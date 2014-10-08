@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mvd::MainWindow</class>
+ <widget class="QMainWindow" name="mvd::MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>150</width>
+    <height>150</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Main window</string>
+  </property>
+  <property name="locale">
+   <locale language="C" country="AnyCountry"/>
+  </property>
+  <widget class="QWidget" name="m_CentralWidget"/>
+  <widget class="QMenuBar" name="m_MenuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>150</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="action_Quit"/>
+   </widget>
+   <widget class="QMenu" name="menu_Help">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="action_About"/>
+   </widget>
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="action_Preferences"/>
+   </widget>
+   <addaction name="menu_File"/>
+   <addaction name="menu_Edit"/>
+   <addaction name="menu_Help"/>
+  </widget>
+  <action name="action_Quit">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+   <property name="toolTip">
+    <string>Quit application.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_ImportImage">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="mvdMainWindow.qrc">
+     <normaloff>:/icons/action_Open_Icon</normaloff>:/icons/action_Open_Icon</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Import image...</string>
+   </property>
+   <property name="iconText">
+    <string>Import image...</string>
+   </property>
+   <property name="toolTip">
+    <string>Import image-file.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_About">
+   <property name="text">
+    <string>&amp;About...</string>
+   </property>
+   <property name="iconText">
+    <string>About...</string>
+   </property>
+   <property name="toolTip">
+    <string>About...</string>
+   </property>
+  </action>
+  <action name="action_Preferences">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Prefere&amp;nces</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="mvdMainWindow.qrc"/>
+ </resources>
+ <connections/>
+</ui>
