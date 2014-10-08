@@ -17,7 +17,7 @@ if(OTB_USE_EXTERNAL_GDAL)
   message(STATUS "  GDAL includes : ${GDAL_INCLUDE_DIR}")
   message(STATUS "  GDAL library  : ${GDAL_LIBRARY}")
 
-  if(UNIX)
+  if(UNIX OR MINGW)
     if(NOT GDAL_CONFIG)
       message(FATAL_ERROR "Cannot find gdal-config. Set GDAL_CONFIG")
     endif()
