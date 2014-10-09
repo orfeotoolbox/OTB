@@ -31,8 +31,9 @@
 
 /**
  * \namespace otb
- * \brief The "otb" namespace contains all Orfeo Toolbox (OTB) classes
- * There are several nested namespaces withing the otb:: namespace.
+ * \brief The "otb" namespace contains all Orfeo Toolbox (OTB) classes.
+ *
+ * There are several nested namespaces within this one.
  */
 namespace otb
 {

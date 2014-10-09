@@ -26,6 +26,7 @@ namespace otb
 {
 
 /**
+ *  \namespace GeoInformationConversion
  *  \brief Helper functions to do the geo information conversions used frequently.
  *
  *  This namespace provides helpers functions to build a WKT from a valid EPSG number using
