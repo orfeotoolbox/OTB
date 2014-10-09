@@ -86,6 +86,8 @@ main( int argc, char* argv[] )
   mvd::MainWindow mainWindow;
   mainWindow.Initialize();
 
+  application.Foo();
+
   //
   // 3. Initialize cache directory.
   /*

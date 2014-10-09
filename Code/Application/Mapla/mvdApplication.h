@@ -113,6 +113,10 @@ public:
   inline
     static Application* Instance();
 
+  /**
+   */
+  void Foo();
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 public slots:

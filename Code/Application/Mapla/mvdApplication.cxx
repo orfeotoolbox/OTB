@@ -90,7 +90,13 @@ Application
     PROJECT_NAME, Monteverdi2_VERSION_STRING,
     "OrfeoToolBox", "orfeo-toolbox.org"
   );
+}
 
+/*******************************************************************************/
+void
+Application
+::Foo()
+{
   SetModel( new OTBApplicationsModel( this ) );
 }
 

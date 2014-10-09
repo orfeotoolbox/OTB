@@ -113,6 +113,8 @@ MainWindow
       this
     );
 
+  assert( Application::Instance() );
+
   setCentralWidget( m_ApplicationsToolBoxController->GetWidget() );
 
 #else // OTB_WRAP_QT
@@ -181,6 +183,8 @@ MainWindow
 ::OnAboutToChangeModel( const AbstractModel* model )
 {
   qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
+
+  m_ApplicationsToolBoxController->SetModel( NULL );
 }
 
 /*****************************************************************************/
@@ -189,6 +193,8 @@ MainWindow
 ::OnModelChanged( AbstractModel* model )
 {
   qDebug() << this << "::OnModelChanged(" << model << ")";
+
+  m_ApplicationsToolBoxController->SetModel( model );
 }
 
 /*****************************************************************************/
