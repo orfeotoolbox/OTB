@@ -277,7 +277,12 @@ QtWidgetView
 
   SetupWidget( widget, InputFilenameInitializer() );
   SetupWidget( widget, InputFilenameListInitializer( this ) );
-  SetupWidget( widget, InputImageInitializer() );
+  SetupWidget(
+    widget,
+    InputImageInitializer(
+      I18nCoreApplication::ConstInstance()->GetModel< DatabaseModel >()!=NULL
+    )
+  );
   SetupWidget( widget, InputImageListInitializer( this ) );
   SetupWidget( widget, InputVectorDataInitializer() );
   SetupWidget( widget, InputVectorDataListInitializer( this ) );

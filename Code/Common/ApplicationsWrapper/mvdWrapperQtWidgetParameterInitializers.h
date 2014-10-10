@@ -137,7 +137,11 @@ class InputImageInitializer : public std::unary_function<
   >
 {
 public:
+  inline InputImageInitializer( bool supportsDataset );
   inline result_type operator () ( argument_type widget ) const;
+
+private:
+  bool m_SupportsDataset;
 };
 
 /**
@@ -305,7 +309,15 @@ FileSelectionInitializer
     SetupForDatasetDrop( widget );
     }
   else
-    SetupForFilenameDrop( widget, "You can drop filename here." );   
+    SetupForFilenameDrop( widget, "You can drop filename here." );
+}
+
+/*****************************************************************************/
+inline
+InputImageInitializer
+::InputImageInitializer( bool supportsDataset ) :
+  m_SupportsDataset( supportsDataset )
+{
 }
 
 /*****************************************************************************/
@@ -316,8 +328,13 @@ InputImageInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop dataset or filename here." );
-  SetupForDatasetDrop( widget );
+  if( m_SupportsDataset )
+    {
+    SetupForFilenameDrop( widget, "You can drop dataset or filename here." );
+    SetupForDatasetDrop( widget );
+    }
+  else
+    SetupForFilenameDrop( widget, "You can drop filename here." );   
 }
 
 /*****************************************************************************/
@@ -341,7 +358,12 @@ InputImageListInitializer
     m_View, SLOT( OnFileSelectionWidgetAdded1( QWidget * ) )
   );
 
-  SetupWidget( widget, FileSelectionInitializer( true  ) );            
+  SetupWidget(
+    widget,
+    FileSelectionInitializer(
+      I18nCoreApplication::ConstInstance()->GetModel< DatabaseModel >()!=NULL
+    )
+  );            
 }
 
 /*****************************************************************************/

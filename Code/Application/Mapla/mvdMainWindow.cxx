@@ -43,7 +43,11 @@
 # include "ApplicationsWrapper/mvdApplicationLauncher.h"
 # include "ApplicationsWrapper/mvdApplicationsToolBoxController.h"
 # include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
-# include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"
+# if 1
+#   include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"
+# else
+#   include "otbWrappperQtWidgetView.h"
+# endif
 #endif
 //
 #include "Gui/mvdApplicationsToolBox.h"
@@ -203,22 +207,35 @@ MainWindow
 ::OnApplicationToLaunchSelected( const QString& appName,
 				 const QString& docName)
 {
-#if (defined( OTB_WRAP_QT ) && 0) || 0
+#ifdef OTB_WRAP_QT
 
   assert( Application::ConstInstance()!=NULL );
-  assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );
+  assert( Application::ConstInstance()->GetModel()!=NULL );
   assert(
-    Application::ConstInstance()->GetOTBApplicationsModel()->GetLauncher()!=NULL
+    Application::ConstInstance()->GetModel()==
+    Application::ConstInstance()->GetModel< OTBApplicationsModel >()
+  );
+  assert(
+    Application::ConstInstance()
+    ->GetModel< OTBApplicationsModel >()
+    ->GetLauncher()!=NULL
   );
 
   Wrapper::QtWidgetView* appWidget =
     Application::ConstInstance()
-    ->GetOTBApplicationsModel()
+    ->GetModel< OTBApplicationsModel >()
     ->GetLauncher()
     ->NewOtbApplicationWidget( appName );
 
   assert( appWidget!=NULL );
 
+  QMainWindow * mainWindow = new QMainWindow( /* this */ );
+
+  mainWindow->setCentralWidget( appWidget );
+
+  mainWindow->show();
+
+  /*
   //
   // add the application in a tab
   // TODO : check if this application is already opened ???
@@ -259,6 +276,7 @@ MainWindow
     this,
     SLOT( OnTabCloseRequested() )
     );
+  */
 
 #endif // OTB_WRAP_QT
 }
