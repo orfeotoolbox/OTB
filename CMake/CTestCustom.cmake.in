@@ -45,6 +45,8 @@ set(CTEST_CUSTOM_COVERAGE_EXCLUDE
 
 set(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
+  ".*otbImageFileReader.txx.*resolution.*may be used uninitialized in this function"
+  ".*itkImageRegionConstIteratorWithIndex.*assuming signed overflow does not occur when assuming that.*Wstrict.*"
   "vcl_deprecated_header"
   "backward_warning"
   "[Uu]tilities"
