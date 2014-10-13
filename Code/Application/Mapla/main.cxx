@@ -203,16 +203,12 @@ main( int argc, char* argv[] )
   //
   // 5. Show window.
 #if defined( _DEBUG )
+#else // _DEBUG
+  splash.finish(&mainWindow);
+#endif // _DEBUG
+
   // Usefull when developping/debugging to avoid overlapping other windows.
   mainWindow.show();
-
-#else
-  splash.finish(&mainWindow);
-
-  // TODO: Correctly manage main-window state via application settings.
-  mainWindow.showMaximized();
-
-#endif
 
   //
   // 6. Check OpenGL capabilities
