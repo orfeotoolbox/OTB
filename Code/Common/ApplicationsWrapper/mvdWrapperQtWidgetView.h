@@ -82,6 +82,9 @@ class Monteverdi2_EXPORT QtWidgetView :
 	      READ IsClosable
 	      WRITE SetClosable );
 
+  Q_PROPERTY( bool isStandalone
+              READ IsStandalone );
+
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
@@ -90,6 +93,7 @@ public:
 
   /** \brief Constructor. */
   QtWidgetView( otb::Wrapper::Application::Pointer otbApp,
+                bool isStandalone,
 		QWidget* parent =0,
 		Qt::WindowFlags flags =0 );
 
@@ -106,8 +110,25 @@ public:
   }
 
   /**
+   * \return The OTB-application pointer of this view.
+   */
+  otb::Wrapper::Application::ConstPointer GetApplication() const
+  {
+    return otb::ConstCast< otb::Wrapper::Application >(
+      m_Application
+    );
+  }
+
+  /**
    */
   inline bool IsClosable() const;
+
+  /**
+   */
+  bool IsStandalone() const
+  {
+    return m_IsStandalone;
+  }
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -169,9 +190,10 @@ private:
 
   QPushButton* m_ExecButton;
   QPushButton* m_QuitButton;
-  QLabel*      m_Message;
+  QLabel* m_Message;
 
   bool m_IsClosable : 1;
+  bool m_IsStandalone : 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

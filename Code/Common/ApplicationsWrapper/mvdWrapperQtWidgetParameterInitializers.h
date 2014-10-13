@@ -155,12 +155,13 @@ class InputImageListInitializer : public std::unary_function<
   >
 {
 public:
-  inline InputImageListInitializer( QWidget * view );
+  inline InputImageListInitializer( QWidget * view, bool supportsDataset );
 
   inline result_type operator () ( argument_type widget ) const;
 
 private:
   QWidget * m_View;
+  bool m_SupportsDataset;
 };
 
 /**
@@ -340,8 +341,9 @@ InputImageInitializer
 /*****************************************************************************/
 inline
 InputImageListInitializer
-::InputImageListInitializer( QWidget * view ) :
-  m_View( view )
+::InputImageListInitializer( QWidget * view, bool supportsDataset ) :
+  m_View( view ),
+  m_SupportsDataset( supportsDataset )
 {
 }
 
@@ -358,12 +360,7 @@ InputImageListInitializer
     m_View, SLOT( OnFileSelectionWidgetAdded1( QWidget * ) )
   );
 
-  SetupWidget(
-    widget,
-    FileSelectionInitializer(
-      I18nCoreApplication::ConstInstance()->GetModel< DatabaseModel >()!=NULL
-    )
-  );            
+  SetupWidget( widget, FileSelectionInitializer( m_SupportsDataset ) );
 }
 
 /*****************************************************************************/

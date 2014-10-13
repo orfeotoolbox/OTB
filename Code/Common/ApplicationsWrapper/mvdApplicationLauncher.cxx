@@ -82,7 +82,7 @@ ApplicationLauncher
 /*******************************************************************************/
 Wrapper::QtWidgetView*
 ApplicationLauncher
-::NewOtbApplicationWidget( const QString& appName ) const
+::NewOtbApplicationWidget( const QString& appName, bool isStandalone ) const
 {
   // Create module
   otb::Wrapper::Application::Pointer otbApp(
@@ -101,91 +101,99 @@ ApplicationLauncher
     );
     }
 
-  // Search for elev parameters
-  typedef std::vector< std::string > ParametersKeys;
-  const ParametersKeys parameters( otbApp->GetParametersKeys() );
-
-  // Little flag structure with bool operator to optimize look
-  // scanning parameter keys.
-  struct Flags
-  {
-    Flags() :
-      m_HasDem( false ),
-      m_HasGeoid( false )
+  if( !isStandalone )
     {
-    }
+    // Search for elev parameters
+    typedef std::vector< std::string > ParametersKeys;
+    const ParametersKeys parameters( otbApp->GetParametersKeys() );
 
-    inline operator bool () const
+    // Little flag structure with bool operator to optimize look
+    // scanning parameter keys.
+    struct Flags
     {
-      return m_HasDem && m_HasGeoid;
-    }
-
-    bool m_HasDem : 1;
-    bool m_HasGeoid : 1;
-  };
-
-  Flags found;
-
-  for( ParametersKeys::const_iterator it( parameters.begin() );
-       it!=parameters.end() && !found;
-       ++it )
-    {
-    std::size_t lastDot = it->find_last_of('.');
-
-    assert( I18nCoreApplication::ConstInstance()!=NULL );
-    const I18nCoreApplication* i18nApp = I18nCoreApplication::ConstInstance();
-
-    if( lastDot != std::string::npos )
+      Flags() :
+        m_HasDem( false ),
+        m_HasGeoid( false )
       {
-      std::string lastKey( it->substr( lastDot + 1, it->size() - lastDot - 1 ) );
+      }
 
-      if( lastKey=="dem" )
-	{
-	found.m_HasDem = true;
+      inline operator bool () const
+      {
+        return m_HasDem && m_HasGeoid;
+      }
 
-	if( i18nApp->HasSettingsKey(
-	      I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ) &&
-	    i18nApp->RetrieveSettingsKey(
-	      I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ).toBool() )
-	{
-	otbApp->EnableParameter( *it );
-	otbApp->SetParameterString(
-	  *it,
-	  ToStdString(
-	    i18nApp->RetrieveSettingsKey(
-	      I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
-	    )
-	    .toString()
-	  )
-	);
-	}
-	}
-      else if( lastKey=="geoid" )
-	{
-	found.m_HasGeoid = true;
+      bool m_HasDem : 1;
+      bool m_HasGeoid : 1;
+    };
 
-	if( i18nApp->HasSettingsKey(
-	      I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE ) &&
-	    i18nApp->RetrieveSettingsKey(
-	      I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE ).toBool() )
-	  {
-	  otbApp->EnableParameter( *it );
-	  otbApp->SetParameterString(
-	    *it,
-	    ToStdString(
-	      i18nApp->RetrieveSettingsKey(
-		I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
-	      )
-	      .toString()
-	    )
-	  );
-	  }
-	}
+    Flags found;
+
+    for( ParametersKeys::const_iterator it( parameters.begin() );
+         it!=parameters.end() && !found;
+         ++it )
+      {
+      std::size_t lastDot = it->find_last_of('.');
+
+      assert( I18nCoreApplication::ConstInstance()!=NULL );
+      const I18nCoreApplication* i18nApp = I18nCoreApplication::ConstInstance();
+
+      if( lastDot != std::string::npos )
+        {
+        std::string lastKey(
+          it->substr( lastDot + 1, it->size() - lastDot - 1 )
+        );
+
+        if( lastKey=="dem" )
+          {
+          found.m_HasDem = true;
+
+          if( i18nApp->HasSettingsKey(
+                I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ) &&
+              i18nApp->RetrieveSettingsKey(
+                I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ).toBool() )
+            {
+            otbApp->EnableParameter( *it );
+            otbApp->SetParameterString(
+              *it,
+              ToStdString(
+                i18nApp->RetrieveSettingsKey(
+                  I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
+                )
+                .toString()
+              )
+            );
+            }
+          }
+        else if( lastKey=="geoid" )
+          {
+          found.m_HasGeoid = true;
+
+          if( i18nApp->HasSettingsKey(
+                I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE ) &&
+              i18nApp->RetrieveSettingsKey(
+                I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE )
+              .toBool() )
+            {
+            otbApp->EnableParameter( *it );
+
+            otbApp->SetParameterString(
+              *it,
+              ToStdString(
+                i18nApp->RetrieveSettingsKey(
+                  I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
+                )
+                .toString()
+              )
+            );
+            }
+          }
+        }
       }
     }
 
   // Create GUI based on module
-  Wrapper::QtWidgetView* gui = new Wrapper::QtWidgetView( otbApp );
+  Wrapper::QtWidgetView* gui = new Wrapper::QtWidgetView( otbApp, isStandalone );
+
   gui->CreateGui();
 
   return gui;

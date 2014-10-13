@@ -225,11 +225,17 @@ MainWindow
     Application::ConstInstance()
     ->GetModel< OTBApplicationsModel >()
     ->GetLauncher()
-    ->NewOtbApplicationWidget( appName );
+    ->NewOtbApplicationWidget( appName, true );
 
   assert( appWidget!=NULL );
+  assert( appWidget->GetApplication() );
 
   QMainWindow * mainWindow = new QMainWindow( /* this */ );
+
+  mainWindow->setWindowTitle(
+    QString( "%1 (OTB-" OTB_VERSION_STRING ")" )
+    .arg( appWidget->GetApplication()->GetDocName() )
+  );
 
   mainWindow->setCentralWidget( appWidget );
 

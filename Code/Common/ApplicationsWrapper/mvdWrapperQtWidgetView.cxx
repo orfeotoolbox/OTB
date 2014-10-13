@@ -80,6 +80,7 @@ namespace Wrapper
 /*******************************************************************************/
 QtWidgetView
 ::QtWidgetView( otb::Wrapper::Application::Pointer otbApp,
+                bool isStandalone,
 		QWidget* parent,
 		Qt::WindowFlags flags ) :
   m_Application( otbApp ),
@@ -87,7 +88,8 @@ QtWidgetView
   m_ExecButton( NULL ),
   m_QuitButton( NULL ),
   m_Message( NULL ),
-  m_IsClosable( true )
+  m_IsClosable( true ),
+  m_IsStandalone( isStandalone )
 {
   m_Model = new otb::Wrapper::QtWidgetModel( otbApp );
 
@@ -277,20 +279,16 @@ QtWidgetView
 
   SetupWidget( widget, InputFilenameInitializer() );
   SetupWidget( widget, InputFilenameListInitializer( this ) );
-  SetupWidget(
-    widget,
-    InputImageInitializer(
-      I18nCoreApplication::ConstInstance()->GetModel< DatabaseModel >()!=NULL
-    )
-  );
-  SetupWidget( widget, InputImageListInitializer( this ) );
+  SetupWidget( widget, InputImageInitializer( !m_IsStandalone ) );
+  SetupWidget( widget, InputImageListInitializer( this, !m_IsStandalone ) );
   SetupWidget( widget, InputVectorDataInitializer() );
   SetupWidget( widget, InputVectorDataListInitializer( this ) );
 #if defined( _DEBUG )
   SetupWidget( widget, ToolTipInitializer() );
 #endif
 
-  SetupWidget( widget, OutputImageInitializer( m_Application->GetName() ) );
+  if( !m_IsStandalone )
+    SetupWidget( widget, OutputImageInitializer( m_Application->GetName() ) );
 }
 
 /*******************************************************************************/
