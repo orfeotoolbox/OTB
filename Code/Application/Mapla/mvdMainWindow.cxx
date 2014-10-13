@@ -186,7 +186,7 @@ void
 MainWindow
 ::OnAboutToChangeModel( const AbstractModel* model )
 {
-  qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
+  // qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
   m_ApplicationsToolBoxController->SetModel( NULL );
 }
@@ -196,7 +196,7 @@ void
 MainWindow
 ::OnModelChanged( AbstractModel* model )
 {
-  qDebug() << this << "::OnModelChanged(" << model << ")";
+  // qDebug() << this << "::OnModelChanged(" << model << ")";
 
   m_ApplicationsToolBoxController->SetModel( model );
 }
