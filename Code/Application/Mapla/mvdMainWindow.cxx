@@ -105,7 +105,7 @@ MainWindow
 ::virtual_SetupUI()
 {
   setObjectName( "mvd::MainWindow" );
-  setWindowTitle( PROJECT_NAME );
+  setWindowTitle( PROJECT_NAME " Application Launcher" );
 
 #ifdef OTB_WRAP_QT
 
