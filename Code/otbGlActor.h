@@ -41,6 +41,9 @@ public:
   itkGetMacro(Visible,bool);
   itkBooleanMacro(Visible);
 
+  itkSetStringMacro(Name);
+  itkGetStringMacro(Name);
+
   // Retrieve the full extent of the actor
   virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const = 0;
 
@@ -67,6 +70,9 @@ private:
 
   // Visibility flag
   bool m_Visible;
+
+  // Name field
+  std::string m_Name;
 
 }; // End class GlActor
 
