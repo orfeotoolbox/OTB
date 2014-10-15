@@ -51,15 +51,19 @@ public:
 
   itkNewMacro(Self);
 
-  void AddImage(const std::string & fname, const std::string & name);
+  void AddImage(const std::string & fname, const std::string & key, const std::string & name = "");
 
-  void AddVector(const std::string & fname, const std::string & name);
+  void AddVector(const std::string & fname, const std::string & key, const std::string & name = "");
 
   void Initialize(unsigned int w, unsigned int h, const std::string & name = "OTB viewer for geeks");
 
   void Refresh();
 
-  void Start();
+  virtual void Start();
+
+  void ClearActors();
+
+  void SetActorName(const std::string & key, const std::string & name);
 
 protected:
 
@@ -67,6 +71,25 @@ protected:
   IceViewer();
 
   virtual ~IceViewer();
+
+ // Non-static callbacks
+  virtual void scroll_callback(GLFWwindow * window, double xoffset, double yoffset);
+  virtual bool scroll_callback_image(GLFWwindow * window, double xoffset, double yoffset);
+  virtual bool scroll_callback_vector(GLFWwindow * window, double xoffset, double yoffset);
+  virtual void cursor_pos_callback(GLFWwindow * window, double xpos, double ypos);
+  virtual void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+  virtual bool key_callback_image(GLFWwindow* window, int key, int scancode, int action, int mods);
+  virtual bool key_callback_vector(GLFWwindow* window, int key, int scancode, int action, int mods);
+  virtual void mouse_button_callback(GLFWwindow * window, int button, int action, int mode);
+  virtual void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
+
+  otb::GlActor::Pointer GetActor(const std::string& key);
+
+  void CopyActorStyle(otb::GlActor::Pointer srcActor, otb::GlActor::Pointer dstActor);
+
+  // Update all shaders with current color and position
+  void UpdateShaderColorAndPosition();
 
 private:
   // Static callbacks
@@ -77,24 +100,14 @@ private:
   static void static_scroll_callback(GLFWwindow * window, double xoffset, double yoffset);
   static void error_callback(int error, const char* description);
 
-  // Non-static callbacks
-  void scroll_callback(GLFWwindow * window, double xoffset, double yoffset);
-  bool scroll_callback_image(GLFWwindow * window, double xoffset, double yoffset);
-  bool scroll_callback_vector(GLFWwindow * window, double xoffset, double yoffset);
-  void cursor_pos_callback(GLFWwindow * window, double xpos, double ypos);
-  void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-  bool key_callback_image(GLFWwindow* window, int key, int scancode, int action, int mods);
-  bool key_callback_vector(GLFWwindow* window, int key, int scancode, int action, int mods);
-  void mouse_button_callback(GLFWwindow * window, int button, int action, int mode);
-  void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
   // Render Hud
   void DrawHud();
   
   // Render help
   void DrawHelp();
 
-  // Update all shaders with current color and position
+
+  // Update shader with current color and position
   void UpdateShaderColorAndPosition(double vpx, double vpy,otb::GlImageActor * currentActor);
 
   // prevent implementation

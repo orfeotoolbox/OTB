@@ -76,7 +76,7 @@ IceViewer::~IceViewer()
   glfwTerminate();
 }
 
-void IceViewer::AddImage(const std::string & fname, const std::string & name)
+void IceViewer::AddImage(const std::string & fname, const std::string & key, const std::string & name)
 {
   if(m_View.IsNull())
     {
@@ -86,6 +86,15 @@ void IceViewer::AddImage(const std::string & fname, const std::string & name)
   otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
   actor->Initialize(fname);
   actor->SetVisible(true);
+
+  if(name == "")
+    {
+    actor->SetName(key);
+    }
+  else
+    {
+    actor->SetName(name);
+    }
 
   // Get advised colors
   ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(actor->GetMetaDataDictionary());
@@ -109,10 +118,10 @@ void IceViewer::AddImage(const std::string & fname, const std::string & name)
   // TODO: Implement this
   // actor->UpdateColorBalance();
   
-  m_View->AddActor(actor,name);
+  m_View->AddActor(actor,key);
 }
 
-void IceViewer::AddVector(const std::string & fname, const std::string & name)
+void IceViewer::AddVector(const std::string & fname, const std::string & key, const std::string & name)
 {
   if(m_View.IsNull())
     {
@@ -124,6 +133,15 @@ void IceViewer::AddVector(const std::string & fname, const std::string & name)
   actor->SetVisible(true);
   actor->SetAlpha(0.5);
   actor->SetColor(m_ColorMapIterator->second);
+
+  if(name == "")
+    {
+    actor->SetName(key);
+    }
+  else
+    {
+    actor->SetName(name);
+    }
   
   ++m_ColorMapIterator;
   if(m_ColorMapIterator == m_ColorMap.end())
@@ -131,7 +149,7 @@ void IceViewer::AddVector(const std::string & fname, const std::string & name)
     m_ColorMapIterator = m_ColorMap.begin();
     }
 
-  m_View->AddActor(actor,name);
+  m_View->AddActor(actor,key);
 
   // Add other layers if the dataset contains some
   std::vector<std::string> layers = actor->GetAvailableLayers();
@@ -147,6 +165,15 @@ void IceViewer::AddVector(const std::string & fname, const std::string & name)
       actor->SetVisible(true);
       actor->SetAlpha(0.5);
       actor->SetColor(m_ColorMapIterator->second);
+
+      if(name == "")
+        {
+        actor->SetName(key+"_"+(*it));
+        }
+      else
+        {
+        actor->SetName(name+"_"+(*it));
+        }
       
       ++m_ColorMapIterator;
       if(m_ColorMapIterator == m_ColorMap.end())
@@ -154,9 +181,14 @@ void IceViewer::AddVector(const std::string & fname, const std::string & name)
         m_ColorMapIterator = m_ColorMap.begin();
         }
 
-      m_View->AddActor(actor,name+"_"+(*it));
+      m_View->AddActor(actor,key+"_"+(*it));
       }
     }
+}
+
+void IceViewer::ClearActors()
+{
+  m_View->ClearActors();
 }
 
 void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string & name)
@@ -182,7 +214,7 @@ void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string & n
     glfwDestroyWindow(m_Window);
     }
   
-  m_Window = glfwCreateWindow(w, h,"OTB viewer for geeks", NULL, NULL);
+  m_Window = glfwCreateWindow(w, h,name.c_str(), NULL, NULL);
   if (!m_Window)
     {
     itkExceptionMacro(<<"Could not create glfw window.");
@@ -345,7 +377,7 @@ void IceViewer::DrawHud()
       oss<<(currentActor->GetVisible()?"+ ":"- ");
       oss<<((*it)==m_ReferenceActor?"*":" ");
       oss<<((*it)==m_SelectedActor?"[":" ");
-      oss<<"(image) "<<(*it);
+      oss<<"(image) "<<m_View->GetActor(*it)->GetName();
       oss<<((*it)==m_SelectedActor?"]":" ");
       oss<<((*it)==m_ReferenceActor?"*":" ");
       oss<<std::endl;
@@ -402,7 +434,7 @@ void IceViewer::DrawHud()
       oss<<(currentVectorActor->GetVisible()?"+ ":"- ");
       oss<<((*it)==m_ReferenceActor?"*":" ");
       oss<<((*it)==m_SelectedActor?"[":" ");
-      oss<<"(vector) "<<(*it)<<", layer: "<<currentVectorActor->GetCurrentLayer();
+      oss<<"(vector) "<<m_View->GetActor(*it)->GetName()<<", layer: "<<currentVectorActor->GetCurrentLayer();
       oss<<((*it)==m_SelectedActor?"]":" ");
       oss<<((*it)==m_ReferenceActor?"*":" ");
       oss<<std::endl;
@@ -832,9 +864,6 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypo
   double posx, posy,vpx,vpy;
   glfwGetCursorPos(m_Window,&posx,&posy);
   m_View->GetSettings()->ScreenToViewPortTransform(posx,posy,vpx,vpy);
-
-  int width, height;
-  glfwGetFramebufferSize(m_Window, &width, &height);
   
   if(m_Dragging)
     {
@@ -861,8 +890,20 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypo
       }
     }
 
-  std::vector<std::string> renderingOrder = m_View->GetRenderingOrder();
+  this->UpdateShaderColorAndPosition();
+}
 
+void IceViewer::UpdateShaderColorAndPosition()
+{
+  int width, height;
+  glfwGetFramebufferSize(m_Window, &width, &height);
+
+  double posx, posy,vpx,vpy;
+  glfwGetCursorPos(m_Window,&posx,&posy);
+  m_View->GetSettings()->ScreenToViewPortTransform(posx,posy,vpx,vpy);
+
+  std::vector<std::string> renderingOrder = m_View->GetRenderingOrder();
+  
   // Inform all shaders of current color and position
   for(std::vector<std::string>::iterator it = renderingOrder.begin();
       it!=renderingOrder.end();++it)
@@ -890,7 +931,6 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypo
       }
     }
 }
-
 
 void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -1261,37 +1301,7 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
     for(std::vector<std::string>::const_iterator it = actorsKeys.begin();
         it!=actorsKeys.end();++it)
       { 
-      otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(*it).GetPointer());
-
-      if(currentActor.IsNotNull() && currentActor->GetVisible())
-        {
-        otb::StandardShader::Pointer currentShader = static_cast<otb::StandardShader *>(currentActor->GetShader());
-
-        // Apply same parameters to all image actors
-        currentActor->SetRedIdx(actor->GetRedIdx());
-        currentActor->SetGreenIdx(actor->GetGreenIdx());
-        currentActor->SetBlueIdx(actor->GetBlueIdx());
-        currentShader->SetMinRed(shader->GetMinRed());
-        currentShader->SetMinGreen(shader->GetMinGreen());
-        currentShader->SetMinBlue(shader->GetMinBlue());
-        currentShader->SetMaxRed(shader->GetMaxRed());
-        currentShader->SetMaxGreen(shader->GetMaxGreen());
-        currentShader->SetMaxBlue(shader->GetMaxBlue());
-        currentShader->SetGamma(shader->GetGamma());
-        if(shader->GetShaderType() == SHADER_STANDARD || shader->GetShaderType() == SHADER_LOCAL_CONTRAST || shader->GetShaderType() == SHADER_SPECTRAL_ANGLE || shader->GetShaderType() == SHADER_GRADIENT)
-          {
-          currentShader->SetShaderType(shader->GetShaderType());
-            currentShader->SetRadius(shader->GetRadius());
-          if(shader->GetShaderType() == SHADER_LOCAL_CONTRAST)
-            {
-            currentShader->SetLocalContrastRange(shader->GetLocalContrastRange());
-            }
-          if(shader->GetShaderType() == SHADER_SPECTRAL_ANGLE)
-            {
-            currentShader->SetSpectralAngleRange(shader->GetSpectralAngleRange());
-            }
-          }
-        }
+      this->CopyActorStyle(m_View->GetActor(m_SelectedActor),m_View->GetActor(*it));
       }
     }
 
@@ -1427,6 +1437,57 @@ void IceViewer::framebuffer_size_callback(GLFWwindow* window, int width, int hei
   m_View->GetSettings()->SetViewportSize(size);
   m_View->GetSettings()->Center(center);
 
+}
+
+otb::GlActor::Pointer IceViewer::GetActor(const std::string & key)
+{
+  return m_View->GetActor(key);
+}
+
+void IceViewer::CopyActorStyle(otb::GlActor::Pointer srcActor, otb::GlActor::Pointer dstActor)
+{
+
+  otb::GlImageActor::Pointer srcImgActor = dynamic_cast<otb::GlImageActor*>(srcActor.GetPointer());
+  otb::GlImageActor::Pointer dstImgActor = dynamic_cast<otb::GlImageActor*>(dstActor.GetPointer());
+
+
+  if(srcActor.IsNotNull() && srcActor->GetVisible() && dstImgActor.IsNotNull() && dstActor->GetVisible())
+    {
+    otb::StandardShader::Pointer srcShader = static_cast<otb::StandardShader *>(srcImgActor->GetShader());
+    otb::StandardShader::Pointer dstShader = static_cast<otb::StandardShader *>(dstImgActor->GetShader());
+
+    // Apply same parameters to all image actors
+    dstImgActor->SetRedIdx(srcImgActor->GetRedIdx());
+    dstImgActor->SetGreenIdx(srcImgActor->GetGreenIdx());
+    dstImgActor->SetBlueIdx(srcImgActor->GetBlueIdx());
+    dstShader->SetMinRed(srcShader->GetMinRed());
+    dstShader->SetMinGreen(srcShader->GetMinGreen());
+    dstShader->SetMinBlue(srcShader->GetMinBlue());
+    dstShader->SetMaxRed(srcShader->GetMaxRed());
+    dstShader->SetMaxGreen(srcShader->GetMaxGreen());
+    dstShader->SetMaxBlue(srcShader->GetMaxBlue());
+    dstShader->SetGamma(srcShader->GetGamma());
+    
+    if(srcShader->GetShaderType() == SHADER_STANDARD || srcShader->GetShaderType() == SHADER_LOCAL_CONTRAST || srcShader->GetShaderType() == SHADER_SPECTRAL_ANGLE || srcShader->GetShaderType() == SHADER_GRADIENT)
+      {
+      dstShader->SetShaderType(srcShader->GetShaderType());
+      dstShader->SetRadius(srcShader->GetRadius());
+      if(srcShader->GetShaderType() == SHADER_LOCAL_CONTRAST)
+        {
+        dstShader->SetLocalContrastRange(srcShader->GetLocalContrastRange());
+        }
+      if(srcShader->GetShaderType() == SHADER_SPECTRAL_ANGLE)
+        {
+        dstShader->SetSpectralAngleRange(srcShader->GetSpectralAngleRange());
+        }
+      }
+    }
+}
+
+void IceViewer::SetActorName(const std::string & key, const std::string & name)
+{
+  // Should be more careful here
+  m_View->GetActor(key)->SetName(name);
 }
 
 }
