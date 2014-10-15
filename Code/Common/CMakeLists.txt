@@ -12,7 +12,7 @@ add_library(OTBCommon ${OTBCommon_SRCS})
 #    PROPERTIES
 #    LINK_INTERFACE_LIBRARIES ""
 #)
-target_link_libraries(OTBCommon ${ITK_LIBRARIES} otbconfigfile ${MUPARSER_LIBRARIES} ${OGR_LIBRARY} OTBOssimAdapters)
+target_link_libraries(OTBCommon ${ITK_LIBRARIES} otbconfigfile ${MUPARSER_LIBRARIES} ${MUPARSERX_LIBRARIES} ${OGR_LIBRARY} OTBOssimAdapters)
 if(OTB_USE_MAPNIK)
     target_link_libraries(OTBCommon ${MAPNIK_LIBRARY} ${ICUUC_LIBRARY})
 endif()

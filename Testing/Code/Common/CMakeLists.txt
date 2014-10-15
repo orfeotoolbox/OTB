@@ -935,6 +935,15 @@ otbUnaryFunctorWithIndexImageFilter
     otbParserTest
     )
 
+# ----------------  otbParserX  --------------------- #
+  add_test(coTuParserX ${COMMON_TESTS12}
+    otbParserXTestNew
+    )
+
+  add_test(coTvParserX ${COMMON_TESTS12}
+    otbParserXTest
+    )
+
 # ----------------  otbVariableLengthVectorConverter  --------------------- #
 add_test(coTuVariableLengthVectorConverter ${COMMON_TESTS12}
     otbVariableLengthVectorConverterNew
@@ -1327,6 +1336,7 @@ otbUnaryFunctorWithIndexImageFilter.cxx
 set(BasicCommon_SRCS12
 otbCommonTests12.cxx
 otbParserTest.cxx
+otbParserXTest.cxx
 otbVariableLengthVectorConverter.cxx
 otbRGBAPixelConverter.cxx
 )

@@ -202,6 +202,11 @@ if(NOT OTB_USE_EXTERNAL_MUPARSER)
   add_subdirectory(otbmuparser)
 endif()
 
+if(NOT OTB_USE_EXTERNAL_MUPARSERX)
+  message(STATUS "Configuring otbmuparserx...")
+  add_subdirectory(otbmuparserx)
+endif()
+
 if(NOT OTB_USE_EXTERNAL_LIBKML)
   message(STATUS "Configuring otbkml...")
   add_subdirectory(otbkml)

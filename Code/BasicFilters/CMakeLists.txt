@@ -3,8 +3,9 @@
 file(GLOB OTBBasicFilters_SRCS "*.cxx" )
 
 add_library(OTBBasicFilters ${OTBBasicFilters_SRCS})
-target_link_libraries(OTBBasicFilters OTBCommon otbedison ${MUPARSER_LIBRARIES})
+target_link_libraries(OTBBasicFilters OTBCommon otbedison ${MUPARSER_LIBRARIES} ${MUPARSERX_LIBRARIES})
 
+ 
 # Explicit link to fftw is required
 # The link of ITKFFT to fftw does not propagate well :
 # in an external project using OTB with FFT features,

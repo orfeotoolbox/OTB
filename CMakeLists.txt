@@ -216,6 +216,7 @@ include(ImportQt4)
 include(ImportSiftFast)
 include(ImportTinyXML)
 include(ImportMuParser)
+include(ImportMuParserX)
 include(ImportLibKML)
 include(ImportOpenCV)
 #-----------------------------------------------------------------------------
