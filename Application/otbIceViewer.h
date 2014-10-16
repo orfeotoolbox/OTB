@@ -65,6 +65,9 @@ public:
 
   void SetActorName(const std::string & key, const std::string & name);
 
+  itkSetMacro(DisplayHud,bool);
+  itkGetMacro(DisplayHud,bool);
+
 protected:
 
 
