@@ -39,8 +39,6 @@ public:
   itkTypeMacro(ParserXImpl, itk::LightObject);
 
   /** Convenient type definitions */
-  //typedef double                                   ValueType;     //chris
-  //typedef mu::Parser::exception_type               ExceptionType; //chris
   typedef mup::Value                                ValueType;
   typedef mup::ParserError                          ExceptionType;
 
@@ -59,19 +57,8 @@ public:
   /** Initialize user defined functions */
   virtual void InitFun()
   {
-    //m_MuParserX.DefineFun("ndvi", Self::NDVI); chris
-    //m_MuParserX.DefineFun("NDVI", Self::NDVI); chris
     m_MuParserX.DefineFun(new ndvi);
 
-#ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
-    /* Starting with muParser 2.0.0, logical operators have been
-       renamed to "&&" and "||", instead of "and" and "or".
-       Reintroducing pre-2.0.0 operators, so formulas can be
-       defined with "and" and "or" even after 2.0.0
-     */
-    //m_MuParser.DefineOprt("and", Self::AND); chris
-    //m_MuParser.DefineOprt("or",  Self::OR); chris
-#endif
   }
 
   /** Set the expression to be parsed */
