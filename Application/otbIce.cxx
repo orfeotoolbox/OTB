@@ -56,7 +56,7 @@ int main(int argc, char * argv[])
   // Initialize viewer
   viewer->Initialize(800,600);
 
-  for(unsigned int i = 1; i<argc;++i)
+  for(int i = 1; i<argc;++i)
     {
     try
       {

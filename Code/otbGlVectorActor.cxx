@@ -190,7 +190,7 @@ std::vector<std::string> GlVectorActor::GetAvailableLayers() const
 {
   std::vector<std::string> resp;
 
-  for(unsigned int i = 0; i<m_OGRDataSource->GetLayersCount();++i)
+  for(int i = 0; i<m_OGRDataSource->GetLayersCount();++i)
     {
     resp.push_back(m_OGRDataSource->GetLayer(i).GetName());
     }
@@ -352,7 +352,7 @@ void GlVectorActor::UpdateData()
     otb::ogr::Layer filtered = m_OGRDataSource->GetLayerChecked(m_CurrentLayer);
     filtered.SetSpatialFilterRect(ulx,uly,lrx,lry);
 
-   m_OptimizedRenderingActive = m_OptimizedRendering && filtered.GetFeatureCount(true)>(settings->GetViewportSize()[0]*settings->GetViewportSize()[1]/100);
+   m_OptimizedRenderingActive = m_OptimizedRendering && filtered.GetFeatureCount(true)>static_cast<int>(settings->GetViewportSize()[0]*settings->GetViewportSize()[1]/100);
 
     if(m_OptimizedRenderingActive)
       {
@@ -401,7 +401,7 @@ void GeometryRender(const OGRLineString * in)
 {
   glBegin(GL_LINE_STRIP);
   
-  for(unsigned int i = 0; i < in->getNumPoints();++i)
+  for(int i = 0; i < in->getNumPoints();++i)
     {
     glVertex2d(in->getX(i),in->getY(i));
     }
@@ -419,7 +419,7 @@ void GeometryRender(const OGRPolygon * in, GLUtesselator * tesselator, bool fill
       // Render the outer boundary
       gluTessBeginContour(tesselator);
       
-      for(unsigned int i = 0; i < in->getExteriorRing()->getNumPoints();++i)
+      for(int i = 0; i < in->getExteriorRing()->getNumPoints();++i)
         {
         GLdouble * glp = new GLdouble[3];
         glp[0] = in->getExteriorRing()->getX(i);
@@ -433,11 +433,11 @@ void GeometryRender(const OGRPolygon * in, GLUtesselator * tesselator, bool fill
       // End the outer boundary contour
       gluTessEndContour(tesselator);
       
-      for(unsigned int j = 0; j < in->getNumInteriorRings();++j)
+      for(int j = 0; j < in->getNumInteriorRings();++j)
         {        
         gluTessBeginContour(tesselator);
 
-        for(unsigned int i = 0; i < in->getInteriorRing(j)->getNumPoints();++i)
+        for(int i = 0; i < in->getInteriorRing(j)->getNumPoints();++i)
           {
           GLdouble * glp = new GLdouble[3];
           glp[0] = in->getInteriorRing(j)->getX(i);
@@ -465,7 +465,7 @@ void GeometryRender(const OGRPolygon * in, GLUtesselator * tesselator, bool fill
         // Render the outer boundary
         gluTessBeginContour(tesselator);
         
-        for(unsigned int i = 0; i < in->getExteriorRing()->getNumPoints();++i)
+        for(int i = 0; i < in->getExteriorRing()->getNumPoints();++i)
           {
           GLdouble * glp = new GLdouble[3];
           glp[0] = in->getExteriorRing()->getX(i);
@@ -479,11 +479,11 @@ void GeometryRender(const OGRPolygon * in, GLUtesselator * tesselator, bool fill
         // End the outer boundary contour
         gluTessEndContour(tesselator);
       
-        for(unsigned int j = 0; j < in->getNumInteriorRings();++j)
+        for(int j = 0; j < in->getNumInteriorRings();++j)
           {        
           gluTessBeginContour(tesselator);
           
-          for(unsigned int i = 0; i < in->getInteriorRing(j)->getNumPoints();++i)
+          for(int i = 0; i < in->getInteriorRing(j)->getNumPoints();++i)
           {
           GLdouble * glp = new GLdouble[3];
           glp[0] = in->getInteriorRing(j)->getX(i);
@@ -512,7 +512,7 @@ void GeometryRender(const OGRPolygon * in, GLUtesselator * tesselator, bool fill
 
 void GeometryRender(const OGRMultiPoint * in, const ViewSettings * settings, const unsigned int & size)
 {
-  for(unsigned int i = 0; i < in->getNumGeometries();++i)
+  for(int i = 0; i < in->getNumGeometries();++i)
     {
     GeometryRender(dynamic_cast<const OGRPoint *>(in->getGeometryRef(i)),settings,size);   
     }
@@ -520,7 +520,7 @@ void GeometryRender(const OGRMultiPoint * in, const ViewSettings * settings, con
 
 void GeometryRender(const OGRMultiLineString * in)
 {
-  for(unsigned int i = 0; i < in->getNumGeometries();++i)
+  for(int i = 0; i < in->getNumGeometries();++i)
     {
     GeometryRender(dynamic_cast<const OGRLineString *>(in->getGeometryRef(i)));
     }
@@ -528,7 +528,7 @@ void GeometryRender(const OGRMultiLineString * in)
 
 void GeometryRender(const OGRMultiPolygon * in, GLUtesselator * tesselator, bool fill, bool solid)
 {
-  for(unsigned int i = 0; i < in->getNumGeometries();++i)
+  for(int i = 0; i < in->getNumGeometries();++i)
     {
     GeometryRender(dynamic_cast<const OGRPolygon *>(in->getGeometryRef(i)),tesselator,fill,solid);
     }
@@ -679,7 +679,7 @@ OGRPolygon GeometryTransform(const OGRPolygon * in,otb::GenericRSTransform<> * t
   const OGRLinearRing * inExtRing = in->getExteriorRing();
   OGRLinearRing outExtRing;
   
-  for(unsigned int i = 0; i<inExtRing->getNumPoints();++i)
+  for(int i = 0; i<inExtRing->getNumPoints();++i)
     {
     OGRPoint p,op;
     inExtRing->getPoint(i,&p);
@@ -689,12 +689,12 @@ OGRPolygon GeometryTransform(const OGRPolygon * in,otb::GenericRSTransform<> * t
   outPolygon.addRing(&outExtRing);
   
   // Then process any interior ring
-  for(unsigned int j = 0; j<in->getNumInteriorRings();++j)
+  for(int j = 0; j<in->getNumInteriorRings();++j)
     {
     const OGRLinearRing * inIntRing = in->getInteriorRing(j);
     OGRLinearRing outIntRing;
     
-    for(unsigned int i = 0; i<inIntRing->getNumPoints();++i)
+    for(int i = 0; i<inIntRing->getNumPoints();++i)
       {
       OGRPoint p,op;
       inIntRing->getPoint(i,&p);
@@ -710,7 +710,7 @@ OGRMultiPoint GeometryTransform(const OGRMultiPoint * in, otb::GenericRSTransfor
 {
   OGRMultiPoint outMultiPoint;
 
-  for(unsigned int i = 0; i < in->getNumGeometries();++i)
+  for(int i = 0; i < in->getNumGeometries();++i)
     {
     OGRPoint p = GeometryTransform(dynamic_cast<const OGRPoint *>(in->getGeometryRef(i)),transform);
     outMultiPoint.addGeometry(&p);
@@ -723,7 +723,7 @@ OGRMultiLineString GeometryTransform(const OGRMultiLineString * in, otb::Generic
 {
  OGRMultiLineString outMultiLineString;
 
-  for(unsigned int i = 0; i < in->getNumGeometries();++i)
+  for(int i = 0; i < in->getNumGeometries();++i)
     {
     OGRLineString l = GeometryTransform(dynamic_cast<const OGRLineString *>(in->getGeometryRef(i)),transform);
     outMultiLineString.addGeometry(&l);
@@ -735,7 +735,7 @@ OGRMultiPolygon GeometryTransform(const OGRMultiPolygon * in, otb::GenericRSTran
 {
 OGRMultiPolygon outMultiPolygon;
 
-  for(unsigned int i = 0; i < in->getNumGeometries();++i)
+  for(int i = 0; i < in->getNumGeometries();++i)
     {
     OGRPolygon p = GeometryTransform(dynamic_cast<const OGRPolygon *>(in->getGeometryRef(i)),transform);
     outMultiPolygon.addGeometry(&p);
