@@ -300,7 +300,7 @@ std::pair< std::string, std::vector< PropertyType > > PropertiesVectorByCategory
 
 /**
  */
-typedef std::map<  std::string, PropertiesVector> PropertiesContainer;
+typedef std::map< std::string, PropertiesVector > PropertiesContainer;
 
 /*******************************************************************************/
 /* Type definitions for Dataset list                                           */
