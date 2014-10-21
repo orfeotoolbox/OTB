@@ -197,6 +197,26 @@ images is the processing of SLC SAR images, which are complex.
 \section{Extended filename for reader and writer}
 \label{sec:Reading Image Series}
 
+\subsection{Purpose}
+
+There are multiple ways to define geo-referencing information. For instance,
+ one can use a geographic transform, a cartographic projection, or a sensor 
+model with RPC coefficients. A single image may contain several of these 
+elements, such as in the "ortho-ready" products : this is a type of product 
+still in sensor geometry (the sensor model is supplied with the image) 
+but it also contains an approximative geographic transform that can be used 
+to have a quick estimate of the image localisation. For instance, your product
+may contain a ".TIF" file for the image, along with a ".RPB" file that contains
+the sensor model coefficients and an ".IMD" file that contains a cartographic 
+projection. 
+
+This case leads to the following question : which geo-referencing element
+should be used when opening this image in an OTB reader. In fact, it depends on
+the users need. For an orthorectification application, the sensor model must be
+used. In order to specify which information should be skipped, a syntax of 
+extended filenames has been developped for both reader and writer. 
+
+
 \subsection{Syntax}
 
 The reader and writer extended file name support is based on the same syntax,
@@ -245,6 +265,11 @@ IMPORTANT: Note that you'll probably need to "quote" the filename.
   \item Skip geometric information
   \item Clears the keyword list
   \item Keeps the projectionref and the origin/spacing informations
+  \item false by default. 
+  \end{itemize}
+\item \begin{verbatim}&skiprpctag=<(bool)true>\end{verbatim}
+  \begin{itemize}
+  \item Skip the reading of internal RPC tags (see \ref{sec:TypesofSensorModels} for details)
   \item false by default. 
   \end{itemize}
 \end{itemize}

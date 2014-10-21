@@ -249,8 +249,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/OGRWrappersExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMHandlerExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/LidarReaderExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/LidarToImageExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/TileMapImageIOExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/BinaryThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/ThresholdImageFilter.cxx
@@ -269,7 +267,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Filtering/DanielssonDistanceMapImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/MathematicalMorphologyBinaryFilters.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/MathematicalMorphologyGrayscaleFilters.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/RasterizationExample.cxx
+  #${OTB_SOURCE_DIR}/Examples/Filtering/RasterizationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/FrostImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/ScalingFilterExample.cxx
@@ -303,8 +301,8 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/CorrelationLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AssymmetricFusionOfLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LocalHoughExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LineSegmentDetectorExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RightAngleDetectionExample.cxx
+  #${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LineSegmentDetectorExample.cxx
+  #${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RightAngleDetectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractSegmentsByStepsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractSegmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ParallelLineDetectionExample.cxx
@@ -377,13 +375,11 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromSamplesExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromImagesExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Visualization/VisuExample1.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/ImageToLabelToImage.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/ShapeAttributeComputation.cxx
 #   ${OTB_SOURCE_DIR}/Examples/OBIA/KeepNObjects.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/RadiometricAttributesLabelMapFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/HooverMetricsEstimation.cxx
-  ${OTB_SOURCE_DIR}/Examples/GeospatialAnalysis/PostGISCreateTable.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/ImageLinearIteratorWithIndex.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators2.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators5.cxx
@@ -410,7 +406,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Tutorials/FilteringPipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/ScalingPipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/SmarterFilteringPipeline.cxx
-  ${OTB_SOURCE_DIR}/Examples/Tutorials/SimpleViewer.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/OrthoFusion.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/Multispectral.cxx
   ${OTB_SOURCE_DIR}/Examples/Simulation/ProsailModel.cxx

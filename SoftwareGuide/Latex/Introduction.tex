@@ -132,15 +132,12 @@ software organization and directory structure. It is helpful to know enough to
 navigate through the
 code base to find examples, code, and documentation.
 
-OTB is organized into several different modules. There are three:
-the \code{OTB}, \code{OTB-Documents} and \code{OTB-Wrapping}
-modules. The source code, examples and applications are found in the
-\code{OTB} module; documentation, tutorials, and material related to the
-design and marketing of OTB are found in \code{OTB-Documents}; and resources 
-to wrap OTB classes into other languages (such as Java or Python)
-are available from \code{OTB-Wrapping}. Usually you will work with the
-\code{OTB} module unless you are a developer, are teaching a course, or
-are looking at the details of various design documents.
+OTB is organized into two different modules. There are the \code{OTB} and the
+\code{OTB-Documents} modules. The source code, examples and applications are found
+in the \code{OTB} module; documentation, tutorials, and material related to the
+design and marketing of OTB are found in \code{OTB-Documents}. Usually you will
+work with the \code{OTB} module unless you are a developer, are teaching a course,
+or are looking at the details of various design documents.
 
 The \code{OTB} module contains the following subdirectories:
 \begin{itemize}
@@ -148,11 +145,11 @@ The \code{OTB} module contains the following subdirectories:
         of the majority of the source code.
         \item \code{OTB/Applications}---a set of applications modules
         that can be launched in different ways (command-line, graphical interface,
-        Python/Java), refer to the OTB Cookbook for more information
+        Python/Java), refer to the OTB Cookbook for more information.
         \item \code{OTB/CMake}---internal files used during the
-        configuration process
+        configuration process.
         \item \code{OTB/Copyright}---the copyright information of OTB
-        and all the dependencies included in the OTB source tree
+        and all the dependencies included in the OTB source tree.
         \item \code{OTB/Examples}---a suite of simple, well-documented
         examples used by this guide and to illustrate important
         OTB concepts.
@@ -170,7 +167,7 @@ important to understand since other directory structures (such as the
 \code{OTB/Code} directory.
 \begin{itemize}
   \item \code{OTB/Code/ApplicationEngine}---the core library for
-  building applications based on OTB
+  building applications based on OTB.
   \item \code{OTB/Code/Common}---core classes, macro definitions,
   typedefs, and other software constructs central to OTB.
   \item \code{OTB/Code/BasicFilters}---basic image processing
@@ -184,43 +181,36 @@ important to understand since other directory structures (such as the
 	\item \code{OTB/Code/DisparityMap}---tools for estimating
   disparities -- deformations -- between images.	
 	\item \code{OTB/Code/Fuzzy}---fuzzy logic based algorithms,
-	with Dempster-Shaffer theory related classes
-  \item \code{OTB/Code/GeospatialAnalysis}---classes allowing to connect to geospatial
-  database like PostGIS. 
-	\item \code{OTB/Code/Gui}---very basic widgets for building
-	graphical user interfaces, such as progress bars for filters,
-	etc.
-  \item \code{OTB/Code/Hyperspectral}---hyperspectral images analysis
+	with Dempster-Shafer theory related classes.
+  \item \code{OTB/Code/Hyperspectral}---hyperspectral images analysis.
   \item \code{OTB/Code/IO}---classes that support the reading
   and writing of data.
-	\item \code{OTB/Code/Learning}---several functionnalities for
+	\item \code{OTB/Code/Learning}---several functionalities for
 	supervised learning and classification.
   \item \code{OTB/Code/Markov}---implementation of Markov Random
 	Fields regularization and segmentation.
 	\item \code{OTB/Code/MultiScale}---a set of functionalities
 	for multiscale image analysis and synthesis.
 	\item \code{OTB/Code/MultiTemporal}---time series interpolation 
-	related algorithms
+	related algorithms.
 	\item \code{OTB/Code/OBIA}---Object Based Image Analysis filters
-	and data structures
+	and data structures.
 	\item \code{OTB/Code/ObjectDetection}---Object detection chain
-	based on local feature extraction
+	based on local feature extraction.
   \item \code{OTB/Code/Projections}---classes allowing
   to deal with sensor models and cartographic projections.
   \item \code{OTB/Code/Radiometry}---classes allowing to compute
   vegetation indices and radiometric corrections.
 	\item \code{OTB/Code/SARPolarimetry}---some add-ons for SAR
 	polarimetry synthesis and analysis. 
-\item \code{OTB/Code/Segmentation}---several functionnalities for image segmentation.
-  \item \code{OTB/Code/Simulation}---Sensor simulator
+  \item \code{OTB/Code/Segmentation}---several functionalities for image segmentation.
+  \item \code{OTB/Code/Simulation}---Sensor simulator.
 	\item \code{OTB/Code/SpatialReasoning}---several
-	functionnalities high level image analysis using spatial
+	functionalities high level image analysis using spatial
 	reasoning techniques.
 	\item \code{OTB/Code/Testing}---internal classes used in the
-	used in the testing framework
-	\item \code{OTB/Code/Visualization}---utilities for simple image
-	visualization.
-        \item \code{OTB/Code/Wrappers}---wrappers of applications in several access points (command-line, QT Gui, SWIG\ldots).
+	used in the testing framework.
+  \item \code{OTB/Code/Wrappers}---wrappers of applications in several access points (command-line, QT Gui, SWIG\ldots).
 \end{itemize}
 
 The \code{OTB-Documents} module contains the following subdirectories:

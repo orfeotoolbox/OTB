@@ -157,7 +157,21 @@ OTB, through the use of the OSSIM library --
 \url{http://www.ossim.org} -- offers models for most of current
 sensors either through a physical or an analytical approach. This is
 transparent for the user, since the geometrical model for a given
-image is instantiated using the information stored in its meta-data.\\
+image is instantiated using the information stored in its meta-data. The 
+search for a sensor model is not straightforward. It is done in 3 steps :
+\begin{enumerate}
+  \item Search in the OSSIM plugin factory for a suitable model 
+(\code{ossimplugins::ossimPluginProjectionFactory}). For instance, this
+factory contains Pl\'eiades and TerraSar sensor models.
+  \item If no model was found, search in the OSSIM projection factory 
+(\code{ossimProjectionFactoryRegistry}). For instance this factory contains
+Spot5, Landsat and Quickbird sensor models.
+  \item If still no model was found, search for a valid sensor model defined
+ in an external \code{.geom} file. If no model is found, check if there are 
+any RPC tags embedded within the image (GDAL is used to detect those RPC 
+tags). When the tags are present, an \code{ossimRpcModel} is created.
+\end{enumerate}
+
 
 \subsection{Using Sensor Models}
 \label{sec:UsingSensorModels}

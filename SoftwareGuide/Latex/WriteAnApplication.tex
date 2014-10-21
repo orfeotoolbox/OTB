@@ -34,7 +34,10 @@ Every application derive from the class \doxygen{otb}{Wrapper::Application}. An
 application can't be templated. It must contain the standard class typedefs and
 a call to the \code{OTB\_APPLICATION\_EXPORT} macro.
 
-There are also three methods to implement in a new application:
+You need also to define standard macros \doxygen{itk}{NewMacro} and
+\doxygen{itk}{TypeMacro}.
+ 
+It is also mandatory to implement three methods in a new application:
 \begin{itemize}
   \item \code{DoInit()}
   \item \code{DoUpdateParameters()}
@@ -101,7 +104,8 @@ types of parameters:
   \item \code{ParameterType\_Float} : parameter storing a float.
   \item \code{ParameterType\_String} : parameter storing character string.
   \item \code{ParameterType\_StringList} : parameter storing a list of character string.
-  \item \code{ParameterType\_Filename} : parameter storing a file name.
+  \item \code{ParameterType\_InputFilename} : parameter storing an input file name.
+  \item \code{ParameterType\_InputFilenameList} : parameter storing a list of input file names.
   \item \code{ParameterType\_Directory} : parameter storing a folder name.
   \item \code{ParameterType\_Group} : parameter storing children parameters.
   \item \code{ParameterType\_Choice} : parameter storing a list of choices (doesn't support
@@ -113,9 +117,12 @@ types of parameters:
   \item \code{ParameterType\_ComplexInputImage} : parameter storing a complex input image.
   \item \code{ParameterType\_InputVectorData} : parameter storing input vector data.
   \item \code{ParameterType\_InputVectorDataList} : parameter storing a list of input vector data.
+  \item \code{ParameterType\_InputProcessXML} : parameter storing an input XML file name.
+  \item \code{ParameterType\_OutputFilename} : parameter storing an output file name.
   \item \code{ParameterType\_OutputImage} : parameter storing an output image.
   \item \code{ParameterType\_ComplexOutputImage} : parameter storing a complex output image.
   \item \code{ParameterType\_OutputVectorData} : parameter storing an output vector data.
+  \item \code{ParameterType\_OutputProcessXML} : parameter storing an output XML file name.
   \item \code{ParameterType\_RAM} : parameter storing the maximum amount of RAM to be used.
 \end{itemize}
 
