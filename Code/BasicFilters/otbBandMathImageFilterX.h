@@ -28,6 +28,8 @@
 
 #include "otbParserX.h"
 
+
+
 namespace otb
 {
 /** \class BandMathImageFilterX
@@ -135,14 +137,32 @@ private :
   BandMathImageFilterX(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  std::string                           m_Expression;
-  std::vector<ParserType::Pointer>      m_VParser;
-  std::vector< std::vector<ValueType> >    m_AImage;
-  std::vector< std::string >            m_VVarName;
-  unsigned int                          m_NbVar;
+  void generateVariables();
 
-  SpacingType                           m_Spacing;
-  OrigineType                           m_Origin;
+
+  typedef struct {
+      std::string name;
+      int         type;
+      int         info[5]; 
+  } adhocStruct;
+
+  typedef struct {
+      std::string name;
+      ValueType   value;
+      int         type;
+      int         info[5]; 
+  } adhocStruct2;
+
+  std::string                               m_Expression;
+  std::vector<ParserType::Pointer>          m_VParser;
+  std::vector< std::vector<adhocStruct2> >  m_AImage;
+  std::vector< adhocStruct >                m_VVarName;
+  std::vector< adhocStruct >                m_VAllowedVarName;
+  std::vector< adhocStruct >                m_VNotAllowedVarName;
+  unsigned int                             m_NbVar;
+
+  SpacingType                              m_Spacing;
+  OrigineType                              m_Origin;
 
   long                                  m_UnderflowCount;
   long                                  m_OverflowCount;

@@ -25,6 +25,47 @@
 namespace otb
 {
 
+
+class bands : public mup::ICallback
+  {
+public:
+    bands():ICallback(mup::cmFUNC, "bands", 2)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+    {
+
+      // Get the argument from the argument input vector
+      mup::matrix_type a = a_pArg[0]->GetArray();      
+      mup::matrix_type b = a_pArg[1]->GetArray();
+
+
+      int nbrows = b.GetRows();
+      int nbcols = b.GetCols();
+
+      mup::matrix_type res(nbrows,nbcols,0.);
+
+      for (int k=0; k<nbcols; ++k)
+        res.At(0,k)=a.At(b.At(0,k).GetInteger()-1); //-1 : to make first band have rank #1 (and not 0)
+
+      // The return value is passed by writing it to the reference ret
+      *ret = res;
+
+    }
+
+    const mup::char_type* GetDesc() const
+    {
+      return "bands - A bands selector";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new bands(*this);
+    }
+  };
+
+
+
 class ndvi : public mup::ICallback
   {
 public:
@@ -48,14 +89,175 @@ public:
 
     const mup::char_type* GetDesc() const
     {
-      return "NDVI";
+      return "NDVI - Normalized Difference Vegetation Index";
     }
 
-    IToken* Clone() const
+    mup::IToken* Clone() const
     {
       return new ndvi(*this);
     }
   };
+
+
+//--------------------------------------------------------------------------------------------------------//
+class vcos : public mup::ICallback
+  {
+public:
+    vcos():ICallback(mup::cmFUNC, "vcos", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+    {
+      // Get the argument from the argument input vector
+      const mup::matrix_type a = a_pArg[0]->GetArray();
+
+
+      int nbrows = a.GetRows();
+      int nbcols = a.GetCols();
+
+      mup::matrix_type res(nbrows,nbcols,0.);
+
+      for (int k=0; k<nbcols; ++k)
+        for (int p=0; p<nbrows; ++p)
+          res.At(p,k) = vcl_cos(a.At(p,k).GetFloat());
+          
+
+      // The return value is passed by writing it to the reference ret
+      *ret = res;
+    }
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vcos - Cosinus for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vcos(*this);
+    }
+  };
+
+
+class vsin : public mup::ICallback
+  {
+public:
+    vsin():ICallback(mup::cmFUNC, "vsin", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+    {
+      // Get the argument from the argument input vector
+      const mup::matrix_type a = a_pArg[0]->GetArray();
+
+
+      int nbrows = a.GetRows();
+      int nbcols = a.GetCols();
+
+      mup::matrix_type res(nbrows,nbcols,0.);
+
+      for (int k=0; k<nbcols; ++k)
+        for (int p=0; p<nbrows; ++p)
+          res.At(p,k) = vcl_sin(a.At(p,k).GetFloat());
+
+      // The return value is passed by writing it to the reference ret
+      *ret = res;
+    }
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vsin - Sinus for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vsin(*this);
+    }
+  };
+
+
+class MatDiv : public mup::IOprtBin    
+  {
+  public:
+    MatDiv():IOprtBin(_T("div"), (int)(mup::prMUL_DIV), mup::oaLEFT) 
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
+    {
+      const mup::matrix_type a = a_pArg[0]->GetArray();
+      const mup::matrix_type b = a_pArg[1]->GetArray();
+
+      /*if (!arg1->IsNonComplexScalar())
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1)); 
+
+      if (!arg2->IsNonComplexScalar())
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));*/ 
+      
+      int nbrows = a.GetRows();
+      int nbcols = a.GetCols();
+
+      mup::matrix_type res(nbrows,nbcols,0.);
+
+      for (int k=0; k<nbcols; ++k)
+        for (int p=0; p<nbrows; ++p)
+          res.At(p,k) = a.At(p,k).GetFloat() / b.At(p,k).GetFloat();
+          
+
+      // The return value is passed by writing it to the reference ret
+      *ret = res; 
+    }
+
+    virtual const mup::char_type* GetDesc() const 
+    { 
+      return _T("x ./ y - Division for noncomplex vectors & matrices"); 
+    }
+  
+    virtual mup::IToken* Clone() const
+    { 
+      return new MatDiv(*this); 
+    }
+  };
+
+class MatConv : public mup::IOprtBin    
+  {
+  public:
+    MatConv():IOprtBin(_T("mult"), (int)(mup::prMUL_DIV), mup::oaLEFT) 
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
+    {
+      const mup::matrix_type a = a_pArg[0]->GetArray();
+      const mup::matrix_type b = a_pArg[1]->GetArray();
+
+      /*if (!arg1->IsNonComplexScalar())
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1)); 
+
+      if (!arg2->IsNonComplexScalar())
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));*/ 
+      
+      int nbrows = a.GetRows();
+      int nbcols = a.GetCols();
+
+      mup::matrix_type res(nbrows,nbcols,0.);
+
+      for (int k=0; k<nbcols; ++k)
+        for (int p=0; p<nbrows; ++p)
+          res.At(p,k) = a.At(p,k).GetFloat() * b.At(p,k).GetFloat();
+        
+      // The return value is passed by writing it to the reference ret
+      *ret = res; 
+    }
+
+    virtual const mup::char_type* GetDesc() const 
+    { 
+      return _T("x mult y - Convolution for noncomplex vectors & matrices"); 
+    }
+  
+    virtual mup::IToken* Clone() const
+    { 
+      return new MatConv(*this); 
+    }
+  };
+
 
 }//end namespace otb
 

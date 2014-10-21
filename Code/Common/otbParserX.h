@@ -71,6 +71,9 @@ public:
 
   /** Return the list of variables */
   const mup::var_maptype& GetVar() const;
+ 
+  /** Return the list of expression variables (only make sense after having set up an expression) */
+  const mup::var_maptype& GetExprVar() const;
 
   /**  Check Expression **/
   bool CheckExpr();

@@ -58,7 +58,12 @@ public:
   virtual void InitFun()
   {
     m_MuParserX.DefineFun(new ndvi);
-
+    //m_MuParserX.DefineFun(new conv);
+    m_MuParserX.DefineFun(new bands);
+    m_MuParserX.DefineFun(new vcos);
+    m_MuParserX.DefineFun(new vsin);
+    m_MuParserX.DefineOprt(new MatDiv);
+    m_MuParserX.DefineOprt(new MatConv);
   }
 
   /** Set the expression to be parsed */
@@ -113,6 +118,12 @@ public:
   const mup::var_maptype& GetVar() const
   {
     return m_MuParserX.GetVar();
+  }
+
+  /** Return the list of expression variables (only make sense after having set up an expression) */
+  const mup::var_maptype& GetExprVar() const
+  {
+    return m_MuParserX.GetExprVar();
   }
 
   /**  Check Expression **/
@@ -247,6 +258,14 @@ const mup::var_maptype& ParserX::GetVar() const
 {
   return m_InternalParserX->GetVar();
 }
+
+
+/** Return the list of expression variables (only make sense after having set up an expression) */
+const mup::var_maptype& ParserX::GetExprVar() const
+{
+   return m_InternalParserX->GetExprVar();
+}
+
 
 // Get the map with the functions
 /*ParserX::FunctionMapType ParserX::GetFunList() const chris

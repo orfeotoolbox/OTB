@@ -28,6 +28,7 @@ void RegisterTests()
   REGISTER_TEST(otbBandMathImageFilterXNew);
   REGISTER_TEST(otbBandMathImageFilter);
   REGISTER_TEST(otbBandMathImageFilterX);
+  REGISTER_TEST(otbBandMathImageFilterXBatchMode);
   REGISTER_TEST(otbBandMathImageFilterWithIdx);
   REGISTER_TEST(otbBandMathImageFilterXWithIdx);
   REGISTER_TEST(otbComplexToIntensityFilterTest);
