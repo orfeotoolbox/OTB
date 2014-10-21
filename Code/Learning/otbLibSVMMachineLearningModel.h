@@ -96,6 +96,9 @@ public:
 
   itkGetMacro(ParameterOptimization, bool);
   itkSetMacro(ParameterOptimization, bool);
+ 
+  itkGetMacro(DoProbabilityEstimates, bool);
+  itkSetMacro(DoProbabilityEstimates, bool);
 
   // itkGetMacro(Epsilon, int);
   // itkSetMacro(Epsilon, int);
@@ -117,6 +120,7 @@ private:
   int m_KernelType;
   float m_C;
   bool m_ParameterOptimization;
+  bool m_DoProbabilityEstimates;
   typename SVMEstimatorType::Pointer m_SVMestimator;
 };
 } // end namespace otb

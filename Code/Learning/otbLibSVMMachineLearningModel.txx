@@ -39,6 +39,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   m_C = 1.0;
   // m_Epsilon = 1e-6;
   m_ParameterOptimization = false;
+  m_DoProbabilityEstimates = false;
   m_SVMestimator = SVMEstimatorType::New();
 }
 
@@ -67,6 +68,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   m_SVMestimator->SetC(m_C);
   m_SVMestimator->SetKernelType(m_KernelType);
   m_SVMestimator->SetParametersOptimization(m_ParameterOptimization);
+  m_SVMestimator->DoProbabilityEstimates(m_DoProbabilityEstimates);
 
   m_SVMestimator->SetInputSampleList(this->GetInputListSample());
   m_SVMestimator->SetTrainingSampleList(this->GetTargetListSample());
