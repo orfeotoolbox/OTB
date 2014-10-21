@@ -23,6 +23,7 @@
 #include "itkFixedArray.h"
 #include "itkListSample.h"
 #include "otbMachineLearningModel.h"
+#include "itkVariableSizeMatrix.h"
 
 class CvRTrees;
 
@@ -48,6 +49,10 @@ public:
   typedef TTargetValue                                  TargetValueType;
   typedef itk::FixedArray<TargetValueType,1>            TargetSampleType;
   typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
+  
+  // Other
+  typedef itk::VariableSizeMatrix<float>                VariableImportanceMatrixType;
+
 
   //opencv typedef
   typedef CvRTrees RFType;
@@ -159,11 +164,9 @@ public:
   itkGetMacro(TerminationCriteria, int);
   itkSetMacro(TerminationCriteria, int);
 
-  // cv::Mat GetVariableImportance()
-  // {
-  //   return m_RFModel->getVarImportance();
-  // }
-
+  /** Returns a matrix containing variable importance */
+  VariableImportanceMatrixType GetVariableImportance();
+  
   float GetTrainError();
 
 protected:
