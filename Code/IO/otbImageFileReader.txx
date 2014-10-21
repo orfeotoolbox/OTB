@@ -479,7 +479,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     itk::ExposeMetaData(dict, MetaDataKey::ProjectionRefKey, projRef);
 
     // Compute spacing for an identity geotransform at current resolution
-    unsigned int resolution;
+    unsigned int resolution = 0;
     itk::ExposeMetaData<unsigned int>(dict,
                                       MetaDataKey::ResolutionFactor,
                                       resolution);
