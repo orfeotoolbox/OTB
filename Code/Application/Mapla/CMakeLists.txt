@@ -79,21 +79,21 @@ endif()
 # The library is also used in tests, waiting for a better test strategy
 # The library is not installed
 
-add_library( Mapla
-  STATIC
-  ${Mapla_SOURCES}
-  ${Mapla_FORMS_HEADERS}
-  ${Mapla_SRC_MOC}
-)
-target_link_libraries( Mapla
-  Monteverdi2_Gui
-)
+# add_library( Mapla
+#   STATIC
+#   ${Mapla_SOURCES}
+#   ${Mapla_FORMS_HEADERS}
+#   ${Mapla_SRC_MOC}
+# )
+# target_link_libraries( Mapla
+#   Monteverdi2_Gui
+# )
 
-if (OTB_WRAP_QT)
-target_link_libraries( Mapla
-  Monteverdi2_ApplicationsWrapper
-)
-endif()
+# if (OTB_WRAP_QT)
+# target_link_libraries( Mapla
+#   Monteverdi2_ApplicationsWrapper
+# )
+# endif()
 
 #############################################################################
 # monteverdi2 executable
@@ -102,6 +102,10 @@ add_executable( mapla
   main.cxx
   ${Mapla_WIN32_RC_FILE}
   ${Mapla_RESOURCES_RCC}
+  #
+  ${Mapla_SOURCES}
+  ${Mapla_FORMS_HEADERS}
+  ${Mapla_SRC_MOC}  
 )
 
 if (MONTEVERDI2_OUTPUT_NAME)
@@ -109,10 +113,16 @@ if (MONTEVERDI2_OUTPUT_NAME)
 endif()
 
 target_link_libraries( mapla
-  Mapla
-  #Monteverdi2_Gui
+  # Mapla
+  Monteverdi2_Gui
   ${QT_QTMAIN_LIBRARY}
 )
+
+if( OTB_WRAP_QT )
+  target_link_libraries( mapla
+    Monteverdi2_ApplicationsWrapper
+  )
+endif()
 
 # deploy a qt.conf file in the monteverdi2 target build dir
 # to avoid warning on translation discovery
