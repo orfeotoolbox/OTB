@@ -41,10 +41,6 @@
 
 #include <cassert>
 
-//OTB-TEAM
-#define nullptr 0
-#define unique_ptr auto_ptr
-#define override 
 
 #if defined(_UNICODE)
   #if !defined(_T)
@@ -66,7 +62,7 @@
 #endif
 
 /** \brief A macro containing the version of muParserX. */
-#define MUP_PARSER_VERSION _T("3.0.2 (20140714; release)")
+#define MUP_PARSER_VERSION _T("3.0.3 (20141011; release)")
 
 /** \brief A macro for setting the parser namespace. */
 #define MUP_NAMESPACE_START namespace mup {
