@@ -134,11 +134,6 @@ protected :
   void AfterThreadedGenerateData();
 
 private :
-  BandMathImageFilterX(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
-  void generateVariables();
-
 
   typedef struct {
       std::string name;
@@ -153,7 +148,14 @@ private :
       int         info[5]; 
   } adhocStruct2;
 
-  std::string                               m_Expression;
+  BandMathImageFilterX(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+  void addVariable(adhocStruct&);
+  void generateVariables();
+
+
+  std::vector<std::string>                  m_Expression;
   std::vector<ParserType::Pointer>          m_VParser;
   std::vector< std::vector<adhocStruct2> >  m_AImage;
   std::vector< adhocStruct >                m_VVarName;

@@ -79,7 +79,7 @@ void BandMathImageFilterX<TImage>
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Expression: "      << m_Expression                  << std::endl;
+  os << indent << "Expression: "      << m_Expression[0]                  << std::endl;
   os << indent << "Computed values follow:"                            << std::endl;
   os << indent << "UnderflowCount: "  << m_UnderflowCount              << std::endl;
   os << indent << "OverflowCount: "   << m_OverflowCount               << std::endl;
@@ -182,8 +182,8 @@ template< typename TImage >
 void BandMathImageFilterX<TImage>
 ::SetExpression(const std::string& expression)
 {
-  if (m_Expression != expression)
-    m_Expression = expression;
+  //if (m_Expression != expression)
+    m_Expression.push_back(expression);
   this->Modified();
 }
 
@@ -191,7 +191,7 @@ template< typename TImage >
 std::string BandMathImageFilterX<TImage>
 ::GetExpression() const
 {
-  return m_Expression;
+  return m_Expression[0];
 }
 
 template< typename TImage >
@@ -204,38 +204,55 @@ std::string BandMathImageFilterX<TImage>
 
 template< typename TImage >
 void BandMathImageFilterX<TImage>
+::addVariable(adhocStruct &ahc)
+{
+    bool found=false;
+    for(int i=0; i<m_VVarName.size(); ++i)
+      if (m_VVarName[i].name == ahc.name)
+        found=true;
+
+    if (!found)
+      m_VVarName.push_back(ahc);
+}
+
+
+template< typename TImage >
+void BandMathImageFilterX<TImage>
 ::generateVariables()
 {
 
   m_VVarName.clear();
   m_VNotAllowedVarName.clear();
 
-  ParserType::Pointer dummyParser = ParserType::New();
-  dummyParser->SetExpr(this->GetExpression());
-
-  mup::var_maptype vmap = dummyParser->GetExprVar();
-  for (mup::var_maptype::iterator item = vmap.begin(); item!=vmap.end(); ++item)
+  for(int IDExpression=0; IDExpression<m_Expression.size(); ++IDExpression)
   {
-    bool OK=false; int i=0;
-    while( ( !OK ) && (i<m_VAllowedVarName.size()) )
-    {
-      if (item->first == m_VAllowedVarName[i].name)
-        OK=true;
-      else
-        i++;
-    }
-    
-    if (OK) {m_VVarName.push_back(m_VAllowedVarName[i]);}
-    else {
-            adhocStruct ahc;
-            ahc.name = item->first;  
-            m_VNotAllowedVarName.push_back(ahc);
-          }
+      ParserType::Pointer dummyParser = ParserType::New();
+      dummyParser->SetExpr(this->GetExpression());
+
+      mup::var_maptype vmap = dummyParser->GetExprVar();
+      for (mup::var_maptype::iterator item = vmap.begin(); item!=vmap.end(); ++item)
+      {
+        bool OK=false; int i=0;
+        while( ( !OK ) && (i<m_VAllowedVarName.size()) )
+        {
+          if (item->first == m_VAllowedVarName[i].name)
+            OK=true;
+          else
+            i++;
+        }
+        
+        if (OK) {addVariable(m_VAllowedVarName[i]);} //<<<<<<------------
+        else {
+                adhocStruct ahc;
+                ahc.name = item->first;  
+                m_VNotAllowedVarName.push_back(ahc);
+              }
+      }
   }
  
 
-for(int y=0; y<m_VVarName.size(); y++)
-  std::cout << "--> " << m_VVarName[y].name << " " << m_VVarName[y].type << std::endl;
+/*for(int y=0; y<m_VVarName.size(); y++)
+  std::cout << "--> " << m_VVarName[y].name << " " << m_VVarName[y].type << std::endl;*/
 
   if (m_VNotAllowedVarName.size()>0)
   {
@@ -299,7 +316,7 @@ void BandMathImageFilterX<TImage>
   for(int i = 0; i < nbThreads; ++i)
   {
     m_AImage[i].resize(m_NbVar);
-    m_VParser[i]->SetExpr(m_Expression);
+    m_VParser[i]->SetExpr(m_Expression[0]);
 
     for(int j=0; j < m_NbVar; ++j)
       {
