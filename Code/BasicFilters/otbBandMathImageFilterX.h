@@ -109,9 +109,6 @@ public:
   void SetNthInput( unsigned int idx, const ImageType * image);
   void SetNthInput( unsigned int idx, const ImageType * image, const std::string& varName);
 
-  /** Change the nth filter input associated variable name */
-  void SetNthInputName(unsigned int idx, const std::string& expression);
-
   /** Set the expression to be parsed */
   void SetExpression(const std::string& expression);
 
@@ -119,7 +116,7 @@ public:
   std::string GetExpression(int) const;
 
   /** Return the nth filter input associated variable name */
-  std::string GetNthInputName(unsigned int idx) const;
+  std::vector<std::string>& GetVarNames() const;
 
   /** Return a pointer on the nth filter input */
   ImageType * GetNthInput(unsigned int idx);
@@ -154,7 +151,7 @@ private :
   void operator=(const Self&); //purposely not implemented
 
   void AddVariable(adhocStruct&);
-  void GenerateVariables();
+  void PrepareParsers();
   void OutputsDimensions();
 
   std::vector<std::string>                  m_Expression;

@@ -62,7 +62,7 @@ BandMathImageFilterX<TImage>
   ahcY.type = 1;
   m_VAllowedVarName.push_back(ahcY);
 
-  this->SetNumberOfThreads(1);
+  //this->SetNumberOfThreads(1);
 
 }
 
@@ -165,13 +165,6 @@ void BandMathImageFilterX<TImage>
 
 }
 
-template <class TImage>
-void BandMathImageFilterX<TImage>
-::SetNthInputName(unsigned int idx, const std::string& varName)
-{
- // m_VVarName[idx] = varName; //TODO
-}
-
 template <typename TImage>
 TImage * BandMathImageFilterX<TImage>
 ::GetNthInput(unsigned int idx)
@@ -181,9 +174,9 @@ TImage * BandMathImageFilterX<TImage>
 
 template< typename TImage >
 void BandMathImageFilterX<TImage>
-::SetExpression(const std::string& expression)
+::SetExpression(const std::string& expression) 
 {
-  m_Expression.push_back(expression); //TODO
+  m_Expression.push_back(expression); 
 
   if (m_Expression.size()>1)
     this->SetNthOutput( (int) (m_Expression.size()) -1, ( TImage::New() ).GetPointer() );
@@ -195,14 +188,19 @@ template< typename TImage >
 std::string BandMathImageFilterX<TImage>
 ::GetExpression(int IDExpression) const
 {
-  return m_Expression.at(IDExpression); //TODO
+  return m_Expression.at(IDExpression); 
 }
 
 template< typename TImage >
-std::string BandMathImageFilterX<TImage>
-::GetNthInputName(unsigned int idx) const
+std::vector<std::string>& BandMathImageFilterX<TImage>
+::GetVarNames() const
 {
-  //return m_VVarName.at(idx); //TODO
+  std::vector<std::string> res;
+  for(int y=0; y<m_VVarName.size(); y++)
+    res.push_back(m_VVarName[y].name);
+
+  return res;
+
 }
 
 
@@ -222,7 +220,7 @@ void BandMathImageFilterX<TImage>
 
 template< typename TImage >
 void BandMathImageFilterX<TImage>
-::GenerateVariables()
+::PrepareParsers()
 {
 
   // Generate variables names
@@ -257,12 +255,7 @@ void BandMathImageFilterX<TImage>
       }
 
   }
- 
-/*for(int y=0; y<m_VAllowedVarName.size(); y++)
-  std::cout << "--> " << m_VAllowedVarName[y].name << " " << m_VAllowedVarName[y].type << std::endl;
 
-for(int y=0; y<m_VVarName.size(); y++)
-  std::cout << "---------> " << m_VVarName[y].name << " " << m_VVarName[y].type << std::endl;*/
 
   if (m_VNotAllowedVarName.size()>0)
   {
@@ -293,7 +286,6 @@ for(int y=0; y<m_VVarName.size(); y++)
   for(int i = 0; i < nbThreads; ++i)
   {
     m_AImage[i].resize(m_NbVar);
-    //m_VParser[i]->SetExpr(m_Expression[0]); //To be vired
 
     for(int j=0; j < m_NbVar; ++j)
       {
@@ -380,9 +372,6 @@ void BandMathImageFilterX< TImage >
     }
   }
 
-  /*for(int i=0; i<m_Expression.size(); ++i)
-    std::cout << "m_outputsDimensions[i] = " << m_outputsDimensions[i] << std::endl;*/
-
 }
 
 
@@ -394,8 +383,8 @@ void BandMathImageFilterX< TImage >
   typedef itk::ImageBase< TImage::ImageDimension > ImageBaseType;
   typename ImageBaseType::Pointer outputPtr;
 
-  GenerateVariables();
-  OutputsDimensions();
+  PrepareParsers(); // addition
+  OutputsDimensions(); // addition
 
   // Allocate the output memory
   int i=0;
@@ -451,7 +440,6 @@ void BandMathImageFilterX<TImage>
   m_ThreadOverflow.SetSize(nbThreads);
   m_ThreadOverflow.Fill(0);
 
-  //GenerateVariables();
 }
 
 
@@ -472,14 +460,20 @@ void BandMathImageFilterX<TImage>
     m_OverflowCount += m_ThreadOverflow[i];
     }
 
-  if((m_UnderflowCount != 0) || (m_OverflowCount!=0))
-    otbWarningMacro(<< std::endl
-        << "The Following Parsed Expression  :  "
-        << this->GetExpression(0)                                 << std::endl //TODO
-        << "Generated " << m_UnderflowCount << " Underflow(s) "
+  if((m_UnderflowCount != 0) || (m_OverflowCount!=0)) //TODO
+  {
+    std::stringstream sstm;
+    sstm << std::endl
+        << "The Following Parsed Expression  :  ";
+    for(int t=0; t<m_Expression.size(); ++t)
+        sstm << this->GetExpression(t) << std::endl;
+    sstm << "Generated " << m_UnderflowCount << " Underflow(s) "
         << "And " << m_OverflowCount        << " Overflow(s) "   << std::endl
         << "The Parsed Expression, The Inputs And The Output "
-        << "Type May Be Incompatible !");
+        << "Type May Be Incompatible !";
+
+    otbWarningMacro(<< sstm.str());
+  }
 }
 
 template< typename TImage >
@@ -496,19 +490,14 @@ void BandMathImageFilterX<TImage>
   std::vector< ImageRegionConstIteratorType > Vit;
   Vit.resize(nbInputImages);
   for(int j=0; j < nbInputImages; ++j)
-    {
-      Vit[j] = ImageRegionConstIteratorType (this->GetNthInput(j), outputRegionForThread);
-    }
+    Vit[j] = ImageRegionConstIteratorType (this->GetNthInput(j), outputRegionForThread);
+    
 
   std::vector< ImageRegionConstIteratorType > VoutIt;
   VoutIt.resize(m_Expression.size());
   for(int j=0; j < VoutIt.size(); ++j)
-    {
-      VoutIt[j] = ImageRegionConstIteratorType (this->GetOutput(j), outputRegionForThread);
-//std::cout << " this->GetOutput(j)->GetNumberOfComponentsPerPixel()  = " << this->GetOutput(j)->GetNumberOfComponentsPerPixel() << std::endl;
-    }
-
-  //itk::ImageRegionIterator<TImage> outIt (this->GetOutput(0), outputRegionForThread);
+    VoutIt[j] = ImageRegionConstIteratorType (this->GetOutput(j), outputRegionForThread);
+    
 
   // Support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
@@ -624,7 +613,7 @@ void BandMathImageFilterX<TImage>
 
     for(int j=0; j < nbInputImages; ++j) {++Vit[j];}
     for(int j=0; j < m_Expression.size(); ++j) {++VoutIt[j];}
-    //++outIt; 
+    
     progress.CompletedPixel();
   }
 
