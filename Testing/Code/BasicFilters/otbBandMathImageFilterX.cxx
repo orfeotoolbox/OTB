@@ -104,16 +104,23 @@ int otbBandMathImageFilterX( int itkNotUsed(argc), char* itkNotUsed(argv) [])
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3, "canal3");
 
-  filter->SetExpression("vcos(2 * pi * im1) div (2 * pi * im2 + {1E-3}) mult vsin(pi * canal3) + ndvi(im1b1, im2b1) * sqrt(2) * canal3");
+  filter->SetExpression("vcos(2 * pi * im1) div (2 * pi * im2 + {1E-3}) mult vsin(pi * canal3) + ndvi(im1b1, im2b1) * sqrt(2) * canal3"); //Sub-test 1
+  filter->SetExpression("im1b1 / im2b1"); //Sub-test 2 (Edge Effect Handling)
   filter->Update();
 
+  //if (filter->GetNumberOfOutputs() != 2)
+    
+
+  ImageType::Pointer output1 = filter->GetOutput(0);
+  ImageType::Pointer output2 = filter->GetOutput(1);
+
   std::cout << "\n---  Standard Use\n";
-  std::cout << "Parsed Expression :   " << filter->GetExpression() << std::endl;
+  std::cout << "Parsed Expression :   " << filter->GetExpression(0) << std::endl;
 
-  ImageType::Pointer output = filter->GetOutput();
-  IteratorType it(output, region);
+  //Sub-test 1
+  IteratorType itoutput1(output1, region);
 
-  for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(), it.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3, ++it)
+  for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(), itoutput1.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3, ++itoutput1)
     {
     ImageType::IndexType i1 = it1.GetIndex();
     ImageType::IndexType i2 = it2.GetIndex();
@@ -124,7 +131,7 @@ int otbBandMathImageFilterX( int itkNotUsed(argc), char* itkNotUsed(argv) [])
     px2[0] = ( i2[0] * i2[1] );
     px3[0] = ( i3[0] + i3[1] * i3[1] );
 
-    double result = it.Get()[0];
+    double result = itoutput1.Get()[0];
     double ndvi_expected;
     double error;
 
@@ -138,7 +145,7 @@ int otbBandMathImageFilterX( int itkNotUsed(argc), char* itkNotUsed(argv) [])
 
     
     /*std::cout << "Pixel_1 =  " << it1.Get()[0] << "     Pixel_2 =  " << it2.Get()[0] << "     Pixel_3 =  " << it3.Get()[0]
-        << "     Result =  " << it.Get()[0] << "     Expected =  " << expected << std::endl;*/
+        << "     Result =  " << itoutput1.Get()[0] << "     Expected =  " << expected << std::endl;*/
     
 
     error = (result - expected) * (result - expected) / (result + expected);
@@ -149,7 +156,7 @@ int otbBandMathImageFilterX( int itkNotUsed(argc), char* itkNotUsed(argv) [])
          << "Pixel_1 =  "       << it1.Get()[0]
          << "     Pixel_2 =  "  << it2.Get()[0]
          << "     Pixel_3 =  "  << it3.Get()[0]
-         << "     Result =  "   << it.Get()[0]
+         << "     Result =  "   << itoutput1.Get()[0]
          << "     Expected =  " << expected     << std::endl );
       FAIL_FLAG++;
       }
@@ -161,23 +168,25 @@ int otbBandMathImageFilterX( int itkNotUsed(argc), char* itkNotUsed(argv) [])
   FAIL_FLAG = 0;
 
 
-
+  //Sub-test 2
   /** Edge Effect Handling */
+
+  IteratorType itoutput2(output2, region);
   std::cout << "\n--- Edge Effect Handling\n";
   std::cout << "- +/-inf section\n";
-  filter->SetExpression("im1b1 / im2b1");
-  filter->Update();
+  //filter->SetExpression("im1b1 / im2b1");
+  //filter->Update();
 
   std::cout << "- nan section\n";
-  it1.GoToBegin(); it2.GoToBegin(); it.GoToBegin();
-  for(i=1; i<=50; ++i , ++it1, ++it2, ++it){}
-  if(vnl_math_isnan(it.Get()[0]))
-    std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Result =  " << it.Get() << "     Expected =  nan\n";
+  it1.GoToBegin(); it2.GoToBegin(); itoutput2.GoToBegin();
+  for(i=1; i<=50; ++i , ++it1, ++it2, ++itoutput2){}
+  if(vnl_math_isnan(itoutput2.Get()[0]))
+    std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Result =  " << itoutput2.Get() << "     Expected =  nan\n";
   else
     itkGenericExceptionMacro(
              << "\nError > Bad Edge Effect Handling -> Test Failled\n"
              << "Pixel_1 =  "     << it1.Get()  << "     Pixel_2 =  "  << it2.Get()
-             << "     Result =  " << it.Get()   << "     Expected =  nan\n" );
+             << "     Result =  " << itoutput2.Get()   << "     Expected =  nan\n" );
   std::cout << std::endl; 
 
   return EXIT_SUCCESS;
@@ -255,7 +264,7 @@ int otbBandMathImageFilterXBatchMode( int itkNotUsed(argc), char* itkNotUsed(arg
   filter->Update();
 
   std::cout << "\n---  Standard Use\n";
-  std::cout << "Parsed Expression :   " << filter->GetExpression() << std::endl;
+  std::cout << "Parsed Expression :   " << filter->GetExpression(0) << std::endl;
 
   ImageType::Pointer output = filter->GetOutput();
   IteratorType it(output, region);
@@ -400,25 +409,17 @@ int otbBandMathImageFilterXWithIdx( int itkNotUsed(argc), char* argv[])
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3);
 
- // #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
   filter->SetExpression("(sqrt(idxX*idxX+idxY*idxY) < 50) ? im1b1 : im2b1");
-  //#else
-  //filter->SetExpression("if(sqrt(idxX*idxX+idxY*idxY) < 50, b2, b3)");
-  //#endif
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname1);
   writer->Update();
 
-  //#ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
-  filter->SetExpression("(sqrt(im2PhyX*im2PhyX+im2PhyY*im2PhyY) < 25) ? im2b1 : im3b1");
-  /*#else
-  filter->SetExpression("if(sqrt(idxPhyX*idxPhyX+idxPhyY*idxPhyY) < 25, b2, b3)");
-  #endif*/
+  /*filter->SetExpression("(sqrt(im2PhyX*im2PhyX+im2PhyY*im2PhyY) < 25) ? im2b1 : im3b1");
   WriterType::Pointer writer2 = WriterType::New();
   writer2->SetInput(filter->GetOutput());
   writer2->SetFileName(outfname2);
-  writer2->Update();
+  writer2->Update();*/
 
   return EXIT_SUCCESS;
 }

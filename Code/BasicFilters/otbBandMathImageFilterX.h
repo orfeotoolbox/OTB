@@ -116,7 +116,7 @@ public:
   void SetExpression(const std::string& expression);
 
   /** Return the expression to be parsed */
-  std::string GetExpression() const;
+  std::string GetExpression(int) const;
 
   /** Return the nth filter input associated variable name */
   std::string GetNthInputName(unsigned int idx) const;
@@ -128,6 +128,8 @@ protected :
   BandMathImageFilterX();
   virtual ~BandMathImageFilterX();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  void AllocateOutputs();
 
   void BeforeThreadedGenerateData();
   void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
@@ -151,9 +153,9 @@ private :
   BandMathImageFilterX(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  void addVariable(adhocStruct&);
-  void generateVariables();
-
+  void AddVariable(adhocStruct&);
+  void GenerateVariables();
+  void OutputsDimensions();
 
   std::vector<std::string>                  m_Expression;
   std::vector<ParserType::Pointer>          m_VParser;
@@ -162,6 +164,7 @@ private :
   std::vector< adhocStruct >                m_VAllowedVarName;
   std::vector< adhocStruct >                m_VNotAllowedVarName;
   unsigned int                             m_NbVar;
+  std::vector< int >                        m_outputsDimensions;
 
   SpacingType                              m_Spacing;
   OrigineType                              m_Origin;

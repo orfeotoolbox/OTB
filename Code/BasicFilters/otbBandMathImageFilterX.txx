@@ -62,7 +62,7 @@ BandMathImageFilterX<TImage>
   ahcY.type = 1;
   m_VAllowedVarName.push_back(ahcY);
 
-  //this->SetNumberOfThreads(1);
+  this->SetNumberOfThreads(1);
 
 }
 
@@ -72,6 +72,7 @@ BandMathImageFilterX<TImage>
 ::~BandMathImageFilterX()
 {
 }
+
 
 template <class TImage>
 void BandMathImageFilterX<TImage>
@@ -182,16 +183,19 @@ template< typename TImage >
 void BandMathImageFilterX<TImage>
 ::SetExpression(const std::string& expression)
 {
-  //if (m_Expression != expression)
-    m_Expression.push_back(expression);
+  m_Expression.push_back(expression); //TODO
+
+  if (m_Expression.size()>1)
+    this->SetNthOutput( (int) (m_Expression.size()) -1, ( TImage::New() ).GetPointer() );
+
   this->Modified();
 }
 
 template< typename TImage >
 std::string BandMathImageFilterX<TImage>
-::GetExpression() const
+::GetExpression(int IDExpression) const
 {
-  return m_Expression[0];
+  return m_Expression.at(IDExpression); //TODO
 }
 
 template< typename TImage >
@@ -204,7 +208,7 @@ std::string BandMathImageFilterX<TImage>
 
 template< typename TImage >
 void BandMathImageFilterX<TImage>
-::addVariable(adhocStruct &ahc)
+::AddVariable(adhocStruct &ahc)
 {
     bool found=false;
     for(int i=0; i<m_VVarName.size(); ++i)
@@ -218,16 +222,19 @@ void BandMathImageFilterX<TImage>
 
 template< typename TImage >
 void BandMathImageFilterX<TImage>
-::generateVariables()
+::GenerateVariables()
 {
 
+  // Generate variables names
   m_VVarName.clear();
   m_VNotAllowedVarName.clear();
+
+  this->SetNumberOfRequiredOutputs((int) m_Expression.size());
 
   for(int IDExpression=0; IDExpression<m_Expression.size(); ++IDExpression)
   {
       ParserType::Pointer dummyParser = ParserType::New();
-      dummyParser->SetExpr(this->GetExpression());
+      dummyParser->SetExpr(this->GetExpression(IDExpression));
 
       mup::var_maptype vmap = dummyParser->GetExprVar();
       for (mup::var_maptype::iterator item = vmap.begin(); item!=vmap.end(); ++item)
@@ -241,18 +248,21 @@ void BandMathImageFilterX<TImage>
             i++;
         }
         
-        if (OK) {addVariable(m_VAllowedVarName[i]);} //<<<<<<------------
+        if (OK) {AddVariable(m_VAllowedVarName[i]);} 
         else {
                 adhocStruct ahc;
                 ahc.name = item->first;  
                 m_VNotAllowedVarName.push_back(ahc);
               }
       }
+
   }
  
+/*for(int y=0; y<m_VAllowedVarName.size(); y++)
+  std::cout << "--> " << m_VAllowedVarName[y].name << " " << m_VAllowedVarName[y].type << std::endl;
 
-/*for(int y=0; y<m_VVarName.size(); y++)
-  std::cout << "--> " << m_VVarName[y].name << " " << m_VVarName[y].type << std::endl;*/
+for(int y=0; y<m_VVarName.size(); y++)
+  std::cout << "---------> " << m_VVarName[y].name << " " << m_VVarName[y].type << std::endl;*/
 
   if (m_VNotAllowedVarName.size()>0)
   {
@@ -264,6 +274,149 @@ void BandMathImageFilterX<TImage>
     itkExceptionMacro(<< sstm.str());
   }
 
+  
+  // Register variables for each parser (important : one parser per thread)
+  m_VParser.clear();
+  unsigned int nbThreads = this->GetNumberOfThreads();
+  typename std::vector<ParserType::Pointer>::iterator        itParser;
+  m_VParser.resize(nbThreads);
+  for(itParser = m_VParser.begin(); itParser < m_VParser.end(); itParser++)
+    {
+      *itParser = ParserType::New();
+    }
+
+  m_NbVar = m_VVarName.size();
+
+  m_AImage.resize(nbThreads);
+
+  double initValue = 1.0;
+  for(int i = 0; i < nbThreads; ++i)
+  {
+    m_AImage[i].resize(m_NbVar);
+    //m_VParser[i]->SetExpr(m_Expression[0]); //To be vired
+
+    for(int j=0; j < m_NbVar; ++j)
+      {
+        m_AImage[i][j].name = m_VVarName[j].name;
+        m_AImage[i][j].type  = m_VVarName[j].type;
+        for (int t=0;t<5;++t) 
+          m_AImage[i][j].info[t]=m_VVarName[j].info[t];
+
+       
+        if ( (m_AImage[i][j].type == 0 ) || (m_AImage[i][j].type == 1) ) // indices (idxX & idxY)
+        {
+            m_AImage[i][j].value = ValueType(initValue);
+        }
+
+        if (m_AImage[i][j].type == 2) //imiPhyX 
+        {
+          SpacingType spacing = this->GetNthInput(m_AImage[i][j].info[0])->GetSpacing();
+          m_AImage[i][j].value = ValueType(static_cast<double>(spacing[0]));
+        }
+
+        if (m_AImage[i][j].type == 3) //imiPhyY
+        {
+          SpacingType spacing = this->GetNthInput(m_AImage[i][j].info[0])->GetSpacing();
+          m_AImage[i][j].value = ValueType(static_cast<double>(spacing[1]));
+        }
+
+        if (m_AImage[i][j].type == 4 ) // vector
+        {
+            unsigned int nbBands = this->GetNthInput(m_AImage[i][j].info[0])->GetNumberOfComponentsPerPixel();
+            m_AImage[i][j].value = ValueType(1,nbBands,initValue);
+        }
+
+        if (m_AImage[i][j].type == 5 ) // pixel
+        {
+            m_AImage[i][j].value = ValueType(initValue);
+        }
+
+        if (m_AImage[i][j].type == 6 ) // neighborhood
+        {
+            //TODO
+        }
+
+        m_VParser.at(i)->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value)); 
+
+        initValue += 0.01;
+        if (initValue>10.0)
+          initValue=1.0;
+      }
+  }
+
+}
+
+
+template< typename TImage >
+void BandMathImageFilterX< TImage >
+::OutputsDimensions()
+{
+  m_outputsDimensions.clear();
+
+  for(int i=0; i<m_Expression.size(); ++i)
+  {
+    m_VParser.at(0)->SetExpr(m_Expression[i]);
+    ValueType value = m_VParser.at(0)->Eval();
+
+    switch (value.GetType())
+    {   //ValueType
+        case 'i':
+        m_outputsDimensions.push_back(1);
+        break;
+
+        case 'f':
+        m_outputsDimensions.push_back(1);
+        break;
+
+        case 'c':
+        itkExceptionMacro(<< "Complex numbers not supported." << std::endl);
+        break;
+
+        case 'm':
+        mup::matrix_type vect = value.GetArray();
+        m_outputsDimensions.push_back(vect.GetCols());
+        break;
+
+    }
+  }
+
+  /*for(int i=0; i<m_Expression.size(); ++i)
+    std::cout << "m_outputsDimensions[i] = " << m_outputsDimensions[i] << std::endl;*/
+
+}
+
+
+
+template< typename TImage >
+void BandMathImageFilterX< TImage >
+::AllocateOutputs()
+{
+  typedef itk::ImageBase< TImage::ImageDimension > ImageBaseType;
+  typename ImageBaseType::Pointer outputPtr;
+
+  GenerateVariables();
+  OutputsDimensions();
+
+  // Allocate the output memory
+  int i=0;
+  for ( itk::OutputDataObjectIterator it(this); !it.IsAtEnd(); it++ )
+    {
+      // Check whether the output is an image of the appropriate
+      // dimension (use ProcessObject's version of the GetInput()
+      // method since it returns the input as a pointer to a
+      // DataObject as opposed to the subclass version which
+      // static_casts the input to an TInputImage).
+      outputPtr = dynamic_cast< ImageBaseType * >( it.GetOutput() );
+
+        if ( outputPtr )
+        {
+          outputPtr->SetBufferedRegion( outputPtr->GetRequestedRegion() );
+          outputPtr->SetNumberOfComponentsPerPixel(m_outputsDimensions[i]);
+          outputPtr->Allocate();
+        }
+
+      i++;
+    }
 }
 
 template< typename TImage >
@@ -298,71 +451,7 @@ void BandMathImageFilterX<TImage>
   m_ThreadOverflow.SetSize(nbThreads);
   m_ThreadOverflow.Fill(0);
 
-
-  // Important : one parser for each thread
-  typename std::vector<ParserType::Pointer>::iterator        itParser;
-  m_VParser.resize(nbThreads);
-  for(itParser = m_VParser.begin(); itParser < m_VParser.end(); itParser++)
-    {
-      *itParser = ParserType::New();
-    }
-
-  // Generate variables, and register them for each parser (reminder : one per thread)
-  generateVariables();
-  m_NbVar = m_VVarName.size();
-
-  m_AImage.resize(nbThreads);
-
-  for(int i = 0; i < nbThreads; ++i)
-  {
-    m_AImage[i].resize(m_NbVar);
-    m_VParser[i]->SetExpr(m_Expression[0]);
-
-    for(int j=0; j < m_NbVar; ++j)
-      {
-        m_AImage[i][j].name = m_VVarName[j].name;
-        m_AImage[i][j].type  = m_VVarName[j].type;
-        for (int t=0;t<5;++t) 
-          m_AImage[i][j].info[t]=m_VVarName[j].info[t];
-
-       
-        if ( (m_AImage[i][j].type == 0 ) || (m_AImage[i][j].type == 1) ) // indices (idxX & idxY)
-        {
-            m_AImage[i][j].value = ValueType(0.0);
-        }
-
-        if (m_AImage[i][j].type == 2) //imiPhyX 
-        {
-          SpacingType spacing = this->GetNthInput(m_AImage[i][j].info[0])->GetSpacing();
-          m_AImage[i][j].value = ValueType(static_cast<double>(spacing[0]));
-        }
-
-        if (m_AImage[i][j].type == 3) //imiPhyY
-        {
-          SpacingType spacing = this->GetNthInput(m_AImage[i][j].info[0])->GetSpacing();
-          m_AImage[i][j].value = ValueType(static_cast<double>(spacing[1]));
-        }
-
-        if (m_AImage[i][j].type == 4 ) // vector
-        {
-            unsigned int nbBands = this->GetNthInput(m_AImage[i][j].info[0])->GetNumberOfComponentsPerPixel();
-            m_AImage[i][j].value = ValueType(1,nbBands,0.0);
-        }
-
-        if (m_AImage[i][j].type == 5 ) // pixel
-        {
-            m_AImage[i][j].value = ValueType(0.0);
-        }
-
-        if (m_AImage[i][j].type == 6 ) // neighborhood
-        {
-            //TODO
-        }
-
-        m_VParser.at(i)->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value)); 
-      }
-  }
- 
+  //GenerateVariables();
 }
 
 
@@ -386,7 +475,7 @@ void BandMathImageFilterX<TImage>
   if((m_UnderflowCount != 0) || (m_OverflowCount!=0))
     otbWarningMacro(<< std::endl
         << "The Following Parsed Expression  :  "
-        << this->GetExpression()                                 << std::endl
+        << this->GetExpression(0)                                 << std::endl //TODO
         << "Generated " << m_UnderflowCount << " Underflow(s) "
         << "And " << m_OverflowCount        << " Overflow(s) "   << std::endl
         << "The Parsed Expression, The Inputs And The Output "
@@ -411,14 +500,24 @@ void BandMathImageFilterX<TImage>
       Vit[j] = ImageRegionConstIteratorType (this->GetNthInput(j), outputRegionForThread);
     }
 
-  itk::ImageRegionIterator<TImage> outIt (this->GetOutput(), outputRegionForThread);
+  std::vector< ImageRegionConstIteratorType > VoutIt;
+  VoutIt.resize(m_Expression.size());
+  for(int j=0; j < VoutIt.size(); ++j)
+    {
+      VoutIt[j] = ImageRegionConstIteratorType (this->GetOutput(j), outputRegionForThread);
+//std::cout << " this->GetOutput(j)->GetNumberOfComponentsPerPixel()  = " << this->GetOutput(j)->GetNumberOfComponentsPerPixel() << std::endl;
+    }
+
+  //itk::ImageRegionIterator<TImage> outIt (this->GetOutput(0), outputRegionForThread);
 
   // Support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Pixel affectation 
   for(int j=0; j < nbInputImages; ++j) {Vit[j].GoToBegin();}
-  outIt.GoToBegin();
+  for(int j=0; j < m_Expression.size(); ++j) {VoutIt[j].GoToBegin();}
+  //outIt.GoToBegin();
+
   while(!Vit.at(0).IsAtEnd()) // For each pixel
   {
 
@@ -466,61 +565,66 @@ void BandMathImageFilterX<TImage>
         }
     }
 
+  for(int IDExpression=0; IDExpression<m_Expression.size(); ++IDExpression)
+  {
 
-    try
-    {
-      value = m_VParser[threadId]->Eval();
-    }
-    catch(itk::ExceptionObject& err)
-    {
-      itkExceptionMacro(<< err);
-    }
+        m_VParser[threadId]->SetExpr(m_Expression[IDExpression]);
 
-    switch (value.GetType())
-    {   //ValueType
-        case 'i':
-        outIt.Get()[0] = value.GetInteger();
-        break;
-
-        case 'f':
-        outIt.Get()[0] = value.GetFloat();
-        break;
-
-        case 'c':
-        itkExceptionMacro(<< "Complex numbers not supported." << std::endl);
-        break;
-
-        case 'm':
-        mup::matrix_type vect = value.GetArray();
-        for(int p=0; p<vect.GetCols(); ++p)
-          outIt.Get()[p] = vect.At(0,p); 
-        break;
-
-    }
-
-
-
-    for(int p=0; p<outIt.Get().GetSize(); ++p)
-    {
-        // Case value is equal to -inf or inferior to the minimum value
-        // allowed by the pixelType cast
-        if (outIt.Get()[p] < double(itk::NumericTraits<typename PixelType::ValueType>::NonpositiveMin()))
+        try
         {
-            outIt.Get()[p] = itk::NumericTraits<typename PixelType::ValueType>::NonpositiveMin();
-            m_ThreadUnderflow[threadId]++;
+          value = m_VParser[threadId]->Eval();
         }
-        // Case value is equal to inf or superior to the maximum value
-        // allowed by the pixelType cast
-        else if (outIt.Get()[p] > double(itk::NumericTraits<typename PixelType::ValueType>::max()))
+        catch(itk::ExceptionObject& err)
         {
-           outIt.Get()[p] = itk::NumericTraits<typename PixelType::ValueType>::max();
-           m_ThreadOverflow[threadId]++;
-        }  
-    }
+          itkExceptionMacro(<< err);
+        }
 
+        switch (value.GetType())
+        {   //ValueType
+            case 'i':
+            VoutIt[IDExpression].Get()[0] = value.GetInteger();
+            break;
+
+            case 'f':
+            VoutIt[IDExpression].Get()[0] = value.GetFloat();
+            break;
+
+            case 'c':
+            itkExceptionMacro(<< "Complex numbers not supported." << std::endl);
+            break;
+
+            case 'm':
+            mup::matrix_type vect = value.GetArray();
+            for(int p=0; p<vect.GetCols(); ++p)
+              VoutIt[IDExpression].Get()[p] = vect.At(0,p); 
+            break;
+
+        }
+
+
+        for(int p=0; p<VoutIt[IDExpression].Get().GetSize(); ++p)
+        {
+            // Case value is equal to -inf or inferior to the minimum value
+            // allowed by the pixelType cast
+            if (VoutIt[IDExpression].Get()[p] < double(itk::NumericTraits<typename PixelType::ValueType>::NonpositiveMin()))
+            {
+                VoutIt[IDExpression].Get()[p] = itk::NumericTraits<typename PixelType::ValueType>::NonpositiveMin();
+                m_ThreadUnderflow[threadId]++;
+            }
+            // Case value is equal to inf or superior to the maximum value
+            // allowed by the pixelType cast
+            else if (VoutIt[IDExpression].Get()[p] > double(itk::NumericTraits<typename PixelType::ValueType>::max()))
+            {
+               VoutIt[IDExpression].Get()[p] = itk::NumericTraits<typename PixelType::ValueType>::max();
+               m_ThreadOverflow[threadId]++;
+            }  
+        }
+
+    }
 
     for(int j=0; j < nbInputImages; ++j) {++Vit[j];}
-    ++outIt;
+    for(int j=0; j < m_Expression.size(); ++j) {++VoutIt[j];}
+    //++outIt; 
     progress.CompletedPixel();
   }
 
