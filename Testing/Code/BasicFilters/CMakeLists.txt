@@ -2126,8 +2126,6 @@ add_test(bfTvBandMathImageFilter ${BASICFILTERS_TESTS13}
 add_test(bfTvBandMathImageFilterX ${BASICFILTERS_TESTS13}
   otbBandMathImageFilterX)
 
-add_test(bfTvotbBandMathImageFilterXBatchMode ${BASICFILTERS_TESTS13}
-  otbBandMathImageFilterXBatchMode)
 
 add_test(bfTvBandMathImageFilterWithIdx ${BASICFILTERS_TESTS13}
   otbBandMathImageFilterWithIdx
