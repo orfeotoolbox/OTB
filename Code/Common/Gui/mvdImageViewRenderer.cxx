@@ -37,6 +37,7 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbStandardShader.h"
+#include "otbGlVersionChecker.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -100,8 +101,8 @@ ImageViewRenderer
   qWarning() <<
     ToStdString(
       tr( "Required OpenGL version '%1' with GLSL version '%2'." )
-      .arg( otb::GlView::REQUIRED_GL_VERSION )
-      .arg( otb::GlView::REQUIRED_GLSL_VERSION )
+      .arg( otb::GlVersionChecker::REQUIRED_GL_VERSION )
+      .arg( otb::GlVersionChecker::REQUIRED_GLSL_VERSION )
     ).c_str();
 
   //
@@ -114,7 +115,7 @@ ImageViewRenderer
 
   try
     {
-    isOk = otb::GlView::CheckGLCapabilities( glVersion, glslVersion );
+    isOk = otb::GlVersionChecker::CheckGLCapabilities( glVersion, glslVersion );
 
     //
     // Trace runtime OpenGL and GLSL versions.
@@ -146,8 +147,8 @@ ImageViewRenderer
     tr( "Current OpenGL version is '%1' supporting OpenGL Shading-Language (GLSL) version '%2'.\nRequired OpenGL version is at least '%3' with GLSL version at least '%4'.\nPlease upgrade your graphics driver and/or hardware for the application to run properly on this platform.\nIf you are running the application under some remote-desktop service, runtime OpenGL and GLSL versions may differ from those running directly on remote platform.\nPlease contact your system administrator.\nApplication will now exit!" )
     .arg( glVersion )
     .arg( glslVersion )
-    .arg( otb::GlView::REQUIRED_GL_VERSION )
-    .arg( otb::GlView::REQUIRED_GLSL_VERSION )
+    .arg( otb::GlVersionChecker::REQUIRED_GL_VERSION )
+    .arg( otb::GlVersionChecker::REQUIRED_GLSL_VERSION )
   );
 
   //
