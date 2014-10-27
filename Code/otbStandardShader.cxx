@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "otbStandardShader.h"
 #include "otbFragmentShaderRegistry.h"
+#include "otbGlVersionChecker.h"
 #include <GL/glew.h>
 
 namespace otb
@@ -53,7 +54,21 @@ StandardShader::~StandardShader()
 
 std::string StandardShader::GetSource() const
 {
-  return "#version 130 \n"                                              \
+  const char * glsl130String = "1.30";
+  bool isGLSLS130Available = otb::GlVersionChecker::CheckGLCapabilities( otb::GlVersionChecker::REQUIRED_GL_VERSION, glsl130String);
+
+  std::string shader_source = "";
+
+  if(isGLSLS130Available)
+    {
+    shader_source+="#version 130 \n";
+    }
+  else
+    {
+    shader_source+="#version 120 \n";
+    }
+
+  shader_source = 
     "uniform sampler2D src;\n"                                          \
     "uniform vec4 shader_a;\n"                                          \
     "uniform vec4 shader_b;\n"                                          \
@@ -115,7 +130,11 @@ std::string StandardShader::GetSource() const
     "gl_FragColor[2] = tmp[2];\n"                                       \
     "gl_FragColor[3] = alpha;\n"                                        \
     "}\n"                                                               \
-    "}\n"                                                               \
+    "}\n";
+  
+  if(isGLSLS130Available)
+    {
+    shader_source+=
     "else if(shader_type == 6)\n"                                       \
     "{\n"                                                               \
     "if(dist < shader_radius)\n"                                        \
@@ -130,9 +149,11 @@ std::string StandardShader::GetSource() const
     "gl_FragColor = clamp(pow(5*shader_a*(0.5*abs((pdx-p))+ 0.5*abs((pdy-p))),shader_gamma),0.0,1.0);\n" \
     "gl_FragColor[3] = alpha;\n"                                        \
     "}\n"                                                               \
-    "}\n"                                                               \
-    "}"
-;}
+    "}\n";                   
+    }
+  shader_source+="}";
+  return shader_source;
+}
 
 std::string StandardShader::GetName() const
 {
