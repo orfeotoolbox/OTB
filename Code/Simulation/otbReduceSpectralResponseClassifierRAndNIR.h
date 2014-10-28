@@ -19,7 +19,6 @@
 #define __otbReduceSpectralResponseClassifierRAndNIR_h
 
 
-
 #include "otbReduceSpectralResponse.h"
 #include "otbVegetationIndicesFunctor.h"
 

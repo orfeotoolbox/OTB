@@ -26,7 +26,6 @@
 #include "otbMacro.h"
 
 
-
 #include "otbBinarySpectralAngleFunctor.h"
 
 #include "muParserCallback.h"

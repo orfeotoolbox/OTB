@@ -16,7 +16,7 @@
 
 =========================================================================*/
 #include "otbMachineLearningModelFactory.h"
-#include "otbConfigure.h"   
+#include "otbConfigure.h"
 
 #ifdef OTB_USE_OPENCV
 #include "otbKNearestNeighborsMachineLearningModelFactory.h"

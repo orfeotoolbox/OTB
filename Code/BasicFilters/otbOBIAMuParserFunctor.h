@@ -27,7 +27,6 @@
 
 
 
-
 namespace otb
 {
 /** \class OBIAMuParserFunctor

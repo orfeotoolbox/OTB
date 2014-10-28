@@ -30,7 +30,6 @@
 #include "itkArray.h"
 
 
-
 #include "itkInPlaceLabelMapFilter.h"
 #include "itkLabelObjectAccessors.h"
 #include "itkProgressReporter.h"

@@ -40,7 +40,6 @@
 #include "otbWrapperStringListParameter.h"
 
 
-
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperTypes.h"
 #include <itksys/RegularExpression.hxx>

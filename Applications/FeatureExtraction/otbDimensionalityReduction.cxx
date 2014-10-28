@@ -19,7 +19,6 @@
 #include "otbWrapperApplicationFactory.h"
 
 
-
 #include "otbMaximumAutocorrelationFactorImageFilter.h"
 #include "otbNAPCAImageFilter.h"
 #include "otbLocalActivityVectorImageFilter.h"

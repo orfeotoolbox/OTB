@@ -22,7 +22,6 @@
 #include "otbWrapperStringListParameter.h"
 
 
-
 namespace otb
 {
 namespace Wrapper

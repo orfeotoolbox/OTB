@@ -24,7 +24,6 @@
 #include "itkProcessObject.h"
 
 
-
 namespace otb
 {
 namespace Wrapper

@@ -20,7 +20,7 @@
 #include "otbSVMModel.h"
 #include "otbMacro.h"
 
-#include <algorithm> 
+#include <algorithm>
 
 namespace otb
 {

@@ -38,7 +38,6 @@
 #include "otbFillGapsFilter.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
-
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"

@@ -21,7 +21,6 @@
 #include "otbFastICAImageFilter.h"
 
 
-
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 
