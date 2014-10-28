@@ -19,7 +19,6 @@
 #define __otbWindowedSincInterpolateImageLanczosFunction_h
 
 #include "otbWindowedSincInterpolateImageFunctionBase.h"
-#include "itkSize.h"
 #include "otbMath.h"
 #include "vnl/vnl_math.h"
 

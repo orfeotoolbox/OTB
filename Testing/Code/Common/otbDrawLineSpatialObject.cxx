@@ -19,7 +19,6 @@
 
 
 #include "itkMacro.h"
-#include "itkLineSpatialObject.h"
 #include <iostream>
 #include <list>
 

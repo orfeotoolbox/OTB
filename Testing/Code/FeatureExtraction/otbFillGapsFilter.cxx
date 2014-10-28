@@ -20,7 +20,6 @@
 
 #include "itkMacro.h"
 #include "otbFillGapsFilter.h"
-#include "otbLineSpatialObjectList.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

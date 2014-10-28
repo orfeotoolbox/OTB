@@ -23,7 +23,6 @@
 // SAR Sensors
 #include "otbTerraSarImageMetadataInterfaceFactory.h"
 
-#include "itkObjectFactoryBase.h"
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 

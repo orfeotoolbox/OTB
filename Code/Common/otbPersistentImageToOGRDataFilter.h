@@ -24,7 +24,6 @@
 #include "otbPersistentImageFilter.h"
 
 #include "otbLabelImageToOGRDataSourceFilter.h"
-#include "otbOGRDataSourceWrapper.h"
 
 #include "itkMacro.h"
 #include <string>

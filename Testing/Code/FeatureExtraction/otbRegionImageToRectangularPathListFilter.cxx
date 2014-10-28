@@ -19,7 +19,6 @@
 #include "otbRegionImageToRectangularPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 
 #include <stdio.h>

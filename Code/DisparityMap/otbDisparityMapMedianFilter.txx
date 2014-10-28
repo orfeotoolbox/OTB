@@ -19,7 +19,6 @@
 #define __otbDisparityMapMedianFilter_txx
 
 #ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
-#include "itkOptMedianImageFilter.h"
 #else
 
 #include "otbDisparityMapMedianFilter.h"

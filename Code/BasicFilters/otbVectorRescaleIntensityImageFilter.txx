@@ -23,7 +23,6 @@
 
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "itkSampleToHistogramFilter.h"
-#include "itkDenseFrequencyContainer2.h"
 #include "itkHistogram.h"
 #include "itkListSample.h"
 #include "otbObjectList.h"

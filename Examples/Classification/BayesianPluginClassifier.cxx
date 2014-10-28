@@ -60,7 +60,6 @@
 
 // Software Guide : BeginCodeSnippet
 #include "itkVector.h"
-#include "itkArray.h"
 #include "itkListSample.h"
 #include "itkSubsample.h"
 // Software Guide : EndCodeSnippet
@@ -85,7 +84,6 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "itkDecisionRule.h"
 #include "itkMaximumRatioDecisionRule.h"
 #include "itkGaussianMembershipFunction.h"
 #include "itkSampleClassifierFilter.h"

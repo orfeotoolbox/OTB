@@ -18,7 +18,6 @@
 #include "itkMacro.h"
 
 #include "otbReflectanceToImageImageFilter.h"
-#include "otbVectorImage.h"
 
 int otbReflectanceToImageImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {

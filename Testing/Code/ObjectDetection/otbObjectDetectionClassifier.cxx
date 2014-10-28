@@ -21,10 +21,8 @@
 #include <iterator>
 
 #include "otbImage.h"
-#include "otbVectorData.h"
 #include "otbRadiometricMomentsImageFunction.h"
 #include "itkListSample.h"
-#include "itkFixedArray.h"
 #include "itkVariableLengthVector.h"
 #include "otbObjectDetectionClassifier.h"
 #include "otbImageFileReader.h"

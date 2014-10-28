@@ -18,7 +18,6 @@
 #ifndef __otbWrapperChoiceParameter_h
 #define __otbWrapperChoiceParameter_h
 
-#include "otbWrapperParameter.h"
 #include "otbWrapperParameterGroup.h"
 
 namespace otb

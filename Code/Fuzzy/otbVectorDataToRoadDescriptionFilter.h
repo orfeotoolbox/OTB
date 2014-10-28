@@ -19,7 +19,6 @@
 #define __otbVectorDataToRoadDescriptionFilter_h
 
 #include "otbVectorDataToSpecificDescriptionFilterBase.h"
-#include "itkPreOrderTreeIterator.h"
 #include "otbVectorData.h"
 
 //#include "otbNDVIDataNodeFeatureFunction.h"

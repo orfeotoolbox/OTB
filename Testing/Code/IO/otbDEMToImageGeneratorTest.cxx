@@ -19,7 +19,6 @@
 
 #include "otbDEMToImageGenerator.h"
 #include "otbImageFileWriter.h"
-#include "otbImage.h"
 #include "otbStandardFilterWatcher.h"
 
 int otbDEMToImageGeneratorTest(int argc, char * argv[])

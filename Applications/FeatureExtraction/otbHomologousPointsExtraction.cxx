@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
 // Elevation handler
@@ -31,7 +30,6 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbKeyPointSetsMatchingFilter.h"
 
-#include "itkPointSet.h"
 #include "itkEuclideanDistanceMetric.h"
 #include "otbGenericRSTransform.h"
 #include "otbOGRDataSourceWrapper.h"

@@ -20,7 +20,6 @@
 
 #include "itkObject.h"
 #include "itkVariableLengthVector.h"
-#include "itkFixedArray.h"
 #include "itkListSample.h"
 
 namespace otb

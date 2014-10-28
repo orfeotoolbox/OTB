@@ -21,7 +21,6 @@
 #include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
 #include "itkLineIterator.h"
 #include "itkMatrix.h"
-#include "itkCovariantVector.h"
 #include "vnl/vnl_math.h"
 
 namespace otb

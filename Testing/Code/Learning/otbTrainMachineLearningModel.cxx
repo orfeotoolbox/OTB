@@ -20,7 +20,6 @@
 #include <string>
 #include <algorithm>
 
-#include "otbMachineLearningModel.h"
 #include "otbLibSVMMachineLearningModel.h"
 #include "otbSVMMachineLearningModel.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"

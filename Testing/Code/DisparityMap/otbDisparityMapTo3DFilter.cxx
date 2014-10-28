@@ -17,7 +17,6 @@
 =========================================================================*/
 
 #include "otbDisparityMapTo3DFilter.h"
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

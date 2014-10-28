@@ -19,7 +19,6 @@
 
 
 #include "itkMacro.h"
-#include "itkLinearInterpolateImageFunction.h"
 
 #include <iostream>
 

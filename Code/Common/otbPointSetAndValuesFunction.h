@@ -19,7 +19,6 @@
 #define __otbPointSetAndValuesFunction_h
 
 #include "itkFunctionBase.h"
-#include "itkPoint.h"
 #include "itkIndex.h"
 #include "itkContinuousIndex.h"
 #include "itkVectorContainer.h"

@@ -41,7 +41,6 @@
 // Software Guide : EndCodeSnippet
 
 #include "otbImageFileWriter.h"
-#include "otbVectorDataExtractROI.h"
 #include "otbVectorDataProjectionFilter.h"
 #include "itkRGBAPixel.h"
 #include "itkChangeLabelImageFilter.h"

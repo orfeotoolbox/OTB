@@ -21,11 +21,9 @@
 #include <typeinfo>
 
 #include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbSinclairReciprocalImageFilter.h"
-#include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
 #include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
 #include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
 #include "otbMultiChannelExtractROI.h"

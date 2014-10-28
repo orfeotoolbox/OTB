@@ -21,7 +21,6 @@
 #include "itkImageSource.h"
 #include "otbImageIOBase.h"
 #include "itkExceptionObject.h"
-#include "itkSize.h"
 #include "itkImageRegion.h"
 
 #include "otbDefaultConvertPixelTraits.h"

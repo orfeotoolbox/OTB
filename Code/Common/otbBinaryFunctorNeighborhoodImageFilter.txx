@@ -20,7 +20,6 @@
 
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkProgressReporter.h"
 

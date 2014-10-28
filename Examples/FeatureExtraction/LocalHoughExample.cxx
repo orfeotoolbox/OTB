@@ -33,7 +33,6 @@
 // Software Guide : BeginCodeSnippet
 #include "otbLocalHoughFilter.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
-#include "otbLineSpatialObjectList.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"

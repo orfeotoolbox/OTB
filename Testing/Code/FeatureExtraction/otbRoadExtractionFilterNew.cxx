@@ -18,7 +18,6 @@
 #include "itkMacro.h"
 
 #include "itkPolyLineParametricPath.h"
-#include "otbVectorImage.h"
 #include "otbRoadExtractionFilter.h"
 
 int otbRoadExtractionFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

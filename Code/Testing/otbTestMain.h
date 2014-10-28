@@ -24,7 +24,6 @@
 #include <string>
 #include <iostream>
 
-#include "itkWin32Header.h"
 #include "itkMultiThreader.h"
 #include "itkMacro.h"
 

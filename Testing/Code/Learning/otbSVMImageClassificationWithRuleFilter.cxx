@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbSVMImageClassificationWithRuleFilter.h"
-#include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

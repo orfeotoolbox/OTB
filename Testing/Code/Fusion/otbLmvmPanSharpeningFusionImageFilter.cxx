@@ -19,7 +19,6 @@
 #include "itkMacro.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVectorImage.h"
 #include "otbImage.h"
 
 #include "otbLmvmPanSharpeningFusionImageFilter.h"

@@ -19,11 +19,8 @@
 #ifndef __otbImageRegionAdaptativeSplitter_h
 #define __otbImageRegionAdaptativeSplitter_h
 
-#include "itkObject.h"
 #include "itkRegion.h"
-#include "itkImageRegion.h"
 #include "itkImageRegionSplitter.h"
-#include "itkObjectFactory.h"
 #include "itkIndex.h"
 #include "itkSize.h"
 #include "itkFastMutexLock.h"

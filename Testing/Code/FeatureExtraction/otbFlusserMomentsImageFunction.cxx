@@ -22,12 +22,10 @@
 #include <iomanip>
 #include <fstream>
 #include "itkMacro.h"
-#include "otbImage.h"
 
 #include "otbImageFileReader.h"
 #include "otbFlusserMomentsImageFunction.h"
 #include "otbBCOInterpolateImageFunction.h"
-#include "itkLinearInterpolateImageFunction.h"
 #include "otbStreamingResampleImageFilter.h"
 #include "itkResampleImageFilter.h"
 #include "itkAffineTransform.h"

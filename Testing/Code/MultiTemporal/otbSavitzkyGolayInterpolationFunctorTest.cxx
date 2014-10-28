@@ -17,9 +17,7 @@
 =========================================================================*/
 
 
-#include "itkFixedArray.h"
 #include "otbSavitzkyGolayInterpolationFunctor.h"
-#include "otbTimeSeries.h"
 
 int otbSavitzkyGolayInterpolationFunctorTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {

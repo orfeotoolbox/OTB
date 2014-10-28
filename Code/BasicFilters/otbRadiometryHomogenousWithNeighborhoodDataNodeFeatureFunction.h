@@ -21,7 +21,6 @@
 #include "otbDataNodeImageFunction.h"
 
 #include "otbBinarySpectralAngleFunctor.h"
-#include "otbDataNode.h"
 #include "otbPolyLineImageConstIterator.h"
 #include "itkLineConstIterator.h"
 #include "itkVariableLengthVector.h"

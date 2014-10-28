@@ -22,7 +22,6 @@
 #define __otbWaveletGenerator_h
 
 #include <vector>
-#include "itkMacro.h"
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
 

@@ -20,7 +20,6 @@
 
 #include "otbSOMClassifier.h"
 #include "itkInPlaceImageFilter.h"
-#include "itkFixedArray.h"
 #include "itkListSample.h"
 
 namespace otb

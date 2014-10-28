@@ -18,7 +18,6 @@
 #ifndef __otbKmzProductWriter_h
 #define __otbKmzProductWriter_h
 
-#include "itkProcessObject.h"
 #include "itkObjectFactory.h"
 
 //kmz creation

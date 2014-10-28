@@ -18,10 +18,8 @@
 #ifndef __otbSarParametricMapFunction_h
 #define __otbSarParametricMapFunction_h
 
-#include "itkNumericTraits.h"
 #include "itkImageFunction.h"
 #include "itkPointSet.h"
-#include "itkPoint.h"
 #include "itkVariableSizeMatrix.h"
 
 namespace otb

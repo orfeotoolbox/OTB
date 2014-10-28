@@ -20,7 +20,6 @@
 
 #include <algorithm>
 
-#include "otbMacro.h"
 
 #include "otbImageMetadataInterfaceBase.h"
 

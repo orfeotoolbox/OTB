@@ -18,7 +18,6 @@
 #ifndef __otbWavelengthSpectralBands_h
 #define __otbWavelengthSpectralBands_h
 
-#include "itkDataObject.h"
 #include "itkObjectFactory.h"
 #include "otbMacro.h"
 #include "otbObjectList.h"

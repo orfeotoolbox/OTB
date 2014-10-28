@@ -20,7 +20,6 @@
 
 #include <vector>
 
-#include "itkImageLinearIteratorWithIndex.h"
 #include "itkInterpolateImageFunction.h"
 #include "vnl/vnl_matrix.h"
 

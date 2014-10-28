@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-#include "itkMacro.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 
 int otbMultiToMonoChannelExtractROINew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

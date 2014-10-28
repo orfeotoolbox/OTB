@@ -24,7 +24,6 @@
 #include <iomanip>
 #include "ogrsf_frmts.h"
 #include "itkTimeProbe.h"
-#include "otbMacro.h"
 #include <set>
 
 namespace otb

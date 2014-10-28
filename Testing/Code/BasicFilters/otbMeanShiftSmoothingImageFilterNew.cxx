@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "itkMacro.h"
-#include "otbVectorImage.h"
 #include "otbMeanShiftSmoothingImageFilter.h"
 
 int otbMeanShiftSmoothingImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

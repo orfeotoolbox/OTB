@@ -38,7 +38,6 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileWriter.h"
 
 int main(int argc, char * argv[])

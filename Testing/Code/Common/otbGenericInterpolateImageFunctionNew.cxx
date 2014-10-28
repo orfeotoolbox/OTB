@@ -19,7 +19,6 @@
 
 #include "otbGenericInterpolateImageFunction.h"
 #include "otbImage.h"
-#include "itkConstantBoundaryCondition.h"
 
 namespace Function
 {

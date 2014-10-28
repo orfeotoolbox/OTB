@@ -19,7 +19,6 @@
 
 
 #include "itkPointSet.h"
-#include "otbLineSpatialObjectList.h"
 #include <iostream>
 
 #include "otbLineSpatialObjectListToPointSetFilter.h"

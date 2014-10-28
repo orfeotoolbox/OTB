@@ -23,7 +23,6 @@
 
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "itkProgressReporter.h"
-#include "itkNeighborhoodIterator.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkConstShapedNeighborhoodIterator.h"
 #include "itkLabelMapToLabelImageFilter.h"

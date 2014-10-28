@@ -20,7 +20,6 @@
 #ifndef __otbLineSpatialObjectListToRightAnglePointSetFilter_h
 #define __otbLineSpatialObjectListToRightAnglePointSetFilter_h
 
-#include "itkProcessObject.h"
 #include "itkPointSet.h"
 #include "otbLineSpatialObjectListToPointSetFilter.h"
 #include "otbMath.h"

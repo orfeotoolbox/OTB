@@ -19,7 +19,6 @@
 #include <iostream>
 #include "itkPolyLineParametricPath.h"
 
-#include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 #include "otbExtractROI.h"

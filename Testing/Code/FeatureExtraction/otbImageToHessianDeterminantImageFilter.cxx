@@ -18,7 +18,6 @@
 #include "itkMacro.h"
 
 #include "otbImageToHessianDeterminantImageFilter.h"
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

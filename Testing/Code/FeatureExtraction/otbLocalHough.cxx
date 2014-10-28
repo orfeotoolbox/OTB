@@ -22,9 +22,7 @@
 
 #include <iostream>
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbLineSpatialObjectList.h"
 
 #include "otbLocalHoughFilter.h"
 

@@ -22,7 +22,6 @@
 #define __otbFunctionWithNeighborhoodToImageFilter_h
 
 #include "otbFunctionToImageFilter.h"
-#include "itkInPlaceImageFilter.h"
 
 namespace otb
 {

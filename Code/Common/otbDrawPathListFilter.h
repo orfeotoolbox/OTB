@@ -19,7 +19,6 @@
 #define __otbDrawPathListFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "itkConceptChecking.h"
 #include "otbObjectList.h"
 
 namespace otb

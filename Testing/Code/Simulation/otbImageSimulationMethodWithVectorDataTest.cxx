@@ -22,7 +22,6 @@
 #include "otbVectorDataFileReader.h"
 
 #include "otbVectorDataToLabelMapWithAttributesFilter.h"
-#include "otbProspectModel.h"
 #include "otbSailModel.h"
 #include "otbImageSimulationMethod.h"
 #include "otbAttributesMapLabelObject.h"

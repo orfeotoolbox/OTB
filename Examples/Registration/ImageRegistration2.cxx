@@ -41,7 +41,6 @@
 #include "itkImageRegistrationMethod.h"
 #include "itkTranslationTransform.h"
 #include "itkMutualInformationImageToImageMetric.h"
-#include "itkLinearInterpolateImageFunction.h"
 #include "itkGradientDescentOptimizer.h"
 #include "otbImage.h"
 // Software Guide : EndCodeSnippet

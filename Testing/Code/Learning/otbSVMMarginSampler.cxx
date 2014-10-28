@@ -20,7 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "itkVariableLengthVector.h"
 #include "itkListSample.h"
 #include "otbSVMMarginSampler.h"
 #include "otbSVMModel.h"

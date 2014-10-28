@@ -23,7 +23,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbThresholdImageToPointSetFilter.h"
-#include "itkPointSet.h"
 
 int otbThresholdImageToPointSetTest(int itkNotUsed(argc), char * argv[])
 {

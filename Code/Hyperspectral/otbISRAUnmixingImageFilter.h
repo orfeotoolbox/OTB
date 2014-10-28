@@ -18,7 +18,6 @@
 #ifndef __otbISRAUnmixingImageFilter_h
 #define __otbISRAUnmixingImageFilter_h
 
-#include "itkMacro.h"
 #include "itkNumericTraits.h"
 #include "otbUnaryFunctorImageFilter.h"
 #include "vnl/algo/vnl_svd.h"

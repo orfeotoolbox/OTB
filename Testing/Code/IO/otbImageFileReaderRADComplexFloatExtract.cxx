@@ -18,7 +18,6 @@
 
 
 
-#include "itkMacro.h"
 #include <iostream>
 #include "otbImage.h"
 #include "otbVectorImage.h"

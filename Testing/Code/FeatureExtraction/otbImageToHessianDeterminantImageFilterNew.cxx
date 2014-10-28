@@ -18,7 +18,6 @@
 #include "itkMacro.h"
 
 #include "otbImageToHessianDeterminantImageFilter.h"
-#include "otbImage.h"
 
 int otbImageToHessianDeterminantImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

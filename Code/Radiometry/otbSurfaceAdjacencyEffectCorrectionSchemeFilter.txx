@@ -29,14 +29,12 @@
 #include "itkNeighborhoodInnerProduct.h"
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
-#include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkOffset.h"
 #include "itkProgressReporter.h"
 #include "otbImage.h"
 #include "otbSIXSTraits.h"
 #include "otbMath.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"
-#include "otbOpticalImageMetadataInterface.h"
 
 namespace otb
 {

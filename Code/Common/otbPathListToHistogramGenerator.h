@@ -21,10 +21,8 @@
 
 #include "itkSampleToHistogramFilter.h"
 #include "itkHistogram.h"
-#include "itkProcessObject.h"
 #include "itkListSample.h"
 #include "itkVector.h"
-#include "itkDenseFrequencyContainer2.h"
 #include "otbObjectList.h"
 
 //TODO : write a HistogramSource when outputing Histogram

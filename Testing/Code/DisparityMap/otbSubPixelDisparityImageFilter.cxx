@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbSubPixelDisparityImageFilter.h"
-#include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbStandardWriterWatcher.h"

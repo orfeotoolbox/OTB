@@ -18,11 +18,9 @@
 
 #include "otbStreamingResampleImageFilter.h"
 #include "otbVectorImage.h"
-#include "itkVector.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
-#include "otbImage.h"
 
 // Transform
 #include "itkTransform.h"

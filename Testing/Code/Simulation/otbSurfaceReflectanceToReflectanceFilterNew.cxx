@@ -17,12 +17,10 @@
 =========================================================================*/
 
 #include "otbMacro.h"
-#include "otbVectorImage.h"
 #include "itkImageRegionIterator.h"
 #include "otbSpectralResponse.h"
 
 #include "otbSurfaceReflectanceToReflectanceFilter.h"
-#include "otbAtmosphericRadiativeTerms.h"
 
 int otbSurfaceReflectanceToReflectanceFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {

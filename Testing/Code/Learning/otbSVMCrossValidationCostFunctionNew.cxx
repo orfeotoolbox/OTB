@@ -22,7 +22,6 @@
 #include "otbImage.h"
 #include <iostream>
 
-#include "otbSVMModel.h"
 #include "otbSVMCrossValidationCostFunction.h"
 
 int otbSVMCrossValidationCostFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

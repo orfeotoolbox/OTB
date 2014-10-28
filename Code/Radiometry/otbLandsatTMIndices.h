@@ -20,7 +20,6 @@
 
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"
-#include "itkFixedArray.h"
 #include "otbBandName.h"
 #include "otbFuzzyVariable.h"
 #include <vector>

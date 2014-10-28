@@ -20,7 +20,6 @@
 
 #include "otbUnaryFunctorVectorImageFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
 
 namespace otb

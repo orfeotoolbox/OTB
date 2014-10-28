@@ -18,7 +18,6 @@
 #ifndef __otbExtractSegmentsImageFilter_h
 #define __otbExtractSegmentsImageFilter_h
 
-#include "itkImageToImageFilter.h"
 
 #include "otbPixelSuppressionByDirectionImageFilter.h"
 #include "otbLocalHoughFilter.h"
@@ -26,7 +25,6 @@
 #include "otbDrawLineSpatialObjectListFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-#include "otbLineSpatialObjectList.h"
 
 namespace otb
 {

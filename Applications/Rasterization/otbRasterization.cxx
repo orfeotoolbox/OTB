@@ -20,7 +20,6 @@
 
 #include "otbGeoInformationConversion.h"
 
-#include "otbOGRDataSourceWrapper.h"
 #include "otbOGRDataSourceToLabelImageFilter.h"
 #include "otbGenericRSTransform.h"
 

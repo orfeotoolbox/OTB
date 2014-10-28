@@ -20,11 +20,8 @@
 #endif
 
 #include "otbWrapperQtWidgetParameterFactory.h"
-#include "otbWrapperEmptyParameter.h"
 #include "otbWrapperNumericalParameter.h"
-#include "otbWrapperChoiceParameter.h"
 #include "otbWrapperStringParameter.h"
-#include "otbWrapperParameterGroup.h"
 
 #include "otbWrapperQtWidgetModel.h"
 

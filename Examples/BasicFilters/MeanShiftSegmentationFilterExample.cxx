@@ -37,14 +37,12 @@
 //
 //  Software Guide : EndLatex
 
-#include "itkMacro.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
-#include "itkRGBPixel.h"
 #include "itkScalarToRGBPixelFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"
 

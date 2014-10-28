@@ -26,7 +26,6 @@
 #include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"
 #include "otbWaveletPacketTransform.h"
-#include "otbWaveletPacketDecompositionCosts.h"
 
 template<otb::Wavelet::Wavelet TWavelet>
 int otbWaveletPacketTransform_generic(int itkNotUsed(argc), char * argv[])

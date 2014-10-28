@@ -101,7 +101,6 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbVectorImage.h"

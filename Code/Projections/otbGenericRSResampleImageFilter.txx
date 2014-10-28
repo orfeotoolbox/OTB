@@ -20,14 +20,12 @@
 
 #include "otbGenericRSResampleImageFilter.h"
 
-#include "itkMetaDataDictionary.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
 
 #include "itkProgressAccumulator.h"
 
 #include "itkPoint.h"
-#include "itkNumericTraits.h"
 
 #include "ogr_spatialref.h"
 #include "cpl_conv.h"

@@ -18,7 +18,6 @@
 #include "itkMacro.h"
 
 #include "otbDEMCaracteristicsExtractor.h"
-#include "otbImage.h"
 
 int otbDEMCaracteristicsExtractorNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {

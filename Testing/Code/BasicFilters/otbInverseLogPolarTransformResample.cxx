@@ -17,10 +17,8 @@
 =========================================================================*/
 #include "otbInverseLogPolarTransform.h"
 #include "otbImage.h"
-#include "itkLinearInterpolateImageFunction.h"
 #include "itkResampleImageFilter.h"
 #include "itkPoint.h"
-#include "otbMacro.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 

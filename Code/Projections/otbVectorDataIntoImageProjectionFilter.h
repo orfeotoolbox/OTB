@@ -18,7 +18,6 @@
 #ifndef __otbVectorDataIntoImageProjectionFilter_h
 #define __otbVectorDataIntoImageProjectionFilter_h
 
-#include "otbVectorDataToVectorDataFilter.h"
 
 #include "otbImage.h"
 

@@ -44,13 +44,11 @@
 // Software Guide : BeginCodeSnippet
 #include "otbStereorectificationDisplacementFieldSource.h"
 #include "otbStreamingWarpImageFilter.h"
-#include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "otbBandMathImageFilter.h"
 #include "otbSubPixelDisparityImageFilter.h"
 #include "otbDisparityMapMedianFilter.h"
 #include "otbDisparityMapToDEMFilter.h"
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

@@ -23,7 +23,6 @@
 
 #include "otbSarBrightnessToImageFilter.h"
 
-#include "otbSarImageMetadataInterface.h"
 #include "otbSarImageMetadataInterfaceFactory.h"
 
 namespace otb

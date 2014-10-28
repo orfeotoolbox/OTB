@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkMacro.h"
 #include "itkFixedArray.h"
 #include "otbLandsatTMIndices.h"
 #include <vector>

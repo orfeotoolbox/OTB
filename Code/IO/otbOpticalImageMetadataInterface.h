@@ -20,7 +20,6 @@
 
 #include <string>
 
-#include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbFilterFunctionValues.h"

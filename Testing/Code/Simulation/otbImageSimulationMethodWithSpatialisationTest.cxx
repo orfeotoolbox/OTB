@@ -17,12 +17,10 @@
 =========================================================================*/
 
 #include "otbVectorImage.h"
-#include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorDataFileReader.h"
 
 #include "otbSpatialisationFilter.h"
-#include "otbProspectModel.h"
 #include "otbSailModel.h"
 #include "otbImageSimulationMethod.h"
 #include "otbAttributesMapLabelObject.h"

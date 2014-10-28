@@ -21,7 +21,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbOGRDataSourceWrapper.h"
 
 #include "otbOGRDataSourceToLabelImageFilter.h"
 #include "otbStandardOneLineFilterWatcher.h"

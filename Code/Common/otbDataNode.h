@@ -19,7 +19,6 @@
 #define __otbDataNode_h
 
 #include "itkPoint.h"
-#include "otbPolyLineParametricPathWithValue.h"
 #include "otbPolygon.h"
 #include "otbObjectList.h"
 #include "otbVectorDataKeywordlist.h"

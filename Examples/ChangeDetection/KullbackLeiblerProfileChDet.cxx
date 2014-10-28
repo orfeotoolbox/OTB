@@ -42,13 +42,11 @@
 //
 // Software Guide : EndLatex
 
-#include "itkMacro.h"
 #include "otbImage.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 
 //  Software Guide : BeginCodeSnippet
-#include "otbVectorImage.h"
 #include "otbKullbackLeiblerProfileImageFilter.h"
 //  Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"

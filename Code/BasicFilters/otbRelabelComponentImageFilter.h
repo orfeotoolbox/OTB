@@ -18,7 +18,6 @@
 #define __otbRelabelComponentImageFilter_h
 
 #include "itkRelabelComponentImageFilter.h"
-#include "itkImage.h"
 #include <vector>
 
 namespace otb

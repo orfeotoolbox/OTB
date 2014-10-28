@@ -19,7 +19,6 @@
 
 #include "otbStreamingMinMaxVectorImageFilter.h"
 #include "otbImageFileReader.h"
-#include "otbVectorImage.h"
 #include <fstream>
 #include "otbStreamingTraits.h"
 #include "otbStandardFilterWatcher.h"

@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbSVMImageClassificationWithRuleFilter.h"
-#include "otbVectorImage.h"
 #include "otbImage.h"
 
 int otbSVMImageClassificationWithRuleFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

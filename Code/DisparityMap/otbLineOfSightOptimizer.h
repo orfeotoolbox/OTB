@@ -19,7 +19,6 @@
 #define __otbLineOfSightOptimizer_h
 
 #include "itkObject.h"
-#include "itkDefaultStaticMeshTraits.h"
 
 #include "itkPointSet.h"
 

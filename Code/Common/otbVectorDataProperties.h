@@ -19,7 +19,6 @@
 #ifndef __otbVectorDataProperties_h
 #define __otbVectorDataProperties_h
 
-#include "itkDataObject.h"
 #include "itkObjectFactory.h"
 
 // #include "itkNumericTraits.h"

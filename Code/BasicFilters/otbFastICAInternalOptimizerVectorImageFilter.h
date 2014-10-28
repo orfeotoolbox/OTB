@@ -19,7 +19,6 @@
 #define __otbFastICAInternalOptimizerVectorImageFilter_h
 
 #include "otbMacro.h"
-#include "itkImageToImageFilter.h"
 #include "otbMatrixImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
 

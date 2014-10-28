@@ -18,12 +18,10 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbImageToLabelMapWithAttributesFilter_h
 #define __otbImageToLabelMapWithAttributesFilter_h
 
-#include "itkLabelMap.h"
 #include "itkLabelObject.h"
 #include "itkShapeLabelMapFilter.h"
 #include "otbAttributesMapLabelObjectWithClassLabel.h"
 #include "otbLabelImageToLabelMapWithAdjacencyFilter.h"
-#include "otbLabelMapWithAdjacency.h"
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
 #include "otbLabelMapWithClassLabelToClassLabelImageFilter.h"

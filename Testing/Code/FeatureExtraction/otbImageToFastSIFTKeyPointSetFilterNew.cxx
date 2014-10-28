@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbSiftFastImageFilter.h"
-#include "otbImage.h"
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
 

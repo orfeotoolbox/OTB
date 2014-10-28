@@ -15,11 +15,9 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkMacro.h"
 
 #include "otbUnaryFunctorNeighborhoodWithOffsetImageFilter.h"
 #include "otbVectorImage.h"
-#include "itkConstNeighborhoodIterator.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbTextureFunctors.h"

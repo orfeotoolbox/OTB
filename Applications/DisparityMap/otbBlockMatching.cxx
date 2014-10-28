@@ -18,7 +18,6 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "otbVarianceImageFilter.h"
 #include "otbBandMathImageFilter.h"
 #include "otbImageList.h"

@@ -20,7 +20,6 @@
 
 #include "otbDEMConvertAdapter.h"
 
-#include "itkImageIOBase.h"
 #include "itkImageIOFactory.h"
 
 namespace otb

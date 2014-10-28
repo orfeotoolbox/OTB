@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbCommandLineArgumentParser.h"
-#include "otbMacro.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"

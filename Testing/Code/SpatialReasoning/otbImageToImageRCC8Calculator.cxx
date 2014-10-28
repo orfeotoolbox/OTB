@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "itkMacro.h"
 #include "otbImageToImageRCC8Calculator.h"
-#include "otbImage.h"
 #include "otbImageList.h"
 #include "otbImageFileReader.h"
 

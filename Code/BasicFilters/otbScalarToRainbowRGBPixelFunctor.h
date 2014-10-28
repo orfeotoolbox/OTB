@@ -19,7 +19,6 @@
 #ifndef __otbScalarToRainbowRGBPixelFunctor_h
 #define __otbScalarToRainbowRGBPixelFunctor_h
 
-#include "itkRGBPixel.h"
 #include "itkColormapFunction.h"
 
 namespace otb

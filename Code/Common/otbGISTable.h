@@ -18,10 +18,8 @@
 #ifndef __otbGISTable_h
 #define __otbGISTable_h
 
-#include "itkDataObject.h"
 #include "itkObjectFactory.h"
 #include "itkPoint.h"
-#include "otbPolyLineParametricPathWithValue.h"
 #include "otbPolygon.h"
 #include "otbObjectList.h"
 

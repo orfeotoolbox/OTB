@@ -15,7 +15,6 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbKmzProductWriter.h"

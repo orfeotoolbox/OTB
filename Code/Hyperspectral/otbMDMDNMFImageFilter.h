@@ -19,7 +19,6 @@
 #define __otbMDMDNMFImageFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "itkVariableSizeMatrix.h"
 #include "otbVectorImageToMatrixImageFilter.h"
 
 #include "vnl/vnl_matrix.h"

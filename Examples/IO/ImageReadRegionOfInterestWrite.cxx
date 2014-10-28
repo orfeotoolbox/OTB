@@ -51,7 +51,6 @@
 #include "otbExtractROI.h"
 // Software Guide : EndCodeSnippet
 
-#include "otbImage.h"
 
 int main(int argc, char * argv[])
 {

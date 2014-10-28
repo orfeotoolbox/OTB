@@ -15,13 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbStreamingLineSegmentDetector.h"
 
 #include "otbVectorImageToAmplitudeImageFilter.h"
-#include "otbVectorData.h"
 #include "otbStreamingStatisticsImageFilter.h"
 #include "itkShiftScaleImageFilter.h"
 

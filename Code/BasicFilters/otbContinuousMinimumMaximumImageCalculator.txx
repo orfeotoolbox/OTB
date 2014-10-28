@@ -21,7 +21,6 @@
 
 #include "otbContinuousMinimumMaximumImageCalculator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
-#include "itkNumericTraits.h"
 
 namespace otb
 {

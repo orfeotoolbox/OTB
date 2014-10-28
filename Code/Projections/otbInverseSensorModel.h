@@ -21,7 +21,6 @@
 #include "otbSensorModelBase.h"
 
 #include "itkMacro.h"
-#include "itkSmartPointer.h"
 #include "itkObject.h"
 
 namespace otb

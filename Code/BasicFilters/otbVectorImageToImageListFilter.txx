@@ -20,7 +20,6 @@
 
 #include "otbVectorImageToImageListFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
-#include "itkImageRegionConstIteratorWithIndex.h"
 #include <vector>
 #include "otbMacro.h"
 #include "itkProgressReporter.h"

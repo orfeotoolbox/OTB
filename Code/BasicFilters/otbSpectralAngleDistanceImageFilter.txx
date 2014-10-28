@@ -20,7 +20,6 @@
 
 #include "otbSpectralAngleDistanceImageFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
 #include "otbMath.h"

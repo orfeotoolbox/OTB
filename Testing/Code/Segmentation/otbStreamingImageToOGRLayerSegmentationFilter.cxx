@@ -20,12 +20,10 @@
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
 #include "otbImageFileReader.h"
 
-#include "otbMeanShiftVectorImageFilter.h"
 #include "otbMeanShiftImageFilter.h"
 
 
 #include "otbPersistentImageToOGRDataFilter.h"
-#include "otbPersistentFilterStreamingDecorator.h"
 
 #include "otbOGRDataSourceWrapper.h"
 

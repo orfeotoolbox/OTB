@@ -38,23 +38,19 @@
 //
 //  Software Guide : EndLatex
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
 #include "otbMeanShiftVectorImageFilter.h"
 #include "itkLabelImageToLabelMapFilter.h"
-#include "otbAttributesMapLabelObject.h"
 #include "itkLabelMap.h"
 #include "otbShapeAttributesLabelMapFilter.h"
-#include "otbStatisticsAttributesLabelMapFilter.h"
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
 #include "itkLabelMapToBinaryImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbAttributesMapOpeningLabelMapFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include "otbVegetationIndicesFunctor.h"
 #include "otbMultiChannelRAndNIRIndexImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 

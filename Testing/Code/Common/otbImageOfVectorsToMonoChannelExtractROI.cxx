@@ -18,7 +18,6 @@
 #include "otbImageOfVectorsToMonoChannelExtractROI.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbImage.h"
 
 int otbImageOfVectorsToMonoChannelExtractROI(int itkNotUsed(argc), char * argv[])
 {

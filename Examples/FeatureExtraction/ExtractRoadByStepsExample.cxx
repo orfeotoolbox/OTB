@@ -45,9 +45,7 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkSqrtImageFilter.h"
 
-#include "itkCovariantVector.h"
 #include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"

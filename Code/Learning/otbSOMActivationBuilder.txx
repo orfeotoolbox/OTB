@@ -18,7 +18,6 @@
 #ifndef __otbSOMActivationBuilder_txx
 #define __otbSOMActivationBuilder_txx
 
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 
 namespace otb

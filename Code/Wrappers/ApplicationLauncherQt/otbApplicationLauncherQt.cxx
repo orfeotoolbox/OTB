@@ -16,7 +16,6 @@
 
  =========================================================================*/
 #include <QtGui>
-#include "otbWrapperApplication.h"
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
 #include "otbWrapperQtWidgetSimpleProgressReport.h"

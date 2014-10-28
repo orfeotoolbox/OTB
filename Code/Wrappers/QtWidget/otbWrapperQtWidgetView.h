@@ -20,7 +20,6 @@
 
 #include <QtGui>
 #include <QObject>
-#include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
 
 namespace otb

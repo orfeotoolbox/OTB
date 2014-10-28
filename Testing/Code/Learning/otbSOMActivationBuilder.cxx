@@ -19,12 +19,10 @@
 #include "otbImage.h"
 #include "otbSOMMap.h"
 #include "otbSOMActivationBuilder.h"
-#include "itkVariableLengthVector.h"
 #include "itkEuclideanDistanceMetric.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkListSample.h"
-#include "otbVectorImage.h"
 #include "itkImageRegionIterator.h"
 
 int otbSOMActivationBuilder(int itkNotUsed(argc), char* argv[])

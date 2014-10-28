@@ -21,7 +21,6 @@
 #include "itkMacro.h"
 #include <iostream>
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbTouziEdgeDetectorImageFilter.h"

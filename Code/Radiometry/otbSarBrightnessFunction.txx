@@ -20,7 +20,6 @@
 #define __otbSarBrightnessFunction_txx
 
 #include "otbSarBrightnessFunction.h"
-#include "otbSarParametricMapFunction.h"
 #include "itkNumericTraits.h"
 
 namespace otb

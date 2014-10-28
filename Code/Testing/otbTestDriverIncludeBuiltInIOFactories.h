@@ -15,7 +15,6 @@
 #include "otbTileMapImageIOFactory.h"
 #endif
 
-#include "itkObjectFactoryBase.h"
 
 void RegisterOTBBuiltInFactories(void)
 {

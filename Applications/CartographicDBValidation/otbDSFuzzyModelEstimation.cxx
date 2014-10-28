@@ -21,13 +21,10 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 #include "otbWrapperStringListParameter.h"
-#include "otbVectorData.h"
 #include "otbImageToEnvelopeVectorDataFilter.h"
 #include "otbVectorDataToRandomLineGenerator.h"
 #include "itkAmoebaOptimizer.h"
-#include "otbVectorDataToDSValidatedVectorDataFilter.h"
 #include "otbStandardDSCostFunction.h"
-#include "otbFuzzyDescriptorsModelManager.h"
 
 
 namespace otb

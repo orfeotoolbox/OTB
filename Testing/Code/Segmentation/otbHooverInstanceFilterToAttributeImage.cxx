@@ -24,7 +24,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkLabelMap.h"
 #include "otbAttributesMapLabelObject.h"
 #include "itkLabelImageToLabelMapFilter.h"
 

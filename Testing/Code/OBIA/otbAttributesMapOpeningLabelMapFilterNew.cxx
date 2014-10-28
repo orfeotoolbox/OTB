@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "otbAttributesMapLabelObject.h"
 #include "itkLabelMap.h"
 #include "otbAttributesMapOpeningLabelMapFilter.h"
 

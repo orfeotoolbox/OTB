@@ -20,7 +20,6 @@
 #include "otbImageListToVectorImageFilter.h"
 #include "otbConfusionMatrixToMassOfBelief.h"
 
-#include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageList.h"
 

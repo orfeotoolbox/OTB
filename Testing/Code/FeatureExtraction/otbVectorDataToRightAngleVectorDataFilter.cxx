@@ -25,7 +25,6 @@
 #include "otbImage.h"
 #include "otbImageFileWriter.h"
 
-#include "otbMath.h"
 
 int otbVectorDataToRightAngleVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

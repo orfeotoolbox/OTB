@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-#include "otbImage.h"
 #include "otbVectorData.h"
 
 #include "otbImageFileReader.h"

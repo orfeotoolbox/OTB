@@ -21,7 +21,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkLabelMapFilter.h"
 #include "otbLabelMapWithClassLabelToLabeledSampleListFilter.h"
 #include "itkListSample.h"
-#include "itkEuclideanDistanceMetric.h"
 #include "itkWeightedCentroidKdTreeGenerator.h"
 #include "itkKdTreeBasedKmeansEstimator.h"
 

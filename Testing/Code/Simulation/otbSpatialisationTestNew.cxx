@@ -20,7 +20,6 @@
 
 
 #include "otbSpatialisationFilter.h"
-#include "otbImage.h"
 #include "otbAttributesMapLabelObject.h"
 
 int otbSpatialisationTestNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])

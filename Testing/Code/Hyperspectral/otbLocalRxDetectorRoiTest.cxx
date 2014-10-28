@@ -1,5 +1,4 @@
 #include "otbImageFileReader.h"
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
 #include "otbLocalRxDetectorNonThreadFilter.h"

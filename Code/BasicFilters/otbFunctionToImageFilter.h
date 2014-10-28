@@ -24,7 +24,6 @@
 #include "itkInPlaceImageFilter.h"
 #include "itkImageFunction.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageToImageFilter.h"
 #include "itkSize.h"
 #include "itkSpatialFunction.h"
 

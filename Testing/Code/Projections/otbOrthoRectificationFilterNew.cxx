@@ -17,7 +17,6 @@
 =========================================================================*/
 
 #include "otbMacro.h"
-#include "otbImage.h"
 #include "otbMapProjections.h"
 #include "otbOrthoRectificationFilter.h"
 

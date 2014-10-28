@@ -22,7 +22,6 @@
 #include "otbStreamingWarpImageFilter.h"
 #include "itkTransformToDisplacementFieldSource.h"
 #include "itkLinearInterpolateImageFunction.h"
-#include "itkInterpolateImageFunction.h"
 #include "otbImage.h"
 #include "itkVector.h"
 

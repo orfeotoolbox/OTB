@@ -17,16 +17,13 @@
 =========================================================================*/
 
 
-#include "itkMacro.h"
 #include <iostream>
 #include <typeinfo>
 
 #include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbSinclairImageFilter.h"
-#include "otbSinclairToCovarianceMatrixFunctor.h"
 #include "otbSinclairToCircularCovarianceMatrixFunctor.h"
 #include "otbSinclairToCoherencyMatrixFunctor.h"
 #include "otbSinclairToMuellerMatrixFunctor.h"

@@ -24,7 +24,6 @@
 #include "itkMacro.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageIteratorWithIndex.h"
-#include "itkImageConstIteratorWithIndex.h"
 
 namespace otb
 {

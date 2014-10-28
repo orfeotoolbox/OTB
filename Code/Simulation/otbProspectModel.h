@@ -19,7 +19,6 @@
 #define __otbProspectModel_h
 
 
-#include "itkProcessObject.h"
 #include "itkObjectFactory.h"
 #include "otbLeafParameters.h"
 

@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbROIdataConversion.h"
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

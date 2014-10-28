@@ -19,7 +19,6 @@
 
 #include "otbPerBandVectorImageFilter.h"
 #include "otbVectorImage.h"
-#include "otbImage.h"
 #include "itkMeanImageFilter.h"
 
 int otbPerBandVectorImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

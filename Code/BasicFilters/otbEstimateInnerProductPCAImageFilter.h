@@ -19,7 +19,6 @@
 #define __otbEstimateInnerProductPCAImageFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "itkVariableLengthVector.h"
 #include "otbStreamingInnerProductVectorImageFilter.h"
 
 namespace otb

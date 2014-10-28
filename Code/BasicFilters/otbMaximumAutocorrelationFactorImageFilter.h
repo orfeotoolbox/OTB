@@ -18,11 +18,9 @@
 #ifndef __otbMaximumAutocorrelationFactorImageFilter_h
 #define __otbMaximumAutocorrelationFactorImageFilter_h
 
-#include "itkImageToImageFilter.h"
 
 #include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbConcatenateVectorImageFilter.h"
-#include "otbVectorImage.h"
 #include "itkNumericTraits.h"
 
 #include "vnl/vnl_vector.h"

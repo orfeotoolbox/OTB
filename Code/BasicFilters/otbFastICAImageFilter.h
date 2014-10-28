@@ -18,10 +18,8 @@
 #ifndef __otbFastICAImageFilter_h
 #define __otbFastICAImageFilter_h
 
-#include "otbMacro.h"
 #include "itkImageToImageFilter.h"
 #include "otbPCAImageFilter.h"
-#include "otbMatrixImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbFastICAInternalOptimizerVectorImageFilter.h"
 

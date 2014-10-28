@@ -21,7 +21,6 @@
 #ifndef __otbSimpleRcsPanSharpeningFusionImageFilter_h
 #define __otbSimpleRcsPanSharpeningFusionImageFilter_h
 
-#include "itkImageToImageFilter.h"
 #include "otbConvolutionImageFilter.h"
 #include "itkTernaryFunctorImageFilter.h"
 

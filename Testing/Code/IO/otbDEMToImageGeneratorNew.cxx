@@ -18,7 +18,6 @@
 #include "itkMacro.h"
 
 #include "otbDEMToImageGenerator.h"
-#include "otbImage.h"
 
 int otbDEMToImageGeneratorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

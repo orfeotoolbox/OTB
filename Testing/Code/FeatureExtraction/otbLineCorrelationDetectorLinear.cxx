@@ -26,7 +26,6 @@
 #include "otbImageFileWriter.h"
 #include "otbLineCorrelationDetectorImageFilter.h"
 
-#include "itkLinearInterpolateImageFunction.h"
 
 int otbLineCorrelationDetectorLinear(int itkNotUsed(argc), char* argv[])
 {

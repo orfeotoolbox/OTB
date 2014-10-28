@@ -19,7 +19,6 @@
 #define __otbRCC8VertexWithCompacity_h
 
 #include "otbRCC8VertexBase.h"
-#include "itkObjectFactory.h"
 
 namespace otb
 {

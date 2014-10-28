@@ -18,13 +18,11 @@
 
 
 #include "itkMacro.h"
-#include "itkPointSet.h"
 #include <iostream>
 #include <cstdlib>
 
 #include "otbSVMPointSetModelEstimator.h"
 #include "itkPointSetToListSampleAdaptor.h"
-#include "itkListSample.h"
 #include "otbSVMClassifier.h"
 
 int main(int itkNotUsed(argc), char* itkNotUsed(argv)[])

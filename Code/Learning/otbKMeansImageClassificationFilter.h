@@ -19,9 +19,7 @@
 #define __otbKMeansImageClassificationFilter_h
 
 #include "itkInPlaceImageFilter.h"
-#include "itkFixedArray.h"
 #include "itkListSample.h"
-#include "itkFixedArray.h"
 #include "itkEuclideanDistanceMetric.h"
 
 namespace otb

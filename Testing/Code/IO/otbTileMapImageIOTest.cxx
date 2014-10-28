@@ -18,7 +18,6 @@
 
 
 #include "itkRGBPixel.h"
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbTileMapImageIO.h"
 #include "otbTileMapTransform.h"

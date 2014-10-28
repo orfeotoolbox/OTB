@@ -20,7 +20,6 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "itkLabelMap.h"
 #include "itkLabelObject.h"
 #include "itkLabelImageToLabelMapFilter.h"
 

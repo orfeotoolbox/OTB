@@ -20,9 +20,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageToLabelMapWithAttributesFilter.h"
-#include "itkLabelMap.h"
 #include "otbImageFileReader.h"
-#include "otbAttributesMapLabelObjectWithClassLabel.h"
 
 int otbImageToLabelMapWithAttributesFilter(int itkNotUsed(argc), char* argv[])
 {

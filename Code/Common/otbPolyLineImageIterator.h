@@ -18,7 +18,6 @@
 #ifndef __otbPolyLineImageIterator_h
 #define __otbPolyLineImageIterator_h
 
-#include "itkIndex.h"
 #include "itkImage.h"
 #include "otbPolyLineImageConstIterator.h"
 

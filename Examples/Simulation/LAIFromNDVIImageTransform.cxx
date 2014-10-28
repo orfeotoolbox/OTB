@@ -35,7 +35,6 @@
 
 // Software Guide : BeginCodeSnippet
 #include "otbMultiChannelRAndNIRIndexImageFilter.h"
-#include "otbVegetationIndicesFunctor.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbCommandLineArgumentParser.h"

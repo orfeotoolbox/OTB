@@ -49,7 +49,6 @@
 #include "otbTouziEdgeDetectorImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileWriter.h"

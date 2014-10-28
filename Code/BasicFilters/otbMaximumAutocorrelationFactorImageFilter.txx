@@ -27,7 +27,6 @@
 #include "vnl/algo/vnl_generalized_eigensystem.h"
 
 #include "itkChangeInformationImageFilter.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 

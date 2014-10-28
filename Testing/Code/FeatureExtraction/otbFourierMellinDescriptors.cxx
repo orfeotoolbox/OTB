@@ -20,7 +20,6 @@
 #include "itkMacro.h"
 
 #include "otbFourierMellinDescriptorsImageFunction.h"
-#include "otbImage.h"
 
 #include "otbImageFileReader.h"
 #include "otbBCOInterpolateImageFunction.h"

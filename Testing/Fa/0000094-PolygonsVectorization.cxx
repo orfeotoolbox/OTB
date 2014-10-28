@@ -21,10 +21,8 @@
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "itkImageRegion.h"
 
 #include "otbPolygon.h"
-#include "otbObjectList.h"
 #include "otbPersistentVectorizationImageFilter.h"
 #include "itkRelabelComponentImageFilter.h"
 #include "itkConnectedComponentImageFilter.h"

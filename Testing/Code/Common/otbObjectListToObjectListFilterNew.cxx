@@ -19,7 +19,6 @@
 #include "otbObjectListToObjectListFilter.h"
 #include "otbObjectList.h"
 #include <complex>
-#include "otbPolyLineParametricPathWithValue.h"
 #include "otbPolygon.h"
 
 int otbObjectListToObjectListFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

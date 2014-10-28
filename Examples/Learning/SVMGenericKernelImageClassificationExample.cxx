@@ -23,7 +23,6 @@
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkImageRegionIterator.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -42,7 +41,6 @@
 //  Software Guide : EndLatex
 
 #include "itkImageToListSampleAdaptor.h"
-#include "itkListSample.h"
 
 //  Software Guide : BeginCodeSnippet
 #include "otbSVMClassifier.h"

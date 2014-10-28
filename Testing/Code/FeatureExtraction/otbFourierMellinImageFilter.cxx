@@ -18,7 +18,6 @@
 
 
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbForwardFourierMellinTransformImageFilter.h"

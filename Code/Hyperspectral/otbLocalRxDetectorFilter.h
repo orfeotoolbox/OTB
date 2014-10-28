@@ -25,7 +25,6 @@
 #include "itkImageRegionIterator.h"
 #include "itkListSample.h"
 #include "itkCovarianceSampleFilter.h"
-#include "itkVariableSizeMatrix.h"
 
 namespace otb
 {

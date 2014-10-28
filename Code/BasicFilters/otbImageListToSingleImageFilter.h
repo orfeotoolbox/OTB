@@ -19,7 +19,6 @@
 #define __otbImageListToSingleImageFilter_h
 
 #include "otbImageListToImageFilter.h"
-#include "otbImageList.h"
 
 namespace otb
 {

@@ -51,12 +51,10 @@
 //  Software Guide : BeginCodeSnippet
 #include "otbSVMImageModelEstimator.h"
 #include "itkImageToListSampleAdaptor.h"
-#include "itkListSample.h"
 #include "otbSVMClassifier.h"
 //  Software Guide : EndCodeSnippet
 
 #include "otbImageFileWriter.h"
-#include "itkImageRegionIterator.h"
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkScalarToRGBPixelFunctor.h"

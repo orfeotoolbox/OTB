@@ -19,12 +19,9 @@
 #define __otbBSplinesInterpolateTransformDisplacementFieldGenerator_txx
 
 #include "otbBSplinesInterpolateTransformDisplacementFieldGenerator.h"
-#include "itkImageRegionIteratorWithIndex.h"
 #include "itkLandmarkDisplacementFieldSource.h"
 #include "otbObjectList.h"
-#include "otbImage.h"
 #include "otbMacro.h"
-#include "otbMath.h"
 
 namespace otb
 {

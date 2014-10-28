@@ -21,7 +21,6 @@
 #include "otbSOMMap.h"
 #include "otbSOM.h"
 #include "otbSOMImageClassificationFilter.h"
-#include "itkEuclideanDistanceMetric.h"
 #include "itkImageRegionSplitter.h"
 #include "otbStreamingTraits.h"
 #include "itkImageRegionConstIterator.h"

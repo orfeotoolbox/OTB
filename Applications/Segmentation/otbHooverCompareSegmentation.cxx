@@ -22,7 +22,6 @@
 #include "otbHooverInstanceFilter.h"
 #include "otbLabelMapToAttributeImageFilter.h"
 
-#include "itkLabelMap.h"
 #include "otbAttributesMapLabelObject.h"
 #include "itkLabelImageToLabelMapFilter.h"
 #include "otbUnaryFunctorImageFilter.h"

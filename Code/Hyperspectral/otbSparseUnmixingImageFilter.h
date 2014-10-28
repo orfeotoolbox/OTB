@@ -19,7 +19,6 @@
 #define __otbSparseUnmixingImageFilter_h
 
 #include "otbMacro.h"
-#include "otbObjectList.h"
 #include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"
 #include "otbWaveletTransform.h"
@@ -27,7 +26,6 @@
 #include "otbAngularProjectionSetImageFilter.h"
 
 #include "itkListSample.h"
-#include "itkFixedArray.h"
 #include "itkHistogram.h"
 
 namespace otb {

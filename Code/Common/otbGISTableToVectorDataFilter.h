@@ -19,7 +19,6 @@
 #define __otbGISTableToVectorDataFilter_h
 
 //#include "itkImageToImageFilter.h"
-#include "itkDataObject.h"
 #include "otbVectorDataSource.h"
 #include "otbGISTable.h"
 #include "otbVectorDataFileReader.h"

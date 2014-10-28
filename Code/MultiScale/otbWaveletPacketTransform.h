@@ -21,7 +21,6 @@
 #ifndef __otbWaveletPacketTransform_h
 #define __otbWaveletPacketTransform_h
 
-#include "itkImageSource.h"
 #include "otbImageToImageListFilter.h"
 #include "otbImageListToImageFilter.h"
 #include "itkProgressAccumulator.h"

@@ -16,7 +16,6 @@
 
   =========================================================================*/
 // Wrappers
-#include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperElevationParametersHandler.h"

@@ -21,7 +21,6 @@
 #include "otbHistogramOfOrientedGradientCovariantImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
-#include "itkMacro.h"
 #include "otbMath.h"
 
 namespace otb

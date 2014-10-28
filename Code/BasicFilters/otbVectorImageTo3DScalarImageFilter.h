@@ -18,7 +18,6 @@
 #ifndef __otbVectorImageTo3DScalarImageFilter_h
 #define __otbVectorImageTo3DScalarImageFilter_h
 
-#include "otbVectorImageTo3DScalarImageFilter.h"
 #include "itkImageToImageFilter.h"
 
 namespace otb

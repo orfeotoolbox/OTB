@@ -18,7 +18,6 @@
 #ifndef __otbImageReference_h
 #define __otbImageReference_h
 
-#include "itkVector.h"
 #include "itkPoint.h"
 #include "itkMacro.h"
 

@@ -50,7 +50,6 @@
 
 #include "itkImageRegistrationMethod.h"
 #include "itkMeanSquaresImageToImageMetric.h"
-#include "itkLinearInterpolateImageFunction.h"
 #include "itkRegularStepGradientDescentOptimizer.h"
 #include "otbImage.h"
 #include "itkMeanImageFilter.h"

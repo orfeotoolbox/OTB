@@ -17,9 +17,7 @@
 =========================================================================*/
 
 #include "otbImage.h"
-#include "itkPointSet.h"
 #include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
-#include "otbLineSpatialObjectList.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
 
 #include "otbImageFileReader.h"

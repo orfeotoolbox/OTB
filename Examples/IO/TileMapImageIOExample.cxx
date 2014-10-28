@@ -38,7 +38,6 @@
 
 // Software Guide : BeginCodeSnippet
 #include "itkRGBPixel.h"
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbTileMapImageIO.h"
 #include "otbInverseSensorModel.h"

@@ -24,7 +24,6 @@
 #include "itkConfigure.h"
 
 #include "itkProcessObject.h"
-#include "itkVariableSizeMatrix.h"
 #include "otbConfusionMatrixMeasurements.h"
 
 

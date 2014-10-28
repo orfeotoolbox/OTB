@@ -18,7 +18,6 @@
 #ifndef __otbMachineLearningModelFactoryBase_h
 #define __otbMachineLearningModelFactoryBase_h
 
-#include "itkObject.h"
 #include "itkMutexLock.h"
 
 namespace otb

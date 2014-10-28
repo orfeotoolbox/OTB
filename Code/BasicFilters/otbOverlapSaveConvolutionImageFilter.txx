@@ -25,7 +25,6 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkNeighborhoodAlgorithm.h"
-#include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkOffset.h"
 #include "itkProgressReporter.h"
 

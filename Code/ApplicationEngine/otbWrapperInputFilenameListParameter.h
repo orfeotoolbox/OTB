@@ -21,7 +21,6 @@
 #include <string>
 #include "otbWrapperStringParameter.h"
 
-#include "otbWrapperParameter.h"
 #include "otbObjectList.h"
 
 namespace otb

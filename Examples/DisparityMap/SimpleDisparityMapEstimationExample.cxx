@@ -42,13 +42,11 @@
 #include "itkTranslationTransform.h"
 #include "itkNormalizedCorrelationImageToImageMetric.h"
 #include "itkWindowedSincInterpolateImageFunction.h"
-#include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkGradientDescentOptimizer.h"
 #include "otbBSplinesInterpolateDisplacementFieldGenerator.h"
 #include "otbWarpImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

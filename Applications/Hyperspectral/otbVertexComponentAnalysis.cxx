@@ -19,7 +19,6 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbVcaImageFilter.h"
-#include "otbVectorImageToMatrixImageFilter.h"
 
 namespace otb
 {

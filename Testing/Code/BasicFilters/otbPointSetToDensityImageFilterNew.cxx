@@ -19,7 +19,6 @@
 #include <stdio.h>
 #include "otbImage.h"
 #include "otbPointSetToDensityImageFilter.h"
-#include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
 
 int otbPointSetToDensityImageFilterNew(int, char*[])

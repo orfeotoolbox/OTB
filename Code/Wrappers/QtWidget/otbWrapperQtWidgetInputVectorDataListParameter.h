@@ -20,7 +20,6 @@
 
 #include <QtGui>
 #include "otbWrapperInputVectorDataListParameter.h"
-#include "otbWrapperQtWidgetParameterBase.h"
 #include "otbQtFileSelectionWidget.h"
 
 namespace otb

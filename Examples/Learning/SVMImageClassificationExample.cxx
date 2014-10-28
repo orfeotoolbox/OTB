@@ -21,7 +21,6 @@
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkImageRegionIterator.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImage.h"
 
@@ -51,7 +50,6 @@
 #include "itkImageToListSampleAdaptor.h"
 
 // Software Guide : BeginCodeSnippet
-#include "itkListSample.h"
 #include "otbSVMClassifier.h"
 // Software Guide : EndCodeSnippet
 

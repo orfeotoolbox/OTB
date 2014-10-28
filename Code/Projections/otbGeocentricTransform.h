@@ -18,7 +18,6 @@
 #ifndef __otbGeocentricTransform_h
 #define __otbGeocentricTransform_h
 
-#include "otbTransform.h"
 #include "otbGenericMapProjection.h"
 #include "otbEllipsoidAdapter.h"
 

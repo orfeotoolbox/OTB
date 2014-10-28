@@ -19,13 +19,10 @@
 
 #include "otbImageToLuminanceImageFilter.h"
 #include "otbLuminanceToReflectanceImageFilter.h"
-#include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericCorrectionParameters.h"
-#include "otbAtmosphericRadiativeTerms.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include <string>

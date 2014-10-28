@@ -19,7 +19,6 @@
 
 
 #include <fstream>
-#include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbSOMMap.h"
 #include "otbSOMClassifier.h"

@@ -19,15 +19,12 @@
 #include "otbWrapperApplicationFactory.h"
 
 
-#include "itkImageToImageFilter.h"
 
 #include "otbMaximumAutocorrelationFactorImageFilter.h"
-#include "otbPCAImageFilter.h"
 #include "otbNAPCAImageFilter.h"
 #include "otbLocalActivityVectorImageFilter.h"
 #include "otbMaximumAutocorrelationFactorImageFilter.h"
 #include "otbFastICAImageFilter.h"
-#include "otbFastICAInternalOptimizerVectorImageFilter.h"
 
 //#include "otbVirtualDimensionality.h"
 

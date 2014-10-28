@@ -26,7 +26,6 @@
 #include "itkImageRegionMultidimensionalSplitter.h"
 #include "otbImageIOFactory.h"
 
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 
 #include "itkMetaDataObject.h"

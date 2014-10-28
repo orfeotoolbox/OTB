@@ -18,7 +18,6 @@
 #ifndef __otbExtendedFilenameToWriterOptions_h
 #define __otbExtendedFilenameToWriterOptions_h
 
-#include "itkObject.h"
 #include "otbExtendedFilenameHelper.h"
 #include "otbGDALImageIO.h"
 

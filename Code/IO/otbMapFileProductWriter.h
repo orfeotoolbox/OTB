@@ -18,7 +18,6 @@
 #ifndef __otbMapFileProductWriter_h
 #define __otbMapFileProductWriter_h
 
-#include "itkProcessObject.h"
 #include "itkObjectFactory.h"
 
 // Image Tiling
@@ -26,7 +25,6 @@
 #include "otbImageFileWriter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbGeoInformationConversion.h"
-#include "otbGenericRSTransform.h"
 #include "otbStreamingShrinkImageFilter.h"
 
 // sahpe index necessary includes

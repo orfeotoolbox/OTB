@@ -18,11 +18,9 @@
 
 
 
-#include "itkMacro.h"
 #include <iostream>
 #include "itkComplexToRealImageFilter.h"
 #include "itkComplexToImaginaryImageFilter.h"
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"

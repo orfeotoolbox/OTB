@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbDisparityMapEstimationMethod.h"
-#include "itkPointSet.h"
 #include "otbImage.h"
 #include "itkTranslationTransform.h"
 

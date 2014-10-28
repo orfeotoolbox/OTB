@@ -18,7 +18,6 @@
 #ifndef __otbTileMapTransform_h
 #define __otbTileMapTransform_h
 
-#include "otbTransform.h"
 
 // Only for the enum definition
 #include "otbGenericMapProjection.h"

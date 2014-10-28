@@ -21,7 +21,6 @@
 #include "otbRealMomentsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
-#include "itkMacro.h"
 
 namespace otb
 {

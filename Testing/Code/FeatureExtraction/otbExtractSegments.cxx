@@ -26,7 +26,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractSegmentsImageFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
 
 int otbExtractSegments(int itkNotUsed(argc), char * argv[])
 {

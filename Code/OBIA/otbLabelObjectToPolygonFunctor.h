@@ -23,7 +23,6 @@
 //TODO change this include  have to define from what inherate this class
 #include "otbPolyLineParametricPathWithValue.h" //for vcl_abs
 
-#include "itkVector.h"
 #include "itkPoint.h"
 #include "itkIndex.h"
 

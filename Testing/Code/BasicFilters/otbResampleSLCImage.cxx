@@ -15,10 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkMacro.h"
 
 #include "otbStreamingResampleImageFilter.h"
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "itkTranslationTransform.h"

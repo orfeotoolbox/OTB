@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-#include "otbMacro.h"
 #include "otbObjectList.h"
 #include "otbImage.h"
 #include "otbWaveletOperator.h"
@@ -27,7 +26,6 @@
 #include "otbCommandLineArgumentParser.h"
 
 #include "itkListSample.h"
-#include "itkFixedArray.h"
 
 #include "otbSparseWvltToAngleMapperListFilter.h"
 

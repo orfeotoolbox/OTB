@@ -19,13 +19,11 @@
 //Warning !! the SVM model estimator do not converge in this test !!
 
 #include "otbVectorImage.h"
-#include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorDataFileReader.h"
 
 #include "otbVectorDataToLabelMapWithAttributesFilter.h"
 #include "otbSpatialisationFilter.h"
-#include "otbProspectModel.h"
 #include "otbSailModel.h"
 #include "otbImageSimulationMethod.h"
 #include "otbAttributesMapLabelObject.h"

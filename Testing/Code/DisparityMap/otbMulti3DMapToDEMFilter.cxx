@@ -17,13 +17,11 @@
 =========================================================================*/
 
 #include "otbMulti3DMapToDEMFilter.h"
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorImageToImageListFilter.h"
 #include <string>
-#include "otbObjectList.h"
 #include "otbGeoInformationConversion.h"
 
 typedef otb::Image<double, 2>                    ImageType;

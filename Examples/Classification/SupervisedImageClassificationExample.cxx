@@ -34,7 +34,6 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbMacro.h"
 #include "otbMachineLearningModelFactory.h"
 #include "otbImageClassificationFilter.h"
 // Software Guide : EndCodeSnippet

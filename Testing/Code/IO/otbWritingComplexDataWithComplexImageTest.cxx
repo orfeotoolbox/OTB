@@ -20,7 +20,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
-#include "otbImage.h"
 #include "otbMacro.h"
 
 int otbWritingComplexDataWithComplexImageTest(int itkNotUsed(argc), char * argv[])

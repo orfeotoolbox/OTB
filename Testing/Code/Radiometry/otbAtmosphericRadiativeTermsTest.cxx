@@ -19,7 +19,6 @@
 
 #include <fstream>
 
-#include "itkMacro.h"
 #include "otbAtmosphericRadiativeTerms.h"
 #include <cstdlib>
 

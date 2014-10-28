@@ -25,12 +25,10 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbVectorImage.h"
-#include "itkNumericTraits.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbFusionImageBase.h"
 #include "otbStreamingMatrixTransposeMatrixImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
-#include "itkVariableSizeMatrix.h"
 
 namespace otb
 {

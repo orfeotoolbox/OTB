@@ -20,7 +20,6 @@
 
 #include "otbPointSetFunction.h"
 
-#include "itkProcessObject.h"
 #include "itkNumericTraits.h"
 #include "itkConstNeighborhoodIterator.h"
 

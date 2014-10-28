@@ -19,7 +19,6 @@
 #define __otbDrawLineSpatialObjectFilter_h
 
 #include "itkSpatialObjectToImageFilter.h"
-#include "itkLineSpatialObject.h"
 #include "otbLineSpatialObjectList.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
 

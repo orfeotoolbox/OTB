@@ -18,7 +18,6 @@
 #ifndef __otbPhysicalToRPCSensorModelImageFilter_h
 #define __otbPhysicalToRPCSensorModelImageFilter_h
 
-#include "itkCastImageFilter.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 #include "otbGenericRSTransform.h"
 

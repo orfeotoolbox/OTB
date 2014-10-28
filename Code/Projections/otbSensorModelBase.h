@@ -26,7 +26,6 @@
 
 #include "otbTransform.h"
 #include "itkSmartPointer.h"
-#include "itkObject.h"
 
 namespace otb
 {

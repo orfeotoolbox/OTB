@@ -19,7 +19,6 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "itkMacro.h"
 #include "itksys/SystemTools.hxx"
 #include "otbSystem.h"
 

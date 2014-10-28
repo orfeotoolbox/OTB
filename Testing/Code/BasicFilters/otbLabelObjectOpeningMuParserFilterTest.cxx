@@ -19,11 +19,9 @@
 
 #include <iostream>
 
-#include "otbImage.h"
 
 #include "otbAttributesMapLabelObject.h"
 #include "otbLabelObjectOpeningMuParserFilter.h"
-#include "otbParser.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbShapeAttributesLabelMapFilter.h"

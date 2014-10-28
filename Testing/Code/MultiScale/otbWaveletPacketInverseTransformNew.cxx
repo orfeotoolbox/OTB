@@ -22,7 +22,6 @@
 #include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"
 #include "otbWaveletPacketTransform.h"
-#include "otbWaveletPacketDecompositionCosts.h"
 
 int otbWaveletPacketInverseTransformNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

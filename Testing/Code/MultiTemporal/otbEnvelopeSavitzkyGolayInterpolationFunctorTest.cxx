@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "itkFixedArray.h"
 #include "otbEnvelopeSavitzkyGolayInterpolationFunctor.h"
 #include "otbTimeSeries.h"
 

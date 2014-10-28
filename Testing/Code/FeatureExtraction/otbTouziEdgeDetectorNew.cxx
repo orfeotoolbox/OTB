@@ -19,7 +19,6 @@
 
 
 #include "itkMacro.h"
-#include "otbImage.h"
 #include <iostream>
 
 #include "otbTouziEdgeDetectorImageFilter.h"

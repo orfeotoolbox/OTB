@@ -21,7 +21,6 @@
 #include "itkInterpolateImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkConstantBoundaryCondition.h"
-#include "itkZeroFluxNeumannBoundaryCondition.h"
 
 namespace otb
 {

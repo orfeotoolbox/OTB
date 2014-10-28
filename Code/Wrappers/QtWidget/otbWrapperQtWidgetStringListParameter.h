@@ -19,7 +19,6 @@
 #define __otbWrapperQtWidgetStringListParameter_h
 
 #include <QtGui>
-#include "otbWrapperStringListParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 #include "otbQtStringSelectionWidget.h"
 

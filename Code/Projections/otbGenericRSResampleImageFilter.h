@@ -18,10 +18,8 @@
 #ifndef __otbGenericRSResampleImageFilter_h
 #define __otbGenericRSResampleImageFilter_h
 
-#include "itkImageToImageFilter.h"
 #include "otbStreamingResampleImageFilter.h"
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
-#include "otbGenericRSTransform.h"
 
 namespace otb
 {

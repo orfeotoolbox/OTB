@@ -48,7 +48,6 @@
 #include "itkRescaleIntensityImageFilter.h"
 
 
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkScalarToRGBPixelFunctor.h"
 
 

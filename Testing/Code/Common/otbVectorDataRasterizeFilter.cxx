@@ -21,7 +21,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataProjectionFilter.h"
 

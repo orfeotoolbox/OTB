@@ -19,7 +19,6 @@
 #define __otbGeometriesSet_h
 
 #include <boost/variant.hpp>
-#include "itkDataObject.h"
 // #include "otbOGRLayerWrapper.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "otbImageReference.h"

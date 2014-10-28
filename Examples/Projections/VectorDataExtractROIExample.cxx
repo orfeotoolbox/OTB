@@ -37,12 +37,10 @@
 
 #include "otbVectorData.h"
 #include "otbVectorDataExtractROI.h"
-#include "otbRemoteSensingRegion.h"
 
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbImageMetadataInterfaceFactory.h"
-#include "otbImageMetadataInterfaceBase.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"

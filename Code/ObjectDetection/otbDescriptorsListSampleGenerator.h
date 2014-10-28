@@ -27,7 +27,6 @@
 #include "itkListSample.h"
 #include "otbVectorData.h"
 
-#include "itkDataObject.h"
 #include "itkSimpleDataObjectDecorator.h"
 
 #include "otbPersistentImageFilter.h"

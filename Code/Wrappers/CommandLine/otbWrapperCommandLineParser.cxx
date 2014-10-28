@@ -19,7 +19,6 @@
 
 
 #include "otbWrapperApplicationRegistry.h"
-#include "otbWrapperApplication.h"
 
 #include <itksys/SystemTools.hxx>
 #include <itksys/RegularExpression.hxx>

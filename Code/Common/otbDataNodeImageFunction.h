@@ -20,7 +20,6 @@
 
 #include "otbDataNodeFunctionBase.h"
 #include "otbDataNode.h"
-#include "itkIndex.h"
 #include "itkContinuousIndex.h"
 #include "itkImageBase.h"
 

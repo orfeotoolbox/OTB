@@ -18,10 +18,8 @@
 #include "itkMacro.h"
 
 #include "otbImageToLuminanceImageFilter.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkVariableLengthVector.h"
 
 int otbImageToLuminanceImageFilter(int itkNotUsed(argc), char * argv[])
 {

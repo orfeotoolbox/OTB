@@ -20,7 +20,6 @@
 #include "otbImageFileWriter.h"
 #include "otbVectorData.h"
 #include "otbVectorDataProjectionFilter.h"
-#include "otbVectorDataExtractROI.h"
 #include <fstream>
 #include <iostream>
 

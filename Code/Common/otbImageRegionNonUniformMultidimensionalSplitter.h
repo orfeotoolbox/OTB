@@ -21,7 +21,6 @@
 #ifndef __otbImageRegionNonUniformMultidimensionalSplitter_h
 #define __otbImageRegionNonUniformMultidimensionalSplitter_h
 
-#include "itkObject.h"
 #include "itkRegion.h"
 #include "itkObjectFactory.h"
 #include "itkIndex.h"

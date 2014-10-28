@@ -19,9 +19,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "otbVectorImage.h"
-#include "otbImage.h"
 #include "itkEuclideanDistanceMetric.h"
 #include "otbStreamingTraits.h"
 #include "itkImageRegionConstIterator.h"
@@ -29,7 +27,6 @@
 #include "itkWeightedCentroidKdTreeGenerator.h"
 #include "itkKdTreeBasedKmeansEstimator.h"
 #include "otbStreamingShrinkImageFilter.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "otbChangeLabelImageFilter.h"
 #include "otbRAMDrivenStrippedStreamingManager.h"
 
@@ -37,7 +34,6 @@
 #include "itkLabelToRGBImageFilter.h"
 #include "otbReliefColormapFunctor.h"
 #include "itkScalarToRGBColormapImageFilter.h"
-#include "otbWrapperTypes.h"
 
 
 namespace otb

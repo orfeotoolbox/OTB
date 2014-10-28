@@ -23,16 +23,13 @@
 
 #include "itkExtractImageFilter.h"
 
-#include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "otbPersistentImageToOGRLayerFilter.h"
 #include "otbRelabelComponentImageFilter.h"
 #include "itkMultiplyImageFilter.h"
 
-#include "otbMeanShiftImageFilter.h"
 #include "otbMeanShiftSmoothingImageFilter.h"
 #include "otbMeanShiftVectorImageFilter.h"
-#include "itkMacro.h"
 
 
 namespace otb

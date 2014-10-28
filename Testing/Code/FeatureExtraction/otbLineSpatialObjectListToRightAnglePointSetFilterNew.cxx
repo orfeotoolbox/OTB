@@ -19,7 +19,6 @@
 #include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
 #include "otbImage.h"
 #include "otbLineSpatialObjectList.h"
-#include "itkPointSet.h"
 
 int otbLineSpatialObjectListToRightAnglePointSetFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

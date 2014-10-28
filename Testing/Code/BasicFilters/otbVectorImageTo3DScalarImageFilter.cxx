@@ -20,7 +20,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVectorImageTo3DScalarImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageSliceConstIteratorWithIndex.h"
 

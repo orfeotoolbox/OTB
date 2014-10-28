@@ -21,7 +21,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVegetationIndicesFunctor.h"
 
 template<class TInputRImage, class TInputBImage, class TInputNIRImage, class TOutputImage, class TFunction>
 int generic_EVIRAndBAndNIRVegetationIndexImageFilter(int itkNotUsed(argc), char * argv[])

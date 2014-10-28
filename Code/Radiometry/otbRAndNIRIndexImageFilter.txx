@@ -20,9 +20,7 @@
 
 #include "otbRAndNIRIndexImageFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
-#include "itkProcessObject.h"
 
 namespace otb
 {

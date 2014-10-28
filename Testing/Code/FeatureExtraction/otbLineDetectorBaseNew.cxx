@@ -18,7 +18,6 @@
 
 
 #include "itkMacro.h"
-#include "otbImage.h"
 #include <iostream>
 
 #include "otbLineDetectorImageFilterBase.h"

@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
 
 #include "itkExtractImageFilter.h"

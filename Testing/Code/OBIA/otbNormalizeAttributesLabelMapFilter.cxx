@@ -24,7 +24,6 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbAttributesMapLabelObject.h"
-#include "otbLabelImageToLabelMapWithAdjacencyFilter.h"
 #include "otbImageToLabelMapWithAttributesFilter.h"
 #include "otbMinMaxAttributesLabelMapFilter.h"
 #include "otbNormalizeAttributesLabelMapFilter.h"

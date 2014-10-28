@@ -19,7 +19,6 @@
 
 
 #include "otbROIdataConversion.h"
-#include "otbImage.h"
 #include "otbVectorImage.h"
 
 int otbROIdataConversionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

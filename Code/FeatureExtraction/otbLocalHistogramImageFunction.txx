@@ -20,7 +20,6 @@
 
 #include "otbLocalHistogramImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
-#include "itkNumericTraits.h"
 #include "itkMacro.h"
 #include "itkExtractImageFilter.h"
 #include "otbMath.h"

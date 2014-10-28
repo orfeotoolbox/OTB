@@ -23,7 +23,6 @@
 #define itksys_SHARED_FORWARD_EXE_BUILD ""
 #define itksys_SHARED_FORWARD_EXE_INSTALL ""
 
-#include "itkWin32Header.h"
 #include <map>
 #include <string>
 #include <iostream>

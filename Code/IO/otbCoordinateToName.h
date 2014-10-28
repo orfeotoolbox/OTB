@@ -18,7 +18,6 @@
 #ifndef __otbCoordinateToName_h
 #define __otbCoordinateToName_h
 
-#include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "itkPoint.h"
 #include "itkMultiThreader.h"

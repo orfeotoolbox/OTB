@@ -22,7 +22,6 @@
 #include "otbDrawPathListFilter.h"
 
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
 #include "otbPolyLineImageIterator.h"
 #include "itkMetaDataObject.h"
 

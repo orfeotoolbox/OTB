@@ -23,10 +23,8 @@
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "itkImageToImageFilter.h"
 #include "itkGradientMagnitudeImageFilter.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"
-#include "itkNthElementImageAdaptor.h"
 #include "itkCovariantVector.h"
 #include "itkAtan2ImageFilter.h"
 #include "itkAtanImageFilter.h"

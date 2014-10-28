@@ -20,7 +20,6 @@
 #include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"
 #include "otbWaveletPacketTransform.h"
-#include "otbWaveletPacketDecompositionCosts.h"
 
 int otbWaveletPacketTransformNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "otbAttributesMapLabelObject.h"
 #include "itkLabelMap.h"
 #include "otbLabelMapToSampleListFilter.h"
 #include "itkVariableLengthVector.h"

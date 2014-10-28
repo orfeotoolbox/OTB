@@ -20,7 +20,6 @@
 
 #include "otbSurfaceReflectanceToReflectanceFilter.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"
-#include "otbOpticalImageMetadataInterface.h"
 
 namespace otb
 {

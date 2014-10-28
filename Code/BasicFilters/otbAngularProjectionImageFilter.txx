@@ -21,7 +21,6 @@
 
 #include <vnl/vnl_math.h>
 
-#include <itkImageRegionConstIterator.h>
 #include <itkImageRegionIterator.h>
 #include <itkProgressAccumulator.h>
 

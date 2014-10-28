@@ -20,7 +20,6 @@
 #include <iostream>
 #include <iomanip>
 
-#include "itkMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 

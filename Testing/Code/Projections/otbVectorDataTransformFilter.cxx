@@ -20,7 +20,6 @@
 #include "itkAffineTransform.h"
 
 #include "otbVectorImage.h"
-#include "otbVectorData.h"
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"

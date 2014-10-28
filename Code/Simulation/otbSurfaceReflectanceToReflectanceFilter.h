@@ -25,9 +25,7 @@
 
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 
-#include "otbAtmosphericRadiativeTerms.h"
 #include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
-#include "otbImageMetadataCorrectionParameters.h"
 #include "itkMetaDataDictionary.h"
 // #include "itkFactory.h"
 namespace otb

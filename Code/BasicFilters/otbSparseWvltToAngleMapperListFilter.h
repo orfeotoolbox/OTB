@@ -22,9 +22,7 @@
 #include "otbImageList.h"
 
 #include "itkProcessObject.h"
-#include "itkDataObject.h"
 #include "itkDataObjectDecorator.h"
-#include "itkNumericTraits.h"
 #include "itkImageRegionConstIterator.h"
 
 namespace otb {

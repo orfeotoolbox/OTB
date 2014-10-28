@@ -19,7 +19,6 @@
 #define __otbScalarBufferToImageFileWriter_h
 
 
-#include "itkProcessObject.h"
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
 

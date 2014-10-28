@@ -26,7 +26,6 @@
 #include "otbMacro.h"
 
 
-#include "itkLightObject.h"
 #include "itkObjectFactory.h"
 
 #include "otbBinarySpectralAngleFunctor.h"

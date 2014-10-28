@@ -17,7 +17,6 @@
 =========================================================================*/
 
 #include "otbKMLVectorDataIO.h"
-#include "otbVectorData.h"
 #include <iostream>
 
 int otbKMLVectorDataIOTestFileReader(int argc, char* argv[])

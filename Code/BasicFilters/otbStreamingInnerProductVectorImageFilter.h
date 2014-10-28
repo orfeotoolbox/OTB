@@ -23,7 +23,6 @@
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-#include "itkNumericTraits.h"
 #include "itkArray.h"
 #include "itkSimpleDataObjectDecorator.h"
 #include "itkImageRegionSplitter.h"

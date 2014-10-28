@@ -18,7 +18,6 @@
 #ifndef __otbMachineLearningModelFactory_h
 #define __otbMachineLearningModelFactory_h
 
-#include "itkObject.h"
 #include "otbMachineLearningModel.h"
 #include "otbMachineLearningModelFactoryBase.h"
 

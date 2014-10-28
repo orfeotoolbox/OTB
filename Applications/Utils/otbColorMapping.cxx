@@ -28,7 +28,6 @@
 #include "itkScalarToRGBColormapImageFilter.h"
 #include "otbReliefColormapFunctor.h"
 
-#include "itkImageRegionSplitter.h"
 #include "otbStreamingTraits.h"
 
 #include "otbRAMDrivenStrippedStreamingManager.h"
@@ -36,11 +35,8 @@
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
 
-#include "itkDenseFrequencyContainer2.h"
 #include "itkVariableLengthVector.h"
-#include "itkHistogram.h"
 #include "otbObjectList.h"
-#include "itkNumericTraitsVariableLengthVectorPixel.h"
 
 #include "itkImageRegionConstIterator.h"
 #include "otbUnaryFunctorImageFilter.h"

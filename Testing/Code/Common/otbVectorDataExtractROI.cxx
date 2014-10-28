@@ -15,9 +15,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbVectorData.h"
 #include "otbVectorDataExtractROI.h"
-#include "otbRemoteSensingRegion.h"
 
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"

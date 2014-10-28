@@ -19,9 +19,7 @@
 #define __otbVectorizationPathListFilter_h
 
 #include "otbPathListSource.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
-#include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodIterator.h"
 #include "itkConstantBoundaryCondition.h"
 #include "otbImage.h"

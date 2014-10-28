@@ -18,12 +18,10 @@
 
 
 #include "otbVectorDataToDSValidatedVectorDataFilter.h"
-#include "otbMassOfBelief.h"
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
-#include "otbFuzzyDescriptorsModelManager.h"
 
 int otbVectorDataToDSValidatedVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {

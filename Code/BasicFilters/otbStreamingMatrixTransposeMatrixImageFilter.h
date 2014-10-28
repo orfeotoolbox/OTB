@@ -22,7 +22,6 @@
 #define __otbStreamingMatrixTransposeMatrixImageFilter_h
 
 #include "otbPersistentImageFilter.h"
-#include "itkNumericTraits.h"
 #include "itkArray.h"
 #include "itkSimpleDataObjectDecorator.h"
 #include "otbStreamingTraits.h"

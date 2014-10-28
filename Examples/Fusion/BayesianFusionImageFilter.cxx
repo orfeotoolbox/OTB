@@ -71,14 +71,12 @@
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
-#include "otbVectorImage.h"
 #include "itkCastImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
-#include "otbImageToVectorImageCastFilter.h"
 
 int main(int argc, char *argv[])
 {

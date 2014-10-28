@@ -39,7 +39,6 @@
 #include "otbDrawLineSpatialObjectListFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-#include "otbLineSpatialObjectList.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"

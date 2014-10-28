@@ -32,7 +32,6 @@
 
 // Software Guide : BeginCodeSnippet
 #include "itkShapeLabelObject.h"
-#include "itkLabelMap.h"
 #include "itkLabelImageToLabelMapFilter.h"
 #include "itkShapeLabelMapFilter.h"
 // Software Guide : EndCodeSnippet

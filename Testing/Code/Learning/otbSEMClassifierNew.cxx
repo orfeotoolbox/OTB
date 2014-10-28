@@ -20,9 +20,7 @@
 
 #include "itkMacro.h"
 #include "otbImage.h"
-#include "itkListSample.h"
 #include "otbVectorImage.h"
-#include "otbModelComponentBase.h"
 #include "otbSEMClassifier.h"
 
 #include <iostream>

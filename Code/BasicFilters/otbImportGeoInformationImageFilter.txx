@@ -18,10 +18,8 @@
 #ifndef __otbImportGeoInformationImageFilter_txx
 #define __otbImportGeoInformationImageFilter_txx
 
-#include "itkDataObject.h"
 #include "otbImportGeoInformationImageFilter.h"
 #include "itkMetaDataObject.h"
-#include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
 
 namespace otb

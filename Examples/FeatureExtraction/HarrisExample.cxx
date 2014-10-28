@@ -38,7 +38,6 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbHarrisImageFilter.h"
 // Software Guide : EndCodeSnippet
 #include "otbHarrisImageToPointSetFilter.h"
 #include "itkRescaleIntensityImageFilter.h"

@@ -20,7 +20,6 @@
 #define __otbLabelImageRegionPruningFilter_txx
 
 #include "otbLabelImageRegionPruningFilter.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"

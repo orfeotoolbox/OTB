@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "otbMorphologicalProfilesSegmentationFilter.h"
 #include "itkMacro.h"
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

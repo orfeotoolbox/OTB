@@ -28,7 +28,6 @@
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

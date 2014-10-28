@@ -21,7 +21,6 @@
 
 #include "otbMeanShiftImageFilter.h"
 
-#include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbMacro.h"

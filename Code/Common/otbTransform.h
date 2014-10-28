@@ -19,7 +19,6 @@
 #define __otbTransform_h
 
 #include "itkTransform.h"
-#include "itkVector.h"
 #include "vnl/vnl_vector_fixed.h"
 
 

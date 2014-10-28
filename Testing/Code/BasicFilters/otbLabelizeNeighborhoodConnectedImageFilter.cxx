@@ -19,7 +19,6 @@
 
 #include <iostream>
 
-#include "itkRGBPixel.h"
 #include "itkScalarToRGBPixelFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"
 

@@ -16,11 +16,9 @@
 
 =========================================================================*/
 #include "itkMacro.h"
-#include "otbVectorImage.h"
 #include "otbSOMMap.h"
 #include "otbPeriodicSOM.h"
 #include "itkRGBPixel.h"
-#include "itkEuclideanDistanceMetric.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkListSample.h"

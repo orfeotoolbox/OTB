@@ -24,10 +24,8 @@
 
 #include "itkNumericTraits.h"
 #include <vector>
-#include "itkConstNeighborhoodIterator.h"
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 #include "itkVariableSizeMatrix.h"
-#include "otbAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
 #include <iomanip>
 

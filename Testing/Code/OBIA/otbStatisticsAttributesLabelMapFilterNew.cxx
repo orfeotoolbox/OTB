@@ -18,7 +18,6 @@
 
 
 #include "otbAttributesMapLabelObject.h"
-#include "itkLabelMap.h"
 #include "otbStatisticsAttributesLabelMapFilter.h"
 #include "otbImage.h"
 

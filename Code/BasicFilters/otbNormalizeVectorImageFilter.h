@@ -20,9 +20,7 @@
 
 #include <vnl/vnl_math.h>
 
-#include <itkNumericTraits.h>
 #include <itkMacro.h>
-#include <itkVariableLengthVector.h>
 #include <otbVectorImage.h>
 #include <otbUnaryFunctorVectorImageFilter.h>
 

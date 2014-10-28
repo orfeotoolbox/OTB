@@ -25,7 +25,6 @@
 //#error OGRLayerStreamStitchingFilter requires GDAL version >= 1.8.0
 //#endif
 
-#include "itkProcessObject.h"
 #include "itkProgressReporter.h"
 
 #include <algorithm>

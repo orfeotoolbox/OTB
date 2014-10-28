@@ -19,7 +19,6 @@
 
 
 #include "itkMacro.h"
-#include "itkListSample.h"
 #include <iostream>
 
 #include "otbSVMSampleListModelEstimator.h"

@@ -20,7 +20,6 @@
 
 #include "otbImageListToVectorImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
-#include "otbObjectList.h"
 #include "otbWrapperTypes.h"
 #include "otbImageList.h"
 

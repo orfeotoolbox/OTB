@@ -19,7 +19,6 @@
 
 #include "otbPerBandVectorImageFilter.h"
 #include "otbVectorImage.h"
-#include "otbImage.h"
 #include "itkSobelEdgeDetectionImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

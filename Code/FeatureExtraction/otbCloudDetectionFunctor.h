@@ -18,7 +18,6 @@
 #ifndef __otbCloudDetectionFunctor_h
 #define __otbCloudDetectionFunctor_h
 
-#include "otbMath.h"
 #include "otbCloudEstimatorFunctor.h"
 
 namespace otb

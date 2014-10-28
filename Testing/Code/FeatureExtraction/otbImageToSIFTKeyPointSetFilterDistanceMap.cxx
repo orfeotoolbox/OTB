@@ -19,13 +19,10 @@
 #include <fstream>
 
 #include "itkPointSet.h"
-#include "itkImageRegionIterator.h"
 #include "itkVariableLengthVector.h"
 #include "itkResampleImageFilter.h"
 #include "itkDanielssonDistanceMapImageFilter.h"
-#include "itkSubtractImageFilter.h"
 #include "itkMinimumMaximumImageCalculator.h"
-#include "itkShrinkImageFilter.h"
 #include "itkExpandImageFilter.h"
 #include "itkPointSetToImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"

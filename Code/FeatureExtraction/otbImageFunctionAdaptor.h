@@ -19,7 +19,6 @@
 #define __otbImageFunctionAdaptor_h
 
 #include "itkImageFunction.h"
-#include "itkNumericTraits.h"
 
 #include "otbVariableLengthVectorConverter.h"
 

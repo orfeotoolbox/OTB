@@ -19,7 +19,6 @@
 
 
 #include "itkMacro.h"
-#include "itkListSample.h"
 #include <iostream>
 
 #include "otbSVMSampleListModelEstimator.h"
@@ -30,7 +29,6 @@
 #include "otbSVMClassifier.h"
 #include "otbConfusionMatrixCalculator.h"
 
-#include "otbMath.h"
 
 #include <fstream>
 

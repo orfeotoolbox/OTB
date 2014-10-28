@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "itkMacro.h"
 #include <iostream>
 
 #include "otbSensorModelBase.h"

@@ -23,16 +23,13 @@
 #include <iostream>
 #include <list>
 
-#include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbLineSpatialObjectList.h"
 
 #include "otbLocalHoughFilter.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
 
-#include "otbImageToLineSpatialObjectListFilter.h"
 
 #include "itkRescaleIntensityImageFilter.h"
 

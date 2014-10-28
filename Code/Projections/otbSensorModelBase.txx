@@ -20,7 +20,6 @@
 
 #include "otbSensorModelBase.h"
 
-#include "otbMacro.h"
 
 namespace otb
 {

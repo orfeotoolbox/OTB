@@ -21,7 +21,6 @@
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
-#include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
 

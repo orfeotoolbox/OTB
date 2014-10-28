@@ -20,7 +20,6 @@
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImageListToSingleImageFilter.h"
 #include "otbVectorImage.h"
-#include "otbImageList.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

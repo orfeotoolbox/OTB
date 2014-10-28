@@ -22,12 +22,10 @@
 #include <iterator>
 #include <stdlib.h>
 
-#include "otbMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
-#include "otbInverseSensorModel.h"
 #include "otbStreamingResampleImageFilter.h"
 
 
@@ -35,7 +33,6 @@
 #include "itkResampleImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
-#include "itkLinearInterpolateImageFunction.h"
 #include "itkChangeInformationImageFilter.h"
 
 #include "otbOrthoRectificationFilter.h"

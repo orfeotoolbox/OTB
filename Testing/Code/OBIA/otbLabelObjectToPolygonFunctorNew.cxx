@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbLabelObjectToPolygonFunctor.h"
-#include "otbPolygon.h"
 #include "otbAttributesMapLabelObject.h"
 #include <cstdlib>
 

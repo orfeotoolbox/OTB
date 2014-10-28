@@ -21,10 +21,8 @@
 #include <algorithm>
 #include <iomanip>
 
-#include "itkObjectFactory.h"
 
 #include "itkContinuousIndex.h"
-#include "itkRegion.h"
 #include "otbImageKeywordlist.h"
 #include "itkImageRegion.h"
 

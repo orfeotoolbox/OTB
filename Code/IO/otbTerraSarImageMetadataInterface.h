@@ -22,7 +22,6 @@
 #include <string>
 
 #include "otbSarImageMetadataInterface.h"
-#include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
 #include "itkImageBase.h"
 

@@ -22,7 +22,6 @@
 #include "otbGeometriesToGeometriesFilter.h"
 #include <cassert>
 #include "otbGeometriesSet.h"
-#include "itkMacro.h"
 #include "itkTimeProbe.h"
 #include "otbMacro.h"
 

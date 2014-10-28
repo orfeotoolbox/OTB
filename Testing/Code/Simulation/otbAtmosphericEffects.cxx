@@ -18,14 +18,12 @@
 
 #include "otbMacro.h"
 
-#include "otbSpectralResponse.h"
 #include "otbSatelliteRSR.h"
 #include "otbAtmosphericEffects.h"
 #include "otbReduceSpectralResponse.h"
 
 #include "otbAtmosphericCorrectionParameters.h"
 #include "otbImageMetadataCorrectionParameters.h"
-#include "otbAtmosphericRadiativeTerms.h"
 
 int otbAtmosphericEffects(int argc, char * argv[])
 {

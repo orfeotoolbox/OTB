@@ -29,7 +29,6 @@
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbVectorImage.h"
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex

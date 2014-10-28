@@ -24,7 +24,6 @@
 #include <iostream>
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageMetadataInterfaceBase.h"
 #include "otbImageMetadataInterfaceFactory.h"
 
 int otbImageMetadataInterfaceBaseTest(int itkNotUsed(argc), char* argv[])

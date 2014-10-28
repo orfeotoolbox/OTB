@@ -20,7 +20,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 
-#include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 
 #include "otbLabelImageToVectorDataFilter.h"

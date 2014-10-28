@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "itkFixedArray.h"
 #include "otbTimeSeries.h"
 
 int otbPolynomialTimeSeriesTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])

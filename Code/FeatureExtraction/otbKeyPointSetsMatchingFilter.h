@@ -18,7 +18,6 @@
 #ifndef __otbKeyPointSetsMatchingFilter_h
 #define __otbKeyPointSetsMatchingFilter_h
 
-#include "otbObjectList.h"
 #include "otbObjectListSource.h"
 #include "otbLandmark.h"
 #include "itkEuclideanDistanceMetric.h"

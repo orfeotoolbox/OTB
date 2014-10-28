@@ -21,7 +21,6 @@
 #include "otbGenericRSTransform.h"
 #include "otbGeographicalDistance.h"
 #include "itkEuclideanDistanceMetric.h"
-#include "otbDEMHandler.h"
 #include "otbSensorModelAdapter.h"
 #include "otbRPCSolverAdapter.h"
 

@@ -43,7 +43,6 @@
 #include "itkRescaleIntensityImageFilter.h"
 
 // Software Guide : BeginCodeSnippet
-#include "itkCovariantVector.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"
 // Software Guide : EndCodeSnippet
 

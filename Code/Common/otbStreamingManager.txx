@@ -19,7 +19,6 @@
 #define __otbStreamingManager_txx
 
 #include "otbStreamingManager.h"
-#include "otbMacro.h"
 #include "otbConfigure.h"
 #include "otbConfigurationFile.h"
 #include "itkExtractImageFilter.h"

@@ -19,7 +19,6 @@
 #define __otbVariableLengthVectorConverter_txx
 
 #include "otbVariableLengthVectorConverter.h"
-#include "itkNumericTraits.h"
 #include <complex>
 
 

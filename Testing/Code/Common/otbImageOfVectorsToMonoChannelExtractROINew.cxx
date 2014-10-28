@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbImageOfVectorsToMonoChannelExtractROI.h"
-#include "otbImage.h"
 
 int otbImageOfVectorsToMonoChannelExtractROINew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

@@ -69,7 +69,6 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -79,7 +78,6 @@
 #include "otbPrintableImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
-#include "otbVectorRescaleIntensityImageFilter.h"
 // Software Guide : BeginCodeSnippet
 int main(int argc, char* argv[])
 {

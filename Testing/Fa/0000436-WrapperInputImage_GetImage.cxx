@@ -19,10 +19,8 @@
 #include "otbWrapperInputImageParameter.h"
 
 
-#include "otbImage.h"
 #include "otbLineSegmentDetector.h"
 
-#include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbImageFileWriter.h"
 

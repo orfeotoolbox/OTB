@@ -18,7 +18,6 @@
 
 
 #include "itkFixedArray.h"
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbFineRegistrationImageFilter.h"

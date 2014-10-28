@@ -19,17 +19,14 @@
 
 #include "otbVectorImage.h"
 
-#include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
 
-#include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 #include "itkPreOrderTreeIterator.h"
 
 #include "otbVectorDataIntoImageProjectionFilter.h"
-#include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataTransformFilter.h"
 #include "itkAffineTransform.h"
 

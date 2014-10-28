@@ -30,7 +30,6 @@
 #include <map>
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include "otbOGRFeatureWrapper.h"
 #include "otbOGRLayerWrapper.h"
 
 // forward declarations

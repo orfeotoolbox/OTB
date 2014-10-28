@@ -18,7 +18,6 @@
 #ifndef __otbListSampleToBalancedListSampleFilter_h
 #define __otbListSampleToBalancedListSampleFilter_h
 
-#include "otbListSampleToListSampleFilter.h"
 #include "otbGaussianAdditiveNoiseSampleListFilter.h"
 #include "itkDataObjectDecorator.h"
 #include "otbMacro.h"

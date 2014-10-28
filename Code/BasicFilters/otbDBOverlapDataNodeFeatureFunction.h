@@ -20,7 +20,6 @@
 
 #include "otbDataNodeVectorDataFunction.h"
 
-#include "otbDataNode.h"
 #include "itkPreOrderTreeIterator.h"
 
 namespace otb

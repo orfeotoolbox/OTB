@@ -24,7 +24,6 @@
 
 #include "otbGroundSpacingImageFunction.h"
 
-#include "itkNumericTraits.h"
 #include "itkConstNeighborhoodIterator.h"
 
 namespace otb

@@ -23,7 +23,6 @@
 #include "otbWaveletTransform.h"
 
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkProgressAccumulator.h"
 #include "otbMacro.h"
 

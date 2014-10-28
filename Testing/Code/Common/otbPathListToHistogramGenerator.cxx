@@ -23,7 +23,6 @@
 #include "otbOrientationPathFunction.h"
 #include "otbPathListToHistogramGenerator.h"
 #include "otbMath.h"
-#include "otbObjectList.h"
 
 int otbPathListToHistogramGenerator(int itkNotUsed(argc), char * argv[])
 {

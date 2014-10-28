@@ -19,7 +19,6 @@
 #define __otbRadiometricMomentsImageFunction_txx
 
 #include "otbRadiometricMomentsImageFunction.h"
-#include "itkNumericTraits.h"
 #include "itkMacro.h"
 #include "itkVariableLengthVector.h"
 #include <complex>

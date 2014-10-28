@@ -17,10 +17,8 @@
 =========================================================================*/
 
 #include "itkLabelMapToLabelImageFilter.h"
-#include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbSpatialisationFilter.h"
-#include "otbImage.h"
 #include "otbAttributesMapLabelObject.h"
 
 int otbSpatialisationTest(int itkNotUsed(argc), char * argv[])

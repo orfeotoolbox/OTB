@@ -22,7 +22,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVegetationIndicesFunctor.h"
 
 template<class TInputImage, class TOutputImage, class TFunction>
 void generic_SetASetBMultiChannelRAndNIRVegetationIndexImageFilter(int itkNotUsed(argc), char * argv[])

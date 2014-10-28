@@ -29,7 +29,6 @@
 #include "otbListSampleToHistogramListGenerator.h"
 #include "itkImageRegionConstIterator.h"
 
-#include "otbWrapperTypes.h"
 
 namespace otb
 {

@@ -41,7 +41,6 @@
 #include "itkWeightedCentroidKdTreeGenerator.h"
 
 #include "itkMinimumDecisionRule.h"
-#include "itkEuclideanDistanceMetric.h"
 #include "itkSampleClassifierFilter.h"
 
 #include "itkImageToListSampleAdaptor.h"

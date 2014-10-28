@@ -21,7 +21,6 @@
 #ifndef __otbKullbackLeiblerSupervizedDistanceImageFilter_h
 #define __otbKullbackLeiblerSupervizedDistanceImageFilter_h
 
-#include "itkVariableLengthVector.h"
 #include "otbKullbackLeiblerDistanceImageFilter.h"
 
 #include "otbROIdataConversion.h"

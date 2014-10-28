@@ -20,7 +20,6 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbExtractROI.h"
 #include "otbConnectedComponentMuParserFunctor.h"
-#include "itkConnectedComponentFunctorImageFilter.h"
 #include "otbBandMathImageFilter.h"
 #include "itkStatisticsImageFilter.h"
 #include "itkChangeLabelImageFilter.h"

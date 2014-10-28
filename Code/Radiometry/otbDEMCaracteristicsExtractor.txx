@@ -22,7 +22,6 @@
 #define __otbDEMCaracteristicsExtractor_txx
 
 #include "otbDEMCaracteristicsExtractor.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 #include "otbMath.h"
 

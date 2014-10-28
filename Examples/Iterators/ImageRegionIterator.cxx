@@ -45,7 +45,6 @@
 
 #include "otbImage.h"
 // Software Guide : BeginCodeSnippet
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 // Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"

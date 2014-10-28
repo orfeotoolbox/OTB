@@ -23,14 +23,11 @@
 #include "otbWrapperEmptyParameter.h"
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
-#include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
-#include "otbWrapperNumericalParameter.h"
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperRadiusParameter.h"
-#include "otbWrapperStringParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperRAMParameter.h"
 #include "otbWrapperOutputProcessXMLParameter.h"
@@ -42,11 +39,9 @@
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperStringListParameter.h"
 
-#include "otbImageFileWriter.h"
 
 
 #include "otbWrapperApplicationRegistry.h"
-#include "otbWrapperApplication.h"
 #include "otbWrapperTypes.h"
 #include <itksys/RegularExpression.hxx>
 #include <string>

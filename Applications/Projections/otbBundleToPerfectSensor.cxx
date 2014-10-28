@@ -15,7 +15,6 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbMultiToMonoChannelExtractROI.h"
@@ -27,7 +26,6 @@
 // Elevation handler
 #include "otbWrapperElevationParametersHandler.h"
 
-#include "otbStreamingResampleImageFilter.h"
 #include "otbPleiadesPToXSAffineTransformCalculator.h"
 
 namespace otb

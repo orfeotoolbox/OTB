@@ -19,7 +19,6 @@
 #define __otbAtmosphericCorrectionParameters_h
 
 #include "itkObject.h"
-#include "itkObjectFactory.h"
 #include "itkMacro.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"

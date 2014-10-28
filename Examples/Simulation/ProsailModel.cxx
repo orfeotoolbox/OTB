@@ -37,7 +37,6 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbLeafParameters.h"
 #include "otbSailModel.h"
 #include "otbProspectModel.h"
 // Software Guide : EndCodeSnippet

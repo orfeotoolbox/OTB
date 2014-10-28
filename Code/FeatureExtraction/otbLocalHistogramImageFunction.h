@@ -19,7 +19,6 @@
 #define __otbLocalHistogramImageFunction_h
 
 #include "itkImageFunction.h"
-#include "itkFixedArray.h"
 #include "itkHistogram.h"
 #include "itkNumericTraits.h"
 

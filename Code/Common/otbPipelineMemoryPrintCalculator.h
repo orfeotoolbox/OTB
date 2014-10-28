@@ -19,7 +19,6 @@
 #define __otbPipelineMemoryPrintCalculator_h
 
 #include "itkProcessObject.h"
-#include "itkDataObject.h"
 #include "itksys/FundamentalType.h"
 #include <set>
 

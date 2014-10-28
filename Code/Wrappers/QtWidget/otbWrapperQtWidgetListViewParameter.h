@@ -20,7 +20,6 @@
 
 #include <QtGui>
 #include "otbWrapperListViewParameter.h"
-#include "otbWrapperParameterGroup.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 namespace otb

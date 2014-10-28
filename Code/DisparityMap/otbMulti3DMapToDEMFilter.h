@@ -19,7 +19,6 @@
 #define __otbMulti3DMapToDEMFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "otbGenericRSTransform.h"
 #include "otbImageToGenericRSOutputParameters.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkImageRegionConstIterator.h"

@@ -16,14 +16,12 @@
 
   =========================================================================*/
 // Wrappers
-#include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperElevationParametersHandler.h"
 #include "otbWrapperMapProjectionParametersHandler.h"
 #include "otbSensorModelAdapter.h"
 #include "otbRPCSolverAdapter.h"
-#include "itkPoint.h"
 #include "itkEuclideanDistanceMetric.h"
 #include "otbGenericRSTransform.h"
 #include "otbOGRDataSourceWrapper.h"

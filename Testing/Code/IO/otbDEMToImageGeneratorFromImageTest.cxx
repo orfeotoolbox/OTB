@@ -15,11 +15,9 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkMacro.h"
 
 
 #include "otbImageFileWriter.h"
-#include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 

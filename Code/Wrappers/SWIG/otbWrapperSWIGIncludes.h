@@ -18,7 +18,6 @@
 #ifndef __otbWrapperSWIGIncludes_h
 #define __otbWrapperSWIGIncludes_h
 
-#include "otbWrapperApplication.h"
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperAddProcessToWatchEvent.h"
 #include "otbWrapperDocExampleStructure.h"

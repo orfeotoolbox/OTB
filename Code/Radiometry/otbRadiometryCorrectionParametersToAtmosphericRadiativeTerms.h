@@ -19,7 +19,6 @@
 #define __otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms_h
 
 #include "otbAtmosphericRadiativeTerms.h"
-#include "otbAtmosphericCorrectionParameters.h"
 #include "otbImageMetadataCorrectionParameters.h"
 #include "otbSIXSTraits.h"
 

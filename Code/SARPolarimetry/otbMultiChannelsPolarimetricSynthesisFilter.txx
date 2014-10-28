@@ -22,7 +22,6 @@
 
 #include "otbMultiChannelsPolarimetricSynthesisFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
 #include "otbMath.h"
 

@@ -18,7 +18,6 @@
 #ifndef __otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_h
 #define __otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_h
 
-#include "itkMacro.h"
 #include "otbPersistentImageToVectorDataFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 
@@ -27,7 +26,6 @@
 #include "otbMaskMuParserFilter.h"
 #include "itkRelabelComponentImageFilter.h"
 #include "otbAttributesMapLabelObject.h"
-#include "otbLabelMapWithAdjacency.h"
 #include "otbLabelImageToLabelMapWithAdjacencyFilter.h"
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
 #include "otbShapeAttributesLabelMapFilter.h"

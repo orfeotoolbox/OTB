@@ -22,7 +22,6 @@
 #define __otbStreamingWarpImageFilter_txx
 
 #include "otbStreamingWarpImageFilter.h"
-#include "otbStreamingTraits.h"
 #include "itkImageRegionIteratorWithIndex.h"
 
 namespace otb

@@ -18,7 +18,6 @@
 #ifndef __otbImageToOSMVectorDataGenerator_h
 #define __otbImageToOSMVectorDataGenerator_h
 
-#include "otbVectorData.h"
 #include "otbOSMDataToVectorDataGenerator.h"
 
 namespace otb {

@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "otbConfigure.h"
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 #include "otbCurlHelperInterface.h"

@@ -19,7 +19,6 @@
 #define __otbParserConditionDataNodeFeatureFunction_h
 
 #include "otbDataNodeImageFunction.h"
-#include "otbDataNode.h"
 #include "otbPolyLineImageConstIterator.h"
 #include "otbMaskMuParserFunctor.h"
 

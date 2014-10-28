@@ -22,7 +22,6 @@
 //#include "itkConstNeighborhoodIterator.h"
 #include "otbTextureImageFunction.h"
 #include "otbFunctionWithNeighborhoodToImageFilter.h"
-#include "itkOffset.h"
 //#include "otbTextureFunctorBase.h"
 
 template <class TInputScalarType, class TOutputScalarType> //IterInput1, class TIterInput2, class TOutput>

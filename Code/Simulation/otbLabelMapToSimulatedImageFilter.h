@@ -24,7 +24,6 @@
 #include "otbLabelToProSailParameters.h"
 #include "otbReduceSpectralResponse.h"
 #include "otbGaussianAdditiveNoiseSampleListFilter.h"
-#include "otbSpectralResponse.h"
 #include "otbSatelliteRSR.h"
 
 

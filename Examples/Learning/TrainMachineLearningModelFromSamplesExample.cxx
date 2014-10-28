@@ -35,7 +35,6 @@
 #include "otbListSampleGenerator.h"
 
 // Random number generator
-#include "itkMersenneTwisterRandomVariateGenerator.h"
 
 // SVM model Estimator
 #include "otbSVMMachineLearningModel.h"

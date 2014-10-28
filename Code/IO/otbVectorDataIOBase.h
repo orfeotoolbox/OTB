@@ -21,9 +21,7 @@
 #include <string>
 
 #include "itkLightProcessObject.h"
-#include "itkObjectFactory.h"
 #include "itkIndent.h"
-#include "itkVector.h"
 #include "itkPoint.h"
 #include "itkDataObject.h"
 

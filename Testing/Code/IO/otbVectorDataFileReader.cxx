@@ -20,9 +20,7 @@
 #include "otbVectorData.h"
 #include <fstream>
 
-#include "itkTreeContainer.h"
 #include "itkDataObject.h"
-#include "otbDataNode.h"
 
 int otbVectorDataFileReader(int itkNotUsed(argc), char * argv[])
 {

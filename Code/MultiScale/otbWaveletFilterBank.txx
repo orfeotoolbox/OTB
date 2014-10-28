@@ -22,13 +22,10 @@
 #define __otbWaveletFilterBank_txx
 #include "otbWaveletFilterBank.h"
 
-#include "otbMacro.h"
 #include "otbSubsampleImageFilter.h"
 #include "otbSubsampledImageRegionConstIterator.h"
 
-#include "itkNeighborhoodAlgorithm.h"
 #include "itkPeriodicBoundaryCondition.h"
-#include "itkProgressReporter.h"
 
 // FIXME
 #define __myDebug__ 0

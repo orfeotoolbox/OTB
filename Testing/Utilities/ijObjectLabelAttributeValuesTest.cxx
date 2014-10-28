@@ -1,7 +1,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "itkShapeLabelObject.h"
-#include "itkLabelMap.h"
 #include "itkLabelImageToStatisticsLabelMapFilter.h"
 #include "itkSimpleFilterWatcher.h"
 

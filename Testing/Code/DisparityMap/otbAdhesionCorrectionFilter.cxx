@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbAdhesionCorrectionFilter.h"
-#include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbStandardWriterWatcher.h"
 #include "otbImageFileReader.h"

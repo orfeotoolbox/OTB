@@ -20,7 +20,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "itksys/SystemTools.hxx"
-#include "otbOGRDataSourceWrapper.h"
 
 int otbOGRLayerStreamStitchingFilter(int argc, char * argv[])
 {

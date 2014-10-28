@@ -24,7 +24,6 @@
 #include "otbMultiChannelRAndBAndNIRIndexImageFilter.h"
 #include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
 #include "otbWaterIndicesFunctor.h"
-#include "otbSoilIndicesFunctor.h"
 #include "otbBuiltUpIndicesFunctor.h"
 
 #include "otbImageList.h"

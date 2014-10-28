@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "itkMacro.h"
 #include "otbAtmosphericCorrectionParameters.h"
 
 #include <cstdlib>

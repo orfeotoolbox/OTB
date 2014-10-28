@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "itkMacro.h"
 #include "otbRCC8Graph.h"
-#include "otbImage.h"
 #include "otbRCC8VertexBase.h"
 #include "otbPolygon.h"
 #include "otbImageMultiSegmentationToRCC8GraphFilter.h"

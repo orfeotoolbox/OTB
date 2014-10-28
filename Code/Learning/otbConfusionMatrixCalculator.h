@@ -20,9 +20,7 @@
 #define __otbConfusionMatrixCalculator_h
 
 #include "otbMacro.h"
-#include "itkObject.h"
 #include "itkObjectFactory.h"
-#include "itkVariableSizeMatrix.h"
 #include "otbConfusionMatrixMeasurements.h"
 
 namespace otb

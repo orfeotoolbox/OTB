@@ -18,12 +18,9 @@
 
 #include "otbMacro.h"
 
-#include "otbSpectralResponse.h"
 #include "otbSatelliteRSR.h"
-#include "otbReduceSpectralResponse.h"
 #include "otbReduceSpectralResponseClassifierRAndNIR.h"
 
-#include "otbVegetationIndicesFunctor.h"
 
 int otbReduceSpectralResponseClassifierRAndNIR(int argc, char * argv[])
 {

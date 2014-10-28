@@ -21,11 +21,9 @@
 #include <fstream>
 
 #include "itkPoint.h"
-#include "itkPointSet.h"
 
 #include "itkPointSetToListSampleAdaptor.h"
 #include "itkSubsample.h"
-#include "itkListSample.h"
 #include "otbSVMClassifier.h"
 
 int otbSVMClassifierPointSet(int argc, char* argv[])

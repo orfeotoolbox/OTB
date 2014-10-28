@@ -18,12 +18,9 @@
 #ifndef __otbRoadExtractionFilter_h
 #define __otbRoadExtractionFilter_h
 
-#include "itkCovariantVector.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
-#include "otbImageToPathListFilter.h"
 #include "otbSpectralAngleDistanceImageFilter.h"
 #include "otbGenericRoadExtractionFilter.h"
 

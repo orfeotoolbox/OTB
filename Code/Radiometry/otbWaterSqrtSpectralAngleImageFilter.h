@@ -18,7 +18,6 @@
 #ifndef __otbWaterSqrtSpectralAngleImageFilter_h
 #define __otbWaterSqrtSpectralAngleImageFilter_h
 
-#include "otbMath.h"
 #include "otbWaterIndicesFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"
 

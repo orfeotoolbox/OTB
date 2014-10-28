@@ -19,7 +19,6 @@
 #define __otbPointSetDensityFunction_h
 
 #include "otbPointSetFunction.h"
-#include "itkPoint.h"
 
 namespace otb
 {

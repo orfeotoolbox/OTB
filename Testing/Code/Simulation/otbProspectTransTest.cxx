@@ -19,7 +19,6 @@
 #include "otbMacro.h"
 
 #include "otbProspectModel.h"
-#include "otbLeafParameters.h"
 
 #include <iostream>
 #include <fstream>

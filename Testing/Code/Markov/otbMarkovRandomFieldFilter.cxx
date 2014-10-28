@@ -23,7 +23,6 @@
 #include "otbMarkovRandomFieldFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-#include "otbMRFEnergy.h"
 #include "otbMRFEnergyPotts.h"
 #include "otbMRFEnergyGaussianClassification.h"
 #include "otbMRFOptimizerMetropolis.h"

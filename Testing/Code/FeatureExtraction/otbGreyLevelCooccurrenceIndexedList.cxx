@@ -15,7 +15,6 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkMacro.h"
 #include "otbGreyLevelCooccurrenceIndexedList.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkConstNeighborhoodIterator.h"

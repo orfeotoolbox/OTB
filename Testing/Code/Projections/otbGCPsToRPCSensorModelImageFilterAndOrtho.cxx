@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"

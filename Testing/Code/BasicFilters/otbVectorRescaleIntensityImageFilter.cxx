@@ -15,10 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkMacro.h"
 
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"

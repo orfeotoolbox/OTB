@@ -20,14 +20,12 @@
 
 #include <fstream>
 
-#include "itkListSample.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "itkImageToListSampleAdaptor.h"
 #include "otbSVMClassifier.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkImageRegionIterator.h"
 #include "itkRescaleIntensityImageFilter.h"
 
 namespace otb

@@ -19,9 +19,7 @@
 #define __otbGISTableToLabelMapFilter_h
 
 //#include "itkImageToImageFilter.h"
-#include "itkDataObject.h"
 #include "otbLabelMapSource.h"
-#include "otbGISTable.h"
 //include "otbLabelMap.h"
 #include "otbVectorData.h"
 #include "otbGISTableToVectorDataFilter.h"

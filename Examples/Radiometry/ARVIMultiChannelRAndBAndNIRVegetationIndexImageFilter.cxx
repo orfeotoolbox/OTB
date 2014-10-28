@@ -83,9 +83,7 @@
 #include "otbMultiChannelRAndBAndNIRIndexImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "itkMacro.h"
 #include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"

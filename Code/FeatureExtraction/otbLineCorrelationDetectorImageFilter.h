@@ -18,7 +18,6 @@
 #ifndef __otbLineCorrelationDetectorImageFilter_h
 #define __otbLineCorrelationDetectorImageFilter_h
 
-#include "itkNearestNeighborInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "otbLineDetectorImageFilterBase.h"
 

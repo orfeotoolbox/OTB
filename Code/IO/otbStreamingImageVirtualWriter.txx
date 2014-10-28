@@ -20,7 +20,6 @@
 #include "otbStreamingImageVirtualWriter.h"
 
 #include "otbMacro.h"
-#include "otbConfigure.h"
 #include "itkCommand.h"
 
 #include "otbNumberOfDivisionsStrippedStreamingManager.h"

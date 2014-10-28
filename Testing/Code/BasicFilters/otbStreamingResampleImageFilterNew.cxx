@@ -18,7 +18,6 @@
 #include "itkMacro.h"
 
 #include "otbStreamingResampleImageFilter.h"
-#include "otbImage.h"
 
 int otbStreamingResampleImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

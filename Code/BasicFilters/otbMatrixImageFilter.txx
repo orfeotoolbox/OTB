@@ -19,7 +19,6 @@
 #define __otbMatrixImageFilter_txx
 
 #include "otbMatrixImageFilter.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 

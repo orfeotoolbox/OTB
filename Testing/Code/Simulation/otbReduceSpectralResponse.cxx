@@ -18,7 +18,6 @@
 
 #include "otbMacro.h"
 
-#include "otbSpectralResponse.h"
 #include "otbSatelliteRSR.h"
 #include "otbReduceSpectralResponse.h"
 

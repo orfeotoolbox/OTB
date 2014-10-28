@@ -20,7 +20,6 @@
 
 #include "otbForwardSensorModel.h"
 #include "otbCoordinateToName.h"
-#include "otbMacro.h"
 
 namespace otb
 {

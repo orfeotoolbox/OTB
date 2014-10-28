@@ -21,13 +21,11 @@
 /* kindly stolen from the build files of OTB-Wrapping
  * (Typedefs/itkBase.includes, Typedefs/wrap_ITKCommonBase.i) */
 
-#include "itkLightObject.h"
 #include "itkObject.h"
 #include "itkProcessObject.h"
 #include "itkObjectFactoryBase.h"
 
 #include "itkCommand.h"
-#include "itkEventObject.h"
 
 typedef itk::LightObject                itkLightObject;
 typedef itk::LightObject::Pointer       itkLightObject_Pointer;

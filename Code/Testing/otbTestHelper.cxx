@@ -30,7 +30,6 @@
 #include "itksys/Directory.hxx"
 #include "itksys/RegularExpression.hxx"
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

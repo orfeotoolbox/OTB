@@ -20,7 +20,6 @@
 #include "otbFastICAInternalOptimizerVectorImageFilter.h"
 
 #include <itkMacro.h>
-#include <itkImageRegionConstIterator.h>
 #include <itkImageRegionIterator.h>
 
 #include <vnl/vnl_math.h>

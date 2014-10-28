@@ -22,7 +22,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVegetationIndicesFunctor.h"
 
 int otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {

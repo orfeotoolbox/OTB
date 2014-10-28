@@ -26,7 +26,6 @@
 #include "itkNeighborhoodInnerProduct.h"
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
-#include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkProgressReporter.h"
 #include "otbMath.h"
 

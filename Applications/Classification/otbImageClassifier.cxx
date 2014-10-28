@@ -18,7 +18,6 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "itkVariableLengthVector.h"
 #include "otbChangeLabelImageFilter.h"
 #include "otbStandardWriterWatcher.h"
 #include "otbStatisticsXMLFileReader.h"

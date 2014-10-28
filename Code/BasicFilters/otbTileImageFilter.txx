@@ -19,7 +19,6 @@
 #define __otbTileImageFilter_txx
 
 #include "otbTileImageFilter.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 
 namespace otb

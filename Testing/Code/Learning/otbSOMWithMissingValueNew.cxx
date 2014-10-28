@@ -19,7 +19,6 @@
 
 =========================================================================*/
 
-#include "otbVectorImage.h"
 #include "itkVariableLengthVector.h"
 #include "itkListSample.h"
 

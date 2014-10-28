@@ -18,12 +18,9 @@
 #ifndef __otbUrbanAreaDetectionImageFilter_h
 #define __otbUrbanAreaDetectionImageFilter_h
 
-#include "otbMath.h"
 #include "otbImage.h"
-#include "otbVegetationIndicesFunctor.h"
 #include "otbWaterIndicesFunctor.h"
 #include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
-#include "itkBinaryThresholdImageFilter.h"
 #include "itkImageToImageFilter.h"
 #include "itkBinaryErodeImageFilter.h"
 #include "itkBinaryDilateImageFilter.h"
@@ -34,7 +31,6 @@
 #include "otbEdgeDensityImageFilter.h"
 #include "otbBinaryImageDensityFunction.h"
 #include "otbVectorImageToIntensityImageFilter.h"
-#include "itkBinaryThresholdImageFilter.h"
 
 namespace otb
 {

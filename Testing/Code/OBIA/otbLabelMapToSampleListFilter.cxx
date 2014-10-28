@@ -17,13 +17,11 @@
 =========================================================================*/
 
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
 #include "itkBinaryImageToLabelMapFilter.h"
-#include "otbAttributesMapLabelObject.h"
 #include "itkLabelMap.h"
 #include "otbShapeAttributesLabelMapFilter.h"
 

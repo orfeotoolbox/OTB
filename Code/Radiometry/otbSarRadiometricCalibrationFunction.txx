@@ -20,7 +20,6 @@
 #define __otbSarRadiometricCalibrationFunction_txx
 
 #include "otbSarRadiometricCalibrationFunction.h"
-#include "otbSarParametricMapFunction.h"
 #include "itkNumericTraits.h"
 
 namespace otb

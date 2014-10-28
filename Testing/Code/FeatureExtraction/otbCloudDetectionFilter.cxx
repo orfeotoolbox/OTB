@@ -19,7 +19,6 @@
 
 #include "otbVectorImage.h"
 #include "otbImage.h"
-#include "otbCloudDetectionFunctor.h"
 #include "otbCloudDetectionFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

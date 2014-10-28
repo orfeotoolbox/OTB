@@ -25,7 +25,6 @@
 
 #include <list>
 
-#include "otbImage.h"
 #include "otbImageFileWriter.h"
 
 /**

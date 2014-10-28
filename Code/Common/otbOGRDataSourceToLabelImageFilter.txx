@@ -19,7 +19,6 @@
 #include "otbOGRDataSourceToLabelImageFilter.h"
 #include "otbOGRIOHelper.h"
 #include "otbGdalDataTypeBridge.h"
-#include "otbMacro.h"
 
 #include "gdal_alg.h"
 #include "stdint.h" //needed for uintptr_t

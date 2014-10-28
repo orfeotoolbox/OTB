@@ -18,7 +18,6 @@
 #ifndef __otbDisparityMapEstimationMethod_h
 #define __otbDisparityMapEstimationMethod_h
 
-#include "itkProcessObject.h"
 #include "itkImageToImageMetric.h"
 #include "itkSingleValuedNonLinearOptimizer.h"
 #include "itkDataObjectDecorator.h"

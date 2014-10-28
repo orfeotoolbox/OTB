@@ -20,7 +20,6 @@
 
 #include "otbWrapperInputImageParameter.h"
 
-#include "otbImageFileReader.h"
 #include "itkCastImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 

@@ -22,7 +22,6 @@
 #include "otbSOMMap.h"
 #include "otbSOMClassifier.h"
 #include "itkListSample.h"
-#include "otbVectorImage.h"
 
 int otbSOMClassifierNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

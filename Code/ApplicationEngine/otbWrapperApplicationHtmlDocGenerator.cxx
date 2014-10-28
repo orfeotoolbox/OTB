@@ -19,7 +19,6 @@
 
 #include <stdio.h>
 #include "otbMacro.h"
-#include "otbWrapperParameterGroup.h"
 #include "otbWrapperChoiceParameter.h"
 
 namespace otb

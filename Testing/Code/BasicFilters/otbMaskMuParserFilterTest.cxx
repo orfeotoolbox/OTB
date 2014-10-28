@@ -23,7 +23,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbParser.h"
 
 #include "otbMaskMuParserFilter.h"
 

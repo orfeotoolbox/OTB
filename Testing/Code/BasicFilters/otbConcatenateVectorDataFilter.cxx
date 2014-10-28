@@ -19,7 +19,6 @@
 #include "otbCommandLineArgumentParser.h"
 
 // Images
-#include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 

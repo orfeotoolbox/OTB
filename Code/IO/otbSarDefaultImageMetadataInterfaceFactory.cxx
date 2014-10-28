@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "otbMacro.h"
 
 #include "otbSarDefaultImageMetadataInterfaceFactory.h"
 #include "otbSarDefaultImageMetadataInterface.h"

@@ -23,7 +23,6 @@
 #include "itkLineIterator.h"
 #include "itkDataObject.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
 
 namespace otb
 {

@@ -37,7 +37,6 @@
 //#include "itkLabelStatisticsKeepNObjectsImageFilter.h"
 
 #include "itkLabelImageToLabelMapFilter.h"
-#include "itkStatisticsLabelObject.h"
 #include "itkStatisticsLabelMapFilter.h"
 #include "itkStatisticsKeepNObjectsLabelMapFilter.h"
 #include "itkLabelMapToLabelImageFilter.h"

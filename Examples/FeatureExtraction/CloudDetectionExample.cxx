@@ -43,13 +43,10 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbCloudDetectionFunctor.h"
 #include "otbCloudDetectionFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "itkMacro.h"
 #include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"

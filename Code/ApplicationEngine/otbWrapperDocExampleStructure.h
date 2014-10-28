@@ -24,7 +24,6 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include "itkMacro.h"
 #include "otbConfigure.h"
 #include "itkFixedArray.h"
 

@@ -19,9 +19,7 @@
 #ifndef __otbImageRegionTileMapSplitter_h
 #define __otbImageRegionTileMapSplitter_h
 
-#include "itkObject.h"
 #include "itkRegion.h"
-#include "itkImageRegion.h"
 #include "itkImageRegionSplitter.h"
 #include "itkObjectFactory.h"
 #include "itkIndex.h"

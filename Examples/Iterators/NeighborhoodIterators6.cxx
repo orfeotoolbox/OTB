@@ -23,7 +23,6 @@
 #include "itkNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkFastMarchingImageFilter.h"
-#include "itkNumericTraits.h"
 #include "itkAddImageFilter.h"
 
 //  Software Guide : BeginCommandLineArgs

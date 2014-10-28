@@ -19,9 +19,7 @@
 
 #include <iostream>
 
-#include "itkRGBPixel.h"
 #include "itkScalarToRGBPixelFunctor.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
 #include "otbLabelizeConfidenceConnectedImageFilter.h"

@@ -20,7 +20,6 @@
 #ifndef __otbImageToSURFKeyPointSetFilter_h
 #define __otbImageToSURFKeyPointSetFilter_h
 
-#include "itkProcessObject.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "otbImageToHessianDeterminantImageFilter.h"
 #include "itkPointSet.h"
@@ -30,7 +29,6 @@
 #include "otbImageToPointSetFilter.h"
 #include "itkVector.h"
 
-#include "otbMath.h"
 #include <iostream>
 namespace otb
 {

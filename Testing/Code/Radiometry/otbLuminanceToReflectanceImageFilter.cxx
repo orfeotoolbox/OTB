@@ -21,7 +21,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkVariableLengthVector.h"
 
 int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
 {

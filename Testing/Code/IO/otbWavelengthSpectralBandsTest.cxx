@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-#include "otbFilterFunctionValues.h"
 #include "otbWavelengthSpectralBands.h"
 
 using namespace otb;

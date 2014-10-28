@@ -23,9 +23,7 @@
 #include "otbSubsampleImageFilter.h"
 
 #include "otbMacro.h"
-#include "otbSubsampledImageRegionConstIterator.h"
 #include "otbSubsampledImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 

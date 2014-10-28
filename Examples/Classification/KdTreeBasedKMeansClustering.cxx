@@ -113,7 +113,6 @@
 
 // Software Guide : BeginCodeSnippet
 #include "itkMinimumDecisionRule.h"
-#include "itkEuclideanDistanceMetric.h"
 #include "itkSampleClassifierFilter.h"
 // Software Guide : EndCodeSnippet
 

@@ -20,10 +20,8 @@
 #ifndef __otbEdgeDensityImageFilter_h
 #define __otbEdgeDensityImageFilter_h
 
-#include "itkImageToImageFilter.h"
 #include "otbBinaryImageToDensityImageFilter.h"
 #include "itkProcessObject.h"
-#include "itkNumericTraits.h"
 
 
 namespace otb

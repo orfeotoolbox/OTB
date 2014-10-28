@@ -19,7 +19,6 @@
 #include <vector>
 #include "otbMacro.h"
 #include "otbSystem.h"
-#include "itkMacro.h"
 
 namespace otb
 {

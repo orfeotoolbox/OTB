@@ -19,13 +19,10 @@
 #define __otbLocalHoughFilter_h
 
 
-#include "itkProcessObject.h"
 #include "itkHoughTransform2DLinesImageFilter.h"
 
 #include "otbImageToLineSpatialObjectListFilter.h"
-#include "otbLineSpatialObjectList.h"
 #include "otbExtractROI.h"
-#include "otbImage.h"
 
 namespace otb
 {

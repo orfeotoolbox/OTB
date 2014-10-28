@@ -19,7 +19,6 @@
 #define __otbPointSetFunction_h
 
 #include "itkSpatialFunction.h"
-#include "itkPoint.h"
 #include "itkProcessObject.h"
 
 namespace otb

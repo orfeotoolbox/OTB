@@ -21,7 +21,6 @@
 
 
 #include "itkProcessObject.h"
-#include "itkObjectFactory.h"
 #include "itkMacro.h"
 
 namespace otb

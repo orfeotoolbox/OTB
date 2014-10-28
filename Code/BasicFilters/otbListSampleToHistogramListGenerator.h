@@ -25,7 +25,6 @@
 #include "itkHistogram.h"
 #include "otbObjectList.h"
 #include "itkStatisticsAlgorithm.h"
-#include "itkDenseFrequencyContainer2.h"
 #include "itkNumericTraits.h"
 
 namespace otb {

@@ -22,7 +22,6 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
-#include "itkMacro.h"
 #include <complex>
 #include <cmath>
 

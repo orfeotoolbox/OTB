@@ -25,7 +25,6 @@
 
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
-#include "otbImageFileWriter.h"
 
 int otbStreamingImageFileWriterTest(int itkNotUsed(argc), char* argv[])
 {

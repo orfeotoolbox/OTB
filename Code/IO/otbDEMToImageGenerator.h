@@ -21,7 +21,6 @@
 #include <iostream>
 #include <stdio.h>
 
-#include "itkIndent.h"
 #include "itkImageSource.h"
 #include "otbImage.h"
 #include "otbDEMHandler.h"

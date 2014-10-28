@@ -28,7 +28,6 @@
 #include "otbDataNode.h"
 #include "otbMetaDataKey.h"
 #include "itkTimeProbe.h"
-#include "otbVectorDataKeywordlist.h"
 #include "otbOGRIOHelper.h"
 
 namespace otb

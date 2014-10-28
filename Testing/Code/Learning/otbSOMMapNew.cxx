@@ -18,7 +18,6 @@
 #include "itkMacro.h"
 #include "otbSOMMap.h"
 #include "itkRGBPixel.h"
-#include "itkEuclideanDistanceMetric.h"
 
 int otbSOMMapNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

@@ -24,7 +24,6 @@
 #include "otbConnectedComponentMuParserFunctor.h"
 #include <itkConnectedComponentFunctorImageFilter.h>
 
-#include "otbParser.h"
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

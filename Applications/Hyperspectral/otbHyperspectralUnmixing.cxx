@@ -25,7 +25,6 @@
 //#include "otbFCLSUnmixingImageFilter.h"
 #include "otbMDMDNMFImageFilter.h"
 
-#include "otbVectorImageToMatrixImageFilter.h"
 
 namespace otb
 {

@@ -20,7 +20,6 @@
 
 #include "otbFastICAImageFilter.h"
 
-#include "otbMacro.h"
 
 
 #include "itkNumericTraits.h"

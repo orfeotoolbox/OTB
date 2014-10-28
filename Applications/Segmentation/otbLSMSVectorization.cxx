@@ -23,7 +23,6 @@
 
 #include "otbStreamingStatisticsImageFilter.h"
 #include "otbLabelImageToOGRDataSourceFilter.h"
-#include "otbOGRDataSourceWrapper.h"
 #include "otbOGRFeatureWrapper.h"
 
 #include <time.h>

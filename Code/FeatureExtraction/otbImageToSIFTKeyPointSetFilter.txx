@@ -22,7 +22,6 @@
 
 #include "itkMatrix.h"
 #include "itkProcessObject.h"
-#include "otbMath.h"
 
 namespace otb
 {

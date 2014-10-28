@@ -20,7 +20,6 @@
 
 #include <boost/noncopyable.hpp>
 #include "itkProcessObject.h"
-#include "itkObjectFactory.h"
 #include "itkMacro.h"
 
 // Forward declarations

@@ -19,7 +19,6 @@
 #include "otbImage.h"
 #include <iostream>
 
-#include "itkBinaryBallStructuringElement.h"
 #include "otbNeighborhoodMajorityVotingImageFilter.h"
 
 int otbNeighborhoodMajorityVotingImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

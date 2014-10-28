@@ -32,7 +32,6 @@
 //
 // Software Guide : EndLatex
 
-#include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 #include "otbCommandLineArgumentParser.h"

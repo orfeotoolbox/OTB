@@ -23,7 +23,6 @@
 #include "otbCommandLineArgumentParser.h"
 
 #include "otbFastICAImageFilter.h"
-#include "otbFastICAInternalOptimizerVectorImageFilter.h"
 
 int otbFastICAInternalOptimizerVectorImageFilterNewTest ( int itkNotUsed(argc), char* itkNotUsed(argv) [] )
 {

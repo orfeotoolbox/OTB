@@ -19,7 +19,6 @@
 #include "otbRasterizeVectorDataFilter.h"
 #include "otbOGRIOHelper.h"
 #include "otbGdalDataTypeBridge.h"
-#include "otbMacro.h"
 
 namespace otb
 {

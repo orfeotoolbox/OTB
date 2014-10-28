@@ -19,7 +19,6 @@
 #define __otbAtmosphericEffects_h
 
 #include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
-#include "otbAtmosphericRadiativeTerms.h"
 
 namespace otb
 {

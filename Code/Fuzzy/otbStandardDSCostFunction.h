@@ -21,7 +21,6 @@
 #include "itkSingleValuedCostFunction.h"
 
 #include "otbVectorDataToDSValidatedVectorDataFilter.h"
-#include "otbParser.h"
 #include "otbFuzzyDescriptorsModelManager.h"
 
 namespace otb

@@ -47,7 +47,6 @@
 #include "itkThresholdImageFilter.h"
 #include "itkMacro.h"
 #include "otbImageFileWriter.h"
-#include "otbImage.h"
 
 int main(int argc, char * argv[])
 {

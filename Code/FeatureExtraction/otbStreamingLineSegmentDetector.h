@@ -24,15 +24,12 @@
 #include <vector>
 
 #include "itkImageRegion.h"
-#include "otbVectorData.h"
 #include "itkPreOrderTreeIterator.h"
 
-#include "itkDataObject.h"
 #include "itkDataObjectDecorator.h"
 #include "itkSimpleDataObjectDecorator.h"
 
 #include "otbLineSegmentDetector.h"
-#include "itkExtractImageFilter.h"
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"

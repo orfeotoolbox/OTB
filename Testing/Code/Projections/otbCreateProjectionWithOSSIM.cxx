@@ -31,7 +31,6 @@
 #include <iterator>
 #include <stdlib.h>
 
-#include "otbMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

@@ -19,7 +19,6 @@
 #define __otbMultiChannelRAndGAndNIRIndexImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "itkImageRegionIteratorWithIndex.h"
 #include "otbVegetationIndicesFunctor.h"
 
 namespace otb

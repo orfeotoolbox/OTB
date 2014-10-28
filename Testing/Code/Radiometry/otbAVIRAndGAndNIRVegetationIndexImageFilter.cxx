@@ -21,7 +21,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVegetationIndicesFunctor.h"
 
 int otbAVIRAndGAndNIRVegetationIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {

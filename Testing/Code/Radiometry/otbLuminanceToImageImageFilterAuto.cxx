@@ -15,13 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkMacro.h"
 
 #include "otbLuminanceToImageImageFilter.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkVariableLengthVector.h"
 #include "otbMultiChannelExtractROI.h"
 
 //Test the retrieval of parameters from the image metadata

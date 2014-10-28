@@ -15,22 +15,18 @@
 
  =========================================================================*/
 
-#include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
 #include <iostream>
 #include "otbConfigurationFile.h"
 
 //Image
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbVectorData.h"
 #include "otbListSampleGenerator.h"
 
 // ListSample
-#include "itkListSample.h"
 #include "itkVariableLengthVector.h"
-#include "itkFixedArray.h"
 
 //Estimator
 #include "otbMachineLearningModelFactory.h"
@@ -67,7 +63,6 @@
 #include "otbListSampleToBalancedListSampleFilter.h"
 
 // VectorData projection filter
-#include "otbVectorDataProjectionFilter.h"
 
 // Extract a ROI of the vectordata
 #include "otbVectorDataIntoImageProjectionFilter.h"

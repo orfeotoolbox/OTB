@@ -19,7 +19,6 @@
 #define __otbPixelWiseBlockMatchingImageFilter_txx
 
 #include "otbPixelWiseBlockMatchingImageFilter.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 #include "itkConstantBoundaryCondition.h"

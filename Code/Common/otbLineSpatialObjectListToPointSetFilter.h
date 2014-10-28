@@ -21,7 +21,6 @@
 
 #include "itkProcessObject.h"
 #include "otbLineSpatialObjectList.h"
-#include "itkLineSpatialObject.h"
 
 namespace otb
 {

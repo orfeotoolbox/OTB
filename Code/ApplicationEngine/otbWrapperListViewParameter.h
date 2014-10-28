@@ -18,7 +18,6 @@
 #ifndef __otbWrapperListViewParameter_h
 #define __otbWrapperListViewParameter_h
 
-#include "otbWrapperParameter.h"
 #include "otbWrapperParameterGroup.h"
 
 namespace otb

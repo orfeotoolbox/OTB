@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "itkFixedArray.h"
 #include "otbTimeSeriesLeastSquareFittingFunctor.h"
 #include "otbTimeSeries.h"
 

@@ -21,7 +21,6 @@
 #include "itkMacro.h"
 
 #include "otbThresholdImageToPointSetFilter.h"
-#include "itkPointSet.h"
 #include "otbImage.h"
 
 #include <iostream>

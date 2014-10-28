@@ -20,7 +20,6 @@
 
 #include "itkPolyLineParametricPath.h"
 #include "itkMetaDataObject.h"
-#include "itkImageRegion.h"
 #include "otbRemoteSensingRegion.h"
 #include "otbMacro.h"
 

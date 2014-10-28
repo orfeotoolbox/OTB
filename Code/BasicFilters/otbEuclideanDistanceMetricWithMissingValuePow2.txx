@@ -21,7 +21,6 @@
 #ifndef __otbEuclideanDistanceMetricWithMissingValuePow2_txx
 #define __otbEuclideanDistanceMetricWithMissingValuePow2_txx
 
-#include "itkNumericTraits.h"
 #include "itkMeasurementVectorTraits.h"
 
 namespace otb {

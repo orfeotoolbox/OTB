@@ -19,9 +19,7 @@
 #define __otbHarrisImageFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "itkRecursiveGaussianImageFilter.h"
 #include "itkHessianRecursiveGaussianImageFilter.h"
-#include "itkSymmetricSecondRankTensor.h"
 #include "otbHessianToScalarImageFilter.h"
 #include "otbMultiplyByScalarImageFilter.h"
 #include "otbMath.h"

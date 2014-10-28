@@ -19,7 +19,6 @@
 #define __otbImageMetadataCorrectionParameters_h
 
 #include "itkObject.h"
-#include "itkMacro.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
 #include "otbObjectList.h"

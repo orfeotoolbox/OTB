@@ -29,7 +29,6 @@
 // iostream is used for general output
 #include <iostream>
 
-#include "otbMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -41,7 +40,6 @@
 #include "itkResampleImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
-#include "itkLinearInterpolateImageFunction.h"
 #include "itkTranslationTransform.h"
 
 #include "otbInverseSensorModel.h"

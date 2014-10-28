@@ -17,10 +17,8 @@
 =========================================================================*/
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbPolygon.h"
 #include "itkLabelImageToLabelMapFilter.h"
 #include "otbAttributesMapLabelObject.h"
-#include "itkLabelMap.h"
 #include "otbLabelObjectToPolygonFunctor.h"
 #include "otbVectorData.h"
 #include "otbVectorDataProjectionFilter.h"

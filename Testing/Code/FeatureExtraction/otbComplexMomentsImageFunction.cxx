@@ -22,7 +22,6 @@
 #include <iomanip>
 #include <fstream>
 #include "itkMacro.h"
-#include "otbImage.h"
 
 #include "otbImageFileReader.h"
 #include "otbComplexMomentsImageFunction.h"

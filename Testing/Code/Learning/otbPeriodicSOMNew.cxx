@@ -19,7 +19,6 @@
 #include "otbSOMMap.h"
 #include "otbPeriodicSOM.h"
 #include "itkRGBPixel.h"
-#include "itkEuclideanDistanceMetric.h"
 #include "itkListSample.h"
 
 int otbPeriodicSOMNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

@@ -18,13 +18,11 @@
 #ifndef __otbInnerProductPCAImageFilter_h
 #define __otbInnerProductPCAImageFilter_h
 
-#include "itkImageToImageFilter.h"
 #include "otbImage.h"
 #include "otbMacro.h"
 #include "otbEstimateInnerProductPCAImageFilter.h"
 #include "otbNormalizeInnerProductPCAImageFilter.h"
 #include "otbMeanFunctor.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 #include "otbConcatenateVectorImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"

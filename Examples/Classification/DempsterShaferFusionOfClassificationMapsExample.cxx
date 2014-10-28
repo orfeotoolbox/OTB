@@ -40,7 +40,6 @@
 #include <fstream>
 // Software Guide : EndCodeSnippet
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 

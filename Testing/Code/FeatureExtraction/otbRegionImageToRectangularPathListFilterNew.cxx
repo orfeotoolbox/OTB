@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "itkMacro.h"
 #include "otbRegionImageToRectangularPathListFilter.h"
-#include "otbImage.h"
 #include "itkPolyLineParametricPath.h"
 
 int otbRegionImageToRectangularPathListFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

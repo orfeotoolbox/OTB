@@ -24,7 +24,6 @@
 #include "otbMacro.h"
 #include "itksys/SystemTools.hxx"
 #include "itkTimeProbe.h"
-#include "itkMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
 

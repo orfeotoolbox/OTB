@@ -21,7 +21,6 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 
 #include "itkRescaleIntensityImageFilter.h"

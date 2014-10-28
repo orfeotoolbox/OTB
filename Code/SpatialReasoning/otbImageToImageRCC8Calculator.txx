@@ -25,7 +25,6 @@
 #include "itkSubtractImageFilter.h"
 #include "itkAndImageFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
 #include "otbBinaryImageMinimalBoundingRegionCalculator.h"
 #include "otbMacro.h"
 

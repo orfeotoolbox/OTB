@@ -19,7 +19,6 @@
 #define __otbStreamingTraits_h
 
 #include "otbMacro.h"
-#include "otbConfigure.h"
 
 #include "itkInterpolateImageFunction.h"
 #include "itkBSplineInterpolateImageFunction.h"
@@ -36,7 +35,6 @@
 
 #include "otbProlateInterpolateImageFunction.h"
 
-#include "otbVectorImage.h"
 
 namespace otb
 {

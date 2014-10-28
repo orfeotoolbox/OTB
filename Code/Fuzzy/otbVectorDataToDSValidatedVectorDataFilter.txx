@@ -19,7 +19,6 @@
 #define __otbVectorDataToDSValidatedVectorDataFilter_txx
 
 #include "otbVectorDataToDSValidatedVectorDataFilter.h"
-#include "otbMassOfBelief.h"
 #include <iostream>
 
 namespace otb

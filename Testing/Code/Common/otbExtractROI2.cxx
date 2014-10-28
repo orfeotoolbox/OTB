@@ -16,10 +16,8 @@
 
 =========================================================================*/
 
-#include "itkMacro.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbImage.h"
 
 #include "otbExtractROI.h"
 

@@ -19,7 +19,6 @@
 #define __otbJointMassOfBeliefFilter_h
 
 #include "itkProcessObject.h"
-#include "itkObjectFactory.h"
 #include "itkNumericTraits.h"
 
 namespace otb

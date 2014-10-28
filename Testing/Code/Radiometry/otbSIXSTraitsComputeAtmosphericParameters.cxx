@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "otbAtmosphericCorrectionParameters.h"
 #include "otbSIXSTraits.h"
 #include <iostream>
 #include <fstream>

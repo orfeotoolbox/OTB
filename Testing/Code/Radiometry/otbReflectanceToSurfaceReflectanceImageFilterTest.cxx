@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkMacro.h"
 
 #include <fstream>
 #include <iostream>
@@ -24,12 +23,9 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericCorrectionParameters.h"
 
-#include "itkMetaDataDictionary.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"
-#include "otbOpticalImageMetadataInterface.h"
 
 int otbReflectanceToSurfaceReflectanceImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {

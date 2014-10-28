@@ -18,7 +18,6 @@
 #ifndef __otbSatelliteRSR_h
 #define __otbSatelliteRSR_h
 
-#include "itkDataObject.h"
 #include <itkObjectFactory.h>
 #include <vector>
 #include <utility>

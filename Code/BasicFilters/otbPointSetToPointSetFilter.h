@@ -19,7 +19,6 @@
 #define __otbPointSetToPointSetFilter_h
 
 #include "otbPointSetSource.h"
-#include "itkImageRegionSplitter.h"
 #include "otbStreamingTraits.h"
 
 namespace otb

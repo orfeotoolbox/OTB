@@ -19,7 +19,6 @@
 #define __otbStreamingManager_h
 
 #include "otbMacro.h"
-#include "otbConfigure.h"
 
 #include "itkObject.h"
 #include "itkDataObject.h"

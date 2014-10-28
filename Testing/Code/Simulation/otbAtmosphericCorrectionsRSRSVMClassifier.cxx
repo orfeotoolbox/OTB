@@ -16,16 +16,13 @@
 
 =========================================================================*/
 
-#include "otbMacro.h"
 
 #include "otbAtmosphericEffects.h"
 #include "otbSatelliteRSR.h"
-#include "otbSpectralResponse.h"
 #include "otbReduceSpectralResponse.h"
 
 #include "otbSVMSampleListModelEstimator.h"
 #include "otbSVMClassifier.h"
-#include "itkListSample.h"
 #include "otbConfusionMatrixCalculator.h"
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"

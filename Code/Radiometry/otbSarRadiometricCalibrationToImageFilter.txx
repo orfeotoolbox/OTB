@@ -23,7 +23,6 @@
 
 #include "otbSarRadiometricCalibrationToImageFilter.h"
 
-#include "otbSarImageMetadataInterface.h"
 #include "otbSarImageMetadataInterfaceFactory.h"
 
 namespace otb

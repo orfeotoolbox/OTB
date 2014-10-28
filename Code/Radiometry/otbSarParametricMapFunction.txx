@@ -22,7 +22,6 @@
 #include "otbSarParametricMapFunction.h"
 #include "itkNumericTraits.h"
 
-#include "itkMetaDataDictionary.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
 #include "otbImageKeywordlist.h"

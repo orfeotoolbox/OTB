@@ -19,9 +19,7 @@
 #define __otbGradientBoostedTreeMachineLearningModel_h
 
 #include "itkLightObject.h"
-#include "itkVariableLengthVector.h"
 #include "itkFixedArray.h"
-#include "itkListSample.h"
 #include "otbMachineLearningModel.h"
 
 

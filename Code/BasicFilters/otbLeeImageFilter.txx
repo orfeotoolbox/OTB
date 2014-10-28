@@ -21,12 +21,10 @@
 #include "otbLeeImageFilter.h"
 
 #include "itkDataObject.h"
-#include "itkMacro.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodInnerProduct.h"
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
-#include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkOffset.h"
 #include "itkProgressReporter.h"
 

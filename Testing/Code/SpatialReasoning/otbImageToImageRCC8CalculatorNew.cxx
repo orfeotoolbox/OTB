@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "itkMacro.h"
 #include "otbImageToImageRCC8Calculator.h"
-#include "otbImage.h"
 
 int otbImageToImageRCC8CalculatorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

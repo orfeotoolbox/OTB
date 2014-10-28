@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbLabeledSampleLocalizationGenerator.h"

@@ -18,7 +18,6 @@
 
 #include "otbMacro.h"
 
-#include "otbLeafParameters.h"
 #include "otbSailModel.h"
 #include "otbProspectModel.h"
 

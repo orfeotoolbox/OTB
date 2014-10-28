@@ -23,9 +23,7 @@
 #include <string>
 
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkNumericTraits.h"
-#include "itkProgressReporter.h"
 
 namespace otb
 {

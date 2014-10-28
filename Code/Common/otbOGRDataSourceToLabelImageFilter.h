@@ -19,7 +19,6 @@
 #define __otbOGRDataSourceToLabelImageFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "itkImageSource.h"
 #include "otbMacro.h"
 
 

@@ -20,7 +20,6 @@
 
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkProgressReporter.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"

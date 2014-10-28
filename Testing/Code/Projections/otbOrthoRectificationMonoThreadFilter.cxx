@@ -21,12 +21,9 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include "otbMacro.h"
 #include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbInverseSensorModel.h"
 #include "otbStreamingResampleImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 

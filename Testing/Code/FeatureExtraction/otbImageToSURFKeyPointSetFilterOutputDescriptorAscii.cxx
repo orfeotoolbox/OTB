@@ -25,7 +25,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
 #include "itkRGBPixel.h"
 #include "itkImageRegionIterator.h"

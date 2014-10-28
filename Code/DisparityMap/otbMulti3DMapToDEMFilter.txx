@@ -21,9 +21,7 @@
 #include "otbMulti3DMapToDEMFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
-#include "itkNumericTraits.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
-#include "otbImageToGenericRSOutputParameters.h"
 #include "otbInverseSensorModel.h"
 
 namespace otb

@@ -21,7 +21,6 @@
 #include "otbWrapperQtWidgetParameterFactory.h"
 #include "otbWrapperQtWidgetProgressReport.h"
 #include "otbWrapperOutputImageParameter.h"
-#include "otbWrapperParameterGroup.h"
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperQtWidgetSimpleProgressReport.h"
 #include "otbWrapperApplicationHtmlDocGenerator.h"

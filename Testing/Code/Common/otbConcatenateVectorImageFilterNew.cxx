@@ -18,7 +18,6 @@
 #include "itkMacro.h"
 
 #include "otbConcatenateVectorImageFilter.h"
-#include "otbVectorImage.h"
 
 int otbConcatenateVectorImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

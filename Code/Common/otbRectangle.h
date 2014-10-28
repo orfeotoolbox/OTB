@@ -18,10 +18,8 @@
 #ifndef __otbRectangle_h
 #define __otbRectangle_h
 
-#include "itkObject.h"
 #include "itkImageRegion.h"
 
-#include "itkContinuousIndex.h"
 #include "itkVectorContainer.h"
 
 namespace otb

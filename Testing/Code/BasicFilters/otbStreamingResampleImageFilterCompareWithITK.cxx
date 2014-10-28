@@ -15,15 +15,12 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkMacro.h"
 
 #include "otbStreamingResampleImageFilter.h"
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 #include "itkTranslationTransform.h"
-#include "itkNearestNeighborInterpolateImageFunction.h"
 #include "otbStreamingTraits.h"
 #include "itkResampleImageFilter.h"
 

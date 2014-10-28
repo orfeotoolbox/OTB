@@ -17,7 +17,6 @@
 =========================================================================*/
 
 #include <iostream>
-#include "otbMachineLearningModel.h"
 #include "otbLibSVMMachineLearningModel.h"
 #include "otbSVMMachineLearningModel.h"
 #include "otbRandomForestsMachineLearningModel.h"

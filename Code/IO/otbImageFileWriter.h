@@ -18,7 +18,6 @@
 #ifndef __otbImageFileWriter_h
 #define __otbImageFileWriter_h
 
-#include "otbMacro.h"
 #include "otbImageIOBase.h"
 #include "itkProcessObject.h"
 #include "otbStreamingManager.h"

@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-#include "otbImage.h"
 #include "otbSarRadiometricCalibrationToImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbExtractROI.h"

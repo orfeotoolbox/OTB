@@ -19,7 +19,6 @@
 #define __otbListSampleSource_h
 
 #include "itkProcessObject.h"
-#include "itkDataObject.h"
 #include "itkDataObjectDecorator.h"
 
 namespace otb {

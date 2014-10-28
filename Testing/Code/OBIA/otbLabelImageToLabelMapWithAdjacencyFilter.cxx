@@ -17,10 +17,8 @@
 =========================================================================*/
 
 #include "otbLabelImageToLabelMapWithAdjacencyFilter.h"
-#include "otbLabelMapWithAdjacency.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "itkLabelObject.h"
 #include "itkNumericTraits.h"
 
 #include <fstream>

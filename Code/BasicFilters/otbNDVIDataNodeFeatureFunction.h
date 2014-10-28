@@ -21,7 +21,6 @@
 #include "otbDataNodeImageFunction.h"
 
 #include "otbVegetationIndicesFunctor.h"
-#include "otbDataNode.h"
 #include "otbPolyLineImageConstIterator.h"
 
 namespace otb

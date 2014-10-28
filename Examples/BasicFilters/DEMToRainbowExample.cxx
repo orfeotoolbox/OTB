@@ -48,7 +48,6 @@
 //
 // Software Guide : EndLatex
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 

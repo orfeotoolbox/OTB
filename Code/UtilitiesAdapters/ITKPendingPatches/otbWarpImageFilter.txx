@@ -21,7 +21,6 @@
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionIteratorWithIndex.h"
-#include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 #include "itkContinuousIndex.h"
 #include "vnl/vnl_math.h"

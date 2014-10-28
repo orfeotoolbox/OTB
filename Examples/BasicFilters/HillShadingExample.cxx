@@ -38,7 +38,6 @@
 //
 // Software Guide : EndLatex
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -49,7 +48,6 @@
 #include "otbReliefColormapFunctor.h"
 #include "itkMultiplyImageFilter.h"
 #include "itkShiftScaleImageFilter.h"
-#include "itkBinaryFunctorImageFilter.h"
 #include "otbWorldFile.h"
 
 int main(int argc, char * argv[])

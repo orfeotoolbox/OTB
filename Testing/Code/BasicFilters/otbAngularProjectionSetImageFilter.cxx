@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-#include "itkFixedArray.h"
 #include "itkListSample.h"
 
 #include "otbMath.h"

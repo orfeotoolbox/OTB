@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbWrapperParameterGroup.h"
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperDirectoryParameter.h"
@@ -27,12 +26,10 @@
 #include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
-#include "otbWrapperNumericalParameter.h"
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperRadiusParameter.h"
-#include "otbWrapperStringParameter.h"
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"

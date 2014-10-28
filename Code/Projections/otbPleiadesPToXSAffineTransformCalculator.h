@@ -19,7 +19,6 @@
 #define __otbPleiadesPToXSAffineTransformCalculator__h
 
 #include "itkLightObject.h"
-#include "itkObjectFactory.h"
 #include "itkScalableAffineTransform.h"
 #include "itkImageBase.h"
 

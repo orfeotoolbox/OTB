@@ -21,10 +21,8 @@
 #include "otbWrapperChoiceParameter.h"
 
 // Segmentation filters includes
-#include "otbMeanShiftVectorImageFilter.h"
 #include "otbMeanShiftSegmentationFilter.h"
 #include "otbConnectedComponentMuParserFunctor.h"
-#include "itkConnectedComponentFunctorImageFilter.h"
 #include "otbMaskMuParserFilter.h"
 #include "otbVectorImageToAmplitudeImageFilter.h"
 #include "itkGradientMagnitudeImageFilter.h"
@@ -33,7 +31,6 @@
 
 // Large scale vectorization framework
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
-#include "otbOGRDataSourceWrapper.h"
 
 // Fusion filter
 #include "otbOGRLayerStreamStitchingFilter.h"

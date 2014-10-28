@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "itkImageRegionConstIterator.h"
 //  Software Guide : BeginLatex
@@ -34,7 +33,6 @@
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "itkImageRegionSplitter.h"
 #include "otbStreamingTraits.h"
 // Software Guide : EndCodeSnippet
 

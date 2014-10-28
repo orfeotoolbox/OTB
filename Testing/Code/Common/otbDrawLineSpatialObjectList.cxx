@@ -26,7 +26,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbLineSpatialObjectList.h"
 
 #include "otbDrawLineSpatialObjectListFilter.h"
 

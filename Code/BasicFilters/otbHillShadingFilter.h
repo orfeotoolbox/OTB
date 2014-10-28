@@ -20,7 +20,6 @@
 
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 #include "otbHillShadingFunctor.h"
-#include "itkConstNeighborhoodIterator.h"
 
 namespace otb
 {

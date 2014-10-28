@@ -21,7 +21,6 @@
 #include "itkInPlaceImageFilter.h"
 #include "otbPolarimetricSynthesisFunctor.h"
 #include "otbPolarimetricData.h"
-#include "itkFixedArray.h"
 #include <complex>
 
 namespace otb

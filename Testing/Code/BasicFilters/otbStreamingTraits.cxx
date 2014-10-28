@@ -19,7 +19,6 @@
 #include "otbStreamingTraits.h"
 
 #include "otbImage.h"
-#include "otbVectorImage.h"
 
 #include <iostream>
 

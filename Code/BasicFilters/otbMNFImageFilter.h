@@ -18,11 +18,8 @@
 #ifndef __otbMNFImageFilter_h
 #define __otbMNFImageFilter_h
 
-#include "otbMacro.h"
 #include "itkImageToImageFilter.h"
-#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbMatrixImageFilter.h"
-#include "otbNormalizeVectorImageFilter.h"
 #include "otbPCAImageFilter.h"
 
 

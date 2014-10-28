@@ -20,7 +20,6 @@
 
 #include "otbDataNode.h"
 #include "otbMetaDataKey.h"
-#include "otbVectorDataKeywordlist.h"
 
 namespace otb
 {

@@ -19,9 +19,7 @@
 #define __otbWrapperApplicationRegistry_h
 
 #include <string>
-#include "otbMacro.h"
 #include "itkObject.h"
-#include "itkObjectFactory.h"
 
 #include "otbWrapperApplication.h"
 

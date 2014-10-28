@@ -21,12 +21,10 @@
 
 #include "otbOGRDataSourceToLabelImageFilter.h"
 #include "itkImageRegionConstIterator.h"
-#include "otbOGRDataSourceWrapper.h"
 
 #include "itkImageRegionSplitter.h"
 #include "otbStreamingTraits.h"
 
-#include "itkVariableSizeMatrix.h"
 
 #include "otbConfusionMatrixMeasurements.h"
 

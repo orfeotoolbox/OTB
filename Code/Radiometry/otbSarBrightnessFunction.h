@@ -18,7 +18,6 @@
 #ifndef __otbSarBrightnessFunction_h
 #define __otbSarBrightnessFunction_h
 
-#include "itkNumericTraits.h"
 #include "itkImageFunction.h"
 #include "otbSarBrightnessFunctor.h"
 #include "otbSarParametricMapFunction.h"

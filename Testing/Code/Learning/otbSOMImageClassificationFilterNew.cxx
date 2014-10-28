@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbSOMImageClassificationFilter.h"
-#include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbSOMMap.h"
 

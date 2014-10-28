@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-#include "itkMacro.h"
 #include "otbMultiChannelExtractROI.h"
 
 int otbMultiChannelExtractROINew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

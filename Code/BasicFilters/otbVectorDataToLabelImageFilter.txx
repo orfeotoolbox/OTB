@@ -21,7 +21,6 @@
 #include "otbVectorDataToLabelImageFilter.h"
 #include "otbOGRIOHelper.h"
 #include "otbGdalDataTypeBridge.h"
-#include "otbMacro.h"
 
 #include "gdal_alg.h"
 #include "ogr_srs_api.h"

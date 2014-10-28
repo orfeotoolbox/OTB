@@ -25,7 +25,6 @@
 
 #include "otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter.h"
 
-#include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodInnerProduct.h"
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
@@ -36,7 +35,6 @@
 #include "otbSIXSTraits.h"
 #include "otbMath.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"
-#include "otbOpticalImageMetadataInterface.h"
 
 namespace otb
 {

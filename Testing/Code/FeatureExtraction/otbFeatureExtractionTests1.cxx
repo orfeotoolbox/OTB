@@ -20,7 +20,6 @@
 // and all it expects is that you have a function called RegisterTests
 
 
-#include "otbConfigure.h"
 
 #include "otbTestMain.h"
 

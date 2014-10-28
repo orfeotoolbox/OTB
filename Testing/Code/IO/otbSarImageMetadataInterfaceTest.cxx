@@ -24,7 +24,6 @@
 #include <iostream>
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbSarImageMetadataInterface.h"
 #include "otbSarImageMetadataInterfaceFactory.h"
 
 void printPointSet(otb::SarImageMetadataInterface::PointSetPointer pointSet, std::ostream& stream )

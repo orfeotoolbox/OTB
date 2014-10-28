@@ -20,7 +20,6 @@
 
 #include "otbProfileDerivativeToMultiScaleCharacteristicsFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
 #include <vector>
 #include "otbMacro.h"
 

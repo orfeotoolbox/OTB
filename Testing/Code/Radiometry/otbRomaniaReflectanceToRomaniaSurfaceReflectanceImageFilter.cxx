@@ -15,15 +15,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkMacro.h"
 
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericCorrectionParameters.h"
-#include "otbAtmosphericRadiativeTerms.h"
 #include <fstream>
 #include <iostream>
 

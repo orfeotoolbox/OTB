@@ -21,7 +21,6 @@
 #define __otbKeyPointDensityImageFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "itkProcessObject.h"
 #include "otbPointSetToDensityImageFilter.h"
 #include "itkNumericTraits.h"
 

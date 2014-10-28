@@ -20,9 +20,7 @@
 
 #include "otbLineSegmentDetector.h"
 #include "itkImageRegionIterator.h"
-#include "itkNumericTraits.h"
 #include "itkMinimumMaximumImageCalculator.h"
-#include "itkConstNeighborhoodIterator.h"
 #include "itkImageConstIterator.h"
 #include "itkNeighborhoodIterator.h"
 #include "otbPolygon.h"

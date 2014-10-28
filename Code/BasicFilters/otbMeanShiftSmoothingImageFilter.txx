@@ -20,7 +20,6 @@
 #define __otbMeanShiftSmoothingImageFilter_txx
 
 #include "otbMeanShiftSmoothingImageFilter.h"
-#include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
 #include "otbUnaryFunctorWithIndexWithOutputSizeImageFilter.h"
 #include "otbMacro.h"

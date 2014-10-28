@@ -19,7 +19,6 @@
 #include "otbMacro.h"
 
 #include "otbSpectralResponse.h"
-#include "otbVectorImage.h"
 
 int otbSpectralResponse(int argc, char * argv[])
 {

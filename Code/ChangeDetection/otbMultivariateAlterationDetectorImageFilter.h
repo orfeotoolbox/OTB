@@ -18,7 +18,6 @@
 #ifndef __otbMultivariateAlterationDetectorImageFilter_h
 #define __otbMultivariateAlterationDetectorImageFilter_h
 
-#include "itkImageToImageFilter.h"
 
 #include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbConcatenateVectorImageFilter.h"

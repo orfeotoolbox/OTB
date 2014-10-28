@@ -21,7 +21,6 @@
 
 #include "itkImageToImageFilter.h"
 #include "itkConstNeighborhoodIterator.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 #include "otbImage.h"
 

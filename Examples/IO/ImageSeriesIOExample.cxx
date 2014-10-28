@@ -38,7 +38,6 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbObjectList.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 #include "otbImageFileWriter.h"

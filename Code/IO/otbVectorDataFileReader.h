@@ -20,7 +20,6 @@
 
 #include "otbVectorDataSource.h"
 #include "otbVectorDataIOBase.h"
-#include "itkMacro.h"
 
 namespace otb
 {

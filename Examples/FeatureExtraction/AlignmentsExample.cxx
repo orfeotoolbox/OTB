@@ -58,7 +58,6 @@
 #include "otbDrawPathFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "otbImage.h"
 #include "otbImageFileWriter.h"
 
 #include "otbImageFileReader.h"

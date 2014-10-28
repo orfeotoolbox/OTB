@@ -19,7 +19,6 @@
 #ifndef __otbVectorImageToASPixelAccessor_h
 #define __otbVectorImageToASPixelAccessor_h
 
-#include "itkFixedArray.h"
 #include "itkVector.h"
 
 namespace otb

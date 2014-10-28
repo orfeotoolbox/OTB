@@ -21,7 +21,6 @@
 #endif
 #include <iostream>
 #include <fstream>
-#include "otbVectorImage.h"
 #include "otbSOMMap.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -40,7 +39,6 @@
 #include "itkListSample.h"
 
 #include "otbSOMClassifier.h"
-#include "itkVariableLengthVector.h"
 #include "itkMembershipSample.h"
 
 int main(int argc, char* argv[])

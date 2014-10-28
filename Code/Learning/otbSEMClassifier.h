@@ -3,7 +3,6 @@
 
 #include "itkListSample.h"
 #include "itkSampleClassifierFilter.h"
-#include "itkMembershipFunctionBase.h"
 
 #include "otbModelComponentBase.h"
 

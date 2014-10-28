@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "itkMacro.h"
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMeanShiftImageFilter.h"

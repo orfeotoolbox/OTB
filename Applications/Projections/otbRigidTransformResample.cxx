@@ -18,7 +18,6 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "itkLinearInterpolateImageFunction.h"
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 

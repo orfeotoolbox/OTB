@@ -41,7 +41,6 @@
 // Software Guide : BeginCodeSnippet
 #include "otbSiftFastImageFilter.h"
 // Software Guide : EndCodeSnippet
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkPointSet.h"

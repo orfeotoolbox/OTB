@@ -19,7 +19,6 @@
 =========================================================================*/
 
 #include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbImageList.h"
 #include "otbImageSeriesFileReader.h"
 #include "otbImageFileWriter.h"

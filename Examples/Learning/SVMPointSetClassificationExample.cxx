@@ -23,7 +23,6 @@
 //  Software Guide : EndCommandLineArgs
 
 #include "itkMacro.h"
-#include "itkPointSet.h"
 #include <iostream>
 #include <cstdlib>
 
@@ -42,7 +41,6 @@
 
 //  Software Guide : BeginCodeSnippet
 #include "itkPointSetToListSampleAdaptor.h"
-#include "itkListSample.h"
 #include "otbSVMClassifier.h"
 //  Software Guide : EndCodeSnippet
 

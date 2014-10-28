@@ -24,7 +24,6 @@
 #include "vnl/algo/vnl_matrix_inverse.h"
 #include "vnl/algo/vnl_generalized_eigensystem.h"
 
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 

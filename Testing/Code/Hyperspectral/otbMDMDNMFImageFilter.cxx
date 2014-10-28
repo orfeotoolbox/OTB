@@ -19,7 +19,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
 #include "otbMDMDNMFImageFilter.h"
-#include "otbVectorImageToMatrixImageFilter.h"
 #include "otbStandardWriterWatcher.h"
 
 int otbMDMDNMFImageFilterNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])

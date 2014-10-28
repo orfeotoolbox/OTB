@@ -18,23 +18,18 @@
 
 
 
-#include "otbMacro.h"
 
 #include <iostream>
 #include "itkParametricPath.h"
 #include "itkPolyLineParametricPath.h"
-#include "itkVectorContainer.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageToPathListAlignFilter.h"
 
-#include "itkPath.h"
 #include "itkPathSource.h"
-#include "otbPathListSource.h"
 #include "otbImageToPathListFilter.h"
-#include "itkContinuousIndex.h"
 
 #include <stdio.h>
 

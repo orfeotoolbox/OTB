@@ -19,7 +19,6 @@
 #define __otbTextureImageFunction_h
 
 #include "itkImageFunction.h"
-#include "itkNumericTraits.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkVariableLengthVector.h"
 

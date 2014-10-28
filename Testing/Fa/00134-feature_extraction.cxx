@@ -19,17 +19,14 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVectorImage.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 #include "itkMeanImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbMultiChannelRAndNIRIndexImageFilter.h"
-#include "otbVegetationIndicesFunctor.h"
 
 int main(int itkNotUsed(argc), char* argv[])
 {

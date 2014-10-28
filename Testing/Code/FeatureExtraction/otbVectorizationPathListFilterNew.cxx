@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "itkMacro.h"
 #include "otbVectorizationPathListFilter.h"
-#include "otbImage.h"
 #include "itkPolyLineParametricPath.h"
 
 int otbVectorizationPathListFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

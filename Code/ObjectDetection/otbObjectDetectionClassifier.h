@@ -24,7 +24,6 @@
 #include "itkImageRegion.h"
 #include "otbVectorData.h"
 
-#include "itkDataObject.h"
 #include "itkDataObjectDecorator.h"
 #include "itkSimpleDataObjectDecorator.h"
 

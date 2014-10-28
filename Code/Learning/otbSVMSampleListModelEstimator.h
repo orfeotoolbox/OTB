@@ -22,7 +22,6 @@
 
 #include "itkImageModelEstimatorBase.h"
 #include "itkImageRegionIterator.h"
-#include "otbSVMModel.h"
 #include "otbSVMModelEstimator.h"
 
 namespace otb

@@ -18,9 +18,7 @@
 
 
 
-#include "otbImage.h"
 #include "otbForwardFourierMellinTransformImageFilter.h"
-#include "itkLinearInterpolateImageFunction.h"
 
 int otbFourierMellinImageFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {

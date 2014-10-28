@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "itkMacro.h"
-#include "otbVectorImage.h"
 #include "otbSOMMap.h"
 #include "itkRGBPixel.h"
 #include "otbImageFileReader.h"
@@ -24,7 +23,6 @@
 #include "itkListSample.h"
 #include "itkImageRegionIterator.h"
 
-#include "itkVariableLengthVector.h"
 #include "otbSOMWithMissingValue.h"
 #include "otbFlexibleDistanceWithMissingValue.h"
 

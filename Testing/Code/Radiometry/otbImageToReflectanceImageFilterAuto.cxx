@@ -15,13 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkMacro.h"
 
 #include "otbImageToReflectanceImageFilter.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkVariableLengthVector.h"
 #include "otbMultiChannelExtractROI.h"
 
 int otbImageToReflectanceImageFilterAuto(int itkNotUsed(argc), char * argv[])

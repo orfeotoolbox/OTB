@@ -18,7 +18,6 @@
 
 
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingMinMaxImageFilter.h"
 

@@ -22,7 +22,6 @@
 #include <algorithm>
 
 #include "otbSiftFastImageFilter.h"
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"

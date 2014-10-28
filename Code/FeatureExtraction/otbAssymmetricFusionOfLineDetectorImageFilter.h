@@ -20,7 +20,6 @@
 
 #include "itkImageToImageFilter.h"
 
-#include "itkLinearInterpolateImageFunction.h"
 #include "otbLineRatioDetectorImageFilter.h"
 #include "otbLineCorrelationDetectorImageFilter.h"
 #include "otbAssociativeSymmetricalSumImageFilter.h"

@@ -19,7 +19,6 @@
 #define __otbAddCarvingPathFilter_h
 
 #include "itkImageAndPathToImageFilter.h"
-#include "itkImageSliceConstIteratorWithIndex.h"
 #include "itkImageSliceIteratorWithIndex.h"
 
 namespace otb

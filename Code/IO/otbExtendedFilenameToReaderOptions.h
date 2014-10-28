@@ -18,7 +18,6 @@
 #ifndef __otbExtendedFilenameToReaderOptions_h
 #define __otbExtendedFilenameToReaderOptions_h
 
-#include "itkObject.h"
 #include "otbExtendedFilenameHelper.h"
 
 namespace otb

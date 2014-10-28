@@ -20,7 +20,6 @@
 #define __otbLabelImageRegionMergingFilter_txx
 
 #include "otbLabelImageRegionMergingFilter.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"

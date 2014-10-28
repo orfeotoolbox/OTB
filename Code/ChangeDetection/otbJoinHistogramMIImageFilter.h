@@ -19,7 +19,6 @@
 #define __otbJoinHistogramMIImageFilter_h
 
 #include "otbBinaryFunctorNeighborhoodJoinHistogramImageFilter.h"
-#include "itkHistogram.h"
 #include "otbJoinHistogramMI.h"
 
 namespace otb

@@ -20,7 +20,6 @@
 
 #include "otbMacro.h"
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbVectorData.h"
@@ -29,7 +28,6 @@
 
 #include "otbVectorDataIntoImageProjectionFilter.h"
 
-#include "otbVectorDataExtractROI.h"
 #include "otbVectorDataProjectionFilter.h"
 
 /*

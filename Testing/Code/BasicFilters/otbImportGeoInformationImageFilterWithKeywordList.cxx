@@ -20,7 +20,6 @@
 #include "otbImportGeoInformationImageFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageKeywordlist.h"
 
 int otbImportGeoInformationImageFilterWithKeywordList(int itkNotUsed(argc), char * argv[])
 {

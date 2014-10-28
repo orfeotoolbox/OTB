@@ -18,7 +18,6 @@
 #ifndef __otbCloudEstimatorFunctor_h
 #define __otbCloudEstimatorFunctor_h
 
-#include "otbMath.h"
 #include "otbSpectralAngleFunctor.h"
 
 namespace otb

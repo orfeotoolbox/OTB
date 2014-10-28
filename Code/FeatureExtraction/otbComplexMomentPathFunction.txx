@@ -20,7 +20,6 @@
 
 #include "otbComplexMomentPathFunction.h"
 #include "itkImageRegionIterator.h"
-#include "itkImage.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "otbMacro.h"
 

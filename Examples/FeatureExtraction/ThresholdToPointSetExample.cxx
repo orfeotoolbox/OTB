@@ -49,7 +49,6 @@
 
 // Software Guide : BeginCodeSnippet
 #include "otbThresholdImageToPointSetFilter.h"
-#include "itkPointSet.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])

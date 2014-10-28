@@ -21,7 +21,6 @@
 
 #include "otbWrapperApplicationHtmlDocGenerator.h"
 #include "otbWrapperApplicationRegistry.h"
-#include "otbWrapperApplication.h"
 
 int otbWrapperApplicationHtmlDocGeneratorNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {

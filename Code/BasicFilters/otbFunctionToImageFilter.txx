@@ -22,7 +22,6 @@
 #define __otbFunctionToImageFilter_txx
 
 #include "otbFunctionToImageFilter.h"
-#include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
 

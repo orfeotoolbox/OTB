@@ -19,7 +19,6 @@
 
 #include <fstream>
 #include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbSOMMap.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

@@ -18,12 +18,10 @@
 
 
 #include "otbBoxAndWhiskerImageFilter.h"
-#include "itkMacro.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorImage.h"
 #include "otbEuclideanDistanceMetricWithMissingValuePow2.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 
 int otbBoxAndWhiskerImageFilter(int itkNotUsed(argc), char * argv[])

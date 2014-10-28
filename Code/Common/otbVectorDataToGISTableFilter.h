@@ -22,7 +22,6 @@
 //#include "itkAttributeLabelObject.h"
 #include "otbGISTableSource.h"
 #include "otbGISConnectionImplementation.h"
-#include "otbVectorData.h"
 #include <iostream>
 #include <sstream>
 #include <string>

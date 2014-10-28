@@ -27,7 +27,6 @@
 //#include "itkDataObject.h"
 
 #include "otbLabelMapSource.h"
-#include "otbVectorData.h"
 #include "otbCorrectPolygonFunctor.h"
 
 #include <vector>

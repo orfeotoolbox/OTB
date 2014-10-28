@@ -21,9 +21,7 @@
 #include "itkResampleImageFilter.h"
 #include "itkScalableAffineTransform.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
-#include "itkLinearInterpolateImageFunction.h"
 #include "itkProgressAccumulator.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 
 namespace otb

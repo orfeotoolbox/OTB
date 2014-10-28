@@ -24,7 +24,6 @@
 #include "otbSystem.h"
 #include "itksys/SystemTools.hxx"
 #include "otbImage.h"
-#include "itkVariableLengthVector.h"
 #include "otbTinyXML.h"
 #include "otbImageKeywordlist.h"
 

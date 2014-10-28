@@ -21,7 +21,6 @@
 #include "otbSarParametricMapFunction.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkPointSet.h"
 
 
 int otbSarParametricMapFunctionToImageFilter(int itkNotUsed(argc), char * argv[])

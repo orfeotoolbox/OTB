@@ -18,7 +18,6 @@
 #include "itkMacro.h"
 
 #include "otbDEMCaracteristicsExtractor.h"
-#include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 

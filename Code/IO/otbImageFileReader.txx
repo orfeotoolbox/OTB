@@ -24,17 +24,13 @@
 #include <itksys/SystemTools.hxx>
 #include <fstream>
 
-#include "itkObjectFactory.h"
 #include "itkImageIOFactory.h"
-#include "itkImageRegion.h"
 #include "itkPixelTraits.h"
 #include "itkVectorImage.h"
 #include "itkMetaDataObject.h"
 
 #include "otbConvertPixelBuffer.h"
-#include "otbMacro.h"
 #include "otbImageIOFactory.h"
-#include "otbImageKeywordlist.h"
 #include "otbMetaDataKey.h"
 
 #include "otbGDALImageIO.h" //FIXME avoid requiring GDALImageIO here

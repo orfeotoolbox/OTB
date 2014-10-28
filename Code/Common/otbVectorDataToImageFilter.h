@@ -22,7 +22,6 @@
 #include "itkImageSource.h"
 #include "otbRGBAPixelConverter.h"
 #include "otbVectorDataExtractROI.h"
-#include "otbRemoteSensingRegion.h"
 
 #include <mapnik/memory_datasource.hpp>
 #include <mapnik/map.hpp>

@@ -16,12 +16,10 @@
 
 =========================================================================*/
 #include "otbSOMbasedImageFilter.h"
-#include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbSOMMap.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkEuclideanDistanceMetric.h"
 
 
 int otbSOMbasedImageFilterTest(int itkNotUsed(argc), char * argv[])

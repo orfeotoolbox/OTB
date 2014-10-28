@@ -10,7 +10,6 @@
 
 #include "otbMacro.h"
 // default mixture model
-#include "otbGaussianModelComponent.h"
 
 #include "otbSEMClassifier.h"
 

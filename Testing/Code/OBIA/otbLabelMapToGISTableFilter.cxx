@@ -22,7 +22,6 @@
 #include <fstream>
 #include <iostream>
 
-#include "otbPolygon.h"
 #include "otbImage.h"
 #include "otbLabelMapToGISTableFilter.h"
 #include "otbAttributesMapLabelObject.h"

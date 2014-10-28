@@ -18,7 +18,6 @@
 #ifndef __otbMeanRatioImageFilter_h
 #define __otbMeanRatioImageFilter_h
 
-#include "otbBinaryFunctorNeighborhoodImageFilter.h"
 #include "otbMeanRatio.h"
 
 namespace otb

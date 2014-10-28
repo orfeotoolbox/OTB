@@ -18,7 +18,6 @@
 #ifndef __otbWrapperApplicationFactory_h
 #define __otbWrapperApplicationFactory_h
 
-#include "itkObjectFactory.h"
 #include "itkVersion.h"
 
 namespace otb

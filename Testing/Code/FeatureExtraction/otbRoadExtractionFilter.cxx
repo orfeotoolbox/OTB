@@ -17,9 +17,7 @@
 =========================================================================*/
 #include "itkMacro.h"
 
-#include "itkPolyLineParametricPath.h"
 #include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbRoadExtractionFilter.h"
 #include "otbDrawPathListFilter.h"
 #include "otbImageFileReader.h"

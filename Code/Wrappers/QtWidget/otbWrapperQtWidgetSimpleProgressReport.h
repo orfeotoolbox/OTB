@@ -19,12 +19,10 @@
 #define __otbWrapperQtWidgetSimpleProgressReport_h
 
 #include <QtGui>
-#include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
 #include "itkProcessObject.h"
 #include "itkQtProgressBar.h"
 
-#include "itkCommand.h"
 
 namespace otb
 {

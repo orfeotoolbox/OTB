@@ -20,7 +20,6 @@
 
 #include "otbImageFittingPolygonListFilter.h"
 #include "otbPolyLineImageConstIterator.h"
-#include "otbMacro.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 
 namespace otb

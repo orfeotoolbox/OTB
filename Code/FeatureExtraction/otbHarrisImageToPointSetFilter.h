@@ -18,7 +18,6 @@
 #ifndef __otbHarrisImageToPointSetFilter_h
 #define __otbHarrisImageToPointSetFilter_h
 
-#include "otbImageToPointSetFilter.h"
 #include "otbThresholdImageToPointSetFilter.h"
 #include "otbHarrisImageFilter.h"
 

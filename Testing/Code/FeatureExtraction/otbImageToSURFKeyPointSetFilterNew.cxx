@@ -19,7 +19,6 @@
 =========================================================================*/
 #include "otbImageToSURFKeyPointSetFilter.h"
 #include "otbImage.h"
-#include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
 
 int otbImageToSURFKeyPointSetFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

@@ -21,7 +21,6 @@
 #include "otbLikelihoodPathListFilter.h"
 #include "otbPolyLineImageConstIterator.h"
 #include "itkMetaDataObject.h"
-#include "otbMacro.h"
 
 namespace otb
 {

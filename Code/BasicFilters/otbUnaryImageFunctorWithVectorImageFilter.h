@@ -21,12 +21,9 @@
 #ifndef __otbUnaryImageFunctorWithVectorImageFilter_h
 #define __otbUnaryImageFunctorWithVectorImageFilter_h
 
-#include "itkImageToImageFilter.h"
 #include "otbVectorImage.h"
-#include "itkNumericTraits.h"
 #include "itkVariableLengthVector.h"
 #include "itkUnaryFunctorImageFilter.h"
-#include "itkInPlaceImageFilter.h"
 
 namespace otb
 {

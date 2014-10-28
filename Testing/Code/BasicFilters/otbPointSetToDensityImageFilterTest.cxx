@@ -17,7 +17,6 @@
 =========================================================================*/
 
 #include <stdio.h>
-#include "itkPointSet.h"
 #include "otbImage.h"
 #include "otbPointSetToDensityImageFilter.h"
 #include "itkVariableLengthVector.h"

@@ -18,7 +18,6 @@
 
 
 
-#include "itkPointSet.h"
 #include "itkPointSetToListSampleAdaptor.h"
 #include "itkSubsample.h"
 #include "otbSVMClassifier.h"

@@ -24,7 +24,6 @@
 
 #include "otbBinaryImageDensityFunction.h"
 
-#include "itkNumericTraits.h"
 #include "itkConstNeighborhoodIterator.h"
 
 namespace otb

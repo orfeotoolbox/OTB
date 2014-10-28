@@ -22,9 +22,7 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkPathIterator.h"
-#include "itkImage.h"
 #include "itkNumericTraits.h"
-#include "itkImageLinearConstIteratorWithIndex.h"
 #include "itkImageLinearIteratorWithIndex.h"
 #include "otbMath.h"
 

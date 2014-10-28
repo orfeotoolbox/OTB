@@ -21,7 +21,6 @@
 // First make sure that the configuration is available.
 // This line can be removed once the optimized versions
 // gets integrated into the main directories.
-#include "itkConfigure.h"
 
 #include "otbNeighborhoodMajorityVotingImageFilter.h"
 

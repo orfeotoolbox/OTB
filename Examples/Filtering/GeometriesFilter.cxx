@@ -22,7 +22,6 @@
 #include "otbGeometriesToGeometriesFilter.h"
 #include <string>
 #include <iostream>
-#include "otbOGRDataSourceWrapper.h"
 #include "otbGeometriesSet.h"
 
 /*===========================================================================*/

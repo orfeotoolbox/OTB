@@ -29,7 +29,6 @@
 #include "otbPleiadesImageMetadataInterfaceFactory.h"
 #include "otbSpot6ImageMetadataInterfaceFactory.h"
 
-#include "itkObjectFactoryBase.h"
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 

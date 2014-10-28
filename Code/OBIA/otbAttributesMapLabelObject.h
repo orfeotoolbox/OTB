@@ -19,7 +19,6 @@
 #define __otbAttributesMapLabelObject_h
 
 #include "itkShapeLabelObject.h"
-#include "itkLabelMap.h"
 #include "otbPolygon.h"
 #include <map>
 

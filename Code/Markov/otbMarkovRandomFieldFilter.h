@@ -27,12 +27,10 @@
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionIterator.h"
 
-#include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkNeighborhood.h"
 #include "itkSize.h"
-#include "otbMRFEnergy.h"
 #include "otbMRFOptimizer.h"
 #include "otbMRFSampler.h"
 

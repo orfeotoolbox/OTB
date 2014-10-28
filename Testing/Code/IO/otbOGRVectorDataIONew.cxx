@@ -17,7 +17,6 @@
 =========================================================================*/
 
 #include "otbOGRVectorDataIO.h"
-#include "otbVectorData.h"
 
 int otbOGRVectorDataIONew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

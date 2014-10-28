@@ -16,21 +16,17 @@
 
 =========================================================================*/
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "itkRGBPixel.h"
-#include "otbImage.h"
 #include "otbTileMapTransform.h"
 #include "otbOrthoRectificationFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkPoint.h"
-#include "otbImageRegionTileMapSplitter.h"
 #include "otbTileMapImageIO.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 #include "otbPrintableImageFilter.h"
-#include "otbMultiChannelExtractROI.h"
 
 int otbTileMapWriter(int argc, char *argv[])
 {
