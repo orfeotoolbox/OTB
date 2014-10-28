@@ -22,7 +22,6 @@
 #include "itkVariableLengthVector.h"
 #include "itkResampleImageFilter.h"
 #include "itkDanielssonDistanceMapImageFilter.h"
-#include "itkExpandImageFilter.h"
 #include "itkPointSetToImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 

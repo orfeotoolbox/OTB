@@ -19,7 +19,6 @@
 #define __otbRoadExtractionFilter_h
 
 
-#include "otbVectorImage.h"
 #include "otbSpectralAngleDistanceImageFilter.h"
 #include "otbGenericRoadExtractionFilter.h"
 

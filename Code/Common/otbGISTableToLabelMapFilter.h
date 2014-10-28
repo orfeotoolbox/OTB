@@ -20,7 +20,6 @@
 
 //#include "itkImageToImageFilter.h"
 //include "otbLabelMap.h"
-#include "otbVectorData.h"
 #include "otbGISTableToVectorDataFilter.h"
 #include "otbVectorDataToLabelMapFilter.h"
 

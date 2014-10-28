@@ -23,7 +23,6 @@
 #include "otbStreamingTraits.h"
 #include "otbConfigurationFile.h"
 
-#include "itkNearestNeighborInterpolateImageFunction.h"
 
 namespace otb
 {

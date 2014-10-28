@@ -23,7 +23,6 @@
 #include "itkImageSource.h"
 #include "otbProspectModel.h"
 #include "otbSailModel.h"
-#include "otbSatelliteRSR.h"
 #include "otbLabelMapToSimulatedImageFilter.h"
 
 #include "otbMultiToMonoChannelExtractROI.h"
