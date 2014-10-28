@@ -31,7 +31,7 @@ namespace otb
 {
 
 const char * GlVersionChecker::REQUIRED_GL_VERSION = "2.0.0";
-const char * GlVersionChecker::REQUIRED_GLSL_VERSION = "1.30";
+const char * GlVersionChecker::REQUIRED_GLSL_VERSION = "1.20";
 
 const char *
 GlVersionChecker

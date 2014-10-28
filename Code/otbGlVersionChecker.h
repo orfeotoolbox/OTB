@@ -71,6 +71,22 @@ public:
   static bool CheckGLCapabilities( const char * & glVersion,
                                    const char * & glslVersion );
 
+  /**
+   * \brief Compares to version-strings on the model of strcmp().
+   *
+   * \param Left hand-side version string (runtime). If
+   * <code>NULL</code>, version-string is considered 0.0.0. (\see
+   * GlVersionChecker::SplitVersion()).
+   *
+   * \param Right hande-side version string (required). If
+   * <code>NULL</code>, version-string is considered 0.0.0. (\see
+   * GlVersionChecker::SplitVersion()).
+   *
+   * \return <code>-1</code> if version<required; <code>0</code> if
+   * version==required; <code>+1</code> if version>=required.
+   */
+  static int VerCmp( const char * version, const char * required );
+
 private:
   // Prevent instantiation
   GlVersionChecker();
@@ -93,23 +109,7 @@ private:
   static bool SplitVersion( const char * version,
                             int& major,
                             int& minor,
-                            int& release );
-
-  /**
-   * \brief Compares to version-strings on the model of strcmp().
-   *
-   * \param Left hand-side version string (runtime). If
-   * <code>NULL</code>, version-string is considered 0.0.0. (\see
-   * GlVersionChecker::SplitVersion()).
-   *
-   * \param Right hande-side version string (required). If
-   * <code>NULL</code>, version-string is considered 0.0.0. (\see
-   * GlVersionChecker::SplitVersion()).
-   *
-   * \return <code>-1</code> if version<required; <code>0</code> if
-   * version==required; <code>+1</code> if version>=required.
-   */
-  static int VerCmp( const char * version, const char * required );
+                            int& release );  
 };
 
 } // End namespace otb

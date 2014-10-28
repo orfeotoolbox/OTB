@@ -54,8 +54,14 @@ StandardShader::~StandardShader()
 
 std::string StandardShader::GetSource() const
 {
-  const char * glsl130String = "1.30";
-  bool isGLSLS130Available = otb::GlVersionChecker::CheckGLCapabilities( otb::GlVersionChecker::REQUIRED_GL_VERSION, glsl130String);
+  const char * glVersion = NULL;
+  const char * glslVersion = NULL;
+  if(!otb::GlVersionChecker::CheckGLCapabilities( glVersion, glslVersion))
+    {
+    itkExceptionMacro(<<" Required GL and GLSL versions were not found (GL version is "<<glVersion<<", should be at least "<<otb::GlVersionChecker::REQUIRED_GL_VERSION<<", GLSL version is "<<glslVersion<<", should be at least "<<otb::GlVersionChecker::REQUIRED_GLSL_VERSION<<")");
+    }
+
+  bool isGLSLS130Available  = otb::GlVersionChecker::VerCmp(glslVersion,"1.30")>=0;
 
   std::string shader_source = "";
 
