@@ -18,6 +18,7 @@
 #include "itkMacro.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
+#include "otbVectorImageTo3DScalarImageFilter.h"
 
 int otbVectorImageTo3DScalarImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

@@ -22,6 +22,7 @@
 #include "otbImageFileWriter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageSliceConstIteratorWithIndex.h"
+#include "otbVectorImageTo3DScalarImageFilter.h"
 
 int otbVectorImageTo3DScalarImageFilter(int itkNotUsed(argc), char * argv[])
 {
