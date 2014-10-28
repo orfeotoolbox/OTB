@@ -22,7 +22,6 @@
 #include <iterator>
 #include <stdlib.h>
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"

@@ -18,7 +18,6 @@
 #include "itkMacro.h"
 
 #include "otbBCOInterpolateImageFunction.h"
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include <fstream>
 #include "otbImageFileWriter.h"

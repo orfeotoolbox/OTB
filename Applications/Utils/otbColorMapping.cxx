@@ -36,7 +36,6 @@
 #include "otbListSampleToHistogramListGenerator.h"
 
 #include "itkVariableLengthVector.h"
-#include "otbObjectList.h"
 
 #include "itkImageRegionConstIterator.h"
 #include "otbUnaryFunctorImageFilter.h"

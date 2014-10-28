@@ -64,7 +64,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbAttributesMapLabelObject.h"
 #include "itkLabelImageToLabelMapFilter.h"
 
 int main(int argc, char* argv[])

@@ -19,7 +19,6 @@
 
 =========================================================================*/
 
-#include "itkVariableLengthVector.h"
 #include "itkListSample.h"
 
 #include "otbSOMMap.h"

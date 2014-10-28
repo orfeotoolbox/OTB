@@ -32,7 +32,6 @@
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "itkLabelMap.h"
 #include "itkBinaryImageToLabelMapFilter.h"
 #include "itkLabelMapToLabelImageFilter.h"
 // Software Guide : EndCodeSnippet

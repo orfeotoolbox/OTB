@@ -21,7 +21,6 @@
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
-#include "otbPersistentFilterStreamingDecorator.h"
 
 int otbStreamingLineSegmentDetectorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

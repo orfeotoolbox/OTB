@@ -23,7 +23,6 @@ for details.
 #include "otbStreamingStatisticsImageFilter.h"
 
 #include "itkImageRegionIterator.h"
-#include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
 

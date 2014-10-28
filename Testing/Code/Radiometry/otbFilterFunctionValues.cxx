@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "itkMacro.h"
 #include "otbSIXSTraits.h"
 #include <fstream>
 #include <cstdlib>

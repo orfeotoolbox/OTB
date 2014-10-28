@@ -29,7 +29,6 @@
 // iostream is used for general output
 #include <iostream>
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"

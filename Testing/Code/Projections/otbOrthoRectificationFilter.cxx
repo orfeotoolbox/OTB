@@ -21,7 +21,6 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMapProjections.h"

@@ -24,7 +24,6 @@
 
 #include "otbLuminanceToImageImageFilter.h"
 #include "otbReflectanceToLuminanceImageFilter.h"
-#include "itkNumericTraits.h"
 
 namespace otb
 {

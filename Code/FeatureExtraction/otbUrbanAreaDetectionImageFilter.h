@@ -21,7 +21,6 @@
 #include "otbImage.h"
 #include "otbWaterIndicesFunctor.h"
 #include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
-#include "itkImageToImageFilter.h"
 #include "itkBinaryErodeImageFilter.h"
 #include "itkBinaryDilateImageFilter.h"
 #include "itkBinaryBallStructuringElement.h"

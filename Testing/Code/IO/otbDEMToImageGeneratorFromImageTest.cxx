@@ -18,7 +18,6 @@
 
 
 #include "otbImageFileWriter.h"
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 
 #include "otbDEMToImageGenerator.h"

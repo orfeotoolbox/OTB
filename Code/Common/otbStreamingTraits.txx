@@ -21,10 +21,8 @@
 #include <boost/cstdint.hpp>
 
 #include "otbStreamingTraits.h"
-#include "otbConfigure.h"
 #include "otbConfigurationFile.h"
 
-#include "itkBSplineInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 
 namespace otb

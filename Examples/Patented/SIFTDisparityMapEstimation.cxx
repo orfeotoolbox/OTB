@@ -47,7 +47,6 @@
 // Software Guide : EndCodeSnippet
 
 
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"

@@ -19,7 +19,6 @@
 #define __otbWrapperQtWidgetInputImageListParameter_h
 
 #include <QtGui>
-#include "otbWrapperQtWidgetParameterBase.h"
 #include "otbQtFileSelectionWidget.h"
 
 namespace otb

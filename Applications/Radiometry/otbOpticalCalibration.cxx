@@ -29,7 +29,6 @@
 #include "otbGroundSpacingImageFunction.h"
 #include "vnl/vnl_random.h"
 
-#include "otbOpticalImageMetadataInterfaceFactory.h"
 
 #include <fstream>
 #include <sstream>

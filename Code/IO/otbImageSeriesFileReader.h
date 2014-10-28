@@ -23,7 +23,6 @@
 
 #include "otbImageSeriesFileReaderBase.h"
 
-#include "otbVectorImage.h"
 #include "otbObjectList.h"
 
 #include "otbExtractROI.h"

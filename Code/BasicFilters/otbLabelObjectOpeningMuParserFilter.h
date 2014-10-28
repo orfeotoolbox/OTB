@@ -29,7 +29,6 @@
 
 #include "itkArray.h"
 
-#include "otbMacro.h"
 
 
 #include "itkInPlaceLabelMapFilter.h"

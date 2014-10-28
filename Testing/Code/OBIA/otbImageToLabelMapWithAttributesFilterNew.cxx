@@ -21,7 +21,6 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageToLabelMapWithAttributesFilter.h"
-#include "otbAttributesMapLabelObjectWithClassLabel.h"
 
 int otbImageToLabelMapWithAttributesFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {

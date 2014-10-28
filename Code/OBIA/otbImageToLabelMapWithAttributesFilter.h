@@ -18,7 +18,6 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbImageToLabelMapWithAttributesFilter_h
 #define __otbImageToLabelMapWithAttributesFilter_h
 
-#include "itkLabelObject.h"
 #include "itkShapeLabelMapFilter.h"
 #include "otbAttributesMapLabelObjectWithClassLabel.h"
 #include "otbLabelImageToLabelMapWithAdjacencyFilter.h"

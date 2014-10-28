@@ -20,7 +20,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorImage.h"
-#include "otbImage.h"
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 

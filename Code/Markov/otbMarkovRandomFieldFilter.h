@@ -27,7 +27,6 @@
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionIterator.h"
 
-#include "itkNeighborhoodIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkNeighborhood.h"
 #include "itkSize.h"

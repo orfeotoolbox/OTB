@@ -19,7 +19,6 @@
 
 #include <iostream>
 
-#include "otbSensorModelBase.h"
 #include "otbForwardSensorModel.h"
 #include "otbInverseSensorModel.h"
 

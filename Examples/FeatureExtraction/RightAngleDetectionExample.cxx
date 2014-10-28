@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-#include "otbVectorData.h"
 
 #include "otbImageFileReader.h"
 #include "otbLineSegmentDetector.h"

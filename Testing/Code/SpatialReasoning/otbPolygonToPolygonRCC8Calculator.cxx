@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "itkMacro.h"
 #include "otbPolygonToPolygonRCC8Calculator.h"
-#include "otbObjectList.h"
 #include "otbImageFileReader.h"
 #include "otbPolygon.h"
 #include "otbImageToEdgePathFilter.h"

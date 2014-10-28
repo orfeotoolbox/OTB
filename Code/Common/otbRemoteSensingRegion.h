@@ -22,7 +22,6 @@
 #include <iomanip>
 
 
-#include "itkContinuousIndex.h"
 #include "otbImageKeywordlist.h"
 #include "itkImageRegion.h"
 

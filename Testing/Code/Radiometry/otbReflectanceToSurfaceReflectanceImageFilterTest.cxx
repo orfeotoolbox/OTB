@@ -23,7 +23,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbAtmosphericCorrectionParameters.h"
 
 #include "otbOpticalImageMetadataInterfaceFactory.h"
 

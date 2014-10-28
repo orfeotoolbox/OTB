@@ -51,7 +51,6 @@
 // Software Guide : EndCodeSnippet
 
 #include "itkMacro.h"
-#include "otbVectorImage.h"
 
 #include "itkVectorExpandImageFilter.h"
 #include "itkVectorNearestNeighborInterpolateImageFunction.h"

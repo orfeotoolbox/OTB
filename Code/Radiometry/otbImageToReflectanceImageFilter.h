@@ -22,10 +22,8 @@
 #ifndef __otbImageToReflectanceImageFilter_h
 #define __otbImageToReflectanceImageFilter_h
 
-#include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbImageToLuminanceImageFilter.h"
 #include "otbLuminanceToReflectanceImageFilter.h"
-#include "itkNumericTraits.h"
 
 namespace otb
 {

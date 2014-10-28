@@ -30,7 +30,6 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
-#include "otbImageList.h"
 #include "otbImageListSource.h"
 #include "otbImageFileReader.h"
 

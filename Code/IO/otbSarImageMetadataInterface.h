@@ -20,7 +20,6 @@
 
 #include <string>
 
-#include "otbMetaDataKey.h"
 #include "otbImageMetadataInterfaceBase.h"
 #include "itkPointSet.h"
 

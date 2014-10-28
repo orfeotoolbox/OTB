@@ -19,7 +19,6 @@
 #define __otbPCAImageFilter_h
 
 #include "otbMacro.h"
-#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbMatrixImageFilter.h"
 #include "otbNormalizeVectorImageFilter.h"
 

@@ -19,7 +19,6 @@
 #define __otbWindowedSincInterpolateImageWelchFunction_h
 
 #include "otbWindowedSincInterpolateImageFunctionBase.h"
-#include "otbMath.h"
 #include "vnl/vnl_math.h"
 
 namespace otb

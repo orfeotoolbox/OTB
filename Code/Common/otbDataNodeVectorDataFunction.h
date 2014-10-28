@@ -19,7 +19,6 @@
 #define __otbDataNodeVectorDataFunction_h
 
 #include "otbDataNodeFunctionBase.h"
-#include "otbVectorData.h"
 #include "otbVectorDataProperties.h"
 
 

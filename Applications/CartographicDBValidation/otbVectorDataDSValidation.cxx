@@ -21,7 +21,6 @@
 #include "otbWrapperApplicationFactory.h"
 #include "otbWrapperStringListParameter.h"
 
-#include "otbFuzzyDescriptorsModelManager.h"
 
 
 namespace otb

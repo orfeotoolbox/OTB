@@ -21,7 +21,6 @@
 #include "otbVectorDataFileReader.h"
 
 #include "otbSpatialisationFilter.h"
-#include "otbSailModel.h"
 #include "otbImageSimulationMethod.h"
 #include "otbAttributesMapLabelObject.h"
 #include "otbImageFileReader.h"

@@ -18,7 +18,6 @@
 #ifndef __otbWrapperCommandLineLauncher_h
 #define __otbWrapperCommandLineLauncher_h
 
-#include "itkObject.h"
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperParameter.h"

@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-#include "otbVectorImage.h"
 #include "itkRGBPixel.h"
 #include "otbTileMapTransform.h"
 #include "otbOrthoRectificationFilter.h"

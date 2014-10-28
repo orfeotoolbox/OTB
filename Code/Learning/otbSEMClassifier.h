@@ -4,7 +4,6 @@
 #include "itkListSample.h"
 #include "itkSampleClassifierFilter.h"
 
-#include "otbModelComponentBase.h"
 
 #include "otbGaussianModelComponent.h"
 

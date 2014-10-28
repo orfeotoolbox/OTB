@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include "otbVectorImage.h"
 
 #include "itkExtractImageFilter.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"

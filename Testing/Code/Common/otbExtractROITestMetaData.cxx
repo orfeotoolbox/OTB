@@ -18,7 +18,6 @@
 #include <iostream>
 #include <fstream>
 
-#include "otbVectorImage.h"
 
 #include "itkExtractImageFilter.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"

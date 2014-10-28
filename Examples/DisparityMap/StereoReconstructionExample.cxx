@@ -49,7 +49,6 @@
 #include "otbDisparityMapMedianFilter.h"
 #include "otbDisparityMapToDEMFilter.h"
 
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbBCOInterpolateImageFunction.h"

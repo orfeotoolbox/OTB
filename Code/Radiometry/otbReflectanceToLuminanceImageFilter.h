@@ -25,7 +25,6 @@
 #include "otb_6S.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbMath.h"
-#include "itkVariableLengthVector.h"
 #include "otbMacro.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"
 #include <iomanip>

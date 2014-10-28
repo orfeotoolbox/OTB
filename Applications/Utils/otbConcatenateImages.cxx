@@ -20,7 +20,6 @@
 
 #include "otbImageListToVectorImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
-#include "otbWrapperTypes.h"
 #include "otbImageList.h"
 
 namespace otb

@@ -20,7 +20,6 @@
 
 #include "otbMacro.h"
 
-#include "itkObject.h"
 #include "itkDataObject.h"
 #include "itkImageRegionSplitterBase.h"
 #include "otbPipelineMemoryPrintCalculator.h"

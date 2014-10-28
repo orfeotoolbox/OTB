@@ -18,7 +18,6 @@
 #ifndef __otbSensorModelAdapter_h
 #define __otbSensorModelAdapter_h
 
-#include "itkObjectFactory.h"
 #include "otbDEMHandler.h"
 
 class ossimProjection;

@@ -20,7 +20,6 @@
 
 #include "otbMacro.h"
 
-#include "itkInterpolateImageFunction.h"
 #include "itkBSplineInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkImageRegionSplitter.h"

@@ -23,7 +23,6 @@
 
 #include "itkPDEDeformableRegistrationFunction.h"
 #include "itkPoint.h"
-#include "itkInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkCentralDifferenceImageFunction.h"
 

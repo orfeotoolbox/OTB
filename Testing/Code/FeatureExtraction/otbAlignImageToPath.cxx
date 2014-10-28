@@ -20,16 +20,13 @@
 
 
 #include <iostream>
-#include "itkParametricPath.h"
 #include "itkPolyLineParametricPath.h"
 
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageToPathListAlignFilter.h"
 
 #include "itkPathSource.h"
-#include "otbImageToPathListFilter.h"
 
 #include <stdio.h>
 

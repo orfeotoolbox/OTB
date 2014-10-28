@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbDisparityTranslateFilter.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorImageToImageListFilter.h"

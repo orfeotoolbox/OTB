@@ -31,7 +31,6 @@
 
 #include "otbLineSegmentDetector.h"
 
-#include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "otbPersistentImageToVectorDataFilter.h"
 

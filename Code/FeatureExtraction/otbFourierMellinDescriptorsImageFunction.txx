@@ -21,7 +21,6 @@
 #include "otbFourierMellinDescriptorsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
-#include "otbMath.h"
 
 namespace otb
 {

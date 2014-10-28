@@ -30,7 +30,6 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbKeyPointSetsMatchingFilter.h"
 
-#include "itkEuclideanDistanceMetric.h"
 #include "otbGenericRSTransform.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "ogrsf_frmts.h"

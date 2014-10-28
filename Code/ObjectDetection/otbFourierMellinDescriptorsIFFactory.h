@@ -22,7 +22,6 @@
 
 #include "otbMetaImageFunction.h"
 #include "itkDataObject.h"
-#include "otbImage.h"
 #include "otbImageFunctionAdaptor.h"
 #include "otbFourierMellinDescriptorsImageFunction.h"
 

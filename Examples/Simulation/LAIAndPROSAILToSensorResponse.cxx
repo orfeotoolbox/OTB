@@ -36,7 +36,6 @@
 //
 // Software Guide : EndLatex
 
-#include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileReader.h"
@@ -46,7 +45,6 @@
 #include "itkOrImageFilter.h"
 
 // Software Guide : BeginCodeSnippet
-#include "otbSailModel.h"
 #include "otbLeafParameters.h"
 #include "otbReduceSpectralResponse.h"
 #include "otbImageSimulationMethod.h"

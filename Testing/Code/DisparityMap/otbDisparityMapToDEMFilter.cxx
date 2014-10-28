@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbDisparityMapToDEMFilter.h"
-#include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
 #include "otbStandardWriterWatcher.h"
 #include "otbImageFileReader.h"

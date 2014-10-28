@@ -20,7 +20,6 @@
 
 #include <string>
 #include "otbMacro.h"
-#include "itkObjectFactory.h"
 #include "otbWrapperTypes.h"
 #include "otbWrapperTags.h"
 #include "otbWrapperParameterGroup.h"

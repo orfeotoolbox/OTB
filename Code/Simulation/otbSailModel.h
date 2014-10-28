@@ -19,7 +19,6 @@
 #define __otbSailModel_h
 
 
-#include "itkObjectFactory.h"
 #include "otbSpectralResponse.h"
 #include "otbDataSpecP5B.h"
 #include "otbSimulationStep2Base.h"

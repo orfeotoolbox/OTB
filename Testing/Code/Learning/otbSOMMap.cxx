@@ -18,7 +18,6 @@
 #include "itkMacro.h"
 #include "otbSOMMap.h"
 #include "itkRGBPixel.h"
-#include "itkVariableLengthVector.h"
 
 int otbSOMMap(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {

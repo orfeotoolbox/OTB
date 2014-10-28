@@ -28,7 +28,6 @@
 
 #include "otbVectorDataIntoImageProjectionFilter.h"
 
-#include "otbVectorDataProjectionFilter.h"
 
 /*
 * Tests prTvVectorDataIntoImageProjectionFilterTest_2 and

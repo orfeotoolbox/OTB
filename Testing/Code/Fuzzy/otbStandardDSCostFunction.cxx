@@ -19,7 +19,6 @@
 
 #include "otbStandardDSCostFunction.h"
 
-#include "otbVectorDataToDSValidatedVectorDataFilter.h"
 
 int otbStandardDSCostFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {

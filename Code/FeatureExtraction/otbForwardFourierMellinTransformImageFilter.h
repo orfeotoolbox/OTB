@@ -20,7 +20,6 @@
 #define __otbForwardFourierMellinTransformImageFilter_h
 
 #include "otbImage.h"
-#include "itkImageToImageFilter.h"
 #include "itkVnlForwardFFTImageFilter.h"
 #include "otbLogPolarTransform.h"
 #include "itkResampleImageFilter.h"

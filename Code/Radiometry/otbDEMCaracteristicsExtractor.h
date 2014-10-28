@@ -25,7 +25,6 @@
 #include "otbVectorImage.h"
 #include "itkGradientMagnitudeImageFilter.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"
-#include "itkCovariantVector.h"
 #include "itkAtan2ImageFilter.h"
 #include "itkAtanImageFilter.h"
 #include "otbMultiplyByScalarImageFilter.h"

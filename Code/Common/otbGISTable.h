@@ -18,7 +18,6 @@
 #ifndef __otbGISTable_h
 #define __otbGISTable_h
 
-#include "itkObjectFactory.h"
 #include "itkPoint.h"
 #include "otbPolygon.h"
 #include "otbObjectList.h"

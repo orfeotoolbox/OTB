@@ -20,7 +20,6 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbVectorImage.h"
-#include "itkEuclideanDistanceMetric.h"
 #include "otbStreamingTraits.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkListSample.h"

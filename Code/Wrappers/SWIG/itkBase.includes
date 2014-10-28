@@ -21,7 +21,6 @@
 /* kindly stolen from the build files of OTB-Wrapping
  * (Typedefs/itkBase.includes, Typedefs/wrap_ITKCommonBase.i) */
 
-#include "itkObject.h"
 #include "itkProcessObject.h"
 #include "itkObjectFactoryBase.h"
 

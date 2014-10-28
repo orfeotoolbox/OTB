@@ -18,7 +18,6 @@
 #ifndef __otbGenericRSTransform_h
 #define __otbGenericRSTransform_h
 
-#include "itkMacro.h"
 #include "otbCompositeTransform.h"
 
 namespace otb

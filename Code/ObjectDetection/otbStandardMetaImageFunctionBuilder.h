@@ -19,7 +19,6 @@
 #define __otbStandardMetaImageFunctionBuilder_h
 
 
-#include "otbMetaImageFunction.h"
 #include "itkVariableLengthVector.h"
 
 #include "otbMultiChannelIFFactory.h"

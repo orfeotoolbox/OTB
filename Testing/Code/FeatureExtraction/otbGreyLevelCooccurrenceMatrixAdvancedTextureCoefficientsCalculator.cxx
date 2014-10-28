@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-#include "itkHistogram.h"
 #include "vnl/vnl_math.h"
 
 #include "otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator.h"

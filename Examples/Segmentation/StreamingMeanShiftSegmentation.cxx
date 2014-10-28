@@ -38,7 +38,6 @@
 
 // Software Guide : BeginCodeSnippet
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
-#include "otbOGRDataSourceWrapper.h"
 #include "otbOGRLayerStreamStitchingFilter.h"
 // Software Guide : EndCodeSnippet
 

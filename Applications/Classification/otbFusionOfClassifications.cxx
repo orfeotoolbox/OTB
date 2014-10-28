@@ -27,7 +27,6 @@
 #include <iostream>
 #include <fstream>
 
-#include "otbImage.h"
 #include "otbImageList.h"
 
 

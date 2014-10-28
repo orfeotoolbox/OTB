@@ -24,7 +24,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbAttributesMapLabelObject.h"
 #include "itkLabelImageToLabelMapFilter.h"
 
 int otbHooverInstanceFilterToAttributeImage(int argc, char* argv[])

@@ -22,7 +22,6 @@
 #include "otbOGRDataSourceToLabelImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 
-#include "itkImageRegionSplitter.h"
 #include "otbStreamingTraits.h"
 
 

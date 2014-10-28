@@ -30,7 +30,6 @@
 
 #include "itkArray.h"
 
-#include "otbMacro.h"
 
 #include "otbMaskMuParserFunctor.h"
 

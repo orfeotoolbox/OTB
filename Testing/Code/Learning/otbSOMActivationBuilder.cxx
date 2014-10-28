@@ -19,7 +19,6 @@
 #include "otbImage.h"
 #include "otbSOMMap.h"
 #include "otbSOMActivationBuilder.h"
-#include "itkEuclideanDistanceMetric.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkListSample.h"

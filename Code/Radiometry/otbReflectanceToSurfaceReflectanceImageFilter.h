@@ -26,7 +26,6 @@
 
 #include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericCorrectionParameters.h"
-#include "otbAtmosphericRadiativeTerms.h"
 
 #include "itkMetaDataDictionary.h"
 

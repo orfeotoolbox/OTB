@@ -20,7 +20,6 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "itkLabelObject.h"
 #include "itkLabelImageToLabelMapFilter.h"
 
 int otbHooverMatrixFilter(int argc, char* argv[])

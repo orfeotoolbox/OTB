@@ -19,12 +19,10 @@
 
 #include "otbVectorDataToRoadDescriptionFilter.h"
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
-#include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataProperties.h"
 #include "otbRemoteSensingRegion.h"
 #include "otbVectorDataIntoImageProjectionFilter.h"

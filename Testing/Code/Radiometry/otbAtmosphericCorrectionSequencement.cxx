@@ -19,7 +19,6 @@
 
 #include "otbImageToLuminanceImageFilter.h"
 #include "otbLuminanceToReflectanceImageFilter.h"
-#include "otbAtmosphericCorrectionParameters.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 

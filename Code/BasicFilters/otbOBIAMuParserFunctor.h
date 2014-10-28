@@ -26,7 +26,6 @@
 #include "otbMacro.h"
 
 
-#include "itkObjectFactory.h"
 
 
 namespace otb

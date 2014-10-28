@@ -18,7 +18,6 @@
 #ifndef __otbBuiltUpIndicesFunctor_h
 #define __otbBuiltUpIndicesFunctor_h
 
-#include "itkVariableLengthVector.h"
 #include "otbVegetationIndicesFunctor.h"
 
 namespace otb

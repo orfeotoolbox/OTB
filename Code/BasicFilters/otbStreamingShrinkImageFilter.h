@@ -18,7 +18,6 @@
 #ifndef __otbStreamingShrinkImageFilter_h
 #define __otbStreamingShrinkImageFilter_h
 
-#include "itkImageToImageFilter.h"
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"

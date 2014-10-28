@@ -24,7 +24,6 @@ for details.
 
 #include <algorithm>
 #include "itkImageRegionIterator.h"
-#include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
 

@@ -21,7 +21,6 @@
 
 #include "otbImage.h"
 #include "otbRadiometricMomentsImageFunction.h"
-#include "itkFixedArray.h"
 #include "otbDescriptorsListSampleGenerator.h"
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileReader.h"

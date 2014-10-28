@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-#include "otbObjectList.h"
 #include "otbImage.h"
 #include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"

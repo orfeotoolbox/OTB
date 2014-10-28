@@ -20,7 +20,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbAtmosphericCorrectionParameters.h"
 #include <fstream>
 #include <iostream>
 

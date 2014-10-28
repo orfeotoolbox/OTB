@@ -18,7 +18,6 @@
 #ifndef __otbPlaceNameToLonLat_h
 #define __otbPlaceNameToLonLat_h
 
-#include "itkObjectFactory.h"
 #include "otbCurlHelperInterface.h"
 
 namespace otb

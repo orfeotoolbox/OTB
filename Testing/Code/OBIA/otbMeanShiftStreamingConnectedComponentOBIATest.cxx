@@ -15,7 +15,6 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbVectorImage.h"
 #include "otbVectorData.h"
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"

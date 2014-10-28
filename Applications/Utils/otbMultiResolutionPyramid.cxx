@@ -22,7 +22,6 @@
 #include "itkDiscreteGaussianImageFilter.h"
 #include "itkShrinkImageFilter.h"
 
-#include "otbWrapperOutputImageParameter.h"
 
 namespace otb
 {

@@ -18,7 +18,6 @@
 #ifndef __otbLineRatioDetectorImageFilter_h
 #define __otbLineRatioDetectorImageFilter_h
 
-#include "itkLinearInterpolateImageFunction.h"
 #include "otbLineDetectorImageFilterBase.h"
 
 namespace otb

@@ -21,7 +21,6 @@
 #include "itkTreeContainer.h"
 #include "itkDataObject.h"
 #include "otbDataNode.h"
-#include "itkPoint.h"
 
 namespace otb
 {

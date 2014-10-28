@@ -18,7 +18,6 @@
 
 #include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericCorrectionParameters.h"
-#include "otbAtmosphericRadiativeTerms.h"
 #include <vector>
 #include <fstream>
 #include <iostream>

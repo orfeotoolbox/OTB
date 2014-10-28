@@ -22,7 +22,6 @@
 #include "itkScalableAffineTransform.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "itkProgressAccumulator.h"
-#include "itkImageRegionIterator.h"
 
 namespace otb
 {

@@ -17,7 +17,6 @@
 =========================================================================*/
 
 #include "otbMacro.h"
-#include "itkImageRegionIterator.h"
 #include "otbSpectralResponse.h"
 
 #include "otbSurfaceReflectanceToReflectanceFilter.h"

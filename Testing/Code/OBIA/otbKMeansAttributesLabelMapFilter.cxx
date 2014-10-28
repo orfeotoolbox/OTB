@@ -22,7 +22,6 @@
 #include <iostream>
 
 #include "otbVectorImage.h"
-#include "itkLabelMap.h"
 #include "itkLabelImageToLabelMapFilter.h"
 #include "otbImageToLabelMapWithAttributesFilter.h"
 #include "otbKMeansAttributesLabelMapFilter.h"

@@ -22,7 +22,6 @@
 #include "otbImageFileWriter.h"
 
 #include "itkBinaryImageToLabelMapFilter.h"
-#include "itkLabelMap.h"
 #include "otbShapeAttributesLabelMapFilter.h"
 
 #include "itkVariableLengthVector.h"

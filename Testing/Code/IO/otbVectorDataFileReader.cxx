@@ -20,7 +20,6 @@
 #include "otbVectorData.h"
 #include <fstream>
 
-#include "itkDataObject.h"
 
 int otbVectorDataFileReader(int itkNotUsed(argc), char * argv[])
 {

@@ -39,7 +39,6 @@
 #include "itkListSample.h"
 
 #include "otbSOMClassifier.h"
-#include "itkMembershipSample.h"
 
 int main(int argc, char* argv[])
 {

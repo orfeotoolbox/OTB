@@ -20,7 +20,6 @@
 
 #include "itkProcessObject.h"
 #include "itkVariableLengthVector.h"
-#include "itkMacro.h"
 #include "itkFixedArray.h"
 #include "itkHistogram.h"
 #include "itkSmartPointer.h"

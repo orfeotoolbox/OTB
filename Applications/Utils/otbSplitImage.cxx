@@ -17,7 +17,6 @@
  =========================================================================*/
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
-#include "otbWrapperOutputImageParameter.h"
 
 #include "otbMultiToMonoChannelExtractROI.h"
 

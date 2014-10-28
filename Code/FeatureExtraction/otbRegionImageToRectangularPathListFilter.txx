@@ -28,7 +28,6 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkPathIterator.h"
-#include "itkNumericTraits.h"
 #include "itkImageLinearIteratorWithIndex.h"
 #include "otbMath.h"
 #include "itkNeighborhoodBinaryThresholdImageFunction.h"

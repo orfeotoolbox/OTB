@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbMeanShiftSmoothingImageFilter.h"
 
