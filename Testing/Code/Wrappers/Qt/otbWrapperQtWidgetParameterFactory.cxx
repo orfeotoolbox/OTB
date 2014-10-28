@@ -22,7 +22,7 @@
 #include "otbWrapperQtWidgetParameterFactory.h"
 #include "otbWrapperStringParameter.h"
 #include "otbWrapperEmptyParameter.h"
-
+#include "otbWrapperChoiceParameter.h"
 #include "otbWrapperQtWidgetModel.h"
 
 #include "otbWrapperQtWidgetParameterGroup.h"
