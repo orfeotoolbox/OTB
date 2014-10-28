@@ -22,6 +22,7 @@
 #include "otbRemoteSensingRegion.h"
 #include "otbDEMHandler.h"
 #include "itkMacro.h"
+#include "itkPreOrderTreeIterator.h"
 
 namespace otb
 {

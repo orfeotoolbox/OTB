@@ -22,6 +22,7 @@
 #define __otbSimpleRcsPanSharpeningFusionImageFilter_h
 
 #include "otbConvolutionImageFilter.h"
+#include "otbImage.h"
 #include "itkTernaryFunctorImageFilter.h"
 
 #include "itkProgressAccumulator.h"
