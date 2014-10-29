@@ -24,6 +24,7 @@
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
+#include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
@@ -55,12 +56,12 @@ BandMathImageFilterX<TImage>
   adhocStruct ahcX;
   ahcX.name = "idxX";
   ahcX.type = 0;
-  m_VAllowedVarName.push_back(ahcX);
+  m_VAllowedVarNameAuto.push_back(ahcX);
 
   adhocStruct ahcY;
   ahcY.name = "idxY";
   ahcY.type = 1;
-  m_VAllowedVarName.push_back(ahcY);
+  m_VAllowedVarNameAuto.push_back(ahcY);
 
   //this->SetNumberOfThreads(1);
 
@@ -113,7 +114,7 @@ void BandMathImageFilterX<TImage>
   ahcPhyX.name = sstmPhyX.str();
   ahcPhyX.type = 2;
   ahcPhyX.info[0] = idx; // Input image #ID
-  m_VAllowedVarName.push_back(ahcPhyX);
+  m_VAllowedVarNameAuto.push_back(ahcPhyX);
 
   std::stringstream sstmPhyY;
   adhocStruct ahcPhyY;
@@ -121,7 +122,7 @@ void BandMathImageFilterX<TImage>
   ahcPhyY.name = sstmPhyY.str();
   ahcPhyY.type = 3;
   ahcPhyY.info[0] = idx; // Input image #ID
-  m_VAllowedVarName.push_back(ahcPhyY);
+  m_VAllowedVarNameAuto.push_back(ahcPhyY);
 
   //imi
   std::stringstream sstm;
@@ -130,7 +131,7 @@ void BandMathImageFilterX<TImage>
   ahc.name = sstm.str();
   ahc.type = 4;
   ahc.info[0] = idx; // Input image #ID
-  m_VAllowedVarName.push_back(ahc);
+  m_VAllowedVarNameAuto.push_back(ahc);
 
   //imibj
   for (int j=0; j<image->GetNumberOfComponentsPerPixel(); j++)
@@ -142,25 +143,25 @@ void BandMathImageFilterX<TImage>
     ahc.type = 5;
     ahc.info[0] = idx; // Input image #ID
     ahc.info[1] = j; // Band #ID
-    m_VAllowedVarName.push_back(ahc);
+    m_VAllowedVarNameAuto.push_back(ahc);
   }
 
   //imibjNkxp
-  int size=0;
+  int size=10;
   for (int j=0; j<image->GetNumberOfComponentsPerPixel(); j++)
-    for(int k=1; k<=size; k++)
-      for(int p=1; p<=size; p++)
+    for(int x=0; x<=size; x++)
+      for(int y=0; y<=size; y++)
       {
         std::stringstream sstm;
         adhocStruct ahc;
-        sstm << varName << "b" << (j+1) << "N" << k << "x" << p;
+        sstm << varName << "b" << (j+1) << "N" << 2*x+1 << "x" << 2*y+1;
         ahc.name = sstm.str();
         ahc.type = 6;
         ahc.info[0] = idx; // Input image #ID
-        ahc.info[1] = j; // Band #ID
-        ahc.info[2] = k;
-        ahc.info[3] = p;
-        m_VAllowedVarName.push_back(ahc);
+        ahc.info[1] = j;   // Band #ID
+        ahc.info[2] = 2*x+1;  // Size x direction (matrix convention = cols)
+        ahc.info[3] = 2*y+1;  // Size y direction (matrix convention = rows)
+        m_VAllowedVarNameAuto.push_back(ahc);
       }
 
 }
@@ -185,11 +186,74 @@ void BandMathImageFilterX<TImage>
 }
 
 template< typename TImage >
+void BandMathImageFilterX<TImage>
+::SetMatrix(const std::string& name, const std::string& definition)
+{
+  if (name.empty())
+    itkExceptionMacro(<< "Please, set a name for your matrix/vector." << std::endl);
+
+  if (definition.empty())
+    itkExceptionMacro(<< "Please, set the definition of your matrix/vector." << std::endl);
+
+  if ( (definition.find("{") != 0) || (definition.find("}")) != definition.size()-1 )
+    itkExceptionMacro(<< "Definition of a matrix must begin with { and end with } characters." << std::endl);
+
+  //Get rid of { and } characters
+  std::string def;
+  for(int i=1; i<definition.size()-1; ++i)
+    def.push_back(definition[i]);
+
+
+  std::vector< std::vector<double> > mat;
+  std::istringstream iss( def ); 
+  std::string rows;
+  while (std::getline( iss, rows, ';' ) )
+  {
+      mat.push_back(std::vector<double>(0));
+      std::istringstream iss2( rows );
+      std::string elmt;
+        while (std::getline( iss2, elmt, ',' ) )
+        {
+            std::istringstream iss3( elmt );
+            double val;
+            iss3 >> val;
+            //std::cout << val << std::endl;
+            mat.back().push_back(val);
+        }
+  }
+
+  for(int i=0; i<mat.size(); i++)
+  {
+    std::cout << std::endl;
+    for(int j=0; j<mat[i].size(); j++)
+      std::cout << mat[i][j] << " ";
+  }
+  std::cout << std::endl;
+  
+  //Check dimensions of the matrix
+  for (int i=0; i<mat.size()-1; i++)
+    if (mat[i].size() != mat[i+1].size())
+      itkExceptionMacro(<< "Each row must have the same number of cols : " << definition << std::endl);
+  
+
+  std::stringstream sstm;
+  adhocStruct ahc;
+  sstm << name;
+  ahc.name = sstm.str();
+  ahc.type = 7;
+  ahc.info[0] = mat[0].size();  // Size x direction (matrix convention = cols)
+  ahc.info[1] = mat.size();     // Size y direction (matrix convention = rows)
+  m_VAllowedVarNameAddedByUser.push_back(ahc);
+
+}
+
+template< typename TImage >
 std::string BandMathImageFilterX<TImage>
 ::GetExpression(int IDExpression) const
 {
   return m_Expression.at(IDExpression); 
 }
+
 
 template< typename TImage >
 std::vector<std::string>& BandMathImageFilterX<TImage>
@@ -200,7 +264,6 @@ std::vector<std::string>& BandMathImageFilterX<TImage>
     res.push_back(m_VVarName[y].name);
 
   return res;
-
 }
 
 
@@ -226,27 +289,34 @@ void BandMathImageFilterX<TImage>
   // Generate variables names
   m_VVarName.clear();
   m_VNotAllowedVarName.clear();
+  m_VFinalAllowedVarName.clear();
+
+  //TODO
+  for(int i=0; i<m_VAllowedVarNameAddedByUser.size(); i++)
+    m_VFinalAllowedVarName.push_back(m_VAllowedVarNameAddedByUser[i]); 
+  for(int i=0; i<m_VAllowedVarNameAuto.size(); i++)
+    m_VFinalAllowedVarName.push_back(m_VAllowedVarNameAuto[i]);
 
   this->SetNumberOfRequiredOutputs((int) m_Expression.size());
 
-  for(int IDExpression=0; IDExpression<m_Expression.size(); ++IDExpression)
+  for(int IDExpression=0; IDExpression<m_Expression.size(); ++IDExpression) // For each expression
   {
       ParserType::Pointer dummyParser = ParserType::New();
       dummyParser->SetExpr(this->GetExpression(IDExpression));
 
       mup::var_maptype vmap = dummyParser->GetExprVar();
       for (mup::var_maptype::iterator item = vmap.begin(); item!=vmap.end(); ++item)
-      {
+      {//std::cout << "item->first : " << item->first << std::endl;
         bool OK=false; int i=0;
-        while( ( !OK ) && (i<m_VAllowedVarName.size()) )
+        while( ( !OK ) && (i<m_VFinalAllowedVarName.size()) )
         {
-          if (item->first == m_VAllowedVarName[i].name)
+          if (item->first == m_VFinalAllowedVarName[i].name)
             OK=true;
           else
             i++;
         }
         
-        if (OK) {AddVariable(m_VAllowedVarName[i]);} 
+        if (OK) {AddVariable(m_VFinalAllowedVarName[i]); } 
         else {
                 adhocStruct ahc;
                 ahc.name = item->first;  
@@ -254,9 +324,10 @@ void BandMathImageFilterX<TImage>
               }
       }
 
-  }
+  }// At this step, m_VVarName has been built
 
 
+  //Checking formulas consistency
   if (m_VNotAllowedVarName.size()>0)
   {
     std::stringstream sstm;
@@ -267,7 +338,7 @@ void BandMathImageFilterX<TImage>
     itkExceptionMacro(<< sstm.str());
   }
 
-  
+
   // Register variables for each parser (important : one parser per thread)
   m_VParser.clear();
   unsigned int nbThreads = this->GetNumberOfThreads();
@@ -282,10 +353,10 @@ void BandMathImageFilterX<TImage>
 
   m_AImage.resize(nbThreads);
 
-  double initValue = 1.0;
-  for(int i = 0; i < nbThreads; ++i)
+  double initValue = 0.1;
+  for(int i = 0; i < nbThreads; ++i) // For each thread
   {
-    m_AImage[i].resize(m_NbVar);
+    m_AImage[i].resize(m_NbVar); // For each variable
 
     for(int j=0; j < m_NbVar; ++j)
       {
@@ -325,14 +396,23 @@ void BandMathImageFilterX<TImage>
 
         if (m_AImage[i][j].type == 6 ) // neighborhood
         {
-            //TODO
+            m_AImage[i][j].value = ValueType(m_AImage[i][j].info[3],m_AImage[i][j].info[2],initValue);
+        }
+
+        if (m_AImage[i][j].type == 7 ) // TODO
+        {
+            m_AImage[i][j].value = ValueType(m_AImage[i][j].info[1],m_AImage[i][j].info[0],0.0);
+            m_AImage[i][j].value.At(0,0)=0.1;
+            m_AImage[i][j].value.At(0,1)=0.5;
+            m_AImage[i][j].value.At(0,2)=0.1;
+
         }
 
         m_VParser.at(i)->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value)); 
 
-        initValue += 0.01;
-        if (initValue>10.0)
-          initValue=1.0;
+        initValue += 0.001;
+        if (initValue>1.0)
+          initValue=0.1;
       }
   }
 
@@ -366,10 +446,15 @@ void BandMathImageFilterX< TImage >
 
         case 'm':
         mup::matrix_type vect = value.GetArray();
-        m_outputsDimensions.push_back(vect.GetCols());
+        if ( vect.GetRows() == 1 ) //Vector
+          m_outputsDimensions.push_back(vect.GetCols()); 
+        else //Matrix
+          itkExceptionMacro(<< "Result of the evaluation can't be a matrix." << std::endl);
         break;
 
     }
+
+    std::cout << "Type = " << value.GetType() << " dimension = " << m_outputsDimensions.back() << std::endl;
   }
 
 }
@@ -383,7 +468,7 @@ void BandMathImageFilterX< TImage >
   typedef itk::ImageBase< TImage::ImageDimension > ImageBaseType;
   typename ImageBaseType::Pointer outputPtr;
 
-  PrepareParsers(); // addition
+  PrepareParsers();    // addition
   OutputsDimensions(); // addition
 
   // Allocate the output memory
@@ -400,7 +485,7 @@ void BandMathImageFilterX< TImage >
         if ( outputPtr )
         {
           outputPtr->SetBufferedRegion( outputPtr->GetRequestedRegion() );
-          outputPtr->SetNumberOfComponentsPerPixel(m_outputsDimensions[i]);
+          outputPtr->SetNumberOfComponentsPerPixel(m_outputsDimensions[i]); // addition
           outputPtr->Allocate();
         }
 
@@ -485,7 +570,9 @@ void BandMathImageFilterX<TImage>
   ValueType value;
   unsigned int nbInputImages = this->GetNumberOfInputs();
 
-  // Iterators
+  //----------------- --------- -----------------// 
+  //----------------- Iterators -----------------// 
+  //----------------- --------- -----------------// 
   typedef itk::ImageRegionConstIterator<TImage> ImageRegionConstIteratorType;
   std::vector< ImageRegionConstIteratorType > Vit;
   Vit.resize(nbInputImages);
@@ -499,17 +586,36 @@ void BandMathImageFilterX<TImage>
     VoutIt[j] = ImageRegionConstIteratorType (this->GetOutput(j), outputRegionForThread);
     
 
+  //Special case : neighborhoods
+ 
+  //std::vector< adhocStruct > ngbhName;
+  std::vector< itk::ConstNeighborhoodIterator<TImage> > VNit;
+  for(int j=0; j<m_VVarName.size(); ++j)
+    if (m_VVarName[j].type == 6) 
+     {
+        typename itk::ConstNeighborhoodIterator<TImage>::RadiusType radius;
+        radius[0]=(int) ((m_VVarName[j].info[2]-1)/2); // Size x direction (otb convention)
+        radius[1]=(int) ((m_VVarName[j].info[3]-1)/2); // Size y direction (otb convention)
+        VNit.push_back( itk::ConstNeighborhoodIterator<TImage>(radius, this->GetNthInput(m_VVarName[j].info[0]),outputRegionForThread)); // info[0] = Input image ID
+        VNit.back().NeedToUseBoundaryConditionOn();      //TODO
+     }
+
+
   // Support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  // Pixel affectation 
-  for(int j=0; j < nbInputImages; ++j) {Vit[j].GoToBegin();}
-  for(int j=0; j < m_Expression.size(); ++j) {VoutIt[j].GoToBegin();}
-  //outIt.GoToBegin();
+
+  //----------------- --------------------- -----------------// 
+  //----------------- Variable affectations -----------------// 
+  //----------------- --------------------- -----------------// 
+  for(int j=0; j < nbInputImages; ++j)       {  Vit[j].GoToBegin();     }
+  for(int j=0; j < m_Expression.size(); ++j) {  VoutIt[j].GoToBegin();  }
+  for(int j=0; j < VNit.size(); ++j)         {  VNit[j].GoToBegin();    } 
 
   while(!Vit.at(0).IsAtEnd()) // For each pixel
   {
 
+    int ngbhNameIndex=0; int index=0; 
     for(int j=0; j < m_AImage[threadId].size(); ++j) // For each variable, perform a copy
     {
 
@@ -546,14 +652,35 @@ void BandMathImageFilterX<TImage>
 
           case 6 : //neighborhood
             // TODO
+
+          // m_AImage[threadId][j].info[1] : Band #ID
+          if (m_AImage[threadId][j].info[2]*m_AImage[threadId][j].info[3] != VNit[ngbhNameIndex].Size() )
+            itkExceptionMacro(<< "Size of muparserx variable is different from its related otb neighborhood iterator")
+
+          for(int cols=0; cols<m_AImage[threadId][j].info[2]; ++cols)
+            for(int rows=0; rows<m_AImage[threadId][j].info[3]; ++rows)
+              {
+                m_AImage[threadId][j].value.At(rows,cols) = VNit[ngbhNameIndex].GetPixel(index)[m_AImage[threadId][j].info[1]];
+                index++;
+              }
+
+          ngbhNameIndex++;
+          break;
+
+          case 7 :
+          //Nothing to do
           break;
 
           default :
             itkExceptionMacro(<< "Type of the variable is unknown");
           break;
         }
-    }
+    }//End while
 
+
+  //----------------- ----------- -----------------// 
+  //----------------- Evaluations -----------------// 
+  //----------------- ----------- -----------------// 
   for(int IDExpression=0; IDExpression<m_Expression.size(); ++IDExpression)
   {
 
@@ -579,18 +706,22 @@ void BandMathImageFilterX<TImage>
             break;
 
             case 'c':
-            itkExceptionMacro(<< "Complex numbers not supported." << std::endl);
+            itkExceptionMacro(<< "Complex numbers are not supported." << std::endl);
             break;
 
             case 'm':
             mup::matrix_type vect = value.GetArray();
-            for(int p=0; p<vect.GetCols(); ++p)
-              VoutIt[IDExpression].Get()[p] = vect.At(0,p); 
-            break;
 
+            if ( vect.GetRows() == 1 ) //Vector
+              for(int p=0; p<vect.GetCols(); ++p)
+                VoutIt[IDExpression].Get()[p] = vect.At(0,p).GetFloat(); 
+            else //Matrix
+              itkExceptionMacro(<< "Result of the evaluation can't be a matrix." << std::endl);
+            break;
         }
 
-
+ 
+        //----------------- Pixel affectations -----------------// 
         for(int p=0; p<VoutIt[IDExpression].Get().GetSize(); ++p)
         {
             // Case value is equal to -inf or inferior to the minimum value
@@ -611,9 +742,10 @@ void BandMathImageFilterX<TImage>
 
     }
 
-    for(int j=0; j < nbInputImages; ++j) {++Vit[j];}
-    for(int j=0; j < m_Expression.size(); ++j) {++VoutIt[j];}
-    
+    for(int j=0; j < nbInputImages; ++j)        {   ++Vit[j];    }
+    for(int j=0; j < m_Expression.size(); ++j)  {   ++VoutIt[j]; }
+    for(int j=0; j < VNit.size(); ++j)      {   ++VNit[j];   }    
+
     progress.CompletedPixel();
   }
 

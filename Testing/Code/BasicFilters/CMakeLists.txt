@@ -2117,21 +2117,23 @@ add_test(bfTvImageAndVectorImageOperationFilterTest ${BASICFILTERS_TESTS12}
 add_test(bfTuBandMathImageFilter ${BASICFILTERS_TESTS13}
   otbBandMathImageFilterNew)
 
-add_test(bfTuBandMathImageFilterX ${BASICFILTERS_TESTS13}
-  otbBandMathImageFilterXNew)
-
 add_test(bfTvBandMathImageFilter ${BASICFILTERS_TESTS13}
   otbBandMathImageFilter)
-
-add_test(bfTvBandMathImageFilterX ${BASICFILTERS_TESTS13}
-  otbBandMathImageFilterX)
-
 
 add_test(bfTvBandMathImageFilterWithIdx ${BASICFILTERS_TESTS13}
   otbBandMathImageFilterWithIdx
   ${TEMP}/bfTvBandMathImageFilterWithIdx1.tif
   ${TEMP}/bfTvBandMathImageFilterWithIdx2.tif
 )
+
+add_test(bfTuBandMathImageFilterXNew ${BASICFILTERS_TESTS13}
+  otbBandMathImageFilterXNew)
+
+add_test(bfTvBandMathImageFilterX ${BASICFILTERS_TESTS13}
+  otbBandMathImageFilterX)
+
+add_test(bfTvotbBandMathImageFilterXConv ${BASICFILTERS_TESTS13}
+  otbBandMathImageFilterXConv)
 
 add_test(bfTvBandMathImageFilterXWithIdx ${BASICFILTERS_TESTS13}
   otbBandMathImageFilterXWithIdx

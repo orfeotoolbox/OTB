@@ -112,6 +112,9 @@ public:
   /** Set the expression to be parsed */
   void SetExpression(const std::string& expression);
 
+  /** Set a matrix (or a vector) */
+  void SetMatrix(const std::string& name, const std::string& definition);
+
   /** Return the expression to be parsed */
   std::string GetExpression(int) const;
 
@@ -158,7 +161,9 @@ private :
   std::vector<ParserType::Pointer>          m_VParser;
   std::vector< std::vector<adhocStruct2> >  m_AImage;
   std::vector< adhocStruct >                m_VVarName;
-  std::vector< adhocStruct >                m_VAllowedVarName;
+  std::vector< adhocStruct >                m_VAllowedVarNameAuto;
+  std::vector< adhocStruct >                m_VAllowedVarNameAddedByUser;
+    std::vector< adhocStruct >              m_VFinalAllowedVarName; // m_VAllowedVarNameAuto + m_VAllowedVarNameAddedByUser
   std::vector< adhocStruct >                m_VNotAllowedVarName;
   unsigned int                             m_NbVar;
   std::vector< int >                        m_outputsDimensions;

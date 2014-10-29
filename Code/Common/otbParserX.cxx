@@ -58,7 +58,7 @@ public:
   virtual void InitFun()
   {
     m_MuParserX.DefineFun(new ndvi);
-    //m_MuParserX.DefineFun(new conv);
+    m_MuParserX.DefineFun(new conv);
     m_MuParserX.DefineFun(new bands);
     m_MuParserX.DefineFun(new vcos);
     m_MuParserX.DefineFun(new vsin);

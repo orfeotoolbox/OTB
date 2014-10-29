@@ -199,6 +199,154 @@ int otbBandMathImageFilterX( int itkNotUsed(argc), char* itkNotUsed(argv) [])
 }
 
 
+int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) [])
+{
+
+  typedef otb::VectorImage<double, 2>              ImageType;
+  typedef ImageType::PixelType                      PixelType;
+  typedef otb::BandMathImageFilterX<ImageType>      FilterType;
+
+  unsigned int i;
+  const unsigned int N = 100, D1=3, D2=1, D3=1;
+  unsigned int FAIL_FLAG = 0;
+
+  ImageType::SizeType size;
+  size.Fill(N);
+  ImageType::IndexType index;
+  index.Fill(0);
+  ImageType::RegionType region;
+  region.SetSize(size);
+  region.SetIndex(index);
+
+  ImageType::Pointer image1 = ImageType::New();
+  ImageType::Pointer image2 = ImageType::New();
+  ImageType::Pointer image3 = ImageType::New();
+
+  image1->SetLargestPossibleRegion( region );
+  image1->SetBufferedRegion( region );
+  image1->SetRequestedRegion( region );
+  image1->SetNumberOfComponentsPerPixel(D1);
+  image1->Allocate();
+
+  image2->SetLargestPossibleRegion( region );
+  image2->SetBufferedRegion( region );
+  image2->SetRequestedRegion( region );
+  image2->SetNumberOfComponentsPerPixel(D2);
+  image2->Allocate();
+
+  image3->SetLargestPossibleRegion( region );
+  image3->SetBufferedRegion( region );
+  image3->SetRequestedRegion( region );
+  image3->SetNumberOfComponentsPerPixel(D3);
+  image3->Allocate();
+
+  typedef itk::ConstNeighborhoodIterator<ImageType> IteratorType;
+  typename IteratorType::RadiusType radius;
+  radius[0]=1; // Size x direction
+  radius[1]=0; // Size y direction
+
+  IteratorType it1(radius, image1, region);
+  IteratorType it2(radius, image2, region);
+  IteratorType it3(radius, image3, region);
+
+  for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3)
+  {
+    ImageType::IndexType i1 = it1.GetIndex();
+    ImageType::IndexType i2 = it2.GetIndex();
+    ImageType::IndexType i3 = it3.GetIndex();
+
+    it1.GetCenterPixel()[0] = i1[0] + i1[1] -50; it1.GetCenterPixel()[1] = i1[0] * i1[1] -50; it1.GetCenterPixel()[2] = i1[0] / (i1[1]+1)+5;
+    it2.GetCenterPixel()[0] = i2[0] * i2[1];
+    it3.GetCenterPixel()[0] = i3[0] + i3[1] * i3[1];
+
+  }
+
+
+  FilterType::Pointer         filter       = FilterType::New();
+  std::cout << "Number Of Threads  :  " << filter->GetNumberOfThreads() << std::endl;
+
+
+  filter->SetNthInput(0, image1);
+  filter->SetNthInput(1, image2);
+  filter->SetNthInput(2, image3, "canal3");
+  filter->SetMatrix("kernel1N3x1","{0.1 , 0.5 , 0.1}"); 
+  filter->SetExpression("conv(kernel1N3x1,im1b1N3x1)"); 
+  filter->Update();
+
+  if (filter->GetNumberOfOutputs() != 1)
+    itkGenericExceptionMacro(  <<std::endl << "Error = wrong number of outputs ");
+  
+
+  ImageType::Pointer output1 = filter->GetOutput(0);
+
+  if (output1->GetNumberOfComponentsPerPixel() != 1)
+    itkGenericExceptionMacro(  <<std::endl << "Error = wrong number of components per pixel ");
+
+  std::cout << "\n---  Standard Use\n";
+  std::cout << "Parsed Expression :   " << filter->GetExpression(0) << std::endl;
+
+
+
+  //Sub-test 1
+  IteratorType itoutput1(radius, output1, region);
+
+  for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(), itoutput1.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3, ++itoutput1)
+    {
+    ImageType::IndexType i1 = it1.GetIndex();
+    ImageType::IndexType i2 = it2.GetIndex();
+    ImageType::IndexType i3 = it3.GetIndex();
+    PixelType px1(D1),px2(D2),px3(D3);
+
+    px1[0]=0; float coefs[3]={0.1,0.5,0.1};
+    for(int i=0; i<it1.Size(); ++i)
+        px1[0] += coefs[i]*it1.GetPixel(i)[0]; 
+    //px1[1] = ( i1[0] * i1[1] -50 ); px1[2] = ( i1[0] / (i1[1]+1)+5 );
+    
+
+    px2[0] = ( i2[0] * i2[1] );
+    px3[0] = ( i3[0] + i3[1] * i3[1] );
+
+    double result1 = itoutput1.GetCenterPixel()[0], result2 = itoutput1.GetCenterPixel()[1], result3 = itoutput1.GetCenterPixel()[2];
+    double error1,error2,error3; 
+
+    double expected1 = px1[0];
+    /*double expected2 = px1[1];
+    double expected3 = px1[2];   */
+
+    /*std::cout << "Pixel_1 =  " << it1.Get()[0] << "     Pixel_2 =  " << it2.Get()[0] << "     Pixel_3 =  " << it3.Get()[0]
+        << "     Result =  " << itoutput1.Get()[0] << "     Expected =  " << expected1 << std::endl;*/
+    
+
+    error1 = (result1 - expected1) * (result1 - expected1) / (result1 + expected1);
+    /*error2 = (result2 - expected2) * (result2 - expected2) / (result2 + expected2);
+    error3 = (result3 - expected3) * (result3 - expected3) / (result3 + expected3);*/
+
+    if ( ( error1 > 1E-9 ) /*|| ( error2 > 1E-9 ) || ( error3 > 1E-9 )*/)
+      {
+      itkGenericExceptionMacro(  <<std::endl
+<< "Error = " << error1 << "  > 1E-9     -> TEST FAILLED" << std::endl
+         << "Pixel_[-1]_band1 =  "       << it1.GetPixel(0)[0]
+         << "     Pixel_[0]_band1 =  "  << it1.GetPixel(1)[0]
+         << "     Pixel_[1]_band1 =  "  << it1.GetPixel(2)[0]
+         << "     Result =  "   << result1
+         << "     Expected =  " << expected1     << std::endl); 
+/*<< "Error = " << error2 << "  > 1E-9     -> TEST FAILLED" << std::endl
+         << "Pixel_[-1]_band2 =  "       << it1.GetPixel(0)[1]
+         << "     Pixel_[0]_band2 =  "  << it1.GetPixel(1)[1]
+         << "     Pixel_[1]_band2 =  "  << it1.GetPixel(2)[1]
+         << "     Result =  "   << result2
+         << "     Expected =  " << expected2     << std::endl
+<< "Error = " << error3 << "  > 1E-9     -> TEST FAILLED" << std::endl
+         << "Pixel_[-1]_band3 =  "       << it1.GetPixel(0)[2]
+         << "     Pixel_[0]_band3 =  "  << it1.GetPixel(1)[2]
+         << "     Pixel_[1]_band3 =  "  << it1.GetPixel(2)[2]
+         << "     Result =  "   << result3
+         << "     Expected =  " << expected3     << std::endl);*/
+      }
+  }
+
+  return EXIT_SUCCESS;
+}
 
 
 int otbBandMathImageFilterXWithIdx( int itkNotUsed(argc), char* argv[])
