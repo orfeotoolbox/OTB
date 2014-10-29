@@ -17,7 +17,6 @@
 =========================================================================*/
 
 #include "otbMetaDataKey.h"
-#include "gdal.h"
 
 #define NBKEYS  23
 
