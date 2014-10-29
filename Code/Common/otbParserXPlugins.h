@@ -35,15 +35,17 @@ public:
     virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
 
+      assert(a_iArgc==2);
+
       // Get the argument from the argument input vector
       mup::matrix_type a = a_pArg[0]->GetArray();      
       mup::matrix_type b = a_pArg[1]->GetArray();
 
 
-      int nbrows = b.GetRows();
+      int nbrows = b.GetRows(); assert(nbrows==1); // Bands selection is done by a row vector
       int nbcols = b.GetCols();
 
-      mup::matrix_type res(nbrows,nbcols,0.);
+      mup::matrix_type res(1,nbcols,0.);
 
       for (int k=0; k<nbcols; ++k)
         res.At(0,k)=a.At(b.At(0,k).GetInteger()-1); //-1 : to make first band have rank #1 (and not 0)
@@ -80,9 +82,7 @@ public:
       int nbrows = m1.GetRows();
       int nbcols = m1.GetCols();
 
-      //matrix_type m3(nbrows,nbcols,0);
-
-      mup::matrix_type res(a_iArgc-1,1,0);
+      mup::matrix_type res(1,a_iArgc-1,0);
 
       for (int k=1; k<a_iArgc; ++k)
       {
@@ -91,12 +91,22 @@ public:
 
         mup::matrix_type m2 = a_pArg[k]->GetArray();
 
+        if ( (m2.GetRows() != nbrows) || (m2.GetCols() != nbcols) )
+        {
+            mup::ErrorContext err;
+            err.Errc = mup::ecMATRIX_DIMENSION_MISMATCH;
+            err.Arg = a_iArgc;
+            err.Ident = GetIdent();
+            throw mup::ParserError(err);
+        }
+
+
         for (int i=0; i<nbrows; i++)
           for (int j=0; j<nbcols; j++)
             sum += m1.At(i,j).GetFloat() * m2.At(i,j).GetFloat();
 
         
-        res.At(k-1,0)=sum;  
+        res.At(0,k-1)=sum;  
       }
 
 
@@ -116,11 +126,10 @@ public:
   };
 
 
-
-class MatDiv : public mup::IOprtBin    
+class ElementWiseDivision : public mup::IOprtBin    
   {
   public:
-    MatDiv():IOprtBin(_T("div"), (int)(mup::prMUL_DIV), mup::oaLEFT) 
+    ElementWiseDivision():IOprtBin(_T("div"), (int)(mup::prMUL_DIV), mup::oaLEFT) 
     {}
 
     virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
@@ -128,11 +137,6 @@ class MatDiv : public mup::IOprtBin
       const mup::matrix_type a = a_pArg[0]->GetArray();
       const mup::matrix_type b = a_pArg[1]->GetArray();
 
-      /*if (!arg1->IsNonComplexScalar())
-        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1)); 
-
-      if (!arg2->IsNonComplexScalar())
-        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));*/ 
       
       int nbrows = a.GetRows();
       int nbcols = a.GetCols();
@@ -150,33 +154,27 @@ class MatDiv : public mup::IOprtBin
 
     virtual const mup::char_type* GetDesc() const 
     { 
-      return _T("x ./ y - Division for noncomplex vectors & matrices"); 
+      return _T("x div y - Element-wise division (vectors / matrices)"); 
     }
   
     virtual mup::IToken* Clone() const
     { 
-      return new MatDiv(*this); 
+      return new ElementWiseDivision(*this); 
     }
   };
 
 
 
-class MatConv : public mup::IOprtBin    
+class ElementWiseMultiplication : public mup::IOprtBin    
   {
   public:
-    MatConv():IOprtBin(_T("mult"), (int)(mup::prMUL_DIV), mup::oaLEFT) 
+    ElementWiseMultiplication():IOprtBin(_T("mult"), (int)(mup::prMUL_DIV), mup::oaLEFT) 
     {}
 
     virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
     {
       const mup::matrix_type a = a_pArg[0]->GetArray();
       const mup::matrix_type b = a_pArg[1]->GetArray();
-
-      /*if (!arg1->IsNonComplexScalar())
-        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1)); 
-
-      if (!arg2->IsNonComplexScalar())
-        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));*/ 
       
       int nbrows = a.GetRows();
       int nbcols = a.GetCols();
@@ -193,12 +191,12 @@ class MatConv : public mup::IOprtBin
 
     virtual const mup::char_type* GetDesc() const 
     { 
-      return _T("x mult y - Convolution for noncomplex vectors & matrices"); 
+      return _T("x mult y - Element wise multiplication (vectors / matrices)"); 
     }
   
     virtual mup::IToken* Clone() const
     { 
-      return new MatConv(*this); 
+      return new ElementWiseMultiplication(*this); 
     }
   };
 

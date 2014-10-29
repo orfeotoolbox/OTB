@@ -139,16 +139,10 @@ private :
 
   typedef struct {
       std::string name;
-      int         type;
-      int         info[5]; 
-  } adhocStruct;
-
-  typedef struct {
-      std::string name;
       ValueType   value;
       int         type;
       int         info[5]; 
-  } adhocStruct2;
+  } adhocStruct;
 
   BandMathImageFilterX(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -159,11 +153,11 @@ private :
 
   std::vector<std::string>                  m_Expression;
   std::vector<ParserType::Pointer>          m_VParser;
-  std::vector< std::vector<adhocStruct2> >  m_AImage;
+  std::vector< std::vector<adhocStruct> >   m_AImage;
   std::vector< adhocStruct >                m_VVarName;
   std::vector< adhocStruct >                m_VAllowedVarNameAuto;
   std::vector< adhocStruct >                m_VAllowedVarNameAddedByUser;
-    std::vector< adhocStruct >              m_VFinalAllowedVarName; // m_VAllowedVarNameAuto + m_VAllowedVarNameAddedByUser
+  std::vector< adhocStruct >                m_VFinalAllowedVarName;   // m_VFinalAllowedVarName = m_VAllowedVarNameAuto + m_VAllowedVarNameAddedByUser
   std::vector< adhocStruct >                m_VNotAllowedVarName;
   unsigned int                             m_NbVar;
   std::vector< int >                        m_outputsDimensions;

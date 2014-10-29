@@ -81,7 +81,7 @@ void BandMathImageFilterX<TImage>
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Expression: "      << m_Expression[0]                  << std::endl;
+  os << indent << "Expression: "      << m_Expression[0]                  << std::endl; //TODO
   os << indent << "Computed values follow:"                            << std::endl;
   os << indent << "UnderflowCount: "  << m_UnderflowCount              << std::endl;
   os << indent << "OverflowCount: "   << m_OverflowCount               << std::endl;
@@ -217,19 +217,11 @@ void BandMathImageFilterX<TImage>
             std::istringstream iss3( elmt );
             double val;
             iss3 >> val;
-            //std::cout << val << std::endl;
             mat.back().push_back(val);
         }
   }
-
-  for(int i=0; i<mat.size(); i++)
-  {
-    std::cout << std::endl;
-    for(int j=0; j<mat[i].size(); j++)
-      std::cout << mat[i][j] << " ";
-  }
-  std::cout << std::endl;
   
+
   //Check dimensions of the matrix
   for (int i=0; i<mat.size()-1; i++)
     if (mat[i].size() != mat[i+1].size())
@@ -243,6 +235,12 @@ void BandMathImageFilterX<TImage>
   ahc.type = 7;
   ahc.info[0] = mat[0].size();  // Size x direction (matrix convention = cols)
   ahc.info[1] = mat.size();     // Size y direction (matrix convention = rows)
+
+  ahc.value = ValueType(ahc.info[1],ahc.info[0],0.0);
+  for(int i=0; i<mat.size(); i++)
+    for(int j=0; j<mat[i].size(); j++)
+      ahc.value.At(i,j)=mat[i][j];
+ 
   m_VAllowedVarNameAddedByUser.push_back(ahc);
 
 }
@@ -291,7 +289,7 @@ void BandMathImageFilterX<TImage>
   m_VNotAllowedVarName.clear();
   m_VFinalAllowedVarName.clear();
 
-  //TODO
+  // m_VFinalAllowedVarName = m_VAllowedVarNameAuto + m_VAllowedVarNameAddedByUser
   for(int i=0; i<m_VAllowedVarNameAddedByUser.size(); i++)
     m_VFinalAllowedVarName.push_back(m_VAllowedVarNameAddedByUser[i]); 
   for(int i=0; i<m_VAllowedVarNameAuto.size(); i++)
@@ -306,7 +304,7 @@ void BandMathImageFilterX<TImage>
 
       mup::var_maptype vmap = dummyParser->GetExprVar();
       for (mup::var_maptype::iterator item = vmap.begin(); item!=vmap.end(); ++item)
-      {//std::cout << "item->first : " << item->first << std::endl;
+      {
         bool OK=false; int i=0;
         while( ( !OK ) && (i<m_VFinalAllowedVarName.size()) )
         {
@@ -399,13 +397,13 @@ void BandMathImageFilterX<TImage>
             m_AImage[i][j].value = ValueType(m_AImage[i][j].info[3],m_AImage[i][j].info[2],initValue);
         }
 
-        if (m_AImage[i][j].type == 7 ) // TODO
+        if (m_AImage[i][j].type == 7 ) // user defined variables
         {
-            m_AImage[i][j].value = ValueType(m_AImage[i][j].info[1],m_AImage[i][j].info[0],0.0);
-            m_AImage[i][j].value.At(0,0)=0.1;
-            m_AImage[i][j].value.At(0,1)=0.5;
-            m_AImage[i][j].value.At(0,2)=0.1;
 
+          for(int t=0; t<m_VAllowedVarNameAddedByUser.size(); t++)
+            if (m_VAllowedVarNameAddedByUser[t].name.compare(m_AImage[i][j].name) == 0)
+              m_AImage[i][j].value = m_VAllowedVarNameAddedByUser[t].value;
+              
         }
 
         m_VParser.at(i)->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value)); 
@@ -454,7 +452,7 @@ void BandMathImageFilterX< TImage >
 
     }
 
-    std::cout << "Type = " << value.GetType() << " dimension = " << m_outputsDimensions.back() << std::endl;
+    //std::cout << "Type = " << value.GetType() << " dimension = " << m_outputsDimensions.back() << std::endl;
   }
 
 }
@@ -587,8 +585,6 @@ void BandMathImageFilterX<TImage>
     
 
   //Special case : neighborhoods
- 
-  //std::vector< adhocStruct > ngbhName;
   std::vector< itk::ConstNeighborhoodIterator<TImage> > VNit;
   for(int j=0; j<m_VVarName.size(); ++j)
     if (m_VVarName[j].type == 6) 
@@ -597,7 +593,7 @@ void BandMathImageFilterX<TImage>
         radius[0]=(int) ((m_VVarName[j].info[2]-1)/2); // Size x direction (otb convention)
         radius[1]=(int) ((m_VVarName[j].info[3]-1)/2); // Size y direction (otb convention)
         VNit.push_back( itk::ConstNeighborhoodIterator<TImage>(radius, this->GetNthInput(m_VVarName[j].info[0]),outputRegionForThread)); // info[0] = Input image ID
-        VNit.back().NeedToUseBoundaryConditionOn();      //TODO
+        VNit.back().NeedToUseBoundaryConditionOn();      //TODO : better to use ImageBoundaryFacesCalculator
      }
 
 
@@ -615,7 +611,7 @@ void BandMathImageFilterX<TImage>
   while(!Vit.at(0).IsAtEnd()) // For each pixel
   {
 
-    int ngbhNameIndex=0; int index=0; 
+    int ngbhNameIndex=0; int index; 
     for(int j=0; j < m_AImage[threadId].size(); ++j) // For each variable, perform a copy
     {
 
@@ -651,14 +647,14 @@ void BandMathImageFilterX<TImage>
           break;
 
           case 6 : //neighborhood
-            // TODO
-
+    
           // m_AImage[threadId][j].info[1] : Band #ID
           if (m_AImage[threadId][j].info[2]*m_AImage[threadId][j].info[3] != VNit[ngbhNameIndex].Size() )
             itkExceptionMacro(<< "Size of muparserx variable is different from its related otb neighborhood iterator")
 
-          for(int cols=0; cols<m_AImage[threadId][j].info[2]; ++cols)
-            for(int rows=0; rows<m_AImage[threadId][j].info[3]; ++rows)
+          index=0;
+          for(int rows=0; rows<m_AImage[threadId][j].info[3]; ++rows)
+            for(int cols=0; cols<m_AImage[threadId][j].info[2]; ++cols)
               {
                 m_AImage[threadId][j].value.At(rows,cols) = VNit[ngbhNameIndex].GetPixel(index)[m_AImage[threadId][j].info[1]];
                 index++;
@@ -686,14 +682,7 @@ void BandMathImageFilterX<TImage>
 
         m_VParser[threadId]->SetExpr(m_Expression[IDExpression]);
 
-        try
-        {
-          value = m_VParser[threadId]->Eval();
-        }
-        catch(itk::ExceptionObject& err)
-        {
-          itkExceptionMacro(<< err);
-        }
+        value = m_VParser[threadId]->Eval();
 
         switch (value.GetType())
         {   //ValueType
@@ -744,7 +733,7 @@ void BandMathImageFilterX<TImage>
 
     for(int j=0; j < nbInputImages; ++j)        {   ++Vit[j];    }
     for(int j=0; j < m_Expression.size(); ++j)  {   ++VoutIt[j]; }
-    for(int j=0; j < VNit.size(); ++j)      {   ++VNit[j];   }    
+    for(int j=0; j < VNit.size(); ++j)          {   ++VNit[j];   }    
 
     progress.CompletedPixel();
   }

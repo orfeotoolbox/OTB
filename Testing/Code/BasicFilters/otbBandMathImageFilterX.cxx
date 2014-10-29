@@ -179,8 +179,6 @@ int otbBandMathImageFilterX( int itkNotUsed(argc), char* itkNotUsed(argv) [])
   IteratorType itoutput2(output2, region);
   std::cout << "\n--- Edge Effect Handling\n";
   std::cout << "- +/-inf section\n";
-  //filter->SetExpression("im1b1 / im2b1");
-  //filter->Update();
 
   std::cout << "- nan section\n";
   it1.GoToBegin(); it2.GoToBegin(); itoutput2.GoToBegin();
@@ -243,7 +241,7 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) []
   typedef itk::ConstNeighborhoodIterator<ImageType> IteratorType;
   typename IteratorType::RadiusType radius;
   radius[0]=1; // Size x direction
-  radius[1]=0; // Size y direction
+  radius[1]=2; // Size y direction
 
   IteratorType it1(radius, image1, region);
   IteratorType it2(radius, image2, region);
@@ -266,21 +264,21 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) []
   std::cout << "Number Of Threads  :  " << filter->GetNumberOfThreads() << std::endl;
 
 
-  filter->SetNthInput(0, image1);
+  filter->SetNthInput(0, image1,"imageA");
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3, "canal3");
-  filter->SetMatrix("kernel1N3x1","{0.1 , 0.5 , 0.1}"); 
-  filter->SetExpression("conv(kernel1N3x1,im1b1N3x1)"); 
+  filter->SetMatrix("kernel1","{ 0.1 , 0.2 , 0.3 ; 0.4 , 0.5 , 0.6 ; 0.7 , 0.8 , 0.9 ; 1.0 , 1.1 , 1.2 ; 1.3 , 1.4 , 1.5 }"); 
+  filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5)"); 
   filter->Update();
 
   if (filter->GetNumberOfOutputs() != 1)
-    itkGenericExceptionMacro(  <<std::endl << "Error = wrong number of outputs ");
+    itkGenericExceptionMacro(<< "Wrong number of outputs.");
   
 
   ImageType::Pointer output1 = filter->GetOutput(0);
 
-  if (output1->GetNumberOfComponentsPerPixel() != 1)
-    itkGenericExceptionMacro(  <<std::endl << "Error = wrong number of components per pixel ");
+  if (output1->GetNumberOfComponentsPerPixel() != 2)
+    itkGenericExceptionMacro(<< "Wrong number of components per pixel.");
 
   std::cout << "\n---  Standard Use\n";
   std::cout << "Parsed Expression :   " << filter->GetExpression(0) << std::endl;
@@ -295,53 +293,38 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) []
     ImageType::IndexType i1 = it1.GetIndex();
     ImageType::IndexType i2 = it2.GetIndex();
     ImageType::IndexType i3 = it3.GetIndex();
-    PixelType px1(D1),px2(D2),px3(D3);
+    PixelType px1(output1->GetNumberOfComponentsPerPixel());
 
-    px1[0]=0; float coefs[3]={0.1,0.5,0.1};
+    float coefs[15] = { 0.1 , 0.2 , 0.3 , 0.4 , 0.5 , 0.6 , 0.7 , 0.8 , 0.9 , 1.0 , 1.1 , 1.2 , 1.3 , 1.4 , 1.5};
+
+    px1[0]=0; 
     for(int i=0; i<it1.Size(); ++i)
         px1[0] += coefs[i]*it1.GetPixel(i)[0]; 
-    //px1[1] = ( i1[0] * i1[1] -50 ); px1[2] = ( i1[0] / (i1[1]+1)+5 );
-    
+      
 
-    px2[0] = ( i2[0] * i2[1] );
-    px3[0] = ( i3[0] + i3[1] * i3[1] );
+    px1[1]=0; 
+    for(int i=0; i<it1.Size(); ++i)
+        px1[1] += coefs[i]*it1.GetPixel(i)[1];   
 
-    double result1 = itoutput1.GetCenterPixel()[0], result2 = itoutput1.GetCenterPixel()[1], result3 = itoutput1.GetCenterPixel()[2];
-    double error1,error2,error3; 
 
-    double expected1 = px1[0];
-    /*double expected2 = px1[1];
-    double expected3 = px1[2];   */
 
-    /*std::cout << "Pixel_1 =  " << it1.Get()[0] << "     Pixel_2 =  " << it2.Get()[0] << "     Pixel_3 =  " << it3.Get()[0]
-        << "     Result =  " << itoutput1.Get()[0] << "     Expected =  " << expected1 << std::endl;*/
-    
+    double result1 = itoutput1.GetCenterPixel()[0], result2 = itoutput1.GetCenterPixel()[1];
+    double error1,error2; 
+
+    double expected1 = px1[0], expected2 = px1[1];
 
     error1 = (result1 - expected1) * (result1 - expected1) / (result1 + expected1);
-    /*error2 = (result2 - expected2) * (result2 - expected2) / (result2 + expected2);
-    error3 = (result3 - expected3) * (result3 - expected3) / (result3 + expected3);*/
+    error2 = (result2 - expected2) * (result2 - expected2) / (result2 + expected2);
 
-    if ( ( error1 > 1E-9 ) /*|| ( error2 > 1E-9 ) || ( error3 > 1E-9 )*/)
-      {
-      itkGenericExceptionMacro(  <<std::endl
-<< "Error = " << error1 << "  > 1E-9     -> TEST FAILLED" << std::endl
-         << "Pixel_[-1]_band1 =  "       << it1.GetPixel(0)[0]
-         << "     Pixel_[0]_band1 =  "  << it1.GetPixel(1)[0]
-         << "     Pixel_[1]_band1 =  "  << it1.GetPixel(2)[0]
-         << "     Result =  "   << result1
-         << "     Expected =  " << expected1     << std::endl); 
-/*<< "Error = " << error2 << "  > 1E-9     -> TEST FAILLED" << std::endl
-         << "Pixel_[-1]_band2 =  "       << it1.GetPixel(0)[1]
-         << "     Pixel_[0]_band2 =  "  << it1.GetPixel(1)[1]
-         << "     Pixel_[1]_band2 =  "  << it1.GetPixel(2)[1]
-         << "     Result =  "   << result2
-         << "     Expected =  " << expected2     << std::endl
-<< "Error = " << error3 << "  > 1E-9     -> TEST FAILLED" << std::endl
-         << "Pixel_[-1]_band3 =  "       << it1.GetPixel(0)[2]
-         << "     Pixel_[0]_band3 =  "  << it1.GetPixel(1)[2]
-         << "     Pixel_[1]_band3 =  "  << it1.GetPixel(2)[2]
-         << "     Result =  "   << result3
-         << "     Expected =  " << expected3     << std::endl);*/
+    if ( ( error1 > 1E-9 ) || ( error2 > 1E-9 ) )
+      {      
+      itkGenericExceptionMacro(  
+         << "Error1 = " << error1 << "  > 1E-9     -> TEST FAILLED" << std::endl
+         << "     Result1 =  "   << result1
+         << "     Expected1 =  " << expected1     << std::endl
+         << "Error2 = " << error2 << "  > 1E-9     -> TEST FAILLED" << std::endl
+         << "     Result2 =  "   << result2
+         << "     Expected2 =  " << expected2     << std::endl); 
       }
   }
 
@@ -432,16 +415,17 @@ int otbBandMathImageFilterXWithIdx( int itkNotUsed(argc), char* argv[])
   filter->SetNthInput(2, image3);
 
   filter->SetExpression("(sqrt(idxX*idxX+idxY*idxY) < 50) ? im1b1 : im2b1");
+  filter->SetExpression("(sqrt(im2PhyX*im2PhyX+im2PhyY*im2PhyY) < 25) ? im2b1 : im3b1");
+
   WriterType::Pointer writer = WriterType::New();
-  writer->SetInput(filter->GetOutput());
+  writer->SetInput(filter->GetOutput(0));
   writer->SetFileName(outfname1);
   writer->Update();
-
-  /*filter->SetExpression("(sqrt(im2PhyX*im2PhyX+im2PhyY*im2PhyY) < 25) ? im2b1 : im3b1");
+  
   WriterType::Pointer writer2 = WriterType::New();
-  writer2->SetInput(filter->GetOutput());
+  writer2->SetInput(filter->GetOutput(1));
   writer2->SetFileName(outfname2);
-  writer2->Update();*/
+  writer2->Update();
 
   return EXIT_SUCCESS;
 }

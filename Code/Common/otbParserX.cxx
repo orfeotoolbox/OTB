@@ -62,8 +62,8 @@ public:
     m_MuParserX.DefineFun(new bands);
     m_MuParserX.DefineFun(new vcos);
     m_MuParserX.DefineFun(new vsin);
-    m_MuParserX.DefineOprt(new MatDiv);
-    m_MuParserX.DefineOprt(new MatConv);
+    m_MuParserX.DefineOprt(new ElementWiseDivision);
+    m_MuParserX.DefineOprt(new ElementWiseMultiplication);
   }
 
   /** Set the expression to be parsed */
