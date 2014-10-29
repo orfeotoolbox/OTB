@@ -18,7 +18,6 @@
 
 #include "otbImageMetadataInterfaceBase.h"
 
-#include "otbImageKeywordlist.h"
 #include "itkMetaDataObject.h"
 #include "itksys/SystemTools.hxx"
 

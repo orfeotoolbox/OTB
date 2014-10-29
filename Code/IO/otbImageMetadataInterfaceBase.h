@@ -20,6 +20,7 @@
 
 #include <string>
 
+#include "otbImageKeywordlist.h"
 #include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
 #include "itkImageBase.h"
@@ -27,8 +28,6 @@
 
 namespace otb
 {
-
-class ImageKeywordlist;
 
 /** \class ImageMetadataInterfaceBase
  *
