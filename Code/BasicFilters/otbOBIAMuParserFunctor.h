@@ -26,7 +26,6 @@
 #include "otbMacro.h"
 
 
-
 namespace otb
 {
 /** \class OBIAMuParserFunctor

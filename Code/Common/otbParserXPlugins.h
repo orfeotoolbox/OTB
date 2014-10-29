@@ -38,7 +38,7 @@ public:
       assert(a_iArgc==2);
 
       // Get the argument from the argument input vector
-      mup::matrix_type a = a_pArg[0]->GetArray();      
+      mup::matrix_type a = a_pArg[0]->GetArray();
       mup::matrix_type b = a_pArg[1]->GetArray();
 
 
@@ -106,7 +106,7 @@ public:
             sum += m1.At(i,j).GetFloat() * m2.At(i,j).GetFloat();
 
         
-        res.At(0,k-1)=sum;  
+        res.At(0,k-1)=sum;
       }
 
 
@@ -126,10 +126,10 @@ public:
   };
 
 
-class ElementWiseDivision : public mup::IOprtBin    
+class ElementWiseDivision : public mup::IOprtBin
   {
   public:
-    ElementWiseDivision():IOprtBin(_T("div"), (int)(mup::prMUL_DIV), mup::oaLEFT) 
+    ElementWiseDivision():IOprtBin(_T("div"), (int)(mup::prMUL_DIV), mup::oaLEFT)
     {}
 
     virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
@@ -149,26 +149,25 @@ class ElementWiseDivision : public mup::IOprtBin
           
 
       // The return value is passed by writing it to the reference ret
-      *ret = res; 
+      *ret = res;
     }
 
-    virtual const mup::char_type* GetDesc() const 
-    { 
-      return _T("x div y - Element-wise division (vectors / matrices)"); 
+    virtual const mup::char_type* GetDesc() const
+    {
+      return _T("x div y - Element-wise division (vectors / matrices)");
     }
   
     virtual mup::IToken* Clone() const
-    { 
-      return new ElementWiseDivision(*this); 
+    {
+      return new ElementWiseDivision(*this);
     }
   };
 
 
-
-class ElementWiseMultiplication : public mup::IOprtBin    
+class ElementWiseMultiplication : public mup::IOprtBin
   {
   public:
-    ElementWiseMultiplication():IOprtBin(_T("mult"), (int)(mup::prMUL_DIV), mup::oaLEFT) 
+    ElementWiseMultiplication():IOprtBin(_T("mult"), (int)(mup::prMUL_DIV), mup::oaLEFT)
     {}
 
     virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
@@ -186,20 +185,19 @@ class ElementWiseMultiplication : public mup::IOprtBin
           res.At(p,k) = a.At(p,k).GetFloat() * b.At(p,k).GetFloat();
         
       // The return value is passed by writing it to the reference ret
-      *ret = res; 
+      *ret = res;
     }
 
-    virtual const mup::char_type* GetDesc() const 
-    { 
-      return _T("x mult y - Element wise multiplication (vectors / matrices)"); 
+    virtual const mup::char_type* GetDesc() const
+    {
+      return _T("x mult y - Element wise multiplication (vectors / matrices)");
     }
   
     virtual mup::IToken* Clone() const
-    { 
-      return new ElementWiseMultiplication(*this); 
+    {
+      return new ElementWiseMultiplication(*this);
     }
   };
-
 
 
 class ndvi : public mup::ICallback
@@ -218,7 +216,7 @@ public:
 
      // The return value is passed by writing it to the reference ret
       if ( vcl_abs(r + niri) < 1E-6 )
-          *ret = 0.;  
+          *ret = 0.;
       else
           *ret = (niri-r)/(niri+r);
     }
@@ -309,7 +307,6 @@ public:
       return new vsin(*this);
     }
   };
-
 
 
 

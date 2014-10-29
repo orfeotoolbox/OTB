@@ -29,7 +29,6 @@
 #include "otbParserX.h"
 
 
-
 namespace otb
 {
 /** \class BandMathImageFilterX
@@ -141,7 +140,7 @@ private :
       std::string name;
       ValueType   value;
       int         type;
-      int         info[5]; 
+      int         info[5];
   } adhocStruct;
 
   BandMathImageFilterX(const Self&); //purposely not implemented
