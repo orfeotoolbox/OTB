@@ -309,7 +309,6 @@ public:
   };
 
 
-
 }//end namespace otb
 
 #endif
