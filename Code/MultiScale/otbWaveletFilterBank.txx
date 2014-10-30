@@ -29,7 +29,6 @@
 
 // FIXME
 #define __myDebug__ 0
-#include "otbImageFileWriter.h"
 
 namespace otb {
 
