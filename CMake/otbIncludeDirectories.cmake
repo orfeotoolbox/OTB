@@ -301,6 +301,15 @@ else()
                 Utilities/otbmuparser)
 endif()
 
+#For MuParserX header file
+if(OTB_USE_EXTERNAL_MUPARSERX)
+        set(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
+                ${MUPARSERX_INCLUDE_DIR})
+else()
+        set(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+                Utilities/otbmuparserx)
+endif()
+
 #For LibKML header file
 if(OTB_USE_EXTERNAL_LIBKML)
         set(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
