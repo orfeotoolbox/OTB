@@ -21,6 +21,7 @@
 
 #include "otbMath.h"
 #include "mpParser.h"
+#include <vector>
 
 namespace otb
 {
@@ -36,6 +37,7 @@ public:
     {
 
       assert(a_iArgc==2);
+      assert(a_pArg[1]->GetType()=='m');
 
       // Get the argument from the argument input vector
       mup::matrix_type a = a_pArg[0]->GetArray();
@@ -122,6 +124,68 @@ public:
     mup::IToken* Clone() const
     {
       return new conv(*this);
+    }
+  };
+
+
+class cat : public mup::ICallback
+  {
+public:
+    cat():ICallback(mup::cmFUNC, "cat", -1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+    {
+
+      std::vector<double> vect;
+      int nbrows,nbcols;
+      mup::matrix_type m1;
+
+      for (int k=0; k<a_iArgc; ++k)
+      {
+
+        // Get the argument from the argument input vector
+        switch (a_pArg[k]->GetType())
+        {
+          case 'm':
+
+              m1 = a_pArg[k]->GetArray();
+
+              nbrows = m1.GetRows();
+              nbcols = m1.GetCols();
+
+              assert(nbrows==1);
+
+              for (int j=0; j<nbcols; j++)
+                  vect.push_back( m1.At(0,j).GetFloat());
+
+          break;
+    
+          case 'i':
+            vect.push_back( (double) a_pArg[k]->GetInteger());
+          break; 
+        
+          case 'f':
+            vect.push_back( (double) a_pArg[k]->GetFloat());
+          break;
+        }
+      }
+
+      // The return value is passed by writing it to the reference ret
+      mup::matrix_type res(1,vect.size(),0);
+      for (int j=0; j<vect.size(); j++)
+            res.At(0,j) = vect[j];
+      *ret = res;
+    }
+
+    const mup::char_type* GetDesc() const
+    {
+      return "cat(m1,m2) - Values concatenation";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new cat(*this);
     }
   };
 

@@ -94,7 +94,7 @@ public:
   itkTypeMacro(BandMathImageFilterX, InPlaceImageFilter);
 
   /** Some convenient typedefs. */
-  typedef TImage                                  ImageType;
+  typedef TImage                                   ImageType;
   typedef typename ImageType::ConstPointer        ImagePointer;
   typedef typename ImageType::RegionType          ImageRegionType;
   typedef typename ImageType::PixelType           PixelType;
@@ -108,20 +108,22 @@ public:
   void SetNthInput( unsigned int idx, const ImageType * image);
   void SetNthInput( unsigned int idx, const ImageType * image, const std::string& varName);
 
-  /** Set the expression to be parsed */
+  /** Return a pointer on the nth filter input */
+  ImageType * GetNthInput(unsigned int idx);
+
+  /** Set an expression to be parsed */
   void SetExpression(const std::string& expression);
+
+  /** Return the nth expression to be parsed */
+  std::string GetExpression(int) const;
 
   /** Set a matrix (or a vector) */
   void SetMatrix(const std::string& name, const std::string& definition);
 
-  /** Return the expression to be parsed */
-  std::string GetExpression(int) const;
-
-  /** Return the nth filter input associated variable name */
+  /** Return the variable names */
   std::vector<std::string>& GetVarNames() const;
 
-  /** Return a pointer on the nth filter input */
-  ImageType * GetNthInput(unsigned int idx);
+
 
 protected :
   BandMathImageFilterX();
@@ -158,11 +160,9 @@ private :
   std::vector< adhocStruct >                m_VAllowedVarNameAddedByUser;
   std::vector< adhocStruct >                m_VFinalAllowedVarName;   // m_VFinalAllowedVarName = m_VAllowedVarNameAuto + m_VAllowedVarNameAddedByUser
   std::vector< adhocStruct >                m_VNotAllowedVarName;
-  unsigned int                             m_NbVar;
   std::vector< int >                        m_outputsDimensions;
 
-  SpacingType                              m_Spacing;
-  OrigineType                              m_Origin;
+  unsigned int                             m_SizeNeighbourhood;
 
   long                                  m_UnderflowCount;
   long                                  m_OverflowCount;

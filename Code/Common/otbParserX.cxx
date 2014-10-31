@@ -60,6 +60,7 @@ public:
     m_MuParserX.DefineFun(new ndvi);
     m_MuParserX.DefineFun(new conv);
     m_MuParserX.DefineFun(new bands);
+    m_MuParserX.DefineFun(new cat);
     m_MuParserX.DefineFun(new vcos);
     m_MuParserX.DefineFun(new vsin);
     m_MuParserX.DefineOprt(new ElementWiseDivision);

@@ -63,7 +63,7 @@ BandMathImageFilterX<TImage>
   ahcY.type = 1;
   m_VAllowedVarNameAuto.push_back(ahcY);
 
-  //this->SetNumberOfThreads(1);
+  m_SizeNeighbourhood=10;
 
 }
 
@@ -72,6 +72,22 @@ template <class TImage>
 BandMathImageFilterX<TImage>
 ::~BandMathImageFilterX()
 {
+  m_Expression.clear();
+  m_VParser.clear();
+
+  for(int i=0; i<m_AImage.size(); ++i)
+    m_AImage[i].clear();
+  m_AImage.clear();
+
+  m_VVarName.clear();
+  m_VAllowedVarNameAuto.clear();
+  m_VAllowedVarNameAddedByUser.clear();
+  m_VFinalAllowedVarName.clear();   
+  m_VNotAllowedVarName.clear();
+  m_outputsDimensions.clear();
+
+
+
 }
 
 
@@ -147,10 +163,9 @@ void BandMathImageFilterX<TImage>
   }
 
   //imibjNkxp
-  int size=10;
   for (int j=0; j<image->GetNumberOfComponentsPerPixel(); j++)
-    for(int x=0; x<=size; x++)
-      for(int y=0; y<=size; y++)
+    for(int x=0; x<=m_SizeNeighbourhood; x++)
+      for(int y=0; y<=m_SizeNeighbourhood; y++)
       {
         std::stringstream sstm;
         adhocStruct ahc;
@@ -177,7 +192,23 @@ template< typename TImage >
 void BandMathImageFilterX<TImage>
 ::SetExpression(const std::string& expression)
 {
-  m_Expression.push_back(expression);
+
+  if (expression.find("|") != std::string::npos)
+  {
+    std::ostringstream oss;
+    oss << "cat(";
+    for(int i=0; i < expression.size(); ++i)
+      if (expression[i] == '|')
+        oss << ",";
+      else 
+        oss << expression[i];
+
+    oss << ")";
+    m_Expression.push_back(oss.str());
+
+  }
+  else
+    m_Expression.push_back(expression);
 
   if (m_Expression.size()>1)
     this->SetNthOutput( (int) (m_Expression.size()) -1, ( TImage::New() ).GetPointer() );
@@ -347,16 +378,16 @@ void BandMathImageFilterX<TImage>
       *itParser = ParserType::New();
     }
 
-  m_NbVar = m_VVarName.size();
+  int nbVar = m_VVarName.size();
 
   m_AImage.resize(nbThreads);
 
   double initValue = 0.1;
   for(int i = 0; i < nbThreads; ++i) // For each thread
   {
-    m_AImage[i].resize(m_NbVar); // For each variable
+    m_AImage[i].resize(nbVar); // For each variable
 
-    for(int j=0; j < m_NbVar; ++j)
+    for(int j=0; j < nbVar; ++j)
       {
         m_AImage[i][j].name = m_VVarName[j].name;
         m_AImage[i][j].type  = m_VVarName[j].type;
