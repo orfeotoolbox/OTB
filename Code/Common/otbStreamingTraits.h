@@ -18,6 +18,7 @@
 #ifndef __otbStreamingTraits_h
 #define __otbStreamingTraits_h
 
+
 #include "otbMacro.h"
 
 #include "itkBSplineInterpolateImageFunction.h"

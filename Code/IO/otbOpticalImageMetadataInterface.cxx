@@ -18,7 +18,6 @@
 
 #include "otbOpticalImageMetadataInterface.h"
 
-#include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
 

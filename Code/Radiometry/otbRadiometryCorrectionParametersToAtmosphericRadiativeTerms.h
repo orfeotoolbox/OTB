@@ -21,6 +21,7 @@
 #include "otbAtmosphericRadiativeTerms.h"
 #include "otbImageMetadataCorrectionParameters.h"
 #include "otbSIXSTraits.h"
+#include "otbMacro.h"
 
 namespace otb
 {

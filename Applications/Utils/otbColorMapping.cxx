@@ -44,6 +44,8 @@
 #include "itkCastImageFilter.h"
 #include "otbStreamingStatisticsMapFromLabelImageFilter.h"
 
+#include "otbMacro.h"
+
 namespace otb
 {
 

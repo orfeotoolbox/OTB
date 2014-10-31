@@ -20,7 +20,6 @@
 
 #include <iostream>
 #include <fstream>
-#include "otbMacro.h"
 
 namespace otb
 {

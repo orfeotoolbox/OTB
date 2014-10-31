@@ -20,7 +20,6 @@
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
-#include "otbMacro.h"
 
 namespace otb
 {

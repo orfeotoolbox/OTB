@@ -17,8 +17,6 @@
 =========================================================================*/
 
 
-#include "otbMacro.h"
-
 #include "otbFormosatImageMetadataInterfaceFactory.h"
 #include "otbFormosatImageMetadataInterface.h"
 

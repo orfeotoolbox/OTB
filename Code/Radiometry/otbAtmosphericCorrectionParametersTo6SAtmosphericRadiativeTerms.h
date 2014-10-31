@@ -18,7 +18,6 @@
 #ifndef __otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms_h
 #define __otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms_h
 
-#include "otbMacro.h"
 #include "itkProcessObject.h"
 #include "otbAtmosphericCorrectionParameters.h"
 #include "otbAtmosphericRadiativeTerms.h"

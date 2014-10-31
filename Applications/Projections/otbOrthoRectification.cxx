@@ -33,8 +33,6 @@
 
 #include "otbGeographicalDistance.h"
 
-#include "otbMacro.h"
-
 namespace otb
 {
 

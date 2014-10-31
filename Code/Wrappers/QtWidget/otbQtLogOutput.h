@@ -22,7 +22,6 @@
 #include "itkStdStreamLogOutput.h"
 //#include "itkObjectFactory.h"
 //#include "itkProcessObject.h"
-#include "otbMacro.h"
 
 namespace otb
 {

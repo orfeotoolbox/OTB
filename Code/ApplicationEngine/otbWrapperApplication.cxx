@@ -36,7 +36,7 @@
 
 #include "otbWrapperAddProcessToWatchEvent.h"
 
-
+#include "otbMacro.h"
 #include "otbWrapperTypes.h"
 #include <exception>
 #include "itkMacro.h"

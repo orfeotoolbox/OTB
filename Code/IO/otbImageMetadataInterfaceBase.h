@@ -24,7 +24,6 @@
 #include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
 #include "itkImageBase.h"
-#include "otbMacro.h"
 
 namespace otb
 {

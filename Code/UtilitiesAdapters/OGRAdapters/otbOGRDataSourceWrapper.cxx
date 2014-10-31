@@ -31,7 +31,6 @@
 #include "itkExceptionObject.h"
 #include "itksys/SystemTools.hxx"
 // OTB includes
-#include "otbMacro.h"
 #include "otbOGRDriversInit.h"
 #include "otbSystem.h"
 // OGR includes

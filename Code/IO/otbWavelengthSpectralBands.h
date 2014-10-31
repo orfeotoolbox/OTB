@@ -18,7 +18,6 @@
 #ifndef __otbWavelengthSpectralBands_h
 #define __otbWavelengthSpectralBands_h
 
-#include "otbMacro.h"
 #include "otbObjectList.h"
 #include "otbFilterFunctionValues.h"
 

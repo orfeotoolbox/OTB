@@ -19,7 +19,6 @@
 #define __otbWrapperApplication_h
 
 #include <string>
-#include "otbMacro.h"
 #include "otbWrapperTypes.h"
 #include "otbWrapperTags.h"
 #include "otbWrapperParameterGroup.h"

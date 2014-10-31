@@ -18,7 +18,6 @@
 #include "otbWrapperApplicationHtmlDocGenerator.h"
 
 #include <stdio.h>
-#include "otbMacro.h"
 #include "otbWrapperChoiceParameter.h"
 
 namespace otb

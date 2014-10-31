@@ -18,6 +18,7 @@
 
 #include "otbPipelineMemoryPrintCalculator.h"
 
+#include "otbMacro.h"
 #include "otbMath.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"

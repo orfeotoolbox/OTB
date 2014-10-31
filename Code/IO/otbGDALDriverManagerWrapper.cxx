@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "otbGDALDriverManagerWrapper.h"
 #include <vector>
-#include "otbMacro.h"
 #include "otbSystem.h"
 
 namespace otb

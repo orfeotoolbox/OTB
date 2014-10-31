@@ -22,7 +22,6 @@
 #include <vector>
 
 #include "itkProcessObject.h"
-#include "otbMacro.h"
 
 namespace otb
 {

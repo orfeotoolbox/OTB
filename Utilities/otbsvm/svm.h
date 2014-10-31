@@ -4,10 +4,15 @@
 #define LIBSVM_VERSION 300
 
 /*** Begin OTB modification ***/
-#include <map>
-#include <vector>
-#include "otbMacro.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <sstream>
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
+
 
 struct svm_node;
 struct svm_parameter;

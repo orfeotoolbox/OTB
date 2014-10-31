@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "otbOGRIOHelper.h"
 
+#include "otbMacro.h"
 #include "ogrsf_frmts.h"
 #include "otbOGR.h"
 #include "itkTimeProbe.h"

@@ -19,7 +19,6 @@
 #define __otbJPEG2000ImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
-#include "otbImageIOBase.h"
 
 namespace otb
 {

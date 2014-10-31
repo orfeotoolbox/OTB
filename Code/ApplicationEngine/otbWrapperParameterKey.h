@@ -19,9 +19,10 @@
 #define __otbWrapperParameterKey_h
 
 #include <string>
-#include "otbMacro.h"
+#include <vector>
+#include <ostream>
 #include <itksys/RegularExpression.hxx>
-
+#include "itkMacro.h"
 
 namespace otb
 {

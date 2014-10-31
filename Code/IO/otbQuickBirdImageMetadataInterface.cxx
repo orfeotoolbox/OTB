@@ -19,7 +19,6 @@
 #include "otbQuickBirdImageMetadataInterface.h"
 
 #include <boost/algorithm/string.hpp>
-#include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
 

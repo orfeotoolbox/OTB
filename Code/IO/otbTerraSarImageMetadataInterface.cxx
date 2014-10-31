@@ -19,7 +19,6 @@
 #include "otbTerraSarImageMetadataInterface.h"
 
 #include <boost/algorithm/string.hpp>
-#include "otbMacro.h"
 #include "otbMath.h"
 #include "itkIndex.h"
 #include "itkMetaDataObject.h"

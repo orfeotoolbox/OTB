@@ -20,8 +20,6 @@
 #include <typeinfo>
 #include <cassert>
 
-#include "otbMacro.h"
-
 #include "otbSpot6ImageMetadataInterfaceFactory.h"
 #include "otbSpot6ImageMetadataInterface.h"
 

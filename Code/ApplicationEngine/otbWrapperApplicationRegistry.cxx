@@ -16,6 +16,7 @@
 
  =========================================================================*/
 #include "otbWrapperApplicationRegistry.h"
+#include "otbMacro.h"
 #include "itksys/SystemTools.hxx"
 #include <iterator>
 

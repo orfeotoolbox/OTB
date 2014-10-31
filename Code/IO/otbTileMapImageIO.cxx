@@ -26,6 +26,7 @@
 
 #include "itksys/SystemTools.hxx"
 #include "otbSystem.h"
+#include "otbMacro.h"
 
 #include "otbGDALImageIO.h"
 

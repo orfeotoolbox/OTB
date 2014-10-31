@@ -24,7 +24,6 @@
 #include <map>
 
 #include "itkProcessObject.h"
-#include "otbMacro.h"
 
 /** \class CommandLineArgumentParserHelpException
  * \brief This exception is thrown when the help menu is displayed.

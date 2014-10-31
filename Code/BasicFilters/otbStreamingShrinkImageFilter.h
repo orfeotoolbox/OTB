@@ -23,6 +23,7 @@
 #include "otbPersistentFilterStreamingDecorator.h"
 
 #include "otbStreamingManager.h"
+#include "otbMacro.h"
 
 namespace otb
 {

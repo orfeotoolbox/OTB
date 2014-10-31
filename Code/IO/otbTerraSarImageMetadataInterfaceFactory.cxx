@@ -17,8 +17,6 @@
 =========================================================================*/
 
 
-#include "otbMacro.h"
-
 #include "otbTerraSarImageMetadataInterfaceFactory.h"
 #include "otbTerraSarImageMetadataInterface.h"
 

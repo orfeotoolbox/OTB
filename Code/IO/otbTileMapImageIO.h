@@ -25,7 +25,6 @@
 //#include "stdlib.h"
 
 /* ITK Libraries */
-#include "otbMacro.h"
 #include "otbImageIOBase.h"
 #include "otbImageRegionTileMapSplitter.h"
 

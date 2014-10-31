@@ -20,6 +20,7 @@
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperRAMParameter.h"
 #include "itksys/SystemTools.hxx"
+#include "otbMacro.h"
 
 namespace otb
 {

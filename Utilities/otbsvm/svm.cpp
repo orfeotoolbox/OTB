@@ -1,11 +1,11 @@
+#include "svm.h"
 #include <math.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include <float.h>
 #include <string.h>
-#include <stdarg.h>
-#include "svm.h"
+#include <iostream>
+
 int libsvm_version = LIBSVM_VERSION;
 typedef float Qfloat;
 typedef signed char schar;

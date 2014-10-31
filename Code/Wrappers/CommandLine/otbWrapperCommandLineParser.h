@@ -18,7 +18,6 @@
 #ifndef __otbWrapperCommandLineParser_h
 #define __otbWrapperCommandLineParser_h
 
-#include "otbMacro.h"
 #include "itkObjectFactory.h"
 
 
