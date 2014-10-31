@@ -163,7 +163,7 @@ public:
     
           case 'i':
             vect.push_back( (double) a_pArg[k]->GetInteger());
-          break; 
+          break;
         
           case 'f':
             vect.push_back( (double) a_pArg[k]->GetFloat());

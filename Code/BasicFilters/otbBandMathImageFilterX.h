@@ -124,7 +124,6 @@ public:
   std::vector<std::string>& GetVarNames() const;
 
 
-
 protected :
   BandMathImageFilterX();
   virtual ~BandMathImageFilterX();
