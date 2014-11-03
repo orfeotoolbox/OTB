@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbMath.h"
 
+#include "otbConfigure.h"
+
 #include "muParser.h"
 #include "otbParser.h"
 
