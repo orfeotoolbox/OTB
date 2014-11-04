@@ -27,6 +27,10 @@ OTB_CREATE_APPLICATION(NAME           BandMath
                        SOURCES        otbBandMath.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
 
+OTB_CREATE_APPLICATION(NAME           BandMathX
+                       SOURCES        otbBandMathX.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+
 OTB_CREATE_APPLICATION(NAME           SplitImage
                        SOURCES        otbSplitImage.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)

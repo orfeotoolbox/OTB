@@ -145,6 +145,19 @@ OTB_TEST_APPLICATION(NAME apTvUtBandMath
                              ${INPUTDATA}/apTvUtBandMathOutput.tif
                              ${TEMP}/apTvUtBandMathOutput.tif)
 
+#--- BandMathX application -----
+
+OTB_TEST_APPLICATION(NAME apTvUtBandMathX
+                     APP  BandMathX
+                     OPTIONS -il ${INPUTDATA}/poupees_sub_c1.png
+                                  ${INPUTDATA}/poupees_sub_c2.png
+                                  ${INPUTDATA}/poupees_sub.png
+                             -out ${TEMP}/apTvUtBandMathXOutput.tif
+                             -exp "cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3,im3b4)"
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/apTvUtBandMathOutput.tif
+                             ${TEMP}/apTvUtBandMathXOutput.tif)
+
 
 #--- Split Image application ----
 
