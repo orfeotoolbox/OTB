@@ -26,6 +26,8 @@
 #include "otbBandMathImageFilterX.h"
 #include "otbImageFileWriter.h"
 
+#include "itkImageRegionIteratorWithIndex.h"
+
 int otbBandMathImageFilterXNew( int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   typedef double                                            PixelType;
@@ -105,7 +107,7 @@ int otbBandMathImageFilterX( int itkNotUsed(argc), char* itkNotUsed(argv) [])
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3, "canal3");
 
-  filter->SetExpression("vcos(2 * pi * im1) div (2 * pi * bands(im2,{1,1,1})) mult vsin(pi * bands(canal3,{1,1,1}))"); //Sub-test 1
+  filter->SetExpression("vcos(2 * pi * im1) div (2 * pi * bands(im2,{1,1,1}) + {3.38,3.38,3.38}) mult vsin(pi * bands(canal3,{1,1,1}))"); //Sub-test 1
   filter->SetExpression("im1b1 / im2b1"); //Sub-test 2 (Edge Effect Handling)
   filter->Update();
 
@@ -137,9 +139,9 @@ int otbBandMathImageFilterX( int itkNotUsed(argc), char* itkNotUsed(argv) [])
     double error1,error2,error3;
 
 
-    double expected1 = vcl_cos( 2 * otb::CONST_PI * px1[0] ) / ( 2 * otb::CONST_PI * px2[0] ) * vcl_sin( otb::CONST_PI * px3[0] );
-    double expected2 = vcl_cos( 2 * otb::CONST_PI * px1[1] ) / ( 2 * otb::CONST_PI * px2[0] ) * vcl_sin( otb::CONST_PI * px3[0] );
-    double expected3 = vcl_cos( 2 * otb::CONST_PI * px1[2] ) / ( 2 * otb::CONST_PI * px2[0] ) * vcl_sin( otb::CONST_PI * px3[0] );
+    double expected1 = vcl_cos( 2 * otb::CONST_PI * px1[0] ) / ( 2 * otb::CONST_PI * px2[0] + 3.38 ) * vcl_sin( otb::CONST_PI * px3[0] );
+    double expected2 = vcl_cos( 2 * otb::CONST_PI * px1[1] ) / ( 2 * otb::CONST_PI * px2[0] + 3.38 ) * vcl_sin( otb::CONST_PI * px3[0] );
+    double expected3 = vcl_cos( 2 * otb::CONST_PI * px1[2] ) / ( 2 * otb::CONST_PI * px2[0] + 3.38 ) * vcl_sin( otb::CONST_PI * px3[0] );
 
     /*std::cout << "Pixel_1 =  " << it1.Get()[0] << "     Pixel_2 =  " << it2.Get()[0] << "     Pixel_3 =  " << it3.Get()[0]
         << "     Result =  " << itoutput1.Get()[0] << "     Expected =  " << expected1 << std::endl; */
@@ -239,13 +241,14 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) []
   image3->Allocate();
 
   typedef itk::ConstNeighborhoodIterator<ImageType> IteratorType;
-  IteratorType::RadiusType radius;
+  IteratorType::RadiusType radius,radius2,radius3;
   radius[0]=1; // Size x direction
   radius[1]=2; // Size y direction
 
-  IteratorType it1(radius, image1, region);
-  IteratorType it2(radius, image2, region);
-  IteratorType it3(radius, image3, region);
+
+  IteratorType it1(radius, image1, region);    it1.NeedToUseBoundaryConditionOn();
+  IteratorType it2(radius, image2, region);    it2.NeedToUseBoundaryConditionOn();
+  IteratorType it3(radius, image3, region);    it3.NeedToUseBoundaryConditionOn();
 
   for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3)
   {
@@ -268,7 +271,7 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) []
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3, "canal3");
   filter->SetMatrix("kernel1","{ 0.1 , 0.2 , 0.3; 0.4 , 0.5 , 0.6; 0.7 , 0.8 , 0.9; 1.0 , 1.1 , 1.2; 1.3 , 1.4 , 1.5 }");
-  filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5) | im2b1^1.1 | vcos(canal3)");
+  filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5) ; im2b1^1.1 ; vcos(canal3) ; mean(imageAb2N3x3) ; var(imageAb2N3x3) ; median(imageAb2N3x3)");
   filter->Update();
 
   if (filter->GetNumberOfOutputs() != 1)
@@ -277,7 +280,7 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) []
 
   ImageType::Pointer output1 = filter->GetOutput(0);
 
-  if (output1->GetNumberOfComponentsPerPixel() != 4)
+  if (output1->GetNumberOfComponentsPerPixel() != 7)
     itkGenericExceptionMacro(<< "Wrong number of components per pixel.");
 
   std::cout << "\n---  Standard Use\n";
@@ -310,32 +313,61 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) []
 
     px1[3]= vcl_cos(it3.GetCenterPixel()[0]);
 
+    // mean var median
+    std::vector<double> vect; 
+    for (int i=3; i<=11; i++)
+      vect.push_back(it1.GetPixel(i)[1]); 
 
-    double result1 = itoutput1.GetCenterPixel()[0], result2 = itoutput1.GetCenterPixel()[1], result3 = itoutput1.GetCenterPixel()[2], result4 = itoutput1.GetCenterPixel()[3];
-    double error1,error2,error3,error4;
+    px1[4] = 0.0;
+    for (int i=0; i<vect.size(); i++)
+      px1[4] += vect[i]; 
+    px1[4] /= ((double) vect.size()); //mean
 
-    double expected1 = px1[0], expected2 = px1[1], expected3 = px1[2], expected4 = px1[3];
+    px1[5] = 0.0;
+    for (int i=0; i<vect.size(); i++)
+      px1[5] += (vect[i]-px1[4])*(vect[i]-px1[4]); 
+    px1[5] /= ((double) vect.size()); //var
+
+    std::sort(vect.begin(),vect.end());
+    px1[6] = vect[(int) (vect.size()/2.)]; //median
+
+    double result1 = itoutput1.GetCenterPixel()[0], result2 = itoutput1.GetCenterPixel()[1], result3 = itoutput1.GetCenterPixel()[2], result4 = itoutput1.GetCenterPixel()[3], result5 = itoutput1.GetCenterPixel()[4] , result6 = itoutput1.GetCenterPixel()[5], result7 = itoutput1.GetCenterPixel()[6];
+    double error1,error2,error3,error4,error5,error6,error7;
+
+    double expected1 = px1[0], expected2 = px1[1], expected3 = px1[2], expected4 = px1[3], expected5 = px1[4] , expected6 = px1[5], expected7 = px1[6];
 
     error1 = (result1 - expected1) * (result1 - expected1) / (result1 + expected1);
     error2 = (result2 - expected2) * (result2 - expected2) / (result2 + expected2);
     error3 = (result3 - expected3) * (result3 - expected3) / (result3 + expected3);
     error4 = (result4 - expected4) * (result4 - expected4) / (result4 + expected4);
+    error5 = (result5 - expected5) * (result5 - expected5) / (result5 + expected5);
+    error6 = (result6 - expected6) * (result6 - expected6) / (result6 + expected6);
+    error7 = (result7 - expected7) * (result7 - expected7) / (result7 + expected7);
 
-    if ( ( error1 > 1E-9 ) || ( error2 > 1E-9 ) || ( error3 > 1E-9 ) || ( error4 > 1E-9 ))
+    if ( ( error1 > 1E-9 ) || ( error2 > 1E-9 ) || ( error3 > 1E-9 ) || ( error4 > 1E-9 ) || ( error5 > 1E-9 ) || ( error6 > 1E-9 ) || ( error7 > 1E-9 ))
       {
-      itkGenericExceptionMacro(
-         << "Error1 = " << error1 << "  > 1E-9     -> TEST FAILLED" << std::endl
+      itkGenericExceptionMacro( << "TEST FAILLED" << std::endl
+         << "Error1 = " << error1  << std::endl
          << "     Result1 =  "   << result1
          << "     Expected1 =  " << expected1     << std::endl
-         << "Error2 = " << error2 << "  > 1E-9     -> TEST FAILLED" << std::endl
+         << "Error2 = " << error2  << std::endl
          << "     Result2 =  "   << result2
          << "     Expected2 =  " << expected2     << std::endl
-         << "Error3 = " << error3 << "  > 1E-9     -> TEST FAILLED" << std::endl
+         << "Error3 = " << error3  << std::endl
          << "     Result3 =  "   << result3
          << "     Expected3 =  " << expected3     << std::endl
-         << "Error4 = " << error4 << "  > 1E-9     -> TEST FAILLED" << std::endl
+         << "Error4 = " << error4 << std::endl
          << "     Result4 =  "   << result4
-         << "     Expected4 =  " << expected4     << std::endl);
+         << "     Expected4 =  " << expected4     << std::endl
+         << "Error5 = " << error5 << std::endl
+         << "     Result5 =  "   << result5
+         << "     Expected5 =  " << expected5 << std::endl
+         << "Error6 = " << error6 << std::endl
+         << "     Result6 =  "   << result6
+         << "     Expected6 =  " << expected6 << std::endl
+         << "Error7 = " << error7 << std::endl
+         << "     Result7 =  "   << result7
+         << "     Expected7 =  " << expected7 << std::endl);
       }
   }
 

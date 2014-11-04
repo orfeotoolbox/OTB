@@ -61,10 +61,24 @@ public:
     m_MuParserX.DefineFun(new conv);
     m_MuParserX.DefineFun(new bands);
     m_MuParserX.DefineFun(new cat);
-    m_MuParserX.DefineFun(new vcos);
-    m_MuParserX.DefineFun(new vsin);
     m_MuParserX.DefineOprt(new ElementWiseDivision);
     m_MuParserX.DefineOprt(new ElementWiseMultiplication);
+    m_MuParserX.DefineFun(new mean);
+    m_MuParserX.DefineFun(new var);
+    m_MuParserX.DefineFun(new median);
+
+    m_MuParserX.DefineFun(new vcos);
+    m_MuParserX.DefineFun(new vsin);
+    m_MuParserX.DefineFun(new vtan);
+    m_MuParserX.DefineFun(new vtanh);
+    m_MuParserX.DefineFun(new vsinh);
+    m_MuParserX.DefineFun(new vcosh);
+    m_MuParserX.DefineFun(new vlog);
+    m_MuParserX.DefineFun(new vlog10);
+    m_MuParserX.DefineFun(new vabs);
+    m_MuParserX.DefineFun(new vexp);
+    m_MuParserX.DefineFun(new vsqrt);
+
   }
 
   /** Set the expression to be parsed */

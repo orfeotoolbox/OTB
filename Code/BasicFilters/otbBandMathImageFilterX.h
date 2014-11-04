@@ -23,7 +23,6 @@
 #define __otbBandMathImageFilterX_h
 
 #include "itkInPlaceImageFilter.h"
-#include "itkImageRegionIteratorWithIndex.h"
 #include "itkArray.h"
 
 #include "otbParserX.h"

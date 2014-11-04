@@ -33,29 +33,7 @@ public:
     bands():ICallback(mup::cmFUNC, "bands", 2)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
-    {
-
-      assert(a_iArgc==2);
-      assert(a_pArg[1]->GetType()=='m');
-
-      // Get the argument from the argument input vector
-      mup::matrix_type a = a_pArg[0]->GetArray();
-      mup::matrix_type b = a_pArg[1]->GetArray();
-
-
-      int nbrows = b.GetRows(); assert(nbrows==1); // Bands selection is done by a row vector
-      int nbcols = b.GetCols();
-
-      mup::matrix_type res(1,nbcols,0.);
-
-      for (int k=0; k<nbcols; ++k)
-        res.At(0,k)=a.At(b.At(0,k).GetInteger()-1); //-1 : to make first band have rank #1 (and not 0)
-
-      // The return value is passed by writing it to the reference ret
-      *ret = res;
-
-    }
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
 
     const mup::char_type* GetDesc() const
     {
@@ -75,46 +53,7 @@ public:
     conv():ICallback(mup::cmFUNC, "conv", -1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
-    {
-      // Get the argument from the argument input vector
-      mup::matrix_type m1 = a_pArg[0]->GetArray();
-      
-
-      int nbrows = m1.GetRows();
-      int nbcols = m1.GetCols();
-
-      mup::matrix_type res(1,a_iArgc-1,0);
-
-      for (int k=1; k<a_iArgc; ++k)
-      {
-  
-        float sum=0.0;
-
-        mup::matrix_type m2 = a_pArg[k]->GetArray();
-
-        if ( (m2.GetRows() != nbrows) || (m2.GetCols() != nbcols) )
-        {
-            mup::ErrorContext err;
-            err.Errc = mup::ecMATRIX_DIMENSION_MISMATCH;
-            err.Arg = a_iArgc;
-            err.Ident = GetIdent();
-            throw mup::ParserError(err);
-        }
-
-
-        for (int i=0; i<nbrows; i++)
-          for (int j=0; j<nbcols; j++)
-            sum += m1.At(i,j).GetFloat() * m2.At(i,j).GetFloat();
-
-        
-        res.At(0,k-1)=sum;
-      }
-
-
-      // The return value is passed by writing it to the reference ret
-      *ret = res;
-    }
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
 
     const mup::char_type* GetDesc() const
     {
@@ -128,93 +67,13 @@ public:
   };
 
 
-class cat : public mup::ICallback
-  {
-public:
-    cat():ICallback(mup::cmFUNC, "cat", -1)
-    {}
-
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
-    {
-
-      std::vector<double> vect;
-      int nbrows,nbcols;
-      mup::matrix_type m1;
-
-      for (int k=0; k<a_iArgc; ++k)
-      {
-
-        // Get the argument from the argument input vector
-        switch (a_pArg[k]->GetType())
-        {
-          case 'm':
-
-              m1 = a_pArg[k]->GetArray();
-
-              nbrows = m1.GetRows();
-              nbcols = m1.GetCols();
-
-              assert(nbrows==1);
-
-              for (int j=0; j<nbcols; j++)
-                  vect.push_back( m1.At(0,j).GetFloat());
-
-          break;
-    
-          case 'i':
-            vect.push_back( (double) a_pArg[k]->GetInteger());
-          break;
-        
-          case 'f':
-            vect.push_back( (double) a_pArg[k]->GetFloat());
-          break;
-        }
-      }
-
-      // The return value is passed by writing it to the reference ret
-      mup::matrix_type res(1,vect.size(),0);
-      for (int j=0; j<vect.size(); j++)
-            res.At(0,j) = vect[j];
-      *ret = res;
-    }
-
-    const mup::char_type* GetDesc() const
-    {
-      return "cat(m1,m2) - Values concatenation";
-    }
-
-    mup::IToken* Clone() const
-    {
-      return new cat(*this);
-    }
-  };
-
-
 class ElementWiseDivision : public mup::IOprtBin
   {
   public:
     ElementWiseDivision():IOprtBin(_T("div"), (int)(mup::prMUL_DIV), mup::oaLEFT)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
-    {
-      const mup::matrix_type a = a_pArg[0]->GetArray();
-      const mup::matrix_type b = a_pArg[1]->GetArray();
-
-      
-      int nbrows = a.GetRows();
-      int nbcols = a.GetCols();
-
-      mup::matrix_type res(nbrows,nbcols,0.);
-
-      for (int k=0; k<nbcols; ++k)
-        for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = a.At(p,k).GetFloat() / b.At(p,k).GetFloat();
-          
-
-      // The return value is passed by writing it to the reference ret
-      *ret = res;
-    }
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int);
 
     virtual const mup::char_type* GetDesc() const
     {
@@ -234,23 +93,7 @@ class ElementWiseMultiplication : public mup::IOprtBin
     ElementWiseMultiplication():IOprtBin(_T("mult"), (int)(mup::prMUL_DIV), mup::oaLEFT)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
-    {
-      const mup::matrix_type a = a_pArg[0]->GetArray();
-      const mup::matrix_type b = a_pArg[1]->GetArray();
-      
-      int nbrows = a.GetRows();
-      int nbcols = a.GetCols();
-
-      mup::matrix_type res(nbrows,nbcols,0.);
-
-      for (int k=0; k<nbcols; ++k)
-        for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = a.At(p,k).GetFloat() * b.At(p,k).GetFloat();
-        
-      // The return value is passed by writing it to the reference ret
-      *ret = res;
-    }
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int);
 
     virtual const mup::char_type* GetDesc() const
     {
@@ -270,20 +113,7 @@ public:
     ndvi():ICallback(mup::cmFUNC, "ndvi", 2)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
-    {
-      // Get the argument from the argument input vector
-      mup::float_type r = a_pArg[0]->GetFloat();
-      
-      mup::float_type niri = a_pArg[1]->GetFloat();
-
-
-     // The return value is passed by writing it to the reference ret
-      if ( vcl_abs(r + niri) < 1E-6 )
-          *ret = 0.;
-      else
-          *ret = (niri-r)/(niri+r);
-    }
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
 
     const mup::char_type* GetDesc() const
     {
@@ -297,6 +127,86 @@ public:
   };
 
 
+class cat : public mup::ICallback
+  {
+public:
+    cat():ICallback(mup::cmFUNC, "cat", -1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "cat(m1,m2) - Values concatenation";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new cat(*this);
+    }
+  };
+
+
+class mean : public mup::ICallback
+  {
+public:
+    mean():ICallback(mup::cmFUNC, "mean", -1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "mean(m1,m2,..) - Mean";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new mean(*this);
+    }
+  };
+
+
+class var : public mup::ICallback
+  {
+public:
+    var():ICallback(mup::cmFUNC, "var", -1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "var(m1,m2,..) - Variance";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new var(*this);
+    }
+  };
+
+
+class median : public mup::ICallback
+  {
+public:
+    median():ICallback(mup::cmFUNC, "median", -1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "median(m1,m2,..) - median";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new median(*this);
+    }
+  };
+
+
 //--------------------------------------------------------------------------------------------------------//
 class vcos : public mup::ICallback
   {
@@ -304,25 +214,7 @@ public:
     vcos():ICallback(mup::cmFUNC, "vcos", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
-    {
-      // Get the argument from the argument input vector
-      const mup::matrix_type a = a_pArg[0]->GetArray();
-
-
-      int nbrows = a.GetRows();
-      int nbcols = a.GetCols();
-
-      mup::matrix_type res(nbrows,nbcols,0.);
-
-      for (int k=0; k<nbcols; ++k)
-        for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_cos(a.At(p,k).GetFloat());
-          
-
-      // The return value is passed by writing it to the reference ret
-      *ret = res;
-    }
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
 
     const mup::char_type* GetDesc() const
     {
@@ -342,24 +234,7 @@ public:
     vsin():ICallback(mup::cmFUNC, "vsin", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
-    {
-      // Get the argument from the argument input vector
-      const mup::matrix_type a = a_pArg[0]->GetArray();
-
-
-      int nbrows = a.GetRows();
-      int nbcols = a.GetCols();
-
-      mup::matrix_type res(nbrows,nbcols,0.);
-
-      for (int k=0; k<nbcols; ++k)
-        for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_sin(a.At(p,k).GetFloat());
-
-      // The return value is passed by writing it to the reference ret
-      *ret = res;
-    }
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
 
     const mup::char_type* GetDesc() const
     {
@@ -372,6 +247,185 @@ public:
     }
   };
 
+
+class vtan : public mup::ICallback
+  {
+public:
+    vtan():ICallback(mup::cmFUNC, "vtan", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vtan - Tangent for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vtan(*this);
+    }
+  };
+
+
+class vtanh : public mup::ICallback
+  {
+public:
+    vtanh():ICallback(mup::cmFUNC, "vtanh", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vtanh - Hyperbolic tangent for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vtanh(*this);
+    }
+  };
+
+
+class vsinh : public mup::ICallback
+  {
+public:
+    vsinh():ICallback(mup::cmFUNC, "vsinh", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vsinh - Hyperbolic sinus for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vsinh(*this);
+    }
+  };
+
+
+class vcosh : public mup::ICallback
+  {
+public:
+    vcosh():ICallback(mup::cmFUNC, "vcosh", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vcosh - Hyperbolic cosinus for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vcosh(*this);
+    }
+  };
+
+
+class vlog : public mup::ICallback
+  {
+public:
+    vlog():ICallback(mup::cmFUNC, "vlog", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vlog - Log for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vlog(*this);
+    }
+  };
+
+
+class vlog10 : public mup::ICallback
+  {
+public:
+    vlog10():ICallback(mup::cmFUNC, "vlog10", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vlog10 - Log10 for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vlog10(*this);
+    }
+  };
+
+
+class vabs : public mup::ICallback
+  {
+public:
+    vabs():ICallback(mup::cmFUNC, "vabs", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vabs - Absolute value for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vabs(*this);
+    }
+  };
+
+
+class vexp : public mup::ICallback
+  {
+public:
+    vexp():ICallback(mup::cmFUNC, "vexp", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vexp - Exponential for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vexp(*this);
+    }
+  };
+
+
+class vsqrt : public mup::ICallback
+  {
+public:
+    vsqrt():ICallback(mup::cmFUNC, "vsqrt", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vsqrt - Sqrt for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vsqrt(*this);
+    }
+  };
 
 }//end namespace otb
 
