@@ -49,7 +49,6 @@ void bands::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
     }
 
 
-
 void conv::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
       // Get the argument from the argument input vector
@@ -92,7 +91,6 @@ void conv::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
     }
 
 
-
 void ElementWiseDivision::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
     {
       const mup::matrix_type a = a_pArg[0]->GetArray();
@@ -117,7 +115,6 @@ void ElementWiseDivision::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *
     }
 
 
-
 void ElementWiseMultiplication::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
     {
       const mup::matrix_type a = a_pArg[0]->GetArray();
@@ -137,7 +134,6 @@ void ElementWiseMultiplication::Eval(mup::ptr_val_type &ret, const mup::ptr_val_
     }
 
 
-
 void ndvi::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
       // Get the argument from the argument input vector
@@ -152,7 +148,6 @@ void ndvi::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
       else
           *ret = (niri-r)/(niri+r);
     }
-
 
 
 void cat::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
@@ -184,7 +179,7 @@ void cat::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
     
           case 'i':
             vect.push_back( (double) a_pArg[k]->GetInteger());
-          break; 
+          break;
         
           case 'f':
             vect.push_back( (double) a_pArg[k]->GetFloat());
@@ -200,7 +195,6 @@ void cat::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
     }
 
 
-
 void mean::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
 
@@ -210,7 +204,7 @@ void mean::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
       double sum;
 
       for (int k=0; k<a_iArgc; ++k)
-      {     
+      {
 
         // Get the argument from the argument input vector
         switch (a_pArg[k]->GetType())
@@ -226,7 +220,7 @@ void mean::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
 
             for (int i=0; i<nbrows; i++)
               for (int j=0; j<nbcols; j++)
-                sum += m1.At(i,j).GetFloat(); 
+                sum += m1.At(i,j).GetFloat();
 
             vect.push_back( sum / (double) (nbrows*nbcols) );
 
@@ -235,7 +229,7 @@ void mean::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
     
           case 'i':
             vect.push_back( (double) a_pArg[k]->GetInteger());
-          break; 
+          break;
         
           case 'f':
             vect.push_back( (double) a_pArg[k]->GetFloat());
@@ -260,7 +254,7 @@ void var::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
       double sum,mean;
 
       for (int k=0; k<a_iArgc; ++k)
-      {     
+      {
 
         // Get the argument from the argument input vector
         switch (a_pArg[k]->GetType())
@@ -292,7 +286,7 @@ void var::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
     
           case 'i':
             vect.push_back( 0.0 );
-          break; 
+          break;
         
           case 'f':
             vect.push_back( 0.0 );
@@ -308,7 +302,6 @@ void var::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
     }
 
 
-
 void median::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
 
@@ -318,7 +311,7 @@ void median::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a
 
 
       for (int k=0; k<a_iArgc; ++k)
-      {     
+      {
         tempvect.clear();
         // Get the argument from the argument input vector
         switch (a_pArg[k]->GetType())
@@ -342,7 +335,7 @@ void median::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a
     
           case 'i':
             vect.push_back( (double) a_pArg[k]->GetInteger());
-          break; 
+          break;
         
           case 'f':
             vect.push_back( (double) a_pArg[k]->GetFloat());
@@ -398,7 +391,6 @@ void vsin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
       // The return value is passed by writing it to the reference ret
       *ret = res;
     }
-
 
 
 void vtan::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
@@ -481,7 +473,6 @@ void vcosh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
     }
 
 
-
 void vlog::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
       // Get the argument from the argument input vector
@@ -500,7 +491,6 @@ void vlog::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
       // The return value is passed by writing it to the reference ret
       *ret = res;
     }
-
 
 
 void vlog10::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
@@ -523,7 +513,6 @@ void vlog10::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a
     }
 
 
-
 void vabs::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
       // Get the argument from the argument input vector
@@ -542,7 +531,6 @@ void vabs::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
       // The return value is passed by writing it to the reference ret
       *ret = res;
     }
-
 
 
 void vexp::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)

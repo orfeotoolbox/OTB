@@ -82,10 +82,9 @@ BandMathImageFilterX<TImage>
   m_VVarName.clear();
   m_VAllowedVarNameAuto.clear();
   m_VAllowedVarNameAddedByUser.clear();
-  m_VFinalAllowedVarName.clear();   
+  m_VFinalAllowedVarName.clear();
   m_VNotAllowedVarName.clear();
   m_outputsDimensions.clear();
-
 
 
 }
@@ -200,7 +199,7 @@ void BandMathImageFilterX<TImage>
     for(int i=0; i < expression.size(); ++i)
       if (expression[i] == ';')
         oss << ",";
-      else 
+      else
         oss << expression[i];
 
     oss << ")";

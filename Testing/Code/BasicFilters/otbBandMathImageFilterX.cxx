@@ -271,7 +271,7 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) []
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3, "canal3");
   filter->SetMatrix("kernel1","{ 0.1 , 0.2 , 0.3; 0.4 , 0.5 , 0.6; 0.7 , 0.8 , 0.9; 1.0 , 1.1 , 1.2; 1.3 , 1.4 , 1.5 }");
-  filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5) ; im2b1^1.1 ; vcos(canal3) ; mean(imageAb2N3x3) ; var(imageAb2N3x3) ; median(imageAb2N3x3)");
+  filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5); im2b1^1.1; vcos(canal3); mean(imageAb2N3x3); var(imageAb2N3x3); median(imageAb2N3x3)");
   filter->Update();
 
   if (filter->GetNumberOfOutputs() != 1)
@@ -314,18 +314,18 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) []
     px1[3]= vcl_cos(it3.GetCenterPixel()[0]);
 
     // mean var median
-    std::vector<double> vect; 
+    std::vector<double> vect;
     for (int i=3; i<=11; i++)
-      vect.push_back(it1.GetPixel(i)[1]); 
+      vect.push_back(it1.GetPixel(i)[1]);
 
     px1[4] = 0.0;
     for (int i=0; i<vect.size(); i++)
-      px1[4] += vect[i]; 
+      px1[4] += vect[i];
     px1[4] /= ((double) vect.size()); //mean
 
     px1[5] = 0.0;
     for (int i=0; i<vect.size(); i++)
-      px1[5] += (vect[i]-px1[4])*(vect[i]-px1[4]); 
+      px1[5] += (vect[i]-px1[4])*(vect[i]-px1[4]);
     px1[5] /= ((double) vect.size()); //var
 
     std::sort(vect.begin(),vect.end());
