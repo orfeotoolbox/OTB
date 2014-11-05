@@ -191,9 +191,9 @@ private:
     AddRAMParameter();
 
     AddParameter(ParameterType_Choice,   "level", "Calibration Level");
-    AddChoice("level.toa",     "Image to TOA reflectance");
+    AddChoice("level.toa",     "Image to Top Of Atmosphere reflectance");
     AddChoice("level.toatoim",     "TOA reflectance to Image");
-    AddChoice("level.toc",     "TOC : Top Of Canopy (EXPERIMENTAL)");
+    AddChoice("level.toc",     "Image to Top Of Canopy reflectance (atmospheric corrections)");
     SetParameterString("level", "toa");
 
     AddParameter(ParameterType_Empty, "milli", "Convert to milli reflectance");
