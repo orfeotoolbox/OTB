@@ -20,7 +20,6 @@
 
 #include "itkNumericTraits.h"
 
-#include "otbVectorDataProperties.h"
 #include "otbSpatialisationFilter.h"
 
 namespace otb

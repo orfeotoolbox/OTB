@@ -19,9 +19,9 @@
 
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
-#include "otbCurlHelperInterface.h"
 
 #include "otbImageIOFactory.h"
+#include "otbConfigure.h"
 
 #include "otbONERAImageIOFactory.h"
 #include "otbMSTARImageIOFactory.h"
@@ -101,10 +101,9 @@ ImageIOFactory::RegisterBuiltInFactories()
 #ifdef OTB_USE_JPEG2000
       itk::ObjectFactoryBase::RegisterFactory(JPEG2000ImageIOFactory::New());
 #endif
-      if (CurlHelperInterface::IsCurlAvailable())
-        {
-        itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());
-        }
+#ifdef OTB_CURL_MULTI_AVAILABLE
+      itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());
+#endif
       itk::ObjectFactoryBase::RegisterFactory(GDALImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(MWImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(ONERAImageIOFactory::New());
