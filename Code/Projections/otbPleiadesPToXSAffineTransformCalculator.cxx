@@ -145,7 +145,7 @@ PleiadesPToXSAffineTransformCalculator
 
     transform->Scale(0.25);
 
-    // Invert the transform to get the P to XS transform    
+    // Invert the transform to get the P to XS transform
     return transform;
     }
 
