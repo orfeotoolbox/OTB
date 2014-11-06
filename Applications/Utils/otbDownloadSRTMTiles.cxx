@@ -18,6 +18,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 #include "otbGenericRSTransform.h"
+#include "otbCurlHelper.h"
 
 namespace otb
 {

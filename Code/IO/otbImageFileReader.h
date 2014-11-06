@@ -24,7 +24,6 @@
 #include "itkImageRegion.h"
 
 #include "otbDefaultConvertPixelTraits.h"
-#include "otbCurlHelperInterface.h"
 #include "otbImageKeywordlist.h"
 #include "otbExtendedFilenameToReaderOptions.h"
 
@@ -131,8 +130,6 @@ public:
   void  SetImageIO( otb::ImageIOBase * imageIO );
   itkGetObjectMacro(ImageIO,otb::ImageIOBase);
 
-  itkSetObjectMacro(Curl, CurlHelperInterface);
-
   virtual void SetFileName(const char* extendedFileName);
   virtual void SetFileName(std::string extendedFileName);
   virtual const char* GetFileName () const;
@@ -189,8 +186,6 @@ private:
   itk::ImageIORegion m_ActualIORegion;
 
   FNameHelperType::Pointer m_FilenameHelper;
-
-  CurlHelperInterface::Pointer m_Curl;
 
   unsigned int m_AdditionalNumber;
 };

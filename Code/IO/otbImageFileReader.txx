@@ -19,6 +19,7 @@
 #define __otbImageFileReader_txx
 
 #include "otbImageFileReader.h"
+#include "otbConfigure.h"
 
 #include "otbSystem.h"
 #include <itksys/SystemTools.hxx>
@@ -38,7 +39,6 @@
 #include "otbJPEG2000ImageIO.h" //FIXME avoid requiring JPEG2000ImageIO here
 #endif
 #include "otbTileMapImageIO.h" //FIXME avoid requiring TileMapImageIO here
-#include "otbCurlHelper.h"
 
 namespace otb
 {
@@ -64,7 +64,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
    m_ExceptionMessage(""),
    m_ActualIORegion(),
    m_FilenameHelper(FNameHelperType::New()),
-   m_Curl(CurlHelper::New()),
    m_AdditionalNumber(0)
 {
 }
@@ -547,23 +546,10 @@ void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::TestFileExistanceAndReadability()
 {
-  // Test if the file a server name
-  if  (this->m_FileName[0] == 'h'
-       && this->m_FileName[1] == 't'
-       && this->m_FileName[2] == 't'
-       && this->m_FileName[3] == 'p')
+  // Test if the file a server name : if so the test is skipped
+  if (this->m_FileName.find(std::string("http://")) == 0 ||
+      this->m_FileName.find(std::string("https://")) == 0)
     {
-    // If the url is not available
-    if (!m_Curl->TestUrlAvailability(this->m_FileName))
-      {
-      otb::ImageFileReaderException e(__FILE__, __LINE__);
-      std::ostringstream msg;
-      msg << "File name is an http address, but curl fails to connect to it "
-          << std::endl << "Filename = " << this->m_FileName
-          << std::endl;
-      e.SetDescription(msg.str().c_str());
-      throw e;
-      }
     return;
     }
 

@@ -117,10 +117,16 @@ bool TileMapImageIO::CanReadFile(const char* file)
     return true;
     }
   // Filename is http server
-  else if (filename.find("http://") == 0)
+  else if (filename.find("http://") == 0 ||
+           filename.find("https://") == 0)
     {
     m_FileNameIsServerName = true;
-    return true;
+    // If the url is available
+    if (m_Curl->TestUrlAvailability(filename))
+      {
+      return true;
+      }
+    itkDebugMacro(<< "Url is unavailable.");
     }
   return false;
 }
