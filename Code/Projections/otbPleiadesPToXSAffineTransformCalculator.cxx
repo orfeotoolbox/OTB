@@ -126,26 +126,28 @@ PleiadesPToXSAffineTransformCalculator
       
     // Compute shift between MS and P (in Pan pixels)
     // in order to keep the top left corners unchanged, apply an
-    // additional offset of (3/2) panchro pixels, or 0.375 xs pixels
-    int lineShift_MS_P =int(vcl_floor((timeDelta/(linePeriodPan/1000))  + 0.5)) + 0.375;
-    int colShift_MS_P = colStartXS*4 - colStartPan-4 + 0.375;
+    // additional offset of (3/2) panchro pixels
+    std::cout<<timeDelta/(linePeriodPan/1000)<<std::endl;
+    double lineShift_MS_P = (timeDelta/(linePeriodPan/1000))-1.5;
+    double colShift_MS_P =  ((colStartXS)*4 - colStartPan)-1.5;
      
     // Apply the scaling
     typedef itk::ScalableAffineTransform<double, 2>  TransformType;
     TransformType::Pointer transform = TransformType::New();
-    transform->Scale(4.0);
+    transform->SetIdentity();
 
     // Apply the offset
     TransformType::OutputVectorType offset;
     offset[0] = static_cast<double>(colShift_MS_P);
-    offset[1] = static_cast<double>(lineShift_MS_P);
+
+    // Y axis inverted
+    offset[1] = static_cast<double>(-lineShift_MS_P);
     transform->Translate(offset);
-    
-    // Invert the transform to get the P to XS transform
-    TransformType::Pointer realTransform = TransformType::New();
-    transform->GetInverse(realTransform);
-    
-    return realTransform;
+
+    transform->Scale(0.25);
+
+    // Invert the transform to get the P to XS transform    
+    return transform;
     }
 
 } // End namespace otb
