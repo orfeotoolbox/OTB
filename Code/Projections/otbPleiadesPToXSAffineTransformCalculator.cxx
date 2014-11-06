@@ -127,7 +127,6 @@ PleiadesPToXSAffineTransformCalculator
     // Compute shift between MS and P (in Pan pixels)
     // in order to keep the top left corners unchanged, apply an
     // additional offset of (3/2) panchro pixels
-    std::cout<<timeDelta/(linePeriodPan/1000)<<std::endl;
     double lineShift_MS_P = (timeDelta/(linePeriodPan/1000))-1.5;
     double colShift_MS_P =  ((colStartXS)*4 - colStartPan)-1.5;
      
