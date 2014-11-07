@@ -66,7 +66,7 @@ DateTimeAdapter::GetMinute()
 }
 
 double
-DateTimeAdapter::GetSeconds()
+DateTimeAdapter::GetSeconds() const
 {
   return static_cast<double>(m_LocalTm->getSec())
     + m_LocalTm->getFractionalSecond();
@@ -81,7 +81,7 @@ DateTimeAdapter::SetFromIso8601(const std::string &date)
 double
 DateTimeAdapter::GetDeltaInSeconds(const DateTimeAdapter *pastDate)
 {
-  return m_LocalTm->deltaInSeconds(*(pastDate->m_LocalTm));
+  return ( this->GetSeconds() - pastDate->GetSeconds() );
 }
 
 

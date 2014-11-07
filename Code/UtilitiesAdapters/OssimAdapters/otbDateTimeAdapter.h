@@ -65,7 +65,7 @@ public:
   int GetMinute();
   
   /** Seconds Accessor*/
-  double GetSeconds();
+  double GetSeconds() const; 
   
   /** Set the date and time from an Iso8601 string
    *  Return true if the date is valid
