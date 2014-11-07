@@ -120,7 +120,7 @@ public:
   void SetMatrix(const std::string& name, const std::string& definition);
 
   /** Return the variable names */
-  std::vector<std::string>& GetVarNames() const;
+  std::vector<std::string> GetVarNames() const;
 
 
 protected :

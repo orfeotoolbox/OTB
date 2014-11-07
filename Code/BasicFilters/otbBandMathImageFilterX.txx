@@ -284,7 +284,7 @@ std::string BandMathImageFilterX<TImage>
 
 
 template< typename TImage >
-std::vector<std::string>& BandMathImageFilterX<TImage>
+std::vector<std::string> BandMathImageFilterX<TImage>
 ::GetVarNames() const
 {
   std::vector<std::string> res;
