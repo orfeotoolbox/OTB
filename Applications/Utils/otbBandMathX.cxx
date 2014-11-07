@@ -72,7 +72,7 @@ private:
       "Always keep in mind that this application only addresses mathematically well-defined formulas.\n"
       "For instance, it is not possible to add vectors of different dimensions (this implies the addition of a row vector with a column vector),\n"
       "or add a scalar to a vector or a matrix, or divide two vectors, and so on...\n"
-      "Thus, it is important to remember that a pixel of n components is always represented as a row vector.\n" 
+      "Thus, it is important to remember that a pixel of n components is always represented as a row vector.\n"
       "\n"
       "Example :\n\n"
       "                   im1 + im2 \n"
@@ -84,7 +84,7 @@ private:
       "                   im1b2 + im2b2 \n"
       "                         ...."
       "\n\nNevertheless, the first expression is by far much pleaseant. We call this new functionnality the 'batch mode'\n"
-      "(performing the same operation in a band-to-band fashion).\n" 
+      "(performing the same operation in a band-to-band fashion).\n"
 
       "\n\n"
       "- Operations involving neighborhoods of pixels:\n\n"
