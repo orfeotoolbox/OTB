@@ -117,6 +117,19 @@ public:
       }
   }
 
+  /** Define a constant */
+  /*void DefineConst(const std::string &sName, ValueType *fVar)
+  {
+    try
+      {
+      m_MuParserX.DefineConst(sName, mup::Variable(fVar));
+      }
+    catch(ExceptionType &e)
+      {
+      ExceptionHandler(e);
+      }
+  }*/
+
   /** Clear all the defined variables */
   void ClearVar()
   {

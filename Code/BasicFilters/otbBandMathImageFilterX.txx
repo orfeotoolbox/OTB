@@ -31,6 +31,7 @@
 
 
 #include <iostream>
+#include <fstream>
 #include <string>
 
 namespace otb
@@ -219,11 +220,11 @@ template< typename TImage >
 void BandMathImageFilterX<TImage>
 ::SetMatrix(const std::string& name, const std::string& definition)
 {
-  if (name.empty())
-    itkExceptionMacro(<< "Please, set a name for your matrix/vector." << std::endl);
 
-  if (definition.empty())
-    itkExceptionMacro(<< "Please, set the definition of your matrix/vector." << std::endl);
+  for(int i=0; i<m_VAllowedVarNameAddedByUser.size(); i++)
+    if (name.compare(m_VAllowedVarNameAddedByUser[i].name) == 0)
+      itkExceptionMacro(<< "Variable name '"<< name << "' already used." << std::endl);
+
 
   if ( (definition.find("{") != 0) || (definition.find("}")) != definition.size()-1 )
     itkExceptionMacro(<< "Definition of a matrix must begin with { and end with } characters." << std::endl);
@@ -258,10 +259,9 @@ void BandMathImageFilterX<TImage>
       itkExceptionMacro(<< "Each row must have the same number of cols : " << definition << std::endl);
   
 
-  std::stringstream sstm;
+  //Registration
   adhocStruct ahc;
-  sstm << name;
-  ahc.name = sstm.str();
+  ahc.name = name;
   ahc.type = 7;
   ahc.info[0] = mat[0].size();  // Size x direction (matrix convention = cols)
   ahc.info[1] = mat.size();     // Size y direction (matrix convention = rows)
@@ -274,6 +274,183 @@ void BandMathImageFilterX<TImage>
   m_VAllowedVarNameAddedByUser.push_back(ahc);
 
 }
+
+
+template< typename TImage >
+void BandMathImageFilterX<TImage>
+::SetConstant(const std::string& name, double value)
+{
+  for(int i=0; i<m_VAllowedVarNameAddedByUser.size(); i++)
+    if (name.compare(m_VAllowedVarNameAddedByUser[i].name) == 0)
+      itkExceptionMacro(<< "Variable name '"<< name << "' already used." << std::endl);
+
+  adhocStruct ahc;
+  ahc.name = name;
+  ahc.type = 7;
+  ahc.value = value;
+ 
+  m_VAllowedVarNameAddedByUser.push_back(ahc);
+
+}
+
+
+template< typename TImage >
+void BandMathImageFilterX<TImage>
+::exportContext(const std::string& filename) 
+{
+
+  std::vector< std::string > vectI,vectF,vectM, vectFinal;
+
+  for(int i=0; i<m_VAllowedVarNameAddedByUser.size(); i++)
+	    {
+        std::ostringstream iss;
+        std::string        str;
+
+        switch (m_VAllowedVarNameAddedByUser[i].value.GetType())
+        {
+          case 'i':
+            iss << "#I " << m_VAllowedVarNameAddedByUser[i].name << " " << m_VAllowedVarNameAddedByUser[i].value.GetInteger();
+            str=iss.str(); 
+            vectI.push_back(str);
+          break;
+          case 'f':
+            iss << "#F " << m_VAllowedVarNameAddedByUser[i].name << " " << m_VAllowedVarNameAddedByUser[i].value.GetFloat(); 
+            str=iss.str(); 
+            vectF.push_back(str);
+          break;
+          case 'c':
+            itkExceptionMacro(<< "Complex numbers not supported." << std::endl);
+          break;
+          case 'm':
+            iss << "#M " << m_VAllowedVarNameAddedByUser[i].name << " " << "{";
+            for(int k=0; k<m_VAllowedVarNameAddedByUser[i].value.GetRows(); k++)
+            {
+              iss << " " << m_VAllowedVarNameAddedByUser[i].value.At(k,0);
+              for(int p=1; p<m_VAllowedVarNameAddedByUser[i].value.GetCols(); p++)
+                iss << " , " <<  m_VAllowedVarNameAddedByUser[i].value.At(k,p);
+                iss << " ;";
+            }
+            str=iss.str(); 
+            str.erase(str.size()-1);
+            str.push_back('}');
+            vectM.push_back(str);
+          break;
+        }  
+
+    }
+
+  // Sorrting : I F M and E at the end
+  for(int i=0;i<vectI.size();++i)
+    vectFinal.push_back(vectI[i]);
+  for(int i=0;i<vectF.size();++i)
+    vectFinal.push_back(vectF[i]);
+  for(int i=0;i<vectM.size();++i)
+    vectFinal.push_back(vectM[i]);
+  for(int i=0; i < m_Expression.size(); ++i)
+    {
+      std::ostringstream iss;
+      iss << "#E " << m_Expression[i] << std::endl;
+      std::string str=iss.str();
+      vectFinal.push_back(str);
+    }
+
+  std::ofstream exportFile(filename.c_str(), std::ios::out | std::ios::trunc);
+  if(exportFile)  
+    {
+      for(int i=0; i<vectFinal.size(); ++i)
+        exportFile << vectFinal[i] << std::endl;
+
+      exportFile.close();
+    }
+    else 
+      itkExceptionMacro(<< "Could not open " << filename << "." << std::endl);
+}
+
+template< typename TImage >
+void BandMathImageFilterX<TImage>
+::importContext(const std::string& filename) 
+{
+  std::ifstream importFile(filename.c_str(), std::ios::in);
+
+  std::string line,sub,name,matrixdef;
+  int pos,pos2,lineID=0;
+  double value;
+
+  if(importFile)  
+    {
+ 
+      while(std::getline(importFile,line))
+      {
+        lineID++;
+
+        if ( (line[0] == '#') && ((line[1] == 'I') || (line[1] == 'i') || (line[1] == 'F') || (line[1] == 'f')) )
+          {
+            
+            pos = line.find_first_not_of(' ',2);
+
+            if (pos == std::string::npos)
+              itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : please, set the name and the value of the constant." << std::endl);
+
+            sub = line.substr(pos);
+
+            pos = sub.find_first_of(' ');
+            name = sub.substr(0,pos); 
+        
+            if (sub.find_first_of('{',pos) != std::string::npos)
+              itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID 
+              << " : symbol #F found, but find vector/matrix definition. Please, set an integer or a float number." << std::endl);
+
+            if (sub.find_first_not_of(' ',pos) == std::string::npos )
+              itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : please, set the value of the constant." << std::endl)
+
+            std::istringstream iss( sub.substr(pos) );
+            iss >> value; 
+              
+            SetConstant(name,value);
+
+          }
+        else if ( (line[0] == '#') && ((line[1] == 'M') || (line[1] == 'm')) )
+          {
+
+            pos = line.find_first_not_of(' ',2);
+
+            if (pos == std::string::npos)
+              itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : please, set the name and the definition of the vector/matrix." << std::endl);
+
+            std::string sub = line.substr(pos);
+
+            pos = sub.find_first_of(' ');
+            name = sub.substr(0,pos);
+            pos2 = sub.find_first_of('{');
+            if (pos2 != std::string::npos)
+              matrixdef = sub.substr(pos2);
+            else
+              itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : symbol #M found, but couldn't not find vector/matrix definition." << std::endl);
+
+            SetMatrix(name,matrixdef);
+
+          }
+        else if ( (line[0] == '#') && ((line[1] == 'E') || (line[1] == 'e')) )
+          {
+            pos = line.find_first_not_of(' ',2);
+
+            if (pos == std::string::npos)
+              itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : symbol #E found, but couldn't not find any expression." << std::endl);
+
+            sub = line.substr(pos);
+
+            SetExpression(sub);
+          }
+
+      }
+
+      importFile.close();
+    }
+    else 
+      itkExceptionMacro(<< "Could not open " << filename << "." << std::endl);
+
+}
+
 
 template< typename TImage >
 std::string BandMathImageFilterX<TImage>
@@ -394,6 +571,8 @@ void BandMathImageFilterX<TImage>
           m_AImage[i][j].info[t]=m_VVarName[j].info[t];
 
        
+        //bool isAConstant = false;        
+
         if ( (m_AImage[i][j].type == 0 ) || (m_AImage[i][j].type == 1) ) // indices (idxX & idxY)
         {
             m_AImage[i][j].value = ValueType(initValue);
@@ -433,10 +612,17 @@ void BandMathImageFilterX<TImage>
           for(int t=0; t<m_VAllowedVarNameAddedByUser.size(); t++)
             if (m_VAllowedVarNameAddedByUser[t].name.compare(m_AImage[i][j].name) == 0)
               m_AImage[i][j].value = m_VAllowedVarNameAddedByUser[t].value;
+
+         // isAConstant=true;
               
         }
 
         m_VParser.at(i)->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value));
+
+       /* if (isAConstant)
+          m_VParser.at(i)->DefineConst(m_AImage[i][j].name, &(m_AImage[i][j].value));
+        else
+          m_VParser.at(i)->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value));*/
 
         initValue += 0.001;
         if (initValue>1.0)
@@ -693,7 +879,7 @@ void BandMathImageFilterX<TImage>
           break;
 
           case 7 :
-          //Nothing to do
+          //Nothing to do : user defined variable or constant, which have already been set
           break;
 
           default :

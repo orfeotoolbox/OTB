@@ -199,8 +199,9 @@ int otbBandMathImageFilterX( int itkNotUsed(argc), char* itkNotUsed(argv) [])
 }
 
 
-int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) [])
+int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
 {
+  const char * inputFilename  = argv[1];
 
   typedef otb::VectorImage<double, 2>              ImageType;
   typedef ImageType::PixelType                      PixelType;
@@ -266,13 +267,19 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) []
   FilterType::Pointer         filter       = FilterType::New();
   std::cout << "Number Of Threads  :  " << filter->GetNumberOfThreads() << std::endl;
 
+  double expo = 1.1;
 
   filter->SetNthInput(0, image1,"imageA");
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3, "canal3");
-  filter->SetMatrix("kernel1","{ 0.1 , 0.2 , 0.3; 0.4 , 0.5 , 0.6; 0.7 , 0.8 , 0.9; 1.0 , 1.1 , 1.2; 1.3 , 1.4 , 1.5 }");
-  filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5); im2b1^1.1; vcos(canal3); mean(imageAb2N3x3); var(imageAb2N3x3); median(imageAb2N3x3)");
+  //filter->SetMatrix("kernel1","{ 0.1 , 0.2 , 0.3; 0.4 , 0.5 , 0.6; 0.7 , 0.8 , 0.9; 1.0 , 1.1 , 1.2; 1.3 , 1.4 , 1.5 }");
+  //filter->SetVariable("expo",expo);
+  //filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5); im2b1^1.1; vcos(canal3); mean(imageAb2N3x3); var(imageAb2N3x3); median(imageAb2N3x3)");
+  filter->importContext(inputFilename); //Equivalent to three commands above
   filter->Update();
+
+  //filter->exportContext("/home/cpalmann/Desktop/testBandMathX.txt");
+  
 
   if (filter->GetNumberOfOutputs() != 1)
     itkGenericExceptionMacro(<< "Wrong number of outputs.");
@@ -309,7 +316,7 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* itkNotUsed(argv) []
     for(int i=0; i<it1.Size(); ++i)
         px1[1] += coefs[i]*it1.GetPixel(i)[1];
 
-    px1[2]= vcl_pow(it2.GetCenterPixel()[0],1.1);
+    px1[2]= vcl_pow(it2.GetCenterPixel()[0],expo);
 
     px1[3]= vcl_cos(it3.GetCenterPixel()[0]);
 

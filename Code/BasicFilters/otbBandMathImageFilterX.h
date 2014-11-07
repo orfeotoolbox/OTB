@@ -27,6 +27,8 @@
 
 #include "otbParserX.h"
 
+#include <vector>
+
 
 namespace otb
 {
@@ -119,6 +121,15 @@ public:
   /** Set a matrix (or a vector) */
   void SetMatrix(const std::string& name, const std::string& definition);
 
+  /** Set a variable */
+  void SetConstant(const std::string& name, double value);
+
+  /** Export constants and expressions to a given filename */
+  void exportContext(const std::string& filename);
+
+  /** Import constants and expressions from a given filename */
+  void importContext(const std::string& filename);
+
   /** Return the variable names */
   std::vector<std::string> GetVarNames() const;
 
@@ -143,6 +154,7 @@ private :
       int         info[5];
   } adhocStruct;
 
+
   BandMathImageFilterX(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
@@ -166,6 +178,7 @@ private :
   long                                  m_OverflowCount;
   itk::Array<long>                      m_ThreadUnderflow;
   itk::Array<long>                      m_ThreadOverflow;
+
 };
 
 }//end namespace otb

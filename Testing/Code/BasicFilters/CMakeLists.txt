@@ -2133,7 +2133,9 @@ add_test(bfTvBandMathImageFilterX ${BASICFILTERS_TESTS13}
   otbBandMathImageFilterX)
 
 add_test(bfTvotbBandMathImageFilterXConv ${BASICFILTERS_TESTS13}
-  otbBandMathImageFilterXConv)
+  otbBandMathImageFilterXConv
+  ${BASELINE_FILES}/bfTvExportBandMathX.txt
+)
 
 add_test(bfTvBandMathImageFilterXWithIdx ${BASICFILTERS_TESTS13}
   otbBandMathImageFilterXWithIdx

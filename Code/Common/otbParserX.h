@@ -63,6 +63,9 @@ public:
   /** Define a variable */
   void DefineVar(const std::string &sName, ValueType *fVar);
 
+  /** Define a constant */
+  //void DefineConst(const std::string &sName, ValueType *fVar);
+
   /** Clear all the defined variables */
   void ClearVar();
 
