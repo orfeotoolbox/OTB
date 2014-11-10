@@ -296,13 +296,13 @@ void BandMathImageFilterX<TImage>
 
 template< typename TImage >
 void BandMathImageFilterX<TImage>
-::exportContext(const std::string& filename)
+::exportContext(const std::string& filename) 
 {
 
   std::vector< std::string > vectI,vectF,vectM, vectFinal;
 
   for(int i=0; i<m_VAllowedVarNameAddedByUser.size(); i++)
-           {
+	    {
         std::ostringstream iss;
         std::string        str;
 
@@ -310,12 +310,12 @@ void BandMathImageFilterX<TImage>
         {
           case 'i':
             iss << "#I " << m_VAllowedVarNameAddedByUser[i].name << " " << m_VAllowedVarNameAddedByUser[i].value.GetInteger();
-            str=iss.str();
+            str=iss.str(); 
             vectI.push_back(str);
           break;
           case 'f':
-            iss << "#F " << m_VAllowedVarNameAddedByUser[i].name << " " << m_VAllowedVarNameAddedByUser[i].value.GetFloat();
-            str=iss.str();
+            iss << "#F " << m_VAllowedVarNameAddedByUser[i].name << " " << m_VAllowedVarNameAddedByUser[i].value.GetFloat(); 
+            str=iss.str(); 
             vectF.push_back(str);
           break;
           case 'c':
@@ -328,23 +328,23 @@ void BandMathImageFilterX<TImage>
               iss << " " << m_VAllowedVarNameAddedByUser[i].value.At(k,0);
               for(int p=1; p<m_VAllowedVarNameAddedByUser[i].value.GetCols(); p++)
                 iss << " , " <<  m_VAllowedVarNameAddedByUser[i].value.At(k,p);
-                iss << ";";
+                iss << " ;";
             }
-            str=iss.str();
+            str=iss.str(); 
             str.erase(str.size()-1);
             str.push_back('}');
             vectM.push_back(str);
           break;
-        }
+        }  
 
     }
 
   // Sorrting : I F M and E at the end
-  for(int i=0; i<vectI.size(); ++i)
+  for(int i=0;i<vectI.size();++i)
     vectFinal.push_back(vectI[i]);
-  for(int i=0; i<vectF.size(); ++i)
+  for(int i=0;i<vectF.size();++i)
     vectFinal.push_back(vectF[i]);
-  for(int i=0; i<vectM.size(); ++i)
+  for(int i=0;i<vectM.size();++i)
     vectFinal.push_back(vectM[i]);
   for(int i=0; i < m_Expression.size(); ++i)
     {
@@ -355,99 +355,117 @@ void BandMathImageFilterX<TImage>
     }
 
   std::ofstream exportFile(filename.c_str(), std::ios::out | std::ios::trunc);
-  if(exportFile)
+  if(exportFile)  
     {
       for(int i=0; i<vectFinal.size(); ++i)
         exportFile << vectFinal[i] << std::endl;
 
       exportFile.close();
     }
-    else
+    else 
       itkExceptionMacro(<< "Could not open " << filename << "." << std::endl);
 }
 
 template< typename TImage >
 void BandMathImageFilterX<TImage>
-::importContext(const std::string& filename)
+::importContext(const std::string& filename) 
 {
   std::ifstream importFile(filename.c_str(), std::ios::in);
 
-  std::string line,sub,name,matrixdef;
-  int pos,pos2,lineID=0;
+  std::string wholeline,line,sub,name,matrixdef;
+  int pos,pos2,lineID=0,nbSuccesses=0;
   double value;
 
-  if(importFile)
+  if(importFile)  
     {
  
-      while(std::getline(importFile,line))
+      while(std::getline(importFile,wholeline))
       {
         lineID++;
 
-        if ( (line[0] == '#') && ((line[1] == 'I') || (line[1] == 'i') || (line[1] == 'F') || (line[1] == 'f')) )
-          {
-            
-            pos = line.find_first_not_of(' ',2);
-
-            if (pos == std::string::npos)
-              itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : please, set the name and the value of the constant." << std::endl);
-
-            sub = line.substr(pos);
-
-            pos = sub.find_first_of(' ');
-            name = sub.substr(0,pos);
+        pos = wholeline.find_first_not_of(' ');
         
-            if (sub.find_first_of('{',pos) != std::string::npos)
-              itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID
-              << " : symbol #F found, but find vector/matrix definition. Please, set an integer or a float number." << std::endl);
+        if (pos != std::string::npos)
+        {
+          line = wholeline.substr(pos);
 
-            if (sub.find_first_not_of(' ',pos) == std::string::npos )
-              itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : please, set the value of the constant." << std::endl)
-
-            std::istringstream iss( sub.substr(pos) );
-            iss >> value;
+          if ( (line[0] == '#') && ((line[1] == 'I') || (line[1] == 'i') || (line[1] == 'F') || (line[1] == 'f')) )
+            {
               
-            SetConstant(name,value);
+              pos = line.find_first_not_of(' ',2);
 
-          }
-        else if ( (line[0] == '#') && ((line[1] == 'M') || (line[1] == 'm')) )
-          {
+              if (pos == std::string::npos)
+                itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : please, set the name and the value of the constant." << std::endl);
 
-            pos = line.find_first_not_of(' ',2);
+              sub = line.substr(pos);
 
-            if (pos == std::string::npos)
-              itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : please, set the name and the definition of the vector/matrix." << std::endl);
+              pos = sub.find_first_of(' ');
+              name = sub.substr(0,pos); 
+          
+              if (sub.find_first_of('{',pos) != std::string::npos)
+                itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID 
+                << " : symbol #F found, but find vector/matrix definition. Please, set an integer or a float number." << std::endl);
 
-            std::string sub = line.substr(pos);
+              if (sub.find_first_not_of(' ',pos) == std::string::npos )
+                itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : please, set the value of the constant." << std::endl)
 
-            pos = sub.find_first_of(' ');
-            name = sub.substr(0,pos);
-            pos2 = sub.find_first_of('{');
-            if (pos2 != std::string::npos)
-              matrixdef = sub.substr(pos2);
-            else
-              itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : symbol #M found, but couldn't not find vector/matrix definition." << std::endl);
+              std::istringstream iss( sub.substr(pos) );
+              iss >> value; 
+                
+              SetConstant(name,value);
+              nbSuccesses++;
 
-            SetMatrix(name,matrixdef);
+            }
+          else if ( (line[0] == '#') && ((line[1] == 'M') || (line[1] == 'm')) )
+            {
 
-          }
-        else if ( (line[0] == '#') && ((line[1] == 'E') || (line[1] == 'e')) )
-          {
-            pos = line.find_first_not_of(' ',2);
+              pos = line.find_first_not_of(' ',2);
 
-            if (pos == std::string::npos)
-              itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : symbol #E found, but couldn't not find any expression." << std::endl);
+              if (pos == std::string::npos)
+                itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : please, set the name and the definition of the vector/matrix." << std::endl);
 
-            sub = line.substr(pos);
+              std::string sub = line.substr(pos);
 
-            SetExpression(sub);
-          }
+              pos = sub.find_first_of(' ');
+              name = sub.substr(0,pos);
+              pos2 = sub.find_first_of('{');
+              if (pos2 != std::string::npos)
+                matrixdef = sub.substr(pos2);
+              else
+                itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : symbol #M found, but couldn't not find vector/matrix definition." << std::endl);
 
-      }
+              SetMatrix(name,matrixdef);
+              nbSuccesses++;
+
+            }
+          else if ( (line[0] == '#') && ((line[1] == 'E') || (line[1] == 'e')) )
+            {
+              pos = line.find_first_not_of(' ',2);
+
+              if (pos == std::string::npos)
+                itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : symbol #E found, but couldn't not find any expression." << std::endl);
+
+              sub = line.substr(pos);
+
+              SetExpression(sub);
+              nbSuccesses++;
+
+            }
+ 
+        }
+      }//while
 
       importFile.close();
+
+
+    if (nbSuccesses == 0)
+      itkExceptionMacro(<< "No constant or expression could be set; please, ensure that the file '" << filename << "' is correct." << std::endl);
+
     }
-    else
+    else 
       itkExceptionMacro(<< "Could not open " << filename << "." << std::endl);
+
+
 
 }
 
@@ -571,7 +589,7 @@ void BandMathImageFilterX<TImage>
           m_AImage[i][j].info[t]=m_VVarName[j].info[t];
 
        
-        //bool isAConstant = false;
+        //bool isAConstant = false;        
 
         if ( (m_AImage[i][j].type == 0 ) || (m_AImage[i][j].type == 1) ) // indices (idxX & idxY)
         {
@@ -622,7 +640,7 @@ void BandMathImageFilterX<TImage>
        /* if (isAConstant)
           m_VParser.at(i)->DefineConst(m_AImage[i][j].name, &(m_AImage[i][j].value));
         else
-          m_VParser.at(i)->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value)); */
+          m_VParser.at(i)->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value));*/
 
         initValue += 0.001;
         if (initValue>1.0)

@@ -153,7 +153,9 @@ OTB_TEST_APPLICATION(NAME apTvUtBandMathX
                                   ${INPUTDATA}/poupees_sub_c2.png
                                   ${INPUTDATA}/poupees_sub.png
                              -out ${TEMP}/apTvUtBandMathXOutput.tif
-                             -exp "cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3,im3b4)"
+                             #-exp "cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3,im3b4)"
+                             -incontext ${INPUTDATA}/apTvUtExportBandMathX.txt
+                             #-outcontext ${TEMP}/apTvUtExportBandMathXTemp.txt
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/apTvUtBandMathOutput.tif
                              ${TEMP}/apTvUtBandMathXOutput.tif)

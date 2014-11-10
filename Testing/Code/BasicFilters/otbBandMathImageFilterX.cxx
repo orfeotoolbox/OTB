@@ -277,8 +277,6 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
   //filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5); im2b1^1.1; vcos(canal3); mean(imageAb2N3x3); var(imageAb2N3x3); median(imageAb2N3x3)");
   filter->importContext(inputFilename); //Equivalent to three commands above
   filter->Update();
-
-  //filter->exportContext("/home/cpalmann/Desktop/testBandMathX.txt");
   
 
   if (filter->GetNumberOfOutputs() != 1)

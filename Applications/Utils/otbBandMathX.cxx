@@ -134,9 +134,20 @@ private:
 
     AddRAMParameter();
 
-    AddParameter(ParameterType_String, "exp", "Expression");
+    AddParameter(ParameterType_StringList, "exp", "Expression");
     SetParameterDescription("exp",
                             "The mathematical expression to apply.");
+    MandatoryOff("exp");
+
+    AddParameter(ParameterType_String, "incontext", "Import context");
+    SetParameterDescription("incontext",
+                            "A txt file containing user's constants and expressions.");
+    MandatoryOff("incontext");
+
+    AddParameter(ParameterType_String, "outcontext", "Export context");
+    SetParameterDescription("outcontext",
+                            "A txt file containing user's constants and expressions.");
+    MandatoryOff("outcontext");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "verySmallFSATSW_r.tif verySmallFSATSW_nir.tif verySmallFSATSW.tif");
@@ -158,13 +169,18 @@ private:
     const unsigned int nbImages = inList->Size();
 
     if (nbImages == 0)
-      {
-       itkExceptionMacro("No input Image set...; please set at least one input image");
-      }
+    {
+     itkExceptionMacro("No input Image set...; please set at least one input image");
+    }
 
-    //m_ChannelExtractorList = ExtractROIFilterListType::New();
+    if ( (!HasUserValue("exp")) && (!HasUserValue("incontext")) )
+    {
+     itkExceptionMacro("No expression set...; please set at least one one expression");
+    }
+
+
+
     m_Filter               = BandMathImageFilterType::New();
-
 
     for (unsigned int i = 0; i < nbImages; i++)
       {
@@ -179,10 +195,22 @@ private:
 
       }
 
-    m_Filter->SetExpression(GetParameterString("exp"));
+
+    if ( (HasUserValue("exp")) && (IsParameterEnabled("exp")) )
+    {
+      std::vector<std::string> stringList = GetParameterStringList("exp");
+      for(int s=0; s<stringList.size(); s++)
+        m_Filter->SetExpression(stringList[s]);
+    }
+
+    if ( (HasUserValue("incontext")) && (IsParameterEnabled("incontext")) )
+      m_Filter->importContext(GetParameterString("incontext"));
 
     // Set the output image
     SetParameterOutputImage("out", m_Filter->GetOutput());
+
+    if ( (HasUserValue("outcontext")) && (IsParameterEnabled("outcontext")) )
+      m_Filter->exportContext(GetParameterString("outcontext"));
   }
 
   BandMathImageFilterType::Pointer  m_Filter;
