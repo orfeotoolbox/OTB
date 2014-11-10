@@ -275,7 +275,7 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
   //filter->SetMatrix("kernel1","{ 0.1 , 0.2 , 0.3; 0.4 , 0.5 , 0.6; 0.7 , 0.8 , 0.9; 1.0 , 1.1 , 1.2; 1.3 , 1.4 , 1.5 }");
   //filter->SetVariable("expo",expo);
   //filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5); im2b1^1.1; vcos(canal3); mean(imageAb2N3x3); var(imageAb2N3x3); median(imageAb2N3x3)");
-  filter->importContext(inputFilename); //Equivalent to three commands above
+  filter->ImportContext(inputFilename); //Equivalent to three commands above
   filter->Update();
   
 

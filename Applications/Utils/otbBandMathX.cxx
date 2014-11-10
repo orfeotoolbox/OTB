@@ -122,7 +122,7 @@ private:
       "#F expo 1.1\n"
       "#M kernel1 { 0.1 , 0.2 , 0.3 ; 0.4 , 0.5 , 0.6 ; 0.7 , 0.8 , 0.9 ; 1 , 1.1 , 1.2 ; 1.3 , 1.4 , 1.5 }\n"
       "\nAs we can see,  #I/#F allows the definition of an integer/float constant, whereas #M allows the definition of a vector/matrix.\n"
-      "In the latter case, elements of a row must be separated by comma, and rows must be separated by semicolons.\n"
+      "In the latter case, elements of a row must be separated by commas, and rows must be separated by semicolons.\n"
       "It is also possible to define expressions within the same txt file, with the pattern #E expr; they will be added to the list of expressions to be applied. For instance:\n\n"
       "#E conv(kernel1,im1b1N3x5) ; im2b1^expo\n"
       "\n- The 'outcontext' parameter allows to save user's constants and expressions (context).\n"
@@ -215,13 +215,13 @@ private:
     }
 
     if ( (HasUserValue("incontext")) && (IsParameterEnabled("incontext")) )
-      m_Filter->importContext(GetParameterString("incontext"));
+      m_Filter->ImportContext(GetParameterString("incontext"));
 
     // Set the output image
     SetParameterOutputImage("out", m_Filter->GetOutput());
 
     if ( (HasUserValue("outcontext")) && (IsParameterEnabled("outcontext")) )
-      m_Filter->exportContext(GetParameterString("outcontext"));
+      m_Filter->ExportContext(GetParameterString("outcontext"));
   }
 
   BandMathImageFilterType::Pointer  m_Filter;

@@ -296,7 +296,7 @@ void BandMathImageFilterX<TImage>
 
 template< typename TImage >
 void BandMathImageFilterX<TImage>
-::exportContext(const std::string& filename) 
+::ExportContext(const std::string& filename) 
 {
 
   std::vector< std::string > vectI,vectF,vectM, vectFinal;
@@ -368,7 +368,7 @@ void BandMathImageFilterX<TImage>
 
 template< typename TImage >
 void BandMathImageFilterX<TImage>
-::importContext(const std::string& filename) 
+::ImportContext(const std::string& filename) 
 {
   std::ifstream importFile(filename.c_str(), std::ios::in);
 

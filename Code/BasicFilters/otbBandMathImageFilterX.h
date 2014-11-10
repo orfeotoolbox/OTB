@@ -125,10 +125,10 @@ public:
   void SetConstant(const std::string& name, double value);
 
   /** Export constants and expressions to a given filename */
-  void exportContext(const std::string& filename);
+  void ExportContext(const std::string& filename);
 
   /** Import constants and expressions from a given filename */
-  void importContext(const std::string& filename);
+  void ImportContext(const std::string& filename);
 
   /** Return the variable names */
   std::vector<std::string> GetVarNames() const;
