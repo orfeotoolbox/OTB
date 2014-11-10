@@ -121,7 +121,7 @@ public:
   /** Set a matrix (or a vector) */
   void SetMatrix(const std::string& name, const std::string& definition);
 
-  /** Set a variable */
+  /** Set a constant */
   void SetConstant(const std::string& name, double value);
 
   /** Export constants and expressions to a given filename */
@@ -130,7 +130,7 @@ public:
   /** Import constants and expressions from a given filename */
   void ImportContext(const std::string& filename);
 
-  /** Return the variable names */
+  /** Return the variable and constant names */
   std::vector<std::string> GetVarNames() const;
 
 
