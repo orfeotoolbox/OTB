@@ -115,16 +115,16 @@ private:
       "- Application itself:\n\n"
       "The application takes the following parameters :"
       "- Setting the list of inputs can be done with the 'il' parameter.\n"
-      "- Setting expressions can be done with the 'exp' parameter. Separating expressions by semi-colons (;) will concatenate their results into one multiband output image.\n"
+      "- Setting expressions can be done with the 'exp' parameter. Separating expressions by semi-colons (; ) will concatenate their results into one multiband output image.\n"
       "Adding expressions without the use of semi-colons will produce additional output images (not implemented yet).\n"
       "- Setting constants can be done with the 'incontext' parameter. User must provide a txt file with a specific syntax: #type name value\n"
       "An example of such a file is given below:\n\n"
       "#F expo 1.1\n"
-      "#M kernel1 { 0.1 , 0.2 , 0.3 ; 0.4 , 0.5 , 0.6 ; 0.7 , 0.8 , 0.9 ; 1 , 1.1 , 1.2 ; 1.3 , 1.4 , 1.5 }\n"
+      "#M kernel1 { 0.1 , 0.2 , 0.3; 0.4 , 0.5 , 0.6; 0.7 , 0.8 , 0.9; 1 , 1.1 , 1.2; 1.3 , 1.4 , 1.5 }\n"
       "\nAs we can see,  #I/#F allows the definition of an integer/float constant, whereas #M allows the definition of a vector/matrix.\n"
       "In the latter case, elements of a row must be separated by commas, and rows must be separated by semicolons.\n"
       "It is also possible to define expressions within the same txt file, with the pattern #E expr; they will be added to the list of expressions to be applied. For instance:\n\n"
-      "#E conv(kernel1,im1b1N3x5) ; im2b1^expo\n"
+      "#E conv(kernel1,im1b1N3x5); im2b1^expo\n"
       "\n- The 'outcontext' parameter allows to save user's constants and expressions (context).\n"
       "- Setting the output image can be done with the 'out' parameter (multi-outputs is not implemented yet).\n"
       "\n\n"
@@ -188,7 +188,6 @@ private:
     {
      itkExceptionMacro("No expression set...; please set at least one one expression");
     }
-
 
 
     m_Filter               = BandMathImageFilterType::New();
