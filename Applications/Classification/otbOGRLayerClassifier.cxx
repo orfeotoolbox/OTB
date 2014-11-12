@@ -82,31 +82,31 @@ private:
   void DoUpdateParameters()
   {
     if ( HasValue("inshp") )
-      {	
-	const char * shapefile = GetParameterString("inshp").c_str();
+      {
+       const char * shapefile = GetParameterString("inshp").c_str();
 
-	otb::ogr::DataSource::Pointer ogrDS;
-	otb::ogr::Layer layer(NULL, false);
+       otb::ogr::DataSource::Pointer ogrDS;
+       otb::ogr::Layer layer(NULL, false);
 
-	OGRSpatialReference oSRS("");
-	std::vector<std::string> options;
-	
-	ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
-	std::string layername = itksys::SystemTools::GetFilenameName(shapefile);
-	layername = layername.substr(0,layername.size()-4);
-	layer = ogrDS->GetLayer(0);
+       OGRSpatialReference oSRS("");
+       std::vector<std::string> options;
+       
+       ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
+       std::string layername = itksys::SystemTools::GetFilenameName(shapefile);
+       layername = layername.substr(0,layername.size()-4);
+       layer = ogrDS->GetLayer(0);
 
-	otb::ogr::Feature feature = layer.ogr().GetNextFeature();
-	ClearChoices("feat");
-	for(int iField=0;iField<feature.ogr().GetFieldCount();iField++)
-	  {
-	    std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
-	    key = item;
-	    key.erase(std::remove(key.begin(), key.end(), ' '), key.end());
-	    std::transform(key.begin(), key.end(), key.begin(), tolower);
-	    key="feat."+key;
-	    AddChoice(key,item);
-	  }
+       otb::ogr::Feature feature = layer.ogr().GetNextFeature();
+       ClearChoices("feat");
+       for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
+         {
+           std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
+           key = item;
+           key.erase(std::remove(key.begin(), key.end(), ' '), key.end());
+           std::transform(key.begin(), key.end(), key.begin(), tolower);
+           key="feat."+key;
+           AddChoice(key,item);
+         }
       }
   }
 
@@ -135,8 +135,8 @@ private:
     MeasurementType meanMeasurementVector = statisticsReader->GetStatisticVectorByName("mean");
     MeasurementType stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
 
-    otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read); 
-    otb::ogr::Layer layer = source->GetLayer(0); 
+    otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
+    otb::ogr::Layer layer = source->GetLayer(0);
     bool goesOn = true;
     otb::ogr::Feature feature = layer.ogr().GetNextFeature();
 
@@ -146,17 +146,17 @@ private:
 
     if(feature.addr())
       while(goesOn)
-	{
-	  MeasurementType mv; mv.SetSize(nbFeatures);
-	  
-	  for(int idx=0; idx < nbFeatures; ++idx)
-	    mv[idx] = feature.ogr().GetFieldAsDouble(GetSelectedItems("feat")[idx]);
-	  
-	  input->PushBack(mv);
-	  target->PushBack(feature.ogr().GetFieldAsInteger("class"));
-	  feature = layer.ogr().GetNextFeature();
-	  goesOn = feature.addr() != 0;
-	}
+       {
+         MeasurementType mv; mv.SetSize(nbFeatures);
+         
+         for(int idx=0; idx < nbFeatures; ++idx)
+           mv[idx] = feature.ogr().GetFieldAsDouble(GetSelectedItems("feat")[idx]);
+         
+         input->PushBack(mv);
+         target->PushBack(feature.ogr().GetFieldAsInteger("class"));
+         feature = layer.ogr().GetNextFeature();
+         goesOn = feature.addr() != 0;
+       }
 
     ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
     trainingShiftScaleFilter->SetInput(input);
@@ -180,8 +180,8 @@ private:
     libSVMClassifier->Load(modelfile);
     libSVMClassifier->PredictAll();
 
-    otb::ogr::DataSource::Pointer source2 = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Update_LayerUpdate); 
-    otb::ogr::Layer layer2 = source2->GetLayer(0); 
+    otb::ogr::DataSource::Pointer source2 = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Update_LayerUpdate);
+    otb::ogr::Layer layer2 = source2->GetLayer(0);
  
     OGRFieldDefn predictedField(GetParameterString("cfield").c_str(), OFTInteger);
     layer2.CreateField(predictedField, true);
@@ -193,13 +193,13 @@ private:
 
     if(feature2.addr())
       while(goesOn2)
-	{	
+       {
         feature2.ogr().SetField(GetParameterString("cfield").c_str(),(int)labelListSample->GetMeasurementVector(count)[0]);
-	  layer2.SetFeature(feature2);
-	  feature2 = layer2.ogr().GetNextFeature();
-	  goesOn2 = feature2.addr() != 0;
-	  count++;
-	}  
+         layer2.SetFeature(feature2);
+         feature2 = layer2.ogr().GetNextFeature();
+         goesOn2 = feature2.addr() != 0;
+         count++;
+       }
     layer2.ogr().CommitTransaction();
     source2->SyncToDisk();
 
@@ -213,6 +213,5 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::OGRLayerClassifier)
-
 
 

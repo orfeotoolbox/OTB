@@ -67,31 +67,31 @@ private:
   void DoUpdateParameters()
   {
     if ( HasValue("inshp") )
-      {	
-	const char * shapefile = GetParameterString("inshp").c_str();
+      {
+       const char * shapefile = GetParameterString("inshp").c_str();
 
-	otb::ogr::DataSource::Pointer ogrDS;
-	otb::ogr::Layer layer(NULL, false);
+       otb::ogr::DataSource::Pointer ogrDS;
+       otb::ogr::Layer layer(NULL, false);
 
-	OGRSpatialReference oSRS("");
-	std::vector<std::string> options;
-	
-	ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
-	std::string layername = itksys::SystemTools::GetFilenameName(shapefile);
-	layername = layername.substr(0,layername.size()-4);
-	layer = ogrDS->GetLayer(0);
+       OGRSpatialReference oSRS("");
+       std::vector<std::string> options;
+       
+       ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
+       std::string layername = itksys::SystemTools::GetFilenameName(shapefile);
+       layername = layername.substr(0,layername.size()-4);
+       layer = ogrDS->GetLayer(0);
 
-	otb::ogr::Feature feature = layer.ogr().GetNextFeature();
-	ClearChoices("feat");
-	for(unsigned int iField=0;iField<feature.ogr().GetFieldCount();iField++)
-	  {
-	    std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
-	    key = item;
-	    key.erase(std::remove(key.begin(), key.end(), ' '), key.end());
-	    std::transform(key.begin(), key.end(), key.begin(), tolower);
-	    key="feat."+key;
-	    AddChoice(key,item);
-	  }
+       otb::ogr::Feature feature = layer.ogr().GetNextFeature();
+       ClearChoices("feat");
+       for(unsigned int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
+         {
+           std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
+           key = item;
+           key.erase(std::remove(key.begin(), key.end(), ' '), key.end());
+           std::transform(key.begin(), key.end(), key.begin(), tolower);
+           key="feat."+key;
+           AddChoice(key,item);
+         }
       }
   }
 
@@ -104,7 +104,7 @@ private:
 
       otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
   
-      otb::ogr::Layer layer = source->GetLayer(0); 
+      otb::ogr::Layer layer = source->GetLayer(0);
       bool goesOn = true;
       otb::ogr::Feature feature = layer.ogr().GetNextFeature();
   
@@ -115,26 +115,26 @@ private:
       const int nbFeatures = GetSelectedItems("feat").size();
       
       if(feature.addr())
-	while(goesOn)
-	  {
-	    MeasurementType mv; mv.SetSize(nbFeatures);
-	    
-	    for(unsigned int idx=0; idx < nbFeatures; ++idx)
-	      mv[idx] = feature.ogr().GetFieldAsDouble(GetSelectedItems("feat")[idx]);
-	    
-	    featValue.push_back(mv);
-	    feature = layer.ogr().GetNextFeature();
-	    goesOn = feature.addr() != 0;
-	  }
+       while(goesOn)
+         {
+           MeasurementType mv; mv.SetSize(nbFeatures);
+           
+           for(unsigned int idx=0; idx < nbFeatures; ++idx)
+             mv[idx] = feature.ogr().GetFieldAsDouble(GetSelectedItems("feat")[idx]);
+           
+           featValue.push_back(mv);
+           feature = layer.ogr().GetNextFeature();
+           goesOn = feature.addr() != 0;
+         }
   
       MeasurementType mean; mean.SetSize(nbFeatures);
       MeasurementType stddev; stddev.SetSize(nbFeatures);
 
-      for(unsigned int featIt=0;featIt<nbFeatures;featIt++){
-	double sum = 0.0; for(unsigned add=0;add<featValue.size();add++)  sum += featValue[add][featIt];
-	mean[featIt] =  sum / featValue.size();
-	double accum = 0.0; for(unsigned add=0;add<featValue.size();add++) accum += (featValue[add][featIt] - mean[featIt]) * (featValue[add][featIt] - mean[featIt]);
-	stddev[featIt] = sqrt(accum / (featValue.size()-1));}
+      for(unsigned int featIt=0; featIt<nbFeatures; featIt++){
+       double sum = 0.0; for(unsigned add=0; add<featValue.size(); add++)  sum += featValue[add][featIt];
+       mean[featIt] =  sum / featValue.size();
+       double accum = 0.0; for(unsigned add=0; add<featValue.size(); add++) accum += (featValue[add][featIt] - mean[featIt]) * (featValue[add][featIt] - mean[featIt]);
+       stddev[featIt] = sqrt(accum / (featValue.size()-1)); }
   
       typedef otb::StatisticsXMLFileWriter<MeasurementType> StatisticsWriter;
       StatisticsWriter::Pointer writer = StatisticsWriter::New();
