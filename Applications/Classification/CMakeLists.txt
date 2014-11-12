@@ -40,5 +40,14 @@ OTB_CREATE_APPLICATION(NAME         ImageClassifier
                        SOURCES      otbImageClassifier.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
 
+OTB_CREATE_APPLICATION(NAME         ComputeOGRLayersFeaturesStatistics
+                       SOURCES      otbComputeOGRLayersFeaturesStatistics.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
 
+OTB_CREATE_APPLICATION(NAME         TrainOGRLayersClassifier
+                       SOURCES      otbTrainOGRLayersClassifier.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
 
+OTB_CREATE_APPLICATION(NAME         OGRLayerClassifier
+                       SOURCES      otbOGRLayerClassifier.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
