@@ -124,11 +124,48 @@ PleiadesPToXSAffineTransformCalculator
     tmpStr = kwlXS.GetMetadataByKey("support_data.swath_first_col");
     int colStartXS = atoi(tmpStr.c_str());
       
-    // Compute shift between MS and P (in Pan pixels)
-    // in order to keep the top left corners unchanged, apply an
-    // additional offset of (3/2) panchro pixels
-    double lineShift_MS_P = (timeDelta/(linePeriodPan/1000))-1.5;
-    double colShift_MS_P =  ((colStartXS)*4 - colStartPan)-1.5;
+
+    /**
+    This code compute the shift between PAN and XS image from a bundle
+    product in SENSOR geometry level using acquisition start time of
+    XS and PAN images, as well as PAN sampling rate to get the shift
+    in lines and FIRST_COL metadata to get shift in columns. Here are
+    two examples of how this computation is done:
+
+    Product 6543
+                              XS                            PA
+      START                   17:16:57.2374640              17:16:57.2373170
+      Te                      0.294                         0.0735
+      FIRST_COL               3577                          14304
+
+      deltaMS-PA =  0.000147
+      deltaMS-PA_nb_lin = deltaMS-PA / (TePA / 1000) = 2 lines
+      deltacolMS-PA = (FIRST_COL _MS -1 )*4 + 1 - FIRST_COL_PA = 1 column
+
+    Product 0445
+                              XS                            PA
+      START                   17:20:45.2371140              17:20:45.2369670
+      Te                      0.294                         0.0735
+      FIRST_COL               526                           2101
+
+      deltaMS-PA =  0.000147
+      deltaMS-PA_nb_lin = deltaMS-PA / (TePA / 1000) = 2 lines
+      deltacolMS-PA = (FIRST_COL _MS -1 )*4 + 1 - FIRST_COL_PA = 0 column
+
+    In order to get a transform from PAN physical space to XS physical
+    space, we have to take into account two additional effects:
+    - The shifts above must be multiplied by -1 to get the correct
+      transform direction,
+    - In SENSOR geometry level, sampling grids of XS and PAN product
+      are phased, which means that a shift of 1.5 pixels must be added
+      in both directions in order to get the upper-left corners of XS
+      and PAN pixels to match.
+
+    This leads to the following formula:
+     */
+    double lineShift_MS_P = -vcl_floor((timeDelta/(linePeriodPan/1000)+0.5))+1.5;
+    double colShift_MS_P =  -((colStartXS-1)*4 - colStartPan + 1)+1.5;
+
      
     // Apply the scaling
     typedef itk::ScalableAffineTransform<double, 2>  TransformType;
@@ -137,15 +174,13 @@ PleiadesPToXSAffineTransformCalculator
 
     // Apply the offset
     TransformType::OutputVectorType offset;
-    offset[0] = static_cast<double>(colShift_MS_P);
-
-    // Y axis inverted
-    offset[1] = static_cast<double>(-lineShift_MS_P);
+    offset[0] = colShift_MS_P;
+    offset[1] = lineShift_MS_P;
     transform->Translate(offset);
 
+    // Apply the scaling
     transform->Scale(0.25);
 
-    // Invert the transform to get the P to XS transform
     return transform;
     }
 
