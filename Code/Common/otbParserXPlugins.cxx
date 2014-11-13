@@ -18,6 +18,8 @@
 #include "otbParserXPlugins.h"
 
 #include "otbMath.h"
+#include "itkNumericTraits.h"
+
 #include <vector>
 
 namespace otb
@@ -339,6 +341,129 @@ void median::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a
         
           case 'f':
             vect.push_back( (double) a_pArg[k]->GetFloat());
+          break;
+        }
+      }
+
+      // The return value is passed by writing it to the reference ret
+      mup::matrix_type res(1,vect.size(),0);
+      for (int j=0; j<vect.size(); j++)
+            res.At(0,j) = vect[j];
+      *ret = res;
+    }
+
+
+
+void vmin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+    {
+  
+      std::vector<double> vect;
+      double min; 
+
+      int nbrows,nbcols;
+      mup::matrix_type m1;
+
+      for (int k=0; k<a_iArgc; ++k)
+      {
+
+        // Get the argument from the argument input vector
+        switch (a_pArg[k]->GetType())
+        {
+          case 'm':
+
+            min = itk::NumericTraits<double>::max();
+
+            m1 = a_pArg[k]->GetArray();
+
+            nbrows = m1.GetRows();
+            nbcols = m1.GetCols();
+
+            for (int i=0; i<nbrows; i++)
+              for (int j=0; j<nbcols; j++)
+                if (m1.At(i,j).GetFloat() < min )
+                  min = m1.At(i,j).GetFloat();
+
+            vect.push_back(min);
+
+          break;
+    
+          case 'i':
+            min = itk::NumericTraits<double>::max();
+
+            if ( (double) a_pArg[k]->GetInteger() < min)
+              min = (double) a_pArg[k]->GetInteger();
+
+            vect.push_back(min);
+          break;
+        
+          case 'f':
+            min = itk::NumericTraits<double>::max();
+
+            if ( a_pArg[k]->GetFloat() < min)
+              min = a_pArg[k]->GetFloat();
+
+            vect.push_back(min);
+          break;
+        }
+      }
+
+      // The return value is passed by writing it to the reference ret
+      mup::matrix_type res(1,vect.size(),0);
+      for (int j=0; j<vect.size(); j++)
+            res.At(0,j) = vect[j];
+      *ret = res;
+    }
+
+
+void vmax::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+    {
+  
+      std::vector<double> vect;
+      double max; 
+
+      int nbrows,nbcols;
+      mup::matrix_type m1;
+
+      for (int k=0; k<a_iArgc; ++k)
+      {
+
+        // Get the argument from the argument input vector
+        switch (a_pArg[k]->GetType())
+        {
+          case 'm':
+
+            max = itk::NumericTraits<double>::min();
+
+            m1 = a_pArg[k]->GetArray();
+
+            nbrows = m1.GetRows();
+            nbcols = m1.GetCols();
+
+            for (int i=0; i<nbrows; i++)
+              for (int j=0; j<nbcols; j++)
+                if (m1.At(i,j).GetFloat() > max )
+                  max = m1.At(i,j).GetFloat();
+
+            vect.push_back(max);
+
+          break;
+    
+          case 'i':
+            max = itk::NumericTraits<double>::min();
+
+            if ( (double) a_pArg[k]->GetInteger() > max)
+              max = (double) a_pArg[k]->GetInteger();
+
+            vect.push_back(max);
+          break;
+        
+          case 'f':
+            max = itk::NumericTraits<double>::min();
+
+            if ( a_pArg[k]->GetFloat() > max)
+              max = a_pArg[k]->GetFloat();
+
+            vect.push_back(max);
           break;
         }
       }

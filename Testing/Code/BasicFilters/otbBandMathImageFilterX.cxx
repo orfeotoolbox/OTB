@@ -273,38 +273,46 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3, "canal3");
   //filter->SetMatrix("kernel1","{ 0.1 , 0.2 , 0.3; 0.4 , 0.5 , 0.6; 0.7 , 0.8 , 0.9; 1.0 , 1.1 , 1.2; 1.3 , 1.4 , 1.5 }");
-  //filter->SetVariable("expo",expo);
+  //filter->SetConstant("expo",expo);
   //filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5); im2b1^1.1; vcos(canal3); mean(imageAb2N3x3); var(imageAb2N3x3); median(imageAb2N3x3)");
   filter->ImportContext(inputFilename); //Equivalent to three commands above
+  filter->SetExpression("(vmax(canal3b1N3x5)+vmin(canal3b1N3x5)) div {2.0}");
   filter->Update();
-  
 
-  if (filter->GetNumberOfOutputs() != 1)
+  if (filter->GetNumberOfOutputs() != 2)
     itkGenericExceptionMacro(<< "Wrong number of outputs.");
   
 
   ImageType::Pointer output1 = filter->GetOutput(0);
+  ImageType::Pointer output2 = filter->GetOutput(1);
 
   if (output1->GetNumberOfComponentsPerPixel() != 7)
-    itkGenericExceptionMacro(<< "Wrong number of components per pixel.");
+    itkGenericExceptionMacro(<< "Wrong number of components per pixel (input 1).");
+
+  if (output2->GetNumberOfComponentsPerPixel() != 1)
+    itkGenericExceptionMacro(<< "Wrong number of components per pixel (input 2).");
 
   std::cout << "\n---  Standard Use\n";
-  std::cout << "Parsed Expression :   " << filter->GetExpression(0) << std::endl;
-
+  std::cout << "Parsed Expression 1 :   " << filter->GetExpression(0) << std::endl;
+  std::cout << "Parsed Expression 2 :   " << filter->GetExpression(1) << std::endl;
 
 
   //Sub-test 1
   IteratorType itoutput1(radius, output1, region);
+  IteratorType itoutput2(radius, output2, region);
 
-  for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(), itoutput1.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3, ++itoutput1)
+  for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(), itoutput1.GoToBegin(), itoutput2.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3, ++itoutput1, ++itoutput2)
     {
     ImageType::IndexType i1 = it1.GetIndex();
     ImageType::IndexType i2 = it2.GetIndex();
     ImageType::IndexType i3 = it3.GetIndex();
+    
     PixelType px1(output1->GetNumberOfComponentsPerPixel());
+    PixelType px2(output2->GetNumberOfComponentsPerPixel());
 
     float coefs[15] = { 0.1 , 0.2 , 0.3 , 0.4 , 0.5 , 0.6 , 0.7 , 0.8 , 0.9 , 1.0 , 1.1 , 1.2 , 1.3 , 1.4 , 1.5};
 
+    //expression 1
     px1[0]=0;
     for(int i=0; i<it1.Size(); ++i)
         px1[0] += coefs[i]*it1.GetPixel(i)[0];
@@ -336,6 +344,16 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
     std::sort(vect.begin(),vect.end());
     px1[6] = vect[(int) (vect.size()/2.)]; //median
 
+
+    //expression 2
+    std::vector<double> vect2;
+    for (int i=0; i<it3.Size(); i++)
+      vect2.push_back(it3.GetPixel(i)[0]);
+    std::sort(vect2.begin(),vect2.end());
+    px2[0] = (vect2.back() + vect2.front())/2.0;
+
+
+    //expression 1
     double result1 = itoutput1.GetCenterPixel()[0], result2 = itoutput1.GetCenterPixel()[1], result3 = itoutput1.GetCenterPixel()[2], result4 = itoutput1.GetCenterPixel()[3], result5 = itoutput1.GetCenterPixel()[4] , result6 = itoutput1.GetCenterPixel()[5], result7 = itoutput1.GetCenterPixel()[6];
     double error1,error2,error3,error4,error5,error6,error7;
 
@@ -349,7 +367,13 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
     error6 = (result6 - expected6) * (result6 - expected6) / (result6 + expected6);
     error7 = (result7 - expected7) * (result7 - expected7) / (result7 + expected7);
 
-    if ( ( error1 > 1E-9 ) || ( error2 > 1E-9 ) || ( error3 > 1E-9 ) || ( error4 > 1E-9 ) || ( error5 > 1E-9 ) || ( error6 > 1E-9 ) || ( error7 > 1E-9 ))
+
+    //expression 2
+    double result8 = itoutput2.GetCenterPixel()[0];
+    double expected8 = px2[0];
+    double error8 = (result8 - expected8) * (result8 - expected8) / (result8 + expected8);
+
+    if ( ( error1 > 1E-9 ) || ( error2 > 1E-9 ) || ( error3 > 1E-9 ) || ( error4 > 1E-9 ) || ( error5 > 1E-9 ) || ( error6 > 1E-9 ) || ( error7 > 1E-9 ) || (error8 > 1E-9) )
       {
       itkGenericExceptionMacro( << "TEST FAILLED" << std::endl
          << "Error1 = " << error1  << std::endl
@@ -372,7 +396,10 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
          << "     Expected6 =  " << expected6 << std::endl
          << "Error7 = " << error7 << std::endl
          << "     Result7 =  "   << result7
-         << "     Expected7 =  " << expected7 << std::endl);
+         << "     Expected7 =  " << expected7 << std::endl
+         << "Error8 = " << error8 << std::endl
+         << "     Result8 =  "   << result8 
+         << "     Expected8 =  " << expected8 << std::endl);
       }
   }
 

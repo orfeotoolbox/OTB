@@ -66,6 +66,8 @@ public:
     m_MuParserX.DefineFun(new mean);
     m_MuParserX.DefineFun(new var);
     m_MuParserX.DefineFun(new median);
+    m_MuParserX.DefineFun(new vmin);
+    m_MuParserX.DefineFun(new vmax);
 
     m_MuParserX.DefineFun(new vcos);
     m_MuParserX.DefineFun(new vsin);

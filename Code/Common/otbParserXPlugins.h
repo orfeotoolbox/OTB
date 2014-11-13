@@ -207,6 +207,46 @@ public:
   };
 
 
+class vmin : public mup::ICallback
+  {
+public:
+    vmin():ICallback(mup::cmFUNC, "vmin", -1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vmin(m1,m2,..) - overall minimun";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vmin(*this);
+    }
+  };
+
+
+class vmax : public mup::ICallback
+  {
+public:
+    vmax():ICallback(mup::cmFUNC, "vmax", -1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vmax(m1,m2,..) - overall maximun";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vmax(*this);
+    }
+  };
+
+
 //--------------------------------------------------------------------------------------------------------//
 class vcos : public mup::ICallback
   {
