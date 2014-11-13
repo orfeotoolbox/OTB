@@ -184,11 +184,10 @@ private:
      itkExceptionMacro("No input Image set...; please set at least one input image");
     }
 
-    if ( (!HasUserValue("exp")) && (!HasUserValue("incontext")) )
+    if ( (!IsParameterEnabled("exp")) && (!IsParameterEnabled("incontext")) )
     {
-     itkExceptionMacro("No expression set...; please set at least one one expression");
+     itkExceptionMacro("No expression set...; please set and enable at least one one expression");
     }
-
 
     m_Filter               = BandMathImageFilterType::New();
 
@@ -206,21 +205,26 @@ private:
       }
 
 
-    if ( (HasUserValue("exp")) && (IsParameterEnabled("exp")) )
+    if ( IsParameterEnabled("exp") )
     {
       std::vector<std::string> stringList = GetParameterStringList("exp");
       for(int s=0; s<stringList.size(); s++)
-        m_Filter->SetExpression(stringList[s]);
+        {
+          otbAppLogINFO( << stringList[s] << std::endl );
+          m_Filter->SetExpression(stringList[s]);
+        }
     }
 
-    if ( (HasUserValue("incontext")) && (IsParameterEnabled("incontext")) )
+    if ( IsParameterEnabled("incontext") )
       m_Filter->ImportContext(GetParameterString("incontext"));
+
+    if ( IsParameterEnabled("outcontext") )
+      m_Filter->ExportContext(GetParameterString("outcontext"));
 
     // Set the output image
     SetParameterOutputImage("out", m_Filter->GetOutput());
 
-    if ( (HasUserValue("outcontext")) && (IsParameterEnabled("outcontext")) )
-      m_Filter->ExportContext(GetParameterString("outcontext"));
+
   }
 
   BandMathImageFilterType::Pointer  m_Filter;
