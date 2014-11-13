@@ -353,12 +353,11 @@ void median::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a
     }
 
 
-
 void vmin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
   
       std::vector<double> vect;
-      double min; 
+      double min;
 
       int nbrows,nbcols;
       mup::matrix_type m1;
@@ -419,7 +418,7 @@ void vmax::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
     {
   
       std::vector<double> vect;
-      double max; 
+      double max;
 
       int nbrows,nbcols;
       mup::matrix_type m1;

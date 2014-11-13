@@ -398,7 +398,7 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
          << "     Result7 =  "   << result7
          << "     Expected7 =  " << expected7 << std::endl
          << "Error8 = " << error8 << std::endl
-         << "     Result8 =  "   << result8 
+         << "     Result8 =  "   << result8
          << "     Expected8 =  " << expected8 << std::endl);
       }
   }
