@@ -698,6 +698,9 @@ void BandMathImageFilterX< TImage >
   typedef itk::ImageBase< TImage::ImageDimension > ImageBaseType;
   typename ImageBaseType::Pointer outputPtr;
 
+  if (m_Expression.size() == 0)
+    itkExceptionMacro(<< "No expression set; please set at least one one expression." << std::endl);
+
   PrepareParsers();    // addition
   OutputsDimensions(); // addition
 
