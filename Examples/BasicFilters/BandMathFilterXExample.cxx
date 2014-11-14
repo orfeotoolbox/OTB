@@ -142,7 +142,7 @@ int main( int argc, char* argv[])
 //  The variable im1b1N5x5 represents a neigborhood of size 5x5 around this pixel (and so on for each band).
 //  The last element we need is the operator mean. By setting its inputs with four neigborhoods, we tell this operator to process the four related bands.
 //  As output, it will produce a vector of four components; this is consistent with the fact that we wish to perform a difference with im1.
-//  Thus, the final expression is as follows: 
+//  Thus, the final expression is as follows:
 //
 //  Software Guide : EndLatex
 
@@ -182,11 +182,11 @@ int main( int argc, char* argv[])
 //
 //  Now let's see a little bit more complex example.
 //  The aim now is to give the central pixel a higher weight. Moreover :
-//  - we wish to use smaller neighborhoods 
+//  - we wish to use smaller neighborhoods
 //  - we wish to drop the 4th band
 //  - we wish to add a given number to each band.
 //
-//  First, we instantiate new filters to later make a proper pipeline: 
+//  First, we instantiate new filters to later make a proper pipeline:
 //
 //  Software Guide : EndLatex
 
@@ -201,17 +201,17 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-//  We define a new kernel (rows are separated by semi-colons, whereas their elements are separated by commas): 
+//  We define a new kernel (rows are separated by semi-colons, whereas their elements are separated by commas):
 //
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  filter2->SetMatrix("kernel","{ 0.1 , 0.1 , 0.1 ; 0.1 , 0.2 , 0.1 ; 0.1 , 0.1 , 0.1 }");
+  filter2->SetMatrix("kernel","{ 0.1 , 0.1 , 0.1; 0.1 , 0.2 , 0.1; 0.1 , 0.1 , 0.1 }");
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
 //
-//  We then define a new constant: 
+//  We then define a new constant:
 //
 //  Software Guide : EndLatex
 
@@ -221,7 +221,7 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-//  We now set the expression (note the use of conv operator): 
+//  We now set the expression (note the use of conv operator):
 //
 //  Software Guide : EndLatex
 
@@ -231,7 +231,7 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-//  It is possible to export these definitions to a txt file (they will be reusable later thanks to the method ImportContext): 
+//  It is possible to export these definitions to a txt file (they will be reusable later thanks to the method ImportContext):
 //
 //  Software Guide : EndLatex
 
@@ -242,7 +242,7 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-//  And finally, we set the pipeline: 
+//  And finally, we set the pipeline:
 //
 //  Software Guide : EndLatex
 
