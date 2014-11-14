@@ -45,7 +45,7 @@ BandMathImageFilterX<TImage>
   //This number will be incremented each time an image
   //is added over the one minimumrequired
   this->SetNumberOfRequiredInputs( 1 );
-  this->InPlaceOff();
+  //this->InPlaceOff();
 
   m_UnderflowCount = 0;
   m_OverflowCount = 0;
@@ -148,6 +148,8 @@ void BandMathImageFilterX<TImage>
   ahc.type = 4;
   ahc.info[0] = idx; // Input image #ID
   m_VAllowedVarNameAuto.push_back(ahc);
+
+  
 
   //imibj
   for (int j=0; j<image->GetNumberOfComponentsPerPixel(); j++)
@@ -518,6 +520,7 @@ void BandMathImageFilterX<TImage>
     m_VFinalAllowedVarName.push_back(m_VAllowedVarNameAddedByUser[i]);
   for(int i=0; i<m_VAllowedVarNameAuto.size(); i++)
     m_VFinalAllowedVarName.push_back(m_VAllowedVarNameAuto[i]);
+
 
   this->SetNumberOfRequiredOutputs((int) m_Expression.size());
 

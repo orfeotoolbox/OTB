@@ -22,7 +22,7 @@
 #ifndef __otbBandMathImageFilterX_h
 #define __otbBandMathImageFilterX_h
 
-#include "itkInPlaceImageFilter.h"
+#include "itkImageToImageFilter.h"
 #include "itkArray.h"
 
 #include "otbParserX.h"
@@ -79,12 +79,12 @@ namespace otb
 
 template< class TImage >
 class ITK_EXPORT BandMathImageFilterX
-  : public itk::InPlaceImageFilter< TImage >
+  : public itk::ImageToImageFilter< TImage , TImage >
 {
 public:
   /** Standard class typedefs. */
   typedef BandMathImageFilterX< TImage >                 Self;
-  typedef itk::InPlaceImageFilter< TImage >             Superclass;
+  typedef itk::ImageToImageFilter< TImage , TImage>             Superclass;
   typedef itk::SmartPointer< Self >                     Pointer;
   typedef itk::SmartPointer< const Self >               ConstPointer;
 
@@ -92,7 +92,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BandMathImageFilterX, InPlaceImageFilter);
+  itkTypeMacro(BandMathImageFilterX, ImageToImageFilter);
 
   /** Some convenient typedefs. */
   typedef TImage                                   ImageType;
