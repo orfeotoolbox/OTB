@@ -149,7 +149,7 @@ void BandMathImageFilterX<TImage>
   ahc.info[0] = idx; // Input image #ID
   m_VAllowedVarNameAuto.push_back(ahc);
 
-  
+  this->UpdateOutputInformation(); //Mandatory before call of GetNumberOfComponentsPerPixel
 
   //imibj
   for (int j=0; j<image->GetNumberOfComponentsPerPixel(); j++)
