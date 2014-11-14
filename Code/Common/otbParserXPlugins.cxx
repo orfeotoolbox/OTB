@@ -43,7 +43,7 @@ void bands::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
       mup::matrix_type res(1,nbcols,0.);
 
       for (int k=0; k<nbcols; ++k)
-        res.At(0,k)=a.At(b.At(0,k).GetInteger()-1); //-1 : to make first band have rank #1 (and not 0)
+        res.At(0,k)=a.At(0,b.At(0,k).GetInteger()-1); //-1 : to make first band have rank #1 (and not 0)
 
       // The return value is passed by writing it to the reference ret
       *ret = res;
