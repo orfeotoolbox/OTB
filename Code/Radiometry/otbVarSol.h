@@ -18,6 +18,7 @@
 #ifndef __otbVarSol_h
 #define __otbVarSol_h
 
+#include "itkMacro.h"
 #include "otbMath.h"
 
 namespace otb
