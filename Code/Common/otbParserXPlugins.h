@@ -107,6 +107,26 @@ class ElementWiseMultiplication : public mup::IOprtBin
   };
 
 
+class ElementWisePower : public mup::IOprtBin
+  {
+public:
+    ElementWisePower():IOprtBin(_T("pow"), (int) mup::prPOW, mup::oaRIGHT)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return _T("pow - Power for noncomplex vectors & matrices");
+    }
+
+    virtual mup::IToken* Clone() const
+    {
+      return new ElementWisePower(*this);
+    }
+  };
+
+
 class ndvi : public mup::ICallback
   {
 public:
@@ -245,7 +265,6 @@ public:
       return new vmax(*this);
     }
   };
-
 
 //--------------------------------------------------------------------------------------------------------//
 class vcos : public mup::ICallback
@@ -466,6 +485,7 @@ public:
       return new vsqrt(*this);
     }
   };
+
 
 }//end namespace otb
 

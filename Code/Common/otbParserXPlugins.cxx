@@ -30,6 +30,7 @@ void bands::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
     {
 
       assert(a_iArgc==2);
+      assert(a_pArg[0]->GetType()=='m');
       assert(a_pArg[1]->GetType()=='m');
 
       // Get the argument from the argument input vector
@@ -53,6 +54,8 @@ void bands::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
 
 void conv::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
+      assert(a_pArg[0]->GetType()=='m');
+
       // Get the argument from the argument input vector
       mup::matrix_type m1 = a_pArg[0]->GetArray();
       
@@ -95,12 +98,26 @@ void conv::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
 
 void ElementWiseDivision::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
     {
+      assert(a_pArg[0]->GetType()=='m');
+      assert(a_pArg[1]->GetType()=='m');
+
       const mup::matrix_type a = a_pArg[0]->GetArray();
       const mup::matrix_type b = a_pArg[1]->GetArray();
 
       
       int nbrows = a.GetRows();
       int nbcols = a.GetCols();
+
+      int nbrows2 = b.GetRows();
+      int nbcols2 = b.GetCols();
+
+      if ( (nbrows != nbrows2) || (nbcols != nbcols2) )
+      {
+          mup::ErrorContext err;
+          err.Errc = mup::ecMATRIX_DIMENSION_MISMATCH;
+          err.Ident = GetIdent();
+          throw mup::ParserError(err);
+      }
 
       mup::matrix_type res(nbrows,nbcols,0.);
 
@@ -119,11 +136,26 @@ void ElementWiseDivision::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *
 
 void ElementWiseMultiplication::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
     {
+
+      assert(a_pArg[0]->GetType()=='m');
+      assert(a_pArg[1]->GetType()=='m');
+
       const mup::matrix_type a = a_pArg[0]->GetArray();
       const mup::matrix_type b = a_pArg[1]->GetArray();
       
       int nbrows = a.GetRows();
       int nbcols = a.GetCols();
+
+      int nbrows2 = b.GetRows();
+      int nbcols2 = b.GetCols();
+
+      if ( (nbrows != nbrows2) || (nbcols != nbcols2) )
+      {
+          mup::ErrorContext err;
+          err.Errc = mup::ecMATRIX_DIMENSION_MISMATCH;
+          err.Ident = GetIdent();
+          throw mup::ParserError(err);
+      }
 
       mup::matrix_type res(nbrows,nbcols,0.);
 
@@ -136,11 +168,37 @@ void ElementWiseMultiplication::Eval(mup::ptr_val_type &ret, const mup::ptr_val_
     }
 
 
+void ElementWisePower::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+    {
+
+      assert(a_iArgc==2);
+      assert(a_pArg[0]->GetType()=='m');
+
+      // Get the argument from the argument input vector
+      const mup::matrix_type a = a_pArg[0]->GetArray();
+      const double pw = a_pArg[1]->GetFloat();
+
+      int nbrows = a.GetRows();
+      int nbcols = a.GetCols();
+
+      mup::matrix_type res(nbrows,nbcols,0.);
+
+      for (int k=0; k<nbcols; ++k)
+        for (int p=0; p<nbrows; ++p)
+        {
+          assert(a.At(p,k).GetFloat() >= 0 );
+          res.At(p,k) = vcl_pow(a.At(p,k).GetFloat(),pw);
+        }
+
+      // The return value is passed by writing it to the reference ret
+      *ret = res;
+    }
+
+
 void ndvi::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
       // Get the argument from the argument input vector
       mup::float_type r = a_pArg[0]->GetFloat();
-      
       mup::float_type niri = a_pArg[1]->GetFloat();
 
 
@@ -475,6 +533,7 @@ void vmax::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
     }
 
 
+
 //--------------------------------------------------------------------------------------------------------//
 void vcos::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
@@ -698,7 +757,6 @@ void vsqrt::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
       // The return value is passed by writing it to the reference ret
       *ret = res;
     }
-
 
 }//end namespace otb
 
