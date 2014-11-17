@@ -2135,13 +2135,24 @@ add_test(bfTvBandMathImageFilterX ${BASICFILTERS_TESTS13}
 add_test(bfTvotbBandMathImageFilterXConv ${BASICFILTERS_TESTS13}
   otbBandMathImageFilterXConv
   ${BASELINE_FILES}/bfTvExportBandMathX.txt
+  ${TEMP}/bfTvExportBandMathXOut.txt
 )
+
+add_test(bfTvotbBandMathImageFilterXTxt ${BASICFILTERS_TESTS13}
+--compare-ascii ${NOTOL}
+             ${BASELINE_FILES}/bfTvExportBandMathX.txt
+            ${TEMP}/bfTvExportBandMathXOut.txt
+            otbBandMathImageFilterXTxt
+            ${BASELINE_FILES}/bfTvExportBandMathX.txt
+            ${TEMP}/bfTvExportBandMathXOut.txt
+         )
 
 add_test(bfTvBandMathImageFilterXWithIdx ${BASICFILTERS_TESTS13}
   otbBandMathImageFilterXWithIdx
   ${TEMP}/bfTvBandMathImageFilterWithIdx1.tif
   ${TEMP}/bfTvBandMathImageFilterWithIdx2.tif
 )
+
 
 add_test(bfTvComplexToIntensityFilterTest ${BASICFILTERS_TESTS13}
   otbComplexToIntensityFilterTest)

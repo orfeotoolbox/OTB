@@ -407,6 +407,24 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
 }
 
 
+int otbBandMathImageFilterXTxt( int itkNotUsed(argc), char* argv [])
+{
+  const char * inputFilename   = argv[1];
+  const char * outputFilename  = argv[2];
+
+  typedef otb::VectorImage<double, 2>              ImageType;
+  typedef ImageType::PixelType                      PixelType;
+  typedef otb::BandMathImageFilterX<ImageType>      FilterType;
+
+  FilterType::Pointer         filter       = FilterType::New();
+
+  filter->ImportContext(inputFilename); 
+  filter->ExportContext(outputFilename);
+
+  return EXIT_SUCCESS;
+}
+
+
 int otbBandMathImageFilterXWithIdx( int itkNotUsed(argc), char* argv[])
 {
   const char * outfname1       = argv[1];
