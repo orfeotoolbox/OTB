@@ -142,11 +142,9 @@ int main( int argc, char* argv[])
 //  The variable im1b1N5x5 represents a neigborhood of size 5x5 around this pixel (and so on for each band).
 //  The last element we need is the operator 'mean'. By setting its inputs with four neigborhoods, we tell this operator to process the four related bands.
 //  As output, it will produce a vector of four components; this is consistent with the fact that we wish to perform a difference with im1.
-<<<<<<< dest
-//  Thus, the final expression is as follows:
-=======
+//
 //  Thus, the expression is as follows:
->>>>>>> source
+
 //
 //  Software Guide : EndLatex
 
@@ -225,11 +223,7 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-<<<<<<< dest
-//  We now set the expression (note the use of conv operator):
-=======
 //  We now set the expression (note the use of 'conv' operator, as well as the 'bands' operator which is used as a band selector):
->>>>>>> source
 //
 //  Software Guide : EndLatex
 
