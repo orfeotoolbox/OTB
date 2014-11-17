@@ -19,7 +19,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {RoadExtractBandMathX.tif}
+//    OUTPUTS: {qb_BandMath-res1.tif} {qb_BandMath-res2.tif} {context.txt}
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
@@ -73,7 +73,7 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-//  We start by the classical \code{typedef}s needed for reading and
+//  Then, we set the classical \code{typedef}s needed for reading and
 //  writing the images. The \doxygen{otb}{BandMathImageFilterX} class
 //  works with \doxygen{otb}{VectorImage}.
 //
@@ -140,9 +140,13 @@ int main( int argc, char* argv[])
 //
 //  Now, we can define the expression. The variable im1 represents a pixel (made of 4 components) of the input image.
 //  The variable im1b1N5x5 represents a neigborhood of size 5x5 around this pixel (and so on for each band).
-//  The last element we need is the operator mean. By setting its inputs with four neigborhoods, we tell this operator to process the four related bands.
+//  The last element we need is the operator 'mean'. By setting its inputs with four neigborhoods, we tell this operator to process the four related bands.
 //  As output, it will produce a vector of four components; this is consistent with the fact that we wish to perform a difference with im1.
+<<<<<<< dest
 //  Thus, the final expression is as follows:
+=======
+//  Thus, the expression is as follows:
+>>>>>>> source
 //
 //  Software Guide : EndLatex
 
@@ -168,7 +172,7 @@ int main( int argc, char* argv[])
 // Figure~\ref{fig:BandMathImageFilterX} shows the result of our high-pass filter.
 // \begin{figure}
 // \center
-// \includegraphics[width=0.45\textwidth]{qb_ExtractRoad_pretty.eps}
+// \includegraphics[width=0.45\textwidth]{qb_ExtractRoad.eps}
 // \includegraphics[width=0.45\textwidth]{qb_BandMath-res1.eps}
 // \itkcaption[Band Math X]{From left to right:
 // Original image, high-pass filter output.}
@@ -221,7 +225,11 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
+<<<<<<< dest
 //  We now set the expression (note the use of conv operator):
+=======
+//  We now set the expression (note the use of 'conv' operator, as well as the 'bands' operator which is used as a band selector):
+>>>>>>> source
 //
 //  Software Guide : EndLatex
 
@@ -254,14 +262,14 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-// Figure~\ref{fig:BandMathImageFilterX} shows the result of the second filter.
+// Figure~\ref{fig:BandMathImageFilterX2} shows the result of the second filter.
 // \begin{figure}
 // \center
-// \includegraphics[width=0.45\textwidth]{qb_ExtractRoad_pretty.eps}
+// \includegraphics[width=0.45\textwidth]{qb_ExtractRoad.eps}
 // \includegraphics[width=0.45\textwidth]{qb_BandMath-res2.eps}
 // \itkcaption[Band Math X]{From left to right:
 // Original image, second filter output.}
-// \label{fig:BandMathImageFilterX}
+// \label{fig:BandMathImageFilterX2}
 // \end{figure}
 //
 // Software Guide : EndLatex
