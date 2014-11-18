@@ -95,15 +95,16 @@ public:
   itkTypeMacro(BandMathImageFilterX, ImageToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef TImage                                   ImageType;
-  typedef typename ImageType::ConstPointer        ImagePointer;
-  typedef typename ImageType::RegionType          ImageRegionType;
-  typedef typename ImageType::PixelType           PixelType;
-  typedef typename ImageType::IndexType           IndexType;
-  typedef typename ImageType::PointType           OrigineType;
-  typedef typename ImageType::SpacingType         SpacingType;
-  typedef ParserX                                  ParserType;
-  typedef typename ParserType::ValueType          ValueType;
+  typedef TImage                                      ImageType;
+  typedef typename ImageType::ConstPointer           ConstImagePointer;
+  typedef typename ImageType::Pointer                ImagePointer;
+  typedef typename ImageType::RegionType             ImageRegionType;
+  typedef typename ImageType::PixelType::ValueType   PixelType;
+  typedef typename ImageType::IndexType              IndexType;
+  typedef typename ImageType::PointType              OrigineType;
+  typedef typename ImageType::SpacingType            SpacingType;
+  typedef ParserX                                     ParserType;
+  typedef typename ParserType::ValueType             ValueType;
 
   /** Set the nth filter input with or without a specified associated variable name */
   void SetNthInput( unsigned int idx, const ImageType * image);
@@ -141,12 +142,18 @@ protected :
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   void GenerateOutputInformation();
+  void GenerateInputRequestedRegion();
 
   void BeforeThreadedGenerateData();
   void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
   void AfterThreadedGenerateData();
 
 private :
+
+  bool globalStatsDetected() const 
+  {
+    return (m_StatsVarDetected.size()>0);
+  }
 
   typedef struct {
       std::string name;
@@ -174,6 +181,8 @@ private :
   std::vector< int >                        m_outputsDimensions;
 
   unsigned int                             m_SizeNeighbourhood;
+
+  std::vector< int >                        m_StatsVarDetected; // input image ID for which global statistics have been detected
 
   long                                  m_UnderflowCount;
   long                                  m_OverflowCount;

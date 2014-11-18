@@ -29,6 +29,7 @@
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
 
+#include <otbStreamingStatisticsVectorImageFilter.h>
 
 #include <iostream>
 #include <fstream>
@@ -45,7 +46,6 @@ BandMathImageFilterX<TImage>
   //This number will be incremented each time an image
   //is added over the one minimumrequired
   this->SetNumberOfRequiredInputs( 1 );
-  //this->InPlaceOff();
 
   m_UnderflowCount = 0;
   m_OverflowCount = 0;
@@ -102,9 +102,9 @@ void BandMathImageFilterX<TImage>
   os << indent << "UnderflowCount: "  << m_UnderflowCount              << std::endl;
   os << indent << "OverflowCount: "   << m_OverflowCount               << std::endl;
   os << indent << "itk::NumericTraits<typename PixelType::ValueType>::NonpositiveMin()  :  "
-               << itk::NumericTraits<typename PixelType::ValueType>::NonpositiveMin()      << std::endl;
+               << itk::NumericTraits<PixelType>::NonpositiveMin()      << std::endl;
   os << indent << "itk::NumericTraits<typename PixelType::ValueType>::max()  :             "
-         << itk::NumericTraits<typename PixelType::ValueType>::max()                 << std::endl;
+         << itk::NumericTraits<PixelType>::max()                 << std::endl;
 }
 
 template <class TImage>
@@ -152,7 +152,7 @@ void BandMathImageFilterX<TImage>
   m_VAllowedVarNameAuto.push_back(ahc);
 
   //Mandatory before call of GetNumberOfComponentsPerPixel
-  //Really important not to call the filter's UpdateOutputInformation method:
+  //Really important not to call the filter's UpdateOutputInformation method here:
   //this method is not ready until all inputs, variables and expressions are set.
   imagebis->UpdateOutputInformation(); 
 
@@ -186,6 +186,26 @@ void BandMathImageFilterX<TImage>
         m_VAllowedVarNameAuto.push_back(ahc);
       }
 
+  //imibjSTATS
+  std::vector< std::string > statsNames;
+  statsNames.push_back("Mini");
+  statsNames.push_back("Maxi");
+  statsNames.push_back("Mean");
+
+  for (int j=0; j<imagebis->GetNumberOfComponentsPerPixel(); j++)
+    for (int t=0; t<statsNames.size(); t++)
+    {
+      std::stringstream sstm;
+      adhocStruct ahc;
+      sstm << varName << "b" << (j+1) << statsNames[t];
+      ahc.name = sstm.str();
+      ahc.type = 8;
+      ahc.info[0] = idx; // Input image #ID
+      ahc.info[1] = j;   // Band #ID
+      ahc.info[2] = t;   // Sub-type : 0 Mini, 1 Maxi, 2 Mean ...
+      m_VAllowedVarNameAuto.push_back(ahc);
+    }
+
 }
 
 template <typename TImage>
@@ -194,6 +214,7 @@ TImage * BandMathImageFilterX<TImage>
 {
   return const_cast<TImage *>(this->GetInput(idx));
 }
+
 
 template< typename TImage >
 void BandMathImageFilterX<TImage>
@@ -222,6 +243,8 @@ void BandMathImageFilterX<TImage>
 
   this->Modified();
 }
+
+
 
 template< typename TImage >
 void BandMathImageFilterX<TImage>
@@ -507,6 +530,7 @@ void BandMathImageFilterX<TImage>
 
     if (!found)
       m_VVarName.push_back(ahc);
+    
 }
 
 
@@ -516,7 +540,8 @@ void BandMathImageFilterX<TImage>
 {
 
   if (m_Expression.size() == 0)
-    itkExceptionMacro(<< "No expression set; please set at least one expression." << std::endl); // addition
+    itkExceptionMacro(<< "No expression set; please set at least one expression." << std::endl);
+
 
   // Generate variables names
   m_VVarName.clear();
@@ -524,6 +549,7 @@ void BandMathImageFilterX<TImage>
   m_VFinalAllowedVarName.clear();
 
   // m_VFinalAllowedVarName = m_VAllowedVarNameAuto + m_VAllowedVarNameAddedByUser
+  // m_VFinalAllowedVarName = variable names dictionary 
   for(int i=0; i<m_VAllowedVarNameAddedByUser.size(); i++)
     m_VFinalAllowedVarName.push_back(m_VAllowedVarNameAddedByUser[i]);
   for(int i=0; i<m_VAllowedVarNameAuto.size(); i++)
@@ -580,7 +606,11 @@ void BandMathImageFilterX<TImage>
       *itParser = ParserType::New();
     }
 
-  int nbVar = m_VVarName.size();
+  // Important to remember that variables of m_VVarName come from a call of GetExprVar method
+  // Only useful variables are allocated in this filter
+  int nbVar = m_VVarName.size(); 
+
+  m_StatsVarDetected.clear();
 
   m_AImage.clear();
   m_AImage.resize(nbThreads);
@@ -599,7 +629,6 @@ void BandMathImageFilterX<TImage>
           m_AImage[i][j].info[t]=m_VVarName[j].info[t];
 
        
-        //bool isAConstant = false;
 
         if ( (m_AImage[i][j].type == 0 ) || (m_AImage[i][j].type == 1) ) // indices (idxX & idxY)
         {
@@ -641,16 +670,26 @@ void BandMathImageFilterX<TImage>
             if (m_VAllowedVarNameAddedByUser[t].name.compare(m_AImage[i][j].name) == 0)
               m_AImage[i][j].value = m_VAllowedVarNameAddedByUser[t].value;
 
-         // isAConstant=true;
               
         }
 
+        if (m_AImage[i][j].type == 8 ) // global stats
+        {
+            m_AImage[i][j].value = ValueType(initValue);  
+            //m_AImage[i][j].info[0] = Image ID : useful to know which images must have their regions set to largest possible region (see GenerateInputRequestedRegion)  
+            bool found = false;
+            for (int r=0; r<m_StatsVarDetected.size() && !found; r++) 
+                if (m_StatsVarDetected[r] == m_AImage[i][j].info[0])
+                  found = true;
+            if (!found)            
+              m_StatsVarDetected.push_back(m_AImage[i][j].info[0]); 
+        }
+
+
+        //Register variable
         m_VParser.at(i)->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value));
 
-       /* if (isAConstant)
-          m_VParser.at(i)->DefineConst(m_AImage[i][j].name, &(m_AImage[i][j].value));
-        else
-          m_VParser.at(i)->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value)); */
+
 
         initValue += 0.001;
         if (initValue>1.0)
@@ -735,6 +774,28 @@ void BandMathImageFilterX< TImage >
 
 
 template< typename TImage >
+void BandMathImageFilterX< TImage >
+::GenerateInputRequestedRegion()
+{
+  // call the superclass' implementation of this method
+  Superclass::GenerateInputRequestedRegion();
+
+  for (int i=0; i<m_StatsVarDetected.size(); i++) //Must request largest possible region (only for concerned image)
+  {
+      if ( m_StatsVarDetected[i] < this->GetNumberOfInputs() )
+      {
+          ImagePointer  inputPtr = const_cast<TImage *>(this->GetInput(m_StatsVarDetected[i]));
+          inputPtr->SetRequestedRegionToLargestPossibleRegion();
+      }
+      else 
+        itkExceptionMacro(<< "Requested input #" << m_StatsVarDetected[i] << ", but only " << this->GetNumberOfInputs() << " inputs are available." << std::endl); 
+  }
+
+}
+
+
+
+template< typename TImage >
 void BandMathImageFilterX<TImage>
 ::BeforeThreadedGenerateData()
 {
@@ -759,6 +820,14 @@ void BandMathImageFilterX<TImage>
                         << this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(1) << "]");
       }
     }
+
+  if (globalStatsDetected()) // Must instantiate stats variables of the parsers
+    for (unsigned int i=0; i<m_StatsVarDetected.size(); i++)
+    {
+      typedef otb::StreamingStatisticsVectorImageFilter<TImage, itk::NumericTraits<PixelType> > statsFilter;
+    }
+
+
 
   // Allocate and initialize the thread temporaries
   m_ThreadUnderflow.SetSize(nbThreads);
@@ -958,20 +1027,19 @@ void BandMathImageFilterX<TImage>
         {
             // Case value is equal to -inf or inferior to the minimum value
             // allowed by the pixelType cast
-            if (VoutIt[IDExpression].Get()[p] < double(itk::NumericTraits<typename PixelType::ValueType>::NonpositiveMin()))
+            if (VoutIt[IDExpression].Get()[p] < double(itk::NumericTraits<PixelType>::NonpositiveMin()))
             {
-                VoutIt[IDExpression].Get()[p] = itk::NumericTraits<typename PixelType::ValueType>::NonpositiveMin();
+                VoutIt[IDExpression].Get()[p] = itk::NumericTraits<PixelType>::NonpositiveMin();
                 m_ThreadUnderflow[threadId]++;
             }
             // Case value is equal to inf or superior to the maximum value
             // allowed by the pixelType cast
-            else if (VoutIt[IDExpression].Get()[p] > double(itk::NumericTraits<typename PixelType::ValueType>::max()))
+            else if (VoutIt[IDExpression].Get()[p] > double(itk::NumericTraits<PixelType>::max()))
             {
-               VoutIt[IDExpression].Get()[p] = itk::NumericTraits<typename PixelType::ValueType>::max();
+               VoutIt[IDExpression].Get()[p] = itk::NumericTraits<PixelType>::max();
                m_ThreadOverflow[threadId]++;
             }
         }
-
     }
 
     for(int j=0; j < nbInputImages; ++j)        {   ++Vit[j];    }
