@@ -134,12 +134,13 @@ public:
   std::vector<std::string> GetVarNames() const;
 
 
+
 protected :
   BandMathImageFilterX();
   virtual ~BandMathImageFilterX();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  void AllocateOutputs();
+  void GenerateOutputInformation();
 
   void BeforeThreadedGenerateData();
   void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );

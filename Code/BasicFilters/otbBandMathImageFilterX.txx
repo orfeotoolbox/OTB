@@ -121,7 +121,9 @@ template <class TImage>
 void BandMathImageFilterX<TImage>
 ::SetNthInput(unsigned int idx, const ImageType * image, const std::string& varName)
 {
-  this->SetInput(idx, const_cast<TImage *>( image ));
+
+  ImageType * imagebis = const_cast<ImageType *>( image ); // Useful for call of UpdateOutputInformation() (see below)
+  this->SetInput(idx, imagebis );
 
   //imiPhyX and imiPhyY
   std::stringstream sstmPhyX;
@@ -149,10 +151,13 @@ void BandMathImageFilterX<TImage>
   ahc.info[0] = idx; // Input image #ID
   m_VAllowedVarNameAuto.push_back(ahc);
 
-  this->UpdateOutputInformation(); //Mandatory before call of GetNumberOfComponentsPerPixel
+  //Mandatory before call of GetNumberOfComponentsPerPixel
+  //Really important not to call the filter's UpdateOutputInformation method:
+  //this method is not ready until all inputs, variables and expressions are set.
+  imagebis->UpdateOutputInformation(); 
 
   //imibj
-  for (int j=0; j<image->GetNumberOfComponentsPerPixel(); j++)
+  for (int j=0; j<imagebis->GetNumberOfComponentsPerPixel(); j++)
   {
     std::stringstream sstm;
     adhocStruct ahc;
@@ -165,7 +170,7 @@ void BandMathImageFilterX<TImage>
   }
 
   //imibjNkxp
-  for (int j=0; j<image->GetNumberOfComponentsPerPixel(); j++)
+  for (int j=0; j<imagebis->GetNumberOfComponentsPerPixel(); j++)
     for(int x=0; x<=m_SizeNeighbourhood; x++)
       for(int y=0; y<=m_SizeNeighbourhood; y++)
       {
@@ -330,7 +335,7 @@ void BandMathImageFilterX<TImage>
               iss << " " << m_VAllowedVarNameAddedByUser[i].value.At(k,0);
               for(int p=1; p<m_VAllowedVarNameAddedByUser[i].value.GetCols(); p++)
                 iss << " , " <<  m_VAllowedVarNameAddedByUser[i].value.At(k,p);
-                iss << ";";
+                iss << " ;";
             }
             str=iss.str();
             str.erase(str.size()-1);
@@ -510,6 +515,9 @@ void BandMathImageFilterX<TImage>
 ::PrepareParsers()
 {
 
+  if (m_Expression.size() == 0)
+    itkExceptionMacro(<< "No expression set; please set at least one expression." << std::endl); // addition
+
   // Generate variables names
   m_VVarName.clear();
   m_VNotAllowedVarName.clear();
@@ -521,8 +529,6 @@ void BandMathImageFilterX<TImage>
   for(int i=0; i<m_VAllowedVarNameAuto.size(); i++)
     m_VFinalAllowedVarName.push_back(m_VAllowedVarNameAuto[i]);
 
-
-  this->SetNumberOfRequiredOutputs((int) m_Expression.size());
 
   for(int IDExpression=0; IDExpression<m_Expression.size(); ++IDExpression) // For each expression
   {
@@ -576,11 +582,13 @@ void BandMathImageFilterX<TImage>
 
   int nbVar = m_VVarName.size();
 
+  m_AImage.clear();
   m_AImage.resize(nbThreads);
 
   double initValue = 0.1;
   for(int i = 0; i < nbThreads; ++i) // For each thread
   {
+    m_AImage.clear();
     m_AImage[i].resize(nbVar); // For each variable
 
     for(int j=0; j < nbVar; ++j)
@@ -657,6 +665,9 @@ template< typename TImage >
 void BandMathImageFilterX< TImage >
 ::OutputsDimensions()
 {
+
+  this->SetNumberOfRequiredOutputs((int) m_Expression.size());
+
   m_outputsDimensions.clear();
 
   for(int i=0; i<m_Expression.size(); ++i)
@@ -696,38 +707,32 @@ void BandMathImageFilterX< TImage >
 
 template< typename TImage >
 void BandMathImageFilterX< TImage >
-::AllocateOutputs()
+::GenerateOutputInformation(void)
 {
+  Superclass::GenerateOutputInformation();
+
   typedef itk::ImageBase< TImage::ImageDimension > ImageBaseType;
   typename ImageBaseType::Pointer outputPtr;
-
-  if (m_Expression.size() == 0)
-    itkExceptionMacro(<< "No expression set; please set at least one one expression." << std::endl);
 
   PrepareParsers();    // addition
   OutputsDimensions(); // addition
 
-  // Allocate the output memory
   int i=0;
-  for ( itk::OutputDataObjectIterator it(this); !it.IsAtEnd(); it++ )
+  for ( itk::OutputDataObjectIterator it(this); !it.IsAtEnd(); i++, it++ )
     {
       // Check whether the output is an image of the appropriate
       // dimension (use ProcessObject's version of the GetInput()
       // method since it returns the input as a pointer to a
       // DataObject as opposed to the subclass version which
-      // static_casts the input to an TInputImage).
+      // static_casts the input to an TImage).
       outputPtr = dynamic_cast< ImageBaseType * >( it.GetOutput() );
 
         if ( outputPtr )
-        {
-          outputPtr->SetBufferedRegion( outputPtr->GetRequestedRegion() );
-          outputPtr->SetNumberOfComponentsPerPixel(m_outputsDimensions[i]); // addition
-          outputPtr->Allocate();
-        }
-
-      i++;
+          outputPtr->SetNumberOfComponentsPerPixel(m_outputsDimensions[i]);
     }
+
 }
+
 
 template< typename TImage >
 void BandMathImageFilterX<TImage>
