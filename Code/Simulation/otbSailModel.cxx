@@ -30,10 +30,11 @@ namespace otb
 
 /** Constructor */
 SailModel
-::SailModel()
+::SailModel() : m_LAI(2), m_Angl(50), m_PSoil(1), m_Skyl(70), m_HSpot(0.2),
+                m_TTS(30), m_TTO(0), m_PSI(0), m_FCoverView(0.0)
 {
    this->ProcessObject::SetNumberOfRequiredInputs(2);
-   this->ProcessObject::SetNumberOfRequiredOutputs(2);
+   this->ProcessObject::SetNumberOfRequiredOutputs(4);
 
    SpectralResponseType::Pointer vRefl = static_cast<SpectralResponseType *>(this->MakeOutput(0).GetPointer());
    this->itk::ProcessObject::SetNthOutput(0, vRefl.GetPointer());
@@ -41,15 +42,11 @@ SailModel
    SpectralResponseType::Pointer hRefl = static_cast<SpectralResponseType *>(this->MakeOutput(1).GetPointer());
    this->itk::ProcessObject::SetNthOutput(1, hRefl.GetPointer());
 
-   //default values
-   m_LAI=2;
-   m_Angl=50;
-   m_PSoil=1;
-   m_Skyl=70;
-   m_HSpot=0.2;
-   m_TTS=30;
-   m_TTO=0;
-   m_PSI=0;
+   SpectralResponseType::Pointer vAbs = static_cast<SpectralResponseType *>(this->MakeOutput(2).GetPointer());
+   this->itk::ProcessObject::SetNthOutput(2, vAbs.GetPointer());
+
+   SpectralResponseType::Pointer hAbs = static_cast<SpectralResponseType *>(this->MakeOutput(3).GetPointer());
+   this->itk::ProcessObject::SetNthOutput(3, hAbs.GetPointer());
 }
 
 /** Destructor */
@@ -105,12 +102,12 @@ SailModel
    return static_cast<itk::DataObject*>(SpectralResponseType::New().GetPointer());
 }
 
-/** Get output vertical reflectance */
+/** Get output viewing reflectance */
 SailModel::SpectralResponseType *
 SailModel
 ::GetViewingReflectance()
 {
-   if(this->GetNumberOfOutputs() < 2)
+   if(this->GetNumberOfOutputs() < 4)
    {
       //exit
       return 0;
@@ -118,17 +115,43 @@ SailModel
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(0));
 }
 
-/** Get output horizontal reflectance */
+/** Get output hemispherical reflectance */
 SailModel::SpectralResponseType *
 SailModel
 ::GetHemisphericalReflectance()
 {
-   if(this->GetNumberOfOutputs() < 2)
+   if(this->GetNumberOfOutputs() < 4)
    {
       //exit
       return 0;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(1));
+}
+
+/** Get output viewing absorptance */
+SailModel::SpectralResponseType *
+SailModel
+::GetViewingAbsorptance()
+{
+   if(this->GetNumberOfOutputs() < 4)
+   {
+      //exit
+      return 0;
+   }
+   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(2));
+}
+
+/** Get output hemispherical absorptance */
+SailModel::SpectralResponseType *
+SailModel
+::GetHemisphericalAbsorptance()
+{
+   if(this->GetNumberOfOutputs() < 4)
+   {
+      //exit
+      return 0;
+   }
+   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(3));
 }
 
 
@@ -182,6 +205,8 @@ SailModel
    SpectralResponseType::Pointer inTrans = this->GetTransmittance();
    SpectralResponseType::Pointer outVRefl = this->GetViewingReflectance();
    SpectralResponseType::Pointer outHRefl = this->GetHemisphericalReflectance();
+   SpectralResponseType::Pointer outVAbs = this->GetViewingAbsorptance();
+   SpectralResponseType::Pointer outHAbs = this->GetHemisphericalAbsorptance();
 
    // LEAF ANGLE DISTRIBUTION
    double rd = CONST_PI/180;
@@ -269,7 +294,7 @@ SailModel
    double e1, e2, rinf, rinf2, re, denom, J1ks, J2ks, J1ko, J2ko;
    double Ps, Qs, Pv, Qv, z, g1, g2, Tv1, Tv2, T1, T2, T3;
    double alf, sumint, fhot, x1, y1, f1, fint, x2, y2, f2;
-   double resh, resv;
+   double resh, resv, absh, absv;
 
    int nbdata = sizeof(DataSpecP5B) / sizeof(DataSpec);
    for (int i = 0; i < nbdata; ++i)
@@ -430,16 +455,21 @@ SailModel
       resh = (rddt*PARdifo+rsdt*PARdiro)/(PARdiro+PARdifo);
       resv = (rdot*PARdifo+rsot*PARdiro)/(PARdiro+PARdifo);
 
-      SpectralResponseType::PairType tmp1, tmp2;
-      tmp1.first=lambda/1000.0;
-      tmp1.second=resh;
-      tmp2.first=lambda/1000.0;
-      tmp2.second=resv;
-
-      outVRefl->GetResponse().push_back(tmp2);
-      outHRefl->GetResponse().push_back(tmp1);
-
+      absh = (1-rddt-(1-rsoil0)*(tdd+(tdd*rdd*rsoil0)/dn));
+      absv = (1-rsdt-(1-rsoil0)*(tss+(tss*rsoil0*rdd+tsd)/dn));
+      
+      SpectralResponseType::PairType response;
+      response.first=lambda/1000.0;
+      response.second=resh;
+      outHRefl->GetResponse().push_back(response);
+      response.second=resv;
+      outVRefl->GetResponse().push_back(response);
+      response.second=absh;
+      outHAbs->GetResponse().push_back(response);
+      response.second=absv;
+      outVAbs->GetResponse().push_back(response);
    }
+   m_FCoverView = 1-too;
 }
 
 

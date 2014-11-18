@@ -28,7 +28,7 @@ namespace otb
 /** \class SailModel
    * \brief This class implements the SAIL model (see http://teledetection.ipgp.jussieu.fr/prosail/).
    *
-   * Hemispherical and viewing reflectance are computed from 400 to 2500 nm (step 1nm).
+   * Hemispherical and viewing reflectances and absorptances are computed from 400 to 2500 nm (step 1nm).
    * Input Reflectance and transmittance must be spectrum (otbSpectralResponse) from 400 nm to 2500 nm with step 1nm.
    * \sa itk::ProcessObject
    * \sa SimulationStep2Base
@@ -93,12 +93,17 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
       itkSetMacro(PSI, double);
       itkGetMacro(PSI, double);
 
+      /** Get the computed fcover */
+      itkGetMacro(FCoverView, double);
+
       /** GenerateData */
       virtual void GenerateData();
 
       /** Get Output */
       virtual SpectralResponseType * GetViewingReflectance();
       virtual SpectralResponseType * GetHemisphericalReflectance();
+      virtual SpectralResponseType * GetViewingAbsorptance();
+      virtual SpectralResponseType * GetHemisphericalAbsorptance();
 
      const ParametersType  GetInput();
      void SetInput(const ParametersType &);
@@ -137,7 +142,7 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
       double m_TTS; //solar zenith angle
       double m_TTO; //observer zenith angle
       double m_PSI; //azimuth
-
+      double m_FCoverView; //fCover in the viewing direction
 };
 
 }// end namespace otb
