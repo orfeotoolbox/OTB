@@ -418,7 +418,7 @@ int otbBandMathImageFilterXTxt( int itkNotUsed(argc), char* argv [])
 
   FilterType::Pointer         filter       = FilterType::New();
 
-  filter->ImportContext(inputFilename); 
+  filter->ImportContext(inputFilename);
   filter->ExportContext(outputFilename);
 
   return EXIT_SUCCESS;

@@ -154,7 +154,7 @@ void BandMathImageFilterX<TImage>
   //Mandatory before call of GetNumberOfComponentsPerPixel
   //Really important not to call the filter's UpdateOutputInformation method here:
   //this method is not ready until all inputs, variables and expressions are set.
-  imagebis->UpdateOutputInformation(); 
+  imagebis->UpdateOutputInformation();
 
   //imibj
   for (int j=0; j<imagebis->GetNumberOfComponentsPerPixel(); j++)
@@ -243,7 +243,6 @@ void BandMathImageFilterX<TImage>
 
   this->Modified();
 }
-
 
 
 template< typename TImage >
@@ -358,7 +357,7 @@ void BandMathImageFilterX<TImage>
               iss << " " << m_VAllowedVarNameAddedByUser[i].value.At(k,0);
               for(int p=1; p<m_VAllowedVarNameAddedByUser[i].value.GetCols(); p++)
                 iss << " , " <<  m_VAllowedVarNameAddedByUser[i].value.At(k,p);
-                iss << " ;";
+                iss << ";";
             }
             str=iss.str();
             str.erase(str.size()-1);
@@ -549,7 +548,7 @@ void BandMathImageFilterX<TImage>
   m_VFinalAllowedVarName.clear();
 
   // m_VFinalAllowedVarName = m_VAllowedVarNameAuto + m_VAllowedVarNameAddedByUser
-  // m_VFinalAllowedVarName = variable names dictionary 
+  // m_VFinalAllowedVarName = variable names dictionary
   for(int i=0; i<m_VAllowedVarNameAddedByUser.size(); i++)
     m_VFinalAllowedVarName.push_back(m_VAllowedVarNameAddedByUser[i]);
   for(int i=0; i<m_VAllowedVarNameAuto.size(); i++)
@@ -608,7 +607,7 @@ void BandMathImageFilterX<TImage>
 
   // Important to remember that variables of m_VVarName come from a call of GetExprVar method
   // Only useful variables are allocated in this filter
-  int nbVar = m_VVarName.size(); 
+  int nbVar = m_VVarName.size();
 
   m_StatsVarDetected.clear();
 
@@ -675,20 +674,19 @@ void BandMathImageFilterX<TImage>
 
         if (m_AImage[i][j].type == 8 ) // global stats
         {
-            m_AImage[i][j].value = ValueType(initValue);  
-            //m_AImage[i][j].info[0] = Image ID : useful to know which images must have their regions set to largest possible region (see GenerateInputRequestedRegion)  
+            m_AImage[i][j].value = ValueType(initValue);
+            //m_AImage[i][j].info[0] = Image ID : useful to know which images must have their regions set to largest possible region (see GenerateInputRequestedRegion)
             bool found = false;
-            for (int r=0; r<m_StatsVarDetected.size() && !found; r++) 
+            for (int r=0; r<m_StatsVarDetected.size() && !found; r++)
                 if (m_StatsVarDetected[r] == m_AImage[i][j].info[0])
                   found = true;
-            if (!found)            
-              m_StatsVarDetected.push_back(m_AImage[i][j].info[0]); 
+            if (!found)
+              m_StatsVarDetected.push_back(m_AImage[i][j].info[0]);
         }
 
 
         //Register variable
         m_VParser.at(i)->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value));
-
 
 
         initValue += 0.001;
@@ -787,12 +785,11 @@ void BandMathImageFilterX< TImage >
           ImagePointer  inputPtr = const_cast<TImage *>(this->GetInput(m_StatsVarDetected[i]));
           inputPtr->SetRequestedRegionToLargestPossibleRegion();
       }
-      else 
-        itkExceptionMacro(<< "Requested input #" << m_StatsVarDetected[i] << ", but only " << this->GetNumberOfInputs() << " inputs are available." << std::endl); 
+      else
+        itkExceptionMacro(<< "Requested input #" << m_StatsVarDetected[i] << ", but only " << this->GetNumberOfInputs() << " inputs are available." << std::endl);
   }
 
 }
-
 
 
 template< typename TImage >
@@ -826,7 +823,6 @@ void BandMathImageFilterX<TImage>
     {
       typedef otb::StreamingStatisticsVectorImageFilter<TImage, itk::NumericTraits<PixelType> > statsFilter;
     }
-
 
 
   // Allocate and initialize the thread temporaries

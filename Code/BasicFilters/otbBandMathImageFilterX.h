@@ -135,7 +135,6 @@ public:
   std::vector<std::string> GetVarNames() const;
 
 
-
 protected :
   BandMathImageFilterX();
   virtual ~BandMathImageFilterX();
@@ -150,7 +149,7 @@ protected :
 
 private :
 
-  bool globalStatsDetected() const 
+  bool globalStatsDetected() const
   {
     return (m_StatsVarDetected.size()>0);
   }
