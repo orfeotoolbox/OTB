@@ -39,10 +39,10 @@ int otbListSampleGeneratorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 int otbListSampleGenerator(int argc, char* argv[])
 {
 
-  if (argc != 8)
+  if (argc != 9)
     {
     std::cerr << "Usage: " << argv[0] << " inputImage inputVectorData outputTrainingFile outputValidationFile"
-              << " maxTrainingSize maxValidationSize validationTrainingProportion"
+              << " maxTrainingSize maxValidationSize validationTrainingProportion boundByMin"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -54,6 +54,7 @@ int otbListSampleGenerator(int argc, char* argv[])
   int         maxTrainingSize = atoi(argv[5]);
   int         maxValidationSize = atoi(argv[6]);
   double      validationTrainingProportion = atof(argv[7]);
+  bool        boundByMin = static_cast<bool>(atoi(argv[8]));
 
   std::string classKey = "Class";
 
@@ -79,6 +80,7 @@ int otbListSampleGenerator(int argc, char* argv[])
   generator->SetMaxTrainingSize(maxTrainingSize);
   generator->SetMaxValidationSize(maxValidationSize);
   generator->SetValidationTrainingProportion(validationTrainingProportion);
+  generator->SetBoundByMin(boundByMin);
 
   generator->SetInput(reader->GetOutput());
   generator->SetInputVectorData(vectorReader->GetOutput());
