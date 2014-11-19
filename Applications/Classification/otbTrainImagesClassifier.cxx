@@ -82,6 +82,11 @@ void TrainImagesClassifier::DoInit()
   SetDefaultParameterInt("sample.mv", 1000);
   SetParameterDescription("sample.mv", "Maximum size per class (in pixels) of the validation sample list (default = 1000) (no limit = -1). If equal to -1, then the maximal size of the available validation sample list per class will be equal to the surface area of the smallest class multiplied by the validation sample ratio.");
 
+  AddParameter(ParameterType_Int, "sample.bm", "Bound sample number by minimum");
+  SetDefaultParameterInt("sample.bm", 1);
+  SetParameterDescription("sample.bm", "Bound the number of samples for each class by the number of available samples by the smaller class. Proportions between training and validation are respected. Default is true (=1).");
+
+
   AddParameter(ParameterType_Empty, "sample.edg", "On edge pixel inclusion");
   SetParameterDescription("sample.edg",
                           "Takes pixels on polygon edge into consideration when building training and validation samples.");
@@ -283,6 +288,7 @@ void TrainImagesClassifier::DoExecute()
     sampleGenerator->SetMaxTrainingSize(GetParameterInt("sample.mt"));
     sampleGenerator->SetMaxValidationSize(GetParameterInt("sample.mv"));
     sampleGenerator->SetValidationTrainingProportion(GetParameterFloat("sample.vtr"));
+    sampleGenerator->SetBoundByMin(GetParameterInt("sample.bm"));
 
     // take pixel located on polygon edge into consideration
     if (IsParameterEnabled("sample.edg"))
