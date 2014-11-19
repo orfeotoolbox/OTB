@@ -288,7 +288,7 @@ void TrainImagesClassifier::DoExecute()
     sampleGenerator->SetMaxTrainingSize(GetParameterInt("sample.mt"));
     sampleGenerator->SetMaxValidationSize(GetParameterInt("sample.mv"));
     sampleGenerator->SetValidationTrainingProportion(GetParameterFloat("sample.vtr"));
-    sampleGenerator->SetBoundByMin(GetParameterInt("sample.bm"));
+    sampleGenerator->SetBoundByMin(GetParameterInt("sample.bm")!=0);
 
     // take pixel located on polygon edge into consideration
     if (IsParameterEnabled("sample.edg"))
