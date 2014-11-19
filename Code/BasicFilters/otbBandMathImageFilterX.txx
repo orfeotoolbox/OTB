@@ -101,10 +101,10 @@ void BandMathImageFilterX<TImage>
   os << indent << "Computed values follow:"                            << std::endl;
   os << indent << "UnderflowCount: "  << m_UnderflowCount              << std::endl;
   os << indent << "OverflowCount: "   << m_OverflowCount               << std::endl;
-  os << indent << "itk::NumericTraits<typename PixelType::ValueType>::NonpositiveMin()  :  "
-               << itk::NumericTraits<PixelType>::NonpositiveMin()      << std::endl;
-  os << indent << "itk::NumericTraits<typename PixelType::ValueType>::max()  :             "
-         << itk::NumericTraits<PixelType>::max()                 << std::endl;
+  os << indent << "itk::NumericTraits<typename PixelValueType>::NonpositiveMin()  :  "
+               << itk::NumericTraits<PixelValueType>::NonpositiveMin()      << std::endl;
+  os << indent << "itk::NumericTraits<typename PixelValueType>::max()  :             "
+         << itk::NumericTraits<PixelValueType>::max()                 << std::endl;
 }
 
 template <class TImage>
@@ -611,13 +611,17 @@ void BandMathImageFilterX<TImage>
 
   m_StatsVarDetected.clear();
 
+  //Reset
+  for(int i=0; i<m_AImage.size(); ++i)
+    m_AImage[i].clear();
   m_AImage.clear();
+
   m_AImage.resize(nbThreads);
 
   double initValue = 0.1;
   for(int i = 0; i < nbThreads; ++i) // For each thread
   {
-    m_AImage.clear();
+ 
     m_AImage[i].resize(nbVar); // For each variable
 
     for(int j=0; j < nbVar; ++j)
@@ -778,7 +782,7 @@ void BandMathImageFilterX< TImage >
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
-  for (int i=0; i<m_StatsVarDetected.size(); i++) //Must request largest possible region (only for concerned image)
+  for (int i=0; i<m_StatsVarDetected.size(); i++) //Must request largest possible regions (only for concerned images)
   {
       if ( m_StatsVarDetected[i] < this->GetNumberOfInputs() )
       {
@@ -796,11 +800,11 @@ template< typename TImage >
 void BandMathImageFilterX<TImage>
 ::BeforeThreadedGenerateData()
 {
-  // Some useful variable
+  // Some useful variables
   unsigned int nbThreads = this->GetNumberOfThreads();
   unsigned int nbInputImages = this->GetNumberOfInputs();
 
-  // Check if input image dimensions matches
+  // Check if input image dimensions match
   unsigned int inputSize[2];
   inputSize[0] = this->GetNthInput(0)->GetLargestPossibleRegion().GetSize(0);
   inputSize[1] = this->GetNthInput(0)->GetLargestPossibleRegion().GetSize(1);
@@ -818,10 +822,54 @@ void BandMathImageFilterX<TImage>
       }
     }
 
-  if (globalStatsDetected()) // Must instantiate stats variables of the parsers
+  if (globalStatsDetected()) 
+  // Must instantiate stats variables of the parsers
+  // Note : at this stage, inputs have already been set to largest possible regions.                
     for (unsigned int i=0; i<m_StatsVarDetected.size(); i++)
     {
-      typedef otb::StreamingStatisticsVectorImageFilter<TImage, itk::NumericTraits<PixelType> > statsFilter;
+
+      typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;
+      typename StreamingStatisticsVectorImageFilterType::Pointer filter = StreamingStatisticsVectorImageFilterType::New();
+
+      filter->SetInput( this->GetNthInput(m_StatsVarDetected[i]) );
+      filter->Update();
+
+      PixelType pix; //Variable length vector
+      
+      for(int t=0; t<m_AImage.size(); t++) // for each thread
+        for(int v=0; v<m_AImage[t].size(); v++) // for each variable
+          if ( (m_AImage[t][v].type == 8) && (m_AImage[t][v].info[0] == m_StatsVarDetected[i]) )// type 8 : flag identifying a glob stat; info[0] : input ID
+          {
+              switch ( m_AImage[t][v].info[2] ) // info[2] sub-type (see also SetNthInput method above)
+              {
+                  case 0: // mini
+
+                    pix = filter->GetMinimum();
+                    for (unsigned int b=0; b<pix.GetSize(); b++) // for each band
+                      if (m_AImage[t][v].info[1] == b) // info[1] : band ID
+                        m_AImage[t][v].value = pix[b];
+
+                  break;
+
+                  case 1: // maxi
+
+                    pix = filter->GetMaximum();
+                    for (unsigned int b=0; b<pix.GetSize(); b++) // for each band
+                      if (m_AImage[t][v].info[1] == b) // info[1] : band ID
+                        m_AImage[t][v].value = pix[b];
+
+                  break;
+
+                  case 2: // mean
+
+                    pix = filter->GetMean();
+                    for (unsigned int b=0; b<pix.GetSize(); b++) // for each band
+                      if (m_AImage[t][v].info[1] == b) // info[1] : band ID
+                        m_AImage[t][v].value = pix[b];
+
+                  break;
+              }
+          }
     }
 
 
@@ -975,6 +1023,10 @@ void BandMathImageFilterX<TImage>
           //Nothing to do : user defined variable or constant, which have already been set
           break;
 
+          case 8 :
+          //Nothing to do : variable has already been set inside BeforeThreadedGenerateData method (see above)
+          break;
+
           default :
             itkExceptionMacro(<< "Type of the variable is unknown");
           break;
@@ -1022,17 +1074,17 @@ void BandMathImageFilterX<TImage>
         for(int p=0; p<VoutIt[IDExpression].Get().GetSize(); ++p)
         {
             // Case value is equal to -inf or inferior to the minimum value
-            // allowed by the pixelType cast
-            if (VoutIt[IDExpression].Get()[p] < double(itk::NumericTraits<PixelType>::NonpositiveMin()))
+            // allowed by the PixelValueType cast
+            if (VoutIt[IDExpression].Get()[p] < double(itk::NumericTraits<PixelValueType>::NonpositiveMin()))
             {
-                VoutIt[IDExpression].Get()[p] = itk::NumericTraits<PixelType>::NonpositiveMin();
+                VoutIt[IDExpression].Get()[p] = itk::NumericTraits<PixelValueType>::NonpositiveMin();
                 m_ThreadUnderflow[threadId]++;
             }
             // Case value is equal to inf or superior to the maximum value
-            // allowed by the pixelType cast
-            else if (VoutIt[IDExpression].Get()[p] > double(itk::NumericTraits<PixelType>::max()))
+            // allowed by the PixelValueType cast
+            else if (VoutIt[IDExpression].Get()[p] > double(itk::NumericTraits<PixelValueType>::max()))
             {
-               VoutIt[IDExpression].Get()[p] = itk::NumericTraits<PixelType>::max();
+               VoutIt[IDExpression].Get()[p] = itk::NumericTraits<PixelValueType>::max();
                m_ThreadOverflow[threadId]++;
             }
         }

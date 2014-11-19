@@ -251,6 +251,10 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
   IteratorType it2(radius, image2, region);    it2.NeedToUseBoundaryConditionOn();
   IteratorType it3(radius, image3, region);    it3.NeedToUseBoundaryConditionOn();
 
+  typename PixelType::ValueType imageAb2Mini = itk::NumericTraits<typename PixelType::ValueType>::max();
+  typename PixelType::ValueType imageAb3Mean = 0.0, n=0.0;
+  typename PixelType::ValueType im2b1Maxi = itk::NumericTraits<typename PixelType::ValueType>::min();
+
   for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3)
   {
     ImageType::IndexType i1 = it1.GetIndex();
@@ -261,8 +265,21 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
     it2.GetCenterPixel()[0] = i2[0] * i2[1];
     it3.GetCenterPixel()[0] = i3[0] + i3[1] * i3[1];
 
+    // Minimum of im1 band 2
+    if (imageAb2Mini > it1.GetCenterPixel()[1])
+      imageAb2Mini = it1.GetCenterPixel()[1];
+
+    // Mean of im1 band 3
+    imageAb3Mean += it1.GetCenterPixel()[2];
+    n++;
+
+    // Maximum of im2 band 1
+    if (im2b1Maxi < it2.GetCenterPixel()[0])
+      im2b1Maxi = it2.GetCenterPixel()[0];
+
   }
 
+  imageAb3Mean = imageAb3Mean /n;
 
   FilterType::Pointer         filter       = FilterType::New();
   std::cout << "Number Of Threads  :  " << filter->GetNumberOfThreads() << std::endl;
@@ -276,7 +293,7 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
   //filter->SetConstant("expo",expo);
   //filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5); im2b1^1.1; vcos(canal3); mean(imageAb2N3x3); var(imageAb2N3x3); median(imageAb2N3x3)");
   filter->ImportContext(inputFilename); //Equivalent to three commands above
-  filter->SetExpression("(vmax(canal3b1N3x5)+vmin(canal3b1N3x5)) div {2.0}");
+  filter->SetExpression("(vmax(canal3b1N3x5)+vmin(canal3b1N3x5)) div {2.0} + {imageAb2Mini / im2b1Maxi} + {imageAb3Mean} ");
   filter->Update();
 
   if (filter->GetNumberOfOutputs() != 2)
@@ -350,7 +367,8 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
     for (int i=0; i<it3.Size(); i++)
       vect2.push_back(it3.GetPixel(i)[0]);
     std::sort(vect2.begin(),vect2.end());
-    px2[0] = (vect2.back() + vect2.front())/2.0;
+    px2[0] = (vect2.back() + vect2.front())/2.0 + imageAb2Mini / im2b1Maxi + imageAb3Mean;
+
 
 
     //expression 1

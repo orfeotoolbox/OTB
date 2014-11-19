@@ -99,7 +99,8 @@ public:
   typedef typename ImageType::ConstPointer           ConstImagePointer;
   typedef typename ImageType::Pointer                ImagePointer;
   typedef typename ImageType::RegionType             ImageRegionType;
-  typedef typename ImageType::PixelType::ValueType   PixelType;
+  typedef typename ImageType::PixelType::ValueType   PixelValueType;
+  typedef typename ImageType::PixelType              PixelType;
   typedef typename ImageType::IndexType              IndexType;
   typedef typename ImageType::PointType              OrigineType;
   typedef typename ImageType::SpacingType            SpacingType;
