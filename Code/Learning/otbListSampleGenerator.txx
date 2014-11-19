@@ -64,6 +64,7 @@ ListSampleGenerator<TImage, TVectorData>
   m_MaxTrainingSize(-1),
   m_MaxValidationSize(-1),
   m_ValidationTrainingProportion(0.0),
+  m_BoundByMin(true),
   m_PolygonEdgeInclusion(false),
   m_NumberOfClasses(0),
   m_ClassKey("Class"),
@@ -382,30 +383,42 @@ ListSampleGenerator<TImage, TVectorData>
   double minSizeValidation = minSize * m_ValidationTrainingProportion;
 
   // Apply the limit if specified by the user
-  if ((m_MaxTrainingSize != -1) && (m_MaxTrainingSize < minSizeTraining))
+  if(m_BoundByMin)
     {
-    minSizeTraining = m_MaxTrainingSize;
+    if ((m_MaxTrainingSize != -1) && (m_MaxTrainingSize < minSizeTraining))
+      {
+      minSizeTraining = m_MaxTrainingSize;
+      }
+    if ((m_MaxValidationSize != -1) && (m_MaxValidationSize < minSizeValidation))
+      {
+      minSizeValidation = m_MaxValidationSize;
+      }
     }
-  if ((m_MaxValidationSize != -1) && (m_MaxValidationSize < minSizeValidation))
-    {
-    minSizeValidation = m_MaxValidationSize;
-    }
-
   // Compute the probability selection for each class
   for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
        itmap != m_ClassesSize.end();
        ++itmap)
     {
     m_ClassesProbTraining[itmap->first] = minSizeTraining / itmap->second;
-    }
-  for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
-       itmap != m_ClassesSize.end();
-       ++itmap)
-    {
     m_ClassesProbValidation[itmap->first] = minSizeValidation / itmap->second;
+    if(!m_BoundByMin)
+      {
+      long int maxSizeT = (itmap->second)*(1.0 - m_ValidationTrainingProportion);
+      long int maxSizeV = (itmap->second)*m_ValidationTrainingProportion;
+      maxSizeT = (m_MaxTrainingSize == -1)?maxSizeT:m_MaxTrainingSize;
+      maxSizeV = (m_MaxValidationSize == -1)?maxSizeV:m_MaxValidationSize;
+    
+      //not enough samples to respect the bounds
+      if(maxSizeT+maxSizeV > itmap->second)
+        {
+        maxSizeT = (itmap->second)*(1.0 - m_ValidationTrainingProportion);
+        maxSizeV = (itmap->second)*m_ValidationTrainingProportion;
+        }
+      m_ClassesProbTraining[itmap->first] = maxSizeT/(itmap->second);
+      m_ClassesProbValidation[itmap->first] = maxSizeV/(itmap->second);
+      }
     }
 }
-
 template <class TImage, class TVectorData>
 double
 ListSampleGenerator<TImage, TVectorData>
@@ -420,11 +433,11 @@ ListSampleGenerator<TImage, TVectorData>
   // Remove contribution of all interior rings
   PolygonListPointerType interiorRings = polygonDataNode->GetPolygonInteriorRings();
   for (typename PolygonListType::Iterator interiorRing = interiorRings->Begin();
-      interiorRing != interiorRings->End();
-      ++interiorRing)
-  {
+       interiorRing != interiorRings->End();
+       ++interiorRing)
+    {
     area -= interiorRing.Get()->GetArea() / pixelArea;
-  }
+    }
 
   return area;
 }

@@ -103,6 +103,8 @@ public:
   itkSetMacro(MaxValidationSize, long int);
   itkGetConstMacro(ValidationTrainingProportion, double);
   itkSetClampMacro(ValidationTrainingProportion, double, 0.0, 1.0);
+  itkGetConstMacro(BoundByMin, bool);
+  itkSetMacro(BoundByMin, bool);
 
   itkGetConstMacro(NumberOfClasses, unsigned short);
   typedef std::map<ClassLabelType, int> SampleNumberType;
@@ -175,6 +177,7 @@ private:
   double   m_ValidationTrainingProportion; // proportion of training vs validation
                                            // (0.0 = all training, 1.0 = all validation)
 
+  bool m_BoundByMin; //Bound the number of samples by the class having the fewer
   bool           m_PolygonEdgeInclusion; // if true take into consideration pixel which are on polygon edge
                                            //  useful, when dealing with small polygon area (1 or two pixels)
                                            // false by default

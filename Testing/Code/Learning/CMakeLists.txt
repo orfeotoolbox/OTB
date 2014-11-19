@@ -504,11 +504,12 @@ add_test(leTvListSampleGenerator1 ${LEARNING_TESTS4}
     -1
     -1
     0
-)
+    1
+    )
 
-# test the proportion between training and validation
-add_test(leTvListSampleGenerator2 ${LEARNING_TESTS4}
- --compare-n-ascii ${NOTOL} 2
+  # test the proportion between training and validation
+  add_test(leTvListSampleGenerator2 ${LEARNING_TESTS4}
+    --compare-n-ascii ${NOTOL} 2
     ${BASELINE_FILES}/leTvListSampleGenerator2.txt
     ${TEMP}/leTvListSampleGenerator2.txt
     ${BASELINE_FILES}/leTvListSampleGeneratorValidation2.txt
@@ -521,11 +522,12 @@ add_test(leTvListSampleGenerator2 ${LEARNING_TESTS4}
     -1
     -1
     0.5
-)
+    1
+    )
 
-# test the size limit for training and validation
-add_test(leTvListSampleGenerator3 ${LEARNING_TESTS4}
- --compare-n-ascii ${NOTOL} 2
+  # test the size limit for training and validation
+  add_test(leTvListSampleGenerator3 ${LEARNING_TESTS4}
+    --compare-n-ascii ${NOTOL} 2
     ${BASELINE_FILES}/leTvListSampleGenerator3.txt
     ${TEMP}/leTvListSampleGenerator3.txt
     ${BASELINE_FILES}/leTvListSampleGeneratorValidation3.txt
@@ -538,195 +540,247 @@ add_test(leTvListSampleGenerator3 ${LEARNING_TESTS4}
     100
     200
     0.5
-)
-# -------            otb::ConfusionMatrixCalculator   -----------------------------
-add_test(leTuConfusionMatrixCalculatorNew ${LEARNING_TESTS4}
-otbConfusionMatrixCalculatorNew)
+    1
+    )
+  # test without bounds by the smaller class
+  add_test(leTvListSampleGenerator4 ${LEARNING_TESTS4}
+    --compare-n-ascii ${NOTOL} 2
+    ${BASELINE_FILES}/leTvListSampleGenerator4.txt
+    ${TEMP}/leTvListSampleGenerator4.txt
+    ${BASELINE_FILES}/leTvListSampleGeneratorValidation4.txt
+    ${TEMP}/leTvListSampleGeneratorValidation4.txt
+    otbListSampleGenerator
+    ${EXAMPLEDATA}/qb_RoadExtract.tif
+    ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
+    ${TEMP}/leTvListSampleGenerator4.txt
+    ${TEMP}/leTvListSampleGeneratorValidation4.txt
+    -1
+    -1
+    0.5
+    0
+    )
+  # test without bounds by the smaller class but bounding by max number
+  add_test(leTvListSampleGenerator5 ${LEARNING_TESTS4}
+    --compare-n-ascii ${NOTOL} 2
+    ${BASELINE_FILES}/leTvListSampleGenerator5.txt
+    ${TEMP}/leTvListSampleGenerator5.txt
+    ${BASELINE_FILES}/leTvListSampleGeneratorValidation5.txt
+    ${TEMP}/leTvListSampleGeneratorValidation5.txt
+    otbListSampleGenerator
+    ${EXAMPLEDATA}/qb_RoadExtract.tif
+    ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
+    ${TEMP}/leTvListSampleGenerator5.txt
+    ${TEMP}/leTvListSampleGeneratorValidation5.txt
+    8000
+    8000
+    0.5
+    0
+    )
+  # test without bounds by the smaller class but bounding by max number which may be > than the available
+  add_test(leTvListSampleGenerator6 ${LEARNING_TESTS4}
+    --compare-n-ascii ${NOTOL} 2
+    ${BASELINE_FILES}/leTvListSampleGenerator6.txt
+    ${TEMP}/leTvListSampleGenerator6.txt
+    ${BASELINE_FILES}/leTvListSampleGeneratorValidation6.txt
+    ${TEMP}/leTvListSampleGeneratorValidation6.txt
+    otbListSampleGenerator
+    ${EXAMPLEDATA}/qb_RoadExtract.tif
+    ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
+    ${TEMP}/leTvListSampleGenerator6.txt
+    ${TEMP}/leTvListSampleGeneratorValidation6.txt
+    15000
+    15000
+    0.5
+    0
+    )
+  # -------            otb::ConfusionMatrixCalculator   -----------------------------
+  add_test(leTuConfusionMatrixCalculatorNew ${LEARNING_TESTS4}
+    otbConfusionMatrixCalculatorNew)
 
-add_test(leTvConfusionMatrixCalculatorSetListSamples ${LEARNING_TESTS4}
-otbConfusionMatrixCalculatorSetListSamples 1000 4)
+  add_test(leTvConfusionMatrixCalculatorSetListSamples ${LEARNING_TESTS4}
+    otbConfusionMatrixCalculatorSetListSamples 1000 4)
 
-add_test(leTvConfusionMatrixCalculatorWrongSize ${LEARNING_TESTS4}
-otbConfusionMatrixCalculatorWrongSize 1000 4)
-set_tests_properties(leTvConfusionMatrixCalculatorWrongSize PROPERTIES WILL_FAIL true)
+  add_test(leTvConfusionMatrixCalculatorWrongSize ${LEARNING_TESTS4}
+    otbConfusionMatrixCalculatorWrongSize 1000 4)
+  set_tests_properties(leTvConfusionMatrixCalculatorWrongSize PROPERTIES WILL_FAIL true)
 
-add_test(leTvConfusionMatrixCalculatorUpdate ${LEARNING_TESTS4}
-otbConfusionMatrixCalculatorCompute 4 3)
+  add_test(leTvConfusionMatrixCalculatorUpdate ${LEARNING_TESTS4}
+    otbConfusionMatrixCalculatorCompute 4 3)
 
-add_test(leTvConfusionMatrixCalculatorUpdateWithBaseline ${LEARNING_TESTS4}
-otbConfusionMatrixCalculatorComputeWithBaseline)
+  add_test(leTvConfusionMatrixCalculatorUpdateWithBaseline ${LEARNING_TESTS4}
+    otbConfusionMatrixCalculatorComputeWithBaseline)
 
-# -------            otb::ConfusionMatrixMeasurements   -----------------------------
-add_test(leTuConfusionMatrixMeasurementsNew ${LEARNING_TESTS4}
-otbConfusionMatrixMeasurementsNew)
+  # -------            otb::ConfusionMatrixMeasurements   -----------------------------
+  add_test(leTuConfusionMatrixMeasurementsNew ${LEARNING_TESTS4}
+    otbConfusionMatrixMeasurementsNew)
 
-add_test(leTvConfusionMatrixMeasurementsTest ${LEARNING_TESTS4}
-otbConfusionMatrixMeasurementsTest)
+  add_test(leTvConfusionMatrixMeasurementsTest ${LEARNING_TESTS4}
+    otbConfusionMatrixMeasurementsTest)
 
-add_test(leTvConfusionMatrixConcatenateTest ${LEARNING_TESTS4}
-otbConfusionMatrixConcatenateTest
- ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
- ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
- ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
- ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
- ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
- ${INPUTDATA}/Classification/QB_1_ortho_C6.csv)
-
-
-
-# otbGaussianModelComponent
-add_test(leTuGaussianModelComponentNew ${LEARNING_TESTS4}
-otbGaussianModelComponentNew)
-
-
-# ShiftScaleSampleListFilter tests ----------
-add_test(leTuShiftScaleSampleListFilterNew ${LEARNING_TESTS4}
-otbShiftScaleSampleListFilterNew)
-
-add_test(leTvShiftScaleSampleListFilter ${LEARNING_TESTS4}
---compare-ascii ${NOTOL}
- ${BASELINE_FILES}/leTvShiftScaleSampleListFilterOutput.txt
- ${TEMP}/leTvShiftScaleSampleListFilterOutput.txt
-otbShiftScaleSampleListFilter
-${TEMP}/leTvShiftScaleSampleListFilterOutput.txt
- 2
--1 -3
- 1  2
--2 -5
--1 -3
- 0 -1
-)
-# Gaussian Additive
-add_test(leTuGaussianAdditiveNoiseSampleListFilterNew ${LEARNING_TESTS4}
-otbGaussianAdditiveNoiseSampleListFilterNew)
-
-add_test(leTvGaussianAdditiveNoiseSampleListFilter ${LEARNING_TESTS4}
---compare-ascii ${NOTOL}
-        ${BASELINE_FILES}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
-        ${TEMP}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
-otbGaussianAdditiveNoiseSampleListFilter
-${TEMP}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
- 2
--1 -3
- 1  2
--2 -5
--1 -3
- 0 -1
-)
-
-# ConcatenateSampleListFilter tests ----------
-add_test(leTuConcatenateSampleListFilterNew ${LEARNING_TESTS4}
-otbConcatenateSampleListFilterNew)
-
-add_test(leTvConcatenateSampleListFilter ${LEARNING_TESTS4}
---compare-ascii ${NOTOL}
- ${BASELINE_FILES}/leTvConcatenateSampleListFilterOutput.txt
- ${TEMP}/leTvConcatenateSampleListFilterOutput.txt
-otbConcatenateSampleListFilter
-${TEMP}/leTvConcatenateSampleListFilterOutput.txt
- 2 3 2
--1 -3
- 1  2
--2 -5
--1 -3
- 0 -1
-)
-
-#ListSampleToBalancedListSampleFilterNew tests ----------
-add_test(leTuListSampleToBalancedListSampleFilterNew ${LEARNING_TESTS4}
-otbListSampleToBalancedListSampleFilterNew)
-
-add_test(leTvListSampleToBalancedListSampleFilter ${LEARNING_TESTS4}
---compare-ascii ${NOTOL}
-${BASELINE_FILES}/leTvListSampleToBalancedListSampleFilterOutput.txt
- ${TEMP}/leTvListSampleToBalancedListSampleFilterOutput.txt
-otbListSampleToBalancedListSampleFilter
-${TEMP}/leTvListSampleToBalancedListSampleFilterOutput.txt
- 2
--1 -3  0 # The third element is the label of the SampleList
- 1  2  1
--2 -5  0
--1 -3  1
- 0 -1  1
--3  1  1
--5  2  1
- 2  1  1
- 2  8  1
- 1 -4  0
--1  5  4
- 2  5  1
- 0 -5  0
- 1 -1  2
-)
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# -------            otb::DecisionTree   ------------------------------
-add_test(leTuDecisionTreeNew ${LEARNING_TESTS5}
-otbDecisionTreeNew)
-
-add_test(leTvDecisionTreeBuild ${LEARNING_TESTS5}
-otbDecisionTreeBuild)
-
-add_test(leTvDecisionTreeWithRealValues ${LEARNING_TESTS5}
-otbDecisionTreeWithRealValues)
+  add_test(leTvConfusionMatrixConcatenateTest ${LEARNING_TESTS4}
+    otbConfusionMatrixConcatenateTest
+    ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+    ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+    ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+    ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+    ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+    ${INPUTDATA}/Classification/QB_1_ortho_C6.csv)
 
 
-add_test(leTuNeighborhoodMajorityVotingImageFilterNew ${LEARNING_TESTS5}
-otbNeighborhoodMajorityVotingImageFilterNew)
 
-add_test(leTvNeighborhoodMajorityVotingImageFilterTest ${LEARNING_TESTS5}
- --compare-image ${NOTOL}
- ${BASELINE}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
- ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
-otbNeighborhoodMajorityVotingImageFilterTest
- ${INPUTDATA}/Classification/QB_1_ortho_4Cls_N_Classified_OTB.tif
- ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
- false #KeepOriginalLabelBool
- 2 #xRadius
- 5 #yRadius
- 10 #LabelForNoDataPixels
- 7 #LabelForUndecidedPixels
- )
+  # otbGaussianModelComponent
+  add_test(leTuGaussianModelComponentNew ${LEARNING_TESTS4}
+    otbGaussianModelComponentNew)
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-if(OTB_USE_OPENCV)
-	add_test(leTuRandomForestsMachineLearningModelNew ${LEARNING_TESTS6}
-           otbRandomForestsMachineLearningModelNew)
+  # ShiftScaleSampleListFilter tests ----------
+  add_test(leTuShiftScaleSampleListFilterNew ${LEARNING_TESTS4}
+    otbShiftScaleSampleListFilterNew)
 
-	add_test(leTvRandomForestsMachineLearningModel ${LEARNING_TESTS6}
-         otbRandomForestsMachineLearningModel
-         ${INPUTDATA}/letter.scale
-         ${TEMP}/rf_model.txt
-         )
+  add_test(leTvShiftScaleSampleListFilter ${LEARNING_TESTS4}
+    --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/leTvShiftScaleSampleListFilterOutput.txt
+    ${TEMP}/leTvShiftScaleSampleListFilterOutput.txt
+    otbShiftScaleSampleListFilter
+    ${TEMP}/leTvShiftScaleSampleListFilterOutput.txt
+    2
+    -1 -3
+    1  2
+    -2 -5
+    -1 -3
+    0 -1
+    )
+  # Gaussian Additive
+  add_test(leTuGaussianAdditiveNoiseSampleListFilterNew ${LEARNING_TESTS4}
+    otbGaussianAdditiveNoiseSampleListFilterNew)
 
-	add_test(leTuKNearestNeighborsMachineLearningModelNew ${LEARNING_TESTS6}
-           otbKNearestNeighborsMachineLearningModelNew)
+  add_test(leTvGaussianAdditiveNoiseSampleListFilter ${LEARNING_TESTS4}
+    --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
+    ${TEMP}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
+    otbGaussianAdditiveNoiseSampleListFilter
+    ${TEMP}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
+    2
+    -1 -3
+    1  2
+    -2 -5
+    -1 -3
+    0 -1
+    )
 
-	add_test(leTvKNearestNeighborsMachineLearningModel ${LEARNING_TESTS6}
-         otbKNearestNeighborsMachineLearningModel
-         ${INPUTDATA}/letter.scale
-         ${TEMP}/knn_model.txt
-         )
+  # ConcatenateSampleListFilter tests ----------
+  add_test(leTuConcatenateSampleListFilterNew ${LEARNING_TESTS4}
+    otbConcatenateSampleListFilterNew)
 
-	add_test(leTuSVMMachineLearningModelNew ${LEARNING_TESTS6}
-           otbSVMMachineLearningModelNew)
+  add_test(leTvConcatenateSampleListFilter ${LEARNING_TESTS4}
+    --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/leTvConcatenateSampleListFilterOutput.txt
+    ${TEMP}/leTvConcatenateSampleListFilterOutput.txt
+    otbConcatenateSampleListFilter
+    ${TEMP}/leTvConcatenateSampleListFilterOutput.txt
+    2 3 2
+    -1 -3
+    1  2
+    -2 -5
+    -1 -3
+    0 -1
+    )
 
-	add_test(leTvSVMMachineLearningModel ${LEARNING_TESTS6}
-         otbSVMMachineLearningModel
-         ${INPUTDATA}/letter.scale
-         ${TEMP}/svm_model.txt
-         )
+  #ListSampleToBalancedListSampleFilterNew tests ----------
+  add_test(leTuListSampleToBalancedListSampleFilterNew ${LEARNING_TESTS4}
+    otbListSampleToBalancedListSampleFilterNew)
 
-	add_test(leTuLibSVMMachineLearningModelNew ${LEARNING_TESTS6}
-       	 otbLibSVMMachineLearningModelNew)
+  add_test(leTvListSampleToBalancedListSampleFilter ${LEARNING_TESTS4}
+    --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/leTvListSampleToBalancedListSampleFilterOutput.txt
+    ${TEMP}/leTvListSampleToBalancedListSampleFilterOutput.txt
+    otbListSampleToBalancedListSampleFilter
+    ${TEMP}/leTvListSampleToBalancedListSampleFilterOutput.txt
+    2
+    -1 -3  0 # The third element is the label of the SampleList
+    1  2  1
+    -2 -5  0
+    -1 -3  1
+    0 -1  1
+    -3  1  1
+    -5  2  1
+    2  1  1
+    2  8  1
+    1 -4  0
+    -1  5  4
+    2  5  1
+    0 -5  0
+    1 -1  2
+    )
 
-	add_test(leTvLibSVMMachineLearningModel ${LEARNING_TESTS6}
-	     otbLibSVMMachineLearningModel
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # -------            otb::DecisionTree   ------------------------------
+  add_test(leTuDecisionTreeNew ${LEARNING_TESTS5}
+    otbDecisionTreeNew)
+
+  add_test(leTvDecisionTreeBuild ${LEARNING_TESTS5}
+    otbDecisionTreeBuild)
+
+  add_test(leTvDecisionTreeWithRealValues ${LEARNING_TESTS5}
+    otbDecisionTreeWithRealValues)
+
+
+  add_test(leTuNeighborhoodMajorityVotingImageFilterNew ${LEARNING_TESTS5}
+    otbNeighborhoodMajorityVotingImageFilterNew)
+
+  add_test(leTvNeighborhoodMajorityVotingImageFilterTest ${LEARNING_TESTS5}
+    --compare-image ${NOTOL}
+    ${BASELINE}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
+    ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
+    otbNeighborhoodMajorityVotingImageFilterTest
+    ${INPUTDATA}/Classification/QB_1_ortho_4Cls_N_Classified_OTB.tif
+    ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
+    false #KeepOriginalLabelBool
+    2 #xRadius
+    5 #yRadius
+    10 #LabelForNoDataPixels
+    7 #LabelForUndecidedPixels
+    )
+
+
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if(OTB_USE_OPENCV)
+    add_test(leTuRandomForestsMachineLearningModelNew ${LEARNING_TESTS6}
+      otbRandomForestsMachineLearningModelNew)
+
+    add_test(leTvRandomForestsMachineLearningModel ${LEARNING_TESTS6}
+      otbRandomForestsMachineLearningModel
+      ${INPUTDATA}/letter.scale
+      ${TEMP}/rf_model.txt
+      )
+
+    add_test(leTuKNearestNeighborsMachineLearningModelNew ${LEARNING_TESTS6}
+      otbKNearestNeighborsMachineLearningModelNew)
+
+    add_test(leTvKNearestNeighborsMachineLearningModel ${LEARNING_TESTS6}
+      otbKNearestNeighborsMachineLearningModel
+      ${INPUTDATA}/letter.scale
+      ${TEMP}/knn_model.txt
+      )
+
+    add_test(leTuSVMMachineLearningModelNew ${LEARNING_TESTS6}
+      otbSVMMachineLearningModelNew)
+
+    add_test(leTvSVMMachineLearningModel ${LEARNING_TESTS6}
+      otbSVMMachineLearningModel
+      ${INPUTDATA}/letter.scale
+      ${TEMP}/svm_model.txt
+      )
+
+    add_test(leTuLibSVMMachineLearningModelNew ${LEARNING_TESTS6}
+      otbLibSVMMachineLearningModelNew)
+
+    add_test(leTvLibSVMMachineLearningModel ${LEARNING_TESTS6}
+      otbLibSVMMachineLearningModel
 	     ${INPUTDATA}/letter.scale
 	     ${TEMP}/libsvm_model.txt
      	 )
