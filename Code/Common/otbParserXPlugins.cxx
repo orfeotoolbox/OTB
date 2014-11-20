@@ -38,7 +38,7 @@ void bands::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
       mup::matrix_type b = a_pArg[1]->GetArray();
 
 
-      int nbrows = b.GetRows(); 
+      int nbrows = b.GetRows();
       int nbcols = b.GetCols();
 
       assert(a.GetRows()==1); // Bands selection is done on a row vector
