@@ -302,7 +302,7 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
   //filter->SetConstant("expo",expo);
   //filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5); im2b1^1.1; vcos(canal3); mean(imageAb2N3x3); var(imageAb2N3x3); median(imageAb2N3x3)");
   filter->ImportContext(inputFilename); //Equivalent to three commands above
-  filter->SetExpression("(vmax(canal3b1N3x5)+vmin(canal3b1N3x5)) div {2.0} + {imageAb2Mini / im2b1Maxi}  + {imageAb3Mean / imageAb1Sum * imageAb3Var} ");
+  filter->SetExpression("(vmax(canal3b1N3x5)+vmin(canal3b1N3x5)) div {2.0} + {imageAb3Var} dv 2.0 + {imageAb2Mini / im2b1Maxi} mlt 3.4 + {imageAb3Mean / imageAb1Sum * imageAb3Var} pw 1.2");
   filter->Update();
 
   if (filter->GetNumberOfOutputs() != 2)
@@ -376,7 +376,7 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
     for (int i=0; i<it3.Size(); i++)
       vect2.push_back(it3.GetPixel(i)[0]);
     std::sort(vect2.begin(),vect2.end());
-    px2[0] = (vect2.back() + vect2.front())/2.0 +  (imageAb2Mini / im2b1Maxi) + imageAb3Mean / imageAb1Sum * imageAb3Var;
+    px2[0] = (vect2.back() + vect2.front())/2.0 + imageAb3Var / 2.0 + (imageAb2Mini / im2b1Maxi)*3.4 + vcl_pow(imageAb3Mean / imageAb1Sum * imageAb3Var,1.2);
 
 
 

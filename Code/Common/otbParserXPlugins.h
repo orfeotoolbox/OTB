@@ -87,6 +87,26 @@ class ElementWiseDivision : public mup::IOprtBin
   };
 
 
+class DivisionByScalar : public mup::IOprtBin
+  {
+  public:
+    DivisionByScalar():IOprtBin(_T("dv"), (int)(mup::prMUL_DIV), mup::oaLEFT)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int);
+
+    virtual const mup::char_type* GetDesc() const
+    {
+      return _T("x dv y - division of vectors / matrices by a scalar");
+    }
+  
+    virtual mup::IToken* Clone() const
+    {
+      return new DivisionByScalar(*this);
+    }
+  };
+
+
 class ElementWiseMultiplication : public mup::IOprtBin
   {
   public:
@@ -107,6 +127,26 @@ class ElementWiseMultiplication : public mup::IOprtBin
   };
 
 
+class MultiplicationByScalar : public mup::IOprtBin
+  {
+  public:
+    MultiplicationByScalar():IOprtBin(_T("mlt"), (int)(mup::prMUL_DIV), mup::oaLEFT)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int);
+
+    virtual const mup::char_type* GetDesc() const
+    {
+      return _T("x mlt y - multiplication of vectors / matrices by a scalar");
+    }
+  
+    virtual mup::IToken* Clone() const
+    {
+      return new MultiplicationByScalar(*this);
+    }
+  };
+
+
 class ElementWisePower : public mup::IOprtBin
   {
 public:
@@ -123,6 +163,26 @@ public:
     virtual mup::IToken* Clone() const
     {
       return new ElementWisePower(*this);
+    }
+  };
+
+
+class PowerByScalar : public mup::IOprtBin
+  {
+  public:
+    PowerByScalar():IOprtBin(_T("pw"), (int)(mup::prMUL_DIV), mup::oaLEFT)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int);
+
+    virtual const mup::char_type* GetDesc() const
+    {
+      return _T("x pw y - power of vectors / matrices by a scalar");
+    }
+  
+    virtual mup::IToken* Clone() const
+    {
+      return new PowerByScalar(*this);
     }
   };
 

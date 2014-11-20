@@ -61,15 +61,19 @@ public:
     m_MuParserX.DefineFun(new conv);
     m_MuParserX.DefineFun(new bands);
     m_MuParserX.DefineFun(new cat);
-    m_MuParserX.DefineOprt(new ElementWiseDivision);
-    m_MuParserX.DefineOprt(new ElementWiseMultiplication);
-    m_MuParserX.DefineOprt(new ElementWisePower);
     m_MuParserX.DefineFun(new mean);
     m_MuParserX.DefineFun(new var);
     m_MuParserX.DefineFun(new median);
+
+    m_MuParserX.DefineOprt(new ElementWiseDivision);
+    m_MuParserX.DefineOprt(new ElementWiseMultiplication);
+    m_MuParserX.DefineOprt(new ElementWisePower);
+    m_MuParserX.DefineOprt(new DivisionByScalar);
+    m_MuParserX.DefineOprt(new MultiplicationByScalar);
+    m_MuParserX.DefineOprt(new PowerByScalar);
+
     m_MuParserX.DefineFun(new vmin);
     m_MuParserX.DefineFun(new vmax);
-
     m_MuParserX.DefineFun(new vcos);
     m_MuParserX.DefineFun(new vsin);
     m_MuParserX.DefineFun(new vtan);
