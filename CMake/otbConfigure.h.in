@@ -73,9 +73,6 @@
 #cmakedefine TIXML_USE_STL
 #endif
 
-/* Path of OTB binaries and OTB install */
-#define OTB_CONFIG "@OTB_BINARY_DIR@"
-
 /* Deprecated Management */
 #cmakedefine OTB_USE_DEPRECATED
 

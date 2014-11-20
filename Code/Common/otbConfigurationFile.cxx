@@ -43,12 +43,6 @@ ConfigurationFile
       m_OTBConfig = LoadSilent(envVar);
       }
     }
-
-  if ( !m_OTBConfig )
-    {
-    std::string OTBBinDir(OTB_CONFIG);
-    m_OTBConfig = LoadSilent(OTBBinDir + "/otb.conf");
-    }
 }
 
 ConfigurationFile
