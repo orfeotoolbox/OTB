@@ -10,11 +10,31 @@ mark_as_advanced(USE_SYSTEM_OPENJPEG)
 if(USE_SYSTEM_OPENJPEG)
   message(STATUS "  Using OpenJpeg system version")
 else()
-  
-  # TODO : handle dependencies : TIFF, ZLIB, ...
-  
+  set(${proj}_DEPENDENCIES)
   set(OPENJPEG_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(OPENJPEG_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  
+  # handle dependencies : TIFF, ZLIB, ...
+  # although they seem un-used by the openjp2 codec
+  if(USE_SYSTEM_TIFF)
+    set(OPENJPEG_SB_TIFF_CONFIG)
+  else()
+    set(OPENJPEG_SB_TIFF_CONFIG 
+      -DTIFF_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include 
+      -DTIFF_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libtiff.so
+      )
+    list(APPEND ${proj}_DEPENDENCIES TIFF)
+  endif()
+  
+  if(USE_SYSTEM_ZLIB)
+    set(OPENJPEG_SB_ZLIB_CONFIG)
+  else()
+    set(OPENJPEG_SB_ZLIB_CONFIG 
+      -DZLIB_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include
+      -DZLIB_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libzlib.so
+      )
+    list(APPEND ${proj}_DEPENDENCIES ZLIB)
+  endif()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
@@ -34,6 +54,9 @@ else()
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DBUILD_TESTING:BOOL=OFF
       -DBUILD_THIRDPARTY:BOOL=OFF
+      ${OPENJPEG_SB_TIFF_CONFIG}
+      ${OPENJPEG_SB_ZLIB_CONFIG}
+    DEPENDS ${${proj}_DEPENDENCIES}
     )
 
   message(STATUS "  Using OpenJpeg SuperBuild version")

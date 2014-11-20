@@ -10,16 +10,42 @@ mark_as_advanced(USE_SYSTEM_GDAL)
 if(USE_SYSTEM_GDAL)
   message(STATUS "  Using GDAL system version")
 else()
-  
+  set(${proj}_DEPENDENCIES)
   set(GDAL_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(GDAL_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  
+  if(USE_SYSTEM_TIFF)
+    set(GDAL_SB_TIFF_CONFIG)
+  else()
+    set(GDAL_SB_TIFF_CONFIG 
+        --with-libtiff=${CMAKE_INSTALL_PREFIX}
+      )
+    list(APPEND ${proj}_DEPENDENCIES TIFF)
+  endif()
+  
+  if(USE_SYSTEM_GEOTIFF)
+    set(GDAL_SB_GEOTIFF_CONFIG)
+  else()
+    set(GDAL_SB_GEOTIFF_CONFIG 
+      --with-geotiff=${CMAKE_INSTALL_PREFIX}
+      )
+    list(APPEND ${proj}_DEPENDENCIES GEOTIFF)
+  endif()
+  
+  if(USE_SYSTEM_OPENJPEG)
+    set(GDAL_SB_OPENJPEG_CONFIG)
+  else()
+    set(GDAL_SB_OPENJPEG_CONFIG 
+      --with-openjpeg=${CMAKE_INSTALL_PREFIX}
+      )
+    list(APPEND ${proj}_DEPENDENCIES OPENJPEG)
+  endif()
   
   if(WIN32)
     # TODO : use nmake
   else()
     
     ExternalProject_Add(${proj}
-      DEPENDS OPENJPEG TIFF
       PREFIX ${proj}
       URL "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"
       URL_MD5 9fdf0f2371a3e9863d83e69951c71ec4
@@ -27,15 +53,17 @@ else()
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
       CONFIGURE_COMMAND ${GDAL_SB_BUILD_DIR}/configure 
         --prefix=${CMAKE_INSTALL_PREFIX}
-        --with-libtiff=${CMAKE_INSTALL_PREFIX}
-        --with-geotiff=${CMAKE_INSTALL_PREFIX}
-        #--with-rename-internal-libtiff-symbols=yes
-        #--with-rename-internal-libgeotiff-symbols=yes
-        --with-openjpeg=${CMAKE_INSTALL_PREFIX}
+        --enable-static=no
+        ${GDAL_SB_TIFF_CONFIG}
+        ${GDAL_SB_GEOTIFF_CONFIG}
+        ${GDAL_SB_OPENJPEG_CONFIG}
         --without-ogdi
         --without-jasper
+        #--with-libz=${CMAKE_INSTALL_PREFIX}
+        --with-png=internal
       BUILD_COMMAND make
       INSTALL_COMMAND make install
+      DEPENDS ${${proj}_DEPENDENCIES}
       )
     
     ExternalProject_Add_Step(${proj} copy_source

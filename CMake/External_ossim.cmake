@@ -16,17 +16,31 @@ mark_as_advanced(USE_SYSTEM_OSSIM)
 if(USE_SYSTEM_OSSIM)
   message(STATUS "  Using OSSIM system version")
 else()
-  # set project dependencies (GEOS, GDAL, TIFF, JPEG, OPENTHREADS, )
-  # TODO
-
-  # include dependencies if any
-  # TODO
-
+  set(${proj}_DEPENDENCIES)
   set(OSSIM_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(OSSIM_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
+  # set project dependencies (GEOS, GDAL, TIFF, JPEG, OPENTHREADS, )
+  if(USE_SYSTEM_TIFF)
+    set(OSSIM_SB_TIFF_CONFIG)
+  else()
+    set(OSSIM_SB_TIFF_CONFIG 
+      -DTIFF_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include 
+      -DTIFF_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libtiff.so
+      )
+    list(APPEND ${proj}_DEPENDENCIES TIFF)
+  endif()
+  
+  if(USE_SYSTEM_GEOS)
+    set(OSSIM_SB_GEOS_CONFIG)
+  else()
+    set(OSSIM_SB_GEOS_CONFIG 
+      -DGEOS_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include/geos
+      )
+    list(APPEND ${proj}_DEPENDENCIES GEOS)
+  endif()
+  
   ExternalProject_Add(${proj}
-    DEPENDS TIFF
     PREFIX ${proj}
     URL "http://download.osgeo.org/ossim/source/latest/ossim-1.8.18-1.tar.gz"
     URL_MD5 c61e77f3fab08df0e486367eb4365c91
@@ -41,9 +55,8 @@ else()
       -DBUILD_OSSIMCSM_PLUGIN:STRING=OFF
       -DCMAKE_CXX_FLAGS:STRING=-D__STDC_CONSTANT_MACROS
       -DWMS_INCLUDE_DIR:STRING=${OSSIM_SB_SRC}/libwms/include
-      -DGEOS_INCLUDE_DIR:STRING=/usr/include/geos
-      -DTIFF_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include
-      -DTIFF_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libtiff.so
+      ${OSSIM_SB_TIFF_CONFIG}
+      ${OSSIM_SB_GEOS_CONFIG}
       -DBUILD_OSSIMPREDATOR:BOOL=OFF
       -DBUILD_OSSIMPLANET:BOOL=OFF
       -DBUILD_OSSIMPLANETQT:BOOL=OFF
@@ -53,6 +66,7 @@ else()
       -DBUILD_OMS:BOOL=OFF
       -DCMAKE_MODULE_PATH:PATH=${OSSIM_SB_SRC}/ossim_package_support/cmake/CMakeModules
     PATCH_COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/ossim_patch_1.cmake
+    DEPENDS ${${proj}_DEPENDENCIES}
     )
   
   # Write patch file in binary dir

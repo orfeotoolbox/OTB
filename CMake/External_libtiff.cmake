@@ -19,7 +19,8 @@ else()
   else()
     set(LIBTIFF_SB_ZLIB_CONFIG 
       --with-zlib-include-dir=${CMAKE_INSTALL_PREFIX}/include
-      --with-zlib-lib-dir=${CMAKE_INSTALL_PREFIX}/lib)
+      #--with-zlib-lib-dir=${CMAKE_INSTALL_PREFIX}/lib
+      )
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
   
