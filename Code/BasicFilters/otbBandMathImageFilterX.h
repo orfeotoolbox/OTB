@@ -25,6 +25,7 @@
 #include "itkImageToImageFilter.h"
 #include "itkArray.h"
 
+#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbParserX.h"
 
 #include <vector>
@@ -33,43 +34,21 @@
 namespace otb
 {
 /** \class BandMathImageFilterX
- * \brief Performs a mathematical operation on the input images
+ * \brief Performs mathematical operations on the input images
  * according to the formula specified by the user.
  *
- * This filter is based on the mathematical parser library muParser.
+ * This filter is based on the mathematical parser library muParserX.
  * The built in functions and operators list is available at:
- * http://muparser.sourceforge.net/mup_features.html#idDef2
- *
- * OTB additional functions:
- * ndvi(r, niri)
- *
- * OTB additional constants:
- * e - log2e - log10e - ln2 - ln10 - pi - euler
+ * \url{http:*articles.beltoforion.de/article.php?a=muparserx}.
  *
  * In order to use this filter, at least one input image is to be
  * set. An associated variable name can be specified or not by using
- * the corresponding SetNthInput method. For the nth input image, if
- * no associated variable name has been spefified, a default variable
- * name is given by concatenating the letter "b" (for band) and the
- * corresponding input index.
- * Next step is to set the expression according to the variable
- * names. For example, in the default case with three input images the
- * following expression is valid :
- * "ndvi(b1, b2)*b3"
- *
- * As an additional functionality, the filter also granted access to
- * indexes information under special virtual bands named idxX, idxY
- * for the images indexes and idxPhyX, idxPhyY for the physical
- * indexes.
- * It allows the user to perform, for example a spatial processing
- * aiming to suppress a determined area :
- * "if(sqrt((idxPhyX-105.3)*(idxPhyX-105.3)+
- *          (idxPhyY-207.1)*(idxPhyY-207.1))>100, b1, 0)"
- * This expression replace the physical zone around the point of
- * physical index (105.3; 207.1) by a black area
- * This functionality assumes that all the band involved have the same
- * spacing and origin.
- *
+ * the corresponding SetNthInput method. For the jth (j=1..T) input image, if
+ * no associated variable name has been specified, a default variable
+ * name is given by concatenating the prefix "im" with the
+ * corresponding input index plus one (for instance, im1 is related to the first input).
+ * If the jth input image is multidimensional, then the variable imj represents a vector whose components are related to its bands.
+ * In order to access the kth band, the variable observes the following pattern : imjbk.
  *
  * \sa Parser
  *
@@ -106,6 +85,11 @@ public:
   typedef typename ImageType::SpacingType            SpacingType;
   typedef ParserX                                     ParserType;
   typedef typename ParserType::ValueType             ValueType;
+
+  /** Typedef for statistic computing. */
+  typedef StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;
+  typedef typename StreamingStatisticsVectorImageFilterType::Pointer StreamingStatisticsVectorImageFilterPointerType;
+  typedef typename StreamingStatisticsVectorImageFilterType::MatrixType MatrixType;
 
   /** Set the nth filter input with or without a specified associated variable name */
   void SetNthInput( unsigned int idx, const ImageType * image);

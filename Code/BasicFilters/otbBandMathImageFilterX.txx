@@ -29,8 +29,6 @@
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
 
-#include <otbStreamingStatisticsVectorImageFilter.h>
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -97,7 +95,9 @@ void BandMathImageFilterX<TImage>
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Expression: "      << m_Expression[0]                  << std::endl; //TODO
+  os << indent << "Expressions: " << std::endl;
+  for (unsigned int i=0; i<m_Expression.size(); i++)
+    os << indent << m_Expression[i] << std::endl;                                     
   os << indent << "Computed values follow:"                            << std::endl;
   os << indent << "UnderflowCount: "  << m_UnderflowCount              << std::endl;
   os << indent << "OverflowCount: "   << m_OverflowCount               << std::endl;
@@ -154,7 +154,7 @@ void BandMathImageFilterX<TImage>
   //Mandatory before call of GetNumberOfComponentsPerPixel
   //Really important not to call the filter's UpdateOutputInformation method here:
   //this method is not ready until all inputs, variables and expressions are set.
-  imagebis->UpdateOutputInformation();
+  imagebis->UpdateOutputInformation(); 
 
   //imibj
   for (int j=0; j<imagebis->GetNumberOfComponentsPerPixel(); j++)
@@ -191,6 +191,8 @@ void BandMathImageFilterX<TImage>
   statsNames.push_back("Mini");
   statsNames.push_back("Maxi");
   statsNames.push_back("Mean");
+  statsNames.push_back("Sum");
+  statsNames.push_back("Var");
 
   for (int j=0; j<imagebis->GetNumberOfComponentsPerPixel(); j++)
     for (int t=0; t<statsNames.size(); t++)
@@ -243,6 +245,7 @@ void BandMathImageFilterX<TImage>
 
   this->Modified();
 }
+
 
 
 template< typename TImage >
@@ -357,7 +360,7 @@ void BandMathImageFilterX<TImage>
               iss << " " << m_VAllowedVarNameAddedByUser[i].value.At(k,0);
               for(int p=1; p<m_VAllowedVarNameAddedByUser[i].value.GetCols(); p++)
                 iss << " , " <<  m_VAllowedVarNameAddedByUser[i].value.At(k,p);
-                iss << ";";
+                iss << " ;";
             }
             str=iss.str();
             str.erase(str.size()-1);
@@ -548,7 +551,7 @@ void BandMathImageFilterX<TImage>
   m_VFinalAllowedVarName.clear();
 
   // m_VFinalAllowedVarName = m_VAllowedVarNameAuto + m_VAllowedVarNameAddedByUser
-  // m_VFinalAllowedVarName = variable names dictionary
+  // m_VFinalAllowedVarName = variable names dictionary 
   for(int i=0; i<m_VAllowedVarNameAddedByUser.size(); i++)
     m_VFinalAllowedVarName.push_back(m_VAllowedVarNameAddedByUser[i]);
   for(int i=0; i<m_VAllowedVarNameAuto.size(); i++)
@@ -607,7 +610,7 @@ void BandMathImageFilterX<TImage>
 
   // Important to remember that variables of m_VVarName come from a call of GetExprVar method
   // Only useful variables are allocated in this filter
-  int nbVar = m_VVarName.size();
+  int nbVar = m_VVarName.size(); 
 
   m_StatsVarDetected.clear();
 
@@ -678,14 +681,14 @@ void BandMathImageFilterX<TImage>
 
         if (m_AImage[i][j].type == 8 ) // global stats
         {
-            m_AImage[i][j].value = ValueType(initValue);
-            //m_AImage[i][j].info[0] = Image ID : useful to know which images must have their regions set to largest possible region (see GenerateInputRequestedRegion)
+            m_AImage[i][j].value = ValueType(initValue);  
+            //m_AImage[i][j].info[0] = Image ID : useful to know which images must have their regions set to largest possible region (see GenerateInputRequestedRegion)  
             bool found = false;
-            for (int r=0; r<m_StatsVarDetected.size() && !found; r++)
+            for (int r=0; r<m_StatsVarDetected.size() && !found; r++) 
                 if (m_StatsVarDetected[r] == m_AImage[i][j].info[0])
                   found = true;
-            if (!found)
-              m_StatsVarDetected.push_back(m_AImage[i][j].info[0]);
+            if (!found)            
+              m_StatsVarDetected.push_back(m_AImage[i][j].info[0]); 
         }
 
 
@@ -789,11 +792,12 @@ void BandMathImageFilterX< TImage >
           ImagePointer  inputPtr = const_cast<TImage *>(this->GetInput(m_StatsVarDetected[i]));
           inputPtr->SetRequestedRegionToLargestPossibleRegion();
       }
-      else
-        itkExceptionMacro(<< "Requested input #" << m_StatsVarDetected[i] << ", but only " << this->GetNumberOfInputs() << " inputs are available." << std::endl);
+      else 
+        itkExceptionMacro(<< "Requested input #" << m_StatsVarDetected[i] << ", but only " << this->GetNumberOfInputs() << " inputs are available." << std::endl); 
   }
 
 }
+
 
 
 template< typename TImage >
@@ -828,13 +832,13 @@ void BandMathImageFilterX<TImage>
     for (unsigned int i=0; i<m_StatsVarDetected.size(); i++)
     {
 
-      typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;
-      typename StreamingStatisticsVectorImageFilterType::Pointer filter = StreamingStatisticsVectorImageFilterType::New();
+      StreamingStatisticsVectorImageFilterPointerType filter = StreamingStatisticsVectorImageFilterType::New();
 
       filter->SetInput( this->GetNthInput(m_StatsVarDetected[i]) );
       filter->Update();
 
       PixelType pix; //Variable length vector
+      MatrixType mat;
       
       for(int t=0; t<m_AImage.size(); t++) // for each thread
         for(int v=0; v<m_AImage[t].size(); v++) // for each variable
@@ -868,6 +872,26 @@ void BandMathImageFilterX<TImage>
                         m_AImage[t][v].value = pix[b];
 
                   break;
+
+                  break;
+
+                  case 3: // sum
+
+                    pix = filter->GetSum();
+                    for (unsigned int b=0; b<pix.GetSize(); b++) // for each band
+                      if (m_AImage[t][v].info[1] == b) // info[1] : band ID
+                        m_AImage[t][v].value = pix[b];
+
+                  break;
+
+                  case 4: // stddev
+
+                   mat = filter->GetCovariance();
+                    for (unsigned int b=0; b<mat.Cols(); b++) // for each band
+                      if (m_AImage[t][v].info[1] == b) // info[1] : band ID
+                        m_AImage[t][v].value = mat(b,b);
+
+                  break;
               }
           }
     }
@@ -899,7 +923,7 @@ void BandMathImageFilterX<TImage>
     m_OverflowCount += m_ThreadOverflow[i];
     }
 
-  if((m_UnderflowCount != 0) || (m_OverflowCount!=0)) //TODO
+  if((m_UnderflowCount != 0) || (m_OverflowCount!=0)) 
   {
     std::stringstream sstm;
     sstm << std::endl
@@ -949,7 +973,7 @@ void BandMathImageFilterX<TImage>
         radius[0]=(int) ((m_VVarName[j].info[2]-1)/2); // Size x direction (otb convention)
         radius[1]=(int) ((m_VVarName[j].info[3]-1)/2); // Size y direction (otb convention)
         VNit.push_back( itk::ConstNeighborhoodIterator<TImage>(radius, this->GetNthInput(m_VVarName[j].info[0]),outputRegionForThread)); // info[0] = Input image ID
-        VNit.back().NeedToUseBoundaryConditionOn();      //TODO : better to use ImageBoundaryFacesCalculator
+        VNit.back().NeedToUseBoundaryConditionOn();     
      }
 
 
