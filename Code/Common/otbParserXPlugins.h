@@ -237,7 +237,7 @@ public:
 
     const mup::char_type* GetDesc() const
     {
-      return "mean(m1,m2,..) - Mean";
+      return "mean(m1,m2,..) - mean of each neighborhood";
     }
 
     mup::IToken* Clone() const
@@ -257,12 +257,32 @@ public:
 
     const mup::char_type* GetDesc() const
     {
-      return "var(m1,m2,..) - Variance";
+      return "var(m1,m2,..) - variance of each neighborhood";
     }
 
     mup::IToken* Clone() const
     {
       return new var(*this);
+    }
+  };
+
+
+class corr : public mup::ICallback
+  {
+public:
+    corr():ICallback(mup::cmFUNC, "corr", 2)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "corr(m1,m2) - variance of two variables m1 and m2";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new corr(*this);
     }
   };
 
@@ -277,12 +297,32 @@ public:
 
     const mup::char_type* GetDesc() const
     {
-      return "median(m1,m2,..) - median";
+      return "median(m1,m2,..) - median value of each neighborhood";
     }
 
     mup::IToken* Clone() const
     {
       return new median(*this);
+    }
+  };
+
+
+class maj : public mup::ICallback
+  {
+public:
+    maj():ICallback(mup::cmFUNC, "maj", -1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "maj(m1,m2,..) - majority value of each neighborhood";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new maj(*this);
     }
   };
 

@@ -64,6 +64,8 @@ public:
     m_MuParserX.DefineFun(new mean);
     m_MuParserX.DefineFun(new var);
     m_MuParserX.DefineFun(new median);
+    m_MuParserX.DefineFun(new maj);
+    m_MuParserX.DefineFun(new corr);
 
     m_MuParserX.DefineOprt(new ElementWiseDivision);
     m_MuParserX.DefineOprt(new ElementWiseMultiplication);

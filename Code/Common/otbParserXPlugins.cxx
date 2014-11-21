@@ -483,6 +483,61 @@ void var::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
     }
 
 
+void corr::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+    {
+
+      assert(a_pArg[0]->GetType()=='m');
+      assert(a_pArg[1]->GetType()=='m');
+
+      // Get the argument from the argument input vector
+      const mup::matrix_type a = a_pArg[0]->GetArray();
+      const mup::matrix_type b = a_pArg[1]->GetArray();
+
+      int nbrows = a.GetRows();
+      int nbcols = a.GetCols();
+
+      int nbrows2 = b.GetRows();
+      int nbcols2 = b.GetCols();
+
+      assert(nbrows == nbrows2);
+      assert(nbcols == nbcols2);
+
+      double mean1=0.0;
+      for (int i=0; i<nbrows; i++)
+        for (int j=0; j<nbcols; j++)
+         mean1 += a.At(i,j).GetFloat();
+      mean1 = mean1 / (double) (nbrows*nbcols);
+
+      double var1=0.0;
+      for (int i=0; i<nbrows; i++)
+        for (int j=0; j<nbcols; j++)
+          var1 += vcl_pow(mean1 - a.At(i,j).GetFloat(),2);
+      var1 = var1 / (double) (nbrows*nbcols);
+
+      double mean2=0.0;
+      for (int i=0; i<nbrows; i++)
+        for (int j=0; j<nbcols; j++)
+         mean2 += b.At(i,j).GetFloat();
+      mean2 = mean2 / (double) (nbrows*nbcols);
+
+      double var2=0.0;
+      for (int i=0; i<nbrows; i++)
+        for (int j=0; j<nbcols; j++)
+          var2 += vcl_pow(mean2 - b.At(i,j).GetFloat(),2);
+      var2 = var2 / (double) (nbrows*nbcols);
+
+      double cross=0.0;
+      for (int i=0; i<nbrows; i++)
+        for (int j=0; j<nbcols; j++)
+         cross += (a.At(i,j).GetFloat()-mean1)*(b.At(i,j).GetFloat()-mean2);
+      cross = cross / (double) (nbrows*nbcols);
+
+
+      *ret = cross / ( vcl_sqrt(var1)*vcl_sqrt(var2) );
+    }
+
+
+
 void median::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
 
@@ -511,6 +566,73 @@ void median::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a
             std::sort(tempvect.begin(),tempvect.end());
 
             vect.push_back( tempvect[(int) (tempvect.size()/2.)] );
+
+          break;
+    
+          case 'i':
+            vect.push_back( (double) a_pArg[k]->GetInteger());
+          break;
+        
+          case 'f':
+            vect.push_back( (double) a_pArg[k]->GetFloat());
+          break;
+        }
+      }
+
+      // The return value is passed by writing it to the reference ret
+      mup::matrix_type res(1,vect.size(),0);
+      for (int j=0; j<vect.size(); j++)
+            res.At(0,j) = vect[j];
+      *ret = res;
+    }
+
+
+void maj::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+    {
+
+      std::vector<int> vect,tempvect;
+      int nbrows,nbcols,score,bestScore,majElmt;
+      mup::matrix_type m1;
+
+
+      for (int k=0; k<a_iArgc; ++k)
+      {
+        tempvect.clear();
+        // Get the argument from the argument input vector
+        switch (a_pArg[k]->GetType())
+        {
+          case 'm':
+
+            m1 = a_pArg[k]->GetArray();
+
+            nbrows = m1.GetRows();
+            nbcols = m1.GetCols();
+
+            for (int i=0; i<nbrows; i++)
+              for (int j=0; j<nbcols; j++)
+                tempvect.push_back( (int) (m1.At(i,j).GetFloat() + 0.5) );
+
+            std::sort(tempvect.begin(),tempvect.end());
+
+            bestScore = 0;
+            score = 0;
+
+            for(unsigned int t=0; t<tempvect.size()-1; t++)
+            {
+
+              score++;
+              if (tempvect[t] != tempvect[t+1])
+              {
+                  if (score > bestScore)
+                  {
+                    bestScore=score;
+                    majElmt=tempvect[t];
+                  }
+                  score=0;
+              }
+            }
+
+            vect.push_back( majElmt );
 
           break;
     
