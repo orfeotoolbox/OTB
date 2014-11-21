@@ -41,6 +41,24 @@ else()
     list(APPEND ${proj}_DEPENDENCIES OPENJPEG)
   endif()
   
+  if(USE_SYSTEM_SQLITE)
+    set(GDAL_SB_SQLITE_CONFIG)
+  else()
+    set(GDAL_SB_SQLITE_CONFIG 
+      --with-sqlite3=${CMAKE_INSTALL_PREFIX}
+      )
+    list(APPEND ${proj}_DEPENDENCIES SQLITE)
+  endif()
+  
+  if(USE_SYSTEM_GEOS)
+    set(GDAL_SB_GEOS_CONFIG)
+  else()
+    set(GDAL_SB_GEOS_CONFIG 
+      --with-geos=${CMAKE_INSTALL_PREFIX}/bin/geos-config
+      )
+    list(APPEND ${proj}_DEPENDENCIES GEOS)
+  endif()
+  
   if(USE_SYSTEM_ZLIB)
     set(GDAL_SB_ZLIB_CONFIG)
   else()
@@ -61,16 +79,19 @@ else()
       URL_MD5 9fdf0f2371a3e9863d83e69951c71ec4
       BINARY_DIR ${GDAL_SB_BUILD_DIR}
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-      CONFIGURE_COMMAND ${GDAL_SB_BUILD_DIR}/configure 
+      CONFIGURE_COMMAND 
+        LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
+        ${GDAL_SB_BUILD_DIR}/configure 
         --prefix=${CMAKE_INSTALL_PREFIX}
         --enable-static=no
+        --without-ogdi
+        #--without-jasper
+        ${GDAL_SB_ZLIB_CONFIG}
         ${GDAL_SB_TIFF_CONFIG}
         ${GDAL_SB_GEOTIFF_CONFIG}
         ${GDAL_SB_OPENJPEG_CONFIG}
-        ${GDAL_SB_ZLIB_CONFIG}
-        --without-ogdi
-        --without-jasper
-        #--with-png=internal
+        ${GDAL_SB_SQLITE_CONFIG}
+        ${GDAL_SB_GEOS_CONFIG}
       BUILD_COMMAND make
       INSTALL_COMMAND make install
       DEPENDS ${${proj}_DEPENDENCIES}

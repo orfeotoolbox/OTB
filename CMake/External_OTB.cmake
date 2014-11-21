@@ -25,6 +25,9 @@ ExternalProject_Add(${proj}
       -DGDAL_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
       -DGDAL_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/libgdal.so
       -DGDAL_CONFIG:PATH=${CMAKE_INSTALL_PREFIX}/bin/gdal-config
+    CMAKE_COMMAND
+      LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
+      ${CMAKE_COMMAND}
     )
 
 message(STATUS "  Using OTB SuperBuild version")

@@ -19,7 +19,6 @@ else()
   else()
     set(LIBTIFF_SB_ZLIB_CONFIG 
       --with-zlib-include-dir=${CMAKE_INSTALL_PREFIX}/include
-      #--with-zlib-lib-dir=${CMAKE_INSTALL_PREFIX}/lib
       )
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
@@ -29,11 +28,13 @@ else()
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "ftp://ftp.remotesensing.org/pub/libtiff/tiff-3.9.7.tar.gz"
-      URL_MD5 626102f448ba441d42e3212538ad67d2
+      URL "ftp://ftp.remotesensing.org/pub/libtiff/tiff-4.0.3.tar.gz"
+      URL_MD5 051c1068e6a0627f461948c365290410
       BINARY_DIR ${LIBTIFF_SB_BUILD_DIR}
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-      CONFIGURE_COMMAND ${LIBTIFF_SB_BUILD_DIR}/configure 
+      CONFIGURE_COMMAND
+        LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
+        ${LIBTIFF_SB_BUILD_DIR}/configure
         --prefix=${CMAKE_INSTALL_PREFIX}
         --enable-static=no
         ${LIBTIFF_SB_ZLIB_CONFIG}

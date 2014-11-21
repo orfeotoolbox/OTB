@@ -67,6 +67,9 @@ else()
       -DCMAKE_MODULE_PATH:PATH=${OSSIM_SB_SRC}/ossim_package_support/cmake/CMakeModules
     PATCH_COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/ossim_patch_1.cmake
     DEPENDS ${${proj}_DEPENDENCIES}
+    CMAKE_COMMAND
+      LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
+      ${CMAKE_COMMAND}
     )
   
   # Write patch file in binary dir

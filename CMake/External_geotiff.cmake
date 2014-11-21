@@ -46,7 +46,9 @@ else()
       URL_MD5 efa7b418bc00228fcda4da63557e40c2
       BINARY_DIR ${GEOTIFF_SB_BUILD_DIR}
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-      CONFIGURE_COMMAND ${GEOTIFF_SB_BUILD_DIR}/configure 
+      CONFIGURE_COMMAND
+        LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
+        ${GEOTIFF_SB_BUILD_DIR}/configure
         --prefix=${CMAKE_INSTALL_PREFIX}
         --enable-static=no
         ${GEOTIFF_SB_TIFF_CONFIG}
