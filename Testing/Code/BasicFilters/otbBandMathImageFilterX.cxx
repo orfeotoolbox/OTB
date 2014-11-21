@@ -251,11 +251,11 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
   IteratorType it2(radius, image2, region);    it2.NeedToUseBoundaryConditionOn();
   IteratorType it3(radius, image3, region);    it3.NeedToUseBoundaryConditionOn();
 
-  typename PixelType::ValueType imageAb2Mini = itk::NumericTraits<typename PixelType::ValueType>::max();
-  typename PixelType::ValueType imageAb3Mean = 0.0, n=0.0;
-  typename PixelType::ValueType imageAb3Var = 0.0;
-  typename PixelType::ValueType imageAb1Sum = 0.0;
-  typename PixelType::ValueType im2b1Maxi = itk::NumericTraits<typename PixelType::ValueType>::min();
+  PixelType::ValueType imageAb2Mini = itk::NumericTraits<PixelType::ValueType>::max();
+  PixelType::ValueType imageAb3Mean = 0.0, n=0.0;
+  PixelType::ValueType imageAb3Var = 0.0;
+  PixelType::ValueType imageAb1Sum = 0.0;
+  PixelType::ValueType im2b1Maxi = itk::NumericTraits<PixelType::ValueType>::min();
 
   for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3)
   {
