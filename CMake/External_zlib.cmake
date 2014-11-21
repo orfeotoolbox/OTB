@@ -2,7 +2,7 @@ message(STATUS "Setup Zlib ...")
 
 set(proj ZLIB)
 
-set(DEFAULT_USE_SYSTEM_ZLIB  OFF)
+set(DEFAULT_USE_SYSTEM_ZLIB  ON)
 
 option(USE_SYSTEM_ZLIB "  Use a system build of Zlib." ${DEFAULT_USE_SYSTEM_ZLIB})
 mark_as_advanced(USE_SYSTEM_ZLIB)
@@ -18,6 +18,7 @@ else()
     set(git_protocol "git")
   endif()
   
+  # Beware : this is an old version of Zlib (1.2.3)
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     GIT_REPOSITORY "${git_protocol}://github.com/commontk/zlib.git"

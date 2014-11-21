@@ -41,6 +41,16 @@ else()
     list(APPEND ${proj}_DEPENDENCIES OPENJPEG)
   endif()
   
+  if(USE_SYSTEM_ZLIB)
+    set(GDAL_SB_ZLIB_CONFIG)
+  else()
+    # Not shure this setting works with zlib
+    set(GDAL_SB_ZLIB_CONFIG 
+      --with-libz=${CMAKE_INSTALL_PREFIX}
+      )
+    list(APPEND ${proj}_DEPENDENCIES ZLIB)
+  endif()
+  
   if(WIN32)
     # TODO : use nmake
   else()
@@ -57,10 +67,10 @@ else()
         ${GDAL_SB_TIFF_CONFIG}
         ${GDAL_SB_GEOTIFF_CONFIG}
         ${GDAL_SB_OPENJPEG_CONFIG}
+        ${GDAL_SB_ZLIB_CONFIG}
         --without-ogdi
         --without-jasper
-        #--with-libz=${CMAKE_INSTALL_PREFIX}
-        --with-png=internal
+        #--with-png=internal
       BUILD_COMMAND make
       INSTALL_COMMAND make install
       DEPENDS ${${proj}_DEPENDENCIES}
