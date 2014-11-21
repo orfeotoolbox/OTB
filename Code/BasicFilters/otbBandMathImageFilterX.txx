@@ -359,7 +359,7 @@ void BandMathImageFilterX<TImage>
               iss << " " << m_VAllowedVarNameAddedByUser[i].value.At(k,0);
               for(int p=1; p<m_VAllowedVarNameAddedByUser[i].value.GetCols(); p++)
                 iss << " , " <<  m_VAllowedVarNameAddedByUser[i].value.At(k,p);
-                iss << ";";
+              iss << " ;";
             }
             str=iss.str();
             str.erase(str.size()-1);
@@ -370,7 +370,7 @@ void BandMathImageFilterX<TImage>
 
     }
 
-  // Sorrting : I F M and E at the end
+  // Sorting : I F M and E 
   for(int i=0; i<vectI.size(); ++i)
     vectFinal.push_back(vectI[i]);
   for(int i=0; i<vectF.size(); ++i)
