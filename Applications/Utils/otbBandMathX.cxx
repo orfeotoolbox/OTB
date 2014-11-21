@@ -150,12 +150,12 @@ private:
                             "Mathematical expressions to apply.");
     MandatoryOff("exp");
 
-    AddParameter(ParameterType_String, "incontext", "Import context");
+    AddParameter(ParameterType_InputFilename, "incontext", "Import context");
     SetParameterDescription("incontext",
                             "A txt file containing user's constants and expressions.");
     MandatoryOff("incontext");
 
-    AddParameter(ParameterType_String, "outcontext", "Export context");
+    AddParameter(ParameterType_OutputFilename, "outcontext", "Export context");
     SetParameterDescription("outcontext",
                             "A txt file where to save user's constants and expressions.");
     MandatoryOff("outcontext");
