@@ -63,8 +63,8 @@ private:
     AddParameter(ParameterType_InputFilename, "inshp", "Name of the input shapefile");
     SetParameterDescription("inshp","Name of the input shapefile");
 
-    AddParameter(ParameterType_InputFilename, "inxml", "XML file containing mean and variance of each feature.");
-    SetParameterDescription("inxml", "XML file containing mean and variance of each feature.");
+    AddParameter(ParameterType_InputFilename, "instats", "XML file containing mean and variance of each feature.");
+    SetParameterDescription("instats", "XML file containing mean and variance of each feature.");
 
     AddParameter(ParameterType_OutputFilename, "insvm", "Input model filename.");
     SetParameterDescription("insvm", "Input model filename.");
@@ -115,7 +115,7 @@ private:
     clock_t tic = clock();
 
     const char * shapefile = GetParameterString("inshp").c_str();
-    const char * XMLfile = GetParameterString("xml").c_str();
+    const char * XMLfile = GetParameterString("instats").c_str();
     const char * modelfile = GetParameterString("insvm").c_str();
 
     typedef double ValueType;
@@ -143,6 +143,7 @@ private:
     ListSampleType::Pointer input = ListSampleType::New();
     LabelListSampleType::Pointer target = LabelListSampleType::New();
     const int nbFeatures = GetSelectedItems("feat").size();
+    input->SetMeasurementVectorSize(nbFeatures);
 
     if(feature.addr())
       while(goesOn)

@@ -63,8 +63,8 @@ private:
     AddParameter(ParameterType_InputFilename, "inshp", "Name of the input shapefile");
     SetParameterDescription("inshp","Name of the input shapefile");
 
-    AddParameter(ParameterType_InputFilename, "inxml", "XML file containing mean and variance of each feature.");
-    SetParameterDescription("inxml", "XML file containing mean and variance of each feature.");
+    AddParameter(ParameterType_InputFilename, "instats", "XML file containing mean and variance of each feature.");
+    SetParameterDescription("instats", "XML file containing mean and variance of each feature.");
 
     AddParameter(ParameterType_OutputFilename, "outsvm", "Output model filename.");
     SetParameterDescription("outsvm", "Output model filename.");
@@ -114,7 +114,7 @@ private:
     clock_t tic = clock();
 
     const char * shapefile = GetParameterString("inshp").c_str();
-    const char * XMLfile = GetParameterString("inxml").c_str();
+    const char * XMLfile = GetParameterString("instats").c_str();
     const char * modelfile = GetParameterString("outsvm").c_str();
 
     typedef double ValueType;
@@ -133,7 +133,7 @@ private:
 
     MeasurementType meanMeasurementVector = statisticsReader->GetStatisticVectorByName("mean");
     MeasurementType stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
-    
+   
     otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
     otb::ogr::Layer layer = source->GetLayer(0);
     bool goesOn = true;
@@ -142,7 +142,9 @@ private:
     ListSampleType::Pointer input = ListSampleType::New();
     LabelListSampleType::Pointer target = LabelListSampleType::New();
     const int nbFeatures = GetSelectedItems("feat").size();
-      
+
+    input->SetMeasurementVectorSize(nbFeatures);
+   
     if(feature.addr())
       while(goesOn)
        {

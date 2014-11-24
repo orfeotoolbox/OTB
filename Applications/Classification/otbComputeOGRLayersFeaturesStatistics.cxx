@@ -57,8 +57,8 @@ private:
     AddParameter(ParameterType_InputFilename, "inshp", "Name of the input shapefile");
     SetParameterDescription("inshp","Name of the input shapefile");
 
-    AddParameter(ParameterType_InputFilename, "outxml", "XML file containing mean and variance of each feature.");
-    SetParameterDescription("outxml", "XML file containing mean and variance of each feature.");
+    AddParameter(ParameterType_InputFilename, "outstats", "XML file containing mean and variance of each feature.");
+    SetParameterDescription("outstats", "XML file containing mean and variance of each feature.");
 
     AddParameter(ParameterType_ListView,  "feat", "List of features to consider for statistics.");
     SetParameterDescription("feat","List of features to consider for statistics.");
@@ -100,7 +100,7 @@ private:
       clock_t tic = clock();
 
       const char * shapefile = GetParameterString("inshp").c_str();
-      const char * XMLfile = GetParameterString("outxml").c_str();
+      const char * XMLfile = GetParameterString("outstats").c_str();
 
       otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
   
