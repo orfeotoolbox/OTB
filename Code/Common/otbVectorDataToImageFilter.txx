@@ -28,6 +28,8 @@
 
 #include "ogr_spatialref.h"
 
+#include "otbMapnikAdapter.h"
+
 namespace otb
 {
 
