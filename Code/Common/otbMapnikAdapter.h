@@ -81,5 +81,5 @@ typedef mapnik::geometry<vertex2d> geom;
 static geom* create_geom(mapnik::eGeomType geom_type) { return new geom(geom_type); }
 #endif
 }
-
+}
 
