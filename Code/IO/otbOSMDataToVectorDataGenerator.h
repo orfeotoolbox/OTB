@@ -16,6 +16,9 @@
 
 =========================================================================*/
 
+#ifndef __otbOSMDataToVectorDataGenerator_h
+#define __otbOSMDataToVectorDataGenerator_h
+
 // store the nodes (points) coordinates
 #include <map>
 #include <string>
@@ -220,3 +223,5 @@ private:
 }; // end of class
 
 } // end of namespace otb
+
+#endif
