@@ -180,10 +180,6 @@ private:
   SpectralResponse(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-
-  /** Interpolator to calcul f(lambda)*///TODO implement the interpolator
-  //typename InterpolatorType::Pointer m_Interpolator;
-
 };
 
 }// end namespace otb
