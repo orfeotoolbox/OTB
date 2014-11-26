@@ -15,6 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
+#ifndef __otbMapnikAdapter_h
+#define __otbMapnikAdapter_h
+
 #include <mapnik/datasource_cache.hpp>
 #include <mapnik/font_engine_freetype.hpp>
 #include <mapnik/agg_renderer.hpp>
@@ -83,3 +87,4 @@ static geom* create_geom(mapnik::eGeomType geom_type) { return new geom(geom_typ
 }
 }
 
+#endif
