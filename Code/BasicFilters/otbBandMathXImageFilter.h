@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbBandMathImageFilterX_h
-#define __otbBandMathImageFilterX_h
+#ifndef __otbBandMathXImageFilter_h
+#define __otbBandMathXImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkArray.h"
@@ -33,7 +33,7 @@
 
 namespace otb
 {
-/** \class BandMathImageFilterX
+/** \class BandMathXImageFilter
  * \brief Performs mathematical operations on the input images
  * according to the formula specified by the user.
  *
@@ -57,12 +57,12 @@ namespace otb
  */
 
 template< class TImage >
-class ITK_EXPORT BandMathImageFilterX
+class ITK_EXPORT BandMathXImageFilter
   : public itk::ImageToImageFilter< TImage , TImage >
 {
 public:
   /** Standard class typedefs. */
-  typedef BandMathImageFilterX< TImage >                 Self;
+  typedef BandMathXImageFilter< TImage >                 Self;
   typedef itk::ImageToImageFilter< TImage , TImage>             Superclass;
   typedef itk::SmartPointer< Self >                     Pointer;
   typedef itk::SmartPointer< const Self >               ConstPointer;
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BandMathImageFilterX, ImageToImageFilter);
+  itkTypeMacro(BandMathXImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
   typedef TImage                                      ImageType;
@@ -121,8 +121,8 @@ public:
 
 
 protected :
-  BandMathImageFilterX();
-  virtual ~BandMathImageFilterX();
+  BandMathXImageFilter();
+  virtual ~BandMathXImageFilter();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   void GenerateOutputInformation();
@@ -147,7 +147,7 @@ private :
   } adhocStruct;
 
 
-  BandMathImageFilterX(const Self&); //purposely not implemented
+  BandMathXImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   void AddVariable(adhocStruct&);
@@ -178,7 +178,7 @@ private :
 }//end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBandMathImageFilterX.txx"
+#include "otbBandMathXImageFilter.txx"
 #endif
 
 #endif

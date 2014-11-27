@@ -28,8 +28,8 @@ target_link_libraries(HillShadingExample OTBCommon OTBIO OTBBasicFilters)
 add_executable(BandMathFilterExample BandMathFilterExample.cxx )
 target_link_libraries(BandMathFilterExample OTBCommon OTBIO OTBBasicFilters)
 
-add_executable(BandMathFilterXExample BandMathFilterXExample.cxx )
-target_link_libraries(BandMathFilterXExample OTBCommon OTBIO OTBBasicFilters)
+add_executable(BandMathXImageFilterExample BandMathXImageFilterExample.cxx )
+target_link_libraries(BandMathXImageFilterExample OTBCommon OTBIO OTBBasicFilters)
 
 if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

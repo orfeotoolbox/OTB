@@ -2126,29 +2126,29 @@ add_test(bfTvBandMathImageFilterWithIdx ${BASICFILTERS_TESTS13}
   ${TEMP}/bfTvBandMathImageFilterWithIdx2.tif
 )
 
-add_test(bfTuBandMathImageFilterXNew ${BASICFILTERS_TESTS13}
-  otbBandMathImageFilterXNew)
+add_test(bfTuBandMathXImageFilterNew ${BASICFILTERS_TESTS13}
+  otbBandMathXImageFilterNew)
 
-add_test(bfTvBandMathImageFilterX ${BASICFILTERS_TESTS13}
-  otbBandMathImageFilterX)
+add_test(bfTvBandMathXImageFilter ${BASICFILTERS_TESTS13}
+  otbBandMathXImageFilter)
 
-add_test(bfTvotbBandMathImageFilterXConv ${BASICFILTERS_TESTS13}
-  otbBandMathImageFilterXConv
+add_test(bfTvBandMathXImageFilterConv ${BASICFILTERS_TESTS13}
+  otbBandMathXImageFilterConv
   ${BASELINE_FILES}/bfTvExportBandMathX.txt
   ${TEMP}/bfTvExportBandMathXOut.txt
 )
 
-add_test(bfTvotbBandMathImageFilterXTxt ${BASICFILTERS_TESTS13}
+add_test(bfTvBandMathXImageFilterTxt ${BASICFILTERS_TESTS13}
 --compare-ascii ${NOTOL}
              ${BASELINE_FILES}/bfTvExportBandMathX.txt
             ${TEMP}/bfTvExportBandMathXOut.txt
-            otbBandMathImageFilterXTxt
+            otbBandMathXImageFilterTxt
             ${BASELINE_FILES}/bfTvExportBandMathX.txt
             ${TEMP}/bfTvExportBandMathXOut.txt
          )
 
-add_test(bfTvBandMathImageFilterXWithIdx ${BASICFILTERS_TESTS13}
-  otbBandMathImageFilterXWithIdx
+add_test(bfTvBandMathXImageFilterWithIdx ${BASICFILTERS_TESTS13}
+  otbBandMathXImageFilterWithIdx
   ${TEMP}/bfTvBandMathImageFilterWithIdx1.tif
   ${TEMP}/bfTvBandMathImageFilterWithIdx2.tif
 )
@@ -3173,7 +3173,7 @@ otbImageAndVectorImageOperationFilterTest.cxx
 set(BasicFilters_SRCS13
 otbBasicFiltersTests13.cxx
 otbBandMathImageFilter.cxx
-otbBandMathImageFilterX.cxx
+otbBandMathXImageFilter.cxx
 otbComplexToIntensityFilterTest.cxx
 otbRealAndImaginaryImageToComplexImageFilterTest.cxx
 otbRealImageToComplexImageFilterTest.cxx

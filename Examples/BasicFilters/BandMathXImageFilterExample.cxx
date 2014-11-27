@@ -56,7 +56,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbBandMathImageFilterX.h"
+#include "otbBandMathXImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 int main( int argc, char* argv[])
@@ -74,7 +74,7 @@ int main( int argc, char* argv[])
 //  Software Guide : BeginLatex
 //
 //  Then, we set the classical \code{typedef}s needed for reading and
-//  writing the images. The \doxygen{otb}{BandMathImageFilterX} class
+//  writing the images. The \doxygen{otb}{BandMathXImageFilter} class
 //  works with \doxygen{otb}{VectorImage}.
 //
 //  Software Guide : EndLatex
@@ -94,7 +94,7 @@ int main( int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::BandMathImageFilterX<ImageType>                  FilterType;
+  typedef otb::BandMathXImageFilter<ImageType>                  FilterType;
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -167,14 +167,14 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-// Figure~\ref{fig:BandMathImageFilterX} shows the result of our high-pass filter.
+// Figure~\ref{fig:BandMathXImageFilter} shows the result of our high-pass filter.
 // \begin{figure}
 // \center
 // \includegraphics[width=0.45\textwidth]{qb_ExtractRoad.eps}
 // \includegraphics[width=0.45\textwidth]{qb_BandMath-res1.eps}
 // \itkcaption[Band Math X]{From left to right:
 // Original image, high-pass filter output.}
-// \label{fig:BandMathImageFilterX}
+// \label{fig:BandMathXImageFilter}
 // \end{figure}
 //
 // Software Guide : EndLatex
@@ -256,14 +256,14 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-// Figure~\ref{fig:BandMathImageFilterX2} shows the result of the second filter.
+// Figure~\ref{fig:BandMathXImageFilter2} shows the result of the second filter.
 // \begin{figure}
 // \center
 // \includegraphics[width=0.45\textwidth]{qb_ExtractRoad.eps}
 // \includegraphics[width=0.45\textwidth]{qb_BandMath-res2.eps}
 // \itkcaption[Band Math X]{From left to right:
 // Original image, second filter output.}
-// \label{fig:BandMathImageFilterX2}
+// \label{fig:BandMathXImageFilter2}
 // \end{figure}
 //
 // Software Guide : EndLatex

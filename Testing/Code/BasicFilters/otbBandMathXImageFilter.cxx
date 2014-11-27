@@ -23,16 +23,16 @@
 
 #include "otbMath.h"
 #include "otbVectorImage.h"
-#include "otbBandMathImageFilterX.h"
+#include "otbBandMathXImageFilter.h"
 #include "otbImageFileWriter.h"
 
 #include "itkImageRegionIteratorWithIndex.h"
 
-int otbBandMathImageFilterXNew( int itkNotUsed(argc), char* itkNotUsed(argv) [])
+int otbBandMathXImageFilterNew( int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   typedef double                                            PixelType;
   typedef otb::VectorImage<PixelType, 2>                     ImageType;
-  typedef otb::BandMathImageFilterX<ImageType>               FilterType;
+  typedef otb::BandMathXImageFilter<ImageType>               FilterType;
 
    FilterType::Pointer         filter       = FilterType::New();
 
@@ -40,12 +40,12 @@ int otbBandMathImageFilterXNew( int itkNotUsed(argc), char* itkNotUsed(argv) [])
 }
 
 
-int otbBandMathImageFilterX( int itkNotUsed(argc), char* itkNotUsed(argv) [])
+int otbBandMathXImageFilter( int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
 
   typedef otb::VectorImage<double, 2>              ImageType;
   typedef ImageType::PixelType                      PixelType;
-  typedef otb::BandMathImageFilterX<ImageType>      FilterType;
+  typedef otb::BandMathXImageFilter<ImageType>      FilterType;
 
   unsigned int i;
   const unsigned int N = 100, D1=3, D2=1, D3=1;
@@ -199,13 +199,13 @@ int otbBandMathImageFilterX( int itkNotUsed(argc), char* itkNotUsed(argv) [])
 }
 
 
-int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
+int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
 {
   const char * inputFilename  = argv[1];
 
   typedef otb::VectorImage<double, 2>              ImageType;
   typedef ImageType::PixelType                      PixelType;
-  typedef otb::BandMathImageFilterX<ImageType>      FilterType;
+  typedef otb::BandMathXImageFilter<ImageType>      FilterType;
 
   unsigned int i;
   const unsigned int N = 100, D1=3, D2=1, D3=1;
@@ -434,14 +434,14 @@ int otbBandMathImageFilterXConv( int itkNotUsed(argc), char* argv [])
 }
 
 
-int otbBandMathImageFilterXTxt( int itkNotUsed(argc), char* argv [])
+int otbBandMathXImageFilterTxt( int itkNotUsed(argc), char* argv [])
 {
   const char * inputFilename   = argv[1];
   const char * outputFilename  = argv[2];
 
   typedef otb::VectorImage<double, 2>              ImageType;
   typedef ImageType::PixelType                      PixelType;
-  typedef otb::BandMathImageFilterX<ImageType>      FilterType;
+  typedef otb::BandMathXImageFilter<ImageType>      FilterType;
 
   FilterType::Pointer         filter       = FilterType::New();
 
@@ -452,7 +452,7 @@ int otbBandMathImageFilterXTxt( int itkNotUsed(argc), char* argv [])
 }
 
 
-int otbBandMathImageFilterXWithIdx( int itkNotUsed(argc), char* argv[])
+int otbBandMathXImageFilterWithIdx( int itkNotUsed(argc), char* argv[])
 {
   const char * outfname1       = argv[1];
   const char * outfname2       = argv[2];
@@ -460,7 +460,7 @@ int otbBandMathImageFilterXWithIdx( int itkNotUsed(argc), char* argv[])
   
   typedef otb::VectorImage<double, 2>                          ImageType;
   typedef ImageType::PixelType                            PixelType;
-  typedef otb::BandMathImageFilterX<ImageType>            FilterType;
+  typedef otb::BandMathXImageFilter<ImageType>            FilterType;
   typedef otb::ImageFileWriter<ImageType>                 WriterType;
 
   const unsigned int N = 100, D1=1, D2=1, D3=1;

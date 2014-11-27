@@ -18,9 +18,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBandMathImageFilterX_txx
-#define __otbBandMathImageFilterX_txx
-#include "otbBandMathImageFilterX.h"
+#ifndef __otbBandMathXImageFilter_txx
+#define __otbBandMathXImageFilter_txx
+#include "otbBandMathXImageFilter.h"
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
@@ -38,8 +38,8 @@ namespace otb
 
 /** Constructor */
 template <class TImage>
-BandMathImageFilterX<TImage>
-::BandMathImageFilterX()
+BandMathXImageFilter<TImage>
+::BandMathXImageFilter()
 {
   //This number will be incremented each time an image
   //is added over the one minimumrequired
@@ -68,8 +68,8 @@ BandMathImageFilterX<TImage>
 
 /** Destructor */
 template <class TImage>
-BandMathImageFilterX<TImage>
-::~BandMathImageFilterX()
+BandMathXImageFilter<TImage>
+::~BandMathXImageFilter()
 {
   m_Expression.clear();
   m_VParser.clear();
@@ -90,7 +90,7 @@ BandMathImageFilterX<TImage>
 
 
 template <class TImage>
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -108,7 +108,7 @@ void BandMathImageFilterX<TImage>
 }
 
 template <class TImage>
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::SetNthInput(unsigned int idx, const ImageType * image)
 {
 
@@ -118,7 +118,7 @@ void BandMathImageFilterX<TImage>
 }
 
 template <class TImage>
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::SetNthInput(unsigned int idx, const ImageType * image, const std::string& varName)
 {
 
@@ -211,7 +211,7 @@ void BandMathImageFilterX<TImage>
 }
 
 template <typename TImage>
-TImage * BandMathImageFilterX<TImage>
+TImage * BandMathXImageFilter<TImage>
 ::GetNthInput(unsigned int idx)
 {
   return const_cast<TImage *>(this->GetInput(idx));
@@ -219,7 +219,7 @@ TImage * BandMathImageFilterX<TImage>
 
 
 template< typename TImage >
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::SetExpression(const std::string& expression)
 {
 
@@ -248,7 +248,7 @@ void BandMathImageFilterX<TImage>
 
 
 template< typename TImage >
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::SetMatrix(const std::string& name, const std::string& definition)
 {
 
@@ -308,7 +308,7 @@ void BandMathImageFilterX<TImage>
 
 
 template< typename TImage >
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::SetConstant(const std::string& name, double value)
 {
   for(int i=0; i<m_VAllowedVarNameAddedByUser.size(); i++)
@@ -326,7 +326,7 @@ void BandMathImageFilterX<TImage>
 
 
 template< typename TImage >
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::ExportContext(const std::string& filename)
 {
 
@@ -398,7 +398,7 @@ void BandMathImageFilterX<TImage>
 }
 
 template< typename TImage >
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::ImportContext(const std::string& filename)
 {
   std::ifstream importFile(filename.c_str(), std::ios::in);
@@ -501,7 +501,7 @@ void BandMathImageFilterX<TImage>
 
 
 template< typename TImage >
-std::string BandMathImageFilterX<TImage>
+std::string BandMathXImageFilter<TImage>
 ::GetExpression(int IDExpression) const
 {
   return m_Expression.at(IDExpression);
@@ -509,7 +509,7 @@ std::string BandMathImageFilterX<TImage>
 
 
 template< typename TImage >
-std::vector<std::string> BandMathImageFilterX<TImage>
+std::vector<std::string> BandMathXImageFilter<TImage>
 ::GetVarNames() const
 {
   std::vector<std::string> res;
@@ -521,7 +521,7 @@ std::vector<std::string> BandMathImageFilterX<TImage>
 
 
 template< typename TImage >
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::AddVariable(adhocStruct &ahc)
 {
     bool found=false;
@@ -536,7 +536,7 @@ void BandMathImageFilterX<TImage>
 
 
 template< typename TImage >
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::PrepareParsers()
 {
 
@@ -705,7 +705,7 @@ void BandMathImageFilterX<TImage>
 
 
 template< typename TImage >
-void BandMathImageFilterX< TImage >
+void BandMathXImageFilter< TImage >
 ::OutputsDimensions()
 {
 
@@ -749,7 +749,7 @@ void BandMathImageFilterX< TImage >
 
 
 template< typename TImage >
-void BandMathImageFilterX< TImage >
+void BandMathXImageFilter< TImage >
 ::GenerateOutputInformation(void)
 {
   Superclass::GenerateOutputInformation();
@@ -778,7 +778,7 @@ void BandMathImageFilterX< TImage >
 
 
 template< typename TImage >
-void BandMathImageFilterX< TImage >
+void BandMathXImageFilter< TImage >
 ::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
@@ -799,7 +799,7 @@ void BandMathImageFilterX< TImage >
 
 
 template< typename TImage >
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::BeforeThreadedGenerateData()
 {
   // Some useful variables
@@ -905,7 +905,7 @@ void BandMathImageFilterX<TImage>
 
 
 template< typename TImage >
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::AfterThreadedGenerateData()
 {
   unsigned int nbThreads = this->GetNumberOfThreads();
@@ -938,7 +938,7 @@ void BandMathImageFilterX<TImage>
 }
 
 template< typename TImage >
-void BandMathImageFilterX<TImage>
+void BandMathXImageFilter<TImage>
 ::ThreadedGenerateData(const ImageRegionType& outputRegionForThread,
            itk::ThreadIdType threadId)
 {

@@ -20,7 +20,7 @@
 
 #include "otbObjectList.h"
 
-#include "otbBandMathImageFilterX.h"
+#include "otbBandMathXImageFilter.h"
 
 namespace otb
 {
@@ -44,7 +44,7 @@ public:
   itkTypeMacro(BandMathX, otb::Application);
 
 
-  typedef otb::BandMathImageFilterX<FloatVectorImageType>                             BandMathImageFilterType;
+  typedef otb::BandMathXImageFilter<FloatVectorImageType>                             BandMathImageFilterType;
 
 
 private:
