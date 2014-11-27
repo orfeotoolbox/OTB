@@ -29,6 +29,8 @@ namespace otb
 /** \class QtLogOutput
  *  \brief Class that get log output and launch an event when received.
  *
+ *
+ * \ingroup OTBQtWidget
  */
 
 class ITK_ABI_EXPORT QtLogOutput : public QObject, public itk::LogOutput

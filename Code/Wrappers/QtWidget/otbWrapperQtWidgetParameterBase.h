@@ -27,7 +27,7 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class
+/** \class QtWidgetParameterBase
  * \brief
  */
 class ITK_ABI_EXPORT QtWidgetParameterBase : public QWidget

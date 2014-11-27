@@ -31,8 +31,10 @@ class Parameter;
 class QtWidgetModel;
 class QtWidgetParameterBase;
 
-/** \class ImageIOFactory
- * \brief Create instances of ImageIO objects using an object factory.
+/** \class QtWidgetParameterFactory
+ * \brief 
+ *
+ * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtWidgetParameterFactory : public itk::Object
 {

@@ -29,7 +29,7 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class
+/** \class QtFileSelectionWidget
  * \brief
  */
 class ITK_ABI_EXPORT QtFileSelectionWidget : public QWidget

@@ -28,7 +28,7 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class
+/** \class QtWidgetInputProcessXMLParameter
  * \brief
  */
 class ITK_ABI_EXPORT QtWidgetInputProcessXMLParameter : public QtWidgetParameterBase

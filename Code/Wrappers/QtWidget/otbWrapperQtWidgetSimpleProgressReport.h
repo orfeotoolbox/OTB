@@ -29,7 +29,7 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class
+/** \class QtWidgetSimpleProgressReport
  * \brief Create a widget reporting the progress of the application
  *        process.
  */

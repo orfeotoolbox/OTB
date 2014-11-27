@@ -28,7 +28,7 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class
+/** \class QtStringSelectionWidget
  * \brief
  */
 class ITK_ABI_EXPORT QtStringSelectionWidget : public QWidget

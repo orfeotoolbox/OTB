@@ -73,7 +73,7 @@ private:
 };
 
 
-/** \class
+/** \class QtWidgetModel
  * \brief
  */
 class ITK_ABI_EXPORT QtWidgetModel : public QObject

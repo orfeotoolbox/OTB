@@ -28,7 +28,7 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class
+/** \class QtWidgetComplexInputImageParameter
  * \brief
  */
 class ITK_ABI_EXPORT QtWidgetComplexInputImageParameter : public QtWidgetParameterBase
