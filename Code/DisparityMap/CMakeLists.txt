@@ -3,7 +3,7 @@
 file(GLOB OTBDisparityMap_SRCS "*.cxx" )
 
 add_library(OTBDisparityMap ${OTBDisparityMap_SRCS})
-target_link_libraries(OTBDisparityMap OTBCommon ${ITK_LIBRARIES} itkvnl)
+target_link_libraries(OTBDisparityMap OTBCommon ${ITK_LIBRARIES} ${ITKVNL_LIBRARIES})
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(OTBDisparityMap PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 endif()
