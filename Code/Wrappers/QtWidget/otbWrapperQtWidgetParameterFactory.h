@@ -32,7 +32,7 @@ class QtWidgetModel;
 class QtWidgetParameterBase;
 
 /** \class QtWidgetParameterFactory
- * \brief 
+ * \brief
  *
  * \ingroup OTBQtWidget
  */

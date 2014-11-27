@@ -394,7 +394,7 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  //Predict age using first line of abalone dataset 
+  //Predict age using first line of abalone dataset
   //1:-1 2:0.027027 3:0.0420168 4:-0.831858 5:-0.63733 6:-0.699395 7:-0.735352
   //8:-0.704036
   // Input value is 15.
