@@ -776,6 +776,13 @@ add_test(leTvListSampleGenerator1 ${LEARNING_TESTS4}
       ${TEMP}/svm_model.txt
       )
 
+    add_test(leTvSVMMachineLearningRegressionModel ${LEARNING_TESTS6}
+      otbSVMMachineLearningRegressionModel
+      ${INPUTDATA}/abalone.scale
+      ${TEMP}/svm_model_regression.txt
+      )
+
+
     add_test(leTuLibSVMMachineLearningModelNew ${LEARNING_TESTS6}
       otbLibSVMMachineLearningModelNew)
 

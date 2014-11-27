@@ -28,6 +28,7 @@ void RegisterTests()
   REGISTER_TEST(otbLibSVMMachineLearningModel);
   REGISTER_TEST(otbSVMMachineLearningModelNew);
   REGISTER_TEST(otbSVMMachineLearningModel);
+  REGISTER_TEST(otbSVMMachineLearningRegressionModel);
   REGISTER_TEST(otbKNearestNeighborsMachineLearningModelNew);
   REGISTER_TEST(otbKNearestNeighborsMachineLearningModel);
   REGISTER_TEST(otbRandomForestsMachineLearningModelNew);
