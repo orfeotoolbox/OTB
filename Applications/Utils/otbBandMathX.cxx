@@ -118,7 +118,7 @@ private:
       "The application takes the following parameters :"
       "- Setting the list of inputs can be done with the 'il' parameter.\n"
       "- Setting expressions can be done with the 'exp' parameter. Separating expressions by semi-colons (; ) will concatenate their results into one multiband output image.\n"
-      "Adding expressions without the use of semi-colons will produce additional output images (not implemented yet).\n"
+      "Adding expressions without the use of semi-colons will produce additional output images.\n"
       "- Setting constants can be done with the 'incontext' parameter. User must provide a txt file with a specific syntax: #type name value\n"
       "An example of such a file is given below:\n\n"
       "#F expo 1.1\n"

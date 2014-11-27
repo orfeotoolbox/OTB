@@ -62,6 +62,12 @@ private:
 
     AddParameter(ParameterType_ListView,  "feat", "List of features to consider for statistics.");
     SetParameterDescription("feat","List of features to consider for statistics.");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("inshp", "vectorData.shp");
+    SetDocExampleParameterValue("outstats", "results.xml");
+    SetDocExampleParameterValue("feat", "perimeter");
+
   }
 
   void DoUpdateParameters()

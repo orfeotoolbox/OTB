@@ -77,6 +77,13 @@ private:
     SetParameterDescription("cfield","Field containing the predicted class");
     SetParameterString("cfield","predicted");
 
+    // Doc example parameter settings
+    SetDocExampleParameterValue("inshp", "vectorData.shp");
+    SetDocExampleParameterValue("instats", "meanVar.xml");
+    SetDocExampleParameterValue("insvm", "svmModel.svm");
+    SetDocExampleParameterValue("feat", "perimeter");
+    SetDocExampleParameterValue("cfield", "predicted");
+
   }
 
   void DoUpdateParameters()

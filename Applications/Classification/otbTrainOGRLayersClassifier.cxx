@@ -76,6 +76,13 @@ private:
     SetParameterDescription("cfield","Field containing the class id for supervision. Only geometries with this field available will be taken into account.");
     SetParameterString("cfield","class");
 
+    // Doc example parameter settings
+    SetDocExampleParameterValue("inshp", "vectorData.shp");
+    SetDocExampleParameterValue("instats", "meanVar.xml");
+    SetDocExampleParameterValue("outsvm", "svmModel.svm");
+    SetDocExampleParameterValue("feat", "perimeter");
+    SetDocExampleParameterValue("cfield", "predicted");
+
   }
 
   void DoUpdateParameters()
