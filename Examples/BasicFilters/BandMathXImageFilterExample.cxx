@@ -223,12 +223,12 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-//  We now set the expression (note the use of 'conv' operator, as well as the 'bands' operator which is used as a band selector):
+//  We now set the expression (note the use of 'dotpr' operator, as well as the 'bands' operator which is used as a band selector):
 //
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  filter2->SetExpression("bands(im1,{1,2,3})-conv(kernel,im1b1N3x3,im1b2N3x3,im1b3N3x3) + {cst,cst,cst}");
+  filter2->SetExpression("bands(im1,{1,2,3})-dotpr(kernel,im1b1N3x3,im1b2N3x3,im1b3N3x3) + {cst,cst,cst}");
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
