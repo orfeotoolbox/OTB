@@ -130,7 +130,9 @@ inline vec_float4 atan2f4( vec_float4 y, vec_float4 x );
 
 inline u64 GetMicroTime()
 {
-#ifdef _WIN32
+//OTB - 28/11/2014
+/*For mingw LARGE_INTEGER is not defined but timeval struct exists in winsock2.h */
+#if defined(_WIN32) && !defined(_MSC_VER)
     LARGE_INTEGER count, freq;
     QueryPerformanceCounter(&count);
     QueryPerformanceFrequency(&freq);
