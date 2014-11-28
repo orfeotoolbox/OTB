@@ -58,7 +58,7 @@ public:
   virtual void InitFun()
   {
     m_MuParserX.DefineFun(new ndvi);
-    m_MuParserX.DefineFun(new conv);
+    m_MuParserX.DefineFun(new dotpr);
     m_MuParserX.DefineFun(new bands);
     m_MuParserX.DefineFun(new cat);
     m_MuParserX.DefineFun(new mean);
@@ -74,6 +74,7 @@ public:
     m_MuParserX.DefineOprt(new MultiplicationByScalar);
     m_MuParserX.DefineOprt(new PowerByScalar);
 
+    m_MuParserX.DefineFun(new vnorm);
     m_MuParserX.DefineFun(new vmin);
     m_MuParserX.DefineFun(new vmax);
     m_MuParserX.DefineFun(new vcos);

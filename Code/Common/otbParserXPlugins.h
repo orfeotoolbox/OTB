@@ -47,25 +47,24 @@ public:
   };
 
 
-class conv : public mup::ICallback
+class dotpr : public mup::ICallback
   {
 public:
-    conv():ICallback(mup::cmFUNC, "conv", -1)
+    dotpr():ICallback(mup::cmFUNC, "dotpr", -1)
     {}
 
     virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
 
     const mup::char_type* GetDesc() const
     {
-      return "conv(m1,m2) - A matrix convolution";
+      return "dotpr(m1,m2) - A vector/matrix dot product";
     }
 
     mup::IToken* Clone() const
     {
-      return new conv(*this);
+      return new dotpr(*this);
     }
   };
-
 
 class ElementWiseDivision : public mup::IOprtBin
   {
@@ -326,18 +325,37 @@ public:
     }
   };
 
-
-class vmin : public mup::ICallback
+//--------------------------------------------------------------------------------------------------------//
+class vnorm : public mup::ICallback
   {
 public:
-    vmin():ICallback(mup::cmFUNC, "vmin", -1)
+    vnorm():ICallback(mup::cmFUNC, "vnorm", 1)
     {}
 
     virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
 
     const mup::char_type* GetDesc() const
     {
-      return "vmin(m1,m2,..) - overall minimun";
+      return "vnorm(v1) - Norm for a vector : sqrt(sum of squared elements); works also with matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vnorm(*this);
+    }
+  };
+
+class vmin : public mup::ICallback
+  {
+public:
+    vmin():ICallback(mup::cmFUNC, "vmin", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vmin(m1) - overall minimun";
     }
 
     mup::IToken* Clone() const
@@ -350,14 +368,14 @@ public:
 class vmax : public mup::ICallback
   {
 public:
-    vmax():ICallback(mup::cmFUNC, "vmax", -1)
+    vmax():ICallback(mup::cmFUNC, "vmax", 1)
     {}
 
     virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
 
     const mup::char_type* GetDesc() const
     {
-      return "vmax(m1,m2,..) - overall maximun";
+      return "vmax(m1) - overall maximun";
     }
 
     mup::IToken* Clone() const
@@ -366,7 +384,7 @@ public:
     }
   };
 
-//--------------------------------------------------------------------------------------------------------//
+
 class vcos : public mup::ICallback
   {
 public:

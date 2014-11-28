@@ -55,7 +55,7 @@ void bands::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
     }
 
 
-void conv::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void dotpr::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
       assert(a_pArg[0]->GetType()=='m');
 
@@ -91,7 +91,6 @@ void conv::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
       // The return value is passed by writing it to the reference ret
       *ret = res;
     }
-
 
 void ElementWiseDivision::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int)
     {
@@ -653,6 +652,33 @@ void maj::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
     }
 
 
+//--------------------------------------------------------------------------------------------------------//
+void vnorm::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+    {
+
+      int nbrows,nbcols;
+      mup::matrix_type m1;
+      double sum=0.0;
+
+      assert( a_iArgc==1 );
+      assert(a_pArg[0]->GetType()=='m');
+
+      m1 = a_pArg[0]->GetArray();
+
+      nbrows = m1.GetRows();
+      nbcols = m1.GetCols();
+
+      for (int i=0; i<nbrows; i++)
+        for (int j=0; j<nbcols; j++)
+          sum += vcl_pow(m1.At(i,j).GetFloat(),2.0);
+
+
+      // The return value is passed by writing it to the reference ret
+      mup::matrix_type res(1,1,vcl_sqrt(sum));
+      *ret = res;
+  }
+
+
 void vmin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
   
@@ -662,54 +688,23 @@ void vmin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
       int nbrows,nbcols;
       mup::matrix_type m1;
 
-      for (int k=0; k<a_iArgc; ++k)
-      {
+      assert( a_iArgc==1 );
+      assert(a_pArg[0]->GetType()=='m');
 
-        // Get the argument from the argument input vector
-        switch (a_pArg[k]->GetType())
-        {
-          case 'm':
+      min = itk::NumericTraits<double>::max();
 
-            min = itk::NumericTraits<double>::max();
+      m1 = a_pArg[0]->GetArray();
 
-            m1 = a_pArg[k]->GetArray();
+      nbrows = m1.GetRows();
+      nbcols = m1.GetCols();
 
-            nbrows = m1.GetRows();
-            nbcols = m1.GetCols();
-
-            for (int i=0; i<nbrows; i++)
-              for (int j=0; j<nbcols; j++)
-                if (m1.At(i,j).GetFloat() < min )
-                  min = m1.At(i,j).GetFloat();
-
-            vect.push_back(min);
-
-          break;
-    
-          case 'i':
-            min = itk::NumericTraits<double>::max();
-
-            if ( (double) a_pArg[k]->GetInteger() < min)
-              min = (double) a_pArg[k]->GetInteger();
-
-            vect.push_back(min);
-          break;
-        
-          case 'f':
-            min = itk::NumericTraits<double>::max();
-
-            if ( a_pArg[k]->GetFloat() < min)
-              min = a_pArg[k]->GetFloat();
-
-            vect.push_back(min);
-          break;
-        }
-      }
+      for (int i=0; i<nbrows; i++)
+        for (int j=0; j<nbcols; j++)
+          if (m1.At(i,j).GetFloat() < min )
+            min = m1.At(i,j).GetFloat();
 
       // The return value is passed by writing it to the reference ret
-      mup::matrix_type res(1,vect.size(),0);
-      for (int j=0; j<vect.size(); j++)
-            res.At(0,j) = vect[j];
+      mup::matrix_type res(1,1,min);
       *ret = res;
     }
 
@@ -723,59 +718,27 @@ void vmax::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
       int nbrows,nbcols;
       mup::matrix_type m1;
 
-      for (int k=0; k<a_iArgc; ++k)
-      {
+      assert( a_iArgc==1 );
+      assert(a_pArg[0]->GetType()=='m');
 
-        // Get the argument from the argument input vector
-        switch (a_pArg[k]->GetType())
-        {
-          case 'm':
+      max = itk::NumericTraits<double>::min();
 
-            max = itk::NumericTraits<double>::min();
+      m1 = a_pArg[0]->GetArray();
 
-            m1 = a_pArg[k]->GetArray();
+      nbrows = m1.GetRows();
+      nbcols = m1.GetCols();
 
-            nbrows = m1.GetRows();
-            nbcols = m1.GetCols();
-
-            for (int i=0; i<nbrows; i++)
-              for (int j=0; j<nbcols; j++)
-                if (m1.At(i,j).GetFloat() > max )
-                  max = m1.At(i,j).GetFloat();
-
-            vect.push_back(max);
-
-          break;
-    
-          case 'i':
-            max = itk::NumericTraits<double>::min();
-
-            if ( (double) a_pArg[k]->GetInteger() > max)
-              max = (double) a_pArg[k]->GetInteger();
-
-            vect.push_back(max);
-          break;
-        
-          case 'f':
-            max = itk::NumericTraits<double>::min();
-
-            if ( a_pArg[k]->GetFloat() > max)
-              max = a_pArg[k]->GetFloat();
-
-            vect.push_back(max);
-          break;
-        }
-      }
+      for (int i=0; i<nbrows; i++)
+        for (int j=0; j<nbcols; j++)
+          if (m1.At(i,j).GetFloat() > max )
+            max = m1.At(i,j).GetFloat();
 
       // The return value is passed by writing it to the reference ret
-      mup::matrix_type res(1,vect.size(),0);
-      for (int j=0; j<vect.size(); j++)
-            res.At(0,j) = vect[j];
+      mup::matrix_type res(1,1,max);
       *ret = res;
     }
 
 
-//--------------------------------------------------------------------------------------------------------//
 void vcos::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
       assert(a_iArgc==1);
