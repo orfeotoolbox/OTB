@@ -369,7 +369,7 @@ void BandMathXImageFilter<TImage>
               iss << " " << m_VAllowedVarNameAddedByUser[i].value.At(k,0);
               for(int p=1; p<m_VAllowedVarNameAddedByUser[i].value.GetCols(); p++)
                 iss << " , " <<  m_VAllowedVarNameAddedByUser[i].value.At(k,p);
-              iss << " ;";
+              iss << ";";
             }
             str=iss.str();
             str.erase(str.size()-1);
