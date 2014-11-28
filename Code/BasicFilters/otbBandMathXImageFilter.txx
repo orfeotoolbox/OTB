@@ -63,6 +63,8 @@ BandMathXImageFilter<TImage>
   m_VAllowedVarNameAuto.push_back(ahcY);
 
   m_SizeNeighbourhood=10;
+  
+  m_ManyExpressions = true;
 
 }
 
@@ -217,11 +219,18 @@ TImage * BandMathXImageFilter<TImage>
   return const_cast<TImage *>(this->GetInput(idx));
 }
 
+template< typename TImage >
+void BandMathXImageFilter<TImage>
+::SetManyExpressions(bool flag)
+{
+    m_ManyExpressions = flag;
+}
 
 template< typename TImage >
 void BandMathXImageFilter<TImage>
 ::SetExpression(const std::string& expression)
 {
+  std::string expressionToBePushed = expression;
 
   if (expression.find(";") != std::string::npos)
   {
@@ -234,11 +243,12 @@ void BandMathXImageFilter<TImage>
         oss << expression[i];
 
     oss << ")";
-    m_Expression.push_back(oss.str());
-
   }
-  else
-    m_Expression.push_back(expression);
+
+  if (m_ManyExpressions)
+    m_Expression.push_back(expressionToBePushed);
+  else if (m_Expression.size() == 0)
+    m_Expression.push_back(expressionToBePushed);
 
   if (m_Expression.size()>1)
     this->SetNthOutput( (int) (m_Expression.size()) -1, ( TImage::New() ).GetPointer() );

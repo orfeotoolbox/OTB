@@ -99,6 +99,9 @@ public:
   ImageType * GetNthInput(unsigned int idx);
 
   /** Set an expression to be parsed */
+  void SetManyExpressions(bool flag);
+
+  /** Set an expression to be parsed */
   void SetExpression(const std::string& expression);
 
   /** Return the nth expression to be parsed */
@@ -172,6 +175,8 @@ private :
   long                                  m_OverflowCount;
   itk::Array<long>                      m_ThreadUnderflow;
   itk::Array<long>                      m_ThreadOverflow;
+
+  bool                                  m_ManyExpressions;
 
 };
 

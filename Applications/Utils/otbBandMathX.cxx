@@ -52,7 +52,7 @@ private:
   {
     SetName("BandMathX");
     SetDescription("This application performs mathematical operations on multiband images.\n"
-      "Mathematical formula interpretation is done via muParserX libraries https://code.google.com/p/muparserx/");
+      "Mathematical formula interpretation is done via muParserX library : http://articles.beltoforion.de/article.php?a=muparserx");
 
     SetDocName("Band Math X");
     SetDocLongDescription("The goal of this documentation is to give the user some hints about the syntax used in this application.\n"
@@ -95,10 +95,10 @@ private:
       "- J is an number identifying the band (remember, first band is indexed by 1)\n"
       "- KxP are two numbers that represent the size of the neighborhood (first one is related to the horizontal direction)\n"
       "All neighborhood are centred, thus K and P must be odd numbers.\n"
-      "Many operators come with this new functionnality: conv, mean var median min max...\n"
+      "Many operators come with this new functionnality: dotpr, mean var median min max...\n"
       "For instance, if im1 represents the pixel of 3 bands image:\n\n"
       "               im1 - mean(im1b1N5x5,im1b2N5x5,im1b3N5x5)       (3)\n"
-      "\ncould represent a high pass filter (Note that by implying three neighborhoods, the operator returned a row vector of three components.\n"
+      "\ncould represent a high pass filter (Note that by implying three neighborhoods, the operator mean returns a row vector of three components.\n"
       "It is a typical behaviour for many operators of this application).\n"
 
       "\n\n"
@@ -115,18 +115,17 @@ private:
 
       "\n\n"
       "- Application itself:\n\n"
-      "The application takes the following parameters :"
+      "The application takes the following parameters :\n"
       "- Setting the list of inputs can be done with the 'il' parameter.\n"
-      "- Setting expressions can be done with the 'exp' parameter. Separating expressions by semi-colons (; ) will concatenate their results into one multiband output image.\n"
-      "Adding expressions without the use of semi-colons will produce additional output images.\n"
-      "- Setting constants can be done with the 'incontext' parameter. User must provide a txt file with a specific syntax: #type name value\n"
+      "- Setting expressions can be done with the 'exp' parameter (see also limitations section below).\n"
+      "- Setting constants can be done with the 'incontext' parameter. User must provide a txt file with a specific syntax: #type name value\n"    
       "An example of such a file is given below:\n\n"
       "#F expo 1.1\n"
       "#M kernel1 { 0.1 , 0.2 , 0.3; 0.4 , 0.5 , 0.6; 0.7 , 0.8 , 0.9; 1 , 1.1 , 1.2; 1.3 , 1.4 , 1.5 }\n"
       "\nAs we can see,  #I/#F allows the definition of an integer/float constant, whereas #M allows the definition of a vector/matrix.\n"
       "In the latter case, elements of a row must be separated by commas, and rows must be separated by semicolons.\n"
-      "It is also possible to define expressions within the same txt file, with the pattern #E expr; they will be added to the list of expressions to be applied. For instance:\n\n"
-      "#E conv(kernel1,im1b1N3x5); im2b1^expo\n"
+      "It is also possible to define expressions within the same txt file, with the pattern #E expr. For instance (two expressions; see also limitations section below):\n\n"
+      "#E dotpr(kernel1,im1b1N3x5) ; im2b1^expo\n"
       "\n- The 'outcontext' parameter allows to save user's constants and expressions (context).\n"
       "- Setting the output image can be done with the 'out' parameter (multi-outputs is not implemented yet).\n"
       "\n\n"
@@ -134,7 +133,8 @@ private:
 
 );
 
-    SetDocLimitations("Only one output is possible (to be improved)");
+    SetDocLimitations("The application is currently unable to produce one output image per expression, contrary to otbBandMathXImageFilter.\n"
+                      "Separating expressions by semi-colons (;) will concatenate their results into a unique multiband output image. ");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     AddDocTag("Util");
@@ -147,9 +147,9 @@ private:
 
     AddRAMParameter();
 
-    AddParameter(ParameterType_StringList, "exp", "Expressions");
+    AddParameter(ParameterType_String, "exp", "Expressions");
     SetParameterDescription("exp",
-                            "Mathematical expressions to apply.");
+                            "Mathematical expression to apply.");
     MandatoryOff("exp");
 
     AddParameter(ParameterType_InputFilename, "incontext", "Import context");
@@ -192,6 +192,7 @@ private:
     }
 
     m_Filter               = BandMathImageFilterType::New();
+    m_Filter->SetManyExpressions(false);
 
     for (unsigned int i = 0; i < nbImages; i++)
       {
