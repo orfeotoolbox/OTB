@@ -622,6 +622,11 @@ void BandMathXImageFilter<TImage>
   int nbVar = m_VVarName.size();
 
   m_StatsVarDetected.clear();
+  m_NeighDetected.clear();
+  m_NeighExtremaSizes.clear();
+  unsigned int nbInputImages = this->GetNumberOfInputs();
+  RadiusType dummyRadius; dummyRadius[0]=1; dummyRadius[1]=1;
+  m_NeighExtremaSizes.resize(nbInputImages,dummyRadius);  
 
   //Reset
   for(int i=0; i<m_AImage.size(); ++i)
@@ -676,6 +681,22 @@ void BandMathXImageFilter<TImage>
         if (m_AImage[i][j].type == 6 ) // neighborhood
         {
             m_AImage[i][j].value = ValueType(m_AImage[i][j].info[3],m_AImage[i][j].info[2],initValue);
+
+            //m_AImage[i][j].info[0] = Image ID 
+            bool found = false;
+            for (int r=0; r<m_NeighDetected.size() && !found; r++)
+                if (m_NeighDetected[r] == m_AImage[i][j].info[0])
+                  found = true;
+            if (!found)
+              m_NeighDetected.push_back(m_AImage[i][j].info[0]);
+
+            // find biggest radius for a given input image (idis given by info[0])
+            if (m_NeighExtremaSizes[m_AImage[i][j].info[0]][0] < (int) ((m_VVarName[j].info[2]-1)/2) )  // Size x direction (otb convention)
+              m_NeighExtremaSizes[m_AImage[i][j].info[0]][0] = (int) ((m_VVarName[j].info[2]-1)/2);
+
+            if (m_NeighExtremaSizes[m_AImage[i][j].info[0]][1] < (int) ((m_VVarName[j].info[3]-1)/2) )  // Size y direction (otb convention)
+              m_NeighExtremaSizes[m_AImage[i][j].info[0]][1] = (int) ((m_VVarName[j].info[3]-1)/2); 
+
         }
 
         if (m_AImage[i][j].type == 7 ) // user defined variables
@@ -691,7 +712,7 @@ void BandMathXImageFilter<TImage>
         if (m_AImage[i][j].type == 8 ) // global stats
         {
             m_AImage[i][j].value = ValueType(initValue);
-            //m_AImage[i][j].info[0] = Image ID : useful to know which images must have their regions set to largest possible region (see GenerateInputRequestedRegion)
+            //m_AImage[i][j].info[0] = Image ID 
             bool found = false;
             for (int r=0; r<m_StatsVarDetected.size() && !found; r++)
                 if (m_StatsVarDetected[r] == m_AImage[i][j].info[0])
@@ -715,126 +736,9 @@ void BandMathXImageFilter<TImage>
 
 
 template< typename TImage >
-void BandMathXImageFilter< TImage >
-::OutputsDimensions()
-{
-
-  this->SetNumberOfRequiredOutputs((int) m_Expression.size());
-
-  m_outputsDimensions.clear();
-
-  for(int i=0; i<m_Expression.size(); ++i)
-  {
-    m_VParser.at(0)->SetExpr(m_Expression[i]);
-    ValueType value = m_VParser.at(0)->Eval();
-
-    switch (value.GetType())
-    {   //ValueType
-        case 'i':
-        m_outputsDimensions.push_back(1);
-        break;
-
-        case 'f':
-        m_outputsDimensions.push_back(1);
-        break;
-
-        case 'c':
-        itkExceptionMacro(<< "Complex numbers not supported." << std::endl);
-        break;
-
-        case 'm':
-        mup::matrix_type vect = value.GetArray();
-        if ( vect.GetRows() == 1 ) //Vector
-          m_outputsDimensions.push_back(vect.GetCols());
-        else //Matrix
-          itkExceptionMacro(<< "Result of the evaluation can't be a matrix." << std::endl);
-        break;
-
-    }
-
-    //std::cout << "Type = " << value.GetType() << " dimension = " << m_outputsDimensions.back() << std::endl;
-  }
-
-}
-
-
-template< typename TImage >
-void BandMathXImageFilter< TImage >
-::GenerateOutputInformation(void)
-{
-  Superclass::GenerateOutputInformation();
-
-  typedef itk::ImageBase< TImage::ImageDimension > ImageBaseType;
-  typename ImageBaseType::Pointer outputPtr;
-
-  PrepareParsers();    // addition
-  OutputsDimensions(); // addition
-
-  int i=0;
-  for ( itk::OutputDataObjectIterator it(this); !it.IsAtEnd(); i++, it++ )
-    {
-      // Check whether the output is an image of the appropriate
-      // dimension (use ProcessObject's version of the GetInput()
-      // method since it returns the input as a pointer to a
-      // DataObject as opposed to the subclass version which
-      // static_casts the input to an TImage).
-      outputPtr = dynamic_cast< ImageBaseType * >( it.GetOutput() );
-
-        if ( outputPtr )
-          outputPtr->SetNumberOfComponentsPerPixel(m_outputsDimensions[i]);
-    }
-
-}
-
-
-template< typename TImage >
-void BandMathXImageFilter< TImage >
-::GenerateInputRequestedRegion()
-{
-  // call the superclass' implementation of this method
-  Superclass::GenerateInputRequestedRegion();
-
-  for (int i=0; i<m_StatsVarDetected.size(); i++) //Must request largest possible regions (only for concerned images)
-  {
-      if ( m_StatsVarDetected[i] < this->GetNumberOfInputs() )
-      {
-          ImagePointer  inputPtr = const_cast<TImage *>(this->GetInput(m_StatsVarDetected[i]));
-          inputPtr->SetRequestedRegionToLargestPossibleRegion();
-      }
-      else
-        itkExceptionMacro(<< "Requested input #" << m_StatsVarDetected[i] << ", but only " << this->GetNumberOfInputs() << " inputs are available." << std::endl);
-  }
-
-}
-
-
-template< typename TImage >
 void BandMathXImageFilter<TImage>
-::BeforeThreadedGenerateData()
+::PrepareParsersGlobStats()
 {
-  // Some useful variables
-  unsigned int nbThreads = this->GetNumberOfThreads();
-  unsigned int nbInputImages = this->GetNumberOfInputs();
-
-  // Check if input image dimensions match
-  unsigned int inputSize[2];
-  inputSize[0] = this->GetNthInput(0)->GetLargestPossibleRegion().GetSize(0);
-  inputSize[1] = this->GetNthInput(0)->GetLargestPossibleRegion().GetSize(1);
-
-  for(unsigned int p = 1; p < nbInputImages; p++)
-    {
-    if((inputSize[0] != this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(0))
-       || (inputSize[1] != this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(1)))
-      {
-      itkExceptionMacro(<< "Input images must have the same dimensions." << std::endl
-                        << "band #1 is [" << inputSize[0] << ";" << inputSize[1] << "]" << std::endl
-                        << "band #" << p+1 << " is ["
-                        << this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(0) << ";"
-                        << this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(1) << "]");
-      }
-    }
-
-  if (globalStatsDetected())
   // Must instantiate stats variables of the parsers
   // Note : at this stage, inputs have already been set to largest possible regions.
     for (unsigned int i=0; i<m_StatsVarDetected.size(); i++)
@@ -903,8 +807,168 @@ void BandMathXImageFilter<TImage>
               }
           }
     }
+}
+
+template< typename TImage >
+void BandMathXImageFilter< TImage >
+::OutputsDimensions()
+{
+
+  this->SetNumberOfRequiredOutputs((int) m_Expression.size());
+
+  m_outputsDimensions.clear();
+
+  for(int i=0; i<m_Expression.size(); ++i)
+  {
+    m_VParser.at(0)->SetExpr(m_Expression[i]);
+    ValueType value = m_VParser.at(0)->Eval();
+
+    switch (value.GetType())
+    {   //ValueType
+        case 'i':
+        m_outputsDimensions.push_back(1);
+        break;
+
+        case 'f':
+        m_outputsDimensions.push_back(1);
+        break;
+
+        case 'c':
+        itkExceptionMacro(<< "Complex numbers not supported." << std::endl);
+        break;
+
+        case 'm':
+        mup::matrix_type vect = value.GetArray();
+        if ( vect.GetRows() == 1 ) //Vector
+          m_outputsDimensions.push_back(vect.GetCols());
+        else //Matrix
+          itkExceptionMacro(<< "Result of the evaluation can't be a matrix." << std::endl);
+        break;
+
+    }
+
+    //std::cout << "Type = " << value.GetType() << " dimension = " << m_outputsDimensions.back() << std::endl;
+  }
+
+}
+
+template< typename TImage >
+void BandMathXImageFilter< TImage >
+::CheckImageDimensions(void)
+{
+  // Check if input image dimensions match 
+  unsigned int nbInputImages = this->GetNumberOfInputs();
+  unsigned int inputSize[2];
+  inputSize[0] = this->GetNthInput(0)->GetLargestPossibleRegion().GetSize(0);
+  inputSize[1] = this->GetNthInput(0)->GetLargestPossibleRegion().GetSize(1);
+
+  for(unsigned int p = 1; p < nbInputImages; p++)
+    if((inputSize[0] != this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(0))
+       || (inputSize[1] != this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(1)))
+      {
+
+      itkExceptionMacro(<< "Input images must have the same dimensions." << std::endl
+                        << "band #1 is [" << inputSize[0] << ";" << inputSize[1] << "]" << std::endl
+                        << "band #" << p+1 << " is ["
+                        << this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(0) << ";"
+                        << this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(1) << "]");
+      }
+
+}
+
+template< typename TImage >
+void BandMathXImageFilter< TImage >
+::GenerateOutputInformation(void)
+{
+  Superclass::GenerateOutputInformation();
 
 
+  CheckImageDimensions();         
+  PrepareParsers();               
+  if (globalStatsDetected())      
+    PrepareParsersGlobStats();
+  OutputsDimensions();          
+
+
+  typedef itk::ImageBase< TImage::ImageDimension > ImageBaseType;
+  typename ImageBaseType::Pointer outputPtr;
+
+  int i=0;
+  for ( itk::OutputDataObjectIterator it(this); !it.IsAtEnd(); i++, it++ )
+    {
+      // Check whether the output is an image of the appropriate
+      // dimension (use ProcessObject's version of the GetInput()
+      // method since it returns the input as a pointer to a
+      // DataObject as opposed to the subclass version which
+      // static_casts the input to an TImage).
+      outputPtr = dynamic_cast< ImageBaseType * >( it.GetOutput() );
+
+        if ( outputPtr )
+          outputPtr->SetNumberOfComponentsPerPixel(m_outputsDimensions[i]);
+    }
+
+}
+
+
+template< typename TImage >
+void BandMathXImageFilter< TImage >
+::GenerateInputRequestedRegion()
+{
+  // call the superclass' implementation of this method
+  Superclass::GenerateInputRequestedRegion();
+
+  for(unsigned int i=0; i<m_NeighDetected.size(); i++)
+    if ( m_NeighDetected[i] < this->GetNumberOfInputs() )
+      { 
+
+        // get pointers to the input and output
+        typename Superclass::InputImagePointer  inputPtr   =  const_cast<TImage *>( this->GetNthInput(m_NeighDetected[i]) );
+
+
+        ImageRegionType inputRequestedRegion;
+        inputRequestedRegion = inputPtr->GetRequestedRegion();
+
+        // pad the input requested region by the operator radius
+        inputRequestedRegion.PadByRadius(  m_NeighExtremaSizes[m_NeighDetected[i]]  );
+
+        // crop the input requested region at the input's largest possible region
+        if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
+          {
+            inputPtr->SetRequestedRegion(inputRequestedRegion);
+            return;
+          }
+        else
+          {
+          // Couldn't crop the region (requested region is outside the largest
+          // possible region).  Throw an exception.
+
+          // store what we tried to request (prior to trying to crop)
+          inputPtr->SetRequestedRegion(inputRequestedRegion);
+
+          // build an exception
+          itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+          std::ostringstream msg,msg2;
+          msg << static_cast<const char *>(this->GetNameOfClass())
+              << "::GenerateInputRequestedRegion()";
+          e.SetLocation(msg.str().c_str());
+          msg2 << "Requested region is (at least partially) outside the largest possible region (input #" << m_NeighDetected[i] << ").";
+          e.SetDescription(msg2.str().c_str());
+          e.SetDataObject(inputPtr);
+          throw e;
+          }
+      }
+    else
+      itkExceptionMacro(<< "Requested input #" << m_NeighDetected[i] << ", but only " << this->GetNumberOfInputs() << " inputs are available." << std::endl);
+
+}
+
+
+template< typename TImage >
+void BandMathXImageFilter<TImage>
+::BeforeThreadedGenerateData()
+{
+
+  unsigned int nbThreads = this->GetNumberOfThreads();
   // Allocate and initialize the thread temporaries
   m_ThreadUnderflow.SetSize(nbThreads);
   m_ThreadUnderflow.Fill(0);
@@ -977,7 +1041,7 @@ void BandMathXImageFilter<TImage>
   for(int j=0; j<m_VVarName.size(); ++j)
     if (m_VVarName[j].type == 6)
      {
-        typename itk::ConstNeighborhoodIterator<TImage>::RadiusType radius;
+        RadiusType radius;
         radius[0]=(int) ((m_VVarName[j].info[2]-1)/2); // Size x direction (otb convention)
         radius[1]=(int) ((m_VVarName[j].info[3]-1)/2); // Size y direction (otb convention)
         VNit.push_back( itk::ConstNeighborhoodIterator<TImage>(radius, this->GetNthInput(m_VVarName[j].info[0]),outputRegionForThread)); // info[0] = Input image ID
@@ -1052,11 +1116,11 @@ void BandMathXImageFilter<TImage>
           break;
 
           case 7 :
-          //Nothing to do : user defined variable or constant, which have already been set
+          //Nothing to do : user defined variable or constant, which have already been set inside PrepareParsers (see above)
           break;
 
           case 8 :
-          //Nothing to do : variable has already been set inside BeforeThreadedGenerateData method (see above)
+          //Nothing to do : variable has already been set inside PrepareParsersGlobStats method (see above)
           break;
 
           default :

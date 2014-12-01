@@ -22,6 +22,7 @@
 #ifndef __otbBandMathXImageFilter_h
 #define __otbBandMathXImageFilter_h
 
+#include "itkConstNeighborhoodIterator.h"
 #include "itkImageToImageFilter.h"
 #include "itkArray.h"
 
@@ -78,6 +79,7 @@ public:
   typedef typename ImageType::ConstPointer           ConstImagePointer;
   typedef typename ImageType::Pointer                ImagePointer;
   typedef typename ImageType::RegionType             ImageRegionType;
+  typedef typename itk::ConstNeighborhoodIterator<TImage>::RadiusType RadiusType;
   typedef typename ImageType::PixelType::ValueType   PixelValueType;
   typedef typename ImageType::PixelType              PixelType;
   typedef typename ImageType::IndexType              IndexType;
@@ -154,7 +156,9 @@ private :
   void operator=(const Self&); //purposely not implemented
 
   void AddVariable(adhocStruct&);
+  void CheckImageDimensions();
   void PrepareParsers();
+  void PrepareParsersGlobStats();
   void OutputsDimensions();
 
   std::vector<std::string>                  m_Expression;
@@ -170,6 +174,9 @@ private :
   unsigned int                             m_SizeNeighbourhood;
 
   std::vector< int >                        m_StatsVarDetected; // input image ID for which global statistics have been detected
+
+  std::vector< int >                        m_NeighDetected; // input image ID for which neighbourhood have been detected
+  std::vector < RadiusType >                m_NeighExtremaSizes;
 
   long                                  m_UnderflowCount;
   long                                  m_OverflowCount;
