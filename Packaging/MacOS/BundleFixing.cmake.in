@@ -6,4 +6,8 @@ endforeach(APP)
 
 include(BundleUtilities)
 set(BU_CHMOD_BUNDLE_ITEMS ON)
-fixup_bundle("${CMAKE_INSTALL_PREFIX}/bin/monteverdi2" "${OTB_APPS_LIST_INSTALL}" "${CMAKE_INSTALL_PREFIX}/lib/otb")
+fixup_bundle(
+  "${CMAKE_INSTALL_PREFIX}/bin/monteverdi2"
+  "${OTB_APPS_LIST_INSTALL};${CMAKE_INSTALL_PREFIX}/lib/qt4/plugins/sqldrivers/libqsqlite.dylib"
+  "${CMAKE_INSTALL_PREFIX}/lib/otb;${CMAKE_INSTALL_PREFIX}/lib/qt4/plugins/sqldrivers"
+  )
