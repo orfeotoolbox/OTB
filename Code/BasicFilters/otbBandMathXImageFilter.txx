@@ -626,7 +626,7 @@ void BandMathXImageFilter<TImage>
   m_NeighExtremaSizes.clear();
   unsigned int nbInputImages = this->GetNumberOfInputs();
   RadiusType dummyRadius; dummyRadius[0]=1; dummyRadius[1]=1;
-  m_NeighExtremaSizes.resize(nbInputImages,dummyRadius);  
+  m_NeighExtremaSizes.resize(nbInputImages,dummyRadius);
 
   //Reset
   for(int i=0; i<m_AImage.size(); ++i)
@@ -682,7 +682,7 @@ void BandMathXImageFilter<TImage>
         {
             m_AImage[i][j].value = ValueType(m_AImage[i][j].info[3],m_AImage[i][j].info[2],initValue);
 
-            //m_AImage[i][j].info[0] = Image ID 
+            //m_AImage[i][j].info[0] = Image ID
             bool found = false;
             for (int r=0; r<m_NeighDetected.size() && !found; r++)
                 if (m_NeighDetected[r] == m_AImage[i][j].info[0])
@@ -695,7 +695,7 @@ void BandMathXImageFilter<TImage>
               m_NeighExtremaSizes[m_AImage[i][j].info[0]][0] = (int) ((m_VVarName[j].info[2]-1)/2);
 
             if (m_NeighExtremaSizes[m_AImage[i][j].info[0]][1] < (int) ((m_VVarName[j].info[3]-1)/2) )  // Size y direction (otb convention)
-              m_NeighExtremaSizes[m_AImage[i][j].info[0]][1] = (int) ((m_VVarName[j].info[3]-1)/2); 
+              m_NeighExtremaSizes[m_AImage[i][j].info[0]][1] = (int) ((m_VVarName[j].info[3]-1)/2);
 
         }
 
@@ -712,7 +712,7 @@ void BandMathXImageFilter<TImage>
         if (m_AImage[i][j].type == 8 ) // global stats
         {
             m_AImage[i][j].value = ValueType(initValue);
-            //m_AImage[i][j].info[0] = Image ID 
+            //m_AImage[i][j].info[0] = Image ID
             bool found = false;
             for (int r=0; r<m_StatsVarDetected.size() && !found; r++)
                 if (m_StatsVarDetected[r] == m_AImage[i][j].info[0])
@@ -856,7 +856,7 @@ template< typename TImage >
 void BandMathXImageFilter< TImage >
 ::CheckImageDimensions(void)
 {
-  // Check if input image dimensions match 
+  // Check if input image dimensions match
   unsigned int nbInputImages = this->GetNumberOfInputs();
   unsigned int inputSize[2];
   inputSize[0] = this->GetNthInput(0)->GetLargestPossibleRegion().GetSize(0);
@@ -883,11 +883,11 @@ void BandMathXImageFilter< TImage >
   Superclass::GenerateOutputInformation();
 
 
-  CheckImageDimensions();         
-  PrepareParsers();               
-  if (globalStatsDetected())      
+  CheckImageDimensions();
+  PrepareParsers();
+  if (globalStatsDetected())
     PrepareParsersGlobStats();
-  OutputsDimensions();          
+  OutputsDimensions();
 
 
   typedef itk::ImageBase< TImage::ImageDimension > ImageBaseType;
@@ -919,7 +919,7 @@ void BandMathXImageFilter< TImage >
 
   for(unsigned int i=0; i<m_NeighDetected.size(); i++)
     if ( m_NeighDetected[i] < this->GetNumberOfInputs() )
-      { 
+      {
 
         // get pointers to the input and output
         typename Superclass::InputImagePointer  inputPtr   =  const_cast<TImage *>( this->GetNthInput(m_NeighDetected[i]) );
