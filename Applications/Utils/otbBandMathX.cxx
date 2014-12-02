@@ -210,12 +210,9 @@ private:
 
     if ( IsParameterEnabled("exp") )
     {
-      std::vector<std::string> stringList = GetParameterStringList("exp");
-      for(int s=0; s<stringList.size(); s++)
-        {
-          otbAppLogINFO( << stringList[s] << std::endl );
-          m_Filter->SetExpression(stringList[s]);
-        }
+      std::string string = GetParameterString("exp");
+      otbAppLogINFO( << string << std::endl );
+      m_Filter->SetExpression(string);
     }
 
     if ( IsParameterEnabled("incontext") )
