@@ -2,8 +2,6 @@ if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 # Common generic tests
 set(OBIA_TESTS1 ${CXX_TEST_PATH}/otbOBIATests1)
-# Tests involving PostGIS interface
-set(OBIA_TESTS2 ${CXX_TEST_PATH}/otbOBIATests2)
 # Tests involving learning
 set(OBIA_TESTS3 ${CXX_TEST_PATH}/otbOBIATests3)
 
