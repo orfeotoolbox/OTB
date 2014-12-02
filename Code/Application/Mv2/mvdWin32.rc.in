@@ -1,0 +1,32 @@
+#include "winver.h"
+
+IDI_ICON1               ICON    DISCARDABLE     "@Monteverdi2_Catalogue_WIN32_ICON@"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION @Monteverdi2_VERSION_MAJOR@,@Monteverdi2_VERSION_MINOR@,@Monteverdi2_VERSION_PATCH@,0
+ PRODUCTVERSION @Monteverdi2_VERSION_MAJOR@,@Monteverdi2_VERSION_MINOR@,@Monteverdi2_VERSION_PATCH@,0
+ FILEFLAGS 0x0L
+ FILEFLAGSMASK 0x3fL
+ FILEOS 0x00040004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "CompanyName", "OrfeoToolbox"
+            VALUE "FileDescription", "Monteverdi 2"
+            VALUE "FileVersion", "@Monteverdi2_VERSION_MAJOR@.@Monteverdi2_VERSION_MINOR@.@Monteverdi2_VERSION_PATCH@.0"
+            VALUE "LegalCopyright", "Copyright (c) 2012-2013 Centre National d'Etudes Spatiales. All rights reserved."
+            VALUE "InternalName", "monteverdi2"
+            VALUE "OriginalFilename", "monteverdi2.exe"
+            VALUE "ProductName", "Monteverdi 2"
+            VALUE "ProductVersion", "@Monteverdi2_VERSION_MAJOR@.@Monteverdi2_VERSION_MINOR@.@Monteverdi2_VERSION_PATCH@.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END

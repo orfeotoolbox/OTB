@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mvd::MainWindow</class>
+ <widget class="QMainWindow" name="mvd::MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Main window</string>
+  </property>
+  <property name="locale">
+   <locale language="C" country="AnyCountry"/>
+  </property>
+  <widget class="QWidget" name="m_CentralWidget"/>
+  <widget class="QMenuBar" name="m_MenuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="action_ImportImage"/>
+    <addaction name="separator"/>
+    <addaction name="action_Quit"/>
+   </widget>
+   <widget class="QMenu" name="menu_Help">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="action_About"/>
+   </widget>
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="action_Preferences"/>
+   </widget>
+   <addaction name="menu_File"/>
+   <addaction name="menu_Edit"/>
+   <addaction name="menu_View"/>
+   <addaction name="menu_Help"/>
+  </widget>
+  <widget class="QStatusBar" name="m_StatusBar"/>
+  <widget class="QToolBar" name="m_ToolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="windowTitle">
+    <string>Main toolbar</string>
+   </property>
+   <property name="toolTip">
+    <string>Import image-file.</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_ImportImage"/>
+   <addaction name="separator"/>
+   <addaction name="action_ZoomIn"/>
+   <addaction name="action_ZoomOut"/>
+   <addaction name="action_ZoomExtent"/>
+   <addaction name="action_ZoomFull"/>
+  </widget>
+  <action name="action_Quit">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+   <property name="toolTip">
+    <string>Quit application.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_ImportImage">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="mvdMainWindow.qrc">
+     <normaloff>:/icons/action_Open_Icon</normaloff>:/icons/action_Open_Icon</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Import image...</string>
+   </property>
+   <property name="iconText">
+    <string>Import image...</string>
+   </property>
+   <property name="toolTip">
+    <string>Import image-file.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_About">
+   <property name="text">
+    <string>&amp;About...</string>
+   </property>
+   <property name="iconText">
+    <string>About...</string>
+   </property>
+   <property name="toolTip">
+    <string>About...</string>
+   </property>
+  </action>
+  <action name="action_Preferences">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Prefere&amp;nces</string>
+   </property>
+  </action>
+  <action name="action_ZoomIn">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="mvdMainWindow.qrc">
+     <normaloff>:/icons/action_ZoomIn_Icon</normaloff>:/icons/action_ZoomIn_Icon</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom in</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl++</string>
+   </property>
+  </action>
+  <action name="action_ZoomOut">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="mvdMainWindow.qrc">
+     <normaloff>:/icons/action_ZoomOut_Icon</normaloff>:/icons/action_ZoomOut_Icon</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="action_ZoomExtent">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="mvdMainWindow.qrc">
+     <normaloff>:/icons/action_ZoomExtent_Icon</normaloff>:/icons/action_ZoomExtent_Icon</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom to image extent</string>
+   </property>
+  </action>
+  <action name="action_ZoomFull">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="mvdMainWindow.qrc">
+     <normaloff>:/icons/action_ZoomFull_Icon</normaloff>:/icons/action_ZoomFull_Icon</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom to full resolution</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="mvdMainWindow.qrc"/>
+ </resources>
+ <connections/>
+</ui>

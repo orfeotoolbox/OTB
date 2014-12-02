@@ -1,0 +1,20 @@
+<RCC>
+  <qresource prefix="/icons">
+    <file>../../../Data/Icons/zoom-1to1.png</file>
+    <file alias="otb">../../../Data/Icons/monteverdi2-32x32.png</file>
+    <file alias="process">../../../Data/Icons/alg.png</file>
+    <file>../../../Data/Icons/execute.png</file>
+    <file>../../../Data/Icons/locked.png</file>
+    <file>../../../Data/Icons/unlocked.png</file>
+    <file alias="forbidden">../../../Data/Icons/forbidden-128x128.png</file>
+    <file alias="action_ZoomIn_Icon">../../../Data/Icons/action-zoomin_24x24.png</file>
+    <file alias="action_ZoomExtent_Icon">../../../Data/Icons/action-zoomfullextent_24x24.png</file>
+    <file alias="action_ZoomOut_Icon">../../../Data/Icons/action-zoomout_24x24.png</file>
+    <file alias="action_ZoomFull_Icon">../../../Data/Icons/action-zoomtolayer_24x24.png</file>
+    <file alias="action_Open_Icon">../../../Data/Icons/document-open_32x32.png</file>
+  </qresource>
+  <qresource prefix="/images">
+    <file alias="application_icon">../../../Data/Icons/monteverdi2-128x128.png</file>
+    <file alias="application_splash">../../../Data/Icons/monteverdi2-splash.png</file>
+  </qresource>
+</RCC>
