@@ -83,9 +83,6 @@ class Monteverdi2_EXPORT RenderableModel :
 // Public methods.
 public:
 
-  /** \brief Constructor. */
-  RenderableModel( QObject* parent =NULL );
-
   /** \brief Destructor. */
   virtual ~RenderableModel();
 
@@ -106,6 +103,9 @@ signals:
 //
 // Protected methods.
 protected:
+
+  /** \brief Constructor. */
+  RenderableModel( QObject* parent =NULL );
 
 //
 // Protected attributes.
