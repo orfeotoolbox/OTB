@@ -25,6 +25,7 @@ set( Common_Core_SOURCES
   mvdQuicklookModel.cxx
   mvdRenderableModel.cxx
   mvdSerializableInterface.cxx
+  mvdStackedLayerModel.cxx
   mvdTextStream.cxx
   mvdTypes.cxx
   mvdVectorImageModel.cxx
@@ -56,6 +57,7 @@ set( Common_Core_HEADERS_MOC
   #mvdMyClass.h
   mvdQuicklookModel.h
   mvdRenderableModel.h
+  mvdStackedLayerModel.h
   # mvdSystemError.h
   # mvdTypes.h
   mvdVectorImageModel.h
