@@ -4,6 +4,7 @@
 # Package CORE (files ordered by lexicographical order i.e. ease of search).
 set( Common_Core_SOURCES
   mvdAbstractImageModel.cxx
+  mvdAbstractLayerModel.cxx
   mvdAbstractModel.cxx
   mvdAbstractWorker.cxx
   mvdBackgroundTask.cxx
@@ -23,7 +24,6 @@ set( Common_Core_SOURCES
   #mvdModifiableInterface.cxx
   #mvdMyClass.cxx
   mvdQuicklookModel.cxx
-  mvdRenderableModel.cxx
   mvdSerializableInterface.cxx
   mvdStackedLayerModel.cxx
   mvdTextStream.cxx
@@ -37,6 +37,7 @@ set( Common_Core_SOURCES
 # Package CORE (files ordered by lexicographical order i.e. ease of search).
 set( Common_Core_HEADERS_MOC
   mvdAbstractImageModel.h
+  mvdAbstractLayerModel.h
   mvdAbstractModel.h
   mvdAbstractWorker.h
   # mvdAlgorithm.h
@@ -56,7 +57,6 @@ set( Common_Core_HEADERS_MOC
   # mvdMath.h
   #mvdMyClass.h
   mvdQuicklookModel.h
-  mvdRenderableModel.h
   mvdStackedLayerModel.h
   # mvdSystemError.h
   # mvdTypes.h

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdRenderableModel_h
-#define __mvdRenderableModel_h
+#ifndef __mvdAbstractLayerModel_h
+#define __mvdAbstractLayerModel_h
 
 //
 // Configuration include.
@@ -65,11 +65,11 @@ namespace mvd
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class RenderableModel
+ * \class AbstractLayerModel
  *
  * \brief WIP.
  */
-class Monteverdi2_EXPORT RenderableModel :
+class Monteverdi2_EXPORT AbstractLayerModel :
     public QObject
 {
 
@@ -84,7 +84,7 @@ class Monteverdi2_EXPORT RenderableModel :
 public:
 
   /** \brief Destructor. */
-  virtual ~RenderableModel();
+  virtual ~AbstractLayerModel();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -105,7 +105,7 @@ signals:
 protected:
 
   /** \brief Constructor. */
-  RenderableModel( QObject* parent =NULL );
+  AbstractLayerModel( QObject* parent =NULL );
 
 //
 // Protected attributes.
@@ -154,4 +154,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdRenderableModel_h
+#endif // __mvdAbstractLayerModel_h

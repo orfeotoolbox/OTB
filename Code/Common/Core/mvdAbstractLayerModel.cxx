@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdRenderableModel.h"
+#include "mvdAbstractLayerModel.h"
 
 
 /*****************************************************************************/
@@ -41,7 +41,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::RenderableModel
+  TRANSLATOR mvd::AbstractLayerModel
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -65,15 +65,15 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-RenderableModel
-::RenderableModel( QObject* parent ) :
+AbstractLayerModel
+::AbstractLayerModel( QObject* parent ) :
   QObject( parent )
 {
 }
 
 /*******************************************************************************/
-RenderableModel
-::~RenderableModel()
+AbstractLayerModel
+::~AbstractLayerModel()
 {
 }
 
