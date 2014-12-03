@@ -23,6 +23,7 @@ set( Common_Core_SOURCES
   #mvdModifiableInterface.cxx
   #mvdMyClass.cxx
   mvdQuicklookModel.cxx
+  mvdRenderableModel.cxx
   mvdSerializableInterface.cxx
   mvdTextStream.cxx
   mvdTypes.cxx
@@ -54,6 +55,7 @@ set( Common_Core_HEADERS_MOC
   # mvdMath.h
   #mvdMyClass.h
   mvdQuicklookModel.h
+  mvdRenderableModel.h
   # mvdSystemError.h
   # mvdTypes.h
   mvdVectorImageModel.h
