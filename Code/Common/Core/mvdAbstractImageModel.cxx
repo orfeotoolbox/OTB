@@ -88,7 +88,7 @@ ENHANCED_BAND_NAMES[ 10 ] = {
 /*******************************************************************************/
 AbstractImageModel
 ::AbstractImageModel( QObject* parent ) :
-  AbstractModel( parent ),
+  AbstractLayerModel( parent ),
   m_NativeLargestRegion(),
   m_Id( -1 ),
   m_CurrentLod( 0 ),

@@ -45,7 +45,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAbstractModel.h"
+#include "mvdAbstractLayerModel.h"
 #include "mvdImageProperties.h"
 #include "mvdTypes.h"
 
@@ -75,7 +75,7 @@ class QuicklookModel;
  *
  */
 class Monteverdi2_EXPORT AbstractImageModel :
-    public AbstractModel
+    public AbstractLayerModel
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/

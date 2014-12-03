@@ -67,7 +67,7 @@ namespace
 /*******************************************************************************/
 AbstractLayerModel
 ::AbstractLayerModel( QObject* parent ) :
-  QObject( parent )
+  AbstractModel( parent )
 {
 }
 

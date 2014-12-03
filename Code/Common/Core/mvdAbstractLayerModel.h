@@ -44,6 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdAbstractModel.h"
 
 
 /*****************************************************************************/
@@ -70,7 +71,7 @@ namespace mvd
  * \brief WIP.
  */
 class Monteverdi2_EXPORT AbstractLayerModel :
-    public QObject
+    public AbstractModel
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/

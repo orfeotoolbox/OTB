@@ -67,7 +67,7 @@ namespace
 /*******************************************************************************/
 StackedLayerModel
 ::StackedLayerModel( QObject* parent ) :
-  QObject( parent )
+  AbstractModel( parent )
 {
 }
 
