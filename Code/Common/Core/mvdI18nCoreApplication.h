@@ -420,10 +420,6 @@ protected:
 
   /**
    */
-  virtual void virtual_InitializeCore() =0;
-
-  /**
-   */
   void InitializeCore( const QString& appName,
 		       const QString& appVersion,
 		       const QString& orgName,
@@ -460,21 +456,6 @@ protected:
 // Private methods.
 private:
 
-  /**
-   */
-  void InitializeLocale();
-
-  /**
-   */
-  void InitializeSettings();
-
-  /**
-   */
-  void LoadAndInstallTranslator( const QString& filename,
-				 const QString& directory =QString(),
-				 const QString& searchDelimiters =QString(),
-				 const QString& suffix =QString() );
-
   //
   // Static methods.
   //
@@ -490,6 +471,25 @@ private:
    * \param message Content of caught message.
    */
   static void HandleQtMessage( QtMsgType type, const char* message );
+
+  /**
+   */
+  virtual void virtual_InitializeCore() =0;
+
+  /**
+   */
+  void InitializeLocale();
+
+  /**
+   */
+  void InitializeSettings();
+
+  /**
+   */
+  void LoadAndInstallTranslator( const QString& filename,
+				 const QString& directory =QString(),
+				 const QString& searchDelimiters =QString(),
+				 const QString& suffix =QString() );
 
 //
 // Private attributes.

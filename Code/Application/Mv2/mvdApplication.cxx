@@ -34,7 +34,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-// #include "Core/mvdDatabaseModel.h"
+#include "Core/mvdStackedLayerModel.h"
 
 //
 #ifdef OTB_WRAP_QT
@@ -133,8 +133,12 @@ Application
   );
 
   //
-  // create the OTBApplications model
+  // Create the OTBApplications model
   OpenApplicationsBrowser();
+
+  //
+  // Set application's model.
+  SetModel( new StackedLayerModel() );
 }
 
 /*******************************************************************************/

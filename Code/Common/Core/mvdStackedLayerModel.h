@@ -59,7 +59,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-
+class AbstractLayerModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -77,14 +77,34 @@ class Monteverdi2_EXPORT StackedLayerModel :
 
   Q_OBJECT;
 
+//
+// Private types
+private:
+  typedef std::vector< AbstractLayerModel * > LayerModelVector;
+
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+
+//
+// Public types.
+public:
+  typedef LayerModelVector::size_type SizeType;
 
 //
 // Public methods.
 public:
 
+  /** \brief Constructor. */
+  StackedLayerModel( QObject* parent =NULL );
+
   /** \brief Destructor. */
   virtual ~StackedLayerModel();
+
+  inline SizeType Count() const;
+  inline void Add( AbstractLayerModel * );
+
+  // void SetCurrent( AbstractLayerModel * );
+
+  // const AbstractLayerModel * GetCurrent() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -104,9 +124,6 @@ signals:
 // Protected methods.
 protected:
 
-  /** \brief Constructor. */
-  StackedLayerModel( QObject* parent =NULL );
-
 //
 // Protected attributes.
 protected:
@@ -117,10 +134,10 @@ protected:
 // Private methods.
 private:
 
-
 //
 // Private attributes.
 private:
+  LayerModelVector m_LayerModels;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -152,6 +169,25 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::Add( AbstractLayerModel * model )
+{
+  m_LayerModels.push_back( model );
+}
+
+/*****************************************************************************/
+inline
+StackedLayerModel::SizeType
+StackedLayerModel
+::Count() const
+{
+  return m_LayerModels.size();
+}
+
 } // end namespace 'mvd'
 
 #endif // __mvdStackedLayerModel_h

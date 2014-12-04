@@ -130,14 +130,9 @@ protected:
   /** Constructor */
   AbstractModel( QObject* parent =NULL );
 
-  /** */
-  // TODO: Provide default empty virtual method body and clean-up
-  // derived-classes.
-  virtual void virtual_BuildModel( void* context =NULL ) =0;
-
   /**
    */
-  virtual void virtual_Save();
+  virtual void virtual_BuildModel( void* context =NULL );
 
 //
 // Protected attributes.
@@ -148,6 +143,10 @@ protected:
 //
 // Private methods.
 private:
+
+  /**
+   */
+  virtual void virtual_Save();
 
 //
 // Private attributes.
