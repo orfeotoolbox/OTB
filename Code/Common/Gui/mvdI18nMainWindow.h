@@ -261,11 +261,12 @@ protected:
 
   /**
    */
-  DatasetModel* ImportImage( const QString& filename,
-                             int width,
-                             int height,
-                             bool forceCreate );
-
+  DatasetModel *
+    ImportDataset( const QString& filename,
+                   int width,
+                   int height,
+                   bool forceCreate );
+  
 
   //
   // QMainWindow overrides.

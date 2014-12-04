@@ -938,7 +938,7 @@ MainWindow
 ::ImportImage( const QString& filename, bool forceCreate )
 {
   DatasetModel* datasetModel =
-    ImportImage(
+    ImportDataset(
       filename,
 #if 0 // USE_OLD_IMAGE_VIEW
       // Seen but left here intentionaly.

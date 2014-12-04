@@ -159,9 +159,12 @@ I18nMainWindow
 }
 
 /*****************************************************************************/
-DatasetModel*
+DatasetModel *
 I18nMainWindow
-::ImportImage( const QString& filename, int width, int height, bool forceCreate )
+::ImportDataset( const QString& filename,
+                 int width,
+                 int height,
+                 bool forceCreate )
 {
   //
   // Background task.
