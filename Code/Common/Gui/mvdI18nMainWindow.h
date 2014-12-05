@@ -62,6 +62,8 @@ namespace mvd
 // Internal class pre-declaration.
 class AbstractModel;
 class DatasetModel;
+class ImageImporter;
+class VectorImageModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -266,7 +268,13 @@ protected:
                    int width,
                    int height,
                    bool forceCreate );
-  
+
+  /**
+   */
+  VectorImageModel *
+    ImportImage( const QString & filename,
+                 int width,
+                 int height );
 
   //
   // QMainWindow overrides.
@@ -301,6 +309,9 @@ private:
 //
 // Private methods.
 private:
+  /**
+   */
+  QObject * Import( ImageImporter * );
 
   /**
    */
@@ -314,6 +325,9 @@ private:
    */
   inline QMessageBox::StandardButton ConfirmSaveQuit( bool canBeCancelled );
 
+  /**
+   */
+  
 //
 // Private attributes.
 private:

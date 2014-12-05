@@ -84,7 +84,7 @@ class Monteverdi2_EXPORT ImageImporter :
 public:
 
   /**
-   * \brief Constructor.
+   * \brief Constructor (dataset-model).
    *
    * \param filename Filename of image to import.
    * \param width Width of the best-fit size or -1 if none.
@@ -93,6 +93,19 @@ public:
    */
   ImageImporter( const QString& filename,
 		 bool isForceCreateEnabled,
+		 int width =-1,
+		 int height =-1,
+		 QObject* parent =NULL );
+
+  /**
+   * \brief Constructor (image-model).
+   *
+   * \param filename Filename of image to import.
+   * \param width Width of the best-fit size or -1 if none.
+   * \param height Height of the best-fit size or -1 if none.
+   * \param isForceCreateEnabled true to force creation of dataset.
+   */
+  ImageImporter( const QString& filename,
 		 int width =-1,
 		 int height =-1,
 		 QObject* parent =NULL );
@@ -141,6 +154,15 @@ protected:
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
+// Private types.
+private:
+  enum ModelType
+  {
+    DATASET,
+    IMAGE,
+  };
+
+//
 // Private methods.
 private:
 
@@ -158,6 +180,9 @@ private:
   /**
    */
   QString m_Filename;
+  /**
+   */
+  ModelType m_ModelType;
   /**
    */
   int m_Width;

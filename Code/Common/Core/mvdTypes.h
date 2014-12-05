@@ -36,6 +36,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <exception>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -312,6 +313,25 @@ typedef QPair< QString, QString > StringPairType;
 /**
  */
 typedef QList< StringPairType > StringPairListType; 
+
+/*******************************************************************************/
+template< typename T >
+inline
+T
+QObjectCast( QObject * object, const QString & string = QString() )
+{
+  T model = qobject_cast< T >( object );
+
+  if( model!=object )
+    {
+    if( !string.isNull() )
+      qWarning() << string;
+
+    throw std::bad_cast();
+    }
+
+  return model;
+}
 
 /*******************************************************************************/
 } // end namespace 'mvd'

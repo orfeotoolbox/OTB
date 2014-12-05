@@ -187,9 +187,9 @@ AbstractModel
 
 /*****************************************************************************/
 template< typename T >
-T*
+T *
 AbstractModel
-::newChildModel( void* context )
+::newChildModel( void * context )
 {
   T* model = new T( this );
 

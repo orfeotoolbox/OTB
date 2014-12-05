@@ -191,6 +191,46 @@ I18nCoreApplication
 }
 
 /*****************************************************************************/
+VectorImageModel *
+I18nCoreApplication
+::LoadImageModel( const QString & filename,
+                  int width,
+                  int height,
+                  QObject * parent )
+{
+  try
+    {
+    VectorImageModel::EnsureValidImage( filename );
+    }
+  catch( ... )
+    {
+    throw;
+    }
+
+  VectorImageModel * imageModel = NULL;
+
+  try
+    {
+    AbstractImageModel::BuildContext context( filename );
+
+    imageModel = new VectorImageModel( parent );
+
+    imageModel->SetFilename( filename, width, height );
+
+    imageModel->BuildModel( &context );
+    }
+  catch( ... )
+    {
+    delete imageModel;
+    imageModel = NULL;
+
+    throw;
+    }
+
+  return imageModel;
+}
+
+/*****************************************************************************/
 DatasetModel*
 I18nCoreApplication
 ::LoadDatasetModel( const QString& imageFilename,

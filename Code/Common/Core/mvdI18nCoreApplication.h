@@ -66,7 +66,7 @@ namespace mvd
 // Internal classes pre-declaration.
 class AbstractModel;
 class DatasetModel;
-
+class VectorImageModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -284,6 +284,15 @@ public:
     QString DatasetPathName( QString& path,
                              QString& name,
                              const QString& imageFilename );
+
+  /**
+   */
+  static
+    VectorImageModel *
+    LoadImageModel( const QString & filename,
+                    int width,
+                    int height,
+                    QObject * parent =NULL );
 
   /**
    * \brief Load a DatasetModel from disk.

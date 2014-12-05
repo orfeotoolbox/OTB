@@ -103,6 +103,10 @@ public:
 
   /**
    */
+  inline QObject * GetObject() const;
+
+  /**
+   */
   template< typename T >
     inline
     T* GetObject() const;
@@ -174,6 +178,15 @@ private slots:
 
 namespace mvd
 {
+/*****************************************************************************/
+inline
+QObject *
+TaskProgressDialog
+::GetObject() const
+{
+  return m_Object;
+}
+
 /*****************************************************************************/
 template< typename T >
 inline

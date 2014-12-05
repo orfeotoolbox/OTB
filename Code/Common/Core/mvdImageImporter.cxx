@@ -40,6 +40,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdDatasetModel.h"
 #include "mvdI18nCoreApplication.h"
+#include "mvdVectorImageModel.h"
 
 namespace mvd
 {
@@ -75,9 +76,25 @@ ImageImporter
 		 QObject* parent ) :
   AbstractWorker( parent ),
   m_Filename( filename ),
+  m_ModelType( DATASET ),
   m_Width( width ),
   m_Height( height ),
   m_IsForceCreateEnabled( isForceCreateEnabled )
+{
+}
+
+/*******************************************************************************/
+ImageImporter
+::ImageImporter( const QString& filename,
+		 int width,
+		 int height,
+		 QObject* parent ) :
+  AbstractWorker( parent ),
+  m_Filename( filename ),
+  m_ModelType( IMAGE ),
+  m_Width( width ),
+  m_Height( height ),
+  m_IsForceCreateEnabled( false )
 {
 }
 
@@ -106,11 +123,29 @@ ImageImporter
 
   emit ProgressRangeChanged( 0, 0 );
 
-  // Load dataset-model.
-  return
-    I18nCoreApplication::LoadDatasetModel(
-      m_Filename, m_Width, m_Height, m_IsForceCreateEnabled
-    );
+  // Load model.
+  switch( m_ModelType )
+    {
+    case DATASET:
+      return
+        I18nCoreApplication::LoadDatasetModel(
+          m_Filename, m_Width, m_Height, m_IsForceCreateEnabled
+        );
+      break;
+
+    case IMAGE:
+      return
+        I18nCoreApplication::LoadImageModel(
+          m_Filename, m_Width, m_Height
+        );
+      break;
+
+    default:
+      assert( false && "Unhandled ImageImporter::ModelType value." );
+      break;
+    }
+
+  return NULL;
 }
 
 /*******************************************************************************/
@@ -118,9 +153,28 @@ QString
 ImageImporter
 ::virtual_GetFirstProgressText() const
 {
-  return
-    tr( "Importing image '%1' as dataset into cache directory..." )
-    .arg( QFileInfo( m_Filename ).fileName() );
+  switch( m_ModelType )
+    {
+    case DATASET:
+      return
+        tr( "Importing image '%1' as dataset into cache directory..." )
+        .arg( QFileInfo( m_Filename ).fileName()
+        );
+      break;
+
+    case IMAGE:
+      return
+        tr( "Loading image '%1'..." )
+        .arg( QFileInfo( m_Filename ).fileName()
+        );
+      break;
+
+    default:
+      assert( false && "Unhandled ImageImporter::ModelType value." );
+      break;
+    }
+
+  return QString();
 }
 
 /*******************************************************************************/

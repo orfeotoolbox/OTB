@@ -137,7 +137,7 @@ protected:
    */
   void ImportImage( const QString& filename, bool forceCreate );
 
-  using I18nMainWindow::ImportDataset;
+  using I18nMainWindow::ImportImage;
 
   //
   // QMainWindow overrides.

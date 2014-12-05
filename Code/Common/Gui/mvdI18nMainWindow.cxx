@@ -39,6 +39,7 @@
 #include "Core/mvdDatabaseConnection.h"
 #include "Core/mvdDatasetModel.h"
 #include "Core/mvdImageImporter.h"
+#include "Core/mvdVectorImageModel.h"
 #include "Gui/mvdAboutDialog.h"
 #include "Gui/mvdI18nApplication.h"
 #include "Gui/mvdTaskProgressDialog.h"
@@ -166,17 +167,52 @@ I18nMainWindow
                  int height,
                  bool forceCreate )
 {
+  return
+    QObjectCast< DatasetModel * >(
+      Import(
+        // New dataset-importer worker.
+        // It will be auto-deleted by background-task.
+        new ImageImporter(
+          filename,
+          forceCreate,
+          width, height
+        )
+      ),
+      "QObject is not a DatasetModel."
+    );
+}
+
+/*****************************************************************************/
+VectorImageModel *
+I18nMainWindow
+::ImportImage( const QString& filename,
+               int width,
+               int height )
+{
+  return
+    QObjectCast< VectorImageModel * >(
+      Import(
+        // New dataset-importer worker.
+      // It will be auto-deleted by background-task.
+        new ImageImporter(
+          filename,
+          width, height
+        )
+      ),
+      "QObject is not a VectorImageModel."
+    );
+}
+
+
+/*****************************************************************************/
+QObject *
+I18nMainWindow
+::Import( ImageImporter * importer )
+{
+  assert( importer );
+
   //
   // Background task.
-
-  // New image-importer worker.
-  // It will be auto-deleted by background-task.
-  ImageImporter* importer =
-    new ImageImporter(
-      filename,
-      forceCreate,
-      width, height
-    );
 
   // New background-task running worker.
   // Will be self auto-deleted when worker has finished.
@@ -208,16 +244,16 @@ I18nMainWindow
   // MANTIS-921 (then, process result).
   if( button!=QDialog::Accepted )
     {
-    assert( progress.GetObject< DatasetModel >()==NULL );
+    assert( progress.GetObject()==NULL );
 
     return NULL;
     }
-  
+
   // qDebug() << "datasetModel:" << progress.GetObject< DatasetModel >();
 
-  assert( progress.GetObject< DatasetModel >()!=NULL );
+  assert( progress.GetObject()!=NULL );
 
-  return progress.GetObject< DatasetModel >();
+  return progress.GetObject();
 }
 
 /*****************************************************************************/

@@ -49,6 +49,7 @@
 // #include "Core/mvdDatabaseModel.h"
 // #include "Core/mvdDatasetModel.h"
 #include "Core/mvdQuicklookModel.h"
+#include "Core/mvdStackedLayerModel.h"
 #include "Core/mvdVectorImageModel.h"
 //
 #include "Gui/mvdApplicationsToolBox.h"
@@ -951,6 +952,22 @@ void
 MainWindow
 ::ImportImage( const QString& filename, bool forceCreate )
 {
+  VectorImageModel * imageModel = ImportImage( filename, -1, -1 );
+  assert( imageModel );
+
+  assert( Application::Instance() );
+  assert(
+    Application::Instance()->GetModel()==
+    Application::Instance()->GetModel< StackedLayerModel >()
+  );
+
+  StackedLayerModel* stackedLayerModel =
+    Application::Instance()->GetModel< StackedLayerModel >();
+
+  assert( stackedLayerModel!=NULL );
+
+  stackedLayerModel->Add( imageModel );
+
   /*
   DatasetModel* datasetModel =
     ImportImage(
