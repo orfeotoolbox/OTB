@@ -334,7 +334,7 @@ I18nMainWindow
 /*****************************************************************************/
 void
 I18nMainWindow
-::on_action_About_activated()
+::on_action_About_triggered()
 {
   AboutDialog aboutDialog( this );
 
