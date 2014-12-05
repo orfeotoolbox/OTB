@@ -68,6 +68,8 @@ private:
     SetParameterDescription( "foutpos", " The spatial image output. Spatial image output is a displacement map (pixel position after convergence).");
     MandatoryOff("foutpos");
 
+    AddRAMParameter();
+
     AddParameter(ParameterType_Int, "spatialr", "Spatial radius");
     SetParameterDescription("spatialr", "Spatial radius of the neighborhood.");
     SetDefaultParameterInt("spatialr", 5);
