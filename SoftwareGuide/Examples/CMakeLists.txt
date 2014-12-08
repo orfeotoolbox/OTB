@@ -277,7 +277,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/MeanShiftSegmentationFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/HillShadingExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathFilterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathFilterXExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathXImageFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration1.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration2.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration5.cxx
