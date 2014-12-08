@@ -50,6 +50,16 @@ else()
     list(APPEND ${proj}_DEPENDENCIES GEOS)
   endif()
   
+  if(USE_SYSTEM_JPEG)
+    set(OSSIM_SB_JPEG_CONFIG)
+  else()
+    set(OSSIM_SB_JPEG_CONFIG 
+      -DJPEG_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include
+      -DJPEG_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libjpeg.so
+      )
+    list(APPEND ${proj}_DEPENDENCIES JPEG)
+  endif()
+  
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "http://download.osgeo.org/ossim/source/latest/ossim-1.8.18-1.tar.gz"
@@ -68,6 +78,7 @@ else()
       ${OSSIM_SB_TIFF_CONFIG}
       ${OSSIM_SB_GEOTIFF_CONFIG}
       ${OSSIM_SB_GEOS_CONFIG}
+      ${OSSIM_SB_JPEG_CONFIG}
       -DBUILD_OSSIMPREDATOR:BOOL=OFF
       -DBUILD_OSSIMPLANET:BOOL=OFF
       -DBUILD_OSSIMPLANETQT:BOOL=OFF
@@ -75,6 +86,7 @@ else()
       -DBUILD_OSSIMQT4:BOOL=OFF
       -DBUILD_OSSIMGUI:BOOL=OFF
       -DBUILD_OMS:BOOL=OFF
+      -DBUILD_WMS:BOOL=OFF
       -DCMAKE_MODULE_PATH:PATH=${OSSIM_SB_SRC}/ossim_package_support/cmake/CMakeModules
     PATCH_COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/ossim_patch_1.cmake
     DEPENDS ${${proj}_DEPENDENCIES}
