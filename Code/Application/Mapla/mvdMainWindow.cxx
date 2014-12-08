@@ -172,7 +172,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::on_action_Preferences_activated()
+::on_action_Preferences_trigerred()
 {
 #if 0
   PreferencesDialog prefDialog( this );

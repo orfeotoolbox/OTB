@@ -131,7 +131,7 @@ private slots:
 
   /**
    * \brief Qt auto-connected slot which is called when datasetPathButton menu
-   * action is activated.
+   * action is pushed.
    */
   void on_buttonBox_accepted();
 
