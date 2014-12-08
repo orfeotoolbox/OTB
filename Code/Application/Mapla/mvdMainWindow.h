@@ -199,9 +199,9 @@ private:
 private slots:
   /**
    * \brief Qt auto-connected slot which is called when
-   * 'File/Preferences' menu action is activated.
+   * 'File/Preferences' menu action is trigerred.
    */
-  void on_action_Preferences_activated();
+  void on_action_Preferences_triggered();
 };
 
 } // end namespace 'mvd'
