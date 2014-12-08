@@ -12,6 +12,7 @@ set(CMAKE_MODULE_PATH
 include(ExternalProject)
 
 # Call external projects
+include(External_jpeg)
 include(External_SQLite)
 include(External_zlib)
 include(External_libtiff)

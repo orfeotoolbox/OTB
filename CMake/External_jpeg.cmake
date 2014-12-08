@@ -1,0 +1,59 @@
+message(STATUS "Setup libjpeg...")
+
+set(proj JPEG)
+
+set(DEFAULT_USE_SYSTEM_JPEG  OFF)
+
+option(USE_SYSTEM_JPEG "  Use a system build of libjpeg." ${DEFAULT_USE_SYSTEM_JPEG})
+mark_as_advanced(USE_SYSTEM_JPEG)
+
+if(USE_SYSTEM_JPEG)
+  message(STATUS "  Using libjpeg system version")
+else()
+  set(${proj}_DEPENDENCIES)
+  set(JPEG_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
+  set(JPEG_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  
+  # DEBUG
+  message(STATUS "System name : ${CMAKE_SYSTEM_NAME}")
+  message(STATUS "System ver  : ${CMAKE_SYSTEM_VERSION}")
+  message(STATUS "System proc : ${CMAKE_SYSTEM_PROCESSOR}")
+  
+  if(WIN32)
+    # TODO : use nmake
+  else()
+    
+    ExternalProject_Add(${proj}
+      PREFIX ${proj}
+      URL "http://sourceforge.net/projects/libjpeg/files/libjpeg/6b/jpegsrc.v6b.tar.gz/download"
+      URL_MD5 dbd5f3b47ed13132f04c685d608a7547
+      BINARY_DIR ${JPEG_SB_BUILD_DIR}
+      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      PATCH_COMMAND
+        ${CMAKE_COMMAND} -E copy
+        ${CMAKE_SOURCE_DIR}/patches_JPEG/configure
+        ${JPEG_SB_SRC}/
+      CONFIGURE_COMMAND
+        LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
+        ${JPEG_SB_BUILD_DIR}/configure
+        --build=${CMAKE_SYSTEM_PROCESSOR}-linux-gnu
+        --host=${CMAKE_SYSTEM_PROCESSOR}-linux-gnu
+        --prefix=${CMAKE_INSTALL_PREFIX}
+        --mandir=${CMAKE_INSTALL_PREFIX}/share/man
+        --enable-shared=yes
+      BUILD_COMMAND make
+      INSTALL_COMMAND make install-lib
+      DEPENDS ${${proj}_DEPENDENCIES}
+      )
+    
+    ExternalProject_Add_Step(${proj} copy_source
+      COMMAND ${CMAKE_COMMAND} -E copy_directory 
+        ${JPEG_SB_SRC} ${JPEG_SB_BUILD_DIR}
+      DEPENDEES patch update
+      DEPENDERS configure
+      )
+    
+  endif()
+  
+  message(STATUS "  Using libjpeg SuperBuild version")
+endif()
