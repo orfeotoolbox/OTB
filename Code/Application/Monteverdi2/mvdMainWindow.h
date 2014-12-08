@@ -339,7 +339,7 @@ private slots:
    * \brief Qt auto-connected slot which is called when
    * 'File/Preferences' menu action is trigerred.
    */
-  void on_action_Preferences_trigerred();
+  void on_action_Preferences_triggered();
 
   /**
    * \brief Qt auto-connected slot which is called when zoom-in button

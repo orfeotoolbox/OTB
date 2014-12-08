@@ -1058,7 +1058,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::on_action_Preferences_trigerred()
+::on_action_Preferences_triggered()
 {
   PreferencesDialog prefDialog( this );
 
