@@ -19,7 +19,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {qb_BandMath-res1.tif} {qb_BandMath-res2.tif} {context.txt}
+//    OUTPUTS: {qb_BandMath-res1.tif}, {qb_BandMath-res2.tif}, {context.txt}
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
@@ -170,7 +170,7 @@ int main( int argc, char* argv[])
 // Figure~\ref{fig:BandMathXImageFilter} shows the result of our high-pass filter.
 // \begin{figure}
 // \center
-// \includegraphics[width=0.45\textwidth]{qb_ExtractRoad.eps}
+// \includegraphics[width=0.45\textwidth]{qb_ExtractRoad_pretty.eps}
 // \includegraphics[width=0.45\textwidth]{qb_BandMath-res1.eps}
 // \itkcaption[Band Math X]{From left to right:
 // Original image, high-pass filter output.}
@@ -259,7 +259,7 @@ int main( int argc, char* argv[])
 // Figure~\ref{fig:BandMathXImageFilter2} shows the result of the second filter.
 // \begin{figure}
 // \center
-// \includegraphics[width=0.45\textwidth]{qb_ExtractRoad.eps}
+// \includegraphics[width=0.45\textwidth]{qb_ExtractRoad_pretty.eps}
 // \includegraphics[width=0.45\textwidth]{qb_BandMath-res2.eps}
 // \itkcaption[Band Math X]{From left to right:
 // Original image, second filter output.}
