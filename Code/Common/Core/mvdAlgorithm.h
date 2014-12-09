@@ -555,6 +555,8 @@ inline
 QString
 ToQString< float >( const float& val )
 {
+  assert( !std::isnan( val ) );
+
   QString valf;
 
   // See IEEE-754
@@ -590,6 +592,8 @@ inline
 QString
 ToQString< double >( const double& val )
 {
+  assert( !std::isnan( val ) );
+
   QString vald;
 
   // See IEEE-754
