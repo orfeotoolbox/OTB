@@ -14,7 +14,7 @@ else()
   set(GEOTIFF_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(GEOTIFF_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
-  # handle dependencies : TIFF Proj4 Zlib
+  # handle dependencies : TIFF Proj4 Zlib Jpeg
   if(USE_SYSTEM_LIBTIFF)
     set(GEOTIFF_SB_TIFF_CONFIG)
   else()
@@ -36,6 +36,12 @@ else()
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
   
+  if(USE_SYSTEM_JPEG)
+    set(GEOTIFF_SB_JPEG_CONFIG)
+  else()
+    set(GEOTIFF_SB_JPEG_CONFIG --with-jpeg=${CMAKE_INSTALL_PREFIX})
+    list(APPEND ${proj}_DEPENDENCIES JPEG)
+  endif()
   
   if(WIN32)
     # TODO : use nmake
@@ -51,6 +57,7 @@ else()
         ${GEOTIFF_SB_BUILD_DIR}/configure
         --prefix=${CMAKE_INSTALL_PREFIX}
         --enable-static=no
+        ${GEOTIFF_SB_JPEG_CONFIG}
         ${GEOTIFF_SB_TIFF_CONFIG}
         ${GEOTIFF_SB_PROJ_CONFIG}
         ${GEOTIFF_SB_ZLIB_CONFIG}

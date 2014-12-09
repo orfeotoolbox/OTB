@@ -44,7 +44,8 @@ else()
   if(USE_SYSTEM_GEOS)
     set(OSSIM_SB_GEOS_CONFIG)
   else()
-    set(OSSIM_SB_GEOS_CONFIG 
+    set(OSSIM_SB_GEOS_CONFIG
+      -DGEOS_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libgeos.so
       -DGEOS_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include/geos
       )
     list(APPEND ${proj}_DEPENDENCIES GEOS)
