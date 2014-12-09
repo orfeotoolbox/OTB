@@ -34,10 +34,10 @@
 //  The first step for performing reading and writing is to include the
 //  following headers.
 //
-//  \index{otb::ImageFileReader|textbf}
+//  \index{otb::ImageFileReader}
 //  \index{otb::ImageFileReader!header}
 //
-//  \index{otb::ImageFileWriter|textbf}
+//  \index{otb::ImageFileWriter}
 //  \index{otb::ImageFileWriter!header}
 //
 //  Software Guide : EndLatex
