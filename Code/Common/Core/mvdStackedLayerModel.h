@@ -99,12 +99,23 @@ public:
   /** \brief Destructor. */
   virtual ~StackedLayerModel();
 
-  inline SizeType Count() const;
+  inline const AbstractLayerModel * operator[]( SizeType ) const;
+  inline AbstractLayerModel * operator[]( SizeType );
+
   inline void Add( AbstractLayerModel * );
 
-  // void SetCurrent( AbstractLayerModel * );
+  inline SizeType Count() const;
 
-  // const AbstractLayerModel * GetCurrent() const;
+  inline const AbstractLayerModel * Front() const;
+  inline AbstractLayerModel * Front();
+
+  const AbstractLayerModel * GetCurrent() const;
+  AbstractLayerModel * GetCurrent();
+
+  inline bool IsEmpty() const;
+
+  inline void SetCurrent( SizeType i );
+  inline void SetCurrent( AbstractLayerModel * );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -117,6 +128,8 @@ public slots:
 //
 // Signals.
 signals:
+  void AboutToChangeSelectedLayerModel( const AbstractLayerModel * );
+  void SelectedLayerModelChanged( AbstractLayerModel * );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -138,6 +151,7 @@ private:
 // Private attributes.
 private:
   LayerModelVector m_LayerModels;
+  SizeType m_Current;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -172,6 +186,27 @@ namespace mvd
 
 /*****************************************************************************/
 inline
+const AbstractLayerModel *
+StackedLayerModel
+::operator[]( SizeType i ) const
+{
+  return const_cast< StackedLayerModel * >( this )->operator[]( i );
+}
+
+/*****************************************************************************/
+inline
+AbstractLayerModel *
+StackedLayerModel
+::operator[]( SizeType i )
+{
+  return
+    i>=m_LayerModels.size()
+    ? NULL
+    : m_LayerModels[ i ];
+}
+
+/*****************************************************************************/
+inline
 void
 StackedLayerModel
 ::Add( AbstractLayerModel * model )
@@ -186,6 +221,85 @@ StackedLayerModel
 ::Count() const
 {
   return m_LayerModels.size();
+}
+
+/*****************************************************************************/
+inline
+AbstractLayerModel *
+StackedLayerModel
+::Front()
+{
+  return m_LayerModels.front();
+}
+
+/*****************************************************************************/
+inline
+const AbstractLayerModel *
+StackedLayerModel
+::Front() const
+{
+  return m_LayerModels.front();
+}
+
+/*****************************************************************************/
+inline
+AbstractLayerModel *
+StackedLayerModel
+::GetCurrent()
+{
+  return ( *this )[ m_Current ];
+}
+
+/*****************************************************************************/
+inline
+const AbstractLayerModel *
+StackedLayerModel
+::GetCurrent() const
+{
+  return ( *this )[ m_Current ];
+}
+
+/*****************************************************************************/
+inline
+bool
+StackedLayerModel
+::IsEmpty() const
+{
+  return m_LayerModels.empty();
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::SetCurrent( AbstractLayerModel * layer )
+{
+  SizeType current = m_LayerModels.size();
+
+  for( SizeType i=0; i<m_LayerModels.size(); ++i )
+    if( m_LayerModels[ i ]==layer )
+      {
+      current = i;
+      break;
+      }
+
+  SetCurrent( current );
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::SetCurrent( SizeType i )
+{
+  if( i==m_Current )
+    return;
+
+  emit AboutToChangeSelectedLayerModel( m_LayerModels[ i ] );
+
+  m_Current = i;
+
+  emit SelectedLayerModelChanged( GetCurrent() );
 }
 
 } // end namespace 'mvd'

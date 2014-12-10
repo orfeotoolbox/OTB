@@ -970,6 +970,8 @@ MainWindow
 
   imageModel->setParent( stackedLayerModel );
 
+  stackedLayerModel->SetCurrent( imageModel );
+
   /*
   DatasetModel* datasetModel =
     ImportImage(
@@ -1015,7 +1017,6 @@ void
 MainWindow
 ::closeEvent( QCloseEvent* event )
 {
-  assert( Application::Instance() );
   /*
   assert(
     Application::Instance()->GetModel()==
@@ -1115,6 +1116,51 @@ MainWindow
 {
   qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
+
+  // Force to disconnect previously selected layer-model before
+  // stacked-layer model is disconnected.
+  //
+  // If there was no previously set layer-model, this will cause GUI
+  // views to be disabled.
+  //
+  // N.B.: This will cause UI controllers to disable widgets.
+  OnAboutToChangeSelectedLayerModel( NULL );
+
+  assert( Application::Instance() );
+  assert( Application::Instance()->GetModel()==
+          Application::Instance()->GetModel< StackedLayerModel >() );
+
+  StackedLayerModel * stackedLayerModel =
+    Application::Instance()->GetModel< StackedLayerModel >();
+
+  // Exit, if there were no previously set database model.
+  if( stackedLayerModel==NULL )
+    return;
+
+  // Disonnect stacked-layer model from main-window when selected
+  // layer-model is about to change.
+  QObject::disconnect(
+    stackedLayerModel,
+    SIGNAL( AboutToChangeSelectedLayerModel( const AbstractLayerModel * ) ),
+    // to:
+    this,
+    SLOT( OnAboutToChangeSelectedLayerModel( const AbstractLayerModel * ) )
+  );
+
+  // Disconnect database-model to main-window when selected
+  // dataset-model has been changed.
+  QObject::disconnect(
+    stackedLayerModel,
+    SIGNAL( SelectedLayerModelChanged( AbstractLayerModel * ) ),
+    // to:
+    this,
+    SLOT( OnSelectedLayerModelChanged( AbstractLayerModel * ) )
+  );
+
+  //
+  //
+  //
+
   /*
   SetControllerModel( m_DatabaseBrowserDock, NULL );
 
@@ -1167,6 +1213,44 @@ MainWindow
 {
   qDebug() << this << "::OnModelChanged(" << model << ")";
 
+  assert( model==qobject_cast< StackedLayerModel * >( model ) );
+
+  StackedLayerModel * stackedLayerModel =
+    qobject_cast< StackedLayerModel * >( model );
+
+  if( stackedLayerModel==NULL )
+    return;
+
+  // Connect stacked-layer model to main-window when selected layer-model
+  // is about to change.
+  QObject::connect(
+    stackedLayerModel,
+    SIGNAL( AboutToChangeSelectedLayerModel( const AbstractLayerModel * ) ),
+    // to:
+    this,
+    SLOT( OnAboutToChangeSelectedLayerModel( const AbstractLayerModel * ) )
+  );
+
+  // Connect stacked-layer -model to main-window when selected layer-model
+  // has been changed.
+  QObject::connect(
+    stackedLayerModel,
+    SIGNAL( SelectedLayerModelChanged( AbstractLayerModel * ) ),
+    // to:
+    this,
+    SLOT( OnSelectedLayerModelChanged( AbstractLayerModel * ) )
+  );
+
+  // Force to connect selected layer-model after stacked-layer model
+  // is connected.
+  //
+  // N.B.: This will cause UI controllers to disable widgets.
+  OnSelectedLayerModelChanged( stackedLayerModel->GetCurrent() );
+
+  //
+  //
+  //
+
   /*
   SetControllerModel( m_DatabaseBrowserDock, model );
 
@@ -1202,6 +1286,97 @@ MainWindow
   // N.B.: This will cause UI controllers to disable widgets.
   OnSelectedDatasetModelChanged( databaseModel->GetSelectedDatasetModel() );
   */
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnAboutToChangeSelectedLayerModel( const AbstractLayerModel * model )
+{
+  qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
+
+  //
+  // CONTROLLERS.
+  //
+
+  //
+  // Unset model from controllers.
+  //
+  // N.B.: This step must be done *before* disconnecting signals &
+  // slots between model(s) and view(s).
+  //
+  // See also, ::OnSelectedLayerModel() changed.
+
+  // Unset dataset-model from dataset-properties controller.
+  // SetControllerModel( m_DatasetPropertiesDock, NULL );
+
+  // Unset image-model from color-dynamics controller.
+  SetControllerModel( m_ColorDynamicsDock, NULL );
+
+  // Unset image-model from color-setup controller.
+  SetControllerModel( m_ColorSetupDock, NULL );
+
+  // Unset histogram-model from histogram controller.
+  SetControllerModel( m_HistogramDock, NULL );
+
+  // Unset stacked-layer model from stacked-layer controller.
+  // SetControllerModel( m_StackedLayerDock, NULL );
+
+  //
+  // VIEWS.
+  //
+
+  //
+  // MODEL(s).
+  //
+  assert( Application::Instance() );
+  assert( Application::Instance()->GetModel()==
+          Application::Instance()->GetModel< StackedLayerModel >() );
+
+  const StackedLayerModel * stackedLayerModel =
+    Application::Instance()->GetModel< StackedLayerModel >();
+
+  if( !stackedLayerModel )
+    return;
+  
+  const AbstractLayerModel * layerModel = stackedLayerModel->GetCurrent();
+
+  if( !layerModel )
+    return;
+
+  if( layerModel->metaObject()->className()==
+      VectorImageModel::staticMetaObject.className() )
+    {
+    // Disconnect previously selected image-model from view.
+    QObject::disconnect(
+      layerModel,
+      SIGNAL( SettingsUpdated() ),
+      // from:
+      m_ImageView,
+      SLOT( updateGL()  )
+    );
+
+    // Disconnect previously selected quicklook-model from view.
+    // TODO: Remove quicklook temporary hack by better design.
+    QObject::disconnect(
+      layerModel,
+      SIGNAL( SettingsUpdated() ),
+      // from:
+      m_QuicklookViewDock->widget(),
+      SLOT( updateGL()  )
+    );
+    }
+
+  else
+    {
+    assert( false && "Unhandled AbstractLayerModel derived-type." );
+    }
+
+
+  // TODO: If selected layer-model is a VectorImageModel, disconnect
+  // SettingsUpdated() from updateGL().
+
+  // TODO: Disconnect status-bar.
 }
 
 /*****************************************************************************/
@@ -1335,6 +1510,95 @@ MainWindow
   DisconnectPixelDescriptionWidget( datasetModel );
 }
 */
+
+/*****************************************************************************/
+void
+MainWindow
+::OnSelectedLayerModelChanged( AbstractLayerModel * model )
+{
+  qDebug() << this << "::OnSelectedDatasetModelChanged(" << model << ")";
+
+  //
+  // VIEWS.
+  //
+
+  //
+  // MODEL(s).
+  //
+
+  assert( Application::Instance() );
+  assert( Application::Instance()->GetModel()==
+          Application::Instance()->GetModel< StackedLayerModel >() );
+
+  StackedLayerModel * stackedLayerModel =
+    Application::Instance()->GetModel< StackedLayerModel >();
+
+  if( !stackedLayerModel )
+    return;
+
+  AbstractLayerModel * layerModel = stackedLayerModel->GetCurrent();
+
+  if( !layerModel )
+    return;
+
+  if( layerModel->metaObject()->className()==
+      VectorImageModel::staticMetaObject.className() )
+    {
+    //
+    // SAT: Using m_TabWidget->index( 0 ) or m_ImageView is equivalent
+    // since Qt may use signal & slot names to connect (see MOC .cxx
+    // files). Thus, using m_ImageView saves one indirection call.
+    QObject::connect(
+      layerModel,
+      SIGNAL( SettingsUpdated() ),
+      // to:
+      m_ImageView,
+      SLOT( updateGL()  )
+    );
+
+    QObject::connect(
+      layerModel,
+      SIGNAL( SettingsUpdated() ),
+      // to:
+      m_QuicklookViewDock->widget(),
+      SLOT( updateGL()  )
+    );
+    }
+
+  //
+  // CONTROLLERS.
+  //
+
+  //
+  // Connect image-model controllers.
+  //
+  // N.B.: This step *must* be done after signals and slots between
+  // model(s) and view(s) have been connected (because when model is
+  // assigned to controller, widgets/view are reset and emit
+  // refreshing signals).
+  //
+  // See also: OnAboutToChangeLayerModel().
+
+  // Assign dataset-model to dataset-properties controller.
+  // SetControllerModel( m_DatasetPropertiesDock, model );
+
+  // Assign image-model to color-dynamics controller.
+  SetControllerModel( m_ColorDynamicsDock, layerModel );
+
+  // Assign image-model to color-setup controller.
+  SetControllerModel( m_ColorSetupDock, layerModel );
+
+  // Assign histogram-model to histogram controller.
+  SetControllerModel( m_HistogramDock, layerModel );
+
+  //
+  // TOOLBAR.
+  //
+  m_UI->action_ZoomIn->setEnabled( layerModel!=NULL );
+  m_UI->action_ZoomOut->setEnabled( layerModel!=NULL );
+  m_UI->action_ZoomExtent->setEnabled( layerModel!=NULL );
+  m_UI->action_ZoomFull->setEnabled( layerModel!=NULL );
+}
 
 /*****************************************************************************/
 /*

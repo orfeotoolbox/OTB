@@ -63,7 +63,7 @@ namespace mvd
 //
 // Internal class pre-declaration.
 // Core
-// class DatasetModel;
+class AbstractLayerModel;
 // Gui
 class FilenameDragAndDropEventFilter;
 class ImageViewWidget;
@@ -156,11 +156,11 @@ protected slots:
 
   /**
    */
-  void OnAboutToChangeModel( const AbstractModel* );
+  void OnAboutToChangeModel( const AbstractModel * );
 
   /**
    */
-  void OnModelChanged( AbstractModel* );
+  void OnModelChanged( AbstractModel * );
 
   /**
    */
@@ -169,6 +169,14 @@ protected slots:
   /**
    */
   // void OnSelectedDatasetModelChanged( DatasetModel* );
+
+  /**
+   */
+  void OnAboutToChangeSelectedLayerModel( const AbstractLayerModel * );
+
+  /**
+   */
+  void OnSelectedLayerModelChanged( AbstractLayerModel * );
 
   /**
    */
