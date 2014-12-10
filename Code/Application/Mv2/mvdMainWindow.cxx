@@ -968,6 +968,8 @@ MainWindow
 
   stackedLayerModel->Add( imageModel );
 
+  imageModel->setParent( stackedLayerModel );
+
   /*
   DatasetModel* datasetModel =
     ImportImage(
@@ -1033,8 +1035,17 @@ MainWindow
 }
 
 /*****************************************************************************/
-/* SLOTS                                                                     */
+void
+MainWindow
+::virtual_InitializeUI()
+{
+  assert( Application::Instance() );
 
+  Application::Instance()->SetModel( new StackedLayerModel() ); 
+}
+
+/*****************************************************************************/
+/* SLOTS                                                                     */
 /*****************************************************************************/
 void
 MainWindow
@@ -1102,7 +1113,7 @@ void
 MainWindow
 ::OnAboutToChangeModel( const AbstractModel* model )
 {
-  // qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
+  qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
   /*
   SetControllerModel( m_DatabaseBrowserDock, NULL );
@@ -1154,7 +1165,7 @@ void
 MainWindow
 ::OnModelChanged( AbstractModel* model )
 {
-  // qDebug() << this << "::OnModelChanged(" << model << ")";
+  qDebug() << this << "::OnModelChanged(" << model << ")";
 
   /*
   SetControllerModel( m_DatabaseBrowserDock, model );

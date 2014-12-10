@@ -259,16 +259,23 @@ AbstractImageModel
   //
   // Build quicklook before histogram because histogram calculation is
   // based on quicklook image.
-  newChildModel< QuicklookModel >( context );
+  if( !buildContext->m_Quicklook.isEmpty() )
+    newChildModel< QuicklookModel >( context );
 
   //
   // HISTOGRAM.
-  HistogramModel::BuildContext histogramContext(
-    buildContext->IsBeingStored(),
-    buildContext->m_Histogram
-  );
+  if( buildContext->m_Histogram.isEmpty() )
+    newChildModel< HistogramModel >();
 
-  newChildModel< HistogramModel >( &histogramContext );
+  else
+    {
+    HistogramModel::BuildContext histogramContext(
+      buildContext->IsBeingStored(),
+      buildContext->m_Histogram
+    );
+
+    newChildModel< HistogramModel >( &histogramContext );
+    }
 }
 
 /*******************************************************************************/

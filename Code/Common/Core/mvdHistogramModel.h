@@ -485,6 +485,10 @@ HistogramModel
   assert( imageProperties!=NULL );
 
   TImageModel* imageModel = parentImageModel->GetQuicklookModel();
+
+  if( imageModel==NULL )
+    imageModel = qobject_cast< TImageModel * >( parentImageModel );
+
   assert( imageModel!=NULL );
 
   CountType components = imageModel->ToImage()->GetNumberOfComponentsPerPixel();

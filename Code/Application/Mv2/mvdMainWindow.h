@@ -257,6 +257,8 @@ private:
 
   virtual void virtual_ConnectUI();
 
+  virtual void virtual_InitializeUI();
+
 //
 // Private attributes.
 private:

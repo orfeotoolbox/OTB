@@ -135,10 +135,6 @@ Application
   //
   // Create the OTBApplications model
   OpenApplicationsBrowser();
-
-  //
-  // Set application's model.
-  SetModel( new StackedLayerModel() );
 }
 
 /*******************************************************************************/

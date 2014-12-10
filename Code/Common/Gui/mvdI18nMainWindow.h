@@ -323,6 +323,10 @@ private:
 
   /**
    */
+  virtual void virtual_InitializeUI();
+
+  /**
+   */
   inline QMessageBox::StandardButton ConfirmSaveQuit( bool canBeCancelled );
 
   /**
