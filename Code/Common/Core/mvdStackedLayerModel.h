@@ -81,6 +81,8 @@ class Monteverdi2_EXPORT StackedLayerModel :
 // Private types
 private:
   typedef std::vector< AbstractLayerModel * > LayerModelVector;
+  // typedef std::map< std::string, AbstractLayerModel * > LayerModelMap;
+  // typedef std::list< std::string > KeyList;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
@@ -106,8 +108,10 @@ public:
 
   inline SizeType Count() const;
 
+  /*
   inline const AbstractLayerModel * Front() const;
   inline AbstractLayerModel * Front();
+  */
 
   const AbstractLayerModel * GetCurrent() const;
   AbstractLayerModel * GetCurrent();
@@ -130,6 +134,8 @@ public slots:
 signals:
   void AboutToChangeSelectedLayerModel( const AbstractLayerModel * );
   void SelectedLayerModelChanged( AbstractLayerModel * );
+  void StackOrderChanged();
+  void StackContentChanged();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -190,7 +196,7 @@ const AbstractLayerModel *
 StackedLayerModel
 ::operator[]( SizeType i ) const
 {
-  return const_cast< StackedLayerModel * >( this )->operator[]( i );
+  return m_LayerModels[ i ];
 }
 
 /*****************************************************************************/
@@ -199,10 +205,7 @@ AbstractLayerModel *
 StackedLayerModel
 ::operator[]( SizeType i )
 {
-  return
-    i>=m_LayerModels.size()
-    ? NULL
-    : m_LayerModels[ i ];
+  return m_LayerModels[ i ];
 }
 
 /*****************************************************************************/
@@ -212,6 +215,8 @@ StackedLayerModel
 ::Add( AbstractLayerModel * model )
 {
   m_LayerModels.push_back( model );
+
+  emit StackContentChanged();
 }
 
 /*****************************************************************************/
@@ -224,6 +229,7 @@ StackedLayerModel
 }
 
 /*****************************************************************************/
+/*
 inline
 AbstractLayerModel *
 StackedLayerModel
@@ -231,8 +237,10 @@ StackedLayerModel
 {
   return m_LayerModels.front();
 }
+*/
 
 /*****************************************************************************/
+/*
 inline
 const AbstractLayerModel *
 StackedLayerModel
@@ -240,6 +248,7 @@ StackedLayerModel
 {
   return m_LayerModels.front();
 }
+*/
 
 /*****************************************************************************/
 inline
@@ -247,7 +256,10 @@ AbstractLayerModel *
 StackedLayerModel
 ::GetCurrent()
 {
-  return ( *this )[ m_Current ];
+  return
+    m_Current>=m_LayerModels.size()
+    ? NULL
+    : ( *this )[ m_Current ];
 }
 
 /*****************************************************************************/
@@ -256,7 +268,7 @@ const AbstractLayerModel *
 StackedLayerModel
 ::GetCurrent() const
 {
-  return ( *this )[ m_Current ];
+  return const_cast< StackedLayerModel * >( this )->GetCurrent();
 }
 
 /*****************************************************************************/
