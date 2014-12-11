@@ -161,6 +161,9 @@ public:
   /* The type of the termination criteria */
   itkGetMacro(TerminationCriteria, int);
   itkSetMacro(TerminationCriteria, int);
+  /* Perform regression instead of classification */
+  itkGetMacro(RegressionMode, bool);
+  itkSetMacro(RegressionMode, bool);
 
   /** Returns a matrix containing variable importance */
   VariableImportanceMatrixType GetVariableImportance();
@@ -199,6 +202,7 @@ private:
   int m_MaxNumberOfTrees;
   float m_ForestAccuracy;
   int m_TerminationCriteria;
+  bool m_RegressionMode;
 };
 } // end namespace otb
 
