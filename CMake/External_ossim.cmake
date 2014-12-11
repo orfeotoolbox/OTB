@@ -61,6 +61,16 @@ else()
     list(APPEND ${proj}_DEPENDENCIES JPEG)
   endif()
   
+  if(USE_SYSTEM_OPENTHREAD)
+    set(OSSIM_SB_OPENTHREAD_CONFIG)
+  else()
+    set(OSSIM_SB_OPENTHREAD_CONFIG 
+      -DOPENTHREADS_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include
+      -DOPENTHREADS_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libOpenThreads.so
+      )
+    list(APPEND ${proj}_DEPENDENCIES OPENTHREAD)
+  endif()
+  
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "http://download.osgeo.org/ossim/source/latest/ossim-1.8.18-1.tar.gz"
@@ -80,6 +90,7 @@ else()
       ${OSSIM_SB_GEOTIFF_CONFIG}
       ${OSSIM_SB_GEOS_CONFIG}
       ${OSSIM_SB_JPEG_CONFIG}
+      ${OSSIM_SB_OPENTHREAD_CONFIG}
       -DBUILD_OSSIMPREDATOR:BOOL=OFF
       -DBUILD_OSSIMPLANET:BOOL=OFF
       -DBUILD_OSSIMPLANETQT:BOOL=OFF
