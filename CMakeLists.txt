@@ -12,6 +12,7 @@ set(CMAKE_MODULE_PATH
 include(ExternalProject)
 
 # Call external projects
+include(External_openthread)
 include(External_jpeg)
 include(External_SQLite)
 include(External_zlib)
@@ -23,6 +24,7 @@ include(External_ITK)
 include(External_ossim)
 include(External_OpenJpeg)
 include(External_GDAL)
+include(External_muParser)
 
 # TODO
 
