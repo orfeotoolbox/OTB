@@ -28,6 +28,8 @@
 
 //
 // System includes (sorted by alphabetic order)
+// #include <stdexcept>
+#include <sstream>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -37,6 +39,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAbstractLayerModel.h"
+#include "Core/mvdAlgorithm.h"
 
 namespace mvd
 {
@@ -60,6 +64,8 @@ namespace
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
+StackedLayerModel::SizeType
+StackedLayerModel::m_LayerCount = 0;
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
@@ -75,6 +81,49 @@ StackedLayerModel
 StackedLayerModel
 ::~StackedLayerModel()
 {
+}
+
+/*****************************************************************************/
+std::string
+StackedLayerModel
+::Add( AbstractLayerModel * model )
+{
+  std::string key( StackedLayerModel::GenerateKey( model ) );
+  assert( !key.empty() );
+
+  if( key.empty() )
+    {
+    throw
+      std::runtime_error(
+        ToStdString(
+          tr( "Failed to generate string key for '%1'." )
+          .arg( model->metaObject()->className() )
+        )
+      );
+    }
+
+  m_LayerModels.insert( LayerModelMap::value_type( key, model ) );
+
+  emit StackContentChanged();
+
+  return key;
+}
+
+/*******************************************************************************/
+std::string
+StackedLayerModel
+::GenerateKey( AbstractLayerModel * layerModel )
+{
+  std::ostringstream oss;
+
+  oss << "Layer #" << m_LayerCount++;
+
+#ifdef _DEBUG 
+  oss << " (" << layerModel->metaObject()->className()
+      << "@" << std::hex << layerModel << ")";
+#endif
+
+  return oss.str();
 }
 
 /*******************************************************************************/

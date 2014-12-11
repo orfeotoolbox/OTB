@@ -80,16 +80,17 @@ class Monteverdi2_EXPORT StackedLayerModel :
 //
 // Private types
 private:
-  typedef std::vector< AbstractLayerModel * > LayerModelVector;
-  // typedef std::map< std::string, AbstractLayerModel * > LayerModelMap;
-  // typedef std::list< std::string > KeyList;
+  // typedef std::vector< AbstractLayerModel * > LayerModelVector;
+  typedef std::map< std::string, AbstractLayerModel * > LayerModelMap;
+  typedef std::vector< LayerModelMap::key_type > KeyVector;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public types.
 public:
-  typedef LayerModelVector::size_type SizeType;
+  typedef LayerModelMap::size_type SizeType;
+  typedef LayerModelMap::key_type KeyType;
 
 //
 // Public methods.
@@ -101,10 +102,12 @@ public:
   /** \brief Destructor. */
   virtual ~StackedLayerModel();
 
+  /*
   inline const AbstractLayerModel * operator[]( SizeType ) const;
   inline AbstractLayerModel * operator[]( SizeType );
+  */
 
-  inline void Add( AbstractLayerModel * );
+  KeyType Add( AbstractLayerModel * );
 
   inline SizeType Count() const;
 
@@ -118,7 +121,7 @@ public:
 
   inline bool IsEmpty() const;
 
-  inline void SetCurrent( SizeType i );
+  inline void SetCurrent( const KeyType & );
   inline void SetCurrent( AbstractLayerModel * );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
@@ -132,9 +135,14 @@ public slots:
 //
 // Signals.
 signals:
+  void AboutToChangeSelectedLayerModel( const KeyType & );
+  void SelectedLayerModelChanged( const KeyType & );
+
   void AboutToChangeSelectedLayerModel( const AbstractLayerModel * );
   void SelectedLayerModelChanged( AbstractLayerModel * );
+
   void StackOrderChanged();
+
   void StackContentChanged();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -152,12 +160,16 @@ protected:
 //
 // Private methods.
 private:
+  static KeyType GenerateKey( AbstractLayerModel * );
 
 //
 // Private attributes.
 private:
-  LayerModelVector m_LayerModels;
-  SizeType m_Current;
+  static SizeType m_LayerCount;
+
+  LayerModelMap m_LayerModels;
+  KeyVector m_Keys;
+  LayerModelMap::key_type m_Current;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -191,6 +203,7 @@ namespace mvd
 {
 
 /*****************************************************************************/
+/*
 inline
 const AbstractLayerModel *
 StackedLayerModel
@@ -198,8 +211,10 @@ StackedLayerModel
 {
   return m_LayerModels[ i ];
 }
+*/
 
 /*****************************************************************************/
+/*
 inline
 AbstractLayerModel *
 StackedLayerModel
@@ -207,17 +222,7 @@ StackedLayerModel
 {
   return m_LayerModels[ i ];
 }
-
-/*****************************************************************************/
-inline
-void
-StackedLayerModel
-::Add( AbstractLayerModel * model )
-{
-  m_LayerModels.push_back( model );
-
-  emit StackContentChanged();
-}
+*/
 
 /*****************************************************************************/
 inline
@@ -256,10 +261,15 @@ AbstractLayerModel *
 StackedLayerModel
 ::GetCurrent()
 {
-  return
-    m_Current>=m_LayerModels.size()
-    ? NULL
-    : ( *this )[ m_Current ];
+  if( m_Current.empty() )
+    return NULL;
+
+  LayerModelMap::const_iterator it( m_LayerModels.find( m_Current ) );
+
+  if( it==m_LayerModels.end() )
+    return NULL;
+
+  return it->second;
 }
 
 /*****************************************************************************/
@@ -284,34 +294,36 @@ StackedLayerModel
 inline
 void
 StackedLayerModel
-::SetCurrent( AbstractLayerModel * layer )
+::SetCurrent( AbstractLayerModel * layerModel )
 {
-  SizeType current = m_LayerModels.size();
-
-  for( SizeType i=0; i<m_LayerModels.size(); ++i )
-    if( m_LayerModels[ i ]==layer )
+  for( LayerModelMap::const_iterator it( m_LayerModels.begin() );
+       it!=m_LayerModels.end();
+       ++it )
+    if( it->second==layerModel )
       {
-      current = i;
-      break;
+      SetCurrent( it->first );
+      return;
       }
 
-  SetCurrent( current );
+  SetCurrent( LayerModelMap::key_type() );
 }
 
 /*****************************************************************************/
 inline
 void
 StackedLayerModel
-::SetCurrent( SizeType i )
+::SetCurrent( KeyType key )
 {
-  if( i==m_Current )
+  if( key==m_Current )
     return;
 
-  emit AboutToChangeSelectedLayerModel( m_LayerModels[ i ] );
+  emit AboutToChangeSelectedLayerModel( key );
 
-  m_Current = i;
+  emit AboutToChangedSelectedLayerModel( );
 
-  emit SelectedLayerModelChanged( GetCurrent() );
+  m_Current = key;
+
+  emit SelectedLayerModelChanged( key );
 }
 
 } // end namespace 'mvd'
