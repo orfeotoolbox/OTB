@@ -8,7 +8,6 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH})
 
-
 include(ExternalProject)
 
 # Call external projects
@@ -29,4 +28,15 @@ include(External_muParser)
 # TODO
 
 # Call OTB
+
+# set OTB_DATA_ROOT to run test
+find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../OTB-Data)
+
 include(External_OTB)
+
+# DEBUG:
+# impose to build OTB after all dependencies
+add_dependencies(OTB GDAL OPENTHREAD JPEG SQLITE TIFF PROJ GEOTIFF GEOS ITK OSSIM OPENJPEG MUPARSER)
+
+
+
