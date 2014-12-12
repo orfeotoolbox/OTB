@@ -85,7 +85,7 @@ else()
         --prefix=${CMAKE_INSTALL_PREFIX}
         --enable-static=no
         --without-ogdi
-        #--without-jasper
+        --without-jasper
         ${GDAL_SB_ZLIB_CONFIG}
         ${GDAL_SB_TIFF_CONFIG}
         ${GDAL_SB_GEOTIFF_CONFIG}
