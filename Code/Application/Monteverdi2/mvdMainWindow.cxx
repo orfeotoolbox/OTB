@@ -1204,6 +1204,7 @@ MainWindow
     ImageViewWidget::ZOOM_TYPE_FULL
   );
 #else
+  /*
   // Update image-view.
   m_ImageView->SetLayerStack(
     StackedLayerModel(),
@@ -1216,6 +1217,7 @@ MainWindow
     StackedLayerModel(),
     ImageViewWidget::ZOOM_TYPE_FULL
   );
+  */
 #endif
 
   //
@@ -1372,6 +1374,7 @@ MainWindow
     quicklookView->SetImageList( quicklooks, ImageViewWidget::ZOOM_TYPE_EXTENT );
 #endif
 #else
+    {
     StackedLayerModel stackedLayerModel;
 
     stackedLayerModel.Add( vectorImageModel );
@@ -1382,6 +1385,16 @@ MainWindow
       model->GetLastPhysicalCenter(),
       model->GetLastIsotropicZoom()
     );
+    }
+
+    {
+    StackedLayerModel stackedLayerModel;
+
+    QuicklookModel * quicklookModel = vectorImageModel->GetQuicklookModel();
+    assert( quicklookModel!=NULL );
+
+    stackedLayerModel.Add( quicklookModel );
+    stackedLayerModel.SetCurrent( quicklookModel );
 
     ImageViewWidget * quicklookView = GetQuicklookView();
     assert( quicklookView!=NULL );
@@ -1390,6 +1403,7 @@ MainWindow
       stackedLayerModel,
       ImageViewWidget::ZOOM_TYPE_EXTENT
     );
+    }
 #endif
     }
 
