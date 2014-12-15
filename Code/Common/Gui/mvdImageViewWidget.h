@@ -81,11 +81,6 @@ class Monteverdi2_EXPORT ImageViewWidget :
 public:
   /**
    */
-  typedef
-    AbstractImageViewRenderer::VectorImageModelList
-    VectorImageModelList;
-  /**
-   */
   enum ZoomType
   {
     ZOOM_TYPE_NONE = -1,
@@ -128,13 +123,14 @@ public:
 
   /**
    */
-  void SetImageList( const VectorImageModelList& images, ZoomType zoom );
+  void SetLayerStack( const StackedLayerModel & stackedLayerModel,
+                      ZoomType zoom );
 
   /**
    */
-  void SetImageList( const VectorImageModelList& images,
-                     const PointType& center,
-                     double scale );
+  void SetLayerStack( const StackedLayerModel & stackedLayerModel,
+                      const PointType& center,
+                      double scale );
 
   /**
    * \brief Access the abstract view-manipualtor of this image-view.
@@ -253,7 +249,7 @@ private:
 
   /**
    */
-  void SetImageList( const VectorImageModelList& images );
+  void SetLayerStack( const StackedLayerModel & );
 
   /**
    */

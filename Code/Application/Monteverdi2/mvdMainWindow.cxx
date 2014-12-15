@@ -49,6 +49,7 @@
 #include "Core/mvdDatabaseModel.h"
 #include "Core/mvdDatasetModel.h"
 #include "Core/mvdQuicklookModel.h"
+#include "Core/mvdStackedLayerModel.h"
 #include "Core/mvdVectorImageModel.h"
 //
 #include "Gui/mvdApplicationsToolBox.h"
@@ -1189,6 +1190,7 @@ MainWindow
   // VIEWS.
   //
 
+#if 0
   // Update image-view.
   m_ImageView->SetImageList(
     ImageViewWidget::VectorImageModelList(),
@@ -1201,6 +1203,20 @@ MainWindow
     ImageViewWidget::VectorImageModelList(),
     ImageViewWidget::ZOOM_TYPE_FULL
   );
+#else
+  // Update image-view.
+  m_ImageView->SetLayerStack(
+    StackedLayerModel(),
+    ImageViewWidget::ZOOM_TYPE_FULL
+  );
+
+  // Update quicklook-view.
+  assert( GetQuicklookView()!=NULL );
+  GetQuicklookView()->SetLayerStack(
+    StackedLayerModel(),
+    ImageViewWidget::ZOOM_TYPE_FULL
+  );
+#endif
 
   //
   // MODEL(s).
@@ -1322,6 +1338,7 @@ MainWindow
 
   if( vectorImageModel!=NULL )
     {
+#if 0
     //
     // Image-models.
     ImageViewWidget::VectorImageModelList images;
@@ -1353,6 +1370,24 @@ MainWindow
     // qDebug() << quicklooks;
 
     quicklookView->SetImageList( quicklooks, ImageViewWidget::ZOOM_TYPE_EXTENT );
+#endif
+#else
+    StackedLayerModel stackedLayerModel;
+    stackedLayerModel.Add( vectorImageModel );
+
+    m_ImageView->SetLayerStack(
+      stackedLayerModel,
+      model->GetLastPhysicalCenter(),
+      model->GetLastIsotropicZoom()
+    );
+
+    ImageViewWidget * quicklookView = GetQuicklookView();
+    assert( quicklookView!=NULL );
+
+    quicklookView->SetLayerStack(
+      stackedLayerModel,
+      ImageViewWidget::ZOOM_TYPE_EXTENT
+    );
 #endif
     }
 

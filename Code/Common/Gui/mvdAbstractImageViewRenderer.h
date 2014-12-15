@@ -61,9 +61,8 @@ namespace mvd
 
 //
 // Internal classes pre-declaration.
-class AbstractImageModel;
-class VectorImageModel;
-
+class AbstractLayerModel;
+class StackedLayerModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -86,10 +85,6 @@ class AbstractImageViewRenderer :
 //
 // Public types.
 public:
-  /**
-   */
-  typedef QList< VectorImageModel* > VectorImageModelList;
-
   /**
    */
   struct RenderingContext
@@ -123,23 +118,29 @@ public:
   /**
    * Destructor.
    */
-	virtual ~AbstractImageViewRenderer(){};
+  virtual ~AbstractImageViewRenderer(){};
 
   /**
    */
-  inline void SetImageList( const VectorImageModelList& images );
+  inline void SetLayerStack( const StackedLayerModel & );
 
   /**
    */
   virtual bool CheckGLCapabilities() const =0;
 
-  /**
-   */
-  virtual const AbstractImageModel* GetReferenceImageModel() const =0;
+  template< typename T >
+  const T * GetReferenceModel() const;
+
+  template< typename T >
+  T * GetReferenceModel();
 
   /**
    */
-  virtual AbstractImageModel* GetReferenceImageModel() =0;
+  virtual const AbstractLayerModel * GetReferenceModel() const =0;
+
+  /**
+   */
+  virtual AbstractLayerModel * GetReferenceModel() =0;
 
   /**
    */
@@ -195,7 +196,7 @@ protected:
   /**
    * Constructor.
    */
-  AbstractImageViewRenderer( QObject* parent = NULL ):QObject( parent ){};
+  AbstractImageViewRenderer( QObject* parent = NULL ) : QObject( parent ) {}
 
 
 //
@@ -215,7 +216,7 @@ private:
   virtual void virtual_PrepareScene() {};
   /**
    */
-  virtual void virtual_SetImageList( const VectorImageModelList& images ) =0;
+  virtual void virtual_SetLayerStack( const StackedLayerModel & ) =0;
   /**
    */
   virtual void virtual_FinishScene() {};
@@ -240,16 +241,34 @@ namespace mvd
 {
 
 /*****************************************************************************/
+template< typename T >
+const T *
+AbstractImageViewRenderer
+::GetReferenceModel() const
+{
+  return dynamic_cast< const T * >( GetReferenceModel() );
+}
+
+/*****************************************************************************/
+template< typename T >
+T *
+AbstractImageViewRenderer
+::GetReferenceModel()
+{
+  return dynamic_cast< T * >( GetReferenceModel() );
+}
+
+/*****************************************************************************/
 inline
 void
 AbstractImageViewRenderer
-::SetImageList( const VectorImageModelList& images )
+::SetLayerStack( const StackedLayerModel & stackedLayerModel )
 {
   virtual_ClearScene();
 
   virtual_PrepareScene();
 
-  virtual_SetImageList( images );
+  virtual_SetLayerStack( stackedLayerModel );
 
   virtual_FinishScene();
 }

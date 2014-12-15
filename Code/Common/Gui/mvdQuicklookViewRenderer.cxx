@@ -36,6 +36,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbGlImageActor.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -111,7 +112,9 @@ QuicklookViewRenderer
 
   // qDebug() << this << "::virtual_FinishScene()";
 
-  otb::GlImageActor::Pointer referenceGlImageActor( GetReferenceGlImageActor() );
+  otb::GlImageActor::Pointer referenceGlImageActor(
+    GetReferenceActor< otb::GlImageActor >()
+  );
 
   if( referenceGlImageActor.IsNull() )
     return;

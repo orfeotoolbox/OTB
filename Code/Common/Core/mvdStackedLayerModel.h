@@ -84,6 +84,9 @@ private:
   typedef std::map< std::string, AbstractLayerModel * > LayerModelMap;
   typedef std::vector< LayerModelMap::key_type > KeyVector;
 
+  // typedef std::pair< AbstractLayerModel *, void * > LayerModelPair;
+  // typedef std::map< std::string, LayerDataPair > LayerModelPairMap;
+
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
@@ -91,6 +94,7 @@ private:
 public:
   typedef LayerModelMap::size_type SizeType;
   typedef LayerModelMap::key_type KeyType;
+  typedef LayerModelMap::const_iterator ConstIterator;
 
 //
 // Public methods.
@@ -109,12 +113,22 @@ public:
 
   KeyType Add( AbstractLayerModel * );
 
+  inline ConstIterator Begin() const;
+
   inline SizeType Count() const;
+
+  inline ConstIterator End() const;
 
   /*
   inline const AbstractLayerModel * Front() const;
   inline AbstractLayerModel * Front();
   */
+
+  template< typename T >
+    const T * GetCurrent() const;
+
+  template< typename T >
+    T * GetCurrent();
 
   const AbstractLayerModel * GetCurrent() const;
   AbstractLayerModel * GetCurrent();
@@ -226,11 +240,29 @@ StackedLayerModel
 
 /*****************************************************************************/
 inline
+StackedLayerModel::ConstIterator
+StackedLayerModel
+::Begin() const
+{
+  return m_LayerModels.begin();
+}
+
+/*****************************************************************************/
+inline
 StackedLayerModel::SizeType
 StackedLayerModel
 ::Count() const
 {
   return m_LayerModels.size();
+}
+
+/*****************************************************************************/
+inline
+StackedLayerModel::ConstIterator
+StackedLayerModel
+::End() const
+{
+  return m_LayerModels.end();
 }
 
 /*****************************************************************************/
@@ -254,6 +286,26 @@ StackedLayerModel
   return m_LayerModels.front();
 }
 */
+
+/*****************************************************************************/
+template< typename T >
+inline
+T *
+StackedLayerModel
+::GetCurrent()
+{
+  return dynamic_cast< T * >( GetCurrent() );
+}
+
+/*****************************************************************************/
+template< typename T >
+inline
+const T *
+StackedLayerModel
+::GetCurrent() const
+{
+  return dynamic_cast< const T * >( GetCurrent() );
+}
 
 /*****************************************************************************/
 inline
@@ -312,14 +364,12 @@ StackedLayerModel
 inline
 void
 StackedLayerModel
-::SetCurrent( KeyType key )
+::SetCurrent( const KeyType & key )
 {
   if( key==m_Current )
     return;
 
   emit AboutToChangeSelectedLayerModel( key );
-
-  emit AboutToChangedSelectedLayerModel( );
 
   m_Current = key;
 

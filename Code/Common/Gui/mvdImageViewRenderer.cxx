@@ -37,13 +37,15 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbStandardShader.h"
+#include "otbGlImageActor.h"
 #include "otbGlVersionChecker.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdDatasetModel.h"
+#include "Core/mvdAlgorithm.h"
+// #include "Core/mvdDatasetModel.h"
+#include "Core/mvdStackedLayerModel.h"
 #include "Core/mvdTypes.h"
-#include "Core/mvdVectorImageModel.h"
 
 namespace mvd
 {
@@ -72,10 +74,9 @@ ImageViewRenderer
 ::ImageViewRenderer( QObject* parent ) :
   AbstractImageViewRenderer( parent ),
   m_GlView( otb::GlView::New() ),
-  m_ReferenceImageModel( NULL ),
-  m_ReferenceGlImageActor(),
-  m_ImageModelActorPairs(),
-  m_ReferenceActorShaderMode("STANDARD")
+  m_ReferencePair( NULL, otb::GlActor::Pointer() ),
+  m_ModelActorPairs(),
+  m_ReferenceActorShaderMode( "STANDARD" )
 {
   assert( !m_GlView.IsNull() );
 }
@@ -190,19 +191,19 @@ ImageViewRenderer
 }
 
 /*****************************************************************************/
-const AbstractImageModel*
+const AbstractLayerModel *
 ImageViewRenderer
-::GetReferenceImageModel() const
+::GetReferenceModel() const
 {
-  return m_ReferenceImageModel;
+  return m_ReferencePair.first;
 }
 
 /*****************************************************************************/
-AbstractImageModel*
+AbstractLayerModel*
 ImageViewRenderer
-::GetReferenceImageModel()
+::GetReferenceModel()
 {
-  return m_ReferenceImageModel;
+  return m_ReferencePair.first;
 }
 
 /*****************************************************************************/
@@ -215,9 +216,9 @@ ImageViewRenderer
   extent[ 1 ] = 0.0;
 
 #else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
-  assert( !m_ReferenceGlImageActor.IsNull() );
+  assert( !m_ReferencePair.second.IsNull() );
 
-  m_ReferenceGlImageActor->GetExtent(
+  m_ReferencePair.second->GetExtent(
     origin[ 0 ], origin[ 1 ],
     extent[ 0 ], extent[ 1 ]
   );
@@ -351,16 +352,20 @@ ImageViewRenderer
     << ")";
   */
 
-  if( m_ReferenceGlImageActor.IsNull() )
+  otb::GlImageActor::Pointer glImageActor(
+    GetReferenceActor< otb::GlImageActor >()
+  );
+
+  if( glImageActor.IsNull() )
     return false;
 
   //
   // Compute output/physical point.
-  out = m_ReferenceGlImageActor->ViewportToImageTransform( in, true );
+  out = glImageActor->ViewportToImageTransform( in, true );
 
   //
   // Read pixel value.
-  return m_ReferenceGlImageActor->GetPixelFromViewport( in, pixel );
+  return glImageActor->GetPixelFromViewport( in, pixel );
 }
 
 /*****************************************************************************/
@@ -368,13 +373,17 @@ bool
 ImageViewRenderer
 ::Transform( PointType& point, const IndexType& index, bool isPhysical ) const
 {
-  if( m_ReferenceGlImageActor.IsNull() )
+  otb::GlImageActor::ConstPointer glImageActor(
+    GetReferenceActor< otb::GlImageActor >()
+  );
+
+  if( glImageActor.IsNull() )
     return false;
 
   point[ 0 ] = static_cast< double >( index[ 0 ] );
   point[ 1 ] = static_cast< double >( index[ 1 ] );
 
-  point = m_ReferenceGlImageActor->ImageToViewportTransform( point, isPhysical );
+  point = glImageActor->ImageToViewportTransform( point, isPhysical );
 
   return true;
 }
@@ -392,6 +401,7 @@ void
 ImageViewRenderer
 ::UpdateImageActors()
 {
+  /*
   for( ImageModelActorPairMap::const_iterator it(m_ImageModelActorPairs.begin());
        it!=m_ImageModelActorPairs.end();
        ++it )
@@ -483,9 +493,11 @@ ImageViewRenderer
         }
       }
     }
+  */
 }
 
 /*******************************************************************************/
+/*
 void
 ImageViewRenderer
 ::virtual_ClearScene()
@@ -505,11 +517,29 @@ ImageViewRenderer
   m_ReferenceImageModel = NULL;
   m_ReferenceGlImageActor = otb::GlImageActor::Pointer();
 }
+*/
 
 /*******************************************************************************/
 void
 ImageViewRenderer
-::virtual_SetImageList( const VectorImageModelList& images )
+::virtual_SetLayerStack( const StackedLayerModel & stackedLayerModel )
+{
+  assert( !m_GlView.IsNull() );
+
+  typedef
+    StackedLayerModel::ConstIterator::value_type
+    KeyLayerModelPair;
+
+  typedef std::list< KeyLayerModelPair > KeyLayerModelPairList;
+
+  KeyLayerModelPairList layers;
+}
+
+/*******************************************************************************/
+/*
+void
+ImageViewRenderer
+::virtual_SetImageList( const VectorImageModelList & images )
 {
   assert( !m_GlView.IsNull() );
 
@@ -593,6 +623,7 @@ ImageViewRenderer
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 }
+*/
 
 
 /*****************************************************************************/
@@ -601,40 +632,43 @@ ImageViewRenderer
 void ImageViewRenderer::OnPhysicalCursorPositionChanged(const PointType& point,
                                        const DefaultImageType::PixelType& pixel)
 {
-  if(m_ReferenceGlImageActor.IsNotNull())
+  otb::GlImageActor::Pointer glImageActor(
+    GetReferenceActor< otb::GlImageActor >()
+  );
+
+  if( glImageActor.IsNull() )
+    return;
+
+  // Get shader of reference actor
+  otb::FragmentShader::Pointer fragmentShader( glImageActor->GetShader() );
+    
+  assert(
+    fragmentShader==otb::DynamicCast< otb::StandardShader >( fragmentShader )
+  );
+    
+  otb::StandardShader::Pointer shader(
+    otb::DynamicCast< otb::StandardShader >( fragmentShader )
+  );
+    
+  assert( !shader.IsNull() );
+    
+  shader->SetShaderType(otb::SHADER_LOCAL_CONTRAST);
+
+  if(pixel.Size()>0)
     {
-
-    // Get shader of reference actor
-    otb::FragmentShader::Pointer fragmentShader( m_ReferenceGlImageActor->GetShader() );
-    
-    assert(
-      fragmentShader==otb::DynamicCast< otb::StandardShader >( fragmentShader )
-      );
-    
-    otb::StandardShader::Pointer shader(
-      otb::DynamicCast< otb::StandardShader >( fragmentShader )
-      );
-    
-    assert( !shader.IsNull() );
-    
-    shader->SetShaderType(otb::SHADER_LOCAL_CONTRAST);
-
-    if(pixel.Size()>0)
-      {
-      shader->SetCurrentRed(pixel[0]);
-      shader->SetCurrentGreen(pixel[1]);
-      shader->SetCurrentBlue(pixel[2]);
-      }
-
-    PointType p, pscreen;
-    p = m_ReferenceGlImageActor->ImageToViewportTransform(point,true);
-
-    m_GlView->GetSettings()->ViewportToScreenTransform(p[0],p[1], pscreen[0], pscreen[1]);
-
-    pscreen[1] = m_GlView->GetSettings()->GetViewportSize()[1] - pscreen[1];
-
-    shader->SetCenter(pscreen);
+    shader->SetCurrentRed(pixel[0]);
+    shader->SetCurrentGreen(pixel[1]);
+    shader->SetCurrentBlue(pixel[2]);
     }
+
+  PointType p, pscreen;
+  p = glImageActor->ImageToViewportTransform(point,true);
+
+  m_GlView->GetSettings()->ViewportToScreenTransform(p[0],p[1], pscreen[0], pscreen[1]);
+
+  pscreen[1] = m_GlView->GetSettings()->GetViewportSize()[1] - pscreen[1];
+
+  shader->SetCenter(pscreen);
 }
 
 void ImageViewRenderer::OnReferenceActorShaderModeChanged(const std::string & mode)

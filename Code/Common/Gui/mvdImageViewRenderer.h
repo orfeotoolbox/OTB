@@ -46,7 +46,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbGlImageActor.h"
+#include "otbGlActor.h"
 #include "otbGlView.h"
 
 //
@@ -146,9 +146,9 @@ public:
   //
   // AbstractImageViewRenderer overloads.
 
-  virtual const AbstractImageModel* GetReferenceImageModel() const;
+  virtual const AbstractLayerModel* GetReferenceModel() const;
 
-  virtual AbstractImageModel* GetReferenceImageModel();
+  virtual AbstractLayerModel * GetReferenceModel();
 
   virtual void GetReferenceExtent( PointType& origin,
                                    PointType& extent ) const;
@@ -193,11 +193,19 @@ signals:
 protected:
   /**
    */
-  inline otb::GlImageActor::Pointer GetReferenceGlImageActor();
+  inline otb::GlActor::Pointer GetReferenceActor();
+  /**
+   */
+  template< typename T >
+    inline typename T::Pointer GetReferenceActor();
+  /**
+   */
+  template< typename T >
+    inline typename T::ConstPointer GetReferenceActor() const;
   /**
    */
   virtual
-  void UpdateActors( const AbstractImageViewRenderer::RenderingContext* c );
+  void UpdateActors( const AbstractImageViewRenderer::RenderingContext * );
 
 //
 // Protected attributes.
@@ -214,13 +222,16 @@ private:
   /**
    */
   typedef
-  std::pair< VectorImageModel*, otb::GlImageActor::Pointer > ImageModelActorPair;
+    std::pair< AbstractLayerModel *, otb::GlActor::Pointer >
+    ModelActorPair;
+
   /**
    */
-  typedef std::string ActorKey;
+  typedef std::map< std::string, ModelActorPair > ModelActorPairMap;
+
   /**
    */
-  typedef std::map< ActorKey, ImageModelActorPair > ImageModelActorPairMap;
+  typedef ModelActorPairMap::key_type Key;
 
 //
 // Private methods.
@@ -232,22 +243,18 @@ private:
   //
   // AbstractImageViewRenderer overloads.
 
-  virtual void virtual_ClearScene();
-
-  virtual void virtual_SetImageList( const VectorImageModelList& images );
+  virtual void virtual_SetLayerStack( const StackedLayerModel & );
 
 //
 // Private attributes.
 private:
   /**
    */
-  VectorImageModel* m_ReferenceImageModel;
+  ModelActorPair m_ReferencePair;
+
   /**
    */
-  otb::GlImageActor::Pointer m_ReferenceGlImageActor;
-  /**
-   */
-  ImageModelActorPairMap m_ImageModelActorPairs;
+  ModelActorPairMap m_ModelActorPairs;
 
   /**
    */ 
@@ -291,14 +298,33 @@ ImageViewRenderer
   return m_GlView->GetSettings();
 }
 
-
 /*****************************************************************************/
 inline
-otb::GlImageActor::Pointer
+otb::GlActor::Pointer
 ImageViewRenderer
-::GetReferenceGlImageActor()
+::GetReferenceActor()
 {
-  return m_ReferenceGlImageActor;
+  return m_ReferencePair.second;
+}
+
+/*****************************************************************************/
+template< typename T >
+inline
+typename T::Pointer
+ImageViewRenderer
+::GetReferenceActor()
+{
+  return otb::DynamicCast< T >( m_ReferencePair.second );
+}
+
+/*****************************************************************************/
+template< typename T >
+inline
+typename T::ConstPointer
+ImageViewRenderer
+::GetReferenceActor() const
+{
+  return otb::DynamicCast< const T >( m_ReferencePair.second );
 }
 
 } // end namespace 'mvd'

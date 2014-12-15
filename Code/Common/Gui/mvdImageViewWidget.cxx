@@ -38,6 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdStackedLayerModel.h"
 #include "Core/mvdVectorImageModel.h"
 #include "Gui/mvdAbstractImageViewManipulator.h"
 
@@ -118,13 +119,13 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::SetImageList( const VectorImageModelList& images,
-                const PointType& center,
-                double scale )
+::SetLayerStack( const StackedLayerModel & stackedLayerModel,
+                 const PointType& center,
+                 double scale )
 {
-  SetImageList( images );
+  SetLayerStack( stackedLayerModel );
 
-  if( images.isEmpty() )
+  if( stackedLayerModel.IsEmpty() )
     return;
 
   Center( center, scale, scale );
@@ -133,13 +134,12 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::SetImageList( const VectorImageModelList& images,
-                ZoomType zoom )
+::SetLayerStack( const StackedLayerModel & stackedLayerModel,
+                 ZoomType zoom )
 {
+  SetLayerStack( stackedLayerModel );
 
-  SetImageList( images );
-
-  if( images.isEmpty() )
+  if( stackedLayerModel.IsEmpty() )
     return;
 
   //
@@ -150,16 +150,16 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::SetImageList( const VectorImageModelList& images )
+::SetLayerStack( const StackedLayerModel & stackedLayerModel )
 {
+  const VectorImageModel * imageModel =
+    stackedLayerModel.GetCurrent< VectorImageModel >();
+
   //
   // Setup image-view settings to reference image-model data.
-  if( !images.isEmpty() )
+  if( imageModel!=NULL )
     {
-    VectorImageModel* imageModel = images.front();
-    assert( imageModel!=NULL );
-
-    DefaultImageType::Pointer image( imageModel->ToImage() );
+    DefaultImageType::ConstPointer image( imageModel->ToImage() );
     assert( !image.IsNull() );
 
     assert( m_Manipulator!=NULL );
@@ -174,7 +174,7 @@ ImageViewWidget
 
   // Insert image-models into image-view renderer.
   assert( m_Renderer!=NULL );
-  m_Renderer->SetImageList( images );
+  m_Renderer->SetLayerStack( stackedLayerModel );
 }
 
 /*******************************************************************************/
@@ -540,7 +540,8 @@ ImageViewWidget
 
   //
   // Get reference image-model.
-  AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
+  AbstractImageModel* imageModel =
+    m_Renderer->GetReferenceModel< AbstractImageModel >();
   assert( imageModel!=NULL );
 
   // Scale spacing.
@@ -565,7 +566,8 @@ ImageViewWidget
 
   //
   // Get reference image-model.
-  AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
+  AbstractImageModel* imageModel =
+    m_Renderer->GetReferenceModel< AbstractImageModel >();
   assert( imageModel!=NULL );
 
   //
@@ -689,7 +691,7 @@ ImageViewWidget
 {
   assert( m_Renderer!=NULL );
 
-  if( m_Renderer->GetReferenceImageModel()==NULL )
+  if( m_Renderer->GetReferenceModel< AbstractImageModel >()==NULL )
     return;
 
   // Scale and center.
@@ -706,7 +708,7 @@ ImageViewWidget
 {
   assert( m_Renderer!=NULL );
 
-  if( m_Renderer->GetReferenceImageModel()==NULL )
+  if( m_Renderer->GetReferenceModel< AbstractImageModel >()==NULL )
     return;
 
   // Scale and center.
@@ -761,7 +763,8 @@ ImageViewWidget
 
   emit CenterChanged( center );
 
-  AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
+  AbstractImageModel* imageModel =
+    m_Renderer->GetReferenceModel< AbstractImageModel >();
 
   SpacingType nativeSpacing;
   // MANTIS-970: Fixed crash when no dataset is selected.
