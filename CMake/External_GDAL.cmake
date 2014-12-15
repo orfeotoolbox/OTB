@@ -95,6 +95,7 @@ else()
       BUILD_COMMAND make
       INSTALL_COMMAND make install
       DEPENDS ${${proj}_DEPENDENCIES}
+      PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
       )
     
     ExternalProject_Add_Step(${proj} copy_source
