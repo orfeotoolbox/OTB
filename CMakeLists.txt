@@ -36,7 +36,7 @@ include(External_OTB)
 
 # DEBUG:
 # impose to build OTB after all dependencies
-add_dependencies(OTB GDAL OPENTHREAD JPEG SQLITE TIFF PROJ GEOTIFF GEOS ITK OSSIM OPENJPEG MUPARSER)
+add_dependencies(OSSIM GDAL)
 
 
 
