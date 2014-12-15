@@ -1344,8 +1344,7 @@ MainWindow
   if( !layerModel )
     return;
 
-  if( layerModel->metaObject()->className()==
-      VectorImageModel::staticMetaObject.className() )
+  if( layerModel->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
     // Disconnect previously selected image-model from view.
     QObject::disconnect(
@@ -1541,8 +1540,7 @@ MainWindow
   if( !layerModel )
     return;
 
-  if( layerModel->metaObject()->className()==
-      VectorImageModel::staticMetaObject.className() )
+  if( layerModel->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
     //
     // SAT: Using m_TabWidget->index( 0 ) or m_ImageView is equivalent

@@ -42,10 +42,12 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAbstractLayerModel.h"
 #include "Core/mvdAlgorithm.h"
 // #include "Core/mvdDatasetModel.h"
 #include "Core/mvdStackedLayerModel.h"
 #include "Core/mvdTypes.h"
+#include "Core/mvdVectorImageModel.h"
 
 namespace mvd
 {
@@ -526,13 +528,87 @@ ImageViewRenderer
 {
   assert( !m_GlView.IsNull() );
 
-  typedef
-    StackedLayerModel::ConstIterator::value_type
-    KeyLayerModelPair;
 
-  typedef std::list< KeyLayerModelPair > KeyLayerModelPairList;
+  {
+  otb::GlView::StringVectorType keys( m_GlView->GetActorsKeys() );
 
-  KeyLayerModelPairList layers;
+  for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
+       it!=keys.end();
+       ++it )
+    if( !stackedLayerModel.Contains( *it ) )
+      m_GlView->RemoveActor( *it );
+  }
+
+
+#if USE_REMOTE_DESKTOP_DISABLED_RENDERING
+#else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
+
+  for( StackedLayerModel::ConstIterator it( stackedLayerModel.Begin() );
+       it!=stackedLayerModel.End();
+       ++it )
+    if( !m_GlView->ContainsActor( it->first ) )
+      {
+      assert( it->second!=NULL );
+
+      if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
+        {
+        otb::GlImageActor::Pointer glImageActor( otb::GlImageActor::New() );
+
+        // Should all AbstractLayerModel have a ::GetFilename()
+        // method?
+        // -> Not sure: AbstractImageModel coud be derived as a
+        // in-memory image-model.
+        VectorImageModel * vectorImageModel =
+          dynamic_cast< VectorImageModel * >( it->second );
+
+        glImageActor->Initialize(
+          ToStdString(
+            vectorImageModel->GetFilename()
+          )
+        );
+
+        m_GlView->AddActor( glImageActor, it->first );
+
+        glImageActor->SetVisible( true );
+
+        qDebug()
+          << "Added image-actor" << FromStdString( it->first )
+          << "from file" << vectorImageModel->GetFilename();
+        }
+      else
+        {
+        }
+      }
+
+#endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
+
+  //
+  // Remember first vector image-model as reference image-model.
+  m_ReferencePair.first = stackedLayerModel.GetCurrent();
+
+#if USE_REMOTE_DESKTOP_DISABLED_RENDERING
+  m_ReferencePair.second = otb::GlActor::Pointer();
+
+#else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
+
+  //
+  // Remember first actor as reference actor.
+  otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
+
+  if( keys.empty() )
+    m_ReferencePair.second = otb::GlActor::Pointer();
+
+  else
+    {
+    otb::GlActor::Pointer glActor( m_GlView->GetActor( keys.front() ) );
+    assert( !glActor.IsNull() );
+
+    assert( glActor==otb::DynamicCast< otb::GlImageActor >( glActor ) );
+    m_ReferencePair.second = otb::DynamicCast< otb::GlImageActor >( glActor );
+    assert( !m_ReferencePair.second.IsNull() );
+    }
+
+#endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 }
 
 /*******************************************************************************/

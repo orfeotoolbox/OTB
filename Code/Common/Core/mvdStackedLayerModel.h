@@ -115,6 +115,8 @@ public:
 
   inline ConstIterator Begin() const;
 
+  inline bool Contains( const KeyType & key ) const;
+
   inline SizeType Count() const;
 
   inline ConstIterator End() const;
@@ -125,12 +127,12 @@ public:
   */
 
   template< typename T >
-    const T * GetCurrent() const;
+    T * GetCurrent() const;
 
   template< typename T >
     T * GetCurrent();
 
-  const AbstractLayerModel * GetCurrent() const;
+  AbstractLayerModel * GetCurrent() const;
   AbstractLayerModel * GetCurrent();
 
   inline bool IsEmpty() const;
@@ -152,8 +154,10 @@ signals:
   void AboutToChangeSelectedLayerModel( const KeyType & );
   void SelectedLayerModelChanged( const KeyType & );
 
+  /*
   void AboutToChangeSelectedLayerModel( const AbstractLayerModel * );
   void SelectedLayerModelChanged( AbstractLayerModel * );
+  */
 
   void StackOrderChanged();
 
@@ -249,6 +253,15 @@ StackedLayerModel
 
 /*****************************************************************************/
 inline
+bool
+StackedLayerModel
+::Contains( const KeyType & key ) const
+{
+  return m_LayerModels.find( key )!=m_LayerModels.end();
+}
+
+/*****************************************************************************/
+inline
 StackedLayerModel::SizeType
 StackedLayerModel
 ::Count() const
@@ -300,11 +313,11 @@ StackedLayerModel
 /*****************************************************************************/
 template< typename T >
 inline
-const T *
+T *
 StackedLayerModel
 ::GetCurrent() const
 {
-  return dynamic_cast< const T * >( GetCurrent() );
+  return dynamic_cast< T * >( GetCurrent() );
 }
 
 /*****************************************************************************/
@@ -326,7 +339,7 @@ StackedLayerModel
 
 /*****************************************************************************/
 inline
-const AbstractLayerModel *
+AbstractLayerModel *
 StackedLayerModel
 ::GetCurrent() const
 {

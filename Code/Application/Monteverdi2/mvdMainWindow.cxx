@@ -1373,7 +1373,9 @@ MainWindow
 #endif
 #else
     StackedLayerModel stackedLayerModel;
+
     stackedLayerModel.Add( vectorImageModel );
+    stackedLayerModel.SetCurrent( vectorImageModel );
 
     m_ImageView->SetLayerStack(
       stackedLayerModel,
