@@ -900,6 +900,8 @@ MainWindow
 
   imageView->setMinimumWidth( 256 );
 
+  imageView->SetLayerStack( new StackedLayerModel( imageView ) );
+
   return imageView;
 }
 
@@ -929,6 +931,8 @@ MainWindow
   quicklookView->setMinimumSize(  64,  64 );
   quicklookView->setMaximumSize( 512, 512 );
   quicklookView->setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum );
+
+  quicklookView->SetLayerStack( new StackedLayerModel( quicklookView ) );
 
   return quicklookView;
 }
@@ -1218,6 +1222,13 @@ MainWindow
     ImageViewWidget::ZOOM_TYPE_FULL
   );
   */
+
+  /*
+  m_ImageView->GetLayerStack()->Clear();
+
+  assert( GetQuicklookView()!=NULL );
+  GetQuicklookView()->GetLayerStack()->Clear();
+  */
 #endif
 
   //
@@ -1375,10 +1386,15 @@ MainWindow
 #endif
 #else
     {
-    StackedLayerModel stackedLayerModel;
+    StackedLayerModel * stackedLayerModel = m_ImageView->GetLayerStack();
+    assert( stackedLayerModel!=NULL );
 
-    stackedLayerModel.Add( vectorImageModel );
-    stackedLayerModel.SetCurrent( vectorImageModel );
+    if( !stackedLayerModel->Contains( vectorImageModel ) )
+      {
+      stackedLayerModel->Clear();
+      stackedLayerModel->Add( vectorImageModel );
+      stackedLayerModel->SetCurrent( vectorImageModel );
+      }
 
     m_ImageView->SetLayerStack(
       stackedLayerModel,
@@ -1388,16 +1404,21 @@ MainWindow
     }
 
     {
-    StackedLayerModel stackedLayerModel;
+    ImageViewWidget * quicklookView = GetQuicklookView();
+    assert( quicklookView!=NULL );
+
+    StackedLayerModel * stackedLayerModel = quicklookView->GetLayerStack();
+    assert( stackedLayerModel!=NULL );
 
     QuicklookModel * quicklookModel = vectorImageModel->GetQuicklookModel();
     assert( quicklookModel!=NULL );
 
-    stackedLayerModel.Add( quicklookModel );
-    stackedLayerModel.SetCurrent( quicklookModel );
-
-    ImageViewWidget * quicklookView = GetQuicklookView();
-    assert( quicklookView!=NULL );
+    if( !stackedLayerModel->Contains( vectorImageModel ) )
+      {
+      stackedLayerModel->Clear();
+      stackedLayerModel->Add( quicklookModel );
+      stackedLayerModel->SetCurrent( quicklookModel );
+      }
 
     quicklookView->SetLayerStack(
       stackedLayerModel,

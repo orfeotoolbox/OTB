@@ -115,7 +115,10 @@ public:
 
   inline ConstIterator Begin() const;
 
+  void Clear();
+
   inline bool Contains( const KeyType & key ) const;
+  inline bool Contains( const AbstractLayerModel * ) const;
 
   inline SizeType Count() const;
 
@@ -258,6 +261,21 @@ StackedLayerModel
 ::Contains( const KeyType & key ) const
 {
   return m_LayerModels.find( key )!=m_LayerModels.end();
+}
+
+/*****************************************************************************/
+inline
+bool
+StackedLayerModel
+::Contains( const AbstractLayerModel * layerModel ) const
+{
+  for( LayerModelMap::const_iterator it( m_LayerModels.begin() );
+       it!=m_LayerModels.end();
+       ++it )
+    if( it->second==layerModel )
+      return true;
+
+  return false;
 }
 
 /*****************************************************************************/

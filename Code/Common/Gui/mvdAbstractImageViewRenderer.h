@@ -122,7 +122,15 @@ public:
 
   /**
    */
-  inline void SetLayerStack( const StackedLayerModel & );
+  inline void SetLayerStack( StackedLayerModel * );
+
+  /**
+   */
+  inline const StackedLayerModel * GetLayerStack() const;
+
+  /**
+   */
+  inline StackedLayerModel * GetLayerStack();
 
   /**
    */
@@ -196,7 +204,11 @@ protected:
   /**
    * Constructor.
    */
-  AbstractImageViewRenderer( QObject* parent = NULL ) : QObject( parent ) {}
+  AbstractImageViewRenderer( QObject* parent = NULL ) :
+    QObject( parent ),
+    m_StackedLayerModel( NULL )
+  {
+  }
 
 
 //
@@ -210,13 +222,16 @@ protected:
 private:
   /**
    */
-  virtual void virtual_ClearScene() {};
+  // virtual void virtual_ClearScene() {};
   /**
    */
   virtual void virtual_PrepareScene() {};
   /**
    */
-  virtual void virtual_SetLayerStack( const StackedLayerModel & ) =0;
+  virtual void virtual_UpdateScene() {};
+  /**
+   */
+  // virtual void virtual_SetLayerStack( const StackedLayerModel & ) =0;
   /**
    */
   virtual void virtual_FinishScene() {};
@@ -224,6 +239,9 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   */
+  StackedLayerModel * m_StackedLayerModel;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -260,15 +278,33 @@ AbstractImageViewRenderer
 
 /*****************************************************************************/
 inline
+StackedLayerModel *
+AbstractImageViewRenderer
+::GetLayerStack()
+{
+  return m_StackedLayerModel;
+}
+
+/*****************************************************************************/
+inline
+const StackedLayerModel *
+AbstractImageViewRenderer
+::GetLayerStack() const
+{
+  return m_StackedLayerModel;
+}
+
+/*****************************************************************************/
+inline
 void
 AbstractImageViewRenderer
-::SetLayerStack( const StackedLayerModel & stackedLayerModel )
+::SetLayerStack( StackedLayerModel * stackedLayerModel )
 {
-  virtual_ClearScene();
-
   virtual_PrepareScene();
 
-  virtual_SetLayerStack( stackedLayerModel );
+  m_StackedLayerModel = stackedLayerModel;
+
+  virtual_UpdateScene();
 
   virtual_FinishScene();
 }

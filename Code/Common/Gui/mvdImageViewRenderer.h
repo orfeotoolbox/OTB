@@ -227,11 +227,11 @@ private:
 
   /**
    */
-  typedef std::map< std::string, ModelActorPair > ModelActorPairMap;
+  // typedef std::map< std::string, ModelActorPair > ModelActorPairMap;
 
   /**
    */
-  typedef ModelActorPairMap::key_type Key;
+  // typedef ModelActorPairMap::key_type Key;
 
 //
 // Private methods.
@@ -243,18 +243,23 @@ private:
   //
   // AbstractImageViewRenderer overloads.
 
-  virtual void virtual_SetLayerStack( const StackedLayerModel & );
+  // virtual void virtual_SetLayerStack( StackedLayerModel * );
+  virtual void virtual_UpdateScene();
 
 //
 // Private attributes.
 private:
   /**
    */
+  StackedLayerModel * m_StackedLayerModel;
+
+  /**
+   */
   ModelActorPair m_ReferencePair;
 
   /**
    */
-  ModelActorPairMap m_ModelActorPairs;
+  // ModelActorPairMap m_ModelActorPairs;
 
   /**
    */ 

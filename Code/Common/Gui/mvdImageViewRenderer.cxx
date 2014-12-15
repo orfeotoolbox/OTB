@@ -76,8 +76,9 @@ ImageViewRenderer
 ::ImageViewRenderer( QObject* parent ) :
   AbstractImageViewRenderer( parent ),
   m_GlView( otb::GlView::New() ),
+  m_StackedLayerModel( NULL ),
   m_ReferencePair( NULL, otb::GlActor::Pointer() ),
-  m_ModelActorPairs(),
+  // m_ModelActorPairs(),
   m_ReferenceActorShaderMode( "STANDARD" )
 {
   assert( !m_GlView.IsNull() );
@@ -524,9 +525,23 @@ ImageViewRenderer
 /*******************************************************************************/
 void
 ImageViewRenderer
-::virtual_SetLayerStack( const StackedLayerModel & stackedLayerModel )
+// ::virtual_SetLayerStack( StackedLayerModel * stackedLayerModel )
+::virtual_UpdateScene()
 {
   assert( !m_GlView.IsNull() );
+
+  StackedLayerModel * stackedLayerModel = GetLayerStack();
+
+
+  if( stackedLayerModel==NULL )
+    {
+    m_GlView->ClearActors();
+
+    m_ReferencePair.first = NULL;
+    m_ReferencePair.second = otb::GlActor::Pointer();
+
+    return;
+    }
 
 
   {
@@ -535,7 +550,7 @@ ImageViewRenderer
   for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
        it!=keys.end();
        ++it )
-    if( !stackedLayerModel.Contains( *it ) )
+    if( !stackedLayerModel->Contains( *it ) )
       m_GlView->RemoveActor( *it );
   }
 
@@ -543,8 +558,8 @@ ImageViewRenderer
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
 #else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 
-  for( StackedLayerModel::ConstIterator it( stackedLayerModel.Begin() );
-       it!=stackedLayerModel.End();
+  for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
+       it!=stackedLayerModel->End();
        ++it )
     if( !m_GlView->ContainsActor( it->first ) )
       {
@@ -584,7 +599,7 @@ ImageViewRenderer
 
   //
   // Remember first vector image-model as reference image-model.
-  m_ReferencePair.first = stackedLayerModel.GetCurrent();
+  m_ReferencePair.first = stackedLayerModel->GetCurrent();
 
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
   m_ReferencePair.second = otb::GlActor::Pointer();

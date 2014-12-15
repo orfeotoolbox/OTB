@@ -123,14 +123,26 @@ public:
 
   /**
    */
-  void SetLayerStack( const StackedLayerModel & stackedLayerModel,
+  void SetLayerStack( StackedLayerModel * stackedLayerModel,
                       ZoomType zoom );
 
   /**
    */
-  void SetLayerStack( const StackedLayerModel & stackedLayerModel,
+  void SetLayerStack( StackedLayerModel * stackedLayerModel,
                       const PointType& center,
                       double scale );
+
+  /**
+   */
+  void SetLayerStack( StackedLayerModel * );
+
+  /**
+   */
+  inline const StackedLayerModel * GetLayerStack() const;
+
+  /**
+   */
+  inline StackedLayerModel * GetLayerStack();
 
   /**
    * \brief Access the abstract view-manipualtor of this image-view.
@@ -249,10 +261,6 @@ private:
 
   /**
    */
-  void SetLayerStack( const StackedLayerModel & );
-
-  /**
-   */
   void Center( const PointType& point, double sx, double sy );
 
   /**
@@ -313,6 +321,28 @@ ImageViewWidget
 ::GetRenderer() const
 {
   return m_Renderer;
+}
+
+/*****************************************************************************/
+inline
+const StackedLayerModel *
+ImageViewWidget
+::GetLayerStack() const
+{
+  assert( m_Renderer!=NULL );
+
+  return m_Renderer->GetLayerStack();
+}
+
+/*****************************************************************************/
+inline
+StackedLayerModel *
+ImageViewWidget
+::GetLayerStack()
+{
+  assert( m_Renderer!=NULL );
+
+  return m_Renderer->GetLayerStack();
 }
 
 } // End of namespace 'mvd'

@@ -119,13 +119,13 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::SetLayerStack( const StackedLayerModel & stackedLayerModel,
+::SetLayerStack( StackedLayerModel * stackedLayerModel,
                  const PointType& center,
                  double scale )
 {
   SetLayerStack( stackedLayerModel );
 
-  if( stackedLayerModel.IsEmpty() )
+  if( stackedLayerModel->IsEmpty() )
     return;
 
   Center( center, scale, scale );
@@ -134,12 +134,12 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::SetLayerStack( const StackedLayerModel & stackedLayerModel,
+::SetLayerStack( StackedLayerModel * stackedLayerModel,
                  ZoomType zoom )
 {
   SetLayerStack( stackedLayerModel );
 
-  if( stackedLayerModel.IsEmpty() )
+  if( stackedLayerModel->IsEmpty() )
     return;
 
   //
@@ -150,10 +150,10 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::SetLayerStack( const StackedLayerModel & stackedLayerModel )
+::SetLayerStack( StackedLayerModel * stackedLayerModel )
 {
   const VectorImageModel * imageModel =
-    stackedLayerModel.GetCurrent< VectorImageModel >();
+    stackedLayerModel->GetCurrent< VectorImageModel >();
 
   //
   // Setup image-view settings to reference image-model data.

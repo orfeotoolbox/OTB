@@ -109,6 +109,24 @@ StackedLayerModel
   return key;
 }
 
+/*****************************************************************************/
+void
+StackedLayerModel
+::Clear()
+{
+  for( LayerModelMap::iterator it( m_LayerModels.begin() );
+       it!=m_LayerModels.end();
+       ++it )
+    if( it->second!=NULL && it->second->parent()==this )
+      {
+      delete it->second;
+      it->second = NULL;
+      }
+
+  m_LayerModels.clear();
+  m_Keys.clear();
+}
+
 /*******************************************************************************/
 std::string
 StackedLayerModel
