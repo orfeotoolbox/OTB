@@ -157,9 +157,18 @@ GlView::ActorType::Pointer GlView::GetActor(const std::string & key)
     {
     itkExceptionMacro(<<"No actor found with key"<<key);
     }
-  
+
   return m_Actors[key];
 }
+
+
+bool
+GlView
+::ContainsActor( const KeyType & key ) const
+{
+  return ActorMapType::const_iterator( m_Actors.find( key ) )!=m_Actors.end();
+}
+
 
 std::vector<std::string> GlView::GetActorsKeys() const
 {

@@ -54,6 +54,11 @@ public:
   typedef std::map<std::string,ActorType::Pointer>        ActorMapType;
   typedef std::vector<std::string>                        StringVectorType;
 
+  /**
+   * Type definition for otb::GlActor storage key.
+   */
+  typedef StringVectorType::value_type KeyType;
+
   itkNewMacro(Self);
 
   /**
@@ -100,6 +105,15 @@ public:
    * null if no actor could be found with this key.
    */  
   ActorType::Pointer GetActor(const std::string & key);
+
+  /**
+   * Tells wether an otb::GlActor is contained given its storage key.
+   *
+   * @param key otb::GlActor storage key.
+   *
+   * @return true if an otb::GlActor is contained given storage key.
+   */
+  bool ContainsActor( const KeyType & key ) const;
 
   /**
    * This method will return a vector containing the keys of all
