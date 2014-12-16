@@ -61,8 +61,8 @@ else()
         ${GEOTIFF_SB_TIFF_CONFIG}
         ${GEOTIFF_SB_PROJ_CONFIG}
         ${GEOTIFF_SB_ZLIB_CONFIG}
-      BUILD_COMMAND make
-      INSTALL_COMMAND make install
+      BUILD_COMMAND $(MAKE)
+      INSTALL_COMMAND $(MAKE) install
       DEPENDS ${${proj}_DEPENDENCIES}
       )
     

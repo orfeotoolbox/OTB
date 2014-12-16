@@ -41,8 +41,8 @@ else()
         --prefix=${CMAKE_INSTALL_PREFIX}
         --mandir=${CMAKE_INSTALL_PREFIX}/share/man
         --enable-shared=yes
-      BUILD_COMMAND make
-      INSTALL_COMMAND make install-lib
+      BUILD_COMMAND $(MAKE)
+      INSTALL_COMMAND $(MAKE) install-lib
       DEPENDS ${${proj}_DEPENDENCIES}
       )
     

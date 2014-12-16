@@ -52,8 +52,8 @@ else()
         --enable-shared=yes
         --enable-samples=no
         --enable-debug=no
-      BUILD_COMMAND make
-      INSTALL_COMMAND make install
+      BUILD_COMMAND $(MAKE)
+      INSTALL_COMMAND $(MAKE) install
       DEPENDS ${${proj}_DEPENDENCIES}
       )
     

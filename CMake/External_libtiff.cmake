@@ -38,8 +38,8 @@ else()
         --prefix=${CMAKE_INSTALL_PREFIX}
         --enable-static=no
         ${LIBTIFF_SB_ZLIB_CONFIG}
-      BUILD_COMMAND make
-      INSTALL_COMMAND make install
+      BUILD_COMMAND $(MAKE)
+      INSTALL_COMMAND $(MAKE) install
       DEPENDS ${${proj}_DEPENDENCIES}
       )
     

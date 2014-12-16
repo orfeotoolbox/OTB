@@ -23,8 +23,8 @@ else()
       CONFIGURE_COMMAND ${SQLITE_SB_BUILD_DIR}/configure 
         --prefix=${CMAKE_INSTALL_PREFIX}
         --enable-static=no
-      BUILD_COMMAND make
-      INSTALL_COMMAND make install
+      BUILD_COMMAND $(MAKE)
+      INSTALL_COMMAND $(MAKE) install
       DEPENDS ${${proj}_DEPENDENCIES}
       )
     

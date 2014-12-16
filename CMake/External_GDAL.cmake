@@ -92,8 +92,8 @@ else()
         ${GDAL_SB_OPENJPEG_CONFIG}
         ${GDAL_SB_SQLITE_CONFIG}
         ${GDAL_SB_GEOS_CONFIG}
-      BUILD_COMMAND make
-      INSTALL_COMMAND make install
+      BUILD_COMMAND $(MAKE)
+      INSTALL_COMMAND $(MAKE) install
       DEPENDS ${${proj}_DEPENDENCIES}
       PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
       )
