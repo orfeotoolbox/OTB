@@ -138,6 +138,8 @@ public:
   AbstractLayerModel * GetCurrent() const;
   AbstractLayerModel * GetCurrent();
 
+  inline const KeyType & GetCurrentKey() const;
+
   inline bool IsEmpty() const;
 
   inline void SetCurrent( const KeyType & );
@@ -154,8 +156,8 @@ public slots:
 //
 // Signals.
 signals:
-  void AboutToChangeSelectedLayerModel( const KeyType & );
-  void SelectedLayerModelChanged( const KeyType & );
+  void AboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & );
+  void SelectedLayerModelChanged( const StackedLayerModel::KeyType & );
 
   /*
   void AboutToChangeSelectedLayerModel( const AbstractLayerModel * );
@@ -362,6 +364,15 @@ StackedLayerModel
 ::GetCurrent() const
 {
   return const_cast< StackedLayerModel * >( this )->GetCurrent();
+}
+
+/*****************************************************************************/
+inline
+const StackedLayerModel::KeyType &
+StackedLayerModel
+::GetCurrentKey() const
+{
+  return m_Current;
 }
 
 /*****************************************************************************/

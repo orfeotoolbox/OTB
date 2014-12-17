@@ -49,7 +49,6 @@
 // #include "Core/mvdDatabaseModel.h"
 // #include "Core/mvdDatasetModel.h"
 #include "Core/mvdQuicklookModel.h"
-#include "Core/mvdStackedLayerModel.h"
 #include "Core/mvdVectorImageModel.h"
 //
 #include "Gui/mvdApplicationsToolBox.h"
@@ -1124,7 +1123,7 @@ MainWindow
   // views to be disabled.
   //
   // N.B.: This will cause UI controllers to disable widgets.
-  OnAboutToChangeSelectedLayerModel( NULL );
+  OnAboutToChangeSelectedLayerModel( StackedLayerModel::KeyType() );
 
   assert( Application::Instance() );
   assert( Application::Instance()->GetModel()==
@@ -1141,20 +1140,24 @@ MainWindow
   // layer-model is about to change.
   QObject::disconnect(
     stackedLayerModel,
-    SIGNAL( AboutToChangeSelectedLayerModel( const AbstractLayerModel * ) ),
+    SIGNAL(
+      AboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & )
+    ),
     // to:
     this,
-    SLOT( OnAboutToChangeSelectedLayerModel( const AbstractLayerModel * ) )
+    SLOT(
+      OnAboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & )
+    )
   );
 
   // Disconnect database-model to main-window when selected
   // dataset-model has been changed.
   QObject::disconnect(
     stackedLayerModel,
-    SIGNAL( SelectedLayerModelChanged( AbstractLayerModel * ) ),
+    SIGNAL( SelectedLayerModelChanged( const StackedLayerModel::KeyType & ) ),
     // to:
     this,
-    SLOT( OnSelectedLayerModelChanged( AbstractLayerModel * ) )
+    SLOT( OnSelectedLayerModelChanged( const StackedLayerModel:KeyType & ) )
   );
 
   //
@@ -1218,6 +1221,12 @@ MainWindow
   StackedLayerModel * stackedLayerModel =
     qobject_cast< StackedLayerModel * >( model );
 
+
+  m_ImageView->SetLayerStack( stackedLayerModel );
+
+  assert( GetQuicklookView()!=NULL );
+  GetQuicklookView()->SetLayerStack( stackedLayerModel );
+
   if( stackedLayerModel==NULL )
     return;
 
@@ -1225,27 +1234,31 @@ MainWindow
   // is about to change.
   QObject::connect(
     stackedLayerModel,
-    SIGNAL( AboutToChangeSelectedLayerModel( const AbstractLayerModel * ) ),
+    SIGNAL(
+      AboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & )
+    ),
     // to:
     this,
-    SLOT( OnAboutToChangeSelectedLayerModel( const AbstractLayerModel * ) )
+    SLOT(
+      OnAboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & )
+    )
   );
 
   // Connect stacked-layer -model to main-window when selected layer-model
   // has been changed.
   QObject::connect(
     stackedLayerModel,
-    SIGNAL( SelectedLayerModelChanged( AbstractLayerModel * ) ),
+    SIGNAL( SelectedLayerModelChanged( const StackedLayerModel::KeyType & ) ),
     // to:
     this,
-    SLOT( OnSelectedLayerModelChanged( AbstractLayerModel * ) )
+    SLOT( OnSelectedLayerModelChanged( const StackedLayerModel::KeyType & ) )
   );
 
   // Force to connect selected layer-model after stacked-layer model
   // is connected.
   //
   // N.B.: This will cause UI controllers to disable widgets.
-  OnSelectedLayerModelChanged( stackedLayerModel->GetCurrent() );
+  OnSelectedLayerModelChanged( stackedLayerModel->GetCurrentKey() );
 
   //
   //
@@ -1291,9 +1304,11 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeSelectedLayerModel( const AbstractLayerModel * model )
+::OnAboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & key )
 {
-  qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
+  qDebug()
+    << this
+    << "::OnAboutToChangeSelectedDatasetModel(" << FromStdString( key ) << ")";
 
   //
   // CONTROLLERS.
@@ -1513,17 +1528,10 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnSelectedLayerModelChanged( AbstractLayerModel * model )
+::OnSelectedLayerModelChanged( const StackedLayerModel::KeyType & key )
 {
-  qDebug() << this << "::OnSelectedDatasetModelChanged(" << model << ")";
-
-  //
-  // VIEWS.
-  //
-
-  //
-  // MODEL(s).
-  //
+  qDebug()
+    << this << "::OnLayerModelChanged( " << FromStdString( key ) << ")";
 
   assert( Application::Instance() );
   assert( Application::Instance()->GetModel()==
@@ -1532,8 +1540,32 @@ MainWindow
   StackedLayerModel * stackedLayerModel =
     Application::Instance()->GetModel< StackedLayerModel >();
 
+  assert( stackedLayerModel==Application::Instance()->GetModel() );
+
   if( !stackedLayerModel )
     return;
+
+  //
+  // VIEWS.
+  //
+
+  assert( GetQuicklookView()!=NULL );
+
+  GetQuicklookView()->SetLayerStack(
+    stackedLayerModel,
+    ImageViewWidget::ZOOM_TYPE_EXTENT
+  );
+
+  assert( m_ImageView!=NULL );
+
+  m_ImageView->SetLayerStack(
+    stackedLayerModel,
+    ImageViewWidget::ZOOM_TYPE_FULL
+  );
+
+  //
+  // MODEL(s).
+  //
 
   AbstractLayerModel * layerModel = stackedLayerModel->GetCurrent();
 
@@ -1561,6 +1593,10 @@ MainWindow
       m_QuicklookViewDock->widget(),
       SLOT( updateGL()  )
     );
+    }
+  else
+    {
+    assert( false && "Unhandled AbstractLayerModel derived-type." );
     }
 
   //

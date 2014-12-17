@@ -45,6 +45,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdTypes.h"
+#include "Core/mvdStackedLayerModel.h"
 //
 #include "Gui/mvdI18nMainWindow.h"
 
@@ -172,11 +173,11 @@ protected slots:
 
   /**
    */
-  void OnAboutToChangeSelectedLayerModel( const AbstractLayerModel * );
+  void OnAboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & );
 
   /**
    */
-  void OnSelectedLayerModelChanged( AbstractLayerModel * );
+  void OnSelectedLayerModelChanged( const StackedLayerModel::KeyType & );
 
   /**
    */
