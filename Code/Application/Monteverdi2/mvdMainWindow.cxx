@@ -1396,8 +1396,8 @@ MainWindow
       stackedLayerModel->SetCurrent( vectorImageModel );
       }
 
-    m_ImageView->SetLayerStack(
-      stackedLayerModel,
+    m_ImageView->UpdateScene();
+    m_ImageView->CenterOn(
       model->GetLastPhysicalCenter(),
       model->GetLastIsotropicZoom()
     );
@@ -1420,10 +1420,8 @@ MainWindow
       stackedLayerModel->SetCurrent( quicklookModel );
       }
 
-    quicklookView->SetLayerStack(
-      stackedLayerModel,
-      ImageViewWidget::ZOOM_TYPE_EXTENT
-    );
+    quicklookView->UpdateScene();
+    quicklookView->ZoomToExtent();
     }
 #endif
     }

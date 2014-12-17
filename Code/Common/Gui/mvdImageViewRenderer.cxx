@@ -394,15 +394,7 @@ ImageViewRenderer
 /*****************************************************************************/
 void
 ImageViewRenderer
-::UpdateActors( const AbstractImageViewRenderer::RenderingContext* )
-{
-  UpdateImageActors();
-}
-
-/*****************************************************************************/
-void
-ImageViewRenderer
-::UpdateImageActors()
+::UpdateActors( const AbstractImageViewRenderer::RenderingContext * )
 {
   assert( !m_GlView.IsNull() );
 
@@ -420,129 +412,133 @@ ImageViewRenderer
     assert( !it->first.empty() );
     assert( it->second!=NULL );
 
-    assert( m_GlView->ContainsActor( it->first ) );
-
-    if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
+    if( m_GlView->ContainsActor( it->first ) )
       {
-      //
-      // Get vector image-model.
-      VectorImageModel * vectorImageModel =
-        dynamic_cast< VectorImageModel * >( it->second );
-
-      assert( vectorImageModel!=NULL );
-
-      //
-      // Get vector image-model data.
-      const VectorImageModel::Settings & settings =
-        vectorImageModel->GetSettings();
-
-      const ImageProperties * properties = 
-        vectorImageModel->GetProperties();
-
-      //
-      // Get GL image-actor.
-      assert(
-        m_GlView->GetActor( it->first )==
-        otb::DynamicCast< otb::GlImageActor >(
-          m_GlView->GetActor( it->first )
-        )
-      );
-
-      otb::GlImageActor::Pointer imageActor(
-        otb::DynamicCast< otb::GlImageActor >(
-          m_GlView->GetActor( it->first )
-        )
-      );
-      assert( !imageActor.IsNull() );
-
-
-      //
-      // Apply color-setup.
-      VectorImageModel::Settings::ChannelVector channels;
-
-      settings.GetSmartChannels( channels );
-
-      imageActor->SetRedIdx( channels[ RGBW_CHANNEL_RED ] + 1 );
-      imageActor->SetGreenIdx( channels[ RGBW_CHANNEL_GREEN ] + 1 );
-      imageActor->SetBlueIdx( channels[ RGBW_CHANNEL_BLUE ] + 1 );
-
-      //
-      // Apply color-dynamics.
-      //
-      // Must use local variable to cast from T* to T::Pointer because
-      // of ITK set/get macros...
-      otb::FragmentShader::Pointer fragmentShader( imageActor->GetShader() );
-      assert(
-        fragmentShader==otb::DynamicCast< otb::StandardShader >( fragmentShader )
-      );
-
-      otb::StandardShader::Pointer shader(
-        otb::DynamicCast< otb::StandardShader >( fragmentShader )
-      );
-
-      assert( !shader.IsNull() );
-
-      if( settings.IsGrayscaleActivated() )
+      if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
         {
-        shader->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
-        shader->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_WHITE  ) );
-      
-        shader->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
-        shader->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
-      
-        shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
-        shader->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
-        }
-      else
-        {
-        shader->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_RED ) );
-        shader->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_RED  ) );
-      
-        shader->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_GREEN ) );
-        shader->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_GREEN ) );
-      
-        shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_BLUE ) );
-        shader->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_BLUE ) );
-        }
+        //
+        // Get vector image-model.
+        VectorImageModel * vectorImageModel =
+          dynamic_cast< VectorImageModel * >( it->second );
 
-      shader->SetGamma( settings.GetGamma() );
+        assert( vectorImageModel!=NULL );
 
-      if( properties==NULL )
-        shader->SetUseNoData( false );
+        //
+        // Get vector image-model data.
+        const VectorImageModel::Settings & settings =
+          vectorImageModel->GetSettings();
 
-      else
-        {
-        shader->SetUseNoData( properties->IsNoDataEnabled() );
-        shader->SetNoData( properties->GetNoData() );
-        }
+        const ImageProperties * properties = 
+          vectorImageModel->GetProperties();
 
-      // If reference actor
-      if( refImageActor.IsNotNull() &&
-          refImageActor==imageActor )
-        {
-        // TODO: Replace std::string by otb::ShaderType and if/else sequence by switch/case statement.
-        // TODO: Move following code into private sub-function.
-        if( m_ReferenceActorShaderMode=="LOCAL_CONTRAST" )
+        //
+        // Get GL image-actor.
+        assert(
+          m_GlView->GetActor( it->first )==
+          otb::DynamicCast< otb::GlImageActor >(
+            m_GlView->GetActor( it->first )
+          )
+        );
+
+        otb::GlImageActor::Pointer imageActor(
+          otb::DynamicCast< otb::GlImageActor >(
+            m_GlView->GetActor( it->first )
+          )
+        );
+        assert( !imageActor.IsNull() );
+
+
+        //
+        // Apply color-setup.
+        VectorImageModel::Settings::ChannelVector channels;
+
+        settings.GetSmartChannels( channels );
+
+        imageActor->SetRedIdx( channels[ RGBW_CHANNEL_RED ] + 1 );
+        imageActor->SetGreenIdx( channels[ RGBW_CHANNEL_GREEN ] + 1 );
+        imageActor->SetBlueIdx( channels[ RGBW_CHANNEL_BLUE ] + 1 );
+
+        //
+        // Apply color-dynamics.
+        //
+        // Must use local variable to cast from T* to T::Pointer because
+        // of ITK set/get macros...
+        otb::FragmentShader::Pointer fragmentShader( imageActor->GetShader() );
+        assert(
+          fragmentShader==otb::DynamicCast< otb::StandardShader >( fragmentShader )
+        );
+
+        otb::StandardShader::Pointer shader(
+          otb::DynamicCast< otb::StandardShader >( fragmentShader )
+        );
+
+        assert( !shader.IsNull() );
+
+        if( settings.IsGrayscaleActivated() )
           {
-          shader->SetShaderType( otb::SHADER_LOCAL_CONTRAST );
-
-          shader->SetLocalContrastRange(
-            0.1 * std::max(
-              std::max(
-                shader->GetMaxRed() - shader->GetMinRed(),
-                shader->GetMaxGreen() - shader->GetMinGreen()
-              ),
-              shader->GetMaxBlue() - shader->GetMinBlue()
-            )
-          );
+          shader->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
+          shader->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_WHITE  ) );
+      
+          shader->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
+          shader->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
+      
+          shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
+          shader->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
           }
         else
-          shader->SetShaderType( otb::SHADER_STANDARD );
-        }
-      }
+          {
+          shader->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_RED ) );
+          shader->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_RED  ) );
+      
+          shader->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_GREEN ) );
+          shader->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_GREEN ) );
+      
+          shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_BLUE ) );
+          shader->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_BLUE ) );
+          }
 
-    else // 
-      {
+        shader->SetGamma( settings.GetGamma() );
+
+        if( properties==NULL )
+          shader->SetUseNoData( false );
+
+        else
+          {
+          shader->SetUseNoData( properties->IsNoDataEnabled() );
+          shader->SetNoData( properties->GetNoData() );
+          }
+
+        // If reference actor
+        if( refImageActor.IsNotNull() &&
+            refImageActor==imageActor )
+          {
+          // TODO: Replace std::string by otb::ShaderType and if/else sequence by switch/case statement.
+          // TODO: Move following code into private sub-function.
+          if( m_ReferenceActorShaderMode=="LOCAL_CONTRAST" )
+            {
+            shader->SetShaderType( otb::SHADER_LOCAL_CONTRAST );
+
+            shader->SetLocalContrastRange(
+              0.1 * std::max(
+                std::max(
+                  shader->GetMaxRed() - shader->GetMinRed(),
+                  shader->GetMaxGreen() - shader->GetMinGreen()
+                ),
+                shader->GetMaxBlue() - shader->GetMinBlue()
+              )
+            );
+            }
+          else
+            shader->SetShaderType( otb::SHADER_STANDARD );
+          }
+        }
+      //
+      else
+        {
+        qDebug()
+          << __FILE__ << ":" << __LINE__
+          << ": Unhandled AbstractLayerModel derived class.";
+        }
       }
     }
 }

@@ -236,10 +236,6 @@ private:
 //
 // Private methods.
 private:
-  /**
-   */
-  void UpdateImageActors();
-
   //
   // AbstractImageViewRenderer overloads.
 

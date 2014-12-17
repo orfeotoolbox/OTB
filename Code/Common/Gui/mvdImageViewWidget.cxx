@@ -119,32 +119,10 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::SetLayerStack( StackedLayerModel * stackedLayerModel,
-                 const PointType& center,
-                 double scale )
+::CenterOn( const PointType & center,
+            double scale )
 {
-  SetLayerStack( stackedLayerModel );
-
-  if( stackedLayerModel->IsEmpty() )
-    return;
-
   Center( center, scale, scale );
-}
-
-/*******************************************************************************/
-void
-ImageViewWidget
-::SetLayerStack( StackedLayerModel * stackedLayerModel,
-                 ZoomType zoom )
-{
-  SetLayerStack( stackedLayerModel );
-
-  if( stackedLayerModel->IsEmpty() )
-    return;
-
-  //
-  // Center view on center of reference image-model.
-  Center( zoom );
 }
 
 /*******************************************************************************/
@@ -796,6 +774,16 @@ ImageViewWidget
 
   // Emit zooming scale-factor.
   emit RoiChanged( center, rsx, rsy );
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::UpdateScene()
+{
+  assert( m_Renderer!=NULL );
+
+  m_Renderer->UpdateScene();
 }
 
 }

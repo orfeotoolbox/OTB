@@ -124,11 +124,6 @@ public:
   /**
    */
   void SetLayerStack( StackedLayerModel * stackedLayerModel,
-                      ZoomType zoom );
-
-  /**
-   */
-  void SetLayerStack( StackedLayerModel * stackedLayerModel,
                       const PointType& center,
                       double scale );
 
@@ -165,7 +160,13 @@ public:
 public slots:
   /**
    */
+  void UpdateScene();
+  /**
+   */
   void CenterOn( const IndexType& index );
+  /**
+   */
+  void CenterOn( const PointType& center, double scale );
   /**
    */
   void ZoomToExtent();

@@ -1123,7 +1123,7 @@ MainWindow
   // views to be disabled.
   //
   // N.B.: This will cause UI controllers to disable widgets.
-  OnAboutToChangeSelectedLayerModel( StackedLayerModel::KeyType() );
+  // OnAboutToChangeSelectedLayerModel( StackedLayerModel::KeyType() );
 
   assert( Application::Instance() );
   assert( Application::Instance()->GetModel()==
@@ -1159,54 +1159,6 @@ MainWindow
     this,
     SLOT( OnSelectedLayerModelChanged( const StackedLayerModel:KeyType & ) )
   );
-
-  //
-  //
-  //
-
-  /*
-  SetControllerModel( m_DatabaseBrowserDock, NULL );
-
-  assert( Application::Instance()!=NULL );
-
-  DatabaseModel* databaseModel =
-    Application::Instance()->GetModel< DatabaseModel >();
-  // Check that NULL==NULL or (DatabaseModel*)==(AbstractModel*)
-  assert( databaseModel==Application::Instance()->GetModel() );
-
-  // Force to disconnect previously selected dataset-model before
-  // database-model is disconnected.
-  //
-  // If there were no previously set database-model, this will cause
-  // GUI views to be disabled.
-  //
-  // N.B.: This will cause UI controllers to disable widgets.
-  OnAboutToChangeSelectedDatasetModel( NULL );
-
-  // Exit, if there were no previously set database model.
-  if( databaseModel==NULL )
-    return;
-
-  // Disonnect database-model from main-window when selected
-  // dataset-model is about to change.
-  QObject::disconnect(
-    databaseModel,
-    SIGNAL( AboutToChangeSelectedDatasetModel( const DatasetModel* ) ),
-    // to:
-    this,
-    SLOT( OnAboutToChangeSelectedDatasetModel( const DatasetModel* ) )
-  );
-
-  // Disconnect database-model to main-window when selected
-  // dataset-model has been changed.
-  QObject::disconnect(
-    databaseModel,
-    SIGNAL( SelectedDatasetModelChanged( DatasetModel* ) ),
-    // to:
-    this,
-    SLOT( OnSelectedDatasetModelChanged( DatasetModel* ) )
-  );
-  */
 }
 
 /*****************************************************************************/
@@ -1259,46 +1211,6 @@ MainWindow
   //
   // N.B.: This will cause UI controllers to disable widgets.
   OnSelectedLayerModelChanged( stackedLayerModel->GetCurrentKey() );
-
-  //
-  //
-  //
-
-  /*
-  SetControllerModel( m_DatabaseBrowserDock, model );
-
-  DatabaseModel* databaseModel = qobject_cast< DatabaseModel* >( model );
-  assert( databaseModel==model );
-
-  if( databaseModel==NULL )
-    return;
-
-  // Connect database-model to main-window when selected dataset-model
-  // is about to change.
-  QObject::connect(
-    databaseModel,
-    SIGNAL( AboutToChangeSelectedDatasetModel( const DatasetModel* ) ),
-    // to:
-    this,
-    SLOT( OnAboutToChangeSelectedDatasetModel( const DatasetModel* ) )
-  );
-
-  // Connect database-model to main-window when selected dataset-model
-  // has been changed.
-  QObject::connect(
-    databaseModel,
-    SIGNAL( SelectedDatasetModelChanged( DatasetModel* ) ),
-    // to:
-    this,
-    SLOT( OnSelectedDatasetModelChanged( DatasetModel* ) )
-  );
-
-  // Force to connect selected dataset-model after database-model is
-  // connected.
-  //
-  // N.B.: This will cause UI controllers to disable widgets.
-  OnSelectedDatasetModelChanged( databaseModel->GetSelectedDatasetModel() );
-  */
 }
 
 /*****************************************************************************/
@@ -1385,145 +1297,7 @@ MainWindow
     {
     assert( false && "Unhandled AbstractLayerModel derived-type." );
     }
-
-
-  // TODO: If selected layer-model is a VectorImageModel, disconnect
-  // SettingsUpdated() from updateGL().
-
-  // TODO: Disconnect status-bar.
 }
-
-/*****************************************************************************/
-/*
-void
-MainWindow
-::OnAboutToChangeSelectedDatasetModel( const DatasetModel* model )
-{
-  // qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
-
-  //
-  // CONTROLLERS.
-  //
-
-  //
-  // Unset model from controllers.
-  //
-  // N.B.: This step must be done *before* disconnecting signals &
-  // slots between model(s) and view(s).
-  //
-  // See also, ::OnSelectedDatasetModel() changed.
-
-  // Unset dataset-model from dataset-properties controller.
-  SetControllerModel( m_DatasetPropertiesDock, NULL );
-
-  // Unset image-model from color-dynamics controller.
-  SetControllerModel( m_ColorDynamicsDock, NULL );
-
-  // Unset image-model from color-setup controller.
-  SetControllerModel( m_ColorSetupDock, NULL );
-
-  // Unset histogram-model from histogram controller.
-  SetControllerModel( m_HistogramDock, NULL );
-
-  //
-  // VIEWS.
-  //
-
-  // Update image-view.
-  m_ImageView->SetImageList(
-    ImageViewWidget::VectorImageModelList(),
-    ImageViewWidget::ZOOM_TYPE_FULL
-  );
-
-  // Update quicklook-view.
-  assert( GetQuicklookView()!=NULL );
-  GetQuicklookView()->SetImageList(
-    ImageViewWidget::VectorImageModelList(),
-    ImageViewWidget::ZOOM_TYPE_FULL
-  );
-
-  //
-  // MODEL(s).
-  //
-
-  // Access database-model.
-  DatabaseModel* databaseModel =
-    Application::Instance()->GetModel< DatabaseModel >();
-
-
-  // Do not continue if application does not have a databaseModel set.
-  if( databaseModel==NULL )
-    return;
-
-  // Access previously selected dataset-model.
-  DatasetModel* datasetModel =
-    databaseModel->GetSelectedDatasetModel();
-
-  // If there were no previously selected dataset-model, return.
-  if( datasetModel==NULL )
-    return;
-
-  // Save dataset-model if modified.
-#if 0
-  if( datasetModel->IsModified() &&
-      QMessageBox::question(
-	this,
-	tr( PROJECT_NAME ),
-	tr( "Dataset has been modified.\n"
-	    "Do you want to save settings?" ),
-	QMessageBox::Yes |
-	QMessageBox::No,
-	QMessageBox::Yes )==QMessageBox::Yes )
-#endif
-  datasetModel->Save();
-
-  // Access previously selected vector-image model.
-  const VectorImageModel* vectorImageModel =
-    datasetModel->GetSelectedImageModel< VectorImageModel >();
-
-  // Check type.
-  assert( vectorImageModel==datasetModel->GetSelectedImageModel() );
-
-  // Connect newly selected model to view (after all other widgets are
-  // connected to prevent signals/slots to produce multiple view
-  // refreshes).
-  if( vectorImageModel!=NULL )  // could be null when no dataset selected
-    {
-    // Disconnect previously selected image-model from view.
-    QObject::disconnect(
-      vectorImageModel,
-      SIGNAL( SettingsUpdated() ),
-      // from:
-      m_ImageView,
-      SLOT( updateGL()  )
-      );
-
-    // Disconnect previously selected quicklook-model from view.
-    // TODO: Remove quicklook temporary hack by better design.
-    QObject::disconnect(
-      vectorImageModel,
-      SIGNAL( SettingsUpdated() ),
-      // from:
-      m_QuicklookViewDock->widget(),
-      SLOT( updateGL()  )
-      );
-    }
-
-  QObject::disconnect(
-    m_ImageView,
-    SIGNAL( RoiChanged( const PointType&, double, double ) ),
-    // to:
-    datasetModel,
-    SLOT( OnRoiChanged( const PointType&, double, double ) )
-  );
-
-  // Disconnect the signals from the previous dataset model
-  DisconnectStatusBar( datasetModel );
-
-  // Disconnect the 
-  DisconnectPixelDescriptionWidget( datasetModel );
-}
-*/
 
 /*****************************************************************************/
 void
@@ -1542,26 +1316,24 @@ MainWindow
 
   assert( stackedLayerModel==Application::Instance()->GetModel() );
 
-  if( !stackedLayerModel )
+  if( stackedLayerModel==NULL )
     return;
 
   //
   // VIEWS.
   //
 
-  assert( GetQuicklookView()!=NULL );
+  ImageViewWidget * quicklookView = GetQuicklookView();
+  assert( quicklookView );
 
-  GetQuicklookView()->SetLayerStack(
-    stackedLayerModel,
-    ImageViewWidget::ZOOM_TYPE_EXTENT
-  );
+  quicklookView->UpdateScene();
+  quicklookView->ZoomToExtent();
+
 
   assert( m_ImageView!=NULL );
 
-  m_ImageView->SetLayerStack(
-    stackedLayerModel,
-    ImageViewWidget::ZOOM_TYPE_FULL
-  );
+  m_ImageView->UpdateScene();
+  m_ImageView->ZoomToFullResolution();
 
   //
   // MODEL(s).

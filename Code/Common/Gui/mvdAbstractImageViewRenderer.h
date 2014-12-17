@@ -188,6 +188,7 @@ public:
 
 // public slots
 public slots:
+  inline void UpdateScene();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -307,6 +308,15 @@ AbstractImageViewRenderer
   virtual_UpdateScene();
 
   virtual_FinishScene();
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractImageViewRenderer
+::UpdateScene()
+{
+  virtual_UpdateScene();
 }
 
 } // end namespace 'mvd'
