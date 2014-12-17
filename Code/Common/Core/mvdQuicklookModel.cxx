@@ -122,14 +122,19 @@ QuicklookModel
   // Quicklook file.
 
   // Quicklook file information.
-  assert( !buildContext->m_Quicklook.isEmpty() );
-  QFileInfo quicklookFileInfo( buildContext->m_Quicklook );
+  bool inMemory = buildContext->m_Quicklook.isEmpty();
+
+  QFileInfo quicklookFileInfo(
+    inMemory
+    ? buildContext->m_Filename
+    : buildContext->m_Quicklook
+  );
 
   // Quicklook filename.
   QString quicklookFilename( quicklookFileInfo.filePath() );
 
   // First time?
-  if( buildContext->IsBeingStored() )
+  if( buildContext->IsBeingStored() && !inMemory )
     {
     // Instanciate a quicklook file writer.
     VectorImageFileWriterType::Pointer fileWriter(

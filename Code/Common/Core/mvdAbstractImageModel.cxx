@@ -259,8 +259,7 @@ AbstractImageModel
   //
   // Build quicklook before histogram because histogram calculation is
   // based on quicklook image.
-  if( !buildContext->m_Quicklook.isEmpty() )
-    newChildModel< QuicklookModel >( context );
+  newChildModel< QuicklookModel >( context );
 
   //
   // HISTOGRAM.

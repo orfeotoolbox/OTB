@@ -190,7 +190,7 @@ I18nMainWindow
     QObjectCast< VectorImageModel * >(
       Import(
         // New dataset-importer worker.
-      // It will be auto-deleted by background-task.
+        // It will be auto-deleted by background-task.
         new ImageImporter(
           filename,
           width, height
