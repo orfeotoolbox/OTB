@@ -1,9 +1,76 @@
+README
+======
+
 This is the ORFEO Toolbox README file.
+
 Please see the Copyright directory for legal issues on the use of the software.
+
 Install information is available in the OTB Software Guide which can be downloaded from http://www.orfeo-toolbox.org.
 
-Thank you.
 
-The OTB Development Team.
+Software Guide
+--------------
+
+The main source of information is the OTB Software Guide. This is a comprehensive guide which comprises about 800 pages, detailing the steps to install OTB and use it. Most of the classes available are heavily illustrated with results from real remote sensing processing. 
+
+- http://orfeo-toolbox.org/packages/OTBSoftwareGuide.pdf
+
+CookBook
+--------
+A guide for OTB applications and Monteverdi dedicated for non-developers is also available. This guide is composed of a brief tour of of applications and Monteverdi, followed by a set of recipes to perform usual remote sensing tasks with both tools. 
+
+- http://orfeo-toolbox.org/packages/OTBCookBook.pdf
+
+FAQ
+---
+
+- http://orfeo-toolbox.org/packages/OTB-FAQ.pdf
+
+Doxygen
+-------
+
+The doxygen guide which details the full API of the library is a compulsory guide. Two versions of the doxygen are available:
+
+- http://orfeo-toolbox.org/doxygen/  (Release)
+- http://orfeo-toolbox.org/doxygen-current/ (Weekly build)
+
+
+Mailing lists
+-------------
+
+Another good source of information is the OTB mailing list. 
+
+You are always welcomed to ask about OTB on mailing list. 
+Even though one important point to remember is response time and quality is always directly proportional to how better you can explain your problem
+So if you are new to OTB, Before shooting an e-mail you may try our FAQ page and Software Guide. 
+
+- otb-user  http://groups.google.com/group/otb-users
+- otb-developers http://groups.google.com/group/otb-developers
+
+Sample Data
+-----------
+
+- http://orfeo-toolbox.org/packages/OTB-Data-Examples.zip
+
+Blog
+----
+
+- http://blog.orfeo-toolbox.org/
+
+Courses
+-------
+There are tutorials and presentations that help you learn OTB. you can find them in sourceforge page [#]_ or have 
+the latex source via mercurial [#]_ .
+
+.. [1] http://sourceforge.net/projects/orfeo-toolbox/files/OTBCourses-4.2.pdf
+.. [2] http://hg.orfeo-toolbox.org/OTB-Documents/file/tip/Courses
+
+RELEASE NOTES
+-------------
+
+- http://hg.orfeo-toolbox.org/OTB/file/tip/RELEASE_NOTES.txt
+
+
+*All urls provided are concerned with latest release of OTB.*
 
 
