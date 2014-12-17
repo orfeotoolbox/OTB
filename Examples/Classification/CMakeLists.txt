@@ -163,7 +163,7 @@ add_test(clTeScalarImageKmeansClassifierTest ${EXE_TESTS}
 )
 
 add_test(clTeNeighborhoodMajorityVotingImageFilterTest ${EXE_TESTS}
-       --compare-n-images ${NOTOL}
+       --compare-image ${NOTOL}
        ${OTB_DATA_ROOT}/Baseline/OTB/Images/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
        ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7_EX.tif
       ClassificationMapRegularizationExampleTest
