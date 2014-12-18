@@ -445,10 +445,9 @@ MainWindow
 }
 
 /*****************************************************************************/
-/*
 void
 MainWindow
-::ConnectStatusBar( DatasetModel * model)
+::ConnectStatusBar( AbstractLayerModel * model )
 {
   assert( m_StatusBarWidget!=NULL );
 
@@ -478,38 +477,53 @@ MainWindow
     SLOT( CenterOn( const IndexType& ) )
   );
 
-  // Access vector-image model.
-  VectorImageModel* vectorImageModel =
-    model->GetSelectedImageModel< VectorImageModel >();
+  if( model==NULL )
+    return;
 
-  if ( vectorImageModel )
+  // Access vector-image model.
+  if( model->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
+    VectorImageModel * vectorImageModel =
+      qobject_cast< VectorImageModel * >( model );
+
+    assert( vectorImageModel==qobject_cast< VectorImageModel * >( model ) );
+
     //
     // send the physical point of the clicked point in screen
     // vectorImageModel is in charge of pixel information computation
     QObject::connect(
       m_ImageView,
       SIGNAL(
-        PhysicalCursorPositionChanged( const PointType&,
-                                       const DefaultImageType::PixelType& )
+        PhysicalCursorPositionChanged(
+          const PointType&,
+          const DefaultImageType::PixelType&
+        )
       ),
       // to:
       vectorImageModel,
-      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
-                                             const DefaultImageType::PixelType& )
+      SLOT(
+        OnPhysicalCursorPositionChanged(
+          const PointType&,
+          const DefaultImageType::PixelType&
+        )
       )
     );
 
     QObject::connect(
       GetQuicklookView(),
       SIGNAL(
-        PhysicalCursorPositionChanged( const PointType&,
-                                       const DefaultImageType::PixelType& )
+        PhysicalCursorPositionChanged(
+          const PointType&,
+          const DefaultImageType::PixelType&
+        )
       ),
       // to:
       vectorImageModel,
-      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
-                                             const DefaultImageType::PixelType& )
+      SLOT(
+        OnPhysicalCursorPositionChanged(
+          const PointType&,
+          const DefaultImageType::PixelType&
+        )
       )
     );
 
@@ -533,7 +547,6 @@ MainWindow
     );
     }
 }
-*/
 
 /*****************************************************************************/
 /*
@@ -629,10 +642,9 @@ MainWindow
 */
 
 /*****************************************************************************/
-/*
 void
 MainWindow
-::DisconnectStatusBar( const DatasetModel * model )
+::DisconnectStatusBar( const AbstractLayerModel * model )
 {
   assert( m_StatusBarWidget!=NULL );
 
@@ -662,12 +674,19 @@ MainWindow
     SLOT( CenterOn( const IndexType& ) )
   );
 
-  // Access vector-image model.
-  const VectorImageModel* vectorImageModel =
-    model->GetSelectedImageModel< VectorImageModel >();
+  if( model==NULL )
+    return;
 
-  if( vectorImageModel )
+  if( model->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
+    // Access vector-image model.
+    const VectorImageModel* vectorImageModel =
+      qobject_cast< const VectorImageModel * >( model );
+
+    assert(
+      vectorImageModel==qobject_cast< const VectorImageModel * >( model )
+    );
+
     //
     // send the physical point of the clicked point in screen
     // vectorImageModel is in charge of pixel information computation
@@ -715,7 +734,6 @@ MainWindow
       );
     }
 }
-*/
 
 /*****************************************************************************/
 void
@@ -1300,6 +1318,8 @@ MainWindow
     {
     assert( false && "Unhandled AbstractLayerModel derived-type." );
     }
+
+  DisconnectStatusBar( layerModel );
 }
 
 /*****************************************************************************/
@@ -1373,6 +1393,8 @@ MainWindow
     {
     assert( false && "Unhandled AbstractLayerModel derived-type." );
     }
+
+  ConnectStatusBar( layerModel );
 
   //
   // CONTROLLERS.

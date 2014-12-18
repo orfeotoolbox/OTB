@@ -249,10 +249,11 @@ private:
 
   /**
    */
-  // void ConnectStatusBar( DatasetModel* model );
+  void ConnectStatusBar( AbstractLayerModel * model );
+
   /**
    */
-  // void DisconnectStatusBar( const DatasetModel* model );
+  void DisconnectStatusBar( const AbstractLayerModel * model );
 
   /**
    */
