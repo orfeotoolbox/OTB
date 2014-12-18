@@ -1123,7 +1123,7 @@ MainWindow
   // views to be disabled.
   //
   // N.B.: This will cause UI controllers to disable widgets.
-  // OnAboutToChangeSelectedLayerModel( StackedLayerModel::KeyType() );
+  OnAboutToChangeSelectedLayerModel( StackedLayerModel::KeyType() );
 
   assert( Application::Instance() );
   assert( Application::Instance()->GetModel()==
