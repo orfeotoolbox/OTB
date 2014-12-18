@@ -257,8 +257,11 @@ private:
 
   /**
    */
-  // void ConnectPixelDescriptionWidget(DatasetModel * model);
-  // void DisconnectPixelDescriptionWidget(const DatasetModel * model);
+  void ConnectPixelDescriptionWidget( AbstractLayerModel * model);
+
+  /**
+   */
+  void DisconnectPixelDescriptionWidget( const AbstractLayerModel * model );
 
   //
   // I18nMainWindow overrides.

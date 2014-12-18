@@ -549,97 +549,116 @@ MainWindow
 }
 
 /*****************************************************************************/
-/*
 void
 MainWindow
-::ConnectPixelDescriptionWidget( DatasetModel * model)
+::ConnectPixelDescriptionWidget( AbstractLayerModel * model )
 {
+  if( model==NULL ||
+      !model->inherits( VectorImageModel::staticMetaObject.className() ) )
+    return;
+
   // Access vector-image model.
-  VectorImageModel* vectorImageModel =
-    model->GetSelectedImageModel< VectorImageModel >();
+  VectorImageModel * vectorImageModel =
+    qobject_cast< VectorImageModel * >( model );
+
+  assert( vectorImageModel==qobject_cast< VectorImageModel * >( model ) );
+  assert( vectorImageModel!=NULL );
 
   // get the PixelDescription widget
-  PixelDescriptionWidget * wpixelDescription = 
-    qobject_cast<PixelDescriptionWidget*>(
-      m_PixelDescriptionDock->findChild<PixelDescriptionWidget*>()
+  // TODO: Make a widget controller!
+  PixelDescriptionWidget * pixelDescriptionWidget = 
+    qobject_cast< PixelDescriptionWidget * >(
+      m_PixelDescriptionDock->findChild< PixelDescriptionWidget * >()
     );
 
-  if ( vectorImageModel && wpixelDescription )
-    {
-    QObject::connect(
-      vectorImageModel,
-      SIGNAL( CurrentPhysicalUpdated(const QStringList& ) ),
-      wpixelDescription,
-      SLOT( OnCurrentPhysicalUpdated(const QStringList&) )
-      );
+  assert( pixelDescriptionWidget!=NULL );
 
-    QObject::connect(
-      vectorImageModel,
-      SIGNAL( CurrentGeographicUpdated(const QStringList& ) ),
-      wpixelDescription,
-      SLOT( OnCurrentGeographicUpdated(const QStringList& ) )
-      );
+  QObject::connect(
+    vectorImageModel,
+    SIGNAL( CurrentPhysicalUpdated( const QStringList & ) ),
+    // to:
+    pixelDescriptionWidget,
+    SLOT( OnCurrentPhysicalUpdated( const QStringList & ) )
+  );
 
-    QObject::connect(
-      vectorImageModel,
-      SIGNAL( CurrentPixelValueUpdated(const VectorImageType::PixelType&, 
-                                       const QStringList& ) ),
-      wpixelDescription,
-      SLOT( OnCurrentPixelValueUpdated(const VectorImageType::PixelType&, 
-                                       const QStringList& ) )
-      );
-    }
+  QObject::connect(
+    vectorImageModel,
+    SIGNAL( CurrentGeographicUpdated( const QStringList & ) ),
+    // to:
+    pixelDescriptionWidget,
+    SLOT( OnCurrentGeographicUpdated( const QStringList & ) )
+  );
+
+  QObject::connect(
+    vectorImageModel,
+    SIGNAL( CurrentPixelValueUpdated(const VectorImageType::PixelType &, 
+                                     const QStringList & ) ),
+    // to:
+    pixelDescriptionWidget,
+    SLOT( OnCurrentPixelValueUpdated(const VectorImageType::PixelType &, 
+                                     const QStringList & ) )
+  );
 }
-*/
 
 /*****************************************************************************/
-/*
 void
 MainWindow
-::DisconnectPixelDescriptionWidget( const DatasetModel * model)
+::DisconnectPixelDescriptionWidget( const AbstractLayerModel * model )
 {
-  // WIP
+  if( model==NULL ||
+      !model->inherits( VectorImageModel::staticMetaObject.className() ) )
+    return;
 
   // Access vector-image model.
-  const VectorImageModel* vectorImageModel =
-    model->GetSelectedImageModel< VectorImageModel >();
+  const VectorImageModel * vectorImageModel =
+    qobject_cast< const VectorImageModel * >( model );
+
+  assert( vectorImageModel==qobject_cast< const VectorImageModel * >( model ) );
+  assert( vectorImageModel!=NULL );
 
   // get the PixelDescription widget
-  PixelDescriptionWidget * wpixelDescription = 
-    qobject_cast<PixelDescriptionWidget*>(
-      m_PixelDescriptionDock->findChild<PixelDescriptionWidget*>()
+  // TODO: Make a widget controller!
+  PixelDescriptionWidget * pixelDescriptionWidget = 
+    qobject_cast< PixelDescriptionWidget * >(
+      m_PixelDescriptionDock->findChild< PixelDescriptionWidget * >()
     );
 
-  if ( vectorImageModel && wpixelDescription )
-    {
-    QObject::disconnect(
-      vectorImageModel,
-      SIGNAL( CurrentPhysicalUpdated( const QStringList& ) ),
-      // to:
-      wpixelDescription,
-      SLOT( OnCurrentPhysicalUpdated( const QStringList& ) )
-    );
+  assert( pixelDescriptionWidget!=NULL );
 
-    QObject::disconnect(
-      vectorImageModel,
-      SIGNAL( CurrentGeographicUpdated( const QStringList& ) ),
-      // to:
-      wpixelDescription,
-      SLOT( OnCurrentGeographicUpdated( const QStringList& ) )
-    );
+  QObject::disconnect(
+    vectorImageModel,
+    SIGNAL( CurrentPhysicalUpdated( const QStringList & ) ),
+    // to:
+    pixelDescriptionWidget,
+    SLOT( OnCurrentPhysicalUpdated( const QStringList & ) )
+  );
 
-    QObject::connect(
-      vectorImageModel,
-      SIGNAL( CurrentPixelValueUpdated( const VectorImageType::PixelType&,
-                                        const QStringList& ) ),
-      // to:
-      wpixelDescription,
-      SLOT( OnCurrentPixelValueUpdated( const VectorImageType::PixelType&,
-                                        const QStringList& ) )
-    );
-    }
+  QObject::disconnect(
+    vectorImageModel,
+    SIGNAL( CurrentGeographicUpdated( const QStringList & ) ),
+    // to:
+    pixelDescriptionWidget,
+    SLOT( OnCurrentGeographicUpdated( const QStringList & ) )
+  );
+
+  QObject::connect(
+    vectorImageModel,
+    SIGNAL(
+      CurrentPixelValueUpdated(
+        const VectorImageType::PixelType &,
+        const QStringList &
+      )
+    ),
+    // to:
+    pixelDescriptionWidget,
+    SLOT(
+      OnCurrentPixelValueUpdated(
+        const VectorImageType::PixelType &,
+        const QStringList &
+      )
+    )
+  );
 }
-*/
 
 /*****************************************************************************/
 void
@@ -1320,6 +1339,8 @@ MainWindow
     }
 
   DisconnectStatusBar( layerModel );
+
+  DisconnectPixelDescriptionWidget( layerModel );
 }
 
 /*****************************************************************************/
@@ -1395,6 +1416,8 @@ MainWindow
     }
 
   ConnectStatusBar( layerModel );
+
+  ConnectPixelDescriptionWidget( layerModel );
 
   //
   // CONTROLLERS.
