@@ -952,7 +952,10 @@ MainWindow
 ::ImportImage( const QString& filename, bool forceCreate )
 {
   VectorImageModel * imageModel = ImportImage( filename, -1, -1 );
-  assert( imageModel );
+  // assert( imageModel );
+
+  if( imageModel==NULL )
+    return;
 
   assert( Application::Instance() );
   assert(
