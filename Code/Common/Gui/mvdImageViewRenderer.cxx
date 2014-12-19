@@ -77,11 +77,20 @@ ImageViewRenderer
   AbstractImageViewRenderer( parent ),
   m_GlView( otb::GlView::New() ),
   m_StackedLayerModel( NULL ),
+#ifdef _WIN32
+#else // _WIN32
   m_ReferencePair( NULL, otb::GlActor::Pointer() ),
+#endif // _WIN32
   // m_ModelActorPairs(),
   m_ReferenceActorShaderMode( "STANDARD" )
 {
   assert( !m_GlView.IsNull() );
+
+#ifdef _WIN32
+  m_ReferencePair.first = NULL;
+  // m_ReferencePair.second is initialized by otb::GlActor::Pointer default constructor.
+#else // _WIN32
+#endif // _WIN32
 }
 
 /*****************************************************************************/
