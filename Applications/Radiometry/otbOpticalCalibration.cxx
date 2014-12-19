@@ -806,7 +806,7 @@ private:
           if ( !(GetParameterString("atmo.rsr") == "") )
             m_paramAcqui->LoadFilterFunctionValue(GetParameterString("atmo.rsr"));
           else
-            otbAppLogFATAL("Please, set a sensor relative spectral response file.");  
+            otbAppLogFATAL("Please, set a sensor relative spectral response file.");
         }
         else if (IMIName != IMIOptDfltName)
         {
