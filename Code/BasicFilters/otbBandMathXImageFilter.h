@@ -175,7 +175,7 @@ private :
 
   std::vector< int >                        m_StatsVarDetected; // input image ID for which global statistics have been detected
 
-  std::vector< int >                        m_NeighDetected; // input image ID for which neighbourhood have been detected
+  std::vector< unsigned int >              m_NeighDetected; // input image ID for which neighbourhood have been detected
   std::vector < RadiusType >                m_NeighExtremaSizes;
 
   long                                  m_UnderflowCount;

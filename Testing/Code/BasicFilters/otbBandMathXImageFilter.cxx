@@ -340,12 +340,12 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
 
     //expression 1
     px1[0]=0;
-    for(int i=0; i<it1.Size(); ++i)
+    for(unsigned int i=0; i<it1.Size(); ++i)
         px1[0] += coefs[i]*it1.GetPixel(i)[0];
       
 
     px1[1]=0;
-    for(int i=0; i<it1.Size(); ++i)
+    for(unsigned int i=0; i<it1.Size(); ++i)
         px1[1] += coefs[i]*it1.GetPixel(i)[1];
 
     px1[2]= vcl_pow(it2.GetCenterPixel()[0],expo);
@@ -358,12 +358,12 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
       vect.push_back(it1.GetPixel(i)[1]);
 
     px1[4] = 0.0;
-    for (int i=0; i<vect.size(); i++)
+    for (unsigned int i=0; i<vect.size(); i++)
       px1[4] += vect[i];
     px1[4] /= ((double) vect.size()); //mean
 
     px1[5] = 0.0;
-    for (int i=0; i<vect.size(); i++)
+    for (unsigned int i=0; i<vect.size(); i++)
       px1[5] += (vect[i]-px1[4])*(vect[i]-px1[4]);
     px1[5] /= ((double) vect.size()); //var
 
@@ -373,7 +373,7 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
 
     //expression 2
     std::vector<double> vect2;
-    for (int i=0; i<it3.Size(); i++)
+    for (unsigned int i=0; i<it3.Size(); i++)
       vect2.push_back(it3.GetPixel(i)[0]);
     std::sort(vect2.begin(),vect2.end());
     px2[0] = (vect2.back() + vect2.front())/2.0 + imageAb3Var / 2.0 + (imageAb2Mini / im2b1Maxi)*3.4 + vcl_pow(imageAb3Mean / imageAb1Sum * imageAb3Var,1.2);
