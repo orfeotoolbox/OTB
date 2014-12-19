@@ -94,8 +94,6 @@ public:
                                                      DoubleVectorImageType>          ReflectanceToSurfaceReflectanceImageFilterType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionValuesType  FilterFunctionValuesType;
   typedef FilterFunctionValuesType::ValuesVectorType                                ValuesVectorType;
-  //typedef AtmosphericCorrectionParameters                                           AtmosphericCorrectionParametersType; chris
-  //typedef AtmosphericCorrectionParametersType::AerosolModelType                     AerosolModelType; chris
 
   typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
   typedef otb::AtmosphericCorrectionParameters::Pointer                     AtmoCorrectionParametersPointerType;
@@ -805,7 +803,10 @@ private:
         // Relative Spectral Response File
         if (IsParameterEnabled("atmo.rsr"))
         {
-          m_paramAcqui->LoadFilterFunctionValue(GetParameterString("atmo.rsr"));
+          if ( !(GetParameterString("atmo.rsr") == "") )
+            m_paramAcqui->LoadFilterFunctionValue(GetParameterString("atmo.rsr"));
+          else
+            otbAppLogFATAL("Please, set a sensor relative spectral response file.");  
         }
         else if (IMIName != IMIOptDfltName)
         {
