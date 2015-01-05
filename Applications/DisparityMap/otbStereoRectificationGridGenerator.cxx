@@ -277,6 +277,7 @@ private:
     // Left field inversion
     if(IsParameterEnabled("inverse.outleft"))
       {
+
       m_LeftDisplacementFieldCaster->SetInput(m_DisplacementFieldSource->GetLeftDisplacementFieldOutput());
 
       m_LeftInvertDisplacementFieldFilter->SetInput(m_LeftDisplacementFieldCaster->GetOutput());
@@ -284,6 +285,9 @@ private:
       FloatVectorImageType::PointType lorigin = GetParameterImage("io.inleft")->GetOrigin();
       FloatVectorImageType::SpacingType lspacing = GetParameterImage("io.inleft")->GetSpacing();
       FloatVectorImageType::SizeType lsize = GetParameterImage("io.inleft")->GetLargestPossibleRegion().GetSize();
+  
+      if (lsize[0]*lsize[1]>256*256)
+        otbAppLogWARNING("Left image's size (" << lsize[0] << "x" << lsize[1] << ") may result in a too high computational demand. Please consider setting inverse.ssrate parameter correctly (actual value is " << GetParameterInt("inverse.ssrate") << ").");
 
       lspacing[0]*=GetParameterInt("epi.step");
       lspacing[1]*=GetParameterInt("epi.step");
@@ -323,6 +327,9 @@ private:
       FloatVectorImageType::PointType rorigin = GetParameterImage("io.inright")->GetOrigin();
       FloatVectorImageType::SpacingType rspacing = GetParameterImage("io.inright")->GetSpacing();
       FloatVectorImageType::SizeType rsize = GetParameterImage("io.inright")->GetLargestPossibleRegion().GetSize();
+
+      if (rsize[0]*rsize[1]>256*256)
+        otbAppLogWARNING("Right image's size (" << rsize[0] << "x" << rsize[1] << ") may result in a too high computational demand. Please consider setting inverse.ssrate parameter correctly (actual value is " << GetParameterInt("inverse.ssrate") << ").");
 
       rspacing[0]*=GetParameterInt("epi.step");
       rspacing[1]*=GetParameterInt("epi.step");
