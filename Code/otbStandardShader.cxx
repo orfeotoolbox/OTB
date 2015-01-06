@@ -61,17 +61,17 @@ std::string StandardShader::GetSource() const
     itkExceptionMacro(<<" Required GL and GLSL versions were not found (GL version is "<<glVersion<<", should be at least "<<otb::GlVersionChecker::REQUIRED_GL_VERSION<<", GLSL version is "<<glslVersion<<", should be at least "<<otb::GlVersionChecker::REQUIRED_GLSL_VERSION<<")");
     }
 
-  bool isGLSLS130Available  = otb::GlVersionChecker::VerCmp(glslVersion,"1.30")>=0;
+  bool isGLSLS140Available  = otb::GlVersionChecker::VerCmp(glslVersion,"1.40")>=0;
 
   std::string shader_source = "";
 
-  if(isGLSLS130Available)
+  if(isGLSLS140Available)
     {
-    shader_source+="#version 130 \n";
+    shader_source+="#version 140 \n";
     }
   else
     {
-    shader_source+="#version 120 \n";
+    shader_source+="#version 130 \n";
     }
 
   shader_source = 
@@ -138,7 +138,7 @@ std::string StandardShader::GetSource() const
     "}\n"                                                               \
     "}\n";
   
-  if(isGLSLS130Available)
+  if(isGLSLS140Available)
     {
     shader_source+=
     "else if(shader_type == 6)\n"                                       \
