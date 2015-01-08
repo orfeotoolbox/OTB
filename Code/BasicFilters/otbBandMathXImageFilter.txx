@@ -426,7 +426,7 @@ void BandMathXImageFilter<TImage>
 
         pos = wholeline.find_first_not_of(' ');
         
-        if (pos != std::string::npos)
+        if (pos != (int) std::string::npos)
         {
           line = wholeline.substr(pos);
 
@@ -435,7 +435,7 @@ void BandMathXImageFilter<TImage>
               
               pos = line.find_first_not_of(' ',2);
 
-              if (pos == std::string::npos)
+              if (pos == (int) std::string::npos)
                 itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : please, set the name and the value of the constant." << std::endl);
 
               sub = line.substr(pos);
@@ -462,7 +462,7 @@ void BandMathXImageFilter<TImage>
 
               pos = line.find_first_not_of(' ',2);
 
-              if (pos == std::string::npos)
+              if (pos == (int) std::string::npos)
                 itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : please, set the name and the definition of the vector/matrix." << std::endl);
 
               std::string sub = line.substr(pos);
@@ -470,7 +470,7 @@ void BandMathXImageFilter<TImage>
               pos = sub.find_first_of(' ');
               name = sub.substr(0,pos);
               pos2 = sub.find_first_of('{');
-              if (pos2 != std::string::npos)
+              if (pos2 != (int) std::string::npos)
                 matrixdef = sub.substr(pos2);
               else
                 itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : symbol #M found, but couldn't not find vector/matrix definition." << std::endl);
@@ -483,7 +483,7 @@ void BandMathXImageFilter<TImage>
             {
               pos = line.find_first_not_of(' ',2);
 
-              if (pos == std::string::npos)
+              if (pos == (int) std::string::npos)
                 itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : symbol #E found, but couldn't not find any expression." << std::endl);
 
               sub = line.substr(pos);
@@ -691,18 +691,18 @@ void BandMathXImageFilter<TImage>
               m_NeighDetected.push_back(m_AImage[i][j].info[0]);
 
             // find biggest radius for a given input image (idis given by info[0])
-            if (m_NeighExtremaSizes[m_AImage[i][j].info[0]][0] < (int) ((m_VVarName[j].info[2]-1)/2) )  // Size x direction (otb convention)
-              m_NeighExtremaSizes[m_AImage[i][j].info[0]][0] = (int) ((m_VVarName[j].info[2]-1)/2);
+            if (m_NeighExtremaSizes[m_AImage[i][j].info[0]][0] < (unsigned int) ((m_VVarName[j].info[2]-1)/2) )  // Size x direction (otb convention)
+              m_NeighExtremaSizes[m_AImage[i][j].info[0]][0] = (unsigned int) ((m_VVarName[j].info[2]-1)/2);
 
-            if (m_NeighExtremaSizes[m_AImage[i][j].info[0]][1] < (int) ((m_VVarName[j].info[3]-1)/2) )  // Size y direction (otb convention)
-              m_NeighExtremaSizes[m_AImage[i][j].info[0]][1] = (int) ((m_VVarName[j].info[3]-1)/2);
+            if (m_NeighExtremaSizes[m_AImage[i][j].info[0]][1] < (unsigned int) ((m_VVarName[j].info[3]-1)/2) )  // Size y direction (otb convention)
+              m_NeighExtremaSizes[m_AImage[i][j].info[0]][1] = (unsigned int) ((m_VVarName[j].info[3]-1)/2);
 
         }
 
         if (m_AImage[i][j].type == 7 ) // user defined variables
         {
 
-          for(int t=0; t<m_VAllowedVarNameAddedByUser.size(); t++)
+          for(int t=0; t<(int) m_VAllowedVarNameAddedByUser.size(); t++)
             if (m_VAllowedVarNameAddedByUser[t].name.compare(m_AImage[i][j].name) == 0)
               m_AImage[i][j].value = m_VAllowedVarNameAddedByUser[t].value;
 
@@ -761,7 +761,7 @@ void BandMathXImageFilter<TImage>
                   case 0: // mini
 
                     pix = filter->GetMinimum();
-                    for (unsigned int b=0; b<pix.GetSize(); b++) // for each band
+                    for (int b=0; b<(int) pix.GetSize(); b++) // for each band
                       if (m_AImage[t][v].info[1] == b) // info[1] : band ID
                         m_AImage[t][v].value = pix[b];
 
@@ -770,7 +770,7 @@ void BandMathXImageFilter<TImage>
                   case 1: // maxi
 
                     pix = filter->GetMaximum();
-                    for (unsigned int b=0; b<pix.GetSize(); b++) // for each band
+                    for (int b=0; b<(int) pix.GetSize(); b++) // for each band
                       if (m_AImage[t][v].info[1] == b) // info[1] : band ID
                         m_AImage[t][v].value = pix[b];
 
@@ -779,7 +779,7 @@ void BandMathXImageFilter<TImage>
                   case 2: // mean
 
                     pix = filter->GetMean();
-                    for (unsigned int b=0; b<pix.GetSize(); b++) // for each band
+                    for (int b=0; b<(int) pix.GetSize(); b++) // for each band
                       if (m_AImage[t][v].info[1] == b) // info[1] : band ID
                         m_AImage[t][v].value = pix[b];
 
@@ -790,7 +790,7 @@ void BandMathXImageFilter<TImage>
                   case 3: // sum
 
                     pix = filter->GetSum();
-                    for (unsigned int b=0; b<pix.GetSize(); b++) // for each band
+                    for (int b=0; b<(int) pix.GetSize(); b++) // for each band
                       if (m_AImage[t][v].info[1] == b) // info[1] : band ID
                         m_AImage[t][v].value = pix[b];
 
@@ -799,7 +799,7 @@ void BandMathXImageFilter<TImage>
                   case 4: // stddev
 
                    mat = filter->GetCovariance();
-                    for (unsigned int b=0; b<mat.Cols(); b++) // for each band
+                    for (int b=0; b<(int) mat.Cols(); b++) // for each band
                       if (m_AImage[t][v].info[1] == b) // info[1] : band ID
                         m_AImage[t][v].value = mat(b,b);
 
@@ -818,7 +818,7 @@ void BandMathXImageFilter< TImage >
 
   m_outputsDimensions.clear();
 
-  for(int i=0; i<m_Expression.size(); ++i)
+  for(int i=0; i<(int) m_Expression.size(); ++i)
   {
     m_VParser.at(0)->SetExpr(m_Expression[i]);
     ValueType value = m_VParser.at(0)->Eval();
