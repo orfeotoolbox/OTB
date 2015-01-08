@@ -183,6 +183,18 @@ public slots:
 //
 // Signals.
 signals:
+  /**
+   */
+  void RaiseLayerRequested();
+  /**
+   */
+  void LowerLayerRequested();
+  /**
+   */
+  void SelectNextLayerRequested();
+  /**
+   */
+  void SelectPreviousLayerRequested();
 
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/

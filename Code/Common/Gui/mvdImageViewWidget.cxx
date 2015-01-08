@@ -238,6 +238,40 @@ ImageViewWidget
     this, SLOT( ZoomToFullResolution() )
   );
 
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( LowerLayerRequested() ),
+    // to:
+    m_Renderer,
+    SLOT( OnLowerLayerRequested() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( RaiseLayerRequested() ),
+    // to:
+    m_Renderer,
+    SLOT( OnRaiseLayerRequested() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( SelectPreviousLayerRequested() ),
+    // to:
+    this,
+    SLOT( OnSelectPreviousLayerRequested() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( SelectNextLayerRequested() ),
+    // to:
+    this,
+    SLOT( OnSelectNextLayerRequested() )
+  );
+
+
   QObject::connect(
     this, SIGNAL(PhysicalCursorPositionChanged(const PointType&,
                                                const DefaultImageType::PixelType& )),
@@ -248,8 +282,8 @@ ImageViewWidget
  QObject::connect(
    this, SIGNAL(ReferenceActorShaderModeChanged(const std::string &)),
    m_Renderer, SLOT(OnReferenceActorShaderModeChanged(const std::string &)));
+}
 
-   }
 /*******************************************************************************/
 void
 ImageViewWidget
@@ -665,6 +699,108 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
+::OnRoiChanged( const PointType& point,
+                const SizeType& size,
+                const SpacingType& spacing,
+                const PointType& center )
+{
+  assert( m_Renderer!=NULL );
+
+  /*
+  qDebug()
+    << this << "::OnRoiChanged("
+    << "[" << point[ 0 ] << "," << point[ 1 ] << "]"
+    << "[" << center[ 0 ] << "," << center[ 1 ] << "]";
+  */
+
+  emit CenterChanged( center );
+
+  AbstractImageModel* imageModel =
+    m_Renderer->GetReferenceModel< AbstractImageModel >();
+
+  SpacingType nativeSpacing;
+  // MANTIS-970: Fixed crash when no dataset is selected.
+  // {
+  if( imageModel==NULL )
+    {
+    nativeSpacing[ 0 ] = 1.0;
+    nativeSpacing[ 1 ] = 1.0;
+    }
+  else
+    nativeSpacing = imageModel->GetNativeSpacing();
+  // }
+
+  double rsx = nativeSpacing[ 0 ] / spacing[ 0 ];
+  double rsy = nativeSpacing[ 1 ] / spacing[ 1 ];
+
+#if 0
+  double sx = ( spacing[ 0 ]>0.0 ? 1.0 : -1.0 ) / spacing[ 0 ];
+  double sy = ( spacing[ 1 ]>0.0 ? 1.0 : -1.0 ) / spacing[ 1 ];
+#endif
+
+  /*
+  qDebug() << "sx:" << sx << "; sy:" << sy;
+  qDebug() << "rsx:" << rsx << "; rsy:" << rsy;
+  */
+
+  // Emit absolute scale.
+  emit ScaleChanged( rsx, rsy );
+
+  // Emit zooming scale-factor.
+  emit RoiChanged( center, rsx, rsy );
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnSelectPreviousLayerRequested()
+{
+  qDebug() << this << "::OnSelectPreviousLayerRequested()";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  stackedLayerModel->SelectPrevious();
+
+  emit SelectPreviousLayerRequested();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnSelectNextLayerRequested()
+{
+  qDebug() << this << "::OnSelectNextLayerRequested()";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  stackedLayerModel->SelectNext();
+
+  emit SelectNextLayerRequested();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::UpdateScene()
+{
+  assert( m_Renderer!=NULL );
+
+  m_Renderer->UpdateScene();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
 ::ZoomToExtent()
 {
   assert( m_Renderer!=NULL );
@@ -720,70 +856,6 @@ ImageViewWidget
 
   // Refresh view.
   updateGL();
-}
-
-/******************************************************************************/
-void
-ImageViewWidget
-::OnRoiChanged( const PointType& point,
-                const SizeType& size,
-                const SpacingType& spacing,
-                const PointType& center )
-{
-  assert( m_Renderer!=NULL );
-
-  /*
-  qDebug()
-    << this << "::OnRoiChanged("
-    << "[" << point[ 0 ] << "," << point[ 1 ] << "]"
-    << "[" << center[ 0 ] << "," << center[ 1 ] << "]";
-  */
-
-  emit CenterChanged( center );
-
-  AbstractImageModel* imageModel =
-    m_Renderer->GetReferenceModel< AbstractImageModel >();
-
-  SpacingType nativeSpacing;
-  // MANTIS-970: Fixed crash when no dataset is selected.
-  // {
-  if( imageModel==NULL )
-    {
-    nativeSpacing[ 0 ] = 1.0;
-    nativeSpacing[ 1 ] = 1.0;
-    }
-  else
-    nativeSpacing = imageModel->GetNativeSpacing();
-  // }
-
-  double rsx = nativeSpacing[ 0 ] / spacing[ 0 ];
-  double rsy = nativeSpacing[ 1 ] / spacing[ 1 ];
-
-#if 0
-  double sx = ( spacing[ 0 ]>0.0 ? 1.0 : -1.0 ) / spacing[ 0 ];
-  double sy = ( spacing[ 1 ]>0.0 ? 1.0 : -1.0 ) / spacing[ 1 ];
-#endif
-
-  /*
-  qDebug() << "sx:" << sx << "; sy:" << sy;
-  qDebug() << "rsx:" << rsx << "; rsy:" << rsy;
-  */
-
-  // Emit absolute scale.
-  emit ScaleChanged( rsx, rsy );
-
-  // Emit zooming scale-factor.
-  emit RoiChanged( center, rsx, rsy );
-}
-
-/******************************************************************************/
-void
-ImageViewWidget
-::UpdateScene()
-{
-  assert( m_Renderer!=NULL );
-
-  m_Renderer->UpdateScene();
 }
 
 }

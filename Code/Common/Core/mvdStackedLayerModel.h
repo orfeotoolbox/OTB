@@ -120,7 +120,7 @@ public:
   inline bool Contains( const KeyType & key ) const;
   inline bool Contains( const AbstractLayerModel * ) const;
 
-  inline SizeType Count() const;
+  inline SizeType GetCount() const;
 
   inline ConstIterator End() const;
 
@@ -150,6 +150,9 @@ public:
 //
 // Public SLOTS.
 public slots:
+  
+  inline void SelectPrevious();
+  inline void SelectNext();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -185,14 +188,21 @@ protected:
 private:
   static KeyType GenerateKey( AbstractLayerModel * );
 
+  inline const KeyType & GetKey( SizeType ) const;
+
+  inline void SetCurrent( SizeType );
+
 //
 // Private attributes.
 private:
+  static const KeyType NIL_KEY;
+  static const SizeType NIL_INDEX;
+
   static SizeType m_LayerCount;
 
   LayerModelMap m_LayerModels;
   KeyVector m_Keys;
-  LayerModelMap::key_type m_Current;
+  LayerModelMap::size_type m_Current;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -284,7 +294,7 @@ StackedLayerModel
 inline
 StackedLayerModel::SizeType
 StackedLayerModel
-::Count() const
+::GetCount() const
 {
   return m_LayerModels.size();
 }
@@ -346,10 +356,12 @@ AbstractLayerModel *
 StackedLayerModel
 ::GetCurrent()
 {
-  if( m_Current.empty() )
+  if( m_Current>=GetCount() )
     return NULL;
 
-  LayerModelMap::const_iterator it( m_LayerModels.find( m_Current ) );
+  LayerModelMap::const_iterator it(
+    m_LayerModels.find( m_Keys[ m_Current ] )
+  );
 
   if( it==m_LayerModels.end() )
     return NULL;
@@ -372,7 +384,19 @@ const StackedLayerModel::KeyType &
 StackedLayerModel
 ::GetCurrentKey() const
 {
-  return m_Current;
+  return GetKey( m_Current );
+}
+
+/*****************************************************************************/
+inline
+const StackedLayerModel::KeyType &
+StackedLayerModel
+::GetKey( SizeType index ) const
+{
+  if( index>=GetCount() )
+    return StackedLayerModel::NIL_KEY;
+
+  return m_Keys[ index ];
 }
 
 /*****************************************************************************/
@@ -382,6 +406,38 @@ StackedLayerModel
 ::IsEmpty() const
 {
   return m_LayerModels.empty();
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::SelectNext()
+{
+  if( IsEmpty() )
+    return;
+
+  SetCurrent(
+    m_Current>=GetCount()
+    ? 0
+    : ( m_Current + 1 ) % GetCount()
+  );
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::SelectPrevious()
+{
+  if( IsEmpty() )
+    return;
+
+  SetCurrent(
+    m_Current==StackedLayerModel::NIL_INDEX || m_Current<1
+    ? GetCount() - 1
+    : m_Current - 1
+  );
 }
 
 /*****************************************************************************/
@@ -399,7 +455,7 @@ StackedLayerModel
       return;
       }
 
-  SetCurrent( LayerModelMap::key_type() );
+  SetCurrent( StackedLayerModel::NIL_INDEX );
 }
 
 /*****************************************************************************/
@@ -408,12 +464,42 @@ void
 StackedLayerModel
 ::SetCurrent( const KeyType & key )
 {
-  if( key==m_Current )
+  if( key==GetCurrentKey() )
     return;
+
+  if( key==StackedLayerModel::NIL_KEY )
+    {
+    SetCurrent( StackedLayerModel::NIL_INDEX );
+
+    return;
+    }
+
+  for( SizeType i=0; i<m_Keys.size(); ++i )
+    if( m_Keys[ i ]==key )
+      SetCurrent( i );
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::SetCurrent( SizeType index )
+{
+  qDebug() << this << "::SetCurrentIndex(" << index << ")";
+
+  if( index==m_Current )
+    return;
+
+  KeyType key( GetKey( index  ) );
+
+  qDebug()
+    << QString( "'%1'" ).arg( GetCurrentKey().c_str() )
+    << "->"
+    << QString( "'%1'" ).arg( key.c_str() );
 
   emit AboutToChangeSelectedLayerModel( key );
 
-  m_Current = key;
+  m_Current = index;
 
   emit SelectedLayerModelChanged( key );
 }

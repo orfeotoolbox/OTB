@@ -205,7 +205,6 @@ signals:
                    const SpacingType& spacing,
                    const PointType& center );
 
-
   // Signal for DatasetModel
   // void RenderingContextChanged(const PointType& center, double zoom);
 

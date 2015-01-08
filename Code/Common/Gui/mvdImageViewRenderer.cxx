@@ -772,9 +772,19 @@ ImageViewRenderer
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
+
+/******************************************************************************/
+void
+ImageViewRenderer
+::OnLowerLayerRequested()
+{
+}
+
 /*****************************************************************************/
-void ImageViewRenderer::OnPhysicalCursorPositionChanged(const PointType& point,
-                                       const DefaultImageType::PixelType& pixel)
+void
+ImageViewRenderer
+::OnPhysicalCursorPositionChanged(const PointType& point,
+                                  const DefaultImageType::PixelType& pixel)
 {
   otb::GlImageActor::Pointer glImageActor(
     GetReferenceActor< otb::GlImageActor >()
@@ -815,8 +825,34 @@ void ImageViewRenderer::OnPhysicalCursorPositionChanged(const PointType& point,
   shader->SetCenter(pscreen);
 }
 
-void ImageViewRenderer::OnReferenceActorShaderModeChanged(const std::string & mode)
+/******************************************************************************/
+void
+ImageViewRenderer
+::OnRaiseLayerRequested()
+{
+}
+
+/******************************************************************************/
+void
+ImageViewRenderer
+::OnReferenceActorShaderModeChanged(const std::string & mode)
 {
   m_ReferenceActorShaderMode = mode;
 }
+
+/******************************************************************************/
+void
+ImageViewRenderer
+::OnSelectPreviousLayerRequested()
+{
+}
+
+/******************************************************************************/
+void
+ImageViewRenderer
+::OnSelectNextLayerRequested()
+{
+}
+
+/******************************************************************************/
 } // end namespace 'mvd'

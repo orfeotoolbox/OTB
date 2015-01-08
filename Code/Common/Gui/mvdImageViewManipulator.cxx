@@ -596,6 +596,22 @@ ImageViewManipulator
       SetFastRenderMode( true );
       break;
 
+    case Qt::Key_PageUp:
+      emit RaiseLayerRequested();
+      break;
+
+    case Qt::Key_PageDown:
+      emit LowerLayerRequested();
+      break;
+
+    case Qt::Key_Home:
+      emit SelectNextLayerRequested();
+      break;
+
+    case Qt::Key_End:
+      emit SelectPreviousLayerRequested();
+      break;
+
     default:
       break;
     }

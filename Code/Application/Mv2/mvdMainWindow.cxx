@@ -1258,9 +1258,9 @@ void
 MainWindow
 ::OnAboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & key )
 {
-  qDebug()
-    << this
-    << "::OnAboutToChangeSelectedDatasetModel(" << FromStdString( key ) << ")";
+  // qDebug()
+  //   << this
+  //   << "::OnAboutToChangeSelectedDatasetModel(" << FromStdString( key ) << ")";
 
   //
   // CONTROLLERS.
@@ -1348,8 +1348,8 @@ void
 MainWindow
 ::OnSelectedLayerModelChanged( const StackedLayerModel::KeyType & key )
 {
-  qDebug()
-    << this << "::OnLayerModelChanged( " << FromStdString( key ) << ")";
+  // qDebug()
+  //   << this << "::OnLayerModelChanged( " << FromStdString( key ) << ")";
 
   assert( Application::Instance() );
   assert( Application::Instance()->GetModel()==

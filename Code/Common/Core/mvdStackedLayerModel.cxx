@@ -67,13 +67,22 @@ namespace
 StackedLayerModel::SizeType
 StackedLayerModel::m_LayerCount = 0;
 
+const StackedLayerModel::KeyType
+StackedLayerModel::NIL_KEY;
+
+const StackedLayerModel::SizeType
+StackedLayerModel::NIL_INDEX = -1;
+
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
 StackedLayerModel
 ::StackedLayerModel( QObject* parent ) :
-  AbstractModel( parent )
+  AbstractModel( parent ),
+  m_LayerModels(),
+  m_Keys(),
+  m_Current( StackedLayerModel::NIL_INDEX )
 {
 }
 
@@ -103,6 +112,7 @@ StackedLayerModel
     }
 
   m_LayerModels.insert( LayerModelMap::value_type( key, model ) );
+  m_Keys.push_back( key );
 
   emit StackContentChanged();
 
@@ -125,6 +135,7 @@ StackedLayerModel
 
   m_LayerModels.clear();
   m_Keys.clear();
+  m_Current = StackedLayerModel::NIL_INDEX;
 }
 
 /*******************************************************************************/
