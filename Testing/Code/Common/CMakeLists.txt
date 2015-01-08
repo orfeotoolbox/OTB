@@ -1375,7 +1375,7 @@ if(OTB_USE_MAPNIK)
   OTB_ADD_EXECUTABLE(otbCommonTests9 "${BasicCommon_SRCS9}" "OTBIO;OTBTesting;${MAPNIK_LIBRARY};${ICUUC_LIBRARY}")
 endif()
 add_executable(otbCommonTests11 otbCommonTests11.cxx ${BasicCommon_SRCS11})
-target_link_libraries(otbCommonTests11 OTBIO  OTBTesting itkvcl)
+target_link_libraries(otbCommonTests11 OTBIO  OTBTesting ${ITKVNL_LIBRARIES})
 
 OTB_ADD_EXECUTABLE(otbCommonTests12 "${BasicCommon_SRCS12}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests13 "${BasicCommon_SRCS13}" "OTBIO;OTBTesting")
