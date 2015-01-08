@@ -135,7 +135,7 @@ set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 set(EXE_TESTS ${CXX_TEST_PATH}/otbClassificationExamplesTests)
 
 set(TOL 0.0)
-
+set(NOTOL 0.0)
 
 # ------- ScalarImageMarkovRandomField1Test----------
 
