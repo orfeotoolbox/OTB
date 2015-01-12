@@ -271,4 +271,18 @@ void GlView::MoveActorToEndOfRenderingOrder(std::string key, bool front)
       }
     }
 }
+
+void
+GlView
+::SetRenderingOrder( const StringVectorType & keys )
+{
+  m_RenderingOrder.clear();
+
+  for( StringVectorType::const_iterator it( keys.begin() );
+       it!=keys.end();
+       ++it )
+    if( ContainsActor( *it ) )
+      m_RenderingOrder.push_back( *it );
+}
+
 }

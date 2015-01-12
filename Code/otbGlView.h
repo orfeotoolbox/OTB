@@ -159,10 +159,20 @@ public:
 
   //comment this macro (not compiling with OTB 3.X)
   // Get Rendering order
-  StringVectorType GetRenderingOrder() const
-	{
+  const StringVectorType & GetRenderingOrder() const
+  {
     return m_RenderingOrder;
-	};
+  };
+
+  /**
+   * Arbitrary set the rendering order of contained otb::GlActor
+   * instances.
+   *
+   * Keys which are not contained will be ignored.
+   *
+   * @param keys The ordered sequence of keys.
+   */
+  void SetRenderingOrder( const StringVectorType & keys );
 
   // This will rotate the rendering order (without modifying the order)
   void RotateRenderingOrder(bool down = false);
