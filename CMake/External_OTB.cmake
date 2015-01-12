@@ -46,6 +46,16 @@ else()
   list(APPEND ${proj}_DEPENDENCIES MUPARSER)
 endif()
 
+if(USE_SYSTEM_TINYXML)
+  set(OTB_SB_TINYXML_CONFIG)
+else()
+  set(OTB_SB_TINYXML_CONFIG
+    -DTINYXML_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
+    -DTINYXML_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/libtinyXML.so
+    )
+  list(APPEND ${proj}_DEPENDENCIES MUPARSER)
+endif()
+
 ExternalProject_Add(${proj}
     DEPENDS ${${proj}_DEPENDENCIES}
     PREFIX ${proj}

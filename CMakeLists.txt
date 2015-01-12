@@ -24,6 +24,7 @@ include(External_ossim)
 include(External_OpenJpeg)
 include(External_GDAL)
 include(External_muParser)
+include(External_TinyXML)
 
 # TODO
 
