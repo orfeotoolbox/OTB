@@ -1409,6 +1409,16 @@ MainWindow
       m_QuicklookViewDock->widget(),
       SLOT( updateGL()  )
     );
+
+    VectorImageModel * imageModel =
+      qobject_cast< VectorImageModel * >( layerModel );
+
+    assert( imageModel!=NULL );
+
+    setWindowTitle(
+      QString( PROJECT_NAME " - %1" )
+      .arg( QFileInfo( imageModel->GetFilename() ).fileName() )
+    );
     }
   else
     {

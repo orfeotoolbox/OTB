@@ -266,18 +266,6 @@ private:
 //
 // SLOTS.
 private slots:
-  /**
-   */
-  void OnLowerLayerRequested();
-  /**
-   */
-  void OnRaiseLayerRequested();
-  /**
-   */
-  void OnSelectNextLayerRequested();
-  /**
-   */
-  void OnSelectPreviousLayerRequested();
 };
 
 } // end namespace 'mvd'

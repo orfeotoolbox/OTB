@@ -243,7 +243,7 @@ ImageViewWidget
     m_Manipulator,
     SIGNAL( LowerLayerRequested() ),
     // to:
-    m_Renderer,
+    this,
     SLOT( OnLowerLayerRequested() )
   );
 
@@ -251,7 +251,7 @@ ImageViewWidget
     m_Manipulator,
     SIGNAL( RaiseLayerRequested() ),
     // to:
-    m_Renderer,
+    this,
     SLOT( OnRaiseLayerRequested() )
   );
 
@@ -699,6 +699,40 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
+::OnLowerLayerRequested()
+{
+  qDebug() << this << "::OnLowerLayerRequested()";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  stackedLayerModel->RotateDown();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnRaiseLayerRequested()
+{
+  qDebug() << this << "::OnRaiseLayerRequested()";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  stackedLayerModel->RotateUp();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
 ::OnRoiChanged( const PointType& point,
                 const SizeType& size,
                 const SpacingType& spacing,
@@ -764,8 +798,6 @@ ImageViewWidget
 
   stackedLayerModel->SelectPrevious();
 
-  emit SelectPreviousLayerRequested();
-
   updateGL();
 }
 
@@ -782,8 +814,6 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   stackedLayerModel->SelectNext();
-
-  emit SelectNextLayerRequested();
 
   updateGL();
 }

@@ -407,12 +407,14 @@ ImageViewRenderer
 {
   assert( !m_GlView.IsNull() );
 
+
   StackedLayerModel * stackedLayerModel = GetLayerStack();
   assert( stackedLayerModel!=NULL );
 
   otb::GlImageActor::Pointer refImageActor(
     GetReferenceActor< otb::GlImageActor >()
   );
+
 
   for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
        it!=stackedLayerModel->End();
@@ -550,6 +552,8 @@ ImageViewRenderer
         }
       }
     }
+
+  m_GlView->SetRenderingOrder( stackedLayerModel->GetKeys() );
 }
 
 /*******************************************************************************/
@@ -772,14 +776,6 @@ ImageViewRenderer
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
-
-/******************************************************************************/
-void
-ImageViewRenderer
-::OnLowerLayerRequested()
-{
-}
-
 /*****************************************************************************/
 void
 ImageViewRenderer
@@ -828,30 +824,9 @@ ImageViewRenderer
 /******************************************************************************/
 void
 ImageViewRenderer
-::OnRaiseLayerRequested()
-{
-}
-
-/******************************************************************************/
-void
-ImageViewRenderer
 ::OnReferenceActorShaderModeChanged(const std::string & mode)
 {
   m_ReferenceActorShaderMode = mode;
-}
-
-/******************************************************************************/
-void
-ImageViewRenderer
-::OnSelectPreviousLayerRequested()
-{
-}
-
-/******************************************************************************/
-void
-ImageViewRenderer
-::OnSelectNextLayerRequested()
-{
 }
 
 /******************************************************************************/

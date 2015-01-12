@@ -82,7 +82,6 @@ class Monteverdi2_EXPORT StackedLayerModel :
 private:
   // typedef std::vector< AbstractLayerModel * > LayerModelVector;
   typedef std::map< std::string, AbstractLayerModel * > LayerModelMap;
-  typedef std::vector< LayerModelMap::key_type > KeyVector;
 
   // typedef std::pair< AbstractLayerModel *, void * > LayerModelPair;
   // typedef std::map< std::string, LayerDataPair > LayerModelPairMap;
@@ -92,6 +91,8 @@ private:
 //
 // Public types.
 public:
+  typedef std::vector< LayerModelMap::key_type > KeyVector;
+
   typedef LayerModelMap::size_type SizeType;
   typedef LayerModelMap::key_type KeyType;
   typedef LayerModelMap::const_iterator ConstIterator;
@@ -121,6 +122,8 @@ public:
   inline bool Contains( const AbstractLayerModel * ) const;
 
   inline SizeType GetCount() const;
+
+  inline const KeyVector & GetKeys() const;
 
   inline ConstIterator End() const;
 
@@ -153,6 +156,8 @@ public slots:
   
   inline void SelectPrevious();
   inline void SelectNext();
+  inline void RotateDown();
+  inline void RotateUp();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -190,7 +195,11 @@ private:
 
   inline const KeyType & GetKey( SizeType ) const;
 
+  inline SizeType Next( SizeType );
+  inline SizeType Prev( SizeType );
+
   inline void SetCurrent( SizeType );
+  inline void Swap( SizeType, SizeType );
 
 //
 // Private attributes.
@@ -202,7 +211,7 @@ private:
 
   LayerModelMap m_LayerModels;
   KeyVector m_Keys;
-  LayerModelMap::size_type m_Current;
+  SizeType m_Current;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -297,6 +306,15 @@ StackedLayerModel
 ::GetCount() const
 {
   return m_LayerModels.size();
+}
+
+/*****************************************************************************/
+inline
+const StackedLayerModel::KeyVector &
+StackedLayerModel
+::GetKeys() const
+{
+  return m_Keys;
 }
 
 /*****************************************************************************/
@@ -410,6 +428,68 @@ StackedLayerModel
 
 /*****************************************************************************/
 inline
+StackedLayerModel::SizeType
+StackedLayerModel
+::Next( SizeType index )
+{
+  return
+    index>=GetCount()
+    ? 0
+    : ( index + 1 ) % GetCount();
+}
+
+/*****************************************************************************/
+inline
+StackedLayerModel::SizeType
+StackedLayerModel
+::Prev( SizeType index )
+{
+  return
+    index==StackedLayerModel::NIL_INDEX || index<1
+    ? GetCount() - 1
+    : index - 1;
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::RotateDown()
+{
+  if( IsEmpty() )
+    return;
+
+  if( m_Current>=GetCount() )
+    return;
+
+  SizeType index = Next( m_Current );
+
+  Swap( m_Current, index );
+
+  m_Current = index;
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::RotateUp()
+{
+  if( IsEmpty() )
+    return;
+
+  if( m_Current>=GetCount() )
+    return;
+
+  SizeType index = Prev( m_Current );
+
+  Swap( m_Current, index );
+
+  m_Current = index;
+}
+
+/*****************************************************************************/
+inline
 void
 StackedLayerModel
 ::SelectNext()
@@ -417,11 +497,7 @@ StackedLayerModel
   if( IsEmpty() )
     return;
 
-  SetCurrent(
-    m_Current>=GetCount()
-    ? 0
-    : ( m_Current + 1 ) % GetCount()
-  );
+  SetCurrent( Next( m_Current ) );
 }
 
 /*****************************************************************************/
@@ -433,11 +509,7 @@ StackedLayerModel
   if( IsEmpty() )
     return;
 
-  SetCurrent(
-    m_Current==StackedLayerModel::NIL_INDEX || m_Current<1
-    ? GetCount() - 1
-    : m_Current - 1
-  );
+  SetCurrent( Prev( m_Current ) );
 }
 
 /*****************************************************************************/
@@ -502,6 +574,24 @@ StackedLayerModel
   m_Current = index;
 
   emit SelectedLayerModelChanged( key );
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::Swap( SizeType i1, SizeType i2 )
+{
+  qDebug()
+    << "Swapping:"
+    << QString( "%1" ).arg( m_Keys[ i1 ].c_str() )
+    << "<->"
+    << QString( "%1" ).arg( m_Keys[ i2 ].c_str() );
+
+  KeyType tmp( m_Keys[ i1 ] );
+
+  m_Keys[ i1 ] = m_Keys[ i2 ];
+  m_Keys[ i2 ] = tmp;
 }
 
 } // end namespace 'mvd'

@@ -212,12 +212,6 @@ signals:
   /**
    */
   void ScaleChanged( double sx, double sy );
-  /**
-   */
-  void SelectNextLayerRequested();
-  /**
-   */
-  void SelectPreviousLayerRequested();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -297,6 +291,12 @@ private slots:
   /**
    */
   void OnSelectNextLayerRequested();
+  /**
+   */
+  void OnLowerLayerRequested();
+  /**
+   */
+  void OnRaiseLayerRequested();
 };
 
 }// end namespace 'mvd'
