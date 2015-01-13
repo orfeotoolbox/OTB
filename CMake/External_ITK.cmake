@@ -133,7 +133,7 @@ else()
       -DUSE_FFTWD:BOOL=${FFTW_STATUS}
       #-DUSE_SYSTEM_FFTW:BOOL=${FFTW_STATUS}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
-      ${CMAKE_SOURCE_DIR}/patches_ITK/hashtable.hxx.in
+      ${CMAKE_SOURCE_DIR}/patches/ITK/hashtable.hxx.in
       ${ITK_SB_SRC_DIR}/Modules/ThirdParty/KWSys/src/KWSys
     )
   

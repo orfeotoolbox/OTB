@@ -29,7 +29,7 @@ else()
       ${CMAKE_COMMAND}
     DEPENDS ${${proj}_DEPENDENCIES}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
-      ${CMAKE_SOURCE_DIR}/patches_${proj}/CMakeLists.txt 
+      ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt 
       ${MUPARSER_SB_SRC}
     )
   

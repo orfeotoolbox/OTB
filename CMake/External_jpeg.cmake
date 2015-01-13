@@ -31,7 +31,7 @@ else()
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
       PATCH_COMMAND
         ${CMAKE_COMMAND} -E copy
-        ${CMAKE_SOURCE_DIR}/patches_JPEG/configure
+        ${CMAKE_SOURCE_DIR}/patches/JPEG/configure
         ${JPEG_SB_SRC}/
       CONFIGURE_COMMAND
         LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
