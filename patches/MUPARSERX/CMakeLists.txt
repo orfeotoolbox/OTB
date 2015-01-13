@@ -1,0 +1,16 @@
+project(muparserx)
+
+file(GLOB MUPARSERX_SRCS "parser/*.cpp" )
+#include_directories("${CMAKE_CURRENT_SOURCE_DIR}/parser")
+
+add_library(muparserx ${MUPARSERX_SRCS})
+
+install(TARGETS muparserx
+  RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
+  LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
+  ARCHIVE DESTINATION lib COMPONENT Development)
+
+file(GLOB MUPARSERX_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/parser/*.h")
+install(FILES ${MUPARSERX_HEADERS}
+  DESTINATION include
+  COMPONENT Development)
