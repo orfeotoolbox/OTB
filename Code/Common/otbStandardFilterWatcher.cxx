@@ -38,6 +38,7 @@ StandardFilterWatcher
   : FilterWatcherBase(process, comment.c_str())
 {
   m_StarsCount = 50;
+  m_CurrentNbStars = -1;
 }
 
 StandardFilterWatcher
@@ -45,6 +46,7 @@ StandardFilterWatcher
 {
   // Initialize state
   m_StarsCount = watch.m_StarsCount;
+  m_CurrentNbStars = watch.m_CurrentNbStars;
 }
 
 void
@@ -54,6 +56,7 @@ StandardFilterWatcher
   // Initialize state
   FilterWatcherBase::operator=(watch);
   m_StarsCount = watch.m_StarsCount;
+  m_CurrentNbStars = watch.m_CurrentNbStars;
 }
 
 void
