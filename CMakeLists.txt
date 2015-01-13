@@ -9,6 +9,7 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH})
 
 include(ExternalProject)
+include(CTest)
 
 # Call external projects
 include(External_openthread)
