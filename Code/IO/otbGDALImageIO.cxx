@@ -891,8 +891,7 @@ void GDALImageIO::InternalReadImageInformation()
 
   if (m_NumberOfDimensions == 3) m_Spacing[2] = 1;
 
-  char** papszMetadata;
-  papszMetadata =  dataset->GetMetadata(NULL);
+  char** papszMetadata = dataset->GetMetadata(NULL);
 
   /* -------------------------------------------------------------------- */
   /*      Report general info.                                            */
