@@ -35,7 +35,10 @@ add_test(coTvParseHdfFileName ${COMMON_TESTS1}
         otbParseHdfFileName)
 
 # -------            otb::Configuration  -------------
-add_test(coTuConfigurationTest ${COMMON_TESTS1}
+add_test(NAME coTuConfigurationTest
+         COMMAND ${EXECUTABLE_OUTPUT_PATH}/otbTestDriver
+        --add-before-env OTB_CONFIG_FILE ${CMAKE_BINARY_DIR}/otb.conf
+        Execute $<TARGET_FILE:otbCommonTests1>
         otbConfigurationTest
         )
 
