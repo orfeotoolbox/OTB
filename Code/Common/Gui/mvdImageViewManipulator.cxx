@@ -612,6 +612,10 @@ ImageViewManipulator
       emit SelectPreviousLayerRequested();
       break;
 
+    case Qt::Key_Delete:
+      emit DeleteSelectedRequested();
+      break;
+
     default:
       break;
     }

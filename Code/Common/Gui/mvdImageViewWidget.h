@@ -297,6 +297,9 @@ private slots:
   /**
    */
   void OnRaiseLayerRequested();
+  /**
+   */
+  void OnDeleteSelectedRequested();
 };
 
 }// end namespace 'mvd'

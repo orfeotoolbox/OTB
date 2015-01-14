@@ -195,7 +195,9 @@ signals:
   /**
    */
   void SelectPreviousLayerRequested();
-
+  /**
+   */
+  void DeleteSelectedRequested();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

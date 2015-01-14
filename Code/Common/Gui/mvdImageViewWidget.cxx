@@ -271,6 +271,14 @@ ImageViewWidget
     SLOT( OnSelectNextLayerRequested() )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( DeleteSelectedRequested() ),
+    // to:
+    this,
+    SLOT( OnDeleteSelectedRequested() )
+  );
+
 
   QObject::connect(
     this, SIGNAL(PhysicalCursorPositionChanged(const PointType&,
@@ -694,6 +702,23 @@ ImageViewWidget
   assert( m_Manipulator!=NULL );
 
   m_Manipulator->CenterOn( point );
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnDeleteSelectedRequested()
+{
+  qDebug() << this << "::OnDeleteSelectedRequested()";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  stackedLayerModel->DeleteCurrent();
+
+  updateGL();
 }
 
 /******************************************************************************/

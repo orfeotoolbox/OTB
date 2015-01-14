@@ -138,6 +138,78 @@ StackedLayerModel
   m_Current = StackedLayerModel::NIL_INDEX;
 }
 
+/*****************************************************************************/
+bool
+StackedLayerModel
+::Contains( const AbstractLayerModel * layerModel ) const
+{
+  for( LayerModelMap::const_iterator it( m_LayerModels.begin() );
+       it!=m_LayerModels.end();
+       ++it )
+    if( it->second==layerModel )
+      return true;
+
+  return false;
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::Delete( SizeType index )
+{
+  qDebug() << this << "::Delete(" << index << ")";
+
+
+  //
+  // Check content.
+  if( IsEmpty() )
+    return;
+
+  if( index>=GetCount() )
+    return;
+
+  assert( !m_Keys[ index ].empty() );
+
+  //
+  // Find item.
+  LayerModelMap::iterator it(
+    m_LayerModels.find( m_Keys[ index ] )
+  );
+
+  assert( it!=m_LayerModels.end() );
+
+  //
+  // Emit about to change selected item.
+  bool emitSelectionChanged = m_Current<GetCount() && index<=m_Current;
+
+  if( emitSelectionChanged )
+    emit AboutToChangeSelectedLayerModel( GetKey( m_Current + 1 ) );
+
+
+  //
+  // Remove item.
+  if( it->second->parent()==this )
+    {
+    delete it->second;
+    it->second = NULL;
+    }
+
+  m_LayerModels.erase( it );
+
+  m_Keys.erase( m_Keys.begin() + index );
+
+
+  //
+  // Emit selected item changed.
+  if( emitSelectionChanged )
+    {
+    if( m_Current>=GetCount() )
+      m_Current = StackedLayerModel::NIL_INDEX;
+
+    SelectedLayerModelChanged( GetKey( m_Current ) );
+    }
+}
+
 /*******************************************************************************/
 std::string
 StackedLayerModel
@@ -153,6 +225,46 @@ StackedLayerModel
 #endif
 
   return oss.str();
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::SetCurrent( AbstractLayerModel * layerModel )
+{
+  for( LayerModelMap::const_iterator it( m_LayerModels.begin() );
+       it!=m_LayerModels.end();
+       ++it )
+    if( it->second==layerModel )
+      {
+      SetCurrent( it->first );
+      return;
+      }
+
+  SetCurrent( StackedLayerModel::NIL_INDEX );
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::SetCurrent( const KeyType & key )
+{
+  if( key==GetCurrentKey() )
+    return;
+
+  if( key==StackedLayerModel::NIL_KEY )
+    {
+    SetCurrent( StackedLayerModel::NIL_INDEX );
+
+    return;
+    }
+
+  for( SizeType i=0; i<m_Keys.size(); ++i )
+    if( m_Keys[ i ]==key )
+      {
+      SetCurrent( i );
+      return;
+      }
 }
 
 /*******************************************************************************/
