@@ -613,7 +613,10 @@ ImageViewManipulator
       break;
 
     case Qt::Key_Delete:
-      emit DeleteSelectedRequested();
+      if( modifiers.testFlag( Qt::ShiftModifier ) )
+        emit DeleteAllRequested();
+      else
+        emit DeleteSelectedRequested();
       break;
 
     default:

@@ -299,6 +299,9 @@ private slots:
   void OnRaiseLayerRequested();
   /**
    */
+  void OnDeleteAllRequested();
+  /**
+   */
   void OnDeleteSelectedRequested();
 };
 

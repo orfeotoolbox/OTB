@@ -124,18 +124,34 @@ void
 StackedLayerModel
 ::Clear()
 {
+  bool emitSignal = !IsEmpty() && m_Current<GetCount();
+
+
+  if( emitSignal )
+    emit AboutToChangeSelectedLayerModel( KeyType() );
+
+
   for( LayerModelMap::iterator it( m_LayerModels.begin() );
        it!=m_LayerModels.end();
        ++it )
-    if( it->second!=NULL && it->second->parent()==this )
+    {
+    assert( it->second!=NULL );
+
+    if( it->second->parent()==this )
       {
       delete it->second;
       it->second = NULL;
       }
+    }
 
   m_LayerModels.clear();
   m_Keys.clear();
+
   m_Current = StackedLayerModel::NIL_INDEX;
+
+
+  if( emitSignal )
+    emit SelectedLayerModelChanged( KeyType() );
 }
 
 /*****************************************************************************/
