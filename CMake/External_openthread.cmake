@@ -25,7 +25,8 @@ else()
       -DCMAKE_BUILD_TYPE:STRING=Release
       -DBUILD_SHARED_LIBS:BOOL=ON
     CMAKE_COMMAND
-      LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
+      # use 'env' because CTest launcher doesn't perform shell interpretation
+      env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
       ${CMAKE_COMMAND}
     DEPENDS ${${proj}_DEPENDENCIES}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 

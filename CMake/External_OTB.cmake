@@ -91,7 +91,8 @@ ExternalProject_Add(${proj}
       ${OTB_SB_MUPARSERX_CONFIG}
       ${OTB_SB_TINYXML_CONFIG}
     CMAKE_COMMAND
-      LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
+      # use 'env' because CTest launcher doesn't perform shell interpretation
+      env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
       ${CMAKE_COMMAND}
     )
 

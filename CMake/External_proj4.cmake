@@ -23,8 +23,9 @@ else()
       URL_MD5 d815838c92a29179298c126effbb1537
       BINARY_DIR ${PROJ_SB_BUILD_DIR}
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-      CONFIGURE_COMMAND 
-        LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
+      CONFIGURE_COMMAND
+        # use 'env' because CTest launcher doesn't perform shell interpretation
+        env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
         ${PROJ_SB_BUILD_DIR}/configure 
         --prefix=${CMAKE_INSTALL_PREFIX}
         --enable-static=no

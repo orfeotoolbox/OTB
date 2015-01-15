@@ -58,7 +58,8 @@ else()
       ${OPENJPEG_SB_ZLIB_CONFIG}
     DEPENDS ${${proj}_DEPENDENCIES}
     CMAKE_COMMAND
-      LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
+      # use 'env' because CTest launcher doesn't perform shell interpretation
+      env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
       ${CMAKE_COMMAND}
     )
 

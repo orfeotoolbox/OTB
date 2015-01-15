@@ -103,7 +103,8 @@ else()
     PATCH_COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/ossim_patch_1.cmake
     DEPENDS ${${proj}_DEPENDENCIES}
     CMAKE_COMMAND
-      LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
+      # use 'env' because CTest launcher doesn't perform shell interpretation
+      env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
       ${CMAKE_COMMAND}
     )
   

@@ -33,7 +33,8 @@ else()
       BINARY_DIR ${LIBTIFF_SB_BUILD_DIR}
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
       CONFIGURE_COMMAND
-        LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
+        # use 'env' because CTest launcher doesn't perform shell interpretation
+        env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
         ${LIBTIFF_SB_BUILD_DIR}/configure
         --prefix=${CMAKE_INSTALL_PREFIX}
         --enable-static=no

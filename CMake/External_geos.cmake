@@ -27,7 +27,8 @@ else()
       -DBUILD_TESTING:BOOL=OFF
       -DGEOS_ENABLE_TESTS:BOOL=OFF
     CMAKE_COMMAND
-      LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
+      # use 'env' because CTest launcher doesn't perform shell interpretation
+      env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
       ${CMAKE_COMMAND}
     )
 

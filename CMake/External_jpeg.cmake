@@ -34,7 +34,8 @@ else()
         ${CMAKE_SOURCE_DIR}/patches/JPEG/configure
         ${JPEG_SB_SRC}/
       CONFIGURE_COMMAND
-        LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
+        # use 'env' because CTest launcher doesn't perform shell interpretation
+        env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
         ${JPEG_SB_BUILD_DIR}/configure
         --build=${CMAKE_SYSTEM_PROCESSOR}-linux-gnu
         --host=${CMAKE_SYSTEM_PROCESSOR}-linux-gnu
