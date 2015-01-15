@@ -28,7 +28,7 @@
 
 //
 // System includes (sorted by alphabetic order)
-// #include <stdexcept>
+#include <algorithm>
 #include <sstream>
 
 //
@@ -241,6 +241,93 @@ StackedLayerModel
 #endif
 
   return oss.str();
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::LowerLayer( SizeType index )
+{
+  assert( GetCount()>1 );
+  assert( index<GetCount() );
+
+  SizeType next = Next( index );
+
+  std::swap(
+    *( m_Keys.begin() + index ),
+    *( m_Keys.begin() + next )
+  );
+
+  m_Current = next;
+
+  // qDebug() << "current:" << index;
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::RaiseLayer( SizeType index )
+{
+  assert( GetCount()>1 );
+  assert( index<GetCount() );
+
+  SizeType prev = Prev( index );
+
+  std::swap(
+    *( m_Keys.begin() + index ),
+    *( m_Keys.begin() + prev )
+  );
+
+  m_Current = prev;
+
+  // qDebug() << "current:" << index;
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::RotateLayerUp( SizeType index )
+{
+  assert( GetCount()>1 );
+  assert( index<GetCount() );
+
+  KeyType key( GetKey( m_Current ) );
+
+  std::rotate( m_Keys.begin(), m_Keys.begin() + index, m_Keys.end() );
+
+  if( !key.empty() )
+    {
+    m_Current = FindKey( key );
+
+    assert( m_Current!=StackedLayerModel::NIL_INDEX );
+    }
+
+  // qDebug() << "current:" << index;
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::RotateLayerDown( SizeType index )
+{
+  if( GetCount()<2 )
+    return;
+
+  if( index>=GetCount() )
+    return;
+
+  KeyType key( GetKey( m_Current ) );
+
+  std::rotate( m_Keys.rbegin(), m_Keys.rbegin() + index, m_Keys.rend()  );
+
+  if( !key.empty() )
+    {
+    m_Current = FindKey( key );
+
+    assert( m_Current!=StackedLayerModel::NIL_INDEX );
+    }
+
+  // qDebug() << "current:" << index;
 }
 
 /*****************************************************************************/

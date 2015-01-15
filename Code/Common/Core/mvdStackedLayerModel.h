@@ -153,12 +153,11 @@ public:
 //
 // Public SLOTS.
 public slots:
-  
+  inline void DeleteCurrent();
+  inline void LowerCurrent();
+  inline void RaiseCurrent();
   inline void SelectPrevious();
   inline void SelectNext();
-  inline void RotateDown();
-  inline void RotateUp();
-  inline void DeleteCurrent();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -196,13 +195,21 @@ private:
 
   void Delete( SizeType );
 
+  inline SizeType FindKey( const KeyType & ) const;
+
   inline const KeyType & GetKey( SizeType ) const;
 
   inline SizeType Next( SizeType );
   inline SizeType Prev( SizeType );
 
+  void RaiseLayer( SizeType );
+  void LowerLayer( SizeType );
+
+  void RotateLayerUp( SizeType );
+  void RotateLayerDown( SizeType );
+
   inline void SetCurrent( SizeType );
-  inline void Swap( SizeType, SizeType );
+  // inline void Swap( SizeType, SizeType );
 
 //
 // Private attributes.
@@ -222,6 +229,10 @@ private:
 // Slots.
 private slots:
 };
+
+#if _DEBUG
+inline void trace( const std::vector< std::string > & );
+#endif
 
 } // end namespace 'mvd'.
 
@@ -296,6 +307,20 @@ StackedLayerModel
   qDebug() << this << "::DeleteCurrent()";
 
   Delete( m_Current );
+}
+
+/*****************************************************************************/
+inline
+StackedLayerModel::SizeType
+StackedLayerModel
+::FindKey( const KeyType & key ) const
+{
+  KeyVector::const_iterator it( std::find( m_Keys.begin(), m_Keys.end(), key ) );
+
+  if( it==m_Keys.end() )
+    return StackedLayerModel::NIL_INDEX;
+
+  return std::distance( m_Keys.begin(), it );
 }
 
 /*****************************************************************************/
@@ -427,6 +452,23 @@ StackedLayerModel
 
 /*****************************************************************************/
 inline
+void
+StackedLayerModel
+::LowerCurrent()
+{
+  if( GetCount()<2 )
+    return;
+
+  assert( m_Current<GetCount() );
+
+  if( m_Current==GetCount()-1 )
+    RotateLayerDown( 1 );
+  else
+    LowerLayer( m_Current );
+}
+
+/*****************************************************************************/
+inline
 StackedLayerModel::SizeType
 StackedLayerModel
 ::Next( SizeType index )
@@ -444,7 +486,7 @@ StackedLayerModel
 ::Prev( SizeType index )
 {
   return
-    index==StackedLayerModel::NIL_INDEX || index<1
+    index>=GetCount() || index==0
     ? GetCount() - 1
     : index - 1;
 }
@@ -453,38 +495,17 @@ StackedLayerModel
 inline
 void
 StackedLayerModel
-::RotateDown()
+::RaiseCurrent()
 {
-  if( IsEmpty() )
+  if( GetCount()<2 )
     return;
 
-  if( m_Current>=GetCount() )
-    return;
+  assert( m_Current<GetCount() );
 
-  SizeType index = Next( m_Current );
-
-  Swap( m_Current, index );
-
-  m_Current = index;
-}
-
-/*****************************************************************************/
-inline
-void
-StackedLayerModel
-::RotateUp()
-{
-  if( IsEmpty() )
-    return;
-
-  if( m_Current>=GetCount() )
-    return;
-
-  SizeType index = Prev( m_Current );
-
-  Swap( m_Current, index );
-
-  m_Current = index;
+  if( m_Current==0 )
+    RotateLayerUp( 1 );
+  else
+    RaiseLayer( m_Current );
 }
 
 /*****************************************************************************/
@@ -537,22 +558,51 @@ StackedLayerModel
 }
 
 /*****************************************************************************/
+// inline
+// void
+// StackedLayerModel
+// ::Swap( SizeType i1, SizeType i2 )
+// {
+//   qDebug()
+//     << "Swapping:"
+//     << QString( "%1" ).arg( m_Keys[ i1 ].c_str() )
+//     << "<->"
+//     << QString( "%1" ).arg( m_Keys[ i2 ].c_str() );
+
+//   /*
+//   KeyType tmp( m_Keys[ i1 ] );
+
+//   m_Keys[ i1 ] = m_Keys[ i2 ];
+//   m_Keys[ i2 ] = tmp;
+//   */
+
+//   std::swap( m_Keys.begin() + i1, m_Keys.begin() + i2 );
+
+// #ifdef _DEBUG
+//   trace( m_Keys );
+// #endif
+// }
+
+/*****************************************************************************/
+#if _DEBUG
+
 inline
 void
-StackedLayerModel
-::Swap( SizeType i1, SizeType i2 )
+trace( const std::vector< std::string > & strv )
 {
-  // qDebug()
-  //   << "Swapping:"
-  //   << QString( "%1" ).arg( m_Keys[ i1 ].c_str() )
-  //   << "<->"
-  //   << QString( "%1" ).arg( m_Keys[ i2 ].c_str() );
+  typedef std::vector< std::string > StringVector;
 
-  KeyType tmp( m_Keys[ i1 ] );
+  qDebug() << "{";
 
-  m_Keys[ i1 ] = m_Keys[ i2 ];
-  m_Keys[ i2 ] = tmp;
+  for( StringVector::const_iterator it( strv.begin() );
+       it!=strv.end();
+       ++it )
+    qDebug() << QString( "%1" ).arg( it->c_str() );
+
+  qDebug() << "}";
 }
+
+#endif
 
 } // end namespace 'mvd'
 

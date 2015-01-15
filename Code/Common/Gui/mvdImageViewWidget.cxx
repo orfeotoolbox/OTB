@@ -758,7 +758,7 @@ ImageViewWidget
   StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
   assert( stackedLayerModel!=NULL );
 
-  stackedLayerModel->RotateDown();
+  stackedLayerModel->LowerCurrent();
 
   updateGL();
 }
@@ -775,7 +775,7 @@ ImageViewWidget
   StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
   assert( stackedLayerModel!=NULL );
 
-  stackedLayerModel->RotateUp();
+  stackedLayerModel->RaiseCurrent();
 
   updateGL();
 }
