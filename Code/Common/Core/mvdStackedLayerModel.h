@@ -351,28 +351,6 @@ StackedLayerModel
 }
 
 /*****************************************************************************/
-/*
-inline
-AbstractLayerModel *
-StackedLayerModel
-::Front()
-{
-  return m_LayerModels.front();
-}
-*/
-
-/*****************************************************************************/
-/*
-inline
-const AbstractLayerModel *
-StackedLayerModel
-::Front() const
-{
-  return m_LayerModels.front();
-}
-*/
-
-/*****************************************************************************/
 template< typename T >
 inline
 T *
@@ -556,32 +534,6 @@ StackedLayerModel
 
   emit SelectedLayerModelChanged( key );
 }
-
-/*****************************************************************************/
-// inline
-// void
-// StackedLayerModel
-// ::Swap( SizeType i1, SizeType i2 )
-// {
-//   qDebug()
-//     << "Swapping:"
-//     << QString( "%1" ).arg( m_Keys[ i1 ].c_str() )
-//     << "<->"
-//     << QString( "%1" ).arg( m_Keys[ i2 ].c_str() );
-
-//   /*
-//   KeyType tmp( m_Keys[ i1 ] );
-
-//   m_Keys[ i1 ] = m_Keys[ i2 ];
-//   m_Keys[ i2 ] = tmp;
-//   */
-
-//   std::swap( m_Keys.begin() + i1, m_Keys.begin() + i2 );
-
-// #ifdef _DEBUG
-//   trace( m_Keys );
-// #endif
-// }
 
 /*****************************************************************************/
 #if _DEBUG
