@@ -30,12 +30,6 @@ typedef otb::MassOfBelief<std::string>  MassOfBeliefFunctionType;
 typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType>
                                         JointMassOfBeliefFilterType;
 
-std::ostream& operator <<(std::ostream& os, const MassOfBeliefFunctionType::LabelSetType& l )
-{
-  MassOfBeliefFunctionType::PrintLabelSet(os, l);
-  return os;
-}
-
 int otbMassOfBeliefDSApplied(int itkNotUsed(argc), char* argv[])
 {
   const char * hyp_1  = argv[1];
@@ -98,7 +92,11 @@ int otbMassOfBeliefDSApplied(int itkNotUsed(argc), char* argv[])
   std::cout<<mass2<<std::endl;
 
   std::cout << jointMass << std::endl;
-  std::cout << "Considered Hypothesis : " << Hyp << std::endl;
+  
+  std::cout << "Considered Hypothesis : ";
+  MassOfBeliefFunctionType::PrintLabelSet(std::cout, Hyp);
+  std::cout << std::endl;
+  
   std::cout << "Belief(Hyp) : "
             << jointMass->GetBelief(Hyp)
             << "  -  Plausibility(Hyp) : "

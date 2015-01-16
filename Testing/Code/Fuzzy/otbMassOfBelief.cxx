@@ -49,7 +49,9 @@ int otbMassOfBelief(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 
   std::cout<<massFunction<<std::endl;
 
-  std::cout<<"Removing mass from set " <<set4<<std::endl;
+  std::cout<<"Removing mass from set ";
+  MassOfBeliefFunctionType::PrintLabelSet(std::cout, set4);
+  std::cout<<std::endl;
 
   massFunction->RemoveMass(set4);
 
@@ -60,7 +62,11 @@ int otbMassOfBelief(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 
   std::cout<<massFunction<<std::endl;
 
-  std::cout<<"Removing mass "<<set2<<" and adding mass "<<set3<<std::endl;
+  std::cout<<"Removing mass ";
+  MassOfBeliefFunctionType::PrintLabelSet(std::cout, set2);
+  std::cout<<" and adding mass ";
+  MassOfBeliefFunctionType::PrintLabelSet(std::cout, set3);
+  std::cout<<std::endl;
   massFunction->RemoveMass(set2);
   massFunction->SetMass(set3, 0.6);
 
@@ -71,15 +77,23 @@ int otbMassOfBelief(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 
   std::cout<<massFunction<<std::endl;
 
-  std::cout<<"Belief of "<<set3<<" is "<<massFunction->GetBelief(set3)<<std::endl;
-  std::cout<<"Plausibility of "<<set3<<" is "<<massFunction->GetPlausibility(set3)<<std::endl;
+  std::cout<<"Belief of ";
+  MassOfBeliefFunctionType::PrintLabelSet(std::cout, set3);
+  std::cout<<" is "<<massFunction->GetBelief(set3)<<std::endl;
+  
+  std::cout<<"Plausibility of ";
+  MassOfBeliefFunctionType::PrintLabelSet(std::cout, set3);
+  std::cout<<" is "<<massFunction->GetPlausibility(set3)<<std::endl;
 
   MassOfBeliefFunctionType::LabelSetType otherSet;
   otherSet.insert("cat");
   otherSet.insert("dog");
   otherSet.insert("bird");
 
-  std::cout<<"Initializing with power set from universal set " << otherSet<<std::endl;
+  std::cout<<"Initializing with power set from universal set ";
+  MassOfBeliefFunctionType::PrintLabelSet(std::cout, otherSet);
+  std::cout<<std::endl;
+  
   massFunction->InitializePowerSetMasses(otherSet);
 
   std::cout<<massFunction<<std::endl;
