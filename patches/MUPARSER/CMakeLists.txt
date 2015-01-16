@@ -6,6 +6,8 @@ project(muparser)
 file(GLOB MUPARSER_SRCS "src/*.cpp" )
 list(REMOVE_ITEM MUPARSER_SRCS "${CMAKE_SOURCE_DIR}/src/muParserComplex.cpp")
 
+include_directories("${CMAKE_SOURCE_DIR}/include")
+
 add_library(muparser ${MUPARSER_SRCS})
 #if(OTB_LIBRARY_PROPERTIES)
 #  set_target_properties(muparser PROPERTIES ${OTB_LIBRARY_PROPERTIES})
