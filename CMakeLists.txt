@@ -27,6 +27,8 @@ include(External_GDAL)
 include(External_muParser)
 include(External_muParserX)
 include(External_TinyXML)
+include(External_expat)
+include(External_libKML)
 
 # TODO
 
