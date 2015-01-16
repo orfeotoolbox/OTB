@@ -21,12 +21,6 @@
 
 typedef otb::MassOfBelief<std::string> MassOfBeliefFunctionType;
 
-std::ostream& operator <<(std::ostream& os, const MassOfBeliefFunctionType::LabelSetType& l )
-{
-  MassOfBeliefFunctionType::PrintLabelSet(os, l);
-  return os;
-}
-
 int otbMassOfBelief(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   // Instantiate function
