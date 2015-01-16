@@ -28,6 +28,11 @@
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
+
+#ifndef USE_OTB_APPS
+#  define USE_OTB_APPS ( ( defined( _DEBUG ) && 0 ) || 0 )
+#endif
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.

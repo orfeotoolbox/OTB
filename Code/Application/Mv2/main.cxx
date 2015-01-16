@@ -68,7 +68,7 @@ main( int argc, char* argv[] )
 
   //
   // 0. Splash-screen.
-#if !defined( _DEBUG )
+#if !defined( _DEBUG ) && 0
   QPixmap pixmap(QLatin1String( ":/images/application_splash" ));
   QSplashScreen splash(pixmap);
   splash.show();
