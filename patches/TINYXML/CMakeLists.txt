@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8.3)
+
 project(tinyXMLlib)
 
 file(GLOB tinyXMLlib_SRCS "*.cpp")
