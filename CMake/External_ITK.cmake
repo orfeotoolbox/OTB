@@ -105,9 +105,21 @@ else()
   # By default activate FFTW, but with an external fftw build
   # These variables are used in ITK to initialize the value of the ITK_USE_FFTW_XXX options
   if (WIN32)
-    set(FFTW_STATUS OFF)
+    set(ITK_SB_FFTW_CONFIG 
+      -DUSE_FFTWF:BOOL=OFF
+      -DUSE_FFTWD:BOOL=OFF
+      )
   else()
-    set(FFTW_STATUS ON)
+    set(ITK_SB_FFTW_CONFIG 
+      -DUSE_FFTWF:BOOL=ON
+      -DUSE_FFTWD:BOOL=ON
+      -DUSE_SYSTEM_FFTW:BOOL=ON
+      )
+    if (NOT USE_SYSTEM_FFTW)
+      set(ITK_SB_FFTW_CONFIG ${ITK_SB_FFTW_CONFIG}
+        -DFFTW_INCLUDE_PATH:PATH=${CMAKE_INSTALL_PREFIX}/include
+        )
+    endif()
   endif()
   
   # TODO : handle different build type (Release/Debug)
@@ -129,9 +141,7 @@ else()
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DBUILD_TESTING:BOOL=OFF
       -DBUILD_EXAMPLES:BOOL=OFF
-      -DUSE_FFTWF:BOOL=${FFTW_STATUS}
-      -DUSE_FFTWD:BOOL=${FFTW_STATUS}
-      #-DUSE_SYSTEM_FFTW:BOOL=${FFTW_STATUS}
+      ${ITK_SB_FFTW_CONFIG}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
       ${CMAKE_SOURCE_DIR}/patches/ITK/hashtable.hxx.in
       ${ITK_SB_SRC_DIR}/Modules/ThirdParty/KWSys/src/KWSys
