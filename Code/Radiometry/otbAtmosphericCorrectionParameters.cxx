@@ -72,11 +72,11 @@ AtmosphericCorrectionParameters
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
 
-  os << "Atmospheric pressure  : " << m_AtmosphericPressure << std::endl;
-  os << "Water vapor amount    : " << m_WaterVaporAmount << std::endl;
-  os << "Ozone amount          : " << m_OzoneAmount << std::endl;
-  os << "Aerosol model         : " << m_AerosolModel << std::endl;
-  os << "Aerosol optical       : " << m_AerosolOptical << std::endl;
+  os << indent << "Atmospheric pressure  : " << m_AtmosphericPressure << std::endl;
+  os << indent << "Water vapor amount    : " << m_WaterVaporAmount << std::endl;
+  os << indent << "Ozone amount          : " << m_OzoneAmount << std::endl;
+  os << indent << "Aerosol model         : " << m_AerosolModel << std::endl;
+  os << indent << "Aerosol optical       : " << m_AerosolOptical << std::endl;
 
 }
 } // end namespace otb
