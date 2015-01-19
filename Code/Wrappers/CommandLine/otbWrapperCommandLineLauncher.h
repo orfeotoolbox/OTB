@@ -81,7 +81,10 @@ public:
    */
   bool Load();
 
-  /** same as Load method but set the expression before. */
+  /** \deprecated
+   * Load with exp argument is deprecated because class
+   * CommandLineLauncher does not have expression attribute anymore. Use instead the
+   * default constructor. It is included for backwards compatibility. */
   bool Load( const std::string & exp );
   
     /** same as Load method but set the expression before. */
@@ -116,6 +119,10 @@ protected:
   /** Constructor */
   CommandLineLauncher();
 
+  /** \deprecated
+   * Constructor with exp argument is deprecated because class
+   * CommandLineLauncher does not have expression attribute anymore. Use instead the
+   * default constructor. It is included for backwards compatibility. */
   CommandLineLauncher(const char * exp);
 
   /** Destructor */
