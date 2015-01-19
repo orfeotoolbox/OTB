@@ -26,7 +26,7 @@
 #include <fstream>
 #include <iostream>
 
-int otbSurfaceAdjacencyEffectCorrectionSchemeFilter(int argc, char * argv[])
+int otbSurfaceAdjacencyEffectCorrectionSchemeFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];

@@ -19,7 +19,7 @@
 #include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
 #include <cstdlib>
 
-int otbRadiometryCorrectionParametersToAtmosphericRadiativeTermsNew(int argc, char * argv[])
+int otbRadiometryCorrectionParametersToAtmosphericRadiativeTermsNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms
   RadiometryCorrectionParametersToAtmosphericRadiativeTermsType;

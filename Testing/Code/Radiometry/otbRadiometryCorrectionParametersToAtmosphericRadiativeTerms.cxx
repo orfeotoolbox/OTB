@@ -26,6 +26,13 @@
 
 int otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms(int argc, char * argv[])
 {
+  if (argc != 3)
+    {
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " wavelenghFile outputFile " << std::endl;
+    return EXIT_FAILURE;
+    }
+
   const char * wavelenghFile  = argv[1];
   const char * outputFile     = argv[2];
 
