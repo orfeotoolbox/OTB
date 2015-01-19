@@ -89,7 +89,7 @@ private:
 
        otb::ogr::Feature feature = layer.ogr().GetNextFeature();
        ClearChoices("feat");
-       for(unsigned int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
+       for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
          {
            std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
            key = item;
@@ -118,7 +118,7 @@ private:
       typedef itk::VariableLengthVector<ValueType> MeasurementType;
       std::vector<MeasurementType> featValue;
 
-      const int nbFeatures = GetSelectedItems("feat").size();
+      const std::vector<int>::size_type nbFeatures = GetSelectedItems("feat").size();
       
       if(feature.addr())
        while(goesOn)
