@@ -69,6 +69,24 @@ else()
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
   
+  if(USE_SYSTEM_EXPAT)
+    set(GDAL_SB_EXPAT_CONFIG)
+  else()
+    set(GDAL_SB_EXPAT_CONFIG 
+      --with-expat=${CMAKE_INSTALL_PREFIX}
+      )
+    list(APPEND ${proj}_DEPENDENCIES EXPAT)
+  endif()
+  
+  if(USE_SYSTEM_LIBKML)
+    set(GDAL_SB_LIBKML_CONFIG)
+  else()
+    set(GDAL_SB_LIBKML_CONFIG 
+      --with-libkml=${CMAKE_INSTALL_PREFIX}
+      )
+    list(APPEND ${proj}_DEPENDENCIES LIBKML)
+  endif()
+  
   if(WIN32)
     # TODO : use nmake
   else()
@@ -93,6 +111,8 @@ else()
         ${GDAL_SB_OPENJPEG_CONFIG}
         ${GDAL_SB_SQLITE_CONFIG}
         ${GDAL_SB_GEOS_CONFIG}
+        ${GDAL_SB_EXPAT_CONFIG}
+        ${GDAL_SB_LIBKML_CONFIG}
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
       DEPENDS ${${proj}_DEPENDENCIES}
