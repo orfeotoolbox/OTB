@@ -49,7 +49,6 @@ int otbBandMathXImageFilter( int itkNotUsed(argc), char* itkNotUsed(argv) [])
 
   unsigned int i;
   const unsigned int N = 100, D1=3, D2=1, D3=1;
-  unsigned int FAIL_FLAG = 0;
 
   ImageType::SizeType size;
   size.Fill(N);
