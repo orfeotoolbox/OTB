@@ -24,6 +24,15 @@ else()
     list(APPEND ${proj}_DEPENDENCIES EXPAT)
   endif()
   
+  if(USE_SYSTEM_BOOST)
+    set(LIBKML_SB_BOOST_CONFIG)
+  else()
+    set(LIBKML_SB_BOOST_CONFIG 
+      -DBOOST_ROOT:STRING=${CMAKE_INSTALL_PREFIX}
+      )
+    list(APPEND ${proj}_DEPENDENCIES BOOST)
+  endif()
+  
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "https://libkml.googlecode.com/files/libkml-1.2.0.tar.gz"
@@ -35,6 +44,7 @@ else()
       -DCMAKE_BUILD_TYPE:STRING=Release
       -DBUILD_SHARED_LIBS:BOOL=ON
       ${LIBKML_SB_EXPAT_CONFIG}
+      ${LIBKML_SB_BOOST_CONFIG}
     #CMAKE_COMMAND
     #  # use 'env' because CTest launcher doesn't perform shell interpretation
     #  env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib

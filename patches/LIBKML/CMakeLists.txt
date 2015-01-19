@@ -15,14 +15,14 @@ set(libkml_VERSION_STRING "${libkml_VERSION_MAJOR}.${libkml_VERSION_MINOR}.${lib
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 #include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 
-#find_package(Boost 1.35.0)
-#mark_as_advanced(Boost_DIR)
-#if(Boost_FOUND)
-#  message(STATUS "  Found Boost version ${Boost_VERSION}")
-#else()
-#  message(FATAL_ERROR "Cannot build libkml project without boost library (>1.35.0)")
-#endif()
-#include_directories(${Boost_INCLUDE_DIR})
+find_package(Boost 1.35.0)
+mark_as_advanced(Boost_DIR)
+if(Boost_FOUND)
+  message(STATUS "  Found Boost version ${Boost_VERSION}")
+else()
+  message(FATAL_ERROR "Cannot build libkml project without boost library (>1.35.0)")
+endif()
+include_directories(${Boost_INCLUDE_DIR})
 
 find_package(EXPAT)
 
