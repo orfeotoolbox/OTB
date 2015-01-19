@@ -18,7 +18,7 @@
 
 #include "otbImageMetadataCorrectionParameters.h"
 
-int otbImageMetadataCorrectionParametersNew(int argc, char * argv[])
+int otbImageMetadataCorrectionParametersNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::ImageMetadataCorrectionParameters CorrectionParametersType;
   
