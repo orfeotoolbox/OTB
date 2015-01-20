@@ -236,24 +236,24 @@ OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToGeo
 OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToMap
                      APP  VectorDataReprojection
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
-                 			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.kml
+                 			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.sqlite
                              -out.proj user
                              -out.proj.user.map  lambert93
                      VALID   --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToMap.kml
-                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.kml)
+                              ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToMap.sqlite
+                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.sqlite)
 
 OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToMap2
                      APP  VectorDataReprojection
-                     OPTIONS -in.vd  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToMap.kml
-                 			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap2.kml
+                     OPTIONS -in.vd  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToMap.sqlite
+                 			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap2.sqlite
                              -out.proj user
                              -out.proj.user.map  utm
                              -out.proj.user.map.utm.northhem true
                  	           -out.proj.user.map.utm.zone 31
                      VALID   --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/apTvPrVectorDataReprojectionFromMapToMap2.kml
-                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap2.kml)
+                              ${BASELINE_FILES}/apTvPrVectorDataReprojectionFromMapToMap2.sqlite
+                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap2.sqlite)
 
 if(OTB_DATA_USE_LARGEINPUT)
 OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToSensor
@@ -271,7 +271,7 @@ endif()
 # With QGIS the two vectordata are equal
 OTB_TEST_APPLICATION(NAME  apTuPrVectorDataReprojectionFromGeoToMap
                      APP  VectorDataReprojection
-                     OPTIONS -in.vd  ${INPUTDATA}/ToulousePointsWGS.kml
+                     OPTIONS -in.vd  ${INPUTDATA}/ToulousePointsWGS.sqlite
                  			 -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromGeoToMap.shp
                              -out.proj image
                              -out.proj.image.in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif)

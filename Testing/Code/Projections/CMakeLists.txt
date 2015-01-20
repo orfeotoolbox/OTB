@@ -1429,7 +1429,7 @@ add_test(prTuGeometriesProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
         #${INPUTDATA}/ToulousePoints-examples.shp
         #${TEMP}/prTvGeometriesProjectionFilterFromGeoToMap.shp
         otbGeometriesProjectionFilterFromGeoToMap
-        ${INPUTDATA}/ToulousePointsWGS.kml
+        ${INPUTDATA}/ToulousePointsWGS.sqlite
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/prTvGeometriesProjectionFilterFromGeoToMap.shp
 )
