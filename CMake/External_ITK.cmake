@@ -11,6 +11,7 @@ mark_as_advanced(USE_SYSTEM_ITK)
 if(USE_SYSTEM_ITK)
   message(STATUS "  Using ITK system version")
 else()
+  set(${proj}_DEPENDENCIES)
   set(ITK_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(ITK_SB_SRC_DIR ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
@@ -119,6 +120,8 @@ else()
       set(ITK_SB_FFTW_CONFIG ${ITK_SB_FFTW_CONFIG}
         -DFFTW_INCLUDE_PATH:PATH=${CMAKE_INSTALL_PREFIX}/include
         )
+      list(APPEND ${proj}_DEPENDENCIES FFTWF)
+      list(APPEND ${proj}_DEPENDENCIES FFTWD)
     endif()
   endif()
   
@@ -145,6 +148,7 @@ else()
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
       ${CMAKE_SOURCE_DIR}/patches/ITK/hashtable.hxx.in
       ${ITK_SB_SRC_DIR}/Modules/ThirdParty/KWSys/src/KWSys
+    DEPENDS ${${proj}_DEPENDENCIES}
     )
   
   # write patch in binary dir
