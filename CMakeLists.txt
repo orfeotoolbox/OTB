@@ -45,5 +45,8 @@ include(External_OTB)
 # impose to build OTB after all dependencies
 add_dependencies(OSSIM GDAL)
 
+option(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)" OFF)
+
+include(External_Ice)
 
 
