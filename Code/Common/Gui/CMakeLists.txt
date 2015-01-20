@@ -32,6 +32,7 @@ set( Common_Gui_SOURCES
   mvdImageViewManipulator.cxx
   mvdImageViewRenderer.cxx
   mvdImageViewWidget.cxx
+  mvdLayerStackController.cxx
   mvdLayerStackWidget.cxx
   mvdMainWindowTitleLoader.cxx
   #mvdMyWidget.cxx
@@ -82,6 +83,7 @@ set( Common_Gui_HEADERS_MOC
   mvdImageViewManipulator.h
   mvdImageViewRenderer.h
   mvdImageViewWidget.h
+  mvdLayerStackController.h
   mvdLayerStackWidget.h
   mvdMainWindowTitleLoader.h
   #mvdMyWidget.h
