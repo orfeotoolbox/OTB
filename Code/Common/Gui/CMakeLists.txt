@@ -32,6 +32,7 @@ set( Common_Gui_SOURCES
   mvdImageViewManipulator.cxx
   mvdImageViewRenderer.cxx
   mvdImageViewWidget.cxx
+  mvdLayerStackWidget.cxx
   mvdMainWindowTitleLoader.cxx
   #mvdMyWidget.cxx
   mvdPixelDescriptionWidget.cxx
@@ -73,14 +74,15 @@ set( Common_Gui_HEADERS_MOC
   mvdDropLineEdit.h
   mvdFilenameDragAndDropEventFilter.h
   #mvdGui.h
+  mvdHistogramController.h
+  mvdHistogramPlotPicker.h
+  mvdHistogramWidget.h
   mvdI18nApplication.h
   mvdI18nMainWindow.h
   mvdImageViewManipulator.h
   mvdImageViewRenderer.h
   mvdImageViewWidget.h
-  mvdHistogramController.h
-  mvdHistogramPlotPicker.h
-  mvdHistogramWidget.h
+  mvdLayerStackWidget.h
   mvdMainWindowTitleLoader.h
   #mvdMyWidget.h
   mvdPixelDescriptionWidget.h
@@ -107,6 +109,7 @@ set( Common_Gui_FORMS
   mvdDatasetCreationProgressDialog.ui
   mvdDatasetPropertiesWidget.ui
   mvdHistogramWidget.ui
+  mvdLayerStackWidget.ui
   #mvdMyWidget.ui
   mvdPixelDescriptionWidget.ui
   mvdSearchableTreeWidget.ui
