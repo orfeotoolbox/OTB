@@ -28,7 +28,7 @@ else()
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "ftp://ftp.remotesensing.org/pub/libtiff/tiff-4.0.3.tar.gz"
+      URL "http://download.osgeo.org/libtiff/tiff-4.0.3.tar.gz"
       URL_MD5 051c1068e6a0627f461948c365290410
       BINARY_DIR ${LIBTIFF_SB_BUILD_DIR}
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
