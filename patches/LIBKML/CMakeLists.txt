@@ -26,9 +26,19 @@ include_directories(${Boost_INCLUDE_DIR})
 
 find_package(EXPAT)
 
+set(LIBKML_COMPILE_ZLIB OFF)
+if(WIN32 AND (NOT BORLAND))
+  set(LIBKML_COMPILE_ZLIB ON)
+endif()
+if(APPLE)
+  set(LIBKML_COMPILE_ZLIB ON)
+endif()
+    
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.5/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.5/include/uriparser)
 
+# ----------  Base  ------------------------------------------------
 set(libkmlbase_la_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/kml/base)
 include_directories(${libkmlbase_la_SOURCES_DIR})
 set(libkmlbase_la_SOURCES
@@ -55,6 +65,7 @@ else()
         ${CMAKE_CURRENT_SOURCE_DIR}/src/stdafx.h )
 endif()
 
+# ----------  Convenience  -------------------------------------------
 set(libkmlconvenience_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/convenience")
 include_directories(${libkmlconvenience_la_SOURCES_DIR})
 set(libkmlconvenience_la_SOURCES
@@ -64,6 +75,8 @@ set(libkmlconvenience_la_SOURCES
 	${libkmlconvenience_la_SOURCES_DIR}/kmz_check_links.cc
 )
 
+
+# ----------  Dom  ------------------------------------------------
 set(libkmldom_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/dom")
 include_directories(${libkmldom_la_SOURCES_DIR})
 set(libkmldom_la_SOURCES
@@ -115,6 +128,8 @@ set(libkmldom_la_SOURCES
   ${libkmldom_la_SOURCES_DIR}/atom.cc
 )
 
+
+# ----------  Engine  ------------------------------------------------
 set(libkmlengine_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/engine")
 include_directories(${libkmlengine_la_SOURCES_DIR})
 set(libkmlengine_la_SOURCES
@@ -140,6 +155,8 @@ set(libkmlengine_la_SOURCES
   ${libkmlengine_la_SOURCES_DIR}/feature_view.cc
 )
 
+
+# ----------  Regionator  ------------------------------------------------
 set(libkmlregionator_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/regionator")
 include_directories(${libkmlregionator_la_SOURCES_DIR})
 set(libkmlregionator_la_SOURCES
@@ -148,8 +165,21 @@ set(libkmlregionator_la_SOURCES
 	${libkmlregionator_la_SOURCES_DIR}/regionator_util.cc
 )
 
+# ----------  XSD  ------------------------------------------------
+set(libkmlxsd_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/xsd")
+include_directories(${libkmlxsd_la_SOURCES_DIR})
+set(libkmlxsd_la_SOURCES
+  ${libkmlxsd_la_SOURCES_DIR}/xsd_complex_type.cc
+  ${libkmlxsd_la_SOURCES_DIR}/xsd_element.cc
+  ${libkmlxsd_la_SOURCES_DIR}/xsd_file.cc
+  ${libkmlxsd_la_SOURCES_DIR}/xsd_handler.cc
+  ${libkmlxsd_la_SOURCES_DIR}/xsd_primitive_type.cc
+  ${libkmlxsd_la_SOURCES_DIR}/xst_parser.cc
+  ${libkmlxsd_la_SOURCES_DIR}/xsd_util.cc
+  
+)
 
-# Build libkml library
+# ----------  Minizip  ------------------------------------------------
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3/contrib")
 set(libzlib_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3/contrib/minizip")
@@ -160,51 +190,49 @@ set(libzlib_la_SOURCES
 	${libzlib_la_SOURCES_DIR}/zip.c
   ${libzlib_la_SOURCES_DIR}/iomem_simple.c
 )
-set(LIBKML_COMPILE_ZLIB OFF)
 
 
-# Only for Windows Visual Studio and Mac OSX
-set(libzlib_src_la_SOURCES "")
-if(WIN32)
-  if(NOT BORLAND)
-#    if(NOT CYGWIN)
-        include_directories("${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
-        set(libzlib_src_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
-        set(libzlib_src_la_SOURCES
-                ${libzlib_src_la_SOURCES_DIR}/adler32.c
-                ${libzlib_src_la_SOURCES_DIR}/compress.c
-                ${libzlib_src_la_SOURCES_DIR}/crc32.c
-                ${libzlib_src_la_SOURCES_DIR}/deflate.c
-                ${libzlib_src_la_SOURCES_DIR}/inflate.c
-                ${libzlib_src_la_SOURCES_DIR}/gzio.c
-                ${libzlib_src_la_SOURCES_DIR}/infback.c
-                ${libzlib_src_la_SOURCES_DIR}/inffast.c
-                ${libzlib_src_la_SOURCES_DIR}/inftrees.c
-                ${libzlib_src_la_SOURCES_DIR}/trees.c
-                ${libzlib_src_la_SOURCES_DIR}/uncompr.c
-                ${libzlib_src_la_SOURCES_DIR}/zutil.c )
-         set(LIBKML_COMPILE_ZLIB ON)
-#      endif()
-  endif()
-endif()
-if(APPLE)
-        include_directories("${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
-        set(libzlib_src_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
-        set(libzlib_src_la_SOURCES
-                ${libzlib_src_la_SOURCES_DIR}/adler32.c
-                ${libzlib_src_la_SOURCES_DIR}/compress.c
-                ${libzlib_src_la_SOURCES_DIR}/crc32.c
-                ${libzlib_src_la_SOURCES_DIR}/deflate.c
-                ${libzlib_src_la_SOURCES_DIR}/inflate.c
-                ${libzlib_src_la_SOURCES_DIR}/gzio.c
-                ${libzlib_src_la_SOURCES_DIR}/infback.c
-                ${libzlib_src_la_SOURCES_DIR}/inffast.c
-                ${libzlib_src_la_SOURCES_DIR}/inftrees.c
-                ${libzlib_src_la_SOURCES_DIR}/trees.c
-                ${libzlib_src_la_SOURCES_DIR}/uncompr.c
-                ${libzlib_src_la_SOURCES_DIR}/zutil.c )
-         set(LIBKML_COMPILE_ZLIB ON)
-endif()
+
+## Only for Windows Visual Studio and Mac OSX
+#set(libzlib_src_la_SOURCES "")
+#if(WIN32)
+#  if(NOT BORLAND)
+##    if(NOT CYGWIN)
+#        include_directories("${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
+#        set(libzlib_src_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
+#        set(libzlib_src_la_SOURCES
+#                ${libzlib_src_la_SOURCES_DIR}/adler32.c
+#                ${libzlib_src_la_SOURCES_DIR}/compress.c
+#                ${libzlib_src_la_SOURCES_DIR}/crc32.c
+#                ${libzlib_src_la_SOURCES_DIR}/deflate.c
+#                ${libzlib_src_la_SOURCES_DIR}/inflate.c
+#                ${libzlib_src_la_SOURCES_DIR}/gzio.c
+#                ${libzlib_src_la_SOURCES_DIR}/infback.c
+#                ${libzlib_src_la_SOURCES_DIR}/inffast.c
+#                ${libzlib_src_la_SOURCES_DIR}/inftrees.c
+#                ${libzlib_src_la_SOURCES_DIR}/trees.c
+#                ${libzlib_src_la_SOURCES_DIR}/uncompr.c
+#                ${libzlib_src_la_SOURCES_DIR}/zutil.c )
+##      endif()
+# endif()
+#endif()
+#if(APPLE)
+#        include_directories("${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
+#        set(libzlib_src_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
+#        set(libzlib_src_la_SOURCES
+#                ${libzlib_src_la_SOURCES_DIR}/adler32.c
+#                ${libzlib_src_la_SOURCES_DIR}/compress.c
+#                ${libzlib_src_la_SOURCES_DIR}/crc32.c
+#                ${libzlib_src_la_SOURCES_DIR}/deflate.c
+#                ${libzlib_src_la_SOURCES_DIR}/inflate.c
+#                ${libzlib_src_la_SOURCES_DIR}/gzio.c
+#                ${libzlib_src_la_SOURCES_DIR}/infback.c
+#                ${libzlib_src_la_SOURCES_DIR}/inffast.c
+#                ${libzlib_src_la_SOURCES_DIR}/inftrees.c
+#                ${libzlib_src_la_SOURCES_DIR}/trees.c
+#                ${libzlib_src_la_SOURCES_DIR}/uncompr.c
+#                ${libzlib_src_la_SOURCES_DIR}/zutil.c )
+#endif()
 
 
 set(liburiparser_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.5/lib")
@@ -236,9 +264,10 @@ set(libkml_SOURCES
         ${libkmldom_la_SOURCES}
         ${libkmlengine_la_SOURCES}
         ${libkmlregionator_la_SOURCES}
+        ${libkmlxsd_la_SOURCES}
         ${libzlib_la_SOURCES}
         ${liburiparser_la_SOURCES}
-        ${libzlib_src_la_SOURCES}
+#        ${libzlib_src_la_SOURCES}
         )
 # Adjust the compiler flags to avoid problems with ossim code.
 if(CMAKE_COMPILER_IS_GNUCXX)
@@ -259,18 +288,84 @@ if(WIN32)
         endif()
 endif()
 
-add_library(kml ${libkml_SOURCES} )
-target_link_libraries(kml ${EXPAT_LIBRARIES})
-
-if(NOT LIBKML_COMPILE_ZLIB)
-  target_link_libraries(kml ${ZLIB_LIBRARY})
+# -----  DECLARE LIBRARIES  --------------------------------
+if(LIBKML_COMPILE_ZLIB)
+  
+else()
+  find_package(ZLIB)
 endif()
 
-install(TARGETS kml
+
+# Minizip
+add_library(minizip ${libzlib_la_SOURCES} )
+target_link_libraries(minizip )
+
+if(NOT LIBKML_COMPILE_ZLIB)
+  target_link_libraries(minizip ${ZLIB_LIBRARY})
+endif()
+
+install(TARGETS minizip
     RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
     LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION lib COMPONENT Development)
 
+
+# Base
+add_library(kmlbase ${libkmlbase_la_SOURCES} ${liburiparser_la_SOURCES})
+target_link_libraries(kmlbase ${EXPAT_LIBRARIES} minizip)
+
+install(TARGETS kmlbase
+    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION lib COMPONENT Development)
+
+# Convenience
+add_library(kmlconvenience ${libkmlconvenience_la_SOURCES} )
+target_link_libraries(kmlconvenience kmlbase)
+
+install(TARGETS kmlconvenience
+    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION lib COMPONENT Development)
+
+# DOM
+add_library(kmldom ${libkmldom_la_SOURCES} )
+target_link_libraries(kmldom kmlbase)
+
+install(TARGETS kmldom
+    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION lib COMPONENT Development)
+
+# Engine
+add_library(kmlengine ${libkmlengine_la_SOURCES} )
+target_link_libraries(kmlengine kmlbase)
+
+install(TARGETS kmlengine
+    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION lib COMPONENT Development)
+
+# Regionator
+add_library(kmlregionator ${libkmlregionator_la_SOURCES} )
+target_link_libraries(kmlregionator kmlbase)
+
+install(TARGETS kmlregionator
+    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION lib COMPONENT Development)
+
+# XSD
+add_library(kmlxsd ${libkmlxsd_la_SOURCES} )
+target_link_libraries(kmlxsd kmlbase)
+
+install(TARGETS kmlxsd
+    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION lib COMPONENT Development)
+
+
+# install all headers
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/kml
         DESTINATION include
         FILES_MATCHING PATTERN "*.h")
