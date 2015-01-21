@@ -32,8 +32,11 @@ else()
   if(USE_SYSTEM_ZLIB)
     set(GEOTIFF_SB_ZLIB_CONFIG)
   else()
-    set(GEOTIFF_SB_ZLIB_CONFIG --with-zlib=${CMAKE_INSTALL_PREFIX})
-    list(APPEND ${proj}_DEPENDENCIES ZLIB)
+    # geotiff configure script doesn't use the given path for zlib
+    # so this feature is not enabled
+    set(GEOTIFF_SB_ZLIB_CONFIG)
+    #set(GEOTIFF_SB_ZLIB_CONFIG --with-zlib=${CMAKE_INSTALL_PREFIX})
+    #list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
   
   if(USE_SYSTEM_JPEG)
