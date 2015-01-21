@@ -67,7 +67,7 @@ namespace
 /*******************************************************************************/
 LayerStackItemModel
 ::LayerStackItemModel( QObject* parent ) :
-  QObject( parent )
+  QAbstractItemModel( parent )
 {
 }
 
@@ -75,6 +75,58 @@ LayerStackItemModel
 LayerStackItemModel
 ::~LayerStackItemModel()
 {
+}
+
+/*******************************************************************************/
+int
+LayerStackItemModel
+::columnCount( const QModelIndex & parent ) const
+{
+  return ITEM_ROLE_COUNT;
+}
+
+/*******************************************************************************/
+QVariant
+LayerStackItemModel
+::data( const QModelIndex & index, int role ) const
+{
+  return QVariant();
+}
+
+/*******************************************************************************/
+QModelIndex
+LayerStackItemModel
+::index( int row,
+         int column,
+         const QModelIndex & parent ) const
+{
+  return QModelIndex();
+}
+
+/*******************************************************************************/
+QModelIndex
+LayerStackItemModel
+::parent( const QModelIndex & index ) const
+{
+  return QModelIndex();
+}
+
+/*******************************************************************************/
+int
+LayerStackItemModel
+::rowCount( const QModelIndex & parent ) const
+{
+  return 0;
+}
+
+/*******************************************************************************/
+bool
+LayerStackItemModel
+::setData( const QModelIndex & index,
+           const QVariant & value,
+           int role )
+{
+  return false;
 }
 
 /*******************************************************************************/

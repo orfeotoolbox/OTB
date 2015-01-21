@@ -37,6 +37,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdStackedLayerModel.h"
 #include "Gui/mvdLayerStackWidget.h"
 
 namespace mvd
@@ -88,8 +89,15 @@ LayerStackController
 /*******************************************************************************/
 void
 LayerStackController
-::Connect( AbstractModel * )
+::Connect( AbstractModel * model )
 {
+  assert( model==qobject_cast< StackedLayerModel * >( model ) );
+
+  StackedLayerModel * stackedLayerModel =
+    qobject_cast< StackedLayerModel * >( model );
+
+  LayerStackWidget * widget = GetWidget< LayerStackWidget >();
+  assert( widget!=NULL );
 }
 
 /*******************************************************************************/

@@ -57,6 +57,7 @@ namespace
 
 namespace mvd
 {
+class LayerStackItemModel;
 
 //
 // Internal classes pre-declaration.
@@ -94,6 +95,10 @@ public:
 
   /** \brief Destructor. */
   virtual ~LayerStackWidget();
+
+  /**
+   */
+  // void SetModel( LayerStackItemModel * itemModel );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

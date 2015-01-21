@@ -38,6 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Gui/mvdLayerStackItemModel.h"
 
 namespace mvd
 {
@@ -78,6 +79,22 @@ LayerStackWidget
   delete m_UI;
   m_UI = NULL;
 }
+
+/*******************************************************************************/
+// void
+// LayerStackWidget
+// ::SetModel( LayerStackItemModel * itemModel )
+// {
+//   // See http://qt-project.org/doc/qt-4.8/qabstractitemview.html#setModel .
+//   QItemSelectionModel * itemSelectionModel = m_UI->treeView->selectionModel();
+
+//   m_UI->treeView->setModel( itemModel );
+
+//   itemModel->setParent( m_UI->treeView );
+
+//   delete itemSelectionModel;
+//   itemSelectionModel = NULL;
+// }
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

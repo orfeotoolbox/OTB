@@ -70,7 +70,7 @@ namespace mvd
  * \brief WIP.
  */
 class Monteverdi2_EXPORT LayerStackItemModel :
-    public QObject
+    public QAbstractItemModel
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -78,6 +78,24 @@ class Monteverdi2_EXPORT LayerStackItemModel :
   Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+
+//
+// Public types.
+public:
+
+  enum ItemRole
+  {
+    ITEM_ROLE_NAME = Qt::UserRole + 1,
+    ITEM_ROLE_I = Qt::UserRole + 2,
+    ITEM_ROLE_J = Qt::UserRole + 3,
+    ITEM_ROLE_R = Qt::UserRole + 4,
+    ITEM_ROLE_G = Qt::UserRole + 5,
+    ITEM_ROLE_B = Qt::UserRole + 6,
+    ITEM_ROLE_X = Qt::UserRole + 7,
+    ITEM_ROLE_Y = Qt::UserRole + 8,
+    ITEM_ROLE_EPSG = Qt::UserRole + 9,
+    ITEM_ROLE_COUNT = Qt::UserRole + 10,
+  };
 
 //
 // Public methods.
@@ -88,6 +106,46 @@ public:
 
   /** \brief Destructor. */
   virtual ~LayerStackItemModel();
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#columnCount
+   */
+  virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#data
+   */
+  virtual
+    QVariant
+    data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#index
+   */
+  virtual
+    QModelIndex
+    index( int row,
+           int column,
+           const QModelIndex & parent = QModelIndex() ) const;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
+   */
+  virtual QModelIndex parent( const QModelIndex & index ) const;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#rowCount
+   */
+  virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#setData
+   */
+  virtual
+    bool
+    setData( const QModelIndex & index,
+             const QVariant & value,
+             int role = Qt::EditRole );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
