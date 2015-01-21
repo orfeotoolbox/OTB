@@ -30,6 +30,7 @@ else()
         ${FFTW_SB_BUILD_FLOAT_DIR}/configure
             --prefix=${CMAKE_INSTALL_PREFIX}
             --enable-shared
+            --disable-static
             --enable-float
             --enable-threads
             --disable-fortran
@@ -53,6 +54,7 @@ else()
         ${FFTW_SB_BUILD_DOUBLE_DIR}/configure
             --prefix=${CMAKE_INSTALL_PREFIX}
             --enable-shared
+            --disable-static
             --disable-float
             --enable-threads
             --disable-fortran
