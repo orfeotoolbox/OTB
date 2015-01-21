@@ -33,6 +33,7 @@ set( Common_Gui_SOURCES
   mvdImageViewRenderer.cxx
   mvdImageViewWidget.cxx
   mvdLayerStackController.cxx
+  mvdLayerStackItemModel.cxx
   mvdLayerStackWidget.cxx
   mvdMainWindowTitleLoader.cxx
   #mvdMyWidget.cxx
@@ -84,6 +85,7 @@ set( Common_Gui_HEADERS_MOC
   mvdImageViewRenderer.h
   mvdImageViewWidget.h
   mvdLayerStackController.h
+  mvdLayerStackItemModel.h
   mvdLayerStackWidget.h
   mvdMainWindowTitleLoader.h
   #mvdMyWidget.h
