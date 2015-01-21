@@ -35,8 +35,8 @@ else()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "https://libkml.googlecode.com/files/libkml-1.2.0.tar.gz"
-    URL_MD5 25d534437f971bf55a945608e39fea79
+    URL "http://ftp.de.debian.org/debian/pool/main/libk/libkml/libkml_1.3.0~r863.orig.tar.gz"
+    URL_MD5 211ed5fdf2dd45aeb9c0abc8e1fe42be
     BINARY_DIR ${LIBKML_SB_BUILD_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_CACHE_ARGS
