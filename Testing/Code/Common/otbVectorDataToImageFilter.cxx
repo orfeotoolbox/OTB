@@ -105,7 +105,7 @@ int otbVectorDataToImageFilter(int argc, char * argv [])
   return EXIT_SUCCESS;
 }
 
-int otbVectorDataToImageFilterBinary(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbVectorDataToImageFilterBinary(int argc, char * argv [])
 {
 
   if (argc < 3)
