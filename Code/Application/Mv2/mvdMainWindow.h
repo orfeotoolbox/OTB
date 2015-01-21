@@ -25,6 +25,9 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+#define USE_PIXEL_DESCRIPTION ( ( defined( _DEBUG ) && 0 ) || 0 )
+
+
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -260,6 +263,8 @@ private:
    */
   void DisconnectStatusBar( const AbstractLayerModel * model );
 
+#if USE_PIXEL_DESCRIPTION
+
   /**
    */
   void ConnectPixelDescriptionWidget( AbstractLayerModel * model);
@@ -267,6 +272,8 @@ private:
   /**
    */
   void DisconnectPixelDescriptionWidget( const AbstractLayerModel * model );
+
+#endif // USE_PIXEL_DESCRIPTION
 
   //
   // I18nMainWindow overrides.
@@ -308,7 +315,9 @@ private:
   /**
    * \brief Current Pixel Description dock-widget.
    */
+#if USE_PIXEL_DESCRIPTION
   QDockWidget* m_PixelDescriptionDock;
+#endif // USE_PIXEL_DESCRIPTION
 
   /**
    * \brief Histogram dock-widget.

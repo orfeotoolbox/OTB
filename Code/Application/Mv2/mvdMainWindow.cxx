@@ -70,7 +70,9 @@
 #include "Gui/mvdImageViewManipulator.h"
 #include "Gui/mvdImageViewRenderer.h"
 #include "Gui/mvdImageViewWidget.h"
-#include "Gui/mvdPixelDescriptionWidget.h"
+#if USE_PIXEL_DESCRIPTION
+#  include "Gui/mvdPixelDescriptionWidget.h"
+#endif // USE_PIXEL_DESCRIPTION
 #include "Gui/mvdQuicklookViewManipulator.h"
 #include "Gui/mvdQuicklookViewRenderer.h"
 #include "Gui/mvdStatusBarWidget.h"
@@ -110,7 +112,9 @@ MainWindow
   m_ColorSetupDock( NULL ),
   // m_DatabaseBrowserDock( NULL ),
   // m_DatasetPropertiesDock(NULL),
+#if USE_PIXEL_DESCRIPTION
   m_PixelDescriptionDock(NULL),
+#endif // USE_PIXEL_DESCRIPTION
   m_HistogramDock( NULL ),
 #if defined( OTB_WRAP_QT ) && USE_OTB_APPS
   m_OtbApplicationsBrowserDock(NULL),
@@ -437,7 +441,10 @@ MainWindow
 
   // m_UI->menu_View->addAction( m_DatabaseBrowserDock->toggleViewAction() );
   // m_UI->menu_View->addAction( m_DatasetPropertiesDock->toggleViewAction() );
+#if USE_PIXEL_DESCRIPTION
   m_UI->menu_View->addAction( m_PixelDescriptionDock->toggleViewAction() );
+#endif // USE_PIXEL_DESCRIPTION
+
 #if defined( OTB_WRAP_QT ) && USE_OTB_APPS
   m_UI->menu_View->addAction(
     m_OtbApplicationsBrowserDock->toggleViewAction() );
@@ -549,6 +556,8 @@ MainWindow
 }
 
 /*****************************************************************************/
+#if USE_PIXEL_DESCRIPTION
+
 void
 MainWindow
 ::ConnectPixelDescriptionWidget( AbstractLayerModel * model )
@@ -600,7 +609,11 @@ MainWindow
   );
 }
 
+#endif // USE_PIXEL_DESCRIPTION
+
 /*****************************************************************************/
+#if USE_PIXEL_DESCRIPTION
+
 void
 MainWindow
 ::DisconnectPixelDescriptionWidget( const AbstractLayerModel * model )
@@ -659,6 +672,8 @@ MainWindow
     )
   );
 }
+
+#endif // USE_PIXEL_DESCRIPTION
 
 /*****************************************************************************/
 void
@@ -846,6 +861,8 @@ MainWindow
       false
     );
 
+#if USE_PIXEL_DESCRIPTION
+
   // Pixel Description (no controller needed here / direct update of
   // the pixel description through signals from VectorImageModel)
   assert( m_PixelDescriptionDock==NULL );
@@ -858,6 +875,8 @@ MainWindow
     );
 
   tabifyDockWidget( m_PixelDescriptionDock, m_HistogramDock );
+
+#endif // USE_PIXEL_DESCRIPTION
 
   // Color-setup.
   assert( m_ColorSetupDock==NULL );
@@ -1340,7 +1359,9 @@ MainWindow
 
   DisconnectStatusBar( layerModel );
 
+#if USE_PIXEL_DESCRIPTION
   DisconnectPixelDescriptionWidget( layerModel );
+#endif // USE_PIXEL_DESCRIPTION
 }
 
 /*****************************************************************************/
@@ -1427,7 +1448,9 @@ MainWindow
 
   ConnectStatusBar( layerModel );
 
+#if USE_PIXEL_DESCRIPTION
   ConnectPixelDescriptionWidget( layerModel );
+#endif // USE_PIXEL_DESCRIPTION
 
   //
   // CONTROLLERS.
