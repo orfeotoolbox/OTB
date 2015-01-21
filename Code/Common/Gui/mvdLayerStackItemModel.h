@@ -94,7 +94,8 @@ public:
     ITEM_ROLE_X = Qt::UserRole + 7,
     ITEM_ROLE_Y = Qt::UserRole + 8,
     ITEM_ROLE_EPSG = Qt::UserRole + 9,
-    ITEM_ROLE_COUNT = Qt::UserRole + 10,
+    //
+    ITEM_ROLE_COUNT = 10,
   };
 
 //
@@ -118,7 +119,13 @@ public:
   virtual
     QVariant
     data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
-
+  
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#headerData
+   */
+  virtual QVariant headerData( int section,
+                               Qt::Orientation orientation,
+                               int role = Qt::DisplayRole ) const;
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#index
    */

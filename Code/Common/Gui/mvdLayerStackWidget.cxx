@@ -70,6 +70,8 @@ LayerStackWidget
   m_UI( new mvd::Ui::LayerStackWidget() )
 {
   m_UI->setupUi( this );
+
+  m_UI->treeView->setModel( new LayerStackItemModel( m_UI->treeView ) );
 }
 
 /*******************************************************************************/

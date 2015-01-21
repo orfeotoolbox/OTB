@@ -28,6 +28,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -54,6 +55,21 @@ namespace mvd
 
 namespace
 {
+
+QVariant
+HEADERS[ LayerStackItemModel::ITEM_ROLE_COUNT ] =
+{
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Name" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "I" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "J" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Red" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Green" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Blue" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "X" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Y" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "EPSG" ) ),
+};
+
 } // end of anonymous namespace.
 
 
@@ -90,6 +106,31 @@ QVariant
 LayerStackItemModel
 ::data( const QModelIndex & index, int role ) const
 {
+  return QVariant();
+}
+
+/*******************************************************************************/
+QVariant
+LayerStackItemModel
+::headerData( int section,
+              Qt::Orientation orientation,
+              int role ) const
+{
+  switch( orientation )
+    {
+    case Qt::Horizontal:
+      assert( section>=0 && section<ITEM_ROLE_COUNT );
+      return HEADERS[ section ];
+      break;
+
+    case Qt::Vertical:
+      break;
+
+    default:
+      assert( false && "Unhandled Qt::Orientation value." );
+      break;
+    }
+
   return QVariant();
 }
 
