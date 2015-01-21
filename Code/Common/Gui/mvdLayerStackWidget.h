@@ -129,7 +129,7 @@ private:
   /**
    * \brief uic generated.
    */
-  Ui::LayerStackWidget* m_UI;
+  Ui::LayerStackWidget * m_UI;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

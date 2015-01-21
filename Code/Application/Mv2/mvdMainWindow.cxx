@@ -70,6 +70,7 @@
 #include "Gui/mvdImageViewManipulator.h"
 #include "Gui/mvdImageViewRenderer.h"
 #include "Gui/mvdImageViewWidget.h"
+#include "Gui/mvdLayerStackController.h"
 #include "Gui/mvdLayerStackWidget.h"
 #if USE_PIXEL_DESCRIPTION
 #  include "Gui/mvdPixelDescriptionWidget.h"
@@ -855,12 +856,12 @@ MainWindow
 
   // Layer-stack editor.
   assert( m_LayerStackDock==NULL );
-  m_LayerStackDock = AddWidgetToDock(
-    CreateLayerStackWidget(),
-    "LAYER_STACK",
-    tr( "Layer stack" ),
-    Qt::RightDockWidgetArea
-  );
+  m_LayerStackDock = AddDockWidget<
+    LayerStackWidget, LayerStackController, QDockWidget >(
+      "LAYER_STACK",
+      tr( "Layer stack" ),
+      Qt::RightDockWidgetArea
+    );
 
   tabifyDockWidget( m_QuicklookViewDock, m_LayerStackDock );
 
@@ -1014,14 +1015,6 @@ MainWindow
   quicklookView->setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum );
 
   return quicklookView;
-}
-
-/*****************************************************************************/
-LayerStackWidget *
-MainWindow
-::CreateLayerStackWidget()
-{
-  return NULL;
 }
 
 /*****************************************************************************/

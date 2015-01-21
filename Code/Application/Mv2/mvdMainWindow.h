@@ -229,10 +229,6 @@ private:
 
   /**
    */
-  LayerStackWidget * CreateLayerStackWidget();
-
-  /**
-   */
   void InitializeDockWidgets();
 
   /**

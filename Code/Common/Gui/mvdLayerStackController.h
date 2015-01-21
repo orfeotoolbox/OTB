@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+#include "Gui/mvdAbstractModelController.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -59,6 +59,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class LayerStackWidget;
 
 
 /*****************************************************************************/
@@ -70,7 +71,7 @@ namespace mvd
  * \brief WIP.
  */
 class Monteverdi2_EXPORT LayerStackController :
-    public QObject
+    public AbstractModelController
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -84,7 +85,7 @@ class Monteverdi2_EXPORT LayerStackController :
 public:
 
   /** \brief Constructor. */
-  LayerStackController( QObject* parent =NULL );
+  LayerStackController( LayerStackWidget * widget, QObject * parent =NULL );
 
   /** \brief Destructor. */
   virtual ~LayerStackController();
@@ -116,6 +117,24 @@ protected:
 //
 // Private methods.
 private:
+  //
+  // AbstractModelController overloads.
+
+  /**
+   */
+  virtual void Connect( AbstractModel * );
+
+  /**
+   */
+  virtual void Disconnect( AbstractModel * );
+
+  /**
+   */
+  virtual void ClearWidget();
+
+  /**
+   */
+  virtual void ResetWidget();
 
 
 //

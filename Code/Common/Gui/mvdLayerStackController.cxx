@@ -37,6 +37,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Gui/mvdLayerStackWidget.h"
 
 namespace mvd
 {
@@ -66,14 +67,42 @@ namespace
 
 /*******************************************************************************/
 LayerStackController
-::LayerStackController( QObject* parent ) :
-  QObject( parent )
+::LayerStackController( LayerStackWidget * widget, QObject * parent ) :
+  AbstractModelController( widget, parent )
 {
 }
 
 /*******************************************************************************/
 LayerStackController
 ::~LayerStackController()
+{
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::ClearWidget()
+{
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::Connect( AbstractModel * )
+{
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::Disconnect( AbstractModel * )
+{
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::ResetWidget()
 {
 }
 
