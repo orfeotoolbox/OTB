@@ -33,6 +33,15 @@ else()
     list(APPEND ${proj}_DEPENDENCIES BOOST)
   endif()
   
+  if(USE_SYSTEM_ZLIB)
+    set(LIBKML_SB_ZLIB_CONFIG)
+  else()
+    set(LIBKML_SB_ZLIB_CONFIG 
+      -DZLIB_ROOT:STRING=${CMAKE_INSTALL_PREFIX}
+      )
+    list(APPEND ${proj}_DEPENDENCIES ZLIB)
+  endif()
+  
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "http://ftp.de.debian.org/debian/pool/main/libk/libkml/libkml_1.3.0~r863.orig.tar.gz"
@@ -45,6 +54,7 @@ else()
       -DBUILD_SHARED_LIBS:BOOL=ON
       ${LIBKML_SB_EXPAT_CONFIG}
       ${LIBKML_SB_BOOST_CONFIG}
+      ${LIBKML_SB_ZLIB_CONFIG}
     #CMAKE_COMMAND
     #  # use 'env' because CTest launcher doesn't perform shell interpretation
     #  env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
