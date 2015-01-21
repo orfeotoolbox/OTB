@@ -29,7 +29,7 @@
 #include "otbImageFileReader.h"
 #include "otbVectorDataToMapFilter.h"
 
-int otbVectorDataToMapFilterSensorModel(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbVectorDataToMapFilterSensorModel(int argc, char * argv [])
 {
 
   if (argc < 5)

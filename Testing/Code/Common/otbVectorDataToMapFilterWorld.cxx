@@ -27,7 +27,7 @@
 #include "otbImage.h"
 #include "otbVectorDataToMapFilter.h"
 
-int otbVectorDataToMapFilterWorld(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbVectorDataToMapFilterWorld(int argc, char * argv [])
 {
 
   if (argc < 11)
