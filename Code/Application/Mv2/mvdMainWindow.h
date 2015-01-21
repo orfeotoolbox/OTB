@@ -76,6 +76,7 @@ class AbstractLayerModel;
 // Gui
 class FilenameDragAndDropEventFilter;
 class ImageViewWidget;
+class LayerStackWidget;
 class StatusBarWidget;
 
 namespace Ui
@@ -228,6 +229,10 @@ private:
 
   /**
    */
+  LayerStackWidget * CreateLayerStackWidget();
+
+  /**
+   */
   void InitializeDockWidgets();
 
   /**
@@ -311,6 +316,11 @@ private:
    * \brief Dataset-properties dock-widget.
    */
   // QDockWidget* m_DatasetPropertiesDock;
+
+  /**
+   * \brief Layer-stack dock-widget.
+   */
+  QDockWidget * m_LayerStackDock;
 
   /**
    * \brief Current Pixel Description dock-widget.
