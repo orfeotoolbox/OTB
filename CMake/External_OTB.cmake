@@ -92,6 +92,15 @@ else()
   list(APPEND ${proj}_DEPENDENCIES LIBKML)
 endif()
 
+if(USE_SYSTEM_OPENCV)
+  set(OTB_SB_OPENCV_CONFIG)
+else()
+  set(OTB_SB_OPENCV_CONFIG
+    -DOpenCV_DIR:PATH=${CMAKE_INSTALL_PREFIX}/share/OpenCV
+    )
+  list(APPEND ${proj}_DEPENDENCIES OPENCV)
+endif()
+
 ExternalProject_Add(${proj}
     DEPENDS ${${proj}_DEPENDENCIES}
     PREFIX ${proj}
@@ -112,6 +121,7 @@ ExternalProject_Add(${proj}
       -DOTB_USE_EXTERNAL_OSSIM:BOOL=ON
       -DOTB_USE_EXTERNAL_LIBKML:BOOL=ON
       -DOTB_USE_EXTERNAL_BOOST:BOOL=ON
+      -DOTB_USE_OPENCV:BOOL=ON
       ${OTB_SB_ITK_CONFIG}
       ${OTB_SB_OSSIM_CONFIG}
       ${OTB_SB_GDAL_CONFIG}
@@ -120,6 +130,7 @@ ExternalProject_Add(${proj}
       ${OTB_SB_TINYXML_CONFIG}
       ${OTB_SB_BOOST_CONFIG}
       ${OTB_SB_LIBKML_CONFIG}
+      ${OTB_SB_OPENCV_CONFIG}
     CMAKE_COMMAND
       # use 'env' because CTest launcher doesn't perform shell interpretation
       env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib

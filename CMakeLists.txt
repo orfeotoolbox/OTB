@@ -31,6 +31,7 @@ include(External_TinyXML)
 include(External_expat)
 include(External_libKML)
 include(External_GDAL)
+include(External_OpenCV)
 
 # TODO
 
