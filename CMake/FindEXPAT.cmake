@@ -19,10 +19,14 @@
 #  License text for the above reference.)
 
 # Look for the header file.
-find_path(EXPAT_INCLUDE_DIR NAMES expat.h)
+find_path(EXPAT_INCLUDE_DIR NAMES expat.h
+          PATHS 
+          ${CMAKE_PREFIX_PATH}/include)
 
 # Look for the library.
-find_library(EXPAT_LIBRARY NAMES expat libexpat)
+find_library(EXPAT_LIBRARY NAMES expat libexpat
+             PATHS 
+             ${CMAKE_PREFIX_PATH}/lib)
 
 # handle the QUIETLY and REQUIRED arguments and set EXPAT_FOUND to TRUE if
 # all listed variables are TRUE

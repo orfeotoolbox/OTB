@@ -11,22 +11,45 @@ if( LIBKML_INCLUDE_DIR )
     set( LibKML_FIND_QUIETLY TRUE )
 endif()
 
-find_path( LIBKML_INCLUDE_DIR kml/dom.h )
+find_path( LIBKML_INCLUDE_DIR kml/dom.h 
+           PATHS 
+           ${CMAKE_PREFIX_PATH}/include)
 
 find_library( LIBKML_BASE_LIBRARY
-              NAMES kmlbase )
+              NAMES kmlbase 
+              PATHS 
+              ${CMAKE_PREFIX_PATH}/lib )
+
 find_library( LIBKML_CONVENIENCE_LIBRARY
-              NAMES kmlconvenience )
+              NAMES kmlconvenience     
+              PATHS 
+              ${CMAKE_PREFIX_PATH}/lib )
+
 find_library( LIBKML_DOM_LIBRARY
-              NAMES kmldom )
+              NAMES kmldom 
+              PATHS 
+              ${CMAKE_PREFIX_PATH}/lib )
+
 find_library( LIBKML_ENGINE_LIBRARY
-              NAMES kmlengine )
+              NAMES kmlengine 
+              PATHS 
+              ${CMAKE_PREFIX_PATH}/lib )
+
 find_library( LIBKML_REGIONATOR_LIBRARY
-              NAMES kmlregionator )
+              NAMES kmlregionator
+              PATHS 
+              ${CMAKE_PREFIX_PATH}/lib )
+
 find_library( LIBKML_XSD_LIBRARY
-              NAMES kmlxsd )
+              NAMES kmlxsd 
+              PATHS 
+              ${CMAKE_PREFIX_PATH}/lib )
+
 find_library( LIBKML_MINIZIP_LIBRARY
-              NAMES minizip )
+              NAMES minizip
+              PATHS 
+              ${CMAKE_PREFIX_PATH}/lib )
+
 
 mark_as_advanced(   LIBKML_INCLUDE_DIR
                     LIBKML_BASE_LIBRARY

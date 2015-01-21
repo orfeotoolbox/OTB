@@ -12,10 +12,14 @@ if( TINYXML_INCLUDE_DIR )
 endif()
 
 find_path( TINYXML_INCLUDE_DIR tinyxml.h
+           PATHS 
+           ${CMAKE_PREFIX_PATH}/include
            PATH_SUFFIXES tinyxml )
 
 find_library( TINYXML_LIBRARY
               NAMES tinyxml
+              PATHS 
+              ${CMAKE_PREFIX_PATH}/lib
               PATH_SUFFIXES tinyxml )
 
 # handle the QUIETLY and REQUIRED arguments and set TINYXML_FOUND to TRUE if

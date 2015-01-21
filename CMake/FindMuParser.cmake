@@ -12,10 +12,14 @@ if( MUPARSER_INCLUDE_DIR )
 endif()
 
 find_path( MUPARSER_INCLUDE_DIR muParser.h
+           PATHS 
+           ${CMAKE_PREFIX_PATH}/include
            PATH_SUFFIXES muParser )
 
 find_library( MUPARSER_LIBRARIES
               NAMES muparser
+              PATHS
+              ${CMAKE_PREFIX_PATH}/lib
               PATH_SUFFIXES muparser )
 
 # handle the QUIETLY and REQUIRED arguments and set MUPARSER_FOUND to TRUE if

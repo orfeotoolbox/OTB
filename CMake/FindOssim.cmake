@@ -13,7 +13,11 @@ endif()
 
 find_path( OSSIM_INCLUDE_DIR
            NAMES ossim/init/ossimInit.h
-           PATHS $ENV{OSSIM_INCLUDE_DIR} /usr/local )
+           PATHS 
+           $ENV{OSSIM_INCLUDE_DIR} 
+           ${CMAKE_PREFIX_PATH}/include
+           /usr/local/include
+           /usr/include )
 
   file(READ "${OSSIM_INCLUDE_DIR}/ossim/ossimVersion.h" _ossim_version_h_CONTENTS)
   string(REGEX REPLACE ".*# *define OSSIM_VERSION *\"([0-9.]+)\".*" "\\1" OSSIM_VERSION "${_ossim_version_h_CONTENTS}")
@@ -27,7 +31,13 @@ find_path( OSSIM_INCLUDE_DIR
 
 find_library(OSSIM_LIBRARY
              NAMES ossim
-             PATHS /usr/local/lib/ossim)
+             PATHS 
+             ${CMAKE_PREFIX_PATH}/lib
+             ${CMAKE_PREFIX_PATH}/lib64
+             /usr/local/lib/ossim
+             /usr/local/lib64/
+             /usr/lib/
+             /usr/lib64/)
 
 # handle the QUIETLY and REQUIRED arguments and set OSSIM_FOUND to TRUE if
 # all listed variables are TRUE
