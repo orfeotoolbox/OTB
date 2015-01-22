@@ -1229,14 +1229,14 @@ void GDALImageIO::InternalReadImageInformation()
 
 bool GDALImageIO::CanWriteFile(const char* name)
 {
-  m_FileName = name;
-
   // First check the filename
   if (name == NULL)
     {
     itkDebugMacro(<< "No filename specified.");
     return false;
     }
+
+  m_FileName = name;
 
   // Get the GDAL format ID from the name
   std::string gdalDriverShortName = FilenameToGdalDriverShortName(name);
