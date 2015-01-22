@@ -71,7 +71,11 @@ WriterWatcherBase
   m_ProgressWriterTag = m_Process->AddObserver(itk::ProgressEvent(),
                                                m_ProgressWriterCommand);
 
-  // Try to get the filter that is wired to m_Process.
+  m_StartFilterTag = 0;
+  m_EndFilterTag = 0;
+  m_ProgressFilterTag = 0;
+
+ // Try to get the filter that is wired to m_Process.
   if (m_Process->GetInputs()[0]->GetSource())
     {
     m_SourceProcess = m_Process->GetInputs()[0]->GetSource();
