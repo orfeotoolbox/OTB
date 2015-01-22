@@ -133,7 +133,7 @@ void DivisionByScalar::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_p
       const mup::matrix_type a = a_pArg[0]->GetArray();
       mup::matrix_type b;
 
-      double scalar;
+      double scalar = 0;
       switch (a_pArg[1]->GetType())
       {
         case 'i':
