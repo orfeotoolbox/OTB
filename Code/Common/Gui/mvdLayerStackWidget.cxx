@@ -29,6 +29,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -80,6 +81,27 @@ LayerStackWidget
 {
   delete m_UI;
   m_UI = NULL;
+}
+
+/*******************************************************************************/
+const LayerStackItemModel *
+LayerStackWidget
+::GetItemModel() const
+{
+  return const_cast< LayerStackWidget * >( this )->GetItemModel();
+}
+
+/*******************************************************************************/
+LayerStackItemModel *
+LayerStackWidget
+::GetItemModel()
+{
+  assert(
+    m_UI->treeView->model()==
+    qobject_cast< LayerStackItemModel * >( m_UI->treeView->model() )
+    );
+
+  return qobject_cast< LayerStackItemModel * >( m_UI->treeView->model() );
 }
 
 /*******************************************************************************/

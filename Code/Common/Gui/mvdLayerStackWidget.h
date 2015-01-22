@@ -98,7 +98,11 @@ public:
 
   /**
    */
-  // void SetModel( LayerStackItemModel * itemModel );
+  const LayerStackItemModel * GetItemModel() const;
+
+  /**
+   */
+  LayerStackItemModel * GetItemModel();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

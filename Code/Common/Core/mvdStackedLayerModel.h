@@ -107,12 +107,13 @@ public:
   /** \brief Destructor. */
   virtual ~StackedLayerModel();
 
-  /*
   inline const AbstractLayerModel * operator[]( SizeType ) const;
   inline AbstractLayerModel * operator[]( SizeType );
-  */
 
   KeyType Add( AbstractLayerModel * );
+
+  inline const AbstractLayerModel * At( SizeType ) const;
+  inline AbstractLayerModel * At( SizeType );
 
   inline ConstIterator Begin() const;
 
@@ -259,26 +260,48 @@ namespace mvd
 {
 
 /*****************************************************************************/
-/*
 inline
 const AbstractLayerModel *
 StackedLayerModel
 ::operator[]( SizeType i ) const
 {
-  return m_LayerModels[ i ];
+  return At( i );
 }
-*/
 
 /*****************************************************************************/
-/*
 inline
 AbstractLayerModel *
 StackedLayerModel
 ::operator[]( SizeType i )
 {
-  return m_LayerModels[ i ];
+  return At( i );
 }
-*/
+
+/*****************************************************************************/
+inline
+const AbstractLayerModel *
+StackedLayerModel
+::At( SizeType i ) const
+{
+  return const_cast< StackedLayerModel * >( this )->At( i );
+}
+
+/*****************************************************************************/
+inline
+AbstractLayerModel *
+StackedLayerModel
+::At( SizeType i )
+{
+  assert( !GetKey( i ).empty() );
+
+  LayerModelMap::const_iterator it(
+    m_LayerModels.find( GetKey( i ) )
+  );
+
+  assert( it!=m_LayerModels.end() );
+
+  return it->second;
+}
 
 /*****************************************************************************/
 inline

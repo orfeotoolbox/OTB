@@ -38,6 +38,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAbstractLayerModel.h"
+#include "Core/mvdStackedLayerModel.h"
+#include "Core/mvdVectorImageModel.h"
 
 namespace mvd
 {
@@ -57,7 +60,7 @@ namespace
 {
 
 QVariant
-HEADERS[ LayerStackItemModel::ITEM_ROLE_COUNT ] =
+HEADERS[ LayerStackItemModel::COLUMN_COUNT ] =
 {
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Name" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "I" ) ),
@@ -79,48 +82,126 @@ HEADERS[ LayerStackItemModel::ITEM_ROLE_COUNT ] =
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
-/*******************************************************************************/
+/*****************************************************************************/
 LayerStackItemModel
 ::LayerStackItemModel( QObject* parent ) :
-  QAbstractItemModel( parent )
+  QAbstractItemModel( parent ),
+  m_StackedLayerModel( NULL )
 {
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 LayerStackItemModel
 ::~LayerStackItemModel()
 {
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
+void
+LayerStackItemModel
+::SetStack( StackedLayerModel * model )
+{
+  m_StackedLayerModel = model;
+
+  // TODO: emit refresh data signal.
+}
+
+/*****************************************************************************/
+/* QAbstractItemModel overloads                                              */
+/*****************************************************************************/
 int
 LayerStackItemModel
 ::columnCount( const QModelIndex & parent ) const
 {
-  return ITEM_ROLE_COUNT;
+  return COLUMN_COUNT;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 QVariant
 LayerStackItemModel
 ::data( const QModelIndex & index, int role ) const
 {
+  switch( role )
+    {
+    case Qt::DisplayRole:
+      switch( index.column() )
+        {
+        case COLUMN_INDEX:
+          return QVariant( index.row() );
+          break;
+
+        case COLUMN_NAME:
+          assert( m_StackedLayerModel!=NULL );
+
+          const AbstractLayerModel * layerModel =
+            m_StackedLayerModel->At( index.row() );
+
+          assert( layerModel!=NULL );
+
+          if( layerModel->inherits(
+                VectorImageModel::staticMetaObject.className() ) )
+            {
+            const VectorImageModel * vectorImageModel =
+              qobject_cast< const VectorImageModel * >( layerModel );
+            assert( vectorImageModel!=NULL );
+
+            return QVariant( vectorImageModel->GetFilename() );
+            }
+          else
+            {
+            }
+          break;
+        }
+      break;
+
+    default:
+      break;
+    }
+
   return QVariant();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
+Qt::ItemFlags
+LayerStackItemModel
+::flags( const QModelIndex & index ) const
+{
+  return QAbstractItemModel::flags( index );
+}
+
+/*****************************************************************************/
 QVariant
 LayerStackItemModel
 ::headerData( int section,
               Qt::Orientation orientation,
               int role ) const
 {
+  assert( orientation==Qt::Horizontal );
+
+  switch( role )
+    {
+    case Qt::DisplayRole:
+      assert( section>=0 && section<COLUMN_COUNT );
+      return HEADERS[ section ];
+      break;
+
+    default:
+      break;
+    }
+
+  /*
   switch( orientation )
     {
     case Qt::Horizontal:
-      assert( section>=0 && section<ITEM_ROLE_COUNT );
-      return HEADERS[ section ];
+      switch( role )
+        {
+        case Qt::DisplayRole:
+          assert( section>=0 && section<COLUMN_COUNT );
+          return HEADERS[ section ];
+          break;
+        default:
+          break;
+        }
       break;
 
     case Qt::Vertical:
@@ -130,11 +211,12 @@ LayerStackItemModel
       assert( false && "Unhandled Qt::Orientation value." );
       break;
     }
+  */
 
   return QVariant();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 QModelIndex
 LayerStackItemModel
 ::index( int row,
@@ -144,7 +226,7 @@ LayerStackItemModel
   return QModelIndex();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 QModelIndex
 LayerStackItemModel
 ::parent( const QModelIndex & index ) const
@@ -152,7 +234,7 @@ LayerStackItemModel
   return QModelIndex();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 int
 LayerStackItemModel
 ::rowCount( const QModelIndex & parent ) const
@@ -160,7 +242,7 @@ LayerStackItemModel
   return 0;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 bool
 LayerStackItemModel
 ::setData( const QModelIndex & index,
@@ -170,8 +252,8 @@ LayerStackItemModel
   return false;
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
+/*****************************************************************************/
+/* SLOTS                                                                     */
+/*****************************************************************************/
 
 } // end namespace 'mvd'

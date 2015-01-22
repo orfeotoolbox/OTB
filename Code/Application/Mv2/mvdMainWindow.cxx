@@ -1185,7 +1185,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeModel( const AbstractModel* model )
+::OnAboutToChangeModel( const AbstractModel * model )
 {
   qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
@@ -1198,6 +1198,10 @@ MainWindow
   //
   // N.B.: This will cause UI controllers to disable widgets.
   OnAboutToChangeSelectedLayerModel( StackedLayerModel::KeyType() );
+
+  // Assign stacked-layer model controller.
+  SetControllerModel( m_LayerStackDock, NULL );
+
 
   assert( Application::Instance() );
   assert( Application::Instance()->GetModel()==
@@ -1238,7 +1242,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnModelChanged( AbstractModel* model )
+::OnModelChanged( AbstractModel * model )
 {
   qDebug() << this << "::OnModelChanged(" << model << ")";
 
@@ -1246,6 +1250,10 @@ MainWindow
 
   StackedLayerModel * stackedLayerModel =
     qobject_cast< StackedLayerModel * >( model );
+
+
+  // Assign stacked-layer model controller.
+  SetControllerModel( m_LayerStackDock, model );
 
 
   m_ImageView->SetLayerStack( stackedLayerModel );

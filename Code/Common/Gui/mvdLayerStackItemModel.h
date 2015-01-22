@@ -59,7 +59,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-
+class StackedLayerModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -83,20 +83,43 @@ class Monteverdi2_EXPORT LayerStackItemModel :
 // Public types.
 public:
 
+  enum Columns
+  {
+    COLUMN_NONE = -1,
+    //
+    COLUMN_INDEX = 0,
+    COLUMN_NAME,
+    COLUMN_I,
+    COLUMN_J,
+    COLUMN_R,
+    COLUMN_G,
+    COLUMN_B,
+    COLUMN_X,
+    COLUMN_Y,
+    COLUMN_EPSG,
+    //
+    COLUMN_COUNT,
+  };
+
+  /*
   enum ItemRole
   {
-    ITEM_ROLE_NAME = Qt::UserRole + 1,
-    ITEM_ROLE_I = Qt::UserRole + 2,
-    ITEM_ROLE_J = Qt::UserRole + 3,
-    ITEM_ROLE_R = Qt::UserRole + 4,
-    ITEM_ROLE_G = Qt::UserRole + 5,
-    ITEM_ROLE_B = Qt::UserRole + 6,
-    ITEM_ROLE_X = Qt::UserRole + 7,
-    ITEM_ROLE_Y = Qt::UserRole + 8,
-    ITEM_ROLE_EPSG = Qt::UserRole + 9,
+    ITEM_ROLE_INDEX = Qt::UserRole + 1
+    ITEM_ROLE_NAME,
+    ITEM_ROLE_I,
+    ITEM_ROLE_J,
+    ITEM_ROLE_R,
+    ITEM_ROLE_G,
+    ITEM_ROLE_B,
+    ITEM_ROLE_X,
+    ITEM_ROLE_Y,
+    ITEM_ROLE_EPSG,
     //
-    ITEM_ROLE_COUNT = 10,
+    ITEM_ROLE_NONE,
+    //
+    ITEM_ROLE_COUNT = ITEM_ROLE_NONE - Qt::UserRole,
   };
+  */
 
 //
 // Public methods.
@@ -109,6 +132,13 @@ public:
   virtual ~LayerStackItemModel();
 
   /**
+   */
+  void SetStack( StackedLayerModel * );
+
+  //
+  // QAbstractItemModel overloads.
+
+  /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#columnCount
    */
   virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const;
@@ -119,7 +149,12 @@ public:
   virtual
     QVariant
     data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
-  
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
+   */
+  virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#headerData
    */
@@ -186,6 +221,9 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   */
+  StackedLayerModel * m_StackedLayerModel;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
