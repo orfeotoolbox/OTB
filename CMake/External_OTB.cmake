@@ -101,6 +101,16 @@ else()
   list(APPEND ${proj}_DEPENDENCIES OPENCV)
 endif()
 
+if(USE_SYSTEM_CURL)
+  set(OTB_SB_CURL_CONFIG)
+else()
+  set(OTB_SB_CURL_CONFIG
+    -DCURL_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
+    -DCURL_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/libcurl.so
+    )
+  list(APPEND ${proj}_DEPENDENCIES CURL)
+endif()
+
 ExternalProject_Add(${proj}
     DEPENDS ${${proj}_DEPENDENCIES}
     PREFIX ${proj}

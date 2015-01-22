@@ -32,6 +32,7 @@ include(External_expat)
 include(External_libKML)
 include(External_GDAL)
 include(External_OpenCV)
+include(External_curl)
 
 # TODO
 
