@@ -45,7 +45,7 @@ public:
   typedef typename itk::NumericTraits<typename TInput::ValueType>::RealType RealType;
 
   /// Constructor
-  VectorAffineTransform() {}
+  VectorAffineTransform() m_OutputMaximum(), m_OutputMinimum(), m_InputMinimum(), m_InputMaximum(), m_Gamma(1.){}
   /// Desctructor
   virtual ~VectorAffineTransform() {}
 
