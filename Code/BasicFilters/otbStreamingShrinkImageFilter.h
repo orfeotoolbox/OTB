@@ -86,7 +86,7 @@ public:
   itkGetMacro(ShrinkFactor, unsigned int);
 
 protected:
-  StreamingShrinkImageRegionSplitter() : m_SplitsPerDimension(0U), m_ShrinkFactor(10) {}
+  StreamingShrinkImageRegionSplitter() : m_SplitsPerDimension(0U), m_TileDimension(0), m_TileSizeAlignment(0), m_ShrinkFactor(10) {}
   virtual ~StreamingShrinkImageRegionSplitter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
