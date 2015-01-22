@@ -87,6 +87,8 @@ FilterWatcherBase
   m_StartTag = 0;
   m_EndTag = 0;
   m_ProgressTag = 0;
+  m_Started = false;
+  m_Ended = false;
 
   // Create a series of commands
   if (m_Process)
