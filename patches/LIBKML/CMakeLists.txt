@@ -319,15 +319,6 @@ install(TARGETS kmlbase
     LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION lib COMPONENT Development)
 
-# Convenience
-add_library(kmlconvenience ${libkmlconvenience_la_SOURCES} )
-target_link_libraries(kmlconvenience kmlbase)
-
-install(TARGETS kmlconvenience
-    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION lib COMPONENT Development)
-
 # DOM
 add_library(kmldom ${libkmldom_la_SOURCES} )
 target_link_libraries(kmldom kmlbase)
@@ -339,16 +330,25 @@ install(TARGETS kmldom
 
 # Engine
 add_library(kmlengine ${libkmlengine_la_SOURCES} )
-target_link_libraries(kmlengine kmlbase)
+target_link_libraries(kmlengine kmlbase kmldom)
 
 install(TARGETS kmlengine
     RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
     LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION lib COMPONENT Development)
 
+# Convenience
+add_library(kmlconvenience ${libkmlconvenience_la_SOURCES} )
+target_link_libraries(kmlconvenience kmlbase kmldom kmlengine)
+
+install(TARGETS kmlconvenience
+    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION lib COMPONENT Development)
+
 # Regionator
 add_library(kmlregionator ${libkmlregionator_la_SOURCES} )
-target_link_libraries(kmlregionator kmlbase)
+target_link_libraries(kmlregionator kmlbase kmlconvenience kmldom kmlengine)
 
 install(TARGETS kmlregionator
     RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
