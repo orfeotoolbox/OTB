@@ -29,6 +29,12 @@ WriterWatcherBase
   // Initialize state
   m_Comment = "Not watching any object";
   m_Process = 0;
+  m_StartFilterTag = 0;
+  m_EndFilterTag = 0;
+  m_ProgressFilterTag = 0;
+  m_StartWriterTag = 0;
+  m_EndWriterTag = 0;
+  m_ProgressWriterTag = 0;
 }
 
 WriterWatcherBase
