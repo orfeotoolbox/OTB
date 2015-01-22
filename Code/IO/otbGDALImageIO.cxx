@@ -1099,19 +1099,22 @@ void GDALImageIO::InternalReadImageInformation()
       gmlMetadata = jp2Metadata.papszGMLMetadata;
       }
 
-    if (CSLCount(gmlMetadata) > 0)
+    if(gmlMetadata)
       {
-      std::string key;
-      int cptOffset = CSLCount(papszMetadata);
-
-      for (int cpt = 0; gmlMetadata[cpt] != NULL; ++cpt)
+      if (CSLCount(gmlMetadata) > 0)
         {
-        std::ostringstream lStream;
-        lStream << MetaDataKey::MetadataKey << (cpt+cptOffset);
-        key = lStream.str();
-
-        itk::EncapsulateMetaData<std::string>(dict, key,
-                                              static_cast<std::string>(gmlMetadata[cpt]));
+        std::string key;
+        int cptOffset = CSLCount(papszMetadata);
+        
+        for (int cpt = 0; gmlMetadata[cpt] != NULL; ++cpt)
+          {
+          std::ostringstream lStream;
+          lStream << MetaDataKey::MetadataKey << (cpt+cptOffset);
+          key = lStream.str();
+          
+          itk::EncapsulateMetaData<std::string>(dict, key,
+                                                static_cast<std::string>(gmlMetadata[cpt]));
+          }
         }
       }
     }
