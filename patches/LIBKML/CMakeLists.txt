@@ -41,19 +41,23 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.5/incl
 # ----------  Base  ------------------------------------------------
 set(libkmlbase_la_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/kml/base)
 include_directories(${libkmlbase_la_SOURCES_DIR})
-set(libkmlbase_la_SOURCES
-	${libkmlbase_la_SOURCES_DIR}/file.cc
-	${libkmlbase_la_SOURCES_DIR}/referent.cc
-	${libkmlbase_la_SOURCES_DIR}/string_util.cc
-	${libkmlbase_la_SOURCES_DIR}/time_util.cc
+set(libkmlbase_la_SOURCES  
   ${libkmlbase_la_SOURCES_DIR}/attributes.cc
-  ${libkmlbase_la_SOURCES_DIR}/uri_parser.cc
-  ${libkmlbase_la_SOURCES_DIR}/expat_parser.cc
-  ${libkmlbase_la_SOURCES_DIR}/math_util.cc
-  ${libkmlbase_la_SOURCES_DIR}/zip_file.cc
+  ${libkmlbase_la_SOURCES_DIR}/csv_splitter.cc
   ${libkmlbase_la_SOURCES_DIR}/date_time.cc
-  ${libkmlbase_la_SOURCES_DIR}/xml_namespaces.cc
   ${libkmlbase_la_SOURCES_DIR}/expat_handler_ns.cc
+  ${libkmlbase_la_SOURCES_DIR}/expat_parser.cc
+  ${libkmlbase_la_SOURCES_DIR}/file.cc
+  ${libkmlbase_la_SOURCES_DIR}/math_util.cc
+  ${libkmlbase_la_SOURCES_DIR}/mimetypes.cc
+  ${libkmlbase_la_SOURCES_DIR}/referent.cc
+  ${libkmlbase_la_SOURCES_DIR}/string_util.cc
+  ${libkmlbase_la_SOURCES_DIR}/time_util.cc
+  ${libkmlbase_la_SOURCES_DIR}/uri_parser.cc
+  ${libkmlbase_la_SOURCES_DIR}/version.cc
+  ${libkmlbase_la_SOURCES_DIR}/xml_namespaces.cc
+  ${libkmlbase_la_SOURCES_DIR}/zip_file.cc
+  
 )
 if(UNIX)
         set(libkmlbase_la_SOURCES ${libkmlbase_la_SOURCES}
@@ -68,11 +72,18 @@ endif()
 # ----------  Convenience  -------------------------------------------
 set(libkmlconvenience_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/convenience")
 include_directories(${libkmlconvenience_la_SOURCES_DIR})
-set(libkmlconvenience_la_SOURCES
-	${libkmlconvenience_la_SOURCES_DIR}/csv_file.cc
-	${libkmlconvenience_la_SOURCES_DIR}/convenience.cc
-	${libkmlconvenience_la_SOURCES_DIR}/feature_list.cc
-	${libkmlconvenience_la_SOURCES_DIR}/kmz_check_links.cc
+set(libkmlconvenience_la_SOURCES	
+  ${libkmlconvenience_la_SOURCES_DIR}/atom_util.cc
+  ${libkmlconvenience_la_SOURCES_DIR}/convenience.cc
+  ${libkmlconvenience_la_SOURCES_DIR}/csv_file.cc
+  ${libkmlconvenience_la_SOURCES_DIR}/csv_parser.cc
+  ${libkmlconvenience_la_SOURCES_DIR}/feature_list.cc
+  ${libkmlconvenience_la_SOURCES_DIR}/google_doc_list.cc
+  ${libkmlconvenience_la_SOURCES_DIR}/google_maps_data.cc
+  ${libkmlconvenience_la_SOURCES_DIR}/google_picasa_web.cc
+  ${libkmlconvenience_la_SOURCES_DIR}/google_spreadsheets.cc
+  ${libkmlconvenience_la_SOURCES_DIR}/http_client.cc
+  ${libkmlconvenience_la_SOURCES_DIR}/kmz_check_links.cc
 )
 
 
@@ -80,52 +91,55 @@ set(libkmlconvenience_la_SOURCES
 set(libkmldom_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/dom")
 include_directories(${libkmldom_la_SOURCES_DIR})
 set(libkmldom_la_SOURCES
-	${libkmldom_la_SOURCES_DIR}/abstractlatlonbox.cc
-	${libkmldom_la_SOURCES_DIR}/abstractview.cc
-	${libkmldom_la_SOURCES_DIR}/balloonstyle.cc
-	${libkmldom_la_SOURCES_DIR}/colorstyle.cc
-	${libkmldom_la_SOURCES_DIR}/container.cc
-	${libkmldom_la_SOURCES_DIR}/document.cc
-	${libkmldom_la_SOURCES_DIR}/element.cc
-	${libkmldom_la_SOURCES_DIR}/extendeddata.cc
-	${libkmldom_la_SOURCES_DIR}/feature.cc
-	${libkmldom_la_SOURCES_DIR}/folder.cc
-	${libkmldom_la_SOURCES_DIR}/geometry.cc
-	${libkmldom_la_SOURCES_DIR}/hotspot.cc
-	${libkmldom_la_SOURCES_DIR}/iconstyle.cc
-	${libkmldom_la_SOURCES_DIR}/kml_cast.cc
-	${libkmldom_la_SOURCES_DIR}/kml_factory.cc
-	${libkmldom_la_SOURCES_DIR}/kml.cc
-	${libkmldom_la_SOURCES_DIR}/link.cc
-	${libkmldom_la_SOURCES_DIR}/labelstyle.cc
-	${libkmldom_la_SOURCES_DIR}/linestyle.cc
-	${libkmldom_la_SOURCES_DIR}/liststyle.cc
-	${libkmldom_la_SOURCES_DIR}/model.cc
-	${libkmldom_la_SOURCES_DIR}/networklink.cc
-	${libkmldom_la_SOURCES_DIR}/networklinkcontrol.cc
-	${libkmldom_la_SOURCES_DIR}/object.cc
-	${libkmldom_la_SOURCES_DIR}/overlay.cc
-	${libkmldom_la_SOURCES_DIR}/placemark.cc
-	${libkmldom_la_SOURCES_DIR}/polystyle.cc
-	${libkmldom_la_SOURCES_DIR}/region.cc
-	${libkmldom_la_SOURCES_DIR}/schema.cc
-	${libkmldom_la_SOURCES_DIR}/snippet.cc
-	${libkmldom_la_SOURCES_DIR}/style.cc
-	${libkmldom_la_SOURCES_DIR}/stylemap.cc
-	${libkmldom_la_SOURCES_DIR}/styleselector.cc
-	${libkmldom_la_SOURCES_DIR}/substyle.cc
-	${libkmldom_la_SOURCES_DIR}/timeprimitive.cc
-	${libkmldom_la_SOURCES_DIR}/vec2.cc
-	${libkmldom_la_SOURCES_DIR}/kml_handler.cc
-	${libkmldom_la_SOURCES_DIR}/parser.cc
-	${libkmldom_la_SOURCES_DIR}/serializer.cc
-	${libkmldom_la_SOURCES_DIR}/xml_serializer.cc
-	${libkmldom_la_SOURCES_DIR}/xsd.cc
-  ${libkmldom_la_SOURCES_DIR}/gx_tour.cc
-  ${libkmldom_la_SOURCES_DIR}/gx_timeprimitive.cc
-  ${libkmldom_la_SOURCES_DIR}/xal.cc
-  ${libkmldom_la_SOURCES_DIR}/kml_handler_ns.cc
+  ${libkmldom_la_SOURCES_DIR}/abstractlatlonbox.cc
+  ${libkmldom_la_SOURCES_DIR}/abstractview.cc
   ${libkmldom_la_SOURCES_DIR}/atom.cc
+  ${libkmldom_la_SOURCES_DIR}/balloonstyle.cc
+  ${libkmldom_la_SOURCES_DIR}/colorstyle.cc
+  ${libkmldom_la_SOURCES_DIR}/container.cc
+  ${libkmldom_la_SOURCES_DIR}/document.cc
+  ${libkmldom_la_SOURCES_DIR}/element.cc
+  ${libkmldom_la_SOURCES_DIR}/extendeddata.cc
+  ${libkmldom_la_SOURCES_DIR}/feature.cc
+  ${libkmldom_la_SOURCES_DIR}/folder.cc
+  ${libkmldom_la_SOURCES_DIR}/geometry.cc
+  ${libkmldom_la_SOURCES_DIR}/gx_timeprimitive.cc
+  ${libkmldom_la_SOURCES_DIR}/gx_tour.cc
+  ${libkmldom_la_SOURCES_DIR}/hotspot.cc
+  ${libkmldom_la_SOURCES_DIR}/iconstyle.cc
+  ${libkmldom_la_SOURCES_DIR}/kml22.cc
+  ${libkmldom_la_SOURCES_DIR}/kml_cast.cc
+  ${libkmldom_la_SOURCES_DIR}/kml.cc
+  ${libkmldom_la_SOURCES_DIR}/kml_factory.cc
+  ${libkmldom_la_SOURCES_DIR}/kml_handler.cc
+  ${libkmldom_la_SOURCES_DIR}/kml_handler_ns.cc
+  ${libkmldom_la_SOURCES_DIR}/labelstyle.cc
+  ${libkmldom_la_SOURCES_DIR}/linestyle.cc
+  ${libkmldom_la_SOURCES_DIR}/link.cc
+  ${libkmldom_la_SOURCES_DIR}/liststyle.cc
+  ${libkmldom_la_SOURCES_DIR}/model.cc
+  ${libkmldom_la_SOURCES_DIR}/networklink.cc
+  ${libkmldom_la_SOURCES_DIR}/networklinkcontrol.cc
+  ${libkmldom_la_SOURCES_DIR}/object.cc
+  ${libkmldom_la_SOURCES_DIR}/overlay.cc
+  ${libkmldom_la_SOURCES_DIR}/parser.cc
+  ${libkmldom_la_SOURCES_DIR}/placemark.cc
+  ${libkmldom_la_SOURCES_DIR}/polystyle.cc
+  ${libkmldom_la_SOURCES_DIR}/region.cc
+  ${libkmldom_la_SOURCES_DIR}/schema.cc
+  ${libkmldom_la_SOURCES_DIR}/serializer.cc
+  ${libkmldom_la_SOURCES_DIR}/snippet.cc
+  ${libkmldom_la_SOURCES_DIR}/style.cc
+  ${libkmldom_la_SOURCES_DIR}/stylemap.cc
+  ${libkmldom_la_SOURCES_DIR}/styleselector.cc
+  ${libkmldom_la_SOURCES_DIR}/substyle.cc
+  ${libkmldom_la_SOURCES_DIR}/timeprimitive.cc
+  ${libkmldom_la_SOURCES_DIR}/vec2.cc
+  ${libkmldom_la_SOURCES_DIR}/visitor.cc
+  ${libkmldom_la_SOURCES_DIR}/visitor_driver.cc
+  ${libkmldom_la_SOURCES_DIR}/xal.cc
+  ${libkmldom_la_SOURCES_DIR}/xml_serializer.cc
+  ${libkmldom_la_SOURCES_DIR}/xsd.cc
 )
 
 
@@ -133,26 +147,33 @@ set(libkmldom_la_SOURCES
 set(libkmlengine_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/engine")
 include_directories(${libkmlengine_la_SOURCES_DIR})
 set(libkmlengine_la_SOURCES
-	${libkmlengine_la_SOURCES_DIR}/clone.cc
-	${libkmlengine_la_SOURCES_DIR}/entity_mapper.cc
-	${libkmlengine_la_SOURCES_DIR}/feature_balloon.cc
-	${libkmlengine_la_SOURCES_DIR}/feature_visitor.cc
-	${libkmlengine_la_SOURCES_DIR}/find.cc
-	${libkmlengine_la_SOURCES_DIR}/get_links.cc
-	${libkmlengine_la_SOURCES_DIR}/get_link_parents.cc
-	${libkmlengine_la_SOURCES_DIR}/href.cc
-	${libkmlengine_la_SOURCES_DIR}/kml_cache.cc
-	${libkmlengine_la_SOURCES_DIR}/kml_file.cc
-	${libkmlengine_la_SOURCES_DIR}/kml_uri.cc
-	${libkmlengine_la_SOURCES_DIR}/kmz_cache.cc
-	${libkmlengine_la_SOURCES_DIR}/kmz_file.cc
-	${libkmlengine_la_SOURCES_DIR}/location_util.cc
-	${libkmlengine_la_SOURCES_DIR}/merge.cc
-	${libkmlengine_la_SOURCES_DIR}/style_merger.cc
-	${libkmlengine_la_SOURCES_DIR}/style_resolver.cc
-  ${libkmlengine_la_SOURCES_DIR}/find_xml_namespaces.cc
-  ${libkmlengine_la_SOURCES_DIR}/id_mapper.cc
+  ${libkmlengine_la_SOURCES_DIR}/clone.cc
+  ${libkmlengine_la_SOURCES_DIR}/entity_mapper.cc
+  ${libkmlengine_la_SOURCES_DIR}/feature_balloon.cc
   ${libkmlengine_la_SOURCES_DIR}/feature_view.cc
+  ${libkmlengine_la_SOURCES_DIR}/feature_visitor.cc
+  ${libkmlengine_la_SOURCES_DIR}/find.cc
+  ${libkmlengine_la_SOURCES_DIR}/find_xml_namespaces.cc
+  ${libkmlengine_la_SOURCES_DIR}/get_link_parents.cc
+  ${libkmlengine_la_SOURCES_DIR}/get_links.cc
+  ${libkmlengine_la_SOURCES_DIR}/href.cc
+  ${libkmlengine_la_SOURCES_DIR}/id_mapper.cc
+  ${libkmlengine_la_SOURCES_DIR}/kml_cache.cc
+  ${libkmlengine_la_SOURCES_DIR}/kml_file.cc
+  ${libkmlengine_la_SOURCES_DIR}/kml_stream.cc
+  ${libkmlengine_la_SOURCES_DIR}/kml_uri.cc
+  ${libkmlengine_la_SOURCES_DIR}/kmz_cache.cc
+  ${libkmlengine_la_SOURCES_DIR}/kmz_file.cc
+  ${libkmlengine_la_SOURCES_DIR}/link_util.cc
+  ${libkmlengine_la_SOURCES_DIR}/location_util.cc
+  ${libkmlengine_la_SOURCES_DIR}/merge.cc
+  ${libkmlengine_la_SOURCES_DIR}/parse_old_schema.cc
+  ${libkmlengine_la_SOURCES_DIR}/style_inliner.cc
+  ${libkmlengine_la_SOURCES_DIR}/style_merger.cc
+  ${libkmlengine_la_SOURCES_DIR}/style_resolver.cc
+  ${libkmlengine_la_SOURCES_DIR}/style_splitter.cc
+  ${libkmlengine_la_SOURCES_DIR}/update.cc
+  ${libkmlengine_la_SOURCES_DIR}/update_processor.cc 
 )
 
 
