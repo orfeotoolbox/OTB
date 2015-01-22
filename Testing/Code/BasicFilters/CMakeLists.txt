@@ -2257,12 +2257,10 @@ add_test(bfTvMaskMuParserFilterTest ${BASICFILTERS_TESTS13}
     "(b1>100)*(b2>120)"
 )
 
-add_test(bfTuHorizontalSobelVectorImageFilterNew
-         ${BASICFILTERS_TESTS13}
+add_test(bfTuHorizontalSobelVectorImageFilterNew ${BASICFILTERS_TESTS13}
          otbHorizontalSobelVectorImageFilterNewTest)
 
-add_test(bfTvHorizontalSobelVectorImageFilter
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvHorizontalSobelVectorImageFilter ${BASICFILTERS_TESTS13}
            --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvHorizontalSobelVectorImageFilter.tif
              ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif
@@ -2270,12 +2268,10 @@ add_test(bfTvHorizontalSobelVectorImageFilter
 		 -in ${INPUTDATA}/cupriteSubHsi.tif
 		 -out ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif)
 
-add_test(bfTuVerticalSobelVectorImageFilterNew
-         ${BASICFILTERS_TESTS13}
+add_test(bfTuVerticalSobelVectorImageFilterNew ${BASICFILTERS_TESTS13}
          otbVerticalSobelVectorImageFilterNewTest)
 
-add_test(bfTvVerticalSobelVectorImageFilter
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvVerticalSobelVectorImageFilter ${BASICFILTERS_TESTS13}
            --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvVerticalSobelVectorImageFilter.tif
              ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif
@@ -2283,12 +2279,10 @@ add_test(bfTvVerticalSobelVectorImageFilter
 		 -in ${INPUTDATA}/cupriteSubHsi.tif
 		 -out ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif)
 
-add_test(bfTuSobelVectorImageFilterNew
-         ${BASICFILTERS_TESTS13}
+add_test(bfTuSobelVectorImageFilterNew ${BASICFILTERS_TESTS13}
          otbSobelVectorImageFilterNewTest)
 
-add_test(bfTvSobelVectorImageFilter
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvSobelVectorImageFilter ${BASICFILTERS_TESTS13}
            --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvSobelVectorImageFilter.tif
              ${TEMP}/bfTvSobelVectorImageFilter.tif
@@ -2296,12 +2290,10 @@ add_test(bfTvSobelVectorImageFilter
 		 -in ${INPUTDATA}/cupriteSubHsi.tif
 		 -out ${TEMP}/bfTvSobelVectorImageFilter.tif)
 
-add_test(bfTuLocalGradientVectorImageFilterNew
-         ${BASICFILTERS_TESTS13}
+add_test(bfTuLocalGradientVectorImageFilterNew ${BASICFILTERS_TESTS13}
          otbLocalGradientVectorImageFilterNewTest)
 
-add_test(bfTvLocalGradientVectorImageFilter
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvLocalGradientVectorImageFilter ${BASICFILTERS_TESTS13}
            --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvLocalGradientVectorImageFilter.tif
              ${TEMP}/bfTvLocalGradientVectorImageFilter.tif
@@ -2309,12 +2301,10 @@ add_test(bfTvLocalGradientVectorImageFilter
 		 -in ${INPUTDATA}/cupriteSubHsi.tif
 		 -out ${TEMP}/bfTvLocalGradientVectorImageFilter.tif)
 
-add_test(bfTuLocalActivityVectorImageFilterNew
-         ${BASICFILTERS_TESTS13}
+add_test(bfTuLocalActivityVectorImageFilterNew ${BASICFILTERS_TESTS13}
          otbLocalActivityVectorImageFilterNewTest)
 
-add_test(bfTvLocalActivityVectorImageFilter
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvLocalActivityVectorImageFilter ${BASICFILTERS_TESTS13}
            --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvLocalActivityVectorImageFilter.tif
              ${TEMP}/bfTvLocalActivityVectorImageFilter.tif
@@ -2322,12 +2312,10 @@ add_test(bfTvLocalActivityVectorImageFilter
 		 -in ${INPUTDATA}/cupriteSubHsi.tif
 		 -out ${TEMP}/bfTvLocalActivityVectorImageFilter.tif)
 
-add_test(bfTuNormalizeVectorImageFilter
-         ${BASICFILTERS_TESTS13}
+add_test(bfTuNormalizeVectorImageFilter ${BASICFILTERS_TESTS13}
 		 otbNormalizeVectorImageFilterNewTest)
 
-add_test(bfTvNormalizeVectorImageFilter
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvNormalizeVectorImageFilter ${BASICFILTERS_TESTS13}
            --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvNormalizeVectorImageFilter.tif
              ${TEMP}/bfTvNormalizeVectorImageFilter.tif
@@ -2336,12 +2324,10 @@ add_test(bfTvNormalizeVectorImageFilter
 		 -out ${TEMP}/bfTvNormalizeVectorImageFilter.tif)
 
 
-add_test(bfTuNormalizeVectorImageFilter
-         ${BASICFILTERS_TESTS13}
+add_test(bfTuNormalizeVectorImageFilter ${BASICFILTERS_TESTS13}
      otbNormalizeVectorImageFilterNewTest)
 
-add_test(bfTvNormalizeVectorImageFilter
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvNormalizeVectorImageFilter ${BASICFILTERS_TESTS13}
            --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvNormalizeVectorImageFilter.tif
              ${TEMP}/bfTvNormalizeVectorImageFilter.tif
@@ -2351,12 +2337,10 @@ add_test(bfTvNormalizeVectorImageFilter
 
 
 
-add_test(bfTuProjectiveProjectionNew
-         ${BASICFILTERS_TESTS13}
+add_test(bfTuProjectiveProjectionNew ${BASICFILTERS_TESTS13}
          otbProjectiveProjectionNew)
 
-add_test(bfTvProjectiveProjectionTestHighSNR
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvProjectiveProjectionTestHighSNR ${BASICFILTERS_TESTS13}
            --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvProjectiveProjectionTestHighSNR.tif
              ${TEMP}/bfTvProjectiveProjectionTestHighSNR.tif
@@ -2366,23 +2350,19 @@ add_test(bfTvProjectiveProjectionTestHighSNR
      ${TEMP}/bfTvProjectiveProjectionTestHighSNR.tif)
 
 
-add_test(bfTuVectorImageToMatrixNew
-         ${BASICFILTERS_TESTS13}
+add_test(bfTuVectorImageToMatrixNew ${BASICFILTERS_TESTS13}
          otbVectorImageToMatrixNewTest)
 
-add_test(bfTvVectorImageToMatrix
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvVectorImageToMatrix ${BASICFILTERS_TESTS13}
          otbVectorImageToMatrixTest)
 
 ### PCA ###
 
-add_test(bfTuPCAImageFilterNew
-         ${BASICFILTERS_TESTS13}
+add_test(bfTuPCAImageFilterNew ${BASICFILTERS_TESTS13}
          otbPCAImageFilterNewTest)
 
 # Test input->PCA->inverse PCA
-add_test(bfTvPCAImageFilter1
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvPCAImageFilter1 ${BASICFILTERS_TESTS13}
          --compare-image ${EPSILON_7}
              ${INPUTDATA}/cupriteSubHsi.tif
              ${TEMP}/bfTvPCAImageFilter1Inv.tif
@@ -2391,8 +2371,7 @@ add_test(bfTvPCAImageFilter1
          -out ${TEMP}/bfTvPCAImageFilter1.tif
          -inv ${TEMP}/bfTvPCAImageFilter1Inv.tif)
 
-add_test(bfTvPCAImageFilter2
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvPCAImageFilter2 ${BASICFILTERS_TESTS13}
          --compare-image ${EPSILON_7}
              ${INPUTDATA}/cupriteSubHsi.tif
              ${TEMP}/bfTvPCAImageFilter2Inv.tif
@@ -2403,8 +2382,7 @@ add_test(bfTvPCAImageFilter2
          -norm)
 
 # Test the direct transform
-add_test(bfTvPCAImageFilter3
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvPCAImageFilter3 ${BASICFILTERS_TESTS13}
          --compare-n-images ${EPSILON_7} 2
              ${BASELINE}/bfTvPCAImageFilter3.tif
              ${TEMP}/bfTvPCAImageFilter3.tif
@@ -2417,8 +2395,7 @@ add_test(bfTvPCAImageFilter3
          )
 
 # Test the direct transform
-add_test(bfTvPCAImageFilter3Norm
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvPCAImageFilter3Norm ${BASICFILTERS_TESTS13}
          --compare-n-images ${EPSILON_7} 2
              ${BASELINE}/bfTvPCAImageFilter3Norm.tif
              ${TEMP}/bfTvPCAImageFilter3Norm.tif
@@ -2432,8 +2409,7 @@ add_test(bfTvPCAImageFilter3Norm
 
 
 # Test the direct transform, reducing dimensionnality
-add_test(bfTvPCAImageFilter4Norm
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvPCAImageFilter4Norm ${BASICFILTERS_TESTS13}
          --compare-n-images ${EPSILON_7} 2
              ${BASELINE}/bfTvPCAImageFilter4Norm.tif
              ${TEMP}/bfTvPCAImageFilter4Norm.tif
@@ -2447,8 +2423,7 @@ add_test(bfTvPCAImageFilter4Norm
          -n 4)
 
 # Test the direct transform, reducing dimensionnality
-add_test(bfTvPCAImageFilter4
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvPCAImageFilter4 ${BASICFILTERS_TESTS13}
          --compare-n-images ${EPSILON_7} 2
              ${BASELINE}/bfTvPCAImageFilter4.tif
              ${TEMP}/bfTvPCAImageFilter4.tif
@@ -2464,13 +2439,11 @@ add_test(bfTvPCAImageFilter4
 
 ### NAPCA ###
 
-add_test(bfTuNAPCAImageFilterNew
-         ${BASICFILTERS_TESTS13}
+add_test(bfTuNAPCAImageFilterNew ${BASICFILTERS_TESTS13}
          otbNAPCAImageFilterNewTest)
 
 # Test input->NAPCA->inverse NAPCA
-add_test(bfTvNAPCAImageFilter1
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvNAPCAImageFilter1 ${BASICFILTERS_TESTS13}
          --compare-image ${EPSILON_7}
              ${INPUTDATA}/cupriteSubHsi.tif
              ${TEMP}/bfTvNAPCAImageFilter1Inv.tif
@@ -2479,8 +2452,7 @@ add_test(bfTvNAPCAImageFilter1
          -out ${TEMP}/bfTvNAPCAImageFilter1.tif
          -inv ${TEMP}/bfTvNAPCAImageFilter1Inv.tif)
 
-add_test(bfTvNAPCAImageFilter2
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvNAPCAImageFilter2 ${BASICFILTERS_TESTS13}
          --compare-image ${EPSILON_7}
              ${INPUTDATA}/cupriteSubHsi.tif
              ${TEMP}/bfTvNAPCAImageFilter2Inv.tif
@@ -2491,8 +2463,7 @@ add_test(bfTvNAPCAImageFilter2
          -norm)
 
 # Test the direct transform
-add_test(bfTvNAPCAImageFilter3
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvNAPCAImageFilter3 ${BASICFILTERS_TESTS13}
          --compare-n-images ${EPSILON_7} 2
              ${BASELINE}/bfTvNAPCAImageFilter3.tif
              ${TEMP}/bfTvNAPCAImageFilter3.tif
@@ -2506,8 +2477,7 @@ add_test(bfTvNAPCAImageFilter3
 
 
 # Test the direct transform, reducing dimensionnality
-add_test(bfTvNAPCAImageFilter4
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvNAPCAImageFilter4 ${BASICFILTERS_TESTS13}
          --compare-n-images ${EPSILON_7} 2
              ${BASELINE}/bfTvNAPCAImageFilter4.tif
              ${TEMP}/bfTvNAPCAImageFilter4.tif
@@ -2523,8 +2493,7 @@ add_test(bfTvNAPCAImageFilter4
 
 ### MNF ###
 # Test input->MNF->inverse MNF
-add_test(bfTvMNFImageFilter1
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvMNFImageFilter1 ${BASICFILTERS_TESTS13}
          --compare-image ${EPSILON_7}
              ${INPUTDATA}/cupriteSubHsi.tif
              ${TEMP}/bfTvMNFImageFilter1Inv.tif
@@ -2533,8 +2502,7 @@ add_test(bfTvMNFImageFilter1
          -out ${TEMP}/bfTvMNFImageFilter1.tif
          -inv ${TEMP}/bfTvMNFImageFilter1Inv.tif)
 
-add_test(bfTvMNFImageFilter2
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvMNFImageFilter2 ${BASICFILTERS_TESTS13}
          --compare-image ${EPSILON_7}
              ${INPUTDATA}/cupriteSubHsi.tif
              ${TEMP}/bfTvMNFImageFilter2Inv.tif
@@ -2545,8 +2513,7 @@ add_test(bfTvMNFImageFilter2
          -norm)
 
 # Test the direct transform
-add_test(bfTvMNFImageFilter3
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvMNFImageFilter3 ${BASICFILTERS_TESTS13}
          --compare-n-images ${EPSILON_7} 2
              ${BASELINE}/bfTvMNFImageFilter3.tif
              ${TEMP}/bfTvMNFImageFilter3.tif
@@ -2559,8 +2526,7 @@ add_test(bfTvMNFImageFilter3
          -norm)
 
 # Test the direct transform, reducing dimensionnality
-add_test(bfTvMNFImageFilter4
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvMNFImageFilter4 ${BASICFILTERS_TESTS13}
          --compare-n-images ${EPSILON_7} 2
              ${BASELINE}/bfTvMNFImageFilter4.tif
              ${TEMP}/bfTvMNFImageFilter4.tif
@@ -2574,16 +2540,13 @@ add_test(bfTvMNFImageFilter4
          -n 4)
 
 ### FastICA ###
-add_test(bfTuFastICAInternalOptimizerVectorImageFilterNew
-     ${BASICFILTERS_TESTS13}
+add_test(bfTuFastICAInternalOptimizerVectorImageFilterNew ${BASICFILTERS_TESTS13}
      otbFastICAInternalOptimizerVectorImageFilterNewTest)
 
-add_test(bfTuFastICAImageFilterNew
-    ${BASICFILTERS_TESTS13}
+add_test(bfTuFastICAImageFilterNew ${BASICFILTERS_TESTS13}
     otbFastICAImageFilterNewTest)
 
-add_test(bfTvFastICAImageFilter
-         ${BASICFILTERS_TESTS13}
+add_test(bfTvFastICAImageFilter ${BASICFILTERS_TESTS13}
            --compare-n-images ${EPSILON_7} 2
              ${BASELINE}/hyTvFastICAImageFilter.tif
              ${TEMP}/hyTvFastICAImageFilter.tif
@@ -2596,12 +2559,10 @@ add_test(bfTvFastICAImageFilter
 
 ### SparceUnmixing related class
 
-add_test(bfTuAngularProjectionImageFilterNew
-	${BASICFILTERS_TESTS13}
+add_test(bfTuAngularProjectionImageFilterNew ${BASICFILTERS_TESTS13}
 	otbAngularProjectionImageFilterNew)
 
-#add_test(bfTvAngularProjectionImageFilter
-#	${BASICFILTERS_TESTS13}
+#add_test(bfTvAngularProjectionImageFilter ${BASICFILTERS_TESTS13}
 #		--compare-image ${EPSILON_7}
 #		${INPUTDATA}/xx
 #		${TEMP}/yy
@@ -2609,12 +2570,10 @@ add_test(bfTuAngularProjectionImageFilterNew
 #		-in ${INPUTDATA}/xx ${INPUTDATA}/yy
 #		-out ${TEMP}/zz)
 
-add_test(bfTuAngularProjectionSetImageFilterNew
-	${BASICFILTERS_TESTS13}
+add_test(bfTuAngularProjectionSetImageFilterNew ${BASICFILTERS_TESTS13}
 	otbAngularProjectionSetImageFilterNew)
 
-#add_test(bfTvAngularProjectionSetImageFilter
-#	${BASICFILTERS_TESTS13}
+#add_test(bfTvAngularProjectionSetImageFilter ${BASICFILTERS_TESTS13}
 #		--compare-image ${EPSILON_7}
 #		${INPUTDATA}/xx
 #		${TEMP}/yy
@@ -2622,12 +2581,10 @@ add_test(bfTuAngularProjectionSetImageFilterNew
 #		-in ${INPUTDATA}/xx ${INPUTDATA}/yy ${INPUTDATA}/zz ${INPUTDATA}/zzz
 #		-out ${TEMP}/zz)
 
-add_test(bfTuSparseWvltToAngleMapperListFilterNew
-	${BASICFILTERS_TESTS13}
+add_test(bfTuSparseWvltToAngleMapperListFilterNew ${BASICFILTERS_TESTS13}
 	otbSparseWvltToAngleMapperListFilterNew)
 
-#add_test(bfTvSparseWvltToAngleMapperListFilter
-#	${BASICFILTERS_TESTS13}
+#add_test(bfTvSparseWvltToAngleMapperListFilter ${BASICFILTERS_TESTS13}
 #	otbSparseWvltToAngleMapperListFilterTest
 #	-in ${INPUTDATA}/xx ${INPUTDATA}/yy
 #	-th 10)

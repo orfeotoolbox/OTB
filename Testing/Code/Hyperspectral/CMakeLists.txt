@@ -6,12 +6,10 @@ set(Hyperspectral_TESTS2 ${CXX_TEST_PATH}/otbHyperspectralTests2)
 set(Hyperspectral_TESTS3 ${CXX_TEST_PATH}/otbHyperspectralTests3)
 
 # HyperspectralTests1
-add_test(hyTuEigenvalueLikelihoodMaximizationNew
-         ${Hyperspectral_TESTS1}
+add_test(hyTuEigenvalueLikelihoodMaximizationNew ${Hyperspectral_TESTS1}
          otbEigenvalueLikelihoodMaximizationNewTest)
 
-add_test(hyTvEigenvalueLikelihoodMaximizationTest
-         ${Hyperspectral_TESTS1}
+add_test(hyTvEigenvalueLikelihoodMaximizationTest ${Hyperspectral_TESTS1}
            --compare-ascii ${EPSILON_9}
            ${BASELINE_FILES}/hyTvEigenvalueLikelihoodMaximizationTest.txt
            ${TEMP}/hyTvEigenvalueLikelihoodMaximizationTest.txt
@@ -20,12 +18,10 @@ add_test(hyTvEigenvalueLikelihoodMaximizationTest
          ${TEMP}/hyTvEigenvalueLikelihoodMaximizationTest.txt)
 
 # HyperspectralTests1
-add_test(hyTuVirtualDimensionalityNew
-         ${Hyperspectral_TESTS1}
+add_test(hyTuVirtualDimensionalityNew ${Hyperspectral_TESTS1}
          otbVirtualDimensionalityNewTest)
 
-add_test(hyTvVirtualDimensionalityTest
-         ${Hyperspectral_TESTS1}
+add_test(hyTvVirtualDimensionalityTest ${Hyperspectral_TESTS1}
            --compare-ascii ${EPSILON_9}
            ${BASELINE_FILES}/hyTvVirtualDimensionalityTest.txt
            ${TEMP}/hyTvVirtualDimensionalityTest.txt
@@ -34,15 +30,13 @@ add_test(hyTvVirtualDimensionalityTest
          ${TEMP}/hyTvVirtualDimensionalityTest.txt
          1E-3)
 
-add_test(hyTuVCAImageFilterNew
-         ${Hyperspectral_TESTS1}
+add_test(hyTuVCAImageFilterNew ${Hyperspectral_TESTS1}
          otbVCAImageFilterNew
          ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
          ${TEMP}/synthetic_vca_5.hdr
          5 )
 
-add_test(hyTvVCAImageFilterTest1
-         ${Hyperspectral_TESTS1}
+add_test(hyTvVCAImageFilterTest1 ${Hyperspectral_TESTS1}
            --compare-image ${EPSILON_9}
            ${BASELINE}/TvHyVertexComponentAnalysisImage.tif
            ${TEMP}/hyTvVCAImageFilterTest.tif
@@ -51,23 +45,19 @@ add_test(hyTvVCAImageFilterTest1
          ${TEMP}/hyTvVCAImageFilterTest.tif
          5 )
 
-add_test(hyTuSparseUnmixingImageFilterNew
-          ${Hyperspectral_TESTS1}
+add_test(hyTuSparseUnmixingImageFilterNew ${Hyperspectral_TESTS1}
           otbSparseUnmixingImageFilterNew)
 
 # TODO
-#add_test(hyTvSparseUnmixingImageFilterTest
-#          ${Hyperspectral_TESTS1}
+#add_test(hyTvSparseUnmixingImageFilterTest ${Hyperspectral_TESTS1}
 #          otbSparseUnmixingImageFilterTest
 #          )
 
 
-add_test(hyTuUnConstrainedLeastSquareImageFilterNew
-         ${Hyperspectral_TESTS1}
+add_test(hyTuUnConstrainedLeastSquareImageFilterNew ${Hyperspectral_TESTS1}
          otbUnConstrainedLeastSquareImageFilterNewTest)
 
-add_test(hyTvUnConstrainedLeastSquareImageFilterTest
-         ${Hyperspectral_TESTS1}
+add_test(hyTvUnConstrainedLeastSquareImageFilterTest ${Hyperspectral_TESTS1}
            --compare-image ${EPSILON_9}
            ${BASELINE_FILES}/hyTvUnConstrainedLeastSquareImageFilterTest.tif
            ${TEMP}/hyTvUnConstrainedLeastSquareImageFilterTest.tif
@@ -78,12 +68,10 @@ add_test(hyTvUnConstrainedLeastSquareImageFilterTest
 
 
 
-add_test(hyTuNCLSUnmixingImageFilterNew
-         ${Hyperspectral_TESTS1}
+add_test(hyTuNCLSUnmixingImageFilterNew ${Hyperspectral_TESTS1}
          otbNCLSUnmixingImageFilterNewTest)
 
-add_test(hyTvNCLSUnmixingImageFilterTest
-         ${Hyperspectral_TESTS1}
+add_test(hyTvNCLSUnmixingImageFilterTest ${Hyperspectral_TESTS1}
            --compare-image ${EPSILON_9}
            ${BASELINE_FILES}/hyTvNCLSImageFilterTest.tif
            ${TEMP}/hyTvNCLSImageFilterTest.tif
@@ -94,12 +82,10 @@ add_test(hyTvNCLSUnmixingImageFilterTest
          10)
 
 
-add_test(hyTuISRAUnmixingImageFilterNew
-         ${Hyperspectral_TESTS1}
+add_test(hyTuISRAUnmixingImageFilterNew ${Hyperspectral_TESTS1}
          otbISRAUnmixingImageFilterNewTest)
 
-add_test(hyTvISRAUnmixingImageFilterTest
-         ${Hyperspectral_TESTS1}
+add_test(hyTvISRAUnmixingImageFilterTest ${Hyperspectral_TESTS1}
            --compare-image ${EPSILON_9}
            ${BASELINE_FILES}/hyTvISRAUnmixingImageFilterTest.tif
            ${TEMP}/hyTvISRAUnmixingImageFilterTest.tif
@@ -110,12 +96,10 @@ add_test(hyTvISRAUnmixingImageFilterTest
          10)
 
 # HyperspectralTests3
-add_test(hyTuMDMDNMFImageFilterNew
-         ${Hyperspectral_TESTS3}
+add_test(hyTuMDMDNMFImageFilterNew ${Hyperspectral_TESTS3}
          otbMDMDNMFImageFilterNewTest)
 
-add_test(hyTvMDMDNMFImageFilterTest
-         ${Hyperspectral_TESTS3}
+add_test(hyTvMDMDNMFImageFilterTest ${Hyperspectral_TESTS3}
          --compare-image ${EPSILON_9}
          ${BASELINE}/hyTvMDMDNMFImageFilterTest.tif
          ${TEMP}/hyTvMDMDNMFImageFilterTest.tif
@@ -124,8 +108,7 @@ add_test(hyTvMDMDNMFImageFilterTest
          ${TEMP}/hyTvMDMDNMFImageFilterTest.tif
          100)
 
-add_test(hyTvMDMDNMFImageFilterTest2
-         ${Hyperspectral_TESTS3}
+add_test(hyTvMDMDNMFImageFilterTest2 ${Hyperspectral_TESTS3}
          otbMDMDNMFImageFilterTest2
          ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
          ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
