@@ -158,7 +158,7 @@ GDALImageIO::GDALImageIO()
 
   m_NumberOfOverviews = 0;
   m_ResolutionFactor = 0;
-
+  m_BytePerPixel = 0;
 }
 
 GDALImageIO::~GDALImageIO()
