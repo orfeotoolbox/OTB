@@ -161,6 +161,22 @@ else()
         BUILD_COMMAND ""
         INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory  ${GDAL_SB_SRC} ${CMAKE_INSTALL_PREFIX}
     )
+        
+    ExternalProject_Add_Step(${proj} remove_libkml_headers
+        COMMAND ${CMAKE_COMMAND} -E remove_directory
+        ${CMAKE_INSTALL_PREFIX}/include/kml
+        DEPENDEES install
+    )
+     set(KMLLIBS)
+    foreach(KMLLIB "base" "convenience" "regionator" "dom" "engine" "xsd")
+        ExternalProject_Add_Step(${proj} remove_libkml_${KMLLIB}
+        COMMAND ${CMAKE_COMMAND} -E remove 
+        ${CMAKE_INSTALL_PREFIX}/lib/libkml${KMLLIB}.lib
+        DEPENDEES remove_libkml_headers
+    )
+    list(APPEND KMLLIBS ${proj}_${KMLLIB})
+    endforeach()
+
 
   endif()
   
