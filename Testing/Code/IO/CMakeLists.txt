@@ -2584,7 +2584,7 @@ add_test(ioTvVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
             ${BASELINE_FILES}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
             ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
         otbVectorDataFileGeoReaderWriter
-            ${INPUTDATA}/Capitole-Shadows.kml
+            ${INPUTDATA}/Capitole-Shadows.sqlite
             ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
         )
 
