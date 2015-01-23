@@ -68,6 +68,9 @@ else()
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
       DEPENDS ${${proj}_DEPENDENCIES}
+      PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
+        ${CMAKE_SOURCE_DIR}/patches/${proj}/configure
+        ${GEOTIFF_SB_SRC}
       )
     
     ExternalProject_Add_Step(${proj} copy_source
