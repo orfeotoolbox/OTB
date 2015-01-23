@@ -80,12 +80,13 @@ else()
     BUILD_COMMAND ""
     INSTALL_COMMAND "")
     
-  set(extra_flags  -D__STDC_CONSTANT_MACROS)
+  set(OSSIM_CXX_FLAGS  -D__STDC_CONSTANT_MACROS)
   if(MSVC)
     #checkout cmakeModules 
     set(${proj}_DEPENDENCIES ossim_cmakemodules)
+     list(APPEND ${proj}_DEPENDENCIES OPENTHREAD)
     #cmake flags for exception handling in c++    
-    #set(extra_flags /EHsc)
+    set(OSSIM_CXX_FLAGS /EHsc)
     #clear all dependent library settings except GEOTIFF as we link with gdal_i. 
     #This is because of gisinternals built with internal geotiff
     set(OSSIM_SB_TIFF_CONFIG)
@@ -106,6 +107,7 @@ else()
       -DOSSIM_VERSION:STRING=1.8.18-1
       -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
       -DCMAKE_BUILD_TYPE:STRING=Release
+      -DCMAKE_CXX_FLAGS:STRING=${OSSIM_CXX_FLAGS}
       ${OSSIM_SB_TIFF_CONFIG}
       ${OSSIM_SB_GEOTIFF_CONFIG}
       ${OSSIM_SB_GEOS_CONFIG}
