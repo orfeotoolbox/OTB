@@ -14,6 +14,8 @@ else()
   set(OPENCV_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(OPENCV_SB_SRC_DIR ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
+  if(UNIX)
+  
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.10/opencv-2.4.10.zip/download"
@@ -38,6 +40,10 @@ else()
       -DBUILD_ZLIB:BOOL=OFF
     DEPENDS ${${proj}_DEPENDENCIES}
     )
+    
+  else(MSVC)
+  
+  endif()
   
   message(STATUS "  Using OpenCV SuperBuild version")
 endif()

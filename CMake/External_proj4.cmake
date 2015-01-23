@@ -14,7 +14,7 @@ else()
   set(PROJ_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(PROJ_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
-  if(WIN32)
+  if(MSVC)
     # TODO : use nmake
   else()
     ExternalProject_Add(${proj}
@@ -31,14 +31,14 @@ else()
         --enable-static=no
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
-      )
+    )
     
     ExternalProject_Add_Step(${proj} copy_source
       COMMAND ${CMAKE_COMMAND} -E copy_directory 
         ${PROJ_SB_SRC} ${PROJ_SB_BUILD_DIR}
       DEPENDEES patch update
       DEPENDERS configure
-      )
+    )
     
   endif()
   

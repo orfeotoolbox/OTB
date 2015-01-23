@@ -23,8 +23,9 @@ else()
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
   
-  if(WIN32)
+  if(MSVC)
     # TODO : use nmake
+    #using tiff from gis internals
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
@@ -49,7 +50,7 @@ else()
         ${TIFF_SB_SRC} ${TIFF_SB_BUILD_DIR}
       DEPENDEES patch update
       DEPENDERS configure
-      )
+    )
     
   endif()
   

@@ -42,6 +42,18 @@ else()
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
   
+  if(MSVC)
+    set(${proj}_DEPENDENCIES)
+    set(LIBKML_SB_EXPAT_CONFIG)
+    #set(LIBKML_SB_BOOST_CONFIG)
+    set(LIBKML_SB_ZLIB_CONFIG)
+    #try to use github clone
+    #URIPARSER, GOOGLETEST, EXPAT, MINIZIP dependencies
+ ### endif()
+  
+  
+  else(UNIX)
+  
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "http://ftp.de.debian.org/debian/pool/main/libk/libkml/libkml_1.3.0~r863.orig.tar.gz"
@@ -66,5 +78,6 @@ else()
     )
   
   message(STATUS "  Using libKML SuperBuild version")
-
+  endif()
+  
 endif()
