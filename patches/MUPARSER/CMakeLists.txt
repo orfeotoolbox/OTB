@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 2.8.3)
 
 project(muparser)
 
+set(BUILD_SHARED_LIBS ON)
+if(MSVC)
+set(BUILD_SHARED_LIBS OFF) #force off
+endif()
 
 file(GLOB MUPARSER_SRCS "src/*.cpp" )
 list(REMOVE_ITEM MUPARSER_SRCS "${CMAKE_SOURCE_DIR}/src/muParserComplex.cpp")
