@@ -87,10 +87,7 @@ else()
     list(APPEND ${proj}_DEPENDENCIES LIBKML)
   endif()
   
-  if(WIN32)
-    # TODO : use nmake
-  else()
-    
+  if(UNIX)
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"
@@ -113,21 +110,62 @@ else()
         ${GDAL_SB_GEOS_CONFIG}
         ${GDAL_SB_EXPAT_CONFIG}
         ${GDAL_SB_LIBKML_CONFIG}
-      BUILD_COMMAND $(MAKE)
-      INSTALL_COMMAND $(MAKE) install
-      DEPENDS ${${proj}_DEPENDENCIES}
-      PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
-      )
+        BUILD_COMMAND $(MAKE)
+        INSTALL_COMMAND $(MAKE) install
+        DEPENDS ${${proj}_DEPENDENCIES}
+        PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
+    )
     
     ExternalProject_Add_Step(${proj} copy_source
-      COMMAND ${CMAKE_COMMAND} -E copy_directory 
+        COMMAND ${CMAKE_COMMAND} -E copy_directory 
         ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
-      DEPENDEES patch update
-      DEPENDERS configure
-      )
+        DEPENDEES patch update
+        DEPENDERS configure
+    )
     
+  else(WIN32)
+    if(MSVC10)
+        set(URL_PREFIX "release-1600")
+        set(GDAL_LIBS_URL_HASH 2a3e4db48c68d490e3101b5ca98a4bce)
+        set(GDAL_DLL_URL_HASH cc5f45081ec0d0a7604816fabf5f2588)
+    else(MSVC80)
+         set(URL_PREFIX "release-1500")    
+    else(CMAKE_COMPILER_2005)
+        set(URL_PREFIX "release-1400")
+    endif()
+        
+    set(GDAL_LIBS_URL "http://download.gisinternals.com/sdk/downloads/${URL_PREFIX}-gdal-1-11-1-mapserver-6-4-1-libs.zip")
+    set(GDAL_DLL_URL "http://download.gisinternals.com/sdk/downloads/${URL_PREFIX}-gdal-1-11-1-mapserver-6-4-1.zip")
+        
+    #TODO: find hash for archives properly
+    set(GDAL_LIBS_URL_HASH 2a3e4db48c68d490e3101b5ca98a4bce)
+    set(GDAL_DLL_URL_HASH cc5f45081ec0d0a7604816fabf5f2588)
+
+    ExternalProject_Add(${proj}_BIN
+        PREFIX ${proj}/_BIN
+        URL ${GDAL_DLL_URL}
+        URL_MD5 ${GDAL_DLL_URL_HASH}
+        SOURCE_DIR ${GDAL_SB_SRC}
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory ${GDAL_SB_SRC} ${CMAKE_INSTALL_PREFIX}
+     )
+     
+    ExternalProject_Add(${proj}
+        PREFIX ${proj}
+        URL ${GDAL_LIBS_URL}
+        URL_MD5 ${GDAL_LIBS_URL_HASH} 
+        SOURCE_DIR ${GDAL_SB_SRC}
+        DEPENDS ${proj}_BIN
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory  ${GDAL_SB_SRC} ${CMAKE_INSTALL_PREFIX}
+    )
+
   endif()
   
-  
+  list(APPEND OTB_DEPS ${proj})
   message(STATUS "  Using GDAL SuperBuild version")
+  
+  
 endif()
