@@ -167,14 +167,13 @@ else()
         ${CMAKE_INSTALL_PREFIX}/include/kml
         DEPENDEES install
     )
-     set(KMLLIBS)
+    
     foreach(KMLLIB "base" "convenience" "regionator" "dom" "engine" "xsd")
         ExternalProject_Add_Step(${proj} remove_libkml_${KMLLIB}
         COMMAND ${CMAKE_COMMAND} -E remove 
         ${CMAKE_INSTALL_PREFIX}/lib/libkml${KMLLIB}.lib
         DEPENDEES remove_libkml_headers
     )
-    list(APPEND KMLLIBS ${proj}_${KMLLIB})
     endforeach()
 
 
