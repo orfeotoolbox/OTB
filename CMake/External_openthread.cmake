@@ -16,8 +16,8 @@ else()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://www.openscenegraph.org/downloads/developer_releases/OpenSceneGraph-3.2.0.zip"
-    URL_MD5 4980f8692712a24d4c99f363f80c6814
+    SVN_REPOSITORY "http://svn.openscenegraph.org/osg/OpenThreads/tags/OpenThreads-2.3.0/"
+    SVN_REVISION -r 14667
     BINARY_DIR ${OPENTHREAD_SB_BUILD_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_CACHE_ARGS
