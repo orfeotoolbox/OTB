@@ -15,7 +15,7 @@ else()
   set(GEOTIFF_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
   # handle dependencies : TIFF Proj4 Zlib Jpeg
-  if(USE_SYSTEM_LIBTIFF)
+  if(USE_SYSTEM_TIFF)
     set(GEOTIFF_SB_TIFF_CONFIG)
   else()
     set(GEOTIFF_SB_TIFF_CONFIG --with-libtiff=${CMAKE_INSTALL_PREFIX})
