@@ -298,7 +298,9 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
          i != allobjects.end(); ++i)
       {
       otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(i->GetPointer());
-      msg << "    " << io->GetNameOfClass() << std::endl;
+      // IO should never be null, but we would better check for it
+      if(io)
+        msg << "    " << io->GetNameOfClass() << std::endl;
       }
     msg << "  You probably failed to set a file suffix, or" << std::endl;
     msg << "    set the suffix to an unsupported type." << std::endl;
