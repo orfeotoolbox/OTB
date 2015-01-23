@@ -46,8 +46,9 @@ else()
     list(APPEND ${proj}_DEPENDENCIES JPEG)
   endif()
   
-  if(WIN32)
+  if(MSVC)
     # TODO : use nmake
+    #geotiff is from gdal gisinternals
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
@@ -68,14 +69,14 @@ else()
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
       DEPENDS ${${proj}_DEPENDENCIES}
-      )
+    )
     
     ExternalProject_Add_Step(${proj} copy_source
       COMMAND ${CMAKE_COMMAND} -E copy_directory 
         ${GEOTIFF_SB_SRC} ${GEOTIFF_SB_BUILD_DIR}
       DEPENDEES patch update
       DEPENDERS configure
-      )
+    )
     
   endif()
   

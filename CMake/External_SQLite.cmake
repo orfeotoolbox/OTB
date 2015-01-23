@@ -14,7 +14,8 @@ else()
   set(SQLITE_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(SQLITE_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
-  ExternalProject_Add(${proj}
+  if(UNIX)
+    ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "https://sqlite.org/2014/sqlite-autoconf-3080702.tar.gz"
       URL_MD5 0f847048745ddbdf0c441c82d096fbb4
@@ -30,9 +31,11 @@ else()
     
     ExternalProject_Add_Step(${proj} copy_source
       COMMAND ${CMAKE_COMMAND} -E copy_directory 
-        ${SQLITE_SB_SRC} ${SQLITE_SB_BUILD_DIR}
+      ${SQLITE_SB_SRC} ${SQLITE_SB_BUILD_DIR}
       DEPENDEES patch update
       DEPENDERS configure
-      )
+    )
+  else(MSVC)
   
+  endif()
 endif()
