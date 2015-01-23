@@ -452,9 +452,14 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   if (strcmp(this->m_ImageIO->GetNameOfClass(), "TileMapImageIO") == 0)
     {
     typename TileMapImageIO::Pointer imageIO = dynamic_cast<TileMapImageIO*>(this->GetImageIO());
-    std::ostringstream depth;
-    depth << imageIO->GetDepth();
-    otb_kwl.AddKey("depth", depth.str());
+
+    // imageIO should not be null, but we would better check for it
+    if(imageIO)
+      {
+      std::ostringstream depth;
+      depth << imageIO->GetDepth();
+      otb_kwl.AddKey("depth", depth.str());
+      }
     }
 
   otbMsgDevMacro(<< otb_kwl);
