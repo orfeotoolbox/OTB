@@ -15,6 +15,11 @@ else()
   set(ITK_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(ITK_SB_SRC_DIR ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
+  if(MSVC)
+    set(ITK_SB_SRC_DIR "C:/Temp/ITK")
+    set(ITK_SB_BUILD_DIR ${ITK_SB_SRC_DIR}/build)
+  endif()
+  
   set(ITK_ENABLED_MODULES
     Common
     FiniteDifference
@@ -133,6 +138,7 @@ else()
     PREFIX ${proj}
     URL "http://sourceforge.net/projects/itk/files/itk/4.6/InsightToolkit-4.6.1.tar.gz/download"
     URL_MD5 2c84eae50ab2452cdad32aaadced3c37
+    SOURCE_DIR ${ITK_SB_SRC_DIR}
     BINARY_DIR ${ITK_SB_BUILD_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_CACHE_ARGS
@@ -144,6 +150,7 @@ else()
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DBUILD_TESTING:BOOL=OFF
       -DBUILD_EXAMPLES:BOOL=OFF
+      -DITK_USE_SYSTEM_EXPAT:BOOL=ON
       ${ITK_SB_FFTW_CONFIG}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
       ${CMAKE_SOURCE_DIR}/patches/ITK/hashtable.hxx.in
