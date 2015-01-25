@@ -54,12 +54,6 @@ find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBui
 
 include(External_OTB)
 
-# DEBUG:
-# impose to build OTB after all dependencies
-message(STATUS "OTB DEPENDENCIES ${OTB_DEPS}")
-
-#add_dependencies(OTB ${OTB_DEPS})
-
 option(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)" OFF)
 
 include(External_Ice)

@@ -176,11 +176,8 @@ else()
     )
     endforeach()
 
-
   endif()
   
-  list(APPEND OTB_DEPS ${proj})
   message(STATUS "  Using GDAL SuperBuild version")
-  
   
 endif()

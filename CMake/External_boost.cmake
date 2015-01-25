@@ -91,7 +91,6 @@ else()
 
   endif()
   
-  list(APPEND OTB_DEPS ${proj})
   message(STATUS "  Using Boost SuperBuild version")
   
 endif()

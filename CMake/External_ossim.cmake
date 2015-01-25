@@ -126,10 +126,8 @@ else()
       ${CMAKE_BINARY_DIR}/${proj}/_cmakemodules/src/ossim_cmakemodules ${OSSIM_SB_SRC}/CMakeModules
       DEPENDEES patch update
       DEPENDERS configure
-    )
-  
-  list(APPEND OTB_DEPS ${proj})
-  
+    )  
+ 
   message(STATUS "  Using OSSIM SuperBuild version")
 endif()
 
