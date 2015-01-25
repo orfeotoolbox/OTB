@@ -27,14 +27,23 @@ include(External_muParser)
 include(External_muParserX)
 include(External_TinyXML)
 include(External_expat)
+if(UNIX)
+include(External_boost)
+endif()
+include(External_libKML)
+include(External_curl)
 include(External_GDAL)
+# TODO: skip boost headers from gdal includes
+# move sub-dependencies into proper parent dependency.
+
+if(MSVC) 
+include(External_boost)
+endif()
 include(External_ITK)
 include(External_openthread)
 include(External_ossim)
-include(External_libKML)
-include(External_boost)
 include(External_OpenCV)
-include(External_curl)
+
 
 # TODO
 
