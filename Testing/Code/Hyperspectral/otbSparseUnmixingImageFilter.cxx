@@ -105,7 +105,9 @@ int otbSparseUnmixingImageFilterTest ( int argc, char * argv[] )
 
     writers->SetNthElement(i, WriterType::New());
     WriterType::Pointer writer = writers->GetNthElement(i);
-    writer->SetFileName( title.str().c_str() );
+    
+    std::string stitle = title.str();
+    writer->SetFileName( stitle.c_str() );
     writer->SetInput( filter->GetOutput()->GetNthElement(i) );
     writer->Update();
   }
