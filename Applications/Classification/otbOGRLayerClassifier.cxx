@@ -90,30 +90,30 @@ private:
   {
     if ( HasValue("inshp") )
       {
-       const char * shapefile = GetParameterString("inshp").c_str();
+      std::string shapefile = GetParameterString("inshp");
 
-       otb::ogr::DataSource::Pointer ogrDS;
-       otb::ogr::Layer layer(NULL, false);
-
-       OGRSpatialReference oSRS("");
-       std::vector<std::string> options;
-       
-       ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
-       std::string layername = itksys::SystemTools::GetFilenameName(shapefile);
-       layername = layername.substr(0,layername.size()-4);
-       layer = ogrDS->GetLayer(0);
-
-       otb::ogr::Feature feature = layer.ogr().GetNextFeature();
-       ClearChoices("feat");
-       for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
-         {
-           std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
-           key = item;
-           key.erase(std::remove(key.begin(), key.end(), ' '), key.end());
-           std::transform(key.begin(), key.end(), key.begin(), tolower);
-           key="feat."+key;
-           AddChoice(key,item);
-         }
+      otb::ogr::DataSource::Pointer ogrDS;
+      otb::ogr::Layer layer(NULL, false);
+      
+      OGRSpatialReference oSRS("");
+      std::vector<std::string> options;
+      
+      ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
+      std::string layername = itksys::SystemTools::GetFilenameName(shapefile);
+      layername = layername.substr(0,layername.size()-4);
+      layer = ogrDS->GetLayer(0);
+      
+      otb::ogr::Feature feature = layer.ogr().GetNextFeature();
+      ClearChoices("feat");
+      for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
+        {
+        std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
+        key = item;
+        key.erase(std::remove(key.begin(), key.end(), ' '), key.end());
+        std::transform(key.begin(), key.end(), key.begin(), tolower);
+        key="feat."+key;
+        AddChoice(key,item);
+        }
       }
   }
 
@@ -121,9 +121,9 @@ private:
   {
     clock_t tic = clock();
 
-    const char * shapefile = GetParameterString("inshp").c_str();
-    const char * XMLfile = GetParameterString("instats").c_str();
-    const char * modelfile = GetParameterString("insvm").c_str();
+    std::string shapefile = GetParameterString("inshp").c_str();
+    std::string XMLfile = GetParameterString("instats").c_str();
+    std::string modelfile = GetParameterString("insvm").c_str();
 
     typedef double ValueType;
     typedef itk::VariableLengthVector<ValueType> MeasurementType;
