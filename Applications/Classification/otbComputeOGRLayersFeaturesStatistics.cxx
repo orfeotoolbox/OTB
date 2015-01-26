@@ -74,7 +74,7 @@ private:
   {
     if ( HasValue("inshp") )
       {
-       const char * shapefile = GetParameterString("inshp").c_str();
+      std::string shapefile = GetParameterString("inshp");
 
        otb::ogr::DataSource::Pointer ogrDS;
        otb::ogr::Layer layer(NULL, false);
@@ -105,8 +105,8 @@ private:
   {
       clock_t tic = clock();
 
-      const char * shapefile = GetParameterString("inshp").c_str();
-      const char * XMLfile = GetParameterString("outstats").c_str();
+      std::string shapefile = GetParameterString("inshp");
+      std::string XMLfile = GetParameterString("outstats");
 
       otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
   
