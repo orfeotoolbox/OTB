@@ -81,13 +81,13 @@ int main(int argc, char * argv[])
      * Extract command line parameters
      */
 
-    const char * inputImageFileName1 = parseResult->GetParameterString(
-      "--InputImage1").c_str();
-    const char * inputImageFileName2 = parseResult->GetParameterString(
-      "--InputImage2").c_str();
-    const char * inputTrainingImageFileName = parseResult->GetParameterString(
-      "--Roi").c_str();
-    const char * outputImageFileName = parseResult->GetOutputImage().c_str();
+    std::string inputImageFileName1 = parseResult->GetParameterString(
+      "--InputImage1");
+    std::string inputImageFileName2 = parseResult->GetParameterString(
+      "--InputImage2");
+    std::string inputTrainingImageFileName = parseResult->GetParameterString(
+      "--Roi");
+    std::string outputImageFileName = parseResult->GetOutputImage();
 
     int winSize = 35;
     if (parseResult->IsOptionPresent("--winSize"))
