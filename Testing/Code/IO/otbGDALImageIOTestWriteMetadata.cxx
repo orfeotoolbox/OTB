@@ -500,7 +500,9 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
 
     std::ostringstream strIndexGCP;
     strIndexGCP << 1;
-    gdalGcps[0].pszId = const_cast<char *>(strIndexGCP.str().c_str());
+   
+    std::string sstrIndexGCP = strIndexGCP.str();
+    gdalGcps[0].pszId = const_cast<char *>(sstrIndexGCP.c_str());
     gdalGcps[0].pszInfo = const_cast<char *>("GCP test");
     gdalGcps[0].dfGCPPixel = 0.5;
     gdalGcps[0].dfGCPLine = 0.5;
