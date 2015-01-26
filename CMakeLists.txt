@@ -44,6 +44,7 @@ include(External_openthread)
 include(External_ossim)
 include(External_OpenCV)
 
+include(External_qt4)
 
 # TODO
 
