@@ -38,7 +38,29 @@ else()
       -DBUILD_TESTS:BOOL=OFF
       -DBUILD_TIFF:BOOL=OFF
       -DBUILD_ZLIB:BOOL=OFF
+      -DBUILD_opencv_apps:BOOL=OFF
+      -DBUILD_opencv_calib3d:BOOL=OFF
+      -DBUILD_opencv_contrib:BOOL=OFF
+      -DBUILD_opencv_core:BOOL=ON
+      -DBUILD_opencv_features2d:BOOL=OFF
       -DBUILD_opencv_flann:BOOL=OFF
+      -DBUILD_opencv_gpu:BOOL=OFF
+      -DBUILD_opencv_highgui:BOOL=OFF
+      -DBUILD_opencv_imgproc:BOOL=OFF
+      -DBUILD_opencv_java:BOOL=OFF
+      -DBUILD_opencv_legacy:BOOL=OFF
+      -DBUILD_opencv_ml:BOOL=ON
+      -DBUILD_opencv_nonfree:BOOL=OFF
+      -DBUILD_opencv_objdetect:BOOL=OFF
+      -DBUILD_opencv_ocl:BOOL=OFF
+      -DBUILD_opencv_photo:BOOL=OFF
+      -DBUILD_opencv_python:BOOL=OFF
+      -DBUILD_opencv_stitching:BOOL=OFF
+      -DBUILD_opencv_superres:BOOL=OFF
+      -DBUILD_opencv_ts:BOOL=OFF
+      -DBUILD_opencv_video:BOOL=OFF
+      -DBUILD_opencv_videostab:BOOL=OFF
+      -DBUILD_opencv_world:BOOL=OFF
     DEPENDS ${${proj}_DEPENDENCIES}
     )
     
