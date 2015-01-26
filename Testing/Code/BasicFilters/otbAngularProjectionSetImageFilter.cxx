@@ -61,7 +61,7 @@ int otbAngularProjectionSetImageFilterTest ( int argc, char * argv[] )
   std::string inputImageName [ nbInputImages ];
   for ( unsigned int i = 0; i < nbInputImages; i++ )
     inputImageName[i] = parseResult->GetParameterString("--InputImages", i);
-  const char * outputImageName = parseResult->GetParameterString("--OutputImages").c_str();
+  std::string outputImageName = parseResult->GetParameterString("--OutputImages");
 
   // Main type definition
   typedef float  PixelType;
