@@ -89,7 +89,7 @@ private:
   {
     if ( HasValue("inshp") )
       {
-       const char * shapefile = GetParameterString("inshp").c_str();
+      std::string shapefile = GetParameterString("inshp");
 
        otb::ogr::DataSource::Pointer ogrDS;
        otb::ogr::Layer layer(NULL, false);
@@ -120,9 +120,9 @@ private:
   {
     clock_t tic = clock();
 
-    const char * shapefile = GetParameterString("inshp").c_str();
-    const char * XMLfile = GetParameterString("instats").c_str();
-    const char * modelfile = GetParameterString("outsvm").c_str();
+    std::string shapefile = GetParameterString("inshp");
+    std::string XMLfile = GetParameterString("instats");
+    std::string modelfile = GetParameterString("outsvm");
 
     typedef double ValueType;
     typedef itk::VariableLengthVector<ValueType> MeasurementType;
