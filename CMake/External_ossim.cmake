@@ -83,10 +83,13 @@ else()
     set(${proj}_DEPENDENCIES ossim_cmakemodules)
     
   set(OSSIM_CXX_FLAGS  -D__STDC_CONSTANT_MACROS)
+ list(APPEND ${proj}_DEPENDENCIES ossim_cmakemodules)
+  
   if(MSVC)
     #checkout cmakeModules 
-    set(${proj}_DEPENDENCIES ossim_cmakemodules)
+     set(${proj}_DEPENDENCIES ossim_cmakemodules)
      list(APPEND ${proj}_DEPENDENCIES OPENTHREAD)
+     list(APPEND ${proj}_DEPENDENCIES GEOTIFF)
     #cmake flags for exception handling in c++    
     set(OSSIM_CXX_FLAGS /EHsc)
     #clear all dependent library settings except GEOTIFF as we link with gdal_i. 
@@ -95,8 +98,9 @@ else()
     set(OSSIM_SB_GEOS_CONFIG)
     set(OSSIM_SB_JPEG_CONFIG)
     set(OSSIM_SB_OPENTHREAD_CONFIG)
+    set(OSSIM_SB_GEOTIFF_CONFIG)
     #build geotiff and use it
-    set(OSSIM_SB_GEOTIFF_CONFIG -DGEOTIFF_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/gdal_i.lib)
+    #set(OSSIM_SB_GEOTIFF_CONFIG -DGEOTIFF_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/gdal_i.lib)
   endif()
   
   ExternalProject_Add(${proj}
@@ -105,6 +109,7 @@ else()
     SVN_REVISION -r 23087
     BINARY_DIR ${OSSIM_SB_BUILD_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    CMAKE_GENERATOR "NMake Makefiles"
     CMAKE_CACHE_ARGS
       -DOSSIM_VERSION:STRING=1.8.18-1
       -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
