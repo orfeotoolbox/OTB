@@ -38,6 +38,7 @@ else()
       -DBUILD_TESTS:BOOL=OFF
       -DBUILD_TIFF:BOOL=OFF
       -DBUILD_ZLIB:BOOL=OFF
+      -DBUILD_opencv_flann:BOOL=OFF
     DEPENDS ${${proj}_DEPENDENCIES}
     )
     
