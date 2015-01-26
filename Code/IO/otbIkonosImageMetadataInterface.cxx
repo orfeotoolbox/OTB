@@ -369,15 +369,9 @@ IkonosImageMetadataInterface
   int  productionMonth = this->GetProductionMonth();
   int  productionDay = this->GetProductionDay();
   bool isPost20010122 = false;
-  if ((productionYear > 2) || (productionYear < 99)) isPost20010122 = true;
-  else
+  if ((productionDay + 100 * productionMonth + 10000 * productionYear) >= 20010122)
     {
-    if (productionYear == 2)
-      {
-      if (productionMonth > 1) isPost20010122 = true;
-      else
-        if (productionDay >= 22) isPost20010122 = true;
-      }
+    isPost20010122 = true;
     }
 
   //Value computed from
