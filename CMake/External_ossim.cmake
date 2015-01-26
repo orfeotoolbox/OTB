@@ -80,6 +80,8 @@ else()
     BUILD_COMMAND ""
     INSTALL_COMMAND "")
     
+    set(${proj}_DEPENDENCIES ossim_cmakemodules)
+    
   set(OSSIM_CXX_FLAGS  -D__STDC_CONSTANT_MACROS)
   if(MSVC)
     #checkout cmakeModules 
