@@ -660,7 +660,7 @@ OGRLineString GeometryTransform(const OGRLineString * in,otb::GenericRSTransform
 {
   OGRLineString outLineString;
   
-  for(unsigned int i = 0; i<in->getNumPoints();++i)
+  for(int i = 0; i<in->getNumPoints();++i)
     {
     OGRPoint p,op;
     in->getPoint(i,&p);
