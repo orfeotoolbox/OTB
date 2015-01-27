@@ -114,7 +114,7 @@ StackedLayerModel
   m_LayerModels.insert( LayerModelMap::value_type( key, model ) );
   m_Keys.push_back( key );
 
-  emit StackContentChanged();
+  emit LayerAdded( m_Keys.size() - 1 );
 
   return key;
 }
@@ -128,7 +128,10 @@ StackedLayerModel
 
 
   if( emitSignal )
+    {
     emit AboutToChangeSelectedLayerModel( KeyType() );
+    emit ContentAboutToBeReset();
+    }
 
 
   for( LayerModelMap::iterator it( m_LayerModels.begin() );
@@ -151,7 +154,10 @@ StackedLayerModel
 
 
   if( emitSignal )
+    {
     emit SelectedLayerModelChanged( KeyType() );
+    emit ContentReset();
+    }
 }
 
 /*****************************************************************************/
@@ -222,7 +228,8 @@ StackedLayerModel
     if( m_Current>=GetCount() )
       m_Current = StackedLayerModel::NIL_INDEX;
 
-    SelectedLayerModelChanged( GetKey( m_Current ) );
+    emit LayerDeleted( index );
+    emit SelectedLayerModelChanged( GetKey( m_Current ) );
     }
 }
 
@@ -260,6 +267,8 @@ StackedLayerModel
 
   m_Current = next;
 
+  emit OrderChanged();
+
   // qDebug() << "current:" << index;
 }
 
@@ -279,6 +288,8 @@ StackedLayerModel
   );
 
   m_Current = prev;
+
+  emit OrderChanged();
 
   // qDebug() << "current:" << index;
 }
@@ -301,6 +312,8 @@ StackedLayerModel
 
     assert( m_Current!=StackedLayerModel::NIL_INDEX );
     }
+
+  emit OrderChanged();
 
   // qDebug() << "current:" << index;
 }
@@ -326,6 +339,8 @@ StackedLayerModel
 
     assert( m_Current!=StackedLayerModel::NIL_INDEX );
     }
+
+  emit OrderChanged();
 
   // qDebug() << "current:" << index;
 }

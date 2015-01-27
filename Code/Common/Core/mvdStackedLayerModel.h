@@ -173,9 +173,13 @@ signals:
   void SelectedLayerModelChanged( AbstractLayerModel * );
   */
 
-  void StackOrderChanged();
+  void OrderChanged();
 
-  void StackContentChanged();
+  void ContentAboutToBeReset();
+  void ContentReset();
+
+  void LayerAdded( unsigned int index );
+  void LayerDeleted( unsigned int index );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

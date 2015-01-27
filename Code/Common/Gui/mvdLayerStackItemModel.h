@@ -89,6 +89,7 @@ public:
     //
     COLUMN_INDEX = 0,
     COLUMN_NAME,
+    /*
     COLUMN_I,
     COLUMN_J,
     COLUMN_R,
@@ -97,6 +98,7 @@ public:
     COLUMN_X,
     COLUMN_Y,
     COLUMN_EPSG,
+    */
     //
     COLUMN_COUNT,
   };
@@ -156,6 +158,11 @@ public:
   virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 
   /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#hasChildren
+   */
+  virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
+
+  /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#headerData
    */
   virtual QVariant headerData( int section,
@@ -171,9 +178,26 @@ public:
            const QModelIndex & parent = QModelIndex() ) const;
 
   /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#insertRows
+   */
+  virtual
+    bool
+    insertRows( int row,
+                int count,
+                const QModelIndex & parent = QModelIndex() );
+  /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
    */
   virtual QModelIndex parent( const QModelIndex & index ) const;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#removeRows
+   */
+  virtual
+    bool
+    removeRows( int row,
+                int count,
+                const QModelIndex & parent = QModelIndex() );
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#rowCount
@@ -230,6 +254,14 @@ private:
 //
 // Slots.
 private slots:
+  /**
+   */
+  // void OnContentAboutToBeChanged();
+  // void OnContentChanged();
+  // void OnModelAboutToBeReset();
+  // void OnModelReset();
+  void OnLayerAdded( unsigned int );
+  void OnLayerDeleted( unsigned int );
 };
 
 } // end namespace 'mvd'.

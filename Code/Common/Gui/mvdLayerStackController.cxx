@@ -102,12 +102,20 @@ LayerStackController
   widget->GetItemModel()->SetStack(
     qobject_cast< StackedLayerModel * >( model )
   );
+
+  // QObject::connect(
+  //   model,
+  //   SIGNAL( ContentChanged() ),
+  //   // to:
+  //   widget,
+  //   SLOT( repaint() )
+  // );
 }
 
 /*******************************************************************************/
 void
 LayerStackController
-::Disconnect( AbstractModel * )
+::Disconnect( AbstractModel * model )
 {
   // assert( model==qobject_cast< StackedLayerModel * >( model ) );
 
@@ -115,6 +123,14 @@ LayerStackController
   assert( widget!=NULL );
 
   assert( widget->GetItemModel()!=NULL );
+
+  // QObject::disconnect(
+  //   model,
+  //   SIGNAL( ContentChanged() ),
+  //   // to:
+  //   widget,
+  //   SLOT( Repaint() )
+  // );
 
   widget->GetItemModel()->SetStack( NULL );
 }
@@ -129,5 +145,18 @@ LayerStackController
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+// void
+// LayerStackController
+// ::OnContentChanged()
+// {
+//   // qDebug() << this << "::OnContentChanged()";
+
+//   LayerStackWidget * widget = GetWidget< LayerStackWidget >();
+//   assert( widget!=NULL );
+
+//   assert( widget->GetItemModel()!=NULL );
+
+//   widget->repaint();
+// }
 
 } // end namespace 'mvd'

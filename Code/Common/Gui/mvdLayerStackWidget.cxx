@@ -72,7 +72,14 @@ LayerStackWidget
 {
   m_UI->setupUi( this );
 
+  {
+  QItemSelectionModel * ism = m_UI->treeView->selectionModel();
+
   m_UI->treeView->setModel( new LayerStackItemModel( m_UI->treeView ) );
+
+  delete ism;
+  ism = NULL;
+  }
 }
 
 /*******************************************************************************/

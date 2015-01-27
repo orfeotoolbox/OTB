@@ -62,7 +62,9 @@ namespace
 QVariant
 HEADERS[ LayerStackItemModel::COLUMN_COUNT ] =
 {
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Index" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Name" ) ),
+  /*
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "I" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "J" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Red" ) ),
@@ -71,6 +73,7 @@ HEADERS[ LayerStackItemModel::COLUMN_COUNT ] =
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "X" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Y" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "EPSG" ) ),
+  */
 };
 
 } // end of anonymous namespace.
@@ -88,6 +91,21 @@ LayerStackItemModel
   QAbstractItemModel( parent ),
   m_StackedLayerModel( NULL )
 {
+  // QObject::connect(
+  //   this,
+  //   SIGNAL( modelAboutToBeReset() ),
+  //   // to:
+  //   this,
+  //   SLOT( OnModelAboutToBeReset() )
+  // );
+
+  // QObject::connect(
+  //   this,
+  //   SIGNAL( modelReset() ),
+  //   // to:
+  //   this,
+  //   SLOT( OnModelReset() )
+  // );
 }
 
 /*****************************************************************************/
@@ -101,9 +119,78 @@ void
 LayerStackItemModel
 ::SetStack( StackedLayerModel * model )
 {
+  // emit layoutAboutToBeChanged();
+
+  if( m_StackedLayerModel!=NULL )
+    {
+    QObject::disconnect(
+      m_StackedLayerModel,
+      SIGNAL( ContentAboutToBeReset() ),
+      // to:
+      this,
+      SIGNAL( modelAboutToBeReset() )
+    );
+
+    QObject::disconnect(
+      m_StackedLayerModel,
+      SIGNAL( ContentReset() ),
+      // to:
+      this,
+      SIGNAL( modelReset() )
+    );
+
+    QObject::disconnect(
+      m_StackedLayerModel,
+      SIGNAL( LayerAdded( unsigned int ) ),
+      // to: 
+      this,
+      SLOT( OnLayerAdded( unsigned int ) )
+    );
+
+    QObject::disconnect(
+      m_StackedLayerModel,
+      SIGNAL( LayerDeleted( unsigned int ) ),
+      // to: 
+      this,
+      SLOT( OnLayerDeleted( unsigned int ) )
+    );
+    }
+
   m_StackedLayerModel = model;
 
-  // TODO: emit refresh data signal.
+  QObject::connect(
+    m_StackedLayerModel,
+    SIGNAL( ContentAboutToBeReset() ),
+    // to:
+    this,
+    SIGNAL( modelAboutToBeReset() )
+  );
+
+  QObject::connect(
+    m_StackedLayerModel,
+    SIGNAL( ContentReset() ),
+    // to:
+    this,
+    SIGNAL( modelReset() )
+  );
+
+  QObject::connect(
+    m_StackedLayerModel,
+    SIGNAL( LayerAdded( unsigned int ) ),
+    // to: 
+    this,
+    SLOT( OnLayerAdded( unsigned int ) )
+  );
+
+  QObject::connect(
+    m_StackedLayerModel,
+    SIGNAL( LayerDeleted( unsigned int ) ),
+    // to: 
+    this,
+    SLOT( OnLayerDeleted( unsigned int ) )
+  );
+
+  // emit layoutChanged();
 }
 
 /*****************************************************************************/
@@ -113,6 +200,8 @@ int
 LayerStackItemModel
 ::columnCount( const QModelIndex & parent ) const
 {
+  // qDebug() << this << "::columnCount(" << parent << ")";
+
   return COLUMN_COUNT;
 }
 
@@ -121,13 +210,16 @@ QVariant
 LayerStackItemModel
 ::data( const QModelIndex & index, int role ) const
 {
+  // qDebug() << this << "::data(" << index << "," << role << ")";
+
   switch( role )
     {
     case Qt::DisplayRole:
       switch( index.column() )
         {
         case COLUMN_INDEX:
-          return QVariant( index.row() );
+          // qDebug() << "index:" << index.row();
+          return index.row();
           break;
 
         case COLUMN_NAME:
@@ -145,10 +237,13 @@ LayerStackItemModel
               qobject_cast< const VectorImageModel * >( layerModel );
             assert( vectorImageModel!=NULL );
 
-            return QVariant( vectorImageModel->GetFilename() );
+            // qDebug() << "filename:" << vectorImageModel->GetFilename();
+
+            return vectorImageModel->GetFilename();
             }
           else
             {
+            qDebug() << "Unhandled AbstractLayerModel subclass.";
             }
           break;
         }
@@ -166,7 +261,24 @@ Qt::ItemFlags
 LayerStackItemModel
 ::flags( const QModelIndex & index ) const
 {
+  // qDebug() << this << "::flags(" << index << ")";
+
+  /*
+  if (!index.isValid())
+    return 0;
+
+  return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+  */
+
   return QAbstractItemModel::flags( index );
+}
+
+/*****************************************************************************/
+bool
+LayerStackItemModel
+::hasChildren( const QModelIndex & index ) const
+{
+  return !index.isValid();
 }
 
 /*****************************************************************************/
@@ -176,6 +288,11 @@ LayerStackItemModel
               Qt::Orientation orientation,
               int role ) const
 {
+  // qDebug()
+  //   << this << "::headerData("
+  //   << section << "," << orientation << "," << role
+  //   << ")";
+
   assert( orientation==Qt::Horizontal );
 
   switch( role )
@@ -223,7 +340,39 @@ LayerStackItemModel
          int column,
          const QModelIndex & parent ) const
 {
-  return QModelIndex();
+  // qDebug()
+  //   << this << "::index(" << row << "," << column << "," << parent << ")";
+
+  assert( m_StackedLayerModel!=NULL );
+
+  // qDebug()
+  //   << "index:" << row << "," << column << "," << m_StackedLayerModel->At( row );
+
+  return createIndex( row, column, m_StackedLayerModel->At( row ) );
+}
+
+/*****************************************************************************/
+bool
+LayerStackItemModel
+::insertRows( int row, int count, const QModelIndex & parent )
+{
+  assert( !parent.isValid() );
+  assert( count==1 );
+
+  if( parent.isValid() || count!=1 )
+    return false;
+
+  beginInsertRows( parent, row, row + count - 1 );
+  {
+  // StackedLayerModel has already been grown.
+
+  // TODO: Allocate additionnal row data here.
+  }
+  endInsertRows();
+
+  // emit dataChanged( index( row, 0 ), index( last, columnCount() - 1 ) );
+
+  return true;
 }
 
 /*****************************************************************************/
@@ -231,7 +380,31 @@ QModelIndex
 LayerStackItemModel
 ::parent( const QModelIndex & index ) const
 {
+  // qDebug() << this << "::parent(" << index << ")";
+
   return QModelIndex();
+}
+
+/*****************************************************************************/
+bool
+LayerStackItemModel
+::removeRows( int row, int count, const QModelIndex & parent )
+{
+  assert( !parent.isValid() );
+  assert( count==1 );
+
+  if( parent.isValid() || count!=1 )
+    return false;
+
+  beginRemoveRows( parent, row, row + count - 1 );
+  {
+  // StackedLayerModel has already been shortened.
+
+  // TODO: Release additionnal row data here.
+  }
+  endRemoveRows();
+
+  return true;
 }
 
 /*****************************************************************************/
@@ -239,7 +412,18 @@ int
 LayerStackItemModel
 ::rowCount( const QModelIndex & parent ) const
 {
-  return 0;
+  // qDebug() << this << "::rowCount(" << parent << ")";
+
+  // qDebug() << "row-count:" <<
+  //   ( ( m_StackedLayerModel==NULL || parent.isValid() )
+  //     ? 0
+  //     : m_StackedLayerModel->GetCount()
+  //   );
+
+  return
+    ( m_StackedLayerModel==NULL || parent.isValid() )
+    ? 0
+    : m_StackedLayerModel->GetCount();
 }
 
 /*****************************************************************************/
@@ -249,11 +433,79 @@ LayerStackItemModel
            const QVariant & value,
            int role )
 {
+  // qDebug()
+  //   << this << "::setData(" << index << "," << value << "," << role << ")";
+
   return false;
 }
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
+/*****************************************************************************/
+// void
+// LayerStackItemModel
+// ::OnContentAboutToBeChanged()
+// {
+//   qDebug() << this << "::OnAboutContentChanged()";
+
+//   emit layoutAboutToBeChanged();
+// }
+
+/*****************************************************************************/
+// void
+// LayerStackItemModel
+// ::OnContentChanged()
+// {
+//   qDebug() << this << "::OnContentChanged()";
+
+//   // assert( m_StackedLayerModel!=NULL );
+
+//   // beginResetModel();
+//   // {
+//   // }
+//   // endResetModel();
+
+//   // if( m_StackedLayerModel->GetCount()>0 )
+//   //   emit dataChanged(
+//   //     index( 0, 0 ),
+//   //     index( m_StackedLayerModel->GetCount() - 1, COLUMN_COUNT -1 )
+//   //   );
+
+//   emit layoutChanged();
+// }
+
+/*****************************************************************************/
+void
+LayerStackItemModel
+::OnLayerAdded( unsigned int index )
+{
+  insertRow( index );
+}
+
+/*****************************************************************************/
+void
+LayerStackItemModel
+::OnLayerDeleted( unsigned int index )
+{
+  removeRow( index );
+}
+
+/*****************************************************************************/
+// void
+// LayerStackItemModel
+// ::OnModelAboutToBeReset()
+// {
+//   qDebug() << this << "::OnModelAboutToBeReset()";
+// }
+
+/*****************************************************************************/
+// void
+// LayerStackItemModel
+// ::OnModelReset()
+// {
+//   qDebug() << this << "::OnModelReset()";
+// }
+
 /*****************************************************************************/
 
 } // end namespace 'mvd'
