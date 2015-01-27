@@ -728,7 +728,18 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
 {
   double factor = (yoffset>0) ? 1/m_Factor : m_Factor;
   otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+
+  if(currentActor.IsNull())
+    {
+    return false;
+    }
+
   otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+
+  if(shader.IsNull())
+    {
+    return false;
+    }
   
   if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
     {
@@ -805,6 +816,11 @@ bool IceViewer::scroll_callback_vector(GLFWwindow * window, double xoffset, doub
 { 
   double factor = (yoffset>0) ? 1/m_Factor : m_Factor;
   otb::GlVectorActor::Pointer currentVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+
+  if(currentVectorActor.IsNull())
+    {
+    return false;
+    }
 
   if(glfwGetKey(window,GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
     {
@@ -1213,8 +1229,19 @@ bool IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, in
   m_View->GetSettings()->ScreenToViewPortTransform(posx,posy,vpx,vpy);
 
   otb::GlImageActor::Pointer actor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+
+  if(actor.IsNull())
+    {
+    return false;
+    }
+
   otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(actor->GetShader());
    
+  if(shader.IsNull())
+    {
+    return false;
+    }
+
   // Switch shader mode
   if(key == GLFW_KEY_L && action == GLFW_PRESS)
     {
@@ -1361,6 +1388,11 @@ bool IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, i
 {
   otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
+  if(currentActor.IsNull())
+    {
+    return false;
+    }
+
   if(key == GLFW_KEY_F && action == GLFW_PRESS)
     {
     currentActor->SetFill(!currentActor->GetFill());
@@ -1456,29 +1488,32 @@ void IceViewer::CopyActorStyle(otb::GlActor::Pointer srcActor, otb::GlActor::Poi
     otb::StandardShader::Pointer srcShader = static_cast<otb::StandardShader *>(srcImgActor->GetShader());
     otb::StandardShader::Pointer dstShader = static_cast<otb::StandardShader *>(dstImgActor->GetShader());
 
-    // Apply same parameters to all image actors
-    dstImgActor->SetRedIdx(srcImgActor->GetRedIdx());
-    dstImgActor->SetGreenIdx(srcImgActor->GetGreenIdx());
-    dstImgActor->SetBlueIdx(srcImgActor->GetBlueIdx());
-    dstShader->SetMinRed(srcShader->GetMinRed());
-    dstShader->SetMinGreen(srcShader->GetMinGreen());
-    dstShader->SetMinBlue(srcShader->GetMinBlue());
-    dstShader->SetMaxRed(srcShader->GetMaxRed());
-    dstShader->SetMaxGreen(srcShader->GetMaxGreen());
-    dstShader->SetMaxBlue(srcShader->GetMaxBlue());
-    dstShader->SetGamma(srcShader->GetGamma());
-    
-    if(srcShader->GetShaderType() == SHADER_STANDARD || srcShader->GetShaderType() == SHADER_LOCAL_CONTRAST || srcShader->GetShaderType() == SHADER_SPECTRAL_ANGLE || srcShader->GetShaderType() == SHADER_GRADIENT)
+    if(srcShader.IsNotNull() && dstShader.IsNotNull())
       {
-      dstShader->SetShaderType(srcShader->GetShaderType());
-      dstShader->SetRadius(srcShader->GetRadius());
-      if(srcShader->GetShaderType() == SHADER_LOCAL_CONTRAST)
+      // Apply same parameters to all image actors
+      dstImgActor->SetRedIdx(srcImgActor->GetRedIdx());
+      dstImgActor->SetGreenIdx(srcImgActor->GetGreenIdx());
+      dstImgActor->SetBlueIdx(srcImgActor->GetBlueIdx());
+      dstShader->SetMinRed(srcShader->GetMinRed());
+      dstShader->SetMinGreen(srcShader->GetMinGreen());
+      dstShader->SetMinBlue(srcShader->GetMinBlue());
+      dstShader->SetMaxRed(srcShader->GetMaxRed());
+      dstShader->SetMaxGreen(srcShader->GetMaxGreen());
+      dstShader->SetMaxBlue(srcShader->GetMaxBlue());
+      dstShader->SetGamma(srcShader->GetGamma());
+      
+      if(srcShader->GetShaderType() == SHADER_STANDARD || srcShader->GetShaderType() == SHADER_LOCAL_CONTRAST || srcShader->GetShaderType() == SHADER_SPECTRAL_ANGLE || srcShader->GetShaderType() == SHADER_GRADIENT)
         {
-        dstShader->SetLocalContrastRange(srcShader->GetLocalContrastRange());
-        }
-      if(srcShader->GetShaderType() == SHADER_SPECTRAL_ANGLE)
-        {
-        dstShader->SetSpectralAngleRange(srcShader->GetSpectralAngleRange());
+        dstShader->SetShaderType(srcShader->GetShaderType());
+        dstShader->SetRadius(srcShader->GetRadius());
+        if(srcShader->GetShaderType() == SHADER_LOCAL_CONTRAST)
+          {
+          dstShader->SetLocalContrastRange(srcShader->GetLocalContrastRange());
+          }
+        if(srcShader->GetShaderType() == SHADER_SPECTRAL_ANGLE)
+          {
+          dstShader->SetSpectralAngleRange(srcShader->GetSpectralAngleRange());
+          }
         }
       }
     }
