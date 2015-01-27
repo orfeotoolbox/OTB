@@ -130,13 +130,11 @@ int main(int argc, char* argv[])
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
-  // The following types are needed for dealing with the matched points.
+  // The following type is needed for dealing with the matched points.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef PointSetType::PointType         PointType;
- 
   typedef EuclideanDistanceMetricMatchingFilterType::LandmarkListType
   LandmarkListType;
   // Software Guide : EndCodeSnippet
