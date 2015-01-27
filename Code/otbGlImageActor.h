@@ -142,6 +142,7 @@ protected:
   public:
     Tile()
       : m_Loaded(false),
+        m_TextureId(0),
         m_ImageRegion(),
         m_Image(),
         m_UL(),
