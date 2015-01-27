@@ -71,12 +71,10 @@ void FragmentShaderRegistry::RegisterShader(const std::string& name, const std::
     char * logs = new char[length];
     glGetShaderInfoLog(shader,1000,&length,logs);
 
-    itkExceptionMacro(<<"Shader "<<name<<" with sources "<<source<<" failed to compile: "<<logs);
-
     delete [] logs;
     // For safety!
     logs = NULL;
-
+    
     // Shader must be destroyed here!
     glDeleteShader( shader );
     shader = 0;
@@ -84,6 +82,8 @@ void FragmentShaderRegistry::RegisterShader(const std::string& name, const std::
     // Program must be destroyed here!
     glDeleteProgram( program );
     program = 0;
+    
+    itkExceptionMacro(<<"Shader "<<name<<" with sources "<<source<<" failed to compile: "<<logs);
     }
 
   glAttachShader(program,shader);
