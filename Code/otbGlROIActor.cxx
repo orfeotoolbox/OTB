@@ -33,6 +33,7 @@ GlROIActor::GlROIActor()
     m_Kwl(),
     m_Color(),
     m_Alpha(1.0),
+    m_Fill(false),
     m_ViewportToImageTransform(),
     m_ImageToViewportTransform(),
     m_VpUL(),
