@@ -277,7 +277,7 @@ void IceViewer::Start()
   otb::GlImageActor::Pointer firstActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(firstActorKey).GetPointer());
   otb::GlVectorActor::Pointer firstVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(firstActorKey).GetPointer());
   
-  double ulx,uly,lrx,lry;
+  double ulx(0),uly(0),lrx(0),lry(0);
 
   bool shouldHaveNegativeSpacing = false;
 
