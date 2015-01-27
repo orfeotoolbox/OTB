@@ -514,7 +514,12 @@ void GeometryRender(const OGRMultiPoint * in, const ViewSettings * settings, con
 {
   for(int i = 0; i < in->getNumGeometries();++i)
     {
-    GeometryRender(dynamic_cast<const OGRPoint *>(in->getGeometryRef(i)),settings,size);   
+    const OGRPoint * p = dynamic_cast<const OGRPoint *>(in->getGeometryRef(i));
+
+    if(p)
+      {
+      GeometryRender(p,settings,size);
+      }
     }
 }
 
@@ -522,7 +527,12 @@ void GeometryRender(const OGRMultiLineString * in)
 {
   for(int i = 0; i < in->getNumGeometries();++i)
     {
-    GeometryRender(dynamic_cast<const OGRLineString *>(in->getGeometryRef(i)));
+    const OGRLineString * ls = dynamic_cast<const OGRLineString *>(in->getGeometryRef(i));
+
+    if(ls)
+      {
+      GeometryRender(ls);
+      }
     }
 }
 
@@ -530,7 +540,12 @@ void GeometryRender(const OGRMultiPolygon * in, GLUtesselator * tesselator, bool
 {
   for(int i = 0; i < in->getNumGeometries();++i)
     {
-    GeometryRender(dynamic_cast<const OGRPolygon *>(in->getGeometryRef(i)),tesselator,fill,solid);
+    const OGRPolygon * pol = dynamic_cast<const OGRPolygon *>(in->getGeometryRef(i));
+
+    if(pol)
+      {
+      GeometryRender(pol,tesselator,fill,solid);
+      }
     }
 }
 } // end namespace ice_internal
@@ -712,8 +727,13 @@ OGRMultiPoint GeometryTransform(const OGRMultiPoint * in, otb::GenericRSTransfor
 
   for(int i = 0; i < in->getNumGeometries();++i)
     {
-    OGRPoint p = GeometryTransform(dynamic_cast<const OGRPoint *>(in->getGeometryRef(i)),transform);
-    outMultiPoint.addGeometry(&p);
+    const OGRPoint * inp = dynamic_cast<const OGRPoint *>(in->getGeometryRef(i));
+    
+    if(inp)
+      {
+      OGRPoint p = GeometryTransform(inp,transform);
+      outMultiPoint.addGeometry(&p);
+      }
     }
   return outMultiPoint;
 }
@@ -725,8 +745,13 @@ OGRMultiLineString GeometryTransform(const OGRMultiLineString * in, otb::Generic
 
   for(int i = 0; i < in->getNumGeometries();++i)
     {
-    OGRLineString l = GeometryTransform(dynamic_cast<const OGRLineString *>(in->getGeometryRef(i)),transform);
-    outMultiLineString.addGeometry(&l);
+    const OGRLineString * inl = dynamic_cast<const OGRLineString *>(in->getGeometryRef(i));
+    
+    if(inl)
+      {
+      OGRLineString l = GeometryTransform(inl,transform);
+      outMultiLineString.addGeometry(&l);
+      }
     }
   return outMultiLineString;
 }
@@ -737,8 +762,13 @@ OGRMultiPolygon outMultiPolygon;
 
   for(int i = 0; i < in->getNumGeometries();++i)
     {
-    OGRPolygon p = GeometryTransform(dynamic_cast<const OGRPolygon *>(in->getGeometryRef(i)),transform);
-    outMultiPolygon.addGeometry(&p);
+    const OGRPolygon * inp = dynamic_cast<const OGRPolygon *>(in->getGeometryRef(i));
+    
+    if(inp)
+      {
+      OGRPolygon p = GeometryTransform(inp,transform);
+      outMultiPolygon.addGeometry(&p);
+      }
     }
   return outMultiPolygon;
 
