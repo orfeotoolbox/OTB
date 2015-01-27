@@ -54,7 +54,15 @@ int main(int argc, char * argv[])
   otb::IceViewer::Pointer viewer = otb::IceViewer::New();
 
   // Initialize viewer
-  viewer->Initialize(800,600);
+  try
+    {
+    viewer->Initialize(800,600);
+    }
+  catch(itk::ExceptionObject& err)
+    {
+    std::cerr<<"Failed to initialized viewer: "<<err<<std::endl;
+    return EXIT_FAILURE;
+    }
 
   for(int i = 1; i<argc;++i)
     {
