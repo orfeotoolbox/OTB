@@ -21,7 +21,7 @@
 #include "otbNeuralNetworkMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
 #include "itkMacro.h" // itkExceptionMacro
-#include <opencv2/opencv.hpp>
+// #include <opencv2/opencv.hpp>
 
 namespace otb
 {

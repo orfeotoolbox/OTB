@@ -18,7 +18,10 @@
 #ifndef __otbOpenCVUtils_h
 #define __otbOpenCVUtils_h
 
-#include <opencv2/opencv.hpp>
+//#include <opencv2/opencv.hpp>
+#include <opencv2/core/core_c.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/ml/ml.hpp>
 
 namespace otb
 {

@@ -22,7 +22,7 @@
 
 #include "otbRandomForestsMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
-#include <opencv2/opencv.hpp>       // opencv general include file
+// #include <opencv2/opencv.hpp>       // opencv general include file
 
 namespace otb
 {
