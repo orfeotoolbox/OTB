@@ -15,10 +15,10 @@ else()
   set(ITK_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(ITK_SB_SRC_DIR ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
-  if(MSVC)
-    set(ITK_SB_SRC_DIR "C:/Temp/ITK")
-    set(ITK_SB_BUILD_DIR ${ITK_SB_SRC_DIR}/build)
-  endif()
+  # if(MSVC)
+    # set(ITK_SB_SRC_DIR "C:/Temp/ITK")
+    # set(ITK_SB_BUILD_DIR ${ITK_SB_SRC_DIR}/build)
+  # endif()
   
   set(ITK_ENABLED_MODULES
     Common
@@ -132,7 +132,52 @@ else()
   
   # TODO : handle different build type (Release/Debug)
   
-  # TODO : handle system zlib
+    if(USE_SYSTEM_TIFF)
+    set(ITK_SB_TIFF_CONFIG)
+  else()
+    set(ITK_SB_TIFF_CONFIG 
+      -DTIFF_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include 
+      -DTIFF_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libtiff.so
+      )
+    list(APPEND ${proj}_DEPENDENCIES TIFF)
+  endif()
+  
+    if(USE_SYSTEM_EXPAT)
+    set(ITK_SB_EXPAT_CONFIG)
+  else()
+    set(ITK_SB_EXPAT_CONFIG 
+      -DEXPAT_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include 
+      -DEXPAT_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libexpat.so
+      )
+    list(APPEND ${proj}_DEPENDENCIES EXPAT)
+  endif()
+  
+    if(USE_SYSTEM_PNG)
+    set(ITK_SB_PNG_CONFIG)
+  else()
+    set(ITK_SB_PNG_CONFIG 
+      -DPNG_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include 
+      -DPNG_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libpng.so
+      )
+    list(APPEND ${proj}_DEPENDENCIES EXPAT)
+  endif()
+  
+    if(USE_SYSTEM_ZLIB)
+    set(ITK_SB_ZLIB_CONFIG)
+  else()
+    set(ITK_SB_ZLIB_CONFIG 
+      -DZLIB_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include 
+      -DZLIB_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libz.so
+      )
+    list(APPEND ${proj}_DEPENDENCIES ZLIB)
+  endif()
+  
+  if(MSVC)
+    set(ITK_SB_ZLIB_CONFIG)
+    set(ITK_SB_EXPAT_CONFIG)
+    set(ITK_SB_TIFF_CONFIG)
+    set(ITK_SB_PNG_CONFIG)
+  endif()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
@@ -151,7 +196,14 @@ else()
       -DBUILD_TESTING:BOOL=OFF
       -DBUILD_EXAMPLES:BOOL=OFF
       -DITK_USE_SYSTEM_EXPAT:BOOL=ON
+      -DITK_USE_SYSTEM_ZLIB:BOOL=ON
+      -DITK_USE_SYSTEM_TIFF:BOOL=ON
+      -DITK_USE_SYSTEM_PNG:BOOL=ON
       ${ITK_SB_FFTW_CONFIG}
+      ${ITK_SB_TIFF_CONFIG}
+      ${ITK_SB_EXPAT_CONFIG}
+      ${ITK_SB_ZLIB_CONFIG}
+      ${ITK_SB_PNG_CONFIG}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
       ${CMAKE_SOURCE_DIR}/patches/ITK/hashtable.hxx.in
       ${ITK_SB_SRC_DIR}/Modules/ThirdParty/KWSys/src/KWSys
