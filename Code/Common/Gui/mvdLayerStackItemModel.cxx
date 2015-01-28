@@ -152,6 +152,22 @@ LayerStackItemModel
       this,
       SLOT( OnLayerDeleted( unsigned int ) )
     );
+
+    QObject::disconnect(
+      m_StackedLayerModel,
+      SIGNAL( OrderAboutToBeChanged() ),
+      // to:
+      this,
+      SIGNAL( layoutAboutToBeChanged() )
+    );
+
+    QObject::disconnect(
+      m_StackedLayerModel,
+      SIGNAL( OrderChanged() ),
+      // to:
+      this,
+      SIGNAL( layoutChanged() )
+    );
     }
 
   m_StackedLayerModel = model;
@@ -186,6 +202,22 @@ LayerStackItemModel
     // to: 
     this,
     SLOT( OnLayerDeleted( unsigned int ) )
+  );
+
+  QObject::connect(
+    m_StackedLayerModel,
+    SIGNAL( OrderAboutToBeChanged() ),
+    // to:
+    this,
+    SIGNAL( layoutAboutToBeChanged() )
+  );
+
+  QObject::connect(
+    m_StackedLayerModel,
+    SIGNAL( OrderChanged() ),
+    // to:
+    this,
+    SIGNAL( layoutChanged() )
   );
 
   // emit layoutChanged();

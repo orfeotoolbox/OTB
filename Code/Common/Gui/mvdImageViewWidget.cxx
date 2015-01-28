@@ -717,7 +717,7 @@ void
 ImageViewWidget
 ::OnDeleteAllRequested()
 {
-  qDebug() << this << "::OnDeleteAllRequested()";
+  // qDebug() << this << "::OnDeleteAllRequested()";
 
   assert( m_Renderer!=NULL );
 
@@ -734,7 +734,7 @@ void
 ImageViewWidget
 ::OnDeleteSelectedRequested()
 {
-  qDebug() << this << "::OnDeleteSelectedRequested()";
+  // qDebug() << this << "::OnDeleteSelectedRequested()";
 
   assert( m_Renderer!=NULL );
 
@@ -751,7 +751,7 @@ void
 ImageViewWidget
 ::OnLowerLayerRequested()
 {
-  qDebug() << this << "::OnLowerLayerRequested()";
+  // qDebug() << this << "::OnLowerLayerRequested()";
 
   assert( m_Renderer!=NULL );
 
@@ -768,7 +768,7 @@ void
 ImageViewWidget
 ::OnRaiseLayerRequested()
 {
-  qDebug() << this << "::OnRaiseLayerRequested()";
+  // qDebug() << this << "::OnRaiseLayerRequested()";
 
   assert( m_Renderer!=NULL );
 
@@ -839,7 +839,7 @@ void
 ImageViewWidget
 ::OnSelectPreviousLayerRequested()
 {
-  qDebug() << this << "::OnSelectPreviousLayerRequested()";
+  // qDebug() << this << "::OnSelectPreviousLayerRequested()";
 
   assert( m_Renderer!=NULL );
 
@@ -856,7 +856,7 @@ void
 ImageViewWidget
 ::OnSelectNextLayerRequested()
 {
-  qDebug() << this << "::OnSelectNextLayerRequested()";
+  // qDebug() << this << "::OnSelectNextLayerRequested()";
 
   assert( m_Renderer!=NULL );
 

@@ -173,6 +173,7 @@ signals:
   void SelectedLayerModelChanged( AbstractLayerModel * );
   */
 
+  void OrderAboutToBeChanged();
   void OrderChanged();
 
   void ContentAboutToBeReset();
@@ -331,7 +332,7 @@ void
 StackedLayerModel
 ::DeleteCurrent()
 {
-  qDebug() << this << "::DeleteCurrent()";
+  // qDebug() << this << "::DeleteCurrent()";
 
   Delete( m_Current );
 }

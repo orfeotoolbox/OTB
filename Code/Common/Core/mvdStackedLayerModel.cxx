@@ -179,7 +179,7 @@ void
 StackedLayerModel
 ::Delete( SizeType index )
 {
-  qDebug() << this << "::Delete(" << index << ")";
+  // qDebug() << this << "::Delete(" << index << ")";
 
 
   //
@@ -260,6 +260,8 @@ StackedLayerModel
 
   SizeType next = Next( index );
 
+  emit OrderAboutToBeChanged();
+
   std::swap(
     *( m_Keys.begin() + index ),
     *( m_Keys.begin() + next )
@@ -282,6 +284,8 @@ StackedLayerModel
 
   SizeType prev = Prev( index );
 
+  emit OrderAboutToBeChanged();
+
   std::swap(
     *( m_Keys.begin() + index ),
     *( m_Keys.begin() + prev )
@@ -303,6 +307,8 @@ StackedLayerModel
   assert( index<GetCount() );
 
   KeyType key( GetKey( m_Current ) );
+
+  emit OrderAboutToBeChanged();
 
   std::rotate( m_Keys.begin(), m_Keys.begin() + index, m_Keys.end() );
 
@@ -330,6 +336,8 @@ StackedLayerModel
     return;
 
   KeyType key( GetKey( m_Current ) );
+
+  emit OrderAboutToBeChanged();
 
   std::rotate( m_Keys.rbegin(), m_Keys.rbegin() + index, m_Keys.rend()  );
 
