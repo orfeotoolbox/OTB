@@ -24,8 +24,41 @@ else()
   endif()
   
   if(MSVC)
-    # TODO : use nmake
-    #using tiff from gis internals
+  
+    set(TIFF_SB_ZLIB_CONFIG)
+    set(ZLIB_DIR ${CMAKE_INSTALL_PREFIX})
+    configure_file(${CMAKE_SOURCE_DIR}/patches/${proj}/nmake.opt ${TIFF_SB_BUILD_DIR}/nmake.opt)
+    
+     ExternalProject_Add(${proj}_build
+      PREFIX ${proj}
+      URL "http://download.osgeo.org/libtiff/tiff-4.0.3.tar.gz"
+      URL_MD5 051c1068e6a0627f461948c365290410
+      SOURCE_DIR ${TIFF_SB_SRC}
+      BINARY_DIR ${TIFF_SB_SRC}
+      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      DEPENDS ${${proj}_DEPENDENCIES}
+      PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${TIFF_SB_BUILD_DIR}/nmake.opt ${TIFF_SB_SRC}
+      CONFIGURE_COMMAND ""
+      BUILD_COMMAND ${SB_MAKE_CMD} /f ${TIFF_SB_SRC}/Makefile.vc
+      INSTALL_COMMAND ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
+      ${CMAKE_BINARY_DIR}/${proj}/_install
+    )
+
+    ExternalProject_Add(${proj}
+      PREFIX ${proj}/_install
+      DOWNLOAD_COMMAND ""
+      SOURCE_DIR ${proj}/_install
+      BINARY_DIR ${TIFF_SB_BUILD_DIR}
+      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    CMAKE_CACHE_ARGS
+      -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
+      -DCMAKE_BUILD_TYPE:STRING=Release
+      -DTIFF_INCLUDE_DIR:STRING=${TIFF_SB_SRC}/libtiff
+      -DTIFF_LIB_DIR:STRING=${TIFF_SB_SRC}/libtiff
+      DEPENDS ${proj}_build
+      CMAKE_COMMAND
+    )
+
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}

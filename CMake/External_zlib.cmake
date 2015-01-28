@@ -14,7 +14,6 @@ else()
   set(ZLIB_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(ZLIB_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
-  if(UNIX)
   
     if (TRUE)
       # Try official release 1.2.8
@@ -56,9 +55,6 @@ else()
         )
         
       endif()
-      
-    else(MSVC)
-    
-    endif()
-    
+
+     message(STATUS "  Using zlib SuperBuild version")
 endif()
