@@ -1,0 +1,94 @@
+
+
+# Comment out the following to disable JPEG support.
+#JPEG_SUPPORTED = 1
+
+# This will enable 12bit libjpeg - use only with internal jpeg builds.
+#JPEG12_SUPPORTED = 1
+
+GDAL_HOME="@CMAKE_WIN_INSTALL_PREFIX@"
+
+
+#if using an external jpeg library uncomment the follwing lines
+#JPEG_EXTERNAL_LIB = 1
+#JPEGDIR = @CMAKE_WIN_INSTALL_PREFIX@\include
+#JPEG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\libjpeg.lib
+
+#if using an external png library uncomment the follwing lines
+PNG_EXTERNAL_LIB = 1
+PNGDIR = @CMAKE_WIN_INSTALL_PREFIX@\include
+PNG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\libpng16.lib
+
+# if using an external libtiff library
+TIFF_INC = -I@CMAKE_WIN_INSTALL_PREFIX@\include
+TIFF_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\libtiff_i.lib
+# uncomment following line, if you have libtiff version >= 4.0 to enable BigTIFF support
+TIFF_OPTS= -DBIGTIFF_SUPPORT
+
+# if using an external libgeotiff library
+GEOTIFF_INC = -I@CMAKE_WIN_INSTALL_PREFIX@\include
+GEOTIFF_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\geotiff_i.lib
+
+EXPAT_DIR = @CMAKE_WIN_INSTALL_PREFIX@
+EXPAT_INCLUDE = -I$(EXPAT_DIR)\include
+EXPAT_LIB = $(EXPAT_DIR)\lib\expat.lib
+
+# SQLite Libraries
+SQLITE_INC=-I@CMAKE_WIN_INSTALL_PREFIX@\include
+SQLITE_LIB=@CMAKE_WIN_INSTALL_PREFIX@\lib\sqlite3.lib
+# Uncomment following line if libsqlite3 has been compiled with SQLITE_HAS_COLUMN_METADATA=yes
+SQLITE_HAS_COLUMN_METADATA=yes
+
+# PROJ.4 stuff
+PROJ_INCLUDE = -I@CMAKE_WIN_INSTALL_PREFIX@\include
+PROJ_LIBRARY = @CMAKE_WIN_INSTALL_PREFIX@\lib\proj_i.lib
+
+# Uncomment to use libcurl (DLL by default)
+# The cURL library is used for WCS, WMS, GeoJSON, SRS call importFromUrl(), WFS, GFT, CouchDB, /vsicurl/ etc.
+CURL_DIR=@CMAKE_WIN_INSTALL_PREFIX@
+CURL_INC = -I$(CURL_DIR)\include
+# Uncoment following line to use libcurl as dynamic library
+CURL_LIB = $(CURL_DIR)\lib\libcurl.lib wsock32.lib wldap32.lib winmm.lib
+
+# Uncomment for GEOS support (GEOS >= 3.1.0 required)
+GEOS_DIR=@CMAKE_WIN_INSTALL_PREFIX@
+GEOS_CFLAGS = -I$(GEOS_DIR)\include -I$(GEOS_DIR)\include\geos -DHAVE_GEOS
+GEOS_LIB     = $(GEOS_DIR)\lib\geos_c.lib
+
+# Uncomment for OpenJpeg (release v2.0.0) support
+OPENJPEG_ENABLED = YES
+OPENJPEG_CFLAGS = -I@CMAKE_WIN_INSTALL_PREFIX@\include
+OPENJPEG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\openjp2.lib
+
+
+
+##################################################################
+################# TO be enabled for OTB ##########################
+
+# Uncomment out the following lines to enable LibKML support.
+#LIBKML_DIR = C:/Dev/libkml
+#LIBKML_INCLUDE = -I$(LIBKML_DIR)/src -I$(LIBKML_DIR)/third_party/boost_1_34_1
+#LIBKML_LIBRARY = $(LIBKML_DIR)/msvc/Release
+#LIBKML_LIBS =	$(LIBKML_LIBRARY)/libkmlbase.lib \
+#		$(LIBKML_LIBRARY)/libkmlconvenience.lib \
+#		$(LIBKML_LIBRARY)/libkmldom.lib \
+#		$(LIBKML_LIBRARY)/libkmlengine.lib \
+#		$(LIBKML_LIBRARY)/libkmlregionator.lib \
+#		$(LIBKML_LIBRARY)/libkmlxsd.lib \
+#		$(LIBKML_LIBRARY)/minizip_static.lib \
+#		$(LIBKML_DIR)/third_party\expat.win32/libexpat.lib \
+#		$(LIBKML_DIR)/third_party\uriparser-0.7.5.win32/release/uriparser.lib \
+#		$(LIBKML_DIR)/third_party\zlib-1.2.3.win32/lib/minizip.lib \
+#		$(LIBKML_DIR)/third_party\zlib-1.2.3.win32/lib/zlib.lib		
+
+
+# Uncomment the following and update to enable NCSA HDF Release 4 support.
+#HDF4_PLUGIN = NO
+#HDF4_DIR =	D:\warmerda\HDF41r5
+#HDF4_LIB =	/LIBPATH:$(HDF4_DIR)\lib Ws2_32.lib
+
+# Uncomment the following and update to enable NCSA HDF Release 5 support.
+#HDF5_PLUGIN = NO
+#HDF5_DIR =	c:\warmerda\supportlibs\hdf5\5-164-win
+#HDF5_LIB =	$(HDF5_DIR)\dll\hdf5dll.lib 
+
