@@ -43,23 +43,25 @@ else()
   endif()
   
   if(MSVC)
-    set(${proj}_DEPENDENCIES)
+ #   set(${proj}_DEPENDENCIES)
     set(LIBKML_SB_EXPAT_CONFIG)
     #set(LIBKML_SB_BOOST_CONFIG)
     set(LIBKML_SB_ZLIB_CONFIG)
     #try to use github clone
     #URIPARSER, GOOGLETEST, EXPAT, MINIZIP dependencies
- ### endif()
+ endif()
   
   
-  else(UNIX)
-  
+
+  if(UNIX)
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "http://ftp.de.debian.org/debian/pool/main/libk/libkml/libkml_1.3.0~r863.orig.tar.gz"
     URL_MD5 211ed5fdf2dd45aeb9c0abc8e1fe42be
     BINARY_DIR ${LIBKML_SB_BUILD_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    DEPENDS ${${proj}_DEPENDENCIES}  
+    PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory  ${CMAKE_SOURCE_DIR}/patches/${proj}  ${LIBKML_SB_SRC}
     CMAKE_CACHE_ARGS
       -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
       -DCMAKE_BUILD_TYPE:STRING=Release
@@ -67,17 +69,11 @@ else()
       ${LIBKML_SB_EXPAT_CONFIG}
       ${LIBKML_SB_BOOST_CONFIG}
       ${LIBKML_SB_ZLIB_CONFIG}
-    #CMAKE_COMMAND
-    #  # use 'env' because CTest launcher doesn't perform shell interpretation
-    #  env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
-    #  ${CMAKE_COMMAND}
-    DEPENDS ${${proj}_DEPENDENCIES}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory 
-      ${CMAKE_SOURCE_DIR}/patches/${proj}
-      ${LIBKML_SB_SRC}
+    CMAKE_COMMAND   ${SB_CMAKE_COMMAND}
     )
-  
-  message(STATUS "  Using libKML SuperBuild version")
   endif()
+  message(STATUS "  Using libKML SuperBuild version")
+  
+
   
 endif()
