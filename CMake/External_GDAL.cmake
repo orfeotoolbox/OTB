@@ -31,6 +31,24 @@ else()
       )
     list(APPEND ${proj}_DEPENDENCIES GEOTIFF)
   endif()
+
+  if(USE_SYSTEM_PNG)
+    set(GDAL_SB_PNG_CONFIG)
+  else()
+    set(GDAL_SB_PNG_CONFIG 
+      --with-png=${CMAKE_INSTALL_PREFIX}
+      )
+    list(APPEND ${proj}_DEPENDENCIES PNG)
+  endif()
+
+  # if(USE_SYSTEM_JPEG)
+    # set(GDAL_SB_JPEG_CONFIG)
+  # else()
+    # set(GDAL_SB_JPEG_CONFIG 
+      # --with-jpeg=${CMAKE_INSTALL_PREFIX}
+      # )
+    # list(APPEND ${proj}_DEPENDENCIES JPEG)
+  # endif()  
   
   if(USE_SYSTEM_OPENJPEG)
     set(GDAL_SB_OPENJPEG_CONFIG)
@@ -87,6 +105,15 @@ else()
     list(APPEND ${proj}_DEPENDENCIES LIBKML)
   endif()
   
+    if(USE_SYSTEM_CURL)
+    set(GDAL_SB_CURL_CONFIG)
+  else()
+    set(GDAL_SB_CURL_CONFIG 
+      --with-curl=${CMAKE_INSTALL_PREFIX}
+      )
+    list(APPEND ${proj}_DEPENDENCIES CURL)
+  endif()
+  
   if(UNIX)
     ExternalProject_Add(${proj}
       PREFIX ${proj}
@@ -94,6 +121,9 @@ else()
       URL_MD5 9fdf0f2371a3e9863d83e69951c71ec4
       BINARY_DIR ${GDAL_SB_BUILD_DIR}
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      DEPENDS ${${proj}_DEPENDENCIES}
+      UPDATE_COMMAND  ${CMAKE_COMMAND} -E copy_directory ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}        
+      PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath      
       CONFIGURE_COMMAND 
         # use 'env' because CTest launcher doesn't perform shell interpretation
         env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
@@ -105,77 +135,52 @@ else()
         ${GDAL_SB_ZLIB_CONFIG}
         ${GDAL_SB_TIFF_CONFIG}
         ${GDAL_SB_GEOTIFF_CONFIG}
+        ${GDAL_SB_PNG_CONFIG}        
         ${GDAL_SB_OPENJPEG_CONFIG}
         ${GDAL_SB_SQLITE_CONFIG}
         ${GDAL_SB_GEOS_CONFIG}
         ${GDAL_SB_EXPAT_CONFIG}
         ${GDAL_SB_LIBKML_CONFIG}
-        BUILD_COMMAND $(MAKE)
-        INSTALL_COMMAND $(MAKE) install
-        DEPENDS ${${proj}_DEPENDENCIES}
-        PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
+      BUILD_COMMAND $(MAKE)
+      INSTALL_COMMAND $(MAKE) install
     )
-    
-    ExternalProject_Add_Step(${proj} copy_source
-        COMMAND ${CMAKE_COMMAND} -E copy_directory 
-        ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
-        DEPENDEES patch update
-        DEPENDERS configure
-    )
-    
-  else(WIN32)
-    if(MSVC10)
-        set(URL_PREFIX "release-1600")
-        set(GDAL_LIBS_URL_HASH 2a3e4db48c68d490e3101b5ca98a4bce)
-        set(GDAL_DLL_URL_HASH cc5f45081ec0d0a7604816fabf5f2588)
-    else(MSVC80)
-         set(URL_PREFIX "release-1500")    
-    else(CMAKE_COMPILER_2005)
-        set(URL_PREFIX "release-1400")
-    endif()
-        
-    set(GDAL_LIBS_URL "http://download.gisinternals.com/sdk/downloads/${URL_PREFIX}-gdal-1-11-1-mapserver-6-4-1-libs.zip")
-    set(GDAL_DLL_URL "http://download.gisinternals.com/sdk/downloads/${URL_PREFIX}-gdal-1-11-1-mapserver-6-4-1.zip")
-        
-    #TODO: find hash for archives properly
-    set(GDAL_LIBS_URL_HASH 2a3e4db48c68d490e3101b5ca98a4bce)
-    set(GDAL_DLL_URL_HASH cc5f45081ec0d0a7604816fabf5f2588)
 
-    ExternalProject_Add(${proj}_BIN
-        PREFIX ${proj}/_BIN
-        URL ${GDAL_DLL_URL}
-        URL_MD5 ${GDAL_DLL_URL_HASH}
-        SOURCE_DIR ${GDAL_SB_SRC}
-        CONFIGURE_COMMAND ""
-        BUILD_COMMAND ""
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory ${GDAL_SB_SRC} ${CMAKE_INSTALL_PREFIX}
-     )
-     
+  else(MSVC)
+  ##add libkml
+    list(REMOVE_ITEM ${proj}_DEPENDENCIES LIBKML)
+    
+    STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+    configure_file(${CMAKE_SOURCE_DIR}/patches/${proj}/nmake_gdal_extra.opt.in ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
+      
+    ExternalProject_Add(${proj}_build
+       PREFIX ${proj}
+       URL "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"
+       URL_MD5 9fdf0f2371a3e9863d83e69951c71ec4
+       BINARY_DIR ${GDAL_SB_BUILD_DIR}
+       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+       DEPENDS ${${proj}_DEPENDENCIES}
+       PATCH_COMMAND  ${CMAKE_COMMAND} -E copy_directory  ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
+       CONFIGURE_COMMAND ""
+       BUILD_COMMAND ${SB_MAKE_CMD} /f ${GDAL_SB_BUILD_DIR}/Makefile.vc MSVC_VER=${SB_MSVC_VER} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt 
+       INSTALL_COMMAND ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
+      ${CMAKE_BINARY_DIR}/${proj}/_install
+    )
+    
     ExternalProject_Add(${proj}
-        PREFIX ${proj}
-        URL ${GDAL_LIBS_URL}
-        URL_MD5 ${GDAL_LIBS_URL_HASH} 
-        SOURCE_DIR ${GDAL_SB_SRC}
-        DEPENDS ${proj}_BIN
-        CONFIGURE_COMMAND ""
-        BUILD_COMMAND ""
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory  ${GDAL_SB_SRC} ${CMAKE_INSTALL_PREFIX}
-    )
-        
-    ExternalProject_Add_Step(${proj} remove_libkml_headers
-        COMMAND ${CMAKE_COMMAND} -E remove_directory
-        ${CMAKE_INSTALL_PREFIX}/include/kml
-        DEPENDEES install
-    )
+      PREFIX ${proj}/_install
+      DOWNLOAD_COMMAND ""
+      SOURCE_DIR ${proj}/_install
+      BINARY_DIR ${GDAL_SB_BUILD_DIR}
+      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      CMAKE_CACHE_ARGS
+        -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
+        -DCMAKE_BUILD_TYPE:STRING=Release
+        -DGDAL_INCLUDE_DIR:STRING=${GDAL_SB_BUILD_DIR}
+        -DGDAL_LIB_DIR:STRING=${GDAL_SB_BUILD_DIR}
+      DEPENDS ${proj}_build
+      CMAKE_COMMAND
+    )    
     
-    foreach(KMLLIB "base" "convenience" "regionator" "dom" "engine" "xsd")
-        ExternalProject_Add_Step(${proj} remove_libkml_${KMLLIB}
-        COMMAND ${CMAKE_COMMAND} -E remove 
-        ${CMAKE_INSTALL_PREFIX}/lib/libkml${KMLLIB}.lib
-        DEPENDEES remove_libkml_headers
-    )
-    endforeach()
-
   endif()
   
   message(STATUS "  Using GDAL SuperBuild version")
