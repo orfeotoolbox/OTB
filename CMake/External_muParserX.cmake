@@ -27,10 +27,7 @@ else()
     CMAKE_CACHE_ARGS
       -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
       -DCMAKE_BUILD_TYPE:STRING=Release
-    CMAKE_COMMAND
-      # use 'env' because CTest launcher doesn't perform shell interpretation
-      env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
-      ${CMAKE_COMMAND}
+    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     DEPENDS ${${proj}_DEPENDENCIES}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
       ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt 
