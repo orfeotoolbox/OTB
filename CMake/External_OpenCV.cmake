@@ -13,8 +13,8 @@ else()
   set(${proj}_DEPENDENCIES)
   set(OPENCV_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(OPENCV_SB_SRC_DIR ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
-  
-  if(UNIX)
+
+ 
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
@@ -28,8 +28,6 @@ else()
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DBUILD_DOCS:BOOL=OFF
       -DBUILD_EXAMPLES:BOOL=OFF
-      -DBUILD_JASPER:BOOL=OFF
-      -DBUILD_JPEG:BOOL=OFF
       -DBUILD_OPENEXR:BOOL=OFF
       -DBUILD_PACKAGE:BOOL=ON
       -DBUILD_PERF_TESTS:BOOL=OFF
@@ -38,13 +36,12 @@ else()
       -DBUILD_TESTS:BOOL=OFF
       -DBUILD_TIFF:BOOL=OFF
       -DBUILD_ZLIB:BOOL=OFF
-      -DBUILD_opencv_flann:BOOL=OFF
+      -DBUILD_opencv_flann:BOOL=ON
+      -DWITH_JASPER:BOOL=OFF
+      -DWITH_FFMPEG:BOOL=OFF
+      -DWITH_JPEG:BOOL=OFF      
     DEPENDS ${${proj}_DEPENDENCIES}
     )
-    
-  else(MSVC)
-  
-  endif()
   
   message(STATUS "  Using OpenCV SuperBuild version")
 endif()
