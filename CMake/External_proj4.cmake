@@ -15,7 +15,45 @@ else()
   set(PROJ_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
   if(MSVC)
-    # TODO : use nmake
+
+    ExternalProject_Add(${proj}_build
+      PREFIX ${proj}
+      URL "http://download.osgeo.org/proj/proj-4.8.0.tar.gz"
+      URL_MD5 d815838c92a29179298c126effbb1537
+      SOURCE_DIR ${PROJ_SB_SRC}
+      BINARY_DIR ${PROJ_SB_BUILD_DIR}
+      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      CONFIGURE_COMMAND ""
+      BUILD_COMMAND ${SB_MAKE_CMD} /f ${PROJ_SB_SRC}/makefile.vc
+      INSTALL_COMMAND ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
+      ${CMAKE_BINARY_DIR}/${proj}/_install
+    )
+    
+    ExternalProject_Add(${proj}
+      PREFIX ${proj}/_install
+      DOWNLOAD_COMMAND ""
+      SOURCE_DIR ${proj}/_install
+      BINARY_DIR ${PROJ_SB_BUILD_DIR}
+      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    CMAKE_CACHE_ARGS
+      -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
+      -DCMAKE_BUILD_TYPE:STRING=Release
+      -DPROJ_INCLUDE_DIR:STRING=${PROJ_SB_SRC}/src
+      -DPROJ_LIB_DIR:STRING=${PROJ_SB_BUILD_DIR}/src
+      DEPENDS ${proj}_build
+      CMAKE_COMMAND
+    )
+
+    
+
+        
+    
+    ExternalProject_Add_Step(${proj}_build copy_source
+      COMMAND ${CMAKE_COMMAND} -E copy_directory 
+        ${PROJ_SB_SRC} ${PROJ_SB_BUILD_DIR}
+      DEPENDEES patch update
+      DEPENDERS configure
+    )
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
@@ -41,5 +79,5 @@ else()
     )
     
   endif()
-  
+  message(STATUS "  Using Proj4 SuperBuild version")
 endif()

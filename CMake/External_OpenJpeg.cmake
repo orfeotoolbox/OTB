@@ -36,8 +36,13 @@ else()
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
 
-  if(UNIX)
-    ExternalProject_Add(${proj}
+  if(MSVC)
+  #TODO: add LCMS dependency
+  set(OPENJPEG_SB_TIFF_CONFIG)
+  set(OPENJPEG_SB_ZLIB_CONFIG)
+  endif()
+  
+  ExternalProject_Add(${proj}
         PREFIX ${proj}
         URL "http://sourceforge.net/projects/openjpeg.mirror/files/2.0.0/openjpeg-2.0.0.tar.gz/download"
         URL_MD5 d9be274bddc0f47f268e484bdcaaa6c5
@@ -58,16 +63,10 @@ else()
         ${OPENJPEG_SB_TIFF_CONFIG}
         ${OPENJPEG_SB_ZLIB_CONFIG}
         DEPENDS ${${proj}_DEPENDENCIES}
-        CMAKE_COMMAND
-        # use 'env' because CTest launcher doesn't perform shell interpretation
-        env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
-        ${CMAKE_COMMAND}
+        CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
-  else(MSVC)
-        
-  endif()
 
-  message(STATUS "  Using OpenJpeg SuperBuild version")
+  message(STATUS "  Using OpenJPEG SuperBuild version")
 
  
 endif()
