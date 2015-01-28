@@ -62,14 +62,14 @@ else()
     list(APPEND ${proj}_DEPENDENCIES JPEG)
   endif()
   
-  if(USE_SYSTEM_OPENTHREAD)
-    set(OSSIM_SB_OPENTHREAD_CONFIG)
+  if(USE_SYSTEM_OPENTHREADS)
+    set(OSSIM_SB_OPENTHREADS_CONFIG)
   else()
-    set(OSSIM_SB_OPENTHREAD_CONFIG 
+    set(OSSIM_SB_OPENTHREADS_CONFIG 
       -DOPENTHREADS_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include
       -DOPENTHREADS_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libOpenThreads.so
       )
-    list(APPEND ${proj}_DEPENDENCIES OPENTHREAD)
+    list(APPEND ${proj}_DEPENDENCIES OPENTHREADS)
   endif()
 
     ExternalProject_Add(ossim_cmakemodules
@@ -86,7 +86,7 @@ else()
   if(MSVC)
     #checkout cmakeModules 
      set(${proj}_DEPENDENCIES ossim_cmakemodules)
-     list(APPEND ${proj}_DEPENDENCIES OPENTHREAD)
+     list(APPEND ${proj}_DEPENDENCIES OPENTHREADS)
      list(APPEND ${proj}_DEPENDENCIES GEOTIFF)
     #cmake flags for exception handling in c++    
     set(OSSIM_CXX_FLAGS /EHsc)
@@ -95,7 +95,7 @@ else()
     set(OSSIM_SB_TIFF_CONFIG)
     set(OSSIM_SB_GEOS_CONFIG)
     set(OSSIM_SB_JPEG_CONFIG)
-    set(OSSIM_SB_OPENTHREAD_CONFIG)
+    set(OSSIM_SB_OPENTHREADS_CONFIG)
     set(OSSIM_SB_GEOTIFF_CONFIG)
     #build geotiff and use it
     #set(OSSIM_SB_GEOTIFF_CONFIG -DGEOTIFF_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/gdal_i.lib)
@@ -107,7 +107,6 @@ else()
     SVN_REVISION -r 23087
     BINARY_DIR ${OSSIM_SB_BUILD_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    CMAKE_GENERATOR "NMake Makefiles"
     CMAKE_CACHE_ARGS
       -DOSSIM_VERSION:STRING=1.8.18-1
       -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
@@ -117,13 +116,10 @@ else()
       ${OSSIM_SB_GEOTIFF_CONFIG}
       ${OSSIM_SB_GEOS_CONFIG}
       ${OSSIM_SB_JPEG_CONFIG}
-      ${OSSIM_SB_OPENTHREAD_CONFIG}
+      ${OSSIM_SB_OPENTHREADS_CONFIG}
       -DBUILD_OSSIM_MPI_SUPPORT:BOOL=OFF
     DEPENDS ${${proj}_DEPENDENCIES}
-    CMAKE_COMMAND
-      # use 'env' because CTest launcher doesn't perform shell interpretation
-      env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
-      ${CMAKE_COMMAND}
+    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
     
     ExternalProject_Add_Step(${proj} copy_CMakeModules
