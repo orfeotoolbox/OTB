@@ -50,7 +50,7 @@ else()
     #try to use github clone
     #URIPARSER, GOOGLETEST, EXPAT, MINIZIP dependencies
  ### endif()
-  
+       message(STATUS "  LibKML SuperBuild is not available yet...")
   
   else(UNIX)
   

@@ -17,7 +17,12 @@ else()
   if(NOT DEFINED git_protocol)
     set(git_protocol "git")
   endif()
-  
+
+  if(MSVC)
+
+      message(STATUS "  Qt4 SuperBuild is not available yet...")
+else(UNIX)
+      
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "http://download.qt-project.org/official_releases/qt/4.8/4.8.6/qt-everywhere-opensource-src-4.8.6.tar.gz"
@@ -43,5 +48,6 @@ else()
   
   
   message(STATUS "  Using Qt4 SuperBuild version")
+endif()
 
 endif()

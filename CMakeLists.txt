@@ -11,39 +11,39 @@ set(CMAKE_MODULE_PATH
 include(ExternalProject)
 include(CTest)
 
+if(MSVC)
+set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
+set(SB_MAKE_CMD "nmake")
+else(UNIX)
+set(SB_CMAKE_COMMAND env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib  ${CMAKE_COMMAND})
+set(SB_MAKE_CMD "make")
+endif()
 # Call external projects
 
+#TODO: enforce check from ITK on directory length
 
-include(External_jpeg)
-include(External_SQLite)
 include(External_zlib)
+include(External_jpeg)
+include(External_expat)
+include(External_libpng)
 include(External_libtiff)
 include(External_proj4)
 include(External_geotiff)
+include(External_SQLite)
 include(External_geos)
-include(External_fftw)
 include(External_OpenJpeg)
-include(External_muParser)
-include(External_muParserX)
-include(External_TinyXML)
-include(External_expat)
-if(UNIX)
 include(External_boost)
-endif()
 include(External_libKML)
 include(External_curl)
 include(External_GDAL)
-# TODO: skip boost headers from gdal includes
-# move sub-dependencies into proper parent dependency.
-
-if(MSVC) 
-include(External_boost)
-endif()
+include(External_fftw)
 include(External_ITK)
-include(External_openthread)
+include(External_OpenThreads)
 include(External_ossim)
+include(External_muParser)
+include(External_muParserX)
+include(External_TinyXML)
 include(External_OpenCV)
-
 include(External_qt4)
 
 # TODO

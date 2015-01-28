@@ -7,7 +7,8 @@ set(OTB_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
 set(${proj}_DEPENDENCIES)
 
 set(BUILD_LIBKML ON)
-set(BUILD_OPENCV ON)
+set(BUILD_JPEG2000 ON)
+set(BUILD_EXAMPLES ON)
 
 if(USE_SYSTEM_GDAL)
   set(OTB_SB_GDAL_CONFIG)
@@ -122,13 +123,14 @@ if(MSVC)
     set(OTB_SB_TINYXML_CONFIG)
     set(OTB_SB_LIBKML_CONFIG)
     set(OTB_SB_OPENCV_CONFIG)
-    set(OTB_SB_CURL_CONFIG)
+    #doesn't matter to use cmake variable with JPEG prefix. all are empty for windows
+    set(OTB_SB_CURL_CONFIG -DJPEG_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libjpeg.lib)
+    
     #force libkml and opencv OFF)
     set(BUILD_LIBKML OFF)
-    set(BUILD_OPENCV OFF)
-    list(REMOVE_ITEM ${proj}_DEPENDENCIES CURL)
+    set(BUILD_JPEG2000 OFF)
+    set(BUILD_EXAMPLES OFF)
     list(REMOVE_ITEM ${proj}_DEPENDENCIES LIBKML)
-    list(REMOVE_ITEM ${proj}_DEPENDENCIES OPENCV)
 endif()
 ExternalProject_Add(${proj}
     DEPENDS ${${proj}_DEPENDENCIES}
@@ -142,7 +144,7 @@ ExternalProject_Add(${proj}
       -DCMAKE_BUILD_TYPE:STRING=Release
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DBUILD_TESTING:BOOL=${BUILD_TESTING}
-      -DBUILD_EXAMPLES:BOOL=ON
+      -DBUILD_EXAMPLES:BOOL=${BUILD_EXAMPLES}
       -DBUILD_APPLICATIONS:BOOL=ON
       -DOTB_WRAP_QT:BOOL=OFF
       -DCMAKE_PREFIX_PATH:STRING=${CMAKE_INSTALL_PREFIX}
@@ -155,7 +157,8 @@ ExternalProject_Add(${proj}
       -DOTB_USE_EXTERNAL_TINYXML:BOOL=ON
       -DOTB_USE_EXTERNAL_EXPAT:BOOL=ON
       -DOTB_USE_EXTERNAL_LIBKML:BOOL=${BUILD_LIBKML}
-      -DOTB_USE_OPENCV:BOOL=${BUILD_OPENCV}
+      -DOTB_USE_OPENCV:BOOL=ON
+      -DOTB_USE_JPEG2000:BOOL=${BUILD_JPEG2000}
       ${OTB_SB_ITK_CONFIG}
       ${OTB_SB_OSSIM_CONFIG}
       ${OTB_SB_GDAL_CONFIG}
@@ -165,10 +168,8 @@ ExternalProject_Add(${proj}
       ${OTB_SB_BOOST_CONFIG}
       ${OTB_SB_LIBKML_CONFIG}
       ${OTB_SB_OPENCV_CONFIG}
-    CMAKE_COMMAND
-      # use 'env' because CTest launcher doesn't perform shell interpretation
-      env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib
-      ${CMAKE_COMMAND}
+      ${OTB_SB_CURL_CONFIG}
+    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
 message(STATUS "  Using OTB SuperBuild version")
