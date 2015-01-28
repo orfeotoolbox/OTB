@@ -13,34 +13,43 @@ include(CTest)
 
 # Call external projects
 
+if(MSVC)
+
+##TODO: Add check from ITK for long directory names
+
+  set(SB_MAKE_CMD "nmake")
+  set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
+  set(SB_MSVC_VER 1600)
+  if(MSVC10)
+    set(SB_MSVC_VER 1600)
+  else(MSVC80)
+    set(SB_MSVC_VER 1400)
+  endif()
+else(UNIX)
+  set(SB_MAKE_CMD "make")
+  set(SB_CMAKE_COMMAND env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib ${CMAKE_COMMAND})
+endif()
 
 include(External_jpeg)
 include(External_SQLite)
 include(External_zlib)
 include(External_libtiff)
+include(External_libpng)
 include(External_proj4)
 include(External_geotiff)
 include(External_geos)
 include(External_fftw)
+include(External_curl)
 include(External_OpenJpeg)
+include(External_expat)
+include(External_boost)
+include(External_libKML)
+include(External_GDAL)
 include(External_muParser)
 include(External_muParserX)
 include(External_TinyXML)
-include(External_expat)
-if(UNIX)
-include(External_boost)
-endif()
-include(External_libKML)
-include(External_curl)
-include(External_GDAL)
-# TODO: skip boost headers from gdal includes
-# move sub-dependencies into proper parent dependency.
-
-if(MSVC) 
-include(External_boost)
-endif()
 include(External_ITK)
-include(External_openthread)
+include(External_OpenThreads)
 include(External_ossim)
 include(External_OpenCV)
 
