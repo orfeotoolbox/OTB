@@ -6,7 +6,6 @@ set(OTB_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
 
 set(${proj}_DEPENDENCIES)
 
-set(BUILD_LIBKML ON)
 set(BUILD_EXAMPLES ON)
 
 if(USE_SYSTEM_GDAL)
@@ -115,22 +114,20 @@ else()
 endif()
 
 if(MSVC)
-    set(OTB_SB_GDAL_CONFIG)
-    set(OTB_SB_OSSIM_CONFIG)
-    set(OTB_SB_MUPARSER_CONFIG)
-    set(OTB_SB_MUPARSERX_CONFIG)
-    set(OTB_SB_TINYXML_CONFIG)
-    set(OTB_SB_LIBKML_CONFIG)
-    set(OTB_SB_OPENCV_CONFIG)
-    #doesn't matter to use cmake variable with JPEG prefix. all are empty for windows
-    set(OTB_SB_CURL_CONFIG -DJPEG_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libjpeg.lib)
-    
-    #force libkml and opencv OFF)
-    set(BUILD_LIBKML OFF)
-    set(BUILD_EXAMPLES OFF)
-    #FIXME: remove below and build libkml
-    list(REMOVE_ITEM ${proj}_DEPENDENCIES LIBKML)
+  set(BUILD_EXAMPLES OFF)
+  set(OTB_SB_GDAL_CONFIG)
+  set(OTB_SB_OSSIM_CONFIG)
+  set(OTB_SB_MUPARSER_CONFIG)
+  set(OTB_SB_MUPARSERX_CONFIG)
+  set(OTB_SB_TINYXML_CONFIG)
+  set(OTB_SB_LIBKML_CONFIG)
+  set(OTB_SB_OPENCV_CONFIG)
+  #doesn't matter to use cmake variable with JPEG prefix. all are empty for windows
+  #GDAL is built with internal JPEG due to static link conflict. 
+  #replace superbuild version of libjpeg.lib with the GDAL internal one
+  set(OTB_SB_CURL_CONFIG -DJPEG_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libjpeg.lib)
 endif()
+
 ExternalProject_Add(${proj}
     DEPENDS ${${proj}_DEPENDENCIES}
     PREFIX ${proj}
@@ -155,7 +152,7 @@ ExternalProject_Add(${proj}
       -DOTB_USE_EXTERNAL_MUPARSERX:BOOL=ON
       -DOTB_USE_EXTERNAL_TINYXML:BOOL=ON
       -DOTB_USE_EXTERNAL_EXPAT:BOOL=ON
-      -DOTB_USE_EXTERNAL_LIBKML:BOOL=${BUILD_LIBKML}
+      -DOTB_USE_EXTERNAL_LIBKML:BOOL=ON
       -DOTB_USE_OPENCV:BOOL=ON
       -DOTB_USE_JPEG2000:BOOL=OFF
       ${OTB_SB_ITK_CONFIG}
