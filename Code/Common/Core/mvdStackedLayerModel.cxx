@@ -129,6 +129,7 @@ StackedLayerModel
 
   if( emitSignal )
     {
+    emit SelectionAboutToBeChanged( StackedLayerModel::NIL_INDEX );
     emit AboutToChangeSelectedLayerModel( KeyType() );
     emit ContentAboutToBeReset();
     }
@@ -155,6 +156,7 @@ StackedLayerModel
 
   if( emitSignal )
     {
+    emit SelectionChanged( StackedLayerModel::NIL_INDEX );
     emit SelectedLayerModelChanged( KeyType() );
     emit ContentReset();
     }
@@ -205,8 +207,17 @@ StackedLayerModel
   bool emitSelectionChanged = m_Current<GetCount() && index<=m_Current;
 
   if( emitSelectionChanged )
-    emit AboutToChangeSelectedLayerModel( GetKey( m_Current + 1 ) );
+    {
+    KeyType key( GetKey( m_Current + 1 ) );
 
+    emit SelectionAboutToBeChanged(
+      key.empty()
+      ? StackedLayerModel::NIL_INDEX
+      : m_Current + 1
+    );
+
+    emit AboutToChangeSelectedLayerModel( key );
+    }
 
   //
   // Remove item.
@@ -229,6 +240,7 @@ StackedLayerModel
       m_Current = StackedLayerModel::NIL_INDEX;
 
     emit LayerDeleted( index );
+    emit SelectionChanged( m_Current );
     emit SelectedLayerModelChanged( GetKey( m_Current ) );
     }
 }
@@ -261,15 +273,19 @@ StackedLayerModel
   SizeType next = Next( index );
 
   emit OrderAboutToBeChanged();
-
+  {
   std::swap(
     *( m_Keys.begin() + index ),
     *( m_Keys.begin() + next )
   );
-
-  m_Current = next;
-
+  }
   emit OrderChanged();
+
+  emit SelectionAboutToBeChanged( next );
+  {
+  m_Current = next;
+  }
+  emit SelectionChanged( next );
 
   // qDebug() << "current:" << index;
 }
@@ -285,15 +301,19 @@ StackedLayerModel
   SizeType prev = Prev( index );
 
   emit OrderAboutToBeChanged();
-
+  {
   std::swap(
     *( m_Keys.begin() + index ),
     *( m_Keys.begin() + prev )
   );
-
-  m_Current = prev;
-
+  }
   emit OrderChanged();
+
+  emit SelectionAboutToBeChanged( prev );
+  {
+  m_Current = prev;
+  }
+  emit SelectionChanged( prev );
 
   // qDebug() << "current:" << index;
 }
@@ -309,17 +329,23 @@ StackedLayerModel
   KeyType key( GetKey( m_Current ) );
 
   emit OrderAboutToBeChanged();
-
+  {
   std::rotate( m_Keys.begin(), m_Keys.begin() + index, m_Keys.end() );
+  }
+  emit OrderChanged();
 
   if( !key.empty() )
     {
-    m_Current = FindKey( key );
+    SizeType current = FindKey( key );
 
-    assert( m_Current!=StackedLayerModel::NIL_INDEX );
+    assert( current!=StackedLayerModel::NIL_INDEX );
+
+    emit SelectionAboutToBeChanged( current );
+    {
+      m_Current = current;
     }
-
-  emit OrderChanged();
+    emit SelectionChanged( m_Current );
+    }
 
   // qDebug() << "current:" << index;
 }
@@ -338,17 +364,23 @@ StackedLayerModel
   KeyType key( GetKey( m_Current ) );
 
   emit OrderAboutToBeChanged();
-
+  {
   std::rotate( m_Keys.rbegin(), m_Keys.rbegin() + index, m_Keys.rend()  );
+  }
+  emit OrderChanged();
 
   if( !key.empty() )
     {
-    m_Current = FindKey( key );
+    SizeType current = FindKey( key );
 
-    assert( m_Current!=StackedLayerModel::NIL_INDEX );
+    assert( current!=StackedLayerModel::NIL_INDEX );
+
+    emit SelectionAboutToBeChanged( current );
+    {
+    m_Current = current;
     }
-
-  emit OrderChanged();
+    emit SelectionChanged( current );
+    }
 
   // qDebug() << "current:" << index;
 }

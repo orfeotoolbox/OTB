@@ -165,8 +165,8 @@ public slots:
 //
 // Signals.
 signals:
-  void SelectionAboutToBeChanged( unsigned int );
-  void SelectionChanged( unsigned int );
+  void SelectionAboutToBeChanged( size_t );
+  void SelectionChanged( size_t );
 
   void AboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & );
   void SelectedLayerModelChanged( const StackedLayerModel::KeyType & );
@@ -182,8 +182,8 @@ signals:
   void ContentAboutToBeReset();
   void ContentReset();
 
-  void LayerAdded( unsigned int index );
-  void LayerDeleted( unsigned int index );
+  void LayerAdded( size_t index );
+  void LayerDeleted( size_t index );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

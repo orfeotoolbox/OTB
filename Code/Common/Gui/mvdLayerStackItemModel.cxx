@@ -139,18 +139,18 @@ LayerStackItemModel
 
     QObject::disconnect(
       m_StackedLayerModel,
-      SIGNAL( LayerAdded( unsigned int ) ),
+      SIGNAL( LayerAdded( size_t ) ),
       // to: 
       this,
-      SLOT( OnLayerAdded( unsigned int ) )
+      SLOT( OnLayerAdded( size_t ) )
     );
 
     QObject::disconnect(
       m_StackedLayerModel,
-      SIGNAL( LayerDeleted( unsigned int ) ),
+      SIGNAL( LayerDeleted( size_t ) ),
       // to: 
       this,
-      SLOT( OnLayerDeleted( unsigned int ) )
+      SLOT( OnLayerDeleted( size_t ) )
     );
 
     QObject::disconnect(
@@ -190,18 +190,18 @@ LayerStackItemModel
 
   QObject::connect(
     m_StackedLayerModel,
-    SIGNAL( LayerAdded( unsigned int ) ),
+    SIGNAL( LayerAdded( size_t ) ),
     // to: 
     this,
-    SLOT( OnLayerAdded( unsigned int ) )
+    SLOT( OnLayerAdded( size_t ) )
   );
 
   QObject::connect(
     m_StackedLayerModel,
-    SIGNAL( LayerDeleted( unsigned int ) ),
+    SIGNAL( LayerDeleted( size_t ) ),
     // to: 
     this,
-    SLOT( OnLayerDeleted( unsigned int ) )
+    SLOT( OnLayerDeleted( size_t ) )
   );
 
   QObject::connect(
@@ -507,7 +507,7 @@ LayerStackItemModel
 /*****************************************************************************/
 void
 LayerStackItemModel
-::OnLayerAdded( unsigned int index )
+::OnLayerAdded( size_t index )
 {
   insertRow( index );
 }
@@ -515,7 +515,7 @@ LayerStackItemModel
 /*****************************************************************************/
 void
 LayerStackItemModel
-::OnLayerDeleted( unsigned int index )
+::OnLayerDeleted( size_t index )
 {
   removeRow( index );
 }

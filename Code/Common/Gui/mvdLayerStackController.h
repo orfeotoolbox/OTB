@@ -148,7 +148,7 @@ private:
 private slots:
   /**
    */
-  void OnStackedLayerSelectionChanged( unsigned int );
+  void OnStackedLayerSelectionChanged( size_t );
 };
 
 } // end namespace 'mvd'.

@@ -258,8 +258,8 @@ private slots:
   // void OnContentChanged();
   // void OnModelAboutToBeReset();
   // void OnModelReset();
-  void OnLayerAdded( unsigned int );
-  void OnLayerDeleted( unsigned int );
+  void OnLayerAdded( size_t );
+  void OnLayerDeleted( size_t );
 };
 
 } // end namespace 'mvd'.

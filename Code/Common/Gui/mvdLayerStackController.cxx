@@ -97,10 +97,10 @@ LayerStackController
 
   QObject::connect(
     model,
-    SIGNAL( SelectionChanged( unsigned int ) ),
+    SIGNAL( SelectionChanged( size_t ) ),
     // to:
     this,
-    SLOT( OnStackedLayerSelectionChanged( unsigned int ) )
+    SLOT( OnStackedLayerSelectionChanged( size_t ) )
   );
 
 
@@ -125,10 +125,10 @@ LayerStackController
 
   QObject::disconnect(
     model,
-    SIGNAL( SelectionChanged( unsigned int ) ),
+    SIGNAL( SelectionChanged( size_t ) ),
     // to:
     this,
-    SLOT( OnStackedLayerSelectionChanged( unsigned int ) )
+    SLOT( OnStackedLayerSelectionChanged( size_t ) )
   );  
 
 
@@ -152,7 +152,7 @@ LayerStackController
 /*******************************************************************************/
 void
 LayerStackController
-::OnStackedLayerSelectionChanged( unsigned int index )
+::OnStackedLayerSelectionChanged( size_t index )
 {
   qDebug() << this << "::OnStackedLayerSelectionChanged(" << index << ")";
 
