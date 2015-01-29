@@ -34,7 +34,7 @@ else()
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory ${CURL_SB_SRC} ${CURL_SB_BUILD_DIR}
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${SB_MAKE_CMD} /f ${CURL_SB_BUILD_DIR}/winbuild/Makefile.vc mode=dll WITH_ZLIB=dll WITH_DEVEL=${CMAKE_INSTALL_PREFIX}
+        BUILD_COMMAND nmake /f ${CURL_SB_BUILD_DIR}/winbuild/Makefile.vc mode=dll WITH_ZLIB=dll WITH_DEVEL=${CMAKE_INSTALL_PREFIX}
         INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir ${CURL_SB_BUILD_DIR}/builds/ ${CMAKE_COMMAND} -E copy_directory libcurl-vc-x86-release-dll-zlib-dll-ipv6-sspi-winssl ${CMAKE_INSTALL_PREFIX} 
     )
     

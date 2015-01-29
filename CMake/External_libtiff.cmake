@@ -39,7 +39,7 @@ else()
       DEPENDS ${${proj}_DEPENDENCIES}
       PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${TIFF_SB_BUILD_DIR}/nmake.opt ${TIFF_SB_SRC}
       CONFIGURE_COMMAND ""
-      BUILD_COMMAND ${SB_MAKE_CMD} /f ${TIFF_SB_SRC}/Makefile.vc
+      BUILD_COMMAND nmake /f ${TIFF_SB_SRC}/Makefile.vc
       INSTALL_COMMAND ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
       ${CMAKE_BINARY_DIR}/${proj}/_install
     )
@@ -53,8 +53,7 @@ else()
     CMAKE_CACHE_ARGS
       -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
       -DCMAKE_BUILD_TYPE:STRING=Release
-      -DTIFF_INCLUDE_DIR:STRING=${TIFF_SB_SRC}/libtiff
-      -DTIFF_LIB_DIR:STRING=${TIFF_SB_SRC}/libtiff
+      -DTIFF_BUILD_DIR:STRING=${TIFF_SB_SRC}/libtiff
       DEPENDS ${proj}_build
       CMAKE_COMMAND
     )

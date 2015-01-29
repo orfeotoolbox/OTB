@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.8.3)
 
 project(proj_install)
 
-file(GLOB ${PROJECT_NAME}_HEADERS "${PROJ_INCLUDE_DIR}/projects.h" "${PROJ_INCLUDE_DIR}/proj_api.h" "${PROJ_INCLUDE_DIR}/org_proj4_Projections.h" )
-file(GLOB ${PROJECT_NAME}_LIBS "${PROJ_LIB_DIR}/*.lib" )
-file(GLOB ${PROJECT_NAME}_DLLS "${PROJ_LIB_DIR}/*.dll" )
+file(GLOB ${PROJECT_NAME}_HEADERS "${PROJ4_BUILD_DIR}/projects.h" "${PROJ4_BUILD_DIR}/proj_api.h" "${PROJ_INCLUDE_DIR}/org_proj4_Projections.h" )
+file(GLOB ${PROJECT_NAME}_LIBS "${PROJ4_BUILD_DIR}/*.lib" )
+file(GLOB ${PROJECT_NAME}_DLLS "${PROJ4_BUILD_DIR}/*.dll" )
 
 foreach(${PROJECT_NAME}_HEADER ${${PROJECT_NAME}_HEADERS})
 install(FILES ${${PROJECT_NAME}_HEADER}

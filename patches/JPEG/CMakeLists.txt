@@ -4,14 +4,14 @@ project(jpeg_install)
 
 
 file(GLOB ${PROJECT_NAME}_HEADERS 
-           "${JPEG_INCLUDE_DIR}/jconfig.h" 
-           "${JPEG_INCLUDE_DIR}/jerror.h"
-           "${JPEG_INCLUDE_DIR}/jmorecfg.h"
-           "${JPEG_INCLUDE_DIR}/jpegint.h"
-           "${JPEG_INCLUDE_DIR}/jpeglib.h" )
+           "${JPEG_BUILD_DIR}/jconfig.h" 
+           "${JPEG_BUILD_DIR}/jerror.h"
+           "${JPEG_BUILD_DIR}/jmorecfg.h"
+           "${JPEG_BUILD_DIR}/jpegint.h"
+           "${JPEG_BUILD_DIR}/jpeglib.h" )
 
 #libjpeg is static
-file(GLOB ${PROJECT_NAME}_LIBS "${JPEG_LIB_DIR}/*.lib" )
+file(GLOB ${PROJECT_NAME}_LIBS "${JPEG_BUILD_DIR}/*.lib" )
 #file(GLOB ${PROJECT_NAME}_DLLS "${JPEG_INCLUDE_DIR}/jpeg*.dll" )
 
 

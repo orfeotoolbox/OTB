@@ -11,12 +11,12 @@ set(CMAKE_MODULE_PATH
 include(ExternalProject)
 include(CTest)
 
-if(MSVC)
-set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
-set(SB_MAKE_CMD "nmake")
+if(WIN32)
+  if(MSVC)
+    set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
+  endif()      
 else(UNIX)
-set(SB_CMAKE_COMMAND env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib  ${CMAKE_COMMAND})
-set(SB_MAKE_CMD "make")
+  set(SB_CMAKE_COMMAND env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib  ${CMAKE_COMMAND})
 endif()
 # Call external projects
 

@@ -31,7 +31,7 @@ else()
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
       PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory ${JPEG_SB_SRC} ${JPEG_SB_BUILD_DIR}
       CONFIGURE_COMMAND ""
-      BUILD_COMMAND ${SB_MAKE_CMD} /f ${JPEG_SB_BUILD_DIR}/makefile.vc nodebug=1
+      BUILD_COMMAND nmake /f ${JPEG_SB_BUILD_DIR}/makefile.vc nodebug=1
       INSTALL_COMMAND ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
       ${CMAKE_BINARY_DIR}/${proj}/_install
     )
@@ -53,8 +53,7 @@ else()
       CMAKE_CACHE_ARGS
         -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
         -DCMAKE_BUILD_TYPE:STRING=Release
-        -DJPEG_INCLUDE_DIR:STRING=${JPEG_SB_BUILD_DIR}
-        -DJPEG_LIB_DIR:STRING=${JPEG_SB_BUILD_DIR}
+        -DJPEG_BUILD_DIR:STRING=${JPEG_SB_BUILD_DIR}
       DEPENDS ${proj}_build
       CMAKE_COMMAND
     )

@@ -24,7 +24,7 @@ else()
       BINARY_DIR ${PROJ_SB_BUILD_DIR}
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
       CONFIGURE_COMMAND ""
-      BUILD_COMMAND ${SB_MAKE_CMD} /f ${PROJ_SB_SRC}/makefile.vc
+      BUILD_COMMAND nmake /f ${PROJ_SB_SRC}/makefile.vc
       INSTALL_COMMAND ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
       ${CMAKE_BINARY_DIR}/${proj}/_install
     )
@@ -38,8 +38,7 @@ else()
     CMAKE_CACHE_ARGS
       -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
       -DCMAKE_BUILD_TYPE:STRING=Release
-      -DPROJ_INCLUDE_DIR:STRING=${PROJ_SB_SRC}/src
-      -DPROJ_LIB_DIR:STRING=${PROJ_SB_BUILD_DIR}/src
+      -DPROJ4_BUILD_DIR:STRING=${PROJ_SB_SRC}/src
       DEPENDS ${proj}_build
       CMAKE_COMMAND
     )
