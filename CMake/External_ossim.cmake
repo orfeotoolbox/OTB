@@ -72,7 +72,7 @@ else()
     list(APPEND ${proj}_DEPENDENCIES OPENTHREADS)
   endif()
 
-    ExternalProject_Add(ossim_cmakemodules
+  ExternalProject_Add(ossim_cmakemodules
     PREFIX ${proj}/_cmakemodules
     SVN_REPOSITORY "http://svn.osgeo.org/ossim/trunk/ossim_package_support/cmake/CMakeModules"
     SVN_REVISION -r 23087
@@ -80,33 +80,23 @@ else()
     BUILD_COMMAND ""
     INSTALL_COMMAND "")
     
-    set(${proj}_DEPENDENCIES ossim_cmakemodules)
-    
+  list(APPEND ${proj}_DEPENDENCIES ossim_cmakemodules)
+
   set(OSSIM_CXX_FLAGS  -D__STDC_CONSTANT_MACROS)
- list(APPEND ${proj}_DEPENDENCIES ossim_cmakemodules)
   
   if(MSVC)
-    #checkout cmakeModules 
-     set(${proj}_DEPENDENCIES ossim_cmakemodules)
-     list(APPEND ${proj}_DEPENDENCIES OPENTHREADS)
-     list(APPEND ${proj}_DEPENDENCIES GEOTIFF)
-    #cmake flags for exception handling in c++    
     set(OSSIM_CXX_FLAGS /EHsc)
-    #clear all dependent library settings except GEOTIFF as we link with gdal_i. 
-    #This is because of gisinternals built with internal geotiff
     set(OSSIM_SB_TIFF_CONFIG)
     set(OSSIM_SB_GEOS_CONFIG)
     set(OSSIM_SB_JPEG_CONFIG)
     set(OSSIM_SB_OPENTHREADS_CONFIG)
     set(OSSIM_SB_GEOTIFF_CONFIG)
-    #build geotiff and use it
-    #set(OSSIM_SB_GEOTIFF_CONFIG -DGEOTIFF_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/gdal_i.lib)
   endif()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     SVN_REPOSITORY "http://svn.osgeo.org/ossim/trunk/ossim/"
-    SVN_REVISION -r 23087
+    SVN_REVISION -r 23092
     BINARY_DIR ${OSSIM_SB_BUILD_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_CACHE_ARGS
@@ -120,6 +110,7 @@ else()
       ${OSSIM_SB_JPEG_CONFIG}
       ${OSSIM_SB_OPENTHREADS_CONFIG}
       -DBUILD_OSSIM_MPI_SUPPORT:BOOL=OFF
+      -DBUILD_OSSIM_APPS:BOOL=OFF     
     DEPENDS ${${proj}_DEPENDENCIES}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
