@@ -32,6 +32,7 @@ else()
         SOURCE_DIR ${CURL_SB_SRC}
         BINARY_DIR ${CURL_SB_BUILD_DIR}/winbuild
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        DEPENDS ${${proj}_DEPENDENCIES}        
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory ${CURL_SB_SRC} ${CURL_SB_BUILD_DIR}
         CONFIGURE_COMMAND ""
         BUILD_COMMAND nmake /f ${CURL_SB_BUILD_DIR}/winbuild/Makefile.vc mode=dll WITH_ZLIB=dll WITH_DEVEL=${CMAKE_INSTALL_PREFIX}
