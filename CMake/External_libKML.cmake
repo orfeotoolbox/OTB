@@ -49,11 +49,9 @@ else()
   endif()
   
   if(MSVC)
-    set(${proj}_DEPENDENCIES)
-
     set(LIBKML_SB_BOOST_CONFIG)
     set(LIBKML_SB_ZLIB_CONFIG)
-    
+  endif()    
 
   ExternalProject_Add(${proj}
     PREFIX ${proj}
@@ -70,10 +68,8 @@ else()
       ${LIBKML_SB_EXPAT_CONFIG}
       ${LIBKML_SB_BOOST_CONFIG}
       ${LIBKML_SB_ZLIB_CONFIG}
-    
     )
   
   message(STATUS "  Using libKML SuperBuild version")
-  endif()
   
 endif()
