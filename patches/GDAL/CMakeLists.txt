@@ -2,12 +2,13 @@ cmake_minimum_required(VERSION 2.8.3)
 
 project(gdal_install)
 
-file(GLOB GDAL_APPS "apps/*.exe")
+file(GLOB GDAL_APPS "${GDAL_BUILD_DIR}/apps/*.exe")
 foreach(GDAL_APP ${GDAL_APPS})
 install(FILES ${GDAL_APP} DESTINATION bin/gdal/apps  COMPONENT Development)
 endforeach()
         
-file(GLOB GDAL_DATAS "data/*.*")
+file(GLOB GDAL_DATAS "${GDAL_BUILD_DIR}/data/*.*")
+message(STATUS ${GDAL_DATAS})
 foreach(GDAL_DATA ${GDAL_DATAS})
 install(FILES ${GDAL_DATA} DESTINATION bin/gdal-data COMPONENT Development)
 endforeach()
@@ -18,18 +19,18 @@ endforeach()
 	# if exist $(OUTPUT_DIR)\bin\gdal\plugins-external del $(OUTPUT_DIR)\bin\gdal\plugins-external\*.dll
 
 file(GLOB ${PROJECT_NAME}_HEADERS 
-"${GDAL_INCLUDE_DIR}/port/*.h" 
-"${GDAL_INCLUDE_DIR}/gcore/*.h"
-"${GDAL_INCLUDE_DIR}/alg/*.h"
-"${GDAL_INCLUDE_DIR}/ogr/*.h"
-"${GDAL_INCLUDE_DIR}/frmts/mem/memdataset.h"
-"${GDAL_INCLUDE_DIR}/frmts/raw/rawdataset.h"
-"${GDAL_INCLUDE_DIR}/frmts/vrt/*.h"
-"${GDAL_INCLUDE_DIR}/ogr/ogrsf_frmts/*.h")
+"${GDAL_BUILD_DIR}/port/*.h" 
+"${GDAL_BUILD_DIR}/gcore/*.h"
+"${GDAL_BUILD_DIR}/alg/*.h"
+"${GDAL_BUILD_DIR}/ogr/*.h"
+"${GDAL_BUILD_DIR}/frmts/mem/memdataset.h"
+"${GDAL_BUILD_DIR}/frmts/raw/rawdataset.h"
+"${GDAL_BUILD_DIR}/frmts/vrt/*.h"
+"${GDAL_BUILD_DIR}/ogr/ogrsf_frmts/*.h")
 
-file(GLOB ${PROJECT_NAME}_LIBS  "${GDAL_LIB_DIR}/gdal_i.lib" )
+file(GLOB ${PROJECT_NAME}_LIBS  "${GDAL_BUILD_DIR}/gdal_i.lib" )
 
-file(GLOB ${PROJECT_NAME}_DLLS "${GDAL_LIB_DIR}/*.dll" )
+file(GLOB ${PROJECT_NAME}_DLLS "${GDAL_BUILD_DIR}/*.dll" )
 
 foreach(${PROJECT_NAME}_HEADER ${${PROJECT_NAME}_HEADERS})
 install(FILES ${${PROJECT_NAME}_HEADER}
