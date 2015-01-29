@@ -14,54 +14,80 @@ else()
   set(MUPARSER_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(MUPARSER_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
-  ExternalProject_Add(${proj}
-    PREFIX ${proj}
-    URL "http://downloads.sourceforge.net/project/muparser/muparser/Version%202.2.3/muparser_v2_2_3.zip"
-    URL_MD5 9de40ec1dab5bd2787ee344fce5846ad
-    BINARY_DIR ${MUPARSER_SB_BUILD_DIR}
-    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    CMAKE_CACHE_ARGS
-      -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
-      -DCMAKE_BUILD_TYPE:STRING=Release
-    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
-    DEPENDS ${${proj}_DEPENDENCIES}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
-      ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt 
-      ${MUPARSER_SB_SRC}
+  if(MSVC)
+    ExternalProject_Add(${proj}_build
+      PREFIX ${proj}
+      URL "http://downloads.sourceforge.net/project/muparser/muparser/Version%202.2.3/muparser_v2_2_3.zip"
+      URL_MD5 9de40ec1dab5bd2787ee344fce5846ad
+      SOURCE_DIR ${MUPARSER_SB_SRC}
+      BINARY_DIR ${MUPARSER_SB_SRC}/build
+      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      DEPENDS ${${proj}_DEPENDENCIES}
+      CONFIGURE_COMMAND ""
+      BUILD_COMMAND nmake /f makefile.vc DEBUG=0 SHARED=1 SAMPLES=0
+      INSTALL_COMMAND ${CMAKE_COMMAND} -E copy 
+      ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists_install_win.txt ${MUPARSER_SB_SRC}/CMakeLists.txt
     )
-  
-  
-  if(FALSE)
-  #if(WIN32)
-    # TODO : use nmake
-  #else()
-    
+
+    ExternalProject_Add(${proj}
+      PREFIX ${proj}
+      DOWNLOAD_COMMAND ""
+      BINARY_DIR ${MUPARSER_SB_BUILD_DIR}
+      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      DEPENDS ${proj}_build
+      CMAKE_CACHE_ARGS
+        -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
+        -DCMAKE_BUILD_TYPE:STRING=Release
+        -DMUPARSER_BUILD_DIR:STRING=${MUPARSER_SB_SRC}
+      CMAKE_COMMAND
+    )        
+        
+  else(UNIX)
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "http://downloads.sourceforge.net/project/muparser/muparser/Version%202.2.3/muparser_v2_2_3.zip"
       URL_MD5 9de40ec1dab5bd2787ee344fce5846ad
       BINARY_DIR ${MUPARSER_SB_BUILD_DIR}
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-      CONFIGURE_COMMAND
-        LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
-        ${MUPARSER_SB_BUILD_DIR}/configure
-        --prefix=${CMAKE_INSTALL_PREFIX}
-        --enable-shared=yes
-        --enable-samples=no
-        --enable-debug=no
-      BUILD_COMMAND $(MAKE)
-      INSTALL_COMMAND $(MAKE) install
+      CMAKE_CACHE_ARGS
+        -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
+        -DCMAKE_BUILD_TYPE:STRING=Release
+      CMAKE_COMMAND ${SB_CMAKE_COMMAND}
       DEPENDS ${${proj}_DEPENDENCIES}
-      )
+      PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
+      ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt 
+      ${MUPARSER_SB_SRC}
+    )
     
-    ExternalProject_Add_Step(${proj} copy_source
-      COMMAND ${CMAKE_COMMAND} -E copy_directory 
+    if(FALSE)  
+      ExternalProject_Add(${proj}
+        PREFIX ${proj}
+        URL "http://downloads.sourceforge.net/project/muparser/muparser/Version%202.2.3/muparser_v2_2_3.zip"
+        URL_MD5 9de40ec1dab5bd2787ee344fce5846ad
+        BINARY_DIR ${MUPARSER_SB_BUILD_DIR}
+        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        CONFIGURE_COMMAND
+          LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
+          ${MUPARSER_SB_BUILD_DIR}/configure
+          --prefix=${CMAKE_INSTALL_PREFIX}
+          --enable-shared=yes
+          --enable-samples=no
+          --enable-debug=no
+        BUILD_COMMAND $(MAKE)
+        INSTALL_COMMAND $(MAKE) install
+        DEPENDS ${${proj}_DEPENDENCIES}
+      )
+        
+      ExternalProject_Add_Step(${proj} copy_source
+        COMMAND ${CMAKE_COMMAND} -E copy_directory 
         ${MUPARSER_SB_SRC} ${MUPARSER_SB_BUILD_DIR}
-      DEPENDEES patch update
-      DEPENDERS configure
+        DEPENDEES patch update
+        DEPENDERS configure
       )
+        
+    endif()
     
-  endif()
+  endif()  
   
   message(STATUS "  Using muParser SuperBuild version")
 
