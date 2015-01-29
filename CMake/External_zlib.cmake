@@ -55,6 +55,13 @@ else()
         )
         
       endif()
+      
+    if(MSVC)
+      ExternalProject_Add_Step(${proj} msvc_copy_hell
+        COMMAND ${CMAKE_COMMAND} -E copy ${ZLIB_SB_BUILD_DIR}/zlib.lib ${CMAKE_INSTALL_PREFIX}/lib/zdll.lib
+        DEPENDEES install
+      )  
+    endif()
 
      message(STATUS "  Using zlib SuperBuild version")
 endif()
