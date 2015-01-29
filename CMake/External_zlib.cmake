@@ -19,7 +19,7 @@ else()
       # Try official release 1.2.8
       ExternalProject_Add(${proj}
         PREFIX ${proj}
-        URL "http://sourceforge.net/projects/libpng/files/zlib/1.2.8/zlib-1.2.8.tar.gz"
+        URL "http://sourceforge.net/projects/libpng/files/zlib/1.2.8/zlib-1.2.8.tar.gz/download"
         URL_MD5 44d667c142d7cda120332623eab69f40
         BINARY_DIR ${ZLIB_SB_BUILD_DIR}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
