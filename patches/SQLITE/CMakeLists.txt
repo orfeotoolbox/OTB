@@ -5,7 +5,8 @@ project(sqlite)
 set(BUILD_SHARED_LIBS ON)
 
 include_directories("${CMAKE_SOURCE_DIR}")
-
+add_definitions(-DSQLITE_ENABLE_COLUMN_METADATA=1)
+add_definitions(-DSQLITE_ENABLE_RTREE=1)
 add_library(sqlite3 sqlite3_win.c)
 
 install(TARGETS sqlite3
