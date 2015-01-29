@@ -41,14 +41,15 @@ else()
     list(APPEND ${proj}_DEPENDENCIES PNG)
   endif()
 
-  # if(USE_SYSTEM_JPEG)
-    # set(GDAL_SB_JPEG_CONFIG)
-  # else()
-    # set(GDAL_SB_JPEG_CONFIG 
-      # --with-jpeg=${CMAKE_INSTALL_PREFIX}
-      # )
-    # list(APPEND ${proj}_DEPENDENCIES JPEG)
-  # endif()  
+  #gdal on msvc link with internal jpeg .
+  if(USE_SYSTEM_JPEG)
+    set(GDAL_SB_JPEG_CONFIG)
+  else()
+    set(GDAL_SB_JPEG_CONFIG 
+      --with-jpeg=${CMAKE_INSTALL_PREFIX}
+      )
+    list(APPEND ${proj}_DEPENDENCIES JPEG)
+  endif()  
   
   if(USE_SYSTEM_OPENJPEG)
     set(GDAL_SB_OPENJPEG_CONFIG)
@@ -156,12 +157,13 @@ else()
        PREFIX ${proj}
        URL "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"
        URL_MD5 9fdf0f2371a3e9863d83e69951c71ec4
+       SOURCE_DIR ${GDAL_SB_SRC}
        BINARY_DIR ${GDAL_SB_BUILD_DIR}
        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
        DEPENDS ${${proj}_DEPENDENCIES}
        PATCH_COMMAND  ${CMAKE_COMMAND} -E copy_directory  ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
        CONFIGURE_COMMAND ""
-       BUILD_COMMAND ${SB_MAKE_CMD} /f ${GDAL_SB_BUILD_DIR}/Makefile.vc MSVC_VER=${SB_MSVC_VER} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt 
+       BUILD_COMMAND nmake /f ${GDAL_SB_BUILD_DIR}/Makefile.vc MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt 
        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
       ${CMAKE_BINARY_DIR}/${proj}/_install
     )
@@ -175,8 +177,7 @@ else()
       CMAKE_CACHE_ARGS
         -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
         -DCMAKE_BUILD_TYPE:STRING=Release
-        -DGDAL_INCLUDE_DIR:STRING=${GDAL_SB_BUILD_DIR}
-        -DGDAL_LIB_DIR:STRING=${GDAL_SB_BUILD_DIR}
+        -DGDAL_BUILD_DIR:STRING=${GDAL_SB_BUILD_DIR}
       DEPENDS ${proj}_build
       CMAKE_COMMAND
     )    
