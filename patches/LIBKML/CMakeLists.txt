@@ -10,6 +10,10 @@ set(libkml_VERSION_PATCH "0")
 # enough to distinguish available features of the library.
 set(libkml_VERSION_STRING "${libkml_VERSION_MAJOR}.${libkml_VERSION_MINOR}.${libkml_VERSION_PATCH}")
 
+set(BUILD_SHARED_LIBS ON)
+if(MSVC)
+set(BUILD_SHARED_LIBS OFF) #force off
+endif()
 
 # Allow sources in subdirectories to see the include files.
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -25,10 +29,14 @@ endif()
 include_directories(${Boost_INCLUDE_DIR})
 
 find_package(EXPAT)
+include_directories(${EXPAT_INCLUDE_DIR})
 
 set(LIBKML_COMPILE_ZLIB OFF)
 if(WIN32 AND (NOT BORLAND))
   set(LIBKML_COMPILE_ZLIB ON)
+  if(MSVC)
+    set(LIBKML_COMPILE_ZLIB OFF)
+  endif()
 endif()
 if(APPLE)
   set(LIBKML_COMPILE_ZLIB ON)
@@ -203,16 +211,19 @@ set(libkmlxsd_la_SOURCES
 # ----------  Minizip  ------------------------------------------------
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3/contrib")
-set(libzlib_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3/contrib/minizip")
-include_directories(${libzlib_la_SOURCES_DIR})
-set(libzlib_la_SOURCES
-	${libzlib_la_SOURCES_DIR}/unzip.c
-	${libzlib_la_SOURCES_DIR}/ioapi.c
-	${libzlib_la_SOURCES_DIR}/zip.c
-  ${libzlib_la_SOURCES_DIR}/iomem_simple.c
+set(libminizip_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3/contrib/minizip")
+include_directories(${libminizip_la_SOURCES_DIR})
+set(libminizip_la_SOURCES
+	${libminizip_la_SOURCES_DIR}/unzip.c
+	${libminizip_la_SOURCES_DIR}/ioapi.c
+	${libminizip_la_SOURCES_DIR}/zip.c
+  ${libminizip_la_SOURCES_DIR}/iomem_simple.c
 )
 
 
+if(MSVC)
+  list(APPEND libminizip_la_SOURCES ${libminizip_la_SOURCES_DIR}/iowin32.c)
+endif()
 
 ## Only for Windows Visual Studio and Mac OSX
 #set(libzlib_src_la_SOURCES "")
@@ -286,7 +297,7 @@ set(libkml_SOURCES
         ${libkmlengine_la_SOURCES}
         ${libkmlregionator_la_SOURCES}
         ${libkmlxsd_la_SOURCES}
-        ${libzlib_la_SOURCES}
+        ${libminizip_la_SOURCES}
         ${liburiparser_la_SOURCES}
 #        ${libzlib_src_la_SOURCES}
         )
@@ -299,7 +310,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 else()
   if(WIN32)
     foreach(f ${libkml_SOURCES} )
-      set_source_files_properties( ${f} PROPERTIES COMPILE_FLAGS /W0 )
+      set_source_files_properties( ${f} PROPERTIES COMPILE_FLAGS /W3 )
     endforeach()
   endif()
 endif()
@@ -316,13 +327,16 @@ else()
   find_package(ZLIB)
 endif()
 
-
+include_directories(${ZLIB_INCLUDE_DIR})
 # Minizip
-add_library(minizip ${libzlib_la_SOURCES} )
+
+add_library(minizip ${libminizip_la_SOURCES} )
 target_link_libraries(minizip )
 
 if(NOT LIBKML_COMPILE_ZLIB)
   target_link_libraries(minizip ${ZLIB_LIBRARY})
+else()
+message(STATUS " Building zlib from thirdparty")
 endif()
 
 install(TARGETS minizip
@@ -333,7 +347,7 @@ install(TARGETS minizip
 
 # Base
 add_library(kmlbase ${libkmlbase_la_SOURCES} ${liburiparser_la_SOURCES})
-target_link_libraries(kmlbase ${EXPAT_LIBRARIES} minizip)
+target_link_libraries(kmlbase ${EXPAT_LIBRARY} minizip)
 
 install(TARGETS kmlbase
     RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
