@@ -1,5 +1,3 @@
-
-
 # Comment out the following to disable JPEG support.
 #JPEG_SUPPORTED = 1
 
