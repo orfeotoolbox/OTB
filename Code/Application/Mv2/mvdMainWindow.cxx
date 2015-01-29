@@ -1347,7 +1347,7 @@ MainWindow
 
   if( !stackedLayerModel )
     return;
-  
+
   const AbstractLayerModel * layerModel = stackedLayerModel->GetCurrent();
 
   if( !layerModel )

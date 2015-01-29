@@ -269,7 +269,7 @@ LayerStackItemModel
 
             // qDebug() << "filename:" << vectorImageModel->GetFilename();
 
-            return vectorImageModel->GetFilename();
+            return QFileInfo( vectorImageModel->GetFilename() ).fileName();
             }
           else
             {

@@ -94,6 +94,16 @@ LayerStackController
 {
   assert( model==qobject_cast< StackedLayerModel * >( model ) );
 
+
+  QObject::connect(
+    model,
+    SIGNAL( SelectionChanged( unsigned int ) ),
+    // to:
+    this,
+    SLOT( OnStackedLayerSelectionChanged( unsigned int ) )
+  );
+
+
   LayerStackWidget * widget = GetWidget< LayerStackWidget >();
   assert( widget!=NULL );
 
@@ -102,14 +112,6 @@ LayerStackController
   widget->GetItemModel()->SetStack(
     qobject_cast< StackedLayerModel * >( model )
   );
-
-  // QObject::connect(
-  //   model,
-  //   SIGNAL( ContentChanged() ),
-  //   // to:
-  //   widget,
-  //   SLOT( repaint() )
-  // );
 }
 
 /*******************************************************************************/
@@ -119,18 +121,21 @@ LayerStackController
 {
   // assert( model==qobject_cast< StackedLayerModel * >( model ) );
 
+
+
+  QObject::disconnect(
+    model,
+    SIGNAL( SelectionChanged( unsigned int ) ),
+    // to:
+    this,
+    SLOT( OnStackedLayerSelectionChanged( unsigned int ) )
+  );  
+
+
   LayerStackWidget * widget = GetWidget< LayerStackWidget >();
   assert( widget!=NULL );
 
   assert( widget->GetItemModel()!=NULL );
-
-  // QObject::disconnect(
-  //   model,
-  //   SIGNAL( ContentChanged() ),
-  //   // to:
-  //   widget,
-  //   SLOT( Repaint() )
-  // );
 
   widget->GetItemModel()->SetStack( NULL );
 }
@@ -145,18 +150,18 @@ LayerStackController
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-// void
-// LayerStackController
-// ::OnContentChanged()
-// {
-//   // qDebug() << this << "::OnContentChanged()";
+void
+LayerStackController
+::OnStackedLayerSelectionChanged( unsigned int index )
+{
+  qDebug() << this << "::OnStackedLayerSelectionChanged(" << index << ")";
 
-//   LayerStackWidget * widget = GetWidget< LayerStackWidget >();
-//   assert( widget!=NULL );
+  LayerStackWidget * widget = GetWidget< LayerStackWidget >();
+  assert( widget!=NULL );
 
-//   assert( widget->GetItemModel()!=NULL );
+  assert( widget->GetItemModel()!=NULL );
 
-//   widget->repaint();
-// }
+  widget->SetSelection( index );
+}
 
 } // end namespace 'mvd'

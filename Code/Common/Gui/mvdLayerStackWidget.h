@@ -104,6 +104,10 @@ public:
    */
   LayerStackItemModel * GetItemModel();
 
+  /**
+   */
+  void SetSelection( int );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

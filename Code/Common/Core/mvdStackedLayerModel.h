@@ -165,6 +165,9 @@ public slots:
 //
 // Signals.
 signals:
+  void SelectionAboutToBeChanged( unsigned int );
+  void SelectionChanged( unsigned int );
+
   void AboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & );
   void SelectedLayerModelChanged( const StackedLayerModel::KeyType & );
 
@@ -556,10 +559,12 @@ StackedLayerModel
   //   << "->"
   //   << QString( "'%1'" ).arg( key.c_str() );
 
+  emit SelectionAboutToBeChanged( index );
   emit AboutToChangeSelectedLayerModel( key );
 
   m_Current = index;
 
+  emit SelectionChanged( index );
   emit SelectedLayerModelChanged( key );
 }
 

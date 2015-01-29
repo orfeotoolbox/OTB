@@ -128,6 +128,19 @@ LayerStackWidget
 // }
 
 /*******************************************************************************/
+void
+LayerStackWidget
+::SetSelection( int row )
+{
+  assert( m_UI->treeView->selectionModel()!=NULL );
+
+  m_UI->treeView->selectionModel()->select(
+    m_UI->treeView->model()->index( row, 1 ),
+    QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows
+  );
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 
