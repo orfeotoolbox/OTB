@@ -12,7 +12,10 @@ set(OTB_USE_FILE ${OTB_BINARY_DIR}/UseOTB.cmake)
 set(OTB_LIBRARY_DEPENDS_FILE ${OTB_BINARY_DIR}/OTBLibraryDepends.cmake)
 
 # The build settings file.
-set(OTB_BUILD_SETTINGS_FILE ${OTB_BINARY_DIR}/OTBBuildSettings.cmake)
+#Comment Import/Export of build settings as it as been dropped by cmake 
+# https://github.com/Kitware/CMake/commit/fd47a2ae966c3ac1fac1ee699728c55862fb23a2
+#It is still used?
+#set(OTB_BUILD_SETTINGS_FILE ${OTB_BINARY_DIR}/OTBBuildSettings.cmake)
 
 # Library directory.
 set(OTB_LIBRARY_DIRS_CONFIG ${OTB_LIBRARY_PATH})
@@ -44,7 +47,7 @@ set(OTB_LIBRARY_DEPENDS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/
 set(OTB_USE_FILE \${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/UseOTB.cmake)
 
 # The build settings file.
-set(OTB_BUILD_SETTINGS_FILE \${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBBuildSettings.cmake)
+#set(OTB_BUILD_SETTINGS_FILE \${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBBuildSettings.cmake)
 
 
 # Include directories.

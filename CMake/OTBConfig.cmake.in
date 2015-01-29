@@ -39,7 +39,10 @@ set(OTB_VERSION_STRING "@OTB_VERSION_STRING@")
 set(OTB_USE_FILE "@OTB_USE_FILE@")
 
 # The build settings file.
-set(OTB_BUILD_SETTINGS_FILE "@OTB_BUILD_SETTINGS_FILE@")
+#Comment Import/Export of build settings as it as been dropped by cmake 
+# https://github.com/Kitware/CMake/commit/fd47a2ae966c3ac1fac1ee699728c55862fb23a2
+#It is still used?
+#set(OTB_BUILD_SETTINGS_FILE "@OTB_BUILD_SETTINGS_FILE@")
 
 # Whether OTB was built with shared libraries.
 set(OTB_BUILD_SHARED_LIBS "@OTB_BUILD_SHARED_LIBS@")

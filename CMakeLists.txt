@@ -359,9 +359,14 @@ configure_file(${OTB_SOURCE_DIR}/CMake/UseOTB.cmake.in
 configure_file(${OTB_SOURCE_DIR}/CMake/OTBWrapperMacros.cmake
                ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/OTBWrapperMacros.cmake COPYONLY IMMEDIATE)
 
+# The command CMAKE_EXPORT_BUILD_SETTINGS(...) was used by
+# OTB to generate this file.  As of CMake 2.8 the
+# functionality of this command has been dropped as it was deemed
+# harmful (confusing users by changing their compiler).
+
 # Save the compiler settings so another project can import them.
-include(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
-CMAKE_EXPORT_BUILD_SETTINGS(${OTB_BINARY_DIR}/OTBBuildSettings.cmake)
+#include(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
+#CMAKE_EXPORT_BUILD_SETTINGS(${OTB_BINARY_DIR}/OTBBuildSettings.cmake)
 
 # Save library dependencies.
 export_library_dependencies(${OTB_BINARY_DIR}/OTBLibraryDepends.cmake)
@@ -371,7 +376,6 @@ include(${OTB_SOURCE_DIR}/CMake/otbGenerateOTBConfig.cmake)
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   install(FILES
-    ${OTB_BINARY_DIR}/OTBBuildSettings.cmake
     ${OTB_BINARY_DIR}/OTBLibraryDepends.cmake
     ${OTB_BINARY_DIR}/UseOTB.cmake
     ${OTB_SOURCE_DIR}/CMake/OTBWrapperMacros.cmake
