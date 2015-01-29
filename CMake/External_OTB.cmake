@@ -7,7 +7,6 @@ set(OTB_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
 set(${proj}_DEPENDENCIES)
 
 set(BUILD_LIBKML ON)
-set(BUILD_JPEG2000 ON)
 set(BUILD_EXAMPLES ON)
 
 if(USE_SYSTEM_GDAL)
@@ -128,8 +127,8 @@ if(MSVC)
     
     #force libkml and opencv OFF)
     set(BUILD_LIBKML OFF)
-    set(BUILD_JPEG2000 OFF)
     set(BUILD_EXAMPLES OFF)
+    #FIXME: remove below and build libkml
     list(REMOVE_ITEM ${proj}_DEPENDENCIES LIBKML)
 endif()
 ExternalProject_Add(${proj}
@@ -158,7 +157,7 @@ ExternalProject_Add(${proj}
       -DOTB_USE_EXTERNAL_EXPAT:BOOL=ON
       -DOTB_USE_EXTERNAL_LIBKML:BOOL=${BUILD_LIBKML}
       -DOTB_USE_OPENCV:BOOL=ON
-      -DOTB_USE_JPEG2000:BOOL=${BUILD_JPEG2000}
+      -DOTB_USE_JPEG2000:BOOL=OFF
       ${OTB_SB_ITK_CONFIG}
       ${OTB_SB_OSSIM_CONFIG}
       ${OTB_SB_GDAL_CONFIG}
