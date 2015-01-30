@@ -80,8 +80,8 @@ endif()
 if(USE_SYSTEM_LIBKML)
   set(OTB_SB_LIBKML_CONFIG)
 else()
+  # TODO : split LIBKML build into 7 libraries
   set(OTB_SB_LIBKML_CONFIG
-    # TODO : split LIBKML build into 7 libraries
     -DLIBKML_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
     -DLIBKML_BASE_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/libkmlbase.so
     -DLIBKML_CONVENIENCE_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/libkmlconvenience.so
@@ -91,6 +91,20 @@ else()
     -DLIBKML_XSD_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/libkmlxsd.so
     -DLIBKML_MINIZIP_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/libminizip.so
     )
+    
+  if(MSVC)
+    # expat is a dependency for kmlbase
+    set(OTB_SB_LIBKML_CONFIG
+    -DLIBKML_INCLUDE_DIR:FILEPATH=${CMAKE_INSTALL_PREFIX}/include
+    -DLIBKML_BASE_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/kmlbase.lib;${CMAKE_INSTALL_PREFIX}/lib/expat.lib
+    -DLIBKML_CONVENIENCE_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/kmlconvenience.lib
+    -DLIBKML_DOM_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/kmldom.lib
+    -DLIBKML_ENGINE_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/kmlengine.lib
+    -DLIBKML_REGIONATOR_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/kmlregionator.lib
+    -DLIBKML_XSD_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/kmlxsd.lib
+    -DLIBKML_MINIZIP_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/minizip.lib
+    )
+  endif()
   list(APPEND ${proj}_DEPENDENCIES LIBKML)
 endif()
 
@@ -120,7 +134,6 @@ if(MSVC)
   set(OTB_SB_MUPARSER_CONFIG)
   set(OTB_SB_MUPARSERX_CONFIG)
   set(OTB_SB_TINYXML_CONFIG)
-  set(OTB_SB_LIBKML_CONFIG)
   set(OTB_SB_OPENCV_CONFIG)
   #doesn't matter to use cmake variable with JPEG prefix. all are empty for windows
   #GDAL is built with internal JPEG due to static link conflict. 
