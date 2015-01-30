@@ -17,8 +17,8 @@ int svmGenericKernelBasicOperationsTest( int itkNotUsed(argc), char *argv[] )
 
   px = new struct svm_node[5];
   py = new struct svm_node[5];
-  resSub = new struct svm_node[5];
-  resAdd = new struct svm_node[5];
+  resSub = NULL;
+  resAdd = NULL;
 
   px[0].index = 1;
   px[1].index = 1;
