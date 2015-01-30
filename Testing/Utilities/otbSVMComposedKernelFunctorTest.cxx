@@ -25,9 +25,6 @@
 #include "otbSVMKernels.h"
 #include "svm.h"
 
-#ifndef Malloc
-#define Malloc(type,n) new type[n]
-#endif
 
 int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
 {
@@ -48,19 +45,19 @@ int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
   composedKernelFunctor.SetName("compositionFilter");
 
   struct svm_model *model;
-  model = (struct svm_model *)malloc(sizeof(struct svm_model));
+  model = new svm_model;
   model->param.svm_type = 0;
   model->param.kernel_type = 6;
   model->nr_class = 2;
   model->l = 5;
-  model->sv_coef = Malloc(double *,model->nr_class-1);
+  model->sv_coef = new double*[model->nr_class-1];
 
   for(int i=0; i<model->nr_class-1; i++)
-    model->sv_coef[i] = Malloc(double,model->l);
-  model->SV = Malloc(svm_node*,model->l);
+    model->sv_coef[i] = new double[model->l];
+  model->SV = new svm_node*[model->l];
   for(int n = 0; n<model->l; ++n)
     {
-      model->SV[n]=Malloc(svm_node,1);
+      model->SV[n]= new svm_mode;
       model->SV[n]->index = -1;
       model->SV[n]->value = 0.;
     }
@@ -71,9 +68,9 @@ int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
   model->sv_coef[0][3] = -1;
   model->sv_coef[0][4] = -0.54994;
 
-  model->rho = Malloc(double,1);
-  model->probA = Malloc(double,1);
-  model->probB = Malloc(double,1);
+  model->rho = new double[1];
+  model->probA = new double[1];
+  model->probB = new double[1];
   model->rho[0] = 22.3117;
   model->probA[0] = -0.541009;
   model->probB[0] = -0.687381;
@@ -83,23 +80,23 @@ int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
   model->param.degree = 2;
 
 
-  model->label = Malloc(int,2);
+  model->label = new int[2];
   model->label[0] = 1;
   model->label[1] = -1;
-  model->nSV = Malloc(int,2);
+  model->nSV = new int[2];
   model->nSV[0] = 3;
   model->nSV[1] = 2;
 
   model->param.kernel_composed = &composedKernelFunctor;
   svmModel->SetModel(model);
 
-  struct svm_node *x =  Malloc(struct svm_node,3);
-  struct svm_node *y =  Malloc(struct svm_node,3);
+  struct svm_node *x = new svm_node[3];
+  struct svm_node *y = new svm_node[3];
 
-  struct svm_node **SVx = Malloc(svm_node*,1);
-  struct svm_node **SVy = Malloc(svm_node*,1);
-  SVx[0] = Malloc(svm_node,1);
-  SVy[0] = Malloc(svm_node,1);
+  struct svm_node **SVx = new svm_node*[1];
+  struct svm_node **SVy = new svm_node*[1];
+  SVx[0] = new svm_node[1];
+  SVy[0] = new svm_node[1];
   SVx[0] = &x[0];
   SVy[0] = &y[0];
 
@@ -158,6 +155,27 @@ int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
 
   svmModelBis->SaveModel(argv[3]);
 
+  // Free all memory
+
+  for(int i=0; i<model->nr_class-1; i++)
+    delete [] model->sv_coef[i];
+  delete model->sv_coef;
+
+  for(int n = 0; n<model->l; ++n)
+    delete model->SV[n];
+
+  delete [] model->SV;
+  delete model;
+  
+  delete [] model->rho;
+  delete [] model->probA;
+  delete [] model->probB;
+  delete [] model->label;
+  delete [] model->nSV;
+  delete [] x;
+  delete [] y;
+  delete [] SVx[0];
+  delete [] SVy[0];
 
   return EXIT_SUCCESS;
 }
