@@ -29,8 +29,8 @@ endif()
 include_directories(${Boost_INCLUDE_DIR})
 
 find_package(EXPAT)
-include_directories(${EXPAT_INCLUDE_DIR})
-
+include_directories(${EXPAT_INCLUDE_DIR}) 
+  
 set(LIBKML_COMPILE_ZLIB OFF)
 if(WIN32 AND (NOT BORLAND))
   set(LIBKML_COMPILE_ZLIB ON)
@@ -315,9 +315,9 @@ else()
   endif()
 endif()
 if(WIN32)
-        if(NOT CYGWIN)
-                add_definitions(-DWIN32 -DUNICODE -D_UNICODE)
-        endif()
+    if(NOT CYGWIN)
+       add_definitions(-DWIN32 -DUNICODE -D_UNICODE)
+    endif()
 endif()
 
 # -----  DECLARE LIBRARIES  --------------------------------
