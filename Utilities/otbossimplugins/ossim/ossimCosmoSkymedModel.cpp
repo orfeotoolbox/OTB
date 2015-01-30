@@ -141,7 +141,11 @@ bool ossimCosmoSkymedModel::InitPlatformPosition(const ossimKeywordlist &kwl, co
   const char* referenceUTC_str = kwl.find(prefix,"referenceUTC");
   std::string referenceUTC(referenceUTC_str) ;
   CivilDateTime ref_civil_date;
-  if (! UtcDateTimeStringToCivilDate(referenceUTC, ref_civil_date)) return false;
+  if (! UtcDateTimeStringToCivilDate(referenceUTC, ref_civil_date)) 
+    {
+    delete [] ephemeris;
+    return false;
+    }
 
   /*
    * Retrieval of ephemerisis
@@ -251,7 +255,11 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
   if(_platformPosition != NULL)
   {
     Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
-    if (ephemeris == NULL) return false ;
+    if (ephemeris == NULL) 
+      {
+      delete date;
+      return false ;
+      }
 
     _refPoint->set_ephemeris(ephemeris);
 
@@ -259,6 +267,7 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
   }
   else
   {
+    delete date;
     return false;
   }
 
@@ -312,6 +321,8 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
 
   // Default optimization
   optimizeModel(groundGcpCoordinates, imageGcpCoordinates) ;
+
+  delete date;
 
   return true;
 }
