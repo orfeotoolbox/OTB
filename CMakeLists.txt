@@ -59,4 +59,5 @@ option(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)
 
 include(External_Ice)
 
+include(External_Monteverdi2)
 
