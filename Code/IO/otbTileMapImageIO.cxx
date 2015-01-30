@@ -371,12 +371,10 @@ void TileMapImageIO::ReadTile(const std::string& filename, void * buffer)
     }
   else
     {
-    if (bufferCacheFault == NULL)
-      {
-      bufferCacheFault = new unsigned char[m_TileSize * m_TileSize * 3];
-      FillCacheFaults(bufferCacheFault);
-      }
+    bufferCacheFault = new unsigned char[m_TileSize * m_TileSize * 3];
+    FillCacheFaults(bufferCacheFault);
     memcpy(buffer, bufferCacheFault, m_TileSize * m_TileSize * 3);
+    delete [] bufferCacheFault;
     }
 }
 
