@@ -118,7 +118,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
       }
     }
 
-  delete loadBuffer;
+  delete [] loadBuffer;
   delete pxlValue;
 
   //*******************
