@@ -81,7 +81,7 @@ int otbConfusionMatrixToMassOfBeliefTest(int itkNotUsed(argc), char* argv[])
 
   // Converting the Confusion Matrix into a std::map<ClassLabelType, MassType> of Masses of Belief for each label
   ConfusionMatrixToMassOfBeliefType::Pointer confMatToMass = ConfusionMatrixToMassOfBeliefType::New();
-  MassOfBeliefDefinitionMethod massOfBeliefDefMethod;
+  MassOfBeliefDefinitionMethod massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
 
   std::string massOfBeliefDefMethodStr = argv[1];
   if (massOfBeliefDefMethodStr.compare("PRECISION") == 0)
