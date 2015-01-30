@@ -229,6 +229,30 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[17]);
 
+  // Free all memory
+
+  
+  for (int i = 0; i < model->nr_class - 1; ++i)
+    {
+    delete [] model->sv_coef[i];
+    }
+  delete [] model->sv_coef;
+  delete [] model->label;
+  
+  for (int n = 0; n < model->l; ++n)
+    {
+    delete [] model->SV[n];
+    }
+
+  delete [] model->SV;
+  delete model->rho;
+  delete model->probA;
+  delete model->probB;
+  delete [] model->label;
+  delete [] model->nSV;
+  delete model;
+  delete [] p;
+
   return EXIT_SUCCESS;
 }
 
