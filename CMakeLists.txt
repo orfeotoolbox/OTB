@@ -75,3 +75,4 @@ if(ENABLE_QT4)
   include(External_Monteverdi2)
 endif()
 
+#include(External_Monteverdi)
