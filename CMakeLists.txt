@@ -11,6 +11,11 @@ set(CMAKE_MODULE_PATH
 include(ExternalProject)
 include(CTest)
 
+# General options
+option(ENABLE_QT4 " Use QT4 in the SuperBuild" ON)
+option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
+
+
 if(WIN32)
   if(MSVC)
     set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
@@ -44,7 +49,10 @@ include(External_muParser)
 include(External_muParserX)
 include(External_TinyXML)
 include(External_OpenCV)
-include(External_qt4)
+
+if(ENABLE_QT4)
+  include(External_qt4)
+endif()
 
 # TODO
 
@@ -53,11 +61,17 @@ include(External_qt4)
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../OTB-Data)
 
+if(ENABLE_OTB_LARGE_INPUTS)
+  find_path(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
+endif()
+
 include(External_OTB)
 
 option(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)" OFF)
 
 include(External_Ice)
 
-include(External_Monteverdi2)
+if(ENABLE_QT4)
+  include(External_Monteverdi2)
+endif()
 

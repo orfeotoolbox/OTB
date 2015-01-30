@@ -8,11 +8,22 @@ set(${proj}_DEPENDENCIES)
 
 set(BUILD_EXAMPLES ON)
 
-if(USE_SYSTEM_QT4)
-   set(OTB_SB_WRAP_QT_CONFIG)
-   set(OTB_SB_WRAP_QT_CONFIG -DOTB_WRAP_QT:BOOL=ON)
+if(ENABLE_OTB_LARGE_INPUTS)
+  set(OTB_SB_LARGEINPUT_CONFIG 
+    -DOTB_DATA_USE_LARGEINPUT:BOOL=ON
+    -DOTB_DATA_LARGEINPUT_ROOT:PATH=${OTB_DATA_LARGEINPUT_ROOT}
+    )
 else()
-   if(MSVC)
+  set(OTB_SB_LARGEINPUT_CONFIG 
+    -DOTB_DATA_USE_LARGEINPUT:BOOL=OFF
+    )
+endif()
+
+if(ENABLE_QT4)
+  if(USE_SYSTEM_QT4)
+    set(OTB_SB_WRAP_QT_CONFIG -DOTB_WRAP_QT:BOOL=ON)
+  else()
+    if(MSVC)
       set(OTB_SB_WRAP_QT_CONFIG -DOTB_WRAP_QT:BOOL=ON)
       list(APPEND ${proj}_DEPENDENCIES QT4)
     else(UNIX)
@@ -20,6 +31,9 @@ else()
        message(STATUS "  Qt4 is not built by SuperBuild. You need to install it via package manager.")
       set(OTB_SB_WRAP_QT_CONFIG -DOTB_WRAP_QT:BOOL=OFF)
     endif()
+  endif()
+else()
+  set(OTB_SB_WRAP_QT_CONFIG -DOTB_WRAP_QT:BOOL=OFF)
 endif()
 
 if(USE_SYSTEM_GDAL)
@@ -192,6 +206,7 @@ ExternalProject_Add(${proj}
       ${OTB_SB_LIBKML_CONFIG}
       ${OTB_SB_OPENCV_CONFIG}
       ${OTB_SB_CURL_CONFIG}
+      ${OTB_SB_LARGEINPUT_CONFIG}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
