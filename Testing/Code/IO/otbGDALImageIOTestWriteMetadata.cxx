@@ -503,7 +503,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
    
     std::string sstrIndexGCP = strIndexGCP.str();
     gdalGcps[0].pszId = new char[sstrIndexGCP.length()+1];
-    std::strcpy(gdalGcps[0].pszId,sstrIndexGCP.c_str());
+    strcpy(gdalGcps[0].pszId,sstrIndexGCP.c_str());
     gdalGcps[0].pszInfo = const_cast<char *>("GCP test");
     gdalGcps[0].dfGCPPixel = 0.5;
     gdalGcps[0].dfGCPLine = 0.5;
