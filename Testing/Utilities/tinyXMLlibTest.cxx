@@ -592,9 +592,18 @@ int tinyXMLlibTest(int itkNotUsed(argc), char *argv[] )
 						break;
 					}
 				}
-				fclose( saved );
-				fclose( verify );
 			}
+
+                        if(saved)
+                        {
+                               fclose( saved );
+                        }
+                        
+                        if(verified)
+                        {
+                               fclose( verify );
+                        }
+                        
 			XmlTest(file, "UTF-8: Verified multi-language round trip.", 1, okay );
 
 			// On most Western machines, this is an element that contains
