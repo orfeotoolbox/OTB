@@ -316,7 +316,7 @@ private:
           //Searching the "nearest" region
           for(std::set<int>::iterator itMinLabel=minLabel.begin(); itMinLabel!=minLabel.end(); ++itMinLabel)
             {
-            LabelImagePixelType curLabel = *itMinLabel, adjLabel;
+            LabelImagePixelType curLabel = *itMinLabel, adjLabel(0);
             double err = itk::NumericTraits<double>::max();
             if(edgeLabel.count(curLabel)==0)
               {
