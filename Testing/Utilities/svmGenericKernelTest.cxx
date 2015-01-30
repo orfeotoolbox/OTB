@@ -75,7 +75,10 @@ int svmGenericKernelTest( int itkNotUsed(argc), char *argv[] )
                 itkGenericExceptionMacro( << "Problem while saving SVM model "
 			 << std::string(outputFilename) );
         }
-
+        if(model != NULL)
+          {
+          delete model;
+          }
     }
   catch( itk::ExceptionObject & err )
     {
