@@ -17,12 +17,29 @@ else()
   if(NOT DEFINED git_protocol)
     set(git_protocol "git")
   endif()
+  
+  #activate only required components for Qt4
+  set(QT4_SB_CONFIG -no-phonon-backend -no-scripttools -no-multimedia -no-webkit -qt-sql-sqlite -plugin-sql-sqlite -no-nis -no-qt3support)
 
-  if(MSVC)
+  if(NOT USE_SYSTEM_ZLIB) 
+    list(APPEND ${proj}_DEPENDENCIES ZLIB)
+  endif()
 
-      message(STATUS "  Qt4 SuperBuild is not available yet...")
-else(UNIX)
-      
+  if(NOT USE_SYSTEM_TIFF) 
+    list(APPEND ${proj}_DEPENDENCIES TIFF)
+  endif()
+
+  if(NOT USE_SYSTEM_PNG) 
+    list(APPEND ${proj}_DEPENDENCIES PNG)
+  endif()
+  
+  if(NOT USE_SYSTEM_SQLITE) 
+    list(APPEND ${proj}_DEPENDENCIES SQLITE)
+  endif()
+ 
+ #use system libs always for Qt4 as we build them from source or have already in system
+  set(QT4_SB_CONFIG  ${QT4_SB_CONFIG} -system-zlib -system-libpng -system-libtiff -system-libjpeg -system-sqlite)
+   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "http://download.qt-project.org/official_releases/qt/4.8/4.8.6/qt-everywhere-opensource-src-4.8.6.tar.gz"
@@ -34,20 +51,24 @@ else(UNIX)
     CONFIGURE_COMMAND
       ${QT4_SB_BUILD_DIR}/configure
         -prefix ${CMAKE_INSTALL_PREFIX}
-        -opensource
+        -opensource 
         -confirm-license
+        -release
+        -shared
+        -nomake demos 
+        -nomake examples
+        -nomake tools
+        ${QT4_SB_CONFIG}
     DEPENDS ${${proj}_DEPENDENCIES}
     )
-  
+
   ExternalProject_Add_Step(${proj} copy_source
       COMMAND ${CMAKE_COMMAND} -E copy_directory 
-        ${QT4_SB_SRC} ${QT4_SB_BUILD_DIR}
+      ${QT4_SB_SRC} ${QT4_SB_BUILD_DIR}
       DEPENDEES patch update
       DEPENDERS configure
-      )
-  
-  
+    )
+
   message(STATUS "  Using Qt4 SuperBuild version")
-endif()
 
 endif()
