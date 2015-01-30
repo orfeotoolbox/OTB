@@ -385,6 +385,7 @@ void ONERAImageIO::InternalReadImageInformation()
   otbMsgDebugMacro(<< "         Host byte order    : " << this->GetByteOrderAsString(m_ByteOrder));
   otbMsgDebugMacro(<< "         File byte order    : " << this->GetByteOrderAsString(m_FileByteOrder));
 
+  delete [] sHeader;
 }
 
 bool ONERAImageIO::OpenOneraDataFileForWriting(const char* filename)
