@@ -91,6 +91,7 @@ protected:
       res = (char* )malloc(nb_octets);
 
       memcpy(buffer,&value,nb_octets);
+      std::fill_n(res,nb_octets,0);
 
       for (int i=0; i<nb_octets/2; i++) {
         res[i] = buffer[nb_octets-1-i];
