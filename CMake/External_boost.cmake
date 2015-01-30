@@ -29,6 +29,9 @@ else()
         ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt 
         ${BOOST_SB_SRC}
     )
+    
+    message(STATUS "  Using Boost SuperBuild version")
+    
   else(MSVC)
     #TODO: find hash for archives properly
     set(BOOST_HEADERS_URL_HASH 1605dc6085cb2dc778ef5ab6c0e59083)
@@ -36,20 +39,17 @@ else()
     set(BOOST_REGEX_URL_HASH a3bfc2dc9a3ebe3c050518ecb29d6f8b)
     set(BOOST_UTF_URL_HASH 75971963a74c76d32e01974a8e48be11)
     
-    
-   if(MSVC10)
-    set(BOOST_HEADERS_URL_HASH 1605dc6085cb2dc778ef5ab6c0e59083)
-    set(BOOST_GRAPH_URL_HASH c246516ca84a3c79ae8a0b22fceb0344)
-    set(BOOST_REGEX_URL_HASH a3bfc2dc9a3ebe3c050518ecb29d6f8b)
-    set(BOOST_UTF_URL_HASH 75971963a74c76d32e01974a8e48be11)
-   else(MSVC80)
+    if(MSVC10)
+        set(BOOST_HEADERS_URL_HASH 1605dc6085cb2dc778ef5ab6c0e59083)
+        set(BOOST_GRAPH_URL_HASH c246516ca84a3c79ae8a0b22fceb0344)
+        set(BOOST_REGEX_URL_HASH a3bfc2dc9a3ebe3c050518ecb29d6f8b)
+        set(BOOST_UTF_URL_HASH 75971963a74c76d32e01974a8e48be11)
+    else(MSVC80)
  
-   else(CMAKE_COMPILER_2005)
+    else(CMAKE_COMPILER_2005)
    
-   endif()
+    endif()
 
-
-    
     set(BOOST_HEADERS_URL "http://sourceforge.net/projects/boost/files/boost-binaries/1.50.0/boost_1_50_headers.zip/download")
     set(BOOST_GRAPH_URL "http://sourceforge.net/projects/boost/files/boost-binaries/1.50.0/libboost_graph-vc100-mt-1_50.zip/download")
     set(BOOST_UTF_URL "http://sourceforge.net/projects/boost/files/boost-binaries/1.50.0/boost_unit_test_framework-vc100-mt-1_50.zip/download")
@@ -79,18 +79,18 @@ else()
     list(APPEND BOOSTLIBS ${proj}_${BOOSTLIB})
     endforeach()
     
-        ExternalProject_Add(${proj}
-        PREFIX ${proj}
-        DOWNLOAD_COMMAND ""
-        SOURCE_DIR ${BOOST_SB_SRC}
-        DEPENDS ${BOOSTLIBS}
-        CONFIGURE_COMMAND ""
-        BUILD_COMMAND ""
-        INSTALL_COMMAND ""
-     )
+    ExternalProject_Add(${proj}
+      PREFIX ${proj}
+      DOWNLOAD_COMMAND ""
+      SOURCE_DIR ${BOOST_SB_SRC}
+      DEPENDS ${BOOSTLIBS}
+      CONFIGURE_COMMAND ""
+      BUILD_COMMAND ""
+      INSTALL_COMMAND ""
+    )
 
-  endif()
-  
-  message(STATUS "  Using Boost SuperBuild version")
+    message(STATUS "  Using Boost SuperBuild version (prebuilt binaries)")
+    
+  endif() #end else MSVC
   
 endif()
