@@ -14,10 +14,6 @@ else()
   set(QT4_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(QT4_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
-  if(NOT DEFINED git_protocol)
-    set(git_protocol "git")
-  endif()
-  
   #activate only required components for Qt4
   set(QT4_SB_CONFIG -no-phonon-backend -no-scripttools -no-multimedia -no-webkit -qt-sql-sqlite -plugin-sql-sqlite -no-nis -no-qt3support)
 
@@ -44,8 +40,6 @@ else()
     PREFIX ${proj}
     URL "http://download.qt-project.org/official_releases/qt/4.8/4.8.6/qt-everywhere-opensource-src-4.8.6.tar.gz"
     URL_MD5 2edbe4d6c2eff33ef91732602f3518eb
-    #GIT_REPOSITORY "${git_protocol}://gitorious.org/qt/qt.git"
-    #GIT_TAG dde0c2f4f6d72bcc9db732eb51399395ffc37778
     BINARY_DIR ${QT4_SB_BUILD_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CONFIGURE_COMMAND
