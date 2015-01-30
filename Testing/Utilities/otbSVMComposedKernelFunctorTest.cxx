@@ -57,7 +57,7 @@ int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
   model->SV = new svm_node*[model->l];
   for(int n = 0; n<model->l; ++n)
     {
-      model->SV[n]= new svm_mode;
+      model->SV[n]= new svm_node;
       model->SV[n]->index = -1;
       model->SV[n]->value = 0.;
     }

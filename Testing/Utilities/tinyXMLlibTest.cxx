@@ -599,7 +599,7 @@ int tinyXMLlibTest(int itkNotUsed(argc), char *argv[] )
                                fclose( saved );
                         }
                         
-                        if(verified)
+                        if(verify)
                         {
                                fclose( verify );
                         }

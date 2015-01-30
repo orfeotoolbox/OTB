@@ -80,13 +80,11 @@ int svmTest( int itkNotUsed(argc), char *argv[] )
                                 << std::string(outputFilename) );
       }
 
+    if(model!=NULL)
+      {
+      delete model;
+      }
     }
-
-  if(model!=NULL)
-    {
-    delete model;
-    }
-
 
   catch( itk::ExceptionObject & err )
     {
@@ -95,9 +93,9 @@ int svmTest( int itkNotUsed(argc), char *argv[] )
     return EXIT_FAILURE;
     }
   catch (...)
-    {
-    std::cerr << "svmTest exception thrown" << std::endl;
-    return EXIT_FAILURE;
+    {     
+     std::cerr << "svmTest exception thrown" << std::endl;
+     return EXIT_FAILURE;
     }
 
   return EXIT_SUCCESS;
