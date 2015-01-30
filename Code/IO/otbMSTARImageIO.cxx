@@ -111,6 +111,7 @@ bool MSTARImageIO::CanReadFile(const char* filename)
     {
     otbMsgDevMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
     fclose(MSTARfp);
+    MSTARfp = NULL;
     return false;
     }
   rewind(MSTARfp);
@@ -121,6 +122,7 @@ bool MSTARImageIO::CanReadFile(const char* filename)
     {
 //    fprintf(stderr,"Can not determine Phoenix header length!\n");
     fclose(MSTARfp);
+    MSTARfp = NULL;
     return false;
     }
   else
@@ -134,6 +136,7 @@ bool MSTARImageIO::CanReadFile(const char* filename)
     {
 //    fprintf(stderr,"Can not determine native header length!\n");
     fclose(MSTARfp);
+    MSTARfp = NULL;
     return false;
     }
   else
@@ -161,6 +164,8 @@ bool MSTARImageIO::CanReadFile(const char* filename)
     {
     otbMsgDevMacro(<< "Error: Can not determine MSTAR image height!");
     fclose(MSTARfp);
+    MSTARfp = NULL;
+    return false;
     }
   else
     {
@@ -210,6 +215,7 @@ bool MSTARImageIO::CanReadFile(const char* filename)
 // free(phdr);
 
   fclose(MSTARfp);
+  MSTARfp = NULL;
   otbMsgDevMacro(<< "Can read MSTAR");
   return bool(true);
 }
