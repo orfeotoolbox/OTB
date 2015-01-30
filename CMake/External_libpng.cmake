@@ -4,7 +4,7 @@ set(proj PNG)
 
 set(DEFAULT_USE_SYSTEM_PNG  ON)
 
-option(USE_SYSTEM_PNG "  Use a system build of libtiff." ${DEFAULT_USE_SYSTEM_TIFF})
+option(USE_SYSTEM_PNG "  Use a system build of libtiff." ${DEFAULT_USE_SYSTEM_PNG})
 mark_as_advanced(USE_SYSTEM_PNG)
 
 if(USE_SYSTEM_PNG)
