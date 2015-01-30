@@ -86,8 +86,8 @@ int ossimpluginsHermiteInterpolationTest(int itkNotUsed(argc), char * itkNotUsed
   std::cout << std::setprecision(15) << "Value at " << x << " : " << y << " (derivative " << dy << ")\n";
   std::cout << "- Should be :           " << yExpected << " (derivative " << dyExpected << ")" << std::endl;
 
-  if ( ossim::isnan(y) || ( (y - yExpected)/yExpected  > epsilon)) return EXIT_FAILURE;
-  if ( ossim::isnan(dy) ||  ( (dy - dyExpected)/dyExpected  > epsilon)) return EXIT_FAILURE;
+  if ( ossim::isnan(y) || ( (y - yExpected)/yExpected  > epsilon)) {delete interp; return EXIT_FAILURE;}
+  if ( ossim::isnan(dy) ||  ( (dy - dyExpected)/dyExpected  > epsilon)) {delete interp; return EXIT_FAILURE;}
 
   //Test limit situation
   x = 56640.0;
@@ -97,8 +97,8 @@ int ossimpluginsHermiteInterpolationTest(int itkNotUsed(argc), char * itkNotUsed
   std::cout << std::setprecision(15) << "Value at " << x << " : " << y << " (derivative " << dy << ")\n";
   std::cout << "- Should be :    " << yExpected << " (derivative " << dyExpected << ")" << std::endl;
 
-  if ( ossim::isnan(y) || ( (y - yExpected)/yExpected  > epsilon)) return EXIT_FAILURE;
-  if ( ossim::isnan(dy) || ( (dy - dyExpected)/dyExpected  > epsilon)) return EXIT_FAILURE;
+  if ( ossim::isnan(y) || ( (y - yExpected)/yExpected  > epsilon)) {delete interp; return EXIT_FAILURE;}
+  if ( ossim::isnan(dy) || ( (dy - dyExpected)/dyExpected  > epsilon)) {delete interp; return EXIT_FAILURE;}
 
   x = 56700.0;
   yExpected = -1489827.1436;
@@ -107,8 +107,8 @@ int ossimpluginsHermiteInterpolationTest(int itkNotUsed(argc), char * itkNotUsed
   std::cout << std::setprecision(15) << "Value at " << x << " : " << y << " (derivative " << dy << ")\n";
   std::cout << "- Should be :    " << yExpected << " (derivative " << dyExpected << ")" << std::endl;
 
-  if ( ossim::isnan(y) ||  ( (y - yExpected)/yExpected  > epsilon)) return EXIT_FAILURE;
-  if ( ossim::isnan(dy) || ( (dy - dyExpected)/dyExpected  > epsilon)) return EXIT_FAILURE;
+  if ( ossim::isnan(y) ||  ( (y - yExpected)/yExpected  > epsilon)) {delete interp; return EXIT_FAILURE;}
+  if ( ossim::isnan(dy) || ( (dy - dyExpected)/dyExpected  > epsilon)) {delete interp; return EXIT_FAILURE;}
 
   x = 56942.862208;
 
@@ -147,6 +147,9 @@ int ossimpluginsHermiteInterpolationTest(int itkNotUsed(argc), char * itkNotUsed
 
    chrono2.Stop();
    std::cout << "Computation time: " << chrono2.GetMean() << " s" << std::endl;
+
+   delete interp;
+   delete interp2;
 
   return EXIT_SUCCESS;
 }
