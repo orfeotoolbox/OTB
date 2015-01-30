@@ -54,9 +54,9 @@ int otbAngularProjectionImageFilterTest ( int argc, char * argv[] )
     return EXIT_FAILURE;
   }
 
-  const char * inputImageName1 = parseResult->GetParameterString("--InputImages", 0).c_str();
-  const char * inputImageName2 = parseResult->GetParameterString("--InputImages", 1).c_str();
-  const char * outputImageName = parseResult->GetOutputImage().c_str();
+  std::string inputImageName1 = parseResult->GetParameterString("--InputImages", 0);
+  std::string inputImageName2 = parseResult->GetParameterString("--InputImages", 1);
+  std::string outputImageName = parseResult->GetOutputImage();
 
   // Main type definition
   const unsigned int Dimension = 2;
