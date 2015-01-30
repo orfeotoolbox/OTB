@@ -60,7 +60,7 @@ int otbImageFileReaderTestSensorPixelValue(int argc, char* argv[])
   reader->SetFileName(inputFilename);
 
   reader->UpdateOutputInformation();
-  ConfigFile * pixelValuesConfig;
+  ConfigFile * pixelValuesConfig = NULL;
 
   try
     {
@@ -125,6 +125,13 @@ int otbImageFileReaderTestSensorPixelValue(int argc, char* argv[])
 
   double epsilon = 0.0000000001;
   double error = vcl_abs(imagePixelValue - baselinePixelValue);
+
+  if(pixelValuesConfig != NULL)
+    {
+    delete pixelValuesConfig;
+    pixelValuesConfig = NULL;
+    }
+
   if (error < epsilon)
     {
     return EXIT_SUCCESS;
