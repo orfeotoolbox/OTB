@@ -257,7 +257,7 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
 
   // Converting the Confusion Matrix into a std::map<IntLabelPixelType, MassType> of Masses of Belief for each label
   ConfusionMatrixToMassOfBeliefType::Pointer confMatToMass = ConfusionMatrixToMassOfBeliefType::New();
-  MassOfBeliefDefinitionMethod massOfBeliefDefMethod;
+  MassOfBeliefDefinitionMethod massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
 
   std::string massOfBeliefDefMethodStr = argv[1];
   if (massOfBeliefDefMethodStr.compare("PRECISION") == 0)
@@ -448,7 +448,7 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
   /* ***************************************************************************************** */
 
   // Calculation of the four A, B, C and K constants
-  MassType A = 0, B = 1, C = 1, K;
+  MassType A = 0, B = 1, C = 1, K = 0;
   for (itMapMOBClk = mapJointMassesStepI.begin(); itMapMOBClk != mapJointMassesStepI.end(); ++itMapMOBClk)
     {
     classLabelk = itMapMOBClk->first;
@@ -543,7 +543,7 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
   // The decision for the DS Fusion is made with the MAXIMAL Belief function:
   // {Ai} is chosen if Bel({Ai}) = MAX(Bel({Aj}))
 
-  IntLabelPixelType fusedDSLabelSet;
+  IntLabelPixelType fusedDSLabelSet = 0;
   MassType fusedDSBelLabelSetClk = 0.; //Here the MAX of Bel(Ai)
 
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
@@ -869,7 +869,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
 
   // Calculation of the four A, B, C and K constants
 
-  MassType A = 0, B = 1, C = 1, K;
+  MassType A = 0, B = 1, C = 1, K = 0;
   for (itMapMasses = mapJointMassesStepI.begin(); itMapMasses != mapJointMassesStepI.end(); ++itMapMasses)
     {
     labelSetClk = itMapMasses->first;
@@ -1199,7 +1199,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
 
   // Calculation of the four A, B, C and K constants
 
-  MassType A = 0, B = 1, C = 1, K;
+  MassType A = 0, B = 1, C = 1, K = 0;
   mapMassesOfBeliefFunctionType::iterator itMapJMOBF;
   for (itMapJMOBF = mapJMOBFStepI.begin(); itMapJMOBF != mapJMOBFStepI.end(); ++itMapJMOBF)
     {
@@ -1573,7 +1573,7 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
   IntLabelPixelType undefinedValue = 0;
 
   std::string massOfBeliefDefMethodStr = argv[argc - 4];
-  MassOfBeliefDefinitionMethod massOfBeliefDefMethod;
+  MassOfBeliefDefinitionMethod massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
   if (massOfBeliefDefMethodStr.compare("PRECISION") == 0)
     {
     massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
@@ -1779,7 +1779,7 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
   /* ***************************************************************************************** */
 
   // Calculation of the four A, B, C and K constants
-  MassType A = 0, B = 1, C = 1, K;
+  MassType A = 0, B = 1, C = 1, K = 0;
   for (itMapMOBClk = mapJointMassesStepI.begin(); itMapMOBClk != mapJointMassesStepI.end(); ++itMapMOBClk)
     {
     classLabelk = itMapMOBClk->first;
@@ -1874,7 +1874,7 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
   // The decision for the DS Fusion is made with the MAXIMAL Belief function:
   // {Ai} is chosen if Bel({Ai}) = MAX(Bel({Aj}))
 
-  IntLabelPixelType fusedDSLabelSet;
+  IntLabelPixelType fusedDSLabelSet = 0;
   MassType fusedDSBelLabelSetClk = 0.; //Here the MAX of Bel(Ai)
 
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
@@ -1950,7 +1950,7 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
 //  IntLabelPixelType undefinedValue = 0;
 
   std::string massOfBeliefDefMethodStr = argv[argc - 4];
-  MassOfBeliefDefinitionMethod massOfBeliefDefMethod;
+  MassOfBeliefDefinitionMethod massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
   if (massOfBeliefDefMethodStr.compare("PRECISION") == 0)
     {
     massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
