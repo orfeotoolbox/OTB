@@ -14,6 +14,10 @@ else()
   set(QT4_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(QT4_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
+  if(NOT DEFINED git_protocol)
+    set(git_protocol "git")
+  endif()
+  
   #activate only required components for Qt4
   set(QT4_SB_CONFIG -no-phonon-backend -no-scripttools -no-multimedia -no-webkit -qt-sql-sqlite -plugin-sql-sqlite -no-nis -no-qt3support)
 
@@ -40,10 +44,12 @@ else()
     PREFIX ${proj}
     URL "http://download.qt-project.org/official_releases/qt/4.8/4.8.6/qt-everywhere-opensource-src-4.8.6.tar.gz"
     URL_MD5 2edbe4d6c2eff33ef91732602f3518eb
-    BINARY_DIR ${QT4_SB_BUILD_DIR}
+    #GIT_REPOSITORY "${git_protocol}://gitorious.org/qt/qt.git"
+    #GIT_TAG dde0c2f4f6d72bcc9db732eb51399395ffc37778
+    BINARY_DIR ${QT4_SB_SRC}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CONFIGURE_COMMAND
-      ${QT4_SB_BUILD_DIR}/configure
+      ${QT4_SB_SRC}/configure
         -prefix ${CMAKE_INSTALL_PREFIX}
         -opensource 
         -confirm-license
@@ -55,13 +61,14 @@ else()
         ${QT4_SB_CONFIG}
     DEPENDS ${${proj}_DEPENDENCIES}
     )
-
-  ExternalProject_Add_Step(${proj} copy_source
-      COMMAND ${CMAKE_COMMAND} -E copy_directory 
-      ${QT4_SB_SRC} ${QT4_SB_BUILD_DIR}
-      DEPENDEES patch update
-      DEPENDERS configure
-    )
+  
+  #copying Qt4 to have out-of-source build takes too much disk space
+  # ExternalProject_Add_Step(${proj} copy_source
+      # COMMAND ${CMAKE_COMMAND} -E copy_directory 
+      # ${QT4_SB_SRC} ${QT4_SB_BUILD_DIR}
+      # DEPENDEES patch update
+      # DEPENDERS configure
+  # )
 
   message(STATUS "  Using Qt4 SuperBuild version")
 
