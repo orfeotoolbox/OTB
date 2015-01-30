@@ -24,7 +24,7 @@ else()
     else(UNIX)
       set(PNG_SB_ZLIB_CONFIG
         -DZLIB_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
-        -DZLIB_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/libz.so)
+        -DZLIB_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/libz${CMAKE_SHARED_LIBRARY_SUFFIX})
     endif()
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
