@@ -216,7 +216,7 @@ int otbDSFusionOfClassifiersImageFilterTest(int argc, char* argv[])
 
 
   std::string massOfBeliefDefMethodStr = argv[argc - 4];
-  MassOfBeliefDefinitionMethod massOfBeliefDefMethod;
+  MassOfBeliefDefinitionMethod massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
   if (massOfBeliefDefMethodStr.compare("PRECISION") == 0)
     {
     massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
