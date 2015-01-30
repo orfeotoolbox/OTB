@@ -1342,7 +1342,7 @@ namespace ossimplugins
          }
 
          ossimString bandName = sub_nodes[0]->getText();
-         ossim_uint32 bandIndex;
+         ossim_uint32 bandIndex = 0;
          if (bandName == "B0")
             bandIndex = 0;
          else

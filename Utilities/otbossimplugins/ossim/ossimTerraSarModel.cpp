@@ -1129,7 +1129,11 @@ bool ossimplugins::ossimTerraSarModel::InitPlatformPosition(
        */
       std::string utcString(date_str);
       CivilDateTime eph_civil_date;
-      if (! ossim::iso8601TimeStringToCivilDate(utcString, eph_civil_date)) return false;
+      if (! ossim::iso8601TimeStringToCivilDate(utcString, eph_civil_date)) 
+        {
+        delete [] ephemeris;
+        return false;
+        }
 
       JSDDateTime eph_jsd_date(eph_civil_date);
 
@@ -1195,6 +1199,7 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
    }
    else
    {
+      delete date;
       return false;
    }
 
@@ -1227,14 +1232,26 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
       std::string azimuthStartTime(kwl.find("azimuthStartTime"));
       std::string azimuthStopTime(kwl.find("azimuthStopTime"));
       CivilDateTime * dateStart = new CivilDateTime() ;
-      if (! ossim::iso8601TimeStringToCivilDate(azimuthStartTime, *dateStart)) return false ;
+      if (! ossim::iso8601TimeStringToCivilDate(azimuthStartTime, *dateStart)) 
+        {
+        delete dateStart;
+        return false ;
+        }
       CivilDateTime * dateStop = new CivilDateTime() ;
-      if (! ossim::iso8601TimeStringToCivilDate(azimuthStopTime, *dateStop)) return false ;
+      if (! ossim::iso8601TimeStringToCivilDate(azimuthStopTime, *dateStop)) 
+        {
+        delete dateStart;
+        delete dateStop;
+        return false ;
+        }
       double acq_msec_first = (double) dateStart->get_second()+dateStart->get_decimal();
       double acq_msec_last = (double) dateStop->get_second()+dateStop->get_decimal();
 
       double actualPRF = theImageSize.y/(acq_msec_last-acq_msec_first) ;
       _sensor->set_nAzimuthLook(_sensor->get_prf()/actualPRF); 
+
+      delete dateStart;
+      delete dateStop;
    }
    else   
       _sensor->set_nAzimuthLook(1.0);

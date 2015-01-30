@@ -233,15 +233,13 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
             }
             pos->setData(ephemeris, nbrData);
          }
-         else
-         {
-            for (int idx = 0; idx < nbrData; ++idx)
-            {
-               delete ephemeris[idx];
-            }
-            delete [] ephemeris;
-            ephemeris = 0;
-         }
+         
+         for (int idx = 0; idx < nbrData; ++idx)
+           {
+           delete ephemeris[idx];
+           }
+         delete [] ephemeris;
+         ephemeris = 0;
 
       } // matches: if ( xnodes.size() )
       else
@@ -830,27 +828,28 @@ RPCModel ossimRadarSat2ProductDoc::getRpcData(const ossimXmlDocument* xdoc) cons
       }
 
       // end character search term
-
-      model.biasError = biasError;
-      model.randomError = randomError;
-      model.lineFitQuality = lineFitQuality;
-      model.pixelFitQuality = pixelFitQuality;
-      model.lineOffset = lineOffset;
-      model.pixelOffset = pixelOffset;
-      model.latitudeOffset = latitudeOffset;
-      model.longitudeOffset = longitudeOffset;
-      model.heightOffset = heightOffset;
-      model.lineScale = lineScale;
-      model.pixelScale = pixelScale;
-      model.latitudeScale = latitudeScale;
-      model.longitudeScale = longitudeScale;
-      model.heightScale = heightScale;
-      model.lineNumeratorCoefficients = lineNumeratorCoefficients;
-      model.lineDenominatorCoefficients = lineDenominatorCoefficients;
-      model.pixelNumeratorCoefficients = pixelNumeratorCoefficients;
-      model.pixelDenominatorCoefficients = pixelDenominatorCoefficients;
    }
 
+   // Fill RPCModel members
+   model.biasError = biasError;
+   model.randomError = randomError;
+   model.lineFitQuality = lineFitQuality;
+   model.pixelFitQuality = pixelFitQuality;
+   model.lineOffset = lineOffset;
+   model.pixelOffset = pixelOffset;
+   model.latitudeOffset = latitudeOffset;
+   model.longitudeOffset = longitudeOffset;
+   model.heightOffset = heightOffset;
+   model.lineScale = lineScale;
+   model.pixelScale = pixelScale;
+   model.latitudeScale = latitudeScale;
+   model.longitudeScale = longitudeScale;
+   model.heightScale = heightScale;
+   model.lineNumeratorCoefficients = lineNumeratorCoefficients;
+   model.lineDenominatorCoefficients = lineDenominatorCoefficients;
+   model.pixelNumeratorCoefficients = pixelNumeratorCoefficients;
+   model.pixelDenominatorCoefficients = pixelDenominatorCoefficients;
+   
    return model;
 }
 

@@ -68,7 +68,7 @@ namespace ossimplugins
    {
       const double CLUM        = 2.99792458e+8 ;
 
-      double GR, GR0, relativeGroundRange, slantRange, slantrangetime;
+      double GR, GR0, relativeGroundRange, slantRange;
 
       if (_n_srgr==0) return(-1) ;
 
@@ -83,7 +83,6 @@ namespace ossimplugins
          + coefset[4]*pow(relativeGroundRange,3)
          + coefset[5]*pow(relativeGroundRange,4);
 
-      slantrangetime = 2.0*slantRange / (CLUM);
       return  slantRange ;
    }
 

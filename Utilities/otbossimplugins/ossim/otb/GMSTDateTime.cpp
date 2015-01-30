@@ -17,7 +17,9 @@ namespace ossimplugins
 
 
 GMSTDateTime::GMSTDateTime():
-  _tms(0)
+  _tms(0),
+  // TODO: Check this initialisation
+  _origine(GMSTDateTime::AN1900)
 {
 }
 

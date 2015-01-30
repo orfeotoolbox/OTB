@@ -460,7 +460,11 @@ bool ossimRadarSat2Model::InitPlatformPosition(const ossimKeywordlist &kwl, cons
       CivilDateTime eph_civil_date;
 
 
-      if (! ossim::iso8601TimeStringToCivilDate(utcString, eph_civil_date)) return false;
+      if (! ossim::iso8601TimeStringToCivilDate(utcString, eph_civil_date)) 
+        {
+        delete ephemeris;
+        return false;
+        }
 
       JSDDateTime eph_jsd_date(eph_civil_date);
 
@@ -514,7 +518,11 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl,
    std::string zeroDopplerTimeFirstLine(zeroDopplerTimeFirstLine_str);
 
    CivilDateTime * date = new CivilDateTime() ;
-   if (! ossim::iso8601TimeStringToCivilDate(zeroDopplerTimeFirstLine, *date)) return false ;
+   if (! ossim::iso8601TimeStringToCivilDate(zeroDopplerTimeFirstLine, *date)) 
+     {
+     delete date;
+     return false ;
+     }
 
    if (_sensor->get_lin_direction() == -1) {
       double time = (double) date->get_second() + date->get_decimal() ;  // upper left corner
@@ -522,18 +530,22 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl,
       date->set_second((int) floor(time)) ;
       date->set_decimal(time - floor(time)) ;
    }
-   delete date;//FIXME to confirm
   
    if(_platformPosition != 0)
    {
       Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
-      if (ephemeris == 0) return false ;
+      if (ephemeris == 0) 
+        {
+        delete date;
+        return false ;
+        }
       _refPoint->set_ephemeris(ephemeris);
 
       delete ephemeris;
    }
    else
    {
+      delete date;
       return false;
    }
 
@@ -593,6 +605,8 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl,
    // Default optimization
    optimizeModel(groundGcpCoordinates, imageGcpCoordinates) ;
 
+   delete date;
+
    return true;
 }
 
@@ -648,7 +662,7 @@ int ossimRadarSat2Model::FindSRGRSetNumber(JSDDateTime date) const
 {
    if (_n_srgr==0) return(-1) ;
 
-   double delays[20];
+   double * delays = new double[_n_srgr];
    for (int i=0;i<_n_srgr;i++)
    {
       delays[i] = fabs(date.get_second()+date.get_decimal()-_srgr_update[i]) ;
@@ -663,6 +677,7 @@ int ossimRadarSat2Model::FindSRGRSetNumber(JSDDateTime date) const
          min_delay = delays[i] ;
       }
    }
+   delete [] delays;
    return setNumber ;
 }
 

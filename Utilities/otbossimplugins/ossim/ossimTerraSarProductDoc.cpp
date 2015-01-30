@@ -243,6 +243,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initPlatformPosition(
                   << " DEBUG\nnbrData:  " << nbrData << "\n";
             } 
             pos->setData(ephemeris, nbrData);
+            delete [] ephemeris;
          }
          else
          {
