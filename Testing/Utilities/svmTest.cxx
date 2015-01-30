@@ -30,7 +30,7 @@ public:
 
 protected:
   LinearKernelFunctor(const Self& copy)
-  : Superclass(copy)
+    : Superclass(copy)
   {
     *this = copy;
   }
@@ -57,26 +57,37 @@ int svmTest( int itkNotUsed(argc), char *argv[] )
 
   try
     {
-        const char * inputFilename  = argv[1];
-        const char * outputFilename = argv[2];
+    const char * inputFilename  = argv[1];
+    const char * outputFilename = argv[2];
 
 //        otb::LinearKernelFunctor lFunctor;
 
-        struct svm_model* model;
-        model = svm_load_model(inputFilename,NULL);
-        if(model == 0)
-        {
-                itkGenericExceptionMacro( << "Problem while loading SVM model "
-			 << std::string(inputFilename) );
-        }
+    struct svm_model* model;
+    model = svm_load_model(inputFilename,NULL);
+    if(model == 0)
+      {
+      itkGenericExceptionMacro( << "Problem while loading SVM model "
+                                << std::string(inputFilename) );
+      }
 
-        if(svm_save_model(outputFilename, model)!=0)
+    if(svm_save_model(outputFilename, model)!=0)
+      {
+      if(model != NULL)
         {
-                itkGenericExceptionMacro( << "Problem while saving SVM model "
-			 << std::string(outputFilename) );
+        delete model;
         }
+      itkGenericExceptionMacro( << "Problem while saving SVM model "
+                                << std::string(outputFilename) );
+      }
 
     }
+
+  if(model!=NULL)
+    {
+    delete model;
+    }
+
+
   catch( itk::ExceptionObject & err )
     {
     std::cout << "Exception itk::ExceptionObject levee !" << std::endl;
