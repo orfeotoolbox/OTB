@@ -39,9 +39,26 @@ else()
       CMAKE_CACHE_ARGS
         -DCMAKE_BUILD_TYPE:STRING=Release
         -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
-        ${PNG_SB_ZLIB_CONFIG}
+        -DSKIP_INSTALL_EXECUTABLES:BOOL=OFF
+        -DPNG_STATIC:BOOL=OFF
+        -DPNG_SHARED:BOOL=ON
+        -DPNG_TESTS:BOOL=OFF
+        ${PNG_SB_ZLIB_CONFIG}        
       CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
-
+    #having -DPNGLIB_NAME:STRING=libpng in CMAKE_CACHE_ARGS doesnt work
+    #libpng library built in the name libpng16.lib and other libs (Qt4) 
+    #reports libpng.lib is not found As Qt is strict on the name of libpng
+    #below we copy the libpng16.lib to libpng.lib.
+    #modifying CMakeLists.txt in libpng is another way but then whole 
+    #CMakeLists.txt must be kept in superbuild repository.
+    if(MSVC)
+      ExternalProject_Add_Step(${proj} duplicate_pnglib
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_INSTALL_PREFIX}/lib/libpng16.lib ${CMAKE_INSTALL_PREFIX}/lib/libpng.lib
+        DEPENDEES install
+    )    
+    endif()
+    
   message(STATUS "  Using libpng SuperBuild version")
 endif()
