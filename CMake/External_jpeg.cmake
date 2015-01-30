@@ -14,11 +14,6 @@ else()
   set(JPEG_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(JPEG_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
-  # DEBUG
-  message(STATUS "System name : ${CMAKE_SYSTEM_NAME}")
-  message(STATUS "System ver  : ${CMAKE_SYSTEM_VERSION}")
-  message(STATUS "System proc : ${CMAKE_SYSTEM_PROCESSOR}")
-  
   if(WIN32)
 
    
