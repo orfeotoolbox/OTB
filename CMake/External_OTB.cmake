@@ -8,6 +8,20 @@ set(${proj}_DEPENDENCIES)
 
 set(BUILD_EXAMPLES ON)
 
+if(USE_SYSTEM_QT4)
+   set(OTB_SB_WRAP_QT_CONFIG)
+   set(OTB_SB_WRAP_QT_CONFIG -DOTB_WRAP_QT:BOOL=ON)
+else()
+   if(MSVC)
+      set(OTB_SB_WRAP_QT_CONFIG -DOTB_WRAP_QT:BOOL=ON)
+      list(APPEND ${proj}_DEPENDENCIES QT4)
+    else(UNIX)
+       #TODO: use must have Qt4 
+       message(STATUS "  Qt4 is not built by SuperBuild. You need to install it via package manager.")
+      set(OTB_SB_WRAP_QT_CONFIG -DOTB_WRAP_QT:BOOL=OFF)
+    endif()
+endif()
+
 if(USE_SYSTEM_GDAL)
   set(OTB_SB_GDAL_CONFIG)
 else()
@@ -155,7 +169,6 @@ ExternalProject_Add(${proj}
       -DBUILD_TESTING:BOOL=${BUILD_TESTING}
       -DBUILD_EXAMPLES:BOOL=${BUILD_EXAMPLES}
       -DBUILD_APPLICATIONS:BOOL=ON
-      -DOTB_WRAP_QT:BOOL=OFF
       -DCMAKE_PREFIX_PATH:STRING=${CMAKE_INSTALL_PREFIX}
       -DOTB_DATA_ROOT:STRING=${OTB_DATA_ROOT}
       -DOTB_USE_EXTERNAL_OSSIM:BOOL=ON
@@ -168,6 +181,7 @@ ExternalProject_Add(${proj}
       -DOTB_USE_EXTERNAL_LIBKML:BOOL=ON
       -DOTB_USE_OPENCV:BOOL=ON
       -DOTB_USE_JPEG2000:BOOL=OFF
+      ${OTB_SB_WRAP_QT_CONFIG}
       ${OTB_SB_ITK_CONFIG}
       ${OTB_SB_OSSIM_CONFIG}
       ${OTB_SB_GDAL_CONFIG}
