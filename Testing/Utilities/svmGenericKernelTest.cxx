@@ -30,7 +30,7 @@ public:
 
 protected:
   LinearKernelFunctor(const Self& copy)
-  : Superclass(copy)
+    : Superclass(copy)
   {
     *this = copy;
   }
@@ -56,29 +56,33 @@ int svmGenericKernelTest( int itkNotUsed(argc), char *argv[] )
 {
   try
     {
-        const char * inputFilename  = argv[1];
-        const char * outputFilename = argv[2];
-        otb::LinearKernelFunctor lFunctor;
+    const char * inputFilename  = argv[1];
+    const char * outputFilename = argv[2];
+    otb::LinearKernelFunctor lFunctor;
 
-        struct svm_model* model;
-        model = svm_load_model(inputFilename, &lFunctor);
-        if(model == 0)
+    struct svm_model* model;
+    model = svm_load_model(inputFilename, &lFunctor);
+    if(model == 0)
+      {
+      itkGenericExceptionMacro( << "Problem while loading SVM model "
+                                << std::string(inputFilename) );
+      }
+        
+    model->param.kernel_generic->print_parameters();
+        
+    if(svm_save_model(outputFilename, model)!=0)
+      {
+      if(model != NULL)
         {
-                itkGenericExceptionMacro( << "Problem while loading SVM model "
-			 << std::string(inputFilename) );
+        delete model;
         }
-
-        model->param.kernel_generic->print_parameters();
-
-        if(svm_save_model(outputFilename, model)!=0)
-        {
-                itkGenericExceptionMacro( << "Problem while saving SVM model "
-			 << std::string(outputFilename) );
-        }
-        if(model != NULL)
-          {
-          delete model;
-          }
+      itkGenericExceptionMacro( << "Problem while saving SVM model "
+                                << std::string(outputFilename) );
+      }
+    if(model != NULL)
+      {
+      delete model;
+      }
     }
   catch( itk::ExceptionObject & err )
     {
