@@ -216,6 +216,8 @@ bool MWImageIO::InternalReadHeaderInformation(std::fstream& file, const bool rep
     }
   else
     {
+    delete [] headerInformation;
+
     if (reportError == true)
       {
       itkExceptionMacro(<< "MW : impossible to determine CodePix information of the image");
