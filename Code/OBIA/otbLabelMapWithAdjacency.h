@@ -222,7 +222,7 @@ protected:
 
   /** Re-implement CopyInformation to pass the adjancency graph
    * through */
-  virtual void CopyInformation(itk::DataObject * data)
+  virtual void CopyInformation(const itk::DataObject * data)
   {
     // Call superclass implementation
     Superclass::CopyInformation(data);
