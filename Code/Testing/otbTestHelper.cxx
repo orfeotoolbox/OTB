@@ -1133,9 +1133,11 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   if (strRefName != strTestName)
     {
     if (!m_ReportErrors)
+      {
       otbPrintDiff("WARNING: INFO: Internal data source name poDS->GetName() were different",
                    strRefName,
                    strTestName);
+      }
     }
 
   /* -------------------------------------------------------------------- */
