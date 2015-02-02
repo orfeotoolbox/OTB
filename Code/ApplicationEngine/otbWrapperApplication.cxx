@@ -178,8 +178,11 @@ void Application::UpdateParameters()
       {
       Parameter* param = GetParameterByKey(inXMLKey);
       InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
-      inXMLParam->Read(this);
-      m_IsInXMLParsed = true;
+      if(inXMLParam!=NULL)
+        {
+        inXMLParam->Read(this);
+        m_IsInXMLParsed = true;
+        }
       }
     }
   this->DoUpdateParameters();
@@ -205,8 +208,11 @@ int Application::Execute()
          UseSpecificSeed = true;
       Parameter* param = GetParameterByKey(key);
       IntParameter* randParam = dynamic_cast<IntParameter*> (param);
-      int seed = randParam->GetValue();
-      itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(seed);
+      if(randParam!=NULL)
+        {
+        int seed = randParam->GetValue();
+        itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(seed);
+        }
       }
     }
   if (!UseSpecificSeed)
@@ -241,8 +247,11 @@ int Application::ExecuteAndWriteOutput()
           {
           Parameter* param = GetParameterByKey(key);
           RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
-          ram = ramParam->GetValue();
-          useRAM = true;
+          if(ramParam!=NULL)
+            {
+            ram = ramParam->GetValue();
+            useRAM = true;
+            }
           }
         }
 
@@ -271,11 +280,14 @@ int Application::ExecuteAndWriteOutput()
           {
           Parameter* param = GetParameterByKey(key);
           OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
-          outputParam->InitializeWriters();
-          std::ostringstream progressId;
-          progressId << "Writing " << outputParam->GetFileName() << "...";
-          AddProcess(outputParam->GetWriter(), progressId.str());
-          outputParam->Write();
+          if(outputParam!=NULL)
+            {
+            outputParam->InitializeWriters();
+            std::ostringstream progressId;
+            progressId << "Writing " << outputParam->GetFileName() << "...";
+            AddProcess(outputParam->GetWriter(), progressId.str());
+            outputParam->Write();
+            }
           }
         else if (GetParameterType(key) == ParameterType_ComplexOutputImage
                  && IsParameterEnabled(key) && HasValue(key) )
@@ -299,7 +311,10 @@ int Application::ExecuteAndWriteOutput()
           {
           Parameter* param = GetParameterByKey(key);
           OutputProcessXMLParameter* outXMLParam = dynamic_cast<OutputProcessXMLParameter*>(param);
-          outXMLParam->Write(this);
+          if(outXMLParam!=NULL)
+            {
+            outXMLParam->Write(this);
+            }
           }
         }
     }
