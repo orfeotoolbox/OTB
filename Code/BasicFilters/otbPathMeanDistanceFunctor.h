@@ -18,6 +18,7 @@
 #ifndef __otbPathMeanDistanceFunctor_h
 #define __otbPathMeanDistanceFunctor_h
 
+#include "otbMacro.h"
 #include "otbMath.h"
 
 namespace otb

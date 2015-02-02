@@ -18,10 +18,10 @@
 #ifndef __otbNeuralNetworkMachineLearningModel_txx
 #define __otbNeuralNetworkMachineLearningModel_txx
 
+#include <fstream>
 #include "otbNeuralNetworkMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
 #include "itkMacro.h" // itkExceptionMacro
-// #include <opencv2/opencv.hpp>
 
 namespace otb
 {

@@ -35,12 +35,12 @@ namespace otb
    * \ingroup VectorDataFilter
  */
 template <class TInputVectorData, class TOutputVectorData>
-class ITK_EXPORT VectorDataToVectorDataFilter : public otb::VectorDataSource<TOutputVectorData>
+class ITK_EXPORT VectorDataToVectorDataFilter : public VectorDataSource<TOutputVectorData>
 {
 public:
   /** Standard class typedefs. */
   typedef VectorDataToVectorDataFilter             Self;
-  typedef otb::VectorDataSource<TOutputVectorData> Superclass;
+  typedef VectorDataSource<TOutputVectorData>      Superclass;
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
 

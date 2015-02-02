@@ -25,6 +25,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkListSample.h"
 #include "itkCovarianceSampleFilter.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {

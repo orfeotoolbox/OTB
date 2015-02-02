@@ -18,8 +18,9 @@
 #ifndef __otbAngularProjectionImageFilter_h
 #define __otbAngularProjectionImageFilter_h
 
+#include "itkImageRegionConstIterator.h"
+#include "itkProgressReporter.h"
 #include "itkImageToImageFilter.h"
-
 
 namespace otb {
 /** \class AngularProjectionImageFilter

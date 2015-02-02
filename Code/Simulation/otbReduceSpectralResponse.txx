@@ -18,9 +18,9 @@
 #ifndef __otbReduceSpectralResponse_txx
 #define __otbReduceSpectralResponse_txx
 
-#include "otbReduceSpectralResponse.h"
-
 #include <algorithm>
+#include "itkNumericTraits.h"
+#include "otbReduceSpectralResponse.h"
 
 namespace otb
 {

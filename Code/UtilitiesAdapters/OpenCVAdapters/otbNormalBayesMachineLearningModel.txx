@@ -18,10 +18,10 @@
 #ifndef __otbNormalBayesMachineLearningModel_txx
 #define __otbNormalBayesMachineLearningModel_txx
 
+#include <fstream>
+#include "itkMacro.h"
 #include "otbNormalBayesMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
-
-// #include <opencv2/opencv.hpp>
 
 namespace otb
 {

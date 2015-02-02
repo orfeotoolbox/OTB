@@ -21,11 +21,11 @@
 #ifndef __otbListSampleToHistogramListGenerator_h
 #define __otbListSampleToHistogramListGenerator_h
 
-#include "itkObject.h"
-#include "itkHistogram.h"
-#include "otbObjectList.h"
-#include "itkStatisticsAlgorithm.h"
 #include "itkNumericTraits.h"
+#include "itkProcessObject.h"
+#include "itkHistogram.h"
+#include "itkStatisticsAlgorithm.h"
+#include "otbObjectList.h"
 
 namespace otb {
 

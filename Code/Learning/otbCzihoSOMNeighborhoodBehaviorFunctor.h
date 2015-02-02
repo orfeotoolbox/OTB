@@ -21,6 +21,9 @@
 #ifndef __otbCzihoSOMNeighborhoodBehaviorFunctor_h
 #define __otbCzihoSOMNeighborhoodBehaviorFunctor_h
 
+#include "itkSize.h"
+#include "itkMath.h"
+
 namespace otb
 {
 

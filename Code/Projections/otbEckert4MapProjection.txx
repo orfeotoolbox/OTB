@@ -20,6 +20,7 @@
 #define __otbEckert4MapProjection_txx
 
 #include "otbEckert4MapProjection.h"
+#include "otbUtils.h"
 
 namespace otb
 {

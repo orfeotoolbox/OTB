@@ -18,6 +18,7 @@
 #define __otbConvertPixelBuffer_txx
 #include "otbConvertPixelBuffer.h"
 
+#include <cstddef> // ptrdiff_t
 #include "itkRGBPixel.h"
 
 namespace otb

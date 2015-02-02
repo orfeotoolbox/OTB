@@ -17,6 +17,7 @@
 #ifndef __otbConvertPixelBuffer_h
 #define __otbConvertPixelBuffer_h
 
+#include <complex>
 #include "itkObject.h"
 
 namespace otb

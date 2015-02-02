@@ -19,6 +19,7 @@
 #ifndef __otbGdalDataTypeBridge_h
 #define __otbGdalDataTypeBridge_h
 
+#include <typeinfo>
 #include "gdal.h"
 
 namespace otb

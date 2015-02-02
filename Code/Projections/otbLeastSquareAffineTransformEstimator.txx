@@ -18,11 +18,12 @@
 #ifndef __otbLeastSquareAffineTransformEstimator_txx
 #define __otbLeastSquareAffineTransformEstimator_txx
 
-#include "otbLeastSquareAffineTransformEstimator.h"
-
 #include <vnl/algo/vnl_lsqr.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
 #include <vnl/vnl_least_squares_function.h>
+
+#include "otbMacro.h"
+#include "otbLeastSquareAffineTransformEstimator.h"
 
 namespace otb {
 

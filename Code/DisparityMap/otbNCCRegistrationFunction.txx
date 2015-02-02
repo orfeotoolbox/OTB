@@ -21,10 +21,11 @@
 #ifndef __otbNCCRegistrationFunction_txx
 #define __otbNCCRegistrationFunction_txx
 
-#include "otbNCCRegistrationFunction.h"
+#include "vnl/vnl_math.h"
+#include "itkNeighborhoodIterator.h"
 
 #include "otbMacro.h"
-#include "vnl/vnl_math.h"
+#include "otbNCCRegistrationFunction.h"
 
 namespace otb
 {

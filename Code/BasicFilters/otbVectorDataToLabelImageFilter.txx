@@ -18,12 +18,14 @@
 #ifndef __otbVectorDataToLabelImageFilter_txx
 #define __otbVectorDataToLabelImageFilter_txx
 
+#include "gdal_alg.h"
+#include "ogr_srs_api.h"
+
 #include "otbVectorDataToLabelImageFilter.h"
 #include "otbOGRIOHelper.h"
 #include "otbGdalDataTypeBridge.h"
-
-#include "gdal_alg.h"
-#include "ogr_srs_api.h"
+#include "otbImageMetadataInterfaceBase.h"
+#include "otbImageMetadataInterfaceFactory.h"
 
 namespace otb
 {

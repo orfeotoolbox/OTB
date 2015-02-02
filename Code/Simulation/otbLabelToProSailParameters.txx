@@ -20,6 +20,7 @@
 
 #include "itkNumericTraits.h"
 
+#include "otbMacro.h"
 #include "otbLabelToProSailParameters.h"
 
 namespace otb

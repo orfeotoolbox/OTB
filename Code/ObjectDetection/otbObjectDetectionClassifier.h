@@ -20,17 +20,18 @@
 
 #include <vector>
 
-#include "itkFixedArray.h"
 #include "itkImageRegion.h"
-#include "otbVectorData.h"
-
+#include "itkFixedArray.h"
+#include "itkVariableLengthVector.h"
+#include "itkListSample.h"
 #include "itkDataObjectDecorator.h"
 #include "itkSimpleDataObjectDecorator.h"
+#include "itkFunctionBase.h"
 
+#include "otbVectorData.h"
+#include "otbSVMModel.h"
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-
-#include "otbSVMModel.h"
 
 namespace otb
 {

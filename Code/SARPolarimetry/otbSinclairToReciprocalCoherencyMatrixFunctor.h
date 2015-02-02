@@ -19,6 +19,7 @@
 #define __otbSinclairToReciprocalCoherencyMatrixFunctor_h
 
 #include "vcl_complex.h"
+#include "itkMacro.h"
 
 namespace otb
 {
@@ -60,6 +61,9 @@ public:
   /** Some typedefs. */
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
+  
+  itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6);
+  
   inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv, const TInput3& Svv)
   {
     TOutput result;
@@ -99,9 +103,8 @@ public:
 
 protected:
 
-
 private:
-    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6);
+
 };
 
 } // namespace Functor

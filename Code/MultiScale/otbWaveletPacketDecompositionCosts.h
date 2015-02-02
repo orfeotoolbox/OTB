@@ -23,6 +23,7 @@
 
 #include "itkObject.h"
 #include "itkMacro.h"
+#include "itkObjectFactory.h"
 
 namespace otb {
 

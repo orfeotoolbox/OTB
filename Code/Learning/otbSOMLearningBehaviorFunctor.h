@@ -44,8 +44,8 @@ class SOMLearningBehaviorFunctor
 {
 public:
   /** Empty constructor / descructor */
-  CzihoSOMLearningBehaviorFunctor () {}
-  virtual ~CzihoSOMLearningBehaviorFunctor() {}
+  SOMLearningBehaviorFunctor () {}
+  virtual ~SOMLearningBehaviorFunctor() {}
 
   /** Functor */
   virtual double operator ()(unsigned int currentIteration,

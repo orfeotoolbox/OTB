@@ -19,6 +19,7 @@
 #define __otbCBAMI_h
 
 #include <vector>
+#include "itkMath.h"
 
 namespace otb
 {

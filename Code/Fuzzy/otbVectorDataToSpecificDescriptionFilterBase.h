@@ -39,12 +39,12 @@ namespace otb
 
 template <class TVectorData>
 class ITK_EXPORT VectorDataToSpecificDescriptionFilterBase :
-public otb::VectorDataToVectorDataFilter<TVectorData, TVectorData>
+  public VectorDataToVectorDataFilter<TVectorData, TVectorData>
 {
 public:
   /** Standard class typedefs. */
   typedef VectorDataToSpecificDescriptionFilterBase    Self;
-  typedef otb::VectorDataToVectorDataFilter<TVectorData,
+  typedef VectorDataToVectorDataFilter<TVectorData,
     TVectorData>                                       Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;

@@ -28,6 +28,8 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkNeighborhoodInnerProduct.h"
 
+#include "otbWaveletOperatorBase.h"
+
 namespace otb {
 
 /** \class WaveletFilterBank

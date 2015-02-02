@@ -21,7 +21,8 @@
 
 #include <vnl/vnl_math.h>
 
-#include <itkImageRegionIterator.h>
+#include "itkImageRegionIterator.h"
+#include "itkProgressReporter.h"
 
 namespace otb {
 

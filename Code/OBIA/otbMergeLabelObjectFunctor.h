@@ -18,6 +18,7 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbMergeLabelObjectFunctor_h
 #define __otbMergeLabelObjectFunctor_h
 
+#include <algorithm>
 
 namespace otb
 {

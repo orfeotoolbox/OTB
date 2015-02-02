@@ -19,6 +19,7 @@
 #define __otbImageListToRCC8GraphFilter_h
 
 #include "otbRCC8GraphSource.h"
+#include "otbImageList.h"
 
 namespace otb
 {

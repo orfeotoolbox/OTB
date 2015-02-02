@@ -20,6 +20,7 @@
 #define __otbSinusoidalMapProjection_txx
 
 #include "otbSinusoidalMapProjection.h"
+#include "otbUtils.h"
 
 namespace otb
 {

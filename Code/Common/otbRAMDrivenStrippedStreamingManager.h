@@ -18,6 +18,7 @@
 #ifndef __otbRAMDrivenStrippedStreamingManager_h
 #define __otbRAMDrivenStrippedStreamingManager_h
 
+#include "itkImageRegionSplitter.h"
 #include "otbStreamingManager.h"
 
 namespace otb

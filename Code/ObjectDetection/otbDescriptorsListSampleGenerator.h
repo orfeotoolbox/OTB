@@ -22,13 +22,12 @@
 
 #include "itkVariableLengthVector.h"
 #include "itkImageRegion.h"
-
-#include "otbListSampleSource.h"
+#include "itkFunctionBase.h"
 #include "itkListSample.h"
-#include "otbVectorData.h"
-
 #include "itkSimpleDataObjectDecorator.h"
 
+#include "otbListSampleSource.h"
+#include "otbVectorData.h"
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 

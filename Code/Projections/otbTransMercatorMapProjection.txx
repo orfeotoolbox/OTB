@@ -19,6 +19,7 @@
 #define __otbTransMercatorMapProjection_txx
 
 #include "otbTransMercatorMapProjection.h"
+#include "otbUtils.h"
 
 namespace otb
 {

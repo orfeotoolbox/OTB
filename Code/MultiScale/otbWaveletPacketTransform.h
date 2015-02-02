@@ -21,10 +21,12 @@
 #ifndef __otbWaveletPacketTransform_h
 #define __otbWaveletPacketTransform_h
 
-#include "otbImageToImageListFilter.h"
-#include "otbImageListToImageFilter.h"
 #include "itkProgressAccumulator.h"
 
+#include "otbImageToImageListFilter.h"
+#include "otbImageListToImageFilter.h"
+#include "otbWaveletGenerator.h"
+#include "otbWaveletOperatorBase.h"
 #include "otbWaveletPacketDecompositionCosts.h"
 
 namespace otb {

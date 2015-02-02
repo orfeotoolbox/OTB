@@ -19,8 +19,10 @@
 #define __otbWorldFile_h
 
 #include <iomanip>
+#include <fstream>
 
 #include "itkObject.h"
+#include "itkObjectFactory.h"
 
 namespace otb {
 

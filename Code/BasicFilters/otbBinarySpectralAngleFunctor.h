@@ -18,6 +18,7 @@
 #ifndef __otbBinarySpectralAngleFunctor_h
 #define __otbBinarySpectralAngleFunctor_h
 
+#include <algorithm>
 #include "otbMath.h"
 
 namespace otb

@@ -19,6 +19,9 @@
 #ifndef __otbImageListToSingleImageFilter_txx
 #define __otbImageListToSingleImageFilter_txx
 
+#include "itkImageRegionConstIteratorWithIndex.h"
+#include "itkImageRegionIteratorWithIndex.h"
+#include "itkProgressReporter.h"
 #include "otbImageListToSingleImageFilter.h"
 
 namespace otb

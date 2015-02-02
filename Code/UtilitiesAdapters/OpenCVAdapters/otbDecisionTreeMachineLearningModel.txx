@@ -21,7 +21,8 @@
 #include "otbDecisionTreeMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
 
-// #include <opencv2/opencv.hpp>
+#include <fstream>
+#include "itkMacro.h"
 
 namespace otb
 {

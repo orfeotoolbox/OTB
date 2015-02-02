@@ -18,6 +18,8 @@
 #ifndef __otbCrossCorrelation_h
 #define __otbCrossCorrelation_h
 
+#include "itkMath.h"
+
 namespace otb
 {
 

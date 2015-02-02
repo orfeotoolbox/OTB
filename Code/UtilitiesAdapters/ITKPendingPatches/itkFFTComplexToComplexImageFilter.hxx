@@ -31,6 +31,7 @@
 #ifndef __itkFFTComplexToComplexImageFilter_hxx
 #define __itkFFTComplexToComplexImageFilter_hxx
 
+#include "itkFFTComplexToComplexImageFilter.h"
 
 #if defined( ITK_USE_FFTWD ) || defined( ITK_USE_FFTWF )
 #include "itkFFTWComplexToComplexImageFilter.h"
@@ -40,7 +41,7 @@ namespace itk
 {
 #if defined( ITK_USE_FFTWD ) || defined( ITK_USE_FFTWF )
 template< class TImage >
-class FFTWComplexToComplexImageFilter;
+class ::itk::FFTWComplexToComplexImageFilter;
 #endif
 
 template< class TImage >

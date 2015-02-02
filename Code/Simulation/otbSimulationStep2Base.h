@@ -19,9 +19,8 @@
 #ifndef __otbSimulationStep2Base_h
 #define __otbSimulationStep2Base_h
 
-
 #include "itkProcessObject.h"
-
+#include "otbSpectralResponse.h"
 
 namespace otb
 {

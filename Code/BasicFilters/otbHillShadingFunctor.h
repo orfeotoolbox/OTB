@@ -18,6 +18,7 @@
 #ifndef __otbHillShadingFunctor_h
 #define __otbHillShadingFunctor_h
 
+#include "itkNumericTraits.h"
 #include "otbMath.h"
 
 namespace otb

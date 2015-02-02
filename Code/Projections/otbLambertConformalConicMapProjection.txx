@@ -20,6 +20,7 @@
 #define __otbLambertConformalConicMapProjection_txx
 
 #include "otbLambertConformalConicMapProjection.h"
+#include "otbUtils.h"
 
 namespace otb
 {

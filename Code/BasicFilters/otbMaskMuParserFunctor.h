@@ -24,16 +24,12 @@
 
 #include "otbParser.h"
 #include "otbMacro.h"
-
-
 #include "otbBinarySpectralAngleFunctor.h"
-
-#include "muParserCallback.h"
 
 namespace otb
 {
 /** \class MaskMuParserFunctor
- * \brief functor used to create binary mask for input of connected component segmentation module.
+ * \brief Functor used to create binary mask for input of connected component segmentation module.
  *
  * This functor is based on the mathematical parser library muParser.
  * The built in functions and operators list is available at:

@@ -22,9 +22,9 @@
 #ifndef __otbGroundSpacingImageFunction_txx
 #define __otbGroundSpacingImageFunction_txx
 
-#include "otbGroundSpacingImageFunction.h"
-
+#include "otbMath.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "otbGroundSpacingImageFunction.h"
 
 namespace otb
 {

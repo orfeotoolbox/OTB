@@ -19,10 +19,9 @@
 #define __otbRandomForestsMachineLearningModel_txx
 
 #include <fstream>
-
+#include "itkMacro.h"
 #include "otbRandomForestsMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
-// #include <opencv2/opencv.hpp>       // opencv general include file
 
 namespace otb
 {

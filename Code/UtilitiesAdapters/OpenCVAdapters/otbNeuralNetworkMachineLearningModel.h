@@ -18,11 +18,11 @@
 #ifndef __otbNeuralNetworkMachineLearningModel_h
 #define __otbNeuralNetworkMachineLearningModel_h
 
+#include <opencv2/opencv.hpp>
+
 #include "itkLightObject.h"
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
-
-class CvANN_MLP;
 
 namespace otb
 {

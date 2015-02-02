@@ -30,13 +30,15 @@ namespace otb
  */
 template <class TPointSet, class TValue, class TCoordRep = double>
 class ITK_EXPORT PointSetAndValuesFunction
-  : public itk::FunctionBase<itk::Point<TCoordRep, ::itk::GetPointSetDimension<TPointSet>::PointDimension>, TValue>
+  : public itk::FunctionBase<itk::Point<TCoordRep, TPointSet::PointDimension>, TValue>
 {
 public:
   /** Standard typedefs */
   typedef PointSetAndValuesFunction Self;
-  typedef itk::FunctionBase<itk::Point<TCoordRep,
-          ::itk::GetPointSetDimension<TPointSet>::PointDimension>, TValue> Superclass;
+  typedef itk::FunctionBase<
+             itk::Point<TCoordRep, TPointSet::PointDimension>,
+             TValue
+             > Superclass;
   typedef itk::SmartPointer<Self>
   Pointer;
   typedef itk::SmartPointer<const Self>

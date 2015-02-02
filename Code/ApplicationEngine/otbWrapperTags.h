@@ -18,6 +18,7 @@
 #ifndef __otbWrapperTags_h
 #define __otbWrapperTags_h
 
+#include <string>
 
 namespace otb
 {

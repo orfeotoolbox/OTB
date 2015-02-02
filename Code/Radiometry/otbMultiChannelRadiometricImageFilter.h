@@ -19,6 +19,8 @@
 #define __otbMultiChannelRadiometricImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
+
+#include "otbMacro.h"
 #include "otbBandName.h"
 
 namespace otb

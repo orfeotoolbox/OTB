@@ -24,6 +24,8 @@
 #include "otbImageToImageListFilter.h"
 #include "otbImageListToImageFilter.h"
 #include "otbObjectList.h"
+#include "otbWaveletGenerator.h"
+#include "otbWaveletOperatorBase.h"
 
 namespace otb {
 

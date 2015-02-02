@@ -18,6 +18,10 @@
 #ifndef __otbUniformAlphaBlendingFunctor_h
 #define __otbUniformAlphaBlendingFunctor_h
 
+#include "itkMacro.h"
+#include "itkNumericTraits.h"
+#include "otbMath.h"
+
 namespace otb
 {
 namespace Functor

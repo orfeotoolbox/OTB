@@ -22,6 +22,7 @@
 #define __otbCzihoSOMLearningBehaviorFunctor_h
 
 #include "itkSize.h"
+#include "otbMath.h"
 
 namespace otb
 {

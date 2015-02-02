@@ -20,6 +20,7 @@
 #define __otbMollweidMapProjection_txx
 
 #include "otbMollweidMapProjection.h"
+#include "otbUtils.h"
 
 namespace otb
 {
