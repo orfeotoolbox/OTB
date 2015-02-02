@@ -213,7 +213,6 @@ const std::type_info& ImageIOBase::GetComponentTypeInfo() const
     default:
       itkExceptionMacro ("Unknown component type: " << m_ComponentType);
     }
-  return typeid(ImageIOBase::UnknownType);
 }
 
 //
@@ -715,7 +714,6 @@ std::string ImageIOBase::GetFileTypeAsString(FileType t) const
     default:
       return s = "TypeNotApplicable";
     }
-  return s="TypeNotApplicable";
 }
 
 std::string ImageIOBase::GetByteOrderAsString(ByteOrder t) const
@@ -731,7 +729,6 @@ std::string ImageIOBase::GetByteOrderAsString(ByteOrder t) const
     default:
       return s = "OrderNotApplicable";
     }
-  return s="OrderNotApplicable";
 }
 
 std::string ImageIOBase::GetComponentTypeAsString(IOComponentType t) const
@@ -771,8 +768,6 @@ std::string ImageIOBase::GetComponentTypeAsString(IOComponentType t) const
     default:
       return (s = "unknown");
     }
-  return (s="unknown");
-
 }
 
 std::string ImageIOBase::GetPixelTypeAsString(IOPixelType t) const
@@ -804,8 +799,6 @@ std::string ImageIOBase::GetPixelTypeAsString(IOPixelType t) const
     default:
       itkExceptionMacro ("Unknown pixel type: " << t);
     }
-  return (s="unknown");
-
 }
 
 namespace {

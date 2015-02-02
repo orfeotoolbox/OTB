@@ -55,7 +55,6 @@ VectorDataIOBase
     default:
       return s = "OrderNotApplicable";
     }
-  return s = "OrderNotApplicable";
 }
 
 void
