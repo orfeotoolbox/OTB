@@ -1414,9 +1414,8 @@ void JPEG2000ImageIO::ReadImageInformation()
   // Check some internal parameters of the JPEG2000 file
   if ( !this->m_InternalReaders.front()->CanRead())
     {
-    itkExceptionMacro(<< "Cannot read this file because some JPEG2000 parameters are not supported!");
     this->m_InternalReaders.front()->Clean();
-    return;
+    itkExceptionMacro(<< "Cannot read this file because some JPEG2000 parameters are not supported!");
     }
 
   // If one of the readers fails, clean everything
