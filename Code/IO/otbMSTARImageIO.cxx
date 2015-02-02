@@ -279,8 +279,8 @@ void MSTARImageIO::Read(void* buffer)
   tptr = (char *) strstr(tbuff, "native_header_length= ");
   if (tptr == (char *) NULL)
     {
-    itkExceptionMacro(<< "Can not determine native header length!\n");
     fclose(MSTARfp);
+    itkExceptionMacro(<< "Can not determine native header length!\n");
     }
   else
     {
@@ -291,8 +291,8 @@ void MSTARImageIO::Read(void* buffer)
   tptr = (char *) strstr(tbuff, "NumberOfColumns= ");
   if (tptr == (char *) NULL)
     {
-    itkExceptionMacro(<< "Error: Can not determine MSTAR image width");
     fclose(MSTARfp);
+    itkExceptionMacro(<< "Error: Can not determine MSTAR image width");
     }
   else
     {
@@ -304,8 +304,8 @@ void MSTARImageIO::Read(void* buffer)
   tptr = (char *) strstr(tbuff, "NumberOfRows= ");
   if (tptr == (char *) NULL)
     {
-    itkExceptionMacro(<< "Error: Can not determine MSTAR image height!");
     fclose(MSTARfp);
+    itkExceptionMacro(<< "Error: Can not determine MSTAR image height!");
     }
   else
     {
@@ -596,8 +596,8 @@ void MSTARImageIO::ReadImageInformation()
   tptr = (char *) strstr(tbuff, "native_header_length= ");
   if (tptr == (char *) NULL)
     {
-    itkExceptionMacro(<< "Can not determine native header length!\n");
     fclose(MSTARfp);
+    itkExceptionMacro(<< "Can not determine native header length!\n");
     }
   else
     {
@@ -608,8 +608,8 @@ void MSTARImageIO::ReadImageInformation()
   tptr = (char *) strstr(tbuff, "NumberOfColumns= ");
   if (tptr == (char *) NULL)
     {
-    itkExceptionMacro(<< "Error: Can not determine MSTAR image width");
     fclose(MSTARfp);
+    itkExceptionMacro(<< "Error: Can not determine MSTAR image width");
     }
   else
     {
@@ -621,8 +621,8 @@ void MSTARImageIO::ReadImageInformation()
   tptr = (char *) strstr(tbuff, "NumberOfRows= ");
   if (tptr == (char *) NULL)
     {
-    itkExceptionMacro(<< "Error: Can not determine MSTAR image height!");
     fclose(MSTARfp);
+    itkExceptionMacro(<< "Error: Can not determine MSTAR image height!");
     }
   else
     {
