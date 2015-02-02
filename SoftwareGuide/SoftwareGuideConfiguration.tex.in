@@ -5,8 +5,14 @@
 
 
 % Define command to make reference to on-line Doxygen documentation
+\usepackage{ifthen}
 \newcommand{\doxygen}[2]{
-\href{http://www.orfeo-toolbox.org/doxygen/class#1_1_1#2.html}{\code{#1::#2}}}  
+\ifthenelse{ \equal{#1}{otb}
+}{
+\href{http://www.orfeo-toolbox.org/doxygen/class#1_1_1#2.html}{\code{#1::#2}}
+}{
+\href{http://www.itk.org/Doxygen46/html/class#1_1_1#2.html}{\code{#1::#2}}
+}}
 
 % Define command to make reference to on-line Doxygen documentation
 \newcommand{\subdoxygen}[3]{
