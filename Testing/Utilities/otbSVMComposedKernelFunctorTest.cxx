@@ -175,7 +175,7 @@ int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
   delete [] SVx[0];
   delete [] SVy[0];
   delete [] SVx;
-  delete [] sVy;
+  delete [] SVy;
 
   delete model;
 
