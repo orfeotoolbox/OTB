@@ -237,7 +237,6 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
     delete [] model->sv_coef[i];
     }
   delete [] model->sv_coef;
-  delete [] model->label;
   
   for (int n = 0; n < model->l; ++n)
     {
