@@ -810,7 +810,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "<string> [pixel]";
     }
-  else if (type == ParameterType_Choice || type == ParameterType_ListView || ParameterType_InputImageList ||
+  else if (type == ParameterType_Choice || type == ParameterType_ListView || type == ParameterType_InputImageList ||
            type == ParameterType_InputVectorDataList || type == ParameterType_InputFilenameList ||
            type == ParameterType_StringList )
     {
