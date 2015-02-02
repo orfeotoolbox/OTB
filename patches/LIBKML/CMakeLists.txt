@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(libkml)
 
 set(libkml_VERSION_MAJOR "1")
-set(libkml_VERSION_MINOR "2")
+set(libkml_VERSION_MINOR "3")
 set(libkml_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
@@ -37,9 +37,6 @@ if(WIN32 AND (NOT BORLAND))
   if(MSVC)
     set(LIBKML_COMPILE_ZLIB OFF)
   endif()
-endif()
-if(APPLE)
-  set(LIBKML_COMPILE_ZLIB ON)
 endif()
     
 
