@@ -319,15 +319,21 @@ OutputImageParameter::GetWriter()
     {
     case ImagePixelType_uint8:
       {
-      if (type == 1)
-        writer = m_VectorUInt8Writer;
-      else
-        if (type == 0)
+      switch(type)
+        {
+        case 0:
           writer = m_UInt8Writer;
-        else
-          if (type == 2)
-            writer = m_RGBAUInt8Writer;
-          else writer = m_RGBUInt8Writer;
+          break;
+        case 1:
+          writer = m_VectorUInt8Writer;
+          break;
+        case 2:
+          writer = m_RGBAUInt8Writer;
+          break;
+        default:
+          writer = m_RGBUInt8Writer;
+          break;
+        }
       break;
       }
     case ImagePixelType_int16:
