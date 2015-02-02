@@ -119,7 +119,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
     }
 
   delete [] loadBuffer;
-  delete pxlValue;
+  delete [] pxlValue;
 
   //*******************
   // Method 2 : Use RasterIO to read each band included in the file
@@ -155,7 +155,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
       }
     }
 
-  delete pPixelValue;
+  delete [] pPixelValue;
   GDALClose(poDataset);
 
   return EXIT_SUCCESS;
