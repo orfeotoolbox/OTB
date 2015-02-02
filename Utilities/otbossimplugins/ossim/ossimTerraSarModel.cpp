@@ -1186,12 +1186,20 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
    _refPoint->set_pix_line(sc_lin);
 
    CivilDateTime * date = new CivilDateTime() ;
-   if (! ossim::iso8601TimeStringToCivilDate(inp_sctim_string, *date)) return false ;
+   if (! ossim::iso8601TimeStringToCivilDate(inp_sctim_string, *date)) 
+     {
+     delete date;
+     return false ;
+     }
 
    if(_platformPosition != NULL)
    {
       Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
-      if (ephemeris == NULL) return false ; 
+      if (ephemeris == NULL) 
+        {
+        delete date;
+        return false ;
+        }
 
       _refPoint->set_ephemeris(ephemeris);
 

@@ -1212,6 +1212,9 @@ int ossimRadarSatModel::FindSRGRSetNumber(JSDDateTime date) const
   if (_n_srgr==0) return(-1) ;
 
   double * delays = new double[_n_srgr];
+  
+  std::fill_n(delays,_n_srgr,0);
+
   for (int i=0;i<_n_srgr;i++)
   {
     delays[i] = fabs(date.get_second()+date.get_decimal()-_srgr_update[i]) ;
