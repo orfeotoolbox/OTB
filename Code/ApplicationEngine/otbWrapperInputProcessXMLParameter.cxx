@@ -156,8 +156,8 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
 
   if (!doc.LoadFile(fp , TIXML_ENCODING_UTF8))
     {
-    itkExceptionMacro(<< "Can't open file " << m_FileName);
     fclose(fp);
+    itkExceptionMacro(<< "Can't open file " << m_FileName);
     }
 
   TiXmlHandle handle(&doc);
@@ -276,10 +276,13 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       else if (type == ParameterType_OutputImage)
         {
         OutputImageParameter *paramDown = dynamic_cast<OutputImageParameter*>(param);
-        paramDown->SetFileName(value);
-        std::string pixTypeAsString  = GetChildNodeTextOf(n_Parameter, "pixtype");
-        ImagePixelType outPixType = GetPixelTypeFromString(pixTypeAsString);
-        paramDown->SetPixelType(outPixType);
+        if(paramDown!=NULL)
+          {
+          paramDown->SetFileName(value);
+          std::string pixTypeAsString  = GetChildNodeTextOf(n_Parameter, "pixtype");
+          ImagePixelType outPixType = GetPixelTypeFromString(pixTypeAsString);
+          paramDown->SetPixelType(outPixType);
+          }
         }
       else if (type == ParameterType_ComplexOutputImage)
         {

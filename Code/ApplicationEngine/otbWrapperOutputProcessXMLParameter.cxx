@@ -180,15 +180,19 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
        if (type == ParameterType_Empty)
          {
            EmptyParameter* eParam = dynamic_cast<EmptyParameter *> (param);
-           //Dont use app->HasUserValue which returns false always because of
-           //EmptyParameter::HasValue() is false for EmptyParameter
-           if(eParam->HasUserValue())
+
+           if(eParam!=NULL)
              {
-             paramExists = true;
-             emptyValue = "false";
-             if( eParam->GetActive() )
+             //Dont use app->HasUserValue which returns false always because of
+             //EmptyParameter::HasValue() is false for EmptyParameter
+             if(eParam->HasUserValue())
                {
-               emptyValue = "true";
+               paramExists = true;
+               emptyValue = "false";
+               if( eParam->GetActive() )
+                 {
+                 emptyValue = "true";
+                 }
                }
              }
          }
@@ -207,8 +211,11 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
           {
            OutputImageParameter *imgParam = dynamic_cast<OutputImageParameter *>(param);
            value = imgParam->GetFileName();
-           ImagePixelType pixType = imgParam->GetPixelType();
-           pixelTypeAsString = pixelTypeToString(pixType);
+           if(imgParam!=NULL)
+             {
+             ImagePixelType pixType = imgParam->GetPixelType();
+             pixelTypeAsString = pixelTypeToString(pixType);
+             }
          }
          else if( type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
                   type == ParameterType_InputVectorDataList || type == ParameterType_StringList ||
