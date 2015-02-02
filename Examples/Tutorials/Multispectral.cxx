@@ -79,7 +79,7 @@ int main(int argc, char * argv[])
   //
   //  Sometime, you need to process only one spectral band of the image. To get
   // only one of the spectral band we use the
-  // /doxygen{otb}{MultiToMonoChannelExtractROI}. The declaration is as usual:
+  // \doxygen{otb}{MultiToMonoChannelExtractROI}. The declaration is as usual:
   //
   //  Software Guide : EndLatex
 
