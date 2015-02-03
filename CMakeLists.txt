@@ -14,7 +14,9 @@ include(CTest)
 # General options
 option(ENABLE_QT4 " Use QT4 in the SuperBuild" ON)
 option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
-
+option(BUILD_ICE "Clone and build ICE" OFF)
+option(BUILD_MONTEVERDI2 "Clone and build Monteverdi2" OFF)
+option(BUILD_MONTEVERDI "Clone and build Monteverdi" OFF)
 
 if(WIN32)
   if(MSVC)
@@ -67,12 +69,15 @@ endif()
 
 include(External_OTB)
 
-option(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)" OFF)
+if(BUILD_ICE)
+  option(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)" OFF)
+  include(External_Ice)
+endif()
 
-include(External_Ice)
-
-if(ENABLE_QT4)
+if(BUILD_MONTEVERDI2)
   include(External_Monteverdi2)
 endif()
 
-#include(External_Monteverdi)
+if(BUILD_MONTEVERDI)
+  include(External_Monteverdi)
+endif()
