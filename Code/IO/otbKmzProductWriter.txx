@@ -32,7 +32,10 @@ template <class TInputImage>
 KmzProductWriter<TInputImage>
 ::KmzProductWriter():
   m_UseExtendMode(true),
-  m_TileSize(512)
+  m_TileSize(512),
+  m_MaxDepth(0),
+  m_CurrentDepth(0),
+  m_CurIdx(0)
 {
   // Modify superclass default values, can be overridden by subclasses
   this->SetNumberOfRequiredInputs(1);

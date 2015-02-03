@@ -43,6 +43,8 @@ namespace otb
 
 KMLVectorDataIO
 ::KMLVectorDataIO()
+  : m_Tree(),
+    m_Kept(0)
 {}
 
 

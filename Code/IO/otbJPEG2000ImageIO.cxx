@@ -742,7 +742,7 @@ void JPEG2000TileCache::AddTile(unsigned int tileIndex, boost::shared_ptr<opj_im
 /************************************************************************/
 JPEG2000ImageIO::JPEG2000ImageIO()
 {
-  // Initialize multi-threader
+    // Initialize multi-threader
   m_Threader = itk::MultiThreader::New();
   m_NumberOfThreads = m_Threader->GetNumberOfThreads();
 
@@ -768,6 +768,12 @@ JPEG2000ImageIO::JPEG2000ImageIO()
   m_ResolutionFactor = 0; // Full resolution by default
 
   m_CacheSizeInByte = 0; // By default no cache
+
+  m_NumberOfOverviews = 0;
+
+  m_ResolutionFactor = 1;
+
+  m_TileCacheSizeInByte = 0;
 }
 
 JPEG2000ImageIO::~JPEG2000ImageIO()
