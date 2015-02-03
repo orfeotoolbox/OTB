@@ -1270,7 +1270,10 @@ namespace ossimplugins
          }
 
          ossimString bandName = sub_nodes[0]->getText();
-         ossim_uint32 bandIndex;
+         // Initialize bandIndex with a value that will fail later on
+         // if not changed by the following
+         ossim_uint32 bandIndex(theNumBands+1); 
+
          if (bandName == "B0")
             bandIndex = 0;
          else
@@ -1290,6 +1293,7 @@ namespace ossimplugins
                            << "ossimSpot6DimapSupportData::parseRadiometricMetadata ERROR: Band ID is incorrect\n";
                      }
 
+         // Fail here if bandIndex was not found by previous code
          if ((bandIndex >= theNumBands ) )
          {
             ossimNotify(ossimNotifyLevel_WARN)

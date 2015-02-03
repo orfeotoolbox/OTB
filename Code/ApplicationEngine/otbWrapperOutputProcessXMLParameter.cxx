@@ -210,9 +210,10 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
          if (type == ParameterType_OutputImage)
           {
            OutputImageParameter *imgParam = dynamic_cast<OutputImageParameter *>(param);
-           value = imgParam->GetFileName();
+           
            if(imgParam!=NULL)
              {
+             value = imgParam->GetFileName();
              ImagePixelType pixType = imgParam->GetPixelType();
              pixelTypeAsString = pixelTypeToString(pixType);
              }

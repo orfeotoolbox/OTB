@@ -297,24 +297,21 @@ OutputImageParameter::GetWriter()
     {
     type = 1;
     }
-  else
-    if (dynamic_cast<UInt8RGBAImageType*> (m_Image.GetPointer()))
-      {
-      type = 2;
-      writer = m_RGBAUInt8Writer;
-      itkWarningMacro("UInt8RGBAImageType will be saved in UInt8 format.");
-      return writer;
-      }
-    else
-      if (dynamic_cast<UInt8RGBImageType*> (m_Image.GetPointer()))
-        {
-        type = 3;
-        writer = m_RGBUInt8Writer;
-        itkWarningMacro("UInt8RGBImageType will be saved in UInt8 format.");
-        return writer;
-        }
-
-
+  else if (dynamic_cast<UInt8RGBAImageType*> (m_Image.GetPointer()))
+    {
+    type = 2;
+    writer = m_RGBAUInt8Writer;
+    itkWarningMacro("UInt8RGBAImageType will be saved in UInt8 format.");
+    return writer;
+    }
+  else if (dynamic_cast<UInt8RGBImageType*> (m_Image.GetPointer()))
+    {
+    type = 3;
+    writer = m_RGBUInt8Writer;
+    itkWarningMacro("UInt8RGBImageType will be saved in UInt8 format.");
+    return writer;
+    }
+  
   switch (GetPixelType())
     {
     case ImagePixelType_uint8:

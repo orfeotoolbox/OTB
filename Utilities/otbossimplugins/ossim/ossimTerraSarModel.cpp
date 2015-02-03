@@ -1211,6 +1211,8 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
       return false;
    }
 
+   delete date;
+
    const double CLUM        = 2.99792458e+8 ;
    double sceneCenterSlantRange = _sceneCenterRangeTime * CLUM / 2.0 ;
 

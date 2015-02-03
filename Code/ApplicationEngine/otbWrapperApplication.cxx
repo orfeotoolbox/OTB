@@ -265,15 +265,19 @@ int Application::ExecuteAndWriteOutput()
           {
           Parameter* param = GetParameterByKey(key);
           OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
-          outputParam->InitializeWriters();
-          if (useRAM)
+
+          if(outputParam!=NULL)
             {
-            outputParam->SetRAMValue(ram);
+            outputParam->InitializeWriters();
+            if (useRAM)
+              {
+              outputParam->SetRAMValue(ram);
+              }
+            std::ostringstream progressId;
+            progressId << "Writing " << outputParam->GetFileName() << "...";
+            AddProcess(outputParam->GetWriter(), progressId.str());
+            outputParam->Write();
             }
-          std::ostringstream progressId;
-          progressId << "Writing " << outputParam->GetFileName() << "...";
-          AddProcess(outputParam->GetWriter(), progressId.str());
-          outputParam->Write();
           }
         else if (GetParameterType(key) == ParameterType_OutputVectorData
                  && IsParameterEnabled(key) && HasValue(key) )
@@ -294,15 +298,19 @@ int Application::ExecuteAndWriteOutput()
           {
           Parameter* param = GetParameterByKey(key);
           ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
-          outputParam->InitializeWriters();
-          if (useRAM)
+          
+          if(outputParam!=NULL)
             {
-            outputParam->SetRAMValue(ram);
+            outputParam->InitializeWriters();
+            if (useRAM)
+              {
+              outputParam->SetRAMValue(ram);
+              }
+            std::ostringstream progressId;
+            progressId << "Writing " << outputParam->GetFileName() << "...";
+            AddProcess(outputParam->GetWriter(), progressId.str());
+            outputParam->Write();
             }
-          std::ostringstream progressId;
-          progressId << "Writing " << outputParam->GetFileName() << "...";
-          AddProcess(outputParam->GetWriter(), progressId.str());
-          outputParam->Write();
           }
 
         //xml writer parameter
