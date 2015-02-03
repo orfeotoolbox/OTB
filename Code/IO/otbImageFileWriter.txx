@@ -470,7 +470,7 @@ ImageFileWriter<TInputImage>
 
     if(imageIO.IsNull())
       {
-      otb::ImageFileWriterException e(__FILE__, __LINE__);
+      itk::ImageFileWriterException e(__FILE__, __LINE__);
       std::ostringstream msg;
       msg << " ImageIO is of kind GDALImageIO, but fails to dynamic_cast (this should never happen)."<< std::endl;
       e.SetDescription(msg.str().c_str());

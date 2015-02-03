@@ -29,7 +29,7 @@ namespace otb
  */
 template <class TInputImage>
 MapFileProductWriter<TInputImage>
-::MapFileProductWriter(): m_TileSize(256), m_SRID(26918)
+::MapFileProductWriter(): m_TileSize(256), m_SRID(26918), m_CurrentDepth(0)
 {
   m_GenericRSResampler = GenericRSResamplerType::New();
 
