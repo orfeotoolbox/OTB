@@ -62,6 +62,26 @@ MSTARImageIO::MSTARImageIO()
 
   MSTARfp = NULL;        /* Input FILE ptr to MSTAR image file     */
   HDRfp = NULL;          /* Output FILE ptr to MSTAR header file   */
+  RAWfp = NULL;
+
+  i = 0;
+  j = 0;
+  rv = 0;
+  n = 0;
+  numrows = 0;
+  numcols = 0;
+  numgot = 0;
+  outOpt = 0;
+  phlen = 0;
+  nhlen = 0;
+  mstartype = 0;
+  magloc = 0;
+  bytesPerImage = 0;
+  nchunks = 0;
+  totchunks = 0;
+  byteorder = 0;
+  littleushortval = 0;
+  littlefloatval = 0.;
 
   MSTARname = NULL;      /* Input MSTAR filename           */
 
@@ -70,6 +90,8 @@ MSTARImageIO::MSTARImageIO()
 
   FSCENEdata = NULL; /* Ptr to Fullscene data buffer */
   CHIPdata = NULL;   /* Ptr to CHIp data buffer      */
+
+  
 
 }
 
