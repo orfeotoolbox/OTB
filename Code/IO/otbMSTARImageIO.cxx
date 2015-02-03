@@ -370,12 +370,18 @@ void MSTARImageIO::Read(void* buffer)
     {
     case CHIP_IMAGE:
       magloc  = phlen;
-      fseek(MSTARfp, magloc, 0);
+      if(fseek(MSTARfp, magloc, 0))
+        {
+        itkExceptionMacro(<<" Problem while reading file "<<MSTARname);
+        }
       nchunks = numrows * numcols;
       break;
     case FSCENE_IMAGE:
       magloc  = phlen + nhlen; /* nhlen = 512 */
-      fseek(MSTARfp, magloc, 0);
+      if(fseek(MSTARfp, magloc, 0))
+        {
+        itkExceptionMacro(<<" Problem while reading file "<<MSTARname);
+        }
       nchunks = numrows * numcols;
       break;
     }
