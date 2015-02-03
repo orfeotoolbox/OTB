@@ -14,6 +14,12 @@ else()
   set(OPENCV_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(OPENCV_SB_SRC_DIR ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
+  #TODO: add these properly
+  # list(APPEND ${proj}_DEPENDENCIES TIFF)
+  # list(APPEND ${proj}_DEPENDENCIES ZLIB)
+  # list(APPEND ${proj}_DEPENDENCIES PNG)
+  # list(APPEND ${proj}_DEPENDENCIES JPEG)
+  
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.10/opencv-2.4.10.zip/download"
