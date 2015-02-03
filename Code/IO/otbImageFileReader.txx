@@ -318,6 +318,15 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     {
     typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
 
+    if(imageIO.IsNull())
+      {
+      otb::ImageFileReaderException e(__FILE__, __LINE__);
+      std::ostringstream msg;
+      msg << " ImageIO is of kind GDALImageIO, but fails to dynamic_cast (this should never happen)."<< std::endl;
+      e.SetDescription(msg.str().c_str());
+      throw e;
+      }
+
     // Hint the IO whether the OTB image type takes complex pixels
     // this will determine the strategy to fill up a vector image
     OutputImagePixelType dummy;
@@ -728,8 +737,12 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
     {
     typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
-    imageIO->GetResolutionInfo(res,desc);
-    return true;
+
+    if(imageIO.IsNotNull())
+      {
+      imageIO->GetResolutionInfo(res,desc);
+      return true;
+      }
     }
 
 #if defined(OTB_USE_JPEG2000)
@@ -737,8 +750,12 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
     {
     typename JPEG2000ImageIO::Pointer imageIO = dynamic_cast<JPEG2000ImageIO*>(this->GetImageIO());
-    imageIO->GetResolutionInfo(res,desc);
-    return true;
+
+    if(imageIO.IsNotNull())
+      {
+      imageIO->GetResolutionInfo(res,desc);
+      return true;
+      }
     }
 #endif
 

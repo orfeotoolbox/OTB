@@ -452,7 +452,8 @@ ImageFileWriter<TInputImage>
          i != allobjects.end(); ++i)
       {
       otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(i->GetPointer());
-      msg << "    " << io->GetNameOfClass() << std::endl;
+      if(io)
+        msg << "    " << io->GetNameOfClass() << std::endl;
       }
     msg << "  You probably failed to set a file suffix, or" << std::endl;
     msg << "    set the suffix to an unsupported type." << std::endl;
@@ -466,6 +467,16 @@ ImageFileWriter<TInputImage>
       && m_FilenameHelper->gdalCreationOptionsIsSet()   )
     {
     typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(m_ImageIO.GetPointer());
+
+    if(imageIO.IsNull())
+      {
+      otb::ImageFileWriterException e(__FILE__, __LINE__);
+      std::ostringstream msg;
+      msg << " ImageIO is of kind GDALImageIO, but fails to dynamic_cast (this should never happen)."<< std::endl;
+      e.SetDescription(msg.str().c_str());
+      throw e;
+      }
+
     imageIO->SetOptions(m_FilenameHelper->GetgdalCreationOptions());
     }
 
