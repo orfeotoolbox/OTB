@@ -56,22 +56,31 @@ else()
 
   else()
     
+    if(APPLE)
+      set(JPEG_PATCH_COMMAND "${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/patches/${proj} ${JPEG_SB_SRC}")
+      string(TOLOWER ${CMAKE_SYSTEM_NAME} APPLE_SYS_NAME_LOWER)
+      set(JPEG_HOST_CONFIG
+        --build=${CMAKE_SYSTEM_PROCESSOR}-apple-${APPLE_SYS_NAME_LOWER}${CMAKE_SYSTEM_VERSION}
+        --host=${CMAKE_SYSTEM_PROCESSOR}-apple-${APPLE_SYS_NAME_LOWER}${CMAKE_SYSTEM_VERSION})
+    else()
+      set(JPEG_PATCH_COMMAND "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/${proj}/configure ${JPEG_SB_SRC}")
+      set(JPEG_HOST_CONFIG
+        --build=${CMAKE_SYSTEM_PROCESSOR}-linux-gnu
+        --host=${CMAKE_SYSTEM_PROCESSOR}-linux-gnu)
+    endif()
+    
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "http://sourceforge.net/projects/libjpeg/files/libjpeg/6b/jpegsrc.v6b.tar.gz/download"
       URL_MD5 dbd5f3b47ed13132f04c685d608a7547
       BINARY_DIR ${JPEG_SB_BUILD_DIR}
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-      PATCH_COMMAND
-        ${CMAKE_COMMAND} -E copy
-        ${CMAKE_SOURCE_DIR}/patches/JPEG/configure
-        ${JPEG_SB_SRC}/
+      PATCH_COMMAND ${JPEG_PATCH_COMMAND}
       CONFIGURE_COMMAND
         # use 'env' because CTest launcher doesn't perform shell interpretation
         env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
         ${JPEG_SB_BUILD_DIR}/configure
-        --build=${CMAKE_SYSTEM_PROCESSOR}-linux-gnu
-        --host=${CMAKE_SYSTEM_PROCESSOR}-linux-gnu
+        ${JPEG_HOST_CONFIG}
         --prefix=${CMAKE_INSTALL_PREFIX}
         --mandir=${CMAKE_INSTALL_PREFIX}/share/man
         --enable-shared=yes
