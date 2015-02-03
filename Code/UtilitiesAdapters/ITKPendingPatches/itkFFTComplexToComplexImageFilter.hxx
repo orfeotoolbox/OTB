@@ -41,7 +41,7 @@ namespace itk
 {
 #if defined( ITK_USE_FFTWD ) || defined( ITK_USE_FFTWF )
 template< class TImage >
-class ::itk::FFTWComplexToComplexImageFilter;
+class FFTWComplexToComplexImageFilter;
 #endif
 
 template< class TImage >
