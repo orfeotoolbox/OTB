@@ -454,6 +454,12 @@ KMLVectorDataIO
 ::Read(itk::DataObject* datag)
 {
   VectorDataPointerType data = dynamic_cast<VectorDataType*>(datag);
+
+  if(!data)
+    {
+    itkExceptionMacro(<< "Dynamic cast error: data to write is not of type otb::VectorData (this should never happen).");
+    }
+
   std::string kml;
   bool        status = kmlbase::File::ReadFileToString(this->m_FileName, &kml);
   if (status == false)
@@ -519,7 +525,13 @@ void KMLVectorDataIO::Write(const itk::DataObject* datag, char ** itkNotUsed(pap
   // Retrieve data required for georeferencing
 
   VectorDataConstPointerType data_in = dynamic_cast<const VectorDataType*>(datag);
+
   VectorDataConstPointerType data = data_in;
+
+  if(!data)
+    {
+    itkExceptionMacro(<< "Dynamic cast error: data to write is not of type otb::VectorData (this should never happen).");
+    }
 
   std::string           projectionRefWkt = data->GetProjectionRef();
   OGRSpatialReferenceH oSRS = OSRNewSpatialReference(projectionRefWkt.c_str());
