@@ -1,7 +1,10 @@
 
-include(External_glfw)
-
 include(External_glew)
+
+if(BUILD_ICE_APPLICATION)
+  include(External_glfw)
+  #TODO.. include(External_glut)
+endif()
 
 message(STATUS "Setup Ice...")
 
@@ -12,13 +15,18 @@ set(ICE_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
 
 set(${proj}_DEPENDENCIES OTB)
 
-if(USE_SYSTEM_GLFW)
-  set(ICE_SB_GLFW_CONFIG)
-else()
-  set(ICE_SB_GLFW_CONFIG
-    -DGLFW_INCLUDE_DIR:PATH={CMAKE_INSTALL_PREFIX}/include
-    -DGLFW_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/glfw.so)  
-  list(APPEND ${proj}_DEPENDENCIES GLFW)
+#need this var anyway for cmake_cache_args
+set(ICE_SB_GLFW_CONFIG)
+
+if(BUILD_ICE_APPLICATION)
+  if(USE_SYSTEM_GLFW)
+    set(ICE_SB_GLFW_CONFIG)
+  else()
+    set(ICE_SB_GLFW_CONFIG
+      -DGLFW_INCLUDE_DIR:PATH={CMAKE_INSTALL_PREFIX}/include
+      -DGLFW_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/glfw.so)  
+    list(APPEND ${proj}_DEPENDENCIES GLFW)
+  endif()
 endif()
 
 if(USE_SYSTEM_GLEW)
@@ -29,6 +37,7 @@ else()
     -DGLEW_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/glew.so)
   list(APPEND ${proj}_DEPENDENCIES GLEW)
 endif()
+
 
 if(USE_SYSTEM_ITK)
   set(ICE_SB_ITK_CONFIG)
