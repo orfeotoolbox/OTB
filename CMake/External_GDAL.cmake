@@ -151,11 +151,12 @@ else()
   ##https://trac.osgeo.org/gdal/ticket/5725     
   ##is needed for SQLITE driver 
     list(REMOVE_ITEM ${proj}_DEPENDENCIES LIBKML)
-    
-    STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+
+    STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})    
+    STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
     configure_file(${CMAKE_SOURCE_DIR}/patches/${proj}/nmake_gdal_extra.opt.in ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
       
-    ExternalProject_Add(${proj}_build
+    ExternalProject_Add(${proj}
        PREFIX ${proj}
        URL "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"
        URL_MD5 9fdf0f2371a3e9863d83e69951c71ec4
@@ -166,24 +167,10 @@ else()
        PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory  ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
        CONFIGURE_COMMAND  ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/ogrsqlitevirtualogr.cpp
       ${GDAL_SB_BUILD_DIR}/ogr/ogrsf_frmts/sqlite/ogrsqlitevirtualogr.cpp
-       BUILD_COMMAND nmake /f ${GDAL_SB_BUILD_DIR}/Makefile.vc MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt 
-       INSTALL_COMMAND ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
-      ${CMAKE_BINARY_DIR}/${proj}/_install
+       BUILD_COMMAND nmake /f ${GDAL_SB_BUILD_DIR}/makefile.vc MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
+       INSTALL_COMMAND nmake /f ${GDAL_SB_BUILD_DIR}/makefile.vc devinstall MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
     )
     
-    ExternalProject_Add(${proj}
-      PREFIX ${proj}/_install
-      DOWNLOAD_COMMAND ""
-      SOURCE_DIR ${proj}/_install
-      BINARY_DIR ${GDAL_SB_BUILD_DIR}
-      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-      CMAKE_CACHE_ARGS
-        -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
-        -DCMAKE_BUILD_TYPE:STRING=Release
-        -DGDAL_BUILD_DIR:STRING=${GDAL_SB_BUILD_DIR}
-      DEPENDS ${proj}_build
-      CMAKE_COMMAND
-    )    
     
   endif()
   
