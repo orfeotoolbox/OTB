@@ -31,6 +31,11 @@ ImageToOSMVectorDataGenerator<TImage>
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
+
+  m_ImageExtent.minX = 0;
+  m_ImageExtent.maxX = 0;
+  m_ImageExtent.minY = 0;
+  m_ImageExtent.maxY = 0;
 }
 
 template < class TImage >

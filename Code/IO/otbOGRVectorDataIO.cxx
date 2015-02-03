@@ -80,6 +80,12 @@ OGRVectorDataIO
 {
   VectorDataPointerType data = dynamic_cast<VectorDataType*>(datag);
   // Destroy previous opened data source
+
+  if(!data)
+    {
+    itkExceptionMacro(<<"Failed to dynamic cast to otb::VectorData (this should never happen)");
+    }
+
   if (m_DataSource != NULL)
     {
     OGRDataSource::DestroyDataSource(m_DataSource);
@@ -194,6 +200,12 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
   chrono.Start();
 
   VectorDataConstPointerType data = dynamic_cast<const VectorDataType*>(datag);
+
+  if(!data)
+    {
+    itkExceptionMacro(<<"Failed to dynamic cast to otb::VectorData (this should never happen).");
+    }
+
 
   //Find first the OGR driver
   OGRSFDriver * ogrDriver =
