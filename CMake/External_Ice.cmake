@@ -38,6 +38,16 @@ else()
   list(APPEND ${proj}_DEPENDENCIES ITK)
 endif()
 
+if(USE_SYSTEM_TINYXML)
+  set(ICE_SB_TINYXML_CONFIG)
+else()
+  set(ICE_SB_TINYXML_CONFIG
+    -DTINYXML_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
+    -DTINYXML_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/libtinyXML${CMAKE_SHARED_LIBRARY_SUFFIX}
+    )
+  list(APPEND ${proj}_DEPENDENCIES TINYXML)
+endif()
+
 if(MSVC)
   set(ICE_SB_ITK_CONFIG)
   set(ICE_SB_GLEW_CONFIG)
@@ -61,7 +71,8 @@ ExternalProject_Add(${proj}
     -DOTB_DIR:PATH=${CMAKE_INSTALL_PREFIX}/lib/otb
     ${ICE_SB_ITK_CONFIG}
     ${ICE_SB_GLFW_CONFIG}
-    ${ICE_SB_GLEW_CONFIG}      
+    ${ICE_SB_GLEW_CONFIG}
+    ${ICE_SB_TINYXML_CONFIG}
    )
 
 message(STATUS "  Using Ice SuperBuild version")
