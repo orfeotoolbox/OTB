@@ -773,7 +773,7 @@ JPEG2000ImageIO::JPEG2000ImageIO()
 
   m_ResolutionFactor = 1;
 
-  m_TileCacheSizeInByte = 0;
+  m_CacheSizeInByte = 0;
 }
 
 JPEG2000ImageIO::~JPEG2000ImageIO()
