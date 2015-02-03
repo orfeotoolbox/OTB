@@ -58,6 +58,10 @@ ONERAImageIO::ONERAImageIO()
 
   m_FileByteOrder = BigEndian;
 
+  m_width = 0;
+  m_height = 0;
+  m_NbBands = 0;
+
 }
 
 ONERAImageIO::~ONERAImageIO()
