@@ -19,7 +19,6 @@
 #ifndef __otbHistogramStatisticsFunction_txx
 #define __otbHistogramStatisticsFunction_txx
 
-#include "itkNumericTraits.h"
 #include "otbHistogramStatisticsFunction.h"
 
 namespace otb
