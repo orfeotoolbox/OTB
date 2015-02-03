@@ -80,6 +80,22 @@ LayerStackWidget
   delete ism;
   ism = NULL;
   }
+
+  QObject::connect(
+    m_UI->treeView->selectionModel(),
+    SIGNAL( currentRowChanged( const QModelIndex &,  const QModelIndex & ) ),
+    // to:
+    this,
+    SLOT( OnCurrentRowChanged( const QModelIndex &, const QModelIndex & ) )
+    );
+
+  QObject::connect(
+    m_UI->treeView->selectionModel(),
+    SIGNAL( selectionChanged( const QItemSelection &,  const QItemSelection & ) ),
+    // to:
+    this,
+    SLOT( OnSelectionChanged( const QItemSelection &, const QItemSelection & ) )
+    );
 }
 
 /*******************************************************************************/
@@ -130,18 +146,63 @@ LayerStackWidget
 /*******************************************************************************/
 void
 LayerStackWidget
-::SetSelection( int row )
+::SetCurrent( int row )
 {
   assert( m_UI->treeView->selectionModel()!=NULL );
 
+  // if( m_UI->treeView->selectionModel()->currentIndex().row()==row )
+  //   return;
+
+#if 1
   m_UI->treeView->selectionModel()->select(
     m_UI->treeView->model()->index( row, 1 ),
-    QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows
+    QItemSelectionModel::ClearAndSelect |
+    // QItemSelectionModel::Current |
+    QItemSelectionModel::Rows
   );
+#else
+  m_UI->treeView->selectionModel()->setCurrentIndex(
+    m_UI->treeView->model()->index( row, 1 ),
+    QItemSelectionModel::ClearAndSelect |
+    // QItemSelectionModel::Current |
+    QItemSelectionModel::Rows
+  );
+#endif
 }
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+void
+LayerStackWidget
+::OnCurrentRowChanged( const QModelIndex & current,
+                       const QModelIndex & previous )
+{
+  qDebug()
+    << this
+    << "::OnCurrentRowChange(" << current.row() << "," << previous.row() << ")";
+
+  emit CurrentChanged( current.row() );
+}
+
+/*******************************************************************************/
+void
+LayerStackWidget
+::OnSelectionChanged( const QItemSelection & selected,
+                      const QItemSelection & deselected )
+{
+  qDebug()
+    << this
+    << "::OnSelectionChanged(" << selected << "," << deselected << ")";
+
+  QModelIndexList indexes( selected.indexes() );
+  // assert( indexes.empty() || indexes.size()==1 );
+
+  emit SelectionChanged(
+    indexes.empty()
+    ? -1
+    : indexes.front().row()
+  );
+}
 
 } // end namespace 'mvd'

@@ -146,6 +146,7 @@ public:
 
   inline bool IsEmpty() const;
 
+  inline void SetCurrent( SizeType );
   void SetCurrent( const KeyType & );
   void SetCurrent( AbstractLayerModel * );
 
@@ -165,8 +166,8 @@ public slots:
 //
 // Signals.
 signals:
-  void SelectionAboutToBeChanged( size_t );
-  void SelectionChanged( size_t );
+  void CurrentAboutToBeChanged( size_t );
+  void CurrentChanged( size_t );
 
   void AboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & );
   void SelectedLayerModelChanged( const StackedLayerModel::KeyType & );
@@ -217,7 +218,6 @@ private:
   void RotateLayerUp( SizeType );
   void RotateLayerDown( SizeType );
 
-  inline void SetCurrent( SizeType );
   // inline void Swap( SizeType, SizeType );
 
 //
@@ -559,12 +559,12 @@ StackedLayerModel
   //   << "->"
   //   << QString( "'%1'" ).arg( key.c_str() );
 
-  emit SelectionAboutToBeChanged( index );
+  emit CurrentAboutToBeChanged( index );
   emit AboutToChangeSelectedLayerModel( key );
 
   m_Current = index;
 
-  emit SelectionChanged( index );
+  emit CurrentChanged( index );
   emit SelectedLayerModelChanged( key );
 }
 

@@ -605,11 +605,11 @@ ImageViewManipulator
       break;
 
     case Qt::Key_Home:
-      emit SelectNextLayerRequested();
+      emit SelectPreviousLayerRequested();
       break;
 
     case Qt::Key_End:
-      emit SelectPreviousLayerRequested();
+      emit SelectNextLayerRequested();
       break;
 
     case Qt::Key_Delete:

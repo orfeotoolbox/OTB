@@ -106,7 +106,7 @@ public:
 
   /**
    */
-  void SetSelection( int );
+  void SetCurrent( int );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -119,6 +119,12 @@ public slots:
 //
 // Signals.
 signals:
+  /**
+   */
+  void CurrentChanged( int );
+  /**
+   */
+  void SelectionChanged( int );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -149,6 +155,16 @@ private:
 //
 // Slots.
 private slots:
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qitemselectionmodel.html#currentRowChanged
+   */
+  void OnCurrentRowChanged( const QModelIndex &, const QModelIndex & );
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qitemselectionmodel.html#selectionChanged
+   */
+  void OnSelectionChanged( const QItemSelection & selected,
+                           const QItemSelection & deselected );
 };
 
 } // end namespace 'mvd'

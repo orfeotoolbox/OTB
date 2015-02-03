@@ -129,7 +129,7 @@ StackedLayerModel
 
   if( emitSignal )
     {
-    emit SelectionAboutToBeChanged( StackedLayerModel::NIL_INDEX );
+    emit CurrentAboutToBeChanged( StackedLayerModel::NIL_INDEX );
     emit AboutToChangeSelectedLayerModel( KeyType() );
     emit ContentAboutToBeReset();
     }
@@ -156,7 +156,7 @@ StackedLayerModel
 
   if( emitSignal )
     {
-    emit SelectionChanged( StackedLayerModel::NIL_INDEX );
+    emit CurrentChanged( StackedLayerModel::NIL_INDEX );
     emit SelectedLayerModelChanged( KeyType() );
     emit ContentReset();
     }
@@ -210,7 +210,7 @@ StackedLayerModel
     {
     KeyType key( GetKey( m_Current + 1 ) );
 
-    emit SelectionAboutToBeChanged(
+    emit CurrentAboutToBeChanged(
       key.empty()
       ? StackedLayerModel::NIL_INDEX
       : m_Current + 1
@@ -240,7 +240,7 @@ StackedLayerModel
       m_Current = StackedLayerModel::NIL_INDEX;
 
     emit LayerDeleted( index );
-    emit SelectionChanged( m_Current );
+    emit CurrentChanged( m_Current );
     emit SelectedLayerModelChanged( GetKey( m_Current ) );
     }
 }
@@ -281,11 +281,11 @@ StackedLayerModel
   }
   emit OrderChanged();
 
-  emit SelectionAboutToBeChanged( next );
+  emit CurrentAboutToBeChanged( next );
   {
   m_Current = next;
   }
-  emit SelectionChanged( next );
+  emit CurrentChanged( next );
 
   // qDebug() << "current:" << index;
 }
@@ -309,11 +309,11 @@ StackedLayerModel
   }
   emit OrderChanged();
 
-  emit SelectionAboutToBeChanged( prev );
+  emit CurrentAboutToBeChanged( prev );
   {
   m_Current = prev;
   }
-  emit SelectionChanged( prev );
+  emit CurrentChanged( prev );
 
   // qDebug() << "current:" << index;
 }
@@ -340,11 +340,11 @@ StackedLayerModel
 
     assert( current!=StackedLayerModel::NIL_INDEX );
 
-    emit SelectionAboutToBeChanged( current );
+    emit CurrentAboutToBeChanged( current );
     {
       m_Current = current;
     }
-    emit SelectionChanged( m_Current );
+    emit CurrentChanged( m_Current );
     }
 
   // qDebug() << "current:" << index;
@@ -375,11 +375,11 @@ StackedLayerModel
 
     assert( current!=StackedLayerModel::NIL_INDEX );
 
-    emit SelectionAboutToBeChanged( current );
+    emit CurrentAboutToBeChanged( current );
     {
     m_Current = current;
     }
-    emit SelectionChanged( current );
+    emit CurrentChanged( current );
     }
 
   // qDebug() << "current:" << index;

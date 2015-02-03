@@ -97,10 +97,10 @@ LayerStackController
 
   QObject::connect(
     model,
-    SIGNAL( SelectionChanged( size_t ) ),
+    SIGNAL( CurrentChanged( size_t ) ),
     // to:
     this,
-    SLOT( OnStackedLayerSelectionChanged( size_t ) )
+    SLOT( OnStackedLayerCurrentChanged( size_t ) )
   );
 
 
@@ -112,6 +112,25 @@ LayerStackController
   widget->GetItemModel()->SetStack(
     qobject_cast< StackedLayerModel * >( model )
   );
+
+
+#if 0
+  QObject::connect(
+    widget,
+    SIGNAL( CurrentChanged( int ) ),
+    // to:
+    this,
+    SLOT( OnCurrentChanged( int ) )
+  );
+#else
+  QObject::connect(
+    widget,
+    SIGNAL( SelectionChanged( int ) ),
+    // to:
+    this,
+    SLOT( OnSelectionChanged( int ) )
+  );
+#endif
 }
 
 /*******************************************************************************/
@@ -122,14 +141,13 @@ LayerStackController
   // assert( model==qobject_cast< StackedLayerModel * >( model ) );
 
 
-
   QObject::disconnect(
     model,
-    SIGNAL( SelectionChanged( size_t ) ),
+    SIGNAL( CurrentChanged( size_t ) ),
     // to:
     this,
-    SLOT( OnStackedLayerSelectionChanged( size_t ) )
-  );  
+    SLOT( OnStackedLayerCurrentChanged( size_t ) )
+  );
 
 
   LayerStackWidget * widget = GetWidget< LayerStackWidget >();
@@ -138,6 +156,25 @@ LayerStackController
   assert( widget->GetItemModel()!=NULL );
 
   widget->GetItemModel()->SetStack( NULL );
+
+
+#if 0
+  QObject::disconnect(
+    widget,
+    SIGNAL( CurrentChanged( int ) ),
+    // to:
+    this,
+    SLOT( OnCurrentChanged( int ) )
+  );
+#else
+  QObject::disconnect(
+    widget,
+    SIGNAL( SelectionChanged( int ) ),
+    // to:
+    this,
+    SLOT( OnSelectionChanged( int ) )
+  );
+#endif
 }
 
 /*******************************************************************************/
@@ -152,16 +189,48 @@ LayerStackController
 /*******************************************************************************/
 void
 LayerStackController
-::OnStackedLayerSelectionChanged( size_t index )
+::OnCurrentChanged( int index )
 {
-  qDebug() << this << "::OnStackedLayerSelectionChanged(" << index << ")";
+  qDebug() << this << "::OnCurrentChanged(" << index << ")";
+
+  assert( GetModel()==GetModel< StackedLayerModel >() );
+  StackedLayerModel * model = GetModel< StackedLayerModel >();
+  assert( model!=NULL );
+
+  model->SetCurrent( index );
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::OnSelectionChanged( int index )
+{
+  qDebug() << this << "::OnSelectionChanged(" << index << ")";
+
+  assert( GetModel()==GetModel< StackedLayerModel >() );
+  StackedLayerModel * model = GetModel< StackedLayerModel >();
+  assert( model!=NULL );
+
+  model->SetCurrent( index );
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::OnStackedLayerCurrentChanged( size_t index )
+{
+  qDebug() << this << "::OnStackedLayerCurrentChanged(" << index << ")";
 
   LayerStackWidget * widget = GetWidget< LayerStackWidget >();
   assert( widget!=NULL );
 
   assert( widget->GetItemModel()!=NULL );
 
-  widget->SetSelection( index );
+  bool signalsBlocked = widget->blockSignals( true );
+  {
+  widget->SetCurrent( index );
+  }
+  widget->blockSignals( signalsBlocked );
 }
 
 } // end namespace 'mvd'
