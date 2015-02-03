@@ -19,7 +19,7 @@ else()
   endif()
   
   #activate only required components for Qt4
-  set(QT4_SB_CONFIG -no-phonon-backend -no-scripttools -no-multimedia -no-webkit -qt-sql-sqlite -plugin-sql-sqlite -no-nis -no-qt3support)
+  set(QT4_SB_CONFIG )
 
   if(NOT USE_SYSTEM_ZLIB) 
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
@@ -38,27 +38,18 @@ else()
   endif()
  
  #use system libs always for Qt4 as we build them from source or have already in system
-  set(QT4_SB_CONFIG  ${QT4_SB_CONFIG} -system-zlib -system-libpng -system-libtiff -system-libjpeg -system-sqlite)
-   
+  set(QT4_SB_CONFIG)
+
+    STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})    
+    STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
+    
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "http://download.qt-project.org/official_releases/qt/4.8/4.8.6/qt-everywhere-opensource-src-4.8.6.tar.gz"
     URL_MD5 2edbe4d6c2eff33ef91732602f3518eb
-    #GIT_REPOSITORY "${git_protocol}://gitorious.org/qt/qt.git"
-    #GIT_TAG dde0c2f4f6d72bcc9db732eb51399395ffc37778
     BINARY_DIR ${QT4_SB_SRC}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    CONFIGURE_COMMAND
-      ${QT4_SB_SRC}/configure
-        -prefix ${CMAKE_INSTALL_PREFIX}
-        -opensource 
-        -confirm-license
-        -release
-        -shared
-        -nomake demos 
-        -nomake examples
-        -nomake tools
-        ${QT4_SB_CONFIG}
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -E chdir ${QT4_SB_SRC} configure -prefix ${CMAKE_WIN_INSTALL_PREFIX} -opensource -confirm-license -release -shared -nomake demos -nomake examples -nomake tools -no-phonon-backend -no-phonon -no-script -no-scripttools -no-multimedia -no-webkit -qt-sql-sqlite -plugin-sql-sqlite -no-nis -no-qt3support -system-zlib -system-libpng -system-libtiff -system-libjpeg -system-sqlite
     DEPENDS ${${proj}_DEPENDENCIES}
     )
   
