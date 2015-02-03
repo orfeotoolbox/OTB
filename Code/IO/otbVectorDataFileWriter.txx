@@ -35,7 +35,8 @@ VectorDataFileWriter<TInputVectorData>
 ::VectorDataFileWriter() :
   m_FileName(""),
   m_VectorDataIO(0),
-  m_UserSpecifiedVectorDataIO(false)
+  m_UserSpecifiedVectorDataIO(false),
+  m_FactorySpecifiedVectorDataIO(false)
 {
 }
 /**
