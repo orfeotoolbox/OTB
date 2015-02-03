@@ -1,5 +1,12 @@
+
+# Comment out the following to disable BSB support.
+BSB_SUPPORTED = 1
+
+# Comment out the following to disable ODBC support.
+ODBC_SUPPORTED = 1
+
 # Comment out the following to disable JPEG support.
-#JPEG_SUPPORTED = 1
+JPEG_SUPPORTED = 1
 
 # This will enable 12bit libjpeg - use only with internal jpeg builds.
 #JPEG12_SUPPORTED = 1
@@ -51,7 +58,7 @@ CURL_LIB = $(CURL_DIR)\lib\libcurl.lib wsock32.lib wldap32.lib winmm.lib
 # Uncomment for GEOS support (GEOS >= 3.1.0 required)
 GEOS_DIR=@CMAKE_WIN_INSTALL_PREFIX@
 GEOS_CFLAGS = -I$(GEOS_DIR)\include -I$(GEOS_DIR)\include\geos -DHAVE_GEOS
-GEOS_LIB     = $(GEOS_DIR)\lib\geos_c.lib
+GEOS_LIB     = $(GEOS_DIR)\lib\geos.lib $(GEOS_DIR)\lib\geos_c.lib
 
 # Uncomment for OpenJpeg (release v2.0.0) support
 OPENJPEG_ENABLED = YES
