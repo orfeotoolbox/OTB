@@ -28,7 +28,7 @@ file(GLOB ${PROJECT_NAME}_HEADERS
 "${GDAL_BUILD_DIR}/frmts/vrt/*.h"
 "${GDAL_BUILD_DIR}/ogr/ogrsf_frmts/*.h")
 
-file(GLOB ${PROJECT_NAME}_LIBS  "${GDAL_BUILD_DIR}/gdal_i.lib" )
+file(GLOB ${PROJECT_NAME}_LIBS  "${GDAL_BUILD_DIR}/*.lib" )
 
 file(GLOB ${PROJECT_NAME}_DLLS "${GDAL_BUILD_DIR}/*.dll" )
 
