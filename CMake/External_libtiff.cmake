@@ -24,10 +24,15 @@ else()
   endif()
   
   if(MSVC)
-  
+    #is JPEG required for linux also?
+    if(NOT USE_SYSTEM_JPEG)
+        list(APPEND ${proj}_DEPENDENCIES JPEG)
+    endif()
+    
     set(TIFF_SB_ZLIB_CONFIG)
-    set(ZLIB_DIR ${CMAKE_INSTALL_PREFIX})
-    configure_file(${CMAKE_SOURCE_DIR}/patches/${proj}/nmake.opt ${TIFF_SB_BUILD_DIR}/nmake.opt)
+    STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})    
+    STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})    
+    configure_file(${CMAKE_SOURCE_DIR}/patches/${proj}/nmake.opt ${CMAKE_BINARY_DIR}/nmake_libtiff_extra.opt)
     
      ExternalProject_Add(${proj}_build
       PREFIX ${proj}
@@ -37,7 +42,7 @@ else()
       BINARY_DIR ${TIFF_SB_SRC}
       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
       DEPENDS ${${proj}_DEPENDENCIES}
-      PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${TIFF_SB_BUILD_DIR}/nmake.opt ${TIFF_SB_SRC}
+      PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/nmake_libtiff_extra.opt ${TIFF_SB_SRC}/nmake.opt
       CONFIGURE_COMMAND ""
       BUILD_COMMAND nmake /f ${TIFF_SB_SRC}/Makefile.vc
       INSTALL_COMMAND ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
