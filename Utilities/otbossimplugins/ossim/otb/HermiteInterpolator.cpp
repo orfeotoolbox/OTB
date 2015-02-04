@@ -86,7 +86,7 @@ HermiteInterpolator::HermiteInterpolator(int nbrPoints, double* x, double* y, do
      */
 //    if (theXValues[i] <= theXValues[i-1])
 //      std::cerr << "WARNING: Hermite interpolation assumes increasing x values" << std::endl;
-    assert(theXValues[i] > theXValues[i-1]);
+    assert(theXValues && theXValues[i] > theXValues[i-1]);
   }
 }
 

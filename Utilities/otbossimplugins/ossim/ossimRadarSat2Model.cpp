@@ -205,7 +205,11 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
             }
 
             // Set the base class gsd:
+            if(result)
+            {
             result = rsDoc.initGsd(xdoc, theGSD);
+            }
+
             if (result)
             {
                theMeanGSD = (theGSD.x + theGSD.y)/2.0;
@@ -462,7 +466,7 @@ bool ossimRadarSat2Model::InitPlatformPosition(const ossimKeywordlist &kwl, cons
 
       if (! ossim::iso8601TimeStringToCivilDate(utcString, eph_civil_date)) 
         {
-        delete ephemeris;
+        delete [] ephemeris;
         return false;
         }
 

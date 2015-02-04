@@ -69,7 +69,14 @@ namespace ossimplugins
       _imageFilename(rhs._imageFilename),
       _productXmlFile(rhs._productXmlFile)
    {
-      _sarSensor = new SarSensor(_sensor,_platformPosition);
+     if(_sensor && _platformPosition)
+       {
+       _sarSensor = new SarSensor(_sensor,_platformPosition);
+       }
+     else
+       {
+       _sarSensor = NULL;
+       }
    }
 
    ossimGeometricSarSensorModel::~ossimGeometricSarSensorModel()
@@ -248,14 +255,17 @@ namespace ossimplugins
          ++itEstimatedCoords;
       }
 
-      xErrorMean /= nbPoints ;
-      yErrorMean /= nbPoints ;
-      xActualMean /= nbPoints ;
-      yActualMean /= nbPoints ;
-      xActualPow /= nbPoints ;
-      yActualPow /= nbPoints ;
-      xErrorByActualMean /= nbPoints ;
-      yErrorByActualMean /= nbPoints ;
+      if(nbPoints>0)
+        {
+        xErrorMean /= nbPoints ;
+        yErrorMean /= nbPoints ;
+        xActualMean /= nbPoints ;
+        yActualMean /= nbPoints ;
+        xActualPow /= nbPoints ;
+        yActualPow /= nbPoints ;
+        xErrorByActualMean /= nbPoints ;
+        yErrorByActualMean /= nbPoints ;
+        }
 
       // linear regression
       if (fabs(xActualPow - xActualMean*xActualMean) > FLT_EPSILON)

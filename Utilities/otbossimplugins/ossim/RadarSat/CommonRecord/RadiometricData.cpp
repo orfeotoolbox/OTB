@@ -160,7 +160,7 @@ RadiometricData& RadiometricData::operator=(const RadiometricData& rhs)
 
     _n_data = rhs._n_data;
 
-    _field_size = _field_size;
+    _field_size = rhs._field_size;
 
 	_chan_ind = rhs._chan_ind;
 

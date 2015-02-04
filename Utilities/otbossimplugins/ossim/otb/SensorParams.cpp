@@ -252,7 +252,6 @@ bool SensorParams::loadState(const ossimKeywordlist& kwl, const char* prefix)
    {
       result = false;
    }
-   return result;
 
    lookup = kwl.find(pfx.c_str(), DOPCENLINEAR_KW);
    if (lookup)
