@@ -143,9 +143,6 @@ private:
   /** Resolution factor*/
   unsigned int m_ResolutionFactor;
 
-  /** */
-  unsigned int m_NumberOfOverviews;
-
   /** Size of the cache used to reduce number of decoding operations*/
   unsigned int m_CacheSizeInByte;
 

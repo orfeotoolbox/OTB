@@ -365,6 +365,7 @@ void JPEG2000InternalReader::Clean()
 
   this->m_IsOpen = false;
   this->m_CodecFormat = CODEC_UNKNOWN;
+  this->m_ResolutionFactor=0;
 }
 
 boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int tileIndex)
@@ -655,7 +656,7 @@ private:
 
 };
 
-JPEG2000TileCache::JPEG2000TileCache() : m_Cache(), m_CacheSizeInTiles(4), m_CacheSizeInByte(0), m_IsReady(false)
+JPEG2000TileCache::JPEG2000TileCache() : m_Cache(), m_CacheSizeInTiles(4), m_CacheSizeInByte(0), m_TileCacheSizeInByte(0), m_IsReady(false)
 {}
 
 JPEG2000TileCache::~JPEG2000TileCache()
@@ -766,10 +767,7 @@ JPEG2000ImageIO::JPEG2000ImageIO()
 
   m_BytePerPixel = 1;
   m_ResolutionFactor = 0; // Full resolution by default
-
   m_CacheSizeInByte = 0; // By default no cache
-
-  m_NumberOfOverviews = 0;
 }
 
 JPEG2000ImageIO::~JPEG2000ImageIO()
