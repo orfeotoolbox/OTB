@@ -87,6 +87,8 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
   step = 4./static_cast<double>(2*radius);
   position = - double(radius) * step;
 
+  double sum = 0.0;
+
   for ( int i = -radius; i <= radius; ++i)
     {
     // Compute the BCO coefficients according to alpha.
@@ -109,8 +111,13 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
       {
       BCOCoef[m_Radius+i] = 0;
       }
+
+    sum += BCOCoef[m_Radius+i];
     position += step;
     }
+
+  for ( unsigned int i = 0; i < winSize; ++i)
+    BCOCoef[i] = BCOCoef[i] / sum;
 
   return BCOCoef;
 }
@@ -179,10 +186,8 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
     value += lineRes[i+radius]*BCOCoefX[i+radius];
     }
 
-  norma = (vcl_log(static_cast<double>(radius))/vcl_log(2.0));
-  norma = norma * norma;
 
-  return ( static_cast<OutputType>( value/norma ) );
+  return ( static_cast<OutputType>( value ) );
 }
 
 template < typename TPixel, unsigned int VImageDimension, class TCoordRep >
@@ -278,12 +283,9 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
       }
     }
 
-  norma = (vcl_log(static_cast<double>(radius))/vcl_log(2.0));
-  norma = norma * norma;
-
   for( unsigned int k = 0; k<componentNumber; ++k)
     {
-    output.SetElement(k, value.at(k)/norma);
+    output.SetElement(k, value.at(k));
     }
 
   return ( output );
