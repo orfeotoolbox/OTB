@@ -15,9 +15,9 @@ GDAL_HOME="@CMAKE_WIN_INSTALL_PREFIX@"
 
 
 #if using an external jpeg library uncomment the follwing lines
-#JPEG_EXTERNAL_LIB = 1
-#JPEGDIR = @CMAKE_WIN_INSTALL_PREFIX@\include
-#JPEG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\libjpeg.lib
+JPEG_EXTERNAL_LIB = 1
+JPEGDIR = @CMAKE_WIN_INSTALL_PREFIX@\include
+JPEG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\libjpeg.lib
 
 #if using an external png library uncomment the follwing lines
 PNG_EXTERNAL_LIB = 1
