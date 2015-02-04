@@ -11,13 +11,7 @@ if( OSSIM_INCLUDE_DIR )
     set( Ossim_FIND_QUIETLY TRUE )
 endif()
 
-find_path( OSSIM_INCLUDE_DIR
-           NAMES ossim/init/ossimInit.h
-           PATHS 
-           $ENV{OSSIM_INCLUDE_DIR} 
-           ${CMAKE_PREFIX_PATH}/include
-           /usr/local/include
-           /usr/include )
+find_path( OSSIM_INCLUDE_DIR NAMES ossim/init/ossimInit.h )
 
   file(READ "${OSSIM_INCLUDE_DIR}/ossim/ossimVersion.h" _ossim_version_h_CONTENTS)
   string(REGEX REPLACE ".*# *define OSSIM_VERSION *\"([0-9.]+)\".*" "\\1" OSSIM_VERSION "${_ossim_version_h_CONTENTS}")
@@ -29,15 +23,7 @@ find_path( OSSIM_INCLUDE_DIR
     "((${OSSIM_MAJOR_VERSION_NUMBER})*100+${OSSIM_MINOR_VERSION_NUMBER})*100+${OSSIM_PATCH_VERSION_NUMBER}")
   mark_as_advanced(OSSIM_VERSION)
 
-find_library(OSSIM_LIBRARY
-             NAMES ossim
-             PATHS 
-             ${CMAKE_PREFIX_PATH}/lib
-             ${CMAKE_PREFIX_PATH}/lib64
-             /usr/local/lib/ossim
-             /usr/local/lib64/
-             /usr/lib/
-             /usr/lib64/)
+find_library(OSSIM_LIBRARY NAMES ossim)
 
 # handle the QUIETLY and REQUIRED arguments and set OSSIM_FOUND to TRUE if
 # all listed variables are TRUE
