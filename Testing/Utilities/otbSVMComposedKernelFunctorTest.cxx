@@ -35,14 +35,14 @@ int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
 
   ModelType::Pointer svmModel = ModelType::New();
 
-  otb::CustomKernelFunctor         customFunctor;
-  otb::SAMKernelFunctor            SAMFunctor;
-  ComposedKernelFunctor            composedKernelFunctor;
-  composedKernelFunctor.AddKernelFunctorModelToKernelList(&customFunctor);
-  composedKernelFunctor.AddKernelFunctorModelToKernelList(&SAMFunctor);
-  composedKernelFunctor.AddPonderationToPonderationList(1.5);
-  composedKernelFunctor.AddPonderationToPonderationList(2.0);
-  composedKernelFunctor.SetName("compositionFilter");
+  otb::CustomKernelFunctor         * customFunctor = new otb::CustomKernelFunctor;
+  otb::SAMKernelFunctor            * SAMFunctor = new otb::SAMKernelFunctor;
+  ComposedKernelFunctor            * composedKernelFunctor = new ComposedKernelFunctor;
+  composedKernelFunctor->AddKernelFunctorModelToKernelList(customFunctor);
+  composedKernelFunctor->AddKernelFunctorModelToKernelList(SAMFunctor);
+  composedKernelFunctor->AddPonderationToPonderationList(1.5);
+  composedKernelFunctor->AddPonderationToPonderationList(2.0);
+  composedKernelFunctor->SetName("compositionFilter");
 
   struct svm_model *model;
   model = new svm_model;
@@ -87,7 +87,7 @@ int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
   model->nSV[0] = 3;
   model->nSV[1] = 2;
 
-  model->param.kernel_composed = &composedKernelFunctor;
+  model->param.kernel_composed = composedKernelFunctor;
   svmModel->SetModel(model);
 
   struct svm_node *x = new svm_node[3];
@@ -95,8 +95,6 @@ int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
 
   struct svm_node **SVx = new svm_node*[1];
   struct svm_node **SVy = new svm_node*[1];
-  SVx[0] = new svm_node[1];
-  SVy[0] = new svm_node[1];
   SVx[0] = &x[0];
   SVy[0] = &y[0];
 
@@ -125,10 +123,10 @@ int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
 
   file<<"Functor Results:"<<std::endl;
 
-  res1 = customFunctor(SVx[0], SVy[0], model->param);
+  res1 = (*customFunctor)(SVx[0], SVy[0], model->param);
   file<<"Custom Functor only: "<<res1<<std::endl;
   //std::cout<<"customFunctor : "<<res1<<std::endl;
-  res2 = SAMFunctor(SVx[0], SVy[0], model->param);
+  res2 = (*SAMFunctor)(SVx[0], SVy[0], model->param);
   file<<"SAM Functor only: "<<res2<<std::endl;
   //std::cout<<"SAMFunctor : "<<res2<<std::endl;
   file<<"Composed Functor: "<<std::endl;
@@ -172,12 +170,12 @@ int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
   delete [] model->nSV;
   delete [] x;
   delete [] y;
-  delete [] SVx[0];
-  delete [] SVy[0];
   delete [] SVx;
   delete [] SVy;
 
   delete model;
+
+  svmModel = NULL;
 
   return EXIT_SUCCESS;
 }

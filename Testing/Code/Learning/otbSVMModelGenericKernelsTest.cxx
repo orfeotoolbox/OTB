@@ -99,13 +99,7 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   for (int i = 0; i < model->nr_class - 1; ++i)
     model->sv_coef[i] = new double[model->l];
   model->SV = new svm_node *[model->l];
-  for (int n = 0; n < model->l; ++n)
-    {
-    model->SV[n] = new svm_node[1];
-    model->SV[n]->index = -1;
-    model->SV[n]->value = 0.;
-    }
-
+ 
   model->sv_coef[0][0] = 0.125641;
   model->sv_coef[0][1] = 1;
   model->sv_coef[0][2] = 0;
@@ -238,12 +232,8 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
     }
   delete [] model->sv_coef;
   
-  for (int n = 0; n < model->l; ++n)
-    {
-    delete [] model->SV[n];
-    }
-
   delete [] model->SV;
+
   delete model->rho;
   delete model->probA;
   delete model->probB;
