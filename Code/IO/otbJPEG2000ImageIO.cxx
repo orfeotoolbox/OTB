@@ -770,10 +770,6 @@ JPEG2000ImageIO::JPEG2000ImageIO()
   m_CacheSizeInByte = 0; // By default no cache
 
   m_NumberOfOverviews = 0;
-
-  m_ResolutionFactor = 1;
-
-  m_CacheSizeInByte = 0;
 }
 
 JPEG2000ImageIO::~JPEG2000ImageIO()
