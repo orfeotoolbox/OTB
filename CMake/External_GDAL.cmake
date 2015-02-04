@@ -142,6 +142,7 @@ else()
         ${GDAL_SB_GEOS_CONFIG}
         ${GDAL_SB_EXPAT_CONFIG}
         ${GDAL_SB_LIBKML_CONFIG}
+        ${GDAL_SB_JPEG_CONFIG}
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
     )
