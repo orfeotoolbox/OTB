@@ -37,6 +37,7 @@ void RegisterTests()
   REGISTER_TEST(otbWindowedSincInterpolateImageHammingFunction);
   REGISTER_TEST(otbBCOInterpolateImageFunctionNew);
   REGISTER_TEST(otbBCOInterpolateImageFunction);
+  REGISTER_TEST(otbBCOInterpolateImageFunction2);
   REGISTER_TEST(otbBCOInterpolateImageFunctionOverVectorImageNew);
   REGISTER_TEST(otbBCOInterpolateImageFunctionOverVectorImage);
   REGISTER_TEST(otbBCOInterpolateImageFunctionTest);

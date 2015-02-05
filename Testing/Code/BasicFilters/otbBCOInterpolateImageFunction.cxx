@@ -97,6 +97,89 @@ int otbBCOInterpolateImageFunction(int argc, char * argv[])
 }
 
 
+
+int otbBCOInterpolateImageFunction2(int argc, char * argv[])
+{
+
+  typedef otb::Image<double, 2>              ImageType;
+  ImageType::Pointer inputImage = ImageType::New();
+
+  const unsigned int N = 100;
+
+  ImageType::SizeType size;
+  size.Fill(N);
+  ImageType::IndexType index;
+  index.Fill(0);
+  ImageType::RegionType region;
+  region.SetSize(size);
+  region.SetIndex(index);
+
+  inputImage->SetLargestPossibleRegion( region );
+  inputImage->SetBufferedRegion( region );
+  inputImage->SetRequestedRegion( region );
+  inputImage->SetNumberOfComponentsPerPixel(1);
+  inputImage->Allocate();
+
+  typedef itk::ImageRegionIterator<ImageType> IteratorType;
+  IteratorType it1(inputImage, region);
+
+  for (it1.GoToBegin(); !it1.IsAtEnd(); ++it1)
+    it1.Set(1.0);
+
+
+
+  const unsigned int radius = atoi(argv[1]);
+  const double alpha        = atof(argv[2]);
+
+  typedef otb::BCOInterpolateImageFunction<ImageType, double> InterpolatorType;
+  typedef InterpolatorType::ContinuousIndexType               ContinuousIndexType;
+  typedef otb::ImageFileReader<ImageType>                     ReaderType;
+
+
+  std::vector<ContinuousIndexType> indicesList;
+
+  for (unsigned int i=3; i+1 < argc; i=i+2)
+    {
+    ContinuousIndexType idx;
+
+    idx[0] = atof(argv[i]);
+    idx[1] = atof(argv[i + 1]);
+    std::cout << idx[0] << " " << idx[1] << std::endl;
+    indicesList.push_back(idx);
+
+    }
+
+  // Instantiating object
+  InterpolatorType::Pointer filter = InterpolatorType::New();
+
+  ReaderType::Pointer reader = ReaderType::New();
+
+  std::cout << "Alpha Checking : " << std::endl << filter->GetAlpha() << std::endl;
+  filter->SetAlpha(-1.0);
+  std::cout << filter->GetAlpha() << std::endl;
+  filter->SetAlpha(alpha);
+  std::cout << filter->GetAlpha() << std::endl;
+  std::cout << "Radius Checking : " << std::endl << filter->GetRadius() << std::endl;
+  filter->SetRadius(radius);
+  std::cout << filter->GetRadius() << std::endl;
+
+  filter->SetInputImage(inputImage);
+
+
+
+  for (std::vector<ContinuousIndexType>::iterator it = indicesList.begin(); it != indicesList.end(); ++it)
+    {
+      std::cout << (*it) << " -> " << filter->EvaluateAtContinuousIndex((*it)) << std::endl;
+      if (vcl_abs(filter->EvaluateAtContinuousIndex((*it))-1.0)>1e-6)
+        return EXIT_FAILURE;
+    }
+
+
+  return EXIT_SUCCESS;
+}
+
+
+
 int otbBCOInterpolateImageFunctionOverVectorImageNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::VectorImage<double, 2>                                     ImageType;
