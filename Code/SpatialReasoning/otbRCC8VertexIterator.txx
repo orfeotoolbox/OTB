@@ -30,7 +30,7 @@ RCC8VertexIterator<TGraph>
 ::RCC8VertexIterator()
 {
   m_Graph = GraphType::New();
-  tie(m_Iter, m_End) = vertices(*(m_Graph->GetGraph()));
+  boost::tie(m_Iter, m_End) = boost::vertices(*(m_Graph->GetGraph()));
 }
 /**
  * Copy operator.
@@ -51,7 +51,7 @@ RCC8VertexIterator<TGraph>
 ::RCC8VertexIterator(TGraph * graph)
 {
   m_Graph = graph;
-  tie(m_Iter, m_End) = vertices(*(m_Graph->GetGraph()));
+  boost::tie(m_Iter, m_End) = boost::vertices(*(m_Graph->GetGraph()));
 }
 /**
  * Get the current object.
@@ -108,7 +108,7 @@ void
 RCC8VertexIterator<TGraph>
 ::GoToBegin(void)
 {
-  tie(m_Iter, m_End) = vertices(*(m_Graph->GetGraph()));
+  boost::tie(m_Iter, m_End) = boost::vertices(*(m_Graph->GetGraph()));
 }
 /**
  * Increment.
