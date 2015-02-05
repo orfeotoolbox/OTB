@@ -31,27 +31,16 @@ else()
   endif()
   
   if(USE_SYSTEM_BOOST)
-    set(LIBKML_SB_BOOST_CONFIG)
+    # TODO : handle specific prefix
   else()
-    set(LIBKML_SB_BOOST_CONFIG 
-      -DBOOST_ROOT:STRING=${CMAKE_INSTALL_PREFIX}
-      )
     list(APPEND ${proj}_DEPENDENCIES BOOST)
   endif()
   
   if(USE_SYSTEM_ZLIB)
-    set(LIBKML_SB_ZLIB_CONFIG)
+    # TODO : handle specific prefix
   else()
-    set(LIBKML_SB_ZLIB_CONFIG 
-      -DZLIB_ROOT:STRING=${CMAKE_INSTALL_PREFIX}
-      )      
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
-  
-  if(MSVC)
-    set(LIBKML_SB_BOOST_CONFIG)
-    set(LIBKML_SB_ZLIB_CONFIG)
-  endif()    
 
   ExternalProject_Add(${proj}
     PREFIX ${proj}
@@ -65,9 +54,8 @@ else()
       -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
       -DCMAKE_BUILD_TYPE:STRING=Release
       -DBUILD_SHARED_LIBS:BOOL=ON
+      -DCMAKE_PREFIX_PATH:STRING=${CMAKE_INSTALL_PREFIX}
       ${LIBKML_SB_EXPAT_CONFIG}
-      ${LIBKML_SB_BOOST_CONFIG}
-      ${LIBKML_SB_ZLIB_CONFIG}
     )
   
   message(STATUS "  Using libKML SuperBuild version")
