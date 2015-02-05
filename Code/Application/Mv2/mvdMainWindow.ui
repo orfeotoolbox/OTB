@@ -74,7 +74,17 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_ImportImage"/>
-   <addaction name="separator"/>
+  </widget>
+  <widget class="QToolBar" name="m_RenderToolBar">
+   <property name="windowTitle">
+    <string>Render toolbar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
    <addaction name="action_ZoomIn"/>
    <addaction name="action_ZoomOut"/>
    <addaction name="action_ZoomExtent"/>

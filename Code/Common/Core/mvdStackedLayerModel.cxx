@@ -82,7 +82,8 @@ StackedLayerModel
   AbstractModel( parent ),
   m_LayerModels(),
   m_Keys(),
-  m_Current( StackedLayerModel::NIL_INDEX )
+  m_Current( StackedLayerModel::NIL_INDEX ),
+  m_Reference( StackedLayerModel::NIL_INDEX )
 {
 }
 
@@ -111,10 +112,13 @@ StackedLayerModel
       );
     }
 
+  emit ContentAboutToBeChanged();
+
   m_LayerModels.insert( LayerModelMap::value_type( key, model ) );
   m_Keys.push_back( key );
 
   emit LayerAdded( m_Keys.size() - 1 );
+  emit ContentChanged();
 
   return key;
 }
@@ -124,15 +128,19 @@ void
 StackedLayerModel
 ::Clear()
 {
-  bool emitSignal = !IsEmpty() && m_Current<GetCount();
+  bool emitSignal1 = !IsEmpty() && m_Current<GetCount();
+  bool emitSignal2 = !IsEmpty() && m_Reference<GetCount();
 
 
-  if( emitSignal )
+  if( emitSignal1 )
     {
     emit CurrentAboutToBeChanged( StackedLayerModel::NIL_INDEX );
     emit AboutToChangeSelectedLayerModel( KeyType() );
     emit ContentAboutToBeReset();
     }
+
+  if( emitSignal2 )
+    emit ReferenceAboutToBeChanged( StackedLayerModel::NIL_INDEX );
 
 
   for( LayerModelMap::iterator it( m_LayerModels.begin() );
@@ -154,12 +162,15 @@ StackedLayerModel
   m_Current = StackedLayerModel::NIL_INDEX;
 
 
-  if( emitSignal )
+  if( emitSignal1 )
     {
     emit CurrentChanged( StackedLayerModel::NIL_INDEX );
     emit SelectedLayerModelChanged( KeyType() );
     emit ContentReset();
     }
+
+  if( emitSignal2 )
+    emit ReferenceChanged( StackedLayerModel::NIL_INDEX );
 }
 
 /*****************************************************************************/
@@ -202,11 +213,13 @@ StackedLayerModel
 
   assert( it!=m_LayerModels.end() );
 
-  //
-  // Emit about to change selected item.
-  bool emitSelectionChanged = m_Current<GetCount() && index<=m_Current;
+  emit ContentAboutToBeChanged();
 
-  if( emitSelectionChanged )
+  //
+  // Emit about to change current item.
+  bool emitCurrentChanged = m_Current<GetCount() && index<=m_Current;
+
+  if( emitCurrentChanged )
     {
     KeyType key( GetKey( m_Current + 1 ) );
 
@@ -220,6 +233,17 @@ StackedLayerModel
     }
 
   //
+  // Emit about to change reference item.
+  bool emitReferenceChanged = m_Reference<GetCount() && index<=m_Reference;
+
+  if( emitReferenceChanged )
+    emit ReferenceAboutToBeChanged(
+      GetKey( m_Reference + 1 ).empty()
+      ? StackedLayerModel::NIL_INDEX
+      : m_Reference + 1
+    );
+
+  //
   // Remove item.
   if( it->second->parent()==this )
     {
@@ -231,17 +255,28 @@ StackedLayerModel
 
   m_Keys.erase( m_Keys.begin() + index );
 
+  emit LayerDeleted( index );
+  emit ContentChanged();
 
   //
   // Emit selected item changed.
-  if( emitSelectionChanged )
+  if( emitCurrentChanged )
     {
     if( m_Current>=GetCount() )
       m_Current = StackedLayerModel::NIL_INDEX;
 
-    emit LayerDeleted( index );
     emit CurrentChanged( m_Current );
     emit SelectedLayerModelChanged( GetKey( m_Current ) );
+    }
+
+  //
+  // Emit selected item changed.
+  if( emitReferenceChanged )
+    {
+    if( m_Reference>=GetCount() )
+      m_Reference = StackedLayerModel::NIL_INDEX;
+
+    emit ReferenceChanged( m_Reference );
     }
 }
 
@@ -287,7 +322,13 @@ StackedLayerModel
   }
   emit CurrentChanged( next );
 
-  // qDebug() << "current:" << index;
+  SetReference(
+    m_Reference==next
+    ? index
+    : ( m_Reference==index
+        ? next
+        : m_Reference )
+  );
 }
 
 /*****************************************************************************/
@@ -315,7 +356,13 @@ StackedLayerModel
   }
   emit CurrentChanged( prev );
 
-  // qDebug() << "current:" << index;
+  SetReference(
+    m_Reference==prev
+    ? index
+    : ( m_Reference==index
+        ? prev
+        : m_Reference )
+  );
 }
 
 /*****************************************************************************/
@@ -326,7 +373,8 @@ StackedLayerModel
   assert( GetCount()>1 );
   assert( index<GetCount() );
 
-  KeyType key( GetKey( m_Current ) );
+  KeyType currentKey( GetKey( m_Current ) );
+  KeyType referenceKey( GetKey( m_Reference ) );
 
   emit OrderAboutToBeChanged();
   {
@@ -334,9 +382,9 @@ StackedLayerModel
   }
   emit OrderChanged();
 
-  if( !key.empty() )
+  if( !currentKey.empty() )
     {
-    SizeType current = FindKey( key );
+    SizeType current = FindKey( currentKey );
 
     assert( current!=StackedLayerModel::NIL_INDEX );
 
@@ -345,6 +393,19 @@ StackedLayerModel
       m_Current = current;
     }
     emit CurrentChanged( m_Current );
+    }
+
+  if( !referenceKey.empty() )
+    {
+    SizeType reference = FindKey( referenceKey );
+
+    assert( reference!=StackedLayerModel::NIL_INDEX );
+
+    emit ReferenceAboutToBeChanged( reference );
+    {
+      m_Reference = reference;
+    }
+    emit ReferenceChanged( m_Reference );
     }
 
   // qDebug() << "current:" << index;
@@ -361,7 +422,8 @@ StackedLayerModel
   if( index>=GetCount() )
     return;
 
-  KeyType key( GetKey( m_Current ) );
+  KeyType currentKey( GetKey( m_Current ) );
+  KeyType referenceKey( GetKey( m_Reference ) );
 
   emit OrderAboutToBeChanged();
   {
@@ -369,9 +431,9 @@ StackedLayerModel
   }
   emit OrderChanged();
 
-  if( !key.empty() )
+  if( !currentKey.empty() )
     {
-    SizeType current = FindKey( key );
+    SizeType current = FindKey( currentKey );
 
     assert( current!=StackedLayerModel::NIL_INDEX );
 
@@ -380,6 +442,19 @@ StackedLayerModel
     m_Current = current;
     }
     emit CurrentChanged( current );
+    }
+
+  if( !referenceKey.empty() )
+    {
+    SizeType reference = FindKey( referenceKey );
+
+    assert( reference!=StackedLayerModel::NIL_INDEX );
+
+    emit ReferenceAboutToBeChanged( reference );
+    {
+    m_Reference = reference;
+    }
+    emit ReferenceChanged( reference );
     }
 
   // qDebug() << "current:" << index;
@@ -421,6 +496,29 @@ StackedLayerModel
     if( m_Keys[ i ]==key )
       {
       SetCurrent( i );
+      return;
+      }
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::SetReference( const KeyType & key )
+{
+  if( key==GetKey( m_Reference ) )
+    return;
+
+  if( key==StackedLayerModel::NIL_KEY )
+    {
+    SetReference( StackedLayerModel::NIL_INDEX );
+
+    return;
+    }
+
+  for( SizeType i=0; i<m_Keys.size(); ++i )
+    if( m_Keys[ i ]==key )
+      {
+      SetReference( i );
       return;
       }
 }

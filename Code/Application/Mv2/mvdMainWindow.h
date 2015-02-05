@@ -258,6 +258,18 @@ private:
 
   /**
    */
+  void ConnectReferenceLayerComboBox( StackedLayerModel * );
+
+  /**
+   */
+  void DisconnectReferenceLayerComboBox( StackedLayerModel * );
+
+  /**
+   */
+  void SetupReferenceLayerComboBox( StackedLayerModel * );
+
+  /**
+   */
   void ConnectStatusBar( AbstractLayerModel * model );
 
   /**
@@ -404,6 +416,14 @@ private slots:
   /**
    */
   void OnFilenameDropped( const QString& filename );
+
+  /**
+   */
+  void OnReferenceLayerCurrentIndexChanged( int );
+
+  /**
+   */
+  void RefreshReferenceLayerComboBox();
 
 };
 

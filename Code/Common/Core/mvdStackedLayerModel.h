@@ -144,11 +144,16 @@ public:
 
   inline const KeyType & GetCurrentKey() const;
 
+  inline SizeType GetReferenceIndex() const;
+
   inline bool IsEmpty() const;
 
   inline void SetCurrent( SizeType );
   void SetCurrent( const KeyType & );
   void SetCurrent( AbstractLayerModel * );
+
+  inline void SetReference( SizeType );
+  void SetReference( const KeyType & );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -166,25 +171,25 @@ public slots:
 //
 // Signals.
 signals:
-  void CurrentAboutToBeChanged( size_t );
-  void CurrentChanged( size_t );
-
   void AboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & );
   void SelectedLayerModelChanged( const StackedLayerModel::KeyType & );
 
-  /*
-  void AboutToChangeSelectedLayerModel( const AbstractLayerModel * );
-  void SelectedLayerModelChanged( AbstractLayerModel * );
-  */
+  void ContentAboutToBeChanged();
+  void ContentAboutToBeReset();
+  void ContentChanged();
+  void ContentReset();
+
+  void CurrentAboutToBeChanged( size_t );
+  void CurrentChanged( size_t );
+
+  void LayerAdded( size_t index );
+  void LayerDeleted( size_t index );
 
   void OrderAboutToBeChanged();
   void OrderChanged();
 
-  void ContentAboutToBeReset();
-  void ContentReset();
-
-  void LayerAdded( size_t index );
-  void LayerDeleted( size_t index );
+  void ReferenceAboutToBeChanged( size_t );
+  void ReferenceChanged( size_t );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -231,6 +236,7 @@ private:
   LayerModelMap m_LayerModels;
   KeyVector m_Keys;
   SizeType m_Current;
+  SizeType m_Reference;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -452,6 +458,15 @@ StackedLayerModel
 
 /*****************************************************************************/
 inline
+StackedLayerModel::SizeType
+StackedLayerModel
+::GetReferenceIndex() const
+{
+  return m_Reference;
+}
+
+/*****************************************************************************/
+inline
 bool
 StackedLayerModel
 ::IsEmpty() const
@@ -547,7 +562,7 @@ void
 StackedLayerModel
 ::SetCurrent( SizeType index )
 {
-  // qDebug() << this << "::SetCurrentIndex(" << index << ")";
+  // qDebug() << this << "::SetCurrent(" << index << ")";
 
   if( index==m_Current )
     return;
@@ -566,6 +581,24 @@ StackedLayerModel
 
   emit CurrentChanged( index );
   emit SelectedLayerModelChanged( key );
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::SetReference( SizeType index )
+{
+  // qDebug() << this << "::SetReference(" << index << ")";
+
+  if( index==m_Reference )
+    return;
+
+  emit ReferenceAboutToBeChanged( index );
+
+  m_Current = index;
+
+  emit ReferenceChanged( index );
 }
 
 /*****************************************************************************/

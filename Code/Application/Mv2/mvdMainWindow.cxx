@@ -97,6 +97,7 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
+#define REFERENCE_LAYER_COMBOBOX_NAME "referenceLayerComboBox"
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -178,6 +179,20 @@ MainWindow
   InitializeDockWidgets();
 
   InitializeStatusBarWidgets();
+
+  assert( m_UI!=NULL );
+
+  {
+  QComboBox * comboBox =
+    new QComboBox( m_UI->m_RenderToolBar );
+
+  assert( comboBox!=NULL );
+
+  comboBox->setObjectName( "referenceLayerComboBox" );
+  comboBox->setMinimumSize( QSize( 128, 0 ) );
+
+  m_UI->m_RenderToolBar->addWidget( comboBox );
+  }
 }
 
 /*****************************************************************************/
@@ -431,6 +446,7 @@ MainWindow
 ::ConnectViewMenu()
 {
   m_UI->menu_View->addAction( m_UI->m_ToolBar->toggleViewAction() );
+  m_UI->menu_View->addAction( m_UI->m_RenderToolBar->toggleViewAction() );
   
   m_UI->menu_View->addSeparator();
 
@@ -1119,6 +1135,132 @@ MainWindow
 }
 
 /*****************************************************************************/
+void
+MainWindow
+::ConnectReferenceLayerComboBox( StackedLayerModel * model )
+{
+  assert( model!=NULL );
+
+  QComboBox * comboBox =
+    m_UI->m_RenderToolBar->findChild< QComboBox * >(
+      REFERENCE_LAYER_COMBOBOX_NAME
+    );
+
+  assert( comboBox!=NULL );
+
+  QObject::connect(
+    comboBox,
+    SIGNAL( currentIndexChanged( int ) ),
+    // to:
+    this,
+    SLOT( OnReferenceLayerCurrentIndexChanged( int ) )
+  );
+
+  QObject::connect(
+    model,
+    SIGNAL( ContentChanged() ),
+    // to:
+    this,
+    SLOT( RefreshReferenceLayerComboBox() )
+  );
+
+  QObject::connect(
+    model,
+    SIGNAL( OrderChanged() ),
+    // to:
+    this,
+    SLOT( RefreshReferenceLayerComboBox() )
+  );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::SetupReferenceLayerComboBox( StackedLayerModel * model )
+{
+  QComboBox * comboBox =
+    m_UI->m_RenderToolBar->findChild< QComboBox * >(
+      REFERENCE_LAYER_COMBOBOX_NAME
+    );
+
+  assert( comboBox!=NULL );
+
+  comboBox->clear();
+
+  if( model==NULL )
+    return;
+
+  for( StackedLayerModel::ConstIterator it( model->Begin() );
+       it!=model->End();
+       ++it )
+    {
+    if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
+      {
+      const VectorImageModel * vectorImageModel =
+        qobject_cast< const VectorImageModel * >( it->second );
+
+      assert( vectorImageModel!=NULL );
+
+      comboBox->addItem(
+        QString( "%1: %2" )
+        .arg( comboBox->count() )
+        .arg( QFileInfo( vectorImageModel->GetFilename() ).fileName() )
+      );
+      }
+    else
+      qDebug() << "Unhandled AbstractLayerModel subclass.";
+    }
+
+  if( model->GetReferenceIndex()<model->GetCount() )
+    comboBox->setCurrentIndex( model->GetReferenceIndex() );
+
+  comboBox->setEnabled( model->GetCount()>0 );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::DisconnectReferenceLayerComboBox( StackedLayerModel * model )
+{
+  QComboBox * comboBox =
+    m_UI->m_RenderToolBar->findChild< QComboBox * >(
+      REFERENCE_LAYER_COMBOBOX_NAME
+    );
+
+  assert( comboBox!=NULL );
+
+  QObject::disconnect(
+    comboBox,
+    SIGNAL( currentIndexChanged( int ) ),
+    // to:
+    this,
+    SLOT( OnReferenceLayerCurrentIndexChanged( int ) )
+  );
+
+  if( model!=NULL )
+    {
+    QObject::disconnect(
+      model,
+      SIGNAL( ContentChanged() ),
+      // to:
+      this,
+      SLOT( RefreshReferenceLayerComboBox() )
+    );
+
+    QObject::disconnect(
+      model,
+      SIGNAL( OrderChanged() ),
+      // to:
+      this,
+      SLOT( RefreshReferenceLayerComboBox() )
+    );
+    }
+
+  comboBox->clear();
+  comboBox->setEnabled( false );
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
@@ -1202,6 +1344,14 @@ MainWindow
   // Assign stacked-layer model controller.
   SetControllerModel( m_LayerStackDock, NULL );
 
+  // QObject::disconnect(
+  //   refLayerComboBox,
+  //   SIGNAL( currentIndexChanged( int ) ),
+  //   // to:
+  //   this,
+  //   SLOT( OnReferenceLayerCurrentIndexChanged( int ) )
+  // );
+
 
   assert( Application::Instance() );
   assert( Application::Instance()->GetModel()==
@@ -1209,6 +1359,8 @@ MainWindow
 
   StackedLayerModel * stackedLayerModel =
     Application::Instance()->GetModel< StackedLayerModel >();
+
+  DisconnectReferenceLayerComboBox( stackedLayerModel );
 
   // Exit, if there were no previously set database model.
   if( stackedLayerModel==NULL )
@@ -1251,6 +1403,8 @@ MainWindow
   StackedLayerModel * stackedLayerModel =
     qobject_cast< StackedLayerModel * >( model );
 
+  SetupReferenceLayerComboBox( stackedLayerModel );
+  ConnectReferenceLayerComboBox( stackedLayerModel );
 
   // Assign stacked-layer model controller.
   SetControllerModel( m_LayerStackDock, model );
@@ -1263,6 +1417,7 @@ MainWindow
 
   if( stackedLayerModel==NULL )
     return;
+
 
   // Connect stacked-layer model to main-window when selected layer-model
   // is about to change.
@@ -1814,6 +1969,56 @@ MainWindow
 ::OnFilenameDropped( const QString& filename )
 {
   ImportImage( filename, true );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnReferenceLayerCurrentIndexChanged( int index )
+{
+  qDebug() << this << "::OnReferenceLayerCurrentIndexChanged(" << index << ")";
+
+
+  assert( I18nCoreApplication::Instance()!=NULL );
+  assert( I18nCoreApplication::Instance()->GetModel()==
+          I18nCoreApplication::Instance()->GetModel< StackedLayerModel >() );
+
+  StackedLayerModel * model = 
+    I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
+
+  assert( model!=NULL );
+
+  model->SetReference( index );
+
+  /*
+  ImageViewWidget * quicklookView = GetQuicklookView();
+  assert( quicklookView );
+
+  quicklookView->UpdateScene();
+  quicklookView->ZoomToExtent();
+
+
+  assert( m_ImageView!=NULL );
+
+  m_ImageView->UpdateScene();
+  m_ImageView->ZoomToFullResolution();
+  */
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::RefreshReferenceLayerComboBox()
+{
+  qDebug() << this << "::RefreshReferenceLayerComboBox()";
+
+  assert( I18nCoreApplication::Instance()!=NULL );
+  assert( I18nCoreApplication::Instance()->GetModel()==
+          I18nCoreApplication::Instance()->GetModel< StackedLayerModel >() );
+
+  SetupReferenceLayerComboBox(
+    I18nCoreApplication::Instance()->GetModel< StackedLayerModel >()
+  );
 }
 
 } // end namespace 'mvd'
