@@ -9,9 +9,9 @@ endif()
 
 file(GLOB tinyXMLlib_SRCS "*.cpp")
 file(GLOB tinyXMLlib_HDRS "*.h")
-add_library(tinyXML ${tinyXMLlib_SRCS})
+add_library(tinyxml ${tinyXMLlib_SRCS})
 
-install(TARGETS tinyXML
+install(TARGETS tinyxml
     RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
     LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION lib COMPONENT Development)
