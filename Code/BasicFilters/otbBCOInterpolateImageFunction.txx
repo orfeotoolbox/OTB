@@ -137,7 +137,6 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
 {
   int radius = this->GetRadius();
   unsigned int winSize = 2*radius+1;
-  double norma;
   unsigned int dim;
 
   IndexType baseIndex;
@@ -207,7 +206,6 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
 
   int radius = this->GetRadius();
   unsigned int winSize = 2*radius+1;
-  double norma;
   unsigned int dim;
   unsigned int componentNumber = this->GetInputImage()->GetNumberOfComponentsPerPixel();
 

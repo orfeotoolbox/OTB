@@ -206,9 +206,7 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
   typedef ImageType::PixelType                      PixelType;
   typedef otb::BandMathXImageFilter<ImageType>      FilterType;
 
-  unsigned int i;
   const unsigned int N = 100, D1=3, D2=1, D3=1;
-  unsigned int FAIL_FLAG = 0;
 
   ImageType::SizeType size;
   size.Fill(N);
@@ -241,7 +239,7 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
   image3->Allocate();
 
   typedef itk::ConstNeighborhoodIterator<ImageType> IteratorType;
-  IteratorType::RadiusType radius,radius2,radius3;
+  IteratorType::RadiusType radius;
   radius[0]=1; // Size x direction
   radius[1]=2; // Size y direction
 
@@ -328,10 +326,6 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
 
   for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(), itoutput1.GoToBegin(), itoutput2.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3, ++itoutput1, ++itoutput2)
     {
-    ImageType::IndexType i1 = it1.GetIndex();
-    ImageType::IndexType i2 = it2.GetIndex();
-    ImageType::IndexType i3 = it3.GetIndex();
-    
     PixelType px1(output1->GetNumberOfComponentsPerPixel());
     PixelType px2(output2->GetNumberOfComponentsPerPixel());
 
@@ -439,8 +433,7 @@ int otbBandMathXImageFilterTxt( int itkNotUsed(argc), char* argv [])
   const char * outputFilename  = argv[2];
 
   typedef otb::VectorImage<double, 2>              ImageType;
-  typedef ImageType::PixelType                      PixelType;
-  typedef otb::BandMathXImageFilter<ImageType>      FilterType;
+  typedef otb::BandMathXImageFilter<ImageType>     FilterType;
 
   FilterType::Pointer         filter       = FilterType::New();
 
@@ -457,8 +450,7 @@ int otbBandMathXImageFilterWithIdx( int itkNotUsed(argc), char* argv[])
   const char * outfname2       = argv[2];
 
   
-  typedef otb::VectorImage<double, 2>                          ImageType;
-  typedef ImageType::PixelType                            PixelType;
+  typedef otb::VectorImage<double, 2>                     ImageType;
   typedef otb::BandMathXImageFilter<ImageType>            FilterType;
   typedef otb::ImageFileWriter<ImageType>                 WriterType;
 

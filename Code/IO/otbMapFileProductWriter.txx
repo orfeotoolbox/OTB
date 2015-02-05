@@ -29,9 +29,12 @@ namespace otb
  */
 template <class TInputImage>
 MapFileProductWriter<TInputImage>
-::MapFileProductWriter(): m_TileSize(256), m_SRID(26918), m_CurrentDepth(0)
+::MapFileProductWriter()
 {
   m_GenericRSResampler = GenericRSResamplerType::New();
+  m_TileSize = 256;
+  m_CurrentDepth = 0;
+  m_SRID = 26918;
 
   // Modify superclass default values, can be overridden by subclasses
   this->SetNumberOfRequiredInputs(1);

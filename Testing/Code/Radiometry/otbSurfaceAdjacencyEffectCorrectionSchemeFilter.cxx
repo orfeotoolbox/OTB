@@ -61,9 +61,6 @@ int otbSurfaceAdjacencyEffectCorrectionSchemeFilter(int itkNotUsed(argc), char *
   typedef FilterFunctionValuesType::WavelengthSpectralBandType          ValueType;                //float
   typedef FilterFunctionValuesType::ValuesVectorType                    ValuesVectorType;         //std::vector<float>
 
-  typedef AcquiCorrectionParametersType::WavelengthSpectralBandVectorType        WavelengthSpectralBandVectorType;
-
-
   AcquiCorrectionParametersPointerType paramAcqui = AcquiCorrectionParametersType::New();
   AtmoCorrectionParametersPointerType  paramAtmo = AtmoCorrectionParametersType::New();
   FilterFunctionValuesType::Pointer                   functionValues;

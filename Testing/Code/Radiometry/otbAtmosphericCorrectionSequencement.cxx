@@ -139,13 +139,10 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
 
   typedef otb::AtmosphericRadiativeTerms                                    AtmosphericRadiativeTermsType;
   typedef AtmosphericRadiativeTermsType::Pointer                  AtmosphericRadiativeTermsPointerType;
-  typedef otb::AtmosphericRadiativeTerms::DataVectorType DataVectorType;
 
   typedef otb::FilterFunctionValues                                         FilterFunctionValuesType;
-  typedef FilterFunctionValuesType::WavelengthSpectralBandType              ValueType;                //float
   typedef FilterFunctionValuesType::ValuesVectorType                        ValuesVectorType;         //std::vector<float>
 
-  typedef AcquiCorrectionParametersType::WavelengthSpectralBandVectorType        WavelengthSpectralBandVectorType;
 
   AcquiCorrectionParametersPointerType paramAcqui = AcquiCorrectionParametersType::New();
   AtmoCorrectionParametersPointerType  paramAtmo = AtmoCorrectionParametersType::New();

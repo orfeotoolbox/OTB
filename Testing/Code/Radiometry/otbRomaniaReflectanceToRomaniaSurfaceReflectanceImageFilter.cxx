@@ -43,12 +43,6 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int itkNotUsed(a
   
   typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms
   CorrectionParametersToRadiativeTermsType;
-  /*typedef otb::AtmosphericCorrectionParameters                 CorrectionParametersType; chris
-  typedef otb::AtmosphericRadiativeTerms                       RadiativeTermsType;
-  typedef otb::FilterFunctionValues                            FilterFunctionValuesType;
-  typedef CorrectionParametersType::AerosolModelType           AerosolModelType;
-  typedef FilterFunctionValuesType::WavelengthSpectralBandType ValueType;
-  typedef FilterFunctionValuesType::ValuesVectorType           ValuesVectorType; */
 
   typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
   typedef AtmoCorrectionParametersType::Pointer                    AtmoCorrectionParametersPointerType;
@@ -65,13 +59,6 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int itkNotUsed(a
   typedef FilterFunctionValuesType::WavelengthSpectralBandType          ValueType;                //float
   typedef FilterFunctionValuesType::ValuesVectorType                    ValuesVectorType;         //std::vector<float>
 
-  typedef AcquiCorrectionParametersType::WavelengthSpectralBandVectorType        WavelengthSpectralBandVectorType;
-
-
-
-  //AtmosphericRadiativeTermsType::Pointer                         radiative     = AtmosphericRadiativeTermsType::New(); chris
-  //CorrectionParametersType::Pointer                   param         = CorrectionParametersType::New(); chris
-  //CorrectionParametersToRadiativeTermsType*           corrToRadia   = new CorrectionParametersToRadiativeTermsType; chris
   AcquiCorrectionParametersPointerType paramAcqui = AcquiCorrectionParametersType::New();
   AtmoCorrectionParametersPointerType  paramAtmo = AtmoCorrectionParametersType::New();
   FilterFunctionValuesType::Pointer                   functionValues;
