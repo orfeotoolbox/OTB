@@ -45,6 +45,7 @@ void BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
   else
     {
     m_Radius = radius;
+    m_WinSize = 2*m_Radius+1;
     }
 }
 
@@ -76,21 +77,21 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
 ::EvaluateCoef( const ContinuousIndexValueType & indexValue ) const
 {
   // Init BCO coefficient container
-  int radius = this->GetRadius();
-  unsigned int winSize = 2*radius+1;
-  CoefContainerType BCOCoef = CoefContainerType(winSize, 0.);
+
+  CoefContainerType BCOCoef(m_WinSize, 0.);
   double offset, dist, position, step;
 
   offset = indexValue - itk::Math::Floor<IndexValueType>(indexValue+0.5);
 
   // Compute BCO coefficients
-  step = 4./static_cast<double>(2*radius);
-  position = - double(radius) * step;
+  step = 4./static_cast<double>(2*m_Radius);
+  position = - static_cast<double>(m_Radius) * step;
 
   double sum = 0.0;
 
-  for ( int i = -radius; i <= radius; ++i)
+  for ( unsigned int i = 0; i < m_WinSize; ++i)
     {
+
     // Compute the BCO coefficients according to alpha.
     dist = vcl_abs(position - offset*step);
 
@@ -98,25 +99,25 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
       {
       if (dist <= 1.)
         {
-        BCOCoef[radius+i] = (m_Alpha + 2.)*vcl_abs(dist * dist * dist)
+        BCOCoef[i] = (m_Alpha + 2.)*vcl_abs(dist * dist * dist)
           - (m_Alpha + 3.)*dist*dist + 1;
         }
       else
         {
-        BCOCoef[radius+i] = m_Alpha*vcl_abs(dist * dist * dist) - 5
+        BCOCoef[i] = m_Alpha*vcl_abs(dist * dist * dist) - 5
           *m_Alpha*dist*dist + 8*m_Alpha*vcl_abs(dist) - 4*m_Alpha;
         }
       }
     else
       {
-      BCOCoef[m_Radius+i] = 0;
+      BCOCoef[i] = 0;
       }
 
-    sum += BCOCoef[m_Radius+i];
+    sum += BCOCoef[i];
     position += step;
     }
 
-  for ( unsigned int i = 0; i < winSize; ++i)
+  for ( unsigned int i = 0; i < m_WinSize; ++i)
     BCOCoef[i] = BCOCoef[i] / sum;
 
   return BCOCoef;
@@ -269,10 +270,11 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
         neighIndex[1] = this->m_StartIndex[1];
         }
 
+      const InputPixelType & pixel = this->GetInputImage()->GetPixel( neighIndex );
       for( unsigned int k = 0; k<componentNumber; ++k)
         {
-        lineRes[i+radius].at(k) = lineRes[i+radius].at(k)
-          + this->GetInputImage()->GetPixel( neighIndex ).GetElement(k) * BCOCoefY[j+radius];
+        lineRes[i+this->m_Radius].at(k) = lineRes[i+this->m_Radius].at(k)
+          + pixel.GetElement(k) * BCOCoefY[j+this->m_Radius];
         }
       }
     for( unsigned int k = 0; k<componentNumber; ++k)

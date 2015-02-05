@@ -107,20 +107,23 @@ public:
   virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const = 0;
 
 protected:
-  BCOInterpolateImageFunctionBase() : m_Radius(2), m_Alpha(-0.5) {};
+  BCOInterpolateImageFunctionBase() : m_Radius(2), m_WinSize(5), m_Alpha(-0.5) {};
   virtual ~BCOInterpolateImageFunctionBase() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Compute the BCO coefficients. */
   virtual CoefContainerType EvaluateCoef( const ContinuousIndexValueType & indexValue ) const;
+  
+    /** Used radius for the BCO */
+  unsigned int           m_Radius;
+  /** Used winsize for the BCO */
+  unsigned int           m_WinSize;
+  /** Optimisation Coefficient */
+  double                 m_Alpha;
 
 private:
   BCOInterpolateImageFunctionBase( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
-  /** Used radius for the BCO */
-  unsigned int           m_Radius;
-  /** Optimisation Coefficient */
-  double                 m_Alpha;
 };
 
 
