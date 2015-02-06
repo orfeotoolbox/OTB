@@ -29,34 +29,6 @@ else()
         ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt 
         ${MUPARSER_SB_SRC}
     )
-    
-  if(FALSE)  
-    ExternalProject_Add(${proj}
-      PREFIX ${proj}
-      URL "http://downloads.sourceforge.net/project/muparser/muparser/Version%202.2.3/muparser_v2_2_3.zip"
-      URL_MD5 9de40ec1dab5bd2787ee344fce5846ad
-      BINARY_DIR ${MUPARSER_SB_BUILD_DIR}
-      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-      CONFIGURE_COMMAND
-        LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib 
-        ${MUPARSER_SB_BUILD_DIR}/configure
-        --prefix=${CMAKE_INSTALL_PREFIX}
-        --enable-shared=yes
-        --enable-samples=no
-        --enable-debug=no
-      BUILD_COMMAND $(MAKE)
-      INSTALL_COMMAND $(MAKE) install
-      DEPENDS ${${proj}_DEPENDENCIES}
-    )
-        
-    ExternalProject_Add_Step(${proj} copy_source
-      COMMAND ${CMAKE_COMMAND} -E copy_directory 
-      ${MUPARSER_SB_SRC} ${MUPARSER_SB_BUILD_DIR}
-      DEPENDEES patch update
-      DEPENDERS configure
-    )
-   
-  endif()  
   
   message(STATUS "  Using muParser SuperBuild version")
 
