@@ -116,6 +116,9 @@ else()
   endif()
   
   if(UNIX)
+    set(GDAL_SB_EXTRA_OPTIONS "" CACHE STRING "Extra options to be passed to GDAL configure script")
+    mark_as_advanced(GDAL_SB_EXTRA_OPTIONS)
+    
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"
@@ -143,6 +146,7 @@ else()
         ${GDAL_SB_EXPAT_CONFIG}
         ${GDAL_SB_LIBKML_CONFIG}
         ${GDAL_SB_JPEG_CONFIG}
+        ${GDAL_SB_EXTRA_OPTIONS}
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
     )
