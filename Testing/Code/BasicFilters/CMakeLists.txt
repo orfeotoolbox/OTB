@@ -188,7 +188,7 @@ if(OTB_DATA_USE_LARGEINPUT)
                 ${BASELINE}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
                 ${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
         otbStreamingShrinkImageFilter
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
         50
 )
@@ -198,7 +198,7 @@ add_test(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS2}
                 ${BASELINE}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
                 ${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
                 otbStreamingShrinkImageFilter
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
         20
 )
@@ -247,7 +247,7 @@ if(OTB_DATA_USE_LARGEINPUT)
                 ${BASELINE_FILES}/bfTvImportGeoInformationKeywordListOutput.txt
                 ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
          otbImportGeoInformationImageFilterWithKeywordList
-         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
 )
 endif()
@@ -372,7 +372,7 @@ add_test(bfTvImageListToSingleImageFilter ${BASICFILTERS_TESTS3}
 #if(OTB_DATA_USE_LARGEINPUT)
 #    add_test(bfTvImageListToSingleImageFilterLarge ${BASICFILTERS_TESTS3}
 #                        otbImageListToSingleImageFilter
-#                        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+#                        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 #                        ${TEMP}/bfTvImageListToSingleImageFilterLargeOut.tif
 #    )
 #endif()
@@ -439,7 +439,7 @@ add_test(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS4}
                     ${BASELINE_FILES}/bfStreamingStatisticsImageFilterResults.txt
                     ${TEMP}/bfStreamingStatisticsImageFilterResults.txt
          otbStreamingStatisticsImageFilter
-#                ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+#                ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
                 ${INPUTDATA}/small_poupees_1canal.hd
                 ${TEMP}/bfStreamingStatisticsImageFilterResults.txt)
 
@@ -537,7 +537,7 @@ add_test(bfTuStreamingResampleImageFilterWithAffineTransformNew ${BASICFILTERS_T
 if(OTB_DATA_USE_LARGEINPUT)
 add_test(bfTvStreamingResampleImageFilterWithAffineTransform ${BASICFILTERS_TESTS5}
   otbStreamingResampleImageFilterWithAffineTransform
-  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+  ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
   500
   ${TEMP}/bfTvotbStreamingResampledImageWithAffineTransform.tif
   )
@@ -616,7 +616,7 @@ add_test(bfTvStreamingStatisticsVectorImageFilter ${BASICFILTERS_TESTS5}
                     ${BASELINE_FILES}/bfTvStreamingStatisticsVectorImageFilterResults.txt
                     ${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
          otbStreamingStatisticsVectorImageFilter
-                #${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+                #${OTB_DATA_LARGEINPUT_ROOT}/SPOT5_SCENE01/IMAGERY.TIF
                 ${INPUTDATA}/couleurs_extrait.png
                 ${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
                 )
@@ -1504,7 +1504,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 #
 #add_test(bfTvMeanShiftImageFilterValidLargeInput ${BASICFILTERS_TESTS9}
 #        otbMeanShiftImageFilter
-#        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+#        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 #        ${TEMP}/bfMeanShiftImageFilterOutputValidLargeInput.tif
 #        ${TEMP}/bfMeanShiftImageFilterClusteredOutputValidLargeInput.tif
 #        ${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutputValidLargeInput.tif
@@ -1514,7 +1514,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 
 #add_test(bfTvMeanShiftImageFilter2LargeInput ${BASICFILTERS_TESTS9}
 #       otbMeanShiftImageFilter2
-#        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+#        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 #        ${TEMP}/bfMeanShiftImageSpatialOutputLargeInput.tif
 #        ${TEMP}/bfMeanShiftImageFilterSpectralOutputLargeInput.tif
 #        9 9 10 10 0.001 10

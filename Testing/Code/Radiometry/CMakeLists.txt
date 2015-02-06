@@ -91,7 +91,7 @@ add_test(raTvImageToLuminanceImageFilterAutoSpot5 ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoSpot5.tif
                           ${TEMP}/raTvImageToLuminanceImageFilterAutoSpot5.tif
         otbImageToLuminanceImageFilterAuto
-        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/raTvImageToLuminanceImageFilterAutoSpot5.tif
          )
 
@@ -99,7 +99,7 @@ add_test(raTvImageToLuminanceImageFilterAutoIkonos ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoIkonos.tif
                           ${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
         otbImageToLuminanceImageFilterAuto
-        ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+        ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
         ${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
          )
 
@@ -107,7 +107,7 @@ add_test(raTvImageToLuminanceImageFilterAutoWV2PAN ${RADIOMETRY_TESTS2}
    --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoWV2PAN.tif
                        ${TEMP}/raTvImageToLuminanceImageFilterAutoWV2PAN.tif
         otbImageToLuminanceImageFilterAuto
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
         ${TEMP}/raTvImageToLuminanceImageFilterAutoWV2PAN.tif
          )
 
@@ -115,7 +115,7 @@ add_test(raTvImageToLuminanceImageFilterAutoWV2MULTI ${RADIOMETRY_TESTS2}
    --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoWV2Multi.tif
                        ${TEMP}/raTvImageToLuminanceImageFilterAutoWV2Multi.tif
         otbImageToLuminanceImageFilterAuto
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
         ${TEMP}/raTvImageToLuminanceImageFilterAutoWV2Multi.tif
          )
 
@@ -123,7 +123,7 @@ add_test(raTvImageToLuminanceImageFilterAutoQuickbirdPAN ${RADIOMETRY_TESTS2}
    --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoQuickbirdPAN.tif
                        ${TEMP}/raTvImageToLuminanceImageFilterAutoQuickbirdPAN.tif
         otbImageToLuminanceImageFilterAuto
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/raTvImageToLuminanceImageFilterAutoQuickbirdPAN.tif
          )
 
@@ -131,7 +131,7 @@ add_test(raTvImageToLuminanceImageFilterAutoQuickbirdXS ${RADIOMETRY_TESTS2}
    --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
                        ${TEMP}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
         otbImageToLuminanceImageFilterAuto
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
          )
 
@@ -139,7 +139,7 @@ add_test(raTvImageToLuminanceImageFilterAutoQuickbirdXS ${RADIOMETRY_TESTS2}
    --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
                        ${TEMP}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
         otbImageToLuminanceImageFilterAuto
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
          )
 
@@ -147,7 +147,7 @@ add_test(raTvImageToLuminanceImageFilterAutoFORMOSAT ${RADIOMETRY_TESTS2}
    --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoFormosat.tif
                        ${TEMP}/raTvImageToLuminanceImageFilterAutoFormosat.tif
         otbImageToLuminanceImageFilterAuto
-        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
         ${TEMP}/raTvImageToLuminanceImageFilterAutoFormosat.tif
          )
 
@@ -196,7 +196,7 @@ add_test(raTvLuminanceToReflectanceImageFilterAutoSpot5 ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
                           ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
         otbLuminanceToReflectanceImageFilterAuto
-        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
          )
 
@@ -204,7 +204,7 @@ add_test(raTvLuminanceToReflectanceImageFilterAutoIkonos ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif
                           ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif
         otbLuminanceToReflectanceImageFilterAuto
-        ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+        ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
         ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif
          )
 
@@ -212,7 +212,7 @@ add_test(raTvLuminanceToReflectanceImageFilterAutoWV2PAN ${RADIOMETRY_TESTS2}
    --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoWV2PAN.tif
                        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoWV2PAN.tif
         otbLuminanceToReflectanceImageFilterAuto
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
         ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoWV2PAN.tif
          )
 
@@ -220,7 +220,7 @@ add_test(raTvLuminanceToReflectanceImageFilterAutoWV2MULTI ${RADIOMETRY_TESTS2}
    --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoWV2Multi.tif
                        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoWV2Multi.tif
         otbLuminanceToReflectanceImageFilterAuto
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
         ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoWV2Multi.tif
          )
 
@@ -228,7 +228,7 @@ add_test(raTvLuminanceToReflectanceImageFilterAutoQuickbirdPAN ${RADIOMETRY_TEST
    --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdPAN.tif
                        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdPAN.tif
         otbLuminanceToReflectanceImageFilterAuto
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdPAN.tif
          )
 
@@ -236,7 +236,7 @@ add_test(raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS ${RADIOMETRY_TESTS
    --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
                        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
         otbLuminanceToReflectanceImageFilterAuto
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
          )
 
@@ -244,7 +244,7 @@ add_test(raTvLuminanceToReflectanceImageFilterAutoFORMOSAT ${RADIOMETRY_TESTS2}
    --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
                        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
         otbLuminanceToReflectanceImageFilterAuto
-        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
         ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
          )
 
@@ -328,13 +328,13 @@ add_test(raTvImageToReflectanceImageFilterAuto ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToReflectanceImageFilterAuto.tif
                           ${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
         otbImageToReflectanceImageFilterAuto
-        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
          )
 
 add_test(raTuImageToReflectanceImageFilterAutoFORMOSAT2 ${RADIOMETRY_TESTS2}
         otbImageToReflectanceImageFilterAuto
-                ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+                ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
                 ${TEMP}/raTvImageToReflectanceImageFilterAutoFORMOSAT2.tif
          )
 
@@ -366,7 +366,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 
 set(TEHERANSPOT5DIR ${TEMP}/OpticalCalibLumToImSPOT5)
 file(MAKE_DIRECTORY ${TEHERANSPOT5DIR})
-file(GLOB MTDATA ${LARGEINPUT}/SPOT5/TEHERAN/*.DIM)
+file(GLOB MTDATA ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/*.DIM)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${TEHERANSPOT5DIR} COPYONLY)  
 endforeach(f)
@@ -376,14 +376,14 @@ add_test(raTvLuminanceToImageImageFilterAutoSpot5 ${RADIOMETRY_TESTS2}
                           ${TEHERANSPOT5DIR}/raTvLuminanceToImageImageFilterAutoSpot5.tif
         otbLuminanceToImageImageFilterAuto
         ${TEHERANSPOT5DIR}/IMAGERY.TIF 
-	${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+	${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEHERANSPOT5DIR}/raTvLuminanceToImageImageFilterAutoSpot5.tif
 	${TEHERANSPOT5DIR}/raTvSMALLTEHERANLuminanceToImageImageFilterAutoSpot5.tif
          )
 
 set(BLOSSEVILLEIKONOSDIR ${TEMP}/OpticalCalibLumToImIkonos)
 file(MAKE_DIRECTORY ${BLOSSEVILLEIKONOSDIR})
-file(GLOB MTDATA ${LARGEINPUT}/IKONOS/BLOSSEVILLE/*metadata.txt ${LARGEINPUT}/IKONOS/BLOSSEVILLE/*pan*)
+file(GLOB MTDATA ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/*metadata.txt ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/*pan*)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${BLOSSEVILLEIKONOSDIR} COPYONLY)  
 endforeach(f)
@@ -393,14 +393,14 @@ add_test(raTvLuminanceToImageImageFilterAutoIkonos ${RADIOMETRY_TESTS2}
                           ${BLOSSEVILLEIKONOSDIR}/raTvLuminanceToImageImageFilterAutoIkonos.tif
         otbLuminanceToImageImageFilterAuto
 	${BLOSSEVILLEIKONOSDIR}/po_2619900_pan_0000000.tif
-        ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+        ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
         ${BLOSSEVILLEIKONOSDIR}/raTvLuminanceToImageImageFilterAutoIkonos.tif
 	${BLOSSEVILLEIKONOSDIR}/raTvSMALLBLOSSEVILLELuminanceToImageImageFilterAutoIkonos.tif
          )
 
 set(ROMEWV2DIR ${TEMP}/OpticalCalibLumToImWv2PAN)
 file(MAKE_DIRECTORY ${ROMEWV2DIR})
-set(MTDATADIR ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN)
+set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN)
 file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${ROMEWV2DIR} COPYONLY)  
@@ -411,14 +411,14 @@ add_test(raTvLuminanceToImageImageFilterAutoWV2PAN ${RADIOMETRY_TESTS2}
                        ${ROMEWV2DIR}/raTvLuminanceToImageImageFilterAutoWV2PAN.tif
         otbLuminanceToImageImageFilterAuto
 	${ROMEWV2DIR}/09DEC10103019-P2AS-052298844010_01_P001.TIF
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
         ${ROMEWV2DIR}/raTvLuminanceToImageImageFilterAutoWV2PAN.tif
 	${ROMEWV2DIR}/raTvSMALLROMELuminanceToImageImageFilterAutoWV2PAN.tif
          )
 
 set(ROMEWV2DIR ${TEMP}/OpticalCalibLumToImWv2MULTI)
 file(MAKE_DIRECTORY ${ROMEWV2DIR})
-set(MTDATADIR ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL)
+set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL)
 file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${ROMEWV2DIR} COPYONLY)  
@@ -429,14 +429,14 @@ add_test(raTvLuminanceToImageImageFilterAutoWV2MULTI ${RADIOMETRY_TESTS2}
                        ${ROMEWV2DIR}/raTvLuminanceToImageImageFilterAutoWV2Multi.tif
         otbLuminanceToImageImageFilterAuto
 	${ROMEWV2DIR}/09DEC10103019-M2AS-052298844010_01_P001.TIF
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
 	${ROMEWV2DIR}/raTvLuminanceToImageImageFilterAutoWV2Multi.tif
         ${ROMEWV2DIR}/raTvSMALLROMELuminanceToImageImageFilterAutoWV2Multi.tif
          )
 
 set(TOULOUSEQBDIR ${TEMP}/OpticalCalibLumToImQBPAN)
 file(MAKE_DIRECTORY ${TOULOUSEQBDIR})
-set(MTDATADIR ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN)
+set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN)
 file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${TOULOUSEQBDIR} COPYONLY)  
@@ -447,14 +447,14 @@ add_test(raTvLuminanceToImageImageFilterAutoQuickbirdPAN ${RADIOMETRY_TESTS2}
                        ${TOULOUSEQBDIR}/raTvLuminanceToImageImageFilterAutoQuickbirdPAN.tif
         otbLuminanceToImageImageFilterAuto
 	${TOULOUSEQBDIR}/02APR01105228-P1BS-000000128955_01_P001.TIF
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TOULOUSEQBDIR}/raTvLuminanceToImageImageFilterAutoQuickbirdPAN.tif
 	${TOULOUSEQBDIR}/raTvSMALLTOULOUSELuminanceToImageImageFilterAutoQuickbirdPAN.tif
          )
 
 set(TOULOUSEQBDIR ${TEMP}/OpticalCalibLumToImQBXS)
 file(MAKE_DIRECTORY ${TOULOUSEQBDIR})
-set(MTDATADIR ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL)
+set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL)
 file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${TOULOUSEQBDIR} COPYONLY)  
@@ -465,14 +465,14 @@ add_test(raTvLuminanceToImageImageFilterAutoQuickbirdXS ${RADIOMETRY_TESTS2}
                        ${TOULOUSEQBDIR}/raTvLuminanceToImageImageFilterAutoQuickbirdXS.tif
         otbLuminanceToImageImageFilterAuto
 	${TOULOUSEQBDIR}/02APR01105228-M1BS-000000128955_01_P001.TIF
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TOULOUSEQBDIR}/raTvLuminanceToImageImageFilterAutoQuickbirdXS.tif
 	${TOULOUSEQBDIR}/raTvSMALLTOULOUSELuminanceToImageImageFilterAutoQuickbirdXS.tif
          )
 
 set(SUDOUESTFORMOSATDIR ${TEMP}/OpticalCalibLumToImFormosat)
 file(MAKE_DIRECTORY ${SUDOUESTFORMOSATDIR})
-set(MTDATADIR ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat)
+set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat)
 file(GLOB MTDATA ${MTDATADIR}/*.DIM)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${SUDOUESTFORMOSATDIR} COPYONLY)  
@@ -483,7 +483,7 @@ add_test(raTvLuminanceToImageImageFilterAutoFORMOSAT ${RADIOMETRY_TESTS2}
                        ${SUDOUESTFORMOSATDIR}/raTvLuminanceToImageImageFilterAutoFormosat.tif
         otbLuminanceToImageImageFilterAuto
 	${SUDOUESTFORMOSATDIR}/IMAGERY.TIF
-        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
         ${SUDOUESTFORMOSATDIR}/raTvLuminanceToImageImageFilterAutoFormosat.tif
 	${SUDOUESTFORMOSATDIR}/raTvSMALLSOLuminanceToImageImageFilterAutoFormosat.tif
          )
@@ -529,7 +529,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 
 set(TEHERANSPOT5DIR ${TEMP}/OpticalCalibRefToLumSPOT5)
 file(MAKE_DIRECTORY ${TEHERANSPOT5DIR})
-file(GLOB MTDATA ${LARGEINPUT}/SPOT5/TEHERAN/*.DIM)
+file(GLOB MTDATA ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/*.DIM)
 foreach(f ${MTDATA})  
 	configure_file(${f} ${TEHERANSPOT5DIR} COPYONLY)  
 endforeach(f)
@@ -544,7 +544,7 @@ add_test(raTvReflectanceToLuminanceImageFilterAutoSpot5 ${RADIOMETRY_TESTS2}
 
 set(BLOSSEVILLEIKONOSDIR ${TEMP}/OpticalCalibRefToLumIkonos)
 file(MAKE_DIRECTORY ${BLOSSEVILLEIKONOSDIR})
-file(GLOB MTDATA ${LARGEINPUT}/IKONOS/BLOSSEVILLE/*metadata.txt ${LARGEINPUT}/IKONOS/BLOSSEVILLE/*pan*)
+file(GLOB MTDATA ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/*metadata.txt ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/*pan*)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${BLOSSEVILLEIKONOSDIR} COPYONLY)  
 endforeach(f)
@@ -559,7 +559,7 @@ add_test(raTvReflectanceToLuminanceImageFilterAutoIkonos ${RADIOMETRY_TESTS2}
 
 set(ROMEWV2DIR ${TEMP}/OpticalCalibRefToLumWv2PAN)
 file(MAKE_DIRECTORY ${ROMEWV2DIR})
-set(MTDATADIR ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN)
+set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN)
 file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${ROMEWV2DIR} COPYONLY)  
@@ -575,7 +575,7 @@ add_test(raTvReflectanceToLuminanceImageFilterAutoWV2PAN ${RADIOMETRY_TESTS2}
 
 set(ROMEWV2DIR ${TEMP}/OpticalCalibRefToLumWv2MULTI)
 file(MAKE_DIRECTORY ${ROMEWV2DIR})
-set(MTDATADIR ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL)
+set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL)
 file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${ROMEWV2DIR} COPYONLY)  
@@ -591,7 +591,7 @@ add_test(raTvReflectanceToLuminanceImageFilterAutoWV2MULTI ${RADIOMETRY_TESTS2}
 
 set(TOULOUSEQBDIR ${TEMP}/OpticalCalibRefToLumQBPAN)
 file(MAKE_DIRECTORY ${TOULOUSEQBDIR})
-set(MTDATADIR ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN)
+set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN)
 file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${TOULOUSEQBDIR} COPYONLY)  
@@ -607,7 +607,7 @@ add_test(raTvReflectanceToLuminanceImageFilterAutoQuickbirdPAN ${RADIOMETRY_TEST
 
 set(TOULOUSEQBDIR ${TEMP}/OpticalCalibRefToLumQBXS)
 file(MAKE_DIRECTORY ${TOULOUSEQBDIR})
-set(MTDATADIR ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL)
+set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL)
 file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${TOULOUSEQBDIR} COPYONLY)  
@@ -624,7 +624,7 @@ add_test(raTvReflectanceToLuminanceImageFilterAutoQuickbirdXS ${RADIOMETRY_TESTS
 # ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif : this image seems to be corrupted
 #set(SUDOUESTFORMOSATDIR ${TEMP}/OpticalCalibRefToLumFormosat)
 #file(MAKE_DIRECTORY ${SUDOUESTFORMOSATDIR})
-#set(MTDATADIR ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat)
+#set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat)
 #file(GLOB MTDATA ${MTDATADIR}/*.DIM)
 #foreach(f ${MTDATA}) 
 #	configure_file(${f} ${SUDOUESTFORMOSATDIR} COPYONLY)  
@@ -717,7 +717,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 
 set(TEHERANSPOT5DIR ${TEMP}/OpticalCalibRefToImSPOT5)
 file(MAKE_DIRECTORY ${TEHERANSPOT5DIR})
-file(GLOB MTDATA ${LARGEINPUT}/SPOT5/TEHERAN/*.DIM)
+file(GLOB MTDATA ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/*.DIM)
 foreach(f ${MTDATA}) 
 	configure_file(${f} ${TEHERANSPOT5DIR} COPYONLY)  
 endforeach(f)
@@ -727,7 +727,7 @@ add_test(raTvReflectanceToImageImageFilterAutoSpot5 ${RADIOMETRY_TESTS2}
                           ${TEHERANSPOT5DIR}/raTvReflectanceToImageImageFilterAutoSpot5.tif
         otbReflectanceToImageImageFilterAuto
         ${TEHERANSPOT5DIR}/IMAGERY.TIF 
-	${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+	${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEHERANSPOT5DIR}/raTvReflectanceToImageImageFilterAutoSpot5.tif
 	${TEHERANSPOT5DIR}/raTvSMALLTEHERANReflectanceToImageImageFilterAutoSpot5.tif
          )
@@ -735,8 +735,8 @@ add_test(raTvReflectanceToImageImageFilterAutoSpot5 ${RADIOMETRY_TESTS2}
 
 add_test(raTuReflectanceToImageImageFilterAutoFORMOSAT2 ${RADIOMETRY_TESTS2}
         otbReflectanceToImageImageFilterAuto
-                ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
-		${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF	
+                ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+		${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF	
                 ${TEMP}/raTvReflectanceToImageImageFilterAutoFORMOSAT2.tif
 		${TEMP}/raTvSMALLReflectanceToImageImageFilterAutoFORMOSAT2.tif
          )
@@ -926,7 +926,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 #  --compare-ascii ${EPSILON_12}  ${BASELINE_FILES}/raTvReflectanceToSurfaceReflectanceImageFilter2.txt
 #                              ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter2.txt
 #        otbReflectanceToSurfaceReflectanceImageFilterTest2
-#    ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+#    ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
 #    ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter2.txt
 #       )
 endif()
@@ -1622,7 +1622,7 @@ add_test(raTvTerraSarBrightnessImageFilterUPSALA ${RADIOMETRY_TESTS9}
                 ${BASELINE}/raTvTerraSarBrightnessImageFilter_UPSALA.tif
                 ${TEMP}/raTvTerraSarBrightnessImageFilter_UPSALA.tif
         otbTerraSarBrightnessImageFilterTest
-        ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
+        ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
         ${TEMP}/raTvTerraSarBrightnessImageFilter_UPSALA.tif
         1 # use metadata
         0 # results in linear scale
@@ -1634,7 +1634,7 @@ add_test(raTvTerraSarBrightnessImageComplexFilterTORONTO ${RADIOMETRY_TESTS9}
                 ${BASELINE}/raTvTerraSarBrightnessComplexImageFilter_TORONTO.tif
                 ${TEMP}/raTvTerraSarBrightnessImageComplexFilter_TORONTO.tif
         otbTerraSarBrightnessImageComplexFilterTest
-        ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+        ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
         ${TEMP}/raTvTerraSarBrightnessImageComplexFilter_TORONTO.tif
         1 # use metadata
         0 # results in linear scale
@@ -1697,7 +1697,7 @@ if(OTB_DATA_USE_LARGEINPUT)
                     ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
                     ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
         otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
                 ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
                 1000 1000 250 250 # Extract
           )
@@ -1709,7 +1709,7 @@ if(OTB_DATA_USE_LARGEINPUT)
                     ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
                     ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
         otbSarRadiometricCalibrationToImageFilterWithComplexPixelTestWithoutNoise
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
                 ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
                 1000 1000 250 250 # Extract
           )
@@ -1721,7 +1721,7 @@ if(OTB_DATA_USE_LARGEINPUT)
                     ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
                     ${TEMP}/raTvSarRadiometricCalibrationToImageFilterRealPixel_TSX_PANGKALANBUUN_HH.tif
         otbSarRadiometricCalibrationToImageFilterWithRealPixelTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
                 ${TEMP}/raTvSarRadiometricCalibrationToImageFilterRealPixel_TSX_PANGKALANBUUN_HH.tif
                  1000 1000 250 250 # Extract
           )
@@ -1733,7 +1733,7 @@ if(OTB_DATA_USE_LARGEINPUT)
                     ${BASELINE}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
                     ${TEMP}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
         otbSarRadiometricCalibrationToImageFilterWithExtractROIBeforeTest
-            ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+            ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
                 ${TEMP}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
                 1000 1000 250 250 # Extract
           )
@@ -1742,7 +1742,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 # CReader->SarRadiometricCalibFilter with CReader->ModulusFilter->SarRadiometricCalibFilter
   add_test(raTvSarRadiometricCalibrationToImageCompareFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
         otbSarRadiometricCalibrationToImageFilterCompareTest
-               ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+               ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
                1000 1000 250 250 # Extract
           )
 
@@ -1753,7 +1753,7 @@ if(OTB_DATA_USE_LARGEINPUT)
            ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
            ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
         otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest
-           ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+           ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
            ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
                    2000 2000 250 250 # Extract
           )
@@ -1764,7 +1764,7 @@ if(OTB_DATA_USE_LARGEINPUT)
            ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
            ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
         otbSarRadiometricCalibrationToImageFilterWithRealPixelTest
-           ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
+           ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
            ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
                2000 2000 250 250 # Extract
           )
@@ -1807,7 +1807,7 @@ if(OTB_DATA_USE_LARGEINPUT)
                     ${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
                     ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
         otbSarBrightnessToImageFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
                 ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
                 1000 1000 250 250 # Extract
           )
@@ -1819,7 +1819,7 @@ if(OTB_DATA_USE_LARGEINPUT)
                     ${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
                     ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
         otbSarBrightnessToImageFilterTestWithoutNoise
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
                 ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
                 1000 1000 250 250 # Extract
           )
@@ -1830,7 +1830,7 @@ add_test(raTvSarBrightnessToImageWithComplexPixelFilter  ${RADIOMETRY_TESTS9}
                     ${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
                     ${TEMP}/raTvSarBrightnessToImageFilterComplexPixel_TSX_PANGKALANBUUN_HH.tif
         otbSarBrightnessToImageWithComplexPixelFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
                 ${TEMP}/raTvSarBrightnessToImageFilterComplexPixel_TSX_PANGKALANBUUN_HH.tif
                 1000 1000 250 250 # Extract
         )

@@ -54,12 +54,12 @@ set(IO_TESTS24    ${CXX_TEST_PATH}/otbIOTests24)
 if(OTB_DATA_USE_LARGEINPUT)
    set(GenericTestPHR_DATA_INPUTS
       ${GenericTestPHR_DATA_INPUTS}
-      ${LARGEINPUT}/PLEIADES-PRE/TLSE_JP2_ORTHO_DIMAPv2_PMS-N_lossy_12bits/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
-      ${LARGEINPUT}/PLEIADES-PRE/TLSE_TIFF_ORTHO_DIMAPv2_MS_lossless_8bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_ORT_IPU_20111109_7807-004_R1C1.TIF
-      ${LARGEINPUT}/PLEIADES-PRE/TLSE_TIFF_PRIMARY_DIMAPv2_MS_lossly_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20111025_3077-004_R1C1.TIF
-      ${LARGEINPUT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2
-      ${LARGEINPUT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R1C1.JP2
-      ${LARGEINPUT}/PLEIADES/PARIS_JP2_DIMAPv1_ORTHO_PMS_lossless_12bits/IMGPHR_PHR1A_ORTHO_20120502_IPU_20120430_6347-003_V1/IMG_R1C1.JP2
+      ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES-PRE/TLSE_JP2_ORTHO_DIMAPv2_PMS-N_lossy_12bits/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+      ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES-PRE/TLSE_TIFF_ORTHO_DIMAPv2_MS_lossless_8bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_ORT_IPU_20111109_7807-004_R1C1.TIF
+      ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES-PRE/TLSE_TIFF_PRIMARY_DIMAPv2_MS_lossly_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20111025_3077-004_R1C1.TIF
+      ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2
+      ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R1C1.JP2
+      ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/PARIS_JP2_DIMAPv1_ORTHO_PMS_lossless_12bits/IMGPHR_PHR1A_ORTHO_20120502_IPU_20120430_6347-003_V1/IMG_R1C1.JP2
    )
 
    set(GenericTestPHR_DATA_TYPES
@@ -74,9 +74,9 @@ if(OTB_DATA_USE_LARGEINPUT)
 
    set(GenericTestSPOT6_DATA_INPUTS
       ${GenericTestSPOT6_DATA_INPUTS}
-      ${LARGEINPUT}/SPOT6/SPOT6_Ortho_Bundle_12_bits/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201306031242000_ORT_816005101_R1C1.JP2
-      ${LARGEINPUT}/SPOT6/SPOT6_Ortho_Pan-sharpened_12_bits/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_PMS_001_A/IMG_SPOT6_PMS_201305251604372_ORT_816009101_R1C1.JP2
-      ${LARGEINPUT}/SPOT6/SPOT6_Primary_Bundle_12_bits/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201211100138085_SEN_816007101_R1C1.JP2
+      ${OTB_DATA_LARGEINPUT_ROOT}/SPOT6/SPOT6_Ortho_Bundle_12_bits/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201306031242000_ORT_816005101_R1C1.JP2
+      ${OTB_DATA_LARGEINPUT_ROOT}/SPOT6/SPOT6_Ortho_Pan-sharpened_12_bits/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_PMS_001_A/IMG_SPOT6_PMS_201305251604372_ORT_816009101_R1C1.JP2
+      ${OTB_DATA_LARGEINPUT_ROOT}/SPOT6/SPOT6_Primary_Bundle_12_bits/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201211100138085_SEN_816007101_R1C1.JP2
    )
 
    set(GenericTestSPOT6_DATA_TYPES
@@ -148,7 +148,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 # ---  RADARSAT (GDAL)  ---
 add_test(ioTvMultiMonoChannelROI_RADARSAT2ENVI ${COMMON_TESTS3}
          otbMultiToMonoChannelExtractROI
-         -ushort ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/
+         -ushort ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA/SCENE01/
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
@@ -186,7 +186,7 @@ add_test(ioTvImageFileReaderWithComplexPixel_PALSAR ${IO_TESTS1}
             ${BASELINE}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
             ${TEMP}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
         otbImageFileReaderWithComplexPixelTest
-            ${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+            ${OTB_DATA_LARGEINPUT_ROOT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
             ${TEMP}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
             0 0 100 100)
 
@@ -195,7 +195,7 @@ add_test(ioTvImageFileReaderWithComplexPixel_ERS ${IO_TESTS1}
             ${BASELINE}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
             ${TEMP}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
         otbImageFileReaderWithComplexPixelTest
-            ${LARGEINPUT}/SAR_ERS2_SLCI_SCENE1/
+            ${OTB_DATA_LARGEINPUT_ROOT}/SAR_ERS2_SLCI_SCENE1/
             ${TEMP}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
             0 0 100 100)
 
@@ -204,7 +204,7 @@ add_test(ioTvImageFileReaderWithComplexPixel_RADARSAT ${IO_TESTS1}
             ${BASELINE}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
             ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
         otbImageFileReaderWithComplexPixelTest
-            ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/
+            ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA/SCENE01/
             ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
             0 0 100 100)
 
@@ -213,19 +213,19 @@ add_test(ioTvVectorImageFileReaderWithComplexPixel_RADARSAT2 ${IO_TESTS1}
             ${BASELINE}/ioImageFileReaderWithComplexPixel_RADARSAT2.tif
             ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT2.tif
         otbVectorImageFileReaderWithComplexPixelTest
-            ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+            ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
             ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT2.tif
             0 0 100 100)
 
 add_test(ioTvCompareWritingComplexImage_TIF ${IO_TESTS1}
         otbCompareWritingComplexImageTest
-            ${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+            ${OTB_DATA_LARGEINPUT_ROOT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
             ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.tif
             0 0 100 100)
 
 add_test(ioTvCompareWritingComplexImage_HDR ${IO_TESTS1}
          otbCompareWritingComplexImageTest
-         ${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+         ${OTB_DATA_LARGEINPUT_ROOT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
          ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.hdr
          0 0 100 100)
 
@@ -750,7 +750,7 @@ add_test(ioTvImageKeywordlistSPOT5 ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
          --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
     otbImageKeywordlist
-         ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
          ${TEMP}/ioTvImageKeywordlistSpot5.txt
          ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
 )
@@ -763,7 +763,7 @@ add_test(ioTvImageKeywordlistFORMOSAT2 ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
          --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
     otbImageKeywordlist
-         ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
          ${TEMP}/ioTvImageKeywordlistFORMOSAT2.txt
          ${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
 )
@@ -777,7 +777,7 @@ add_test(ioTvImageKeywordlistQuickbird ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbImageKeywordlist
-         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/ioTvImageKeywordlistQuickbird.txt
          ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
 )
@@ -790,7 +790,7 @@ add_test(ioTvImageKeywordlistIkonos ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbImageKeywordlist
-         ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
          ${TEMP}/ioTvImageKeywordlistIkonos.txt
          ${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
 )
@@ -802,7 +802,7 @@ add_test(ioTvImageKeywordlistRapidEye ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
          ${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEINPUT}/RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
+         ${OTB_DATA_LARGEINPUT_ROOT}/RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
          ${TEMP}/ioTvImageKeywordlistRapidEye.txt
          ${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
 )
@@ -814,7 +814,7 @@ add_test(ioTvImageKeywordlistEnvisatAsar ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
          ${TEMP}/ioTvImageKeywordlistEnvisatAsar_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEINPUT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
+         ${OTB_DATA_LARGEINPUT_ROOT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
          ${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
          ${TEMP}/ioTvImageKeywordlistEnvisatAsar_saveState_loadState.txt
 )
@@ -826,7 +826,7 @@ add_test(ioTvImageKeywordlistAlosPalsar ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
          ${TEMP}/ioTvImageKeywordlistAlosPalsar_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+         ${OTB_DATA_LARGEINPUT_ROOT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
          ${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
          ${TEMP}/ioTvImageKeywordlistAlosPalsar_saveState_loadState.txt
 )
@@ -838,7 +838,7 @@ add_test(ioTvImageKeywordlistRadarSat1_GOMA ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/DAT_01.001
+         ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA/SCENE01/DAT_01.001
          ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_saveState_loadState.txt
 )
@@ -850,7 +850,7 @@ add_test(ioTvImageKeywordlistRadarSat1_GOMA_vdf ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/VDF_DAT.001
+         ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA/SCENE01/VDF_DAT.001
          ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf_saveState_loadState.txt
 )
@@ -862,7 +862,7 @@ add_test(ioTvImageKeywordlistRadarSat1_SARDEGNA ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEINPUT}/RADARSAT1/SARDEGNA/scene01/dat_01.001
+         ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/SARDEGNA/scene01/dat_01.001
          ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
          )
@@ -874,7 +874,7 @@ add_test(ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEINPUT}/RADARSAT1/SARDEGNA/scene01/dat_01.001
+         ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/SARDEGNA/scene01/dat_01.001
          ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf_saveState_loadState.txt
          )
@@ -887,7 +887,7 @@ add_test(ioTvImageKeywordlistRadarSat2 ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
           --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
-         ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+         ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
          ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
 )
@@ -900,7 +900,7 @@ add_test(ioTvImageKeywordlistTerraSarX ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
           --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
-         ${LARGEINPUT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+         ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
 )
@@ -913,7 +913,7 @@ add_test(ioTvImageKeywordlistTerraSarX_Upsala ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
           --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
-         ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
+         ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
 )
@@ -925,26 +925,26 @@ add_test(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
           --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
-         ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+         ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
 )
 
 add_test(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingXmlFile ${IO_TESTS4}
     otbImageKeywordlist
-         ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+         ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
 )
 add_test(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingHHFile ${IO_TESTS4}
     otbImageKeywordlist
-         ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+         ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
 )
 add_test(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingVVFile ${IO_TESTS4}
     otbImageKeywordlist
-         ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+         ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
 )
@@ -958,7 +958,7 @@ add_test(ioTvImageKeywordlistErs ${IO_TESTS4}
          ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
          ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
     otbImageKeywordlist
-         ${LARGEINPUT}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
+         ${OTB_DATA_LARGEINPUT_ROOT}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
          ${TEMP}/ioTvImageKeywordlistErs.txt
          ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
 )
@@ -1045,64 +1045,64 @@ if(OTB_DATA_USE_LARGEINPUT)
 
 add_test(ioTuGDALImageIOCanRead_RADARSAT ${IO_TESTS5} otbGDALImageIOTestCanRead
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
-#        ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/ )
-        ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/DAT_01.001 )
+#        ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA/SCENE01/ )
+        ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA/SCENE01/DAT_01.001 )
 
 add_test(ioTuGDALImageIOCanRead_SAR_ERS2 ${IO_TESTS5} otbGDALImageIOTestCanRead
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
-#        ${LARGEINPUT}/SAR_ERS2_SLCI_SCENE1/ )
-        ${LARGEINPUT}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
+#        ${OTB_DATA_LARGEINPUT_ROOT}/SAR_ERS2_SLCI_SCENE1/ )
+        ${OTB_DATA_LARGEINPUT_ROOT}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
 
 add_test(ioTuGDALImageIOCanRead_QUICK_PAN ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF )
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF )
 
 add_test(ioTuGDALImageIOCanRead_QUICK_XS ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF )
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF )
 
 add_test(ioTuGDALImageIOCanRead_WV2_PAN ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF )
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF )
 
 add_test(ioTuGDALImageIOCanRead_WV2_MUL ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF )
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF )
 
 add_test(ioTuGDALImageIOCanRead_WV2_PSH ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_pansharpened_natural_color_8bit/052298834010_01_P001_PSH/09DEC10103019-S2AS-052298834010_01_P001.TIF )
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_pansharpened_natural_color_8bit/052298834010_01_P001_PSH/09DEC10103019-S2AS-052298834010_01_P001.TIF )
 
 
 add_test(ioTuGDALImageIOCanRead_IKONOS_PAN ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/IKONOS/PARIS/po_79039_pan_0000000.tif)
+        ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_pan_0000000.tif)
 
 add_test(ioTuGDALImageIOCanRead_IKONOS_GRN ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/IKONOS/PARIS/po_79039_grn_0000000.tif)
+        ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_grn_0000000.tif)
 
 add_test(ioTuGDALImageIOCanRead_IKONOS_BLU ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/IKONOS/PARIS/po_79039_blu_0000000.tif)
+        ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_blu_0000000.tif)
 
 add_test(ioTuGDALImageIOCanRead_IKONOS_RED ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/IKONOS/PARIS/po_79039_red_0000000.tif)
+        ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_red_0000000.tif)
 
 add_test(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/IKONOS/PARIS/po_79039_nir_0000000.tif)
+        ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_nir_0000000.tif)
 
 add_test(ioTuGDALImageIOCanRead_SPOT4 ${IO_TESTS5} otbGDALImageIOTestCanRead
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
-#        ${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/ )
-        ${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT )
+#        ${OTB_DATA_LARGEINPUT_ROOT}/SPOT4/RIO_DE_JANEIRO/ )
+        ${OTB_DATA_LARGEINPUT_ROOT}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT )
 
 add_test(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/IKONOS/PARIS/po_79039_nir_0000000.tif)
+        ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_nir_0000000.tif)
 
 add_test(ioTuGDALImageIOCanRead_FORMOSAT2 ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF)
+        ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF)
 
 add_test(ioTuGDALImageIOCanRead_COSMOSKYMED ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5)
+        ${OTB_DATA_LARGEINPUT_ROOT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5)
 
 add_test(ioTuGDALImageIOCanRead_COSMOSKYMED2 ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5)
+        ${OTB_DATA_LARGEINPUT_ROOT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5)
 
 add_test(ioTuGDALImageIOCanRead_COSMOSKYMED3 ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS2_GTC_B_S2_08_HH_RD_SF_20110417180326_20110417180333.h5)
+        ${OTB_DATA_LARGEINPUT_ROOT}/COSMOSKYMED/Toulouse_spotlight/CSKS2_GTC_B_S2_08_HH_RD_SF_20110417180326_20110417180333.h5)
 
 endif()
 
@@ -1148,7 +1148,7 @@ add_test(ioTvGDALImageIOWriteMetadata ${IO_TESTS6}
 if(OTB_DATA_USE_LARGEINPUT)
 
 add_test(ioTuONERAImageIOCanRead ${IO_TESTS6} otbONERAImageIOTestCanRead
-        ${LARGEINPUT}/ONERA/spa3_0215_rad.ent)
+        ${OTB_DATA_LARGEINPUT_ROOT}/ONERA/spa3_0215_rad.ent)
 
 # Read one ONERAimage type CFloat32 with IFreaderScalar and write to a 2 bands hdr file OK
 # crop 10 10 100 100
@@ -1157,7 +1157,7 @@ add_test(ioTvONERAImageFileReader ${IO_TESTS6}
             ${BASELINE}/ioImageFileReaderONERA.hdr
             ${TEMP}/ioImageFileReaderONERA.hdr
          otbImageFileReaderONERATest
-            ${LARGEINPUT}/ONERA/spa3_0215_rad.ent
+            ${OTB_DATA_LARGEINPUT_ROOT}/ONERA/spa3_0215_rad.ent
             ${TEMP}/ioImageFileReaderONERA.hdr
             10 10 100 100 )
 
@@ -1170,7 +1170,7 @@ add_test(ioTvONERAImageFileReaderComplex ${IO_TESTS6}
                         ${BASELINE}/ioImageFileReaderONERAComplexImag.hdr
                         ${TEMP}/ioImageFileReaderONERAComplexImag.hdr
          otbImageFileReaderONERAComplex
-            ${LARGEINPUT}/ONERA/spa3_0215_rad.ent
+            ${OTB_DATA_LARGEINPUT_ROOT}/ONERA/spa3_0215_rad.ent
             ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
                 ${TEMP}/ioImageFileReaderONERAComplexImag.hdr )
 
@@ -1181,7 +1181,7 @@ add_test(ioTvONERAImageFileWriterComplex ${IO_TESTS6}
             ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
             ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
          otbImageFileWriterONERAComplex
-            ${LARGEINPUT}/ONERA/spa3_0215_rad.ent
+            ${OTB_DATA_LARGEINPUT_ROOT}/ONERA/spa3_0215_rad.ent
             ${TEMP}/ioImageFileReaderONERAComplexWrite.ent )
 
 add_test(ioTvONERAImageStreamWriter ${IO_TESTS6}
@@ -1439,7 +1439,7 @@ add_test(ioTvMultiChannelROI_SPOT42PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/
+         ${OTB_DATA_LARGEINPUT_ROOT}/SPOT4/RIO_DE_JANEIRO/
          ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 1 2 3 )
@@ -1447,7 +1447,7 @@ add_test(ioTvMultiChannelROI_SPOT42PNG_2 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
                      ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/
+         ${OTB_DATA_LARGEINPUT_ROOT}/SPOT4/RIO_DE_JANEIRO/
          ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 3 2 1 )
@@ -1483,7 +1483,7 @@ add_test(ioTvMultiChannelROI_SPOT52PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/SPOT5/TEHERAN/
+         ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 1 2 3 )
@@ -1492,7 +1492,7 @@ add_test(ioTvMultiChannelROI_SPOT52PNG_2 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/SPOT5/TEHERAN/
+         ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 1 )
@@ -1500,7 +1500,7 @@ add_test(ioTvMultiChannelROI_SPOT52PNG_3 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/SPOT5/TEHERAN/
+         ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 2 )
@@ -1508,7 +1508,7 @@ add_test(ioTvMultiChannelROI_SPOT52PNG_4 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/SPOT5/TEHERAN/
+         ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 3 )
@@ -1516,7 +1516,7 @@ add_test(ioTvMultiChannelROI_SPOT52PNG_5 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/SPOT5/TEHERAN/
+         ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 4 )
@@ -1526,7 +1526,7 @@ add_test(ioTvMultiChannelROI_IkonosPAN2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/IKONOS/PARIS/po_79039_pan_0000000.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_pan_0000000.tif
          ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1536,7 +1536,7 @@ add_test(ioTvMultiChannelROI_IkonosRED2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
                             ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/IKONOS/PARIS/po_79039_red_0000000.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_red_0000000.tif
          ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1545,7 +1545,7 @@ add_test(ioTvMultiChannelROI_IkonosGRN2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/IKONOS/PARIS/po_79039_grn_0000000.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_grn_0000000.tif
          ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1554,7 +1554,7 @@ add_test(ioTvMultiChannelROI_IkonosBLU2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/IKONOS/PARIS/po_79039_blu_0000000.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_blu_0000000.tif
          ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1563,7 +1563,7 @@ add_test(ioTvMultiChannelROI_IkonosNIR2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/IKONOS/PARIS/po_79039_nir_0000000.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_nir_0000000.tif
          ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1573,7 +1573,7 @@ add_test(ioTvMultiChannelROI_IkonosNIR2LUM ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300_nogeoinfo.png
                      ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/IKONOS/PARIS/po_79039_nir_0000000.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_nir_0000000.tif
          ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1583,7 +1583,7 @@ add_test(ioTvMultiChannelROI_IkonosNIR2BSQ ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}       ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300_nogeoinfo.png
                                 ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
          otbMultiChannelExtractROI
-         ${LARGEINPUT}/IKONOS/PARIS/po_79039_nir_0000000.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_nir_0000000.tif
          ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -1593,7 +1593,7 @@ add_test(ioTvMultiChannelROI_QuickbirdPAN2TIFF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
                      ${TEMP}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         -ushort ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          -ushort ${TEMP}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
          -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
          )
@@ -1603,7 +1603,7 @@ add_test(ioTvMultiChannelROI_QuickbirdXS2TIFF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
                      ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+         -ushort ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
          -ushort ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
          -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
          )
@@ -1620,7 +1620,7 @@ add_test(ioTvOtbImageTestSAR_ERS ${IO_TESTS9}
    --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbImageTestSAR_ERS.txt
                      ${TEMP}/ioOtbImageTestSAR_ERS.txt
          otbImageTest
-         ${LARGEINPUT}/SAR_ERS2_SLCI_SCENE1/
+         ${OTB_DATA_LARGEINPUT_ROOT}/SAR_ERS2_SLCI_SCENE1/
          ${TEMP}/ioOtbImageTestSAR_ERS.txt)
 
 # ---  Otb::Image Test  ---
@@ -1629,7 +1629,7 @@ add_test(ioTvOtbImageTestRadarsat ${IO_TESTS9}
      ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
      ${TEMP}/ioOtbImageTestRadarsat.txt
    otbImageTest
-     ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/
+     ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA/SCENE01/
      ${TEMP}/ioOtbImageTestRadarsat.txt)
 
 # ---  Otb::VectorImage Test  ---
@@ -1638,7 +1638,7 @@ add_test(ioTvOtbVectorImageTestRadarsat ${IO_TESTS9}
      ${TEMP}/ioOtbImageTestRadarsat.txt
      ${TEMP}/ioOtbVectorImageTestRadarsat.txt
    otbVectorImageLegacyTest
-     ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/
+     ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA/SCENE01/
      ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
 set_tests_properties(ioTvOtbVectorImageTestRadarsat PROPERTIES DEPENDS ioTvOtbImageTestRadarsat)
 
@@ -1647,21 +1647,21 @@ add_test(ioTvOtbVectorImageTestSpot5 ${IO_TESTS9}
    --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
                      ${TEMP}/ioOtbVectorImageTestSpot5.txt
         otbVectorImageLegacyTest
-        ${LARGEINPUT}/SPOT5/TEHERAN/
+        ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/
         ${TEMP}/ioOtbVectorImageTestSpot5.txt)
 
 add_test(ioTvOtbVectorImageTestFORMOSAT2 ${IO_TESTS9}
    --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestFORMOSAT2.txt
                      ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt
         otbVectorImageLegacyTest
-        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/
+        ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/
         ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt)
 
 add_test(ioTvOtbVectorImageTestCOSMOSKYMED ${IO_TESTS9}
    --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestCOSMOSKYMED.txt
                      ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt
         otbVectorImageLegacyTest
-        ${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5
+        ${OTB_DATA_LARGEINPUT_ROOT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5
         ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt)
 
 endif()
@@ -1723,7 +1723,7 @@ add_test(ioTvVImageFileReader_RESOLUTION_3 ${IO_TESTS9}
 if(OTB_DATA_USE_LARGEINPUT)
     add_test(ioTvVImageFileReader_RESOLUTION_4 ${IO_TESTS9}
         otbVectorImageFileReaderWriterTest
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF?&resol=4
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF?&resol=4
         ${TEMP}/ioImageFileReader_RESOLUTION_4.tif )
 endif()
 
@@ -2028,7 +2028,7 @@ add_test(ioTvDEMToImageGeneratorFromImageTest_SensorModel ${IO_TESTS12}
         ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest_SM.tif
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract.tif
       otbDEMToImageGeneratorFromImageTest
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${INPUTDATA}/DEM/srtm_directory
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_Extract_DEM.tif
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract.tif
@@ -2087,7 +2087,7 @@ add_test(ioTuJ2KImageIOCanRead ${IO_TESTS13}
 if(OTB_DATA_USE_LARGEINPUT)
 add_test(ioTuJP2ImageIOCanRead ${IO_TESTS13}
          otbJPEG2000ImageIOTestCanRead
-         ${LARGEINPUT}/JPEG2000/QB_multicomp.jpx
+         ${OTB_DATA_LARGEINPUT_ROOT}/JPEG2000/QB_multicomp.jpx
          )
 endif()
 
@@ -2099,7 +2099,7 @@ add_test(ioTvVectorImageFileReaderWriterJP22TIF ${IO_TESTS9}
 --compare-image ${EPSILON_9}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
                         ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
          otbVectorImageFileReaderWriterTest
-         ${LARGEINPUT}/JPEG2000/QB_multicomp_small.jpx
+         ${OTB_DATA_LARGEINPUT_ROOT}/JPEG2000/QB_multicomp_small.jpx
          ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
          )
 
@@ -2108,7 +2108,7 @@ add_test(ioTvImageFileReaderWriterJP22TIF ${IO_TESTS2}
 --compare-image ${EPSILON_9}  ${BASELINE}/ioTvImageFileReaderWriterJP22TIFOutput.tif
                         ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          otbDoubleImageIOTest
-         ${LARGEINPUT}/JPEG2000/QB_multicomp_small.jpx
+         ${OTB_DATA_LARGEINPUT_ROOT}/JPEG2000/QB_multicomp_small.jpx
          ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          )
 endif()
@@ -2157,7 +2157,7 @@ if(OTB_DATA_USE_LARGEINPUT)
       --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvMultiResolutionReadingInfoOut_tiff2.txt
                                ${TEMP}/ioTvMultiResolutionReadingInfoOut_tiff2.txt
           otbMultiResolutionReadingInfo
-          ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+          ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
           ${TEMP}/ioTvMultiResolutionReadingInfoOut_tiff2.txt
           )
 endif()
@@ -2321,7 +2321,7 @@ endif()
 #           --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
 #                                         ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
 #           otbMultiChannelExtractROI
-#              -ushort ${LARGEINPUT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
+#              -ushort ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
 #              -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
 #              -startX 1330 -startY 928 -sizeX 32 -sizeY 32
 #              -time
@@ -2448,7 +2448,7 @@ add_test(ioTvGDALDriverDoubleWritingTest ${IO_TESTS14}
 if(OTB_DATA_USE_LARGEINPUT)
 add_test(ioTvReadingComplexDataIntoComplexImage ${IO_TESTS14}
                 otbReadingComplexDataIntoComplexImageTest
-                ${LARGEINPUT}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
+                ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
                 1000 1000
 )
 
@@ -2457,7 +2457,7 @@ add_test(ioTvWritingComplexDataWithComplexImage ${IO_TESTS14}
                 ${BASELINE}/ioWritingComplexDataWithComplexImageOutput.tif
                 ${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
                 otbWritingComplexDataWithComplexImageTest
-                ${LARGEINPUT}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
+                ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
                 ${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
                 1000 1000
                 500  500
@@ -2485,7 +2485,7 @@ add_test(ioTvSHPVectorDataFileReader ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader.txt
                         ${TEMP}/ioSHPVectorDataFileReader.txt
         otbVectorDataFileReader
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
         ${TEMP}/ioSHPVectorDataFileReader.txt
 )
 endif()
@@ -2503,7 +2503,7 @@ add_test(ioTvSHPVectorDataFileReader3 ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader3.txt
                         ${TEMP}/ioSHPVectorDataFileReader3.txt
         otbVectorDataFileReader
-        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+        ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
         ${TEMP}/ioSHPVectorDataFileReader3.txt
 )
 endif()
@@ -2565,7 +2565,7 @@ add_test(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
             ${BASELINE_FILES}/ioTvVectorDataFileReaderWriterOutput.shp
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
         otbVectorDataFileReaderWriter
-            ${LARGEINPUT}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+            ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
         )
 endif()
@@ -2682,7 +2682,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 # Can read a RAD format (ci2)
 add_test(ioTuRADImageIOCanRead_RADCI2 ${IO_TESTS16}
         otbRADImageIOTestCanRead
-        ${LARGEINPUT}/RAD_CI2/3017_HH.rad)
+        ${OTB_DATA_LARGEINPUT_ROOT}/RAD_CI2/3017_HH.rad)
 
 # Convert a ci2.RAD file into ENVI format
 add_test(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
@@ -2690,7 +2690,7 @@ add_test(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
         ${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr
         ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr
         otbImageFileReaderRADComplexFloatExtract
-        ${LARGEINPUT}/RAD_CI2/3017_HH.rad
+        ${OTB_DATA_LARGEINPUT_ROOT}/RAD_CI2/3017_HH.rad
         ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr )
 
 endif()
@@ -2798,49 +2798,49 @@ add_test(ioTvImageMetadataInterfaceBaseTest_QB ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_QB.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_QB.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_QB.txt
 )
 add_test(ioTvImageMetadataInterfaceBaseTest_QBCevennes ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_QBCevennes.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_QBCevennes.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_QBCevennes.txt
 )
 add_test(ioTvImageMetadataInterfaceBaseTest_QBMUL ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_QBMUL.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_QBMUL.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_QBMUL.txt
 )
 add_test(ioTvImageMetadataInterfaceBaseTest_WV2Pan ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_WV2RomePan.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_WV2RomePan.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_WV2RomePan.txt
 )
 add_test(ioTvImageMetadataInterfaceBaseTest_WV2Mul ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_WV2RomeMul.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_WV2RomeMul.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_WV2RomeMul.txt
 )
 add_test(ioTvImageMetadataInterfaceBaseTest_IKONOS ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_IKONOS.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_IKONOS.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif
+        ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif
         ${TEMP}/ioTvImageMetadataInterfaceBase_IKONOS.txt
 )
 add_test(ioTvImageMetadataInterfaceBaseTest_SPOT ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_SPOT.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_SPOT.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_SPOT.txt
 )
 
@@ -2898,42 +2898,42 @@ add_test(ioTvImageMetadataInterfaceBaseTest_FORMOSAT2 ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
 )
 add_test(ioTvImageMetadataInterfaceBaseTest_TSX1dims ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
+        ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
 )
 add_test(ioTvImageMetadataInterfaceBaseTest_TSX1TORONTO ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+        ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
 )
 add_test(ioTvImageMetadataInterfaceBaseTest_TSX1PANGKALANBUUNUsingHHCosFile ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingHHCosFile.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingHHCosFile.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+        ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingHHCosFile.txt
 )
 add_test(ioTvImageMetadataInterfaceBaseTest_TSX1PANGKALANBUUNUsingVVCosFile ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingVVCosFile.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingVVCosFile.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+        ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingVVCosFile.txt
 )
 add_test(ioTvImageMetadataInterfaceBaseTest_TSX1PANGKALANBUUNUsingXmlFile ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1PangkalanbuunuUsingXmlFile.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PangkalanbuunuUsingXmlFile.txt
         otbImageMetadataInterfaceBaseTest
-        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+        ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PangkalanbuunuUsingXmlFile.txt
 )
 
@@ -2943,49 +2943,49 @@ add_test(ioTvOpticalImageMetadataInterfaceTest_QB ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QB.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_QB.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_QB.txt
 )
 add_test(ioTvOpticalImageMetadataInterfaceTest_QBCevennes ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
 )
 add_test(ioTvOpticalImageMetadataInterfaceTest_QBMUL ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QBMUL.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_QBMUL.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_QBMUL.txt
 )
 add_test(ioTvOpticalImageMetadataInterfaceTest_WV2Pan ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_WV2RomePan.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomePan.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomePan.txt
 )
 add_test(ioTvOpticalImageMetadataInterfaceTest_WV2Mul ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
 )
 add_test(ioTvOpticalImageMetadataInterfaceTest_IKONOS ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_IKONOS.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_IKONOS.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif
+        ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif
         ${TEMP}/ioTvOpticalImageMetadataInterface_IKONOS.txt
 )
 add_test(ioTvOpticalImageMetadataInterfaceTest_SPOT ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_SPOT.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT.txt
 )
 
@@ -2993,7 +2993,7 @@ add_test(ioTvOpticalImageMetadataInterfaceTest_FORMOSAT2 ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
                          ${TEMP}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
         otbOpticalImageMetadataInterfaceTest
-        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
         ${TEMP}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
 )
 
@@ -3002,35 +3002,35 @@ add_test(ioTvSarImageMetadataInterfaceTest_TSX1dims ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1dims.txt
                          ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
         otbSarImageMetadataInterfaceTest
-        ${LARGEINPUT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
+        ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
         ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
 )
 add_test(ioTvSarImageMetadataInterfaceTest_TSX1TORONTO ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
                          ${TEMP}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
         otbSarImageMetadataInterfaceTest
-        ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+        ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
         ${TEMP}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
 )
 add_test(ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingHHCosFile ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
                          ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
         otbSarImageMetadataInterfaceTest
-        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+        ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
         ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
 )
 add_test(ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingVVCosFile ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
                          ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
         otbSarImageMetadataInterfaceTest
-        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+        ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
         ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
 )
 add_test(ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingXmlFile ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
                          ${TEMP}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
         otbSarImageMetadataInterfaceTest
-        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+        ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
         ${TEMP}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
 )
 
@@ -3082,8 +3082,8 @@ set_property(TEST ioTvTileMapImageIOWeb PROPERTY RESOURCE_LOCK web_access)
 if(OTB_DATA_USE_LARGEINPUT)
 add_test(ioTvTileMapWriter ${IO_TESTS19}
     otbTileMapWriter
-       ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
-#       ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+       ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
+#       ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
        ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
        ${TEMP}
        500 # extract index[0]
@@ -3149,7 +3149,7 @@ endif()
 if(OTB_DATA_USE_LARGEINPUT)
 add_test(ioTvImageFileReaderTestSensorPixelValueQB ${IO_TESTS20}
 otbImageFileReaderTestSensorPixelValue
-       ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+       ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
        ${BASELINE_FILES}/ioTvSensorsPixelValue.ini
        OPTIC
        QB
@@ -3161,7 +3161,7 @@ otbImageFileReaderTestSensorPixelValue
 
 add_test(ioTvImageFileReaderTestSensorPixelValueIKONOS ${IO_TESTS20}
 otbImageFileReaderTestSensorPixelValue
-       ${LARGEINPUT}/IKONOS/PARIS/po_79039_pan_0000000.tif
+       ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/PARIS/po_79039_pan_0000000.tif
        ${BASELINE_FILES}/ioTvSensorsPixelValue.ini
        OPTIC
        IKONOS
@@ -3648,7 +3648,7 @@ if(OTB_DATA_USE_LARGEINPUT)
     --ignore-lines-with 2 DataPath FileName
     otbSpectralSensitivityReaderGenericTest
     ${INPUTDATA}/Radiometry/SPOT4/HRVIR1/rep6S.dat
-    ${LARGEINPUT}/SPOT4/ROMANIA/raTvS4_20020518_Reflectance.img
+    ${OTB_DATA_LARGEINPUT_ROOT}/SPOT4/ROMANIA/raTvS4_20020518_Reflectance.img
     ${TEMP}/raTvSpectralSensitivityReaderSpot4Test.txt
     )
 endif()

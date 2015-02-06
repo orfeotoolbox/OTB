@@ -387,7 +387,7 @@ add_test(coTvExtractROITestMetaData_TIFF ${COMMON_TESTS3}
          ${TEMP}/coTvExtractROITestMetaData2.txt
          --ignore-lines-with 1 Origin:
          otbExtractROITestMetaData
-         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/coTvExtractROITestMetaData1.tif
          ${TEMP}/coTvExtractROITestMetaData2.tif
          ${TEMP}/coTvExtractROITestMetaData1.txt
@@ -400,7 +400,7 @@ add_test(coTvExtractROITestMetaData_HDR ${COMMON_TESTS3}
          ${TEMP}/coTvExtractROITestMetaData2_hdr.txt
          --ignore-lines-with 1 Origin:
          otbExtractROITestMetaData
-         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/coTvExtractROITestMetaData1.hdr
          ${TEMP}/coTvExtractROITestMetaData2.hdr
          ${TEMP}/coTvExtractROITestMetaData1_hdr.txt
@@ -824,7 +824,7 @@ add_test(coTvVectorDataToMapFilter ${COMMON_TESTS9}
                         ${BASELINE}/coTvVectorDataToMapFilter.png
                      ${TEMP}/coTvVectorDataToMapFilter.png
    otbVectorDataToMapFilter
-        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+        ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
         ${TEMP}/coTvVectorDataToMapFilter.png
         ${INPUTDATA}/DejaVuSans.ttf # font
 )
@@ -834,7 +834,7 @@ add_test(coTvVectorDataToMapFilterBinary ${COMMON_TESTS9}
                         ${BASELINE}/coTvVectorDataToMapFilterBinary.png
                      ${TEMP}/coTvVectorDataToMapFilterBinary.png
    otbVectorDataToMapFilterBinary
-        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+        ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
         ${TEMP}/coTvVectorDataToMapFilterBinary.png
 )
 
@@ -843,7 +843,7 @@ add_test(coTvVectorDataToMapFilterNoFonts ${COMMON_TESTS9}
                         ${BASELINE}/coTvVectorDataToMapFilterNoFonts.png
                      ${TEMP}/coTvVectorDataToMapFilterNoFonts.png
    otbVectorDataToMapFilterNoFonts
-        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+        ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
         ${TEMP}/coTvVectorDataToMapFilterNoFonts.png
 )
 
@@ -854,7 +854,7 @@ add_test(coTvVectorDataToImageFilter ${COMMON_TESTS9}
                         ${BASELINE}/coTvVectorDataToMapFilter.png
                      ${TEMP}/coTvVectorDataToImageFilter.png
    otbVectorDataToImageFilter
-        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+        ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
         ${TEMP}/coTvVectorDataToImageFilter.png
         ${INPUTDATA}/DejaVuSans.ttf # font
 )
@@ -864,7 +864,7 @@ add_test(coTvVectorDataToImageFilterBinary ${COMMON_TESTS9}
                         ${BASELINE}/coTvVectorDataToMapFilterBinary.png
                      ${TEMP}/coTvVectorDataToImageFilterBinary.png
    otbVectorDataToImageFilterBinary
-        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+        ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
         ${TEMP}/coTvVectorDataToImageFilterBinary.png
 )
 
@@ -881,8 +881,8 @@ add_test(coTvVectorDataToMapFilterSensorModel ${COMMON_TESTS9}
                         ${BASELINE}/coTvVectorDataToMapFilterSensorModel.png
                      ${TEMP}/coTvVectorDataToMapFilterSensorModel.png
    otbVectorDataToMapFilterSensorModel
-        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/coTvVectorDataToMapFilterSensorModel.png
         ${INPUTDATA}/DejaVuSans.ttf # font
 )

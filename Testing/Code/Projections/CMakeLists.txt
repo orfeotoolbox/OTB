@@ -43,19 +43,19 @@ if(OTB_DATA_USE_LARGEINPUT)
 
 add_test(prTvTestCreateInverseForwardSensorModel_Toulouse ${PROJECTIONS_TESTS1}
         otbCreateInverseForwardSensorModel
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
 add_test(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS1}
         otbCreateInverseForwardSensorModel
-        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
 add_test(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS1}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvRegionProjectionResamplerToulouse.tif
                           ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
         otbRegionProjectionResampler
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
                                 1.44 43.6050 # Long/Lat of Toulouse, Capitole
         500
@@ -69,7 +69,7 @@ add_test(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvRegionProjectionResamplerCevennes.tif
                           ${TEMP}/prTvRegionProjectionResamplerCevennes.tif
                                 otbRegionProjectionResampler
-        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/prTvRegionProjectionResamplerCevennes.tif
         3.7 44.08
         500
@@ -85,7 +85,7 @@ add_test(prTvSensorModelSPOT5 ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelSpot5.txt
 --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
-         ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
          ${TEMP}/prTvSensorModelSpot5.txt
 )
 
@@ -95,7 +95,7 @@ add_test(prTvSensorModelFORMOSAT2 ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelFORMOSAT2.txt
 --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
-         ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
          ${TEMP}/prTvSensorModelFORMOSAT2.txt
 )
 
@@ -106,7 +106,7 @@ add_test(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelQuickbird.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
-         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/prTvSensorModelQuickbird.txt
 )
 
@@ -116,7 +116,7 @@ add_test(prTvSensorModelPleiades-PRE-TIFF ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelPleiades-PRE-TIFF_OUT.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
-         ${LARGEINPUT}/PLEIADES-PRE/TLSE_TIFF_PRIMARY_DIMAPv2_MS_lossly_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20111025_3077-004_R1C1.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES-PRE/TLSE_TIFF_PRIMARY_DIMAPv2_MS_lossly_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20111025_3077-004_R1C1.TIF
          ${TEMP}/prTvSensorModelPleiades-PRE-TIFF_OUT.txt
 )
 
@@ -126,7 +126,7 @@ add_test(prTvSensorModelPleiades-JP2 ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelPleiades_OUT.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
-         ${LARGEINPUT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2
          ${TEMP}/prTvSensorModelPleiades_OUT.txt
 )
 
@@ -136,7 +136,7 @@ add_test(prTvSensorModelIkonos ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelIkonos.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
-         ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
          ${TEMP}/prTvSensorModelIkonos.txt
 )
 
@@ -146,7 +146,7 @@ add_test(prTvSensorModelRapidEye ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelRapidEye.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
-         ${LARGEINPUT}/RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
+         ${OTB_DATA_LARGEINPUT_ROOT}/RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
          ${TEMP}/prTvSensorModelRapidEye.txt
 )
 
@@ -155,7 +155,7 @@ add_test(prTvSensorModelEnvisatAsar ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelEnvisatAsar.txt
          ${TEMP}/prTvSensorModelEnvisatAsar.txt
     otbSensorModel
-         ${LARGEINPUT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
+         ${OTB_DATA_LARGEINPUT_ROOT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
          ${TEMP}/prTvSensorModelEnvisatAsar.txt
 )
 
@@ -164,7 +164,7 @@ add_test(prTvSensorModelAlosPalsar ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelAlosPalsar.txt
          ${TEMP}/prTvSensorModelAlosPalsar.txt
     otbSensorModel
-         ${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+         ${OTB_DATA_LARGEINPUT_ROOT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
          ${TEMP}/prTvSensorModelAlosPalsar.txt
 )
 
@@ -173,7 +173,7 @@ add_test(prTvSensorModelRadarSat1_GOMA ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelRadarSat1_GOMA.txt
          ${TEMP}/prTvSensorModelRadarSat1_GOMA.txt
     otbSensorModel
-         ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/DAT_01.001
+         ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA/SCENE01/DAT_01.001
          ${TEMP}/prTvSensorModelRadarSat1_GOMA.txt
 )
 
@@ -182,7 +182,7 @@ add_test(prTvSensorModelRadarSat1_SARDEGNA ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelRadarSat1_SARDEGNA.txt
          ${TEMP}/prTvSensorModelRadarSat1_SARDEGNA.txt
     otbSensorModel
-         ${LARGEINPUT}/RADARSAT1/SARDEGNA/scene01/dat_01.001
+         ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/SARDEGNA/scene01/dat_01.001
          ${TEMP}/prTvSensorModelRadarSat1_SARDEGNA.txt
 )
 
@@ -192,7 +192,7 @@ add_test(prTvSensorModelRadarSat2 ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelRadarSat2.txt
         --ignore-lines-with 3 product_xml_filename meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
-         ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+         ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
          ${TEMP}/prTvSensorModelRadarSat2.txt
 )
 
@@ -202,7 +202,7 @@ add_test(prTvSensorModelTerraSarX ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelTerraSarX.txt
         --ignore-lines-with 3 product_xml_filename meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
-         ${LARGEINPUT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+         ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/prTvSensorModelTerraSarX.txt
 )
 
@@ -212,7 +212,7 @@ add_test(prTvSensorModelTerraSarX_Upsala ${PROJECTIONS_TESTS1}
         ${TEMP}/prTvSensorModelTerraSarX_Upsala.txt
         --ignore-lines-with 3 product_xml_filename meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
-         ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
+         ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
          ${TEMP}/prTvSensorModelTerraSarX_Upsala.txt
 )
 add_test(prTvSensorModelTerraSarX_Toronto ${PROJECTIONS_TESTS1}
@@ -221,7 +221,7 @@ add_test(prTvSensorModelTerraSarX_Toronto ${PROJECTIONS_TESTS1}
         ${TEMP}/prTvSensorModelTerraSarX_Toronto.txt
         --ignore-lines-with 3 product_xml_filename meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
-         ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+         ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/prTvSensorModelTerraSarX_Toronto.txt
 )
 
@@ -230,7 +230,7 @@ add_test(prTvSensorModelErs ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelErs.txt
          ${TEMP}/prTvSensorModelErs.txt
     otbSensorModel
-         ${LARGEINPUT}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
+         ${OTB_DATA_LARGEINPUT_ROOT}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
          ${TEMP}/prTvSensorModelErs.txt
 )
 
@@ -254,7 +254,7 @@ foreach( file ${SARSENSORMODEL_TYPES})
                  ${BASELINE}/prTvSensorModelGridDeltaY_${sensor_name}.tif
                  ${TEMP}/prTvSensorModelGridDeltaY_${sensor_name}.tif
             otbSensorModelGrid
-                    ${LARGEINPUT}/${file}
+                    ${OTB_DATA_LARGEINPUT_ROOT}/${file}
                  ${TEMP}/prTvSensorModelGridDeltaX_${sensor_name}.tif
                  ${TEMP}/prTvSensorModelGridDeltaY_${sensor_name}.tif
                  10 10
@@ -267,7 +267,7 @@ foreach( file ${SARSENSORMODEL_TYPES})
                  ${BASELINE}/prTvForwardSensorModelGridY_${sensor_name}.tif
                  ${TEMP}/prTvForwardSensorModelGridY_${sensor_name}.tif
             otbForwardSensorModelGrid
-                    ${LARGEINPUT}/${file}
+                    ${OTB_DATA_LARGEINPUT_ROOT}/${file}
                  ${TEMP}/prTvForwardSensorModelGridX_${sensor_name}.tif
                  ${TEMP}/prTvForwardSensorModelGridY_${sensor_name}.tif
                  10 10
@@ -294,7 +294,7 @@ add_test(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
         otbOrthoRectificationFilter
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
         374100.8
         4829184.8
@@ -312,7 +312,7 @@ add_test(prTvOrthoRectificationToulouseXS ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouseXS_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouseXS_UTM.tif
         otbOrthoRectificationFilter
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationToulouseXS_UTM.tif
         367319 4835740 300 300 2.5608 -2.8452 31 N 4
         )
@@ -321,7 +321,7 @@ add_test(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCevennes_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennes_UTM.tif
         otbOrthoRectificationFilter
-        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationCevennes_UTM.tif
         556046
         4.881e+06
@@ -338,7 +338,7 @@ add_test(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
         otbOrthoRectificationFilterWithDEM
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
         374100.8
         4829184.8
@@ -356,7 +356,7 @@ add_test(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         otbOrthoRectificationFilterWithDEM
-        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         556046
         4.881e+06
@@ -376,7 +376,7 @@ add_test(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM.tif
                           ${TEMP}/prTvOrthoRectificationSPOT5_UTM.tif
         otbOrthoRectificationFilter
-        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/prTvOrthoRectificationSPOT5_UTM.tif
         536187
         3950748
@@ -393,7 +393,7 @@ add_test(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM_band1.tif
                           ${TEMP}/prTvOrthoRectificationMonoThreadSPOT5_UTM.tif
         otbOrthoRectificationMonoThreadFilter
-        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/prTvOrthoRectificationMonoThreadSPOT5_UTM.tif
         536187
         3950748
@@ -436,7 +436,7 @@ add_test(prTvOrthoRectificationUTM_RADARDSAT1 ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARDSAT1.tif
                           ${TEMP}/prTvOrthoRectificationUTM_RADARDSAT1.tif
         otbOrthoRectificationFilter
-                    ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/
+                    ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA/SCENE01/
                 ${TEMP}/prTvOrthoRectificationUTM_RADARDSAT1.tif
                 755929.75 9821313.25
                 200        200 10 -10 35 S 4
@@ -446,7 +446,7 @@ add_test(prTvOrthoRectificationUTM_RADARSAT2_XML ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2.tif
                           ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2.tif
         otbOrthoRectificationFilter
-                    ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+                    ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
                 ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2.tif
                 611000.953075 5439991.842531
                 200        200 10 -10 14 N 4
@@ -455,7 +455,7 @@ add_test(prTvOrthoRectificationUTM_RADARSAT2_HH ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2_XML.tif
                           ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_XML.tif
         otbOrthoRectificationFilter
-                    ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif
+                    ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif
                 ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_XML.tif
                 611000.953075 5439991.842531
                 200        200 10 -10 14 N 4
@@ -464,7 +464,7 @@ add_test(prTvOrthoRectificationUTM_RADARSAT2_HV ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2_HV.tif
                           ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_HV.tif
         otbOrthoRectificationFilter
-                    ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HV.tif
+                    ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HV.tif
                 ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_HV.tif
                 611000.953075 5439991.842531
                 200        200 10 -10 14 N 4
@@ -473,7 +473,7 @@ add_test(prTvOrthoRectificationUTM_RADARSAT2_VH ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2_VH.tif
                           ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_VH.tif
         otbOrthoRectificationFilter
-                    ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_VH.tif
+                    ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_VH.tif
                 ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_VH.tif
                 611000.953075 5439991.842531
                 200        200 10 -10 14 N 4
@@ -482,7 +482,7 @@ add_test(prTvOrthoRectificationUTM_RADARSAT2_VV ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2_VV.tif
                           ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_VV.tif
         otbOrthoRectificationFilter
-                    ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_VV.tif
+                    ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_VV.tif
                 ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_VV.tif
                 611000.953075 5439991.842531
                 200        200 10 -10 14 N 4
@@ -492,7 +492,7 @@ add_test(prTvOrthoRectificationUTM_ENVISAT ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_ENVISAT.tif
                           ${TEMP}/prTvOrthoRectificationUTM_ENVISAT.tif
         otbOrthoRectificationComplexFilter
-                    ${LARGEINPUT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
+                    ${OTB_DATA_LARGEINPUT_ROOT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
                 ${TEMP}/prTvOrthoRectificationUTM_ENVISAT.tif
                 655696.679130 4906584.046495
                 200        200 10 -10 30 N 4
@@ -502,7 +502,7 @@ add_test(prTvOrthoRectificationUTM_PALSAR ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_PALSAR.tif
                           ${TEMP}/prTvOrthoRectificationUTM_PALSAR.tif
         otbOrthoRectificationComplexFilter
-                    ${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+                    ${OTB_DATA_LARGEINPUT_ROOT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
                 ${TEMP}/prTvOrthoRectificationUTM_PALSAR.tif
                 309298.731439 3909055.130746
                 200        200 10 -10 54 N 4
@@ -512,7 +512,7 @@ add_test(prTvOrthoRectificationUTM_TERRASARX_HH ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_TERRASARX_HH.tif
                           ${TEMP}/prTvOrthoRectificationUTM_TERRASARX_HH.tif
         otbOrthoRectificationComplexFilter
-                    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                    ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
                 ${TEMP}/prTvOrthoRectificationUTM_TERRASARX_HH.tif
                 591992.001073 9699689.825866
                 200        200 10 -10 49 S 4
@@ -522,7 +522,7 @@ add_test(prTvOrthoRectificationUTM_TERRASARX_VV ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_TERRASARX_VV.tif
                           ${TEMP}/prTvOrthoRectificationUTM_TERRASARX_VV.tif
         otbOrthoRectificationComplexFilter
-                    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+                    ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
                 ${TEMP}/prTvOrthoRectificationUTM_TERRASARX_VV.tif
                 591992.001073 9699689.825866
                 200        200 10 -10 49 S 4
@@ -1051,7 +1051,7 @@ add_test(prTvCompositeTransform ${PROJECTIONS_TESTS3}
         --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvCompositeTransform.txt
         ${TEMP}/prTvCompositeTransform.txt
         otbCompositeTransform
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvCompositeTransform.txt
 )
 endif()
@@ -1096,7 +1096,7 @@ add_test(prTvGenericRSTransformFromImage ${PROJECTIONS_TESTS3}
 if(OTB_DATA_USE_LARGEINPUT)
 add_test(prTvGenericRSTransformQuickbirdToulouseGeodesicPointChecking ${PROJECTIONS_TESTS3}
 otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
-${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 ${INPUTDATA}/DEM/srtm_directory/
 ${INPUTDATA}/DEM/egm96.grd
 16271 15647 # IGN reference point based inside CNES (site 31555A point c)
@@ -1111,7 +1111,7 @@ ${INPUTDATA}/DEM/egm96.grd
 # TODO MSD need to update the tolerance values and used a real pleiades file
 add_test(prTvGenericRSTransformPleiadesToulouseGeodesicPointChecking_PRE ${PROJECTIONS_TESTS3}
 otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
-${LARGEINPUT}/PLEIADES-PRE/TLSE_TIFF_PRIMARY_DIMAPv2_MS_lossly_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20111025_3077-004_R1C1.TIF
+${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES-PRE/TLSE_TIFF_PRIMARY_DIMAPv2_MS_lossly_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20111025_3077-004_R1C1.TIF
 ${INPUTDATA}/DEM/srtm_directory/
 ${INPUTDATA}/DEM/egm96.grd
 6933 6472 # IGN reference point based inside CNES (site 31555A point c)
@@ -1124,7 +1124,7 @@ ${INPUTDATA}/DEM/egm96.grd
 # TODO MSD need to update the tolerance values and used a real pleiades file
 add_test(prTvGenericRSTransformPleiadesToulouseGeodesicPointChecking ${PROJECTIONS_TESTS3}
 otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
-${LARGEINPUT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2
+${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2
 ${INPUTDATA}/DEM/srtm_directory/
 ${INPUTDATA}/DEM/egm96.grd
 20000 28010 # IGN reference point based inside CNES (site 31555A point c)
@@ -1137,22 +1137,22 @@ ${INPUTDATA}/DEM/egm96.grd
 
 # Generic Testing
 set(GenericConversionChecking_INPUTS
-    ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-    #${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT
-    ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
-    ${LARGEINPUT}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
-    ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif
-    ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
-    #${LARGEINPUT}/GEOEYE/LES_ROCHES/po_350134_bgrn_0000000.tif
-    #${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
-    #${LARGEINPUT}/PALSAR/ALOS-H1_1__A-ORBIT__ALPSRP037120700.tif
-    #${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
-    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
-    ${LARGEINPUT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
-    #${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5
-    #${LARGEINPUT}/MODIS/MOD13Q1/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf
-    #${LARGEINPUT}/ONERA/spa3_0215_rad.dat
-    #${LARGEINPUT}/RAPIDEYE/level3A/2008-12-25T005918_RE3_3A-NAC_752656_40091.tif
+    ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+    #${OTB_DATA_LARGEINPUT_ROOT}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT
+    ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
+    ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
+    ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif
+    ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+    #${OTB_DATA_LARGEINPUT_ROOT}/GEOEYE/LES_ROCHES/po_350134_bgrn_0000000.tif
+    #${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+    #${OTB_DATA_LARGEINPUT_ROOT}/PALSAR/ALOS-H1_1__A-ORBIT__ALPSRP037120700.tif
+    #${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+    ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+    ${OTB_DATA_LARGEINPUT_ROOT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
+    #${OTB_DATA_LARGEINPUT_ROOT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5
+    #${OTB_DATA_LARGEINPUT_ROOT}/MODIS/MOD13Q1/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf
+    #${OTB_DATA_LARGEINPUT_ROOT}/ONERA/spa3_0215_rad.dat
+    #${OTB_DATA_LARGEINPUT_ROOT}/RAPIDEYE/level3A/2008-12-25T005918_RE3_3A-NAC_752656_40091.tif
     )
 
 set(GenericConversionChecking_TYPES
@@ -1233,22 +1233,22 @@ endforeach()
 # Forward / Backward projection consistency checking
 
 set(FWDBWDChecking_INPUTS
-    ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-    #${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT
-    ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
-    ${LARGEINPUT}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
-    ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif
-    ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
-    #${LARGEINPUT}/GEOEYE/LES_ROCHES/po_350134_bgrn_0000000.tif
-    #${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
-    #${LARGEINPUT}/PALSAR/ALOS-H1_1__A-ORBIT__ALPSRP037120700.tif
-    #${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
-    ${LARGEINPUT}/TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
-    ${LARGEINPUT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
-    #${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5
-    #${LARGEINPUT}/MODIS/MOD13Q1/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf
-    #${LARGEINPUT}/ONERA/spa3_0215_rad.dat
-    #${LARGEINPUT}/RAPIDEYE/level3A/2008-12-25T005918_RE3_3A-NAC_752656_40091.tif
+    ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+    #${OTB_DATA_LARGEINPUT_ROOT}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT
+    ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
+    ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
+    ${OTB_DATA_LARGEINPUT_ROOT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif
+    ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+    #${OTB_DATA_LARGEINPUT_ROOT}/GEOEYE/LES_ROCHES/po_350134_bgrn_0000000.tif
+    #${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+    #${OTB_DATA_LARGEINPUT_ROOT}/PALSAR/ALOS-H1_1__A-ORBIT__ALPSRP037120700.tif
+    #${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+    ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
+    ${OTB_DATA_LARGEINPUT_ROOT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
+    #${OTB_DATA_LARGEINPUT_ROOT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5
+    #${OTB_DATA_LARGEINPUT_ROOT}/MODIS/MOD13Q1/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf
+    #${OTB_DATA_LARGEINPUT_ROOT}/ONERA/spa3_0215_rad.dat
+    #${OTB_DATA_LARGEINPUT_ROOT}/RAPIDEYE/level3A/2008-12-25T005918_RE3_3A-NAC_752656_40091.tif
     )
 
 set(FWDBWDChecking_TYPES
@@ -1360,7 +1360,7 @@ add_test(prTvVectorDataProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
             ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
         otbVectorDataProjectionFilterFromMapToSensor
         ${INPUTDATA}/ToulousePoints-examples.shp
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
 )
 
@@ -1370,7 +1370,7 @@ add_test(prTvGeometriesProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
             ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
         otbGeometriesProjectionFilterFromMapToSensor
         ${INPUTDATA}/ToulousePoints-examples.shp
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
 )
 endif()
@@ -1457,15 +1457,15 @@ add_test(prTvGeometriesProjectionFilterFromMapToEPSG_WGS84 ${PROJECTIONS_TESTS3}
 # TESTS ABOUT REPROJECTION INTO AN IMAGE OF A VECTORDATA
 if(OTB_DATA_USE_LARGEINPUT)
   set(VectorDataIntoImage_FILES
-    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_withgeom.tif
-    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_withgeom_ENVI.hdr
-    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_withgeom.tif
-    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_withgeom_ENVI.hdr
-    ${LARGEINPUT}/QB_EXTRACT/qb_utm.tif
-    ${LARGEINPUT}/QB_EXTRACT/qb_utm_withgeom.tif
-    ${LARGEINPUT}/QB_EXTRACT/qb_wgs84.tif
-    ${LARGEINPUT}/QB_EXTRACT/qb_wgs84_withgeom.tif
-    ${LARGEINPUT}/QB_EXTRACT/qb_wgs84_worldfile.tif
+    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_extract_00_withgeom.tif
+    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_extract_00_withgeom_ENVI.hdr
+    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_extract_11_withgeom.tif
+    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_extract_11_withgeom_ENVI.hdr
+    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_utm.tif
+    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_utm_withgeom.tif
+    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_wgs84.tif
+    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_wgs84_withgeom.tif
+    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_wgs84_worldfile.tif
     )
 
   set( VectorDataIntoImage_TESTNB 0)
@@ -1475,7 +1475,7 @@ if(OTB_DATA_USE_LARGEINPUT)
     add_test(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB} ${PROJECTIONS_TESTS3}
              otbVectorDataIntoImageProjectionFilterTest
               ${file}
-              ${LARGEINPUT}/VECTOR/MidiPyrenees/natural.shp
+              ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/natural.shp
               ${INPUTDATA}/DEM/srtm_directory
               3 )
   endforeach()
@@ -1484,17 +1484,17 @@ if(OTB_DATA_USE_LARGEINPUT)
 #  The call set_tests_properties(test PROPERTIES WILL_FAIL true) does not do what it is supposed to
 #
 #  set(VectorDataIntoImage_FILES_NOGEOM
-#    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_nogeom.tif
-#    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_nogeom_ENVI.hdr
-#    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_nogeom.tif
-#    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_nogeom_ENVI.hdr)
+#    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_extract_00_nogeom.tif
+#    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_extract_00_nogeom_ENVI.hdr
+#    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_extract_11_nogeom.tif
+#    ${OTB_DATA_LARGEINPUT_ROOT}/QB_EXTRACT/qb_extract_11_nogeom_ENVI.hdr)
 #
 #  foreach( file ${VectorDataIntoImage_FILES_NOGEOM} )
 #    math(EXPR VectorDataIntoImage_TESTNB "${VectorDataIntoImage_TESTNB} + 1")
 #    add_test(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB} ${PROJECTIONS_TESTS3}
 #             otbVectorDataIntoImageProjectionFilterTest
 #              ${file}
-#              ${LARGEINPUT}/VECTOR/MidiPyrenees/natural.shp
+#              ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/natural.shp
 #              ${INPUTDATA}/DEM/srtm_directory
 #              3 )
 #    set_tests_properties(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB}
@@ -1507,7 +1507,7 @@ endif()
 # add_test(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef ${PROJECTIONS_TESTS3}
 #         otbVectorDataIntoImageProjectionFilterTest
 #           ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-#           ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+#           ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
 #           ${INPUTDATA}/DEM/srtm_directory
 #           ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef.shp
 #           ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef.txt
@@ -1517,7 +1517,7 @@ endif()
 # add_test(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef1 ${PROJECTIONS_TESTS3}
 #         otbVectorDataIntoImageProjectionFilterTest
 #           ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-#           ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+#           ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
 #           ${INPUTDATA}/DEM/srtm_directory
 #           ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef1.shp
 #           ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef1.txt
@@ -1527,7 +1527,7 @@ endif()
 #add_test(prTvVectorData_ProjRef_ProjIntoImage_WithSensorModel ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
 #          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_EXTRACT.HDR
-#          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+#          ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
 #          ${INPUTDATA}/DEM/srtm_directory
 #          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithWithSensorModel.shp
 #          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithWithSensorModel.txt
@@ -1537,7 +1537,7 @@ endif()
 #add_test(prTvVectorData_ProjRef_ProjIntoImage_WithSensorModel1 ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
 #          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_EXTRACT.HDR
-#          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+#          ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
 #          ${INPUTDATA}/DEM/srtm_directory
 #          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithWithSensorModel1.shp
 #          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithWithSensorModel1.txt
@@ -1547,7 +1547,7 @@ endif()
 #add_test(prTvVectorData_ProjRef_ProjIntoImage_Index ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
 #          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_EXTRACT_INDEX.HDR
-#          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+#          ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
 #          ${INPUTDATA}/DEM/srtm_directory
 #          ${TEMP}/prTvVectorDataProjRefProjIntoImageIndex.shp
 #          ${TEMP}/prTvVectorDataProjRefProjIntoImageindex.txt
@@ -1557,7 +1557,7 @@ endif()
 #add_test(prTvVectorData_ProjRef_ProjIntoImage_Index1 ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
 #           ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_EXTRACT_INDEX.HDR
-#          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+#          ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
 #          ${INPUTDATA}/DEM/srtm_directory
 #          ${TEMP}/prTvVectorDataProjRefProjIntoImageIndex1.shp
 #          ${TEMP}/prTvVectorDataProjRefProjIntoImageindex1.txt
@@ -1605,7 +1605,7 @@ add_test(prTvTileMapTransform ${PROJECTIONS_TESTS3}
 if(OTB_DATA_USE_LARGEINPUT)
 add_test(prTvVectorDataExtractROIandProjection ${PROJECTIONS_TESTS3}
    otbVectorDataExtractROIandProjection
-        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+        ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
 )
 endif()
 
@@ -1636,7 +1636,7 @@ add_test(prTvotbGenericRSResampleImageFilter ${PROJECTIONS_TESTS4}
     ${BASELINE}/prTvotbGenericRSResampleImageFilterOutput.tif
     ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
     otbGenericRSResampleImageFilter
-  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+  ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
   1000
   15
   0
@@ -1666,7 +1666,7 @@ foreach( file ${SENSOR_TYPES})
     ${BASELINE}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
     ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
     otbGenericRSResampleImageFilterFromMap
-    ${LARGEINPUT}/${file}
+    ${OTB_DATA_LARGEINPUT_ROOT}/${file}
     15
     0
     ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
@@ -1686,7 +1686,7 @@ add_test(prTvImageToEnvelopeVectorDataFilter ${PROJECTIONS_TESTS4}
   ${BASELINE_FILES}/prTvImageToEnvelopeVectorDataFilterOutput.kml
   ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
   otbImageToEnvelopeVectorDataFilter
-  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+  ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
   ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
 )
 endif()
@@ -1702,7 +1702,7 @@ add_test(prTvImageToGenericRSOutputParameters ${PROJECTIONS_TESTS4}
   ${BASELINE_FILES}/prTvImageToGenericRSOutputParametersOutput.txt
   ${TEMP}/prTvImageToGenericRSOutputParametersOutput.txt
   otbImageToGenericRSOutputParameters
-  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+  ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
   ${TEMP}/prTvImageToGenericRSOutputParametersOutput.txt
 )
 endif()
@@ -1753,7 +1753,7 @@ add_test(prTvVectorDataTransformFilter ${PROJECTIONS_TESTS4}
   ${BASELINE_FILES}/prTvVectorDataTransformFilter_Translation.shp
    ${TEMP}/prTvVectorDataTransformFilter_Translation.shp
  otbVectorDataTransformFilter
-  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+  ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
   ${INPUTDATA}/ToulouseRoad-examples.shp
   ${TEMP}/prTvVectorDataTransformFilter_Translation.shp
 )
@@ -1830,38 +1830,38 @@ if(OTB_DATA_USE_LARGEINPUT)
 
 add_test(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS5}
         otbCreateProjectionWithOSSIM
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
 add_test(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS5}
         otbCreateProjectionWithOSSIM
-        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
 add_test(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS5}
         otbCreateProjectionWithOTB
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
 add_test(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS5}
         otbCreateProjectionWithOTB
-        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
 add_test(prTvTileImageFilterGenericRSTransformTest_TLSE_DIMAPv2 ${PROJECTIONS_TESTS5}
          otbTileImageFilterRSTransformTest
          1 3
-         ${LARGEINPUT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2
-         ${LARGEINPUT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2
-         ${LARGEINPUT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R3C1.JP2
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R3C1.JP2
 )
 
 add_test(prTvTileImageFilterGenericRSTransformTest_LASVEGAS_DIMAPv1 ${PROJECTIONS_TESTS5}
          otbTileImageFilterRSTransformTest
          1 3
-         ${LARGEINPUT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R1C1.JP2
-         ${LARGEINPUT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R2C1.JP2
-         ${LARGEINPUT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R3C1.JP2
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R1C1.JP2
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R2C1.JP2
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R3C1.JP2
 )
 
 endif()

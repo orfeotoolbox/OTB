@@ -13,7 +13,7 @@ add_test(uaTvPlatformPositionComputeBaselineTest ${UtilitiesAdapters_TESTS1}
            ${BASELINE_FILES}/uaTvPlatformPositionComputeBaselineTest.txt
            ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt
          otbPlatformPositionComputeBaselineTest
-         ${LARGEINPUT}/TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml
+         ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml
          ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt)
 endif()
 
@@ -26,12 +26,12 @@ add_test(uaTvGeometricSarSensorModelAdapterTest ${UtilitiesAdapters_TESTS1}
            ${BASELINE_FILES}/uaTvGeometricSarSensorModelAdapterTest.txt
            ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt
          otbGeometricSarSensorModelAdapterTest
-         ${LARGEINPUT}/TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml
+         ${OTB_DATA_LARGEINPUT_ROOT}/TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml
          ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt)
 
 add_test(uaTvRPCSolverAdapterValidationTest ${UtilitiesAdapters_TESTS1}
          otbRPCSolverAdapterTest
-         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          10 0.25 0.35
          ${INPUTDATA}/DEM/srtm_directory/
          ${INPUTDATA}/DEM/egm96.grd
@@ -39,7 +39,7 @@ add_test(uaTvRPCSolverAdapterValidationTest ${UtilitiesAdapters_TESTS1}
 
 add_test(uaTvRPCSolverAdapterNoDEMValidationTest ${UtilitiesAdapters_TESTS1}
          otbRPCSolverAdapterTest
-         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          10 0.25 0.35
          no
          no
@@ -50,7 +50,7 @@ add_test(uaTvRPCSolverAdapterOutGeomTest ${UtilitiesAdapters_TESTS1}
          ${BASELINE_FILES}/uaTvRPCSolverAdapterOutGeomTest.geom
          ${TEMP}/uaTvRPCSolverAdapterOutGeomTest.geom
          otbRPCSolverAdapterTest
-         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          10 0.25 0.35
          ${INPUTDATA}/DEM/srtm_directory/
          ${INPUTDATA}/DEM/egm96.grd
@@ -59,7 +59,7 @@ add_test(uaTvRPCSolverAdapterOutGeomTest ${UtilitiesAdapters_TESTS1}
 
 add_test(uaTvRPCSolverAdapterNotEnoughPointsForElevationTest ${UtilitiesAdapters_TESTS1}
          otbRPCSolverAdapterTest
-         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          5 0.25 0.35
          no
          no
@@ -67,7 +67,7 @@ add_test(uaTvRPCSolverAdapterNotEnoughPointsForElevationTest ${UtilitiesAdapters
 
 add_test(uaTvRPCSolverAdapterNotEnoughPointsTest ${UtilitiesAdapters_TESTS1}
          otbRPCSolverAdapterTest
-         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          4 0.25 0.35
          ${INPUTDATA}/DEM/srtm_directory/
          ${INPUTDATA}/DEM/egm96.grd
@@ -326,7 +326,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 # Test with general elevation images (tif format)
 add_test(uaTvDEMHandler_AboveEllipsoid_BDALTI_TIF_NoGeoid ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
-  ${LARGEINPUT}/BD_ALTI/
+  ${OTB_DATA_LARGEINPUT_ROOT}/BD_ALTI/
   no
   800
   7.283262

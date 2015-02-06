@@ -471,13 +471,13 @@ add_test(dmTvMultiDisparityMapTo3DFilter ${DISPARITYMAP_TESTS4}
      ${BASELINE}/dmTvMultiDisparityMapTo3DFilterResidue.tif
      ${TEMP}/dmTvMultiDisparityMapTo3DFilterResidue.tif
          otbMultiDisparityMapTo3DFilter
-         ${LARGEINPUT}/PLEIADES/tristereo_sample/master_pan.tif
-         ${LARGEINPUT}/PLEIADES/tristereo_sample/slave_pan_1.tif
-         ${LARGEINPUT}/PLEIADES/tristereo_sample/slave_pan_2.tif
-         ${LARGEINPUT}/PLEIADES/tristereo_sample/phys_disp_1.tif
-         ${LARGEINPUT}/PLEIADES/tristereo_sample/phys_disp_2.tif
-         ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
-         ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_2.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_sample/master_pan.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_sample/slave_pan_1.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_sample/slave_pan_2.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_sample/phys_disp_1.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_sample/phys_disp_2.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_sample/mask_1.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_sample/mask_2.tif
          ${TEMP}/dmTvMultiDisparityMapTo3DFilterOutput.tif
          ${TEMP}/dmTvMultiDisparityMapTo3DFilterResidue.tif
          )
@@ -525,9 +525,9 @@ if(OTB_DATA_USE_LARGEINPUT)
 add_test(dmTuMulti3DMapToDEMFilterMeanMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
          otbMulti3DMapToDEMFilter
          ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
-         ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_sample/mask_1.tif
          ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
-         ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_sample/mask_1.tif
 		 ${TEMP}/dmTuMulti3DMapToDEMFilterOutputMeanMultiThreadMultiStream.tif
 		 2.5
 		 2
@@ -537,9 +537,9 @@ add_test(dmTuMulti3DMapToDEMFilterMeanMultiThreadMultiStream ${DISPARITYMAP_TEST
 add_test(dmTuMulti3DMapToDEMFilterAccMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
          otbMulti3DMapToDEMFilter
          ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
-         ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_sample/mask_1.tif
          ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
-         ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
+         ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_sample/mask_1.tif
 		 ${TEMP}/dmTuMulti3DMapToDEMFilterOutputAccMultiThreadMultiStream.tif
 		 2.5
 		 3

@@ -112,9 +112,9 @@ OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
 if(OTB_DATA_USE_LARGEINPUT)
 OTB_TEST_APPLICATION(NAME apTvDmStereoFramework
                      APP  StereoFramework
-                     OPTIONS -input.il ${LARGEINPUT}/PLEIADES/tristereo_Haiti_Pan/phr_haiti_xt1.tif
-                     			       ${LARGEINPUT}/PLEIADES/tristereo_Haiti_Pan/phr_haiti_xt2.tif
-                     			       ${LARGEINPUT}/PLEIADES/tristereo_Haiti_Pan/phr_haiti_xt3.tif
+                     OPTIONS -input.il ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_Haiti_Pan/phr_haiti_xt1.tif
+                     			       ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_Haiti_Pan/phr_haiti_xt2.tif
+                     			       ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_Haiti_Pan/phr_haiti_xt3.tif
                      			       -input.co "0 1,0 2"
                                 -elev.dem ${DEM_DATA}
                                 -elev.geoid ${OTB_DATA_ROOT}/Input/DEM/egm96.grd
@@ -136,9 +136,9 @@ OTB_TEST_APPLICATION(NAME apTvDmStereoFramework
 
  OTB_TEST_APPLICATION(NAME apTvDmStereoFramework2
                      APP  StereoFramework
-                     OPTIONS -input.il ${LARGEINPUT}/PLEIADES/tristereo_Haiti_Pan/master_pan.tif
-                     			       ${LARGEINPUT}/PLEIADES/tristereo_Haiti_Pan/slave_pan_1.tif
-                     			       ${LARGEINPUT}/PLEIADES/tristereo_Haiti_Pan/slave_pan_2.tif
+                     OPTIONS -input.il ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_Haiti_Pan/master_pan.tif
+                     			       ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_Haiti_Pan/slave_pan_1.tif
+                     			       ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/tristereo_Haiti_Pan/slave_pan_2.tif
                      			       -input.co "0 1,0 2"
                                 -elev.dem ${DEM_DATA}
                                 -elev.geoid ${OTB_DATA_ROOT}/Input/DEM/egm96.grd
