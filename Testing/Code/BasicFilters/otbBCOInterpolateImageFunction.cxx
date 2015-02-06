@@ -138,7 +138,7 @@ int otbBCOInterpolateImageFunction2(int argc, char * argv[])
 
   std::vector<ContinuousIndexType> indicesList;
 
-  for (unsigned int i=3; i+1 < argc; i=i+2)
+  for (int i=3; i+1 < argc; i=i+2)
     {
     ContinuousIndexType idx;
 

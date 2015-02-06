@@ -55,7 +55,6 @@ int otbSurfaceAdjacencyEffectCorrectionSchemeFilter(int itkNotUsed(argc), char *
 
   typedef otb::AtmosphericRadiativeTerms                                    AtmosphericRadiativeTermsType;
   typedef AtmosphericRadiativeTermsType::Pointer                   AtmosphericRadiativeTermsPointerType;
-  typedef otb::AtmosphericRadiativeTerms::DataVectorType DataVectorType;
 
   typedef otb::FilterFunctionValues                                     FilterFunctionValuesType;
   typedef FilterFunctionValuesType::WavelengthSpectralBandType          ValueType;                //float
