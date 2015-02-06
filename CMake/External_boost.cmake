@@ -17,8 +17,8 @@ else()
   if(UNIX)
     ExternalProject_Add(${proj}
         PREFIX ${proj}
-        URL "http://sourceforge.net/projects/boost/files/boost/1.57.0/boost_1_57_0.tar.gz/download"
-        URL_MD5 25f9a8ac28beeb5ab84aa98510305299
+        URL "http://sourceforge.net/projects/boost/files/boost/1.54.0/boost_1_54_0.tar.gz/download"
+        URL_MD5 efbfbff5a85a9330951f243d0a46e4b9
         BINARY_DIR ${BOOST_SB_BUILD_DIR}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_CACHE_ARGS
