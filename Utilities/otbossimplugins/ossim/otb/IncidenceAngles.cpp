@@ -134,6 +134,8 @@ bool IncidenceAngles::loadState(const ossimKeywordlist& kwl, const char* prefix)
 
 std::ostream& IncidenceAngles::print(std::ostream& out) const
 {
+  std::ios::fmtflags f(out.flags());
+
    out << setprecision(15) << setiosflags(ios::fixed)
        << "\n IncidentAngles class data members:\n";
 
@@ -154,6 +156,8 @@ std::ostream& IncidenceAngles::print(std::ostream& out) const
      _tabCornersInfoIncidenceAngle[i].saveState(kwl, s3.c_str());
    }
    out << kwl;
+
+   out.flags(f);
 
    return out;
 }

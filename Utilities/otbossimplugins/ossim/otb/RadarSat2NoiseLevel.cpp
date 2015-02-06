@@ -299,6 +299,8 @@ bool RadarSat2NoiseLevel::loadState(const ossimKeywordlist& kwl, const char* pre
 
 std::ostream& RadarSat2NoiseLevel::print(std::ostream& out) const
 {
+  std::ios::fmtflags f(out.flags());
+
    out << setprecision(15) << setiosflags(ios::fixed)
        << "\n RadarSat2NoiseLevel class data members:\n";
 
@@ -309,6 +311,8 @@ std::ostream& RadarSat2NoiseLevel::print(std::ostream& out) const
    /* TODO Add print method*/
    
    //out << kwl;
+
+   out.flags(f);
 
    return out;
 }

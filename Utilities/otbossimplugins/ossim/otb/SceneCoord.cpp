@@ -138,6 +138,8 @@ bool SceneCoord::loadState(const ossimKeywordlist& kwl, const char* prefix)
 
 std::ostream& SceneCoord::print(std::ostream& out) const
 {
+  std::ios::fmtflags f(out.flags());
+
    out << setprecision(15) << setiosflags(ios::fixed)
        << "\n SceneCoord class data members:\n";
 
@@ -158,6 +160,8 @@ std::ostream& SceneCoord::print(std::ostream& out) const
      _tabCornersSceneCoord[i].saveState(kwl, s3.c_str());
    }
    out << kwl;
+
+   out.flags(f);
 
    return out;
 }
