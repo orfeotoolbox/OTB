@@ -52,6 +52,7 @@ ossimRadarSat2RPCModel::ossimRadarSat2RPCModel()
    :
    ossimRpcModel(),
    theDecimation(1.0),
+   _sensor(NULL),
    theProductXmlFile(ossimFilename::NIL)
 {
 }
@@ -60,6 +61,7 @@ ossimRadarSat2RPCModel::ossimRadarSat2RPCModel(const ossimRadarSat2RPCModel& rhs
    :
    ossimRpcModel(rhs),
    theDecimation(1.0),
+   _sensor(NULL),
    theProductXmlFile(rhs.theProductXmlFile)
 {
    

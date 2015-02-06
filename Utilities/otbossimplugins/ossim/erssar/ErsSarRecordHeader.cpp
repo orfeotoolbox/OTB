@@ -15,7 +15,14 @@
 namespace ossimplugins
 {
 
-ErsSarRecordHeader::ErsSarRecordHeader()
+ErsSarRecordHeader::ErsSarRecordHeader():
+  _rec_seq(0),
+  _rec_sub1(0),
+  _rec_type(0),
+  _rec_sub2(0),
+  _rec_sub3(0),
+  _length(0)
+  
 {
 }
 
@@ -52,7 +59,8 @@ ErsSarRecordHeader::ErsSarRecordHeader(const ErsSarRecordHeader& rhs):
     _rec_sub1(rhs._rec_sub1),
     _rec_type(rhs._rec_type),
     _rec_sub2(rhs._rec_sub2),
-    _rec_sub3(rhs._rec_sub3)
+    _rec_sub3(rhs._rec_sub3),
+    _length(rhs._length)
 {
 }
 
@@ -63,6 +71,7 @@ ErsSarRecordHeader& ErsSarRecordHeader::operator=(const ErsSarRecordHeader& rhs)
   _rec_type = rhs._rec_type;
   _rec_sub2 = rhs._rec_sub2;
   _rec_sub3 = rhs._rec_sub3;
+  _length   = rhs._length;
   return *this;
 }
 

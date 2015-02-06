@@ -114,53 +114,9 @@ public:
   
 protected:
   
-
-  
-  //***
-  // Image constant parameters:
-  //***
-  double           theIllumAzimuth;
-  double           theIllumElevation;
-  double           theOrbitAltitude;
-  double           theOrbitInclination;
-  int              theMapZone;
-  ossimDpt         theMapOffset;
-  int              theWrsPathNumber;
-  int              theWrsRowNumber;
-  double           theMeridianalAngle;
-  double           thePositionError;
- 
-  ProjectionType       theProjectionType;
-  ossimRefPtr<ossimMapProjection>  theMapProjection;
- 
-  double           theMapAzimAngle;
-  double           theMapAzimCos;
-  double           theMapAzimSin;
-  double           theMap2IcRotAngle;
-  double           theMap2IcRotCos;
-  double           theMap2IcRotSin;
- // 
- // //***
- // // Adjustable parameters:
- // //***
-  double           theIntrackOffset;
-  double           theCrtrackOffset;
-  double           theLineGsdCorr;
-  double           theSampGsdCorr;
-  double           theRollOffset;
-  double           theYawOffset;
-  double           theYawRate;
-  double           theMapRotation;
- // 
- // //***
- // // Quantities derived from the adjustable parameters:
- // //***
-  NEWMAT::Matrix   theRollRotMat;
-
   unsigned int qDepth;  
   TYPE_DATA
   
-
 };
 } // End: namespace ossimplugins
 #endif

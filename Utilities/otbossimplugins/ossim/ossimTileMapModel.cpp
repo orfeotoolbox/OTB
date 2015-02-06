@@ -273,6 +273,8 @@ namespace ossimplugins
 //*****************************************************************************
    void ossimTileMapModel::writeGeomTemplate(ostream& os)
    {
+     std::ios::fmtflags f(os.flags());
+
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::writeGeomTemplate: entering..." << std::endl;
 
       os <<
@@ -283,6 +285,9 @@ namespace ossimplugins
 
 
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::writeGeomTemplate: returning..." << std::endl;
+
+      os.flags(f);
+      
       return;
    }
 } // End: namespace ossimplugins

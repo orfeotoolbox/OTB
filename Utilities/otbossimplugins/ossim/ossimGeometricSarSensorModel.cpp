@@ -570,6 +570,8 @@ namespace ossimplugins
 
 std::ostream& ossimGeometricSarSensorModel::print(std::ostream& out) const
 {
+  std::ios::fmtflags f(out.flags());
+
    out << setprecision(15) << setiosflags(ios::fixed)
        << "\nossimGeometricSarSensorModel class data members:\n";
 
@@ -605,6 +607,8 @@ std::ostream& ossimGeometricSarSensorModel::print(std::ostream& out) const
            _optimizationBiasY);
 
    out << kwl;
+
+   out.flags(f);
 
    return ossimSensorModel::print(out);
 }

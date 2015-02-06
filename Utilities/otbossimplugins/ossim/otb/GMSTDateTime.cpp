@@ -42,6 +42,7 @@ GMSTDateTime::GMSTDateTime(double tms, Ori_TSM_Green origine):
 GMSTDateTime::GMSTDateTime(CivilDateTime& rhs)
 {
   rhs.AsGMSTDateTime(this);
+  _origine = GMSTDateTime::AN1900;
 }
 
 GMSTDateTime& GMSTDateTime::operator=(const GMSTDateTime& rhs)

@@ -21,7 +21,10 @@ Equation::Equation():
    _coefficients(NULL),
    _degree(0),
    _nbrSol(0),
-   _solutions(NULL)
+   _solutions(NULL),
+   _normalisationType(Equation::GreatValues),
+   _normalisationCoefficient(1.),
+   _trueDegree(0)
 {
   _order.clear();
 }
@@ -38,7 +41,10 @@ Equation::Equation(int degree, std::complex<double>* coefficients):
    _coefficients(NULL),
    _degree(0),
    _nbrSol(0),
-   _solutions(NULL)
+   _solutions(NULL),
+   _normalisationType(Equation::GreatValues),
+   _normalisationCoefficient(1.),
+   _trueDegree(0)
 {
   _order.clear();
   CreateEquation(degree, coefficients);
@@ -65,7 +71,14 @@ void Equation::CreateEquation(int degree, std::complex<double>* coefficients)
   }
 }
 
-Equation::Equation(const Equation& rhs)
+Equation::Equation(const Equation& rhs):  
+  _coefficients(NULL),
+   _degree(0),
+   _nbrSol(0),
+   _solutions(NULL),
+   _normalisationType(Equation::GreatValues),
+   _normalisationCoefficient(1.),
+   _trueDegree(0)
 {
   CreateEquation(rhs._degree, rhs._coefficients);
 }
