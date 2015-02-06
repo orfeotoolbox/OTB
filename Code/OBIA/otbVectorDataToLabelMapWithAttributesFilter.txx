@@ -336,7 +336,7 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
         typedef typename IndexType::IndexValueType IndexValueType;
         RSRegionType polygonExtRingBoundReg = correctPolygonExtRing->GetBoundingRegion();
 
-        IndexType startIdx,endIdx,tmpIdx;
+        
         OriginType physCorners[4];
         physCorners[0][0] = polygonExtRingBoundReg.GetOrigin(0);
         physCorners[0][1] = polygonExtRingBoundReg.GetOrigin(1);
@@ -349,21 +349,19 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
         physCorners[2][0] += polygonExtRingBoundReg.GetSize(0);
         physCorners[3][0] += polygonExtRingBoundReg.GetSize(0);
 
+        IndexType startIdx,endIdx,tmpIdx;
+
+        startIdx.Fill(itk::NumericTraits<IndexValueType>::max());
+        endIdx.Fill(itk::NumericTraits<IndexValueType>::NonpositiveMin());
+
         for (unsigned int k=0; k<4; ++k)
           {
           this->GetOutput()->TransformPhysicalPointToIndex(physCorners[k],tmpIdx);
-          if (k == 0)
-            {
-            startIdx = tmpIdx;
-            endIdx = tmpIdx;
-            }
-          else
-            {
-            startIdx[0] = std::min(startIdx[0],tmpIdx[0]);
-            startIdx[1] = std::min(startIdx[1],tmpIdx[1]);
-            endIdx[0] = std::max(endIdx[0],tmpIdx[0]);
-            endIdx[1] = std::max(endIdx[1],tmpIdx[1]);
-            }
+          
+          startIdx[0] = std::min(startIdx[0],tmpIdx[0]);
+          startIdx[1] = std::min(startIdx[1],tmpIdx[1]);
+          endIdx[0] = std::max(endIdx[0],tmpIdx[0]);
+          endIdx[1] = std::max(endIdx[1],tmpIdx[1]);
           }
         // Check that the polygon intersects the largest possible region
         RegionType polyRegion;
