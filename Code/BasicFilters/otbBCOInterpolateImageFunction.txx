@@ -136,14 +136,13 @@ typename BCOInterpolateImageFunction< TInputImage, TCoordRep >
 BCOInterpolateImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const
 {
-  int radius = this->GetRadius();
-  unsigned int winSize = 2*radius+1;
+
   unsigned int dim;
 
   IndexType baseIndex;
   IndexType neighIndex;
 
-  std::vector<RealType> lineRes(winSize, 0.);
+  std::vector<RealType> lineRes(this->m_WinSize, 0.);
 
   RealType value = itk::NumericTraits<RealType>::Zero;
 
@@ -156,13 +155,13 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
     baseIndex[dim] = itk::Math::Floor< IndexValueType >( index[dim]+0.5 );
     }
 
-  for( int i = -radius; i <= radius; ++i )
+  for( int i = 0; i < this->m_WinSize; ++i )
     {
-    for( int j = -radius; j <= radius; ++j )
+    for( int j = 0; j < this->m_WinSize; ++j )
       {
       // get neighbor index
-      neighIndex[0] = baseIndex[0] + i;
-      neighIndex[1] = baseIndex[1] + j;
+      neighIndex[0] = baseIndex[0] + i - this->m_Radius;
+      neighIndex[1] = baseIndex[1] + j - this->m_Radius;
 
       if( neighIndex[0] > this->m_EndIndex[0] )
         {
@@ -180,10 +179,9 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
         {
         neighIndex[1] = this->m_StartIndex[1];
         }
-      lineRes[i+radius] = lineRes[i+radius]
-        + static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) ) * BCOCoefY[j+radius];
+      lineRes[i] += static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) ) * BCOCoefY[j];
       }
-    value += lineRes[i+radius]*BCOCoefX[i+radius];
+    value += lineRes[i]*BCOCoefX[i];
     }
 
 
@@ -205,33 +203,18 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
 {
   typedef typename itk::NumericTraits<InputPixelType>::ScalarRealType ScalarRealType;
 
-  int radius = this->GetRadius();
-  unsigned int winSize = 2*radius+1;
+
   unsigned int dim;
   unsigned int componentNumber = this->GetInputImage()->GetNumberOfComponentsPerPixel();
 
   IndexType baseIndex;
   IndexType neighIndex;
 
-  std::vector< std::vector< ScalarRealType > > lineRes;
 
-  lineRes.resize(winSize);
-  for( unsigned int i = 0; i<winSize; ++i)
-    {
-    lineRes.at(i).resize(componentNumber);
-    for( unsigned int j = 0; j<componentNumber; ++j)
-      {
-      lineRes.at(i).at(j) = itk::NumericTraits<ScalarRealType>::Zero;
-      }
-    }
+    
+  std::vector< std::vector<ScalarRealType> >  lineRes ( this->m_WinSize, std::vector<ScalarRealType>( componentNumber, itk::NumericTraits<ScalarRealType>::Zero) );
+  std::vector< ScalarRealType > value(componentNumber,itk::NumericTraits<ScalarRealType>::Zero);
 
-  std::vector< ScalarRealType > value;
-
-  value.resize(componentNumber);
-  for( unsigned int j = 0; j<componentNumber; ++j)
-    {
-    value.at(j) = itk::NumericTraits<ScalarRealType>::Zero;
-    }
 
   OutputType output;
 
@@ -246,13 +229,13 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
     baseIndex[dim] = itk::Math::Floor< IndexValueType >( index[dim]+0.5 );
     }
 
-  for( int i = -radius; i <= radius; ++i )
+  for( int i = 0; i < this->m_WinSize; ++i )
     {
-    for( int j = -radius; j <= radius; ++j )
+    for( int j = 0; j < this->m_WinSize; ++j )
       {
       // get neighbor index
-      neighIndex[0] = baseIndex[0] + i;
-      neighIndex[1] = baseIndex[1] + j;
+      neighIndex[0] = baseIndex[0] + i - this->m_Radius;
+      neighIndex[1] = baseIndex[1] + j - this->m_Radius;
       if( neighIndex[0] > this->m_EndIndex[0] )
         {
         neighIndex[0] = this->m_EndIndex[0];
@@ -273,19 +256,18 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
       const InputPixelType & pixel = this->GetInputImage()->GetPixel( neighIndex );
       for( unsigned int k = 0; k<componentNumber; ++k)
         {
-        lineRes[i+this->m_Radius].at(k) = lineRes[i+this->m_Radius].at(k)
-          + pixel.GetElement(k) * BCOCoefY[j+this->m_Radius];
+        lineRes[i][k] += pixel.GetElement(k) * BCOCoefY[j];
         }
       }
     for( unsigned int k = 0; k<componentNumber; ++k)
       {
-      value.at(k) += lineRes[i+radius].at(k)*BCOCoefX[i+radius];
+      value[k] += lineRes[i][k]*BCOCoefX[i];
       }
     }
 
   for( unsigned int k = 0; k<componentNumber; ++k)
     {
-    output.SetElement(k, value.at(k));
+    output.SetElement(k, value[k]);
     }
 
   return ( output );
