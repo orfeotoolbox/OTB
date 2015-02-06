@@ -23,6 +23,12 @@ if(WIN32)
     set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
   endif()      
 else(UNIX)
+  if(APPLE)
+    set(LDLIB DYLD_LIBRARY_PATH)
+  else()
+    set(LDLIB LD_LIBRARY_PATH)
+  endif()
+  
   set(SB_CMAKE_COMMAND env LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib  ${CMAKE_COMMAND})
 endif()
 # Call external projects
