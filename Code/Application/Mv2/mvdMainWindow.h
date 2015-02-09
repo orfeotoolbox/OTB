@@ -423,6 +423,10 @@ private slots:
 
   /**
    */
+  void OnReferenceLayerChanged( size_t );
+
+  /**
+   */
   void RefreshReferenceLayerComboBox();
 
 };

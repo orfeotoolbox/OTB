@@ -1171,6 +1171,14 @@ MainWindow
     this,
     SLOT( RefreshReferenceLayerComboBox() )
   );
+
+  QObject::connect(
+    model,
+    SIGNAL( ReferenceChanged( size_t ) ),
+    // to:
+    this,
+    SLOT( OnRefreshLayerChanged( size_t ) )
+  );
 }
 
 /*****************************************************************************/
@@ -1187,23 +1195,28 @@ MainWindow
 
   comboBox->clear();
 
+  comboBox->addItem( "None" );
+
   if( model==NULL )
     return;
 
-  for( StackedLayerModel::ConstIterator it( model->Begin() );
-       it!=model->End();
-       ++it )
+  for( StackedLayerModel::SizeType i=0;
+       i<model->GetCount();
+       ++i )
     {
-    if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
+    AbstractLayerModel * layer = model->At( i );
+    assert( layer!=NULL );
+
+    if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
       {
       const VectorImageModel * vectorImageModel =
-        qobject_cast< const VectorImageModel * >( it->second );
+        qobject_cast< const VectorImageModel * >( layer );
 
       assert( vectorImageModel!=NULL );
 
       comboBox->addItem(
         QString( "%1: %2" )
-        .arg( comboBox->count() )
+        .arg( comboBox->count() - 1 )
         .arg( QFileInfo( vectorImageModel->GetFilename() ).fileName() )
       );
       }
@@ -1211,8 +1224,17 @@ MainWindow
       qDebug() << "Unhandled AbstractLayerModel subclass.";
     }
 
-  if( model->GetReferenceIndex()<model->GetCount() )
-    comboBox->setCurrentIndex( model->GetReferenceIndex() );
+  // bool signalsBlocked = comboBox->blockSignals( true );
+  // {
+#if 1
+  comboBox->setCurrentIndex(
+    model->GetReferenceIndex()>=model->GetCount()
+    ? 0 // comboBox->count() - 1
+    : model->GetReferenceIndex()
+  );
+#endif
+  // }
+  // comboBox->blockSignals( signalsBlocked );
 
   comboBox->setEnabled( model->GetCount()>0 );
 }
@@ -1253,6 +1275,14 @@ MainWindow
       // to:
       this,
       SLOT( RefreshReferenceLayerComboBox() )
+    );
+
+    QObject::disconnect(
+      model,
+      SIGNAL( ReferenceChanged( size_t ) ),
+      // to:
+      this,
+      SLOT( OnRefreshLayerChanged( size_t ) )
     );
     }
 
@@ -1974,11 +2004,21 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnReferenceLayerCurrentIndexChanged( int index )
+::OnReferenceLayerChanged( size_t index )
 {
-  qDebug() << this << "::OnReferenceLayerCurrentIndexChanged(" << index << ")";
+  qDebug() << this << "::OnReferenceLayerChanged(" << index << ")";
 
+  //
+  // Access widget.
+  QComboBox * comboBox =
+    m_UI->m_RenderToolBar->findChild< QComboBox * >(
+      REFERENCE_LAYER_COMBOBOX_NAME
+    );
 
+  assert( comboBox!=NULL );
+
+  //
+  // Access model.
   assert( I18nCoreApplication::Instance()!=NULL );
   assert( I18nCoreApplication::Instance()->GetModel()==
           I18nCoreApplication::Instance()->GetModel< StackedLayerModel >() );
@@ -1988,20 +2028,63 @@ MainWindow
 
   assert( model!=NULL );
 
-  model->SetReference( index );
+  //
+  // Update widget from model.
+  comboBox->setCurrentIndex(
+    model->GetReferenceIndex()>=model->GetCount()
+    ? 0 // comboBox->count() - 1
+    : model->GetReferenceIndex() + 1
+  );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnReferenceLayerCurrentIndexChanged( int index )
+{
+  qDebug() << this << "::OnReferenceLayerCurrentIndexChanged(" << index << ")";
+
+  //
+  // Access widget.
+  QComboBox * comboBox =
+    m_UI->m_RenderToolBar->findChild< QComboBox * >(
+      REFERENCE_LAYER_COMBOBOX_NAME
+    );
+
+  assert( comboBox!=NULL );
+
+  //
+  // Access model.
+  assert( I18nCoreApplication::Instance()!=NULL );
+  assert( I18nCoreApplication::Instance()->GetModel()==
+          I18nCoreApplication::Instance()->GetModel< StackedLayerModel >() );
+
+  StackedLayerModel * model = 
+    I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
+
+  assert( model!=NULL );
+
+
+  //
+  // Update model.
+  model->SetReference(
+    index<=0 // index>=comboBox->count() - 1
+    ? StackedLayerModel::NIL_INDEX
+    : comboBox->currentIndex() - 1
+  );
 
   /*
   ImageViewWidget * quicklookView = GetQuicklookView();
   assert( quicklookView );
 
   quicklookView->UpdateScene();
-  quicklookView->ZoomToExtent();
+  quicklookView->updateGL();
 
 
   assert( m_ImageView!=NULL );
 
   m_ImageView->UpdateScene();
-  m_ImageView->ZoomToFullResolution();
+  m_ImageView->updateGL();
   */
 }
 

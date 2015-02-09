@@ -97,6 +97,8 @@ public:
   typedef LayerModelMap::key_type KeyType;
   typedef LayerModelMap::const_iterator ConstIterator;
 
+  static const SizeType NIL_INDEX;
+
 //
 // Public methods.
 public:
@@ -143,6 +145,9 @@ public:
   AbstractLayerModel * GetCurrent();
 
   inline const KeyType & GetCurrentKey() const;
+
+  AbstractLayerModel * GetReference() const;
+  AbstractLayerModel * GetReference();
 
   inline SizeType GetReferenceIndex() const;
 
@@ -229,7 +234,6 @@ private:
 // Private attributes.
 private:
   static const KeyType NIL_KEY;
-  static const SizeType NIL_INDEX;
 
   static SizeType m_LayerCount;
 
@@ -454,6 +458,34 @@ StackedLayerModel
     return StackedLayerModel::NIL_KEY;
 
   return m_Keys[ index ];
+}
+
+/*****************************************************************************/
+inline
+AbstractLayerModel *
+StackedLayerModel
+::GetReference()
+{
+  if( m_Reference>=GetCount() )
+    return NULL;
+
+  LayerModelMap::const_iterator it(
+    m_LayerModels.find( m_Keys[ m_Reference ] )
+  );
+
+  if( it==m_LayerModels.end() )
+    return NULL;
+
+  return it->second;
+}
+
+/*****************************************************************************/
+inline
+AbstractLayerModel *
+StackedLayerModel
+::GetReference() const
+{
+  return const_cast< StackedLayerModel * >( this )->GetReference();
 }
 
 /*****************************************************************************/
