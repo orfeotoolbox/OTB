@@ -104,7 +104,7 @@ void DoExecute()
   paramOut->SetValue(inImage);
 
   // Set the output pixel type
-  itk::ImageIOBase::Pointer  imageIO = ImageIOFactory::CreateImageIO( GetParameterString("in").c_str(),
+  ImageIOBase::Pointer  imageIO = ImageIOFactory::CreateImageIO( GetParameterString("in").c_str(),
                                                                       ImageIOFactory::ReadMode);
   std::string componentTypeInfo(imageIO->GetComponentTypeInfo().name());
   if( componentTypeInfo == typeid(unsigned char).name())
