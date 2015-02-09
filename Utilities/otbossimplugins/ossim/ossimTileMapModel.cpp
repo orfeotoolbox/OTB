@@ -172,19 +172,23 @@ namespace ossimplugins
 //*****************************************************************************
    std::ostream& ossimTileMapModel::print(std::ostream& os) const
    {
-      os << "\nDump of ossimTileMapModel object at "
-         << hex << this << ":\n"
-         << "\nTileMapModel -- Dump of all data members: "
-         << "\n        theImageID: " << theImageID.chars()
-         << "\n        theImageSize: " << theImageSize
-         << "\n        theRefImgPt: " << theRefImgPt
-         << "\n        theRefGndPt: " << theRefGndPt
-         << "\n        theGSD.line: " << theGSD.line
-         << "\n        theGSD.samp: " << theGSD.samp
-         << "\n        qDepth: " << qDepth
-         << endl;
-
-      return ossimSensorModel::print(os);
+     std::ios::fmtflags f(os.flags());
+     
+     os << "\nDump of ossimTileMapModel object at "
+        << hex << this << ":\n"
+        << "\nTileMapModel -- Dump of all data members: "
+        << "\n        theImageID: " << theImageID.chars()
+        << "\n        theImageSize: " << theImageSize
+        << "\n        theRefImgPt: " << theRefImgPt
+        << "\n        theRefGndPt: " << theRefGndPt
+        << "\n        theGSD.line: " << theGSD.line
+        << "\n        theGSD.samp: " << theGSD.samp
+        << "\n        qDepth: " << qDepth
+        << endl;
+     
+     os.flags(f);
+     
+     return ossimSensorModel::print(os);
    }
 
 //*****************************************************************************
