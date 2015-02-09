@@ -1177,7 +1177,7 @@ MainWindow
     SIGNAL( ReferenceChanged( size_t ) ),
     // to:
     this,
-    SLOT( OnRefreshLayerChanged( size_t ) )
+    SLOT( OnReferenceLayerChanged( size_t ) )
   );
 }
 
@@ -1193,12 +1193,19 @@ MainWindow
 
   assert( comboBox!=NULL );
 
+
+  bool signalsBlocked = comboBox->blockSignals( true );
+  {
   comboBox->clear();
 
   comboBox->addItem( "None" );
+  }
+  comboBox->blockSignals( signalsBlocked );
+
 
   if( model==NULL )
     return;
+
 
   for( StackedLayerModel::SizeType i=0;
        i<model->GetCount();
@@ -1224,17 +1231,15 @@ MainWindow
       qDebug() << "Unhandled AbstractLayerModel subclass.";
     }
 
-  // bool signalsBlocked = comboBox->blockSignals( true );
-  // {
+
 #if 1
   comboBox->setCurrentIndex(
     model->GetReferenceIndex()>=model->GetCount()
     ? 0 // comboBox->count() - 1
-    : model->GetReferenceIndex()
+    : model->GetReferenceIndex() + 1
   );
 #endif
-  // }
-  // comboBox->blockSignals( signalsBlocked );
+
 
   comboBox->setEnabled( model->GetCount()>0 );
 }
@@ -1282,7 +1287,7 @@ MainWindow
       SIGNAL( ReferenceChanged( size_t ) ),
       // to:
       this,
-      SLOT( OnRefreshLayerChanged( size_t ) )
+      SLOT( OnReferenceLayerChanged( size_t ) )
     );
     }
 

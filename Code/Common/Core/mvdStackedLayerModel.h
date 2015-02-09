@@ -628,7 +628,7 @@ StackedLayerModel
 
   emit ReferenceAboutToBeChanged( index );
 
-  m_Current = index;
+  m_Reference = index;
 
   emit ReferenceChanged( index );
 }
