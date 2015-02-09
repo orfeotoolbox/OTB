@@ -155,9 +155,9 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
     baseIndex[dim] = itk::Math::Floor< IndexValueType >( index[dim]+0.5 );
     }
 
-  for( int i = 0; i < this->m_WinSize; ++i )
+  for(unsigned int i = 0; i < this->m_WinSize; ++i )
     {
-    for( int j = 0; j < this->m_WinSize; ++j )
+    for(unsigned int j = 0; j < this->m_WinSize; ++j )
       {
       // get neighbor index
       neighIndex[0] = baseIndex[0] + i - this->m_Radius;
@@ -229,9 +229,9 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
     baseIndex[dim] = itk::Math::Floor< IndexValueType >( index[dim]+0.5 );
     }
 
-  for( int i = 0; i < this->m_WinSize; ++i )
+  for(unsigned int i = 0; i < this->m_WinSize; ++i )
     {
-    for( int j = 0; j < this->m_WinSize; ++j )
+    for(unsigned int j = 0; j < this->m_WinSize; ++j )
       {
       // get neighbor index
       neighIndex[0] = baseIndex[0] + i - this->m_Radius;
