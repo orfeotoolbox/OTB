@@ -133,9 +133,6 @@ set(OTB_SB_JPEG_CONFIG)
 if(MSVC)
   set(BUILD_EXAMPLES OFF)
   set(OTB_SB_OPENCV_CONFIG)
-  #doesn't matter to use cmake variable with JPEG prefix. all are empty for windows
-  #GDAL is built with internal JPEG due to static link conflict. 
-  #replace superbuild version of libjpeg.lib with the GDAL internal one
   set(OTB_SB_JPEG_CONFIG -DJPEG_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libjpeg.lib)
 endif()
 
