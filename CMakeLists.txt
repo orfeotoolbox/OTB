@@ -56,6 +56,7 @@ include(External_muParser)
 include(External_muParserX)
 include(External_TinyXML)
 include(External_OpenCV)
+include(External_swig)
 
 if(ENABLE_QT4)
   include(External_qt4)
@@ -71,6 +72,10 @@ find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBui
 if(ENABLE_OTB_LARGE_INPUTS)
   find_path(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
 endif()
+
+# SWIG Wrapping
+option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
+option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" ON)
 
 include(External_OTB)
 

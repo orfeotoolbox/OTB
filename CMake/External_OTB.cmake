@@ -138,6 +138,20 @@ if(MSVC)
   set(OTB_SB_JPEG_CONFIG -DJPEG_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libjpeg.lib)
 endif()
 
+set(OTB_SB_SWIG_CONFIG)
+if(OTB_WRAP_PYTHON OR OTB_WRAP_JAVA)
+  if(USE_SYSTEM_SWIG)
+    # TODO : handle specific prefix
+  else()
+    if(MSVC)
+      set(OTB_SB_SWIG_CONFIG
+        -DSWIG_EXECUTABLE:STRING=${CMAKE_BINARY_DIR}/SWIG/src/SWIG/swig.exe
+        )
+    endif()
+    list(APPEND ${proj}_DEPENDENCIES SWIG)
+  endif()
+endif()
+
 ExternalProject_Add(${proj}
     DEPENDS ${${proj}_DEPENDENCIES}
     PREFIX ${proj}
@@ -170,6 +184,9 @@ ExternalProject_Add(${proj}
       ${OTB_SB_OPENCV_CONFIG}
       ${OTB_SB_JPEG_CONFIG}
       ${OTB_SB_LARGEINPUT_CONFIG}
+      -DOTB_WRAP_PYTHON:BOOL=${OTB_WRAP_PYTHON}
+      -DOTB_WRAP_JAVA:BOOL=${OTB_WRAP_JAVA}
+      ${OTB_SB_SWIG_CONFIG}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
