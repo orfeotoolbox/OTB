@@ -10,16 +10,20 @@ if(WIN32)
   set(DEFAULT_USE_SYSTEM_OSSIM  ON)
 endif()
 
-option(USE_SYSTEM_OSSIM "  Use a system build of Ossim." ${DEFAULT_USE_SYSTEM_OSSIM})
-mark_as_advanced(USE_SYSTEM_OSSIM)
+SETUP_SYSTEM_LIBRARY(PROJECT ${proj} DOC "  Use a system build of Ossim.")
+
+ADD_SYSTEM_LOCATION(PROJECT ${proj} VARIABLES ${proj}_LIBRARY ${proj}_INCLUDE_DIR)
 
 if(USE_SYSTEM_OSSIM)
   message(STATUS "  Using OSSIM system version")
+  message(WARNING " DEBUG : OSSIM_LIBRARY = ${OSSIM_LIBRARY}")
+  message(WARNING " DEBUG : OSSIM_INCLUDE_DIR = ${OSSIM_INCLUDE_DIR}")
+  message(WARNING " DEBUG : SYSTEM_OSSIM_CMAKE_CACHE = ${SYSTEM_OSSIM_CMAKE_CACHE}")
+  
 else()
   set(${proj}_DEPENDENCIES)
   set(OSSIM_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(OSSIM_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
-
   
   # set project dependencies (GEOS, GDAL, TIFF, JPEG, OPENTHREADS, )
   if(USE_SYSTEM_TIFF)
@@ -83,6 +87,7 @@ else()
       -DBUILD_OSSIM_APPS:BOOL=OFF
       -DBUILD_OSSIM_FRAMEWORKS:BOOL=OFF
       -DCMAKE_PREFIX_PATH:STRING=${CMAKE_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}
+      ${}
     DEPENDS ${${proj}_DEPENDENCIES}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )

@@ -10,6 +10,7 @@ set(CMAKE_MODULE_PATH
 
 include(ExternalProject)
 include(CTest)
+include(SuperBuild_Macro)
 
 # General options
 option(ENABLE_QT4 " Use QT4 in the SuperBuild" ON)

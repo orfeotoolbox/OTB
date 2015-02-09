@@ -5,6 +5,7 @@ set(proj OTB)
 set(OTB_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
 
 set(${proj}_DEPENDENCIES)
+set(${proj}_ADDITIONAL_CACHE)
 
 set(BUILD_EXAMPLES ON)
 
@@ -43,7 +44,7 @@ else()
 endif()
 
 if(USE_SYSTEM_OSSIM)
-  # TODO : handle specific prefix
+  list(APPEND ${proj}_ADDITIONAL_CACHE SYSTEM_OSSIM_CMAKE_CACHE)
 else()
   list(APPEND ${proj}_DEPENDENCIES OSSIM)
 endif()
@@ -187,6 +188,7 @@ ExternalProject_Add(${proj}
       -DOTB_WRAP_PYTHON:BOOL=${OTB_WRAP_PYTHON}
       -DOTB_WRAP_JAVA:BOOL=${OTB_WRAP_JAVA}
       ${OTB_SB_SWIG_CONFIG}
+      ${OTB_ADDITIONAL_CACHE}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
