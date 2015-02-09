@@ -15,7 +15,8 @@ else()
   set(BOOST_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
   
   if(UNIX)
-    ExternalProject_Add(${proj}
+    if(FALSE)
+      ExternalProject_Add(${proj}
         PREFIX ${proj}
         URL "http://sourceforge.net/projects/boost/files/boost/1.54.0/boost_1_54_0.tar.gz/download"
         URL_MD5 efbfbff5a85a9330951f243d0a46e4b9
@@ -28,7 +29,28 @@ else()
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
         ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt 
         ${BOOST_SB_SRC}
-    )
+      )
+    else()
+      ExternalProject_Add(${proj}
+        PREFIX ${proj}
+        URL "http://sourceforge.net/projects/boost/files/boost/1.54.0/boost_1_54_0.tar.gz/download"
+        URL_MD5 efbfbff5a85a9330951f243d0a46e4b9
+        BINARY_DIR ${BOOST_SB_BUILD_DIR}
+        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        CONFIGURE_COMMAND
+          ${BOOST_SB_BUILD_DIR}/bootstrap.sh
+            --prefix=${CMAKE_INSTALL_PREFIX}
+        BUILD_COMMAND ./b2
+        INSTALL_COMMAND ./b2 install
+      )
+      
+      ExternalProject_Add_Step(${proj} copy_source
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+          ${BOOST_SB_SRC} ${BOOST_SB_BUILD_DIR}
+        DEPENDEES patch update
+        DEPENDERS configure
+      )
+    endif()
     
     message(STATUS "  Using Boost SuperBuild version")
     
