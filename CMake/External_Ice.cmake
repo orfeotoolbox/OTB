@@ -3,7 +3,7 @@ include(External_glew)
 
 if(BUILD_ICE_APPLICATION)
   include(External_glfw)
-  #TODO.. include(External_glut)
+  include(External_glut)
 endif()
 
 message(STATUS "Setup Ice...")
