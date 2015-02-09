@@ -28,6 +28,7 @@ namespace Wrapper
 {
 
 QtWidgetProgressReport::QtWidgetProgressReport(QtWidgetModel * model)
+  : m_CurrentProcess()
 {
   m_Model = model;
   connect(model, SIGNAL(SetProgressReportBegin()), this, SLOT(show()) );
@@ -61,11 +62,14 @@ QtWidgetProgressReport::ProcessEvent( itk::Object * itkNotUsed(caller),
 {
   if( typeid( otb::Wrapper::AddProcessToWatchEvent ) == typeid( event ) )
     {
-    const AddProcessToWatchEvent* eventToWacth = dynamic_cast< const  AddProcessToWatchEvent*> ( &event );
+    const AddProcessToWatchEvent* eventToWatch = dynamic_cast< const  AddProcessToWatchEvent*> ( &event );
 
-    m_CurrentProcess = eventToWacth->GetProcess();
-    m_CurrentDescription =  eventToWacth->GetProcessDescription();
-    emit AddNewProcessToReport();
+    if(eventToWatch)
+      {
+      m_CurrentProcess = eventToWatch->GetProcess();
+      m_CurrentDescription =  eventToWatch->GetProcessDescription();
+      emit AddNewProcessToReport();
+      }
     }
 }
 
