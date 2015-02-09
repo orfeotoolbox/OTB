@@ -33,6 +33,7 @@ else()
     endif()
 endif()
 
+#TODO: control build testing via cmake variable properly
 ExternalProject_Add(${proj}
    PREFIX ${proj}
    HG_REPOSITORY "http://hg.orfeo-toolbox.org/Monteverdi2"
@@ -43,7 +44,7 @@ ExternalProject_Add(${proj}
    CMAKE_CACHE_ARGS
     -DCMAKE_BUILD_TYPE:STRING=Release
     -DBUILD_SHARED_LIBS:BOOL=ON
-    -DBUILD_TESTING:BOOL=${BUILD_TESTING}
+    -DBUILD_TESTING:BOOL=ON
     -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
     -DCMAKE_PREFIX_PATH:STRING=${CMAKE_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}
     -DOTB_DATA_ROOT:STRING=${OTB_DATA_ROOT}    
