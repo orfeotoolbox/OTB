@@ -31,3 +31,17 @@ macro(ADD_SYSTEM_LOCATION)
     endif()
   endforeach(var)
 endmacro(ADD_SYSTEM_LOCATION)
+
+# Macro ADD_SYSTEM_PREFIX : defines a system prefix for the given project
+#   - creates a cache variable SYSTEM_${PROJECT}_PREFIX
+macro(ADD_SYSTEM_PREFIX)
+  cmake_parse_arguments(NEW_SYSPREFIX  "" "PROJECT" "" ${ARGN})
+  set(SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX "" CACHE PATH "Set a custom system prefix")
+  mark_as_advanced(SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX)
+  if(USE_SYSTEM_${NEW_SYSPREFIX_PROJECT})
+    set_property(CACHE SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX PROPERTY TYPE PATH)
+  else()
+    set_property(CACHE SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX PROPERTY TYPE INTERNAL)
+  endif()
+  
+endmacro(ADD_SYSTEM_PREFIX)
