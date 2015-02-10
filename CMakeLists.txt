@@ -19,9 +19,12 @@ option(BUILD_ICE "Clone and build ICE" OFF)
 option(BUILD_MONTEVERDI2 "Clone and build Monteverdi2" OFF)
 option(BUILD_MONTEVERDI "Clone and build Monteverdi" OFF)
 
+set(SB_BUILD_SHARED_LIBS ON)
+
 if(WIN32)
   if(MSVC)
     set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
+     set(SB_BUILD_SHARED_LIBS OFF)
   endif()      
 else(UNIX)
   if(APPLE)
