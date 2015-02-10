@@ -13,6 +13,7 @@ else()
   set(${proj}_DEPENDENCIES)
   set(SWIG_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(SWIG_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  set(SWIG_SB_CONFIG_CACHE)
   
   set(PythonInterp_FIND_VERSION 2.7)
   find_package(PythonInterp)
@@ -45,6 +46,20 @@ else()
       )
     
   else()
+    if(USE_SYSTEM_PCRE)
+      # TODO : handle specific location
+    else()
+      list(APPEND SWIG_SB_CONFIG_CACHE --with-pcre-prefix=${CMAKE_INSTALL_PREFIX})
+      list(APPEND ${proj}_DEPENDENCIES PCRE)
+    endif()
+    
+    if(USE_SYSTEM_BOOST)
+      # TODO : handle specific location
+    else()
+      list(APPEND SWIG_SB_CONFIG_CACHE --with-boost=${CMAKE_INSTALL_PREFIX})
+      list(APPEND ${proj}_DEPENDENCIES BOOST)
+    endif()
+    
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "http://sourceforge.net/projects/swig/files/swig/swig-3.0.5/swig-3.0.5.tar.gz/download"
@@ -56,6 +71,7 @@ else()
         --prefix=${CMAKE_INSTALL_PREFIX}
         ${SWIG_SB_PYTHON_CONFIG}
         ${SWIG_SB_JAVA_CONFIG}
+        ${SWIG_SB_CONFIG_CACHE}
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
       DEPENDS ${${proj}_DEPENDENCIES}

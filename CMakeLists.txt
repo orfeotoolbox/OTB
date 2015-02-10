@@ -57,6 +57,7 @@ include(External_muParser)
 include(External_muParserX)
 include(External_TinyXML)
 include(External_OpenCV)
+include(External_pcre)
 include(External_swig)
 
 if(ENABLE_QT4)
