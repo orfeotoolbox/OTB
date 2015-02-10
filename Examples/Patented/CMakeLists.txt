@@ -1,13 +1,6 @@
 project(PatentedExamples)
 include_regular_expression("^.*$")
 
-
-#add_executable(FuzzyConnectednessImageFilter FuzzyConnectednessImageFilter.cxx )
-#target_link_libraries(FuzzyConnectednessImageFilter OTBIO OTBCommon )
-
-#add_executable(HybridSegmentationFuzzyVoronoi HybridSegmentationFuzzyVoronoi.cxx )
-#target_link_libraries(HybridSegmentationFuzzyVoronoi OTBIO OTBCommon )
-
 #Examples using SIFT
 if(OTB_USE_SIFTFAST)
 add_executable(SIFTDisparityMapEstimation SIFTDisparityMapEstimation.cxx )
