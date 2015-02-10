@@ -13,105 +13,86 @@ else()
   set(${proj}_DEPENDENCIES)
   set(GDAL_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(GDAL_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  set(GDAL_SB_CONFIG)
   
   if(USE_SYSTEM_TIFF)
-    set(GDAL_SB_TIFF_CONFIG)
+    if(NOT SYSTEM_TIFF_PREFIX STREQUAL "")
+      list(APPEND GDAL_SB_CONFIG --with-libtiff=${SYSTEM_TIFF_PREFIX})
+    endif()
   else()
-    set(GDAL_SB_TIFF_CONFIG 
-        --with-libtiff=${CMAKE_INSTALL_PREFIX}
-      )
+    list(APPEND GDAL_SB_CONFIG --with-libtiff=${CMAKE_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES TIFF)
   endif()
   
   if(USE_SYSTEM_GEOTIFF)
-    set(GDAL_SB_GEOTIFF_CONFIG)
+    # TODO : handle specific prefix
   else()
-    set(GDAL_SB_GEOTIFF_CONFIG 
-      --with-geotiff=${CMAKE_INSTALL_PREFIX}
-      )
+    list(APPEND GDAL_SB_CONFIG --with-geotiff=${CMAKE_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES GEOTIFF)
   endif()
 
   if(USE_SYSTEM_PNG)
-    set(GDAL_SB_PNG_CONFIG)
+    # TODO : handle specific prefix
   else()
-    set(GDAL_SB_PNG_CONFIG 
-      --with-png=${CMAKE_INSTALL_PREFIX}
-      )
+    list(APPEND GDAL_SB_CONFIG --with-png=${CMAKE_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES PNG)
   endif()
 
   #gdal on msvc link with internal jpeg .
   if(USE_SYSTEM_JPEG)
-    set(GDAL_SB_JPEG_CONFIG)
+    # TODO : handle specific prefix
   else()
-    set(GDAL_SB_JPEG_CONFIG 
-      --with-jpeg=${CMAKE_INSTALL_PREFIX}
-      )
+    list(APPEND GDAL_SB_CONFIG --with-jpeg=${CMAKE_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES JPEG)
   endif()  
   
   if(USE_SYSTEM_OPENJPEG)
-    set(GDAL_SB_OPENJPEG_CONFIG)
+    # TODO : handle specific prefix
   else()
-    set(GDAL_SB_OPENJPEG_CONFIG 
-      --with-openjpeg=${CMAKE_INSTALL_PREFIX}
-      )
+    list(APPEND GDAL_SB_CONFIG --with-openjpeg=${CMAKE_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES OPENJPEG)
   endif()
   
   if(USE_SYSTEM_SQLITE)
-    set(GDAL_SB_SQLITE_CONFIG)
+    # TODO : handle specific prefix
   else()
-    set(GDAL_SB_SQLITE_CONFIG 
-      --with-sqlite3=${CMAKE_INSTALL_PREFIX}
-      )
+    list(APPEND GDAL_SB_CONFIG --with-sqlite3=${CMAKE_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES SQLITE)
   endif()
   
   if(USE_SYSTEM_GEOS)
-    set(GDAL_SB_GEOS_CONFIG)
+    # TODO : handle specific prefix
   else()
-    set(GDAL_SB_GEOS_CONFIG 
-      --with-geos=${CMAKE_INSTALL_PREFIX}/bin/geos-config
-      )
+    list(APPEND GDAL_SB_CONFIG --with-geos=${CMAKE_INSTALL_PREFIX}/bin/geos-config)
     list(APPEND ${proj}_DEPENDENCIES GEOS)
   endif()
   
   if(USE_SYSTEM_ZLIB)
-    set(GDAL_SB_ZLIB_CONFIG)
+    # TODO : handle specific prefix
   else()
     # Not shure this setting works with zlib
-    set(GDAL_SB_ZLIB_CONFIG 
-      --with-libz=${CMAKE_INSTALL_PREFIX}
-      )
+    list(APPEND GDAL_SB_CONFIG --with-libz=${CMAKE_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
   
   if(USE_SYSTEM_EXPAT)
-    set(GDAL_SB_EXPAT_CONFIG)
+    # TODO : handle specific prefix
   else()
-    set(GDAL_SB_EXPAT_CONFIG 
-      --with-expat=${CMAKE_INSTALL_PREFIX}
-      )
+    list(APPEND GDAL_SB_CONFIG --with-expat=${CMAKE_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES EXPAT)
   endif()
   
   if(USE_SYSTEM_LIBKML)
-    set(GDAL_SB_LIBKML_CONFIG)
+    # TODO : handle specific prefix
   else()
-    set(GDAL_SB_LIBKML_CONFIG 
-      --with-libkml=${CMAKE_INSTALL_PREFIX}
-      )
+    list(APPEND GDAL_SB_CONFIG --with-libkml=${CMAKE_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES LIBKML)
   endif()
   
-    if(USE_SYSTEM_CURL)
-    set(GDAL_SB_CURL_CONFIG)
+  if(USE_SYSTEM_CURL)
+    # TODO : handle specific prefix
   else()
-    set(GDAL_SB_CURL_CONFIG 
-      --with-curl=${CMAKE_INSTALL_PREFIX}
-      )
+    list(APPEND GDAL_SB_CONFIG --with-curl=${CMAKE_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES CURL)
   endif()
   
@@ -136,16 +117,7 @@ else()
         --enable-static=no
         --without-ogdi
         --without-jasper
-        ${GDAL_SB_ZLIB_CONFIG}
-        ${GDAL_SB_TIFF_CONFIG}
-        ${GDAL_SB_GEOTIFF_CONFIG}
-        ${GDAL_SB_PNG_CONFIG}        
-        ${GDAL_SB_OPENJPEG_CONFIG}
-        ${GDAL_SB_SQLITE_CONFIG}
-        ${GDAL_SB_GEOS_CONFIG}
-        ${GDAL_SB_EXPAT_CONFIG}
-        ${GDAL_SB_LIBKML_CONFIG}
-        ${GDAL_SB_JPEG_CONFIG}
+        ${GDAL_SB_CONFIG}
         ${GDAL_SB_EXTRA_OPTIONS}
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install

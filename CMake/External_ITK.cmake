@@ -14,6 +14,7 @@ else()
   set(${proj}_DEPENDENCIES)
   set(ITK_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(ITK_SB_SRC_DIR ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  set(ITK_SB_CONFIG)
   
   # if(MSVC)
     # set(ITK_SB_SRC_DIR "C:/Temp/ITK")
@@ -133,7 +134,7 @@ else()
   # TODO : handle different build type (Release/Debug)
   
   if(USE_SYSTEM_TIFF)
-    # TODO : handle specific prefix
+    list(APPEND ITK_SB_CONFIG ${SYSTEM_ITK_CMAKE_CACHE})
   else()
     list(APPEND ${proj}_DEPENDENCIES TIFF)
   endif()
@@ -182,6 +183,7 @@ else()
       -DITK_USE_SYSTEM_TIFF:BOOL=ON
       -DITK_USE_SYSTEM_PNG:BOOL=ON
       ${ITK_SB_FFTW_CONFIG}
+      ${ITK_SB_CONFIG}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
       ${CMAKE_SOURCE_DIR}/patches/ITK/hashtable.hxx.in
       ${ITK_SB_SRC_DIR}/Modules/ThirdParty/KWSys/src/KWSys

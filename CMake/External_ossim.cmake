@@ -20,10 +20,11 @@ else()
   set(${proj}_DEPENDENCIES)
   set(OSSIM_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(OSSIM_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  set(${proj}_ADDITIONAL_CACHE)
   
   # set project dependencies (GEOS, GDAL, TIFF, JPEG, OPENTHREADS, )
   if(USE_SYSTEM_TIFF)
-    # TODO : handle specific prefix
+    list(APPEND ${proj}_ADDITIONAL_CACHE ${SYSTEM_TIFF_CMAKE_CACHE})
   else()
     list(APPEND ${proj}_DEPENDENCIES TIFF)
   endif()
@@ -83,7 +84,7 @@ else()
       -DBUILD_OSSIM_APPS:BOOL=OFF
       -DBUILD_OSSIM_FRAMEWORKS:BOOL=OFF
       -DCMAKE_PREFIX_PATH:STRING=${CMAKE_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}
-      ${}
+      ${OSSIM_ADDITIONAL_CACHE}
     DEPENDS ${${proj}_DEPENDENCIES}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )

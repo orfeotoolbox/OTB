@@ -13,18 +13,25 @@ else()
   set(${proj}_DEPENDENCIES)
   set(GEOTIFF_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(GEOTIFF_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  set(GEOTIFF_SB_CONFIG)
   
   # handle dependencies : TIFF Proj4 Zlib Jpeg
   if(USE_SYSTEM_TIFF)
-    set(GEOTIFF_SB_TIFF_CONFIG)
-  else()
-    set(GEOTIFF_SB_TIFF_CONFIG --with-libtiff=${CMAKE_INSTALL_PREFIX})
-    
     if(MSVC)
-        set(GEOTIFF_SB_TIFF_CONFIG 
+      list(APPEND GEOTIFF_SB_CONFIG ${SYSTEM_TIFF_CMAKE_CACHE})
+    else()
+      if(NOT SYSTEM_TIFF_PREFIX STREQUAL "")
+        list(APPEND GEOTIFF_SB_CONFIG --with-libtiff=${SYSTEM_TIFF_PREFIX})
+      endif()
+    endif()
+  else()
+    if(MSVC)
+      list(APPEND GEOTIFF_SB_CONFIG
         -DTIFF_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include 
         -DTIFF_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libtiff_i.lib
         )
+    else()
+      list(APPEND GEOTIFF_SB_CONFIG --with-libtiff=${CMAKE_INSTALL_PREFIX})
     endif()
     
     list(APPEND ${proj}_DEPENDENCIES TIFF)
@@ -94,7 +101,7 @@ else()
         -DWITH_JPEG:BOOL=OFF
         -DWITH_ZLIB:BOOL=ON
         -DWITH_UTILITIES:BOOL=ON
-        ${GEOTIFF_SB_TIFF_CONFIG}
+        ${GEOTIFF_SB_CONFIG}
         ${GEOTIFF_SB_JPEG_CONFIG}
         ${GEOTIFF_SB_PROJ_CONFIG}
         ${GEOTIFF_SB_ZLIB_CONFIG}
@@ -114,7 +121,7 @@ else()
         --prefix=${CMAKE_INSTALL_PREFIX}
         --enable-static=no
         ${GEOTIFF_SB_JPEG_CONFIG}
-        ${GEOTIFF_SB_TIFF_CONFIG}
+        ${GEOTIFF_SB_CONFIG}
         ${GEOTIFF_SB_PROJ_CONFIG}
         ${GEOTIFF_SB_ZLIB_CONFIG}
         

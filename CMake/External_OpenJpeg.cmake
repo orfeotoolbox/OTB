@@ -13,11 +13,12 @@ else()
   set(${proj}_DEPENDENCIES)
   set(OPENJPEG_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
   set(OPENJPEG_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  set(${proj}_ADDITIONAL_CACHE)
   
   # handle dependencies : TIFF, ZLIB, ...
   # although they seem un-used by the openjp2 codec
   if(USE_SYSTEM_TIFF)
-    # TODO : handle specific prefix
+    list(APPEND ${proj}_ADDITIONAL_CACHE ${SYSTEM_TIFF_CMAKE_CACHE})
   else()
     list(APPEND ${proj}_DEPENDENCIES TIFF)
   endif()
@@ -51,6 +52,7 @@ else()
         -DBUILD_TESTING:BOOL=OFF
         -DBUILD_THIRDPARTY:BOOL=OFF
         -DCMAKE_PREFIX_PATH:STRING=${CMAKE_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}
+        ${OPENJPEG_ADDITIONAL_CACHE}
         DEPENDS ${${proj}_DEPENDENCIES}
         CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
