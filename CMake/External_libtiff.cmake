@@ -4,8 +4,11 @@ set(proj TIFF)
 
 set(DEFAULT_USE_SYSTEM_TIFF  OFF)
 
-option(USE_SYSTEM_TIFF "  Use a system build of libtiff." ${DEFAULT_USE_SYSTEM_TIFF})
-mark_as_advanced(USE_SYSTEM_TIFF)
+SETUP_SYSTEM_LIBRARY(PROJECT ${proj} DOC "  Use a system build of libtiff.")
+
+ADD_SYSTEM_LOCATION(PROJECT ${proj} VARIABLES ${proj}_LIBRARY ${proj}_INCLUDE_DIR)
+
+ADD_SYSTEM_PREFIX(PROJECT ${proj})
 
 if(USE_SYSTEM_TIFF)
   message(STATUS "  Using libtiff system version")
