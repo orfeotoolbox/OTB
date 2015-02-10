@@ -44,7 +44,7 @@ else()
 endif()
 
 if(USE_SYSTEM_OSSIM)
-  list(APPEND ${proj}_ADDITIONAL_CACHE SYSTEM_OSSIM_CMAKE_CACHE)
+  list(APPEND ${proj}_ADDITIONAL_CACHE ${SYSTEM_OSSIM_CMAKE_CACHE})
 else()
   list(APPEND ${proj}_DEPENDENCIES OSSIM)
 endif()
@@ -156,7 +156,7 @@ endif()
 ExternalProject_Add(${proj}
     DEPENDS ${${proj}_DEPENDENCIES}
     PREFIX ${proj}
-    HG_REPOSITORY "http://hg.orfeo-toolbox.org/OTB"
+    HG_REPOSITORY "http://hg.orfeo-toolbox.org/OTB-Nightly"
     HG_TAG tip
     BINARY_DIR ${OTB_SB_BUILD_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
