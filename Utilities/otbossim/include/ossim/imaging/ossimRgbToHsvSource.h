@@ -10,7 +10,7 @@
 //*************************************************************************
 // $Id: ossimRgbToHsvSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimRgbToHsvSource_HEADER
-#define ossimJpegRgbToYCbCrSource_HEADER
+#define ossimRgbToHsvSource_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
 
 class ossimRgbToHsvSource : public ossimImageSourceFilter
