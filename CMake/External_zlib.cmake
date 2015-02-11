@@ -4,8 +4,9 @@ set(proj ZLIB)
 
 set(DEFAULT_USE_SYSTEM_ZLIB  ON)
 
-option(USE_SYSTEM_ZLIB "  Use a system build of Zlib." ${DEFAULT_USE_SYSTEM_ZLIB})
-mark_as_advanced(USE_SYSTEM_ZLIB)
+SETUP_SYSTEM_LIBRARY(PROJECT ${proj} DOC "  Use a system build of Zlib.")
+
+ADD_SYSTEM_PREFIX(PROJECT ${proj} CMAKE_ALIAS ZLIB_ROOT)
 
 if(USE_SYSTEM_ZLIB)
   message(STATUS "  Using Zlib system version")

@@ -13,14 +13,14 @@ ADD_SYSTEM_PREFIX(PROJECT ${proj})
 if(USE_SYSTEM_TIFF)
   message(STATUS "  Using libtiff system version")
 else()
-  set(${proj}_DEPENDENCIES)
-  set(TIFF_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(TIFF_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   if(USE_SYSTEM_ZLIB)
-    set(TIFF_SB_ZLIB_CONFIG)
+    if(NOT SYSTEM_ZLIB_PREFIX STREQUAL "")
+      list(APPEND TIFF_SB_CONFIG --with-zlib-include-dir=${SYSTEM_ZLIB_PREFIX}/include)
+    endif()
   else()
-    set(TIFF_SB_ZLIB_CONFIG 
+    list(APPEND TIFF_SB_CONFIG
       --with-zlib-include-dir=${CMAKE_INSTALL_PREFIX}/include
       )
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
@@ -32,7 +32,6 @@ else()
         list(APPEND ${proj}_DEPENDENCIES JPEG)
     endif()
     
-    set(TIFF_SB_ZLIB_CONFIG)
     STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})    
     STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})    
     configure_file(${CMAKE_SOURCE_DIR}/patches/${proj}/nmake.opt ${CMAKE_BINARY_DIR}/nmake_libtiff_extra.opt)
@@ -79,7 +78,7 @@ else()
         ${TIFF_SB_BUILD_DIR}/configure
         --prefix=${CMAKE_INSTALL_PREFIX}
         --enable-static=no
-        ${TIFF_SB_ZLIB_CONFIG}
+        ${TIFF_SB_CONFIG}
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
       DEPENDS ${${proj}_DEPENDENCIES}
