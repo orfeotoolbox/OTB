@@ -34,8 +34,10 @@ endmacro(ADD_SYSTEM_LOCATION)
 
 # Macro ADD_SYSTEM_PREFIX : defines a system prefix for the given project
 #   - creates a cache variable SYSTEM_${PROJECT}_PREFIX
+#   - if CMAKE_ALIAS is defined, it is used to add an entry in cache
+#       -D${CMAKE_ALIAS}:PATH=${SYSTEM_${PROJECT}_PREFIX}
 macro(ADD_SYSTEM_PREFIX)
-  cmake_parse_arguments(NEW_SYSPREFIX  "" "PROJECT" "" ${ARGN})
+  cmake_parse_arguments(NEW_SYSPREFIX  "" "PROJECT;CMAKE_ALIAS" "" ${ARGN})
   set(SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX "" CACHE PATH "Set a custom system prefix")
   mark_as_advanced(SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX)
   if(USE_SYSTEM_${NEW_SYSPREFIX_PROJECT})
@@ -43,5 +45,21 @@ macro(ADD_SYSTEM_PREFIX)
   else()
     set_property(CACHE SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX PROPERTY TYPE INTERNAL)
   endif()
-  
+  if(NOT ${NEW_SYSPREFIX_CMAKE_ALIAS} STREQUAL "")
+    if(NOT SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX STREQUAL "")
+      set(ITEM_FOR_CMAKE_CACHE
+        "-D${NEW_SYSPREFIX_CMAKE_ALIAS}:PATH=${SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX}")
+      list(APPEND SYSTEM_${NEW_SYSLOC_PROJECT}_CMAKE_CACHE ${ITEM_FOR_CMAKE_CACHE})
+    endif()
+  endif()
 endmacro(ADD_SYSTEM_PREFIX)
+
+# Macro SETUP_SUPERBUILD
+# Initialize usefull variables to build a superbuild project
+macro(SETUP_SUPERBUILD)
+  cmake_parse_arguments(NEW_SB "" "PROJECT" "" ${ARGN})
+  set(${NEW_SB_PROJECT}_DEPENDENCIES)
+  set(${NEW_SB_PROJECT}_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${NEW_SB_PROJECT}/build)
+  set(${NEW_SB_PROJECT}_SB_SRC ${CMAKE_BINARY_DIR}/${NEW_SB_PROJECT}/src/${NEW_SB_PROJECT})
+  set(${NEW_SB_PROJECT}_SB_CONFIG)
+endmacro(SETUP_SUPERBUILD)
