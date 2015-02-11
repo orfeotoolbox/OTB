@@ -2,7 +2,7 @@ message(STATUS "Setup pcre...")
 
 set(proj PCRE)
 
-set(DEFAULT_USE_SYSTEM_PCRE  OFF)
+set(DEFAULT_USE_SYSTEM_PCRE  ON)
 
 option(USE_SYSTEM_PCRE "  Use a system build of pcre." ${DEFAULT_USE_SYSTEM_PCRE})
 mark_as_advanced(USE_SYSTEM_PCRE)

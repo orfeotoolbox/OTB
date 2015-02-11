@@ -2,7 +2,7 @@ message(STATUS "Setup swig...")
 
 set(proj SWIG)
 
-set(DEFAULT_USE_SYSTEM_SWIG  OFF)
+set(DEFAULT_USE_SYSTEM_SWIG  ON)
 
 option(USE_SYSTEM_SWIG "  Use a system build of swig." ${DEFAULT_USE_SYSTEM_SWIG})
 mark_as_advanced(USE_SYSTEM_SWIG)
