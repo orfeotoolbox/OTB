@@ -124,16 +124,16 @@ public:
   inline bool Contains( const KeyType & key ) const;
   bool Contains( const AbstractLayerModel * ) const;
 
-  inline SizeType GetCount() const;
-
-  inline const KeyVector & GetKeys() const;
-
   inline ConstIterator End() const;
 
   /*
   inline const AbstractLayerModel * Front() const;
   inline AbstractLayerModel * Front();
   */
+
+  inline SizeType GetCount() const;
+
+  inline const KeyVector & GetKeys() const;
 
   template< typename T >
     T * GetCurrent() const;
