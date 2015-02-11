@@ -79,8 +79,8 @@ if(ENABLE_OTB_LARGE_INPUTS)
 endif()
 
 # SWIG Wrapping
-option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
-option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" ON)
+option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" OFF)
+option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
 include(External_OTB)
 
