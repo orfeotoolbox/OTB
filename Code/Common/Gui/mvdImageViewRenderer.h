@@ -102,14 +102,20 @@ public:
      */
     inline
     RenderingContext() :
-      AbstractImageViewRenderer::RenderingContext(),
-      m_ViewSettings()
+      AbstractImageViewRenderer::RenderingContext()
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+      ,m_ViewSettings()
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
     {
     }
 
     virtual ~RenderingContext() {}
 
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+#else // USE_VIEW_SETTINGS_SIDE_EFFECT
     otb::ViewSettings::Pointer m_ViewSettings;
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
   };
 
 //
