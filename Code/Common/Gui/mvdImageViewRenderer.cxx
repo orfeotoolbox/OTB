@@ -665,6 +665,7 @@ ImageViewRenderer
 
   //
   // Remember first actor as reference actor.
+  {
   otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
 
   if( keys.empty() )
@@ -679,6 +680,7 @@ ImageViewRenderer
     m_ReferencePair.second = otb::DynamicCast< otb::GlImageActor >( glActor );
     assert( !m_ReferencePair.second.IsNull() );
     }
+  }
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 }
