@@ -10,12 +10,13 @@ mark_as_advanced(USE_SYSTEM_BOOST)
 if(USE_SYSTEM_BOOST)
   message(STATUS "  Using Boost system version")
 else()
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
-  set(BOOST_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(BOOST_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  option(SUPERBUILD_BOOST_HEADER_ONLY "Only use Boost headers" ON)
+  mark_as_advanced(SUPERBUILD_BOOST_HEADER_ONLY)
   
   if(UNIX)
-    if(FALSE)
+    if(SUPERBUILD_BOOST_HEADER_ONLY)
       ExternalProject_Add(${proj}
         PREFIX ${proj}
         URL "http://sourceforge.net/projects/boost/files/boost/1.54.0/boost_1_54_0.tar.gz/download"
@@ -42,6 +43,9 @@ else()
             --prefix=${CMAKE_INSTALL_PREFIX}
         BUILD_COMMAND ./b2
         INSTALL_COMMAND ./b2 install
+        PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory
+          ${CMAKE_SOURCE_DIR}/patches/${proj}/1.54.0
+          ${BOOST_SB_SRC}
       )
       
       ExternalProject_Add_Step(${proj} copy_source
