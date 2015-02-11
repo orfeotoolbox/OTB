@@ -17,10 +17,7 @@ ADD_SYSTEM_LOCATION(PROJECT ${proj} VARIABLES ${proj}_LIBRARY ${proj}_INCLUDE_DI
 if(USE_SYSTEM_OSSIM)
   message(STATUS "  Using OSSIM system version")
 else()
-  set(${proj}_DEPENDENCIES)
-  set(OSSIM_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(OSSIM_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
-  set(OSSIM_SB_CONFIG)
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   # set project dependencies (GEOS, GDAL, TIFF, JPEG, OPENTHREADS, )
   if(USE_SYSTEM_TIFF)

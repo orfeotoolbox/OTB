@@ -10,9 +10,7 @@ mark_as_advanced(USE_SYSTEM_GEOS)
 if(USE_SYSTEM_GEOS)
   message(STATUS "  Using GEOS system version")
 else()
-  
-  set(GEOS_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(GEOS_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  SETUP_SUPERBUILD(PROJECT ${proj})
 
   ExternalProject_Add(${proj}
     PREFIX ${proj}

@@ -10,9 +10,7 @@ mark_as_advanced(USE_SYSTEM_SQLITE)
 if(USE_SYSTEM_SQLITE)
   message(STATUS "  Using SQLite system version")
 else()
-  set(${proj}_DEPENDENCIES)
-  set(SQLITE_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(SQLITE_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   if(UNIX)
     ExternalProject_Add(${proj}

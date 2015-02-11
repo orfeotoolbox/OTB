@@ -11,14 +11,11 @@ mark_as_advanced(USE_SYSTEM_ITK)
 if(USE_SYSTEM_ITK)
   message(STATUS "  Using ITK system version")
 else()
-  set(${proj}_DEPENDENCIES)
-  set(ITK_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(ITK_SB_SRC_DIR ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
-  set(ITK_SB_CONFIG)
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   # if(MSVC)
-    # set(ITK_SB_SRC_DIR "C:/Temp/ITK")
-    # set(ITK_SB_BUILD_DIR ${ITK_SB_SRC_DIR}/build)
+    # set(ITK_SB_SRC "C:/Temp/ITK")
+    # set(ITK_SB_BUILD_DIR ${ITK_SB_SRC}/build)
   # endif()
   
   set(ITK_ENABLED_MODULES
@@ -165,7 +162,7 @@ else()
     PREFIX ${proj}
     URL "http://sourceforge.net/projects/itk/files/itk/4.6/InsightToolkit-4.6.1.tar.gz/download"
     URL_MD5 2c84eae50ab2452cdad32aaadced3c37
-    SOURCE_DIR ${ITK_SB_SRC_DIR}
+    SOURCE_DIR ${ITK_SB_SRC}
     BINARY_DIR ${ITK_SB_BUILD_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_CACHE_ARGS
@@ -186,14 +183,14 @@ else()
       ${ITK_SB_CONFIG}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
       ${CMAKE_SOURCE_DIR}/patches/ITK/hashtable.hxx.in
-      ${ITK_SB_SRC_DIR}/Modules/ThirdParty/KWSys/src/KWSys
+      ${ITK_SB_SRC}/Modules/ThirdParty/KWSys/src/KWSys
     DEPENDS ${${proj}_DEPENDENCIES}
     )
   
   # write patch in binary dir
   #file(WRITE ${CMAKE_BINARY_DIR}/itk_patch_1.cmake 
   #  "configure_file(${CMAKE_SOURCE_DIR}/patches_ITK/hashtable.hxx.in 
-  #   ${ITK_SB_SRC_DIR}/Modules/ThirdParty/KWSys/src/KWSys/hashtable.hxx.in COPYONLY)")
+  #   ${ITK_SB_SRC}/Modules/ThirdParty/KWSys/src/KWSys/hashtable.hxx.in COPYONLY)")
   
   message(STATUS "  Using ITK SuperBuild version")
 endif()

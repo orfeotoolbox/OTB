@@ -14,9 +14,7 @@ endif()
 if(USE_SYSTEM_OPENTHREADS)
   message(STATUS "  Using OpenThread system version")
 else()
-  set(${proj}_DEPENDENCIES)
-  set(OPENTHREADS_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(OPENTHREADS_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   #TODO: try to use cmake variable for DOWNLOAD_COMMAND for different platforms
   if(MSVC)

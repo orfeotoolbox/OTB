@@ -10,7 +10,7 @@ mark_as_advanced(USE_SYSTEM_FFTW)
 if(USE_SYSTEM_FFTW)
   message(STATUS "  Using FFTW system version")
 else()
-  set(${proj}_DEPENDENCIES)
+  SETUP_SUPERBUILD(PROJECT ${proj})
   set(projFloat ${proj}F)
   set(projDouble ${proj}D)
   

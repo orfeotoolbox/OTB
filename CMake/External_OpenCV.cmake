@@ -10,9 +10,7 @@ mark_as_advanced(USE_SYSTEM_OPENCV)
 if(USE_SYSTEM_OPENCV)
   message(STATUS "  Using OpenCV system version")
 else()
-  set(${proj}_DEPENDENCIES)
-  set(OPENCV_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(OPENCV_SB_SRC_DIR ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   #TODO: add these properly
   # list(APPEND ${proj}_DEPENDENCIES TIFF)

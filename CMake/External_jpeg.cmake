@@ -10,9 +10,7 @@ mark_as_advanced(USE_SYSTEM_JPEG)
 if(USE_SYSTEM_JPEG)
   message(STATUS "  Using libjpeg system version")
 else()
-  set(${proj}_DEPENDENCIES)
-  set(JPEG_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(JPEG_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   if(WIN32)
       

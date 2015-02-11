@@ -10,9 +10,7 @@ mark_as_advanced(USE_SYSTEM_MUPARSERX)
 if(USE_SYSTEM_MUPARSERX)
   message(STATUS "  Using muParserX system version")
 else()
-  set(${proj}_DEPENDENCIES)
-  set(MUPARSERX_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(MUPARSERX_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   # svn checkout http://muparserx.googlecode.com/svn/trunk/ muparserx-read-only
   

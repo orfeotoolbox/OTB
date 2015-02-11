@@ -11,9 +11,7 @@ ADD_SYSTEM_PREFIX(PROJECT ${proj} CMAKE_ALIAS ZLIB_ROOT)
 if(USE_SYSTEM_ZLIB)
   message(STATUS "  Using Zlib system version")
 else()
-  
-  set(ZLIB_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(ZLIB_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   # Try official release 1.2.8
   ExternalProject_Add(${proj}

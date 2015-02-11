@@ -10,10 +10,7 @@ mark_as_advanced(USE_SYSTEM_SWIG)
 if(USE_SYSTEM_SWIG)
   message(STATUS "  Using swig system version")
 else()
-  set(${proj}_DEPENDENCIES)
-  set(SWIG_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(SWIG_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
-  set(SWIG_SB_CONFIG_CACHE)
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   set(PythonInterp_FIND_VERSION 2.7)
   find_package(PythonInterp)
@@ -49,14 +46,14 @@ else()
     if(USE_SYSTEM_PCRE)
       # TODO : handle specific location
     else()
-      list(APPEND SWIG_SB_CONFIG_CACHE --with-pcre-prefix=${CMAKE_INSTALL_PREFIX})
+      list(APPEND SWIG_SB_CONFIG --with-pcre-prefix=${CMAKE_INSTALL_PREFIX})
       list(APPEND ${proj}_DEPENDENCIES PCRE)
     endif()
     
     if(USE_SYSTEM_BOOST)
       # TODO : handle specific location
     else()
-      list(APPEND SWIG_SB_CONFIG_CACHE --with-boost=${CMAKE_INSTALL_PREFIX})
+      list(APPEND SWIG_SB_CONFIG --with-boost=${CMAKE_INSTALL_PREFIX})
       list(APPEND ${proj}_DEPENDENCIES BOOST)
     endif()
     
@@ -71,7 +68,7 @@ else()
         --prefix=${CMAKE_INSTALL_PREFIX}
         ${SWIG_SB_PYTHON_CONFIG}
         ${SWIG_SB_JAVA_CONFIG}
-        ${SWIG_SB_CONFIG_CACHE}
+        ${SWIG_SB_CONFIG}
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
       DEPENDS ${${proj}_DEPENDENCIES}

@@ -10,9 +10,7 @@ mark_as_advanced(USE_SYSTEM_MUPARSER)
 if(USE_SYSTEM_MUPARSER)
   message(STATUS "  Using muParser system version")
 else()
-  set(${proj}_DEPENDENCIES)
-  set(MUPARSER_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(MUPARSER_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}

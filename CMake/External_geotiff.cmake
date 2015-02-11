@@ -10,10 +10,7 @@ mark_as_advanced(USE_SYSTEM_GEOTIFF)
 if(USE_SYSTEM_GEOTIFF)
   message(STATUS "  Using libgeotiff system version")
 else()
-  set(${proj}_DEPENDENCIES)
-  set(GEOTIFF_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(GEOTIFF_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
-  set(GEOTIFF_SB_CONFIG)
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   # handle dependencies : TIFF Proj4 Zlib Jpeg
   if(USE_SYSTEM_TIFF)

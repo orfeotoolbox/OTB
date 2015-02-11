@@ -10,9 +10,7 @@ mark_as_advanced(USE_SYSTEM_PROJ)
 if(USE_SYSTEM_PROJ)
   message(STATUS "  Using Proj4 system version")
 else()
-  
-  set(PROJ_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(PROJ_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   if(MSVC)
 

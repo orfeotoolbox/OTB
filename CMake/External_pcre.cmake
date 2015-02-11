@@ -10,9 +10,7 @@ mark_as_advanced(USE_SYSTEM_PCRE)
 if(USE_SYSTEM_PCRE)
   message(STATUS "  Using pcre system version")
 else()
-  set(${proj}_DEPENDENCIES)
-  set(PCRE_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${proj}/build)
-  set(PCRE_SB_SRC ${CMAKE_BINARY_DIR}/${proj}/src/${proj})
+  SETUP_SUPERBUILD(PROJECT ${proj})
   
   if(MSVC)
     # TODO ?
