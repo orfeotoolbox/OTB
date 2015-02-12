@@ -590,7 +590,7 @@ ImageViewRenderer
   StackedLayerModel * stackedLayerModel = GetLayerStack();
 
 
-  if( stackedLayerModel==NULL )
+  if( stackedLayerModel==NULL || stackedLayerModel->IsEmpty() )
     {
     m_GlView->ClearActors();
 
@@ -657,6 +657,7 @@ ImageViewRenderer
   //
   // Remember first vector image-model as reference image-model.
   m_ReferencePair.first = stackedLayerModel->GetReference();
+
 
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
   m_ReferencePair.second = otb::GlActor::Pointer();
