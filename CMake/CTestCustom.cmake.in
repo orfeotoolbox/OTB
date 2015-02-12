@@ -62,7 +62,7 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*Microsoft.*include.*.h.*[Ww]arning.*"
   ".*gdal_priv.h.*[Ww]arning.*"
   ".*cpl_string.h.*[Ww]arning.*"
-  "*otbmuparserx*"
+  ".*otbmuparserx.*"
 
   # Ignore clang's summary warning, assuming prior text has matched some
   # other warning expression:
