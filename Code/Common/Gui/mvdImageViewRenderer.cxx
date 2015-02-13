@@ -665,7 +665,7 @@ ImageViewRenderer
 #else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 
   //
-  // Remember first actor as reference actor.
+  // Remember reference actor.
   {
   otb::GlActor::Pointer glActor(
     m_GlView->GetActor(
