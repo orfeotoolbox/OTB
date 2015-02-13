@@ -133,6 +133,8 @@ public:
 
   inline SizeType GetCount() const;
 
+  inline const KeyType & GetKey( SizeType ) const;
+
   inline const KeyVector & GetKeys() const;
 
   template< typename T >
@@ -146,19 +148,30 @@ public:
 
   inline const KeyType & GetCurrentKey() const;
 
+  template< typename T >
+    T * GetReference() const;
+
+  template< typename T >
+    T * GetReference();
+
   AbstractLayerModel * GetReference() const;
   AbstractLayerModel * GetReference();
 
   inline SizeType GetReferenceIndex() const;
 
+  inline bool HasCurrent() const;
+
+  inline bool HasReference() const;
+
   inline bool IsEmpty() const;
 
   inline void SetCurrent( SizeType );
   void SetCurrent( const KeyType & );
-  void SetCurrent( AbstractLayerModel * );
+  void SetCurrent( const AbstractLayerModel * );
 
   inline void SetReference( SizeType );
   void SetReference( const KeyType & );
+  void SetReference( const AbstractLayerModel * );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -217,8 +230,6 @@ private:
 
   inline SizeType FindKey( const KeyType & ) const;
 
-  inline const KeyType & GetKey( SizeType ) const;
-
   inline SizeType Next( SizeType );
   inline SizeType Prev( SizeType );
 
@@ -229,6 +240,8 @@ private:
   void RotateLayerDown( SizeType );
 
   // inline void Swap( SizeType, SizeType );
+
+  inline const KeyType & KeyOf( const AbstractLayerModel * ) const;
 
 //
 // Private attributes.
@@ -384,6 +397,24 @@ StackedLayerModel
 
 /*****************************************************************************/
 inline
+bool
+StackedLayerModel
+::HasCurrent() const
+{
+  return m_Current<GetCount();
+}
+
+/*****************************************************************************/
+inline
+bool
+StackedLayerModel
+::HasReference() const
+{
+  return m_Reference<GetCount();
+}
+
+/*****************************************************************************/
+inline
 StackedLayerModel::ConstIterator
 StackedLayerModel
 ::End() const
@@ -461,6 +492,26 @@ StackedLayerModel
 }
 
 /*****************************************************************************/
+template< typename T >
+inline
+T *
+StackedLayerModel
+::GetReference()
+{
+  return dynamic_cast< T * >( GetReference() );
+}
+
+/*****************************************************************************/
+template< typename T >
+inline
+T *
+StackedLayerModel
+::GetReference() const
+{
+  return dynamic_cast< T * >( GetReference() );
+}
+
+/*****************************************************************************/
 inline
 AbstractLayerModel *
 StackedLayerModel
@@ -504,6 +555,21 @@ StackedLayerModel
 ::IsEmpty() const
 {
   return m_LayerModels.empty();
+}
+
+/*****************************************************************************/
+inline
+const StackedLayerModel::KeyType &
+StackedLayerModel
+::KeyOf( const AbstractLayerModel * layerModel ) const
+{
+  for( LayerModelMap::const_iterator it( m_LayerModels.begin() );
+       it!=m_LayerModels.end();
+       ++it )
+    if( it->second==layerModel )
+      return it->first;
+
+  return StackedLayerModel::NIL_KEY;
 }
 
 /*****************************************************************************/

@@ -667,20 +667,18 @@ ImageViewRenderer
   //
   // Remember first actor as reference actor.
   {
-  otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
+  otb::GlActor::Pointer glActor(
+    m_GlView->GetActor(
+      stackedLayerModel->GetKey(
+        stackedLayerModel->GetReferenceIndex()
+      )
+    )
+  );
+  // assert( !glActor.IsNull() );
 
-  if( keys.empty() )
-    m_ReferencePair.second = otb::GlActor::Pointer();
-
-  else
-    {
-    otb::GlActor::Pointer glActor( m_GlView->GetActor( keys.front() ) );
-    assert( !glActor.IsNull() );
-
-    assert( glActor==otb::DynamicCast< otb::GlImageActor >( glActor ) );
-    m_ReferencePair.second = otb::DynamicCast< otb::GlImageActor >( glActor );
-    assert( !m_ReferencePair.second.IsNull() );
-    }
+  assert( glActor==otb::DynamicCast< otb::GlImageActor >( glActor ) );
+  m_ReferencePair.second = otb::DynamicCast< otb::GlImageActor >( glActor );
+  // assert( !m_ReferencePair.second.IsNull() );
   }
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
