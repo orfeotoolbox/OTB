@@ -2474,8 +2474,9 @@ add_test(ioTuVectorDataIOFactory ${IO_TESTS15}
 add_test(ioTuOGRVectorDataIO ${IO_TESTS15}
         otbOGRVectorDataIONew )
 
-add_test(ioTuVectorDataSourceNew ${IO_TESTS15}
-        otbVectorDataSourceNew )
+# duplicated test
+# add_test(ioTuVectorDataSourceNew ${IO_TESTS15}
+#        otbVectorDataSourceNew )
 
 add_test(ioTuVectorDataFileReaderNew ${IO_TESTS15}
         otbVectorDataFileReaderNew )
@@ -4004,7 +4005,7 @@ otbWritingComplexDataWithComplexImageTest.cxx
 set(BasicIO_SRCS15
 otbIOTests15.cxx
 otbVectorDataIOFactory.cxx
-otbVectorDataSourceNew.cxx
+#otbVectorDataSourceNew.cxx
 otbVectorDataFileReaderNew.cxx
 otbVectorDataFileReader.cxx
 otbVectorDataFileWriterNew.cxx
