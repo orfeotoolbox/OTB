@@ -85,7 +85,7 @@ class Monteverdi2_EXPORT AbstractImageViewManipulator :
 public:
 
   /** \brief Destructor. */
-	virtual ~AbstractImageViewManipulator() {};
+  virtual ~AbstractImageViewManipulator() {};
 
   //
   // Accessors
@@ -103,22 +103,30 @@ public:
   /**
    */
   virtual PointType GetOrigin() const =0;
+
   /**
    */
   virtual void SetSpacing( const SpacingType& spacing ) =0;
   /**
    */
   virtual SpacingType GetSpacing() const =0;
+
   /**
    */
   virtual void SetNativeSpacing( const SpacingType& spacing ) =0;
+
   /**
    */
   virtual void SetWkt( const std::string& wkt ) =0;
+
   /**
    */
   virtual
     void SetKeywordList( const DefaultImageType::ImageKeywordlistType& kwl ) =0;
+
+  /**
+   */
+  virtual PointType GetCenter() const =0;
 
   //
   // Controls

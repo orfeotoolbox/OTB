@@ -303,6 +303,15 @@ private slots:
   /**
    */
   void OnDeleteSelectedRequested();
+  /**
+   */
+  void OnReferenceChanged( size_t );
+  /**
+   */
+  void OnSetProjectionRequired();
+  /**
+   */
+  void OnUpdateProjectionRequired();
 };
 
 }// end namespace 'mvd'

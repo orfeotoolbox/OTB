@@ -463,18 +463,9 @@ StackedLayerModel
 /*****************************************************************************/
 void
 StackedLayerModel
-::SetCurrent( AbstractLayerModel * layerModel )
+::SetCurrent( const AbstractLayerModel * layerModel )
 {
-  for( LayerModelMap::const_iterator it( m_LayerModels.begin() );
-       it!=m_LayerModels.end();
-       ++it )
-    if( it->second==layerModel )
-      {
-      SetCurrent( it->first );
-      return;
-      }
-
-  SetCurrent( StackedLayerModel::NIL_INDEX );
+  SetCurrent( KeyOf( layerModel ) );
 }
 
 /*****************************************************************************/
@@ -521,6 +512,14 @@ StackedLayerModel
       SetReference( i );
       return;
       }
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::SetReference( const AbstractLayerModel * layerModel )
+{
+  SetReference( KeyOf( layerModel ) );
 }
 
 /*******************************************************************************/

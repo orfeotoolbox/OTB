@@ -591,73 +591,97 @@ ImageViewRenderer
 
 
   if( stackedLayerModel==NULL || stackedLayerModel->IsEmpty() )
-    {
     m_GlView->ClearActors();
 
-    m_ReferencePair.first = NULL;
-    m_ReferencePair.second = otb::GlActor::Pointer();
+  else
+    {
+      {
+      otb::GlView::StringVectorType keys( m_GlView->GetActorsKeys() );
 
-    return;
-    }
-
-
-  {
-  otb::GlView::StringVectorType keys( m_GlView->GetActorsKeys() );
-
-  for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
-       it!=keys.end();
-       ++it )
-    if( !stackedLayerModel->Contains( *it ) )
-      m_GlView->RemoveActor( *it );
-  }
+      for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
+           it!=keys.end();
+           ++it )
+        if( !stackedLayerModel->Contains( *it ) )
+          m_GlView->RemoveActor( *it );
+      }
 
 
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
 #else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 
-  for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
-       it!=stackedLayerModel->End();
-       ++it )
-    if( !m_GlView->ContainsActor( it->first ) )
-      {
-      assert( it->second!=NULL );
-
-      if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
+    for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
+         it!=stackedLayerModel->End();
+         ++it )
+      if( !m_GlView->ContainsActor( it->first ) )
         {
-        otb::GlImageActor::Pointer glImageActor( otb::GlImageActor::New() );
+        assert( it->second!=NULL );
 
-        // Should all AbstractLayerModel have a ::GetFilename()
-        // method?
-        // -> Not sure: AbstractImageModel coud be derived as a
-        // in-memory image-model.
-        VectorImageModel * vectorImageModel =
-          dynamic_cast< VectorImageModel * >( it->second );
+        if( it->second->inherits( VectorImageModel::staticMetaObject.className()))
+          {
+          otb::GlImageActor::Pointer glImageActor( otb::GlImageActor::New() );
 
-        glImageActor->Initialize(
-          ToStdString(
-            vectorImageModel->GetFilename()
-          )
-        );
+          // Should all AbstractLayerModel have a ::GetFilename()
+          // method?
+          // -> Not sure: AbstractImageModel coud be derived as a
+          // in-memory image-model.
+          VectorImageModel * vectorImageModel =
+            dynamic_cast< VectorImageModel * >( it->second );
 
-        m_GlView->AddActor( glImageActor, it->first );
+          glImageActor->Initialize(
+            ToStdString(
+              vectorImageModel->GetFilename()
+            )
+          );
 
-        glImageActor->SetVisible( true );
+          m_GlView->AddActor( glImageActor, it->first );
 
-        qDebug()
-          << "Added image-actor" << FromStdString( it->first )
-          << "from file" << vectorImageModel->GetFilename();
+          glImageActor->SetVisible( true );
+
+          qDebug()
+            << "Added image-actor" << FromStdString( it->first )
+            << "from file" << vectorImageModel->GetFilename();
+          }
+        else
+          {
+          assert( false && "Unhandled AbstractLayerModel derived type." );
+          }
         }
-      else
-        {
-        }
-      }
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
+    }
+
+  RefreshScene();
+}
+
+/*******************************************************************************/
+void
+ImageViewRenderer
+::virtual_RefreshScene()
+{
+  StackedLayerModel * stackedLayerModel = GetLayerStack();
+
+  if( stackedLayerModel==NULL || stackedLayerModel->IsEmpty() )
+    {
+    m_ReferencePair.first = NULL;
+    m_ReferencePair.second = otb::GlActor::Pointer();
+
+    // emit ClearProjectionRequired();
+
+    return;
+    }
+
+
+  ModelActorPair referencePair( m_ReferencePair );
 
   //
   // Remember first vector image-model as reference image-model.
   m_ReferencePair.first = stackedLayerModel->GetReference();
 
+  StackedLayerModel::KeyType referenceKey(
+    stackedLayerModel->GetKey(
+      stackedLayerModel->GetReferenceIndex()
+    )
+  );
 
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
   m_ReferencePair.second = otb::GlActor::Pointer();
@@ -667,19 +691,22 @@ ImageViewRenderer
   //
   // Remember reference actor.
   {
-  otb::GlActor::Pointer glActor(
-    m_GlView->GetActor(
-      stackedLayerModel->GetKey(
-        stackedLayerModel->GetReferenceIndex()
-      )
-    )
-  );
+  otb::GlActor::Pointer glActor( m_GlView->GetActor( referenceKey ) );
   // assert( !glActor.IsNull() );
 
   assert( glActor==otb::DynamicCast< otb::GlImageActor >( glActor ) );
   m_ReferencePair.second = otb::DynamicCast< otb::GlImageActor >( glActor );
   // assert( !m_ReferencePair.second.IsNull() );
   }
+
+  if( !m_ReferencePair.second.IsNull() )
+    {
+    if( referencePair.second.IsNull() )
+      emit SetProjectionRequired();
+
+    else
+      emit UpdateProjectionRequired();
+    }
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 }
@@ -774,6 +801,30 @@ ImageViewRenderer
 }
 */
 
+/*****************************************************************************/
+bool
+ImageViewRenderer
+::Reproject( PointType & center,
+             SpacingType & spacing,
+             const PointType & vcenter,
+             const SpacingType & vspacing ) const
+{
+  assert( !m_GlView.IsNull() );
+
+  const StackedLayerModel * stackedLayerModel = GetLayerStack();
+
+  if( stackedLayerModel==NULL )
+    return false;
+
+  return
+    m_GlView->Reproject(
+      center,
+      spacing,
+      stackedLayerModel->GetKey( stackedLayerModel->GetReferenceIndex() ),
+      vcenter,
+      vspacing
+    );
+}
 
 /*****************************************************************************/
 /* SLOTS                                                                     */

@@ -134,6 +134,8 @@ public:
     const DefaultImageType::ImageKeywordlistType& kwl
   );
 
+  virtual PointType GetCenter() const;
+
   //
   // Controls.
 

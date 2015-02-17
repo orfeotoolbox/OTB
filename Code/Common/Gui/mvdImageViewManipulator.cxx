@@ -207,6 +207,16 @@ ImageViewManipulator
 }
 
 /******************************************************************************/
+PointType
+ImageViewManipulator
+::GetCenter() const
+{
+  assert( !m_ViewSettings.IsNull() );
+
+  return m_ViewSettings->GetViewportCenter();
+}
+
+/******************************************************************************/
 void
 ImageViewManipulator
 ::SetupRenderingContext(

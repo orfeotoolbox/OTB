@@ -1061,6 +1061,9 @@ MainWindow
 
   stackedLayerModel->SetCurrent( imageModel );
 
+  if( !stackedLayerModel->HasReference() )
+    stackedLayerModel->SetReference( imageModel  );
+
   /*
   DatasetModel* datasetModel =
     ImportImage(
@@ -1408,19 +1411,19 @@ MainWindow
     SIGNAL(
       AboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & )
     ),
-    // to:
+    // from:
     this,
     SLOT(
       OnAboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & )
     )
   );
 
-  // Disconnect database-model to main-window when selected
-  // dataset-model has been changed.
+  // Disconnect stacked-layer model to main-window when selected
+  // layer-model has been changed.
   QObject::disconnect(
     stackedLayerModel,
     SIGNAL( SelectedLayerModelChanged( const StackedLayerModel::KeyType & ) ),
-    // to:
+    // from:
     this,
     SLOT( OnSelectedLayerModelChanged( const StackedLayerModel:KeyType & ) )
   );
@@ -1443,7 +1446,6 @@ MainWindow
 
   // Assign stacked-layer model controller.
   SetControllerModel( m_LayerStackDock, model );
-
 
   m_ImageView->SetLayerStack( stackedLayerModel );
 
@@ -1600,7 +1602,7 @@ MainWindow
   //
   // VIEWS.
   //
-
+  /*
   ImageViewWidget * quicklookView = GetQuicklookView();
   assert( quicklookView );
 
@@ -1612,6 +1614,7 @@ MainWindow
 
   m_ImageView->UpdateScene();
   m_ImageView->ZoomToFullResolution();
+  */
 
   //
   // MODEL(s).
@@ -2040,6 +2043,21 @@ MainWindow
     ? 0 // comboBox->count() - 1
     : model->GetReferenceIndex() + 1
   );
+
+
+  /*
+  ImageViewWidget * quicklookView = GetQuicklookView();
+  assert( quicklookView );
+
+  quicklookView->UpdateScene();
+  quicklookView->updateGL();
+
+
+  assert( m_ImageView!=NULL );
+
+  m_ImageView->UpdateScene();
+  m_ImageView->updateGL();
+  */
 }
 
 /*****************************************************************************/
@@ -2077,20 +2095,6 @@ MainWindow
     ? StackedLayerModel::NIL_INDEX
     : comboBox->currentIndex() - 1
   );
-
-  /*
-  ImageViewWidget * quicklookView = GetQuicklookView();
-  assert( quicklookView );
-
-  quicklookView->UpdateScene();
-  quicklookView->updateGL();
-
-
-  assert( m_ImageView!=NULL );
-
-  m_ImageView->UpdateScene();
-  m_ImageView->updateGL();
-  */
 }
 
 /*****************************************************************************/

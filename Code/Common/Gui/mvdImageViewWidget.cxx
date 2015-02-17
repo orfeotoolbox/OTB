@@ -41,6 +41,8 @@
 #include "Core/mvdStackedLayerModel.h"
 #include "Core/mvdVectorImageModel.h"
 #include "Gui/mvdAbstractImageViewManipulator.h"
+// See ::OnUpdateProjectionRequired()
+#include "Gui/mvdImageViewRenderer.h"
 
 namespace mvd
 {
@@ -130,29 +132,61 @@ void
 ImageViewWidget
 ::SetLayerStack( StackedLayerModel * stackedLayerModel )
 {
-  const VectorImageModel * imageModel =
-    stackedLayerModel->GetCurrent< VectorImageModel >();
+  assert( m_Renderer!=NULL );
 
-  //
-  // Setup image-view settings to reference image-model data.
-  if( imageModel!=NULL )
+  {
+  StackedLayerModel * model = m_Renderer->GetLayerStack();
+
+  if( model!=NULL )
     {
-    DefaultImageType::ConstPointer image( imageModel->ToImage() );
-    assert( !image.IsNull() );
+    //
+    // Disconnect stacked-layer model from this image-view.
+    QObject::disconnect(
+      model,
+      SIGNAL( ReferenceChanged( size_t ) ),
+      // from:
+      this,
+      SLOT( OnReferenceChanged( size_t ) )
+    );
 
-    assert( m_Manipulator!=NULL );
-    m_Manipulator->SetViewportSize( width(), height() );
-
-    m_Manipulator->SetOrigin( imageModel->GetOrigin() );
-    m_Manipulator->SetSpacing( imageModel->GetSpacing() );
-    m_Manipulator->SetNativeSpacing( imageModel->GetNativeSpacing() );
-    m_Manipulator->SetWkt( image->GetProjectionRef() );
-    m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
+    //
+    // Disconnect stacked-layer model from this image-view.
+    QObject::disconnect(
+      model,
+      SIGNAL( ContentChanged() ),
+      // from:
+      this,
+      SLOT( UpdateScene() )
+    );
     }
+  }
+
+  // Set projection parameters of manipulator from layer data.
+  OnSetProjectionRequired();
 
   // Insert image-models into image-view renderer.
-  assert( m_Renderer!=NULL );
   m_Renderer->SetLayerStack( stackedLayerModel );
+
+
+  //
+  // Disconnect stacked-layer model from this image-view.
+  QObject::connect(
+    stackedLayerModel,
+    SIGNAL( ContentChanged() ),
+    // to:
+    this,
+    SLOT( UpdateScene() )
+  );
+
+  //
+  // Connect stacked layer-model to image-view renderer.
+  QObject::connect(
+    stackedLayerModel,
+    SIGNAL( ReferenceChanged( size_t ) ),
+    // to
+    this,
+    SLOT( OnReferenceChanged( size_t ) )
+  );
 }
 
 /*******************************************************************************/
@@ -176,14 +210,17 @@ ImageViewWidget
 
   m_Manipulator = manipulator;
   m_Manipulator->setParent( this );
+  m_Manipulator->SetViewportSize( width(), height() );
 
   m_Renderer = renderer;
   m_Renderer->setParent( this );
 
   QObject::connect(
-    m_Manipulator, SIGNAL( RefreshViewRequested() ),
+    m_Manipulator,
+    SIGNAL( RefreshViewRequested() ),
     // to:
-    this, SLOT( updateGL() )
+    this,
+    SLOT( updateGL() )
   );
 
   QObject::connect(
@@ -289,15 +326,48 @@ ImageViewWidget
 
 
   QObject::connect(
-    this, SIGNAL(PhysicalCursorPositionChanged(const PointType&,
-                                               const DefaultImageType::PixelType& )),
-                 m_Renderer, SLOT(OnPhysicalCursorPositionChanged(const PointType&,
-                                                                  const DefaultImageType::PixelType& )));
+    this,
+    SIGNAL(
+      PhysicalCursorPositionChanged(
+        const PointType &,
+        const DefaultImageType::PixelType &
+      )
+    ),
+    // to:
+    m_Renderer,
+    SLOT(
+      OnPhysicalCursorPositionChanged(
+        const PointType &,
+        const DefaultImageType::PixelType &
+      )
+    )
+  );
 
 
  QObject::connect(
-   this, SIGNAL(ReferenceActorShaderModeChanged(const std::string &)),
-   m_Renderer, SLOT(OnReferenceActorShaderModeChanged(const std::string &)));
+   this,
+   SIGNAL( ReferenceActorShaderModeChanged( const std::string & ) ),
+   // to:
+   m_Renderer,
+   SLOT( OnReferenceActorShaderModeChanged( const std::string & ) )
+ );
+
+
+ QObject::connect(
+   m_Renderer,
+   SIGNAL( SetProjectionRequired() ),
+   // to:
+   this,
+   SLOT( OnSetProjectionRequired() )
+ );
+
+ QObject::connect(
+   m_Renderer,
+   SIGNAL( UpdateProjectionRequired() ),
+   // to:
+   this,
+   SLOT( OnUpdateProjectionRequired() )
+ );
 }
 
 /*******************************************************************************/
@@ -783,6 +853,16 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
+::OnReferenceChanged( size_t )
+{
+  assert( m_Renderer!=NULL );
+
+  m_Renderer->RefreshScene();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
 ::OnRoiChanged( const PointType& point,
                 const SizeType& size,
                 const SpacingType& spacing,
@@ -866,6 +946,110 @@ ImageViewWidget
   stackedLayerModel->SelectNext();
 
   updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnSetProjectionRequired()
+{
+  StackedLayerModel * stackedLayerModel = GetLayerStack();
+
+  if( stackedLayerModel==NULL )
+    return;
+
+
+  const AbstractLayerModel * layer = stackedLayerModel->GetReference();
+  assert( layer!=NULL );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
+
+    const VectorImageModel * imageModel =
+      qobject_cast< const VectorImageModel * >( layer );
+
+    assert( imageModel!=NULL );
+
+    DefaultImageType::ConstPointer image( imageModel->ToImage() );
+    assert( !image.IsNull() );
+
+    assert( m_Manipulator!=NULL );
+
+    m_Manipulator->SetOrigin( imageModel->GetOrigin() );
+    m_Manipulator->SetSpacing( imageModel->GetSpacing() );
+    m_Manipulator->SetNativeSpacing( imageModel->GetNativeSpacing() );
+
+    m_Manipulator->SetWkt( image->GetProjectionRef() );
+    m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
+    }
+  else
+    {
+    assert( false && "Unhandled AbstractLayerModel derived type." );
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnUpdateProjectionRequired()
+{
+  // Reminder: specific #include "mvdImageViewRenderer.h"
+  assert( m_Manipulator!=NULL );
+
+  assert( m_Renderer==qobject_cast< const ImageViewRenderer * >( m_Renderer ) );
+
+  //
+  // ImageViewRenderer specific code (as opposing to
+  // AbstractImageViewRenderer).
+  //
+  // Could be moved in derived class if necessary.
+  // {
+  const ImageViewRenderer * renderer =
+    qobject_cast< const ImageViewRenderer * >( m_Renderer );
+
+  assert( m_Renderer!=NULL );
+
+
+  PointType center;
+  SpacingType spacing;
+
+  renderer->Reproject(
+    center,
+    spacing,
+    m_Manipulator->GetCenter(),
+    m_Manipulator->GetSpacing()
+  );
+  // }
+
+  m_Manipulator->CenterOn( center );
+  m_Manipulator->SetSpacing( spacing );
+
+
+  const AbstractLayerModel * layer = GetLayerStack()->GetReference();
+  assert( layer!=NULL );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
+
+    const VectorImageModel * imageModel =
+      qobject_cast< const VectorImageModel * >( layer );
+
+    assert( imageModel!=NULL );
+
+    DefaultImageType::ConstPointer image( imageModel->ToImage() );
+    assert( !image.IsNull() );
+
+    assert( m_Manipulator!=NULL );
+
+    m_Manipulator->SetWkt( image->GetProjectionRef() );
+    m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
+    }
+  else
+    {
+    assert( false && "Unhandled AbstractLayerModel derived type." );
+    }
 }
 
 /******************************************************************************/

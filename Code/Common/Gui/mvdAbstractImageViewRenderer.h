@@ -189,6 +189,7 @@ public:
 // public slots
 public slots:
   inline void UpdateScene();
+  inline void RefreshScene();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -230,6 +231,9 @@ private:
   /**
    */
   virtual void virtual_UpdateScene() {};
+  /**
+   */
+  virtual void virtual_RefreshScene() {};
   /**
    */
   // virtual void virtual_SetLayerStack( const StackedLayerModel & ) =0;
@@ -317,6 +321,15 @@ AbstractImageViewRenderer
 ::UpdateScene()
 {
   virtual_UpdateScene();
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractImageViewRenderer
+::RefreshScene()
+{
+  virtual_RefreshScene();
 }
 
 } // end namespace 'mvd'

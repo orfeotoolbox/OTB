@@ -177,6 +177,12 @@ public:
                           const IndexType&,
                           bool isPhysical ) const;
 
+  bool
+    Reproject( PointType & center,
+               SpacingType & spacing,
+               const PointType & vcenter,
+               const SpacingType & vspacing ) const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots
@@ -191,6 +197,8 @@ public slots:
 //
 // SIGNALS.
 signals:
+  void SetProjectionRequired();
+  void UpdateProjectionRequired();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -242,11 +250,13 @@ private:
 //
 // Private methods.
 private:
+
   //
   // AbstractImageViewRenderer overloads.
 
   // virtual void virtual_SetLayerStack( StackedLayerModel * );
   virtual void virtual_UpdateScene();
+  virtual void virtual_RefreshScene();
 
 //
 // Private attributes.
