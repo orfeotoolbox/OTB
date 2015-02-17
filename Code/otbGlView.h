@@ -18,8 +18,10 @@
 #ifndef otb_GlView_h
 #define otb_GlView_h
 
-#include "otbViewSettings.h"
+
+#include "otbGeoInterface.h"
 #include "otbGlActor.h"
+#include "otbViewSettings.h"
 
 #include <map>
 #include <vector>
@@ -104,7 +106,7 @@ public:
    * \return A pointer to the retrieved actor. This pointer will be
    * null if no actor could be found with this key.
    */  
-  ActorType::Pointer GetActor(const std::string & key);
+  ActorType::Pointer GetActor(const std::string & key) const;
 
   /**
    * Tells wether an otb::GlActor is contained given its storage key.
@@ -184,6 +186,24 @@ public:
   // is set to true or back if front is set to false)
   void MoveActorToEndOfRenderingOrder(std::string key, bool front = false);
 
+  /**
+   * Reproject viewport center and spacing into given actor's
+   * coordinate system.
+   */
+  template< typename P, typename S, typename P2, typename S2 >
+  bool Reproject( P & center,
+                  S & spacing,
+                  const KeyType & key,
+                  P2 & vcenter,
+                  S2 & vspacing,
+                  double norm = 1000.0 ) const;
+
+  /**
+   * Reproject viewport center and spacing into given actor's
+   * coordinate system.
+   */
+  // bool Reproject( const KeyType & key, double  norm );
+
 protected:
   GlView();
 
@@ -201,6 +221,80 @@ private:
   StringVectorType      m_RenderingOrder;
 
 }; // End class GlView
+
+
+template< typename P, typename S, typename P2, typename S2 >
+bool
+GlView
+::Reproject( P & origin,
+             S & spacing,
+             const KeyType & key,
+             P2 & vcenter,
+             S2 & vspacing,
+             double norm ) const
+{
+  //
+  // Reference actor has not been found.
+  otb::GlActor::Pointer actor( GetActor( key ) );
+
+  if( actor.IsNull() )
+    return false;
+
+
+  //
+  // Reference actor does not implement geo-interface.
+  const otb::GeoInterface * geo =
+    dynamic_cast< const GeoInterface * >( actor.GetPointer() );
+
+  if( geo==NULL )
+    return false;
+
+
+  //
+  // Compute transform origin.
+  if( !geo->TransformFromViewport( origin, vcenter, true ) )
+    return false;
+
+  //
+  // Compute transformed X-axis extremity.
+  GeoInterface::Point2d x( vcenter );
+
+  x[ 0 ] += norm * vspacing[ 0 ]; 
+
+  if( !geo->TransformFromViewport( x, x, true ) )
+    return false;
+
+  //
+  // Compute transformed Y-axis extremity.
+  GeoInterface::Point2d y( vcenter );
+
+  y[ 1 ] += norm * vspacing[ 1 ];
+
+  if( !geo->TransformFromViewport( y, y, true ) )
+    return false; 
+
+  //
+  // Compute transformed spacing.
+  //
+  // Note SAT:
+  //     Formula has been taken from IceViewer::key_callback(). I think
+  // that the norm of the transformed X and Y axises is not
+  // the new spacing if transform contains a rotation.
+  //     To correct this, transformed X and Y vectors should be
+  // projected against reference actor X and Y axises (using vectorial
+  // dot dot product).
+
+  x[ 0 ] -= origin[ 0 ];
+  x[ 1 ] -= origin[ 1 ];
+
+  y[ 0 ] -= origin[ 0 ];
+  y[ 1 ] -= origin[ 1 ];
+
+  spacing[ 0 ] = vcl_sqrt( x[ 0 ] * x[ 0 ] + x[ 1 ] * x[ 1 ] ) / norm;
+  spacing[ 1 ] = vcl_sqrt( y[ 0 ] * y[ 0 ] + y[ 1 ] * y[ 1 ] ) / norm;
+
+  return true;
+}
 
 } // End namespace otb
 

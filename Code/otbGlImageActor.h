@@ -18,22 +18,25 @@
 #ifndef otb_GlImageActor_h
 #define otb_GlImageActor_h
 
-#include "otbGlActor.h"
 
-#include "otbVectorImage.h"
-#include "otbMultiChannelExtractROI.h"
-#include "otbImageFileReader.h"
 #include "otbGenericRSTransform.h"
-#include "itkCenteredRigid2DTransform.h"
+#include "otbGeoInterface.h"
+#include "otbGlActor.h"
 #include "otbFragmentShader.h"
+#include "otbImageFileReader.h"
+#include "otbMultiChannelExtractROI.h"
+#include "otbVectorImage.h"
+
+#include "itkCenteredRigid2DTransform.h"
 
 #include <vcl_algorithm.h>
+
 
 namespace otb
 {
 
 class GlImageActor 
-  : public GlActor
+  : public GlActor, public GeoInterface
 {
 public:
   typedef GlImageActor                                    Self;
@@ -75,9 +78,13 @@ public:
 
   const SpacingType & GetSpacing() const;
 
-  std::string GetWkt() const;
-  
+  virtual std::string GetWkt() const;
+
   ImageKeywordlistType GetKwl() const;
+
+  virtual bool HasKwl() const;
+
+  bool GetKwl( ImageKeywordlist & ) const;
 
   MetaDataDictionaryType & GetMetaDataDictionary() const;
 
@@ -124,6 +131,26 @@ public:
 
   itkGetObjectMacro(Shader,FragmentShader);
   itkSetObjectMacro(Shader,FragmentShader);
+
+  //
+  // otb::GlActor overloads.
+  //
+
+  virtual bool TransformFromViewport( Point2f & out,
+                                      const Point2f & in,
+                                      bool isPhysical = true ) const;
+
+  virtual bool TransformFromViewport( Point2d & out,
+                                      const Point2d & in,
+                                      bool isPhysical = true ) const;
+
+  virtual bool TransformToViewport( Point2f & out,
+                                    const Point2f & in,
+                                    bool isPhysical = true ) const;
+
+  virtual bool TransformToViewport( Point2d & out,
+                                    const Point2d & in,
+                                    bool isPhysical = true ) const;
 
 protected:
   GlImageActor();

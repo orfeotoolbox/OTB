@@ -16,6 +16,8 @@
 
 =========================================================================*/
 #include "otbGlView.h"
+
+
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -25,6 +27,10 @@
 #include <algorithm>
 #include <cstring>
 #include <cassert>
+
+
+#include "otbGeoInterface.h"
+
 
 namespace otb
 {
@@ -151,14 +157,23 @@ void GlView::ClearActors()
   m_RenderingOrder.clear();
 }
 
-GlView::ActorType::Pointer GlView::GetActor(const std::string & key)
+GlView::ActorType::Pointer GlView::GetActor(const std::string & key) const
 {
-  if(m_Actors.count(key)==0)
-    {
-    itkExceptionMacro(<<"No actor found with key"<<key);
-    }
+  // if(m_Actors.count(key)==0)
+  //   {
+  //   itkExceptionMacro(<<"No actor found with key"<<key);
+  //   }
 
-  return m_Actors[key];
+
+  ActorMapType::const_iterator it( m_Actors.find( key ) );
+
+  if( it==m_Actors.end() )
+    return ActorType::Pointer();
+
+
+  assert( it->first==key );
+
+  return it->second;
 }
 
 
@@ -284,5 +299,6 @@ GlView
     if( ContainsActor( *it ) )
       m_RenderingOrder.push_back( *it );
 }
+
 
 }

@@ -28,4 +28,4 @@ GlActor::GlActor()
 GlActor::~GlActor()
 {}
 
-}
+} // End namespace 'otb'.

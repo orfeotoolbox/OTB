@@ -242,13 +242,23 @@ void GlVectorActor::GetExtent(double & ulx, double & uly, double & lrx, double &
   lry = std::max(std::max(vpul[1],vplr[1]),std::max(vpur[1],vpll[1]));
 }
 
-GlVectorActor::PointType GlVectorActor::ViewportToVectorTransform(const PointType & vpPoint)
+GlVectorActor::PointType
+GlVectorActor
+::ViewportToVectorTransform(const PointType & vpPoint) const
 {
+  /*
+  // Because this method should be const, UpdateTransforms() should
+  // not be called here. But, if this causes a buggy behaviour,
+  // another solution must be thought about.
   if(m_ViewportToVectorTransform.IsNull())
     {
     UpdateTransforms();
     }
-  
+  */
+
+  // Actor should have been initialized before calling this method!
+  assert( !m_ViewportToVectorTransform.IsNull() );
+
   return m_ViewportToVectorTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(vpPoint));
 
 }
@@ -821,4 +831,20 @@ void GlVectorActor::InternalFeaturesTransform()
     }
 }
 
+
+bool
+GlVectorActor
+::TransformFromViewport( Point2d & out,
+                         const Point2d & in,
+                         bool isPhysical ) const
+{
+  if( !isPhysical )
+    return false;
+
+  out = ViewportToVectorTransform( in );
+
+  return true;
 }
+
+
+} // End of namespace 'otb'.

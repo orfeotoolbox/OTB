@@ -74,6 +74,28 @@ GlImageActor::ImageKeywordlistType GlImageActor::GetKwl() const
   return m_FileReader->GetOutput()->GetImageKeywordlist();
 }
 
+
+bool
+GlImageActor
+::HasKwl() const
+{
+  return true;
+}
+
+
+bool
+GlImageActor
+::GetKwl( ImageKeywordlist & kwl ) const
+{
+  assert( !m_FileReader.IsNull() );
+  assert( m_FileReader->GetOutput()!=NULL );
+
+  kwl = m_FileReader->GetOutput()->GetImageKeywordlist();
+
+  return true;
+}
+
+
 GlImageActor::MetaDataDictionaryType & GlImageActor::GetMetaDataDictionary() const
 {
   return m_FileReader->GetOutput()->GetMetaDataDictionary();
@@ -804,4 +826,71 @@ void GlImageActor::AutoColorAdjustment(double & minRed, double & maxRed, double 
     minBlue =  histogramsGenerator->GetOutput()->GetNthElement(2)->Quantile(0,lcp);
     maxBlue =  histogramsGenerator->GetOutput()->GetNthElement(2)->Quantile(0,1-hcp);   
 }
+
+
+
+bool
+GlImageActor
+::TransformFromViewport( Point2f & out,
+                         const Point2f & in,
+                         bool isPhysical ) const
+{
+  out = ViewportToImageTransform( in, isPhysical );
+
+  return true;
 }
+
+
+bool
+GlImageActor
+::TransformFromViewport( Point2d & out,
+                         const Point2d & in,
+                         bool isPhysical ) const
+{
+  Point2f p;
+
+  if( !TransformFromViewport( p, Point2f( in ), isPhysical ) )
+    return false;
+
+  out = p;
+
+  out[ 0 ] = p[ 0 ];
+  out[ 1 ] = p[ 1 ];
+
+  return true;
+}
+
+
+bool
+GlImageActor
+::TransformToViewport( Point2f & out,
+                       const Point2f & in,
+                       bool isPhysical ) const
+{
+  out = ViewportToImageTransform( in, isPhysical );
+
+  return true;
+}
+
+
+bool
+GlImageActor
+::TransformToViewport( Point2d & out,
+                       const Point2d & in,
+                       bool isPhysical ) const
+{
+  Point2f p;
+
+  if( !TransformToViewport( p, Point2f( in ), isPhysical ) )
+    return false;
+
+  out = p;
+
+  out[ 0 ] = p[ 0 ];
+  out[ 1 ] = p[ 1 ];
+
+  return true;
+}
+
+
+} // End of namespace 'otb'.

@@ -18,14 +18,17 @@
 #ifndef otb_GlVectorActor_h
 #define otb_GlVectorActor_h
 
-#include "otbGlActor.h"
 
 #include "otbGenericRSTransform.h"
-#include "itkVector.h"
+#include "otbGeoInterface.h"
+#include "otbGlActor.h"
 #include "otbOGRDataSourceWrapper.h"
-#include "otbOGRLayerWrapper.h"
 #include "otbOGRFeatureWrapper.h"
+#include "otbOGRLayerWrapper.h"
+
 #include "itkCenteredRigid2DTransform.h"
+#include "itkVector.h"
+
 
 // Forward declaration of GLUtesselator
 class GLUtesselator;
@@ -34,7 +37,7 @@ namespace otb
 {
 
 class GlVectorActor 
-  : public GlActor
+  : public GlActor, public GeoInterface
 {
 public:
   typedef GlVectorActor                                   Self;
@@ -75,7 +78,7 @@ public:
   // Gl rendering of current state
   virtual void Render();
 
-  PointType ViewportToVectorTransform(const PointType & point);
+  PointType ViewportToVectorTransform(const PointType & point) const;
 
   itkSetMacro(Color,ColorType);
   itkGetConstReferenceMacro(Color,ColorType);
@@ -101,6 +104,15 @@ public:
   itkGetConstReferenceMacro(LineWidth,double);
 
   std::string GetWkt() const;
+
+  //
+  // otb::GlActor overloads.
+  //
+
+  virtual bool TransformFromViewport( Point2d & out,
+                                      const Point2d & in,
+                                      bool isPhysical = true ) const;
+
 
 protected:
   GlVectorActor();
