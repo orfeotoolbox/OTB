@@ -17,3 +17,4 @@ include_directories(BEFORE ${OTB_INCLUDE_DIRS})
 # Add link directories needed to use OTB.
 link_directories(${OTB_LIBRARY_DIRS})
 
+# TODO : find_package() & include(UseFile) for all external dependencies
