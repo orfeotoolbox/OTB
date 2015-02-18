@@ -31,6 +31,8 @@ namespace otb
  * and returns true if it is above the threshold, false otherwise.
  *
  *  \ingroup Functor
+ *
+ * \ingroup OTBPath
  */
 template <class TInput1>
 class PathLengthFunctor

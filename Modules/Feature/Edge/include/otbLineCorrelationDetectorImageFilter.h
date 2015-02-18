@@ -26,6 +26,8 @@ namespace otb
  *\class LineCorrelationDetectorImageFilter
  * \brief To be documented
  *
+ *
+ * \ingroup OTBEdge
  */
 
 template <class TInputImage,

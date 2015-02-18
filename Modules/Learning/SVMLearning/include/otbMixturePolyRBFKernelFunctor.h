@@ -20,7 +20,7 @@
 #ifndef __otbMixturePolyRBFKernelFunctor_h
 #define __otbMixturePolyRBFKernelFunctor_h
 
-#include "svm.h"
+#include "otb_libsvm.h"
 
 namespace otb
 {
@@ -36,6 +36,8 @@ namespace otb
  * Variable to be instanciated (through \code SetValue \endcode) are:
  * Mixture (def=0.5), GammaPoly (def=1.0), CoefPoly (def=1.0),
  * DegreePoly (def=2), GammaRBF (def=1.0)
+ *
+ * \ingroup OTBSVMLearning
  */
 
 class MixturePolyRBFKernelFunctor

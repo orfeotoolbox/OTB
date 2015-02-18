@@ -27,6 +27,8 @@ namespace Functor
 {
 /** \class HorizontalSobelOperator
  * \brief Performs the calculation of horizontal Sobel derivation
+ *
+ * \ingroup OTBEdge
  */
 template < class TInput, class TOutput >
 class HorizontalSobelOperator
@@ -54,6 +56,8 @@ public:
 
 /** \class HorizontalSobelVectorImageFilter
  * \brief Implements the Horizontal Sobel Gradient to be processed on a vector image
+ *
+ * \ingroup OTBEdge
  */
 template < class TInputImage, class TOutputImage >
 class ITK_EXPORT HorizontalSobelVectorImageFilter

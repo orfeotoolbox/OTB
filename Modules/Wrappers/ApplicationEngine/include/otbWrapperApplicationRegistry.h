@@ -32,6 +32,8 @@ namespace Wrapper
  *  \brief This class represent an application
  *  TODO
  *
+ *
+ * \ingroup OTBApplicationEngine
  */
 class ITK_ABI_EXPORT ApplicationRegistry : public itk::Object
 {

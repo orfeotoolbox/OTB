@@ -29,6 +29,8 @@ namespace otb
  * \brief Virtual class for the Real moments for a path
  *
  * \ingroup PathFunctions
+ *
+ * \ingroup OTBMoments
  */
 
 template <class TInputPath,

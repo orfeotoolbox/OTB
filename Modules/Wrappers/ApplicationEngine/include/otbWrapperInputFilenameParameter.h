@@ -28,6 +28,8 @@ namespace Wrapper
 
 /** \class InputFilenameParameter
  *  \brief This class represent a string parameter for the wrapper framework
+ *
+ * \ingroup OTBApplicationEngine
  */
 class ITK_ABI_EXPORT InputFilenameParameter
   : public Parameter

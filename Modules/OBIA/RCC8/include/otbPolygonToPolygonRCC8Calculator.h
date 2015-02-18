@@ -43,6 +43,8 @@ namespace otb
  * The goal of this class is to determine which of these 8 relations link the two inputs regions represented
  * by the closed input path. Since this class will further be used iteratively on a possibly large set
  * of regiosn, it is optimised : the decision is managed by a decision tree.
+ *
+ * \ingroup OTBRCC8
  */
 template <class TInputPolygon>
 class ITK_EXPORT PolygonToPolygonRCC8Calculator : public itk::Object

@@ -123,6 +123,8 @@ protected:
  * the input and then applies the dedicated functor.
  *
  * \sa StreamingStatisticsVectorImageFilter
+ *
+ * \ingroup OTBStatistics
  */
 template < class TInputImage, class TOutputImage >
 class ITK_EXPORT NormalizeVectorImageFilter

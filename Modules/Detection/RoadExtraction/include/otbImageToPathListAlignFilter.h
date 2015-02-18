@@ -30,6 +30,8 @@ namespace otb
 /** \class ImageToPathListAlignFilter
  * \brief Base class used to implement filter to extract align points or group of points and give the coordinates.
  *
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT ImageToPathListAlignFilter : public ImageToPathListFilter<TInputImage, TOutputPath>

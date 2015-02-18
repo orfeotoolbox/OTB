@@ -41,6 +41,8 @@ namespace otb
  *
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBTransform
  */
 
 template <class TInputImage, class TOutputImage, class TDisplacementField>

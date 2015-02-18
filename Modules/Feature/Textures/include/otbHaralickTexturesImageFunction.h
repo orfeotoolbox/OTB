@@ -82,6 +82,8 @@ namespace otb
  * \sa otb::GreyLevelCo-occurrenceIndexedList
  *
  * \ingroup ImageFunctions
+ *
+ * \ingroup OTBTextures
  */
 
 

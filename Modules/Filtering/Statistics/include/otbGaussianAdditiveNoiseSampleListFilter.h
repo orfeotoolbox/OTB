@@ -36,6 +36,8 @@ namespace Statistics {
  * method SetNumberOfIteration()
  *
  * \sa ListSampleToListSampleFilter
+ *
+ * \ingroup OTBStatistics
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
 class ITK_EXPORT GaussianAdditiveNoiseSampleListFilter :

@@ -36,6 +36,8 @@ namespace Wrapper
  * using one the following methods Get{AverageElevation, DEMDirectory, GeoidFile}.
  *
  *
+ *
+ * \ingroup OTBApplicationEngine
  */
 
 class ElevationParametersHandler

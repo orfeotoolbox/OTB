@@ -52,6 +52,8 @@ namespace otb
  * psi   = 0;    % azimuth (deg)
  *
  * \sa ProcessObject
+ *
+ * \ingroup OTBSimulation
  */
 
 template <class TLabel>

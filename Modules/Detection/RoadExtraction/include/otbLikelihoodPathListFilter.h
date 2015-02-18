@@ -31,6 +31,8 @@ namespace otb
  * (using a PolyLineImageConstIterator) divided by the number of points in the
  * path
  *
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TPath, class TImage>
 class ITK_EXPORT LikelihoodPathListFilter

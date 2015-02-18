@@ -63,6 +63,8 @@ namespace otb
  * \sa NeighborhoodIterator
  *
  * \ingroup IntensityImageFilters
+ *
+ * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class TOutputImage, class TMask>
 class ITK_EXPORT DisparityMapMedianFilter :

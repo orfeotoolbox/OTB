@@ -27,6 +27,8 @@ namespace Wrapper
 /** \class ApplicationHtmlDocGenerator
  *  \brief This class genertaes the documentation of a class usung the
  *  class doc attributes.
+ *
+ * \ingroup OTBApplicationEngine
  */
 
 class ITK_ABI_EXPORT ApplicationHtmlDocGenerator

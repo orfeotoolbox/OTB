@@ -42,6 +42,8 @@ class ImageKeywordlist;
  * information relative to the baseline. If necessary, it could be
  * extended to non SAR models, but the optical ossim classes would
  * need to be modified.
+ *
+ * \ingroup OTBOSSIMAdapters
  **/
 
 class PlatformPositionAdapter: public itk::Object

@@ -24,7 +24,7 @@
 #include "otbSystem.h"
 #include "itksys/SystemTools.hxx"
 #include "otbImage.h"
-#include "otbTinyXML.h"
+#include "otb_tinyxml.h"
 #include "otbImageKeywordlist.h"
 
 #include "itkMetaDataObject.h"

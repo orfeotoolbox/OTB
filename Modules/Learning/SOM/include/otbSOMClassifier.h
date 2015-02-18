@@ -36,6 +36,8 @@ namespace otb
  * instead of itk::SampleClassifierBase.
  *
  * \sa SOM, SOMMap, SOMActivationBuilder.
+ *
+ * \ingroup OTBSOM
  */
 
 template<class TSample, class TSOMMap, class TLabel>

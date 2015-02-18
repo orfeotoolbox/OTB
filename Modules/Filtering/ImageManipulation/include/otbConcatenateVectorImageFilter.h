@@ -26,6 +26,8 @@ namespace otb
 /** \class ConcatenateVectorImageFilter
  * \brief This filter concatenates the vector pixel of the first
  * image with the vector pixel of the second image.
+ *
+ * \ingroup OTBImageManipulation
  */
 template<class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT ConcatenateVectorImageFilter

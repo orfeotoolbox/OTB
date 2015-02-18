@@ -37,6 +37,8 @@ namespace otb
  *
  * \ingroup Projection
  *
+ *
+ * \ingroup OTBTransform
  */
 template <class TScalarType,
     unsigned int NInputDimensions = 3,

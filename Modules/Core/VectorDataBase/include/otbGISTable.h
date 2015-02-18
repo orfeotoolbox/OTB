@@ -31,6 +31,8 @@ namespace otb
  * \sa GISTableFileReader
  * \sa GISTableFileWriter
  *
+ *
+ * \ingroup OTBVectorDataBase
  */
 template <class TConnectionImplementation, class TPrecision = double, unsigned int TSpatialDimension = 2>
 class GISTable

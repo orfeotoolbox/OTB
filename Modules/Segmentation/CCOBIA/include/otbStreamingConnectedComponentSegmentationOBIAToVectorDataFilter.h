@@ -52,6 +52,8 @@ namespace otb {
 *  - OBIAExpression : mathematical expression for OBIA filtering
 *
 * \ingroup Streamed
+ *
+ * \ingroup OTBCCOBIA
 */
 template <class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
 class PersistentConnectedComponentSegmentationOBIAToVectorDataFilter : public otb::PersistentImageToVectorDataFilter<TVImage, TOutputVectorData>
@@ -221,6 +223,8 @@ private:
 * \sa PersistentFilterStreamingDecorator
 *
 * \ingroup Streamed
+ *
+ * \ingroup OTBCCOBIA
 */
 template <class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
 class StreamingConnectedComponentSegmentationOBIAToVectorDataFilter

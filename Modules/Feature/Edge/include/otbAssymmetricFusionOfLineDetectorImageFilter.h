@@ -34,6 +34,8 @@ namespace otb
  * detector by croos-correlation) and a filter that produces a fusion of
  * those two line detector filters.
  *
+ *
+ * \ingroup OTBEdge
  */
 
 template <class TInputImage,

@@ -34,6 +34,8 @@ namespace otb
  * as IsInside, IsOnEdge, IsTouching, IsCrossing.
  *
  * \sa otb::PolyLineParametricPathWithValue
+ *
+ * \ingroup OTBVectorDataBase
  */
 template<class TValue = double>
 class ITK_EXPORT Polygon

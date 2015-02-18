@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class RandomForestsMachineLearningModelFactory
  * \brief Creation d'un instance d'un objet RandomForestsMachineLearningModel utilisant les object factory.
+ *
+ * \ingroup OTBOpenCVAdapters
  */
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT RandomForestsMachineLearningModelFactory : public itk::ObjectFactoryBase

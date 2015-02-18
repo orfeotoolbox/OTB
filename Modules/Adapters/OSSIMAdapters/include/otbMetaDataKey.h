@@ -109,6 +109,8 @@ namespace MetaDataKey
  * \brief This OTB_GCP class is used to manage the GCP parameters
  * in OTB.
  *
+ *
+ * \ingroup OTBOSSIMAdapters
  */
 class ITK_EXPORT OTB_GCP
 {

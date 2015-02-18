@@ -26,6 +26,8 @@ namespace otb
  *
  * \brief Creation of an "otb" SpotImageMetadataInterface that gets metadata.
  *
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT SpotImageMetadataInterface : public OpticalImageMetadataInterface
 {

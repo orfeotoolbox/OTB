@@ -38,6 +38,8 @@ namespace otb
  *
  *
  * \ingroup ImageFunctions
+ *
+ * \ingroup OTBImageBase
  */
 
 template< class TInternalImageFunctionType, class TOutputPrecision = double >

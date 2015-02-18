@@ -59,6 +59,8 @@ namespace otb
  * for the convex (resp. concave) objects whose size is comprised between \f$N_{n-1} \f$ and \f$N_n\f$ .
  *
  * \sa GeodescicMorphologyDecompositionImageFilter
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template <class TImage, class TStructuringElement>
 class ITK_EXPORT GeodesicMorphologyIterativeDecompositionImageFilter

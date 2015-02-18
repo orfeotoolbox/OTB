@@ -36,6 +36,8 @@ namespace otb {
  *
  * \ingroup ImageIterator
  * \sa SubsampledImageRegionConstIterator
+ *
+ * \ingroup OTBCommon
  */
 template <class TImage>
 class ITK_EXPORT SubsampledImageRegionIterator

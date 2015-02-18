@@ -50,6 +50,8 @@ namespace otb
  *  \sa SinclairToCovarianceMatrixFunctor
  *  \sa SinclairToMuelleMatrixrFunctor
  *
+ *
+ * \ingroup OTBPolarimetry
  */
 
 template <class TInputImageHH, class TInputImageHV,

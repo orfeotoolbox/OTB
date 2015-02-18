@@ -24,6 +24,8 @@ namespace otb
 {
 /** \class MSTARImageIOFactory
  * \brief Creation d'un instance d'un objet MSTARImageIO utilisant les object factory.
+ *
+ * \ingroup OTBIOMSTAR
  */
 class ITK_EXPORT MSTARImageIOFactory : public itk::ObjectFactoryBase
 {

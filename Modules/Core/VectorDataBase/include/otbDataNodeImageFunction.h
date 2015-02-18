@@ -32,6 +32,8 @@ namespace otb
   *
   * \ingroup Functions
   * \sa NDVIDataNodeFeatureFunction
+ *
+ * \ingroup OTBVectorDataBase
  */
 
 template <

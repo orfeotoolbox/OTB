@@ -33,6 +33,8 @@ namespace otb {
  *  The world file format is detailed at
  *  http://en.wikipedia.org/wiki/World_file
  *
+ *
+ * \ingroup OTBCarto
  */
 
 class ITK_EXPORT WorldFile : public itk::Object

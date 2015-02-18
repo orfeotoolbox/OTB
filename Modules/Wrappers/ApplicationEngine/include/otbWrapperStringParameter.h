@@ -28,6 +28,8 @@ namespace Wrapper
 
 /** \class StringParameter
  *  \brief This class represent a string parameter for the wrapper framework
+ *
+ * \ingroup OTBApplicationEngine
  */
 class ITK_ABI_EXPORT StringParameter
   : public Parameter

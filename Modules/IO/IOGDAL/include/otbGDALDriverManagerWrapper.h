@@ -77,6 +77,8 @@ private:
  *
  * \ingroup IOFilters
  *
+ *
+ * \ingroup OTBIOGDAL
  */
 // Wraps the GdalDriverManager so that GDALAllRegister is called automatically
 class GDALDriverManagerWrapper

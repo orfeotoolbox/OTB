@@ -33,6 +33,8 @@ namespace Function
  * Note: Paper referenced in WindowedSincInterpolateImageFunctionBase gives
  * an incorrect definition of this window function.
  * \sa WindowedSincInterpolateImageLanczosFunction
+ *
+ * \ingroup OTBInterpolation
  */
 template<class TInput = double, class TOutput = double>
 class LanczosWindowFunction
@@ -87,6 +89,8 @@ private:
  * \sa Function::LanczosWindowFunction
  * \sa Function::BlackmanWindowFunction
  * \ingroup ImageFunctionBases ImageInterpolators
+ *
+ * \ingroup OTBInterpolation
  */
 template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
       double, class TInputInterpolator = double, class TOutputInterpolator = double>

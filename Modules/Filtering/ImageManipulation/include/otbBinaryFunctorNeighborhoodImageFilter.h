@@ -37,6 +37,8 @@ namespace otb
  *
  * \example ChangeDetection/ChangeDetectionFrameworkExample.cxx
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage1, class TInputImage2,
     class TOutputImage, class TFunction>

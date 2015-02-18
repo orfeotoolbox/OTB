@@ -38,6 +38,8 @@ namespace otb
  *
  * \ingroup Common
  *
+ *
+ * \ingroup OTBImageBase
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ExtractROIBase :

@@ -68,6 +68,8 @@ namespace otb {
  *  Note that if one of the server limits are crossed
  *  node/way/relation or area requested, an exception is raised.
  *
+ *
+ * \ingroup OTBCarto
  */
 class  ITK_EXPORT OSMDataToVectorDataGenerator :
     public VectorDataSource< otb::VectorData<> >

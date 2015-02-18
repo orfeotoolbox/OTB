@@ -31,6 +31,8 @@ namespace Function
  * \brief Window function for sinc interpolation.
  * \f[ w(x) = 0.54 + 0.46 cos(\frac{\pi x}{m} ) \f]
  * \sa WindowedSincInterpolateImageHammingFunction
+ *
+ * \ingroup OTBInterpolation
  */
 template<class TInput = double, class TOutput = double>
 class HammingWindowFunction
@@ -77,6 +79,8 @@ private:
  * \sa Function::LanczosWindowFunction
  * \sa Function::BlackmanWindowFunction
  * \ingroup ImageFunctionBases ImageInterpolators
+ *
+ * \ingroup OTBInterpolation
  */
 template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
       double, class TInputInterpolator = double, class TOutputInterpolator = double>

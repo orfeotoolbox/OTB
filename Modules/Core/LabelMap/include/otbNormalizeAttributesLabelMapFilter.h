@@ -37,6 +37,8 @@ namespace Functor
 *   all attributes are in [0, 1] interval
 *
 *   \sa MinMaxAttributesLabelMapFilter
+ *
+ * \ingroup OTBLabelMap
 */
 template <class TLabelObject>
 class NormalizeAttributesLabelObjectFunctor
@@ -88,6 +90,8 @@ private:
  *        attributes are in the [0, 1] interval
  *
  * \sa MinMaxAttributesLabelMapFilter
+ *
+ * \ingroup OTBLabelMap
  */
 template<class TImage>
 class ITK_EXPORT NormalizeAttributesLabelMapFilter

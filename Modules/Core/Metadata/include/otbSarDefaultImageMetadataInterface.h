@@ -29,6 +29,8 @@ namespace otb
  *
  * \brief Creation of an "otb" DefaultImageMetadataInterface that gets metadata.
  *
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT SarDefaultImageMetadataInterface : public SarImageMetadataInterface
 {

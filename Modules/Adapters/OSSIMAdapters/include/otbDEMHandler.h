@@ -79,6 +79,8 @@ namespace otb
  * DEM directory can either contain DTED or SRTM formats.
  * \ingroup Images
  *
+ *
+ * \ingroup OTBOSSIMAdapters
  */
 
 class ITK_EXPORT DEMHandler : public itk::Object

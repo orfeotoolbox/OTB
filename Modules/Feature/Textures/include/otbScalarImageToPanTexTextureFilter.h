@@ -39,6 +39,8 @@ namespace otb
  *
  * \sa otb::GreyLevelCooccurrenceIndexedList
  *
+ *
+ * \ingroup OTBTextures
  */
 
 template<class TInpuImage, class TOutputImage>

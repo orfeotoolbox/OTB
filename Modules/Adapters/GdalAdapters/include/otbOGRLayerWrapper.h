@@ -60,6 +60,8 @@ bool operator==(Layer const& lhs, Layer const& rhs);
  *
  * \todo Find a way to be notified when the related \c OGRDataSource is released
  * \since OTB v 3.14.0
+ *
+ * \ingroup OTBGdalAdapters
  */
 class Layer
   {
@@ -312,6 +314,8 @@ public:
    * instance.
    * \see http://www.boost.org/doc/libs/1_49_0/libs/iterator/doc/iterator_facade.html#tutorial-example
    * \since OTB v 3.14.0
+ *
+ * \ingroup OTBGdalAdapters
    */
   template <class Value> class feature_iter
     : public boost::iterator_facade<feature_iter<Value>, Value, boost::single_pass_traversal_tag>

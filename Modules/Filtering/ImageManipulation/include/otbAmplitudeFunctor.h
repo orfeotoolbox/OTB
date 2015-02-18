@@ -30,6 +30,8 @@ namespace Function
 *  \ingroup Visualization
 *
 * \sa PhaseFunctor ChannelSelectorFunctor
+ *
+ * \ingroup OTBImageManipulation
 */
 template <class TInputPixel>
 class AmplitudeFunctor : public ChannelSelectorFunctor<TInputPixel>

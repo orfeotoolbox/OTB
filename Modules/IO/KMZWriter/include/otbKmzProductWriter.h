@@ -55,6 +55,8 @@ namespace otb
  *
  * \ingroup IO
  *
+ *
+ * \ingroup OTBKMZWriter
  */
 template <class TInputImage>
 class ITK_EXPORT KmzProductWriter : public itk::ProcessObject

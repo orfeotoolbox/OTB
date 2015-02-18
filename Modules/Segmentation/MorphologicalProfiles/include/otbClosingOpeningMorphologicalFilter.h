@@ -38,6 +38,8 @@ namespace otb
  *
  * \sa ClosingOpeningMorphologicalFilter,
  * MorphologicalPyramidAnalysisFilter
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TKernel>
 class ITK_EXPORT ClosingOpeningMorphologicalFilter

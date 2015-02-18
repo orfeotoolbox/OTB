@@ -45,6 +45,8 @@ namespace otb
  *
  *  \see itk::SimpleFilterWatcher
  *  \see otb::fltkFilterWatcher
+ *
+ * \ingroup OTBCommon
  */
 class /*ITK_EXPORT*/ StandardFilterWatcher : public FilterWatcherBase
 {

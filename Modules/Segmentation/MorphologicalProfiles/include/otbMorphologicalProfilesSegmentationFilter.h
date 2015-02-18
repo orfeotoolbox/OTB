@@ -51,6 +51,8 @@ namespace otb
 *   \sa otb::ProfileToProfileDerivativeFilter
 *   \sa otb::ProfileDerivativeToMultiScaleCharacteristicsFilter
 *   \sa otb::MultiScaleConvexOrConcaveClassificationFilter
+ *
+ * \ingroup OTBMorphologicalProfiles
 */
 template <class TInputImage,  class TOuputImage, class TInternalPrecision = float, class TStructuringElement = itk::BinaryBallStructuringElement<typename TInputImage::PixelType, TInputImage::ImageDimension> >
 class ITK_EXPORT MorphologicalProfilesSegmentationFilter

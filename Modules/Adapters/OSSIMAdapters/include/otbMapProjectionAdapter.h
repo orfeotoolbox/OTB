@@ -40,6 +40,8 @@ namespace otb
  * \sa GenericMapProjection
  * \ingroup Projection
  *
+ *
+ * \ingroup OTBOSSIMAdapters
  **/
 
 class MapProjectionAdapter: public itk::Object

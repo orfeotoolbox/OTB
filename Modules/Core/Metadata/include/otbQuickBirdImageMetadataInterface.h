@@ -26,6 +26,8 @@ namespace otb
  *
  * \brief Creation of an "otb" QuickBirdImageMetadataInterface that gets metadata.
  *
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT QuickBirdImageMetadataInterface : public OpticalImageMetadataInterface
 {

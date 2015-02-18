@@ -55,6 +55,8 @@ namespace Statistics
  * to membership functions from different distributional model
  *
  * \sa FIXME: StochasticExpectationMaximizationMixtureModelEstimator
+ *
+ * \ingroup OTBCommon
  */
 
 template<class TSample>

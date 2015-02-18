@@ -38,6 +38,8 @@ namespace Functor
    *
    * \ingroup Functor
    * \ingroup Radiometry
+ *
+ * \ingroup OTBSimulation
  */
 template <class TInput, class TOutput>
 class ReflectanceToSurfaceReflectanceImageFunctor
@@ -154,6 +156,8 @@ private:
  * \ingroup LuminanceToReflectanceImageFilter
  * \ingroup ImageToReflectanceImageFilter
  * \ingroup Radiometry
+ *
+ * \ingroup OTBSimulation
  */
 template <class TInputImage, class TOutputImage >
 class ITK_EXPORT SurfaceReflectanceToReflectanceFilter :

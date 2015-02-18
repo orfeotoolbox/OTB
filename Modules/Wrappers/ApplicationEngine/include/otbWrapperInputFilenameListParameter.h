@@ -29,6 +29,8 @@ namespace Wrapper
 {
 /** \class InputFilenameListParameter
  *  \brief This class represents a list of InputFilename parameter
+ *
+ * \ingroup OTBApplicationEngine
  */
 
 class ITK_ABI_EXPORT InputFilenameListParameter : public Parameter

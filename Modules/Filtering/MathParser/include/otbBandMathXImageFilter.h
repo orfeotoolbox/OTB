@@ -55,6 +55,8 @@ namespace otb
  *
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBMathParser
  */
 
 template< class TImage >

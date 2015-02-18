@@ -29,6 +29,8 @@ namespace otb
  *         as input.
  *
  *
+ *
+ * \ingroup OTBSpatialObjects
  */
 
 template <class TLinesList, class TPointSet>

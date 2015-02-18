@@ -47,6 +47,8 @@ namespace otb
  * \ingroup Multithreaded
  * \ingroup MathematicalStatisticsImageFilters
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 template<class TInputImage>
 class ITK_EXPORT PersistentInnerProductVectorImageFilter :
@@ -149,6 +151,8 @@ private:
  * \ingroup Streamed
  * \ingroup Multithreaded
  * \ingroup MathematicalStatisticsImageFilters
+ *
+ * \ingroup OTBImageManipulation
  */
 
 template<class TInputImage>

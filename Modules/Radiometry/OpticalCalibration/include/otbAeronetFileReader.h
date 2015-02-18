@@ -30,6 +30,8 @@ class AeronetData;
 
 /** \class AeronetFileReaderException
  * \brief Base exception class for Aeronet problems during reading.
+ *
+ * \ingroup OTBOpticalCalibration
  */
 class ITK_EXPORT AeronetFileReaderException
   : public itk::ExceptionObject
@@ -67,6 +69,8 @@ public:
  *  The datas start in the line number 6.
  *
  * \sa AeronetData
+ *
+ * \ingroup OTBOpticalCalibration
  */
 class ITK_EXPORT AeronetFileReader : public itk::ProcessObject
 {

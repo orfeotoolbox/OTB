@@ -44,6 +44,8 @@ namespace Functor
  * \sa TerraSarBrightnessImageFilter
  * \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBSARCalibration
  */
 
 template <class TInput, class TOutput>

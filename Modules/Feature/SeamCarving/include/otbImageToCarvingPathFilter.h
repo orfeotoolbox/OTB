@@ -49,6 +49,8 @@ namespace otb
  *
  * \ingroup PathFilters
  * \ingroup ImageFilters
+ *
+ * \ingroup OTBSeamCarving
  */
 
 template <class TInputImage, class TOutputPath>

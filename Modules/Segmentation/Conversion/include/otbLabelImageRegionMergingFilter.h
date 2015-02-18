@@ -35,6 +35,8 @@ namespace otb
  *
  *
  * \ingroup ImageSegmentation
+ *
+ * \ingroup OTBConversion
  */
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage = TInputLabelImage, class TOutputClusteredImage = TInputSpectralImage>
 class ITK_EXPORT LabelImageRegionMergingFilter

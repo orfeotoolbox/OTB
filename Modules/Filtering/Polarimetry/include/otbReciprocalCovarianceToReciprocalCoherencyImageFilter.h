@@ -46,6 +46,8 @@ namespace Functor {
  * \sa CovarianceToCircularCoherencyDegreeImageFilter
  * \sa ReciprocalCovarianceToReciprocalCoherencyDegreeImageFilter
  *
+ *
+ * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
 class ReciprocalCovarianceToReciprocalCoherencyFunctor
@@ -113,6 +115,8 @@ private:
  *
  * \ingroup SARPolarimetry
  * \sa ReciprocalCovarianceToReciprocalCoherencyFunctor
+ *
+ * \ingroup OTBPolarimetry
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalCovarianceToReciprocalCoherencyImageFilter :

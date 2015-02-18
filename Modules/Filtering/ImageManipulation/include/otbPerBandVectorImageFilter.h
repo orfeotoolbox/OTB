@@ -39,6 +39,8 @@ namespace otb
  * \sa ImageListToImageListApplyFilter
  * \sa ImageListToVectorImageFilter
  * \ingroup Streamed
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage, class TFilter>
 class ITK_EXPORT PerBandVectorImageFilter

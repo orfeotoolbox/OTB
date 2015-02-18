@@ -32,6 +32,8 @@ namespace otb
   * \brief <b>DEPRECATED</b>: See VectorDataToImageFilter
   * \deprecated use VectorDataToImageFilter instead
   * \sa VectorDataToImageFilter
+ *
+ * \ingroup OTBVectorDataRendering
   */
 
 template <class TVectorData, class TImage>

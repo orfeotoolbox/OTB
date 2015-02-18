@@ -28,6 +28,8 @@ namespace otb
  *
  * This class is available only for testing purposes
  *
+ *
+ * \ingroup OTBCurlAdapters
  */
 class ITK_ABI_EXPORT CurlHelperStub : public CurlHelperInterface
 {

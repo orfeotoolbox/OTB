@@ -41,6 +41,8 @@ namespace otb {
   *
   *
   * \see ImageFileReader
+ *
+ * \ingroup OTBImageIO
  */
 template <class TImage, class TInternalImage = TImage>
 class ITK_EXPORT ImageSeriesFileReader
@@ -149,6 +151,8 @@ private:
  * GenerateData and TestBandSelection methods are specialised.
  *
  * \see ImageSeriesFileReader
+ *
+ * \ingroup OTBImageIO
  */
 template <class TPixel, class TInternalPixel>
 class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2> >
@@ -250,6 +254,8 @@ private:
  * GenerateData and TestBandSelection methods are specialised.
  *
  * \see ImageSeriesFileReader
+ *
+ * \ingroup OTBImageIO
  */
 template <class TPixel, class TInternalPixel>
 class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
@@ -352,6 +358,8 @@ private:
  * GenerateData method is specialised.
  *
  * \see ImageSeriesFileReader
+ *
+ * \ingroup OTBImageIO
  */
 template <class TPixel, class TInternalPixel>
 class ITK_EXPORT ImageSeriesFileReader<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> >

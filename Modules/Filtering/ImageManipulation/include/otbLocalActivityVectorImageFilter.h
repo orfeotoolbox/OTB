@@ -29,6 +29,8 @@ namespace Functor
 {
 /** \class LocalActivityOperator
  * \brief Performs the calculation of LocalActivity derivation
+ *
+ * \ingroup OTBImageManipulation
  */
 template < class TInput, class TOutput >
 class LocalActivityOperator
@@ -76,6 +78,8 @@ public:
 
 /** \class LocalActivityVectorImageFilter
  * \brief Implements the  LocalActivity Gradient to be processed on a vector image
+ *
+ * \ingroup OTBImageManipulation
  */
 template < class TInputImage, class TOutputImage >
 class ITK_EXPORT LocalActivityVectorImageFilter

@@ -63,6 +63,8 @@ namespace otb
  * \ingroup Streamed
  * \ingroup Threaded
  *
+ *
+ * \ingroup OTBTextures
  */
 template<class TInpuImage, class TOutputImage>
 class ScalarImageToHigherOrderTexturesFilter : public itk::ImageToImageFilter

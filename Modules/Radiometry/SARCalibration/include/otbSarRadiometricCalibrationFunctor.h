@@ -32,6 +32,8 @@ namespace Functor
  * \brief Compute the backscatter value.
  *  \f$ \sigma^{0} = (scale * DN^{2} + offset) * sin( \theta_{inc}) * OldGain / NewGain * RangeSpreadLoss \f$
  *
+ *
+ * \ingroup OTBSARCalibration
  */
 template<class TInput, class TOutput>
 class ITK_EXPORT SarRadiometricCalibrationFunctor

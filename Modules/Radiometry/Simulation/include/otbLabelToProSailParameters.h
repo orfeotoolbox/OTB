@@ -57,6 +57,8 @@ namespace otb
  * TODO : define different vegetation types and ProSail parameters associated.
  *
  * \sa LabelToSimulationParametersBase
+ *
+ * \ingroup OTBSimulation
  */
 
 template <class TLabel>

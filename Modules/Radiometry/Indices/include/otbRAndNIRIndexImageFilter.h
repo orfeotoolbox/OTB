@@ -28,6 +28,8 @@ namespace otb
  * \brief TODO
  *
    * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 
 template <class TInputImageR, class TInputImageNIR, class TOutputImage,

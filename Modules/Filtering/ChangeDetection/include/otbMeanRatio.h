@@ -32,6 +32,8 @@ namespace otb
  *
 
  * \ingroup Functor
+ *
+ * \ingroup OTBChangeDetection
  */
 namespace Functor
 {

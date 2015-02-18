@@ -42,6 +42,8 @@ namespace otb
  *
  * \sa ImageToProfileFilter
  * \sa itk::OpeningByReconstructionImageFilter
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
 class ITK_EXPORT MorphologicalOpeningProfileFilter

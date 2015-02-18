@@ -56,6 +56,8 @@ namespace Functor
 *  why it is necessary to call a specific method for \code IterationThreshold \endcode intialization.
 *
 *  \sa SOM
+ *
+ * \ingroup OTBSOM
 */
 
 class CzihoSOMLearningBehaviorFunctor

@@ -26,6 +26,8 @@ namespace otb
  * \class ImageMultiSegmentationToRCC8GraphFilter
  * \brief This class takes a list of labelled segmentation images
  * and build the RCC8 graph of the set of regions it represents.
+ *
+ * \ingroup OTBRCC8
  */
 template <class TInputImage, class TOutputGraph>
 class ITK_EXPORT ImageMultiSegmentationToRCC8GraphFilter

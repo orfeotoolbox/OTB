@@ -37,6 +37,8 @@ namespace Functor
  *  SSD (Sum of Square Distances) block-matching. The functor is
  *  templated by the type of inputs images and output metric image,
  *  and is using two neighborhood iterators as inputs.
+ *
+ * \ingroup OTBStereo
  */
 template <class TInputImage, class TOutputMetricImage>
 ITK_EXPORT class SSDBlockMatching
@@ -69,6 +71,8 @@ public:
  *  SSD (Sum of Square Distances) block-matching. The functor is
  *  templated by the type of inputs images and output metric image,
  *  and is using two neighborhood iterators as inputs.
+ *
+ * \ingroup OTBStereo
  */
 template <class TInputImage, class TOutputMetricImage>
 ITK_EXPORT class SSDDivMeanBlockMatching
@@ -112,6 +116,8 @@ public:
  *  NCC (Normalized Cross-Correlation) block-matching. The functor is
  *  templated by the type of inputs images and output metric image,
  *  and is using two neighborhood iterators as inputs.
+ *
+ * \ingroup OTBStereo
  */
 template <class TInputImage, class TOutputMetricImage>
 ITK_EXPORT class NCCBlockMatching
@@ -180,6 +186,8 @@ public:
  *  two windows based on the L^p pseudo norm (p greater than 0). The functor is
  *  templated by the type of inputs images and output metric image,
  *  and is using two neighborhood iterators as inputs.
+ *
+ * \ingroup OTBStereo
  */
 template <class TInputImage, class TOutputMetricImage>
 ITK_EXPORT class LPBlockMatching
@@ -280,6 +288,8 @@ private:
  *  \ingroup Streamed
  *  \ingroup Threaded
  *
+ *
+ * \ingroup OTBStereo
  */
 
 template <class TInputImage, class TOutputMetricImage, class TOutputDisparityImage = TOutputMetricImage, class TMaskImage = otb::Image<unsigned char>,

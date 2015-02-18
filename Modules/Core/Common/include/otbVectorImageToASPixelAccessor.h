@@ -36,6 +36,8 @@ namespace Accessor
  * \sa ImageAdaptor
  * \ingroup ImageAdaptors
  *
+ *
+ * \ingroup OTBCommon
  */
 
 template <class T>

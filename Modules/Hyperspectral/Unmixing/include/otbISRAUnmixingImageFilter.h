@@ -32,6 +32,8 @@ namespace Functor {
  *
  * \brief TODO
  *
+ *
+ * \ingroup OTBUnmixing
  */
 template<class TInput, class TOutput, class TPrecision>
 class ISRAUnmixingFunctor
@@ -110,6 +112,8 @@ private:
  * \ingroup Hyperspectral
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBUnmixing
  */
 template <class TInputImage, class TOutputImage, class TPrecision>
 class ITK_EXPORT ISRAUnmixingImageFilter :

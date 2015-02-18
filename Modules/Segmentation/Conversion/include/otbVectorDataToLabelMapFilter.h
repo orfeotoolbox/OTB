@@ -47,6 +47,8 @@ namespace otb
  * The final object labels start with 1 and are consecutive (depraced +10).
  *
  * \sa LabelMapSource
+ *
+ * \ingroup OTBConversion
  */
 
 template <class TVectorData, class TLabelMap>

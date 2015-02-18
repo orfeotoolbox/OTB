@@ -41,6 +41,8 @@ namespace otb
  * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
  *
  * \ingroup Markov
+ *
+ * \ingroup OTBMarkov
  */
 
 class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer

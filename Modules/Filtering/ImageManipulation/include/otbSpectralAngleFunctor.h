@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class SpectralAngleFunctor
  *  \brief This functor computes the spectral angle according to a reference pixel.
+ *
+ * \ingroup OTBImageManipulation
  */
 namespace Functor
 {

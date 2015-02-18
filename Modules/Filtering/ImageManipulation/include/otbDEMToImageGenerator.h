@@ -41,6 +41,8 @@ namespace otb
  *
  * \example IO/DEMToImageGenerator.cxx
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TDEMImage>
 class ITK_EXPORT DEMToImageGenerator :

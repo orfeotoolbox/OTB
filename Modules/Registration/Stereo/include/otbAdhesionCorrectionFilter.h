@@ -56,6 +56,8 @@ namespace otb
  *
  * See Publications : N. Sabater, J.M. Morel, A. Almansa and G. Blanchet, "Discarding moving objects in quasi-simultaneous stereovision", in IEEE International Conference on Image Processing, ICIP'10, 2010.
  *                   N. Sabater, J.M. Morel and A. Almansa, "Sub-pixel stereo matching", in IEEE International Geoscience and Remote Sensing Symposium, IGARSS'10, 2010.
+ *
+ * \ingroup OTBStereo
  */
 
 

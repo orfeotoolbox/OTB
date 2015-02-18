@@ -71,6 +71,8 @@ namespace otb
  * the Matlab code using Octave.
  *
  * \ingroup Streamed, Multithreaded
+ *
+ * \ingroup OTBChangeDetection
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MultivariateAlterationDetectorImageFilter

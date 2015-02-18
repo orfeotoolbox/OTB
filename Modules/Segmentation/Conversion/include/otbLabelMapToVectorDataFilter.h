@@ -47,6 +47,8 @@ namespace otb {
    *
    * \sa VectorDataSource
  * \ingroup GeoSpatialAnalysis
+ *
+ * \ingroup OTBConversion
  */
 template<class TLabelMap, class TVectorData,
          class TFieldsFunctor = Functor::LabelObjectFieldsFunctor<typename TLabelMap::LabelObjectType> >

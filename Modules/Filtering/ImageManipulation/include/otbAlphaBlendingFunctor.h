@@ -34,6 +34,8 @@ namespace Functor
  * \f$ \alpha_{pix} \f$ is retrieved from the second pixel RGBA
  * \f$ \alpha_{glo} \f$ is provided by the SetAlpha() method (1.0 by default)
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 
 template<class TInputPixel1, class TInputPixel2, class TOutputPixel>

@@ -34,6 +34,8 @@ namespace otb
  * This class is templated over the input image and the output image.
  *
  * \ingroup ImageFilters
+ *
+ * \ingroup OTBMoments
  */
 
 

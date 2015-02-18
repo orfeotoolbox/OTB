@@ -46,6 +46,8 @@ namespace otb
  *
  * \example Fusion/PanSharpeningExample.cxx
  *
+ *
+ * \ingroup OTBPanSharpening
  **/
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision = float>
@@ -111,6 +113,8 @@ private:
    * This functor applies the
    *  \f[ \frac{XS}{\mathrm{Filtered}(PAN)}PAN  \f]
    * operation. It is intended for internal use only.
+ *
+ * \ingroup OTBPanSharpening
    */
   class FusionFunctor
   {

@@ -30,6 +30,8 @@ namespace otb
  * not available, i.e. the compilation should pass, the runtime should
  * not segfault but of course, the behavior will be different.
  *
+ *
+ * \ingroup OTBCurlAdapters
  */
 class ITK_EXPORT CurlHelper : public CurlHelperInterface
 {

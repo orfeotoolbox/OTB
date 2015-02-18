@@ -30,6 +30,8 @@ namespace Functor
  *  Used by the RemoveIsolatedByDirectionFilter.
  *  \sa RemoveIsolatedByDirectionFilter
  *  \ingroup Functor
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TInput1, class TInput2, class TOutput>
 class RemoveIsolatedByDirectionFunctor
@@ -71,6 +73,8 @@ public:
  *
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TInputModulus, class TInputDirection, class TOutputImage>
 class ITK_EXPORT RemoveIsolatedByDirectionFilter

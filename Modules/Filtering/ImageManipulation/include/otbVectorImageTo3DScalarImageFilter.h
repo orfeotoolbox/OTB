@@ -34,6 +34,8 @@ namespace otb
  *
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT VectorImageTo3DScalarImageFilter

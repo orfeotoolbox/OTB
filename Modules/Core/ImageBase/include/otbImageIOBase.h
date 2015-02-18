@@ -53,6 +53,8 @@ namespace otb
  *
  * \ingroup IOFilters
  *
+ *
+ * \ingroup OTBImageBase
  */
 class ITK_EXPORT ImageIOBase : public itk::LightProcessObject
 {
@@ -76,6 +78,8 @@ public:
   /**
    * \class UnknownType
    * Used to return information when types are unknown.
+ *
+ * \ingroup OTBImageBase
    */
   class UnknownType {};
 

@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class SVMMachineLearningModelFactory
  * \brief Creation d'un instance d'un objet SVMMachineLearningModel utilisant les object factory.
+ *
+ * \ingroup OTBOpenCVAdapters
  */
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT SVMMachineLearningModelFactory : public itk::ObjectFactoryBase

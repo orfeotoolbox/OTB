@@ -29,6 +29,8 @@ namespace otb
  *
  * \sa ComplexToPhaseImageFilter ComplexToModulusImageFilter
  * \ingroup IntensityImageFilters  Multithreaded
+ *
+ * \ingroup OTBCommon
  */
 
 namespace Function {

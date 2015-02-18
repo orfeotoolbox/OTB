@@ -51,6 +51,8 @@ namespace ogr
  * order to ensure the temporary vector of <tt>char*</tt> survives the call of
  * \c to_ogr(). Even when used as suggested by the example above, the vector
  * survives till the <tt>; </tt> at the end of the instruction.
+ *
+ * \ingroup OTBGdalAdapters
  */
 struct StringListConverter
 {

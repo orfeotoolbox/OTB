@@ -30,6 +30,8 @@ namespace otb
  * \class PolygonListToRCC8GraphFilter
  * \brief This class computes an RCC8 graph from a set of polygons.
  * \sa ImageMultiSegmentationToRCC8GraphFilter
+ *
+ * \ingroup OTBRCC8
  */
 template <class TPolygonList, class TOutputGraph>
 class ITK_EXPORT PolygonListToRCC8GraphFilter

@@ -45,6 +45,8 @@ namespace otb
   * \ingroup VectorDataFilter
   * \sa VectorDataToSpecificDescriptionFilterBase
   * \sa VectorDataToBuildingDescriptionFilter
+ *
+ * \ingroup OTBRoadExtraction
  */
 
 template <class TVectorData, class TOpticalImage>

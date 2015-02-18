@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class VectorDataIOFactory
  * \brief Create instances of VectorDataIO objects using an object factory.
+ *
+ * \ingroup OTBVectorDataIO
  */
 class ITK_EXPORT VectorDataIOFactory : public itk::Object
 {

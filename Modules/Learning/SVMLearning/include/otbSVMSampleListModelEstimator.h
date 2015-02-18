@@ -34,6 +34,8 @@ namespace Functor
 *
 *   \sa Vector
 *   \sa FixedArray
+ *
+ * \ingroup OTBSVMLearning
 */
 template <class TVector>
 class VectorToMeasurementVectorFunctor
@@ -58,6 +60,8 @@ public:
 *   \brief Helper class to convert itk::VariableLengthVector samples to internal
 *   training vector type.
 *   \sa VariableLengthVector
+ *
+ * \ingroup OTBSVMLearning
 */
 template <class TVector>
 class VariableLengthVectorToMeasurementVectorFunctor
@@ -104,6 +108,8 @@ public:
  * \sa ImageClassificationFilter
  *
  * \ingroup ClassificationFilters
+ *
+ * \ingroup OTBSVMLearning
  */
 template <class TInputSampleList,
     class TTrainingSampleList, class TMeasurementFunctor =

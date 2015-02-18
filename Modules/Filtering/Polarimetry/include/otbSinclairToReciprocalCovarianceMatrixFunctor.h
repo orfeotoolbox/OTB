@@ -52,6 +52,8 @@ namespace Functor
  *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
  *  \sa SinclairToReciprocalCoherencyeMatrixFunctor
  *
+ *
+ * \ingroup OTBPolarimetry
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
 class SinclairToReciprocalCovarianceMatrixFunctor

@@ -27,6 +27,8 @@ namespace Functor
 /** \class DistanceComparisonFunctor
  *  \brief This functor is used in nearest neighborhood sorting.
  *  \ingroup DisparityMap
+ *
+ * \ingroup OTBDisplacementField
  */
 class DistanceComparisonFunctor
 {
@@ -58,6 +60,8 @@ private:
  *  \sa DisparityMapEstimationMethod
  *   \sa itk::WarpImageFilter
    *  \ingroup DisparityMap
+ *
+ * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
 class ITK_EXPORT PointSetToDisplacementFieldGenerator

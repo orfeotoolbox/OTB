@@ -38,6 +38,8 @@ namespace Statistics
  * N/A
  *
  * \sa ModelComponentBase, SEMClassifier
+ *
+ * \ingroup OTBLearningBase
  */
 
 template<class TSample>

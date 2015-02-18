@@ -38,6 +38,8 @@ namespace otb
   * \ingroup Functions
   * \sa DataNodeImageFunction
   * \sa DataNodeVectorDataFunction
+ *
+ * \ingroup OTBVectorDataBase
  */
 
 template <class TDataNode, class TOutput>

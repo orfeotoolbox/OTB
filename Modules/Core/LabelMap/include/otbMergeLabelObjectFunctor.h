@@ -38,6 +38,8 @@ namespace Functor
  * resulting label object will have more than one connected component.
  *
  * This functor is thread safe.
+ *
+ * \ingroup OTBLabelMap
  */
 template <class TLabelObject >
 class MergeLabelObjectFunctor

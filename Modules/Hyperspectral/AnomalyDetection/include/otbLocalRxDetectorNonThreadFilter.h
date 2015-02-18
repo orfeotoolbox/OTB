@@ -34,6 +34,8 @@ namespace otb
  *
  *
  * \ingroup ImageFilters
+ *
+ * \ingroup OTBAnomalyDetection
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LocalRxDetectorNonThreadFilter:

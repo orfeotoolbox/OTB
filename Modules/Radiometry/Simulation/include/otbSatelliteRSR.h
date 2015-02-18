@@ -39,6 +39,8 @@ namespace otb
 
  * \sa SpectralResponse
  * \sa itk::DataObject
+ *
+ * \ingroup OTBSimulation
  */
 template<class TPrecision = double, class TValuePrecision = double>
 class SatelliteRSR: public itk::DataObject

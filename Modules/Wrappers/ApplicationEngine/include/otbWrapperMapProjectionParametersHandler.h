@@ -42,6 +42,8 @@ enum
  *
  * This class allow creating a Group with several mapProjection
  * parameters
+ *
+ * \ingroup OTBApplicationEngine
  */
 class MapProjectionParametersHandler
 {

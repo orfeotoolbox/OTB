@@ -36,6 +36,8 @@ namespace otb
  * \sa PolarimetricSynthesisFilter
  * \sa PolarimetricSynthesisFunctor
  *
+ *
+ * \ingroup OTBPolarimetry
  */
 
 template <class TInputImage, class TOutputImage,

@@ -55,6 +55,8 @@ namespace otb
 * features. Systems, Signals and Image Processing, 2008. IWSSIP 2008. 15th
 * International Conference on , vol., no., pp.141,144, 25-28 June 2008
 * doi: 10.1109/IWSSIP.2008.4604387
+ *
+ * \ingroup OTBTextures
 */
 
 template <class TPixel>

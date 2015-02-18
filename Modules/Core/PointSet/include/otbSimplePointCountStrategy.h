@@ -32,6 +32,8 @@ namespace otb
  * The filter will walk over all the pixels in the input image, and for
  * each one of them it will do the following:
 
+ *
+ * \ingroup OTBPointSet
  */
 
 template<class TPointSet, class TRadiusType, class TIndexType>

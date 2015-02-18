@@ -37,6 +37,8 @@ namespace otb
  *  a VariableLengthVector.
  *
  *  \ingroup ImageFunction
+ *
+ * \ingroup OTBImageBase
  */
 template <class TOutputPrecision = double, class TCoordRep = double>
 class ITK_EXPORT MetaImageFunction

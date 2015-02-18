@@ -36,6 +36,8 @@ namespace otb
    * N/A
    *
    * \sa ModelComponentBase, GaussianModelComponent
+ *
+ * \ingroup OTBLearningBase
  */
 template<class TInputImage, class TOutputImage>
 class ITK_EXPORT SEMClassifier

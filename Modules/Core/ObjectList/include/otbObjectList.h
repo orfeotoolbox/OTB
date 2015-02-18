@@ -29,6 +29,8 @@ namespace otb
  *
  * ObjectList stores SmartPointer to ObjectType in a std::vector data structure. It provides the same
  * methods and iterators interfaces.
+ *
+ * \ingroup OTBObjectList
  */
 template <class TObject>
 class ITK_EXPORT ObjectList : public itk::DataObject
@@ -137,6 +139,8 @@ public:
 
   /** \class Iterator
    *  \brief Iterator of the object list.
+ *
+ * \ingroup OTBObjectList
    */
   class ITK_EXPORT Iterator
   {
@@ -244,6 +248,8 @@ private:
   };
   /** \class ConstIterator
    *  \brief ConstIterator of the object list.
+ *
+ * \ingroup OTBObjectList
    */
   class ITK_EXPORT ConstIterator
   {
@@ -334,6 +340,8 @@ private:
   };
   /** \class ReverseIterator
    *  \brief ReverseIterator of the object list.
+ *
+ * \ingroup OTBObjectList
    */
   class ITK_EXPORT ReverseIterator
   {
@@ -426,6 +434,8 @@ private:
   };
   /** \class ReverseConstIterator
    *  \brief ReverseConstIterator of the object list.
+ *
+ * \ingroup OTBObjectList
    */
   class ITK_EXPORT ReverseConstIterator
   {

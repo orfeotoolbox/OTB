@@ -38,6 +38,8 @@ namespace otb
  *  an histogram from a list of path. Internally it creates a List that is feed into
  *  the ListSampleToHistogramGenerator.
  *
+ *
+ * \ingroup OTBPath
  */
 
 template<class TPath, class TFunction>

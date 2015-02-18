@@ -30,6 +30,8 @@ namespace Wrapper
 
 /** \class QtWidgetOutputFilenameParameter
  * \brief
+ *
+ * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtWidgetOutputFilenameParameter : public QtWidgetParameterBase
 {

@@ -67,6 +67,8 @@ namespace otb
  * \sa RemoveTortuousPathListFilter
  * \sa LinkPathListFilter
  * \sa LikelihoodPathListFilter
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT GenericRoadExtractionFilter

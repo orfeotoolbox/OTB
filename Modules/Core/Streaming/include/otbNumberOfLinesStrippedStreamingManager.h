@@ -33,6 +33,8 @@ namespace otb
  *
  * \sa ImageFileWriter
  * \sa StreamingImageVirtualFileWriter
+ *
+ * \ingroup OTBStreaming
  */
 template<class TImage>
 class ITK_EXPORT NumberOfLinesStrippedStreamingManager : public StreamingManager<TImage>

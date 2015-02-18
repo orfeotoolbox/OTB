@@ -31,6 +31,8 @@ namespace otb
  *  Input masses can be added by using the PushBackInput() method.
  *
  *  \sa MassOfBelief
+ *
+ * \ingroup OTBDempsterShafer
  */
 template <class TMassFunction>
 class ITK_EXPORT JointMassOfBeliefFilter : public itk::ProcessObject

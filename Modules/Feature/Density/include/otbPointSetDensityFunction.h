@@ -29,6 +29,8 @@ namespace otb
  *
  *
  * \ingroup PointSetFunctions
+ *
+ * \ingroup OTBDensity
  */
 template <class TPointSet, class TOutput>
 class ITK_EXPORT PointSetDensityFunction : public PointSetFunction<TPointSet, TOutput>

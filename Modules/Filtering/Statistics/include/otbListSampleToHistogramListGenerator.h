@@ -37,6 +37,8 @@ namespace otb {
  *  single joint-histogram. The output is a Histogram list (\sa
  *  ObjectList).
  * \sa ListSampleToVariableDimensionHistogram
+ *
+ * \ingroup OTBStatistics
  */
 template<class TListSample,
     class THistogramMeasurement,

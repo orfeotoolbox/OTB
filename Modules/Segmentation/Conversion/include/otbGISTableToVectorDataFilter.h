@@ -35,6 +35,8 @@ namespace otb {
  *
  * \sa VectorDataSource
  * \ingroup Common, GeospatialAnalysis
+ *
+ * \ingroup OTBConversion
  */
 template<class TGISTable, class TVectorData>
 class ITK_EXPORT GISTableToVectorDataFilter :

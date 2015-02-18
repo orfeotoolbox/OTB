@@ -46,6 +46,8 @@ namespace otb
  * \ingroup Multithreaded
  * \ingroup MathematicalStatisticsImageFilters
  *
+ *
+ * \ingroup OTBStatistics
  */
 template<class TInputImage, class TPrecision >
 class ITK_EXPORT PersistentStreamingStatisticsVectorImageFilter :
@@ -263,6 +265,8 @@ private:
  * \ingroup Streamed
  * \ingroup Multithreaded
  * \ingroup MathematicalStatisticsImageFilters
+ *
+ * \ingroup OTBStatistics
  */
 
 template<class TInputImage, class TPrecision = typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType>

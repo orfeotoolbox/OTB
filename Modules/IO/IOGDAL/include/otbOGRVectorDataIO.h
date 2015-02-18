@@ -36,6 +36,8 @@ namespace otb
  * handle Esri Shapefile (shp), MapInfo (map) and Geography Markup Language (GML)
  * and possibly other OGR formats.
  *
+ *
+ * \ingroup OTBIOGDAL
  */
 class ITK_EXPORT OGRVectorDataIO
   : public VectorDataIOBase

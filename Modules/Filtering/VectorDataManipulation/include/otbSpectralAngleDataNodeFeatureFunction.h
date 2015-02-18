@@ -43,6 +43,8 @@ namespace otb
   * \ingroup Functions
   * \sa DataNodeImageFunction
   * \sa NDVIDataNodeFeatureFunction
+ *
+ * \ingroup OTBVectorDataManipulation
   */
 
 template <

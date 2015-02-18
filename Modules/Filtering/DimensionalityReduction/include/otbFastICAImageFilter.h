@@ -31,6 +31,8 @@ namespace otb
  * The estimation of the covariance matrix has persistent capabilities...
  *
  * \sa PCAImageFilter
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage, Transform::TransformDirection TDirectionOfTransformation >
 class ITK_EXPORT FastICAImageFilter

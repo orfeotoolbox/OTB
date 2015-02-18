@@ -66,6 +66,8 @@ namespace otb
   * \ingroup VectorDataFilter
   * \sa VectorDataToRoadDescriptionFilter
   * \sa VectorDataToBuildingDescriptionFilter
+ *
+ * \ingroup OTBDempsterShafer
  */
 
 template <class TVectorData, class TPrecision=float>

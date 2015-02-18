@@ -43,6 +43,8 @@ enum TileMapAdressingStyle {GM = 0, OSM = 1, NEARMAP = 2, LOCAL = 3};
    * \brief ImageIO object for reading and writing TileMap images
    *
    *
+ *
+ * \ingroup OTBIOTileMap
  */
 class ITK_EXPORT TileMapImageIO : public otb::ImageIOBase
 {

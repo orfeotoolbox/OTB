@@ -46,6 +46,8 @@ namespace otb
    *
    * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
    *
+ *
+ * \ingroup OTBRoadExtraction
  */
 
 //   template <class TPath>

@@ -31,6 +31,8 @@ namespace otb
  *  \brief This composite filter computes the density of the edges around a pixel.
  *
  *
+ *
+ * \ingroup OTBEdge
  */
 
 template <class TInputImage, class TOutputImage, class TEdgeDetector, class TDensityCount>

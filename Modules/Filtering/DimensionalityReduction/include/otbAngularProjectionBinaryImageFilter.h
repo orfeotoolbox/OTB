@@ -30,6 +30,8 @@ namespace otb {
  * This class performs the projections of the 2 input images to a set of N
  * output images according to N angular values
  *
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template < class TInputImage, class TOutputImage, class TPrecision >
 class ITK_EXPORT AngularProjectionBinaryImageFilter

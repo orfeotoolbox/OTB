@@ -37,6 +37,8 @@ namespace otb
 * and \f$ L \f$ the perimeter (obtained by the method GetLength() ).
  *
  *  \ingroup Functor
+ *
+ * \ingroup OTBVectorDataManipulation
  */
 template <class TInput1>
 class PolygonCompacityFunctor

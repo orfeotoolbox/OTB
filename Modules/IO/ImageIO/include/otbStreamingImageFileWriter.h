@@ -33,6 +33,8 @@ namespace otb
  *  alias of this class.
  *
  *  \sa ImageFileWriter
+ *
+ * \ingroup OTBImageIO
  */
 template <class TInputImage> class ITK_EXPORT StreamingImageFileWriter : public ImageFileWriter<TInputImage>
 {

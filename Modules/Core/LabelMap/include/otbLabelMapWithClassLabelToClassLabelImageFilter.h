@@ -25,6 +25,8 @@ namespace otb {
 /** \class LabelMapWithClassLabelToClassLabelImageFilter
  * \brief Converts a LabelMap<LabelObjectWithClassLabel> to an image
  *        of class labels
+ *
+ * \ingroup OTBLabelMap
  */
 template<class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelMapWithClassLabelToClassLabelImageFilter :

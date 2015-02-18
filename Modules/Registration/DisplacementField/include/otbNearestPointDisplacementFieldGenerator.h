@@ -27,6 +27,8 @@ namespace otb
  *  In each pixel location, the displacement is considered to be the displacement of the nearest seed point in the point set.
  *
  * \ingroup DisparityMap
+ *
+ * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
 class ITK_EXPORT NearestPointDisplacementFieldGenerator

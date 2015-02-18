@@ -33,6 +33,8 @@ namespace otb
    *
    * \sa itk::DataObject
    * \sa SimulationStep1Base
+ *
+ * \ingroup OTBSimulation
  */
 
 class ITK_EXPORT ProspectModel : public SimulationStep1Base

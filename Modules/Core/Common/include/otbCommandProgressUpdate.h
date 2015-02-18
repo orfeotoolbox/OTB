@@ -29,6 +29,8 @@ namespace otb
 * \class CommandProgressUpdate
 * \brief TODO
 *
+ *
+ * \ingroup OTBCommon
 */
 template <class TFilter>
 class CommandProgressUpdate : public itk::Command

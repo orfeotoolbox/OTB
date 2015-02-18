@@ -43,6 +43,8 @@ namespace otb {
  *
  * \sa GenericRSTransform
  * \ingroup Projection
+ *
+ * \ingroup OTBTransform
  **/
 
 template<class TImage>

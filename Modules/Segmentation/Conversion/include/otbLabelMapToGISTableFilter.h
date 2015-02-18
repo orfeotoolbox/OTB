@@ -44,6 +44,8 @@ namespace otb {
  *
  * \sa LabelMapToBinaryImageFilter, LabelMapMaskImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
+ *
+ * \ingroup OTBConversion
  */
 template<class TLabelMap, class TGISTable>
 class ITK_EXPORT LabelMapToGISTableFilter :

@@ -32,6 +32,8 @@ namespace otb
    * Input Reflectance and transmittance must be spectrum (otbSpectralResponse) from 400 nm to 2500 nm with step 1nm.
    * \sa itk::ProcessObject
    * \sa SimulationStep2Base
+ *
+ * \ingroup OTBSimulation
  */
 
 

@@ -33,6 +33,8 @@ namespace otb
  * The function has to inherit from itkImageFunction
  *
  * \ingroup ImageFilters
+ *
+ * \ingroup OTBSARCalibration
  */
 
 template <class TInputImage, class TOutputImage>

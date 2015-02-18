@@ -34,6 +34,8 @@ namespace otb {
  *
  * \sa ResampleImageFilter
  * \sa SubsampleImageRegionConstIterator
+ *
+ * \ingroup OTBCommon
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT DecimateImageFilter :

@@ -18,6 +18,8 @@ namespace otb
  * pixel in the other image.
  *
  * \ingroup IntensityImageFilters   Multithreaded
+ *
+ * \ingroup OTBTestKernel
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT DifferenceImageFilter :

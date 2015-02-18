@@ -36,6 +36,8 @@ namespace Functor
  *
  *  TInput and TOutput type are supposed to be of type itk::VariableLengthVector.
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 template<typename TInput, typename  TOutput>
 class VectorAffineTransform
@@ -202,6 +204,8 @@ private:
  *
  *  \ingroup IntensityImageFilters
  *  \ingroup MultiThreaded
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage = TInputImage>
 class ITK_EXPORT VectorRescaleIntensityImageFilter

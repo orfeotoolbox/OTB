@@ -64,6 +64,8 @@ namespace otb
  *
  * \sa      FastCorrelationImageFilter, DisparityMapEstimationMethod
  * \ingroup IntensityImageFilters, Streamed
+ *
+ * \ingroup OTBStereo
  */
 template <class TInputImage, class T0utputCorrelation, class TOutputDisplacementField>
 class ITK_EXPORT FineRegistrationImageFilter : public itk::ImageToImageFilter<TInputImage, T0utputCorrelation>

@@ -71,6 +71,8 @@ enum CellFusionMode {
  *  \ingroup Streamed
  *  \ingroup Threaded
  *
+ *
+ * \ingroup OTBStereo
  */
 template <class T3DImage =  otb::VectorImage<double,2>,
           class TMaskImage = otb::Image<unsigned char>, class TOutputDEMImage = otb::Image<double> >

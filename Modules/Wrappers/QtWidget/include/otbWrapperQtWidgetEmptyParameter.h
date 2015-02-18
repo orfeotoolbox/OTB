@@ -29,6 +29,8 @@ namespace Wrapper
 
 /** \class QtWidgetEmptyParameter
  * \brief
+ *
+ * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtWidgetEmptyParameter : public QtWidgetParameterBase
 {

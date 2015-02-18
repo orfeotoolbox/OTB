@@ -32,6 +32,8 @@ namespace otb
  * This filter is intended to work on AttributesMapLabelObject. The user chooses
  * the attributes to display for each channel. The output image is expected to be
  * a vector image.
+ *
+ * \ingroup OTBLabelMap
  */
 
 template< class TInputImage, class TOutputImage , class TAttributeAccessor=

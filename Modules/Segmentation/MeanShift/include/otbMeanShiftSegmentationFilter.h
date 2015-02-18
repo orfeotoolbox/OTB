@@ -78,6 +78,8 @@ private:
 *  merging filter.
 *  This filter relies on MeanShift Labeled image created from clustered filtered output of meanshift filter.
 *  Mode search algorithm is not performed on tiles boundaries. Thus output depends on Thread numbers.
+ *
+ * \ingroup OTBMeanShift
 */
 
 

@@ -30,6 +30,8 @@ namespace Statistics {
  * this filter does not allow different input/output SampleList.
  *
  * \sa ListSampleToListSampleFilter
+ *
+ * \ingroup OTBStatistics
  */
 template < class TSampleList >
 class ITK_EXPORT ConcatenateSampleListFilter :

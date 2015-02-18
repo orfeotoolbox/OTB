@@ -38,6 +38,8 @@ namespace otb
  * \sa Path
  *
  * \ingroup PathFunction
+ *
+ * \ingroup OTBPath
  */
 template <class TInputPath,
     class TOutput>

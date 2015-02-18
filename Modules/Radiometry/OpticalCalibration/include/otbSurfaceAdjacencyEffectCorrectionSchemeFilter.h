@@ -39,6 +39,8 @@ namespace Functor
 *
 *  \ingroup Functor
 * \ingroup Radiometry
+ *
+ * \ingroup OTBOpticalCalibration
 */
 template <class TNeighIter, class TOutput>
 class ComputeNeighborhoodContributionFunctor
@@ -132,6 +134,8 @@ private:
  *
  * \ingroup Radiometry
  *
+ *
+ * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT SurfaceAdjacencyEffectCorrectionSchemeFilter :

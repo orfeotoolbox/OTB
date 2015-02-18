@@ -40,6 +40,8 @@ namespace otb
  *  probability of water.
  *
  *  \sa SpectralAngleDistanceImageFilter
+ *
+ * \ingroup OTBIndices
  */
 
 template <class TInputVectorImage, class TOutputImage,

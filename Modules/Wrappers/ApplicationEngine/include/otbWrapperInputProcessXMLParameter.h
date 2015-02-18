@@ -1,7 +1,7 @@
 #ifndef __otbWrapperInputProcessXMLParameter_h
 #define __otbWrapperInputProcessXMLParameter_h
 #include "otbWrapperApplication.h"
-#include "otbTinyXML.h"
+#include "otb_tinyxml.h"
 #include <sstream>
 
 namespace otb
@@ -11,6 +11,8 @@ namespace Wrapper
 
 /** \class InputProcessXMLParameter
  *  \brief This class represent a xml filename parameter for the wrapper framework to load otb application.
+ *
+ * \ingroup OTBApplicationEngine
  */
 class ITK_ABI_EXPORT InputProcessXMLParameter
   : public Parameter

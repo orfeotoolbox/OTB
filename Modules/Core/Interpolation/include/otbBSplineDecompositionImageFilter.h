@@ -33,6 +33,8 @@ namespace otb
  * class.
  * \sa itk::BSplineDecompositionImageFilter
  * \ingroup ImageFilters
+ *
+ * \ingroup OTBInterpolation
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT BSplineDecompositionImageFilter :

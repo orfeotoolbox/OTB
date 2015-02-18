@@ -30,6 +30,8 @@ namespace Functor {
  *
  * \brief TODO
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 template<class TInput, class TOutput>
 class ConcatenateScalarValueFunctor
@@ -85,6 +87,8 @@ private:
  *
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ConcatenateScalarValueImageFilter :

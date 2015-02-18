@@ -44,6 +44,8 @@ namespace otb
  *
  * \sa SOM
  * \sa SOMActivationBuilder
+ *
+ * \ingroup OTBSOM
  */
 template <class TNeuron = itk::VariableLengthVector<double>,
           class TDistance = itk::Statistics::EuclideanDistanceMetric<TNeuron>,

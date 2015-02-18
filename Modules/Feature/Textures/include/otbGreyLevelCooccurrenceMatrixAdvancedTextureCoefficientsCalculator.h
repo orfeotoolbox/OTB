@@ -90,6 +90,8 @@ namespace otb {
  * \sa GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator
  * \sa ScalarImageTextureCalculator
  *
+ *
+ * \ingroup OTBTextures
  */
 
 template <typename THistogram>

@@ -39,6 +39,8 @@ namespace otb
  * \ingroup MultiScale
  * \sa MorphologicalPyramidAnalyseFilter
  * \sa MorphologicalPyramidResampler
+ *
+ * \ingroup OTBMorphologicalPyramid
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MorphologicalPyramidSynthesisFilter

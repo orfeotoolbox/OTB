@@ -43,6 +43,8 @@ namespace otb
  *  (using "Class" as a default key).
  *  The field is retrieved by GetFieldAsInt(), thus must be int-compatible
  *
+ *
+ * \ingroup OTBObjectDetection
  */
 template <class TVectorData>
 class ITK_EXPORT LabeledSampleLocalizationGenerator :

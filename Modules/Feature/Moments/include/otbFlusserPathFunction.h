@@ -54,6 +54,8 @@ namespace otb
  * coordinate representation type (e.g. float or double).
  *
  * \ingroup PathFunctions
+ *
+ * \ingroup OTBMoments
  */
 
 template <class TInputPath,

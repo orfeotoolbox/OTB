@@ -32,6 +32,8 @@ namespace otb
  * can create cross polygons !
  * \Note It is a non-streamed version.
  *  \ingroup OBIA
+ *
+ * \ingroup OTBConversion
  */
 
 template <class TInputImage, class TPrecision = double>

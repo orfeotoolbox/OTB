@@ -52,6 +52,8 @@ namespace Functor
  *
  * Please be aware that this functor is not thread-safe.
  *
+ *
+ * \ingroup OTBLabelMap
  */
 template <class TLabelObject, class TPolygon>
 class LabelObjectToPolygonFunctor

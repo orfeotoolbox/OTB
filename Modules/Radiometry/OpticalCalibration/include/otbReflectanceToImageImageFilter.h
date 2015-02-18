@@ -39,6 +39,8 @@ namespace Functor
    * \ingroup LuminanceToImageFunctor
    * \ingroup ReflectanceToLuminanceFunctor
    * \ingroup Radiometry
+ *
+ * \ingroup OTBOpticalCalibration
  */
 template <class TInput, class TOutput>
 class ReflectanceToImageImageFunctor
@@ -117,6 +119,8 @@ private:
  * \ingroup LuminanceToImageImageFilter
  * \ingroup ReflectanceToLuminanceImageFilter
  * \ingroup Radiometry
+ *
+ * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReflectanceToImageImageFilter :

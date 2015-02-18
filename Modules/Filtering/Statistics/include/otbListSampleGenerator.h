@@ -43,6 +43,8 @@ namespace otb
  *
  *  The input VectorData is supposed to be fully contained within the image extent
  *
+ *
+ * \ingroup OTBStatistics
  */
 template <class TImage, class TVectorData>
 class ITK_EXPORT ListSampleGenerator :

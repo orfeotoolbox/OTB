@@ -27,6 +27,8 @@ namespace otb
  * sufficient.
  * \sa itk::DisplacementFieldSource
  * \ingroup DisparityMap
+ *
+ * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
 class ITK_EXPORT BSplinesInterpolateDisplacementFieldGenerator

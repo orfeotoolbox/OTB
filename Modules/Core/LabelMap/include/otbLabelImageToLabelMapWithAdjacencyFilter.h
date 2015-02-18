@@ -30,6 +30,8 @@ namespace otb {
 /** \class LabelImageToLabelMapWithAdjacencyFilter
  * \brief convert a labeled image to a label map with adjacency information.
  *
+ *
+ * \ingroup OTBLabelMap
  */
 template<class TInputImage, class TOutputImage=otb::LabelMapWithAdjacency< itk::LabelObject< typename TInputImage::PixelType, TInputImage::ImageDimension > > >
 class ITK_EXPORT LabelImageToLabelMapWithAdjacencyFilter :

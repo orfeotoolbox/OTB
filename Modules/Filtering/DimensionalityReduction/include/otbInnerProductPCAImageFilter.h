@@ -56,6 +56,8 @@ namespace otb
  * the membership function objects and populates them.
  *
  * \sa itk::ImagePCAShapeModelEstimator
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT InnerProductPCAImageFilter

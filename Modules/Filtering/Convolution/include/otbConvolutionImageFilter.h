@@ -57,6 +57,8 @@ namespace otb
  * \ingroup IntensityImageFilters
  * \ingroup Streamed
  * \ingroup MultiThreaded
+ *
+ * \ingroup OTBConvolution
  */
 template <class TInputImage, class TOutputImage, class TBoundaryCondition =
       itk::ZeroFluxNeumannBoundaryCondition<TInputImage>,

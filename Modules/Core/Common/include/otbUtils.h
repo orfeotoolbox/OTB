@@ -28,6 +28,8 @@ namespace otb
  *
  * Some usefull utilities in use across the library
  *
+ *
+ * \ingroup OTBCommon
  */
 namespace Utils
 {

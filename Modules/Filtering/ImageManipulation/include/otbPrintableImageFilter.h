@@ -36,6 +36,8 @@ namespace Functor
  * \class MaskFunctor
  * \brief Output is a InputPixel if MaskPixel is m_Background and a
  * defined other value (m_ObjectColor) otherwise.
+ *
+ * \ingroup OTBImageManipulation
  */
 
 template<class TInputPixel, class TMaskPixel, class TOutputPixel>
@@ -111,6 +113,8 @@ protected:
  *  It is useful for publications for instance.
  *
  * \sa itkImageToImageFilter
+ *
+ * \ingroup OTBImageManipulation
  **/
 
 template <class TInputImage, class TMaskImage = otb::Image<unsigned char, 2> >

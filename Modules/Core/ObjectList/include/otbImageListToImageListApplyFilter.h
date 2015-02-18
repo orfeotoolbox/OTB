@@ -37,6 +37,8 @@ namespace otb
  *  output images and filter IO types.
  *
  * \ingroup Streamed
+ *
+ * \ingroup OTBObjectList
  */
 template <class TInputImageList, class TOutputImageList, class TFilter>
 class ITK_EXPORT ImageListToImageListApplyFilter

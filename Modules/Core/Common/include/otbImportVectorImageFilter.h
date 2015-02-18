@@ -36,6 +36,8 @@ namespace otb
  *
  * This class is templated over the output Image Type
  *
+ *
+ * \ingroup OTBCommon
  */
 
 template <typename TOutputImageType>

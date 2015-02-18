@@ -27,6 +27,8 @@ namespace otb
  * Implement the sleep operation from openthreads to remove Monteverdi
  * dependance to openthreads at compile time.
  *
+ *
+ * \ingroup OTBOpenThreadsAdapters
  */
 class Threads
 {

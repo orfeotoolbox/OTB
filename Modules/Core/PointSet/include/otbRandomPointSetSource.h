@@ -36,6 +36,8 @@ namespace otb
  * \code SetMinPoint \endcode and \code SetMaxPoint \endcode methods.
  *
  * \ingroup DataSources
+ *
+ * \ingroup OTBPointSet
  */
 
 template <class TOutputPointSet>

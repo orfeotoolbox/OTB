@@ -24,6 +24,8 @@ namespace otb
 {
 /** \class LUMImageIOFactory
  * \brief Creation d'un instance d'un objet LUMImageIO utilisant les object factory.
+ *
+ * \ingroup OTBIOLUM
  */
 class ITK_EXPORT LUMImageIOFactory : public itk::ObjectFactoryBase
 {

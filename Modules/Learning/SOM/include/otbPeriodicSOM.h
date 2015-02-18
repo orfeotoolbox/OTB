@@ -51,6 +51,8 @@ namespace otb
  * \sa SOMActivationBuilder
  * \sa CzihoSOMLearningBehaviorFunctor
  * \sa CzihoSOMNeighborhoodBehaviorFunctor
+ *
+ * \ingroup OTBSOM
  */
 template <class TListSample, class TMap,
     class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,

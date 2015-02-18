@@ -50,6 +50,8 @@ namespace otb
  *In order to avoid homogenous regions of a material, for each pixel in the region a noise is added to the reference sprectrum obtained from the spectrum simulator (see LabelMapToSimulatedImageFilter).
  *
  * \sa ImageSource
+ *
+ * \ingroup OTBSimulation
  */
 
 template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>

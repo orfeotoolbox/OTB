@@ -22,7 +22,7 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
-#include "ConfigFile.h"
+#include "otb_configfile.h"
 #include "itksys/FundamentalType.h"
 
 namespace otb
@@ -33,6 +33,8 @@ namespace otb
  *
  *  The path to the file can be set with environment variable OTB_CONFIG_FILE
  *
+ *
+ * \ingroup OTBCommon
 */
 
 class ConfigurationFile

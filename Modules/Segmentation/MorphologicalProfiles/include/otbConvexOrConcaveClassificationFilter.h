@@ -49,6 +49,8 @@ namespace Functor
  *  \end{array}\right.
  * \f]
  *
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template<class TInput, class TOutput>
 class ConvexOrConcaveDecisionRule
@@ -173,6 +175,8 @@ private:
  *
  * \sa GeodesicMorphologyDecompositionImageFilter
  * \sa GeodesicMorphologyLevelingFilter
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ConvexOrConcaveClassificationFilter

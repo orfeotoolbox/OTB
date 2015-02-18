@@ -35,6 +35,8 @@ namespace otb
  * See http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName
  *
  *  \sa ImageFileWriter
+ *
+ * \ingroup OTBExtendedFilename
  */
 
 class ITK_EXPORT ExtendedFilenameToWriterOptions : public itk::Object

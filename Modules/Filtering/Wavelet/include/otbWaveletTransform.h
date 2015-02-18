@@ -48,6 +48,8 @@ namespace otb {
  * \sa WaveletFilterBank
  * \sa WaveletPacketTransform
  *
+ *
+ * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TFilter,
     Wavelet::WaveletDirection TDirectionOfTransformation>
@@ -98,6 +100,8 @@ private:
  * \sa WaveletFilterBank
  * \sa WaveletPacketTransform
  *
+ *
+ * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TFilter>
 class ITK_EXPORT WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD>
@@ -222,6 +226,8 @@ private:
  * \sa WaveletFilterBank
  * \sa WaveletPacketTransform
  *
+ *
+ * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TFilter>
 class ITK_EXPORT WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE>

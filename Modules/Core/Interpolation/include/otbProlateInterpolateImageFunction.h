@@ -34,6 +34,8 @@ namespace Function
  * \brief Prolate function give the value of the prolate profile following
  * one of the 2 image dimension.
  *
+ *
+ * \ingroup OTBInterpolation
  */
 template<class TInput, class TOutput>
 class ProlateFunction
@@ -252,6 +254,8 @@ private:
  * The Initialize() method need to be call to create the filter.
  *
  * \ingroup ImageFunctions ImageInterpolators
+ *
+ * \ingroup OTBInterpolation
  */
 template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
       double, class TInputInterpolator = double, class TOutputInterpolator = double>

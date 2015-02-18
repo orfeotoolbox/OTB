@@ -34,6 +34,8 @@ namespace otb
  * of data.
  *
  * \ingroup DataSources
+ *
+ * \ingroup OTBPointSet
  */
 
 template <class TOutputPointSet>

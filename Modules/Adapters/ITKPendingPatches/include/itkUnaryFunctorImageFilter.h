@@ -43,6 +43,8 @@ namespace itk
  * \wiki
  * \wikiexample{ImageProcessing/UnaryFunctorImageFilter,Apply a custom operation to each pixel in an image}
  * \endwiki
+ *
+ * \ingroup OTBITKPendingPatches
  */
 template< class TInputImage, class TOutputImage, class TFunction >
 class ITK_EXPORT UnaryFunctorImageFilter:public InPlaceImageFilter< TInputImage, TOutputImage >

@@ -29,6 +29,8 @@ namespace Wrapper
 
 /**
  * \class Group
+ *
+ * \ingroup OTBApplicationEngine
  */
 class ITK_ABI_EXPORT ParameterGroup
   : public Parameter

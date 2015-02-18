@@ -118,6 +118,8 @@ namespace otb
  *  \delta\cdot\1_{1J}\end{array}\right]\enspace \f$.
  *
  * \ingroup ImageFilters
+ *
+ * \ingroup OTBUnmixing
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MDMDNMFImageFilter:

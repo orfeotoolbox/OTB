@@ -34,12 +34,16 @@ namespace otb
    \f[ \sigma(x, y)=\frac{xy}{1-x-y+2xy} \f] with \f$ x, y \in [0, 1] \f$.
  *
  *
+ *
+ * \ingroup OTBEdge
  */
 
 namespace Functor
 {
 /** \class AssociativeSymmetricalSum
  * \brief Functor used with the AssociativeSymmetricalSumImageFilter.
+ *
+ * \ingroup OTBEdge
  */
 template<class TInput1, class TInput2, class TOutput>
 class ITK_EXPORT AssociativeSymmetricalSum

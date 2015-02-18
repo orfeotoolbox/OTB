@@ -31,6 +31,8 @@ namespace otb
  *
  * \sa SOMMap
  * \sa SOM
+ *
+ * \ingroup OTBSOM
  */
 template <class TListSample, class TInputMap, class TOutputImage>
 class ITK_EXPORT SOMActivationBuilder

@@ -54,6 +54,8 @@ namespace otb
  * Note : the coordinates in the vector data are assumed to be physical coordinates.
  *
  * \sa LabelMapSource
+ *
+ * \ingroup OTBConversion
  */
 
 template <class TVectorData, class TLabelMap>

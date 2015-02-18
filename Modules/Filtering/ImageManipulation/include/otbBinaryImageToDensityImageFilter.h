@@ -27,6 +27,8 @@ namespace otb
 /** \class BinaryImageToDensityImageFilter
  *  \brief This class performs a streaming isotropic shrinking operation without smoothing.
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage, class TCountFunction>
 class ITK_EXPORT BinaryImageToDensityImageFilter

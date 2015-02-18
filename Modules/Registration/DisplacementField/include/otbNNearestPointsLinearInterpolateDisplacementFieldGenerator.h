@@ -25,6 +25,8 @@ namespace otb
 /** \class NNearestPointsLinearInterpolateDisplacementFieldGenerator
  *  \brief This class generate the displacement field by performing a linear interpolation of the displacement induced by the n nearest point.
  * \ingroup DisparityMap
+ *
+ * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
 class ITK_EXPORT NNearestPointsLinearInterpolateDisplacementFieldGenerator

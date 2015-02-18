@@ -44,6 +44,8 @@ namespace otb
  * \ingroup IntensityImageFilters
  * \ingroup Threading
  * \ingroup Streamed
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT SpectralAngleDistanceImageFilter

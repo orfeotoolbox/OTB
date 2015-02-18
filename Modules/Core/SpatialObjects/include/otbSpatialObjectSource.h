@@ -27,6 +27,8 @@ namespace otb
  * \class SpatialObjectSource
  * \brief Base class for filters producing a SpatialObject as output.
  * \ingroup DataSources
+ *
+ * \ingroup OTBSpatialObjects
  */
 template <class TSpatialObject>
 class ITK_EXPORT SpatialObjectSource

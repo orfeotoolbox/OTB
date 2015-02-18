@@ -25,6 +25,8 @@ namespace otb
 /** \class CloudDetectionFunctor
  *  \brief This functor first uses CloudEstimatorFunctor
  *  \brief And then binarise the image with two thresholds
+ *
+ * \ingroup OTBCloudDetection
  */
 namespace Functor
 {

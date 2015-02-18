@@ -31,6 +31,8 @@ namespace otb
  * \brief  (ex: Sail http://teledetection.ipgp.jussieu.fr/prosail/).
  *
  * \sa ProcessObject
+ *
+ * \ingroup OTBSimulation
  */
 
 

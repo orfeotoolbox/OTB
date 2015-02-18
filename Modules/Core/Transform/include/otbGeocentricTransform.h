@@ -27,6 +27,8 @@ namespace otb
  *
  * \brief Convert coordinates from geocentric (X, Y, Z) to geographic (lon, lat, h)
  *
+ *
+ * \ingroup OTBTransform
  */
 template <TransformDirection::TransformationDirection TDirectionOfMapping,
     class TScalarType = double,

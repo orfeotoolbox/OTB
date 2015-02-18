@@ -36,6 +36,8 @@ namespace otb
  *  FourierMellinDescriptorsImageFunction to an existing
  *  MetaImageFunction through the method Create.
  *
+ *
+ * \ingroup OTBObjectDetection
  */
 
 template <class TImageType, class TCoordRep = double, class TPrecision = double>

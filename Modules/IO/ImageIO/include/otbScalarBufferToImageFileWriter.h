@@ -31,6 +31,8 @@ namespace otb
  * TBufferType is the scalar buffer type, TOutputPixelType is the type in which the image will be recorded.
  * User have to precise the image size, the number of channel will be computed automatically.
  * The SetFilename method precises the image name.
+ *
+ * \ingroup OTBImageIO
  */
 
 template <class TBufferType, class TOutputPixelType=TBufferType>

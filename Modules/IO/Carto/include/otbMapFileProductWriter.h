@@ -59,6 +59,8 @@ namespace otb
  *
  * \ingroup IO
  *
+ *
+ * \ingroup OTBCarto
  */
 template <class TInputImage>
 class ITK_EXPORT MapFileProductWriter : public itk::ProcessObject

@@ -55,6 +55,8 @@ namespace itk
  * implements the same algorithm.
  *
  * \ingroup ITKDeprecated
+ *
+ * \ingroup OTBITKPendingPatches
  */
 
 template< unsigned int VImageDimension >

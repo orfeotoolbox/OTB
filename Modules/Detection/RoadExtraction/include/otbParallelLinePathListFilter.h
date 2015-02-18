@@ -45,6 +45,8 @@ namespace otb
  *
    * \ingroup PathFilters
  *
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TPath>
 class ITK_EXPORT ParallelLinePathListFilter

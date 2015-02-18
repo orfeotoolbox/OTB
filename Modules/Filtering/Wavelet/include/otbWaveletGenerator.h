@@ -55,6 +55,8 @@ enum Wavelet {
  * Wavelet::Wavelet type. The members throw an
  * exception if the template specialization is not defined
  * according to the wavelet ID.
+ *
+ * \ingroup OTBWavelet
  */
 template <Wavelet::Wavelet TMotherWaveletOperator>
 class ITK_EXPORT WaveletGenerator

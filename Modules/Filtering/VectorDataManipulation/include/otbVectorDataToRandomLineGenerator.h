@@ -38,6 +38,8 @@ namespace otb
  *  SetNumberOfOutputLine
  *
  *  \sa VectorDataSource
+ *
+ * \ingroup OTBVectorDataManipulation
  */
 template <class TVectorData>
 class ITK_EXPORT VectorDataToRandomLineGenerator :

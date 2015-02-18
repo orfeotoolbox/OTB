@@ -36,6 +36,8 @@ namespace otb
  * \Note It is a non-streamed version.
  * \ingroup OBIA
  *
+ *
+ * \ingroup OTBConversion
  */
 
 template <class TInputImage>

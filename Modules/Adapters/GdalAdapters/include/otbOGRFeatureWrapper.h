@@ -51,6 +51,8 @@ bool operator==(Feature const& lhs, Feature const& rhs);
  * se, as it may be null in some cases, for instance to define mark the \c
  * Layer::end() iterator.
  * \since OTB v 3.14.0
+ *
+ * \ingroup OTBGdalAdapters
  */
 class Feature
   {

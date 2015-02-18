@@ -26,6 +26,8 @@ namespace otb
 /** \class ImageListToRCC8GraphFilter
  * \brief Base class for filters taking an images list as input to
  * produce a RCC8 graph.
+ *
+ * \ingroup OTBRCC8
  */
 template <class TInputImage, class TOutputGraph>
 class ITK_EXPORT ImageListToRCC8GraphFilter

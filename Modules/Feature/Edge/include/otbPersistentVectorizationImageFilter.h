@@ -41,6 +41,8 @@ namespace otb
  *
  * \sa PersistentImageFilter
  *
+ *
+ * \ingroup OTBEdge
  */
 template<class TInputImage, class TOutputPath>
 class ITK_EXPORT PersistentVectorizationImageFilter :

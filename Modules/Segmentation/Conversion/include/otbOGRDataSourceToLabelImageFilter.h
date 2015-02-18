@@ -47,6 +47,8 @@ namespace otb {
  *    - Setting the Origin/Size/Spacing of the output image
  *    - Using an existing image as support via SetOutputParametersFromImage(ImageBase)
  *
+ *
+ * \ingroup OTBConversion
  */
 template < class TOutputImage >
 class  ITK_EXPORT OGRDataSourceToLabelImageFilter :

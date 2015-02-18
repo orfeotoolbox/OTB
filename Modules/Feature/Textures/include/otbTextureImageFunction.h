@@ -34,6 +34,8 @@ namespace otb
  *
  * \ingroup ImageFunctions
    * \ingroup Textures
+ *
+ * \ingroup OTBTextures
  */
 template <class TInputImage, class TFunctor, class TCoordRep = float>
 class ITK_EXPORT TextureImageFunction :

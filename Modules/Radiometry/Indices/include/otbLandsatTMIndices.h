@@ -56,6 +56,8 @@ enum ReflectanceType {Thousands, Normalized};
    *  are available for setting these units.
    *
    * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template<class TInput, class TOutput>
 class LandsatTMIndexBase
@@ -323,6 +325,8 @@ protected:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class LandsatTMIndex : public LandsatTMIndexBase<TInput, TOutput>
@@ -355,6 +359,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class Bright : public LandsatTMIndex<TInput, TOutput>
@@ -394,6 +400,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class Vis : public LandsatTMIndex<TInput, TOutput>
@@ -425,6 +433,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class NIR : public LandsatTMIndex<TInput, TOutput>
@@ -455,6 +465,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class MIR1 : public LandsatTMIndex<TInput, TOutput>
@@ -485,6 +497,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class MIR2 : public LandsatTMIndex<TInput, TOutput>
@@ -515,6 +529,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class TIR : public LandsatTMIndex<TInput, TOutput>
@@ -559,6 +575,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class MIRTIR : public LandsatTMIndex<TInput, TOutput>
@@ -597,6 +615,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class NDVI : public LandsatTMIndex<TInput, TOutput>
@@ -642,6 +662,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class NDBSI : public LandsatTMIndex<TInput, TOutput>
@@ -683,6 +705,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class BIO : public LandsatTMIndex<TInput, TOutput>
@@ -727,6 +751,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class NDSI : public LandsatTMIndex<TInput, TOutput>
@@ -782,6 +808,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class NDSIVis : public LandsatTMIndex<TInput, TOutput>
@@ -825,6 +853,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class NDBBBI : public LandsatTMIndex<TInput, TOutput>
@@ -868,6 +898,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput>
 class LinguisticVariables : public LandsatTMIndexBase<TInput, itk::FixedArray<unsigned int, 11> >
@@ -1015,6 +1047,8 @@ protected:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class KernelSpectralRule : public LandsatTMIndexBase<TInput, TOutput >
@@ -1114,6 +1148,8 @@ protected:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class ThickCloudsSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1170,6 +1206,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class ThinCloudsSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1229,6 +1267,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class SnowOrIceSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1286,6 +1326,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class WaterOrShadowSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1331,6 +1373,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class PitbogOrGreenhouseSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1387,6 +1431,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class DominantBlueSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1433,6 +1479,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class VegetationSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1491,6 +1539,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class RangelandSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1550,6 +1600,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class BarrenLandOrBuiltUpOrCloudsSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1606,6 +1658,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class FlatResponseBarrenLandOrBuiltUpSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1658,6 +1712,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class ShadowWithBarrenLandSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1703,6 +1759,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class ShadowWithVegetationSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1749,6 +1807,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class ShadowCloudOrSnowSpectralRule : public KernelSpectralRule<TInput, TOutput>
@@ -1802,6 +1862,8 @@ public:
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
 class WetlandSpectralRule : public KernelSpectralRule<TInput, TOutput>

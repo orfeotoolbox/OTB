@@ -46,6 +46,8 @@ namespace itk
  *
  * \sa ForwardFFTImageFilter
  * \ingroup ITKReview
+ *
+ * \ingroup OTBITKPendingPatches
  */
 template< class TImage >
 class FFTComplexToComplexImageFilter:

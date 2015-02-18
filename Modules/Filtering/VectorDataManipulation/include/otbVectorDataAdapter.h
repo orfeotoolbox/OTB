@@ -26,6 +26,8 @@ namespace otb
 /** \class VectorDataAdapter
   * \brief Helper class to convert the vector data to generic type
   *
+ *
+ * \ingroup OTBVectorDataManipulation
   */
 
 template <class TInputVectorData, class TOutputVectorData>

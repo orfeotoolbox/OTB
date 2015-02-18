@@ -56,6 +56,8 @@ namespace otb
  * the interval \f$ [0, 1] \f$.
  *
  *
+ *
+ * \ingroup OTBEdge
  */
 template <class TInputImage,
     class TOutputImage,

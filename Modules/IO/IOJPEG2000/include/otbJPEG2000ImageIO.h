@@ -37,6 +37,8 @@ class JPEG2000TileCache;
  *
  * \ingroup IOFilters
  *
+ *
+ * \ingroup OTBIOJPEG2000
  */
 class ITK_EXPORT JPEG2000ImageIO : public otb::ImageIOBase
 {

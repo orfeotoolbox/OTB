@@ -80,6 +80,8 @@ namespace otb
  *  element of the power-set, or directly for a set of elements of the
  *  power-set intersecting (resp. contained in) a given hypothesis.
  *
+ *
+ * \ingroup OTBDempsterShafer
  */
 template <class TLabel = unsigned short, class TMass = double>
 class ITK_EXPORT MassOfBelief : public itk::DataObject

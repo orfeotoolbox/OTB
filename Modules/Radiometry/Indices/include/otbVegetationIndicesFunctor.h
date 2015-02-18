@@ -39,6 +39,8 @@ namespace Functor
    *  the Evaluate() method.
    *
    * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template<class TInput1, class TInput2, class TOutput>
 class RAndNIRIndexBase
@@ -144,6 +146,8 @@ private:
  *  Subclasses should NOT overload operators, they must  re-implement
  *  the Evaluate() method.
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template<class TInput1, class TInput2, class TInput3, class TOutput>
 class RAndBAndNIRIndexBase
@@ -271,6 +275,8 @@ private:
  *  Subclasses should NOT overload operators, they must  re-implement
  *  the Evaluate() method.
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template<class TInput1, class TInput2, class TInput3, class TOutput>
 class RAndGAndNIRIndexBase
@@ -396,6 +402,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class NDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -434,6 +442,8 @@ protected:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class RVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -472,6 +482,8 @@ protected:
  *
  *  \ingroup Functor2
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class PVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -528,6 +540,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class SAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -580,6 +594,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class TSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -652,6 +668,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class WDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -697,6 +715,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 
 template <class TInput1, class TInput2, class TOutput>
@@ -771,6 +791,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class MSAVI2 : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -807,6 +829,8 @@ protected:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class GEMI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -859,6 +883,8 @@ protected:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
 class AVI : public RAndGAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
@@ -952,6 +978,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
 class ARVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
@@ -1004,6 +1032,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
 class TSARVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
@@ -1090,6 +1120,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
 class EVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
@@ -1175,6 +1207,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class IPVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -1212,6 +1246,8 @@ protected:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class TNDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -1262,6 +1298,8 @@ private:
  *  \ingroup Functor
  * \ingroup Radiometry
  * \ingroup VegetationIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class LAIFromNDVILogarithmic : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -1346,6 +1384,8 @@ private:
  *  \ingroup Functor
  * \ingroup Radiometry
  * \ingroup VegetationIndices
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class LAIFromReflectancesLinear : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -1410,6 +1450,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
   */
 
 

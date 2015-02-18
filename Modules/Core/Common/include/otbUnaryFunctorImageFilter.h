@@ -34,6 +34,8 @@ namespace otb
  * remains unchanged.
  *
  * \sa itk::UnaryFunctorImageFilter
+ *
+ * \ingroup OTBCommon
  */
 template <class TInputImage, class TOutputImage, class TFunction>
 class ITK_EXPORT UnaryFunctorImageFilter : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>

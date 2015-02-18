@@ -28,6 +28,8 @@ namespace Wrapper
 
 /** \class QtWidgetParameterLabel
  * \brief
+ *
+ * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtWidgetParameterLabel : public QWidget
 {

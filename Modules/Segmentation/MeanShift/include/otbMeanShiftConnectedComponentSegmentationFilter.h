@@ -45,6 +45,8 @@ namespace otb {
 *  - ConnectedComponentExpression : mathematical expression which connects two pixels
 *  - MinimumObjectSize : minimum object size kept after segmentation
 *
+ *
+ * \ingroup OTBMeanShift
 */
 
 

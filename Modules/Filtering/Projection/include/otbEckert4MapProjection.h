@@ -26,6 +26,8 @@ namespace otb
  *  \brief This class implements the Eckert4 map projection.
  *
  * It converts coordinates in longitude, latitude (WGS84) to Eckert4 map coordinates.
+ *
+ * \ingroup OTBProjection
  */
 template <TransformDirection::TransformationDirection TTransform>
 class ITK_EXPORT Eckert4MapProjection : public GenericMapProjection<TTransform>

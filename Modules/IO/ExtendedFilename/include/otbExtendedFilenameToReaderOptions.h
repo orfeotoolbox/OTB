@@ -34,6 +34,8 @@ namespace otb
  * - &skipgeom  : switch to skip the geometric informations
  *
  *  \sa ImageFileReader
+ *
+ * \ingroup OTBExtendedFilename
  */
 
 class ITK_EXPORT ExtendedFilenameToReaderOptions : public itk::Object

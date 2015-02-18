@@ -60,6 +60,8 @@ namespace otb
  * \ingroup Streamed
  * \ingroup Multithreaded
  * \ingroup Radiometry
+ *
+ * \ingroup OTBSARCalibration
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT TerraSarBrightnessImageFilter :

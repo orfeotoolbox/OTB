@@ -34,6 +34,8 @@ namespace otb
  * \sa AttributeLabelObject, AttributeOpeningLabelMapFilter
  *
  * \ingroup ImageEnhancement MathematicalMorphologyImageFilters
+ *
+ * \ingroup OTBLabelMap
  */
 template<class TImage >
 class ITK_EXPORT AttributesMapOpeningLabelMapFilter

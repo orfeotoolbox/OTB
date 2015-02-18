@@ -63,6 +63,8 @@ enum WaveletDirection {FORWARD = 0, INVERSE = 1};
  * \sa Neighborhood
  *
  * \ingroup Operators
+ *
+ * \ingroup OTBWavelet
  */
 template <Wavelet::Wavelet TMotherWaveletOperator,
     class TPixel, unsigned int VDimension,

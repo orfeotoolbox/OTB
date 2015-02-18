@@ -43,6 +43,8 @@ namespace otb
  * \class GeometriesToGeometriesFilter
  * Root abstract class for all geometries to geometries filters.
  * \since OTB v 3.14.0
+ *
+ * \ingroup OTBGdalAdapters
  */
 class ITK_EXPORT GeometriesToGeometriesFilter : public GeometriesSource
   {
@@ -239,6 +241,8 @@ private:
  * actual \c TransformationFunctor.
  * \since OTB v 3.14.0
  * \todo Add a specialization for \c ogr::Feature.
+ *
+ * \ingroup OTBGdalAdapters
  */
 template <class TransformationFunctor, class TransformedElementType, class FieldTransformationPolicy = FieldCopyTransformation>
 struct TransformationFunctorDispatcher
@@ -317,6 +321,8 @@ private:
  * what we need).
  * \since OTB v 3.14.0
  * \todo Find a better name
+ *
+ * \ingroup OTBGdalAdapters
  */
 template <class TransformationFunctor, class FieldTransformationPolicy = FieldCopyTransformation>
 class ITK_EXPORT DefaultGeometriesToGeometriesFilter

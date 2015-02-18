@@ -34,6 +34,8 @@ namespace otb
  * at each bound in case a security margin has to be kept.
  *
  * \sa ImageToImageRCC8Calculator
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage>
 class ITK_EXPORT BinaryImageMinimalBoundingRegionCalculator

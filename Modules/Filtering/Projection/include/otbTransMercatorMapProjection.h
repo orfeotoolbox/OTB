@@ -26,6 +26,8 @@ namespace otb
  *  \brief This class implements the TransMercator map projection.
  * It converts coordinates in longitude, latitude (WGS84) to TransMercator map coordinates.
  *
+ *
+ * \ingroup OTBProjection
  */
 template <TransformDirection::TransformationDirection TTransform>
 class ITK_EXPORT TransMercatorMapProjection : public GenericMapProjection<TTransform>

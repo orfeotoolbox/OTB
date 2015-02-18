@@ -30,6 +30,8 @@ namespace otb
  * \ingroup DataSources
  * \ingroup Images
  * \ingroup Lists
+ *
+ * \ingroup OTBObjectList
  */
 template <class TOutputImage>
 class ITK_EXPORT ImageListSource

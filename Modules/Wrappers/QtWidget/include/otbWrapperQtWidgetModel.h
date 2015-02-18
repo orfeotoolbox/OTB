@@ -75,6 +75,8 @@ private:
 
 /** \class QtWidgetModel
  * \brief
+ *
+ * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtWidgetModel : public QObject
 {

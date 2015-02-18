@@ -48,6 +48,8 @@ namespace otb
  * This Spectral response can be loaded from ASCII file (JPL spectral library Version 1.2)
  * http://speclib.jpl.nasa.gov.
  * \sa itk::DataObject
+ *
+ * \ingroup OTBSimulation
  */
 template<class TPrecision = double, class TValuePrecision = double>
 class SpectralResponse: public itk::DataObject

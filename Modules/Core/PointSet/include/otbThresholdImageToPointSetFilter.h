@@ -28,6 +28,8 @@ namespace otb
 /** \class ThresholdImageToPointSetFilter
  * \brief Produce a PointSet according to filtering conditions
  *
+ *
+ * \ingroup OTBPointSet
  */
 
 template <class TInputImage,

@@ -35,6 +35,8 @@ namespace Function
 *  \ingroup Visualization
 *
 * \sa AmplitudeFunctor PhaseFunctor
+ *
+ * \ingroup OTBCommon
 */
 template <class TInputPixel>
 class ChannelSelectorFunctor : public itk::Object

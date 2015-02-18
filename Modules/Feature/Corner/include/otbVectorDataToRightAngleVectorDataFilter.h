@@ -37,6 +37,8 @@ namespace otb
  *  firsts vertex of each line features as a segment.
  *
  *
+ *
+ * \ingroup OTBCorner
  */
 
 template <class TVectorData>

@@ -28,6 +28,8 @@ namespace otb
  *  \brief Helper to handle extended filenames.
  *
  *  \sa ImageFileReader
+ *
+ * \ingroup OTBExtendedFilename
  */
 
 class ITK_EXPORT ExtendedFilenameHelper : public itk::Object

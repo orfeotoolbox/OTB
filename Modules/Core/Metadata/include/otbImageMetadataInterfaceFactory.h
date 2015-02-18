@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class ImageMetadataInterfaceFactory
  * \brief Create instances of ImageMetadataInterfaceFactory objects using an object factory.
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT ImageMetadataInterfaceFactory : public itk::Object
 {

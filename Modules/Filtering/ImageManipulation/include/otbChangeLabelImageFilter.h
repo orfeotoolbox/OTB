@@ -33,6 +33,8 @@ namespace otb
  *
  * Adapt the itkChangeLabelImageFilter for multichannel images.
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 
 namespace Functor {

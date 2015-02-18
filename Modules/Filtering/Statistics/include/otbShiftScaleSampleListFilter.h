@@ -36,6 +36,8 @@ namespace Statistics {
  * Shifts and scales can be set via the SetShift() and SetScales() methods.
  *
  * \sa ListSampleToListSampleFilter
+ *
+ * \ingroup OTBStatistics
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
 class ITK_EXPORT ShiftScaleSampleListFilter :

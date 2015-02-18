@@ -25,6 +25,8 @@ namespace otb
 /** \class MollweidMapProjection
  *  \brief This class implements the Mollweid map projection.
  *  It converts coordinates in longitude, latitude (WGS84) to Mollweid map coordinates.
+ *
+ * \ingroup OTBProjection
  */
 template <TransformDirection::TransformationDirection TTransform>
 class ITK_EXPORT MollweidMapProjection : public GenericMapProjection<TTransform>

@@ -40,6 +40,8 @@ namespace otb
  *  ... dim0denomM ... dim1num0 ... dimDdenomM.
  *
  * \ingroup Transform
+ *
+ * \ingroup OTBProjection
  **/
 
 template <class TScalarType = double,

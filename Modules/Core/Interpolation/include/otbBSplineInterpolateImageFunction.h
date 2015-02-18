@@ -38,6 +38,8 @@ namespace otb
  * \sa otb::BSplineDecompositionImageFilter
  *
  * \ingroup ImageFunctions
+ *
+ * \ingroup OTBInterpolation
  */
 template <
     class TImageType,

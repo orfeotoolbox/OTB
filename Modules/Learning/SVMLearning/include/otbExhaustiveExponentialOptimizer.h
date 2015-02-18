@@ -38,6 +38,8 @@ namespace otb
  * the search space.
  *
  * \ingroup Numerics Optimizers
+ *
+ * \ingroup OTBSVMLearning
  */
 class ITK_EXPORT ExhaustiveExponentialOptimizer :
   public itk::SingleValuedNonLinearOptimizer

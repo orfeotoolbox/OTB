@@ -30,6 +30,8 @@ namespace ogr
  * \todo See how mix it with the \c otb::ogr::DataSource wrapper as it was
  * with \c VectorData.
  * \since OTB v 3.14.0
+ *
+ * \ingroup OTBGdalAdapters
  */
 template <typename TPrecision> class ImageReference
 {

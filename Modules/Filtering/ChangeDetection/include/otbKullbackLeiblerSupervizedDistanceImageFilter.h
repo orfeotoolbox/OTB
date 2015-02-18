@@ -58,12 +58,16 @@ namespace otb
  * http://www.math.ucdavis.edu/~saito/publications
  *
  * \sa CumulantsForEdgeworth
+ *
+ * \ingroup OTBChangeDetection
  */
 namespace Functor
 {
 /** \class KullbackLeiblerSupervizedDistance
  * \brief Functor for KullbackLeiblerSupervizedDistanceImageFilter. Please refer to KullbackLeiblerSupervizedDistanceImageFilter.
  *
+ *
+ * \ingroup OTBChangeDetection
  */
 template <class TInput1, class TInput2, class TInputROIImage, class TOutput>
 class KullbackLeiblerSupervizedDistance

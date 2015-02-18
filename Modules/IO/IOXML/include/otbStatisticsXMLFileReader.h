@@ -30,6 +30,8 @@ namespace otb {
  * Measurement vector for the statistic set as paramater.
  *
  *
+ *
+ * \ingroup OTBIOXML
  */
 template < class TMeasurementVector>
 class  StatisticsXMLFileReader :

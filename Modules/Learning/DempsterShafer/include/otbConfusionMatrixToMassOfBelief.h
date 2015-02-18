@@ -44,6 +44,8 @@ namespace otb
  *  The MassOfBeliefDefinitionMethod indicates which parameter of the confusion matrix will
  *  stand for the mass of belief of each label (PRECISION, RECALL, ACCURACY, KAPPA).
  *
+ *
+ * \ingroup OTBDempsterShafer
  */
 
 template <class TConfusionMatrix = itk::VariableSizeMatrix<double>, class TLabel = int >

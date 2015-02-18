@@ -56,10 +56,14 @@ namespace otb
  *
  * \sa Parser
  *
+ *
+ * \ingroup OTBCCOBIA
  */
 
 /** \class ConnectedComponentMuParserFunctor
  *  \brief This functor use MuParser as criteria for itk connected component module
+ *
+ * \ingroup OTBCCOBIA
  */
 namespace Functor
 {

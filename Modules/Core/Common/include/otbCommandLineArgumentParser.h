@@ -27,6 +27,8 @@
 
 /** \class CommandLineArgumentParserHelpException
  * \brief This exception is thrown when the help menu is displayed.
+ *
+ * \ingroup OTBCommon
  */
 class ITK_EXPORT CommandLineArgumentParserHelpException
   : public itk::ExceptionObject
@@ -49,6 +51,8 @@ public:
 
 /** \class CommandLineArgumentParserVersionException
  * \brief This exception is thrown when the version is displayed.
+ *
+ * \ingroup OTBCommon
  */
 class ITK_EXPORT CommandLineArgumentParserVersionException
   : public itk::ExceptionObject
@@ -71,6 +75,8 @@ public:
 
 /** \class CommandLineArgumentParserArgumentErrorException
  * \brief This exception is thrown when the version is displayed.
+ *
+ * \ingroup OTBCommon
  */
 class ITK_EXPORT CommandLineArgumentParserArgumentErrorException
   : public itk::ExceptionObject
@@ -101,6 +107,8 @@ namespace otb
  * \brief Object returned by CommandLineArgumentParser
  *
  * \see CommandLineArgumentParser
+ *
+ * \ingroup OTBCommon
  */
 class ITK_EXPORT CommandLineArgumentParseResult : public itk::ProcessObject
 {
@@ -201,6 +209,8 @@ private:
  *      }
  *    }
  * \endcode
+ *
+ * \ingroup OTBCommon
  */
 class ITK_EXPORT CommandLineArgumentParser : public itk::ProcessObject
 {

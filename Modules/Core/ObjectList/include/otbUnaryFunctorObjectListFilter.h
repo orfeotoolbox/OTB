@@ -31,6 +31,8 @@ namespace otb
   *
   *
   * \ingroup ObjectListFilter
+ *
+ * \ingroup OTBObjectList
  */
 template <class TInputList, class TOutputList, class TFunction>
 class ITK_EXPORT UnaryFunctorObjectListFilter :

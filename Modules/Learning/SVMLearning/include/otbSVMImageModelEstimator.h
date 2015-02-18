@@ -49,6 +49,8 @@ namespace otb
  * \sa ImageClassificationFilter
  *
  * \ingroup ClassificationFilters
+ *
+ * \ingroup OTBSVMLearning
  */
 template <class TInputImage, class TTrainingImage>
 class ITK_EXPORT SVMImageModelEstimator :

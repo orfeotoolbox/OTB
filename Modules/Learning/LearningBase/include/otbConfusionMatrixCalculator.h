@@ -48,6 +48,8 @@ namespace otb
  *  In case of multiclasses problem, these measurements are extended by considering one class versus others.
  *
  *  Moreover overall accuracy and \f[ \kappa \f] index are computed.
+ *
+ * \ingroup OTBLearningBase
  */
 template <class TRefListLabel, class TProdListLabel>
 class ITK_EXPORT ConfusionMatrixCalculator :

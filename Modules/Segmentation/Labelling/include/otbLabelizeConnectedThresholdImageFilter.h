@@ -27,6 +27,8 @@ namespace otb
 /** \class LabelizeConnectedThresholdImageFilter
  *  \brief TODO
  *
+ *
+ * \ingroup OTBLabelling
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelizeConnectedThresholdImageFilter

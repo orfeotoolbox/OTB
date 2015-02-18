@@ -26,6 +26,8 @@ namespace otb
 /** \class VectorDataFileReaderException
  *
  * \brief Base exception class for IO conflicts.
+ *
+ * \ingroup OTBVectorDataIO
  */
 class VectorDataFileReaderException : public itk::ExceptionObject
 {

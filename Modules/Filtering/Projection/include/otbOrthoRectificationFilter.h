@@ -42,6 +42,8 @@ namespace otb
  *
  * \example Projections/OrthoRectificationExample.cxx
  *
+ *
+ * \ingroup OTBProjection
  */
 
 template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision = double>

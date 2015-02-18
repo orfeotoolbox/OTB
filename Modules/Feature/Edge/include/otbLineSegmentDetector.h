@@ -33,6 +33,8 @@ namespace Functor
 {
 /** \class MagnitudeFunctor
  *  \brief This functor computes the magnitude of a covariant vector.
+ *
+ * \ingroup OTBEdge
  */
 template <class TInputPixel, class TOutputPixel>
 class MagnitudeFunctor
@@ -48,6 +50,8 @@ public:
 /** \class OrientationFunctor
  *  \brief This functor computes the orientation of a covariant vector<br>
  *   Orientation values lies between -Pi and Pi.
+ *
+ * \ingroup OTBEdge
  */
 template <class TInputPixel, class TOutputPixel>
 class OrientationFunctor
@@ -79,6 +83,8 @@ public:
  *  And Website :
  *  http://www.ipol.im/pub/algo/gjmr_line_segment_detector/
  *
+ *
+ * \ingroup OTBEdge
  */
 
 template <class TInputImage, class TPrecision = double>

@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class Log10ThresholdedImageFilter
  * \brief Computes the 10 * vcl_log10(x) pixel-wise with a threshold for the lowest values
+ *
+ * \ingroup OTBImageManipulation
  */
 namespace Functor
 {

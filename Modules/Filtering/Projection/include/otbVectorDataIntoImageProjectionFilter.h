@@ -35,6 +35,8 @@ namespace otb
   * \ingroup Projection
   *
   *
+ *
+ * \ingroup OTBProjection
   */
 
 template <class TInputVectorData, class TInputImage>

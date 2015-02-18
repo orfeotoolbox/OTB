@@ -48,6 +48,8 @@ namespace Functor
 *  \code operator() \endcode is templated with the dimension of the neighborhoodSize.
 *
 *  \sa SOM
+ *
+ * \ingroup OTBSOM
 */
 class CzihoSOMNeighborhoodBehaviorFunctor
 {

@@ -39,6 +39,8 @@ namespace otb { namespace ogr {
  * \c OGRFeatureDefn.
  * \sa OGRFieldDefn
  * \since OTB v 3.14.0
+ *
+ * \ingroup OTBGdalAdapters
  */
 class FieldDefn
   {
@@ -87,6 +89,8 @@ class Feature;
  * \invariant <tt>m_Feature->GetFieldDefnRef(m_index) != 0</tt>.
  * \sa OGRField
  * \since OTB v 3.14.0
+ *
+ * \ingroup OTBGdalAdapters
  */
 class Field
 {

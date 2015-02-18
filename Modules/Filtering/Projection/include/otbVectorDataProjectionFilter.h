@@ -56,6 +56,8 @@ namespace otb
   *
   * \example Projections/VectorDataProjectionExample.cxx
   *
+ *
+ * \ingroup OTBProjection
   */
 
 template <class TInputVectorData, class TOutputVectorData>

@@ -21,8 +21,8 @@
 #include "itkObjectFactory.h"
 #include "itkDataObject.h"
 #include "itkVariableLengthVector.h"
-#include "svm.h"
 #include "itkTimeProbe.h"
+#include "otb_libsvm.h"
 
 namespace otb
 {
@@ -54,6 +54,8 @@ namespace otb
 
  *
  * \ingroup ClassificationFilters
+ *
+ * \ingroup OTBSVMLearning
  */
 template <class TValue, class TLabel>
 class ITK_EXPORT SVMModel : public itk::DataObject

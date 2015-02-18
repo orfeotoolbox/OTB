@@ -36,6 +36,8 @@ namespace otb {
  * the most significant coeff (up to a threashold).
  *
  * \ingroup Threaded
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template < class TInputImageList, class TOutputSampleList, unsigned int VNbInputImages >
 class SparseWvltToAngleMapperListFilter

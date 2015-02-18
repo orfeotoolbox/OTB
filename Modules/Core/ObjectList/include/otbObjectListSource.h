@@ -37,6 +37,8 @@ namespace otb
    * class derived from ObjectList or other implementations.
    *
    * \ingroup ObjectListFilter
+ *
+ * \ingroup OTBObjectList
  */
 template <class TOutputList>
 class ITK_EXPORT ObjectListSource : public itk::ProcessObject

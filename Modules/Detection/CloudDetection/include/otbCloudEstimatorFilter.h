@@ -31,6 +31,8 @@ namespace otb
  * Applies a color reversal.
  *
  * \example FeatureExtraction/CloudDetectionExample.cxx
+ *
+ * \ingroup OTBCloudDetection
  */
 template <class TInputImage, class TOutputImage, class TFunction = Functor::SpectralAngleFunctor<
         typename TInputImage::PixelType, typename TOutputImage::PixelType> >

@@ -31,6 +31,8 @@ namespace otb
  *
  * \ingroup IO
  *
+ *
+ * \ingroup OTBVectorDataBase
  */
 
 template <class TOutputGISTable>

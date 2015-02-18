@@ -59,6 +59,8 @@ namespace otb { namespace ogr {
  * - all functions related to the reference count.
  * \since OTB v 3.14.0
  * \internal As the class is not meant to be inherited, no new function is virtual.
+ *
+ * \ingroup OTBGdalAdapters
  */
 class DataSource : public itk::DataObject , public boost::noncopyable
   {
@@ -176,6 +178,8 @@ public:
    * instance.
    * \see http://www.boost.org/doc/libs/1_49_0/libs/iterator/doc/iterator_facade.html#tutorial-example
    * \since OTB v 3.14.0
+ *
+ * \ingroup OTBGdalAdapters
    */
   template <class Value> class layer_iter
     : public boost::iterator_facade<layer_iter<Value>, Value, boost::random_access_traversal_tag, Value>

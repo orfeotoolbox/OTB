@@ -33,6 +33,8 @@ namespace otb
    *
    * \sa UnaryFunctorImageFilter
    * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInputImage, class TOutputImage,
     class TFunction = Functor::IR<typename TInputImage::InternalPixelType,

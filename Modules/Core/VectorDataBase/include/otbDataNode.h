@@ -65,6 +65,8 @@ enum
  * - the precision of the value associated with objects such as lines or polygons (default double)
  *
  * \sa VectorData
+ *
+ * \ingroup OTBVectorDataBase
  */
 template <class TPrecision = double, unsigned VDimension = 2, class TValuePrecision = double>
 class DataNode

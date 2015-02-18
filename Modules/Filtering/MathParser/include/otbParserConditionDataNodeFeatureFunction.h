@@ -35,6 +35,8 @@ namespace otb
   * \ingroup Functions
   * \sa DataNodeImageFunction
   * \sa SpectralAngleDataNodeFeatureFunction
+ *
+ * \ingroup OTBMathParser
   */
 
 template <

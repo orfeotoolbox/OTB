@@ -35,6 +35,8 @@ namespace otb
  *  parameter corresponding to the input profile.
  *
  * \sa ProfileToProfileDerivativeImageFilter
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TLabeledImage>
 class ITK_EXPORT ProfileDerivativeToMultiScaleCharacteristicsFilter

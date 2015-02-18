@@ -47,6 +47,8 @@ namespace otb
  *
  * \sa SFSTexturesFunctor
  * \ingroup Textures
+ *
+ * \ingroup OTBTextures
 */
 
 template <class TInputImage, class TOutputImage>

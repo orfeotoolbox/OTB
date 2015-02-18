@@ -35,6 +35,8 @@ namespace otb
  *
  * \sa InPlaceImageFilter
  * \sa ImageBase
+ *
+ * \ingroup OTBProjection
  */
 template <class TImage, class TSourceImage>
 class ITK_EXPORT ImportGeoInformationImageFilter

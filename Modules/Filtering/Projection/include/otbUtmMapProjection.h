@@ -27,6 +27,8 @@ namespace otb
  *
  * It converts coordinates in longitude, latitude (WGS84) to UTM map coordinates.
  *
+ *
+ * \ingroup OTBProjection
  */
 template <TransformDirection::TransformationDirection TTransform>
 class ITK_EXPORT UtmMapProjection : public GenericMapProjection<TTransform>

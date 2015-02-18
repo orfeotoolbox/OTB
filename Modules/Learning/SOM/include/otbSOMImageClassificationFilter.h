@@ -35,6 +35,8 @@ namespace otb
  * \sa SVMClassifier
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBSOM
  */
 template <class TInputImage, class TOutputImage, class TSOMMap, class TMaskImage = TOutputImage>
 class ITK_EXPORT SOMImageClassificationFilter

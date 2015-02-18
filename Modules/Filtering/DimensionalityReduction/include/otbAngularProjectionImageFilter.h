@@ -32,6 +32,8 @@ namespace otb {
  * The angle value are considered to come from a itk::FixedArray...
  *
  * \ingroup Threaded
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template < class TInputImage, class TOutputImage, class TAngleArray, class TPrecision >
 class ITK_EXPORT AngularProjectionImageFilter

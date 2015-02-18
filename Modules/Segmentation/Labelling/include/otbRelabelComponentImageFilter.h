@@ -67,6 +67,8 @@ namespace otb
  * \sa ConnectedComponentImageFilter, BinaryThresholdImageFilter, ThresholdImageFilter
  *
  * \ingroup Singlethreaded
+ *
+ * \ingroup OTBLabelling
  */
 
 template <class TInputImage, class TOutputImage>

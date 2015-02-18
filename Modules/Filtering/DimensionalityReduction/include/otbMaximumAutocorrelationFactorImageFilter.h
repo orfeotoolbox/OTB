@@ -59,6 +59,8 @@ namespace otb
 
  * \ingroup Multithreaded, Streamed
  * \sa otbPCAImageFilter
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MaximumAutocorrelationFactorImageFilter

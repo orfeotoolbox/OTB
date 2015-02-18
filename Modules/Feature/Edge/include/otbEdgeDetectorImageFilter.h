@@ -31,6 +31,8 @@ namespace otb
  *  The used edge detection filter is given as template of the class.
  *  The class only supports Image.
  *
+ *
+ * \ingroup OTBEdge
  */
 
 template <class TInputImage, class TOutputImage, class TEdgeDetection>

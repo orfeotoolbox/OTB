@@ -52,6 +52,8 @@ namespace otb
  * \sa ImageSeriesReader
  * \sa ImageIOBase
  * \sa ExtendedFilenameToReaderOptions
+ *
+ * \ingroup OTBImageIO
  */
 template <class TInputImage>
 class ITK_EXPORT ImageFileWriter : public itk::ProcessObject

@@ -60,6 +60,8 @@ class GDALDataTypeWrapper;
  *
  * \ingroup IOFilters
  *
+ *
+ * \ingroup OTBIOGDAL
  */
 class ITK_EXPORT GDALImageIO : public otb::ImageIOBase
 {

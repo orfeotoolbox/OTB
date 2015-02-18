@@ -26,6 +26,8 @@ namespace otb
 * \brief This class implements the Lambert 2 Etendu map projection.
 * It converts coordinates in longitude, latitude (WGS84) to Lambert 2 Etendu map coordinates.
 *
+ *
+ * \ingroup OTBProjection
  */
 template <TransformDirection::TransformationDirection TTransform>
 class ITK_EXPORT Lambert2EtenduProjection : public LambertConformalConicMapProjection<TTransform>

@@ -38,6 +38,8 @@ namespace otb
 /**
  * \class LabeledOutputAccessor
  * \brief Accessor to the index of the labeled output image of the Template Filter.
+ *
+ * \ingroup OTBOGRProcessing
  */
 template <class TFilter>
 class LabeledOutputAccessor
@@ -50,6 +52,8 @@ class LabeledOutputAccessor
 /**
  * \class LabeledOutputAccessor
  * \brief Specialized class to get the index of the labeled output image in mean shift filter.
+ *
+ * \ingroup OTBOGRProcessing
  */
 template <class TInputImage, class TOutputImage, class TLabeledImage, class TBufferConverter>
 class LabeledOutputAccessor<MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledImage, TBufferConverter> >
@@ -62,6 +66,8 @@ class LabeledOutputAccessor<MeanShiftImageFilter<TInputImage, TOutputImage, TLab
 /**
  * \class LabeledOutputAccessor
  * \brief Specialized class to get the index of the labeled output image in mean shift vector image filter.
+ *
+ * \ingroup OTBOGRProcessing
  */
 template <class TInputImage, class TOutputImage, class TLabeledImage>
 class LabeledOutputAccessor<MeanShiftVectorImageFilter<TInputImage, TOutputImage, TLabeledImage> >
@@ -74,6 +80,8 @@ class LabeledOutputAccessor<MeanShiftVectorImageFilter<TInputImage, TOutputImage
 /**
  * \class LabeledOutputAccessor
  * \brief Specialized class to get the index of the labeled output image in mean shift filter (new version).
+ *
+ * \ingroup OTBOGRProcessing
  */
 template <class TInputImage, class TOutputImage, class TOutputImage2, class TKernelType>
 class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TOutputImage2, TKernelType> >
@@ -87,6 +95,8 @@ class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputIm
  * \brief This filter is a framework for large scale segmentation.
  * For a detailed description @see StreamingImageToOGRLayerSegmentationFilter
  * \Note
+ *
+ * \ingroup OTBOGRProcessing
  */
 template <class TImageType,  class TSegmentationFilter>
 class PersistentImageToOGRLayerSegmentationFilter
@@ -223,6 +233,8 @@ private:
  * can create cross polygons !
  * \Note The input mask can be used to exclude pixels from vectorization process.
  * All pixels with a value of 0 in the input mask image will not be suitable for vectorization.
+ *
+ * \ingroup OTBOGRProcessing
  */
 template <class TImageType,  class TSegmentationFilter>
 class ITK_EXPORT StreamingImageToOGRLayerSegmentationFilter :

@@ -38,6 +38,8 @@ namespace Functor
 /** \class BayesianFunctor
  * \brief Functor for the bayesian fusion filter. Please refer to BayesianFusionFilter.
  *
+ *
+ * \ingroup OTBPanSharpening
  */
 template <class TInputMultiSpectral,
     class TInputMultiSpectralInterp,
@@ -184,6 +186,8 @@ private:
  * \example Fusion/BayesianFusionImageFilter.cxx
  *
  *
+ *
+ * \ingroup OTBPanSharpening
  */
 
 template <class TInputMultiSpectralImage,

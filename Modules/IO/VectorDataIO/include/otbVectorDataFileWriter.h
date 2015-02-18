@@ -27,6 +27,8 @@ namespace otb
 /** \brief Base exception class for IO problems during writing.
  *
  * \class ImageFileWriterException
+ *
+ * \ingroup OTBVectorDataIO
  */
 class VectorDataFileWriterException : public itk::ExceptionObject
 {
@@ -55,6 +57,8 @@ public:
  *  \brief This class writes vector data file format (shapefile and KML)
  *
  *  \ingroup IO
+ *
+ * \ingroup OTBVectorDataIO
  */
 
 template <class TInputVectorData>

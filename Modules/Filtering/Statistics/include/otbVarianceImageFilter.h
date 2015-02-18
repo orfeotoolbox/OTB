@@ -37,6 +37,8 @@ namespace otb
  * \sa NeighborhoodIterator
  *
  * \ingroup IntensityImageFilters
+ *
+ * \ingroup OTBStatistics
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT VarianceImageFilter :

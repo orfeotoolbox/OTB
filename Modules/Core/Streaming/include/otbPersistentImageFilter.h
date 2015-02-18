@@ -37,6 +37,8 @@ namespace otb
  *
  * \sa StatisticsImageFilter
  * \sa StatisticsVectorImageFilter
+ *
+ * \ingroup OTBStreaming
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT PersistentImageFilter

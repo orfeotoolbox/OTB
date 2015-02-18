@@ -40,6 +40,8 @@ namespace Functor
 /** \class RadiometricNonWaterNonVegetationIndexFunctor
  *  \brief This functor computes ndwi and ndvi of an image
  *  \brief in order to find urban areas and generate a grayscale image
+ *
+ * \ingroup OTBUrbanArea
  */
 template<class TInput, class TOutput = double>
 class RadiometricNonWaterNonVegetationIndexFunctor
@@ -90,6 +92,8 @@ protected:
 /** \class RadiometricNonWaterNonVegetationDetectionFunctor
  *  \brief This functor uses computes RadiometricNonWaterNonVegetationIndexFunctor
  *  \brief and appli a threshold to produce a binary image
+ *
+ * \ingroup OTBUrbanArea
  */
 template<class TInput, class TOutput>
 class RadiometricNonWaterNonVegetationDetectionFunctor
@@ -140,6 +144,8 @@ protected:
 /** \class UrbanAreaDetectionImageFilter
  *  \brief This filter uses associated functors to produce a binary or grayscale image
  *  \brief where the white areas represents the urban areas.
+ *
+ * \ingroup OTBUrbanArea
  */
 template <class TInputImage, class TOutputImage,
     class TFunction = Functor::RadiometricNonWaterNonVegetationIndexFunctor<

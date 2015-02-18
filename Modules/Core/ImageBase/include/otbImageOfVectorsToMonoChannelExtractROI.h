@@ -30,6 +30,8 @@ namespace otb
 /** \class ImageOfVectorsToMonoChannelExtractROI
  * \brief
  * \todo Document this class
+ *
+ * \ingroup OTBImageBase
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageOfVectorsToMonoChannelExtractROI :

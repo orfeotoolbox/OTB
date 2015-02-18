@@ -44,6 +44,8 @@ namespace otb
  * gradient vectors.
  *  \ingroup Streamed
  *  \ingroup Threaded
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TInputImage, class TOutputModulus, class TOutputDirection>
 class ITK_EXPORT NeighborhoodScalarProductFilter

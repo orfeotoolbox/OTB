@@ -33,6 +33,8 @@ namespace otb
    *
    *
    * \ingroup GISTableFilter
+ *
+ * \ingroup OTBVectorDataManipulation
  */
 template <class TInputGISTable, class TOutputGISTable>
 class ITK_EXPORT GISTableToGISTableFilter : public otb::GISTableSource<TOutputGISTable>

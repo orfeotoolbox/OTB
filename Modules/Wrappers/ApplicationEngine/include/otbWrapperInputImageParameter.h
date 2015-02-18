@@ -28,6 +28,8 @@ namespace Wrapper
 {
 /** \class InputImageParameter
  *  \brief This class represents a InputImage parameter
+ *
+ * \ingroup OTBApplicationEngine
  */
 
 class ITK_ABI_EXPORT InputImageParameter : public Parameter

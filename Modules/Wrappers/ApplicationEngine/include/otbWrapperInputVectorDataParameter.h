@@ -27,6 +27,8 @@ namespace Wrapper
 {
 /** \class InputVectorDataParameter
  *  \brief This class represents a InputVectorData parameter
+ *
+ * \ingroup OTBApplicationEngine
  */
 
 class ITK_ABI_EXPORT InputVectorDataParameter : public Parameter

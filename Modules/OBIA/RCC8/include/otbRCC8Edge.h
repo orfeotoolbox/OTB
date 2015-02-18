@@ -28,6 +28,8 @@ namespace otb
  *  \brief Base class to represent an edge in a RCC8 Graph.
  *
  * \sa RCC8Graph, RCC8VertexBase
+ *
+ * \ingroup OTBRCC8
  */
 class ITK_EXPORT RCC8Edge : public itk::DataObject
 {

@@ -35,6 +35,8 @@ namespace Functor
  * SetAttributeName method.
  *
  * \sa AttributesMapLabelObject
+ *
+ * \ingroup OTBLabelMap
  */
 template<class TLabelObject>
 class ITK_EXPORT AttributesMapLabelObjectAccessor
@@ -81,6 +83,8 @@ private:
 *   \brief This class allows to build a measurement vector from an AttributesMapLabelObject
 *
 *    It Allows to select only a subset of the available attributes.
+ *
+ * \ingroup OTBLabelMap
 */
 template<class TLabelObject, class TMeasurementVector>
 class AttributesMapMeasurementFunctor
@@ -149,6 +153,8 @@ private:
  * \sa LabelObject, ShapeLabelObject, StatisticsLabelObject
  *
  * \ingroup DataRepresentation
+ *
+ * \ingroup OTBLabelMap
  */
 template <class TLabel, unsigned int VImageDimension, class TAttributesValue>
 class ITK_EXPORT AttributesMapLabelObject

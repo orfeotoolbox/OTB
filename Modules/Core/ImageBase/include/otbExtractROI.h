@@ -32,6 +32,8 @@ namespace otb
  * \note Parameter to this class are the input pixel type and the output
  * pixel type.
  *
+ *
+ * \ingroup OTBImageBase
  */
 template <class TInputPixel, class TOutputPixel>
 class ITK_EXPORT ExtractROI :

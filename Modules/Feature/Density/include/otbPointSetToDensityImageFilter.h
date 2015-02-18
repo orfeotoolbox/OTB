@@ -31,6 +31,8 @@ namespace otb
 
 /** \class PointSetToDensityImageFilter
  *  \brief Draw the density of a point set on an image
+ *
+ * \ingroup OTBDensity
  */
 
 template <class TInputPointSet, class TOutputImage,

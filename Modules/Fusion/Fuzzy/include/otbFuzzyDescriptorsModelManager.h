@@ -33,6 +33,8 @@ namespace otb {
  * Measurement vector for the statistic set as paramater.
  *
  *
+ *
+ * \ingroup OTBFuzzy
  */
   class  FuzzyDescriptorsModelManager
 {

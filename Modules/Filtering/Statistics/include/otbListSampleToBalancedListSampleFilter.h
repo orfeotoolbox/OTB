@@ -36,6 +36,8 @@ namespace Statistics {
  * Mean and Variance are set via the methods SetMean() and SetVariance().
  *
  * \sa ListSampleToListSampleFilter, GaussianAdditiveNoiseSampleListFilter
+ *
+ * \ingroup OTBStatistics
  */
 template < class TInputSampleList,
            class TLabelSampleList,

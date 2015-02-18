@@ -29,6 +29,8 @@ namespace otb
  *
  *  This class implements abstract class otb::LabelizeImageFilterBase
  *  \see itk::ConfidenceConnectedImageFilter
+ *
+ * \ingroup OTBLabelling
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelizeConfidenceConnectedImageFilter

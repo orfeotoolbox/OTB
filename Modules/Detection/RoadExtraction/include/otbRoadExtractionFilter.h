@@ -52,6 +52,8 @@ namespace otb
  *
  * \example FeatureExtraction/ExtractRoadExample.cxx
  *
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT RoadExtractionFilter

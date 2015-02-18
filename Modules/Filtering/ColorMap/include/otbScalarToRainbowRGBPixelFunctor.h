@@ -34,6 +34,8 @@ namespace Functor
  *
  * \sa ScalarToRainbowRGBPixelFunctor
  *
+ *
+ * \ingroup OTBColorMap
  */
 template<class TRGBPixel>
 class ITK_EXPORT HSVToRGBFunctor
@@ -124,6 +126,8 @@ namespace Functor
  *
  * \example BasicFilters/DEMToRainbowExample.cxx
  *
+ *
+ * \ingroup OTBColorMap
  */
 template<class TScalar, class TRGBPixel = itk::RGBPixel<unsigned char> >
 class ITK_EXPORT ScalarToRainbowRGBPixelFunctor

@@ -33,6 +33,8 @@ namespace otb
    * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
    *
    * \ingroup Markov
+ *
+ * \ingroup OTBMarkov
  */
 
 template<class TInput1, class TInput2>

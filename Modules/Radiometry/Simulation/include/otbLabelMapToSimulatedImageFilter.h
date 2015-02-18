@@ -41,6 +41,8 @@ namespace otb
  * is not thread safe, and then (even if all the remaining is multithread) the number of thread must be set to 1.
  *
  * \sa LabelMapFilter
+ *
+ * \ingroup OTBSimulation
  */
 
 template <class TInputLabelMap, class TSimuStep1, class TSimuStep2, class TOutputImage>

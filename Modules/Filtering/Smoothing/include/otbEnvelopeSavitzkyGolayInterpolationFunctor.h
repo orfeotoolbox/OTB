@@ -31,6 +31,8 @@ namespace Functor
  *  fitting the upper or lower envelope of the series being interpolated.
  *
  * \sa otbSavitzkyGolayInterpolationFunctor
+ *
+ * \ingroup OTBSmoothing
  */
 template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSeries>
 class EnvelopeSavitzkyGolayInterpolationFunctor

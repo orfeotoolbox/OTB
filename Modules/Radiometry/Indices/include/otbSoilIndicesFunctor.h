@@ -41,6 +41,8 @@ namespace Functor
  *  the Evaluate() method.
  *
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
 */
 template<class TInput1, class TInput2, class TOutput>
 class GAndRIndexBase
@@ -143,6 +145,8 @@ private:
  *
  *
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template<class TInput1, class TInput2, class TInput3, class TOutput>
 class GAndRAndNirIndexBase
@@ -272,6 +276,8 @@ private:
  *
  *  \ingroup Functor
  *  \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class IR : public GAndRIndexBase<TInput1, TInput2, TOutput>
@@ -313,6 +319,8 @@ protected:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class IC : public GAndRIndexBase<TInput1, TInput2, TOutput>
@@ -350,6 +358,8 @@ protected:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class IB : public GAndRIndexBase<TInput1, TInput2, TOutput>
@@ -383,6 +393,8 @@ protected:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
 class IB2 : public GAndRAndNirIndexBase<TInput1, TInput2, TInput3, TOutput>

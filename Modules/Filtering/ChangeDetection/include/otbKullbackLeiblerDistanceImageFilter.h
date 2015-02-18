@@ -29,6 +29,8 @@ namespace otb
 /** \class CumulantsForEdgeworth
  * \brief Helper class for KullbackLeiblerDistanceImageFilter. Please refer to KullbackLeiblerDistanceImageFilter.
  *
+ *
+ * \ingroup OTBChangeDetection
  */
 template <class TInput>
 class CumulantsForEdgeworth
@@ -84,6 +86,8 @@ namespace Functor
 /** \class KullbackLeiblerDistance
  * \brief Functor for KullbackLeiblerDistanceImageFilter. Please refer to KullbackLeiblerDistanceImageFilter.
  *
+ *
+ * \ingroup OTBChangeDetection
  */
 template <class TInput1, class TInput2, class TOutput>
 class KullbackLeiblerDistance
@@ -134,6 +138,8 @@ public:
  * http://www.math.ucdavis.edu/~saito/publications
  *
  * \ingroup IntensityImageFilters Multithreaded
+ *
+ * \ingroup OTBChangeDetection
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT KullbackLeiblerDistanceImageFilter :

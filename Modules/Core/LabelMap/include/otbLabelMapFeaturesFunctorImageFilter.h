@@ -44,6 +44,8 @@ namespace otb {
  * \sa itk::InPlaceLabelMapFilter
  *
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
+ *
+ * \ingroup OTBLabelMap
  */
 template<class TImage, class TFunctor>
 class ITK_EXPORT LabelMapFeaturesFunctorImageFilter :

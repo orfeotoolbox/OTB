@@ -35,6 +35,8 @@ namespace otb
  *
  * \ingroup IOFilters
  *
+ *
+ * \ingroup OTBIOBSQ
  */
 class ITK_EXPORT BSQImageIO : public otb::ImageIOBase
 {

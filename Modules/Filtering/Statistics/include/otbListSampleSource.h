@@ -33,6 +33,8 @@ namespace Statistics {
  *  itk::Statistics::ListSample is a DataObject
  *  the output sample list.
  *
+ *
+ * \ingroup OTBStatistics
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
 class ITK_EXPORT ListSampleSource :

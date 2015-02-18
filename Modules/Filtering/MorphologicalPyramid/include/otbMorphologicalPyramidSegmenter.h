@@ -41,6 +41,8 @@ namespace MorphologicalPyramid
  * \sa ResampleImageFilter
  * \sa LinearInterpolateImageFunction
  * \sa ScaleTransform
+ *
+ * \ingroup OTBMorphologicalPyramid
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT Segmenter

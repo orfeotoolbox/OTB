@@ -30,6 +30,8 @@ namespace Functor {
  *
  * \brief TODO
  *
+ *
+ * \ingroup OTBProjection
  */
 template<class TInput, class TOutput, class TPrecision>
 class ProjectiveProjectionFunctor
@@ -97,6 +99,8 @@ private:
  *
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBProjection
  */
 template <class TInputImage, class TOutputImage, class TPrecision>
 class ITK_EXPORT ProjectiveProjectionImageFilter :

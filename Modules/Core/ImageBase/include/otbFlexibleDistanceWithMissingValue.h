@@ -45,6 +45,8 @@ namespace Statistics {
  * The only restriction is that elements have to support \code NaN \endcode.
  *
  * \sa EuclideanDistanceMetricWithMissingValuePow2
+ *
+ * \ingroup OTBImageBase
  */
 template<class TVector>
 class ITK_EXPORT FlexibleDistanceWithMissingValue :

@@ -44,6 +44,8 @@ namespace otb
  * The output is an image of intensity of detection and an image of
  * direction of the line fo each pixel.
  *
+ *
+ * \ingroup OTBEdge
  */
 
 template <class TInputImage,

@@ -33,6 +33,8 @@ namespace otb {
  * Supported vector types are those implementing the method GetElement(idx)
  * and defining the type ValueType.
  *
+ *
+ * \ingroup OTBIOXML
  */
 template < class TMeasurementVector>
 class  StatisticsXMLFileWriter :

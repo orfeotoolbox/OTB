@@ -47,6 +47,8 @@ template<typename T> inline T simple_pow(T const& v, unsigned int p)
  * Functor returning the joint spatial-range representation of a pixel, i.e. the
  * concatenation of range components and coordinates as a vector. Components are
  * scaled by their respective spatial and range bandwidth.
+ *
+ * \ingroup OTBSmoothing
  */
 template<class TInputImage, class TOutputJointImage>
 class SpatialRangeJointDomainTransform
@@ -137,6 +139,8 @@ public:
  *
  * Iterator for reading pixels over an image region, specialized for faster
  * access to pixels in vector images through the method GetPixelPointer
+ *
+ * \ingroup OTBSmoothing
  */
 template<typename TImage>
 class FastImageRegionConstIterator: public itk::ImageRegionConstIterator<TImage>
@@ -184,6 +188,8 @@ private:
  *
  * The (spatially and spectrally) neighboring buckets of pixels can then be
  * obtained by using GetNeighborhoodBucketListIndices().
+ *
+ * \ingroup OTBSmoothing
  */
 template<class TImage>
 class BucketImage
@@ -442,6 +448,8 @@ private:
  *
  * \ingroup ImageSegmentation
  * \ingroup ImageEnhancement
+ *
+ * \ingroup OTBSmoothing
  */
 template<class TInputImage, class TOutputImage, class TKernel = Meanshift::KernelUniform,
     class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >

@@ -38,6 +38,8 @@ namespace otb
  *
  * \brief ImageIO object for reading/writing KML format vector data
  *
+ *
+ * \ingroup OTBIOKML
  */
 class ITK_EXPORT KMLVectorDataIO
   : public VectorDataIOBase

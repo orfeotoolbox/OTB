@@ -29,6 +29,8 @@ namespace otb
  * \class GeometriesSet
  * \brief Common ITK type to manipulate any set of geometries: a \c otb::ogr::DataSource, or a \c otb::ogr::Layer.
  * \since OTB v 3.14.0
+ *
+ * \ingroup OTBGdalAdapters
  */
 class ITK_EXPORT GeometriesSet : public itk::DataObject
   {

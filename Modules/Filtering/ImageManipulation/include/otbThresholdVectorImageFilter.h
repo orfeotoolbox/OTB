@@ -36,6 +36,8 @@ namespace otb
  * The pixels must support the operators >= and <=.
  *
  * \ingroup IntensityImageFilters Multithreaded
+ *
+ * \ingroup OTBImageManipulation
  */
   template <class TInputImage, class TOutputImage=TInputImage>
   class ITK_EXPORT ThresholdVectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>

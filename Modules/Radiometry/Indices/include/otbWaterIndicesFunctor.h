@@ -38,6 +38,8 @@ namespace Functor
    *  the Evaluate() method.
    *
    * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template<class TInput1, class TInput2, class TOutput>
 class WaterIndexBase
@@ -113,6 +115,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class WaterIndexFunctor : public WaterIndexBase<TInput1, TInput2, TOutput>
@@ -148,6 +152,8 @@ protected:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class SRWI : public WaterIndexBase<TInput1, TInput2, TOutput>
@@ -185,6 +191,8 @@ protected:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class NDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
@@ -268,6 +276,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class NDWI2 : public WaterIndexBase<TInput1, TInput2, TOutput>
@@ -351,6 +361,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class MNDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
@@ -434,6 +446,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class NDPI : public WaterIndexBase<TInput1, TInput2, TOutput>
@@ -517,6 +531,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class NDTI : public WaterIndexBase<TInput1, TInput2, TOutput>
@@ -601,6 +617,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInputVectorPixel, class TOutputPixel>
 class WaterSqrtSpectralAngleFunctor : public SqrtSpectralAngleFunctor<TInputVectorPixel, TOutputPixel>

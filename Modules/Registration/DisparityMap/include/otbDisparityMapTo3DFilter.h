@@ -42,6 +42,8 @@ namespace otb
  *  \ingroup Streamed
  *  \ingroup Threaded
  *
+ *
+ * \ingroup OTBDisparityMap
  */
 template <class TDisparityImage, class TOutputImage =  otb::VectorImage<float,2>,
           class TEpipolarGridImage = otb::VectorImage<float,2> , class TMaskImage = otb::Image<unsigned char> >

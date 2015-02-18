@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class PleiadesImageMetadataInterfaceFactory
  * \brief Creating an instance of a ImageMetadataInterface object using object factory.
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT PleiadesImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
 {

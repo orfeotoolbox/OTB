@@ -34,6 +34,8 @@ namespace MorphologicalPyramid
  *
  * \sa MorphologicalPyramidAnalyseFilter
  * \sa MorphologicalPyramidSynthesisFilter
+ *
+ * \ingroup OTBMorphologicalPyramid
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MRToMSConverter

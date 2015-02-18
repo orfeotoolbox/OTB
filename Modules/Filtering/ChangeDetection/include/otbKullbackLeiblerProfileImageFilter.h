@@ -35,6 +35,8 @@ namespace otb
 /** \class CumulantsForEdgeworthProfile
   * \brief Helper class for KullbackLeiblerProfileImageFilter. Please refer to KullbackLeibleProfileImageFilter.
   *
+ *
+ * \ingroup OTBChangeDetection
   */
 template <class TInput>
 class CumulantsForEdgeworthProfile
@@ -95,6 +97,8 @@ namespace Functor
 /** \class KullbackLeiblerProfile
  * \brief Functor for KullbackLeiblerProfileImageFilter. Please refer to KullbackLeiblerProfileImageFilter.
  *
+ *
+ * \ingroup OTBChangeDetection
  */
 template<class TInput1, class TInput2, class TOutput>
 class KullbackLeiblerProfile
@@ -152,6 +156,8 @@ protected:
  *  TOutput is expected to be a itk::VariableLengthVector< TPixel > and comes from an otbVectorImage< TPixel, 2 >
  *
  * \ingroup IntensityImageFilters Multithreaded
+ *
+ * \ingroup OTBChangeDetection
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT KullbackLeiblerProfileImageFilter :

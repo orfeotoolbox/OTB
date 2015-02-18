@@ -31,6 +31,8 @@ namespace Functor
  *  a size of 1.
  * \ingroup Functor
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInput, class TOutput>
 class VectorCast
@@ -62,6 +64,8 @@ public:
  * \brief This is a helper class that convert an otb::Image into a single-channel otb::VectorImage.
  * \ingroup Singlethreaded
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputVectorImage>
 class ITK_EXPORT ImageToVectorImageCastFilter

@@ -38,6 +38,8 @@ namespace otb
  * radiometric attributes for each LabelObject.
  *
  * It is suitable to be used with otb::LabelMapWithAdjacency<otb::AttributesMapLabelObject>
+ *
+ * \ingroup OTBMoments
  */
 template <class TInputImage, class TLabeledImage, class TLabel, class TLabelObject >
 class ITK_EXPORT ImageToLabelMapWithAttributesFilter

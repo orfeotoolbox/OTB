@@ -27,6 +27,8 @@ namespace otb {
  * \brief Computes the min/max of all attributes of a LabelMap
  *        where LabelObject type is compatible with otb::AttributesMapLabelObject
  *
+ *
+ * \ingroup OTBLabelMap
  */
 template<class TInputImage>
 class ITK_EXPORT MinMaxAttributesLabelMapFilter :

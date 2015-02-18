@@ -42,6 +42,8 @@ namespace otb
  * meters. Mean radius (6371 km) is used as a default value, but one
  * might use local values from spheroid or geoid for better precision.
  *
+ *
+ * \ingroup OTBProjection
  */
 template <class TVector>
 class ITK_EXPORT GeographicalDistance :

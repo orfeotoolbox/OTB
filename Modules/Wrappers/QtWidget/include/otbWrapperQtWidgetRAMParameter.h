@@ -30,6 +30,8 @@ namespace Wrapper
 
 /** \class QtWidgetRAMParameter
  * \brief
+ *
+ * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtWidgetRAMParameter : public QtWidgetParameterBase
 {

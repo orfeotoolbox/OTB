@@ -34,6 +34,8 @@ namespace otb
  *
  * \ingroup IOFilters
  *
+ *
+ * \ingroup OTBIORAD
  */
 class ITK_EXPORT RADImageIO : public otb::ImageIOBase
 {

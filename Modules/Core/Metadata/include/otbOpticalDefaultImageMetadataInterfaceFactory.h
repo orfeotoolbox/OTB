@@ -26,6 +26,8 @@ namespace otb
 /** \class OpticalDefaultImageMetadataInterfaceFactory
  * \brief Creating an instance of a OpticalImageMetadataInterface object using object factory.
  * This class only provides the method of the virtual pure class OpticalImageMetadataInterface and throw exception for virtual method.
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT OpticalDefaultImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
 {

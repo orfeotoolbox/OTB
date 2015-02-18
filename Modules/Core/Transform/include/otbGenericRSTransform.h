@@ -37,6 +37,8 @@ enum TransformAccuracy {UNKNOWN, ESTIMATE, PRECISE};
  *
  * \ingroup Projection
  *
+ *
+ * \ingroup OTBTransform
  **/
 
 template <class TScalarType = double,

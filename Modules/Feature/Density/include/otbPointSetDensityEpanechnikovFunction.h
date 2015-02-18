@@ -30,6 +30,8 @@ namespace otb
  *
  *
  * \ingroup PointSetFunctions
+ *
+ * \ingroup OTBDensity
  */
 template <class TPointSet, class TOutput>
 class ITK_EXPORT PointSetDensityEpanechnikovFunction : public PointSetFunction<TPointSet, TOutput>

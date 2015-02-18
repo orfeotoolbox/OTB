@@ -29,6 +29,8 @@ namespace otb
  *
  *  A rectangle is defined by the median of the width, an orientation and a width
  *
+ *
+ * \ingroup OTBCommon
  */
 template<class TValue = double>
 class ITK_EXPORT Rectangle

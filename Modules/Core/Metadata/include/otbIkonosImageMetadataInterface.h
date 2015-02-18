@@ -26,6 +26,8 @@ namespace otb
  *
  * \brief Creation of an "otb" IkonosImageMetadataInterface that gets metadata.
  *
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT IkonosImageMetadataInterface : public OpticalImageMetadataInterface
 {

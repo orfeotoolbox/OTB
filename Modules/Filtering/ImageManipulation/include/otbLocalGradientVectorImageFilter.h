@@ -29,6 +29,8 @@ namespace Functor
 {
 /** \class LocalGradientOperator
  * \brief Performs the calculation of LocalGradient derivation
+ *
+ * \ingroup OTBImageManipulation
  */
 template < class TInput, class TOutput >
 class LocalGradientOperator
@@ -59,6 +61,8 @@ public:
 
 /** \class LocalGradientVectorImageFilter
  * \brief Implements the 3x3 Local Gradient to be processed on a vector image
+ *
+ * \ingroup OTBImageManipulation
  */
 template < class TInputImage, class TOutputImage >
 class ITK_EXPORT LocalGradientVectorImageFilter

@@ -38,6 +38,8 @@ namespace otb
   * \ingroup VectorDataFilter
   * \ingroup Projection
   *
+ *
+ * \ingroup OTBProjection
   */
 template <class TInputImage, class TOutputVectorData>
 class ITK_EXPORT ImageToEnvelopeVectorDataFilter :

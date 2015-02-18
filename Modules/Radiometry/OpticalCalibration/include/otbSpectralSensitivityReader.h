@@ -32,6 +32,8 @@ namespace otb
  *  This class read a file that contains spectral sensitivity values and fill
  *  a structure that contains man and max wavelengths, the coefficients list and the step.
  *
+ *
+ * \ingroup OTBOpticalCalibration
  */
 
 class ITK_EXPORT SpectralSensitivityReader : public itk::ProcessObject

@@ -26,6 +26,8 @@ namespace otb
  *
  * \brief Creation of an "otb" WorldView2ImageMetadataInterface that gets metadata.
  *
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT WorldView2ImageMetadataInterface : public OpticalImageMetadataInterface
 {

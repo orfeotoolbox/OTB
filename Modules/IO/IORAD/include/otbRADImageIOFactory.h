@@ -24,6 +24,8 @@ namespace otb
 {
 /** \class RADImageIOFactory
  * \brief Creation d'un instance d'un objet RADImageIO utilisant les object factory.
+ *
+ * \ingroup OTBIORAD
  */
 class ITK_EXPORT RADImageIOFactory : public itk::ObjectFactoryBase
 {

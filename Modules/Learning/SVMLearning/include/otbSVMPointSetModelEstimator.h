@@ -49,6 +49,8 @@ namespace otb
  * \sa ImageClassificationFilter
  *
  * \ingroup ClassificationFilters
+ *
+ * \ingroup OTBSVMLearning
  */
 template <class TInputPointSet, class TTrainingPointSet>
 class ITK_EXPORT SVMPointSetModelEstimator :

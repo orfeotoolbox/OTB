@@ -48,6 +48,8 @@ namespace otb
  *
  * \ingroup Projection
  *
+ *
+ * \ingroup OTBImageManipulation
  **/
 
 template <class TInputImage, class TOutputImage,

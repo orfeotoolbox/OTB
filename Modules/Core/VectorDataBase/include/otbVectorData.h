@@ -48,6 +48,8 @@ namespace otb
  * \sa VectorDataFileReader
  * \sa VectorDataFileWriter
  *
+ *
+ * \ingroup OTBVectorDataBase
  */
 template <class TPrecision = double, unsigned int VDimension = 2, class TValuePrecision = double>
 class VectorData

@@ -30,6 +30,8 @@ namespace otb
 
 /** \class LineSpatialObjectListToRightAnglePointSetFilter
  * \brief TODO
+ *
+ * \ingroup OTBCorner
  */
 
 template <class TImage, class TLinesList, class TPointSet>

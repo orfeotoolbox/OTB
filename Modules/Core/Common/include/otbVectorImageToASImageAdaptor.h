@@ -31,6 +31,8 @@ namespace otb
  *
  * \ingroup ImageAdaptors
  *
+ *
+ * \ingroup OTBCommon
  */
 template <class TImage>
 class ITK_EXPORT VectorImageToASImageAdaptor : public

@@ -28,6 +28,8 @@ namespace Wrapper
 
 /** \class QtWidgetInputImageListParameter
  * \brief
+ *
+ * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtWidgetInputImageListParameter : public QtWidgetParameterBase
 {

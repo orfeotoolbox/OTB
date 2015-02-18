@@ -30,6 +30,8 @@ namespace otb
  * <b>Limitations:</b> This filter is currently working with integer position
  * for the polygon vertices. It should be optimized for continuous positions.
  *
+ *
+ * \ingroup OTBPath
  */
 template <class TPath, class TImage>
 class ITK_EXPORT ImageFittingPolygonListFilter

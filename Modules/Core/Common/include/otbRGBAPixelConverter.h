@@ -33,6 +33,8 @@ namespace otb
  * To be usable, the desired convertion must be implemented through
  * partial specialisation mecanism.
  *
+ *
+ * \ingroup OTBCommon
  */
 
 

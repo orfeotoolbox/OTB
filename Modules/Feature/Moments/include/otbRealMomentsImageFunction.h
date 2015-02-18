@@ -31,6 +31,8 @@ namespace otb
  * Calculate the real moment values over a specified neighborhood.
  *
  * \ingroup ImageFunctions
+ *
+ * \ingroup OTBMoments
  */
 
 template <class TInputImage, class TCoordRep = double>

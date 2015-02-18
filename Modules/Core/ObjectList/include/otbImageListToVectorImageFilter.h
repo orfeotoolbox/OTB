@@ -32,6 +32,8 @@ namespace otb
  * Casting is done through standard cast operation.
  *
  * \ingroup Streamed
+ *
+ * \ingroup OTBObjectList
  */
 template <class TImageList, class TVectorImage>
 class ITK_EXPORT ImageListToVectorImageFilter

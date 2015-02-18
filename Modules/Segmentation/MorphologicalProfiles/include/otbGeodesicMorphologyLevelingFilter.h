@@ -29,6 +29,8 @@ namespace Functor
  * geodesic morphology decomposition filter. For more details, please refer to
  * the documentation of this filter.
  * \sa GeodesicMorphologyDecompositionImageFilter
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template <class TInput, class TInputMap, class TOutput>
 class LevelingFunctor
@@ -66,6 +68,8 @@ public:
  *  functions. Please refer to the documentation of this filter for more details.
  *
  * \sa GeodesicMorphologyDecompositionImageFilter
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TInputMaps, class TOutputImage>
 class ITK_EXPORT GeodesicMorphologyLevelingFilter

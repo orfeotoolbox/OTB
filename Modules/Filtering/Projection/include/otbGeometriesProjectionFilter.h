@@ -148,6 +148,8 @@ private:
  *
  * \note This filter does not support \em in-place transformation as the spatial
  * references of the new layer are expected to change.
+ *
+ * \ingroup OTBProjection
  */
 class ITK_EXPORT GeometriesProjectionFilter : public GeometriesToGeometriesFilter
 {

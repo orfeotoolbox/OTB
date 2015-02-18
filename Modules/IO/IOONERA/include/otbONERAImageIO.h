@@ -33,6 +33,8 @@ namespace otb
  *
  * \ingroup IOFilters
  *
+ *
+ * \ingroup OTBIOONERA
  */
 class ITK_EXPORT ONERAImageIO : public otb::ImageIOBase
 {

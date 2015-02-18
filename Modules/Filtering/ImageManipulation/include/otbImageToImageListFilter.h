@@ -29,6 +29,8 @@ namespace otb
  *
  * \ingroup Images
  * \ingroup Lists
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageToImageListFilter

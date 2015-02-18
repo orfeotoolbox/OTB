@@ -29,6 +29,8 @@ namespace Functor
 {
 /** \class SobelOperator
  * \brief Performs the calculation of Sobel derivation
+ *
+ * \ingroup OTBEdge
  */
 template < class TInput, class TOutput >
 class SobelOperator
@@ -63,6 +65,8 @@ public:
 
 /** \class SobelVectorImageFilter
  * \brief Implements the  Sobel Gradient to be processed on a vector image
+ *
+ * \ingroup OTBEdge
  */
 template < class TInputImage, class TOutputImage >
 class ITK_EXPORT SobelVectorImageFilter

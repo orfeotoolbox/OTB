@@ -40,6 +40,8 @@ class ImageKeywordlist;
  * \sa ForwardSensorModel
  * \ingroup Projection
  *
+ *
+ * \ingroup OTBOSSIMAdapters
  **/
 
 class SensorModelAdapter: public itk::Object

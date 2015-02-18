@@ -26,6 +26,8 @@ namespace otb
 {
 /** \class RCC8GraphFileWriterException
  * \brief Base exception class for IO problems during writing.
+ *
+ * \ingroup OTBRCC8
  */
 class ITK_EXPORT RCC8GraphFileWriterException
   : public itk::ExceptionObject
@@ -57,6 +59,8 @@ public:
  *
  * \sa RCC8GraphFileReader
  * \sa RCC8Graph
+ *
+ * \ingroup OTBRCC8
  */
 template <class TInputGraph>
 class ITK_EXPORT RCC8GraphFileWriter

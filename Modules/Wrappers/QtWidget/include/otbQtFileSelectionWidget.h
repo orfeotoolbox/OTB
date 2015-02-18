@@ -31,6 +31,8 @@ namespace Wrapper
 
 /** \class QtFileSelectionWidget
  * \brief
+ *
+ * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtFileSelectionWidget : public QWidget
 {

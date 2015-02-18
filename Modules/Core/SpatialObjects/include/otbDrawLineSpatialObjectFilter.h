@@ -34,6 +34,8 @@ namespace otb
  * allocate the output image. This filter copies the input image in
  * the output image.
  *
+ *
+ * \ingroup OTBSpatialObjects
  */
 
 template <class TInputImage, class TOutputImage>

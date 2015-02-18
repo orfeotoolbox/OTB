@@ -31,6 +31,8 @@ namespace otb {
  * \sa otb::AttributesMapLabelObject
  * \sa otb::SVMModel
  * \sa itk::InPlaceLabelMapFilter
+ *
+ * \ingroup OTBSVMLearning
  */
 template<class TInputLabelMap>
 class ITK_EXPORT LabelMapSVMClassifier :

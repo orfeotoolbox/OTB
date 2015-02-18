@@ -28,6 +28,8 @@ namespace Functor
 
 /** \class SqrtSpectralAngleFunctor
  *  \brief This functor computes the square root of a spectral angle according to a reference pixel.
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputVectorPixel, class TOutputPixel>
 class SqrtSpectralAngleFunctor : public SpectralAngleFunctor<TInputVectorPixel, TOutputPixel>

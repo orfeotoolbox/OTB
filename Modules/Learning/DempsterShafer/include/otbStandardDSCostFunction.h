@@ -47,6 +47,8 @@ namespace otb
   * \ingroup CostFunction
   * \sa VectorDataToDSValidatedVectorDataFilter
   * \sa AmoebaOptimizer
+ *
+ * \ingroup OTBDempsterShafer
  */
 
 template <class TDSValidationFilter>

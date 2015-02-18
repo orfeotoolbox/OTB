@@ -46,6 +46,8 @@ namespace Wrapper
  * After the attribute key, if the user give several values (expression
  * without \"--\" separated by space), it will automatically be
  * interpreted as a list.
+ *
+ * \ingroup OTBCommandLine
  */
 
 class ITK_ABI_EXPORT CommandLineLauncher : public itk::Object

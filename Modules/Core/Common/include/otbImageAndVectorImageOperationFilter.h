@@ -113,6 +113,8 @@ protected:
  *
  * \sa itkMultiplyImageFilter
  * \ingroup itkBinaryFunctorImageFilter
+ *
+ * \ingroup OTBCommon
  */
 
 template <class TInputImage, class TVectorInputImage, class TOutputImage>

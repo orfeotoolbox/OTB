@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class SarImageMetadataInterfaceFactory
  * \brief Create instances of SarImageMetadataInterfaceFactory objects using an object factory.
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT SarImageMetadataInterfaceFactory : public itk::Object
 {

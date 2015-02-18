@@ -33,6 +33,8 @@ namespace otb
  *  First seeds are obtained with a theshold filter
  *  For each seed, itk::NeighborhoodConnectedImageFilter labels pixel
  *  Finally, filter produce a regions map
+ *
+ * \ingroup OTBLabelling
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelizeNeighborhoodConnectedImageFilter

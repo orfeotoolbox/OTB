@@ -51,6 +51,8 @@ namespace otb
  * Sensing, vol. 44, no. 9, pp. 2601-1616, sep 2006.
  *
  * \ingroup Hyperspectral
+ *
+ * \ingroup OTBEndmembersExtraction
  */
 template<class TPrecision>
 class ITK_EXPORT VirtualDimensionality :

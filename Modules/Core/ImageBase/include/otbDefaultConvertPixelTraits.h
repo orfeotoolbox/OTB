@@ -34,6 +34,8 @@ namespace otb
  *  This implementation does a simple assignment operator, so if you are
  *  going from a higher bit representation to a lower bit one (int to
  *  char), you may want to specialize and add some sort of transfer function.
+ *
+ * \ingroup OTBImageBase
  */
 template<typename PixelType>
 class DefaultConvertPixelTraits

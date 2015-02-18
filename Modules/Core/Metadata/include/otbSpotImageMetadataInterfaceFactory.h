@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class SpotImageMetadataInterfaceFactory
  * \brief Creating an instance of a ImageMetadataInterface object using object factory.
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT SpotImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
 {

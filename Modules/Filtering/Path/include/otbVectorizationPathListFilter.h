@@ -36,6 +36,8 @@ namespace otb
  *  detection. Path with less than three vertices are not kept by the filter.
  *
  * \ingroup PathListSource
+ *
+ * \ingroup OTBPath
  */
 template <class TInputModulus, class TInputDirection, class TOutputPath>
 class ITK_EXPORT VectorizationPathListFilter

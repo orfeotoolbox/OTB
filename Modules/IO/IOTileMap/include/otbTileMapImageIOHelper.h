@@ -32,6 +32,8 @@ namespace otb
 /** \class TileMapImageIOHelper
  *  \brief This class IO TileMapImage
  *
+ *
+ * \ingroup OTBIOTileMap
  */
 
 class TileMapImageIOHelper: public itk::Object

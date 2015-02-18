@@ -37,6 +37,8 @@ namespace otb
  * with \f$ \Delta\phi_{n}(f) = \mid \Pi_{\phi_{n2}}(f)-\Pi_{\phi_{n1}}(f) \mid \f$
  *
  * \ingroup Streamed
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ProfileToProfileDerivativeFilter

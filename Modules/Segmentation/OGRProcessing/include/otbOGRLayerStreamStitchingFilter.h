@@ -49,6 +49,8 @@ namespace otb
  *  \ingroup OBIA
  *
  *
+ *
+ * \ingroup OTBOGRProcessing
  */
 template <class TInputImage>
 class ITK_EXPORT OGRLayerStreamStitchingFilter :

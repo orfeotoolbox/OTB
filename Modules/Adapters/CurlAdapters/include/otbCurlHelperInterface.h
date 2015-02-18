@@ -32,6 +32,8 @@ namespace otb
  * This class implement the interface of the curl access allowing for
  * different implementation to be used (include stubs for test).
  *
+ *
+ * \ingroup OTBCurlAdapters
  */
 class ITK_EXPORT CurlHelperInterface : public itk::Object
 {

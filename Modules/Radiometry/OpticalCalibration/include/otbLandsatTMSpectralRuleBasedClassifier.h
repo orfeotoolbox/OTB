@@ -52,6 +52,8 @@ namespace LandsatTM
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
+ *
+ * \ingroup OTBOpticalCalibration
  */
 template <class TInput, class TOutput>
 class SpectralRuleBasedClassifier : public KernelSpectralRule<TInput, TOutput>

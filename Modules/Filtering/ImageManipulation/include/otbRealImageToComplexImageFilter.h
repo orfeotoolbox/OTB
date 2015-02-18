@@ -29,6 +29,8 @@ namespace otb
  *
  * \sa RealImageToComplexImageFilter
  * \ingroup Multithreaded
+ *
+ * \ingroup OTBImageManipulation
  */
 
 namespace Function {

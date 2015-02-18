@@ -31,6 +31,8 @@ namespace Statistics {
  *  This filter provide pipeline support for itk::Statistics::ListSample via itk::DataObjectDecorator for
  *  both the input and the output sample list.
  *
+ *
+ * \ingroup OTBStatistics
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
 class ITK_EXPORT ListSampleToListSampleFilter :

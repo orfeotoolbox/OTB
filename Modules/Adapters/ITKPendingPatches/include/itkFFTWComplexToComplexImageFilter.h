@@ -51,6 +51,8 @@ namespace itk
  * \ingroup ITKReview
  *
  * \sa FFTWGlobalConfiguration
+ *
+ * \ingroup OTBITKPendingPatches
  */
 template< class TImage >
 class ITK_EXPORT FFTWComplexToComplexImageFilter:

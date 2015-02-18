@@ -32,6 +32,8 @@ namespace otb
  * operation to be applied.  A Functor style is used.
  *
  * \ingroup IntensityImageFilters   Multithreaded
+ *
+ * \ingroup OTBCommon
  */
 template <class TInputImage, class TOutputImage, class TFunction>
 class ITK_EXPORT UnaryFunctorNeighborhoodVectorImageFilter

@@ -33,6 +33,8 @@ namespace otb
  * or the GenerateData method.
  *
  * \ingroup Function
+ *
+ * \ingroup OTBStatistics
  */
 
 template<class TInputHistogram, class TOutput>

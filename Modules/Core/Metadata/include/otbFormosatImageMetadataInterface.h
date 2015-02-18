@@ -26,6 +26,8 @@ namespace otb
  *
  * \brief Creation of an "otb" FormosatImageMetadataInterface that gets metadata.
  *
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT FormosatImageMetadataInterface : public OpticalImageMetadataInterface
 {

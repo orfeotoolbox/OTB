@@ -44,6 +44,8 @@ namespace otb {
  *
  * N is given in template value
  *
+ *
+ * \ingroup OTBUnmixing
  */
 template < class TInputImage, class TOutputImage,
             unsigned int VNbInputImage,

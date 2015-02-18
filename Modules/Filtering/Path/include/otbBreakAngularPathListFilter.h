@@ -28,6 +28,8 @@ namespace otb
    *
    * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
    *
+ *
+ * \ingroup OTBPath
  */
 template <class TPath>
 class ITK_EXPORT BreakAngularPathListFilter

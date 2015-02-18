@@ -68,6 +68,8 @@ namespace internal
  *
  * \ingroup Projections
  *
+ *
+ * \ingroup OTBOSSIMAdapters
  */
 class ITK_EXPORT ImageKeywordlist
 {

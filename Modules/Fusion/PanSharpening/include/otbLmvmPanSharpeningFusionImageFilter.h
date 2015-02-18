@@ -48,6 +48,8 @@ namespace otb
  * \ingroup Fusion
  *
  *
+ *
+ * \ingroup OTBPanSharpening
  **/
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision = float>
@@ -121,6 +123,8 @@ private:
   /** \class FusionFunctor
    * This functor applies the LMVM
    * operation. It is intended for internal use only.
+ *
+ * \ingroup OTBPanSharpening
    */
   class FusionFunctor1
   {

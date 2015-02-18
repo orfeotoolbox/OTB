@@ -62,6 +62,8 @@ namespace otb
  * \example  DisparityMap/NCCRegistrationFilterExample.cxx
  *
  *
+ *
+ * \ingroup OTBStereo
  */
 template<class TFixedImage, class TMovingImage, class TDisplacementField>
 class ITK_EXPORT NCCRegistrationFilter :

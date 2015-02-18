@@ -32,6 +32,8 @@ namespace Wrapper
  * To be valid, the expression must be as follow:
  * ModuleName (ModulePaths) --attribut1_Key attrubut1_Value --attribut2_Key attrubut2_Value
  * After the attribut key, if the user give several values (expression without \"--\" separated by space), it will automacally be interpreted as a list.
+ *
+ * \ingroup OTBCommandLine
  */
 
 class ITK_ABI_EXPORT CommandLineParser : public itk::Object

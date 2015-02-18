@@ -45,6 +45,8 @@ namespace otb
  * by the segmentation images. Since this class will further be used iteratively on a possibly large set
  * of region, it is optimised : the decision is managed by a decision tree, and the input data size is reduced
  * to the smallest set needed to determine the relation.
+ *
+ * \ingroup OTBRCC8
  */
 template <class TInputImage>
 class ITK_EXPORT ImageToImageRCC8Calculator : public itk::ImageToImageFilter<TInputImage, TInputImage>

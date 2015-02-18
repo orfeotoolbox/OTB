@@ -54,6 +54,8 @@ namespace otb
  * Orientation is expressed in degree in the range of [0, 360]
  *
  *  \sa otb::ImageToDeterminantHessianImage
+ *
+ * \ingroup OTBDescriptors
  */
 
 template <class TInputImage, class TOutputPointSet>

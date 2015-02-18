@@ -39,6 +39,8 @@ namespace Wrapper
  *  ...).
  * User has to set the application name, the binary path and a list of
  *  key/value couple.
+ *
+ * \ingroup OTBApplicationEngine
  */
 class ITK_ABI_EXPORT DocExampleStructure :
   public itk::Object

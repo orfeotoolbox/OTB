@@ -31,7 +31,7 @@
 
 extern "C"
 {
-#include "openjpeg.h"
+#include "otb_openjpeg.h"
 }
 
 #include "gdal.h"
@@ -42,7 +42,7 @@ extern "C"
 
 #include "itksys/SystemTools.hxx"
 
-#include "otbTinyXML.h"
+#include "otb_tinyxml.h"
 
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"

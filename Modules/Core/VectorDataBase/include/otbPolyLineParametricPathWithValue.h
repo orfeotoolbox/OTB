@@ -31,6 +31,8 @@ namespace otb
  * The precision of the value can be set.
  *
  * \sa itk::PolyLineParametricPath.
+ *
+ * \ingroup OTBVectorDataBase
  */
 template <class TValue, unsigned int VDimension = 2>
 class ITK_EXPORT PolyLineParametricPathWithValue

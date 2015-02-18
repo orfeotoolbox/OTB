@@ -43,6 +43,8 @@ namespace Functor
 {
 /** \class MagnitudeFunctor
  *  \brief This functor computes the magnitude of a covariant vector.
+ *
+ * \ingroup OTBDescriptors
  */
 template <class TInputPixel, class TOutputPixel>
 class MagnitudeFunctor
@@ -58,6 +60,8 @@ public:
 /** \class OrientationFunctor
  *  \brief This functor computes the orientation of a cavariant vector<br>
  *   Orientation values lies between 0 and 2*Pi.
+ *
+ * \ingroup OTBDescriptors
  */
 template <class TInputPixel, class TOutputPixel>
 class OrientationFunctor
@@ -104,6 +108,8 @@ public:
  *
  * \example FeatureExtraction/SIFTExample.cxx
  *
+ *
+ * \ingroup OTBDescriptors
  */
 template <class TInputImage, class TOutputPointSet>
 class ITK_EXPORT ImageToSIFTKeyPointSetFilter

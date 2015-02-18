@@ -40,6 +40,8 @@ namespace Functor
  * Amplitude and phase can be obtained using the itk::ComplexToModulusImageFilter
  * and itk::ComplexToPhaseImageFilter for example.
  *
+ *
+ * \ingroup OTBColorMap
  */
 template<class TInput1, class TInput2 = TInput1, class TInput3 = TInput1, class TOutput = TInput1>
 class ITK_EXPORT AmplitudePhaseToRGBFunctor

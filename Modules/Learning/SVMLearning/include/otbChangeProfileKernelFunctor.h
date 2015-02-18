@@ -20,7 +20,7 @@
 #ifndef __otbChangeProfileKernelFunctor_h
 #define __otbChangeProfileKernelFunctor_h
 
-#include "svm.h"
+#include "otb_libsvm.h"
 
 namespace otb
 {
@@ -38,6 +38,8 @@ namespace otb
  * The parameters \f$ \gamma \f$, \f$ \textrm{coef} \f$ and \f$ \textrm{degree} \f$ are
  * to be fixed through \code SetValue \endcode with keywords: Gamma (def 1.0),
  * Coef (def 1.0) and Degree (def 1.0).
+ *
+ * \ingroup OTBSVMLearning
  */
 
 class ChangeProfileKernelFunctor

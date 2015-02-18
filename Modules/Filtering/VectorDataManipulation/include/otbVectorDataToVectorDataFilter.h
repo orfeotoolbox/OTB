@@ -33,6 +33,8 @@ namespace otb
    *
    *
    * \ingroup VectorDataFilter
+ *
+ * \ingroup OTBVectorDataManipulation
  */
 template <class TInputVectorData, class TOutputVectorData>
 class ITK_EXPORT VectorDataToVectorDataFilter : public VectorDataSource<TOutputVectorData>

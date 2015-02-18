@@ -48,6 +48,8 @@ namespace otb
  *
  *
  *
+ *
+ * \ingroup OTBObjectDetection
  */
 
 template <class TPrecision = double, class TCoordRep = double>

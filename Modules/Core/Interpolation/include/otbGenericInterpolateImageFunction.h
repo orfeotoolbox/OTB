@@ -34,6 +34,8 @@ namespace otb
  * The Initialize() method need to be call to create the filter.
  *
  * \ingroup ImageFunctions ImageInterpolators
+ *
+ * \ingroup OTBInterpolation
  */
 template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>,
     class TCoordRep = double>

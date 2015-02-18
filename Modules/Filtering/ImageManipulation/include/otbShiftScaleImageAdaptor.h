@@ -40,6 +40,8 @@ namespace Accessor
  * to the types defined as template parameters
  *
  * \ingroup ImageAdaptors
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TPixelType, class TExternalType>
 class ITK_EXPORT ShiftScalePixelAccessor
@@ -96,6 +98,8 @@ private:
  * types following C++ default casting rules.
  *
  * \ingroup ImageAdaptors
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TImage, class TOutputPixelType>
 class ITK_EXPORT ShiftScaleImageAdaptor : public

@@ -46,6 +46,8 @@ namespace otb
  * should remember that if a peculiar operation is needed for some
  * applications, one should provide a patch for this class including
  * the new functionnalities, for consistency reason.
+ *
+ * \ingroup OTBRCC8
  */
 template <class TVertex>
 class ITK_EXPORT RCC8Graph  :

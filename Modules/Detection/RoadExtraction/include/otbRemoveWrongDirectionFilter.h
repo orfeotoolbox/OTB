@@ -34,6 +34,8 @@ namespace Functor
  *
  * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
  *
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TInput1, class TInput2, class TOutput>
 class RemoveWrongDirectionFunctor
@@ -67,6 +69,8 @@ public:
  * \sa NeighborhoodScalarProductFilter
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TInputModulus, class TInputDirection, class TOutputImage>
 class ITK_EXPORT RemoveWrongDirectionFilter

@@ -60,6 +60,8 @@ enum MapProj
  *  GenericMapProjection should be used instead.
  *
  *
+ *
+ * \ingroup OTBProjection
  */
 template <MapProjectionType::MapProj TMapProj,
           TransformDirection::TransformationDirection TTransform>

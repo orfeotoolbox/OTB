@@ -31,6 +31,8 @@ namespace otb
  *  RCC8 graph.
  *
  * \sa RCC8Graph, RCC8Edge
+ *
+ * \ingroup OTBRCC8
  */
 template <class TPath>
 class ITK_EXPORT RCC8VertexBase

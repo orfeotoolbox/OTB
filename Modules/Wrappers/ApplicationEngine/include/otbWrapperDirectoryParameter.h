@@ -30,6 +30,8 @@ namespace Wrapper
 
 /** \class DirectoryParameter
  *  \brief This class represent a string parameter for the wrapper framework
+ *
+ * \ingroup OTBApplicationEngine
  */
 class ITK_ABI_EXPORT DirectoryParameter
   : public Parameter

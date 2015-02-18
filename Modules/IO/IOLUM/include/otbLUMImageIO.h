@@ -34,6 +34,8 @@ namespace otb
  *
  * \ingroup IOFilters
  *
+ *
+ * \ingroup OTBIOLUM
  */
 class ITK_EXPORT LUMImageIO : public otb::ImageIOBase
 {

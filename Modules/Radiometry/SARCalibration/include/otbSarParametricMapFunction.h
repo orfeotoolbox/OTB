@@ -32,6 +32,8 @@ namespace otb
  *  \note This is an internal class used by the Sar calibration framework.
  *
  * \ingroup ImageFunctions
+ *
+ * \ingroup OTBSARCalibration
  */
 
 template <class TInputImage, class TCoordRep = float>

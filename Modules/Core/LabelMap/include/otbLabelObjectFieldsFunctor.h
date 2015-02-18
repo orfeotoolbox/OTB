@@ -31,6 +31,8 @@ namespace Functor
  *  \brief Returns additionnal OGR fields to be saved in VectorData
  *
  * \sa LabelObjectWithClassLabelFieldsFunctor
+ *
+ * \ingroup OTBLabelMap
  */
 template<class TLabelObject>
 class ITK_EXPORT LabelObjectFieldsFunctor

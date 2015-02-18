@@ -27,6 +27,8 @@ namespace otb
  *  nearest point in pointset.
  *
  * \ingroup DisparityMap
+ *
+ * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
 class ITK_EXPORT NearestTransformDisplacementFieldGenerator

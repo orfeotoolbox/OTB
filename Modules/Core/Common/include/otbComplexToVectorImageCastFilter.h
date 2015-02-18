@@ -33,6 +33,8 @@ namespace otb
  *
  * \sa ComplexToImaginaryImageFilter
  * \sa ComplexToRealImageFilter
+ *
+ * \ingroup OTBCommon
  */
 namespace Functor {
 

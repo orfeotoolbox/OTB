@@ -36,6 +36,8 @@ namespace otb
    *
    *
    * \ingroup ObjectListFilter
+ *
+ * \ingroup OTBObjectList
  */
 template <class TInputList, class TOutputList>
 class ITK_EXPORT ObjectListToObjectListFilter : public otb::ObjectListSource<TOutputList>

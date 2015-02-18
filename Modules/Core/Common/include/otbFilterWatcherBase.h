@@ -37,6 +37,8 @@ namespace otb
  *  \li StartFilter  : callback called at the begin of process
  *  \li EndFilter    : callback called at the end of process
  *
+ *
+ * \ingroup OTBCommon
  */
 class /*ITK_EXPORT*/ FilterWatcherBase
 {

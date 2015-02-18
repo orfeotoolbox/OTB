@@ -33,6 +33,8 @@ namespace otb {
  *
  * \sa WaveletOperatorBase
  * \sa WaveletGenerator
+ *
+ * \ingroup OTBWavelet
  */
 template <Wavelet::Wavelet TMotherWaveletOperator,
     Wavelet::WaveletDirection TDirectionOfTransformation,

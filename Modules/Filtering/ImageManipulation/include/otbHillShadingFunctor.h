@@ -34,6 +34,8 @@ namespace Functor
  *
  *  \ingroup Functor
  *  \example BasicFilters/HillShadingExample.cxx
+ *
+ * \ingroup OTBImageManipulation
 */
 template<class TInput1, class TInput2 = TInput1, class TOutput = TInput1>
 class HillShadeModulationFunctor
@@ -61,6 +63,8 @@ public:
  *
  *  \ingroup Functor
  *  \example BasicFilters/HillShadingExample.cxx
+ *
+ * \ingroup OTBImageManipulation
 */
 template <class TNeighIter, class TInputImage, class TOutput>
 class HillShadingFunctor

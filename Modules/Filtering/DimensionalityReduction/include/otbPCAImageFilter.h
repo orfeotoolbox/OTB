@@ -39,6 +39,8 @@ namespace otb
  *
  * \sa otbStreamingStatisticsVectorImageFilter
  * \sa MatrixMultiplyImageFilter
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage, Transform::TransformDirection TDirectionOfTransformation >
 class ITK_EXPORT PCAImageFilter

@@ -32,6 +32,8 @@ namespace otb
  * SetInput() method set the modulus image input and
  * SetInputDirection() set the image direction input.
  *
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TInputImage,
     class TInputImageDirection,

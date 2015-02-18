@@ -26,6 +26,8 @@ namespace otb
 /** \class FusionImageBase
  * Basic class for every Fusion classes.
  * \sa TernaryFunctorImageFilter
+ *
+ * \ingroup OTBPanSharpening
  */
 template <class TInputMultiSpectralImage, class TInputMultiSpectralInterpImage, class TInputPanchroImage,
     class TOutputImage, class TFunctor>

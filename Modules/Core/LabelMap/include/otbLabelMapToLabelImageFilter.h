@@ -35,6 +35,8 @@ namespace otb {
  * \sa LabelMapToBinaryImageFilter, LabelMapMaskImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup LabeledImageFilters
+ *
+ * \ingroup OTBLabelMap
  */
 template<class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelMapToLabelImageFilter :

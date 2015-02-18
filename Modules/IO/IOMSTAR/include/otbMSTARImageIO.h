@@ -31,6 +31,8 @@ namespace otb
  *
  * \ingroup IOFilters
  *
+ *
+ * \ingroup OTBIOMSTAR
  */
 class ITK_EXPORT MSTARImageIO : public otb::ImageIOBase
 {

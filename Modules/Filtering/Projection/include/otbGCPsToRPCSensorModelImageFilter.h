@@ -68,6 +68,8 @@ namespace otb {
  *
  * The output image can be given to the OrthorectificationFilter.
  *
+ *
+ * \ingroup OTBProjection
  */
 template <class TImage>
 class ITK_EXPORT GCPsToRPCSensorModelImageFilter :

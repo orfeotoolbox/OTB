@@ -44,6 +44,8 @@ namespace otb
  * coordinate representation type (e.g. float or double).
  *
  * \ingroup ImageFunctions
+ *
+ * \ingroup OTBStatistics
  */
 
 template <class TInputImage, class TCoordRep = double >

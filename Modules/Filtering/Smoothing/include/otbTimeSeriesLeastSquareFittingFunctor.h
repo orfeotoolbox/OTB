@@ -49,6 +49,8 @@ namespace Functor
   *  \f$ A_{ij} = \frac{\Phi_{ij}}{\sigma_i} \f$
   *
   *
+ *
+ * \ingroup OTBSmoothing
   */
 template <class TSeriesType, class TTimeFunction, class TDateType = TSeriesType, class TWeightType = TSeriesType>
 class TimeSeriesLeastSquareFittingFunctor

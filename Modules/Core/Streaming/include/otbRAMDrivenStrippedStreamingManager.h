@@ -34,6 +34,8 @@ namespace otb
  *
  * \sa ImageFileWriter
  * \sa StreamingImageVirtualFileWriter
+ *
+ * \ingroup OTBStreaming
  */
 template<class TImage>
 class ITK_EXPORT RAMDrivenStrippedStreamingManager : public StreamingManager<TImage>

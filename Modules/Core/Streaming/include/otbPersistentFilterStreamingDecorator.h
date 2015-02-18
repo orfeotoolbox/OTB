@@ -37,6 +37,8 @@ namespace otb
  *
  * \sa StreamingStatisticsImageFilter
  * \sa StreamingStatisticsVectorImageFilter
+ *
+ * \ingroup OTBStreaming
  */
 template <class TFilter>
 class ITK_EXPORT PersistentFilterStreamingDecorator

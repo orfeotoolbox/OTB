@@ -31,6 +31,8 @@ namespace otb
   *
   * \ingroup Functions
   * \sa
+ *
+ * \ingroup OTBVectorDataBase
  */
 
 template <

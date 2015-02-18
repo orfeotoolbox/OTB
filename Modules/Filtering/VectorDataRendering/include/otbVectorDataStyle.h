@@ -29,6 +29,8 @@ namespace otb
  *   \brief Load style into a mapnik::Map
  *
  * \sa VectorDataToMapFilter
+ *
+ * \ingroup OTBVectorDataRendering
  */
 
 class ITK_EXPORT VectorDataStyle : public itk::LightObject

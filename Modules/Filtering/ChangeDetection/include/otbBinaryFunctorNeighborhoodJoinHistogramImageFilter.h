@@ -34,6 +34,8 @@ namespace otb
  * operation to be applied.  A Functor style is used.
  *
  * \ingroup IntensityImageFilters   Multithreaded
+ *
+ * \ingroup OTBChangeDetection
  */
 template <class TInputImage1, class TInputImage2,
     class TOutputImage, class TFunction>

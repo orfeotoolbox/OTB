@@ -73,6 +73,8 @@ namespace otb
  *
  *   \ingroup Streamed
  *   \ingroup Threaded
+ *
+ * \ingroup OTBStereo
  */
 template <class TInputImage, class TOutputHeight>
 class ITK_EXPORT StereoSensorModelToElevationFilter

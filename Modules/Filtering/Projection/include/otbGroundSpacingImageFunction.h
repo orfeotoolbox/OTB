@@ -38,6 +38,8 @@ namespace otb
  * giving an 'as-the-crow-flies' distance between the points (ignoring any hills!).
  *
  * \ingroup ImageFunctions
+ *
+ * \ingroup OTBProjection
  */
 template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT GroundSpacingImageFunction :

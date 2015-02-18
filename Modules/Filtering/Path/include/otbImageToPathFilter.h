@@ -26,6 +26,8 @@ namespace otb
  * \class ImageToPathFilter
  * \brief Base class for filters taking an image as input, and producing an
  * output of type Path.
+ *
+ * \ingroup OTBPath
  */
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT ImageToPathFilter

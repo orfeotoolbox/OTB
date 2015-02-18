@@ -30,6 +30,8 @@ namespace Wrapper
  *
  *  Represents an enumerated parameter.
  *  The different values of the enumeration can be associated with a parameter
+ *
+ * \ingroup OTBApplicationEngine
  */
 class ITK_ABI_EXPORT ChoiceParameter
   : public Parameter

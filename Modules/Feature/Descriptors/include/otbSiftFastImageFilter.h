@@ -42,6 +42,8 @@ namespace otb
  * \sa ImageToSIFTKeyPointSetFilter
  *
  * \example FeatureExtraction/SIFTFastExample.cxx
+ *
+ * \ingroup OTBDescriptors
  */
 template <class TInputImage, class TOutputPointSet>
 class ITK_EXPORT SiftFastImageFilter

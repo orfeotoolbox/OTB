@@ -54,6 +54,8 @@ public:
 /** \class ImageSeriesFileReaderBase
  * \brief
  * \sa ImageSeriesFileReader
+ *
+ * \ingroup OTBImageIO
  */
 
 template <class TImage, class TInternalImage = TImage>

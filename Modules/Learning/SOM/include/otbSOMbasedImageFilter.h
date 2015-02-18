@@ -34,6 +34,8 @@ namespace Functor {
  *
  *  On the contrary to SOMClassifier, it does not yield labels but the
  *  value of the winning neurons. Also, it is threaded...
+ *
+ * \ingroup OTBSOM
  */
 template <class TInput, class TOutput, class TDistanceMetric, class TMap>
 class ITK_EXPORT SOMbasedImageFilterFunctor
@@ -93,6 +95,8 @@ private:
  *
  * \ingroup Streamed
  * \sa EuclideanDistanceMetricWithMissingValue
+ *
+ * \ingroup OTBSOM
  */
 template <class TInputImage, class TOutputImage,
     class TDistanceMetric, class TMap>

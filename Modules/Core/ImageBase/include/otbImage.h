@@ -26,6 +26,8 @@ namespace otb
 /** \class Image
  * \brief Creation of an "otb" image which contains metadata.
  *
+ *
+ * \ingroup OTBImageBase
  */
 
 template <class TPixel, unsigned int VImageDimension = 2>

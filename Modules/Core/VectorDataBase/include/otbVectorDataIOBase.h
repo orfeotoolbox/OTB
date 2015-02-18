@@ -49,6 +49,8 @@ namespace otb
  *
  * \ingroup IOFilters
  *
+ *
+ * \ingroup OTBVectorDataBase
  */
 class ITK_EXPORT VectorDataIOBase : public itk::LightProcessObject
 {

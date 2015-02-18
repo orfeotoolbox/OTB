@@ -24,6 +24,8 @@ namespace otb
 {
 /** \class BSQImageIOFactory
  * \brief Creation d'un instance d'un objet BSQImageIO utilisant les object factory.
+ *
+ * \ingroup OTBIOBSQ
  */
 class ITK_EXPORT BSQImageIOFactory : public itk::ObjectFactoryBase
 {

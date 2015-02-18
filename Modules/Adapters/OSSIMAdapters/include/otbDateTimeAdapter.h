@@ -33,6 +33,8 @@ namespace otb
  *
  *  This class provide functions to define, compare and measure times and dates.
  *
+ *
+ * \ingroup OTBOSSIMAdapters
  **/
 class DateTimeAdapter : public itk::Object
 {

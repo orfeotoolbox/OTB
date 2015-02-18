@@ -33,6 +33,8 @@ namespace otb
  *
  * A class that extract pixel value from an input image according to a ROI
  * image and outputs it on a vector of PixelType.
+ *
+ * \ingroup OTBProjection
  */
 template <class TInputImage, class TInputROIImage>
 class ROIdataConversion

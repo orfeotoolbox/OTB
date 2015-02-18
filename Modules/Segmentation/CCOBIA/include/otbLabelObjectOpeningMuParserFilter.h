@@ -55,6 +55,8 @@ namespace otb
  *
  * \sa Parser
  *
+ *
+ * \ingroup OTBCCOBIA
  */
 template<class TImage, class TFunction = Functor::OBIAMuParserFunctor<typename TImage::LabelObjectType> >
 class ITK_EXPORT LabelObjectOpeningMuParserFilter: public itk::InPlaceLabelMapFilter<TImage>

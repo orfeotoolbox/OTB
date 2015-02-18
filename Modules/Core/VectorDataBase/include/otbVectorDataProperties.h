@@ -30,6 +30,8 @@ namespace otb
  *   \brief Compute public properties of the vectordata
  *
  * \sa VectorData
+ *
+ * \ingroup OTBVectorDataBase
  */
 
 template <class TVectorData>

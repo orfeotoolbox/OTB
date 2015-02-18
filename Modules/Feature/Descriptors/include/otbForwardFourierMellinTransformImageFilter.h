@@ -41,6 +41,8 @@ namespace otb
  * \note the Fourier transform image is coded from 0.0 to 1.0
  *
  * \ingroup ImageFunctions
+ *
+ * \ingroup OTBDescriptors
  */
 
 template <class TPixel,

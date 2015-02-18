@@ -31,6 +31,8 @@ namespace Function
  * \brief Window function for sinc interpolation.
  * \f[ w(x) = 1 - ( \frac{x^2}{m^2} ) \f]
  * \sa WindowedSincInterpolateImageWelchFunction
+ *
+ * \ingroup OTBInterpolation
  */
 template<class TInput = double, class TOutput = double>
 class WelchWindowFunction
@@ -76,6 +78,8 @@ private:
  * \sa Function::LanczosWindowFunction
  * \sa Function::BlackmanWindowFunction
  * \ingroup ImageFunctionBases ImageInterpolators
+ *
+ * \ingroup OTBInterpolation
  */
 template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
       double, class TInputInterpolator = double, class TOutputInterpolator = double>

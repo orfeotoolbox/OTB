@@ -29,6 +29,8 @@ namespace otb
  * the displacements from the transforms induced by the n nearest points.
  *
  * \ingroup DisparityMap
+ *
+ * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
 class ITK_EXPORT NNearestTransformsLinearInterpolateDisplacementFieldGenerator

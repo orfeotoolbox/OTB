@@ -41,6 +41,8 @@ namespace Functor
    * \sa LuminanceToImageImageFilter
    * \ingroup Functor
    * \ingroup Radiometry
+ *
+ * \ingroup OTBOpticalCalibration
  */
 
 template <class TInput, class TOutput>
@@ -100,6 +102,8 @@ private:
  * \ingroup Radiometry
  *
  * \example Radiometry/AtmosphericCorrectionSequencement.cxx
+ *
+ * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LuminanceToImageImageFilter :

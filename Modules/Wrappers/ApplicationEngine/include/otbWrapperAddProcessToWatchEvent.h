@@ -30,6 +30,8 @@ namespace Wrapper
  *  \brief This class implements an event storing a pointer to
  *  itk::ProcessObject and a string describing the process.
  *
+ *
+ * \ingroup OTBApplicationEngine
  */
 class ITK_ABI_EXPORT AddProcessToWatchEvent: public itk::EventObject
 {

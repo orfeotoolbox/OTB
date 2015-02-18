@@ -37,6 +37,8 @@ namespace otb
  *
  * \sa MorphologicalOpeningProfileFilter
  * \sa MorhologicalClosingProfileFilter
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TFilter, class TParameter = unsigned int>
 class ITK_EXPORT ImageToProfileFilter

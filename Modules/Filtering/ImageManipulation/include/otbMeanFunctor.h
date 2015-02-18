@@ -24,6 +24,8 @@ namespace Functor
 {
 /** \class MeanFunctor
  *  \brief This functor generate the mean value of a component pixels
+ *
+ * \ingroup OTBImageManipulation
  */
 template<class TInput, class TOutputValue>
 class MeanFunctor

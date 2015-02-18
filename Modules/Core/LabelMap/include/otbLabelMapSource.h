@@ -30,6 +30,8 @@ namespace otb
  *
  * \ingroup IO
  *
+ *
+ * \ingroup OTBLabelMap
  */
 
 template <class TOutputLabelMap>

@@ -47,6 +47,8 @@ namespace otb
  *  vol. 4, n. 2, 2007, pp 260-264
  *
  * \ingroup Textures
+ *
+ * \ingroup OTBTextures
  */
 
 namespace Functor

@@ -34,6 +34,8 @@ namespace otb
  * The result value is comprise between 0.0 and 1.0
  *
  * \ingroup PathFunctions
+ *
+ * \ingroup OTBPath
  */
 
 template <class TInputPath,

@@ -54,6 +54,8 @@ namespace otb
    *
    * \ingroup ITKSystemObjects
    * \ingroup DataProcessing
+ *
+ * \ingroup OTBCommon
  */
 
 template <unsigned int VImageDimension>

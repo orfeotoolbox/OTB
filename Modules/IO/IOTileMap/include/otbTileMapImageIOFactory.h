@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class TileMapImageIOFactory
  * \brief Creation of a TileMapImageIO object using object factory.
+ *
+ * \ingroup OTBIOTileMap
  */
 class ITK_EXPORT TileMapImageIOFactory : public itk::ObjectFactoryBase
 {

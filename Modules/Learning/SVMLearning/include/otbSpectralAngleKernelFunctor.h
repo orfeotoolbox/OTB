@@ -20,7 +20,7 @@
 #ifndef __otbSpectralAngleKernelFunctor_h
 #define __otbSpectralAngleKernelFunctor_h
 
-#include "svm.h"
+#include "otb_libsvm.h"
 
 namespace otb
 {
@@ -40,6 +40,8 @@ namespace otb
  * The only parameter \f$ c_0 \f$ is to be fixed by the \code SetValue \endcode
  * interface with keyword Coef (def 2.0).
  *
+ *
+ * \ingroup OTBSVMLearning
  */
 
 class SpectralAngleKernelFunctor

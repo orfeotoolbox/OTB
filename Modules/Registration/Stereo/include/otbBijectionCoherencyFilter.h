@@ -39,6 +39,8 @@ namespace otb
  *  \ingroup Streamed
  *  \ingroup Threaded
  *
+ *
+ * \ingroup OTBStereo
  */
 template <class TDisparityImage, class TOutputImage = otb::Image<unsigned char> >
 class ITK_EXPORT BijectionCoherencyFilter :

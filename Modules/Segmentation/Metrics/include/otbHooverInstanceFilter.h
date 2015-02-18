@@ -62,6 +62,8 @@ namespace otb
  * (see Hoover et al., "An experimental comparison of range image segmentation algorithms", IEEE PAMI vol. 18, no. 7, July 1996)
  *
  * \sa HooverMatrixFilter
+ *
+ * \ingroup OTBMetrics
  */
 
 template< class TLabelMap >

@@ -55,6 +55,8 @@ namespace otb
    * \sa SpectralResponse
    * \sa SatelliteRSR
    *
+ *
+ * \ingroup OTBSimulation
  */
 template <class TSpectralResponse , class TRSR>
 class ReduceSpectralResponse : public itk::DataObject

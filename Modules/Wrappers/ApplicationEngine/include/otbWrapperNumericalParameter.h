@@ -28,6 +28,8 @@ namespace Wrapper
 {
 /** \class NumericalParameter
  *  \brief This class represents a numerical parameter
+ *
+ * \ingroup OTBApplicationEngine
  */
 template <class T>
 class ITK_ABI_EXPORT NumericalParameter : public Parameter

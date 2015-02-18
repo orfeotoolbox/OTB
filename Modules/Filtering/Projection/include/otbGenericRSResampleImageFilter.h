@@ -44,6 +44,8 @@ namespace otb
  *
  * \ingroup Projection
  *
+ *
+ * \ingroup OTBProjection
  **/
 
 template <class TInputImage, class TOutputImage>

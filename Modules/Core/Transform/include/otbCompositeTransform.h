@@ -35,6 +35,8 @@ namespace otb
 *
  *
 * \ingroup Transform
+ *
+ * \ingroup OTBTransform
 */
 
 //typedef enum

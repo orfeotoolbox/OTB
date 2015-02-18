@@ -47,6 +47,8 @@ namespace otb
  * \sa StreamingTraits
  * \sa StatisticsImageFilter
  * \ingroup MathematicalStatisticsImageFilters
+ *
+ * \ingroup OTBImageManipulation
  */
 template<class TInputImage, class TInputImage2>
 class ITK_EXPORT PersistentMatrixTransposeMatrixImageFilter :
@@ -197,6 +199,8 @@ private:
  * \ingroup Streamed
  * \ingroup Multithreaded
  * \ingroup MathematicalStatisticsImageFilters
+ *
+ * \ingroup OTBImageManipulation
  */
 
 template<class TInputImage1, class TInputImage2>

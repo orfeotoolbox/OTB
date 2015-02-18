@@ -45,6 +45,8 @@ The output of the detector is \f$[det(\mu) - \alpha trace^2(\mu)\f$.
 
 The interest points can then be extracted with a thresholding filter.
  *
+ *
+ * \ingroup OTBCorner
  */
 
 template <class TInputImage, class TOutputImage>

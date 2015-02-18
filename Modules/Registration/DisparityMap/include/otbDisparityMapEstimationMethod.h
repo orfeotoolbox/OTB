@@ -46,6 +46,8 @@ namespace otb
  *  from CNES.
  *
  *  \sa FineRegistrationImageFilter, FastCorrelationImageFilter
+ *
+ * \ingroup OTBDisparityMap
  */
 template <class TFixedImage, class TMovingImage, class TPointSet>
 class ITK_EXPORT DisparityMapEstimationMethod

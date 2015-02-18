@@ -35,6 +35,8 @@ namespace MeanShift
  *   This class handles buffer conversion when pixel type is scalar.
  *  \deprecated
  *
+ *
+ * \ingroup OTBEdisonMeanShift
  **/
 class ScalarBufferConverter
 {
@@ -97,6 +99,8 @@ public:
  * \sa MeanShiftSmootingImageFilter, MeanShiftSegmentationFilter
  *
  * \ingroup ImageEnhancement
+ *
+ * \ingroup OTBEdisonMeanShift
  */
 
 template <class TInputImage, class TOutputImage,

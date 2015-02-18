@@ -34,6 +34,8 @@ namespace Functor {
  * http://www.insight-journal.org/browse/publication/285
  * http://hdl.handle.net/1926/1452
  *
+ *
+ * \ingroup OTBColorMap
  */
 template<class TScalar, class TRGBPixel>
 class ITK_EXPORT ReliefColormapFunctor

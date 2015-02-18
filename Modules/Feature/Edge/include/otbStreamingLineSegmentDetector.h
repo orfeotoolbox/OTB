@@ -44,6 +44,8 @@ namespace otb
  *
  * \sa PersistentImageToVectorDataFilter
  *
+ *
+ * \ingroup OTBEdge
  */
 template <class TImageType>
 class PersistentStreamingLineSegmentDetector

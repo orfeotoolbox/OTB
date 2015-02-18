@@ -27,6 +27,8 @@ namespace otb
 /** \class SVMMarginSampler
  *  \brief Implement one iteration of active learning by margin
  *  \ingroup ActiveLearningFilters
+ *
+ * \ingroup OTBSVMLearning
  */
 
 template< class TSample, class TModel >

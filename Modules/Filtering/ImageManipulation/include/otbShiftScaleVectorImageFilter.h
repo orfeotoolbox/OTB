@@ -38,6 +38,8 @@ namespace Functor
  *
  *  TInput and TOutput type are supposed to be of type itk::VariableLengthVector.
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 template<class TInput, class TOutput>
 class VectorShiftScale
@@ -142,6 +144,8 @@ private:
  *
  *  \ingroup IntensityImageFilters
  *  \ingroup MultiThreaded
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage = TInputImage>
 class ITK_EXPORT ShiftScaleVectorImageFilter :

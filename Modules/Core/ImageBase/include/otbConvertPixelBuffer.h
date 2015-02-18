@@ -33,6 +33,8 @@ namespace otb
  * OutputConvertTraits() is the traits class.  The default one used is
  * DefaultConvertPixelTraits.
  *
+ *
+ * \ingroup OTBImageBase
  */
 template <
   typename InputPixelType,

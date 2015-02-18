@@ -46,6 +46,8 @@ namespace otb
    * \sa SpectralResponse
    * \sa SatelliteRSR
    *
+ *
+ * \ingroup OTBSimulation
  */
   template <class TReduceSpectralResponse , class TFunction = Functor::NDVI< typename TReduceSpectralResponse::ValuePrecisionType, typename TReduceSpectralResponse::ValuePrecisionType,
   typename TReduceSpectralResponse::ValuePrecisionType > >

@@ -54,6 +54,8 @@ namespace otb
    * Remark: image is assumed to be 2 dimensionnal
    *
    *
+ *
+ * \ingroup OTBStatistics
  */
 
 template <class TInputImage>

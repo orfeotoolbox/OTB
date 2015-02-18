@@ -30,6 +30,8 @@ namespace otb
  * extracted from a aeronet file.
  *
  * \sa AeronetFileReader
+ *
+ * \ingroup OTBOpticalCalibration
  */
 class ITK_EXPORT AeronetData :  public itk::DataObject
 {

@@ -29,6 +29,8 @@ namespace otb
  *
  * \sa ImaginaryImageToComplexImageFilter
  * \ingroup Multithreaded
+ *
+ * \ingroup OTBCommon
  */
 
 namespace Function {

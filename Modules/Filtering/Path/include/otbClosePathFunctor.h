@@ -31,6 +31,8 @@ namespace otb
 * \sa UnaryFunctorObjectListFilter
 *
  *  \ingroup Functor
+ *
+ * \ingroup OTBPath
  */
 template <class TInput, class TOutput>
 class ClosePathFunctor

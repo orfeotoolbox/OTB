@@ -58,6 +58,8 @@ namespace otb {
  * NOTE: All computation are performed in double. Results are casted
  * back to TPoint::CoordRepType.
  *
+ *
+ * \ingroup OTBProjection
  */
 template <class TPoint>
 class ITK_EXPORT LeastSquareAffineTransformEstimator :

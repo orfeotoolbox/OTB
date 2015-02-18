@@ -50,6 +50,8 @@ namespace otb
  *
  * \sa DecisionTreeClassifier
  * \sa DecisionTreeEstimator
+ *
+ * \ingroup OTBLearningBase
  */
 
 template <class AttributeValueType, class LabelType>

@@ -24,6 +24,8 @@ namespace otb
 {
 /** \class JPEG2000ImageIOFactory
  * \brief Create instances of JPEG2000ImageIO objects using an object factory.
+ *
+ * \ingroup OTBIOJPEG2000
  */
 class ITK_EXPORT JPEG2000ImageIOFactory : public itk::ObjectFactoryBase
 {

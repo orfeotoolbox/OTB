@@ -38,6 +38,8 @@ namespace otb
  * looking for, the variance of the accumulator blurring (default = 5) and
  * the radius of the disc to remove from the accumulator (default = 10).
  *
+ *
+ * \ingroup OTBEdge
  */
 
 template <class TInputImage>

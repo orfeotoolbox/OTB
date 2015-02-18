@@ -32,6 +32,8 @@ namespace otb
  * GetOutput() method return the output image modulus and
  * GetOutputDirection() return the output image direction
  *
+ *
+ * \ingroup OTBCommon
  */
 template <class TInputImage,
     class TOutputImage,

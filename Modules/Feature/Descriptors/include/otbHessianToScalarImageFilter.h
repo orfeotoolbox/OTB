@@ -25,6 +25,8 @@ namespace otb
 
 /** \class HessianToScalarImageFilter
  * \brief TODO
+ *
+ * \ingroup OTBDescriptors
  */
 
 namespace Functor

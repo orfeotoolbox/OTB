@@ -31,6 +31,8 @@ namespace Functor
  * \brief Implements simple blending
  * For each channel the blending function is as follows:
  * \f[ P_{o} = \alpha P_{i1} + (1 - \alpha) P_{i2} \f]
+ *
+ * \ingroup OTBCommon
  */
 
 template<class TInputPixel, class TInputPixel2, class TOutputPixel>

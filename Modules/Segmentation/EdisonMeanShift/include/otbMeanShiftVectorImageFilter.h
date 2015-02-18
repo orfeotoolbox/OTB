@@ -29,6 +29,8 @@ namespace MeanShift
  *  \brief Small utilities class used for buffer conversion with EDISON standard.
  *   This class handles buffer conversion when pixel type is scalar.
  * \deprecated
+ *
+ * \ingroup OTBEdisonMeanShift
  **/
 class VectorBufferConverter
 {
@@ -75,6 +77,8 @@ public:
  * \sa MeanShiftSmootingImageFilter, MeanShiftSegmentationFilter
  *
  * \ingroup ImageEnhancement
+ *
+ * \ingroup OTBEdisonMeanShift
  */
 template <class TInputImage, class TOutputImage, class TLabeledOutput = otb::Image<unsigned short, 2> >
 class MeanShiftVectorImageFilter

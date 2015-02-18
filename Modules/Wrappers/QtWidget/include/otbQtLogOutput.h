@@ -31,6 +31,8 @@ namespace otb
  *
  *
  * \ingroup OTBQtWidget
+ *
+ * \ingroup OTBQtWidget
  */
 
 class ITK_ABI_EXPORT QtLogOutput : public QObject, public itk::LogOutput

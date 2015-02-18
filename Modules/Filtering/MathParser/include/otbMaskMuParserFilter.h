@@ -65,6 +65,8 @@ namespace otb
  *
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBMathParser
  */
 
 template<class TInputImage, class TOutputImage, class TFunction = Functor::MaskMuParserFunctor<

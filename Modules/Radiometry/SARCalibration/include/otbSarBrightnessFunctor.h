@@ -32,6 +32,8 @@ namespace Functor
  * \brief Compute the brightness value.
  *  \f$ \beta^{0} = (scale * DN^{2} + offset) * OldGain / NewGain * RangeSpreadLoss \f$
  *
+ *
+ * \ingroup OTBSARCalibration
  */
 template<class TInput, class TOutput>
 class ITK_EXPORT SarBrightnessFunctor

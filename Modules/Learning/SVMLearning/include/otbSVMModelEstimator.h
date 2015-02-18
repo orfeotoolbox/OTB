@@ -52,6 +52,8 @@ namespace otb
  *
  *
  * \ingroup ClassificationFilters
+ *
+ * \ingroup OTBSVMLearning
  */
 template <class InputPixelType, class LabelPixelType>
 class ITK_EXPORT SVMModelEstimator : public itk::ProcessObject

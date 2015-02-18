@@ -30,6 +30,8 @@ namespace otb
  *
  * \brief Creation of an "otb" TerraSarImageMetadataInterface that gets metadata.
  *
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT TerraSarImageMetadataInterface : public SarImageMetadataInterface
 {

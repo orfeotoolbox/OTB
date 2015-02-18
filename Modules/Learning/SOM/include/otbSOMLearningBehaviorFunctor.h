@@ -39,6 +39,8 @@ namespace Functor
   \f]
 *
 *  \sa SOM
+ *
+ * \ingroup OTBSOM
 */
 class SOMLearningBehaviorFunctor
 {

@@ -41,6 +41,8 @@ namespace otb
  * \f$ (i_{p}, j_{p})\f$ : the coordinates of the pixels belonging to \f$ \eta_{p} \subset \eta_{s} \f$
  * \f$ C_{s}\f$ : the variation coefficient computed over \f$ \eta_{p}\f$
  *
+ *
+ * \ingroup OTBImageNoise
  */
 
 template <class TInputImage, class TOutputImage>

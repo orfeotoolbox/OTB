@@ -47,6 +47,8 @@ namespace otb
  * \ingroup Streamed
  * \ingroup Multithreaded
  * \ingroup MathematicalStatisticsImageFilters
+ *
+ * \ingroup OTBStatistics
  */
 template<class TInputVectorImage, class TLabelImage>
 class ITK_EXPORT PersistentStreamingStatisticsMapFromLabelImageFilter :
@@ -182,6 +184,8 @@ private:
  * \ingroup Streamed
  * \ingroup Multithreaded
  * \ingroup MathematicalStatisticsImageFilters
+ *
+ * \ingroup OTBStatistics
  */
 
 template<class TInputVectorImage, class TLabelImage>

@@ -25,6 +25,8 @@ namespace otb
 /**
  * \class RCC8InEdgeIterator
  * \brief Iterates on the graph in edges from a vertex.
+ *
+ * \ingroup OTBRCC8
  */
 template <class TGraph>
 class ITK_EXPORT RCC8InEdgeIterator

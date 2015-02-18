@@ -28,6 +28,8 @@ namespace otb
  * \brief Virtual class for the Geometric moments for an path function
  *
  * \ingroup PathFunctions
+ *
+ * \ingroup OTBMoments
  */
 
 template <class TInputPath,

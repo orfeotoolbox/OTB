@@ -34,6 +34,8 @@ namespace otb {
  * It is based on the depth of the decomposition only...
  *
  * \sa WaveletPacketForwardTransform
+ *
+ * \ingroup OTBWavelet
  */
 template <class TImage>
 class ITK_EXPORT FullyDecomposedWaveletPacketCost

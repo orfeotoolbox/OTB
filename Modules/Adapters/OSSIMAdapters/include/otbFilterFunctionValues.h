@@ -34,6 +34,8 @@ namespace otb
  * Those value can be directly read from the image metadatas.
  *
  * \ingroup IO
+ *
+ * \ingroup OTBOSSIMAdapters
  */
 class ITK_EXPORT FilterFunctionValues : public itk::DataObject
 {

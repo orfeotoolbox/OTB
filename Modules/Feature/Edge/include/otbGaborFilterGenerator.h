@@ -64,6 +64,8 @@ namespace otb
  * - \f$ v_0    \f$ : y spatial frenquency of the sinusoidal carrier (GetV0()/SetV0())
  * - \f$ \phi   \f$ : Phase of the sinusoidal carrier (GetPhi()/SetPhi())
  *
+ *
+ * \ingroup OTBEdge
  */
 
 template <class TPrecision>

@@ -54,6 +54,8 @@ namespace otb
  * \ingroup ImageFeatureExtraction
  * \sa LineSpatialObject
  *
+ *
+ * \ingroup OTBEdge
  * */
 
 template<typename TInputPixelType, typename TOutputPixelType>

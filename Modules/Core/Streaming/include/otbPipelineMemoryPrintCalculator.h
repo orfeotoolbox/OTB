@@ -57,6 +57,8 @@ namespace otb
  *  biased depending on the filters in the upstream pipeline. The bias
  *  correction factor parameters allows to compensate this bias to the first
  *  order.
+ *
+ * \ingroup OTBStreaming
  */
 class ITK_EXPORT PipelineMemoryPrintCalculator :
   public itk::Object

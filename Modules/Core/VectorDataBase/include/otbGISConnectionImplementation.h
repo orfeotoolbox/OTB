@@ -27,6 +27,8 @@ namespace otb
  * \brief Base class for GIS DB connection implementations
  *
  *
+ *
+ * \ingroup OTBVectorDataBase
  */
 
 template <class TransactorType>

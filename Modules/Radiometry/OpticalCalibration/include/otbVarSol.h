@@ -34,6 +34,8 @@ namespace otb
    * IEEE Transactions on Geoscience and Remote Sensing 35
    * \ingroup Radiometry
    *
+ *
+ * \ingroup OTBOpticalCalibration
  */
   class ITK_EXPORT VarSol
   {

@@ -45,6 +45,8 @@ namespace otb
  * \ingroup VectorDataFilter
  *
  * \example Projections/VectorDataExtractROIExample.cxx
+ *
+ * \ingroup OTBVectorDataManipulation
  */
 template <class TVectorData>
 class ITK_EXPORT VectorDataExtractROI :

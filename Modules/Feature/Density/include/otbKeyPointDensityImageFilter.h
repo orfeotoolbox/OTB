@@ -40,6 +40,8 @@ namespace otb
  * within its neighborhood is computed.
  *
  * The output is a map of key points density.
+ *
+ * \ingroup OTBDensity
  */
 
 template <class TInputImage, class TOutputImage, class TDetector>

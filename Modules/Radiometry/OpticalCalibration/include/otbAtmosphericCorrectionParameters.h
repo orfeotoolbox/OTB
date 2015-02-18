@@ -35,6 +35,8 @@ namespace otb
  *
  * \ingroup Radiometry
  *
+ *
+ * \ingroup OTBOpticalCalibration
  */
 
 class ITK_EXPORT AtmosphericCorrectionParameters : public itk::DataObject

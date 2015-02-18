@@ -30,6 +30,8 @@ namespace otb
   *
   * \ingroup Functions
   * \sa DataNodeVectorDataFunction
+ *
+ * \ingroup OTBVectorDataManipulation
   */
 
 template <

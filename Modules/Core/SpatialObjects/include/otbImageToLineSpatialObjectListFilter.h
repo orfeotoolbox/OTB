@@ -30,6 +30,8 @@ namespace otb
  * ImageToLineSpatialObjectListFilter is the base class for all process objects
  * that output list of LineSpatialObject.
  *
+ *
+ * \ingroup OTBSpatialObjects
  */
 
 template <class TInputImage>

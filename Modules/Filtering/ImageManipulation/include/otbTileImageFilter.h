@@ -43,6 +43,8 @@ namespace otb
  *
  * \ingroup Streamed
  * \ingroup MultiThreaded
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TImage>
 class ITK_EXPORT TileImageFilter :

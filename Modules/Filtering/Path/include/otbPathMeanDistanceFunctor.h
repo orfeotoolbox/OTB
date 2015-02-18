@@ -33,6 +33,8 @@ namespace otb
  * \sa UnaryFunctorObjectListBooleanFilter
  *
  *  \ingroup Functor
+ *
+ * \ingroup OTBPath
  */
 template <class TInput1>
 class PathMeanDistanceFunctor

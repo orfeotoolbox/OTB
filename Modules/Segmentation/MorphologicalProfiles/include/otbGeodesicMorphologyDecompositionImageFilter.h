@@ -75,6 +75,8 @@ namespace otb
  * \sa GeodesicMorphologyLevelingFilter
  * \sa itk::OpeningByReconstructionImageFilter
  * \sa itk::ClosingByReconstructionImageFilter
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
 class ITK_EXPORT GeodesicMorphologyDecompositionImageFilter

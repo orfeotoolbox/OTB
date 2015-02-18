@@ -45,6 +45,8 @@ namespace otb {
  * \sa WaveletOperatorBase
  * \sa WaveletLowPassOperator
  * \sa WaveletHighPassOperator
+ *
+ * \ingroup OTBWavelet
  */
 template <Wavelet::Wavelet TMotherWaveletOperator,
     Wavelet::WaveletDirection TDirectionOfTransformation,

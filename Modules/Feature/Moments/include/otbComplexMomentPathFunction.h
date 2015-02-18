@@ -44,6 +44,8 @@ namespace otb
  *   - and the coordinate representation type (e.g. float or double).
  *
  * \ingroup ImageFunctions
+ *
+ * \ingroup OTBMoments
  */
 template <class TInputPath,
     class TOutput = std::complex<double>,

@@ -30,6 +30,8 @@ namespace Functor
  *  This functor first computes the spectral angle according to a reference pixel.
  *  Then multiplies the result by a Gaussian coefficient
  *  And reverse the pixel values.
+ *
+ * \ingroup OTBCloudDetection
  */
 
 template<class TInput, class TOutputValue>

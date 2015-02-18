@@ -60,6 +60,8 @@ typedef enum
  * \sa ImageFileWriter
  * \sa StreamingStatisticsImageFilter
  * \sa StreamingResampleImageFilter
+ *
+ * \ingroup OTBInterpolation
  */
 template<class TImage>
 class ITK_EXPORT StreamingTraitsBase
@@ -114,6 +116,8 @@ public:
  * \sa ImageFileWriter
  * \sa StreamingStatisticsImageFilter
  * \sa StreamingResampleImageFilter
+ *
+ * \ingroup OTBInterpolation
  */
 template <class TImage>
 class ITK_EXPORT StreamingTraits
@@ -164,6 +168,8 @@ public:
   * \sa ImageFileWriter
   * \sa StreamingStatisticsImageFilter
   * \sa StreamingResampleImageFilter
+ *
+ * \ingroup OTBInterpolation
   */
 template <typename TPixel, unsigned int VImageDimension>
 class ITK_EXPORT StreamingTraits< otb::VectorImage<TPixel, VImageDimension> >

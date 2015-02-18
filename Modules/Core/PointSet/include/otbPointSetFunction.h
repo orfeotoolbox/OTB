@@ -29,6 +29,8 @@ namespace otb
  * \brief Calculate the density in the neighborhood of a pixel
  *
  * \ingroup SpatialFunctions
+ *
+ * \ingroup OTBPointSet
  */
 template <class TPointSet, class TOutput>
 class ITK_EXPORT PointSetFunction :

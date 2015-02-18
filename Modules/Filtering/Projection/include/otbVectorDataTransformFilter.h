@@ -34,6 +34,8 @@ namespace otb
   *
   * \ingroup VectorDataFilter
   * \ingroup Projection
+ *
+ * \ingroup OTBProjection
   */
 
 template <class TInputVectorData, class TOutputVectorData>

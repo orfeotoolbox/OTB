@@ -33,6 +33,8 @@ namespace otb
  * or directly set by the user.
  *
  * \ingroup Radiometry
+ *
+ * \ingroup OTBOpticalCalibration
  */
 
 class ITK_EXPORT AtmosphericRadiativeTermsSingleChannel : public itk::DataObject
@@ -158,6 +160,8 @@ private:
  *
  * \ingroup AtmosphericRadiativeTermSingleChannel
  * \ingroup Radiometry
+ *
+ * \ingroup OTBOpticalCalibration
  */
 
 class ITK_EXPORT AtmosphericRadiativeTerms : public itk::DataObject

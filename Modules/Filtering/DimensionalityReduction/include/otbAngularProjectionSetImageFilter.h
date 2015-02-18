@@ -38,6 +38,8 @@ namespace otb {
  *
  * \sa AngularProjectionImageListFilter
  *
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template < class TInputImage, class TOutputImage, class TAngleList, class TPrecision >
 class ITK_EXPORT AngularProjectionSetImageFilter

@@ -42,6 +42,8 @@ namespace otb
  * \sa SpatialFunctionImageFilter
  * \sa ImageFunction
  * \ingroup ImageFilters
+ *
+ * \ingroup OTBImageManipulation
  */
 
 template <class TInputImage, class TOutputImage, class TFunction>

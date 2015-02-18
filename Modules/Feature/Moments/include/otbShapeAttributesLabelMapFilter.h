@@ -38,6 +38,8 @@ namespace Functor
 *   \brief Functor to compute shape attributes of one LabelObject.
 *
 *   \sa ShapeAttributesLabelMapFilter
+ *
+ * \ingroup OTBMoments
 */
 template <class TLabelObject, class TLabelImage>
 class ShapeAttributesLabelObjectFunctor
@@ -196,6 +198,8 @@ private:
  * \sa itk::ShapeLabelMapFilter
  *
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
+ *
+ * \ingroup OTBMoments
  */
 template<class TImage,
     class TLabelImage = Image<typename TImage::PixelType,

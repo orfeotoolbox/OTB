@@ -29,6 +29,8 @@ namespace Wrapper
 {
 /** \class OutputImageParameter
  *  \brief This class represents a OutputImage parameter
+ *
+ * \ingroup OTBApplicationEngine
  */
 
 class ITK_ABI_EXPORT OutputImageParameter : public Parameter

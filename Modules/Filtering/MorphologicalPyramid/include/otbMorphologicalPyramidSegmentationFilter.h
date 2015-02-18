@@ -51,6 +51,8 @@ namespace otb
  * \ingroup MultiScale
  * \sa MorphologicalPyramidSynthesisFilter, OpeningClosingMorphologicalFilter,
  * ClosingOpeningMorphologicalFilter, Segmenter, MRToMSConverter, Resampler
+ *
+ * \ingroup OTBMorphologicalPyramid
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MorphologicalPyramidSegmentationFilter

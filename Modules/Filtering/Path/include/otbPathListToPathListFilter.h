@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class PathListToPathListFilter
  *  \brief Base class for filter taking a PathList as input a returning a PathList.
+ *
+ * \ingroup OTBPath
  */
 template <class TPath>
 class ITK_EXPORT PathListToPathListFilter

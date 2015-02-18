@@ -24,6 +24,8 @@ namespace otb
 {
 /** \class OGRVectorDataIOFactory
  * \brief Create an instance of an OGRVectorDataIOFactory.
+ *
+ * \ingroup OTBIOGDAL
  */
 class ITK_EXPORT OGRVectorDataIOFactory : public itk::ObjectFactoryBase
 {

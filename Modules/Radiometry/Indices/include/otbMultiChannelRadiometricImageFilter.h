@@ -35,6 +35,8 @@ namespace otb
    *
    * \sa UnaryFunctorImageFilter
    * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInputImage, class TOutputImage, class TFunction>
 class ITK_EXPORT MultiChannelRadiometricImageFilter

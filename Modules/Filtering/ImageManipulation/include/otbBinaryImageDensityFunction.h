@@ -40,6 +40,8 @@ namespace otb
  * coordinate representation type (e.g. float or double ).
  *
  * \ingroup ImageFunctions
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT BinaryImageDensityFunction :

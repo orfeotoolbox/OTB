@@ -27,6 +27,8 @@ namespace otb
 {
 /** \class PointSetAndValuesFunction
  *  \brief Base class for function needing a point set and a set of associated value to compute the output.
+ *
+ * \ingroup OTBPointSet
  */
 template <class TPointSet, class TValue, class TCoordRep = double>
 class ITK_EXPORT PointSetAndValuesFunction

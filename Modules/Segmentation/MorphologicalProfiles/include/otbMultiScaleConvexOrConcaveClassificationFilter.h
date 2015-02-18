@@ -51,6 +51,8 @@ namespace Functor
  *
  * This functor is the decision rule used for multi-scale classification using
  * morphological profiles.
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template<class TInput, class TLabeled>
 class MultiScaleConvexOrConcaveDecisionRule
@@ -141,6 +143,8 @@ private:
  *
  * See MultiScaleConvexOrConcaveDecisionRule functor documentation for more details.
  *
+ *
+ * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MultiScaleConvexOrConcaveClassificationFilter

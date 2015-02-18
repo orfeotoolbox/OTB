@@ -36,6 +36,8 @@ namespace Functor
  * - cast the \c double value resulting to the pixel type of the output image
  * - store the casted value into the output image.
  *
+ *
+ * \ingroup OTBChangeDetection
  */
 
 template<class TInput1, class TInput2, class TOutput>

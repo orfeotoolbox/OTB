@@ -29,6 +29,8 @@ namespace otb
  *
  * \brief Class for SAR captor metadata reading.
  *
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT SarImageMetadataInterface : public ImageMetadataInterfaceBase
 {

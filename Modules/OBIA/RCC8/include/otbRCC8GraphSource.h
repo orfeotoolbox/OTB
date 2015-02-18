@@ -25,6 +25,8 @@ namespace otb
 /** \class RCC8GraphSource
  *  \brief Base class for all the filters producing an otbRCC8Graph
  * \ingroup DataSources
+ *
+ * \ingroup OTBRCC8
  */
 template <class TOutputGraph>
 class ITK_EXPORT RCC8GraphSource

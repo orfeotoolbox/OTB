@@ -29,6 +29,8 @@ namespace Functor
  *  \brief
  *
  *  \ingroup Functor
+ *
+ * \ingroup OTBMoments
  */
 template <class TNeighIter, class TPrecision = float>
 class RadiometricMomentsFunctor

@@ -44,6 +44,8 @@ namespace otb
  * compute the partial derivatives. as such, it can be quite intensive.
  *
  * \ingroup ClassificationFilters
+ *
+ * \ingroup OTBSVMLearning
  */
 template <class TModel>
 class ITK_EXPORT SVMCrossValidationCostFunction

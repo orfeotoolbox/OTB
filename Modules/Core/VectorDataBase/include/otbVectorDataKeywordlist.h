@@ -36,6 +36,8 @@ namespace otb
  *
  * \todo add the accessor to enable modifying/updating the data.
  *
+ *
+ * \ingroup OTBVectorDataBase
  */
 
 class VectorDataKeywordlist

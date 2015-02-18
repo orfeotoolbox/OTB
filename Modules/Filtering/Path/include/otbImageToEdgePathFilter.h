@@ -47,6 +47,8 @@ namespace otb
  *
  * This leads to consistant result for geometric descriptors (for instance compacity).
  * \sa ImageToPathFilter
+ *
+ * \ingroup OTBPath
  */
 
 template <class TInputImage, class TOutputPath>

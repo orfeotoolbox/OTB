@@ -31,6 +31,8 @@ namespace Function
  * \brief Gaussian interpolation windowing function.
  * \f[ w(x) = exp ( -2. \frac{sigma*sigma * \pi } ) \f]
  * \sa otbWindowedSincInterpolateImageFunctionBase
+ *
+ * \ingroup OTBInterpolation
  */
 template<class TInput = double, class TOutput = double>
 class GaussianWindowFunction
@@ -76,6 +78,8 @@ private:
  * \sa Function::LanczosWindowFunction
  * \sa Function::BlackmanWindowFunction
  * \ingroup ImageFunctionBases ImageInterpolators
+ *
+ * \ingroup OTBInterpolation
  */
 template<class TInputImage, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>, class TCoordRep =
       double, class TInputInterpolator = double, class TOutputInterpolator = double>

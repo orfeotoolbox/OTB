@@ -27,6 +27,8 @@ namespace otb
  * \class PlaceNameToLonLat
  * \brief Retrieve Longitude and Latitude coordinates from a place name
  *
+ *
+ * \ingroup OTBCarto
  */
 
 class ITK_EXPORT PlaceNameToLonLat : public itk::Object

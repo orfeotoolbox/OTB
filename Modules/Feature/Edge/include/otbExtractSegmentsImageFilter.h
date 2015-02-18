@@ -38,6 +38,8 @@ namespace otb
  *   - otb::FillGapsFilter
  *   - otb::DrawLineSpatialObjectListFilter
  *
+ *
+ * \ingroup OTBEdge
  */
 
 template <class TInputImage,

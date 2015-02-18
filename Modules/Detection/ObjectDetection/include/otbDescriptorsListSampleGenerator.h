@@ -46,6 +46,8 @@ public:
  *
  *  This class inherits PersistentImageFilter and provides the Reset/Synthesize functions,
  *  plus the ThreadedGenerateData function implementing the image function evaluation
+ *
+ * \ingroup OTBObjectDetection
  */
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabel>
 class ITK_EXPORT PersistentDescriptorsListSampleGenerator :
@@ -230,6 +232,8 @@ private:
  *  The label is read from the vector data using the data field "Class", read as an int
  *
  *  This class is streaming capable and multithreaded
+ *
+ * \ingroup OTBObjectDetection
  */
 template <class TInputImage, class TVectorData, class TListSample, class TLabel, class TOutputPrecision = double, class TCoordRep = double>
 class ITK_EXPORT DescriptorsListSampleGenerator :

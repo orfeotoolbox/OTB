@@ -32,6 +32,8 @@ namespace otb
  *  \sa itk::WarpImageFilter
  *
  *  \ingroup DisparityMap
+ *
+ * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
 class ITK_EXPORT PointSetWithTransformToDisplacementFieldGenerator

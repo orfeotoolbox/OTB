@@ -31,6 +31,8 @@ namespace Functor
  *  \brief This functor is used by the NonMaxRemovalByDirectionFilter
  *  \sa NonMaxRemovalByDirectionFilter
  *  \ingroup Functor
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TInput1, class TInput2, class TOutput>
 class NonMaxRemovalByDirectionFunctor
@@ -98,6 +100,8 @@ public:
  *
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBRoadExtraction
  */
 template <class TInputModulus, class TInputDirection, class TOutputImage>
 class ITK_EXPORT NonMaxRemovalByDirectionFilter

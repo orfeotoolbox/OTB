@@ -35,6 +35,8 @@ namespace otb {
  *
  * \sa LabelMapSource
  * \ingroup Common, GeospatialAnalysis
+ *
+ * \ingroup OTBConversion
  */
 template<class TGISTable, class TLabelMap>
 class ITK_EXPORT GISTableToLabelMapFilter :

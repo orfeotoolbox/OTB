@@ -31,6 +31,8 @@ namespace otb
    *
    * see http://teledetection.ipgp.jussieu.fr/prosail/
    * \sa itk::DataObject
+ *
+ * \ingroup OTBSimulation
  */
 
 class ITK_EXPORT ProSailParameters : public itk::DataObject

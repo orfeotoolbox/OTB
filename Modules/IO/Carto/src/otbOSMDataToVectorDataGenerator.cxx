@@ -22,7 +22,7 @@
 #include "itkDataObject.h"
 #include "itkMacro.h"
 
-#include "otbTinyXML.h"
+#include "otb_tinyxml.h"
 
 namespace otb
 {

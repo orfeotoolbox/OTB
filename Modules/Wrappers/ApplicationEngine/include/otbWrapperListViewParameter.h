@@ -31,6 +31,8 @@ namespace Wrapper
  * The row selected in the ListWidget are stored in a std::vector. The
  * method GetSelectedItems() allow the user to access to this method.
  *
+ *
+ * \ingroup OTBApplicationEngine
  */
 class ITK_ABI_EXPORT ListViewParameter
   : public Parameter

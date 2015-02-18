@@ -32,6 +32,8 @@ namespace otb
  * This class can work in asynchronous mode using \code  MultithreadOn() \endcode. In this
  * case, the web request does not block the rest of the program.
  *
+ *
+ * \ingroup OTBCarto
  */
 
 class ITK_EXPORT CoordinateToName : public itk::Object

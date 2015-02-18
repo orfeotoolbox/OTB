@@ -49,6 +49,8 @@ namespace otb
  * \sa PersistentImageFilter
  * \sa PersistentStatisticsImageFilter
  * \sa PersistentImageStreamingDecorator.
+ *
+ * \ingroup OTBStreaming
  */
 template <class TInputImage >
 class ITK_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>

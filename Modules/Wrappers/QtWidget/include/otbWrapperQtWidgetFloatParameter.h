@@ -29,6 +29,8 @@ namespace Wrapper
 
 /** \class QtWidgetFloatParameter
  * \brief
+ *
+ * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtWidgetFloatParameter : public QtWidgetParameterBase
 {

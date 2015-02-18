@@ -28,6 +28,8 @@ namespace otb
  *
  *  It can be used as a functor in a BinaryFunctorImageFilter to
  *  compute the pixel-by-pixel spectral angles.
+ *
+ * \ingroup OTBImageManipulation
  */
 namespace Functor
 {

@@ -56,6 +56,8 @@ namespace otb
  *  \ingroup Streamed
  *  \ingroup Threaded
  *
+ *
+ * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class TOutputMetricImage, class TDisparityImage = TOutputMetricImage,
           class TMaskImage = otb::Image<unsigned char>,

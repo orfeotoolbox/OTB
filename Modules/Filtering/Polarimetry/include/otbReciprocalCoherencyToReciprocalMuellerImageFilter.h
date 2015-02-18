@@ -54,6 +54,8 @@ namespace Functor {
  *
  * \ingroup SARPolarimetry
  *
+ *
+ * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
 class ReciprocalCoherencyToReciprocalMuellerFunctor
@@ -111,6 +113,8 @@ private:
  * \ingroup SARPolarimetry
  * \sa ReciprocalCoherencyToReciprocalMuellerFunctor
  *
+ *
+ * \ingroup OTBPolarimetry
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalCoherencyToReciprocalMuellerImageFilter :

@@ -41,6 +41,8 @@ namespace otb {
  *
  * \ingroup Streamed
  * \sa EuclideanDistanceMetricWithMissingValue
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage>
 class ITK_EXPORT BoxAndWhiskerImageFilter

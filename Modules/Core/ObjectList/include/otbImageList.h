@@ -28,6 +28,8 @@ namespace otb
  * It is derived from the otbObjectList class, which allows to manipulate an ITK/OTB
  * object list with the appropriate formalism (iterators, accessors).
  * \sa ObjectList
+ *
+ * \ingroup OTBObjectList
  */
 
 template <class TImage>

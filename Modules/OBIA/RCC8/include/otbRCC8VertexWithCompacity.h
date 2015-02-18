@@ -27,6 +27,8 @@ namespace otb
  *  the represented region.
  *
  * \sa RCC8Graph, RCC8Edge, RCC8VertexBase
+ *
+ * \ingroup OTBRCC8
  */
 template <class TPath, class TPrecision = float>
 class ITK_EXPORT RCC8VertexWithCompacity

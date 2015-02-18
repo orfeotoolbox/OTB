@@ -33,6 +33,8 @@ namespace otb
 /** \class ImageFileReaderException
  *
  * \brief Base exception class for IO conflicts.
+ *
+ * \ingroup OTBImageIO
  */
 class ImageFileReaderException : public itk::ExceptionObject
 {
@@ -75,6 +77,8 @@ public:
  *
  * \ingroup IOFilters
  *
+ *
+ * \ingroup OTBImageIO
  */
 template <class TOutputImage,
           class ConvertPixelTraits=DefaultConvertPixelTraits<

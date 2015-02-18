@@ -35,6 +35,8 @@ namespace otb
  * \note If nothing is specified, only the first channel is processed.
  * \note This class is templated over the pixel types of the input and output images.
  * The input image has to be an otb::VectorImage, whereas the output image has to be an otb::Image.
+ *
+ * \ingroup OTBImageBase
  */
 template <class TInputPixelType, class TOutputPixelType>
 class ITK_EXPORT MultiToMonoChannelExtractROI :

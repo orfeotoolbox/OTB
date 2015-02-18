@@ -30,6 +30,8 @@ namespace otb
  *
  * \brief Class for Optical captor metadata reading.
  *
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT OpticalImageMetadataInterface : public ImageMetadataInterfaceBase
 {

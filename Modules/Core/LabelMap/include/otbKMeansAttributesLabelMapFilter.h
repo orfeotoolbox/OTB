@@ -28,6 +28,8 @@ namespace otb {
 
 /** \class KMeansAttributesLabelMapFilter
  * \brief Execute a KMeans on the attributes of a itk::LabelMap<otb::AttributesMapLabelObject>
+ *
+ * \ingroup OTBLabelMap
  */
 template<class TInputImage>
 class ITK_EXPORT KMeansAttributesLabelMapFilter :

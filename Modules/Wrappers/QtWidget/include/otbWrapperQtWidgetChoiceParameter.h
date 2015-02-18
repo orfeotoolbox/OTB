@@ -29,6 +29,8 @@ namespace Wrapper
 
 /** \class QtWidgetChoiceParameter
  * \brief
+ *
+ * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtWidgetChoiceParameter : public QtWidgetParameterBase
 {

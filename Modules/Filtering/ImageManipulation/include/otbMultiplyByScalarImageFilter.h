@@ -25,6 +25,8 @@ namespace otb
 
 /** \class MultiplyByScalarImageFilter
  * \brief TODO
+ *
+ * \ingroup OTBImageManipulation
  */
 
 namespace Functor

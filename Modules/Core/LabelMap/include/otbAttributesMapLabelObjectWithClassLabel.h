@@ -44,6 +44,8 @@ namespace otb
  *\sa LabelObject, ShapeLabelObject, StatisticsLabelObject
  *
  * \ingroup DataRepresentation
+ *
+ * \ingroup OTBLabelMap
  */
 template < class TLabel, unsigned int VImageDimension, class TAttributesValue, class TClassLabel >
 class ITK_EXPORT AttributesMapLabelObjectWithClassLabel : public AttributesMapLabelObject<TLabel, VImageDimension, TAttributesValue>

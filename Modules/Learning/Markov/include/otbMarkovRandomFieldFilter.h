@@ -74,6 +74,8 @@ namespace otb
  * \example  Markov/MarkovRegularizationExample.cxx
  * \example  Markov/MarkovRestaurationExample.cxx
  *
+ *
+ * \ingroup OTBMarkov
  */
 
 template <class TInputImage, class TClassifiedImage>

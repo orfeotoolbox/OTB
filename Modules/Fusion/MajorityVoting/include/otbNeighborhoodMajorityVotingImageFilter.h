@@ -56,6 +56,8 @@ namespace otb
  *
  * \sa MorphologyImageFilter, GrayscaleFunctionDilateImageFilter, BinaryDilateImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
+ *
+ * \ingroup OTBMajorityVoting
  */
 template<
          class TInputImage,

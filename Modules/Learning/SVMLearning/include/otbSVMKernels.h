@@ -31,12 +31,14 @@
 #include "otbNonGaussianRBFKernelFunctor.h"
 #include "otbMixturePolyRBFKernelFunctor.h"
 
-#include "svm.h"
+#include "otb_libsvm.h"
 
 namespace otb
 {
 /** \class CustomKernelFunctor
  * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class CustomKernelFunctor : public GenericKernelFunctorBase
 {
@@ -77,6 +79,8 @@ protected:
 
 /** \class InvMultiQuadricKernelFunctor
  * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class InvMultiQuadricKernelFunctor : public GenericKernelFunctorBase
 {
@@ -126,6 +130,8 @@ private:
 
 /** \class KModKernelFunctor
  * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class KModKernelFunctor : public GenericKernelFunctorBase
 {
@@ -176,6 +182,8 @@ private:
 
 /** \class SAMKernelFunctor
  * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class SAMKernelFunctor : public GenericKernelFunctorBase
 {
@@ -222,6 +230,8 @@ protected:
 
 /** \class RadialSAMKernelFunctor
   * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class RadialSAMKernelFunctor : public GenericKernelFunctorBase
 {
@@ -265,6 +275,8 @@ private:
 
 /** \class InverseCosSAMKernelFunctor
   * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class InverseCosSAMKernelFunctor : public GenericKernelFunctorBase
 {
@@ -308,6 +320,8 @@ private:
 
 /** \class InvMultiQuadraticSAMKernelFunctor
   * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class InvMultiQuadraticSAMKernelFunctor : public GenericKernelFunctorBase
 {
@@ -358,6 +372,8 @@ private:
 
 /** \class KModSAMKernelFunctor
   * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class KModSAMKernelFunctor : public GenericKernelFunctorBase
 {
@@ -408,6 +424,8 @@ private:
 
 /** \class RBFKernelFunctor
   * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class RBFKernelFunctor : public GenericKernelFunctorBase
 {
@@ -526,6 +544,8 @@ private:
 
 /** \class RBFRBFSAMKernelFunctor
 * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class RBFRBFSAMKernelFunctor : public GenericKernelFunctorBase
 {
@@ -572,6 +592,8 @@ private:
 
 /** \class PolyRBFSAMKernelFunctor
 * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class PolyRBFSAMKernelFunctor : public GenericKernelFunctorBase
 {
@@ -619,6 +641,8 @@ private:
 
 /** \class RBFDiffKernelFunctor
 * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class RBFDiffKernelFunctor : public GenericKernelFunctorBase
 {
@@ -677,6 +701,8 @@ protected:
 
 /** \class CustomLinearKernelFunctor
 * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class CustomLinearKernelFunctor : public GenericKernelFunctorBase
 {
@@ -726,6 +752,8 @@ private:
 
 /** \class GroupedRBFKernelFunctor
 * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class GroupedRBFKernelFunctor : public GenericKernelFunctorBase
 {
@@ -905,6 +933,8 @@ private:
 
 /** \class GroupingAdaptiveKernelFunctor
  * \brief Undocumented
+ *
+ * \ingroup OTBSVMLearning
  */
 class GroupingAdaptiveKernelFunctor : public GenericKernelFunctorBase
 {

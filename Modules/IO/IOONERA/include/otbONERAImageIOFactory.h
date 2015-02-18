@@ -24,6 +24,8 @@ namespace otb
 {
 /** \class ONERAImageIOFactory
  * \brief Creation d'un instance d'un objet ONERAImageIO utilisant les object factory.
+ *
+ * \ingroup OTBIOONERA
  */
 class ITK_EXPORT ONERAImageIOFactory : public itk::ObjectFactoryBase
 {

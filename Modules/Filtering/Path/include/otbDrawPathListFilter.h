@@ -39,6 +39,8 @@ namespace otb
  *
  * \ingroup PathListFilters
  * \ingroup PathLists
+ *
+ * \ingroup OTBPath
  */
 
 template <class TInputImage, class TInputPath, class TOutputImage>

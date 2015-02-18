@@ -34,6 +34,8 @@ namespace otb
 /** \class OGRIOHelper
  *  \brief This class IO OGR
  *
+ *
+ * \ingroup OTBIOGDAL
  */
 class OGRIOHelper: public itk::Object
 {

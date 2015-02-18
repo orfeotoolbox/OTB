@@ -37,6 +37,8 @@ namespace otb
  *
  * \ingroup Transform
  * \ingroup Projection
+ *
+ * \ingroup OTBTransform
  */
 
 template <class TScalarType,

@@ -50,6 +50,8 @@ public:
  *  This class inherits PersistentImageFilter and provides the Reset/Synthesize functions,
  *  plus the ThreadedGenerateData function implementing the image function evaluation
  *
+ *
+ * \ingroup OTBSVMLearning
  */
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 class ITK_EXPORT PersistentObjectDetectionClassifier :
@@ -241,6 +243,8 @@ private:
  *  the negative class label being given by SetNoClassLabel()
  *
  *  This class is streaming capable and multithreaded
+ *
+ * \ingroup OTBSVMLearning
  */
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionPrecision = double, class TCoordRep = double>
 class ITK_EXPORT ObjectDetectionClassifier :

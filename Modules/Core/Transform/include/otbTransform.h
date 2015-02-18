@@ -28,6 +28,8 @@ namespace otb
  * \brief Class to overload method passed to virtual pure in ITK V4.
  *
  *
+ *
+ * \ingroup OTBTransform
  */
 template< class TScalarType,
           unsigned int NInputDimensions = 3,

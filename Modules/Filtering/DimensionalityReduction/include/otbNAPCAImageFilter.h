@@ -39,6 +39,8 @@ namespace otb {
  *
  * \sa otbStreamingStatisticsVectorImageFilter
  * \sa MNFImageFilter
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,

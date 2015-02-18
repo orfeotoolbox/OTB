@@ -46,6 +46,8 @@ namespace otb
  * function.
  *
  * \ingroup ImageFunctions ImageInterpolators
+ *
+ * \ingroup OTBInterpolation
  */
 template< class TInputImage, class TCoordRep = double >
 class ITK_EXPORT BCOInterpolateImageFunctionBase :

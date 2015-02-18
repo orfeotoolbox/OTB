@@ -42,10 +42,14 @@ namespace otb
  *
  * \sa Parser
  *
+ *
+ * \ingroup OTBMathParser
  */
 
 /** \class OBIAMuParserFunctor
  *  \brief This functor use MuParser to evaluate and process mathematical expression
+ *
+ * \ingroup OTBMathParser
  */
 namespace Functor
 {

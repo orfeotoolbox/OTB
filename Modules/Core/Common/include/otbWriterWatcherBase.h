@@ -40,6 +40,8 @@ namespace otb
  *  \li StartFilter        : callback called at the begin of filter execution for a given tile
  *  \li EndFilter          : callback called at the end of filter execution for a given tile
  *
+ *
+ * \ingroup OTBCommon
  */
 class /*ITK_EXPORT*/ WriterWatcherBase
 {

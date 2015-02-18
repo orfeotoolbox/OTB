@@ -50,6 +50,8 @@ namespace otb
  * path type (e.g. PolyLineParametricPath<2> ).
  *
  * \ingroup FunctionFunctions
+ *
+ * \ingroup OTBMoments
  */
 
 template <class TInputPath,

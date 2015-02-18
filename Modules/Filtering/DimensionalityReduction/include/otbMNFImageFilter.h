@@ -36,6 +36,8 @@ namespace otb {
  *
  * \sa otbStreamingStatisticsVectorImageFilter
  * \sa PCAImageFiler
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,

@@ -29,6 +29,8 @@ namespace otb
    *
    * \ingroup Radiometry
    *
+ *
+ * \ingroup OTBIndices
  */
 
 template <class TInputImageG, class TInputImageR, class TOutputImage,

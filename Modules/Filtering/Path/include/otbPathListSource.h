@@ -34,6 +34,8 @@ namespace otb
  * \ingroup DataSources
  * \ingroup Paths
  * \ingroup Lists
+ *
+ * \ingroup OTBPath
  */
 
 template <class TOutputPath>

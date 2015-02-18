@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class GDALImageIOFactory
  * \brief Creation d'un instance d'un objet GDALImageIO utilisant les object factory.
+ *
+ * \ingroup OTBIOGDAL
  */
 class ITK_EXPORT GDALImageIOFactory : public itk::ObjectFactoryBase
 {

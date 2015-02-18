@@ -36,6 +36,8 @@ namespace otb
  * in a single vectordata.
  * Warning : this filter does not create a deep copy of each node.
  *
+ *
+ * \ingroup OTBVectorDataManipulation
  */
 template <class TVectorData>
 class ITK_EXPORT ConcatenateVectorDataFilter :

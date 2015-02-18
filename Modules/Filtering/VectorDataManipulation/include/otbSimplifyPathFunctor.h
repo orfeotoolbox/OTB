@@ -44,6 +44,8 @@ namespace otb
 * \sa UnaryFunctorObjectListFilter
 *
  *  \ingroup Functor
+ *
+ * \ingroup OTBVectorDataManipulation
  */
 template <class TInput, class TOutput>
 class SimplifyPathFunctor

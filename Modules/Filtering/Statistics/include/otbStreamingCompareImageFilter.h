@@ -43,6 +43,8 @@ namespace otb
  * \sa PersistentImageFilter
  * \ingroup Streamed
  * \ingroup Multithreaded
+ *
+ * \ingroup OTBStatistics
  */
 template<class TInputImage>
 class ITK_EXPORT PersistentCompareImageFilter :
@@ -190,6 +192,8 @@ private:
  * \sa StreamingImageVirtualWriter
  * \ingroup Streamed
  * \ingroup Multithreaded
+ *
+ * \ingroup OTBStatistics
  */
 
 template<class TInputImage>

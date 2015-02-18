@@ -38,6 +38,8 @@ namespace otb
  *  which is a non-sense.
  *
  *  \sa itk::BSplineScatteredDataPointSetToImageFilter
+ *
+ * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
 class ITK_EXPORT BSplinesInterpolateTransformDisplacementFieldGenerator

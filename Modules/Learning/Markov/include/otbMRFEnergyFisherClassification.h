@@ -37,6 +37,8 @@ namespace otb
  * This class is meant to be used in the MRF framework with the
  * otb::MarkovRandomFieldFilter
  *
+ *
+ * \ingroup OTBMarkov
  */
 template< class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergyFisherClassification: public MRFEnergy< TInput1, TInput2>

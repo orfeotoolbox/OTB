@@ -54,6 +54,8 @@ namespace otb
    * otb::Image< itk::RGBAPixel<InternalPixelType> >,
    * otb::Image< itk::RGBPixel<InternalPixelType> >.
    *
+ *
+ * \ingroup OTBVectorDataRendering
    */
 
 template <class TVectorData, class TImage>

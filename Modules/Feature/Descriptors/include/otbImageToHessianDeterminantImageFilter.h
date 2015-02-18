@@ -39,6 +39,8 @@ namespace Functor
  * The First  component is  : Dxx
  * The Second component is  : Dyy
  * The Third  component is  : Dxy
+ *
+ * \ingroup OTBDescriptors
  */
 template <class TInput, class TOutput>
 class HessianDeterminant
@@ -75,6 +77,8 @@ public:
  *  of each pixel's matrix is computed.
  *
  *  \sa itk::HessianRecursiveGaussianImageFilter
+ *
+ * \ingroup OTBDescriptors
  */
 template <class TInputImage, class TOutputImage, class TPrecision = double>
 class ITK_EXPORT ImageToHessianDeterminantImageFilter

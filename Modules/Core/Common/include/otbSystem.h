@@ -32,6 +32,8 @@ namespace otb
  *
  * System operations, filename or strings manipulations, etc.
  *
+ *
+ * \ingroup OTBCommon
  */
 class ITK_EXPORT System
 {

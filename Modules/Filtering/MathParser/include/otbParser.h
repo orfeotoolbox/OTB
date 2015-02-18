@@ -33,6 +33,8 @@ class ParserImpl;
  *
  * \sa BandMathImageFilter
  *
+ *
+ * \ingroup OTBMathParser
  */
 class ITK_EXPORT Parser : public itk::LightObject
 {

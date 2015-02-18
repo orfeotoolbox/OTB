@@ -59,6 +59,8 @@ namespace otb
  * ogr::DataSource can't be grafted, and as a consequence, \c GeometriesSource
  * subtypes can't be grafted as well.
  * \since OTB v 3.14.0
+ *
+ * \ingroup OTBGdalAdapters
  */
 class ITK_EXPORT GeometriesSource : public itk::ProcessObject, boost::noncopyable
   {

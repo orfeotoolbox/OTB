@@ -48,6 +48,8 @@ namespace otb
  *  \sa SinclairToReciprocalCoherencyMatrixFunctor
  *  \sa SinclairToReciprocalCovarianceMatrixFunctor
  *
+ *
+ * \ingroup OTBPolarimetry
  */
 
 

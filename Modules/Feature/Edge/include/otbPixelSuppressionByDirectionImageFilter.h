@@ -40,6 +40,8 @@ namespace otb
  * image filters which are the image of intensity of detection and
  * the image of direction.
  *
+ *
+ * \ingroup OTBEdge
  */
 
 template <class TInputImage, class TOutputImage>

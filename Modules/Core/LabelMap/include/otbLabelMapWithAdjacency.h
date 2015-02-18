@@ -30,6 +30,8 @@ namespace otb
 *
 *   The adjacency information is stored as a map of set of labels, in
 *   order to avoid duplicated neighbors.
+ *
+ * \ingroup OTBLabelMap
 */
 
 template <class TLabelObject >

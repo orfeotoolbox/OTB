@@ -39,6 +39,8 @@ namespace otb
  *  \sa SOMMap
  *  \sa PeriodicSOM
  *  \sa EuclideanDistanceMetricWithMissingValue
+ *
+ * \ingroup OTBSOM
  */
 template <class TListSample, class TMap,
     class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,

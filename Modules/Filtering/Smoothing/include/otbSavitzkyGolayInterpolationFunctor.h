@@ -47,6 +47,8 @@ namespace Functor
  *
  * \sa otbTimeSeriesLeastSquareFittingFunctor
  *
+ *
+ * \ingroup OTBSmoothing
  */
 template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSeries, unsigned int Degree=2>
 class SavitzkyGolayInterpolationFunctor

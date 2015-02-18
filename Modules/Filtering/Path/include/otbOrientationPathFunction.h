@@ -30,6 +30,8 @@ namespace otb
  * The result value is in radian.
  *
  * \ingroup PathFunctions
+ *
+ * \ingroup OTBPath
  */
 
 template <class TInputPath,

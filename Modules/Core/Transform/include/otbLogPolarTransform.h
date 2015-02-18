@@ -39,6 +39,8 @@ namespace otb
  *
  * \sa InverseLogPolarTransform
  * \ingroup Transform
+ *
+ * \ingroup OTBTransform
  */
 template <class TScalarType>
 class ITK_EXPORT LogPolarTransform

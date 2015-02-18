@@ -32,6 +32,8 @@ namespace otb
  *  the intersection using a Mean Square optimization method.
  *  This filter is templated over the precision of 3 points coordinates
  *
+ *
+ * \ingroup OTBStereo
  */
 template <class TPrecision = float, class TLabel = int>
 class ITK_EXPORT LineOfSightOptimizer :

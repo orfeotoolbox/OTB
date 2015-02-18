@@ -33,6 +33,8 @@ namespace otb
  * have to take care of transforming this data by other means.
  *
  * \ingroup PointSetFilters
+ *
+ * \ingroup OTBPointSet
  */
 template <class TInputPointSet, class TOutputPointSet, class TTransform>
 class ITK_EXPORT TransformPointSetFilter :

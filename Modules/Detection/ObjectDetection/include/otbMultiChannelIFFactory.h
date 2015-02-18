@@ -36,6 +36,8 @@ namespace otb
  *  call an ImageFunctionFactory for each band of the input image or
  *  once if the image type is otb::Image.
  *
+ *
+ * \ingroup OTBObjectDetection
  */
 
 template <class TIFFactory, class TInputImage>

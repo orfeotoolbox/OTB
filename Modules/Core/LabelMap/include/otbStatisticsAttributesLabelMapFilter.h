@@ -33,6 +33,8 @@ namespace Functor
 *   \brief Functor to compute statistics attributes of one LabelObject.
 *
 *   \sa StatisticsAttributesLabelMapFilter
+ *
+ * \ingroup OTBLabelMap
 */
 template <class TLabelObject, class TFeatureImage>
 class StatisticsAttributesLabelObjectFunctor
@@ -119,6 +121,8 @@ private:
  * \sa itk::StatisticsLabelMapFilter
  *
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
+ *
+ * \ingroup OTBLabelMap
  */
 template<class TImage, class TFeatureImage>
 class ITK_EXPORT StatisticsAttributesLabelMapFilter :

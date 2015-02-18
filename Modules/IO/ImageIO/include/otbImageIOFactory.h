@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class ImageIOFactory
  * \brief Creation of object instance using object factory.
+ *
+ * \ingroup OTBImageIO
  */
 class ITK_EXPORT ImageIOFactory : public itk::Object
 {

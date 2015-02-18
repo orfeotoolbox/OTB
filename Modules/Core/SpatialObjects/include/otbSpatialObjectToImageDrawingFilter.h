@@ -32,6 +32,8 @@ namespace otb
  *  the maximum size of the object's bounding box is used.
  *  The spacing of the image is given by the spacing of the input
  *  Spatial object.
+ *
+ * \ingroup OTBSpatialObjects
  */
 template <class TInputSpatialObject, class TOutputImage>
 class ITK_EXPORT SpatialObjectToImageDrawingFilter : public itk::ImageSource<TOutputImage>

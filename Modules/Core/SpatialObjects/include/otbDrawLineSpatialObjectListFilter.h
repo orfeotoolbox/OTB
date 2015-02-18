@@ -32,6 +32,8 @@ namespace otb
  *
  *
  *
+ *
+ * \ingroup OTBSpatialObjects
  */
 
 template <class TInputImage, class TOutputImage>

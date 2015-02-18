@@ -32,6 +32,8 @@ namespace otb
  * via proper redefinition of the functor.
  *
  * \sa otb::SVMSampleListModelEstimator
+ *
+ * \ingroup OTBLabelMap
  */
 
 template <class TInputLabelMap, class TOutputSampleList, class TOutputTrainingSampleList,

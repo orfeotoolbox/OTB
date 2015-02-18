@@ -36,6 +36,8 @@ namespace Functor
    *  the Evaluate() method.
    *
    * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template<class TInput1, class TInput2, class TOutput>
 class TM4AndTM5IndexBase
@@ -138,6 +140,8 @@ private:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class NDBI : public TM4AndTM5IndexBase<TInput1, TInput2, TOutput>
@@ -175,6 +179,8 @@ protected:
  *
  *  \ingroup Functor
  * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
 class ISU : public RAndNIRIndexBase<TInput1, TInput2, TOutput>

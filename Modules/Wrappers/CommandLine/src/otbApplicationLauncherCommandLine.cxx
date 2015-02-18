@@ -17,7 +17,7 @@
  =========================================================================*/
 
 #include "otbWrapperCommandLineLauncher.h"
-#include "otbTinyXML.h"
+#include "otb_tinyxml.h"
 #include <vector>
 
 const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key);

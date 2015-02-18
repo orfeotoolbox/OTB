@@ -35,6 +35,8 @@ namespace otb
   * \ingroup VectorDataFilter
   * \sa VectorDataToRoadDescriptionFilter
   * \sa VectorDataToBuildingDescriptionFilter
+ *
+ * \ingroup OTBVectorDataManipulation
  */
 
 template <class TVectorData>

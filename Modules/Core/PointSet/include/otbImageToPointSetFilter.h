@@ -32,6 +32,8 @@ namespace otb
  * defines the SetInput() method for defining the input to a filter.
  *
  * \ingroup ImageFilters
+ *
+ * \ingroup OTBPointSet
  */
 template <class TInputImage, class TOutputPointSet>
 class ITK_EXPORT ImageToPointSetFilter : public PointSetSource<TOutputPointSet>

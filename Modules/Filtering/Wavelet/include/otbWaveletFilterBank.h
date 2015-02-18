@@ -77,6 +77,8 @@ namespace otb {
  * \sa WaveletOperator
  *
  * \ingroup Streamed
+ *
+ * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage,
     class TWaveletOperator,
@@ -146,6 +148,8 @@ private:
  * from the input(s) to the output(s)...
  *
  * \sa WaveletOperator
+ *
+ * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
 class ITK_EXPORT WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
@@ -329,6 +333,8 @@ private:
  * from the input(s) to the output(s)...
  *
  * \sa WaveletOperator
+ *
+ * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
 class ITK_EXPORT WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>

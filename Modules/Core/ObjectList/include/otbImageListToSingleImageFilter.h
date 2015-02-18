@@ -32,6 +32,8 @@ namespace otb
  *
  *
  * \ingroup Streamed
+ *
+ * \ingroup OTBObjectList
  */
 
 template <class TInputImageType>

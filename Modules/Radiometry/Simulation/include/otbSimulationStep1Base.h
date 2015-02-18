@@ -32,6 +32,8 @@ namespace otb
  * \brief Base class for all method that simulate the Reflectance and Transmittance of an object. (ex: Prospect)
  *
  * \sa ProcessObject
+ *
+ * \ingroup OTBSimulation
  */
 
 

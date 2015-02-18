@@ -58,6 +58,8 @@ namespace otb {
  * \ingroup Hyperspectral
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBEndmembersExtraction
  */
 template <class TVectorImage>
 class ITK_EXPORT VCAImageFilter : public itk::ImageToImageFilter<TVectorImage, TVectorImage>

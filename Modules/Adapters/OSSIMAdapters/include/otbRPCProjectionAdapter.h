@@ -44,6 +44,8 @@ class ImageKeywordlist;
  * \deprecated Please use the RpcSolverAdapter class static methods instead
  *
  * \sa GCPsToRPCSensorModelImageFilter
+ *
+ * \ingroup OTBOSSIMAdapters
  **/
 
 class RPCProjectionAdapter: public itk::Object

@@ -26,6 +26,8 @@ namespace otb
 * \brief This class implements the SVY21 map projection (Singapore geodesic system).
 * It converts coordinates in longitude, latitude (WGS84) to SVY21 map coordinates.
 *
+ *
+ * \ingroup OTBProjection
  */
 template <TransformDirection::TransformationDirection TTransform>
 class ITK_EXPORT SVY21MapProjection : public TransMercatorMapProjection<TTransform>

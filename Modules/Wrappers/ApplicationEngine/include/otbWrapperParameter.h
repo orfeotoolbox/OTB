@@ -53,6 +53,8 @@ enum DefaultValueMode
  *  This class is a high level class representing a parameter for the
  *  wrapper framework. It should be subclassed to represent different
  *  kinds of parameters
+ *
+ * \ingroup OTBApplicationEngine
  */
 class ITK_ABI_EXPORT Parameter
   : public itk::Object

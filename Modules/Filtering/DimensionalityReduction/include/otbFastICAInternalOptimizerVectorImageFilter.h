@@ -34,6 +34,8 @@ namespace otb
  *
  * \ingroup Multithreaded
  * \sa FastICAImageFilter
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT FastICAInternalOptimizerVectorImageFilter

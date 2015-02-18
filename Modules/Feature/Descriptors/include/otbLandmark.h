@@ -30,6 +30,8 @@ namespace otb
  * It is used to represent match between keypoint like SIFT keypoint for instance.
  *
  * The class TLandmarkData can be used to store any information on the matching.
+ *
+ * \ingroup OTBDescriptors
  */
 template <class TPoint, class TPointData, class TLandmarkData = TPointData>
 class ITK_EXPORT Landmark

@@ -30,6 +30,8 @@ namespace otb
    * \brief Data class containing Leaf Parameters.
    *
    * \sa itk::DataObject
+ *
+ * \ingroup OTBSimulation
  */
 
 class ITK_EXPORT LeafParameters : public itk::DataObject

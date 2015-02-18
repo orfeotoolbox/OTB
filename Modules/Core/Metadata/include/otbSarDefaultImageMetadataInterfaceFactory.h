@@ -26,6 +26,8 @@ namespace otb
 /** \class SarDefaultImageMetadataInterfaceFactory
  * \brief Creating an instance of a SarImageMetadataInterface object using object factory.
  * This class only provides the method of the virtual pure class SarImageMetadataInterface and throw exception for virtual method.
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT SarDefaultImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
 {

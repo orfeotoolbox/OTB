@@ -37,6 +37,8 @@ namespace otb
 \f$L\f$ the image number of looks and
 \f$C_r = \frac{\sqrt{Var(I)}}{E[I]} \f$ and  \f$Var(I) = E[I^2] - E[I]^2\f$.
  *
+ *
+ * \ingroup OTBImageNoise
  */
 
 template <class TInputImage, class TOutputImage>

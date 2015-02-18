@@ -37,6 +37,8 @@ namespace otb {
 *   For more information, please refere to the documentation of the
 *   original itk::WatershedImageFilter .
 *
+ *
+ * \ingroup OTBWatersheds
 */
 template <class TInputImage,  class TOutputLabelImage >
 class WatershedSegmentationFilter

@@ -33,6 +33,8 @@ namespace otb {
  *  the OSM XML file storing the datas within this input image bbox.
  *
  * \sa otb::OSMDataToVectorDataGenerator
+ *
+ * \ingroup OTBCarto
  */
 template < class TImage>
 class  ITK_EXPORT ImageToOSMVectorDataGenerator :

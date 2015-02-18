@@ -29,6 +29,8 @@ namespace otb
  * The Line is basically defined by a set of points.
  *
  * \sa LineSpatialObjectPoint
+ *
+ * \ingroup OTBSpatialObjects
  */
 template <unsigned int VDimension = 3>
 class ITK_EXPORT LineSpatialObject

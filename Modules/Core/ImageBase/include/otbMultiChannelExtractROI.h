@@ -36,6 +36,8 @@ namespace otb
  *
  * \note If no channels are specified, then all channels from the input image are selected.
  * \note The image manipulated inside this class are of type otb::VectorImage.
+ *
+ * \ingroup OTBImageBase
  */
 template <class TInputPixelType, class TOutputPixelType>
 class ITK_EXPORT MultiChannelExtractROI :

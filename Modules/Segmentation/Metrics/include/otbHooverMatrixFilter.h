@@ -32,6 +32,8 @@ namespace otb
  * couples of region. These couples are made from a ground truth segmentation and
  * a machine segmentation. The line number gives the index of the ground truth region. The
  * column number gives the index of the machine segmentation region.
+ *
+ * \ingroup OTBMetrics
  */
 
 template< class TLabelMap >

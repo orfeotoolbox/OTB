@@ -36,6 +36,8 @@ namespace otb
  * \sa LineIterator
  * \sa LineConstIterator
  * \sa PolyLineImageIterator
+ *
+ * \ingroup OTBPath
  */
 template <class TImage, class TPath>
 class ITK_EXPORT PolyLineImageConstIterator

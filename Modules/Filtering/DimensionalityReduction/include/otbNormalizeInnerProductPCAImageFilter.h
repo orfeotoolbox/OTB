@@ -30,6 +30,8 @@ namespace otb
  *  \brief  The aim of the class is to normalise vector images using a vector coefficient values.
  *
  * \ingroup VectorImage
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT NormalizeInnerProductPCAImageFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>

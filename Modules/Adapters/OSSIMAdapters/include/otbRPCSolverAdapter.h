@@ -39,6 +39,8 @@ class ImageKeywordlist;
  *  This class defines some typedefs and exposes the RPC solving functions.
  *
  * \sa GCPsToRPCSensorModelImageFilter
+ *
+ * \ingroup OTBOSSIMAdapters
  **/
 
 class RPCSolverAdapter

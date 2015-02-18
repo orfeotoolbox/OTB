@@ -27,6 +27,8 @@ namespace otb
 
 /** \class TileMapTransform
  *  \brief to do
+ *
+ * \ingroup OTBProjection
  **/
 
 template <TransformDirection::TransformationDirection TTransformDirection,

@@ -159,6 +159,8 @@ private:
  * \ingroup Streamed
  * \ingroup Multithreaded
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 template<class TInputImage, class TOutputImage = TInputImage>
 class ITK_EXPORT PersistentShrinkImageFilter :
@@ -251,6 +253,8 @@ private:
  * \ingroup Streamed
  * \ingroup Multithreaded
  *
+ *
+ * \ingroup OTBImageManipulation
  */
 template<class TInputImage, class TOutputImage = TInputImage>
 class ITK_EXPORT StreamingShrinkImageFilter :

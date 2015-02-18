@@ -30,6 +30,8 @@ namespace otb
    * - the SatelliteRSR relatives spectral response of a sensor (RSR).
    *
    * \sa itk::DataObject
+ *
+ * \ingroup OTBSimulation
  */
 template <class TSpectralResponse , class TRSR>
 class AtmosphericEffects

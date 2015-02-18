@@ -130,6 +130,8 @@ namespace otb
  * \sa Function::LanczosWindowFunction
  * \sa Function::BlackmanWindowFunction
  * \ingroup ImageFunctionBases ImageInterpolators
+ *
+ * \ingroup OTBInterpolation
  */
 template<class TInputImage, class TWindowFunction, class TBoundaryCondition =
       itk::ZeroFluxNeumannBoundaryCondition<TInputImage>, class TCoordRep = double>

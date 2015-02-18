@@ -70,6 +70,8 @@ namespace Functor {
  * \sa MuellerToCircularPolarisationImageFilter
  * \sa MuellerToReciprocalCovarianceFunctor
  *
+ *
+ * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
 class MuellerToPolarisationDegreeAndPowerFunctor
@@ -199,6 +201,8 @@ private:
  * \ingroup SARPolarimetry
  * \sa MuellerToPolarisationDegreeAndPowerFunctor
  *
+ *
+ * \ingroup OTBPolarimetry
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MuellerToPolarisationDegreeAndPowerImageFilter :

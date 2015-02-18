@@ -50,6 +50,8 @@ namespace otb
  * where if  \f[ \mu_{1}>\mu_{2} s_{i}=+1 \f]
  * else if \f[ \mu_{1}<\mu_{2} s_{i}=-1 \f]
  *
+ *
+ * \ingroup OTBEdge
  */
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection = TOutputImage>

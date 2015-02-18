@@ -32,6 +32,8 @@ namespace otb
  *  a value between 0 and 1.
  *
  *  \example BasicFilters/HillShadingExample.cxx
+ *
+ * \ingroup OTBImageManipulation
 */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT HillShadingFilter :

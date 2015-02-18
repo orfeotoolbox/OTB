@@ -32,6 +32,8 @@ namespace otb
 * \sa UnaryFunctorObjectListFilter
 *
  *  \ingroup Functor
+ *
+ * \ingroup OTBVectorDataManipulation
  */
 template <class TPolygon>
 class CorrectPolygonFunctor

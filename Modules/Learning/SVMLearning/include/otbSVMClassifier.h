@@ -52,6 +52,8 @@ namespace otb
  * \sa LibSVMMachineLearningModel
  * \sa ImageClassificationFilter
  *
+ *
+ * \ingroup OTBSVMLearning
  */
 
 template<class TSample, class TLabel>

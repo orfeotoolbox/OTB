@@ -32,6 +32,8 @@ namespace otb
  *
  * \brief Base class for captor metadata reading.
  *
+ *
+ * \ingroup OTBMetadata
  */
 class ITK_EXPORT ImageMetadataInterfaceBase : public itk::Object
 {

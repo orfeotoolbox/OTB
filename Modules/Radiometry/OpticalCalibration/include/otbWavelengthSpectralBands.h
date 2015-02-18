@@ -27,6 +27,8 @@ namespace otb
  *  \brief This class contains the values of the filter functions
  *
  * \ingroup IO
+ *
+ * \ingroup OTBOpticalCalibration
  */
 class ITK_EXPORT WavelengthSpectralBands : public itk::DataObject
 {

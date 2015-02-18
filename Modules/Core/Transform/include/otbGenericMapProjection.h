@@ -48,6 +48,8 @@ enum TransformationDirection
  *
  * \ingroup Projection
  *
+ *
+ * \ingroup OTBTransform
  **/
 
 template <TransformDirection::TransformationDirection TDirectionOfMapping,

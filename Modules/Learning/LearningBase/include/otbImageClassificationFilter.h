@@ -32,6 +32,8 @@ namespace otb
  * \sa Classifier
  * \ingroup Streamed
  * \ingroup Threaded
+ *
+ * \ingroup OTBLearningBase
  */
 template <class TInputImage, class TOutputImage, class TMaskImage = TOutputImage>
 class ITK_EXPORT ImageClassificationFilter

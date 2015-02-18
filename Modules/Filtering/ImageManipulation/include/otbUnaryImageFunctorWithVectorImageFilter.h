@@ -38,6 +38,8 @@ namespace otb
  *
  * \ingroup Functor
  * \ingroup VectorImage
+ *
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage, class TFunction>
 class ITK_EXPORT UnaryImageFunctorWithVectorImageFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>

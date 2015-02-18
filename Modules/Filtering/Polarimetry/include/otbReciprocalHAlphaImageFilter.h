@@ -52,6 +52,8 @@ namespace Functor {
  *
  * \ingroup SARPolarimetry
  *
+ *
+ * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
 class ReciprocalHAlphaFunctor
@@ -210,6 +212,8 @@ private:
  *
  * \ingroup SARPOlarimetry
  * \sa ReciprocalHAlphaFunctor
+ *
+ * \ingroup OTBPolarimetry
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalHAlphaImageFilter :

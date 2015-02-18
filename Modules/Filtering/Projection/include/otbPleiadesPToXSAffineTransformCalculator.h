@@ -43,6 +43,8 @@ namespace otb {
  * the inverse transform is needed, one can call the GetInverse()
  * method of the transform to retrieve it.
  *
+ *
+ * \ingroup OTBProjection
  */
 class ITK_EXPORT PleiadesPToXSAffineTransformCalculator
   : public itk::LightObject

@@ -29,6 +29,8 @@ namespace Wrapper
 
 /** \class QtWidgetView
  * \brief
+ *
+ * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtWidgetView : public QWidget
 {

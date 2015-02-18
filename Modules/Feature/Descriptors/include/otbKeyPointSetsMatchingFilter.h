@@ -41,6 +41,8 @@ namespace otb
  *   \sa Landmark
  *   \sa PointSet
  *   \sa EuclideanDistanceMetric
+ *
+ * \ingroup OTBDescriptors
  */
 template <class TPointSet, class TDistance = itk::Statistics::EuclideanDistanceMetric<typename TPointSet::PixelType> >
 class ITK_EXPORT KeyPointSetsMatchingFilter

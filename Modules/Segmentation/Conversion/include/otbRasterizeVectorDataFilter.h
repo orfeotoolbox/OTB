@@ -54,6 +54,8 @@ namespace otb {
  *  Note : The VectorDatas and the input raster must be in the same
  *  projectionRef. Nothing is done in this class to reproject the
  *  VectorData into the image coordinate system.
+ *
+ * \ingroup OTBConversion
  */
 template <class TVectorData, class TInputImage, class TOutputImage = TInputImage  >
 class  ITK_EXPORT RasterizeVectorDataFilter :

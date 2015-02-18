@@ -27,6 +27,8 @@ namespace otb
  * \brief Applies the Inner product to an vector image.
  * Implement the itk::ImagePCAShapeModelEstimator algorithms in streaming capabilities
  * Use by the  InnerProductPCAImageFilter composite filter
+ *
+ * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT EstimateInnerProductPCAImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>

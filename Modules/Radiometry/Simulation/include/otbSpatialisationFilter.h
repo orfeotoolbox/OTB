@@ -42,6 +42,8 @@ namespace otb
  * The Label of each object is set using SetLabels.
  *
  * \sa LabelMapSource
+ *
+ * \ingroup OTBSimulation
  */
 
 template <class TLabelMap>

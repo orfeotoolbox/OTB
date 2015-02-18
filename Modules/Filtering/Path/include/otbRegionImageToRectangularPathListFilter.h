@@ -34,6 +34,8 @@ namespace otb
 /** \class RegionImageToRectangularPathListFilter
  * \brief Base class used to implement filter to model regions by rectangles.
  *
+ *
+ * \ingroup OTBPath
  */
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT RegionImageToRectangularPathListFilter : public ImageToPathListFilter<TInputImage, TOutputPath>

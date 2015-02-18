@@ -44,6 +44,8 @@ namespace otb {
  * \sa ResampleImageFilter
  * \sa SubsampleImageRegionConstIterator
  * \sa DecimateImageFilter
+ *
+ * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage,
     Wavelet::WaveletDirection TDirectionOfTransformation>

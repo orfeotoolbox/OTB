@@ -20,7 +20,7 @@
 #ifndef __otbNonGaussianRBFKernelFunctor_h
 #define __otbNonGaussianRBFKernelFunctor_h
 
-#include "svm.h"
+#include "otb_libsvm.h"
 
 //FIXME: shouldn't it be in the Functor namespace?
 namespace otb
@@ -36,6 +36,8 @@ namespace otb
  * Variables to be instanciated (through \code SetValue \endcode) are:
  * Alpha (def=1), Beta (def=2) and Gamma (def 1.0).
  *
+ *
+ * \ingroup OTBSVMLearning
  */
 class NonGaussianRBFKernelFunctor
   : public GenericKernelFunctorBase

@@ -33,6 +33,8 @@ namespace otb
  *
  * \todo{Add the support for different ellipsoid models}
  *
+ *
+ * \ingroup OTBOSSIMAdapters
  **/
 
 class EllipsoidAdapter: public itk::Object

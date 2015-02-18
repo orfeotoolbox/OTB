@@ -49,6 +49,8 @@ namespace otb
  * IEEE Int. Conf. On Image Processing(ICIP) 2009, Cairo, Egypte, 2009
  *
  * \ingroup Hyperspectral
+ *
+ * \ingroup OTBEndmembersExtraction
  */
 template<class TPrecision>
 class ITK_EXPORT EigenvalueLikelihoodMaximisation :

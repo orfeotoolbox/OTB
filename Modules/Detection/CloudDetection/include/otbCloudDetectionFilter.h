@@ -25,6 +25,8 @@ namespace otb
 {
 /** \class CloudDetectionFilter
  * \brief Applies cloud detection functor to an image.
+ *
+ * \ingroup OTBCloudDetection
  */
 template <class TInputImage, class TOutputImage, class TFunction = Functor::CloudDetectionFunctor<
         typename TInputImage::PixelType, typename TOutputImage::PixelType> >

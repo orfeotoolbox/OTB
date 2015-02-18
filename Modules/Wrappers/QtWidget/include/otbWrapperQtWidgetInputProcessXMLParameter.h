@@ -30,6 +30,8 @@ namespace Wrapper
 
 /** \class QtWidgetInputProcessXMLParameter
  * \brief
+ *
+ * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtWidgetInputProcessXMLParameter : public QtWidgetParameterBase
 {

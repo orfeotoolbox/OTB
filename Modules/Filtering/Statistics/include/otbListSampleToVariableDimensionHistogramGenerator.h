@@ -41,6 +41,8 @@ namespace otb {
  * ListSampleToHistogramGenerator class documentation.
  *
  * \sa VariableDimensionHistogram, ListSample, ListSampleToHistogramGenerator
+ *
+ * \ingroup OTBStatistics
  */
 template<class TListSample,
     class THistogramMeasurement,

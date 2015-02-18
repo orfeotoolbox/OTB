@@ -34,6 +34,8 @@ namespace otb
  *
  * \ingroup IOFilters
  *
+ *
+ * \ingroup OTBIOMW
  */
 class ITK_EXPORT MWImageIO : public otb::ImageIOBase
 {
