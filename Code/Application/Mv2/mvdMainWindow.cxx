@@ -317,37 +317,6 @@ MainWindow
 
 
   //
-  // EVENT FILTERS.
-
-  /*
-  // Database browser
-  DatabaseBrowserController* dbBrowserController =
-    m_DatabaseBrowserDock->findChild< DatabaseBrowserController* >();
-  assert( dbBrowserController!=NULL );
-
-#if ENABLE_TREE_WIDGET_TEST
-  assert(
-    dbBrowserController->GetWidget()==
-    dbBrowserController->GetWidget< DatabaseBrowserWidgetTest >()
-  );
-
-  DatabaseBrowserWidgetTest* dbBrowserWidget =
-    dbBrowserController->GetWidget< DatabaseBrowserWidgetTest >();
-
-#else // ENABLE_TREE_WIDGET_TEST
-  assert(
-    dbBrowserController->GetWidget()==
-    dbBrowserController->GetWidget< DatabaseBrowserWidget >()
-  );
-
-  DatabaseBrowserWidget* dbBrowserWidget =
-    dbBrowserController->GetWidget< DatabaseBrowserWidget >();
-#endif // ENABLE_TREE_WIDGET_TEST
-
-  dbBrowserWidget->InstallTreeEventFilter( m_FilenameDragAndDropEventFilter );
-  */
-
-  //
   // Image views
   ConnectImageViews();
 }
@@ -458,8 +427,6 @@ MainWindow
 
   m_UI->menu_View->addSeparator();
 
-  // m_UI->menu_View->addAction( m_DatabaseBrowserDock->toggleViewAction() );
-  // m_UI->menu_View->addAction( m_DatasetPropertiesDock->toggleViewAction() );
 #if USE_PIXEL_DESCRIPTION
   m_UI->menu_View->addAction( m_PixelDescriptionDock->toggleViewAction() );
 #endif // USE_PIXEL_DESCRIPTION
@@ -810,40 +777,6 @@ MainWindow
   //
   // Left pane.
 
-  /*
-  // Database-browser.
-  assert( m_DatabaseBrowserDock==NULL );
-#if ENABLE_TREE_WIDGET_TEST
-  m_DatabaseBrowserDock =
-    AddDockWidget
-    < DatabaseBrowserWidgetTest, DatabaseBrowserController, QDockWidget >
-    ( "DATABASE_BROWSER",
-      tr( "Database browser (test)" ),
-      Qt::LeftDockWidgetArea
-    );
-#else // ENABLE_TREE_WIDGET_TEST
-  m_DatabaseBrowserDock =
-    AddDockWidget
-    < DatabaseBrowserWidget, DatabaseBrowserController, QDockWidget >
-    ( "DATABASE_BROWSER",
-      tr( "Database browser" ),
-      Qt::LeftDockWidgetArea
-    );
-#endif // ENABLE_TREE_WIDGET_TEST
-  */
-
-  /*
-  // Dataset-properties.
-  assert( m_DatasetPropertiesDock==NULL );
-  m_DatasetPropertiesDock =
-    AddDockWidget
-    < DatasetPropertiesWidget, DatasetPropertiesController, QDockWidget >
-    ( "DATASET_PROPERTIES",
-      tr( "Dataset properties" ),
-      Qt::LeftDockWidgetArea
-    );
-  */
-
 #if defined( OTB_WRAP_QT ) && USE_OTB_APPS
   // OTB-applications browser.
   assert( m_OtbApplicationsBrowserDock==NULL );
@@ -1063,45 +996,6 @@ MainWindow
 
   if( !stackedLayerModel->HasReference() )
     stackedLayerModel->SetReference( imageModel  );
-
-  /*
-  DatasetModel* datasetModel =
-    ImportImage(
-      filename,
-#if 0 // USE_OLD_IMAGE_VIEW
-      // Seen but left here intentionaly.
-      m_ImageView1->width(),
-      m_ImageView1->height(),
-#else
-      -1, -1,
-#endif // USE_OLD_IMAGE_VIEW
-      forceCreate
-    );
-
-  if( datasetModel==NULL )
-    return;
-
-  assert( Application::Instance() );
-  assert( Application::Instance()->GetModel()!=NULL );
-  assert(
-    Application::Instance()->GetModel()==
-    Application::Instance()->GetModel< DatabaseModel >()
-  );
-
-  DatabaseModel* databaseModel =
-    Application::Instance()->GetModel< DatabaseModel >();
-  assert( databaseModel!=NULL );
-
-  DatasetHash hash( 
-    databaseModel->RegisterDatasetModel(
-      datasetModel
-    )
-  );
-
-  qDebug() << "hash:" << hash;
-
-  databaseModel->SelectDatasetModel( hash );
-  */
 }
 
 /*****************************************************************************/
@@ -1109,21 +1003,6 @@ void
 MainWindow
 ::closeEvent( QCloseEvent* event )
 {
-  /*
-  assert(
-    Application::Instance()->GetModel()==
-    Application::Instance()->GetModel< DatabaseModel >()
-  );
-
-  DatabaseModel* databaseModel =
-    Application::Instance()->GetModel< DatabaseModel >();
-
-  DatasetModel* datasetModel = databaseModel->GetSelectedDatasetModel();
-
-  if( datasetModel!=NULL )
-    datasetModel->Save();
-  */
-
   I18nMainWindow::closeEvent( event );
 }
 
@@ -1382,14 +1261,6 @@ MainWindow
   // Assign stacked-layer model controller.
   SetControllerModel( m_LayerStackDock, NULL );
 
-  // QObject::disconnect(
-  //   refLayerComboBox,
-  //   SIGNAL( currentIndexChanged( int ) ),
-  //   // to:
-  //   this,
-  //   SLOT( OnReferenceLayerCurrentIndexChanged( int ) )
-  // );
-
 
   assert( Application::Instance() );
   assert( Application::Instance()->GetModel()==
@@ -1508,9 +1379,6 @@ MainWindow
   //
   // See also, ::OnSelectedLayerModel() changed.
 
-  // Unset dataset-model from dataset-properties controller.
-  // SetControllerModel( m_DatasetPropertiesDock, NULL );
-
   // Unset image-model from color-dynamics controller.
   SetControllerModel( m_ColorDynamicsDock, NULL );
 
@@ -1602,19 +1470,6 @@ MainWindow
   //
   // VIEWS.
   //
-  /*
-  ImageViewWidget * quicklookView = GetQuicklookView();
-  assert( quicklookView );
-
-  quicklookView->UpdateScene();
-  quicklookView->ZoomToExtent();
-
-
-  assert( m_ImageView!=NULL );
-
-  m_ImageView->UpdateScene();
-  m_ImageView->ZoomToFullResolution();
-  */
 
   //
   // MODEL(s).
@@ -1683,7 +1538,6 @@ MainWindow
   // See also: OnAboutToChangeLayerModel().
 
   // Assign dataset-model to dataset-properties controller.
-  // SetControllerModel( m_DatasetPropertiesDock, model );
 
   // Assign image-model to color-dynamics controller.
   SetControllerModel( m_ColorDynamicsDock, layerModel );
@@ -1702,152 +1556,6 @@ MainWindow
   m_UI->action_ZoomExtent->setEnabled( layerModel!=NULL );
   m_UI->action_ZoomFull->setEnabled( layerModel!=NULL );
 }
-
-/*****************************************************************************/
-/*
-void
-MainWindow
-::OnSelectedDatasetModelChanged( DatasetModel* model )
-{
-  // qDebug() << this << "::OnSelectedDatasetModelChanged(" << model << ")";
-
-  // Access vector-image model.
-  VectorImageModel* vectorImageModel =
-    model->GetSelectedImageModel< VectorImageModel >();
-
-  // Check type.
-  assert( vectorImageModel==model->GetSelectedImageModel() );
-
-  //
-  // VIEWS.
-  //
-
-  // connect the status bar
-  // must be done before the SetImageModel (to be able to receive
-  // the signal with zoom level)
-  ConnectStatusBar( model );
-
-  ConnectPixelDescriptionWidget( model );
-
-  if( model!=NULL )
-    {
-    QObject::connect(
-      m_ImageView,
-      SIGNAL( RoiChanged( const PointType&, double, double ) ),
-      // to:
-      model,
-      SLOT( OnRoiChanged( const PointType&, double, double ) )
-    );
-    }
-
-  if( vectorImageModel!=NULL )
-    {
-    //
-    // Image-models.
-    ImageViewWidget::VectorImageModelList images;
-
-    images << vectorImageModel;
-
-    // m_ImageView->SetImageList( images, ImageViewWidget::ZOOM_TYPE_FULL );
-    m_ImageView->SetImageList(
-      images,
-      model->GetLastPhysicalCenter(),
-      model->GetLastIsotropicZoom()
-    );
-
-    //
-    // Quicklooks.
-    ImageViewWidget* quicklookView = GetQuicklookView();
-    assert( quicklookView!=NULL );
-
-#if 0
-    // Use full image for quicklook-view.
-    quicklookView->SetImageList( images, ImageViewWidget::ZOOM_TYPE_EXTENT );
-#else
-    // Use quicklook-image for quicklook-view.
-    ImageViewWidget::VectorImageModelList quicklooks;
-
-    assert( vectorImageModel->GetQuicklookModel()!=NULL );
-    quicklooks << vectorImageModel->GetQuicklookModel();
-
-    // qDebug() << quicklooks;
-
-    quicklookView->SetImageList( quicklooks, ImageViewWidget::ZOOM_TYPE_EXTENT );
-#endif
-    }
-
-  //
-  // MODEL(s).
-  //
-
-  // connected to prevent signals/slots to produce multiple view
-  // refreshes).
-  if( vectorImageModel!=NULL )  // could be null when no dataset selected
-    {
-    //
-    // SAT: Using m_TabWidget->index( 0 ) or m_ImageView is equivalent
-    // since Qt may use signal & slot names to connect (see MOC .cxx
-    // files). Thus, using m_ImageView saves one indirection call.
-    QObject::connect(
-      vectorImageModel,
-      SIGNAL( SettingsUpdated() ),
-      // to:
-      m_ImageView,
-      SLOT( updateGL()  )
-      );
-
-    QObject::connect(
-      vectorImageModel,
-      SIGNAL( SettingsUpdated() ),
-      // to:
-      m_QuicklookViewDock->widget(),
-      SLOT( updateGL()  )
-      );
-
-
-    //
-    // trigger the placename computation
-    // used by m_DatasetPropertiesDock
-    // Done here to find placename if not computed, everytime this
-    // dataset is loaded
-    model->LoadImagePlacename();
-    }
-
-  //
-  // CONTROLLERS.
-  //
-
-  //
-  // Connect image-model controllers.
-  //
-  // N.B.: This step *must* be done after signals and slots between
-  // model(s) and view(s) have been connected (because when model is
-  // assigned to controller, widgets/view are reset and emit
-  // refreshing signals).
-  //
-  // See also: OnAboutToChangeDatasetModel().
-
-  // Assign dataset-model to dataset-properties controller.
-  SetControllerModel( m_DatasetPropertiesDock, model );
-
-  // Assign image-model to color-dynamics controller.
-  SetControllerModel( m_ColorDynamicsDock, vectorImageModel );
-
-  // Assign image-model to color-setup controller.
-  SetControllerModel( m_ColorSetupDock, vectorImageModel );
-
-  // Assign histogram-model to histogram controller.
-  SetControllerModel( m_HistogramDock, vectorImageModel );
-
-  //
-  // TOOLBAR.
-  //
-  m_UI->action_ZoomIn->setEnabled( vectorImageModel!=NULL );
-  m_UI->action_ZoomOut->setEnabled( vectorImageModel!=NULL );
-  m_UI->action_ZoomExtent->setEnabled( vectorImageModel!=NULL );
-  m_UI->action_ZoomFull->setEnabled( vectorImageModel!=NULL );
-}
-*/
 
 /*****************************************************************************/
 void
@@ -1988,17 +1696,6 @@ MainWindow
 {
   if( status<0 )
     return;
-
-  /*
-  assert( m_DatabaseBrowserDock!=NULL );
-  assert(
-    m_DatabaseBrowserDock->findChild< const DatabaseBrowserController* >()!=NULL
-  );
-
-  m_DatabaseBrowserDock
-    ->findChild< DatabaseBrowserController* >()
-    ->CheckDatasetsConsistency();
-  */
 }
 
 /*****************************************************************************/
@@ -2043,21 +1740,6 @@ MainWindow
     ? 0 // comboBox->count() - 1
     : model->GetReferenceIndex() + 1
   );
-
-
-  /*
-  ImageViewWidget * quicklookView = GetQuicklookView();
-  assert( quicklookView );
-
-  quicklookView->UpdateScene();
-  quicklookView->updateGL();
-
-
-  assert( m_ImageView!=NULL );
-
-  m_ImageView->UpdateScene();
-  m_ImageView->updateGL();
-  */
 }
 
 /*****************************************************************************/

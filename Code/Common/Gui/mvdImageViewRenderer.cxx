@@ -557,32 +557,8 @@ ImageViewRenderer
 }
 
 /*******************************************************************************/
-/*
 void
 ImageViewRenderer
-::virtual_ClearScene()
-{
-  assert( !m_GlView.IsNull() );
-
-  // qDebug() << this << "::virtual_CleraScene()";
-
-  //
-  // Remove all actors.
-  m_GlView->ClearActors();
-
-  // Forget image-model/actors relationships.
-  m_ImageModelActorPairs.clear();
-
-  // Forget reference instances.
-  m_ReferenceImageModel = NULL;
-  m_ReferenceGlImageActor = otb::GlImageActor::Pointer();
-}
-*/
-
-/*******************************************************************************/
-void
-ImageViewRenderer
-// ::virtual_SetLayerStack( StackedLayerModel * stackedLayerModel )
 ::virtual_UpdateScene()
 {
   assert( !m_GlView.IsNull() );
@@ -710,96 +686,6 @@ ImageViewRenderer
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 }
-
-/*******************************************************************************/
-/*
-void
-ImageViewRenderer
-::virtual_SetImageList( const VectorImageModelList & images )
-{
-  assert( !m_GlView.IsNull() );
-
-  // qDebug() << this << "::virtual_SetImageList(" << images << ")";
-
-  //
-  // Check that references are clear.
-  assert( m_ImageModelActorPairs.empty() );
-  assert( m_ReferenceImageModel==NULL );
-  assert( m_ReferenceGlImageActor.IsNull() );
-
-  //
-  // Return if there is no vector-image model.
-  if( images.isEmpty() )
-    return;
-
-  //
-  // Insert new actors corresponding to vector-image model.
-  for( VectorImageModelList::const_iterator it( images.begin() );
-       it!=images.end();
-       ++it )
-    {
-    assert( *it!=NULL );
-
-#if USE_REMOTE_DESKTOP_DISABLED_RENDERING
-
-    ImageModelActorPair pair(
-      *it,
-      otb::GlImageActor::Pointer()
-    );
-
-#else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
-
-    ImageModelActorPair pair(
-      *it,
-      otb::GlImageActor::New()
-    );
-
-    pair.second->Initialize( ToStdString( pair.first->GetFilename() ) );
-
-    DatasetModel* datasetModel = pair.first->GetDatasetModel();
-
-    ActorKey actorKey(
-      m_GlView->AddActor(
-        pair.second,
-        pair.first==NULL
-        ? std::string()
-        : ToStdString( datasetModel->GetHash() )
-      )
-    );
-
-    pair.second->SetVisible( true );
-
-    m_ImageModelActorPairs.insert(
-      ImageModelActorPairMap::value_type( actorKey, pair )
-    );
-
-    qDebug() << "Added image-actor:" << FromStdString( actorKey );
-
-#endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
-    }
-
-  //
-  // Remember first vector image-model as reference image-model.
-  m_ReferenceImageModel = images.front();
-
-#if USE_REMOTE_DESKTOP_DISABLED_RENDERING
-#else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
-
-  //
-  // Remember first actor as reference actor.
-  otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
-  assert( !keys.empty() );
-
-  otb::GlActor::Pointer glActor( m_GlView->GetActor( keys.front() ) );
-  assert( !glActor.IsNull() );
-
-  assert( glActor==otb::DynamicCast< otb::GlImageActor >( glActor ) );
-  m_ReferenceGlImageActor = otb::DynamicCast< otb::GlImageActor >( glActor );
-  assert( !m_ReferenceGlImageActor.IsNull() );
-
-#endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
-}
-*/
 
 /*****************************************************************************/
 bool
