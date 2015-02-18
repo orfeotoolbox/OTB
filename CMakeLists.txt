@@ -192,27 +192,39 @@ set(OTB_TEST_OUTPUT_DIR "${OTB_BINARY_DIR}/Testing/Temporary")
 
 #-----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
-find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
+find_path(OTB_DATA_ROOT
+  NAMES README-OTB-Data
+  HINTS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data
+)
 mark_as_advanced(OTB_DATA_ROOT)
 
 option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
 mark_as_advanced(OTB_DATA_USE_LARGEINPUT)
 if(OTB_DATA_USE_LARGEINPUT)
-  find_path(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
+  find_path(OTB_DATA_LARGEINPUT_ROOT
+    NAMES OTBData.readme
+    HINTS $ENV{OTB_DATA_LARGEINPUT_ROOT}
+  )
   mark_as_advanced(OTB_DATA_LARGEINPUT_ROOT)
 endif()
 
 option(OTB_DATA_USE_SPOTPHRINPUT "Use PHR data provided by SPOT." OFF)
 mark_as_advanced(OTB_DATA_USE_SPOTPHRINPUT)
 if(OTB_DATA_USE_SPOTPHRINPUT)
-  find_path(OTB_DATA_SPOTPHRINPUT_ROOT OTB_PHR_Data.readme $ENV{OTB_DATA_SPOTPHRINPUT_ROOT})
+  find_path(OTB_DATA_SPOTPHRINPUT_ROOT
+    NAMES OTB_PHR_Data.readme
+    HINTS $ENV{OTB_DATA_SPOTPHRINPUT_ROOT}
+  )
   mark_as_advanced(OTB_DATA_SPOTPHRINPUT_ROOT)
 endif()
 
 option(OTB_DATA_USE_CNESPHRINPUT "Use PHR data provided by CNES." OFF)
 mark_as_advanced(OTB_DATA_USE_CNESPHRINPUT)
 if(OTB_DATA_USE_CNESPHRINPUT)
-  find_path(OTB_DATA_CNESPHRINPUT_ROOT OTB_PHR_Data.readme $ENV{OTB_DATA_CNESPHRINPUT_ROOT})
+  find_path(OTB_DATA_CNESPHRINPUT_ROOT 
+    NAMES OTB_PHR_Data.readme
+    HINTS $ENV{OTB_DATA_CNESPHRINPUT_ROOT}
+  )
   mark_as_advanced(OTB_DATA_CNESPHRINPUT_ROOT)
 endif()
 
