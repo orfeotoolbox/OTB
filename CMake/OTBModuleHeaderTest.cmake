@@ -86,7 +86,11 @@ macro( otb_module_headertest _name )
         )
       add_executable( ${_test_name} ${_header_test_src} )
       target_link_libraries( ${_test_name} OTBCommon )
-      add_dependencies(${_test_name} ${${_name}_LIBRARIES})
+      if (${_name}_LIBRARIES)
+        # OTBBoostAdapters depends only on OTBBoost,
+        # and OTBBoost_LIBRARIES can be empty, so check for it
+        add_dependencies(${_test_name} ${${_name}_LIBRARIES})
+      endif()
       add_dependencies(${_name}-all ${_test_name})
       math( EXPR _test_num "${_test_num} + 1" )
     endforeach()
