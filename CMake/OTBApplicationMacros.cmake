@@ -62,12 +62,10 @@ macro(otb_create_application)
                DESTINATION ${APPLICATION_BINARY_PATH}
                FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
-          if (OTB_INSTALL_BIN_DIR)
-              # Install a version of this script if we are inside the OTB build
-              install(PROGRAMS ${SCRIPT_CLI_INSTALLABLE}
-                      DESTINATION ${OTB_INSTALL_BIN_DIR}
-                      COMPONENT RuntimeLibraries)
-          endif()
+          # Install a version of this script if we are inside the OTB build
+          install(PROGRAMS ${SCRIPT_CLI_INSTALLABLE}
+                  DESTINATION ${OTB_INSTALL_RUNTIME_DIR}
+                  COMPONENT Runtime)
       endif()
 
       if (WIN32)
@@ -91,12 +89,10 @@ macro(otb_create_application)
                DESTINATION ${APPLICATION_BINARY_PATH}
                FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
-          if (OTB_INSTALL_BIN_DIR)
-              # Install a version of this script if we are inside the OTB build
-              install(PROGRAMS ${SCRIPT_GUI_INSTALLABLE}
-                      DESTINATION ${OTB_INSTALL_BIN_DIR}
-                      COMPONENT RuntimeLibraries)
-          endif()
+          # Install a version of this script if we are inside the OTB build
+          install(PROGRAMS ${SCRIPT_GUI_INSTALLABLE}
+                  DESTINATION ${OTB_INSTALL_RUNTIME_DIR}
+                  COMPONENT Runtime)
       endif()
    #endif()
 
