@@ -1,3 +1,1 @@
-find_package(OpenJPEG 
-  2.0.0
-  )
+find_package(OpenJPEG)
