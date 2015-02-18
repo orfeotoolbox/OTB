@@ -48,6 +48,17 @@ OPTION(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)
 include_directories(Code)
 
 #----------------------------------------------------------------------------
+# ITK
+find_package(ITK REQUIRED)
+if(ITK_FOUND)
+  MESSAGE(STATUS "ITK found")
+  include(${ITK_USE_FILE})
+else(ITK_FOUND)
+  message(FATAL_ERROR "ITK not found. Please set ITK_DIR")
+endif(ITK_FOUND)
+
+
+#----------------------------------------------------------------------------
 # Orfeo ToolBox
 find_package(OTB REQUIRED)
 if(OTB_FOUND)
@@ -111,18 +122,17 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${Ice_BINARY_DIR}/bin CACHE INTERNAL "Single 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${Ice_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for all LIBRARY products (so, modules)")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${Ice_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for all RUNTIME products (executables, dlls)")
 
-
 # Install dirs
 if(NOT Ice_INSTALL_BIN_DIR)
   set(Ice_INSTALL_BIN_DIR "bin")
 endif(NOT Ice_INSTALL_BIN_DIR)
 
 if(NOT Ice_INSTALL_LIB_DIR)
-  set(Ice_INSTALL_LIB_DIR "lib/otb")
+  set(Ice_INSTALL_LIB_DIR "lib/")
 endif(NOT Ice_INSTALL_LIB_DIR)
 
 if(NOT Ice_INSTALL_INCLUDE_DIR)
-  set(Ice_INSTALL_INCLUDE_DIR "include/otb")
+  set(Ice_INSTALL_INCLUDE_DIR "include/")
 endif(NOT Ice_INSTALL_INCLUDE_DIR)
 
 add_subdirectory(Code)
