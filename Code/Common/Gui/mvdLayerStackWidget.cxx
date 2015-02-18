@@ -153,21 +153,24 @@ LayerStackWidget
   // if( m_UI->treeView->selectionModel()->currentIndex().row()==row )
   //   return;
 
-#if 1
-  m_UI->treeView->selectionModel()->select(
-    m_UI->treeView->model()->index( row, 1 ),
-    QItemSelectionModel::ClearAndSelect |
-    // QItemSelectionModel::Current |
-    QItemSelectionModel::Rows
+  if( row<0 )
+    m_UI->treeView->selectionModel()->clearSelection();
+
+  else
+    m_UI->treeView->selectionModel()->select(
+      m_UI->treeView->model()->index( row, 1 ),
+      QItemSelectionModel::ClearAndSelect |
+      QItemSelectionModel::Rows
   );
-#else
+
+  /*
   m_UI->treeView->selectionModel()->setCurrentIndex(
     m_UI->treeView->model()->index( row, 1 ),
     QItemSelectionModel::ClearAndSelect |
     // QItemSelectionModel::Current |
     QItemSelectionModel::Rows
   );
-#endif
+  */
 }
 
 /*******************************************************************************/

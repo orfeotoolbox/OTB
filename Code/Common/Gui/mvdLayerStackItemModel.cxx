@@ -378,7 +378,16 @@ LayerStackItemModel
   // qDebug()
   //   << "index:" << row << "," << column << "," << m_StackedLayerModel->At( row );
 
-  return createIndex( row, column, m_StackedLayerModel->At( row ) );
+  assert( row>=0 && column>=0 );
+
+  return
+    createIndex(
+      row,
+      column,
+      parent.isValid()
+      ? NULL
+      : m_StackedLayerModel->At( row )
+    );
 }
 
 /*****************************************************************************/

@@ -132,6 +132,8 @@ StackedLayerModel
   bool emitSignal2 = !IsEmpty() && m_Reference<GetCount();
 
 
+  //
+  // Clear current.
   if( emitSignal1 )
     {
     emit CurrentAboutToBeChanged( StackedLayerModel::NIL_INDEX );
@@ -139,10 +141,26 @@ StackedLayerModel
     emit ContentAboutToBeReset();
     }
 
+  m_Current = StackedLayerModel::NIL_INDEX;
+
+  if( emitSignal1 )
+    {
+    emit CurrentChanged( m_Current );
+    emit SelectedLayerModelChanged( KeyType() );
+    }
+
+  //
+  // Clear reference.
   if( emitSignal2 )
     emit ReferenceAboutToBeChanged( StackedLayerModel::NIL_INDEX );
 
+  m_Reference = StackedLayerModel::NIL_INDEX;
 
+  if( emitSignal2 )
+    emit ReferenceChanged( m_Reference );
+
+  //
+  // Clear content.
   for( LayerModelMap::iterator it( m_LayerModels.begin() );
        it!=m_LayerModels.end();
        ++it )
@@ -159,18 +177,8 @@ StackedLayerModel
   m_LayerModels.clear();
   m_Keys.clear();
 
-  m_Current = StackedLayerModel::NIL_INDEX;
-
-
   if( emitSignal1 )
-    {
-    emit CurrentChanged( StackedLayerModel::NIL_INDEX );
-    emit SelectedLayerModelChanged( KeyType() );
     emit ContentReset();
-    }
-
-  if( emitSignal2 )
-    emit ReferenceChanged( StackedLayerModel::NIL_INDEX );
 }
 
 /*****************************************************************************/
