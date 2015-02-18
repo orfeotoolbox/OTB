@@ -22,7 +22,6 @@
 #include "itkImage.h"
 #include "itkNumericTraits.h"
 #include "itkArray.h"
-#include "itkFFTWCommon.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 
 namespace otb

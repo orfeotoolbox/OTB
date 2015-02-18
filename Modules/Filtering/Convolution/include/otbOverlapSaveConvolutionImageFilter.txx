@@ -32,6 +32,10 @@
 #include "itkImageRegionIterator.h"
 #include "otbMath.h"
 
+#ifdef ITK_USE_FFTWD
+#include "itkFFTWCommon.h"
+#endif
+
 namespace otb
 {
 
