@@ -1,4 +1,0 @@
-extern int trunca_(doublereal *coeff, integer *ipol);
-/* comlen num_quad__ 4 */
-/* comlen sixs_polar__ 56032 */
-/*:ref: gauss_ 14 5 7 7 7 7 4 */

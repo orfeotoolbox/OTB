@@ -1,2 +1,0 @@
-extern int us62_();
-/* comlen sixs_atm__ 1360 */

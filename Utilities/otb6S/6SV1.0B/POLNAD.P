@@ -1,1 +1,0 @@
-extern int polnad_(doublereal *xts, doublereal *xtv, doublereal *phi, doublereal *pveg, doublereal *ropq, doublereal *ropu);

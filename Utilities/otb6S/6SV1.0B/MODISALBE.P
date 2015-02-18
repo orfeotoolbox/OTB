@@ -1,1 +1,0 @@
-extern int modisalbe_(doublereal *p1, doublereal *p2, doublereal *p3, doublereal *brdfalb);

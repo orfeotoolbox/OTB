@@ -1,2 +1,0 @@
-extern int tropic_();
-/* comlen sixs_atm__ 1360 */

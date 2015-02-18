@@ -1,4 +1,0 @@
-extern int versalbe_(integer *option, doublereal *optics, doublereal *struct__, doublereal *brdfalb);
-/* comlen sixs_ier__ 8 */
-/*:ref: gauss_ 14 5 7 7 7 7 4 */
-/*:ref: mvbp1_ 7 5 4 7 7 7 4 */

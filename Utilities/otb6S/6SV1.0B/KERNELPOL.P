@@ -1,3 +1,0 @@
-extern int kernelpol_(integer *is, integer *mu, doublereal *rm, doublereal *xpl, doublereal *xrl, doublereal *xtl, doublereal *bp, doublereal *gr, doublereal *gt, doublereal *arr, doublereal *art, doublereal *att);
-/* comlen num_quad__ 4 */
-/* comlen sixs_polar__ 56032 */

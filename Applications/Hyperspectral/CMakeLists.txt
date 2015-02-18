@@ -1,3 +1,0 @@
-
-OTB_CREATE_APPLICATION(NAME HyperspectralUnmixing SOURCES otbHyperspectralUnmixing.cxx LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
-OTB_CREATE_APPLICATION(NAME VertexComponentAnalysis SOURCES otbVertexComponentAnalysis.cxx LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)

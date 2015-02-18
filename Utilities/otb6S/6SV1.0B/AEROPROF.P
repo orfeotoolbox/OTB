@@ -1,2 +1,0 @@
-extern int aero_prof__(doublereal *ta, doublereal *piz, doublereal *tr, doublereal *hr, integer *nt, doublereal *xmus, doublereal *h__, doublereal *ch, doublereal *ydel, doublereal *xdel, doublereal *altc);
-/* comlen aeroprof_ 2428 */

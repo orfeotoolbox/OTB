@@ -1,4 +1,0 @@
-extern int atmref_(integer *iaer, integer *iaer_prof__, doublereal *tamoy, doublereal *taer, doublereal *trmoy, doublereal *pizmoy, doublereal *piza, doublereal *tamoyp, doublereal *taerp, doublereal *trmoyp, doublereal *palt, doublereal *phi, doublereal *xmus, doublereal *xmuv, doublereal *phirad, integer *nt, integer *mu, integer *np, doublereal *rm, doublereal *gb, doublereal *rp, doublereal *rorayl, doublereal *roaero, doublereal *romix, doublereal *rqrayl, doublereal *rqaero, doublereal *rqmix, doublereal *rurayl, doublereal *ruaero, doublereal *rumix, integer *ipol, doublereal *xlm1, doublereal *xlm2, doublereal *rorayl_fi__, doublereal *romix_fi__, integer *nfi, integer *nfilut, doublereal *filut, doublereal *rolut, doublereal *rolutq, doublereal *rolutu);
-/* comlen sixs_del__ 16 */
-/*:ref: ospol_ 14 24 4 7 7 7 7 7 7 7 4 4 4 7 7 7 7 7 7 7 4 4 7 7 7 7 */
-/*:ref: os_ 14 18 4 7 7 7 7 7 7 7 4 4 4 7 7 7 7 7 4 7 */

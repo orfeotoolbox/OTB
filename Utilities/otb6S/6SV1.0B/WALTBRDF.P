@@ -1,1 +1,0 @@
-extern int waltbrdf_(doublereal *a, doublereal *ap, doublereal *b, doublereal *c__, integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal *brdfint);

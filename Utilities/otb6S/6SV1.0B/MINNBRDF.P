@@ -1,1 +1,0 @@
-extern int minnbrdf_(doublereal *par1, doublereal *par2, integer *mu, integer *np, doublereal *rm, doublereal *brdfint);

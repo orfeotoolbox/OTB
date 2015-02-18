@@ -1,1 +1,0 @@
-extern int roujbrdf_(doublereal *k0, doublereal *k1, doublereal *k2, integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal *brdfint);

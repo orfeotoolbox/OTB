@@ -1,7 +1,0 @@
-extern int specinterp_(doublereal *wl, doublereal *taer55, doublereal *taer55p, doublereal *tamoy, doublereal *tamoyp, doublereal *pizmoy, doublereal *pizmoyp, integer *ipol);
-/* comlen num_quad__ 4 */
-/* comlen sixs_phase__ 480000 */
-/* comlen sixs_polar__ 56032 */
-/* comlen sixs_disc__ 4320 */
-/* comlen sixs_aer__ 960 */
-/*:ref: trunca_ 14 2 7 4 */

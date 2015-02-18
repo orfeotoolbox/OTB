@@ -1,3 +1,0 @@
-extern int poslan_(integer *month, integer *jday, doublereal *tu, doublereal *xlon, doublereal *xlat, doublereal *asol, doublereal *phi0, doublereal *avis, doublereal *phiv);
-/* comlen sixs_ier__ 8 */
-/*:ref: possol_ 14 7 4 4 7 7 7 7 7 */

@@ -1,3 +1,0 @@
-extern int oceabrdffast_(doublereal *pws, doublereal *paw, doublereal *xsal, doublereal *pcl, doublereal *pwl, integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal *brdfint);
-/*:ref: indwat_ 14 4 7 7 7 7 */
-/*:ref: sunglint_ 14 8 7 7 7 7 7 7 7 7 */

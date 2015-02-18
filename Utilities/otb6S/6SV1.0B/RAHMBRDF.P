@@ -1,1 +1,0 @@
-extern int rahmbrdf_(doublereal *rho0, doublereal *af, doublereal *xk, integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal *brdfint);

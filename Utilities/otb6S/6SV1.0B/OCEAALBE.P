@@ -1,4 +1,0 @@
-extern int oceaalbe_(doublereal *pws, doublereal *paw, doublereal *xsal, doublereal *pcl, doublereal *pwl, doublereal *brdfalbe);
-/*:ref: indwat_ 14 4 7 7 7 7 */
-/*:ref: morcasiwat_ 14 3 7 7 7 */
-/*:ref: glitalbe_ 14 5 7 7 7 7 7 */

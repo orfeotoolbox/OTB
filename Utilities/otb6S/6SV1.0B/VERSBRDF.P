@@ -1,3 +1,0 @@
-extern int versbrdf_(integer *option, doublereal *optics, doublereal *struct__, integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal *brdfint);
-/* comlen sixs_ier__ 8 */
-/*:ref: mvbp1_ 7 5 4 7 7 7 4 */

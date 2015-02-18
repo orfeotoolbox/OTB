@@ -1,4 +1,0 @@
-extern int possol_(integer *month, integer *jday, doublereal *tu, doublereal *xlon, doublereal *xlat, doublereal *asol, doublereal *phi0);
-extern int day_number__(integer *jday, integer *month, integer *ia, integer *j);
-extern int pos_fft__(integer *j, doublereal *tu, doublereal *xlon, doublereal *xlat, doublereal *asol, doublereal *phi0);
-/*:ref: print_error__ 14 2 13 124 */

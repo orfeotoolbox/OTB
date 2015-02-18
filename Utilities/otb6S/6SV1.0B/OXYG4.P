@@ -1,1 +1,0 @@
-extern int oxyg4_(doublereal *a, integer *inu);

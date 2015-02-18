@@ -1,1 +1,0 @@
-extern int spline_(doublereal *x, doublereal *y, integer *n, doublereal *yp1, doublereal *ypn, doublereal *y2);

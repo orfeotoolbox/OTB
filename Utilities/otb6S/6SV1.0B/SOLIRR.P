@@ -1,2 +1,0 @@
-extern int solirr_(doublereal *wl, doublereal *swl);
-/* comlen sixs_ier__ 8 */

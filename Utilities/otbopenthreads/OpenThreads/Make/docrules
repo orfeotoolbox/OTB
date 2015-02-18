@@ -1,4 +1,0 @@
-documentation :
-	cd docs && doxygen doxyfile
-	
-

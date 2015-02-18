@@ -1,2 +1,0 @@
-extern int midsum_();
-/* comlen sixs_atm__ 1360 */

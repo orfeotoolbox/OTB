@@ -1,2 +1,0 @@
-
-OTB_CREATE_APPLICATION(NAME TestApplication SOURCES otbTestApplication.cxx LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)

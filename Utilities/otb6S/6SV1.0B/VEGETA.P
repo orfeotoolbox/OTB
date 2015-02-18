@@ -1,1 +1,0 @@
-extern int vegeta_(doublereal *r__);

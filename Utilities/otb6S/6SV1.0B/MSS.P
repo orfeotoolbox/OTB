@@ -1,2 +1,0 @@
-extern int mss_(integer *iwa);
-/* comlen sixs_ffu__ 12024 */
