@@ -1,0 +1,52 @@
+#-----------------------------------------------------------------------------
+#
+# OTBConfig.cmake - OTB CMake configuration file for external projects.
+#
+# This file is configured by OTB and used by the UseOTB.cmake module
+# to load OTB's settings for an external project.
+@OTB_CONFIG_CODE@
+
+# The C and C++ flags added by OTB to the cmake-configured flags.
+set(OTB_REQUIRED_C_FLAGS "@OTB_REQUIRED_C_FLAGS@")
+set(OTB_REQUIRED_CXX_FLAGS "@OTB_REQUIRED_CXX_FLAGS@")
+set(OTB_REQUIRED_LINK_FLAGS "@OTB_REQUIRED_LINK_FLAGS@")
+
+# The OTB version number
+set(OTB_VERSION_MAJOR "@OTB_VERSION_MAJOR@")
+set(OTB_VERSION_MINOR "@OTB_VERSION_MINOR@")
+set(OTB_VERSION_PATCH "@OTB_VERSION_PATCH@")
+
+# The location of the UseOTB.cmake file.
+set(OTB_USE_FILE "@OTB_USE_FILE@")
+
+# Whether OTB was built with shared libraries.
+set(OTB_BUILD_SHARED "@BUILD_SHARED_LIBS@")
+
+# List of available OTB modules.
+set(OTB_MODULES_ENABLED "@OTB_CONFIG_MODULES_ENABLED@")
+
+# Import OTB targets.
+set(OTB_CONFIG_TARGETS_FILE "@OTB_CONFIG_TARGETS_FILE@")
+if(NOT OTB_TARGETS_IMPORTED@OTB_CONFIG_TARGETS_CONDITION@)
+  set(OTB_TARGETS_IMPORTED 1)
+  include("${OTB_CONFIG_TARGETS_FILE}")
+endif()
+
+# Load module interface macros.
+include("@OTB_CONFIG_MODULE_API_FILE@")
+
+# Compute set of requested modules.
+if(OTB_FIND_COMPONENTS)
+  # Specific modules requested by find_package(OTB).
+  set(OTB_MODULES_REQUESTED "${OTB_FIND_COMPONENTS}")
+endif()
+if(NOT OTB_MODULES_REQUESTED)
+  # No specific modules requested.  Use all of them.
+  set(OTB_MODULES_REQUESTED "${OTB_MODULES_ENABLED}")
+endif()
+
+# Load requested modules and their dependencies into variables:
+#  OTB_LIBRARIES       = Libraries to link
+#  OTB_INCLUDE_DIRS    = Header file search path
+#  OTB_LIBRARY_DIRS    = Library search path (for outside dependencies)
+otb_module_config(OTB ${OTB_MODULES_REQUESTED})

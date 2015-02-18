@@ -1,0 +1,15 @@
+otb_module_test()
+
+set(OTBOpenThreadsAdaptersTests
+otbOpenThreadsAdaptersTestDriver.cxx
+otbThreadsTest.cxx
+)
+
+add_executable(otbOpenThreadsAdaptersTestDriver ${OTBOpenThreadsAdaptersTests})
+target_link_libraries(otbOpenThreadsAdaptersTestDriver ${OTBOpenThreadsAdapters-Test_LIBRARIES})
+otb_module_target_label(otbOpenThreadsAdaptersTestDriver)
+
+# Tests Declaration
+
+otb_add_test(NAME ioTvThreadsTest COMMAND otbOpenThreadsAdaptersTestDriver otbThreadsTest)
+

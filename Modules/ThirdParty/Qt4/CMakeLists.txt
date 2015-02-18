@@ -1,0 +1,6 @@
+project(OTBQt4)
+
+set(OTBQt4_SYSTEM_INCLUDE_DIRS ${QT_INCLUDE_DIRS})
+set(OTBQt4_LIBRARIES "${QT_LIBRARIES}")
+
+otb_module_impl()

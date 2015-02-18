@@ -1,0 +1,11 @@
+extern int iapialbe_(integer *pild, doublereal *pxlt, doublereal *prl, doublereal *ptl, doublereal *prs, integer *pihs, doublereal *pc, doublereal *brdfalb);
+/* comlen sixs_ier__ 8 */
+/* comlen gauss_m__ 324 */
+/* comlen p_ 44 */
+/* comlen ld_ 32 */
+/* comlen ro_ 24 */
+/*:ref: lad_ 14 0 */
+/*:ref: gauss_ 14 5 7 7 7 7 4 */
+/*:ref: gauleg_ 14 5 7 7 7 7 4 */
+/*:ref: solve_ 14 1 7 */
+/*:ref: ro_1__ 7 4 7 7 7 7 */

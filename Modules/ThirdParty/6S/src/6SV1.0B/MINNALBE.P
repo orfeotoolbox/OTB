@@ -1,0 +1,1 @@
+extern int minnalbe_(doublereal *par1, doublereal *par2, doublereal *brdfalb);

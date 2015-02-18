@@ -1,0 +1,15 @@
+extern doublereal ro_1__(doublereal *theta_i__, doublereal *phi_i__, doublereal *theta_e__, doublereal *phi_e__);
+extern doublereal gamma_f__(doublereal *theta_p__, doublereal *phi_p__, doublereal *theta, doublereal *phi);
+extern doublereal geo_(doublereal *theta_i__, doublereal *phi_i__, doublereal *theta_e__, doublereal *phi_e__);
+extern doublereal h_(doublereal *xl, doublereal *xli);
+extern doublereal g_f__(doublereal *theta);
+extern doublereal psi_(doublereal *theta, doublereal *xt);
+extern doublereal gl_(doublereal *theta);
+extern int gauleg_(doublereal *x1, doublereal *x2, doublereal *x, doublereal *w, integer *n);
+extern int solve_(doublereal *theta_i__);
+extern int lad_();
+/* comlen gauss_m__ 324 */
+/* comlen p_ 44 */
+/* comlen ro_ 24 */
+/* comlen ld_ 32 */
+/* comlen l_ 16 */

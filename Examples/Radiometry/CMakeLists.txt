@@ -1,0 +1,18 @@
+project(RadiometryExamples)
+
+add_executable(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx)
+target_link_libraries(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ${OTB_LIBRARIES})
+
+add_executable(AtmosphericCorrectionSequencement AtmosphericCorrectionSequencement.cxx)
+target_link_libraries(AtmosphericCorrectionSequencement ${OTB_LIBRARIES})
+
+add_executable(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx)
+target_link_libraries(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter ${OTB_LIBRARIES})
+
+add_executable(NDVIRAndNIRVegetationIndexImageFilter NDVIRAndNIRVegetationIndexImageFilter.cxx)
+target_link_libraries(NDVIRAndNIRVegetationIndexImageFilter ${OTB_LIBRARIES})
+
+
+if(BUILD_TESTING)
+  add_subdirectory(test)
+endif()

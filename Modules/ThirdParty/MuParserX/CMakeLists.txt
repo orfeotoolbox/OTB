@@ -1,0 +1,6 @@
+project(OTBMuParserX)
+
+set(OTBMuParserX_SYSTEM_INCLUDE_DIRS ${MUPARSERX_INCLUDE_DIRS})
+set(OTBMuParserX_LIBRARIES "${MUPARSERX_LIBRARIES}")
+
+otb_module_impl()

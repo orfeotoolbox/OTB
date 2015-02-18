@@ -1,0 +1,2 @@
+extern int modis_(integer *iwa);
+/* comlen sixs_ffu__ 12024 */

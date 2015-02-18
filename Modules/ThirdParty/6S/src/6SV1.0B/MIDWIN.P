@@ -1,0 +1,2 @@
+extern int midwin_();
+/* comlen sixs_atm__ 1360 */

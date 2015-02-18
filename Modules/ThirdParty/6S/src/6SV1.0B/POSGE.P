@@ -1,0 +1,4 @@
+extern int posge_(integer *month, integer *jday, doublereal *tu, integer *nc, integer *nl, doublereal *asol, doublereal *phi0, doublereal *avis, doublereal *phiv, doublereal *xlon, doublereal *xlat);
+/* comlen sixs_ier__ 8 */
+/*:ref: print_error__ 14 2 13 124 */
+/*:ref: possol_ 14 7 4 4 7 7 7 7 7 */

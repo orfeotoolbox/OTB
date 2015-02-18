@@ -1,0 +1,1 @@
+extern int ozon1_(doublereal *a, integer *inu);

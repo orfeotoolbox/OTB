@@ -1,0 +1,3 @@
+extern int csalbr_(doublereal *xtau, doublereal *xalb);
+extern doublereal fintexp3_(doublereal *xtau);
+extern doublereal fintexp1_(doublereal *xtau);

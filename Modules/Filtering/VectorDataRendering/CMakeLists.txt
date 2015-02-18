@@ -1,0 +1,4 @@
+project(OTBVectorDataRendering)
+
+set(OTBVectorDataRendering_LIBRARIES OTBVectorDataRendering)
+otb_module_impl()

@@ -1,0 +1,5 @@
+extern int oceabrdf_(doublereal *pws, doublereal *paw, doublereal *xsal, doublereal *pcl, doublereal *pwl, doublereal *rfoam, doublereal *rwat, doublereal *rglit, integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal *brdfint);
+/*:ref: indwat_ 14 4 7 7 7 7 */
+/*:ref: morcasiwat_ 14 3 7 7 7 */
+/*:ref: gauss_ 14 5 7 7 7 7 4 */
+/*:ref: sunglint_ 14 8 7 7 7 7 7 7 7 7 */

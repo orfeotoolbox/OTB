@@ -1,0 +1,20 @@
+otb_module_test()
+
+set(OTBSeamCarvingTests
+otbSeamCarvingTestDriver.cxx
+otbRemoveCarvingPathFilterNew.cxx
+otbImageToCarvingPathFilterNew.cxx
+)
+
+add_executable(otbSeamCarvingTestDriver ${OTBSeamCarvingTests})
+target_link_libraries(otbSeamCarvingTestDriver ${OTBSeamCarving-Test_LIBRARIES})
+otb_module_target_label(otbSeamCarvingTestDriver)
+
+# Tests Declaration
+
+otb_add_test(NAME feTuRemoveCarvingPathFilterNew COMMAND otbSeamCarvingTestDriver
+  otbRemoveCarvingPathFilterNew)
+
+otb_add_test(NAME feTuImageToCarvingPathFilterNew COMMAND otbSeamCarvingTestDriver
+  otbImageToCarvingPathFilterNew)
+

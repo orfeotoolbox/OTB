@@ -1,0 +1,51 @@
+project(IteratorsExamples)
+
+add_executable(ImageLinearIteratorWithIndex2 ImageLinearIteratorWithIndex2.cxx)
+target_link_libraries(ImageLinearIteratorWithIndex2 ${OTB_LIBRARIES})
+
+add_executable(ImageLinearIteratorWithIndex ImageLinearIteratorWithIndex.cxx)
+target_link_libraries(ImageLinearIteratorWithIndex ${OTB_LIBRARIES})
+
+add_executable(ImageRandomConstIteratorWithIndex ImageRandomConstIteratorWithIndex.cxx)
+target_link_libraries(ImageRandomConstIteratorWithIndex ${OTB_LIBRARIES})
+
+add_executable(ImageRegionIterator ImageRegionIterator.cxx)
+target_link_libraries(ImageRegionIterator ${OTB_LIBRARIES})
+
+add_executable(ImageRegionIteratorWithIndex ImageRegionIteratorWithIndex.cxx)
+target_link_libraries(ImageRegionIteratorWithIndex ${OTB_LIBRARIES})
+
+add_executable(ImageSliceIteratorWithIndex ImageSliceIteratorWithIndex.cxx)
+target_link_libraries(ImageSliceIteratorWithIndex ${OTB_LIBRARIES})
+
+add_executable(IteratorsExamples IteratorsExamples.cxx)
+target_link_libraries(IteratorsExamples ${OTB_LIBRARIES})
+
+add_executable(NeighborhoodIterators1 NeighborhoodIterators1.cxx)
+target_link_libraries(NeighborhoodIterators1 ${OTB_LIBRARIES})
+
+add_executable(NeighborhoodIterators2 NeighborhoodIterators2.cxx)
+target_link_libraries(NeighborhoodIterators2 ${OTB_LIBRARIES})
+
+add_executable(NeighborhoodIterators3 NeighborhoodIterators3.cxx)
+target_link_libraries(NeighborhoodIterators3 ${OTB_LIBRARIES})
+
+add_executable(NeighborhoodIterators4 NeighborhoodIterators4.cxx)
+target_link_libraries(NeighborhoodIterators4 ${OTB_LIBRARIES})
+
+add_executable(NeighborhoodIterators5 NeighborhoodIterators5.cxx)
+target_link_libraries(NeighborhoodIterators5 ${OTB_LIBRARIES})
+
+add_executable(NeighborhoodIterators6 NeighborhoodIterators6.cxx)
+target_link_libraries(NeighborhoodIterators6 ${OTB_LIBRARIES})
+
+add_executable(ShapedNeighborhoodIterators1 ShapedNeighborhoodIterators1.cxx)
+target_link_libraries(ShapedNeighborhoodIterators1 ${OTB_LIBRARIES})
+
+add_executable(ShapedNeighborhoodIterators2 ShapedNeighborhoodIterators2.cxx)
+target_link_libraries(ShapedNeighborhoodIterators2 ${OTB_LIBRARIES})
+
+
+if(BUILD_TESTING)
+  add_subdirectory(test)
+endif()

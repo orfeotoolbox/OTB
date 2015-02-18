@@ -1,0 +1,28 @@
+# TODO : upgrade to latest libsvm >= 3.19
+
+set(OTB3P_INSTALL_EXPORT_NAME "${OTBConfigFile-targets}")
+set(OTB3P_INSTALL_INCLUDE_DIR "${OTBConfigFile_INSTALL_INCLUDE_DIR}")
+set(OTB3P_INSTALL_RUNTIME_DIR "${OTBConfigFile_INSTALL_RUNTIME_DIR}")
+set(OTB3P_INSTALL_LIBRARY_DIR "${OTBConfigFile_INSTALL_LIBRARY_DIR}")
+set(OTB3P_INSTALL_ARCHIVE_DIR "${OTBConfigFile_INSTALL_ARCHIVE_DIR}")
+
+add_library(otbconfigfile ConfigFile.cpp)
+
+if(OTB_LIBRARY_PROPERTIES)
+  set_target_properties(otbconfigfile PROPERTIES ${OTB_LIBRARY_PROPERTIES})
+endif(OTB_LIBRARY_PROPERTIES)
+
+install(TARGETS otbconfigfile
+  EXPORT ${OTB3P_INSTALL_EXPORT_NAME}
+  RUNTIME DESTINATION ${OTB3P_INSTALL_RUNTIME_DIR} COMPONENT RuntimeLibraries
+  LIBRARY DESTINATION ${OTB3P_INSTALL_LIBRARY_DIR} COMPONENT RuntimeLibraries
+  ARCHIVE DESTINATION ${OTB3P_INSTALL_ARCHIVE_DIR} COMPONENT Development
+  )
+
+install(FILES
+  ConfigFile.h
+  DESTINATION ${OTB3P_INSTALL_INCLUDE_DIR}/otbconfigfile
+  COMPONENT Development
+  )
+
+otb_module_target( otbconfigfile NO_INSTALL )

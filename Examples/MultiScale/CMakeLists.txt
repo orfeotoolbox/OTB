@@ -1,0 +1,18 @@
+project(MultiScaleExamples)
+
+add_executable(MorphologicalPyramidAnalysisFilterExample MorphologicalPyramidAnalysisFilterExample.cxx)
+target_link_libraries(MorphologicalPyramidAnalysisFilterExample ${OTB_LIBRARIES})
+
+add_executable(MorphologicalPyramidSegmentationExample MorphologicalPyramidSegmentationExample.cxx)
+target_link_libraries(MorphologicalPyramidSegmentationExample ${OTB_LIBRARIES})
+
+add_executable(MorphologicalPyramidSegmenterExample MorphologicalPyramidSegmenterExample.cxx)
+target_link_libraries(MorphologicalPyramidSegmenterExample ${OTB_LIBRARIES})
+
+add_executable(MorphologicalPyramidSynthesisFilterExample MorphologicalPyramidSynthesisFilterExample.cxx)
+target_link_libraries(MorphologicalPyramidSynthesisFilterExample ${OTB_LIBRARIES})
+
+
+if(BUILD_TESTING)
+  add_subdirectory(test)
+endif()
