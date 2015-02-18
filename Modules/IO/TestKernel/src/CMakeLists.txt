@@ -12,4 +12,4 @@ otb_module_target(OTBTestKernel)
 
 add_executable(otbTestDriver otbTestDriver.cxx)
 target_link_libraries(otbTestDriver OTBTestKernel)
-otb_module_target_label(otbTestDriver)
+otb_module_target(otbTestDriver)
