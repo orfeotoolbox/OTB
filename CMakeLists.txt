@@ -124,61 +124,6 @@ macro(otb_download_attempt_check _name)
   endif()
 endmacro()
 
-#-----------------------------------------------------------------------------
-# OTB wrapper for add_test that automatically sets the test's LABELS property
-# to the value of its containing module.
-#
-function(otb_add_test)
-  set(largeinput_regex "LARGEINPUT{([^;{}\r\n]*)}")
-  
-  set(_depends_on_largeinput OFF)
-  foreach(arg IN LISTS ARGN)
-     if("x${arg}" MATCHES "${largeinput_regex}")
-       string(REGEX REPLACE "${largeinput_regex}" "\\1" largeinput_relative_path "${arg}")
-       set(_fullpath "${OTB_DATA_LARGEINPUT_ROOT}/${largeinput_relative_path}")
-       list(APPEND _out_arg ${_fullpath})
-       set(_depends_on_largeinput ON)
-     else()
-       list(APPEND _out_arg ${arg})
-     endif()
-  endforeach()
-
-  if (_depends_on_largeinput AND NOT OTB_DATA_LARGEINPUT_ROOT)
-    return()
-  endif()
-
-  add_test(${_out_arg})
-
-  if("NAME" STREQUAL "${ARGV0}")
-    set(_iat_testname ${ARGV1})
-  else()
-    set(_iat_testname ${ARGV0})
-  endif()
-
-  if(otb-module)
-    set(_label ${otb-module})
-  else()
-    set(_label ${main_project_name})
-  endif()
-
-  set_property(TEST ${_iat_testname} PROPERTY LABELS ${_label})
-
-endfunction()
-
-#-----------------------------------------------------------------------------
-# OTB function to ignore a test
-#
-function(otb_tests_ignore)
-  set_property(GLOBAL APPEND PROPERTY CTEST_CUSTOM_TESTS_IGNORE ${ARGN})
-endfunction()
-
-#-----------------------------------------------------------------------------
-# OTB function to ignore a test during MemCheck
-#
-function(otb_memcheck_ignore)
-  set_property(GLOBAL APPEND PROPERTY CTEST_CUSTOM_MEMCHECK_IGNORE ${ARGN})
-endfunction()
-
 # TODO : handle shared libs on windows
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 set(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
@@ -245,6 +190,32 @@ option(BUILD_EXAMPLES "Build the Examples directory." ON)
 #----------------------------------------------------------------------------
 set(OTB_TEST_OUTPUT_DIR "${OTB_BINARY_DIR}/Testing/Temporary")
 
+#-----------------------------------------------------------------------------
+# Configure the default OTB_DATA_ROOT for the location of OTB Data.
+find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
+mark_as_advanced(OTB_DATA_ROOT)
+
+option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
+mark_as_advanced(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
+  find_path(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
+  mark_as_advanced(OTB_DATA_LARGEINPUT_ROOT)
+endif()
+
+option(OTB_DATA_USE_SPOTPHRINPUT "Use PHR data provided by SPOT." OFF)
+mark_as_advanced(OTB_DATA_USE_SPOTPHRINPUT)
+if(OTB_DATA_USE_SPOTPHRINPUT)
+  find_path(OTB_DATA_SPOTPHRINPUT_ROOT OTB_PHR_Data.readme $ENV{OTB_DATA_SPOTPHRINPUT_ROOT})
+  mark_as_advanced(OTB_DATA_SPOTPHRINPUT_ROOT)
+endif()
+
+option(OTB_DATA_USE_CNESPHRINPUT "Use PHR data provided by CNES." OFF)
+mark_as_advanced(OTB_DATA_USE_CNESPHRINPUT)
+if(OTB_DATA_USE_CNESPHRINPUT)
+  find_path(OTB_DATA_CNESPHRINPUT_ROOT OTB_PHR_Data.readme $ENV{OTB_DATA_CNESPHRINPUT_ROOT})
+  mark_as_advanced(OTB_DATA_CNESPHRINPUT_ROOT)
+endif()
+
 set(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 set(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 set(INPUTDATA      ${OTB_DATA_ROOT}/Input)
@@ -272,6 +243,60 @@ set(EPSILON_13 0.0000000000001)
 set(EPSILON_14 0.00000000000001)
 set(EPSILON_15 0.000000000000001)
 
+#-----------------------------------------------------------------------------
+# OTB wrapper for add_test that automatically sets the test's LABELS property
+# to the value of its containing module.
+#
+function(otb_add_test)
+  set(largeinput_regex "LARGEINPUT{([^;{}\r\n]*)}")
+  
+  set(_depends_on_largeinput OFF)
+  foreach(arg IN LISTS ARGN)
+     if("x${arg}" MATCHES "${largeinput_regex}")
+       string(REGEX REPLACE "${largeinput_regex}" "\\1" largeinput_relative_path "${arg}")
+       set(_fullpath "${OTB_DATA_LARGEINPUT_ROOT}/${largeinput_relative_path}")
+       list(APPEND _out_arg ${_fullpath})
+       set(_depends_on_largeinput ON)
+     else()
+       list(APPEND _out_arg ${arg})
+     endif()
+  endforeach()
+
+  if (_depends_on_largeinput AND NOT OTB_DATA_USE_LARGEINPUT)
+    return()
+  endif()
+
+  add_test(${_out_arg})
+
+  if("NAME" STREQUAL "${ARGV0}")
+    set(_iat_testname ${ARGV1})
+  else()
+    set(_iat_testname ${ARGV0})
+  endif()
+
+  if(otb-module)
+    set(_label ${otb-module})
+  else()
+    set(_label ${main_project_name})
+  endif()
+
+  set_property(TEST ${_iat_testname} PROPERTY LABELS ${_label})
+
+endfunction()
+
+#-----------------------------------------------------------------------------
+# OTB function to ignore a test
+#
+function(otb_tests_ignore)
+  set_property(GLOBAL APPEND PROPERTY CTEST_CUSTOM_TESTS_IGNORE ${ARGN})
+endfunction()
+
+#-----------------------------------------------------------------------------
+# OTB function to ignore a test during MemCheck
+#
+function(otb_memcheck_ignore)
+  set_property(GLOBAL APPEND PROPERTY CTEST_CUSTOM_MEMCHECK_IGNORE ${ARGN})
+endfunction()
 
 # Location of OTB Example Data.
 # set(OTB_EXAMPLE_DATA_ROOT "${OTB_SOURCE_DIR}/Examples/Data")
