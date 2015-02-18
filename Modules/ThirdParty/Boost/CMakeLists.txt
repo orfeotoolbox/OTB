@@ -10,6 +10,6 @@ endif()
 otb_module_impl()
 
 install(DIRECTORY ${OTBBoost_SOURCE_DIR}/src/boost
-  DESTINATION ${OTBBoost_INSTALL_INCLUDE_DIR}/boost
+  DESTINATION ${OTBBoost_INSTALL_INCLUDE_DIR}
   COMPONENT Development
   )
