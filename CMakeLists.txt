@@ -54,7 +54,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "4")
-set(OTB_VERSION_MINOR "3")
+set(OTB_VERSION_MINOR "5")
 set(OTB_VERSION_PATCH "0")
 
 if(NOT OTB_INSTALL_RUNTIME_DIR)
