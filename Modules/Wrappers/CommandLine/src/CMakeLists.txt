@@ -13,4 +13,4 @@ otb_module_target(OTBCommandLine)
 
 add_executable(otbApplicationLauncherCommandLine otbApplicationLauncherCommandLine.cxx)
 target_link_libraries(otbApplicationLauncherCommandLine OTBCommandLine)
-otb_module_target_label(otbApplicationLauncherCommandLine)
+otb_module_target(otbApplicationLauncherCommandLine)
