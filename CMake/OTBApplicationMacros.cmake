@@ -116,7 +116,10 @@ macro(otb_test_application)
                   $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
                   ${TESTAPPLICATION_OPTIONS}
                   -testenv ${TESTAPPLICATION_TESTENVOPTIONS})
-  # Be sure that the ${otb-module}-all target triggers the build of commandline launcher and testdriver
-  add_dependencies(${otb-module}-all otbApplicationLauncherCommandLine)
-  add_dependencies(${otb-module}-all otbTestDriver)
+                  
+  if(otb-module)
+    # Be sure that the ${otb-module}-all target triggers the build of commandline launcher and testdriver
+    add_dependencies(${otb-module}-all otbApplicationLauncherCommandLine)
+    add_dependencies(${otb-module}-all otbTestDriver)
+  endif()
 endmacro()
