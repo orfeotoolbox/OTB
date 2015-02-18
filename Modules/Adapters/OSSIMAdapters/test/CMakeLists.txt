@@ -592,7 +592,7 @@ otb_add_test(NAME uaTvRPCSolverAdapterNotEnoughPointsTest COMMAND otbOSSIMAdapte
   ${INPUTDATA}/DEM/srtm_directory/
   ${INPUTDATA}/DEM/egm96.grd
   )
-if (OTB_DATA_LARGEINPUT_ROOT)
+if (OTB_DATA_USE_LARGEINPUT)
   set_property(TEST uaTvRPCSolverAdapterNotEnoughPointsTest PROPERTY WILL_FAIL TRUE)
 endif()
 
