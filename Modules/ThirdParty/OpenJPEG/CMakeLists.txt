@@ -1,9 +1,6 @@
 project(OTBOpenJPEG)
-set(OTBOpenJPEG_THIRD_PARTY 1)
-
-set(OTBOpenJPEG_LIBRARIES otbopenjpeg)
-set(OTBOpenJPEG_INCLUDE_DIRS
-  ${OTBOpenJPEG_BINARY_DIR}/src
-  )
-
-otb_module_impl()
+  
+  set(OTBOpenJPEG_SYSTEM_INCLUDE_DIRS ${OPENJPEG_INCLUDE_DIRS})
+  set(OTBOpenJPEG_LIBRARIES "${OPENJPEG_LIBRARIES}")
+  
+  otb_module_impl()
