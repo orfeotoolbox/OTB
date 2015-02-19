@@ -11,7 +11,7 @@ configure_file( src/otb_curl.h.in src/otb_curl.h )
 set(OTBCurl_SYSTEM_INCLUDE_DIRS ${CURL_INCLUDE_DIRS})
 set(OTBCurl_LIBRARIES "${CURL_LIBRARIES}")
 set(OTBCurl_INCLUDE_DIRS
-  ${OTBCurl_BINARY_DIR}
+  ${OTBCurl_BINARY_DIR}/src
   )
 
 otb_module_impl()

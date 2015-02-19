@@ -17,6 +17,7 @@
 =========================================================================*/
 
 #include <cstdio>
+#include <cstring>
 #include <sstream>
 #include <itkLightObject.h>
 #include "otb_curl.h"
