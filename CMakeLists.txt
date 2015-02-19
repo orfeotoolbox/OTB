@@ -232,7 +232,7 @@ set(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 set(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 set(INPUTDATA      ${OTB_DATA_ROOT}/Input)
 set(TEMP           ${OTB_BINARY_DIR}/Testing/Temporary)
-set(EXAMPLEDATA ${OTB_DATA_ROOT}/Examples)
+set(EXAMPLEDATA    ${OTB_DATA_ROOT}/Examples)
 
 if(OTB_DATA_USE_LARGEINPUT)
   set(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
