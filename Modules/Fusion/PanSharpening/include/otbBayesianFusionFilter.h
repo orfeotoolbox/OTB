@@ -307,7 +307,7 @@ protected:
   void ComputeInternalStatistics(void);
   /** Call the superclass implementation and set the StatisticsHaveBeenGenerated
    * flag to false */
-  virtual void Modified(void);
+  virtual void Modified(void) const;
 
 private:
   /** Ponderation declaration*/
@@ -322,7 +322,7 @@ private:
   /** Optimisation matrix */
   MatrixType m_Vcondopt;
   /** True if internal statistics have been generated */
-  bool m_StatisticsHaveBeenGenerated;
+  mutable bool m_StatisticsHaveBeenGenerated;
 };
 
 } // end namespace otb

@@ -62,7 +62,7 @@ BayesianFusionFilter<TInputMultiSpectralImage,
     TInputMultiSpectralInterpImage,
     TInputPanchroImage,
     TOutputImage>
-::Modified()
+::Modified() const
 {
   Superclass::Modified();
   m_StatisticsHaveBeenGenerated = false;
