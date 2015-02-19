@@ -166,6 +166,7 @@ public:
   typedef typename PersistentFilterType::MatrixType             MatrixType;
   typedef typename PersistentFilterType::MatrixObjectType       MatrixObjectType;
 
+  using Superclass::SetInput;
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);

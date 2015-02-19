@@ -78,6 +78,7 @@ public:
   typedef ogr::Feature                         OGRFeatureType;
 
   /** Set the input image of this process object.  */
+  using Superclass::SetInput;
   virtual void SetInput(const InputImageType *input);
   /** Get the input image. */
   virtual const InputImageType * GetInput(void);

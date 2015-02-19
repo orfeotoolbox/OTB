@@ -52,6 +52,7 @@ public:
   /// Input image dimension
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   /// Input image Setters and getters
+  using Superclass::SetInput;
   virtual void SetInput(const InputImageType * Image);
   const InputImageType * GetInput(void);
 

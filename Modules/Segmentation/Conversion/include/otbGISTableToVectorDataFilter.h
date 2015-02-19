@@ -76,6 +76,7 @@ public:
                VectorDataSource);
 
   /** Set/Get the GISTable input of this process object.  */
+  using Superclass::SetInput;
   virtual void SetInput(const InputGISTableType *input);
   virtual void SetInput(unsigned int idx, const InputGISTableType *input);
   const InputGISTableType * GetInput(void);

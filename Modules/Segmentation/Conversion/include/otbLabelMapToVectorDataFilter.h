@@ -91,6 +91,7 @@ public:
                VectorDataSource);
 
   /** Set/Get the LabelMap input of this process object.  */
+  using Superclass::SetInput;
   virtual void SetInput(const InputLabelMapType *input);
   virtual void SetInput(unsigned int idx, const InputLabelMapType *input);
   const InputLabelMapType * GetInput(void);

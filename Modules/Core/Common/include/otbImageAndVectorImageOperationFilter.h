@@ -159,6 +159,7 @@ public:
   typedef typename FunctorType::OperatorType OperatorType;
 
   /** Set the input images of this process object.  */
+  using Superclass::SetInput;
   void SetInput(const InputImageType *input);
   void SetVectorInput(const VectorInputImageType *input);
 

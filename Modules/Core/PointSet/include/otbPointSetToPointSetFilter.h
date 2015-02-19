@@ -60,6 +60,7 @@ public:
   typedef   itk::ProcessObject                         ProcessObjectType;
 
   /** Set the input image of this process object.  */
+  using Superclass::SetInput;
   void SetInput(unsigned int idx, const InputPointSetType *input);
   void SetInput(const InputPointSetType *input);
 

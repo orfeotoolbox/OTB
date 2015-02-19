@@ -72,6 +72,7 @@ public:
   //typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
 
   /** Method to set/get the input list sample */
+  using Superclass::SetInput;
   void SetInput( const InputSampleListType * inputPtr );
   //void SetInput( const InputSampleListObjectType * inputPtr );
 

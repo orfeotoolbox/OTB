@@ -215,6 +215,7 @@ public:
   typedef typename Superclass::FilterType::LabelPopulationMapType    LabelPopulationMapType;
 
   /** Set input multispectral image */
+  using Superclass::SetInput;
   void SetInput(const VectorImageType * input)
   {
     this->GetFilter()->SetInput(input);

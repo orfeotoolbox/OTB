@@ -60,6 +60,7 @@ public:
 
   typedef itk::DataObject::Pointer DataObjectPointer;
 
+  using Superclass::SetInput;
   virtual void SetInput(const InputGISTableType *input);
   const InputGISTableType * GetInput(void);
 

@@ -118,6 +118,7 @@ public:
   } RenderingStyleType;
 
   /** Set/Get the vector data input of this process object.  */
+  using Superclass::SetInput;
   virtual void SetInput(const VectorDataType *input);
   virtual void SetInput(unsigned int idx, const VectorDataType *input);
   const VectorDataType * GetInput(void);

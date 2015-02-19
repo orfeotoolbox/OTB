@@ -62,6 +62,7 @@ public:
   /** InputImage dimension constant */
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   /** Overiding the SetInput() and GetInput() methods */
+  using Superclass::SetInput;
   virtual void SetInput(const InputImageListType * imageList);
   virtual InputImageListType * GetInput(void);
 

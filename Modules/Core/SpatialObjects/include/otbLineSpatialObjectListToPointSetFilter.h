@@ -60,6 +60,7 @@ public:
   typedef itk::ProcessObject ProcessObjectType;
 
   /** Set/Get the input image */
+  using Superclass::SetInput;
   virtual void SetInput(const LinesListType *list);
   virtual const LinesListType* GetInput(void);
 

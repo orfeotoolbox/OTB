@@ -89,6 +89,8 @@ public:
   itkSetStringMacro(FileName);
   /** Get the filename */
   itkGetStringMacro(FileName);
+  
+  using Superclass::SetInput;
   /**
    * Set the input graph.
    * \param inputGraph The graph to write.

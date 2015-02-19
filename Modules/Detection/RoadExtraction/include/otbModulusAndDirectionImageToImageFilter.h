@@ -66,6 +66,7 @@ public:
   typedef typename Superclass::OutputImageType OutputImageType;
 
   /** Set/Get the image input of this process object.  */
+  using Superclass::SetInput;
   virtual void SetInput(const InputImageType *input);
   virtual void SetInputDirection(const InputImageDirectionType *direction);
   const InputImageType * GetInput(void);

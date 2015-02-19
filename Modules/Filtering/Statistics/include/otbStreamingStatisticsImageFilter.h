@@ -250,6 +250,7 @@ public:
   typedef itk::SimpleDataObjectDecorator<RealType>  RealObjectType;
   typedef itk::SimpleDataObjectDecorator<PixelType> PixelObjectType;
 
+  using Superclass::SetInput;
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);

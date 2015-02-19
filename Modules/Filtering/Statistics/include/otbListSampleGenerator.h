@@ -82,6 +82,7 @@ public:
   typedef typename ListLabelType::Pointer        ListLabelPointerType;
 
   /** Connects the input image for which the sample list is going to be extracted */
+  using Superclass::SetInput;
   void SetInput(const ImageType *);
   const ImageType * GetInput() const;
 

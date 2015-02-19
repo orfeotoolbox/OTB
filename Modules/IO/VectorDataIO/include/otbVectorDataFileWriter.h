@@ -82,6 +82,7 @@ public:
   typedef VectorDataIOBase VectorDataIOBaseType;
 
   /** Set/Get the image input of this writer.  */
+  using Superclass::SetInput;
   void SetInput(const InputVectorDataType *input);
   const InputVectorDataType * GetInput(void);
   const InputVectorDataType * GetInput(unsigned int idx);

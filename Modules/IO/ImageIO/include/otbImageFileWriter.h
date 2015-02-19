@@ -157,6 +157,7 @@ public:
   void SetAutomaticAdaptativeStreaming(unsigned int availableRAM = 0, double bias = 1.0);
 
   /** Set the only input of the writer */
+  using Superclass::SetInput;
   virtual void SetInput(const InputImageType *input);
 
   /** Get writer only input */

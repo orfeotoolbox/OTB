@@ -97,6 +97,8 @@ public:
   virtual OutputPointType TransformPoint(const InputPointType  & ) const
     { return OutputPointType(); }
 
+  using Superclass::TransformVector;
+
   /**  Method to transform a vector. */
   virtual OutputVectorType    TransformVector(const InputVectorType &) const
     { return OutputVectorType(); }
@@ -104,6 +106,8 @@ public:
   /**  Method to transform a vnl_vector. */
   virtual OutputVnlVectorType TransformVector(const InputVnlVectorType &) const
     { return OutputVnlVectorType(); }
+
+  using Superclass::TransformCovariantVector;
 
   /**  Method to transform a CovariantVector. */
   virtual OutputCovariantVectorType TransformCovariantVector(

@@ -211,6 +211,7 @@ public:
    * \param image the input image
    *
    */
+  using Superclass::SetInput;
   void SetInput(const TInputImage * image)
   {
     this->SetInput1(image);

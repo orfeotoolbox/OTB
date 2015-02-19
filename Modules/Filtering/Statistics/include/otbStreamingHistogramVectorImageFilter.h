@@ -247,6 +247,7 @@ public:
   typedef typename InternalFilterType::HistogramType      HistogramType;
   typedef typename InternalFilterType::HistogramListType  HistogramListType;
 
+  using Superclass::SetInput;
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);

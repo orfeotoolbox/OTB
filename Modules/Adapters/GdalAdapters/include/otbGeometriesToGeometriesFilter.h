@@ -73,6 +73,7 @@ public:
 
   /**\name Single input GeometriesSet property */
   //@{
+  using Superclass::SetInput;
   virtual void SetInput(const InputGeometriesType *input);
   const InputGeometriesType * GetInput(void);
   //@}

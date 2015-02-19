@@ -180,6 +180,7 @@ public:
   /** Type of DataObjects used for scalar outputs */
   typedef typename StatFilterType::MatrixObjectType MatrixObjectType;
 
+  using Superclass::SetInput;
   void SetInput(TInputImage * input)
   {
     this->GetFilter()->SetInput(input);

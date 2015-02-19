@@ -74,6 +74,7 @@ public:
   typedef typename Superclass::OutputPathListPointerType OutputPathListPointerType;
 
   /** Set/get the input modulus */
+  using Superclass::SetInput;
   void SetInput(InputModulusType * inputModulus);
   const InputModulusType * GetInput(void);
 

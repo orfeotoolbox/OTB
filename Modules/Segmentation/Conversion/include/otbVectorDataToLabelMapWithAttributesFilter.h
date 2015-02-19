@@ -168,6 +168,7 @@ public:
 ;
 
   /** Set/Get the Vector data input of this process object.  */
+  using Superclass::SetInput;
   virtual void SetInput(const InputVectorDataType *input);
   virtual void SetInput(unsigned int idx, const InputVectorDataType *input);
   const InputVectorDataType * GetInput(void);

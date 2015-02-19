@@ -109,6 +109,7 @@ public:
    */
   unsigned int GetNumberOfRelations(void);
 
+  using Superclass::SetInput;
   /** Set the input of the filter */
   virtual void SetInput(const PolygonListType *input);
   /** Get the input of the filter */

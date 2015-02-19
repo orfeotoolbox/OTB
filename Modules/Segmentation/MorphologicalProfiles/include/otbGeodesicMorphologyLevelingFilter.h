@@ -113,6 +113,7 @@ public:
   /**
    * Set the original input image
    */
+  using Superclass::SetInput;
   void SetInput(const TInputImage * input)
   {
     this->SetInput1(input);

@@ -54,6 +54,7 @@ public:
 
   typedef itk::ProcessObject ProcessObjectType;
 
+  using Superclass::SetInput;
   void SetInput(const LineSpatialObjectListType * input);
   const LineSpatialObjectListType * GetInput();
 

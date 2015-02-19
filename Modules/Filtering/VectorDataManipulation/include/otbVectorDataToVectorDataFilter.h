@@ -83,6 +83,7 @@ public:
 
   typedef itk::DataObject::Pointer DataObjectPointer;
 
+  using Superclass::SetInput;
   virtual void SetInput(const InputVectorDataType *input);
   const InputVectorDataType * GetInput(void);
 

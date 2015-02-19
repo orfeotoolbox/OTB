@@ -71,6 +71,7 @@ public:
   typedef ShapeAttributesLabelMapFilter<LabelMapType>                             ShapeLabelMapFilterType;
   typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType, InputImageType>   BandStatisticsLabelMapFilterType;
 
+  using Superclass::SetInput;
   virtual void SetInput( const InputImageType *image);
   virtual void SetLabeledImage( const LabeledImageType * image);
   const InputImageType * GetInput(void);

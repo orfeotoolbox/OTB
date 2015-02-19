@@ -73,6 +73,7 @@ public:
   typedef ogr::Layer                                 OGRLayerType;
 
   /** Set/Get the input image of this process object.  */
+  using Superclass::SetInput;
   virtual void SetInput(const InputImageType *input);
   virtual const InputImageType * GetInput(void);
 

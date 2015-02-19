@@ -71,6 +71,7 @@ public:
   typedef itk::ProcessObject ProcessObjectType;
 
   /** Set/Get the input image */
+  using Superclass::SetInput;
   void SetInput(const InputImageType *image);
   const InputImageType * GetInput(void);
 

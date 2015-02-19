@@ -72,6 +72,7 @@ public:
   typedef typename OutputDataNodeType::PolygonType PolygonType;
 
   /** Set input image */
+  using Superclass::SetInput;
   void SetInput(const InputImageType *input);
 
   /** Get input image */

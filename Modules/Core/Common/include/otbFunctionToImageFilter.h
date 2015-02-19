@@ -83,9 +83,6 @@ public:
   typedef typename FunctionType::OutputType FunctionValueType;
   typedef typename FunctionType::InputType  FunctionPositionType;
 
-  /** Connect one of the operands for pixel-wise addition. */
-  //void SetInput( const TInputImage *image);
-
   /** Set the internal spatial function. */
   void SetFunction(FunctionType* PixelFunction)
   {

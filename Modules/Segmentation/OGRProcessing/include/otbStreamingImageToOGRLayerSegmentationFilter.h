@@ -269,6 +269,7 @@ public:
   typedef typename InputImageType::SizeType                                   SizeType;
 
   /** Set the input image. */
+  using Superclass::SetInput;
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);

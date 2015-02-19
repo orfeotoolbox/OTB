@@ -210,6 +210,7 @@ public:
   typedef typename StatFilterType::IndexObjectType IndexObjectType;
   typedef TInputImage                              InputImageType;
 
+  using Superclass::SetInput;
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);

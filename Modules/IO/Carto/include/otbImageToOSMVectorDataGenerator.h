@@ -71,6 +71,7 @@ public:
   };
 
   /** Method to set/get the input image */
+  using Superclass::SetInput;
   void SetInput( const ImageType  * input);
 
    /** Returns the input image */

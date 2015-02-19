@@ -95,6 +95,7 @@ public:
 public:
 
   /** Connects the input PathList for which the histogram is going to be computed */
+  using Superclass::SetInput;
   void SetInput(const PathListType* path);
   const PathListType* GetInput() const;
 

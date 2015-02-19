@@ -122,6 +122,7 @@ public:
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       InputImageType::ImageDimension);
 
+  using Superclass::SetInput;
   virtual void SetInput( const InputImageType *image);
   virtual void SetInput( unsigned int, const TInputImage * image);
   const InputImageType * GetInput(void);

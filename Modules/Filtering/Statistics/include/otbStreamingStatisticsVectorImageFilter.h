@@ -301,6 +301,7 @@ public:
 
   typedef typename StatFilterType::InternalPixelType   InternalPixelType;
 
+  using Superclass::SetInput;
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);

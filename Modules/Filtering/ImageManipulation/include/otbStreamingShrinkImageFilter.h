@@ -281,6 +281,7 @@ public:
   typedef StreamingShrinkStreamingManager<InputImageType>       StreamingShrinkStreamingManagerType;
   typedef typename StreamingShrinkStreamingManagerType::Pointer StreamingShrinkStreamingManagerPointerType;
 
+  using Superclass::SetInput;
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);

@@ -226,6 +226,7 @@ public:
   typedef typename StatFilterType::PixelObjectType     PixelObjectType;
   typedef typename StatFilterType::MatrixObjectType    MatrixObjectType;
 
+  using Superclass::SetInput;
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);

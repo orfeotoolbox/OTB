@@ -72,6 +72,7 @@ public:
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
 
   /** Connects the VectorData from which the extend will be extracted. */
+  using Superclass::SetInput;
   void SetInput(const VectorDataType *);
   const VectorDataType * GetInput() const;
 
