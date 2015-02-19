@@ -5,9 +5,6 @@ void RegisterTests()
   REGISTER_TEST(otbOssimJpegFileRessourceLeakTest);
   REGISTER_TEST(otbMapProjectionAdapterTest);
   REGISTER_TEST(otbOssimElevManagerTest2);
-  REGISTER_TEST(otbFilterFunctionValuesSpectralResponseTest);
-  REGISTER_TEST(otbFilterFunctionValuesTest);
-  REGISTER_TEST(otbFilterFunctionValuesDigitalGlobeTest);
   REGISTER_TEST(otbOssimElevManagerTest4);
   REGISTER_TEST(otbGeometricSarSensorModelAdapterNewTest);
   REGISTER_TEST(otbGeometricSarSensorModelAdapterTest);
