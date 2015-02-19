@@ -1,7 +1,7 @@
 # Find MuParserX
 #
 #   MUPARSERX_FOUND        - True if MuParser found.
-#   MUPARSERX_INCLUDE_DIRS - where to find tinyxml.h, etc.
+#   MUPARSERX_INCLUDE_DIRS - where to find mpParser.h, etc.
 #   MUPARSERX_LIBRARIES    - List of libraries when using MuParser.
 #
 
