@@ -59,6 +59,12 @@ int otbImageClassificationFilter(int itkNotUsed(argc), char * argv[])
   model = MachineLearningModelFactoryType::CreateMachineLearningModel(modelfname,
                                                                       MachineLearningModelFactoryType::ReadMode);
 
+  if (model.IsNull())
+  {
+    std::cerr << "Unable to create a model from " << modelfname << std::endl;
+    return EXIT_FAILURE;
+  }
+
   model->Load(modelfname);
 
   filter->SetModel(model);
