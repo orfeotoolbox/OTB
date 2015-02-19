@@ -6,7 +6,6 @@ otbImageKeywordlist.cxx
 otbOssimJpegFileRessourceLeakTest.cxx
 otbMapProjectionAdapterTest.cxx
 otbOssimElevManagerTest2.cxx
-otbFilterFunctionValues.cxx
 otbOssimElevManagerTest4.cxx
 otbGeometricSarSensorModelAdapter.cxx
 otbPlatformPositionAdapter.cxx
