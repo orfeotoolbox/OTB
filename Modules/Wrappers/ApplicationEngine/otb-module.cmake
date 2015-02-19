@@ -18,7 +18,7 @@ otb_module(OTBApplicationEngine
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine
-  
+    OTBAppImageUtils
   DESCRIPTION
     "${DOCUMENTATION}"
   )
