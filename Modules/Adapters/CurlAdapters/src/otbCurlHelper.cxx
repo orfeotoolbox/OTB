@@ -16,19 +16,13 @@
 
 =========================================================================*/
 
-#include "otbCurlHelper.h"
-
+#include <cstdio>
 #include <sstream>
-
+#include <itkLightObject.h>
+#include "otb_curl.h"
+#include "otbCurlHelper.h"
 #include "otbMacro.h"
 
-#ifdef OTB_USE_CURL
-#include <curl/curl.h>
-#include <cstring>
-#endif
-
-#include <cstdio>
-#include <itkLightObject.h>
 
 namespace otb
 {
