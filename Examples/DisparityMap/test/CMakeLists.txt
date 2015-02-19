@@ -2,7 +2,7 @@
 # ------- SimpleDisparityMapEstimationExampleTest ----------
 
 otb_add_test(NAME dmTeSimpleDisparityMapEstimationExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/deformationFieldOutput.png
     ${TEMP}/deformationFieldOutput.png
     ${BASELINE}/resampledMovingOutput.png
@@ -16,7 +16,7 @@ otb_add_test(NAME dmTeSimpleDisparityMapEstimationExampleTest COMMAND ${OTB_TEST
 )
 
 otb_add_test(NAME dmTeStereoReconstructionExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/elevationOutput.tif
     ${TEMP}/elevationOutput.tif
   $<TARGET_FILE:StereoReconstructionExample>

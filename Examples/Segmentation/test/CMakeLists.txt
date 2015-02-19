@@ -2,7 +2,7 @@
 # ------- IsolatedConnectedImageFilterTest----------
 
 otb_add_test(NAME seTeIsolatedConnectedImageFilterTest1 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ConnectedThresholdOutput1.png
     ${TEMP}/ConnectedThresholdOutput1.png
   $<TARGET_FILE:IsolatedConnectedImageFilter>
@@ -14,7 +14,7 @@ otb_add_test(NAME seTeIsolatedConnectedImageFilterTest1 COMMAND ${OTB_TEST_DRIVE
 # ------- IsolatedConnectedImageFilterTest----------
 
 otb_add_test(NAME seTeIsolatedConnectedImageFilterTest2 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/IsolatedConnectedImageFilterOutput1.png
     ${TEMP}/IsolatedConnectedImageFilterOutput1.png
   $<TARGET_FILE:IsolatedConnectedImageFilter>
@@ -26,7 +26,7 @@ otb_add_test(NAME seTeIsolatedConnectedImageFilterTest2 COMMAND ${OTB_TEST_DRIVE
 # ------- FastMarchingImageFilterTest----------
 
 otb_add_test(NAME seTeFastMarchingImageFilterTest1 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/FastMarchingImageFilterOutput5.png
     ${TEMP}/FastMarchingImageFilterOutput5.png
   $<TARGET_FILE:FastMarchingImageFilter>
@@ -38,7 +38,7 @@ otb_add_test(NAME seTeFastMarchingImageFilterTest1 COMMAND ${OTB_TEST_DRIVER}
 # ------- FastMarchingImageFilterTest----------
 
 otb_add_test(NAME seTeFastMarchingImageFilterTest2 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/FastMarchingImageFilterOutput6.png
     ${TEMP}/FastMarchingImageFilterOutput6.png
   $<TARGET_FILE:FastMarchingImageFilter>
@@ -50,7 +50,7 @@ otb_add_test(NAME seTeFastMarchingImageFilterTest2 COMMAND ${OTB_TEST_DRIVER}
 # ------- FastMarchingImageFilterTest----------
 
 otb_add_test(NAME seTeFastMarchingImageFilterTest3 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/FastMarchingImageFilterOutput7.png
     ${TEMP}/FastMarchingImageFilterOutput7.png
   $<TARGET_FILE:FastMarchingImageFilter>
@@ -62,7 +62,7 @@ otb_add_test(NAME seTeFastMarchingImageFilterTest3 COMMAND ${OTB_TEST_DRIVER}
 # ------- OtsuThresholdImageFilterTest----------
 
 otb_add_test(NAME seTeOtsuThresholdImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/OtsuThresholdImageFilterOutput.png
     ${TEMP}/OtsuThresholdImageFilterOutput.png
   $<TARGET_FILE:OtsuThresholdImageFilter>
@@ -74,7 +74,7 @@ otb_add_test(NAME seTeOtsuThresholdImageFilterTest COMMAND ${OTB_TEST_DRIVER}
 # ------- ConfidenceConnectedTest----------
 
 otb_add_test(NAME seTeConfidenceConnectedTest1 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ConfidenceConnectedOutput1.png
     ${TEMP}/ConfidenceConnectedOutput1.png
   $<TARGET_FILE:ConfidenceConnected>
@@ -86,7 +86,7 @@ otb_add_test(NAME seTeConfidenceConnectedTest1 COMMAND ${OTB_TEST_DRIVER}
 # ------- ConfidenceConnectedTest----------
 
 otb_add_test(NAME seTeConfidenceConnectedTest2 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ConfidenceConnectedOutput2.png
     ${TEMP}/ConfidenceConnectedOutput2.png
   $<TARGET_FILE:ConfidenceConnected>
@@ -98,7 +98,7 @@ otb_add_test(NAME seTeConfidenceConnectedTest2 COMMAND ${OTB_TEST_DRIVER}
 # ------- ConfidenceConnectedTest----------
 
 otb_add_test(NAME seTeConfidenceConnectedTest3 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ConfidenceConnectedOutput3.png
     ${TEMP}/ConfidenceConnectedOutput3.png
   $<TARGET_FILE:ConfidenceConnected>
@@ -112,7 +112,7 @@ otb_add_test(NAME seTeConfidenceConnectedTest3 COMMAND ${OTB_TEST_DRIVER}
 # ------- VectorConfidenceConnectedTest----------
 
 otb_add_test(NAME seTeVectorConfidenceConnectedTest1 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/VectorConfidenceConnectedOutput1.png
     ${TEMP}/VectorConfidenceConnectedOutput1.png
   $<TARGET_FILE:VectorConfidenceConnected>
@@ -124,7 +124,7 @@ otb_add_test(NAME seTeVectorConfidenceConnectedTest1 COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME seTeVectorConfidenceConnectedTest2 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/VectorConfidenceConnectedOutput2.png
     ${TEMP}/VectorConfidenceConnectedOutput2.png
   $<TARGET_FILE:VectorConfidenceConnected>
@@ -136,7 +136,7 @@ otb_add_test(NAME seTeVectorConfidenceConnectedTest2 COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME seTeVectorConfidenceConnectedTest3 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/VectorConfidenceConnectedOutput3.png
     ${TEMP}/VectorConfidenceConnectedOutput3.png
   $<TARGET_FILE:VectorConfidenceConnected>
@@ -152,7 +152,7 @@ otb_add_test(NAME seTeVectorConfidenceConnectedTest3 COMMAND ${OTB_TEST_DRIVER}
 # ------- NeighborhoodConnectedImageFilterTest----------
 
 otb_add_test(NAME seTeNeighborhoodConnectedImageFilterTest1 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/NeighborhoodConnectedThresholdOutput1.png
     ${TEMP}/NeighborhoodConnectedThresholdOutput1.png
   $<TARGET_FILE:NeighborhoodConnectedImageFilter>
@@ -164,7 +164,7 @@ otb_add_test(NAME seTeNeighborhoodConnectedImageFilterTest1 COMMAND ${OTB_TEST_D
 # ------- NeighborhoodConnectedImageFilterTest----------
 
 otb_add_test(NAME seTeNeighborhoodConnectedImageFilterTest2 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/NeighborhoodConnectedThresholdOutput2.png
     ${TEMP}/NeighborhoodConnectedThresholdOutput2.png
   $<TARGET_FILE:NeighborhoodConnectedImageFilter>
@@ -176,7 +176,7 @@ otb_add_test(NAME seTeNeighborhoodConnectedImageFilterTest2 COMMAND ${OTB_TEST_D
 # ------- NeighborhoodConnectedImageFilterTest----------
 
 otb_add_test(NAME seTeNeighborhoodConnectedImageFilterTest3 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/NeighborhoodConnectedThresholdOutput3.png
     ${TEMP}/NeighborhoodConnectedThresholdOutput3.png
   $<TARGET_FILE:NeighborhoodConnectedImageFilter>
@@ -192,7 +192,7 @@ otb_add_test(NAME seTeNeighborhoodConnectedImageFilterTest3 COMMAND ${OTB_TEST_D
 #Moreover, NO baseline file for this first implementation is available in the
 #OTB-Data directory.
 #otb_add_test(NAME seTeWatershedSegmentationTest1 COMMAND ${OTB_TEST_DRIVER}
-#        --compare-n-images ${TOL} 1
+#        --compare-n-images ${NOTOL} 1
 #        ${BASELINE}/WatershedSegmentation1Output1.png
 #        ${TEMP}/WatershedSegmentation1Output1.png
 #        $<TARGET_FILE:WatershedSegmentation>
@@ -204,7 +204,7 @@ otb_add_test(NAME seTeNeighborhoodConnectedImageFilterTest3 COMMAND ${OTB_TEST_D
 # ------- WatershedSegmentationTest----------
 
 otb_add_test(NAME seTeWatershedSegmentationTest2 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/WatershedSegmentation1Output2.png
     ${TEMP}/WatershedSegmentation1Output2.png
   $<TARGET_FILE:WatershedSegmentation>
@@ -216,7 +216,7 @@ otb_add_test(NAME seTeWatershedSegmentationTest2 COMMAND ${OTB_TEST_DRIVER}
 # ------- ConnectedThresholdImageFilterTest----------
 
 otb_add_test(NAME seTeConnectedThresholdImageFilterTest1 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ConnectedThresholdOutput1.png
     ${TEMP}/ConnectedThresholdOutput1.png
   $<TARGET_FILE:ConnectedThresholdImageFilter>
@@ -228,7 +228,7 @@ otb_add_test(NAME seTeConnectedThresholdImageFilterTest1 COMMAND ${OTB_TEST_DRIV
 # ------- ConnectedThresholdImageFilterTest----------
 
 otb_add_test(NAME seTeConnectedThresholdImageFilterTest2 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ConnectedThresholdOutput2.png
     ${TEMP}/ConnectedThresholdOutput2.png
   $<TARGET_FILE:ConnectedThresholdImageFilter>
@@ -240,7 +240,7 @@ otb_add_test(NAME seTeConnectedThresholdImageFilterTest2 COMMAND ${OTB_TEST_DRIV
 # ------- ConnectedThresholdImageFilterTest----------
 
 otb_add_test(NAME seTeConnectedThresholdImageFilterTest3 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ConnectedThresholdOutput3.png
     ${TEMP}/ConnectedThresholdOutput3.png
   $<TARGET_FILE:ConnectedThresholdImageFilter>
@@ -252,7 +252,7 @@ otb_add_test(NAME seTeConnectedThresholdImageFilterTest3 COMMAND ${OTB_TEST_DRIV
 # ------- OtsuMultipleThresholdImageFilterTest----------
 
 otb_add_test(NAME seTeOtsuMultipleThresholdImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 3
+  --compare-n-images ${NOTOL} 3
     ${BASELINE}/OtsuMultipleThresholdsOutput000.png
     ${TEMP}/OtsuMultipleThresholdsOutput000.png
     ${BASELINE}/OtsuMultipleThresholdsOutput001.png
@@ -269,7 +269,7 @@ otb_add_test(NAME seTeOtsuMultipleThresholdImageFilterTest COMMAND ${OTB_TEST_DR
 # ------- LabelizeNeighborhoodConnectedImageFilterTest----------
 
 otb_add_test(NAME seTeLabelizeNeighborhoodConnectedImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/LabelizeNeighborhoodConnectedImageFilterOutput.png
     ${TEMP}/LabelizeNeighborhoodConnectedImageFilterOutput.png
   $<TARGET_FILE:LabelizeNeighborhoodConnectedImageFilter>

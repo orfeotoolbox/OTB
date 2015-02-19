@@ -2,7 +2,7 @@
 # ------- MathematicalMorphologyBinaryFiltersTest----------
 
 otb_add_test(NAME fiTeMathematicalMorphologyBinaryFiltersTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/MathematicalMorphologyBinaryErosionOutput.png
     ${TEMP}/MathematicalMorphologyBinaryErosionOutput.png
     ${BASELINE}/MathematicalMorphologyBinaryDilationOutput.png
@@ -17,7 +17,7 @@ otb_add_test(NAME fiTeMathematicalMorphologyBinaryFiltersTest COMMAND ${OTB_TEST
 # ------- DanielssonDistanceMapImageFilterTest----------
 
 otb_add_test(NAME fiTeDanielssonDistanceMapImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/DanielssonDistanceMapImageFilterOutput1.png
     ${TEMP}/DanielssonDistanceMapImageFilterOutput1.png
     ${BASELINE}/DanielssonDistanceMapImageFilterOutput2.png
@@ -31,7 +31,7 @@ otb_add_test(NAME fiTeDanielssonDistanceMapImageFilterTest COMMAND ${OTB_TEST_DR
 # ------- MeanImageFilterTest----------
 
 otb_add_test(NAME fiTeMeanImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/MeanImageFilterOutput.png
     ${TEMP}/MeanImageFilterOutput.png
   $<TARGET_FILE:MeanImageFilter>
@@ -42,7 +42,7 @@ otb_add_test(NAME fiTeMeanImageFilterTest COMMAND ${OTB_TEST_DRIVER}
 # ------- ThresholdImageFilterTest----------
 
 otb_add_test(NAME fiTeThresholdImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 3
+  --compare-n-images ${NOTOL} 3
     ${BASELINE}/ThresholdImageFilterOutputBelow.png
     ${TEMP}/ThresholdImageFilterOutputBelow.png
     ${BASELINE}/ThresholdImageFilterOutputAbove.png
@@ -71,7 +71,7 @@ otb_add_test(NAME fiTeGradientMagnitudeRecursiveGaussianImageFilterTest COMMAND 
 # ------- GradientAnisotropicDiffusionImageFilterTest----------
 
 otb_add_test(NAME fiTeGradientAnisotropicDiffusionImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/GradientAnisotropicDiffusionImageFilterOutput.png
     ${TEMP}/GradientAnisotropicDiffusionImageFilterOutput.png
   $<TARGET_FILE:GradientAnisotropicDiffusionImageFilter>
@@ -83,7 +83,7 @@ otb_add_test(NAME fiTeGradientAnisotropicDiffusionImageFilterTest COMMAND ${OTB_
 # ------- GradientMagnitudeImageFilterTest----------
 
 otb_add_test(NAME fiTeGradientMagnitudeImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/GradientMagnitudeImageFilterOutput.png
     ${TEMP}/GradientMagnitudeImageFilterOutput.png
   GradientMagnitudeImageFilterTest
@@ -94,7 +94,7 @@ otb_add_test(NAME fiTeGradientMagnitudeImageFilterTest COMMAND ${OTB_TEST_DRIVER
 # ------- MathematicalMorphologyGrayscaleFiltersTest----------
 
 otb_add_test(NAME fiTeMathematicalMorphologyGrayscaleFiltersTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/MathematicalMorphologyGrayscaleErosionOutput.png
     ${TEMP}/MathematicalMorphologyGrayscaleErosionOutput.png
     ${BASELINE}/MathematicalMorphologyGrayscaleDilationOutput.png
@@ -109,7 +109,7 @@ otb_add_test(NAME fiTeMathematicalMorphologyGrayscaleFiltersTest COMMAND ${OTB_T
 # ------- LaplacianRecursiveGaussianImageFilter1Test----------
 
 otb_add_test(NAME fiTeLaplacianRecursiveGaussianImageFilter1Test COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/LaplacianRecursiveGaussianImageFilteroutput5.hdr
     ${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.hdr
     ${BASELINE}/LaplacianRecursiveGaussianImageFilterOutput5.png
@@ -125,7 +125,7 @@ otb_add_test(NAME fiTeLaplacianRecursiveGaussianImageFilter1Test COMMAND ${OTB_T
 # ------- LaplacianRecursiveGaussianImageFilter2Test----------
 
 otb_add_test(NAME fiTeLaplacianRecursiveGaussianImageFilter2Test COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/LaplacianRecursiveGaussianImageFilter2output5.hdr
     ${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.hdr
     ${BASELINE}/LaplacianRecursiveGaussianImageFilter2Output5.png
@@ -140,7 +140,7 @@ otb_add_test(NAME fiTeLaplacianRecursiveGaussianImageFilter2Test COMMAND ${OTB_T
 # ------- CannyEdgeDetectionImageFilterTest----------
 
 otb_add_test(NAME fiTeCannyEdgeDetectionImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/CannyEdgeDetectorImageFilterOutput.png
     ${TEMP}/CannyEdgeDetectorImageFilterOutput.png
   $<TARGET_FILE:CannyEdgeDetectionImageFilter>
@@ -152,7 +152,7 @@ otb_add_test(NAME fiTeCannyEdgeDetectionImageFilterTest COMMAND ${OTB_TEST_DRIVE
 # ------- DiscreteGaussianImageFilterTest----------
 
 otb_add_test(NAME fiTeDiscreteGaussianImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/DiscreteGaussianImageFilterOutput.png
     ${TEMP}/DiscreteGaussianImageFilterOutput.png
   $<TARGET_FILE:DiscreteGaussianImageFilter>
@@ -164,7 +164,7 @@ otb_add_test(NAME fiTeDiscreteGaussianImageFilterTest COMMAND ${OTB_TEST_DRIVER}
 # ------- MedianImageFilterTest----------
 
 otb_add_test(NAME fiTeMedianImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/MedianImageFilterOutput.png
     ${TEMP}/MedianImageFilterOutput.png
   $<TARGET_FILE:MedianImageFilter>
@@ -175,7 +175,7 @@ otb_add_test(NAME fiTeMedianImageFilterTest COMMAND ${OTB_TEST_DRIVER}
 # ------- BinaryThresholdImageFilterTest----------
 
 otb_add_test(NAME fiTeBinaryThresholdImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/BinaryThresholdImageFilterOutput.png
     ${TEMP}/BinaryThresholdImageFilterOutput.png
   $<TARGET_FILE:BinaryThresholdImageFilter>
@@ -187,7 +187,7 @@ otb_add_test(NAME fiTeBinaryThresholdImageFilterTest COMMAND ${OTB_TEST_DRIVER}
 # ------- DerivativeImageFilterTest----------
 
 otb_add_test(NAME fiTeDerivativeImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/DerivativeImageFilterFloatOutput.hdr
     ${TEMP}/DerivativeImageFilterFloatOutput.hdr
     ${BASELINE}/DerivativeImageFilterOutput.png

@@ -1,7 +1,7 @@
 
 # -----EstimateAffineTransformationExampleTest---------
 otb_add_test(NAME dmTeEstimateAffineTransformationExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/EstimateAffineTransformationOutput.png
     ${TEMP}/AffineTransformationOutput.png
   $<TARGET_FILE:EstimateAffineTransformationExample>
@@ -16,7 +16,7 @@ otb_add_test(NAME dmTeEstimateAffineTransformationExampleTest COMMAND ${OTB_TEST
 if(Module_OTBSiftFast)
 
   otb_add_test(NAME dmTeSIFTDisparityMapEstimationTest COMMAND ${OTB_TEST_DRIVER}
-    --compare-image ${TOL}
+    --compare-image ${NOTOL}
       ${BASELINE}/SIFTdeformationFieldOutput.png
       ${TEMP}/SIFTdeformationFieldOutput.png
     $<TARGET_FILE:SIFTDisparityMapEstimation>
@@ -26,7 +26,7 @@ if(Module_OTBSiftFast)
   )
 
   otb_add_test(NAME feTeSIFTFastExampleTest COMMAND ${OTB_TEST_DRIVER}
-    --compare-image ${TOL}
+    --compare-image ${NOTOL}
      ${BASELINE}/ROISpot5SiftFast.png
      ${TEMP}/ROISpot5SiftFast.png
     $<TARGET_FILE:SIFTFastExample>

@@ -2,7 +2,7 @@
 # ------- SVMImageClassificationExampleTest----------
 
 otb_add_test(NAME leTeSVMImageClassificationExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ROI_QB_MUL_1_SVN_CLASS.png
     ${TEMP}/ROI_QB_MUL_1_SVN_CLASS.png
   $<TARGET_FILE:SVMImageClassificationExample>
@@ -14,7 +14,7 @@ otb_add_test(NAME leTeSVMImageClassificationExampleTest COMMAND ${OTB_TEST_DRIVE
 # ------- SVMImageEstimatorClassificationMultiExampleTest----------
 
 otb_add_test(NAME leTeSVMImageEstimatorClassificationMultiExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
     ${TEMP}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
   $<TARGET_FILE:SVMImageEstimatorClassificationMultiExample>
@@ -27,7 +27,7 @@ otb_add_test(NAME leTeSVMImageEstimatorClassificationMultiExampleTest COMMAND ${
 # ------- GenerateTrainingImageExampleTest----------
 
 otb_add_test(NAME leTeGenerateTrainingImageExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ROI_QB_MUL_4_training.png
     ${TEMP}/ROI_QB_MUL_4_training.png
   $<TARGET_FILE:GenerateTrainingImageExample>
@@ -53,7 +53,7 @@ otb_add_test(NAME leTeSVMImageModelEstimatorExampleTest COMMAND ${OTB_TEST_DRIVE
 # ------- SOMExampleTest----------
 
 otb_add_test(NAME leTeSOMExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/ROI_QB_MUL_SOM.png
     ${TEMP}/ROI_QB_MUL_SOM.png
     ${BASELINE}/ROI_QB_MUL_SOMACT.png
@@ -68,7 +68,7 @@ otb_add_test(NAME leTeSOMExampleTest COMMAND ${OTB_TEST_DRIVER}
 # ------- SOMClassifierExampleTest----------
 
 otb_add_test(NAME leTeSOMClassifierExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/ROI_QB_MUL_extractSOMCLASS.tif
     ${TEMP}/ROI_QB_MUL_extractSOMCLASS.tif
   $<TARGET_FILE:SOMClassifierExample>
@@ -80,7 +80,7 @@ otb_add_test(NAME leTeSOMClassifierExampleTest COMMAND ${OTB_TEST_DRIVER}
 # ------- SEMModelEstimatorExampleTest----------
 
 otb_add_test(NAME leTeSEMModelEstimatorExampleTest COMMAND ${OTB_TEST_DRIVER}
-#        --compare-image ${TOL}
+#        --compare-image ${NOTOL}
 #        ${BASELINE}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
 #        ${TEMP}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
   $<TARGET_FILE:SEMModelEstimatorExample>

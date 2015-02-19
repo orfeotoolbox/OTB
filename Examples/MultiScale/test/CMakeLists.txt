@@ -2,7 +2,7 @@
 # ------- MorphologicalPyramidAnalysisFilterExampleTest ----------
 
 otb_add_test(NAME msTeMorphologicalPyramidAnalysisFilterExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 20
+  --compare-n-images ${NOTOL} 20
     ${BASELINE}/suburb2_an_1.jpeg ${TEMP}/suburb2_an_1.jpeg
     ${BASELINE}/suburb2_an_2.jpeg ${TEMP}/suburb2_an_2.jpeg
     ${BASELINE}/suburb2_an_3.jpeg ${TEMP}/suburb2_an_3.jpeg
@@ -41,7 +41,7 @@ otb_add_test(NAME msTeMorphologicalPyramidAnalysisFilterExampleTest COMMAND ${OT
 # ------- MorphologicalPyramidSynthesisFilterExampleTest ----------
 
 otb_add_test(NAME msTeMorphologicalPyramidSynthesisFilterExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/suburb2_synthesis.jpeg
     ${TEMP}/suburb2_synthesis.jpeg
   $<TARGET_FILE:MorphologicalPyramidSynthesisFilterExample>
@@ -53,7 +53,7 @@ otb_add_test(NAME msTeMorphologicalPyramidSynthesisFilterExampleTest COMMAND ${O
 # ------- MorphologicalPyramidSegmenterExampleTest ----------
 
 otb_add_test(NAME msTeMorphologicalPyramidSegmenterExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/outputPyrSegmented.tif
     ${TEMP}/outputPyrSegmented.tif
   $<TARGET_FILE:MorphologicalPyramidSegmenterExample>

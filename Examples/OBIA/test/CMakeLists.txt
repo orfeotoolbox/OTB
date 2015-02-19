@@ -1,6 +1,6 @@
 
 otb_add_test(NAME  trTeOBIAImageToLabelToImageTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/OBIAI2L2IOutput.tif
     ${TEMP}/OBIAI2L2IOutput.tif
   $<TARGET_FILE:ImageToLabelToImage>
@@ -21,7 +21,7 @@ otb_add_test(NAME trTeOBIAShapeAttributeComputationTest COMMAND ${OTB_TEST_DRIVE
 )
 
 otb_add_test(NAME trTeOBIARadiometricAttributesLabelMapFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/OBIARadiometricAttributes.png
     ${TEMP}/OBIARadiometricAttributes.png
   $<TARGET_FILE:RadiometricAttributesLabelMapFilterExample>

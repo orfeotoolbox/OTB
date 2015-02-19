@@ -1,6 +1,6 @@
 
 otb_add_test(NAME prTeOrthoRectificationExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/panOrthoToul.tif
     ${TEMP}/panOrthoToul.tif
   $<TARGET_FILE:OrthoRectificationExample>
@@ -17,7 +17,7 @@ otb_add_test(NAME prTeOrthoRectificationExampleTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME prTeOrthoRectificationExampleXSTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/xsOrthoToul.tif
     ${TEMP}/xsOrthoToul.tif
   $<TARGET_FILE:OrthoRectificationExample>
@@ -34,7 +34,7 @@ otb_add_test(NAME prTeOrthoRectificationExampleXSTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME prTeMapProjectionExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ascii ${TOL}
+  --compare-ascii ${NOTOL}
     ${BASELINE}/mapProjectionExample.txt
     ${TEMP}/mapProjectionExample.txt
   $<TARGET_FILE:MapProjectionExample>
@@ -42,7 +42,7 @@ otb_add_test(NAME prTeMapProjectionExampleTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME prTeVectorDataProjectionExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ogr ${TOL}
+  --compare-ogr ${NOTOL}
     ${BASELINE}/vectorDataProjectionExample.shp
     ${TEMP}/vectorDataProjectionExample.shp
   $<TARGET_FILE:VectorDataProjectionExample>
@@ -52,7 +52,7 @@ otb_add_test(NAME prTeVectorDataProjectionExampleTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME prTeGeometriesProjectionTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ogr ${TOL}
+  --compare-ogr ${NOTOL}
     ${BASELINE}/geometriesProjectionExample.shp
     ${TEMP}/geometriesProjectionExample.shp
   $<TARGET_FILE:GeometriesProjectionExample>
@@ -93,7 +93,7 @@ otb_add_test(NAME prTePlaceNameToLonLatExampleTest COMMAND ${OTB_TEST_DRIVER}
     Toulouse
 )
 otb_add_test(NAME prTeCoordinateToNameExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ascii ${TOL}
+  --compare-ascii ${NOTOL}
     ${BASELINE}/CoordinateToNameExample.txt
     ${TEMP}/CoordinateToNameExample.txt
   $<TARGET_FILE:CoordinateToNameExample>

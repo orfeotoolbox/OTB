@@ -1,5 +1,5 @@
 otb_add_test(NAME siTvHyperspectralExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 3
+  --compare-n-images ${NOTOL} 3
     ${BASELINE}/siTvHyperspectralUnmixingExampleTestBand1.png
     ${TEMP}/siTvHyperspectralUnmixingExampleTestBand1.png
     ${BASELINE}/siTvHyperspectralUnmixingExampleTestBand2.png

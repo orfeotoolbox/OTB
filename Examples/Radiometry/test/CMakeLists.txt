@@ -18,7 +18,7 @@ otb_add_test(NAME raTeARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest 
 # -------            AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest   ------------------------------
 
 otb_add_test(NAME raTeAVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  #--compare-image ${TOL}
+  #--compare-image ${NOTOL}
   #  ${BASELINE}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
   #  ${TEMP}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
   $<TARGET_FILE:AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter>
@@ -37,7 +37,7 @@ otb_add_test(NAME raTeAVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest C
 # -------            NDVIRAndNIRVegetationIndexImageFilter   ------------------------------
 
 otb_add_test(NAME raTeNDVIRAndNIRVegetationIndexImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/NDVIRAndNIRVegetationIndex.tif
     ${TEMP}/NDVIRAndNIRVegetationIndex.tif
   $<TARGET_FILE:NDVIRAndNIRVegetationIndexImageFilter>

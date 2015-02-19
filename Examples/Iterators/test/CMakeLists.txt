@@ -2,7 +2,7 @@
 # ------- ImageRegionIteratorWithIndexTest----------
 
 otb_add_test(NAME itTeImageRegionIteratorWithIndexTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ImageRegionIteratorWithIndexOutput.png
     ${TEMP}/ImageRegionIteratorWithIndexOutput.png
   $<TARGET_FILE:ImageRegionIteratorWithIndex>
@@ -13,7 +13,7 @@ otb_add_test(NAME itTeImageRegionIteratorWithIndexTest COMMAND ${OTB_TEST_DRIVER
 # ------- NeighborhoodIterators1Test----------
 
 otb_add_test(NAME itTeNeighborhoodIterators1Test COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/NeighborhoodIterators1a.png
     ${TEMP}/NeighborhoodIterators1a.png
   $<TARGET_FILE:NeighborhoodIterators1>
@@ -24,7 +24,7 @@ otb_add_test(NAME itTeNeighborhoodIterators1Test COMMAND ${OTB_TEST_DRIVER}
 # ------- NeighborhoodIterators4Test----------
 
 otb_add_test(NAME itTeNeighborhoodIterators4aTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/NeighborhoodIterators4a.png
     ${TEMP}/NeighborhoodIterators4a.png
   $<TARGET_FILE:NeighborhoodIterators4>
@@ -36,7 +36,7 @@ otb_add_test(NAME itTeNeighborhoodIterators4aTest COMMAND ${OTB_TEST_DRIVER}
 # ------- NeighborhoodIterators4Test----------
 
 otb_add_test(NAME itTeNeighborhoodIterators4bTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/NeighborhoodIterators4b.png
     ${TEMP}/NeighborhoodIterators4b.png
   $<TARGET_FILE:NeighborhoodIterators4>
@@ -48,7 +48,7 @@ otb_add_test(NAME itTeNeighborhoodIterators4bTest COMMAND ${OTB_TEST_DRIVER}
 # ------- NeighborhoodIterators4Test----------
 
 otb_add_test(NAME itTeNeighborhoodIterators4cTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/NeighborhoodIterators4c.png
     ${TEMP}/NeighborhoodIterators4c.png
   $<TARGET_FILE:NeighborhoodIterators4>
@@ -60,7 +60,7 @@ otb_add_test(NAME itTeNeighborhoodIterators4cTest COMMAND ${OTB_TEST_DRIVER}
 # ------- NeighborhoodIterators4Test----------
 
 otb_add_test(NAME itTeNeighborhoodIterators4dTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/NeighborhoodIterators4d.png
     ${TEMP}/NeighborhoodIterators4d.png
   $<TARGET_FILE:NeighborhoodIterators4>
@@ -72,7 +72,7 @@ otb_add_test(NAME itTeNeighborhoodIterators4dTest COMMAND ${OTB_TEST_DRIVER}
 # ------- NeighborhoodIterators6Test----------
 
 otb_add_test(NAME itTeNeighborhoodIterators6aTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/NeighborhoodIterators6a.png
     ${TEMP}/NeighborhoodIterators6a.png
   $<TARGET_FILE:NeighborhoodIterators6>
@@ -83,7 +83,7 @@ otb_add_test(NAME itTeNeighborhoodIterators6aTest COMMAND ${OTB_TEST_DRIVER}
 # ------- NeighborhoodIterators6Test----------
 
 otb_add_test(NAME itTeNeighborhoodIterators6bTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/NeighborhoodIterators6b.png
     ${TEMP}/NeighborhoodIterators6b.png
   $<TARGET_FILE:NeighborhoodIterators6>
@@ -94,7 +94,7 @@ otb_add_test(NAME itTeNeighborhoodIterators6bTest COMMAND ${OTB_TEST_DRIVER}
 # ------- NeighborhoodIterators6Test----------
 
 otb_add_test(NAME itTeNeighborhoodIterators6cTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/NeighborhoodIterators6c.png
     ${TEMP}/NeighborhoodIterators6c.png
   $<TARGET_FILE:NeighborhoodIterators6>
@@ -105,7 +105,7 @@ otb_add_test(NAME itTeNeighborhoodIterators6cTest COMMAND ${OTB_TEST_DRIVER}
 # ------- ImageRegionIteratorTest----------
 
 otb_add_test(NAME itTeImageRegionIteratorTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ImageRegionIteratorOutput.png
     ${TEMP}/ImageRegionIteratorOutput.png
   $<TARGET_FILE:ImageRegionIterator>
@@ -117,7 +117,7 @@ otb_add_test(NAME itTeImageRegionIteratorTest COMMAND ${OTB_TEST_DRIVER}
 # ------- ShapedNeighborhoodIterators2Test----------
 
 otb_add_test(NAME itTeShapedNeighborhoodIterators2Test COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ShapedNeighborhoodIterators1b.png
     ${TEMP}/ShapedNeighborhoodIterators1b.png
   $<TARGET_FILE:ShapedNeighborhoodIterators2>

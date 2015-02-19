@@ -4,7 +4,7 @@ otb_add_test(NAME  trTeTutorialsHelloWorld COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME  trTeTutorialsPipelineTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/TutorialsPipelineOutput.png
     ${TEMP}/TutorialsPipelineOutput.png
   $<TARGET_FILE:Pipeline>
@@ -13,7 +13,7 @@ otb_add_test(NAME  trTeTutorialsPipelineTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME  trTeTutorialsFilteringPipelineTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/TutorialsFilteringPipelineOutput.png
     ${TEMP}/TutorialsFilteringPipelineOutput.png
   $<TARGET_FILE:FilteringPipeline>
@@ -22,7 +22,7 @@ otb_add_test(NAME  trTeTutorialsFilteringPipelineTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME  trTeTutorialsScalingPipelineTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/TutorialsScalingPipelineOutput.png
     ${TEMP}/TutorialsScalingPipelineOutput.png
   $<TARGET_FILE:ScalingPipeline>
@@ -31,7 +31,7 @@ otb_add_test(NAME  trTeTutorialsScalingPipelineTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME  trTeTutorialsMultispectralTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/MultispectralOutput1.tif
     ${TEMP}/MultispectralOutput1.tif
     ${BASELINE}/MultispectralOutput2.tif
@@ -44,7 +44,7 @@ otb_add_test(NAME  trTeTutorialsMultispectralTest COMMAND ${OTB_TEST_DRIVER}
 
 
 otb_add_test(NAME  trTeTutorialsSmarterFilteringPipelineTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/TutorialsSmarterFilteringPipelineOutput.png
     ${TEMP}/TutorialsSmarterFilteringPipelineOutput.png
   $<TARGET_FILE:SmarterFilteringPipeline>
@@ -56,7 +56,7 @@ otb_add_test(NAME  trTeTutorialsSmarterFilteringPipelineTest COMMAND ${OTB_TEST_
 )
 
 otb_add_test(NAME  trTeTutorialsOrthoFusionTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/TutorialsOrthoFusionOutput.tif
     ${TEMP}/TutorialsOrthoFusionOutput.tif
   $<TARGET_FILE:OrthoFusion>

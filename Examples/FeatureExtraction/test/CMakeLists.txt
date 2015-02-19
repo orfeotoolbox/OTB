@@ -2,7 +2,7 @@
 # ------- CorrelationLineDetectorExampleTest----------
 
 otb_add_test(NAME feTeCorrelationLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/amstLineCorrelations.png
     ${TEMP}/amstLineCorrelations.png
     ${BASELINE}/amstLineCorrelationDirections.png
@@ -17,7 +17,7 @@ otb_add_test(NAME feTeCorrelationLineDetectorExampleTest COMMAND ${OTB_TEST_DRIV
 # ------- LocalHoughExampleTest----------
 
 otb_add_test(NAME feTeLocalHoughExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/detected_local_hough.png
     ${TEMP}/detected_local_hough.png
   $<TARGET_FILE:LocalHoughExample>
@@ -29,7 +29,7 @@ otb_add_test(NAME feTeLocalHoughExampleTest COMMAND ${OTB_TEST_DRIVER}
 # ------- HarrisExampleTest----------
 
 otb_add_test(NAME feTeHarrisExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ROISpot5Harris.png
     ${TEMP}/ROISpot5Harris.png
   $<TARGET_FILE:HarrisExample>
@@ -41,7 +41,7 @@ otb_add_test(NAME feTeHarrisExampleTest COMMAND ${OTB_TEST_DRIVER}
 # ------- TouziEdgeDetectorExampleTest----------
 
 otb_add_test(NAME feTeTouziEdgeDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/amstTouziEdges.png
     ${TEMP}/amstTouziEdges.png
     ${BASELINE}/amstTouziDirections.png
@@ -56,7 +56,7 @@ otb_add_test(NAME feTeTouziEdgeDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
 # ------- ExtractSegmentsByStepsExampleTest----------
 
 otb_add_test(NAME feTeExtractSegmentsByStepsExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/amstSegmentExtractionBySteps.png
     ${TEMP}/amstSegmentExtractionBySteps.png
   $<TARGET_FILE:ExtractSegmentsByStepsExample>
@@ -68,7 +68,7 @@ otb_add_test(NAME feTeExtractSegmentsByStepsExampleTest COMMAND ${OTB_TEST_DRIVE
 # ------- AssymmetricFusionOfLineDetectorExampleTest----------
 
 otb_add_test(NAME feTeAssymmetricFusionOfLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/amstLineFusion.png
     ${TEMP}/amstLineFusion.png
   $<TARGET_FILE:AssymmetricFusionOfLineDetectorExample>
@@ -80,7 +80,7 @@ otb_add_test(NAME feTeAssymmetricFusionOfLineDetectorExampleTest COMMAND ${OTB_T
 # ------- ExtractSegmentsExampleTest----------
 
 otb_add_test(NAME feTeExtractSegmentsExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/amstSegmentExtraction.png
     ${TEMP}/amstSegmentExtraction.png
   $<TARGET_FILE:ExtractSegmentsExample>
@@ -92,7 +92,7 @@ otb_add_test(NAME feTeExtractSegmentsExampleTest COMMAND ${OTB_TEST_DRIVER}
 # ------- RatioLineDetectorExampleTest----------
 
 otb_add_test(NAME feTeRatioLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/amstLineRatios.png
     ${TEMP}/amstLineRatios.png
     ${BASELINE}/amstLineRatioDirections.png
@@ -107,7 +107,7 @@ otb_add_test(NAME feTeRatioLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
 # ------- AlignmentsExampleTest----------
 
 otb_add_test(NAME feTeAlignmentsExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/QB_SuburbAlign.png
     ${TEMP}/QB_SuburbAlign.png
   $<TARGET_FILE:AlignmentsExample>
@@ -120,7 +120,7 @@ otb_add_test(NAME feTeAlignmentsExampleTest COMMAND ${OTB_TEST_DRIVER}
 
 
 otb_add_test(NAME feTeExtractRoadByStepsExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${NOTOL} 2
     ${BASELINE}/qb_ExtractRoad_pretty.png
     ${TEMP}/qb_ExtractRoad_pretty.png
     ${BASELINE}/ExtractRoadByStepsExampleOutput.png
@@ -134,7 +134,7 @@ otb_add_test(NAME feTeExtractRoadByStepsExampleTest COMMAND ${OTB_TEST_DRIVER}
 
 
 otb_add_test(NAME feTeExtractRoadExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/ExtractRoadExampleOutput.png
     ${TEMP}/ExtractRoadExampleOutput.png
   $<TARGET_FILE:ExtractRoadExample>
@@ -146,7 +146,7 @@ otb_add_test(NAME feTeExtractRoadExampleTest COMMAND ${OTB_TEST_DRIVER}
 # ------- SeamCarvingExamplesTest----------
 
 otb_add_test(NAME feTeSeamCarvingExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/SeamCarvingExampleOutput.png
     ${TEMP}/SeamCarvingExampleOutput.png
   SeamCarvingExampleTest
@@ -156,7 +156,7 @@ otb_add_test(NAME feTeSeamCarvingExampleTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME feTeSeamCarvingOtherExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/SeamCarvingOtherExampleOutput.png
     ${TEMP}/SeamCarvingOtherExampleOutput.png
   $<TARGET_FILE:SeamCarvingOtherExample>
@@ -166,7 +166,7 @@ otb_add_test(NAME feTeSeamCarvingOtherExampleTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 #otb_add_test(NAME feTeImageToSIFTKeyPointSetFilterTest COMMAND ${OTB_TEST_DRIVER}
-#        --compare-image ${TOL}
+#        --compare-image ${NOTOL}
 #        ${BASELINE}/ImageToSIFTKeyPointSetFilterOutput.png
 #        ${TEMP}/ImageToSIFTKeyPointSetFilterOutput.png
 #        $<TARGET_FILE:ImageToSIFTKeyPointSetFilter>
@@ -179,7 +179,7 @@ otb_add_test(NAME feTeSeamCarvingOtherExampleTest COMMAND ${OTB_TEST_DRIVER}
 # ------- CloudDetectionExampleTest----------
 
 otb_add_test(NAME feTeCloudDetectionExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${TOL}
+  --compare-image ${NOTOL}
     ${BASELINE}/CloudDetectionOutput.png
     ${TEMP}/PrettyCloudDetectionOutput.png
   $<TARGET_FILE:CloudDetectionExample>
@@ -194,7 +194,7 @@ if (Module_OTBVectorDataRendering)
 
   # ------- Line Segment Detector test----------
   otb_add_test(NAME feTeLineSegmentDetectorExampleTest  COMMAND ${OTB_TEST_DRIVER}
-    --compare-image ${TOL}
+    --compare-image ${NOTOL}
       ${BASELINE}/feTeLineSegmentDetectorExampleOutput.png
       ${TEMP}/feTeLineSegmentDetectorExampleOutput.png
     $<TARGET_FILE:LineSegmentDetectorExample>
@@ -205,7 +205,7 @@ if (Module_OTBVectorDataRendering)
   # ------- Right Angle Detection test----------
 
   otb_add_test(NAME feTeRightAngleDetectionExample  COMMAND ${OTB_TEST_DRIVER}
-    --compare-image ${TOL}
+    --compare-image ${NOTOL}
       ${BASELINE}/feTeRightAngleDetectionExampleOutput.png
       ${TEMP}/feTeRightAngleDetectionExampleOutput.png
     $<TARGET_FILE:RightAngleDetectionExample>

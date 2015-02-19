@@ -2,7 +2,7 @@
 # ------- ImageAdaptor4Test----------
 
 otb_add_test(NAME diTeImageAdaptor4Test1 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ImageAdaptorThresholdingA.png
     ${TEMP}/ImageAdaptorThresholdingA.png
   $<TARGET_FILE:ImageAdaptor4>
@@ -14,7 +14,7 @@ otb_add_test(NAME diTeImageAdaptor4Test1 COMMAND ${OTB_TEST_DRIVER}
 # ------- ImageAdaptor4Test----------
 
 otb_add_test(NAME diTeImageAdaptor4Test2 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ImageAdaptorThresholdingB.png
     ${TEMP}/ImageAdaptorThresholdingB.png
   $<TARGET_FILE:ImageAdaptor4>
@@ -26,7 +26,7 @@ otb_add_test(NAME diTeImageAdaptor4Test2 COMMAND ${OTB_TEST_DRIVER}
 # ------- Image5Test----------
 
 otb_add_test(NAME diTeImage5Test COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/Image5.png
     ${TEMP}/Image5.png
   $<TARGET_FILE:Image5>
@@ -36,7 +36,7 @@ otb_add_test(NAME diTeImage5Test COMMAND ${OTB_TEST_DRIVER}
 # ------- Image6Test----------
 
 otb_add_test(NAME diTeImage6Test COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/Image6.tif
     ${TEMP}/Image6.tif
   $<TARGET_FILE:Image6>

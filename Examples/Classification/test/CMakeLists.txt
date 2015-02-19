@@ -2,7 +2,7 @@
 # ------- ScalarImageMarkovRandomField1Test----------
 
 otb_add_test(NAME clTeScalarImageMarkovRandomField1Test COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/ScalarImageMarkovRandomField1Output.png
     ${TEMP}/ScalarImageMarkovRandomField1Output.png
   $<TARGET_FILE:ScalarImageMarkovRandomField1>
@@ -15,7 +15,7 @@ otb_add_test(NAME clTeScalarImageMarkovRandomField1Test COMMAND ${OTB_TEST_DRIVE
 # ------- ScalarImageKmeansClassifierTest----------
 
 otb_add_test(NAME clTeScalarImageKmeansClassifierTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${TOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/QB_Suburb_labelled.png
     ${TEMP}/QB_Suburb_labelled.png
   $<TARGET_FILE:ScalarImageKmeansClassifier>
