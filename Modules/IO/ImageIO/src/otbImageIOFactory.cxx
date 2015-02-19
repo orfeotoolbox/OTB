@@ -30,10 +30,15 @@
 #include "otbBSQImageIOFactory.h"
 #include "otbRADImageIOFactory.h"
 #include "otbMWImageIOFactory.h"
+
 #ifdef OTB_USE_JPEG2000
 #  include "otbJPEG2000ImageIOFactory.h"
 #endif
+
+#include "otb_curl.h"
+#ifdef OTB_CURL_MULTI_AVAILABLE
 #include "otbTileMapImageIOFactory.h"
+#endif
 
 namespace otb
 {
