@@ -3,7 +3,8 @@
 * compile without -Wshadow and fix as much warnings as possible
 * remove KMLVectorDataIO since it should not be used. leave libkml dependency only for KmzWriter module.
 * LineSegmentDetectorExample RightAngleDetectionExample depends on VectorDataRendering (mapnik) : rewrite it with the OGR based rasterization
-
+* OTB_USE_CURL
+* OTB_USE_OPENCV
 * Wrapper test (Java Python)
 * Handle OTB_DATA_USE_SPOTPHRINPUT & OTB_DATA_USE_CNESPHRINPUT
 * Copyright statements
