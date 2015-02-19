@@ -12,7 +12,7 @@ otb_add_test(NAME  trTeOBIAImageToLabelToImageTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME trTeOBIAShapeAttributeComputationTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ascii ${EPS}
+  --compare-ascii ${EPSILON_3}
     ${BASELINE}/OBIAShapeAttribute.txt
     ${TEMP}/OBIAShapeAttribute.txt
   $<TARGET_FILE:ShapeAttributeComputation>

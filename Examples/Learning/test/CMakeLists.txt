@@ -39,7 +39,7 @@ otb_add_test(NAME leTeGenerateTrainingImageExampleTest COMMAND ${OTB_TEST_DRIVER
 # ------- SVMImageModelEstimatorExampleTest----------
 
 otb_add_test(NAME leTeSVMImageModelEstimatorExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ascii ${EPS}
+  --compare-ascii ${EPSILON_3}
     ${BASELINE}/svm_image_model.svn
     ${TEMP}/svm_image_model.svn
   --ignore-lines-with 2 probA probB
@@ -92,7 +92,7 @@ otb_add_test(NAME leTeSEMModelEstimatorExampleTest COMMAND ${OTB_TEST_DRIVER}
 # ------- SVMGenericKernelImageModelEstimatorExampleTest----------
 
 otb_add_test(NAME leTeSVMGenericKernelImageModelEstimatorExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ascii ${EPS}
+  --compare-ascii ${EPSILON_3}
     ${BASELINE}/svm_image_model_generic_kernel.svn
     ${TEMP}/svm_image_model_generic_kernel.svn
   --ignore-lines-with 2 probA probB
@@ -105,7 +105,7 @@ otb_add_test(NAME leTeSVMGenericKernelImageModelEstimatorExampleTest COMMAND ${O
 # ------- SVMGenericKernelImageClassificationExampleTest----------
 
 otb_add_test(NAME leTeSVMGenericKernelImageClassificationExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${EPS}
+  --compare-image ${EPSILON_3}
     ${BASELINE}/ROI_QB_MUL_GENERIC_KERNEL_IMAGE_CLASSIF.png
     ${TEMP}/ROI_QB_MUL_GENERIC_KERNEL_IMAGE_CLASSIF.png
   $<TARGET_FILE:SVMGenericKernelImageClassificationExample>
