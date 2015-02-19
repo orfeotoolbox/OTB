@@ -234,7 +234,7 @@ set(INPUTDATA      ${OTB_DATA_ROOT}/Input)
 set(TEMP           ${OTB_BINARY_DIR}/Testing/Temporary)
 set(EXAMPLEDATA    ${OTB_DATA_ROOT}/Examples)
 
-set(NOTOL 0.0)
+set(NOTOL      0.0)
 set(EPSILON_1  0.1)
 set(EPSILON_2  0.01)
 set(EPSILON_3  0.001)
