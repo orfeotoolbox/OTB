@@ -55,6 +55,7 @@ class ITK_EXPORT ProspectModel : public SimulationStep1Base
       itkTypeMacro(ProspectModel, SpectrumGeneratorBase);
 
       /** Set/Get Input */
+      using Superclass::SetInput;
       virtual  void SetInput(const ParametersType &);
       void SetInput(const LeafParametersType *object);
       LeafParametersType * GetInput();

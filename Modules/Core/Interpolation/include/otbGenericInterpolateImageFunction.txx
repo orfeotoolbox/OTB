@@ -83,7 +83,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
 void
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
-::Modified()
+::Modified() const
 {
   Superclass::Modified();
   m_TablesHaveBeenGenerated = false;

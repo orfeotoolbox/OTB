@@ -117,7 +117,7 @@ protected:
 
   /** Call the superclass implementation and set the TablesHaveBeenGenerated
    * flag to false */
-  virtual void Modified(void);
+  virtual void Modified(void) const;
 
   /** Delete tables.*/
   virtual void ResetOffsetTable();
