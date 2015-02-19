@@ -47,7 +47,6 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
   "vcl_deprecated_header"
   "backward_warning"
-  "[Uu]tilities"
   "warning LNK4221"
   "ranlib:.*file:.*has no symbols"
   "ranlib: file: .+ has no symbols"
@@ -59,6 +58,7 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*Microsoft.*include.*.h.*[Ww]arning.*"
   ".*gdal_priv.h.*[Ww]arning.*"
   ".*cpl_string.h.*[Ww]arning.*"
+  ".*ogr_feature.h.*[Ww]arning.*"
 
   # Ignore clang's summary warning, assuming prior text has matched some
   # other warning expression:
