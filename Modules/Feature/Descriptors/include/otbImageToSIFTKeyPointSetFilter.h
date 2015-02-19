@@ -388,10 +388,10 @@ private:
   unsigned int m_ChangeSamplePointsMax;
 
   /** Gaussian sigma for histogram smoothing */
-  static const double m_HistogramGaussianWeights[73];
+  std::vector<double> m_HistogramGaussianWeights;
 
   /** Offsets vector, conveniance datas */
-  static const OffsetType m_Offsets[8];
+  OffsetType m_Offsets[8];
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
