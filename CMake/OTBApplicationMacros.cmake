@@ -9,8 +9,14 @@ macro(otb_create_application)
    target_link_libraries(${APPLICATION_TARGET_NAME} OTBApplicationEngine ${APPLICATION_LINK_LIBRARIES})
    otb_module_target_label(${APPLICATION_TARGET_NAME})
 
+   # Setup build output location
+   # Do not output in the standard lib folder where all shared libs goes.
+   # This is to avoid the application factory to look into each and every shared lib
+   # for itkLoad symbol
+   set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/lib/otb/applications)
+
    # Remove the usual 'lib' prefix to make it clear it is a plugin
-   # and not a library to link against
+   # and not a shared library to link against
    set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY PREFIX "")
 
    # on Apple platform, a "MODULE" library gets a ".so" extension
