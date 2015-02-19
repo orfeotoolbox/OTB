@@ -24,6 +24,7 @@ otbImageSimulationMethodWithVectorDataTest.cxx
 otbSailReflVTest.cxx
 otbSatelliteRSRNew.cxx
 otbSailReflHTest.cxx
+otbFilterFunctionValues.cxx
 )
 
 add_executable(otbSimulationTestDriver ${OTBSimulationTests})
@@ -272,3 +273,20 @@ otb_add_test(NAME siTvSailReflHTest COMMAND otbSimulationTestDriver
   ${TEMP}/siTvSailReflHTest.txt
   )
 
+otb_add_test(NAME raTvFilterFunctionValuesSpectralResponseTest COMMAND otbSimulationTestDriver
+  --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvFilterFunctionValuesSpectralResponseTest.txt
+  ${TEMP}/raTvFilterFunctionValuesSpectralResponseTest.txt
+  otbFilterFunctionValuesSpectralResponseTest
+  ${SPECTRUM_DB}/JHU/becknic/manmade/txt/0092uuu.txt
+  ${TEMP}/raTvFilterFunctionValuesSpectralResponseTest.txt
+  0.0025
+  )
+
+otb_add_test(NAME raTuFilterFunctionValuesTest COMMAND otbSimulationTestDriver
+  otbFilterFunctionValuesTest
+  ${TEMP}/raTuFilterFunctionValuesTest.txt
+  0.5             # lambda min
+  0.7             # lambda max
+  0.05            # user step
+  0.2 0.5 0.3 0.9 0.8 # vector
+  )

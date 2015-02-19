@@ -13,7 +13,6 @@ otb_module(OTBOSSIMAdapters
   TEST_DEPENDS
     OTBTestKernel
     OTBProjection
-    OTBSimulation
   
   DESCRIPTION
     "${DOCUMENTATION}"
