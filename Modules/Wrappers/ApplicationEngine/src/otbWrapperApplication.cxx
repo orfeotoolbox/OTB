@@ -1317,20 +1317,10 @@ void Application::AddRAMParameter(std::string paramKey, std::string paramName, u
 // paramKey default value = ram
 void Application::AddRAMParameter(std::string paramKey)
 {
-  // Get the  RAM Parameter from the configuration file
-  if (otb::ConfigurationFile::GetInstance()->IsValid() )
-    {
-    AddRAMParameter(paramKey,
+  // Get the  RAM Parameter from the configuration manager
+  AddRAMParameter(paramKey,
                     "Available RAM (Mb)",
-                    otb::ConfigurationFile::GetInstance()->GetAvailableRAMInMBytes());
-    }
-  else
-    {
-    // TODO check this
-    AddRAMParameter(paramKey,
-                    "Available RAM (Mb)",
-                    128);
-    }
+                  otb::ConfigurationManager::GetMaxRAMHint());
   MandatoryOff(paramKey);
   SetParameterDescription(paramKey, "Available memory for processing (in MB)");
 }

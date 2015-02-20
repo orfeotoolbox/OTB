@@ -38,11 +38,11 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
                                "This parameter allows to select a directory containing Digital Elevation Model tiles");
   app->MandatoryOff(oss.str());
 
-  std::string demDirFromConfig = otb::ConfigurationFile::GetInstance()->GetDEMDirectory();
+  std::string demDirFromConfig = otb::ConfigurationManager::GetDEMDirectory();
 
   if(demDirFromConfig!="")
     {
-    app->SetParameterString(oss.str(), otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+    app->SetParameterString(oss.str(), demDirFromConfig);
     app->EnableParameter(oss.str());
     }
   else
@@ -57,11 +57,11 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   app->SetParameterDescription(oss.str(),"Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website (http://hg.orfeo-toolbox.org/OTB-Data/raw-file/404aa6e4b3e0/Input/DEM/egm96.grd).");
   app->MandatoryOff(oss.str());
 
-  std::string geoidFromConfig = otb::ConfigurationFile::GetInstance()->GetGeoidFile();
+  std::string geoidFromConfig = otb::ConfigurationManager::GetGeoidFile();
 
   if(geoidFromConfig!="")
     {
-    app->SetParameterString(oss.str(),geoidFromConfig );
+    app->SetParameterString(oss.str(), geoidFromConfig);
     app->EnableParameter(oss.str());
     }
   else
