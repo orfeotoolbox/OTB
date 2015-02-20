@@ -10,6 +10,11 @@ macro(_otb_module_use_recurse mod)
     foreach(dep IN LISTS ${mod}_DEPENDS)
       _otb_module_use_recurse(${dep})
     endforeach()
+    foreach(dep IN LISTS ${mod}_OPTIONAL_DEPENDS)
+      if (${otb-module}_ENABLED)
+        _otb_module_use_recurse(${dep})
+      endif()
+    endforeach()
     if(${mod}_INCLUDE_DIRS)
       include_directories(${${mod}_INCLUDE_DIRS})
     endif()
@@ -39,11 +44,12 @@ endmacro()
 # otb_module_load(<module>)
 #
 # Loads variables describing the given module:
-#  <module>_LOADED         = True if the module has been loaded
-#  <module>_DEPENDS        = List of dependencies on other modules
-#  <module>_LIBRARIES      = Libraries to link
-#  <module>_INCLUDE_DIRS   = Header search path
-#  <module>_LIBRARY_DIRS   = Library search path (for outside dependencies)
+#  <module>_LOADED           = True if the module has been loaded
+#  <module>_DEPENDS          = List of dependencies on other modules
+#  <module>_OPTIONAL_DEPENDS = List of dependencies on other modules
+#  <module>_LIBRARIES        = Libraries to link
+#  <module>_INCLUDE_DIRS     = Header search path
+#  <module>_LIBRARY_DIRS     = Library search path (for outside dependencies)
 macro(otb_module_load mod)
   if(NOT ${mod}_LOADED)
     include("${OTB_MODULES_DIR}/${mod}.cmake" OPTIONAL)
