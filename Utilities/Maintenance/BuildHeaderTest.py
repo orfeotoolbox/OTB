@@ -31,18 +31,7 @@ for syntax and missing #include's.
 """
 
 # Headers to not test because of dependecy issues, etc.
-BANNED_HEADERS = set(('itkExceptionObject.h', # There is a pre-processor check so people use itkMacro.h instead.
-    'itkFFTWForwardFFTImageFilter.h',
-    'itkFFTWInverseFFTImageFilter.h',
-    'itkFFTWRealToHalfHermitianForwardFFTImageFilter.h',
-    'itkFFTWHalfHermitianToRealInverseFFTImageFilter.h',
-    'itkFFTWComplexToComplexFFTImageFilter.h',
-    'itkFFTWCommon.h',
-    'itkPyBuffer.h', # needs Python.h, etc
-    'itkVanHerkGilWermanErodeDilateImageFilter.h', # circular include's
-    'itkBSplineDeformableTransform.h',   # deprecated
-    'vtkCaptureScreen.h',  # these includes require VTK
-    'itkBSplineDeformableTransformInitializer.h'))
+BANNED_HEADERS = set(()) # No banned headers in OTB for now
 
 HEADER = """/*=========================================================================
  *
