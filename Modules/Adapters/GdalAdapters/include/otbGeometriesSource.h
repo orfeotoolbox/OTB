@@ -105,6 +105,7 @@ public:
    * \throw std::bad_alloc if no new output can be added.
    */
   virtual void SetOutput(OutputGeometriesType* output, DataObjectPointerArraySizeType idx = 0);
+  using Superclass::SetOutput;
   //@}
 
   /** \c ProcessObject hook Specialized for \c GeometriesSource.
