@@ -42,8 +42,7 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
   m_PointDataContainerPerThread.clear();
 
   // create default region splitter
-  m_RegionSplitter = itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>::New();
-
+  m_StreamingManager = StreamingManagerType::New();
 }
 
 /**
@@ -138,20 +137,16 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
 
   PointDataContainerType * outputPointDataContainer = this->GetOutput()->GetPointData();
   outputPointDataContainer->Initialize();
-
+  
   typename TInputImage::RegionType inputRegion = this->GetInput()->GetLargestPossibleRegion();
-
-  unsigned int numDivisions;
-  numDivisions =  StreamingTraitsType
-                 ::CalculateNumberOfStreamDivisions(this->GetInput(),
-                                                    this->GetInput()->GetLargestPossibleRegion(),
-                                                    m_RegionSplitter,
-                                                    SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS,
-                                                    0, 0, 0);
 
   // Input is an image, cast away the constness so we can set
   // the requested region.
   InputImagePointer input = const_cast<TInputImage *> (this->GetInput());
+
+  m_StreamingManager->PrepareStreaming(input,inputRegion);
+
+  unsigned long numDivisions = m_StreamingManager->GetNumberOfSplits();
 
   /**
    * Loop over the number of pieces, execute the upstream pipeline on each
@@ -163,7 +158,7 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
        piece < numDivisions && !this->GetAbortGenerateData();
        piece++)
     {
-    streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions, inputRegion);
+    streamRegion = m_StreamingManager->GetSplit(piece);
     typedef itk::ImageToImageFilterDetail::ImageRegionCopier<itkGetStaticConstMacro(InputImageDimension),
         itkGetStaticConstMacro(InputImageDimension)>
     OutputToInputRegionCopierType;

@@ -21,7 +21,7 @@
 #include "otbSOMMap.h"
 #include "otbSOM.h"
 #include "otbSOMImageClassificationFilter.h"
-#include "otbStreamingTraits.h"
+#include "otbRAMDrivenAdaptativeStreamingManager.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRandomNonRepeatingConstIteratorWithIndex.h"
 
@@ -53,8 +53,9 @@ public:
   typedef itk::Statistics::ListSample<SampleType> ListSampleType;
   typedef otb::SOM<ListSampleType, SOMMapType> EstimatorType;
 
-  typedef otb::StreamingTraits<FloatVectorImageType> StreamingTraitsType;
-  typedef itk::ImageRegionSplitter<2>  SplitterType;
+  typedef RAMDrivenAdaptativeStreamingManager
+    <FloatVectorImageType>                            RAMDrivenAdaptativeStreamingManagerType;
+
   typedef FloatVectorImageType::RegionType RegionType;
 
   typedef itk::ImageRegionConstIterator<FloatVectorImageType> IteratorType;
@@ -98,10 +99,6 @@ private:
     AddParameter(ParameterType_Int,  "ts",   "TrainingSetSize");
     SetParameterDescription("ts", "Maximum training set size (in pixels)");
     MandatoryOff("ts");
-
-    AddParameter(ParameterType_Int,  "sl",   "StreamingLines");
-    SetParameterDescription("sl", "Number of lines in each streaming block (used during data sampling)");
-    MandatoryOff("sl");
 
     AddParameter(ParameterType_OutputImage, "som", "SOM Map");
     SetParameterDescription("som","Output image containing the Self-Organizing Map");
@@ -203,24 +200,18 @@ private:
     RegionType largestRegion = input->GetLargestPossibleRegion();
 
     // Setting up local streaming capabilities
-    SplitterType::Pointer splitter = SplitterType::New();
-    unsigned int numberOfStreamDivisions;
-    if (HasValue("sl"))
-    {
-      numberOfStreamDivisions = StreamingTraitsType::CalculateNumberOfStreamDivisions(input,
-                                          largestRegion,
-                                          splitter,
-                                          otb::SET_BUFFER_NUMBER_OF_LINES,
-                                          0, 0, GetParameterInt("sl"));
-    }
-    else
-    {
-      numberOfStreamDivisions = StreamingTraitsType::CalculateNumberOfStreamDivisions(input,
-                                          largestRegion,
-                                          splitter,
-                                          otb::SET_BUFFER_MEMORY_SIZE,
-                                          0, 1048576*GetParameterInt("ram"), 0);
-    }
+    
+    RAMDrivenAdaptativeStreamingManagerType::Pointer
+        streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+    int availableRAM = GetParameterInt("ram");
+    streamingManager->SetAvailableRAMInMB(availableRAM);
+    float bias = 2.0; // empiric value;
+    streamingManager->SetBias(bias);
+    
+    streamingManager->PrepareStreaming(input, largestRegion);
+      
+    unsigned long numberOfStreamDivisions = streamingManager->GetNumberOfSplits();
+    
 
     otbAppLogINFO("The images will be streamed into "<<numberOfStreamDivisions<<" parts.");
 
@@ -258,7 +249,7 @@ private:
       unsigned int localNbSamples=0;
 
       piece = randPerm[index];
-      streamingRegion = splitter->GetSplit(piece, numberOfStreamDivisions, largestRegion);
+      streamingRegion = streamingManager->GetSplit(piece);
       //otbAppLogINFO("Processing region: "<<streamingRegion);
 
       input->SetRequestedRegion(streamingRegion);

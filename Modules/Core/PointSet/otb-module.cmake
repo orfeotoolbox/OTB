@@ -10,6 +10,7 @@ otb_module(OTBPointSet
   DEPENDS
     OTBCommon
     OTBInterpolation
+    OTBStreaming
   TEST_DEPENDS
     OTBTestKernel
   

@@ -18,6 +18,7 @@ otb_module(OTBAppImageUtils
     OTBKMZWriter
     OTBOSSIMAdapters
     OTBObjectList
+    OTBStreaming
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine

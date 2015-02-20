@@ -19,7 +19,9 @@
 #define __otbImageToPointSetFilter_h
 
 #include "otbPointSetSource.h"
-#include "otbStreamingTraits.h"
+#include "otbRAMDrivenAdaptativeStreamingManager.h"
+
+// TODO: This class needs a refactoring to become a persistent filter
 
 namespace otb
 {
@@ -113,10 +115,10 @@ protected:
   /** End Multi-threading implementation */
 
   /** Setup for streaming */
-  typedef StreamingTraits<InputImageType>                                       StreamingTraitsType;
-  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)> SplitterType;
-  typedef typename SplitterType::Pointer                                        RegionSplitterPointer;
-  RegionSplitterPointer m_RegionSplitter;
+  typedef RAMDrivenAdaptativeStreamingManager<InputImageType> StreamingManagerType;
+  typedef typename StreamingManagerType::Pointer StreamingManagerPointer;
+
+  StreamingManagerPointer m_StreamingManager;
 
 private:
   ImageToPointSetFilter(const ImageToPointSetFilter &); //purposely not implemented

@@ -22,8 +22,7 @@
 #include "otbOGRDataSourceToLabelImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 
-#include "otbStreamingTraits.h"
-
+#include "otbRAMDrivenAdaptativeStreamingManager.h"
 
 #include "otbConfusionMatrixMeasurements.h"
 
@@ -49,10 +48,9 @@ public:
   typedef itk::ImageRegionConstIterator<Int32ImageType> ImageIteratorType;
 
   typedef otb::OGRDataSourceToLabelImageFilter<Int32ImageType> RasterizeFilterType;
-
-  typedef otb::StreamingTraits<Int32ImageType> StreamingTraitsType;
-
-  typedef itk::ImageRegionSplitter<2> SplitterType;
+  
+  typedef RAMDrivenAdaptativeStreamingManager
+    <Int32ImageType>                            RAMDrivenAdaptativeStreamingManagerType;
 
   typedef Int32ImageType::RegionType RegionType;
 
@@ -242,14 +240,17 @@ private:
       }
 
     // Prepare local streaming
-    SplitterType::Pointer splitter = SplitterType::New();
-    unsigned int numberOfStreamDivisions = StreamingTraitsType::CalculateNumberOfStreamDivisions(
-      input,
-      input->GetLargestPossibleRegion(),
-      splitter,
-      otb::SET_BUFFER_MEMORY_SIZE,
-      0, 1048576*GetParameterInt("ram"), 0);
-    RegionType streamRegion;
+    
+    RAMDrivenAdaptativeStreamingManagerType::Pointer
+      streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+    int availableRAM = GetParameterInt("ram");
+    streamingManager->SetAvailableRAMInMB(availableRAM);
+    float bias = 2.0; // empiric value;
+    streamingManager->SetBias(bias);
+    
+    streamingManager->PrepareStreaming(input, input->GetLargestPossibleRegion());
+
+    unsigned long numberOfStreamDivisions = streamingManager->GetNumberOfSplits();
 
     otbAppLogINFO("Number of stream divisions : "<<numberOfStreamDivisions);
 
@@ -262,7 +263,7 @@ private:
 
     for (unsigned int index = 0; index < numberOfStreamDivisions; index++)
       {
-      streamRegion = splitter->GetSplit(index, numberOfStreamDivisions, reference->GetLargestPossibleRegion());
+      RegionType streamRegion = streamingManager->GetSplit(index);
 
       input->SetRequestedRegion(streamRegion);
       input->PropagateRequestedRegion();
