@@ -22,3 +22,5 @@ otb_add_test(NAME owTvQtWidgetParameterGroup COMMAND otbQtWidgetTestDriver
 otb_add_test(NAME owTvQtWidgetParameterFactory COMMAND otbQtWidgetTestDriver
   otbWrapperQtWidgetParameterFactory)
 
+otb_add_test(NAME owTvQtWidgetShow COMMAND otbQtWidgetTestDriver
+  otbWrapperQtWidgetShowWidget ${OTB_BINARY_DIR}/lib/otb/applications)

@@ -32,19 +32,13 @@ int otbWrapperQtWidgetShowWidget(int argc, char* argv[])
 {
   QApplication qtApp(argc, argv);
 
-  if (argc < 2)
-    {
-    std::cerr << "Usage : " << argv[0] << " module_name [module_path]" << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  std::string moduleName = argv[1];
+  std::cout << "Usage : " << argv[0] << " [module_path]" << std::endl;
 
   // Get the module path list
   std::list<std::string> modulePathList;
-  if (argc > 2)
+  if (argc > 1)
     {
-    std::copy(argv + 2, argv + argc, std::back_inserter(modulePathList));
+    std::copy(argv + 1, argv + argc, std::back_inserter(modulePathList));
 
     // Load the path in the environment
     std::string specificEnv("ITK_AUTOLOAD_PATH=");
@@ -56,54 +50,65 @@ int otbWrapperQtWidgetShowWidget(int argc, char* argv[])
       }
     }
 
-  // Create module
-  Application::Pointer app = ApplicationRegistry::CreateApplication(moduleName);
-  if (app.IsNull())
+  bool result = true;
 
+  // Get list of available applications
+  std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
+  for (std::vector<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)
     {
-    std::cerr << "Could not find application " << moduleName << std::endl;
-
-    const char* modulePath = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
-    std::cout << "Module search path : " << (modulePath ? modulePath : "") << std::endl;
-    std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
-
-    std::cout << "Available applications : " << (list.empty() ? "None" : "") << std::endl;
-    for (std::vector<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)
+    std::cout << "Testing QtWidget for application "<< (*it) << " ..." << std::endl;
+    // Create module
+    Application::Pointer app = ApplicationRegistry::CreateApplication(*it);
+    if (app.IsNull())
       {
-      std::cout << "  " << *it << std::endl;
+      std::cerr << "Could not find application " << (*it) << std::endl;
+      result = false;
+      continue;
       }
-    return EXIT_FAILURE;
+  
+    // MainWidget : that contains the view and any other widget
+    // (progress, logs...)
+    QMainWindow* mainWindow =  new QMainWindow();
+  
+    // Create GUI based on module
+    QtWidgetView* gui = new QtWidgetView(app);
+    gui->CreateGui();
+  
+    // Connect the View "Quit" signal, to the mainWindow close slot
+    QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
+  
+    // Create a progressReport object
+    QtWidgetProgressReport* progressReport =  new QtWidgetProgressReport(gui->GetModel());
+    progressReport->SetApplication(app);
+  
+    // Create a dock widget containg the progress widget
+    QDockWidget* qdock = new QDockWidget("Progress Reporting ...", mainWindow);
+    qdock->setWidget(progressReport);
+  
+    // build the main window, central widget is the plugin view, other
+    // are docked widget (progress, logs...)
+    mainWindow->setCentralWidget(gui);
+    mainWindow->addDockWidget(Qt::BottomDockWidgetArea, qdock);
+  
+    // Show the main window
+    mainWindow->show();
+  
+    QTimer::singleShot(1000, &qtApp, SLOT(quit()));
+  
+    // Start event processing loop
+    if (qtApp.exec())
+      {
+      std::cerr << "Failed to show widget for application " << (*it) << std::endl;
+      result = false;
+      }
+    
+    // clean main window
+    if (mainWindow) delete mainWindow;
     }
-
-  // MainWidget : that contains the view and any other widget
-  // (progress, logs...)
-  QMainWindow* mainWindow =  new QMainWindow();
-
-  // Create GUI based on module
-  QtWidgetView* gui = new QtWidgetView(app);
-  gui->CreateGui();
-
-  // Connect the View "Quit" signal, to the mainWindow close slot
-  QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
-
-  // Create a progressReport object
-  QtWidgetProgressReport* progressReport =  new QtWidgetProgressReport(gui->GetModel());
-  progressReport->SetApplication(app);
-
-  // Create a dock widget containg the progress widget
-  QDockWidget* qdock = new QDockWidget("Progress Reporting ...", mainWindow);
-  qdock->setWidget(progressReport);
-
-  // build the main window, central widget is the plugin view, other
-  // are docked widget (progress, logs...)
-  mainWindow->setCentralWidget(gui);
-  mainWindow->addDockWidget(Qt::BottomDockWidgetArea, qdock);
-
-  // Show the main window
-  mainWindow->show();
-
-  QTimer::singleShot(1000, &qtApp, SLOT(quit()));
-
-  // Start event processing loop
-  return qtApp.exec();
+  
+  if (result)
+    {
+    return EXIT_SUCCESS;
+    }
+  return EXIT_FAILURE;
 }
