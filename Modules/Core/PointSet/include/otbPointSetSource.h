@@ -63,7 +63,7 @@ public:
 
   /** Get the point set output of this process object.  */
   OutputPointSetType * GetOutput(void);
-  OutputPointSetType * GetOutput(unsigned int idx);
+  OutputPointSetType * GetOutput(DataObjectPointerArraySizeType idx);
 
   /** Set the point set output of this process object. This call is slated
    * to be removed from ITK. You should GraftOutput() and possible
@@ -120,7 +120,7 @@ public:
    * SmartPointer to a DataObject. If a subclass of MeshSource has
    * multiple outputs of different types, then that class must provide
    * an implementation of MakeOutput(). */
-  virtual DataObjectPointer MakeOutput(unsigned int idx);
+  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
 
 protected:
   PointSetSource();

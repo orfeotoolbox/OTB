@@ -48,7 +48,7 @@ PointSetSource<TOutputPointSet>
 template<class TOutputPointSet>
 typename PointSetSource<TOutputPointSet>::DataObjectPointer
 PointSetSource<TOutputPointSet>
-::MakeOutput(unsigned int)
+::MakeOutput(DataObjectPointerArraySizeType)
 {
   return static_cast<itk::DataObject*>(TOutputPointSet::New().GetPointer());
 }
@@ -76,7 +76,7 @@ PointSetSource<TOutputPointSet>
 template<class TOutputPointSet>
 typename PointSetSource<TOutputPointSet>::OutputPointSetType *
 PointSetSource<TOutputPointSet>
-::GetOutput(unsigned int idx)
+::GetOutput(DataObjectPointerArraySizeType idx)
 {
   return static_cast<TOutputPointSet*>
            (this->ProcessObject::GetOutput(idx));
@@ -124,7 +124,7 @@ PointSetSource<TOutputPointSet>
 template<class TOutputPointSet>
 void
 PointSetSource<TOutputPointSet>
-::GraftNthOutput(unsigned int idx, itk::DataObject *graft)
+::GraftNthOutput(DataObjectPointerArraySizeType idx, itk::DataObject *graft)
 {
   if (idx >= this->GetNumberOfOutputs())
     {

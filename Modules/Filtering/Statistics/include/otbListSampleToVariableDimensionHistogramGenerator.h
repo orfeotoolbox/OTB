@@ -112,7 +112,7 @@ protected:
   virtual ~ListSampleToVariableDimensionHistogramGenerator() {}
   void GenerateData();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  DataObjectPointer MakeOutput(unsigned int idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
 
 private:
   HistogramSizeType     m_Sizes;

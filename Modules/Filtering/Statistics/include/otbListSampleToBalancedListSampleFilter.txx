@@ -46,7 +46,7 @@ template < class TInputSampleList, class TLabelSampleList, class TOutputSampleLi
 typename ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
 ::DataObjectPointer
 ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
-::MakeOutput(unsigned int idx)
+::MakeOutput(DataObjectPointerArraySizeType idx)
 {
   DataObjectPointer output;
   switch (idx)

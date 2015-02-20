@@ -115,7 +115,7 @@ VectorDataSource<TOutputVectorData>
 template <class TOutputVectorData>
 typename VectorDataSource<TOutputVectorData>::OutputVectorDataType *
 VectorDataSource<TOutputVectorData>
-::GetOutput(unsigned int idx)
+::GetOutput(DataObjectPointerArraySizeType idx)
 {
   return static_cast<OutputVectorDataType*>
            (this->Superclass::GetOutput(idx));

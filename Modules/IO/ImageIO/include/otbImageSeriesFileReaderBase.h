@@ -130,11 +130,11 @@ public:
     return m_ListOfFileNames.size();
   }
   virtual OutputImageListType * GetOutput(void);
-  virtual OutputImageType *     GetOutput(unsigned int idx);
+  virtual OutputImageType *     GetOutput(DataObjectPointerArraySizeType idx);
 
   /** Performs selective file extraction */
   virtual OutputImageListType * GenerateOutput(void);
-  virtual OutputImageType * GenerateOutput(unsigned int idx);
+  virtual OutputImageType * GenerateOutput(DataObjectPointerArraySizeType idx);
 
   /** Synchronization */
   void Update()

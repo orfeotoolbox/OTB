@@ -39,7 +39,7 @@ template < class TInputSampleList, class TOutputSampleList >
 typename ListSampleSource<TInputSampleList, TOutputSampleList>
 ::DataObjectPointer
 ListSampleSource<TInputSampleList, TOutputSampleList>
-::MakeOutput(unsigned int itkNotUsed(idx))
+::MakeOutput(DataObjectPointerArraySizeType)
 {
   OutputSampleListPointer outputSampleList = OutputSampleListType::New();
   return static_cast<DataObjectPointer>(outputSampleList);

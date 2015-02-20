@@ -94,7 +94,7 @@ public:
 
   // Build the outputs
   typedef itk::DataObject::Pointer DataObjectPointer;
-  virtual DataObjectPointer MakeOutput(unsigned int idx);
+  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
   //virtual void Update();
 
   /** Accessors */

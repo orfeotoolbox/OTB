@@ -75,7 +75,7 @@ public:
    * SmartPointer to a DataObject. If a subclass of ImageSource has
    * multiple outputs of different types, then that class must provide
    * an implementation of MakeOutput(). */
-  virtual DataObjectPointer MakeOutput(unsigned int idx);
+  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
 
   /** Graft the specified DataObject onto this ProcessObject's output.
   * This method grabs a handle to the specified DataObject's path
@@ -119,7 +119,7 @@ public:
   * must be a valid output number (less than
   * ProcessObject::GetNumberOfOutputs()). See the GraftOutput for
    * general usage information. */
-  void GraftNthOutput(unsigned int idx, itk::DataObject *graft);
+  void GraftNthOutput(DataObjectPointerArraySizeType idx, itk::DataObject *graft);
 
   /** Get the output data of this process object.  The output of this
   * function is not valid until an appropriate Update() method has
@@ -162,7 +162,7 @@ public:
   * By default, the largest possible region is requested.
    */
   OutputListType * GetOutput(void);
-  OutputListType * GetOutput(unsigned int idx);
+  OutputListType * GetOutput(DataObjectPointerArraySizeType idx);
 
 protected:
   /** Constructor */

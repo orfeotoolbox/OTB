@@ -75,7 +75,7 @@ public:
 
   /** Overriding GetOutput() method */
   virtual OutputVectorDataType* GetOutput(void);
-  virtual OutputVectorDataType* GetOutput(unsigned int idx);
+  virtual OutputVectorDataType* GetOutput(DataObjectPointerArraySizeType idx);
 
 protected:
   VectorDataSource();

@@ -111,7 +111,7 @@ void BandMathXImageFilter<TImage>
 
 template <class TImage>
 void BandMathXImageFilter<TImage>
-::SetNthInput(unsigned int idx, const ImageType * image)
+::SetNthInput(DataObjectPointerArraySizeType idx, const ImageType * image)
 {
 
   std::stringstream sstm;
@@ -121,7 +121,7 @@ void BandMathXImageFilter<TImage>
 
 template <class TImage>
 void BandMathXImageFilter<TImage>
-::SetNthInput(unsigned int idx, const ImageType * image, const std::string& varName)
+::SetNthInput(DataObjectPointerArraySizeType idx, const ImageType * image, const std::string& varName)
 {
 
   ImageType * imagebis = const_cast<ImageType *>( image ); // Useful for call of UpdateOutputInformation() (see below)
@@ -214,7 +214,7 @@ void BandMathXImageFilter<TImage>
 
 template <typename TImage>
 TImage * BandMathXImageFilter<TImage>
-::GetNthInput(unsigned int idx)
+::GetNthInput(DataObjectPointerArraySizeType idx)
 {
   return const_cast<TImage *>(this->GetInput(idx));
 }
@@ -251,7 +251,7 @@ void BandMathXImageFilter<TImage>
     m_Expression.push_back(expressionToBePushed);
 
   if (m_Expression.size()>1)
-    this->SetNthOutput( (int) (m_Expression.size()) -1, ( TImage::New() ).GetPointer() );
+    this->SetNthOutput( (DataObjectPointerArraySizeType) (m_Expression.size()) -1, ( TImage::New() ).GetPointer() );
 
   this->Modified();
 }

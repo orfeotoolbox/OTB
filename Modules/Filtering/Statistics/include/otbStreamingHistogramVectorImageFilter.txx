@@ -56,7 +56,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
 template<class TInputImage>
 itk::DataObject::Pointer
 PersistentHistogramVectorImageFilter<TInputImage>
-::MakeOutput(unsigned int output)
+::MakeOutput(DataObjectPointerArraySizeType output)
 {
   itk::DataObject::Pointer ret;
   switch (output)

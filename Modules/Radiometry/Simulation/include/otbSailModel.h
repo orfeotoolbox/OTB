@@ -119,7 +119,7 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
       /** PrintSelf method */
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-      virtual DataObjectPointer MakeOutput(unsigned int);
+      virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType);
 
       /** Compute Leaf Angle Distribution */
       void Calc_LIDF(const double a, VectorType &lidf);

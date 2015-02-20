@@ -104,7 +104,7 @@ public:
    * By default, the largest possible region is requested.
    */
 //   OutputPathListType * GetOutput(void);
-//   OutputPathListType * GetOutput(unsigned int idx);
+//   OutputPathListType * GetOutput(DataObjectPointerArraySizeType idx);
 
   /** Graft the specified DataObject onto this ProcessObject's output.
    * This method grabs a handle to the specified DataObject's path
@@ -149,7 +149,7 @@ public:
    * must be a valid output number (less than
    * ProcessObject::GetNumberOfOutputs()). See the GraftOutput for
    * general usage information. */
-//   virtual void GraftNthOutput(unsigned int idx, OutputPathListType *output);
+//   virtual void GraftNthOutput(DataObjectPointerArraySizeType idx, OutputPathListType *output);
 
   /** Make a DataObject of the correct type to used as the specified
    * output.  Every ProcessObject subclass must be able to create a
@@ -164,7 +164,7 @@ public:
    * SmartPointer to a DataObject. If a subclass of ImageSource has
    * multiple outputs of different types, then that class must provide
    * an implementation of MakeOutput(). */
-//   virtual DataObjectPointer MakeOutput(unsigned int idx);
+//   virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
 
 protected:
   PathListSource() {};

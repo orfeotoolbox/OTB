@@ -94,7 +94,7 @@ public:
   /** Overriding \c GetOutput() functions */
   virtual OutputGeometriesType* GetOutput(void);
   /** Overriding \c GetOutput() functions */
-  virtual OutputGeometriesType* GetOutput(unsigned int idx);
+  virtual OutputGeometriesType* GetOutput(DataObjectPointerArraySizeType idx);
 
   /**
    * Output mutator.
@@ -104,7 +104,7 @@ public:
    *
    * \throw std::bad_alloc if no new output can be added.
    */
-  virtual void SetOutput(OutputGeometriesType* output, unsigned int idx = 0);
+  virtual void SetOutput(OutputGeometriesType* output, DataObjectPointerArraySizeType idx = 0);
   //@}
 
   /** \c ProcessObject hook Specialized for \c GeometriesSource.

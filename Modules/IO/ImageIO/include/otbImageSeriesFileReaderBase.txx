@@ -79,7 +79,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
 template <class TImage, class TInternalImage>
 typename ImageSeriesFileReaderBase<TImage, TInternalImage>::OutputImageType *
 ImageSeriesFileReaderBase<TImage, TInternalImage>
-::GetOutput(unsigned int idx)
+::GetOutput(DataObjectPointerArraySizeType idx)
 {
   if (this->GetNumberOfOutputs() < 1)
     throw ImageSeriesFileReaderException(__FILE__,

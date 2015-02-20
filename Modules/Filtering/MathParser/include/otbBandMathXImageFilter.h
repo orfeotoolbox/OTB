@@ -96,11 +96,11 @@ public:
   typedef typename StreamingStatisticsVectorImageFilterType::MatrixType MatrixType;
 
   /** Set the nth filter input with or without a specified associated variable name */
-  void SetNthInput( unsigned int idx, const ImageType * image);
-  void SetNthInput( unsigned int idx, const ImageType * image, const std::string& varName);
+  void SetNthInput( DataObjectPointerArraySizeType idx, const ImageType * image);
+  void SetNthInput( DataObjectPointerArraySizeType idx, const ImageType * image, const std::string& varName);
 
   /** Return a pointer on the nth filter input */
-  ImageType * GetNthInput(unsigned int idx);
+  ImageType * GetNthInput(DataObjectPointerArraySizeType idx);
 
   /** Set an expression to be parsed */
   void SetManyExpressions(bool flag);

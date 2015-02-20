@@ -125,7 +125,7 @@ protected:
   void ComputeMaxSampleFrequency();
 
   /** Make Output */
-  DataObjectPointer MakeOutput(unsigned int idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
 
   ListSampleToBalancedListSampleFilter();
   virtual ~ListSampleToBalancedListSampleFilter() {}

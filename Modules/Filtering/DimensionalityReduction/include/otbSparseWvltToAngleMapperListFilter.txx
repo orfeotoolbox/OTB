@@ -66,7 +66,7 @@ template < class TInputImageList, class TOutputSampleList, unsigned int VNbInput
 typename SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputImages >
 ::DataObjectPointer
 SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputImages >
-::MakeOutput(unsigned int itkNotUsed(idx))
+::MakeOutput(DataObjectPointerArraySizeType itkNotUsed(idx))
 {
   typename OutputSampleListObjectType::Pointer outputPtr = OutputSampleListObjectType::New();
   OutputSampleListPointer outputSampleList = OutputSampleListType::New();

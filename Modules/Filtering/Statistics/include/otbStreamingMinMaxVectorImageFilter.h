@@ -142,7 +142,7 @@ public:
   /** Make a DataObject of the correct type to be used as the specified
    * output.
    */
-  virtual DataObjectPointer MakeOutput(unsigned int idx);
+  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.

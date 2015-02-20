@@ -147,7 +147,7 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  itk::DataObject::Pointer MakeOutput(unsigned int idx);
+  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
 
   void AllocateOutputs();
   void GenerateOutputInformation();

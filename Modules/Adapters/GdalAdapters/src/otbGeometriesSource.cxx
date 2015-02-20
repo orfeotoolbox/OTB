@@ -50,13 +50,13 @@ otb::GeometriesSource::OutputGeometriesType* otb::GeometriesSource::GetOutput(vo
 }
 
 /*virtual*/
-otb::GeometriesSource::OutputGeometriesType* otb::GeometriesSource::GetOutput(unsigned int idx)
+otb::GeometriesSource::OutputGeometriesType* otb::GeometriesSource::GetOutput(DataObjectPointerArraySizeType idx)
 {
   return static_cast<GeometriesSet*> (Superclass::GetOutput(idx));
 }
 
 /*virtual*/
-void otb::GeometriesSource::SetOutput(OutputGeometriesType* output, unsigned int idx/* = 0 */)
+void otb::GeometriesSource::SetOutput(OutputGeometriesType* output, DataObjectPointerArraySizeType idx/* = 0 */)
 {
   Superclass::SetNthOutput(idx, output);
 }

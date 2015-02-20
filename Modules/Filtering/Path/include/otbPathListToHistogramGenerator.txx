@@ -99,7 +99,7 @@ PathListToHistogramGenerator<TPath, TFunction>
 template<class TPath, class TFunction>
 typename PathListToHistogramGenerator<TPath, TFunction>::DataObjectPointer
 PathListToHistogramGenerator<TPath, TFunction>
-::MakeOutput(unsigned int)
+::MakeOutput(DataObjectPointerArraySizeType)
 {
   DataObjectPointer output;
   output = static_cast<itk::DataObject*>(HistogramType::New().GetPointer());

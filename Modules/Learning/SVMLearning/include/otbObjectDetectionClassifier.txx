@@ -97,7 +97,7 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 itk::DataObject::Pointer
 PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
-::MakeOutput(unsigned int idx)
+::MakeOutput(DataObjectPointerArraySizeType idx)
 {
   itk::DataObject::Pointer output;
   switch (idx)

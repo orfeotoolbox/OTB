@@ -57,7 +57,7 @@ public:
 
   /** Overriding GetOutput() method */
   virtual OutputGISTableType* GetOutput(void);
-  virtual OutputGISTableType* GetOutput(unsigned int idx);
+  virtual OutputGISTableType* GetOutput(DataObjectPointerArraySizeType idx);
 
 protected:
   GISTableSource();

@@ -75,10 +75,10 @@ void BandMathImageFilter<TImage>
 
 template <class TImage>
 void BandMathImageFilter<TImage>
-::SetNthInput(unsigned int idx, const ImageType * image)
+::SetNthInput(DataObjectPointerArraySizeType idx, const ImageType * image)
 {
   this->SetInput(idx, const_cast<TImage *>( image ));
-  unsigned int nbInput = this->GetNumberOfInputs();
+  DataObjectPointerArraySizeType nbInput = this->GetNumberOfInputs();
   m_VVarName.resize(nbInput+4);
   std::ostringstream varName;
   varName << "b" << nbInput;
@@ -92,7 +92,7 @@ void BandMathImageFilter<TImage>
 
 template <class TImage>
 void BandMathImageFilter<TImage>
-::SetNthInput(unsigned int idx, const ImageType * image, const std::string& varName)
+::SetNthInput(DataObjectPointerArraySizeType idx, const ImageType * image, const std::string& varName)
 {
   this->SetInput(idx, const_cast<TImage *>( image ));
   m_VVarName.resize(this->GetNumberOfInputs()+4);
@@ -106,14 +106,14 @@ void BandMathImageFilter<TImage>
 
 template <class TImage>
 void BandMathImageFilter<TImage>
-::SetNthInputName(unsigned int idx, const std::string& varName)
+::SetNthInputName(DataObjectPointerArraySizeType idx, const std::string& varName)
 {
   m_VVarName[idx] = varName;
 }
 
 template <typename TImage>
 TImage * BandMathImageFilter<TImage>
-::GetNthInput(unsigned int idx)
+::GetNthInput(DataObjectPointerArraySizeType idx)
 {
   return const_cast<TImage *>(this->GetInput(idx));
 }
@@ -136,7 +136,7 @@ std::string BandMathImageFilter<TImage>
 
 template< typename TImage >
 std::string BandMathImageFilter<TImage>
-::GetNthInputName(unsigned int idx) const
+::GetNthInputName(DataObjectPointerArraySizeType idx) const
 {
   return m_VVarName.at(idx);
 }

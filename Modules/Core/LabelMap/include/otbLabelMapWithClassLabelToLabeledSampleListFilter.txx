@@ -42,7 +42,7 @@ template <class TInputLabelMap, class TOutputListSample, class TOutputTrainingLi
 typename LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample,TOutputTrainingListSample,TMeasurementFunctor>
 ::DataObjectPointerType
 LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample,TOutputTrainingListSample,TMeasurementFunctor>
-::MakeOutput(unsigned int idx)
+::MakeOutput(DataObjectPointerArraySizeType idx)
 {
   DataObjectPointerType output;
 

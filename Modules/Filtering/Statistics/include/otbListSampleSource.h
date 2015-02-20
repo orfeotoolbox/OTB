@@ -69,7 +69,7 @@ public:
 
 protected:
   /** Standard itk::ProcessObject subclass method. */
-  virtual DataObjectPointer MakeOutput(unsigned int idx);
+  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
 
   ListSampleSource();
   virtual ~ListSampleSource() {}

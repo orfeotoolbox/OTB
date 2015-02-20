@@ -77,7 +77,7 @@ PersistentStatisticsImageFilter<TInputImage>
 template<class TInputImage>
 typename itk::DataObject::Pointer
 PersistentStatisticsImageFilter<TInputImage>
-::MakeOutput(unsigned int output)
+::MakeOutput(DataObjectPointerArraySizeType output)
 {
   switch (output)
     {

@@ -54,7 +54,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 template<class TInputImage, class TPrecision>
 itk::DataObject::Pointer
 PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
-::MakeOutput(unsigned int output)
+::MakeOutput(DataObjectPointerArraySizeType output)
 {
   switch (output)
     {

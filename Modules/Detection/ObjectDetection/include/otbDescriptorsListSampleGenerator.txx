@@ -130,7 +130,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 itk::DataObject::Pointer
 PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
-::MakeOutput(unsigned int idx)
+::MakeOutput(DataObjectPointerArraySizeType idx)
 {
   itk::DataObject::Pointer output;
   switch (idx)

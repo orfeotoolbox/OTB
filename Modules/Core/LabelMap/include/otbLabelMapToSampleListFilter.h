@@ -97,7 +97,7 @@ protected:
   virtual void GenerateData();
 
   /** Make Output */
-  virtual DataObjectPointerType MakeOutput(unsigned int idx);
+  virtual DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx);
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

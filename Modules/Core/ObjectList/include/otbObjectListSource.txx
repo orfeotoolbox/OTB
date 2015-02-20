@@ -47,7 +47,7 @@ ObjectListSource<TOutputList>
 template<class TOutputList>
 typename ObjectListSource<TOutputList>::DataObjectPointer
 ObjectListSource<TOutputList>
-::MakeOutput(unsigned int)
+::MakeOutput(DataObjectPointerArraySizeType)
 {
   return static_cast<itk::DataObject*>(TOutputList::New().GetPointer());
 }
@@ -75,7 +75,7 @@ ObjectListSource<TOutputList>
 template <class TOutputList>
 typename ObjectListSource<TOutputList>::OutputListType *
 ObjectListSource<TOutputList>
-::GetOutput(unsigned int idx)
+::GetOutput(DataObjectPointerArraySizeType idx)
 {
   return static_cast<TOutputList*>
            (this->Superclass::GetOutput(idx));
@@ -98,7 +98,7 @@ ObjectListSource<TOutputList>
 template<class TOutputList>
 void
 ObjectListSource<TOutputList>
-::GraftNthOutput(unsigned int idx, itk::DataObject *graft)
+::GraftNthOutput(DataObjectPointerArraySizeType idx, itk::DataObject *graft)
 {
   if (idx >= this->GetNumberOfOutputs())
     {

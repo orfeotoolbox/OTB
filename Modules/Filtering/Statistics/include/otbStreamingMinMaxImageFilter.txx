@@ -55,7 +55,7 @@ PersistentMinMaxImageFilter<TInputImage>
 template<class TInputImage>
 typename itk::DataObject::Pointer
 PersistentMinMaxImageFilter<TInputImage>
-::MakeOutput(unsigned int output)
+::MakeOutput(DataObjectPointerArraySizeType output)
 {
   itk::DataObject::Pointer ret;
   switch (output)

@@ -35,7 +35,7 @@ MinMaxAttributesLabelMapFilter<TInputImage>
 template<class TInputImage>
 typename MinMaxAttributesLabelMapFilter<TInputImage>::DataObjectPointerType
 MinMaxAttributesLabelMapFilter<TInputImage>
-::MakeOutput(unsigned int i)
+::MakeOutput(DataObjectPointerArraySizeType i)
 {
   DataObjectPointerType ret;
   switch (i)

@@ -130,7 +130,7 @@ ListSampleGenerator<TImage, TVectorData>
 template <class TImage, class TVectorData>
 typename ListSampleGenerator<TImage, TVectorData>::DataObjectPointer
 ListSampleGenerator<TImage, TVectorData>
-::MakeOutput(unsigned int idx)
+::MakeOutput(DataObjectPointerArraySizeType idx)
 {
   DataObjectPointer output;
   switch (idx)

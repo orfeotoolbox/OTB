@@ -59,7 +59,7 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 template<class TInputImage, class TInputImage2>
 itk::DataObject::Pointer
 PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
-::MakeOutput(unsigned int output)
+::MakeOutput(DataObjectPointerArraySizeType output)
 {
   switch (output)
     {

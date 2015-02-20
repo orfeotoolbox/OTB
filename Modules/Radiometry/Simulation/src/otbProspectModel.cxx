@@ -72,7 +72,7 @@ ProspectModel
 /** Make outputs */
 ProspectModel::DataObjectPointer
 ProspectModel
-::MakeOutput(unsigned int)
+::MakeOutput(DataObjectPointerArraySizeType)
 {
    return static_cast<itk::DataObject *>(SpectralResponseType::New().GetPointer());
 }

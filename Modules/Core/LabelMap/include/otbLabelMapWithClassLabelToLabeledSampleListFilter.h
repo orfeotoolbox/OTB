@@ -103,7 +103,7 @@ protected:
   virtual void GenerateData();
 
   /** Make Output */
-  DataObjectPointerType MakeOutput(unsigned int idx);
+  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx);
 
 private:
   LabelMapWithClassLabelToLabeledSampleListFilter(const Self&); //purposely not implemented

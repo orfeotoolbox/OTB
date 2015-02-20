@@ -102,7 +102,7 @@ PersistentCompareImageFilter<TInputImage>
 template<class TInputImage>
 typename itk::DataObject::Pointer
 PersistentCompareImageFilter<TInputImage>
-::MakeOutput(unsigned int output)
+::MakeOutput(DataObjectPointerArraySizeType output)
 {
   switch (output)
     {

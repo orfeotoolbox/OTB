@@ -70,7 +70,7 @@ LabelMapSource<TOutputLabelMap>
 template <class TOutputLabelMap>
 typename LabelMapSource<TOutputLabelMap>::OutputLabelMapType *
 LabelMapSource<TOutputLabelMap>
-::GetOutput(unsigned int idx)
+::GetOutput(DataObjectPointerArraySizeType idx)
 {
   return static_cast<OutputLabelMapType*>
            (this->Superclass::GetOutput(idx));

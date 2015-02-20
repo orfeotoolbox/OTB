@@ -75,7 +75,7 @@ class ITK_EXPORT ProspectModel : public SimulationStep1Base
       /** PrintSelf method */
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-      DataObjectPointer MakeOutput(unsigned int);
+      DataObjectPointer MakeOutput(DataObjectPointerArraySizeType);
 
       /** Compute Transmission of isotropic radiation across an interface between two dielectrics*/
       double Tav(const int theta, double ref);

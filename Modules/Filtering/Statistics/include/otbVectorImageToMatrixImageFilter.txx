@@ -45,7 +45,7 @@ PersistentVectorImageToMatrixFilter<TInputImage>
 template<class TInputImage>
 itk::DataObject::Pointer
 PersistentVectorImageToMatrixFilter<TInputImage>
-::MakeOutput(unsigned int output)
+::MakeOutput(DataObjectPointerArraySizeType output)
 {
   switch (output)
     {

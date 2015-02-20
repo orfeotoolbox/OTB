@@ -74,7 +74,7 @@ GISTableSource<TOutputGISTable>
 template <class TOutputGISTable>
 typename GISTableSource<TOutputGISTable>::OutputGISTableType *
 GISTableSource<TOutputGISTable>
-::GetOutput(unsigned int idx)
+::GetOutput(DataObjectPointerArraySizeType idx)
 {
   return static_cast<OutputGISTableType*>
            (this->Superclass::GetOutput(idx));

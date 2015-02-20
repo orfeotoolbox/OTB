@@ -56,7 +56,7 @@ public:
 
   /** Overriding GetOutput() method */
   virtual OutputLabelMapType* GetOutput(void);
-  virtual OutputLabelMapType* GetOutput(unsigned int idx);
+  virtual OutputLabelMapType* GetOutput(DataObjectPointerArraySizeType idx);
 
 protected:
   LabelMapSource();

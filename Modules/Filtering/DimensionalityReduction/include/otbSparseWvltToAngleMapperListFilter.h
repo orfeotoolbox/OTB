@@ -105,7 +105,8 @@ protected:
   virtual ~SparseWvltToAngleMapperListFilter() { }
 
   /** Standard itk::ProcessObject subclass method. */
-  virtual DataObjectPointer MakeOutput(unsigned int idx);
+  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** This method causes the filter to generate its output. */

@@ -85,7 +85,7 @@ template<class TListSample, class THistogramMeasurement, class TFrequencyContain
 typename ListSampleToVariableDimensionHistogramGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>
 ::DataObjectPointer
 ListSampleToVariableDimensionHistogramGenerator<TListSample, THistogramMeasurement,TFrequencyContainer>
-::MakeOutput(unsigned int itkNotUsed(idx))
+::MakeOutput(DataObjectPointerArraySizeType itkNotUsed(idx))
 {
   DataObjectPointer output;
   output = static_cast<itk::DataObject*>(HistogramType::New().GetPointer());

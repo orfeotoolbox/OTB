@@ -97,7 +97,7 @@ SailModel
 /** Make output */
 SailModel::DataObjectPointer
 SailModel
-::MakeOutput(unsigned int)
+::MakeOutput(DataObjectPointerArraySizeType)
 {
    return static_cast<itk::DataObject*>(SpectralResponseType::New().GetPointer());
 }
