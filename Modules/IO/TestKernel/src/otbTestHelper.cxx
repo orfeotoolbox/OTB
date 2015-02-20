@@ -25,6 +25,7 @@
 #include <fstream>
 #include <cctype>
 #include <algorithm>
+#include <string>
 
 #include "itksys/SystemTools.hxx"
 #include "itksys/Directory.hxx"
@@ -1554,7 +1555,7 @@ void TestHelper::AddWhiteSpace(const std::string& strIn, std::string &strOut) co
     {
     size_t found;
     found=strLine.find(keys[it]);
-    while (found!=string::npos)
+    while (found!=std::string::npos)
       {
         strLine.replace(found, 1, keysOut[it]);
         found=strLine.find(keys[it], found + keysOut[it].size());
