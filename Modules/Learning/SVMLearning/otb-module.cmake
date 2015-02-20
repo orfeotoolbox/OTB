@@ -1,4 +1,4 @@
-set(DOCUMENTATION "OTB implementation of the Support Vector Machine.")
+set(DOCUMENTATION "Deprecated classes for SVM learning. See module 'Supervised' for a replacement")
 
 otb_module(OTBSVMLearning 
   DEPENDS
