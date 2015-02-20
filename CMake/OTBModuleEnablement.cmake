@@ -167,6 +167,13 @@ set(OTB_MODULES_DISABLED "")
 foreach(otb-module ${OTB_MODULES_ALL})
   if(${otb-module}_ENABLED)
     list(APPEND OTB_MODULES_ENABLED ${otb-module})
+
+    # We will sort modules according to their dependency graph,
+    # to enable them in order. To solve the modules dependency graph,
+    # we join both DEPENDS and OPTIONAL_DEPENDS
+    set(OTB_MODULE_${otb-module}_DEPENDS_FOR_SORT "")
+    list(APPEND OTB_MODULE_${otb-module}_DEPENDS_FOR_SORT ${OTB_MODULE_${otb-module}_DEPENDS})
+    list(APPEND OTB_MODULE_${otb-module}_DEPENDS_FOR_SORT ${OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS})
   else()
     list(APPEND OTB_MODULES_DISABLED ${otb-module})
   endif()
@@ -176,7 +183,7 @@ list(SORT OTB_MODULES_DISABLED) # Deterministic order.
 
 # Order list to satisfy dependencies.
 include(CMake/TopologicalSort.cmake)
-topological_sort(OTB_MODULES_ENABLED OTB_MODULE_ _DEPENDS)
+topological_sort(OTB_MODULES_ENABLED OTB_MODULE_ _DEPENDS_FOR_SORT)
 
 # TODO : shall we set up CPack ?
 # #
