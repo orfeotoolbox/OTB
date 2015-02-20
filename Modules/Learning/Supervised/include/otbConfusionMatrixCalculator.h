@@ -49,7 +49,7 @@ namespace otb
  *
  *  Moreover overall accuracy and \f[ \kappa \f] index are computed.
  *
- * \ingroup OTBLearningBase
+ * \ingroup OTBSupervised
  */
 template <class TRefListLabel, class TProdListLabel>
 class ITK_EXPORT ConfusionMatrixCalculator :

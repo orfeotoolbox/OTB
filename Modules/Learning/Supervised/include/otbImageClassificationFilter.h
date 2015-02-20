@@ -33,7 +33,7 @@ namespace otb
  * \ingroup Streamed
  * \ingroup Threaded
  *
- * \ingroup OTBLearningBase
+ * \ingroup OTBSupervised
  */
 template <class TInputImage, class TOutputImage, class TMaskImage = TOutputImage>
 class ITK_EXPORT ImageClassificationFilter

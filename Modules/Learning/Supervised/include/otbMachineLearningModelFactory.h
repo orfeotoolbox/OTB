@@ -26,7 +26,7 @@ namespace otb
 /** \class MachineLearningModelFactory
  * \brief Creation of object instance using object factory.
  *
- * \ingroup OTBLearningBase
+ * \ingroup OTBSupervised
  */
 template <class TInputValue, class TOutputValue>
 class ITK_EXPORT MachineLearningModelFactory : public MachineLearningModelFactoryBase

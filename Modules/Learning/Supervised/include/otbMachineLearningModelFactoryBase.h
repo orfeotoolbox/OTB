@@ -29,7 +29,7 @@ namespace otb
  * part of a template class (ld error).
  *
  *
- * \ingroup OTBLearningBase
+ * \ingroup OTBSupervised
  */
 class ITK_EXPORT MachineLearningModelFactoryBase : public itk::Object
 {
