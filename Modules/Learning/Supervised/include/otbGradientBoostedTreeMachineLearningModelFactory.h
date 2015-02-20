@@ -18,6 +18,8 @@
 #ifndef __otbGradientBoostedTreeMachineLearningModelFactory_h
 #define __otbGradientBoostedTreeMachineLearningModelFactory_h
 
+#include "otbRequiresOpenCVCheck.h"
+
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
 

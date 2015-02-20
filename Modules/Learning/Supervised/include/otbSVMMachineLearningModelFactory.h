@@ -18,6 +18,8 @@
 #ifndef __otbSVMMachineLearningModelFactory_h
 #define __otbSVMMachineLearningModelFactory_h
 
+#include "otbRequiresOpenCVCheck.h"
+
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
 

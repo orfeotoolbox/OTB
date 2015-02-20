@@ -18,6 +18,8 @@
 #ifndef __otbNormalBayesMachineLearningModel_h
 #define __otbNormalBayesMachineLearningModel_h
 
+#include "otbRequiresOpenCVCheck.h"
+
 #include "itkLightObject.h"
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"

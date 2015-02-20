@@ -18,6 +18,8 @@
 #ifndef __otbGradientBoostedTreeMachineLearningModel_h
 #define __otbGradientBoostedTreeMachineLearningModel_h
 
+#include "otbRequiresOpenCVCheck.h"
+
 #include "itkLightObject.h"
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"

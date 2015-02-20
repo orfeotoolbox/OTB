@@ -18,6 +18,8 @@
 #ifndef __otbRandomForestsMachineLearningModel_h
 #define __otbRandomForestsMachineLearningModel_h
 
+#include "otbRequiresOpenCVCheck.h"
+
 #include "itkLightObject.h"
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"

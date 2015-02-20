@@ -18,6 +18,8 @@
 #ifndef __otbNeuralNetworkMachineLearningModelFactory_h
 #define __otbNeuralNetworkMachineLearningModelFactory_h
 
+#include "otbRequiresOpenCVCheck.h"
+
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
 

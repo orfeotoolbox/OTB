@@ -18,6 +18,8 @@
 #ifndef __otbNeuralNetworkMachineLearningModel_h
 #define __otbNeuralNetworkMachineLearningModel_h
 
+#include "otbRequiresOpenCVCheck.h"
+
 #include <opencv2/core/core_c.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/ml/ml.hpp>

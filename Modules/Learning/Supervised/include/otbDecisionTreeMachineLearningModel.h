@@ -18,6 +18,8 @@
 #ifndef __otbDecisionTreeMachineLearningModel_h
 #define __otbDecisionTreeMachineLearningModel_h
 
+#include "otbRequiresOpenCVCheck.h"
+
 #include "itkLightObject.h"
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"

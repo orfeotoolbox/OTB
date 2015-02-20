@@ -18,6 +18,8 @@
 #ifndef __otbBoostMachineLearningModel_h
 #define __otbBoostMachineLearningModel_h
 
+#include "otbRequiresOpenCVCheck.h"
+
 #include "itkLightObject.h"
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"

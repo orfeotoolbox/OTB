@@ -18,6 +18,8 @@
 #ifndef __otbKNearestNeighborsMachineLearningModel_h
 #define __otbKNearestNeighborsMachineLearningModel_h
 
+#include "otbRequiresOpenCVCheck.h"
+
 #include "itkLightObject.h"
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
