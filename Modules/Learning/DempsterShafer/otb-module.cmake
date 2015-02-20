@@ -9,7 +9,7 @@ otb_module(OTBDempsterShafer
     OTBVectorDataBase
     OTBImageBase
     OTBVectorDataManipulation
-    OTBLearningBase
+    OTBSupervised
     OTBCommon
     OTBMathParser
     OTBFuzzy
