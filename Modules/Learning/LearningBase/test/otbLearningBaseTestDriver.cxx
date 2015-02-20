@@ -2,39 +2,10 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbDecisionTreeBuild);
-  REGISTER_TEST(otbConfusionMatrixCalculatorNew);
-  REGISTER_TEST(otbConfusionMatrixCalculatorSetListSamples);
-  REGISTER_TEST(otbConfusionMatrixCalculatorWrongSize);
-  REGISTER_TEST(otbConfusionMatrixCalculatorCompute);
-  REGISTER_TEST(otbConfusionMatrixCalculatorComputeWithBaseline);
-  REGISTER_TEST(otbConfusionMatrixMeasurementsNew);
-  REGISTER_TEST(otbConfusionMatrixMeasurementsTest);
-  REGISTER_TEST(otbConfusionMatrixConcatenateTest);
   REGISTER_TEST(otbGaussianModelComponentNew);
   REGISTER_TEST(otbKMeansImageClassificationFilter);
   REGISTER_TEST(otbDecisionTreeWithRealValues);
   REGISTER_TEST(otbSEMClassifierNew);
-  REGISTER_TEST(otbLibSVMMachineLearningModelNew);
-  REGISTER_TEST(otbLibSVMMachineLearningModel);
-  REGISTER_TEST(otbSVMMachineLearningModelNew);
-  REGISTER_TEST(otbSVMMachineLearningModel);
-  REGISTER_TEST(otbSVMMachineLearningRegressionModel);
-  REGISTER_TEST(otbKNearestNeighborsMachineLearningModelNew);
-  REGISTER_TEST(otbKNearestNeighborsMachineLearningModel);
-  REGISTER_TEST(otbRandomForestsMachineLearningModelNew);
-  REGISTER_TEST(otbRandomForestsMachineLearningModel);
-  REGISTER_TEST(otbBoostMachineLearningModelNew);
-  REGISTER_TEST(otbBoostMachineLearningModel);
-  REGISTER_TEST(otbANNMachineLearningModelNew);
-  REGISTER_TEST(otbANNMachineLearningModel);
-  REGISTER_TEST(otbNormalBayesMachineLearningModelNew);
-  REGISTER_TEST(otbNormalBayesMachineLearningModel);
-  REGISTER_TEST(otbDecisionTreeMachineLearningModelNew);
-  REGISTER_TEST(otbDecisionTreeMachineLearningModel);
-  REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelNew);
-  REGISTER_TEST(otbGradientBoostedTreeMachineLearningModel);
-  REGISTER_TEST(otbImageClassificationFilterNew);
-  REGISTER_TEST(otbImageClassificationFilter);
   REGISTER_TEST(otbDecisionTreeNew);
   REGISTER_TEST(otbKMeansImageClassificationFilterNew);
 }

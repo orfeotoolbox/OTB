@@ -11,6 +11,7 @@
 * Copyright statements
 * Example README
 * Check set_tests_property calls for resource lock (curl, ...)
+* 0000209-SVMValidationLinearlySeparableProbEstimation not compiled and tested
 * skipped tests :
 apTvDocAppli_${app}
 Warning : test name contains a variable : owTvQtWidgetShow_${app}

@@ -12,9 +12,7 @@ otb_module(OTBSVMLearning
     OTBMoments
     OTBTestKernel
     OTBIOXML
-    OTBOpenCVAdapters
-    OTBVectorDataIO
-  
+    OTBVectorDataIO  
   DESCRIPTION
     "${DOCUMENTATION}"
   )

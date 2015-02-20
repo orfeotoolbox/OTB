@@ -3,12 +3,9 @@ mainly based on OpenCV.")
 
 otb_module(OTBLearningBase 
   DEPENDS
-    OTBOpenCVAdapters
     OTBCommon
-    OTBSVMLearning
   TEST_DEPENDS
     OTBTestKernel
-  
   DESCRIPTION
     "${DOCUMENTATION}"
   )
