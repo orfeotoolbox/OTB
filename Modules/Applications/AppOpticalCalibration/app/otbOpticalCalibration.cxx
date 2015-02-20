@@ -15,6 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
   =========================================================================*/
+#include <string>
+
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
@@ -116,7 +118,7 @@ public:
 
 private:
 
-  string m_inImageName;
+  std::string m_inImageName;
   bool m_currentEnabledStateOfFluxParam;
 
   void DoInit()
@@ -361,7 +363,7 @@ private:
     if (HasValue("in"))
     {
       bool newInputImage = false;
-      string tempName = GetParameterString("in");
+      std::string tempName = GetParameterString("in");
 
       // Check if the input image change
       if (tempName != m_inImageName)
@@ -379,7 +381,7 @@ private:
         itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
         OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
-        string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
+        std::string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
         if ( (IMIName != IMIOptDfltName))
         {
            ossOutput << "Sensor detected: " << lImageMetadataInterface->GetSensorID() << std::endl;
@@ -604,12 +606,12 @@ private:
     if (IsParameterEnabled("acqui.gainbias") && HasValue("acqui.gainbias"))
     {
       // Try to retrieve information from file provided by user
-      string filename(GetParameterString("acqui.gainbias"));
+      std::string filename(GetParameterString("acqui.gainbias"));
       
       std::ifstream file(filename.c_str(), std::ios::in);
       if(file)
       {
-        string line;
+        std::string line;
         unsigned int numLine = 0;
         while (getline(file, line))
         {
@@ -623,7 +625,7 @@ private:
             numLine++;
             std::vector<double> values;
             std::istringstream  iss(line);
-            string value; double dvalue;
+            std::string value; double dvalue;
             while ( getline( iss, value, ':' ) )
             {
               std::istringstream  iss2(value);
@@ -676,7 +678,7 @@ private:
     if (IsParameterEnabled("acqui.solarilluminations") && HasValue("acqui.solarilluminations"))
     {
       // Try to retrieve information from file provided by user
-      string filename(GetParameterString("acqui.solarilluminations"));
+      std::string filename(GetParameterString("acqui.solarilluminations"));
       
       std::ifstream file(filename.c_str(), std::ios::in);
       if(file)
@@ -693,7 +695,7 @@ private:
           {
             std::vector<double> values;
             std::istringstream  iss(line);
-            string value; double dvalue;
+            std::string value; double dvalue;
             while ( getline( iss, value, ':' ) )
             {
               std::istringstream  iss2(value);
