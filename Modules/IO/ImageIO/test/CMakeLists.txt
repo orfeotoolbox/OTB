@@ -9,7 +9,6 @@ otbShortRGBImageIOTest.cxx
 otbPipelineMetadataHandlingWithUFFilterTest.cxx
 otbImageMetadataFileWriterTest.cxx
 otbImageFileWriterTestWithoutInput.cxx
-otbImageFileReaderTestSensorPixelValue.cxx
 otbVectorImageStreamingFileWriterTestWithoutInput.cxx
 otbReadingComplexDataIntoComplexImageTest.cxx
 otbStreamingImageFileWriterTest.cxx
@@ -135,30 +134,6 @@ otb_add_test(NAME ioTvImageMetadataWriterTest_TIF COMMAND otbImageIOTestDriver
   otbImageMetadataFileWriterTest
   ${INPUTDATA}/spot5SubWithGcps.tif
   ${TEMP}/ioTvImageMetadataWriterTIF.tif
-  )
-
-otb_add_test(NAME ioTvImageFileReaderTestSensorPixelValueIKONOS COMMAND otbImageIOTestDriver
-  otbImageFileReaderTestSensorPixelValue
-  LARGEINPUT{IKONOS/PARIS/po_79039_pan_0000000.tif}
-  ${BASELINE_FILES}/ioTvSensorsPixelValue.ini
-  OPTIC
-  IKONOS
-  PAN
-  1
-  1024
-  1024
-  )
-
-otb_add_test(NAME ioTvImageFileReaderTestSensorPixelValueQB COMMAND otbImageIOTestDriver
-  otbImageFileReaderTestSensorPixelValue
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  ${BASELINE_FILES}/ioTvSensorsPixelValue.ini
-  OPTIC
-  QB
-  PAN
-  1
-  1024
-  1024
   )
 
 otb_add_test(NAME ioTvImageFileReaderRGB_BSQ2PNG COMMAND otbImageIOTestDriver
