@@ -165,11 +165,11 @@ public:
 
   inline bool IsEmpty() const;
 
-  inline void SetCurrent( SizeType );
+  inline void SetCurrent( SizeType, bool =false );
   void SetCurrent( const KeyType & );
   void SetCurrent( const AbstractLayerModel * );
 
-  inline void SetReference( SizeType );
+  inline void SetReference( SizeType, bool =false );
   void SetReference( const KeyType & );
   void SetReference( const AbstractLayerModel * );
 
@@ -200,6 +200,7 @@ signals:
   void CurrentAboutToBeChanged( size_t );
   void CurrentChanged( size_t );
 
+  void LayerAboutToBeDeleted( size_t index );
   void LayerAdded( size_t index );
   void LayerDeleted( size_t index );
 
@@ -323,6 +324,9 @@ AbstractLayerModel *
 StackedLayerModel
 ::At( SizeType i )
 {
+  if( i>=GetCount() )
+    return NULL;
+
   assert( !GetKey( i ).empty() );
 
   LayerModelMap::const_iterator it(
@@ -658,11 +662,11 @@ StackedLayerModel
 inline
 void
 StackedLayerModel
-::SetCurrent( SizeType index )
+::SetCurrent( SizeType index, bool force )
 {
   // qDebug() << this << "::SetCurrent(" << index << ")";
 
-  if( index==m_Current )
+  if( index==m_Current && !force )
     return;
 
   KeyType key( GetKey( index  ) );
@@ -685,11 +689,11 @@ StackedLayerModel
 inline
 void
 StackedLayerModel
-::SetReference( SizeType index )
+::SetReference( SizeType index, bool force )
 {
   // qDebug() << this << "::SetReference(" << index << ")";
 
-  if( index==m_Reference )
+  if( index==m_Reference && !force )
     return;
 
   emit ReferenceAboutToBeChanged( index );

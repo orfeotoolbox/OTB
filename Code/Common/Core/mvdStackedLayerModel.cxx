@@ -98,6 +98,18 @@ std::string
 StackedLayerModel
 ::Add( AbstractLayerModel * model )
 {
+  assert( model!=NULL );
+
+  if( model==NULL )
+    {
+    throw
+      std::runtime_error(
+        ToStdString(
+          tr( "Cannot insert NULL AbstractLayerModel." )
+        )
+      );
+    }
+
   std::string key( StackedLayerModel::GenerateKey( model ) );
   assert( !key.empty() );
 
@@ -221,35 +233,27 @@ StackedLayerModel
 
   assert( it!=m_LayerModels.end() );
 
-  emit ContentAboutToBeChanged();
-
   //
-  // Emit about to change current item.
+  // Check if signals have to be emitted.
   bool emitCurrentChanged = m_Current<GetCount() && index<=m_Current;
-
-  if( emitCurrentChanged )
-    {
-    KeyType key( GetKey( m_Current + 1 ) );
-
-    emit CurrentAboutToBeChanged(
-      key.empty()
-      ? StackedLayerModel::NIL_INDEX
-      : m_Current + 1
-    );
-
-    emit AboutToChangeSelectedLayerModel( key );
-    }
-
-  //
-  // Emit about to change reference item.
   bool emitReferenceChanged = m_Reference<GetCount() && index<=m_Reference;
 
-  if( emitReferenceChanged )
-    emit ReferenceAboutToBeChanged(
-      GetKey( m_Reference + 1 ).empty()
-      ? StackedLayerModel::NIL_INDEX
-      : m_Reference + 1
-    );
+  //
+  // Remember new current index.
+  SizeType current =
+    index>=m_Current
+    ? m_Current
+    : ( m_Current>0
+        ? m_Current - 1
+        : StackedLayerModel::NIL_INDEX );
+
+  //
+  // Emit signals.
+  if( emitCurrentChanged )
+    emit AboutToChangeSelectedLayerModel( GetKey( current ) );
+
+  emit ContentAboutToBeChanged();
+  emit LayerAboutToBeDeleted( index );
 
   //
   // Remove item.
@@ -267,25 +271,26 @@ StackedLayerModel
   emit ContentChanged();
 
   //
-  // Emit selected item changed.
+  // Emit about to change current item.
   if( emitCurrentChanged )
     {
-    if( m_Current>=GetCount() )
-      m_Current = StackedLayerModel::NIL_INDEX;
+    emit CurrentAboutToBeChanged( current );
 
-    emit CurrentChanged( m_Current );
-    emit SelectedLayerModelChanged( GetKey( m_Current ) );
+    m_Current = current;
+
+    emit CurrentChanged( current );
+    emit SelectedLayerModelChanged( GetKey( current ) );
     }
 
   //
-  // Emit selected item changed.
+  // Emit about to change reference item.
   if( emitReferenceChanged )
-    {
-    if( m_Reference>=GetCount() )
-      m_Reference = StackedLayerModel::NIL_INDEX;
-
-    emit ReferenceChanged( m_Reference );
-    }
+    SetReference(
+      index>=m_Reference
+      ? m_Reference
+      : m_Reference - 1,
+      true
+    );
 }
 
 /*******************************************************************************/

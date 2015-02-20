@@ -200,7 +200,8 @@ AbstractModelController
     }
   else if( object==m_Model )
     {
-    // qDebug() << "Disconnect (model) on destroy.";
+#if 0
+    qDebug() << "Disconnect (model" << object << ") on destroy.";
 
     // When model is destroyed, safely disconnect-it from controller
     // if no previous call to SetModel( NULL ) has been made from
@@ -209,6 +210,7 @@ AbstractModelController
     // N.B.: This is quite equivalent to SetModel( NULL ) but is
     // quite bit faster.
     private_Disconnect( m_Model );
+#endif
     }
 }
 

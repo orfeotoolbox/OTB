@@ -380,6 +380,13 @@ LayerStackItemModel
 
   assert( row>=0 && column>=0 );
 
+#if 1
+  AbstractLayerModel * layer = m_StackedLayerModel->At( row );
+
+  if( layer==NULL || parent.isValid() )
+    return QModelIndex();
+#endif
+
   return
     createIndex(
       row,
@@ -526,7 +533,11 @@ void
 LayerStackItemModel
 ::OnLayerDeleted( size_t index )
 {
+  bool signalsBlocked = blockSignals( true );
+  {
   removeRow( index );
+  }
+  blockSignals( signalsBlocked );
 }
 
 /*****************************************************************************/
