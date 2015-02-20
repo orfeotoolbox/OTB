@@ -20,7 +20,7 @@
 #define __otbForwardFourierMellinTransformImageFilter_h
 
 #include "otbImage.h"
-#include "itkVnlForwardFFTImageFilter.h"
+#include "itkForwardFFTImageFilter.h"
 #include "otbLogPolarTransform.h"
 #include "itkResampleImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -35,7 +35,7 @@ namespace otb
  * This class implements a composite filter. It combines two filters :
  *   - otb::LogPolarResampleImageFilter : converting the input image in a
  log-polar system coordinate
- *   - itk::VnlFFTRealToComplexConjugateImageFilter : applying the Forward
+ *   - itk::ForwardFFTImageFilter : applying the Forward
  Fourier transform of the log-polar image.
  *
  * \note the Fourier transform image is coded from 0.0 to 1.0
@@ -59,7 +59,7 @@ public:
   typedef Image<TPixel, Dimension> InputImageType;
   /*   typedef otb::Image< std::complex< TPixel > , Dimension >           OutputImageType; */
 
-  typedef typename itk::VnlForwardFFTImageFilter<InputImageType>                   FourierImageFilterType;
+  typedef typename itk::ForwardFFTImageFilter<InputImageType>                      FourierImageFilterType;
   typedef typename FourierImageFilterType::OutputImageType                         OutputImageType;
 
   /** Standard class typedefs. */
