@@ -17,7 +17,6 @@ otbSVMModelGenericKernelsTest.cxx
 otbSVMImageModelEstimatorTrainOneClass.cxx
 otbSVMCrossValidationCostFunctionNew.cxx
 otbSVMModelLoadSave.cxx
-otbMachineLearningModelCanRead.cxx
 otbSVMClassifierPointSet.cxx
 otbSVMImageClassificationWithRuleFilterNew.cxx
 otbSVMImageModelEstimatorTrain.cxx
@@ -206,60 +205,6 @@ otb_add_test(NAME leTvSVMModelLoadSave COMMAND otbSVMLearningTestDriver
   otbSVMModelLoadSave
   ${INPUTDATA}/svm_model
   ${TEMP}/svmmodel_test)
-
-otb_add_test(NAME leTuDecisionTreeMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
-  otbDecisionTreeMachineLearningModelCanRead
-  ${TEMP}/decisiontree_model.txt
-  )
-set_property(TEST leTuDecisionTreeMachineLearningModelCanRead PROPERTY DEPENDS leTvDecisionTreeMachineLearningModel)
-
-otb_add_test(NAME leTuGradientBoostedTreeMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
-  otbGradientBoostedTreeMachineLearningModelCanRead
-  ${TEMP}/gbt_model.txt
-  )
-set_property(TEST leTuGradientBoostedTreeMachineLearningModelCanRead PROPERTY DEPENDS leTvGradientBoostedTreeMachineLearningModel)
-
-otb_add_test(NAME leTuNormalBayesMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
-  otbNormalBayesMachineLearningModelCanRead
-  ${TEMP}/normalbayes_model.txt
-  )
-set_property(TEST leTuNormalBayesMachineLearningModelCanRead PROPERTY DEPENDS leTvNormalBayesMachineLearningModel)
-
-otb_add_test(NAME leTuANNMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
-  otbNeuralNetworkMachineLearningModelCanRead
-  ${TEMP}/ann_model.txt
-  )
-set_property(TEST leTuANNMachineLearningModelCanRead PROPERTY DEPENDS leTvANNMachineLearningModel)
-
-otb_add_test(NAME leTuSVMMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
-  otbSVMMachineLearningModelCanRead
-  ${TEMP}/svm_model.txt
-  )
-set_property(TEST leTuSVMMachineLearningModelCanRead PROPERTY DEPENDS leTvSVMMachineLearningModel)
-
-otb_add_test(NAME leTuLibSVMMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
-  otbLibSVMMachineLearningModelCanRead
-  ${TEMP}/libsvm_model.txt
-  )
-set_property(TEST leTuLibSVMMachineLearningModelCanRead PROPERTY DEPENDS leTvLibSVMMachineLearningModel)
-
-otb_add_test(NAME leTuBoostMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
-  otbBoostMachineLearningModelCanRead
-  ${TEMP}/boost_model.txt
-  )
-set_property(TEST leTuBoostMachineLearningModelCanRead PROPERTY DEPENDS leTvBoostMachineLearningModel)
-
-otb_add_test(NAME leTuRandomForestsMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
-  otbRandomForestsMachineLearningModelCanRead
-  ${TEMP}/rf_model.txt
-  )
-set_property(TEST leTuRandomForestsMachineLearningModelCanRead PROPERTY DEPENDS leTvRandomForestsMachineLearningModel)
-
-otb_add_test(NAME leTuKNNMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
-  otbKNNMachineLearningModelCanRead
-  ${TEMP}/knn_model.txt
-  )
-set_property(TEST leTuKNNMachineLearningModelCanRead PROPERTY DEPENDS leTvKNearestNeighborsMachineLearningModel)
 
 otb_add_test(NAME leTvSVMClassifierPointSet COMMAND otbSVMLearningTestDriver
   otbSVMClassifierPointSet
