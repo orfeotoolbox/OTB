@@ -89,6 +89,7 @@ public:
   typedef typename ImageType::SpacingType            SpacingType;
   typedef ParserX                                     ParserType;
   typedef typename ParserType::ValueType             ValueType;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Typedef for statistic computing. */
   typedef StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;

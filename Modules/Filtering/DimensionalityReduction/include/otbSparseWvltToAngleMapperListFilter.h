@@ -89,6 +89,7 @@ public:
    * a ProcessObject's pipeline */
   typedef itk::DataObject::Pointer                             DataObjectPointer;
   typedef itk::DataObjectDecorator< OutputSampleListType >     OutputSampleListObjectType;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Returns the output sample list */
   OutputSampleListType * GetOutputSampleList();

@@ -55,6 +55,7 @@ public:
   itkTypeMacro(PointSetSource, itk::ProcessObject);
 
   /** Some convenient typedefs. */
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
   typedef itk::DataObject::Pointer                        DataObjectPointer;
   typedef TOutputPointSet                                 OutputPointSetType;
   typedef typename OutputPointSetType::Pointer            OutputPointSetPointer;
@@ -105,7 +106,7 @@ public:
    * filter's pipeline mechanism must be consistent with what the
    * mini-pipeline will do). */
   virtual void GraftOutput(itk::DataObject *output);
-  virtual void GraftNthOutput(unsigned int idx, itk::DataObject *output);
+  virtual void GraftNthOutput(DataObjectPointerArraySizeType idx, itk::DataObject *output);
 
   /** Make a DataObject of the correct type to used as the specified
    * output.  Every ProcessObject subclass must be able to create a

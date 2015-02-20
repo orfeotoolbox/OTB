@@ -71,6 +71,7 @@ public:
   typedef typename TInputImage::SizeType   SizeType;
   typedef typename TInputImage::IndexType  IndexType;
   typedef typename TInputImage::PixelType  PixelType;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);

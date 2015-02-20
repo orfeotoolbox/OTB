@@ -71,6 +71,7 @@ public:
   typedef itk::ProcessObject                   Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
   //@}
 
   /**\name I/O typedefs */

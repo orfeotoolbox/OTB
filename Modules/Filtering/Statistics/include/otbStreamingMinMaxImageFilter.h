@@ -82,6 +82,7 @@ public:
 
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Type of DataObjects used for scalar outputs */
   typedef itk::SimpleDataObjectDecorator<PixelType> PixelObjectType;

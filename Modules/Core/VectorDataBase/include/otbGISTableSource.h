@@ -52,6 +52,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(GISTableSource, itk::ProcessObject);
 
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
   typedef TOutputGISTable                   OutputGISTableType;
   typedef typename TOutputGISTable::Pointer OutputGISTablePointer;
 

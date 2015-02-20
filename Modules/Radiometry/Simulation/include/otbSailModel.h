@@ -50,6 +50,8 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
       typedef std::vector<double>                   VectorType;
       typedef Superclass::ParametersType   ParametersType;
 
+      typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+
       /** Standard macros */
       itkNewMacro(Self);
       itkTypeMacro(SailModel, ProcessObject);

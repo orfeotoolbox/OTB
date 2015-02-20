@@ -82,6 +82,7 @@ public:
                       TInputImage::ImageDimension);
 
   /** Smart Pointer type to a DataObject. */
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
   typedef typename itk::DataObject::Pointer DataObjectPointer;
 
   /** Input VectorData */

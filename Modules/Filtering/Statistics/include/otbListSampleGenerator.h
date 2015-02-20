@@ -69,6 +69,7 @@ public:
   typedef typename ImageType::RegionType   ImageRegionType;
   typedef TVectorData                      VectorDataType;
   typedef typename VectorDataType::Pointer VectorDataPointerType;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** List to store the pixel values */
   typedef typename ImageType::PixelType           SampleType;

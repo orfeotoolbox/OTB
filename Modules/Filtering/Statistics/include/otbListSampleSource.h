@@ -59,6 +59,7 @@ public:
   typedef typename OutputSampleListType::ConstPointer          OutputSampleListConstPointer;
   typedef typename OutputSampleListType::MeasurementVectorType OutputMeasurementVectorType;
   typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** ListSample is not a DataObject, we need to decorate it to push it down
    * a ProcessObject's pipeline */

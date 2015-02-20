@@ -57,6 +57,7 @@ public:
   itkTypeMacro(ObjectListSource, ProcessObject);
 
   /** Some typedefs. */
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
   typedef TOutputList                   OutputListType;
   typedef typename TOutputList::Pointer OutputListPointer;
 

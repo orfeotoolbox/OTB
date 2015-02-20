@@ -103,6 +103,7 @@ public:
   typedef typename ImageType::PointType           OrigineType;
   typedef typename ImageType::SpacingType         SpacingType;
   typedef Parser                                  ParserType;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Set the nth filter input with or without a specified associated variable name */
   void SetNthInput( DataObjectPointerArraySizeType idx, const ImageType * image);

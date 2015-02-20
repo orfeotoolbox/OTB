@@ -99,6 +99,8 @@ public:
 
   typedef ObjectList<ReaderType>           ReaderListType;
   typedef typename ReaderListType::Pointer ReaderListPointerType;
+  
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Get the file to be read */
   itkGetStringMacro(FileName);

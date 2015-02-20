@@ -42,6 +42,7 @@ public:
   typedef itk::SmartPointer<const Self>                ConstPointer;
 
   /** Some convenient typedefs. */
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
   typedef TInputImage InputImageType;
   typedef typename InputImageType::Pointer             InputImagePointer;
   typedef typename InputImageType::ConstPointer        InputImageConstPointer;

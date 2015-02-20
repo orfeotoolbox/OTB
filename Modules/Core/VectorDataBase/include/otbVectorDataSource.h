@@ -52,6 +52,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataSource, itk::ProcessObject);
 
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
   typedef TOutputVectorData                   OutputVectorDataType;
   typedef typename TOutputVectorData::Pointer OutputVectorDataPointer;
 

@@ -50,6 +50,8 @@ class ITK_EXPORT ProspectModel : public SimulationStep1Base
       typedef Superclass::SpectralResponseType      SpectralResponseType;
       typedef Superclass::ParametersType            ParametersType;
 
+      typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+
       /** Standard macros */
       itkNewMacro(Self);
       itkTypeMacro(ProspectModel, SpectrumGeneratorBase);

@@ -83,6 +83,7 @@ public:
 
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Type to use for computations. */
   typedef itk::VariableSizeMatrix<PrecisionType>        MatrixType;

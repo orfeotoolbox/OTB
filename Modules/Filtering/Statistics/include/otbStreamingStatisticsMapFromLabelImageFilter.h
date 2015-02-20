@@ -87,6 +87,7 @@ public:
 
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   typedef itk::ImageBase<InputImageDimension> ImageBaseType;
   typedef typename ImageBaseType::RegionType InputImageRegionType;

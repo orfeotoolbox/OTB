@@ -76,6 +76,7 @@ public:
 
   /** DataObject typedef*/
   typedef typename Superclass::DataObjectPointer        DataObjectPointer;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   // Set/Get the input list sample
   void SetListSample(const ListSampleType* inputlist);

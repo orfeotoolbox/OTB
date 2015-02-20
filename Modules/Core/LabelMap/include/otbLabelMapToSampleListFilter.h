@@ -71,6 +71,7 @@ public:
 
   /** DataObject typedef*/
   typedef typename Superclass::DataObjectPointer      DataObjectPointerType;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Set/Get the input label map */
   void SetInputLabelMap(const InputLabelMapType * inputLabelMap);

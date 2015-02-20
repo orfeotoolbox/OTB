@@ -84,6 +84,7 @@ public:
 
   /** DataObject typedef*/
   typedef typename Superclass::DataObjectPointer               DataObjectPointer;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Filter adding noise to a ListSample */
   typedef otb::Statistics::GaussianAdditiveNoiseSampleListFilter

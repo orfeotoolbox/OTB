@@ -51,6 +51,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(LabelMapSource, itk::ProcessObject);
 
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
   typedef TOutputLabelMap                   OutputLabelMapType;
   typedef typename TOutputLabelMap::Pointer OutputLabelMapPointer;
 

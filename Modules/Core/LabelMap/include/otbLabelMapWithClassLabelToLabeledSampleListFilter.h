@@ -61,6 +61,7 @@ public:
   typedef typename InputLabelMapType::ConstPointer    InputLabelMapConstPointerType;
   typedef typename InputLabelMapType::LabelObjectType LabelObjectType;
   typedef typename InputLabelMapType::ConstIterator   ConstIteratorType;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Output sample list */
   typedef TOutputSampleList                           OutputSampleListType;

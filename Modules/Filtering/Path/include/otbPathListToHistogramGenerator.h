@@ -88,6 +88,7 @@ public:
 
   /** DataObject typedef*/
   typedef typename Superclass::DataObjectPointer        DataObjectPointer;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   void GraftNthOutput(unsigned int idx, itk::DataObject *graft);
   void GraftOutput(itk::DataObject *graft);

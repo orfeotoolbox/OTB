@@ -72,6 +72,8 @@ public:
   typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
   typedef ogr::Layer                                 OGRLayerType;
 
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+
   /** Set/Get the input image of this process object.  */
   using Superclass::SetInput;
   virtual void SetInput(const InputImageType *input);

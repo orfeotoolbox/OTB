@@ -56,6 +56,7 @@ public:
 
   /** Some convenient typedefs. */
   typedef itk::DataObject::Pointer DataObjectPointer;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   typedef TOutputPath                               OutputPathType;
   typedef typename OutputPathType::Pointer          OutputPathPointerType;
