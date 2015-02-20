@@ -20,10 +20,13 @@
 #include <cstring>
 #include <sstream>
 #include <itkLightObject.h>
-#include "otb_curl.h"
-#include "otbCurlHelper.h"
+#include "otbConfigure.h" // for OTB_USE_CURL
 #include "otbMacro.h"
+#include "otbCurlHelper.h"
 
+#ifdef OTB_USE_CURL
+#  include "otb_curl.h"
+#endif
 
 namespace otb
 {

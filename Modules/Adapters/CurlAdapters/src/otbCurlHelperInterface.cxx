@@ -16,8 +16,12 @@
 
 =========================================================================*/
 
-#include "otb_curl.h"
+#include "otbConfigure.h" // for OTB_USE_CURL
 #include "otbCurlHelperInterface.h"
+
+#ifdef OTB_USE_CURL
+#  include "otb_curl.h"
+#endif
 
 namespace otb {
 

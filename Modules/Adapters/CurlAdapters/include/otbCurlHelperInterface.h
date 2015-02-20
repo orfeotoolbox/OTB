@@ -21,7 +21,6 @@
 #include <iosfwd>
 #include "itkObject.h"
 #include "itkObjectFactory.h"
-#include "otbConfigure.h"
 
 namespace otb
 {
