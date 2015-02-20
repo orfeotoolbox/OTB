@@ -247,7 +247,7 @@ private:
      m_Multi3DMapToDEMFilter =  Multi3DFilterType::New();
     }
 
-  std::vector<std::vector<int> > CreateCouplesList(string couples)
+  std::vector<std::vector<int> > CreateCouplesList(std::string couples)
     {
     std::vector<std::vector<int> > couplesList;
 
