@@ -28,9 +28,7 @@
 #include "itkScalarToRGBColormapImageFilter.h"
 #include "otbReliefColormapFunctor.h"
 
-#include "otbStreamingTraits.h"
-
-#include "otbRAMDrivenStrippedStreamingManager.h"
+#include "otbRAMDrivenAdaptativeStreamingManager.h"
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
@@ -212,8 +210,8 @@ public:
     <PixelType, RGBPixelType>                         ReliefColorMapFunctorType;
 
   // Image support LUT
-  typedef RAMDrivenStrippedStreamingManager
-    <FloatVectorImageType>                            RAMDrivenStrippedStreamingManagerType;
+  typedef RAMDrivenAdaptativeStreamingManager
+    <FloatVectorImageType>                            RAMDrivenAdaptativeStreamingManagerType;
   typedef otb::StreamingShrinkImageFilter
     <FloatVectorImageType, FloatVectorImageType>       ImageSamplingFilterType;
   typedef itk::Statistics::DenseFrequencyContainer2    DFContainerType;
@@ -238,8 +236,6 @@ public:
       <RGBPixelType, LabelVectorType> >               ColorToLabelFilterType;
 
   // Streaming the input image for color->label operation
-  typedef otb::StreamingTraits<RGBImageType>          StreamingTraitsType;
-  typedef itk::ImageRegionSplitter<2>                 SplitterType;
   typedef RGBImageType::RegionType                    RegionType;
   typedef itk::ImageRegionConstIterator<RGBImageType> RGBImageIteratorType;
 
@@ -498,8 +494,8 @@ private:
       //first of all resampling
 
       //calculate split number
-      RAMDrivenStrippedStreamingManagerType::Pointer
-          streamingManager = RAMDrivenStrippedStreamingManagerType::New();
+      RAMDrivenAdaptativeStreamingManagerType::Pointer
+          streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
       int availableRAM = GetParameterInt("ram");
       streamingManager->SetAvailableRAMInMB(availableRAM);
       float bias = 2.0; // empiric value;
@@ -709,21 +705,25 @@ private:
 
       // Setting up local streaming capabilities
       RegionType largestRegion = input->GetLargestPossibleRegion();
-      SplitterType::Pointer splitter = SplitterType::New();
-      unsigned int numberOfStreamDivisions;
-      numberOfStreamDivisions = StreamingTraitsType::CalculateNumberOfStreamDivisions(input,
-                                          largestRegion,
-                                          splitter,
-                                          otb::SET_BUFFER_MEMORY_SIZE,
-                                          0, 1048576*GetParameterInt("ram"), 0);
 
+      RAMDrivenAdaptativeStreamingManagerType::Pointer
+        streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+      int availableRAM = GetParameterInt("ram");
+      streamingManager->SetAvailableRAMInMB(availableRAM);
+      float bias = 2.0; // empiric value;
+      streamingManager->SetBias(bias);
+
+      streamingManager->PrepareStreaming(input, largestRegion);
+
+      unsigned long numberOfStreamDivisions = streamingManager->GetNumberOfSplits();
+     
       otbAppLogINFO("Number of divisions : "<<numberOfStreamDivisions);
 
       // iteration over stream divisions
       RegionType streamingRegion;
       for (unsigned int index = 0; index<numberOfStreamDivisions; index++)
         {
-        streamingRegion = splitter->GetSplit(index, numberOfStreamDivisions, largestRegion);
+        streamingRegion = streamingManager->GetSplit(index);
         input->SetRequestedRegion(streamingRegion);
         input->PropagateRequestedRegion();
         input->UpdateOutputData();
