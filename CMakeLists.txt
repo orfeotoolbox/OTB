@@ -138,15 +138,6 @@ mark_as_advanced(OTB_USE_DEPRECATED)
 option(OTB_SHOW_ALL_MSG_DEBUG "Show all debug messages (very verbose)" OFF)
 mark_as_advanced(OTB_SHOW_ALL_MSG_DEBUG)
 
-#-----------------------------------------------------------------------------
-# Option to define streaming activation in applications
-# Use by otbConfigure.h.in
-# Note: 8*4000*4000 = 128000000 (double 4000x4000 image)
-set(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING 128000000 CACHE STRING "Image size to activate using streaming for applications.")
-mark_as_advanced(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING)
-set(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING 128000000 CACHE STRING "Max size buffer for streaming.")
-mark_as_advanced(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING)
-
 include(OTBSetStandardCompilerFlags)
 #---------------------------------------------------------------
 # run try compiles and tests for OTB
