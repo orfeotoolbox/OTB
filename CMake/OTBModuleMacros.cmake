@@ -68,11 +68,13 @@ macro(otb_module _name)
   list(SORT OTB_MODULE_${otb-module-test}_DEPENDS) # Deterministic order.
 endmacro()
 
+set(OTB_MODULE_ACTIVATION_OPTION_LIST "")
 macro(otb_module_activation_option _option_desc _default)
   string(REGEX REPLACE "OTB(.*)" "OTB_USE_\\1" _option_name ${otb-module})
   string(TOUPPER ${_option_name} _option_name)
   option(${_option_name} ${_option_desc} ${_default})
   set(OTB_MODULE_${otb-module}_ACTIVATION_OPTION ${_option_name})
+  list(APPEND OTB_MODULE_ACTIVATION_OPTION_LIST ${_option_name})
 endmacro()
 
 macro(otb_module_check_name _name)
