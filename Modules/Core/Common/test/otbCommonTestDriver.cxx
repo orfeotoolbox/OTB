@@ -9,8 +9,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageRegionAdaptativeSplitter);
   REGISTER_TEST(otbRGBAPixelConverterNew);
   REGISTER_TEST(otbRGBAPixelConverter);
-  REGISTER_TEST(otbConfigurationTest);
-  REGISTER_TEST(otbConfigurationTestDEM);
   REGISTER_TEST(otbRectangle);
   REGISTER_TEST(otbCompareAsciiTests4);
   REGISTER_TEST(otbCompareAsciiTests3);
@@ -30,4 +28,5 @@ void RegisterTests()
   REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitter);
   REGISTER_TEST(otbCompareAsciiTests5);
   REGISTER_TEST(otbRectangleNew);
+  REGISTER_TEST(otbConfigurationManagerTest);
 }

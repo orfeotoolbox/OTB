@@ -8,7 +8,6 @@ otbImageRegionTileMapSplitter.cxx
 otbCompareAsciiTestScientificNotation.cxx
 otbImageRegionAdaptativeSplitter.cxx
 otbRGBAPixelConverter.cxx
-otbConfigurationTest.cxx
 otbRectangle.cxx
 otbCompareAsciiTests4.cxx
 otbCompareAsciiTests3.cxx
@@ -25,6 +24,7 @@ otbCompareAsciiTests2.cxx
 otbImageRegionNonUniformMultidimensionalSplitter.cxx
 otbCompareAsciiTests5.cxx
 otbRectangleNew.cxx
+otbConfigurationManagerTest.cxx
 )
 
 add_executable(otbCommonTestDriver ${OTBCommonTests})
@@ -108,10 +108,6 @@ otb_add_test(NAME coTuRGBAPixelConverter COMMAND otbCommonTestDriver
 
 otb_add_test(NAME coTvRGBAPixelConverter COMMAND otbCommonTestDriver
   otbRGBAPixelConverter
-  )
-
-otb_add_test(NAME coTuConfigurationTestDEM COMMAND otbCommonTestDriver
-  otbConfigurationTestDEM
   )
 
 otb_add_test(NAME coTvRectangle COMMAND otbCommonTestDriver
@@ -310,3 +306,16 @@ otb_add_test(NAME tsTvCompareAscii5epsilon2 COMMAND otbCommonTestDriver
 otb_add_test(NAME coTuRectangleNew COMMAND otbCommonTestDriver
   otbRectangleNew)
 
+otb_add_test(NAME coTvConfigurationManagerDefault COMMAND otbCommonTestDriver
+  otbConfigurationManagerTest
+  128)
+
+
+
+otb_add_test(NAME coTvConfigurationManagerEnvVar COMMAND otbTestDriver
+  --add-before-env OTB_MAX_RAM_HINT "256"
+  --add-before-env OTB_DEM_DIRECTORY "/path/to/dem/"
+  --add-before-env OTB_GEOID_FILE "/path/to/geoid.file"
+  Execute $<TARGET_FILE:otbCommonTestDriver>
+  otbConfigurationManagerTest
+  256 /path/to/dem/ /path/to/geoid.file)

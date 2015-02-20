@@ -19,7 +19,6 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include <iostream>
-#include "otbConfigurationFile.h"
 
 //Image
 #include "otbVectorImage.h"

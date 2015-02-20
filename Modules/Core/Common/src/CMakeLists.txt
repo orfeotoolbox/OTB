@@ -5,7 +5,7 @@ set(OTBCommon_SRC
   otbSystem.cxx
   otbStandardWriterWatcher.cxx
   otbUtils.cxx
-  otbConfigurationFile.cxx
+  otbConfigurationManager.cxx
   otbStandardOneLineFilterWatcher.cxx
   otbWriterWatcherBase.cxx
   otbCommandLineArgumentParser.cxx
@@ -13,7 +13,6 @@ set(OTBCommon_SRC
 
 add_library(OTBCommon ${OTBCommon_SRC})
 target_link_libraries(OTBCommon 
-  ${OTBConfigFile_LIBRARIES}
   ${OTBITK_LIBRARIES}
 
   )
