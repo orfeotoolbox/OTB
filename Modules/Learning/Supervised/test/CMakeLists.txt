@@ -47,9 +47,9 @@ otb_add_test(NAME leTvConfusionMatrixConcatenateTest COMMAND otbSupervisedTestDr
   ${INPUTDATA}/Classification/QB_1_ortho_C6.csv)
 
 if(OTB_USE_LIBSVM)
-  include(test-libsvm)
+  include(tests-libsvm.cmake)
 endif()
 
 if(OTB_USE_OPENCV)
-  include(test-opencv)
+  include(tests-opencv.cmake)
 endif()
