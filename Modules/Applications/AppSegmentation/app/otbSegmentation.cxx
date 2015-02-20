@@ -488,7 +488,7 @@ private:
       std::string dataSourceName = GetParameterString("mode.vector.out");
 
       //projection ref conversion to ESRI need to be tested in case of .shp
-      if ((dataSourceName.find(".shp") != string::npos) && (!projRef.empty()))
+      if ((dataSourceName.find(".shp") != std::string::npos) && (!projRef.empty()))
         {
 
         if (!(otb::GeoInformationConversion::IsESRIValidWKT(projRef)))
