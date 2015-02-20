@@ -24,22 +24,24 @@ namespace otb {
 bool
 CurlHelperInterface::IsCurlAvailable()
 {
-  bool curlAvailable = false;
-
 #ifdef OTB_USE_CURL
-  curlAvailable = true;
+  const bool curlAvailable = true;
+#else
+  const bool curlAvailable = false;
 #endif
+
   return curlAvailable;
 }
 
 bool
 CurlHelperInterface::IsCurlMultiAvailable()
 {
-  bool curlMultiAvailable = false;
-
 #ifdef OTB_CURL_MULTI_AVAILABLE
-  curlMultiAvailable = true;
+  const bool curlMultiAvailable = true;
+#else
+  const bool curlMultiAvailable = false;
 #endif
+
   return curlMultiAvailable;
 }
 

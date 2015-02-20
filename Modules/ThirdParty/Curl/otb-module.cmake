@@ -8,3 +8,5 @@ otb_module(OTBCurl
   DESCRIPTION
     "${DOCUMENTATION}"
   )
+
+otb_module_activation_option("Enable curl based functionnalities" ON)

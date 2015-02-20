@@ -46,8 +46,11 @@ public:
   itkNewMacro(Self);
 
   bool TestUrlAvailability(const std::string& url) const;
+  
   bool IsCurlReturnHttpError(const std::string& url) const;
+  
   int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const;
+  
   int RetrieveFile(const std::string& urlString, std::string filename) const;
 
   int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const;
@@ -57,6 +60,7 @@ public:
                         int maxConnect) const;
 
   itkGetMacro(Timeout,long int);
+  
   itkSetMacro(Timeout,long int);
 
 protected:

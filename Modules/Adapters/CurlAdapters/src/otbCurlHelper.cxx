@@ -145,7 +145,7 @@ private:
   CurlMultiResource (const CurlMultiResource &);
   CurlMultiResource & operator= (const CurlMultiResource &);
 }; //end of class CurlMultiResource
-#endif
+#endif // OTB_CURL_MULTI_AVAILABLE
 
 /**
  * Resource class that create FILE * and  close the FILE *  descriptor
@@ -194,7 +194,7 @@ private:
   CurlFileDescriptorResource & operator= (const CurlFileDescriptorResource &);
 }; //end of class FileResource
 
-#endif  // Necessary only if Curl Availabale
+#endif // OTB_USE_CURL
 
 bool CurlHelper::TestUrlAvailability(const std::string& url) const
 {

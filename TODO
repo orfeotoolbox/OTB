@@ -4,6 +4,7 @@
 * remove KMLVectorDataIO since it should not be used. leave libkml dependency only for KmzWriter module.
 * LineSegmentDetectorExample RightAngleDetectionExample depends on VectorDataRendering (mapnik) : rewrite it with the OGR based rasterization
 * OTB_USE_CURL
+* CurlHelperStub is only for tests : move to TestKernel
 * OTB_USE_OPENCV
 * Wrapper test (Java Python)
 * Handle OTB_DATA_USE_SPOTPHRINPUT & OTB_DATA_USE_CNESPHRINPUT
