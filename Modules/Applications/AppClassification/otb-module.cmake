@@ -11,7 +11,7 @@ otb_module(OTBAppClassification
     OTBMajorityVoting
     OTBVectorDataIO
     OTBSOM
-    OTBSVMLearning
+    OTBSupervised
     OTBLearningBase
     OTBApplicationEngine
     OTBIndices
