@@ -345,12 +345,6 @@ set(OTB_CONFIG_TARGETS_CONDITION "")
 set(OTB_CONFIG_TARGETS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBTargets.cmake")
 set(OTB_CONFIG_MODULE_API_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBModuleAPI.cmake")
 
-# TODO : check if we need this
-#if(NOT OTB_USE_SYSTEM_FFTW)
-#  # Location installed with the FFTW ExternalProject.
-#  set(FFTW_LIBDIR "\${OTB_INSTALL_PREFIX}/lib/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
-#  set(FFTW_INCLUDE_PATH "\${OTB_INSTALL_PREFIX}/include/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}/Algorithms")
-#endif()
 configure_file(CMake/OTBConfig.cmake.in CMakeFiles/OTBConfig.cmake @ONLY)
 
 # TODO : port unscrustify scripts from ITK to OTB ?
