@@ -84,7 +84,7 @@ public:
 private:
   LabelImageReaderType::Pointer m_FinalReader;
   ImportGeoInformationImageFilterType::Pointer m_ImportGeoInformationFilter;
-  std::vector<string> m_FilesToRemoveAfterExecute;
+  std::vector<std::string> m_FilesToRemoveAfterExecute;
   bool m_TmpDirCleanup;
 
   std::string CreateFileName(unsigned int row, unsigned int column, std::string label)
