@@ -19,7 +19,7 @@
 
 #include <iomanip>
 #include <iostream>
-#include <fstream>
+
 
 #include "otbMacro.h"
 #include "itksys/SystemTools.hxx"
@@ -31,7 +31,7 @@
 
 extern "C"
 {
-#include "otb_openjpeg.h"
+#include "openjpeg.h"
 }
 
 #include "gdal.h"
@@ -51,21 +51,13 @@ void OpjImageDestroy(opj_image_t * img)
 {
   if(img)
     {
-    otbopenjpeg_opj_image_destroy(img);
+    opj_image_destroy(img);
     }
 }
 
-void OpjCodestreamDestroy(opj_codestream_info_v2 * cstr)
+void OpjCodestreamDestroy(opj_codestream_info_v2_t * cstr)
 {
-  otbopenjpeg_opj_destroy_cstr_info_v2(&cstr);
-}
-
-void FileDestroy(FILE * file)
-{
-  if(file)
-    {
-    fclose(file);
-    }
+  opj_destroy_cstr_info(&cstr);
 }
 
 /**
@@ -297,7 +289,7 @@ public:
   unsigned int m_ResolutionFactor;
 
 private:
-  boost::shared_ptr<FILE> m_File;
+  std::string m_FileName;
   int Initialize();
 };
 
@@ -305,26 +297,27 @@ private:
 int JPEG2000InternalReader::Open(const char *filename, unsigned int resolution)
 {
   this->Clean();
+  
+  std::string str(filename);
+  this->m_FileName = str;
 
   // Open the file
-  this->m_File  = boost::shared_ptr<FILE>(fopen(filename, "rb"),FileDestroy);
-  if (!this->m_File)
+  if (!this->m_FileName.empty())
     {
     this->Clean();
     return 0;
     }
 
   // Find the codec file format
-  std::string lFileName(filename);
 
-  if (itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(lFileName)) == ".j2k")
+  if (itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(m_FileName)) == ".j2k")
     {
-    this->m_CodecFormat = CODEC_J2K;
+    this->m_CodecFormat = OPJ_CODEC_J2K;
     }
-  else if (itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(lFileName)) == ".jp2"
-           || itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(lFileName)) == ".jpx")
+  else if (itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(m_FileName)) == ".jp2"
+           || itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(m_FileName)) == ".jpx")
     {
-    this->m_CodecFormat = CODEC_JP2;
+    this->m_CodecFormat = OPJ_CODEC_JP2;
     }
   else
     {
@@ -347,8 +340,6 @@ int JPEG2000InternalReader::Open(const char *filename, unsigned int resolution)
 
 void JPEG2000InternalReader::Clean()
 {
-  m_File = boost::shared_ptr<FILE>();
-
   this->m_XResolution.clear();
   this->m_YResolution.clear();
   this->m_Precision.clear();
@@ -364,21 +355,21 @@ void JPEG2000InternalReader::Clean()
   this->m_YNbOfTile = 0;
 
   this->m_IsOpen = false;
-  this->m_CodecFormat = CODEC_UNKNOWN;
+  this->m_CodecFormat = OPJ_CODEC_UNKNOWN;
   this->m_ResolutionFactor=0;
 }
 
 boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int tileIndex)
 {
 
-  if (!m_File)
+  if (!this->m_FileName.empty())
     {
     this->Clean();
     return boost::shared_ptr<opj_image_t>();
     }
 
   // Creating the file stream
-  boost::shared_ptr<opj_stream_t> stream = boost::shared_ptr<opj_stream_t>(otbopenjpeg_opj_stream_create_default_file_stream(m_File.get(), true),otbopenjpeg_opj_stream_destroy);
+  boost::shared_ptr<opj_stream_t> stream = boost::shared_ptr<opj_stream_t>(opj_stream_create_default_file_stream(this->m_FileName.c_str(), true),opj_stream_destroy);
   if (!stream)
     {
     this->Clean();
@@ -386,7 +377,7 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
     }
 
   // Creating the codec
-  boost::shared_ptr<opj_codec_t> codec = boost::shared_ptr<opj_codec_t>(otbopenjpeg_opj_create_decompress_v2(this->m_CodecFormat),otbopenjpeg_opj_destroy_codec);
+  boost::shared_ptr<opj_codec_t> codec = boost::shared_ptr<opj_codec_t>(opj_create_decompress(this->m_CodecFormat),opj_destroy_codec);
 
   if (!codec)
     {
@@ -396,17 +387,17 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
 
   // Setting default parameters
   opj_dparameters_t parameters;
-  otbopenjpeg_opj_set_default_decoder_parameters(&parameters);
+  opj_set_default_decoder_parameters(&parameters);
   parameters.cp_reduce = static_cast<int>(this->m_ResolutionFactor);
 
   // Set default event mgr
-  opj_event_mgr_t eventManager;
-  eventManager.info_handler = info_callback;
-  eventManager.warning_handler = warning_callback;
-  eventManager.error_handler = error_callback;
-
+  // catch events using our callbacks and give a local context      
+  opj_set_info_handler(codec.get(), info_callback,00);
+  opj_set_warning_handler(codec.get(), warning_callback,00);
+  opj_set_error_handler(codec.get(), error_callback,00);
+  
   // Setup the decoder decoding parameters using user parameters
-  if (!otbopenjpeg_opj_setup_decoder_v2(codec.get(), &parameters, &eventManager))
+  if (!opj_setup_decoder(codec.get(), &parameters))
     {
     this->Clean();
     return boost::shared_ptr<opj_image_t>();
@@ -416,7 +407,7 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
   // boxes
   opj_image_t * unsafeOpjImgPtr = NULL;
 
-  if (!otbopenjpeg_opj_read_header(stream.get(), codec.get(),&unsafeOpjImgPtr))
+  if (!opj_read_header(stream.get(), codec.get(),&unsafeOpjImgPtr))
     {
     boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
     this->Clean();
@@ -425,7 +416,7 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
 
   boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
 
-  if( otbopenjpeg_opj_get_decoded_tile(codec.get(), stream.get(), image.get(), tileIndex))
+  if( opj_get_decoded_tile(codec.get(), stream.get(), image.get(), tileIndex))
     {
     otbMsgDevMacro(<<"Tile "<<tileIndex<<" read from file");
 
@@ -445,10 +436,10 @@ JPEG2000InternalReader::JPEG2000InternalReader()
 
 int JPEG2000InternalReader::Initialize()
 {
-  if (m_File)
+  if (m_FileName.empty())
     {
     // Creating the file stream
-    boost::shared_ptr<opj_stream_t> stream = boost::shared_ptr<opj_stream_t>(otbopenjpeg_opj_stream_create_default_file_stream(m_File.get(), true),otbopenjpeg_opj_stream_destroy);
+    boost::shared_ptr<opj_stream_t> stream = boost::shared_ptr<opj_stream_t>(opj_stream_create_default_file_stream(this->m_FileName.c_str(), true),opj_stream_destroy);
     if (!stream)
       {
       this->Clean();
@@ -456,7 +447,7 @@ int JPEG2000InternalReader::Initialize()
       }
 
     // Creating the codec
-    boost::shared_ptr<opj_codec_t> codec = boost::shared_ptr<opj_codec_t>(otbopenjpeg_opj_create_decompress_v2(this->m_CodecFormat),otbopenjpeg_opj_destroy_codec);
+    boost::shared_ptr<opj_codec_t> codec = boost::shared_ptr<opj_codec_t>(opj_create_decompress(this->m_CodecFormat),opj_destroy_codec);
 
     if (!codec)
       {
@@ -466,17 +457,17 @@ int JPEG2000InternalReader::Initialize()
 
     // Setting default parameters
     opj_dparameters_t parameters;
-    otbopenjpeg_opj_set_default_decoder_parameters(&parameters);
+    opj_set_default_decoder_parameters(&parameters);
     parameters.cp_reduce = static_cast<int>(this->m_ResolutionFactor);
 
     // Set default event mgr
-    opj_event_mgr_t eventManager;
-    eventManager.info_handler = info_callback;
-    eventManager.warning_handler = warning_callback;
-    eventManager.error_handler = error_callback;
+    // catch events using our callbacks and give a local context      
+    opj_set_info_handler(codec.get(), info_callback,00);
+    opj_set_warning_handler(codec.get(), warning_callback,00);
+    opj_set_error_handler(codec.get(), error_callback,00);
 
     // Setup the decoder decoding parameters using user parameters
-    if (!otbopenjpeg_opj_setup_decoder_v2(codec.get(), &parameters, &eventManager))
+    if (!opj_setup_decoder(codec.get(), &parameters))
       {
       this->Clean();
       return 0;
@@ -486,7 +477,7 @@ int JPEG2000InternalReader::Initialize()
     // boxes
     opj_image_t * unsafeOpjImgPtr = NULL;
 
-    if (!otbopenjpeg_opj_read_header(stream.get(), codec.get(),&unsafeOpjImgPtr))
+    if (!opj_read_header(stream.get(), codec.get(),&unsafeOpjImgPtr))
       {
       boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
       this->Clean();
@@ -496,7 +487,7 @@ int JPEG2000InternalReader::Initialize()
     boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
 
     // Get the codestream information
-    boost::shared_ptr<opj_codestream_info_v2> cstrInfo = boost::shared_ptr<opj_codestream_info_v2>(otbopenjpeg_opj_get_cstr_info(codec.get()),OpjCodestreamDestroy);
+    boost::shared_ptr<opj_codestream_info_v2> cstrInfo = boost::shared_ptr<opj_codestream_info_v2>(opj_get_cstr_info(codec.get()),OpjCodestreamDestroy);
 
     if (!cstrInfo)
       {
