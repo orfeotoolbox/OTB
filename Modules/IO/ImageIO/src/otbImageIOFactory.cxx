@@ -35,10 +35,7 @@
 #  include "otbJPEG2000ImageIOFactory.h"
 #endif
 
-#include "otb_curl.h"
-#ifdef OTB_CURL_MULTI_AVAILABLE
 #include "otbTileMapImageIOFactory.h"
-#endif
 
 namespace otb
 {
@@ -106,9 +103,7 @@ ImageIOFactory::RegisterBuiltInFactories()
 #ifdef OTB_USE_JPEG2000
       itk::ObjectFactoryBase::RegisterFactory(JPEG2000ImageIOFactory::New());
 #endif
-#ifdef OTB_CURL_MULTI_AVAILABLE
       itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());
-#endif
       itk::ObjectFactoryBase::RegisterFactory(GDALImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(MWImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(ONERAImageIOFactory::New());

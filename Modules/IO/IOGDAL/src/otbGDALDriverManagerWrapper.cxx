@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "otbGDALDriverManagerWrapper.h"
 #include <vector>
+#include <boost/algorithm/string/predicate.hpp>
 #include "otbSystem.h"
 
 namespace otb
@@ -94,7 +95,14 @@ GDALDriverManagerWrapper::Open( std::string filename ) const
 {
   GDALDatasetWrapper::Pointer datasetWrapper;
 
-  // first : test if a driver can identify the dataset
+  if (boost::algorithm::starts_with(filename, "http://")
+      || boost::algorithm::starts_with(filename, "https://") )
+    {
+    // don't try to open it and exit
+    return datasetWrapper;
+    }
+
+  // test if a driver can identify the dataset
   GDALDriverH identifyDriverH = GDALIdentifyDriver(filename.c_str(), NULL);
   if(identifyDriverH == NULL)
     {
