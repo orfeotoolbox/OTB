@@ -20,8 +20,9 @@ otb_module(OTBSimulation
   TEST_DEPENDS
     OTBTestKernel
     OTBConversion
+    OTBSVMLearning
+    OTBSupervised
     OTBLearningBase
-  
   DESCRIPTION
     "${DOCUMENTATION}"
   )
