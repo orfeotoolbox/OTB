@@ -48,7 +48,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
 template <class TInputImage>
 typename LabelImageToOGRDataSourceFilter<TInputImage>::DataObjectPointer
 LabelImageToOGRDataSourceFilter<TInputImage>
-::MakeOutput(unsigned int itkNotUsed(idx))
+::MakeOutput(DataObjectPointerArraySizeType itkNotUsed(idx))
 {
   return static_cast< DataObjectPointer >(OGRDataSourceType::New().GetPointer());
 }
