@@ -9,6 +9,15 @@ void RegisterTests()
   REGISTER_TEST(otbConfusionMatrixMeasurementsNew);
   REGISTER_TEST(otbConfusionMatrixMeasurementsTest);
   REGISTER_TEST(otbConfusionMatrixConcatenateTest);
+  REGISTER_TEST(otbLibSVMMachineLearningModelCanRead);
+  REGISTER_TEST(otbSVMMachineLearningModelCanRead);
+  REGISTER_TEST(otbRandomForestsMachineLearningModelCanRead);
+  REGISTER_TEST(otbBoostMachineLearningModelCanRead);
+  REGISTER_TEST(otbNeuralNetworkMachineLearningModelCanRead);
+  REGISTER_TEST(otbNormalBayesMachineLearningModelCanRead);
+  REGISTER_TEST(otbDecisionTreeMachineLearningModelCanRead);
+  REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelCanRead);
+  REGISTER_TEST(otbKNNMachineLearningModelCanRead);
   REGISTER_TEST(otbLibSVMMachineLearningModelNew);
   REGISTER_TEST(otbLibSVMMachineLearningModel);
   REGISTER_TEST(otbSVMMachineLearningModelNew);

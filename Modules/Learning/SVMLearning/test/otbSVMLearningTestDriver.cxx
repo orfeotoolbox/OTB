@@ -18,15 +18,6 @@ void RegisterTests()
   REGISTER_TEST(otbSVMImageModelEstimatorTrainOneClass);
   REGISTER_TEST(otbSVMCrossValidationCostFunctionNew);
   REGISTER_TEST(otbSVMModelLoadSave);
-  REGISTER_TEST(otbLibSVMMachineLearningModelCanRead);
-  REGISTER_TEST(otbSVMMachineLearningModelCanRead);
-  REGISTER_TEST(otbRandomForestsMachineLearningModelCanRead);
-  REGISTER_TEST(otbBoostMachineLearningModelCanRead);
-  REGISTER_TEST(otbNeuralNetworkMachineLearningModelCanRead);
-  REGISTER_TEST(otbNormalBayesMachineLearningModelCanRead);
-  REGISTER_TEST(otbDecisionTreeMachineLearningModelCanRead);
-  REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelCanRead);
-  REGISTER_TEST(otbKNNMachineLearningModelCanRead);
   REGISTER_TEST(otbSVMClassifierPointSet);
   REGISTER_TEST(otbSVMImageClassificationWithRuleFilterNew);
   REGISTER_TEST(otbSVMImageModelEstimatorTrain);
