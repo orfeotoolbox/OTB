@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-
+#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "itkImageRegionConstIterator.h"
 //  Software Guide : BeginLatex
@@ -33,21 +33,20 @@
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbStreamingTraits.h"
+#include "otbRAMDrivenAdaptativeStreamingManager.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
 {
 
-  if (argc != 3)
+  if (argc != 2)
     {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << " inputImageFile nbLinesForStreaming " << std::endl;
+    std::cerr << argv[0] << " inputImageFile " << std::endl;
     return EXIT_FAILURE;
     }
 
   const char *       infname = argv[1];
-  const unsigned int nbLinesForStreaming = atoi(argv[2]);
 
   typedef float PixelType;
 
@@ -56,7 +55,7 @@ int main(int argc, char * argv[])
 
 //  Software Guide : BeginLatex
 //
-//  The \doxygen{otb}{StreamingTraits} class manages the streaming
+//  The \doxygen{otb}{RAMDrivenAdaptativeStreamingManager} class manages the streaming
 //  approaches which are possible with the image type over which it is
 //  templated. The class \doxygen{itk}{ImageRegionSplitter} is
 //  templated over the number of dimensions of the image and will
@@ -66,8 +65,9 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::StreamingTraits<ImageType> StreamingTraitsType;
-  typedef itk::ImageRegionSplitter<2>     SplitterType;
+//  typedef otb::StreamingTraits<ImageType> StreamingTraitsType;
+//  typedef itk::ImageRegionSplitter<2>     SplitterType;
+  typedef otb::RAMDrivenAdaptativeStreamingManager<ImageType> StreamingManagerType;
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 //
@@ -112,6 +112,7 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
+/*
   SplitterType::Pointer splitter = SplitterType::New();
   unsigned int          numberOfStreamDivisions =
     StreamingTraitsType::CalculateNumberOfStreamDivisions(
@@ -123,6 +124,14 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
   std::cout << "The images will be streamed into " <<
   numberOfStreamDivisions << " parts." << std::endl;
+*/
+
+  StreamingManagerType::Pointer
+    streamingManager = StreamingManagerType::New();
+  const int availableRAM = 128;
+  streamingManager->SetAvailableRAMInMB(availableRAM);
+  streamingManager->PrepareStreaming(reader->GetOutput(), largestRegion);
+  const unsigned long numberOfStreamDivisions = streamingManager->GetNumberOfSplits();
 
 //  Software Guide : BeginLatex
 //
@@ -146,9 +155,10 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-    streamingRegion =
+    /*streamingRegion = 
       splitter->GetSplit(piece, numberOfStreamDivisions, largestRegion);
-
+    */
+    streamingRegion = streamingManager->GetSplit(piece);
     std::cout << "Processing region: " << streamingRegion << std::endl;
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
