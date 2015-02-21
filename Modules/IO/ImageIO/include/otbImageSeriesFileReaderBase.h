@@ -165,7 +165,7 @@ protected:
    * - TImage is an Image and TInteranalImage is a VectorImage
    * - TImage and TInternalImage are of Image type.
    */
-  virtual void GenerateData(unsigned int idx);
+  virtual void GenerateData(DataObjectPointerArraySizeType idx);
 
   /**
    * Read the MetaFile and test its effectiveness once inputFileName is set.

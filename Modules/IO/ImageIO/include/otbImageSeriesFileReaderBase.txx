@@ -332,7 +332,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
 template <class TImage, class TInternalImage>
 void
 ImageSeriesFileReaderBase<TImage, TInternalImage>
-::GenerateData(unsigned int itkNotUsed(idx))
+::GenerateData(DataObjectPointerArraySizeType itkNotUsed(idx))
 {
   std::ostringstream msg;
   msg << "Something wrong... Check the template definition of this class in the program...\n";
@@ -365,7 +365,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
 template <class TImage, class TInternalImage>
 typename ImageSeriesFileReaderBase<TImage, TInternalImage>::OutputImageType *
 ImageSeriesFileReaderBase<TImage, TInternalImage>
-::GenerateOutput(unsigned int idx)
+::GenerateOutput(DataObjectPointerArraySizeType idx)
 {
   this->GenerateData(idx);
   return this->GetOutput(idx);

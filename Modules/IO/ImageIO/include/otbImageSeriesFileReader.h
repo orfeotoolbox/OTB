@@ -101,6 +101,8 @@ public:
   typedef ObjectList<ExtractSelectionType>           ExtractSelectionListType;
   typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
 
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+
 protected:
   ImageSeriesFileReader();
   virtual ~ImageSeriesFileReader () {}
@@ -116,7 +118,8 @@ protected:
    * - TImage is an Image and TInteranalImage is a VectorImage
    * - TImage and TInternalImage are of Image type.
    */
-  virtual void GenerateData(unsigned int idx);
+  virtual void GenerateData(DataObjectPointerArraySizeType idx);
+  using Superclass::GenerateData;
 
   /** AllocateListOfComponents
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
@@ -205,6 +208,8 @@ public:
   typedef ObjectList<ExtractSelectionType>           ExtractSelectionListType;
   typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
 
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+
 protected:
   ImageSeriesFileReader();
   virtual ~ImageSeriesFileReader () {}
@@ -220,7 +225,8 @@ protected:
    * - TImage is an Image and TInteranalImage is a VectorImage
    * - TImage and TInternalImage are of Image type.
    */
-  virtual void GenerateData(unsigned int idx);
+  virtual void GenerateData(DataObjectPointerArraySizeType idx);
+  using Superclass::GenerateData;
 
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
@@ -308,6 +314,8 @@ public:
   typedef ObjectList<ExtractSelectionType>           ExtractSelectionListType;
   typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
 
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+
 protected:
   ImageSeriesFileReader();
   virtual ~ImageSeriesFileReader () {}
@@ -323,7 +331,8 @@ protected:
    * - TImage is an Image and TInteranalImage is a VectorImage
    * - TImage and TInternalImage are of Image type.
    */
-  virtual void GenerateData(unsigned int idx);
+  virtual void GenerateData(DataObjectPointerArraySizeType idx);
+  using Superclass::GenerateData;
 
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
@@ -413,6 +422,8 @@ public:
   typedef ObjectList<ExtractSelectionType>           ExtractSelectionListType;
   typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
 
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+
 protected:
   ImageSeriesFileReader();
   virtual ~ImageSeriesFileReader () {}
@@ -428,7 +439,8 @@ protected:
    * - TImage is an Image and TInteranalImage is a VectorImage
    * - TImage and TInternalImage are of Image type.
    */
-  virtual void GenerateData(unsigned int idx);
+  virtual void GenerateData(DataObjectPointerArraySizeType idx);
+  using Superclass::GenerateData;
 
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.

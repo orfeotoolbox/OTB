@@ -47,7 +47,7 @@ ImageSeriesFileReader<TImage, TInternalImage>
 template <class TImage, class TInternalImage>
 void
 ImageSeriesFileReader<TImage, TInternalImage>
-::GenerateData(unsigned int idx)
+::GenerateData(DataObjectPointerArraySizeType idx)
 {
   std::ostringstream msg;
   msg << "Something wrong... Check the template definition of this class in the program...\n";
@@ -119,7 +119,7 @@ ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2> >
 template <class TPixel, class TInternalPixel>
 void
 ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2> >
-::GenerateData(unsigned int idx)
+::GenerateData(DataObjectPointerArraySizeType idx)
 {
   otbMsgDebugMacro(<< "Reading " << idx << "th image: " << this->m_ListOfFileNames[idx]);
 
@@ -200,7 +200,7 @@ ImageSeriesFileReader<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
 template <class TPixel, class TInternalPixel>
 void
 ImageSeriesFileReader<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
-::GenerateData(unsigned int idx)
+::GenerateData(DataObjectPointerArraySizeType idx)
 {
   otbMsgDebugMacro(<< "Reading " << idx << "th image: " << this->m_ListOfFileNames[idx]);
 
@@ -261,7 +261,7 @@ ImageSeriesFileReader<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> >
 template <class TPixel, class TInternalPixel>
 void
 ImageSeriesFileReader<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> >
-::GenerateData(unsigned int idx)
+::GenerateData(DataObjectPointerArraySizeType idx)
 {
   otbMsgDebugMacro(<< "Reading " << idx << "th image: " << this->m_ListOfFileNames[idx]);
 
