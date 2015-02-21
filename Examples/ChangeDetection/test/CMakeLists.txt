@@ -5,7 +5,7 @@ otb_add_test(NAME cdTeCorrelChDetTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/CorrChDet.tif
     ${TEMP}/CorrChDet.tif
-  $<TARGET_FILE:CorrelChDet>
+  Execute $<TARGET_FILE:CorrelChDet>
     ${INPUTDATA}/ERSBefore.png
     ${INPUTDATA}/ERSAfter.png
     ${TEMP}/CorrChDet.tif
@@ -18,7 +18,7 @@ otb_add_test(NAME cdTeDiffChDetTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/DiffChDet.tif
     ${TEMP}/DiffChDet.tif
-  $<TARGET_FILE:DiffChDet>
+  Execute $<TARGET_FILE:DiffChDet>
     ${INPUTDATA}/SpotBefore.png
     ${INPUTDATA}/SpotAfter.png
     ${TEMP}/DiffChDet.tif
@@ -31,7 +31,7 @@ otb_add_test(NAME cdTeRatioChDetTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/RatioChDet.tif
     ${TEMP}/RatioChDet.tif
-  $<TARGET_FILE:RatioChDet>
+  Execute $<TARGET_FILE:RatioChDet>
     ${INPUTDATA}/GomaAvant.png
     ${INPUTDATA}/GomaApres.png
     ${TEMP}/RatioChDet.tif
@@ -44,7 +44,7 @@ otb_add_test(NAME cdTeKullbackLeiblerDistanceChDetTest COMMAND ${OTB_TEST_DRIVER
   --compare-n-images ${PNGEPSILON} 1
     ${BASELINE}/KullbackLeiblerDistanceChDetTest.png
     ${TEMP}/KullbackLeiblerDistanceChDetTest.png
-  $<TARGET_FILE:KullbackLeiblerDistanceChDet>
+  Execute $<TARGET_FILE:KullbackLeiblerDistanceChDet>
     ${INPUTDATA}/GomaAvant.png
     ${INPUTDATA}/GomaApres.png
     ${TEMP}/KullbackLeiblerDistanceChDetTest.png
@@ -57,7 +57,7 @@ otb_add_test(NAME cdTeKullbackLeiblerProfileChDetTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/KullbackLeiblerProfileChDetTest.png
     ${TEMP}/KullbackLeiblerProfileChDetTest.png
-  $<TARGET_FILE:KullbackLeiblerProfileChDet>
+  Execute $<TARGET_FILE:KullbackLeiblerProfileChDet>
     ${INPUTDATA}/GomaAvant.png
     ${INPUTDATA}/GomaApres.png
     ${TEMP}/KullbackLeiblerProfileChDetTest.png

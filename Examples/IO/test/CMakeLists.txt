@@ -7,7 +7,7 @@ otb_add_test(NAME ioTeExtractROITest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/ROI_IMAGERY_RGB.png
     ${BASELINE}/ROI_IMAGERY_MIR.png
     ${TEMP}/ROI_IMAGERY_MIR.png
-  $<TARGET_FILE:ExtractROI>
+  Execute $<TARGET_FILE:ExtractROI>
     ${INPUTDATA}/IMAGERY_SSECH.tif
     ${TEMP}/ROI_IMAGERY_RGB.png
     ${TEMP}/ROI_IMAGERY_MIR.png
@@ -18,7 +18,7 @@ otb_add_test(NAME ioTeDEMToImageGeneratorTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${EPSILON_5}
     ${BASELINE}/DEMToImageGenerator.tif
     ${TEMP}/DEMToImageGenerator.tif
-  $<TARGET_FILE:DEMToImageGenerator>
+  Execute $<TARGET_FILE:DEMToImageGenerator>
     ${TEMP}/DEMToImageGenerator.tif
     ${TEMP}/pretty_DEMToImageGenerator.png
     6.5
@@ -31,7 +31,7 @@ otb_add_test(NAME ioTeDEMToImageGeneratorTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME prTeDEMHandlerExampleTest COMMAND ${OTB_TEST_DRIVER}
-  $<TARGET_FILE:DEMHandlerExample>
+  Execute $<TARGET_FILE:DEMHandlerExample>
     ${DATA}/DEM/srtm_directory/
     ${DATA}/DEM/egm96.grd
     40
@@ -42,7 +42,7 @@ otb_add_test(NAME prTeDEMHandlerExampleTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME ioTeImageToKmzAndMapFileProductExample COMMAND ${OTB_TEST_DRIVER}
-  $<TARGET_FILE:ImageToKmzAndMapFileProductExample>
+  Execute $<TARGET_FILE:ImageToKmzAndMapFileProductExample>
     ${DATA}/Haiti1_sr10.jpeg
     ${TEMP}/ioTeHaitiKmzProduct.kmz
     ${TEMP}/mapserverExample/ioTeHaitiMapFileProduct.map
@@ -80,7 +80,7 @@ otb_add_test(NAME ioTeTileMapImageIOExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${HIGHTOL}
     ${BASELINE}/openStreetMap.png
     ${TEMP}/openStreetMap.png
-  $<TARGET_FILE:TileMapImageIOExample>
+  Execute $<TARGET_FILE:TileMapImageIOExample>
     ${INPUTDATA}/osmfile.otb
     ${TEMP}/openStreetMap.png
     ${TEMP}

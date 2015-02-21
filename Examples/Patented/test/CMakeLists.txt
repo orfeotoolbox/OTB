@@ -4,7 +4,7 @@ otb_add_test(NAME dmTeEstimateAffineTransformationExampleTest COMMAND ${OTB_TEST
   --compare-image ${NOTOL}
     ${BASELINE}/EstimateAffineTransformationOutput.png
     ${TEMP}/AffineTransformationOutput.png
-  $<TARGET_FILE:EstimateAffineTransformationExample>
+  Execute $<TARGET_FILE:EstimateAffineTransformationExample>
     ${INPUTDATA}/QB_Suburb.png
     ${INPUTDATA}/QB_SuburbR10X13Y17.png
     ${TEMP}/AffineTransformationOutput.png
@@ -19,7 +19,7 @@ if(Module_OTBSiftFast)
     --compare-image ${NOTOL}
       ${BASELINE}/SIFTdeformationFieldOutput.png
       ${TEMP}/SIFTdeformationFieldOutput.png
-    $<TARGET_FILE:SIFTDisparityMapEstimation>
+    Execute $<TARGET_FILE:SIFTDisparityMapEstimation>
       ${INPUTDATA}/ROISpot5.png
       ${INPUTDATA}/ROISpot5Warped.png
       ${TEMP}/SIFTdeformationFieldOutput.png
@@ -29,7 +29,7 @@ if(Module_OTBSiftFast)
     --compare-image ${NOTOL}
      ${BASELINE}/ROISpot5SiftFast.png
      ${TEMP}/ROISpot5SiftFast.png
-    $<TARGET_FILE:SIFTFastExample>
+    Execute $<TARGET_FILE:SIFTFastExample>
      ${INPUTDATA}/ROISpot5.png
      ${TEMP}/ROISpot5SiftFast.png
      3

@@ -4,7 +4,7 @@ otb_add_test(NAME raTeARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest 
   --compare-image ${EPSILON}
     ${BASELINE}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
     ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
-  $<TARGET_FILE:ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter>
+  Execute $<TARGET_FILE:ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter>
     ${INPUTDATA}/poupees_sub.png
     ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
     ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex3.tif
@@ -21,7 +21,7 @@ otb_add_test(NAME raTeAVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest C
   #--compare-image ${NOTOL}
   #  ${BASELINE}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
   #  ${TEMP}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
-  $<TARGET_FILE:AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter>
+  Execute $<TARGET_FILE:AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter>
     ${INPUTDATA}/qb_toulouse_sub.tif
     ${TEMP}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
     ${TEMP}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest2.png
@@ -40,7 +40,7 @@ otb_add_test(NAME raTeNDVIRAndNIRVegetationIndexImageFilterTest COMMAND ${OTB_TE
   --compare-image ${NOTOL}
     ${BASELINE}/NDVIRAndNIRVegetationIndex.tif
     ${TEMP}/NDVIRAndNIRVegetationIndex.tif
-  $<TARGET_FILE:NDVIRAndNIRVegetationIndexImageFilter>
+  Execute $<TARGET_FILE:NDVIRAndNIRVegetationIndexImageFilter>
     ${INPUTDATA}/poupees_sub_c1.png
     ${INPUTDATA}/poupees_sub_c2.png
     ${TEMP}/NDVIRAndNIRVegetationIndex.tif
@@ -53,7 +53,7 @@ otb_add_test(NAME raTeAtmosphericCorrectionSequencementTest COMMAND ${OTB_TEST_D
   --compare-image ${EPSILON}
     ${BASELINE}/Example_RomaniaAtmosphericCorrectionSequencement.tif
     ${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif
-  $<TARGET_FILE:AtmosphericCorrectionSequencement>
+  Execute $<TARGET_FILE:AtmosphericCorrectionSequencement>
     ${INPUTDATA}/Romania_Extract.tif
     ${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif
     ${INPUTDATA}/atmosphericCorrectionSequencement_alpha_beta.txt

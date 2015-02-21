@@ -5,7 +5,7 @@ otb_add_test(NAME leTeSVMImageClassificationExampleTest COMMAND ${OTB_TEST_DRIVE
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/ROI_QB_MUL_1_SVN_CLASS.png
     ${TEMP}/ROI_QB_MUL_1_SVN_CLASS.png
-  $<TARGET_FILE:SVMImageClassificationExample>
+  Execute $<TARGET_FILE:SVMImageClassificationExample>
     ${INPUTDATA}/ROI_QB_MUL_1.png
     ${TEMP}/ROI_QB_MUL_1_SVN_CLASS.png
     ${OTB_DATA_ROOT}/Examples/svm_image_model.svm
@@ -17,7 +17,7 @@ otb_add_test(NAME leTeSVMImageEstimatorClassificationMultiExampleTest COMMAND ${
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
     ${TEMP}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
-  $<TARGET_FILE:SVMImageEstimatorClassificationMultiExample>
+  Execute $<TARGET_FILE:SVMImageEstimatorClassificationMultiExample>
     ${INPUTDATA}/ROI_QB_MUL_1.png
     ${INPUTDATA}/ROI_mask_multi.png
     ${TEMP}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
@@ -30,7 +30,7 @@ otb_add_test(NAME leTeGenerateTrainingImageExampleTest COMMAND ${OTB_TEST_DRIVER
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/ROI_QB_MUL_4_training.png
     ${TEMP}/ROI_QB_MUL_4_training.png
-  $<TARGET_FILE:GenerateTrainingImageExample>
+  Execute $<TARGET_FILE:GenerateTrainingImageExample>
     ${INPUTDATA}/ROI_QB_MUL_4.tif
     ${INPUTDATA}/LearningROIs.txt
     ${TEMP}/ROI_QB_MUL_4_training.png
@@ -43,7 +43,7 @@ otb_add_test(NAME leTeSVMImageModelEstimatorExampleTest COMMAND ${OTB_TEST_DRIVE
     ${BASELINE}/svm_image_model.svn
     ${TEMP}/svm_image_model.svn
   --ignore-lines-with 2 probA probB
-  $<TARGET_FILE:SVMImageModelEstimatorExample>
+  Execute $<TARGET_FILE:SVMImageModelEstimatorExample>
     ${INPUTDATA}/ROI_QB_MUL_1.png
     ${INPUTDATA}/ROI_mask.png
     ${TEMP}/svm_image_model.svn
@@ -58,7 +58,7 @@ otb_add_test(NAME leTeSOMExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/ROI_QB_MUL_SOM.png
     ${BASELINE}/ROI_QB_MUL_SOMACT.png
     ${TEMP}/ROI_QB_MUL_SOMACT.png
-  $<TARGET_FILE:SOMExample>
+  Execute $<TARGET_FILE:SOMExample>
     ${INPUTDATA}/ROI_QB_MUL_1.png
     ${TEMP}/ROI_QB_MUL_SOM.png
     ${TEMP}/ROI_QB_MUL_SOMACT.png
@@ -71,7 +71,7 @@ otb_add_test(NAME leTeSOMClassifierExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${NOTOL}
     ${BASELINE}/ROI_QB_MUL_extractSOMCLASS.tif
     ${TEMP}/ROI_QB_MUL_extractSOMCLASS.tif
-  $<TARGET_FILE:SOMClassifierExample>
+  Execute $<TARGET_FILE:SOMClassifierExample>
     ${INPUTDATA}/ROI_QB_MUL_1_extract.tif
     ${INPUTDATA}/ROI_QB_MUL_extractSOM.tif
     ${TEMP}/ROI_QB_MUL_extractSOMCLASS.tif
@@ -83,7 +83,7 @@ otb_add_test(NAME leTeSEMModelEstimatorExampleTest COMMAND ${OTB_TEST_DRIVER}
 #        --compare-image ${NOTOL}
 #        ${BASELINE}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
 #        ${TEMP}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
-  $<TARGET_FILE:SEMModelEstimatorExample>
+  Execute $<TARGET_FILE:SEMModelEstimatorExample>
     ${INPUTDATA}/ROI_QB_MUL_1.tif
     ${TEMP}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
     4 40 5
@@ -96,7 +96,7 @@ otb_add_test(NAME leTeSVMGenericKernelImageModelEstimatorExampleTest COMMAND ${O
     ${BASELINE}/svm_image_model_generic_kernel.svn
     ${TEMP}/svm_image_model_generic_kernel.svn
   --ignore-lines-with 2 probA probB
-  $<TARGET_FILE:SVMGenericKernelImageModelEstimatorExample>
+  Execute $<TARGET_FILE:SVMGenericKernelImageModelEstimatorExample>
     ${INPUTDATA}/ROI_QB_MUL_1.png
     ${INPUTDATA}/ROI_mask_multi.png
     ${TEMP}/svm_image_model_generic_kernel.svn
@@ -108,7 +108,7 @@ otb_add_test(NAME leTeSVMGenericKernelImageClassificationExampleTest COMMAND ${O
   --compare-image ${EPSILON_3}
     ${BASELINE}/ROI_QB_MUL_GENERIC_KERNEL_IMAGE_CLASSIF.png
     ${TEMP}/ROI_QB_MUL_GENERIC_KERNEL_IMAGE_CLASSIF.png
-  $<TARGET_FILE:SVMGenericKernelImageClassificationExample>
+  Execute $<TARGET_FILE:SVMGenericKernelImageClassificationExample>
     ${INPUTDATA}/ROI_QB_MUL_1.png
     ${TEMP}/ROI_QB_MUL_GENERIC_KERNEL_IMAGE_CLASSIF.png
     ${INPUTDATA}/svm_image_model_generic_kernel.svn

@@ -3,7 +3,7 @@ otb_add_test(NAME prTeOrthoRectificationExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${NOTOL}
     ${BASELINE}/panOrthoToul.tif
     ${TEMP}/panOrthoToul.tif
-  $<TARGET_FILE:OrthoRectificationExample>
+  Execute $<TARGET_FILE:OrthoRectificationExample>
     LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
     ${TEMP}/panOrthoToul.tif
     31
@@ -20,7 +20,7 @@ otb_add_test(NAME prTeOrthoRectificationExampleXSTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${NOTOL}
     ${BASELINE}/xsOrthoToul.tif
     ${TEMP}/xsOrthoToul.tif
-  $<TARGET_FILE:OrthoRectificationExample>
+  Execute $<TARGET_FILE:OrthoRectificationExample>
     LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
     ${TEMP}/xsOrthoToul.tif
     31
@@ -37,7 +37,7 @@ otb_add_test(NAME prTeMapProjectionExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-ascii ${NOTOL}
     ${BASELINE}/mapProjectionExample.txt
     ${TEMP}/mapProjectionExample.txt
-  $<TARGET_FILE:MapProjectionExample>
+  Execute $<TARGET_FILE:MapProjectionExample>
     ${TEMP}/mapProjectionExample.txt
 )
 
@@ -45,7 +45,7 @@ otb_add_test(NAME prTeVectorDataProjectionExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-ogr ${NOTOL}
     ${BASELINE}/vectorDataProjectionExample.shp
     ${TEMP}/vectorDataProjectionExample.shp
-  $<TARGET_FILE:VectorDataProjectionExample>
+  Execute $<TARGET_FILE:VectorDataProjectionExample>
     ${INPUTDATA}/Capitole-Shadows.kml
     LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
     ${TEMP}/vectorDataProjectionExample.shp
@@ -55,7 +55,7 @@ otb_add_test(NAME prTeGeometriesProjectionTest COMMAND ${OTB_TEST_DRIVER}
   --compare-ogr ${NOTOL}
     ${BASELINE}/geometriesProjectionExample.shp
     ${TEMP}/geometriesProjectionExample.shp
-  $<TARGET_FILE:GeometriesProjectionExample>
+  Execute $<TARGET_FILE:GeometriesProjectionExample>
     ${INPUTDATA}/Capitole-Shadows.shp
     LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
     ${TEMP}/geometriesProjectionExample.shp
@@ -67,7 +67,7 @@ otb_add_test(NAME prTeEstimateRPCSensorModelExampleTest COMMAND ${OTB_TEST_DRIVE
     ${BASELINE}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
     ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
   --ignore-lines-with 5 PipelineMTime ImportImageContaine Source: Image Time:
-  $<TARGET_FILE:EstimateRPCSensorModelExample>
+  Execute $<TARGET_FILE:EstimateRPCSensorModelExample>
     LARGEINPUT{SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT}
     ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
     1199 1259 -22.76847 -43.168043 0.
@@ -89,14 +89,14 @@ otb_add_test(NAME prTeEstimateRPCSensorModelExampleTest COMMAND ${OTB_TEST_DRIVE
 )
 
 otb_add_test(NAME prTePlaceNameToLonLatExampleTest COMMAND ${OTB_TEST_DRIVER}
-  $<TARGET_FILE:PlaceNameToLonLatExample>
+  Execute $<TARGET_FILE:PlaceNameToLonLatExample>
     Toulouse
 )
 otb_add_test(NAME prTeCoordinateToNameExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-ascii ${NOTOL}
     ${BASELINE}/CoordinateToNameExample.txt
     ${TEMP}/CoordinateToNameExample.txt
-  $<TARGET_FILE:CoordinateToNameExample>
+  Execute $<TARGET_FILE:CoordinateToNameExample>
     103.78 1.29
     ${TEMP}/CoordinateToNameExample.txt
 )

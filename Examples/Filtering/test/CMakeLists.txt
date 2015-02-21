@@ -7,7 +7,7 @@ otb_add_test(NAME fiTeMathematicalMorphologyBinaryFiltersTest COMMAND ${OTB_TEST
     ${TEMP}/MathematicalMorphologyBinaryErosionOutput.png
     ${BASELINE}/MathematicalMorphologyBinaryDilationOutput.png
     ${TEMP}/MathematicalMorphologyBinaryDilationOutput.png
-  $<TARGET_FILE:MathematicalMorphologyBinaryFilters>
+  Execute $<TARGET_FILE:MathematicalMorphologyBinaryFilters>
     ${INPUTDATA}/ROISpot5.png
     ${TEMP}/MathematicalMorphologyBinaryErosionOutput.png
     ${TEMP}/MathematicalMorphologyBinaryDilationOutput.png
@@ -22,7 +22,7 @@ otb_add_test(NAME fiTeDanielssonDistanceMapImageFilterTest COMMAND ${OTB_TEST_DR
     ${TEMP}/DanielssonDistanceMapImageFilterOutput1.png
     ${BASELINE}/DanielssonDistanceMapImageFilterOutput2.png
     ${TEMP}/DanielssonDistanceMapImageFilterOutput2.png
-  $<TARGET_FILE:DanielssonDistanceMapImageFilter>
+  Execute $<TARGET_FILE:DanielssonDistanceMapImageFilter>
     ${INPUTDATA}/FivePoints.png
     ${TEMP}/DanielssonDistanceMapImageFilterOutput1.png
     ${TEMP}/DanielssonDistanceMapImageFilterOutput2.png
@@ -34,7 +34,7 @@ otb_add_test(NAME fiTeMeanImageFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/MeanImageFilterOutput.png
     ${TEMP}/MeanImageFilterOutput.png
-  $<TARGET_FILE:MeanImageFilter>
+  Execute $<TARGET_FILE:MeanImageFilter>
     ${INPUTDATA}/QB_Suburb.png
     ${TEMP}/MeanImageFilterOutput.png
 )
@@ -49,7 +49,7 @@ otb_add_test(NAME fiTeThresholdImageFilterTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/ThresholdImageFilterOutputAbove.png
     ${BASELINE}/ThresholdImageFilterOutputOutside.png
     ${TEMP}/ThresholdImageFilterOutputOutside.png
-  $<TARGET_FILE:ThresholdImageFilter>
+  Execute $<TARGET_FILE:ThresholdImageFilter>
     ${INPUTDATA}/ROISpot5.png
     ${TEMP}/ThresholdImageFilterOutputBelow.png
     ${TEMP}/ThresholdImageFilterOutputAbove.png
@@ -62,7 +62,7 @@ otb_add_test(NAME fiTeGradientMagnitudeRecursiveGaussianImageFilterTest COMMAND 
   --compare-n-images ${PNGTOL} 1
     ${BASELINE}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
     ${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
-  $<TARGET_FILE:GradientMagnitudeRecursiveGaussianImageFilter>
+  Execute $<TARGET_FILE:GradientMagnitudeRecursiveGaussianImageFilter>
     ${INPUTDATA}/ROISpot5.png
     ${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
     3
@@ -74,7 +74,7 @@ otb_add_test(NAME fiTeGradientAnisotropicDiffusionImageFilterTest COMMAND ${OTB_
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/GradientAnisotropicDiffusionImageFilterOutput.png
     ${TEMP}/GradientAnisotropicDiffusionImageFilterOutput.png
-  $<TARGET_FILE:GradientAnisotropicDiffusionImageFilter>
+  Execute $<TARGET_FILE:GradientAnisotropicDiffusionImageFilter>
     ${INPUTDATA}/QB_Suburb.png
     ${TEMP}/GradientAnisotropicDiffusionImageFilterOutput.png
     5 0.125 3
@@ -99,7 +99,7 @@ otb_add_test(NAME fiTeMathematicalMorphologyGrayscaleFiltersTest COMMAND ${OTB_T
     ${TEMP}/MathematicalMorphologyGrayscaleErosionOutput.png
     ${BASELINE}/MathematicalMorphologyGrayscaleDilationOutput.png
     ${TEMP}/MathematicalMorphologyGrayscaleDilationOutput.png
-  $<TARGET_FILE:MathematicalMorphologyGrayscaleFilters>
+  Execute $<TARGET_FILE:MathematicalMorphologyGrayscaleFilters>
     ${INPUTDATA}/QB_Suburb.png
     ${TEMP}/MathematicalMorphologyGrayscaleErosionOutput.png
     ${TEMP}/MathematicalMorphologyGrayscaleDilationOutput.png
@@ -114,7 +114,7 @@ otb_add_test(NAME fiTeLaplacianRecursiveGaussianImageFilter1Test COMMAND ${OTB_T
     ${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.hdr
     ${BASELINE}/LaplacianRecursiveGaussianImageFilterOutput5.png
     ${TEMP}/LaplacianRecursiveGaussianImageFilterOutput5.png
-  $<TARGET_FILE:LaplacianRecursiveGaussianImageFilter1>
+  Execute $<TARGET_FILE:LaplacianRecursiveGaussianImageFilter1>
     ${INPUTDATA}/ROISpot5.png
     ${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.hdr
     5
@@ -130,7 +130,7 @@ otb_add_test(NAME fiTeLaplacianRecursiveGaussianImageFilter2Test COMMAND ${OTB_T
     ${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.hdr
     ${BASELINE}/LaplacianRecursiveGaussianImageFilter2Output5.png
     ${TEMP}/LaplacianRecursiveGaussianImageFilter2Output5.png
-  $<TARGET_FILE:LaplacianRecursiveGaussianImageFilter2>
+  Execute $<TARGET_FILE:LaplacianRecursiveGaussianImageFilter2>
     ${INPUTDATA}/ROISpot5.png
     ${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.hdr
     5
@@ -143,7 +143,7 @@ otb_add_test(NAME fiTeCannyEdgeDetectionImageFilterTest COMMAND ${OTB_TEST_DRIVE
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/CannyEdgeDetectorImageFilterOutput.png
     ${TEMP}/CannyEdgeDetectorImageFilterOutput.png
-  $<TARGET_FILE:CannyEdgeDetectionImageFilter>
+  Execute $<TARGET_FILE:CannyEdgeDetectionImageFilter>
     ${INPUTDATA}/ROISpot5.png
     ${TEMP}/CannyEdgeDetectorImageFilterOutput.png
     2
@@ -155,7 +155,7 @@ otb_add_test(NAME fiTeDiscreteGaussianImageFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/DiscreteGaussianImageFilterOutput.png
     ${TEMP}/DiscreteGaussianImageFilterOutput.png
-  $<TARGET_FILE:DiscreteGaussianImageFilter>
+  Execute $<TARGET_FILE:DiscreteGaussianImageFilter>
     ${INPUTDATA}/QB_Suburb.png
     ${TEMP}/DiscreteGaussianImageFilterOutput.png
     4 9
@@ -167,7 +167,7 @@ otb_add_test(NAME fiTeMedianImageFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/MedianImageFilterOutput.png
     ${TEMP}/MedianImageFilterOutput.png
-  $<TARGET_FILE:MedianImageFilter>
+  Execute $<TARGET_FILE:MedianImageFilter>
     ${INPUTDATA}/QB_Suburb.png
     ${TEMP}/MedianImageFilterOutput.png
 )
@@ -178,7 +178,7 @@ otb_add_test(NAME fiTeBinaryThresholdImageFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/BinaryThresholdImageFilterOutput.png
     ${TEMP}/BinaryThresholdImageFilterOutput.png
-  $<TARGET_FILE:BinaryThresholdImageFilter>
+  Execute $<TARGET_FILE:BinaryThresholdImageFilter>
     ${INPUTDATA}/ROISpot5.png
     ${TEMP}/BinaryThresholdImageFilterOutput.png
     150 180 0 255
@@ -192,7 +192,7 @@ otb_add_test(NAME fiTeDerivativeImageFilterTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/DerivativeImageFilterFloatOutput.hdr
     ${BASELINE}/DerivativeImageFilterOutput.png
     ${TEMP}/DerivativeImageFilterOutput.png
-  $<TARGET_FILE:DerivativeImageFilter>
+  Execute $<TARGET_FILE:DerivativeImageFilter>
     ${INPUTDATA}/ROISpot5.png
     ${TEMP}/DerivativeImageFilterFloatOutput.hdr
     ${TEMP}/DerivativeImageFilterOutput.png

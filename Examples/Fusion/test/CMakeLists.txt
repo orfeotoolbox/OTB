@@ -3,7 +3,7 @@ otb_add_test(NAME fuTeBayesianFusionImageFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${EPSILON}
     ${BASELINE}/ImageBayesianFusion.tif
     ${TEMP}/ImageBayesianFusion.tif
-  $<TARGET_FILE:BayesianFusionImageFilter>
+  Execute $<TARGET_FILE:BayesianFusionImageFilter>
     ${INPUTDATA}/multiSpect.tif
     ${INPUTDATA}/multiSpectInterp.tif
     ${INPUTDATA}/panchro.tif
@@ -19,7 +19,7 @@ otb_add_test(NAME fuTePanSharpeningExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${EPSILON}
     ${BASELINE}/PanSharpeningExampleTest.tif
     ${TEMP}/PanSharpeningExampleTest.tif
-  $<TARGET_FILE:PanSharpeningExample>
+  Execute $<TARGET_FILE:PanSharpeningExample>
     ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
     ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
     ${TEMP}/PanSharpeningExampleTest.tif
