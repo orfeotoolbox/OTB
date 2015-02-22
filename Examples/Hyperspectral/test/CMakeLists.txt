@@ -10,7 +10,7 @@ otb_add_test(NAME siTvHyperspectralExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${BASELINE}/siTvHyperspectralUnmixingExampleTestBand3.png
     ${TEMP}/siTvHyperspectralUnmixingExampleTestBand3.png
   Execute $<TARGET_FILE:HyperspectralUnmixingExample>
-    ${IMAGEDATA}/AVIRIS/Indian_pines_corrected.tif
+    LARGEINPUT{AVIRIS/Indian_pines_corrected.tif}
     ${TEMP}/siTvHyperspectralUnmixingExampleTest.tif
     ${TEMP}/siTvHyperspectralUnmixingExampleTestBand1.png
     ${TEMP}/siTvHyperspectralUnmixingExampleTestBand2.png
