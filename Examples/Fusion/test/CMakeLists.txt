@@ -2,7 +2,7 @@ set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Fusion)
 set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 otb_add_test(NAME fuTeBayesianFusionImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${EPSILON}
+  --compare-image ${EPSILON_8}
     ${BASELINE}/ImageBayesianFusion.tif
     ${TEMP}/ImageBayesianFusion.tif
   Execute $<TARGET_FILE:BayesianFusionImageFilter>
@@ -18,7 +18,7 @@ otb_add_test(NAME fuTeBayesianFusionImageFilterTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME fuTePanSharpeningExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${EPSILON}
+  --compare-image ${EPSILON_8}
     ${BASELINE}/PanSharpeningExampleTest.tif
     ${TEMP}/PanSharpeningExampleTest.tif
   Execute $<TARGET_FILE:PanSharpeningExample>

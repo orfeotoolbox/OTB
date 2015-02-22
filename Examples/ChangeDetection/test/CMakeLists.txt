@@ -43,7 +43,7 @@ otb_add_test(NAME cdTeRatioChDetTest COMMAND ${OTB_TEST_DRIVER}
 # ------- KullbackLeiblerDistanceChDetTest----------
 
 otb_add_test(NAME cdTeKullbackLeiblerDistanceChDetTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${PNGEPSILON} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/KullbackLeiblerDistanceChDetTest.png
     ${TEMP}/KullbackLeiblerDistanceChDetTest.png
   Execute $<TARGET_FILE:KullbackLeiblerDistanceChDet>

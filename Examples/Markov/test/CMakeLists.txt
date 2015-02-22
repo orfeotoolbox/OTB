@@ -2,7 +2,7 @@ set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Markov)
 set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 otb_add_test(NAME maTeMarkovClassification1ExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${EPSILON}
+  --compare-image ${EPSILON_8}
     ${BASELINE}/MarkovClassification1.png
     ${TEMP}/MarkovClassification1.png
   Execute $<TARGET_FILE:MarkovClassification1Example>
@@ -15,7 +15,7 @@ otb_add_test(NAME maTeMarkovClassification1ExampleTest COMMAND ${OTB_TEST_DRIVER
 )
 
 otb_add_test(NAME maTeMarkovClassification2ExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${EPSILON}
+  --compare-image ${EPSILON_8}
     ${BASELINE}/MarkovClassification2.png
     ${TEMP}/MarkovClassification2.png
   Execute $<TARGET_FILE:MarkovClassification2Example>
@@ -27,7 +27,7 @@ otb_add_test(NAME maTeMarkovClassification2ExampleTest COMMAND ${OTB_TEST_DRIVER
 )
 
 otb_add_test(NAME maTeMarkovClassification3ExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${EPSILON}
+  --compare-image ${EPSILON_8}
     ${BASELINE}/MarkovClassification3.png
     ${TEMP}/MarkovClassification3.png
   Execute $<TARGET_FILE:MarkovClassification3Example>
@@ -38,7 +38,7 @@ otb_add_test(NAME maTeMarkovClassification3ExampleTest COMMAND ${OTB_TEST_DRIVER
 )
 
 otb_add_test(NAME maTeMarkovRestaurationExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${EPSILON}
+  --compare-image ${EPSILON_8}
     ${BASELINE}/MarkovRestauration.png
     ${TEMP}/MarkovRestauration.png
   Execute $<TARGET_FILE:MarkovRestaurationExample>
@@ -53,7 +53,7 @@ otb_add_test(NAME maTeMarkovRestaurationExampleTest COMMAND ${OTB_TEST_DRIVER}
 
 
 otb_add_test(NAME maTeMarkovRegularizationExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${EPSILON}
+  --compare-image ${EPSILON_8}
     ${BASELINE}/MarkovRegularization-scaled.png
     ${TEMP}/MarkovRegularization-scaled.png
   Execute $<TARGET_FILE:MarkovRegularizationExample>

@@ -4,7 +4,7 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 # -------            ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter   ------------------------------
 
 otb_add_test(NAME raTeARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${EPSILON}
+  --compare-image ${EPSILON_8}
     ${BASELINE}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
     ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
   Execute $<TARGET_FILE:ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter>
@@ -53,7 +53,7 @@ otb_add_test(NAME raTeNDVIRAndNIRVegetationIndexImageFilterTest COMMAND ${OTB_TE
 )
 
 otb_add_test(NAME raTeAtmosphericCorrectionSequencementTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${EPSILON}
+  --compare-image ${EPSILON_8}
     ${BASELINE}/Example_RomaniaAtmosphericCorrectionSequencement.tif
     ${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif
   Execute $<TARGET_FILE:AtmosphericCorrectionSequencement>
