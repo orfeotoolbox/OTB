@@ -61,7 +61,7 @@ otb_add_test(NAME fiTeThresholdImageFilterTest COMMAND ${OTB_TEST_DRIVER}
 # ------- GradientMagnitudeRecursiveGaussianImageFilterTest----------
 
 otb_add_test(NAME fiTeGradientMagnitudeRecursiveGaussianImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${PNGTOL} 1
+  --compare-n-images ${NOTOL} 1
     ${BASELINE}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
     ${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
   Execute $<TARGET_FILE:GradientMagnitudeRecursiveGaussianImageFilter>
