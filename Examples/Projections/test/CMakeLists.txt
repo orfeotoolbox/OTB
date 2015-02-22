@@ -1,3 +1,5 @@
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Projections)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 otb_add_test(NAME prTeOrthoRectificationExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${NOTOL}

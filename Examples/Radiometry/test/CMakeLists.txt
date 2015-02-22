@@ -1,3 +1,6 @@
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Radiometry)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+
 # -------            ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter   ------------------------------
 
 otb_add_test(NAME raTeARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest COMMAND ${OTB_TEST_DRIVER}

@@ -1,3 +1,5 @@
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/MultiScale)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 # ------- MorphologicalPyramidAnalysisFilterExampleTest ----------
 

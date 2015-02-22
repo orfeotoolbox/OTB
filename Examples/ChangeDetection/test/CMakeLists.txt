@@ -1,3 +1,5 @@
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/ChangeDetection)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 # ------- CorrelChDetTest----------
 

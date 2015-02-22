@@ -1,3 +1,6 @@
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Simulation)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+
 # ------- ProsailModelExampleTest ----------
 
 otb_add_test(NAME siTvProsailModelExampleTest COMMAND ${OTB_TEST_DRIVER}

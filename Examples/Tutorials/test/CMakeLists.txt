@@ -1,3 +1,5 @@
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Tutorials)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 otb_add_test(NAME  trTeTutorialsHelloWorld COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:HelloWorldOTB>

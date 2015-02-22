@@ -1,3 +1,5 @@
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Classification)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 # ------- ScalarImageMarkovRandomField1Test----------
 

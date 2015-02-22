@@ -1,3 +1,5 @@
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Learning)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 # ------- SVMImageClassificationExampleTest----------
 
