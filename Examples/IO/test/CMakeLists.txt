@@ -79,7 +79,7 @@ otb_add_test(NAME ioTeImageToKmzAndMapFileProductExample COMMAND ${OTB_TEST_DRIV
 )
 
 otb_add_test(NAME ioTeTileMapImageIOExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${HIGHTOL}
+  --compare-image 10.0
     ${BASELINE}/openStreetMap.png
     ${TEMP}/openStreetMap.png
   Execute $<TARGET_FILE:TileMapImageIOExample>
