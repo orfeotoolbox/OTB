@@ -151,7 +151,7 @@ otb_add_test(NAME feTeSeamCarvingExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${NOTOL}
     ${BASELINE}/SeamCarvingExampleOutput.png
     ${TEMP}/SeamCarvingExampleOutput.png
-  SeamCarvingExampleTest
+  Execute $<TARGET_FILE:SeamCarvingExample>
     ${INPUTDATA}/QB_Suburb.png
     ${TEMP}/SeamCarvingExampleOutput.png
     50
