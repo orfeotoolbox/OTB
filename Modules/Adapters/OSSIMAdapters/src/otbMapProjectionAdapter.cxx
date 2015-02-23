@@ -166,24 +166,24 @@ std::string MapProjectionAdapter::GetParameter(const std::string& key) const
   // Apply parameters to transmercator
   if (projectionName.compare("ossimTransMercatorProjection") == 0)
     {
-    const ossimTransMercatorProjection* projection = dynamic_cast<const ossimTransMercatorProjection*>(this->GetMapProjection());
+    const ossimTransMercatorProjection* tmProjection = dynamic_cast<const ossimTransMercatorProjection*>(this->GetMapProjection());
     if (key.compare("ScaleFactor") == 0)
       {
-      return Utils::ConvertToString(projection->getScaleFactor());
+      return Utils::ConvertToString(tmProjection->getScaleFactor());
       }
     }
 
   // Apply parameters to Utm
   if (projectionName.compare("ossimUtmProjection") == 0)
     {
-    const ossimUtmProjection* projection = dynamic_cast<const ossimUtmProjection*>(this->GetMapProjection());
+    const ossimUtmProjection* utmProjection = dynamic_cast<const ossimUtmProjection*>(this->GetMapProjection());
     if (key.compare("Zone") == 0)
       {
-      return Utils::ConvertToString(projection->getZone());
+      return Utils::ConvertToString(utmProjection->getZone());
       }
     if (key.compare("Hemisphere") == 0)
       {
-      return Utils::ConvertToString(projection->getHemisphere());
+      return Utils::ConvertToString(utmProjection->getHemisphere());
       }
     }
 
@@ -342,131 +342,131 @@ void MapProjectionAdapter::ApplyParametersToProjection()
   // Apply parameters to LambertConformalConic
   if (projectionName.compare("ossimLambertConformalConicProjection") == 0)
     {
-    ossimLambertConformalConicProjection* projection = dynamic_cast<ossimLambertConformalConicProjection*>(this->GetMapProjection());
+    ossimLambertConformalConicProjection* lccProjection = dynamic_cast<ossimLambertConformalConicProjection*>(this->GetMapProjection());
 
     it = m_ParameterStore.find("FalseNorthing");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
 
-      projection->setFalseNorthing(value);
+      lccProjection->setFalseNorthing(value);
       }
     it = m_ParameterStore.find("FalseEasting");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
 
-      projection->setFalseEasting(value);
+      lccProjection->setFalseEasting(value);
       }
     it = m_ParameterStore.find("StandardParallel1");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
-      projection->setStandardParallel1(value);
+      lccProjection->setStandardParallel1(value);
       }
     it = m_ParameterStore.find("StandardParallel2");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
-      projection->setStandardParallel2(value);
+      lccProjection->setStandardParallel2(value);
       }
     }
 
   // Apply parameters to Eckert4
   if (projectionName.compare("ossimEckert4Projection") == 0)
     {
-    ossimEckert4Projection* projection = dynamic_cast<ossimEckert4Projection*>(this->GetMapProjection());
+    ossimEckert4Projection* e4Projection = dynamic_cast<ossimEckert4Projection*>(this->GetMapProjection());
 
     it = m_ParameterStore.find("FalseNorthing");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
-      projection->setFalseNorthing(value);
+      e4Projection->setFalseNorthing(value);
       }
     it = m_ParameterStore.find("FalseEasting");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
-      projection->setFalseEasting(value);
+      e4Projection->setFalseEasting(value);
       }
     }
 
   // Apply parameters to Mollweid
   if (projectionName.compare("ossimMollweidProjection") == 0)
     {
-    ossimMollweidProjection* projection = dynamic_cast<ossimMollweidProjection*>(this->GetMapProjection());
+    ossimMollweidProjection* mProjection = dynamic_cast<ossimMollweidProjection*>(this->GetMapProjection());
 
     it = m_ParameterStore.find("FalseNorthing");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
-      projection->setFalseNorthing(value);
+      mProjection->setFalseNorthing(value);
       }
     it = m_ParameterStore.find("FalseEasting");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
-      projection->setFalseEasting(value);
+      mProjection->setFalseEasting(value);
       }
     }
 
   // Apply parameters to Sinusoidal
   if (projectionName.compare("ossimSinusoidalProjection") == 0)
     {
-    ossimSinusoidalProjection* projection = dynamic_cast<ossimSinusoidalProjection*>(this->GetMapProjection());
+    ossimSinusoidalProjection* sProjection = dynamic_cast<ossimSinusoidalProjection*>(this->GetMapProjection());
 
     it = m_ParameterStore.find("FalseNorthing");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
-      projection->setFalseNorthing(value);
+      sProjection->setFalseNorthing(value);
       }
     it = m_ParameterStore.find("FalseEasting");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
-      projection->setFalseEasting(value);
+      sProjection->setFalseEasting(value);
       }
     }
 
   // Apply parameters to transmercator
   if (projectionName.compare("ossimTransMercatorProjection") == 0)
     {
-    ossimTransMercatorProjection* projection = dynamic_cast<ossimTransMercatorProjection*> (this->GetMapProjection());
+    ossimTransMercatorProjection* tmProjection = dynamic_cast<ossimTransMercatorProjection*> (this->GetMapProjection());
     it = m_ParameterStore.find("ScaleFactor");
     if (it != m_ParameterStore.end())
       {
       double scale = atof((*it).second.c_str());
-      projection->setScaleFactor(scale);
+      tmProjection->setScaleFactor(scale);
       }
     it = m_ParameterStore.find("FalseNorthing");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
-      projection->setFalseNorthing(value);
+      tmProjection->setFalseNorthing(value);
       }
     it = m_ParameterStore.find("FalseEasting");
     if (it != m_ParameterStore.end())
       {
       double value = atof((*it).second.c_str());
-      projection->setFalseEasting(value);
+      tmProjection->setFalseEasting(value);
       }
     }
 
   // Apply parameters to Utm
   if (projectionName.compare("ossimUtmProjection") == 0)
     {
-    ossimUtmProjection* projection = dynamic_cast<ossimUtmProjection*>(this->GetMapProjection());
+    ossimUtmProjection* utmProjection = dynamic_cast<ossimUtmProjection*>(this->GetMapProjection());
     it = m_ParameterStore.find("Zone");
     if (it != m_ParameterStore.end())
       {
       int zone = atoi((*it).second.c_str());
-      projection->setZone(zone);
+      utmProjection->setZone(zone);
       }
     it = m_ParameterStore.find("Hemisphere");
     if (it != m_ParameterStore.end())
       {
-      projection->setHemisphere((*it).second[0]);
+      utmProjection->setHemisphere((*it).second[0]);
       }
     }
 }
