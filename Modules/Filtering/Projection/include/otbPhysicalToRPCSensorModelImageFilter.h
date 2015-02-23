@@ -107,7 +107,7 @@ public:
   }
 
   /** Reimplement the method Modified() */
-  virtual void Modified();
+  virtual void Modified() const;
 
 protected:
   /** Constructor */
@@ -129,7 +129,7 @@ private:
   GCPsToSensorModelPointerType       m_GCPsToSensorModelFilter;
 
   SizeType                           m_GridSize;
-  bool                               m_OutputInformationGenerated;
+  mutable bool                       m_OutputInformationGenerated;
 
 };
 } // end of namespace otb

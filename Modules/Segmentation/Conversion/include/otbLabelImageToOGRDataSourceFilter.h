@@ -122,6 +122,7 @@ protected:
   typedef itk::DataObject::Pointer DataObjectPointer;
 
   virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  using Superclass::MakeOutput;
 
 private:
   LabelImageToOGRDataSourceFilter(const Self &);  //purposely not implemented

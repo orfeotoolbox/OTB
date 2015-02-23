@@ -73,6 +73,7 @@ public:
 
   /** Connects the VectorDatas from which the localizations are going to be extracted. */
   void AddInput(const VectorDataType *);
+  using Superclass::AddInput;
 
   const VectorDataType * GetInput(unsigned int idx) const;
 

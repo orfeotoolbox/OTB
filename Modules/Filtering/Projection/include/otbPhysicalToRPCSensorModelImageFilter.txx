@@ -104,7 +104,7 @@ PhysicalToRPCSensorModelImageFilter<TImage>
 template <class TImage>
 void
 PhysicalToRPCSensorModelImageFilter<TImage>
-::Modified()
+::Modified() const
 {
   Superclass::Modified();
   m_OutputInformationGenerated= false;
