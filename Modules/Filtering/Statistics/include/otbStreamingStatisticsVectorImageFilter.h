@@ -175,6 +175,7 @@ public:
    * output.
    */
   virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  using Superclass::MakeOutput;
 
   virtual void Reset(void);
 
