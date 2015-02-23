@@ -36,13 +36,11 @@ public:
     * Take a projection type name.
     */
    virtual ossimProjection* createProjection(const ossimString& name)const;
-   using ossimProjectionFactoryBase::createProjection;
    /**
     * Take a keywordlist.
     */
    virtual ossimProjection* createProjection(const ossimKeywordlist& kwl,
                                              const char* prefix=0)const;
-   using ossimProjectionFactoryBase::createProjection;
 
    virtual ossimObject* createObject(const ossimString& typeName)const;
 
