@@ -762,14 +762,14 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
 
         while (vIt != vertexList->End())
           {
-          VertexType pointCoord = vIt.Value();
+          VertexType pointCoord1 = vIt.Value();
           if (DataNodeType::Dimension > 2)
             {
-            coordinates->add_latlngalt(pointCoord[1], pointCoord[0], pointCoord[2] + 1); //Drawing polygon 1m above ground to avoid z-buffer issues
+            coordinates->add_latlngalt(pointCoord1[1], pointCoord1[0], pointCoord1[2] + 1); //Drawing polygon 1m above ground to avoid z-buffer issues
             }
           else
             {
-            coordinates->add_latlngalt(pointCoord[1], pointCoord[0], 1); //Drawing polygon 1m above ground to avoid z-buffer issues
+            coordinates->add_latlngalt(pointCoord1[1], pointCoord1[0], 1); //Drawing polygon 1m above ground to avoid z-buffer issues
             }
 
           line->set_coordinates(coordinates);
@@ -778,14 +778,14 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
 
         //Adding the first point again to close the polygon
         vIt = vertexList->Begin();
-        VertexType pointCoord = vIt.Value();
+        VertexType pointCoord2 = vIt.Value();
         if (DataNodeType::Dimension > 2)
           {
-          coordinates->add_latlngalt(pointCoord[1], pointCoord[0], pointCoord[2] + 1); //Drawing polygon 1m above ground to avoid z-buffer issues
+          coordinates->add_latlngalt(pointCoord2[1], pointCoord2[0], pointCoord2[2] + 1); //Drawing polygon 1m above ground to avoid z-buffer issues
           }
         else
           {
-          coordinates->add_latlngalt(pointCoord[1], pointCoord[0], 1); //Drawing polygon 1m above ground to avoid z-buffer issues
+          coordinates->add_latlngalt(pointCoord2[1], pointCoord2[0], 1); //Drawing polygon 1m above ground to avoid z-buffer issues
           }
         line->set_coordinates(coordinates);
 
@@ -803,14 +803,14 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
           while (vIt != vertexList->End())
             {
             vIt = vertexList->Begin();
-            VertexType pointCoord = vIt.Value();
+            VertexType pointCoord3 = vIt.Value();
             if (DataNodeType::Dimension > 2)
               {
-              coordinates->add_latlngalt(pointCoord[1], pointCoord[0], pointCoord[2] + 1); //Drawing polygon 1m above ground to avoid z-buffer issues
+              coordinates->add_latlngalt(pointCoord3[1], pointCoord3[0], pointCoord3[2] + 1); //Drawing polygon 1m above ground to avoid z-buffer issues
               }
             else
               {
-              coordinates->add_latlngalt(pointCoord[1], pointCoord[0], 1); //Drawing polygon 1m above ground to avoid z-buffer issues
+              coordinates->add_latlngalt(pointCoord3[1], pointCoord3[0], 1); //Drawing polygon 1m above ground to avoid z-buffer issues
               }
 
             line->set_coordinates(coordinates);
@@ -819,14 +819,14 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
 
           //Adding the first point again to close the polygon
           vIt = vertexList->Begin();
-          VertexType pointCoord = vIt.Value();
+          VertexType pointCoord4 = vIt.Value();
           if (DataNodeType::Dimension > 2)
             {
-            coordinates->add_latlngalt(pointCoord[1], pointCoord[0], pointCoord[2] + 1); //Drawing polygon 1m above ground to avoid z-buffer issues
+            coordinates->add_latlngalt(pointCoord4[1], pointCoord4[0], pointCoord4[2] + 1); //Drawing polygon 1m above ground to avoid z-buffer issues
             }
           else
             {
-            coordinates->add_latlngalt(pointCoord[1], pointCoord[0], 1); //Drawing polygon 1m above ground to avoid z-buffer issues
+            coordinates->add_latlngalt(pointCoord4[1], pointCoord4[0], 1); //Drawing polygon 1m above ground to avoid z-buffer issues
             }
 
           line->set_coordinates(coordinates);

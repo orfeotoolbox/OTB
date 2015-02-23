@@ -18,7 +18,7 @@
 #ifndef __otbParserXPlugins_h
 #define __otbParserXPlugins_h
 
-
+#include "itkMacro.h"
 #include "otbMath.h"
 #include "mpParser.h"
 #include <vector>
@@ -33,7 +33,7 @@ public:
     bands():ICallback(mup::cmFUNC, "bands", 2)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -152,7 +152,7 @@ public:
     ElementWisePower():IOprtBin(_T("pow"), (int) mup::prPOW, mup::oaRIGHT)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -192,7 +192,7 @@ public:
     ndvi():ICallback(mup::cmFUNC, "ndvi", 2)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -252,7 +252,7 @@ public:
     var():ICallback(mup::cmFUNC, "var", -1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -272,7 +272,7 @@ public:
     corr():ICallback(mup::cmFUNC, "corr", 2)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -332,7 +332,7 @@ public:
     vnorm():ICallback(mup::cmFUNC, "vnorm", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -351,7 +351,7 @@ public:
     vmin():ICallback(mup::cmFUNC, "vmin", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -371,7 +371,7 @@ public:
     vmax():ICallback(mup::cmFUNC, "vmax", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -391,7 +391,7 @@ public:
     vcos():ICallback(mup::cmFUNC, "vcos", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -411,7 +411,7 @@ public:
     vsin():ICallback(mup::cmFUNC, "vsin", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -431,7 +431,7 @@ public:
     vtan():ICallback(mup::cmFUNC, "vtan", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -451,7 +451,7 @@ public:
     vtanh():ICallback(mup::cmFUNC, "vtanh", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -471,7 +471,7 @@ public:
     vsinh():ICallback(mup::cmFUNC, "vsinh", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -491,7 +491,7 @@ public:
     vcosh():ICallback(mup::cmFUNC, "vcosh", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -511,7 +511,7 @@ public:
     vlog():ICallback(mup::cmFUNC, "vlog", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -531,7 +531,7 @@ public:
     vlog10():ICallback(mup::cmFUNC, "vlog10", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -551,7 +551,7 @@ public:
     vabs():ICallback(mup::cmFUNC, "vabs", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -571,7 +571,7 @@ public:
     vexp():ICallback(mup::cmFUNC, "vexp", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {
@@ -591,7 +591,7 @@ public:
     vsqrt():ICallback(mup::cmFUNC, "vsqrt", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
 
     const mup::char_type* GetDesc() const
     {

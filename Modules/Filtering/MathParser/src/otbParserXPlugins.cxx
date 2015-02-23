@@ -26,7 +26,7 @@ namespace otb
 {
 
 
-void bands::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void bands::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
 
       assert(a_iArgc==2);
@@ -37,12 +37,10 @@ void bands::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
       mup::matrix_type a = a_pArg[0]->GetArray();
       mup::matrix_type b = a_pArg[1]->GetArray();
 
-
-      int nbrows = b.GetRows();
       int nbcols = b.GetCols();
 
       assert(a.GetRows()==1); // Bands selection is done on a row vector
-      assert(nbrows==1); // Bands selection is done by a row vector
+      assert(b.GetRows()==1); // Bands selection is done by a row vector
 
       mup::matrix_type res(1,nbcols,0.);
 
@@ -105,11 +103,8 @@ void ElementWiseDivision::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *
       int nbrows = a.GetRows();
       int nbcols = a.GetCols();
 
-      int nbrows2 = b.GetRows();
-      int nbcols2 = b.GetCols();
-
-      assert(nbrows == nbrows2);
-      assert(nbcols == nbcols2);
+      assert(nbrows == b.GetRows());
+      assert(nbcols == b.GetCols());
 
       mup::matrix_type res(nbrows,nbcols,0.);
 
@@ -181,11 +176,8 @@ void ElementWiseMultiplication::Eval(mup::ptr_val_type &ret, const mup::ptr_val_
       int nbrows = a.GetRows();
       int nbcols = a.GetCols();
 
-      int nbrows2 = b.GetRows();
-      int nbcols2 = b.GetCols();
-
-      assert(nbrows == nbrows2);
-      assert(nbcols == nbcols2);
+      assert(nbrows == b.GetRows());
+      assert(nbcols == b.GetCols());
 
       mup::matrix_type res(nbrows,nbcols,0.);
 
@@ -204,7 +196,7 @@ void MultiplicationByScalar::Eval(mup::ptr_val_type &ret, const mup::ptr_val_typ
       const mup::matrix_type a = a_pArg[0]->GetArray();
       mup::matrix_type b;
 
-      double scalar;
+      double scalar(1.);
       switch (a_pArg[1]->GetType())
       {
         case 'i':
@@ -238,7 +230,7 @@ void MultiplicationByScalar::Eval(mup::ptr_val_type &ret, const mup::ptr_val_typ
     }
 
 
-void ElementWisePower::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void ElementWisePower::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
 
       assert(a_pArg[0]->GetType()=='m');
@@ -251,11 +243,8 @@ void ElementWisePower::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_p
       int nbrows = a.GetRows();
       int nbcols = a.GetCols();
 
-      int nbrows2 = b.GetRows();
-      int nbcols2 = b.GetCols();
-
-      assert(nbrows == nbrows2);
-      assert(nbcols == nbcols2);
+      assert(nbrows == b.GetRows());
+      assert(nbcols == b.GetCols());
 
       mup::matrix_type res(nbrows,nbcols,0.);
 
@@ -278,7 +267,7 @@ void PowerByScalar::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg
       const mup::matrix_type a = a_pArg[0]->GetArray();
       mup::matrix_type b;
 
-      double scalar;
+      double scalar(1.);
       switch (a_pArg[1]->GetType())
       {
         case 'i':
@@ -312,7 +301,7 @@ void PowerByScalar::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg
     }
 
 
-void ndvi::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void ndvi::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
 
       assert(a_iArgc==2);
@@ -334,7 +323,7 @@ void cat::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
     {
 
       std::vector<double> vect;
-      int nbrows,nbcols;
+      int nbcols;
       mup::matrix_type m1;
 
       for (int k=0; k<a_iArgc; ++k)
@@ -347,10 +336,10 @@ void cat::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
 
               m1 = a_pArg[k]->GetArray();
 
-              nbrows = m1.GetRows();
+             
               nbcols = m1.GetCols();
 
-              assert(nbrows==1);
+              assert(m1.GetRows()==1);
 
               for (int j=0; j<nbcols; j++)
                   vect.push_back( m1.At(0,j).GetFloat());
@@ -482,7 +471,7 @@ void var::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
     }
 
 
-void corr::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void corr::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
 
       assert(a_pArg[0]->GetType()=='m');
@@ -495,11 +484,8 @@ void corr::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
       int nbrows = a.GetRows();
       int nbcols = a.GetCols();
 
-      int nbrows2 = b.GetRows();
-      int nbcols2 = b.GetCols();
-
-      assert(nbrows == nbrows2);
-      assert(nbcols == nbcols2);
+      assert(nbrows == b.GetRows());
+      assert(nbcols == b.GetCols());
 
       double mean1=0.0;
       for (int i=0; i<nbrows; i++)
@@ -653,7 +639,7 @@ void maj::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
 
 
 //--------------------------------------------------------------------------------------------------------//
-void vnorm::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vnorm::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
 
       int nbrows,nbcols;
@@ -679,7 +665,7 @@ void vnorm::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
   }
 
 
-void vmin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vmin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
   
       std::vector<double> vect;
@@ -709,7 +695,7 @@ void vmin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
     }
 
 
-void vmax::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vmax::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
   
       std::vector<double> vect;
@@ -739,7 +725,7 @@ void vmax::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
     }
 
 
-void vcos::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vcos::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
       assert(a_iArgc==1);
       assert(a_pArg[0]->GetType()=='m');
@@ -763,7 +749,7 @@ void vcos::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
     }
 
 
-void vsin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vsin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
       assert(a_iArgc==1);
       assert(a_pArg[0]->GetType()=='m');
@@ -785,7 +771,7 @@ void vsin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
     }
 
 
-void vtan::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vtan::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
 
       assert(a_iArgc==1);
@@ -808,7 +794,7 @@ void vtan::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
     }
 
 
-void vtanh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vtanh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
       assert(a_iArgc==1);
       assert(a_pArg[0]->GetType()=='m');
@@ -831,7 +817,7 @@ void vtanh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
     }
 
 
-void vsinh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vsinh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
       assert(a_iArgc==1);
       assert(a_pArg[0]->GetType()=='m');
@@ -854,7 +840,7 @@ void vsinh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
     }
 
 
-void vcosh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vcosh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
 
       assert(a_iArgc==1);
@@ -878,7 +864,7 @@ void vcosh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
     }
 
 
-void vlog::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vlog::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
       assert(a_iArgc==1);
       assert(a_pArg[0]->GetType()=='m');
@@ -900,7 +886,7 @@ void vlog::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
     }
 
 
-void vlog10::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vlog10::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
       assert(a_iArgc==1);
       assert(a_pArg[0]->GetType()=='m');
@@ -923,7 +909,7 @@ void vlog10::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a
     }
 
 
-void vabs::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vabs::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
       assert(a_iArgc==1);
       assert(a_pArg[0]->GetType()=='m');
@@ -945,7 +931,7 @@ void vabs::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
     }
 
 
-void vexp::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vexp::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
       assert(a_iArgc==1);
       assert(a_pArg[0]->GetType()=='m');
@@ -968,7 +954,7 @@ void vexp::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
     }
 
 
-void vsqrt::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+void vsqrt::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
     {
 
       assert(a_iArgc==1);
