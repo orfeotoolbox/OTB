@@ -496,6 +496,9 @@ unsigned int GDALImageIO::GetOverviewsCount()
     return dataset->GetRasterBand(1)->GetOverviewCount();
     }
 
+  if (dataset->GetRasterBand(1)->GetOverviewCount())
+    return dataset->GetRasterBand(1)->GetOverviewCount();
+
   // default case: compute overviews until one of the dimensions is 1
   bool flagStop = false;
   unsigned int possibleOverviewCount = 0;

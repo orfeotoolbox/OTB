@@ -56,9 +56,9 @@ int otbGDALOverviewsBuilder(int itkNotUsed(argc), char* argv[])
   io->SetFileName(inputFilename);
   io->CanReadFile(inputFilename);
   io->ReadImageInformation();
-  //std::cout << io->GetNumberOfOverviews() << std::endl;
+  //std::cout << io->GetOverviewsCount() << std::endl;
 
-  if (io->GetNumberOfOverviews() != static_cast<unsigned int>(nbResolution)-1 )
+  if (io->GetOverviewsCount() != static_cast<unsigned int>(nbResolution)-1 )
     return EXIT_FAILURE;
 
   return EXIT_SUCCESS;
