@@ -131,7 +131,7 @@ BayesianFusionFilter<TInputMultiSpectralImage,
   covComputefilter->SetInput(multiSpecInterp);
   covComputefilter->Update();
 
-  MatrixType m_CovarianceMatrix = covComputefilter->GetCovariance();
+  m_CovarianceMatrix = covComputefilter->GetCovariance();
   otbMsgDebugMacro(<< "Covariance: " << m_CovarianceMatrix);
 
   m_CovarianceInvMatrix = m_CovarianceMatrix.GetInverse();

@@ -109,9 +109,9 @@ ConcatenateVectorDataFilter<TVectorData>
     {
       // Add the current vectordata
       TreeNodeType *
-         inputRoot = const_cast<TreeNodeType *>(this->GetInput(idx)->GetDataTree()->GetRoot());
+         currentInputRoot = const_cast<TreeNodeType *>(this->GetInput(idx)->GetDataTree()->GetRoot());
 
-      ProcessNode(inputRoot, outputDocument);
+      ProcessNode(currentInputRoot, outputDocument);
 
     }
 

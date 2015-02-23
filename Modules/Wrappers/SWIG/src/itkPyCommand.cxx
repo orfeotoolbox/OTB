@@ -33,9 +33,9 @@ PyCommand::~PyCommand()
     this->obj = NULL;
 }
 
-void PyCommand::SetCommandCallable(PyObject *obj)
+void PyCommand::SetCommandCallable(PyObject *theObj)
 {
-    if (obj != this->obj)
+    if (theObj != this->obj)
     {
         if (this->obj)
         {
@@ -44,7 +44,7 @@ void PyCommand::SetCommandCallable(PyObject *obj)
         }
 
         // store the new object
-        this->obj = obj;
+        this->obj = theObj;
 
         if (this->obj)
         {

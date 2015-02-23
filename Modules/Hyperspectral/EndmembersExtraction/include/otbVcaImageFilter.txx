@@ -92,7 +92,7 @@ void VCAImageFilter<TImage>::GenerateData()
     vnl_matrix<PrecisionType> R = statsInput->GetCorrelation().GetVnlMatrix();
     vnl_svd<PrecisionType> svd(R);
     vnl_matrix<PrecisionType> U = svd.U();
-    vnl_matrix<PrecisionType> Ud = U.get_n_columns(0, m_NumberOfEndmembers);
+    Ud = U.get_n_columns(0, m_NumberOfEndmembers);
     vnl_matrix<PrecisionType> Udt = Ud.transpose();
 
     // To remove the mean

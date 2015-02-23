@@ -563,13 +563,13 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   if (m_ComputeFeretDiameter)
     {
     // init the vars
-    unsigned long size = 0;
+    unsigned long ssize = 0;
     typedef typename std::deque<typename LabelObjectType::IndexType> IndexListType;
     IndexListType idxList;
 
     // Line iterator
-    ConstLineIteratorType lit = ConstLineIteratorType(lo);
-    lit.GoToBegin();
+    ConstLineIteratorType llit = ConstLineIteratorType(lo);
+    llit.GoToBegin();
 
     typedef typename itk::ConstNeighborhoodIterator<LabelImageType> NeighborIteratorType;
     typename TLabelImage::SizeType neighborHoodRadius;
@@ -582,10 +582,10 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     it.GoToBegin();
 
     // iterate over all the lines
-    while ( !lit.IsAtEnd() )
+    while ( !llit.IsAtEnd() )
       {
-      const typename LabelObjectType::IndexType& firstIdx = lit.GetLine().GetIndex();
-      unsigned long                              length = lit.GetLine().GetLength();
+      const typename LabelObjectType::IndexType& firstIdx = llit.GetLine().GetIndex();
+      unsigned long                              length = llit.GetLine().GetLength();
 
       long endIdx0 = firstIdx[0] + length;
       for (typename LabelObjectType::IndexType idx = firstIdx; idx[0] < endIdx0; idx[0]++)
@@ -600,12 +600,12 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
           if (it.GetPixel(i) != label)
             {
             idxList.push_back(idx);
-            size++;
+            ssize++;
             break;
             }
           }
         }
-      ++lit;
+      ++llit;
       }
 
     // we can now search the feret diameter
