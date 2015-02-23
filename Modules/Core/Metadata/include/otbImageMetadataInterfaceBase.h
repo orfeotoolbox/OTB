@@ -192,13 +192,13 @@ public:
 
   virtual bool CanRead() const = 0;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict) const;
+  virtual void Print(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict) const;
 
 protected:
   ImageMetadataInterfaceBase();
   virtual ~ImageMetadataInterfaceBase() {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   MetaDataDictionaryType m_MetaDataDictionary;
 
