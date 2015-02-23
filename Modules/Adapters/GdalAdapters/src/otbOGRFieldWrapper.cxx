@@ -19,7 +19,11 @@
 /*===========================================================================*/
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ogr_feature.h"
+#pragma GCC diagnostic pop
+
 #include "otbOGRFeatureWrapper.h"
 #include "otbJoinContainer.h"
 #include <boost/array.hpp>

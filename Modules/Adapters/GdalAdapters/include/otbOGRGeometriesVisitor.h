@@ -44,10 +44,10 @@ struct propagate_const<Tin const, Tout>
 /** @} */
 
 #define TRY_APPLY(TYPE, geometry, functor) \
-if (typename propagate_const<TGeometry, TYPE>::type * dc \
+if (typename propagate_const<TGeometry, TYPE>::type * dc_##TYPE \
   = dynamic_cast<typename propagate_const<TGeometry, TYPE>::type*>(geometry))\
 {\
-  return functor(dc); \
+  return functor(dc_##TYPE); \
 }
 
 
