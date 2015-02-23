@@ -287,20 +287,38 @@ LayerStackItemModel
 }
 
 /*****************************************************************************/
+bool
+LayerStackItemModel
+::dropMimeData( const QMimeData * data,
+                Qt::DropAction action,
+                int row,
+                int column,
+                const QModelIndex & parent )
+{
+  // qDebug()
+  //   << this
+  //   << "::dropMimeData("
+  //   << data << "," << action << "," << row << "," << column << "," << parent
+  //   << ")";
+
+  // qDebug() << "QMimeData::formats():" << data->formats();
+
+  return QAbstractItemModel::dropMimeData( data, action, row, column, parent );
+}
+
+/*****************************************************************************/
 Qt::ItemFlags
 LayerStackItemModel
 ::flags( const QModelIndex & index ) const
 {
-  // qDebug() << this << "::flags(" << index << ")";
+  if( !index.isValid() )
+    return QAbstractItemModel::flags( index );
 
-  /*
-  if (!index.isValid())
-    return 0;
-
-  return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-  */
-
-  return QAbstractItemModel::flags( index );
+  return
+    QAbstractItemModel::flags( index )
+    // | Qt::ItemIsDragEnabled
+    // | Qt::ItemIsDropEnabled
+    | Qt::ItemIsUserCheckable;
 }
 
 /*****************************************************************************/
@@ -483,6 +501,17 @@ LayerStackItemModel
   //   << this << "::setData(" << index << "," << value << "," << role << ")";
 
   return false;
+}
+
+/*****************************************************************************/
+Qt::DropActions
+LayerStackItemModel
+::supportedDropActions() const
+{
+  // qDebug() << this << "::supportedDropActions()";
+
+  // return Qt::MoveAction;
+  return QAbstractItemModel::supportedDropActions();
 }
 
 /*****************************************************************************/

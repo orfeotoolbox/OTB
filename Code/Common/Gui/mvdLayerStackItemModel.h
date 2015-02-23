@@ -151,6 +151,17 @@ public:
     data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
 
   /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#dropMimeData
+   */
+  virtual
+    bool
+    dropMimeData( const QMimeData * data,
+                  Qt::DropAction action,
+                  int row,
+                  int column,
+                  const QModelIndex & parent );
+
+  /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
    */
   virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
@@ -210,6 +221,11 @@ public:
     setData( const QModelIndex & index,
              const QVariant & value,
              int role = Qt::EditRole );
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#supportedDropActions
+   */
+  virtual Qt::DropActions supportedDropActions() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

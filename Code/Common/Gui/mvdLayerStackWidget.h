@@ -137,6 +137,10 @@ protected:
 //
 // Protected attributes.
 protected:
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemview.html#dropEvent
+   */
+  // virtual void dopEvent( QDropEvent * event );
 
 //
 // Private methods.
