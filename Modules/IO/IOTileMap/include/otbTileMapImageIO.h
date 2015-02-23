@@ -119,6 +119,21 @@ public:
    * that the IORegion has been set properly. */
   virtual void Write(const void* buffer);
 
+  /** Get the number of overviews available into the file specified
+   *  This imageIO didn't support overviews */
+  virtual unsigned int GetOverviewsCount()
+  {
+    return 0;
+  }
+  
+  /** Get information about overviews available into the file specified
+   * This imageIO didn't support overviews */ 
+  virtual std::vector<std::string> GetOverviewsInfo()
+  {
+    std::vector<std::string> desc;
+    return desc;
+  }
+
 protected:
   /** Constructor.*/
   TileMapImageIO();

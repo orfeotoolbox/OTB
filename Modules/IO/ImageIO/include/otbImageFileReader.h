@@ -141,15 +141,15 @@ public:
   /** Get the resolution information from the file */
   bool GetResolutionsInfo( std::vector<unsigned int>& res,
                           std::vector<std::string>& desc);
-
-  /** Get the list of available resolutions from the file */
-  std::vector<unsigned int> GetAvailableResolutions();
-
-  /** Get the number of available overviews into the file */
-  unsigned int GetNbOfAvailableOverviews();
-
-  /** Indicate if the ImageIO support overviews*/
-  bool HasOverviewsSupport();
+  
+  /** Get the number of overviews available into the file specified
+   * Returns: overview count, zero if none. */
+  unsigned int GetOverviewsCount(); 
+  
+  
+  /** Get description about overviews available into the file specified 
+   * Returns: overview info, empty if none.*/
+  std::vector<std::string> GetOverviewsInfo();
 
 protected:
   ImageFileReader();

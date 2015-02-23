@@ -830,48 +830,34 @@ struct ThreadStruct
 };
 
 
-/** Get Info about all resolution in jpeg2000 file */
-bool JPEG2000ImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc)
+std::vector<std::string> JPEG2000ImageIO::GetOverviewsInfo()
 {
-  res = this->m_InternalReaders[0]->GetAvailableResolutions();
-
-  if (res.empty())
-    return false;
-
+  std::vector<std::string> desc;
   int originalWidth = m_InternalReaders[0]->m_Width;
   int originalHeight = m_InternalReaders[0]->m_Height;
 
-  for (std::vector<unsigned int>::iterator itRes = res.begin(); itRes < res.end(); itRes++)
+  unsigned int lOverviewCount = this->GetOverviewsCount();
+
+  for (unsigned int i = 0; i < lOverviewCount; i++)
     {
     // For each resolution we will compute the tile dim and image dim
     std::ostringstream oss;
 
-    int w = int_ceildivpow2( originalWidth, *itRes);
-    int h = int_ceildivpow2( originalHeight, *itRes);
+    int w = int_ceildivpow2( originalWidth, i);
+    int h = int_ceildivpow2( originalHeight, i);
 
-    int tw = int_ceildivpow2(m_InternalReaders[0]->m_TileWidth, *itRes);
-    int th = int_ceildivpow2(m_InternalReaders[0]->m_TileHeight, *itRes);
+    int tw = int_ceildivpow2(m_InternalReaders[0]->m_TileWidth, i);
+    int th = int_ceildivpow2(m_InternalReaders[0]->m_TileHeight, i);
 
-    oss << "Resolution: " << *itRes << " (Image [w x h]: " << w << "x" << h << ", Tile [w x h]: " << tw << "x" << th << ")";
+    oss << "Resolution: " << i << " (Image [w x h]: " << w << "x" << h << ", Tile [w x h]: " << tw << "x" << th << ")";
 
     desc.push_back(oss.str());
     }
 
-
-  return true;
+  return desc;
 }
 
-bool JPEG2000ImageIO::GetAvailableResolutions(std::vector<unsigned int>& res)
-{
-  res = this->m_InternalReaders[0]->GetAvailableResolutions();
-
-  if (res.empty())
-    return false;
-
-  return true;
-}
-
-unsigned int JPEG2000ImageIO::GetNumberOfOverviews()
+unsigned int JPEG2000ImageIO::GetOverviewsCount()
 {
   std::vector<unsigned int> tempResList = this->m_InternalReaders[0]->GetAvailableResolutions();
 
@@ -882,7 +868,6 @@ unsigned int JPEG2000ImageIO::GetNumberOfOverviews()
 
   return tempResList.size() - 1;
 }
-
 
 // Read image
 void JPEG2000ImageIO::Read(void* buffer)

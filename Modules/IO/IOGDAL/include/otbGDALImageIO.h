@@ -163,7 +163,16 @@ public:
 
   /** Get Info about all resolution possible from the file dimensions  */
   bool GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc);
+  
+  /** Get number of available overviews in the file
+   *  Return 0 if no overviews available 
+   *  Currently this overview count is only based on the first band
+   *  If no pre-computed overviews are available we provide the overview
+   *  count based on size division by 2*/
+  virtual unsigned int GetOverviewsCount();
 
+  /** Get description about overviews available into the file specified */
+  virtual std::vector<std::string> GetOverviewsInfo();
 
 protected:
   /**

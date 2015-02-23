@@ -282,7 +282,15 @@ public:
    * component size of 1 byte. This method can be invoked only after
    * the component type is set. */
   virtual unsigned int GetComponentSize() const;
-
+  
+  /** Get the number of overviews available into the file specified
+   * Returns: overview count, zero if none. */
+  virtual unsigned int GetOverviewsCount() = 0; 
+  
+  /** Get information about overviews available into the file specified
+   * Returns: overview info, empty if none. */ 
+  virtual std::vector<std::string> GetOverviewsInfo() = 0;
+  
 
   /*-------- This part of the interfaces deals with reading data ----- */
 

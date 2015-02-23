@@ -70,17 +70,13 @@ public:
   /** Set the spacing and dimention information for the set filename. */
   virtual void ReadImageInformation();
 
-  /** Get Info about all resolution in jpeg2000 file */
-  bool GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc);
-
-  /** Get all resolution in jpeg2000 file from res = 0 which is the full resolution
-   *   to nbReslution-1 which is most degraded*/
-  bool GetAvailableResolutions(std::vector<unsigned int>& res);
-
+  /** Get description about overviews available into the file specified */
+  virtual std::vector<std::string> GetOverviewsInfo();
+  
   /** Get number of available overviews in the jpeg2000 file
    *  ( if return = 0 => no overviews available because only one resolution
    *  is encoded in the file) */
-  unsigned int GetNumberOfOverviews();
+  virtual unsigned int GetOverviewsCount();
 
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(void* buffer);
@@ -118,7 +114,10 @@ public:
 
   itkSetMacro(CacheSizeInByte, unsigned int);
   itkGetMacro(CacheSizeInByte, unsigned int);
+  
 
+  
+  
 protected:
   /** Constructor.*/
   JPEG2000ImageIO();

@@ -98,6 +98,21 @@ public:
   // JULIEN: NOT USED, NOT IMPLEMENTED
   //void SampleImage(void* buffer, int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
 
+  /** Get the number of overviews available into the file specified
+   *  This imageIO didn't support overviews */
+  virtual unsigned int GetOverviewsCount()
+  {
+    return 0;
+  }
+  
+  /** Get information about overviews available into the file specified
+   * This imageIO didn't support overviews */ 
+  virtual std::vector<std::string> GetOverviewsInfo()
+  {
+    std::vector<std::string> desc;
+    return desc;
+  }
+
 protected:
   /** Constructor.*/
   LUMImageIO();

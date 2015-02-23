@@ -486,98 +486,58 @@ void GDALImageIO::ReadImageInformation()
   this->InternalReadImageInformation();
 }
 
-bool GDALImageIO::GetAvailableResolutions(std::vector<unsigned int>& res)
-{
+unsigned int GDALImageIO::GetOverviewsCount()
+{ 
   GDALDataset* dataset = m_Dataset->GetDataSet();
-
+ 
+  // JPEG2000 case : use the number of overviews actually in the dataset
   if (m_Dataset->IsJPEG2000())
     {
-    // JPEG2000 case : use the number of overviews actually in the dataset
-    // Original resolution
-    res.push_back(0);
-
-    // available overviews
-    for (unsigned int k=0; k<m_NumberOfOverviews; ++k)
-      {
-      res.push_back(k+1);
-      }
-
-    return true;
+    return dataset->GetRasterBand(1)->GetOverviewCount();
     }
 
-  // default case : compute overviews until one of the dimensions is 1
+  // default case: compute overviews until one of the dimensions is 1
   bool flagStop = false;
-  unsigned int resFactor = 0;
+  unsigned int possibleOverviewCount = 0;
   while (!flagStop)
     {
-    res.push_back(resFactor);
+    unsigned int tDimX = uint_ceildivpow2(dataset->GetRasterXSize(),possibleOverviewCount);
+    unsigned int tDimY = uint_ceildivpow2(dataset->GetRasterYSize(),possibleOverviewCount);
 
-    unsigned int tDimX = uint_ceildivpow2(dataset->GetRasterXSize(),resFactor);
-    unsigned int tDimY = uint_ceildivpow2(dataset->GetRasterYSize(),resFactor);
-
-    resFactor++;
-
+    possibleOverviewCount++;
     if ( (tDimX == 1) || (tDimY == 1) )
       {
       flagStop = true;
       }
     }
-
-  return true;
+  return possibleOverviewCount;
 }
 
-bool GDALImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc)
+
+std::vector<std::string> GDALImageIO::GetOverviewsInfo()
 {
-  this->GetAvailableResolutions(res);
-
-  if (res.empty())
-    return false;
-
+  std::vector<std::string> desc;
+  unsigned lOverviewsCount = this->GetOverviewsCount();
+  if ( lOverviewsCount == 0)
+    return desc;
+    
   unsigned int originalWidth = m_OriginalDimensions[0];
-  unsigned int originalHeight = m_OriginalDimensions[1];
-
-  bool computeBlockSize = false;
-  int blockSizeX = 0;
-  int blockSizeY = 0;
-  // For Jpeg2000 files, retrieve the tile size.
-  // TODO : the image and tile sizes at different resolution should be
-  // read in the GDAL dataset, when available
-  GDALDataset* dataset = m_Dataset->GetDataSet();
-  if (m_Dataset->IsJPEG2000())
-    {
-    computeBlockSize = true;
-    dataset->GetRasterBand(1)->GetBlockSize(&blockSizeX, &blockSizeY);
-    if (blockSizeX==0 || blockSizeY==0)
-      {
-      computeBlockSize = false;
-      }
-    }
-
-
-  for (std::vector<unsigned int>::iterator itRes = res.begin(); itRes < res.end(); itRes++)
+  unsigned int originalHeight = m_OriginalDimensions[1];  
+ 
+  // Get the overview sizes
+  for( unsigned int iOverview = 0; iOverview < lOverviewsCount; iOverview++ )
     {
     // For each resolution we will compute the tile dim and image dim
-    std::ostringstream oss;
-
-    unsigned int w = uint_ceildivpow2( originalWidth, *itRes);
-    unsigned int h = uint_ceildivpow2( originalHeight, *itRes);
-
-    oss << "Resolution: " << *itRes << " (Image [w x h]: " << w << "x" << h << ", Tile [w x h]: ";
-    if (computeBlockSize)
-      {
-      unsigned int tw = uint_ceildivpow2( static_cast<unsigned int>(blockSizeX), *itRes);
-      unsigned int th = uint_ceildivpow2( static_cast<unsigned int>(blockSizeY), *itRes);
-      oss << tw << "x" << th << ")";
-      }
-    else
-      {
-      oss <<  "not defined x not defined" << ")";
-      }
-
+    std::ostringstream oss;    
+    unsigned int w = uint_ceildivpow2( originalWidth, iOverview);
+    unsigned int h = uint_ceildivpow2( originalHeight, iOverview);
+    
+    oss << "Overview level: " << iOverview << " (Image [w x h]: " << w << "x" << h << ")";
+    
     desc.push_back(oss.str());
     }
-
-  return false;
+    
+  return desc;
 }
 
 void GDALImageIO::InternalReadImageInformation()

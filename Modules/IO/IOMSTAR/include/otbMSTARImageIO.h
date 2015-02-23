@@ -89,6 +89,22 @@ public:
   virtual ~MSTARImageIO();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+
+  /** Get the number of overviews available into the file specified
+   *  This imageIO didn't support overviews */
+  virtual unsigned int GetOverviewsCount()
+  {
+    return 0;
+  }
+  
+  /** Get information about overviews available into the file specified
+   * This imageIO didn't support overviews */ 
+  virtual std::vector<std::string> GetOverviewsInfo()
+  {
+    std::vector<std::string> desc;
+    return desc;
+  }
+  
 private:
   MSTARImageIO(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

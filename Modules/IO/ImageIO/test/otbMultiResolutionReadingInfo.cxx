@@ -45,20 +45,18 @@ int otbMultiResolutionReadingInfo(int argc, char* argv[])
   reader->SetFileName(inputFilename);
   reader->UpdateOutputInformation();
 
-  std::vector<unsigned int> res;
-  std::vector<std::string> desc;
-
-  bool readingResolutionInfo = reader->GetResolutionsInfo(res,desc);
-  if (readingResolutionInfo == false )
+  
+  std::vector<std::string> desc = reader->GetOverviewsInfo();
+  if (desc.empty())
     return EXIT_FAILURE;
 
   std::ofstream file;
   file.open(outputAsciiFilename);
 
   // Parse all the names to delete the path of the filename
-  for( unsigned int itRes = 0; itRes < (unsigned int)res.size(); itRes++ )
+  for( unsigned int itRes = 0; itRes < reader->GetOverviewsCount(); itRes++ )
     {
-    file << "RESOLUTION: " << res[itRes] << "; " << "DESC: " << desc[itRes] << std::endl;
+    file << "RESOLUTION: " << itRes << "; " << "DESC: " << desc[itRes] << std::endl;
     }
 
   file.close();

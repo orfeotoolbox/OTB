@@ -37,9 +37,7 @@
 #include "otbMacro.h"
 
 #include "otbGDALImageIO.h" //FIXME avoid requiring GDALImageIO here
-#if defined(OTB_USE_JPEG2000)
-#include "otbJPEG2000ImageIO.h" //FIXME avoid requiring JPEG2000ImageIO here
-#endif
+
 
 namespace otb
 {
@@ -360,11 +358,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::ResolutionFactor, m_AdditionalNumber);
     }
 
-    // Special actions for the JPEG2000ImageIO
-  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
-    {
-    itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::CacheSizeInBytes, 135000000);
-    }
+  // This value is used by JPEG2000ImageIO and not by the others ImageIO
+  itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::CacheSizeInBytes, 135000000);
 
   // Got to allocate space for the image. Determine the characteristics of
   // the image.
@@ -680,136 +675,24 @@ return this->m_FilenameHelper->GetSimpleFileName();
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-std::vector<unsigned int>
-ImageFileReader<TOutputImage, ConvertPixelTraits>
-::GetAvailableResolutions()
- {
-  this->UpdateOutputInformation();
-
-  std::vector<unsigned int> res;
-  // GDAL image IO
-  if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
-    {
-    typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
-    imageIO->GetAvailableResolutions(res);
-    return res;
-    }
-
-#if defined(OTB_USE_JPEG2000)
-  // JPEG2000 image IO
-  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
-    {
-    typename JPEG2000ImageIO::Pointer imageIO = dynamic_cast<JPEG2000ImageIO*>(this->GetImageIO());
-    imageIO->GetAvailableResolutions(res);
-    return res;
-    }
-#endif
-
-  // other imageIO
-  res.clear();
-  res.push_back(0);
-  return res;
- }
-
-template <class TOutputImage, class ConvertPixelTraits>
-bool
-ImageFileReader<TOutputImage, ConvertPixelTraits>
-::GetResolutionsInfo( std::vector<unsigned int>& res, std::vector<std::string>& desc)
- {
-  this->UpdateOutputInformation();
-
-  // GDAL image IO
-  if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
-    {
-    typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
-
-    if(imageIO.IsNotNull())
-      {
-      imageIO->GetResolutionInfo(res,desc);
-      return true;
-      }
-    }
-
-#if defined(OTB_USE_JPEG2000)
-  // JPEG2000 image IO
-  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
-    {
-    typename JPEG2000ImageIO::Pointer imageIO = dynamic_cast<JPEG2000ImageIO*>(this->GetImageIO());
-
-    if(imageIO.IsNotNull())
-      {
-      imageIO->GetResolutionInfo(res,desc);
-      return true;
-      }
-    }
-#endif
-
-  // other imageIO
-  res.clear();
-  desc.clear();
-
-  res.push_back(0);
-
-  // TODO MSD : manage the tile information or not ?
-  std::ostringstream oss;
-  oss << "Resolution: " << 0 << " (Image [w x h]: "
-      << this->m_ImageIO->GetDimensions(0) << "x" << this->m_ImageIO->GetDimensions(1)
-      << ", Tile [w x h]: " <<  "not defined x not defined" << ")";
-  desc.push_back(oss.str());
-
-  return true;
- }
-
-template <class TOutputImage, class ConvertPixelTraits>
 unsigned int
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::GetNbOfAvailableOverviews()
+::GetOverviewsCount()
  {
   this->UpdateOutputInformation();
 
-  // GDAL image IO
-  if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
-    {
-    typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
-    return imageIO->GetNumberOfOverviews();
-    }
-
-#if defined(OTB_USE_JPEG2000)
-  // JPEG2000 image IO
-  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
-    {
-    typename JPEG2000ImageIO::Pointer imageIO = dynamic_cast<JPEG2000ImageIO*>(this->GetImageIO());
-    return imageIO->GetNumberOfOverviews();
-    }
-#endif
-
-  // other imageIO whi
-  return 0;
+  return this->m_ImageIO->GetOverviewsCount();
  }
-
+ 
+ 
 template <class TOutputImage, class ConvertPixelTraits>
-bool
+std::vector<std::string>
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::HasOverviewsSupport()
+::GetOverviewsInfo()
  {
   this->UpdateOutputInformation();
-
-  // GDAL image IO
-  if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
-    {
-    return true;
-    }
-
-#if defined(OTB_USE_JPEG2000)
-  // JPEG2000 image IO
-  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
-    {
-    return true;
-    }
-#endif
-
-  // Other imageIO
-  return false;
+  
+  return this->m_ImageIO->GetOverviewsInfo();
  }
 
 template <class TOutputImage, class ConvertPixelTraits>
