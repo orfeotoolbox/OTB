@@ -191,7 +191,7 @@ void
 LayerStackController
 ::OnCurrentChanged( int index )
 {
-  qDebug() << this << "::OnCurrentChanged(" << index << ")";
+  // qDebug() << this << "::OnCurrentChanged(" << index << ")";
 
   assert( GetModel()==GetModel< StackedLayerModel >() );
   StackedLayerModel * model = GetModel< StackedLayerModel >();
@@ -205,7 +205,7 @@ void
 LayerStackController
 ::OnSelectionChanged( int index )
 {
-  qDebug() << this << "::OnSelectionChanged(" << index << ")";
+  // qDebug() << this << "::OnSelectionChanged(" << index << ")";
 
   assert( GetModel()==GetModel< StackedLayerModel >() );
   StackedLayerModel * model = GetModel< StackedLayerModel >();
@@ -219,7 +219,7 @@ void
 LayerStackController
 ::OnStackedLayerCurrentChanged( size_t index )
 {
-  qDebug() << this << "::OnStackedLayerCurrentChanged(" << index << ")";
+  // qDebug() << this << "::OnStackedLayerCurrentChanged(" << index << ")";
 
   LayerStackWidget * widget = GetWidget< LayerStackWidget >();
   assert( widget!=NULL );
