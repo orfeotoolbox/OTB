@@ -181,9 +181,9 @@ LayerStackWidget
 ::OnCurrentRowChanged( const QModelIndex & current,
                        const QModelIndex & previous )
 {
-  qDebug()
-    << this
-    << "::OnCurrentRowChange(" << current.row() << "," << previous.row() << ")";
+  // qDebug()
+  //   << this
+  //   << "::OnCurrentRowChange(" << current.row() << "," << previous.row() << ")";
 
   emit CurrentChanged( current.row() );
 }
@@ -194,9 +194,9 @@ LayerStackWidget
 ::OnSelectionChanged( const QItemSelection & selected,
                       const QItemSelection & deselected )
 {
-  qDebug()
-    << this
-    << "::OnSelectionChanged(" << selected << "," << deselected << ")";
+  // qDebug()
+  //   << this
+  //   << "::OnSelectionChanged(" << selected << "," << deselected << ")";
 
   QModelIndexList indexes( selected.indexes() );
   // assert( indexes.empty() || indexes.size()==1 );
