@@ -34,11 +34,12 @@
 #include "otbImageIOFactory.h"
 #include "otbMetaDataKey.h"
 
+#include "otbMacro.h"
+
 #include "otbGDALImageIO.h" //FIXME avoid requiring GDALImageIO here
 #if defined(OTB_USE_JPEG2000)
 #include "otbJPEG2000ImageIO.h" //FIXME avoid requiring JPEG2000ImageIO here
 #endif
-#include "otbTileMapImageIO.h" //FIXME avoid requiring TileMapImageIO here
 
 namespace otb
 {
@@ -456,22 +457,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
     otbMsgDevMacro(<< "Loading external kwl");
     }
-
-  // Pass the depth parameter from the tilemap around
-  if (strcmp(this->m_ImageIO->GetNameOfClass(), "TileMapImageIO") == 0)
-    {
-    typename TileMapImageIO::Pointer imageIO = dynamic_cast<TileMapImageIO*>(this->GetImageIO());
-
-    // imageIO should not be null, but we would better check for it
-    if(imageIO)
-      {
-      std::ostringstream depth;
-      depth << imageIO->GetDepth();
-      otb_kwl.AddKey("depth", depth.str());
-      }
-    }
-
-  otbMsgDevMacro(<< otb_kwl);
 
   // Don't add an empty ossim keyword list
   if( otb_kwl.GetSize() != 0 )
