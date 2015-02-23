@@ -545,6 +545,10 @@ void GDALImageIO::InternalReadImageInformation()
   itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
                                     MetaDataKey::ResolutionFactor,
                                     m_ResolutionFactor);
+                                    
+  itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
+                                    MetaDataKey::SubDatasetIndex,
+                                    m_DatasetNumber);
 
   // Detecting if we are in the case of an image with subdatasets
   // example: hdf Modis data

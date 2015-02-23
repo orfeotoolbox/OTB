@@ -337,16 +337,17 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     else
       imageIO->SetIsVectorImage(false);
 
+    }
+
     // Pass the dataset number (used for hdf files for example)
     if (m_FilenameHelper->SubDatasetIndexIsSet())
       {
-      imageIO->SetDatasetNumber(m_FilenameHelper->GetSubDatasetIndex());
+      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::SubDatasetIndex, m_FilenameHelper->GetSubDatasetIndex());
       }
     else
       {
-      imageIO->SetDatasetNumber(m_AdditionalNumber);
+      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::SubDatasetIndex, m_AdditionalNumber);
       }
-    }
 
 
   if (m_FilenameHelper->ResolutionFactorIsSet())

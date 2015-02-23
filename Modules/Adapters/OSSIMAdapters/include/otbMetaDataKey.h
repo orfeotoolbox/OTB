@@ -61,6 +61,7 @@ namespace MetaDataKey
   extern char const* VectorDataKeywordlistDelimiterKey;
 
   extern char const* ResolutionFactor;
+  extern char const* SubDatasetIndex;
   extern char const* CacheSizeInBytes;
 
   extern char const* TileHintX;

@@ -95,10 +95,6 @@ public:
   itkSetMacro(IsVectorImage, bool);
   itkGetMacro(IsVectorImage, bool);
 
-  /** Set/Get the dataset index to extract (starting at 0)*/
-  itkSetMacro(DatasetNumber, unsigned int);
-  itkGetMacro(DatasetNumber, unsigned int);
-
   /** Set/Get the options */
   void SetOptions(const GDALCreationOptionsType& opts)
   {

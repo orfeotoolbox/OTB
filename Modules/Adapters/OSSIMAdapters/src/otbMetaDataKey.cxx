@@ -54,6 +54,7 @@ char const* VectorDataKeywordlistKey = "VectorDataKeywordlist";
 char const* VectorDataKeywordlistDelimiterKey = "VectorDataKeywordlistDelimiter";
 
 char const* ResolutionFactor = "ResolutionFactor";
+char const* SubDatasetIndex = "SubDatasetIndex";
 char const* CacheSizeInBytes = "CacheSizeInBytes";
 
 char const* TileHintX = "TileHintX";
@@ -82,6 +83,7 @@ const MetaDataKey::KeyTypeDef Types[] =
   MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistKey,          MetaDataKey::TVECTORDATAKEYWORDLIST),
   MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistDelimiterKey, MetaDataKey::TSTRING),
   MetaDataKey::KeyTypeDef(MetaDataKey::ResolutionFactor,                  MetaDataKey::TENTIER),
+  MetaDataKey::KeyTypeDef(MetaDataKey::SubDatasetIndex,                   MetaDataKey::TENTIER),
   MetaDataKey::KeyTypeDef(MetaDataKey::CacheSizeInBytes,                  MetaDataKey::TENTIER),
   MetaDataKey::KeyTypeDef(MetaDataKey::TileHintX,                         MetaDataKey::TENTIER),
   MetaDataKey::KeyTypeDef(MetaDataKey::TileHintY,                         MetaDataKey::TENTIER)
