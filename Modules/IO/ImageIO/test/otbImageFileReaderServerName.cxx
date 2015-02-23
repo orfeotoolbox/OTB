@@ -23,7 +23,6 @@
 #include <iostream>
 
 #include "otbImageFileReader.h"
-#include "otbTileMapImageIO.h"
 
 int otbImageFileReaderServerName(int itkNotUsed(argc), char* argv[])
 {
