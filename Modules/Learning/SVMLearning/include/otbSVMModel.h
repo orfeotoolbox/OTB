@@ -358,7 +358,7 @@ public:
   }
 
   /** Reset ModelUpToDate */
-  virtual void Modified()
+  virtual void Modified() const
   {
     Superclass::Modified();
     m_ModelUpToDate = false;
@@ -434,7 +434,7 @@ private:
   struct svm_model* m_Model;
 
   /** True if model is up-to-date */
-  bool m_ModelUpToDate;
+  mutable bool m_ModelUpToDate;
 
   /** Container of the SVM problem */
   struct svm_problem m_Problem;

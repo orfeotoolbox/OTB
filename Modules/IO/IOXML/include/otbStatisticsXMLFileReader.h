@@ -58,7 +58,7 @@ public:
   typedef std::pair<std::string , MeasurementVectorType>  InputDataType;
   typedef std::vector< InputDataType >                   MeasurementVectorContainer;
 
-  virtual void Modified()
+  virtual void Modified() const
     {
       m_IsUpdated = false;
     }
@@ -88,7 +88,7 @@ private:
   std::string                 m_FileName;
   MeasurementVectorContainer  m_MeasurementVectorContainer;
   unsigned int                m_NumberOfOutputs;
-  bool                        m_IsUpdated;
+  mutable bool                m_IsUpdated;
 
 }; // end of class StatisticsXMLFileReader
 
