@@ -120,7 +120,7 @@ private:
       }
 
     // Transform the PAN image to otb::Image
-    typedef otb::Image<FloatVectorImageType::InternalPixelType> FloatImageType;
+    typedef otb::Image<FloatVectorImageType::InternalPixelType> InternalImageType;
     typedef otb::MultiToMonoChannelExtractROI<float,float> ExtractFilterType;
 
     ExtractFilterType::Pointer channelSelect = ExtractFilterType::New();
@@ -128,12 +128,12 @@ private:
     channelSelect->SetChannel(1);
     channelSelect->SetInput(panchroV);
     channelSelect->UpdateOutputInformation();
-    FloatImageType::Pointer panchro = channelSelect->GetOutput();
+    InternalImageType::Pointer panchro = channelSelect->GetOutput();
 
     typedef otb::BCOInterpolateImageFunction<FloatVectorImageType> InterpolatorType;
     typedef otb::GenericRSResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  ResamplerType;
     typedef otb::StreamingResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  BasicResamplerType;
-    typedef otb::SimpleRcsPanSharpeningFusionImageFilter<FloatImageType, FloatVectorImageType, FloatVectorImageType> FusionFilterType;
+    typedef otb::SimpleRcsPanSharpeningFusionImageFilter<InternalImageType, FloatVectorImageType, FloatVectorImageType> FusionFilterType;
 
     // Resample filter
     ResamplerType::Pointer    resampler = ResamplerType::New();
