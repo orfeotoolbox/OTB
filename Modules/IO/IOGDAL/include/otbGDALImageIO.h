@@ -105,6 +105,15 @@ public:
   {
     return m_CreationOptions;
   }
+  
+  /** Provide hist about the output container to deal with complex pixel
+   *  type */ 
+  virtual void SetOutputImagePixelType( bool isComplexInternalPixelType, 
+                                        bool isVectorImage)
+  {
+    this->SetIsComplex(isComplexInternalPixelType);
+    this->SetIsVectorImage(isVectorImage);
+  }
 
   /*-------- This part of the interface deals with reading data. ------ */
 

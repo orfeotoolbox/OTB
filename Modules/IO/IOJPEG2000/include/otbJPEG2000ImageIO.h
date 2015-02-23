@@ -73,6 +73,11 @@ public:
   /** Get description about overviews available into the file specified */
   virtual std::vector<std::string> GetOverviewsInfo();
   
+  /** Provide hist about the output container to deal with complex pixel
+   *  type (Not used here) */ 
+  virtual void SetOutputImagePixelType( bool isComplexInternalPixelType, 
+                                        bool isVectorImage){}
+  
   /** Get number of available overviews in the jpeg2000 file
    *  ( if return = 0 => no overviews available because only one resolution
    *  is encoded in the file) */

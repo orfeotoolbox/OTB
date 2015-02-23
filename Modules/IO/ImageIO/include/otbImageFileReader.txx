@@ -36,8 +36,6 @@
 
 #include "otbMacro.h"
 
-#include "otbGDALImageIO.h" //FIXME avoid requiring GDALImageIO here
-
 
 namespace otb
 {
@@ -312,42 +310,24 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   // Get the ImageIO MetaData Dictionary
   itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
 
-  // Special actions for the gdal image IO
-  if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
+  // Hint the IO whether the OTB image type takes complex pixels
+  // this will determine the strategy to fill up a vector image
+  OutputImagePixelType dummy;
+  bool lVectorImage = false;
+  if (strcmp(output->GetNameOfClass(), "VectorImage") == 0)
+    lVectorImage= true;
+  
+  this->m_ImageIO->SetOutputImagePixelType(PixelIsComplex(dummy),lVectorImage);
+
+  // Pass the dataset number (used for hdf files for example)
+  if (m_FilenameHelper->SubDatasetIndexIsSet())
     {
-    typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
-
-    if(imageIO.IsNull())
-      {
-      otb::ImageFileReaderException e(__FILE__, __LINE__);
-      std::ostringstream msg;
-      msg << " ImageIO is of kind GDALImageIO, but fails to dynamic_cast (this should never happen)."<< std::endl;
-      e.SetDescription(msg.str().c_str());
-      throw e;
-      }
-
-    // Hint the IO whether the OTB image type takes complex pixels
-    // this will determine the strategy to fill up a vector image
-    OutputImagePixelType dummy;
-    imageIO->SetIsComplex(PixelIsComplex(dummy));
-
-    // VectorImage ??
-    if (strcmp(output->GetNameOfClass(), "VectorImage") == 0)
-      imageIO->SetIsVectorImage(true);
-    else
-      imageIO->SetIsVectorImage(false);
-
+    itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::SubDatasetIndex, m_FilenameHelper->GetSubDatasetIndex());
     }
-
-    // Pass the dataset number (used for hdf files for example)
-    if (m_FilenameHelper->SubDatasetIndexIsSet())
-      {
-      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::SubDatasetIndex, m_FilenameHelper->GetSubDatasetIndex());
-      }
-    else
-      {
-      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::SubDatasetIndex, m_AdditionalNumber);
-      }
+  else
+    {
+    itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::SubDatasetIndex, m_AdditionalNumber);
+    }
 
 
   if (m_FilenameHelper->ResolutionFactorIsSet())

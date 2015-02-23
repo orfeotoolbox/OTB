@@ -290,6 +290,11 @@ public:
   /** Get information about overviews available into the file specified
    * Returns: overview info, empty if none. */ 
   virtual std::vector<std::string> GetOverviewsInfo() = 0;
+
+  /** Provide hist about the output container to deal with complex pixel
+   *  type */ 
+  virtual void SetOutputImagePixelType( bool isComplexInternalPixelType, 
+                                        bool isVectorImage) = 0;
   
 
   /*-------- This part of the interfaces deals with reading data ----- */

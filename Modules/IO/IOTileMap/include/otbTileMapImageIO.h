@@ -133,6 +133,11 @@ public:
     std::vector<std::string> desc;
     return desc;
   }
+  
+  /** Provide hist about the output container to deal with complex pixel
+   *  type (Not used here) */ 
+  virtual void SetOutputImagePixelType( bool isComplexInternalPixelType, 
+                                        bool isVectorImage){}
 
 protected:
   /** Constructor.*/
