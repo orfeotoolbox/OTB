@@ -78,8 +78,8 @@ public:
   SOMMapType * GetMap(void);
   itkSetObjectMacro(Sample, SampleType);
   itkGetObjectMacro(Sample, SampleType);
-  itkSetObjectMacro(Output, OutputType);
-  itkGetObjectMacro(Output, OutputType);
+  
+  OutputType * GetOutput();
 
 protected:
   /** Constructor */
@@ -94,8 +94,6 @@ protected:
 private:
   /// The input sample
   SamplePointerType m_Sample;
-  /// The output membership sample.
-  OutputPointerType m_Output;
 
 }; // end of class
 } // end of namespace otb

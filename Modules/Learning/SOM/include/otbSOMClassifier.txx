@@ -34,9 +34,20 @@ SOMClassifier<TSample, TSOMMap, TLabel>
   SOMMapPointerType sommap = SOMMapType::New();
   this->SetNthInput(0, sommap.GetPointer());
   m_Sample = SampleType::New();
-  m_Output = OutputType::New();
-  this->SetNthOutput(0, sommap.GetPointer());
+
+  OutputPointerType outputPtr = OutputType::New();
+  this->SetNthOutput(0, outputPtr.GetPointer());
 }
+
+template<class TSample, class TSOMMap, class TLabel>
+typename SOMClassifier<TSample, TSOMMap, TLabel>
+::OutputType *
+SOMClassifier<TSample, TSOMMap, TLabel>
+::GetOutput()
+{
+  return dynamic_cast<OutputType *>(this->itk::ProcessObject::GetOutput(0));
+}
+
 /**
  * SOMMap getter.
  */
