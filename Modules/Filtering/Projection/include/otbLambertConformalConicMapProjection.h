@@ -56,7 +56,7 @@ public:
   void   SetFalseNorthing(double falseNorthing);
   double GetFalseNorthing() const;
   double GetFalseEasting() const;
-  void  SetParameters(double parallel1Degree, double parallel2Degree,
+  void  SetAllParameters(double parallel1Degree, double parallel2Degree,
                       double falseEasting, double falseNorthing);
 
 protected:

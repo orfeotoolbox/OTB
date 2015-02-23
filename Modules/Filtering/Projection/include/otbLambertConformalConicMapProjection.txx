@@ -81,7 +81,7 @@ void LambertConformalConicMapProjection<TTransform>
 /// Set the parameters
 template <TransformDirection::TransformationDirection TTransform>
 void LambertConformalConicMapProjection<TTransform>
-::SetParameters(double parallel1Degree, double parallel2Degree, double falseEasting, double falseNorthing)
+::SetAllParameters(double parallel1Degree, double parallel2Degree, double falseEasting, double falseNorthing)
 {
   this->SetParameter("StandardParallel1", Utils::ConvertToString(parallel1Degree));
   this->SetParameter("StandardParallel2", Utils::ConvertToString(parallel2Degree));
