@@ -195,14 +195,14 @@ ProspectModel
       TN=s2/s3;
 
 
-      SpectralResponseType::PairType refl;
-      SpectralResponseType::PairType trans;
-      refl.first=lambda/1000.0;
-      refl.second=RN;
-      trans.first=lambda/1000.0;
-      trans.second=TN;
-      outRefl->GetResponse().push_back(refl);
-      outTrans->GetResponse().push_back(trans);
+      SpectralResponseType::PairType rrefl;
+      SpectralResponseType::PairType ttrans;
+      rrefl.first=lambda/1000.0;
+      rrefl.second=RN;
+      ttrans.first=lambda/1000.0;
+      ttrans.second=TN;
+      outRefl->GetResponse().push_back(rrefl);
+      outTrans->GetResponse().push_back(ttrans);
    }
 }
 

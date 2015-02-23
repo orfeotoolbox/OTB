@@ -209,21 +209,21 @@ FillGapsFilter
           {
 
           // Store 23-segment
-          PointType     point;
-          PointListType pointList;
+          PointType     ppoint;
+          PointListType ppointList;
 
-          point.SetPosition(x2, y2);
-          pointList.push_back(point);
-          point.SetPosition(x3, y3);
-          pointList.push_back(point);
+          ppoint.SetPosition(x2, y2);
+          ppointList.push_back(ppoint);
+          ppoint.SetPosition(x3, y3);
+          ppointList.push_back(ppoint);
 
-          LineSpatialObjectType::Pointer line = LineSpatialObjectType::New();
-          line->SetId(0);
-          line->SetPoints(pointList);
-          line->ComputeBoundingBox();
-          outputLine->push_back(line);
+          LineSpatialObjectType::Pointer lline = LineSpatialObjectType::New();
+          lline->SetId(0);
+          lline->SetPoints(ppointList);
+          lline->ComputeBoundingBox();
+          outputLine->push_back(lline);
 
-          pointList.clear();
+          ppointList.clear();
 
           }
         } // if(Rmin < m_Radius)

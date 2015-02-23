@@ -161,27 +161,27 @@ ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
   while (!outputIt.IsAtEnd())
     {
     // define an output pixel
-    typename OutputImageType::PixelType output;
+    typename OutputImageType::PixelType outpix;
     // Retrieve the size of each input pixel
     unsigned int l1 = input1It.Get().GetSize();
     unsigned int l2 = input2It.Get().GetSize();
     // Set the output pixel size
-    output.SetSize(l1 + l2);
+    outpix.SetSize(l1 + l2);
     // Loop through each band of the first image
     for (unsigned int i = 0; i < l1; ++i)
       {
       // Fill the output pixel
-      output[i] = static_cast<typename OutputImageType::InternalPixelType>(input1It.Get()[i]);
+      outpix[i] = static_cast<typename OutputImageType::InternalPixelType>(input1It.Get()[i]);
       }
     // Loop though each band of the second image
     for (unsigned int i = 0; i < l2; ++i)
       {
       // Fill the output pixel
 
-      output[i + l1] = static_cast<typename OutputImageType::InternalPixelType>(input2It.Get()[i]);
+      outpix[i + l1] = static_cast<typename OutputImageType::InternalPixelType>(input2It.Get()[i]);
       }
     // Set the output pixel
-    outputIt.Set(output);
+    outputIt.Set(outpix);
     // Increment the iterator
     ++input1It;
     ++input2It;

@@ -685,10 +685,10 @@ ParameterGroup::GetParameterByKey(std::string name)
 
   // Look for parentName in the current group
   Parameter::Pointer parentParam;
-  ParameterListType::iterator it;
-  for (it = m_ParameterList.begin(); it != m_ParameterList.end(); ++it)
+  ParameterListType::iterator vit;
+  for (vit = m_ParameterList.begin(); vit != m_ParameterList.end(); ++vit)
     {
-    Parameter::Pointer param = *it;
+    Parameter::Pointer param = *vit;
 
     if (param->GetKey() == parentName)
       {
@@ -710,12 +710,12 @@ ParameterGroup::GetParameterByKey(std::string name)
       {
       // Remove the parent from the param name
       std::ostringstream childNameOss;
-      std::vector<std::string>::const_iterator it = splittedName.begin() + 1;
-      while(it != splittedName.end())
+      std::vector<std::string>::const_iterator vvit = splittedName.begin() + 1;
+      while(vvit != splittedName.end())
         {
-        childNameOss << *it;
-        ++it;
-        if (it != splittedName.end())
+        childNameOss << *vvit;
+        ++vvit;
+        if (vvit != splittedName.end())
           {
           childNameOss << ".";
           }
@@ -746,12 +746,12 @@ ParameterGroup::GetParameterByKey(std::string name)
 
         // Remove the parent and the choice value from the param name
         std::ostringstream childNameOss;
-        std::vector<std::string>::const_iterator it = splittedName.begin() + 2;
-        while(it != splittedName.end())
+        std::vector<std::string>::const_iterator vvvit = splittedName.begin() + 2;
+        while(vvvit != splittedName.end())
           {
-          childNameOss << *it;
-          ++it;
-          if (it != splittedName.end())
+          childNameOss << *vvvit;
+          ++vvvit;
+          if (vvvit != splittedName.end())
             {
             childNameOss << ".";
             }

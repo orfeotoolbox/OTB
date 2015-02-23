@@ -31,7 +31,10 @@
 
 // include SharedForward to avoid duplicating the code which find the library path variable
 // name and the path separator
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
 #include "itksys/SharedForward.h"
+#pragma GCC diagnostic pop
 #include "itksys/Process.h"
 
 // Temporary definition of otbTestMain
@@ -95,16 +98,16 @@ int parseCommandLine(int ac, char * av[], std::vector<char *>& remainingArgs)
       // var must also be set
       if (std::string(KWSYS_SHARED_FORWARD_LDPATH) == "LD_LIBRARY_PATH")
         {
-        std::string libpath = "LD_LIBRARY_PATH_64";
-        libpath += "=";
-        libpath += av[i + 1];
-        char * oldenv = getenv("LD_LIBRARY_PATH_64");
-        if (oldenv)
+        std::string libpath64 = "LD_LIBRARY_PATH_64";
+        libpath64 += "=";
+        libpath64 += av[i + 1];
+        char * oldenv2 = getenv("LD_LIBRARY_PATH_64");
+        if (oldenv2)
           {
-          libpath += KWSYS_SHARED_FORWARD_PATH_SEP;
-          libpath += oldenv;
+          libpath64 += KWSYS_SHARED_FORWARD_PATH_SEP;
+          libpath64 += oldenv;
           }
-        itksys::SystemTools::PutEnv(libpath.c_str());
+        itksys::SystemTools::PutEnv(libpath64.c_str());
         }
       i += 2;
       }

@@ -525,21 +525,17 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
         }
       else
         {
-        for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
+        if (m_EnableMinMax)
           {
-
-          if (m_EnableMinMax)
+          for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
             {
-            for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
+            if (vectorValue[j] < threadMin[j])
               {
-              if (vectorValue[j] < threadMin[j])
-                {
-                threadMin[j] = vectorValue[j];
-                }
-              if (vectorValue[j] > threadMax[j])
-                {
-                threadMax[j] = vectorValue[j];
-                }
+              threadMin[j] = vectorValue[j];
+              }
+            if (vectorValue[j] > threadMax[j])
+              {
+              threadMax[j] = vectorValue[j];
               }
             }
           }

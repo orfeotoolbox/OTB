@@ -443,7 +443,6 @@ void MSTARImageIO::Read(void* buffer)
         case LSB_FIRST: /* Little-endian..do byteswap */
 
           otbMsgDevMacro(<< "Performing auto-byteswap...\n");
-          int returnVal;
           for (i = 0; i < totchunks; ++i)
             {
             returnVal = fread(bigfloatbuf, sizeof(char), 4, MSTARfp);
@@ -489,7 +488,6 @@ void MSTARImageIO::Read(void* buffer)
         {
         case LSB_FIRST: /* Little-endian..do byteswap */
           otbMsgDevMacro(<< "Performing auto-byteswap...");
-          int returnVal;
           for (i = 0; i < nchunks; ++i)
             {
             returnVal = fread(bigushortbuf, sizeof(char), 2, MSTARfp);
@@ -512,7 +510,7 @@ void MSTARImageIO::Read(void* buffer)
 
         unsigned long cpt(0);
         cpt = (unsigned long) (nbComponents) * (unsigned long) (m_BytePerPixel);
-        for (unsigned long i = 0; i < lTailleBuffer; i = i + m_BytePerPixel)
+        for (unsigned long k = 0; k < lTailleBuffer; k = k + m_BytePerPixel)
           {
           memcpy((void*) (&(p[cpt])), (const void*) (&(FSCENEdata[i])), (size_t) (m_BytePerPixel));
           cpt += step;
@@ -532,7 +530,6 @@ void MSTARImageIO::Read(void* buffer)
         {
         case LSB_FIRST: /* Little-endian..do byteswap */
           otbMsgDevMacro(<< "Performing auto-byteswap...");
-          int returnVal;
           for (i = 0; i < nchunks; ++i)
             {
             returnVal = fread(bigushortbuf, sizeof(char), 2, MSTARfp);
@@ -555,7 +552,7 @@ void MSTARImageIO::Read(void* buffer)
 
         unsigned long cpt(0);
         cpt = (unsigned long) (nbComponents) * (unsigned long) (m_BytePerPixel);
-        for (unsigned long i = 0; i < lTailleBuffer; i = i + m_BytePerPixel)
+        for (unsigned long k = 0; k < lTailleBuffer; k = k + m_BytePerPixel)
           {
           memcpy((void*) (&(p[cpt])), (const void*) (&(CHIPdata[i])), (size_t) (m_BytePerPixel));
           cpt += step;
