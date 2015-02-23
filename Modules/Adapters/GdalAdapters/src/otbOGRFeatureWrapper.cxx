@@ -22,7 +22,12 @@
 #include "otbOGRFeatureWrapper.h"
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ogr_feature.h"
+#pragma GCC diagnostic pop
+
 #include "cpl_error.h"
 #include "itkMacro.h"
 

@@ -39,7 +39,10 @@
 // #include "boost/type_traits/is_array.hpp"
 #include "boost/type_traits/is_contiguous.h" // from OTB actually
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ogr_feature.h" // OGRFeature::*field_getters
+#pragma GCC diagnostic pop
 #include "cpl_string.h" // CSLCount
 #include "otbOGRHelpers.h"
 
