@@ -176,7 +176,7 @@ protected:
   virtual void GenerateOutputInformation();
 
   /** Drive the model up-to-date flag */
-  virtual void Modified();
+  virtual void Modified() const;
 
 private:
   GCPsToRPCSensorModelImageFilter (const Self &);   // purposely not implemented
@@ -214,7 +214,7 @@ private:
   ImageKeywordlist m_Keywordlist;
 
   /** Flag to see if model is up-to-date */
-  bool m_ModelUpToDate;
+  mutable bool m_ModelUpToDate;
 
 }; // end of class
 

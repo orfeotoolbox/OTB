@@ -64,7 +64,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
 template <class TImage>
 void
 GCPsToRPCSensorModelImageFilter<TImage>
-::Modified()
+::Modified() const
 {
   // Call superclass implementation
   this->Superclass::Modified();
