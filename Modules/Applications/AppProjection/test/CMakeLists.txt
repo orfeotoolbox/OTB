@@ -2,7 +2,7 @@ otb_module_test()
 #----------- OrthoRectification TESTS ----------------
 otb_test_application(NAME  apTvPrOrthorectification_UTM_OutXML1
                      APP  OrthoRectification
-                     OPTIONS -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                     OPTIONS -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
                  			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.tif
                  			 -elev.dem ${INPUTDATA}/DEM/srtm_directory/
                  		     -outputs.ulx  374100.8
@@ -23,7 +23,7 @@ otb_test_application(NAME  apTvPrOrthorectification_UTM_InXML1
                      APP  OrthoRectification
                      OPTIONS
                        -inxml  ${INPUTDATA}/apTvPrOrthorectifTest_UTM_OutXML1.xml
-                 			 -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                 			 -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
                  			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM_InXML1.tif
                  			 -elev.dem ${INPUTDATA}/DEM/srtm_directory/
                         VALID   --compare-image ${EPSILON_4}
@@ -34,7 +34,7 @@ otb_test_application(NAME  apTvPrOrthorectification_DEMTIF_UTM_InXML1
                      APP  OrthoRectification
                      OPTIONS
                        -inxml  ${INPUTDATA}/apTvPrOrthorectifTest_DEMTIF_UTM_OutXML1.xml
-                       -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                       -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
                        -io.out ${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM_InXML1.tif
                        -elev.dem ${INPUTDATA}/DEM/tif_directory/
                         VALID   --compare-image ${EPSILON_4}
@@ -43,7 +43,7 @@ otb_test_application(NAME  apTvPrOrthorectification_DEMTIF_UTM_InXML1
 
 otb_test_application(NAME  apTvPrOrthorectification_WGS84
                      APP  OrthoRectification
-                     OPTIONS -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                     OPTIONS -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
                        -io.out ${TEMP}/apTvPrOrthorectifTest_WGS84.tif
                        -elev.dem ${INPUTDATA}/DEM/srtm_directory/
                        -outputs.ulx  1.35404
@@ -62,7 +62,7 @@ otb_test_application(NAME  apTvPrOrthorectification_WGS84
 
 otb_test_application(NAME  apTvPrOrthorectification_UTM
                      APP  OrthoRectification
-                     OPTIONS -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                     OPTIONS -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
                  			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM.tif
                  			 -elev.dem ${INPUTDATA}/DEM/srtm_directory/
                  		     -outputs.ulx  374100.8
@@ -80,7 +80,7 @@ otb_test_application(NAME  apTvPrOrthorectification_UTM
 
 otb_test_application(NAME  apTvPrOrthorectification_DEMTIF_UTM_OutXML1
                      APP  OrthoRectification
-                     OPTIONS -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                     OPTIONS -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
                        -io.out ${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM_OutXML1.tif
                        -elev.dem ${INPUTDATA}/DEM/tif_directory/
                        -outputs.ulx  374100.8
@@ -99,7 +99,7 @@ otb_test_application(NAME  apTvPrOrthorectification_DEMTIF_UTM_OutXML1
 
 otb_test_application(NAME  apTvPrOrthorectification_DEMTIF_UTM
                      APP  OrthoRectification
-                     OPTIONS -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                     OPTIONS -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
                        -io.out ${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM.tif
                        -elev.dem ${INPUTDATA}/DEM/tif_directory/
                        -outputs.ulx  374100.8
@@ -183,7 +183,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
                  			 -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp
                              -out.proj image
-                             -out.proj.image.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                             -out.proj.image.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
                      VALID   --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp)

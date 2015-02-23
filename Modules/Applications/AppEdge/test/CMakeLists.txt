@@ -2,7 +2,7 @@ otb_module_test()
 #----------- LineSegmentDetection TESTS ----------------
 otb_test_application(NAME   apTvFeLineSegmentDetectionNoRescale
                      APP  LineSegmentDetection
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
+                     OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF}
                              -out ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp
                              -norescale true
                      VALID   --compare-ogr ${EPSILON_9}
@@ -11,7 +11,7 @@ otb_test_application(NAME   apTvFeLineSegmentDetectionNoRescale
 
 otb_test_application(NAME   apTvFeLineSegmentDetection
                      APP  LineSegmentDetection
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
+                     OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF}
                              -out ${TEMP}/feTvLineSegmentDetection_LI.shp
                      VALID   --compare-ogr ${EPSILON_9}
                              ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI.shp

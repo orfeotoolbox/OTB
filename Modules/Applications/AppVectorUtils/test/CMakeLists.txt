@@ -2,7 +2,7 @@ otb_module_test()
 #----------- VectorDataTransform TESTS ----------------
 otb_test_application(NAME apTvUtVectorDataTransform_Rotation
                      APP VectorDataTransform
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+                     OPTIONS -in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
                              -vd ${INPUTDATA}/ToulouseRoad-examples.shp
                              -out ${TEMP}/apTvUtVectorDataTransform_rotation.shp
                              -transform.ro 15
@@ -12,7 +12,7 @@ otb_test_application(NAME apTvUtVectorDataTransform_Rotation
 
 otb_test_application(NAME apTvUtVectorDataTransform_Translation_Rotation
                      APP VectorDataTransform
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+                     OPTIONS -in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
                              -vd ${INPUTDATA}/ToulouseRoad-examples.shp
                              -out ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp
                              -transform.ro 15
@@ -27,7 +27,7 @@ otb_test_application(NAME apTvUtVectorDataTransform_Translation_Rotation
 otb_test_application(NAME apTvUtVectorDataExtractROI
                      APP VectorDataExtractROI
                      OPTIONS -io.in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -io.vd ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
+                             -io.vd LARGEINPUT{VECTOR/MidiPyrenees/roads.shp}
                              -io.out ${TEMP}/apTvUtVectorDataExtractROIApplicationTest.shp
                      VALID   --compare-ogr ${NOTOL}
                              ${BASELINE_FILES}/apTvUtVectorDataExtractROIApplicationTest.shp
@@ -51,7 +51,7 @@ otb_test_application(NAME apTvUtVectorDataSetField
 #----------- OSMDownloader TESTS ----------------
 otb_test_application(NAME apTvUtOSMDownloader
                      APP OSMDownloader
-                     OPTIONS -support ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
+                     OPTIONS -support LARGEINPUT{DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF}
                              -key highway
                              -out ${TEMP}/apTvUtOSMDownloader.shp
                      VALID   --compare-ogr ${NOTOL}

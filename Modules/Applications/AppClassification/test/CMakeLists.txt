@@ -451,15 +451,15 @@ otb_test_application(NAME apTvFusionOfClassificationsMV2Inputs
 #----------- ComputePolylineFeatureFromImage TESTS ----------------
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr
                      APP  ComputePolylineFeatureFromImage
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/NDVI.TIF
-                			 -vd ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/wrongroads.shp
+                     OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/NDVI.TIF}
+                			 -vd LARGEINPUT{DEMPSTER-SHAFER/wrongroads.shp}
                 			 -expr  "(b1 > 0.4)"
   						     -field "NONDVI"
                 			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr.shp)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication
                      APP  ComputePolylineFeatureFromImage
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/SpectralAngleRoad.TIF
+                     OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/SpectralAngleRoad.TIF}
                 			 -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_RoadExtractionApplication.shp
                 			 -expr  "(b1 > 0.25)"
   						     -field "ROADSA"
@@ -467,7 +467,7 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadE
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr
                      APP  ComputePolylineFeatureFromImage
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/SpectralAngleRoad.TIF
+                     OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/SpectralAngleRoad.TIF}
                 			 -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr.shp
                 			 -expr  "(b1 > 0.25)"
   						     -field "ROADSA"
@@ -475,7 +475,7 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr
                      APP  ComputePolylineFeatureFromImage
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/BUILDINGS.TIF
+                     OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/BUILDINGS.TIF}
                 			 -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr.shp
                 			 -expr  "(b1 == 0)"
   						     -field "NOBUIL"
@@ -486,23 +486,23 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_RoadExtractionApplication
                      APP  ComputePolylineFeatureFromImage
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/NDVI.TIF
-                			 -vd ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/road_extraction.shp
+                     OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/NDVI.TIF}
+                			 -vd LARGEINPUT{DEMPSTER-SHAFER/road_extraction.shp}
                 			 -expr  "(b1 > 0.4)"
   						     -field "NONDVI"
                 			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_RoadExtractionApplication.shp)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_gt
                      APP  ComputePolylineFeatureFromImage
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/NDVI.TIF
-                			 -vd ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/roads_ground_truth.shp
+                     OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/NDVI.TIF}
+                			 -vd LARGEINPUT{DEMPSTER-SHAFER/roads_ground_truth.shp}
                 			 -expr  "(b1 > 0.4)"
   						     -field NONDVI
                 			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage.shp)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt
                      APP  ComputePolylineFeatureFromImage
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/SpectralAngleRoad.TIF
+                     OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/SpectralAngleRoad.TIF}
                 			 -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage.shp
                 			 -expr  "(b1 > 0.25)"
   						     -field "ROADSA"
@@ -510,7 +510,7 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt
                      APP  ComputePolylineFeatureFromImage
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/BUILDINGS.TIF
+                     OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/BUILDINGS.TIF}
                 			 -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt.shp
                 			 -expr  "(b1 == 0)"
   						     -field "NOBUIL"
@@ -521,7 +521,7 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication
                      APP  ComputePolylineFeatureFromImage
-                     OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/BUILDINGS.TIF
+                     OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/BUILDINGS.TIF}
                 			 -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication.shp
                 			 -expr  "(b1 == 0)"
   						     -field "NOBUIL"
