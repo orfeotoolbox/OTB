@@ -187,7 +187,7 @@ void
 VectorImage<TPixel, VImageDimension>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  this->GetMetaDataInterface()->Print(os, indent, this->GetMetaDataDictionary());
+  this->GetMetaDataInterface()->PrintMetadata(os, indent, this->GetMetaDataDictionary());
 }
 
 } // end namespace otb

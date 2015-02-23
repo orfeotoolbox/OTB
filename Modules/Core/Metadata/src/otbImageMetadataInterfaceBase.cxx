@@ -442,9 +442,8 @@ ImageMetadataInterfaceBase::GetYPixelSpacing() const
 
 }
 
-
 void
-ImageMetadataInterfaceBase::Print(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict)
 {
 
   std::vector<std::string> keys = dict.GetKeys();
