@@ -21,38 +21,38 @@
 
 #define otbAppLogFATAL(x) \
   { \
-  std::ostringstream message; \
-  message << "" x << std::endl; \
-  this->GetLogger()->Write( itk::LoggerBase::FATAL, message.str() ); \
+  std::ostringstream msg; \
+  msg << "" x << std::endl; \
+  this->GetLogger()->Write( itk::LoggerBase::FATAL, msg.str() ); \
   itkGenericExceptionMacro(<< "Fatal error caught. Aborting..."); \
   }
 
 #define otbAppLogCRITICAL(x) \
   { \
-  std::ostringstream message; \
-  message << "" x << std::endl; \
-  this->GetLogger()->Write( itk::LoggerBase::CRITICAL, message.str() ); \
+  std::ostringstream msg; \
+  msg << "" x << std::endl; \
+  this->GetLogger()->Write( itk::LoggerBase::CRITICAL, msg.str() ); \
   }
 
 #define otbAppLogWARNING(x) \
   { \
-  std::ostringstream message; \
-  message << "" x << std::endl; \
-  this->GetLogger()->Write( itk::LoggerBase::WARNING, message.str() ); \
+  std::ostringstream msg; \
+  msg << "" x << std::endl; \
+  this->GetLogger()->Write( itk::LoggerBase::WARNING, msg.str() ); \
   }
 
 #define otbAppLogINFO(x) \
   { \
-  std::ostringstream message; \
-  message << "" x << std::endl; \
-  this->GetLogger()->Write( itk::LoggerBase::INFO, message.str() ); \
+  std::ostringstream msg; \
+  msg << "" x << std::endl; \
+  this->GetLogger()->Write( itk::LoggerBase::INFO, msg.str() ); \
   }
 
 #define otbAppLogDEBUG(x) \
   { \
-  std::ostringstream message; \
-  message << "" x << std::endl; \
-  this->GetLogger()->Write( itk::LoggerBase::DEBUG, message.str() ); \
+  std::ostringstream msg; \
+  msg << "" x << std::endl; \
+  this->GetLogger()->Write( itk::LoggerBase::DEBUG, msg.str() ); \
   }
 
 #endif
