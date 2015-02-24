@@ -96,6 +96,38 @@ LayerStackWidget
     this,
     SLOT( OnSelectionChanged( const QItemSelection &, const QItemSelection & ) )
     );
+
+  QObject::connect(
+    m_UI->topButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( TopButtonClicked() )
+  );
+
+  QObject::connect(
+    m_UI->bottomButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( BottomButtonClicked() )
+  );
+
+  QObject::connect(
+    m_UI->upButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( UpButtonClicked() )
+  );
+
+  QObject::connect(
+    m_UI->downButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( DownButtonClicked() )
+  );
 }
 
 /*******************************************************************************/

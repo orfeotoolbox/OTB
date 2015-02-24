@@ -125,6 +125,18 @@ signals:
   /**
    */
   void SelectionChanged( int );
+  /**
+   */
+  void TopButtonClicked();
+  /**
+   */
+  void BottomButtonClicked();
+  /**
+   */
+  void UpButtonClicked();
+  /**
+   */
+  void DownButtonClicked();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

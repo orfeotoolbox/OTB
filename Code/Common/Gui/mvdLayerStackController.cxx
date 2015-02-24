@@ -121,6 +121,39 @@ LayerStackController
     this,
     SLOT( OnSelectionChanged( int ) )
   );
+
+
+  QObject::connect(
+    widget,
+    SIGNAL( TopButtonClicked() ),
+    // to:
+    this,
+    SLOT( OnTopButtonClicked() )
+  );
+
+  QObject::connect(
+    widget,
+    SIGNAL( BottomButtonClicked() ),
+    // to:
+    this,
+    SLOT( OnBottomButtonClicked() )
+  );
+
+  QObject::connect(
+    widget,
+    SIGNAL( UpButtonClicked() ),
+    // to:
+    this,
+    SLOT( OnUpButtonClicked() )
+  );
+
+  QObject::connect(
+    widget,
+    SIGNAL( DownButtonClicked() ),
+    // to:
+    this,
+    SLOT( OnDownButtonClicked() )
+  );
 }
 
 /*******************************************************************************/
@@ -169,6 +202,25 @@ LayerStackController
 /*******************************************************************************/
 void
 LayerStackController
+::OnBottomButtonClicked()
+{
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::OnDownButtonClicked()
+{
+  assert( GetModel()==GetModel< StackedLayerModel >() );
+  StackedLayerModel * model = GetModel< StackedLayerModel >();
+  assert( model!=NULL );
+
+  model->LowerCurrent();
+}
+
+/*******************************************************************************/
+void
+LayerStackController
 ::OnCurrentChanged( int index )
 {
   // qDebug() << this << "::OnCurrentChanged(" << index << ")";
@@ -211,6 +263,25 @@ LayerStackController
   widget->SetCurrent( index );
   }
   widget->blockSignals( signalsBlocked );
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::OnTopButtonClicked()
+{
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::OnUpButtonClicked()
+{
+  assert( GetModel()==GetModel< StackedLayerModel >() );
+  StackedLayerModel * model = GetModel< StackedLayerModel >();
+  assert( model!=NULL );
+
+  model->RaiseCurrent();
 }
 
 } // end namespace 'mvd'
