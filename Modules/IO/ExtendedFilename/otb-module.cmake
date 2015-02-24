@@ -4,13 +4,17 @@ file for sensor modeling, tell  that a TILED GeoTiff is to be written, read a
 different subdataset or resolution (for multi-resolution data), or manage ortho-ready
 product by skipping either geographic or sensor-model information.")
 
-otb_module(OTBExtendedFilename 
+otb_module(OTBExtendedFilename
   DEPENDS
     OTBIOGDAL
     OTBBoost
+    OTBITK
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

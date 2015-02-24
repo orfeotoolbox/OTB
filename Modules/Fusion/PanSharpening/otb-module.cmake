@@ -5,15 +5,18 @@ multispectral (XS) data (lower resolution in several spectral bands) to generate
 with a high resolution and several spectral bands. This module provides classes
 related to this purpose.")
 
-otb_module(OTBPanSharpening 
+otb_module(OTBPanSharpening
   DEPENDS
     OTBImageBase
     OTBStatistics
-    OTBImageManipulation
+    OTBITK
     OTBConvolution
+    OTBImageManipulation
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

@@ -3,14 +3,20 @@ manipulation based on object attributes. They are useful for Object-Based Image 
 (OBIA) (analyzing images at the object level instead of working at the pixel
 level).")
 
-otb_module(OTBLabelMap 
+otb_module(OTBLabelMap
   DEPENDS
     OTBVectorDataBase
     OTBCommon
+    OTBITK
+
   TEST_DEPENDS
     OTBTestKernel
+    OTBImageIO
+    OTBProjection
     OTBVectorDataIO
-  
+    OTBVectorDataManipulation
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

@@ -4,18 +4,22 @@ relations to each other (8 basic relations are possible between two regions). Th
 RCC8 constraint language has been popularly adopted by the GIS communities. This
 module provides classes related to this purpose.")
 
-otb_module(OTBRCC8 
+otb_module(OTBRCC8
   DEPENDS
-    OTBImageManipulation
+    OTBITK
     OTBImageBase
     OTBRoadExtraction
-    OTBCommon
+    OTBImageManipulation
     OTBPath
+    OTBCommon
     OTBBoost
     OTBObjectList
+
   TEST_DEPENDS
+    OTBVectorDataBase
     OTBTestKernel
-  
+    OTBImageIO
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

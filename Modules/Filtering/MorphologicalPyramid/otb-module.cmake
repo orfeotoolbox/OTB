@@ -5,17 +5,20 @@ down-sampling operation, such a decomposition can be used. The Morphological Pyr
 approach to such a decomposition. This module contains classes useful in meeting
 that goal.")
 
-otb_module(OTBMorphologicalPyramid 
+otb_module(OTBMorphologicalPyramid
   DEPENDS
+    OTBITK
     OTBImageBase
     OTBPointSet
-    OTBObjectList
     OTBImageManipulation
     OTBCommon
+    OTBObjectList
+
   TEST_DEPENDS
     OTBMorphologicalProfiles
+    OTBImageIO
     OTBTestKernel
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

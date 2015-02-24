@@ -4,17 +4,17 @@ to instantiate it and another one which uses the class. The output of each test
 (image, text file, binary file) is controlled against a baseline to make sure that
 the result hasn't changed.")
 
-otb_module(OTBTestKernel 
+otb_module(OTBTestKernel
   DEPENDS
     OTBGdalAdapters
     OTBImageIO
+    OTBITK
     OTBImageBase
     OTBCommon
     OTBGDAL
     OTBOSSIMAdapters
     OTBImageManipulation
-  
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

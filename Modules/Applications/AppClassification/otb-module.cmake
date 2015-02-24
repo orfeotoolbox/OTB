@@ -1,6 +1,6 @@
 set(DOCUMENTATION "Classification application.")
 
-otb_module(OTBAppClassification 
+otb_module(OTBAppClassification
   DEPENDS
     OTBVectorDataBase
     OTBConversion
@@ -12,10 +12,10 @@ otb_module(OTBAppClassification
     OTBVectorDataIO
     OTBSOM
     OTBSupervised
-    OTBLearningBase
     OTBApplicationEngine
     OTBIndices
     OTBMathParser
+    OTBITK
     OTBDempsterShafer
     OTBGdalAdapters
     OTBProjection
@@ -26,11 +26,11 @@ otb_module(OTBAppClassification
     OTBImageManipulation
     OTBObjectList
     OTBCommon
-    OTBStreaming
+
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

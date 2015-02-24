@@ -5,12 +5,17 @@ deformation map, interferogram. In this case, it is important to ensure that sim
 values will get similar colors. This module contains classes that can meet these
 requirements.")
 
-otb_module(OTBColorMap 
+otb_module(OTBColorMap
   DEPENDS
     OTBCommon
+    OTBITK
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+    OTBITKPendingPatches
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

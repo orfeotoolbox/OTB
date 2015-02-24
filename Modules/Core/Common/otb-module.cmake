@@ -1,11 +1,14 @@
 set(DOCUMENTATION "TO BE DOCUMENTED")
 
-otb_module(OTBCommon 
+otb_module(OTBCommon
   DEPENDS
-    OTBITKPendingPatches
+    OTBBoost
     OTBITK
+    OTBITKPendingPatches
+
   TEST_DEPENDS
     OTBTestKernel
+
   DESCRIPTION
     "${DOCUMENTATION}"
 )

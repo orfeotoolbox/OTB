@@ -6,15 +6,19 @@ abrupt changes in an image pair, abrupt changes within an image series and a
 known date, abrupt changes within an image series and an unknown date, progressive
 changes within an image series.")
 
-otb_module(OTBChangeDetection 
+otb_module(OTBChangeDetection
   DEPENDS
-    OTBProjection
-    OTBStatistics
-    OTBImageManipulation
     OTBCommon
+    OTBStatistics
+    OTBITK
+    OTBProjection
+    OTBImageManipulation
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

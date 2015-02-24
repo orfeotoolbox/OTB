@@ -1,18 +1,20 @@
 set(DOCUMENTATION "Edge detection and extraction application (see also Edge
 module).")
 
-otb_module(OTBAppEdge 
+otb_module(OTBAppEdge
   DEPENDS
     OTBStatistics
-    OTBProjection
+    OTBITK
     OTBImageBase
-    OTBEdge
     OTBApplicationEngine
+    OTBEdge
     OTBImageManipulation
+    OTBProjection
+
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

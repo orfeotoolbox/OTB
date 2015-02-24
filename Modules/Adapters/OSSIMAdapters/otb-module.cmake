@@ -3,17 +3,22 @@ process imagery, maps, terrain, and vector data). It is used inside OTB for
 several purposes: sensor models (especially RPC), metadata parsers, DEM handlers, and
 so on.")
 
-otb_module(OTBOSSIMAdapters 
+otb_module(OTBOSSIMAdapters
   DEPENDS
-    OTBGDAL
-    OTBCommon
-    OTBOssim
-    OTBOssimPlugins
     OTBOpenThreads
+    OTBITK
+    OTBCommon
+    OTBGDAL
+    OTBOssimPlugins
+    OTBOssim
+
   TEST_DEPENDS
     OTBTestKernel
+    OTBImageBase
+    OTBImageIO
+    OTBTransform
     OTBProjection
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

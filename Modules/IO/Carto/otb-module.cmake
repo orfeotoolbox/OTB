@@ -6,22 +6,24 @@ shapefile). request OSM Server using the OSM API 0.6 to get the xml file storing
 the vector elements available. retrieve Longitude and Latitude coordinates from a
 place name. And so on.")
 
-otb_module(OTBCarto 
+otb_module(OTBCarto
   DEPENDS
     OTBVectorDataBase
+    OTBImageManipulation
     OTBImageIO
     OTBProjection
-    OTBTinyXML
     OTBImageBase
+    OTBTinyXML
     OTBTransform
     OTBCommon
     OTBCurlAdapters
     OTBVectorDataIO
-    OTBImageManipulation
+    OTBITK
+
   TEST_DEPENDS
     OTBOpenThreadsAdapters
     OTBTestKernel
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

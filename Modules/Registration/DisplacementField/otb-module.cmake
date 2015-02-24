@@ -5,16 +5,19 @@ BSpline). The class otb::StereorectificationDisplacementFieldSource is specializ
 in generating a deformation field between two images in epipolar geometry
 (horizontal shifts).")
 
-otb_module(OTBDisplacementField 
+otb_module(OTBDisplacementField
   DEPENDS
+    OTBITK
     OTBImageBase
     OTBTransform
     OTBCommon
     OTBOSSIMAdapters
     OTBObjectList
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

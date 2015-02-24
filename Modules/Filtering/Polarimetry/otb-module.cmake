@@ -5,13 +5,17 @@ applications. Here, the user can find (for instance) classes to handle different
 representations of a polarisation state, to perform polarimetry synthesis, and so
 on.")
 
-otb_module(OTBPolarimetry 
+otb_module(OTBPolarimetry
   DEPENDS
     OTBCommon
     OTBITKPendingPatches
+    OTBITK
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

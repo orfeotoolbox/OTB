@@ -3,18 +3,23 @@ vector of numbers which is invariant to common image transformations. Descriptor
 then compared according to some criterion in order to be matched. This module
 contains different descriptors such as Fourrier-Mellin, SIFT, SURF, HOG, and so on.")
 
-otb_module(OTBDescriptors 
+otb_module(OTBDescriptors
   DEPENDS
     OTBSiftFast
+    OTBITK
     OTBITKPendingPatches
     OTBImageBase
     OTBTransform
     OTBPointSet
     OTBCommon
     OTBObjectList
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+    OTBImageManipulation
+    OTBInterpolation
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

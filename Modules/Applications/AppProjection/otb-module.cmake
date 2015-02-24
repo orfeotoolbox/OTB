@@ -1,6 +1,6 @@
 set(DOCUMENTATION "Projection application (see also Projection module).")
 
-otb_module(OTBAppProjection 
+otb_module(OTBAppProjection
   DEPENDS
     OTBGdalAdapters
     OTBImageManipulation
@@ -12,12 +12,14 @@ otb_module(OTBAppProjection
     OTBApplicationEngine
     OTBMathParser
     OTBCommon
-    OTBGDAL
     OTBInterpolation
+    OTBGDAL
+    OTBITK
+
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

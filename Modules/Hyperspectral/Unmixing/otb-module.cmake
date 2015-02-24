@@ -5,16 +5,20 @@ unmixing one of these 'mixed' pixels is called hyperspectral image unmixing or
 simply hyperspectral unmixing. This module contains classes useful in meeting that
 goal.")
 
-otb_module(OTBUnmixing 
+otb_module(OTBUnmixing
   DEPENDS
-    OTBDimensionalityReduction
     OTBStatistics
-    OTBBoost
+    OTBITK
+    OTBImageBase
+    OTBDimensionalityReduction
     OTBCommon
+    OTBBoost
     OTBWavelet
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

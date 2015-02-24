@@ -1,19 +1,23 @@
 set(DOCUMENTATION "This module contains features to write kmz files (supported
 by Google Earth).")
 
-otb_module(OTBKMZWriter 
+otb_module(OTBKMZWriter
   DEPENDS
     OTBVectorDataBase
     OTBImageIO
-    OTBImageBase
-    OTBTransform
-    OTBOSSIMAdapters
-    OTBImageManipulation
-    OTBVectorDataIO
+    OTBITK
     OTBlibkml
+    OTBTransform
+    OTBImageManipulation
+    OTBImageBase
+    OTBVectorDataIO
+    OTBOSSIMAdapters
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBCommon
+    OTBProjection
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

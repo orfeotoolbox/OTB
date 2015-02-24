@@ -4,12 +4,19 @@ OpenCV and/or libSVM")
 
 otb_module(OTBSupervised
   DEPENDS
+    OTBBoost
     OTBCommon
+    OTBITK
+
   OPTIONAL_DEPENDS
     OTBOpenCV
     OTBSVMLearning
+
   TEST_DEPENDS
     OTBTestKernel
+    OTBImageIO
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

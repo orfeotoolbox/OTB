@@ -1,15 +1,18 @@
 set(DOCUMENTATION "This module is concerned with the detection of urban area.")
 
-otb_module(OTBUrbanArea 
+otb_module(OTBUrbanArea
   DEPENDS
-    OTBIndices
+    OTBStatistics
+    OTBITK
     OTBImageBase
     OTBEdge
-    OTBStatistics
     OTBImageManipulation
+    OTBIndices
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

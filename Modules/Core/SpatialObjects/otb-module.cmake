@@ -8,12 +8,16 @@ Spatial objects are a natural data structure for communicating the results of
 segmentation methods and for introducing geometrical priors in both segmentation and
 registration methods.")
 
-otb_module(OTBSpatialObjects 
+otb_module(OTBSpatialObjects
   DEPENDS
     OTBCommon
+    OTBITK
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

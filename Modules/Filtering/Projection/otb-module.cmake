@@ -5,10 +5,11 @@ manifold of a 3-dimensional space (the Earth surface) in a 2-dimensional space
 generically related to this purpose. for instance, user can handle OGR data type, find RPC
 solvers, re-project input vector data over input images, and so on.")
 
-otb_module(OTBProjection 
+otb_module(OTBProjection
   DEPENDS
     OTBVectorDataBase
     OTBGdalAdapters
+    OTBITK
     OTBImageBase
     OTBTransform
     OTBVectorDataManipulation
@@ -18,10 +19,13 @@ otb_module(OTBProjection
     OTBBoost
     OTBGDAL
     OTBCommon
+
   TEST_DEPENDS
     OTBTestKernel
+    OTBImageIO
+    OTBITKPendingPatches
     OTBVectorDataIO
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

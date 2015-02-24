@@ -1,20 +1,23 @@
 set(DOCUMENTATION "This module contains classes related to the handling of
 vector data (see also VectorDataBase and VectorDataManipulation modules).")
 
-otb_module(OTBVectorDataManipulation 
+otb_module(OTBVectorDataManipulation
   DEPENDS
     OTBVectorDataBase
-    OTBImageManipulation
+    OTBITK
     OTBTransform
-    OTBOSSIMAdapters
-    OTBCommon
-    OTBGDAL
+    OTBImageManipulation
     OTBPath
+    OTBCommon
+    OTBOSSIMAdapters
     OTBObjectList
+
   TEST_DEPENDS
-    OTBTestKernel
     OTBVectorDataIO
-  
+    OTBTestKernel
+    OTBImageIO
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

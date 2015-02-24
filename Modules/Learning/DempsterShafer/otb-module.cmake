@@ -4,19 +4,23 @@ dempster-Shafer, which is based on belief function and plausible reasoning, can
 be used for this purpose. This module contains classes related to this theory (see
 also majority voting module).")
 
-otb_module(OTBDempsterShafer 
+otb_module(OTBDempsterShafer
   DEPENDS
     OTBVectorDataBase
+    OTBITK
     OTBImageBase
     OTBVectorDataManipulation
     OTBSupervised
     OTBCommon
-    OTBMathParser
     OTBFuzzy
+    OTBMathParser
+
   TEST_DEPENDS
-    OTBTestKernel
     OTBVectorDataIO
-  
+    OTBTestKernel
+    OTBImageIO
+    OTBObjectList
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

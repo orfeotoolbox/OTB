@@ -4,14 +4,18 @@ keypoints (SIFT or SURF, for instance). Many estimators are implemented
 the total number of pixels within a region). Note that the estimated density can be
 represented as an image or quiered at particular points (function).")
 
-otb_module(OTBDensity 
+otb_module(OTBDensity
   DEPENDS
     OTBPointSet
     OTBCommon
+    OTBITK
+
   TEST_DEPENDS
     OTBDescriptors
     OTBTestKernel
-  
+    OTBImageIO
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

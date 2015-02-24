@@ -4,16 +4,19 @@ as input, and producing an output of type Path. another interesting class is
 'otbPathFunction', which is the base class for all objects that evaluate a function
 of an image using a path list (computation of histograms for instance). And so on.")
 
-otb_module(OTBPath 
+otb_module(OTBPath
   DEPENDS
     OTBVectorDataBase
     OTBImageBase
-    OTBCommon
     OTBObjectList
+    OTBITK
+    OTBCommon
+
   TEST_DEPENDS
     OTBTestKernel
+    OTBImageIO
     OTBVectorDataIO
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

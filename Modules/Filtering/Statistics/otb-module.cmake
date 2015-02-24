@@ -5,21 +5,25 @@ concatenate several sample lists into a single one, to generate a noised version
 of the input sample list, and so on. The other part works on images and labelMaps
 and allows the calculation of classical statistics (min max mean histogram).")
 
-otb_module(OTBStatistics 
+otb_module(OTBStatistics
   DEPENDS
     OTBVectorDataBase
-    OTBImageManipulation
     OTBProjection
     OTBITKPendingPatches
     OTBImageBase
     OTBLabelMap
     OTBStreaming
+    OTBImageManipulation
     OTBCommon
     OTBObjectList
+    OTBITK
+
   TEST_DEPENDS
     OTBVectorDataIO
     OTBTestKernel
-  
+    OTBImageIO
+    OTBInterpolation
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

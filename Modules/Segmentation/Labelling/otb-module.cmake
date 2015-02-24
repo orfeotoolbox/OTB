@@ -6,13 +6,18 @@ neighbourhood. Remaping the labels is also possible, so that that the label numb
 are consecutive with no gaps between the label numbers used. Finally, it is also
 possible to sort the labels based on the size of the object.")
 
-otb_module(OTBLabelling 
+otb_module(OTBLabelling
   DEPENDS
     OTBPointSet
     OTBImageManipulation
+    OTBITK
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+    OTBITKPendingPatches
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

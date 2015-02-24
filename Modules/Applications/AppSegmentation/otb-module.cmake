@@ -1,31 +1,33 @@
 set(DOCUMENTATION "Segmentation application.")
 
-otb_module(OTBAppSegmentation 
+otb_module(OTBAppSegmentation
   DEPENDS
     OTBVectorDataBase
-    OTBLabelMap
-    OTBConversion
-    OTBImageManipulation
-    OTBImageIO
-    OTBProjection
-    OTBImageBase
-    OTBWatersheds
-    OTBGdalAdapters
-    OTBSmoothing
-    OTBMetrics
     OTBOGRProcessing
+    OTBConversion
     OTBStatistics
-    OTBMeanShift
-    OTBApplicationEngine
+    OTBImageIO
+    OTBITK
     OTBCCOBIA
-    OTBMathParser
-    OTBMorphologicalProfiles
+    OTBWatersheds
     OTBTransform
+    OTBMetrics
+    OTBSmoothing
+    OTBMeanShift
+    OTBGdalAdapters
+    OTBApplicationEngine
+    OTBImageBase
+    OTBMathParser
     OTBCommon
+    OTBImageManipulation
+    OTBMorphologicalProfiles
+    OTBLabelMap
+    OTBProjection
+
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

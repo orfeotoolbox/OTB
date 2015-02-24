@@ -4,14 +4,17 @@ which are in competition by means of mutual interactions and they adapt in order
 to match characteristic patterns of the examples given during the learning. The
 SOM is usually on a plane (2D).")
 
-otb_module(OTBSOM 
+otb_module(OTBSOM
   DEPENDS
     OTBImageBase
     OTBCommon
     OTBITKPendingPatches
+    OTBITK
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

@@ -3,17 +3,22 @@ that are more suitable to remote sensing (compared to the ones already available
 itk -see itk::Transform-). this mainly concerns transformations of coordinates
 from any map projection or sensor model to any map projection or sensor model.")
 
-otb_module(OTBTransform 
+otb_module(OTBTransform
   DEPENDS
+    OTBITK
     OTBITKPendingPatches
-    OTBCommon
-    OTBGDAL
-    OTBBoost
     OTBOSSIMAdapters
     OTBInterpolation
+    OTBBoost
+    OTBGDAL
+    OTBCommon
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+    OTBOssim
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

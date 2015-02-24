@@ -1,29 +1,31 @@
 set(DOCUMENTATION "This module contains classes related to the reading and the
 writing of remote sensing images.")
 
-otb_module(OTBImageIO 
+otb_module(OTBImageIO
   DEPENDS
+    OTBIOMW
     OTBIORAD
-    OTBIOONERA
-    OTBIOJPEG2000
+    OTBIOMSTAR
+    OTBITK
     OTBITKPendingPatches
     OTBIOLUM
-    OTBImageBase
-    OTBIOMW
-    OTBIOMSTAR
+    OTBBoost
+    OTBIOJPEG2000
     OTBIOBSQ
     OTBIOGDAL
-    OTBStreaming
-    OTBBoost
+    OTBIOONERA
     OTBIOTileMap
     OTBCommon
+    OTBImageBase
+    OTBStreaming
     OTBExtendedFilename
     OTBOSSIMAdapters
     OTBObjectList
+
   TEST_DEPENDS
     OTBTestKernel
     OTBStatistics
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

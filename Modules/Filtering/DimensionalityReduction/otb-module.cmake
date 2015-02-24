@@ -5,17 +5,20 @@ Analysis (PCA), Noise-Adjusted Principal Components Analysis (NAPCA), Maximum
 Noise Fraction (MNF), Fast Independant Component Analysis (FICA), Maximum
 Autocorrelation Factor (MAF), and so on.")
 
-otb_module(OTBDimensionalityReduction 
+otb_module(OTBDimensionalityReduction
   DEPENDS
-    OTBImageBase
     OTBStatistics
-    OTBObjectList
+    OTBITK
+    OTBImageBase
     OTBImageManipulation
     OTBCommon
+    OTBObjectList
+
   TEST_DEPENDS
     OTBTestKernel
+    OTBImageIO
     OTBWavelet
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

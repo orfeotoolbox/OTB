@@ -2,8 +2,9 @@ set(DOCUMENTATION "TO BE DOCUMENTED")
 
 otb_module(OTBSWIGWrapper
   DEPENDS
-      OTBApplicationEngine
-  
+    OTBApplicationEngine
+    OTBITK
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

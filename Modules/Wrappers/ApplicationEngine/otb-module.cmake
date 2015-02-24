@@ -1,24 +1,28 @@
 set(DOCUMENTATION "This module contains classes that ease the implementation of
 applications (see chapter 'How to write an application' of the SoftwareGuide).")
 
-otb_module(OTBApplicationEngine 
+otb_module(OTBApplicationEngine
   DEPENDS
     OTBVectorDataBase
-    OTBImageManipulation
     OTBImageIO
     OTBProjection
-    OTBTinyXML
     OTBVectorDataIO
     OTBTransform
-    OTBCommon
+    OTBImageManipulation
+    OTBTinyXML
     OTBImageBase
+    OTBCommon
+    OTBObjectList
     OTBBoost
     OTBOSSIMAdapters
-    OTBObjectList
+    OTBITK
+
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine
+    OTBEdge
     OTBAppImageUtils
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

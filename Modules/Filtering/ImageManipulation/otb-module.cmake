@@ -5,8 +5,9 @@ nice other features, let's mention: applying a standard  (or a functor)  per
 band, evaluating a ImageFunction onto a source image, generating an image from DEM
 data.")
 
-otb_module(OTBImageManipulation 
+otb_module(OTBImageManipulation
   DEPENDS
+    OTBITK
     OTBITKPendingPatches
     OTBImageBase
     OTBTransform
@@ -15,11 +16,13 @@ otb_module(OTBImageManipulation
     OTBInterpolation
     OTBOSSIMAdapters
     OTBObjectList
+
   TEST_DEPENDS
     OTBTextures
     OTBTestKernel
+    OTBImageIO
     OTBDensity
-  
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

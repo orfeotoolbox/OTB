@@ -5,12 +5,15 @@ probabilities. This module contains classes related to well-known approaches for
 detection which have shown success for multispectral and hyperspectral images
 (for example Local-RX detector).")
 
-otb_module(OTBAnomalyDetection 
+otb_module(OTBAnomalyDetection
   DEPENDS
-    OTBCommon
+    OTBITK
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)

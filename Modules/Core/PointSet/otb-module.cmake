@@ -6,14 +6,18 @@ will be able to apply a transform to all the points of a PointSet, extract all
 the points of a PointSet that are in a given region, generate a random point set,
 and so on.")
 
-otb_module(OTBPointSet 
+otb_module(OTBPointSet
   DEPENDS
-    OTBCommon
-    OTBInterpolation
     OTBStreaming
+    OTBInterpolation
+    OTBITK
+    OTBCommon
+
   TEST_DEPENDS
     OTBTestKernel
-  
+    OTBImageIO
+    OTBImageBase
+
   DESCRIPTION
     "${DOCUMENTATION}"
-  )
+)
