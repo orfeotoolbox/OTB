@@ -34,8 +34,8 @@ otb_add_test(NAME ioTeDEMToImageGeneratorTest COMMAND ${OTB_TEST_DRIVER}
 
 otb_add_test(NAME prTeDEMHandlerExampleTest COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:DEMHandlerExample>
-    ${INPUTDATA}/DEM/srtm_directory/
-    ${INPUTDATA}/DEM/egm96.grd
+    ${INPUTDATA}/DEM_srtm
+    ${INPUTDATA}/DEM_srtm/egm96.grd
     40
     8.434583
     44.647083
@@ -50,7 +50,7 @@ otb_add_test(NAME ioTeImageToKmzAndMapFileProductExample COMMAND ${OTB_TEST_DRIV
     ${TEMP}/mapserverExample/ioTeHaitiMapFileProduct.map
     ${TEMP}/mapserverExample/shapeindex
     http://localhost/cgi-bin/mapserv
-    ${INPUTDATA}/DEM/srtm_directory
+    ${INPUTDATA}/DEM_srtm
     198.000000 199.000000 -72.351257 18.555075 0.000000
     196.000000 194.000000 -72.352051 18.556946 0.000000
     208.000000 157.000000 -72.346130 18.574358 0.000000

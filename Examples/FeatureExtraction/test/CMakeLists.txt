@@ -62,7 +62,7 @@ otb_add_test(NAME feTeExtractSegmentsByStepsExampleTest COMMAND ${OTB_TEST_DRIVE
     ${BASELINE}/amstSegmentExtractionBySteps.png
     ${TEMP}/amstSegmentExtractionBySteps.png
   Execute $<TARGET_FILE:ExtractSegmentsByStepsExample>
-    ${INPUTDATA_OTB}/amst_ers1.ima.extrait.419_187_70_66.hdr
+    ${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.hdr
     ${TEMP}/amstSegmentExtractionBySteps.png
     10 3 10 0.5 10 10 3 10 0.5
 )
@@ -86,7 +86,7 @@ otb_add_test(NAME feTeExtractSegmentsExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${BASELINE}/amstSegmentExtraction.png
     ${TEMP}/amstSegmentExtraction.png
   Execute $<TARGET_FILE:ExtractSegmentsExample>
-    ${INPUTDATA_OTB}/amst_ers1.ima.extrait.419_187_70_66.hdr
+    ${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.hdr
     ${TEMP}/amstSegmentExtraction.png
     10 3 10 0.5 10 10 3 10 0.5
 )
