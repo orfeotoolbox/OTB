@@ -114,15 +114,6 @@ LayerStackController
   );
 
 
-#if 0
-  QObject::connect(
-    widget,
-    SIGNAL( CurrentChanged( int ) ),
-    // to:
-    this,
-    SLOT( OnCurrentChanged( int ) )
-  );
-#else
   QObject::connect(
     widget,
     SIGNAL( SelectionChanged( int ) ),
@@ -130,7 +121,6 @@ LayerStackController
     this,
     SLOT( OnSelectionChanged( int ) )
   );
-#endif
 }
 
 /*******************************************************************************/
@@ -158,15 +148,6 @@ LayerStackController
   widget->GetItemModel()->SetStack( NULL );
 
 
-#if 0
-  QObject::disconnect(
-    widget,
-    SIGNAL( CurrentChanged( int ) ),
-    // to:
-    this,
-    SLOT( OnCurrentChanged( int ) )
-  );
-#else
   QObject::disconnect(
     widget,
     SIGNAL( SelectionChanged( int ) ),
@@ -174,7 +155,6 @@ LayerStackController
     this,
     SLOT( OnSelectionChanged( int ) )
   );
-#endif
 }
 
 /*******************************************************************************/
