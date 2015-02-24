@@ -28,16 +28,6 @@
 #include "itkConnectedComponentImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-/*
-#include "itkBinaryErodeImageFilter.h"
-#include "itkBinaryDilateImageFilter.h"
-#include "itkBinaryBallStructuringElement.h"
-//#include "itkBinaryMorphologicalClosingImageFilter.h"
-//#include "itkBinaryMorphologicalOpeningImageFilter.h"
-#include "itkMedianImageFilter.h"
-#include "otbRemoveObjectPreprocessingImageFilter.h"
-*/
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
