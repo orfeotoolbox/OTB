@@ -12,6 +12,11 @@ if(USE_SYSTEM_MUPARSERX)
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   
+  set(MUPARSERX_FLAGS)
+  if(APPLE)
+    set(MUPARSERX_FLAGS -std=c++0x)
+  endif()
+  
   # svn checkout http://muparserx.googlecode.com/svn/trunk/ muparserx-read-only
   
   ExternalProject_Add(${proj}
@@ -26,6 +31,7 @@ else()
       -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
       -DCMAKE_BUILD_TYPE:STRING=Release
       -DBUILD_SHARED_LIBS:BOOL=ON
+      ${MUPARSERX_FLAGS}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     DEPENDS ${${proj}_DEPENDENCIES}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
