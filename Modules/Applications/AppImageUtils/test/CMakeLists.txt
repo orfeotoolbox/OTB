@@ -2,7 +2,7 @@ otb_module_test()
 #----------- DownloadSRTMTiles TESTS ----------------
 otb_test_application(NAME apTuUtDownloadSRTMTiles
                      APP  DownloadSRTMTiles
-                     OPTIONS -il ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+                     OPTIONS -il LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
                              -mode list
                              -mode.list.indir ${INPUTDATA}/DEM/srtm_directory
                      )
@@ -137,7 +137,7 @@ otb_test_application(NAME  apTvUtReadImageInfoTest
 
 otb_test_application(NAME  apTvUtReadImageInfoSpot5
                      APP  ReadImageInfo
-                     OPTIONS -in ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
+                     OPTIONS -in LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
                      TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoSpot5.txt
                      VALID   --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvUtReadImageInfoSpot5.txt
@@ -145,7 +145,7 @@ otb_test_application(NAME  apTvUtReadImageInfoSpot5
 
 otb_test_application(NAME  apTvUtReadImageInfoERS
                      APP  ReadImageInfo
-                     OPTIONS -in ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
+                     OPTIONS -in LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
                      TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoERS.txt
                      VALID   --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvUtReadImageInfoERS.txt
@@ -153,7 +153,7 @@ otb_test_application(NAME  apTvUtReadImageInfoERS
 
 otb_test_application(NAME  apTvUtReadImageInfoRADARSAT1
                      APP  ReadImageInfo
-                     OPTIONS -in ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001
+                     OPTIONS -in LARGEINPUT{RADARSAT1/GOMA/SCENE01/DAT_01.001}
                      TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoRADARSAT1.txt
                      VALID   --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvUtReadImageInfoRADARSAT1.txt
@@ -173,7 +173,7 @@ otb_test_application(NAME apTvUtQuicklookROI1Channel
 
 otb_test_application(NAME apTvUtQuicklookSpot5
                      APP Quicklook
-                     OPTIONS -in ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
+                     OPTIONS -in LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
                              -out ${TEMP}/apTvUtQuicklookSpot5.tif
                              -cl Channel1 Channel2 Channel3
                              -rox 10

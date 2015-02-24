@@ -2,7 +2,7 @@ otb_module_test()
 #----------- Rasterization TESTS ----------------
 otb_test_application(NAME apTvRsRasterizationLinesAttributeMode
                      APP  Rasterization
-                     OPTIONS -in   ${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
+                     OPTIONS -in   LARGEINPUT{VECTOR/MidiPyrenees/roads.shp}
                              -im   ${BASELINE}/apTvRsRasterizationLines.tif
                              -out  ${TEMP}/apTvRsRasterizationLinesAttributeMode.tif uint32
                              -background 0
@@ -26,7 +26,7 @@ otb_test_application(NAME apTvRsRasterizationPolygons2LayersWith2SRS
 
 otb_test_application(NAME apTvRsRasterizationLines
                      APP  Rasterization
-                     OPTIONS -in   ${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
+                     OPTIONS -in   LARGEINPUT{VECTOR/MidiPyrenees/roads.shp}
                              -im   ${BASELINE}/apTvRsRasterizationLines.tif
                              -out  ${TEMP}/apTvRsRasterizationLines.tif uint8
                              -background 255
@@ -37,7 +37,7 @@ otb_test_application(NAME apTvRsRasterizationLines
 
 otb_test_application(NAME apTvRsRasterizationLinesStreaming
                      APP  Rasterization
-                     OPTIONS -in   ${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
+                     OPTIONS -in   LARGEINPUT{VECTOR/MidiPyrenees/roads.shp}
                              -im   ${BASELINE}/apTvRsRasterizationLines.tif
                              -out  ${TEMP}/apTvRsRasterizationLinesStreaming.tif uint8
                  	     -ram 1
@@ -61,7 +61,7 @@ otb_test_application(NAME apTvRsRasterizationPolygons
 
 otb_test_application(NAME apTvRsRasterizationPoints
                      APP  Rasterization
-                     OPTIONS -in   ${LARGEDATA}/VECTOR/MidiPyrenees/points.shp
+                     OPTIONS -in   LARGEINPUT{VECTOR/MidiPyrenees/points.shp}
                              -im   ${BASELINE}/apTvRsRasterizationPoints.tif
                              -out  ${TEMP}/apTvRsRasterizationPoints.tif uint8
                              -background 255
