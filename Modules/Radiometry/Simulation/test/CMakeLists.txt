@@ -1,5 +1,13 @@
 otb_module_test()
 
+#Paths for spectral libraries
+set(SPECTRUM_DB ${INPUTDATA}/BD-CNES)
+set(SRCLASS0 ${SPECTRUM_DB}/JHU/becknic/manmade/txt)
+set(SRCLASS1 ${SPECTRUM_DB}/JHU/becknic/water/txt)
+set(SRCLASS2 ${SPECTRUM_DB}/JHU/becknic/soils/txt)
+set(SRCLASS3 ${SPECTRUM_DB}/JHU/becknic/vegetation/txt)
+set(SRCLASS4 ${SPECTRUM_DB}/JHU/becknic/rocks/sedimentary/powder/0_75/txt)
+
 set(OTBSimulationTests
 otbSimulationTestDriver.cxx
 otbReduceSpectralResponseSVMClassifier.cxx
