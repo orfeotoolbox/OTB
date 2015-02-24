@@ -18,6 +18,8 @@
 #ifndef __otbMapFileProductWriter_h
 #define __otbMapFileProductWriter_h
 
+#include <iostream>
+
 #include "itkObjectFactory.h"
 
 // Image Tiling
