@@ -4,7 +4,7 @@ set(OTB3P_INSTALL_RUNTIME_DIR "${OTBLibSVM_INSTALL_RUNTIME_DIR}")
 set(OTB3P_INSTALL_LIBRARY_DIR "${OTBLibSVM_INSTALL_LIBRARY_DIR}")
 set(OTB3P_INSTALL_ARCHIVE_DIR "${OTBLibSVM_INSTALL_ARCHIVE_DIR}")
 add_subdirectory(otblibsvm)
-otb_module_target(otblibsvm NO_INSTALL)
+#otb_module_target(otblibsvm NO_INSTALL)
 
 install(FILES otb_libsvm.h
   DESTINATION ${OTBLibSVM_INSTALL_INCLUDE_DIR}
