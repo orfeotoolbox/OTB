@@ -53,7 +53,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
-::Modified()
+::Modified() const
 {
   Superclass::Modified();
   m_FunctorParametersHaveBeenComputed  = false;

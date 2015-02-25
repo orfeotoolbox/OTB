@@ -280,7 +280,7 @@ protected:
   void UpdateFunctors();
 
   /** If modified, we need to compute the functor parameters again */
-  virtual void Modified();
+  virtual void Modified() const;
 
 private:
 
@@ -298,7 +298,7 @@ private:
   /** Weighting values for the neighbor pixels.*/
   WeightingValuesContainerType m_WeightingValues;
   /** True if the functor parameters have been generated */
-  bool m_FunctorParametersHaveBeenComputed;
+  mutable bool m_FunctorParametersHaveBeenComputed;
   /** Pixel spacing in kilometers */
   double m_PixelSpacingInKilometers;
   /** Viewing angle in degree */

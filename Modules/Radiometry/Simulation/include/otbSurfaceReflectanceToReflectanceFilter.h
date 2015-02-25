@@ -274,7 +274,7 @@ protected:
   void UpdateFunctors();
 
   /** If modified, we need to compute the functor parameters again */
-  virtual void Modified();
+  virtual void Modified() const;
 
 private:
 
@@ -287,7 +287,7 @@ private:
   AtmoCorrectionParametersPointerType      m_AtmoCorrectionParameters;
   AcquiCorrectionParametersPointerType     m_AcquiCorrectionParameters;
 
-  bool m_UseGenerateParameters;
+  mutable bool m_UseGenerateParameters;
 
   /** True if the functor parameters have been generated */
   bool m_FunctorParametersHaveBeenComputed;

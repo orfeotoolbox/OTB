@@ -251,7 +251,7 @@ protected:
   void UpdateFunctors();
 
   /** If modified, we need to compute the functor parameters again */
-  virtual void Modified();
+  virtual void Modified() const;
 
 private:
 
@@ -265,7 +265,7 @@ private:
   bool m_UseGenerateParameters;
 
   /** True if the functor parameters have been generated */
-  bool m_FunctorParametersHaveBeenComputed;
+  mutable bool m_FunctorParametersHaveBeenComputed;
 
   AtmosphericRadiativeTermsPointerType     m_AtmosphericRadiativeTerms;
   AtmoCorrectionParametersPointerType      m_AtmoCorrectionParameters;

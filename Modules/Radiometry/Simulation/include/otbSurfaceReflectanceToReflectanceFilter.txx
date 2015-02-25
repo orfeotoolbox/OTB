@@ -110,7 +110,7 @@ SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
-::Modified()
+::Modified() const
 {
   Superclass::Modified();
   m_FunctorParametersHaveBeenComputed  = false;

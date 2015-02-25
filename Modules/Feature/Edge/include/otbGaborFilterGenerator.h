@@ -121,7 +121,7 @@ protected:
 
   /** Reimplement the Modified() method
    *to set the NeedToGenerateFilter to true */
-  virtual void Modified();
+  virtual void Modified() const;
 
 private:
   GaborFilterGenerator(const Self&); //purposely not implemented
@@ -142,7 +142,7 @@ private:
   ArrayType m_Filter;
 
   /** Wether we need to regenerate the filter */
-  bool m_NeedToRegenerateFilter;
+  mutable bool m_NeedToRegenerateFilter;
 
 };
 } // end namespace otb

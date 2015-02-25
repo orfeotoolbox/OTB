@@ -84,7 +84,7 @@ GaborFilterGenerator<TPrecision>
 template <class TPrecision>
 void
 GaborFilterGenerator<TPrecision>
-::Modified()
+::Modified() const
 {
   this->Superclass::Modified();
   m_NeedToRegenerateFilter = true;
