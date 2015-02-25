@@ -3,18 +3,19 @@ format images.")
 
 otb_module(OTBIOTileMap
   DEPENDS
-    OTBIOGDAL
+    OTBITK
     OTBImageBase
+    OTBIOGDAL
     OTBCommon
     OTBCurlAdapters
-    OTBITK
+    OTBOSSIMAdapters
 
   TEST_DEPENDS
-    OTBTransform
     OTBTestKernel
-    OTBImageIO
-    OTBImageManipulation
     OTBProjection
+    OTBImageIO
+    OTBTransform
+    OTBImageManipulation
 
   DESCRIPTION
     "${DOCUMENTATION}"

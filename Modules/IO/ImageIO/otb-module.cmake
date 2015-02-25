@@ -10,7 +10,6 @@ otb_module(OTBImageIO
     OTBITKPendingPatches
     OTBIOLUM
     OTBBoost
-    OTBIOJPEG2000
     OTBIOBSQ
     OTBIOGDAL
     OTBIOONERA
