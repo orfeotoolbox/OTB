@@ -8,21 +8,21 @@ otb_module(OTBConversion
     OTBVectorDataManipulation
     OTBGdalAdapters
     OTBITK
-    OTBVectorDataIO
+    OTBImageBase
     OTBIOGDAL
     OTBStreaming
     OTBLabelMap
-    OTBImageBase
     OTBMetadata
     OTBBoost
     OTBGDAL
     OTBCommon
 
   TEST_DEPENDS
-    OTBTestKernel
+    OTBVectorDataIO
+    OTBSmoothing
     OTBImageIO
     OTBProjection
-    OTBSmoothing
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
