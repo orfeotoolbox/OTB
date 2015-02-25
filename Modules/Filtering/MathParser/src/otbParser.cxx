@@ -16,11 +16,9 @@
 
 =========================================================================*/
 #include "otbMath.h"
-
-#include "otbConfigure.h"
-
-#include "muParser.h"
 #include "otbParser.h"
+
+#include "otb_muparser.h"
 
 namespace otb
 {
