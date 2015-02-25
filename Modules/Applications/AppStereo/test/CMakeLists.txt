@@ -6,7 +6,7 @@ otb_module_test()
                      			       LARGEINPUT{PLEIADES/tristereo_Haiti_Pan/slave_pan_1.tif}
                      			       LARGEINPUT{PLEIADES/tristereo_Haiti_Pan/slave_pan_2.tif}
                      			       -input.co "0 1,0 2"
-                                -elev.dem ${DEM_DATA}
+                                -elev.dem ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
                                 -elev.geoid ${OTB_DATA_ROOT}/Input/DEM/egm96.grd
                                 -stereorect.invgridssrate 15
                                 -mask.variancet 100
@@ -29,7 +29,7 @@ otb_test_application(NAME apTvDmStereoFramework
                      			       LARGEINPUT{PLEIADES/tristereo_Haiti_Pan/phr_haiti_xt2.tif}
                      			       LARGEINPUT{PLEIADES/tristereo_Haiti_Pan/phr_haiti_xt3.tif}
                      			       -input.co "0 1,0 2"
-                                -elev.dem ${DEM_DATA}
+                                -elev.dem ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
                                 -elev.geoid ${OTB_DATA_ROOT}/Input/DEM/egm96.grd
                                 -stereorect.invgridssrate 15
                                 -mask.variancet 100
