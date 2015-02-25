@@ -388,9 +388,9 @@ LineSegmentDetector<TInputImage, TPrecision>
   double        delta_2 = delta / 2.0;
   RectangleType r;
 
-  double NFA = this->ComputeRectNFA(rec);
+  double nfa_rect = this->ComputeRectNFA(rec);
 
-  if (NFA > 0.) return NFA;
+  if (nfa_rect > 0.) return nfa_rect;
 
   /*Try to improve the precison of the oriented */
   CopyRectangle(r, rec);
@@ -399,14 +399,14 @@ LineSegmentDetector<TInputImage, TPrecision>
     r[7] /= 2.0;
     r[6] = CONST_PI * r[7];                // prec = rec[6]
     nfa_new = this->ComputeRectNFA(r);
-    if (nfa_new > NFA)
+    if (nfa_new > nfa_rect)
       {
-      NFA = nfa_new;
+      nfa_rect = nfa_new;
       CopyRectangle(rec, r);
       }
     }
 
-  if (NFA > 0.) return NFA;
+  if (nfa_rect > 0.) return nfa_rect;
 
   /*Try to improve the width of the rectangle*/
   CopyRectangle(r, rec);
@@ -414,13 +414,13 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
     r[4] -= delta;     //r[4] is stored as the width
     nfa_new = this->ComputeRectNFA(r);
-    if (nfa_new > NFA)
+    if (nfa_new > nfa_rect)
       {
-      NFA = nfa_new;
+      nfa_rect = nfa_new;
       CopyRectangle(rec, r);
       }
     }
-  if (NFA > 0.) return NFA;
+  if (nfa_rect > 0.) return nfa_rect;
 
   /*Try to improve the extremity of the segments*/
   CopyRectangle(r, rec);
@@ -435,14 +435,14 @@ LineSegmentDetector<TInputImage, TPrecision>
       r[4] -= delta;
 
       nfa_new = this->ComputeRectNFA(r);
-      if (nfa_new > NFA)
+      if (nfa_new > nfa_rect)
         {
-        NFA = nfa_new;
+        nfa_rect = nfa_new;
         CopyRectangle(rec, r);
         }
       }
     }
-  if (NFA > 0.) return NFA;
+  if (nfa_rect > 0.) return nfa_rect;
 
   CopyRectangle(r, rec);
   for (n = 0; n < 5; ++n)
@@ -456,14 +456,14 @@ LineSegmentDetector<TInputImage, TPrecision>
       r[4] -= delta;
 
       nfa_new = this->ComputeRectNFA(r);
-      if (nfa_new > NFA)
+      if (nfa_new > nfa_rect)
         {
-        NFA = nfa_new;
+        nfa_rect = nfa_new;
         CopyRectangle(rec, r);
         }
       }
     }
-  if (NFA > 0.) return NFA;
+  if (nfa_rect > 0.) return nfa_rect;
 
   /*Try to improve the precision again */
   CopyRectangle(r, rec);
@@ -472,14 +472,14 @@ LineSegmentDetector<TInputImage, TPrecision>
     r[7] /= 2.0;
     r[6] = CONST_PI * r[7];                // prec = rec[]
     nfa_new = this->ComputeRectNFA(r);
-    if (nfa_new > NFA)
+    if (nfa_new > nfa_rect)
       {
-      NFA = nfa_new;
+      nfa_rect = nfa_new;
       CopyRectangle(rec, r);
       }
     }
 
-  return NFA;
+  return nfa_rect;
 
 }
 

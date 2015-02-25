@@ -70,6 +70,7 @@ public:
    * to be removed from ITK. You should GraftOutput() and possible
    * DataObject::DisconnectPipeline() to properly change the output. */
   void SetOutput(OutputPointSetType *output);
+  using Superclass::SetOutput;
 
   /** Graft the specified DataObject onto this ProcessObject's output.
    * This method grabs a handle to the specified DataObject's bulk

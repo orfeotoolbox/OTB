@@ -40,7 +40,6 @@ int otbVectorDataTransformFilterNew (int itkNotUsed(argc), char * itkNotUsed(arg
 int otbVectorDataTransformFilter (int itkNotUsed(argc), char * argv[])
 {
   typedef otb::VectorImage<double, 2>             ImageType;
-  typedef otb::VectorData<>                      VectorDataType;
 
   typedef otb::ImageFileReader<ImageType>             ReaderType;
   typedef otb::VectorDataFileReader<VectorDataType>   VectorDataFileReaderType;

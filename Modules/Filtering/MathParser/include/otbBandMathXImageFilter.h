@@ -97,6 +97,7 @@ public:
   typedef typename StreamingStatisticsVectorImageFilterType::MatrixType MatrixType;
 
   /** Set the nth filter input with or without a specified associated variable name */
+  using Superclass::SetNthInput;
   void SetNthInput( DataObjectPointerArraySizeType idx, const ImageType * image);
   void SetNthInput( DataObjectPointerArraySizeType idx, const ImageType * image, const std::string& varName);
 

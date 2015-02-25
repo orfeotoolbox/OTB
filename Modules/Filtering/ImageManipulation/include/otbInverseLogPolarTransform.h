@@ -102,7 +102,8 @@ public:
    * \param point The point to transform.
    * \return The transformed point.
    */
-  OutputPointType TransformPoint(const InputPointType& point) const;
+   using Superclass::TransformVector;
+   OutputPointType TransformPoint(const InputPointType& point) const;
   /**
    * Transform a vector representing a point.
    * \param vector The point to transform.

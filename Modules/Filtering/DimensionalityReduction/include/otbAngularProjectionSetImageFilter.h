@@ -117,6 +117,8 @@ public:
   }
 
   void SetInput ( unsigned int i, const InputImageType * );
+  using Superclass::SetInput;
+
   const InputImageType * GetInput( unsigned int i ) const;
 
 protected:

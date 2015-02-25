@@ -145,13 +145,13 @@ void BandMathXImageFilter<TImage>
   m_VAllowedVarNameAuto.push_back(ahcPhyY);
 
   //imi
-  std::stringstream sstm;
-  adhocStruct ahc;
-  sstm << varName;
-  ahc.name = sstm.str();
-  ahc.type = 4;
-  ahc.info[0] = idx; // Input image #ID
-  m_VAllowedVarNameAuto.push_back(ahc);
+  std::stringstream sstm_glob;
+  adhocStruct ahc_glob;
+  sstm_glob << varName;
+  ahc_glob.name = sstm_glob.str();
+  ahc_glob.type = 4;
+  ahc_glob.info[0] = idx; // Input image #ID
+  m_VAllowedVarNameAuto.push_back(ahc_glob);
 
   //Mandatory before call of GetNumberOfComponentsPerPixel
   //Really important not to call the filter's UpdateOutputInformation method here:
@@ -413,7 +413,7 @@ void BandMathXImageFilter<TImage>
 {
   std::ifstream importFile(filename.c_str(), std::ios::in);
 
-  std::string wholeline,line,sub,name,matrixdef;
+  std::string wholeline,line,name,matrixdef;
   int pos,pos2,lineID=0,nbSuccesses=0;
   double value;
 
@@ -438,7 +438,7 @@ void BandMathXImageFilter<TImage>
               if (pos == (int) std::string::npos)
                 itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : please, set the name and the value of the constant." << std::endl);
 
-              sub = line.substr(pos);
+              std::string sub = line.substr(pos);
 
               pos = sub.find_first_of(' ');
               name = sub.substr(0,pos);
@@ -486,7 +486,7 @@ void BandMathXImageFilter<TImage>
               if (pos == (int) std::string::npos)
                 itkExceptionMacro(<< "In file '"<< filename << "', line " << lineID << " : symbol #E found, but couldn't not find any expression." << std::endl);
 
-              sub = line.substr(pos);
+              std::string sub = line.substr(pos);
 
               SetExpression(sub);
               nbSuccesses++;

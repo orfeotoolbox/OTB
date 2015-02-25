@@ -128,6 +128,7 @@ protected:
   virtual bool IsLineIntersectionNotNull(LinePointerType line);
 
   virtual void ProcessNode(InternalTreeNodeType * source, InternalTreeNodeType * destination);
+  using Superclass::ProcessNode;
 
 private:
   VectorDataExtractROI(const Self &); //purposely not implemented

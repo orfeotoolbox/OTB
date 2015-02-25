@@ -83,6 +83,8 @@ public:
   typedef std::vector< InputImageListConstIteratorType >  InputImageListConstIteratorVectorType;
 
   void SetInput ( unsigned int i, const InputImageListType * );
+  using Superclass::SetInput;
+
   const InputImageListType * GetInput( unsigned int i ) const;
 
   /** ListSample is not a DataObject, we need to decorate it to push it down

@@ -59,15 +59,19 @@ public:
   typedef typename MassFunctionType::LabelSetOfSetType LabelSetOfSetType;
 
   /** Add an input to the end */
+  using Superclass::PushBackInput;
   virtual void PushBackInput(const MassFunctionType * input);
 
   /** Add an input to the front */
+  using Superclass::PushFrontInput;
   virtual void PushFrontInput(const MassFunctionType * input);
 
   /** Remove the last input */
+  using Superclass::PopBackInput;
   virtual void PopBackInput();
 
   /** Remove the first input */
+  using Superclass::PopFrontInput;
   virtual void PopFrontInput();
 
   /** Get the idx th input */

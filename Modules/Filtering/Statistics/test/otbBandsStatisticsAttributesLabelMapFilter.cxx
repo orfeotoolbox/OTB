@@ -29,11 +29,11 @@
 
 const unsigned int Dimension = 2;
 typedef unsigned short LabelType;
-typedef double         PixelType;
+typedef double         DoublePixelType;
 
 typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>                LabelObjectType;
 typedef itk::LabelMap<LabelObjectType>                                             LabelMapType;
-typedef otb::VectorImage<PixelType, Dimension>                                     VectorImageType;
+typedef otb::VectorImage<DoublePixelType, Dimension>                               VectorImageType;
 typedef otb::Image<unsigned int, 2>                                                LabeledImageType;
 
 typedef LabelMapType::Iterator                                                     IteratorType;

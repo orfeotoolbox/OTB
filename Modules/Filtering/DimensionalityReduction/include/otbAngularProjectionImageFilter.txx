@@ -85,7 +85,7 @@ AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision
 
   while ( !iteratorsAtEnd && !outIter.IsAtEnd() )
   {
-    outIter.Set( GenerateData( it ) );
+    outIter.Set( InternalGenerateData( it ) );
 
     ++outIter;
     for ( unsigned int i = 0; i < this->GetNumberOfInputs(); ++i )
@@ -103,7 +103,7 @@ template < class TInputImage, class TOutputImage, class TAngleArray, class TPrec
 typename AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision >
 ::OutputImagePixelType
 AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision >
-::GenerateData ( const ImageRegionConstIteratorVectorType & it ) const
+::InternalGenerateData ( const ImageRegionConstIteratorVectorType & it ) const
 {
   PrecisionType output = 0;
 

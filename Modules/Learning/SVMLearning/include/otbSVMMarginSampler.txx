@@ -96,11 +96,11 @@ SVMMarginSampler< TSample, TModel >
     double minDistance = vcl_abs(hdistances[0]);
 
     // Compute th min distances
-    for(unsigned int i = 1; i<hdistances.Size(); ++i)
+    for(unsigned int j = 1; j<hdistances.Size(); ++j)
       {
-      if(vcl_abs(hdistances[i])<minDistance)
+      if(vcl_abs(hdistances[j])<minDistance)
         {
-        minDistance = vcl_abs(hdistances[i]);
+        minDistance = vcl_abs(hdistances[j]);
         }
       }
     // Keep index and min distance

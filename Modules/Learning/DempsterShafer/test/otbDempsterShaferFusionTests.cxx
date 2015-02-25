@@ -615,8 +615,6 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   unsigned int nbClassesMax = 6;
   //*****************************
 
-  typedef MassOfBeliefFunctionType::MassType MassType; //double by default
-
   std::vector<LabelPixelType> vectorAllLabels;
   unsigned int nbArgs = static_cast<unsigned int> (argc);
   for (unsigned int it = 1; it < nbArgs; ++it)
@@ -1022,8 +1020,6 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
 // OPTIMIZED DS FUSION
 int otbDempsterShaferFusionOptTest(int argc, char * argv[])
 {
-  typedef MassOfBeliefFunctionType::MassType MassType; //double by default
-
   std::vector<LabelPixelType> vectorAllLabels;
   unsigned int nbArgs = static_cast<unsigned int> (argc);
   for (unsigned int it = 1; it < nbArgs; ++it)
@@ -1351,8 +1347,6 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
 // NOT OPTIMIZED DS FUSION
 int otbDempsterShaferFusionTest(int argc, char * argv[])
 {
-  typedef MassOfBeliefFunctionType::MassType MassType; //double by default
-
   std::vector<LabelPixelType> vectorAllLabels;
   unsigned int nbArgs = static_cast<unsigned int> (argc);
   for (unsigned int it = 1; it < nbArgs; ++it)

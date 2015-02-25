@@ -60,6 +60,7 @@ public:
 
   /** Method to set/get the input list sample */
   void AddInput( const SampleListType * inputPtr );
+  using Superclass::AddInput;
 
 protected:
   /** This method causes the filter to generate its output. */
