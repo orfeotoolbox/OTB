@@ -155,18 +155,6 @@ private slots:
   /**
    */
   void OnStackedLayerCurrentChanged( size_t );
-  /**
-   */
-  void OnTopButtonClicked();
-  /**
-   */
-  void OnBottomButtonClicked();
-  /**
-   */
-  void OnUpButtonClicked();
-  /**
-   */
-  void OnDownButtonClicked();
 };
 
 } // end namespace 'mvd'.

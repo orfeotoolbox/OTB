@@ -329,12 +329,14 @@ StackedLayerModel
   }
   emit OrderChanged();
 
+  // WARNING: This may be buggy if index!=m_Current
   emit CurrentAboutToBeChanged( next );
   {
   m_Current = next;
   }
   emit CurrentChanged( next );
 
+  // WARNING: This may be buggy if index!=m_Reference
   SetReference(
     m_Reference==next
     ? index
@@ -342,6 +344,78 @@ StackedLayerModel
         ? next
         : m_Reference )
   );
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::MoveTo( SizeType index, SizeType position )
+{
+  assert( GetCount()>1 );
+  assert( index<GetCount() );
+  assert( position<GetCount() );
+
+  if( index==position )
+    return;
+
+  //
+  // Move element.
+  emit OrderAboutToBeChanged();
+  {
+  KeyType key( m_Keys[ index ] );
+
+  m_Keys.erase( m_Keys.begin() + index );
+  m_Keys.insert( m_Keys.begin() + position, key );
+  }
+  emit OrderChanged();
+
+  //
+  // Compute new current element.
+  SizeType current( m_Current );
+
+  if( index==m_Current )
+    current = position;
+
+  if( index>m_Current && position<=m_Current )
+    ++ current;
+
+  else if( index<m_Current && position>=m_Current )
+    -- current;
+
+  //
+  // Signal new current element.
+  SetCurrent( current );
+
+  //
+  // Compute new reference element.
+  SizeType reference( m_Reference );
+
+  if( index==m_Reference )
+    reference = position;
+
+  if( index>m_Reference && position<=m_Reference )
+    ++ reference;
+
+  else if( index<m_Reference && position>=m_Reference )
+    -- reference;
+
+  SetReference( reference );
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::MoveToBottom( SizeType index )
+{
+  MoveTo( index, m_Keys.size() - 1 );
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::MoveToTop( SizeType index )
+{
+  MoveTo( index, 0 );
 }
 
 /*****************************************************************************/
@@ -363,12 +437,14 @@ StackedLayerModel
   }
   emit OrderChanged();
 
+  // WARNING: This may be buggy if index!=m_Current.
   emit CurrentAboutToBeChanged( prev );
   {
   m_Current = prev;
   }
   emit CurrentChanged( prev );
 
+  // WARNING: This may be buggy if index!=m_Reference.
   SetReference(
     m_Reference==prev
     ? index

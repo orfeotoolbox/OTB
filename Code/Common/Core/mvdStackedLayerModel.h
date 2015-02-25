@@ -180,6 +180,8 @@ public:
 public slots:
   inline void DeleteCurrent();
   inline void LowerCurrent();
+  inline void MoveCurrentToBottom();
+  inline void MoveCurrentToTop();
   inline void RaiseCurrent();
   inline void SelectPrevious();
   inline void SelectNext();
@@ -239,6 +241,10 @@ private:
 
   void RotateLayerUp( SizeType );
   void RotateLayerDown( SizeType );
+
+  void MoveTo( SizeType index, SizeType position );
+  void MoveToTop( SizeType );
+  void MoveToBottom( SizeType );
 
   // inline void Swap( SizeType, SizeType );
 
@@ -591,6 +597,28 @@ StackedLayerModel
     RotateLayerDown( 1 );
   else
     LowerLayer( m_Current );
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::MoveCurrentToBottom()
+{
+  if( m_Current>=GetCount() )
+    return;
+
+  MoveToBottom( m_Current );
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::MoveCurrentToTop()
+{
+  if( m_Current>=GetCount() )
+    return;
+
+  MoveToTop( m_Current );
 }
 
 /*****************************************************************************/

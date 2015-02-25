@@ -127,32 +127,32 @@ LayerStackController
     widget,
     SIGNAL( TopButtonClicked() ),
     // to:
-    this,
-    SLOT( OnTopButtonClicked() )
+    model,
+    SLOT( MoveCurrentToTop() )
   );
 
   QObject::connect(
     widget,
     SIGNAL( BottomButtonClicked() ),
     // to:
-    this,
-    SLOT( OnBottomButtonClicked() )
+    model,
+    SLOT( MoveCurrentToBottom() )
   );
 
   QObject::connect(
     widget,
     SIGNAL( UpButtonClicked() ),
     // to:
-    this,
-    SLOT( OnUpButtonClicked() )
+    model,
+    SLOT( RaiseCurrent() )
   );
 
   QObject::connect(
     widget,
     SIGNAL( DownButtonClicked() ),
     // to:
-    this,
-    SLOT( OnDownButtonClicked() )
+    model,
+    SLOT( LowerCurrent() )
   );
 }
 
@@ -184,9 +184,41 @@ LayerStackController
   QObject::disconnect(
     widget,
     SIGNAL( SelectionChanged( int ) ),
-    // to:
+    // from:
     this,
     SLOT( OnSelectionChanged( int ) )
+  );
+
+  QObject::disconnect(
+    widget,
+    SIGNAL( TopButtonClicked() ),
+    // from:
+    model,
+    SLOT( MoveCurrentToTop() )
+  );
+
+  QObject::disconnect(
+    widget,
+    SIGNAL( BottomButtonClicked() ),
+    // from:
+    model,
+    SLOT( MoveCurrentToBottom() )
+  );
+
+  QObject::disconnect(
+    widget,
+    SIGNAL( UpButtonClicked() ),
+    // from:
+    model,
+    SLOT( RaiseCurrent() )
+  );
+
+  QObject::disconnect(
+    widget,
+    SIGNAL( DownButtonClicked() ),
+    // from:
+    model,
+    SLOT( LowerCurrent() )
   );
 }
 
@@ -199,25 +231,6 @@ LayerStackController
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
-/*******************************************************************************/
-void
-LayerStackController
-::OnBottomButtonClicked()
-{
-}
-
-/*******************************************************************************/
-void
-LayerStackController
-::OnDownButtonClicked()
-{
-  assert( GetModel()==GetModel< StackedLayerModel >() );
-  StackedLayerModel * model = GetModel< StackedLayerModel >();
-  assert( model!=NULL );
-
-  model->LowerCurrent();
-}
-
 /*******************************************************************************/
 void
 LayerStackController
@@ -263,25 +276,6 @@ LayerStackController
   widget->SetCurrent( index );
   }
   widget->blockSignals( signalsBlocked );
-}
-
-/*******************************************************************************/
-void
-LayerStackController
-::OnTopButtonClicked()
-{
-}
-
-/*******************************************************************************/
-void
-LayerStackController
-::OnUpButtonClicked()
-{
-  assert( GetModel()==GetModel< StackedLayerModel >() );
-  StackedLayerModel * model = GetModel< StackedLayerModel >();
-  assert( model!=NULL );
-
-  model->RaiseCurrent();
 }
 
 } // end namespace 'mvd'
