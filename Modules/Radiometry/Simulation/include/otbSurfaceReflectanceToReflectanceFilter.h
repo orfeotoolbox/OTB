@@ -287,10 +287,10 @@ private:
   AtmoCorrectionParametersPointerType      m_AtmoCorrectionParameters;
   AcquiCorrectionParametersPointerType     m_AcquiCorrectionParameters;
 
-  mutable bool m_UseGenerateParameters;
+  bool m_UseGenerateParameters;
 
   /** True if the functor parameters have been generated */
-  bool m_FunctorParametersHaveBeenComputed;
+  mutable bool m_FunctorParametersHaveBeenComputed;
 };
 
 } // end namespace otb
