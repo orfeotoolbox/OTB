@@ -147,94 +147,6 @@ otb_test_application(NAME  apTvCcConnectedComponentSegmentatioNoMask
                              ${TEMP}/apTvCcConnectedComponentSegmentationNoMask.shp)
 
 
-#----------- LSMSSegmentation TESTS ----------------
-otb_test_application(NAME     apTvLSMS2Segmentation
-                     APP      LSMSSegmentation
-                     OPTIONS  -in ${TEMP}/apTvLSMS1_filtered_range.tif
-                              -inpos ${TEMP}/apTvLSMS1_filtered_spatial.tif
-                              -out ${TEMP}/apTvLSMS2_Segmentation.tif uint32
-                              -ranger 30
-                              -spatialr  5
-                              -minsize 0
-                              -tilesizex 100
-                              -tilesizey 100
-                     VALID    --compare-image ${NOTOL}
-                              ${BASELINE}/apTvLSMS2_Segmentation.tif
-                              ${TEMP}/apTvLSMS2_Segmentation.tif
-                     )
-
-otb_test_application(NAME     apTvLSMS2Segmentation_NoSmall
-                     APP      LSMSSegmentation
-                     OPTIONS  -in ${TEMP}/apTvLSMS1_filtered_range.tif
-                              -inpos ${TEMP}/apTvLSMS1_filtered_spatial.tif
-                              -out ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif uint32
-                              -ranger 30
-                              -spatialr  5
-                              -minsize 10
-                              -tilesizex 100
-                              -tilesizey 100
-                     VALID    --compare-image ${NOTOL}
-                              ${BASELINE}/apTvLSMS2_Segmentation_NoSmall.tif
-                              ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif
-                     )
-
-
-#----------- LSMSVectorization TESTS ----------------
-otb_test_application(NAME     apTvLSMS4Vectorization_SmallMerged
-                     APP      LSMSVectorization
-                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
-                              -inseg  ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif
-                              -out ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
-                              -tilesizex 100
-                              -tilesizey 100
-                     VALID    --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/apTvLSMS4_Segmentation_SmallMerged.shp
-                              ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
-                     )
-
-otb_test_application(NAME     apTvLSMS4Vectorization_NoSmall
-                     APP      LSMSVectorization
-                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
-                              -inseg  ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif
-                              -out ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
-                              -tilesizex 100
-                              -tilesizey 100
-                     VALID    --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/apTvLSMS4_Segmentation_NoSmall.shp
-                              ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
-                     )
-
-
-#----------- LSMSSmallRegionsMerging TESTS ----------------
-otb_test_application(NAME     apTvLSMS3SmallRegionsMerging
-                     APP      LSMSSmallRegionsMerging
-                     OPTIONS  -in ${TEMP}/apTvLSMS1_filtered_range.tif
-                              -inseg  ${TEMP}/apTvLSMS2_Segmentation.tif
-                              -out ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif uint32
-                              -minsize 10
-                              -tilesizex 100
-                              -tilesizey 100
-                     VALID    --compare-image ${NOTOL}
-                              ${BASELINE}/apTvLSMS3_Segmentation_SmallMerged.tif
-                              ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif
-                     )
-
-
-#----------- HooverCompareSegmentation TESTS ----------------
-otb_test_application(NAME     apTvSeHooverCompareSegmentationTest
-                     APP      HooverCompareSegmentation
-                     OPTIONS  -ingt ${INPUTDATA}/maur_GT.tif
-                              -inms ${INPUTDATA}/maur_labelled.tif
-                              -outgt ${TEMP}/apTvSeHooverCompareSegmentationTestOutgt.tif
-                              -outms ${TEMP}/apTvSeHooverCompareSegmentationTestOutms.tif
-                     TESTENVOPTIONS ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
-                     VALID    --compare-ascii ${EPSILON_7}
-                              ${BASELINE_FILES}/apTvSeHooverCompareSegmentationTest.txt
-                	      ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
-                              --ignore-lines-with 2 outgt: outms:
-                     )
-
-
 #----------- MeanShiftSmoothing TESTS ----------------
 otb_test_application(NAME     apTvLSMS1MeanShiftSmoothingNoModeSearch
                      APP      MeanShiftSmoothing
@@ -262,4 +174,98 @@ otb_test_application(NAME apTuSeMeanShiftSmoothing
                  			 -maxiter 10
                  			 -thres 0.1
                  			 -modesearch 0)
+
+#----------- LSMSSegmentation TESTS ----------------
+otb_test_application(NAME     apTvLSMS2Segmentation
+                     APP      LSMSSegmentation
+                     OPTIONS  -in ${TEMP}/apTvLSMS1_filtered_range.tif
+                              -inpos ${TEMP}/apTvLSMS1_filtered_spatial.tif
+                              -out ${TEMP}/apTvLSMS2_Segmentation.tif uint32
+                              -ranger 30
+                              -spatialr  5
+                              -minsize 0
+                              -tilesizex 100
+                              -tilesizey 100
+                     VALID    --compare-image ${NOTOL}
+                              ${BASELINE}/apTvLSMS2_Segmentation.tif
+                              ${TEMP}/apTvLSMS2_Segmentation.tif
+                     )
+
+set_property(TEST apTvLSMS2Segmentation PROPERTY DEPENDS apTvLSMS1MeanShiftSmoothingNoModeSearch)
+
+otb_test_application(NAME     apTvLSMS2Segmentation_NoSmall
+                     APP      LSMSSegmentation
+                     OPTIONS  -in ${TEMP}/apTvLSMS1_filtered_range.tif
+                              -inpos ${TEMP}/apTvLSMS1_filtered_spatial.tif
+                              -out ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif uint32
+                              -ranger 30
+                              -spatialr  5
+                              -minsize 10
+                              -tilesizex 100
+                              -tilesizey 100
+                     VALID    --compare-image ${NOTOL}
+                              ${BASELINE}/apTvLSMS2_Segmentation_NoSmall.tif
+                              ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif
+                     )
+
+set_property(TEST apTvLSMS2Segmentation_NoSmall PROPERTY DEPENDS apTvLSMS1MeanShiftSmoothingNoModeSearch)
+
+#----------- LSMSSmallRegionsMerging TESTS ----------------
+otb_test_application(NAME     apTvLSMS3SmallRegionsMerging
+                     APP      LSMSSmallRegionsMerging
+                     OPTIONS  -in ${TEMP}/apTvLSMS1_filtered_range.tif
+                              -inseg  ${TEMP}/apTvLSMS2_Segmentation.tif
+                              -out ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif uint32
+                              -minsize 10
+                              -tilesizex 100
+                              -tilesizey 100
+                     VALID    --compare-image ${NOTOL}
+                              ${BASELINE}/apTvLSMS3_Segmentation_SmallMerged.tif
+                              ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif
+                     )
+
+set_property(TEST apTvLSMS3SmallRegionsMerging PROPERTY DEPENDS apTvLSMS2Segmentation)
+
+#----------- LSMSVectorization TESTS ----------------
+otb_test_application(NAME     apTvLSMS4Vectorization_SmallMerged
+                     APP      LSMSVectorization
+                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                              -inseg  ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif
+                              -out ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
+                              -tilesizex 100
+                              -tilesizey 100
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvLSMS4_Segmentation_SmallMerged.shp
+                              ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
+                     )
+
+set_property(TEST apTvLSMS4Vectorization_SmallMerged PROPERTY DEPENDS apTvLSMS3SmallRegionsMerging)
+
+otb_test_application(NAME     apTvLSMS4Vectorization_NoSmall
+                     APP      LSMSVectorization
+                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                              -inseg  ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif
+                              -out ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
+                              -tilesizex 100
+                              -tilesizey 100
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvLSMS4_Segmentation_NoSmall.shp
+                              ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
+                     )
+
+set_property(TEST apTvLSMS4Vectorization_NoSmall PROPERTY DEPENDS apTvLSMS2Segmentation_NoSmall)
+
+#----------- HooverCompareSegmentation TESTS ----------------
+otb_test_application(NAME     apTvSeHooverCompareSegmentationTest
+                     APP      HooverCompareSegmentation
+                     OPTIONS  -ingt ${INPUTDATA}/maur_GT.tif
+                              -inms ${INPUTDATA}/maur_labelled.tif
+                              -outgt ${TEMP}/apTvSeHooverCompareSegmentationTestOutgt.tif
+                              -outms ${TEMP}/apTvSeHooverCompareSegmentationTestOutms.tif
+                     TESTENVOPTIONS ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
+                     VALID    --compare-ascii ${EPSILON_7}
+                              ${BASELINE_FILES}/apTvSeHooverCompareSegmentationTest.txt
+                	      ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
+                              --ignore-lines-with 2 outgt: outms:
+                     )
 
