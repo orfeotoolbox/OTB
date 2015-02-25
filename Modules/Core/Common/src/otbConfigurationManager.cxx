@@ -19,6 +19,8 @@
 
 #include "itksys/SystemTools.hxx"
 
+#include <cstdlib>
+
 namespace otb
 {
 
