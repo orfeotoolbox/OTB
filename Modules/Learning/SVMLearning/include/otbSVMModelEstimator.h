@@ -272,6 +272,17 @@ public:
     return (this->GetModel()->GetDoProbabilityEstimates());
   }
 
+  /** Get/Set methods for generic kernel functor */
+  virtual GenericKernelFunctorBase * GetKernelFunctor(void) const
+  {
+    return this->GetModel()->GetKernelFunctor();
+  }
+  virtual void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
+  {
+    this->GetModel()->SetKernelFunctor(pGenericKernelFunctor);
+    this->Modified();
+  }
+
   /** Save the model */
   virtual void SaveModel(const char * fname)
   {

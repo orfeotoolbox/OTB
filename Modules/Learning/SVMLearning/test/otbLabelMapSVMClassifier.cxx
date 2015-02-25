@@ -154,9 +154,7 @@ int otbLabelMapSVMClassifier(int itkNotUsed(argc), char * argv[])
   svmEstim->SetTrainingSampleList(labelMap2SampleList->GetOutputTrainingSampleList());
   svmEstim->Modified();
   svmEstim->Update();
-  
-  std::cout<<"Ding"<<std::endl;
-  
+
   // Classify using the whole LabelMap with estimated model
   classifier->SetInput(labelMap);
   classifier->SetModel(svmEstim->GetModel());

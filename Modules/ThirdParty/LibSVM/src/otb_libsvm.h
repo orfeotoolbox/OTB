@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otb_curl_h
+#ifndef __otb_libsvm_h
 
-#include <svm.h>
+#include "otblibsvm/svm.h"
 
 #endif
