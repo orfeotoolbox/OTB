@@ -197,20 +197,20 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
                                                                   oSRS);
 
     // From OGRLayer* to OGRGeometryH vector
-    for (unsigned int idx = 0; idx < ogrLayerVector.size(); ++idx)
+    for (unsigned int idx2 = 0; idx2 < ogrLayerVector.size(); ++idx2)
       {
       // test if the layers contain a field m_BurnField;
       int burnField = -1;
 
       if( !m_BurnAttribute.empty() )
         {
-        burnField = OGR_FD_GetFieldIndex( OGR_L_GetLayerDefn( (OGRLayerH)(ogrLayerVector[idx]) ),
+        burnField = OGR_FD_GetFieldIndex( OGR_L_GetLayerDefn( (OGRLayerH)(ogrLayerVector[idx2]) ),
                                            m_BurnAttribute.c_str() );
 
       // Get the geometries of the layer
       OGRFeatureH hFeat;
-      OGR_L_ResetReading( (OGRLayerH)(ogrLayerVector[idx]) );
-      while( ( hFeat = OGR_L_GetNextFeature( (OGRLayerH)(ogrLayerVector[idx]) )) != NULL )
+      OGR_L_ResetReading( (OGRLayerH)(ogrLayerVector[idx2]) );
+      while( ( hFeat = OGR_L_GetNextFeature( (OGRLayerH)(ogrLayerVector[idx2]) )) != NULL )
         {
         OGRGeometryH hGeom;
         if( OGR_F_GetGeometryRef( hFeat ) == NULL )
@@ -227,7 +227,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
           // TODO : if no burnAttribute available, warning or raise an exception??
           m_FullBurnValues.push_back(m_DefaultBurnValue++);
           itkWarningMacro(<<"Failed to find attribute "<<m_BurnAttribute << " in layer "
-                          << OGR_FD_GetName( OGR_L_GetLayerDefn( (OGRLayerH)(ogrLayerVector[idx]) ))
+                          << OGR_FD_GetName( OGR_L_GetLayerDefn( (OGRLayerH)(ogrLayerVector[idx2]) ))
                           <<" .Setting burn value to default =  "
                           << m_DefaultBurnValue);
           }

@@ -264,12 +264,12 @@ private:
         }
 
       //Construct SRTM tile filename based on min/max lat/long
-      for (int i = floorMinLat; i <= floorMaxLat; ++i)
+      for (int k = floorMinLat; k <= floorMaxLat; ++k)
         {
         for (int j = floorMinLong; j <= floorMaxLong; ++j)
           {
           std::ostringstream ossOutput;
-          if (i < 0)
+          if (k < 0)
             {
             ossOutput << "S";
             }
@@ -278,11 +278,11 @@ private:
             ossOutput << "N";
             }
 
-          if (vcl_abs(i) <= 9)
+          if (vcl_abs(k) <= 9)
             {
             ossOutput << "0";
             }
-          ossOutput << vcl_abs(i);
+          ossOutput << vcl_abs(k);
 
           if (j < 0)
             {

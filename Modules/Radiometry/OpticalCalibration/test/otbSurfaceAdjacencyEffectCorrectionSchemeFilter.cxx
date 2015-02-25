@@ -135,22 +135,22 @@ int otbSurfaceAdjacencyEffectCorrectionSchemeFilter(int itkNotUsed(argc), char *
     float maxSpectralValue(0.);
     float value(0.);
 
-    std::ifstream fin;
+    std::ifstream fin2;
     //Read input file parameters
-    fin.open(wavelenghFiles[j]);
-    fin >> minSpectralValue; //wlinf;
-    fin >> maxSpectralValue; //wlsup;
+    fin2.open(wavelenghFiles[j]);
+    fin2 >> minSpectralValue; //wlinf;
+    fin2 >> maxSpectralValue; //wlsup;
 
     std::string line;
-    std::getline(fin, line);
-    while (std::getline(fin, line) )
+    std::getline(fin2, line);
+    while (std::getline(fin2, line) )
       {
       value = atof(line.c_str());
       vect.push_back(value);
       std::cout << "value " << value << std::endl;
       }
     std::cout << "vec size " << vect.size()<< std::endl;
-    fin.close();
+    fin2.close();
     functionValues->SetFilterFunctionValues(vect);
     functionValues->SetMinSpectralValue(minSpectralValue);
     functionValues->SetMaxSpectralValue(maxSpectralValue);

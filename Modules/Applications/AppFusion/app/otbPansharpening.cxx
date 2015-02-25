@@ -147,8 +147,8 @@ private:
       }
 
     // Transform the PAN image to otb::Image
-    typedef otb::Image<FloatVectorImageType::InternalPixelType> FloatImageType;
-    typedef itk::VectorIndexSelectionCastImageFilter<FloatVectorImageType, FloatImageType> VectorIndexSelectionCastImageFilterType;
+    typedef otb::Image<FloatVectorImageType::InternalPixelType> InternalFloatImageType;
+    typedef itk::VectorIndexSelectionCastImageFilter<FloatVectorImageType, InternalFloatImageType> VectorIndexSelectionCastImageFilterType;
 
     VectorIndexSelectionCastImageFilterType::Pointer channelSelect = VectorIndexSelectionCastImageFilterType::New();
     m_Ref.push_back(channelSelect.GetPointer());
@@ -156,7 +156,7 @@ private:
     channelSelect->SetInput(panchroV);
     channelSelect->UpdateOutputInformation();
 
-    FloatImageType::Pointer panchro = channelSelect->GetOutput();
+    InternalFloatImageType::Pointer panchro = channelSelect->GetOutput();
     FloatVectorImageType* xs = GetParameterImage("inxs");
 
     switch (GetParameterInt("method"))
@@ -184,7 +184,7 @@ private:
       double radiusx = static_cast<unsigned int> (GetParameterInt("method.lmvm.radiusx"));
       double radiusy = static_cast<unsigned int> (GetParameterInt("method.lmvm.radiusy"));
 
-      FloatImageType::SizeType radius;
+      InternalFloatImageType::SizeType radius;
       radius[0] = radiusx;
       radius[1] = radiusy;
 

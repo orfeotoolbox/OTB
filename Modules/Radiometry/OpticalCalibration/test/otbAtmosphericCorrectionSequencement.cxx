@@ -175,12 +175,12 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
       fin >> value;
       valuesVector.push_back(value);
       }
-    FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
-    functionValues->SetFilterFunctionValues(valuesVector);
-    functionValues->SetMinSpectralValue(minSpectralValue);
-    functionValues->SetMaxSpectralValue(maxSpectralValue);
-    functionValues->SetUserStep(userStep);
-    paramAcqui->SetWavelengthSpectralBandWithIndex(i, functionValues);
+    FilterFunctionValuesType::Pointer functionValues2 = FilterFunctionValuesType::New();
+    functionValues2->SetFilterFunctionValues(valuesVector);
+    functionValues2->SetMinSpectralValue(minSpectralValue);
+    functionValues2->SetMaxSpectralValue(maxSpectralValue);
+    functionValues2->SetUserStep(userStep);
+    paramAcqui->SetWavelengthSpectralBandWithIndex(i, functionValues2);
     }
 
   fin.close();

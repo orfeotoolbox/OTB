@@ -142,16 +142,16 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int itkNotUsed(a
     float maxSpectralValue(0.);
     float value(0.);
 
-    std::ifstream fin;
+    std::ifstream fin2;
     //Read input file parameters
-    fin.open(wavelenghFiles[j]);
-    fin >> minSpectralValue; //wlinf;
-    fin >> maxSpectralValue; //wlsup;
+    fin2.open(wavelenghFiles[j]);
+    fin2 >> minSpectralValue; //wlinf;
+    fin2 >> maxSpectralValue; //wlsup;
 
-    while (fin.good())
+    while (fin2.good())
       {
       std::string line;
-      std::getline(fin, line);
+      std::getline(fin2, line);
       if (!line.empty())
        {
        value = atof(line.c_str());
@@ -159,7 +159,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int itkNotUsed(a
        }
       }
 
-    fin.close();
+    fin2.close();
 
     functionValues->SetFilterFunctionValues(vect);
     functionValues->SetMinSpectralValue(minSpectralValue);

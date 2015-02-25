@@ -45,7 +45,10 @@
 #include "cpl_string.h"
 #include "cpl_multiproc.h"
 #include "ogr_api.h"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ogrsf_frmts.h"
+#pragma GCC diagnostic pop
 
 #define otbPrintDiff(comment, refStr, testStr) \
   std::cout << "   ----    '" << comment << "' checking   ---------------------------" << std::endl; \

@@ -110,6 +110,7 @@ public:
   typedef typename TransformFilterType::OutputImageListPointerType OutputImageListPointerType;
   typedef typename TransformFilterType::OutputImageIterator        OutputImageIterator;
 
+  using Superclass::SetInput;
   void SetInput ( unsigned int i, const InputImageType * );
   const InputImageType * GetInput( unsigned int i ) const;
 

@@ -111,7 +111,7 @@ private:
     FloatVectorImageType* inVImage = GetParameterImage("in");
 
     // Transform to otb::Image
-    typedef otb::Image<FloatVectorImageType::InternalPixelType> FloatImageType;
+    typedef otb::Image<FloatVectorImageType::InternalPixelType> InternalFloatImageType;
     typedef otb::MultiToMonoChannelExtractROI<float,float> ExtractFilterType;
 
     ExtractFilterType::Pointer channelSelect = ExtractFilterType::New();
@@ -119,7 +119,7 @@ private:
     channelSelect->SetChannel(1);
     channelSelect->SetInput(inVImage);
     channelSelect->UpdateOutputInformation();
-    FloatImageType::Pointer inImage = channelSelect->GetOutput();
+    InternalFloatImageType::Pointer inImage = channelSelect->GetOutput();
     inImage->UpdateOutputInformation();
 
     switch (GetParameterInt("filter"))

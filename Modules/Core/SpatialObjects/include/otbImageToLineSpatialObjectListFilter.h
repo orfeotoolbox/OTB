@@ -76,6 +76,7 @@ public:
   const InputImageType * GetInput(void);
 
   /** Set/Get the list of LineSpatialObject of this process object.  */
+  using Superclass::SetOutput;
   void SetOutput(const LinesListType *list);
   LinesListType * GetOutput(void);
 
