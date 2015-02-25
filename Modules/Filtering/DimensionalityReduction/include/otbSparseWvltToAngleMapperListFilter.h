@@ -107,7 +107,8 @@ protected:
 
   /** Standard itk::ProcessObject subclass method. */
   virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
-  
+  using Superclass::MakeOutput;
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** This method causes the filter to generate its output. */

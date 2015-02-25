@@ -96,6 +96,8 @@ public:
   // Build the outputs
   typedef itk::DataObject::Pointer DataObjectPointer;
   virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  using Superclass::MakeOutput;
+
   //virtual void Update();
 
   /** Accessors */

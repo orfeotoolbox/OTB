@@ -105,6 +105,7 @@ protected:
 
   /** Make Output */
   DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx);
+  using Superclass::MakeOutput;
 
 private:
   LabelMapWithClassLabelToLabeledSampleListFilter(const Self&); //purposely not implemented

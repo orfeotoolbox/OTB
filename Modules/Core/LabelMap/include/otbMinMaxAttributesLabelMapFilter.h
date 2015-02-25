@@ -87,6 +87,7 @@ public:
   const AttributesMapObjectType* GetMaximumOutput() const;
 
   virtual DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx);
+  using Superclass::MakeOutput;
 
 protected:
   MinMaxAttributesLabelMapFilter();

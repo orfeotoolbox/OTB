@@ -77,6 +77,7 @@ public:
    * multiple outputs of different types, then that class must provide
    * an implementation of MakeOutput(). */
   virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  using Superclass::MakeOutput;
 
   /** Graft the specified DataObject onto this ProcessObject's output.
   * This method grabs a handle to the specified DataObject's path

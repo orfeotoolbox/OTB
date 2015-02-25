@@ -114,6 +114,7 @@ protected:
   void GenerateData();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  using Superclass::MakeOutput;
 
 private:
   HistogramSizeType     m_Sizes;

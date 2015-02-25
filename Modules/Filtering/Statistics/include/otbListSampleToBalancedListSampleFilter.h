@@ -127,6 +127,7 @@ protected:
 
   /** Make Output */
   DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  using Superclass::MakeOutput;
 
   ListSampleToBalancedListSampleFilter();
   virtual ~ListSampleToBalancedListSampleFilter() {}

@@ -151,6 +151,7 @@ protected:
   void GenerateData();
 
   DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  using Superclass::MakeOutput;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

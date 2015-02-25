@@ -117,6 +117,8 @@ protected:
   virtual ~PathListToHistogramGenerator() {}
   virtual void GenerateData();
   DataObjectPointer MakeOutput(DataObjectPointerArraySizeType);
+  using Superclass::MakeOutput;
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

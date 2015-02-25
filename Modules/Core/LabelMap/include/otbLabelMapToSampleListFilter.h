@@ -99,6 +99,7 @@ protected:
 
   /** Make Output */
   virtual DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx);
+  using Superclass::MakeOutput;
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
