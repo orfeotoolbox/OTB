@@ -82,15 +82,6 @@ public:
   {return Superclass::ITK_STRUCTURED_REGION; }
 
   /** Constructor. RemoteSensingRegion is a lightweight object that is not reference
-   * counted, so the constructor is public. */
-  RemoteSensingRegion(unsigned int dimension)
-    {
-    m_InputProjectionRef = "";
-    m_Size.Fill(0.);
-    m_Index.Fill(0.);
-    }
-
-  /** Constructor. RemoteSensingRegion is a lightweight object that is not reference
    * counted, so the constructor is public.  Default dimension is 2. */
   RemoteSensingRegion()
     {
