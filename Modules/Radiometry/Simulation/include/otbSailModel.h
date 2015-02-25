@@ -111,6 +111,7 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
 
      const ParametersType  GetInput();
      void SetInput(const ParametersType &);
+     using Superclass::SetInput;
 
 
    protected:

@@ -111,7 +111,9 @@ public:
    * \param vector The point to transform.
    * \return The transformed point.
    */
+  using Superclass::TransformVector;
   OutputVectorType TransformVector(const InputVectorType& vector) const;
+
   /**
    * Transform a vnl vector representing a point.
    * \param vector The point to transform.

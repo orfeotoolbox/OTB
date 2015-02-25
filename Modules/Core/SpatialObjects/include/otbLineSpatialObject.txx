@@ -121,8 +121,8 @@ LineSpatialObject<VDimension>
       while (it != end)
         {
 
-        PointType pt = this->GetIndexToWorldTransform()->TransformPoint((*it).GetPosition());
-        const_cast<BoundingBoxType *>(this->GetBounds())->ConsiderPoint(pt);
+        PointType pt2 = this->GetIndexToWorldTransform()->TransformPoint((*it).GetPosition());
+        const_cast<BoundingBoxType *>(this->GetBounds())->ConsiderPoint(pt2);
         ++it;
         }
 

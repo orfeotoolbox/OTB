@@ -279,14 +279,14 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
    outputPtr->SetOrigin(genericRSEstimator->GetOutputOrigin());
 
     // Compute output size
-   typename TOutputDEMImage::RegionType outRegion;
-     outRegion.SetIndex(0, 0);
-     outRegion.SetIndex(1, 0);
-     outRegion.SetSize(0, genericRSEstimator->GetOutputSize()[0]);
+   typename TOutputDEMImage::RegionType outRegion2;
+     outRegion2.SetIndex(0, 0);
+     outRegion2.SetIndex(1, 0);
+     outRegion2.SetSize(0, genericRSEstimator->GetOutputSize()[0]);
      //TODO JGT check the size
      //outRegion.SetSize(1, static_cast<unsigned int> ((box_ymax - box_ymin) / vcl_abs(outSpacing[1])+1));
-     outRegion.SetSize(1, genericRSEstimator->GetOutputSize()[1]);
-     outputPtr->SetLargestPossibleRegion(outRegion);
+     outRegion2.SetSize(1, genericRSEstimator->GetOutputSize()[1]);
+     outputPtr->SetLargestPossibleRegion(outRegion2);
      outputPtr->SetNumberOfComponentsPerPixel(1);
 
 
@@ -573,7 +573,6 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
       {
       T3DImage *imgPtr = const_cast<T3DImage *> (this->Get3DMapInput(k));
       TMaskImage *mskPtr = const_cast<TMaskImage *> (this->GetMaskInput(k));
-      typename T3DImage::RegionType requestedRegion = imgPtr->GetRequestedRegion();
 
       typename InputMapType::PointType origin;
       origin = imgPtr->GetOrigin();

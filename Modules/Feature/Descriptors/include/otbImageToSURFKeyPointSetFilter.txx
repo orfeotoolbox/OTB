@@ -105,13 +105,13 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
       m_ResampleFilter->SetInput(this->GetInput());
 
       SizeType size = this->GetInput()->GetLargestPossibleRegion().GetSize();
-      for (int k = 0; k < 2; ++k)
-        size[k] = (unsigned int) floor(size[k] / std::pow(2.0, i));
+      for (int l = 0; l < 2; ++l)
+        size[l] = (unsigned int) floor(size[l] / std::pow(2.0, i));
       m_ResampleFilter->SetSize(size);
 
 
-      for (int k = 0; k < 2; ++k)
-        spacing[k] = (spacing[k] * std::pow(2.0, i));
+      for (int l = 0; l < 2; ++l)
+        spacing[l] = (spacing[l] * std::pow(2.0, i));
       m_ResampleFilter->SetOutputSpacing(spacing);
           /* necessary to handle images where the origin is not (0, 0) */
           m_ResampleFilter->SetOutputOrigin(this->GetInput()->GetOrigin());
@@ -583,13 +583,13 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
   double length = 0;
 
   // Detecting current point orientation
-  for (int i = 0; i < NbBins * 2; i = i + 2)
+  for (int ii = 0; ii < NbBins * 2; ii = ii + 2)
     {
-    length = vcl_sqrt(tab[i] * tab[i] + tab[i + 1] * tab[i + 1]);
+    length = vcl_sqrt(tab[ii] * tab[ii] + tab[ii + 1] * tab[ii + 1]);
     if (length > max)
       {
       max = length;
-      indice = i / 2;
+      indice = ii / 2;
       }
     }
 
@@ -686,11 +686,11 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
     }
 
   double accu = 0;
-  for (int i = 0; i < 64; ++i)
-    accu += descriptorVector[i] * descriptorVector[i];
+  for (int ii = 0; ii < 64; ++ii)
+    accu += descriptorVector[ii] * descriptorVector[ii];
 
-  for (int j = 0; j < 64; ++j)
-    descriptorVector[j] /= vcl_sqrt(accu);
+  for (int jj = 0; jj < 64; ++jj)
+    descriptorVector[jj] /= vcl_sqrt(accu);
 
   return descriptorVector;
 

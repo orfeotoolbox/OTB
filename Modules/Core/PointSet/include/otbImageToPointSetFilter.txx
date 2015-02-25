@@ -163,9 +163,9 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
         itkGetStaticConstMacro(InputImageDimension)>
     OutputToInputRegionCopierType;
     OutputToInputRegionCopierType regionCopier;
-    InputImageRegionType          inputRegion;
-    regionCopier(inputRegion, streamRegion);
-    input->SetRequestedRegion(inputRegion);
+    InputImageRegionType          inputRegion2;
+    regionCopier(inputRegion2, streamRegion);
+    input->SetRequestedRegion(inputRegion2);
 
     // Call a method that can be overridden by a subclass to perform
     // some calculations prior to splitting the main computations into

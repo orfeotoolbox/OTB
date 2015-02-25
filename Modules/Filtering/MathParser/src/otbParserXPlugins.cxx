@@ -671,8 +671,10 @@ void vnorm::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
   }
 
 
-void vmin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vmin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
+      if(a_iArgc != 1)
+        return;
   
       std::vector<double> vect;
       double min;
@@ -680,7 +682,6 @@ void vmin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
       int nbrows,nbcols;
       mup::matrix_type m1;
 
-      assert( a_iArgc==1 );
       assert(a_pArg[0]->GetType()=='m');
 
       min = itk::NumericTraits<double>::max();
@@ -701,8 +702,10 @@ void vmin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
     }
 
 
-void vmax::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vmax::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
+      if(a_iArgc != 1)
+        return;
   
       std::vector<double> vect;
       double max;
@@ -710,7 +713,7 @@ void vmax::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
       int nbrows,nbcols;
       mup::matrix_type m1;
 
-      assert( a_iArgc==1 );
+ 
       assert(a_pArg[0]->GetType()=='m');
 
       max = itk::NumericTraits<double>::min();
@@ -731,9 +734,11 @@ void vmax::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
     }
 
 
-void vcos::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vcos::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
-      assert(a_iArgc==1);
+      if(a_iArgc != 1)
+        return;
+
       assert(a_pArg[0]->GetType()=='m');
 
       // Get the argument from the argument input vector
@@ -755,9 +760,11 @@ void vcos::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
     }
 
 
-void vsin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vsin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
-      assert(a_iArgc==1);
+      if(a_iArgc != 1)
+        return;
+
       assert(a_pArg[0]->GetType()=='m');
 
       // Get the argument from the argument input vector
@@ -777,10 +784,11 @@ void vsin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
     }
 
 
-void vtan::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vtan::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
+      if(a_iArgc != 1)
+        return;
 
-      assert(a_iArgc==1);
       assert(a_pArg[0]->GetType()=='m');
 
       // Get the argument from the argument input vector
@@ -800,9 +808,11 @@ void vtan::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
     }
 
 
-void vtanh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vtanh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
-      assert(a_iArgc==1);
+      if(a_iArgc != 1)
+        return;
+
       assert(a_pArg[0]->GetType()=='m');
 
       // Get the argument from the argument input vector
@@ -823,9 +833,11 @@ void vtanh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int it
     }
 
 
-void vsinh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vsinh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
-      assert(a_iArgc==1);
+      if(a_iArgc != 1)
+        return;
+      
       assert(a_pArg[0]->GetType()=='m');
 
       // Get the argument from the argument input vector
@@ -846,10 +858,11 @@ void vsinh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int it
     }
 
 
-void vcosh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vcosh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
+      if(a_iArgc != 1)
+        return;
 
-      assert(a_iArgc==1);
       assert(a_pArg[0]->GetType()=='m');
 
       // Get the argument from the argument input vector
@@ -870,9 +883,11 @@ void vcosh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int it
     }
 
 
-void vlog::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vlog::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
-      assert(a_iArgc==1);
+      if(a_iArgc != 1)
+        return;
+
       assert(a_pArg[0]->GetType()=='m');
 
       // Get the argument from the argument input vector
@@ -892,9 +907,11 @@ void vlog::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
     }
 
 
-void vlog10::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vlog10::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
-      assert(a_iArgc==1);
+      if(a_iArgc != 1)
+        return; 
+
       assert(a_pArg[0]->GetType()=='m');
 
       // Get the argument from the argument input vector
@@ -915,9 +932,11 @@ void vlog10::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int i
     }
 
 
-void vabs::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
-    {
-      assert(a_iArgc==1);
+void vabs::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
+    {     
+      if(a_iArgc != 1)
+        return; 
+      
       assert(a_pArg[0]->GetType()=='m');
 
       // Get the argument from the argument input vector
@@ -937,9 +956,11 @@ void vabs::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
     }
 
 
-void vexp::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vexp::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
-      assert(a_iArgc==1);
+      if(a_iArgc != 1)
+        return; 
+
       assert(a_pArg[0]->GetType()=='m');
 
       // Get the argument from the argument input vector
@@ -960,10 +981,11 @@ void vexp::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
     }
 
 
-void vsqrt::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vsqrt::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
+      if(a_iArgc != 1)
+        return; 
 
-      assert(a_iArgc==1);
       assert(a_pArg[0]->GetType()=='m');
 
       // Get the argument from the argument input vector

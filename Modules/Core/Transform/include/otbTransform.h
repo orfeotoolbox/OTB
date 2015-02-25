@@ -94,25 +94,25 @@ public:
   typedef typename Superclass::InverseTransformBasePointer InverseTransformBasePointer;
 
   /**  Method to transform a point. */
+
   virtual OutputPointType TransformPoint(const InputPointType  & ) const
     { return OutputPointType(); }
-
+  
   using Superclass::TransformVector;
-
   /**  Method to transform a vector. */
   virtual OutputVectorType    TransformVector(const InputVectorType &) const
-    { return OutputVectorType(); }
+  { return OutputVectorType(); }
 
   /**  Method to transform a vnl_vector. */
-  virtual OutputVnlVectorType TransformVector(const InputVnlVectorType &) const
+  virtual OutputVnlVectorType TransforVector(const InputVnlVectorType &) const
     { return OutputVnlVectorType(); }
 
   using Superclass::TransformCovariantVector;
-
   /**  Method to transform a CovariantVector. */
   virtual OutputCovariantVectorType TransformCovariantVector(
     const InputCovariantVectorType &) const
   { return OutputCovariantVectorType(); }
+
 
   /** Set the transformation parameters and update internal transformation.
    * SetParameters gives the transform the option to set it's

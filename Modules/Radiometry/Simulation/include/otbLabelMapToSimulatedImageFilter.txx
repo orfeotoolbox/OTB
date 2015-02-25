@@ -125,10 +125,10 @@ LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputIm
     for (unsigned int i = 0; i < length; ++i)
       {
       //add gaussian white noise
-      for (unsigned int i = 0; i < m_NumberOfComponentsPerPixel; ++i)
+      for (unsigned int j = 0; j < m_NumberOfComponentsPerPixel; ++j)
         {
         double ran = randomGen->GetNormalVariate(m_Mean, m_Variance);
-        pixel[i] = static_cast<InternalPixelType> (reduceSpectralResponse->GetReduceResponse()->GetResponse()[i].second
+        pixel[j] = static_cast<InternalPixelType> (reduceSpectralResponse->GetReduceResponse()->GetResponse()[j].second
             + ran);
         }
       this->GetOutput()->SetPixel(idx, pixel);
