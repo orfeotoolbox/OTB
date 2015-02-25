@@ -4,7 +4,6 @@ set(OTBMuParser_SYSTEM_INCLUDE_DIRS ${MUPARSER_INCLUDE_DIRS})
 set(OTBMuParser_LIBRARIES "${MUPARSER_LIBRARIES}")
 set(OTBMuParser_INCLUDE_DIRS ${OTBMuParser_BINARY_DIR}/src)
 
-# TODO : OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS$
 # Starting with muparser 2.0.0,
 # intrinsic operators "and", "or", "xor" have been removed
 #  and intrinsic operators "&&" and "||" have been introduced as replacements
