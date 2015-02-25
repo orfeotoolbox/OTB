@@ -26,10 +26,12 @@ namespace otb
 {
 
 
-void bands::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void bands::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
+      
+      if (a_iArgc != 2)
+        return;
 
-      assert(a_iArgc==2);
       assert(a_pArg[0]->GetType()=='m');
       assert(a_pArg[1]->GetType()=='m');
 
@@ -301,10 +303,11 @@ void PowerByScalar::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg
     }
 
 
-void ndvi::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void ndvi::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
-
-      assert(a_iArgc==2);
+      // Check for arg length
+      if(a_iArgc != 2)
+        return;
 
       // Get the argument from the argument input vector
       mup::float_type r = a_pArg[0]->GetFloat();
@@ -639,8 +642,11 @@ void maj::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
 
 
 //--------------------------------------------------------------------------------------------------------//
-void vnorm::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc))
+void vnorm::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc)
     {
+      // Check for arg length
+      if(a_iArgc != 1)
+        return;
 
       int nbrows,nbcols;
       mup::matrix_type m1;

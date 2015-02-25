@@ -33,7 +33,7 @@ public:
     bands():ICallback(mup::cmFUNC, "bands", 2)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
 
     const mup::char_type* GetDesc() const
     {
@@ -192,7 +192,7 @@ public:
     ndvi():ICallback(mup::cmFUNC, "ndvi", 2)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
 
     const mup::char_type* GetDesc() const
     {
@@ -332,7 +332,7 @@ public:
     vnorm():ICallback(mup::cmFUNC, "vnorm", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
 
     const mup::char_type* GetDesc() const
     {
