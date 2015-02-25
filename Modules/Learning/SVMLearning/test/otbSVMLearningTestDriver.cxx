@@ -2,19 +2,14 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbSVMImageClassificationWithRuleFilter);
-  REGISTER_TEST(otbSVMModelCopyGenericKernelTest);
   REGISTER_TEST(otbLabelMapSVMClassifierNew);
   REGISTER_TEST(otbLabelMapSVMClassifier);
-  REGISTER_TEST(otbSVMModelCopyTest);
   REGISTER_TEST(otbSVMPointSetModelEstimatorTrain);
   REGISTER_TEST(otbExhaustiveExponentialOptimizerNew);
   REGISTER_TEST(otbSVMImageModelEstimatorModelAccessor);
   REGISTER_TEST(otbSVMImageClassificationFilter);
-  REGISTER_TEST(otbSVMModelGenericKernelLoadSave);
   REGISTER_TEST(otbSVMModelNew);
   REGISTER_TEST(otbSVMImageModelEstimatorNew);
-  REGISTER_TEST(otbSVMModelGenericKernelsTest);
-  REGISTER_TEST(otbSVMKernelsTest);
   REGISTER_TEST(otbSVMImageModelEstimatorTrainOneClass);
   REGISTER_TEST(otbSVMCrossValidationCostFunctionNew);
   REGISTER_TEST(otbSVMModelLoadSave);
@@ -30,10 +25,7 @@ void RegisterTests()
   REGISTER_TEST(otbSVMModelAccessor);
   REGISTER_TEST(otbSVMModelLoad);
   REGISTER_TEST(otbSVMImageClassificationFilterNew);
-  REGISTER_TEST(otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest);
-  REGISTER_TEST(otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest);
   REGISTER_TEST(otbSVMPointSetModelEstimatorNew);
   REGISTER_TEST(otbSVMMarginSamplerNew);
-  REGISTER_TEST(otbSVMModelCopyComposedKernelTest);
   REGISTER_TEST(otbExhaustiveExponentialOptimizerTest);
 }

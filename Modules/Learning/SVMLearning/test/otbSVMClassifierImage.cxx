@@ -28,45 +28,6 @@
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-namespace otb
-{
-
-class Linear : public GenericKernelFunctorBase
-{
-public:
-  typedef Linear                              Self;
-  typedef GenericKernelFunctorBase            Superclass;
-
-  Linear() : GenericKernelFunctorBase() {}
-  virtual ~Linear() {}
-
-  // Deep copy operator
-  virtual GenericKernelFunctorBase* Clone() const
-  {
-    return new Self(*this);
-  }
-
-  virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter&) const
-  {
-    return this->dot(x, y);
-  }
-
-protected:
-  Linear(const Self& copy)
-  : Superclass(copy)
-  {
-    *this = copy;
-  }
-
-  Linear& operator=(const Self& copy)
-  {
-    Superclass::operator =(copy);
-    return *this;
-  }
-};
-
-}
-
 int otbSVMClassifierImage(int argc, char* argv[])
 {
   if (argc != 4)
@@ -102,9 +63,6 @@ int otbSVMClassifierImage(int argc, char* argv[])
   typedef otb::SVMModel<InputPixelType, LabelPixelType> ModelType;
 
   ModelType::Pointer model = ModelType::New();
-
-  otb::Linear lFunctor;
-  model->SetKernelFunctor(&lFunctor);
 
   model->LoadModel(modelFilename);
 

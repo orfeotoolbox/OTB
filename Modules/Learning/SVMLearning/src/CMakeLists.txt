@@ -1,9 +1,5 @@
 set(OTBSVMLearning_SRC
-  otbChangeProfileKernelFunctor.cxx
   otbExhaustiveExponentialOptimizer.cxx
-  otbNonGaussianRBFKernelFunctor.cxx
-  otbMixturePolyRBFKernelFunctor.cxx
-  otbSpectralAngleKernelFunctor.cxx
   )
 
 add_library(OTBSVMLearning ${OTBSVMLearning_SRC})

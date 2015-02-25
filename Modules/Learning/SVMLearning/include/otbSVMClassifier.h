@@ -89,7 +89,6 @@ public:
 
   /** Returns the classification result */
   OutputType* GetOutput();
-  void SetOutput(OutputType* output);
 
   /** Returns the hyperplanes distances */
   HyperplanesDistancesListSampleType * GetHyperplanesDistancesOutput();
@@ -109,6 +108,10 @@ public:
 protected:
   SVMClassifier();
   virtual ~SVMClassifier() {}
+
+  void SetOutput(OutputType* output);
+  using Superclass::SetOutput;
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Starts the classification process */

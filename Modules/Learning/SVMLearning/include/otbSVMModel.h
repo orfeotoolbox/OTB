@@ -99,10 +99,6 @@ public:
     return (unsigned int) (m_Model->nr_class * (m_Model->nr_class - 1) / 2);
   }
 
-  /** Set a new model. To avoid pointers holding conflicts, this
-   * method actually makes a copy of aModel */
-  void SetModel(struct svm_model* aModel);
-
   /** Gets the model */
   const struct svm_model* GetModel()
   {
@@ -136,13 +132,11 @@ public:
     this->LoadModel(model_file_name.c_str());
   }
 
-  /** Copy the model */
-  Pointer GetCopy() const;
-
   /** Set the SVM type to C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
   void SetSVMType(int svmtype)
   {
     m_Parameters.svm_type = svmtype;
+    m_ModelUpToDate = false;
     this->Modified();
   }
 
@@ -160,6 +154,7 @@ public:
   void SetKernelType(int kerneltype)
   {
     m_Parameters.kernel_type = kerneltype;
+    m_ModelUpToDate = false;
     this->Modified();
   }
 
@@ -173,6 +168,7 @@ public:
   void SetPolynomialKernelDegree(int degree)
   {
     m_Parameters.degree = degree;
+    m_ModelUpToDate = false;
     this->Modified();
   }
 
@@ -186,6 +182,7 @@ public:
   virtual void SetKernelGamma(double gamma)
   {
     m_Parameters.gamma = gamma;
+    m_ModelUpToDate = false;
     this->Modified();
   }
   /** Get the gamma parameter for poly/rbf/sigmoid kernels */
@@ -198,6 +195,7 @@ public:
   void SetKernelCoef0(double coef0)
   {
     m_Parameters.coef0 = coef0;
+    m_ModelUpToDate = false;
     this->Modified();
   }
 
@@ -212,6 +210,7 @@ public:
   void SetNu(double nu)
   {
     m_Parameters.nu = nu;
+    m_ModelUpToDate = false;
     this->Modified();
   }
 
@@ -226,6 +225,7 @@ public:
   void SetCacheSize(int cSize)
   {
     m_Parameters.cache_size = static_cast<double>(cSize);
+    m_ModelUpToDate = false;
     this->Modified();
   }
 
@@ -239,6 +239,7 @@ public:
   void SetC(double c)
   {
     m_Parameters.C = c;
+    m_ModelUpToDate = false;
     this->Modified();
   }
 
@@ -252,6 +253,7 @@ public:
   void SetEpsilon(double eps)
   {
     m_Parameters.eps = eps;
+    m_ModelUpToDate = false;
     this->Modified();
   }
 
@@ -265,6 +267,7 @@ public:
   void SetP(double p)
   {
     m_Parameters.p = p;
+    m_ModelUpToDate = false;
     this->Modified();
   }
 
@@ -278,6 +281,7 @@ public:
   void DoShrinking(bool s)
   {
     m_Parameters.shrinking = static_cast<int>(s);
+    m_ModelUpToDate = false;
     this->Modified();
   }
 
@@ -291,6 +295,7 @@ public:
   void DoProbabilityEstimates(bool prob)
   {
     m_Parameters.probability = static_cast<int>(prob);
+    m_ModelUpToDate = false;
     this->Modified();
   }
 
@@ -298,19 +303,6 @@ public:
   bool GetDoProbabilityEstimates(void) const
   {
     return static_cast<bool>(m_Parameters.probability);
-  }
-
-  /** Get/Set methods for generic kernel functor */
-  GenericKernelFunctorBase * GetKernelFunctor(void) const
-  {
-    return m_Parameters.kernel_generic;
-  }
-
-  void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
-  {
-    if (pGenericKernelFunctor != NULL)
-      m_Parameters.kernel_generic = pGenericKernelFunctor->Clone();
-    this->Modified();
   }
 
   /** Return number of support vectors */
@@ -355,13 +347,6 @@ public:
   struct svm_problem& GetProblem()
   {
     return m_Problem;
-  }
-
-  /** Reset ModelUpToDate */
-  virtual void Modified() const
-  {
-    Superclass::Modified();
-    m_ModelUpToDate = false;
   }
 
   /** Allocate the problem */
