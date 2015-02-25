@@ -41,6 +41,7 @@
 #include "Core/mvdAbstractLayerModel.h"
 #include "Core/mvdStackedLayerModel.h"
 #include "Core/mvdVectorImageModel.h"
+#include "Core/mvdVisibleInterface.h"
 
 namespace mvd
 {
@@ -241,9 +242,34 @@ LayerStackItemModel
 ::data( const QModelIndex & index, int role ) const
 {
   // qDebug() << this << "::data(" << index << "," << role << ")";
-
   switch( role )
     {
+    case Qt::CheckStateRole:
+      if( index.column()!=COLUMN_NAME )
+        return QVariant();
+      else
+        {
+        assert( !index.parent().isValid() );
+        assert( index.internalPointer()!=NULL );
+
+        AbstractLayerModel * layer =
+          static_cast< AbstractLayerModel * >( index.internalPointer() );
+
+        assert( layer!=NULL );
+        assert( layer==dynamic_cast< VisibleInterface * >( layer ) );
+
+        VisibleInterface * interface =
+          dynamic_cast< VisibleInterface * >( layer );
+
+        assert( interface!=NULL );
+
+        return
+          interface->IsVisible()
+          ? Qt::Checked
+          : Qt::Unchecked;
+        }
+      break;
+
     case Qt::DisplayRole:
       switch( index.column() )
         {
@@ -256,7 +282,8 @@ LayerStackItemModel
           assert( m_StackedLayerModel!=NULL );
 
           const AbstractLayerModel * layerModel =
-            m_StackedLayerModel->At( index.row() );
+            static_cast< AbstractLayerModel * >( index.internalPointer() );
+          // m_StackedLayerModel->At( index.row() );
 
           assert( layerModel!=NULL );
 
@@ -314,11 +341,16 @@ LayerStackItemModel
   if( !index.isValid() )
     return QAbstractItemModel::flags( index );
 
-  return
+  Qt::ItemFlags flags =
     QAbstractItemModel::flags( index )
     // | Qt::ItemIsDragEnabled
     // | Qt::ItemIsDropEnabled
-    | Qt::ItemIsUserCheckable;
+    ;
+
+  if( index.column()==COLUMN_NAME )
+    flags |= Qt::ItemIsUserCheckable | Qt::ItemIsEditable;
+
+  return flags;
 }
 
 /*****************************************************************************/
@@ -499,6 +531,44 @@ LayerStackItemModel
 {
   // qDebug()
   //   << this << "::setData(" << index << "," << value << "," << role << ")";
+
+  if( index.column()==COLUMN_NAME && role==Qt::CheckStateRole )
+    {
+    // qDebug() << index.row() << "check-state:" << value;
+
+    assert( !index.parent().isValid() );
+    assert( index.internalPointer()!=NULL );
+
+    assert( index.internalPointer()!=NULL );
+
+    AbstractLayerModel * layer =
+      static_cast< AbstractLayerModel * >( index.internalPointer() );
+
+    assert( layer!=NULL );
+    assert( layer==dynamic_cast< VisibleInterface * >( layer ) );
+
+    VisibleInterface * interface = dynamic_cast< VisibleInterface * >( layer );
+    assert( interface!=NULL );
+
+    switch( value.toInt() )
+      {
+      case Qt::Checked:
+        interface->SetVisible( true );
+        break;
+
+      case Qt::Unchecked:
+        interface->SetVisible( false );
+        break;
+
+      default:
+        assert( false && "Unhandled Qt::CheckedState value." );
+        break;
+      }
+
+    emit dataChanged( index, index );
+
+    return true;
+    }
 
   return false;
 }

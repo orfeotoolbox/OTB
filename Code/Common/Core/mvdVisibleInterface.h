@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAbstractLayerModel_h
-#define __mvdAbstractLayerModel_h
+#ifndef __mvdVisibleInterface_h
+#define __mvdVisibleInterface_h
 
 //
 // Configuration include.
@@ -31,7 +31,6 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtCore>
 
 //
 // System includes (sorted by alphabetic order)
@@ -44,8 +43,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdAbstractModel.h"
-#include "Core/mvdVisibleInterface.h"
+
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -66,18 +64,12 @@ namespace mvd
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class AbstractLayerModel
+ * \class VisibleInterface
  *
  * \brief WIP.
  */
-class Monteverdi2_EXPORT AbstractLayerModel :
-    public AbstractModel,
-    public VisibleInterface
+class Monteverdi2_EXPORT VisibleInterface
 {
-
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
-  Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
@@ -85,29 +77,25 @@ class Monteverdi2_EXPORT AbstractLayerModel :
 // Public methods.
 public:
 
+  /** \brief Constructor. */
+  VisibleInterface( bool =true );
+
   /** \brief Destructor. */
-  virtual ~AbstractLayerModel();
+  virtual ~VisibleInterface();
 
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+  /**
+   */
+  inline void SetVisible( bool );
 
-//
-// Public SLOTS.
-public slots:
-
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
-
-//
-// Signals.
-signals:
+  /**
+   */
+  inline bool IsVisible() const;
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
-
-  /** \brief Constructor. */
-  AbstractLayerModel( QObject* parent =NULL );
 
 //
 // Protected attributes.
@@ -118,20 +106,18 @@ protected:
 //
 // Private methods.
 private:
-
+  /**
+   */
+  virtual void virtual_SignalVisibilityChanged( bool ) const;
 
 //
 // Private attributes.
 private:
-
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Slots.
-private slots:
+  bool m_IsVisible: 1;
 };
 
 } // end namespace 'mvd'.
+
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
@@ -154,6 +140,27 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+bool
+VisibleInterface
+::IsVisible() const
+{
+  return m_IsVisible;
+}
+
+/*****************************************************************************/
+inline
+void
+VisibleInterface
+::SetVisible( bool state )
+{
+  m_IsVisible = state;
+
+  virtual_SignalVisibilityChanged( state );
+}
+
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractLayerModel_h
+#endif // __mvdVisibleInterface_h

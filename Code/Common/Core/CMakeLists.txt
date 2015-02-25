@@ -29,6 +29,7 @@ set( Common_Core_SOURCES
   mvdTextStream.cxx
   mvdTypes.cxx
   mvdVectorImageModel.cxx
+  mvdVisibleInterface.cxx
 )
 
 #############################################################################

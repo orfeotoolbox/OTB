@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdAbstractLayerModel.h"
+#include "mvdVisibleInterface.h"
 
 
 /*****************************************************************************/
@@ -41,7 +41,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::AbstractLayerModel
+  TRANSLATOR mvd::VisibleInterface
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -65,16 +65,22 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-AbstractLayerModel
-::AbstractLayerModel( QObject* parent ) :
-  AbstractModel( parent ),
-  VisibleInterface()
+VisibleInterface
+::VisibleInterface( bool isVisible ) :
+  m_IsVisible( isVisible )
 {
 }
 
 /*******************************************************************************/
-AbstractLayerModel
-::~AbstractLayerModel()
+VisibleInterface
+::~VisibleInterface()
+{
+}
+
+/*******************************************************************************/
+void
+VisibleInterface
+::virtual_SignalVisibilityChanged( bool ) const
 {
 }
 

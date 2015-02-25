@@ -1711,7 +1711,7 @@ void
 MainWindow
 ::OnReferenceLayerChanged( size_t index )
 {
-  qDebug() << this << "::OnReferenceLayerChanged(" << index << ")";
+  // qDebug() << this << "::OnReferenceLayerChanged(" << index << ")";
 
   //
   // Access widget.
@@ -1747,7 +1747,7 @@ void
 MainWindow
 ::OnReferenceLayerCurrentIndexChanged( int index )
 {
-  qDebug() << this << "::OnReferenceLayerCurrentIndexChanged(" << index << ")";
+  // qDebug() << this << "::OnReferenceLayerCurrentIndexChanged(" << index << ")";
 
   //
   // Access widget.
@@ -1784,7 +1784,7 @@ void
 MainWindow
 ::RefreshReferenceLayerComboBox()
 {
-  qDebug() << this << "::RefreshReferenceLayerComboBox()";
+  // qDebug() << this << "::RefreshReferenceLayerComboBox()";
 
   assert( I18nCoreApplication::Instance()!=NULL );
   assert( I18nCoreApplication::Instance()->GetModel()==
