@@ -17,7 +17,7 @@ otb_add_test(NAME leTvImageClassificationFilterLibSVM COMMAND otbSupervisedTestD
   ${TEMP}/leImageClassificationFilterLibSVMOutput.tif
   )
 
-otb_add_test(NAME leTuLibSVMMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
+otb_add_test(NAME leTuLibSVMMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbLibSVMMachineLearningModelCanRead
   ${TEMP}/libsvm_model.txt
   )

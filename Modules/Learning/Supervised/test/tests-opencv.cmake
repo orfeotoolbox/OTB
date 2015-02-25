@@ -89,49 +89,49 @@ otb_add_test(NAME leTvImageClassificationFilterSVM COMMAND otbSupervisedTestDriv
   ${TEMP}/leImageClassificationFilterSVMOutput.tif
   )
 
-otb_add_test(NAME leTuDecisionTreeMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
+otb_add_test(NAME leTuDecisionTreeMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbDecisionTreeMachineLearningModelCanRead
   ${TEMP}/decisiontree_model.txt
   )
-set_property(TEST leTuDecisionTreeMachineLearningModelCanRead PROPERTY DEPENDS leTvDecisionTreeMachineLearningModel)
+set_property(TEST leTuDecisionTreeMachineLearningModelCanRead APPEND PROPERTY DEPENDS leTvDecisionTreeMachineLearningModel)
 
-otb_add_test(NAME leTuGradientBoostedTreeMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
+otb_add_test(NAME leTuGradientBoostedTreeMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbGradientBoostedTreeMachineLearningModelCanRead
   ${TEMP}/gbt_model.txt
   )
 set_property(TEST leTuGradientBoostedTreeMachineLearningModelCanRead PROPERTY DEPENDS leTvGradientBoostedTreeMachineLearningModel)
 
-otb_add_test(NAME leTuNormalBayesMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
+otb_add_test(NAME leTuNormalBayesMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbNormalBayesMachineLearningModelCanRead
   ${TEMP}/normalbayes_model.txt
   )
 set_property(TEST leTuNormalBayesMachineLearningModelCanRead PROPERTY DEPENDS leTvNormalBayesMachineLearningModel)
 
-otb_add_test(NAME leTuANNMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
+otb_add_test(NAME leTuANNMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbNeuralNetworkMachineLearningModelCanRead
   ${TEMP}/ann_model.txt
   )
 set_property(TEST leTuANNMachineLearningModelCanRead PROPERTY DEPENDS leTvANNMachineLearningModel)
 
-otb_add_test(NAME leTuSVMMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
+otb_add_test(NAME leTuSVMMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbSVMMachineLearningModelCanRead
   ${TEMP}/svm_model.txt
   )
 set_property(TEST leTuSVMMachineLearningModelCanRead PROPERTY DEPENDS leTvSVMMachineLearningModel)
 
-otb_add_test(NAME leTuBoostMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
+otb_add_test(NAME leTuBoostMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbBoostMachineLearningModelCanRead
   ${TEMP}/boost_model.txt
   )
 set_property(TEST leTuBoostMachineLearningModelCanRead PROPERTY DEPENDS leTvBoostMachineLearningModel)
 
-otb_add_test(NAME leTuRandomForestsMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
+otb_add_test(NAME leTuRandomForestsMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbRandomForestsMachineLearningModelCanRead
   ${TEMP}/rf_model.txt
   )
 set_property(TEST leTuRandomForestsMachineLearningModelCanRead PROPERTY DEPENDS leTvRandomForestsMachineLearningModel)
 
-otb_add_test(NAME leTuKNNMachineLearningModelCanRead COMMAND otbSVMLearningTestDriver
+otb_add_test(NAME leTuKNNMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbKNNMachineLearningModelCanRead
   ${TEMP}/knn_model.txt
   )
