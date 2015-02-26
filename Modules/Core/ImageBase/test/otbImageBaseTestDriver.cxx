@@ -5,7 +5,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageAndVectorImageOperationFilterNew);
   REGISTER_TEST(otbImagePCAShapeModelEstimatorTest);
   REGISTER_TEST(otbFunctionToImageFilter);
-  REGISTER_TEST(otbOssimElevManagerTest);
   REGISTER_TEST(otbExtractROI2);
   REGISTER_TEST(otbComplexToVectorImageCastFilterNew);
   REGISTER_TEST(otbComplexToVectorImageCastFilterTest);

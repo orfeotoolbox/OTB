@@ -6,7 +6,6 @@ otbFlexibleDistanceWithMissingValue.cxx
 otbImageAndVectorImageOperationFilterNew.cxx
 otbImagePCAShapeModelEstimatorTest.cxx
 otbFunctionToImageFilter.cxx
-otbOssimElevManagerTest.cxx
 otbExtractROI2.cxx
 otbComplexToVectorImageCastFilter.cxx
 otbMultiChannelExtractROI.cxx
@@ -78,30 +77,6 @@ otb_add_test(NAME bfTvFunctionToImageFilterTest COMMAND otbImageBaseTestDriver
   ${INPUTDATA}/poupees_1canal.hd
   ${TEMP}/bfTvFunctionToImageFilterTest.tif
   2 # radius
-  )
-
-
-otb_add_test(NAME prTvossimElevManagerTest3 COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest3.tif
-  ${TEMP}/prTvossimElevManagerTest3.tif
-  otbOssimElevManagerTest
-  ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/prTvossimElevManagerTest3.tif
-  -1.8 52   0.02 -0.018 232 422
-  )
-
-otb_add_test(NAME prTvossimElevManagerTest COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest.tif
-  ${TEMP}/prTvossimElevManagerTest.tif
-  otbOssimElevManagerTest
-  ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/prTvossimElevManagerTest.tif
-  6.5
-  45.5
-  0.002
-  -0.002
-  500
-  500
   )
 
 otb_add_test(NAME coTvExtractROI2 COMMAND otbImageBaseTestDriver
