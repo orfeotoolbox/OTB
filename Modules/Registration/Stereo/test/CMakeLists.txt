@@ -6,6 +6,7 @@ otbBijectionCoherencyFilter.cxx
 otbMulti3DMapToDEMFilter.cxx
 otbAdhesionCorrectionFilter.cxx
 otbStereoSensorModelToElevationMapFilter.cxx
+otbStereorectificationDisplacementFieldSource.cxx
 )
 
 add_executable(otbStereoTestDriver ${OTBStereoTests})
@@ -287,3 +288,20 @@ otb_add_test(NAME dmTvStereoSensorModelToElevationFilter COMMAND otbStereoTestDr
   3
   )
 
+otb_add_test(NAME dmTvStereorectificationDisplacementFieldSource COMMAND otbDisplacementFieldTestDriver
+  --compare-n-images ${EPSILON_10} 2
+  ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput1.tif
+  ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput1.tif
+  ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput2.tif
+  ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput2.tif
+  otbStereorectificationDisplacementFieldSource
+  ${EXAMPLEDATA}/sensor_stereo_left.tif
+  ${EXAMPLEDATA}/sensor_stereo_right.tif
+  ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput1.tif
+  ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput2.tif
+  300
+  0.5
+  5
+  )
+otb_add_test(NAME dmTuStereorectificationDisplacementFieldSourceNew COMMAND otbDisplacementFieldTestDriver
+  otbStereorectificationDisplacementFieldSourceNew)

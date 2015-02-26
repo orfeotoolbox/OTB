@@ -13,4 +13,5 @@ void RegisterTests()
   REGISTER_TEST(otbAdhesionCorrectionFilter);
   REGISTER_TEST(otbStereoSensorModelToElevationMapFilterNew);
   REGISTER_TEST(otbStereoSensorModelToElevationMapFilter);
+  REGISTER_TEST(otbStereorectificationDisplacementFieldSource);
 }

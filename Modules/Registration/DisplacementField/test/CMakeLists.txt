@@ -11,7 +11,6 @@ otbPointSetWithTransformToDisplacementFieldGeneratorNew.cxx
 otbBSplinesInterpolateDisplacementFieldGeneratorNew.cxx
 otbNNearestTransformsLinearInterpolateDisplacementFieldGeneratorNew.cxx
 otbNNearestPointsLinearInterpolateDisplacementFieldGeneratorNew.cxx
-otbStereorectificationDisplacementFieldSource.cxx
 otbNearestTransformDisplacementFieldGenerator.cxx
 otbNearestPointDisplacementFieldGenerator.cxx
 otbBSplinesInterpolateTransformDisplacementFieldGenerator.cxx
@@ -62,24 +61,7 @@ otb_add_test(NAME dmTuBSplinesInterpolateDisplacementFieldGeneratorNew COMMAND o
 otb_add_test(NAME dmTuNNearestPointsLinearInterpolateDisplacementFieldGeneratorNew COMMAND otbDisplacementFieldTestDriver
   otbNNearestPointsLinearInterpolateDisplacementFieldGeneratorNew)
 
-otb_add_test(NAME dmTvStereorectificationDisplacementFieldSource COMMAND otbDisplacementFieldTestDriver
-  --compare-n-images ${EPSILON_10} 2
-  ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput1.tif
-  ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput1.tif
-  ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput2.tif
-  ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput2.tif
-  otbStereorectificationDisplacementFieldSource
-  ${EXAMPLEDATA}/sensor_stereo_left.tif
-  ${EXAMPLEDATA}/sensor_stereo_right.tif
-  ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput1.tif
-  ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput2.tif
-  300
-  0.5
-  5
-  )
 
-otb_add_test(NAME dmTuStereorectificationDisplacementFieldSourceNew COMMAND otbDisplacementFieldTestDriver
-  otbStereorectificationDisplacementFieldSourceNew)
 
 otb_add_test(NAME dmTvNearestTransformDisplacementFieldGenerator COMMAND otbDisplacementFieldTestDriver
   --compare-image ${EPSILON_10}

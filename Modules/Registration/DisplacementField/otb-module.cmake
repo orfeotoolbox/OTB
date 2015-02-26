@@ -7,16 +7,14 @@ in generating a deformation field between two images in epipolar geometry
 
 otb_module(OTBDisplacementField
   DEPENDS
+    OTBCommon
     OTBITK
     OTBImageBase
-    OTBTransform
-    OTBCommon
-    OTBOSSIMAdapters
     OTBObjectList
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBImageIO
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

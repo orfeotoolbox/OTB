@@ -11,7 +11,6 @@ void RegisterTests()
   REGISTER_TEST(otbNNearestTransformsLinearInterpolateDisplacementFieldGeneratorNew);
   REGISTER_TEST(otbNNearestPointsLinearInterpolateDisplacementFieldGeneratorNew);
   REGISTER_TEST(otbStereorectificationDisplacementFieldSourceNew);
-  REGISTER_TEST(otbStereorectificationDisplacementFieldSource);
   REGISTER_TEST(otbNearestTransformDisplacementFieldGenerator);
   REGISTER_TEST(otbNearestPointDisplacementFieldGenerator);
   REGISTER_TEST(otbBSplinesInterpolateTransformDisplacementFieldGenerator);

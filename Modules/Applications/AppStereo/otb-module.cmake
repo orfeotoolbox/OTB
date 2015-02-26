@@ -5,7 +5,6 @@ otb_module(OTBAppStereo
     OTBApplicationEngine
     OTBDEM
     OTBDisparityMap
-    OTBDisplacementField
     OTBITK
     OTBImageBase
     OTBImageIO
