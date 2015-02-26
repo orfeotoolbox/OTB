@@ -28,10 +28,10 @@
 #include "itkGradientImageFilter.h"
 #include "otbHistogramOfOrientedGradientCovariantImageFunction.h"
 
-typedef unsigned short InputPixelType;
+typedef unsigned short ShortPixelType;
 const unsigned int     Dimension = 2;
 
-typedef otb::Image<InputPixelType,  Dimension>                                  InputImageType;
+typedef otb::Image<ShortPixelType,  Dimension>                                  InputImageType;
 typedef otb::ImageFileReader<InputImageType>                                    ReaderType;
 typedef itk::GradientImageFilter<InputImageType>                                GradientFilterType;
 typedef GradientFilterType::OutputImageType                                     CovariantImageType;
