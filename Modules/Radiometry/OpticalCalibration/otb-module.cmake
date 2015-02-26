@@ -5,21 +5,19 @@ into account the neighborhood contribution.")
 
 otb_module(OTBOpticalCalibration
   DEPENDS
+    OTB6S
+    OTBBoost
+    OTBCommon
     OTBITK
     OTBImageBase
-    OTB6S
     OTBImageManipulation
-    OTBIndices
-    OTBCommon
     OTBMetadata
-    OTBBoost
     OTBOSSIMAdapters
     OTBObjectList
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBImageIO
-    OTBITKPendingPatches
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

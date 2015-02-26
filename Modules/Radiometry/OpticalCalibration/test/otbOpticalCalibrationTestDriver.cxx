@@ -9,7 +9,6 @@ void RegisterTests()
   REGISTER_TEST(otbLuminanceToReflectanceImageFilterNew);
   REGISTER_TEST(otbLuminanceToReflectanceImageFilterAuto);
   REGISTER_TEST(otbImageToLuminanceImageFilterNew);
-  REGISTER_TEST(otbLandsatTMSpectralRuleBasedClassifierTest);
   REGISTER_TEST(otbRadiometryCorrectionParametersToAtmosphericRadiativeTermsNew);
   REGISTER_TEST(otbLuminanceToImageImageFilterAuto);
   REGISTER_TEST(otbLuminanceToImageImageFilterNew);

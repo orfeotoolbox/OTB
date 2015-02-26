@@ -8,7 +8,6 @@ otbReflectanceToLuminanceImageFilterNew.cxx
 otbLuminanceToReflectanceImageFilterNew.cxx
 otbLuminanceToReflectanceImageFilterAuto.cxx
 otbImageToLuminanceImageFilterNew.cxx
-otbLandsatTMSpectralRuleBasedClassifierTest.cxx
 otbRadiometryCorrectionParametersToAtmosphericRadiativeTermsNew.cxx
 otbLuminanceToImageImageFilterAuto.cxx
 otbLuminanceToImageImageFilterNew.cxx
@@ -219,11 +218,6 @@ otb_add_test(NAME raTuImageToLuminanceImageFilterNew COMMAND otbOpticalCalibrati
   otbImageToLuminanceImageFilterNew
   )
 
-otb_add_test(NAME raTvLandsatTMSpectralRuleBasedClassifierTest COMMAND otbOpticalCalibrationTestDriver
-  otbLandsatTMSpectralRuleBasedClassifierTest
-  ${INPUTDATA}/L5Strip.tif
-  ${TEMP}/raTvLandsatTMSpectralRuleBasedClassifierTest_Image.tif
-  )
 
 otb_add_test(NAME raTuRadiometryCorrectionParametersToAtmosphericRadiativeTermsNew COMMAND otbOpticalCalibrationTestDriver
   otbRadiometryCorrectionParametersToAtmosphericRadiativeTermsNew)

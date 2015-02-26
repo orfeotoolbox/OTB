@@ -10,15 +10,16 @@ set(OTBOpticalCalibration_SRC
   )
 
 add_library(OTBOpticalCalibration ${OTBOpticalCalibration_SRC})
-target_link_libraries(OTBOpticalCalibration 
-  ${OTBImageBase_LIBRARIES}
+target_link_libraries(OTBOpticalCalibration
   ${OTB6S_LIBRARIES}
-  ${OTBImageManipulation_LIBRARIES}
-  ${OTBCommon_LIBRARIES}
-  ${OTBMetadata_LIBRARIES}
   ${OTBBoost_LIBRARIES}
+  ${OTBCommon_LIBRARIES}
+  ${OTBITK_LIBRARIES}
+  ${OTBImageBase_LIBRARIES}
+  ${OTBImageManipulation_LIBRARIES}
+  ${OTBMetadata_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}
-
+  ${OTBObjectList_LIBRARIES}
   )
 
 otb_module_target(OTBOpticalCalibration)
