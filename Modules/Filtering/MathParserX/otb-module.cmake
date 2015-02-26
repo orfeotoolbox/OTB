@@ -10,6 +10,7 @@ otb_module(OTBMathParserX
   TEST_DEPENDS
     OTBImageBase
     OTBImageIO
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
