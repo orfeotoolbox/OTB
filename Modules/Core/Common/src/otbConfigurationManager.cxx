@@ -42,7 +42,7 @@ ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
 {
   std::string svalue;
   
-  uint64_t value = 128;
+  RAMValueType value = 128;
   
   if(itksys::SystemTools::GetEnv("OTB_MAX_RAM_HINT",svalue))
     {
@@ -51,7 +51,7 @@ ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
     
     if(tmp)
       {
-      value = static_cast<uint64_t>(tmp);
+      value = static_cast<RAMValueType>(tmp);
       }
     }
   
