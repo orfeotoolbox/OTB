@@ -25,16 +25,6 @@
 namespace otb
 {
 
-/*
-template<class TVectorData>
-VectorDataProperties<TVectorData>
-::VectorDataProperties()
-{
-//   m_InputGISConnection = InputGISConnectionType::New();
-//   m_DropExistingGISTable = false;
-//   m_GISTableName = "otb_to_gis_sample";
-}
- */
 template <class TVectorData>
 bool VectorDataProperties<TVectorData>
 ::IsBoundingRegionNull()
@@ -144,7 +134,6 @@ VectorDataProperties<TVectorData>
         }
       case otb::FEATURE_LINE:
         {
-//         this->GetOutput()->InsertLineString( static_cast<typename TGISTable::LinePointerType> (dataNode->GetLine()), dataNode->GetNodeId() );
         this->AddRegion(dataNode->GetLine()->GetBoundingRegion());
         break;
         }
@@ -158,27 +147,27 @@ VectorDataProperties<TVectorData>
         {
         itkExceptionMacro(
           <<
-          "This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
+          "This type (FEATURE_MULTIPOINT) is not handle (yet), please request for it");
         break;
         }
       case FEATURE_MULTILINE:
         {
         itkExceptionMacro(
-          << "This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
+          << "This type (FEATURE_MULTILINE) is not handle (yet), please request for it");
         break;
         }
       case FEATURE_MULTIPOLYGON:
         {
         itkExceptionMacro(
           <<
-          "This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
+          "This type (FEATURE_MULTIPOLYGON) is not handle (yet), please request for it");
         break;
         }
       case FEATURE_COLLECTION:
         {
         itkExceptionMacro(
           <<
-          "This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
+          "This type (FEATURE_COLLECTION) is not handle (yet), please request for it");
         break;
         }
       }
