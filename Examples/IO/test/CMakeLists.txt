@@ -45,7 +45,7 @@ otb_add_test(NAME prTeDEMHandlerExampleTest COMMAND ${OTB_TEST_DRIVER}
 
 otb_add_test(NAME ioTeImageToKmzAndMapFileProductExample COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:ImageToKmzAndMapFileProductExample>
-    ${INPUTDATA}/Haiti1_sr10.jpeg
+    ${OTB_DATA_ROOT}/Input/Haiti1_sr10.jpeg
     ${TEMP}/ioTeHaitiKmzProduct.kmz
     ${TEMP}/mapserverExample/ioTeHaitiMapFileProduct.map
     ${TEMP}/mapserverExample/shapeindex

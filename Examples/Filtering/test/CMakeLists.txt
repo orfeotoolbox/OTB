@@ -62,7 +62,7 @@ otb_add_test(NAME fiTeThresholdImageFilterTest COMMAND ${OTB_TEST_DRIVER}
 
 otb_add_test(NAME fiTeGradientMagnitudeRecursiveGaussianImageFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
-    ${BASELINE}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
+    ${BASELINE}/GradientMagnitudeRecursiveGaussianImageFilterOutput5.png
     ${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
   Execute $<TARGET_FILE:GradientMagnitudeRecursiveGaussianImageFilter>
     ${INPUTDATA}/ROISpot5.png
@@ -88,7 +88,7 @@ otb_add_test(NAME fiTeGradientMagnitudeImageFilterTest COMMAND ${OTB_TEST_DRIVER
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/GradientMagnitudeImageFilterOutput.png
     ${TEMP}/GradientMagnitudeImageFilterOutput.png
-  GradientMagnitudeImageFilterTest
+   Execute $<TARGET_FILE:GradientMagnitudeImageFilter>
     ${INPUTDATA}/ROISpot5.png
     ${TEMP}/GradientMagnitudeImageFilterOutput.png
 )
