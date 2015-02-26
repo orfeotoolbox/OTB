@@ -6,8 +6,8 @@ otb_module(OTBOpenThreadsAdapters
     OTBOpenThreads
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBITK
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
