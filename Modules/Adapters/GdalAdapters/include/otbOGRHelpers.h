@@ -77,7 +77,7 @@ struct StringListConverter
       m_raw.push_back(b->c_str());
       }
     m_raw.push_back(0);
-    assert(CSLCount(const_cast <char**>(&m_raw[0])) == boost::size(strings));
+    assert(CSLCount(const_cast <char**>(&m_raw[0])) == static_cast<int>(boost::size(strings)));
     }
   /**
    * Acces to the OGR compliant list of strings.

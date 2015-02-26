@@ -262,9 +262,9 @@ int main(int argc, char* argv[])
 // intended for educationnal purposes and that you do not need to proceed
 // as this. See the example in section
 // \ref{sec:OrthorectificationwithOTB} in order to code
-// ortho-rectification chains in a very simple way.\\
+// ortho-rectification chains in a very simple way.
 //
-//  You want to go on? OK. You have been warned.\\
+//  You want to go on? OK. You have been warned.
 //
 //  We will start by declaring an image region iterator and some
 //  convenience variables.
