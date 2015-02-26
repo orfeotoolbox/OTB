@@ -5,7 +5,6 @@ otbStatisticsTestDriver.cxx
 otbListSampleToHistogramListGeneratorNew.cxx
 otbStreamingMinMaxImageFilter.cxx
 otbStreamingMinMaxVectorImageFilterNew.cxx
-otbDEMCaracteristicsExtractorNew.cxx
 otbVarianceImageFilterNew.cxx
 otbStreamingStatisticsImageFilterNew.cxx
 otbListSampleToVariableDimensionHistogramGeneratorNew.cxx
@@ -35,7 +34,6 @@ otbLocalHistogramImageFunctionNew.cxx
 otbRealAndImaginaryImageToComplexImageFilterTest.cxx
 otbStreamingStatisticsImageFilter.cxx
 otbListSampleToBalancedListSampleFilter.cxx
-otbDEMCaracteristicsExtractor.cxx
 otbStreamingStatisticsVectorImageFilter.cxx
 otbStreamingMinMaxVectorImageFilter.cxx
 otbListSampleGeneratorTest.cxx
@@ -101,9 +99,6 @@ otb_add_test(NAME bfTvRealImageToComplexImageFilterTest COMMAND otbStatisticsTes
 otb_add_test(NAME coTuHistogramStatisticsFunction COMMAND otbStatisticsTestDriver
   otbHistogramStatisticsFunction 100)
 
-otb_add_test(NAME raTuDEMCaracteristicsExtractorNew COMMAND otbStatisticsTestDriver
-  otbDEMCaracteristicsExtractorNew
-  )
 
 otb_add_test(NAME bfTvContinuousMinimumMaximumImageCalculatorTest COMMAND otbStatisticsTestDriver
   otbContinuousMinimumMaximumImageCalculatorTest
@@ -346,27 +341,6 @@ otb_add_test(NAME leTvListSampleToBalancedListSampleFilter COMMAND otbStatistics
   1 -1  2
   )
 
-otb_add_test(NAME raTvDEMCaracteristicsExtractor COMMAND otbStatisticsTestDriver
-  --compare-n-images ${EPSILON_12} 4
-  ${BASELINE}/raTvDEMCaracteristicsExtractorSlop.tif
-  ${TEMP}/raTvDEMCaracteristicsExtractorSlop.tif
-  ${BASELINE}/raTvDEMCaracteristicsExtractorAspect.tif
-  ${TEMP}/raTvDEMCaracteristicsExtractorAspect.tif
-  ${BASELINE}/raTvDEMCaracteristicsExtractorIncidence.tif
-  ${TEMP}/raTvDEMCaracteristicsExtractorIncidence.tif
-  ${BASELINE}/raTvDEMCaracteristicsExtractorExitance.tif
-  ${TEMP}/raTvDEMCaracteristicsExtractorExitance.tif
-  otbDEMCaracteristicsExtractor
-  ${INPUTDATA}/pyramide.tif
-  20 # view azimut
-  40 # view angle
-  10 # solar azimut
-  30 # solar angle
-  ${TEMP}/raTvDEMCaracteristicsExtractorSlop.tif
-  ${TEMP}/raTvDEMCaracteristicsExtractorAspect.tif
-  ${TEMP}/raTvDEMCaracteristicsExtractorIncidence.tif
-  ${TEMP}/raTvDEMCaracteristicsExtractorExitance.tif
-  )
 
 otb_add_test(NAME bfTvStreamingStatisticsVectorImageFilterWithNaNs COMMAND otbStatisticsTestDriver
   --compare-ascii ${NOTOL}

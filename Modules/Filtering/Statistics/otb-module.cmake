@@ -11,7 +11,6 @@ otb_module(OTBStatistics
     OTBITK
     OTBITKPendingPatches
     OTBImageBase
-    OTBImageManipulation
     OTBObjectList
     OTBProjection
     OTBStreaming
@@ -19,6 +18,7 @@ otb_module(OTBStatistics
   TEST_DEPENDS
     OTBCommandLineParser
     OTBImageIO
+    OTBImageManipulation
     OTBInterpolation
     OTBTestKernel
     OTBVectorDataBase

@@ -3,6 +3,8 @@ set(OTBDEMTests
   otbDEMToImageGeneratorFromImageTest.cxx
   otbDEMToImageGeneratorNew.cxx
   otbDEMToImageGeneratorTest.cxx
+  otbDEMCaracteristicsExtractor.cxx
+  otbDEMCaracteristicsExtractorNew.cxx
   otbDEMTestDriver.cxx  )
 
 add_executable(otbDEMTestDriver ${OTBDEMTests})
@@ -73,4 +75,28 @@ otb_add_test(NAME ioTvDEMToImageGeneratorTest COMMAND otbImageManipulationTestDr
   500
   0.002
   -0.002
+  )
+otb_add_test(NAME raTvDEMCaracteristicsExtractor COMMAND otbStatisticsTestDriver
+  --compare-n-images ${EPSILON_12} 4
+  ${BASELINE}/raTvDEMCaracteristicsExtractorSlop.tif
+  ${TEMP}/raTvDEMCaracteristicsExtractorSlop.tif
+  ${BASELINE}/raTvDEMCaracteristicsExtractorAspect.tif
+  ${TEMP}/raTvDEMCaracteristicsExtractorAspect.tif
+  ${BASELINE}/raTvDEMCaracteristicsExtractorIncidence.tif
+  ${TEMP}/raTvDEMCaracteristicsExtractorIncidence.tif
+  ${BASELINE}/raTvDEMCaracteristicsExtractorExitance.tif
+  ${TEMP}/raTvDEMCaracteristicsExtractorExitance.tif
+  otbDEMCaracteristicsExtractor
+  ${INPUTDATA}/pyramide.tif
+  20 # view azimut
+  40 # view angle
+  10 # solar azimut
+  30 # solar angle
+  ${TEMP}/raTvDEMCaracteristicsExtractorSlop.tif
+  ${TEMP}/raTvDEMCaracteristicsExtractorAspect.tif
+  ${TEMP}/raTvDEMCaracteristicsExtractorIncidence.tif
+  ${TEMP}/raTvDEMCaracteristicsExtractorExitance.tif
+  )
+otb_add_test(NAME raTuDEMCaracteristicsExtractorNew COMMAND otbStatisticsTestDriver
+  otbDEMCaracteristicsExtractorNew
   )

@@ -5,6 +5,7 @@ otb_module(OTBDEM
     OTBCommon
     OTBITK
     OTBImageBase
+    OTBImageManipulation
     OTBOSSIMAdapters
     OTBTransform
 

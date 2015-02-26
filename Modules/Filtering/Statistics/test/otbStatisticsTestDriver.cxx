@@ -4,7 +4,6 @@ void RegisterTests()
   REGISTER_TEST(otbListSampleToHistogramListGeneratorNew);
   REGISTER_TEST(otbStreamingMinMaxImageFilter);
   REGISTER_TEST(otbStreamingMinMaxVectorImageFilterNew);
-  REGISTER_TEST(otbDEMCaracteristicsExtractorNew);
   REGISTER_TEST(otbVarianceImageFilterNew);
   REGISTER_TEST(otbStreamingStatisticsImageFilterNew);
   REGISTER_TEST(otbListSampleToVariableDimensionHistogramGeneratorNew);
@@ -43,7 +42,6 @@ void RegisterTests()
   REGISTER_TEST(otbStreamingStatisticsImageFilter);
   REGISTER_TEST(otbListSampleToBalancedListSampleFilterNew);
   REGISTER_TEST(otbListSampleToBalancedListSampleFilter);
-  REGISTER_TEST(otbDEMCaracteristicsExtractor);
   REGISTER_TEST(otbStreamingStatisticsVectorImageFilter);
   REGISTER_TEST(otbStreamingMinMaxVectorImageFilter);
   REGISTER_TEST(otbListSampleGeneratorNew);
