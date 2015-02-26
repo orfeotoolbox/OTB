@@ -1,20 +1,15 @@
 #include "otbTestMain.h"
 void RegisterTests()
 {
-  REGISTER_TEST(otbCompareAsciiTests);
   REGISTER_TEST(otbVariableLengthVectorConverterNew);
   REGISTER_TEST(otbImageRegionTileMapSplitter);
-  REGISTER_TEST(otbCompareAsciiTestScientificNotation);
   REGISTER_TEST(otbImageRegionAdaptativeSplitterNew);
   REGISTER_TEST(otbImageRegionAdaptativeSplitter);
   REGISTER_TEST(otbRGBAPixelConverterNew);
   REGISTER_TEST(otbRGBAPixelConverter);
   REGISTER_TEST(otbRectangle);
-  REGISTER_TEST(otbCompareAsciiTests4);
-  REGISTER_TEST(otbCompareAsciiTests3);
   REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitterNew);
   REGISTER_TEST(otbTestCommandLineArgumentParserHelp);
-  REGISTER_TEST(otbCompareAsciiTestsEpsilon3_WhiteSpace);
   REGISTER_TEST(otbTestCommandLineArgumentParserWithError);
   REGISTER_TEST(otbSystemTest);
   REGISTER_TEST(otbParseHdfSubsetName);
@@ -24,9 +19,7 @@ void RegisterTests()
   REGISTER_TEST(otbTestCommandLineArgumentParserList);
   REGISTER_TEST(otbImageRegionTileMapSplitterNew);
   REGISTER_TEST(otbTestCommandLineArgumentParser);
-  REGISTER_TEST(otbCompareAsciiTests2);
   REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitter);
-  REGISTER_TEST(otbCompareAsciiTests5);
   REGISTER_TEST(otbRectangleNew);
   REGISTER_TEST(otbConfigurationManagerTest);
 }
