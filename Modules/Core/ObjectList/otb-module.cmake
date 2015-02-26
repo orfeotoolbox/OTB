@@ -12,6 +12,7 @@ otb_module(OTBObjectList
     OTBImageBase
     OTBImageIO
     OTBTestKernel
+    OTBVectorDataBase
 
   DESCRIPTION
     "${DOCUMENTATION}"

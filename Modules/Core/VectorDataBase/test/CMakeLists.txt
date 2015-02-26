@@ -6,13 +6,11 @@ otbVectorData.cxx
 otbVectorDataKeywordlistTest.cxx
 otbPolygon.cxx
 otbVectorDataSourceNew.cxx
-otbObjectList2.cxx
 otbDataNodeTest.cxx
 otbRemoteSensingRegion.cxx
 otbPolygonNew.cxx
 otbPolyLineParametricPathWithValueNew.cxx
 otbRemoteSensingRegionNew.cxx
-otbObjectListToObjectListFilterNew.cxx
 otbVectorDataNew.cxx
 )
 
@@ -58,9 +56,6 @@ otb_add_test(NAME coTuVectorDataSource COMMAND otbVectorDataBaseTestDriver
   otbVectorDataSourceNew
   )
 
-otb_add_test(NAME coTvObjectListTestNotValid COMMAND otbVectorDataBaseTestDriver
-  otbObjectList2
-  )
 
 otb_add_test(NAME coTvDataNode COMMAND otbVectorDataBaseTestDriver
   otbDataNodeTest
@@ -81,8 +76,6 @@ otb_add_test(NAME coTuPolyLineParametricPathWithValueNew COMMAND otbVectorDataBa
 otb_add_test(NAME coTuRemoteSensingRegionNew COMMAND otbVectorDataBaseTestDriver
   otbRemoteSensingRegionNew )
 
-otb_add_test(NAME coTuObjectListToObjectListFilterNew COMMAND otbVectorDataBaseTestDriver
-  otbObjectListToObjectListFilterNew)
 
 otb_add_test(NAME coTuVectorData COMMAND otbVectorDataBaseTestDriver
   otbVectorDataNew

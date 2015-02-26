@@ -12,6 +12,8 @@ set(OTBObjectListTests
   otbImageListToVectorImageFilter2.cxx
   otbImageListToVectorImageFilter.cxx
   otbImageListToVectorImageFilterNew.cxx
+  otbObjectList2.cxx
+  otbObjectListToObjectListFilterNew.cxx
   otbObjectListTestDriver.cxx  )
 
 add_executable(otbObjectListTestDriver ${OTBObjectListTests})
@@ -76,3 +78,8 @@ otb_add_test(NAME coTvImageListToVectorImageFilter COMMAND otbImageBaseTestDrive
   )
 otb_add_test(NAME coTuImageListToVectorImageFilterNew COMMAND otbImageBaseTestDriver
   otbImageListToVectorImageFilterNew)
+otb_add_test(NAME coTvObjectListTestNotValid COMMAND otbVectorDataBaseTestDriver
+  otbObjectList2
+  )
+otb_add_test(NAME coTuObjectListToObjectListFilterNew COMMAND otbVectorDataBaseTestDriver
+  otbObjectListToObjectListFilterNew)
