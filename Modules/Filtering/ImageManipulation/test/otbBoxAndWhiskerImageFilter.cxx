@@ -67,10 +67,10 @@ int otbBoxAndWhiskerImageFilter(int itkNotUsed(argc), char * argv[])
   binaryImage->SetRegions(filter->GetOutput()->GetLargestPossibleRegion());
   binaryImage->SetNumberOfComponentsPerPixel(filter->GetOutput()->GetNumberOfComponentsPerPixel());
   binaryImage->Allocate();
-  ImageType::PixelType pixel;
-  pixel.SetSize(filter->GetOutput()->GetNumberOfComponentsPerPixel());
-  pixel.Fill(0.0);
-  binaryImage->FillBuffer(pixel);
+  ImageType::PixelType p;
+  p.SetSize(filter->GetOutput()->GetNumberOfComponentsPerPixel());
+  p.Fill(0.0);
+  binaryImage->FillBuffer(p);
 
   typedef itk :: ImageRegionConstIterator<ImageType > ConstIteratorType;
   typedef itk :: ImageRegionIterator <ImageType > IteratorType;

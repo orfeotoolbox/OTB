@@ -459,12 +459,12 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     if (resolution != 0)
       idSpacing = 1.0 * vcl_pow((double)2.0, (double)resolution);
 
-    const double Epsilon = 1.0E-12;
+    const double epsilon = 1.0E-12;
     if ( projRef.empty()
-         && vcl_abs(origin[0] - 0.5 * spacing[0]) > Epsilon
-         && vcl_abs(origin[1] - 0.5 * spacing[1]) > Epsilon
-         && vcl_abs(spacing[0] - idSpacing) > Epsilon
-         && vcl_abs(spacing[1] - idSpacing) > Epsilon)
+         && vcl_abs(origin[0] - 0.5 * spacing[0]) > epsilon
+         && vcl_abs(origin[1] - 0.5 * spacing[1]) > epsilon
+         && vcl_abs(spacing[0] - idSpacing) > epsilon
+         && vcl_abs(spacing[1] - idSpacing) > epsilon)
       {
       std::string wgs84ProjRef =
               "GEOGCS[\"GCS_WGS_1984\", DATUM[\"D_WGS_1984\", SPHEROID[\"WGS_1984\", 6378137, 298.257223563]],"

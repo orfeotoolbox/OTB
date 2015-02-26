@@ -64,7 +64,7 @@ CommandLineLauncher::CommandLineLauncher() :
   m_AddProcessCommand->SetCallbackFunction(this, &CommandLineLauncher::LinkWatchers);
 }
 
-CommandLineLauncher::CommandLineLauncher(const char * exp) /*:
+CommandLineLauncher::CommandLineLauncher(const char * itkNotused(exp)) /*:
   m_Expression(exp)*/
 {
   m_Application = NULL;
@@ -487,10 +487,10 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                             type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
                             type == ParameterType_InputVectorData   || type == ParameterType_OutputVectorData )
                           {
-                          for(unsigned int i=1; i<values.size(); i++)
+                          for(unsigned int j=1; j<values.size(); j++)
                             {
                             values[0].append(" ");
-                            values[0].append(values[i]);
+                            values[0].append(values[j]);
                             }
                           }
                         else if (!param->GetAutomaticValue())
