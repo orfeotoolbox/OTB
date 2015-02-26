@@ -25,8 +25,8 @@ set(OSSIMPLUGINS_OTB_PATCH "1")
 
   # When using External ossim, compile ossimplugin as a DLL
   # even if we compile OTB as a static lib
-  if(WIN32)
-    set(ossimplugins_LIBTYPE SHARED)
+  set(ossimplugins_LIBTYPE SHARED)
+  if(WIN32)  
     add_definitions(-DOSSIMPLUGINSMAKINGDLL)
   endif()
 
@@ -50,6 +50,11 @@ set(ossimplugins_SOURCES
 )
 
 add_library(otbossimplugins ${ossimplugins_LIBTYPE} ${ossimplugins_SOURCES})
+target_link_libraries(otbossimplugins 
+  ${OTBGDAL_LIBRARIES}
+  ${OSSIM_LIBRARIES}
+  ${OTBGeoTIFF_LIBRARIES}
+  )
 
 # Apply user-defined properties to the library target.
 if(OTB_LIBRARY_PROPERTIES)
