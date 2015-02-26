@@ -9,6 +9,7 @@ otb_module(OTBComplexImage
     OTBITK
     OTBImageBase
     OTBImageIO
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
