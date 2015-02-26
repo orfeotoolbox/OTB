@@ -5,7 +5,6 @@ otbImageBaseTestDriver.cxx
 otbFlexibleDistanceWithMissingValue.cxx
 otbImageAndVectorImageOperationFilterNew.cxx
 otbImagePCAShapeModelEstimatorTest.cxx
-otbStandardOneLineFilterWatcherTest.cxx
 otbFunctionToImageFilter.cxx
 otbOssimElevManagerTest.cxx
 otbExtractROI2.cxx
@@ -23,13 +22,11 @@ otbImageOfVectorsToMonoChannelExtractROINew.cxx
 otbExtractROINew.cxx
 otbExtractROI_RGB.cxx
 otbComplexToIntensityFilterTest.cxx
-otbStandardFilterWatcherNew.cxx
 otbMultiToMonoChannelExtractROINew.cxx
 otbMultiToMonoChannelExtractROI.cxx
 otbImageTest.cxx
 otbFlexibleDistanceWithMissingValueNew.cxx
 otbImageFunctionAdaptor.cxx
-otbStandardWriterWatcher.cxx
 otbMultiChannelExtractROINew.cxx
 )
 
@@ -69,10 +66,6 @@ otb_add_test(NAME bfTvItkImagePCAShapeModelEstimatorTest COMMAND otbImageBaseTes
   )
 set_property(TEST bfTvItkImagePCAShapeModelEstimatorTest PROPERTY DEPENDS bfTvInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator)
 
-otb_add_test(NAME coTuStandardOneLineFilterWatcher COMMAND otbImageBaseTestDriver
-  otbStandardOneLineFilterWatcherTest
-  ${INPUTDATA}/qb_RoadExtract.img
-  )
 
 
 
@@ -365,10 +358,6 @@ otb_add_test(NAME coTvExtractROI_QB COMMAND otbImageBaseTestDriver
 otb_add_test(NAME bfTvComplexToIntensityFilterTest COMMAND otbImageBaseTestDriver
   otbComplexToIntensityFilterTest)
 
-otb_add_test(NAME coTuStandardFilterWatcherNew COMMAND otbImageBaseTestDriver
-  otbStandardFilterWatcherNew
-  ${INPUTDATA}/qb_RoadExtract.img
-  )
 
 otb_add_test(NAME coTuMultiToMonoROINew COMMAND otbImageBaseTestDriver
   otbMultiToMonoChannelExtractROINew)
@@ -408,12 +397,6 @@ otb_add_test(NAME feTuImageFunctionAdaptorNew COMMAND otbImageBaseTestDriver
   otbImageFunctionAdaptorNew
   )
 
-otb_add_test(NAME coTvStandardWriterWatcher COMMAND otbImageBaseTestDriver
-  otbStandardWriterWatcher
-  ${INPUTDATA}/couleurs.tif
-  ${TEMP}/coTvStandardWriterWatcherOutput.tif
-  20
-  )
 
 otb_add_test(NAME coTuMultiChannelROINew COMMAND otbImageBaseTestDriver
   otbMultiChannelExtractROINew)

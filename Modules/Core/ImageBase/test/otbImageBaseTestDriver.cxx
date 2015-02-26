@@ -4,7 +4,6 @@ void RegisterTests()
   REGISTER_TEST(otbFlexibleDistanceWithMissingValue);
   REGISTER_TEST(otbImageAndVectorImageOperationFilterNew);
   REGISTER_TEST(otbImagePCAShapeModelEstimatorTest);
-  REGISTER_TEST(otbStandardOneLineFilterWatcherTest);
   REGISTER_TEST(otbFunctionToImageFilter);
   REGISTER_TEST(otbOssimElevManagerTest);
   REGISTER_TEST(otbExtractROI2);
@@ -24,13 +23,11 @@ void RegisterTests()
   REGISTER_TEST(otbExtractROINew);
   REGISTER_TEST(otbExtractROI_RGB);
   REGISTER_TEST(otbComplexToIntensityFilterTest);
-  REGISTER_TEST(otbStandardFilterWatcherNew);
   REGISTER_TEST(otbMultiToMonoChannelExtractROINew);
   REGISTER_TEST(otbMultiToMonoChannelExtractROI);
   REGISTER_TEST(otbImageTest);
   REGISTER_TEST(otbFlexibleDistanceWithMissingValueNew);
   REGISTER_TEST(otbImageFunctionAdaptorNew);
   REGISTER_TEST(otbImageFunctionAdaptor);
-  REGISTER_TEST(otbStandardWriterWatcher);
   REGISTER_TEST(otbMultiChannelExtractROINew);
 }

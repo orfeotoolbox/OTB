@@ -7,6 +7,8 @@ otb_module(OTBCommon
     OTBITKPendingPatches
 
   TEST_DEPENDS
+    OTBImageBase
+    OTBImageIO
     OTBTestKernel
 
   DESCRIPTION

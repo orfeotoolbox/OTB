@@ -18,4 +18,7 @@ void RegisterTests()
   REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitter);
   REGISTER_TEST(otbRectangleNew);
   REGISTER_TEST(otbConfigurationManagerTest);
+  REGISTER_TEST(otbStandardFilterWatcherNew);
+  REGISTER_TEST(otbStandardOneLineFilterWatcherTest);
+  REGISTER_TEST(otbStandardWriterWatcher);
 }

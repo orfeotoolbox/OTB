@@ -14,6 +14,9 @@ otbImageRegionTileMapSplitterNew.cxx
 otbImageRegionNonUniformMultidimensionalSplitter.cxx
 otbRectangleNew.cxx
 otbConfigurationManagerTest.cxx
+otbStandardFilterWatcherNew.cxx
+otbStandardOneLineFilterWatcherTest.cxx
+otbStandardWriterWatcher.cxx
 )
 
 add_executable(otbCommonTestDriver ${OTBCommonTests})
@@ -173,3 +176,17 @@ otb_add_test(NAME coTvConfigurationManagerEnvVar COMMAND otbTestDriver
   Execute $<TARGET_FILE:otbCommonTestDriver>
   otbConfigurationManagerTest
   256 /path/to/dem/ /path/to/geoid.file)
+otb_add_test(NAME coTuStandardFilterWatcherNew COMMAND otbImageBaseTestDriver
+  otbStandardFilterWatcherNew
+  ${INPUTDATA}/qb_RoadExtract.img
+  )
+otb_add_test(NAME coTuStandardOneLineFilterWatcher COMMAND otbImageBaseTestDriver
+  otbStandardOneLineFilterWatcherTest
+  ${INPUTDATA}/qb_RoadExtract.img
+  )
+otb_add_test(NAME coTvStandardWriterWatcher COMMAND otbImageBaseTestDriver
+  otbStandardWriterWatcher
+  ${INPUTDATA}/couleurs.tif
+  ${TEMP}/coTvStandardWriterWatcherOutput.tif
+  20
+  )
