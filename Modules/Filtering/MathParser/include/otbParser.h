@@ -21,6 +21,8 @@
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
 
+#include "otb_muparser.h"
+
 namespace otb
 {
 
