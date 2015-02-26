@@ -139,8 +139,30 @@ ImageViewWidget
 
   if( model!=NULL )
     {
+    for( StackedLayerModel::ConstIterator it( model->Begin() );
+         it!=model->End();
+         ++it )
+    Disconnect( it->second );
+
     //
     // Disconnect stacked-layer model from this image-view.
+
+    QObject::disconnect(
+      model,
+      SIGNAL( LayerAdded( size_t ) ),
+      // from:
+      this,
+      SLOT( OnLayerAdded( size_t ) )
+    );
+
+    QObject::disconnect(
+      model,
+      SIGNAL( AboutToDeleteLayer( size_t ) ),
+      // from:
+      this,
+      SLOT( OnAboutToDeleteLayer( size_t ) )
+    );
+
     QObject::disconnect(
       model,
       SIGNAL( ReferenceChanged( size_t ) ),
@@ -149,8 +171,6 @@ ImageViewWidget
       SLOT( OnReferenceChanged( size_t ) )
     );
 
-    //
-    // Disconnect stacked-layer model from this image-view.
     QObject::disconnect(
       model,
       SIGNAL( ContentChanged() ),
@@ -169,7 +189,24 @@ ImageViewWidget
 
 
   //
-  // Disconnect stacked-layer model from this image-view.
+  // Connect stacked layer-model to image-view renderer.
+
+  QObject::connect(
+    stackedLayerModel,
+    SIGNAL( LayerAdded( size_t ) ),
+    // to:
+    this,
+    SLOT( OnLayerAdded( size_t ) )
+  );
+
+  QObject::connect(
+    stackedLayerModel,
+    SIGNAL( AboutToDeleteLayer( size_t ) ),
+    // to:
+    this,
+    SLOT( OnAboutToDeleteLayer( size_t ) )
+  );
+
   QObject::connect(
     stackedLayerModel,
     SIGNAL( ContentChanged() ),
@@ -178,8 +215,6 @@ ImageViewWidget
     SLOT( UpdateScene() )
   );
 
-  //
-  // Connect stacked layer-model to image-view renderer.
   QObject::connect(
     stackedLayerModel,
     SIGNAL( ReferenceChanged( size_t ) ),
@@ -187,6 +222,11 @@ ImageViewWidget
     this,
     SLOT( OnReferenceChanged( size_t ) )
   );
+
+  for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
+       it!=stackedLayerModel->End();
+       ++it )
+    Connect( it->second );
 }
 
 /*******************************************************************************/
@@ -742,6 +782,54 @@ ImageViewWidget
 }
 
 /*******************************************************************************/
+void
+ImageViewWidget
+::Connect( AbstractLayerModel * layer )
+{
+  assert( layer!=NULL );
+
+  QObject::connect(
+    layer,
+    SIGNAL( VisibilityChanged() ),
+    // to:
+    this,
+    SLOT( updateGL() )
+  );
+
+  QObject::connect(
+    layer,
+    SIGNAL( LayerAdded( size_t ) ),
+    // from:
+    this,
+    SLOT( OnLayerAdded( size_t ) )
+  );
+
+  QObject::disconnect(
+    layer,
+    SIGNAL( AboutToDeleteLayer( size_t ) ),
+    // from:
+    this,
+    SLOT( OnAboutToDeleteLayer( size_t ) )
+  );
+}
+
+/*******************************************************************************/
+void
+ImageViewWidget
+::Disconnect( AbstractLayerModel * layer )
+{
+  assert( layer!=NULL );
+
+  QObject::disconnect(
+    layer,
+    SIGNAL( VisibilityChanged() ),
+    // from:
+    this,
+    SLOT( updateGL() )
+  );
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /******************************************************************************/
 void
@@ -785,6 +873,16 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
+::OnAboutToDeleteLayer( size_t index )
+{
+  assert( GetLayerStack()!=NULL );
+
+  Disconnect( GetLayerStack()->At( index ) );
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
 ::OnDeleteAllRequested()
 {
   // qDebug() << this << "::OnDeleteAllRequested()";
@@ -814,6 +912,16 @@ ImageViewWidget
   stackedLayerModel->DeleteCurrent();
 
   updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnLayerAdded( size_t index )
+{
+  assert( GetLayerStack()!=NULL );
+
+  Connect( GetLayerStack()->At( index ) );
 }
 
 /******************************************************************************/

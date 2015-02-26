@@ -458,6 +458,7 @@ ImageViewRenderer
         );
         assert( !imageActor.IsNull() );
 
+        imageActor->SetVisible( vectorImageModel->IsVisible() );
 
         //
         // Apply color-setup.
@@ -611,7 +612,7 @@ ImageViewRenderer
 
           m_GlView->AddActor( glImageActor, it->first );
 
-          glImageActor->SetVisible( true );
+          // glImageActor->SetVisible( vectorImageModel->IsVisible() );
 
           qDebug()
             << "Added image-actor" << FromStdString( it->first )

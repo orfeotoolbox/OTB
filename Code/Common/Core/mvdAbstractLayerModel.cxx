@@ -79,6 +79,14 @@ AbstractLayerModel
 }
 
 /*******************************************************************************/
+void
+AbstractLayerModel
+::virtual_SignalVisibilityChanged( bool isVisible ) const
+{
+  emit VisibilityChanged( isVisible );
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 

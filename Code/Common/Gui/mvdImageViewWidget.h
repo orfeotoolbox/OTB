@@ -268,6 +268,14 @@ private:
    */
   void Center( ZoomType zoom =ZOOM_TYPE_NONE );
 
+  /**
+   */
+  void Connect( AbstractLayerModel * );
+
+  /**
+   */
+  void Disconnect( AbstractLayerModel * );
+
 //
 // Private attributes.
 private:
@@ -312,6 +320,12 @@ private slots:
   /**
    */
   void OnUpdateProjectionRequired();
+  /**
+   */
+  void OnLayerAdded( size_t );
+  /**
+   */
+  void OnAboutToDeleteLayer( size_t );
 };
 
 }// end namespace 'mvd'

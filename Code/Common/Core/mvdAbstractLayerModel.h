@@ -99,6 +99,9 @@ public slots:
 //
 // Signals.
 signals:
+  /**
+   */
+  void VisibilityChanged( bool =true ) const;
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -119,6 +122,9 @@ protected:
 // Private methods.
 private:
 
+  //
+  // VisibleInterface overloads.
+  void virtual_SignalVisibilityChanged( bool ) const;
 
 //
 // Private attributes.
