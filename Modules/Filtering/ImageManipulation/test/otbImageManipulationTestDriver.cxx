@@ -1,7 +1,6 @@
 #include "otbTestMain.h"
 void RegisterTests()
 {
-  REGISTER_TEST(otbVectorImageToImageListFilter);
   REGISTER_TEST(otbVectorImageToImageListFilterIterator);
   REGISTER_TEST(otbBinaryImageDensityFunctionNew);
   REGISTER_TEST(otbPrintableImageFilter);
@@ -46,7 +45,6 @@ void RegisterTests()
   REGISTER_TEST(otbPhaseFunctorTest);
   REGISTER_TEST(otbShiftScaleVectorImageFilterNew);
   REGISTER_TEST(otbChangeLabelImageFilter);
-  REGISTER_TEST(otbVectorImageToImageListFilterNew);
   REGISTER_TEST(otbClampVectorImageFilterNew);
   REGISTER_TEST(otbClampVectorImageFilterTest);
   REGISTER_TEST(otbPrintableImageFilterNew);
@@ -58,7 +56,6 @@ void RegisterTests()
   REGISTER_TEST(otbBCOInterpolateImageFunctionOverVectorImage);
   REGISTER_TEST(otbBCOInterpolateImageFunctionTest);
   REGISTER_TEST(otbBCOInterpolateImageFunctionVectorImageTest);
-  REGISTER_TEST(otbImageToImageListFilterNew);
   REGISTER_TEST(otbBoxAndWhiskerImageFilter);
   REGISTER_TEST(otbStreamingShrinkImageFilterNew);
   REGISTER_TEST(otbVectorRescaleIntensityImageFilter);

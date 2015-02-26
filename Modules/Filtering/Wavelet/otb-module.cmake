@@ -2,15 +2,14 @@ set(DOCUMENTATION "This module contains classes for wavelet analysis.")
 
 otb_module(OTBWavelet
   DEPENDS
-    OTBImageManipulation
-    OTBObjectList
-    OTBITK
     OTBCommon
+    OTBITK
+    OTBObjectList
 
   TEST_DEPENDS
-    OTBTestKernel
-    OTBImageIO
     OTBImageBase
+    OTBImageIO
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

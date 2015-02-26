@@ -7,19 +7,18 @@ precision.")
 
 otb_module(OTBDisparityMap
   DEPENDS
-    OTBStereo
+    OTBCommon
     OTBITK
     OTBITKPendingPatches
     OTBImageBase
-    OTBTransform
     OTBPointSet
-    OTBCommon
+    OTBStereo
+    OTBTransform
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBImageIO
-    OTBImageManipulation
     OTBObjectList
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

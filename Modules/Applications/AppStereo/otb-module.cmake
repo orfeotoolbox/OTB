@@ -9,7 +9,6 @@ otb_module(OTBAppStereo
     OTBITK
     OTBImageBase
     OTBImageIO
-    OTBImageManipulation
     OTBInterpolation
     OTBMathParser
     OTBObjectList

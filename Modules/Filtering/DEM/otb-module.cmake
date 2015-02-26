@@ -10,6 +10,7 @@ otb_module(OTBDEM
 
   TEST_DEPENDS
     OTBImageIO
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

@@ -3,15 +3,14 @@ image classification based on geodesic morphology characteristics.")
 
 otb_module(OTBMorphologicalProfiles
   DEPENDS
-    OTBImageBase
-    OTBImageManipulation
-    OTBObjectList
-    OTBITK
     OTBCommon
+    OTBITK
+    OTBImageBase
+    OTBObjectList
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBImageIO
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

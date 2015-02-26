@@ -2,7 +2,6 @@ otb_module_test()
 
 set(OTBImageManipulationTests
 otbImageManipulationTestDriver.cxx
-otbVectorImageToImageListFilter.cxx
 otbBinaryImageDensityFunctionNew.cxx
 otbPrintableImageFilter.cxx
 otbConcatenateScalarValueImageFilterTest.cxx
@@ -42,12 +41,10 @@ otbStreamingInnerProductVectorImageFilter.cxx
 otbPhaseFunctorTest.cxx
 otbShiftScaleVectorImageFilterNew.cxx
 otbChangeLabelImageFilter.cxx
-otbVectorImageToImageListFilterNew.cxx
 otbClampVectorImageFilter.cxx
 otbPrintableImageFilterNew.cxx
 otbShiftScaleImageAdaptorNew.cxx
 otbStreamingInnerProductVectorImageFilterNew.cxx
-otbImageToImageListFilterNew.cxx
 otbBoxAndWhiskerImageFilter.cxx
 otbStreamingShrinkImageFilterNew.cxx
 otbVectorRescaleIntensityImageFilter.cxx
@@ -88,48 +85,8 @@ otb_module_target_label(otbImageManipulationTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME bfTvVectorImageToImageListFilter COMMAND otbImageManipulationTestDriver
-  --compare-n-images ${EPSILON_7} 3
-  ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
-  ${TEMP}/bfTvVectorImageToImageListFilterBand1.png
-  ${BASELINE}/bfTvVectorImageToImageListFilterBand2.png
-  ${TEMP}/bfTvVectorImageToImageListFilterBand2.png
-  ${BASELINE}/bfTvVectorImageToImageListFilterBand3.png
-  ${TEMP}/bfTvVectorImageToImageListFilterBand3.png
-  otbVectorImageToImageListFilter
-  ${INPUTDATA}/poupees.png
-  ${TEMP}/bfTvVectorImageToImageListFilterBand1.png
-  ${TEMP}/bfTvVectorImageToImageListFilterBand2.png
-  ${TEMP}/bfTvVectorImageToImageListFilterBand3.png
-  )
 
-otb_add_test(NAME bfTvVectorImageToImageListFilterIt COMMAND otbImageManipulationTestDriver
-  --compare-n-images ${EPSILON_7} 3
-  ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
-  ${TEMP}/bfTvVectorImageToImageListFilterItBand1.png
-  ${BASELINE}/bfTvVectorImageToImageListFilterBand2.png
-  ${TEMP}/bfTvVectorImageToImageListFilterItBand2.png
-  ${BASELINE}/bfTvVectorImageToImageListFilterBand3.png
-  ${TEMP}/bfTvVectorImageToImageListFilterItBand3.png
-  otbVectorImageToImageListFilterIterator
-  ${INPUTDATA}/poupees.png
-  ${TEMP}/bfTvVectorImageToImageListFilterIt
-  png
-  )
 
-otb_add_test(NAME bfTvVectorImageToImageListFilterIt2 COMMAND otbImageManipulationTestDriver
-  --compare-n-images ${EPSILON_7} 3
-  ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
-  ${TEMP}/bfTvVectorImageToImageListFilterIt2Band1.tif
-  ${BASELINE}/bfTvVectorImageToImageListFilterBand2.png
-  ${TEMP}/bfTvVectorImageToImageListFilterIt2Band2.tif
-  ${BASELINE}/bfTvVectorImageToImageListFilterBand3.png
-  ${TEMP}/bfTvVectorImageToImageListFilterIt2Band3.tif
-  otbVectorImageToImageListFilterIterator
-  ${INPUTDATA}/poupees.png
-  ${TEMP}/bfTvVectorImageToImageListFilterIt2
-  tif
-  )
 
 otb_add_test(NAME bfTuBinaryImageDensityFunctionNew COMMAND  otbImageManipulationTestDriver
   otbBinaryImageDensityFunctionNew
@@ -500,8 +457,6 @@ otb_add_test(NAME bfTvChangeLabelImageFilter COMMAND otbImageManipulationTestDri
   255   # upper  threshold
   )
 
-otb_add_test(NAME bfTuVectorImageToImageListFilterNew COMMAND otbImageManipulationTestDriver
-  otbVectorImageToImageListFilterNew)
 
 otb_add_test(NAME bfTvClampVectorImageFilterTest COMMAND otbImageManipulationTestDriver
   --compare-image 0.0001
@@ -534,8 +489,6 @@ otb_add_test(NAME bfTuStreamingInnerProductVectorImageFilterNew COMMAND otbImage
 
 
 
-otb_add_test(NAME coTuImageToImageListFilterNew COMMAND otbImageManipulationTestDriver
-  otbImageToImageListFilterNew)
 
 
 

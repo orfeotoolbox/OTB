@@ -7,16 +7,15 @@ that goal.")
 
 otb_module(OTBMorphologicalPyramid
   DEPENDS
+    OTBCommon
     OTBITK
     OTBImageBase
-    OTBPointSet
-    OTBImageManipulation
-    OTBCommon
     OTBObjectList
+    OTBPointSet
 
   TEST_DEPENDS
-    OTBMorphologicalProfiles
     OTBImageIO
+    OTBMorphologicalProfiles
     OTBTestKernel
 
   DESCRIPTION

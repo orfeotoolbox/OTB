@@ -3,10 +3,10 @@ set(OTBWavelet_SRC
   )
 
 add_library(OTBWavelet ${OTBWavelet_SRC})
-target_link_libraries(OTBWavelet 
+target_link_libraries(OTBWavelet
   ${OTBCommon_LIBRARIES}
-  ${OTBImageManipulation_LIBRARIES}
-
+  ${OTBITK_LIBRARIES}
+  ${OTBObjectList_LIBRARIES}
   )
 
 otb_module_target(OTBWavelet)

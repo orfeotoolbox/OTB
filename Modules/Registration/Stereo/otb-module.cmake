@@ -4,20 +4,19 @@ elevation map construction are available.")
 
 otb_module(OTBStereo
   DEPENDS
-    OTBStatistics
+    OTBCommon
     OTBITK
     OTBITKPendingPatches
     OTBImageBase
-    OTBTransform
-    OTBCommon
     OTBInterpolation
     OTBOSSIMAdapters
     OTBObjectList
+    OTBStatistics
+    OTBTransform
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBImageIO
-    OTBImageManipulation
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
