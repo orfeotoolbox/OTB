@@ -10,7 +10,6 @@ otbGaborFilterGeneratorNew.cxx
 otbLocalHoughDraw.cxx
 otbAssociativeSymmetricalSum.cxx
 otbGaborFilterGenerator.cxx
-otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter.cxx
 otbPersistentVectorizationFilterNew.cxx
 otbLineCorrelationDetectorNew.cxx
 otbPersistentVectorizationFilter.cxx
@@ -130,20 +129,6 @@ otb_add_test(NAME bfTvGaborFilterGenerator COMMAND otbEdgeTestDriver
   0
   )
 
-otb_add_test(NAME bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter COMMAND otbEdgeTestDriver
-  --compare-image ${EPSILON_7}
-  ${TEMP}/bfTvCompareConvolutionOutput.tif
-  ${TEMP}/bfTvCompareOSConvolutionoutput.tif
-  otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter
-  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
-  ${TEMP}/bfTvCompareConvolutionOutput.tif
-  ${TEMP}/bfTvCompareOSConvolutionoutput.tif
-  64 64 #Radius
-  0.02 0.025 # a b
-  -45 # theta
-  0.0125 0.0125 #u0 v0
-  0
-  )
 
 otb_add_test(NAME bfTuPersistentVectorizationImageFilterNew COMMAND otbEdgeTestDriver
   otbPersistentVectorizationFilterNew

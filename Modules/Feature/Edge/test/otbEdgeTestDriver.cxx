@@ -10,7 +10,6 @@ void RegisterTests()
   REGISTER_TEST(otbLocalHoughDraw);
   REGISTER_TEST(otbAssociativeSymmetricalSum);
   REGISTER_TEST(otbGaborFilterGenerator);
-  REGISTER_TEST(otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter);
   REGISTER_TEST(otbPersistentVectorizationFilterNew);
   REGISTER_TEST(otbLineCorrelationDetectorNew);
   REGISTER_TEST(otbPersistentVectorizationFilter);

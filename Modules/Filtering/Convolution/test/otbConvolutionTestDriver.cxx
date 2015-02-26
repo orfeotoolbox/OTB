@@ -5,4 +5,5 @@ void RegisterTests()
   REGISTER_TEST(otbConvolutionImageFilterNew);
   REGISTER_TEST(otbOverlapSaveConvolutionImageFilterNew);
   REGISTER_TEST(otbOverlapSaveConvolutionImageFilter);
+  REGISTER_TEST(otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter);
 }
