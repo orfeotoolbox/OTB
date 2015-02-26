@@ -4,6 +4,7 @@ set(OTBSeamCarvingTests
 otbSeamCarvingTestDriver.cxx
 otbRemoveCarvingPathFilterNew.cxx
 otbImageToCarvingPathFilterNew.cxx
+otbAddCarvingPathFilterNew.cxx
 )
 
 add_executable(otbSeamCarvingTestDriver ${OTBSeamCarvingTests})
@@ -18,3 +19,5 @@ otb_add_test(NAME feTuRemoveCarvingPathFilterNew COMMAND otbSeamCarvingTestDrive
 otb_add_test(NAME feTuImageToCarvingPathFilterNew COMMAND otbSeamCarvingTestDriver
   otbImageToCarvingPathFilterNew)
 
+otb_add_test(NAME feTuAddCarvingPathFilterNew COMMAND otbPathTestDriver
+  otbAddCarvingPathFilterNew)

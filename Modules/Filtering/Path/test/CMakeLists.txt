@@ -19,7 +19,6 @@ otbImageToEdgePathFilterNew.cxx
 otbDrawPathListFilter.cxx
 otbDrawPathListFilterNew.cxx
 otbDrawPathFilter.cxx
-otbAddCarvingPathFilterNew.cxx
 otbOrientationPath.cxx
 otbOrientationPathNew.cxx
 otbDrawPathFilterNew.cxx
@@ -143,8 +142,6 @@ otb_add_test(NAME coTvDrawPatFilter COMMAND otbPathTestDriver
   ${TEMP}/coTvDrawPathFilterOutput.png
   )
 
-otb_add_test(NAME feTuAddCarvingPathFilterNew COMMAND otbPathTestDriver
-  otbAddCarvingPathFilterNew)
 
 otb_add_test(NAME feTuOrientationPath_090 COMMAND otbPathTestDriver
   otbOrientationPath 90.0)

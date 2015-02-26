@@ -18,7 +18,6 @@ void RegisterTests()
   REGISTER_TEST(otbDrawPathListFilter);
   REGISTER_TEST(otbDrawPathListFilterNew);
   REGISTER_TEST(otbDrawPathFilter);
-  REGISTER_TEST(otbAddCarvingPathFilterNew);
   REGISTER_TEST(otbOrientationPath);
   REGISTER_TEST(otbOrientationPathNew);
   REGISTER_TEST(otbDrawPathFilterNew);
