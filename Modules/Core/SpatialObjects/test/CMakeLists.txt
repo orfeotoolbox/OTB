@@ -2,10 +2,8 @@ otb_module_test()
 
 set(OTBSpatialObjectsTests
 otbSpatialObjectsTestDriver.cxx
-otbFillGapsFilter.cxx
 otbLineSpatialObjectListToPointSetFilterNew.cxx
 otbSpatialObjectToImageDrawingFilter.cxx
-otbFillGapsFilterNew.cxx
 otbDrawLineSpatialObject.cxx
 otbSpatialObjectToImageDrawingFilterNew.cxx
 otbLineSpatialObjectList.cxx
@@ -23,13 +21,6 @@ otb_module_target_label(otbSpatialObjectsTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME feTvFillGapsFilter COMMAND otbSpatialObjectsTestDriver
-  --compare-image ${EPSILON_8}
-  ${BASELINE}/feTvFillGapfilter.png
-  ${TEMP}/feTvFillGapfilter.png
-  otbFillGapsFilter
-  ${INPUTDATA}/ImageLine.bsq.hdr
-  ${TEMP}/feTvFillGapfilter.png)
 
 otb_add_test(NAME coTuLineSpatialObjectListToPointSetFilter COMMAND otbSpatialObjectsTestDriver
   otbLineSpatialObjectListToPointSetFilterNew)
@@ -44,8 +35,6 @@ otb_add_test(NAME bfTvSpatialObjectToImageDrawingFilterWithoutInputImage COMMAND
   50
   )
 
-otb_add_test(NAME feTuFillGapsFilterNew COMMAND otbSpatialObjectsTestDriver
-  otbFillGapsFilterNew)
 
 otb_add_test(NAME coTuDrawLineSpatialObject COMMAND otbSpatialObjectsTestDriver
   otbDrawLineSpatialObject

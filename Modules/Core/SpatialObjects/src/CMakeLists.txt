@@ -1,5 +1,4 @@
 set(OTBSpatialObjects_SRC
-  otbFillGapsFilter.cxx
   )
 
 add_library(OTBSpatialObjects ${OTBSpatialObjects_SRC})

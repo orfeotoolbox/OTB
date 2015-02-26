@@ -1,10 +1,8 @@
 #include "otbTestMain.h"
 void RegisterTests()
 {
-  REGISTER_TEST(otbFillGapsFilter);
   REGISTER_TEST(otbLineSpatialObjectListToPointSetFilterNew);
   REGISTER_TEST(otbSpatialObjectToImageDrawingFilter);
-  REGISTER_TEST(otbFillGapsFilterNew);
   REGISTER_TEST(otbDrawLineSpatialObject);
   REGISTER_TEST(otbSpatialObjectToImageDrawingFilterNew);
   REGISTER_TEST(otbLineSpatialObjectList);

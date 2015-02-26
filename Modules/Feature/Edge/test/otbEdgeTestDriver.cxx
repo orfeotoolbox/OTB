@@ -43,4 +43,6 @@ void RegisterTests()
   REGISTER_TEST(otbLineSegmentDetector_8b_16b_compare);
   REGISTER_TEST(otbLineCorrelationDetectorLinear);
   REGISTER_TEST(otbLineDetectorBaseNew);
+  REGISTER_TEST(otbFillGapsFilter);
+  REGISTER_TEST(otbFillGapsFilterNew);
 }
