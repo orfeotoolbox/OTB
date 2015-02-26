@@ -132,7 +132,7 @@ protected:
    * Initialize a range of vertex.
    * \param num The index of the last vertices to intialize.
    */
-  void Initialize(unsigned int num);
+  void InitializeGraph(unsigned int num);
 
 private:
 

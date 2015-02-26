@@ -77,6 +77,7 @@ public:
   typedef itk::Statistics::EuclideanDistanceMetric<PointType>    EuclideanDistanceMetricType;
 
   /** Connects the VectorDatas from which the localizations are going to be extracted. */
+  using Superclass::PushBackInput;
   void PushBackInput(const VectorDataType *);
   const VectorDataType * GetInput(unsigned int idx) const;
 

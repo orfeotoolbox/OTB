@@ -65,11 +65,11 @@ void QtWidgetSimpleProgressReport::SetApplication(Application::Pointer app)
 
 void
 QtWidgetSimpleProgressReport::ProcessEvent( itk::Object * itkNotUsed(caller),
-                                      const itk::EventObject & event )
+                                      const itk::EventObject & event2 )
 {
-  if( typeid( otb::Wrapper::AddProcessToWatchEvent ) == typeid( event ) )
+  if( typeid( otb::Wrapper::AddProcessToWatchEvent ) == typeid( event2 ) )
     {
-    const AddProcessToWatchEvent* eventToWatch = dynamic_cast< const  AddProcessToWatchEvent*> ( &event );
+    const AddProcessToWatchEvent* eventToWatch = dynamic_cast< const  AddProcessToWatchEvent*> ( &event2 );
 
     if(eventToWatch)
       {

@@ -75,8 +75,8 @@ public:
   
   /** Provide hist about the output container to deal with complex pixel
    *  type (Not used here) */ 
-  virtual void SetOutputImagePixelType( bool isComplexInternalPixelType, 
-                                        bool isVectorImage){}
+  virtual void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType), 
+                                        bool itkNotUsed(isVectorImage)){}
   
   /** Get number of available overviews in the jpeg2000 file
    *  ( if return = 0 => no overviews available because only one resolution

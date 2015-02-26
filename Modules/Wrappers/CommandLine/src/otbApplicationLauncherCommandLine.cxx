@@ -136,9 +136,9 @@ std::string PrepareExpressionFromXML(std::string filename)
       std::string type = GetChildNodeTextOf(n_Parameter, "type");
       if (type == "OutputImage")
         {
-        std::string type = GetChildNodeTextOf(n_Parameter, "pixtype");
+        std::string t = GetChildNodeTextOf(n_Parameter, "pixtype");
         expression.append(" ");
-        expression.append(type);
+        expression.append(t);
         }
       }
     }
@@ -224,8 +224,8 @@ std::vector<std::string> PrepareVectorExpressionFromXML(std::string filename)
       std::string type = GetChildNodeTextOf(n_Parameter, "type");
       if (type == "OutputImage")
         {
-        std::string type = GetChildNodeTextOf(n_Parameter, "pixtype");
-        expression.push_back(CleanWord(type));
+        std::string t = GetChildNodeTextOf(n_Parameter, "pixtype");
+        expression.push_back(CleanWord(t));
         }
       }
     }

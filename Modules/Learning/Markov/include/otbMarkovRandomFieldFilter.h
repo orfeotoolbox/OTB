@@ -257,12 +257,12 @@ public:
   /** Get the neighborhood radius */
   const NeighborhoodRadiusType GetNeighborhoodRadius() const
   {
-    NeighborhoodRadiusType m_NeighborhoodRadius;
+    NeighborhoodRadiusType neighborhoodRadius;
 
     for (int i = 0; i < InputImageDimension; ++i)
-      m_NeighborhoodRadius[i] = m_InputImageNeighborhoodRadius[i];
+      neighborhoodRadius[i] = m_InputImageNeighborhoodRadius[i];
 
-    return m_NeighborhoodRadius;
+    return neighborhoodRadius;
   }
 
   /** Set training image for the starting point. This is not compulsory:

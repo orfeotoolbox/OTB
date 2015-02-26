@@ -39,7 +39,7 @@ void
 RCC8Graph<TVertex>
 ::Build(void)
 {
-  this->Initialize(m_NumberOfVertices - 1);
+  this->InitializeGraph(m_NumberOfVertices - 1);
 }
 /**
  * Initialize a range of vertex.
@@ -48,7 +48,7 @@ RCC8Graph<TVertex>
 template <class TVertex>
 void
 RCC8Graph<TVertex>
-::Initialize(unsigned int num)
+::InitializeGraph(unsigned int num)
 {
   for (unsigned int i = boost::num_vertices(m_Graph); i <= num; ++i)
     {
@@ -69,7 +69,7 @@ RCC8Graph<TVertex>
 {
   if (index >= m_NumberOfVertices)
     {
-    this->Initialize(index);
+    this->InitializeGraph(index);
     m_NumberOfVertices = index + 1;
     }
   VertexDescriptorType v = *boost::vertices(m_Graph).first;

@@ -22,18 +22,18 @@ namespace otb
 {
 namespace Wrapper
 {
-QtApplication::QtApplication(int& argc, char** argv)
-  : QApplication(argc, argv)
+QtApplication::QtApplication(int& argc, char** argvv)
+  : QApplication(argc, argvv)
 {
 
 }
 
 bool
-QtApplication::notify(QObject *object, QEvent* event)
+QtApplication::notify(QObject *object, QEvent* ev)
   {
     try
       {
-      return QApplication::notify(object, event);
+      return QApplication::notify(object, ev);
       }
     catch (std::exception &ex)
       {

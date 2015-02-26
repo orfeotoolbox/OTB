@@ -147,9 +147,9 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
   while( it != glcVector.end())
     {
     double frequency = (*it).second / totalFrequency;
-    CooccurrenceIndexType index = (*it).first;
-    pixelMean += index[0] * frequency;
-    marginalSums[index[0]] += frequency;
+    CooccurrenceIndexType index2 = (*it).first;
+    pixelMean += index2[0] * frequency;
+    marginalSums[index2[0]] += frequency;
     ++it;
     }
 
@@ -184,8 +184,8 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
   while( constVectorIt != glcVector.end())
     {
     RelativeFrequencyType frequency = (*constVectorIt).second / totalFrequency;
-    CooccurrenceIndexType        index = (*constVectorIt).first;
-    pixelVariance += ( index[0] - pixelMean ) * ( index[0] - pixelMean ) * frequency;
+    CooccurrenceIndexType        index2 = (*constVectorIt).first;
+    pixelVariance += ( index2[0] - pixelMean ) * ( index2[0] - pixelMean ) * frequency;
     ++constVectorIt;
     }
 
@@ -202,16 +202,16 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
   constVectorIt = glcVector.begin();
   while( constVectorIt != glcVector.end())
     {
-    CooccurrenceIndexType index = (*constVectorIt).first;
+    CooccurrenceIndexType index2 = (*constVectorIt).first;
     RelativeFrequencyType frequency = (*constVectorIt).second / totalFrequency;
     textures[0] += frequency * frequency;
     textures[1] -= ( frequency > GetPixelValueTolerance() ) ? frequency *vcl_log(frequency) / log2:0;
-    textures[2] += ( ( index[0] - pixelMean ) * ( index[1] - pixelMean ) * frequency ) / pixelVarianceSquared;
-    textures[3] += frequency / ( 1.0 + ( index[0] - index[1] ) * ( index[0] - index[1] ) );
-    textures[4] += ( index[0] - index[1] ) * ( index[0] - index[1] ) * frequency;
-    textures[5] += vcl_pow( ( index[0] - pixelMean ) + ( index[1] - pixelMean ), 3 ) * frequency;
-    textures[6] += vcl_pow( ( index[0] - pixelMean ) + ( index[1] - pixelMean ), 4 ) * frequency;
-    textures[7] += index[0] * index[1] * frequency;
+    textures[2] += ( ( index2[0] - pixelMean ) * ( index2[1] - pixelMean ) * frequency ) / pixelVarianceSquared;
+    textures[3] += frequency / ( 1.0 + ( index2[0] - index2[1] ) * ( index2[0] - index2[1] ) );
+    textures[4] += ( index2[0] - index2[1] ) * ( index2[0] - index2[1] ) * frequency;
+    textures[5] += vcl_pow( ( index2[0] - pixelMean ) + ( index2[1] - pixelMean ), 3 ) * frequency;
+    textures[6] += vcl_pow( ( index2[0] - pixelMean ) + ( index2[1] - pixelMean ), 4 ) * frequency;
+    textures[7] += index2[0] * index2[1] * frequency;
     ++constVectorIt;
     }
   textures[7] = (fabs(marginalDevSquared) > 1E-8) ?  ( textures[7] - marginalMean * marginalMean )  / marginalDevSquared : 0;

@@ -65,6 +65,7 @@ public:
   virtual const LinesListType* GetInput(void);
 
   /** Set/Get the list of LineSpatialObject of this process object.  */
+  using Superclass::SetOutput;
   virtual void SetOutput(const PointSetType *pointSet);
   virtual PointSetType* GetOutput(void);
 

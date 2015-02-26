@@ -131,20 +131,20 @@ void QtWidgetInputVectorDataListParameter::DoCreateWidget()
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(fileLayout);
-  QScrollArea * scroll = new QScrollArea();
-  scroll->setWidget(mainGroup);
-  scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  scroll->setWidgetResizable(true);
+  QScrollArea * scroll2 = new QScrollArea();
+  scroll2->setWidget(mainGroup);
+  scroll2->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  scroll2->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+  scroll2->setWidgetResizable(true);
 
-  hLayout->addWidget(scroll);
+  hLayout->addWidget(scroll2);
   hLayout->addLayout(buttonLayout);
 
   this->setLayout(hLayout);
 
   m_FileLayout = fileLayout;
   m_HLayout = hLayout;
-  m_Scroll = scroll;
+  m_Scroll = scroll2;
 
 }
 

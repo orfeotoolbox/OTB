@@ -38,25 +38,25 @@ void QtWidgetFloatParameter::DoUpdateGUI()
   m_QDoubleSpinBox->setRange(m_FloatParam->GetMinimumValue(),
                              m_FloatParam->GetMaximumValue());
 
-  bool signalsBlocked = m_QDoubleSpinBox->blockSignals( true );
+  bool signalsBlocked2 = m_QDoubleSpinBox->blockSignals( true );
 
   if (m_FloatParam->HasValue())
     {
     m_QDoubleSpinBox->setValue(m_FloatParam->GetValue());
     }
-  m_QDoubleSpinBox->blockSignals( signalsBlocked );
+  m_QDoubleSpinBox->blockSignals( signalsBlocked2 );
 
-  QFont font = m_QDoubleSpinBox->font();
+  QFont f = m_QDoubleSpinBox->font();
   if (m_FloatParam->HasUserValue())
     {
-    font.setBold(true);
+    f.setBold(true);
     }
   else
     {
-    font.setBold(false);
+    f.setBold(false);
     }
 
-  m_QDoubleSpinBox->setFont(font);
+  m_QDoubleSpinBox->setFont(f);
 }
 
 void QtWidgetFloatParameter::DoCreateWidget()

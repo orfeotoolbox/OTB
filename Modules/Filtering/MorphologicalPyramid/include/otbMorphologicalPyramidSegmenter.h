@@ -129,6 +129,7 @@ protected:
   /**
    * Configure the output data.
    */
+  using Superclass::EnlargeOutputRequestedRegion;
   void EnlargeOutputRequestedRegion(void);
 
 private:

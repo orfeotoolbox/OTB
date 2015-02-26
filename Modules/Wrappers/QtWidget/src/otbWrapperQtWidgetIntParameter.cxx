@@ -63,13 +63,13 @@ void QtWidgetIntParameter::DoUpdateGUI()
   m_QSpinBox->setRange(m_IntParam->GetMinimumValue(),
                        m_IntParam->GetMaximumValue());
 
-  bool signalsBlocked = m_QSpinBox->blockSignals( true );
+  bool signalsBlocked2 = m_QSpinBox->blockSignals( true );
 
   if (m_IntParam->HasValue())
     {
     m_QSpinBox->setValue(m_IntParam->GetValue());
     }
-  m_QSpinBox->blockSignals( signalsBlocked );
+  m_QSpinBox->blockSignals( signalsBlocked2 );
 
   QFont font = m_QSpinBox->font();
   if (m_IntParam->HasUserValue())

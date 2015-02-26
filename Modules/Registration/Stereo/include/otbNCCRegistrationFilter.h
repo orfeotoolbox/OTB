@@ -141,6 +141,7 @@ protected:
   virtual void InitializeIteration();
 
   /** Apply update. */
+  using Superclass::ApplyUpdate;
   virtual void ApplyUpdate(TimeStepType dt);
 
   /** Update the Input requested region. */
