@@ -5,20 +5,16 @@ of an image.")
 
 otb_module(OTBMoments
   DEPENDS
-    OTBVectorDataBase
-    OTBLabelMap
-    OTBStatistics
-    OTBITK
-    OTBImageBase
-    OTBVectorDataManipulation
     OTBCommon
+    OTBITK
     OTBPath
 
   TEST_DEPENDS
-    OTBTestKernel
+    OTBImageBase
     OTBImageIO
     OTBImageManipulation
     OTBInterpolation
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

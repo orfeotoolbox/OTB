@@ -12,7 +12,6 @@ otb_module(OTBStatistics
     OTBITKPendingPatches
     OTBImageBase
     OTBImageManipulation
-    OTBLabelMap
     OTBObjectList
     OTBProjection
     OTBStreaming

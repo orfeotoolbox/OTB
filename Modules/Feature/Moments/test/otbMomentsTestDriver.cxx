@@ -14,28 +14,20 @@ void RegisterTests()
   REGISTER_TEST(otbRealMomentsImageFunctionNew);
   REGISTER_TEST(otbRealMomentsImageFunction);
   REGISTER_TEST(otbNormalizeAttributesLabelMapFilterNew);
-  REGISTER_TEST(otbNormalizeAttributesLabelMapFilter);
   REGISTER_TEST(otbComplexMomentsImageFunctionNew);
   REGISTER_TEST(otbComplexMomentsImageFunction);
   REGISTER_TEST(otbComplexMomentsImageFunctionScaleInvariant);
-  REGISTER_TEST(otbLabelMapToSampleListFilter);
   REGISTER_TEST(otbHuPathNew);
   REGISTER_TEST(otbMinMaxAttributesLabelMapFilterNew);
-  REGISTER_TEST(otbMinMaxAttributesLabelMapFilter);
-  REGISTER_TEST(otbShapeAttributesLabelMapFilterNew);
   REGISTER_TEST(otbFlusserPathNew);
   REGISTER_TEST(otbFlusserMomentsImageFunctionNew);
   REGISTER_TEST(otbFlusserMomentsImageFunction);
   REGISTER_TEST(otbFlusserMomentsImageFunctionScaleInvariant);
   REGISTER_TEST(otbFlusserMomentsImageFunctionRotationInvariant);
-  REGISTER_TEST(otbImageToLabelMapWithAttributesFilter);
-  REGISTER_TEST(otbImageToLabelMapWithAttributesFilterNew);
   REGISTER_TEST(otbHuPath);
   REGISTER_TEST(otbKMeansAttributesLabelMapFilterNew);
-  REGISTER_TEST(otbKMeansAttributesLabelMapFilter);
   REGISTER_TEST(otbFlusserPath);
   REGISTER_TEST(otbComplexMomentPath);
-  REGISTER_TEST(otbLabelMapWithClassLabelToLabeledSampleListFilter);
   REGISTER_TEST(otbRadiometricMomentsImageFilterNew);
   REGISTER_TEST(otbRadiometricMomentsImageFilter);
 }

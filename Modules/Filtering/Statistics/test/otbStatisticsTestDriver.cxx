@@ -50,6 +50,5 @@ void RegisterTests()
   REGISTER_TEST(otbListSampleGenerator);
   REGISTER_TEST(otbImaginaryImageToComplexImageFilterTest);
   REGISTER_TEST(otbBandsStatisticsAttributesLabelMapFilterNew);
-  REGISTER_TEST(otbBandsStatisticsAttributesLabelMapFilter);
   REGISTER_TEST(otbListSampleToHistogramListGenerator);
 }

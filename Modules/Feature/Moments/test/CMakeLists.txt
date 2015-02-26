@@ -8,21 +8,13 @@ otbMetaImageFunction.cxx
 otbComplexMomentPathNew.cxx
 otbHuMomentsImageFunction.cxx
 otbRealMomentsImageFunction.cxx
-otbNormalizeAttributesLabelMapFilter.cxx
 otbComplexMomentsImageFunction.cxx
-otbLabelMapToSampleListFilter.cxx
 otbHuPathNew.cxx
-otbMinMaxAttributesLabelMapFilter.cxx
-otbShapeAttributesLabelMapFilterNew.cxx
 otbFlusserPathNew.cxx
 otbFlusserMomentsImageFunction.cxx
-otbImageToLabelMapWithAttributesFilter.cxx
-otbImageToLabelMapWithAttributesFilterNew.cxx
 otbHuPath.cxx
-otbKMeansAttributesLabelMapFilter.cxx
 otbFlusserPath.cxx
 otbComplexMomentPath.cxx
-otbLabelMapWithClassLabelToLabeledSampleListFilter.cxx
 otbRadiometricMomentsImageFilter.cxx
 )
 
@@ -104,17 +96,7 @@ otb_add_test(NAME feTvRealMomentsImageFunction COMMAND otbMomentsTestDriver
   4
   ${TEMP}/feTvRealMomentsImageFunction.txt)
 
-otb_add_test(NAME obTuNormalizeAttributesLabelMapFilterNew COMMAND otbMomentsTestDriver
-  otbNormalizeAttributesLabelMapFilterNew)
 
-otb_add_test(NAME obTvNormalizeAttributesLabelMapFilter COMMAND otbMomentsTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/obTvNormalizeAttributesLabelMapFilter.txt
-  ${TEMP}/obTvNormalizeAttributesLabelMapFilter.txt
-  otbNormalizeAttributesLabelMapFilter
-  ${INPUTDATA}/maur.tif
-  ${INPUTDATA}/maur_labelled.tif
-  ${TEMP}/obTvNormalizeAttributesLabelMapFilter.txt)
 
 otb_add_test(NAME feTvComplexMomentsImageFunction COMMAND otbMomentsTestDriver
   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvComplexMomentsImageFunction.txt
@@ -137,30 +119,12 @@ otb_add_test(NAME feTvComplexMomentsImageFunctionScaleInvariant COMMAND otbMomen
   4
   )
 
-otb_add_test(NAME obTvLabelMapToSampleListFilter COMMAND otbMomentsTestDriver
-  otbLabelMapToSampleListFilter
-  ${OTB_DATA_ROOT}/Input/rcc8_mire1.png
-  SHAPE::Flusser01 SHAPE::Flusser02 SHAPE::Flusser03 SHAPE::Flusser04
-  SHAPE::Flusser05 SHAPE::Flusser06 SHAPE::Flusser07 SHAPE::Flusser08
-  SHAPE::Flusser09 SHAPE::Flusser10 SHAPE::Flusser11)
 
 otb_add_test(NAME feTuHuPathNew COMMAND otbMomentsTestDriver
   otbHuPathNew)
 
-otb_add_test(NAME obTuMinMaxAttributesLabelMapFilterNew COMMAND otbMomentsTestDriver
-  otbMinMaxAttributesLabelMapFilterNew)
 
-otb_add_test(NAME obTvMinMaxAttributesLabelMapFilter COMMAND otbMomentsTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/obTvMinMaxAttributesLabelMapFilter.txt
-  ${TEMP}/obTvMinMaxAttributesLabelMapFilter.txt
-  otbMinMaxAttributesLabelMapFilter
-  ${INPUTDATA}/maur.tif
-  ${INPUTDATA}/maur_labelled.tif
-  ${TEMP}/obTvMinMaxAttributesLabelMapFilter.txt)
 
-otb_add_test(NAME obTuShapeAttributesLabelMapFilterNew COMMAND otbMomentsTestDriver
-  otbShapeAttributesLabelMapFilterNew)
 
 otb_add_test(NAME feTuFlusserPathNew COMMAND otbMomentsTestDriver
   otbFlusserPathNew)
@@ -187,13 +151,7 @@ otb_add_test(NAME feTvFlusserMomentsImageFunctionRotationInvariant COMMAND otbMo
   90
   )
 
-otb_add_test(NAME obTvImageToLabelMapWithAttributesFilter COMMAND otbMomentsTestDriver
-  otbImageToLabelMapWithAttributesFilter
-  ${INPUTDATA}/maur.tif
-  ${INPUTDATA}/maur_labelled.tif)
 
-otb_add_test(NAME obTuImageToLabelMapWithAttributesFilterNew COMMAND otbMomentsTestDriver
-  otbImageToLabelMapWithAttributesFilterNew)
 
 otb_add_test(NAME feTvHuPath COMMAND otbMomentsTestDriver
   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feHuPath.txt
@@ -201,14 +159,7 @@ otb_add_test(NAME feTvHuPath COMMAND otbMomentsTestDriver
   otbHuPath
   ${TEMP}/feHuPath.txt)
 
-otb_add_test(NAME obTvKMeansAttributesLabelMapFilter COMMAND otbMomentsTestDriver
-  otbKMeansAttributesLabelMapFilter
-  ${INPUTDATA}/maur.tif
-  ${INPUTDATA}/maur_labelled.tif
-  ${TEMP}/obTvKMeansAttributesLabelMapFilter.txt)
 
-otb_add_test(NAME obTuKMeansAttributesLabelMapFilterNew COMMAND otbMomentsTestDriver
-  otbKMeansAttributesLabelMapFilterNew)
 
 otb_add_test(NAME feTvFlusserPath COMMAND otbMomentsTestDriver
   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feFlusserPath.txt
@@ -224,12 +175,6 @@ otb_add_test(NAME feTvComplexMomentPath COMMAND otbMomentsTestDriver
   1
   ${TEMP}/feComplexMomentPath.txt)
 
-otb_add_test(NAME obTvLabelMapWithClassLabelToLabeledSampleListFilter COMMAND otbMomentsTestDriver
-  otbLabelMapWithClassLabelToLabeledSampleListFilter
-  ${OTB_DATA_ROOT}/Input/rcc8_mire1.png
-  SHAPE::Flusser01  SHAPE::Flusser02  SHAPE::Flusser03 SHAPE::Flusser04
-  SHAPE::Flusser05  SHAPE::Flusser06  SHAPE::Flusser07 SHAPE::Flusser08
-  SHAPE::Flusser09 SHAPE::Flusser10  SHAPE::Flusser11)
 
 otb_add_test(NAME feTuRadiometricMomentsImageFilterNew COMMAND otbMomentsTestDriver
   otbRadiometricMomentsImageFilterNew)

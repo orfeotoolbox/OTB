@@ -5,17 +5,18 @@ level).")
 
 otb_module(OTBLabelMap
   DEPENDS
-    OTBVectorDataBase
     OTBCommon
     OTBITK
+    OTBImageBase
+    OTBMoments
+    OTBVectorDataBase
+    OTBVectorDataManipulation
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBImageIO
     OTBProjection
+    OTBTestKernel
     OTBVectorDataIO
-    OTBVectorDataManipulation
-    OTBImageBase
 
   DESCRIPTION
     "${DOCUMENTATION}"

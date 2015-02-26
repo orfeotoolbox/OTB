@@ -40,7 +40,6 @@ otbStreamingStatisticsVectorImageFilter.cxx
 otbStreamingMinMaxVectorImageFilter.cxx
 otbListSampleGeneratorTest.cxx
 otbImaginaryImageToComplexImageFilterTest.cxx
-otbBandsStatisticsAttributesLabelMapFilter.cxx
 otbListSampleToHistogramListGenerator.cxx
 )
 
@@ -516,14 +515,7 @@ otb_add_test(NAME bfTvImaginaryImageToComplexImageFilterTest COMMAND otbStatisti
   ${INPUTDATA}/GomaAvant.png
   )
 
-otb_add_test(NAME obTuBandsStatisticsAttributesLabelMapFilterNew COMMAND otbStatisticsTestDriver
-  otbBandsStatisticsAttributesLabelMapFilterNew)
 
-otb_add_test(NAME obTvBandsStatisticsAttributesLabelMapFilter COMMAND otbStatisticsTestDriver
-  otbBandsStatisticsAttributesLabelMapFilter
-  ${INPUTDATA}/maur.tif
-  ${INPUTDATA}/maur_labelled.tif
-  ${TEMP}/obTvBandsStatisticsAttributesLabelMapFilter.txt)
 
 otb_add_test(NAME bfTvListSampleToHistogramListGenerator COMMAND otbStatisticsTestDriver
   --compare-ascii ${NOTOL}

@@ -3,23 +3,21 @@ Component algorithm (segmentation).")
 
 otb_module(OTBCCOBIA
   DEPENDS
-    OTBConversion
-    OTBStatistics
-    OTBProjection
-    OTBMoments
-    OTBLabelMap
-    OTBStreaming
     OTBCommon
-    OTBMathParser
+    OTBConversion
     OTBITK
+    OTBLabelMap
+    OTBMathParser
+    OTBProjection
+    OTBStreaming
 
   TEST_DEPENDS
-    OTBVectorDataBase
-    OTBTestKernel
-    OTBImageIO
-    OTBVectorDataIO
-    OTBSmoothing
     OTBImageBase
+    OTBImageIO
+    OTBSmoothing
+    OTBTestKernel
+    OTBVectorDataBase
+    OTBVectorDataIO
 
   DESCRIPTION
     "${DOCUMENTATION}"
