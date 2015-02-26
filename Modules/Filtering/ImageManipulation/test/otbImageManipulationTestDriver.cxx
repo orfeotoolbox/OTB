@@ -38,7 +38,6 @@ void RegisterTests()
   REGISTER_TEST(otbMatrixImageFilterTest);
   REGISTER_TEST(otbMatrixTransposeMatrixImageFilter);
   REGISTER_TEST(otbPerBandVectorImageFilterNew);
-  REGISTER_TEST(otbInverseLogPolarTransformResample);
   REGISTER_TEST(otbUnaryFunctorNeighborhoodImageFilter);
   REGISTER_TEST(otbStreamingResampleImageFilterNew);
   REGISTER_TEST(otbStreamingInnerProductVectorImageFilter);
@@ -61,8 +60,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorRescaleIntensityImageFilter);
   REGISTER_TEST(otbLog10ThresholdedImageFilterTest);
   REGISTER_TEST(otbChangeLabelImageFilterNew);
-  REGISTER_TEST(otbInverseLogPolarTransformNew);
-  REGISTER_TEST(otbStreamingResampleImageFilterWithAffineTransform);
   REGISTER_TEST(otbMatrixTransposeMatrixImageFilterNew);
   REGISTER_TEST(otbExtractROIResample);
   REGISTER_TEST(otbLocalGradientVectorImageFilterNewTest);
@@ -86,7 +83,6 @@ void RegisterTests()
   REGISTER_TEST(otbSpectralAngleDistanceImageFilterNew);
   REGISTER_TEST(otbUnaryImageFunctorWithVectorImageFilterNew);
   REGISTER_TEST(otbBinaryImageToDensityImageFilter);
-  REGISTER_TEST(otbInverseLogPolarTransform);
   REGISTER_TEST(otbSpectralAngleDistanceImageFilter);
   REGISTER_TEST(otbFunctionWithNeighborhoodToImageFilterNew);
   REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValue);

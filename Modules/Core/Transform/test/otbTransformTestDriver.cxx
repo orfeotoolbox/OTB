@@ -21,4 +21,8 @@ void RegisterTests()
   REGISTER_TEST(otbStreamingWarpImageFilter);
   REGISTER_TEST(otbSensorModelsNew);
   REGISTER_TEST(otbGenericMapProjectionNew);
+  REGISTER_TEST(otbInverseLogPolarTransform);
+  REGISTER_TEST(otbInverseLogPolarTransformNew);
+  REGISTER_TEST(otbInverseLogPolarTransformResample);
+  REGISTER_TEST(otbStreamingResampleImageFilterWithAffineTransform);
 }

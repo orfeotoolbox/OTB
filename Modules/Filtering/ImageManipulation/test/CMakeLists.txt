@@ -34,7 +34,6 @@ otbTileImageFilter.cxx
 otbMatrixImageFilterTest.cxx
 otbMatrixTransposeMatrixImageFilter.cxx
 otbPerBandVectorImageFilterNew.cxx
-otbInverseLogPolarTransformResample.cxx
 otbUnaryFunctorNeighborhoodImageFilter.cxx
 otbStreamingResampleImageFilterNew.cxx
 otbStreamingInnerProductVectorImageFilter.cxx
@@ -50,8 +49,6 @@ otbStreamingShrinkImageFilterNew.cxx
 otbVectorRescaleIntensityImageFilter.cxx
 otbLog10ThresholdedImageFilterTest.cxx
 otbChangeLabelImageFilterNew.cxx
-otbInverseLogPolarTransformNew.cxx
-otbStreamingResampleImageFilterWithAffineTransform.cxx
 otbMatrixTransposeMatrixImageFilterNew.cxx
 otbExtractROIResample.cxx
 otbLocalGradientVectorImageFilter.cxx
@@ -72,7 +69,6 @@ otbVectorRescaleIntensityImageFilterNew.cxx
 otbSpectralAngleDistanceImageFilterNew.cxx
 otbUnaryImageFunctorWithVectorImageFilterNew.cxx
 otbBinaryImageToDensityImageFilter.cxx
-otbInverseLogPolarTransform.cxx
 otbSpectralAngleDistanceImageFilter.cxx
 otbFunctionWithNeighborhoodToImageFilterNew.cxx
 otbEuclideanDistanceMetricWithMissingValue.cxx
@@ -398,13 +394,6 @@ otb_add_test(NAME bfTvMatrixTransposeMatrixImageFilter COMMAND otbImageManipulat
 otb_add_test(NAME bfTuPerBandVectorImageFilterNew COMMAND otbImageManipulationTestDriver
   otbPerBandVectorImageFilterNew)
 
-otb_add_test(NAME bfTvInverseLogPolarTransformResample COMMAND otbImageManipulationTestDriver
-  --compare-image ${NOTOL}  ${BASELINE}/bfInverseLogPolarTransformResampleOutput.hdr
-  ${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
-  otbInverseLogPolarTransformResample
-  ${BASELINE}/bfLogPolarTransformResampleOutput.hdr
-  ${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
-  )
 
 otb_add_test(NAME coTvUnaryFunctorNeighborhoodImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
@@ -527,19 +516,8 @@ otb_add_test(NAME bfTuChangeLabelImageFilterNew COMMAND otbImageManipulationTest
   otbChangeLabelImageFilterNew
   )
 
-otb_add_test(NAME bfTuInverseLogPolarTransformNew COMMAND otbImageManipulationTestDriver
-  otbInverseLogPolarTransformNew)
 
-otb_add_test(NAME bfTvStreamingResampleImageFilterWithAffineTransform COMMAND otbImageManipulationTestDriver
-  otbStreamingResampleImageFilterWithAffineTransform
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  500
-  ${TEMP}/bfTvotbStreamingResampledImageWithAffineTransform.tif
-  )
 
-otb_add_test(NAME bfTuStreamingResampleImageFilterWithAffineTransformNew COMMAND otbImageManipulationTestDriver
-  otbStreamingResampleImageFilterWithAffineTransform
-  )
 
 otb_add_test(NAME bfTuMatrixTransposeMatrixImageFilterNew COMMAND otbImageManipulationTestDriver
   otbMatrixTransposeMatrixImageFilterNew)
@@ -699,15 +677,6 @@ otb_add_test(NAME bfTvBinaryImageToDensityImageFilter COMMAND otbImageManipulati
   2 # radius
   )
 
-otb_add_test(NAME bfTvInverseLogPolarTransform COMMAND otbImageManipulationTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/bfInverseLogPolarTransformResults.txt
-  ${TEMP}/bfInverseLogPolarTransformResults.txt
-  otbInverseLogPolarTransform
-  1. 1.
-  ${TEMP}/bfInverseLogPolarTransformResults.txt
-  6 0 0 10 20 45 60 3.14 3.14 1 0 0 1
-  )
 
 otb_add_test(NAME bfTvSpectralAngleDistanceImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}

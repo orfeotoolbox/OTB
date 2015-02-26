@@ -5,19 +5,20 @@ from any map projection or sensor model to any map projection or sensor model.")
 
 otb_module(OTBTransform
   DEPENDS
+    OTBBoost
+    OTBCommon
+    OTBGDAL
     OTBITK
     OTBITKPendingPatches
-    OTBOSSIMAdapters
     OTBInterpolation
-    OTBBoost
-    OTBGDAL
-    OTBCommon
+    OTBOSSIMAdapters
 
   TEST_DEPENDS
-    OTBTestKernel
-    OTBImageIO
-    OTBOssim
     OTBImageBase
+    OTBImageIO
+    OTBImageManipulation
+    OTBOssim
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
