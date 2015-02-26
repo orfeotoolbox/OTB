@@ -32,7 +32,6 @@ otbPhysicalToRPCSensorModelImageFilter.cxx
 otbGeometriesProjectionFilterFromGeoToMap.cxx
 otbVectorDataProjectionFilterFromMapToImage.cxx
 otbGenericRSTransformFromImage.cxx
-otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.cxx
 otbCompositeTransform.cxx
 otbLeastSquareAffineTransformEstimator.cxx
 otbSpectralAngleDataNodeFeatureFunction.cxx
@@ -561,31 +560,8 @@ otb_add_test(NAME prTvGenericRSTransformQuickbirdToulouseGeodesicPointChecking C
   23 # Tolerance in meters according to DigitalGlobe specification
   )
 
-otb_add_test(NAME bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_Polygon COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
-  ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
-  otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_BUILDINGS.shp
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-  ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
-  0 )
 
-otb_add_test(NAME bfTuRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionNew COMMAND otbProjectionTestDriver
-  otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionNew
-  )
 
-otb_add_test(NAME bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_Line COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Line.shp
-  ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Line.shp
-  otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-  ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Line.shp
-  0 )
 
 otb_add_test(NAME prTvCompositeTransform COMMAND otbProjectionTestDriver
   --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvCompositeTransform.txt
