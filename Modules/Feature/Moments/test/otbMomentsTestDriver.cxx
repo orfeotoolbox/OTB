@@ -11,7 +11,6 @@ void RegisterTests()
   REGISTER_TEST(otbHuMomentsImageFunctionRotationInvariant);
   REGISTER_TEST(otbRealMomentsImageFunctionNew);
   REGISTER_TEST(otbRealMomentsImageFunction);
-  REGISTER_TEST(otbNormalizeAttributesLabelMapFilterNew);
   REGISTER_TEST(otbComplexMomentsImageFunction);
   REGISTER_TEST(otbComplexMomentsImageFunctionScaleInvariant);
   REGISTER_TEST(otbHuPathNew);
