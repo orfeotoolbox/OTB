@@ -13,7 +13,6 @@ void RegisterTests()
   REGISTER_TEST(otbUnaryFunctorNeighborhoodImageFilterNew);
   REGISTER_TEST(otbStreamingShrinkImageFilter);
   REGISTER_TEST(otbUnaryFunctorWithIndexImageFilterNew);
-  REGISTER_TEST(otbProlateInterpolateImageFunction);
   REGISTER_TEST(otbUnaryFunctorImageFilterNew);
   REGISTER_TEST(otbUnaryImageFunctorWithVectorImageFilter);
   REGISTER_TEST(otbImageToVectorImageCastFilterNew);
@@ -66,7 +65,6 @@ void RegisterTests()
   REGISTER_TEST(otbLocalGradientVectorImageFilterTest);
   REGISTER_TEST(otbBinaryImageMinimalBoundingRegionCalculator);
   REGISTER_TEST(otbPerBandVectorImageFilterWithSobelFilter);
-  REGISTER_TEST(otbProlateValidationTest);
   REGISTER_TEST(otbBinaryImageDensityFunction);
   REGISTER_TEST(otbVectorImageToAmplitudeImageFilterNew);
   REGISTER_TEST(otbThresholdVectorImageFilterNew);

@@ -12,7 +12,6 @@ otbSqrtSpectralAngleImageFilter.cxx
 otbUnaryFunctorNeighborhoodImageFilterNew.cxx
 otbStreamingShrinkImageFilter.cxx
 otbUnaryFunctorWithIndexImageFilterNew.cxx
-otbProlateInterpolateImageFunction.cxx
 otbUnaryFunctorImageFilterNew.cxx
 otbUnaryImageFunctorWithVectorImageFilter.cxx
 otbImageToVectorImageCastFilterNew.cxx
@@ -53,7 +52,6 @@ otbExtractROIResample.cxx
 otbLocalGradientVectorImageFilter.cxx
 otbBinaryImageMinimalBoundingRegionCalculator.cxx
 otbPerBandVectorImageFilterWithSobelFilter.cxx
-otbProlateValidationTest.cxx
 otbBinaryImageDensityFunction.cxx
 otbVectorImageToAmplitudeImageFilterNew.cxx
 otbThresholdVectorImageFilter.cxx
@@ -159,26 +157,6 @@ otb_add_test(NAME coTuUnaryFunctorWithIndexImageFilterNew COMMAND otbImageManipu
   otbUnaryFunctorWithIndexImageFilterNew
   )
 
-otb_add_test(NAME bfTvProlateInterpolateImageFunction COMMAND otbImageManipulationTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/bfProlateInterpolateImageFunctionOutput.txt
-  ${TEMP}/bfProlateInterpolateImageFunctionOutput.txt
-  otbProlateInterpolateImageFunction
-  ${INPUTDATA}/poupees.tif
-  ${TEMP}/bfProlateInterpolateImageFunctionOutput.txt
-  ${TEMP}/bfProlateInterpolateImageFunctionCosOutput.tif
-  ${TEMP}/bfProlateInterpolateImageFunctionITKCosOutput.tif
-  ${TEMP}/bfProlateInterpolateImageFunctionProOutput.tif
-  3 # radius
-  0.5 0.5
-  127.33 44.9
-  259.67 21.43
-  12.13 61.79
-  89.5 11
-  128 128
-  127.255 128.73
-  -1 -1
-  )
 
 otb_add_test(NAME bfTuUnaryFunctorImageFilterNew COMMAND otbImageManipulationTestDriver
   otbUnaryFunctorImageFilterNew)
@@ -565,18 +543,6 @@ otb_add_test(NAME bfTvPerBandVectorImageFilterWithSobelFilter COMMAND otbImageMa
   ${TEMP}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.hdr
   )
 
-otb_add_test(NAME bfTvProlateValidationTest COMMAND otbImageManipulationTestDriver
-  --compare-image ${EPSILON_7}
-  ${BASELINE}/bfTvProlateValidationTest.tif
-  ${TEMP}/bfTvProlateValidationTest.tif
-  otbProlateValidationTest
-  ${INPUTDATA}/poupees.tif
-  ${TEMP}/bfTvProlateValidationTest.tif
-  3 # radius
-  0.5 # factor
-  512 # size
-  ${TEMP}/defaultprolatevalidationtest.tif # nearest neighborhood interpolator : NOT GENERATE IN THE TEST
-  )
 
 otb_add_test(NAME bfTvBinaryImageDensityFunction COMMAND otbImageManipulationTestDriver
   --compare-ascii ${NOTOL}

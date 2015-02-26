@@ -23,6 +23,8 @@ otbWindowedSincInterpolateImageGaussianFunctionNew.cxx
 otbWindowedSincInterpolateImageHammingFunctionNew.cxx
 otbStreamingTraits.cxx
 otbBCOInterpolateImageFunction.cxx
+otbProlateInterpolateImageFunction.cxx
+otbProlateValidationTest.cxx
 )
 
 add_executable(otbInterpolationTestDriver ${OTBInterpolationTests})
@@ -280,4 +282,36 @@ otb_add_test(NAME bfTvBCOInterpolateImageFunction COMMAND otbImageManipulationTe
   128 128
   127.255 128.73
   -1 -1
+  )
+otb_add_test(NAME bfTvProlateInterpolateImageFunction COMMAND otbImageManipulationTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/bfProlateInterpolateImageFunctionOutput.txt
+  ${TEMP}/bfProlateInterpolateImageFunctionOutput.txt
+  otbProlateInterpolateImageFunction
+  ${INPUTDATA}/poupees.tif
+  ${TEMP}/bfProlateInterpolateImageFunctionOutput.txt
+  ${TEMP}/bfProlateInterpolateImageFunctionCosOutput.tif
+  ${TEMP}/bfProlateInterpolateImageFunctionITKCosOutput.tif
+  ${TEMP}/bfProlateInterpolateImageFunctionProOutput.tif
+  3 # radius
+  0.5 0.5
+  127.33 44.9
+  259.67 21.43
+  12.13 61.79
+  89.5 11
+  128 128
+  127.255 128.73
+  -1 -1
+  )
+otb_add_test(NAME bfTvProlateValidationTest COMMAND otbImageManipulationTestDriver
+  --compare-image ${EPSILON_7}
+  ${BASELINE}/bfTvProlateValidationTest.tif
+  ${TEMP}/bfTvProlateValidationTest.tif
+  otbProlateValidationTest
+  ${INPUTDATA}/poupees.tif
+  ${TEMP}/bfTvProlateValidationTest.tif
+  3 # radius
+  0.5 # factor
+  512 # size
+  ${TEMP}/defaultprolatevalidationtest.tif # nearest neighborhood interpolator : NOT GENERATE IN THE TEST
   )
