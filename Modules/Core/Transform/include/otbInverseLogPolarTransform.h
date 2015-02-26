@@ -38,7 +38,7 @@ namespace otb
  * \sa LogPolarTransform
  * \ingroup  Transform
  *
- * \ingroup OTBImageManipulation
+ * \ingroup OTBTransform
  */
 
 template <class TScalarType>

@@ -32,7 +32,7 @@ namespace Functor
  *
  * \sa otbSavitzkyGolayInterpolationFunctor
  *
- * \ingroup OTBSmoothing
+ * \ingroup OTBTimeSeries
  */
 template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSeries>
 class EnvelopeSavitzkyGolayInterpolationFunctor

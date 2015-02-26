@@ -27,7 +27,7 @@ namespace otb
 /** \class FillGapsFilter
  * \brief To be documented
  *
- * \ingroup OTBSpatialObjects
+ * \ingroup OTBEdge
  */
 class ITK_EXPORT FillGapsFilter : public itk::ProcessObject
 {

@@ -38,7 +38,7 @@ namespace Functor
  *  templated by the type of inputs images and output metric image,
  *  and is using two neighborhood iterators as inputs.
  *
- * \ingroup OTBStereo
+ * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class TOutputMetricImage>
 ITK_EXPORT class SSDBlockMatching
@@ -72,7 +72,7 @@ public:
  *  templated by the type of inputs images and output metric image,
  *  and is using two neighborhood iterators as inputs.
  *
- * \ingroup OTBStereo
+ * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class TOutputMetricImage>
 ITK_EXPORT class SSDDivMeanBlockMatching
@@ -117,7 +117,7 @@ public:
  *  templated by the type of inputs images and output metric image,
  *  and is using two neighborhood iterators as inputs.
  *
- * \ingroup OTBStereo
+ * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class TOutputMetricImage>
 ITK_EXPORT class NCCBlockMatching
@@ -187,7 +187,7 @@ public:
  *  templated by the type of inputs images and output metric image,
  *  and is using two neighborhood iterators as inputs.
  *
- * \ingroup OTBStereo
+ * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class TOutputMetricImage>
 ITK_EXPORT class LPBlockMatching
@@ -289,7 +289,7 @@ private:
  *  \ingroup Threaded
  *
  *
- * \ingroup OTBStereo
+ * \ingroup OTBDisparityMap
  */
 
 template <class TInputImage, class TOutputMetricImage, class TOutputDisparityImage = TOutputMetricImage, class TMaskImage = otb::Image<unsigned char>,

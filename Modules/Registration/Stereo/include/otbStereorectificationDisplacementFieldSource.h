@@ -81,7 +81,7 @@ namespace otb
  *  \sa StreamingWarpImageFilter
  *  \sa StereoSensorModelToElevationMapFilter
  *
- * \ingroup OTBDisplacementField
+ * \ingroup OTBStereo
  */
 template <class TInputImage, class TOutputImage >
 class ITK_EXPORT StereorectificationDisplacementFieldSource

@@ -39,7 +39,7 @@ namespace Functor
 *
 *   \sa ShapeAttributesLabelMapFilter
  *
- * \ingroup OTBMoments
+ * \ingroup OTBLabelMap
 */
 template <class TLabelObject, class TLabelImage>
 class ShapeAttributesLabelObjectFunctor
@@ -199,7 +199,7 @@ private:
  *
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  *
- * \ingroup OTBMoments
+ * \ingroup OTBLabelMap
  */
 template<class TImage,
     class TLabelImage = Image<typename TImage::PixelType,

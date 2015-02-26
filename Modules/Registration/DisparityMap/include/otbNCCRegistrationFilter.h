@@ -63,7 +63,7 @@ namespace otb
  *
  *
  *
- * \ingroup OTBStereo
+ * \ingroup OTBDisparityMap
  */
 template<class TFixedImage, class TMovingImage, class TDisplacementField>
 class ITK_EXPORT NCCRegistrationFilter :

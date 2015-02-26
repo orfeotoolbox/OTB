@@ -19,6 +19,8 @@ struct svm_parameter;
 
 /** \class GenericKernelFunctorBase
  * \brief Undocumented
+ *
+ * \ingroup OTBLibSVM
  */
 class GenericKernelFunctorBase
 {
@@ -99,6 +101,8 @@ private:
 
 /** \class ComposedKernelFunctor
  * \brief Undocumented
+ *
+ * \ingroup OTBLibSVM
  */
 class ComposedKernelFunctor: public GenericKernelFunctorBase
 {

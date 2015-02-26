@@ -42,7 +42,7 @@ namespace Functor
 *   \sa BandsStatisticsAttributesLabelMapFilter
 *   \sa StatisticsAttributesLabelObjectFunctor
  *
- * \ingroup OTBStatistics
+ * \ingroup OTBLabelMap
 */
 template <class TLabelObject, class TFeatureImage>
 class BandStatsAttributesLabelObjectFunctor
@@ -130,7 +130,7 @@ private:
  *
  * \ingroup ImageEnhancement MathematicalMorphologyImageFilters
  *
- * \ingroup OTBStatistics
+ * \ingroup OTBLabelMap
  */
 template<class TImage, class TFeatureImage>
 class ITK_EXPORT BandsStatisticsAttributesLabelMapFilter

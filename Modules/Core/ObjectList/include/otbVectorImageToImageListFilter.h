@@ -35,7 +35,7 @@ namespace otb
  *
  * \ingroup Streamed
  *
- * \ingroup OTBImageManipulation
+ * \ingroup OTBObjectList
  */
 template <class TVectorImageType, class TImageList>
 class ITK_EXPORT VectorImageToImageListFilter

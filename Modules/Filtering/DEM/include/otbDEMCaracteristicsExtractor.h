@@ -49,7 +49,7 @@ namespace otb
    * \ingroup DEMToImageGenerator
    * \ingroup Radiometry
  *
- * \ingroup OTBStatistics
+ * \ingroup OTBDEM
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT DEMCaracteristicsExtractor :

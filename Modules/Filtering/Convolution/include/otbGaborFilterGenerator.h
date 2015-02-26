@@ -65,7 +65,7 @@ namespace otb
  * - \f$ \phi   \f$ : Phase of the sinusoidal carrier (GetPhi()/SetPhi())
  *
  *
- * \ingroup OTBEdge
+ * \ingroup OTBConvolution
  */
 
 template <class TPrecision>

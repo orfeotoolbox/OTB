@@ -36,7 +36,6 @@ class QtWidgetParameterBase;
  *
  * \ingroup OTBQtWidget
  *
- * \ingroup OTBQtWidget
  */
 class ITK_ABI_EXPORT QtWidgetParameterFactory : public itk::Object
 {

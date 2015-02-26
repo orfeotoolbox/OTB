@@ -28,7 +28,7 @@ namespace otb
 /** \class NormalBayesMachineLearningModelFactory
  * \brief Creation d'un instance d'un objet SVMMachineLearningModel utilisant les object factory.
  *
- * \ingroup OTBOpenCVAdapters
+ * \ingroup OTBSupervised
  */
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT NormalBayesMachineLearningModelFactory : public itk::ObjectFactoryBase

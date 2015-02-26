@@ -48,7 +48,7 @@ namespace otb
  *
  * \sa VectorDataExtractROI
  *
- * \ingroup OTBVectorDataBase
+ * \ingroup OTBImageBase
  */
 
 template <class TType>

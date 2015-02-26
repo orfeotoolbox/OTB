@@ -42,7 +42,7 @@ namespace otb
  * \sa itk::NCCRegistrationFunction
  * \ingroup FiniteDifferenceFunctions
  *
- * \ingroup OTBStereo
+ * \ingroup OTBDisparityMap
  */
 template<class TFixedImage, class TMovingImage, class TDisplacementField>
 class ITK_EXPORT NCCRegistrationFunction :

@@ -46,7 +46,7 @@ namespace Statistics {
  *
  * \sa EuclideanDistanceMetricWithMissingValuePow2
  *
- * \ingroup OTBImageBase
+ * \ingroup OTBImageManipulation
  */
 template<class TVector>
 class ITK_EXPORT FlexibleDistanceWithMissingValue :

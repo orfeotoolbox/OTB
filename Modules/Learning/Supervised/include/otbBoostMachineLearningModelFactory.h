@@ -28,7 +28,7 @@ namespace otb
 /** \class BoostMachineLearningModelFactory
  * \brief Creation d'un instance d'un objet SVMMachineLearningModel utilisant les object factory.
  *
- * \ingroup OTBOpenCVAdapters
+ * \ingroup OTBSupervised
  */
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT BoostMachineLearningModelFactory : public itk::ObjectFactoryBase

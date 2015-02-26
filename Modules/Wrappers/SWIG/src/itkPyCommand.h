@@ -38,6 +38,8 @@ namespace itk
  * This is analogous to itk::TclCommand, but then a tad more flexible.; )
  *
  * This class was contributed by Charl P. Botha <cpbotha |AT| ieee.org>
+ *
+ * \ingroup OTBSWIG
  */
 class PyCommand : public Command
 {

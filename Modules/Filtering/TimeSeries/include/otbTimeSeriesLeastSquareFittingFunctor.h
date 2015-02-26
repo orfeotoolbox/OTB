@@ -50,7 +50,7 @@ namespace Functor
   *
   *
  *
- * \ingroup OTBSmoothing
+ * \ingroup OTBTimeSeries
   */
 template <class TSeriesType, class TTimeFunction, class TDateType = TSeriesType, class TWeightType = TSeriesType>
 class TimeSeriesLeastSquareFittingFunctor
