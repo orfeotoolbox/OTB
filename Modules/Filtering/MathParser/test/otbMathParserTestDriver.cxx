@@ -2,7 +2,6 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbParserXTestNew);
-  REGISTER_TEST(otbParserXTest);
   REGISTER_TEST(otbMaskMuParserFilterNew);
   REGISTER_TEST(otbMaskMuParserFilterTest);
   REGISTER_TEST(otbParserConditionDataNodeFeatureFunctionNew);
@@ -12,7 +11,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageListToSingleImageFilterNew);
   REGISTER_TEST(otbImageListToSingleImageFilter);
   REGISTER_TEST(otbBandMathXImageFilterNew);
-  REGISTER_TEST(otbBandMathXImageFilter);
   REGISTER_TEST(otbBandMathXImageFilterConv);
   REGISTER_TEST(otbBandMathXImageFilterTxt);
   REGISTER_TEST(otbBandMathXImageFilterWithIdx);

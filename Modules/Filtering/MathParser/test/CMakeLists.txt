@@ -2,13 +2,11 @@ otb_module_test()
 
 set(OTBMathParserTests
 otbMathParserTestDriver.cxx
-otbParserXTest.cxx
 otbMaskMuParserFilterNew.cxx
 otbMaskMuParserFilterTest.cxx
 otbParserConditionDataNodeFeatureFunction.cxx
 otbParserTest.cxx
 otbImageListToSingleImageFilterTest.cxx
-otbBandMathXImageFilter.cxx
 otbBandMathImageFilter.cxx
 )
 
@@ -18,13 +16,7 @@ otb_module_target_label(otbMathParserTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME coTvParserX COMMAND otbMathParserTestDriver
-  otbParserXTest
-  )
 
-otb_add_test(NAME coTuParserX COMMAND otbMathParserTestDriver
-  otbParserXTestNew
-  )
 
 otb_add_test(NAME bfTuMaskMuParserFilterNew COMMAND otbMathParserTestDriver
   otbMaskMuParserFilterNew
@@ -86,32 +78,10 @@ otb_add_test(NAME bfTvImageListToSingleImageFilter COMMAND otbMathParserTestDriv
   ${TEMP}/bfTvImageListToSingleImageFilterOut.tif
   )
 
-otb_add_test(NAME bfTuBandMathXImageFilterNew COMMAND otbMathParserTestDriver
-  otbBandMathXImageFilterNew)
 
-otb_add_test(NAME bfTvBandMathXImageFilterConv COMMAND otbMathParserTestDriver
-  otbBandMathXImageFilterConv
-  ${BASELINE_FILES}/bfTvExportBandMathX.txt
-  ${TEMP}/bfTvExportBandMathXOut.txt
-  )
 
-otb_add_test(NAME bfTvBandMathXImageFilter COMMAND otbMathParserTestDriver
-  otbBandMathXImageFilter)
 
-otb_add_test(NAME bfTvBandMathXImageFilterWithIdx COMMAND otbMathParserTestDriver
-  otbBandMathXImageFilterWithIdx
-  ${TEMP}/bfTvBandMathImageFilterWithIdx1.tif
-  ${TEMP}/bfTvBandMathImageFilterWithIdx2.tif
-  )
 
-otb_add_test(NAME bfTvBandMathXImageFilterTxt COMMAND otbMathParserTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/bfTvExportBandMathX.txt
-  ${TEMP}/bfTvExportBandMathXOut.txt
-  otbBandMathXImageFilterTxt
-  ${BASELINE_FILES}/bfTvExportBandMathX.txt
-  ${TEMP}/bfTvExportBandMathXOut.txt
-  )
 
 otb_add_test(NAME bfTvBandMathImageFilterWithIdx COMMAND otbMathParserTestDriver
   otbBandMathImageFilterWithIdx

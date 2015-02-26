@@ -4,22 +4,20 @@ better capabilities than the ones based on MuParser.")
 
 otb_module(OTBMathParser
   DEPENDS
-    OTBVectorDataBase
-    OTBMuParser
-    OTBITK
-    OTBMuParserX
-    OTBStatistics
     OTBCommon
-    OTBPath
+    OTBITK
     OTBImageManipulation
+    OTBMuParser
+    OTBPath
+    OTBVectorDataBase
 
   TEST_DEPENDS
-    OTBTestKernel
-    OTBImageIO
-    OTBProjection
-    OTBVectorDataIO
     OTBImageBase
+    OTBImageIO
     OTBObjectList
+    OTBProjection
+    OTBTestKernel
+    OTBVectorDataIO
 
   DESCRIPTION
     "${DOCUMENTATION}"

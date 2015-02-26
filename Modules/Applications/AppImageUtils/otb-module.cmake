@@ -2,26 +2,27 @@ set(DOCUMENTATION "Image utils and handling application.")
 
 otb_module(OTBAppImageUtils
   DEPENDS
-    OTBStatistics
-    OTBColorMap
-    OTBImageBase
-    OTBTransform
-    OTBKMZWriter
-    OTBImageManipulation
-    OTBStreaming
-    OTBCarto
     OTBApplicationEngine
+    OTBCarto
+    OTBColorMap
+    OTBCommon
     OTBCurlAdapters
     OTBITK
+    OTBImageBase
+    OTBImageManipulation
+    OTBKMZWriter
     OTBMathParser
-    OTBCommon
-    OTBObjectList
+    OTBMathParserX
     OTBOSSIMAdapters
+    OTBObjectList
     OTBProjection
+    OTBStatistics
+    OTBStreaming
+    OTBTransform
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBCommandLine
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
