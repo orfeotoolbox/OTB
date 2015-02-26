@@ -7,14 +7,13 @@ requirements.")
 
 otb_module(OTBColorMap
   DEPENDS
-    OTBCommon
     OTBITK
 
   TEST_DEPENDS
-    OTBTestKernel
-    OTBImageIO
     OTBITKPendingPatches
     OTBImageBase
+    OTBImageIO
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
