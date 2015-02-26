@@ -62,13 +62,13 @@ void QtWidgetRAMParameter::DoCreateWidget()
 
 void QtWidgetRAMParameter::DoUpdateGUI()
 {
-  bool signalsBlocked = m_QSpinBox->blockSignals( true );
+  bool blocked = m_QSpinBox->blockSignals( true );
 
   if (m_RAMParam->HasValue())
     {
     m_QSpinBox->setValue(static_cast<int>(m_RAMParam->GetValue()));
     }
-  m_QSpinBox->blockSignals( signalsBlocked );
+  m_QSpinBox->blockSignals( blocked );
 
   QFont font = m_QSpinBox->font();
   if (m_RAMParam->HasUserValue())

@@ -71,16 +71,16 @@ void QtWidgetIntParameter::DoUpdateGUI()
     }
   m_QSpinBox->blockSignals( signalsBlocked2 );
 
-  QFont font = m_QSpinBox->font();
+  QFont f = m_QSpinBox->font();
   if (m_IntParam->HasUserValue())
     {
-    font.setBold(true);
+    f.setBold(true);
     }
   else
     {
-    font.setBold(false);
+    f.setBold(false);
     }
-  m_QSpinBox->setFont(font);
+  m_QSpinBox->setFont(f);
 }
 
 void QtWidgetIntParameter::SetValue(int value)

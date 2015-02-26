@@ -134,20 +134,20 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(fileLayout);
-  QScrollArea * scroll = new QScrollArea();
-  scroll->setWidget(mainGroup);
-  scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  scroll->setWidgetResizable(true);
+  QScrollArea * s = new QScrollArea();
+  s->setWidget(mainGroup);
+  s->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  s->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+  s->setWidgetResizable(true);
 
-  hLayout->addWidget(scroll);
+  hLayout->addWidget(s);
   hLayout->addLayout(buttonLayout);
 
   this->setLayout(hLayout);
 
   m_FileLayout = fileLayout;
   m_HLayout = hLayout;
-  m_Scroll = scroll;
+  m_Scroll = s;
 
 }
 

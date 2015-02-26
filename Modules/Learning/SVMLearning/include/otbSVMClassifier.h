@@ -90,6 +90,7 @@ public:
   /** Returns the classification result */
   OutputType* GetOutput();
   void SetOutput(OutputType* output);
+  using Superclass::SetOutput;
 
   /** Returns the hyperplanes distances */
   HyperplanesDistancesListSampleType * GetHyperplanesDistancesOutput();

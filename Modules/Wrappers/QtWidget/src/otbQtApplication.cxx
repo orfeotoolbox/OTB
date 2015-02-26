@@ -22,8 +22,8 @@ namespace otb
 {
 namespace Wrapper
 {
-QtApplication::QtApplication(int& argc, char** argvv)
-  : QApplication(argc, argvv)
+QtApplication::QtApplication(int& argcc, char** argvv)
+  : QApplication(argcc, argvv)
 {
 
 }

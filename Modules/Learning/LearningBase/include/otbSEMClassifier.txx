@@ -27,7 +27,6 @@ SEMClassifier<TInputImage, TOutputImage>
   m_NbSamples = 0;
   m_SampleList = 0;
   m_NbChange = 0;
-  m_NbClasses = 0;
   m_TerminationThreshold = 1E-5;
   m_Neighborhood = 1;
 
@@ -43,7 +42,7 @@ SEMClassifier<TInputImage, TOutputImage>
 {
   Superclass::PrintSelf(os, indent);
 
-  for (int componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
+  for (int componentIndex = 0; componentIndex < this->GetNumberOfClasses(); ++componentIndex)
     {
     os << indent << "Component num " << componentIndex;
     os << " (prop " << m_Proportions[componentIndex] << ") ";
@@ -283,27 +282,18 @@ SEMClassifier<TInputImage, TOutputImage>
   return static_cast<int>(m_ComponentVector.size());
 }
 
-template<class TInputImage, class TOutputImage>
-unsigned int
-SEMClassifier<TInputImage, TOutputImage>
-::GetNumberOfClasses()
-{
-  return m_NbClasses;
-}
-
 template <class TInputImage, class TOutputImage>
 void
-SEMClassifier<TInputImage, TOutputImage>
-::SetNumberOfClasses(int theNumberOfClasses)
+SEMClassifier<TInputImage,TOutputImage>
+::Modified() const
 {
-  m_NbClasses = theNumberOfClasses;
-  m_ComponentVector.resize(theNumberOfClasses);
-
+  Superclass::Modified();
   if (m_ComponentDeclared == 1)
     otbMsgDebugMacro(
       << "Previous component declarations will be lost since called before SetNumberOfClasses");
 
   m_ComponentDeclared = 0;
+  
 }
 
 template <class TInputImage, class TOutputImage>
@@ -327,10 +317,12 @@ void
 SEMClassifier<TInputImage, TOutputImage>
 ::InitParameters()
 {
+  unsigned int nbClasses = this->GetNumberOfClasses();
+
   if (!m_ExternalLabels)
     {
     m_ClassLabels.resize(m_NbSamples);
-    if (static_cast<int>(m_InitialProportions.size()) != m_NbClasses)
+    if (static_cast<int>(m_InitialProportions.size()) != nbClasses)
       {
       int label;
       for (typename ClassLabelVectorType::iterator labelIter = m_ClassLabels.begin();
@@ -338,9 +330,9 @@ SEMClassifier<TInputImage, TOutputImage>
            ++labelIter)
         {
         //label = (int) floor( 0.5 + nbClassesDbl * ran / double(RAND_MAX+1) );
-        label = rand() % m_NbClasses;
+        label = rand() % nbClasses;
         if (label < 0) label = 0;
-        else if (label >= m_NbClasses) label = m_NbClasses - 1;
+        else if (label >= nbClasses) label = nbClasses - 1;
         *labelIter = label;
         }
       }
@@ -373,8 +365,8 @@ SEMClassifier<TInputImage, TOutputImage>
         cumulativeProportion = 0.0;
         sample = double(rand()) / (double(RAND_MAX) + 1.0);
 
-        *labelIter = m_NbClasses - 1;
-        for (int componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
+        *labelIter = nbClasses - 1;
+        for (int componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
           {
           if (cumulativeProportion <= sample
               && sample < cumulativeProportion + m_InitialProportions[componentIndex])
@@ -388,25 +380,25 @@ SEMClassifier<TInputImage, TOutputImage>
       }
     }
 
-  m_Proportions.resize(m_NbClasses);
-  m_Proba.resize(m_NbClasses);
-  for (int i = 0; i < m_NbClasses; ++i)
+  m_Proportions.resize(nbClasses);
+  m_Proba.resize(nbClasses);
+  for (int i = 0; i < nbClasses; ++i)
     m_Proba[i].resize(m_NbSamples);
 
   if (!m_ComponentDeclared)
     {
-    otbMsgDebugMacro(<< "default mixture initialization with " << m_NbClasses
+    otbMsgDebugMacro(<< "default mixture initialization with " << nbClasses
                      << " Gaussian components");
     typedef otb::Statistics::GaussianModelComponent<ClassSampleType> GaussianType;
 
-    for (int componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
+    for (int componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
       {
       typename GaussianType::Pointer comp = GaussianType::New();
       AddComponent(componentIndex, comp);
       }
     }
 
-  otbMsgDevMacro(<< "num class   : " << m_NbClasses);
+  otbMsgDevMacro(<< "num class   : " << nbClasses);
   otbMsgDevMacro(<< "num sample : " << GetSampleList()->Size());
   otbMsgDevMacro(<< "num labels : " << GetClassLabels().size());
   otbMsgDevMacro(<< "contextual neighborhood : " << m_Neighborhood);
@@ -419,6 +411,8 @@ void
 SEMClassifier<TInputImage, TOutputImage>
 ::PerformStochasticProcess()
 {
+  unsigned int nbClasses = this->GetNumberOfClasses();
+
   double x, y, z;
   m_NbChange = 0;
 
@@ -430,7 +424,7 @@ SEMClassifier<TInputImage, TOutputImage>
     x = double(rand()) / (double(RAND_MAX) + 1.0);
     z = 0.0;
 
-    for (int componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
+    for (int componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
       {
       y = z;
       z += m_Proba[componentIndex][posSample];
@@ -463,13 +457,15 @@ void
 SEMClassifier<TInputImage, TOutputImage>
 ::PerformExpectationProcess()
 {
+  unsigned int nbClasses = this->GetNumberOfClasses();
+
   int componentIndex;
-  for (componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
+  for (componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
     m_Proportions[componentIndex] = 0.0;
 
   std::vector<typename ClassSampleType::Pointer> coeffByClass;
 
-  for (componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
+  for (componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
     {
     coeffByClass.push_back(ClassSampleType::New());
     coeffByClass[componentIndex]->SetMeasurementVectorSize(
@@ -493,7 +489,7 @@ SEMClassifier<TInputImage, TOutputImage>
     }
   while (++iterSample != lastSample && ++iterLabel != lastLabel);
 
-  for (componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
+  for (componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
     {
     if (m_Proportions[componentIndex] == 0.0)
       {
@@ -507,7 +503,7 @@ SEMClassifier<TInputImage, TOutputImage>
     m_ComponentVector[componentIndex]->Update();
     }
 
-  for (componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
+  for (componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
     m_Proportions[componentIndex] /= static_cast<double> (m_NbSamples);
 
 }
@@ -517,6 +513,8 @@ void
 SEMClassifier<TInputImage, TOutputImage>
 ::PerformMaximizationProcess()
 {
+  unsigned int nbClasses = this->GetNumberOfClasses();
+
   int    i, j, a, b;
   int    voisinage = m_Neighborhood / 2;
   int    componentIndex;
@@ -528,9 +526,9 @@ SEMClassifier<TInputImage, TOutputImage>
   cols = (int) size[0];
   line = (int) size[1];
 
-  std::vector<double> pdf(m_NbClasses);
-  std::vector<double> localWeight(m_NbClasses);
-  std::vector<double> localCount(m_NbClasses);
+  std::vector<double> pdf(nbClasses);
+  std::vector<double> localWeight(nbClasses);
+  std::vector<double> localCount(nbClasses);
 
   typename SampleType::ConstIterator iterSample = m_SampleList->Begin();
   typename SampleType::ConstIterator lastSample = m_SampleList->End();
@@ -542,7 +540,7 @@ SEMClassifier<TInputImage, TOutputImage>
     {
     id = iterSample.GetInstanceIdentifier();
 
-    for (componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
+    for (componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
       localCount[componentIndex] = 0.0;
 
     i = id / cols;
@@ -558,12 +556,12 @@ SEMClassifier<TInputImage, TOutputImage>
         localCount[m_ClassLabels[a * cols + b]] += 1.0;
         }
 
-    for (componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
+    for (componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
       localWeight[componentIndex] = localCount[componentIndex]
                                     / neighborhoodWeight;
 
     sumPdf = 0.0;
-    for (componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
+    for (componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
       {
       measurementVector = iterSample.GetMeasurementVector();
       aPdf = localWeight[componentIndex]
@@ -572,7 +570,7 @@ SEMClassifier<TInputImage, TOutputImage>
       pdf[componentIndex] = aPdf;
       }
 
-    for (componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
+    for (componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
       {
       if (sumPdf == 0.0) m_Proba[componentIndex][iterSample.GetInstanceIdentifier()] = 0.0;
       else
@@ -589,12 +587,14 @@ void
 SEMClassifier<TInputImage, TOutputImage>
 ::GetMaximumAposterioriLabels()
 {
+  unsigned int nbClasses = this->GetNumberOfClasses();
+
   // Class results initialization
   m_Output = OutputType::New();
   m_Output->SetSample(this->GetSampleList());
 //  m_Output->Resize(this->GetSampleList()->Size()); //FIXME check if
 //  still necessary
-  m_Output->SetNumberOfClasses(m_NbClasses);
+  m_Output->SetNumberOfClasses(nbClasses);
 
   // Image results classification
   m_OutputImage = TOutputImage::New();
@@ -619,7 +619,7 @@ SEMClassifier<TInputImage, TOutputImage>
   do
     {
     cluster = 0;
-    for (componentIndex = 1; componentIndex < m_NbClasses; ++componentIndex)
+    for (componentIndex = 1; componentIndex < nbClasses; ++componentIndex)
       {
       if (m_Proba[componentIndex][sampleIter.GetInstanceIdentifier()]
           > m_Proba[cluster][sampleIter.GetInstanceIdentifier()]) cluster = componentIndex;

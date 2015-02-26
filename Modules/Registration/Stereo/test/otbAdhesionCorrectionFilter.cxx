@@ -55,8 +55,6 @@ int otbAdhesionCorrectionFilter(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
-  const unsigned int ImageDimension = 2;
-
   const char* medianDisparityFileName = argv[1];
   const char* medianMaskFileName = argv[2];
   const char* subpixelDisparityFileName = argv[3];

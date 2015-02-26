@@ -116,10 +116,6 @@ public:
   void SetClassLabels(TOutputImage * imgLabels);
   ClassLabelVectorType& GetClassLabels();
 
-  /** Sets/Gets the total number of classes currently plugged in. */
-  void SetNumberOfClasses(int theSize);
-  unsigned int GetNumberOfClasses();
-
   /** Set/Gets the maximum number of iterations. When the optimization
    * process reaches the maximum number of interations, even if the
    * class parameters aren't converged, the optimization process
@@ -158,6 +154,8 @@ public:
 
   /* Return the classification result (as an image) */
   TOutputImage * GetOutputImage();
+  
+  virtual void Modified() const;
 
 protected:
   SEMClassifier();
@@ -184,7 +182,6 @@ private:
   int                m_NbSamples;
   typename SampleType::Pointer m_SampleList;
 
-  int    m_NbClasses;
   int    m_MaximumIteration;
   int    m_CurrentIteration;
   int    m_NbChange;
@@ -199,7 +196,7 @@ private:
   ClassLabelVectorType   m_ClassLabels;
 
   int m_ExternalLabels;
-  int m_ComponentDeclared;
+  mutable int m_ComponentDeclared;
 
   typename TOutputImage::Pointer m_OutputImage;
   typename OutputType::Pointer m_Output;

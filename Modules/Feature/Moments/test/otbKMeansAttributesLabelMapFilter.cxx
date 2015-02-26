@@ -26,14 +26,14 @@
 #include "otbImageToLabelMapWithAttributesFilter.h"
 #include "otbKMeansAttributesLabelMapFilter.h"
 
-const unsigned int Dimension = 2;
+const unsigned int Dim  = 2;
 typedef unsigned short LabelType;
 typedef double         PixelType;
 
-typedef otb::AttributesMapLabelObjectWithClassLabel<LabelType, Dimension, double, LabelType>
+typedef otb::AttributesMapLabelObjectWithClassLabel<LabelType, Dim, double, LabelType>
                                                                                     LabelObjectType;
 typedef itk::LabelMap<LabelObjectType>                                              LabelMapType;
-typedef otb::VectorImage<PixelType, Dimension>                                      VectorImageType;
+typedef otb::VectorImage<PixelType, Dim>                                      VectorImageType;
 typedef otb::Image<unsigned int, 2>                                                 LabeledImageType;
 
 typedef LabelMapType::Iterator                                                      IteratorType;

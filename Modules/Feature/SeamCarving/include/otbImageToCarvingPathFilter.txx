@@ -202,44 +202,44 @@ ImageToCarvingPathFilter<TInputImage, TOutputPath>
   while (flag)
     {
     flag = false;
-    PixelType min = maxValue;
-    IndexType indexToAdd;
+    PixelType minValue = maxValue;
+    IndexType indexToAdd2;
     bool      isInside = false;
 
     if (neighIt.GetPixel(UP0, isInside) < min)
       {
       if (isInside)
         {
-        min = neighIt.GetPixel(UP0);
-        indexToAdd = neighIt.GetIndex(UP0);
+        minValue = neighIt.GetPixel(UP0);
+        indexToAdd2 = neighIt.GetIndex(UP0);
         flag = true;
         }
       }
 
-    if (neighIt.GetPixel(UP1, isInside) < min)
+    if (neighIt.GetPixel(UP1, isInside) < minValue)
       {
       if (isInside)
         {
-        min = neighIt.GetPixel(UP1);
-        indexToAdd = neighIt.GetIndex(UP1);
+        minValue = neighIt.GetPixel(UP1);
+        indexToAdd2 = neighIt.GetIndex(UP1);
         flag = true;
         }
       }
 
-    if (neighIt.GetPixel(UP2, isInside) < min)
+    if (neighIt.GetPixel(UP2, isInside) < minValue)
       {
       if (isInside)
         {
-        min = neighIt.GetPixel(UP2);
-        indexToAdd = neighIt.GetIndex(UP2);
+        minValue = neighIt.GetPixel(UP2);
+        indexToAdd2 = neighIt.GetIndex(UP2);
         flag = true;
         }
       }
 
     if (flag)
       {
-      outputPath->AddVertex(indexToAdd);
-      neighIt.SetLocation(indexToAdd);
+      outputPath->AddVertex(indexToAdd2);
+      neighIt.SetLocation(indexToAdd2);
       }
 
     }
