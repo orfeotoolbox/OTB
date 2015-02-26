@@ -27,7 +27,6 @@ otbRegionProjectionResampler.cxx
 otbVectorImageTo3DScalarImageFilterNew.cxx
 otbUnaryFunctorWithIndexImageFilter.cxx
 otbMeanFunctorImageTest.cxx
-otbLocalActivityVectorImageFilter.cxx
 otbBinaryImageToDensityImageFilterNew.cxx
 otbVectorImageTo3DScalarImageFilter.cxx
 otbTileImageFilter.cxx
@@ -306,16 +305,7 @@ otb_add_test(NAME bfTvMeanFunctorImageTest COMMAND otbImageManipulationTestDrive
   ${TEMP}/bfMeanFunctorImage.tif
   )
 
-otb_add_test(NAME bfTvLocalActivityVectorImageFilter COMMAND otbImageManipulationTestDriver
-  --compare-image ${EPSILON_7}
-  ${BASELINE}/bfTvLocalActivityVectorImageFilter.tif
-  ${TEMP}/bfTvLocalActivityVectorImageFilter.tif
-  otbLocalActivityVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvLocalActivityVectorImageFilter.tif)
 
-otb_add_test(NAME bfTuLocalActivityVectorImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbLocalActivityVectorImageFilterNewTest)
 
 otb_add_test(NAME bfTuBinaryImageToImageDensityFilterNew COMMAND  otbImageManipulationTestDriver
   otbBinaryImageToDensityImageFilterNew

@@ -19,6 +19,7 @@ otbSparseWvltToAngleMapperListFilterNew.cxx
 otbAngularProjectionImageFilterNew.cxx
 otbAngularProjectionImageFilter.cxx
 otbSparseWvltToAngleMapperListFilter.cxx
+otbLocalActivityVectorImageFilter.cxx
 )
 
 add_executable(otbDimensionalityReductionTestDriver ${OTBDimensionalityReductionTests})
@@ -385,3 +386,12 @@ otb_add_test(NAME bfTuSparseWvltToAngleMapperListFilterNew COMMAND otbDimensiona
 otb_add_test(NAME bfTuAngularProjectionImageFilterNew COMMAND otbDimensionalityReductionTestDriver
   otbAngularProjectionImageFilterNew)
 
+otb_add_test(NAME bfTuLocalActivityVectorImageFilterNew COMMAND otbImageManipulationTestDriver
+  otbLocalActivityVectorImageFilterNewTest)
+otb_add_test(NAME bfTvLocalActivityVectorImageFilter COMMAND otbImageManipulationTestDriver
+  --compare-image ${EPSILON_7}
+  ${BASELINE}/bfTvLocalActivityVectorImageFilter.tif
+  ${TEMP}/bfTvLocalActivityVectorImageFilter.tif
+  otbLocalActivityVectorImageFilterTest
+  -in ${INPUTDATA}/cupriteSubHsi.tif
+  -out ${TEMP}/bfTvLocalActivityVectorImageFilter.tif)
