@@ -64,7 +64,7 @@ CommandLineLauncher::CommandLineLauncher() :
   m_AddProcessCommand->SetCallbackFunction(this, &CommandLineLauncher::LinkWatchers);
 }
 
-CommandLineLauncher::CommandLineLauncher(const char * itkNotUsed(exp)) /*:
+CommandLineLauncher::CommandLineLauncher(const char *) /*:
   m_Expression(exp)*/
 {
   m_Application = NULL;
