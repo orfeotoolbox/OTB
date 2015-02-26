@@ -9,7 +9,6 @@ otbImagePCAShapeModelEstimatorTest.cxx
 otbStandardOneLineFilterWatcherTest.cxx
 otbObjectList.cxx
 otbImageList.cxx
-otbEuclideanDistanceMetricWithMissingValueNew.cxx
 otbFunctionToImageFilter.cxx
 otbImageListSourceNew.cxx
 otbOssimElevManagerTest.cxx
@@ -31,7 +30,6 @@ otbImageAndVectorImageOperationFilterTest.cxx
 otbImageOfVectorsToMonoChannelExtractROI.cxx
 otbImageListNew.cxx
 otbImageOfVectorsToMonoChannelExtractROINew.cxx
-otbEuclideanDistanceMetricWithMissingValue.cxx
 otbObjectListNew.cxx
 otbExtractROINew.cxx
 otbImageListToVectorImageFilter2.cxx
@@ -105,8 +103,6 @@ otb_add_test(NAME coTvImageList COMMAND otbImageBaseTestDriver
   ${TEMP}/amst.png
   )
 
-otb_add_test(NAME bfTuEuclideanDistanceMetricWithMissingValueNew COMMAND otbImageBaseTestDriver
-  otbEuclideanDistanceMetricWithMissingValueNew)
 
 otb_add_test(NAME bfTvFunctionToImageFilterTest COMMAND otbImageBaseTestDriver
   --compare-image ${EPSILON_7}
@@ -405,8 +401,6 @@ otb_add_test(NAME coTuImageOfVectorsToMonoChannelExtractROINew COMMAND otbImageB
   otbImageOfVectorsToMonoChannelExtractROINew
   )
 
-otb_add_test(NAME bfTvEuclideanDistanceMetricWithMissingValue COMMAND otbImageBaseTestDriver
-  otbEuclideanDistanceMetricWithMissingValue)
 
 otb_add_test(NAME coTuObjectListNew COMMAND otbImageBaseTestDriver
   otbObjectListNew)

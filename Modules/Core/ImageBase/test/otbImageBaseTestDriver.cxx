@@ -8,7 +8,6 @@ void RegisterTests()
   REGISTER_TEST(otbStandardOneLineFilterWatcherTest);
   REGISTER_TEST(otbObjectList);
   REGISTER_TEST(otbImageList);
-  REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValueNew);
   REGISTER_TEST(otbFunctionToImageFilter);
   REGISTER_TEST(otbImageListSourceNew);
   REGISTER_TEST(otbOssimElevManagerTest);
@@ -32,7 +31,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageOfVectorsToMonoChannelExtractROI);
   REGISTER_TEST(otbImageListNew);
   REGISTER_TEST(otbImageOfVectorsToMonoChannelExtractROINew);
-  REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValue);
   REGISTER_TEST(otbObjectListNew);
   REGISTER_TEST(otbExtractROINew);
   REGISTER_TEST(otbImageListToVectorImageFilter2);

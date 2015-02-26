@@ -6,14 +6,15 @@ SOM is usually on a plane (2D).")
 
 otb_module(OTBSOM
   DEPENDS
-    OTBImageBase
     OTBCommon
-    OTBITKPendingPatches
     OTBITK
+    OTBITKPendingPatches
+    OTBImageBase
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBImageIO
+    OTBImageManipulation
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

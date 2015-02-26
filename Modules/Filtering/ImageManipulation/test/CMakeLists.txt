@@ -82,6 +82,8 @@ otbBinaryImageToDensityImageFilter.cxx
 otbInverseLogPolarTransform.cxx
 otbSpectralAngleDistanceImageFilter.cxx
 otbFunctionWithNeighborhoodToImageFilterNew.cxx
+otbEuclideanDistanceMetricWithMissingValue.cxx
+otbEuclideanDistanceMetricWithMissingValueNew.cxx
 )
 
 add_executable(otbImageManipulationTestDriver ${OTBImageManipulationTests})
@@ -920,3 +922,7 @@ otb_add_test(NAME bfTvFunctionWithNeighborhoodToImageFilterNew COMMAND otbImageM
   otbFunctionWithNeighborhoodToImageFilterNew
   )
 
+otb_add_test(NAME bfTvEuclideanDistanceMetricWithMissingValue COMMAND otbImageBaseTestDriver
+  otbEuclideanDistanceMetricWithMissingValue)
+otb_add_test(NAME bfTuEuclideanDistanceMetricWithMissingValueNew COMMAND otbImageBaseTestDriver
+  otbEuclideanDistanceMetricWithMissingValueNew)

@@ -3,21 +3,22 @@ representation of mono- and multiband images.")
 
 otb_module(OTBImageBase
   DEPENDS
-    OTBMetadata
-    OTBOSSIMAdapters
+    OTBCommon
     OTBITK
     OTBITKPendingPatches
-    OTBCommon
+    OTBMetadata
+    OTBOSSIMAdapters
 
   TEST_DEPENDS
-    OTBStatistics
-    OTBImageIO
-    OTBMoments
-    OTBTestKernel
-    OTBDescriptors
     OTBBoost
-    OTBOssim
+    OTBDescriptors
+    OTBImageIO
+    OTBImageManipulation
+    OTBMoments
     OTBObjectList
+    OTBOssim
+    OTBStatistics
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

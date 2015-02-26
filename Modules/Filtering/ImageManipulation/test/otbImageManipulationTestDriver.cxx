@@ -96,4 +96,6 @@ void RegisterTests()
   REGISTER_TEST(otbInverseLogPolarTransform);
   REGISTER_TEST(otbSpectralAngleDistanceImageFilter);
   REGISTER_TEST(otbFunctionWithNeighborhoodToImageFilterNew);
+  REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValue);
+  REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValueNew);
 }
