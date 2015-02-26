@@ -22,4 +22,5 @@ void RegisterTests()
   REGISTER_TEST(otbWindowedSincInterpolateImageHammingFunctionNew);
   REGISTER_TEST(otbStreamingTraitsImage);
   REGISTER_TEST(otbStreamingTraitsVectorImage);
+  REGISTER_TEST(otbBCOInterpolateImageFunction);
 }

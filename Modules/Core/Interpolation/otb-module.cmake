@@ -3,13 +3,14 @@ set(DOCUMENTATION "This module contains additional interpolation functions
 
 otb_module(OTBInterpolation
   DEPENDS
-    OTBImageBase
     OTBCommon
     OTBITK
+    OTBImageBase
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBImageIO
+    OTBImageManipulation
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

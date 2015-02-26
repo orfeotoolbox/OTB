@@ -22,6 +22,7 @@ otbBSplineInterpolateImageFunction.cxx
 otbWindowedSincInterpolateImageGaussianFunctionNew.cxx
 otbWindowedSincInterpolateImageHammingFunctionNew.cxx
 otbStreamingTraits.cxx
+otbBCOInterpolateImageFunction.cxx
 )
 
 add_executable(otbInterpolationTestDriver ${OTBInterpolationTests})
@@ -206,3 +207,77 @@ otb_add_test(NAME bfTuStreamingTraitsImage COMMAND otbInterpolationTestDriver
   otbStreamingTraitsImage
   )
 
+otb_add_test(NAME bfTvBCOInterpolateImageFunctionVectorImageTest COMMAND otbImageManipulationTestDriver
+  --compare-image ${EPSILON_7}
+  ${BASELINE}/bfTvBCOInterpolateImageFunctionVectorImageTest.tif
+  ${TEMP}/bfTvBCOInterpolateImageFunctionVectorImageTest.tif
+  otbBCOInterpolateImageFunctionVectorImageTest
+  ${INPUTDATA}/poupees.tif
+  ${TEMP}/bfTvBCOInterpolateImageFunctionVectorImageTest.tif
+  4 # radius
+  -0.5 # optimised bicubic
+  )
+otb_add_test(NAME bfTvBCOInterpolateImageFunctionTest COMMAND otbImageManipulationTestDriver
+  --compare-image ${EPSILON_7}
+  ${BASELINE}/bfTvBCOInterpolateImageFunctionTest.tif
+  ${TEMP}/bfTvBCOInterpolateImageFunctionTest.tif
+  otbBCOInterpolateImageFunctionTest
+  ${INPUTDATA}/poupees.tif
+  ${TEMP}/bfTvBCOInterpolateImageFunctionTest.tif
+  3 # radius
+  -0.5 # optimised bicubic
+  )
+otb_add_test(NAME bfTuBCOInterpolateImageFunctionNew COMMAND otbImageManipulationTestDriver
+  otbBCOInterpolateImageFunctionNew
+  )
+otb_add_test(NAME bfTvBCOInterpolateImageFunctionOverVectorImage COMMAND otbImageManipulationTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/bfTvBCOInterpolateImageFunctionOverVectorImageOutput.txt
+  ${TEMP}/bfTvBCOInterpolateImageFunctionOverVectorImageOutput.txt
+  otbBCOInterpolateImageFunctionOverVectorImage
+  ${INPUTDATA}/poupees.tif
+  ${TEMP}/bfTvBCOInterpolateImageFunctionOverVectorImageOutput.txt
+  3 # radius
+  -0.5 # optimised bicubic
+  0.5 0.5
+  127.33 44.9
+  259.67 21.43
+  12.13 61.79
+  89.5 11
+  128 128
+  127.255 128.73
+  -1 -1
+  )
+otb_add_test(NAME bfTuBCOInterpolateImageFunctionOverVectorImageNew COMMAND otbImageManipulationTestDriver
+  otbBCOInterpolateImageFunctionOverVectorImageNew)
+otb_add_test(NAME bfTvBCOInterpolateImageFunction2 COMMAND otbImageManipulationTestDriver
+  otbBCOInterpolateImageFunction2
+  3 # radius
+  -0.5 # optimised bicubic
+  0.5 0.5
+  127.33 44.9
+  259.67 21.43
+  12.13 61.79
+  89.5 11
+  128 128
+  127.255 128.73
+  -1 -1
+  )
+otb_add_test(NAME bfTvBCOInterpolateImageFunction COMMAND otbImageManipulationTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/bfTvBCOInterpolateImageFunctionOutput.txt
+  ${TEMP}/bfTvBCOInterpolateImageFunctionOutput.txt
+  otbBCOInterpolateImageFunction
+  ${INPUTDATA}/poupees.tif
+  ${TEMP}/bfTvBCOInterpolateImageFunctionOutput.txt
+  3 # radius
+  -0.5 # optimised bicubic
+  0.5 0.5
+  127.33 44.9
+  259.67 21.43
+  12.13 61.79
+  89.5 11
+  128 128
+  127.255 128.73
+  -1 -1
+  )

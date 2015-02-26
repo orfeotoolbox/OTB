@@ -55,7 +55,6 @@ void RegisterTests()
   REGISTER_TEST(otbShiftScaleImageAdaptorNew);
   REGISTER_TEST(otbStreamingInnerProductVectorImageFilterNew);
   REGISTER_TEST(otbBCOInterpolateImageFunctionNew);
-  REGISTER_TEST(otbBCOInterpolateImageFunction);
   REGISTER_TEST(otbBCOInterpolateImageFunction2);
   REGISTER_TEST(otbBCOInterpolateImageFunctionOverVectorImageNew);
   REGISTER_TEST(otbBCOInterpolateImageFunctionOverVectorImage);
