@@ -28,10 +28,10 @@ otb_add_test(NAME siTvProsailModelExampleTest COMMAND ${OTB_TEST_DRIVER}
 
 otb_add_test(NAME siTvLAIFromNDVIImageTransfromExampleTest  COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${EPSILON_8}
-    ${BASELINE_IMAGES_OTB}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
+    ${OTB_DATA_ROOT}/Baseline/OTB/Images/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
     ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
   Execute $<TARGET_FILE:LAIFromNDVIImageTransform>
-    ${INPUTDATA_EXAMPLES}/verySmallFSATSW.tif
+    ${INPUTDATA}/verySmallFSATSW.tif
     ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
     ${TEMP}/verySmallFSATSW_visu.png
     ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW_visu.png
@@ -41,16 +41,16 @@ otb_add_test(NAME siTvLAIFromNDVIImageTransfromExampleTest  COMMAND ${OTB_TEST_D
 
 otb_add_test(NAME siTvLAIAndPROSAILToSensorResponseExampleTest  COMMAND ${OTB_TEST_DRIVER}
 --compare-image ${EPSILON_8}
-  ${BASELINE_IMAGES_APPLI}/siTvLAIAndPROSAILToSensorResponseSmall.tif
+  ${OTBAPP_BASELINE}/siTvLAIAndPROSAILToSensorResponseSmall.tif
   ${TEMP}/siTvLAIAndPROSAILToSensorResponseSmall.tif
 Execute $<TARGET_FILE:LAIAndPROSAILToSensorResponse>
-  ${INPUTDATA}/LAIveryverySmallFSATSW.tif
+  ${OTB_DATA_ROOT}/Input/LAIveryverySmallFSATSW.tif
   ${TEMP}/siTvLAIAndPROSAILToSensorResponseSmall.tif
-  ${INPUTDATA}/Simu_label_LAI_small.png
-  ${INPUTDATA}/Simu_mask_LAI_0_small.png
-  ${INPUTDATA}/label-params-SO-2006-Level-2.txt
-  ${INPUTDATA}/acqui-params.txt
-  ${INPUTDATA}/Radiometry/FORMOSAT2/RSI/rep6S.dat
+  ${OTB_DATA_ROOT}/Input/Simu_label_LAI_small.png
+  ${OTB_DATA_ROOT}/Input/Simu_mask_LAI_0_small.png
+  ${OTB_DATA_ROOT}/Input/label-params-SO-2006-Level-2.txt
+  ${OTB_DATA_ROOT}/Input/acqui-params.txt
+  ${OTB_DATA_ROOT}/Input/Radiometry/FORMOSAT2/RSI/rep6S.dat
   5
-  ${INPUTDATA}/
+  ${OTB_DATA_ROOT}/Input/
 )
