@@ -3,11 +3,12 @@ data (see also VectorDataIO and VectorDataManipulation modules).")
 
 otb_module(OTBVectorDataBase
   DEPENDS
+    OTBCommon
+    OTBGDAL
+    OTBITK
+    OTBImageBase
     OTBOSSIMAdapters
     OTBObjectList
-    OTBITK
-    OTBGDAL
-    OTBCommon
 
   TEST_DEPENDS
     OTBTestKernel

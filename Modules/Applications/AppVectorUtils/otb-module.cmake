@@ -2,17 +2,18 @@ set(DOCUMENTATION "VectorUtils application.")
 
 otb_module(OTBAppVectorUtils
   DEPENDS
-    OTBVectorDataBase
-    OTBProjection
-    OTBVectorDataManipulation
-    OTBCarto
     OTBApplicationEngine
+    OTBCarto
     OTBCommon
     OTBITK
+    OTBImageBase
+    OTBProjection
+    OTBVectorDataBase
+    OTBVectorDataManipulation
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBCommandLine
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

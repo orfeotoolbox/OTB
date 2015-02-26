@@ -16,13 +16,13 @@ otb_module(OTBStatistics
     OTBObjectList
     OTBProjection
     OTBStreaming
-    OTBVectorDataBase
 
   TEST_DEPENDS
     OTBCommandLineParser
     OTBImageIO
     OTBInterpolation
     OTBTestKernel
+    OTBVectorDataBase
     OTBVectorDataIO
 
   DESCRIPTION

@@ -5,6 +5,7 @@ otb_module(OTBVectorDataManipulation
   DEPENDS
     OTBCommon
     OTBITK
+    OTBImageBase
     OTBImageManipulation
     OTBOSSIMAdapters
     OTBObjectList
@@ -14,7 +15,6 @@ otb_module(OTBVectorDataManipulation
 
   TEST_DEPENDS
     OTBCommandLineParser
-    OTBImageBase
     OTBImageIO
     OTBTestKernel
     OTBVectorDataIO

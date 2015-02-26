@@ -4,11 +4,13 @@ set(OTBVectorDataBase_SRC
   )
 
 add_library(OTBVectorDataBase ${OTBVectorDataBase_SRC})
-target_link_libraries(OTBVectorDataBase 
+target_link_libraries(OTBVectorDataBase
   ${OTBCommon_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
-
+  ${OTBITK_LIBRARIES}
+  ${OTBImageBase_LIBRARIES}
+  ${OTBOSSIMAdapters_LIBRARIES}
+  ${OTBObjectList_LIBRARIES}
   )
 
 otb_module_target(OTBVectorDataBase)
