@@ -2,17 +2,10 @@ otb_module_test()
 
 set(OTBSmoothingTests
 otbSmoothingTestDriver.cxx
-otbSavitzkyGolayInterpolationFunctorNew.cxx
-otbTimeSeriesLeastSquareFittingFunctorTest.cxx
-otbPolynomialTimeSeriesTest.cxx
-otbEnvelopeSavitzkyGolayInterpolationFunctorTest.cxx
 otbMeanShiftSmoothingImageFilter.cxx
 otbMeanShiftSmoothingImageFilterSpatialStability.cxx
-otbSavitzkyGolayInterpolationFunctorTest.cxx
 otbMeanShiftSmoothingImageFilterNew.cxx
 otbMeanShiftSmoothingImageFilterThreading.cxx
-otbTimeSeriesLeastSquareFittingFunctorNew.cxx
-otbTimeSeriesLeastSquareFittingFunctorWeightsTest.cxx
 )
 
 add_executable(otbSmoothingTestDriver ${OTBSmoothingTests})
@@ -21,27 +14,10 @@ otb_module_target_label(otbSmoothingTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME mtTuSavitzkyGolayInterpolationFunctor COMMAND otbSmoothingTestDriver
-  otbSavitzkyGolayInterpolationFunctorNew
-  )
 
-otb_add_test(NAME mtTvTimeSeriesLeastSquaresFittingFunctor2 COMMAND otbSmoothingTestDriver
-  otbTimeSeriesLeastSquareFittingFunctorTest
-  10 0.3 3.123
-  )
 
-otb_add_test(NAME mtTvTimeSeriesLeastSquaresFittingFunctor COMMAND otbSmoothingTestDriver
-  otbTimeSeriesLeastSquareFittingFunctorTest
-  1 2 3
-  )
 
-otb_add_test(NAME mtTvPolynomialTimeSeriesTest1 COMMAND otbSmoothingTestDriver
-  otbPolynomialTimeSeriesTest
-  )
 
-otb_add_test(NAME mtTvEnvelopeSavitzkyGolayInterpolationFunctorTest COMMAND otbSmoothingTestDriver
-  otbEnvelopeSavitzkyGolayInterpolationFunctorTest
-  )
 
 otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterOptim COMMAND otbSmoothingTestDriver
   --compare-image ${EPSILON_7}
@@ -143,9 +119,6 @@ otb_add_test(NAME bfTuMeanShiftSmoothingImageFilterSpatialStability COMMAND otbS
   100 100 512 512
   )
 
-otb_add_test(NAME mtTvSavitzkyGolayInterpolationFunctorTest COMMAND otbSmoothingTestDriver
-  otbSavitzkyGolayInterpolationFunctorTest
-  )
 
 otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterThreadingNonOpt COMMAND otbSmoothingTestDriver
   --compare-image ${EPSILON_7}
@@ -158,12 +131,5 @@ otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterThreadingNonOpt COMMAND otbSm
   4 10 0
   )
 
-otb_add_test(NAME mtTuTimeSeriesLeastSquaresFittingFunctor COMMAND otbSmoothingTestDriver
-  otbTimeSeriesLeastSquareFittingFunctorNew
-  )
 
-otb_add_test(NAME mtTvTimeSeriesLeastSquaresFittingFunctorWeights COMMAND otbSmoothingTestDriver
-  otbTimeSeriesLeastSquareFittingFunctorWeightsTest
-  1 2 3
-  )
 

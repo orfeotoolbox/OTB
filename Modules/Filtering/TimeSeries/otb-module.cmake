@@ -1,0 +1,9 @@
+set(DOCUMENTATION "TODO")
+
+otb_module(OTBTimeSeries
+  DEPENDS
+    OTBITK
+
+  DESCRIPTION
+    "${DOCUMENTATION}"
+)
