@@ -6,10 +6,8 @@ void RegisterTests()
   REGISTER_TEST(otbHorizontalSobelVectorImageFilterNewTest);
   REGISTER_TEST(otbHorizontalSobelVectorImageFilterTest);
   REGISTER_TEST(otbAssymmetricFusionOfLineDetector);
-  REGISTER_TEST(otbGaborFilterGeneratorNew);
   REGISTER_TEST(otbLocalHoughDraw);
   REGISTER_TEST(otbAssociativeSymmetricalSum);
-  REGISTER_TEST(otbGaborFilterGenerator);
   REGISTER_TEST(otbPersistentVectorizationFilterNew);
   REGISTER_TEST(otbLineCorrelationDetectorNew);
   REGISTER_TEST(otbPersistentVectorizationFilter);

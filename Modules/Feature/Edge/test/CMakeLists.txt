@@ -6,10 +6,8 @@ otbPixelSuppressionByDirectionNew.cxx
 otbEdgeDetectorImageFilter.cxx
 otbHorizontalSobelVectorImageFilter.cxx
 otbAssymmetricFusionOfLineDetector.cxx
-otbGaborFilterGeneratorNew.cxx
 otbLocalHoughDraw.cxx
 otbAssociativeSymmetricalSum.cxx
-otbGaborFilterGenerator.cxx
 otbPersistentVectorizationFilterNew.cxx
 otbLineCorrelationDetectorNew.cxx
 otbPersistentVectorizationFilter.cxx
@@ -80,9 +78,6 @@ otb_add_test(NAME feTvAssymmetricFusionOfLineDetector COMMAND otbEdgeTestDriver
   ${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hdr
   2 3)
 
-otb_add_test(NAME bfTuGaborFilterGeneratorNew COMMAND otbEdgeTestDriver
-  otbGaborFilterGeneratorNew
-  )
 
 otb_add_test(NAME feTvLocalHoughDrawBis COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_8}  ${BASELINE}/feFiltreLocalHoughDraw_Line_20_10_2.png
@@ -116,18 +111,6 @@ otb_add_test(NAME feTvAssociativeSymmetricalSum COMMAND otbEdgeTestDriver
   ${BASELINE}/feFiltreLineCorrelationLinear_amst_2_3.hdr
   ${TEMP}/feFiltreASS_amst_2_3.hdr)
 
-otb_add_test(NAME bfTvGaborFilterGenerator COMMAND otbEdgeTestDriver
-  --compare-image ${EPSILON_7}
-  ${BASELINE}/bfGaborFilterGeneratorTest.tif
-  ${TEMP}/bfGaborFilterGeneratorTest.tif
-  otbGaborFilterGenerator
-  ${TEMP}/bfGaborFilterGeneratorTest.tif
-  64 64 #Radius
-  0.02 0.025 # a b
-  -45 # theta
-  0.0125 0.0125 #u0 v0
-  0
-  )
 
 
 otb_add_test(NAME bfTuPersistentVectorizationImageFilterNew COMMAND otbEdgeTestDriver
