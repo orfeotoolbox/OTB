@@ -25,11 +25,9 @@ otbOrientationPathNew.cxx
 otbDrawPathFilterNew.cxx
 otbPolyLineImageConstIterator.cxx
 otbRegionImageToRectangularPathListFilter.cxx
-otbBreakAngularPathListFilter.cxx
 otbVectorizationPathListFilter.cxx
 otbPathListToPathListFilterNew.cxx
 otbPathListToHistogramGeneratorNew.cxx
-otbBreakAngularPathListFilterNew.cxx
 otbCompacityPathNew.cxx
 otbClosePathFunctor.cxx
 otbPolyLineImageIterator.cxx
@@ -231,8 +229,6 @@ otb_add_test(NAME coTuPathListToPathListFilterNew COMMAND otbPathTestDriver
 otb_add_test(NAME coTuPathListToHistogramGeneratorNew COMMAND otbPathTestDriver
   otbPathListToHistogramGeneratorNew)
 
-otb_add_test(NAME feTuBreakAngularPathListFilterNew COMMAND otbPathTestDriver
-  otbBreakAngularPathListFilterNew)
 
 otb_add_test(NAME feTuCompacityPathNew COMMAND otbPathTestDriver
   otbCompacityPathNew)

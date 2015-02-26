@@ -27,4 +27,6 @@ void RegisterTests()
   REGISTER_TEST(otbSimplifyManyPathListFilter);
   REGISTER_TEST(otbNeighborhoodScalarProductFilter);
   REGISTER_TEST(otbDrawPathAlign);
+  REGISTER_TEST(otbBreakAngularPathListFilter);
+  REGISTER_TEST(otbBreakAngularPathListFilterNew);
 }

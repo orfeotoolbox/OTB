@@ -24,11 +24,9 @@ void RegisterTests()
   REGISTER_TEST(otbDrawPathFilterNew);
   REGISTER_TEST(otbPolyLineImageConstIterator);
   REGISTER_TEST(otbRegionImageToRectangularPathListFilter);
-  REGISTER_TEST(otbBreakAngularPathListFilter);
   REGISTER_TEST(otbVectorizationPathListFilter);
   REGISTER_TEST(otbPathListToPathListFilterNew);
   REGISTER_TEST(otbPathListToHistogramGeneratorNew);
-  REGISTER_TEST(otbBreakAngularPathListFilterNew);
   REGISTER_TEST(otbCompacityPathNew);
   REGISTER_TEST(otbClosePathFunctor);
   REGISTER_TEST(otbPolyLineImageIterator);

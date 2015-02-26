@@ -27,6 +27,8 @@ otbVectorDataToRoadDescriptionFilter.cxx
 otbSimplifyManyPathListFilter.cxx
 otbNeighborhoodScalarProductFilter.cxx
 otbDrawPathAlign.cxx
+otbBreakAngularPathListFilter.cxx
+otbBreakAngularPathListFilterNew.cxx
 )
 
 add_executable(otbRoadExtractionTestDriver ${OTBRoadExtractionTests})
@@ -227,3 +229,5 @@ otb_add_test(NAME feTvDrawPathTestAlign COMMAND otbRoadExtractionTestDriver
   ${INPUTDATA}/DeuxTraits.png
   ${TEMP}/feDrawPathAlignDeuxTraits.png)
 
+otb_add_test(NAME feTuBreakAngularPathListFilterNew COMMAND otbPathTestDriver
+  otbBreakAngularPathListFilterNew)
