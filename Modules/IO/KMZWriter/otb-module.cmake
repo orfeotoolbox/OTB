@@ -3,20 +3,20 @@ by Google Earth).")
 
 otb_module(OTBKMZWriter
   DEPENDS
-    OTBVectorDataBase
-    OTBImageIO
     OTBITK
-    OTBlibkml
-    OTBTransform
-    OTBImageManipulation
     OTBImageBase
-    OTBVectorDataIO
+    OTBImageIO
+    OTBImageManipulation
     OTBOSSIMAdapters
+    OTBTransform
+    OTBVectorDataBase
+    OTBVectorDataIO
+    OTBlibkml
 
   TEST_DEPENDS
-    OTBTestKernel
-    OTBCommon
+    OTBCommandLineParser
     OTBProjection
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

@@ -7,23 +7,24 @@ solvers, re-project input vector data over input images, and so on.")
 
 otb_module(OTBProjection
   DEPENDS
-    OTBVectorDataBase
+    OTBBoost
+    OTBCommon
+    OTBGDAL
     OTBGdalAdapters
     OTBITK
     OTBImageBase
-    OTBTransform
-    OTBVectorDataManipulation
-    OTBOSSIMAdapters
     OTBImageManipulation
     OTBMetadata
-    OTBBoost
-    OTBGDAL
-    OTBCommon
+    OTBOSSIMAdapters
+    OTBTransform
+    OTBVectorDataBase
+    OTBVectorDataManipulation
 
   TEST_DEPENDS
-    OTBTestKernel
-    OTBImageIO
+    OTBCommandLineParser
     OTBITKPendingPatches
+    OTBImageIO
+    OTBTestKernel
     OTBVectorDataIO
 
   DESCRIPTION

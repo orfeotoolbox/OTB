@@ -3,20 +3,21 @@ vector data (see also VectorDataBase and VectorDataManipulation modules).")
 
 otb_module(OTBVectorDataManipulation
   DEPENDS
-    OTBVectorDataBase
-    OTBITK
-    OTBTransform
-    OTBImageManipulation
-    OTBPath
     OTBCommon
+    OTBITK
+    OTBImageManipulation
     OTBOSSIMAdapters
     OTBObjectList
+    OTBPath
+    OTBTransform
+    OTBVectorDataBase
 
   TEST_DEPENDS
-    OTBVectorDataIO
-    OTBTestKernel
-    OTBImageIO
+    OTBCommandLineParser
     OTBImageBase
+    OTBImageIO
+    OTBTestKernel
+    OTBVectorDataIO
 
   DESCRIPTION
     "${DOCUMENTATION}"

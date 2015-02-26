@@ -8,19 +8,20 @@ place name. And so on.")
 
 otb_module(OTBCarto
   DEPENDS
-    OTBVectorDataBase
-    OTBImageManipulation
-    OTBImageIO
-    OTBProjection
-    OTBImageBase
-    OTBTinyXML
-    OTBTransform
     OTBCommon
     OTBCurlAdapters
-    OTBVectorDataIO
     OTBITK
+    OTBImageBase
+    OTBImageIO
+    OTBImageManipulation
+    OTBProjection
+    OTBTinyXML
+    OTBTransform
+    OTBVectorDataBase
+    OTBVectorDataIO
 
   TEST_DEPENDS
+    OTBCommandLineParser
     OTBOpenThreadsAdapters
     OTBTestKernel
 

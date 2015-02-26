@@ -4,23 +4,24 @@ Line Ratio Detector (SAR images), Hough Transform, and so on.")
 
 otb_module(OTBEdge
   DEPENDS
-    OTBVectorDataBase
+    OTBCommon
     OTBConversion
-    OTBProjection
+    OTBITK
     OTBITKPendingPatches
     OTBImageBase
+    OTBImageManipulation
+    OTBObjectList
+    OTBPath
+    OTBProjection
     OTBSpatialObjects
     OTBStreaming
-    OTBImageManipulation
-    OTBPath
-    OTBCommon
-    OTBObjectList
-    OTBITK
+    OTBVectorDataBase
 
   TEST_DEPENDS
-    OTBTestKernel
-    OTBImageIO
+    OTBCommandLineParser
     OTBConvolution
+    OTBImageIO
+    OTBTestKernel
     OTBVectorDataIO
 
   DESCRIPTION

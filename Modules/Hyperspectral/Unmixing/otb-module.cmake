@@ -7,17 +7,18 @@ goal.")
 
 otb_module(OTBUnmixing
   DEPENDS
-    OTBStatistics
+    OTBBoost
+    OTBCommon
+    OTBDimensionalityReduction
     OTBITK
     OTBImageBase
-    OTBDimensionalityReduction
-    OTBCommon
-    OTBBoost
+    OTBStatistics
     OTBWavelet
 
   TEST_DEPENDS
-    OTBTestKernel
+    OTBCommandLineParser
     OTBImageIO
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

@@ -9,16 +9,12 @@ void RegisterTests()
   REGISTER_TEST(otbRGBAPixelConverter);
   REGISTER_TEST(otbRectangle);
   REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitterNew);
-  REGISTER_TEST(otbTestCommandLineArgumentParserHelp);
-  REGISTER_TEST(otbTestCommandLineArgumentParserWithError);
   REGISTER_TEST(otbSystemTest);
   REGISTER_TEST(otbParseHdfSubsetName);
   REGISTER_TEST(otbParseHdfFileName);
   REGISTER_TEST(otbImageRegionSquareTileSplitterNew);
   REGISTER_TEST(otbImageRegionSquareTileSplitter);
-  REGISTER_TEST(otbTestCommandLineArgumentParserList);
   REGISTER_TEST(otbImageRegionTileMapSplitterNew);
-  REGISTER_TEST(otbTestCommandLineArgumentParser);
   REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitter);
   REGISTER_TEST(otbRectangleNew);
   REGISTER_TEST(otbConfigurationManagerTest);

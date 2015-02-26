@@ -7,16 +7,17 @@ Autocorrelation Factor (MAF), and so on.")
 
 otb_module(OTBDimensionalityReduction
   DEPENDS
-    OTBStatistics
+    OTBCommon
     OTBITK
     OTBImageBase
     OTBImageManipulation
-    OTBCommon
     OTBObjectList
+    OTBStatistics
 
   TEST_DEPENDS
-    OTBTestKernel
+    OTBCommandLineParser
     OTBImageIO
+    OTBTestKernel
     OTBWavelet
 
   DESCRIPTION

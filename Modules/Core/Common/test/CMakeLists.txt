@@ -8,13 +8,9 @@ otbImageRegionAdaptativeSplitter.cxx
 otbRGBAPixelConverter.cxx
 otbRectangle.cxx
 otbImageRegionNonUniformMultidimensionalSplitterNew.cxx
-otbTestCommandLineArgumentParserHelp.cxx
-otbTestCommandLineArgumentParserWithError.cxx
 otbSystemTest.cxx
 otbImageRegionSquareTileSplitter.cxx
-otbTestCommandLineArgumentParserList.cxx
 otbImageRegionTileMapSplitterNew.cxx
-otbTestCommandLineArgumentParser.cxx
 otbImageRegionNonUniformMultidimensionalSplitter.cxx
 otbRectangleNew.cxx
 otbConfigurationManagerTest.cxx
@@ -105,27 +101,12 @@ otb_add_test(NAME coTuImageRegionNonUniformMultidimensionalSplitterNew COMMAND o
   otbImageRegionNonUniformMultidimensionalSplitterNew
   )
 
-otb_add_test(NAME coTuCmdLineArgParserHelpWithArg COMMAND otbCommonTestDriver
-  otbTestCommandLineArgumentParserHelp
-  --help -image image.png)
-
-otb_add_test(NAME coTuCmdLineArgParserHelpWithoutArg COMMAND otbCommonTestDriver
-  otbTestCommandLineArgumentParserHelp
-  --help)
 
 
 
-otb_add_test(NAME coTuCmdLineArgParserDeuxEntier_LessArg COMMAND otbCommonTestDriver
-  otbTestCommandLineArgumentParserWithError
-  -image image.png -entier 150 -double 12.25 -deuxentiers 78 )
 
-otb_add_test(NAME coTuCmdLineArgParser_MissingObligatoryArg COMMAND otbCommonTestDriver
-  otbTestCommandLineArgumentParserWithError
-  -entier 150 -double 12.25 -deuxentiers 78 56 32)
 
-otb_add_test(NAME coTuCmdLineArgParserDeuxEntier_MoreArg COMMAND otbCommonTestDriver
-  otbTestCommandLineArgumentParserWithError
-  -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 32)
+
 
 otb_add_test(NAME coTuSystemTests_IsA_Methods COMMAND otbCommonTestDriver
   otbSystemTest
@@ -151,33 +132,15 @@ otb_add_test(NAME coTvImageRegionSquareTileSplitter COMMAND otbCommonTestDriver
   ${TEMP}/coImageRegionSquareTileSplitter.txt
   )
 
-otb_add_test(NAME coTuCmdLineArgParser_List2Arg COMMAND otbCommonTestDriver
-  otbTestCommandLineArgumentParserList
-  -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 -doubles 1.0 2.0)
 
-otb_add_test(NAME coTuCmdLineArgParser_List2ArgBis COMMAND otbCommonTestDriver
-  otbTestCommandLineArgumentParserList
-  -image image.png -entier 150 -double 12.25 -doubles 1.0 2.0 -deuxentiers 78 56 )
 
-otb_add_test(NAME coTuCmdLineArgParser_EmptyList COMMAND otbCommonTestDriver
-  otbTestCommandLineArgumentParserList
-  -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 -doubles)
 
-otb_add_test(NAME coTuCmdLineArgParser_List1Arg COMMAND otbCommonTestDriver
-  otbTestCommandLineArgumentParserList
-  -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 -doubles 1.0 2.5)
 
-otb_add_test(NAME coTuCmdLineArgParser_List3ArgWithError COMMAND otbCommonTestDriver
-  otbTestCommandLineArgumentParserList
-  -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 -doubles 1.0 2.5 -3.5)
 
 otb_add_test(NAME coTuImageRegionTileMapSplitterNew COMMAND otbCommonTestDriver
   otbImageRegionTileMapSplitterNew
   )
 
-otb_add_test(NAME coTuCmdLineArgParserDeuxEntiers_ExactNumberArg COMMAND otbCommonTestDriver
-  otbTestCommandLineArgumentParser
-  -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 )
 
 
 

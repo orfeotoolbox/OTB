@@ -8,7 +8,6 @@ set(OTBCommon_SRC
   otbConfigurationManager.cxx
   otbStandardOneLineFilterWatcher.cxx
   otbWriterWatcherBase.cxx
-  otbCommandLineArgumentParser.cxx
   )
 
 add_library(OTBCommon ${OTBCommon_SRC})

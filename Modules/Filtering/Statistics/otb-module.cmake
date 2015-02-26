@@ -7,22 +7,23 @@ and allows the calculation of classical statistics (min max mean histogram).")
 
 otb_module(OTBStatistics
   DEPENDS
-    OTBVectorDataBase
-    OTBProjection
+    OTBCommon
+    OTBITK
     OTBITKPendingPatches
     OTBImageBase
-    OTBLabelMap
-    OTBStreaming
     OTBImageManipulation
-    OTBCommon
+    OTBLabelMap
     OTBObjectList
-    OTBITK
+    OTBProjection
+    OTBStreaming
+    OTBVectorDataBase
 
   TEST_DEPENDS
-    OTBVectorDataIO
-    OTBTestKernel
+    OTBCommandLineParser
     OTBImageIO
     OTBInterpolation
+    OTBTestKernel
+    OTBVectorDataIO
 
   DESCRIPTION
     "${DOCUMENTATION}"

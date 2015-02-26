@@ -7,21 +7,22 @@ data.")
 
 otb_module(OTBImageManipulation
   DEPENDS
+    OTBCommon
     OTBITK
     OTBITKPendingPatches
     OTBImageBase
-    OTBTransform
-    OTBStreaming
-    OTBCommon
     OTBInterpolation
     OTBOSSIMAdapters
     OTBObjectList
+    OTBStreaming
+    OTBTransform
 
   TEST_DEPENDS
-    OTBTextures
-    OTBTestKernel
-    OTBImageIO
+    OTBCommandLineParser
     OTBDensity
+    OTBImageIO
+    OTBTestKernel
+    OTBTextures
 
   DESCRIPTION
     "${DOCUMENTATION}"
