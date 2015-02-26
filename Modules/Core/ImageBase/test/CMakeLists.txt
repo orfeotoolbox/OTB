@@ -2,35 +2,25 @@ otb_module_test()
 
 set(OTBImageBaseTests
 otbImageBaseTestDriver.cxx
-otbImageListToVectorImageFilterNew.cxx
 otbFlexibleDistanceWithMissingValue.cxx
 otbImageAndVectorImageOperationFilterNew.cxx
 otbImagePCAShapeModelEstimatorTest.cxx
 otbStandardOneLineFilterWatcherTest.cxx
-otbImageList.cxx
 otbFunctionToImageFilter.cxx
-otbImageListSourceNew.cxx
 otbOssimElevManagerTest.cxx
 otbExtractROI2.cxx
-otbImageListToImageFilterNew.cxx
 otbComplexToVectorImageCastFilter.cxx
 otbMultiChannelExtractROI.cxx
-otbImageListToImageListApplyFilter.cxx
 otbVectorImageTest.cxx
 otbExtractROITestMetaData.cxx
 otbTestMultiExtractMultiUpdate.cxx
 otbExtractROI.cxx
 otbFunctionToImageFilterNew.cxx
-otbImageListToImageListFilterNew.cxx
-otbImageListToImageListApplyFilterNew.cxx
 otbVectorImageToASImageAdaptorNew.cxx
-otbImageListToVectorImageFilter.cxx
 otbImageAndVectorImageOperationFilterTest.cxx
 otbImageOfVectorsToMonoChannelExtractROI.cxx
-otbImageListNew.cxx
 otbImageOfVectorsToMonoChannelExtractROINew.cxx
 otbExtractROINew.cxx
-otbImageListToVectorImageFilter2.cxx
 otbExtractROI_RGB.cxx
 otbComplexToIntensityFilterTest.cxx
 otbStandardFilterWatcherNew.cxx
@@ -49,8 +39,6 @@ otb_module_target_label(otbImageBaseTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME coTuImageListToVectorImageFilterNew COMMAND otbImageBaseTestDriver
-  otbImageListToVectorImageFilterNew)
 
 otb_add_test(NAME bfTvFlexibleDistanceWithMissingValue COMMAND otbImageBaseTestDriver
   otbFlexibleDistanceWithMissingValue
@@ -87,13 +75,6 @@ otb_add_test(NAME coTuStandardOneLineFilterWatcher COMMAND otbImageBaseTestDrive
   )
 
 
-otb_add_test(NAME coTvImageList COMMAND otbImageBaseTestDriver
-  --compare-image ${NOTOL}   ${INPUTDATA}/amst.png
-  ${TEMP}/amst.png
-  otbImageList
-  ${INPUTDATA}/amst.png
-  ${TEMP}/amst.png
-  )
 
 
 otb_add_test(NAME bfTvFunctionToImageFilterTest COMMAND otbImageBaseTestDriver
@@ -106,8 +87,6 @@ otb_add_test(NAME bfTvFunctionToImageFilterTest COMMAND otbImageBaseTestDriver
   2 # radius
   )
 
-otb_add_test(NAME coTuImageListSourceNew COMMAND otbImageBaseTestDriver
-  otbImageListSourceNew)
 
 otb_add_test(NAME prTvossimElevManagerTest3 COMMAND otbImageBaseTestDriver
   --compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest3.tif
@@ -140,8 +119,6 @@ otb_add_test(NAME coTvExtractROI2 COMMAND otbImageBaseTestDriver
   ${TEMP}/coExtractROI2_cthead1_26_97_209_100.png
   26 97 209 100 )
 
-otb_add_test(NAME coTuImageListToImageFilterNew COMMAND otbImageBaseTestDriver
-  otbImageListToImageFilterNew)
 
 otb_add_test(NAME bfTuComplexToVectorImageCastFilterTest COMMAND otbImageBaseTestDriver
   --compare-n-images ${NOTOL} 2
@@ -224,22 +201,6 @@ otb_add_test(NAME coTvMultiChannelROI_3c_BSQ COMMAND otbImageBaseTestDriver
   -startX 0 -startY 0 -sizeX 134  -sizeY 330 -channels 3 4 5 )
 set_property(TEST coTvMultiChannelROI_3c_BSQ PROPERTY DEPENDS coTvMultiChannelROI_5c_BSQ)
 
-otb_add_test(NAME bfTvImageListToImageListApplyFilter COMMAND otbImageBaseTestDriver
-  --compare-n-images ${EPSILON_7} 3
-  ${BASELINE}/bfTvImageListToImageListApplyFilterBand1.png
-  ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
-  ${BASELINE}/bfTvImageListToImageListApplyFilterBand2.png
-  ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
-  ${BASELINE}/bfTvImageListToImageListApplyFilterBand3.png
-  ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
-  otbImageListToImageListApplyFilter
-  ${INPUTDATA}/poupees_c1.hdr
-  ${INPUTDATA}/poupees_c2.hdr
-  ${INPUTDATA}/poupees_c3.hdr
-  ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
-  ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
-  ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
-  )
 
 otb_add_test(NAME ioTvMultiDatasetReading2 COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
@@ -335,26 +296,12 @@ otb_add_test(NAME bfTuFunctionToImageFilterNew COMMAND otbImageBaseTestDriver
   otbFunctionToImageFilterNew
   )
 
-otb_add_test(NAME coTvImageListToImageListFilterNew COMMAND otbImageBaseTestDriver
-  otbImageListToImageListFilterNew)
 
-otb_add_test(NAME bfTuImageListToImageListApplyFilterNew COMMAND otbImageBaseTestDriver
-  otbImageListToImageListApplyFilterNew)
 
 otb_add_test(NAME coTuVectorImageToASImageAdaptorNew COMMAND otbImageBaseTestDriver
   otbVectorImageToASImageAdaptorNew
   )
 
-otb_add_test(NAME coTvImageListToVectorImageFilter COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_7}
-  ${BASELINE}/bfTvImageListToVectorImageFilter.png
-  ${TEMP}/coTvImageListToVectorImageFilter.png
-  otbImageListToVectorImageFilter
-  ${INPUTDATA}/poupees_c1.hdr
-  ${INPUTDATA}/poupees_c2.hdr
-  ${INPUTDATA}/poupees_c3.hdr
-  ${TEMP}/coTvImageListToVectorImageFilter.png
-  )
 
 otb_add_test(NAME bfTvImageAndVectorImageOperationFilterTest COMMAND otbImageBaseTestDriver
   --compare-n-images ${NOTOL} 4
@@ -386,8 +333,6 @@ otb_add_test(NAME coTvImageOfVectorsToMonoChannelExtractROI COMMAND otbImageBase
   ${TEMP}/coImageOfVectorsToMonoChannelExtractROI.png
   )
 
-otb_add_test(NAME coTuImageListNew COMMAND otbImageBaseTestDriver
-  otbImageListNew)
 
 otb_add_test(NAME coTuImageOfVectorsToMonoChannelExtractROINew COMMAND otbImageBaseTestDriver
   otbImageOfVectorsToMonoChannelExtractROINew
@@ -398,12 +343,6 @@ otb_add_test(NAME coTuImageOfVectorsToMonoChannelExtractROINew COMMAND otbImageB
 otb_add_test(NAME coTuExtractROINew COMMAND otbImageBaseTestDriver
   otbExtractROINew)
 
-otb_add_test(NAME coTvImageListToVectorImageFilter2 COMMAND otbImageBaseTestDriver
-  otbImageListToVectorImageFilter2
-  ${INPUTDATA}/poupees_c1.hdr
-  ${INPUTDATA}/poupees_c2.hdr
-  ${INPUTDATA}/poupees_c3.hdr
-  )
 
 otb_add_test(NAME coTvExtractROI_RGB COMMAND otbImageBaseTestDriver
   --compare-image ${NOTOL}   ${BASELINE}/coExtractROI_RGB_300_10_200_50.png

@@ -15,7 +15,6 @@ otb_module(OTBImageBase
     OTBImageIO
     OTBImageManipulation
     OTBMoments
-    OTBObjectList
     OTBOssim
     OTBStatistics
     OTBTestKernel
