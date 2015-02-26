@@ -5,7 +5,6 @@ void RegisterTests()
   REGISTER_TEST(otbRadiometricMomentsImageFunctionNew);
   REGISTER_TEST(otbRadiometricMomentsImageFunction);
   REGISTER_TEST(otbMetaImageFunctionNew);
-  REGISTER_TEST(otbMetaImageFunction);
   REGISTER_TEST(otbComplexMomentPathNew);
   REGISTER_TEST(otbHuMomentsImageFunctionNew);
   REGISTER_TEST(otbHuMomentsImageFunction);

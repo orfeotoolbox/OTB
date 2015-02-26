@@ -4,7 +4,6 @@ set(OTBMomentsTests
 otbMomentsTestDriver.cxx
 otbComplexMomentPathFloat.cxx
 otbRadiometricMomentsImageFunction.cxx
-otbMetaImageFunction.cxx
 otbComplexMomentPathNew.cxx
 otbHuMomentsImageFunction.cxx
 otbRealMomentsImageFunction.cxx
@@ -43,19 +42,7 @@ otb_add_test(NAME feTvRadiometricMomentsImageFunction COMMAND otbMomentsTestDriv
   ${INPUTDATA}/poupees.png
   ${TEMP}/feTvRadiometricMomentsImageFunction.txt)
 
-otb_add_test(NAME feTvMetaImageFunction COMMAND otbMomentsTestDriver
-  --compare-ascii ${EPSILON_8}
-  ${BASELINE_FILES}/feTvMetaImageFunction.txt
-  ${TEMP}/feTvMetaImageFunction.txt
-  otbMetaImageFunction
-  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-  ${TEMP}/feTvMetaImageFunction.txt
-  451846.014047961 5412466.57452216
-  )
 
-otb_add_test(NAME feTuMetaImageFunctionNew COMMAND otbMomentsTestDriver
-  otbMetaImageFunctionNew
-  )
 
 otb_add_test(NAME feTuComplexMomentPathNew COMMAND otbMomentsTestDriver
   otbComplexMomentPathNew)

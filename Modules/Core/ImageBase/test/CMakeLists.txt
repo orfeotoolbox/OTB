@@ -27,6 +27,7 @@ otbImageTest.cxx
 otbFlexibleDistanceWithMissingValueNew.cxx
 otbImageFunctionAdaptor.cxx
 otbMultiChannelExtractROINew.cxx
+otbMetaImageFunction.cxx
 )
 
 add_executable(otbImageBaseTestDriver ${OTBImageBaseTests})
@@ -376,3 +377,15 @@ otb_add_test(NAME feTuImageFunctionAdaptorNew COMMAND otbImageBaseTestDriver
 otb_add_test(NAME coTuMultiChannelROINew COMMAND otbImageBaseTestDriver
   otbMultiChannelExtractROINew)
 
+otb_add_test(NAME feTvMetaImageFunction COMMAND otbMomentsTestDriver
+  --compare-ascii ${EPSILON_8}
+  ${BASELINE_FILES}/feTvMetaImageFunction.txt
+  ${TEMP}/feTvMetaImageFunction.txt
+  otbMetaImageFunction
+  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+  ${TEMP}/feTvMetaImageFunction.txt
+  451846.014047961 5412466.57452216
+  )
+otb_add_test(NAME feTuMetaImageFunctionNew COMMAND otbMomentsTestDriver
+  otbMetaImageFunctionNew
+  )
