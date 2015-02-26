@@ -2,13 +2,8 @@ otb_module_test()
 
 set(OTBStereoTests
 otbStereoTestDriver.cxx
-otbFineRegistrationImageFilterNew.cxx
 otbBijectionCoherencyFilter.cxx
 otbMulti3DMapToDEMFilter.cxx
-otbNCCRegistrationFilter.cxx
-otbPixelWiseBlockMatchingImageFilter.cxx
-otbFineRegistrationImageFilterTest.cxx
-otbNCCRegistrationFilterNew.cxx
 otbAdhesionCorrectionFilter.cxx
 otbStereoSensorModelToElevationMapFilter.cxx
 )
@@ -19,9 +14,6 @@ otb_module_target_label(otbStereoTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME dmTuFineRegistrationImageFilterNew COMMAND otbStereoTestDriver
-  otbFineRegistrationImageFilterNew
-  )
 
 otb_add_test(NAME dmTuBijectionCoherencyFilterNew COMMAND otbStereoTestDriver
   otbBijectionCoherencyFilterNew)
@@ -243,135 +235,14 @@ otb_add_test(NAME dmTvMulti3DMapToDEMFilterStadiumMeanMultiThreadMultiStream COM
   4
   )
 
-otb_add_test(NAME dmTvNCCRegistrationFilter COMMAND otbStereoTestDriver
-  --compare-image ${EPSILON_10}
-  ${BASELINE}/dmNCCRegistrationFilterOutput.tif
-  ${TEMP}/dmNCCRegistrationFilterOutput.tif
-  otbNCCRegistrationFilter
-  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
-  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_sinus.tif
-  ${TEMP}/dmNCCRegistrationFilterOutput.tif
-  5 1.0 2)
 
-otb_add_test(NAME dmTuPixelWiseBlockMatchingImageFilterNew COMMAND otbStereoTestDriver
-  otbPixelWiseBlockMatchingImageFilterNew)
 
-otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilterNCC COMMAND otbStereoTestDriver
-  --compare-n-images ${NOTOL} 2
-  ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
-  ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
-  ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
-  ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
-  otbPixelWiseBlockMatchingImageFilterNCC
-  ${EXAMPLEDATA}/StereoFixed.png
-  ${EXAMPLEDATA}/StereoMoving.png
-  ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
-  ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
-  2
-  -10 +10
-  )
 
-otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilter COMMAND otbStereoTestDriver
-  --compare-n-images ${NOTOL} 2
-  ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
-  ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
-  ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterOutputMetric.tif
-  ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputMetric.tif
-  otbPixelWiseBlockMatchingImageFilter
-  ${EXAMPLEDATA}/StereoFixed.png
-  ${EXAMPLEDATA}/StereoMoving.png
-  ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
-  ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputMetric.tif
-  2
-  -10 +10
-  )
 
-otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanSquare COMMAND otbStereoTestDriver
-  --compare-n-images ${EPSILON_10} 2
-  ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif
-  ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanSquareField.tif
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareField.tif
-  otbFineRegistrationImageFilterTest
-  ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
-  ${EXAMPLEDATA}/StereoMoving.png # movingFileName
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif # output correlFileName
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareField.tif  # output fieldFileName
-  3 # radius
-  2 # sradius
-  0.1 # precision
-  2 # Mean square
-  1 # Grid step
-  0 # Initial offset x
-  0 # Initial offset y
-  0 0 80 65 # region to proceed
-  )
 
-otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithNormalizedCorrelation COMMAND otbStereoTestDriver
-  --compare-n-images ${EPSILON_10} 2
-  ${BASELINE}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif
-  ${BASELINE}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationField.tif
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationField.tif
-  otbFineRegistrationImageFilterTest
-  ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
-  ${EXAMPLEDATA}/StereoMoving.png # movingFileName
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif # output correlFileName
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationField.tif  # output fieldFileName
-  3 # radius
-  2 # sradius
-  0.1 # precision
-  1 # Normalized Correlation
-  1 # Grid step
-  0 # Initial offset x
-  0 # Initial offset y
-  0 0 80 130 # region to proceed
-  )
 
-otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanReciprocalDifference COMMAND otbStereoTestDriver
-  --compare-n-images ${EPSILON_10} 2
-  ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif
-  ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceField.tif
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceField.tif
-  otbFineRegistrationImageFilterTest
-  ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
-  ${EXAMPLEDATA}/StereoMoving.png # movingFileName
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif # output correlFileName
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceField.tif  # output fieldFileName
-  3 # radius
-  2 # sradius
-  0.1 # precision
-  3 # Mean reciprocal difference
-  1 # Grid step
-  0 # Initial offset x
-  0 # Initial offset y
-  0 0 80 130 # region to proceed
-  )
 
-otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithCorrelation COMMAND otbStereoTestDriver
-  --compare-n-images ${EPSILON_10} 2
-  ${BASELINE}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif
-  ${BASELINE}/feTvFineRegistrationImageFilterTestWithCorrelationField.tif
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationField.tif
-  otbFineRegistrationImageFilterTest
-  ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
-  ${EXAMPLEDATA}/StereoMoving.png # movingFileName
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif # output correlFileName
-  ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationField.tif  # output fieldFileName
-  3 # radius
-  2 # sradius
-  0.1 # precision
-  0 # Correlation
-  1 # Grid step
-  0 # Initial offset x
-  0 # Initial offset y
-  0 0 80 130 # region to proceed
-  )
 
-otb_add_test(NAME dmTuNCCRegistrationFilterNew COMMAND otbStereoTestDriver
-  otbNCCRegistrationFilterNew)
 
 otb_add_test(NAME dmTvAdhesionCorrectionFilter COMMAND otbStereoTestDriver
   --compare-n-images ${EPSILON_4} 3

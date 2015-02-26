@@ -15,4 +15,9 @@ void RegisterTests()
   REGISTER_TEST(otbDisparityMapTo3DFilter);
   REGISTER_TEST(otbMultiDisparityMapTo3DFilterNew);
   REGISTER_TEST(otbMultiDisparityMapTo3DFilter);
+  REGISTER_TEST(otbFineRegistrationImageFilterNew);
+  REGISTER_TEST(otbFineRegistrationImageFilterTest);
+  REGISTER_TEST(otbNCCRegistrationFilter);
+  REGISTER_TEST(otbNCCRegistrationFilterNew);
+  REGISTER_TEST(otbPixelWiseBlockMatchingImageFilter);
 }

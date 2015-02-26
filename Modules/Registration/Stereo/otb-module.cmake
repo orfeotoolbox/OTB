@@ -4,7 +4,6 @@ elevation map construction are available.")
 
 otb_module(OTBStereo
   DEPENDS
-    OTBCommon
     OTBITK
     OTBITKPendingPatches
     OTBImageBase
@@ -15,6 +14,7 @@ otb_module(OTBStereo
     OTBTransform
 
   TEST_DEPENDS
+    OTBCommon
     OTBImageIO
     OTBTestKernel
 
