@@ -8,6 +8,11 @@ otb_module(OTBObjectList
     OTBCommon
     OTBITK
 
+  TEST_DEPENDS
+    OTBImageBase
+    OTBImageIO
+    OTBTestKernel
+
   DESCRIPTION
     "${DOCUMENTATION}"
 )

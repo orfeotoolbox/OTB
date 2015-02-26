@@ -6,7 +6,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageAndVectorImageOperationFilterNew);
   REGISTER_TEST(otbImagePCAShapeModelEstimatorTest);
   REGISTER_TEST(otbStandardOneLineFilterWatcherTest);
-  REGISTER_TEST(otbObjectList);
   REGISTER_TEST(otbImageList);
   REGISTER_TEST(otbFunctionToImageFilter);
   REGISTER_TEST(otbImageListSourceNew);
@@ -31,7 +30,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageOfVectorsToMonoChannelExtractROI);
   REGISTER_TEST(otbImageListNew);
   REGISTER_TEST(otbImageOfVectorsToMonoChannelExtractROINew);
-  REGISTER_TEST(otbObjectListNew);
   REGISTER_TEST(otbExtractROINew);
   REGISTER_TEST(otbImageListToVectorImageFilter2);
   REGISTER_TEST(otbExtractROI_RGB);

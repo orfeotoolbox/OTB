@@ -7,7 +7,6 @@ otbFlexibleDistanceWithMissingValue.cxx
 otbImageAndVectorImageOperationFilterNew.cxx
 otbImagePCAShapeModelEstimatorTest.cxx
 otbStandardOneLineFilterWatcherTest.cxx
-otbObjectList.cxx
 otbImageList.cxx
 otbFunctionToImageFilter.cxx
 otbImageListSourceNew.cxx
@@ -30,7 +29,6 @@ otbImageAndVectorImageOperationFilterTest.cxx
 otbImageOfVectorsToMonoChannelExtractROI.cxx
 otbImageListNew.cxx
 otbImageOfVectorsToMonoChannelExtractROINew.cxx
-otbObjectListNew.cxx
 otbExtractROINew.cxx
 otbImageListToVectorImageFilter2.cxx
 otbExtractROI_RGB.cxx
@@ -88,12 +86,6 @@ otb_add_test(NAME coTuStandardOneLineFilterWatcher COMMAND otbImageBaseTestDrive
   ${INPUTDATA}/qb_RoadExtract.img
   )
 
-otb_add_test(NAME coTvObjectList COMMAND otbImageBaseTestDriver
-  otbObjectList
-  ${INPUTDATA}/couleurs.jpg
-  ${INPUTDATA}/poupees.png
-  ${INPUTDATA}/couleurs_extrait.png
-  )
 
 otb_add_test(NAME coTvImageList COMMAND otbImageBaseTestDriver
   --compare-image ${NOTOL}   ${INPUTDATA}/amst.png
@@ -402,8 +394,6 @@ otb_add_test(NAME coTuImageOfVectorsToMonoChannelExtractROINew COMMAND otbImageB
   )
 
 
-otb_add_test(NAME coTuObjectListNew COMMAND otbImageBaseTestDriver
-  otbObjectListNew)
 
 otb_add_test(NAME coTuExtractROINew COMMAND otbImageBaseTestDriver
   otbExtractROINew)
