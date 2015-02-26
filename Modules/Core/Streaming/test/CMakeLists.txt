@@ -3,6 +3,7 @@ otb_module_test()
 set(OTBStreamingTests
 otbStreamingTestDriver.cxx
 otbStreamingManager.cxx
+otbPipelineMemoryPrintCalculatorTest.cxx
 )
 
 add_executable(otbStreamingTestDriver ${OTBStreamingTests})
@@ -55,3 +56,14 @@ otb_add_test(NAME coTvTileDimensionTiledStreamingManager COMMAND otbStreamingTes
   ${TEMP}/coTvTileDimensionTiledStreamingManager.txt
   )
 
+otb_add_test(NAME coTvPipelineMemoryPrintCalculator COMMAND otbStatisticsTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/coTvPipelineMemoryPrintCalculatorOutput.txt
+  ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
+  otbPipelineMemoryPrintCalculatorTest
+  ${INPUTDATA}/qb_RoadExtract.img
+  ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
+  )
+otb_add_test(NAME coTuPipelineMemoryPrintCalculatorNew COMMAND otbStatisticsTestDriver
+  otbPipelineMemoryPrintCalculatorNew
+  )

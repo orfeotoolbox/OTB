@@ -10,7 +10,6 @@ otbStreamingStatisticsImageFilterNew.cxx
 otbListSampleToVariableDimensionHistogramGeneratorNew.cxx
 otbStreamingHistogramVectorImageFilter.cxx
 otbStreamingStatisticsVectorImageFilterNew.cxx
-otbPipelineMemoryPrintCalculatorTest.cxx
 otbRealImageToComplexImageFilterTest.cxx
 otbHistogramStatisticsFunction.cxx
 otbContinuousMinimumMaximumImageCalculatorTest.cxx
@@ -78,18 +77,7 @@ otb_add_test(NAME bfTuStreamingHistogramVIFilterNew COMMAND otbStatisticsTestDri
 otb_add_test(NAME bfTuStreamingStatisticsVectorImageFilterNew COMMAND otbStatisticsTestDriver
   otbStreamingStatisticsVectorImageFilterNew)
 
-otb_add_test(NAME coTvPipelineMemoryPrintCalculator COMMAND otbStatisticsTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/coTvPipelineMemoryPrintCalculatorOutput.txt
-  ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
-  otbPipelineMemoryPrintCalculatorTest
-  ${INPUTDATA}/qb_RoadExtract.img
-  ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
-  )
 
-otb_add_test(NAME coTuPipelineMemoryPrintCalculatorNew COMMAND otbStatisticsTestDriver
-  otbPipelineMemoryPrintCalculatorNew
-  )
 
 otb_add_test(NAME bfTvRealImageToComplexImageFilterTest COMMAND otbStatisticsTestDriver
   otbRealImageToComplexImageFilterTest

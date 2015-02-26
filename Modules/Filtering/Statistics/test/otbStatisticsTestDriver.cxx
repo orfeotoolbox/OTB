@@ -10,7 +10,6 @@ void RegisterTests()
   REGISTER_TEST(otbStreamingHistogramVectorImageFilterNew);
   REGISTER_TEST(otbStreamingStatisticsVectorImageFilterNew);
   REGISTER_TEST(otbPipelineMemoryPrintCalculatorNew);
-  REGISTER_TEST(otbPipelineMemoryPrintCalculatorTest);
   REGISTER_TEST(otbRealImageToComplexImageFilterTest);
   REGISTER_TEST(otbHistogramStatisticsFunction);
   REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorTest);

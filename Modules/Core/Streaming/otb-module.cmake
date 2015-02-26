@@ -5,14 +5,16 @@ the system from running out of memory.")
 
 otb_module(OTBStreaming
   DEPENDS
+    OTBCommon
     OTBITK
     OTBITKPendingPatches
     OTBImageBase
-    OTBCommon
     OTBOSSIMAdapters
     OTBObjectList
 
   TEST_DEPENDS
+    OTBImageIO
+    OTBStatistics
     OTBTestKernel
 
   DESCRIPTION
