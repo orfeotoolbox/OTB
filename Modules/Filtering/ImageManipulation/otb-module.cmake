@@ -12,7 +12,6 @@ otb_module(OTBImageManipulation
     OTBITKPendingPatches
     OTBImageBase
     OTBInterpolation
-    OTBOSSIMAdapters
     OTBObjectList
     OTBStreaming
     OTBTransform

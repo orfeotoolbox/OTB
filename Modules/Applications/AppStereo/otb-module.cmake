@@ -2,23 +2,24 @@ set(DOCUMENTATION "Stereo application (see also Stereo module).")
 
 otb_module(OTBAppStereo
   DEPENDS
-    OTBStereo
-    OTBStatistics
-    OTBImageIO
+    OTBApplicationEngine
+    OTBDEM
+    OTBDisparityMap
+    OTBDisplacementField
     OTBITK
     OTBImageBase
-    OTBInterpolation
-    OTBTransform
-    OTBDisplacementField
-    OTBDisparityMap
+    OTBImageIO
     OTBImageManipulation
+    OTBInterpolation
     OTBMathParser
     OTBObjectList
-    OTBApplicationEngine
+    OTBStatistics
+    OTBStereo
+    OTBTransform
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBCommandLine
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

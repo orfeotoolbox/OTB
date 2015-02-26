@@ -7,7 +7,6 @@ void RegisterTests()
   REGISTER_TEST(otbPrintableImageFilter);
   REGISTER_TEST(otbConcatenateScalarValueImageFilterNew);
   REGISTER_TEST(otbConcatenateScalarValueImageFilterTest);
-  REGISTER_TEST(otbDEMToImageGeneratorNew);
   REGISTER_TEST(otbShiftScaleImageAdaptor);
   REGISTER_TEST(otbImageToVectorImageCastFilter);
   REGISTER_TEST(otbFunctionWithNeighborhoodToImageFilter);
@@ -17,7 +16,6 @@ void RegisterTests()
   REGISTER_TEST(otbUnaryFunctorWithIndexImageFilterNew);
   REGISTER_TEST(otbProlateInterpolateImageFunction);
   REGISTER_TEST(otbUnaryFunctorImageFilterNew);
-  REGISTER_TEST(otbDEMToImageGeneratorTest);
   REGISTER_TEST(otbUnaryImageFunctorWithVectorImageFilter);
   REGISTER_TEST(otbImageToVectorImageCastFilterNew);
   REGISTER_TEST(otbPrintableImageFilterWithMask);
@@ -61,7 +59,6 @@ void RegisterTests()
   REGISTER_TEST(otbBCOInterpolateImageFunctionTest);
   REGISTER_TEST(otbBCOInterpolateImageFunctionVectorImageTest);
   REGISTER_TEST(otbImageToImageListFilterNew);
-  REGISTER_TEST(otbDEMToImageGeneratorFromImageTest);
   REGISTER_TEST(otbBoxAndWhiskerImageFilter);
   REGISTER_TEST(otbStreamingShrinkImageFilterNew);
   REGISTER_TEST(otbVectorRescaleIntensityImageFilter);
