@@ -422,6 +422,7 @@ MainWindow
   m_UI->menu_View->addAction( m_ColorSetupDock->toggleViewAction() );
   m_UI->menu_View->addAction( m_ColorDynamicsDock->toggleViewAction() );
   m_UI->menu_View->addAction( m_HistogramDock->toggleViewAction() );
+  m_UI->menu_View->addAction( m_LayerStackDock->toggleViewAction() );
 
   m_UI->menu_View->addSeparator();
 
