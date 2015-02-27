@@ -169,22 +169,22 @@ otb_add_test(NAME coTvConfigurationManagerDefault COMMAND otbCommonTestDriver
 
 
 
-otb_add_test(NAME coTvConfigurationManagerEnvVar COMMAND otbTestDriver
+otb_add_test(NAME coTvConfigurationManagerEnvVar COMMAND otbCommonTestDriver
   --add-before-env OTB_MAX_RAM_HINT "256"
   --add-before-env OTB_DEM_DIRECTORY "/path/to/dem/"
   --add-before-env OTB_GEOID_FILE "/path/to/geoid.file"
   Execute $<TARGET_FILE:otbCommonTestDriver>
   otbConfigurationManagerTest
   256 /path/to/dem/ /path/to/geoid.file)
-otb_add_test(NAME coTuStandardFilterWatcherNew COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTuStandardFilterWatcherNew COMMAND otbCommonTestDriver
   otbStandardFilterWatcherNew
   ${INPUTDATA}/qb_RoadExtract.img
   )
-otb_add_test(NAME coTuStandardOneLineFilterWatcher COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTuStandardOneLineFilterWatcher COMMAND otbCommonTestDriver
   otbStandardOneLineFilterWatcherTest
   ${INPUTDATA}/qb_RoadExtract.img
   )
-otb_add_test(NAME coTvStandardWriterWatcher COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTvStandardWriterWatcher COMMAND otbCommonTestDriver
   otbStandardWriterWatcher
   ${INPUTDATA}/couleurs.tif
   ${TEMP}/coTvStandardWriterWatcherOutput.tif

@@ -288,7 +288,7 @@ otb_add_test(NAME dmTvStereoSensorModelToElevationFilter COMMAND otbStereoTestDr
   3
   )
 
-otb_add_test(NAME dmTvStereorectificationDisplacementFieldSource COMMAND otbDisplacementFieldTestDriver
+otb_add_test(NAME dmTvStereorectificationDisplacementFieldSource COMMAND otbStereoTestDriver
   --compare-n-images ${EPSILON_10} 2
   ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput1.tif
   ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput1.tif
@@ -303,5 +303,5 @@ otb_add_test(NAME dmTvStereorectificationDisplacementFieldSource COMMAND otbDisp
   0.5
   5
   )
-otb_add_test(NAME dmTuStereorectificationDisplacementFieldSourceNew COMMAND otbDisplacementFieldTestDriver
+otb_add_test(NAME dmTuStereorectificationDisplacementFieldSourceNew COMMAND otbStereoTestDriver
   otbStereorectificationDisplacementFieldSourceNew)

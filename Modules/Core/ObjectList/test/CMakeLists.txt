@@ -22,28 +22,28 @@ set(OTBObjectListTests
 add_executable(otbObjectListTestDriver ${OTBObjectListTests})
 target_link_libraries(otbObjectListTestDriver ${OTBObjectList-Test_LIBRARIES})
 otb_module_target_label(otbObjectListTestDriver)
-otb_add_test(NAME coTvObjectList COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTvObjectList COMMAND otbObjectListTestDriver
   otbObjectList
   ${INPUTDATA}/couleurs.jpg
   ${INPUTDATA}/poupees.png
   ${INPUTDATA}/couleurs_extrait.png
   )
-otb_add_test(NAME coTuObjectListNew COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTuObjectListNew COMMAND otbObjectListTestDriver
   otbObjectListNew)
-otb_add_test(NAME coTvImageList COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTvImageList COMMAND otbObjectListTestDriver
   --compare-image ${NOTOL}   ${INPUTDATA}/amst.png
   ${TEMP}/amst.png
   otbImageList
   ${INPUTDATA}/amst.png
   ${TEMP}/amst.png
   )
-otb_add_test(NAME coTuImageListNew COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTuImageListNew COMMAND otbObjectListTestDriver
   otbImageListNew)
-otb_add_test(NAME coTuImageListSourceNew COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTuImageListSourceNew COMMAND otbObjectListTestDriver
   otbImageListSourceNew)
-otb_add_test(NAME coTuImageListToImageFilterNew COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTuImageListToImageFilterNew COMMAND otbObjectListTestDriver
   otbImageListToImageFilterNew)
-otb_add_test(NAME bfTvImageListToImageListApplyFilter COMMAND otbImageBaseTestDriver
+otb_add_test(NAME bfTvImageListToImageListApplyFilter COMMAND otbObjectListTestDriver
   --compare-n-images ${EPSILON_7} 3
   ${BASELINE}/bfTvImageListToImageListApplyFilterBand1.png
   ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
@@ -59,17 +59,17 @@ otb_add_test(NAME bfTvImageListToImageListApplyFilter COMMAND otbImageBaseTestDr
   ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
   ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
   )
-otb_add_test(NAME bfTuImageListToImageListApplyFilterNew COMMAND otbImageBaseTestDriver
+otb_add_test(NAME bfTuImageListToImageListApplyFilterNew COMMAND otbObjectListTestDriver
   otbImageListToImageListApplyFilterNew)
-otb_add_test(NAME coTvImageListToImageListFilterNew COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTvImageListToImageListFilterNew COMMAND otbObjectListTestDriver
   otbImageListToImageListFilterNew)
-otb_add_test(NAME coTvImageListToVectorImageFilter2 COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTvImageListToVectorImageFilter2 COMMAND otbObjectListTestDriver
   otbImageListToVectorImageFilter2
   ${INPUTDATA}/poupees_c1.hdr
   ${INPUTDATA}/poupees_c2.hdr
   ${INPUTDATA}/poupees_c3.hdr
   )
-otb_add_test(NAME coTvImageListToVectorImageFilter COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTvImageListToVectorImageFilter COMMAND otbObjectListTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvImageListToVectorImageFilter.png
   ${TEMP}/coTvImageListToVectorImageFilter.png
@@ -79,16 +79,16 @@ otb_add_test(NAME coTvImageListToVectorImageFilter COMMAND otbImageBaseTestDrive
   ${INPUTDATA}/poupees_c3.hdr
   ${TEMP}/coTvImageListToVectorImageFilter.png
   )
-otb_add_test(NAME coTuImageListToVectorImageFilterNew COMMAND otbImageBaseTestDriver
+otb_add_test(NAME coTuImageListToVectorImageFilterNew COMMAND otbObjectListTestDriver
   otbImageListToVectorImageFilterNew)
-otb_add_test(NAME coTvObjectListTestNotValid COMMAND otbVectorDataBaseTestDriver
+otb_add_test(NAME coTvObjectListTestNotValid COMMAND otbObjectListTestDriver
   otbObjectList2
   )
-otb_add_test(NAME coTuObjectListToObjectListFilterNew COMMAND otbVectorDataBaseTestDriver
+otb_add_test(NAME coTuObjectListToObjectListFilterNew COMMAND otbObjectListTestDriver
   otbObjectListToObjectListFilterNew)
-otb_add_test(NAME coTuImageToImageListFilterNew COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME coTuImageToImageListFilterNew COMMAND otbObjectListTestDriver
   otbImageToImageListFilterNew)
-otb_add_test(NAME bfTvVectorImageToImageListFilter COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME bfTvVectorImageToImageListFilter COMMAND otbObjectListTestDriver
   --compare-n-images ${EPSILON_7} 3
   ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
   ${TEMP}/bfTvVectorImageToImageListFilterBand1.png
@@ -102,7 +102,7 @@ otb_add_test(NAME bfTvVectorImageToImageListFilter COMMAND otbImageManipulationT
   ${TEMP}/bfTvVectorImageToImageListFilterBand2.png
   ${TEMP}/bfTvVectorImageToImageListFilterBand3.png
   )
-otb_add_test(NAME bfTvVectorImageToImageListFilterIt COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME bfTvVectorImageToImageListFilterIt COMMAND otbObjectListTestDriver
   --compare-n-images ${EPSILON_7} 3
   ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
   ${TEMP}/bfTvVectorImageToImageListFilterItBand1.png
@@ -115,7 +115,7 @@ otb_add_test(NAME bfTvVectorImageToImageListFilterIt COMMAND otbImageManipulatio
   ${TEMP}/bfTvVectorImageToImageListFilterIt
   png
   )
-otb_add_test(NAME bfTvVectorImageToImageListFilterIt2 COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME bfTvVectorImageToImageListFilterIt2 COMMAND otbObjectListTestDriver
   --compare-n-images ${EPSILON_7} 3
   ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
   ${TEMP}/bfTvVectorImageToImageListFilterIt2Band1.tif
@@ -128,5 +128,5 @@ otb_add_test(NAME bfTvVectorImageToImageListFilterIt2 COMMAND otbImageManipulati
   ${TEMP}/bfTvVectorImageToImageListFilterIt2
   tif
   )
-otb_add_test(NAME bfTuVectorImageToImageListFilterNew COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME bfTuVectorImageToImageListFilterNew COMMAND otbObjectListTestDriver
   otbVectorImageToImageListFilterNew)

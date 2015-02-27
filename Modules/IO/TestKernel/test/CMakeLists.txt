@@ -12,7 +12,7 @@ set(OTBTestKernelTests
 add_executable(otbTestKernelTestDriver ${OTBTestKernelTests})
 target_link_libraries(otbTestKernelTestDriver ${OTBTestKernel-Test_LIBRARIES})
 otb_module_target_label(otbTestKernelTestDriver)
-otb_add_test(NAME tsTvCompareAscii2 COMMAND otbCommonTestDriver
+otb_add_test(NAME tsTvCompareAscii2 COMMAND otbTestKernelTestDriver
   --compare-ascii ${NOTOL}
   ${TEMP}/tsTvCompareAsciiRef2.txt
   ${TEMP}/tsTvCompareAsciiTest2.txt
@@ -21,7 +21,7 @@ otb_add_test(NAME tsTvCompareAscii2 COMMAND otbCommonTestDriver
   ${TEMP}/tsTvCompareAsciiTest2.txt
   )
 set_property(TEST tsTvCompareAscii2 PROPERTY WILL_FAIL true)
-otb_add_test(NAME tsTvCompareAscii2reverse COMMAND otbCommonTestDriver
+otb_add_test(NAME tsTvCompareAscii2reverse COMMAND otbTestKernelTestDriver
   --compare-ascii ${NOTOL}
   ${TEMP}/tsTvCompareAsciiRef2reverse.txt
   ${TEMP}/tsTvCompareAsciiTest2reverse.txt
@@ -30,7 +30,7 @@ otb_add_test(NAME tsTvCompareAscii2reverse COMMAND otbCommonTestDriver
   ${TEMP}/tsTvCompareAsciiRef2reverse.txt
   )
 set_property(TEST tsTvCompareAscii2reverse PROPERTY WILL_FAIL true)
-otb_add_test(NAME tsTvCompareAscii3order COMMAND otbCommonTestDriver
+otb_add_test(NAME tsTvCompareAscii3order COMMAND otbTestKernelTestDriver
   --compare-ascii ${NOTOL}
   ${TEMP}/tsTvCompareAsciiRef3order.txt
   ${TEMP}/tsTvCompareAsciiTest3order.txt
@@ -39,7 +39,7 @@ otb_add_test(NAME tsTvCompareAscii3order COMMAND otbCommonTestDriver
   ${TEMP}/tsTvCompareAsciiTest3order.txt
   )
 set_property(TEST tsTvCompareAscii3order PROPERTY WILL_FAIL true)
-otb_add_test(NAME tsTvCompareAscii3 COMMAND otbCommonTestDriver
+otb_add_test(NAME tsTvCompareAscii3 COMMAND otbTestKernelTestDriver
   --ignore-order --compare-ascii ${NOTOL}
   ${TEMP}/tsTvCompareAsciiRef3.txt
   ${TEMP}/tsTvCompareAsciiTest3.txt
@@ -47,7 +47,7 @@ otb_add_test(NAME tsTvCompareAscii3 COMMAND otbCommonTestDriver
   ${TEMP}/tsTvCompareAsciiRef3.txt
   ${TEMP}/tsTvCompareAsciiTest3.txt
   )
-otb_add_test(NAME tsTvCompareAscii4 COMMAND otbCommonTestDriver
+otb_add_test(NAME tsTvCompareAscii4 COMMAND otbTestKernelTestDriver
   --compare-ascii ${NOTOL}
   ${TEMP}/tsTvCompareAsciiRef4.txt
   ${TEMP}/tsTvCompareAsciiTest4.txt
@@ -56,7 +56,7 @@ otb_add_test(NAME tsTvCompareAscii4 COMMAND otbCommonTestDriver
   ${TEMP}/tsTvCompareAsciiTest4.txt
   )
 set_property(TEST tsTvCompareAscii4 PROPERTY WILL_FAIL true)
-otb_add_test(NAME tsTvCompareAscii4epsilon2 COMMAND otbCommonTestDriver
+otb_add_test(NAME tsTvCompareAscii4epsilon2 COMMAND otbTestKernelTestDriver
   --compare-ascii ${EPSILON_2}
   ${TEMP}/tsTvCompareAsciiRef4epsilon2.txt
   ${TEMP}/tsTvCompareAsciiTest4epsilon2.txt
@@ -64,7 +64,7 @@ otb_add_test(NAME tsTvCompareAscii4epsilon2 COMMAND otbCommonTestDriver
   ${TEMP}/tsTvCompareAsciiRef4epsilon2.txt
   ${TEMP}/tsTvCompareAsciiTest4epsilon2.txt
   )
-otb_add_test(NAME tsTvCompareAscii4epsilon3 COMMAND otbCommonTestDriver
+otb_add_test(NAME tsTvCompareAscii4epsilon3 COMMAND otbTestKernelTestDriver
   --compare-ascii ${EPSILON_3}
   ${TEMP}/tsTvCompareAsciiRef4epsilon3.txt
   ${TEMP}/tsTvCompareAsciiTest4epsilon3.txt
@@ -73,7 +73,7 @@ otb_add_test(NAME tsTvCompareAscii4epsilon3 COMMAND otbCommonTestDriver
   ${TEMP}/tsTvCompareAsciiTest4epsilon3.txt
   )
 set_property(TEST tsTvCompareAscii4epsilon3 PROPERTY WILL_FAIL true)
-otb_add_test(NAME tsTvCompareAscii5epsilon2 COMMAND otbCommonTestDriver
+otb_add_test(NAME tsTvCompareAscii5epsilon2 COMMAND otbTestKernelTestDriver
   --ignore-order  --compare-ascii ${EPSILON_2}
   ${TEMP}/tsTvCompareAsciiRef5epsilon2.txt
   ${TEMP}/tsTvCompareAsciiTest5epsilon2.txt
@@ -81,7 +81,7 @@ otb_add_test(NAME tsTvCompareAscii5epsilon2 COMMAND otbCommonTestDriver
   ${TEMP}/tsTvCompareAsciiRef5epsilon2.txt
   ${TEMP}/tsTvCompareAsciiTest5epsilon2.txt
   )
-otb_add_test(NAME tsTvCompareAsciiScientificNotation COMMAND otbCommonTestDriver
+otb_add_test(NAME tsTvCompareAsciiScientificNotation COMMAND otbTestKernelTestDriver
   --compare-ascii ${EPSILON_2}
   ${TEMP}/tsTvCompareAsciiRef_SN.txt
   ${TEMP}/tsTvCompareAsciiTest_SN.txt
@@ -89,7 +89,7 @@ otb_add_test(NAME tsTvCompareAsciiScientificNotation COMMAND otbCommonTestDriver
   ${TEMP}/tsTvCompareAsciiRef_SN.txt
   ${TEMP}/tsTvCompareAsciiTest_SN.txt
   )
-otb_add_test(NAME tsTvCompareAscii COMMAND otbCommonTestDriver
+otb_add_test(NAME tsTvCompareAscii COMMAND otbTestKernelTestDriver
   --compare-ascii ${NOTOL}
   ${TEMP}/tsTvCompareAsciiRef.txt
   ${TEMP}/tsTvCompareAsciiTest.txt
@@ -97,7 +97,7 @@ otb_add_test(NAME tsTvCompareAscii COMMAND otbCommonTestDriver
   ${TEMP}/tsTvCompareAsciiRef.txt
   ${TEMP}/tsTvCompareAsciiTest.txt
   )
-otb_add_test(NAME tsTvCompareAsciiepsilon3_WhiteSpaceOK COMMAND otbCommonTestDriver
+otb_add_test(NAME tsTvCompareAsciiepsilon3_WhiteSpaceOK COMMAND otbTestKernelTestDriver
   --compare-ascii ${EPSILON_3}
   ${BASELINE_FILES}/tsTvCompareAsciiEpsilon3_Base.txt
   ${TEMP}/tsTvCompareAsciiEpsilon3_TestOK.txt
@@ -105,7 +105,7 @@ otb_add_test(NAME tsTvCompareAsciiepsilon3_WhiteSpaceOK COMMAND otbCommonTestDri
   ${INPUTDATA}/tsTvCompareAsciiEpsilon3_TestOK.txt
   ${TEMP}/tsTvCompareAsciiEpsilon3_TestOK.txt
   )
-otb_add_test(NAME tsTvCompareAsciiepsilon3_WhiteSpaceKO COMMAND otbCommonTestDriver
+otb_add_test(NAME tsTvCompareAsciiepsilon3_WhiteSpaceKO COMMAND otbTestKernelTestDriver
   --compare-ascii ${EPSILON_3}
   ${BASELINE_FILES}/tsTvCompareAsciiEpsilon3_Base.txt
   ${TEMP}/tsTvCompareAsciiEpsilon3_TestKO.txt

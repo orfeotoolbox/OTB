@@ -328,12 +328,12 @@ otb_add_test(NAME feTvLineCorrelationLinear COMMAND otbEdgeTestDriver
 otb_add_test(NAME feTuLineDetectorBaseNew COMMAND otbEdgeTestDriver
   otbLineDetectorBaseNew)
 
-otb_add_test(NAME feTvFillGapsFilter COMMAND otbSpatialObjectsTestDriver
+otb_add_test(NAME feTvFillGapsFilter COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_8}
   ${BASELINE}/feTvFillGapfilter.png
   ${TEMP}/feTvFillGapfilter.png
   otbFillGapsFilter
   ${INPUTDATA}/ImageLine.bsq.hdr
   ${TEMP}/feTvFillGapfilter.png)
-otb_add_test(NAME feTuFillGapsFilterNew COMMAND otbSpatialObjectsTestDriver
+otb_add_test(NAME feTuFillGapsFilterNew COMMAND otbEdgeTestDriver
   otbFillGapsFilterNew)

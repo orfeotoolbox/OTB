@@ -1271,7 +1271,7 @@ foreach( file ${GenericConversionChecking_INPUTS} )
   list(GET GenericConversionChecking_TOL_M   ${GenericConversionChecking_TESTNB} current_tol_m  )
   math(EXPR GenericConversionChecking_TESTNB "${GenericConversionChecking_TESTNB} + 1")
   
-  otb_add_test(NAME prTvGenericRSTransformGenericConversionCheckingFromGCP_${current_type} COMMAND otbTransformTestDriver
+  otb_add_test(NAME prTvGenericRSTransformGenericConversionCheckingFromGCP_${current_type} COMMAND otbProjectionTestDriver
     otbGenericRSTransformGenericConversionCheckingFromGCP
       ${file}
       ${INPUTDATA}/DEM/srtm_directory/

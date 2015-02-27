@@ -229,5 +229,5 @@ otb_add_test(NAME feTvDrawPathTestAlign COMMAND otbRoadExtractionTestDriver
   ${INPUTDATA}/DeuxTraits.png
   ${TEMP}/feDrawPathAlignDeuxTraits.png)
 
-otb_add_test(NAME feTuBreakAngularPathListFilterNew COMMAND otbPathTestDriver
+otb_add_test(NAME feTuBreakAngularPathListFilterNew COMMAND otbRoadExtractionTestDriver
   otbBreakAngularPathListFilterNew)

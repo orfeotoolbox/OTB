@@ -394,7 +394,7 @@ foreach( file ${SARSENSORMODEL_TYPES})
            10 10
           )
 endforeach()
-otb_add_test(NAME bfTvInverseLogPolarTransform COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME bfTvInverseLogPolarTransform COMMAND otbTransformTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/bfInverseLogPolarTransformResults.txt
   ${TEMP}/bfInverseLogPolarTransformResults.txt
@@ -403,21 +403,21 @@ otb_add_test(NAME bfTvInverseLogPolarTransform COMMAND otbImageManipulationTestD
   ${TEMP}/bfInverseLogPolarTransformResults.txt
   6 0 0 10 20 45 60 3.14 3.14 1 0 0 1
   )
-otb_add_test(NAME bfTuInverseLogPolarTransformNew COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME bfTuInverseLogPolarTransformNew COMMAND otbTransformTestDriver
   otbInverseLogPolarTransformNew)
-otb_add_test(NAME bfTvInverseLogPolarTransformResample COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME bfTvInverseLogPolarTransformResample COMMAND otbTransformTestDriver
   --compare-image ${NOTOL}  ${BASELINE}/bfInverseLogPolarTransformResampleOutput.hdr
   ${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
   otbInverseLogPolarTransformResample
   ${BASELINE}/bfLogPolarTransformResampleOutput.hdr
   ${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
   )
-otb_add_test(NAME bfTvStreamingResampleImageFilterWithAffineTransform COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME bfTvStreamingResampleImageFilterWithAffineTransform COMMAND otbTransformTestDriver
   otbStreamingResampleImageFilterWithAffineTransform
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   500
   ${TEMP}/bfTvotbStreamingResampledImageWithAffineTransform.tif
   )
-otb_add_test(NAME bfTuStreamingResampleImageFilterWithAffineTransformNew COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME bfTuStreamingResampleImageFilterWithAffineTransformNew COMMAND otbTransformTestDriver
   otbStreamingResampleImageFilterWithAffineTransform
   )

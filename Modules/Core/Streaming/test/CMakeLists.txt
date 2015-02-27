@@ -56,7 +56,7 @@ otb_add_test(NAME coTvTileDimensionTiledStreamingManager COMMAND otbStreamingTes
   ${TEMP}/coTvTileDimensionTiledStreamingManager.txt
   )
 
-otb_add_test(NAME coTvPipelineMemoryPrintCalculator COMMAND otbStatisticsTestDriver
+otb_add_test(NAME coTvPipelineMemoryPrintCalculator COMMAND otbStreamingTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/coTvPipelineMemoryPrintCalculatorOutput.txt
   ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
@@ -64,6 +64,6 @@ otb_add_test(NAME coTvPipelineMemoryPrintCalculator COMMAND otbStatisticsTestDri
   ${INPUTDATA}/qb_RoadExtract.img
   ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
   )
-otb_add_test(NAME coTuPipelineMemoryPrintCalculatorNew COMMAND otbStatisticsTestDriver
+otb_add_test(NAME coTuPipelineMemoryPrintCalculatorNew COMMAND otbStreamingTestDriver
   otbPipelineMemoryPrintCalculatorNew
   )

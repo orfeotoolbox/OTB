@@ -41,7 +41,7 @@ otb_add_test(NAME bfTvOverlapSaveConvolutionImageFilter COMMAND otbConvolutionTe
   ${TEMP}/bfTvOverlapSaveConvolutionImageFilter.tif
   )
 
-otb_add_test(NAME bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter COMMAND otbEdgeTestDriver
+otb_add_test(NAME bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter COMMAND otbConvolutionTestDriver
   --compare-image ${EPSILON_7}
   ${TEMP}/bfTvCompareConvolutionOutput.tif
   ${TEMP}/bfTvCompareOSConvolutionoutput.tif
@@ -55,7 +55,7 @@ otb_add_test(NAME bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter C
   0.0125 0.0125 #u0 v0
   0
   )
-otb_add_test(NAME bfTvGaborFilterGenerator COMMAND otbEdgeTestDriver
+otb_add_test(NAME bfTvGaborFilterGenerator COMMAND otbConvolutionTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfGaborFilterGeneratorTest.tif
   ${TEMP}/bfGaborFilterGeneratorTest.tif
@@ -67,6 +67,6 @@ otb_add_test(NAME bfTvGaborFilterGenerator COMMAND otbEdgeTestDriver
   0.0125 0.0125 #u0 v0
   0
   )
-otb_add_test(NAME bfTuGaborFilterGeneratorNew COMMAND otbEdgeTestDriver
+otb_add_test(NAME bfTuGaborFilterGeneratorNew COMMAND otbConvolutionTestDriver
   otbGaborFilterGeneratorNew
   )

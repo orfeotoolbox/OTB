@@ -387,9 +387,9 @@ otb_add_test(NAME bfTuSparseWvltToAngleMapperListFilterNew COMMAND otbDimensiona
 otb_add_test(NAME bfTuAngularProjectionImageFilterNew COMMAND otbDimensionalityReductionTestDriver
   otbAngularProjectionImageFilterNew)
 
-otb_add_test(NAME bfTuLocalActivityVectorImageFilterNew COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME bfTuLocalActivityVectorImageFilterNew COMMAND otbDimensionalityReductionTestDriver
   otbLocalActivityVectorImageFilterNewTest)
-otb_add_test(NAME bfTvLocalActivityVectorImageFilter COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME bfTvLocalActivityVectorImageFilter COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvLocalActivityVectorImageFilter.tif
   ${TEMP}/bfTvLocalActivityVectorImageFilter.tif

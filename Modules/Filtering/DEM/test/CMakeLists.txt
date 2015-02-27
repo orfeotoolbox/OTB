@@ -10,7 +10,7 @@ set(OTBDEMTests
 add_executable(otbDEMTestDriver ${OTBDEMTests})
 target_link_libraries(otbDEMTestDriver ${OTBDEM-Test_LIBRARIES})
 otb_module_target_label(otbDEMTestDriver)
-otb_add_test(NAME ioTvDEMToImageGeneratorFromImageTest_SensorModel COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME ioTvDEMToImageGeneratorFromImageTest_SensorModel COMMAND otbDEMTestDriver
   --compare-n-images ${EPSILON_5} 2
   ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest_SM.tif
   ${TEMP}/ioTvDEMToImageGeneratorFromImage_Extract_DEM.tif
@@ -23,7 +23,7 @@ otb_add_test(NAME ioTvDEMToImageGeneratorFromImageTest_SensorModel COMMAND otbIm
   ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract.tif
   2600 4300 512 128
   )
-otb_add_test(NAME ioTvDEMToImageGeneratorFromImageTest COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME ioTvDEMToImageGeneratorFromImageTest COMMAND otbDEMTestDriver
   --compare-image ${EPSILON_5}
   ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest.tif
   ${TEMP}/ioTvDEMToImageGeneratorFromImage.tif
@@ -32,7 +32,7 @@ otb_add_test(NAME ioTvDEMToImageGeneratorFromImageTest COMMAND otbImageManipulat
   ${INPUTDATA}/DEM/srtm_directory
   ${TEMP}/ioTvDEMToImageGeneratorFromImage.tif
   )
-otb_add_test(NAME ioTvDEMToImageGeneratorFromImageTest2 COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME ioTvDEMToImageGeneratorFromImageTest2 COMMAND otbDEMTestDriver
   --compare-n-images ${EPSILON_5} 2
   ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest_Ortho.tif
   ${TEMP}/ioTvDEMToImageGeneratorFromImage_Extract_DEM2.tif
@@ -45,8 +45,8 @@ otb_add_test(NAME ioTvDEMToImageGeneratorFromImageTest2 COMMAND otbImageManipula
   ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract2.tif
   10 15 16 64
   )
-otb_add_test(NAME ioTuDEMToImageGeneratorNew COMMAND otbImageManipulationTestDriver otbDEMToImageGeneratorNew )
-otb_add_test(NAME ioTvDEMToImageGeneratorTest2 COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME ioTuDEMToImageGeneratorNew COMMAND otbDEMTestDriver otbDEMToImageGeneratorNew )
+otb_add_test(NAME ioTvDEMToImageGeneratorTest2 COMMAND otbDEMTestDriver
   --compare-image ${EPSILON_5}  ${BASELINE}/ioTvDEMToImageGenerator2.tif
   ${TEMP}/ioTvDEMToImageGenerator2.tif
   otbDEMToImageGeneratorTest
@@ -54,7 +54,7 @@ otb_add_test(NAME ioTvDEMToImageGeneratorTest2 COMMAND otbImageManipulationTestD
   ${TEMP}/ioTvDEMToImageGenerator2.tif
   -1.8 52 232 422  0.02 -0.018
   )
-otb_add_test(NAME ioTvDEMToImageGeneratorTest1 COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME ioTvDEMToImageGeneratorTest1 COMMAND otbDEMTestDriver
   --compare-image ${EPSILON_5}
   ${BASELINE}/ioTvDEMToImageGenerator1.tif
   ${TEMP}/ioTvDEMToImageGenerator1.tif
@@ -63,7 +63,7 @@ otb_add_test(NAME ioTvDEMToImageGeneratorTest1 COMMAND otbImageManipulationTestD
   ${TEMP}/ioTvDEMToImageGenerator1.tif
   1.437371 43.559045 512 128 0.000032 -0.000024
   )
-otb_add_test(NAME ioTvDEMToImageGeneratorTest COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME ioTvDEMToImageGeneratorTest COMMAND otbDEMTestDriver
   --compare-image ${EPSILON_5}  ${BASELINE}/ioTvDEMToImageGenerator.tif
   ${TEMP}/ioTvDEMToImageGenerator.tif
   otbDEMToImageGeneratorTest
@@ -76,7 +76,7 @@ otb_add_test(NAME ioTvDEMToImageGeneratorTest COMMAND otbImageManipulationTestDr
   0.002
   -0.002
   )
-otb_add_test(NAME raTvDEMCaracteristicsExtractor COMMAND otbStatisticsTestDriver
+otb_add_test(NAME raTvDEMCaracteristicsExtractor COMMAND otbDEMTestDriver
   --compare-n-images ${EPSILON_12} 4
   ${BASELINE}/raTvDEMCaracteristicsExtractorSlop.tif
   ${TEMP}/raTvDEMCaracteristicsExtractorSlop.tif
@@ -97,6 +97,6 @@ otb_add_test(NAME raTvDEMCaracteristicsExtractor COMMAND otbStatisticsTestDriver
   ${TEMP}/raTvDEMCaracteristicsExtractorIncidence.tif
   ${TEMP}/raTvDEMCaracteristicsExtractorExitance.tif
   )
-otb_add_test(NAME raTuDEMCaracteristicsExtractorNew COMMAND otbStatisticsTestDriver
+otb_add_test(NAME raTuDEMCaracteristicsExtractorNew COMMAND otbDEMTestDriver
   otbDEMCaracteristicsExtractorNew
   )

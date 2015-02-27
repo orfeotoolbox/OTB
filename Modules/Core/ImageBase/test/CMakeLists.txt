@@ -377,7 +377,7 @@ otb_add_test(NAME feTuImageFunctionAdaptorNew COMMAND otbImageBaseTestDriver
 otb_add_test(NAME coTuMultiChannelROINew COMMAND otbImageBaseTestDriver
   otbMultiChannelExtractROINew)
 
-otb_add_test(NAME feTvMetaImageFunction COMMAND otbMomentsTestDriver
+otb_add_test(NAME feTvMetaImageFunction COMMAND otbImageBaseTestDriver
   --compare-ascii ${EPSILON_8}
   ${BASELINE_FILES}/feTvMetaImageFunction.txt
   ${TEMP}/feTvMetaImageFunction.txt
@@ -386,6 +386,6 @@ otb_add_test(NAME feTvMetaImageFunction COMMAND otbMomentsTestDriver
   ${TEMP}/feTvMetaImageFunction.txt
   451846.014047961 5412466.57452216
   )
-otb_add_test(NAME feTuMetaImageFunctionNew COMMAND otbMomentsTestDriver
+otb_add_test(NAME feTuMetaImageFunctionNew COMMAND otbImageBaseTestDriver
   otbMetaImageFunctionNew
   )

@@ -152,10 +152,10 @@ otb_add_test(NAME dmTvMultiDisparityMapTo3DFilter COMMAND otbDisparityMapTestDri
   ${TEMP}/dmTvMultiDisparityMapTo3DFilterResidue.tif
   )
 
-otb_add_test(NAME dmTuFineRegistrationImageFilterNew COMMAND otbStereoTestDriver
+otb_add_test(NAME dmTuFineRegistrationImageFilterNew COMMAND otbDisparityMapTestDriver
   otbFineRegistrationImageFilterNew
   )
-otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanSquare COMMAND otbStereoTestDriver
+otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanSquare COMMAND otbDisparityMapTestDriver
   --compare-n-images ${EPSILON_10} 2
   ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif
   ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif
@@ -175,7 +175,7 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanSquare COMMAND otbS
   0 # Initial offset y
   0 0 80 65 # region to proceed
   )
-otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanReciprocalDifference COMMAND otbStereoTestDriver
+otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanReciprocalDifference COMMAND otbDisparityMapTestDriver
   --compare-n-images ${EPSILON_10} 2
   ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif
   ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif
@@ -195,7 +195,7 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenc
   0 # Initial offset y
   0 0 80 130 # region to proceed
   )
-otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithNormalizedCorrelation COMMAND otbStereoTestDriver
+otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithNormalizedCorrelation COMMAND otbDisparityMapTestDriver
   --compare-n-images ${EPSILON_10} 2
   ${BASELINE}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif
   ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif
@@ -215,7 +215,7 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithNormalizedCorrelation C
   0 # Initial offset y
   0 0 80 130 # region to proceed
   )
-otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithCorrelation COMMAND otbStereoTestDriver
+otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithCorrelation COMMAND otbDisparityMapTestDriver
   --compare-n-images ${EPSILON_10} 2
   ${BASELINE}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif
   ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif
@@ -235,7 +235,7 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithCorrelation COMMAND otb
   0 # Initial offset y
   0 0 80 130 # region to proceed
   )
-otb_add_test(NAME dmTvNCCRegistrationFilter COMMAND otbStereoTestDriver
+otb_add_test(NAME dmTvNCCRegistrationFilter COMMAND otbDisparityMapTestDriver
   --compare-image ${EPSILON_10}
   ${BASELINE}/dmNCCRegistrationFilterOutput.tif
   ${TEMP}/dmNCCRegistrationFilterOutput.tif
@@ -244,11 +244,11 @@ otb_add_test(NAME dmTvNCCRegistrationFilter COMMAND otbStereoTestDriver
   ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_sinus.tif
   ${TEMP}/dmNCCRegistrationFilterOutput.tif
   5 1.0 2)
-otb_add_test(NAME dmTuNCCRegistrationFilterNew COMMAND otbStereoTestDriver
+otb_add_test(NAME dmTuNCCRegistrationFilterNew COMMAND otbDisparityMapTestDriver
   otbNCCRegistrationFilterNew)
-otb_add_test(NAME dmTuPixelWiseBlockMatchingImageFilterNew COMMAND otbStereoTestDriver
+otb_add_test(NAME dmTuPixelWiseBlockMatchingImageFilterNew COMMAND otbDisparityMapTestDriver
   otbPixelWiseBlockMatchingImageFilterNew)
-otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilterNCC COMMAND otbStereoTestDriver
+otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilterNCC COMMAND otbDisparityMapTestDriver
   --compare-n-images ${NOTOL} 2
   ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
   ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
@@ -262,7 +262,7 @@ otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilterNCC COMMAND otbStereoTest
   2
   -10 +10
   )
-otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilter COMMAND otbStereoTestDriver
+otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilter COMMAND otbDisparityMapTestDriver
   --compare-n-images ${NOTOL} 2
   ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
   ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
