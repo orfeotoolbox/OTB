@@ -5,7 +5,7 @@ endif()
 # For now we parse module activation list and test if option is ON. If not the cmake configuration stop.
 #TODO We should provide a better mechanism here wich will deactivate only examples required by deactivated options.
 foreach (_activationOption ${OTB_MODULE_ACTIVATION_OPTION_LIST})
-  if(NOT ${_activationOption} AND NOT ${_activationOption} STREQUAL "OTB_USE_MAPNIK")
+  if(NOT ${_activationOption} AND NOT "x${_activationOption}" STREQUAL "xOTB_USE_MAPNIK")
     message(FATAL_ERROR "BUILD_EXAMPLES requires ${_activationOption} to be ON")
   endif()
 endforeach()
