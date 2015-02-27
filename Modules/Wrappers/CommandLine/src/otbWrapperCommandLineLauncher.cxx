@@ -86,12 +86,6 @@ void CommandLineLauncher::DeleteWatcherList()
   m_WatcherList.clear();
 }
 
-bool CommandLineLauncher::Load(const std::string &)
-{
-  /*m_Expression = exp;
-  return this->Load(); */
-  return false;
-}
 
 bool CommandLineLauncher::Load(const std::vector<std::string> &vexp)
 {

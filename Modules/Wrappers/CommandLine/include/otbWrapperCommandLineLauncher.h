@@ -82,14 +82,8 @@ public:
    * - Load the application using the ApplicationRegistry
    */
   bool Load();
-
-  /** \deprecated
-   * Load with exp argument is deprecated because class
-   * CommandLineLauncher does not have expression attribute anymore. Use instead the
-   * default constructor. It is included for backwards compatibility. */
-  bool Load( const std::string & exp );
   
-    /** same as Load method but set the expression before. */
+  /** same as Load method but set the expression before. */
   bool Load(const std::vector<std::string> &vexp);
 
   /** Launch the process, using the Execute application method
