@@ -23,6 +23,12 @@ void RegisterTests()
   REGISTER_TEST(otbStreamingTraitsImage);
   REGISTER_TEST(otbStreamingTraitsVectorImage);
   REGISTER_TEST(otbBCOInterpolateImageFunction);
+  REGISTER_TEST(otbBCOInterpolateImageFunctionNew);
+  REGISTER_TEST(otbBCOInterpolateImageFunction2);
+  REGISTER_TEST(otbBCOInterpolateImageFunctionOverVectorImageNew);
+  REGISTER_TEST(otbBCOInterpolateImageFunctionOverVectorImage);
+  REGISTER_TEST(otbBCOInterpolateImageFunctionTest);
+  REGISTER_TEST(otbBCOInterpolateImageFunctionVectorImageTest);
   REGISTER_TEST(otbProlateInterpolateImageFunction);
   REGISTER_TEST(otbProlateValidationTest);
 }

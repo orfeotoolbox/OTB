@@ -20,4 +20,6 @@ void RegisterTests()
   REGISTER_TEST(otbNCCRegistrationFilter);
   REGISTER_TEST(otbNCCRegistrationFilterNew);
   REGISTER_TEST(otbPixelWiseBlockMatchingImageFilter);
+  REGISTER_TEST(otbPixelWiseBlockMatchingImageFilterNew);
+  REGISTER_TEST(otbPixelWiseBlockMatchingImageFilterNCC);
 }

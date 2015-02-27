@@ -24,5 +24,6 @@ void RegisterTests()
   REGISTER_TEST(otbAngularProjectionImageFilterNew);
   REGISTER_TEST(otbAngularProjectionImageFilterTest);
   REGISTER_TEST(otbSparseWvltToAngleMapperListFilterNewTest);
-  REGISTER_TEST(otbLocalActivityVectorImageFilter);
+  REGISTER_TEST(otbLocalActivityVectorImageFilterNewTest);
+  REGISTER_TEST(otbLocalActivityVectorImageFilterTest);
 }

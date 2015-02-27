@@ -12,5 +12,6 @@ void RegisterTests()
   REGISTER_TEST(otbConcatenateVectorDataFilterNew);
   REGISTER_TEST(otbConcatenateVectorDataFilter);
   REGISTER_TEST(otbVectorDataExtractROINew);
+  REGISTER_TEST(otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionNew);
   REGISTER_TEST(otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction);
 }

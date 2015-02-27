@@ -40,7 +40,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataProjectionFilterFromMapToImage);
   REGISTER_TEST(otbGenericRSTransformFromImage);
   REGISTER_TEST(otbGenericRSTransformImageAndMNTToWGS84ConversionChecking);
-  REGISTER_TEST(otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionNew);
   REGISTER_TEST(otbCompositeTransform);
   REGISTER_TEST(otbLeastSquareAffineTransformEstimator);
   REGISTER_TEST(otbSpectralAngleDataNodeFeatureFunctionNew);
