@@ -70,16 +70,16 @@ void QtWidgetRAMParameter::DoUpdateGUI()
     }
   m_QSpinBox->blockSignals( blocked );
 
-  QFont font = m_QSpinBox->font();
+  QFont f = m_QSpinBox->font();
   if (m_RAMParam->HasUserValue())
     {
-    font.setBold(true);
+    f.setBold(true);
     }
   else
     {
-    font.setBold(false);
+    f.setBold(false);
     }
-  m_QSpinBox->setFont(font);
+  m_QSpinBox->setFont(f);
 }
 
 void QtWidgetRAMParameter::SetValue(int value)

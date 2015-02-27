@@ -1,3 +1,22 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+  Some parts of this code are covered by the GET copyright.
+  See GETCopyright.txt for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
 #ifndef __otbSEMClassifier_txx
 #define __otbSEMClassifier_txx
 
@@ -322,9 +341,9 @@ SEMClassifier<TInputImage, TOutputImage>
   if (!m_ExternalLabels)
     {
     m_ClassLabels.resize(m_NbSamples);
-    if (static_cast<int>(m_InitialProportions.size()) != nbClasses)
+    if (static_cast<unsigned int>(m_InitialProportions.size()) != nbClasses)
       {
-      int label;
+      unsigned int label;
       for (typename ClassLabelVectorType::iterator labelIter = m_ClassLabels.begin();
            labelIter != m_ClassLabels.end();
            ++labelIter)
@@ -366,7 +385,7 @@ SEMClassifier<TInputImage, TOutputImage>
         sample = double(rand()) / (double(RAND_MAX) + 1.0);
 
         *labelIter = nbClasses - 1;
-        for (int componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
+        for (unsigned int componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
           {
           if (cumulativeProportion <= sample
               && sample < cumulativeProportion + m_InitialProportions[componentIndex])
@@ -382,7 +401,7 @@ SEMClassifier<TInputImage, TOutputImage>
 
   m_Proportions.resize(nbClasses);
   m_Proba.resize(nbClasses);
-  for (int i = 0; i < nbClasses; ++i)
+  for (unsigned int i = 0; i < nbClasses; ++i)
     m_Proba[i].resize(m_NbSamples);
 
   if (!m_ComponentDeclared)
@@ -391,7 +410,7 @@ SEMClassifier<TInputImage, TOutputImage>
                      << " Gaussian components");
     typedef otb::Statistics::GaussianModelComponent<ClassSampleType> GaussianType;
 
-    for (int componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
+    for (unsigned int componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
       {
       typename GaussianType::Pointer comp = GaussianType::New();
       AddComponent(componentIndex, comp);
@@ -424,7 +443,7 @@ SEMClassifier<TInputImage, TOutputImage>
     x = double(rand()) / (double(RAND_MAX) + 1.0);
     z = 0.0;
 
-    for (int componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
+    for (unsigned int componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
       {
       y = z;
       z += m_Proba[componentIndex][posSample];
@@ -459,7 +478,7 @@ SEMClassifier<TInputImage, TOutputImage>
 {
   unsigned int nbClasses = this->GetNumberOfClasses();
 
-  int componentIndex;
+  unsigned int componentIndex;
   for (componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
     m_Proportions[componentIndex] = 0.0;
 
@@ -517,7 +536,7 @@ SEMClassifier<TInputImage, TOutputImage>
 
   int    i, j, a, b;
   int    voisinage = m_Neighborhood / 2;
-  int    componentIndex;
+  unsigned int    componentIndex;
   double sumPdf, aPdf;
   double neighborhoodWeight = (double) m_Neighborhood * m_Neighborhood;
 
@@ -601,7 +620,8 @@ SEMClassifier<TInputImage, TOutputImage>
   m_OutputImage->SetRegions(GetSample()->GetBufferedRegion());
   m_OutputImage->Allocate();
 
-  int cluster, componentIndex;
+  int cluster;
+  unsigned int componentIndex;
 
   typename SampleType::ConstIterator sampleIter = this->GetSampleList()->Begin();
   typename SampleType::ConstIterator sampleIterEnd  = this->GetSampleList()->End();

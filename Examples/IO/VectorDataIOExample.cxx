@@ -210,11 +210,11 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  for (PolygonListType::Iterator it = polygonList->Begin();
-       it != polygonList->End(); ++it)
+  for (PolygonListType::Iterator pit = polygonList->Begin();
+       pit != polygonList->End(); ++pit)
     {
     DataNodeType::Pointer newPolygon = DataNodeType::New();
-    newPolygon->SetPolygonExteriorRing(it.Get());
+    newPolygon->SetPolygonExteriorRing(pit.Get());
     tree->Add(newPolygon, multiPolygon);
     }
 // Software Guide : EndCodeSnippet

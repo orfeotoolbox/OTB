@@ -193,7 +193,6 @@ int otbGenericRSResampleImageFilterFromMap(int itkNotUsed(argc), char* argv[])
     }
 
   // Write the resampled image
-  typedef otb::ImageFileWriter<ImageType>    WriterType;
   WriterType::Pointer writer= WriterType::New();
   writer->SetAutomaticTiledStreaming();
   writer->SetFileName(outfname);
