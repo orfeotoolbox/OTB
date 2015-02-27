@@ -170,6 +170,8 @@ otb_test_application(NAME apTvClImageSVMClassifierQB2
                               ${OTBAPP_BASELINE}/clLabeledImageQB2.tif
                               ${TEMP}/clLabeledImageQB2.tif)
 
+set_tests_properties(apTvClImageSVMClassifierQB2 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
+
 otb_test_application(NAME apTvClImageSVMClassifierQB3
                       APP  ImageClassifier
                       OPTIONS -in      ${INPUTDATA}/Classification/QB_3_ortho.tif
@@ -180,6 +182,8 @@ otb_test_application(NAME apTvClImageSVMClassifierQB3
                               ${OTBAPP_BASELINE}/clLabeledImageQB3.tif
                               ${TEMP}/clLabeledImageQB3.tif)
 
+set_tests_properties(apTvClImageSVMClassifierQB2 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
+
 otb_test_application(NAME apTvClImageSVMClassifierQB1
                       APP  ImageClassifier
                       OPTIONS -in      ${INPUTDATA}/Classification/QB_1_ortho.tif
@@ -189,6 +193,8 @@ otb_test_application(NAME apTvClImageSVMClassifierQB1
                       VALID   --compare-image ${NOTOL}
                               ${OTBAPP_BASELINE}/clLabeledImageQB1.tif
                               ${TEMP}/clLabeledImageQB1.tif)
+
+set_tests_properties(apTvClImageSVMClassifierQB1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
 
   otb_test_application(NAME apTvClImageSVMClassifierQB456_6
                        APP  ImageClassifier
@@ -201,6 +207,8 @@ otb_test_application(NAME apTvClImageSVMClassifierQB1
                                ${OTBAPP_BASELINE}/clLabeledImageQB456_6.tif
                                ${TEMP}/clLabeledImageQB456_6.tif)
 
+ set_tests_properties(apTvClImageSVMClassifierQB456_6 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB456)
+
   otb_test_application(NAME apTvClImageSVMClassifierQB456_4
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_4_extract.tif
@@ -210,6 +218,8 @@ otb_test_application(NAME apTvClImageSVMClassifierQB1
                        VALID   --compare-image ${NOTOL}
                                ${OTBAPP_BASELINE}/clLabeledImageQB456_4.tif
                                ${TEMP}/clLabeledImageQB456_4.tif)
+
+set_tests_properties(apTvClImageSVMClassifierQB456_4 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB456)
 
   otb_test_application(NAME apTvClImageSVMClassifierQB456_5
                        APP  ImageClassifier
@@ -221,6 +231,8 @@ otb_test_application(NAME apTvClImageSVMClassifierQB1
                                ${OTBAPP_BASELINE}/clLabeledImageQB456_5.tif
                                ${TEMP}/clLabeledImageQB456_5.tif)
 
+set_tests_properties(apTvClImageSVMClassifierQB456_5 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB456)
+
   otb_test_application(NAME apTvClImageSVMClassifierQB123_6
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_6_extract.tif
@@ -230,6 +242,8 @@ otb_test_application(NAME apTvClImageSVMClassifierQB1
                        VALID   --compare-image ${NOTOL}
                                ${OTBAPP_BASELINE}/clLabeledImageQB123_6.tif
                                ${TEMP}/clLabeledImageQB123_6.tif)
+
+  set_tests_properties(apTvClImageSVMClassifierQB123_6 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
 
   otb_test_application(NAME apTvClImageSVMClassifierQB456_1
                        APP  ImageClassifier
@@ -241,6 +255,8 @@ otb_test_application(NAME apTvClImageSVMClassifierQB1
                                ${OTBAPP_BASELINE}/clLabeledImageQB456_1.tif
                                ${TEMP}/clLabeledImageQB456_1.tif)
 
+set_tests_properties(apTvClImageSVMClassifierQB456_1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB456)
+
   otb_test_application(NAME apTvClImageSVMClassifierQB123_3
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_3_ortho.tif
@@ -250,6 +266,8 @@ otb_test_application(NAME apTvClImageSVMClassifierQB1
                        VALID   --compare-image ${NOTOL}
                                ${OTBAPP_BASELINE}/clLabeledImageQB123_3.tif
                                ${TEMP}/clLabeledImageQB123_3.tif)
+
+  set_tests_properties(apTvClImageSVMClassifierQB123_3 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
 
   otb_test_application(NAME apTvClImageSVMClassifierQB123_2
                        APP  ImageClassifier
@@ -261,6 +279,7 @@ otb_test_application(NAME apTvClImageSVMClassifierQB1
                                ${OTBAPP_BASELINE}/clLabeledImageQB123_2.tif
                                ${TEMP}/clLabeledImageQB123_2.tif)
 
+  set_tests_properties(apTvClImageSVMClassifierQB123_2 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
   otb_test_application(NAME apTvClImageSVMClassifierQB123_1
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_1_ortho.tif
@@ -271,6 +290,7 @@ otb_test_application(NAME apTvClImageSVMClassifierQB1
                                ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
                                ${TEMP}/clLabeledImageQB123_1.tif)
 
+set_tests_properties(apTvClImageSVMClassifierQB123_1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
 
 #----------- TrainOGRLayersClassifier TESTS ----------------
 
