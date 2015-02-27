@@ -24,4 +24,5 @@ void RegisterTests()
   REGISTER_TEST(otbComplexMomentPath);
   REGISTER_TEST(otbRadiometricMomentsImageFilterNew);
   REGISTER_TEST(otbRadiometricMomentsImageFilter);
+  REGISTER_TEST(otbComplexMomentsImageFunctionNew);
 }

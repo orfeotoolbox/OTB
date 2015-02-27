@@ -8,4 +8,5 @@ void RegisterTests()
   REGISTER_TEST(otbRAMDrivenTiledStreamingManager);
   REGISTER_TEST(otbRAMDrivenAdaptativeStreamingManager);
   REGISTER_TEST(otbPipelineMemoryPrintCalculatorTest);
+  REGISTER_TEST(otbPipelineMemoryPrintCalculatorNew);
 }

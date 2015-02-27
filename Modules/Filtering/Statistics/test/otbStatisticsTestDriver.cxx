@@ -9,10 +9,8 @@ void RegisterTests()
   REGISTER_TEST(otbListSampleToVariableDimensionHistogramGeneratorNew);
   REGISTER_TEST(otbStreamingHistogramVectorImageFilterNew);
   REGISTER_TEST(otbStreamingStatisticsVectorImageFilterNew);
-  REGISTER_TEST(otbPipelineMemoryPrintCalculatorNew);
   REGISTER_TEST(otbRealImageToComplexImageFilterTest);
   REGISTER_TEST(otbHistogramStatisticsFunction);
-  REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorTest);
   REGISTER_TEST(otbGaussianAdditiveNoiseSampleListFilterNew);
   REGISTER_TEST(otbGaussianAdditiveNoiseSampleListFilter);
   REGISTER_TEST(otbNormalizeVectorImageFilterNewTest);
@@ -46,6 +44,6 @@ void RegisterTests()
   REGISTER_TEST(otbListSampleGeneratorNew);
   REGISTER_TEST(otbListSampleGenerator);
   REGISTER_TEST(otbImaginaryImageToComplexImageFilterTest);
-  REGISTER_TEST(otbBandsStatisticsAttributesLabelMapFilterNew);
   REGISTER_TEST(otbListSampleToHistogramListGenerator);
+  REGISTER_TEST(otbResampleSLCImage);
 }

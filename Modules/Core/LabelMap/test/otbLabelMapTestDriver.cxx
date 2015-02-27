@@ -25,4 +25,5 @@ void RegisterTests()
   REGISTER_TEST(otbNormalizeAttributesLabelMapFilterNew);
   REGISTER_TEST(otbShapeAttributesLabelMapFilterNew);
   REGISTER_TEST(otbBandsStatisticsAttributesLabelMapFilter);
+  REGISTER_TEST(otbBandsStatisticsAttributesLabelMapFilterNew);
 }

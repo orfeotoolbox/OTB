@@ -1,7 +1,6 @@
 #include "otbTestMain.h"
 void RegisterTests()
 {
-  REGISTER_TEST(otbVectorImageToImageListFilterIterator);
   REGISTER_TEST(otbBinaryImageDensityFunctionNew);
   REGISTER_TEST(otbPrintableImageFilter);
   REGISTER_TEST(otbConcatenateScalarValueImageFilterNew);
@@ -27,8 +26,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorImageTo3DScalarImageFilterNew);
   REGISTER_TEST(otbUnaryFunctorWithIndexImageFilter);
   REGISTER_TEST(otbMeanFunctorImageTest);
-  REGISTER_TEST(otbLocalActivityVectorImageFilterNewTest);
-  REGISTER_TEST(otbLocalActivityVectorImageFilterTest);
   REGISTER_TEST(otbBinaryImageToDensityImageFilterNew);
   REGISTER_TEST(otbVectorImageTo3DScalarImageFilter);
   REGISTER_TEST(otbTileImageFilterNew);
@@ -48,12 +45,6 @@ void RegisterTests()
   REGISTER_TEST(otbPrintableImageFilterNew);
   REGISTER_TEST(otbShiftScaleImageAdaptorNew);
   REGISTER_TEST(otbStreamingInnerProductVectorImageFilterNew);
-  REGISTER_TEST(otbBCOInterpolateImageFunctionNew);
-  REGISTER_TEST(otbBCOInterpolateImageFunction2);
-  REGISTER_TEST(otbBCOInterpolateImageFunctionOverVectorImageNew);
-  REGISTER_TEST(otbBCOInterpolateImageFunctionOverVectorImage);
-  REGISTER_TEST(otbBCOInterpolateImageFunctionTest);
-  REGISTER_TEST(otbBCOInterpolateImageFunctionVectorImageTest);
   REGISTER_TEST(otbBoxAndWhiskerImageFilter);
   REGISTER_TEST(otbStreamingShrinkImageFilterNew);
   REGISTER_TEST(otbVectorRescaleIntensityImageFilter);
