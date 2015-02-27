@@ -13,6 +13,9 @@ foreach(p
   endif()
 endforeach()
 
+# CMP0046 : from CMake 3.0, old behaviour is more convenient
+cmake_policy(SET CMP0046 OLD)
+
 project(OTB)
 
 include(CMakeDependentOption)
