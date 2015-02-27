@@ -18,6 +18,7 @@ otbInnerProductPCAImageFilterNew.cxx
 otbSparseWvltToAngleMapperListFilterNew.cxx
 otbAngularProjectionImageFilterNew.cxx
 otbAngularProjectionImageFilter.cxx
+otbAngularProjectionBinaryImageFilter.cxx
 otbSparseWvltToAngleMapperListFilter.cxx
 otbLocalActivityVectorImageFilter.cxx
 )
