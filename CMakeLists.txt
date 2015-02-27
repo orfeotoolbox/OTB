@@ -14,7 +14,9 @@ foreach(p
 endforeach()
 
 # CMP0046 : from CMake 3.0, old behaviour is more convenient
-cmake_policy(SET CMP0046 OLD)
+if(POLICY CMP0046)
+  cmake_policy(SET CMP0046 OLD)
+endif()
 
 project(OTB)
 
