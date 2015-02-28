@@ -585,6 +585,8 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1_allOpt_InXML.svm)
 
+set_tests_properties(apTvClTrainSVMImagesClassifierQB1_allOpt_InXML PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1) 
+
 otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_OutXML
                       APP  TrainImagesClassifier
                       OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
@@ -598,6 +600,8 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_OutXML
                       VALID   --compare-ascii ${NOTOL}
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1_OutXML.svm)
+
+set_tests_properties(apTvClTrainSVMImagesClassifierQB1_OutXML PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1) 
 
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB123
                        APP  TrainImagesClassifier
@@ -616,6 +620,8 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_OutXML
                                ${OTBAPP_BASELINE_FILES}/clsvmModelQB123.svm
                                ${TEMP}/clsvmModelQB123.svm)
 
+set_tests_properties(apTvClTrainSVMImagesClassifierQB123 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB123) 
+
 otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1
                       APP  TrainImagesClassifier
                       OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
@@ -628,6 +634,8 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1
                       VALID   --compare-ascii ${NOTOL}
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1.svm)
+
+set_tests_properties(apTvClTrainSVMImagesClassifierQB1 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1) 
 
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB456
                        APP  TrainImagesClassifier
@@ -646,6 +654,8 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1
                                ${OTBAPP_BASELINE_FILES}/clsvmModelQB456.svm
                                ${TEMP}/clsvmModelQB456.svm)
 
+set_tests_properties(apTvClTrainSVMImagesClassifierQB456 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB456)
+
 otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
                       APP  TrainImagesClassifier
                       OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
@@ -662,6 +672,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1_allOpt.svm)
 
+set_tests_properties(apTvClTrainSVMImagesClassifierQB1_allOpt PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1)
 
 #----------- DSFuzzyModelEstimation TESTS ----------------
 otb_test_application(NAME apTvCdbDSFuzzyModelEstimation_LI_autoInit
