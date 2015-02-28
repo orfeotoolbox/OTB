@@ -61,7 +61,9 @@ SEMClassifier<TInputImage, TOutputImage>
 {
   Superclass::PrintSelf(os, indent);
 
-  for (int componentIndex = 0; componentIndex < this->GetNumberOfClasses(); ++componentIndex)
+  const unsigned int nbClasses = this->GetNumberOfClasses();
+
+  for (unsigned int componentIndex = 0; componentIndex < nbClasses; ++componentIndex)
     {
     os << indent << "Component num " << componentIndex;
     os << " (prop " << m_Proportions[componentIndex] << ") ";
