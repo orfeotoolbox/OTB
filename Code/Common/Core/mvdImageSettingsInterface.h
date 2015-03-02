@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdMyClass_h
-#define __mvdMyClass_h
+#ifndef __mvdImageSettingsInterface_h
+#define __mvdImageSettingsInterface_h
 
 //
 // Configuration include.
@@ -65,11 +65,11 @@ namespace mvd
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class MyClass
+ * \class ImageSettingsInterface
  *
  * \brief WIP.
  */
-class Monteverdi2_EXPORT MyClass :
+class Monteverdi2_EXPORT ImageSettingsInterface :
     public QObject
 {
 
@@ -84,10 +84,10 @@ class Monteverdi2_EXPORT MyClass :
 public:
 
   /** \brief Constructor. */
-  MyClass( QObject* parent =NULL );
+  ImageSettingsInterface( QObject* parent =NULL );
 
   /** \brief Destructor. */
-  virtual ~MyClass();
+  virtual ~ImageSettingsInterface();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -154,4 +154,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdMyClass_h
+#endif // __mvdImageSettingsInterface_h

@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdMyClass.h"
+#include "mvdImageSettingsInterface.h"
 
 
 /*****************************************************************************/
@@ -41,7 +41,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::MyClass
+  TRANSLATOR mvd::ImageSettingsInterface
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -65,15 +65,15 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-MyClass
-::MyClass( QObject* parent ) :
+ImageSettingsInterface
+::ImageSettingsInterface( QObject* parent ) :
   QObject( parent )
 {
 }
 
 /*******************************************************************************/
-MyClass
-::~MyClass()
+ImageSettingsInterface
+::~ImageSettingsInterface()
 {
 }
 

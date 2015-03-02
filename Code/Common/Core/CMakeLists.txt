@@ -22,6 +22,7 @@ set( Common_Core_SOURCES
   mvdImagePlacenameLoader.cxx
   mvdImageProperties.cxx
   mvdImageSettings.cxx
+  mvdImageSettingsInterface.cxx
   #mvdModifiableInterface.cxx
   #mvdMyClass.cxx
   mvdQuicklookModel.cxx
@@ -57,6 +58,7 @@ set( Common_Core_HEADERS_MOC
   mvdImagePlacenameLoader.h
   # mvdImageProperties.h
   mvdImageSettings.h
+  mvdImageSettingsInterface.h
   # mvdMath.h
   #mvdMyClass.h
   mvdQuicklookModel.h
