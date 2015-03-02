@@ -167,15 +167,14 @@ otb_add_test(NAME coTvConfigurationManagerDefault COMMAND otbCommonTestDriver
   otbConfigurationManagerTest
   128)
 
-
-
-otb_add_test(NAME coTvConfigurationManagerEnvVar COMMAND otbCommonTestDriver
+otb_add_test(NAME coTvConfigurationManagerEnvVar COMMAND otbTestDriver
   --add-before-env OTB_MAX_RAM_HINT "256"
   --add-before-env OTB_DEM_DIRECTORY "/path/to/dem/"
   --add-before-env OTB_GEOID_FILE "/path/to/geoid.file"
   Execute $<TARGET_FILE:otbCommonTestDriver>
   otbConfigurationManagerTest
   256 /path/to/dem/ /path/to/geoid.file)
+
 otb_add_test(NAME coTuStandardFilterWatcherNew COMMAND otbCommonTestDriver
   otbStandardFilterWatcherNew
   ${INPUTDATA}/qb_RoadExtract.img
