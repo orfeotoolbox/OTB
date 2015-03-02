@@ -18,7 +18,7 @@
 
 #include "otbMetaDataKey.h"
 
-#define NBKEYS  23
+#define NBKEYS  24
 
 namespace otb
 {
