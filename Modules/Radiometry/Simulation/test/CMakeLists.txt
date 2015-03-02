@@ -54,7 +54,7 @@ otb_add_test(NAME siTuRSRSVMClassifier COMMAND otbSimulationTestDriver
   )
 
 otb_add_test(NAME siTvProspectTransTest COMMAND otbSimulationTestDriver
-  --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/Simulation/siTvProspectTransTest.txt
+  --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/Simulation/siTvProspectTransTest.txt
   ${TEMP}/siTvProspectTransTest.txt
   otbProspectTransTest
   30.0 #cab
@@ -176,7 +176,7 @@ otb_add_test(NAME siTvReduceSpectralResponseReflectanceMode COMMAND otbSimulatio
   )      
 
 otb_add_test(NAME siTvProspectReflTest COMMAND otbSimulationTestDriver
-  --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/Simulation/siTvProspectReflTest.txt
+  --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/Simulation/siTvProspectReflTest.txt
   ${TEMP}/siTvProspectReflTest.txt
   otbProspectReflTest
   30.0 #cab
@@ -236,7 +236,7 @@ otb_add_test(NAME siTuImageSimulationMethodWithVectorDataTest COMMAND otbSimulat
   )
 
 otb_add_test(NAME siTvSailReflVTest COMMAND otbSimulationTestDriver
-  --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/Simulation/siTvSailReflVTest.txt
+  --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/Simulation/siTvSailReflVTest.txt
   ${TEMP}/siTvSailReflVTest.txt
   otbSailReflVTest
   30.0 #cab
@@ -261,7 +261,7 @@ otb_add_test(NAME siTuSatelliteRSRNew COMMAND otbSimulationTestDriver
   )
 
 otb_add_test(NAME siTvSailReflHTest COMMAND otbSimulationTestDriver
-  --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/Simulation/siTvSailReflHTest.txt
+  --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/Simulation/siTvSailReflHTest.txt
   ${TEMP}/siTvSailReflHTest.txt
   otbSailReflHTest
   30.0 #cab
