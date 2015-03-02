@@ -19,12 +19,14 @@
 #define __otbWrapperQtWidgetParameterGroup_h
 
 #include <QtGui>
+#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperParameterGroup.h"
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperRAMParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 #include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperOutputProcessXMLParameter.h"
+#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {

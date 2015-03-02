@@ -19,8 +19,10 @@
 #define __otbWrapperQtWidgetModel_h
 
 #include <QtGui>
+#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperApplication.h"
 #include "otbQtLogOutput.h"
+#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
