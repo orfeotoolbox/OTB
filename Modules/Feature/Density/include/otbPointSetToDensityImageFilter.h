@@ -109,7 +109,6 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   unsigned int m_Radius;
-  typename PointSetType::Pointer m_PointSet;
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
