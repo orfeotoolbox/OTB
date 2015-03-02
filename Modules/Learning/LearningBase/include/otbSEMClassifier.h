@@ -208,7 +208,7 @@ private:
   int    m_Neighborhood;
 
   TerminationCodeType    m_TerminationCode;
-  ComponentVectorType    m_ComponentVector;
+  mutable ComponentVectorType    m_ComponentVector;
   ProportionVectorType   m_InitialProportions;
   ProportionVectorType   m_Proportions;
   ProbaByClassVectorType m_Proba;

@@ -312,7 +312,8 @@ SEMClassifier<TInputImage,TOutputImage>
   if (m_ComponentDeclared == 1)
     otbMsgDebugMacro(
       << "Previous component declarations will be lost since called before SetNumberOfClasses");
-
+  m_ComponentVector.clear();
+  m_ComponentVector.resize(this->GetNumberOfClasses());
   m_ComponentDeclared = 0;
   
 }
