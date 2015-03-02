@@ -37,7 +37,7 @@ otb_add_test(NAME dmTvDisparityMapEstimationMethod COMMAND otbDisparityMapTestDr
 
 otb_add_test(NAME dmTvDisparityMapToDEMFilter COMMAND otbDisparityMapTestDriver
   --compare-image ${NOTOL}
-  ${BASELINE_EXAMPLE}/elevationOutput.tif
+  ${BASELINE}/../../Examples/DisparityMap/elevationOutput.tif
   ${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
   otbDisparityMapToDEMFilter
   ${INPUTDATA}/sensor_stereo_blockmatching_output.tif

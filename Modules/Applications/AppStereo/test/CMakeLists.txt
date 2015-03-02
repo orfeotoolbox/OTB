@@ -110,7 +110,7 @@ otb_test_application(NAME apTvDmDisparityMapToElevationMap
                              -step 2.5
                              -io.mask ${INPUTDATA}/sensor_stereo_dmap_mask.tif
                      VALID   --compare-image ${EPSILON_10}
-                             ${BASELINE_EXAMPLE}/elevationOutput.tif
+                             ${BASELINE}/../../Examples/DisparityMap/elevationOutput.tif
                              ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
                      )
 
