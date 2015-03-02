@@ -896,7 +896,13 @@ void
 MainWindow
 ::InitializeRenderToolBar()
 {
+  m_UI->m_RenderToolBar->addSeparator();
+
   {
+  m_UI->m_RenderToolBar->addWidget(
+    new QLabel( tr( "Ref.:" ) )
+  );
+
   QComboBox * comboBox =
     new QComboBox( m_UI->m_RenderToolBar );
 
@@ -907,6 +913,8 @@ MainWindow
 
   m_UI->m_RenderToolBar->addWidget( comboBox );
   }
+
+  m_UI->m_RenderToolBar->addSeparator();
 
   {
   m_UI->m_RenderToolBar->addWidget(
