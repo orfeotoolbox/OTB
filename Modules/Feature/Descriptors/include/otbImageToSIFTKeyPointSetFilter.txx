@@ -56,7 +56,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
 
   m_ExpandFilter = ExpandFilterType::New();
   
-  const float HistogramGaussianWeights[73] = {
+  const double HistogramGaussianWeights[73] = {
     2.3771112282795414e-07, 3.8860734758633732e-07, 6.2655544995978937e-07, 9.9631120821413786e-07,
     1.5624909838697011e-06, 2.4167238265599128e-06, 3.6865788528530121e-06,
     5.5463469229192623e-06, 8.2295774080263437e-06, 1.2043009749602365e-05, 1.738119136656513e-05,
@@ -80,7 +80,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
     6.2655544995978937e-07, 3.8860734758633732e-07, 2.3771112282795414e-07
   };
   
-  std::copy(HistogramGaussianWeights, HistogramGaussianWeights+73, m_HistogramGaussianWeights.begin());
+  m_HistogramGaussianWeights = std::vector<double>(HistogramGaussianWeights,HistogramGaussianWeights+73);
   
   m_Offsets[0][0]=-1;
   m_Offsets[0][1]=-1;
