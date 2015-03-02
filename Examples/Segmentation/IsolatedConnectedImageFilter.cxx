@@ -20,10 +20,6 @@
 =========================================================================*/
 
 
-//  INPUTS: {QB_Suburb.png}
-//  OUTPUTS: {ConnectedThresholdOutput1.png}
-//  110 38 50 100
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {QB_Suburb.png}
 //  OUTPUTS: {IsolatedConnectedImageFilterOutput1.png}
@@ -66,13 +62,13 @@
 
 int main(int argc, char *argv[])
 {
-  if (argc < 7)
+  if (argc < 8)
     {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage  outputImage seedX1 seedY1";
     std::cerr << " lowerThreshold seedX2 seedY2" << std::endl;
-    return 1;
+    return EXIT_FAILURE;
     }
 
   //  Software Guide : BeginLatex

@@ -1,17 +1,6 @@
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Segmentation)
 set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
-# ------- IsolatedConnectedImageFilterTest----------
-
-otb_add_test(NAME seTeIsolatedConnectedImageFilterTest1 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/ConnectedThresholdOutput1.png
-    ${TEMP}/ConnectedThresholdOutput1.png
-  Execute $<TARGET_FILE:IsolatedConnectedImageFilter>
-    ${INPUTDATA}/QB_Suburb.png
-    ${TEMP}/ConnectedThresholdOutput1.png
-    110 38 50 100
-)
 
 # ------- IsolatedConnectedImageFilterTest----------
 
