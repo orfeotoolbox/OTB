@@ -628,6 +628,8 @@ otb_add_test(NAME ioTvImageSeriesFileReader COMMAND otbImageIOTestDriver
   ${TEMP}/ioTvImageSeries.png
   )
 
+if(OTB_USE_LARGE_INPUT)
+# This test depends on the output of another test, which depends on large inputs. This situation should not happen.
 otb_add_test(NAME ioTvONERAImageStreamWriter COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}
   ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
@@ -636,6 +638,7 @@ otb_add_test(NAME ioTvONERAImageStreamWriter COMMAND otbImageIOTestDriver
   ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
   ${TEMP}/ioImageFileReaderONERAStreamWrite.ent )
 set_property(TEST ioTvONERAImageStreamWriter PROPERTY DEPENDS ioTvONERAImageFileWriterComplex)
+endif()
 
 otb_add_test(NAME ioTvImageFileReaderWithComplexPixel_PALSAR COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}
