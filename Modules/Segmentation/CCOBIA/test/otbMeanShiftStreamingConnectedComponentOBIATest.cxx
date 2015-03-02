@@ -88,7 +88,6 @@ int otbMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter(in
       connected = ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
   connected->GetFilter()->SetInput(meanShiftFilter->GetRangeOutput());
 
-  connected->GetFilter()->SetMaskExpression(maskexpression);
   connected->GetFilter()->SetConnectedComponentExpression(segmentationexpression);
   connected->GetFilter()->SetMinimumObjectSize(minobjectsize);
   connected->GetFilter()->SetOBIAExpression(obiaexpression);
