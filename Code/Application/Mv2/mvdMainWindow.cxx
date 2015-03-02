@@ -77,6 +77,7 @@
 #endif // USE_PIXEL_DESCRIPTION
 #include "Gui/mvdQuicklookViewManipulator.h"
 #include "Gui/mvdQuicklookViewRenderer.h"
+#include "Gui/mvdShaderWidget.h"
 #include "Gui/mvdStatusBarWidget.h"
 //
 #include "mvdApplication.h"
@@ -180,19 +181,9 @@ MainWindow
 
   InitializeStatusBarWidgets();
 
+  InitializeRenderToolBar();
+
   assert( m_UI!=NULL );
-
-  {
-  QComboBox * comboBox =
-    new QComboBox( m_UI->m_RenderToolBar );
-
-  assert( comboBox!=NULL );
-
-  comboBox->setObjectName( "referenceLayerComboBox" );
-  comboBox->setMinimumSize( QSize( 128, 0 ) );
-
-  m_UI->m_RenderToolBar->addWidget( comboBox );
-  }
 }
 
 /*****************************************************************************/
@@ -898,6 +889,30 @@ MainWindow
 
   tabBar->setTabButton( index, QTabBar::RightSide, 0);
   tabBar->setTabButton( index, QTabBar::LeftSide, 0);
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::InitializeRenderToolBar()
+{
+  {
+  QComboBox * comboBox =
+    new QComboBox( m_UI->m_RenderToolBar );
+
+  assert( comboBox!=NULL );
+
+  comboBox->setObjectName( "referenceLayerComboBox" );
+  comboBox->setMinimumSize( QSize( 128, 0 ) );
+
+  m_UI->m_RenderToolBar->addWidget( comboBox );
+  }
+
+  {
+  m_UI->m_RenderToolBar->addWidget(
+    new ShaderWidget( m_UI->m_RenderToolBar )
+  );
+  }
 }
 
 /*****************************************************************************/

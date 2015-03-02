@@ -237,6 +237,10 @@ private:
 
   /**
    */
+  void InitializeRenderToolBar();
+
+  /**
+   */
   void InitializeStatusBarWidgets();
 
   /**
