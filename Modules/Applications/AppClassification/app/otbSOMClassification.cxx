@@ -156,7 +156,6 @@ private:
     SetDocExampleParameterValue("out","SOMClassification.tif");
     SetDocExampleParameterValue("tp", "1.0");
     SetDocExampleParameterValue("ts","16384");
-    SetDocExampleParameterValue("sl", "32");
     SetDocExampleParameterValue("sx", "32");
     SetDocExampleParameterValue("sy", "32");
     SetDocExampleParameterValue("nx", "10");

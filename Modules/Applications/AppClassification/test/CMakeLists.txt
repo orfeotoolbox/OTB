@@ -18,7 +18,6 @@ otb_test_application(NAME apTvClSOMClassificationFull
                              -vm  ${INPUTDATA}/poupees_sub_c1.png
                              -tp  0.8
                              -ts  13000
-                             -sl  32
                              -som ${TEMP}/apTvClSOMClassificationMap.hdr
                              -sx  30
                              -sy  30
@@ -182,7 +181,7 @@ otb_test_application(NAME apTvClImageSVMClassifierQB3
                               ${OTBAPP_BASELINE}/clLabeledImageQB3.tif
                               ${TEMP}/clLabeledImageQB3.tif)
 
-set_tests_properties(apTvClImageSVMClassifierQB2 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
+set_tests_properties(apTvClImageSVMClassifierQB3 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
 
 otb_test_application(NAME apTvClImageSVMClassifierQB1
                       APP  ImageClassifier
