@@ -353,8 +353,10 @@ SEMClassifier<TInputImage, TOutputImage>
         {
         //label = (int) floor( 0.5 + nbClassesDbl * ran / double(RAND_MAX+1) );
         label = rand() % nbClasses;
-        if (label < 0) label = 0;
-        else if (label >= nbClasses) label = nbClasses - 1;
+        if (label >= nbClasses) 
+          {
+          label = nbClasses - 1;
+          }
         *labelIter = label;
         }
       }

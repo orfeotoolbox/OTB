@@ -797,7 +797,6 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)
 BOOST_AUTO_TEST_CASE(OGRDataSource_new_shp_with_features)
 {
   const std::string k_shp = "SomeShapeFileWithFeatures";
-  const std::string k_one = k_shp;
   ogr::DataSource::Pointer ds = ogr::DataSource::New(k_shp+".shp", ogr::DataSource::Modes::Overwrite);
 
   ogr::Layer l = ds -> CreateLayer(k_one, 0, wkbPoint);
