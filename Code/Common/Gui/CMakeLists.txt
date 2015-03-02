@@ -46,6 +46,7 @@ set( Common_Gui_SOURCES
   mvdTreeWidget.cxx
   mvdTreeWidgetItem.cxx
   mvdTreeWidgetItemDragAndDropEventFilter.cxx
+  mvdShaderWidget.cxx
 )
 
 #############################################################################
@@ -98,6 +99,7 @@ set( Common_Gui_HEADERS_MOC
   mvdTreeWidget.h
   #mvdTreeWidgetItem.h
   mvdTreeWidgetItemDragAndDropEventFilter.h
+  mvdShaderWidget.h
 )
 
 #############################################################################
@@ -117,6 +119,7 @@ set( Common_Gui_FORMS
   #mvdMyWidget.ui
   mvdPixelDescriptionWidget.ui
   mvdSearchableTreeWidget.ui
+  mvdShaderWidget.ui
   mvdStatusBarWidget.ui
   mvdVideoColorToolBox.ui
 )

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mvd::ShaderWidget</class>
+ <widget class="QWidget" name="mvd::ShaderWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>320</width>
+    <height>51</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QComboBox" name="comboBox">
+     <item>
+      <property name="text">
+       <string>Chessboard</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Local constrast</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Local translucency</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Normal</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Spectral angle</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Swipe (horizontal)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Swipe (vertical)</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Size:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="5">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Value:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QSpinBox" name="spinBox">
+     <property name="value">
+      <number>32</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="6">
+    <widget class="QLineEdit" name="lineEdit"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
