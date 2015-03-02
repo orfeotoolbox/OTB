@@ -231,3 +231,19 @@ otb_add_test(NAME feTvDrawPathTestAlign COMMAND otbRoadExtractionTestDriver
 
 otb_add_test(NAME feTuBreakAngularPathListFilterNew COMMAND otbRoadExtractionTestDriver
   otbBreakAngularPathListFilterNew)
+
+otb_add_test(NAME feTvBreakAngularPathListFilter COMMAND otbRoadExtractionTestDriver
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/feBreakAngularPathListOutput.txt
+  ${TEMP}/feBreakAngularPathListOutput.txt
+  otbBreakAngularPathListFilter
+  ${TEMP}/feBreakAngularPathListOutput.txt
+  10 20 30 50 90 140 180 |
+  1 1  5 1  7 1  11 1  21 1  31 1 |
+  1 1  5 1  7 1  11 1  21 11  31 11 |
+  1 1  5 1  7 1  11 1  21 11  31 11 41 11  |
+  1 1  5 1  7 1  11 1  21 11  31 11 41 11 58 11 70 11 |
+  1 11  5 11  7 11  11 11  21 1  31 1 41 1 |
+  1 1  5 1  7 1  11 1  21 11  31 21 41 31  |
+  1 1  5 1  5 11  5 21 |
+  1 1  31 1 41 1
+  )
