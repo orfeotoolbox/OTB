@@ -66,8 +66,7 @@ namespace
 
 /*******************************************************************************/
 ImageSettings
-::ImageSettings( QObject* parent ) :
-  QObject( parent )
+::ImageSettings()
 {
 }
 

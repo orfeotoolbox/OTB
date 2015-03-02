@@ -59,7 +59,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-
+class ImageSettings;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -83,11 +83,23 @@ class Monteverdi2_EXPORT ImageSettingsInterface :
 // Public methods.
 public:
 
-  /** \brief Constructor. */
-  ImageSettingsInterface( QObject* parent =NULL );
-
   /** \brief Destructor. */
   virtual ~ImageSettingsInterface();
+
+  /** */
+  inline
+    const ImageSettings * GetSettings() const;
+
+  /** */
+  inline
+    ImageSettings * GetSettings();
+
+  /** */
+#if 0
+  inline
+    template< typename T >
+    const T * GetSettings() const;
+#endif
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -107,6 +119,9 @@ signals:
 // Protected methods.
 protected:
 
+  /** \brief Constructor. */
+  ImageSettingsInterface( ImageSettings *, QObject * parent =NULL );
+
 //
 // Protected attributes.
 protected:
@@ -116,11 +131,16 @@ protected:
 //
 // Private methods.
 private:
+  /** */
+  void SetSettings( ImageSettings * );
 
 
 //
 // Private attributes.
 private:
+
+  /** */
+  ImageSettings * m_Settings;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -152,6 +172,39 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+const ImageSettings *
+ImageSettingsInterface
+::GetSettings() const
+{
+  return m_Settings;
+}
+
+/*****************************************************************************/
+inline
+ImageSettings *
+ImageSettingsInterface
+::GetSettings()
+{
+  return m_Settings;
+}
+
+/*****************************************************************************/
+#if 0
+
+template< typename T >
+inline
+const ImageSettings *
+ImageSettingsInterface
+::GetSettings() const
+{
+  return dynamic_cast< T >( m_Settings );
+}
+
+#endif
+
 } // end namespace 'mvd'
 
 #endif // __mvdImageSettingsInterface_h

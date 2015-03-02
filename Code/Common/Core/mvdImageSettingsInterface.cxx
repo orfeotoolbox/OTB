@@ -37,6 +37,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdImageSettings.h"
+
 
 namespace mvd
 {
@@ -66,8 +68,9 @@ namespace
 
 /*******************************************************************************/
 ImageSettingsInterface
-::ImageSettingsInterface( QObject* parent ) :
-  QObject( parent )
+::ImageSettingsInterface( ImageSettings * settings, QObject* parent ) :
+  QObject( parent ),
+  m_Settings( settings )
 {
 }
 
@@ -75,6 +78,17 @@ ImageSettingsInterface
 ImageSettingsInterface
 ::~ImageSettingsInterface()
 {
+  delete m_Settings;
+  m_Settings = NULL;
+}
+
+/*******************************************************************************/
+void
+ImageSettingsInterface
+::SetSettings( ImageSettings * settings )
+{
+  delete m_Settings;
+  m_Settings = settings;
 }
 
 /*******************************************************************************/

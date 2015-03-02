@@ -57,7 +57,6 @@ set( Common_Core_HEADERS_MOC
   mvdImageImporter.h
   mvdImagePlacenameLoader.h
   # mvdImageProperties.h
-  mvdImageSettings.h
   mvdImageSettingsInterface.h
   # mvdMath.h
   #mvdMyClass.h

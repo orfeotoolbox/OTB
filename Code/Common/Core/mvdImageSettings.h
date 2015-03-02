@@ -69,13 +69,8 @@ namespace mvd
  *
  * \brief WIP.
  */
-class Monteverdi2_EXPORT ImageSettings :
-    public QObject
+class Monteverdi2_EXPORT ImageSettings
 {
-
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
-  Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
@@ -84,22 +79,10 @@ class Monteverdi2_EXPORT ImageSettings :
 public:
 
   /** \brief Constructor. */
-  ImageSettings( QObject* parent =NULL );
+  ImageSettings();
 
   /** \brief Destructor. */
   virtual ~ImageSettings();
-
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Public SLOTS.
-// public slots:
-
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
-
-//
-// Signals.
-signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -121,12 +104,6 @@ private:
 //
 // Private attributes.
 private:
-
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Slots.
-private slots:
 };
 
 } // end namespace 'mvd'.
