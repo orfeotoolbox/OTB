@@ -48,6 +48,7 @@ if( CMAKE_HOST_WIN32 )
 endif()
 
 set(CMAKE_MODULE_PATH ${OTB_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH})
+include (SourceStatus)
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 include(OTBModuleMacros)
