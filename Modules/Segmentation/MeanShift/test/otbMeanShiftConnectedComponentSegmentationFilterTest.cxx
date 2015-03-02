@@ -53,9 +53,8 @@ int otbMeanShiftConnectedComponentSegmentationFilter(int itkNotUsed(argc), char 
 
   /* conencted component parameters */
 
-  const char * maskexpression = argv[6];
-  const char * segmentationexpression = argv[7];
-  unsigned int minobjectsize = atoi(argv[8]);
+  const char * segmentationexpression = argv[6];
+  unsigned int minobjectsize = atoi(argv[7]);
 
    // add meanshift options
 
@@ -82,7 +81,6 @@ int otbMeanShiftConnectedComponentSegmentationFilter(int itkNotUsed(argc), char 
 
   segmentationFilter->SetInput(meanShiftFilter->GetRangeOutput());
 
-  segmentationFilter->SetMaskExpression(maskexpression);
   segmentationFilter->SetConnectedComponentExpression(segmentationexpression);
   segmentationFilter->SetMinimumObjectSize(minobjectsize);
 

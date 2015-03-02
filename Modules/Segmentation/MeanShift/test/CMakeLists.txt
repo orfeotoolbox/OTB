@@ -19,7 +19,6 @@ otb_add_test(NAME obTuMeanShiftConnectedComponentSegmentationFilter COMMAND otbM
   9
   9
   0.01
-  ""
   "distance<0.2"
   50)
 

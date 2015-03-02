@@ -62,12 +62,10 @@ int otbMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter(in
   const double threshold = atof(argv[5]);
 
   /* conencted component parameters */
-
-  const char * maskexpression = argv[6];
-  const char * segmentationexpression = argv[7];
-  unsigned int minobjectsize = atoi(argv[8]);
-  const char * obiaexpression = argv[9];
-  unsigned int nbstreams = atoi(argv[10]);
+  const char * segmentationexpression = argv[6];
+  unsigned int minobjectsize = atoi(argv[7]);
+  const char * obiaexpression = argv[8];
+  unsigned int nbstreams = atoi(argv[9]);
 
   // add meanshift options
 

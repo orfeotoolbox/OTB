@@ -59,7 +59,6 @@ otb_add_test(NAME obTuMeanShiftStreamingConnectedComponentSegmentationOBIAToVect
   9
   10
   0.001
-  ""
   "distance<10"
   20
   "SHAPE_Elongation>10"
