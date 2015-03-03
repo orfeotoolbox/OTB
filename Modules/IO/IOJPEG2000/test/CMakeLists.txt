@@ -58,3 +58,23 @@ otb_add_test(NAME ioTvJPEG2000ImageIO_CacheSize_25000 COMMAND otbIOJPEG2000TestD
   ${INPUTDATA}/bretagne.j2k
   ${TEMP}/ioClassicalQLJPEG2K_bretagne_OUT.tif)
 
+if(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRINPUT)
+  set( GenericTestPHR_TESTNB 0)
+
+foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
+  list(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
+  math(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+  string(REGEX MATCH "TIFF" PHR_TIFF_FILE ${current_type})
+
+  if(NOT PHR_TIFF_FILE)
+    # CanRead
+    otb_add_test(NAME ioTuJ2KImageIOCanRead_${current_type} COMMAND otbIOJPEG2000TestDriver
+             otbJPEG2000ImageIOTestCanRead
+                ${current_file}
+            )
+  endif()
+
+endforeach()
+
+endif()
+

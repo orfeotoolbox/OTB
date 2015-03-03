@@ -918,3 +918,27 @@ otb_add_test(NAME ioTvCompareWritingComplexImage_HDR COMMAND otbImageIOTestDrive
   ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.hdr
   0 0 100 100)
 
+
+if(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRINPUT)
+  set( GenericTestPHR_TESTNB 0)
+
+foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
+  list(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
+  math(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+  string(REGEX MATCH "TIFF" PHR_TIFF_FILE ${current_type})
+
+
+
+if(NOT PHR_TIFF_FILE)
+    # Extract resolution of input file
+    otb_add_test(NAME ioTvMultiResolutionReadingInfo_${current_type} COMMAND otbImageIOTestDriver
+             --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReadingInfo_${current_type}.txt
+                                       ${TEMP}/ioTvMultiResolutionReadingInfo_${current_type}_OUT.txt
+             otbMultiResolutionReadingInfo
+                ${current_file}
+                ${TEMP}/ioTvMultiResolutionReadingInfo_${current_type}_OUT.txt
+            )
+
+endif()
+endforeach()
+endif()

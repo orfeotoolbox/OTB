@@ -389,3 +389,72 @@ otb_add_test(NAME feTvMetaImageFunction COMMAND otbImageBaseTestDriver
 otb_add_test(NAME feTuMetaImageFunctionNew COMMAND otbImageBaseTestDriver
   otbMetaImageFunctionNew
   )
+
+if(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRINPUT)
+  set( GenericTestPHR_TESTNB 0)
+
+foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
+  list(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
+  math(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+  string(REGEX MATCH "TIFF" PHR_TIFF_FILE ${current_type})
+
+# Read info from the input file
+    otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type} COMMAND otbImageBaseTestDriver
+             --ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
+                                       ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+             --ignore-lines-with 3 CacheSizeInBytes Driver Corner 
+             otbVectorImageTest
+                ${current_file}?&resol=0
+                ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+             )
+
+if(NOT PHR_TIFF_FILE)
+    # Read info from the input file (res=5)
+    otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type}_res5 COMMAND otbImageBaseTestDriver
+             --ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
+                                       ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+             --ignore-lines-with 3 CacheSizeInBytes Driver Corner
+             otbVectorImageTest
+                ${current_file}?&resol=5
+                ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+             )
+    # Decode an area inside one tile
+    otb_add_test(NAME ioTvReaderWriterJP22TIF_${current_type}_1 COMMAND otbImageBaseTestDriver
+	         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_1.tif
+                                           ${TEMP}/ioTvJP22TIF_Extract_${current_type}_1_OUT.tif
+             otbMultiChannelExtractROI
+                -ushort ${current_file}
+                -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_1_OUT.tif
+                -startX 256 -startY 512 -sizeX 256 -sizeY 128
+                -time
+            )
+
+    # Decode an area which need 4 tiles
+    otb_add_test(NAME ioTvReaderWriterJP22TIF_${current_type}_2 COMMAND otbImageBaseTestDriver
+             --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_2.tif
+                                           ${TEMP}/ioTvJP22TIF_Extract_${current_type}_2_OUT.tif
+             otbMultiChannelExtractROI
+                -ushort ${current_file}
+                -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_2_OUT.tif
+                -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
+                -time
+            )
+
+    # Decode the whole image with the lowest resolution (res=5)
+    # (take only one channel to put the file in baseline repository)
+    #write only a subpart of the output image using the extended parameter "box"
+    otb_add_test(NAME ioTvReaderWriterJP22TIF_${current_type}_res5 COMMAND otbImageBaseTestDriver
+             --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_res5.tif
+                                           ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif
+             otbMultiChannelExtractROI
+                -ushort ${current_file}?resol=5
+                -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif?&box=0:0:128:128
+                -channels 1
+                -time
+         )
+
+  endif()
+
+endforeach()
+
+endif()
