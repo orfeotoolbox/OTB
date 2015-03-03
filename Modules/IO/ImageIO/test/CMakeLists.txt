@@ -628,7 +628,7 @@ otb_add_test(NAME ioTvImageSeriesFileReader COMMAND otbImageIOTestDriver
   ${TEMP}/ioTvImageSeries.png
   )
 
-if(OTB_USE_LARGE_INPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 # This test depends on the output of another test, which depends on large inputs. This situation should not happen.
 otb_add_test(NAME ioTvONERAImageStreamWriter COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}
