@@ -597,3 +597,132 @@ otb_add_test(NAME uaTvRPCSolverAdapterValidationTest COMMAND otbOSSIMAdaptersTes
   ${INPUTDATA}/DEM/egm96.grd
   )
 
+
+# --------------------------------------------------------------------------------
+# Manage PHR data input
+if(OTB_DATA_USE_LARGEINPUT)
+   set(GenericTestPHR_DATA_INPUTS
+      ${GenericTestPHR_DATA_INPUTS}
+      ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES-PRE/TLSE_JP2_ORTHO_DIMAPv2_PMS-N_lossy_12bits/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+      ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES-PRE/TLSE_TIFF_ORTHO_DIMAPv2_MS_lossless_8bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_ORT_IPU_20111109_7807-004_R1C1.TIF
+      ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES-PRE/TLSE_TIFF_PRIMARY_DIMAPv2_MS_lossly_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20111025_3077-004_R1C1.TIF
+      ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2
+      ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R1C1.JP2
+      ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES/PARIS_JP2_DIMAPv1_ORTHO_PMS_lossless_12bits/IMGPHR_PHR1A_ORTHO_20120502_IPU_20120430_6347-003_V1/IMG_R1C1.JP2
+   )
+
+   set(GenericTestPHR_DATA_TYPES
+      ${GenericTestPHR_DATA_TYPES}
+      SIMUL_PHR_JP2_ORTHO_DIMAPv2_PMS-N_lossy_12bits
+      SIMUL_PHR_TIFF_ORTHO_DIMAPv2_MS_lossless_8bits
+      SIMUL_PHR_TIFF_PRIMARY_DIMAPv2_MS_lossy_12bits
+      PHR_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits
+      PHR_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits
+      PHR_JP2_DIMAPv1_ORTHO_PMS_lossless_12bits
+   )
+
+   set(GenericTestSPOT6_DATA_INPUTS
+      ${GenericTestSPOT6_DATA_INPUTS}
+      ${OTB_DATA_LARGEINPUT_ROOT}/SPOT6/SPOT6_Ortho_Bundle_12_bits/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201306031242000_ORT_816005101_R1C1.JP2
+      ${OTB_DATA_LARGEINPUT_ROOT}/SPOT6/SPOT6_Ortho_Pan-sharpened_12_bits/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_PMS_001_A/IMG_SPOT6_PMS_201305251604372_ORT_816009101_R1C1.JP2
+      ${OTB_DATA_LARGEINPUT_ROOT}/SPOT6/SPOT6_Primary_Bundle_12_bits/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201211100138085_SEN_816007101_R1C1.JP2
+   )
+
+   set(GenericTestSPOT6_DATA_TYPES
+      ${GenericTestSPOT6_DATA_TYPES}
+      SPOT6_Ortho_Bundle_12_bits
+      SPOT6_Ortho_Pan-sharpened_12_bits
+      SPOT6_Primary_Bundle_12_bits
+   )
+
+endif()
+
+if(OTB_DATA_USE_SPOTPHRINPUT)
+  set(GenericTestPHR_SPOT_DATA_INPUTS
+      ${SPOTPHRINPUT}/ORTHO_UTM_BUNDLE/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_ORT_IPU_20120221_8798-001_R1C1.JP2
+      ${SPOTPHRINPUT}/ORTHO_UTM_BUNDLE/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_ORT_IPU_20120221_8798-002_R1C1.JP2
+      ${SPOTPHRINPUT}/PRIMARY_BUNDLE/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20120221_8686-001_R1C1.JP2
+      ${SPOTPHRINPUT}/PRIMARY_BUNDLE/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20120221_8686-002_R1C1.JP2
+      ${SPOTPHRINPUT}/ORTHO_GEOGRAPHIC_BUNDLE/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_ORT_IPU_20120221_8718-001_R1C1.JP2
+      ${SPOTPHRINPUT}/ORTHO_GEOGRAPHIC_BUNDLE/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_ORT_IPU_20120221_8718-002_R1C1.JP2
+      )
+
+  set(GenericTestPHR_SPOT_DATA_TYPES
+	  SPOT_PHR_ORTHO_UTM_P
+	  SPOT_PHR_ORTHO_UTM_MS
+	  SPOT_PHR_ORTHO_GEO_P
+      	  SPOT_PHR_ORTHO_GEO_MS
+	  SPOT_PHR_PRIMARY_MS
+	  SPOT_PHR_PRIMARY_P
+	 )
+
+   set(GenericTestPHR_DATA_INPUTS ${GenericTestPHR_DATA_INPUTS} ${GenericTestPHR_SPOT_DATA_INPUTS})
+   set(GenericTestPHR_DATA_TYPES ${GenericTestPHR_DATA_TYPES} ${GenericTestPHR_SPOT_DATA_TYPES})
+endif()
+
+if(OTB_DATA_USE_CNESPHRINPUT)
+  set(GenericTestPHR_CNES_DATA_INPUTS
+      ${CNESPHRINPUT}/PRIMARY_PMS/IMGPHR_201212716417737721/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120127_5579-001_R1C1.JP2
+      ${CNESPHRINPUT}/PRIMARY_PMS/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2
+      ${CNESPHRINPUT}/PRIMARY_PMS/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R3C1.JP2
+      )
+
+  set(GenericTestPHR_CNES_DATA_TYPES
+	  CNES_PHR_PRIMARY_PMS_R1C1_2012-01-27
+	  CNES_PHR_PRIMARY_PMS_R1C1_2012-02-22
+	  CNES_PHR_PRIMARY_PMS_R3C1_2012-02-22
+	 )
+
+  set(GenericTestPHR_DATA_INPUTS ${GenericTestPHR_DATA_INPUTS} ${GenericTestPHR_CNES_DATA_INPUTS})
+  set(GenericTestPHR_DATA_TYPES ${GenericTestPHR_DATA_TYPES} ${GenericTestPHR_CNES_DATA_TYPES})
+endif()
+
+if(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRINPUT)
+
+  set( GenericTestPHR_TESTNB 0)
+
+  foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
+    list(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type )
+    math(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+
+      # Get and manipulate ImageKeywordlist
+      otb_add_test(NAME ioTvImageKeywordlist_${current_type} COMMAND otbOSSIMAdaptersTestDriver
+                  --ignore-order --compare-n-ascii ${NOTOL} 2
+                 ${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
+                 ${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
+                 ${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
+                 ${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
+                 --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+                 otbImageKeywordlist
+                  ${current_file}
+                  ${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
+                  ${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
+              )
+
+  endforeach()
+
+
+  set( GenericTestSPOT6_TESTNB 0)
+
+  foreach( current_file ${GenericTestSPOT6_DATA_INPUTS} )
+    list(GET GenericTestSPOT6_DATA_TYPES   ${GenericTestSPOT6_TESTNB} current_type )
+    math(EXPR GenericTestSPOT6_TESTNB "${GenericTestSPOT6_TESTNB} + 1")
+
+      # Get and manipulate ImageKeywordlist
+      otb_add_test(NAME ioTvImageKeywordlist_${current_type} COMMAND otbOSSIMAdaptersTestDriver
+               --ignore-order --compare-n-ascii ${NOTOL} 2
+                 ${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
+                 ${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
+                 ${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
+                 ${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
+               --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+               otbImageKeywordlist
+                  ${current_file}
+                  ${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
+                  ${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
+              )
+
+  endforeach()
+
+endif()
+
