@@ -228,6 +228,9 @@ if(OTB_DATA_USE_CNESPHRINPUT)
   mark_as_advanced(OTB_DATA_CNESPHRINPUT_ROOT)
 endif()
 
+#Generate cmake variables with a set of largeinput data used in tests
+include(OTBManageLargeInputPaths)
+
 set(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 set(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 set(INPUTDATA      ${OTB_DATA_ROOT}/Input)
