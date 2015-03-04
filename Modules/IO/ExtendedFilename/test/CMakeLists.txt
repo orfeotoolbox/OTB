@@ -12,6 +12,9 @@ target_link_libraries(otbExtendedFilenameTestDriver ${OTBExtendedFilename-Test_L
 otb_module_target_label(otbExtendedFilenameTestDriver)
 
 # Tests Declaration
+set(streaming_sizevalue_auto "8")
+set(streaming_sizevalue_nbsplits "10")
+set(streaming_sizevalue_height "100")
 foreach(streaming_type "Tiled" "Stripped")
   foreach(streaming_sizemode "Auto" "Nbsplits" "Height")
     string(TOLOWER ${streaming_type} type)
