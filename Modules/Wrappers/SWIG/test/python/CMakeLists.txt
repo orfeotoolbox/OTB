@@ -1,5 +1,5 @@
 set(TEST_DRIVER otbTestDriver
-    --add-before-env PYTHONPATH        "${CMAKE_BINARY_DIR}/Code/Wrappers/SWIG"
+    --add-before-env PYTHONPATH        "${OTBSWIGWrapper_BINARY_DIR}/src"
     --add-before-env PYTHONPATH        $<TARGET_FILE_DIR:_otbApplication>
     --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )
 
