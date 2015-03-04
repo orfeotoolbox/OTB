@@ -1204,3 +1204,77 @@ foreach(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
   endforeach()
 
 endforeach()
+
+otb_add_test(NAME  ioTvImageFileReaderHDR2LUM COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_1canal.c1.hdr
+                                ${TEMP}/ioImageFileReaderHDR2LUM.lum
+        otbImageFileReaderTest
+        ${INPUTDATA}/poupees_1canal.c1.hdr
+        ${TEMP}/ioImageFileReaderHDR2LUM.lum )
+
+otb_add_test(NAME  ioTvImageFileReaderPNG2LUM COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/cthead1.png
+                                ${TEMP}/ioImageFileReaderPNG2LUM.lum
+        otbImageFileReaderTest
+        ${INPUTDATA}/cthead1.png
+        ${TEMP}/ioImageFileReaderPNG2LUM.lum )
+
+otb_add_test(NAME  ioTvImageFileReaderLUM2LUM COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}        ${TEMP}/ioImageFileReaderPNG2LUM.lum
+                                ${TEMP}/ioImageFileReaderLUM2LUM.lum
+        otbImageFileReaderTest
+        ${TEMP}/ioImageFileReaderPNG2LUM.lum
+        ${TEMP}/ioImageFileReaderLUM2LUM.lum )
+set_tests_properties(ioTvImageFileReaderLUM2LUM PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM)
+
+otb_add_test(NAME  ioTvImageFileWriterLUM2HDR COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/cthead1.png
+                                ${TEMP}/ioImageFileReaderLUM2HDR.hdr
+        otbImageFileReaderTest
+        ${TEMP}/ioImageFileReaderLUM2LUM.lum
+        ${TEMP}/ioImageFileReaderLUM2HDR.hdr )
+set_tests_properties(ioTvImageFileWriterLUM2HDR PROPERTIES DEPENDS ioTvImageFileReaderLUM2LUM)
+
+otb_add_test(NAME  ioTvImageFileReaderBSQ2PNG COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_1canal.hd
+                                ${TEMP}/ioImageFileReaderBSQ2PNG.png
+        otbImageFileReaderTest
+        ${INPUTDATA}/poupees_1canal.hd
+        ${TEMP}/ioImageFileReaderBSQ2PNG.png )
+
+otb_add_test(NAME  ioTvImageFileReaderRGB_PNG2BSQ COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/couleurs_extrait.png
+                                ${TEMP}/ioImageFileReaderRGB_PNG2BSQ.hd
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/couleurs_extrait.png
+        ${TEMP}/ioImageFileReaderRGB_PNG2BSQ.hd )
+
+otb_add_test(NAME  ioTvImageFileReaderRGB_PNG2ENVI COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/couleurs_extrait.png
+                                ${TEMP}/ioImageFileReaderRGB_PNG2ENVI.hdr
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/couleurs_extrait.png
+        ${TEMP}/ioImageFileReaderRGB_PNG2ENVI.hdr )
+
+otb_add_test(NAME  ioTvImageFileReaderIntLUM2HDR COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I4.lum
+                                ${TEMP}/ioImageFileReaderI4_LUM2HDR.hdr
+        otbIntImageIOTest
+        ${INPUTDATA}/poupees_I4.lum
+        ${TEMP}/ioImageFileReaderI4_LUM2HDR.hdr )
+otb_add_test(NAME  ioTvImageFileReaderIntHDR2LUM COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I4.lum
+                                ${TEMP}/ioImageFileReaderI4_HDR2LUM.lum
+        otbIntImageIOTest
+        ${TEMP}/ioImageFileReaderI4_LUM2HDR.hdr
+        ${TEMP}/ioImageFileReaderI4_HDR2LUM.lum )
+set_tests_properties(ioTvImageFileReaderIntHDR2LUM PROPERTIES DEPENDS ioTvImageFileReaderIntLUM2HDR)
+
+otb_add_test(NAME  ioTvImageFileReaderPNG2ENVI COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}        ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+                                ${TEMP}/ioImageFileReaderPNG2ENVI.hdr
+        otbImageFileReaderTest
+        ${INPUTDATA}/cthead1.png
+        ${TEMP}/ioImageFileReaderPNG2ENVI.hdr )
+set_tests_properties(ioTvImageFileReaderPNG2ENVI PROPERTIES DEPENDS ioTvImageFileReaderPNG2BSQ)
+

@@ -1,34 +1,34 @@
 otb_module_test()
 
 set(OTBImageBaseTests
-otbImageBaseTestDriver.cxx
-otbFlexibleDistanceWithMissingValue.cxx
-otbImageAndVectorImageOperationFilterNew.cxx
-otbImagePCAShapeModelEstimatorTest.cxx
-otbFunctionToImageFilter.cxx
-otbExtractROI2.cxx
-otbComplexToVectorImageCastFilter.cxx
-otbMultiChannelExtractROI.cxx
-otbVectorImageTest.cxx
-otbExtractROITestMetaData.cxx
-otbTestMultiExtractMultiUpdate.cxx
-otbExtractROI.cxx
-otbFunctionToImageFilterNew.cxx
-otbVectorImageToASImageAdaptorNew.cxx
-otbImageAndVectorImageOperationFilterTest.cxx
-otbImageOfVectorsToMonoChannelExtractROI.cxx
-otbImageOfVectorsToMonoChannelExtractROINew.cxx
-otbExtractROINew.cxx
-otbExtractROI_RGB.cxx
-otbComplexToIntensityFilterTest.cxx
-otbMultiToMonoChannelExtractROINew.cxx
-otbMultiToMonoChannelExtractROI.cxx
-otbImageTest.cxx
-otbFlexibleDistanceWithMissingValueNew.cxx
-otbImageFunctionAdaptor.cxx
-otbMultiChannelExtractROINew.cxx
-otbMetaImageFunction.cxx
-)
+  otbImageBaseTestDriver.cxx
+  otbFlexibleDistanceWithMissingValue.cxx
+  otbImageAndVectorImageOperationFilterNew.cxx
+  otbImagePCAShapeModelEstimatorTest.cxx
+  otbFunctionToImageFilter.cxx
+  otbExtractROI2.cxx
+  otbComplexToVectorImageCastFilter.cxx
+  otbMultiChannelExtractROI.cxx
+  otbVectorImageTest.cxx
+  otbExtractROITestMetaData.cxx
+  otbTestMultiExtractMultiUpdate.cxx
+  otbExtractROI.cxx
+  otbFunctionToImageFilterNew.cxx
+  otbVectorImageToASImageAdaptorNew.cxx
+  otbImageAndVectorImageOperationFilterTest.cxx
+  otbImageOfVectorsToMonoChannelExtractROI.cxx
+  otbImageOfVectorsToMonoChannelExtractROINew.cxx
+  otbExtractROINew.cxx
+  otbExtractROI_RGB.cxx
+  otbComplexToIntensityFilterTest.cxx
+  otbMultiToMonoChannelExtractROINew.cxx
+  otbMultiToMonoChannelExtractROI.cxx
+  otbImageTest.cxx
+  otbFlexibleDistanceWithMissingValueNew.cxx
+  otbImageFunctionAdaptor.cxx
+  otbMultiChannelExtractROINew.cxx
+  otbMetaImageFunction.cxx
+  )
 
 add_executable(otbImageBaseTestDriver ${OTBImageBaseTests})
 target_link_libraries(otbImageBaseTestDriver ${OTBImageBase-Test_LIBRARIES})
@@ -393,68 +393,247 @@ otb_add_test(NAME feTuMetaImageFunctionNew COMMAND otbImageBaseTestDriver
 if(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRINPUT)
   set( GenericTestPHR_TESTNB 0)
 
-foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
-  list(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
-  math(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
-  string(REGEX MATCH "TIFF" PHR_TIFF_FILE ${current_type})
+  foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
+    list(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
+    math(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+    string(REGEX MATCH "TIFF" PHR_TIFF_FILE ${current_type})
 
-# Read info from the input file
+    # Read info from the input file
     otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type} COMMAND otbImageBaseTestDriver
-             --ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
-                                       ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
-             --ignore-lines-with 3 CacheSizeInBytes Driver Corner 
-             otbVectorImageTest
-                ${current_file}?&resol=0
-                ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
-             )
+      --ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
+      ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+      --ignore-lines-with 3 CacheSizeInBytes Driver Corner 
+      otbVectorImageTest
+      ${current_file}?&resol=0
+      ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+      )
 
-if(NOT PHR_TIFF_FILE)
-    # Read info from the input file (res=5)
-    otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type}_res5 COMMAND otbImageBaseTestDriver
-             --ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
-                                       ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
-             --ignore-lines-with 3 CacheSizeInBytes Driver Corner
-             otbVectorImageTest
-                ${current_file}?&resol=5
-                ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
-             )
-    # Decode an area inside one tile
-    otb_add_test(NAME ioTvReaderWriterJP22TIF_${current_type}_1 COMMAND otbImageBaseTestDriver
-	         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_1.tif
-                                           ${TEMP}/ioTvJP22TIF_Extract_${current_type}_1_OUT.tif
-             otbMultiChannelExtractROI
-                -ushort ${current_file}
-                -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_1_OUT.tif
-                -startX 256 -startY 512 -sizeX 256 -sizeY 128
-                -time
-            )
+    if(NOT PHR_TIFF_FILE)
+      # Read info from the input file (res=5)
+      otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type}_res5 COMMAND otbImageBaseTestDriver
+        --ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
+        ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+        --ignore-lines-with 3 CacheSizeInBytes Driver Corner
+        otbVectorImageTest
+        ${current_file}?&resol=5
+        ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+        )
+      # Decode an area inside one tile
+      otb_add_test(NAME ioTvReaderWriterJP22TIF_${current_type}_1 COMMAND otbImageBaseTestDriver
+	--compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_1.tif
+        ${TEMP}/ioTvJP22TIF_Extract_${current_type}_1_OUT.tif
+        otbMultiChannelExtractROI
+        -ushort ${current_file}
+        -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_1_OUT.tif
+        -startX 256 -startY 512 -sizeX 256 -sizeY 128
+        -time
+        )
 
-    # Decode an area which need 4 tiles
-    otb_add_test(NAME ioTvReaderWriterJP22TIF_${current_type}_2 COMMAND otbImageBaseTestDriver
-             --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_2.tif
-                                           ${TEMP}/ioTvJP22TIF_Extract_${current_type}_2_OUT.tif
-             otbMultiChannelExtractROI
-                -ushort ${current_file}
-                -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_2_OUT.tif
-                -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
-                -time
-            )
+      # Decode an area which need 4 tiles
+      otb_add_test(NAME ioTvReaderWriterJP22TIF_${current_type}_2 COMMAND otbImageBaseTestDriver
+        --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_2.tif
+        ${TEMP}/ioTvJP22TIF_Extract_${current_type}_2_OUT.tif
+        otbMultiChannelExtractROI
+        -ushort ${current_file}
+        -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_2_OUT.tif
+        -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
+        -time
+        )
 
-    # Decode the whole image with the lowest resolution (res=5)
-    # (take only one channel to put the file in baseline repository)
-    #write only a subpart of the output image using the extended parameter "box"
-    otb_add_test(NAME ioTvReaderWriterJP22TIF_${current_type}_res5 COMMAND otbImageBaseTestDriver
-             --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_res5.tif
-                                           ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif
-             otbMultiChannelExtractROI
-                -ushort ${current_file}?resol=5
-                -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif?&box=0:0:128:128
-                -channels 1
-                -time
-         )
+      # Decode the whole image with the lowest resolution (res=5)
+      # (take only one channel to put the file in baseline repository)
+      #write only a subpart of the output image using the extended parameter "box"
+      otb_add_test(NAME ioTvReaderWriterJP22TIF_${current_type}_res5 COMMAND otbImageBaseTestDriver
+        --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_res5.tif
+        ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif
+        otbMultiChannelExtractROI
+        -ushort ${current_file}?resol=5
+        -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif?&box=0:0:128:128
+        -channels 1
+        -time
+        )
 
-  endif()
+    endif()
 
-endforeach()
+  endforeach()
 
 endif()
+
+
+
+# ---  SPOT4 (CAI)  ---
+otb_add_test(NAME  ioTvMultiChannelROI_SPOT42PNG COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
+  ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
+  otbMultiChannelExtractROI
+  LARGEINPUT{SPOT4/RIO_DE_JANEIRO/}
+  ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
+  -startX 700 -startY 60 -sizeX 77 -sizeY 489
+  -channels 1 2 3 )
+
+otb_add_test(NAME  ioTvMultiChannelROI_SPOT42PNG_2 COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
+  ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
+  otbMultiChannelExtractROI
+  LARGEINPUT{SPOT4/RIO_DE_JANEIRO/}
+  ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
+  -startX 700 -startY 60 -sizeX 77 -sizeY 489
+  -channels 3 2 1 )
+
+# ---  ENVI  ---
+otb_add_test(NAME  ioTvMultiChannelROI_ENVI2PNG_2 COMMAND otbImageBaseTestDriver
+  # THOMAS (provisoire) : Images OK mais erreur au DIFF ITK !!!
+  #   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
+  #                     ${TEMP}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
+  otbMultiChannelExtractROI
+  -uchar ${INPUTDATA}/poupees.hdr
+  -uchar ${TEMP}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
+  -startX 100 -startY 100 -sizeX 77 -sizeY 300
+  -channels 1 2 3 )
+
+# ---  SPOT5 BIL (CAI)  ---
+
+
+# add_test(ioTvMultiChannelROI_SPOT5BIL2PNG_2COMMAND otbImageBaseTestDriver
+#   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT5BIL2PNG_poupees_100_100_77_300_channels_1_2_3.png
+#                     ${TEMP}/ioExtractROI_SPOT5BIL2PNG_poupees_100_100_77_300_channels_1_2_3.png
+#         otbMultiChannelExtractROI
+#         ${INPUTDATA}/poupeesBIL
+#         ${TEMP}/ioExtractROI_SPOT5BIL2PNG_poupees_100_100_77_300_channels_1_2_3.png
+#         -startX 100 -startY 100 -sizeX 77 -sizeY 300
+#         -channels 1 2 3 )
+
+# ---  SPOT5 (CAI)  ---
+# ---  Test sur l'image SPOT 5 4 canaux  ---
+
+otb_add_test(NAME   ioTvMultiChannelROI_SPOT52PNG COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
+  ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
+  otbMultiChannelExtractROI
+  LARGEINPUT{SPOT5/TEHERAN/}
+  ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
+  -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
+  -channels 1 2 3 )
+
+otb_add_test(NAME   ioTvMultiChannelROI_SPOT52PNG_2 COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
+  ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
+  otbMultiChannelExtractROI
+  LARGEINPUT{SPOT5/TEHERAN/}
+  ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
+  -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
+  -channels 1 )
+
+otb_add_test(NAME   ioTvMultiChannelROI_SPOT52PNG_3 COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
+  ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
+  otbMultiChannelExtractROI
+  LARGEINPUT{SPOT5/TEHERAN/}
+  ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
+  -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
+  -channels 2 )
+
+otb_add_test(NAME   ioTvMultiChannelROI_SPOT52PNG_4 COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
+  ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
+  otbMultiChannelExtractROI
+  LARGEINPUT{SPOT5/TEHERAN/}
+  ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
+  -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
+  -channels 3 )
+
+otb_add_test(NAME   ioTvMultiChannelROI_SPOT52PNG_5 COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
+  ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
+  otbMultiChannelExtractROI
+  LARGEINPUT{SPOT5/TEHERAN/}
+  ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
+  -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
+  -channels 4 )
+
+# ---  Ikonos PAN  ---
+otb_add_test(NAME   ioTvMultiChannelROI_IkonosPAN2PNG COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
+  ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
+  otbMultiChannelExtractROI
+  LARGEINPUT{IKONOS/PARIS/po_79039_pan_0000000.tif}
+  ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
+  -startX 100 -startY 100 -sizeX 77 -sizeY 300
+  -channels 1)
+
+# ---  Ikonos XS  ---
+otb_add_test(NAME   ioTvMultiChannelROI_IkonosRED2PNG COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
+  ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
+  otbMultiChannelExtractROI
+  LARGEINPUT{IKONOS/PARIS/po_79039_red_0000000.tif}
+  ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
+  -startX 100 -startY 100 -sizeX 77 -sizeY 300
+  -channels 1)
+
+otb_add_test(NAME   ioTvMultiChannelROI_IkonosGRN2PNG COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
+  ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
+  otbMultiChannelExtractROI
+  LARGEINPUT{IKONOS/PARIS/po_79039_grn_0000000.tif}
+  ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
+  -startX 100 -startY 100 -sizeX 77 -sizeY 300
+  -channels 1)
+
+otb_add_test(NAME   ioTvMultiChannelROI_IkonosBLU2PNG COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
+  ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
+  otbMultiChannelExtractROI
+  LARGEINPUT{IKONOS/PARIS/po_79039_blu_0000000.tif}
+  ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
+  -startX 100 -startY 100 -sizeX 77 -sizeY 300
+  -channels 1)
+
+otb_add_test(NAME   ioTvMultiChannelROI_IkonosNIR2PNG COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+  ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+  otbMultiChannelExtractROI
+  LARGEINPUT{IKONOS/PARIS/po_79039_nir_0000000.tif}
+  ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+  -startX 100 -startY 100 -sizeX 77 -sizeY 300
+  -channels 1)
+
+# ---  LUM ----
+otb_add_test(NAME   ioTvMultiChannelROI_IkonosNIR2LUM COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300_nogeoinfo.png
+  ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
+  otbMultiChannelExtractROI
+  LARGEINPUT{IKONOS/PARIS/po_79039_nir_0000000.tif}
+  ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
+  -startX 100 -startY 100 -sizeX 77 -sizeY 300
+  -channels 1)
+
+# ---  BSQ ----
+otb_add_test(NAME   ioTvMultiChannelROI_IkonosNIR2BSQ COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}       ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300_nogeoinfo.png
+  ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
+  otbMultiChannelExtractROI
+  LARGEINPUT{IKONOS/PARIS/po_79039_nir_0000000.tif}
+  ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
+  -startX 100 -startY 100 -sizeX 77 -sizeY 300
+  -channels 1)
+
+# ---  Quickbird PAN  ---
+otb_add_test(NAME   ioTvMultiChannelROI_QuickbirdPAN2TIFF COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
+  ${TEMP}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
+  otbMultiChannelExtractROI
+  -ushort LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  -ushort ${TEMP}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
+  -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
+  )
+
+# ---  Quickbird XS  ---
+otb_add_test(NAME   ioTvMultiChannelROI_QuickbirdXS2TIFF COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
+  ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
+  otbMultiChannelExtractROI
+  -ushort LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
+  -ushort ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
+  -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
+  )
