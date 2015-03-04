@@ -33,6 +33,14 @@ set(OPENJPEG_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/libopenjpeg/function_list.c
 )
 
+if(WIN32)
+  if(BUILD_SHARED_LIBS)
+    add_definitions(-DOPJ_EXPORTS)
+  else()
+    add_definitions(-DOPJ_STATIC)
+  endif()
+endif()
+
 set(CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH})
