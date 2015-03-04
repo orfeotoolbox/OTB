@@ -44,6 +44,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdCore.h"
+#include "Core/mvdImageSettings.h"
 
 
 /*****************************************************************************/
@@ -69,12 +70,13 @@ namespace mvd
  *
  * \brief WIP.
  */
-class Monteverdi2_EXPORT VectorImageSettings
+class Monteverdi2_EXPORT VectorImageSettings :
+    public ImageSettings
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 //
-// Public types.
+// Public types and attributes.
 public:
   /**
    */
@@ -100,30 +102,14 @@ public:
   /**
    * \brief Destructor.
    */
-  ~VectorImageSettings();
+  virtual ~VectorImageSettings();
 
   /**
    * \brief Assignment operator.
    *
    * \param other
    */
-  VectorImageSettings & operator=( const VectorImageSettings & other );
-
-  /**
-   */
-  inline bool IsApplied() const;
-
-  /**
-   */
-  inline bool IsModified() const;
-
-  /**
-   */
-  inline void ClearModified();
-
-  /**
-   */
-  inline void SetApplied();
+  VectorImageSettings & operator = ( const VectorImageSettings & other );
 
   //
   // COLOR COMPOSITION.
@@ -296,10 +282,6 @@ private:
     void SetGrayDynamicsParam( bool high,
 			       const ParametersType::ValueType& param );
 
-  /**
-   */
-  inline void SetModified();
-
 
 //
 // Private attributes.
@@ -335,20 +317,6 @@ private:
   /**
    */
   double m_Gamma;
-
-  /**
-   * \brief Flag which notices that rendering settings have been
-   * edited.
-   */
-  // TODO: Optimize using C++ bitset bool foo:1;
-  bool m_IsModified: 1;
-
-  /**
-   * \brief Flag which notices that rendering settings have been
-   * applied to display.
-   */
-  // TODO: Optimize using C++ bitset bool foo:1;
-  bool m_IsApplied: 1;
 };
 
 } // end namespace 'mvd'.
@@ -389,62 +357,9 @@ VectorImageSettings
   m_IsGrayscaleActivated = other.m_IsGrayscaleActivated;
   m_GrayChannel = other.m_GrayChannel;
   m_GrayDynamicsParams = other.m_GrayDynamicsParams;
-  m_IsApplied = other.m_IsApplied;
   m_Gamma = other.m_Gamma;
 
   return *this;
-}
-
-/*****************************************************************************/
-inline
-bool
-VectorImageSettings
-::IsApplied() const
-{
-  return m_IsApplied;
-}
-
-/*****************************************************************************/
-inline
-bool
-VectorImageSettings
-::IsModified() const
-{
-  return m_IsModified;
-}
-
-/*****************************************************************************/
-inline
-void
-VectorImageSettings
-::SetModified()
-{
-  // qDebug() << this << "::SetModified()";
-
-  m_IsModified = true;
-  m_IsApplied = false;
-}
-
-/*****************************************************************************/
-inline
-void
-VectorImageSettings
-::ClearModified()
-{
-  // qDebug() << this << "::ClearModified()";
-
-  m_IsModified = false;
-}
-
-/*****************************************************************************/
-inline
-void
-VectorImageSettings
-::SetApplied()
-{
-  // qDebug() << this << "::SetApplied()";
-
-  m_IsApplied = true;
 }
 
 /*****************************************************************************/

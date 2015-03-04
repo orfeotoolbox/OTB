@@ -22,9 +22,17 @@
    </property>
    <item>
     <widget class="QComboBox" name="comboBox">
+     <property name="insertPolicy">
+      <enum>QComboBox::InsertAlphabetically</enum>
+     </property>
      <item>
       <property name="text">
        <string>Chessboard</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Gradient</string>
       </property>
      </item>
      <item>

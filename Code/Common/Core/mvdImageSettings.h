@@ -75,6 +75,38 @@ class Monteverdi2_EXPORT ImageSettings
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+// Public types & constants.
+public:
+
+  /** */
+  typedef unsigned int SizeType;
+
+  /** */
+  typedef double ValueType;
+
+  /**
+   */
+  enum Effect
+  {
+    EFFECT_NONE = -1,
+    //
+    EFFECT_CHESSBOARD = 0,
+    EFFECT_GRADIENT,
+    EFFECT_LOCAL_CONTRAST,
+    EFFECT_LOCAL_TRANSLUCENCY,
+    EFFECT_NORMAL,
+    EFFECT_SPECTRAL_ANGLE,
+    EFFECT_SWIPE_H,
+    EFFECT_SWIPE_V,
+    //
+    EFFECT_COUNT
+  };
+
+  /**
+   */
+  static char const * const  EFFECT_NAME[ EFFECT_COUNT ];
+
+//
 // Public methods.
 public:
 
@@ -84,11 +116,55 @@ public:
   /** \brief Destructor. */
   virtual ~ImageSettings();
 
+  /**
+   */
+  inline bool IsApplied() const;
+
+  /**
+   */
+  inline bool IsModified() const;
+
+  /**
+   */
+  inline void ClearModified();
+
+  /**
+   */
+  inline void SetApplied();
+
+  /**
+   */
+  inline bool HasSize() const;
+
+  /**
+   */
+  inline bool HasValue() const;
+
+  /**
+   */
+  inline void SetSize( unsigned int );
+
+  /**
+   */
+  inline unsigned int GetSize() const;
+
+  /**
+   */
+  inline void SetValue( double );
+
+  /**
+   */
+  inline double GetValue() const;
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
+
+  /**
+   */
+  inline void SetModified();
 
 //
 // Protected attributes.
@@ -104,6 +180,32 @@ private:
 //
 // Private attributes.
 private:
+
+  /**
+   * \brief Flag which notices that rendering settings have been
+   * edited.
+   */
+  // TODO: Optimize using C++ bitset bool foo:1;
+  bool m_IsModified: 1;
+
+  /**
+   * \brief Flag which notices that rendering settings have been
+   * applied to display.
+   */
+  // TODO: Optimize using C++ bitset bool foo:1;
+  bool m_IsApplied: 1;
+
+  /**
+   */
+  Effect m_Effect;
+
+  /**
+   */
+  unsigned int m_Size;
+
+  /**
+   */
+  double m_Value;
 };
 
 } // end namespace 'mvd'.
@@ -129,6 +231,125 @@ private:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+bool
+ImageSettings
+::IsApplied() const
+{
+  return m_IsApplied;
+}
+
+/*****************************************************************************/
+inline
+bool
+ImageSettings
+::IsModified() const
+{
+  return m_IsModified;
+}
+
+/*****************************************************************************/
+inline
+void
+ImageSettings
+::SetModified()
+{
+  // qDebug() << this << "::SetModified()";
+
+  m_IsModified = true;
+  m_IsApplied = false;
+}
+
+/*****************************************************************************/
+inline
+void
+ImageSettings
+::ClearModified()
+{
+  // qDebug() << this << "::ClearModified()";
+
+  m_IsModified = false;
+}
+
+/*****************************************************************************/
+inline
+void
+ImageSettings
+::SetApplied()
+{
+  // qDebug() << this << "::SetApplied()";
+
+  m_IsApplied = true;
+}
+
+/*****************************************************************************/
+inline
+bool
+ImageSettings
+::HasSize() const
+{
+  return
+    m_Effect==EFFECT_CHESSBOARD ||
+    m_Effect==EFFECT_LOCAL_CONTRAST ||
+    m_Effect==EFFECT_LOCAL_TRANSLUCENCY ||
+    m_Effect==EFFECT_SPECTRAL_ANGLE ||
+    m_Effect==EFFECT_SWIPE_H ||
+    m_Effect==EFFECT_SWIPE_V;
+}
+
+/*****************************************************************************/
+inline
+bool
+ImageSettings
+::HasValue() const
+{
+  return
+    m_Effect==EFFECT_LOCAL_CONTRAST ||
+    m_Effect==EFFECT_SPECTRAL_ANGLE;
+}
+
+/*****************************************************************************/
+inline
+void
+ImageSettings
+::SetSize( unsigned int size )
+{
+  m_Size = size;
+
+  SetModified();
+}
+
+/*****************************************************************************/
+inline
+unsigned int
+ImageSettings
+::GetSize() const
+{
+  return m_Size;
+}
+
+/*****************************************************************************/
+inline
+void
+ImageSettings
+::SetValue( double value )
+{
+  m_Value = value;
+
+  SetModified();
+}
+
+/*****************************************************************************/
+inline
+double
+ImageSettings
+::GetValue() const
+{
+  return m_Value;
+}
+
 } // end namespace 'mvd'
 
 #endif // __mvdImageSettings_h

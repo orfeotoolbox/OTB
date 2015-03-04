@@ -57,6 +57,20 @@ namespace
 } // end of anonymous namespace.
 
 
+char const * const
+ImageSettings
+::EFFECT_NAME[ ImageSettings::EFFECT_COUNT ] =
+{
+  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Chessboard" ),
+  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Gradient" ),
+  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Local contrast" ),
+  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Local translucency" ),
+  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Normal" ),
+  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Spectral angle" ),
+  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Swipe (horizontal)" ),
+  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Swipe (vertical)" ),
+};
+
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
@@ -66,7 +80,9 @@ namespace
 
 /*******************************************************************************/
 ImageSettings
-::ImageSettings()
+::ImageSettings() :
+  m_IsModified( false ),
+  m_IsApplied( false )
 {
 }
 

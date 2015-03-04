@@ -58,7 +58,6 @@ namespace
 {
 } // end of anonymous namespace.
 
-
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
@@ -73,9 +72,7 @@ VectorImageSettings
   m_IsGrayscaleActivated( false ),
   m_GrayChannel( 0 ),
   m_GrayDynamicsParams( 6 ),
-  m_Gamma( 1.0 ),
-  m_IsModified( false ),
-  m_IsApplied( false )
+  m_Gamma( 1.0 )
 {
 }
 
@@ -87,9 +84,7 @@ VectorImageSettings
   m_IsGrayscaleActivated( false ),
   m_GrayChannel( other.m_GrayChannel ),
   m_GrayDynamicsParams( 6 ),
-  m_Gamma( other.m_Gamma ),
-  m_IsModified( false ),
-  m_IsApplied( other.m_IsApplied )
+  m_Gamma( other.m_Gamma )
 {
 }
 
