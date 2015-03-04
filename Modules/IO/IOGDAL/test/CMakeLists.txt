@@ -219,3 +219,15 @@ otb_add_test(NAME ioTuOGRVectorDataIOTestCanReadMapInfo COMMAND otbIOGDALTestDri
   otbOGRVectorDataIOTestCanRead
   ${INPUTDATA}/LOCALITY_POLYGON.tab)
 
+
+# Tests with GDAL only to read complex data
+set(INPUTFILE_PIXELTYPES_LIST "Float" "Double")
+
+foreach(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
+
+  otb_add_test(NAME ioTvGDALReadPxlComplex${INPUTFILE_PIXELTYPE} COMMAND otbIOGDALTestDriver
+    otbGDALReadPxlComplex${INPUTFILE_PIXELTYPE}
+    ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_3bands.tif
+    1 5 10 2) #old file hdr sans extesions
+
+endforeach()

@@ -942,3 +942,265 @@ if(NOT PHR_TIFF_FILE)
 endif()
 endforeach()
 endif()
+
+
+# Tests about complex reading
+
+set(INPUTFILE_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
+set(READING_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
+set(NBBANDS_LIST "2" "3" "4")
+
+foreach(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
+
+  foreach(READING_PIXELTYPE ${READING_PIXELTYPES_LIST})
+
+    otb_add_test(NAME ioTvMonobandScalar${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
+      COMMAND otbImageIOTestDriver
+      otbMonobandScalarToImageComplex${READING_PIXELTYPE}
+      ${INPUTDATA}/monoband${INPUTFILE_PIXELTYPE}.tif)
+
+    otb_add_test(NAME ioTvMonobandScalar${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
+      COMMAND otbImageIOTestDriver
+      otbMonobandScalarToVectorImageComplex${READING_PIXELTYPE}
+      ${INPUTDATA}/monoband${INPUTFILE_PIXELTYPE}.tif)
+
+    otb_add_test(NAME ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToImageScalar${READING_PIXELTYPE}
+      COMMAND otbImageIOTestDriver
+      otbMonobandComplexToImageScalar${READING_PIXELTYPE}
+      ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
+
+    otb_add_test(NAME ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
+      COMMAND otbImageIOTestDriver
+      otbMonobandComplexToImageComplex${READING_PIXELTYPE}
+      ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
+
+    otb_add_test(NAME ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToVectorImageScalar${READING_PIXELTYPE}
+      COMMAND otbImageIOTestDriver
+      otbMonobandComplexToVectorImageScalar${READING_PIXELTYPE}
+      ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
+
+    otb_add_test(NAME ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
+      COMMAND otbImageIOTestDriver
+      otbMonobandComplexToVectorImageComplex${READING_PIXELTYPE}
+      ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
+
+    # Weird case : only the first 2 bands used
+    otb_add_test(NAME ioTvMultibandScalar${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
+      COMMAND otbImageIOTestDriver
+      otbMultibandScalarToImageComplex${READING_PIXELTYPE}
+      ${INPUTDATA}/multiband${INPUTFILE_PIXELTYPE}.tif)
+
+    # Weird case : one scalar band -> one complex band with imag=0
+    # but interleaving real and imaginary parts can only work for an even nb of bands
+    otb_add_test(NAME ioTvMultibandScalar${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
+      COMMAND otbImageIOTestDriver
+      otbMultibandScalarToVectorImageComplex${READING_PIXELTYPE}
+      ${INPUTDATA}/multiband${INPUTFILE_PIXELTYPE}.tif)
+
+    foreach(NBBANDS ${NBBANDS_LIST})
+
+      # Weird case : need specifications to write the test
+      # otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageScalar${READING_PIXELTYPE}
+      #          COMMAND otbImageIOTestDriver
+      #          otbMultibandComplexToImageScalar${READING_PIXELTYPE}
+      #          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
+
+      # Size: 100x100 is to large to store pixel values coded as short.
+      if( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+
+        otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
+          COMMAND otbImageIOTestDriver
+          otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
+          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
+
+      else()
+
+        otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
+          COMMAND otbImageIOTestDriver
+          otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
+          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
+
+      endif()
+
+      # Weird case : need specifications to write the test
+      # [missing impl]
+      # otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageComplex${READING_PIXELTYPE})
+
+      # Size: 100x100 is to large to store pixel values coded as short.
+      if( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+
+        otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
+          COMMAND otbImageIOTestDriver
+          otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
+          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
+
+      else()
+
+        otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
+          COMMAND otbImageIOTestDriver
+          otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
+          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
+
+      endif()
+
+    endforeach()
+
+  endforeach()
+endforeach()
+
+
+# Tests about writing Scalar / Complex data
+
+set(DATA_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
+set(WRITING_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
+
+foreach(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
+
+  otb_add_test(NAME ioTvWriteImageScalar${DATA_PIXELTYPE}
+    COMMAND otbImageIOTestDriver
+    --compare-image ${NOTOL}
+    ${INPUTDATA}/monoband${DATA_PIXELTYPE}.tif
+    ${TEMP}/monobandOut${DATA_PIXELTYPE}.tif
+    otbImageScalarFileWriterTestWithoutInput${DATA_PIXELTYPE}
+    ${TEMP}/monobandOut${DATA_PIXELTYPE}.tif
+    100
+    )
+
+  otb_add_test(NAME ioTvWriteImageComplex${DATA_PIXELTYPE}
+    COMMAND otbImageIOTestDriver
+    --compare-image ${NOTOL}
+    ${INPUTDATA}/monobandComplex${DATA_PIXELTYPE}.tif
+    ${TEMP}/monobandComplexOut${DATA_PIXELTYPE}.tif
+    otbImageComplexFileWriterTestWithoutInput${DATA_PIXELTYPE}
+    ${TEMP}/monobandComplexOut${DATA_PIXELTYPE}.tif
+    100
+    )
+
+  foreach(NBBANDS ${NBBANDS_LIST})
+    if( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
+
+      otb_add_test(NAME ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
+        COMMAND otbImageIOTestDriver
+        --compare-image ${NOTOL}
+        ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+        ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+        otbVectorImageFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
+        ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+        100
+        ${NBBANDS}
+        )
+
+      otb_add_test(NAME ioTvWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
+        COMMAND otbImageIOTestDriver
+        --compare-image ${NOTOL}
+        ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+        ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+        otbVectorImageFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
+        ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+        100
+        ${NBBANDS}
+        )
+
+    else()
+
+      otb_add_test(NAME ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
+        COMMAND otbImageIOTestDriver
+        --compare-image ${NOTOL}
+        ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+        ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+        otbVectorImageFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
+        ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+        50
+        ${NBBANDS}
+        )
+
+      otb_add_test(NAME ioTvWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
+        COMMAND otbImageIOTestDriver
+        --compare-image ${NOTOL}
+        ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+        ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+        otbVectorImageFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
+        ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+        50
+        ${NBBANDS}
+        )
+
+    endif()
+  endforeach()
+
+  ############
+  # Tests about Streaming writing Scalar / Complex data
+  otb_add_test(NAME ioTvStreamingWriteImageScalar${DATA_PIXELTYPE}
+    COMMAND otbImageIOTestDriver
+    --compare-image ${NOTOL}
+    ${INPUTDATA}/monoband${DATA_PIXELTYPE}.tif
+    ${TEMP}/monobandStrOut${DATA_PIXELTYPE}.tif
+    otbImageScalarStreamingFileWriterTestWithoutInput${DATA_PIXELTYPE}
+    ${TEMP}/monobandStrOut${DATA_PIXELTYPE}.tif
+    100
+    )
+
+  otb_add_test(NAME ioTvStreamingWriteImageComplex${DATA_PIXELTYPE}
+    COMMAND otbImageIOTestDriver
+    --compare-image ${NOTOL}
+    ${INPUTDATA}/monobandComplex${DATA_PIXELTYPE}.tif
+    ${TEMP}/monobandStrComplexOut${DATA_PIXELTYPE}.tif
+    otbImageComplexStreamingFileWriterTestWithoutInput${DATA_PIXELTYPE}
+    ${TEMP}/monobandStrComplexOut${DATA_PIXELTYPE}.tif
+    100
+    )
+
+  foreach(NBBANDS ${NBBANDS_LIST})
+    if( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
+
+      otb_add_test(NAME ioTvStreamingWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
+        COMMAND otbImageIOTestDriver
+        --compare-image ${NOTOL}
+        ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+        ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+        otbVectorImageStreamingFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
+        ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+        100
+        ${NBBANDS}
+        )
+
+      otb_add_test(NAME ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
+        COMMAND otbImageIOTestDriver
+        --compare-image ${NOTOL}
+        ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+        ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+        otbVectorImageStreamingFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
+        ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+        100
+        ${NBBANDS}
+        )
+
+    else()
+
+      otb_add_test(NAME ioTvStreamingWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
+        COMMAND otbImageIOTestDriver
+        --compare-image ${NOTOL}
+        ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+        ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+        otbVectorImageStreamingFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
+        ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+        50
+        ${NBBANDS}
+        )
+
+      otb_add_test(NAME ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
+        COMMAND otbImageIOTestDriver
+        --compare-image ${NOTOL}
+        ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+        ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+        otbVectorImageStreamingFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
+        ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+        50
+        ${NBBANDS}
+        )
+
+    endif()
+
+  endforeach()
+
+endforeach()
