@@ -156,7 +156,7 @@ DatasetModel
        imageElt = DatasetDescriptor::NextImageSiblingElement( imageElt ) )
     {
     // Locals.
-    VectorImageModel::Settings settings;
+    VectorImageSettings settings;
     AbstractImageModel::BuildContext imageContext;
 
     // Read image-model descriptor information.
@@ -446,7 +446,7 @@ DatasetModel
        imageElt = DatasetDescriptor::NextImageSiblingElement( imageElt ) )
     {
     // Locals.
-    VectorImageModel::Settings settings;
+    VectorImageSettings settings;
     ImageProperties properties;
 
     AbstractImageModel::BuildContext imageContext( &settings, &properties );

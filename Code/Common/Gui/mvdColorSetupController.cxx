@@ -258,7 +258,7 @@ ColorSetupController
     {
     RgbwChannel channel = static_cast< RgbwChannel >( i );
 
-    VectorImageModel::Settings::ChannelVector::value_type band =
+    VectorImageSettings::ChannelVector::value_type band =
       imageModel->GetSettings().GetRgbChannel( i );
 
     // Set current-index of channel.

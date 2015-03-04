@@ -112,8 +112,8 @@ QuicklookModel
   // TODO: Remove temporary hack (Quicklook rendering settings).
   if( buildContext->m_Settings!=NULL )
     {
-    Settings * const settings =
-      static_cast< Settings * const >( buildContext->m_Settings );
+    VectorImageSettings * const settings =
+      static_cast< VectorImageSettings * const >( buildContext->m_Settings );
 
     SetSettings( *settings );
     }

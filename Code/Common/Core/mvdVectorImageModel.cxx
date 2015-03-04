@@ -298,8 +298,8 @@ VectorImageModel
     BuildGdalOverviews();
 
   // Get build-context settings.
-  Settings * const  settings =
-    static_cast< Settings * const >( buildContext->m_Settings );
+  VectorImageSettings * const  settings =
+    static_cast< VectorImageSettings * const >( buildContext->m_Settings );
 
   //
   // Step #1: Perform pre-process of AbstractModel::BuildModel()
@@ -359,7 +359,7 @@ VectorImageModel
 #endif
 
   // Patch invalid band indices of default-display (see OTB bug).
-  Settings::ChannelVector rgb( metaData->GetDefaultDisplay() );
+  VectorImageSettings::ChannelVector rgb( metaData->GetDefaultDisplay() );
 
   if( rgb[ 0 ]>=m_Image->GetNumberOfComponentsPerPixel() )
     {
@@ -410,7 +410,7 @@ VectorImageModel
     {
     RgbwChannel channel = static_cast< RgbwChannel >( i );
 
-    Settings::ChannelVector::value_type band =
+    VectorImageSettings::ChannelVector::value_type band =
       GetSettings().GetRgbwChannel( channel );
 
     GetSettings().SetLowIntensity(
@@ -730,7 +730,7 @@ VectorImageModel
 
   //
   // Display the radiometry of the displayed channels
-  Settings::ChannelVector rgb;
+  VectorImageSettings::ChannelVector rgb;
   GetSettings().GetSmartChannels( rgb );
 
   // show the current pixel description only if the mouse cursor is

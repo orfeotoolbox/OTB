@@ -323,7 +323,7 @@ ImageViewRenderer
 
 #else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
   //
-  // Apply VectorImageModel::Settings to otb::GlImageActor.
+  // Apply VectorImageSettings to otb::GlImageActor.
   UpdateActors( c );
 
   //
@@ -436,7 +436,7 @@ ImageViewRenderer
 
         //
         // Get vector image-model data.
-        const VectorImageModel::Settings & settings =
+        const VectorImageSettings & settings =
           vectorImageModel->GetSettings();
 
         const ImageProperties * properties = 
@@ -462,7 +462,7 @@ ImageViewRenderer
 
         //
         // Apply color-setup.
-        VectorImageModel::Settings::ChannelVector channels;
+        VectorImageSettings::ChannelVector channels;
 
         settings.GetSmartChannels( channels );
 

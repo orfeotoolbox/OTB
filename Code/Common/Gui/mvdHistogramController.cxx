@@ -137,7 +137,7 @@ HistogramController
   if( !RgbwBounds( begin, end, channel ) )
     return;
 
-  const VectorImageModel::Settings& settings = imageModel->GetSettings();
+  const VectorImageSettings & settings = imageModel->GetSettings();
 
   widget->SetGrayscaleActivated( settings.IsGrayscaleActivated() );
 
@@ -147,7 +147,7 @@ HistogramController
     {
     RgbwChannel chan = static_cast< RgbwChannel >( i );
 
-    VectorImageModel::Settings::ChannelVector::value_type band =
+    VectorImageSettings::ChannelVector::value_type band =
       settings.GetRgbwChannel( chan );
 
     size_t size = model->GetDataCount( band );

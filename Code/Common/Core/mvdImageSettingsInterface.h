@@ -31,7 +31,6 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtCore>
 
 //
 // System includes (sorted by alphabetic order)
@@ -69,13 +68,8 @@ class ImageSettings;
  *
  * \brief WIP.
  */
-class Monteverdi2_EXPORT ImageSettingsInterface :
-    public QObject
+class Monteverdi2_EXPORT ImageSettingsInterface
 {
-
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
-  Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
@@ -87,12 +81,13 @@ public:
   virtual ~ImageSettingsInterface();
 
   /** */
-  inline
-    const ImageSettings * GetSettings() const;
+  inline const ImageSettings * GetSettings() const;
 
   /** */
-  inline
-    ImageSettings * GetSettings();
+  inline ImageSettings * GetSettings();
+
+  /** */
+  inline bool HasSettings() const;
 
   /** */
 #if 0
@@ -101,18 +96,6 @@ public:
     const T * GetSettings() const;
 #endif
 
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Public SLOTS.
-public slots:
-
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
-
-//
-// Signals.
-signals:
-
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
@@ -120,7 +103,7 @@ signals:
 protected:
 
   /** \brief Constructor. */
-  ImageSettingsInterface( ImageSettings *, QObject * parent =NULL );
+  ImageSettingsInterface();
 
 //
 // Protected attributes.
@@ -141,12 +124,6 @@ private:
 
   /** */
   ImageSettings * m_Settings;
-
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Slots.
-private slots:
 };
 
 } // end namespace 'mvd'.
@@ -204,6 +181,15 @@ ImageSettingsInterface
 }
 
 #endif
+
+/*****************************************************************************/
+inline
+bool
+ImageSettingsInterface
+::HasSettings() const
+{
+  return m_Settings!=0;
+}
 
 } // end namespace 'mvd'
 

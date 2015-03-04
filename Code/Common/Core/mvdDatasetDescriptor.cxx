@@ -40,7 +40,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
 #include "mvdSystemError.h"
-#include "mvdVectorImageModel.h"
+#include "mvdVectorImageSettings.h"
 
 
 /*****************************************************************************/
@@ -197,8 +197,8 @@ DatasetDescriptor
 
   // TODO: Generalize code section
   {
-  const VectorImageModel::Settings* settings =
-    static_cast< const VectorImageModel::Settings* >( imageSettings );
+  const VectorImageSettings* settings =
+    static_cast< const VectorImageSettings* >( imageSettings );
 
   // RGB channels.
   QDomElement rgbElement(
@@ -276,8 +276,8 @@ DatasetDescriptor
   // TODO: Manage XML structure errors.
   assert( !settingsElt.isNull() );
 
-  const VectorImageModel::Settings* settings =
-    static_cast< const VectorImageModel::Settings* >( imageSettings );
+  const VectorImageSettings* settings =
+    static_cast< const VectorImageSettings* >( imageSettings );
   
   {
     // RGB
@@ -619,8 +619,8 @@ DatasetDescriptor
   // TODO: Generalize code section.
   if( imageSettings!=NULL )
     {
-    VectorImageModel::Settings* settings =
-      static_cast< VectorImageModel::Settings* >( imageSettings );
+    VectorImageSettings* settings =
+      static_cast< VectorImageSettings* >( imageSettings );
 
     // Access settings group element.
     QDomElement settingsElt(
@@ -635,7 +635,7 @@ DatasetDescriptor
     );
     // TODO: Manage XML structure errors.
     assert( !rgbElt.isNull() );
-    VectorImageModel::Settings::ChannelVector rgb;
+    VectorImageSettings::ChannelVector rgb;
     DatasetDescriptor::ExtractVectorFromElement( rgb, rgbElt );
     assert( rgb.size() == 3 );
     settings->SetRgbChannels( rgb );

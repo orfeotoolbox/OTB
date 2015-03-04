@@ -423,7 +423,7 @@ ColorDynamicsController
   DefaultImageType::PixelType maxPx( histogramModel->GetMaxPixel() );
 
   // Get image rengering settings.
-  const VectorImageModel::Settings& settings = imageModel->GetSettings();
+  const VectorImageSettings & settings = imageModel->GetSettings();
 
   // Block this controller's signals to prevent display refreshes
   // but let let widget(s) signal their changes so linked values
@@ -500,7 +500,7 @@ ColorDynamicsController
   DefaultImageType::PixelType maxPx( histogramModel->GetMaxPixel() );
 
   // Get image rengering settings.
-  const VectorImageModel::Settings& settings = imageModel->GetSettings();
+  const VectorImageSettings & settings = imageModel->GetSettings();
 
   // Assign values to controlled widget.
   for( CountType i=begin; i<end; ++i )
@@ -566,7 +566,7 @@ ColorDynamicsController
   assert( imageModel!=NULL );
 
   // Get image rengering settings.
-  const VectorImageModel::Settings& settings = imageModel->GetSettings();
+  const VectorImageSettings & settings = imageModel->GetSettings();
 
 
   // Assign values to controlled widget.
@@ -889,7 +889,7 @@ ColorDynamicsController
   assert( imageModel->GetHistogramModel()!=NULL );
 
   // Reference settings.
-  VectorImageModel::Settings& settings = imageModel->GetSettings();
+  VectorImageSettings & settings = imageModel->GetSettings();
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -961,7 +961,7 @@ ColorDynamicsController
   assert( imageModel->GetHistogramModel()!=NULL );
 
   // Reference settings.
-  VectorImageModel::Settings& settings = imageModel->GetSettings();
+  VectorImageSettings & settings = imageModel->GetSettings();
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -1191,7 +1191,7 @@ ColorDynamicsController
   assert( imageModel->GetHistogramModel()!=NULL );
 
   // Reference settings.
-  VectorImageModel::Settings& settings = imageModel->GetSettings();
+  VectorImageSettings & settings = imageModel->GetSettings();
 
   CountType begin;
   CountType end;
@@ -1211,7 +1211,7 @@ ColorDynamicsController
     {
     RgbwChannel chan = static_cast< RgbwChannel >( i );
 
-    VectorImageModel::Settings::ChannelVector::value_type band(
+    VectorImageSettings::ChannelVector::value_type band(
       settings.GetRgbwChannel( chan )
     );
 

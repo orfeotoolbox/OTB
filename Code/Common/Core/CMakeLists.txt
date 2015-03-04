@@ -31,6 +31,7 @@ set( Common_Core_SOURCES
   mvdTextStream.cxx
   mvdTypes.cxx
   mvdVectorImageModel.cxx
+  mvdVectorImageSettings.cxx
   mvdVisibleInterface.cxx
 )
 
@@ -57,7 +58,6 @@ set( Common_Core_HEADERS_MOC
   mvdImageImporter.h
   mvdImagePlacenameLoader.h
   # mvdImageProperties.h
-  mvdImageSettingsInterface.h
   # mvdMath.h
   #mvdMyClass.h
   mvdQuicklookModel.h
