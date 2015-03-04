@@ -31,8 +31,8 @@
 #include "otbRADImageIOFactory.h"
 #include "otbMWImageIOFactory.h"
 
-#ifdef OTB_USE_JPEG2000
-#  include "otbJPEG2000ImageIOFactory.h"
+#ifdef OTB_USE_OPENJPEG
+#include "otbJPEG2000ImageIOFactory.h"
 #endif
 
 #include "otbTileMapImageIOFactory.h"
@@ -100,7 +100,7 @@ ImageIOFactory::RegisterBuiltInFactories()
       itk::ObjectFactoryBase::RegisterFactory(RADImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(BSQImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(LUMImageIOFactory::New());
-#ifdef OTB_USE_JPEG2000
+#ifdef OTB_USE_OPENJPEG
       itk::ObjectFactoryBase::RegisterFactory(JPEG2000ImageIOFactory::New());
 #endif
       itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());

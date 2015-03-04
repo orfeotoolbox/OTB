@@ -3,27 +3,30 @@ writing of remote sensing images.")
 
 otb_module(OTBImageIO
   DEPENDS
-    OTBIOMW
-    OTBIORAD
-    OTBIOMSTAR
-    OTBITK
-    OTBITKPendingPatches
-    OTBIOLUM
     OTBBoost
+    OTBCommon
+    OTBExtendedFilename
     OTBIOBSQ
     OTBIOGDAL
+    OTBIOLUM
+    OTBIOMSTAR
+    OTBIOMW
     OTBIOONERA
+    OTBIORAD
     OTBIOTileMap
-    OTBCommon
+    OTBITK
+    OTBITKPendingPatches
     OTBImageBase
-    OTBStreaming
-    OTBExtendedFilename
     OTBOSSIMAdapters
     OTBObjectList
+    OTBStreaming
+
+  OPTIONAL_DEPENDS
+    OTBIOJPEG2000
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBStatistics
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

@@ -14,7 +14,7 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#define OTB_USE_OPENCV
+#include "otbConfigure.h"
 
 #include "otbWrapperApplicationFactory.h"
 
