@@ -310,7 +310,7 @@ ImageFileWriter<TInputImage>
         }
       if(sizevalue == 0.)
         {
-        itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
+        itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from the OTB_MAX_RAM_HINT environment variable if set, or else use the default value");
         }
       this->SetAutomaticAdaptativeStreaming(sizevalue);
       }
@@ -320,7 +320,7 @@ ImageFileWriter<TInputImage>
         {
         if(sizevalue == 0.)
           {
-          itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
+          itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from the OTB_MAX_RAM_HINT environment variable if set, or else use the default value");
           }
         this->SetAutomaticTiledStreaming(sizevalue);
         }

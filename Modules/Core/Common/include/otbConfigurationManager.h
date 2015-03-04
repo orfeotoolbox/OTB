@@ -64,7 +64,7 @@ public:
    *
    * If environment variable OTB_MAX_RAM_HINT is defined and could be
    * converted to int, return its content as a 64 bits unsigned int.
-   * Else, returns 0. 
+   * Else, returns default value, which is 128 Mb 
    *
    */
   static RAMValueType GetMaxRAMHint();
