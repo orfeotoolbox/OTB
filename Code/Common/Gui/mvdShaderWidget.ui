@@ -21,75 +21,51 @@
     <number>1</number>
    </property>
    <item>
-    <widget class="QComboBox" name="comboBox">
+    <widget class="QComboBox" name="effectComboBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="insertPolicy">
       <enum>QComboBox::InsertAlphabetically</enum>
      </property>
-     <item>
-      <property name="text">
-       <string>Chessboard</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Gradient</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Local constrast</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Local translucency</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Normal</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Spectral angle</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Swipe (horizontal)</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Swipe (vertical)</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="sizeLabel">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string>Size:</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QSpinBox" name="spinBox">
+    <widget class="QSpinBox" name="sizeSpinBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="value">
       <number>16</number>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="valueLabel">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string>Value:</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="lineEdit"/>
+    <widget class="QLineEdit" name="valueLineEdit">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

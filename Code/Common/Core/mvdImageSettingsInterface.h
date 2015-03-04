@@ -117,6 +117,8 @@ private:
   /** */
   void SetSettings( ImageSettings * );
 
+  /** */
+  virtual void virtual_SetSettings( ImageSettings * );
 
 //
 // Private attributes.

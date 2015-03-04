@@ -44,6 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdImageSettingsInterface.h"
 
 
 /*****************************************************************************/
@@ -65,6 +66,7 @@ namespace Ui
 class ShaderWidget;
 };
 
+class ImageSettings;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -76,7 +78,8 @@ class ShaderWidget;
  * widget class.
  */
 class Monteverdi2_EXPORT ShaderWidget :
-    public QWidget
+  public QWidget,
+  public ImageSettingsInterface
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -94,6 +97,10 @@ public:
 
   /** \brief Destructor. */
   virtual ~ShaderWidget();
+
+  /**
+   */
+  void SetSettings( ImageSettings );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -123,6 +130,9 @@ protected:
 // Private methods.
 private:
 
+  /** */
+  virtual void virtual_SetSettings( ImageSettings * );
+
 //
 // Private attributes.
 private:
@@ -131,11 +141,17 @@ private:
    */
   Ui::ShaderWidget * m_UI;
 
+  /** */
+  ImageSettings * m_Settings;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
 private slots:
+  void on_effectComboBox_currentIndexChanged( const QString & );
+  void on_sizeSpinBox_valueChanged( int );
+  void on_valueLineEdit_textChanged( const QString & );
 };
 
 } // end namespace 'mvd'

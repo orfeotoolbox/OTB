@@ -87,6 +87,15 @@ ImageSettingsInterface
 {
   delete m_Settings;
   m_Settings = settings;
+
+  virtual_SetSettings( settings );
+}
+
+/*****************************************************************************/
+void
+ImageSettingsInterface
+::virtual_SetSettings( ImageSettings * )
+{
 }
 
 /*****************************************************************************/
