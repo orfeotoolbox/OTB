@@ -6,7 +6,6 @@ otb_module(OTBAppTest
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine
-  
   DESCRIPTION
     "${DOCUMENTATION}"
   )
