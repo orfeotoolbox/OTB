@@ -134,6 +134,14 @@ public:
 
   /**
    */
+  inline void SetEffect( Effect );
+
+  /**
+   */
+  inline Effect GetEffect() const;
+
+  /**
+   */
   inline bool HasSize() const;
 
   /**
@@ -282,6 +290,26 @@ ImageSettings
   // qDebug() << this << "::SetApplied()";
 
   m_IsApplied = true;
+}
+
+/*****************************************************************************/
+inline
+void
+ImageSettings
+::SetEffect( Effect effect )
+{
+  m_Effect = effect;
+
+  SetModified();
+}
+
+/*****************************************************************************/
+inline
+ImageSettings::Effect
+ImageSettings
+::GetEffect() const
+{
+  return m_Effect;
 }
 
 /*****************************************************************************/
