@@ -99,7 +99,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 #else
   itkGenericExceptionMacro(
     <<
-    "The OverlapSaveConvolutionImageFilter can not operate without the FFTW library (double implementation). Please install it and set it up in the  cmake configuration.");
+    "The OverlapSaveConvolutionImageFilter can not operate without the FFTW library (double implementation). Please build ITK with USE_FFTD set to ON, and rebuild OTB.");
 #endif
   }
 
@@ -294,7 +294,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 #else
   itkGenericExceptionMacro(
     <<
-    "The OverlapSaveConvolutionImageFilter can not operate without the FFTW library (double implementation). Please install it and set it up in the  cmake configuration.");
+    "The OverlapSaveConvolutionImageFilter can not operate without the FFTW library (double implementation). Please build ITK with USE_FFTD set to ON, and rebuild OTB.");
 #endif
 }
 
