@@ -33,7 +33,7 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           PixelInfo
+  NAME           PixelValue
   SOURCES        otbPixelValue.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 

@@ -25,11 +25,11 @@ namespace otb
 namespace Wrapper
 {
 
-class PixelInfo : public Application
+class PixelValue : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef PixelInfo                     Self;
+  typedef PixelValue                     Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -40,7 +40,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(PixelInfo, otb::Application);
+  itkTypeMacro(PixelValue, otb::Application);
 
 private:
   void DoInit()
@@ -157,4 +157,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::PixelInfo)
+OTB_APPLICATION_EXPORT(otb::Wrapper::PixelValue)
