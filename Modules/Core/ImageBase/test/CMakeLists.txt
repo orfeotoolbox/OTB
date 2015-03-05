@@ -786,6 +786,7 @@ otb_add_test(NAME  ioTvMultiMonoChannelROI_ENVI2PNG COMMAND otbImageBaseTestDriv
 # Tests to check if we can open JPEG2000 files specifying the resolution factor.
 # no access to data only PrintSelf() method.
 otb_add_test(NAME  ioTvMultiResolutionReading0 COMMAND otbImageBaseTestDriver
+  --ignore-lines-with 1 SubDatasetIndex
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
                              ${TEMP}/ioTvMultiResolutionReading0.txt
       otbVectorImageTest
@@ -794,6 +795,7 @@ otb_add_test(NAME  ioTvMultiResolutionReading0 COMMAND otbImageBaseTestDriver
       )
 
 otb_add_test(NAME  ioTvMultiResolutionReading3 COMMAND otbImageBaseTestDriver
+  --ignore-lines-with 1 SubDatasetIndex
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
                              ${TEMP}/ioTvMultiResolutionReading3.txt
       otbVectorImageTest
