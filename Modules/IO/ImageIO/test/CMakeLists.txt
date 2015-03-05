@@ -321,6 +321,26 @@ otb_add_test(NAME ioTvReadingComplexDataIntoComplexImage COMMAND otbImageIOTestD
   1000 1000
   )
 
+otb_add_test(NAME ioTvStreamingImageFilterBSQ2PNG COMMAND otbImageIOTestDriver
+   --compare-image ${EPSILON_9}   
+   ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+   ${TEMP}/ioStreamingImageFilterTestBSQ.png
+   otbStreamingImageFilterTest
+   ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+   ${TEMP}/ioStreamingImageFilterTestBSQ.png
+   )
+set_tests_properties(ioTvStreamingImageFilterBSQ2PNG PROPERTIES DEPENDS ioTvImageFileReaderPNG2BSQ)
+
+otb_add_test(ioTvStreamingImageFilterLUM2PNG COMMAND otbImageIOTestDriver
+   --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
+                                ${TEMP}/ioStreamingImageFilterTestLUM.png
+         otbStreamingImageFilterTest
+         ${TEMP}/ioImageFileReaderPNG2LUM.lum
+         ${TEMP}/ioStreamingImageFilterTestLUM.png
+         )
+set_tests_properties(ioTvStreamingImageFilterLUM2PNG PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM)
+
+
 otb_add_test(NAME ioTvImageFileWriterRGB_PNG2PNG COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileWriterRGB_PNG2PNG.png
   ${TEMP}/ioImageFileWriterRGB_PNG2PNG.png
@@ -795,6 +815,14 @@ otb_add_test(NAME ioTvImageFileReaderPDS2TIFF COMMAND otbImageIOTestDriver
   otbImageFileReaderTest
   ${INPUTDATA}/pdsImage.img
   ${TEMP}/ioTvImageFileReaderPDS2TIFF.tif)
+
+otb_add_test(NAME ioTvImageFileReaderPNG2BSQ COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/cthead1.png
+                                ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+        otbImageFileReaderTest
+        ${INPUTDATA}/cthead1.png
+        ${TEMP}/ioImageFileReaderPNG2BSQ.hd )
+
 
 otb_add_test(NAME ioTvWritingComplexDataWithComplexImage COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}

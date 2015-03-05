@@ -435,6 +435,15 @@ otb_add_test(NAME coTuShiftScaleImageAdaptorNew COMMAND otbImageManipulationTest
   otbShiftScaleImageAdaptorNew
   )
 
+otb_add_test(NAME coTvShiftScaleImageAdaptor COMMAND otbImageManipulationTestDriver
+  --compare-image ${EPSILON_9}
+  ${BASELINE}/coTvShiftScaleImageAdaptor.tif    # copie the input image
+  ${TEMP}/coTvShiftScaleImageAdaptor.tif
+  otbShiftScaleImageAdaptor
+  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+  ${TEMP}/coTvShiftScaleImageAdaptor.tif
+  )
+
 otb_add_test(NAME bfTuStreamingInnerProductVectorImageFilterNew COMMAND otbImageManipulationTestDriver
   otbStreamingInnerProductVectorImageFilterNew
   )

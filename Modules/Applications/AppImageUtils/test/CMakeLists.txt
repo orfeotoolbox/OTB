@@ -224,6 +224,19 @@ otb_test_application(NAME apTvUtConcatenateImages_1Image
 
 #----------- MultiResolutionPyramid TESTS ----------------
 
+#----------- PixelValue TESTS ----------------
+OTB_TEST_APPLICATION(NAME apTvUtPixelValue
+                     APP PixelValue
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -coordx 30
+                             -coordy 30
+                             -cl Channel1 Channel3 Channel4
+                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValue.txt
+                       VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtPixelValue.txt
+                	     ${TEMP}/apTvUtPixelValue.txt
+                             )
+
 #----------- ColorMapping TESTS ----------------
 otb_test_application(NAME apTvUtColorMappingLabelToColorCustomLUT
                      APP ColorMapping
@@ -319,6 +332,15 @@ otb_test_application(NAME apTvUtColorMappingLabelToColorOptimalLUT
                              ${BASELINE}/apTvUtColorMappingLabelToColorOptimalLUT.tif
                 	         ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUT.tif)
 
+OTB_TEST_APPLICATION(NAME apTvClLabeledImageColorMappingQB123_1
+                     APP  ColorMapping
+                     OPTIONS -in      ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
+                             -method  custom
+                             -method.custom.lut ${INPUTDATA}/Classification/ColorTable.txt
+                             -out     ${TEMP}/clLabeledFancyImageQB123_1.tif
+                     VALID   --compare-image ${NOTOL}
+                             ${OTBAPP_BASELINE}/clLabeledFancyImageQB123_1.tif
+                             ${TEMP}/clLabeledFancyImageQB123_1.tif)
 
 #----------- KmzExport TESTS ----------------
 otb_test_application(NAME apTvUtKmzExport

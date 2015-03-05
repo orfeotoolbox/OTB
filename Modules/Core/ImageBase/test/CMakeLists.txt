@@ -801,3 +801,31 @@ otb_add_test(NAME  ioTvMultiResolutionReading3 COMMAND otbImageBaseTestDriver
       ${TEMP}/ioTvMultiResolutionReading3.txt
       )
 
+otb_add_test(NAME ioTvOtbVectorImageTestSpot5 COMMAND otbImageBaseTestDriver
+   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
+                     ${TEMP}/ioOtbVectorImageTestSpot5.txt
+        otbVectorImageLegacyTest
+        LARGEINPUT{/SPOT5/TEHERAN/}
+        ${TEMP}/ioOtbVectorImageTestSpot5.txt)
+
+otb_add_test(NAME ioTvOtbVectorImageTestFORMOSAT2 COMMAND otbImageBaseTestDriver
+   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestFORMOSAT2.txt
+                     ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt
+        otbVectorImageLegacyTest
+        LARGEINPUT{/FORMOSAT/Sudouest_20071013_MS_fmsat/}
+        ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt)
+
+otb_add_test(NAME ioTvOtbVectorImageTestCOSMOSKYMED COMMAND otbImageBaseTestDriver
+   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestCOSMOSKYMED.txt
+                     ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt
+        otbVectorImageLegacyTest
+        LARGEINPUT{/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5}
+        ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt)
+
+otb_add_test(NAME ioTvOtbVectorImageTestRadarsat COMMAND otbImageBaseTestDriver
+   --compare-ascii ${EPSILON_3}
+   ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
+   ${TEMP}/ioOtbVectorImageTestRadarsat.txt
+   otbVectorImageLegacyTest
+   LARGEINPUT{/RADARSAT1/GOMA/SCENE01/}
+   ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
