@@ -413,7 +413,7 @@ if(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRI
       otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type}_res5 COMMAND otbImageBaseTestDriver
         --ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
         ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
-        --ignore-lines-with 3 CacheSizeInBytes Driver Corner
+        --ignore-lines-with 4 CacheSizeInBytes Driver Corner SubDatasetIndex
         otbVectorImageTest
         ${current_file}?&resol=5
         ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt

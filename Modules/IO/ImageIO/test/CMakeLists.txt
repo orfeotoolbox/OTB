@@ -962,6 +962,7 @@ if(NOT PHR_TIFF_FILE)
     otb_add_test(NAME ioTvMultiResolutionReadingInfo_${current_type} COMMAND otbImageIOTestDriver
              --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReadingInfo_${current_type}.txt
                                        ${TEMP}/ioTvMultiResolutionReadingInfo_${current_type}_OUT.txt
+             --ignore-lines-with 1 SubDatasetIndex
              otbMultiResolutionReadingInfo
                 ${current_file}
                 ${TEMP}/ioTvMultiResolutionReadingInfo_${current_type}_OUT.txt
