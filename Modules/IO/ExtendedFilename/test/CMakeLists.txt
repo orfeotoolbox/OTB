@@ -28,7 +28,7 @@ foreach(streaming_type "Tiled" "Stripped")
                ${TEMP}/${test_name}.tif
       otbImageFileWriterWithExtendedFilename
               ${INPUTDATA}/maur_rgb_24bpp.tif
-              ${TEMP}/${test_name}.tif?&streaming:type=${type}&streaming:sizemode=${sizemode}&streaming:sizevalue=${streaming_sizevalue_${sizemode}}
+              ${TEMP}/${_test_name}.tif?&streaming:type=${type}&streaming:sizemode=${sizemode}&streaming:sizevalue=${streaming_sizevalue_${sizemode}}
     )
   endforeach()
 endforeach()
