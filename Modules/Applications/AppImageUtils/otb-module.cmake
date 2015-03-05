@@ -10,7 +10,6 @@ otb_module(OTBAppImageUtils
     OTBITK
     OTBImageBase
     OTBImageManipulation
-    OTBKMZWriter
     OTBMathParser
     OTBMathParserX
     OTBOSSIMAdapters

@@ -12,7 +12,6 @@ set(OTBAppImageUtils_LINK_LIBS
   ${OTBMathParser_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBInterpolation_LIBRARIES}
-  ${OTBKMZWriter_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBObjectList_LIBRARIES}
 )
@@ -85,11 +84,6 @@ otb_create_application(
 otb_create_application(
   NAME           ColorMapping
   SOURCES        otbColorMapping.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
-  NAME           KmzExport
-  SOURCES        otbKmzExport.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(

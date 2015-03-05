@@ -8,8 +8,10 @@ otb_module(OTBVectorDataIO
     OTBIOGDAL
     OTBITK
     OTBVectorDataManipulation
-    OTBIOKML
     OTBCommon
+
+  OPTIONAL_DEPENDS
+    OTBIOKML
 
   TEST_DEPENDS
     OTBTestKernel

@@ -18,7 +18,10 @@
 
 #include "otbVectorDataIOFactory.h"
 #include "otbOGRVectorDataIOFactory.h"
+#ifdef OTB_USE_LIBKML
 #include "otbKMLVectorDataIOFactory.h"
+#endif
+
 #include "itkObjectFactoryBase.h"
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
@@ -88,7 +91,9 @@ VectorDataIOFactory
     if (firstTime)
       {
       itk::ObjectFactoryBase::RegisterFactory(OGRVectorDataIOFactory::New());
+      #ifdef OTB_USE_LIBKML
       itk::ObjectFactoryBase::RegisterFactory(KMLVectorDataIOFactory::New());
+      #endif
       firstTime = false;
       }
     }
