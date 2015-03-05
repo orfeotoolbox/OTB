@@ -402,7 +402,7 @@ if(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRI
     otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type} COMMAND otbImageBaseTestDriver
       --ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
       ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
-      --ignore-lines-with 3 CacheSizeInBytes Driver Corner 
+      --ignore-lines-with 4 CacheSizeInBytes SubDatasetIndex Driver Corner 
       otbVectorImageTest
       ${current_file}?&resol=0
       ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
