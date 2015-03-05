@@ -9,7 +9,6 @@ otb_module(OTBDisparityMap
   DEPENDS
     OTBCommon
     OTBITK
-    OTBITKPendingPatches
     OTBImageBase
     OTBPointSet
     OTBStereo

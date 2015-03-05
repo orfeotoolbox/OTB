@@ -7,7 +7,6 @@ otb_module(OTBEdge
     OTBCommon
     OTBConversion
     OTBITK
-    OTBITKPendingPatches
     OTBImageBase
     OTBImageManipulation
     OTBObjectList

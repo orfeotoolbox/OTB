@@ -7,7 +7,6 @@ otb_module(OTBStreaming
   DEPENDS
     OTBCommon
     OTBITK
-    OTBITKPendingPatches
     OTBImageBase
     OTBOSSIMAdapters
     OTBObjectList

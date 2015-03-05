@@ -8,15 +8,14 @@ possible to sort the labels based on the size of the object.")
 
 otb_module(OTBLabelling
   DEPENDS
-    OTBPointSet
-    OTBImageManipulation
     OTBITK
+    OTBImageManipulation
+    OTBPointSet
 
   TEST_DEPENDS
-    OTBTestKernel
-    OTBImageIO
-    OTBITKPendingPatches
     OTBImageBase
+    OTBImageIO
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

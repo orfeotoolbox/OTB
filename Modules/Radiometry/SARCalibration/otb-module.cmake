@@ -3,17 +3,16 @@ set(DOCUMENTATION "This module contains tools related to SAR calibration
 
 otb_module(OTBSARCalibration
   DEPENDS
-    OTBITKPendingPatches
-    OTBMetadata
-    OTBITK
-    OTBOSSIMAdapters
     OTBCommon
+    OTBITK
+    OTBMetadata
+    OTBOSSIMAdapters
 
   TEST_DEPENDS
-    OTBTestKernel
-    OTBStatistics
-    OTBImageIO
     OTBImageBase
+    OTBImageIO
+    OTBStatistics
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

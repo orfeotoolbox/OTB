@@ -4,14 +4,13 @@ radiometric gap between a reference pixel and the other pixels of the image.")
 
 otb_module(OTBCloudDetection
   DEPENDS
+    OTBITK
     OTBImageManipulation
-    OTBITKPendingPatches
 
   TEST_DEPENDS
-    OTBTestKernel
-    OTBImageIO
-    OTBITK
     OTBImageBase
+    OTBImageIO
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

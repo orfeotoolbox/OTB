@@ -10,7 +10,6 @@ otb_module(OTBColorMap
     OTBITK
 
   TEST_DEPENDS
-    OTBITKPendingPatches
     OTBImageBase
     OTBImageIO
     OTBTestKernel

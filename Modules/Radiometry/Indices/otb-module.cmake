@@ -6,22 +6,21 @@ DifferenceWater Index) and so on.")
 
 otb_module(OTBIndices
   DEPENDS
-    OTBVectorDataBase
-    OTBITK
-    OTBITKPendingPatches
-    OTBImageManipulation
-    OTBFuzzy
-    OTBPath
     OTBCommon
+    OTBFuzzy
+    OTBITK
+    OTBImageManipulation
     OTBMetadata
+    OTBPath
+    OTBVectorDataBase
 
   TEST_DEPENDS
-    OTBTestKernel
-    OTBImageIO
-    OTBProjection
-    OTBVectorDataIO
     OTBImageBase
+    OTBImageIO
     OTBObjectList
+    OTBProjection
+    OTBTestKernel
+    OTBVectorDataIO
 
   DESCRIPTION
     "${DOCUMENTATION}"

@@ -9,7 +9,6 @@ otb_module(OTBImageManipulation
   DEPENDS
     OTBCommon
     OTBITK
-    OTBITKPendingPatches
     OTBImageBase
     OTBInterpolation
     OTBObjectList

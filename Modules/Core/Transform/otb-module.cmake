@@ -9,7 +9,6 @@ otb_module(OTBTransform
     OTBCommon
     OTBGDAL
     OTBITK
-    OTBITKPendingPatches
     OTBInterpolation
     OTBOSSIMAdapters
 

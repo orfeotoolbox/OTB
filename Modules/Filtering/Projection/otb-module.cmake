@@ -22,7 +22,6 @@ otb_module(OTBProjection
 
   TEST_DEPENDS
     OTBCommandLineParser
-    OTBITKPendingPatches
     OTBImageIO
     OTBTestKernel
     OTBVectorDataIO

@@ -6,7 +6,6 @@ otb_module(OTBStereo
   DEPENDS
     OTBCommon
     OTBITK
-    OTBITKPendingPatches
     OTBImageBase
     OTBInterpolation
     OTBOSSIMAdapters

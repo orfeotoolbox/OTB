@@ -9,7 +9,6 @@ otb_module(OTBStatistics
   DEPENDS
     OTBCommon
     OTBITK
-    OTBITKPendingPatches
     OTBImageBase
     OTBObjectList
     OTBProjection

@@ -8,13 +8,12 @@ on.")
 otb_module(OTBPolarimetry
   DEPENDS
     OTBCommon
-    OTBITKPendingPatches
     OTBITK
 
   TEST_DEPENDS
-    OTBTestKernel
-    OTBImageIO
     OTBImageBase
+    OTBImageIO
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

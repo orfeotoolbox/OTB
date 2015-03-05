@@ -5,20 +5,19 @@ contains different descriptors such as Fourrier-Mellin, SIFT, SURF, HOG, and so 
 
 otb_module(OTBDescriptors
   DEPENDS
-    OTBSiftFast
-    OTBITK
-    OTBITKPendingPatches
-    OTBImageBase
-    OTBTransform
-    OTBPointSet
     OTBCommon
+    OTBITK
+    OTBImageBase
     OTBObjectList
+    OTBPointSet
+    OTBSiftFast
+    OTBTransform
 
   TEST_DEPENDS
-    OTBTestKernel
     OTBImageIO
     OTBImageManipulation
     OTBInterpolation
+    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"

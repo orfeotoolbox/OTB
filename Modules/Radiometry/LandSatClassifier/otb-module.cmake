@@ -6,7 +6,6 @@ otb_module(OTBLandSatClassifier
 
   TEST_DEPENDS
     OTBITK
-    OTBITKPendingPatches
     OTBImageBase
     OTBImageIO
     OTBTestKernel

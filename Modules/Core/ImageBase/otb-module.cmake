@@ -5,7 +5,6 @@ otb_module(OTBImageBase
   DEPENDS
     OTBCommon
     OTBITK
-    OTBITKPendingPatches
     OTBMetadata
     OTBOSSIMAdapters
 

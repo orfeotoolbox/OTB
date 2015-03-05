@@ -8,7 +8,6 @@ otb_module(OTBSOM
   DEPENDS
     OTBCommon
     OTBITK
-    OTBITKPendingPatches
     OTBImageBase
 
   TEST_DEPENDS

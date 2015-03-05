@@ -15,7 +15,6 @@ otb_module(OTBImageIO
     OTBIORAD
     OTBIOTileMap
     OTBITK
-    OTBITKPendingPatches
     OTBImageBase
     OTBOSSIMAdapters
     OTBObjectList
