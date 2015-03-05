@@ -20,15 +20,15 @@ foreach(streaming_type "Tiled" "Stripped")
     string(TOLOWER ${streaming_type} type)
     string(TOLOWER ${streaming_sizemode} sizemode)
 
-    set(_test_name "ioTvImageFileWriterExtendedFileName_Streaming${streaming_type}${streaming_sizemode}")
+    set(test_name "ioTvImageFileWriterExtendedFileName_Streaming${streaming_type}${streaming_sizemode}")
 
-    otb_add_test(NAME ${_test_name} COMMAND otbExtendedFilenameTestDriver
+    otb_add_test(NAME ${test_name} COMMAND otbExtendedFilenameTestDriver
       --compare-image ${NOTOL}
                ${INPUTDATA}/maur_rgb_24bpp.tif
                ${TEMP}/${test_name}.tif
       otbImageFileWriterWithExtendedFilename
               ${INPUTDATA}/maur_rgb_24bpp.tif
-              ${TEMP}/${_test_name}.tif?&streaming:type=${type}&streaming:sizemode=${sizemode}&streaming:sizevalue=${streaming_sizevalue_${sizemode}}
+              ${TEMP}/${test_name}.tif?&streaming:type=${type}&streaming:sizemode=${sizemode}&streaming:sizevalue=${streaming_sizevalue_${sizemode}}
     )
   endforeach()
 endforeach()
