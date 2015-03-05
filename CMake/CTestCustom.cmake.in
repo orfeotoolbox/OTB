@@ -32,12 +32,12 @@ set(CTEST_CUSTOM_COVERAGE_EXCLUDE
  #".*/Examples/.*"
 
  # Exclude files from the ThirdParty Utilities directories
- ".*/Testing/Utilities/.*"
+ ".*/Modules/ThirdParty/.*"
  ".*/Utilities/.*"
 
  # Exclude SWIG wrappers files
- ".*/Code/Wrappers/SWIG/otbApplicationPYTHON_wrap.*"
- ".*/Code/Wrappers/SWIG/otbApplicationJAVA_wrap.*"
+ ".*/Modules/Wrappers/SWIG/src/otbApplicationPYTHON_wrap.*"
+ ".*/Modules/Wrappers/SWIG/src/otbApplicationJAVA_wrap.*"
 
  # Exclude Qt moc file
  ".*moc_.*"
