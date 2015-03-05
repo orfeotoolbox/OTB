@@ -98,10 +98,6 @@ public:
   /** \brief Destructor. */
   virtual ~ShaderWidget();
 
-  /**
-   */
-  void SetSettings( ImageSettings );
-
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -113,6 +109,7 @@ public slots:
 //
 // Signals.
 signals:
+  void SettingsChanged();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -140,9 +137,6 @@ private:
    * \brief uic generated.
    */
   Ui::ShaderWidget * m_UI;
-
-  /** */
-  ImageSettings * m_Settings;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

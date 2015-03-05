@@ -70,8 +70,7 @@ namespace mvd
 ShaderWidget
 ::ShaderWidget( QWidget * parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
-  m_UI( new mvd::Ui::ShaderWidget() ),
-  m_Settings( NULL )
+  m_UI( new mvd::Ui::ShaderWidget() )
 {
   m_UI->setupUi( this );
 
@@ -107,8 +106,8 @@ ShaderWidget
   if( settings!=NULL )
     {
     for( int i=0; i<m_UI->effectComboBox->count(); ++i )
-      if( QString::compare( ImageSettings::EFFECT_NAME[ i ],
-                            m_UI->effectComboBox->itemText( i ) )==0 )
+      if( QString::compare( m_UI->effectComboBox->itemText( i ),
+                            ImageSettings::EFFECT_NAME[ settings->GetEffect() ] )==0 )
         {
         m_UI->effectComboBox->setCurrentIndex( i );
 
@@ -127,15 +126,18 @@ void
 ShaderWidget
 ::on_effectComboBox_currentIndexChanged( const QString & text )
 {
+  if( !HasSettings() )
+    return;
+
   for( int i=0; i<ImageSettings::EFFECT_COUNT; ++i )
     if( QString::compare( text, ImageSettings::EFFECT_NAME[ i ] )==0 )
       {
-      assert( m_Settings!=NULL );
+      GetSettings()->SetEffect( static_cast< ImageSettings::Effect >( i ) );
 
-      m_Settings->SetEffect( static_cast< ImageSettings::Effect >( i ) );
+      m_UI->sizeSpinBox->setEnabled( GetSettings()->HasSize() );
+      m_UI->valueLineEdit->setEnabled( GetSettings()->HasValue() );
 
-      m_UI->sizeSpinBox->setEnabled( m_Settings->HasSize() );
-      m_UI->valueLineEdit->setEnabled( m_Settings->HasValue() );
+      emit SettingsChanged();
 
       return;
       }
@@ -146,10 +148,12 @@ void
 ShaderWidget
 ::on_sizeSpinBox_valueChanged( int value )
 {
-  assert( m_Settings!=NULL );
-  assert( m_Settings->HasSize() );
+  if( !HasSettings() )
+    return;
 
-  m_Settings->SetSize( value );
+  GetSettings()->SetSize( value );
+
+  emit SettingsChanged();
 }
 
 /*******************************************************************************/
@@ -157,14 +161,16 @@ void
 ShaderWidget
 ::on_valueLineEdit_textChanged( const QString & text )
 {
-  assert( m_Settings!=NULL );
-  assert( m_Settings->HasValue() );
+  if( !HasSettings() )
+    return;
 
   bool isOk = true;
 
-  m_Settings->SetValue( text.toDouble( &isOk ) );
+  GetSettings()->SetValue( text.toDouble( &isOk ) );
 
   assert( isOk );
+
+  emit SettingsChanged();
 }
 
 } // end namespace 'mvd'

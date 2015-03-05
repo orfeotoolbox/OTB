@@ -76,8 +76,10 @@ ImageSettingsInterface
 ImageSettingsInterface
 ::~ImageSettingsInterface()
 {
+#if 0
   delete m_Settings;
   m_Settings = NULL;
+#endif
 }
 
 /*****************************************************************************/
@@ -85,7 +87,10 @@ void
 ImageSettingsInterface
 ::SetSettings( ImageSettings * settings )
 {
+#if 0
   delete m_Settings;
+#endif
+
   m_Settings = settings;
 
   virtual_SetSettings( settings );

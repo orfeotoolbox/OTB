@@ -96,6 +96,10 @@ public:
     const T * GetSettings() const;
 #endif
 
+  /** */
+  void SetSettings( ImageSettings * );
+
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
@@ -114,9 +118,6 @@ protected:
 //
 // Private methods.
 private:
-  /** */
-  void SetSettings( ImageSettings * );
-
   /** */
   virtual void virtual_SetSettings( ImageSettings * );
 

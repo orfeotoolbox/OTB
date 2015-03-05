@@ -127,6 +127,8 @@ MainWindow
   m_ImageView( NULL ),
   m_QuicklookViewDock( NULL ),
   m_CentralTabWidget( NULL ),
+  m_StatusBarWidget( NULL ),
+  m_ShaderWidget( NULL ),
   m_FilenameDragAndDropEventFilter( NULL )
 {
   m_UI->setupUi( this );
@@ -917,9 +919,11 @@ MainWindow
   m_UI->m_RenderToolBar->addSeparator();
 
   {
-  m_UI->m_RenderToolBar->addWidget(
-    new ShaderWidget( m_UI->m_RenderToolBar )
-  );
+  assert( m_ShaderWidget==NULL );
+
+  m_ShaderWidget = new ShaderWidget( m_UI->m_RenderToolBar );
+
+  m_UI->m_RenderToolBar->addWidget( m_ShaderWidget );
   }
 }
 
@@ -1439,6 +1443,8 @@ MainWindow
 
   if( layerModel->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
+    m_ShaderWidget->SetSettings( NULL );
+
     // Disconnect previously selected image-model from view.
     QObject::disconnect(
       layerModel,
@@ -1456,6 +1462,16 @@ MainWindow
       // from:
       m_QuicklookViewDock->widget(),
       SLOT( updateGL()  )
+    );
+
+    //
+    // Disconnect shader-widget from model-updated slot.
+    QObject::disconnect(
+      m_ShaderWidget,
+      SIGNAL( SettingsChanged() ),
+      // from:
+      layerModel,
+      SLOT( OnModelUpdated() )
     );
     }
 
@@ -1523,7 +1539,17 @@ MainWindow
       SIGNAL( SettingsUpdated() ),
       // to:
       m_QuicklookViewDock->widget(),
-      SLOT( updateGL()  )
+      SLOT( updateGL() )
+    );
+
+    //
+    // Connect shader-widget to model-updated slot.
+    QObject::connect(
+      m_ShaderWidget,
+      SIGNAL( SettingsChanged() ),
+      // to:
+      layerModel,
+      SLOT( OnModelUpdated() )
     );
 
     VectorImageModel * imageModel =
@@ -1535,6 +1561,8 @@ MainWindow
       QString( PROJECT_NAME " - %1" )
       .arg( QFileInfo( imageModel->GetFilename() ).fileName() )
     );
+
+    m_ShaderWidget->SetSettings( &imageModel->GetSettings() );
     }
   else
     {

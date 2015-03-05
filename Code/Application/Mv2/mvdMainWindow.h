@@ -77,6 +77,7 @@ class AbstractLayerModel;
 class FilenameDragAndDropEventFilter;
 class ImageViewWidget;
 class LayerStackWidget;
+class ShaderWidget;
 class StatusBarWidget;
 
 namespace Ui
@@ -371,6 +372,10 @@ private:
   /**
    */
   StatusBarWidget* m_StatusBarWidget;
+
+  /**
+   */
+  ShaderWidget * m_ShaderWidget;
 
   /**
    */
