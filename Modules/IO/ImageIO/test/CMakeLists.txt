@@ -331,7 +331,7 @@ otb_add_test(NAME ioTvStreamingImageFilterBSQ2PNG COMMAND otbImageIOTestDriver
    )
 set_tests_properties(ioTvStreamingImageFilterBSQ2PNG PROPERTIES DEPENDS ioTvImageFileReaderPNG2BSQ)
 
-otb_add_test(ioTvStreamingImageFilterLUM2PNG COMMAND otbImageIOTestDriver
+otb_add_test(NAME ioTvStreamingImageFilterLUM2PNG COMMAND otbImageIOTestDriver
    --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
                                 ${TEMP}/ioStreamingImageFilterTestLUM.png
          otbStreamingImageFilterTest
