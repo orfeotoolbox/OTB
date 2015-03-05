@@ -56,7 +56,7 @@ namespace Wrapper
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-class ExampleApplication : public Application
+class ApplicationExample : public Application
 //  Software Guide : EndCodeSnippet
 {
 public:
@@ -66,7 +66,7 @@ public:
   // Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-  typedef ExampleApplication Self;
+  typedef ApplicationExample Self;
   typedef Application Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -260,7 +260,7 @@ private:
 // Finally \code{OTB\_APPLICATION\_EXPORT} is called.
 // Software Guide : EndLatex
 //  Software Guide :BeginCodeSnippet
-OTB_APPLICATION_EXPORT(otb::Wrapper::ExampleApplication)
+OTB_APPLICATION_EXPORT(otb::Wrapper::ApplicationExample)
 //  Software Guide :EndCodeSnippet
 
 
