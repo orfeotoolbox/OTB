@@ -325,7 +325,7 @@ private slots:
   void OnLayerAdded( size_t );
   /**
    */
-  void OnAboutToDeleteLayer( size_t );
+  void OnLayerAboutToBeDeleted( size_t );
 };
 
 }// end namespace 'mvd'

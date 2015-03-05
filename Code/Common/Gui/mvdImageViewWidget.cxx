@@ -201,10 +201,10 @@ ImageViewWidget
 
   QObject::connect(
     stackedLayerModel,
-    SIGNAL( AboutToDeleteLayer( size_t ) ),
+    SIGNAL( LayerAboutToBeDeleted( size_t ) ),
     // to:
     this,
-    SLOT( OnAboutToDeleteLayer( size_t ) )
+    SLOT( OnLayerAboutToBeDeleted( size_t ) )
   );
 
   QObject::connect(
@@ -795,22 +795,6 @@ ImageViewWidget
     this,
     SLOT( updateGL() )
   );
-
-  QObject::connect(
-    layer,
-    SIGNAL( LayerAdded( size_t ) ),
-    // from:
-    this,
-    SLOT( OnLayerAdded( size_t ) )
-  );
-
-  QObject::disconnect(
-    layer,
-    SIGNAL( AboutToDeleteLayer( size_t ) ),
-    // from:
-    this,
-    SLOT( OnAboutToDeleteLayer( size_t ) )
-  );
 }
 
 /*******************************************************************************/
@@ -873,16 +857,6 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
-::OnAboutToDeleteLayer( size_t index )
-{
-  assert( GetLayerStack()!=NULL );
-
-  Disconnect( GetLayerStack()->At( index ) );
-}
-
-/******************************************************************************/
-void
-ImageViewWidget
 ::OnDeleteAllRequested()
 {
   // qDebug() << this << "::OnDeleteAllRequested()";
@@ -912,6 +886,16 @@ ImageViewWidget
   stackedLayerModel->DeleteCurrent();
 
   updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnLayerAboutToBeDeleted( size_t index )
+{
+  assert( GetLayerStack()!=NULL );
+
+  Disconnect( GetLayerStack()->At( index ) );
 }
 
 /******************************************************************************/
