@@ -168,7 +168,7 @@ ShaderWidget
 
   GetSettings()->SetValue( text.toDouble( &isOk ) );
 
-  assert( isOk );
+  // assert( isOk );
 
   emit SettingsChanged();
 }

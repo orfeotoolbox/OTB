@@ -369,6 +369,8 @@ ImageViewWidget
     this,
     SIGNAL(
       PhysicalCursorPositionChanged(
+        const QPoint &,
+        const PointType &,
         const PointType &,
         const DefaultImageType::PixelType &
       )
@@ -377,6 +379,8 @@ ImageViewWidget
     m_Renderer,
     SLOT(
       OnPhysicalCursorPositionChanged(
+        const QPoint &,
+        const PointType &,
         const PointType &,
         const DefaultImageType::PixelType &
       )
@@ -473,13 +477,6 @@ ImageViewWidget
   QGLWidget::mousePressEvent( event );
 
   m_Manipulator->MousePressEvent( event );
-
-  if(event->button() ==  Qt::RightButton)
-    {
-    emit ReferenceActorShaderModeChanged("LOCAL_CONTRAST");
-    updateGL();
-    }
-
 }
 
 /*******************************************************************************/
@@ -515,12 +512,14 @@ ImageViewWidget
 #if 0
     if( m_Renderer->Pick( in, out, pixel ) )
       {
-      emit PhysicalCursorPositionChanged( out, pixel );
+      emit PhysicalCursorPositionChanged( event->pos(), in, out, pixel );
       }
 #else
     m_Renderer->Pick( in, out, pixel );
 
-    emit PhysicalCursorPositionChanged( out, pixel );
+    qDebug() << "PhysicalCursorPositionChanged(" << event->pos() << ")";
+
+    emit PhysicalCursorPositionChanged( event->pos(), in, out, pixel );
 
     updateGL();
 
@@ -537,12 +536,6 @@ ImageViewWidget
   QGLWidget::mouseReleaseEvent( event );
 
   m_Manipulator->MouseReleaseEvent(event);
-
-  if(event->button() ==  Qt::RightButton)
-    {
-    emit ReferenceActorShaderModeChanged("STANDARD");
-    updateGL();
-    }
 }
 
 /*******************************************************************************/

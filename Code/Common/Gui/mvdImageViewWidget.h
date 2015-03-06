@@ -187,8 +187,10 @@ public slots:
 signals:
   /**
    */
-  void PhysicalCursorPositionChanged( const PointType&,
-                                      const DefaultImageType::PixelType& );
+  void PhysicalCursorPositionChanged( const QPoint & screen,
+                                      const PointType & view,
+                                      const PointType & physical,
+                                      const DefaultImageType::PixelType & );
 
 
   /**

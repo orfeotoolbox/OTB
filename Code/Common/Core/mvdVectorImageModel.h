@@ -202,8 +202,10 @@ public:
 public slots:
   /**
    */
-  void OnPhysicalCursorPositionChanged( const PointType&,
-                                        const DefaultImageType::PixelType& );
+  void OnPhysicalCursorPositionChanged( const QPoint &,
+                                        const PointType &,
+                                        const PointType &,
+                                        const DefaultImageType::PixelType & );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

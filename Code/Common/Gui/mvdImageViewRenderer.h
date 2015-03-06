@@ -187,8 +187,10 @@ public:
 
 // public slots
 public slots:
-  void OnPhysicalCursorPositionChanged(const PointType&,
-                                       const DefaultImageType::PixelType& );
+  void OnPhysicalCursorPositionChanged( const QPoint &,
+                                        const PointType &,
+                                        const PointType &,
+                                        const DefaultImageType::PixelType& );
 
   void OnReferenceActorShaderModeChanged(const std::string & mode);
 
@@ -261,10 +263,6 @@ private:
 //
 // Private attributes.
 private:
-  /**
-   */
-  StackedLayerModel * m_StackedLayerModel;
-
   /**
    */
   ModelActorPair m_ReferencePair;

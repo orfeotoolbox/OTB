@@ -677,7 +677,9 @@ VectorImageModel
 /*****************************************************************************/
 void
 VectorImageModel
-::OnPhysicalCursorPositionChanged( const PointType& point,
+::OnPhysicalCursorPositionChanged( const QPoint & screen,
+                                   const PointType & view,
+                                   const PointType & point,
                                    const DefaultImageType::PixelType& pixel )
 {
 // Pixel is read from otb::GlImageActor (inside ImageViewRender)

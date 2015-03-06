@@ -488,26 +488,44 @@ MainWindow
     QObject::connect(
       m_ImageView,
       SIGNAL(
-        PhysicalCursorPositionChanged( const PointType&,
-                                       const DefaultImageType::PixelType& )
+        PhysicalCursorPositionChanged(
+          const QPoint &,
+          const PointType &,
+          const PointType &,
+          const DefaultImageType::PixelType &
+        )
       ),
       // to:
       vectorImageModel,
-      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
-                                             const DefaultImageType::PixelType& )
+      SLOT(
+        OnPhysicalCursorPositionChanged(
+          const QPoint &,
+          const PointType &,
+          const PointType &,
+          const DefaultImageType::PixelType &
+        )
       )
     );
 
     QObject::connect(
       GetQuicklookView(),
       SIGNAL(
-        PhysicalCursorPositionChanged( const PointType&,
-                                       const DefaultImageType::PixelType& )
+        PhysicalCursorPositionChanged(
+          const QPoint &,
+          const PointType &,
+          const PointType &,
+          const DefaultImageType::PixelType &
+        )
       ),
       // to:
       vectorImageModel,
-      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
-                                             const DefaultImageType::PixelType& )
+      SLOT(
+        OnPhysicalCursorPositionChanged(
+          const QPoint &,
+          const PointType &,
+          const PointType &,
+          const DefaultImageType::PixelType &
+        )
       )
     );
 
@@ -666,26 +684,44 @@ MainWindow
     QObject::disconnect(
       m_ImageView,
       SIGNAL(
-        PhysicalCursorPositionChanged( const PointType&,
-                                       const DefaultImageType::PixelType& )
+        PhysicalCursorPositionChanged(
+          const QPoint &,
+          const PointType &,
+          const PointType &,
+          const DefaultImageType::PixelType &
+        )
       ),
       // to:
       vectorImageModel,
-      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
-                                             const DefaultImageType::PixelType& )
+      SLOT(
+        OnPhysicalCursorPositionChanged(
+          const QPoint &,
+          const PointType &,
+          const PointType &,
+          const DefaultImageType::PixelType &
+        )
       )
     );
 
     QObject::disconnect(
       GetQuicklookView(),
       SIGNAL(
-        PhysicalCursorPositionChanged( const PointType&,
-                                       const DefaultImageType::PixelType& )
+        PhysicalCursorPositionChanged(
+          const QPoint &,
+          const PointType &,
+          const PointType &,
+          const DefaultImageType::PixelType &
+        )
       ),
       // to:
       vectorImageModel,
-      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
-                                             const DefaultImageType::PixelType& )
+      SLOT(
+        OnPhysicalCursorPositionChanged(
+          const QPoint &,
+          const PointType &,
+          const PointType &,
+          const DefaultImageType::PixelType &
+        )
       )
     );
 

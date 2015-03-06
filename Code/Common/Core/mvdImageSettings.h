@@ -322,9 +322,7 @@ ImageSettings
     m_Effect==EFFECT_CHESSBOARD ||
     m_Effect==EFFECT_LOCAL_CONTRAST ||
     m_Effect==EFFECT_LOCAL_TRANSLUCENCY ||
-    m_Effect==EFFECT_SPECTRAL_ANGLE ||
-    m_Effect==EFFECT_SWIPE_H ||
-    m_Effect==EFFECT_SWIPE_V;
+    m_Effect==EFFECT_SPECTRAL_ANGLE;
 }
 
 /*****************************************************************************/

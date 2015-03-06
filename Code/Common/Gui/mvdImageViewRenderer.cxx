@@ -76,7 +76,6 @@ ImageViewRenderer
 ::ImageViewRenderer( QObject* parent ) :
   AbstractImageViewRenderer( parent ),
   m_GlView( otb::GlView::New() ),
-  m_StackedLayerModel( NULL ),
 #ifdef _WIN32
 #else // _WIN32
   m_ReferencePair( NULL, otb::GlActor::Pointer() ),
@@ -520,28 +519,67 @@ ImageViewRenderer
           shader->SetNoData( properties->GetNoData() );
           }
 
-        // If reference actor
-        if( refImageActor.IsNotNull() &&
-            refImageActor==imageActor )
+        //
+        // Apply shader properties.
+        //
+        switch( settings.GetEffect() )
           {
-          // TODO: Replace std::string by otb::ShaderType and if/else sequence by switch/case statement.
-          // TODO: Move following code into private sub-function.
-          if( m_ReferenceActorShaderMode=="LOCAL_CONTRAST" )
-            {
-            shader->SetShaderType( otb::SHADER_LOCAL_CONTRAST );
+          case ImageSettings::EFFECT_CHESSBOARD:
+            shader->SetShaderType( otb::SHADER_ALPHA_GRID );
+            shader->SetChessboardSize( settings.GetSize() );
+            break;
 
+          case ImageSettings::EFFECT_GRADIENT:
+            shader->SetShaderType( otb::SHADER_GRADIENT );
+            break;
+
+          case ImageSettings::EFFECT_LOCAL_CONTRAST:
+            shader->SetShaderType( otb::SHADER_LOCAL_CONTRAST );
+            shader->SetRadius( settings.GetSize() );
             shader->SetLocalContrastRange(
-              0.1 * std::max(
+#if 0
+              settings.GetValue() *
+              std::max(
                 std::max(
                   shader->GetMaxRed() - shader->GetMinRed(),
                   shader->GetMaxGreen() - shader->GetMinGreen()
                 ),
                 shader->GetMaxBlue() - shader->GetMinBlue()
               )
+#else
+              settings.GetValue()
+#endif
             );
-            }
-          else
+            break;
+
+          case ImageSettings::EFFECT_LOCAL_TRANSLUCENCY:
+            shader->SetShaderType( otb::SHADER_LOCAL_ALPHA );
+            shader->SetRadius( settings.GetValue() );
+            break;
+
+          case ImageSettings::EFFECT_NORMAL:
             shader->SetShaderType( otb::SHADER_STANDARD );
+            break;
+
+          case ImageSettings::EFFECT_SPECTRAL_ANGLE:
+            shader->SetShaderType( otb::SHADER_SPECTRAL_ANGLE );
+            shader->SetRadius( settings.GetSize() );
+            shader->SetSpectralAngleRange( settings.GetValue() );
+            break;
+
+          case ImageSettings::EFFECT_SWIPE_H:
+            shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
+            shader->SetVerticalSlider( false );
+            break;
+
+          case ImageSettings::EFFECT_SWIPE_V:
+            shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
+            shader->SetVerticalSlider( true );
+            break;
+
+          default:
+            assert( false && "Unhandled ImageSettings::Effect value!" );
+            break;
           }
         }
       //
@@ -718,46 +756,105 @@ ImageViewRenderer
 /*****************************************************************************/
 void
 ImageViewRenderer
-::OnPhysicalCursorPositionChanged(const PointType& point,
-                                  const DefaultImageType::PixelType& pixel)
+::OnPhysicalCursorPositionChanged( const QPoint & screen,
+                                   const PointType & view,
+                                   const PointType & point,
+                                   const DefaultImageType::PixelType & )
 {
-  otb::GlImageActor::Pointer glImageActor(
-    GetReferenceActor< otb::GlImageActor >()
-  );
+  qDebug() << "::OnPhysicalCursorPositionChanged(" << screen << ")";
 
-  if( glImageActor.IsNull() )
+  if( GetLayerStack()==NULL )
     return;
 
-  // Get shader of reference actor
-  otb::FragmentShader::Pointer fragmentShader( glImageActor->GetShader() );
-    
-  assert(
-    fragmentShader==otb::DynamicCast< otb::StandardShader >( fragmentShader )
-  );
-    
-  otb::StandardShader::Pointer shader(
-    otb::DynamicCast< otb::StandardShader >( fragmentShader )
-  );
-    
-  assert( !shader.IsNull() );
-    
-  shader->SetShaderType(otb::SHADER_LOCAL_CONTRAST);
-
-  if(pixel.Size()>0)
+  for( StackedLayerModel::ConstIterator it( GetLayerStack()->Begin() );
+       it!=GetLayerStack()->End();
+       ++it )
     {
-    shader->SetCurrentRed(pixel[0]);
-    shader->SetCurrentGreen(pixel[1]);
-    shader->SetCurrentBlue(pixel[2]);
+    assert( !it->first.empty() );
+    assert( it->second!=NULL );
+
+    if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
+      {
+      //
+      // Check GL-view.
+      assert( m_GlView->ContainsActor( it->first ) );
+
+      //
+      // Get GL image-actor.
+      otb::GlImageActor::Pointer glImageActor(
+        otb::DynamicCast< otb::GlImageActor >(
+          m_GlView->GetActor( it->first )
+        )
+      );
+
+      assert( !glImageActor.IsNull() );
+
+      //
+      // Transform point from viewport to screen.
+#if 0
+      PointType p_view;
+
+      p_view = glImageActor->ImageToViewportTransform( point, true );
+
+      PointType p_screen;
+
+      m_GlView->GetSettings()->ViewportToScreenTransform(
+        p_view[ 0 ], p_view[ 1 ],
+        p_screen[ 0 ], p_screen[ 1 ]
+      );
+
+      p_screen[ 1 ] =
+        m_GlView->GetSettings()->GetViewportSize()[ 1 ] - p_screen[ 1 ];
+#endif
+
+      //
+      // Get pixel RGB.
+      DefaultImageType::PixelType pixel;
+
+      glImageActor->GetPixelFromViewport( view, pixel );
+
+      //
+      // Get shader.
+      otb::FragmentShader::Pointer fshader( glImageActor->GetShader() );
+
+      otb::StandardShader::Pointer shader(
+        otb::DynamicCast< otb::StandardShader >(
+          fshader
+        )
+      );
+
+      assert( !shader.IsNull() );
+
+      //
+      //
+      PointType p_screen;
+
+      p_screen[ 0 ] = screen.x();
+      p_screen[ 1 ] = screen.y();
+
+      shader->SetCenter( p_screen );
+
+      if( shader->GetShaderType()==otb::SHADER_ALPHA_SLIDER )
+        shader->SetSliderPosition(
+          p_screen[
+            shader->GetVerticalSlider()
+            ? 1
+            : 0
+          ]
+        );
+
+      if( pixel.Size()>0 )
+        {
+        shader->SetCurrentRed( pixel[ 0 ] );
+        shader->SetCurrentGreen( pixel[ 1 ] );
+        shader->SetCurrentBlue( pixel[ 2 ] );
+        }
+      }
+    //
+    else
+      {
+      }
     }
-
-  PointType p, pscreen;
-  p = glImageActor->ImageToViewportTransform(point,true);
-
-  m_GlView->GetSettings()->ViewportToScreenTransform(p[0],p[1], pscreen[0], pscreen[1]);
-
-  pscreen[1] = m_GlView->GetSettings()->GetViewportSize()[1] - pscreen[1];
-
-  shader->SetCenter(pscreen);
 }
 
 /******************************************************************************/
