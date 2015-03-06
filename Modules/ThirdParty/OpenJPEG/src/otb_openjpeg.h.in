@@ -17,6 +17,14 @@
 =========================================================================*/
 #ifndef __otb_openjpeg_h
 
+#ifndef OPJ_STATIC
+#cmakedefine OPJ_STATIC
+#endif
+
+#ifndef OPJ_EXPORTS
+#cmakedefine OPJ_EXPORTS
+#endif
+
 #include "otbopenjpeg/openjpeg.h"
 
 #endif
