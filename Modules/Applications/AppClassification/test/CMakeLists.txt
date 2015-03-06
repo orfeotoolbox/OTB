@@ -476,6 +476,8 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr
   						     -field "NONDVI"
                 			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr.shp)
 
+# FIXME cascade dependencies to largeinput repository
+
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/SpectralAngleRoad.TIF}
@@ -484,6 +486,8 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadE
   						     -field "ROADSA"
                 			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication.shp)
 
+set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_RoadExtractionApplication)
+
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/SpectralAngleRoad.TIF}
@@ -491,6 +495,8 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr
                 			 -expr  "(b1 > 0.25)"
   						     -field "ROADSA"
                 			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr.shp)
+
+set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr
                      APP  ComputePolylineFeatureFromImage
@@ -502,6 +508,8 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr
                      VALID	 --compare-ogr 0.0
                      		 ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
                    			 ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp)
+
+set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_RoadExtractionApplication
                      APP  ComputePolylineFeatureFromImage
@@ -527,6 +535,8 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt
   						     -field "ROADSA"
                 			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt.shp)
 
+set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_gt)
+
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/BUILDINGS.TIF}
@@ -537,6 +547,8 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt
                      VALID	 --compare-ogr 0.0
                      		 ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
                    			 ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp)
+
+set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt) 
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication
                      APP  ComputePolylineFeatureFromImage
@@ -549,6 +561,7 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadE
                      		 ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp
                    			 ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp)
 
+set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication) 
 
 #----------- KMeansClassification TESTS ----------------
 otb_test_application(NAME apTvClKMeansImageClassification
