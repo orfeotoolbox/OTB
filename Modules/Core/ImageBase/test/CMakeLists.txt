@@ -761,17 +761,20 @@ otb_add_test(NAME  ioTvMultiMonoChannelROI_RADARSAT2ENVI COMMAND otbImageBaseTes
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
-# ---  RADARSAT (GDAL)  dir name ---
-otb_add_test(NAME  ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI COMMAND otbImageBaseTestDriver
-# THOMAS (provisoire) : Images OK mais erreur au DIFF ITK !!!
-#   --compare-image ${EPSILON_9} ${BASELINE}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
-#                      ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
-         otbMultiToMonoChannelExtractROI
-         -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
-         -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
-         -startX 0 -startY 0 -sizeX ParseHdfSubsetName337 -sizeY 280 )
-set_tests_properties(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI PROPERTIES DEPENDS ioTvMultiMonoChannelROI_RADARSAT2ENVI)
-
+# FIXME this test depends on an other test which requires largeinput. Need to circle the test with it(otb_data_use_large_input). It should not happen
+if(OTB_DATA_USE_LARGEINPUT)
+  # ---  RADARSAT (GDAL)  dir name ---
+  otb_add_test(NAME  ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI COMMAND otbImageBaseTestDriver
+    # THOMAS (provisoire) : Images OK mais erreur au DIFF ITK !!!
+    #   --compare-image ${EPSILON_9} ${BASELINE}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
+    #                      ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
+    otbMultiToMonoChannelExtractROI
+    -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
+    -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
+    -startX 0 -startY 0 -sizeX ParseHdfSubsetName337 -sizeY 280 )
+  
+  set_tests_properties(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI PROPERTIES DEPENDS ioTvMultiMonoChannelROI_RADARSAT2ENVI)
+endif()
 
 # ---  ENVI (GDAL) ---
 otb_add_test(NAME  ioTvMultiMonoChannelROI_ENVI2PNG COMMAND otbImageBaseTestDriver
