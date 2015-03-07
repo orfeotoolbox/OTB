@@ -477,7 +477,7 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr
                 			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr.shp)
 
 # FIXME cascade dependencies to largeinput repository
-
+if(OTB_DATA_USE_LARGEINPUT)
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/SpectralAngleRoad.TIF}
@@ -562,6 +562,7 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadE
                    			 ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp)
 
 set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication) 
+endif()
 
 #----------- KMeansClassification TESTS ----------------
 otb_test_application(NAME apTvClKMeansImageClassification
