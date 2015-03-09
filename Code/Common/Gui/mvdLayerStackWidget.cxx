@@ -128,6 +128,14 @@ LayerStackWidget
     this,
     SIGNAL( DownButtonClicked() )
   );
+
+  QObject::connect(
+    m_UI->deleteButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( DeleteButtonClicked() )
+  );
 }
 
 /*******************************************************************************/

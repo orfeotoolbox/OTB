@@ -137,6 +137,9 @@ signals:
   /**
    */
   void DownButtonClicked();
+  /**
+   */
+  void DeleteButtonClicked();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

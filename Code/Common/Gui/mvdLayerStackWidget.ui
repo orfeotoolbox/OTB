@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>132</width>
+    <width>162</width>
     <height>117</height>
    </rect>
   </property>
@@ -75,6 +75,16 @@
       <widget class="QToolButton" name="bottomButton">
        <property name="text">
         <string>⇥</string>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextOnly</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="deleteButton">
+       <property name="text">
+        <string>☒</string>
        </property>
        <property name="toolButtonStyle">
         <enum>Qt::ToolButtonTextOnly</enum>
