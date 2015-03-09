@@ -517,7 +517,7 @@ ImageViewWidget
 #else
     m_Renderer->Pick( in, out, pixel );
 
-    qDebug() << "PhysicalCursorPositionChanged(" << event->pos() << ")";
+    // qDebug() << "PhysicalCursorPositionChanged(" << event->pos() << ")";
 
     emit PhysicalCursorPositionChanged( event->pos(), in, out, pixel );
 

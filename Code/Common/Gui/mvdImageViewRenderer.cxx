@@ -761,7 +761,7 @@ ImageViewRenderer
                                    const PointType & point,
                                    const DefaultImageType::PixelType & )
 {
-  qDebug() << "::OnPhysicalCursorPositionChanged(" << screen << ")";
+  // qDebug() << "::OnPhysicalCursorPositionChanged(" << screen << ")";
 
   if( GetLayerStack()==NULL )
     return;
