@@ -829,8 +829,12 @@ ImageViewRenderer
       //
       PointType p_screen;
 
+      assert( !m_GlView.IsNull() );
+      assert( m_GlView->GetSettings()!=NULL );
+
       p_screen[ 0 ] = screen.x();
-      p_screen[ 1 ] = screen.y();
+      p_screen[ 1 ] =
+        m_GlView->GetSettings()->GetViewportSize()[ 1 ] - screen.y();
 
       shader->SetCenter( p_screen );
 
