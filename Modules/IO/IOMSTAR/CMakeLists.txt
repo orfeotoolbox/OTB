@@ -1,0 +1,4 @@
+project(OTBIOMSTAR)
+
+set(OTBIOMSTAR_LIBRARIES OTBIOMSTAR)
+otb_module_impl()

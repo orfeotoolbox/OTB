@@ -1,0 +1,4 @@
+project(OTBOpticalCalibration)
+
+set(OTBOpticalCalibration_LIBRARIES OTBOpticalCalibration)
+otb_module_impl()

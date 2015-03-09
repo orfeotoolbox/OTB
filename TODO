@@ -1,0 +1,23 @@
+* SOMLearningBehaviorFunctor not tested (wasn't compiling)
+* PointSetAndValuesFunction not tested (wasn't compiling)
+* compile without -Wshadow and fix as much warnings as possible
+* remove KMLVectorDataIO since it should not be used. leave libkml dependency only for KmzWriter module.
+* LineSegmentDetectorExample RightAngleDetectionExample depends on VectorDataRendering (mapnik) : rewrite it with the OGR based rasterization
+* OTB_USE_CURL
+* CurlHelperStub is only for tests : move to TestKernel
+* OTB_USE_OPENCV
+* Wrapper test (Java Python)
+* Handle OTB_DATA_USE_SPOTPHRINPUT & OTB_DATA_USE_CNESPHRINPUT
+* Copyright statements
+* Example README
+* Check set_tests_property calls for resource lock (curl, ...)
+* 0000209-SVMValidationLinearlySeparableProbEstimation not compiled and tested
+* rewrite doc of ExplicitStreamingExample
+* skipped tests :
+apTvDocAppli_${app}
+Warning : test name contains a variable : owTvQtWidgetShow_${app}
+Warning : test name contains a variable : ioTvMultiResolutionReadingInfo_${current_type}
+Warning : test name contains a variable : ioTvImageKeywordlist_${current_type}
+Warning : test name contains a variable : prTvotbGenericRSResampleImageFilterFromMap_${sensor_name}
+Warning : test name contains a variable : prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB}
+Warning : test name contains a variable : ioTuJ2KImageIOCanRead_${current_type}

@@ -1,0 +1,18 @@
+#include "otbTestMain.h"
+void RegisterTests()
+{
+  REGISTER_TEST(otbNearestTransformDisplacementFieldGeneratorNew);
+  REGISTER_TEST(otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator);
+  REGISTER_TEST(otbNNearestPointsLinearInterpolateDisplacementFieldGenerator);
+  REGISTER_TEST(otbNearestPointDisplacementFieldGeneratorNew);
+  REGISTER_TEST(otbPointSetToDisplacementFieldGeneratorNew);
+  REGISTER_TEST(otbPointSetWithTransformToDisplacementFieldGeneratorNew);
+  REGISTER_TEST(otbBSplinesInterpolateDisplacementFieldGeneratorNew);
+  REGISTER_TEST(otbNNearestTransformsLinearInterpolateDisplacementFieldGeneratorNew);
+  REGISTER_TEST(otbNNearestPointsLinearInterpolateDisplacementFieldGeneratorNew);
+  REGISTER_TEST(otbNearestTransformDisplacementFieldGenerator);
+  REGISTER_TEST(otbNearestPointDisplacementFieldGenerator);
+  REGISTER_TEST(otbBSplinesInterpolateTransformDisplacementFieldGenerator);
+  REGISTER_TEST(otbBSplinesInterpolateDisplacementFieldGenerator);
+  REGISTER_TEST(otbBSplinesInterpolateTransformDisplacementFieldGeneratorNew);
+}

@@ -1,0 +1,1 @@
+extern int dica2_(doublereal *a, integer *inu);

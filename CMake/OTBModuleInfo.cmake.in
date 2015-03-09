@@ -1,0 +1,7 @@
+set(@otb-module@_LOADED 1)
+set(@otb-module@_DEPENDS "@otb-module-DEPENDS@")
+set(@otb-module@_OPTIONAL_DEPENDS "@otb-module-OPTIONAL_DEPENDS@")
+set(@otb-module@_LIBRARIES "@otb-module-LIBRARIES@")
+set(@otb-module@_INCLUDE_DIRS "@otb-module-INCLUDE_DIRS@")
+set(@otb-module@_LIBRARY_DIRS "@otb-module-LIBRARY_DIRS@")
+@otb-module-EXPORT_CODE@

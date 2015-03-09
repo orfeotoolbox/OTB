@@ -1,0 +1,5 @@
+find_package ( LTDL REQUIRED )
+find_package ( ICUUC REQUIRED )
+find_package ( Agg REQUIRED )
+find_package ( Freetype REQUIRED )
+find_package ( Mapnik REQUIRED )

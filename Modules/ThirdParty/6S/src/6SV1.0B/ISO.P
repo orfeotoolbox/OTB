@@ -1,0 +1,7 @@
+extern int iso_(integer *iaer_prof__, doublereal *tamoy, doublereal *trmoy, doublereal *pizmoy, doublereal *tamoyp, doublereal *trmoyp, doublereal *palt, integer *nt, integer *mu, doublereal *rm, doublereal *gb, doublereal *xf);
+/* comlen sixs_del__ 16 */
+/* comlen sixs_ier__ 8 */
+/* comlen multorder_ 4 */
+/*:ref: discre_ 14 11 7 7 7 7 4 4 7 7 7 7 7 */
+/*:ref: aero_prof__ 14 11 7 7 7 7 4 7 7 7 7 7 7 */
+/*:ref: kernel_ 14 6 4 4 7 7 7 7 */

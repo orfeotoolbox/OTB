@@ -1,0 +1,3 @@
+extern int brdfgrid_(integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal *brdfdat, doublereal *angmu, doublereal *angphi, doublereal *brdfint);
+/*:ref: splie2_ 14 5 7 7 4 4 7 */
+/*:ref: splin2_ 14 9 7 7 7 7 4 4 7 7 7 */

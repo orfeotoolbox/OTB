@@ -1,0 +1,25 @@
+set(OTBImageIO_SRC
+  otbImageIOFactory.cxx
+  )
+
+add_library(OTBImageIO ${OTBImageIO_SRC})
+target_link_libraries(OTBImageIO 
+  ${OTBIORAD_LIBRARIES}
+  ${OTBIOONERA_LIBRARIES}
+  ${OTBIOJPEG2000_LIBRARIES}
+  ${OTBIOLUM_LIBRARIES}
+  ${OTBImageBase_LIBRARIES}
+  ${OTBIOMW_LIBRARIES}
+  ${OTBIOMSTAR_LIBRARIES}
+  ${OTBIOBSQ_LIBRARIES}
+  ${OTBIOGDAL_LIBRARIES}
+  ${OTBStreaming_LIBRARIES}
+  ${OTBBoost_LIBRARIES}
+  ${OTBIOTileMap_LIBRARIES}
+  ${OTBCommon_LIBRARIES}
+  ${OTBExtendedFilename_LIBRARIES}
+  ${OTBOSSIMAdapters_LIBRARIES}
+
+  )
+
+otb_module_target(OTBImageIO)

@@ -1,0 +1,4 @@
+project(OTBOpenThreadsAdapters)
+
+set(OTBOpenThreadsAdapters_LIBRARIES OTBOpenThreadsAdapters)
+otb_module_impl()

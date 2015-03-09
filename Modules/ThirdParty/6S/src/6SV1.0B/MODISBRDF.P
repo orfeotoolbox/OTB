@@ -1,0 +1,1 @@
+extern int modisbrdf_(doublereal *p1, doublereal *p2, doublereal *p3, integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal *brdfint);

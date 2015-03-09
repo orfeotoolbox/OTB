@@ -1,0 +1,18 @@
+set(OTBIOJPEG2000_SRC
+  otbJPEG2000ImageIO.cxx
+  otbJPEG2000ImageIOFactory.cxx
+  )
+
+add_library(OTBIOJPEG2000 ${OTBIOJPEG2000_SRC})
+target_link_libraries(OTBIOJPEG2000 
+  ${OTBTinyXML_LIBRARIES}
+  ${OTBImageBase_LIBRARIES}
+  ${OTBOSSIMAdapters_LIBRARIES}
+  ${OTBCommon_LIBRARIES}
+  ${OTBOpenJPEG_LIBRARIES}
+  ${OTBBoost_LIBRARIES}
+  ${OTBGDAL_LIBRARIES}
+
+  )
+
+otb_module_target(OTBIOJPEG2000)

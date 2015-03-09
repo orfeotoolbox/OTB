@@ -1,0 +1,4 @@
+project(OTBIOONERA)
+
+set(OTBIOONERA_LIBRARIES OTBIOONERA)
+otb_module_impl()

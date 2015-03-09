@@ -1,0 +1,4 @@
+extern int bbm_();
+/* comlen num_quad__ 4 */
+/* comlen sixs_aerbas__ 480000 */
+/* comlen sixs_coef__ 1952 */

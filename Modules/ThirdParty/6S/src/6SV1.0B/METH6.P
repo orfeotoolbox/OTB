@@ -1,0 +1,1 @@
+extern int meth6_(doublereal *a, integer *inu);

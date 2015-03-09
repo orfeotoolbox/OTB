@@ -1,0 +1,12 @@
+set(DOCUMENTATION "TODO")
+
+otb_module(OTBTimeSeries
+  DEPENDS
+    OTBITK
+
+  TEST_DEPENDS
+    OTBTestKernel
+
+  DESCRIPTION
+    "${DOCUMENTATION}"
+)

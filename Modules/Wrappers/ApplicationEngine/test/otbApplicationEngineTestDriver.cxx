@@ -1,0 +1,34 @@
+#include "otbTestMain.h"
+void RegisterTests()
+{
+  REGISTER_TEST(otbWrapperApplicationNew);
+  REGISTER_TEST(otbWrapperParameterNew);
+  REGISTER_TEST(otbWrapperParameterTest1);
+  REGISTER_TEST(otbWrapperInputImageParameterNew);
+  REGISTER_TEST(otbWrapperInputImageParameterTest1);
+  REGISTER_TEST(otbWrapperNumericalParameterNew);
+  REGISTER_TEST(otbWrapperNumericalParameterTest1);
+  REGISTER_TEST(otbWrapperStringParameterNew);
+  REGISTER_TEST(otbWrapperStringParameterTest1);
+  REGISTER_TEST(otbWrapperChoiceParameterNew);
+  REGISTER_TEST(otbWrapperChoiceParameterTest1);
+  REGISTER_TEST(otbWrapperApplicationRegistry);
+  REGISTER_TEST(otbWrapperStringListParameterNew);
+  REGISTER_TEST(otbWrapperStringListParameterTest1);
+  REGISTER_TEST(otbWrapperRAMParameterNew);
+  REGISTER_TEST(otbWrapperDocExampleStructureNew);
+  REGISTER_TEST(otbWrapperDocExampleStructureTest);
+  REGISTER_TEST(otbWrapperParameterKey);
+  REGISTER_TEST(otbWrapperParameterListNew);
+  REGISTER_TEST(otbWrapperEmptyParameterNew);
+  REGISTER_TEST(otbWrapperInputImageListParameterNew);
+  REGISTER_TEST(otbWrapperInputImageListParameterTest1);
+  REGISTER_TEST(otbWrapperInputVectorDataListParameterNew);
+  REGISTER_TEST(otbWrapperInputVectorDataListParameterTest1);
+  REGISTER_TEST(otbWrapperApplicationDocTest);
+  REGISTER_TEST(otbWrapperApplicationHtmlDocGeneratorNew);
+  REGISTER_TEST(otbWrapperApplicationHtmlDocGeneratorTest1);
+  REGISTER_TEST(otbWrapperInputVectorDataParameterNew);
+  REGISTER_TEST(otbWrapperOutputImageParameterNew);
+  REGISTER_TEST(otbWrapperOutputImageParameterTest1);
+}

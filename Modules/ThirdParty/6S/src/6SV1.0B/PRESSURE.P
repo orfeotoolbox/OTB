@@ -1,0 +1,2 @@
+extern int pressure_(doublereal *uw, doublereal *uo3, doublereal *xps);
+/* comlen sixs_atm__ 1360 */

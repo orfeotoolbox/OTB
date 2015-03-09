@@ -1,0 +1,1 @@
+extern int gauss_(doublereal *x1, doublereal *x2, doublereal *x, doublereal *w, integer *n);

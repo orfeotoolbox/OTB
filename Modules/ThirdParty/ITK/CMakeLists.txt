@@ -1,0 +1,6 @@
+project(OTBITK)
+
+set(OTBITK_SYSTEM_INCLUDE_DIRS ${ITK_INCLUDE_DIRS})
+set(OTBITK_LIBRARIES "${ITK_LIBRARIES}")
+
+otb_module_impl()

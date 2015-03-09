@@ -1,0 +1,48 @@
+project(LearningExamples)
+
+add_executable(GenerateTrainingImageExample GenerateTrainingImageExample.cxx)
+target_link_libraries(GenerateTrainingImageExample ${OTB_LIBRARIES})
+
+add_executable(SEMModelEstimatorExample SEMModelEstimatorExample.cxx)
+target_link_libraries(SEMModelEstimatorExample ${OTB_LIBRARIES})
+
+add_executable(SOMClassifierExample SOMClassifierExample.cxx)
+target_link_libraries(SOMClassifierExample ${OTB_LIBRARIES})
+
+add_executable(SOMExample SOMExample.cxx)
+target_link_libraries(SOMExample ${OTB_LIBRARIES})
+
+add_executable(SVMGenericKernelImageClassificationExample SVMGenericKernelImageClassificationExample.cxx)
+target_link_libraries(SVMGenericKernelImageClassificationExample ${OTB_LIBRARIES})
+
+add_executable(SVMGenericKernelImageModelEstimatorExample SVMGenericKernelImageModelEstimatorExample.cxx)
+target_link_libraries(SVMGenericKernelImageModelEstimatorExample ${OTB_LIBRARIES})
+
+add_executable(SVMImageClassificationExample SVMImageClassificationExample.cxx)
+target_link_libraries(SVMImageClassificationExample ${OTB_LIBRARIES})
+
+add_executable(SVMImageEstimatorClassificationMultiExample SVMImageEstimatorClassificationMultiExample.cxx)
+target_link_libraries(SVMImageEstimatorClassificationMultiExample ${OTB_LIBRARIES})
+
+add_executable(SVMImageModelEstimatorExample SVMImageModelEstimatorExample.cxx)
+target_link_libraries(SVMImageModelEstimatorExample ${OTB_LIBRARIES})
+
+add_executable(SVMPointSetClassificationExample SVMPointSetClassificationExample.cxx)
+target_link_libraries(SVMPointSetClassificationExample ${OTB_LIBRARIES})
+
+add_executable(SVMPointSetExample SVMPointSetExample.cxx)
+target_link_libraries(SVMPointSetExample ${OTB_LIBRARIES})
+
+add_executable(SVMPointSetModelEstimatorExample SVMPointSetModelEstimatorExample.cxx)
+target_link_libraries(SVMPointSetModelEstimatorExample ${OTB_LIBRARIES})
+
+add_executable(TrainMachineLearningModelFromImagesExample TrainMachineLearningModelFromImagesExample.cxx)
+target_link_libraries(TrainMachineLearningModelFromImagesExample ${OTB_LIBRARIES})
+
+add_executable(TrainMachineLearningModelFromSamplesExample TrainMachineLearningModelFromSamplesExample.cxx)
+target_link_libraries(TrainMachineLearningModelFromSamplesExample ${OTB_LIBRARIES})
+
+
+if(BUILD_TESTING)
+  add_subdirectory(test)
+endif()
