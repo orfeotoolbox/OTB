@@ -22,19 +22,19 @@ endif()
 
 if(ENABLE_QT4)
   if(USE_SYSTEM_QT4)
-    set(OTB_SB_WRAP_QT_CONFIG -DOTB_USE_QT4:BOOL=ON)
+    set(OTB_USE_QT4 ON)
   else()
     if(MSVC)
-      set(OTB_SB_WRAP_QT_CONFIG -DOTB_USE_QT4:BOOL=ON)
+      set(OTB_USE_QT4 ON)
       list(APPEND ${proj}_DEPENDENCIES QT4)
     else(UNIX)
        #TODO: use must have Qt4 
        message(STATUS "  Qt4 is not built by SuperBuild. You need to install it via package manager.")
-      set(OTB_SB_WRAP_QT_CONFIG -DOTB_USE_QT4:BOOL=OFF)
+      set(OTB_USE_QT4 OFF)
     endif()
   endif()
 else()
-  set(OTB_SB_WRAP_QT_CONFIG -DOTB_USE_QT4:BOOL=OFF)
+  set(OTB_USE_QT4 OFF)
 endif()
 
 if(USE_SYSTEM_GDAL)
@@ -174,9 +174,8 @@ ExternalProject_Add(${proj}
       -DOTB_USE_MUPARSER:BOOL=ON
       -DOTB_USE_MUPARSERX:BOOL=ON
       -DOTB_USE_OPENCV:BOOL=ON
-      -DOTB_USE_QT4:BOOL=ON
+      -DOTB_USE_QT4:BOOL=${OTB_USE_QT4}
       -DOTB_USE_SIFTFAST:BOOL=ON
-      ${OTB_SB_WRAP_QT_CONFIG}
       ${OTB_SB_ITK_CONFIG}
       ${OTB_SB_LIBKML_CONFIG}
       ${OTB_SB_OPENCV_CONFIG}
