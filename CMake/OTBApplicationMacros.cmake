@@ -13,7 +13,7 @@ macro(otb_create_application)
    # Do not output in the standard lib folder where all shared libs goes.
    # This is to avoid the application factory to look into each and every shared lib
    # for itkLoad symbol
-   set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/lib/otb/applications)
+   set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications)
 
    # Remove the usual 'lib' prefix to make it clear it is a plugin
    # and not a shared library to link against
@@ -50,11 +50,11 @@ macro(otb_create_application)
       if (WIN32)
         set(SCRIPT_CLI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbcli_app.bat.in)
         set(SCRIPT_CLI_INTERMEDIATE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli_${APPLICATION_NAME}.bat)
-        set(SCRIPT_CLI_INSTALLABLE ${APPLICATION_BINARY_PATH}/otbcli_${APPLICATION_NAME}.bat)
+        set(SCRIPT_CLI_INSTALLABLE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/otbcli_${APPLICATION_NAME}.bat)
       else()
         set(SCRIPT_CLI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbcli_app.sh.in)
         set(SCRIPT_CLI_INTERMEDIATE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli_${APPLICATION_NAME})
-        set(SCRIPT_CLI_INSTALLABLE ${APPLICATION_BINARY_PATH}/otbcli_${APPLICATION_NAME})
+        set(SCRIPT_CLI_INSTALLABLE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/otbcli_${APPLICATION_NAME})
       endif()
 
       if (EXISTS ${SCRIPT_CLI_SOURCE})
@@ -65,7 +65,7 @@ macro(otb_create_application)
 
           # Copy it next to the application shared lib, and give executable rights
           file(COPY ${SCRIPT_CLI_INTERMEDIATE}
-               DESTINATION ${APPLICATION_BINARY_PATH}
+               DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
                FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
           # Install a version of this script if we are inside the OTB build
@@ -77,11 +77,11 @@ macro(otb_create_application)
       if (WIN32)
         set(SCRIPT_GUI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbgui_app.bat.in)
         set(SCRIPT_GUI_INTERMEDIATE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui_${APPLICATION_NAME}.bat)
-        set(SCRIPT_GUI_INSTALLABLE ${APPLICATION_BINARY_PATH}/otbgui_${APPLICATION_NAME}.bat)
+        set(SCRIPT_GUI_INSTALLABLE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/otbgui_${APPLICATION_NAME}.bat)
       else()
         set(SCRIPT_GUI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbgui_app.sh.in)
         set(SCRIPT_GUI_INTERMEDIATE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui_${APPLICATION_NAME})
-        set(SCRIPT_GUI_INSTALLABLE ${APPLICATION_BINARY_PATH}/otbgui_${APPLICATION_NAME})
+        set(SCRIPT_GUI_INSTALLABLE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/otbgui_${APPLICATION_NAME})
       endif()
 
       if (EXISTS ${SCRIPT_GUI_SOURCE})
@@ -92,7 +92,7 @@ macro(otb_create_application)
 
           # Copy it next to the application shared lib, and give executable rights
           file(COPY ${SCRIPT_GUI_INTERMEDIATE}
-               DESTINATION ${APPLICATION_BINARY_PATH}
+               DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
                FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
           # Install a version of this script if we are inside the OTB build

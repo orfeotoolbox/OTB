@@ -89,3 +89,39 @@ target_link_libraries(otbApplicationLauncherQt
   ${OTBQt4_LIBRARIES}
   )
 otb_module_target(otbApplicationLauncherQt)
+
+# Where we will install the script in the build tree
+get_target_property(GUI_OUPUT_DIR otbApplicationLauncherQt RUNTIME_OUTPUT_DIRECTORY)
+
+# Generate a script in the build dir, next to the gui launcher
+# Need a two-step process since configure_file don't support permissions
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts)
+
+
+if (WIN32)
+configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbgui.bat.in
+                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbgui.bat
+                @ONLY )
+file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbgui.bat
+     DESTINATION ${GUI_OUPUT_DIR}
+     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
+# TODO : test if NO_INSTALL is set
+install(PROGRAMS ${GUI_OUPUT_DIR}/otbgui.bat
+        DESTINATION ${OTBQtWidget_INSTALL_RUNTIME_DIR}
+        COMPONENT Runtime)
+
+else()
+configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbgui.sh.in
+                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbgui
+                @ONLY )
+file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbgui
+     DESTINATION ${GUI_OUPUT_DIR}
+     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
+# TODO : test if NO_INSTALL is set
+install(PROGRAMS ${GUI_OUPUT_DIR}/otbgui
+        DESTINATION ${OTBQtWidget_INSTALL_RUNTIME_DIR}
+        COMPONENT Runtime)
+
+endif()
