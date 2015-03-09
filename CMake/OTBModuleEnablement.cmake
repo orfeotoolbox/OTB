@@ -170,10 +170,14 @@ foreach(otb-module ${OTB_MODULES_ALL})
 
     # We will sort modules according to their dependency graph,
     # to enable them in order. To solve the modules dependency graph,
-    # we join both DEPENDS and OPTIONAL_DEPENDS
+    # we join both DEPENDS and OPTIONAL_DEPENDS (if enabled)
     set(OTB_MODULE_${otb-module}_DEPENDS_FOR_SORT "")
     list(APPEND OTB_MODULE_${otb-module}_DEPENDS_FOR_SORT ${OTB_MODULE_${otb-module}_DEPENDS})
-    list(APPEND OTB_MODULE_${otb-module}_DEPENDS_FOR_SORT ${OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS})
+    foreach(opt-dep ${OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS})
+      if(${opt-dep}_ENABLED)
+        list(APPEND OTB_MODULE_${otb-module}_DEPENDS_FOR_SORT ${opt-dep})
+      endif()
+    endforeach()
   else()
     list(APPEND OTB_MODULES_DISABLED ${otb-module})
   endif()
