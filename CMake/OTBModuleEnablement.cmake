@@ -145,7 +145,7 @@ endforeach()
 
 # Filter out the ENABLED modules using the OTB_USE_XXX options
 macro(otb_module_disable otb-module _disabled_by)
-  if(NOT ${otb-module}_IS_TEST)
+  if(NOT ${otb-module}_IS_TEST AND ${otb-module}_ENABLED)
     message(STATUS "Disabled ${otb-module} because ${_disabled_by} is OFF")
   endif()
   set(${otb-module}_ENABLED 0)
