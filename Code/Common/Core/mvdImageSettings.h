@@ -164,6 +164,14 @@ public:
    */
   inline double GetValue() const;
 
+  /**
+   */
+  inline void SetAlpha( double );
+
+  /**
+   */
+  inline double GetAlpha() const;
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
@@ -214,6 +222,10 @@ private:
   /**
    */
   double m_Value;
+
+  /**
+   */
+  double m_Alpha;
 };
 
 } // end namespace 'mvd'.
@@ -374,6 +386,26 @@ ImageSettings
 ::GetValue() const
 {
   return m_Value;
+}
+
+/*****************************************************************************/
+inline
+void
+ImageSettings
+::SetAlpha( double alpha )
+{
+  m_Alpha = alpha;
+
+  SetModified();
+}
+
+/*****************************************************************************/
+inline
+double
+ImageSettings
+::GetAlpha() const
+{
+  return m_Alpha;
 }
 
 } // end namespace 'mvd'

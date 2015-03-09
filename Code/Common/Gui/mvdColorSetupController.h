@@ -205,6 +205,10 @@ private slots:
    */
   void OnGrayscaleActivated( bool activated );
 
+  /**
+   */
+  void OnAlphaValueChanged( double );
+
 };
 
 } // end namespace 'mvd'.

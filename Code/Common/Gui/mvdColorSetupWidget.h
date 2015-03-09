@@ -176,6 +176,14 @@ public:
    */
   int GetCurrentGrayIndex() const;
 
+  /**
+   */
+  void SetAlpha( double );
+
+  /**
+   */
+  double GetAlpha() const;
+
 //
 // SIGNALS.
 signals:
@@ -204,6 +212,10 @@ signals:
    */
   void GrayscaleActivated( bool activated );
 
+  /**
+   */
+  void AlphaValueChanged( double );
+
 //
 // Protected methods.
 protected:
@@ -215,6 +227,13 @@ protected:
 //
 // Private methods.
 private:
+  /**
+   */
+  double ToAlpha( int ) const;
+
+  /**
+   */
+  int FromAlpha( double ) const;
 
 //
 // Private attributes.
@@ -296,6 +315,10 @@ private slots:
   {
     emit GrayscaleActivated( activated );
   }
+
+  /**
+   */
+  void on_alphaSlider_valueChanged( int );
 };
 
 } // end namespace 'mvd'

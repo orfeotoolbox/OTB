@@ -84,7 +84,8 @@ ImageSettings
   m_IsApplied( false ),
   m_Effect( EFFECT_NORMAL ),
   m_Size( 16 ),
-  m_Value( 0.0 )
+  m_Value( 0.0 ),
+  m_Alpha( 1.0 )
 {
 }
 

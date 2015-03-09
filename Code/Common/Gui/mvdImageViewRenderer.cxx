@@ -522,6 +522,12 @@ ImageViewRenderer
         //
         // Apply shader properties.
         //
+        // qDebug()
+        //   << "alpha:" << settings.GetAlpha()
+        //   << "'" << it->first.c_str() << "'";
+
+        shader->SetAlpha( settings.GetAlpha() );
+
         switch( settings.GetEffect() )
           {
           case ImageSettings::EFFECT_CHESSBOARD:

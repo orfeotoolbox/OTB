@@ -186,9 +186,71 @@ ColorSetupWidget
   return m_UI->wComboBox->currentIndex();
 }
 
+/*****************************************************************************/
+void
+ColorSetupWidget
+::SetAlpha( double value )
+{
+  assert( m_UI!=NULL );
+
+  m_UI->alphaSlider->setValue( FromAlpha( value ) );
+}
+
+/*****************************************************************************/
+double
+ColorSetupWidget
+::GetAlpha() const
+{
+  assert( m_UI!=NULL );
+
+  return ToAlpha( m_UI->alphaSlider->value() );
+}
+
+/*****************************************************************************/
+double
+ColorSetupWidget
+::ToAlpha( int value ) const
+{
+  assert( m_UI!=NULL );
+
+  return
+    static_cast< double >( value - m_UI->alphaSlider->minimum() ) /
+    static_cast< double >( m_UI->alphaSlider->maximum() - m_UI->alphaSlider->minimum() );
+}
+
+/*******************************************************************************/
+int
+ColorSetupWidget
+::FromAlpha( double alpha ) const
+{
+  assert( m_UI!=NULL );
+
+  if( alpha>=1.0 )
+    alpha = m_UI->alphaSlider->maximum();
+
+  else if( alpha<=0.0 )
+    alpha = m_UI->alphaSlider->minimum();
+
+  else
+    alpha =
+      static_cast< double >( m_UI->alphaSlider->minimum() ) +
+      alpha * static_cast< double >( m_UI->alphaSlider->maximum() -
+                                     m_UI->alphaSlider->minimum() );
+
+  return static_cast< int >( alpha );
+}
+
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+void
+ColorSetupWidget
+::on_alphaSlider_valueChanged( int value )
+{
+  // qDebug() << "on_alphaSlider_valueChanged(" << value << ")";
+
+  emit AlphaValueChanged( ToAlpha( value ) );
+}
 
 /*******************************************************************************/
 

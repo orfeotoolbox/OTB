@@ -100,6 +100,14 @@ ColorSetupController
     SLOT( OnGrayscaleActivated( bool ) )
   );
 
+  QObject::connect(
+    colorSetupWidget,
+    SIGNAL( AlphaValueChanged( double ) ),
+    // to:
+    this,
+    SLOT( OnAlphaValueChanged( double ) )
+  );
+
   //
   // Connect controller to model.
   QObject::connect(
@@ -129,7 +137,7 @@ ColorSetupController
   QObject::disconnect(
     colorSetupWidget,
     SIGNAL( CurrentRgbIndexChanged( RgbwChannel, int ) ),
-    // to:
+    // from:
     this,
     SLOT( OnCurrentRgbIndexChanged( RgbwChannel, int ) )
   );
@@ -137,7 +145,7 @@ ColorSetupController
   QObject::disconnect(
     colorSetupWidget,
     SIGNAL( CurrentGrayIndexChanged( int ) ),
-    // to:
+    // from:
     this,
     SLOT( OnCurrentGrayIndexChanged( int ) )
   );
@@ -145,9 +153,17 @@ ColorSetupController
   QObject::disconnect(
     colorSetupWidget,
     SIGNAL( GrayscaleActivated( bool ) ),
-    // to:
+    // from:
     this,
     SLOT( OnGrayscaleActivated( bool ) )
+  );
+
+  QObject::disconnect(
+    colorSetupWidget,
+    SIGNAL( AlphaValueChanged( double ) ),
+    // from:
+    this,
+    SLOT( OnAlphaValueChanged( double ) )
   );
 }
 
@@ -366,5 +382,19 @@ ColorSetupController
 }
 
 /*******************************************************************************/
+void
+ColorSetupController
+::OnAlphaValueChanged( double alpha )
+{
+  // Get image-model.
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  // Change grayscale-mode activation state.
+  imageModel->GetSettings().SetAlpha( alpha );
+
+  // Signal model has been updated.
+  emit ModelUpdated();
+}
 
 } // end namespace 'mvd'
