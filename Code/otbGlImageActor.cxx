@@ -126,7 +126,14 @@ void GlImageActor::Initialize(const std::string & filename)
   m_Spacing = m_FileReader->GetOutput()->GetSpacing();
   m_NumberOfComponents = m_FileReader->GetOutput()->GetNumberOfComponentsPerPixel();
 
-  m_AvailableResolutions = m_FileReader->GetAvailableResolutions();
+  unsigned int ovrCount = m_FileReader->GetOverviewsCount();
+
+  m_AvailableResolutions.clear();
+
+  for(unsigned int i =1; i <= ovrCount;++i)
+    {
+    m_AvailableResolutions.push_back(ovrCount);
+    }
 
   m_CurrentResolution = m_AvailableResolutions.front();
 
