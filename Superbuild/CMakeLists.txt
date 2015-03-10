@@ -82,17 +82,17 @@ endif()
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" OFF)
 option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
-include(External_OTB)
+include(External_otb)
 
 if(BUILD_ICE)
   option(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)" OFF)
-  include(External_Ice)
+  include(External_ice)
 endif()
 
 if(BUILD_MONTEVERDI2)
-  include(External_Monteverdi2)
+  include(External_monteverdi2)
 endif()
 
 if(BUILD_MONTEVERDI)
-  include(External_Monteverdi)
+  include(External_monteverdi)
 endif()
