@@ -73,7 +73,9 @@ VectorImageModel
   m_Image(),
   m_ImageFileReader(),
   m_Settings(),
-  m_Filename()
+  m_Filename(),
+  m_LodCount( -1 ),
+  m_GenericRSTransform()
 {
 }
 
@@ -118,14 +120,7 @@ VectorImageModel
   m_ImageFileReader->UpdateOutputInformation();
 
   // Retrieve the list of Lod from file
-  unsigned int ovrCount = m_ImageFileReader->GetOverviewsCount();
-
-  m_AvailableLod.clear();
-
-  for(unsigned int i =1; i <= ovrCount;++i)
-    {
-    m_AvailableLod.push_back(ovrCount);
-    }
+  m_LodCount = m_ImageFileReader->GetOverviewsCount();
 
   // Remember native largest region.
   m_NativeLargestRegion =
@@ -252,17 +247,20 @@ VectorImageModel
   typedef otb::GDALOverviewsBuilder FilterType;
   FilterType::Pointer filter = FilterType::New();
 
-  //m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
+  assert( m_LodCount!=-1 );
+  // m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
 
   std::string tempfilename( ToStdString( m_Filename ) );
 
   filter->SetInputFileName(tempfilename);
   filter->SetResamplingMethod(otb::AVERAGE);
   filter->SetResolutionFactor(4);
-  assert( m_ImageFileReader->GetAvailableResolutions().size()==m_AvailableLod.size() );
+
+  assert( m_ImageFileReader->GetOverviewsCount()==m_LodCount );
+
   filter->SetNbOfResolutions(
-    m_AvailableLod.size() > 1
-    ? m_AvailableLod.size() / 2
+    GetNbLod() > 1
+    ? GetNbLod() / 2
     : 1
   );
 
@@ -454,27 +452,29 @@ VectorImageModel::ComputeBestLod( int width, int height ) const
 }
 
 /*****************************************************************************/
-CountType
-VectorImageModel::ComputeBestLod(const double zoomFactor) const
+unsigned int
+VectorImageModel::ComputeBestLod( double zoomFactor ) const
 {
-  int inverseZoomFactor =  static_cast<int>((1/zoomFactor + 0.5));
-  CountType bestLod = this->Closest(inverseZoomFactor, m_AvailableLod);
-  return bestLod;
+  return this->Closest(
+    static_cast< int >( (1 / zoomFactor + 0.5) ),
+    m_LodCount
+  );
 }
 
 /*****************************************************************************/
 unsigned int 
-VectorImageModel::Closest(double invZoomfactor, const std::vector<unsigned int> & res) 
+VectorImageModel::Closest( double invZoomfactor,
+                           unsigned int lodCount )
 {
-  double minDist       = 50000.;
+  double minDist = 50000.;
   unsigned int closest = 0;
 
   // Compute the diff and keep the index that minimize the distance
-  for (unsigned int idx = 0; idx < res.size(); idx++)
+  for (unsigned int idx = 0; idx < lodCount; idx++)
     {
-    double diff = vcl_abs((double)(1<<idx) - invZoomfactor);
+    double diff = vcl_abs( static_cast< double >( 1 << idx ) - invZoomfactor );
 
-    if (diff < minDist)
+    if( diff < minDist )
       {
       minDist = diff;
       closest = idx;
@@ -515,7 +515,7 @@ CountType
 VectorImageModel
 ::GetNbLod() const
 {
-  return m_AvailableLod.size();
+  return m_LodCount;
 }
 
 /*****************************************************************************/

@@ -546,8 +546,8 @@ private:
     */
   static
     unsigned int
-    Closest(double invZoomfactor,
-	    const std::vector<unsigned int> & res);
+    Closest( double invZoomfactor,
+             unsigned int lodCount );
 
   /** 
     * helper to setup the lod image using a width/height or a zoom factor
@@ -584,8 +584,8 @@ private:
   QString m_Filename;
 
   /** List of all Level of detail (Resolution) available from the file */
-  UIntVector m_AvailableLod;
-  
+  CountType m_LodCount;
+
   //  Generic RS Transform to get lat/long coordinates 
   otb::GenericRSTransform<>::Pointer m_GenericRSTransform;
 
