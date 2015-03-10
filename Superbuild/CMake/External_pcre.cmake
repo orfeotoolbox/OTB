@@ -2,6 +2,9 @@ message(STATUS "Setup pcre...")
 
 set(proj PCRE)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_PCRE  ON)
 
 option(USE_SYSTEM_PCRE "  Use a system build of pcre." ${DEFAULT_USE_SYSTEM_PCRE})
@@ -39,4 +42,5 @@ else()
   endif()
   
   message(STATUS "  Using pcre SuperBuild version")
+endif()
 endif()

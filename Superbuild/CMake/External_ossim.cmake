@@ -2,6 +2,9 @@ message(STATUS "Setup Ossim...")
 
 set(proj OSSIM)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_OSSIM  OFF)
 
 # OSGeo4W provides an "ossim" package : use it otherwise if it is installed and not used by OTB
@@ -96,3 +99,4 @@ else()
   message(STATUS "  Using OSSIM SuperBuild version")
 endif()
 
+endif()

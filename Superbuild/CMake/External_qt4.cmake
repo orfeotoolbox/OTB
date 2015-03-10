@@ -2,6 +2,9 @@ message(STATUS "Setup Qt4 ...")
 
 set(proj QT4)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_QT4  ON)
 
 option(USE_SYSTEM_QT4 "  Use a system build of Qt4." ${DEFAULT_USE_SYSTEM_QT4})
@@ -61,4 +64,5 @@ else()
 
   message(STATUS "  Using Qt4 SuperBuild version")
 
+endif()
 endif()

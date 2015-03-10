@@ -2,6 +2,9 @@ message(STATUS "Setup libtiff...")
 
 set(proj TIFF)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_TIFF  OFF)
 
 SETUP_SYSTEM_LIBRARY(PROJECT ${proj} DOC "  Use a system build of libtiff.")
@@ -94,4 +97,5 @@ else()
   endif()
   
   message(STATUS "  Using libtiff SuperBuild version")
+endif()
 endif()

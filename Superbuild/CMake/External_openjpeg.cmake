@@ -2,6 +2,9 @@ message(STATUS "Setup OpenJpeg...")
 
 set(proj OPENJPEG)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_OPENJPEG  OFF)
 
 option(USE_SYSTEM_OPENJPEG "  Use a system build of OpenJpeg." ${DEFAULT_USE_SYSTEM_OPENJPEG})
@@ -57,4 +60,5 @@ else()
   message(STATUS "  Using OpenJPEG SuperBuild version")
 
  
+endif()
 endif()

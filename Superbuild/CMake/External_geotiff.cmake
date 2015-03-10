@@ -2,6 +2,9 @@ message(STATUS "Setup libgeotiff...")
 
 set(proj GEOTIFF)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_GEOTIFF  OFF)
 
 option(USE_SYSTEM_GEOTIFF "  Use a system build of libgeotiff." ${DEFAULT_USE_SYSTEM_GEOTIFF})
@@ -140,4 +143,5 @@ else()
   endif()
   
   message(STATUS "  Using GeoTIFF SuperBuild version")
+endif()
 endif()

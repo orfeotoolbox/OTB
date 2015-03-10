@@ -2,6 +2,9 @@ message(STATUS "Setup GDAL...")
 
 set(proj GDAL)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_GDAL  OFF)
 
 option(USE_SYSTEM_GDAL "  Use a system build of GDAL." ${DEFAULT_USE_SYSTEM_GDAL})
@@ -150,4 +153,5 @@ else()
   
   message(STATUS "  Using GDAL SuperBuild version")
   
+endif()
 endif()

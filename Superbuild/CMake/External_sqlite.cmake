@@ -2,6 +2,9 @@ message(STATUS "Setup SQLite...")
 
 set(proj SQLITE)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_SQLITE  OFF)
 
 option(USE_SYSTEM_SQLITE "  Use a system build of SQLite." ${DEFAULT_USE_SYSTEM_SQLITE})
@@ -54,4 +57,5 @@ else()
   
   
   message(STATUS "  Using SQLite SuperBuild version")
+endif()
 endif()

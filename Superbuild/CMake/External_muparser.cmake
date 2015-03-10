@@ -2,6 +2,9 @@ message(STATUS "Setup muParser ...")
 
 set(proj MUPARSER)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_MUPARSER  OFF)
 
 option(USE_SYSTEM_MUPARSER "  Use a system build of muParser." ${DEFAULT_USE_SYSTEM_MUPARSER})
@@ -30,4 +33,5 @@ else()
   
   message(STATUS "  Using muParser SuperBuild version")
 
+endif()
 endif()

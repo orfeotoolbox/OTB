@@ -2,6 +2,9 @@ message(STATUS "Setup TinyXML ...")
 
 set(proj TINYXML)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_TINYXML  OFF)
 
 option(USE_SYSTEM_TINYXML "  Use a system build of TinyXML." ${DEFAULT_USE_SYSTEM_TINYXML})
@@ -29,4 +32,5 @@ else()
     )
   
   message(STATUS "  Using TinyXML SuperBuild version")
+endif()
 endif()

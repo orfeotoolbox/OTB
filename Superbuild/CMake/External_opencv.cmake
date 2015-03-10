@@ -2,6 +2,9 @@ message(STATUS "Setup OpenCV...")
 
 set(proj OPENCV)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_OPENCV OFF)
 
 option(USE_SYSTEM_OPENCV "Use a system build of OpenCV." ${DEFAULT_USE_SYSTEM_OPENCV})
@@ -72,4 +75,5 @@ else()
     )
   
   message(STATUS "  Using OpenCV SuperBuild version")
+endif()
 endif()

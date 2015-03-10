@@ -2,6 +2,9 @@ message(STATUS "Setup ITK...")
 
 set(proj ITK)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 # Use an external version of ITK by default except on windows (ITK is not packaged in OSGeo4W)
 set(DEFAULT_USE_SYSTEM_ITK OFF)
 
@@ -193,4 +196,5 @@ else()
   #   ${ITK_SB_SRC}/Modules/ThirdParty/KWSys/src/KWSys/hashtable.hxx.in COPYONLY)")
   
   message(STATUS "  Using ITK SuperBuild version")
+endif()
 endif()

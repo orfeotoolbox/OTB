@@ -2,6 +2,9 @@ message(STATUS "Setup cURL ...")
 
 set(proj CURL)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_CURL  ON)
 
 option(USE_SYSTEM_CURL "  Use a system build of cURL." ${DEFAULT_USE_SYSTEM_CURL})
@@ -56,4 +59,5 @@ else()
   endif()
   message(STATUS "  Using cURL SuperBuild version")
 
+endif()
 endif()

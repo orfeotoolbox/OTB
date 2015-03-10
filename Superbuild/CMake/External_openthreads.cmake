@@ -2,6 +2,9 @@ message(STATUS "Setup OpenThreads ...")
 
 set(proj OPENTHREADS)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_OPENTHREADS  OFF)
 
 option(USE_SYSTEM_OPENTHREADS "  Use a system build of OpenThread." ${DEFAULT_USE_SYSTEM_OPENTHREADS})
@@ -55,4 +58,5 @@ else()
   
   message(STATUS "  Using OpenThreads SuperBuild version")
 
+endif()
 endif()

@@ -2,6 +2,9 @@ message(STATUS "Setup FFTW ...")
 
 set(proj FFTW)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_FFTW  OFF)
 
 option(USE_SYSTEM_FFTW "  Use a system build of FFTW." ${DEFAULT_USE_SYSTEM_FFTW})
@@ -74,4 +77,5 @@ else()
   
 
 
+endif()
 endif()

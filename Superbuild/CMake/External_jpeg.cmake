@@ -2,6 +2,9 @@ message(STATUS "Setup libjpeg...")
 
 set(proj JPEG)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_JPEG  OFF)
 
 option(USE_SYSTEM_JPEG "  Use a system build of libjpeg." ${DEFAULT_USE_SYSTEM_JPEG})
@@ -63,4 +66,5 @@ else()
   endif()
   
   message(STATUS "  Using libjpeg SuperBuild version")
+endif()
 endif()

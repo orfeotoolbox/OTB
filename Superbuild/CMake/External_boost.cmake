@@ -2,6 +2,9 @@ message(STATUS "Setup Boost ...")
 
 set(proj BOOST)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_BOOST  ON)
 
 option(USE_SYSTEM_BOOST "  Use a system build of Boost." ${DEFAULT_USE_SYSTEM_BOOST})
@@ -119,4 +122,5 @@ else()
     
   endif() #end else MSVC
   
+endif()
 endif()

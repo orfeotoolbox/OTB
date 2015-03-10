@@ -2,6 +2,9 @@ message(STATUS "Setup GEOS ...")
 
 set(proj GEOS)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_GEOS  OFF)
 
 option(USE_SYSTEM_GEOS "  Use a system build of GEOS." ${DEFAULT_USE_SYSTEM_GEOS})
@@ -31,3 +34,4 @@ else()
   message(STATUS "  Using GEOS SuperBuild version")
   
  endif()
+endif()

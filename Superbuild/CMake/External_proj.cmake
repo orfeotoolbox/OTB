@@ -2,6 +2,9 @@ message(STATUS "Setup Proj.4 ...")
 
 set(proj PROJ)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_PROJ  OFF)
 
 option(USE_SYSTEM_PROJ "  Use a system build of Proj.4." ${DEFAULT_USE_SYSTEM_PROJ})
@@ -73,4 +76,5 @@ else()
   endif()
   
   message(STATUS "  Using Proj4 SuperBuild version")
+endif()
 endif()

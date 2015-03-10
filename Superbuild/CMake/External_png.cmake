@@ -2,6 +2,9 @@ message(STATUS "Setup libpng...")
 
 set(proj PNG)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_PNG  ON)
 
 option(USE_SYSTEM_PNG "  Use a system build of libtiff." ${DEFAULT_USE_SYSTEM_PNG})
@@ -59,4 +62,5 @@ else()
     endif()
     
   message(STATUS "  Using libpng SuperBuild version")
+endif()
 endif()

@@ -2,6 +2,9 @@ message(STATUS "Setup expat ...")
 
 set(proj EXPAT)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_EXPAT  OFF)
 
 option(USE_SYSTEM_EXPAT "  Use a system build of expat." ${DEFAULT_USE_SYSTEM_EXPAT})
@@ -30,4 +33,5 @@ else()
     
   message(STATUS "  Using Expat SuperBuild version")
 
+endif()
 endif()

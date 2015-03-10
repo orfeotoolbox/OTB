@@ -2,6 +2,9 @@ message(STATUS "Setup swig...")
 
 set(proj SWIG)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_SWIG  ON)
 
 option(USE_SYSTEM_SWIG "  Use a system build of swig." ${DEFAULT_USE_SYSTEM_SWIG})
@@ -84,4 +87,5 @@ else()
   endif()
   
   message(STATUS "  Using swig SuperBuild version")
+endif()
 endif()

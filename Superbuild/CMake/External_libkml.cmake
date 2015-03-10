@@ -2,6 +2,9 @@ message(STATUS "Setup libKML ...")
 
 set(proj LIBKML)
 
+if(NOT __EXTERNAL_${proj}__)
+set(__EXTERNAL_${proj}__ 1)
+
 set(DEFAULT_USE_SYSTEM_LIBKML  OFF)
 
 option(USE_SYSTEM_LIBKML "  Use a system build of libKML." ${DEFAULT_USE_SYSTEM_LIBKML})
@@ -58,4 +61,5 @@ else()
   
   message(STATUS "  Using libKML SuperBuild version")
   
+endif()
 endif()
