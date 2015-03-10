@@ -247,7 +247,7 @@ VectorImageModel
   typedef otb::GDALOverviewsBuilder FilterType;
   FilterType::Pointer filter = FilterType::New();
 
-  assert( m_LodCount!=-1 );
+  assert( m_LodCount!=static_cast< unsigned int >( -1 ) );
   // m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
 
   std::string tempfilename( ToStdString( m_Filename ) );
