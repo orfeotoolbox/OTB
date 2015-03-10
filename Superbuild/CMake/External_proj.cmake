@@ -1,16 +1,13 @@
-message(STATUS "Setup Proj.4 ...")
-
 set(proj PROJ)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_PROJ  OFF)
-
-option(USE_SYSTEM_PROJ "  Use a system build of Proj.4." ${DEFAULT_USE_SYSTEM_PROJ})
-mark_as_advanced(USE_SYSTEM_PROJ)
+message(STATUS "Setup Proj.4 ...")
 
 if(USE_SYSTEM_PROJ)
+  # TODO : FindPROJ.cmake
+  #find_package ( PROJ REQUIRED )
   message(STATUS "  Using Proj4 system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

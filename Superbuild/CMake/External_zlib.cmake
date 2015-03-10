@@ -1,9 +1,9 @@
-message(STATUS "Setup Zlib ...")
-
 set(proj ZLIB)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
+
+message(STATUS "Setup Zlib ...")
 
 ADD_SYSTEM_PREFIX(PROJECT ${proj} CMAKE_ALIAS ZLIB_ROOT)
 

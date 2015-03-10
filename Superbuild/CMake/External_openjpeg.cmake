@@ -1,16 +1,13 @@
-message(STATUS "Setup OpenJpeg...")
-
 set(proj OPENJPEG)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_OPENJPEG  OFF)
-
-option(USE_SYSTEM_OPENJPEG "  Use a system build of OpenJpeg." ${DEFAULT_USE_SYSTEM_OPENJPEG})
-mark_as_advanced(USE_SYSTEM_OPENJPEG)
+message(STATUS "Setup OpenJpeg...")
 
 if(USE_SYSTEM_OPENJPEG)
+  # TODO : FindOpenJPEG.cmake
+  # find_package ( OpenJPEG REQUIRED )
   message(STATUS "  Using OpenJpeg system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

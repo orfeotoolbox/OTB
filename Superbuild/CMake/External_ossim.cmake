@@ -1,23 +1,20 @@
-message(STATUS "Setup Ossim...")
-
 set(proj OSSIM)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_OSSIM  OFF)
+message(STATUS "Setup Ossim...")
 
 # OSGeo4W provides an "ossim" package : use it otherwise if it is installed and not used by OTB
 # we get conflicts (because OSGeo4W include dir is included for other dependencies
-if(WIN32)
-  set(DEFAULT_USE_SYSTEM_OSSIM  ON)
-endif()
-
-SETUP_SYSTEM_LIBRARY(PROJECT ${proj} DOC "  Use a system build of Ossim.")
+#if(WIN32)
+#  set(DEFAULT_USE_SYSTEM_OSSIM  ON)
+#endif()
 
 ADD_SYSTEM_LOCATION(PROJECT ${proj} VARIABLES ${proj}_LIBRARY ${proj}_INCLUDE_DIR)
 
 if(USE_SYSTEM_OSSIM)
+  find_package ( Ossim REQUIRED )
   message(STATUS "  Using OSSIM system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

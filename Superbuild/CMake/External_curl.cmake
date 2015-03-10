@@ -1,16 +1,12 @@
-message(STATUS "Setup cURL ...")
-
 set(proj CURL)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_CURL  ON)
-
-option(USE_SYSTEM_CURL "  Use a system build of cURL." ${DEFAULT_USE_SYSTEM_CURL})
-mark_as_advanced(USE_SYSTEM_CURL)
+message(STATUS "Setup cURL ...")
 
 if(USE_SYSTEM_CURL)
+  find_package ( CURL REQUIRED )
   message(STATUS "  Using cURL system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

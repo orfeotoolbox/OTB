@@ -1,16 +1,12 @@
-message(STATUS "Setup Qt4 ...")
-
 set(proj QT4)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_QT4  ON)
-
-option(USE_SYSTEM_QT4 "  Use a system build of Qt4." ${DEFAULT_USE_SYSTEM_QT4})
-mark_as_advanced(USE_SYSTEM_QT4)
+message(STATUS "Setup Qt4 ...")
 
 if(USE_SYSTEM_QT4)
+  find_package ( QT4 REQUIRED )
   message(STATUS "  Using Qt4 system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

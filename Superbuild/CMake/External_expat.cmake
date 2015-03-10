@@ -1,16 +1,12 @@
-message(STATUS "Setup expat ...")
-
 set(proj EXPAT)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_EXPAT  OFF)
-
-option(USE_SYSTEM_EXPAT "  Use a system build of expat." ${DEFAULT_USE_SYSTEM_EXPAT})
-mark_as_advanced(USE_SYSTEM_EXPAT)
+message(STATUS "Setup expat ...")
 
 if(USE_SYSTEM_EXPAT)
+  find_package ( EXPAT REQUIRED )
   message(STATUS "  Using expat system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

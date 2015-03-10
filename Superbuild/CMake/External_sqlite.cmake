@@ -1,16 +1,13 @@
-message(STATUS "Setup SQLite...")
-
 set(proj SQLITE)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_SQLITE  OFF)
-
-option(USE_SYSTEM_SQLITE "  Use a system build of SQLite." ${DEFAULT_USE_SYSTEM_SQLITE})
-mark_as_advanced(USE_SYSTEM_SQLITE)
+message(STATUS "Setup SQLite...")
 
 if(USE_SYSTEM_SQLITE)
+  # TODO
+  #find_package ( SQLite REQUIRED )
   message(STATUS "  Using SQLite system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

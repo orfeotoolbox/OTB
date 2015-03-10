@@ -1,16 +1,12 @@
-message(STATUS "Setup GDAL...")
-
 set(proj GDAL)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_GDAL  OFF)
-
-option(USE_SYSTEM_GDAL "  Use a system build of GDAL." ${DEFAULT_USE_SYSTEM_GDAL})
-mark_as_advanced(USE_SYSTEM_GDAL)
+message(STATUS "Setup GDAL...")
 
 if(USE_SYSTEM_GDAL)
+  find_package ( GDAL REQUIRED )
   message(STATUS "  Using GDAL system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

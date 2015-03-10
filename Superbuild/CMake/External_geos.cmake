@@ -1,16 +1,13 @@
-message(STATUS "Setup GEOS ...")
-
 set(proj GEOS)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_GEOS  OFF)
-
-option(USE_SYSTEM_GEOS "  Use a system build of GEOS." ${DEFAULT_USE_SYSTEM_GEOS})
-mark_as_advanced(USE_SYSTEM_GEOS)
+message(STATUS "Setup GEOS ...")
 
 if(USE_SYSTEM_GEOS)
+  # TODO : FindGEOS.cmake
+  #find_package ( GEOS REQUIRED )
   message(STATUS "  Using GEOS system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

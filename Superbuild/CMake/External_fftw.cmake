@@ -1,16 +1,13 @@
-message(STATUS "Setup FFTW ...")
-
 set(proj FFTW)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_FFTW  OFF)
-
-option(USE_SYSTEM_FFTW "  Use a system build of FFTW." ${DEFAULT_USE_SYSTEM_FFTW})
-mark_as_advanced(USE_SYSTEM_FFTW)
+message(STATUS "Setup FFTW ...")
 
 if(USE_SYSTEM_FFTW)
+  # TODO : use ITK's FindFFTW
+  find_package ( FFTW REQUIRED )
   message(STATUS "  Using FFTW system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

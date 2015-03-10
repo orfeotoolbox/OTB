@@ -1,17 +1,12 @@
-message(STATUS "Setup ITK...")
-
 set(proj ITK)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-# Use an external version of ITK by default except on windows (ITK is not packaged in OSGeo4W)
-set(DEFAULT_USE_SYSTEM_ITK OFF)
-
-option(USE_SYSTEM_ITK "Use a system build of ITK." ${DEFAULT_USE_SYSTEM_ITK})
-mark_as_advanced(USE_SYSTEM_ITK)
+message(STATUS "Setup ITK...")
 
 if(USE_SYSTEM_ITK)
+  find_package ( ITK REQUIRED )
   message(STATUS "  Using ITK system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

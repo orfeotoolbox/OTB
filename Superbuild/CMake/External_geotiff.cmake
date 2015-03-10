@@ -1,16 +1,12 @@
-message(STATUS "Setup libgeotiff...")
-
 set(proj GEOTIFF)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_GEOTIFF  OFF)
-
-option(USE_SYSTEM_GEOTIFF "  Use a system build of libgeotiff." ${DEFAULT_USE_SYSTEM_GEOTIFF})
-mark_as_advanced(USE_SYSTEM_GEOTIFF)
+message(STATUS "Setup libgeotiff...")
 
 if(USE_SYSTEM_GEOTIFF)
+  find_package ( GeoTIFF REQUIRED )
   message(STATUS "  Using libgeotiff system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

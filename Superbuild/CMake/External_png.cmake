@@ -1,17 +1,13 @@
-message(STATUS "Setup libpng...")
-
 set(proj PNG)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_PNG  ON)
-
-option(USE_SYSTEM_PNG "  Use a system build of libtiff." ${DEFAULT_USE_SYSTEM_PNG})
-mark_as_advanced(USE_SYSTEM_PNG)
+message(STATUS "Setup libpng...")
 
 if(USE_SYSTEM_PNG)
-  message(STATUS "  Using libtiff system version")
+  find_package ( PNG REQUIRED )
+  message(STATUS "  Using libpng system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   

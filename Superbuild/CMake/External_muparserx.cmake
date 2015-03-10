@@ -1,16 +1,12 @@
-message(STATUS "Setup muParserX ...")
-
 set(proj MUPARSERX)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_MUPARSERX  OFF)
-
-option(USE_SYSTEM_MUPARSERX "  Use a system build of muParserX." ${DEFAULT_USE_SYSTEM_MUPARSERX})
-mark_as_advanced(USE_SYSTEM_MUPARSERX)
+message(STATUS "Setup muParserX ...")
 
 if(USE_SYSTEM_MUPARSERX)
+  find_package ( MUPARSERX REQUIRED )
   message(STATUS "  Using muParserX system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

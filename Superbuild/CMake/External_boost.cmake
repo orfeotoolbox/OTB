@@ -1,16 +1,22 @@
-message(STATUS "Setup Boost ...")
-
 set(proj BOOST)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_BOOST  ON)
-
-option(USE_SYSTEM_BOOST "  Use a system build of Boost." ${DEFAULT_USE_SYSTEM_BOOST})
-mark_as_advanced(USE_SYSTEM_BOOST)
+message(STATUS "Setup Boost ...")
 
 if(USE_SYSTEM_BOOST)
+  # Required
+  find_package ( Boost
+    1.35.0
+    REQUIRED
+    )
+  
+  # Optional components
+  find_package ( Boost
+    1.35.0
+    COMPONENTS unit_test_framework
+    )
   message(STATUS "  Using Boost system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

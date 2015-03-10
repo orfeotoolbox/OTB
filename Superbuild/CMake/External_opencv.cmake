@@ -1,16 +1,12 @@
-message(STATUS "Setup OpenCV...")
-
 set(proj OPENCV)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_OPENCV OFF)
-
-option(USE_SYSTEM_OPENCV "Use a system build of OpenCV." ${DEFAULT_USE_SYSTEM_OPENCV})
-mark_as_advanced(USE_SYSTEM_OPENCV)
+message(STATUS "Setup OpenCV...")
 
 if(USE_SYSTEM_OPENCV)
+  find_package ( OpenCV REQUIRED )
   message(STATUS "  Using OpenCV system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

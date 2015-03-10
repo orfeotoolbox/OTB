@@ -1,16 +1,12 @@
-message(STATUS "Setup libjpeg...")
-
 set(proj JPEG)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_JPEG  OFF)
-
-option(USE_SYSTEM_JPEG "  Use a system build of libjpeg." ${DEFAULT_USE_SYSTEM_JPEG})
-mark_as_advanced(USE_SYSTEM_JPEG)
+message(STATUS "Setup libjpeg...")
 
 if(USE_SYSTEM_JPEG)
+  find_package ( JPEG REQUIRED )
   message(STATUS "  Using libjpeg system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

@@ -1,16 +1,12 @@
-message(STATUS "Setup TinyXML ...")
-
 set(proj TINYXML)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_TINYXML  OFF)
-
-option(USE_SYSTEM_TINYXML "  Use a system build of TinyXML." ${DEFAULT_USE_SYSTEM_TINYXML})
-mark_as_advanced(USE_SYSTEM_TINYXML)
+message(STATUS "Setup TinyXML ...")
 
 if(USE_SYSTEM_TINYXML)
+  find_package ( TinyXML REQUIRED )
   message(STATUS "  Using TinyXML system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

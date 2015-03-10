@@ -1,16 +1,12 @@
-message(STATUS "Setup swig...")
-
 set(proj SWIG)
 
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
-set(DEFAULT_USE_SYSTEM_SWIG  ON)
-
-option(USE_SYSTEM_SWIG "  Use a system build of swig." ${DEFAULT_USE_SYSTEM_SWIG})
-mark_as_advanced(USE_SYSTEM_SWIG)
+message(STATUS "Setup swig...")
 
 if(USE_SYSTEM_SWIG)
+  find_package ( SWIG REQUIRED )
   message(STATUS "  Using swig system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
