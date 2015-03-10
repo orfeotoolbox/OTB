@@ -61,8 +61,7 @@ add_library(Monteverdi2_ApplicationsWrapper
 target_link_libraries(Monteverdi2_ApplicationsWrapper
   Monteverdi2_Core
   Monteverdi2_Gui
-  OTBApplicationEngine
-  OTBWrapperQtWidget
+  ${OTB_LIBRARIES}
   ${OPENGL_LIBRARIES}
   Qt4::QtGui
   Qt4::QtOpenGL # Why OpenGL?

@@ -166,6 +166,7 @@ add_library(Monteverdi2_Gui
 #############################################################################
 target_link_libraries(Monteverdi2_Gui
   Monteverdi2_Core
+  ${OTB_LIBRARIES}
   ${ICE_LIBRARIES}
   ${OPENGL_LIBRARIES}
   ${GLEW_LIBRARIES}

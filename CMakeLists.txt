@@ -53,6 +53,16 @@ if(WIN32)
 endif()
 
 #----------------------------------------------------------------------------
+# ITK
+find_package(ITK REQUIRED)
+if(ITK_FOUND)
+  MESSAGE(STATUS "ITK found")
+  include(${ITK_USE_FILE})
+else(ITK_FOUND)
+  message(FATAL_ERROR "ITK not found. Please set ITK_DIR")
+endif(ITK_FOUND)
+
+#----------------------------------------------------------------------------
 # Orfeo ToolBox
 find_package(OTB REQUIRED)
 if(OTB_FOUND)
@@ -125,7 +135,7 @@ endif(Mercurial_FOUND)
 #----------------------------------------------------------------------------
 #Build shared libraries for monteverdi
 #By default, import the option from the OTB configuration
-set(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED_LIBS})
+OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
 #----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
