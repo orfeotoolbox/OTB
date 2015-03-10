@@ -63,3 +63,12 @@ macro(SETUP_SUPERBUILD)
   set(${NEW_SB_PROJECT}_SB_SRC ${CMAKE_BINARY_DIR}/${NEW_SB_PROJECT}/src/${NEW_SB_PROJECT})
   set(${NEW_SB_PROJECT}_SB_CONFIG)
 endmacro(SETUP_SUPERBUILD)
+
+# Macro to include dependencies
+macro(INCLUDE_SUPERBUILD_DEPENDENCIES)
+  foreach(dep ${ARGV})
+    string(TOLOWER ${dep} dep_lower)
+    include(External_${dep_lower})
+  endforeach()
+endmacro(INCLUDE_SUPERBUILD_DEPENDENCIES)
+
