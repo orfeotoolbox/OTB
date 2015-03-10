@@ -185,7 +185,7 @@ private:
    */
   Ui::MainWindow* m_UI;
 
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
   /**
    *  \brief OTB-applications tool-box controller.
    */

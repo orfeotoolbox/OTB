@@ -133,9 +133,7 @@
 #define THROW_QFATAL    !NO_QTHROW && !NO_QFATAL && 1
 #endif
 
-//
-// OTB_WRAP_QT defintion
-#cmakedefine OTB_WRAP_QT "@OTB_WRAP_QT@"
+#include "otbConfigure.h"
 
 //
 // Options
