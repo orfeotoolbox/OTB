@@ -118,7 +118,7 @@ target_link_libraries( mapla
   ${QT_QTMAIN_LIBRARY}
 )
 
-if( OTB_USE_QT4 )
+if( OTBQtWidget_LOADED )
   target_link_libraries( mapla
     Monteverdi2_ApplicationsWrapper
   )
