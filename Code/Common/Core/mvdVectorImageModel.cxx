@@ -118,7 +118,14 @@ VectorImageModel
   m_ImageFileReader->UpdateOutputInformation();
 
   // Retrieve the list of Lod from file
-  m_AvailableLod = m_ImageFileReader->GetAvailableResolutions();
+  unsigned int ovrCount = m_ImageFileReader->GetOverviewsCount();
+
+  m_AvailableLod.clear();
+
+  for(unsigned int i =1; i <= ovrCount;++i)
+    {
+    m_AvailableLod.push_back(ovrCount);
+    }
 
   // Remember native largest region.
   m_NativeLargestRegion =
@@ -202,8 +209,8 @@ VectorImageModel
 ::BuildGdalOverviews()
 {
   // Build overviews if necessary
-  bool hasOverviewsSupport = m_ImageFileReader->HasOverviewsSupport();
-  int nbOfAvailableOvw = m_ImageFileReader->GetNbOfAvailableOverviews();
+  bool hasOverviewsSupport = (m_ImageFileReader->GetOverviewsCount()>0);
+  int nbOfAvailableOvw = m_ImageFileReader->GetOverviewsCount();
   // TODO: this choice should be done by the user during the import of the file
   bool forceToCacheOvw = true;
 

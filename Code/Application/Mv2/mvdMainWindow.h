@@ -348,7 +348,7 @@ private:
   QDockWidget* m_HistogramDock;
 
 
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
   /**
    *  \brief OTB-applications browser dock-widget.
    */

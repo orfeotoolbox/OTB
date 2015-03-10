@@ -89,7 +89,7 @@ endif()
 #   Monteverdi2_Gui
 # )
 
-# if (OTB_WRAP_QT)
+# if (OTB_USE_QT4)
 # target_link_libraries( Mapla
 #   Monteverdi2_ApplicationsWrapper
 # )
@@ -118,7 +118,7 @@ target_link_libraries( mapla
   ${QT_QTMAIN_LIBRARY}
 )
 
-if( OTB_WRAP_QT )
+if( OTB_USE_QT4 )
   target_link_libraries( mapla
     Monteverdi2_ApplicationsWrapper
   )

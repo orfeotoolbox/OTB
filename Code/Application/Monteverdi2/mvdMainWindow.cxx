@@ -39,7 +39,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
 # include "ApplicationsWrapper/mvdApplicationLauncher.h"
 # include "ApplicationsWrapper/mvdApplicationsToolBoxController.h"
 # include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
@@ -113,7 +113,7 @@ MainWindow
   m_DatasetPropertiesDock(NULL),
   m_PixelDescriptionDock(NULL),
   m_HistogramDock( NULL ),
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
   m_OtbApplicationsBrowserDock(NULL),
 #endif
   m_ImageView( NULL ),
@@ -252,7 +252,7 @@ MainWindow
 
   //
   // OTB application support.
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
   //
   // Done here cause needed to be done once and only once.
   SetControllerModel(
@@ -437,7 +437,7 @@ MainWindow
   m_UI->menu_View->addAction( m_DatabaseBrowserDock->toggleViewAction() );
   m_UI->menu_View->addAction( m_DatasetPropertiesDock->toggleViewAction() );
   m_UI->menu_View->addAction( m_PixelDescriptionDock->toggleViewAction() );
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
   m_UI->menu_View->addAction(
     m_OtbApplicationsBrowserDock->toggleViewAction() );
 #endif
@@ -796,7 +796,7 @@ MainWindow
       Qt::LeftDockWidgetArea
     );
 
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
   // OTB-applications browser.
   assert( m_OtbApplicationsBrowserDock==NULL );
   m_OtbApplicationsBrowserDock =
@@ -1540,7 +1540,7 @@ MainWindow
 ::OnApplicationToLaunchSelected( const QString& appName,
 				 const QString& docName)
 {
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
 
   assert( Application::ConstInstance()!=NULL );
   assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );
@@ -1623,7 +1623,7 @@ MainWindow
   QWidget* appWidget = m_CentralTabWidget->widget( index );
   assert( appWidget!=NULL );
 
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
 
   assert( appWidget==qobject_cast< Wrapper::QtWidgetView* >( appWidget ) );
   Wrapper::QtWidgetView* appWidgetView =

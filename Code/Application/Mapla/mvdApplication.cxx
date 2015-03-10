@@ -37,7 +37,7 @@
 #include "Core/mvdDatabaseModel.h"
 
 //
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
 #include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
 #endif
 

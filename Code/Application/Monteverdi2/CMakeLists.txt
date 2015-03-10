@@ -89,7 +89,7 @@ target_link_libraries( Monteverdi2_Catalogue
   Monteverdi2_Gui
 )
 
-if (OTB_WRAP_QT)
+if (OTB_USE_QT4)
 target_link_libraries( Monteverdi2_Catalogue
   Monteverdi2_ApplicationsWrapper
 )
