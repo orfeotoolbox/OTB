@@ -39,7 +39,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
 # include "ApplicationsWrapper/mvdApplicationLauncher.h"
 # include "ApplicationsWrapper/mvdApplicationsToolBoxController.h"
 # include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
@@ -83,7 +83,7 @@ MainWindow
 ::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
   I18nMainWindow( parent, flags ),
   m_UI( new mvd::Ui::MainWindow() )
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
   ,
   m_ApplicationsToolBoxController( NULL )
 #endif
@@ -107,7 +107,7 @@ MainWindow
   setObjectName( "mvd::MainWindow" );
   setWindowTitle( PROJECT_NAME " Application Launcher" );
 
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
 
   assert( m_ApplicationsToolBoxController==NULL );
 
@@ -121,16 +121,16 @@ MainWindow
 
   setCentralWidget( m_ApplicationsToolBoxController->GetWidget() );
 
-#else // OTB_WRAP_QT
+#else // OTB_USE_QT4
 
   setCentralWidget(
     new QLabel(
-      tr( "Enable OTB_WRAP_QT preprocessor definition at compile time!" ),
+      tr( "Enable OTB_USE_QT4 preprocessor definition at compile time!" ),
       this
     )
   );
 
-#endif // OTB_WRAP_QT
+#endif // OTB_USE_QT4
 }
 
 /*****************************************************************************/
@@ -140,7 +140,7 @@ MainWindow
 {
   //
   // OTB application support.
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
 
   QObject::connect(
     m_ApplicationsToolBoxController->GetWidget(),
@@ -207,7 +207,7 @@ MainWindow
 ::OnApplicationToLaunchSelected( const QString& appName,
 				 const QString& docName)
 {
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
 
   assert( Application::ConstInstance()!=NULL );
   assert( Application::ConstInstance()->GetModel()!=NULL );
@@ -284,7 +284,7 @@ MainWindow
     );
   */
 
-#endif // OTB_WRAP_QT
+#endif // OTB_USE_QT4
 }
 
 /*****************************************************************************/

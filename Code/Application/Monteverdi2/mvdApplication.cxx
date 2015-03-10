@@ -37,7 +37,7 @@
 #include "Core/mvdDatabaseModel.h"
 
 //
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
 #include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
 #endif
 
@@ -107,7 +107,7 @@ void
 Application
 ::OpenApplicationsBrowser()
 {
-#ifdef OTB_WRAP_QT
+#ifdef OTB_USE_QT4
   m_OTBApplicationsModel = new OTBApplicationsModel( this );
 
   m_OTBApplicationsModel->BuildModel();

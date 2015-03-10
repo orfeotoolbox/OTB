@@ -39,7 +39,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#if defined( OTB_WRAP_QT ) && USE_OTB_APPS
+#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
 # include "ApplicationsWrapper/mvdApplicationLauncher.h"
 # include "ApplicationsWrapper/mvdApplicationsToolBoxController.h"
 # include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
@@ -120,7 +120,7 @@ MainWindow
   m_PixelDescriptionDock(NULL),
 #endif // USE_PIXEL_DESCRIPTION
   m_HistogramDock( NULL ),
-#if defined( OTB_WRAP_QT ) && USE_OTB_APPS
+#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
   m_OtbApplicationsBrowserDock(NULL),
 #endif
   m_ImageView( NULL ),
@@ -273,7 +273,7 @@ MainWindow
 
   //
   // OTB application support.
-#if defined( OTB_WRAP_QT ) && USE_OTB_APPS
+#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
   //
   // Done here cause needed to be done once and only once.
   SetControllerModel(
@@ -432,7 +432,7 @@ MainWindow
   m_UI->menu_View->addAction( m_PixelDescriptionDock->toggleViewAction() );
 #endif // USE_PIXEL_DESCRIPTION
 
-#if defined( OTB_WRAP_QT ) && USE_OTB_APPS
+#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
   m_UI->menu_View->addAction(
     m_OtbApplicationsBrowserDock->toggleViewAction() );
 #endif
@@ -778,7 +778,7 @@ MainWindow
   //
   // Left pane.
 
-#if defined( OTB_WRAP_QT ) && USE_OTB_APPS
+#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
   // OTB-applications browser.
   assert( m_OtbApplicationsBrowserDock==NULL );
   m_OtbApplicationsBrowserDock =
@@ -1564,7 +1564,7 @@ MainWindow
 ::OnApplicationToLaunchSelected( const QString& appName,
 				 const QString& docName)
 {
-#if defined( OTB_WRAP_QT ) && USE_OTB_APPS
+#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
 
   assert( Application::ConstInstance()!=NULL );
   assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );
@@ -1647,7 +1647,7 @@ MainWindow
   QWidget* appWidget = m_CentralTabWidget->widget( index );
   assert( appWidget!=NULL );
 
-#if defined( OTB_WRAP_QT ) && USE_OTB_APPS
+#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
 
   assert( appWidget==qobject_cast< Wrapper::QtWidgetView* >( appWidget ) );
   Wrapper::QtWidgetView* appWidgetView =
