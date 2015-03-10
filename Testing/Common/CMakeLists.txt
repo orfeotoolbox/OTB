@@ -21,7 +21,7 @@ include_directories(
 # add source files
 set(Common_SRCS mvdApplicationsToolBoxTest.cxx )
 
-if (OTB_WRAP_QT)
+if (OTB_USE_QT4)
   set(Common_SRCS1
     mvdApplicationsBrowserTest.cxx
     mvdFillToolBoxWidgetTreeTest.cxx
@@ -33,7 +33,7 @@ endif()
 add_test(apTvMonteverdi2ApplicationsToolBox ${Common_TESTS} mvdApplicationsToolBoxTest)
 
 # test when OTB_USE_QT is set to ON
-if (OTB_WRAP_QT)
+if (OTB_USE_QT4)
 
   # Applications browser test
   add_test(apTvMonteverdi2ApplicationsBrowser ${Common_TESTS1} 
@@ -54,14 +54,14 @@ endif()
 add_executable(mvdCommonTests mvdCommonTests.cxx ${Common_SRCS})
 target_link_libraries(mvdCommonTests 
   Monteverdi2_Gui    
-  OTBTesting)
+  ${OTB_LIBRARIES})
 
-if (OTB_WRAP_QT)
+if (OTB_USE_QT4)
   add_executable(mvdCommonTests1 mvdCommonTests1.cxx ${Common_SRCS1})
   target_link_libraries(mvdCommonTests1 
     Monteverdi2_Gui
     Monteverdi2_ApplicationsWrapper
-    OTBTesting)
+    ${OTB_LIBRARIES})
 endif()
 
 
