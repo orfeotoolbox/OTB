@@ -3,10 +3,10 @@ include(CMakeParseArguments)
 # Macro SETUP_SYSTEM_LIBRARY : defines USE_SYSTEM_XXX option, initialize
 # internal variables
 macro(SETUP_SYSTEM_LIBRARY)
-  cmake_parse_arguments(NEW_SYSLIB  "" "PROJECT;DOC" "" ${ARGN})
+  cmake_parse_arguments(NEW_SYSLIB  "" "PROJECT;DEFAULT" "" ${ARGN})
   option(USE_SYSTEM_${NEW_SYSLIB_PROJECT}
-    ${NEW_SYSLIB_DOC}
-    ${DEFAULT_USE_SYSTEM_${NEW_SYSLIB_PROJECT}}
+    "  Use a system build of ${NEW_SYSLIB_PROJECT}."
+    ${NEW_SYSLIB_DEFAULT}
     )
   mark_as_advanced(USE_SYSTEM_${NEW_SYSLIB_PROJECT})
   set(SYSTEM_${NEW_SYSLIB_PROJECT}_CMAKE_CACHE)
