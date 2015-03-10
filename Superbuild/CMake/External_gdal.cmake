@@ -17,21 +17,21 @@ else()
       list(APPEND GDAL_SB_CONFIG --with-libtiff=${SYSTEM_TIFF_PREFIX})
     endif()
   else()
-    list(APPEND GDAL_SB_CONFIG --with-libtiff=${CMAKE_INSTALL_PREFIX})
+    list(APPEND GDAL_SB_CONFIG --with-libtiff=${SB_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES TIFF)
   endif()
   
   if(USE_SYSTEM_GEOTIFF)
     # TODO : handle specific prefix
   else()
-    list(APPEND GDAL_SB_CONFIG --with-geotiff=${CMAKE_INSTALL_PREFIX})
+    list(APPEND GDAL_SB_CONFIG --with-geotiff=${SB_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES GEOTIFF)
   endif()
 
   if(USE_SYSTEM_PNG)
     # TODO : handle specific prefix
   else()
-    list(APPEND GDAL_SB_CONFIG --with-png=${CMAKE_INSTALL_PREFIX})
+    list(APPEND GDAL_SB_CONFIG --with-png=${SB_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES PNG)
   endif()
 
@@ -39,28 +39,28 @@ else()
   if(USE_SYSTEM_JPEG)
     # TODO : handle specific prefix
   else()
-    list(APPEND GDAL_SB_CONFIG --with-jpeg=${CMAKE_INSTALL_PREFIX})
+    list(APPEND GDAL_SB_CONFIG --with-jpeg=${SB_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES JPEG)
   endif()  
   
   if(USE_SYSTEM_OPENJPEG)
     # TODO : handle specific prefix
   else()
-    list(APPEND GDAL_SB_CONFIG --with-openjpeg=${CMAKE_INSTALL_PREFIX})
+    list(APPEND GDAL_SB_CONFIG --with-openjpeg=${SB_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES OPENJPEG)
   endif()
   
   if(USE_SYSTEM_SQLITE)
     # TODO : handle specific prefix
   else()
-    list(APPEND GDAL_SB_CONFIG --with-sqlite3=${CMAKE_INSTALL_PREFIX})
+    list(APPEND GDAL_SB_CONFIG --with-sqlite3=${SB_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES SQLITE)
   endif()
   
   if(USE_SYSTEM_GEOS)
     # TODO : handle specific prefix
   else()
-    list(APPEND GDAL_SB_CONFIG --with-geos=${CMAKE_INSTALL_PREFIX}/bin/geos-config)
+    list(APPEND GDAL_SB_CONFIG --with-geos=${SB_INSTALL_PREFIX}/bin/geos-config)
     list(APPEND ${proj}_DEPENDENCIES GEOS)
   endif()
   
@@ -68,28 +68,28 @@ else()
     # TODO : handle specific prefix
   else()
     # Not shure this setting works with zlib
-    list(APPEND GDAL_SB_CONFIG --with-libz=${CMAKE_INSTALL_PREFIX})
+    list(APPEND GDAL_SB_CONFIG --with-libz=${SB_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
   
   if(USE_SYSTEM_EXPAT)
     # TODO : handle specific prefix
   else()
-    list(APPEND GDAL_SB_CONFIG --with-expat=${CMAKE_INSTALL_PREFIX})
+    list(APPEND GDAL_SB_CONFIG --with-expat=${SB_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES EXPAT)
   endif()
   
   if(USE_SYSTEM_LIBKML)
     # TODO : handle specific prefix
   else()
-    list(APPEND GDAL_SB_CONFIG --with-libkml=${CMAKE_INSTALL_PREFIX})
+    list(APPEND GDAL_SB_CONFIG --with-libkml=${SB_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES LIBKML)
   endif()
   
   if(USE_SYSTEM_CURL)
     # TODO : handle specific prefix
   else()
-    list(APPEND GDAL_SB_CONFIG --with-curl=${CMAKE_INSTALL_PREFIX})
+    list(APPEND GDAL_SB_CONFIG --with-curl=${SB_INSTALL_PREFIX})
     list(APPEND ${proj}_DEPENDENCIES CURL)
   endif()
   
@@ -102,15 +102,15 @@ else()
       URL "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"
       URL_MD5 9fdf0f2371a3e9863d83e69951c71ec4
       BINARY_DIR ${GDAL_SB_BUILD_DIR}
-      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      INSTALL_DIR ${SB_INSTALL_PREFIX}
       DEPENDS ${${proj}_DEPENDENCIES}
       UPDATE_COMMAND  ${CMAKE_COMMAND} -E copy_directory ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}        
       PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath      
       CONFIGURE_COMMAND 
         # use 'env' because CTest launcher doesn't perform shell interpretation
-        env ${LDLIBVAR}=${CMAKE_INSTALL_PREFIX}/lib 
+        env ${LDLIBVAR}=${SB_INSTALL_PREFIX}/lib 
         ${GDAL_SB_BUILD_DIR}/configure 
-        --prefix=${CMAKE_INSTALL_PREFIX}
+        --prefix=${SB_INSTALL_PREFIX}
         --enable-static=no
         --without-ogdi
         --without-jasper
@@ -126,7 +126,7 @@ else()
   ##is needed for SQLITE driver 
     list(REMOVE_ITEM ${proj}_DEPENDENCIES LIBKML)
 
-    STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})    
+    STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})    
     STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
     configure_file(${CMAKE_SOURCE_DIR}/patches/${proj}/nmake_gdal_extra.opt.in ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
       
@@ -136,7 +136,7 @@ else()
        URL_MD5 9fdf0f2371a3e9863d83e69951c71ec4
        SOURCE_DIR ${GDAL_SB_SRC}
        BINARY_DIR ${GDAL_SB_BUILD_DIR}
-       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+       INSTALL_DIR ${SB_INSTALL_PREFIX}
        DEPENDS ${${proj}_DEPENDENCIES}
        PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory  ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
        CONFIGURE_COMMAND  ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/ogrsqlitevirtualogr.cpp

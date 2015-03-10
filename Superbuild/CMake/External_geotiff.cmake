@@ -24,11 +24,11 @@ else()
   else()
     if(MSVC)
       list(APPEND GEOTIFF_SB_CONFIG
-        -DTIFF_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include 
-        -DTIFF_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libtiff_i.lib
+        -DTIFF_INCLUDE_DIR:STRING=${SB_INSTALL_PREFIX}/include 
+        -DTIFF_LIBRARY:STRING=${SB_INSTALL_PREFIX}/lib/libtiff_i.lib
         )
     else()
-      list(APPEND GEOTIFF_SB_CONFIG --with-libtiff=${CMAKE_INSTALL_PREFIX})
+      list(APPEND GEOTIFF_SB_CONFIG --with-libtiff=${SB_INSTALL_PREFIX})
     endif()
     
     list(APPEND ${proj}_DEPENDENCIES TIFF)
@@ -37,11 +37,11 @@ else()
   if(USE_SYSTEM_PROJ)
     set(GEOTIFF_SB_PROJ_CONFIG)
   else()
-    set(GEOTIFF_SB_PROJ_CONFIG --with-proj=${CMAKE_INSTALL_PREFIX})
+    set(GEOTIFF_SB_PROJ_CONFIG --with-proj=${SB_INSTALL_PREFIX})
         if(MSVC)
         set(GEOTIFF_SB_PROJ_CONFIG 
-        -DPROJ4_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include 
-        -DPROJ4_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/proj_i.lib
+        -DPROJ4_INCLUDE_DIR:STRING=${SB_INSTALL_PREFIX}/include 
+        -DPROJ4_LIBRARY:STRING=${SB_INSTALL_PREFIX}/lib/proj_i.lib
         )
     endif()
     list(APPEND ${proj}_DEPENDENCIES PROJ)
@@ -55,23 +55,23 @@ else()
     set(GEOTIFF_SB_ZLIB_CONFIG)
     if(MSVC)
         set(GEOTIFF_SB_ZLIB_CONFIG 
-        -DZLIB_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include 
-        -DZLIB_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/zlib.lib
+        -DZLIB_INCLUDE_DIR:STRING=${SB_INSTALL_PREFIX}/include 
+        -DZLIB_LIBRARY:STRING=${SB_INSTALL_PREFIX}/lib/zlib.lib
         )
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
     endif()
-    #set(GEOTIFF_SB_ZLIB_CONFIG --with-zlib=${CMAKE_INSTALL_PREFIX})
+    #set(GEOTIFF_SB_ZLIB_CONFIG --with-zlib=${SB_INSTALL_PREFIX})
     #list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
   
   if(USE_SYSTEM_JPEG)
     set(GEOTIFF_SB_JPEG_CONFIG)
   else()
-    set(GEOTIFF_SB_JPEG_CONFIG --with-jpeg=${CMAKE_INSTALL_PREFIX})
+    set(GEOTIFF_SB_JPEG_CONFIG --with-jpeg=${SB_INSTALL_PREFIX})
     if(MSVC)
       set(GEOTIFF_SB_JPEG_CONFIG 
-        -DJPEG_INCLUDE_DIR:STRING=${CMAKE_INSTALL_PREFIX}/include 
-        -DJPEG_LIBRARY:STRING=${CMAKE_INSTALL_PREFIX}/lib/libjpeg.lib
+        -DJPEG_INCLUDE_DIR:STRING=${SB_INSTALL_PREFIX}/include 
+        -DJPEG_LIBRARY:STRING=${SB_INSTALL_PREFIX}/lib/libjpeg.lib
         )
       list(APPEND ${proj}_DEPENDENCIES JPEG)
     endif()    
@@ -84,14 +84,14 @@ else()
       URL "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.0.tar.gz"
       URL_MD5 efa7b418bc00228fcda4da63557e40c2
       BINARY_DIR ${GEOTIFF_SB_BUILD_DIR}
-      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      INSTALL_DIR ${SB_INSTALL_PREFIX}
       DEPENDS ${${proj}_DEPENDENCIES}
       PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
         ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
         ${GEOTIFF_SB_SRC}  
       
       CMAKE_CACHE_ARGS
-        -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
+        -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
         -DCMAKE_BUILD_TYPE:STRING=Release
         -DWITH_TIFF:BOOL=ON
         -DWITH_PROJ4:BOOL=ON
@@ -110,12 +110,12 @@ else()
       URL "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.0.tar.gz"
       URL_MD5 efa7b418bc00228fcda4da63557e40c2
       BINARY_DIR ${GEOTIFF_SB_BUILD_DIR}
-      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      INSTALL_DIR ${SB_INSTALL_PREFIX}
       CONFIGURE_COMMAND
         # use 'env' because CTest launcher doesn't perform shell interpretation
-        env ${LDLIBVAR}=${CMAKE_INSTALL_PREFIX}/lib
+        env ${LDLIBVAR}=${SB_INSTALL_PREFIX}/lib
         ${GEOTIFF_SB_BUILD_DIR}/configure
-        --prefix=${CMAKE_INSTALL_PREFIX}
+        --prefix=${SB_INSTALL_PREFIX}
         --enable-static=no
         ${GEOTIFF_SB_JPEG_CONFIG}
         ${GEOTIFF_SB_CONFIG}

@@ -17,12 +17,12 @@ else()
   else()
     if(MSVC)
       set(PNG_SB_ZLIB_CONFIG
-        -DZLIB_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
-        -DZLIB_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/zlib.lib)
+        -DZLIB_INCLUDE_DIR:PATH=${SB_INSTALL_PREFIX}/include
+        -DZLIB_LIBRARY:FILEPATH=${SB_INSTALL_PREFIX}/lib/zlib.lib)
     else(UNIX)
       set(PNG_SB_ZLIB_CONFIG
-        -DZLIB_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
-        -DZLIB_LIBRARY:FILEPATH=${CMAKE_INSTALL_PREFIX}/lib/libz${CMAKE_SHARED_LIBRARY_SUFFIX})
+        -DZLIB_INCLUDE_DIR:PATH=${SB_INSTALL_PREFIX}/include
+        -DZLIB_LIBRARY:FILEPATH=${SB_INSTALL_PREFIX}/lib/libz${CMAKE_SHARED_LIBRARY_SUFFIX})
     endif()
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
@@ -32,11 +32,11 @@ else()
       URL "http://sourceforge.net/projects/libpng/files/libpng16/1.6.16/lpng1616.zip/download"
       URL_MD5 c90c9587c9a5c735327fb3f6900f6b03
       BINARY_DIR ${PNG_SB_BUILD_DIR}
-      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      INSTALL_DIR ${SB_INSTALL_PREFIX}
       DEPENDS ${${proj}_DEPENDENCIES}
       CMAKE_CACHE_ARGS
         -DCMAKE_BUILD_TYPE:STRING=Release
-        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+        -DCMAKE_INSTALL_PREFIX:PATH=${SB_INSTALL_PREFIX}
         -DSKIP_INSTALL_EXECUTABLES:BOOL=OFF
         -DPNG_STATIC:BOOL=OFF
         -DPNG_SHARED:BOOL=ON
@@ -53,7 +53,7 @@ else()
     if(MSVC)
       ExternalProject_Add_Step(${proj} duplicate_pnglib
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_INSTALL_PREFIX}/lib/libpng16.lib ${CMAKE_INSTALL_PREFIX}/lib/libpng.lib
+        ${SB_INSTALL_PREFIX}/lib/libpng16.lib ${SB_INSTALL_PREFIX}/lib/libpng.lib
         DEPENDEES install
     )    
     endif()

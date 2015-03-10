@@ -35,7 +35,7 @@ else()
       PREFIX ${proj}
       URL "http://sourceforge.net/projects/swig/files/swigwin/swigwin-3.0.5/swigwin-3.0.5.zip/download"
       URL_MD5 fd2e050f29e2a00b2348f5f7d3476490
-      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      INSTALL_DIR ${SB_INSTALL_PREFIX}
       CONFIGURE_COMMAND ""
       BUILD_COMMAND ""
       INSTALL_COMMAND ""
@@ -46,14 +46,14 @@ else()
     if(USE_SYSTEM_PCRE)
       # TODO : handle specific location
     else()
-      list(APPEND SWIG_SB_CONFIG --with-pcre-prefix=${CMAKE_INSTALL_PREFIX})
+      list(APPEND SWIG_SB_CONFIG --with-pcre-prefix=${SB_INSTALL_PREFIX})
       list(APPEND ${proj}_DEPENDENCIES PCRE)
     endif()
     
     if(USE_SYSTEM_BOOST)
       # TODO : handle specific location
     else()
-      list(APPEND SWIG_SB_CONFIG --with-boost=${CMAKE_INSTALL_PREFIX})
+      list(APPEND SWIG_SB_CONFIG --with-boost=${SB_INSTALL_PREFIX})
       list(APPEND ${proj}_DEPENDENCIES BOOST)
     endif()
     
@@ -62,10 +62,10 @@ else()
       URL "http://sourceforge.net/projects/swig/files/swig/swig-3.0.5/swig-3.0.5.tar.gz/download"
       URL_MD5 dcb9638324461b9baba8e044fe59031d
       BINARY_DIR ${SWIG_SB_BUILD_DIR}
-      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      INSTALL_DIR ${SB_INSTALL_PREFIX}
       CONFIGURE_COMMAND
         ${SWIG_SB_BUILD_DIR}/configure
-        --prefix=${CMAKE_INSTALL_PREFIX}
+        --prefix=${SB_INSTALL_PREFIX}
         ${SWIG_SB_PYTHON_CONFIG}
         ${SWIG_SB_JAVA_CONFIG}
         ${SWIG_SB_CONFIG}

@@ -16,7 +16,7 @@ else()
     set(CURL_SB_ZLIB_CONFIG)
   else()
     set(CURL_SB_ZLIB_CONFIG 
-      -DZLIB_ROOT:STRING=${CMAKE_INSTALL_PREFIX}
+      -DZLIB_ROOT:STRING=${SB_INSTALL_PREFIX}
       )
     list(APPEND ${proj}_DEPENDENCIES ZLIB)
   endif()
@@ -29,12 +29,12 @@ else()
         URL_MD5 58943642ea0ed050ab0431ea1caf3a6f
         SOURCE_DIR ${CURL_SB_SRC}
         BINARY_DIR ${CURL_SB_BUILD_DIR}/winbuild
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        INSTALL_DIR ${SB_INSTALL_PREFIX}
         DEPENDS ${${proj}_DEPENDENCIES}        
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory ${CURL_SB_SRC} ${CURL_SB_BUILD_DIR}
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND nmake /f ${CURL_SB_BUILD_DIR}/winbuild/Makefile.vc mode=dll WITH_ZLIB=dll WITH_DEVEL=${CMAKE_INSTALL_PREFIX}
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir ${CURL_SB_BUILD_DIR}/builds/ ${CMAKE_COMMAND} -E copy_directory libcurl-vc-x86-release-dll-zlib-dll-ipv6-sspi-winssl ${CMAKE_INSTALL_PREFIX} 
+        BUILD_COMMAND nmake /f ${CURL_SB_BUILD_DIR}/winbuild/Makefile.vc mode=dll WITH_ZLIB=dll WITH_DEVEL=${SB_INSTALL_PREFIX}
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir ${CURL_SB_BUILD_DIR}/builds/ ${CMAKE_COMMAND} -E copy_directory libcurl-vc-x86-release-dll-zlib-dll-ipv6-sspi-winssl ${SB_INSTALL_PREFIX} 
     )
     
   else(UNIX)
@@ -43,9 +43,9 @@ else()
         URL "http://curl.haxx.se/download/curl-7.40.0.tar.gz"
         URL_MD5 58943642ea0ed050ab0431ea1caf3a6f
         BINARY_DIR ${CURL_SB_BUILD_DIR}
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        INSTALL_DIR ${SB_INSTALL_PREFIX}
         CMAKE_CACHE_ARGS
-        -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
+        -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
         -DCMAKE_BUILD_TYPE:STRING=Release
         -DBUILD_SHARED_LIBS:BOOL=ON
         -DBUILD_CURL_EXE:BOOL=ON

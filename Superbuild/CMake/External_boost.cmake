@@ -22,9 +22,9 @@ else()
         URL "http://sourceforge.net/projects/boost/files/boost/1.54.0/boost_1_54_0.tar.gz/download"
         URL_MD5 efbfbff5a85a9330951f243d0a46e4b9
         BINARY_DIR ${BOOST_SB_BUILD_DIR}
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        INSTALL_DIR ${SB_INSTALL_PREFIX}
         CMAKE_CACHE_ARGS
-        -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
+        -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
         -DCMAKE_BUILD_TYPE:STRING=Release
         -DBUILD_SHARED_LIBS:BOOL=ON
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
@@ -37,10 +37,10 @@ else()
         URL "http://sourceforge.net/projects/boost/files/boost/1.54.0/boost_1_54_0.tar.gz/download"
         URL_MD5 efbfbff5a85a9330951f243d0a46e4b9
         BINARY_DIR ${BOOST_SB_BUILD_DIR}
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        INSTALL_DIR ${SB_INSTALL_PREFIX}
         CONFIGURE_COMMAND
           ${BOOST_SB_BUILD_DIR}/bootstrap.sh
-            --prefix=${CMAKE_INSTALL_PREFIX}
+            --prefix=${SB_INSTALL_PREFIX}
         BUILD_COMMAND ./b2
         INSTALL_COMMAND ./b2 install
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -88,7 +88,7 @@ else()
         SOURCE_DIR ${BOOST_SB_SRC}/include/boost
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ""
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory ${BOOST_SB_SRC}/include/ ${CMAKE_INSTALL_PREFIX}/include/
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory ${BOOST_SB_SRC}/include/ ${SB_INSTALL_PREFIX}/include/
      )
     set(BOOSTLIBS)
     foreach(BOOSTLIB "REGEX" "GRAPH" "UTF")
@@ -100,7 +100,7 @@ else()
             DEPENDS ${proj}_HEADERS
             CONFIGURE_COMMAND ""
             BUILD_COMMAND ""
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory ${BOOST_SB_SRC}/lib ${CMAKE_INSTALL_PREFIX}/lib
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory ${BOOST_SB_SRC}/lib ${SB_INSTALL_PREFIX}/lib
         )
     list(APPEND BOOSTLIBS ${proj}_${BOOSTLIB})
     endforeach()

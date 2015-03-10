@@ -26,10 +26,10 @@ else()
       PREFIX ${proj}
       URL "http://www.fftw.org/fftw-3.3.4.tar.gz"
       URL_MD5 2edab8c06b24feeb3b82bbb3ebf3e7b3
-      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      INSTALL_DIR ${SB_INSTALL_PREFIX}
       CONFIGURE_COMMAND
         ${FFTW_SB_BUILD_FLOAT_DIR}/configure
-            --prefix=${CMAKE_INSTALL_PREFIX}
+            --prefix=${SB_INSTALL_PREFIX}
             --enable-shared
             --disable-static
             --enable-float
@@ -50,10 +50,10 @@ else()
       PREFIX ${proj}
       URL "http://www.fftw.org/fftw-3.3.4.tar.gz"
       URL_MD5 2edab8c06b24feeb3b82bbb3ebf3e7b3
-      INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+      INSTALL_DIR ${SB_INSTALL_PREFIX}
       CONFIGURE_COMMAND
         ${FFTW_SB_BUILD_DOUBLE_DIR}/configure
-            --prefix=${CMAKE_INSTALL_PREFIX}
+            --prefix=${SB_INSTALL_PREFIX}
             --enable-shared
             --disable-static
             --disable-float
