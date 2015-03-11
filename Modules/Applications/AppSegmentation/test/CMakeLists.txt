@@ -230,7 +230,7 @@ set_property(TEST apTvLSMS3SmallRegionsMerging PROPERTY DEPENDS apTvLSMS2Segment
 otb_test_application(NAME     apTvLSMS4Vectorization_SmallMerged
                      APP      LSMSVectorization
                      OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
-                              -inseg  ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif
+                              -inseg  ${BASELINE}/apTvLSMS3_Segmentation_SmallMerged.tif
                               -out ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
                               -tilesizex 100
                               -tilesizey 100
