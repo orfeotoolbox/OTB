@@ -72,3 +72,12 @@ macro(INCLUDE_SUPERBUILD_DEPENDENCIES)
   endforeach()
 endmacro(INCLUDE_SUPERBUILD_DEPENDENCIES)
 
+# Macro to add a configure variable to ${proj}_SB_CONFIG (var type: string)
+macro(ADD_SUPERBUILD_CONFIG_VAR var)
+  if(DEFINED ${var})
+    list(APPEND ${proj}_SB_CONFIG
+      -D${var}:STRING=${${var}}
+      )
+  endif()
+endmacro(ADD_SUPERBUILD_CONFIG_VAR)
+
