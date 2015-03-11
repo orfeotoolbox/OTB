@@ -72,12 +72,20 @@ macro(INCLUDE_SUPERBUILD_DEPENDENCIES)
   endforeach()
 endmacro(INCLUDE_SUPERBUILD_DEPENDENCIES)
 
-# Macro to add a configure variable to ${proj}_SB_CONFIG (var type: string)
-macro(ADD_SUPERBUILD_CONFIG_VAR var)
+# Macro to add a cmake variable to ${proj}_SB_CONFIG (var type: string)
+macro(ADD_SUPERBUILD_CMAKE_VAR var)
   if(DEFINED ${var})
     list(APPEND ${proj}_SB_CONFIG
       -D${var}:STRING=${${var}}
       )
   endif()
-endmacro(ADD_SUPERBUILD_CONFIG_VAR)
+endmacro(ADD_SUPERBUILD_CMAKE_VAR)
 
+# Macro to add a configure variable to ${proj}_SB_CONFIG
+macro(ADD_SUPERBUILD_CONFIGURE_VAR var name)
+  if(DEFINED ${var})
+    list(APPEND ${proj}_SB_CONFIG
+      ${name}=${${var}}
+      )
+  endif()
+endmacro(ADD_SUPERBUILD_CONFIGURE_VAR)
