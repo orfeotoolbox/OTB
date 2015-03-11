@@ -8,6 +8,7 @@ message(STATUS "Setup pcre...")
 if(USE_SYSTEM_PCRE)
   # TODO : FindPCRE.cmake
   # find_package ( PCRE REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using pcre system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

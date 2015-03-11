@@ -7,6 +7,7 @@ message(STATUS "Setup libgeotiff...")
 
 if(USE_SYSTEM_GEOTIFF)
   find_package ( GeoTIFF REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using libgeotiff system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

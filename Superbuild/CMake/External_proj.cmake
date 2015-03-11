@@ -8,6 +8,7 @@ message(STATUS "Setup Proj.4 ...")
 if(USE_SYSTEM_PROJ)
   # TODO : FindPROJ.cmake
   #find_package ( PROJ REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using Proj4 system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

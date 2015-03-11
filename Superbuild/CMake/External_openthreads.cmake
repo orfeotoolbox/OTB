@@ -11,6 +11,7 @@ endif()
 
 if(USE_SYSTEM_OPENTHREADS)
   find_package ( OpenThreads REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using OpenThread system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

@@ -7,6 +7,7 @@ message(STATUS "Setup ITK...")
 
 if(USE_SYSTEM_ITK)
   find_package ( ITK REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using ITK system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

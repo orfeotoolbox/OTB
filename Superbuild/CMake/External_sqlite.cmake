@@ -8,6 +8,7 @@ message(STATUS "Setup SQLite...")
 if(USE_SYSTEM_SQLITE)
   # TODO
   #find_package ( SQLite REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using SQLite system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

@@ -7,6 +7,7 @@ message(STATUS "Setup libpng...")
 
 if(USE_SYSTEM_PNG)
   find_package ( PNG REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using libpng system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

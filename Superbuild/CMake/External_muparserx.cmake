@@ -7,6 +7,7 @@ message(STATUS "Setup muParserX ...")
 
 if(USE_SYSTEM_MUPARSERX)
   find_package ( MUPARSERX REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using muParserX system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

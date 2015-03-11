@@ -15,6 +15,7 @@ ADD_SYSTEM_LOCATION(PROJECT ${proj} VARIABLES ${proj}_LIBRARY ${proj}_INCLUDE_DI
 
 if(USE_SYSTEM_OSSIM)
   find_package ( Ossim REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using OSSIM system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

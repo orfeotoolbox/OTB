@@ -7,6 +7,7 @@ message(STATUS "Setup Qt4 ...")
 
 if(USE_SYSTEM_QT4)
   find_package ( QT4 REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using Qt4 system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

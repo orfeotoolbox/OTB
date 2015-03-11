@@ -7,6 +7,7 @@ message(STATUS "Setup GDAL...")
 
 if(USE_SYSTEM_GDAL)
   find_package ( GDAL REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using GDAL system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

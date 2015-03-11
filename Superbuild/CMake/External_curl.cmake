@@ -7,18 +7,18 @@ message(STATUS "Setup cURL ...")
 
 if(USE_SYSTEM_CURL)
   find_package ( CURL REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using cURL system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
-    
-  if(USE_SYSTEM_ZLIB)
-    set(CURL_SB_ZLIB_CONFIG)
-  else()
-    set(CURL_SB_ZLIB_CONFIG 
-      -DZLIB_ROOT:STRING=${SB_INSTALL_PREFIX}
-      )
-    list(APPEND ${proj}_DEPENDENCIES ZLIB)
-  endif()
+  
+  # declare dependencies
+  set(${proj}_DEPENDENCIES ZLIB)
+  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+  # set proj back to its original value
+  set(proj CURL)
+  
+  ADD_SUPERBUILD_CONFIG_VAR(ZLIB_ROOT)
   
   #TODO: add openssl and other dependencies
   if(MSVC)

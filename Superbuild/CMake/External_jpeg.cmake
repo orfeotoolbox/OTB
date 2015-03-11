@@ -7,6 +7,7 @@ message(STATUS "Setup libjpeg...")
 
 if(USE_SYSTEM_JPEG)
   find_package ( JPEG REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using libjpeg system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

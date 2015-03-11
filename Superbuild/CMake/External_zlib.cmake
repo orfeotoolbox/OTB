@@ -9,7 +9,9 @@ ADD_SYSTEM_PREFIX(PROJECT ${proj} CMAKE_ALIAS ZLIB_ROOT)
 
 if(USE_SYSTEM_ZLIB)
   find_package(ZLIB REQUIRED)
-  message(STATUS "  Using Zlib system version")
+  add_custom_target(${proj})
+  set(ZLIB_ROOT ${ZLIB_INCLUDE_DIR}/..)
+  message(STATUS "  Using Zlib system version : ${ZLIB_ROOT}")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   
@@ -42,6 +44,7 @@ else()
     endif()
     
     set(ZLIB_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+    set(ZLIB_ROOT ${SB_INSTALL_PREFIX})
     if(MSVC)
       set(ZLIB_LIBRARY ${SB_INSTALL_PREFIX}/lib/zdll.lib)
     elseif(APPLE)

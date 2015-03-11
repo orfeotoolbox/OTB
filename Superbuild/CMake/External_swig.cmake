@@ -7,6 +7,7 @@ message(STATUS "Setup swig...")
 
 if(USE_SYSTEM_SWIG)
   find_package ( SWIG REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using swig system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

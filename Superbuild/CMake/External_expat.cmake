@@ -7,6 +7,7 @@ message(STATUS "Setup expat ...")
 
 if(USE_SYSTEM_EXPAT)
   find_package ( EXPAT REQUIRED )
+  add_custom_target(${proj})
   message(STATUS "  Using expat system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
