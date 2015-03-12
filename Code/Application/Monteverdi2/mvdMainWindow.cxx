@@ -1430,6 +1430,7 @@ MainWindow
       stackedLayerModel->Clear();
       stackedLayerModel->Add( vectorImageModel );
       stackedLayerModel->SetCurrent( vectorImageModel );
+      stackedLayerModel->SetReference( StackedLayerModel::SizeType( 0 ) );
       }
 
     m_ImageView->UpdateScene();
