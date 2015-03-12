@@ -19,11 +19,9 @@ string(REGEX REPLACE ".*# *define OSSIM_VERSION *\"([0-9.]+)\".*" "\\1" OSSIM_VE
 string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1" OSSIM_MAJOR_VERSION_NUMBER "${OSSIM_VERSION}")
 string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\2" OSSIM_MINOR_VERSION_NUMBER "${OSSIM_VERSION}")
 string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\3" OSSIM_PATCH_VERSION_NUMBER "${OSSIM_VERSION}")
-# TODO : why would you need this in the cache ?
-#set(OSSIM_VERSION "${OSSIM_VERSION}" CACHE STRING "OSSIM version" FORCE)
+
 math(EXPR OSSIM_VERSION_NUMBER
   "((${OSSIM_MAJOR_VERSION_NUMBER})*100+${OSSIM_MINOR_VERSION_NUMBER})*100+${OSSIM_PATCH_VERSION_NUMBER}")
-mark_as_advanced(OSSIM_VERSION)
 
 find_library(OSSIM_LIBRARY
              NAMES ossim)

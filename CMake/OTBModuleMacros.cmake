@@ -166,8 +166,6 @@ macro(otb_module_impl)
   endif()
 
   if(EXISTS ${${otb-module}_SOURCE_DIR}/app/CMakeLists.txt AND NOT ${otb-module}_NO_SRC)
-    # TODO : check the utility of the following line
-    # set_property(GLOBAL APPEND PROPERTY OTBTargets_MODULES ${otb-module})
     add_subdirectory(app)
   endif()
 
