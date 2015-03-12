@@ -446,10 +446,11 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
 //        }
       }
 
+    if (ignoreCurrentLineRef) ++itRef;
+    if (ignoreCurrentLineTest) ++itTest;
+
     if (m_IgnoreLineOrder)
       {
-      if (ignoreCurrentLineRef) ++itRef;
-      if (ignoreCurrentLineTest) ++itTest;
       if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
         {
         if (differenceFoundInCurrentLine)
@@ -474,8 +475,11 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
       }
     else
       {
-      ++itRef;
-      ++itTest;
+		if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
+		{
+			++itRef;
+			++itTest;
+		}
       }
 
     }
