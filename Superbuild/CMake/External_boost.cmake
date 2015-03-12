@@ -1,5 +1,11 @@
 set(proj BOOST)
 
+# Use boost 1.54. There was previously incompatibilities between boost and Qt which leads
+# to compilation errors for OTB.  We could increase boost version to last stable
+# release in future version of superbuild as we've patchedOTB code to
+# support both libraries. See the related changeset in OTB trunk:
+# http://hg.orfeo-toolbox.org/OTB/r# ev/8da67e36c78d
+
 if(NOT __EXTERNAL_${proj}__)
 set(__EXTERNAL_${proj}__ 1)
 
