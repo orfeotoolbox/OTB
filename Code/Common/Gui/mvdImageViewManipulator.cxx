@@ -381,6 +381,7 @@ ImageViewManipulator
       break;
 
     case Qt::RightButton:
+      emit ToggleLayerVisibilityRequested( false );
       break;
 
     case Qt::MidButton:
@@ -491,6 +492,7 @@ ImageViewManipulator
       break;
 
     case Qt::RightButton:
+      emit ToggleLayerVisibilityRequested( true );
       break;
 
     case Qt::MidButton:

@@ -364,6 +364,14 @@ ImageViewWidget
     SLOT( OnDeleteSelectedRequested() )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( ToggleLayerVisibilityRequested( bool ) ),
+    // to:
+    this,
+    SLOT( OnToggleLayerVisibilityRequested( bool ) )
+  );
+
 
   QObject::connect(
     this,
@@ -388,30 +396,30 @@ ImageViewWidget
   );
 
 
- QObject::connect(
-   this,
-   SIGNAL( ReferenceActorShaderModeChanged( const std::string & ) ),
-   // to:
-   m_Renderer,
-   SLOT( OnReferenceActorShaderModeChanged( const std::string & ) )
- );
+  QObject::connect(
+    this,
+    SIGNAL( ReferenceActorShaderModeChanged( const std::string & ) ),
+    // to:
+    m_Renderer,
+    SLOT( OnReferenceActorShaderModeChanged( const std::string & ) )
+  );
 
 
- QObject::connect(
-   m_Renderer,
-   SIGNAL( SetProjectionRequired() ),
-   // to:
-   this,
-   SLOT( OnSetProjectionRequired() )
- );
+  QObject::connect(
+    m_Renderer,
+    SIGNAL( SetProjectionRequired() ),
+    // to:
+    this,
+    SLOT( OnSetProjectionRequired() )
+  );
 
- QObject::connect(
-   m_Renderer,
-   SIGNAL( UpdateProjectionRequired() ),
-   // to:
-   this,
-   SLOT( OnUpdateProjectionRequired() )
- );
+  QObject::connect(
+    m_Renderer,
+    SIGNAL( UpdateProjectionRequired() ),
+    // to:
+    this,
+    SLOT( OnUpdateProjectionRequired() )
+  );
 }
 
 /*******************************************************************************/
@@ -938,8 +946,10 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
-::OnReferenceChanged( size_t )
+::OnReferenceChanged( size_t index )
 {
+  qDebug() << this << "::OnReferenceChanged(" << index << ")";
+
   assert( m_Renderer!=NULL );
 
   m_Renderer->RefreshScene();
@@ -1072,6 +1082,26 @@ ImageViewWidget
     {
     assert( false && "Unhandled AbstractLayerModel derived type." );
     }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnToggleLayerVisibilityRequested( bool )
+{
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
+
+  if( layer==NULL )
+    return;
+
+  layer->SetVisible( !layer->IsVisible() );
+
+  updateGL();
 }
 
 /******************************************************************************/

@@ -328,6 +328,9 @@ private slots:
   /**
    */
   void OnLayerAboutToBeDeleted( size_t );
+  /**
+   */
+  void OnToggleLayerVisibilityRequested( bool );
 };
 
 }// end namespace 'mvd'

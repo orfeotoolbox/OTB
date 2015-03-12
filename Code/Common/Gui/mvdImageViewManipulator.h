@@ -202,7 +202,11 @@ signals:
   void DeleteAllRequested();
   /**
    */
+  // TODO: Rename signal into DeleteLayerRequested().
   void DeleteSelectedRequested();
+  /**
+   */
+  void ToggleLayerVisibilityRequested( bool );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
