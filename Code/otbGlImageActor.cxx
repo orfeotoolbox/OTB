@@ -130,9 +130,9 @@ void GlImageActor::Initialize(const std::string & filename)
 
   m_AvailableResolutions.clear();
 
-  for(unsigned int i =1; i <= ovrCount;++i)
+  for(unsigned int i =0; i < ovrCount;++i)
     {
-    m_AvailableResolutions.push_back(ovrCount);
+    m_AvailableResolutions.push_back(i);
     }
 
   m_CurrentResolution = m_AvailableResolutions.front();
@@ -664,8 +664,6 @@ void GlImageActor::UpdateResolution()
   
   double resolution = std::min(100/distAB,100/distAC);
   
-  // std::cout<<"Resolution: "<<resolution<<std::endl;
-  
   // Arbitrary higher than any distance we will compute here
   double minDist       = 50000.;
   unsigned int closest = 0;
@@ -674,7 +672,6 @@ void GlImageActor::UpdateResolution()
   for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
        it != m_AvailableResolutions.end(); ++it)
     {
-    // std::cout<<(*it)<<" "<<(1/((double)(1<<(*it))))<<std::endl;
     double diff = 1/((double)(1<<(*it))) - resolution;
 
     if (diff > 0 && vcl_abs(diff) < minDist)
@@ -684,14 +681,10 @@ void GlImageActor::UpdateResolution()
       }
     }
   
-  // std::cout<<"Nearest resolution level: "<<closest<<std::endl;
-
   m_CurrentResolution = closest;
 
   std::ostringstream extFilename;
   extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
-
-  // std::cout<<"Extfname = "<<extFilename.str()<<std::endl;
 
   m_FileReader = ReaderType::New();
   m_FileReader->SetFileName(extFilename.str());
