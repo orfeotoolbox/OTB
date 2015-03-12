@@ -11,6 +11,7 @@ if(USE_SYSTEM_MUPARSER)
   message(STATUS "  Using muParser system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using muParser SuperBuild version")
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
@@ -28,7 +29,12 @@ else()
         ${MUPARSER_SB_SRC}
     )
   
-  message(STATUS "  Using muParser SuperBuild version")
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  if(WIN32)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/muparser.lib)
+  elseif(UNIX)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libmuparser${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif()
 
 endif()
 endif()

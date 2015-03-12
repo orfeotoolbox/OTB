@@ -19,6 +19,18 @@ option(BUILD_ICE "Clone and build ICE" OFF)
 option(BUILD_MONTEVERDI2 "Clone and build Monteverdi2" OFF)
 option(BUILD_MONTEVERDI "Clone and build Monteverdi" OFF)
 
+# check if superbuild is in OTB source or in stand-alone mode
+set(SUPERBUILD_IN_OTB_TREE OFF)
+if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
+  file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _CONTENT_CMAKELIST
+    REGEX "project\(OTB\)")
+  if("${_CONTENT_CMAKELIST}")
+    set(SUPERBUILD_IN_OTB_TREE ON)
+  endif()
+  
+endif()
+
+
 set(SB_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 
 set(SB_BUILD_SHARED_LIBS ON)

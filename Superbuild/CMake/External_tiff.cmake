@@ -5,9 +5,9 @@ set(__EXTERNAL_${proj}__ 1)
 
 message(STATUS "Setup libtiff...")
 
-ADD_SYSTEM_LOCATION(PROJECT ${proj} VARIABLES ${proj}_LIBRARY ${proj}_INCLUDE_DIR)
+#ADD_SYSTEM_LOCATION(PROJECT ${proj} VARIABLES ${proj}_LIBRARY ${proj}_INCLUDE_DIR)
 
-ADD_SYSTEM_PREFIX(PROJECT ${proj})
+#ADD_SYSTEM_PREFIX(PROJECT ${proj})
 
 if(USE_SYSTEM_TIFF)
   find_package ( TIFF REQUIRED )
@@ -15,23 +15,21 @@ if(USE_SYSTEM_TIFF)
   message(STATUS "  Using libtiff system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using libtiff SuperBuild version")
   
-  if(USE_SYSTEM_ZLIB)
-    if(NOT SYSTEM_ZLIB_PREFIX STREQUAL "")
-      list(APPEND TIFF_SB_CONFIG --with-zlib-include-dir=${SYSTEM_ZLIB_PREFIX}/include)
-    endif()
-  else()
-    list(APPEND TIFF_SB_CONFIG
-      --with-zlib-include-dir=${SB_INSTALL_PREFIX}/include
-      )
-    list(APPEND ${proj}_DEPENDENCIES ZLIB)
+  # declare dependencies
+  set(${proj}_DEPENDENCIES ZLIB)
+  if(MSVC)
+    list(APPEND ${proj}_DEPENDENCIES JPEG)
   endif()
+  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+  # set proj back to its original value
+  set(proj TIFF)
+  
+  ADD_SUPERBUILD_CONFIGURE_VAR(ZLIB_INCLUDE_DIR --with-zlib-include-dir)
   
   if(MSVC)
     #is JPEG required for linux also?
-    if(NOT USE_SYSTEM_JPEG)
-        list(APPEND ${proj}_DEPENDENCIES JPEG)
-    endif()
     
     STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})    
     STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})    
@@ -94,6 +92,12 @@ else()
     
   endif()
   
-  message(STATUS "  Using libtiff SuperBuild version")
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  if(WIN32)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libtiff_i.lib)
+  elseif(UNIX)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libtiff${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif()
+  
 endif()
 endif()

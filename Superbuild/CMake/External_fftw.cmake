@@ -22,6 +22,7 @@ else()
     # TODO : get precompiled binaries as not all MSVC versions can compile FFTW
       message(STATUS "  FFTW SuperBuild is not available yet...")
   else()
+    message(STATUS "  Using FFTW SuperBuild version")
     # Compile the float version of FFTW
     ExternalProject_Add(${projFloat}
       PREFIX ${proj}
@@ -69,8 +70,12 @@ else()
     #  DEPENDEES patch update
     #  DEPENDERS configure
     #  )
-
-          message(STATUS "  Using FFTW SuperBuild version")
+    
+    add_custom_target(${proj})
+    add_dependencies(${proj} ${projDouble} ${projFloat})
+    
+    set(${proj}_INCLUDE_PATH ${SB_INSTALL_PREFIX}/include)
+    
   endif()
   
 

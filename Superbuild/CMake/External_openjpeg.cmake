@@ -12,20 +12,18 @@ if(USE_SYSTEM_OPENJPEG)
   message(STATUS "  Using OpenJpeg system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using OpenJPEG SuperBuild version")
   
-  # handle dependencies : TIFF, ZLIB, ...
-  # although they seem un-used by the openjp2 codec
-  if(USE_SYSTEM_TIFF)
-    list(APPEND OPENJPEG_SB_CONFIG ${SYSTEM_TIFF_CMAKE_CACHE})
-  else()
-    list(APPEND ${proj}_DEPENDENCIES TIFF)
-  endif()
+  # declare dependencies
+  set(${proj}_DEPENDENCIES TIFF ZLIB)
+  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+  # set proj back to its original value
+  set(proj OPENJPEG)
   
-  if(USE_SYSTEM_ZLIB)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND ${proj}_DEPENDENCIES ZLIB)
-  endif()
+  ADD_SUPERBUILD_CMAKE_VAR(TIFF_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(TIFF_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(ZLIB_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(ZLIB_LIBRARY)
 
   if(MSVC)
   #TODO: add LCMS dependency
@@ -55,8 +53,12 @@ else()
         CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
-  message(STATUS "  Using OpenJPEG SuperBuild version")
-
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  if(WIN32)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/openjp2.lib)
+  elseif(UNIX)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libopenjp2${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif()
  
 endif()
 endif()

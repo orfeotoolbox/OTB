@@ -11,6 +11,7 @@ if(USE_SYSTEM_ITK)
   message(STATUS "  Using ITK system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using ITK SuperBuild version")
   
   # if(MSVC)
     # set(ITK_SB_SRC "C:/Temp/ITK")
@@ -105,56 +106,35 @@ else()
     list(APPEND ITK_MODULES_CMAKE_CACHE -DModule_ITK${ITK_MODULE}:BOOL=ON)
   endforeach()
   
+  # declare dependencies
+  set(${proj}_DEPENDENCIES TIFF EXPAT PNG ZLIB FFTW)
+  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+  # set proj back to its original value
+  set(proj ITK)
+  
+  ADD_SUPERBUILD_CMAKE_VAR(TIFF_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(TIFF_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(EXPAT_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(EXPAT_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(PNG_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(PNG_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(ZLIB_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(ZLIB_LIBRARY)
+  
   # By default activate FFTW, but with an external fftw build
   # These variables are used in ITK to initialize the value of the ITK_USE_FFTW_XXX options
   if (WIN32)
-    set(ITK_SB_FFTW_CONFIG 
+    list(APPEND ITK_SB_CONFIG
       -DUSE_FFTWF:BOOL=OFF
       -DUSE_FFTWD:BOOL=OFF
       )
   else()
-    set(ITK_SB_FFTW_CONFIG 
+    list(APPEND ITK_SB_CONFIG 
       -DUSE_FFTWF:BOOL=ON
       -DUSE_FFTWD:BOOL=ON
       -DUSE_SYSTEM_FFTW:BOOL=ON
       )
-    if (NOT USE_SYSTEM_FFTW)
-      set(ITK_SB_FFTW_CONFIG ${ITK_SB_FFTW_CONFIG}
-        -DFFTW_INCLUDE_PATH:PATH=${SB_INSTALL_PREFIX}/include
-        )
-      list(APPEND ${proj}_DEPENDENCIES FFTWF)
-      list(APPEND ${proj}_DEPENDENCIES FFTWD)
-    endif()
-  endif()
-  
-  # TODO : handle different build type (Release/Debug)
-  
-  if(USE_SYSTEM_TIFF)
-    list(APPEND ITK_SB_CONFIG ${SYSTEM_ITK_CMAKE_CACHE})
-  else()
-    list(APPEND ${proj}_DEPENDENCIES TIFF)
-  endif()
-  
-  if(USE_SYSTEM_EXPAT)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND ${proj}_DEPENDENCIES EXPAT)
-  endif()
-  
-  if(USE_SYSTEM_PNG)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND ${proj}_DEPENDENCIES EXPAT)
-  endif()
-  
-  if(USE_SYSTEM_ZLIB)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND ${proj}_DEPENDENCIES ZLIB)
-  endif()
-  
-  if(MSVC)
-    
+    ADD_SUPERBUILD_CMAKE_VAR(FFTW_INCLUDE_PATH)
   endif()
   
   ExternalProject_Add(${proj}
@@ -178,7 +158,6 @@ else()
       -DITK_USE_SYSTEM_ZLIB:BOOL=ON
       -DITK_USE_SYSTEM_TIFF:BOOL=ON
       -DITK_USE_SYSTEM_PNG:BOOL=ON
-      ${ITK_SB_FFTW_CONFIG}
       ${ITK_SB_CONFIG}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
       ${CMAKE_SOURCE_DIR}/patches/ITK/hashtable.hxx.in
@@ -191,6 +170,7 @@ else()
   #  "configure_file(${CMAKE_SOURCE_DIR}/patches_ITK/hashtable.hxx.in 
   #   ${ITK_SB_SRC}/Modules/ThirdParty/KWSys/src/KWSys/hashtable.hxx.in COPYONLY)")
   
-  message(STATUS "  Using ITK SuperBuild version")
+  set(ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-4.6)
+  
 endif()
 endif()

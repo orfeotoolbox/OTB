@@ -11,6 +11,7 @@ if(USE_SYSTEM_TINYXML)
   message(STATUS "  Using TinyXML system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using TinyXML SuperBuild version")
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
@@ -28,6 +29,12 @@ else()
       ${TINYXML_SB_SRC}
     )
   
-  message(STATUS "  Using TinyXML SuperBuild version")
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  if(WIN32)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/tinyXML.lib)
+  elseif(UNIX)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libtinyxml${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif()
+  
 endif()
 endif()

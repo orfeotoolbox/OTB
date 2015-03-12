@@ -11,6 +11,7 @@ if(USE_SYSTEM_EXPAT)
   message(STATUS "  Using expat system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using Expat SuperBuild version")
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
@@ -27,8 +28,13 @@ else()
         -DBUILD_tools:BOOL=OFF
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
-    
-  message(STATUS "  Using Expat SuperBuild version")
+  
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  if(WIN32)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/expat.lib)
+  elseif(UNIX)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libexpat${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif()
 
 endif()
 endif()

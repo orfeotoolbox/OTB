@@ -11,6 +11,7 @@ if(USE_SYSTEM_JPEG)
   message(STATUS "  Using libjpeg system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using libjpeg SuperBuild version")
   
   if(WIN32)
       
@@ -62,6 +63,12 @@ else()
     
   endif()
   
-  message(STATUS "  Using libjpeg SuperBuild version")
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+    if(WIN32)
+      set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libjpeg.lib)
+    elseif(UNIX)
+      set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libjpeg${CMAKE_SHARED_LIBRARY_SUFFIX})
+    endif()
+  
 endif()
 endif()

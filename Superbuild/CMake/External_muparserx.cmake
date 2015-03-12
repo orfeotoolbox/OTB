@@ -11,10 +11,11 @@ if(USE_SYSTEM_MUPARSERX)
   message(STATUS "  Using muParserX system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using muParserX SuperBuild version")
   
   set(MUPARSERX_FLAGS)
   if(APPLE)
-    set(MUPARSERX_FLAGS -std=c++0x)
+    set(MUPARSERX_FLAGS "-DCMAKE_CXX_FLAGS:STRING=-std=c++0x")
   endif()
   
   # svn checkout http://muparserx.googlecode.com/svn/trunk/ muparserx-read-only
@@ -39,7 +40,12 @@ else()
       ${MUPARSERX_SB_SRC}
     )
   
-  message(STATUS "  Using muParserX SuperBuild version")
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  if(WIN32)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/muparserx.lib)
+  elseif(UNIX)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libmuparserx${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif()
 
 endif()
 endif()

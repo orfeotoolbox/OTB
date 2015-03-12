@@ -11,6 +11,7 @@ if(USE_SYSTEM_OPENCV)
   message(STATUS "  Using OpenCV system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using OpenCV SuperBuild version")
   
   #TODO: add these properly
   # list(APPEND ${proj}_DEPENDENCIES TIFF)
@@ -71,6 +72,6 @@ else()
     DEPENDS ${${proj}_DEPENDENCIES}
     )
   
-  message(STATUS "  Using OpenCV SuperBuild version")
+  set(OpenCV_DIR ${SB_INSTALL_PREFIX}/share/OpenCV)
 endif()
 endif()

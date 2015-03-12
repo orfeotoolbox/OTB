@@ -11,6 +11,16 @@ if(USE_SYSTEM_PNG)
   message(STATUS "  Using libpng system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using libpng SuperBuild version")
+  
+  # declare dependencies
+  set(${proj}_DEPENDENCIES ZLIB)
+  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+  # set proj back to its original value
+  set(proj PNG)
+  
+  ADD_SUPERBUILD_CMAKE_VAR(ZLIB_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(ZLIB_LIBRARY)
   
   if(USE_SYSTEM_ZLIB)
     set(PNG_SB_ZLIB_CONFIG)
@@ -41,7 +51,8 @@ else()
         -DPNG_STATIC:BOOL=OFF
         -DPNG_SHARED:BOOL=ON
         -DPNG_TESTS:BOOL=OFF
-        ${PNG_SB_ZLIB_CONFIG}        
+        -DCMAKE_PREFIX_PATH:STRING=${SB_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}
+        ${PNG_SB_CONFIG}        
       CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
     #having -DPNGLIB_NAME:STRING=libpng in CMAKE_CACHE_ARGS doesnt work
@@ -57,7 +68,13 @@ else()
         DEPENDEES install
     )    
     endif()
-    
-  message(STATUS "  Using libpng SuperBuild version")
+  
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  if(WIN32)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libpng.lib)
+  elseif(UNIX)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libpng${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif()
+  
 endif()
 endif()

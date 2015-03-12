@@ -11,31 +11,20 @@ if(USE_SYSTEM_QT4)
   message(STATUS "  Using Qt4 system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using Qt4 SuperBuild version")
   
   if(NOT DEFINED git_protocol)
     set(git_protocol "git")
   endif()
   
-  #activate only required components for Qt4
-  set(QT4_SB_CONFIG )
-
-  if(NOT USE_SYSTEM_ZLIB) 
-    list(APPEND ${proj}_DEPENDENCIES ZLIB)
-  endif()
-
-  if(NOT USE_SYSTEM_TIFF) 
-    list(APPEND ${proj}_DEPENDENCIES TIFF)
-  endif()
-
-  if(NOT USE_SYSTEM_PNG) 
-    list(APPEND ${proj}_DEPENDENCIES PNG)
-  endif()
+  # declare dependencies
+  set(${proj}_DEPENDENCIES ZLIB TIFF PNG SQLITE)
+  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+  # set proj back to its original value
+  set(proj QT4)
   
-  if(NOT USE_SYSTEM_SQLITE) 
-    list(APPEND ${proj}_DEPENDENCIES SQLITE)
-  endif()
  
- #use system libs always for Qt4 as we build them from source or have already in system
+  #use system libs always for Qt4 as we build them from source or have already in system
   set(QT4_SB_CONFIG)
 
     STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})    
@@ -58,8 +47,6 @@ else()
       # DEPENDEES patch update
       # DEPENDERS configure
   # )
-
-  message(STATUS "  Using Qt4 SuperBuild version")
 
 endif()
 endif()

@@ -19,37 +19,24 @@ if(USE_SYSTEM_OSSIM)
   message(STATUS "  Using OSSIM system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using OSSIM SuperBuild version")
   
-  # set project dependencies (GEOS, GDAL, TIFF, JPEG, OPENTHREADS, )
-  if(USE_SYSTEM_TIFF)
-    list(APPEND OSSIM_SB_CONFIG ${SYSTEM_TIFF_CMAKE_CACHE})
-  else()
-    list(APPEND ${proj}_DEPENDENCIES TIFF)
-  endif()
+  # declare dependencies
+  set(${proj}_DEPENDENCIES TIFF GEOTIFF GEOS JPEG OPENTHREADS)
+  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+  # set proj back to its original value
+  set(proj OSSIM)
   
-  if(USE_SYSTEM_GEOTIFF)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND ${proj}_DEPENDENCIES GEOTIFF)
-  endif()
-  
-  if(USE_SYSTEM_GEOS)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND ${proj}_DEPENDENCIES GEOS)
-  endif()
-  
-  if(USE_SYSTEM_JPEG)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND ${proj}_DEPENDENCIES JPEG)
-  endif()
-  
-  if(USE_SYSTEM_OPENTHREADS)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND ${proj}_DEPENDENCIES OPENTHREADS)
-  endif()
+  ADD_SUPERBUILD_CMAKE_VAR(TIFF_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(TIFF_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(GEOTIFF_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(GEOTIFF_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(GEOS_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(GEOS_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(JPEG_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(JPEG_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(OPENTHREADS_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(OPENTHREADS_LIBRARY)
 
   ExternalProject_Add(ossim_cmakemodules
     PREFIX ${proj}/_cmakemodules
@@ -93,8 +80,14 @@ else()
       DEPENDEES patch update
       DEPENDERS configure
     )  
- 
-  message(STATUS "  Using OSSIM SuperBuild version")
+  
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  if(WIN32)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/ossim.lib)
+  elseif(UNIX)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libossim${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif()
+  
 endif()
 
 endif()

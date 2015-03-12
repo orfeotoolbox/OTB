@@ -11,71 +11,35 @@ if(USE_SYSTEM_GEOTIFF)
   message(STATUS "  Using libgeotiff system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using GeoTIFF SuperBuild version")
   
-  # handle dependencies : TIFF Proj4 Zlib Jpeg
-  if(USE_SYSTEM_TIFF)
-    if(MSVC)
-      list(APPEND GEOTIFF_SB_CONFIG ${SYSTEM_TIFF_CMAKE_CACHE})
-    else()
-      if(NOT SYSTEM_TIFF_PREFIX STREQUAL "")
-        list(APPEND GEOTIFF_SB_CONFIG --with-libtiff=${SYSTEM_TIFF_PREFIX})
-      endif()
-    endif()
+  # declare dependencies
+  set(${proj}_DEPENDENCIES TIFF PROJ JPEG ZLIB)
+  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+  # set proj back to its original value
+  set(proj GEOTIFF)
+  
+  if(MSVC)
+    ADD_SUPERBUILD_CMAKE_VAR(TIFF_INCLUDE_DIR)
+    ADD_SUPERBUILD_CMAKE_VAR(TIFF_LIBRARY)
+    ADD_SUPERBUILD_CMAKE_VAR(PROJ4_INCLUDE_DIR)
+    ADD_SUPERBUILD_CMAKE_VAR(PROJ4_LIBRARY)
+    ADD_SUPERBUILD_CMAKE_VAR(ZLIB_INCLUDE_DIR)
+    ADD_SUPERBUILD_CMAKE_VAR(ZLIB_LIBRARY)
+    ADD_SUPERBUILD_CMAKE_VAR(JPEG_INCLUDE_DIR)
+    ADD_SUPERBUILD_CMAKE_VAR(JPEG_LIBRARY)
   else()
-    if(MSVC)
-      list(APPEND GEOTIFF_SB_CONFIG
-        -DTIFF_INCLUDE_DIR:STRING=${SB_INSTALL_PREFIX}/include 
-        -DTIFF_LIBRARY:STRING=${SB_INSTALL_PREFIX}/lib/libtiff_i.lib
-        )
-    else()
-      list(APPEND GEOTIFF_SB_CONFIG --with-libtiff=${SB_INSTALL_PREFIX})
-    endif()
-    
-    list(APPEND ${proj}_DEPENDENCIES TIFF)
+    ADD_SUPERBUILD_CONFIGURE_VAR(TIFF_SB_ROOT --with-libtiff)
+    ADD_SUPERBUILD_CONFIGURE_VAR(PROJ_SB_ROOT --with-proj)
+    ADD_SUPERBUILD_CONFIGURE_VAR(ZLIB_SB_ROOT --with-zlib)
+    ADD_SUPERBUILD_CONFIGURE_VAR(JPEG_SB_ROOT --with-jpeg)
   endif()
   
-  if(USE_SYSTEM_PROJ)
-    set(GEOTIFF_SB_PROJ_CONFIG)
-  else()
-    set(GEOTIFF_SB_PROJ_CONFIG --with-proj=${SB_INSTALL_PREFIX})
-        if(MSVC)
-        set(GEOTIFF_SB_PROJ_CONFIG 
-        -DPROJ4_INCLUDE_DIR:STRING=${SB_INSTALL_PREFIX}/include 
-        -DPROJ4_LIBRARY:STRING=${SB_INSTALL_PREFIX}/lib/proj_i.lib
-        )
-    endif()
-    list(APPEND ${proj}_DEPENDENCIES PROJ)
-  endif()
-  
-  if(USE_SYSTEM_ZLIB)
-    set(GEOTIFF_SB_ZLIB_CONFIG)
-  else()
-    # geotiff configure script doesn't use the given path for zlib
-    # so this feature is not enabled
-    set(GEOTIFF_SB_ZLIB_CONFIG)
-    if(MSVC)
-        set(GEOTIFF_SB_ZLIB_CONFIG 
-        -DZLIB_INCLUDE_DIR:STRING=${SB_INSTALL_PREFIX}/include 
-        -DZLIB_LIBRARY:STRING=${SB_INSTALL_PREFIX}/lib/zlib.lib
-        )
-    list(APPEND ${proj}_DEPENDENCIES ZLIB)
-    endif()
-    #set(GEOTIFF_SB_ZLIB_CONFIG --with-zlib=${SB_INSTALL_PREFIX})
-    #list(APPEND ${proj}_DEPENDENCIES ZLIB)
-  endif()
-  
-  if(USE_SYSTEM_JPEG)
-    set(GEOTIFF_SB_JPEG_CONFIG)
-  else()
-    set(GEOTIFF_SB_JPEG_CONFIG --with-jpeg=${SB_INSTALL_PREFIX})
-    if(MSVC)
-      set(GEOTIFF_SB_JPEG_CONFIG 
-        -DJPEG_INCLUDE_DIR:STRING=${SB_INSTALL_PREFIX}/include 
-        -DJPEG_LIBRARY:STRING=${SB_INSTALL_PREFIX}/lib/libjpeg.lib
-        )
-      list(APPEND ${proj}_DEPENDENCIES JPEG)
-    endif()    
-  endif()
+    #if(MSVC)
+    #    set(GEOTIFF_SB_ZLIB_CONFIG 
+    #    -DZLIB_INCLUDE_DIR:STRING=${SB_INSTALL_PREFIX}/include 
+    #    -DZLIB_LIBRARY:STRING=${SB_INSTALL_PREFIX}/lib/zlib.lib
+    #    )
   
   if(MSVC)
 
@@ -98,10 +62,8 @@ else()
         -DWITH_JPEG:BOOL=OFF
         -DWITH_ZLIB:BOOL=ON
         -DWITH_UTILITIES:BOOL=ON
+        -DCMAKE_PREFIX_PATH:STRING=${SB_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}
         ${GEOTIFF_SB_CONFIG}
-        ${GEOTIFF_SB_JPEG_CONFIG}
-        ${GEOTIFF_SB_PROJ_CONFIG}
-        ${GEOTIFF_SB_ZLIB_CONFIG}
       CMAKE_COMMAND
       )
   else()
@@ -117,11 +79,7 @@ else()
         ${GEOTIFF_SB_BUILD_DIR}/configure
         --prefix=${SB_INSTALL_PREFIX}
         --enable-static=no
-        ${GEOTIFF_SB_JPEG_CONFIG}
         ${GEOTIFF_SB_CONFIG}
-        ${GEOTIFF_SB_PROJ_CONFIG}
-        ${GEOTIFF_SB_ZLIB_CONFIG}
-        
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
       DEPENDS ${${proj}_DEPENDENCIES}
@@ -139,6 +97,6 @@ else()
     
   endif()
   
-  message(STATUS "  Using GeoTIFF SuperBuild version")
+  
 endif()
 endif()

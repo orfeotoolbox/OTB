@@ -14,7 +14,7 @@ if(USE_SYSTEM_ZLIB)
   message(STATUS "  Using Zlib system version : ${ZLIB_ROOT}")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
-  
+  message(STATUS "  Using zlib SuperBuild version")
   # declare dependencies
   
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
@@ -43,17 +43,13 @@ else()
       )  
     endif()
     
-    set(ZLIB_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-    set(ZLIB_ROOT ${SB_INSTALL_PREFIX})
-    if(MSVC)
-      set(ZLIB_LIBRARY ${SB_INSTALL_PREFIX}/lib/zdll.lib)
-    elseif(APPLE)
-      set(ZLIB_LIBRARY ${SB_INSTALL_PREFIX}/lib/libz.dylib)
-    else()
-      set(ZLIB_LIBRARY ${SB_INSTALL_PREFIX}/lib/libz.so)
+    set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+    if(WIN32)
+      set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/zdll.lib)
+    elseif(UNIX)
+      set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libz${CMAKE_SHARED_LIBRARY_SUFFIX})
     endif()
-
-     message(STATUS "  Using zlib SuperBuild version")
+    
 endif()
 
 endif()

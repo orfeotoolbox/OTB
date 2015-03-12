@@ -11,6 +11,7 @@ if(USE_SYSTEM_SWIG)
   message(STATUS "  Using swig system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using swig SuperBuild version")
   
   set(PythonInterp_FIND_VERSION 2.7)
   find_package(PythonInterp)
@@ -43,19 +44,14 @@ else()
       )
     
   else()
-    if(USE_SYSTEM_PCRE)
-      # TODO : handle specific location
-    else()
-      list(APPEND SWIG_SB_CONFIG --with-pcre-prefix=${SB_INSTALL_PREFIX})
-      list(APPEND ${proj}_DEPENDENCIES PCRE)
-    endif()
+    # declare dependencies
+    set(${proj}_DEPENDENCIES PCRE BOOST)
+    INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+    # set proj back to its original value
+    set(proj SWIG)
     
-    if(USE_SYSTEM_BOOST)
-      # TODO : handle specific location
-    else()
-      list(APPEND SWIG_SB_CONFIG --with-boost=${SB_INSTALL_PREFIX})
-      list(APPEND ${proj}_DEPENDENCIES BOOST)
-    endif()
+    ADD_SUPERBUILD_CONFIGURE_VAR(PCRE_SB_ROOT --with-pcre-prefix)
+    ADD_SUPERBUILD_CONFIGURE_VAR(BOOST_SB_ROOT --with-boost)
     
     ExternalProject_Add(${proj}
       PREFIX ${proj}
@@ -83,6 +79,11 @@ else()
     
   endif()
   
-  message(STATUS "  Using swig SuperBuild version")
+  if(WIN32)
+    set(SWIG_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/swig.exe)
+  elseif(UNIX)
+    set(SWIG_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/swig)
+  endif()
+  
 endif()
 endif()

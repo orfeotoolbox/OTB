@@ -11,34 +11,18 @@ if(USE_SYSTEM_LIBKML)
   message(STATUS "  Using libKML system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using libKML SuperBuild version")
+  # declare dependencies
+  set(${proj}_DEPENDENCIES EXPAT ZLIB BOOST)
+  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+  # set proj back to its original value
+  set(proj LIBKML)
   
-  if(USE_SYSTEM_EXPAT)
-    set(LIBKML_SB_EXPAT_CONFIG)
-  else()
-    set(LIBKML_SB_EXPAT_CONFIG 
-      -DEXPAT_INCLUDE_DIR:STRING=${SB_INSTALL_PREFIX}/include
-      -DEXPAT_LIBRARY:STRING=${SB_INSTALL_PREFIX}/lib/libexpat${CMAKE_SHARED_LIBRARY_SUFFIX}
-      )
-      if(MSVC)
-        set(LIBKML_SB_EXPAT_CONFIG 
-            -DEXPAT_INCLUDE_DIR:STRING=${SB_INSTALL_PREFIX}/include
-            -DEXPAT_LIBRARY:STRING=${SB_INSTALL_PREFIX}/lib/expat.lib
-        )  
-      endif()
-    list(APPEND ${proj}_DEPENDENCIES EXPAT)
-  endif()
-  
-  if(USE_SYSTEM_BOOST)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND ${proj}_DEPENDENCIES BOOST)
-  endif()
-  
-  if(USE_SYSTEM_ZLIB)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND ${proj}_DEPENDENCIES ZLIB)
-  endif()
+  ADD_SUPERBUILD_CMAKE_VAR(EXPAT_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(EXPAT_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(ZLIB_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(ZLIB_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(Boost_INCLUDE_DIR)
 
   ExternalProject_Add(${proj}
     PREFIX ${proj}
@@ -53,10 +37,28 @@ else()
       -DCMAKE_BUILD_TYPE:STRING=Release
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DCMAKE_PREFIX_PATH:STRING=${SB_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}
-      ${LIBKML_SB_EXPAT_CONFIG}
+      ${LIBKML_SB_CONFIG}
+    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
   
-  message(STATUS "  Using libKML SuperBuild version")
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  if(WIN32)
+    set(${proj}_BASE_LIBRARY ${SB_INSTALL_PREFIX}/lib/kmlbase.lib)
+    set(${proj}_CONVENIENCE_LIBRARY ${SB_INSTALL_PREFIX}/lib/kmlconvenience.lib)
+    set(${proj}_DOM_LIBRARY ${SB_INSTALL_PREFIX}/lib/kmldom.lib)
+    set(${proj}_ENGINE_LIBRARY ${SB_INSTALL_PREFIX}/lib/kmlengine.lib)
+    set(${proj}_REGIONATOR_LIBRARY ${SB_INSTALL_PREFIX}/lib/kmlregionator.lib)
+    set(${proj}_XSD_LIBRARY ${SB_INSTALL_PREFIX}/lib/kmlxsd.lib)
+    set(${proj}_MINIZIP_LIBRARY ${SB_INSTALL_PREFIX}/lib/minizip.lib)
+  elseif(UNIX)
+    set(${proj}_BASE_LIBRARY ${SB_INSTALL_PREFIX}/lib/libkmlbase${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(${proj}_CONVENIENCE_LIBRARY ${SB_INSTALL_PREFIX}/lib/libkmlconvenience${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(${proj}_DOM_LIBRARY ${SB_INSTALL_PREFIX}/lib/libkmldom${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(${proj}_ENGINE_LIBRARY ${SB_INSTALL_PREFIX}/lib/libkmlengine${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(${proj}_REGIONATOR_LIBRARY ${SB_INSTALL_PREFIX}/lib/libkmlregionator${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(${proj}_XSD_LIBRARY ${SB_INSTALL_PREFIX}/lib/libkmlxsd${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(${proj}_MINIZIP_LIBRARY ${SB_INSTALL_PREFIX}/lib/libminizip${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif()
   
 endif()
 endif()

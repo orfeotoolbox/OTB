@@ -12,6 +12,7 @@ if(USE_SYSTEM_PCRE)
   message(STATUS "  Using pcre system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using pcre SuperBuild version")
   
   if(MSVC)
     # TODO ?
@@ -39,6 +40,5 @@ else()
     
   endif()
   
-  message(STATUS "  Using pcre SuperBuild version")
 endif()
 endif()

@@ -12,6 +12,7 @@ if(USE_SYSTEM_PROJ)
   message(STATUS "  Using Proj4 system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using Proj4 SuperBuild version")
   
   if(MSVC)
 
@@ -73,6 +74,12 @@ else()
     )    
   endif()
   
-  message(STATUS "  Using Proj4 SuperBuild version")
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  if(WIN32)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/proj_i.lib)
+  elseif(UNIX)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libproj${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif()
+  
 endif()
 endif()

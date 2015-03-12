@@ -15,6 +15,7 @@ if(USE_SYSTEM_OPENTHREADS)
   message(STATUS "  Using OpenThread system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using OpenThreads SuperBuild version")
   
   #TODO: try to use cmake variable for DOWNLOAD_COMMAND for different platforms
   if(MSVC)
@@ -53,7 +54,12 @@ else()
     )
   endif()
   
-  message(STATUS "  Using OpenThreads SuperBuild version")
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  if(WIN32)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/OpenThreads.lib)
+  elseif(UNIX)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libOpenThreads${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif()
 
 endif()
 endif()

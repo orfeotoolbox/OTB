@@ -11,87 +11,33 @@ if(USE_SYSTEM_GDAL)
   message(STATUS "  Using GDAL system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
+  message(STATUS "  Using GDAL SuperBuild version")
   
-  if(USE_SYSTEM_TIFF)
-    if(NOT SYSTEM_TIFF_PREFIX STREQUAL "")
-      list(APPEND GDAL_SB_CONFIG --with-libtiff=${SYSTEM_TIFF_PREFIX})
-    endif()
-  else()
-    list(APPEND GDAL_SB_CONFIG --with-libtiff=${SB_INSTALL_PREFIX})
-    list(APPEND ${proj}_DEPENDENCIES TIFF)
-  endif()
+  # declare dependencies
+  set(${proj}_DEPENDENCIES TIFF GEOTIFF PNG JPEG OPENJPEG SQLITE GEOS ZLIB EXPAT LIBKML CURL)
+  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+  # set proj back to its original value
+  set(proj GDAL)
   
-  if(USE_SYSTEM_GEOTIFF)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND GDAL_SB_CONFIG --with-geotiff=${SB_INSTALL_PREFIX})
-    list(APPEND ${proj}_DEPENDENCIES GEOTIFF)
-  endif()
-
-  if(USE_SYSTEM_PNG)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND GDAL_SB_CONFIG --with-png=${SB_INSTALL_PREFIX})
-    list(APPEND ${proj}_DEPENDENCIES PNG)
-  endif()
-
-  #gdal on msvc link with internal jpeg .
-  if(USE_SYSTEM_JPEG)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND GDAL_SB_CONFIG --with-jpeg=${SB_INSTALL_PREFIX})
-    list(APPEND ${proj}_DEPENDENCIES JPEG)
-  endif()  
+  ADD_SUPERBUILD_CONFIGURE_VAR(TIFF_SB_ROOT     --with-libtiff)
+  ADD_SUPERBUILD_CONFIGURE_VAR(GEOTIFF_SB_ROOT  --with-geotiff)
+  ADD_SUPERBUILD_CONFIGURE_VAR(PNG_SB_ROOT      --with-png)
+  ADD_SUPERBUILD_CONFIGURE_VAR(JPEG_SB_ROOT     --with-jpeg)
+  ADD_SUPERBUILD_CONFIGURE_VAR(OPENJPEG_SB_ROOT --with-openjpeg)
+  ADD_SUPERBUILD_CONFIGURE_VAR(SQLITE_SB_ROOT   --with-sqlite3)
+  ADD_SUPERBUILD_CONFIGURE_VAR(GEOS_SB_ROOT     --with-geos)
+  ADD_SUPERBUILD_CONFIGURE_VAR(ZLIB_SB_ROOT     --with-libz)
+  ADD_SUPERBUILD_CONFIGURE_VAR(EXPAT_SB_ROOT    --with-expat)
+  ADD_SUPERBUILD_CONFIGURE_VAR(LIBKML_SB_ROOT   --with-libkml)
+  ADD_SUPERBUILD_CONFIGURE_VAR(CURL_SB_ROOT     --with-curl)
   
-  if(USE_SYSTEM_OPENJPEG)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND GDAL_SB_CONFIG --with-openjpeg=${SB_INSTALL_PREFIX})
-    list(APPEND ${proj}_DEPENDENCIES OPENJPEG)
-  endif()
-  
-  if(USE_SYSTEM_SQLITE)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND GDAL_SB_CONFIG --with-sqlite3=${SB_INSTALL_PREFIX})
-    list(APPEND ${proj}_DEPENDENCIES SQLITE)
-  endif()
-  
-  if(USE_SYSTEM_GEOS)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND GDAL_SB_CONFIG --with-geos=${SB_INSTALL_PREFIX}/bin/geos-config)
-    list(APPEND ${proj}_DEPENDENCIES GEOS)
-  endif()
-  
-  if(USE_SYSTEM_ZLIB)
-    # TODO : handle specific prefix
-  else()
-    # Not shure this setting works with zlib
-    list(APPEND GDAL_SB_CONFIG --with-libz=${SB_INSTALL_PREFIX})
-    list(APPEND ${proj}_DEPENDENCIES ZLIB)
-  endif()
-  
-  if(USE_SYSTEM_EXPAT)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND GDAL_SB_CONFIG --with-expat=${SB_INSTALL_PREFIX})
-    list(APPEND ${proj}_DEPENDENCIES EXPAT)
-  endif()
-  
-  if(USE_SYSTEM_LIBKML)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND GDAL_SB_CONFIG --with-libkml=${SB_INSTALL_PREFIX})
-    list(APPEND ${proj}_DEPENDENCIES LIBKML)
-  endif()
-  
-  if(USE_SYSTEM_CURL)
-    # TODO : handle specific prefix
-  else()
-    list(APPEND GDAL_SB_CONFIG --with-curl=${SB_INSTALL_PREFIX})
-    list(APPEND ${proj}_DEPENDENCIES CURL)
-  endif()
+  #if(USE_SYSTEM_TIFF)
+  #  if(NOT SYSTEM_TIFF_PREFIX STREQUAL "")
+  #    list(APPEND GDAL_SB_CONFIG --with-libtiff=${SYSTEM_TIFF_PREFIX})
+  #  endif()
+  #else()
+  #  list(APPEND GDAL_SB_CONFIG --with-libtiff=${SB_INSTALL_PREFIX})
+  #endif()
   
   if(UNIX)
     set(GDAL_SB_EXTRA_OPTIONS "" CACHE STRING "Extra options to be passed to GDAL configure script")
@@ -145,10 +91,14 @@ else()
        INSTALL_COMMAND nmake /f ${GDAL_SB_BUILD_DIR}/makefile.vc devinstall MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
     )
     
-    
   endif()
   
-  message(STATUS "  Using GDAL SuperBuild version")
+  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  if(WIN32)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/bin/gdal111.dll)
+  elseif(UNIX)
+    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgdal${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif() 
   
 endif()
 endif()
