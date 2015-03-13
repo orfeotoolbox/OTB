@@ -80,9 +80,9 @@ else()
   endif()
   
   if(WIN32)
-    set(SWIG_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/swig.exe)
+    set(_SB_SWIG_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/swig.exe)
   elseif(UNIX)
-    set(SWIG_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/swig)
+    set(_SB_SWIG_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/swig)
   endif()
   
 endif()

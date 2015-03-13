@@ -170,7 +170,7 @@ else()
   #  "configure_file(${CMAKE_SOURCE_DIR}/patches_ITK/hashtable.hxx.in 
   #   ${ITK_SB_SRC}/Modules/ThirdParty/KWSys/src/KWSys/hashtable.hxx.in COPYONLY)")
   
-  set(ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-4.6)
+  set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-4.6)
   
 endif()
 endif()

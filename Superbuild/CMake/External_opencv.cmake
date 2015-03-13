@@ -72,6 +72,6 @@ else()
     DEPENDS ${${proj}_DEPENDENCIES}
     )
   
-  set(OpenCV_DIR ${SB_INSTALL_PREFIX}/share/OpenCV)
+  set(_SB_OpenCV_DIR ${SB_INSTALL_PREFIX}/share/OpenCV)
 endif()
 endif()

@@ -30,11 +30,11 @@ else()
       CMAKE_COMMAND ${SB_CMAKE_COMMAND}  
   )
   
-  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
-    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/bin/geos.dll)
+    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/bin/geos.dll)
   elseif(UNIX)
-    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgeos${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgeos${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
   
  endif()

@@ -54,11 +54,11 @@ else()
 
   endif()
   
-  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
-    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/sqlite3.lib)
+    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/sqlite3.lib)
   elseif(UNIX)
-    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libsqlite3${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libsqlite3${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
   
 endif()

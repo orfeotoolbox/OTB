@@ -74,7 +74,7 @@ else()
     add_custom_target(${proj})
     add_dependencies(${proj} ${projDouble} ${projFloat})
     
-    set(${proj}_INCLUDE_PATH ${SB_INSTALL_PREFIX}/include)
+    set(_SB_${proj}_INCLUDE_PATH ${SB_INSTALL_PREFIX}/include)
     
   endif()
   

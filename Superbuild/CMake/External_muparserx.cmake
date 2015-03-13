@@ -40,11 +40,11 @@ else()
       ${MUPARSERX_SB_SRC}
     )
   
-  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
-    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/muparserx.lib)
+    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/muparserx.lib)
   elseif(UNIX)
-    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libmuparserx${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libmuparserx${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
 
 endif()

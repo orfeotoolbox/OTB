@@ -29,11 +29,11 @@ else()
         ${MUPARSER_SB_SRC}
     )
   
-  set(${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
-    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/muparser.lib)
+    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/muparser.lib)
   elseif(UNIX)
-    set(${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libmuparser${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libmuparser${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
 
 endif()

@@ -133,8 +133,8 @@ else()
     
   endif() #end else MSVC
   
-  set(Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-  set(Boost_LIBRARY_DIR ${SB_INSTALL_PREFIX}/lib)
+  set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  set(_SB_Boost_LIBRARY_DIR ${SB_INSTALL_PREFIX}/lib)
   
   
 endif()
