@@ -949,7 +949,7 @@ otb_add_test(NAME ioTvCompareWritingComplexImage_HDR COMMAND otbImageIOTestDrive
   0 0 100 100)
 
 
-if(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
   set( GenericTestPHR_TESTNB 0)
 
 foreach( current_file ${GenericTestPHR_DATA_INPUTS} )

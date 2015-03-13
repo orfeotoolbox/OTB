@@ -208,26 +208,6 @@ if(OTB_DATA_USE_LARGEINPUT)
   mark_as_advanced(OTB_DATA_LARGEINPUT_ROOT)
 endif()
 
-option(OTB_DATA_USE_SPOTPHRINPUT "Use PHR data provided by SPOT." OFF)
-mark_as_advanced(OTB_DATA_USE_SPOTPHRINPUT)
-if(OTB_DATA_USE_SPOTPHRINPUT)
-  find_path(OTB_DATA_SPOTPHRINPUT_ROOT
-    NAMES OTB_PHR_Data.readme
-    HINTS $ENV{OTB_DATA_SPOTPHRINPUT_ROOT}
-  )
-  mark_as_advanced(OTB_DATA_SPOTPHRINPUT_ROOT)
-endif()
-
-option(OTB_DATA_USE_CNESPHRINPUT "Use PHR data provided by CNES." OFF)
-mark_as_advanced(OTB_DATA_USE_CNESPHRINPUT)
-if(OTB_DATA_USE_CNESPHRINPUT)
-  find_path(OTB_DATA_CNESPHRINPUT_ROOT 
-    NAMES OTB_PHR_Data.readme
-    HINTS $ENV{OTB_DATA_CNESPHRINPUT_ROOT}
-  )
-  mark_as_advanced(OTB_DATA_CNESPHRINPUT_ROOT)
-endif()
-
 #Generate cmake variables with a set of largeinput data used in tests
 include(OTBManageLargeInputPaths)
 

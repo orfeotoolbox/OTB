@@ -390,7 +390,7 @@ otb_add_test(NAME feTuMetaImageFunctionNew COMMAND otbImageBaseTestDriver
   otbMetaImageFunctionNew
   )
 
-if(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
   set( GenericTestPHR_TESTNB 0)
 
   foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
