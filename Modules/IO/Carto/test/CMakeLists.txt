@@ -33,6 +33,7 @@ otb_add_test(NAME ioTvImageToOSMVectorDataGenerator COMMAND otbCartoTestDriver
   -out ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
   -key highvay,motorway
   )
+set_property(TEST ioTvImageToOSMVectorDataGenerator PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME ioTvMapFileProductWriter COMMAND otbCartoTestDriver
   otbMapFileProductWriter
@@ -55,6 +56,7 @@ otb_add_test(NAME ioTvOSMToVectorDataGeneratorByName COMMAND otbCartoTestDriver
   -osm ${INPUTDATA}/qb_road.osm
   -vd ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
   )
+set_property(TEST ioTvOSMToVectorDataGeneratorByName PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME ioTvOSMToVectorDataGeneratorTest COMMAND otbCartoTestDriver
   --compare-ogr ${EPSILON_9}
@@ -64,6 +66,7 @@ otb_add_test(NAME ioTvOSMToVectorDataGeneratorTest COMMAND otbCartoTestDriver
   ${INPUTDATA}/qb_road.osm
   ${TEMP}/ioTvOSMToVectorDataFilterTest_highway.shp
   )
+set_property(TEST ioTvOSMToVectorDataGeneratorTest PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME coTvCoordinateToNameTest COMMAND otbCartoTestDriver
   --compare-ascii ${NOTOL}

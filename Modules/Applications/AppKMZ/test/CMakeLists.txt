@@ -8,6 +8,7 @@ otb_test_application(NAME apTvUtKmzExport
                              -logo ${INPUTDATA}/cnes.png
                              -legend ${INPUTDATA}/otb_big.png
                              -elev.dem ${INPUTDATA}/DEM/srtm_directory)
+set_property(TEST apTvUtKmzExport PROPERTY RESOURCE_LOCK kmz_tmp_dir)
 
 otb_test_application(NAME apTvUtKmzExport1Band
                      APP KmzExport

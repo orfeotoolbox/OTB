@@ -31,6 +31,7 @@ otb_add_test(NAME ioTvTileMapImageIOWeb COMMAND otbIOTileMapTestDriver
   ${TEMP}
   1.4835345 43.55968261 13
   )
+set_property(TEST ioTvTileMapImageIOWeb PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME ioTvTileMapImageIOFile COMMAND otbIOTileMapTestDriver
   otbTileMapImageIOTest
@@ -39,6 +40,7 @@ otb_add_test(NAME ioTvTileMapImageIOFile COMMAND otbIOTileMapTestDriver
   ${TEMP}
   1.4835345 43.55968261 13
   )
+set_property(TEST ioTvTileMapImageIOFile PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME ioTvTileMapWriter COMMAND otbIOTileMapTestDriver
   otbTileMapWriter
