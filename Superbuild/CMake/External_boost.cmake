@@ -55,6 +55,7 @@ else()
         CONFIGURE_COMMAND
           ${BOOST_SB_BUILD_DIR}/bootstrap.sh
             --prefix=${SB_INSTALL_PREFIX}
+            --with-libraries=graph,test,regex
         BUILD_COMMAND ./b2
         INSTALL_COMMAND ./b2 install
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory
