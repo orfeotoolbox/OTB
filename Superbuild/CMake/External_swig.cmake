@@ -6,7 +6,7 @@ set(__EXTERNAL_${proj}__ 1)
 message(STATUS "Setup swig...")
 
 if(USE_SYSTEM_SWIG)
-  find_package ( SWIG REQUIRED )
+  find_package ( SWIG )
   add_custom_target(${proj})
   message(STATUS "  Using swig system version")
 else()

@@ -7,7 +7,7 @@ message(STATUS "Setup OpenJpeg...")
 
 if(USE_SYSTEM_OPENJPEG)
   # TODO : FindOpenJPEG.cmake
-  # find_package ( OpenJPEG REQUIRED )
+  # find_package ( OpenJPEG )
   add_custom_target(${proj})
   message(STATUS "  Using OpenJpeg system version")
 else()

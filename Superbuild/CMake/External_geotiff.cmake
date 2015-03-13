@@ -6,7 +6,7 @@ set(__EXTERNAL_${proj}__ 1)
 message(STATUS "Setup libgeotiff...")
 
 if(USE_SYSTEM_GEOTIFF)
-  find_package ( GeoTIFF REQUIRED )
+  find_package ( GeoTIFF )
   add_custom_target(${proj})
   message(STATUS "  Using libgeotiff system version")
 else()

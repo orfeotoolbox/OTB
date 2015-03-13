@@ -8,7 +8,7 @@ message(STATUS "Setup Zlib ...")
 ADD_SYSTEM_PREFIX(PROJECT ${proj} CMAKE_ALIAS ZLIB_ROOT)
 
 if(USE_SYSTEM_ZLIB)
-  find_package(ZLIB REQUIRED)
+  find_package(ZLIB)
   add_custom_target(${proj})
   message(STATUS "  Using Zlib system version")
 else()

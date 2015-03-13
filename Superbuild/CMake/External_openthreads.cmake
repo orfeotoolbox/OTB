@@ -10,7 +10,7 @@ set(USE_SYSTEM_OPENTHREADS OFF)
 endif()
 
 if(USE_SYSTEM_OPENTHREADS)
-  find_package ( OpenThreads REQUIRED )
+  find_package ( OpenThreads )
   add_custom_target(${proj})
   message(STATUS "  Using OpenThread system version")
 else()

@@ -14,7 +14,7 @@ message(STATUS "Setup Ossim...")
 ADD_SYSTEM_LOCATION(PROJECT ${proj} VARIABLES ${proj}_LIBRARY ${proj}_INCLUDE_DIR)
 
 if(USE_SYSTEM_OSSIM)
-  find_package ( Ossim REQUIRED )
+  find_package ( Ossim )
   add_custom_target(${proj})
   message(STATUS "  Using OSSIM system version")
 else()

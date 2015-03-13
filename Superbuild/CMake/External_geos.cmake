@@ -7,7 +7,7 @@ message(STATUS "Setup GEOS ...")
 
 if(USE_SYSTEM_GEOS)
   # TODO : FindGEOS.cmake
-  #find_package ( GEOS REQUIRED )
+  #find_package ( GEOS )
   add_custom_target(${proj})
   message(STATUS "  Using GEOS system version")
 else()

@@ -10,7 +10,7 @@ message(STATUS "Setup libtiff...")
 #ADD_SYSTEM_PREFIX(PROJECT ${proj})
 
 if(USE_SYSTEM_TIFF)
-  find_package ( TIFF REQUIRED )
+  find_package ( TIFF )
   add_custom_target(${proj})
   message(STATUS "  Using libtiff system version")
 else()

@@ -6,7 +6,7 @@ set(__EXTERNAL_${proj}__ 1)
 message(STATUS "Setup OpenCV...")
 
 if(USE_SYSTEM_OPENCV)
-  find_package ( OpenCV REQUIRED )
+  find_package ( OpenCV )
   add_custom_target(${proj})
   message(STATUS "  Using OpenCV system version")
 else()

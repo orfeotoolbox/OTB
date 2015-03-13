@@ -6,7 +6,7 @@ set(__EXTERNAL_${proj}__ 1)
 message(STATUS "Setup ITK...")
 
 if(USE_SYSTEM_ITK)
-  find_package ( ITK REQUIRED )
+  find_package ( ITK )
   add_custom_target(${proj})
   message(STATUS "  Using ITK system version")
 else()

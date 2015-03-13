@@ -15,7 +15,6 @@ if(USE_SYSTEM_BOOST)
   # Required
   find_package ( Boost
     1.35.0
-    REQUIRED
     )
   # Optional components
   find_package ( Boost

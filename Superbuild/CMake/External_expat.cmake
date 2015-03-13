@@ -6,7 +6,7 @@ set(__EXTERNAL_${proj}__ 1)
 message(STATUS "Setup expat ...")
 
 if(USE_SYSTEM_EXPAT)
-  find_package ( EXPAT REQUIRED )
+  find_package ( EXPAT )
   add_custom_target(${proj})
   message(STATUS "  Using expat system version")
 else()

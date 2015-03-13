@@ -6,7 +6,7 @@ set(__EXTERNAL_${proj}__ 1)
 message(STATUS "Setup libjpeg...")
 
 if(USE_SYSTEM_JPEG)
-  find_package ( JPEG REQUIRED )
+  find_package ( JPEG )
   add_custom_target(${proj})
   message(STATUS "  Using libjpeg system version")
 else()

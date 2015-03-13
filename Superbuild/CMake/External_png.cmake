@@ -6,7 +6,7 @@ set(__EXTERNAL_${proj}__ 1)
 message(STATUS "Setup libpng...")
 
 if(USE_SYSTEM_PNG)
-  find_package ( PNG REQUIRED )
+  find_package ( PNG )
   add_custom_target(${proj})
   message(STATUS "  Using libpng system version")
 else()

@@ -6,7 +6,7 @@ set(__EXTERNAL_${proj}__ 1)
 message(STATUS "Setup Qt4 ...")
 
 if(USE_SYSTEM_QT4)
-  find_package ( QT4 REQUIRED )
+  find_package ( QT4 )
   add_custom_target(${proj})
   message(STATUS "  Using Qt4 system version")
 else()
