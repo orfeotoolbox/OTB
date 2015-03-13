@@ -43,6 +43,7 @@ otb_add_test(NAME ioTvMapFileProductWriter COMMAND otbCartoTestDriver
   http://localhost/cgi-bin/mapserv # cgi executable path
   256
   )
+set_property(TEST ioTvMapFileProductWriter PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME ioTuOSMToVectorDataGenerator COMMAND otbCartoTestDriver
   otbOSMToVectorDataGeneratorNew

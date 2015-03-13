@@ -77,6 +77,7 @@ otb_add_test(NAME ioTeImageToKmzAndMapFileProductExample COMMAND ${OTB_TEST_DRIV
     399.000000 264.000000 -72.255020 18.523664 0.000000
     42.000000  232.000000 -72.426552 18.540876 0.000000
 )
+set_property(TEST ioTeImageToKmzAndMapFileProductExample PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME ioTeTileMapImageIOExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image 10.0

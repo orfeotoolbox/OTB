@@ -15,9 +15,10 @@ otb_add_test(NAME tsTvDataIsNightlyRevision COMMAND otbCurlAdaptersTestDriver
   otbIsNightlyRevision
   ${OTB_DATA_WC_REVISION}
   http://hg.orfeo-toolbox.org/nightly/dataNightlyNumber )
+set_property(TEST tsTvDataIsNightlyRevision PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME tsTvIsNightlyRevision COMMAND otbCurlAdaptersTestDriver
   otbIsNightlyRevision
   ${OTB_WC_REVISION}
   http://hg.orfeo-toolbox.org/nightly/libNightlyNumber )
-
+set_property(TEST tsTvIsNightlyRevision PROPERTY RESOURCE_LOCK web_access)
