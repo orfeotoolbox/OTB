@@ -31,32 +31,39 @@ set(${proj}_DEPENDENCIES
     GDAL
     OSSIM
     ITK
-    MUPARSER
-    MUPARSERX
     TINYXML
     BOOST
-    LIBKML
-    OPENCV
-    CURL
     )
+
+if(OTB_USE_CURL)
+  list(APPEND ${proj}_DEPENDENCIES CURL)
+endif()
+
+if(OTB_USE_LIBKML)
+  list(APPEND ${proj}_DEPENDENCIES LIBKML)
+endif()
+
+if(OTB_USE_OPENCV)
+  list(APPEND ${proj}_DEPENDENCIES OPENCV)
+endif()
+
+if(OTB_USE_MUPARSER)
+  list(APPEND ${proj}_DEPENDENCIES MUPARSER)
+endif()
+
+if(OTB_USE_MUPARSERX)
+  list(APPEND ${proj}_DEPENDENCIES MUPARSERX)
+endif()
+
 if(OTB_WRAP_PYTHON OR OTB_WRAP_JAVA)
   list(APPEND ${proj}_DEPENDENCIES SWIG)
 endif()
-if(ENABLE_QT4)
-  if(USE_SYSTEM_QT4)
-    set(OTB_USE_QT4 ON)
-  else()
-    if(MSVC)
-      set(OTB_USE_QT4 ON)
-      list(APPEND ${proj}_DEPENDENCIES QT4)
-    else(UNIX)
-       #TODO: use must have Qt4 
-       message(STATUS "  Qt4 is not built by SuperBuild. You need to install it via package manager.")
-      set(OTB_USE_QT4 OFF)
-    endif()
+
+if(OTB_USE_QT4)
+  list(APPEND ${proj}_DEPENDENCIES QT4)
+  if(USE_SYSTEM_QT4 AND UNIX)
+    message(STATUS "  Qt4 is not built by SuperBuild. You need to install it via package manager.")
   endif()
-else()
-  set(OTB_USE_QT4 OFF)
 endif()
 
 INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
@@ -131,17 +138,17 @@ ExternalProject_Add(${proj}
       -DBUILD_EXAMPLES:BOOL=${BUILD_EXAMPLES}
       -DCMAKE_PREFIX_PATH:STRING=${CMAKE_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}
       -DOTB_DATA_ROOT:STRING=${OTB_DATA_ROOT}
-      -DOTB_USE_6S:BOOL=ON
-      -DOTB_USE_CURL:BOOL=OFF
-      -DOTB_USE_EDISON:BOOL=ON
-      -DOTB_USE_LIBKML:BOOL=ON
-      -DOTB_USE_LIBSVM:BOOL=ON
-      -DOTB_USE_MAPNIK:BOOL=OFF
-      -DOTB_USE_MUPARSER:BOOL=ON
-      -DOTB_USE_MUPARSERX:BOOL=ON
-      -DOTB_USE_OPENCV:BOOL=ON
+      -DOTB_USE_6S:BOOL=${OTB_USE_6S}
+      -DOTB_USE_CURL:BOOL=${OTB_USE_CURL}
+      -DOTB_USE_EDISON:BOOL=${OTB_USE_EDISON}
+      -DOTB_USE_LIBKML:BOOL=${OTB_USE_LIBKML}
+      -DOTB_USE_LIBSVM:BOOL=${OTB_USE_LIBSVM}
+      -DOTB_USE_MAPNIK:BOOL=${OTB_USE_MAPNIK}
+      -DOTB_USE_MUPARSER:BOOL=${OTB_USE_MUPARSER}
+      -DOTB_USE_MUPARSERX:BOOL=${OTB_USE_MUPARSERX}
+      -DOTB_USE_OPENCV:BOOL=${OTB_USE_OPENCV}
       -DOTB_USE_QT4:BOOL=${OTB_USE_QT4}
-      -DOTB_USE_SIFTFAST:BOOL=ON
+      -DOTB_USE_SIFTFAST:BOOL=${OTB_USE_SIFTFAST}
       ${OTB_SB_CONFIG}
       ${OTB_SB_LARGEINPUT_CONFIG}
       -DOTB_WRAP_PYTHON:BOOL=${OTB_WRAP_PYTHON}

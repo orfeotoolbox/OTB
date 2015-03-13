@@ -81,11 +81,22 @@ SETUP_SYSTEM_LIBRARY(PROJECT OPENCV DEFAULT OFF)
 SETUP_SYSTEM_LIBRARY(PROJECT PCRE DEFAULT ON)
 SETUP_SYSTEM_LIBRARY(PROJECT SWIG DEFAULT ON)
 
-if(ENABLE_QT4)
-  SETUP_SYSTEM_LIBRARY(PROJECT QT4 DEFAULT ON)
-endif()
+SETUP_SYSTEM_LIBRARY(PROJECT QT4 DEFAULT ON)
+
 
 # Call OTB
+option(OTB_USE_6S "Enable module 6S in OTB" ON)
+option(OTB_USE_CURL "Enable module Curl in OTB" ON)
+option(OTB_USE_EDISON "Enable module Edison in OTB" ON)
+option(OTB_USE_LIBKML "Enable module libKML in OTB" ON)
+option(OTB_USE_LIBSVM "Enable module libSVM in OTB" ON)
+option(OTB_USE_MAPNIK "Enable module Mapnik in OTB" OFF)
+option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
+option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
+option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
+option(OTB_USE_OPENJPEG "Enable module openjpeg in OTB" ON)
+option(OTB_USE_QT4 "Enable module QT4 in OTB" ${ENABLE_QT4})
+option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../OTB-Data)
