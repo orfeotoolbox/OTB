@@ -253,6 +253,9 @@ private:
 // Private methods.
 private:
 
+  virtual void virtual_SetProjection() {};
+  virtual void virtual_UpdateProjection() {};
+
   //
   // AbstractImageViewRenderer overloads.
 

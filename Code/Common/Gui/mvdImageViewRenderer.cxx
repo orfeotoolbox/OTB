@@ -404,16 +404,19 @@ void
 ImageViewRenderer
 ::UpdateActors( const AbstractImageViewRenderer::RenderingContext * )
 {
+  qDebug() << this << "::virtual_UpdateActors()";
+
   assert( !m_GlView.IsNull() );
 
 
   StackedLayerModel * stackedLayerModel = GetLayerStack();
   assert( stackedLayerModel!=NULL );
 
+  /*
   otb::GlImageActor::Pointer refImageActor(
     GetReferenceActor< otb::GlImageActor >()
   );
-
+  */
 
   for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
        it!=stackedLayerModel->End();
@@ -598,7 +601,7 @@ ImageViewRenderer
       }
     }
 
-  m_GlView->SetRenderingOrder( stackedLayerModel->GetKeys() );
+  m_GlView->SetRenderingOrder( stackedLayerModel->GetKeys(), false );
 }
 
 /*******************************************************************************/
@@ -606,6 +609,8 @@ void
 ImageViewRenderer
 ::virtual_UpdateScene()
 {
+  qDebug() << this << "::virtual_UpdateScene()";
+
   assert( !m_GlView.IsNull() );
 
   StackedLayerModel * stackedLayerModel = GetLayerStack();
@@ -623,7 +628,11 @@ ImageViewRenderer
            it!=keys.end();
            ++it )
         if( !stackedLayerModel->Contains( *it ) )
+          {
+          qDebug() << "Removed image-actor:" << FromStdString( *it );
+
           m_GlView->RemoveActor( *it );
+          }
       }
 
 
@@ -679,6 +688,8 @@ void
 ImageViewRenderer
 ::virtual_RefreshScene()
 {
+  qDebug() << this << "::virtual_RefreshScene()";
+
   StackedLayerModel * stackedLayerModel = GetLayerStack();
 
   if( stackedLayerModel==NULL || stackedLayerModel->IsEmpty() )
@@ -723,10 +734,17 @@ ImageViewRenderer
   if( !m_ReferencePair.second.IsNull() )
     {
     if( referencePair.second.IsNull() )
-      emit SetProjectionRequired();
+      {
+      virtual_SetProjection();
 
+      emit SetProjectionRequired();
+      }
     else
+      {
+      virtual_UpdateProjection();
+
       emit UpdateProjectionRequired();
+      }
     }
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING

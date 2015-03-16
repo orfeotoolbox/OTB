@@ -320,7 +320,11 @@ void
 AbstractImageViewRenderer
 ::UpdateScene()
 {
+  virtual_PrepareScene();
+
   virtual_UpdateScene();
+
+  virtual_FinishScene();
 }
 
 /*****************************************************************************/

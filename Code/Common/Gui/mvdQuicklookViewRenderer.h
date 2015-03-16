@@ -162,9 +162,16 @@ private:
 // Private methods.
 private:
 
+  void SetWktAndKwl();
+
+  //
+  // ImageViewRenderer overrides.
+  virtual void virtual_SetProjection();
+  virtual void virtual_UpdateProjection();
+
   //
   // AbstractImageViewRenderer overloads.
-
+  // TODO: Move virtual_*Scene() methods to protected section.
   virtual void virtual_FinishScene();
 
 //

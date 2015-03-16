@@ -41,6 +41,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdDatasetModel.h"
+#include "Core/mvdStackedLayerModel.h"
 #include "Core/mvdTypes.h"
 #include "Core/mvdVectorImageModel.h"
 
@@ -65,7 +66,6 @@ namespace mvd
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
 /*****************************************************************************/
 QuicklookViewRenderer
 ::QuicklookViewRenderer( QObject* parent ) :
@@ -106,25 +106,56 @@ QuicklookViewRenderer
 /*******************************************************************************/
 void
 QuicklookViewRenderer
-::virtual_FinishScene()
+::virtual_SetProjection()
 {
-  assert( !m_GlView.IsNull() );
+  SetWktAndKwl();
+}
 
-  // qDebug() << this << "::virtual_FinishScene()";
+/*******************************************************************************/
+void
+QuicklookViewRenderer
+::virtual_UpdateProjection()
+{
+  SetWktAndKwl();
+}
+
+/*******************************************************************************/
+void
+QuicklookViewRenderer
+::SetWktAndKwl()
+{
+  qDebug() << this << "::SetWktAndKwl()";
+
+  assert( GetLayerStack()!=NULL );
+
+  if( GetLayerStack()->IsEmpty() )
+    return;
 
   otb::GlImageActor::Pointer referenceGlImageActor(
     GetReferenceActor< otb::GlImageActor >()
   );
 
-  if( referenceGlImageActor.IsNull() )
-    return;
+  assert( !referenceGlImageActor.IsNull() );
+
+  m_GlRoiActor->SetKwl( referenceGlImageActor->GetKwl() );
+  m_GlRoiActor->SetWkt( referenceGlImageActor->GetWkt() );
+}
+
+/*******************************************************************************/
+void
+QuicklookViewRenderer
+::virtual_FinishScene()
+{
+  qDebug() << this << "::virtual_FinishScene()";
+
+  assert( !m_GlView.IsNull() );
+
 
   std::string key( m_GlView->AddActor( m_GlRoiActor ) );
 
   m_GlRoiActor->SetVisible( true );
 
-  m_GlRoiActor->SetKwl( referenceGlImageActor->GetKwl() );
-  m_GlRoiActor->SetWkt( referenceGlImageActor->GetWkt() );
+  qDebug() << "Added roi-actor:" << FromStdString( key );
 
   /*
   ColorType color;
@@ -137,6 +168,18 @@ QuicklookViewRenderer
   m_GlRoiActor->SetAlpha( 0.2 );
 
   m_GlView->MoveActorToEndOfRenderingOrder( key, true );
+
+#if 0
+  otb::GlImageActor::Pointer referenceGlImageActor(
+    GetReferenceActor< otb::GlImageActor >()
+  );
+
+  if( referenceGlImageActor.IsNull() )
+    return;
+
+  m_GlRoiActor->SetKwl( referenceGlImageActor->GetKwl() );
+  m_GlRoiActor->SetWkt( referenceGlImageActor->GetWkt() );
+#endif
 }
 
 /*****************************************************************************/
@@ -144,9 +187,11 @@ void
 QuicklookViewRenderer
 ::UpdateActors( const AbstractImageViewRenderer::RenderingContext* c )
 {
+  qDebug() << this << "::UpdateActors()";
+
   assert( c!=NULL );
 
-  ImageViewRenderer::UpdateActors( c );
+  // ImageViewRenderer::UpdateActors( c );
 
   assert(
     c==dynamic_cast< const QuicklookViewRenderer::RenderingContext * >( c )
