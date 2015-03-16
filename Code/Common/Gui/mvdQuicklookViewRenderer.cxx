@@ -191,7 +191,7 @@ QuicklookViewRenderer
 
   assert( c!=NULL );
 
-  // ImageViewRenderer::UpdateActors( c );
+  ImageViewRenderer::UpdateActors( c );
 
   assert(
     c==dynamic_cast< const QuicklookViewRenderer::RenderingContext * >( c )
