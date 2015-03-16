@@ -72,7 +72,7 @@ private:
     SetParameterDescription("outgeom","Geom file containing the generated RPC sensor model");
 
     AddParameter(ParameterType_InputFilename,"inpoints","Input file containing tie points");
-    SetParameterDescription("inpoints","Input file containing tie points. Points are stored in following format: row col lon lat. Line beginning with # are ignored.");
+    SetParameterDescription("inpoints","Input file containing tie points. Points are stored in following format: col row lon lat. Line beginning with # are ignored.");
 
     AddParameter(ParameterType_OutputFilename,"outstat","Output file containing output precision statistics");
     SetParameterDescription("outstat","Output file containing the following info: ref_lon ref_lat elevation predicted_lon predicted_lat x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) overall_error(meters)");
