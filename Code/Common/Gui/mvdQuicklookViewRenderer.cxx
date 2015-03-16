@@ -124,7 +124,7 @@ void
 QuicklookViewRenderer
 ::SetWktAndKwl()
 {
-  qDebug() << this << "::SetWktAndKwl()";
+  // qDebug() << this << "::SetWktAndKwl()";
 
   assert( GetLayerStack()!=NULL );
 
@@ -146,7 +146,7 @@ void
 QuicklookViewRenderer
 ::virtual_FinishScene()
 {
-  qDebug() << this << "::virtual_FinishScene()";
+  // qDebug() << this << "::virtual_FinishScene()";
 
   assert( !m_GlView.IsNull() );
 
@@ -155,7 +155,7 @@ QuicklookViewRenderer
 
   m_GlRoiActor->SetVisible( true );
 
-  qDebug() << "Added roi-actor:" << FromStdString( key );
+  // qDebug() << "Added roi-actor:" << FromStdString( key );
 
   /*
   ColorType color;
@@ -187,7 +187,7 @@ void
 QuicklookViewRenderer
 ::UpdateActors( const AbstractImageViewRenderer::RenderingContext* c )
 {
-  qDebug() << this << "::UpdateActors()";
+  // qDebug() << this << "::UpdateActors()";
 
   assert( c!=NULL );
 

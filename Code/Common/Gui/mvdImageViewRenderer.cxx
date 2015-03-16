@@ -404,7 +404,7 @@ void
 ImageViewRenderer
 ::UpdateActors( const AbstractImageViewRenderer::RenderingContext * )
 {
-  qDebug() << this << "::virtual_UpdateActors()";
+  // qDebug() << this << "::virtual_UpdateActors()";
 
   assert( !m_GlView.IsNull() );
 
@@ -609,7 +609,7 @@ void
 ImageViewRenderer
 ::virtual_UpdateScene()
 {
-  qDebug() << this << "::virtual_UpdateScene()";
+  // qDebug() << this << "::virtual_UpdateScene()";
 
   assert( !m_GlView.IsNull() );
 
@@ -629,7 +629,7 @@ ImageViewRenderer
            ++it )
         if( !stackedLayerModel->Contains( *it ) )
           {
-          qDebug() << "Removed image-actor:" << FromStdString( *it );
+          // qDebug() << "Removed image-actor:" << FromStdString( *it );
 
           m_GlView->RemoveActor( *it );
           }
@@ -667,9 +667,9 @@ ImageViewRenderer
 
           // glImageActor->SetVisible( vectorImageModel->IsVisible() );
 
-          qDebug()
-            << "Added image-actor" << FromStdString( it->first )
-            << "from file" << vectorImageModel->GetFilename();
+          // qDebug()
+          //   << "Added image-actor" << FromStdString( it->first )
+          //   << "from file" << vectorImageModel->GetFilename();
           }
         else
           {
