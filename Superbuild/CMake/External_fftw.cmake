@@ -28,6 +28,7 @@ else()
       PREFIX ${proj}
       URL "http://www.fftw.org/fftw-3.3.4.tar.gz"
       URL_MD5 2edab8c06b24feeb3b82bbb3ebf3e7b3
+      SOURCE_DIR ${FFTW_SB_BUILD_FLOAT_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       CONFIGURE_COMMAND
         ${FFTW_SB_BUILD_FLOAT_DIR}/configure
@@ -48,10 +49,11 @@ else()
     #  )
     
     # Compile the double version of FFTW
-    ExternalProject_Add(${projDouble}
+    ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "http://www.fftw.org/fftw-3.3.4.tar.gz"
       URL_MD5 2edab8c06b24feeb3b82bbb3ebf3e7b3
+      SOURCE_DIR ${FFTW_SB_BUILD_DOUBLE_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       CONFIGURE_COMMAND
         ${FFTW_SB_BUILD_DOUBLE_DIR}/configure
@@ -71,8 +73,7 @@ else()
     #  DEPENDERS configure
     #  )
     
-    add_custom_target(${proj})
-    add_dependencies(${proj} ${projDouble} ${projFloat})
+    add_dependencies(${proj} ${projFloat})
     
     set(_SB_${proj}_INCLUDE_PATH ${SB_INSTALL_PREFIX}/include)
     
