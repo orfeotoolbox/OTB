@@ -138,6 +138,8 @@ signals:
 
   void UserZoomFull();
 
+  void UserZoomLayer();
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
@@ -421,6 +423,12 @@ private slots:
    * is pressed.
    */
   void on_action_ZoomFull_triggered();
+
+  /**
+   * \brief Qt auto-connected slot which is called when zoom-layer button
+   * is pressed.
+   */
+  void on_action_ZoomLayer_triggered();
 
   /**
    */

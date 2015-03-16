@@ -44,6 +44,12 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
+    <addaction name="action_ZoomIn"/>
+    <addaction name="action_ZoomOut"/>
+    <addaction name="action_ZoomFull"/>
+    <addaction name="action_ZoomExtent"/>
+    <addaction name="action_ZoomLayer"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
@@ -88,6 +94,7 @@
    <addaction name="action_ZoomIn"/>
    <addaction name="action_ZoomOut"/>
    <addaction name="action_ZoomExtent"/>
+   <addaction name="action_ZoomLayer"/>
    <addaction name="action_ZoomFull"/>
   </widget>
   <action name="action_Quit">
@@ -180,7 +187,7 @@
      <normaloff>:/icons/action_ZoomExtent_Icon</normaloff>:/icons/action_ZoomExtent_Icon</iconset>
    </property>
    <property name="text">
-    <string>Zoom to image extent</string>
+    <string>Zoom to full extent</string>
    </property>
   </action>
   <action name="action_ZoomFull">
@@ -192,7 +199,22 @@
      <normaloff>:/icons/action_ZoomFull_Icon</normaloff>:/icons/action_ZoomFull_Icon</iconset>
    </property>
    <property name="text">
-    <string>Zoom to full resolution</string>
+    <string>Zoom to full resolution (1:1)</string>
+   </property>
+  </action>
+  <action name="action_ZoomLayer">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="mvdMainWindow.qrc">
+     <normaloff>:/icons/action_ZoomLayer_Icon</normaloff>:/icons/action_ZoomLayer_Icon</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom to layer extent</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom to layer extent</string>
    </property>
   </action>
  </widget>

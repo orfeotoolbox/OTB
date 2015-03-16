@@ -1298,6 +1298,14 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
+::on_action_ZoomLayer_triggered()
+{
+  emit UserZoomLayer();
+}
+
+/*****************************************************************************/
+void
+MainWindow
 ::OnAboutToChangeModel( const AbstractModel * model )
 {
   qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
