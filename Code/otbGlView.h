@@ -167,14 +167,17 @@ public:
   };
 
   /**
-   * Arbitrary set the rendering order of contained otb::GlActor
-   * instances.
+   * Arbitrary set the rendering order of some or all of contained
+   * otb::GlActor instances.
    *
    * Keys which are not contained will be ignored.
    *
    * @param keys The ordered sequence of keys.
+   * @param front <code>true</code> to order selected otb::GlActor
+   *              instances in front of non-selected ones.
    */
-  void SetRenderingOrder( const StringVectorType & keys );
+  void SetRenderingOrder( const StringVectorType & keys,
+                          bool front );
 
   // This will rotate the rendering order (without modifying the order)
   void RotateRenderingOrder(bool down = false);
