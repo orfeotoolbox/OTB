@@ -54,7 +54,7 @@ else()
       PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath      
       CONFIGURE_COMMAND 
         # use 'env' because CTest launcher doesn't perform shell interpretation
-        env ${LDLIBVAR}=${SB_INSTALL_PREFIX}/lib 
+        ${SB_ENV_CONFIGURE_CMD}
         ${GDAL_SB_BUILD_DIR}/configure 
         --prefix=${SB_INSTALL_PREFIX}
         --enable-static=no
