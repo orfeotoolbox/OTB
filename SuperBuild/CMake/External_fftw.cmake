@@ -21,6 +21,7 @@ else()
   if(MSVC)
     # TODO : get precompiled binaries as not all MSVC versions can compile FFTW
       message(STATUS "  FFTW SuperBuild is not available yet...")
+      add_custom_target(${proj})
   else()
     message(STATUS "  Using FFTW SuperBuild version")
     # Compile the float version of FFTW
