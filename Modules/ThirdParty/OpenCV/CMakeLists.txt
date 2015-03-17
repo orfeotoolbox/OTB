@@ -2,5 +2,7 @@ project(OTBOpenCV)
 
 set(OTBOpenCV_SYSTEM_INCLUDE_DIRS ${OpenCV_INCLUDE_DIRS})
 set(OTBOpenCV_LIBRARIES "${OpenCV_LIBS}")
+set(OTBOpenCV_EXPORT_CODE_BUILD "find_package(OpenCV REQUIRED HINTS ${OpenCV_DIR})")
+set(OTBOpenCV_EXPORT_CODE_INSTALL ${OTBOpenCV_EXPORT_CODE_BUILD})
 
 otb_module_impl()
