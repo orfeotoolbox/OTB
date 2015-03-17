@@ -310,6 +310,7 @@ set(OTB_USE_FILE "${OTB_SOURCE_DIR}/CMake/UseOTB.cmake")
 set(OTB_CONFIG_TARGETS_CONDITION " AND NOT OTB_BINARY_DIR")
 set(OTB_CONFIG_TARGETS_FILE "${OTB_BINARY_DIR}/OTBTargets.cmake")
 set(OTB_CONFIG_MODULE_API_FILE "${OTB_SOURCE_DIR}/CMake/OTBModuleAPI.cmake")
+set(OTB_CONFIG_APPLI_MACROS_FILE "${OTB_SOURCE_DIR}/CMake/OTBApplicationMacros.cmake")
 configure_file(CMake/OTBConfig.cmake.in OTBConfig.cmake @ONLY)
 
 # Generate OTBConfig.cmake for the install tree.
@@ -329,6 +330,7 @@ set(OTB_USE_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/UseOTB.cmake
 set(OTB_CONFIG_TARGETS_CONDITION "")
 set(OTB_CONFIG_TARGETS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBTargets.cmake")
 set(OTB_CONFIG_MODULE_API_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBModuleAPI.cmake")
+set(OTB_CONFIG_APPLI_MACROS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBApplicationMacros.cmake")
 
 configure_file(CMake/OTBConfig.cmake.in CMakeFiles/OTBConfig.cmake @ONLY)
 
@@ -343,6 +345,7 @@ configure_file(CMake/OTBConfigVersion.cmake.in OTBConfigVersion.cmake @ONLY)
 
 install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               ${OTB_BINARY_DIR}/OTBConfigVersion.cmake
+              CMake/OTBApplicationMacros.cmake
               CMake/OTBModuleAPI.cmake
               CMake/UseOTB.cmake
   DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
@@ -358,6 +361,10 @@ else()
   install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBTargets.cmake
           DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Development)
 endif()
+
+# install FindXXX.cmake
+file(GLOB OTB_FIND_PACKAGE_SCRIPTS CMake/Find*.cmake)
+install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Development)
 
 # TODO : install release notes, copyright notice, ...
 # install(FILES "LICENSE" "NOTICE" "README.txt" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)

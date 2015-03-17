@@ -35,6 +35,10 @@ endif()
 # Load module interface macros.
 include("@OTB_CONFIG_MODULE_API_FILE@")
 
+# Load application macros.
+include(CMakeParseArguments)
+include("@OTB_CONFIG_APPLI_MACROS_FILE@")
+
 # Compute set of requested modules.
 if(OTB_FIND_COMPONENTS)
   # Specific modules requested by find_package(OTB).
