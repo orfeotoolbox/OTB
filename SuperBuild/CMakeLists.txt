@@ -44,11 +44,12 @@ else(UNIX)
   if(APPLE)
     set(LDLIBVAR DYLD_LIBRARY_PATH)
     set(SB_ENV_CONFIGURE_CMD)
+    set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
   else()
     set(LDLIBVAR LD_LIBRARY_PATH)
     set(SB_ENV_CONFIGURE_CMD "env ${LDLIBVAR}=${SB_INSTALL_PREFIX}/lib")
+    set(SB_CMAKE_COMMAND env ${LDLIBVAR}=${CMAKE_INSTALL_PREFIX}/lib  ${CMAKE_COMMAND})
   endif()
-  set(SB_CMAKE_COMMAND env ${LDLIBVAR}=${CMAKE_INSTALL_PREFIX}/lib  ${CMAKE_COMMAND})
 endif()
 # Call external projects
 

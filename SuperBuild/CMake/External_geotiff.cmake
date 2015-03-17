@@ -75,7 +75,7 @@ else()
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       CONFIGURE_COMMAND
         # use 'env' because CTest launcher doesn't perform shell interpretation
-        env ${LDLIBVAR}=${SB_INSTALL_PREFIX}/lib
+        ${SB_ENV_CONFIGURE_CMD}
         ${GEOTIFF_SB_BUILD_DIR}/configure
         --prefix=${SB_INSTALL_PREFIX}
         --enable-static=no
