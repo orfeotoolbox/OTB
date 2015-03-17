@@ -87,14 +87,16 @@ macro(ADD_SUPERBUILD_CMAKE_VAR var)
 endmacro(ADD_SUPERBUILD_CMAKE_VAR)
 
 # Macro to add a configure variable to ${proj}_SB_CONFIG
+# optional 3rd argument : suffix to the variable
 macro(ADD_SUPERBUILD_CONFIGURE_VAR var name)
+  set(suffix "${ARGV2}")
   if(DEFINED _SB_${var})
     list(APPEND ${proj}_SB_CONFIG
-      ${name}=${_SB_${var}}
+      ${name}=${_SB_${var}}${suffix}
       )
   elseif(DEFINED ${var})
     list(APPEND ${proj}_SB_CONFIG
-      ${name}=${${var}}
+      ${name}=${${var}}${suffix}
       )
   endif()
 endmacro(ADD_SUPERBUILD_CONFIGURE_VAR)
