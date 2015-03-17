@@ -7,13 +7,17 @@ macro(otb_create_application)
    include_directories(${APPLICATION_INCLUDE_DIRS})
    add_library(${APPLICATION_TARGET_NAME} MODULE ${APPLICATION_SOURCES})
    target_link_libraries(${APPLICATION_TARGET_NAME} OTBApplicationEngine ${APPLICATION_LINK_LIBRARIES})
-   otb_module_target_label(${APPLICATION_TARGET_NAME})
+   if(otb-module)
+     otb_module_target_label(${APPLICATION_TARGET_NAME})
+   endif()
 
    # Setup build output location
    # Do not output in the standard lib folder where all shared libs goes.
    # This is to avoid the application factory to look into each and every shared lib
    # for itkLoad symbol
-   set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications)
+   if(otb-module)
+     set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications)
+   endif()
 
    # Remove the usual 'lib' prefix to make it clear it is a plugin
    # and not a shared library to link against
@@ -31,9 +35,20 @@ macro(otb_create_application)
    endif()
 
    if (APPLICATION_INSTALL_PATH)
+     if(otb-module)
+       install(TARGETS ${APPLICATION_TARGET_NAME}
+               EXPORT ${${otb-module}-targets}
+               LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
+               COMPONENT RuntimeLibraries)
+     else()
+       install(TARGETS ${APPLICATION_TARGET_NAME}
+               LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
+               COMPONENT RuntimeLibraries)
+     endif()
+   else()
      install(TARGETS ${APPLICATION_TARGET_NAME}
-             EXPORT ${${otb-module}-targets}
-             LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH} COMPONENT RuntimeLibraries)
+             LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+             COMPONENT RuntimeLibraries)
    endif()
 
    # Generate a quickstart script in the build dir
