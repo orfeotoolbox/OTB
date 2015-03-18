@@ -1,0 +1,24 @@
+#!/bin/sh
+
+tempFolder=@TEMP@
+gdalLibLocation=@GDAL_LIBRARY@
+sourceDir=@CMAKE_SOURCE_DIR@
+apple=@APPLE@
+
+#TEST 1 : GDAL version
+gdalConfig="$(which gdal-config)"
+${gdalConfig} --version > ${tempFolder}/testgdal1.txt 
+
+#TEST 2 : dyn. symbols 
+if [ -z "${apple}"]
+then
+nm -D --defined-only ${gdalLibLocation} | grep TIFFClose > ${tempFolder}/testgdal2.txt
+else
+nm -U ${gdalLibLocation} | grep TIFFClose > ${tempFolder}/testgdal2.txt # -U : don't display undefined syms (same as --defined-only)
+fi
+
+#TEST 3 : Big tiff
+gdal_translate -co "BIGTIFF=YES" ${sourceDir}/Modules/ThirdParty/GDAL/logoVectoriel.png ${tempFolder}/logoVectoriel.tif > ${tempFolder}/testgdal3.txt
+
+#TEST 4 : GDAL formats
+${gdalConfig} --formats > ${tempFolder}/testgdal4.txt
