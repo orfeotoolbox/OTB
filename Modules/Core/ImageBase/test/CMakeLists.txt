@@ -161,16 +161,6 @@ otb_add_test(NAME coTvMultiChannelROI_RGB2NG_PNG3 COMMAND otbImageBaseTestDriver
   ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_3.png
   -startX 300 -startY 10 -sizeX 250 -sizeY 50  -channels 3 )
 
-otb_add_test(NAME coTvMultiChannelROI_3c_BSQ COMMAND otbImageBaseTestDriver
-  --compare-image  ${NOTOL}  ${BASELINE}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_345.hdr
-  ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_345.hdr
-  otbMultiChannelExtractROI
-  ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.hdr
-  ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_345.hdr
-  -startX 0 -startY 0 -sizeX 134  -sizeY 330 -channels 3 4 5 )
-set_property(TEST coTvMultiChannelROI_3c_BSQ PROPERTY DEPENDS coTvMultiChannelROI_5c_BSQ)
-
-
 otb_add_test(NAME ioTvMultiDatasetReading2 COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
   ${TEMP}/ioTvMultiDatasetReading2.txt
