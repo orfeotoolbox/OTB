@@ -207,6 +207,11 @@ public:
    */
   // bool Reproject( const KeyType & key, double  norm );
 
+  /**
+   */
+  template< typename P >
+  void GetExtent( P & origin, P & extent ) const;
+
 protected:
   GlView();
 
@@ -298,6 +303,53 @@ GlView
 
   return true;
 }
+
+
+template< typename P >
+void
+GlView
+::GetExtent( P & origin, P & extent ) const
+{
+  if( m_Actors.empty() )
+    {
+    origin[ 0 ] = origin[ 1 ] = 0;
+    extent[ 0 ] = extent[ 1 ] = 0;
+
+    return;
+    }
+
+
+  origin[ 0 ] = std::numeric_limits< typename P::ValueType >::infinity();
+  origin[ 1 ] = std::numeric_limits< typename P::ValueType >::infinity();
+
+  extent[ 0 ] = -std::numeric_limits< typename P::ValueType >::infinity();
+  extent[ 1 ] = -std::numeric_limits< typename P::ValueType >::infinity();
+
+  for( ActorMapType::const_iterator it( m_Actors.begin() );
+       it!=m_Actors.end();
+       ++it )
+    {
+    P o;
+    P e;
+
+    assert( !it->second.IsNull() );
+
+    it->second->GetExtent( o[ 0 ], o[ 1 ], e[ 0 ], e[ 1 ] );
+
+    if( o[ 0 ]<origin[ 0 ] )
+      origin[ 0 ] = o[ 0 ];
+
+    if( o[ 1 ]<origin[ 1 ] )
+      origin[ 1 ] = o[ 1 ];
+
+    if( e[ 0 ]>extent[ 0 ] )
+      extent[ 0 ] = e[ 0 ];
+
+    if( e[ 1 ]>extent[ 1 ] )
+      extent[ 1 ] = e[ 1 ];
+    }
+}
+
 
 } // End namespace otb
 
