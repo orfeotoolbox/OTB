@@ -197,8 +197,8 @@ public:
   bool Reproject( P & center,
                   S & spacing,
                   const KeyType & key,
-                  P2 & vcenter,
-                  S2 & vspacing,
+                  const P2 & vcenter,
+                  const S2 & vspacing,
                   double norm = 1000.0 ) const;
 
   /**
@@ -237,8 +237,8 @@ GlView
 ::Reproject( P & origin,
              S & spacing,
              const KeyType & key,
-             P2 & vcenter,
-             S2 & vspacing,
+             const P2 & vcenter,
+             const S2 & vspacing,
              double norm ) const
 {
   //
