@@ -22,21 +22,6 @@ else()
   ADD_SUPERBUILD_CMAKE_VAR(ZLIB_INCLUDE_DIR)
   ADD_SUPERBUILD_CMAKE_VAR(ZLIB_LIBRARY)
   
-  if(USE_SYSTEM_ZLIB)
-    set(PNG_SB_ZLIB_CONFIG)
-  else()
-    if(MSVC)
-      set(PNG_SB_ZLIB_CONFIG
-        -DZLIB_INCLUDE_DIR:PATH=${SB_INSTALL_PREFIX}/include
-        -DZLIB_LIBRARY:FILEPATH=${SB_INSTALL_PREFIX}/lib/zlib.lib)
-    else(UNIX)
-      set(PNG_SB_ZLIB_CONFIG
-        -DZLIB_INCLUDE_DIR:PATH=${SB_INSTALL_PREFIX}/include
-        -DZLIB_LIBRARY:FILEPATH=${SB_INSTALL_PREFIX}/lib/libz${CMAKE_SHARED_LIBRARY_SUFFIX})
-    endif()
-    list(APPEND ${proj}_DEPENDENCIES ZLIB)
-  endif()
-  
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "http://sourceforge.net/projects/libpng/files/libpng16/1.6.16/lpng1616.zip/download"
