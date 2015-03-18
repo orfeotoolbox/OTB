@@ -51,11 +51,11 @@ otb_add_test(NAME leTvSOMImageClassificationFilter COMMAND otbSOMTestDriver
 otb_add_test(NAME leTvSOMActivationBuilder COMMAND otbSOMTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/leSOMPoupeesSubActivationMap1.hdr
-  ${TEMP}/leSOMPoupeesSubActivationMap1.hdr
+  ${TEMP}/leSOMPoupeesSubActivationMap1.tif
   otbSOMActivationBuilder
   ${INPUTDATA}/poupees_sub.png
   ${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
-  ${TEMP}/leSOMPoupeesSubActivationMap1.hdr
+  ${TEMP}/leSOMPoupeesSubActivationMap1.tif
   32 32 10 10 5 1.0 0.1 128)
 
 otb_add_test(NAME leTuSOMActivationBuilderNew COMMAND otbSOMTestDriver
