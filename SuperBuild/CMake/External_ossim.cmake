@@ -44,7 +44,10 @@ else()
     SVN_REVISION -r 23087
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
-    INSTALL_COMMAND "")
+    INSTALL_COMMAND ""
+    PATCH_COMMAND ${CMAKE_COMMAND} -E copy
+      ${CMAKE_SOURCE_DIR}/patches/${proj}/OssimUtilities.cmake
+      ${CMAKE_BINARY_DIR}/${proj}/_cmakemodules/src/ossim_cmakemodules)
     
   list(APPEND ${proj}_DEPENDENCIES ossim_cmakemodules)
 
@@ -68,6 +71,8 @@ else()
       -DBUILD_OSSIM_MPI_SUPPORT:BOOL=OFF
       -DBUILD_OSSIM_APPS:BOOL=OFF
       -DBUILD_OSSIM_FRAMEWORKS:BOOL=OFF
+      -DINSTALL_ARCHIVE_DIR:STRING=lib
+      -DINSTALL_LIBRARY_DIR:STRING=lib
       -DCMAKE_PREFIX_PATH:STRING=${SB_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}
       ${OSSIM_SB_CONFIG}
     DEPENDS ${${proj}_DEPENDENCIES}
