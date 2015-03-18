@@ -13,11 +13,18 @@ else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using OpenCV SuperBuild version")
   
-  #TODO: add these properly
-  # list(APPEND ${proj}_DEPENDENCIES TIFF)
-  # list(APPEND ${proj}_DEPENDENCIES ZLIB)
-  # list(APPEND ${proj}_DEPENDENCIES PNG)
-  # list(APPEND ${proj}_DEPENDENCIES JPEG)
+  # declare dependencies
+  set(${proj}_DEPENDENCIES ZLIB TIFF PNG)
+  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+  # set proj back to its original value
+  set(proj OPENCV)
+  
+  ADD_SUPERBUILD_CMAKE_VAR(ZLIB_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(ZLIB_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(TIFF_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(TIFF_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(PNG_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(PNG_LIBRARY)
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
@@ -69,6 +76,7 @@ else()
       -DBUILD_opencv_video:BOOL=OFF
       -DBUILD_opencv_videostab:BOOL=OFF
       -DBUILD_opencv_world:BOOL=OFF
+      ${OPENCV_SB_CONFIG}
     DEPENDS ${${proj}_DEPENDENCIES}
     )
   
