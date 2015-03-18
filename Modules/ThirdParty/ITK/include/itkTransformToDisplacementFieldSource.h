@@ -51,7 +51,7 @@ namespace itk
  * \ingroup GeometricTransform
  * \ingroup ITKReview
  *
- * \ingroup OTBITKPendingPatches
+ * \ingroup OTBITK
  */
 template< class TOutputImage,
           class TTransformPrecisionType = double >

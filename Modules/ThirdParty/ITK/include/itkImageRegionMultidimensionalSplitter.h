@@ -56,7 +56,7 @@ namespace itk
  *
  * \ingroup ITKDeprecated
  *
- * \ingroup OTBITKPendingPatches
+ * \ingroup OTBITK
  */
 
 template< unsigned int VImageDimension >

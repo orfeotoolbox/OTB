@@ -77,7 +77,7 @@ namespace otb
  *
  * \ingroup GeometricTransforms MultiThreaded Streamed
  *
- * \ingroup OTBITKPendingPatches
+ * \ingroup OTBITK
  */
 template <
   class TInputImage,
