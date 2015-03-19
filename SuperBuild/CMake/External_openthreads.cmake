@@ -18,7 +18,8 @@ else()
   message(STATUS "  Using OpenThreads SuperBuild version")
   
   #TODO: try to use cmake variable for DOWNLOAD_COMMAND for different platforms
-  if(MSVC)
+  #if(MSVC)
+  if(0)
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       SVN_REPOSITORY "http://svn.openscenegraph.org/osg/OpenThreads/tags/OpenThreads-2.3.0/"
@@ -34,7 +35,8 @@ else()
         ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt ${OPENTHREADS_SB_SRC}
         CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
-  else(UNIX or APPLE)
+  #else(UNIX or APPLE)
+  else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "http://www.openscenegraph.org/downloads/developer_releases/OpenSceneGraph-3.2.0.zip"
