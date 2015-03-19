@@ -19,6 +19,32 @@ add_custom_target( OTBHeaderTests
   ${CMAKE_COMMAND} --build ${OTB_BINARY_DIR}
   COMMENT "Regenerating and building the header tests." )
 
+
+
+SET(BANNED_HEADERS)
+if(NOT OTB_USE_OPENCV)
+	string(CONCAT BANNED_HEADERS ${BANNED_HEADERS} "otbDecisionTreeMachineLearningModelFactory.h otbDecisionTreeMachineLearningModel.h otbKNearestNeighborsMachineLearningModelFactory.h otbKNearestNeighborsMachineLearningModel.h otbRandomForestsMachineLearningModelFactory.h otbRandomForestsMachineLearningModel.h otbSVMMachineLearningModelFactory.h otbSVMMachineLearningModel.h otbGradientBoostedTreeMachineLearningModelFactory.h otbGradientBoostedTreeMachineLearningModel.h otbBoostMachineLearningModelFactory.h otbBoostMachineLearningModel.h otbNeuralNetworkMachineLearningModelFactory.h otbNeuralNetworkMachineLearningModel.h otbNormalBayesMachineLearningModelFactory.h otbNormalBayesMachineLearningModel.h otbRequiresOpenCVCheck.h ")
+	string(STRIP ${BANNED_HEADERS} BANNED_HEADERS)
+	string(CONCAT BANNED_HEADERS ${BANNED_HEADERS} " ")
+endif()
+ 
+if(NOT OTB_USE_LIBSVM)
+	string(CONCAT BANNED_HEADERS ${BANNED_HEADERS} "otbLibSVMMachineLearningModel.h otbLibSVMMachineLearningModelFactory.h")
+	string(STRIP ${BANNED_HEADERS} BANNED_HEADERS)
+	string(CONCAT BANNED_HEADERS ${BANNED_HEADERS} " ")
+endif()
+
+# ************ ADD YOUR BANNED HEADERS HERE ************
+#if(CONDITION)
+#	string(CONCAT BANNED_HEADERS ${BANNED_HEADERS} "BANNED-HEADER1.h")
+#	string(STRIP ${BANNED_HEADERS} BANNED_HEADERS)
+#	string(CONCAT BANNED_HEADERS ${BANNED_HEADERS} " ")
+#endif()
+
+string(STRIP ${BANNED_HEADERS} BANNED_HEADERS)
+
+
+
 macro( otb_module_headertest _name )
   if( NOT ${_name}_THIRD_PARTY AND
       EXISTS ${${_name}_SOURCE_DIR}/include
@@ -83,6 +109,7 @@ macro( otb_module_headertest _name )
         ${${_name}_BINARY_DIR}
         ${MAXIMUM_NUMBER_OF_HEADERS}
         ${_test_num}
+        ${BANNED_HEADERS}
         )
       add_executable( ${_test_name} ${_header_test_src} )
       target_link_libraries( ${_test_name} OTBCommon )

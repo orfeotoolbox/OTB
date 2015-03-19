@@ -30,8 +30,8 @@ test is to make sure there are not missing module dependencies.  It also tests
 for syntax and missing #include's.
 """
 
-# Headers to not test because of dependecy issues, etc.
-BANNED_HEADERS = set(()) # No banned headers in OTB for now
+# BANNED_HEADERS = Headers to not test because of dependecy issues, etc.
+
 
 HEADER = """/*=========================================================================
  *
@@ -81,6 +81,7 @@ def main():
     module_binary_path = sys.argv[3]
     maximum_number_of_headers = int(sys.argv[4])
     test_num           = int(sys.argv[5])
+    BANNED_HEADERS = sys.argv[6].split(' ')
 
     # Get all the header files.
     include_dir = os.path.join(module_source_path, 'include')

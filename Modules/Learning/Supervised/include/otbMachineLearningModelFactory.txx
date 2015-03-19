@@ -28,7 +28,9 @@
 #include "otbDecisionTreeMachineLearningModelFactory.h"
 #include "otbGradientBoostedTreeMachineLearningModelFactory.h"
 #endif
+#ifdef OTB_USE_LIBSVM
 #include "otbLibSVMMachineLearningModelFactory.h"
+#endif
 
 #include "itkMutexLockHolder.h"
 
@@ -88,8 +90,10 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
 ::RegisterBuiltInFactories()
 {
   itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
-
+  
+#ifdef OTB_USE_LIBSVM
   RegisterFactory(LibSVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+#endif
 
 #ifdef OTB_USE_OPENCV
   RegisterFactory(RandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
