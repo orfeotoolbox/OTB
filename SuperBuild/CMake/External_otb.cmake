@@ -123,6 +123,17 @@ else()
     )
 endif()
 
+# issue with APPLE : the DYLD_LIBRARY_PATH is disabled everywhere but it is 
+# necessary here
+if(APPLE)
+  set(OTB_SB_CMAKE_COMMAND
+    env
+    ${LDLIBVAR}=${CMAKE_INSTALL_PREFIX}/lib:$ENV{${LDLIBVAR}}
+    ${CMAKE_COMMAND})
+else()
+  set(OTB_SB_CMAKE_COMMAND ${SB_CMAKE_COMMAND})
+endif()
+
 ExternalProject_Add(${proj}
     DEPENDS ${${proj}_DEPENDENCIES}
     PREFIX ${proj}
@@ -154,7 +165,7 @@ ExternalProject_Add(${proj}
       -DOTB_WRAP_PYTHON:BOOL=${OTB_WRAP_PYTHON}
       -DOTB_WRAP_JAVA:BOOL=${OTB_WRAP_JAVA}
       ${OTB_ADDITIONAL_CACHE}
-    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+    CMAKE_COMMAND ${OTB_SB_CMAKE_COMMAND}
     )
 
 
