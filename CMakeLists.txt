@@ -6,7 +6,7 @@ endif()
 
 foreach(p
     CMP0025 # CMake 3.0
-    CMP0042 # CMake 3.0
+    CMP0042 # CMake 3.0 
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
@@ -16,6 +16,12 @@ endforeach()
 # CMP0046 : from CMake 3.0, old behaviour is more convenient
 if(POLICY CMP0046)
   cmake_policy(SET CMP0046 OLD)
+endif()
+
+# TODO Check if OTB cmake is compatible with CMP0054 NEW policy
+# CMP0054 : New policy introduce in CMake 3.1, keep old behaviour for now
+if(POLICY CMP0054)
+  cmake_policy(SET CMP0054 OLD)
 endif()
 
 project(OTB)
