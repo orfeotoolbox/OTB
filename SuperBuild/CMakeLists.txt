@@ -23,13 +23,12 @@ option(BUILD_MONTEVERDI "Clone and build Monteverdi" OFF)
 set(SUPERBUILD_IN_OTB_TREE OFF)
 if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
   file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _CONTENT_CMAKELIST
-    REGEX "project\(OTB\)")
-  if("${_CONTENT_CMAKELIST}")
+    REGEX "project\\\(OTB\\\)")
+  if(NOT "${_CONTENT_CMAKELIST}" STREQUAL "")
     set(SUPERBUILD_IN_OTB_TREE ON)
   endif()
-  
 endif()
-
+message(STATUS "Check if superbuild is in OTB tree : ${SUPERBUILD_IN_OTB_TREE}")
 
 set(SB_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 
