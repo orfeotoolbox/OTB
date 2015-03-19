@@ -10,7 +10,7 @@ gdalConfig="$(which gdal-config)"
 ${gdalConfig} --version > ${tempFolder}/testgdal1.txt 
 
 #TEST 2 : dyn. symbols 
-if [ -z "${apple}"]
+if [ -z "${apple}" ]
 then
 nm -D --defined-only ${gdalLibLocation} | grep TIFFClose > ${tempFolder}/testgdal2.txt
 else
