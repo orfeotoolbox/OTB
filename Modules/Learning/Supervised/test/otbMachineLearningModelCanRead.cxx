@@ -17,7 +17,13 @@
 =========================================================================*/
 
 #include <iostream>
+
+#include <otbMachineLearningModel.h>
+
+#ifdef OTB_USE_LIBSVM
 #include "otbLibSVMMachineLearningModel.h"
+#endif
+#ifdef OTB_USE_OPENCV
 #include "otbSVMMachineLearningModel.h"
 #include "otbRandomForestsMachineLearningModel.h"
 #include "otbBoostMachineLearningModel.h"
@@ -26,6 +32,7 @@
 #include "otbDecisionTreeMachineLearningModel.h"
 #include "otbGradientBoostedTreeMachineLearningModel.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"
+#endif
 
 typedef otb::MachineLearningModel<float,short>         MachineLearningModelType;
 typedef MachineLearningModelType::InputValueType       InputValueType;
@@ -49,6 +56,8 @@ int otbLibSVMMachineLearningModelCanRead(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   std::string filename(argv[1]);
+  
+  #ifdef OTB_USE_LIBSVM
   typedef otb::LibSVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
   SVMType::Pointer classifier = SVMType::New();
   bool lCanRead = classifier->CanReadFile(filename);
@@ -57,6 +66,7 @@ int otbLibSVMMachineLearningModelCanRead(int argc, char* argv[])
     std::cerr << "Erreur otb::LibSVMMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
     }
+  #endif
 
   return EXIT_SUCCESS;
 }
@@ -75,6 +85,8 @@ int otbSVMMachineLearningModelCanRead(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   std::string filename(argv[1]);
+  
+  #ifdef OTB_USE_OPENCV
   typedef otb::SVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
   SVMType::Pointer classifier = SVMType::New();
   bool lCanRead = classifier->CanReadFile(filename);
@@ -83,6 +95,7 @@ int otbSVMMachineLearningModelCanRead(int argc, char* argv[])
     std::cerr << "Erreur otb::SVMMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
     }
+  #endif
 
   return EXIT_SUCCESS;
 }
@@ -101,6 +114,8 @@ int otbRandomForestsMachineLearningModelCanRead(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   std::string filename(argv[1]);
+  
+  #ifdef OTB_USE_OPENCV
   typedef otb::RandomForestsMachineLearningModel<InputValueType, TargetValueType> RFType;
   RFType::Pointer classifier = RFType::New();
   bool lCanRead = classifier->CanReadFile(filename);
@@ -109,6 +124,7 @@ int otbRandomForestsMachineLearningModelCanRead(int argc, char* argv[])
     std::cerr << "Erreur otb::RandomForestsMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
     }
+  #endif
 
   return EXIT_SUCCESS;
 }
@@ -127,6 +143,8 @@ int otbBoostMachineLearningModelCanRead(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   std::string filename(argv[1]);
+  
+  #ifdef OTB_USE_OPENCV
   typedef otb::BoostMachineLearningModel<InputValueType, TargetValueType> BoostType;
   BoostType::Pointer classifier = BoostType::New();
   bool lCanRead = classifier->CanReadFile(filename);
@@ -135,6 +153,7 @@ int otbBoostMachineLearningModelCanRead(int argc, char* argv[])
     std::cerr << "Erreur otb::BoostMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
     }
+  #endif
 
   return EXIT_SUCCESS;
 }
@@ -153,6 +172,8 @@ int otbNeuralNetworkMachineLearningModelCanRead(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   std::string filename(argv[1]);
+  
+  #ifdef OTB_USE_OPENCV
   typedef otb::NeuralNetworkMachineLearningModel<InputValueType, TargetValueType> ANNType;
   ANNType::Pointer classifier = ANNType::New();
   bool lCanRead = classifier->CanReadFile(filename);
@@ -161,6 +182,7 @@ int otbNeuralNetworkMachineLearningModelCanRead(int argc, char* argv[])
     std::cerr << "Erreur otb::NeuralNetworkMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
     }
+  #endif
 
   return EXIT_SUCCESS;
 }
@@ -179,6 +201,8 @@ int otbNormalBayesMachineLearningModelCanRead(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   std::string filename(argv[1]);
+  
+  #ifdef OTB_USE_OPENCV
   typedef otb::NormalBayesMachineLearningModel<InputValueType, TargetValueType> NormalBayesType;
   NormalBayesType::Pointer classifier = NormalBayesType::New();
   bool lCanRead = classifier->CanReadFile(filename);
@@ -187,6 +211,7 @@ int otbNormalBayesMachineLearningModelCanRead(int argc, char* argv[])
     std::cerr << "Erreur otb::NormalBayesMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
     }
+  #endif
 
   return EXIT_SUCCESS;
 }
@@ -205,6 +230,8 @@ int otbDecisionTreeMachineLearningModelCanRead(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   std::string filename(argv[1]);
+  
+  #ifdef OTB_USE_OPENCV
   typedef otb::DecisionTreeMachineLearningModel<InputValueType, TargetValueType> DecisionTreeType;
   DecisionTreeType::Pointer classifier = DecisionTreeType::New();
   bool lCanRead = classifier->CanReadFile(filename);
@@ -213,6 +240,7 @@ int otbDecisionTreeMachineLearningModelCanRead(int argc, char* argv[])
     std::cerr << "Erreur otb::DecisionTreeMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
     }
+  #endif
 
   return EXIT_SUCCESS;
 }
@@ -231,6 +259,8 @@ int otbGradientBoostedTreeMachineLearningModelCanRead(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   std::string filename(argv[1]);
+  
+  #ifdef OTB_USE_OPENCV
   typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType, TargetValueType> GBTreeType;
   GBTreeType::Pointer classifier = GBTreeType::New();
   bool lCanRead = classifier->CanReadFile(filename);
@@ -239,6 +269,7 @@ int otbGradientBoostedTreeMachineLearningModelCanRead(int argc, char* argv[])
     std::cerr << "Erreur otb::GradientBoostedTreeMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
     }
+  #endif
 
   return EXIT_SUCCESS;
 }
@@ -257,6 +288,8 @@ int otbKNNMachineLearningModelCanRead(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   std::string filename(argv[1]);
+  
+  #ifdef OTB_USE_OPENCV
   typedef otb::KNearestNeighborsMachineLearningModel<InputValueType, TargetValueType> KNNType;
   KNNType::Pointer classifier = KNNType::New();
   bool lCanRead = classifier->CanReadFile(filename);
@@ -265,6 +298,7 @@ int otbKNNMachineLearningModelCanRead(int argc, char* argv[])
     std::cerr << "Erreur otb::KNearestNeighborsMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
     }
+  #endif
 
   return EXIT_SUCCESS;
 }
