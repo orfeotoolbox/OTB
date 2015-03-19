@@ -22,26 +22,20 @@ add_custom_target( OTBHeaderTests
 
 
 SET(BANNED_HEADERS)
-#if(NOT OTB_USE_OPENCV)
-#	string(CONCAT BANNED_HEADERS ${BANNED_HEADERS} "otbDecisionTreeMachineLearningModelFactory.h otbDecisionTreeMachineLearningModel.h otbKNearestNeighborsMachineLearningModelFactory.h otbKNearestNeighborsMachineLearningModel.h otbRandomForestsMachineLearningModelFactory.h otbRandomForestsMachineLearningModel.h otbSVMMachineLearningModelFactory.h otbSVMMachineLearningModel.h otbGradientBoostedTreeMachineLearningModelFactory.h otbGradientBoostedTreeMachineLearningModel.h otbBoostMachineLearningModelFactory.h otbBoostMachineLearningModel.h otbNeuralNetworkMachineLearningModelFactory.h otbNeuralNetworkMachineLearningModel.h otbNormalBayesMachineLearningModelFactory.h otbNormalBayesMachineLearningModel.h otbRequiresOpenCVCheck.h ")
-#	string(STRIP ${BANNED_HEADERS} BANNED_HEADERS)
-#	string(CONCAT BANNED_HEADERS ${BANNED_HEADERS} " ")
-#endif()
+if(NOT OTB_USE_OPENCV)
+	SET(BANNED_HEADERS "${BANNED_HEADERS} otbDecisionTreeMachineLearningModelFactory.h otbDecisionTreeMachineLearningModel.h otbKNearestNeighborsMachineLearningModelFactory.h otbKNearestNeighborsMachineLearningModel.h otbRandomForestsMachineLearningModelFactory.h otbRandomForestsMachineLearningModel.h otbSVMMachineLearningModelFactory.h otbSVMMachineLearningModel.h otbGradientBoostedTreeMachineLearningModelFactory.h otbGradientBoostedTreeMachineLearningModel.h otbBoostMachineLearningModelFactory.h otbBoostMachineLearningModel.h otbNeuralNetworkMachineLearningModelFactory.h otbNeuralNetworkMachineLearningModel.h otbNormalBayesMachineLearningModelFactory.h otbNormalBayesMachineLearningModel.h otbRequiresOpenCVCheck.h")
+endif()
  
-#if(NOT OTB_USE_LIBSVM)
-#	string(CONCAT BANNED_HEADERS ${BANNED_HEADERS} "otbLibSVMMachineLearningModel.h otbLibSVMMachineLearningModelFactory.h")
-#	string(STRIP ${BANNED_HEADERS} BANNED_HEADERS)
-#	string(CONCAT BANNED_HEADERS ${BANNED_HEADERS} " ")
-#endif()
+if(NOT OTB_USE_LIBSVM)
+	SET(BANNED_HEADERS "${BANNED_HEADERS} otbLibSVMMachineLearningModel.h otbLibSVMMachineLearningModelFactory.h")
+endif()
+
+message(${BANNED_HEADERS})
 
 # ************ ADD YOUR BANNED HEADERS HERE ************
 #if(CONDITION)
-#	string(CONCAT BANNED_HEADERS ${BANNED_HEADERS} "BANNED-HEADER1.h")
-#	string(STRIP ${BANNED_HEADERS} BANNED_HEADERS)
-#	string(CONCAT BANNED_HEADERS ${BANNED_HEADERS} " ")
+#	SET(BANNED_HEADERS "${BANNED_HEADERS} BANNED-HEADER1.h BANNED-HEADER2.h")
 #endif()
-
-#string(STRIP ${BANNED_HEADERS} BANNED_HEADERS)
 
 
 
