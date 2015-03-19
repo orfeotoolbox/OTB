@@ -20,13 +20,7 @@
 #include <string>
 #include <algorithm>
 
-#include <otbMachineLearningModel.h>
-
-#ifdef OTB_USE_LIBSVM
 #include "otbLibSVMMachineLearningModel.h"
-#endif
-
-#ifdef OTB_USE_OPENCV
 #include "otbSVMMachineLearningModel.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"
 #include "otbRandomForestsMachineLearningModel.h"
@@ -36,7 +30,6 @@
 #include "otbDecisionTreeMachineLearningModel.h"
 #include "otbGradientBoostedTreeMachineLearningModel.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"
-#endif
 
 #include "otbConfusionMatrixCalculator.h"
 
@@ -195,7 +188,6 @@ bool ReadDataRegressionFile(const std::string & infname, InputListSampleRegressi
   return true;
 }
 
-#ifdef OTB_USE_LIBSVM
 int otbLibSVMMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::LibSVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
@@ -284,9 +276,7 @@ int otbSVMMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) 
   SVMType::Pointer svmclassifier = SVMType::New();
   return EXIT_SUCCESS;
 }
-#endif
 
-#ifdef OTB_USE_OPENCV
 int otbSVMMachineLearningModel(int argc, char * argv[])
 {
   if (argc != 3 )
@@ -1046,4 +1036,3 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 }
-#endif
