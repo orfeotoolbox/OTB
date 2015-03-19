@@ -21,6 +21,7 @@ namespace otb
 {
 namespace Wrapper
 {
+#ifdef OTB_USE_OPENCV
 void TrainImagesClassifier::InitRandomForestsParams()
 {
   AddChoice("classifier.rf", "Random forests classifier");
@@ -111,6 +112,6 @@ void TrainImagesClassifier::TrainRandomForests(ListSampleType::Pointer trainingL
   classifier->Train();
   classifier->Save(GetParameterString("io.out"));
 }
-
+#endif
 } //end namespace wrapper
 } //end namespace otb

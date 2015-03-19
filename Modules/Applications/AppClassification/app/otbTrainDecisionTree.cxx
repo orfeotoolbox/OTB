@@ -21,6 +21,7 @@ namespace otb
 {
 namespace Wrapper
 {
+#ifdef OTB_USE_OPENCV
 void TrainImagesClassifier::InitDecisionTreeParams()
 {
   AddChoice("classifier.dt", "Decision Tree classifier");
@@ -102,6 +103,6 @@ void TrainImagesClassifier::TrainDecisionTree(ListSampleType::Pointer trainingLi
   classifier->Train();
   classifier->Save(GetParameterString("io.out"));
 }
-
+#endif
 } //end namespace wrapper
 } //end namespace otb

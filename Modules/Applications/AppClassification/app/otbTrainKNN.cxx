@@ -22,6 +22,7 @@ namespace otb
 {
 namespace Wrapper
 {
+#ifdef OTB_USE_OPENCV
   void TrainImagesClassifier::InitKNNParams()
   {
     AddChoice("classifier.knn", "KNN classifier");
@@ -46,6 +47,6 @@ namespace Wrapper
     knnClassifier->Train();
     knnClassifier->Save(GetParameterString("io.out"));
   }
-
+#endif
 } //end namespace wrapper
 } //end namespace otb

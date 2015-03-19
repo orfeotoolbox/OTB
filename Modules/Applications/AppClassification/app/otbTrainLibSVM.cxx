@@ -22,6 +22,7 @@ namespace otb
 {
 namespace Wrapper
 {
+#ifdef OTB_USE_LIBSVM
   void TrainImagesClassifier::InitLibSVMParams()
   {
     AddChoice("classifier.libsvm", "LibSVM classifier");
@@ -78,6 +79,6 @@ namespace Wrapper
     libSVMClassifier->Train();
     libSVMClassifier->Save(GetParameterString("io.out"));
   }
-
+#endif
 } //end namespace wrapper
 } //end namespace otb

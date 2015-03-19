@@ -21,6 +21,7 @@ namespace otb
 {
 namespace Wrapper
 {
+#ifdef OTB_USE_OPENCV
 void TrainImagesClassifier::InitGradientBoostedTreeParams()
 {
   AddChoice("classifier.gbt", "Gradient Boosted Tree classifier");
@@ -80,6 +81,6 @@ void TrainImagesClassifier::TrainGradientBoostedTree(
   classifier->Train();
   classifier->Save(GetParameterString("io.out"));
 }
-
+#endif
 } //end namespace wrapper
 } //end namespace otb

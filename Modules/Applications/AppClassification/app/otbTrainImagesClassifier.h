@@ -42,7 +42,9 @@
 # include "otbNeuralNetworkMachineLearningModel.h"
 #endif
 
+#ifdef OTB_USE_LIBSVM 
 #include "otbLibSVMMachineLearningModel.h"
+#endif
 
 // Statistic XML Reader
 #include "otbStatisticsXMLFileReader.h"
@@ -124,8 +126,11 @@ public:
   typedef otb::NeuralNetworkMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> NeuralNetworkType;
   typedef otb::NormalBayesMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> NormalBayesType;
 #endif
+
+#ifdef OTB_USE_LIBSVM 
   typedef otb::LibSVMMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> LibSVMType;
-  
+#endif
+ 
   // Estimate performance on validation sample
   typedef otb::ConfusionMatrixCalculator<LabelListSampleType, LabelListSampleType> ConfusionMatrixCalculatorType;
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType ConfusionMatrixType;
@@ -150,7 +155,10 @@ private:
 
   void LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc);
 
+#ifdef OTB_USE_LIBSVM 
   void InitLibSVMParams();
+#endif  
+  
 #ifdef OTB_USE_OPENCV
   void InitBoostParams();
   void InitSVMParams();
@@ -161,8 +169,11 @@ private:
   void InitRandomForestsParams();
   void InitKNNParams();
 #endif
-  
+
+#ifdef OTB_USE_LIBSVM 
   void TrainLibSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
+#endif 
+  
 #ifdef OTB_USE_OPENCV
   void TrainBoost(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
   void TrainSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);

@@ -22,6 +22,7 @@ namespace otb
 {
 namespace Wrapper
 {
+#ifdef OTB_USE_OPENCV
   void TrainImagesClassifier::InitSVMParams()
   {
     AddChoice("classifier.svm", "SVM classifier (OpenCV)");
@@ -74,7 +75,6 @@ namespace Wrapper
                             "parameters and a similar random seed, the output SVM models will be different according to the method used (optimized or not) "
                             "because the samples are not identically processed within OpenCV.");
   }
-
 
   void TrainImagesClassifier::TrainSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
   {
@@ -152,6 +152,7 @@ namespace Wrapper
     SetParameterFloat("classifier.svm.gamma", static_cast<float> (SVMClassifier->GetOutputGamma()));
     SetParameterFloat("classifier.svm.degree", static_cast<float> (SVMClassifier->GetOutputDegree()));
   }
+#endif
 
 } //end namespace wrapper
 } //end namespace otb

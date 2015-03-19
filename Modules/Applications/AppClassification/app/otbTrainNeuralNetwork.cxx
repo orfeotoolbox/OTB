@@ -22,6 +22,7 @@ namespace otb
 {
 namespace Wrapper
 {
+#ifdef OTB_USE_OPENCV
 void TrainImagesClassifier::InitNeuralNetworkParams()
 {
   AddChoice("classifier.ann", "Artificial Neural Network classifier");
@@ -209,6 +210,6 @@ void TrainImagesClassifier::TrainNeuralNetwork(ListSampleType::Pointer trainingL
   classifier->Train();
   classifier->Save(GetParameterString("io.out"));
 }
-
+#endif
 } //end namespace wrapper
 } //end namespace otb

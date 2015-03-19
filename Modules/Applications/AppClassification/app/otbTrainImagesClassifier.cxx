@@ -105,7 +105,9 @@ void TrainImagesClassifier::DoInit()
   SetParameterDescription("classifier", "Choice of the classifier to use for the training.");
 
   //Group LibSVM
+#ifdef OTB_USE_LIBSVM 
   InitLibSVMParams();
+#endif
 
 #ifdef OTB_USE_OPENCV
   InitSVMParams();
@@ -395,44 +397,80 @@ void TrainImagesClassifier::DoExecute()
   //--------------------------
   LabelListSampleType::Pointer predictedList = LabelListSampleType::New();
   const std::string classifierType = GetParameterString("classifier");
+
   if (classifierType == "libsvm")
     {
+	#ifdef OTB_USE_LIBSVM
     TrainLibSVM(trainingListSample, trainingLabeledListSample);
+    #elseif
+    otbAppLogFATAL("Module LIBSVM is not installed. You should consider turning OTB_USE_LIBSVM on during cmake configuration.");
+    #endif
     }
-#ifdef OTB_USE_OPENCV
   else if (classifierType == "svm")
     {
+	#ifdef OTB_USE_OPENCV
     TrainSVM(trainingListSample, trainingLabeledListSample);
+    #elseif
+    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+    #endif
     }
   else if (classifierType == "boost")
     {
+	#ifdef OTB_USE_OPENCV
     TrainBoost(trainingListSample, trainingLabeledListSample);
+    #elseif
+    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+    #endif
     }
   else if (classifierType == "dt")
     {
+	#ifdef OTB_USE_OPENCV
     TrainDecisionTree(trainingListSample, trainingLabeledListSample);
+    #elseif
+    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+    #endif
     }
   else if (classifierType == "gbt")
     {
+	#ifdef OTB_USE_OPENCV
     TrainGradientBoostedTree(trainingListSample, trainingLabeledListSample);
+    #elseif
+    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+    #endif
     }
   else if (classifierType == "ann")
     {
+	#ifdef OTB_USE_OPENCV
     TrainNeuralNetwork(trainingListSample, trainingLabeledListSample);
+    #elseif
+    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+    #endif
     }
   else if (classifierType == "bayes")
     {
+	#ifdef OTB_USE_OPENCV
     TrainNormalBayes(trainingListSample, trainingLabeledListSample);
+    #elseif
+    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+    #endif
     }
   else if (classifierType == "rf")
     {
+	#ifdef OTB_USE_OPENCV
     TrainRandomForests(trainingListSample, trainingLabeledListSample);
+    #elseif
+    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+    #endif
     }
   else if (classifierType == "knn")
     {
+	#ifdef OTB_USE_OPENCV
     TrainKNN(trainingListSample, trainingLabeledListSample);
+    #elseif
+    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+    #endif
     }
-#endif
+
 
   //--------------------------
   // Performances estimation

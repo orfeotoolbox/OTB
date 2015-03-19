@@ -22,6 +22,7 @@ namespace otb
 {
 namespace Wrapper
 {
+#ifdef OTB_USE_OPENCV
   void TrainImagesClassifier::InitNormalBayesParams()
   {
     AddChoice("classifier.bayes", "Normal Bayes classifier");
@@ -39,6 +40,6 @@ namespace Wrapper
     classifier->Train();
     classifier->Save(GetParameterString("io.out"));
   }
-
+#endif
 } //end namespace wrapper
 } //end namespace otb

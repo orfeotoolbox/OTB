@@ -22,6 +22,7 @@ namespace otb
 {
 namespace Wrapper
 {
+#ifdef OTB_USE_OPENCV
   void TrainImagesClassifier::InitBoostParams()
   {
     AddChoice("classifier.boost", "Boost classifier");
@@ -68,6 +69,7 @@ namespace Wrapper
     boostClassifier->Train();
     boostClassifier->Save(GetParameterString("io.out"));
   }
+#endif
 
 } //end namespace wrapper
 } //end namespace otb
