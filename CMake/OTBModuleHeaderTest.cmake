@@ -30,8 +30,6 @@ if(NOT OTB_USE_LIBSVM)
 	SET(BANNED_HEADERS "${BANNED_HEADERS} otbLibSVMMachineLearningModel.h otbLibSVMMachineLearningModelFactory.h")
 endif()
 
-message(${BANNED_HEADERS})
-
 # ************ ADD YOUR BANNED HEADERS HERE ************
 #if(CONDITION)
 #	SET(BANNED_HEADERS "${BANNED_HEADERS} BANNED-HEADER1.h BANNED-HEADER2.h")
