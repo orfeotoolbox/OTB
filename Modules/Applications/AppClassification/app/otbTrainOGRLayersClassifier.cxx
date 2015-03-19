@@ -26,7 +26,10 @@
 
 #include "itkListSample.h"
 #include "otbShiftScaleSampleListFilter.h"
+
+#ifdef OTB_USE_LIBSVM
 #include "otbLibSVMMachineLearningModel.h"
+#endif
 
 #include <time.h>
 
@@ -118,6 +121,7 @@ private:
 
   void DoExecute()
   {
+	#ifdef OTB_USE_LIBSVM 
     clock_t tic = clock();
 
     std::string shapefile = GetParameterString("inshp");
@@ -197,6 +201,11 @@ private:
     clock_t toc = clock();
 
     otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
+    
+    #elseif
+	otbAppLogFATAL("Module LIBSVM is not installed. You should consider turning OTB_USE_LIBSVM on during cmake configuration.");
+	#endif
+	
     }
 
 };
