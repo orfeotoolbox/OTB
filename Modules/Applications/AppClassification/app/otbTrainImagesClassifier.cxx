@@ -402,7 +402,7 @@ void TrainImagesClassifier::DoExecute()
     {
 	#ifdef OTB_USE_LIBSVM
     TrainLibSVM(trainingListSample, trainingLabeledListSample);
-    #elseif
+    #else
     otbAppLogFATAL("Module LIBSVM is not installed. You should consider turning OTB_USE_LIBSVM on during cmake configuration.");
     #endif
     }
@@ -410,7 +410,7 @@ void TrainImagesClassifier::DoExecute()
     {
 	#ifdef OTB_USE_OPENCV
     TrainSVM(trainingListSample, trainingLabeledListSample);
-    #elseif
+    #else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
     #endif
     }
@@ -418,7 +418,7 @@ void TrainImagesClassifier::DoExecute()
     {
 	#ifdef OTB_USE_OPENCV
     TrainBoost(trainingListSample, trainingLabeledListSample);
-    #elseif
+    #else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
     #endif
     }
@@ -426,7 +426,7 @@ void TrainImagesClassifier::DoExecute()
     {
 	#ifdef OTB_USE_OPENCV
     TrainDecisionTree(trainingListSample, trainingLabeledListSample);
-    #elseif
+    #else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
     #endif
     }
@@ -434,7 +434,7 @@ void TrainImagesClassifier::DoExecute()
     {
 	#ifdef OTB_USE_OPENCV
     TrainGradientBoostedTree(trainingListSample, trainingLabeledListSample);
-    #elseif
+    #else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
     #endif
     }
@@ -442,7 +442,7 @@ void TrainImagesClassifier::DoExecute()
     {
 	#ifdef OTB_USE_OPENCV
     TrainNeuralNetwork(trainingListSample, trainingLabeledListSample);
-    #elseif
+    #else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
     #endif
     }
@@ -450,7 +450,7 @@ void TrainImagesClassifier::DoExecute()
     {
 	#ifdef OTB_USE_OPENCV
     TrainNormalBayes(trainingListSample, trainingLabeledListSample);
-    #elseif
+    #else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
     #endif
     }
@@ -458,7 +458,7 @@ void TrainImagesClassifier::DoExecute()
     {
 	#ifdef OTB_USE_OPENCV
     TrainRandomForests(trainingListSample, trainingLabeledListSample);
-    #elseif
+    #else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
     #endif
     }
@@ -466,7 +466,7 @@ void TrainImagesClassifier::DoExecute()
     {
 	#ifdef OTB_USE_OPENCV
     TrainKNN(trainingListSample, trainingLabeledListSample);
-    #elseif
+    #else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
     #endif
     }
