@@ -20,7 +20,7 @@ else()
   set(proj CURL)
   
   if(USE_SYSTEM_GEOS)
-    ADD_SUPERBUILD_CMAKE_VAR(ZLIB_SB_ROOT)
+    ADD_SUPERBUILD_CMAKE_VAR(ZLIB_ROOT)
   endif()
   
   #TODO: add openssl and other dependencies

@@ -50,8 +50,8 @@ else()
     # set proj back to its original value
     set(proj SWIG)
     
-    ADD_SUPERBUILD_CONFIGURE_VAR(PCRE_SB_ROOT --with-pcre-prefix)
-    ADD_SUPERBUILD_CONFIGURE_VAR(BOOST_SB_ROOT --with-boost)
+    ADD_SUPERBUILD_CONFIGURE_VAR(PCRE_ROOT --with-pcre-prefix)
+    ADD_SUPERBUILD_CONFIGURE_VAR(BOOST_ROOT --with-boost)
     
     ExternalProject_Add(${proj}
       PREFIX ${proj}
