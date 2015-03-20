@@ -20,17 +20,7 @@
 #include <string>
 #include <algorithm>
 
-#include "otbLibSVMMachineLearningModel.h"
-#include "otbSVMMachineLearningModel.h"
-#include "otbKNearestNeighborsMachineLearningModel.h"
-#include "otbRandomForestsMachineLearningModel.h"
-#include "otbBoostMachineLearningModel.h"
-#include "otbNeuralNetworkMachineLearningModel.h"
-#include "otbNormalBayesMachineLearningModel.h"
-#include "otbDecisionTreeMachineLearningModel.h"
-#include "otbGradientBoostedTreeMachineLearningModel.h"
-#include "otbKNearestNeighborsMachineLearningModel.h"
-
+#include <otbMachineLearningModel.h>
 #include "otbConfusionMatrixCalculator.h"
 
 
@@ -188,6 +178,8 @@ bool ReadDataRegressionFile(const std::string & infname, InputListSampleRegressi
   return true;
 }
 
+#ifdef OTB_USE_LIBSVM
+#include "otbLibSVMMachineLearningModel.h"
 int otbLibSVMMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::LibSVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
@@ -269,6 +261,18 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 }
+#endif
+
+#ifdef OTB_USE_OPENCV
+#include "otbSVMMachineLearningModel.h"
+#include "otbKNearestNeighborsMachineLearningModel.h"
+#include "otbRandomForestsMachineLearningModel.h"
+#include "otbBoostMachineLearningModel.h"
+#include "otbNeuralNetworkMachineLearningModel.h"
+#include "otbNormalBayesMachineLearningModel.h"
+#include "otbDecisionTreeMachineLearningModel.h"
+#include "otbGradientBoostedTreeMachineLearningModel.h"
+#include "otbKNearestNeighborsMachineLearningModel.h"
 
 int otbSVMMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
@@ -1036,3 +1040,4 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 }
+#endif
