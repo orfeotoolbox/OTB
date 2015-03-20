@@ -72,3 +72,8 @@ add_test( NAME pyTvBandMathInXML
                   ${TEMP}/pyTvBandMathInXML.tif
                   )
 
+add_test( NAME pyTvNumpyIO
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonNumpyTest.py
+                  ${OTB_DATA_ROOT}/Input/poupees.tif
+                  ${TEMP}/pyTvNumpyIO_ )
