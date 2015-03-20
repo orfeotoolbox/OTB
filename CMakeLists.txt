@@ -58,7 +58,6 @@ include (SourceStatus)
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 include(OTBModuleMacros)
-include(OTBExternalData)
 include(OTBModuleRemote)
 
 set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
