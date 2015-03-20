@@ -4,8 +4,10 @@ cmake_minimum_required(VERSION 2.8.3)
 project(OTB-SuperBuild)
 
 # Path to additional CMake modules
+MESSAGE(INFO "${CMAKE_SOURCE_DIR}")
 set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
+    ${CMAKE_SOURCE_DIR}/../CMake
     ${CMAKE_MODULE_PATH})
 
 include(ExternalProject)
