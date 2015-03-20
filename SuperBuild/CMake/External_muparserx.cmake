@@ -22,10 +22,10 @@ else()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    #URL "http://muparserx.googlecode.com/svn/archives/muparserx_v3_0_2.zip"
-    #URL_MD5 487a91084f1929d2fdc9bedee598a77a
-    SVN_REPOSITORY "http://muparserx.googlecode.com/svn/trunk"
-    SVN_REVISION -r 291
+    URL "https://www.orfeo-toolbox.org/packages/muparserx-r291.tar.gz"
+    URL_MD5 4c9b6e222b35dc1a07d24a9506025785
+    #SVN_REPOSITORY "http://muparserx.googlecode.com/svn/trunk"
+    #SVN_REVISION -r 291
     BINARY_DIR ${MUPARSERX_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     CMAKE_CACHE_ARGS
