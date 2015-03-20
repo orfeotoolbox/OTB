@@ -336,11 +336,25 @@ GlView
 
     it->second->GetExtent( o[ 0 ], o[ 1 ], e[ 0 ], e[ 1 ] );
 
+
     if( o[ 0 ]<origin[ 0 ] )
       origin[ 0 ] = o[ 0 ];
 
     if( o[ 1 ]<origin[ 1 ] )
       origin[ 1 ] = o[ 1 ];
+
+    if( o[ 0 ]>extent[ 0 ] )
+      extent[ 0 ] = o[ 0 ];
+
+    if( o[ 1 ]>extent[ 1 ] )
+      extent[ 1 ] = o[ 1 ];
+
+
+    if( e[ 0 ]<origin[ 0 ] )
+      origin[ 0 ] = e[ 0 ];
+
+    if( e[ 1 ]<origin[ 1 ] )
+      origin[ 1 ] = e[ 1 ];
 
     if( e[ 0 ]>extent[ 0 ] )
       extent[ 0 ] = e[ 0 ];
