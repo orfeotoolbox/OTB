@@ -44,8 +44,6 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAbstractLayerModel.h"
 #include "Core/mvdAlgorithm.h"
-// #include "Core/mvdDatasetModel.h"
-#include "Core/mvdStackedLayerModel.h"
 #include "Core/mvdTypes.h"
 #include "Core/mvdVectorImageModel.h"
 
@@ -220,21 +218,50 @@ ImageViewRenderer
 /*****************************************************************************/
 void
 ImageViewRenderer
+::GetLayerExtent( const StackedLayerModel::KeyType & key,
+                  PointType & origin,
+                  PointType & extent  ) const
+{
+  assert( !m_GlView.IsNull() );
+
+  otb::GlActor::Pointer actor( m_GlView->GetActor( key ) );
+
+  if( actor.IsNull() )
+    {
+    origin[ 0 ] = origin[ 1 ] = 0;
+    origin[ 1 ] = origin[ 1 ] = 0;
+
+    extent[ 0 ] = extent[ 1 ] = 0;
+    extent[ 1 ] = extent[ 1 ] = 0;
+
+    return;
+    }
+
+  actor->GetExtent( origin[ 0 ], origin[ 1 ], extent[ 0 ], extent[ 1 ] );
+}
+
+/*****************************************************************************/
+void
+ImageViewRenderer
 ::GetReferenceExtent( PointType& origin, PointType& extent  ) const
 {
-#if USE_REMOTE_DESKTOP_DISABLED_RENDERING
-  extent[ 0 ] = 0.0;
-  extent[ 1 ] = 0.0;
+  assert( GetLayerStack()!=NULL );
 
-#else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
-  assert( !m_ReferencePair.second.IsNull() );
-
-  m_ReferencePair.second->GetExtent(
-    origin[ 0 ], origin[ 1 ],
-    extent[ 0 ], extent[ 1 ]
+  GetLayerExtent(
+    GetLayerStack()->GetKey( GetLayerStack()->GetReferenceIndex() ),
+    origin,
+    extent
   );
+}
 
-#endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
+/*****************************************************************************/
+void
+ImageViewRenderer
+::GetViewExtent( PointType & origin, PointType & extent ) const
+{
+  assert( !m_GlView.IsNull() );
+
+  m_GlView->GetExtent( origin, extent );
 }
 
 /*****************************************************************************/

@@ -45,6 +45,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdStackedLayerModel.h"
 #include "Core/mvdTypes.h"
 
 /*****************************************************************************/
@@ -152,8 +153,19 @@ public:
 
   /**
    */
+  virtual void GetLayerExtent( const StackedLayerModel::KeyType & key,
+                               PointType& origin,
+                               PointType& extent ) const =0;
+
+  /**
+   */
   virtual void GetReferenceExtent( PointType& origin,
                                    PointType& extent ) const =0;
+
+  /**
+   */
+  virtual void GetViewExtent( PointType& origin,
+                              PointType& extent ) const =0;
 
   /**
    */

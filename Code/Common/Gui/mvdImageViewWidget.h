@@ -85,8 +85,9 @@ public:
   {
     ZOOM_TYPE_NONE = -1,
     //
-    ZOOM_TYPE_FULL,
     ZOOM_TYPE_EXTENT,
+    ZOOM_TYPE_FULL,
+    ZOOM_TYPE_LAYER,
     //
     ZOOM_TYPE_COUNT
   };
@@ -173,6 +174,9 @@ public slots:
   /**
    */
   void ZoomToFullResolution();
+  /**
+   */
+  void ZoomToLayerExtent();
   /**
    */
   void ZoomIn();

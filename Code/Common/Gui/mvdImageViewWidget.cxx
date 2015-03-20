@@ -700,86 +700,170 @@ void
 ImageViewWidget
 ::Center( ZoomType zoom )
 {
+  assert(
+    zoom==ZOOM_TYPE_EXTENT || zoom==ZOOM_TYPE_FULL || zoom==ZOOM_TYPE_LAYER
+  );
+
   assert( m_Renderer!=NULL );
   assert( m_Manipulator!=NULL );
 
-  //
-  // Get reference image-model.
-  AbstractImageModel* imageModel =
-    m_Renderer->GetReferenceModel< AbstractImageModel >();
-  assert( imageModel!=NULL );
 
-  //
-  // Reset spacing of image-view manipulator to image-model spacing.
-  if( zoom==ZOOM_TYPE_FULL ||
-      zoom==ZOOM_TYPE_EXTENT )
+  PointType center;
+  SpacingType spacing;
+
+  center[ 0 ] = center[ 1 ] = 0.0;
+  spacing[ 0 ] = spacing[ 1 ] = 1.0;
+
+
+  switch( zoom )
     {
-    m_Manipulator->SetOrigin( imageModel->GetOrigin() );
-    m_Manipulator->SetSpacing( imageModel->GetSpacing() );
-    }
-
-  //
-  // Get reference extent.
-  PointType origin;
-  PointType extent;
-
-  m_Renderer->GetReferenceExtent( origin, extent );
-
-  //
-  // Calculate appropriate spacing regarding zoom-type.
-  if( zoom==ZOOM_TYPE_EXTENT )
+    case ZOOM_TYPE_EXTENT:
     {
+    //
+    // Calculate center
+    PointType origin;
+    PointType extent;
+
+    m_Renderer->GetViewExtent( origin, extent );
+
+    center.SetToMidPoint( origin, extent );
+
+    //
+    // Get spacing of reference layer.
+    const AbstractLayerModel * layer = m_Renderer->GetReferenceModel();
+    assert( layer!=NULL );
+
+    if( layer->inherits( AbstractImageModel::staticMetaObject.className() ) )
+      {
+      const AbstractImageModel * imageModel =
+        qobject_cast< const AbstractImageModel * >( layer );
+
+      assert( imageModel!=NULL );
+
+      spacing = imageModel->GetSpacing();
+
+      assert( spacing[ 0 ]!=0.0 );
+      assert( spacing[ 1 ]!=0.0 );
+      }
+    else
+      assert( false && "Unhandled AbstractLayerModel derived type." );
+
+    //
+    // Get Viewport size.
     SizeType size( m_Manipulator->GetViewportSize() );
 
-#if 1
     //
-    // Does work but continues to zoom if called several times
-    // because scaling is relative to current viewport.
-    //
-    // Fix: setting spacing of image-view manipulator before
-    // calculations works.
-    SpacingType spacing( m_Manipulator->GetSpacing() );
-
+    // Calculate scale.
     double scale = 
       std::max(
         fabs( extent[ 0 ] - origin[ 0 ] ) / static_cast< double >( size[ 0 ] ),
         fabs( extent[ 1 ] - origin[ 1 ] ) / static_cast< double >( size[ 1 ] )
       );
 
-    // Scale is already a spacing, we just need to apply
-    spacing[ 0 ] = (spacing[0]>0?1:-1) * scale;
-    spacing[ 1 ] = (spacing[1]>0?1:-1) * scale;
-#else
     //
-    // Might not work if image is RS-transformed!?
-    SpacingType spacing( imageModel->GetSpacing() );
+    // Calculate spacing.
+    //
+    // Scale of Viewport is a spacing, sign of spacing needs to be
+    // reported back.
+    spacing[ 0 ] = ( spacing[ 0 ] >=0.0 ? 1.0 : -1.0 ) * scale;
+    spacing[ 1 ] = ( spacing[ 1 ] >=0.0 ? 1.0 : -1.0 ) * scale;
+    }
+    break;
 
-    ImageRegionType region( imageModel->GetNativeLargestRegion() );
-    const SizeType& sz = region.GetSize();
+    case ZOOM_TYPE_FULL:
+    {
+    const AbstractLayerModel * layer = m_Renderer->GetReferenceModel();
+    assert( layer!=NULL );
 
+    if( layer->inherits( AbstractImageModel::staticMetaObject.className() ) )
+      {
+      const AbstractImageModel * imageModel =
+        qobject_cast< const AbstractImageModel * >( layer );
+        
+      assert( imageModel!=NULL );
+
+      spacing = imageModel->GetSpacing();
+      }
+    else
+      assert( false && "Unhandled AbstractLayerModel derived class." );
+
+    PointType origin;
+    PointType extent;
+
+    m_Renderer->GetReferenceExtent( origin, extent );
+
+    center.SetToMidPoint( origin, extent );
+    }
+    break;
+
+    case ZOOM_TYPE_LAYER:
+    {
+    assert( GetLayerStack()!=NULL );
+
+    //
+    // Calculate center
+    PointType origin;
+    PointType extent;
+
+    m_Renderer->GetLayerExtent(
+      m_Renderer->GetLayerStack()->GetCurrentKey(),
+      origin,
+      extent
+    );
+
+    center.SetToMidPoint( origin, extent );
+
+    //
+    // Get spacing of layer.
+    const AbstractLayerModel * layer = GetLayerStack()->GetCurrent();
+    assert( layer!=NULL );
+
+    if( layer->inherits( AbstractImageModel::staticMetaObject.className() ) )
+      {
+      const AbstractImageModel * imageModel =
+        qobject_cast< const AbstractImageModel * >( layer );
+
+      assert( imageModel!=NULL );
+
+      spacing = imageModel->GetSpacing();
+
+      assert( spacing[ 0 ]!=0.0 );
+      assert( spacing[ 1 ]!=0.0 );
+      }
+    else
+      assert( false && "Unhandled AbstractLayerModel derived type." );
+
+    //
+    // Get Viewport size.
+    SizeType size( m_Manipulator->GetViewportSize() );
+
+    //
+    // Calculate scale.
     double scale = 
       std::max(
-        static_cast< double >( sz[ 0 ] ) / static_cast< double >( size[ 0 ] ),
-        static_cast< double >( sz[ 1 ] ) / static_cast< double >( size[ 1 ] )
+        fabs( extent[ 0 ] - origin[ 0 ] ) / static_cast< double >( size[ 0 ] ),
+        fabs( extent[ 1 ] - origin[ 1 ] ) / static_cast< double >( size[ 1 ] )
       );
 
-    spacing[ 0 ] *= scale;
-    spacing[ 1 ] *= scale;
-#endif
+    //
+    // Calculate spacing.
+    //
+    // Scale of Viewport is a spacing, sign of spacing needs to be
+    // reported back.
+    spacing[ 0 ] = ( spacing[ 0 ] >=0.0 ? 1.0 : -1.0 ) * scale;
+    spacing[ 1 ] = ( spacing[ 1 ] >=0.0 ? 1.0 : -1.0 ) * scale;
+    }
+    break;
 
-    // qDebug() << "scale:" << scale;
-
-    m_Manipulator->SetSpacing( spacing );
+    default:
+      assert( false && "Unhandled ImageViewWidget::ZoomType value!" );
+      break;
     }
 
   //
-  // Calculate middle point.
-  PointType middle;
-  middle.SetToMidPoint( origin, extent );
-
-  //
   // Center on middle point.
-  m_Manipulator->CenterOn( middle );
+  m_Manipulator->SetSpacing( spacing );
+  m_Manipulator->CenterOn( center );
 }
 
 /*******************************************************************************/
@@ -1189,6 +1273,20 @@ ImageViewWidget
 
   // Scale and center.
   Center( ImageViewWidget::ZOOM_TYPE_EXTENT );
+
+  // Refresh view.
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::ZoomToLayerExtent()
+{
+  assert( m_Renderer!=NULL );
+
+  // Scale and center.
+  Center( ImageViewWidget::ZOOM_TYPE_LAYER );
 
   // Refresh view.
   updateGL();

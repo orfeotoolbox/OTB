@@ -156,8 +156,15 @@ public:
 
   virtual AbstractLayerModel * GetReferenceModel();
 
+  virtual void GetLayerExtent( const StackedLayerModel::KeyType & key,
+                               PointType& origin,
+                               PointType& extent ) const;
+
   virtual void GetReferenceExtent( PointType& origin,
                                    PointType& extent ) const;
+
+  virtual void GetViewExtent( PointType& origin,
+                              PointType& extent ) const;
 
   virtual
   AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const;

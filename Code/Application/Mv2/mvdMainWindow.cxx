@@ -351,6 +351,13 @@ MainWindow
     SLOT( ZoomToFullResolution() )
   );
 
+  QObject::connect(
+    this,
+    SIGNAL( UserZoomLayer() ),
+    m_ImageView,
+    SLOT( ZoomToLayerExtent() )
+  );
+
   //
   // Connect image-views for ROI-changed events.
 
@@ -1641,6 +1648,7 @@ MainWindow
   m_UI->action_ZoomOut->setEnabled( layerModel!=NULL );
   m_UI->action_ZoomExtent->setEnabled( layerModel!=NULL );
   m_UI->action_ZoomFull->setEnabled( layerModel!=NULL );
+  m_UI->action_ZoomLayer->setEnabled( layerModel!=NULL );
 }
 
 /*****************************************************************************/
