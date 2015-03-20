@@ -99,7 +99,7 @@ else()
   
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/bin/gdal111.dll)
+    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/gdal_i.lib)
   elseif(UNIX)
     set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgdal${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif() 
