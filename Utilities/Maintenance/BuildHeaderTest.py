@@ -81,7 +81,11 @@ def main():
     module_binary_path = sys.argv[3]
     maximum_number_of_headers = int(sys.argv[4])
     test_num           = int(sys.argv[5])
-    BANNED_HEADERS = sys.argv[6].split(' ')
+
+    if len(sys.argv) == 7:
+        BANNED_HEADERS = sys.argv[6].split(' ')
+    else:
+        BANNED_HEADERS = []
 
     # Get all the header files.
     include_dir = os.path.join(module_source_path, 'include')
