@@ -12,7 +12,10 @@ endif()
 if(UNIX)
 
 	message(STATUS "Check if Gdal qualifies for Orfeo ToolBox")
-
+  
+  if("x${GDAL_CONFIG}" STREQUAL "x")
+    message(FATAL_ERROR "Cannot find gdal-config executable. Set GDAL_CONFIG")
+  endif()
 
 	# Prepare bash script
 	configure_file(${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest.sh.in ${CMAKE_CURRENT_BINARY_DIR}/gdalTest.sh @ONLY)
