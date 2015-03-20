@@ -394,4 +394,3 @@ add_subdirectory(Utilities/Doxygen)
 # TODO cleanup
 # Create target to download data from the OTBData group. This must come after
 # all tests have been added that reference the group, so we put it last.
-#ExternalData_Add_Target(OTBData)
