@@ -80,7 +80,7 @@ else()
   endif()
   
   if(WIN32)
-    set(_SB_SWIG_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/swig.exe)
+    set(_SB_SWIG_EXECUTABLE ${CMAKE_BINARY_DIR}/SWIG/src/SWIG/swig.exe)
   elseif(UNIX)
     set(_SB_SWIG_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/swig)
   endif()
