@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-
 project(OTB-SuperBuild)
 
 # Path to additional CMake modules
@@ -13,6 +12,12 @@ set(CMAKE_MODULE_PATH
 include(ExternalProject)
 include(CTest)
 include(SuperBuild_Macro)
+
+# Setup location where source tar-balls are downloaded
+#set (install_location "${CMAKE_CURRENT_BINARY_DIR}/install")
+set (DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/downloads"
+     CACHE PATH "Location where source tar-balls are (to be) downloaded.")
+mark_as_advanced(DOWNLOAD_LOCATION)
 
 # General options
 option(ENABLE_QT4 " Use QT4 in the SuperBuild" ON)
