@@ -158,29 +158,11 @@ otb_add_test(NAME odTvObjectDetectionClassifier COMMAND otbSVMLearningTestDriver
   5 # neighborhood radius
   )
 
-otb_add_test(NAME leTvSVMClassifierImageOneClass COMMAND otbSVMLearningTestDriver
-  --compare-image ${NOTOL}
-  ${BASELINE}/leSVMClassifierImageOneClassOutput.png
-  ${TEMP}/leSVMClassifierImageOneClassOutput.png
-  otbSVMClassifierImage
-  ${INPUTDATA}/ROI_QB_MUL_4.tif
-  ${INPUTDATA}/svm_model_image_one_class
-  ${TEMP}/leSVMClassifierImageOneClassOutput.png)
-
-otb_add_test(NAME leTvSVMClassifierImage COMMAND otbSVMLearningTestDriver
-  --compare-image ${NOTOL}
-  ${BASELINE}/leSVMClassifierImageOutput.png
-  ${TEMP}/leSVMClassifierImageOutput.png
-  otbSVMClassifierImage
-  ${INPUTDATA}/ROI_QB_MUL_4.tif
-  ${INPUTDATA}/svm_model_image
-  ${TEMP}/leSVMClassifierImageOutput.png)
-
 otb_add_test(NAME leTuSVMClassifierNew COMMAND otbSVMLearningTestDriver
   otbSVMClassifierNew)
 
 otb_add_test(NAME leTvSVMSampleListModelEstimatorTest COMMAND otbSVMLearningTestDriver
-  --compare-ascii ${EPSILON_9}
+  --compare-ascii ${EPSILON_4}
   ${BASELINE_FILES}/leTvSVMSampleListModelEstimatorModel.txt
   ${TEMP}/leTvSVMSampleListModelEstimatorModel.txt
   otbSVMSampleListModelEstimatorTest
