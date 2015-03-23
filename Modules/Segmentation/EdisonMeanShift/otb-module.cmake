@@ -8,6 +8,7 @@ otb_module(OTBEdisonMeanShift
     OTBITK
     OTBImageBase
     OTBCommon
+    OTBLabelling
     OTBObjectList
 
   TEST_DEPENDS

@@ -24,6 +24,9 @@ otb_module(OTBAppSegmentation
     OTBLabelMap
     OTBProjection
 
+  OPTIONAL_DEPENDS
+    OTBEdisonMeanShift
+
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine

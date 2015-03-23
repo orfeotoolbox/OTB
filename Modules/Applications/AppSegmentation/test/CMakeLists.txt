@@ -23,12 +23,17 @@ set(raster_comparison --compare-image ${NOTOL})
 set(vector_ref_path ${BASELINE_FILES})
 set(raster_ref_path ${BASELINE})
 
+set(fitlerList "Meanshift" "CC" "Watershed")
+if(OTB_USE_EDISON)
+list(APPEND fitlerList "Edison")
+endif()
+
 # Loop on modes
 foreach(mode "Raster" "Vector")
 string(TOLOWER ${mode} lmode)
 
 # Loop on filters
-foreach(filter "Edison" "Meanshift" "CC" "Watershed")
+foreach(filter ${fitlerList})
 string(TOLOWER ${filter} lfilter)
 
 # Derive output file name

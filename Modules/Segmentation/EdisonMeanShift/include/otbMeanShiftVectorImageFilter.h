@@ -113,5 +113,20 @@ private:
   MeanShiftVectorImageFilter(const Self&); //purposely not implemented
   void operator =(const Self&);             //purposely not implemented
 };
+
+/**
+ * \class LabeledOutputAccessor
+ * \brief Specialized class to get the index of the labeled output image in mean shift vector image filter.
+ *
+ * \ingroup OTBEdisonMeanShift
+ */
+template <class TInputImage, class TOutputImage, class TLabeledImage>
+class LabeledOutputAccessor<MeanShiftVectorImageFilter<TInputImage, TOutputImage, TLabeledImage> >
+{
+   public:
+      typedef typename MeanShiftVectorImageFilter<TInputImage, TOutputImage, TLabeledImage>::LabeledOutputType    LabelImageType;
+      itkStaticConstMacro(LabeledOutputIndex, unsigned int, 2);
+};
+
 } // end namespace otb
 #endif

@@ -25,6 +25,7 @@
 #include "otbImage.h"
 #include "otbObjectList.h"
 #include "otbPolygon.h"
+#include "otbLabeledOutputAccessor.h"
 
 namespace otb
 {
@@ -207,6 +208,21 @@ private:
   /** A map of the different modes by segmented regions */
   mutable ModeMapType m_Modes;
 };
+
+/**
+ * \class LabeledOutputAccessor
+ * \brief Specialized class to get the index of the labeled output image in mean shift filter.
+ *
+ * \ingroup OTBEdisonMeanShift
+ */
+template <class TInputImage, class TOutputImage, class TLabeledImage, class TBufferConverter>
+class LabeledOutputAccessor<MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledImage, TBufferConverter> >
+{
+   public:
+      typedef typename MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledImage, TBufferConverter>::LabeledOutputType    LabelImageType;
+      itkStaticConstMacro(LabeledOutputIndex, unsigned int, 2);
+};
+
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

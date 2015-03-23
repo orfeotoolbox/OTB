@@ -9,11 +9,13 @@ otb_module(OTBOGRProcessing
     OTBConversion
     OTBSmoothing
     OTBStreaming
-    OTBEdisonMeanShift
     OTBCommon
     OTBLabelling
     OTBGDAL
     OTBITK
+  
+  OPTIONAL_DEPENDS
+    OTBEdisonMeanShift
 
   TEST_DEPENDS
     OTBTestKernel

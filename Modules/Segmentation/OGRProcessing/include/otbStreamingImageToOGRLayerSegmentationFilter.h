@@ -27,61 +27,18 @@
 #include "otbPersistentImageToOGRLayerFilter.h"
 #include "otbRelabelComponentImageFilter.h"
 #include "itkMultiplyImageFilter.h"
+#include "otbLabeledOutputAccessor.h"
 
 #include "otbMeanShiftSmoothingImageFilter.h"
-#include "otbMeanShiftVectorImageFilter.h"
-
 
 namespace otb
 {
 
 /**
  * \class LabeledOutputAccessor
- * \brief Accessor to the index of the labeled output image of the Template Filter.
- *
- * \ingroup OTBOGRProcessing
- */
-template <class TFilter>
-class LabeledOutputAccessor
-{
-   public:
-      typedef typename TFilter::OutputImageType    LabelImageType;
-      itkStaticConstMacro(LabeledOutputIndex, unsigned int, 0);
-};
-
-/**
- * \class LabeledOutputAccessor
- * \brief Specialized class to get the index of the labeled output image in mean shift filter.
- *
- * \ingroup OTBOGRProcessing
- */
-template <class TInputImage, class TOutputImage, class TLabeledImage, class TBufferConverter>
-class LabeledOutputAccessor<MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledImage, TBufferConverter> >
-{
-   public:
-      typedef typename MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledImage, TBufferConverter>::LabeledOutputType    LabelImageType;
-      itkStaticConstMacro(LabeledOutputIndex, unsigned int, 2);
-};
-
-/**
- * \class LabeledOutputAccessor
- * \brief Specialized class to get the index of the labeled output image in mean shift vector image filter.
- *
- * \ingroup OTBOGRProcessing
- */
-template <class TInputImage, class TOutputImage, class TLabeledImage>
-class LabeledOutputAccessor<MeanShiftVectorImageFilter<TInputImage, TOutputImage, TLabeledImage> >
-{
-   public:
-      typedef typename MeanShiftVectorImageFilter<TInputImage, TOutputImage, TLabeledImage>::LabeledOutputType    LabelImageType;
-      itkStaticConstMacro(LabeledOutputIndex, unsigned int, 2);
-};
-
-/**
- * \class LabeledOutputAccessor
  * \brief Specialized class to get the index of the labeled output image in mean shift filter (new version).
  *
- * \ingroup OTBOGRProcessing
+ * ingroup OTBOGRProcessing
  */
 template <class TInputImage, class TOutputImage, class TOutputImage2, class TKernelType>
 class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TOutputImage2, TKernelType> >

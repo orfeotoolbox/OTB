@@ -28,6 +28,9 @@
 #include "itkGradientMagnitudeImageFilter.h"
 #include "otbWatershedSegmentationFilter.h"
 #include "otbMorphologicalProfilesSegmentationFilter.h"
+#ifdef OTB_USE_EDISON
+#include "otbMeanShiftVectorImageFilter.h"
+#endif
 
 // Large scale vectorization framework
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
@@ -58,11 +61,13 @@ public:
   typedef UInt32ImageType               MaskImageType;
 
   // Segmentation filters typedefs
+#ifdef OTB_USE_EDISON
   // Edison mean-shift
   typedef otb::MeanShiftVectorImageFilter
   <FloatVectorImageType,
    FloatVectorImageType,
    LabelImageType>                        EdisonSegmentationFilterType;
+#endif
 
   // Home made mean-shift
   typedef otb::MeanShiftSegmentationFilter
@@ -105,10 +110,12 @@ public:
   <FloatVectorImageType, MaskImageType>   MaskMuParserFilterType;
 
   // Vectorize filters
+#ifdef OTB_USE_EDISON
   // Edison mean-shift
   typedef otb::StreamingImageToOGRLayerSegmentationFilter
   <FloatVectorImageType,
    EdisonSegmentationFilterType>          EdisontreamingVectorizedSegmentationOGRType;
+#endif
 
   // Home made mean-shift
   typedef otb::StreamingImageToOGRLayerSegmentationFilter
@@ -205,6 +212,7 @@ private:
     SetDefaultParameterInt("filter.meanshift.maxiter", 100);
     SetMinimumParameterIntValue("filter.meanshift.maxiter", 1);
 
+#ifdef OTB_USE_EDISON
     AddChoice("filter.edison", "Edison mean-shift");
     SetParameterDescription("filter.edison",
                             "Edison implementation of mean-shift algorithm, by its authors.");
@@ -223,6 +231,7 @@ private:
     SetDefaultParameterInt("filter.edison.minsize", 100);
     SetMinimumParameterIntValue("filter.edison.minsize", 0);
     SetDefaultParameterFloat("filter.edison.scale", 1.);
+#endif
 
     //Connected component segmentation parameters
     AddChoice("filter.cc", "Connected components");
@@ -591,6 +600,7 @@ private:
                                                                                                                                                 "in"),
                                                                                                              layer, 0);
       }
+#ifdef OTB_USE_EDISON
     else
       if (segType == "edison")
         {
@@ -617,6 +627,7 @@ private:
                                                                                                                                       "in"),
                                                                                                    layer, 2);
         }
+#endif
       else
         if (segType == "meanshift")
           {
@@ -743,7 +754,6 @@ private:
        }
       }
   }
-  EdisonSegmentationFilterType::Pointer m_Filter;
 };
 }
 }

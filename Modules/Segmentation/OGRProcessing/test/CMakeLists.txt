@@ -2,16 +2,19 @@ otb_module_test()
 
 set(OTBOGRProcessingTests
 otbOGRProcessingTestDriver.cxx
-otbStreamingImageToOGRLayerSegmentationFilter.cxx
 otbOGRLayerStreamStitchingFilter.cxx
 )
+
+if(OTB_USE_EDISON)
+  list(APPEND OTBOGRProcessingTests otbStreamingImageToOGRLayerSegmentationFilter.cxx)
+endif()
 
 add_executable(otbOGRProcessingTestDriver ${OTBOGRProcessingTests})
 target_link_libraries(otbOGRProcessingTestDriver ${OTBOGRProcessing-Test_LIBRARIES})
 otb_module_target_label(otbOGRProcessingTestDriver)
 
 # Tests Declaration
-
+if(OTB_USE_EDISON)
 otb_add_test(NAME obTvStreamingImageToOGRLayerSegmentationFilter COMMAND otbOGRProcessingTestDriver
   --compare-ogr  ${EPSILON_8}
   ${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutput.sqlite
@@ -71,6 +74,7 @@ otb_add_test(NAME obTvStreamingImageToOGRLayerSegmentationFilterQBOrthoWGS84shp 
   0 #Simplify Flag
   0.2 #Simplification tolerance
   )
+endif()
 
 otb_add_test(NAME obTuOGRLayerStreamStitchingFilter COMMAND otbOGRProcessingTestDriver
   --compare-ogr  ${EPSILON_8}
