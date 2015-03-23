@@ -4,7 +4,6 @@ void RegisterTests()
   REGISTER_TEST(otbSVMImageClassificationWithRuleFilter);
   REGISTER_TEST(otbLabelMapSVMClassifierNew);
   REGISTER_TEST(otbLabelMapSVMClassifier);
-  REGISTER_TEST(otbSVMModelCopyTest);
   REGISTER_TEST(otbSVMPointSetModelEstimatorTrain);
   REGISTER_TEST(otbExhaustiveExponentialOptimizerNew);
   REGISTER_TEST(otbSVMImageModelEstimatorModelAccessor);
@@ -19,7 +18,6 @@ void RegisterTests()
   REGISTER_TEST(otbSVMImageModelEstimatorTrain);
   REGISTER_TEST(otbObjectDetectionClassifierNew);
   REGISTER_TEST(otbObjectDetectionClassifier);
-  REGISTER_TEST(otbSVMClassifierImage);
   REGISTER_TEST(otbSVMClassifierNew);
   REGISTER_TEST(otbSVMSampleListModelEstimatorNew);
   REGISTER_TEST(otbSVMSampleListModelEstimatorTest);

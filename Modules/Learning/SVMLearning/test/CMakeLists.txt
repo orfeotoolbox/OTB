@@ -4,7 +4,6 @@ set(OTBSVMLearningTests
 otbSVMLearningTestDriver.cxx
 otbSVMImageClassificationWithRuleFilter.cxx
 otbLabelMapSVMClassifier.cxx
-otbSVMModelCopyTest.cxx
 otbSVMPointSetModelEstimatorTrain.cxx
 otbExhaustiveExponentialOptimizerNew.cxx
 otbSVMImageModelEstimatorModelAccessor.cxx
@@ -18,7 +17,6 @@ otbSVMClassifierPointSet.cxx
 otbSVMImageClassificationWithRuleFilterNew.cxx
 otbSVMImageModelEstimatorTrain.cxx
 otbObjectDetectionClassifier.cxx
-otbSVMClassifierImage.cxx
 otbSVMClassifierNew.cxx
 otbSVMSampleListModelEstimatorTest.cxx
 otbSVMModelAccessor.cxx
@@ -52,13 +50,6 @@ otb_add_test(NAME obTvLabelMapSVMClassifier COMMAND otbSVMLearningTestDriver
 
 otb_add_test(NAME obTuLabelMapSVMClassifierNew COMMAND otbSVMLearningTestDriver
   otbLabelMapSVMClassifierNew)
-
-otb_add_test(NAME leTvSVMModelCopy COMMAND otbSVMLearningTestDriver
-  --compare-ascii ${NOTOL}  ${INPUTDATA}/svm_model
-  ${TEMP}/svmcopymodel_test
-  otbSVMModelCopyTest
-  ${INPUTDATA}/svm_model
-  ${TEMP}/svmcopymodel_test)
   
 otb_add_test(NAME leTvSVMPointSetModelEstimatorTrain COMMAND otbSVMLearningTestDriver
   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_pointset
@@ -166,14 +157,6 @@ otb_add_test(NAME odTvObjectDetectionClassifier COMMAND otbSVMLearningTestDriver
   0 # streaming
   5 # neighborhood radius
   )
-
-otb_add_test(NAME leTvSVMClassifierImageWithGenericKernalLinear COMMAND otbSVMLearningTestDriver
-  --compare-image ${NOTOL}  ${BASELINE}/leTvSVMClassifierImageWithGenericKernalLinearOutput.png
-  ${TEMP}/leTvSVMClassifierImageWithGenericKernalLinearOutput.png
-  otbSVMClassifierImage
-  ${INPUTDATA}/ROI_QB_MUL_4.tif
-  ${INPUTDATA}/svm_model_image_generic_linear
-  ${TEMP}/leTvSVMClassifierImageWithGenericKernalLinearOutput.png)
 
 otb_add_test(NAME leTvSVMClassifierImageOneClass COMMAND otbSVMLearningTestDriver
   --compare-image ${NOTOL}
