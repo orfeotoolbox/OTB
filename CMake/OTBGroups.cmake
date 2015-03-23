@@ -1,63 +1,42 @@
 # Set a list of group names
 set(group_list
+  Adapters
+  Applications
   Core
-  IO
+  Detection
+  Feature
   Filtering
+  Fusion
+  Hyperspectral
+  IO
+  Learning
+  OBIA
+  Radiometry
   Registration
-  Segmentation
-  Numerics
-  Video
-  ThirdParty
-  Bridge
-  Nonunit
-  Compatibility
   Remote
+  Segmentation
+  ThirdParty
+  Wrappers
   )
 
-set(Core_documentation "This group of modules contain the toolkit framework used
-by other modules.  There are common base classes for data objects and process
-objects, basic data structures such as Image, Mesh, QuadEdgeMesh, and
-SpatialObjects, and common functionality for operations such as finite
-differences, image adaptors, or image transforms.")
+set(Adapters_documentation "This group contains adapters class to third party software")
+set(Applications_documentation "This group contains the applications shipped with Orfeo TooLBox")
+set(Core_documentation "This group contains the core module used in Orfeo ToolBox")
+set(Detection_documentation "This group contains algorithms related to detection of low or high level objects")
+set(Feature_documentation "This group contains algorithms related to the computation of features")
+set(Filtering_documentation "This group contains algorithms for classical image to image processing")
+set(Fusion_documentation "This group contains algorithms for data fusion, including pan-sharpening")
+set(Hyperspectral_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")
+set(IO_documentation "This group contains everything related to input/output")
+set(Learning_documentation "This group contains algorithms and frameworks related to supervised or unsupervised learning")
+set(OBIA_documentation "This group contains algorithms related to Object Based Image Analysis")
+set(Radiometry_documentation "This group contains algorithms related to the processing of image radiometry")
+set(Registration_documentation "This group contains algorithms related to registration of images")
+set(Segmentation_documentation "This group contains algorithms related to image segmentaiton")
+set(ThirdParty_documentation "This group contains all Orfeo ToolBox third parties")
+set(Wrappers_documentation "This group contains the application framework and the wrappers to use it")
 
-set(Compatibility_documentation "This group contains modules that ease the transition to ITKv4 and Deprecated classes.")
-
-set(IO_documentation "This group of modules contains classes for reading and
-writing images and other data objects.")
-
-set(Filtering_documentation "This group of modules are filters that modify data
-in the ITK pipeline framework.  These filters take an input object, such as an
-Image, and modify it to create an output.  Filters can be chained together to
-create a processing pipeline.")
-
-set(Registration_documentation "This group of modules address the registration
-problem: find the spatial transformation between two images.  This is a high
-level group that makes use of many lower level modules such as \\ref
-ITKTransform, \\ref ITKOptimizers, \\ref ITKFiniteDifference, and \\ref
-ITKFEM.")
-
-set(Segmentation_documentation "This group of modules address the segmentation
-problem: partition the image into classified regions (labels).  This is a high
-level group that makes use of many lower level modules such as \\ref
-ITKQuadEdgeMesh and \\ref ITKNarrowBand.")
-
-set(Numerics_documentation "This group of modules are basic numerical tools and
-algorithms that have general applications outside of imaging.")
-
-set(Video_documentation "This group of modules handles input, output and processing
-of static and real-time data with temporal components. It also handles communications
-to OpenCV and VXL external libraires.")
-
-set(Bridge_documentation "This group of modules are intended to bridge ITK to
-other toolkits as libraries such as visualization toolkits.")
-
-set(ThirdParty_documentation "This group of modules are third party libraries
-used by other ITK modules.")
-
-set(Nonunit_documentation "This group of modules are intended to make use of an
-extensive set of the toolkit modules.")
-
-set(Remote_documentation "This group of modules is for ITK based code that have
+set(Remote_documentation "This group of modules is for OTB based code that have
 additional third-party dependencies not bundled with the toolkit,
 new algorithms or implementations seeking greater exposure and adoption,
 algorithms that hope to eventually be integrated into the toolkit,
