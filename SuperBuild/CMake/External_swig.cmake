@@ -37,6 +37,7 @@ else()
       URL "http://sourceforge.net/projects/swig/files/swigwin/swigwin-3.0.5/swigwin-3.0.5.zip/download"
       URL_MD5 fd2e050f29e2a00b2348f5f7d3476490
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND ""
       BUILD_COMMAND ""
       INSTALL_COMMAND ""
@@ -59,6 +60,7 @@ else()
       URL_MD5 dcb9638324461b9baba8e044fe59031d
       BINARY_DIR ${SWIG_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND
         ${SWIG_SB_BUILD_DIR}/configure
         --prefix=${SB_INSTALL_PREFIX}

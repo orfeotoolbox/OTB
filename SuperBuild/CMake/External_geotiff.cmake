@@ -49,6 +49,7 @@ else()
       URL_MD5 efa7b418bc00228fcda4da63557e40c2
       BINARY_DIR ${GEOTIFF_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       DEPENDS ${${proj}_DEPENDENCIES}
       PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
         ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
@@ -73,6 +74,7 @@ else()
       URL_MD5 efa7b418bc00228fcda4da63557e40c2
       BINARY_DIR ${GEOTIFF_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND
         # use 'env' because CTest launcher doesn't perform shell interpretation
         ${SB_ENV_CONFIGURE_CMD}

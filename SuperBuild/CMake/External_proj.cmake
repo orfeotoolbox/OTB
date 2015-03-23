@@ -23,6 +23,7 @@ else()
       SOURCE_DIR ${PROJ_SB_SRC}
       BINARY_DIR ${PROJ_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND ""
       BUILD_COMMAND nmake /f ${PROJ_SB_SRC}/makefile.vc
       INSTALL_COMMAND ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
@@ -35,6 +36,7 @@ else()
       SOURCE_DIR ${proj}/_install
       BINARY_DIR ${PROJ_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CMAKE_CACHE_ARGS
         -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
         -DCMAKE_BUILD_TYPE:STRING=Release
@@ -56,6 +58,7 @@ else()
       URL_MD5 d815838c92a29179298c126effbb1537
       BINARY_DIR ${PROJ_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND
         # use 'env' because CTest launcher doesn't perform shell interpretation
         ${SB_ENV_CONFIGURE_CMD}

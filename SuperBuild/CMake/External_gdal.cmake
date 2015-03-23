@@ -53,6 +53,7 @@ else()
       URL_MD5 9fdf0f2371a3e9863d83e69951c71ec4
       BINARY_DIR ${GDAL_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       DEPENDS ${${proj}_DEPENDENCIES}
       UPDATE_COMMAND  ${CMAKE_COMMAND} -E copy_directory ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}        
       PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath      
@@ -87,6 +88,7 @@ else()
        SOURCE_DIR ${GDAL_SB_SRC}
        BINARY_DIR ${GDAL_SB_BUILD_DIR}
        INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
        DEPENDS ${${proj}_DEPENDENCIES}
        PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory  ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
        CONFIGURE_COMMAND  ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/ogrsqlitevirtualogr.cpp

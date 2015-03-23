@@ -41,6 +41,7 @@ else()
       URL_MD5 2edbe4d6c2eff33ef91732602f3518eb
       BINARY_DIR ${QT4_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND
         configure_qt4.bat
       PATCH_COMMAND ${CMAKE_COMMAND} -E copy
@@ -55,6 +56,7 @@ else()
       URL_MD5 2edbe4d6c2eff33ef91732602f3518eb
       BINARY_DIR ${QT4_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND
         configure -prefix ${CMAKE_WIN_INSTALL_PREFIX} -opensource -confirm-license -release -shared -nomake demos -nomake examples -nomake tools -no-phonon-backend -no-phonon -no-script -no-scripttools -no-multimedia -no-webkit -qt-sql-sqlite -plugin-sql-sqlite -no-nis -no-qt3support  -system-zlib -system-libpng -system-libtiff -system-libjpeg -system-sqlite -L ${CMAKE_WIN_INSTALL_PREFIX}\\lib -I ${CMAKE_WIN_INSTALL_PREFIX}\\include
       DEPENDS ${${proj}_DEPENDENCIES}

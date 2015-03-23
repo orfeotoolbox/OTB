@@ -42,6 +42,7 @@ else()
       SOURCE_DIR ${TIFF_SB_SRC}
       BINARY_DIR ${TIFF_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       DEPENDS ${${proj}_DEPENDENCIES}
       PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/nmake_libtiff_extra.opt ${TIFF_SB_SRC}/nmake.opt
       CONFIGURE_COMMAND ""
@@ -56,6 +57,7 @@ else()
       SOURCE_DIR ${proj}/_install
       BINARY_DIR ${TIFF_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
     CMAKE_CACHE_ARGS
       -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
       -DCMAKE_BUILD_TYPE:STRING=Release
@@ -71,6 +73,7 @@ else()
       URL_MD5 051c1068e6a0627f461948c365290410
       BINARY_DIR ${TIFF_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND
         # use 'env' because CTest launcher doesn't perform shell interpretation
         ${SB_ENV_CONFIGURE_CMD}

@@ -31,6 +31,7 @@ else()
       URL_MD5 2edab8c06b24feeb3b82bbb3ebf3e7b3
       SOURCE_DIR ${FFTW_SB_BUILD_FLOAT_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND
         ${FFTW_SB_BUILD_FLOAT_DIR}/configure
             --prefix=${SB_INSTALL_PREFIX}
@@ -56,6 +57,7 @@ else()
       URL_MD5 2edab8c06b24feeb3b82bbb3ebf3e7b3
       SOURCE_DIR ${FFTW_SB_BUILD_DOUBLE_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND
         ${FFTW_SB_BUILD_DOUBLE_DIR}/configure
             --prefix=${SB_INSTALL_PREFIX}
