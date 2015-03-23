@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(OTB-SuperBuild)
 
 # Path to additional CMake modules
-MESSAGE(INFO "${CMAKE_SOURCE_DIR}")
+#MESSAGE(INFO "${CMAKE_SOURCE_DIR}")
 set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_SOURCE_DIR}/../CMake
@@ -15,7 +15,7 @@ include(SuperBuild_Macro)
 
 # Setup location where source tar-balls are downloaded
 #set (install_location "${CMAKE_CURRENT_BINARY_DIR}/install")
-set (DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/downloads"
+set (DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/Downloads"
      CACHE PATH "Location where source tar-balls are (to be) downloaded.")
 mark_as_advanced(DOWNLOAD_LOCATION)
 
