@@ -22,7 +22,7 @@
 #include "itkDataObject.h"
 #include "itkVariableLengthVector.h"
 #include "itkTimeProbe.h"
-#include "otb_libsvm.h"
+#include "svm.h"
 
 namespace otb
 {
@@ -99,10 +99,6 @@ public:
     return (unsigned int) (m_Model->nr_class * (m_Model->nr_class - 1) / 2);
   }
 
-  /** Set a new model. To avoid pointers holding conflicts, this
-   * method actually makes a copy of aModel */
-  void SetModel(struct svm_model* aModel);
-
   /** Gets the model */
   const struct svm_model* GetModel()
   {
@@ -135,9 +131,6 @@ public:
     //implemented in term of const char * version
     this->LoadModel(model_file_name.c_str());
   }
-
-  /** Copy the model */
-  Pointer GetCopy() const;
 
   /** Set the SVM type to C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
   void SetSVMType(int svmtype)
@@ -310,21 +303,6 @@ public:
   bool GetDoProbabilityEstimates(void) const
   {
     return static_cast<bool>(m_Parameters.probability);
-  }
-
-  /** Get/Set methods for generic kernel functor */
-  GenericKernelFunctorBase * GetKernelFunctor(void) const
-  {
-    return m_Parameters.kernel_generic;
-  }
-
-  void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
-  {
-    if (pGenericKernelFunctor != NULL)
-      m_Parameters.kernel_generic = pGenericKernelFunctor->Clone();
-    
-    m_ModelUpToDate = false;
-    this->Modified();
   }
 
   /** Return number of support vectors */

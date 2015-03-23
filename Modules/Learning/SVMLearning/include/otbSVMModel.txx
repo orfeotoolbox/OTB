@@ -34,7 +34,6 @@ SVMModel<TValue, TLabel>::SVMModel()
   this->SetPolynomialKernelDegree(3);
   this->SetKernelGamma(1.);  // 1/k
   this->SetKernelCoef0(1.);
-  this->SetKernelFunctor(NULL);
   this->SetNu(0.5);
   this->SetCacheSize(40);
   this->SetC(1);
@@ -43,8 +42,6 @@ SVMModel<TValue, TLabel>::SVMModel()
   this->DoShrinking(true);
   this->DoProbabilityEstimates(false);
 
-  m_Parameters.kernel_generic = NULL;
-  m_Parameters.kernel_composed = NULL;
   m_Parameters.nr_weight = 0;
   m_Parameters.weight_label = NULL;
   m_Parameters.weight = NULL;
@@ -244,9 +241,10 @@ SVMModel<TValue, TLabel>::BuildProblem()
     }
 
   // Compute the kernel gamma from maxElementIndex if necessary
-  if (this->GetKernelGamma() == 0
-      && this->GetParameters().kernel_type != COMPOSED
-      && this->GetParameters().kernel_type != GENERIC) this->SetKernelGamma(1.0 / static_cast<double>(maxElementIndex));
+  if (this->GetKernelGamma() == 0)
+    {
+    this->SetKernelGamma(1.0 / static_cast<double>(maxElementIndex));
+    }
 
   // problem is up-to-date
   m_ProblemUpToDate = true;
@@ -511,14 +509,6 @@ SVMModel<TValue, TLabel>::EvaluateProbabilities(const MeasurementType& measure) 
   return probabilities;
 }
 
-template <class TValue, class TLabel>
-void
-SVMModel<TValue, TLabel>::SetModel(struct svm_model* aModel)
-{
-  this->DeleteModel();
-  m_Model = svm_copy_model(aModel);
-  m_ModelUpToDate = true;
-}
 
 template <class TValue, class TLabel>
 void
@@ -536,7 +526,7 @@ void
 SVMModel<TValue, TLabel>::LoadModel(const char* model_file_name)
 {
   this->DeleteModel();
-  m_Model = svm_load_model(model_file_name, m_Parameters.kernel_generic);
+  m_Model = svm_load_model(model_file_name);
   if (m_Model == 0)
     {
     itkExceptionMacro(<< "Problem while loading SVM model "
@@ -544,16 +534,6 @@ SVMModel<TValue, TLabel>::LoadModel(const char* model_file_name)
     }
   m_Parameters = m_Model->param;
   m_ModelUpToDate = true;
-}
-
-template <class TValue, class TLabel>
-typename SVMModel<TValue, TLabel>::Pointer
-SVMModel<TValue, TLabel>::GetCopy() const
-{
-  Pointer modelCopy = New();
-  modelCopy->SetModel(m_Model);
-  // We do not copy the problem to avoid sharing allocated memory
-  return modelCopy;
 }
 
 template <class TValue, class TLabel>
