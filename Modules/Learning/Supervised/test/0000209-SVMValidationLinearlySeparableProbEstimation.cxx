@@ -23,7 +23,6 @@
 
 #include "otbSVMSampleListModelEstimator.h"
 #include "otbSVMClassifier.h"
-#include "otbSVMKernels.h"
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "otbSVMClassifier.h"
