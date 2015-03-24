@@ -93,6 +93,15 @@ foreach( var ${OTB_DOXYGEN_OUTPUT} )
   endif()
 endforeach()
 
+set(OTB_DOXYGEN_ITK_TAGFILE "" CACHE FILEPATH "Tagfile containing ITK doxygen")
+set(OTB_DOXYGEN_ITK_DOXYGEN_URL "" CACHE STRING "URL to ITK doxygen")
+
+if(("${OTB_DOXYGEN_ITK_TAGFILE}" STREQUAL "") OR ("${OTB_DOXYGEN_ITK_DOXYGEN_URL}" STREQUAL ""))
+  set(OTB_DOXYGEN_TAGFILE_FIELD "")
+else()
+  set(OTB_DOXYGEN_TAGFILE_FIELD "${OTB_DOXYGEN_ITK_TAGFILE}=${OTB_DOXYGEN_ITK_DOXYGEN_URL}")
+endif()
+
 find_package( Perl )
 
 if( PERL_FOUND )
