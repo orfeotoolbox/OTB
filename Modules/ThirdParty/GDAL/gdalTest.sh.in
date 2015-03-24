@@ -7,6 +7,8 @@ apple=@APPLE@
 gdalConfig=@GDAL_CONFIG@
 gdalTranslate=`dirname ${gdalConfig}`/gdal_translate
 
+mkdir -p ${tempFolder}
+
 #TEST 1 : GDAL version
 ${gdalConfig} --version > ${tempFolder}/testgdal1.txt 
 
