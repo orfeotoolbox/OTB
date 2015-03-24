@@ -18,14 +18,16 @@ else()
     set(MUPARSERX_FLAGS "-DCMAKE_CXX_FLAGS:STRING=-std=c++0x")
   endif()
   
-  # svn checkout http://muparserx.googlecode.com/svn/trunk/ muparserx-read-only
-  
+  # We provide a zip archive of last muparserx release (3.0.5)
+  # Archive was generated using commit sha on muparserx github page
+  # Commands to create source archive:
+  # wget https://github.com/beltoforion/muparserx/archive/2ace83b5411f1ab9940653c2bab0efa5140efb71.zip
+  # mv 2ace83b5411f1ab9940653c2bab0efa5140efb71.zip muparserx_v3_0_5.zip
+
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "https://www.orfeo-toolbox.org/packages/muparserx-r291.tar.gz"
-    URL_MD5 4c9b6e222b35dc1a07d24a9506025785
-    #SVN_REPOSITORY "http://muparserx.googlecode.com/svn/trunk"
-    #SVN_REVISION -r 291
+    URL "https://www.orfeo-toolbox.org/packages/muparserx_v3_0_5.zip"
+    URL_MD5 ad86b88c159ab68f4bfc99d71166e3c5
     BINARY_DIR ${MUPARSERX_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -47,6 +49,5 @@ else()
   elseif(UNIX)
     set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libmuparserx${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-
 endif()
 endif()
