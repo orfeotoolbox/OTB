@@ -12,12 +12,6 @@ target_link_libraries(SOMClassifierExample ${OTB_LIBRARIES})
 add_executable(SOMExample SOMExample.cxx)
 target_link_libraries(SOMExample ${OTB_LIBRARIES})
 
-add_executable(SVMGenericKernelImageClassificationExample SVMGenericKernelImageClassificationExample.cxx)
-target_link_libraries(SVMGenericKernelImageClassificationExample ${OTB_LIBRARIES})
-
-add_executable(SVMGenericKernelImageModelEstimatorExample SVMGenericKernelImageModelEstimatorExample.cxx)
-target_link_libraries(SVMGenericKernelImageModelEstimatorExample ${OTB_LIBRARIES})
-
 add_executable(SVMImageClassificationExample SVMImageClassificationExample.cxx)
 target_link_libraries(SVMImageClassificationExample ${OTB_LIBRARIES})
 
