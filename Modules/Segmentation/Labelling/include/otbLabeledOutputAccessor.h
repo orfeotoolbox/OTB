@@ -21,6 +21,8 @@
 #ifndef __otbLabeledOutputAccessor_h
 #define __otbLabeledOutputAccessor_h
 
+#include "itkMacro.h"
+
 namespace otb
 {
 
