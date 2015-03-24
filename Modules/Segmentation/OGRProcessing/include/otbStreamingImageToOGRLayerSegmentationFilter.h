@@ -38,13 +38,13 @@ namespace otb
  * \class LabeledOutputAccessor
  * \brief Specialized class to get the index of the labeled output image in mean shift filter (new version).
  *
- * ingroup OTBOGRProcessing
+ * \ingroup OTBOGRProcessing
  */
 template <class TInputImage, class TOutputImage, class TOutputImage2, class TKernelType>
 class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TOutputImage2, TKernelType> >
 {
    public:
-      typedef typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TOutputImage2, TKernelType>::LabeledOutputType    LabelImageType;
+      typedef typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TOutputImage2, TKernelType>::OutputLabelImageType    LabelImageType;
       itkStaticConstMacro(LabeledOutputIndex, unsigned int, 0);
 };
 

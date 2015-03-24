@@ -39,6 +39,7 @@
 // Software Guide : BeginCodeSnippet
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
 #include "otbOGRLayerStreamStitchingFilter.h"
+#include "otbMeanShiftVectorImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbVectorImage.h"
