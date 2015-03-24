@@ -1,0 +1,27 @@
+/**
+ *
+ * \mainpage  Monteverdi 2
+ *
+ * <div align="center"><img src="logoVectoriel.png" alt="logoVectoriel.png"></div>
+ *
+ * \section intro Introduction
+ *
+ * Welcome to CNES' Monteverdi 2, an open-source software for image visualization 
+ * and manipulation. It is built on top of Orfeo ToolBox and OTB-Ice libraries.
+ *
+ * \section homepage Home Page
+ *
+ * The Home Page of the project can be found at:
+ *
+ * http://www.orfeo-toolbox.org 
+ *
+ * \section howto How to use this documentation
+ *
+ * This documentation describes the API of Monteverdi2 components. The overall 
+ * design often uses the Model-View-Controller pattern.
+ * 
+ * The interface is based on a <a href="http://qt-project.org">Qt</a> framework. 
+ * The OTB-Ice library is in charge of image rendering.
+ *
+ */
+

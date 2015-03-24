@@ -1,0 +1,28 @@
+/**
+ *
+ * \mainpage  Orfeo Toolbox
+ *
+ * <div align="center"><img src="logoVectoriel.png" alt="logoVectoriel.png"></div>
+ *
+ * \section intro Introduction
+ *
+ * Welcome to CNES' ORFEO Toolbox (OTB). OTB is an open-source image processing
+ * software, designed for remote sensing applications.
+ *
+ * \section homepage Home Page
+ *
+ * The Home Page of the project can be found at:
+ *
+ * http://www.orfeo-toolbox.org 
+ *
+ * \section howto How to use this documentation
+ *
+ * This documentation describes the API of the toolbox. You can start your 
+ * visit by the Classes link above which details all available classes in OTB. The Modules
+ * link presents a hierarchy of classes organized according to their
+ * functionality. The Related Pages link presents design details, in
+ * particular the use of the data pipeline model and the philosophy of
+ * iterators.
+ *
+ */
+
