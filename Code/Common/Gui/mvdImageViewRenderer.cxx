@@ -715,7 +715,7 @@ void
 ImageViewRenderer
 ::virtual_RefreshScene()
 {
-  qDebug() << this << "::virtual_RefreshScene()";
+  // qDebug() << this << "::virtual_RefreshScene()";
 
   StackedLayerModel * stackedLayerModel = GetLayerStack();
 
