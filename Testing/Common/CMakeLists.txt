@@ -30,21 +30,23 @@ endif()
 #-------------- Monteverdi Common Tests ---------------------------------
 
 # Applications toolBox test 
-add_test(apTvMonteverdi2ApplicationsToolBox ${Common_TESTS} mvdApplicationsToolBoxTest)
+add_test( apTvMonteverdi2ApplicationsToolBox ${Common_TESTS}
+  mvdApplicationsToolBoxTest
+  )
 
 # test when OTB_USE_QT is set to ON
 if (OTB_USE_QT4)
 
   # Applications browser test
-  add_test(apTvMonteverdi2ApplicationsBrowser ${Common_TESTS1} 
+  add_test( apTvMonteverdi2ApplicationsBrowser ${Common_TESTS1} 
     mvdApplicationsBrowserTest
-    ${OTB_DIR}/bin
+    ${OTB_INSTALL_PREFIX}/lib/otb/applications
     )
   
   # Fill ToolBox algorithms tree
-  add_test(apTvMonteverdi2FillToolBoxTree ${Common_TESTS1}
+  add_test( apTvMonteverdi2FillToolBoxTree ${Common_TESTS1}
     mvdFillToolBoxWidgetTreeTest
-    ${OTB_DIR}/bin
+    ${OTB_INSTALL_PREFIX}/lib/otb/applications
     )
 
 endif()

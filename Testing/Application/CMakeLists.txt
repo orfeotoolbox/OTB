@@ -20,7 +20,9 @@ include_directories(
   )
 
 #-------------- Monteverdi Application Tests ---------------------------------
-add_test(apTvMonteverdi2Application ${Application_TESTS} mvdMonteverdi2ApplicationTest)
+add_test( apTvMonteverdi2Application ${Application_TESTS}
+  mvdMonteverdi2ApplicationTest
+  )
 
 
 set(Application_SRCS
