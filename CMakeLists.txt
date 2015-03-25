@@ -54,13 +54,13 @@ endif()
 
 #----------------------------------------------------------------------------
 # ITK
-find_package(ITK REQUIRED)
-if(ITK_FOUND)
-  MESSAGE(STATUS "ITK found")
-  include(${ITK_USE_FILE})
-else(ITK_FOUND)
-  message(FATAL_ERROR "ITK not found. Please set ITK_DIR")
-endif(ITK_FOUND)
+# find_package(ITK REQUIRED)
+# if(ITK_FOUND)
+#   MESSAGE(STATUS "ITK found")
+#   include(${ITK_USE_FILE})
+# else(ITK_FOUND)
+#   message(FATAL_ERROR "ITK not found. Please set ITK_DIR")
+# endif(ITK_FOUND)
 
 #----------------------------------------------------------------------------
 # Orfeo ToolBox
