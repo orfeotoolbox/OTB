@@ -23,7 +23,9 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
+#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi2.h"
+#endif //tag=QT4-boost-compatibility
 
 
 /*****************************************************************************/
@@ -38,18 +40,24 @@
 
 //
 // ITK includes (sorted by alphabetic order)
+#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "itkExtractImageFilter.h"
+#endif //tag=QT4-boost-compatibility
 
 //
 // OTB includes (sorted by alphabetic order)
+#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbGenericRSTransform.h"
+#endif //tag=QT4-boost-compatibility
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "Core/mvdAbstractImageModel.h"
 #include "Core/mvdVectorImageSettings.h"
 #include "Core/mvdTypes.h"
 #include "Gui/mvdColorSetupWidget.h"
+#endif //tag=QT4-boost-compatibility
 
 
 /*****************************************************************************/
@@ -331,7 +339,9 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdDatasetModel.h"
+#endif //tag=QT4-boost-compatibility
 
 
 namespace mvd
