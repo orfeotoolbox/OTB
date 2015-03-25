@@ -1056,7 +1056,11 @@ MainWindow
   stackedLayerModel->SetCurrent( imageModel );
 
   if( !stackedLayerModel->HasReference() )
+    {
     stackedLayerModel->SetReference( imageModel  );
+
+    UserZoomExtent();
+    }
 }
 
 /*****************************************************************************/
