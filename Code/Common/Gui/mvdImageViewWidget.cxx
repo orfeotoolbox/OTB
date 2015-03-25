@@ -1221,10 +1221,8 @@ ImageViewWidget
   );
   // }
 
-  m_Manipulator->CenterOn( center );
-  m_Manipulator->SetSpacing( spacing );
 
-
+  // Projection WKT and KWL must preferably be set before changing center/spacing
   const AbstractLayerModel * layer = GetLayerStack()->GetReference();
   assert( layer!=NULL );
 
@@ -1249,6 +1247,12 @@ ImageViewWidget
     {
     assert( false && "Unhandled AbstractLayerModel derived type." );
     }
+
+  // Spacing must be set before centering.
+  m_Manipulator->SetSpacing( spacing );
+
+  // Centering must be done at the last step.
+  m_Manipulator->CenterOn( center );
 }
 
 /******************************************************************************/
