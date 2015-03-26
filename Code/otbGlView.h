@@ -290,7 +290,7 @@ GlView
   // the new spacing if transform contains a rotation.
   //     To correct this, transformed X and Y vectors should be
   // projected against reference actor X and Y axises (using vectorial
-  // dot dot product).
+  // dot product).
 
   x[ 0 ] -= origin[ 0 ];
   x[ 1 ] -= origin[ 1 ];
@@ -300,6 +300,15 @@ GlView
 
   spacing[ 0 ] = vcl_sqrt( x[ 0 ] * x[ 0 ] + x[ 1 ] * x[ 1 ] ) / norm;
   spacing[ 1 ] = vcl_sqrt( y[ 0 ] * y[ 0 ] + y[ 1 ] * y[ 1 ] ) / norm;
+
+  // Sign of x-spacing is done by sign( x . (1, 0) ) which is sign( x[ 0 ] )
+  // Sign of y-spacing is done by sign( y . (0, 1) ) which is sign[ y[ 1 ] )
+
+  if( x[ 0 ]<0.0 )
+    spacing[ 0 ] = -spacing[ 0 ];
+
+  if( y[ 1 ]<0.0 )
+    spacing[ 1 ] = -spacing[ 1 ];
 
   return true;
 }
