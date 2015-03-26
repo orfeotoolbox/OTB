@@ -1319,7 +1319,7 @@ void
 MainWindow
 ::OnAboutToChangeModel( const AbstractModel * model )
 {
-  qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
+  // qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
 
   // Force to disconnect previously selected layer-model before
@@ -1378,7 +1378,7 @@ void
 MainWindow
 ::OnModelChanged( AbstractModel * model )
 {
-  qDebug() << this << "::OnModelChanged(" << model << ")";
+  // qDebug() << this << "::OnModelChanged(" << model << ")";
 
   assert( model==qobject_cast< StackedLayerModel * >( model ) );
 
