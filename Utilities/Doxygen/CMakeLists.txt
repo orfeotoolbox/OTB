@@ -146,9 +146,11 @@ if (BUILD_DOCUMENTATION)
   #  DEPENDS "${OTB_SOURCE_DIR}/Examples" "${OTB_SOURCE_DIR}/Utilities/Doxygen/GenerateExamplesDox.cmake"
   #  )
 
-  add_custom_target(Documentation ALL
+  add_custom_target(Documentation
     COMMAND ${DOXYGEN_EXECUTABLE} ${OTB_BINARY_DIR}/Utilities/Doxygen/doxygen.config
-    MAIN_DEPENDENCY ${OTB_BINARY_DIR}/Utilities/Doxygen/doxygen.config
+    COMMAND ${CMAKE_COMMAND} -E tar cjf
+      ${OTB_BINARY_DIR}/Documentation/Doxygen/OTB-Doxygen-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.tar.bz2
+      ${OTB_BINARY_DIR}/Documentation/Doxygen/html
     DEPENDS         ${OTB_BINARY_DIR}/Utilities/Doxygen/otbdoxygen.pl
    # DEPENDS         ${OTB_BINARY_DIR}/Documentation/Doxygen/Examples.dox
     WORKING_DIRECTORY ${OTB_BINARY_DIR}/Utilities/Doxygen
