@@ -212,7 +212,7 @@ ColorDynamicsWidget
   if( gamma>max )
     gamma = max;
 
-  qDebug() << "::SetGamma(" << value << "): " << gamma;
+  // qDebug() << "::SetGamma(" << value << "): " << gamma;
 
   SetGammaCursorPosition( gamma );
 }
@@ -222,12 +222,12 @@ double
 ColorDynamicsWidget
 ::GetGamma() const
 {
-  qDebug() <<
-    "::GetGamma(" << GetGammaCursorPosition() << "): " <<
-    vcl_pow(
-      GAMMA_POWER,
-      GAMMA_FACTOR * static_cast< double >( GetGammaCursorPosition() )
-    );
+  // qDebug() <<
+  //   "::GetGamma(" << GetGammaCursorPosition() << "): " <<
+  //   vcl_pow(
+  //     GAMMA_POWER,
+  //     GAMMA_FACTOR * static_cast< double >( GetGammaCursorPosition() )
+  //   );
 
   return
     vcl_pow(
