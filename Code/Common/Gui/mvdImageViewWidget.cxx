@@ -814,26 +814,6 @@ ImageViewWidget
     center.SetToMidPoint( origin, extent );
 
     //
-    // Get spacing of layer.
-    const AbstractLayerModel * layer = GetLayerStack()->GetCurrent();
-    assert( layer!=NULL );
-
-    if( layer->inherits( AbstractImageModel::staticMetaObject.className() ) )
-      {
-      const AbstractImageModel * imageModel =
-        qobject_cast< const AbstractImageModel * >( layer );
-
-      assert( imageModel!=NULL );
-
-      spacing = imageModel->GetSpacing();
-
-      assert( spacing[ 0 ]!=0.0 );
-      assert( spacing[ 1 ]!=0.0 );
-      }
-    else
-      assert( false && "Unhandled AbstractLayerModel derived type." );
-
-    //
     // Get Viewport size.
     SizeType size( m_Manipulator->GetViewportSize() );
 
@@ -844,6 +824,11 @@ ImageViewWidget
         fabs( extent[ 0 ] - origin[ 0 ] ) / static_cast< double >( size[ 0 ] ),
         fabs( extent[ 1 ] - origin[ 1 ] ) / static_cast< double >( size[ 1 ] )
       );
+
+    //
+    // Get spacing of layer in viewport system.
+    spacing[ 0 ] = ( extent[ 0 ] - origin[ 0 ] ) / size[ 0 ];
+    spacing[ 1 ] = ( extent[ 1 ] - origin[ 1 ] ) / size[ 1 ];
 
     //
     // Calculate spacing.
