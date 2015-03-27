@@ -20,6 +20,8 @@ int main(int argc, char * argv[])
 	while(getline(file, line))
 		if (line.find(format) !=  string::npos)
 			return 1; //SUCCESS
+			
+	file.close();
   
    }
    /*else

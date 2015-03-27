@@ -27,6 +27,8 @@ int main(int argc, char * argv[])
 		cout << "WARNING : No BIGTIFF capatilities" << endl;
 		return 1; 
 	}
+	
+	file.close();
   
    }
    /*else
