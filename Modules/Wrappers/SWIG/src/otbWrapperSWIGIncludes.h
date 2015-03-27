@@ -27,6 +27,7 @@ typedef otb::Wrapper::Application::Pointer               Application_Pointer;
 typedef otb::Wrapper::ApplicationRegistry                Registry;
 typedef otb::Wrapper::AddProcessToWatchEvent             AddProcessToWatchEvent;
 typedef otb::Wrapper::DocExampleStructure                DocExampleStructure;
+typedef otb::Wrapper::Parameter                          Parameter;
 typedef otb::Wrapper::OutputImageParameter               OutputImageParameter;
 typedef otb::Wrapper::InputImageParameter                InputImageParameter;
 #endif
