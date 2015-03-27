@@ -463,13 +463,6 @@ import keyword
 				print "Unsupported parameter type for '" + paramKey  + "'"
 			return None
 
-		def first_char_to_lower(self, s):
-			if s:
-				return s[:1].lower() + s[1:]
-			else:
-				return s
-
-
 		def __getattr__(self,attr):
 			"""
       __get_attribute__ is called whenever an instance request an attribute.
