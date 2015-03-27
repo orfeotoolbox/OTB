@@ -21,10 +21,6 @@ otb_create_application(
   SOURCES        otbDownloadSRTMTiles.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-otb_create_application(
-  NAME           BandMathX
-  SOURCES        otbBandMathX.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
   NAME           Convert
