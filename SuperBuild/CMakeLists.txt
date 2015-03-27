@@ -53,11 +53,12 @@ else(UNIX)
     set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
   else()
     set(LDLIBVAR LD_LIBRARY_PATH)
-    set(SB_ENV_CONFIGURE_CMD env ${LDLIBVAR}=${SB_INSTALL_PREFIX}/lib:$ENV{${LDLIBVAR}})
-    set(SB_CMAKE_COMMAND env ${LDLIBVAR}=${CMAKE_INSTALL_PREFIX}/lib:$ENV{${LDLIBVAR}}  ${CMAKE_COMMAND})
+    set(SB_ENV_CONFIGURE_CMD env ${LDLIBVAR}=${SB_INSTALL_PREFIX}/lib:$ENV{${LDLIBVAR}} CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER})
+    set(SB_CMAKE_COMMAND env ${LDLIBVAR}=${CMAKE_INSTALL_PREFIX}/lib:$ENV{${LDLIBVAR}}  CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} ${CMAKE_COMMAND})
     message(STATUS "Environment setup for Configure : ${SB_ENV_CONFIGURE_CMD}")
   endif()
 endif()
+
 # Call external projects
 
 #TODO: enforce check from ITK on directory length
