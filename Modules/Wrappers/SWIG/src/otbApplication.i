@@ -154,10 +154,12 @@ public:
   int ExecuteAndWriteOutput();
 
   std::vector<std::string> GetParametersKeys(bool recursive = true);
+  Parameter* Application::GetParameterByKey(std::string name);
   std::string GetParameterName(std::string);
   std::string GetParameterDescription(std::string);
   void SetParameterDescription(std::string paramKey, std::string dec);
   void SetParameterUserValue(std::string paramKey, bool value);
+
 
   void EnableParameter(std::string paramKey);
   void DisableParameter(std::string paramKey);
@@ -418,204 +420,291 @@ DECLARE_REF_COUNT_CLASS( Application )
     /* typedef double Float64; */
 
 #if SWIGPYTHON
+%pythoncode {
+import sys
+import keyword
+}
+#endif
+
+#if SWIGPYTHON
 %extend Application {
   %pythoncode {
 
-    def __str__(self):
-       s  = self.GetDocName()
-       s += '\n'
-       s += self.GetDocLongDescription()
-       return s
+		def __str__(self):
+			s  = self.GetDocName()
+			s += '\n'
+			s += self.GetDocLongDescription()
+			return s
 
-    def GetParameterValue(self, paramKey):
-       paramType = self.GetParameterType(paramKey)
-       if paramType in [ParameterType_InputProcessXML, ParameterType_Choice,
-                        ParameterType_String, ParameterType_InputFilename,
-                        ParameterType_OutputImage, ParameterType_OutputVectorData,
-                        ParameterType_OutputProcessXML, ParameterType_OutputFilename,
-                        ParameterType_Directory, ParameterType_InputImage,
-                        ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
-          return self.GetParameterString(paramKey)
+		def GetParameterValue(self, paramKey):
+			paramType = self.GetParameterType(paramKey)
+			if paramType in [ParameterType_InputProcessXML, ParameterType_Choice,
+											 ParameterType_String, ParameterType_InputFilename,
+											 ParameterType_OutputImage, ParameterType_OutputVectorData,
+											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
+											 ParameterType_Directory, ParameterType_InputImage,
+											 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+				return self.GetParameterString(paramKey)
 
-       elif paramType in [ ParameterType_InputImageList, ParameterType_InputVectorDataList,
-                        ParameterType_InputFilenameList, ParameterType_StringList,
-                        ParameterType_ListView]:
-          return self.GetParameterStringList(paramKey)
+			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
+												 ParameterType_InputFilenameList, ParameterType_StringList,
+												 ParameterType_ListView]:
+				return self.GetParameterStringList(paramKey)
 
-       elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
-          return self.GetParameterInt(paramKey)
+			elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
+				return self.GetParameterInt(paramKey)
 
-       elif paramType in [ParameterType_Float]:
-          return self.GetParameterFloat(paramKey)
+			elif paramType in [ParameterType_Float]:
+				return self.GetParameterFloat(paramKey)
 
-       elif paramType in [ParameterType_Empty]:
-          return self.IsParameterEnabled(paramKey)
-       else:
-          print "Unsupported parameter type for '" + paramKey  + "'"
-          return None
+			elif paramType in [ParameterType_Empty]:
+				return self.IsParameterEnabled(paramKey)
+			else:
+				print "Unsupported parameter type for '" + paramKey  + "'"
+			return None
+
+		def first_char_to_lower(self, s):
+			if s:
+				return s[:1].lower() + s[1:]
+			else:
+				return s
+
+
+		def __getattr__(self,attr):
+			"""
+      __get_attribute__ is called whenever an instance request an attribute.
+      eg: App.SetParameterString(), App.GetName() ..
+      __getattr__ is only called if the attribute is not found by __get_attribute__ call
+      So we keep hide the GetParameter** calls within this method so that it seems like
+      an obivous call for users. App.IN , App.OUT , where 'in' and 'out' are
+      parameters in the 'otb application' with instance App
+			"""
+			if attr is not None:
+
+			  if attr.lower() in self.GetParametersKeys(True):
+			    attr = attr.lower()
+			    parameter_type = self.GetParameterType(attr)
+
+			    if parameter_type in [ParameterType_InputProcessXML, ParameterType_Choice,
+					    									ParameterType_String, ParameterType_InputFilename,
+							                  ParameterType_OutputImage, ParameterType_OutputVectorData,
+															  ParameterType_OutputProcessXML, ParameterType_OutputFilename,
+															  ParameterType_Directory, ParameterType_InputImage,
+															  ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+			      return self.GetParameterString(attr)
+			    elif parameter_type in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
+																ParameterType_InputFilenameList, ParameterType_StringList,
+																ParameterType_ListView]:
+			      return self.GetParameterStringList(attr)
+			    elif parameter_type in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
+			      return self.GetParameterInt(attr)
+			    elif parameter_type in [ParameterType_Float]:
+			      return self.GetParameterFloat(attr)
+			    elif parameter_type in [ParameterType_Empty]:
+			      return self.IsParameterEnabled(attr)
+			    else:
+            raise AttributeError
+			  else:
+			    pass
+
+		def __setattr__(self, attr, value):
+			"""
+      __setattr__ is called if the attribute requested is not found in the attribute list.
+      So these attributes are supposed to be 'key' of parameters used.
+      So we keep hide the SetParameter** calls within this method so that it seems like
+      an obivous call for users. App.IN='my-input-file-name' , App.OUT='my-output-file-name'
+      where 'in' and 'out' are    parameters in the 'otb application' with instance App
+      Ofcourse, we dont blindly accept any attributes as python, we check them against
+      list of existing parameters for application with 'self.GetParametersKeys(True)'
+			"""
+			if attr is not None:
+			  if attr.lower() in self.GetParametersKeys(True):
+			    attr = attr.lower()
+			    parameter_type = self.GetParameterType(attr)
+			    if parameter_type in [ParameterType_InputProcessXML, ParameterType_Choice,
+					    									ParameterType_String, ParameterType_InputFilename,
+							                  ParameterType_OutputImage, ParameterType_OutputVectorData,
+															  ParameterType_OutputProcessXML, ParameterType_OutputFilename,
+															  ParameterType_Directory, ParameterType_InputImage,
+															  ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+			      self.SetParameterString(attr, value)
+			    elif parameter_type in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
+																ParameterType_InputFilenameList, ParameterType_StringList,
+																ParameterType_ListView]:
+			      self.SetParameterStringList(attr, value)
+			    elif parameter_type in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
+			      self.SetParameterInt(attr, value)
+			    elif parameter_type in [ParameterType_Float]:
+			      self.SetParameterFloat(attr, value)
+			    elif parameter_type in [ParameterType_Empty]:
+			      self.EnableParameter(attr)
+			    else:
+			      # # not reaching here due to swig seeing self.__dict__ as yet another object
+			      return dict.__setattr__(self, attr, value)
+			  else:
+			     raise AttributeError
+
       }
 }
+#endif
 
 #if OTB_SWIGNUMPY
 %extend Application {
   %pythoncode {
 
     def SetImageFromNumpyArray(self, paramKey, npArray):
-       """
-       This method takes a numpy array and set ImageIOBase of
-       InputImageParameter by creating an otbImage with
-       same pixel type as numpyarray.dtype
-       """
-       if len(npArray.shape) == 3:
-          raise ValueError( "(len(npArray.shape) == 3)\n"
-                      "Input array given is of 3 dimension.\n"
-                      "SetImageFromNumpyArray create ImageIO from otbImage and thus demands a 2d array.\n"
-                      "you can either provide an 2d numpy array or use SetVectorImageFromNumpyArray depending on your application.\n")
+      """
+      This method takes a numpy array and set ImageIOBase of
+      InputImageParameter by creating an otbImage with
+      same pixel type as numpyarray.dtype
+      """
+      if len(npArray.shape) == 3:
+         raise ValueError( "(len(npArray.shape) == 3)\n"
+													"Input array given is of 3 dimension.\n"
+													"SetImageFromNumpyArray create ImageIO from otbImage and thus demands a 2d array.\n"
+													"you can either provide an 2d numpy array or use SetVectorImageFromNumpyArray depending on your application.\n")
 
-       dt = npArray.dtype.name
-       if dt == 'int8':
-         self.SetImageFromInt8NumpyArray_(paramKey, npArray)
-       elif dt == 'int16':
-         self.SetImageFromInt16NumpyArray_(paramKey, npArray)
-       elif dt == 'int32':
-         self.SetImageFromInt32NumpyArray_(paramKey, npArray)
-       elif dt == 'uint8':
-         self.SetImageFromUInt8NumpyArray_(paramKey, npArray)
-       elif dt == 'uint16':
-         self.SetImageFromUInt16NumpyArray_(paramKey, npArray)
-       elif dt == 'uint32':
-         self.SetImageFromUInt32NumpyArray_(paramKey, npArray)
-       elif dt == 'float':
-         self.SetImageFromFloatNumpyArray_(paramKey, npArray)
-       elif dt == 'double':
-         self.SetImageFromDoubleNumpyArray_(paramKey, npArray)
-       else:
-         self.SetImageFromFloatNumpyArray_(paramKey, npArray)
-       return
-
+      dt = npArray.dtype.name
+      if dt == 'int8':
+        self.SetImageFromInt8NumpyArray_(paramKey, npArray)
+      elif dt == 'int16':
+        self.SetImageFromInt16NumpyArray_(paramKey, npArray)
+      elif dt == 'int32':
+        self.SetImageFromInt32NumpyArray_(paramKey, npArray)
+      elif dt == 'uint8':
+        self.SetImageFromUInt8NumpyArray_(paramKey, npArray)
+      elif dt == 'uint16':
+        self.SetImageFromUInt16NumpyArray_(paramKey, npArray)
+      elif dt == 'uint32':
+        self.SetImageFromUInt32NumpyArray_(paramKey, npArray)
+      elif dt == 'float':
+        self.SetImageFromFloatNumpyArray_(paramKey, npArray)
+      elif dt == 'double':
+        self.SetImageFromDoubleNumpyArray_(paramKey, npArray)
+      else:
+        self.SetImageFromFloatNumpyArray_(paramKey, npArray)
+      return
 
     def SetVectorImageFromNumpyArray(self, paramKey, npArray):
-       """
-       This method takes a numpy array and set ImageIOBase of
-       InputImageParameter by creating an otbVectorImage with
-       same pixel type as numpyarray.dtype.
-       NOTE: Input (npArray) must be an ndarray with 3 dimension,
-       len(npArray.shape) must be > 2
-       """
-       if len(npArray.shape) < 3:
-          raise ValueError( "(len(npArray.shape) < 3)\n"
-                      "Input array given is not of 3 dimension.\n"
-                      "SetVectorImageFromNumpyArray create ImageIO from otbVectorImage and thus demands an array of shape 3.\n"
-                      "you can either provide an 3d numpy array or use SetImageFromNumpyArray depending on your application.\n")
+      """
+      This method takes a numpy array and set ImageIOBase of
+      InputImageParameter by creating an otbVectorImage with
+      same pixel type as numpyarray.dtype.
+      NOTE: Input (npArray) must be an ndarray with 3 dimension,
+      len(npArray.shape) must be > 2
+      """
+      if len(npArray.shape) < 3:
+        raise ValueError( "(len(npArray.shape) < 3)\n"
+													"Input array given is not of 3 dimension.\n"
+													"SetVectorImageFromNumpyArray create ImageIO from otbVectorImage and thus demands an array of shape 3.\n"
+													"you can either provide an 3d numpy array or use SetImageFromNumpyArray depending on your application.\n")
 
-       dt = npArray.dtype.name
-       if dt == 'int8':
-         self.SetVectorImageFromInt8NumpyArray_(paramKey, npArray)
-       elif dt == 'int16':
-         self.SetVectorImageFromInt16NumpyArray_(paramKey, npArray)
-       elif dt == 'int32':
-         self.SetVectorImageFromInt32NumpyArray_(paramKey, npArray)
-       elif dt == 'uint8':
-         self.SetVectorImageFromUInt8NumpyArray_(paramKey, npArray)
-       elif dt == 'uint16':
-         self.SetVectorImageFromUInt16NumpyArray_(paramKey, npArray)
-       elif dt == 'uint32':
-         self.SetVectorImageFromUInt32NumpyArray_(paramKey, npArray)
-       elif dt == 'float':
-         self.SetVectorImageFromFloatNumpyArray_(paramKey, npArray)
-       elif dt == 'double':
-         self.SetVectorImageFromDoubleNumpyArray_(paramKey, npArray)
-       else:
-         self.SetVectorImageFromFloatNumpyArray_(paramKey, npArray)
-       return
-
+      dt = npArray.dtype.name
+      if dt == 'int8':
+        self.SetVectorImageFromInt8NumpyArray_(paramKey, npArray)
+      elif dt == 'int16':
+        self.SetVectorImageFromInt16NumpyArray_(paramKey, npArray)
+      elif dt == 'int32':
+        self.SetVectorImageFromInt32NumpyArray_(paramKey, npArray)
+      elif dt == 'uint8':
+        self.SetVectorImageFromUInt8NumpyArray_(paramKey, npArray)
+      elif dt == 'uint16':
+        self.SetVectorImageFromUInt16NumpyArray_(paramKey, npArray)
+      elif dt == 'uint32':
+        self.SetVectorImageFromUInt32NumpyArray_(paramKey, npArray)
+      elif dt == 'float':
+        self.SetVectorImageFromFloatNumpyArray_(paramKey, npArray)
+      elif dt == 'double':
+        self.SetVectorImageFromDoubleNumpyArray_(paramKey, npArray)
+      else:
+        self.SetVectorImageFromFloatNumpyArray_(paramKey, npArray)
+      return
 
     def GetVectorImageAsNumpyArray(self, paramKey, dt='float'):
-       """
-       If datatype is unknown this method assumes to numpy.float32
-       Valid datatypes are:
-       int8, int16, int32, uint8, uint16, uint32, float, double.
-       NOTE: This method always return an numpy array with dimension 3
-       """
-       if dt == 'int8':
-         return self.GetVectorImageAsInt8NumpyArray_(paramKey)
-       elif dt == 'int16':
-         return self.GetVectorImageAsInt16NumpyArray_(paramKey)
-       elif dt == 'int32':
-         return self.GetVectorImageAsInt32NumpyArray_(paramKey)
-       elif dt == 'uint8':
-         return self.GetVectorImageAsUInt8NumpyArray_(paramKey)
-       elif dt == 'uint16':
-         return self.GetVectorImageAsUInt16NumpyArray_(paramKey)
-       elif dt == 'uint32':
-         return self.GetVectorImageAsUInt32NumpyArray_(paramKey)
-       elif dt == 'float':
-         return self.GetVectorImageAsFloatNumpyArray_(paramKey)
-       elif dt == 'double':
-         return self.GetVectorImageAsDoubleNumpyArray_(paramKey)
-       else:
-         print "Unknown datatype '" + dt + "'. Using float instead. Available types are:"
-         print "int8, int16, int32, uint8, uint16, uint32, float, double"
-         return self.GetVectorImageAsFloatNumpyArray_(paramKey)
+      """
+      If datatype is unknown this method assumes to numpy.float32
+      Valid datatypes are:
+      int8, int16, int32, uint8, uint16, uint32, float, double.
+      NOTE: This method always return an numpy array with dimension 3
+      """
+      if dt == 'int8':
+        return self.GetVectorImageAsInt8NumpyArray_(paramKey)
+      elif dt == 'int16':
+        return self.GetVectorImageAsInt16NumpyArray_(paramKey)
+      elif dt == 'int32':
+        return self.GetVectorImageAsInt32NumpyArray_(paramKey)
+      elif dt == 'uint8':
+        return self.GetVectorImageAsUInt8NumpyArray_(paramKey)
+      elif dt == 'uint16':
+        return self.GetVectorImageAsUInt16NumpyArray_(paramKey)
+      elif dt == 'uint32':
+        return self.GetVectorImageAsUInt32NumpyArray_(paramKey)
+      elif dt == 'float':
+        return self.GetVectorImageAsFloatNumpyArray_(paramKey)
+      elif dt == 'double':
+        return self.GetVectorImageAsDoubleNumpyArray_(paramKey)
+      else:
+        print "Unknown datatype '" + dt + "'. Using float instead. Available types are:"
+        print "int8, int16, int32, uint8, uint16, uint32, float, double"
+        return self.GetVectorImageAsFloatNumpyArray_(paramKey)
 
     def GetImageAsNumpyArray(self, paramKey, dt='float'):
-       """
-       If datatype is unknown this method assumes to numpy.float32
-       Valid datatypes are:
-       int8, int16, int32, uint8, uint16, uint32, float, double.
-       NOTE: This method always return an numpy array with dimension 3
-       """
-       if dt == 'int8':
-         numpy_vector_image = self.GetVectorImageAsInt8NumpyArray_(paramKey)
-       elif dt == 'int16':
-         numpy_vector_image = self.GetVectorImageAsInt16NumpyArray_(paramKey)
-       elif dt == 'int32':
-         numpy_vector_image = self.GetVectorImageAsInt32NumpyArray_(paramKey)
-       elif dt == 'uint8':
-         numpy_vector_image = self.GetVectorImageAsUInt8NumpyArray_(paramKey)
-       elif dt == 'uint16':
-         numpy_vector_image = self.GetVectorImageAsUInt16NumpyArray_(paramKey)
-       elif dt == 'uint32':
-         numpy_vector_image = self.GetVectorImageAsUInt32NumpyArray_(paramKey)
-       elif dt == 'float':
-         numpy_vector_image = self.GetVectorImageAsFloatNumpyArray_(paramKey)
-       elif dt == 'double':
-         numpy_vector_image = self.GetVectorImageAsDoubleNumpyArray_(paramKey)
+      """
+      If datatype is unknown this method assumes to numpy.float32
+      Valid datatypes are:
+      int8, int16, int32, uint8, uint16, uint32, float, double.
+      NOTE: This method always return an numpy array with dimension 3
+      """
+      if dt == 'int8':
+        numpy_vector_image = self.GetVectorImageAsInt8NumpyArray_(paramKey)
+      elif dt == 'int16':
+        numpy_vector_image = self.GetVectorImageAsInt16NumpyArray_(paramKey)
+      elif dt == 'int32':
+        numpy_vector_image = self.GetVectorImageAsInt32NumpyArray_(paramKey)
+      elif dt == 'uint8':
+        numpy_vector_image = self.GetVectorImageAsUInt8NumpyArray_(paramKey)
+      elif dt == 'uint16':
+        numpy_vector_image = self.GetVectorImageAsUInt16NumpyArray_(paramKey)
+      elif dt == 'uint32':
+        numpy_vector_image = self.GetVectorImageAsUInt32NumpyArray_(paramKey)
+      elif dt == 'float':
+        numpy_vector_image = self.GetVectorImageAsFloatNumpyArray_(paramKey)
+      elif dt == 'double':
+        numpy_vector_image = self.GetVectorImageAsDoubleNumpyArray_(paramKey)
 
-       else:
-         print "Unknown datatype '" + dt + "'. Using float instead. Available types are:"
-         print "int8, int16, int32, uint8, uint16, uint32, float, double"
-         numpy_vector_image = self.GetVectorImageAsFloatNumpyArray_(paramKey)
+      else:
+        print "Unknown datatype '" + dt + "'. Using float instead. Available types are:"
+        print "int8, int16, int32, uint8, uint16, uint32, float, double"
+        numpy_vector_image = self.GetVectorImageAsFloatNumpyArray_(paramKey)
 
-       if len(numpy_vector_image.shape) > 2:
-          raise ValueError("len(numpy_vector_image.shape) > 2\n"
-                           "Output image from application is of 3 dimension (len(nparray.shape) > 2). \n"
-                           "GetImageFromNumpyArray returns an numpy array of dimension 2 that will result is loss of data.\n"
-                           "In this case you must use GetVectorImageFromNumpyArray which is capable of return a 3 dimension image.\n")
+      if len(numpy_vector_image.shape) > 2:
+        raise ValueError("len(numpy_vector_image.shape) > 2\n"
+                         "Output image from application is of 3 dimension (len(nparray.shape) > 2). \n"
+                         "GetImageFromNumpyArray returns an numpy array of dimension 2 that will result is loss of data.\n"
+                         "In this case you must use GetVectorImageFromNumpyArray which is capable of return a 3 dimension image.\n")
 
-       numpy_vector_image = numpy_vector_image[:,:,1]
-       return numpy_vector_image
+      numpy_vector_image = numpy_vector_image[:,:,1]
+      return numpy_vector_image
+
     }
 }
 
 #endif /* OTB_SWIGNUMPY */
 
-#endif
 
 class Registry : public itkObject
 {
 public:
+
   static std::vector<std::string> GetAvailableApplications();
   static Application_Pointer CreateApplication(const std::string& name);
   static void AddApplicationPath(std::string newpath);
   static void SetApplicationPath(std::string newpath);
 
-
 protected:
   Registry();
   virtual ~Registry();
 };
-
 
 class AddProcessToWatchEvent : public itkEventObject
 {
