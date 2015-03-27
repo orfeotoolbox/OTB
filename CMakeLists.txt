@@ -2,6 +2,11 @@ PROJECT(Monteverdi2)
 
 cmake_minimum_required(VERSION 2.6)
 
+# CMP0040 : from CMake 3.0, old behaviour is more convenient
+if(POLICY CMP0040)
+  cmake_policy(SET CMP0040 OLD)
+endif()
+
 #----------------------------------------------------------------------------
 # Modules
 set( CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH} )
