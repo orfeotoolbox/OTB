@@ -758,15 +758,15 @@ ImageViewRenderer
   // assert( !m_ReferencePair.second.IsNull() );
   }
 
-  if( !m_ReferencePair.second.IsNull() )
+  if( m_ReferencePair.first!=NULL )
     {
-    if( referencePair.second.IsNull() )
+    if( referencePair.first==NULL )
       {
       virtual_SetProjection();
 
       emit SetProjectionRequired();
       }
-    else
+    else // if( m_ReferencePair.first!=referencePair.first )
       {
       virtual_UpdateProjection();
 
@@ -793,7 +793,7 @@ ImageViewRenderer
     return false;
 
   return
-    m_GlView->Reproject(
+    m_GlView->ReprojectFromView(
       center,
       spacing,
       stackedLayerModel->GetKey( stackedLayerModel->GetReferenceIndex() ),
