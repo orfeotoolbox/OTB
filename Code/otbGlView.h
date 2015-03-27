@@ -190,16 +190,16 @@ public:
   void MoveActorToEndOfRenderingOrder(std::string key, bool front = false);
 
   /**
-   * Reproject viewport center and spacing into given actor's
-   * coordinate system.
+   * Reproject point and spacing expressed in viewport coordinate
+   * system into given actor coordinate system.
    */
   template< typename P, typename S, typename P2, typename S2 >
-  bool Reproject( P & center,
-                  S & spacing,
-                  const KeyType & key,
-                  const P2 & vcenter,
-                  const S2 & vspacing,
-                  double norm = 1000.0 ) const;
+  bool ReprojectFromView( P & center,
+			  S & spacing,
+			  const KeyType & key,
+			  const P2 & vcenter,
+			  const S2 & vspacing,
+			  double norm = 1000.0 ) const;
 
   /**
    * Reproject viewport center and spacing into given actor's
@@ -234,12 +234,12 @@ private:
 template< typename P, typename S, typename P2, typename S2 >
 bool
 GlView
-::Reproject( P & origin,
-             S & spacing,
-             const KeyType & key,
-             const P2 & vcenter,
-             const S2 & vspacing,
-             double norm ) const
+::ReprojectFromView( P & center,
+		     S & spacing,
+		     const KeyType & key,
+		     const P2 & vcenter,
+		     const S2 & vspacing,
+		     double norm ) const
 {
   //
   // Reference actor has not been found.
@@ -260,7 +260,7 @@ GlView
 
   //
   // Compute transform origin.
-  if( !geo->TransformFromViewport( origin, vcenter, true ) )
+  if( !geo->TransformFromViewport( center, vcenter, true ) )
     return false;
 
   //
@@ -292,11 +292,11 @@ GlView
   // projected against reference actor X and Y axises (using vectorial
   // dot product).
 
-  x[ 0 ] -= origin[ 0 ];
-  x[ 1 ] -= origin[ 1 ];
+  x[ 0 ] -= center[ 0 ];
+  x[ 1 ] -= center[ 1 ];
 
-  y[ 0 ] -= origin[ 0 ];
-  y[ 1 ] -= origin[ 1 ];
+  y[ 0 ] -= center[ 0 ];
+  y[ 1 ] -= center[ 1 ];
 
   spacing[ 0 ] = vcl_sqrt( x[ 0 ] * x[ 0 ] + x[ 1 ] * x[ 1 ] ) / norm;
   spacing[ 1 ] = vcl_sqrt( y[ 0 ] * y[ 0 ] + y[ 1 ] * y[ 1 ] ) / norm;
