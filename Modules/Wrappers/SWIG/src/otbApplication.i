@@ -480,11 +480,10 @@ import keyword
       parameters in the 'otb application' with instance App
 			"""
 			if attr is not None:
-
-			  if attr.lower() in self.GetParametersKeys(True):
+			  key_list = [k.upper() for k in self.GetParametersKeys(True)]
+			  if attr in key_list:
 			    attr = attr.lower()
 			    parameter_type = self.GetParameterType(attr)
-
 			    if parameter_type in [ParameterType_InputProcessXML, ParameterType_Choice,
 					    									ParameterType_String, ParameterType_InputFilename,
 							                  ParameterType_OutputImage, ParameterType_OutputVectorData,
@@ -502,10 +501,8 @@ import keyword
 			      return self.GetParameterFloat(attr)
 			    elif parameter_type in [ParameterType_Empty]:
 			      return self.IsParameterEnabled(attr)
-			    else:
-            raise AttributeError
 			  else:
-			    pass
+			    raise AttributeError
 
 		def __setattr__(self, attr, value):
 			"""
@@ -518,7 +515,8 @@ import keyword
       list of existing parameters for application with 'self.GetParametersKeys(True)'
 			"""
 			if attr is not None:
-			  if attr.lower() in self.GetParametersKeys(True):
+			  key_list = [k.upper() for k in self.GetParametersKeys(True)]
+			  if attr in key_list:
 			    attr = attr.lower()
 			    parameter_type = self.GetParameterType(attr)
 			    if parameter_type in [ParameterType_InputProcessXML, ParameterType_Choice,
@@ -542,7 +540,7 @@ import keyword
 			      # # not reaching here due to swig seeing self.__dict__ as yet another object
 			      return dict.__setattr__(self, attr, value)
 			  else:
-			     raise AttributeError
+			    raise AttributeError
 
       }
 }
