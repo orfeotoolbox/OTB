@@ -66,10 +66,6 @@ otb_create_application(
   SOURCES        otbDEMConvert.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-otb_create_application(
-  NAME           BandMath
-  SOURCES        otbBandMath.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
   NAME           ConcatenateImages
