@@ -12,10 +12,13 @@ using namespace std;
 int main(int argc, char * argv[])
 {
 
+  int MAJOR   = atoi(argv[2]);
+  int MINOR   = atoi(argv[3]);
+
   string version(GDALVersionInfo("RELEASE_NAME"));
   
   // Remember gdal version
-  const char * inputFilename  = argv[1];
+  const char * inputFilename  = argv[1]; 
   ofstream file(inputFilename, ios::out | ios::trunc); 
   if(file)  
   {
@@ -52,9 +55,9 @@ int main(int argc, char * argv[])
 	}
 
   
-  if ( (UIntVect[0]<1) || (UIntVect[1]<10) )
+  if ( (UIntVect[0]<MAJOR) || (UIntVect[1]<MINOR) )
 	{
-		cout << "WARNING : Version of GDAL must be >= 1.10 (" << UIntVect[0] << "." << UIntVect[1] << " detected)." << endl;
+		cout << "WARNING : Version of GDAL must be >= " << MAJOR << "." << MINOR << " : " << UIntVect[0] << "." << UIntVect[1] << " detected)." << endl;
 		return 1;
 	}
 
