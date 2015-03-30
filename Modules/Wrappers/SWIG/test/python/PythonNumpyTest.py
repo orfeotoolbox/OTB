@@ -52,5 +52,5 @@ Smoothing = otbApplication.Registry.CreateApplication("Smoothing")
 #take numpy output from Convert application and feed into Smoothing
 Smoothing.SetVectorImageFromNumpyArray("in", ConvertOut)
 Smoothing.SetParameterString("type", 'anidif')
-Smoothing.SetParameterString("out", prefix + "SmoothingOut.png")
+Smoothing.SetParameterString("out", argv[2])
 Smoothing.ExecuteAndWriteOutput()
