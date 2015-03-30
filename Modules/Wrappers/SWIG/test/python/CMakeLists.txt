@@ -75,5 +75,13 @@ add_test( NAME pyTvBandMathInXML
 add_test( NAME pyTvNumpyIO
           COMMAND ${TEST_DRIVER} Execute
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonNumpyTest.py
-                  ${OTB_DATA_ROOT}/Input/poupees.tif
-                  ${TEMP}/pyTvNumpyIO_ )
+                  ${OTB_DATA_ROOT}/Examples/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                  ${TEMP}/pyTvNumpyIO_SmoothingOut.png )
+
+add_test( NAME pyTvNewStyleParameters
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonNewStyleParametersTest.py
+                  ${OTB_DATA_ROOT}/Examples/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                  ${OTB_DATA_ROOT}/Examples/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                  ${OTB_DATA_ROOT}/Examples/ROI_QB_MUL_1.tif
+                  ${TEMP}/pyTvNewStyleParametersTest.tif )
