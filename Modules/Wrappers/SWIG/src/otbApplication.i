@@ -422,11 +422,41 @@ DECLARE_REF_COUNT_CLASS( Application )
 #if SWIGPYTHON
 %pythoncode {
 import sys
-import keyword
+
+class ApplicationProxy(object):
+  def __init__(self, application, groupkey, value = None):
+    self.__dict__["application"] = application
+    self.__dict__["groupkey"] = groupkey
+    if value is not None:
+      self.__dict__["application"].SetParameterString(groupkey, value)
+
+  def __str__(self):
+      return self.__dict__["application"].GetParameterAsString(self.groupkey)
+
+  def __eq__(self, other):
+    if not type(other) == type(self):
+			return (self.__str__() == other)
+    else:
+			return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
+
+  def __ne__(self, other):
+    return not self.__eq__(other)
+
+  def __getattr__(self,attr):
+    return self.__dict__["application"].GetParameterValue( self.groupkey + "." + attr.lower() )
+
+  def __setattr__(self,attr,value):
+    if attr not in self.__dict__:
+        return self.__dict__["application"].SetParameterValue( self.groupkey + "." + attr.lower(), value )
+    else:
+        return dict.__setattr__(self, attr, value)
+
+
 }
 #endif
 
 #if SWIGPYTHON
+
 %extend Application {
   %pythoncode {
 
@@ -436,105 +466,116 @@ import keyword
 			s += self.GetDocLongDescription()
 			return s
 
+		def GetParameterTypeAsString(self, paramType):
+		  if paramType in [ParameterType_InputProcessXML,
+      									 ParameterType_String, ParameterType_InputFilename,
+      									 ParameterType_OutputImage, ParameterType_OutputVectorData,
+      									 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
+      									 ParameterType_Directory, ParameterType_InputImage,
+      									 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+        return "ParameterType_String"
+
+		  elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
+      										 ParameterType_InputFilenameList, ParameterType_StringList,
+      										 ParameterType_ListView]:
+        return "ParameterType_StringList"
+		  elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
+        return "ParameterType_Int"
+		  elif paramType == ParameterType_Float:
+        return "ParameterType_Float"
+		  elif paramType == ParameterType_Empty:
+        return "ParameterType_Empty"
+		  elif paramType == ParameterType_Choice:
+        return "ParameterType_Choice"
+		  elif paramType == ParameterType_Group:
+        return "ParameterType_Group"
+		  else:
+        return "ParameterType_UNKNOWN"
+
+		def SetParameterValue(self, paramKey, value):
+		  paramType = self.GetParameterType(paramKey)
+		  if paramType in [ParameterType_InputProcessXML, ParameterType_RAM,
+    									 ParameterType_String, ParameterType_InputFilename,
+    									 ParameterType_OutputImage, ParameterType_OutputVectorData,
+    									 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
+    									 ParameterType_Directory, ParameterType_InputImage,
+    									 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+		    return self.SetParameterString(paramKey, value)
+		  elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
+    										 ParameterType_InputFilenameList, ParameterType_StringList,
+    										 ParameterType_ListView]:
+		    return self.setParameterStringList(paramKey, value)
+		  elif paramType in [ParameterType_Int, ParameterType_Radius]:
+		    return self.SetParameterInt(paramKey, value)
+		  elif paramType in [ParameterType_Float]:
+		    return self.SetParameterFloat(paramKey, value)
+		  elif paramType in [ParameterType_Empty]:
+		    return self.EnableParameter(paramKey)
+		  elif paramType in [ParameterType_Group]:
+		    return ApplicationProxy(self, paramKey)
+		  elif paramType in [ParameterType_Choice]:
+		    return ApplicationProxy(self, paramKey, value)
+		  else:
+		    print "Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey)
+		  return
+
 		def GetParameterValue(self, paramKey):
-			paramType = self.GetParameterType(paramKey)
-			if paramType in [ParameterType_InputProcessXML, ParameterType_Choice,
-											 ParameterType_String, ParameterType_InputFilename,
-											 ParameterType_OutputImage, ParameterType_OutputVectorData,
-											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
-											 ParameterType_Directory, ParameterType_InputImage,
-											 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
-				return self.GetParameterString(paramKey)
-
-			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
-												 ParameterType_InputFilenameList, ParameterType_StringList,
-												 ParameterType_ListView]:
-				return self.GetParameterStringList(paramKey)
-
-			elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
-				return self.GetParameterInt(paramKey)
-
-			elif paramType in [ParameterType_Float]:
-				return self.GetParameterFloat(paramKey)
-
-			elif paramType in [ParameterType_Empty]:
-				return self.IsParameterEnabled(paramKey)
-			else:
-				print "Unsupported parameter type for '" + paramKey  + "'"
-			return None
+		  paramType = self.GetParameterType(paramKey)
+		  if paramType in [ParameterType_InputProcessXML,
+    									 ParameterType_String, ParameterType_InputFilename,
+    									 ParameterType_OutputImage, ParameterType_OutputVectorData,
+    									 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
+    									 ParameterType_Directory, ParameterType_InputImage,
+    									 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+		    return self.GetParameterString(paramKey)
+		  elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
+    										 ParameterType_InputFilenameList, ParameterType_StringList,
+    										 ParameterType_ListView]:
+		    return self.GetParameterStringList(paramKey)
+		  elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
+		    return self.GetParameterInt(paramKey)
+		  elif paramType in [ParameterType_Float]:
+		    return self.GetParameterFloat(paramKey)
+		  elif paramType in [ParameterType_Empty]:
+		    return self.IsParameterEnabled(paramKey)
+		  elif paramType in [ParameterType_Group, ParameterType_Choice]:
+		    return ApplicationProxy(self, paramKey)
+		  else:
+		    print "Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey)
+		  return None
 
 		def __getattr__(self,attr):
-			"""
-      __get_attribute__ is called whenever an instance request an attribute.
-      eg: App.SetParameterString(), App.GetName() ..
-      __getattr__ is only called if the attribute is not found by __get_attribute__ call
-      So we keep hide the GetParameter** calls within this method so that it seems like
-      an obivous call for users. App.IN , App.OUT , where 'in' and 'out' are
-      parameters in the 'otb application' with instance App
-			"""
-			if attr is not None:
-			  key_list = [k.upper() for k in self.GetParametersKeys(True)]
-			  if attr in key_list:
-			    attr = attr.lower()
-			    parameter_type = self.GetParameterType(attr)
-			    if parameter_type in [ParameterType_InputProcessXML, ParameterType_Choice,
-					    									ParameterType_String, ParameterType_InputFilename,
-							                  ParameterType_OutputImage, ParameterType_OutputVectorData,
-															  ParameterType_OutputProcessXML, ParameterType_OutputFilename,
-															  ParameterType_Directory, ParameterType_InputImage,
-															  ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
-			      return self.GetParameterString(attr)
-			    elif parameter_type in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
-																ParameterType_InputFilenameList, ParameterType_StringList,
-																ParameterType_ListView]:
-			      return self.GetParameterStringList(attr)
-			    elif parameter_type in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
-			      return self.GetParameterInt(attr)
-			    elif parameter_type in [ParameterType_Float]:
-			      return self.GetParameterFloat(attr)
-			    elif parameter_type in [ParameterType_Empty]:
-			      return self.IsParameterEnabled(attr)
-			  else:
-			    raise AttributeError
+		  """
+		  __get_attribute__ is called whenever an instance request an attribute.
+		  eg: App.SetParameterString(), App.GetName() ..
+		  __getattr__ is only called if the attribute is not found by __get_attribute__ call
+		  So we keep hide the GetParameter** calls within this method so that it seems like
+		  an obivous call for users. App.IN , App.OUT , where 'in' and 'out' are
+		  parameters in the 'otb application' with instance App
+		  """
+		  if attr is not None:
+		    key_list = [k.upper() for k in self.GetParametersKeys(True)]
+		    if attr in key_list:
+		      return self.GetParameterValue(attr.lower())
+		    else:
+		      raise AttributeError
 
 		def __setattr__(self, attr, value):
-			"""
-      __setattr__ is called if the attribute requested is not found in the attribute list.
-      So these attributes are supposed to be 'key' of parameters used.
-      So we keep hide the SetParameter** calls within this method so that it seems like
-      an obivous call for users. App.IN='my-input-file-name' , App.OUT='my-output-file-name'
-      where 'in' and 'out' are    parameters in the 'otb application' with instance App
-      Ofcourse, we dont blindly accept any attributes as python, we check them against
-      list of existing parameters for application with 'self.GetParametersKeys(True)'
-			"""
-			if attr is not None:
-			  key_list = [k.upper() for k in self.GetParametersKeys(True)]
-			  if attr in key_list:
-			    attr = attr.lower()
-			    parameter_type = self.GetParameterType(attr)
-			    if parameter_type in [ParameterType_InputProcessXML, ParameterType_Choice,
-					    									ParameterType_String, ParameterType_InputFilename,
-							                  ParameterType_OutputImage, ParameterType_OutputVectorData,
-															  ParameterType_OutputProcessXML, ParameterType_OutputFilename,
-															  ParameterType_Directory, ParameterType_InputImage,
-															  ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
-			      self.SetParameterString(attr, value)
-			    elif parameter_type in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
-																ParameterType_InputFilenameList, ParameterType_StringList,
-																ParameterType_ListView]:
-			      self.SetParameterStringList(attr, value)
-			    elif parameter_type in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
-			      self.SetParameterInt(attr, value)
-			    elif parameter_type in [ParameterType_Float]:
-			      self.SetParameterFloat(attr, value)
-			    elif parameter_type in [ParameterType_Empty]:
-			      self.EnableParameter(attr)
-			    else:
-			      # # not reaching here due to swig seeing self.__dict__ as yet another object
-			      return dict.__setattr__(self, attr, value)
-			  else:
-			    raise AttributeError
-
+		  """
+		  __setattr__ is called if the attribute requested is not found in the attribute list.
+		  So these attributes are supposed to be 'key' of parameters used. Here we
+		  keep hide the SetParameter** calls within this method so that it seems like
+		  an obivous call for users. App.IN='my-input-file-name' , App.OUT='my-output-file-name'w
+		  here 'in' and 'out' are    parameters in the 'otb application' with instance App
+		  Ofcourse, we dont blindly accept any attributes as python, we check them against
+		  list of existing parameters for application with 'self.GetParametersKeys(True)'
+		  """
+		  if attr is not None:
+		    key_list = [k.upper() for k in self.GetParametersKeys(True)]
+		    if attr in key_list:
+		      self.SetParameterValue(attr.lower(), value)
+		    else:
+		      raise AttributeError
       }
 }
 #endif
