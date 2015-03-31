@@ -12,6 +12,11 @@ def cm_assert(a,b):
 
 app = otb.Registry.CreateApplication('OrthoRectification')
 
+#test GetParameterTypeAsString() method in python.
+print app.GetParameterTypeAsString(otb.ParameterType_InputImage)
+print app.GetParameterTypeAsString(otb.ParameterType_String)
+print app.GetParameterTypeAsString(otb.ParameterType_Empty)
+
 # one test for each parameter type (string, float, int, ...)
 
 # # parameter group io.in
@@ -110,5 +115,13 @@ cm_assert(app.IsParameterEnabled('outputs.isotropic'), True)
 app.DisableParameter('outputs.isotropic')
 cm_assert(False, app.OUTPUTS.ISOTROPIC)
 
+#Do not execute. we need LARGEINPUT. so we tried a small application
+#app.Execute()
 
-# #app.ExecuteAndWriteOutput()
+app = None
+
+app = otb.Registry.CreateApplication('Smoothing')
+app.IN = argv[1]
+app.TYPE='anidif'
+app.OUT = argv[2]
+app.ExecuteAndWriteOutput()
