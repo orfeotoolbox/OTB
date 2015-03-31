@@ -10,9 +10,11 @@ otb_module(OTBDescriptors
     OTBImageBase
     OTBObjectList
     OTBPointSet
-    OTBSiftFast
     OTBTransform
 
+  OPTIONAL_DEPENDS
+    OTBSiftFast
+    
   TEST_DEPENDS
     OTBImageIO
     OTBImageManipulation

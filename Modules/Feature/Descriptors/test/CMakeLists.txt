@@ -3,9 +3,7 @@ otb_module_test()
 set(OTBDescriptorsTests
 otbDescriptorsTestDriver.cxx
 otbImageToSURFKeyPointSetFilterOutputDescriptorAscii.cxx
-otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
 otbKeyPointSetsMatchingFilterNew.cxx
-otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
 otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
 otbHistogramOfOrientedGradientCovariantImageFunction.cxx
 otbImageToSURFKeyPointSetFilterOutputInterestPointAscii.cxx
@@ -17,13 +15,20 @@ otbImageToSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
 otbImageToSIFTKeyPointSetFilterOutputAscii.cxx
 otbFourierMellinImageFilter.cxx
 otbImageToHessianDeterminantImageFilter.cxx
-otbImageToFastSIFTKeyPointSetFilterNew.cxx
 otbImageToSIFTKeyPointSetFilterOutputImage.cxx
 otbFourierMellinDescriptors.cxx
 otbImageToSIFTKeyPointSetFilterDistanceMap.cxx
 otbImageToHessianDeterminantImageFilterNew.cxx
 otbFourierMellinImageFilterNew.cxx
 )
+
+if(OTB_USE_SIFTFAST)
+  list(APPEND OTBDescriptorsTests
+       otbImageToFastSIFTKeyPointSetFilterNew.cxx
+       otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
+       otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
+       )
+endif()
 
 add_executable(otbDescriptorsTestDriver ${OTBDescriptorsTests})
 target_link_libraries(otbDescriptorsTestDriver ${OTBDescriptors-Test_LIBRARIES})
@@ -41,28 +46,9 @@ otb_add_test(NAME feTvImageToSURFKeyPointSetFilterSceneOutputDescriptorAscii COM
   3 3
   )
 
-otb_add_test(NAME feTvImageToFastSIFTKeyPointSetFilterSceneOutputInterestPointAscii COMMAND otbDescriptorsTestDriver
-  --ignore-order --compare-ascii ${EPSILON_3}
-  ${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
-  ${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
-  otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii
-  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
-  ${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
-  6
-  )
 
 otb_add_test(NAME feTuKeyPointSetsMatchingFilterNew COMMAND otbDescriptorsTestDriver
   otbKeyPointSetsMatchingFilterNew)
-
-otb_add_test(NAME feTvImageToFastSIFTKeyPointSetFilterSceneOutputDescriptorAscii COMMAND otbDescriptorsTestDriver
-  --ignore-order --epsilon-boundary 0.01 --compare-ascii ${EPSILON_2}
-  ${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
-  ${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
-  otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii
-  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
-  ${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
-  6
-  )
 
 otb_add_test(NAME feTvImageToSIFTKeyPointSetFilterSceneOutputInterestPointAscii COMMAND otbDescriptorsTestDriver
   --ignore-order --compare-ascii ${EPSILON_3}
@@ -206,9 +192,6 @@ otb_add_test(NAME feTvImageToHessianDeterminantImageFilter COMMAND otbDescriptor
   1.5
   )
 
-otb_add_test(NAME feTuImageToFastSIFTKeyPointSetFilterNew COMMAND otbDescriptorsTestDriver
-  otbImageToFastSIFTKeyPointSetFilterNew)
-
 otb_add_test(NAME feTvImageToSIFTKeyPointSetFilterSquareOutputImage COMMAND otbDescriptorsTestDriver
   --compare-image ${EPSILON_8}
   ${BASELINE}/feTvImageToSIFTKeyPointSetFilterSquareImageOutput.png
@@ -278,3 +261,27 @@ otb_add_test(NAME feTuImageToHessianDeterminantImageFilterNew COMMAND otbDescrip
 otb_add_test(NAME feTuForwardFourierMellinImageFilterNew COMMAND otbDescriptorsTestDriver
   otbFourierMellinImageFilterNew)
 
+if(OTB_USE_SIFTFAST)
+otb_add_test(NAME feTuImageToFastSIFTKeyPointSetFilterNew COMMAND otbDescriptorsTestDriver
+  otbImageToFastSIFTKeyPointSetFilterNew)
+
+otb_add_test(NAME feTvImageToFastSIFTKeyPointSetFilterSceneOutputInterestPointAscii COMMAND otbDescriptorsTestDriver
+  --ignore-order --compare-ascii ${EPSILON_3}
+  ${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
+  ${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
+  otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii
+  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+  ${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
+  6
+  )
+
+otb_add_test(NAME feTvImageToFastSIFTKeyPointSetFilterSceneOutputDescriptorAscii COMMAND otbDescriptorsTestDriver
+  --ignore-order --epsilon-boundary 0.01 --compare-ascii ${EPSILON_2}
+  ${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
+  ${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
+  otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii
+  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+  ${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
+  6
+  )
+endif()
