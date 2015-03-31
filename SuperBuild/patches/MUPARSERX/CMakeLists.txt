@@ -17,7 +17,9 @@ endif()
 
 file(GLOB MUPARSERX_SRCS "parser/*.cpp" )
 file(GLOB MUPARSERX_HEADERS "parser/*.h")
-#include_directories("${CMAKE_CURRENT_SOURCE_DIR}/parser")
+# avoid noxious mpCompat.h
+list(REMOVE_ITEM MUPARSERX_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/parser/mpCompat.h")
+
 
 add_library(muparserx ${MUPARSERX_SRCS})
 
