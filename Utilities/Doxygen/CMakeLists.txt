@@ -146,14 +146,22 @@ if (BUILD_DOCUMENTATION)
   #  DEPENDS "${OTB_SOURCE_DIR}/Examples" "${OTB_SOURCE_DIR}/Utilities/Doxygen/GenerateExamplesDox.cmake"
   #  )
 
-  add_custom_target(Documentation
+  add_custom_target(Documentation-doxygen
     COMMAND ${DOXYGEN_EXECUTABLE} ${OTB_BINARY_DIR}/Utilities/Doxygen/doxygen.config
-    COMMAND ${CMAKE_COMMAND} -E tar cjf
-      ${OTB_BINARY_DIR}/Documentation/Doxygen/OTB-Doxygen-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.tar.bz2
-      ${OTB_BINARY_DIR}/Documentation/Doxygen/html
+    #COMMAND ${CMAKE_COMMAND} -E copy
+    #  ${OTB_SOURCE_DIR}/Utilities/Doxygen/favicon.ico
+    #  ${OTB_BINARY_DIR}/Documentation/Doxygen/html
     DEPENDS         ${OTB_BINARY_DIR}/Utilities/Doxygen/otbdoxygen.pl
    # DEPENDS         ${OTB_BINARY_DIR}/Documentation/Doxygen/Examples.dox
     WORKING_DIRECTORY ${OTB_BINARY_DIR}/Utilities/Doxygen
+    )
+  
+  add_custom_target(Documentation
+    COMMAND ${CMAKE_COMMAND} -E tar cjf
+      ${OTB_BINARY_DIR}/Documentation/Doxygen/OTB-Doxygen-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.tar.bz2
+      ${OTB_BINARY_DIR}/Documentation/Doxygen/html
+    DEPENDS Documentation-doxygen
+    WORKING_DIRECTORY ${OTB_BINARY_DIR}/Documentation/Doxygen
     )
 
   # Somehow the logo image is not copied into the html folder.
