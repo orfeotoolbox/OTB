@@ -40,16 +40,13 @@ namespace otb
  *
  * \f[ \frac{XS}{\mathrm{Filtered}(PAN)} PAN  \f]
  *
- * \ingroup Streamed
- * \ingroup Multithreaded
- * \ingroup Fusion
+ * This filter supports streaming and multithreading.
  *
  * \example Fusion/PanSharpeningExample.cxx
  *
  *
  * \ingroup OTBPanSharpening
- **/
-
+ */
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision = float>
 class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
   public itk::ImageToImageFilter<TXsImageType, TOutputImageType>
