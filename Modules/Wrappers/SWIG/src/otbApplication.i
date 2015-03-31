@@ -456,41 +456,47 @@ class ApplicationProxy(object):
 #endif
 
 #if SWIGPYTHON
+/*Maybe TODO: change use a dict to  GetParameterTypeAsString */
 
 %extend Application {
   %pythoncode {
 
 		def __str__(self):
 			s  = self.GetDocName()
+
+		def GetParameterTypeAsString(self, parameter_type):
+			return {
+			ParameterType_InputProcessXML : 'ParameterType_InputProcessXML',
+      ParameterType_String : 'ParameterType_String',
+      ParameterType_InputFilename : 'ParameterType_InputFilename',
+      ParameterType_OutputImage : 'ParameterType_OutputImage',
+      ParameterType_OutputVectorData : 'ParameterType_OutputVectorData',
+      ParameterType_OutputProcessXML : 'ParameterType_OutputProcessXML',
+      ParameterType_OutputFilename : 'ParameterType_OutputFilename',
+      ParameterType_Directory : 'ParameterType_Directory',
+      ParameterType_InputImage : 'ParameterType_InputImage',
+      ParameterType_ComplexInputImage : 'ParameterType_ComplexInputImage',
+      ParameterType_InputVectorData : 'ParameterType_InputVectorData',
+      ParameterType_InputImageList : 'ParameterType_InputImageList',
+      ParameterType_InputVectorDataList : 'ParameterType_InputImageList',
+      ParameterType_InputFilenameList : 'ParameterType_InputFilenameList',
+      ParameterType_StringList : 'ParameterType_StringList',
+      ParameterType_ListView : 'ParameterType_ListView',
+      ParameterType_Int : 'ParameterType_Int',
+      ParameterType_Radius : 'ParameterType_Radius',
+      ParameterType_RAM : 'ParameterType_RAM',
+      ParameterType_Float : 'ParameterType_Float',
+      ParameterType_Empty : 'ParameterType_Empty',
+      ParameterType_Choice : 'ParameterType_Choice',
+      ParameterType_Group : 'ParameterType_Group',
+      }.get(parameter_type, 'ParameterType_UNKNOWN')
+
+
+		def __str__(self):
+			s  = self.GetDocName()
 			s += '\n'
 			s += self.GetDocLongDescription()
 			return s
-
-		def GetParameterTypeAsString(self, paramType):
-		  if paramType in [ParameterType_InputProcessXML,
-      									 ParameterType_String, ParameterType_InputFilename,
-      									 ParameterType_OutputImage, ParameterType_OutputVectorData,
-      									 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
-      									 ParameterType_Directory, ParameterType_InputImage,
-      									 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
-        return "ParameterType_String"
-
-		  elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
-      										 ParameterType_InputFilenameList, ParameterType_StringList,
-      										 ParameterType_ListView]:
-        return "ParameterType_StringList"
-		  elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
-        return "ParameterType_Int"
-		  elif paramType == ParameterType_Float:
-        return "ParameterType_Float"
-		  elif paramType == ParameterType_Empty:
-        return "ParameterType_Empty"
-		  elif paramType == ParameterType_Choice:
-        return "ParameterType_Choice"
-		  elif paramType == ParameterType_Group:
-        return "ParameterType_Group"
-		  else:
-        return "ParameterType_UNKNOWN"
 
 		def SetParameterValue(self, paramKey, value):
 		  paramType = self.GetParameterType(paramKey)
