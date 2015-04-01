@@ -328,9 +328,7 @@ public:
       : m_Layer(&layer), m_Crt(layer.GetNextFeature()) {}
     template <class OtherValue> feature_iter(
       feature_iter<OtherValue> const& other,
-      typename boost::enable_if<boost::is_convertible<OtherValue*,Value*>
-      , enabler
-      >::type = enabler()
+      typename boost::enable_if<boost::is_convertible<OtherValue*,Value*> >::type* = 0
     )
       : m_Layer(other.m_Layer), m_Crt(other.m_Crt)
       {}
