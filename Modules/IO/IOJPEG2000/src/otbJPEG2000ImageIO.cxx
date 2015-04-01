@@ -302,7 +302,7 @@ int JPEG2000InternalReader::Open(const char *filename, unsigned int resolution)
   this->m_FileName = str;
 
   // Open the file
-  if (!this->m_FileName.empty())
+  if (this->m_FileName.empty())
     {
     this->Clean();
     return 0;
