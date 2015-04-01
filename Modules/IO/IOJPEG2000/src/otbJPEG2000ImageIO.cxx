@@ -262,7 +262,7 @@ public:
 
   void Clean();
 
-  int CanRead();
+  bool CanRead();
 
   int Open(const char *filename, unsigned int resolution);
 
@@ -362,7 +362,7 @@ void JPEG2000InternalReader::Clean()
 boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int tileIndex)
 {
 
-  if (!this->m_FileName.empty())
+  if (this->m_FileName.empty())
     {
     this->Clean();
     return boost::shared_ptr<opj_image_t>();
@@ -436,12 +436,13 @@ JPEG2000InternalReader::JPEG2000InternalReader()
 
 int JPEG2000InternalReader::Initialize()
 {
-  if (m_FileName.empty())
+  if (!m_FileName.empty())
     {
     // Creating the file stream
     boost::shared_ptr<opj_stream_t> stream = boost::shared_ptr<opj_stream_t>(opj_stream_create_default_file_stream(this->m_FileName.c_str(), true),opj_stream_destroy);
     if (!stream)
       {
+      std::cerr << "ERROR file stream creation" << std::endl;
       this->Clean();
       return 0;
       }
@@ -451,10 +452,11 @@ int JPEG2000InternalReader::Initialize()
 
     if (!codec)
       {
+      std::cerr << "ERROR codec creation" << std::endl  ;  
       this->Clean();
       return 0;
       }
-
+    
     // Setting default parameters
     opj_dparameters_t parameters;
     opj_set_default_decoder_parameters(&parameters);
@@ -469,6 +471,7 @@ int JPEG2000InternalReader::Initialize()
     // Setup the decoder decoding parameters using user parameters
     if (!opj_setup_decoder(codec.get(), &parameters))
       {
+      std::cerr << "ERROR setup decoder" << std::endl    ;
       this->Clean();
       return 0;
       }
@@ -479,11 +482,12 @@ int JPEG2000InternalReader::Initialize()
 
     if (!opj_read_header(stream.get(), codec.get(),&unsafeOpjImgPtr))
       {
+      std::cerr << "ERROR read header" << std::endl;    
       boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
       this->Clean();
       return 0;
       }
-
+    
     boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
 
     // Get the codestream information
@@ -532,7 +536,7 @@ int JPEG2000InternalReader::Initialize()
 }
 
 
-int JPEG2000InternalReader::CanRead()
+bool JPEG2000InternalReader::CanRead()
  {
    if  (Initialize() &&
        ( this->m_Width > 0 ) && ( this->m_Height > 0 ) &&
@@ -551,13 +555,24 @@ int JPEG2000InternalReader::CanRead()
             (this->m_YResolution[itComp] != this->m_YResolution[itComp+1]) &&
             (!this->m_YResolution[itComp]) )
          {
-         return 0;
+         return false;
          }
        }
-
-     return 1;
+     return true;
      }
-   else return 0;
+   else 
+     {
+     std::cerr  << this->m_Width << ", " 
+                << this->m_Height << ", " 
+                << this->m_TileWidth << ", " 
+                << this->m_TileHeight << ", " 
+                << this->m_XNbOfTile << ", " 
+                << this->m_YNbOfTile<< ", " 
+                << this->m_NbOfComponent 
+                << std::endl ;    
+     std::cout << "HERE1" << std::endl;
+     return false;
+     }
  }
 
 /************************************************************************/
