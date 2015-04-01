@@ -28,9 +28,9 @@ namespace otb
  *  \brief this class uses GDALPolygonize method to transform a Label image into a VectorData.
  *  An optional input mask can be used to exclude pixels from vectorization process.
  *  All pixels with a value of 0 in the input mask image will not be suitable for vectorization.
- * \Note The Use8Connected parameter can be turn on and it will be used in \c GDALPolygonize(). But be carreful, it
+ * \note The Use8Connected parameter can be turn on and it will be used in \c GDALPolygonize(). But be carreful, it
  * can create cross polygons !
- * \Note It is a non-streamed version.
+ * \note It is a non-streamed version.
  *  \ingroup OBIA
  *
  * \ingroup OTBConversion

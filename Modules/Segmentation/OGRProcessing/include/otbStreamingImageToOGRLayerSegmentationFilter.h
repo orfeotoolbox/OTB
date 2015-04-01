@@ -51,7 +51,6 @@ class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputIm
 /** \class PersistentStreamingLabelImageToOGRDataFilter
  * \brief This filter is a framework for large scale segmentation.
  * For a detailed description @see StreamingImageToOGRLayerSegmentationFilter
- * \Note
  *
  * \ingroup OTBOGRProcessing
  */
@@ -186,9 +185,9 @@ private:
  * Finally all features contained in the "memory" DataSource are copied into the input Layer,
  * in the layer specified with the \c SetLayerName() method.
  *
- * \Note The Use8Connected parameter can be turn on and it will be used in \c GDALPolygonize(). But be carreful, it
+ * \note The Use8Connected parameter can be turn on and it will be used in \c GDALPolygonize(). But be carreful, it
  * can create cross polygons !
- * \Note The input mask can be used to exclude pixels from vectorization process.
+ * \note The input mask can be used to exclude pixels from vectorization process.
  * All pixels with a value of 0 in the input mask image will not be suitable for vectorization.
  *
  * \ingroup OTBOGRProcessing
