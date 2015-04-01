@@ -120,7 +120,7 @@ private:
   LmvmPanSharpeningFusionImageFilter(Self &);   // intentionally not implemented
   void operator =(const Self&);                 // intentionally not implemented
 
-  /** \class FusionFunctor
+  /** \class FusionFunctor1
    * This functor applies the LMVM
    * operation. It is intended for internal use only.
  *
