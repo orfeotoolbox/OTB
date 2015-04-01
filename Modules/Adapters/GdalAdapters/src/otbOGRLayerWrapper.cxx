@@ -23,10 +23,15 @@
 #include <cassert>
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "ogrsf_frmts.h" // OGRDataSource & OGRLayer
 #pragma GCC diagnostic pop
+#else
+#include "ogrsf_frmts.h" // OGRDataSource & OGRLayer
+#endif
 
 #include "otbOGRDataSourceWrapper.h"
 

@@ -31,10 +31,15 @@
 
 // include SharedForward to avoid duplicating the code which find the library path variable
 // name and the path separator
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #include "itksys/SharedForward.h"
 #pragma GCC diagnostic pop
+#else
+#include "itksys/SharedForward.h"
+#endif
+
 #include "itksys/Process.h"
 
 // Temporary definition of otbTestMain

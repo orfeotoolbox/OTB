@@ -21,10 +21,14 @@
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
 #include <vector>
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "ogr_feature.h"
 #pragma GCC diagnostic pop
+#else
+#include "ogr_feature.h"
+#endif
 
 namespace otb
 {
