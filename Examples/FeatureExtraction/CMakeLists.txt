@@ -1,5 +1,8 @@
 project(FeatureExtractionExamples)
 
+include_directories("${OTB_SOURCE_DIR}/Modules/Filtering/VectorDataRendering/include")
+file(GLOB DataRendering_HEADERS "${OTB_SOURCE_DIR}/Modules/Filtering/VectorDataRendering/include/*.h")
+
 add_executable(AlignmentsExample AlignmentsExample.cxx)
 target_link_libraries(AlignmentsExample ${OTB_LIBRARIES})
 
@@ -43,7 +46,7 @@ add_executable(HuMomentsImageFunctionExample HuMomentsImageFunctionExample.cxx)
 target_link_libraries(HuMomentsImageFunctionExample ${OTB_LIBRARIES})
 
 if (Module_OTBVectorDataRendering)
-  add_executable(LineSegmentDetectorExample LineSegmentDetectorExample.cxx)
+  add_executable(LineSegmentDetectorExample LineSegmentDetectorExample.cxx ${DataRendering_HEADERS})
   target_link_libraries(LineSegmentDetectorExample ${OTB_LIBRARIES})
 endif()
 
@@ -60,7 +63,7 @@ add_executable(RatioLineDetectorExample RatioLineDetectorExample.cxx)
 target_link_libraries(RatioLineDetectorExample ${OTB_LIBRARIES})
 
 if (Module_OTBVectorDataRendering)
-  add_executable(RightAngleDetectionExample RightAngleDetectionExample.cxx)
+  add_executable(RightAngleDetectionExample RightAngleDetectionExample.cxx ${DataRendering_HEADERS})
   target_link_libraries(RightAngleDetectionExample ${OTB_LIBRARIES})
 endif()
 
