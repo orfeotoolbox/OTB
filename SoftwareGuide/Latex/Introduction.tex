@@ -74,10 +74,6 @@ This software guide assumes that you are working with the latest official OTB
 release (available on the OTB Web site). %If you are a new user,
 %we highly recommend that you use the released version of the software.
 
-\section{Downloading OTB}
-\label{sec:DownloadingOTB}
-
-\index{Downloading}
 
 OTB can be downloaded without cost from the following web site:
 \begin{center}
@@ -101,51 +97,42 @@ created in your disk and you will be ready for starting the configuration
 process described in Section \ref{sec:CMakeforOTB} on page
 \pageref{sec:CMakeforOTB}.
 
-You can also get the current version following instructions in Section
-\ref{sec:FAQMercurial}, on page \pageref{sec:FAQMercurial}.
 
-\subsection{Join the Mailing List}
-\label{sec:JoinMailList}
+There are two other ways of getting the OTB source code:
+\begin{itemize}
+\item Clone the current release with \href{http://mercurial.selenic.com}{Mercurial} from the \href{http://hg.orfeo-toolbox.org/OTB}{OTB mercurial server},
+\item Clone the latest revision with \href{http://mercurial.selenic.com}{Mercurial} from the \href{http://hg.orfeo-toolbox.org/OTB}{OTB mercurial server}.
+\end{itemize}
 
-\index{OTB!mailing list}
-\index{mailing list}
+These last two options need a proper \href{http://mercurial.selenic.com}{Mercurial} installation. To get source code from Mercurial, do:
+\begin{verbatim}
+hg clone http://hg.orfeo-toolbox.org/OTB
+\end{verbatim}
 
-It is strongly recommended that you join the users mailing list. This is one
-of the primary resources for guidance and help regarding the use of the
-toolkit. You can subscribe to the users list online at
+Using Mercurial, you can easily navigate through the different version. For instance, this brings you to the 3.16.0 source code version:
+\begin{verbatim}
+hg update -r 4.4.0
+\end{verbatim}
 
-\begin{center}
-\url{http://groups.google.com/group/otb-users}
-\end{center}
+And this brings you to the latest development version:
+\begin{verbatim}
+hg update
+\end{verbatim}
 
-The otb-users mailing list is also the best mechanism for expressing your
-opinions about the toolbox and to let developers know about features that you
-find useful, desirable or even unnecessary. OTB developers are committed to
-creating a self-sustaining open-source OTB community. Feedback from users is
-fundamental to achieving this goal.
 
 \subsection{Directory Structure}
 \label{sec:DirectoryStructure}
 
 To begin your OTB odyssey, you will first need to know something about OTB's
 software organization and directory structure. It is helpful to know enough to
-navigate through the
-code base to find examples, code, and documentation.
+navigate through the code base to find examples, code, and documentation.
 
-OTB is organized into two different modules. There are the \code{OTB} and the
-\code{OTB-Documents} modules. The source code, examples and applications are found
-in the \code{OTB} module; documentation, tutorials, and material related to the
-design and marketing of OTB are found in \code{OTB-Documents}. Usually you will
-work with the \code{OTB} module unless you are a developer, are teaching a course,
-or are looking at the details of various design documents.
 
-The \code{OTB} module contains the following subdirectories:
+
+The \code{OTB} contains the following subdirectories:
 \begin{itemize}
-        \item \code{OTB/Code}---the heart of the software; the location
+        \item \code{OTB/Modules}---the heart of the software; the location
         of the majority of the source code.
-        \item \code{OTB/Applications}---a set of applications modules
-        that can be launched in different ways (command-line, graphical interface,
-        Python/Java), refer to the OTB Cookbook for more information.
         \item \code{OTB/CMake}---internal files used during the
         configuration process.
         \item \code{OTB/Copyright}---the copyright information of OTB
@@ -153,84 +140,42 @@ The \code{OTB} module contains the following subdirectories:
         \item \code{OTB/Examples}---a suite of simple, well-documented
         examples used by this guide and to illustrate important
         OTB concepts.
-        \item \code{OTB/Testing}---a large number of small programs used
-        to test OTB. These examples tend to be minimally documented but may
-        be useful to demonstrate various system concepts.
-        \item \code{OTB/Utilities}---supporting software for the OTB
-        source code. For example, libraries such as \code{ITK}.% and
-\code{GDAL}.
+        \item \code{OTB/Superbuild}---cmake scripts to automatically download, patch, build and install important 
+        depencies of OTB (ITK, OSSIM, GDAL to name a few).
+        \item \code{OTB/Utilities}---small programs used for the maintenance of OTB.
 \end{itemize}
 
-The source code directory structure---found in \code{OTB/Code}---is
-important to understand since other directory structures (such as the
-\code{Testing} directory) shadow the structure of the
-\code{OTB/Code} directory.
+
+OTB is organized into different modules, each one covering different part of image processing.
+It is therefore important to understand the source code directory structure---found in \code{OTB/Modules}---.
 \begin{itemize}
-  \item \code{OTB/Code/ApplicationEngine}---the core library for
-  building applications based on OTB.
-  \item \code{OTB/Code/Common}---core classes, macro definitions,
+  \item \code{OTB/Modules/Adapters}---Adapters for Boost, Curl, Gdal, OpenThreads and Ossim.
+  \item \code{OTB/Modules/Applications}---a set of applications modules that can be launched in different ways
+    (command-line, graphical interface, Python/Java), refer to the OTB Cookbook for more information.
+  \item \code{OTB/Modules/Core}---core classes, macro definitions,
   typedefs, and other software constructs central to OTB.
-  \item \code{OTB/Code/BasicFilters}---basic image processing
-  filters.
-  \item \code{OTB/Code/Fusion}---image fusion algorithms, as for
+  \item \code{OTB/Modules/Detection}---detection of clouds, roads.
+  \item \code{OTB/Modules/Feature}---various lcoal descriptors and features.
+  \item \code{OTB/Modules/Filtering}---basic image processing filters.
+  \item \code{OTB/Modules/Fusion}---image fusion algorithms, as for
   instance, pansharpening.
-	\item \code{OTB/Code/FeatureExtraction}---the location of many
-	feature extraction algorithms.
-	\item \code{OTB/Code/ChangeDetection}---a set of remote
-	sensing image change detection algorithms.
-	\item \code{OTB/Code/DisparityMap}---tools for estimating
-  disparities -- deformations -- between images.	
-	\item \code{OTB/Code/Fuzzy}---fuzzy logic based algorithms,
-	with Dempster-Shafer theory related classes.
-  \item \code{OTB/Code/Hyperspectral}---hyperspectral images analysis.
-  \item \code{OTB/Code/IO}---classes that support the reading
-  and writing of data.
-	\item \code{OTB/Code/Learning}---several functionalities for
+  \item \code{OTB/Modules/Hyperspectral}---hyperspectral images analysis.
+  \item \code{OTB/Modules/IO}---classes that support the reading
+  and writing of data.     
+  \item \code{OTB/Modules/Learning}---several functionalities for
 	supervised learning and classification.
-  \item \code{OTB/Code/Markov}---implementation of Markov Random
-	Fields regularization and segmentation.
-	\item \code{OTB/Code/MultiScale}---a set of functionalities
-	for multiscale image analysis and synthesis.
-	\item \code{OTB/Code/MultiTemporal}---time series interpolation 
-	related algorithms.
-	\item \code{OTB/Code/OBIA}---Object Based Image Analysis filters
-	and data structures.
-	\item \code{OTB/Code/ObjectDetection}---Object detection chain
-	based on local feature extraction.
-  \item \code{OTB/Code/Projections}---classes allowing
-  to deal with sensor models and cartographic projections.
-  \item \code{OTB/Code/Radiometry}---classes allowing to compute
-  vegetation indices and radiometric corrections.
-	\item \code{OTB/Code/SARPolarimetry}---some add-ons for SAR
-	polarimetry synthesis and analysis. 
-  \item \code{OTB/Code/Segmentation}---several functionalities for image segmentation.
-  \item \code{OTB/Code/Simulation}---Sensor simulator.
-	\item \code{OTB/Code/SpatialReasoning}---several
-	functionalities high level image analysis using spatial
-	reasoning techniques.
-	\item \code{OTB/Code/Testing}---internal classes used in the
-	used in the testing framework.
-  \item \code{OTB/Code/Wrappers}---wrappers of applications in several access points (command-line, QT Gui, SWIG\ldots).
+  \item \code{OTB/Modules/OBIA}---Object Based Image Analysis filters
+	and data structures.         
+  \item \code{OTB/Modules/Radiometry}---classes allowing to compute
+  vegetation indices and radiometric corrections.    
+  \item \code{OTB/Modules/Registration}---classes for registration of images or other data structures to each other.  
+  \item \code{OTB/Modules/Remote}---Functions to fetch remote modules. 
+  \item \code{OTB/Modules/Segmentation}---several functionalities for image segmentation. 
+  \item \code{OTB/Modules/ThirdParty}---cmake scripts to prepare the compilation of OTB and its dependencies (third parties). 
+  \item \code{OTB/Modules/Wrappers}---wrappers of applications in several access points (command-line, QT Gui, SWIG\ldots). 
 \end{itemize}
 
-The \code{OTB-Documents} module contains the following subdirectories:
-\begin{itemize}
-        \item \code{OTB-Documents/CourseWare}---material related to
-        teaching OTB.
-        \item \code{OTB-Documents/Latex}---\LaTeX{} styles to produce this
-        work as well as other documents.
-        %\item \code{OTB-Documents/Marketing}---marketing flyers and
-        %literature used to succinctly describe OTB.
-        %\item \code{OTB-Documents/Papers}---papers related to the many
-        %algorithms, data representations, and software tools used in OTB.
-        \item \code{OTB-Documents/SoftwareGuide}---\LaTeX{} files used to
-        create this guide. (Note that the code found in
-        \code{OTB/Examples} is used in conjunction with these \LaTeX{}
-        files.)
-        %\item \code{OTB-Documents/Validation}---validation case studies
-        %using OTB.
-\end{itemize}
-
+See also chapter \ref{chapter:newModules} for more information about how to write modules.
 
 \subsection{Documentation}
 \label{sec:Documentation}
@@ -263,9 +208,31 @@ and its associated data. This data is available at
 \url{http://smsc.cnes.fr/PLEIADES/index.htm}.
 
 
+
 \section{The OTB Community and Support}
 \label{sec:AdditionalResources}
 
+\subsection{Join the Mailing List}
+\label{sec:JoinMailList}
+
+\index{OTB!mailing list}
+\index{mailing list}
+
+It is strongly recommended that you join the users mailing list. This is one
+of the primary resources for guidance and help regarding the use of the
+toolkit. You can subscribe to the users list online at
+
+\begin{center}
+\url{http://groups.google.com/group/otb-users}
+\end{center}
+
+The otb-users mailing list is also the best mechanism for expressing your
+opinions about the toolbox and to let developers know about features that you
+find useful, desirable or even unnecessary. OTB developers are committed to
+creating a self-sustaining open-source OTB community. Feedback from users is
+fundamental to achieving this goal.
+
+\subsection{Community}
 OTB was created from its inception as a collaborative, community
 effort. Research, teaching, and commercial uses of the toolkit are
 expected. If you would like to participate in the community, there are a
@@ -298,6 +265,8 @@ number of possibilities.
        semester-long graduate courses. Watch the OTB web pages or check in
        the \code{OTB-Documents/CourseWare} directory for more information.
 \end{itemize}
+
+
 
 \section{A Brief History of OTB}
 \label{sec:History}

@@ -1,0 +1,98 @@
+\chapter{Contributors Guidelines}
+\label{chapter:Contribute}
+
+This chapter is concerned with the contributor guidelines.
+Here, you can find useful information about:
+\begin{itemize}
+       \item remote modules, 
+       \item how to submit them,
+       \item what are the acceptance/release policies
+       \item what are the licence compliances
+       \item ...
+\end{itemize}
+
+\section{How to Contribute}
+
+\textbf{Caution}: 
+\begin{itemize}
+       \item  This section has to be reviewed by PSC
+       \item  Some guidelines only apply after modularization is completed 
+\end{itemize}
+
+Contributions through Remote Modules is the prefered way if your contribution is about adding new classes or application to bring new features to OTB. 
+Please also refer to ITK guidelines for remote modules (\url{ITK guidelines for remote modules}).
+
+\section{What are remote modules?}
+
+Remote modules are just like regular modules, except they are not distributed inside OTB source code.
+
+In the Modules/Remote folder of the OTB sources, you can add any number of directories containing valid modules. You will then be able to activate those module through CMake configuration, and build them.
+
+But there is more. Let assume that you have a valid remote module, hosted somewhere on a Git repository. We can add a special CMake file in the Modules/Remote that will tell CMake that this remote module is available, and can be activated during CMake configuration. Upon activation, CMake will first checkout the remote module source code into Modules/Remote, and then build it as a regular module.
+
+But there is more. Once the CMake file describing your module is added into Remote/Modules, you can benefit from OTB development services just like any other module: dashboard build, packaging, doxygen documentation ...
+
+To make it short, by contributing a remote module:
+
+\begin{itemize}
+       \item  You still host the code of your contribution, which is not mixed with other parts of OTB,
+       \item  Any user building OTB will be able to fetch and build your module,
+       \item  Your module will be built on dashboard, packaged for official releases and documented by OTB automatic documentation processes,
+       \item  You do not need permissions to push changesets on OTB repositories.
+\end{itemize}
+
+\section{How to get your remote module inside OTB? }
+
+\begin{itemize}
+    \item Follow the instructions on writing a remote module in order to have a working remote module inside your local source code tree (\ref{sec:writemodule}).
+    \item Host the remote module code on a publicly available git repository. If you do not have access to a git server, bitbucket or github can provide this service for you.
+    \item Write a short email to the otb-developers list, detailing your contributed remote module, and providing the cmake file to add into Modules/Remote so as to get it into OTB, as well as evidence that you comply with the remote module policy (see bellow).
+    \item Remote module acceptance policy compliance will be checked by the otb-developers list,
+    \item Acceptance of remote module is submitted to vote on otb-developers (to be reviewed by PSC). 
+ \end{itemize}
+
+If accepted, your CMake file will be placed into the Modules/Remote folder inside OTB source tree.
+
+During the OTB release process, all module complying with the remote module release policy will be packaged along with standard modules.
+
+A remote module can be removed from Modules/Remote (this only requires to remove the CMake file describing it), if: 
+
+\begin{itemize}
+       \item  It does no longer comply with the remote module acceptance policy (in which case the decision is submitted to vote on otb-developers), 
+       \item  The author of the remote module ask to remove it. 
+\end{itemize}
+
+\section{Remote module acceptance policy }
+
+So as to get your module accepted as an official remote module, you should comply with the following:
+\begin{itemize}
+	\item Remote module source code should be hosted on a publicly available Git repository
+	\item Author of the remote module should be identified and registed to otb-developers mailing list
+	\item Author of the remote module accepts to be contacted by developers or users regarding issues with his module (on a best effort basis),
+	\item Remote module source code should comply with OTB style as much as possible,
+	\item Remote module source code should be documented using doxygen tags,
+	\item Remote module should provide a minimal set of tests to ensure build of template code and basic non-regression testing,
+	\item Remote module should come with a form of documentation (website, publication, readme file ...)
+	\item Remote module should not embed code from any third party software (unless strong arguments are given by the author, in which case an exception can be made),
+	\item Remote module should avoid depending on new third parties if possible,
+	\item Remote module author should be the copyright owner and comply with licences of any third party, which in turn should comply with terms of OTB licence (to be reviewed by PSC)
+	\item Author of remote module should provide a small description of the remote module to be added on OTB website. 
+\end{itemize}
+An internal module should \textbf{never} depend on a remote module whatsoever. 
+
+\section{Remote module release policy }
+
+During the OTB release process, a remote module will be included in source and binary packages if:
+\begin{itemize}
+    \item Dashboard submission exist and show that the remote module:
+    \begin{itemize}
+        \item Builds on all plateform,
+        \item Passes all tests on the reference platform,
+        \item Does not have any test crashing (i.e. failing with core dump or memory issues) on remaining platform 
+    \end{itemize}
+    \item The remote module complies with the remote module acceptance policy at the time of the Release Candidate 
+\end{itemize}
+Developers will notify remote modules authors of existing issues at Release Candidate. If by 3 day to the final release dates, some issues listed above still exist, the remote module will be removed from the release source and binary packages.
+
+Moreover, remote module bringing in new third party dependencies will not be included in binary packages. 
+

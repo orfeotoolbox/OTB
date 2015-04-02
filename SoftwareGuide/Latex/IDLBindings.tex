@@ -79,7 +79,7 @@ In each sub-folder, create a new \code{CMakeLists.txt} including the following l
 \item The second to create a library using the declared source code:\\
   \code{ADD\_LIBRARY(libsubdir1 \${subdir1\_SRCS})}
 \item The third to link this new library with the ones that contain the include files \textbf{and with the IDL lib}:\\
-\code {TARGET\_LINK\_LIBRARIES (libName OTBCommon OTBBasicFilters OTBIO otbsvm \textbf{idl})}\\ 
+\code {TARGET\_LINK\_LIBRARIES (libName ${OTB_LIBRARIES} \textbf{idl})}\\ 
 \end{itemize}
 
 \code{\textbf{Example:}}\\
@@ -89,7 +89,7 @@ In each sub-folder, create a new \code{CMakeLists.txt} including the following l
       # Sources of non-templated classes.
       FILE(GLOB OTBIDLExample1_SRCS "*.cxx")
       ADD_LIBRARY(OTBIDLExample1 ${OTBIDLExample1_SRCS})
-      TARGET_LINK_LIBRARIES (OTBIDLExample1 OTBCommon OTBBasicFilters OTBIO otbsvm idl)
+      TARGET_LINK_LIBRARIES (OTBIDLExample1 ${OTB_LIBRARIES} idl)
 \end{verbatim}
 
 
