@@ -90,7 +90,7 @@ public:
 
   /**
    * Set the Fixed Parameters
-   * \param The Fixed parameters of the transform.
+   * \param param The fixed parameters of the transform.
    */
   virtual void SetFixedParameters( const ParametersType & param)
     { this->m_FixedParameters = param; }

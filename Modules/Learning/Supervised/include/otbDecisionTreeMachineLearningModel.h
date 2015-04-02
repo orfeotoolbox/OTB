@@ -90,7 +90,7 @@ public:
   itkGetMacro(UseSurrogates, bool);
   itkSetMacro(UseSurrogates, bool);
 
-  /** Cluster possible values of a categorical variable into K \leq max_categories clusters to find
+  /** Cluster possible values of a categorical variable into \f$ K \leq MaxCategories \f$ clusters to find
    *  a suboptimal split. If a discrete variable, on which the training procedure tries to make a split,
    *  takes more than max_categories values, the precise best subset estimation may take a very long time
    *  because the algorithm is exponential. Instead, many decision trees engines (including ML) try to find

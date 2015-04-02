@@ -117,14 +117,14 @@ public:
   itkGetMacro(BackPropMomentScale, double);
   itkSetMacro(BackPropMomentScale, double);
 
-  /** Initial value \Delta_0 of update-values \Delta_{ij} in RPROP method.
+  /** Initial value \f$ \Delta_0 \f$ of update-values \f$ \Delta_{ij} \f$ in RPROP method.
    *  Default is 0.1
    *  \see http://docs.opencv.org/modules/ml/doc/neural_networks.html
    */
   itkGetMacro(RegPropDW0, double);
   itkSetMacro(RegPropDW0, double);
 
-  /** Update-values lower limit \Delta_{min} in RPROP method.
+  /** Update-values lower limit \f$ \Delta_{min} \f$ in RPROP method.
    * It must be positive. Default is FLT_EPSILON
    *  \see http://docs.opencv.org/modules/ml/doc/neural_networks.html
    */

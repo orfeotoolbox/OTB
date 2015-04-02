@@ -55,14 +55,14 @@ public:
 
   /** Setters/Getters to the number of neighbors to use
    *  Default is 32
-   *  see @http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html
+   *  \see http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html
    */
   itkGetMacro(K, int);
   itkSetMacro(K, int);
 
   /** Setters/Getters to IsRegression flag
    *  Default is False
-   *  see @http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html
+   *  \see http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html
    */
   itkGetMacro(IsRegression, bool);
   itkSetMacro(IsRegression, bool);

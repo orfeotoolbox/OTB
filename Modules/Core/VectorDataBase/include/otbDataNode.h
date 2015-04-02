@@ -254,7 +254,7 @@ public:
 
   /**
    * Copy the field list from a DataNode
-   * \param datanode where to get the keywordlist to copy.
+   * \param dataNode datanode where to get the keywordlist to copy.
    */
   void CopyFieldList(const DataNode * dataNode);
 

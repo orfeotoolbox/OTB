@@ -106,7 +106,7 @@ public:
  *
  * Orientation is expressed in degree in the range [0, 360] with a precision of 10 degrees.
  *
- * \example FeatureExtraction/SIFTExample.cxx
+ * \example Patented/SIFTExample.cxx
  *
  *
  * \ingroup OTBDescriptors

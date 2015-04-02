@@ -79,7 +79,7 @@ public:
 
   /** Setters/Getters to the threshold WeightTrimRate.
    *  A threshold between 0 and 1 used to save computational time.
-   *  Samples with summary weight \leq 1 - WeightTrimRate do not participate in the next iteration of training.
+   *  Samples with summary weight \f$ w \leq 1 - WeightTrimRate \f$ do not participate in the next iteration of training.
    *  Set this parameter to 0 to turn off this functionality.
    *  Default is 0.95
    *  \see http://docs.opencv.org/modules/ml/doc/boosting.html#cvboostparams-cvboostparams

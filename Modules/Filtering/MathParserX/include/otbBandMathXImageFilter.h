@@ -40,7 +40,7 @@ namespace otb
  *
  * This filter is based on the mathematical parser library muParserX.
  * The built in functions and operators list is available at:
- * \url{http:*articles.beltoforion.de/article.php?a=muparserx}.
+ * http://articles.beltoforion.de/article.php?a=muparserx.
  *
  * In order to use this filter, at least one input image is to be
  * set. An associated variable name can be specified or not by using

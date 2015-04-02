@@ -41,7 +41,7 @@ namespace otb
  *
  * \sa ImageToSIFTKeyPointSetFilter
  *
- * \example FeatureExtraction/SIFTFastExample.cxx
+ * \example Patented/SIFTFastExample.cxx
  *
  * \ingroup OTBDescriptors
  */

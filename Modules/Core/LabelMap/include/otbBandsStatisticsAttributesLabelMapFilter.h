@@ -121,7 +121,7 @@ private:
  * StatisticsAttributesLabelMapFilter on each channel independently
  *
  * The feature name is constructed as:
- * 'STATS' + '::' + 'Band' + #BandIndex + '::' + StatisticName
+ * 'STATS' + '::' + 'Band' + band_index + '::' + statistic_name
  *
  * The ReducedAttributesSet flag allows to tell the internal
  * statistics filter to compute only the main attributes (mean, variance, skewness and kurtosis).

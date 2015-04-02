@@ -180,7 +180,6 @@ struct FieldCopyTransformation
     }
   /**
    * In-place transformation: does nothing.
-   * \param[in] inoutFeature  \c Feature to change.
    * \throw Nothing
    */
     void fieldsTransform(ogr::Feature const& itkNotUsed(inoutFeature)) const
@@ -189,8 +188,8 @@ struct FieldCopyTransformation
     }
   /**
    * By-Copy transformation: copies all fields.
-   * \param[in] inFeature  input \c Feature
-   * \param[in,out] outFeature  output \c Feature
+   * \param [in] inFeature  input \c Feature
+   * \param [in,out] outFeature  output \c Feature
    *
    * \throw itk::ExceptionObject if the fields cannot be copied.
    */
@@ -199,8 +198,8 @@ struct FieldCopyTransformation
   /**
    * Defines the fields in the destination layer.
    * The default action is to copy all fieds from one layer to another.
-   * \param[in] source  source \c Layer
-   * \param[in,out] dest  destination \c Layer
+   * \param [in] source  source \c Layer
+   * \param [in,out] dest  destination \c Layer
    * \throw itk::ExceptionObject in case the operation can't succeed.
    */
   void DefineFields(ogr::Layer const& source, ogr::Layer & dest) const;

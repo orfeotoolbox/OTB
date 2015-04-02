@@ -31,7 +31,7 @@ class Layer;
 class GeometriesSet;
 } // otb namespace
 
-/**\defgroup GeometriesFilters
+/**\defgroup GeometriesFilters Filters of geometries sets
  * \ingroup  gGeometry Filters
  * Filters of geometries sets.
  */
