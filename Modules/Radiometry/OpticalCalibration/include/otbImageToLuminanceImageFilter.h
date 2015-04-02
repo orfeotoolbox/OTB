@@ -22,7 +22,6 @@
 #ifndef __otbImageToLuminanceImageFilter_h
 #define __otbImageToLuminanceImageFilter_h
 
-#include "otb_6S.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "itkNumericTraits.h"
 #include "otbMacro.h"
