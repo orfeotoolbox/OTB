@@ -27,7 +27,7 @@ foreach(otb-module ${DOX_MODULE_LIST})
   endif()
 endforeach()
 
-#list( APPEND DOXYGEN_TEST_DIRS "\"${OTB_SOURCE_DIR}/Examples\" \n")
+list( APPEND DOXYGEN_TEST_DIRS "\"${OTB_SOURCE_DIR}/Examples\" \\\n")
 
 # By definition DOXYGEN_TEST_DIRS can not be empty. In the worst case if
 # BUILD_TESTING is turned OFF, there is only ${OTB_SOURCE_DIR}/Examples;
