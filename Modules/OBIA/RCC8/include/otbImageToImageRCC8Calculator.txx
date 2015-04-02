@@ -353,7 +353,7 @@ ImageToImageRCC8Calculator<TInputImage>
  * process was successful.
  * \param edgeEdgeBool True if edge-edge intersection is not empty.
  * \param interExterBool True if interior-exterior intersection is not empty.
- * \param ExterInterBool True if exterior-interior intersection is not empty.
+ * \param exterInterBool True if exterior-interior intersection is not empty.
  * \return True if the decision process was successful.
  */
 template<class TInputImage>
@@ -396,7 +396,7 @@ ImageToImageRCC8Calculator<TInputImage>
 /**
  * Test if the boolean image is totally black or not. This is a based on the lazy operator
  * paradigm.
- * \param The image to test.
+ * \param image The image to test.
  * \return True or false.
  */
 template<class TInputImage>

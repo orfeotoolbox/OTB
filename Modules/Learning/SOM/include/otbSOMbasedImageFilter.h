@@ -85,7 +85,7 @@ private:
  * pixels and the winning neurons of a SOM.
  *
  * It performs the projection of the SOM onto the data. On the contrary to
- * \doxygen{otb}{SOMClassifier}, it does not yield labels but an image which
+ * otb::SOMClassifier, it does not yield labels but an image which
  * corresponds to the quantized version of the initial image when considering
  * SOMmap as a codebook of a vector quantization.
  *

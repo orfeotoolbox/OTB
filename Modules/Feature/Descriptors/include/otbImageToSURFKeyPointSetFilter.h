@@ -145,7 +145,7 @@ protected:
 
   /** Check local extremum for 8 neighbors (current)
    *
-   *  \param currentScale
+   *  \param neigh Current scale neighborhood
    *
    *  \return true if the Central pixel is extremum
    */
@@ -153,8 +153,8 @@ protected:
 
   /** Check local extremum for 8 neighbors (Previous or Scale)
    *
-   *  \param neigh
-   *  \paramCenterValue
+   *  \param neigh Neighborhood at previous or next scale
+   *  \param CenterValue value at current scale center
    *
    *  \return true if the Central pixel is extremum
    */
@@ -169,7 +169,7 @@ protected:
    *  \param currentScale iterator
    *  \param previousScale iterator
    *  \param nextScale iterator
-   *  \param solution
+   *  \param solution refined keypoint location
    *
    *  \return true if key point is accepted, false otherwise
    */
@@ -180,8 +180,8 @@ protected:
 
   /** AssignOrientation
    *
-   * \param currentScale neighborhood
-   * \param scale affected to the keypoint
+   * \param neigh current scale neighborhood
+   * \param S scale affected to the keypoint
    *
    * \return  key point orientation
    */
@@ -190,9 +190,9 @@ protected:
 
   /** ComputeDescriptor
    *
-   * \param currentScale Neighboorhood
-   * \param orientation assigned to the key point
-   * \param scale
+   * \param neigh current scale neighboorhood
+   * \param O orientation assigned to the key point
+   * \param S scale
    *
    * \return hsitogram descriptor
    */
