@@ -14,7 +14,8 @@ else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using SQLite SuperBuild version")
   
-  if(UNIX)
+  #if(UNIX)
+  if(0)
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "https://sqlite.org/2014/sqlite-autoconf-3080702.tar.gz"
@@ -36,7 +37,8 @@ else()
       DEPENDEES patch update
       DEPENDERS configure
     )
-  else(MSVC)
+  #else(MSVC)
+  else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "http://www.sqlite.org/2015/sqlite-amalgamation-3080801.zip"
@@ -45,8 +47,7 @@ else()
       BINARY_DIR ${SQLITE_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-      PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt ${SQLITE_SB_SRC}
-      UPDATE_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/${proj}/sqlite3_win.c ${SQLITE_SB_SRC}
+      PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/patches/${proj} ${SQLITE_SB_SRC}
       CMAKE_CACHE_ARGS
         -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
         -DCMAKE_BUILD_TYPE:STRING=Release
