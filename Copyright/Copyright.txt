@@ -7,24 +7,68 @@
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
+  
+  Some parts of this code are not covered by the copyright mentioned above.
+  Here is the list of particular cases:
+  
+  * Portions of this code are derived from ITK. See ITKCopyright.txt
+    for details.
+  
+  * Parts of the code have been developed by CS during internships and self-financed
+    studies. See CSCopyright.txt for details.
+  
+  * Parts of the code that have been developped by Emmanuel Christophe.
+    See CrispCopyright.txt for details.
+  
+  * Parts of the code have been developped by Gregoire Mercier.
+    See GETCopyright.txt for details.
 
-  Portions of this code are covered under the ITK copyright.
-  See ITKCopyright.txt for details.
+  --------------------------- DEPENDENCIES ----------------------------------
+  Several utilities are mandatory dependencies used by the OTB library :
+  
+  * ITK         : See ITKCopyright.txt for details.
+  
+  * VXL         : See VXLCopyright.txt for details.
+  
+  * Boost       : See LibBOOSTCopyright.txt for details.
+  
+  * GDAL        : See GDALCopyright.txt for details.
+  
+  * GeoTIFF     : See GeoTIFFCopyright.txt for details.
+  
+  * OpenThreads : See OSGCopyright.txt for details.
+  
+  * OSSIM       : See OSSIMCopyright.txt
+  
+  * TinyXML     : See TinyXMLCopyright.txt
+  
+  Some utilities used by the OTB library are optional. The library may be built
+  without them, but some modules will be disabled :
+  
+  * Curl      : See CurlCopyright.txt for details
+  
+  * LibSVM    : See LibSVMCopyright.txt for details
+  
+  * libKML    : See KMLCopyright.txt for details
+  
+  * Mapnik    : Copyright : Artem Pavlenko : GNU LGPL version 2.1
+  
+  * MuParser  : See MuParserCopyright.txt for details.
+  
+  * MuParserX : See MuParserXCopyright.txt for details.
+  
+  * OpenCV    : See OpenCVCopyright.txt for details.
+  
+  * OpenJPEG  : See OpenJPEGCopyright.txt for details.
+  
+  * Qt4       : Check http://www.qt.io
+  
+  * SiftFast  : the source code is embedded in Modules/ThirdParty/SiftFast/src.
+      See Modules/ThirdParty/SiftFast/src/LICENSE for details.
 
-  Portions of this code are covered under the VXL copyright.
-  See VXLCopyright.txt for details.
 
-  Portions of this code are covered under the LibSVM copyright.
-  See LibSVMCopyright.txt for details.
-
-  Portions of this code are covered under the BOOST copyright.
-  See LibBoostCopyright.txt for details.
-
-  Portions of this code are covered under the OSSIM copyright.
-  See OSSIMCopyright.txt for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/

@@ -1,7 +1,7 @@
 The ORFEO Toolbox (OTB) is developed by the French Centre
 National d'Etudes Spatiales, CNES. OTB is partially derived from ITK,
-GDAL, VTK, VXL and LibSVM, hence some code is copyrighted accordingly (see
-ITKCopyright.txt, GDALCopyright.txt, VTKCopyright.txt, VXLCopyright.txt 
+GDAL, VXL and LibSVM, hence some code is copyrighted accordingly (see
+ITKCopyright.txt, GDALCopyright.txt, VXLCopyright.txt 
 and LibSVMCopyright.txt).
 
 The OTB copyright is as follows:
