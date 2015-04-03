@@ -111,7 +111,7 @@ hg clone http://hg.orfeo-toolbox.org/OTB
 
 Using Mercurial, you can easily navigate through the different version. For instance, this brings you to the 3.16.0 source code version:
 \begin{verbatim}
-hg update -r 4.4.0
+hg update -r 3.16.0
 \end{verbatim}
 
 And this brings you to the latest development version:
@@ -140,7 +140,7 @@ The \code{OTB} contains the following subdirectories:
         \item \code{OTB/Examples}---a suite of simple, well-documented
         examples used by this guide and to illustrate important
         OTB concepts.
-        \item \code{OTB/Superbuild}---cmake scripts to automatically download, patch, build and install important 
+        \item \code{OTB/Superbuild}---CMake scripts to automatically download, patch, build and install important
         depencies of OTB (ITK, OSSIM, GDAL to name a few).
         \item \code{OTB/Utilities}---small programs used for the maintenance of OTB.
 \end{itemize}
@@ -155,7 +155,7 @@ It is therefore important to understand the source code directory structure---fo
   \item \code{OTB/Modules/Core}---core classes, macro definitions,
   typedefs, and other software constructs central to OTB.
   \item \code{OTB/Modules/Detection}---detection of clouds, roads.
-  \item \code{OTB/Modules/Feature}---various lcoal descriptors and features.
+  \item \code{OTB/Modules/Feature}---various local descriptors and features.
   \item \code{OTB/Modules/Filtering}---basic image processing filters.
   \item \code{OTB/Modules/Fusion}---image fusion algorithms, as for
   instance, pansharpening.
@@ -171,8 +171,8 @@ It is therefore important to understand the source code directory structure---fo
   \item \code{OTB/Modules/Registration}---classes for registration of images or other data structures to each other.  
   \item \code{OTB/Modules/Remote}---Functions to fetch remote modules. 
   \item \code{OTB/Modules/Segmentation}---several functionalities for image segmentation. 
-  \item \code{OTB/Modules/ThirdParty}---cmake scripts to prepare the compilation of OTB and its dependencies (third parties). 
-  \item \code{OTB/Modules/Wrappers}---wrappers of applications in several access points (command-line, QT Gui, SWIG\ldots). 
+  \item \code{OTB/Modules/ThirdParty}---Modules that import OTB's dependencies.
+  \item \code{OTB/Modules/Wrappers}---Applications wrappers with several access points (command-line, QT Gui, SWIG\ldots).
 \end{itemize}
 
 See also chapter \ref{chapter:newModules} for more information about how to write modules.
