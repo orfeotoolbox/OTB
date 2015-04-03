@@ -14,6 +14,8 @@ message(STATUS "Check if Gdal qualifies for Orfeo ToolBox")
 set(MIN_MAJOR_VERSION 1)
 set(MIN_MINOR_VERSION 10)
 
+set(GDAL_QUALIFIES TRUE)
+
 #------------------- TESTS ---------------------
 # Version of GDAL  
 try_run(RUN_RESULT_VERSION COMPILE_RESULT_VERSION ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalVersionTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS ${TEMP}/gdalVersion.txt ${MIN_MAJOR_VERSION} ${MIN_MINOR_VERSION})
@@ -21,14 +23,44 @@ try_run(RUN_RESULT_VERSION COMPILE_RESULT_VERSION ${CMAKE_CURRENT_BINARY_DIR} ${
 # Has OGR
 try_compile(GDAL_HAS_OGR ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalOGRTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}")
 
+
+# Has formats JPEG2000 & JPEG & GTIF
+# Note : exact format names can be found here http://www.gdal.org/formats_list.html
+try_run(GDAL_HAS_J2K_OPJG COMPILE_RESULT_FORMATS ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalFormatsTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS JP2OpenJPEG ${TEMP}/gdalFormats.txt ) 
+try_run(GDAL_HAS_J2K_KAK COMPILE_RESULT_FORMATS ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalFormatsTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS JP2KAK ) # No need to output ${TEMP}/gdalFormats.txt everytime
+try_run(GDAL_HAS_J2K_ECW COMPILE_RESULT_FORMATS ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalFormatsTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS JP2ECW ) 
+try_run(GDAL_HAS_J2K_JG2000 COMPILE_RESULT_FORMATS ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalFormatsTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS JPEG2000 ) 
+try_run(GDAL_HAS_JPEG COMPILE_RESULT_FORMATS ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalFormatsTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS JPEG ) 
+try_run(GDAL_HAS_GTIF COMPILE_RESULT_FORMATS ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalFormatsTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS GTiff ) 
+
+
 # Can create geotiff file
 try_run(GDAL_CAN_CREATE_GEOTIFF COMPILE_RESULT_CREATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalCreateTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS GTiff ${TEMP}/testImage.gtif )
-if(GDAL_CAN_CREATE_GEOTIFF)
 
-	# Can create jpeg file
-	try_run(GDAL_CAN_CREATE_JPEG COMPILE_RESULT_CREATECOPY ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS ${TEMP}/testImage.gtif ${TEMP}/testImage.jpeg JPEG)
+#Can create other format file
+if(COMPILE_RESULT_CREATE AND GDAL_CAN_CREATE_GEOTIFF) #Use the result of the previous try_run
+
+	# Can create jpeg file 
+	if (GDAL_HAS_JPEG)
+		try_run(GDAL_CAN_CREATE_JPEG COMPILE_RESULT_CREATECOPY ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS ${TEMP}/testImage.gtif ${TEMP}/testImage.jpeg JPEG)
+	endif()
+	
 	# Can create jpeg2000 file
-	try_run(GDAL_CAN_CREATE_JPEG2000 COMPILE_RESULT_CREATECOPY ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JPEG2000)
+	if (GDAL_HAS_J2K_OPJG)
+		try_run(GDAL_CAN_CREATE_JPEG2000 COMPILE_RESULT_CREATECOPY ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2OpenJPEG)
+	endif()
+	
+	if (GDAL_HAS_J2K_KAK AND NOT GDAL_CAN_CREATE_JPEG2000)
+		try_run(GDAL_CAN_CREATE_JPEG2000 COMPILE_RESULT_CREATECOPY ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2KAK)
+	endif()
+	
+	if (GDAL_HAS_J2K_ECW AND NOT GDAL_CAN_CREATE_JPEG2000)
+		try_run(GDAL_CAN_CREATE_JPEG2000 COMPILE_RESULT_CREATECOPY ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2ECW)
+	endif()
+	
+	if (GDAL_HAS_J2K_JG2000 AND NOT GDAL_CAN_CREATE_JPEG2000)
+		try_run(GDAL_CAN_CREATE_JPEG2000 COMPILE_RESULT_CREATECOPY ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JPEG2000)
+	endif()
 
 endif()
 #------------------- TESTS (END)---------------------
@@ -37,31 +69,62 @@ endif()
 # Warning messages
 if (NOT COMPILE_RESULT_VERSION)
 	message(WARNING "Modules/ThirdParty/GDAL/gdalVersionTest.cxx did not compile.")
-endif()
-
-if (${RUN_RESULT_VERSION} EQUAL 1)
+elseif (${RUN_RESULT_VERSION} EQUAL 1)
 	file(READ "${TEMP}/gdalVersion.txt" DETECTED_VERSION)
 	message(WARNING "Version of GDAL must be >= " ${MIN_MAJOR_VERSION} "." ${MIN_MINOR_VERSION} " : " ${DETECTED_VERSION} " detected.")
+	set(GDAL_QUALIFIES FALSE)
 endif()
 	
 if (NOT GDAL_HAS_OGR)
 	message(WARNING "GDAL doesn't expose OGR library symbols.")
+	set(GDAL_QUALIFIES FALSE)
 endif()
+
+if (NOT COMPILE_RESULT_FORMATS)
+	message(WARNING "Modules/ThirdParty/GDAL/gdalFormatsTest.cxx did not compile.")
+else()
+
+	if (NOT GDAL_HAS_J2K_JG2000 AND NOT GDAL_HAS_J2K_OPJG AND NOT GDAL_HAS_J2K_KAK AND NOT GDAL_HAS_J2K_ECW)
+	message(WARNING "No Jpeg2000 driver found (compatible drivers are : OpenJpeg, Kakadu, ECW).")
+	set(GDAL_QUALIFIES FALSE)
+	endif()
+		
+	if (NOT GDAL_HAS_JPEG)
+	message(WARNING "No jpeg driver found.")
+	set(GDAL_QUALIFIES FALSE)
+	endif()
+	
+	if (NOT GDAL_HAS_GTIF)
+	message(WARNING "No geotiff driver found.")
+	set(GDAL_QUALIFIES FALSE)
+	endif()
+	
+endif()
+
 
 if (NOT COMPILE_RESULT_CREATE)
 	message(WARNING "Modules/ThirdParty/GDAL/gdalCreateTest.cxx did not compile.")
+	
+elseif (NOT GDAL_CAN_CREATE_GEOTIFF)
+		message(WARNING "GDAL can't create geotiff files.")
+		set(GDAL_QUALIFIES FALSE)
 endif()
+	
+
 if (NOT COMPILE_RESULT_CREATECOPY)
 	message(WARNING "Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx did not compile.")
-endif()
-if (NOT GDAL_CAN_CREATE_GEOTIFF)
-	message(WARNING "GDAL can't create tiff files.")
-endif()
-if (NOT GDAL_CAN_CREATE_JPEG)
-	message(WARNING "GDAL can't create jpeg files.")
-endif()
-if (NOT GDAL_CAN_CREATE_JPEG2000)
-	message(WARNING "GDAL can't create jpeg2000 files.")
+	
+else()
+
+	if (NOT GDAL_CAN_CREATE_JPEG)
+		message(WARNING "GDAL can't create jpeg files.")
+		set(GDAL_QUALIFIES FALSE)
+	endif()
+	if (NOT GDAL_CAN_CREATE_JPEG2000)
+		message(WARNING "GDAL can't create jpeg2000 files.")
+		set(GDAL_QUALIFIES FALSE)
+	endif()	
+	
 endif()
 
 
@@ -70,7 +133,7 @@ endif()
 #FOR UNIX SYSTEMS ONLY
 if(UNIX)
   
-  if(GDAL_CAN_CREATE_GEOTIFF)
+  if(GDAL_QUALIFIES)
   
 	  if("x${GDAL_CONFIG}" STREQUAL "x")
 		message(FATAL_ERROR "Cannot find gdal-config executable. Set GDAL_CONFIG")
@@ -88,43 +151,27 @@ if(UNIX)
 
 		# bigtiff
 		try_run(RUN_RESULT_VAR3 COMPILE_RESULT_VAR3 ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest3.cxx ARGS ${TEMP}/testgdal3.txt)
-
-		# formats
-		try_run(GDAL_HAS_HDF COMPILE_RESULT_VAR4 ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest4.cxx ARGS ${TEMP}/testgdal4.txt hdf)
-		try_run(GDAL_HAS_J2K_JG2000 COMPILE_RESULT_VAR4 ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest4.cxx ARGS ${TEMP}/testgdal4.txt jpeg2000)
-		try_run(GDAL_HAS_J2K_OPJG COMPILE_RESULT_VAR4 ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest4.cxx ARGS ${TEMP}/testgdal4.txt openjpeg)
-		try_run(GDAL_HAS_J2K_KAK  COMPILE_RESULT_VAR4 ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest4.cxx ARGS ${TEMP}/testgdal4.txt jp2kak)
-		try_run(GDAL_HAS_J2K_ECW COMPILE_RESULT_VAR4 ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest4.cxx ARGS ${TEMP}/testgdal4.txt ecw)
-
 		#------------------- TESTS (END)---------------------
 
 
 		# Warning messages
 		if (NOT COMPILE_RESULT_VAR2)
 			message(WARNING "Modules/ThirdParty/GDAL/gdalTest2.cxx did not compile.")
-		endif()
-		if (NOT COMPILE_RESULT_VAR3)
-			message(WARNING "Modules/ThirdParty/GDAL/gdalTest3.cxx did not compile.")
-		endif()
-		if (NOT COMPILE_RESULT_VAR4)
-			message(WARNING "Modules/ThirdParty/GDAL/gdalTest4.cxx did not compile.")
-		endif()
-
-
-		if (${RUN_RESULT_VAR2} EQUAL 1)
+		elseif (${RUN_RESULT_VAR2} EQUAL 1)
 			message(WARNING "Internal versions of libtiff/libgeotiff detected without symbol renaming (when configuring GDAL, if options --with-libtiff or --with-geotiff are set to 'internal', then options --with-rename-internal-libtiff-symbols and --with-rename-internal-libgeotiff-symbols should be set to 'yes').")
-		endif()
-		if (${RUN_RESULT_VAR3} EQUAL 1)
-			message(WARNING "No BIGTIFF capatilities.")
-		endif()
-		if (NOT GDAL_HAS_HDF)
-			message(WARNING "No HDF capatilities.")
-		endif()
-		if (NOT GDAL_HAS_J2K_JG2000 AND NOT GDAL_HAS_J2K_OPJG AND NOT GDAL_HAS_J2K_KAK AND NOT GDAL_HAS_J2K_ECW)
-			message(WARNING "No Jpeg2000 driver found (compatible drivers are : OpenJpeg, Kakadu, ECW).")
+			set(GDAL_QUALIFIES FALSE)
 		endif()
 		
-	endif() #GDAL_CAN_CREATE_GEOTIFF
+		
+		if (NOT COMPILE_RESULT_VAR3)
+			message(WARNING "Modules/ThirdParty/GDAL/gdalTest3.cxx did not compile.")
+		elseif (${RUN_RESULT_VAR3} EQUAL 1)
+			message(WARNING "No BIGTIFF capatilities.")
+			set(GDAL_QUALIFIES FALSE)
+		endif()
+
+		
+	endif() #GDAL_QUALIFIES
 
 
 endif() #UNIX

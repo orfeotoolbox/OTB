@@ -20,6 +20,3 @@ fi
 
 #TEST 3 : Big tiff
 ${gdalTranslate} -co "BIGTIFF=YES" ${tempFolder}/testImage.gtif ${tempFolder}/testImageBIG.tif > ${tempFolder}/testgdal3.txt
-
-#TEST 4 : GDAL formats
-${gdalConfig} --formats > ${tempFolder}/testgdal4.txt
