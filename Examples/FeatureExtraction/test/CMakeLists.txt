@@ -192,7 +192,7 @@ otb_add_test(NAME feTeCloudDetectionExampleTest COMMAND ${OTB_TEST_DRIVER}
     553 467 734 581 0.4 0.6 1.0
 )
 
-if (Module_OTBVectorDataRendering)
+if (Module_OTBVectorDataRendering AND OTB_USE_MAPNIK)
 
   # ------- Line Segment Detector test----------
   otb_add_test(NAME feTeLineSegmentDetectorExampleTest  COMMAND ${OTB_TEST_DRIVER}
