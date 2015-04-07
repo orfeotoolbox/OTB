@@ -87,8 +87,16 @@ set(raster_comparison --compare-image ${NOTOL})
 set(ascii_ref_path ${OTBAPP_BASELINE_FILES})
 set(raster_ref_path ${OTBAPP_BASELINE})
 
+set(classifierList)
+if(OTB_USE_LIBSVM)
+  list(APPEND classifierList "LIBSVM")
+endif()
+if(OTB_USE_OPENCV)
+  list(APPEND classifierList "SVM" "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
+endif()
+
 # Loop on classifiers
-foreach(classifier "LIBSVM" "SVM" "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
+foreach(classifier classifierList)
   string(TOLOWER ${classifier} lclassifier)
 
   # Derive output file name
@@ -159,6 +167,7 @@ foreach(classifier "LIBSVM" "SVM" "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
 
 endforeach()
 
+if(OTB_USE_LIBSVM)
 otb_test_application(NAME apTvClImageSVMClassifierQB2
                       APP  ImageClassifier
                       OPTIONS -in      ${INPUTDATA}/Classification/QB_2_ortho.tif
@@ -290,6 +299,7 @@ set_tests_properties(apTvClImageSVMClassifierQB456_1 PROPERTIES DEPENDS apTvClTr
                                ${TEMP}/clLabeledImageQB123_1.tif)
 
 set_tests_properties(apTvClImageSVMClassifierQB123_1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
+endif()
 
 #----------- TrainOGRLayersClassifier TESTS ----------------
 
@@ -581,6 +591,7 @@ otb_test_application(NAME apTvClKMeansImageClassification
 
 
 #----------- TrainImagesClassifier TESTS ----------------
+if(OTB_USE_LIBSVM)
 otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
                       APP  TrainImagesClassifier
                       OPTIONS
@@ -686,6 +697,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
                               ${TEMP}/clsvmModelQB1_allOpt.svm)
 
 set_tests_properties(apTvClTrainSVMImagesClassifierQB1_allOpt PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1)
+endif()
 
 #----------- DSFuzzyModelEstimation TESTS ----------------
 otb_test_application(NAME apTvCdbDSFuzzyModelEstimation_LI_autoInit
