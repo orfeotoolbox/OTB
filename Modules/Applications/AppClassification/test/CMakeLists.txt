@@ -96,7 +96,7 @@ if(OTB_USE_OPENCV)
 endif()
 
 # Loop on classifiers
-foreach(classifier classifierList)
+foreach(classifier ${classifierList})
   string(TOLOWER ${classifier} lclassifier)
 
   # Derive output file name
