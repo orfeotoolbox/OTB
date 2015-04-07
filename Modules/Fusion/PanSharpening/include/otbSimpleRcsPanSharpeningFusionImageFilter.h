@@ -42,10 +42,10 @@ namespace otb
  *
  * This filter supports streaming and multithreading.
  *
+ * \ingroup OTBPanSharpening
+ * 
  * \example Fusion/PanSharpeningExample.cxx
  *
- *
- * \ingroup OTBPanSharpening
  */
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision = float>
 class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
