@@ -2,7 +2,7 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/*.cxx")
 file(GLOB hdrs "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
 
-ADD_LIBRARY(OTBIce SHARED ${srcs})
+ADD_LIBRARY(OTBIce ${srcs})
 TARGET_LINK_LIBRARIES(OTBIce ${OTB_LIBRARIES} ${OPENGL_LIBRARY} ${GLEW_LIBRARY})
 
 set_target_properties(OTBIce

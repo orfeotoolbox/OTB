@@ -1,4 +1,4 @@
-ADD_LIBRARY(IceViewer SHARED otbIceViewer.cxx)
+ADD_LIBRARY(IceViewer otbIceViewer.cxx)
 TARGET_LINK_LIBRARIES(IceViewer OTBIce ${OTB_LIBRARIES} ${GLFW_LIBRARY} ${GLUT_LIBRARY})
 
 file(GLOB hdrs "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
