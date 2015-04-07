@@ -26,45 +26,88 @@
   --------------------------- DEPENDENCIES ----------------------------------
   Several utilities are mandatory dependencies used by the OTB library :
   
-  * ITK         : See ITKCopyright.txt for details.
+  * ITK         : http://www.itk.org
+                  distributed under the Apache 2.0 license
+                  See ITKCopyright.txt for details.
+                  Some patched source files are embedded in OTB sources.
   
-  * VXL         : See VXLCopyright.txt for details.
+  * VXL         : http://vxl.sourceforge.net
+                  distributed under a specific license (simplified BSD-like)
+                  See VXLCopyright.txt for details.
   
-  * Boost       : See LibBOOSTCopyright.txt for details.
+  * Boost       : http://www.boost.org
+                  distributed under the Boost Software License 1.0
+                  See LibBOOSTCopyright.txt for details.
+                  Some patched source files are embedded in OTB sources.
   
-  * GDAL        : See GDALCopyright.txt for details.
+  * GDAL        : http://www.gdal.org
+                  distributed under the X/MIT license
+                  See GDALCopyright.txt for details.
   
-  * GeoTIFF     : See GeoTIFFCopyright.txt for details.
+  * GeoTIFF     : http://trac.osgeo.org/geotiff
+                  distributed under the MIT-like license
+                  See GeoTIFFCopyright.txt for details.
   
-  * OpenThreads : See OSGCopyright.txt for details.
+  * OpenThreads : http://www.openscenegraph.org
+                  distributed under the OpenSceneGraph Public License (OSGPL) 0.0, i.e.
+                  wxWindows Library License
+                  See OSGCopyright.txt for details.
   
-  * OSSIM       : See OSSIMCopyright.txt
+  * OSSIM       : http://www.ossim.org
+                  distributed under the GNU LGPL 2.1 license
+                  See OSSIMCopyright.txt
   
-  * TinyXML     : See TinyXMLCopyright.txt
+  * TinyXML     : http://www.grinninglizard.com/tinyxml
+                  distributed under the zlib/libpng license
+                  See TinyXMLCopyright.txt
   
   Some utilities used by the OTB library are optional. The library may be built
   without them, but some modules will be disabled :
   
-  * Curl      : See CurlCopyright.txt for details
+  * 6S        : http://6s.ltdri.org
+                No license information available on the website but the authors gave CNES
+                the permission to use 6S code inside OTB and to release it under CeCILL v2
+                license
+                The source code is embedded in Modules/ThirdParty/6S
+
+  * Curl      : http://www.curl.haxx.se
+                distributed under the MIT-like license
+                See CurlCopyright.txt for details
   
-  * LibSVM    : See LibSVMCopyright.txt for details
+  * LibSVM    : http://www.csie.ntu.edu.tw/~cjlin/libsvm
+                distributed under the revised BSD license
+                See LibSVMCopyright.txt for details
   
-  * libKML    : See KMLCopyright.txt for details
+  * libKML    : http://code.google.com/p/libkml
+                distributed under the revised BSD license
+                See KMLCopyright.txt for details
   
-  * Mapnik    : Copyright : Artem Pavlenko : GNU LGPL version 2.1
+  * Mapnik    : http://mapnik.org
+                distrubuted under GNU LGPL version 2.1
+                Copyright : Artem Pavlenko
   
-  * MuParser  : See MuParserCopyright.txt for details.
+  * MuParser  : http://muparser.sourceforge.net
+                distributed under the MIT license
+                See MuParserCopyright.txt for details.
   
-  * MuParserX : See MuParserXCopyright.txt for details.
+  * MuParserX : http://muparserx.beltoforion.de
+                distributed under simplified BSD license
+                See MuParserXCopyright.txt for details.
   
-  * OpenCV    : See OpenCVCopyright.txt for details.
+  * OpenCV    : http://opencv.org
+                distributed under the revised BSD License
+                See OpenCVCopyright.txt for details.
   
-  * OpenJPEG  : See OpenJPEGCopyright.txt for details.
+  * OpenJPEG  : http://www.openjpeg.org
+                distributed under the revised BSD license
+                See OpenJPEGCopyright.txt for details.
   
-  * Qt4       : Check http://www.qt.io
+  * Qt4       : http://www.qt.io
   
-  * SiftFast  : the source code is embedded in Modules/ThirdParty/SiftFast/src.
-      See Modules/ThirdParty/SiftFast/src/LICENSE for details.
+  * SiftFast  : http://libsift.sourceforge.net
+                distributed under the GNU LGPL 3.0 license
+                the source code is embedded in Modules/ThirdParty/SiftFast/src.
+                See Modules/ThirdParty/SiftFast/src/LICENSE for details.
 
 
   This software is distributed WITHOUT ANY WARRANTY; without even 
