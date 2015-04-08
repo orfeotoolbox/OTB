@@ -137,35 +137,31 @@ The OTB needs some external libraries to work (see table \ref{tab:installation2}
 \hline
 \textbf{FFTW} & \url{http://www.fftw.org} & no  & - \\
 \hline
-\textbf{expat} & \url{http://expat.sourceforge.net/} & yes  & - \\
-\hline
-\textbf{libtiff} & \url{http://www.libtiff.org} & yes  & - \\
-\hline
 \textbf{libgeotiff} & \url{http://trac.osgeo.org/geotiff/} & yes & - \\
 \hline
 \textbf{OpenJPEG} & \url{http://code.google.com/p/openjpeg/} & no & - \\
 \hline
-\textbf{boost} & \url{http://www.boost.org} & no & - \\
+\textbf{boost} & \url{http://www.boost.org} & yes & - \\
 \hline
-\textbf{openthreads} & \url{http://www.openscenegraph.org}  & - \\
+\textbf{openthreads} & \url{http://www.openscenegraph.org} & yes & - \\
 \hline
 \textbf{Mapnik} & \url{http://www.mapnik.org} & no  & - \\
 \hline
 \textbf{tinyXML} & \url{http://www.grinninglizard.com/tinyxml} & yes & - \\
 \hline
-\textbf{KML} & \url{http://libkml.googlecode.com} & yes & - \\
+\textbf{6S} & \url{http://6s.ltdri.org} & no & - \\
 \hline
-\textbf{6S} & \url{http://6s.ltdri.org} & yes & - \\
+\textbf{SiftFast} & \url{http://libsift.sourceforge.net} & no  & - \\
 \hline
-\textbf{edison} & \url{http://www.caip.rutgers.edu/riul/} & yes  & - \\
+\textbf{MuParser} & \url{http://www.muparser.sourceforge.net} & no  & - \\
 \hline
-\textbf{SiftFast} & \url{http://libsift.sourceforge.net} & yes  & - \\
+\textbf{MuParserX} & \url{http://muparserx.beltoforion.de} & no  & 3.0.5 \\
 \hline
-\textbf{MuParser} & \url{http://www.muparser.sourceforge.net} & yes  & - \\
-\hline
-\textbf{libSVM} & \url{http://www.csie.ntu.edu.tw/~cjlin/libsvm} & yes  & - \\
+\textbf{libSVM} & \url{http://www.csie.ntu.edu.tw/~cjlin/libsvm} & no  & 2.0 \\
 \hline
 \textbf{Qt} & \url{http://qt-project.org/} & no  & 4 \\
+\hline
+\textbf{OpenCV} & \url{http://opencv.org} & no  & - \\
 \hline
 \end{tabular}
 \caption{Libraries used in the OTB.}
@@ -188,9 +184,11 @@ The build process will typically take anywhere from 15 to 30 minutes depending o
 
 Set the CMake variables \code{BUILD\_TESTING} and \code{BUILD\_EXAMPLES} to ON will activate the compilation of the examples and the tests and slow down the build process. The examples distributed with the toolbox are a helpful resource for learning how to use OTB components but are not essential for the use of the toolbox itself. The testing section includes a large number of small programs that exercise the capabilities of OTB classes. Due to the large number of tests, enabling the testing option will considerably increase the build time.  It is not desirable to enable this option for a first build of the toolbox.
 
-Set the CMake variable \code{BUILD\_APPLICATION} to ON will activate the compilation of the applications and their launchers needed to use it. A complete list of these applications, described in the OTB Cookbook, can be found on \href{http://orfeo-toolbox.org/Applications/index.html}{OTB Website}.
-
-
+The CMake variable \code{OTB\_BUILD\_DEFAULT\_MODULES} activates all usual modules. This is required to build the examples. If you want to reduce the set of enabled modules, in order to produce a smaller OTB or to avoid some third parties, you have two methods :
+\begin{itemize}
+  \item disable some third party modules with the CMake variables \code{OTB\_USE\_XXX}. All the modules that depend on the corresponding third party will be disabled.
+  \item disable the option \code{OTB\_BUILD\_DEFAULT\_MODULES}, and enable the modules you want. The variables \code{OTBGroup\_XXX} are used to enable all modules in a group. If this variable is off, the user can select which modules in the group should be enabled, using the pattern variable \code{Module\_XXX}.
+\end{itemize}
 
 
 \textbf{Note 1:} Those who want to avoid using the SuperBuild (even partially) or to use additional dependencies not provided by the SuperBuild, should refer to the subsection \ref{sec:manualdependencies}. 
