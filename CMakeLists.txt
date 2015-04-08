@@ -69,8 +69,22 @@ endif()
 
 #----------------------------------------------------------------------------
 # Orfeo ToolBox
+#should we follow modularization here or import all OTB Modules?
+
+#NOTE: If any header from an OTB Module which not listed below is added,
+#then below line MUST be updated. At the sametime this ensure only the
+#components/modules listed below are linked via OTB_LIBRARIES
 find_package(OTB REQUIRED
-  COMPONENTS OTBApplicationEngine OTBQtWidget OTBImageIO OTBVectorDataIO OTBTestKernel OTBCarto)
+  COMPONENTS
+  OTBApplicationEngine
+  OTBQtWidget
+  OTBImageIO
+  OTBVectorDataIO
+  OTBTestKernel
+  OTBCarto
+  OTBProjection
+  OTBStatistics)
+
 if(OTB_FOUND)
   include(${OTB_USE_FILE})
 else(OTB_FOUND)
