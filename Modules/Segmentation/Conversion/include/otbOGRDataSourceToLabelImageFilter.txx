@@ -117,21 +117,13 @@ void
 OGRDataSourceToLabelImageFilter<TOutputImage>
 ::SetOutputParametersFromImage(const ImageBaseType * image)
 {
-  if (dynamic_cast<const OutputImageType*>(image))
-    {
-    const OutputImageType * src = dynamic_cast<const OutputImageType*>(image);
+    this->SetOutputOrigin ( image->GetOrigin() );
+    this->SetOutputSpacing ( image->GetSpacing() );
+    this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
+    
+    ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(image->GetMetaDataDictionary());
 
-    this->SetOutputOrigin ( src->GetOrigin() );
-    this->SetOutputSpacing ( src->GetSpacing() );
-    //this->SetOutputStartIndex ( src->GetLargestPossibleRegion().GetIndex() );
-    this->SetOutputSize ( src->GetLargestPossibleRegion().GetSize() );
-    this->SetOutputProjectionRef(src->GetProjectionRef());
-    //this->SetOutputKeywordList(src->GetImageKeywordlist());
-    }
-  else
-    {
-    itkExceptionMacro(<< "Image can't be casted to output image type.");
-    }
+    this->SetOutputProjectionRef(imi->GetProjectionRef());
 }
 
 template< class TOutputImage>
