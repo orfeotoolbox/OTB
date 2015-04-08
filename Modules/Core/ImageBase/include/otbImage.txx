@@ -38,6 +38,13 @@ std::string Image<TPixel, VImageDimension>::GetProjectionRef(void) const
 }
 
 template <class TPixel, unsigned int VImageDimension>
+void
+Image<TPixel, VImageDimension>::SetProjectionRef(const std::string& kwl)
+{  
+  itk::EncapsulateMetaData<std::string>(this->GetMetaDataDictionary(),MetaDataKey::ProjectionRefKey,kwl);
+}
+
+template <class TPixel, unsigned int VImageDimension>
 std::string Image<TPixel, VImageDimension>::GetGCPProjection(void) const
 {
   return (this->GetMetaDataInterface()->GetGCPProjection());
@@ -149,6 +156,14 @@ Image<TPixel, VImageDimension>::GetImageKeywordlist(void)
                                         kwl);
   return  kwl;
 }
+
+template <class TPixel, unsigned int VImageDimension>
+void
+Image<TPixel,VImageDimension>::SetImageKeywordList(const ImageKeywordlistType& kwl)
+{
+  itk::EncapsulateMetaData<ImageKeywordlistType>(this->GetMetaDataDictionary(),MetaDataKey::OSSIMKeywordlistKey,kwl);
+}
+
 
 template <class TPixel, unsigned int VImageDimension>
 const typename Image<TPixel, VImageDimension>::ImageKeywordlistType

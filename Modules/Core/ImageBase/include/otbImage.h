@@ -141,6 +141,9 @@ public:
   /** Get the projection coordinate system of the image. */
   virtual std::string GetProjectionRef(void) const;
 
+  virtual void SetProjectionRef(const std::string& wkt);
+
+
   /** Get the GCP projection coordinates of the image. */
   virtual std::string GetGCPProjection(void) const;
 
@@ -168,7 +171,10 @@ public:
 
   /** Get image keyword list */
   virtual ImageKeywordlistType GetImageKeywordlist(void);
+
   virtual const ImageKeywordlistType GetImageKeywordlist(void) const;
+
+  virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
