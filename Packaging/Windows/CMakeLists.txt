@@ -51,14 +51,14 @@ if(NOT OTB_APPS_LIST)
     message(FATAL_ERROR "No OTB-applications detected")
 endif()
 
-# Install the applications 
+# Install the applications
 install(FILES ${OTB_APPS_LIST}
         DESTINATION lib/otb/applications
         COMPONENT Runtime)
 
 # Retrieve the name of all the applications available
 foreach(APP ${OTB_APPS_LIST})
-    string(REPLACE ${OTB_DIR}/applications/ "" APP_NAME ${APP})
+    string(REPLACE ${OTB_DIR}/../../otb/applications/ "" APP_NAME ${APP})
     list(APPEND OTB_APPS_NAME_LIST ${APP_NAME})
 endforeach(APP)
 
@@ -67,7 +67,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake.in
                 ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
                 @ONLY)
 
-#Use the configured file with the list of apps 
+#Use the configured file with the list of apps
 # Gather all dlls from which Monteverdi depends, and put them aside the executable
 # For this to work, the necessary DLL must be in PATH
 install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
@@ -88,7 +88,7 @@ set(MVD2_ADDITIONNAL_DLLS
         ${OSGEO4W_ROOT}/bin/msvcp71.dll
         ${OSGEO4W_ROOT}/bin/msvcr71.dll
         ${OSGEO4W_ROOT}/bin/msvcrt.dll)
-        
+
 # Since an upgrade in OSGeo4W-32bit of libpq (around 2013/10)
 # libpq depends on two additional libs that cmake
 # surprisingly miss during package generation
@@ -118,7 +118,7 @@ install(DIRECTORY ${GDAL_DATA}
 install(FILES ${QT_TRANSLATIONS_FILES}
         DESTINATION  share/qt4/translations
         COMPONENT Resources)
-        
+
 install(FILES ${QT_PLUGINS_DIR}/sqldrivers/qsqlite4.dll
         DESTINATION lib/qt4/plugins/sqldrivers/
         COMPONENT Runtime)
@@ -126,8 +126,7 @@ install(FILES ${QT_PLUGINS_DIR}/sqldrivers/qsqlite4.dll
 install(FILES qt.conf
         DESTINATION  bin
         COMPONENT Resources)
-        
+
 install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/monteverdi2.bat
         DESTINATION bin
         COMPONENT Runtime)
-
