@@ -16,6 +16,11 @@ set(MIN_MINOR_VERSION 10)
 
 set(GDAL_QUALIFIES TRUE)
 
+# Ensure that the temporary dir always exists before starting tests
+if(NOT EXISTS ${TEMP})
+  FILE(MAKE_DIRECTORY ${TEMP})
+endif()
+
 #------------------- TESTS ---------------------
 # Version of GDAL  
 try_run(RUN_RESULT_VERSION COMPILE_RESULT_VERSION ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalVersionTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS ${TEMP}/gdalVersion.txt ${MIN_MAJOR_VERSION} ${MIN_MINOR_VERSION})
