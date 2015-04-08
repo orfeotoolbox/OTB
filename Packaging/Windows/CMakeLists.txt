@@ -45,7 +45,7 @@ endif(NOT GDAL_DATA)
 # Search all the applications available in the OTB install dir
 # Consequently, this part of code only works with an OTB install dir,
 # not with an OB build dir.
-file(GLOB OTB_APPS_LIST ${OTB_DIR}/applications/otbapp_*.dll) # /lib/otb
+file(GLOB OTB_APPS_LIST ${OTB_DIR}/../../otb/applications/otbapp_*.dll) # /lib/otb
 
 if(NOT OTB_APPS_LIST)
     message(FATAL_ERROR "No OTB-applications detected")
