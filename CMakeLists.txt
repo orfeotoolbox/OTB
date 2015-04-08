@@ -60,7 +60,8 @@ include_directories(Code)
 
 #----------------------------------------------------------------------------
 # Orfeo ToolBox
-find_package(OTB REQUIRED COMPONENTS "OTBImageIO" "OTBVectorDataIO")
+find_package(OTB REQUIRED
+  COMPONENTS OTBImageIO OTBVectorDataIO OTBProjection OTBStatistics)
 if(OTB_FOUND)
   MESSAGE(STATUS "OTB found")
   include(${OTB_USE_FILE})
