@@ -96,7 +96,7 @@ enum RgbwChannel
 /**
  * Constant naming video-channels.
  */
-extern
+extern Monteverdi2_EXPORT
 const char*
 RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ];
 
