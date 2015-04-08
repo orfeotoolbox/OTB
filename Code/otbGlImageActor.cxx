@@ -469,11 +469,11 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
   cul[0] = region.GetIndex()[0];
   cul[1] = region.GetIndex()[1];
   cur = cul;
-  cur[0]+=region.GetSize()[0];
+  cur[0]+=region.GetSize()[0]-1;
   cll = cul;
-  cll[1]+=region.GetSize()[1];
+  cll[1]+=region.GetSize()[1]-1;
   clr = cur;
-  clr[1]+=region.GetSize()[1];
+  clr[1]+=region.GetSize()[1]-1;
 
   PointType iul, iur,ill,ilr;
 
@@ -481,11 +481,22 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
   m_FileReader->GetOutput()->TransformContinuousIndexToPhysicalPoint(cur,iur);
   m_FileReader->GetOutput()->TransformContinuousIndexToPhysicalPoint(cll,ill);
   m_FileReader->GetOutput()->TransformContinuousIndexToPhysicalPoint(clr,ilr);
-  
+
   PointType pul = m_ImageToViewportTransform->TransformPoint(iul);
   PointType pur = m_ImageToViewportTransform->TransformPoint(iur);
   PointType pll = m_ImageToViewportTransform->TransformPoint(ill);
   PointType plr = m_ImageToViewportTransform->TransformPoint(ilr);
+
+  // Take into account that Origin refers to center of first pixel
+  SpacingType spacing = m_FileReader->GetOutput()->GetSpacing();
+  pul[0]-=0.5*spacing[0];
+  pul[1]-=0.5*spacing[1];
+  pur[0]+=0.5*spacing[0];
+  pur[1]-=0.5*spacing[1];
+  pll[0]-=0.5*spacing[0];
+  pll[1]+=0.5*spacing[1];
+  plr[0]+=0.5*spacing[0];
+  plr[1]+=0.5*spacing[1];
 
   if(rotate)
     {
