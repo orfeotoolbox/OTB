@@ -9,13 +9,13 @@ set(Ice_VERSION_PATCH "0")
 set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH})
-    
+
 #----------------------------------------------------------------------------
 # ensure WIN32 definition
 if(WIN32)
   add_definitions(-DWIN32)
 endif(WIN32)
- 
+
 #----------------------------------------------------------------------------
 #Prevents conflicts with visual min/max function
 if(WIN32)
@@ -34,12 +34,12 @@ if(WIN32)
     -D_CRT_VCCLRIT_NO_DEPRECATE
     -D_SCL_SECURE_NO_DEPRECATE
   )
-  
+
   if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_definitions(-D_CRT_NONSTDC_NO_WARNING)
   endif()
-  
+
 endif(WIN32)
 
 OPTION(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)" ON)
@@ -49,18 +49,18 @@ include_directories(Code)
 
 #----------------------------------------------------------------------------
 # ITK
-find_package(ITK REQUIRED)
-if(ITK_FOUND)
-  MESSAGE(STATUS "ITK found")
-  include(${ITK_USE_FILE})
-else(ITK_FOUND)
-  message(FATAL_ERROR "ITK not found. Please set ITK_DIR")
-endif(ITK_FOUND)
+# find_package(ITK REQUIRED)
+# if(ITK_FOUND)
+#   MESSAGE(STATUS "ITK found")
+#   include(${ITK_USE_FILE})
+# else(ITK_FOUND)
+#   message(FATAL_ERROR "ITK not found. Please set ITK_DIR")
+# endif(ITK_FOUND)
 
 
 #----------------------------------------------------------------------------
 # Orfeo ToolBox
-find_package(OTB REQUIRED)
+find_package(OTB REQUIRED COMPONENTS "OTBImageIO" "OTBVectorDataIO")
 if(OTB_FOUND)
   MESSAGE(STATUS "OTB found")
   include(${OTB_USE_FILE})
