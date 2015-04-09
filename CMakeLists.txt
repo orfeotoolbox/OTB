@@ -69,7 +69,22 @@ endif()
 
 #----------------------------------------------------------------------------
 # Orfeo ToolBox
-find_package(OTB REQUIRED)
+#should we follow modularization here or import all OTB Modules?
+
+#NOTE: If any header from an OTB Module which not listed below is added,
+#then below line MUST be updated. At the sametime this ensure only the
+#components/modules listed below are linked via OTB_LIBRARIES
+find_package(OTB REQUIRED
+  COMPONENTS
+  OTBApplicationEngine
+  OTBQtWidget
+  OTBImageIO
+  OTBVectorDataIO
+  OTBTestKernel
+  OTBCarto
+  OTBProjection
+  OTBStatistics)
+
 if(OTB_FOUND)
   include(${OTB_USE_FILE})
 else(OTB_FOUND)
@@ -140,8 +155,8 @@ endif(Mercurial_FOUND)
 #----------------------------------------------------------------------------
 #Build shared libraries for monteverdi
 #By default, import the option from the OTB configuration
-OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
+set(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED})
 #----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
 find_path(OTB_DATA_ROOT README-OTB-Data $ENV{OTB_DATA_ROOT})
