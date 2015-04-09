@@ -647,7 +647,7 @@ ImageViewRenderer
     m_GlView->ClearActors();
 
   else
-    {
+    { 
       {
       otb::GlView::StringVectorType keys( m_GlView->GetActorsKeys() );
 
@@ -766,7 +766,7 @@ ImageViewRenderer
 
       emit SetProjectionRequired();
       }
-    else // if( m_ReferencePair.first!=referencePair.first )
+    else if( m_ReferencePair.first!=referencePair.first )
       {
       virtual_UpdateProjection();
 
