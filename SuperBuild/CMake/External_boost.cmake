@@ -33,8 +33,6 @@ else()
     if(SUPERBUILD_BOOST_HEADER_ONLY)
       ExternalProject_Add(${proj}
         PREFIX ${proj}
-        #URL "http://sourceforge.net/projects/boost/files/boost/1.54.0/boost_1_54_0.tar.gz/download"
-        #URL_MD5 efbfbff5a85a9330951f243d0a46e4b9
         URL "http://sourceforge.net/projects/boost/files/boost/1.50.0/boost_1_50_0.tar.bz2/download"
         URL_MD5 52dd00be775e689f55a987baebccc462
         BINARY_DIR ${BOOST_SB_BUILD_DIR}
@@ -51,8 +49,6 @@ else()
     else()
       ExternalProject_Add(${proj}
         PREFIX ${proj}
-        #URL "http://sourceforge.net/projects/boost/files/boost/1.54.0/boost_1_54_0.tar.gz/download"
-        #URL_MD5 efbfbff5a85a9330951f243d0a46e4b9
         URL "http://sourceforge.net/projects/boost/files/boost/1.50.0/boost_1_50_0.tar.bz2/download"
         URL_MD5 52dd00be775e689f55a987baebccc462
         BINARY_DIR ${BOOST_SB_BUILD_DIR}

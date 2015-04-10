@@ -16,8 +16,6 @@ else()
   if(WIN32)
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      #URL "http://www.ijg.org/files/jpegsr8c.zip"
-      #URL_MD5 2af71a567af8f60a649b2fcc87c88192
       URL "http://www.ijg.org/files/jpegsrc.v9a.tar.gz"
       URL_MD5 3353992aecaee1805ef4109aadd433e7
       SOURCE_DIR ${JPEG_SB_SRC}
