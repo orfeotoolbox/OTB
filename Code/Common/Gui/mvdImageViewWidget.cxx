@@ -529,8 +529,31 @@ ImageViewWidget
 
     emit PhysicalCursorPositionChanged( event->pos(), in, out, pixel );
 
-    updateGL();
+    {
+    StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+    assert( stackedLayerModel!=NULL );
 
+    for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
+	 it!=stackedLayerModel->End();
+	 ++ it )
+      {
+      assert( it->second!=NULL );
+
+      if( it->second->inherits( AbstractImageModel::staticMetaObject.className() ) )
+	{
+	VectorImageModel * imageModel = qobject_cast< VectorImageModel * >( it->second );
+	assert( imageModel!=NULL );
+
+	if( imageModel->GetSettings().GetEffect()!=ImageSettings::EFFECT_NONE &&
+	    imageModel->GetSettings().GetEffect()!=ImageSettings::EFFECT_NORMAL )
+	  {
+	  updateGL();
+
+	  break;
+	  }
+	}
+      }
+    }
 #endif  
 }
 
