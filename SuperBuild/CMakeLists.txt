@@ -22,9 +22,6 @@ mark_as_advanced(DOWNLOAD_LOCATION)
 # General options
 option(ENABLE_QT4 " Use QT4 in the SuperBuild" ON)
 option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
-option(BUILD_ICE "Clone and build ICE" OFF)
-option(BUILD_MONTEVERDI2 "Clone and build Monteverdi2" OFF)
-option(BUILD_MONTEVERDI "Clone and build Monteverdi" OFF)
 
 # check if superbuild is in OTB source or in stand-alone mode
 set(SUPERBUILD_IN_OTB_TREE OFF)
@@ -122,16 +119,3 @@ option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SW
 option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
 include(External_otb)
-
-if(BUILD_ICE)
-  option(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)" OFF)
-  include(External_ice)
-endif()
-
-if(BUILD_MONTEVERDI2)
-  include(External_monteverdi2)
-endif()
-
-if(BUILD_MONTEVERDI)
-  include(External_monteverdi)
-endif()
