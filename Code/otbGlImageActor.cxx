@@ -482,21 +482,21 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
   m_FileReader->GetOutput()->TransformContinuousIndexToPhysicalPoint(cll,ill);
   m_FileReader->GetOutput()->TransformContinuousIndexToPhysicalPoint(clr,ilr);
 
+  // Take into account that Origin refers to center of first pixel
+  SpacingType spacing = m_FileReader->GetOutput()->GetSpacing();
+  iul[0]-=0.5*spacing[0];
+  iul[1]-=0.5*spacing[1];
+  iur[0]+=0.5*spacing[0];
+  iur[1]-=0.5*spacing[1];
+  ill[0]-=0.5*spacing[0];
+  ill[1]+=0.5*spacing[1];
+  ilr[0]+=0.5*spacing[0];
+  ilr[1]+=0.5*spacing[1];
+  
   PointType pul = m_ImageToViewportTransform->TransformPoint(iul);
   PointType pur = m_ImageToViewportTransform->TransformPoint(iur);
   PointType pll = m_ImageToViewportTransform->TransformPoint(ill);
   PointType plr = m_ImageToViewportTransform->TransformPoint(ilr);
-
-  // Take into account that Origin refers to center of first pixel
-  SpacingType spacing = m_FileReader->GetOutput()->GetSpacing();
-  pul[0]-=0.5*spacing[0];
-  pul[1]-=0.5*spacing[1];
-  pur[0]+=0.5*spacing[0];
-  pur[1]-=0.5*spacing[1];
-  pll[0]-=0.5*spacing[0];
-  pll[1]+=0.5*spacing[1];
-  plr[0]+=0.5*spacing[0];
-  plr[1]+=0.5*spacing[1];
 
   if(rotate)
     {
