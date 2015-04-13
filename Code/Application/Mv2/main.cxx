@@ -111,12 +111,11 @@ main( int argc, char* argv[] )
 
   //
   // 5. Parse command-line filenames.
-  QStringList args( qtApp.arguments() );
+  QStringList filenames( qtApp.arguments() );
 
-  for( QStringList::const_iterator it( args.constBegin() + 1 );
-       it!=args.constEnd();
-       ++it )
-    mainWindow.ImportImage( *it );
+  filenames.pop_front();
+
+  mainWindow.ImportImages( filenames );
  
 
   //

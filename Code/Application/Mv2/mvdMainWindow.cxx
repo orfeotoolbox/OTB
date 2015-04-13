@@ -1251,17 +1251,9 @@ MainWindow
 {
   //
   // Select filename.
-
-  QString filename(
-    I18nMainWindow::GetOpenFileName( this, tr( "Open file..." ) )
+  ImportImages(
+    I18nMainWindow::GetOpenFileNames( this, tr( "Open file..." ) )
   );
-
-  if( filename.isNull() )
-    return;
-
-  //
-  // Import the image
-  ImportImage( filename, true );
 }
 
 /*****************************************************************************/

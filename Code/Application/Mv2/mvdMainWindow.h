@@ -130,6 +130,10 @@ public slots:
    */
   inline void ImportImage( const QString & filename );
 
+  /**
+   */
+  inline void ImportImages( const QStringList & filenames );
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -502,6 +506,20 @@ MainWindow
 ::ImportImage( const QString & filename )
 {
   ImportImage( filename, true );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::ImportImages( const QStringList & filenames )
+{
+  if( filenames.isEmpty() )
+    return;
+
+  for( QStringList::const_iterator it( filenames.constBegin() );
+       it!=filenames.end();
+       ++it )
+    ImportImage( *it );
 }
 
 } // end namespace 'mvd'
