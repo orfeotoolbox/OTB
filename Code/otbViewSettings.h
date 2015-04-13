@@ -69,15 +69,21 @@ public:
   // Order of priority is Wkt, then keywordlist, then unknown
   void SetWkt(const std::string & wkt)
   {
-    m_Wkt = wkt;
-    m_GeometryChanged = true;
+    if(m_Wkt != wkt)
+      {
+      m_Wkt = wkt;
+      m_GeometryChanged = true;
+      }
   }
   itkGetStringMacro(Wkt);
 
   void SetUseProjection(bool usep)
   {
-    m_UseProjection = usep;
-    m_GeometryChanged = true;
+    if(m_UseProjection != usep)
+      {
+      m_UseProjection = usep;
+      m_GeometryChanged = true;
+      }
   }
 
   itkGetConstReferenceMacro(UseProjection,bool);
@@ -89,8 +95,11 @@ public:
 
   void SetKeywordList(const KeywordListType& kwl)
   {
-    m_KeywordList = kwl;
-    m_GeometryChanged = true;
+    if(!(m_KeywordList==kwl))
+      {
+      m_KeywordList = kwl;
+      m_GeometryChanged = true;
+      }
   }
 
   itkGetConstReferenceMacro(KeywordList,KeywordListType);
