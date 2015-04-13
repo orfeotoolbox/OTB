@@ -88,7 +88,7 @@ main( int argc, char* argv[] )
   mainWindow.Initialize();
 
   //
-  // 5. Show window.
+  // 3. Show window.
 #if defined( _DEBUG )
   // Usefull when developping/debugging to avoid overlapping other windows.
   mainWindow.show();
@@ -105,12 +105,22 @@ main( int argc, char* argv[] )
 #endif // _DEBUG
 
   //
-  // 6. Check OpenGL capabilities
+  // 4. Check OpenGL capabilities
   if( !mainWindow.CheckGLCapabilities() )
     return ERROR_CODE_GL_VERSION;
 
   //
-  // 7. Let's go: run the application and return exit code.
+  // 5. Parse command-line filenames.
+  QStringList args( qtApp.arguments() );
+
+  for( QStringList::const_iterator it( args.constBegin() + 1 );
+       it!=args.constEnd();
+       ++it )
+    mainWindow.ImportImage( *it );
+ 
+
+  //
+  // 6. Let's go: run the application and return exit code.
   int result = QCoreApplication::instance()->exec();
 
   /*

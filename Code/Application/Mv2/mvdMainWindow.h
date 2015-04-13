@@ -120,6 +120,16 @@ public:
    */
   bool CheckGLCapabilities() const;
 
+  /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
+
+//
+// Public slots.
+public slots:
+
+  /**
+   */
+  inline void ImportImage( const QString & filename );
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -432,10 +442,6 @@ private slots:
 
   /**
    */
-  void OnFilenameDropped( const QString& filename );
-
-  /**
-   */
   void OnReferenceLayerCurrentIndexChanged( int );
 
   /**
@@ -488,6 +494,14 @@ MainWindow
 ::GetQuicklookView()
 {
   return qobject_cast< ImageViewWidget* >( m_QuicklookViewDock->widget() );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::ImportImage( const QString & filename )
+{
+  ImportImage( filename, true );
 }
 
 } // end namespace 'mvd'

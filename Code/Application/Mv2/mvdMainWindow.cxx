@@ -1799,14 +1799,6 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnFilenameDropped( const QString& filename )
-{
-  ImportImage( filename, true );
-}
-
-/*****************************************************************************/
-void
-MainWindow
 ::OnReferenceLayerChanged( size_t index )
 {
   // qDebug() << this << "::OnReferenceLayerChanged(" << index << ")";
