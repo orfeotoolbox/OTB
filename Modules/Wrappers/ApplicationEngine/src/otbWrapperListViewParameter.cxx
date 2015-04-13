@@ -174,7 +174,7 @@ ListViewParameter::SetSelectedItemsByNames()
           oss<<", ";
           }
         }
-      itkExceptionMacro("Value "<<selectedName<<" not found in the choices possibilities"<<oss.str()<<".");
+      itkExceptionMacro("Value "<<selectedName<<" not found in the list of choices: "<<oss.str()<<".");
       }
     }
   this->SetSelectedItems(selectedItems);
@@ -210,7 +210,7 @@ ListViewParameter::SetSelectedItemsByKeys()
           oss<<", ";
           }
         }
-      itkExceptionMacro("Value "<<selectedKey<<" not found in the choices possibilities"<<oss.str()<<".");
+      itkExceptionMacro("Value "<<selectedKey<<" not found in the list of choices: "<<oss.str()<<".");
       }
     }
   this->SetSelectedItems(selectedItems);
