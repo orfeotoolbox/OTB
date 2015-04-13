@@ -302,11 +302,11 @@ GlView
       {
       m_RenderingOrder.push_back( *it );
 
-      std::remove_if(
-        thisKeys.begin(),
-        thisKeys.end(),
-        std::bind2nd( std::equal_to< KeyType >(), *it )
-      );
+      StringVectorType::iterator pos = find(thisKeys.begin(),thisKeys.end(),*it);
+      if(pos!=thisKeys.end())
+        {
+        thisKeys.erase(pos);
+        }
       }
 
   m_RenderingOrder.insert(
