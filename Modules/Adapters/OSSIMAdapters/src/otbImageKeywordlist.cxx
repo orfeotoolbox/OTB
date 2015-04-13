@@ -58,6 +58,13 @@ operator =(const Self& p)
   m_Keywordlist = p.m_Keywordlist;
 }
 
+bool
+ImageKeywordlist::
+operator ==(const Self& p)
+{
+  return m_Keywordlist == p.m_Keywordlist;
+}
+
 void
 ImageKeywordlist::
 SetKeywordlist(const ossimKeywordlist& kwl)

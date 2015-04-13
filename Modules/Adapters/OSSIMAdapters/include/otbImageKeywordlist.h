@@ -127,6 +127,7 @@ public:
 
   ImageKeywordlist(const Self &);
   void operator =(const Self&);
+  bool operator ==(const Self&);
 
 protected:
   /** Methods invoked by Print() to print information about the object
