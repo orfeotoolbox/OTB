@@ -536,7 +536,7 @@ I18nMainWindow
 		    QFileDialog::Options options )
 {
   QStringList filenames(
-    QFileDialog::getOpenFileName(
+    QFileDialog::getOpenFileNames(
       parent,
       caption,
       dir.isEmpty() ? I18nMainWindow::m_LastAcceptedDir.path() : dir,
@@ -548,7 +548,7 @@ I18nMainWindow
 
   if( !filenames.isEmpty() )
     I18nMainWindow::m_LastAcceptedDir.setPath(
-      QFileInfo( filenames[ 0 ] ).path()
+      QFileInfo( filenames.back() ).path()
     );
 
   return filenames;
