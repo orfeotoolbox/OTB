@@ -76,6 +76,9 @@ ImageViewWidget
   QGLWidget( parent, shareWidget, flags ),
   m_Manipulator( NULL ),
   m_Renderer( NULL )
+#if USE_XP_REGION_OPTIM
+  ,m_Position()
+#endif // USE_XP_REGION_OPTION
 {
   Initialize( manipulator, renderer );
 }
@@ -91,6 +94,9 @@ ImageViewWidget
   QGLWidget( context, parent, shareWidget, flags ),
   m_Manipulator( NULL ),
   m_Renderer( NULL )
+#if USE_XP_REGION_OPTION
+  ,m_Position()
+#endif // USE_XP_REGION_OPTION
 {
   Initialize( manipulator, renderer );
 }
@@ -106,6 +112,9 @@ ImageViewWidget
   QGLWidget( format, parent, shareWidget, flags ),
   m_Manipulator( NULL ),
   m_Renderer( NULL )
+#if USE_XP_REGION_OPTION
+  ,m_Position()
+#endif // USE_XP_REGION_OPTION
 {
   Initialize( manipulator, renderer );
 }
@@ -246,14 +255,22 @@ ImageViewWidget
 
 
   assert( manipulator!=NULL );
-  assert( renderer!=NULL );
 
   m_Manipulator = manipulator;
   m_Manipulator->setParent( this );
   m_Manipulator->SetViewportSize( width(), height() );
 
+
+  assert( renderer!=NULL );
+
   m_Renderer = renderer;
   m_Renderer->setParent( this );
+
+
+#if USE_XP_REGION_OPTION
+  m_Position[ 0 ] = m_Position[ 1 ] = 0;
+#endif // USE_XP_REGION_OPTION
+
 
   QObject::connect(
     m_Manipulator,
@@ -509,6 +526,9 @@ ImageViewWidget
 
   m_Manipulator->Transform( in, event->pos() );
 
+  qDebug() << "--------";
+  qDebug() << "mouse:" << in[ 0 ] << "," << in[ 1 ];
+
   //
   // Pick pixel of point in viewport space and return point in image
   // space.
@@ -544,17 +564,45 @@ ImageViewWidget
 	VectorImageModel * imageModel = qobject_cast< VectorImageModel * >( it->second );
 	assert( imageModel!=NULL );
 
+#if USE_XP_REGION_OPTIM
+
 	if( imageModel->GetSettings().GetEffect()!=ImageSettings::EFFECT_NONE &&
 	    imageModel->GetSettings().GetEffect()!=ImageSettings::EFFECT_NORMAL )
 	  {
-	  updateGL();
+	  PointType origin;
+	  PointType extent;
 
-	  break;
+	  m_Renderer->GetLayerExtent( it->first, origin, extent );
+
+	  if( ( origin[ 0 ]<=in[ 0 ] && in[ 0 ]<=extent[ 0 ] &&
+		origin[ 1 ]<=in[ 1 ] && in[ 1 ]<=extent[ 1 ] ) |
+	      ( origin[ 0 ]<=m_Position[ 0 ] && m_Position[ 0 ]<=extent[ 0 ] &&
+		origin[ 1 ]<=m_Position[ 1 ] && m_Position[ 1 ]<=extent[ 1 ] ) )
+	    {
+	    qDebug() << FromStdString( it->first );
+
+	    qDebug()
+	      << "o:" << origin[ 0 ] << "," << origin[ 1 ] << ";"
+	      << "e:" << extent[ 0 ] << "," << extent[ 1 ];
+#endif // USE_XP_REGION_OPTIM
+
+	    updateGL();
+
+	    break;
+
+#if USE_XP_REGION_OPTIM
+	    }
 	  }
+#endif // USE_XP_REGION_OPTIM
 	}
       }
     }
-#endif  
+
+#if USE_XP_REGION_OPTIM
+    m_Position = in;
+#endif // USE_XP_REGION_OPTION
+
+#endif
 }
 
 /*******************************************************************************/

@@ -44,6 +44,8 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "Gui/mvdAbstractImageViewRenderer.h"
 
+#define USE_XP_REGION_OPTIM 0
+
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
@@ -290,6 +292,11 @@ private:
 
   /** Model Renderer pointer */
   AbstractImageViewRenderer* m_Renderer;
+
+  /** */
+#if USE_XP_REGION_OPTIM
+  PointType m_Position;
+#endif // USE_XP_REGION_OPTIM
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 private slots:
