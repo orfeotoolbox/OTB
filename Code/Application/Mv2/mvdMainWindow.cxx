@@ -139,10 +139,10 @@ MainWindow
 
   QObject::connect(
     m_FilenameDragAndDropEventFilter,
-    SIGNAL( FilenameDropped( const QString& ) ),
+    SIGNAL( FilenameDropped( const QString & ) ),
     // to:
     this,
-    SLOT( OnFilenameDropped( const QString& ) )
+    SLOT( ImportImage( const QString & ) )
   );
 }
 
