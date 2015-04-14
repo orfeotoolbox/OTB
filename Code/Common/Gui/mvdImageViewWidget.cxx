@@ -526,8 +526,8 @@ ImageViewWidget
 
   m_Manipulator->Transform( in, event->pos() );
 
-  qDebug() << "--------";
-  qDebug() << "mouse:" << in[ 0 ] << "," << in[ 1 ];
+  // qDebug() << "--------";
+  // qDebug() << "mouse:" << in[ 0 ] << "," << in[ 1 ];
 
   //
   // Pick pixel of point in viewport space and return point in image
