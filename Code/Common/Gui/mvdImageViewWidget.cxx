@@ -536,13 +536,7 @@ ImageViewWidget
 
   PointType out;
   DefaultImageType::PixelType pixel;
-  
-#if 0
-  if( m_Renderer->Pick( in, out, pixel ) )
-    {
-    emit PhysicalCursorPositionChanged( event->pos(), in, out, pixel );
-    }
-#else
+
   m_Renderer->Pick( in, out, pixel );
 
   // qDebug() << "PhysicalCursorPositionChanged(" << event->pos() << ")";
@@ -601,8 +595,6 @@ ImageViewWidget
 #if USE_XP_REGION_OPTIM
   m_Position = in;
 #endif // USE_XP_REGION_OPTION
-
-#endif
 }
 
 /*******************************************************************************/
