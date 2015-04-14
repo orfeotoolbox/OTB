@@ -538,68 +538,68 @@ ImageViewWidget
   DefaultImageType::PixelType pixel;
   
 #if 0
-    if( m_Renderer->Pick( in, out, pixel ) )
-      {
-      emit PhysicalCursorPositionChanged( event->pos(), in, out, pixel );
-      }
-#else
-    m_Renderer->Pick( in, out, pixel );
-
-    // qDebug() << "PhysicalCursorPositionChanged(" << event->pos() << ")";
-
-    emit PhysicalCursorPositionChanged( event->pos(), in, out, pixel );
-
+  if( m_Renderer->Pick( in, out, pixel ) )
     {
-    StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
-    assert( stackedLayerModel!=NULL );
+    emit PhysicalCursorPositionChanged( event->pos(), in, out, pixel );
+    }
+#else
+  m_Renderer->Pick( in, out, pixel );
 
-    for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
-	 it!=stackedLayerModel->End();
-	 ++ it )
+  // qDebug() << "PhysicalCursorPositionChanged(" << event->pos() << ")";
+
+  emit PhysicalCursorPositionChanged( event->pos(), in, out, pixel );
+
+  {
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
+       it!=stackedLayerModel->End();
+       ++ it )
+    {
+    assert( it->second!=NULL );
+
+    if( it->second->inherits( AbstractImageModel::staticMetaObject.className() ) )
       {
-      assert( it->second!=NULL );
+      VectorImageModel * imageModel = qobject_cast< VectorImageModel * >( it->second );
+      assert( imageModel!=NULL );
 
-      if( it->second->inherits( AbstractImageModel::staticMetaObject.className() ) )
+#if USE_XP_REGION_OPTIM
+
+      if( imageModel->GetSettings().GetEffect()!=ImageSettings::EFFECT_NONE &&
+	  imageModel->GetSettings().GetEffect()!=ImageSettings::EFFECT_NORMAL )
 	{
-	VectorImageModel * imageModel = qobject_cast< VectorImageModel * >( it->second );
-	assert( imageModel!=NULL );
+	PointType origin;
+	PointType extent;
 
-#if USE_XP_REGION_OPTIM
+	m_Renderer->GetLayerExtent( it->first, origin, extent );
 
-	if( imageModel->GetSettings().GetEffect()!=ImageSettings::EFFECT_NONE &&
-	    imageModel->GetSettings().GetEffect()!=ImageSettings::EFFECT_NORMAL )
+	if( ( origin[ 0 ]<=in[ 0 ] && in[ 0 ]<=extent[ 0 ] &&
+	      origin[ 1 ]<=in[ 1 ] && in[ 1 ]<=extent[ 1 ] ) |
+	    ( origin[ 0 ]<=m_Position[ 0 ] && m_Position[ 0 ]<=extent[ 0 ] &&
+	      origin[ 1 ]<=m_Position[ 1 ] && m_Position[ 1 ]<=extent[ 1 ] ) )
 	  {
-	  PointType origin;
-	  PointType extent;
+	  qDebug() << FromStdString( it->first );
 
-	  m_Renderer->GetLayerExtent( it->first, origin, extent );
-
-	  if( ( origin[ 0 ]<=in[ 0 ] && in[ 0 ]<=extent[ 0 ] &&
-		origin[ 1 ]<=in[ 1 ] && in[ 1 ]<=extent[ 1 ] ) |
-	      ( origin[ 0 ]<=m_Position[ 0 ] && m_Position[ 0 ]<=extent[ 0 ] &&
-		origin[ 1 ]<=m_Position[ 1 ] && m_Position[ 1 ]<=extent[ 1 ] ) )
-	    {
-	    qDebug() << FromStdString( it->first );
-
-	    qDebug()
-	      << "o:" << origin[ 0 ] << "," << origin[ 1 ] << ";"
-	      << "e:" << extent[ 0 ] << "," << extent[ 1 ];
+	  qDebug()
+	    << "o:" << origin[ 0 ] << "," << origin[ 1 ] << ";"
+	    << "e:" << extent[ 0 ] << "," << extent[ 1 ];
 #endif // USE_XP_REGION_OPTIM
 
-	    updateGL();
+	  updateGL();
 
-	    break;
+	  break;
 
 #if USE_XP_REGION_OPTIM
-	    }
 	  }
-#endif // USE_XP_REGION_OPTIM
 	}
+#endif // USE_XP_REGION_OPTIM
       }
     }
+  }
 
 #if USE_XP_REGION_OPTIM
-    m_Position = in;
+  m_Position = in;
 #endif // USE_XP_REGION_OPTION
 
 #endif
