@@ -69,8 +69,12 @@ public:
   // Order of priority is Wkt, then keywordlist, then unknown
   void SetWkt(const std::string & wkt)
   {
+    std::cout << "Wkt: '" << m_Wkt << "' -> '" << wkt << "'" << std::endl;
+    
     if(m_Wkt != wkt)
       {
+      std::cout << "Geometry changed!" << std::endl;
+
       m_Wkt = wkt;
       m_GeometryChanged = true;
       }
@@ -79,8 +83,12 @@ public:
 
   void SetUseProjection(bool usep)
   {
+    std::cout << "Use projection: " << ( usep ? "true" : "false" ) << std::endl;
+
     if(m_UseProjection != usep)
       {
+      std::cout << "Geometry changed!" << std::endl;
+
       m_UseProjection = usep;
       m_GeometryChanged = true;
       }
