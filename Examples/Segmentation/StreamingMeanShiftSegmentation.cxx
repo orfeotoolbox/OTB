@@ -25,7 +25,7 @@
 // The following example illustrates how to segment very large images
 // using the \doxygen{otb}{StreamingImageToOGRLayerSegmentationFilter}. This filter is
 // templated over the segmentation filter that will be used to segment each tile
-// of the input image. In this example we will use the \doxygen{otb}{MeanShiftVectorImageFilter}.
+// of the input image. In this example we will use the \doxygen{otb}{MeanShiftSegmentationFilter}.
 // The labeled output image of each tile is then vectorized (using a filter based on GDALPolygonize)
 // and stored into a \doxygen{otb}{ogr}{Layer} within the \doxygen{otb}{ogr}{DataSource}
 // set as input. Finally a fusion filter, \doxygen{otb}{OGRLayerStreamStitchingFilter}, is used to merge polygons
@@ -39,7 +39,7 @@
 // Software Guide : BeginCodeSnippet
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
 #include "otbOGRLayerStreamStitchingFilter.h"
-#include "otbMeanShiftVectorImageFilter.h"
+#include "otbMeanShiftSegmentationFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbVectorImage.h"
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   //typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> MeanShiftImageFilterType;
-  typedef otb::MeanShiftVectorImageFilter <ImageType, ImageType, LabelImageType>  SegmentationFilterType;
+  typedef otb::MeanShiftSegmentationFilter <ImageType, LabelImageType, ImageType>  SegmentationFilterType;
   typedef otb::StreamingImageToOGRLayerSegmentationFilter<ImageType, SegmentationFilterType> StreamingVectorizedSegmentationType;
   // Software Guide : EndCodeSnippet
 
@@ -174,15 +174,17 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginLatex
   //
-  // Now we set the parameters to the segmentation filter.The \doxygen{otb}{MeanShiftVectorImageFilter}
-  // required three parameters, the spatial radius, the range radius and the minimum object size.
+  // Now we set the parameters to the segmentation filter.The \doxygen{otb}{MeanShiftSegmentationFilter}
+  // has three main parameters, the spatial radius, the range radius and the minimum object size.
   // We use the \code{GetSegmentationFilter()} method on the \doxygen{otb}{StreamingVectorizedSegmentation}
   // to get a pointer to the segmentation filter.
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-  filter->GetSegmentationFilter()->SetSpatialRadius(spatialRadius);
-  filter->GetSegmentationFilter()->SetRangeRadius(rangeRadius);
-  filter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
+  filter->GetSegmentationFilter()->SetSpatialBandwidth(spatialRadius);
+  filter->GetSegmentationFilter()->SetRangeBandwidth(rangeRadius);
+  filter->GetSegmentationFilter()->SetMinRegionSize(minimumObjectSize);
+  filter->GetSegmentationFilter()->SetThreshold(0.1);
+  filter->GetSegmentationFilter()->SetMaxIterationNumber(100);
   // Software Guide : EndCodeSnippet
 
 
