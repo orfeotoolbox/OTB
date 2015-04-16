@@ -730,6 +730,8 @@ void GlImageActor::UpdateTransforms()
     {
     std::cout
       << " '"
+      // << m_FileReader->GetOutput()->GetProjectionRef()
+      // << "' ; '"
       << m_ImageToViewportTransform->GetOutputProjectionRef()
       << "' -> '"
       << settings->GetWkt()

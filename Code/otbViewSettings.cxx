@@ -28,7 +28,7 @@ ViewSettings::ViewSettings()
   m_Spacing.Fill(1);
   m_ViewportSize.Fill(0);
   m_Wkt="";
-  m_UseProjection = false;
+  m_UseProjection = true;
   m_GeometryChanged = false;
   m_RotationCenter.Fill(0);
   m_RotationAngle = 0;
