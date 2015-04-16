@@ -18,6 +18,9 @@
 #ifndef __itkTransformToDisplacementFieldSource_h
 #define __itkTransformToDisplacementFieldSource_h
 
+#ifndef itkTransformToDisplacementFieldSource_h
+#define itkTransformToDisplacementFieldSource_h
+
 #include "itkTransform.h"
 #include "itkImageSource.h"
 
@@ -214,4 +217,5 @@ private:
 #include "itkTransformToDisplacementFieldSource.hxx"
 #endif
 
+#endif
 #endif // end #ifndef __itkTransformToDisplacementFieldSource_h
