@@ -1203,12 +1203,12 @@ ImageViewWidget
 
     assert( m_Manipulator!=NULL );
 
+    m_Manipulator->SetWkt( image->GetProjectionRef() );
+    m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
+
     m_Manipulator->SetOrigin( imageModel->GetOrigin() );
     m_Manipulator->SetSpacing( imageModel->GetSpacing() );
     m_Manipulator->SetNativeSpacing( imageModel->GetNativeSpacing() );
-
-    m_Manipulator->SetWkt( image->GetProjectionRef() );
-    m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
     }
   else
     {

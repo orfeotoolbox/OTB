@@ -83,6 +83,9 @@ ImageViewRenderer
 {
   assert( !m_GlView.IsNull() );
 
+  assert( m_GlView->GetSettings()!=NULL );
+  m_GlView->GetSettings()->SetUseProjection( true );
+
 #ifdef _WIN32
   m_ReferencePair.first = NULL;
   // m_ReferencePair.second is initialized by otb::GlActor::Pointer default constructor.
@@ -656,7 +659,7 @@ ImageViewRenderer
            ++it )
         if( !stackedLayerModel->Contains( *it ) )
           {
-          // qDebug() << "Removed image-actor:" << FromStdString( *it );
+          qDebug() << QString( "Removing image-actor '%1'..." ).arg( it->c_str() );
 
           m_GlView->RemoveActor( *it );
           }
@@ -684,6 +687,10 @@ ImageViewRenderer
           VectorImageModel * vectorImageModel =
             dynamic_cast< VectorImageModel * >( it->second );
 
+	  qDebug()
+	    << QString( "Adding image-actor from file '%1'..." )
+	    .arg( vectorImageModel->GetFilename() );
+
           glImageActor->Initialize(
             ToStdString(
               vectorImageModel->GetFilename()
@@ -694,9 +701,10 @@ ImageViewRenderer
 
           // glImageActor->SetVisible( vectorImageModel->IsVisible() );
 
-          // qDebug()
-          //   << "Added image-actor" << FromStdString( it->first )
-          //   << "from file" << vectorImageModel->GetFilename();
+          qDebug() <<
+	    QString( "Added image-actor '%1' from file '%2'" )
+	    .arg( FromStdString( it->first ) )
+	    .arg( vectorImageModel->GetFilename() );
           }
         else
           {

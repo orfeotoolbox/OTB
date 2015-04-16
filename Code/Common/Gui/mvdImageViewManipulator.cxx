@@ -97,6 +97,8 @@ ImageViewManipulator
   m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY ),
   m_IsMouseDragging( false )
 {
+  m_ViewSettings->SetUseProjection( true );
+
   m_NativeSpacing.Fill( 1.0 );
 }
 
