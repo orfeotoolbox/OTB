@@ -79,7 +79,7 @@ int main(int argc, char * argv[])
   const unsigned int Dimension = 2;
 
   // Labeled image type
-  typedef unsigned short                              LabelType;
+  typedef unsigned int                                LabelType;
   typedef unsigned char                              MaskPixelType;
   typedef double                                      PixelType;
   typedef otb::Image<LabelType, Dimension>            LabeledImageType;
