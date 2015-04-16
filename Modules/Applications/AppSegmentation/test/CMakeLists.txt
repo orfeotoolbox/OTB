@@ -24,9 +24,6 @@ set(vector_ref_path ${BASELINE_FILES})
 set(raster_ref_path ${BASELINE})
 
 set(fitlerList "Meanshift" "CC" "Watershed")
-if(OTB_USE_EDISON)
-list(APPEND fitlerList "Edison")
-endif()
 
 # Loop on modes
 foreach(mode "Raster" "Vector")
