@@ -8,6 +8,8 @@ otbLabelizeConnectedThresholdImageFilterNew.cxx
 otbLabelizeNeighborhoodConnectedImageFilterNew.cxx
 otbLabelizeNeighborhoodConnectedImageFilter.cxx
 otbLabelizeConfidenceConnectedImageFilterNew.cxx
+otbLabelToBoundaryImageFilterNew.cxx
+otbLabelToBoundaryImageFilter.cxx
 )
 
 add_executable(otbLabellingTestDriver ${OTBLabellingTests})
@@ -56,4 +58,15 @@ otb_add_test(NAME bfTvLabelizeNeighborhoodConnectedImageFilter COMMAND otbLabell
 
 otb_add_test(NAME bfTuLabelizeConfidenceConnectedImageFilterNew COMMAND otbLabellingTestDriver
   otbLabelizeConfidenceConnectedImageFilterNew)
+
+otb_add_test(NAME bfTuLabelToBoundaryImageFilterNew COMMAND otbLabellingTestDriver
+  otbLabelToBoundaryImageFilterNew)
+
+otb_add_test(NAME bfTvLabelToBoundaryImageFilter COMMAND otbLabellingTestDriver
+  --compare-image ${EPSILON_7}
+  ${BASELINE}/bfTvLabelToBoundaryImageFilterOutput.tif
+  ${TEMP}/bfTvLabelToBoundaryImageFilterOutput.tif
+  otbLabelToBoundaryImageFilter
+  ${INPUTDATA}/maur_labelled.tif
+  ${TEMP}/bfTvLabelToBoundaryImageFilterOutput.tif)
 
