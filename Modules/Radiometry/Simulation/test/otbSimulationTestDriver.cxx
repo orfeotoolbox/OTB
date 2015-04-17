@@ -27,7 +27,6 @@ void RegisterTests()
   REGISTER_TEST(otbSailReflVTest);
   REGISTER_TEST(otbSatelliteRSRNew);
   REGISTER_TEST(otbSailReflHTest);
-  REGISTER_TEST(otbFilterFunctionValuesDigitalGlobeTest);
   REGISTER_TEST(otbFilterFunctionValuesSpectralResponseTest);
   REGISTER_TEST(otbFilterFunctionValuesTest);
 }
