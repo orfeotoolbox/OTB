@@ -160,11 +160,11 @@ public:
 
   /**
    */
-  inline void SetValue( double );
+  void SetValue( double );
 
   /**
    */
-  inline double GetValue() const;
+  double GetValue() const;
 
   /**
    */
@@ -223,7 +223,8 @@ private:
 
   /**
    */
-  double m_Value;
+  double m_LCRange;
+  double m_SARange;
 
   /**
    */
@@ -368,26 +369,6 @@ ImageSettings
 ::GetSize() const
 {
   return m_Size;
-}
-
-/*****************************************************************************/
-inline
-void
-ImageSettings
-::SetValue( double value )
-{
-  m_Value = value;
-
-  SetModified();
-}
-
-/*****************************************************************************/
-inline
-double
-ImageSettings
-::GetValue() const
-{
-  return m_Value;
 }
 
 /*****************************************************************************/

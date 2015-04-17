@@ -115,7 +115,12 @@ ShaderWidget
         }
 
     m_UI->sizeSpinBox->setValue( settings->GetSize() );
-    m_UI->valueLineEdit->setText( ToQString( settings->GetValue() ) );
+
+    m_UI->valueLineEdit->setText(
+      settings->HasValue()
+      ? ToQString( settings->GetValue() )
+      : QString()
+    );
     }
 }
 
@@ -132,10 +137,21 @@ ShaderWidget
   for( int i=0; i<ImageSettings::EFFECT_COUNT; ++i )
     if( QString::compare( text, ImageSettings::EFFECT_NAME[ i ] )==0 )
       {
-      GetSettings()->SetEffect( static_cast< ImageSettings::Effect >( i ) );
+      ImageSettings * settings = GetSettings();
+      assert( settings!=NULL );
+
+      settings->SetEffect( static_cast< ImageSettings::Effect >( i ) );
 
       m_UI->sizeSpinBox->setEnabled( GetSettings()->HasSize() );
       m_UI->valueLineEdit->setEnabled( GetSettings()->HasValue() );
+
+      m_UI->sizeSpinBox->setValue( settings->GetSize() );
+
+      m_UI->valueLineEdit->setText(
+	settings->HasValue()
+	? ToQString( settings->GetValue() )
+	: QString()
+      );
 
       emit SettingsChanged();
 

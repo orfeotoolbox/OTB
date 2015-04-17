@@ -28,6 +28,8 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
+#include <limits>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -83,8 +85,9 @@ ImageSettings
   m_IsModified( false ),
   m_IsApplied( false ),
   m_Effect( EFFECT_NORMAL ),
-  m_Size( 16 ),
-  m_Value( 0.0 ),
+  m_Size( 50 ),
+  m_LCRange( 0.0 ),
+  m_SARange( 0.0 ),
   m_Alpha( 1.0 )
 {
 }
@@ -93,6 +96,56 @@ ImageSettings
 ImageSettings
 ::~ImageSettings()
 {
+}
+
+/*****************************************************************************/
+void
+ImageSettings
+::SetValue( double value )
+{
+  switch( m_Effect )
+    {
+    case EFFECT_LOCAL_CONTRAST:
+      qDebug() << "LCRange = " << value;
+      m_LCRange = value;
+      break;
+
+    case EFFECT_SPECTRAL_ANGLE :
+      qDebug() << "SARange = " << value;
+      m_SARange = value;
+      break;
+
+    default:
+      assert( false && "No value for this shader effect." );
+      break;
+    }
+
+  SetModified();
+}
+
+/*****************************************************************************/
+double
+ImageSettings
+::GetValue() const
+{
+  switch( m_Effect )
+    {
+    case EFFECT_LOCAL_CONTRAST:
+      qDebug() << "LCRange:" << m_LCRange;
+      return m_LCRange;
+      break;
+
+    case EFFECT_SPECTRAL_ANGLE :
+      qDebug() << "SARange:" << m_LCRange;
+      return m_SARange;
+      break;
+
+    default:
+      return std::numeric_limits< double >::signaling_NaN();
+      break;
+    }
+
+  return std::numeric_limits< double >::signaling_NaN();
 }
 
 /*****************************************************************************/
