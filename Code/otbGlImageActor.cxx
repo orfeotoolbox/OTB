@@ -147,12 +147,12 @@ void GlImageActor::Initialize(const std::string & filename)
 
 void GlImageActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
 {
-  std::cout
-    << "Extent: "
-    << this
-    << " '" << m_FileReader->GetOutput()->GetProjectionRef() << "' ;"
-    << " '" << m_ImageToViewportTransform->GetOutputProjectionRef() << "' ;"
-    << " '" << GetSettings()->GetWkt() << "'" << std::endl;
+  // std::cout
+  //   << "Extent: "
+  //   << this
+  //   << " '" << m_FileReader->GetOutput()->GetProjectionRef() << "' ;"
+  //   << " '" << m_ImageToViewportTransform->GetOutputProjectionRef() << "' ;"
+  //   << " '" << GetSettings()->GetWkt() << "'" << std::endl;
 
   RegionType largest = m_FileReader->GetOutput()->GetLargestPossibleRegion();
 
@@ -721,21 +721,19 @@ void GlImageActor::UpdateTransforms()
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
 
-  std::cout << "Tranform: " << this;
+  // std::cout << "Tranform: " << this;
 
   m_ViewportToImageTransform = RSTransformType::New();
   m_ImageToViewportTransform = RSTransformType::New();
 
   if(settings->GetUseProjection())
     {
-    std::cout
-      << " '"
-      // << m_FileReader->GetOutput()->GetProjectionRef()
-      // << "' ; '"
-      << m_ImageToViewportTransform->GetOutputProjectionRef()
-      << "' -> '"
-      << settings->GetWkt()
-      << "'";
+    // std::cout
+    //   << " '"
+    //   << m_ImageToViewportTransform->GetOutputProjectionRef()
+    //   << "' -> '"
+    //   << settings->GetWkt()
+    //   << "'";
 
     m_ViewportToImageTransform->SetInputProjectionRef(settings->GetWkt());
     m_ViewportToImageTransform->SetInputKeywordList(settings->GetKeywordList());
@@ -748,7 +746,7 @@ void GlImageActor::UpdateTransforms()
     m_ImageToViewportTransform->SetInputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
     }
 
-  std::cout << std::endl;
+  // std::cout << std::endl;
 
   m_ViewportToImageTransform->InstanciateTransform();
   m_ImageToViewportTransform->InstanciateTransform();
