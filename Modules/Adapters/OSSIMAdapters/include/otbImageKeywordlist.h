@@ -127,7 +127,9 @@ public:
 
   ImageKeywordlist(const Self &);
   void operator =(const Self&);
-  bool operator ==(const Self&);
+
+  bool operator ==(const Self&) const;
+  inline bool operator != ( const Self & ) const;
 
 protected:
   /** Methods invoked by Print() to print information about the object
@@ -153,6 +155,14 @@ ImageKeywordlist ReadGeometryFromImage(const std::string& filename, bool checkRp
 ImageKeywordlist ReadGeometryFromGEOMFile(const std::string& filename);
 ImageKeywordlist ReadGeometryFromRPCTag(const std::string& filename);
 void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename);
+
+inline
+bool
+ImageKeywordlist
+::operator !=( const Self & p ) const
+{
+  return !this->operator == ( p );
+}
 
 } //namespace otb
 

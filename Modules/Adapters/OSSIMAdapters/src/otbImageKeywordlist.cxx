@@ -59,8 +59,8 @@ operator =(const Self& p)
 }
 
 bool
-ImageKeywordlist::
-operator ==(const Self& p)
+ImageKeywordlist
+::operator ==(const Self& p) const
 {
   return m_Keywordlist == p.m_Keywordlist;
 }
