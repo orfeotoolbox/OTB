@@ -13,9 +13,6 @@ otb_module(OTBOGRProcessing
     OTBLabelling
     OTBGDAL
     OTBITK
-  
-  OPTIONAL_DEPENDS
-    OTBEdisonMeanShift
 
   TEST_DEPENDS
     OTBTestKernel

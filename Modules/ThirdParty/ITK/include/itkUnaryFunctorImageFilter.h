@@ -18,6 +18,9 @@
 #ifndef __itkUnaryFunctorImageFilter_h
 #define __itkUnaryFunctorImageFilter_h
 
+#ifndef itkUnaryFunctorImageFilter_h
+#define itkUnaryFunctorImageFilter_h
+
 #include "itkInPlaceImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 
@@ -136,4 +139,5 @@ private:
 #include "itkUnaryFunctorImageFilter.hxx"
 #endif
 
+#endif
 #endif

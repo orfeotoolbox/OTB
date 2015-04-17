@@ -444,7 +444,7 @@ private:
  * D. Comaniciu, P. Meer, "Mean Shift Analysis and Applications," iccv, p. 1197, Seventh International Conference
  * on Computer Vision (ICCV'99) - Volume 2, 1999
  *
- * \sa MeanShiftImageFilter
+ * \sa MeanShiftSegmentationFilter
  *
  * \ingroup ImageSegmentation
  * \ingroup ImageEnhancement

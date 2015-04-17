@@ -28,9 +28,6 @@
 #include "itkGradientMagnitudeImageFilter.h"
 #include "otbWatershedSegmentationFilter.h"
 #include "otbMorphologicalProfilesSegmentationFilter.h"
-#ifdef OTB_USE_EDISON
-#include "otbMeanShiftVectorImageFilter.h"
-#endif
 
 // Large scale vectorization framework
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
@@ -61,13 +58,6 @@ public:
   typedef UInt32ImageType               MaskImageType;
 
   // Segmentation filters typedefs
-#ifdef OTB_USE_EDISON
-  // Edison mean-shift
-  typedef otb::MeanShiftVectorImageFilter
-  <FloatVectorImageType,
-   FloatVectorImageType,
-   LabelImageType>                        EdisonSegmentationFilterType;
-#endif
 
   // Home made mean-shift
   typedef otb::MeanShiftSegmentationFilter
@@ -110,12 +100,6 @@ public:
   <FloatVectorImageType, MaskImageType>   MaskMuParserFilterType;
 
   // Vectorize filters
-#ifdef OTB_USE_EDISON
-  // Edison mean-shift
-  typedef otb::StreamingImageToOGRLayerSegmentationFilter
-  <FloatVectorImageType,
-   EdisonSegmentationFilterType>          EdisontreamingVectorizedSegmentationOGRType;
-#endif
 
   // Home made mean-shift
   typedef otb::StreamingImageToOGRLayerSegmentationFilter
@@ -211,27 +195,6 @@ private:
     SetMinimumParameterIntValue("filter.meanshift.minsize", 0);
     SetDefaultParameterInt("filter.meanshift.maxiter", 100);
     SetMinimumParameterIntValue("filter.meanshift.maxiter", 1);
-
-#ifdef OTB_USE_EDISON
-    AddChoice("filter.edison", "Edison mean-shift");
-    SetParameterDescription("filter.edison",
-                            "Edison implementation of mean-shift algorithm, by its authors.");
-
-    // EDISON Meanshift Parameters
-    AddParameter(ParameterType_Int, "filter.edison.spatialr", "Spatial radius");
-    SetParameterDescription("filter.edison.spatialr", "Spatial radius defining neighborhood.");
-    AddParameter(ParameterType_Float, "filter.edison.ranger", "Range radius");
-    SetParameterDescription("filter.edison.ranger", "Range radius defining the radius (expressed in radiometry unit) in the multi-spectral space.");
-    AddParameter(ParameterType_Int, "filter.edison.minsize", "Minimum region size");
-    SetParameterDescription("filter.edison.minsize", "Minimum size of a region in segmentation. Smaller clusters will be merged to the neighboring cluster with the closest radiometry.");
-    AddParameter(ParameterType_Float, "filter.edison.scale", "Scale factor");
-    SetParameterDescription("filter.edison.scale", "Scaling of the image before processing. This is useful for images with narrow decimal ranges (like [0,1] for instance). ");
-    SetDefaultParameterInt("filter.edison.spatialr", 5);
-    SetDefaultParameterFloat("filter.edison.ranger", 15.0);
-    SetDefaultParameterInt("filter.edison.minsize", 100);
-    SetMinimumParameterIntValue("filter.edison.minsize", 0);
-    SetDefaultParameterFloat("filter.edison.scale", 1.);
-#endif
 
     //Connected component segmentation parameters
     AddChoice("filter.cc", "Connected components");
@@ -600,34 +563,6 @@ private:
                                                                                                                                                 "in"),
                                                                                                              layer, 0);
       }
-#ifdef OTB_USE_EDISON
-    else
-      if (segType == "edison")
-        {
-        otbAppLogINFO(<<"Use Edison Mean-shift segmentation."<<std::endl);
-
-        //segmentation parameters
-        const unsigned int spatialRadius = static_cast<unsigned int> (this->GetParameterInt("filter.edison.spatialr"));
-        const float rangeRadius = static_cast<float> (this->GetParameterFloat("filter.edison.ranger"));
-        const unsigned int
-            minimumObjectSize = static_cast<unsigned int> (this->GetParameterInt("filter.edison.minsize"));
-        const float scale = this->GetParameterFloat("filter.edison.scale");
-
-        EdisontreamingVectorizedSegmentationOGRType::Pointer
-            edisonVectorizationFilter = EdisontreamingVectorizedSegmentationOGRType::New();
-
-        edisonVectorizationFilter->GetSegmentationFilter()->SetSpatialRadius(spatialRadius);
-        edisonVectorizationFilter->GetSegmentationFilter()->SetRangeRadius(rangeRadius);
-        edisonVectorizationFilter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
-        edisonVectorizationFilter->GetSegmentationFilter()->SetScale(scale);
-
-        streamSize = GenericApplySegmentation<FloatVectorImageType, EdisonSegmentationFilterType> (
-                                                                                                   edisonVectorizationFilter,
-                                                                                                   this->GetParameterFloatVectorImage(
-                                                                                                                                      "in"),
-                                                                                                   layer, 2);
-        }
-#endif
       else
         if (segType == "meanshift")
           {

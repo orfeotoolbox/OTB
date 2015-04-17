@@ -7,4 +7,6 @@ void RegisterTests()
   REGISTER_TEST(otbLabelizeNeighborhoodConnectedImageFilterNew);
   REGISTER_TEST(otbLabelizeNeighborhoodConnectedImageFilter);
   REGISTER_TEST(otbLabelizeConfidenceConnectedImageFilterNew);
+  REGISTER_TEST(otbLabelToBoundaryImageFilter);
+  REGISTER_TEST(otbLabelToBoundaryImageFilterNew);
 }
