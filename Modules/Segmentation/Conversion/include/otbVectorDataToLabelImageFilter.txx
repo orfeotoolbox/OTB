@@ -259,6 +259,15 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
   // Get the buffered region
   OutputImageRegionType bufferedRegion = this->GetOutput()->GetBufferedRegion();
 
+  //Start from a clean buffer
+  //Patch provided by R. Cresson on otb-developers
+  typename itk::ImageRegionIterator<OutputImageType> outputIt(this->GetOutput(), bufferedRegion);
+  
+  for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
+    {
+    outputIt.Set(itk::NumericTraits<typename OutputImageType::InternalPixelType>::Zero);
+    }
+  
   // nb bands
   unsigned int nbBands =  this->GetOutput()->GetNumberOfComponentsPerPixel();
 
