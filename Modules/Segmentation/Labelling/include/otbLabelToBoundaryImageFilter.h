@@ -33,6 +33,7 @@ namespace Functor
  * The generated boundary is 1-pixel wide, so it is not symetric. 
  * Output value is 1 on the boundaries and 0 in the background
  * 
+ * \ingroup OTBLabelling
  */
 template < class TInput, class TOutput >
 class LabelToBoundaryFunctor
@@ -65,6 +66,7 @@ public:
  * The generated boundary is 1-pixel wide, so it is not symetric. 
  * Output value is 1 on the boundaries and 0 in the background
  * 
+ * \ingroup OTBLabelling
  */
 template < class TInputImage, class TOutputImage >
 class ITK_EXPORT LabelToBoundaryImageFilter
