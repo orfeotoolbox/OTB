@@ -86,8 +86,8 @@ ImageSettings
   m_IsApplied( false ),
   m_Effect( EFFECT_NORMAL ),
   m_Size( 50 ),
-  m_LCRange( 0.0 ),
-  m_SARange( 0.0 ),
+  m_Range( 0.0 ),
+  m_Angle( 0.0 ),
   m_Alpha( 1.0 )
 {
 }
@@ -106,13 +106,13 @@ ImageSettings
   switch( m_Effect )
     {
     case EFFECT_LOCAL_CONTRAST:
-      qDebug() << "LCRange = " << value;
-      m_LCRange = value;
+      qDebug() << "Range = " << value;
+      m_Range = value;
       break;
 
     case EFFECT_SPECTRAL_ANGLE :
-      qDebug() << "SARange = " << value;
-      m_SARange = value;
+      qDebug() << "Angle = " << value;
+      m_Angle = value;
       break;
 
     default:
@@ -131,13 +131,13 @@ ImageSettings
   switch( m_Effect )
     {
     case EFFECT_LOCAL_CONTRAST:
-      qDebug() << "LCRange:" << m_LCRange;
-      return m_LCRange;
+      qDebug() << "Range:" << m_Range;
+      return m_Range;
       break;
 
     case EFFECT_SPECTRAL_ANGLE :
-      qDebug() << "SARange:" << m_LCRange;
-      return m_SARange;
+      qDebug() << "Angle:" << m_Angle;
+      return m_Angle;
       break;
 
     default:

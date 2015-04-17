@@ -223,8 +223,8 @@ private:
 
   /**
    */
-  double m_LCRange;
-  double m_SARange;
+  double m_Range;
+  double m_Angle;
 
   /**
    */
