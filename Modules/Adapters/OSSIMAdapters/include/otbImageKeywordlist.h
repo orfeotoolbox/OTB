@@ -82,9 +82,6 @@ public:
 
   typedef std::map<std::string, std::string> KeywordlistMap;
 
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageKeywordlist, ImageKeywordlist);
-
   /** Get the internal map container */
   const KeywordlistMap& GetKeywordlist() const
   {

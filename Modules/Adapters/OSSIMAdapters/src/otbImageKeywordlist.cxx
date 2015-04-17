@@ -90,7 +90,7 @@ GetMetadataByKey(const std::string& key) const
   // If the key can not be found, throw an exception
   if (it == m_Keywordlist.end())
     {
-    itkExceptionMacro(<< "Keywordlist has no output with key " << key);
+    itkGenericExceptionMacro(<< "Keywordlist has no output with key " << key);
     }
 
   // Then if everything is ok, return the ossinString
