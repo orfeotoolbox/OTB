@@ -143,17 +143,9 @@ void GlImageActor::Initialize(const std::string & filename)
   // std::cout<<"Number of resolutions in file: "<<m_AvailableResolutions.size()<<std::endl;
 }
 
-#include <iostream>
 
 void GlImageActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
 {
-  // std::cout
-  //   << "Extent: "
-  //   << this
-  //   << " '" << m_FileReader->GetOutput()->GetProjectionRef() << "' ;"
-  //   << " '" << m_ImageToViewportTransform->GetOutputProjectionRef() << "' ;"
-  //   << " '" << GetSettings()->GetWkt() << "'" << std::endl;
-
   RegionType largest = m_FileReader->GetOutput()->GetLargestPossibleRegion();
 
   ImageRegionToViewportExtent(largest,ulx,uly,lrx,lry);
@@ -172,22 +164,19 @@ void GlImageActor::ProcessViewSettings()
 
   m_ViewportForwardRotationTransform->SetParameters(rigidParameters);
 
-   rigidParameters[0]=-settings->GetRotationAngle();
-
-   m_ViewportBackwardRotationTransform->SetParameters(rigidParameters);
-
-  if(settings->GetUseProjection() && settings->GetGeometryChanged())
+  rigidParameters[0]=-settings->GetRotationAngle();
+  
+  m_ViewportBackwardRotationTransform->SetParameters(rigidParameters);
+  
+  UpdateTransforms();
+  
+  for (TileVectorType::iterator it = m_LoadedTiles.begin();
+       it!=m_LoadedTiles.end();
+       ++it)
     {
-    UpdateTransforms();
-    
-    for (TileVectorType::iterator it = m_LoadedTiles.begin();
-         it!=m_LoadedTiles.end();
-         ++it)
-      {
-      // Do not rotate here, handled by opengl
-      this->ImageRegionToViewportQuad(it->m_ImageRegion,it->m_UL,it->m_UR,it->m_LL,it->m_LR,false);
-      }
-    } 
+    // Do not rotate here, handled by opengl
+    this->ImageRegionToViewportQuad(it->m_ImageRegion,it->m_UL,it->m_UR,it->m_LL,it->m_LR,false);
+    }
 }
 
 void GlImageActor::UpdateData()
@@ -721,19 +710,24 @@ void GlImageActor::UpdateTransforms()
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
 
-  // std::cout << "Tranform: " << this;
-
-  m_ViewportToImageTransform = RSTransformType::New();
-  m_ImageToViewportTransform = RSTransformType::New();
-
-  if(settings->GetUseProjection())
+  if(!settings->GetUseProjection() || m_ViewportToImageTransform.IsNull() || m_ImageToViewportTransform.IsNull())
     {
-    // std::cout
-    //   << " '"
-    //   << m_ImageToViewportTransform->GetOutputProjectionRef()
-    //   << "' -> '"
-    //   << settings->GetWkt()
-    //   << "'";
+    m_ViewportToImageTransform = RSTransformType::New();
+    m_ImageToViewportTransform = RSTransformType::New();
+    }
+
+  bool geometryChanged = settings->GetGeometryChanged();
+
+  geometryChanged = geometryChanged 
+  || (m_ViewportToImageTransform.IsNotNull() && m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt())
+  || (m_ImageToViewportTransform.IsNotNull() && m_ImageToViewportTransform->GetOutputProjectionRef() != settings->GetWkt())
+    || (m_ViewportToImageTransform.IsNotNull() && !(m_ViewportToImageTransform->GetInputKeywordList() == settings->GetKeywordList()))
+        || (m_ImageToViewportTransform.IsNotNull() && !(m_ImageToViewportTransform->GetOutputKeywordList() == settings->GetKeywordList()));
+
+  if(settings->GetUseProjection() && geometryChanged)
+    {
+    m_ViewportToImageTransform = RSTransformType::New();
+    m_ImageToViewportTransform = RSTransformType::New();
 
     m_ViewportToImageTransform->SetInputProjectionRef(settings->GetWkt());
     m_ViewportToImageTransform->SetInputKeywordList(settings->GetKeywordList());
@@ -745,8 +739,6 @@ void GlImageActor::UpdateTransforms()
     m_ImageToViewportTransform->SetInputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
     m_ImageToViewportTransform->SetInputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
     }
-
-  // std::cout << std::endl;
 
   m_ViewportToImageTransform->InstanciateTransform();
   m_ImageToViewportTransform->InstanciateTransform();

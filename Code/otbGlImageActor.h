@@ -152,6 +152,9 @@ public:
                                     const Point2d & in,
                                     bool isPhysical = true ) const;
 
+
+  void UpdateTransforms();
+
 protected:
   GlImageActor();
   
@@ -230,8 +233,6 @@ private:
   void ViewportExtentToImageRegion(const double& ulx, const double & uly, const double & lrx, const double & lry, RegionType & region) const;
 
   void UpdateResolution();
-
-  void UpdateTransforms();
  
   unsigned int m_TileSize;
 
