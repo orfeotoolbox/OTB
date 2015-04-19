@@ -19,6 +19,7 @@
 #define __otbVectorDataToLabelImageFilter_h
 
 #include "itkImageToImageFilter.h"
+#include "itkImageRegionIterator.h"
 #include "otbMacro.h"
 
 #include "otbVectorData.h"
