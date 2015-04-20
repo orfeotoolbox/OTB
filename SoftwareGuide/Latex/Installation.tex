@@ -238,7 +238,7 @@ OTB\textunderscore SOURCE\textunderscore DIR, OTB\textunderscore BINARY\textunde
     \begin{itemize}
         \item Set the CMAKE\textunderscore INSTALL\textunderscore PREFIX to your install directory (OTB\textunderscore INSTALL\textunderscore DIR)
         \item Online mode (default) : CMake will download all the source archives required to build the dependencies in the folder pointed by the variable DOWNLOAD\textunderscore LOCATION
-        \item Offline mode : if you have already the dependencies archives on your disk, set the variable DOWNLOAD\textunderscore LOCATION to the folder containing those archives. If archives names and MD5 sums match, CMake won't download them.
+        \item Offline mode : if you have already the dependencies archives on your disk, set the variable DOWNLOAD\textunderscore LOCATION to the folder containing those archives. If archives names and MD5 sums match, CMake won't download them. An archive containing all the needed source archives is available on Orfeo ToolBox website, you may download it, uncompress, and point the DOWNLOAD\textunderscore LOCATION variable to the uncompressed folder (see \url{https://www.orfeo-toolbox.org/packages/SuperBuild-archives.tar.bz2}).
         \item For each dependency, you can use the variable USE\textunderscore SYSTEM\textunderscore XXX to choose whether you want this dependency to be build by SuperBuild or if a system version should be used. 
     \end{itemize}
     \item From the cmake interface, launch 'Configure' and 'Generate'
