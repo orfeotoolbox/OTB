@@ -490,7 +490,15 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
   ill[1]+=0.5*spacing[1];
   ilr[0]+=0.5*spacing[0];
   ilr[1]+=0.5*spacing[1];
-  
+
+  // Ensure m_ImageToViewport and m_ViewportToImage transforms are
+  // up-to-date.
+  //
+  // const_cast<>() could be removed it ::UpdateTransforms() is
+  // non-const given that the m_ImageToViewport and m_ViewportToImage
+  // transforms are declared as mutable.
+  const_cast< GlImageActor * >( this )->UpdateTransforms();
+
   PointType pul = m_ImageToViewportTransform->TransformPoint(iul);
   PointType pur = m_ImageToViewportTransform->TransformPoint(iur);
   PointType pll = m_ImageToViewportTransform->TransformPoint(ill);
