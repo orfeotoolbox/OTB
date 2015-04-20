@@ -2,10 +2,8 @@
 
 tempFolder=@TEMP@
 gdalLibLocation=@GDAL_LIBRARY@
-sourceDir=@CMAKE_SOURCE_DIR@
 apple=@APPLE@
-gdalConfig=@GDAL_CONFIG@
-gdalTranslate=`dirname ${gdalConfig}`/gdal_translate
+
 
 mkdir -p ${tempFolder}
 
@@ -17,6 +15,3 @@ nm -D --defined-only ${gdalLibLocation} | grep TIFFClose > ${tempFolder}/testgda
 else
 nm -U ${gdalLibLocation} | grep TIFFClose > ${tempFolder}/testgdal2.txt # -U : don't display undefined syms (same as --defined-only)
 fi
-
-#TEST 3 : Big tiff
-${gdalTranslate} -co "BIGTIFF=YES" ${tempFolder}/testImage.gtif ${tempFolder}/testImageBIG.tif > ${tempFolder}/testgdal3.txt

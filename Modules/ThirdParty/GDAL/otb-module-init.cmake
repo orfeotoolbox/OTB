@@ -40,10 +40,17 @@ try_run(GDAL_HAS_GTIF COMPILE_RESULT_FORMATS ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE
 
 
 # Can create geotiff file
-try_run(GDAL_CAN_CREATE_GEOTIFF COMPILE_RESULT_CREATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalCreateTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS GTiff ${TEMP}/testImage.gtif )
+if (GDAL_HAS_GTIF)
+	try_run(GDAL_CAN_CREATE_GEOTIFF COMPILE_RESULT_CREATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalCreateTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS GTiff ${TEMP}/testImage.gtif )
+endif()
 
 #Can create other format file
 if(COMPILE_RESULT_CREATE AND GDAL_CAN_CREATE_GEOTIFF) #Use the result of the previous try_run
+
+	# Can create bigtiff file 
+	if (GDAL_HAS_GTIF)
+		try_run(GDAL_CAN_CREATE_BIGTIFF COMPILE_RESULT_CREATECOPY ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS ${TEMP}/testImage.gtif ${TEMP}/testImage.bigtif GTiff "BIGTIFF=YES")
+	endif()
 
 	# Can create jpeg file 
 	if (GDAL_HAS_JPEG)
@@ -121,10 +128,16 @@ if (NOT COMPILE_RESULT_CREATECOPY)
 	
 else()
 
+	if (NOT GDAL_CAN_CREATE_BIGTIFF)
+		message(WARNING "No BIGTIFF capatilities.")
+		set(GDAL_QUALIFIES FALSE)
+	endif()
+
 	if (NOT GDAL_CAN_CREATE_JPEG)
 		message(WARNING "GDAL can't create jpeg files.")
 		set(GDAL_QUALIFIES FALSE)
 	endif()
+	
 	if (NOT GDAL_CAN_CREATE_JPEG2000)
 		message(WARNING "GDAL can't create jpeg2000 files.")
 		set(GDAL_QUALIFIES FALSE)
@@ -153,9 +166,6 @@ if(UNIX)
 		#------------------- TESTS ---------------------
 		# test libtiff/libgeotiff and test if symbols are renamed (only for internal libtiff/libgeotiff)
 		try_run(RUN_RESULT_VAR2 COMPILE_RESULT_VAR2 ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest2.cxx ARGS ${TEMP}/testgdal2.txt)
-
-		# bigtiff
-		try_run(RUN_RESULT_VAR3 COMPILE_RESULT_VAR3 ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest3.cxx ARGS ${TEMP}/testgdal3.txt)
 		#------------------- TESTS (END)---------------------
 
 
@@ -167,14 +177,6 @@ if(UNIX)
 			set(GDAL_QUALIFIES FALSE)
 		endif()
 		
-		
-		if (NOT COMPILE_RESULT_VAR3)
-			message(WARNING "Modules/ThirdParty/GDAL/gdalTest3.cxx did not compile.")
-		elseif (${RUN_RESULT_VAR3} EQUAL 1)
-			message(WARNING "No BIGTIFF capatilities.")
-			set(GDAL_QUALIFIES FALSE)
-		endif()
-
 		
 	endif() #GDAL_QUALIFIES
 
