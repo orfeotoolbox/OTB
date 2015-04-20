@@ -29,7 +29,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
-         <normaloff>:/icons/Data/Icons/zoom-1to1.png</normaloff>:/icons/Data/Icons/zoom-1to1.png</iconset>
+         <normaloff>:/icons/action_ZoomFull_Icon</normaloff>:/icons/action_ZoomFull_Icon</iconset>
        </property>
       </widget>
      </item>
