@@ -8,10 +8,10 @@ apple=@APPLE@
 mkdir -p ${tempFolder}
 
 
-#TEST 2 : dyn. symbols 
+#TEST 1 : dyn. symbols 
 if [ -z "${apple}" ]
 then
-nm -D --defined-only ${gdalLibLocation} | grep TIFFClose > ${tempFolder}/testgdal2.txt
+nm -D --defined-only ${gdalLibLocation} | grep TIFFClose > ${tempFolder}/gdalSymbols.txt
 else
-nm -U ${gdalLibLocation} | grep TIFFClose > ${tempFolder}/testgdal2.txt # -U : don't display undefined syms (same as --defined-only)
+nm -U ${gdalLibLocation} | grep TIFFClose > ${tempFolder}/gdalSymbols.txt # -U : don't display undefined syms (same as --defined-only)
 fi

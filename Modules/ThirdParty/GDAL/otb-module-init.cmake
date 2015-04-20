@@ -2,7 +2,6 @@ find_package ( GDAL REQUIRED )
 
 mark_as_advanced(GDAL_INCLUDE_DIR)
 mark_as_advanced(GDAL_LIBRARY)
-mark_as_advanced(GDAL_CONFIG)
 
 
 if(NOT GDAL_FOUND)
@@ -153,10 +152,6 @@ if(UNIX)
   
   if(GDAL_QUALIFIES)
   
-	  if("x${GDAL_CONFIG}" STREQUAL "x")
-		message(FATAL_ERROR "Cannot find gdal-config executable. Set GDAL_CONFIG")
-	  endif()
-
 		# Prepare bash script
 		configure_file(${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest.sh.in ${CMAKE_CURRENT_BINARY_DIR}/gdalTest.sh @ONLY)
 		execute_process(COMMAND chmod u+x ${CMAKE_CURRENT_BINARY_DIR}/gdalTest.sh)
@@ -165,14 +160,14 @@ if(UNIX)
 
 		#------------------- TESTS ---------------------
 		# test libtiff/libgeotiff and test if symbols are renamed (only for internal libtiff/libgeotiff)
-		try_run(RUN_RESULT_VAR2 COMPILE_RESULT_VAR2 ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest2.cxx ARGS ${TEMP}/testgdal2.txt)
+		try_run(RUN_RESULT_SYMBOLS COMPILE_RESULT_SYMBOLS ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalSymbolsTest.cxx ARGS ${TEMP}/gdalSymbols.txt)
 		#------------------- TESTS (END)---------------------
 
 
 		# Warning messages
-		if (NOT COMPILE_RESULT_VAR2)
-			message(WARNING "Modules/ThirdParty/GDAL/gdalTest2.cxx did not compile.")
-		elseif (${RUN_RESULT_VAR2} EQUAL 1)
+		if (NOT COMPILE_RESULT_SYMBOLS)
+			message(WARNING "Modules/ThirdParty/GDAL/gdalSymbolsTest.cxx did not compile.")
+		elseif (${RUN_RESULT_SYMBOLS} EQUAL 1)
 			message(WARNING "Internal versions of libtiff/libgeotiff detected without symbol renaming (when configuring GDAL, if options --with-libtiff or --with-geotiff are set to 'internal', then options --with-rename-internal-libtiff-symbols and --with-rename-internal-libgeotiff-symbols should be set to 'yes').")
 			set(GDAL_QUALIFIES FALSE)
 		endif()
@@ -182,3 +177,10 @@ if(UNIX)
 
 
 endif() #UNIX
+
+
+if (GDAL_QUALIFIES)
+	message(STATUS " >> Yes")
+else()
+	message(STATUS " >> No")
+endif()
