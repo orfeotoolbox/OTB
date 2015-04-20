@@ -96,7 +96,6 @@ SETUP_SYSTEM_LIBRARY(PROJECT QT4 DEFAULT ON)
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
 option(OTB_USE_CURL "Enable module Curl in OTB" ON)
-option(OTB_USE_EDISON "Enable module Edison in OTB" ON)
 option(OTB_USE_LIBKML "Enable module libKML in OTB" ON)
 option(OTB_USE_LIBSVM "Enable module libSVM in OTB" ON)
 option(OTB_USE_MAPNIK "Enable module Mapnik in OTB" OFF)
