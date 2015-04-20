@@ -73,6 +73,20 @@ ImageSettings
   QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Swipe (vertical)" ),
 };
 
+char const * const
+ImageSettings
+::EFFECT_VALUE_NAME[ ImageSettings::EFFECT_COUNT ] =
+{
+  NULL,
+  NULL,
+  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Range" ),
+  NULL,
+  NULL,
+  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Angle" ),
+  NULL,
+  NULL,
+};
+
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 

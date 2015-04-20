@@ -116,6 +116,20 @@ ShaderWidget
 
     m_UI->sizeSpinBox->setValue( settings->GetSize() );
 
+    char const * const text = settings->GetValueName();
+
+    if( text==NULL )
+      {
+      m_UI->valueLabel->setVisible( false );
+      m_UI->valueLabel->setText( QString() );
+      }
+    else
+      {
+      m_UI->valueLabel->setVisible( true );
+      m_UI->valueLabel->setText( QString( text ).append( ":" ) );
+      }
+
+    m_UI->valueLineEdit->setVisible( text!=NULL );
     m_UI->valueLineEdit->setText(
       settings->HasValue()
       ? ToQString( settings->GetValue() )
@@ -147,6 +161,20 @@ ShaderWidget
 
       m_UI->sizeSpinBox->setValue( settings->GetSize() );
 
+      char const * const text = settings->GetValueName();
+
+      if( text==NULL )
+	{
+	m_UI->valueLabel->setVisible( false );
+	m_UI->valueLabel->setText( QString() );
+	}
+      else
+	{
+	m_UI->valueLabel->setVisible( true );
+	m_UI->valueLabel->setText( QString( text ).append( ":" ) );
+	}
+
+      m_UI->valueLineEdit->setVisible( text!=NULL );
       m_UI->valueLineEdit->setText(
 	settings->HasValue()
 	? ToQString( settings->GetValue() )
@@ -180,9 +208,12 @@ ShaderWidget
   if( !HasSettings() )
     return;
 
-  bool isOk = true;
+  if( GetSettings()->HasValue() )
+    {
+    bool isOk = true;
 
-  GetSettings()->SetValue( text.toDouble( &isOk ) );
+    GetSettings()->SetValue( text.toDouble( &isOk ) );
+    }
 
   // assert( isOk );
 

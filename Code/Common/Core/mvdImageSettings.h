@@ -168,6 +168,10 @@ public:
 
   /**
    */
+  inline char const * const GetValueName() const;
+
+  /**
+   */
   inline void SetAlpha( double );
 
   /**
@@ -198,6 +202,10 @@ private:
 //
 // Private attributes.
 private:
+
+  /**
+   */
+  static char const * const  EFFECT_VALUE_NAME[ EFFECT_COUNT ];
 
   /**
    * \brief Flag which notices that rendering settings have been
@@ -325,6 +333,15 @@ ImageSettings
 ::GetEffect() const
 {
   return m_Effect;
+}
+
+/*****************************************************************************/
+inline
+char const * const
+ImageSettings
+::GetValueName() const
+{
+  return ImageSettings::EFFECT_VALUE_NAME[ m_Effect ];
 }
 
 /*****************************************************************************/
