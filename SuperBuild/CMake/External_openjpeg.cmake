@@ -31,8 +31,8 @@ else()
   
   ExternalProject_Add(${proj}
         PREFIX ${proj}
-        URL "http://sourceforge.net/projects/openjpeg.mirror/files/2.1.0/openjpeg-2.1.0.tar.gz/download"
-        URL_MD5 f6419fcc233df84f9a81eb36633c6db6
+        URL "http://sourceforge.net/projects/openjpeg.mirror/files/2.0.0/openjpeg-2.0.0.tar.gz/download"
+        URL_MD5 d9be274bddc0f47f268e484bdcaaa6c5
         BINARY_DIR ${OPENJPEG_SB_BUILD_DIR}
         INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
