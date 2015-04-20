@@ -102,7 +102,7 @@ option(OTB_USE_MAPNIK "Enable module Mapnik in OTB" OFF)
 option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
 option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
 option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
-option(OTB_USE_OPENJPEG "Enable module openjpeg in OTB" ON)
+option(OTB_USE_OPENJPEG "Enable module openjpeg in OTB" OFF)
 option(OTB_USE_QT4 "Enable module QT4 in OTB" ${ENABLE_QT4})
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
 
