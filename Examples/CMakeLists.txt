@@ -1,11 +1,11 @@
 if(NOT OTB_BUILD_DEFAULT_MODULES)
   message(FATAL_ERROR "BUILD_EXAMPLES requires OTB_BUILD_DEFAULT_MODULES to be ON")
 endif()
-# We also need to prevent any OTB_USE_XXX option to be OFF (except mapnik)
+# We also need to prevent any OTB_USE_XXX option to be OFF (except mapnik and openjpeg)
 # For now we parse module activation list and test if option is ON. If not the cmake configuration stop.
 #TODO We should provide a better mechanism here wich will deactivate only examples required by deactivated options.
 foreach (_activationOption ${OTB_MODULE_ACTIVATION_OPTION_LIST})
-  if(NOT ${_activationOption} AND NOT "x${_activationOption}" STREQUAL "xOTB_USE_MAPNIK")
+  if(NOT ${_activationOption} AND NOT "x${_activationOption}" STREQUAL "xOTB_USE_MAPNIK" AND NOT "x${_activationOption}" STREQUAL "xOTB_USE_OPENJPEG")
     message(FATAL_ERROR "BUILD_EXAMPLES requires ${_activationOption} to be ON")
   endif()
 endforeach()
