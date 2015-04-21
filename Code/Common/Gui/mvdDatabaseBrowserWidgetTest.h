@@ -22,8 +22,9 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
+#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi2.h"
-
+#endif //tag=QT4-boost-compatibility
 //
 // This file is included if and only if ENABLE_TREE_WIDGET_TEST is
 // true but its definition is not included here (see
@@ -55,11 +56,13 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "Core/mvdTypes.h"
 #if !DISABLE_CUSTOM_TW_ITEM
 #  include "Gui/mvdTreeWidgetItem.h"
 #endif // !DISABLE_CUSTOM_TW_ITEM
 
+#endif //tag=QT4-boost-compatibility
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
