@@ -9,9 +9,6 @@ if(NOT GDAL_FOUND)
 endif()
 
 if(GDAL_CONFIG_CHECKING)
-
-	message(STATUS "Check if Gdal qualifies for Orfeo ToolBox")
-
 	set(MIN_MAJOR_VERSION 1)
 	set(MIN_MINOR_VERSION 10)
 
@@ -185,9 +182,9 @@ if(GDAL_CONFIG_CHECKING)
 
 
 	if(GDAL_QUALIFIES AND NOT COMPILE_ERRORS)
-		message(STATUS " >> Yes")
+          message(STATUS "Check if Gdal qualifies for Orfeo ToolBox -- yes.")
 	else()
-		message(STATUS " >> No")
+          message(STATUS "Check if Gdal qualifies for Orfeo ToolBox -- no.")
 	endif()
 
 
