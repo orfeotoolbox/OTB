@@ -54,6 +54,7 @@ public:
   virtual double GetFalseNorthing() const;
   virtual double GetFalseEasting() const;
   virtual void SetParameters(double falseEasting, double falseNorthing);
+  using Superclass::SetParameters;
 
 protected:
   Eckert4MapProjection();

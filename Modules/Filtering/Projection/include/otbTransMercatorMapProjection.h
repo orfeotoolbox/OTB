@@ -53,6 +53,8 @@ public:
   virtual void SetFalseNorthing(double falseNorthing);
   virtual void SetScaleFactor(double scaleFactor);
   virtual void SetParameters(double falseEasting, double falseNorthing, double scaleFactor);
+  using Superclass::SetParameters;
+
   virtual double GetFalseNorthing() const;
   virtual double GetFalseEasting() const;
   virtual double GetScaleFactor() const;
