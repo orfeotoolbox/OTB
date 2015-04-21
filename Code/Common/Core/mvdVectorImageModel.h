@@ -44,6 +44,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbGenericRSTransform.h"
 
 //
@@ -51,7 +52,7 @@
 #include "Core/mvdAbstractImageModel.h"
 #include "Core/mvdTypes.h"
 #include "Gui/mvdColorSetupWidget.h"
-
+#endif
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -438,7 +439,7 @@ public:
   //
   // AbstractImageModel overrides.
 
-  /** 
+  /**
    * Get the number of available LOD.
    */
   virtual CountType GetNbLod() const;
@@ -503,7 +504,7 @@ signals:
   void CurrentPhysicalUpdated(const QStringList&);
   void CurrentGeographicUpdated(const QStringList&);
   void CurrentRadioUpdated(const QString&);
-  void CurrentPixelValueUpdated(const VectorImageType::PixelType &, 
+  void CurrentPixelValueUpdated(const VectorImageType::PixelType &,
                                 const QStringList& );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -549,7 +550,7 @@ private:
     Closest( double invZoomfactor,
              unsigned int lodCount );
 
-  /** 
+  /**
     * helper to setup the lod image using a width/height or a zoom factor
     */
   void SetupCurrentLodImage(int w, int h);
@@ -586,7 +587,7 @@ private:
   /** List of all Level of detail (Resolution) available from the file */
   CountType m_LodCount;
 
-  //  Generic RS Transform to get lat/long coordinates 
+  //  Generic RS Transform to get lat/long coordinates
   otb::GenericRSTransform<>::Pointer m_GenericRSTransform;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -666,7 +667,7 @@ VectorImageModel::Settings
 /*****************************************************************************/
 inline
 VectorImageModel::Settings
-::~Settings() 
+::~Settings()
 {
 }
 
