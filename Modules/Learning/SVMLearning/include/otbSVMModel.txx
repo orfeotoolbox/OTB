@@ -62,6 +62,7 @@ void
 SVMModel<TValue, TLabel>::Initialize()
 {
   // Initialize model
+  /*
   if (!m_Model)
     {
     m_Model = new struct svm_model;
@@ -77,7 +78,8 @@ SVMModel<TValue, TLabel>::Initialize()
 
     m_ModelUpToDate = false;
 
-    }
+    } */
+  m_ModelUpToDate = false;
 
   // Intialize problem
   m_Problem.l = 0;

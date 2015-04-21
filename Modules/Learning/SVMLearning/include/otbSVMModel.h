@@ -90,13 +90,15 @@ public:
   /** Get the number of classes. */
   unsigned int GetNumberOfClasses(void) const
   {
-    return (unsigned int) (m_Model->nr_class);
+    if (m_Model) return (unsigned int) (m_Model->nr_class);
+    return 0;
   }
 
   /** Get the number of hyperplane. */
   unsigned int GetNumberOfHyperplane(void) const
   {
-    return (unsigned int) (m_Model->nr_class * (m_Model->nr_class - 1) / 2);
+    if (m_Model) return (unsigned int) (m_Model->nr_class * (m_Model->nr_class - 1) / 2);
+    return 0;
   }
 
   /** Gets the model */
@@ -308,18 +310,21 @@ public:
   /** Return number of support vectors */
   int GetNumberOfSupportVectors(void) const
   {
-    return m_Model->l;
+    if (m_Model) return m_Model->l;
+    return 0;
   }
 
   /** Return rho values */
   double * GetRho(void) const
   {
-    return m_Model->rho;
+    if (m_Model) return m_Model->rho;
+    return NULL;
   }
   /** Return the support vectors */
   svm_node ** GetSupportVectors(void)
   {
-    return m_Model->SV;
+    if (m_Model) return m_Model->SV;
+    return NULL;
   }
   /** Set the support vectors and changes the l number of support vectors accordind to sv.*/
   void SetSupportVectors(svm_node ** sv, int nbOfSupportVector);
@@ -327,7 +332,8 @@ public:
   /** Return the alphas values (SV Coef) */
   double ** GetAlpha(void)
   {
-    return m_Model->sv_coef;
+    if (m_Model) return m_Model->sv_coef;
+    return NULL;
   }
   /** Set the alphas values (SV Coef) */
   void SetAlpha(double ** alpha, int nbOfSupportVector);
@@ -335,13 +341,15 @@ public:
   /** Return the labels lists */
   int * GetLabels()
   {
-    return m_Model->label;
+    if (m_Model) return m_Model->label;
+    return NULL;
   }
 
   /** Get the number of SV per classes */
   int * GetNumberOfSVPerClasse()
   {
-    return m_Model->nSV;
+    if (m_Model) return m_Model->nSV;
+    return NULL;
   }
 
   struct svm_problem& GetProblem()
