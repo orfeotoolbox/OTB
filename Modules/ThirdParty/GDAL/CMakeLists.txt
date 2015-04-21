@@ -3,4 +3,6 @@ project(OTBGDAL)
 set(OTBGDAL_SYSTEM_INCLUDE_DIRS ${GDAL_INCLUDE_DIRS})
 set(OTBGDAL_LIBRARIES "${GDAL_LIBRARIES}")
 
+set(GDAL_CONFIG_CHECKING ON CACHE BOOL "Tests to check gdal config." FORCE)
+
 otb_module_impl()
