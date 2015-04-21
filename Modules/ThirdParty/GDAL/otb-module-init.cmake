@@ -16,6 +16,7 @@ if(GDAL_CONFIG_CHECKING)
 	set(MIN_MINOR_VERSION 10)
 
 	set(GDAL_QUALIFIES TRUE)
+	set(COMPILE_ERRORS FALSE)
 
 	# Ensure that the temporary dir always exists before starting tests
 	if(NOT EXISTS ${TEMP})
@@ -82,6 +83,7 @@ if(GDAL_CONFIG_CHECKING)
 	# Warning messages
 	if (NOT COMPILE_RESULT_VERSION)
 		message(WARNING "Modules/ThirdParty/GDAL/gdalVersionTest.cxx did not compile.")
+		set(COMPILE_ERRORS TRUE)
 	elseif (${RUN_RESULT_VERSION} EQUAL 1)
 		file(READ "${TEMP}/gdalVersion.txt" DETECTED_VERSION)
 		message(WARNING "Version of GDAL must be >= " ${MIN_MAJOR_VERSION} "." ${MIN_MINOR_VERSION} " : " ${DETECTED_VERSION} " detected.")
@@ -95,6 +97,7 @@ if(GDAL_CONFIG_CHECKING)
 
 	if (NOT COMPILE_RESULT_FORMATS)
 		message(WARNING "Modules/ThirdParty/GDAL/gdalFormatsTest.cxx did not compile.")
+		set(COMPILE_ERRORS TRUE)
 	else()
 
 		if (NOT GDAL_HAS_J2K_JG2000 AND NOT GDAL_HAS_J2K_OPJG AND NOT GDAL_HAS_J2K_KAK AND NOT GDAL_HAS_J2K_ECW)
@@ -117,7 +120,7 @@ if(GDAL_CONFIG_CHECKING)
 
 	if (NOT COMPILE_RESULT_CREATE)
 		message(WARNING "Modules/ThirdParty/GDAL/gdalCreateTest.cxx did not compile.")
-		
+		set(COMPILE_ERRORS TRUE)
 	elseif (NOT GDAL_CAN_CREATE_GEOTIFF)
 			message(WARNING "GDAL can't create geotiff files.")
 			set(GDAL_QUALIFIES FALSE)
@@ -126,8 +129,7 @@ if(GDAL_CONFIG_CHECKING)
 
 	if (NOT COMPILE_RESULT_CREATECOPY)
 		message(WARNING "Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx did not compile.")
-		
-	else()
+		set(COMPILE_ERRORS TRUE)
 
 		if (NOT GDAL_CAN_CREATE_BIGTIFF)
 			message(WARNING "No BIGTIFF capatilities.")
@@ -169,6 +171,7 @@ if(GDAL_CONFIG_CHECKING)
 			# Warning messages
 			if (NOT COMPILE_RESULT_SYMBOLS)
 				message(WARNING "Modules/ThirdParty/GDAL/gdalSymbolsTest.cxx did not compile.")
+				set(COMPILE_ERRORS TRUE)
 			elseif (${RUN_RESULT_SYMBOLS} EQUAL 1)
 				message(WARNING "Internal versions of libtiff/libgeotiff detected without symbol renaming (when configuring GDAL, if options --with-libtiff or --with-geotiff are set to 'internal', then options --with-rename-internal-libtiff-symbols and --with-rename-internal-libgeotiff-symbols should be set to 'yes').")
 				set(GDAL_QUALIFIES FALSE)
@@ -181,7 +184,7 @@ if(GDAL_CONFIG_CHECKING)
 	endif() #UNIX
 
 
-	if (GDAL_QUALIFIES)
+	if(GDAL_QUALIFIES AND NOT COMPILE_ERRORS)
 		message(STATUS " >> Yes")
 	else()
 		message(STATUS " >> No")
