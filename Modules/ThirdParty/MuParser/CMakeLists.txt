@@ -24,11 +24,11 @@ unset(CMAKE_REQUIRED_FLAGS)
 unset(CMAKE_REQUIRED_DEFINES)
 
 if(OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS)
-  message(STATUS "  MuParser version is >= 2.0.0 : "
+  message(STATUS "MuParser version is >= 2.0.0 : "
     "uses '&&' and '||' logical operators, and C++ like "
     "ternary if-then-else operator")
 else()
-  message(STATUS "  MuParser version is < 2.0.0  : "
+  message(STATUS "MuParser version is < 2.0.0  : "
     "uses 'and' and 'or' logical operators, and ternary "
     "operator 'if( ; ; )'")
 endif()
