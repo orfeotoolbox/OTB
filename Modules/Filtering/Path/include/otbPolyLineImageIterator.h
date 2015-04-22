@@ -70,9 +70,6 @@ public:
   typedef typename TImage::PixelType             PixelType;
   typedef typename TImage::AccessorType          AccessorType;
 
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(PolyLineImageIterator, PolyLineImageConstIterator);
-
   /** Set the pixel value */
   void Set(const PixelType& value)
   {

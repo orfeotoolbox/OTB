@@ -19,7 +19,6 @@
 #define __otbImageReference_h
 
 #include "itkPoint.h"
-#include "itkMacro.h"
 
 namespace otb
 {
@@ -40,7 +39,7 @@ public:
   enum { Dimension = 2 };
   /**\name Standard ITK typedefs */
   //@{
-  itkTypeMacro(ImageReference, void);
+
   bool GetDebug() const
     {
     return m_Holder.GetDebug();

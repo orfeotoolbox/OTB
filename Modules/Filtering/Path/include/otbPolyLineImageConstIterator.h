@@ -70,9 +70,6 @@ public:
   typedef typename TImage::PixelType             PixelType;
   typedef typename TImage::AccessorType          AccessorType;
 
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(PolyLineImageConstIterator, None);
-
   /** Get the dimension (size) of the index. */
   static unsigned int GetImageIteratorDimension()
   {
