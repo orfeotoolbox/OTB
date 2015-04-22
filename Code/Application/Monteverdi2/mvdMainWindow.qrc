@@ -1,5 +1,10 @@
 <RCC>
   <qresource prefix="/icons">
+    <file alias="action_LayerUp_Icon">../../../Data/Icons/layer-up_24x24.png</file>
+    <file alias="action_LayerBottom_Icon">../../../Data/Icons/layer-bottom_24x24.png</file>
+    <file alias="action_LauerDelete_Icon">../../../Data/Icons/layer-delete_24x24.png</file>
+    <file alias="action_LayerDown_Icon">../../../Data/Icons/layer-down_24x24.png</file>
+    <file alias="action_LayerTop_Icon">../../../Data/Icons/layer-top_24x24.png</file>
     <file alias="action_ZoomFull_Icon">../../../Data/Icons/zoom-1to1.png</file>
     <file alias="otb">../../../Data/Icons/monteverdi2-32x32.png</file>
     <file alias="process">../../../Data/Icons/alg.png</file>
@@ -10,7 +15,7 @@
     <file alias="action_ZoomIn_Icon">../../../Data/Icons/action-zoomin_24x24.png</file>
     <file alias="action_ZoomExtent_Icon">../../../Data/Icons/action-zoomfullextent_24x24.png</file>
     <file alias="action_ZoomOut_Icon">../../../Data/Icons/action-zoomout_24x24.png</file>
-    <file alias="action_ZoomFull_Icon">../../../Data/Icons/action-zoomtolayer_24x24.png</file>
+    <file alias="action_ZoomLayer_Icon">../../../Data/Icons/action-zoomtolayer_24x24.png</file>
     <file alias="action_Open_Icon">../../../Data/Icons/document-open_32x32.png</file>
   </qresource>
   <qresource prefix="/images">

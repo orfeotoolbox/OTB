@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>162</width>
-    <height>117</height>
+    <width>188</width>
+    <height>124</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,54 +40,68 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QToolButton" name="topButton">
+       <property name="toolTip">
+        <string>Move layer to top of stack.</string>
+       </property>
        <property name="text">
-        <string>⇤</string>
+        <string/>
        </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextOnly</enum>
-       </property>
-       <property name="arrowType">
-        <enum>Qt::NoArrow</enum>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerTop_Icon</normaloff>:/icons/action_LayerTop_Icon</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QToolButton" name="upButton">
-       <property name="text">
-        <string>←</string>
+       <property name="toolTip">
+        <string>Move layer up in to stack.</string>
        </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextOnly</enum>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerUp_Icon</normaloff>:/icons/action_LayerUp_Icon</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QToolButton" name="downButton">
-       <property name="text">
-        <string>→</string>
+       <property name="toolTip">
+        <string>Move layer down in the stack.</string>
        </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextOnly</enum>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerDown_Icon</normaloff>:/icons/action_LayerDown_Icon</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QToolButton" name="bottomButton">
-       <property name="text">
-        <string>⇥</string>
+       <property name="toolTip">
+        <string>Move layer to bottom of stack.</string>
        </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextOnly</enum>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerBottom_Icon</normaloff>:/icons/action_LayerBottom_Icon</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QToolButton" name="deleteButton">
        <property name="text">
-        <string>☒</string>
+        <string/>
        </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextOnly</enum>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LauerDelete_Icon</normaloff>:/icons/action_LauerDelete_Icon</iconset>
        </property>
       </widget>
      </item>
@@ -108,6 +122,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../Application/Monteverdi2/mvdMainWindow.qrc"/>
+ </resources>
  <connections/>
 </ui>
