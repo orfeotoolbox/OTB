@@ -118,3 +118,6 @@ option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SW
 option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
 include(External_otb)
+
+# do a system checkup
+include(SystemCheckup)
