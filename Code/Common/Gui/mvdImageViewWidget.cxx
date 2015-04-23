@@ -465,7 +465,7 @@ ImageViewWidget
 {
   QGLWidget::paintGL();
 
-  // qDebug() << this << "::paintGL()";
+  qDebug() << this << "::paintGL()";
 
   //
   // Get new rendering-context.
@@ -558,11 +558,10 @@ ImageViewWidget
       VectorImageModel * imageModel = qobject_cast< VectorImageModel * >( it->second );
       assert( imageModel!=NULL );
 
-#if USE_XP_REGION_OPTIM
-
       if( imageModel->GetSettings().GetEffect()!=ImageSettings::EFFECT_NONE &&
 	  imageModel->GetSettings().GetEffect()!=ImageSettings::EFFECT_NORMAL )
 	{
+#if USE_XP_REGION_OPTIM
 	PointType origin;
 	PointType extent;
 
@@ -580,12 +579,14 @@ ImageViewWidget
 	    << "e:" << extent[ 0 ] << "," << extent[ 1 ];
 #endif // USE_XP_REGION_OPTIM
 
+	  qDebug() << "updateGL(" << in[ 0 ] << "," << in[ 1 ] << ")";
+
 	  updateGL();
 
 	  break;
 
-#if USE_XP_REGION_OPTIM
 	  }
+#if USE_XP_REGION_OPTIM
 	}
 #endif // USE_XP_REGION_OPTIM
       }
