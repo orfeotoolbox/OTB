@@ -67,6 +67,7 @@ ELSE(OTB_FOUND)
           "Cannot build OTB-Documents without OTB.  Please set OTB_DIR.")
 ENDIF(OTB_FOUND)
 
+set(OTB_SOURCE_DIR /home/cpalmann/mydev/OTB-Sandbox-Modular/OTB)
 IF( NOT OTB_SOURCE_DIR )
   MESSAGE(FATAL_ERROR "OTB source directory is not set. Please add OTB_SOURCE8DIR to your cmake cache.")
 ENDIF( NOT OTB_SOURCE_DIR )

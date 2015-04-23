@@ -215,7 +215,7 @@ The purpose is to provide an easy way to get OTB and its dependencies, whatever 
 \subsubsection{Requirements}
 There are few requirements to use the SuperBuild :
 \begin{itemize}
-	\item CMake (at least 2.8.11)
+	\item CMake (at least 2.8.6)
 	\item C and C++ compilers
 	\item libtool
 	\item mercurial (if you intend to download OTB sources from the repository) 
@@ -281,7 +281,6 @@ The libraries not handled by SuperBuild are :
 	\item SWIG
 \end{itemize}
 
-A wiki page is also available here : \url{http://wiki.orfeo-toolbox.org/index.php/SuperBuild}.
 
 \subsection{Manual installation of OTB dependencies}
 \label{sec:manualdependencies}
@@ -481,79 +480,6 @@ $ export GDAL_DATA=$GDAL_INSTALL_DIR/share/gdal
 
 Also note that with this Gdal configuration, you will still need to have Tiff and Geotiff libraries and headers available on your system to build OTB (due to third parties requiring them). However, you can use the system packages for those.
 
-\subsection{Custom OTB}
-
-Since OTB is modularized, it is possible to only build some modules instead of the whole set. 
-You can deactivate each module (and the ones that depend on it) one by one from the cmake interface. 
-You just have to switch off the cmake variable OTB\_BUILD\_DEFAULT\_MODULES, press Configure, and then switch off each Module\_module\_name variable.
-
-\newline
-
-Some of the OTB capabilities are considered as optional, and you can deactivate the related modules thanks to the following cmake variables:
-OTB\_USE\_LIBKML, OTB\_USE\_QT4, OTB\_USE\_OPENCV, OTB\_USE\_MUPARSERX, OTB\_USE\_OPENJPEG, OTB\_USE\_CURL, OTB\_USE\_MUPARSER, OTB\_USE\_LIBSVM, OTB\_USE\_MAPNIK, OTB\_USE\_6S, OTB\_USE\_SIFTFAST.
-
-The table below shows which modules are deactivated when switching off these variables:
-
-\begin{center}
-\begin{tiny}
-\begin{table}[!htbp]
-\begin{tabular}{|p{0.35\textwidth}|p{0.75\textwidth}|}
-\hline
-\textbf{Cmake variable} & \textbf{Modules} \\
-\hline
-\textbf{OTB\_USE\_LIBKML} & OTBlibkml OTBKMZWriter OTBIOKML OTBAppKMZ \\
-\hline
-\textbf{OTB\_USE\_QT4} & OTBQt4 OTBQtWidget \\
-\hline
-\textbf{OTB\_USE\_OPENCV} & OTBOpenCV \\
-\hline
-\textbf{OTB\_USE\_MUPARSERX} & OTBMuParserX OTBMathParserX OTBAppMathParserX \\
-\hline
-\textbf{OTB\_USE\_OPENJPEG} & OTBOpenJPEG OTBIOJPEG2000 \\
-\hline
-\textbf{OTB\_USE\_CURL} & OTBCurl \\
-\hline
-\textbf{OTB\_USE\_MUPARSER} & OTBMuParser OTBMathParser OTBDempsterShafer OTBAppClassification OTBAppMathParser OTBAppStereo OTBAppProjection OTBAppSegmentation OTBAppClassification OTBRoadExtraction OTBRCC8 OTBCCOBIA OTBAppSegmentation OTBMeanShift OTBAppSegmentation OTBMeanShift OTBAppSegmentation \\
-\hline
-\textbf{OTB\_USE\_LIBSVM} & OTBLibSVM OTBSVMLearning \\
-\hline
-\textbf{OTB\_USE\_MAPNIK} & OTBMapnik OTBVectorDataRendering \\
-\hline
-\textbf{OTB\_USE\_6S} & OTB6S OTBOpticalCalibration OTBAppOpticalCalibration OTBSimulation \\
-\hline
-\textbf{OTB\_USE\_SIFTFAST} & OTBSiftFast \\
-\hline
-\end{tabular}
-\caption{Optional capabilities and related modules.}
-\label{tab:optional}
-\end{table}
-\end{tiny}
-\end{center}
-
-Every cmake variable mentionned in this subsection are set to ON by default, except OTB\_USE\_MAPNIK; this means that, by default, all the modules indicated in table \ref{tab:instroduction1} (section \ref{sec:DirectoryStructure}) are built,
-except OTBMapnik and OTBVectorDataRendering.
-
-
-\section{Known issues}
-\label{sec:knownissues}
-
-\begin{itemize}
-\item  openjpeg/ITK 
-\end{itemize}
-
-It is important to know that the OpenJpeg library doesn't support name mangling since version 2.0. 
-As a consequence, if other libraries linked by your project already contain OpenJpeg, there may be a symbol conflict at run-time. 
-For instance, this was observed with OTB build on a recent ITK version (ver. 4). 
-The ITK library already had a version of OpenJpeg in libitkopenjpeg-*.so, which contained the OpenJpeg symbols un-wrapped. 
-These symbols were also loaded by the GDAL driver but only the first ones were used, which caused a crash. 
-
-More information can be found here : \url{http://wiki.orfeo-toolbox.org/index.php/JPEG2000_with_GDAL_OpenJpeg_plugin}
-
-\begin{itemize}
-\item  libkml / Ubuntu 12.04 
-\end{itemize}
-
-TODO
 
 
 \section{Getting Started With OTB }
