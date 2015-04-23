@@ -120,12 +120,12 @@ ImageSettings
   switch( m_Effect )
     {
     case EFFECT_LOCAL_CONTRAST:
-      qDebug() << "Range = " << value;
+      // qDebug() << "Range = " << value;
       m_Range = value;
       break;
 
     case EFFECT_SPECTRAL_ANGLE :
-      qDebug() << "Angle = " << value;
+      // qDebug() << "Angle = " << value;
       m_Angle = value;
       break;
 
@@ -145,12 +145,12 @@ ImageSettings
   switch( m_Effect )
     {
     case EFFECT_LOCAL_CONTRAST:
-      qDebug() << "Range:" << m_Range;
+      // qDebug() << "Range:" << m_Range;
       return m_Range;
       break;
 
     case EFFECT_SPECTRAL_ANGLE :
-      qDebug() << "Angle:" << m_Angle;
+      // qDebug() << "Angle:" << m_Angle;
       return m_Angle;
       break;
 
