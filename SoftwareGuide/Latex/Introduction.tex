@@ -175,6 +175,53 @@ It is therefore important to understand the source code directory structure---fo
   \item \code{OTB/Modules/Wrappers}---Applications wrappers with several access points (command-line, QT Gui, SWIG\ldots).
 \end{itemize}
 
+
+\begin{center}
+\begin{tiny}
+\begin{table}[!htbp]
+\begin{tabular}{|p{0.35\textwidth}|p{0.75\textwidth}|}
+\hline
+\textbf{Folder} & \textbf{Modules} \\
+\hline
+\textbf{Modules/Core} & OTBStreaming OTBPointSet OTBComplexImage OTBObjectList OTBInterpolation OTBCommandLineParser OTBCommon OTBImageBase OTBMetadata OTBLabelMap OTBVectorDataBase OTBTransform OTBSpatialObjects \\
+\hline
+\textbf{Modules/Learning} & OTBSVMLearning OTBSOM OTBLearningBase OTBDempsterShafer OTBSupervised OTBMarkov \\
+\hline
+\textbf{Modules/Registration} & OTBDisplacementField OTBDisparityMap OTBStereo \\
+\hline
+\textbf{Modules/Radiometry} & OTBOpticalCalibration OTBLandSatClassifier OTBSARCalibration OTBSimulation OTBIndices \\
+\hline
+\textbf{Modules/OBIA} & OTBRCC8 \\
+\hline
+\textbf{Modules/IO} & OTBKMZWriter OTBIOONERA OTBVectorDataIO OTBIOGDAL OTBIOTileMap OTBIOMSTAR OTBExtendedFilename OTBIOMW OTBIOLUM OTBImageIO OTBIOJPEG2000 OTBIOBSQ OTBIORAD OTBIOXML OTBTestKernel OTBIOKML OTBCarto \\
+\hline
+\textbf{Modules/ThirdParty} & OTBlibkml OTBQt4 OTBOpenCV OTBMuParserX OTBOpenJPEG OTBITK OTBCurl OTBOssim OTBBoost OTBOpenThreads OTBMuParser OTBLibSVM OTBTinyXML OTBGDAL OTBMapnik OTBOssimPlugins OTB6S OTBGeoTIFF OTBSiftFast \\
+\hline
+\textbf{Modules/Wrappers} & OTBCommandLine OTBQtWidget OTBSWIGWrapper OTBApplicationEngine \\
+\hline
+\textbf{Modules/Hyperspectral} & OTBUnmixing OTBEndmembersExtraction OTBAnomalyDetection \\
+\hline
+\textbf{Modules/Segmentation} & OTBCCOBIA OTBMeanShift OTBMorphologicalProfiles OTBConversion OTBWatersheds OTBMetrics OTBOGRProcessing OTBLabelling \\
+\hline
+\textbf{Modules/Detection} & OTBCloudDetection OTBRoadExtraction OTBUrbanArea OTBObjectDetection \\
+\hline
+\textbf{Modules/Adapters} & OTBBoostAdapters OTBGdalAdapters OTBCurlAdapters OTBOpenThreadsAdapters OTBOSSIMAdapters \\
+\hline
+\textbf{Modules/Feature} & OTBSeamCarving OTBDensity OTBEdge OTBMoments OTBTextures OTBDescriptors OTBCorner \\
+\hline
+\textbf{Modules/Fusion } & OTBFuzzy OTBPanSharpening OTBMajorityVoting \\
+\hline
+\textbf{Modules/Filtering} & OTBColorMap OTBMathParser OTBMathParserX OTBVectorDataManipulation OTBMorphologicalPyramid OTBDEM OTBChangeDetection OTBTimeSeries OTBPolarimetry OTBImageManipulation OTBWavelet OTBPath OTBDimensionalityReduction OTBImageNoise OTBProjection OTBSmoothing OTBVectorDataRendering OTBConvolution OTBStatistics \\
+\hline
+\textbf{Modules/Applications} & OTBAppMathParser OTBAppVectorDataTranslation OTBAppStereo OTBAppProjection OTBAppIndices OTBAppTextures OTBAppDimensionalityReduction OTBAppMoments OTBAppSARCalibration OTBAppChangeDetection OTBAppHyperspectral OTBAppOpticalCalibration OTBAppFiltering OTBAppVectorUtils OTBAppEdge OTBAppMathParserX OTBAppDescriptors OTBAppKMZ OTBAppFusion OTBAppTest OTBAppMorphology OTBAppSegmentation OTBAppImageUtils OTBAppClassification \\
+\hline
+\end{tabular}
+\caption{Correspondances between folders and modules.}
+\label{tab:introduction1}
+\end{table}
+\end{tiny}
+\end{center}
+
 See also chapter \ref{chapter:newModules} for more information about how to write modules.
 
 \subsection{Documentation}
