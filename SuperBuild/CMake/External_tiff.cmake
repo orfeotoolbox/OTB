@@ -5,10 +5,6 @@ set(__EXTERNAL_${proj}__ 1)
 
 message(STATUS "Setup libtiff...")
 
-#ADD_SYSTEM_LOCATION(PROJECT ${proj} VARIABLES ${proj}_LIBRARY ${proj}_INCLUDE_DIR)
-
-#ADD_SYSTEM_PREFIX(PROJECT ${proj})
-
 if(USE_SYSTEM_TIFF)
   find_package ( TIFF )
   add_custom_target(${proj})

@@ -11,8 +11,6 @@ message(STATUS "Setup Ossim...")
 #  set(DEFAULT_USE_SYSTEM_OSSIM  ON)
 #endif()
 
-ADD_SYSTEM_LOCATION(PROJECT ${proj} VARIABLES ${proj}_LIBRARY ${proj}_INCLUDE_DIR)
-
 if(USE_SYSTEM_OSSIM)
   find_package ( Ossim )
   add_custom_target(${proj})
