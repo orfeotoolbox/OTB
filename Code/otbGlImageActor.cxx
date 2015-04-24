@@ -148,6 +148,8 @@ void GlImageActor::GetExtent(double & ulx, double & uly, double & lrx, double & 
 {
   RegionType largest = m_FileReader->GetOutput()->GetLargestPossibleRegion();
 
+  const_cast< GlImageActor * >( this )->UpdateTransforms();
+
   ImageRegionToViewportExtent(largest,ulx,uly,lrx,lry);
 }
 
