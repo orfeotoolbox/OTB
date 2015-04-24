@@ -30,7 +30,16 @@
 # folder in PNG/XFIG/JPEG/EPS format.
 #
 #
-CMAKE_MINIMUM_REQUIRED(VERSION 1.6)
+
+
+
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+
+# TODO Check if OTB cmake is compatible with CMP0050 NEW policy
+# CMP0054 : New policy introduce in CMake 3.0, keep old behaviour for now
+if(POLICY CMP0050)
+  cmake_policy(SET CMP0050 OLD)
+endif()
 
 PROJECT(SoftwareGuide C)
 
