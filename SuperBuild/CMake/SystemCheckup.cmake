@@ -39,6 +39,9 @@ macro(SB_CHECKUP_FIND_PACKAGE var)
     elseif(DEFINED ${_var_name}_VERSION_MAJOR AND DEFINED ${_var_name}_VERSION_MINOR AND DEFINED ${_var_name}_VERSION_PATCH)
       message(STATUS "|  version = ${${_var_name}_VERSION_MAJOR}.${${_var_name}_VERSION_MINOR}.${${_var_name}_VERSION_PATCH}")
       set(_SB_CHECKUP_${_uppervar}_VERSION "${${_var_name}_VERSION_MAJOR}.${${_var_name}_VERSION_MINOR}.${${_var_name}_VERSION_PATCH}")
+    elseif(DEFINED ${_var_name}_MAJOR_VERSION AND DEFINED ${_var_name}_MINOR_VERSION AND DEFINED ${_var_name}_BUILD_VERSION)
+      message(STATUS "|  version = ${${_var_name}_MAJOR_VERSION}.${${_var_name}_MINOR_VERSION}.${${_var_name}_BUILD_VERSION}")
+      set(_SB_CHECKUP_${_uppervar}_VERSION "${${_var_name}_MAJOR_VERSION}.${${_var_name}_MINOR_VERSION}.${${_var_name}_BUILD_VERSION}")
     endif()
     
     # fix incomplete version numbers
@@ -107,11 +110,13 @@ SB_CHECKUP_SPLIT_VERSION(CURL)
 
 # GDAL
 SB_CHECKUP_FIND_PACKAGE(GDAL)
-SB_CHECKUP_FIND_VERSIONS(GDAL 
-                         gdal_version.h
-                         GDAL_VERSION_MAJOR
-                         GDAL_VERSION_MINOR
-                         GDAL_VERSION_REV)
+if(NOT _SB_CHECKUP_GDAL_VERSION)
+  SB_CHECKUP_FIND_VERSIONS(GDAL 
+                           gdal_version.h
+                           GDAL_VERSION_MAJOR
+                           GDAL_VERSION_MINOR
+                           GDAL_VERSION_REV)
+endif()
 
 # GeoTIFF
 SB_CHECKUP_FIND_PACKAGE(GeoTIFF)
@@ -121,11 +126,13 @@ SB_CHECKUP_FIND_PACKAGE(ITK)
 
 # libkml
 SB_CHECKUP_FIND_PACKAGE(LibKML)
-SB_CHECKUP_FIND_VERSIONS(LibKML 
-                         kml/base/version.h
-                         LIBKML_MAJOR_VERSION
-                         LIBKML_MINOR_VERSION
-                         LIBKML_MICRO_VERSION)
+if(NOT _SB_CHECKUP_LIBKML_VERSION)
+  SB_CHECKUP_FIND_VERSIONS(LibKML 
+                           kml/base/version.h
+                           LIBKML_MAJOR_VERSION
+                           LIBKML_MINOR_VERSION
+                           LIBKML_MICRO_VERSION)
+endif()
 
 # LibSVM
 SB_CHECKUP_FIND_PACKAGE(LibSVM)
@@ -143,11 +150,13 @@ SB_CHECKUP_SPLIT_VERSION(OpenCV)
 
 # OpenJPEG
 SB_CHECKUP_FIND_PACKAGE(OpenJPEG)
-SB_CHECKUP_FIND_VERSIONS(OpenJPEG
-                         opj_config.h
-                         OPJ_VERSION_MAJOR
-                         OPJ_VERSION_MINOR
-                         OPJ_VERSION_BUILD)
+if(NOT _SB_CHECKUP_OPENJPEG_VERSION)
+  SB_CHECKUP_FIND_VERSIONS(OpenJPEG
+                           opj_config.h
+                           OPJ_VERSION_MAJOR
+                           OPJ_VERSION_MINOR
+                           OPJ_VERSION_BUILD)
+endif()
 
 # OpenThreads
 SB_CHECKUP_FIND_PACKAGE(OpenThreads)
