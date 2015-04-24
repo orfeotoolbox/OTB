@@ -41,6 +41,11 @@ macro(SB_CHECKUP_FIND_PACKAGE var)
       set(_SB_CHECKUP_${_uppervar}_VERSION "${${_var_name}_VERSION_MAJOR}.${${_var_name}_VERSION_MINOR}.${${_var_name}_VERSION_PATCH}")
     endif()
     
+    # fix incomplete version numbers
+    if(_SB_CHECKUP_${_uppervar}_VERSION MATCHES "^[0-9]+\\.[0-9]+\$")
+      set(_SB_CHECKUP_${_uppervar}_VERSION "${_SB_CHECKUP_${_uppervar}_VERSION}.0")
+    endif()
+    
   endif()
 endmacro(SB_CHECKUP_FIND_PACKAGE)
 
@@ -63,25 +68,30 @@ endmacro(SB_CHECKUP_SPLIT_VERSION)
 
 macro(SB_CHECKUP_FIND_VERSIONS lib header major_name minor_name patch_name)
   string(TOUPPER ${lib} _upperlib)
-  if(_SB_CHECKUP_${_upperlib}_FOUND AND EXISTS ${header})
-    unset(_header_content)
-    set(_major_regex ".*# *define +${major_name} +([0-9]+).*")
-    set(_minor_regex ".*# *define +${minor_name} +([0-9]+).*")
-    set(_patch_regex ".*# *define +${patch_name} +([0-9]+).*")
-    file(READ ${header} _header_content)
-    string(REGEX REPLACE ${_major_regex} "\\1"
-           _SB_CHECKUP_${_upperlib}_VERSION_MAJOR
-           ${_header_content})
-    string(REGEX REPLACE ${_minor_regex} "\\1"
-           _SB_CHECKUP_${_upperlib}_VERSION_MINOR
-           ${_header_content})
-    string(REGEX REPLACE ${_patch_regex} "\\1"
-           _SB_CHECKUP_${_upperlib}_VERSION_PATCH
-           ${_header_content})
-    math(EXPR _SB_CHECKUP_${_upperlib}_VERSION_NUMBER
-      "((${_SB_CHECKUP_${_upperlib}_VERSION_MAJOR})*100+${_SB_CHECKUP_${_upperlib}_VERSION_MINOR})*100+${_SB_CHECKUP_${_upperlib}_VERSION_PATCH}")
-    set(_SB_CHECKUP_${_upperlib}_VERSION "${_SB_CHECKUP_${_upperlib}_VERSION_MAJOR}.${_SB_CHECKUP_${_upperlib}_VERSION_MINOR}.${_SB_CHECKUP_${_upperlib}_VERSION_PATCH}")
-    message(STATUS "|  version = ${_SB_CHECKUP_${_upperlib}_VERSION}")
+  if(_SB_CHECKUP_${_upperlib}_FOUND)
+    foreach(inc_path ${${_upperlib}_INCLUDE_DIRS})
+      if(EXISTS "${inc_path}/${header}")
+        unset(_header_content)
+        set(_major_regex ".*# *define +${major_name} +([0-9]+).*")
+        set(_minor_regex ".*# *define +${minor_name} +([0-9]+).*")
+        set(_patch_regex ".*# *define +${patch_name} +([0-9]+).*")
+        file(READ "${inc_path}/${header}" _header_content)
+        string(REGEX REPLACE ${_major_regex} "\\1"
+               _SB_CHECKUP_${_upperlib}_VERSION_MAJOR
+               ${_header_content})
+        string(REGEX REPLACE ${_minor_regex} "\\1"
+               _SB_CHECKUP_${_upperlib}_VERSION_MINOR
+               ${_header_content})
+        string(REGEX REPLACE ${_patch_regex} "\\1"
+               _SB_CHECKUP_${_upperlib}_VERSION_PATCH
+               ${_header_content})
+        math(EXPR _SB_CHECKUP_${_upperlib}_VERSION_NUMBER
+          "((${_SB_CHECKUP_${_upperlib}_VERSION_MAJOR})*100+${_SB_CHECKUP_${_upperlib}_VERSION_MINOR})*100+${_SB_CHECKUP_${_upperlib}_VERSION_PATCH}")
+        set(_SB_CHECKUP_${_upperlib}_VERSION "${_SB_CHECKUP_${_upperlib}_VERSION_MAJOR}.${_SB_CHECKUP_${_upperlib}_VERSION_MINOR}.${_SB_CHECKUP_${_upperlib}_VERSION_PATCH}")
+        message(STATUS "|  version = ${_SB_CHECKUP_${_upperlib}_VERSION}")
+        break()
+      endif()
+    endforeach()
   endif()
 endmacro(SB_CHECKUP_FIND_VERSIONS)
 
@@ -98,7 +108,7 @@ SB_CHECKUP_SPLIT_VERSION(CURL)
 # GDAL
 SB_CHECKUP_FIND_PACKAGE(GDAL)
 SB_CHECKUP_FIND_VERSIONS(GDAL 
-                         ${GDAL_INCLUDE_DIR}/gdal_version.h
+                         gdal_version.h
                          GDAL_VERSION_MAJOR
                          GDAL_VERSION_MINOR
                          GDAL_VERSION_REV)
@@ -112,7 +122,7 @@ SB_CHECKUP_FIND_PACKAGE(ITK)
 # libkml
 SB_CHECKUP_FIND_PACKAGE(LibKML)
 SB_CHECKUP_FIND_VERSIONS(LibKML 
-                         ${LIBKML_INCLUDE_DIR}/kml/base/version.h
+                         kml/base/version.h
                          LIBKML_MAJOR_VERSION
                          LIBKML_MINOR_VERSION
                          LIBKML_MICRO_VERSION)
@@ -133,6 +143,11 @@ SB_CHECKUP_SPLIT_VERSION(OpenCV)
 
 # OpenJPEG
 SB_CHECKUP_FIND_PACKAGE(OpenJPEG)
+SB_CHECKUP_FIND_VERSIONS(OpenJPEG
+                         opj_config.h
+                         OPJ_VERSION_MAJOR
+                         OPJ_VERSION_MINOR
+                         OPJ_VERSION_BUILD)
 
 # OpenThreads
 SB_CHECKUP_FIND_PACKAGE(OpenThreads)
