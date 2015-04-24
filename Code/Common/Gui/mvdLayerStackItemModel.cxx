@@ -632,11 +632,7 @@ void
 LayerStackItemModel
 ::OnLayerDeleted( size_t index )
 {
-  bool signalsBlocked = blockSignals( true );
-  {
   removeRow( index );
-  }
-  blockSignals( signalsBlocked );
 }
 
 /*****************************************************************************/
