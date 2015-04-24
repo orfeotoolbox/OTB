@@ -52,20 +52,10 @@ public:
   typedef itk::Point<PrecisionType, 2>  PointType;
   //@}
 
-#if !defined( NDEBUG )
-#if defined( __GXX_RTTI ) || defined( __cpp_rtti )
-  // Fixes compile-time error when compiling in DEBUG mode since
-  // otb:ImageReference<> is not derived from itk::Object.
-  //
-  // Error: ‘class otb::ogr::ImageReference<double>’ has no member
-  // named ‘GetNameOfClass' [...]  in expansion of macro
-  // ‘itkDebugMacro’
   inline const char * GetNameOfClass()
   {
-    return typeid( this ).name();
+    return "ImageReference";
   }
-#endif // __GXX_RTTI
-#endif // !NDEBUG
 
   /** Default constructor.
    * \post <tt>m_Spacing = {1,1}</tt>
