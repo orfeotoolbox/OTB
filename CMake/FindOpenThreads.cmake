@@ -10,12 +10,18 @@
 # OPENTHREADS_LIBRARIES
 # OPENTHREADS_FOUND, if false, do not try to link to OpenThreads
 # OPENTHREADS_INCLUDE_DIRS, where to find the headers
+# OPENTHREADS_VERSION        - version string
+# OPENTHREADS_VERSION_MAJOR  - version major number
+# OPENTHREADS_VERSION_MINOR  - version minor number
+# OPENTHREADS_VERSION_PATCH  - version patch number
+# OPENTHREADS_VERSION_NUMBER - version number ((major*100)+minor)*100+patch
 #
 # $OPENTHREADS_DIR is an environment variable that would
 # correspond to the ./configure --prefix=$OPENTHREADS_DIR
 # used in building osg.
 #
 # Created by Eric Wing.
+# Modified by Guillaume Pasero.
 
 #=============================================================================
 # Copyright 2007-2009 Kitware, Inc.
@@ -26,6 +32,14 @@
 # This software is distributed WITHOUT ANY WARRANTY; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the License for more information.
+#=============================================================================
+# Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+# See OTBCopyright.txt for details.
+#
+#
+#     This software is distributed WITHOUT ANY WARRANTY; without even
+#     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+#     PURPOSE.  See the above copyright notices for more information.
 #=============================================================================
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
@@ -71,6 +85,20 @@ find_path(OPENTHREADS_INCLUDE_DIR OpenThreads/Thread
 )
 mark_as_advanced(OPENTHREADS_INCLUDE_DIR)
 
+if(EXISTS "${OPENTHREADS_INCLUDE_DIR}/OpenThreads/Version")
+  file(READ "${OPENTHREADS_INCLUDE_DIR}/OpenThreads/Version" _openthreads_version_CONTENTS)
+  string(REGEX REPLACE ".*# *define +OPENTHREADS_MAJOR_VERSION +([0-9]+).*" "\\1" OPENTHREADS_VERSION_MAJOR "${_openthreads_version_CONTENTS}")
+  string(REGEX REPLACE ".*# *define +OPENTHREADS_MINOR_VERSION +([0-9]+).*" "\\1" OPENTHREADS_VERSION_MINOR "${_openthreads_version_CONTENTS}")
+  string(REGEX REPLACE ".*# *define +OPENTHREADS_PATCH_VERSION +([0-9]+).*" "\\1" OPENTHREADS_VERSION_PATCH "${_openthreads_version_CONTENTS}")
+  
+  set(OPENTHREADS_VERSION "${OPENTHREADS_VERSION_MAJOR}.${OPENTHREADS_VERSION_MINOR}.${OPENTHREADS_VERSION_PATCH}")
+  math(EXPR OPENTHREADS_VERSION_NUMBER
+    "((${OPENTHREADS_VERSION_MAJOR})*100+${OPENTHREADS_VERSION_MINOR})*100+${OPENTHREADS_VERSION_PATCH}")
+else()
+  if(NOT OPENTHREADS_FIND_QUIETLY)
+  message(WARNING "OpenThreads/Version not found !")
+  endif()
+endif()
 
 find_library(OPENTHREADS_LIBRARY
     NAMES OpenThreads OpenThreadsWin32
