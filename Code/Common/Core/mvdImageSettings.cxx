@@ -99,9 +99,9 @@ ImageSettings
   m_IsModified( false ),
   m_IsApplied( false ),
   m_Effect( EFFECT_NORMAL ),
-  m_Size( 50 ),
-  m_Range( 0.0 ),
-  m_Angle( 0.0 ),
+  m_Size( 256 ),
+  m_Range( 50.0 ),
+  m_Angle( 10.0 ),
   m_Alpha( 1.0 )
 {
 }
