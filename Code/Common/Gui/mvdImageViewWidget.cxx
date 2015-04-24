@@ -187,6 +187,14 @@ ImageViewWidget
       this,
       SLOT( UpdateScene() )
     );
+
+    QObject::disconnect(
+      model,
+      SIGNAL( ContentChanged() ),
+      // from:
+      this,
+      SLOT( updateGL() )
+    );
     }
   }
 
@@ -222,6 +230,14 @@ ImageViewWidget
     // to:
     this,
     SLOT( UpdateScene() )
+  );
+
+  QObject::connect(
+    stackedLayerModel,
+    SIGNAL( ContentChanged() ),
+    // to:
+    this,
+    SLOT( updateGL() )
   );
 
   QObject::connect(
@@ -465,7 +481,7 @@ ImageViewWidget
 {
   QGLWidget::paintGL();
 
-  qDebug() << this << "::paintGL()";
+  // qDebug() << this << "::paintGL()";
 
   //
   // Get new rendering-context.
