@@ -659,7 +659,7 @@ ImageViewRenderer
            ++it )
         if( !stackedLayerModel->Contains( *it ) )
           {
-          qDebug() << QString( "Removing image-actor '%1'..." ).arg( it->c_str() );
+          // qDebug() << QString( "Removing image-actor '%1'..." ).arg( it->c_str() );
 
           m_GlView->RemoveActor( *it );
           }
@@ -687,9 +687,9 @@ ImageViewRenderer
           VectorImageModel * vectorImageModel =
             dynamic_cast< VectorImageModel * >( it->second );
 
-	  qDebug()
-	    << QString( "Adding image-actor from file '%1'..." )
-	    .arg( vectorImageModel->GetFilename() );
+	  // qDebug()
+	  //   << QString( "Adding image-actor from file '%1'..." )
+	  //   .arg( vectorImageModel->GetFilename() );
 
           glImageActor->Initialize(
             ToStdString(
@@ -701,10 +701,10 @@ ImageViewRenderer
 
           // glImageActor->SetVisible( vectorImageModel->IsVisible() );
 
-          qDebug() <<
-	    QString( "Added image-actor '%1' from file '%2'" )
-	    .arg( FromStdString( it->first ) )
-	    .arg( vectorImageModel->GetFilename() );
+          // qDebug() <<
+	  //   QString( "Added image-actor '%1' from file '%2'" )
+	  //   .arg( FromStdString( it->first ) )
+	  //   .arg( vectorImageModel->GetFilename() );
           }
         else
           {
