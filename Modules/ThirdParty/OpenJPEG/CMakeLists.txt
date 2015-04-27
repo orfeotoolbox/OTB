@@ -2,7 +2,19 @@ project(OTBOpenJPEG)
   
   set(OTBOpenJPEG_SYSTEM_INCLUDE_DIRS ${OPENJPEG_INCLUDE_DIRS})
   set(OTBOpenJPEG_LIBRARIES "${OPENJPEG_LIBRARIES}")
+  set(OTBOpenJPEG_INCLUDE_DIRS ${OTBOpenJPEG_BINARY_DIR}/src)
   set(OTBOpenJPEG_EXPORT_CODE_BUILD "find_package(OpenJPEG REQUIRED HINTS ${OpenJPEG_DIR})")
   set(OTBOpenJPEG_EXPORT_CODE_INSTALL ${OTBOpenJPEG_EXPORT_CODE_BUILD})
   
+  if(OpenJPEG_FOUND)
+    math(EXPR OTBOpenJPEG_VERSION_NUMBER
+      "((${OPENJPEG_MAJOR_VERSION})*100+${OPENJPEG_MINOR_VERSION})*100+${OPENJPEG_BUILD_VERSION}")
+    configure_file( src/otb_openjpeg.h.in src/otb_openjpeg.h )
+  endif()
+
   otb_module_impl()
+
+install(FILES ${OTBOpenJPEG_BINARY_DIR}/src/otb_openjpeg.h
+  DESTINATION ${OTBOpenJPEG_INSTALL_INCLUDE_DIR}
+  COMPONENT Development
+  )

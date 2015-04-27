@@ -29,10 +29,7 @@
 
 #include <deque>
 
-extern "C"
-{
-#include "openjpeg.h"
-}
+#include "otb_openjpeg.h"
 
 #include "gdal.h"
 #include "gdaljp2metadata.h"
@@ -59,7 +56,15 @@ void OpjCodestreamDestroy(opj_codestream_info_v2_t * cstr)
 {
   opj_destroy_cstr_info(&cstr);
 }
-
+#if defined(OTBOpenJPEG_VERSION_NUMBER) && OTBOpenJPEG_VERSION_NUMBER < 20100
+void FileDestroy(FILE * file)
+{
+  if(file)
+    {
+    fclose(file);
+    }
+}
+#endif
 /**
 Divide an integer by a power of 2 and round upwards
 @return Returns a divided by 2^b
@@ -290,6 +295,9 @@ public:
 
 private:
   std::string m_FileName;
+#if defined(OTBOpenJPEG_VERSION_NUMBER) && OTBOpenJPEG_VERSION_NUMBER < 20100
+  boost::shared_ptr<FILE> m_File;
+#endif
   int Initialize();
 };
 
@@ -307,6 +315,15 @@ int JPEG2000InternalReader::Open(const char *filename, unsigned int resolution)
     this->Clean();
     return 0;
     }
+
+#if defined(OTBOpenJPEG_VERSION_NUMBER) && OTBOpenJPEG_VERSION_NUMBER < 20100
+  this->m_File  = boost::shared_ptr<FILE>(fopen(this->m_FileName.c_str(), "rb"),FileDestroy);
+  if (!this->m_File)
+    {
+    this->Clean();
+    return 0;
+    }
+#endif
 
   // Find the codec file format
 
@@ -340,6 +357,10 @@ int JPEG2000InternalReader::Open(const char *filename, unsigned int resolution)
 
 void JPEG2000InternalReader::Clean()
 {
+  this->m_FileName.clear();
+#if defined(OTBOpenJPEG_VERSION_NUMBER) && OTBOpenJPEG_VERSION_NUMBER < 20100
+  this->m_File = boost::shared_ptr<FILE>();
+#endif
   this->m_XResolution.clear();
   this->m_YResolution.clear();
   this->m_Precision.clear();
@@ -361,7 +382,21 @@ void JPEG2000InternalReader::Clean()
 
 boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int tileIndex)
 {
+#if defined(OTBOpenJPEG_VERSION_NUMBER) && OTBOpenJPEG_VERSION_NUMBER < 20100
+  if (!this->m_File)
+    {
+    this->Clean();
+    return boost::shared_ptr<opj_image_t>();
+    }
 
+  // Creating the file stream
+  boost::shared_ptr<opj_stream_t> stream = boost::shared_ptr<opj_stream_t>(opj_stream_create_default_file_stream(this->m_File.get(), true),opj_stream_destroy);
+  if (!stream)
+    {
+    this->Clean();
+    return boost::shared_ptr<opj_image_t>();
+    }
+#else
   if (this->m_FileName.empty())
     {
     this->Clean();
@@ -375,6 +410,7 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
     this->Clean();
     return boost::shared_ptr<opj_image_t>();
     }
+#endif
 
   // Creating the codec
   boost::shared_ptr<opj_codec_t> codec = boost::shared_ptr<opj_codec_t>(opj_create_decompress(this->m_CodecFormat),opj_destroy_codec);
@@ -436,6 +472,18 @@ JPEG2000InternalReader::JPEG2000InternalReader()
 
 int JPEG2000InternalReader::Initialize()
 {
+#if defined(OTBOpenJPEG_VERSION_NUMBER) && OTBOpenJPEG_VERSION_NUMBER < 20100
+  if (this->m_File)
+    {
+    // Creating the file stream
+    boost::shared_ptr<opj_stream_t> stream = boost::shared_ptr<opj_stream_t>(opj_stream_create_default_file_stream(this->m_File.get(), true),opj_stream_destroy);
+    if (!stream)
+      {
+      std::cerr << "ERROR file stream creation" << std::endl;
+      this->Clean();
+      return 0;
+      }
+#else
   if (!m_FileName.empty())
     {
     // Creating the file stream
@@ -446,7 +494,7 @@ int JPEG2000InternalReader::Initialize()
       this->Clean();
       return 0;
       }
-
+#endif
     // Creating the codec
     boost::shared_ptr<opj_codec_t> codec = boost::shared_ptr<opj_codec_t>(opj_create_decompress(this->m_CodecFormat),opj_destroy_codec);
 
