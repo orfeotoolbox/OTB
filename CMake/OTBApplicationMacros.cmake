@@ -118,25 +118,34 @@ macro(otb_create_application)
    #endif()
 
    list(APPEND OTB_APPLICATIONS_NAME_LIST ${APPLICATION_NAME})
+   list(REMOVE_DUPLICATES OTB_APPLICATIONS_NAME_LIST)
    set(OTB_APPLICATIONS_NAME_LIST ${OTB_APPLICATIONS_NAME_LIST}
        CACHE STRING "List of all applications" FORCE)
 
 endmacro()
 
 macro(otb_test_application)
-   cmake_parse_arguments(TESTAPPLICATION  "" "NAME;APP" "OPTIONS;TESTENVOPTIONS;VALID" ${ARGN} )
-   otb_add_test(NAME ${TESTAPPLICATION_NAME}
-                COMMAND otbTestDriver
+  cmake_parse_arguments(TESTAPPLICATION  "" "NAME;APP" "OPTIONS;TESTENVOPTIONS;VALID" ${ARGN} )
+  if(otb-module)
+    otb_add_test(NAME ${TESTAPPLICATION_NAME}
+                  COMMAND otbTestDriver
                   ${TESTAPPLICATION_VALID}
                   Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                   ${TESTAPPLICATION_APP}
                   $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
                   ${TESTAPPLICATION_OPTIONS}
                   -testenv ${TESTAPPLICATION_TESTENVOPTIONS})
-                  
-  if(otb-module)
     # Be sure that the ${otb-module}-all target triggers the build of commandline launcher and testdriver
     add_dependencies(${otb-module}-all otbApplicationLauncherCommandLine)
     add_dependencies(${otb-module}-all otbTestDriver)
+  else()
+    add_test(NAME ${TESTAPPLICATION_NAME}
+            COMMAND otbTestDriver
+            ${TESTAPPLICATION_VALID}
+            Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+            ${TESTAPPLICATION_APP}
+            $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
+            ${TESTAPPLICATION_OPTIONS}
+            -testenv ${TESTAPPLICATION_TESTENVOPTIONS})
   endif()
 endmacro()
