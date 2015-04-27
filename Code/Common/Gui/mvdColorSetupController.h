@@ -157,6 +157,10 @@ private:
    */
   void ResetIndices( RgbwChannel channels );
 
+  /**
+   */
+  void ResetAlpha();
+
   //
   // AbstractModelController overrides.
 

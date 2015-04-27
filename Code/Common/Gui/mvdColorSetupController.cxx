@@ -217,6 +217,10 @@ ColorSetupController
 
   // Set current-index of white (gray).
   colorSetupWidget->SetCurrentGrayIndex( 0 );
+
+  //
+  // Alpha
+  colorSetupWidget->SetAlpha( 1.0 );
   }
   colorSetupWidget->blockSignals( widgetSignalsBlocked );
   }
@@ -230,6 +234,9 @@ ColorSetupController
 {
   // Reset color-setup widget.
   ResetIndices( RGBW_CHANNEL_RGB );
+
+  // Reset alpha.
+  ResetAlpha();
 }
 
 /*******************************************************************************/
@@ -301,6 +308,37 @@ ColorSetupController
       imageModel->GetSettings().GetGrayChannel()
     );
     }
+  }
+  colorSetupWidget->blockSignals( widgetSignalsBlocked );
+  }
+  this->blockSignals( thisSignalsBlocked );
+}
+
+/*******************************************************************************/
+void
+ColorSetupController
+::ResetAlpha()
+{
+
+  //
+  // Access color-dynamics widget.
+  ColorSetupWidget* colorSetupWidget = GetWidget< ColorSetupWidget >();
+
+  //
+  // Access image-model.
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  // Block this controller's signals to prevent display refreshes
+  // but let let widget(s) signal their changes so linked values
+  // will be correctly updated.
+  bool thisSignalsBlocked = this->blockSignals( true );
+  {
+    // Block widget's signals...
+    //...but force call to valueChanged() slot to force refresh.
+  bool widgetSignalsBlocked = colorSetupWidget->blockSignals( true );
+  {
+  colorSetupWidget->SetAlpha( imageModel->GetSettings().GetAlpha() );
   }
   colorSetupWidget->blockSignals( widgetSignalsBlocked );
   }
