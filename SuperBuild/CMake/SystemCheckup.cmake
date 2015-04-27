@@ -1,7 +1,10 @@
 # Script to analyse the OTB dependencies already present
 
-message(STATUS "|------------------------------------------------")
-message(STATUS "|------------ System checkup results ------------")
+message(STATUS "|----------------------------------------------------------")
+message(STATUS "|----------------- System checkup results -----------------")
+message(STATUS "| The following libraries have been found on your system.")
+message(STATUS "| You can choose to use them (instead of superbuild versions)")
+message(STATUS "| by setting the corresponding option USE_SYSTEM_XXX.")
 
 # try to hide the Superbuild install dir, CMAKE_SYSTEM_PREFIX_PATH
 # contains the CMAKE_INSTALL_PREFIX (-> superbuild libs)
@@ -28,7 +31,7 @@ macro(SB_CHECKUP_FIND_PACKAGE var)
   
   if(_SB_CHECKUP_${_uppervar}_FOUND)
     set(_var_name ${_SB_CHECKUP_${_uppervar}_NAME})
-    message(STATUS "|------------------------------------------------")
+    message(STATUS "|----------------------------------------------------------")
     message(STATUS "|${var} found")
     if(DEFINED ${_var_name}_VERSION)
       set(_SB_CHECKUP_${_uppervar}_VERSION ${${_var_name}_VERSION})
@@ -180,6 +183,6 @@ endif()
 # TinyXML
 SB_CHECKUP_FIND_PACKAGE(TinyXML)
 
-message(STATUS "|------------------------------------------------")
+message(STATUS "|----------------------------------------------------------")
 # restore real install prefix
 list(APPEND CMAKE_SYSTEM_PREFIX_PATH ${CMAKE_INSTALL_PREFIX})
