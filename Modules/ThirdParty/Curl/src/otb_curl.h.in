@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #ifndef __otb_curl_h
+#define __otb_curl_h
 
 #cmakedefine OTB_CURL_MULTI_AVAILABLE
 #include <curl/curl.h>
