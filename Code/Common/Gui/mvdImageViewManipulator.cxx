@@ -563,6 +563,10 @@ ImageViewManipulator
 
     emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), point );
     }
+  else if( modifiers==Qt::NoModifier )
+    emit RotateLayersRequested(
+      event->delta() / (8 * MOUSE_WHEEL_STEP_DEGREES)
+    );
 }
 
 /******************************************************************************/

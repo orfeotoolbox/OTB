@@ -207,6 +207,9 @@ signals:
   /**
    */
   void ToggleLayerVisibilityRequested( bool );
+  /**
+   */
+  void RotateLayersRequested( int );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

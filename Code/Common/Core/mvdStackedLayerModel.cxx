@@ -459,8 +459,11 @@ void
 StackedLayerModel
 ::RotateLayerUp( SizeType index )
 {
-  assert( GetCount()>1 );
-  assert( index<GetCount() );
+  if( GetCount()<2 )
+    return;
+
+  if( index>=GetCount() )
+    return;
 
   KeyType currentKey( GetKey( m_Current ) );
   KeyType referenceKey( GetKey( m_Reference ) );

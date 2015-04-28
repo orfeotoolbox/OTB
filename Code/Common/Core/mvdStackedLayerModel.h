@@ -189,6 +189,7 @@ public slots:
   inline void MoveCurrentToBottom();
   inline void MoveCurrentToTop();
   inline void RaiseCurrent();
+  inline void RotateLayers( int );
   inline void SelectPrevious();
   inline void SelectNext();
 
@@ -440,8 +441,8 @@ StackedLayerModel
 
 /*****************************************************************************/
 StackedLayerModel::ConstIterator
-StackedLayerModel::
-Find( const AbstractLayerModel * layer ) const
+StackedLayerModel
+::Find( const AbstractLayerModel * layer ) const
 {
   for( LayerModelMap::const_iterator it( m_LayerModels.begin() );
        it!=m_LayerModels.end();
@@ -680,6 +681,19 @@ StackedLayerModel
     RotateLayerUp( 1 );
   else
     RaiseLayer( m_Current );
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::RotateLayers( int steps )
+{
+  if( steps>=0 )
+    RotateLayerUp( steps % GetCount() );
+
+  else
+    RotateLayerDown( ( -steps ) % GetCount() );
 }
 
 /*****************************************************************************/

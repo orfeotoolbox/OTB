@@ -155,7 +155,6 @@ ImageViewWidget
 
     //
     // Disconnect stacked-layer model from this image-view.
-
     QObject::disconnect(
       model,
       SIGNAL( LayerAdded( size_t ) ),
@@ -195,6 +194,24 @@ ImageViewWidget
       this,
       SLOT( updateGL() )
     );
+
+    QObject::disconnect(
+      model,
+      SIGNAL( OrderChanged() ),
+      // from:
+      this,
+      SLOT( updateGL() )
+    );
+
+    //
+    // Disconnect layer-stack model from this widget manipulator.
+    QObject::disconnect(
+      GetManipulator(),
+      SIGNAL( RotateLayersRequested( int ) ),
+      // from:
+      model,
+      SLOT( RotateLayers( int ) )
+    );
     }
   }
 
@@ -206,7 +223,17 @@ ImageViewWidget
 
 
   //
-  // Connect stacked layer-model to image-view renderer.
+  // Connect layer-stack model to this widget manipulator.
+  QObject::connect(
+    GetManipulator(),
+    SIGNAL( RotateLayersRequested( int ) ),
+    // to:
+    stackedLayerModel,
+    SLOT( RotateLayers( int ) )
+  );
+
+  //
+  // Connect stacked layer-model to image-view manipulator.
 
   QObject::connect(
     stackedLayerModel,
@@ -216,12 +243,22 @@ ImageViewWidget
     SLOT( OnLayerAdded( size_t ) )
   );
 
+  //
+  // Connect stacked layer-model to this image-view
   QObject::connect(
     stackedLayerModel,
     SIGNAL( LayerAboutToBeDeleted( size_t ) ),
     // to:
     this,
     SLOT( OnLayerAboutToBeDeleted( size_t ) )
+  );
+
+  QObject::connect(
+    stackedLayerModel,
+    SIGNAL( OrderChanged() ),
+    // to:
+    this,
+    SLOT( updateGL() )
   );
 
   QObject::connect(
