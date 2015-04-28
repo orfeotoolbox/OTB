@@ -208,6 +208,8 @@ double SensorModelAdapter::Optimize()
       // Call optimize fit
       precision  = sensorModel->optimizeFit(*m_TiePoints);
       }
+    else
+		itkExceptionMacro(<< "Optimize(): error, dynamic_cast from ossimProjection* to ossimSensorModel* failed.");
     }
 
   // Return the precision
@@ -238,11 +240,13 @@ bool SensorModelAdapter::WriteGeomFile(const std::string & outfile)
     // try to retrieve a sensor model
     ossimSensorModel * sensorModel = NULL;
     sensorModel = dynamic_cast<ossimSensorModel *>(m_SensorModel);
+    
+    if (sensorModel == NULL)
+		itkExceptionMacro(<< "WriteGeomFile(): error, dynamic_cast from ossimProjection* to ossimSensorModel* failed.");
 
     ossimKeywordlist geom;
 
     bool success = sensorModel->saveState(geom);
-
     if(success)
       {
       return geom.write(outfile.c_str());
