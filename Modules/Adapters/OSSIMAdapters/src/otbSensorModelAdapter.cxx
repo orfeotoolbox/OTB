@@ -26,6 +26,7 @@
 #include "ossim/projection/ossimProjection.h"
 #include "ossim/projection/ossimSensorModelFactory.h"
 #include "ossim/projection/ossimSensorModel.h"
+#include "ossim/projection/ossimRpcProjection.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 #include "ossim/base/ossimTieGptSet.h"
 
@@ -200,16 +201,30 @@ double SensorModelAdapter::Optimize()
   if(m_SensorModel != NULL)
     {
     // try to retrieve a sensor model
+    
     ossimSensorModel * sensorModel = NULL;
-    sensorModel = dynamic_cast<ossimSensorModel *>(m_SensorModel);
+	sensorModel = dynamic_cast<ossimSensorModel *>(m_SensorModel);
+    
+    ossimRpcProjection * simpleRpcModel = NULL;
+    simpleRpcModel = dynamic_cast<ossimRpcProjection *>(m_SensorModel);
+    
+     //Handle expections
+	 if ( (sensorModel == NULL ) && (simpleRpcModel == NULL ) )
+		itkExceptionMacro(<< "Optimize(): error, both dynamic_cast from ossimProjection* to ossimSensorModel* / ossimRpcProjection* failed.");
+    
 
-    if(sensorModel != NULL)
+    if(sensorModel != NULL )
       {
-      // Call optimize fit
-      precision  = sensorModel->optimizeFit(*m_TiePoints);
+			// Call optimize fit
+			precision  = sensorModel->optimizeFit(*m_TiePoints);
       }
-    else
-		itkExceptionMacro(<< "Optimize(): error, dynamic_cast from ossimProjection* to ossimSensorModel* failed.");
+    else if (simpleRpcModel != NULL)
+	  {
+		  	// Call optimize fit
+			precision  = simpleRpcModel->optimizeFit(*m_TiePoints);
+	  }
+		
+	
     }
 
   // Return the precision
@@ -241,15 +256,31 @@ bool SensorModelAdapter::WriteGeomFile(const std::string & outfile)
     ossimSensorModel * sensorModel = NULL;
     sensorModel = dynamic_cast<ossimSensorModel *>(m_SensorModel);
     
-    if (sensorModel == NULL)
-		itkExceptionMacro(<< "WriteGeomFile(): error, dynamic_cast from ossimProjection* to ossimSensorModel* failed.");
+    ossimRpcProjection * simpleRpcModel = NULL;
+    simpleRpcModel = dynamic_cast<ossimRpcProjection *>(m_SensorModel);
+    
+	//Handle expections
+	if ( (sensorModel == NULL ) && (simpleRpcModel == NULL ) )
+		itkExceptionMacro(<< "Optimize(): error, both dynamic_cast from ossimProjection* to ossimSensorModel* / ossimRpcProjection* failed.");
 
-    ossimKeywordlist geom;
 
-    bool success = sensorModel->saveState(geom);
+	ossimKeywordlist geom;
+    bool success = false;
+    if(sensorModel != NULL )
+      {
+			// Save state
+			success = sensorModel->saveState(geom);
+      }
+    else if (simpleRpcModel != NULL)
+	  {
+			// Save state
+			success = simpleRpcModel->saveState(geom);
+	  }
+    
+    
     if(success)
       {
-      return geom.write(outfile.c_str());
+			return geom.write(outfile.c_str());
       }
     }
   return false;
