@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include <iostream>
+#include <cstdlib>
 #include "otbConfigurationManager.h"
 
 int otbConfigurationManagerTest(int argc, char * argv[])
@@ -32,7 +33,7 @@ int otbConfigurationManagerTest(int argc, char * argv[])
 
   std::string refDEMDir = (argc>2)?argv[2]:"";
   std::string refGeoidFile = (argc>3)?argv[3]:"";
- 
+
   otb::ConfigurationManager::RAMValueType maxRam = otb::ConfigurationManager::GetMaxRAMHint();
 
   std::cout<<"GetMaxRAMHint(): "<<maxRam<<std::endl;
