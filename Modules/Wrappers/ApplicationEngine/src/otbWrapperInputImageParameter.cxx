@@ -18,7 +18,7 @@
 #include "otbWrapperInputImageParameter.h"
 #include "itksys/SystemTools.hxx"
 #include "otbWrapperTypes.h"
-
+#include "otbWrapperInputImageParameterMacros.h"
 #include <boost/algorithm/string.hpp>
 
 namespace otb
@@ -80,30 +80,6 @@ InputImageParameter::GetImage()
   return this->GetImage<FloatVectorImageType>();
 }
 
-
-#define otbGetImageMacro(image)                       \
-  image##Type *                                       \
-  InputImageParameter::Get##image ()                  \
-  {                                                   \
-    return this->GetImage< image##Type > ();          \
-  }
-
-otbGetImageMacro(UInt8Image)
-otbGetImageMacro(UInt16Image);
-otbGetImageMacro(Int16Image);
-otbGetImageMacro(UInt32Image);
-otbGetImageMacro(Int32Image);
-otbGetImageMacro(FloatImage);
-otbGetImageMacro(DoubleImage);
-
-otbGetImageMacro(UInt8VectorImage);
-otbGetImageMacro(UInt16VectorImage);
-otbGetImageMacro(Int16VectorImage);
-otbGetImageMacro(UInt32VectorImage);
-otbGetImageMacro(Int32VectorImage);
-otbGetImageMacro(FloatVectorImage);
-otbGetImageMacro(DoubleVectorImage);
-
 otbGetImageMacro(UInt8RGBImage);
 otbGetImageMacro(UInt8RGBAImage);
 
@@ -135,60 +111,6 @@ InputImageParameter::ClearValue()
  m_PreviousFileName="";
  m_UseFilename = true;
 }
-
-
-#define otbCastImageMacro(InputImageType, OutputImageType, theMethod)   \
-  template<> OutputImageType *                                          \
-  InputImageParameter::CastImage<InputImageType , OutputImageType>()    \
-  {                                                                     \
-    return this->theMethod<InputImageType , OutputImageType>();         \
-  }
-
-#define otbGenericCastImageMacro(InputImageType, theMethod, prefix)     \
-  otbCastImageMacro(InputImageType, UInt8##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, UInt16##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, Int16##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, UInt32##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, Int32##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, Float##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, Double##prefix##ImageType, theMethod)
-
-
-/*********************************************************************
-********************** Image -> Image
-**********************************************************************/
-otbGenericCastImageMacro(UInt8ImageType, SimpleCastImage, )
-otbGenericCastImageMacro(Int16ImageType, SimpleCastImage, )
-otbGenericCastImageMacro(UInt16ImageType, SimpleCastImage, )
-otbGenericCastImageMacro(Int32ImageType, SimpleCastImage, )
-otbGenericCastImageMacro(UInt32ImageType, SimpleCastImage, )
-otbGenericCastImageMacro(FloatImageType, SimpleCastImage, )
-otbGenericCastImageMacro(DoubleImageType, SimpleCastImage, )
-
-
-/*********************************************************************
-********************** VectorImage -> VectorImage
-**********************************************************************/
-otbGenericCastImageMacro(UInt8VectorImageType, SimpleCastImage, Vector)
-otbGenericCastImageMacro(Int16VectorImageType, SimpleCastImage, Vector)
-otbGenericCastImageMacro(UInt16VectorImageType, SimpleCastImage, Vector)
-otbGenericCastImageMacro(Int32VectorImageType, SimpleCastImage, Vector)
-otbGenericCastImageMacro(UInt32VectorImageType, SimpleCastImage, Vector)
-otbGenericCastImageMacro(FloatVectorImageType, SimpleCastImage, Vector)
-otbGenericCastImageMacro(DoubleVectorImageType, SimpleCastImage, Vector)
-
-
-/*********************************************************************
-********************** Image -> VectorImage
-**********************************************************************/
-otbGenericCastImageMacro(UInt8ImageType, CastVectorImageFromImage, Vector)
-otbGenericCastImageMacro(Int16ImageType, CastVectorImageFromImage, Vector)
-otbGenericCastImageMacro(UInt16ImageType, CastVectorImageFromImage, Vector)
-otbGenericCastImageMacro(Int32ImageType, CastVectorImageFromImage, Vector)
-otbGenericCastImageMacro(UInt32ImageType, CastVectorImageFromImage, Vector)
-otbGenericCastImageMacro(FloatImageType, CastVectorImageFromImage, Vector)
-otbGenericCastImageMacro(DoubleImageType, CastVectorImageFromImage, Vector)
-
 
 }
 }

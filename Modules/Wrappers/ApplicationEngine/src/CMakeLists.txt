@@ -11,6 +11,13 @@ set(OTBApplicationEngine_SRC
   otbWrapperInputFilenameListParameter.cxx
   otbWrapperOutputImageParameter.cxx
   otbWrapperInputImageParameter.cxx
+  otbWrapperInputImageParameterUInt8.cxx
+  otbWrapperInputImageParameterInt16.cxx
+  otbWrapperInputImageParameterUInt16.cxx
+  otbWrapperInputImageParameterInt32.cxx
+  otbWrapperInputImageParameterUInt32.cxx
+  otbWrapperInputImageParameterFloat.cxx
+  otbWrapperInputImageParameterDouble.cxx
   otbWrapperParameterKey.cxx
   otbWrapperDocExampleStructure.cxx
   otbWrapperInputVectorDataParameter.cxx
