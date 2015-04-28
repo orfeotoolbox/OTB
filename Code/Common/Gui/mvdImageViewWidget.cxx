@@ -1054,8 +1054,6 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   stackedLayerModel->Clear();
-
-  updateGL();
 }
 
 /******************************************************************************/
@@ -1071,8 +1069,6 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   stackedLayerModel->DeleteCurrent();
-
-  updateGL();
 }
 
 /******************************************************************************/
@@ -1108,8 +1104,6 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   stackedLayerModel->LowerCurrent();
-
-  updateGL();
 }
 
 /******************************************************************************/
@@ -1125,8 +1119,6 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   stackedLayerModel->RaiseCurrent();
-
-  updateGL();
 }
 
 /******************************************************************************/
