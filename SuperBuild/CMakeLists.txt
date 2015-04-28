@@ -20,7 +20,6 @@ set (DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/Downloads"
 mark_as_advanced(DOWNLOAD_LOCATION)
 
 # General options
-option(ENABLE_QT4 " Use QT4 in the SuperBuild" ON)
 option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
 
 # check if superbuild is in OTB source or in stand-alone mode
@@ -37,6 +36,27 @@ message(STATUS "Check if superbuild is in OTB tree : ${SUPERBUILD_IN_OTB_TREE}")
 set(SB_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 
 set(SB_BUILD_SHARED_LIBS ON)
+
+# Check if CMAKE_INSTALL_PREFIX is set by default
+if(WIN32)
+  if(CMAKE_INSTALL_PREFIX STREQUAL "C:/Program Files (x86)/OTB-SuperBuild"
+     OR CMAKE_INSTALL_PREFIX STREQUAL "C:/Program Files/OTB-SuperBuild")
+    message(WARNING
+      "The CMAKE_INSTALL_PREFIX variable seems to be set by default : "
+      "${CMAKE_INSTALL_PREFIX}. Be aware that this directory will be used"
+      " during the build (even without calling the install target). Please "
+      "make sure you want to use this directory as the SuperBuild output.")
+  endif()
+elseif(UNIX)
+  if(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
+    message(WARNING
+      "The CMAKE_INSTALL_PREFIX variable seems to be set by default : "
+      "${CMAKE_INSTALL_PREFIX}. Be aware that this directory will be used"
+      " during the build (even without calling the install target). Please "
+      "make sure you want to use this directory as the SuperBuild output.")
+  endif()
+endif()
+
 
 if(WIN32)
   if(MSVC)
@@ -103,7 +123,7 @@ option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
 option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
 option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
 option(OTB_USE_OPENJPEG "Enable module openjpeg in OTB" OFF)
-option(OTB_USE_QT4 "Enable module QT4 in OTB" ${ENABLE_QT4})
+option(OTB_USE_QT4 "Enable module QT4 in OTB" ON)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
 
 # set OTB_DATA_ROOT to run test
