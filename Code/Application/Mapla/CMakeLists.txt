@@ -108,8 +108,8 @@ add_executable( mapla
   ${Mapla_SRC_MOC}  
 )
 
-if (MONTEVERDI2_OUTPUT_NAME)
-  set_target_properties(monteverdi2 PROPERTIES OUTPUT_NAME ${MONTEVERDI2_OUTPUT_NAME})
+if (MAPLA_OUTPUT_NAME)
+  set_target_properties(mapla PROPERTIES OUTPUT_NAME ${MAPLA_OUTPUT_NAME})
 endif()
 
 target_link_libraries( mapla
