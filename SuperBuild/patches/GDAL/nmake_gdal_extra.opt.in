@@ -60,8 +60,10 @@ GEOS_DIR=@CMAKE_WIN_INSTALL_PREFIX@
 GEOS_CFLAGS = -I$(GEOS_DIR)\include -I$(GEOS_DIR)\include\geos -DHAVE_GEOS
 GEOS_LIB     = $(GEOS_DIR)\lib\geos.lib $(GEOS_DIR)\lib\geos_c.lib
 
-# Uncomment for OpenJpeg (release v2.0.0) support
+# Uncomment for OpenJpeg support
+HAVE_OPENJPEG = YES
 OPENJPEG_ENABLED = YES
+OPENJPEG_VERSION = 20100
 OPENJPEG_CFLAGS = -I@CMAKE_WIN_INSTALL_PREFIX@\include
 OPENJPEG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\openjp2.lib
 
