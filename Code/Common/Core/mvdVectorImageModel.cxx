@@ -548,17 +548,22 @@ void
 VectorImageModel
 ::virtual_RefreshHistogram()
 {
-  DatasetModel* datasetModel = GetDatasetModel();
-  assert( datasetModel!=NULL );
-
   assert( GetProperties()!=NULL );
 
-  HistogramModel::BuildContext context(
-    true, // Force writing new histogram-model.
-    datasetModel->HistogramFileInfo( GetFilename() ).filePath()
-  );
+  DatasetModel* datasetModel = GetDatasetModel();
 
-  RefreshHistogram( &context );
+  if( datasetModel==NULL )
+    RefreshHistogram( NULL );
+
+  else
+    {
+    HistogramModel::BuildContext context(
+      true, // Force writing new histogram-model.
+      datasetModel->HistogramFileInfo( GetFilename() ).filePath()
+    );
+
+    RefreshHistogram( &context );
+    }
 }
 
 /*****************************************************************************/

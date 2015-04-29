@@ -186,6 +186,10 @@ TModel*
 AbstractModel
 ::GetParentModel()
 {
+  // qDebug()
+  //   << "parent:" << parent()
+  //   << ";" << qobject_cast< TModel* >( parent() );
+
   return qobject_cast< TModel* >( parent() );
 }
 
