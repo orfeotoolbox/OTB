@@ -104,8 +104,8 @@ add_executable( mv2
   ${Monteverdi2_Mv2_RESOURCES_RCC}
   )
 
-if (MONTEVERDI2_OUTPUT_NAME)
-  set_target_properties(mv2 PROPERTIES OUTPUT_NAME ${MONTEVERDI2_OUTPUT_NAME})
+if (MV2_OUTPUT_NAME)
+  set_target_properties(mv2 PROPERTIES OUTPUT_NAME ${MV2_OUTPUT_NAME})
 endif()
 
 target_link_libraries( mv2
