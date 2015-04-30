@@ -1,4 +1,4 @@
-gset(APP_LIST @OTB_APPS_NAME_LIST@)
+set(APP_LIST @OTB_APPS_NAME_LIST@)
 
 foreach(APP ${APP_LIST})
   list(APPEND OTB_APPS_LIST_INSTALL ${CMAKE_INSTALL_PREFIX}/lib/otb/applications/${APP})
