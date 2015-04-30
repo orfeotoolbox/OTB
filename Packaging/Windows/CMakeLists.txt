@@ -22,6 +22,19 @@ set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
     "
     PARENT_SCOPE)
 
+# StartMenu entries for Mv2.
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
+    "
+    CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Mv2.lnk\\\" \\\"$INSTDIR\\\\bin\\\\mv2.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\mv2.exe\\\"
+    "
+    PARENT_SCOPE)
+
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
+    "
+    Delete \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Mv2.lnk\\\"
+    "
+    PARENT_SCOPE)
+
 # Icon for the add-remove program
 set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\monteverdi2.exe" PARENT_SCOPE)
 
@@ -128,5 +141,9 @@ install(FILES qt.conf
         COMPONENT Resources)
 
 install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/monteverdi2.bat
+        DESTINATION bin
+        COMPONENT Runtime)
+
+install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/mv2.bat
         DESTINATION bin
         COMPONENT Runtime)
