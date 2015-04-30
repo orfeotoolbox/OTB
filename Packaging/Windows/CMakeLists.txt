@@ -22,6 +22,19 @@ set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
     "
     PARENT_SCOPE)
 
+# StartMenu entries for Mapla.
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
+    "
+    CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Mapla.lnk\\\" \\\"$INSTDIR\\\\bin\\\\mapla.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\mapla.exe\\\"
+    "
+    PARENT_SCOPE)
+
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
+    "
+    Delete \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Mapla.lnk\\\"
+    "
+    PARENT_SCOPE)
+
 # StartMenu entries for Mv2.
 set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
     "
@@ -141,6 +154,10 @@ install(FILES qt.conf
         COMPONENT Resources)
 
 install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/monteverdi2.bat
+        DESTINATION bin
+        COMPONENT Runtime)
+
+install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/mapla.bat
         DESTINATION bin
         COMPONENT Runtime)
 
