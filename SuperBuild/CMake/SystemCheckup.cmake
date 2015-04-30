@@ -28,7 +28,7 @@ macro(SB_CHECKUP_FIND_PACKAGE var)
     set(_SB_CHECKUP_${_uppervar}_FOUND TRUE)
     set(_SB_CHECKUP_${_uppervar}_NAME ${var})
   endif()
-  
+
   if(_SB_CHECKUP_${_uppervar}_FOUND)
     set(_var_name ${_SB_CHECKUP_${_uppervar}_NAME})
     message(STATUS "|----------------------------------------------------------")
@@ -42,10 +42,17 @@ macro(SB_CHECKUP_FIND_PACKAGE var)
     elseif(DEFINED ${_var_name}_MAJOR_VERSION AND DEFINED ${_var_name}_MINOR_VERSION AND DEFINED ${_var_name}_BUILD_VERSION)
       set(_SB_CHECKUP_${_uppervar}_VERSION "${${_var_name}_MAJOR_VERSION}.${${_var_name}_MINOR_VERSION}.${${_var_name}_BUILD_VERSION}")
     endif()
-    
-    # fix incomplete version numbers
+
+    # fix incomplete version numbers -> add trailing '.0'
     if(_SB_CHECKUP_${_uppervar}_VERSION MATCHES "^[0-9]+\\.[0-9]+\$")
       set(_SB_CHECKUP_${_uppervar}_VERSION "${_SB_CHECKUP_${_uppervar}_VERSION}.0")
+    endif()
+    # fix version numbers with 4 components -> keep first 3 components
+    if(_SB_CHECKUP_${_uppervar}_VERSION MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+\$")
+      set(_tmp_ver_num_  ${_SB_CHECKUP_${_uppervar}_VERSION})
+      string(REGEX REPLACE "^([0-9]+\\.[0-9]+\\.[0-9]+)\\.[0-9]+\$" "\\1"
+          _SB_CHECKUP_${_uppervar}_VERSION
+          ${_tmp_ver_num_})
     endif()
     # display version number
     if(_SB_CHECKUP_${_uppervar}_VERSION MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+\$")
