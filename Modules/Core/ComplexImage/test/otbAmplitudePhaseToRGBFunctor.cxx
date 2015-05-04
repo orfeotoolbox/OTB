@@ -21,7 +21,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkTernaryFunctorImageFilter.h"
 #include "otbAmplitudePhaseToRGBFunctor.h"
 #include "itkComplexToModulusImageFilter.h"

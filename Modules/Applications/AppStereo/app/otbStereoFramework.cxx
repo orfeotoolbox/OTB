@@ -33,6 +33,7 @@
 #include "otbVectorImageToImageListFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkVectorCastImageFilter.h"
 #include "itkInverseDisplacementFieldImageFilter.h"
 

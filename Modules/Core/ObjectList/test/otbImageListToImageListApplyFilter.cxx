@@ -20,6 +20,7 @@
 #include "otbImageListToImageListApplyFilter.h"
 #include "otbImageList.h"
 #include "otbImage.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkMeanImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

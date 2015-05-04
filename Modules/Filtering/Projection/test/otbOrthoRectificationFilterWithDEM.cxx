@@ -27,7 +27,7 @@
 #include "otbImageFileWriter.h"
 #include "otbStreamingResampleImageFilter.h"
 
-
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkExtractImageFilter.h"
 #include "itkResampleImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"

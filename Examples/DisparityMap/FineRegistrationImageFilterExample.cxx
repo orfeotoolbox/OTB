@@ -40,6 +40,7 @@
 
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkRecursiveGaussianImageFilter.h"
 #include "otbWarpImageFilter.h"
 #include "itkMeanReciprocalSquareDifferenceImageToImageMetric.h"

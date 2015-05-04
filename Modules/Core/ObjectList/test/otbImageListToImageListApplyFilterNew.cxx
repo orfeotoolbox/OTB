@@ -20,6 +20,7 @@
 #include "otbImageListToImageListApplyFilter.h"
 #include "otbImageList.h"
 #include "otbImage.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkMeanImageFilter.h"
 
 int otbImageListToImageListApplyFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])

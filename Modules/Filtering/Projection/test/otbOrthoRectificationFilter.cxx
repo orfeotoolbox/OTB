@@ -24,6 +24,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMapProjections.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkComplexToModulusImageFilter.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbOrthoRectificationFilter.h"

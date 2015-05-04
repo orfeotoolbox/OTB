@@ -50,6 +50,7 @@
 // Software Guide : EndCodeSnippet
 
 #include "otbImageFileReader.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileWriter.h"
 

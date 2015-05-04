@@ -19,7 +19,7 @@
 #define __otbClosingOpeningMorphologicalFilter_txx
 
 #include "otbClosingOpeningMorphologicalFilter.h"
-
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkGrayscaleMorphologicalOpeningImageFilter.h"
 #include "itkGrayscaleMorphologicalClosingImageFilter.h"
 #include "itkProgressAccumulator.h"

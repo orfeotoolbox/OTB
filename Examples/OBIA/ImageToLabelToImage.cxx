@@ -31,6 +31,7 @@
 //
 //  Software Guide : EndLatex
 
+#include "itkUnaryFunctorImageFilter.h"
 // Software Guide : BeginCodeSnippet
 #include "itkBinaryImageToLabelMapFilter.h"
 #include "itkLabelMapToLabelImageFilter.h"

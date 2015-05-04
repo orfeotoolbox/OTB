@@ -19,6 +19,7 @@
 #define __otbMorphologicalClosingProfileFilter_h
 
 #include "otbImageToProfileFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkClosingByReconstructionImageFilter.h"
 
 namespace otb

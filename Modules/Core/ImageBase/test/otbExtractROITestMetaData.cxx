@@ -18,7 +18,7 @@
 #include <iostream>
 #include <fstream>
 
-
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkExtractImageFilter.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "otbExtractROI.h"

@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbWrapperComplexOutputImageParameter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkCastImageFilter.h"
 #include "itkVectorCastImageFilter.h"
 

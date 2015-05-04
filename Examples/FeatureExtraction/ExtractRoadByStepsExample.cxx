@@ -42,6 +42,7 @@
 #include "otbDrawPathListFilter.h"
 #include "otbLikelihoodPathListFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkSqrtImageFilter.h"
 

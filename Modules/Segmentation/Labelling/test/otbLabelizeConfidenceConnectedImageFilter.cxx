@@ -19,6 +19,7 @@
 
 #include <iostream>
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkScalarToRGBPixelFunctor.h"
 #include "itkRescaleIntensityImageFilter.h"
 

@@ -43,6 +43,7 @@
 // Software Guide : BeginCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 // Software Guide : EndCodeSnippet
 

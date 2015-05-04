@@ -17,6 +17,7 @@
  =========================================================================*/
 #include "otbWrapperApplicationFactory.h"
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "otbGenericRSResampleImageFilter.h"
 #include "otbBCOInterpolateImageFunction.h"

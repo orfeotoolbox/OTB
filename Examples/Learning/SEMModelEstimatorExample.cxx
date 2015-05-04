@@ -42,6 +42,7 @@
 
 #include "itkVector.h"
 #include "itkVariableLengthVector.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
 //  Software Guide : BeginCodeSnippet

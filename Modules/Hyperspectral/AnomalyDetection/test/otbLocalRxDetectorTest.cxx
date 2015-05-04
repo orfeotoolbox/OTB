@@ -3,6 +3,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
 #include "otbLocalRxDetectorFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
 int LocalRXDetectorNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])

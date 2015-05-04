@@ -22,6 +22,7 @@
 #define __otbLmvmPanSharpeningFusionImageFilter_h
 
 #include "otbConvolutionImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkTernaryFunctorImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 #include "itkNoiseImageFilter.h"

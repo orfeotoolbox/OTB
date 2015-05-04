@@ -15,6 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 #include "otbMultiScaleConvexOrConcaveClassificationFilter.h"
 #include "otbImage.h"

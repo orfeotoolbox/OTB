@@ -20,6 +20,7 @@
 #ifndef __otbEdgeDetectorImageFilter_h
 #define __otbEdgeDetectorImageFilter_h
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkImageToImageFilter.h"
 #include "itkBinaryThresholdImageFilter.h"
 

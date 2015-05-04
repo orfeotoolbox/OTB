@@ -19,6 +19,7 @@
 
 
 #include <iostream>
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkComplexToRealImageFilter.h"
 #include "itkComplexToImaginaryImageFilter.h"
 #include "otbImageFileReader.h"

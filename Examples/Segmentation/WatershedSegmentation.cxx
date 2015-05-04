@@ -55,7 +55,7 @@
 //
 // Software Guide : EndLatex
 #include <iostream>
-
+#include "itkUnaryFunctorImageFilter.h"
 // Software Guide : BeginCodeSnippet
 #include "itkVectorGradientAnisotropicDiffusionImageFilter.h"
 #include "itkVectorGradientMagnitudeImageFilter.h"

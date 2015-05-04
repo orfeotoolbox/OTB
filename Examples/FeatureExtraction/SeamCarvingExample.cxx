@@ -39,6 +39,7 @@
 #include "itkPolyLineParametricPath.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkGradientMagnitudeImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 

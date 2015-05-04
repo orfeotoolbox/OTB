@@ -18,6 +18,7 @@
 #ifndef __otbGCPsToRPCSensorModelImageFilter_h
 #define __otbGCPsToRPCSensorModelImageFilter_h
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkCastImageFilter.h"
 #include "otbDEMHandler.h"
 

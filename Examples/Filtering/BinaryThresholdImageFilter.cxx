@@ -53,6 +53,7 @@
 //
 // Software Guide : EndLatex
 
+#include "itkUnaryFunctorImageFilter.h"
 // Software Guide : BeginCodeSnippet
 #include "itkBinaryThresholdImageFilter.h"
 // Software Guide : EndCodeSnippet

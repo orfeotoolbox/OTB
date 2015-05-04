@@ -32,6 +32,7 @@
 //
 // Software Guide : EndLatex
 
+#include "itkUnaryFunctorImageFilter.h"
 // Software Guide : BeginCodeSnippet
 #include "itkOtsuThresholdImageFilter.h"
 // Software Guide : EndCodeSnippet

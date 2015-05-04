@@ -41,6 +41,7 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileWriter.h"
 

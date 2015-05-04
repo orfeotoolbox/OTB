@@ -19,6 +19,7 @@
 #define __otbProfileToProfileDerivativeFilter_h
 
 #include "otbImageListToImageListFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkSubtractImageFilter.h"
 #include "itkAbsImageFilter.h"
 

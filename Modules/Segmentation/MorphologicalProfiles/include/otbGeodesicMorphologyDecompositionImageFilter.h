@@ -19,6 +19,7 @@
 #define __otbGeodesicMorphologyDecompositionImageFilter_h
 
 #include "otbGeodesicMorphologyLevelingFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkSubtractImageFilter.h"
 #include "itkOpeningByReconstructionImageFilter.h"
 #include "itkClosingByReconstructionImageFilter.h"

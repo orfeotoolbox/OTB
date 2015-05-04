@@ -18,6 +18,7 @@
 #ifndef __otbImportGeoInformationImageFilter_h
 #define __otbImportGeoInformationImageFilter_h
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkCastImageFilter.h"
 
 namespace otb

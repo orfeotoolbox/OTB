@@ -21,6 +21,7 @@
 #include "otbImage.h"
 #include "itkMacro.h"
 #include <iostream>
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

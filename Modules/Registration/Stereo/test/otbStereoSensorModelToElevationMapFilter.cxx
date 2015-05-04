@@ -27,6 +27,7 @@
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 #include "otbVectorImage.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkDiscreteGaussianImageFilter.h"
 #include "itkMedianImageFilter.h"
 

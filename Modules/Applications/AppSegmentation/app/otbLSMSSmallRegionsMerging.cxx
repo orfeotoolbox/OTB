@@ -21,6 +21,7 @@
 
 #include "otbStreamingStatisticsImageFilter.h"
 #include "otbSystem.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkChangeLabelImageFilter.h"
 
 #include "otbTileImageFilter.h"

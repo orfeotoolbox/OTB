@@ -41,6 +41,7 @@
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkGradientMagnitudeImageFilter.h"
 #include "itkThresholdImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"

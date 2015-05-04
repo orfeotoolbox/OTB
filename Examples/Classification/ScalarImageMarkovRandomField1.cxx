@@ -54,6 +54,7 @@
 #include "itkComposeImageFilter.h"
 // Software Guide : EndCodeSnippet
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
 // Software Guide : BeginLatex

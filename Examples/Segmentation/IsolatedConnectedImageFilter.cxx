@@ -55,6 +55,7 @@
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkCastImageFilter.h"
 #include "itkCurvatureFlowImageFilter.h"
 #include "otbImageFileReader.h"

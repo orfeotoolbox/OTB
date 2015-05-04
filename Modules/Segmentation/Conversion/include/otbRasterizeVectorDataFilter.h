@@ -18,6 +18,7 @@
 #ifndef __otbRasterizeVectorDataFilter_h
 #define __otbRasterizeVectorDataFilter_h
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkImageToImageFilter.h"
 #include "itkCastImageFilter.h"
 #include "otbMacro.h"

@@ -26,6 +26,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkMeanImageFilter.h"
 
 int otbImageFileWriterWithFilterTest(int itkNotUsed(argc), char* argv[])

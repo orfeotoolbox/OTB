@@ -20,6 +20,7 @@
 
 #include "otbWrapperComplexInputImageParameter.h"
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkCastImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 

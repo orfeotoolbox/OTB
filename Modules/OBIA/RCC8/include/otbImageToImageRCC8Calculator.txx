@@ -19,6 +19,7 @@
 #define __otbImageToImageRCC8Calculator_txx
 
 #include "otbImageToImageRCC8Calculator.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkBinaryDilateImageFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 #include "itkInvertIntensityImageFilter.h"

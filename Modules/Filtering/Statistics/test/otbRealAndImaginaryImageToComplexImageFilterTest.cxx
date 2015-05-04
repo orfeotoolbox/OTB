@@ -22,6 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbImage.h"
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkComplexToRealImageFilter.h"
 #include "itkComplexToImaginaryImageFilter.h"
 #include "otbStreamingCompareImageFilter.h"

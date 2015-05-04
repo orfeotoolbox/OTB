@@ -52,6 +52,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbBCOInterpolateImageFunction.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkVectorCastImageFilter.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"

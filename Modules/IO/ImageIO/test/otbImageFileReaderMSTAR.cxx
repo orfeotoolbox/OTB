@@ -21,8 +21,8 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkImageRegionIterator.h"
-
 #include "itkRescaleIntensityImageFilter.h"
 
 int otbImageFileReaderMSTAR(int itkNotUsed(argc), char* argv[])

@@ -19,6 +19,7 @@
 #define __otbBSplinesInterpolateTransformDisplacementFieldGenerator_h
 
 #include "otbPointSetWithTransformToDisplacementFieldGenerator.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkBSplineScatteredDataPointSetToImageFilter.h"
 #include "itkBSplineControlPointImageFunction.h"
 #include "otbImage.h"

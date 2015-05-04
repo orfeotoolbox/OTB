@@ -46,6 +46,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkAddImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 
 //  Software Guide : BeginLatex
 //

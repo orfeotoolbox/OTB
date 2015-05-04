@@ -40,6 +40,7 @@
 //
 // Software Guide : EndLatex
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkImageRegistrationMethod.h"
 #include "itkMeanSquaresImageToImageMetric.h"
 #include "itkRegularStepGradientDescentOptimizer.h"

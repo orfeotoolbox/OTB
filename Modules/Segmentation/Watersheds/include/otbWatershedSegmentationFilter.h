@@ -19,6 +19,7 @@
 #define __otbWatershedSegmentationFilter_h
 
 #include "otbMacro.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkCastImageFilter.h"
 #include "itkWatershedImageFilter.h"
 

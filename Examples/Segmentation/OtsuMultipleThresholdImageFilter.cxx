@@ -29,6 +29,7 @@
 // This example illustrates how to use the \doxygen{itk}{OtsuMultipleThresholdsCalculator}.
 // Software Guide : EndLatex
 
+#include "itkUnaryFunctorImageFilter.h"
 // Software Guide : BeginCodeSnippet
 #include "itkOtsuMultipleThresholdsCalculator.h"
 // Software Guide : EndCodeSnippet

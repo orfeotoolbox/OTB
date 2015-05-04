@@ -104,6 +104,7 @@
 //
 // Software Guide : EndLatex
 
+#include "itkUnaryFunctorImageFilter.h"
 // Software Guide : BeginCodeSnippet
 #include "itkCurvatureAnisotropicDiffusionImageFilter.h"
 // Software Guide : EndCodeSnippet

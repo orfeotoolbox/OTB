@@ -18,7 +18,7 @@
 #ifndef __otbLocalHoughFilter_h
 #define __otbLocalHoughFilter_h
 
-
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkHoughTransform2DLinesImageFilter.h"
 
 #include "otbImageToLineSpatialObjectListFilter.h"

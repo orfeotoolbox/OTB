@@ -21,6 +21,7 @@
 #include "otbExtractROI.h"
 #include "otbConnectedComponentMuParserFunctor.h"
 #include "otbBandMathImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkStatisticsImageFilter.h"
 #include "itkChangeLabelImageFilter.h"
 #include "itkImageRegionConstIterator.h"

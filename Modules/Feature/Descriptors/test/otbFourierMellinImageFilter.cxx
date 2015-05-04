@@ -21,6 +21,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbForwardFourierMellinTransformImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkComplexToImaginaryImageFilter.h"
 #include "itkComplexToRealImageFilter.h"

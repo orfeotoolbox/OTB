@@ -45,6 +45,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 #include "otbMarkovRandomFieldFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
 

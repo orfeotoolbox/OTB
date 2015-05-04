@@ -21,6 +21,7 @@
 #include "otbMorphologicalPyramidSegmenter.h"
 
 #include "otbImage.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkConnectedThresholdImageFilter.h"
 #include "itkConnectedComponentImageFilter.h"
 #include "itkRelabelComponentImageFilter.h"

@@ -51,6 +51,7 @@
 #include "itkRegularStepGradientDescentOptimizer.h"
 #include "otbImage.h"
 // Software Guide : EndCodeSnippet
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkMeanImageFilter.h"
 
 #include "otbImageFileReader.h"

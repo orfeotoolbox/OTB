@@ -19,6 +19,7 @@
 #define __otbHoughTransform2DLinesImageFilter_txx
 
 #include "otbHoughTransform2DLinesImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkDiscreteGaussianImageFilter.h"
 #include "itkMinimumMaximumImageCalculator.h"

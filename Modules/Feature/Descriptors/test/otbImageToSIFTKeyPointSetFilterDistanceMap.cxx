@@ -18,6 +18,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
 #include "itkResampleImageFilter.h"

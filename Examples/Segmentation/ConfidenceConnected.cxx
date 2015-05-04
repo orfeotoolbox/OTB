@@ -80,6 +80,7 @@
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkCastImageFilter.h"
 
 //  Software Guide : BeginLatex

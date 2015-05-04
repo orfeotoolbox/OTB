@@ -36,7 +36,7 @@
 // following headers declare the basic components of this registration method.
 //
 // Software Guide : EndLatex
-
+#include "itkUnaryFunctorImageFilter.h"
 // Software Guide : BeginCodeSnippet
 #include "itkImageRegistrationMethod.h"
 #include "itkTranslationTransform.h"

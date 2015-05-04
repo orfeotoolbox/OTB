@@ -18,6 +18,7 @@
 #ifndef __otbGenericRoadExtractionFilter_h
 #define __otbGenericRoadExtractionFilter_h
 
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"
 
 #include "otbVectorImage.h"

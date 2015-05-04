@@ -19,6 +19,7 @@
 #include "otbSarRadiometricCalibrationToImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbExtractROI.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkComplexToModulusImageFilter.h"
 #include  "otbStreamingCompareImageFilter.h"
 
