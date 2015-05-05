@@ -151,7 +151,7 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::GenerateData(
 
   std::ostringstream stream;
   stream << "MEM:::"
-         <<  "DATAPOINTER=" << (unsigned long)(this->GetOutput()->GetBufferPointer()) << ","
+         <<  "DATAPOINTER=" << (unsigned long) (GUIntBig) (this->GetOutput()->GetBufferPointer()) << ","
          <<  "PIXELS=" << bufferedRegion.GetSize()[0] << ","
          <<  "LINES=" << bufferedRegion.GetSize()[1]<< ","
          <<  "BANDS=" << nbBands << ","
