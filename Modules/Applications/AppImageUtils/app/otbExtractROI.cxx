@@ -21,6 +21,7 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbStandardFilterWatcher.h"
 #include "otbWrapperNumericalParameter.h"
+#include "otbWrapperListViewParameter.h"
 #include "otbWrapperTypes.h"
 
 #include "otbWrapperElevationParametersHandler.h"
@@ -129,15 +130,20 @@ private:
         SetParameterInt("sizey", largestRegion.GetSize()[1]);
         }
 
-      // Update the values of the channels to be selected
       unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
-      ClearChoices("cl");
-      for (unsigned int idx = 0; idx < nbComponents; ++idx)
+      ListViewParameter *clParam = dynamic_cast<ListViewParameter*>(GetParameterByKey("cl"));
+      // Update the values of the channels to be selected if nbComponents is changed
+      if (clParam->GetNbChoices() != nbComponents)
         {
-        std::ostringstream key, item;
-        key<<"cl.channel"<<idx+1;
-        item<<"Channel"<<idx+1;
-        AddChoice(key.str(), item.str());
+
+        ClearChoices("cl");
+        for (unsigned int idx = 0; idx < nbComponents; ++idx)
+          {
+          std::ostringstream key, item;
+          key<<"cl.channel"<<idx+1;
+          item<<"Channel"<<idx+1;
+          AddChoice(key.str(), item.str());
+          }
         }
 
       // Put the limit of the index and the size relative the image
