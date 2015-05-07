@@ -57,13 +57,20 @@ public:
     m_Value.clear();
     for(unsigned int i=0; i<sList.size(); i++)
       {
-      m_Value.push_back(sList[i]);
+      this->AddString(sList[i]);
       }
   }
 
   void AddString(std::string value)
   {
-    m_Value.push_back(value);
+    if(!value.empty())
+      {
+      m_Value.push_back(value);
+      if(!this->GetActive())
+        {
+        this->SetActive(true);
+        }
+      }
   }
 
   /** Get the value */
