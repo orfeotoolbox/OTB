@@ -37,22 +37,33 @@ QtWidgetListViewParameter::~QtWidgetListViewParameter()
 
 void QtWidgetListViewParameter::DoUpdateGUI()
 {
-  // remove all the items set before
-  while(m_ListView->takeItem(0))
+  size_t numSelected = m_ListViewParam->GetSelectedItems().size();
+
+  //Clear m_ListView add re-add choices only if no items selected.
+  //Otherwise results in mantis #1025
+
+  if(numSelected < 1)
     {
-    m_ListView->removeItemWidget( m_ListView->takeItem(0) );
+    while(m_ListView->takeItem(0))
+      {
+      m_ListView->removeItemWidget( m_ListView->takeItem(0) );
+      }
+
+    for (unsigned int i = 0; i < m_ListViewParam->GetNbChoices(); ++i)
+      {
+      // Add listBox items
+      QString key = m_ListViewParam->GetChoiceKey(i).c_str();
+      m_ListView->addItem( key);
+      }
     }
 
-  for (unsigned int i = 0; i < m_ListViewParam->GetNbChoices(); ++i)
+  //I can't find any reason for calling m_ListView->setCurrentRow(value) in this
+  //case because QListWidget is a MultiSelection widget.
+  if (m_ListView->selectionMode() == QAbstractItemView::SingleSelection)
     {
-    // Add listBox items
-    QString key = m_ListViewParam->GetChoiceKey(i).c_str();
-    m_ListView->addItem( key);
+    unsigned int value = m_ListViewParam->GetValue( );
+    m_ListView->setCurrentRow(value);
     }
-
-  // Update the combobox value
-  unsigned int value = m_ListViewParam->GetValue( );
-  m_ListView->setCurrentRow(value);
 }
 
 void QtWidgetListViewParameter::DoCreateWidget()
