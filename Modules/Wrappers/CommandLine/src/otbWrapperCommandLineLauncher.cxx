@@ -900,7 +900,7 @@ bool CommandLineLauncher::CheckParametersPrefix()
   // Check if the chain " --" appears in the args, could be a common mistake
   for (std::vector<std::string>::iterator it = m_VExpression.begin(); it != m_VExpression.end(); ++it)
     {
-    if (it->find("--") != std::string::npos )
+    if (it->compare(0, 2, "--") == 0 )
       {
       return false;
       }
