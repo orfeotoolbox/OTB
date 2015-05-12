@@ -175,6 +175,7 @@ else()
       ${CMAKE_SOURCE_DIR}/patches/ITK/hashtable.hxx.in
       ${ITK_SB_SRC}/Modules/ThirdParty/KWSys/src/KWSys
     DEPENDS ${${proj}_DEPENDENCIES}
+    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
   
   # write patch in binary dir
