@@ -55,6 +55,9 @@ public:
   typedef typename InputImage2Type::Pointer InputImage2PointerType;
   typedef typename OutputImageType::Pointer OutputImagePointerType;
 
+  typedef typename InputImage1Type::PixelType         InputPixel1Type;
+  typedef typename InputImage2Type::PixelType         InputPixel2Type;
+
   typedef typename OutputImageType::PixelType         OutputPixelType;
   typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
   typedef typename OutputImageType::RegionType        OutputImageRegionType;

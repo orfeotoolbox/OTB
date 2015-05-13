@@ -155,10 +155,12 @@ void BandMathImageFilter<TImage>
   std::vector< std::string > tmpIdxVarNames;
 
   tmpIdxVarNames.resize(nbAccessIndex);
-  tmpIdxVarNames.at(0) = "idxX";
-  tmpIdxVarNames.at(1) = "idxY";
-  tmpIdxVarNames.at(2) = "idxPhyX";
-  tmpIdxVarNames.at(3) = "idxPhyY";
+
+  tmpIdxVarNames.resize(nbAccessIndex);
+  tmpIdxVarNames[0] = "idxX";
+  tmpIdxVarNames[1] = "idxY";
+  tmpIdxVarNames[2] = "idxPhyX";
+  tmpIdxVarNames[3] = "idxPhyY";
 
   // Check if input image dimensions matches
   inputSize[0] = this->GetNthInput(0)->GetLargestPossibleRegion().GetSize(0);
@@ -198,18 +200,18 @@ void BandMathImageFilter<TImage>
 
   for(i = 0; i < nbThreads; ++i)
     {
-    m_AImage.at(i).resize(m_NbVar);
-    m_VParser.at(i)->SetExpr(m_Expression);
+    m_AImage[i].resize(m_NbVar);
+    m_VParser[i]->SetExpr(m_Expression);
 
     for(j=0; j < nbInputImages; ++j)
       {
-      m_VParser.at(i)->DefineVar(m_VVarName.at(j), &(m_AImage.at(i).at(j)));
+      m_VParser[i]->DefineVar(m_VVarName[j], &(m_AImage[i][j]));
       }
 
     for(j=nbInputImages; j < nbInputImages+nbAccessIndex; ++j)
       {
-      m_VVarName.at(j) = tmpIdxVarNames.at(j-nbInputImages);
-      m_VParser.at(i)->DefineVar(m_VVarName.at(j), &(m_AImage.at(i).at(j)));
+      m_VVarName[j] = tmpIdxVarNames[j-nbInputImages];
+      m_VParser[i]->DefineVar(m_VVarName[j], &(m_AImage[i][j]));
       }
     }
 }
@@ -252,8 +254,9 @@ void BandMathImageFilter<TImage>
 
   typedef itk::ImageRegionConstIterator<TImage> ImageRegionConstIteratorType;
 
-  std::vector< ImageRegionConstIteratorType > Vit;
-  Vit.resize(nbInputImages);
+  assert(nbInputImages);
+  std::vector< ImageRegionConstIteratorType > Vit(nbInputImages);
+
   for(j=0; j < nbInputImages; ++j)
     {
     Vit[j] = ImageRegionConstIteratorType (this->GetNthInput(j), outputRegionForThread);
@@ -264,27 +267,33 @@ void BandMathImageFilter<TImage>
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  while(!Vit.at(0).IsAtEnd())
-    {
-    for(j=0; j < nbInputImages; ++j)
-      {
-      m_AImage.at(threadId).at(j) = static_cast<double>(Vit.at(j).Get());
-      }
+  std::vector<double>      & threadImage     = m_AImage[threadId];
+  ParserType::Pointer const& threadParser    = m_VParser[threadId];
+  long                     & threadUnderflow = m_ThreadUnderflow[threadId];
+  long                     & threadOverflow  = m_ThreadOverflow[threadId];
+  ImageRegionConstIteratorType & firstImageRegion = Vit.front(); // alias for better perfs
+  while(!firstImageRegion.IsAtEnd())
+     {
+     for(j=0; j < nbInputImages; ++j)
+       {
+       threadImage[j] = static_cast<double>(Vit[j].Get());
+       }
 
     // Image Indexes
     for(j=0; j < 2; ++j)
       {
-      m_AImage.at(threadId).at(nbInputImages+j)   = static_cast<double>(Vit.at(0).GetIndex()[j]);
+      threadImage[nbInputImages+j]   = static_cast<double>(firstImageRegion.GetIndex()[j]);
       }
     for(j=0; j < 2; ++j)
       {
-      m_AImage.at(threadId).at(nbInputImages+2+j) = static_cast<double>(m_Origin[j])
-        +static_cast<double>(Vit.at(0).GetIndex()[j]) * static_cast<double>(m_Spacing[j]);
+      threadImage[nbInputImages+2+j] = static_cast<double>(m_Origin[j])
+        + static_cast<double>(firstImageRegion.GetIndex()[j]) * static_cast<double>(m_Spacing[j]);
       }
 
     try
       {
-      value = m_VParser.at(threadId)->Eval();
+
+      value = threadParser->Eval();
       }
     catch(itk::ExceptionObject& err)
       {
@@ -296,14 +305,14 @@ void BandMathImageFilter<TImage>
     if (value < double(itk::NumericTraits<PixelType>::NonpositiveMin()))
       {
       ot.Set(itk::NumericTraits<PixelType>::NonpositiveMin());
-      m_ThreadUnderflow[threadId]++;
+      threadUnderflow++;
       }
     // Case value is equal to inf or superior to the maximum value
     // allowed by the pixelType cast
     else if (value > double(itk::NumericTraits<PixelType>::max()))
       {
       ot.Set(itk::NumericTraits<PixelType>::max());
-      m_ThreadOverflow[threadId]++;
+      threadOverflow++;
       }
     else
       {
@@ -312,12 +321,13 @@ void BandMathImageFilter<TImage>
 
     for(j=0; j < nbInputImages; ++j)
       {
-      ++(Vit.at(j));
+      ++Vit[j];
       }
 
     ++ot;
 
     progress.CompletedPixel();
+
     }
 }
 

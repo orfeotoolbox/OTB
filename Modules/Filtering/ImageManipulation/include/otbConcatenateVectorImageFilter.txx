@@ -157,31 +157,38 @@ ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
   input2It.GoToBegin();
   outputIt.GoToBegin();
 
+  typename OutputImageType::PixelType outputPix(outputIt.Get().GetSize());
+  // Retrieve the size of each input pixel
+  const unsigned int l1 = input1It.Get().GetSize();
+  const unsigned int l2 = input2It.Get().GetSize();
+
   // Iterate through the pixel
   while (!outputIt.IsAtEnd())
     {
-    // define an output pixel
-    typename OutputImageType::PixelType outpix;
-    // Retrieve the size of each input pixel
-    unsigned int l1 = input1It.Get().GetSize();
-    unsigned int l2 = input2It.Get().GetSize();
-    // Set the output pixel size
-    outpix.SetSize(l1 + l2);
+
+    // Check the size of each input pixel
+    assert(l1 == input1It.Get().GetSize());
+    assert(l2 == input2It.Get().GetSize());
+    // Check the size of the output pixel
+    assert(l1 + l2 == outputPix.GetSize());
+    // References to the input pixels
+    InputPixel1Type const& pix1 = input1It.Get();
+    InputPixel2Type const& pix2 = input2It.Get();
+
     // Loop through each band of the first image
     for (unsigned int i = 0; i < l1; ++i)
       {
       // Fill the output pixel
-      outpix[i] = static_cast<typename OutputImageType::InternalPixelType>(input1It.Get()[i]);
+      outputPix[i] = static_cast<typename OutputImageType::InternalPixelType>(pix1[i]);
       }
     // Loop though each band of the second image
     for (unsigned int i = 0; i < l2; ++i)
       {
       // Fill the output pixel
-
-      outpix[i + l1] = static_cast<typename OutputImageType::InternalPixelType>(input2It.Get()[i]);
+      outputPix[i + l1] = static_cast<typename OutputImageType::InternalPixelType>(pix2[i]);
       }
     // Set the output pixel
-    outputIt.Set(outpix);
+    outputIt.Set(outputPix);
     // Increment the iterator
     ++input1It;
     ++input2It;

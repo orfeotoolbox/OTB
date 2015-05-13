@@ -99,14 +99,13 @@ MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
   InputIterator inIt(inputPtr, inputRegionForThread);
 
   // Parcours des canaux a traiter
-  unsigned int channelIn(m_Channel - 1);
+  const unsigned int channelIn(m_Channel - 1);
 
-  InputImagePixelType pixelInput;
   while (!outIt.IsAtEnd())
     {
-    OutputImagePixelType pixelOutput;
-    pixelInput = inIt.Get();
-    pixelOutput = static_cast<OutputValueType>(pixelInput[channelIn]);
+
+    InputImagePixelType const& pixelInput = inIt.Get();
+    OutputImagePixelType const pixelOutput = static_cast<OutputValueType>(pixelInput[channelIn]);
     outIt.Set(pixelOutput);
     ++outIt;
     ++inIt;
