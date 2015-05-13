@@ -1060,7 +1060,7 @@ void BandMathXImageFilter<TImage>
   for(unsigned int j=0; j < m_Expression.size(); ++j) {  VoutIt[j].GoToBegin();  }
   for(unsigned int j=0; j < VNit.size(); ++j)         {  VNit[j].GoToBegin();    }
 
-  while(!Vit.at(0).IsAtEnd()) // For each pixel
+  while(!Vit[0].IsAtEnd()) // For each pixel
   {
 
     int ngbhNameIndex=0; int index;
