@@ -63,15 +63,25 @@ foreach(APP ${OTB_APPS_LIST})
 endforeach(APP)
 
 # configure the file to pass the list of available applications
+set(EXE_FILENAME "monteverdi2.exe")
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake.in
                 ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
                 @ONLY)
+
+set(EXE_FILENAME "mapla.exe")                
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake.in
+                ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing2.cmake
+                @ONLY)
+                
 
 #Use the configured file with the list of apps
 # Gather all dlls from which Monteverdi depends, and put them aside the executable
 # For this to work, the necessary DLL must be in PATH
 install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
-                COMPONENT Runtime)
+                COMPONENT Monteverdi2)
+                
+install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing2.cmake
+                COMPONENT Mapla)                
 
 # The following DLL handling is very specific
 # both to OSGeo4W flavour (32 bit or 64 bit), OSGeo4W package state
