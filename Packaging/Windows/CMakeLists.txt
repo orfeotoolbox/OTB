@@ -1,62 +1,3 @@
-set(CPACK_NSIS_MODIFY_PATH ON PARENT_SCOPE)
-
-# Override the monteverdi2.exe
-# with the monteverdi2.bat shortcut
-set(CPACK_NSIS_MENU_LINKS
-    "bin/monteverdi2.bat" "Monteverdi2"
-    PARENT_SCOPE)
-
-# Since we put bat files as MENU_LINKS, they does not get an icon automatically
-# though NSIS can do that.
-# That's why we use the following hack to associate the icon coming from the executable
-# to the bat file :
-set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
-    "
-    CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2.lnk\\\" \\\"$INSTDIR\\\\bin\\\\monteverdi2.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\monteverdi2.exe\\\"
-    "
-    PARENT_SCOPE)
-
-set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
-    "
-    Delete \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2.lnk\\\"
-    "
-    PARENT_SCOPE)
-
-# StartMenu entries for Mapla.
-set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
-    "
-    CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Mapla.lnk\\\" \\\"$INSTDIR\\\\bin\\\\mapla.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\mapla.exe\\\"
-    "
-    PARENT_SCOPE)
-
-set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
-    "
-    Delete \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Mapla.lnk\\\"
-    "
-    PARENT_SCOPE)
-
-# StartMenu entries for Mv2.
-set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
-    "
-    CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Mv2.lnk\\\" \\\"$INSTDIR\\\\bin\\\\mv2.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\mv2.exe\\\"
-    "
-    PARENT_SCOPE)
-
-set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
-    "
-    Delete \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Mv2.lnk\\\"
-    "
-    PARENT_SCOPE)
-
-# Icon for the add-remove program
-set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\monteverdi2.exe" PARENT_SCOPE)
-
-# set the install/unistall icon used for the installer itself
-# There is a bug in NSI that does not handle full unix paths properly.
-set(CPACK_NSIS_MUI_ICON    "${Monteverdi2_SOURCE_DIR}/Data/Icons/monteverdi2.ico" PARENT_SCOPE)
-set(CPACK_NSIS_MUI_UNIICON "${Monteverdi2_SOURCE_DIR}/Data/Icons/monteverdi2.ico" PARENT_SCOPE)
-
-
 file(TO_CMAKE_PATH "$ENV{OSGEO4W_ROOT}" OSGEO4W_ROOT)
 if(NOT OSGEO4W_ROOT)
   message(FATAL_ERROR "Cannot generate installer without OSGeo4W environment : OSGEO4W_ROOT")
@@ -89,15 +30,25 @@ foreach(APP ${OTB_APPS_LIST})
 endforeach(APP)
 
 # configure the file to pass the list of available applications
+set(EXE_FILENAME "monteverdi2.exe")
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake.in
                 ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
                 @ONLY)
+
+set(EXE_FILENAME "mapla.exe")                
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake.in
+                ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing2.cmake
+                @ONLY)
+                
 
 #Use the configured file with the list of apps
 # Gather all dlls from which Monteverdi depends, and put them aside the executable
 # For this to work, the necessary DLL must be in PATH
 install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
-                COMPONENT Runtime)
+                COMPONENT Monteverdi2)
+                
+install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing2.cmake
+                COMPONENT Mapla)                
 
 # The following DLL handling is very specific
 # both to OSGeo4W flavour (32 bit or 64 bit), OSGeo4W package state
@@ -155,12 +106,10 @@ install(FILES qt.conf
 
 install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/monteverdi2.bat
         DESTINATION bin
-        COMPONENT Runtime)
+        COMPONENT Monteverdi2)
 
+        
 install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/mapla.bat
         DESTINATION bin
-        COMPONENT Runtime)
-
-install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/mv2.bat
-        DESTINATION bin
-        COMPONENT Runtime)
+        COMPONENT Mapla)
+        
