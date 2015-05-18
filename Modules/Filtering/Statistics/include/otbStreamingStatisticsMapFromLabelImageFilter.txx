@@ -199,6 +199,8 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   itk::ImageRegionConstIterator<TInputVectorImage> inIt(inputPtr, inputPtr->GetRequestedRegion());
   itk::ImageRegionConstIterator<TLabelImage> labelIt(labelInputPtr, labelInputPtr->GetRequestedRegion());
 
+  itk::VariableLengthVector<double> zeroValue(inputPtr->GetNumberOfComponentsPerPixel());
+  zeroValue.Fill(0.0);
 
   typename VectorImageType::PixelType value;
   typename LabelImageType::PixelType label;
@@ -211,7 +213,8 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
       label = labelIt.Get();
       if (m_RadiometricValueAccumulator.count(label)<=0) //add new element to the map
       {
-        m_RadiometricValueAccumulator[label] = value;
+        // use a zero pixel with the right number of components to support scalar images
+        m_RadiometricValueAccumulator[label] = (zeroValue + value);
         m_LabelPopulation[label] = 1;
       }
       else
