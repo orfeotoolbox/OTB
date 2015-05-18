@@ -131,9 +131,9 @@ deploy_qt_conf( monteverdi2 )
 #############################################################################
 install(
   TARGETS mapla
-  RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT Runtime
-  LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Runtime
-  ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Development
+  RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT Mapla
+  LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Mapla
+  ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Mapla
 )
 
 #############################################################################
