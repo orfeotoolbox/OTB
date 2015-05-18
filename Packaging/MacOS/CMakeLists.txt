@@ -1,11 +1,32 @@
-set(CPACK_GENERATOR "Bundle" PARENT_SCOPE)
-set(CPACK_BUNDLE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/Monteverdi2.icns" PARENT_SCOPE)
-set(CPACK_BUNDLE_NAME "Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}" PARENT_SCOPE)
-set(CPACK_BUNDLE_PLIST "${CMAKE_CURRENT_BINARY_DIR}/Info.plist" PARENT_SCOPE)
-set(CPACK_BUNDLE_STARTUP_COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/StartupCommand" PARENT_SCOPE)
+set(APPLICATION_NAME "Monteverdi2")
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in 
+                      ${CMAKE_BINARY_DIR}/Packaging/MacOS/Monteverdi2-Info.plist)
 
+set(EXE_FILENAME "monteverdi2")                      
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/StartupCommand.in 
+                      ${CMAKE_BINARY_DIR}/Packaging/MacOS/Monteverdi2-StartupCommand
+                      @ONLY)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake.in
+                      ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
+                      @ONLY)
+
+#mapla                      
+set(APPLICATION_NAME "Mapla")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in 
+                      ${CMAKE_BINARY_DIR}/Packaging/MacOS/Mapla-Info.plist)
+
+set(EXE_FILENAME "mapla")                      
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/StartupCommand.in 
+                      ${CMAKE_BINARY_DIR}/Packaging/MacOS/Mapla-StartupCommand
+                      @ONLY)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake.in
+                      ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing2.cmake
+                      @ONLY)
+
+               
 install(DIRECTORY $ENV{GDAL_DATA}
         DESTINATION share
         COMPONENT Resources)
@@ -35,11 +56,12 @@ foreach(APP ${OTB_APPS_LIST})
   list(APPEND OTB_APPS_NAME_LIST ${APP_NAME})
 endforeach(APP)
 
-# configure the file to pass the list of available applications
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake.in
-               ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
-               @ONLY)
 
-#Use the configured file with the list of apps 
+#Use the configured file with the list of apps : monteverdi2
 install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
-        COMPONENT Runtime)
+        COMPONENT Monteverdi2)
+
+        
+#Use the configured file with the list of apps : mapla
+install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing2.cmake
+        COMPONENT Mapla)        
