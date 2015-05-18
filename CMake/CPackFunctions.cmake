@@ -1,49 +1,48 @@
 
 function(create_cpack_config application)
 
+  #should we handle this when calling function ?
+  #for now mapla has no specific version or it is same as monteverdi2
+  SET(CPACK_PACKAGE_VERSION "${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}.${Monteverdi2_VERSION_PATCH}")
+  SET(CPACK_PACKAGE_VERSION_MAJOR "${Monteverdi2_VERSION_MAJOR}")
+  SET(CPACK_PACKAGE_VERSION_MINOR "${Monteverdi2_VERSION_MINOR}")
+  SET(CPACK_PACKAGE_VERSION_PATCH "${Monteverdi2_VERSION_PATCH}")
+  
   if(WIN32)
-     #CPack setting specific to Windows
-    SET(CPACK_GENERATOR "NSIS")
-    STRING(TOLOWER ${application} application_)
-    SET(BATFILE_NAME "${application_}.bat")
-    SET(EXEFILE_NAME "${application_}.exe")
-    SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
-    "Delete \\\"$SMPROGRAMS\\\\${application}-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\${application}.lnk\\\"  ")
-    SET(CPACK_NSIS_MENU_LINKS "bin/${BATFILE_NAME}" "${application}" )
-    SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\${EXEFILE_NAME}")
-    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
-      "CreateShortCut \\\"$SMPROGRAMS\\\\-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\${application}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\${BATFILE_NAME}\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\${EXEFILE_NAME}\\\"
-    ")
     set(arch_prefix win32)    
     set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
       set(arch_prefix win64)
+    SET(CPACK_GENERATOR "NSIS")
+    STRING(TOLOWER ${application} application_)
+    SET(BATFILE_NAME "${application_}.bat")
+    SET(EXEFILE_NAME "${application_}.exe")
+    SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
+    "Delete \\\"$SMPROGRAMS\\\\${application}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}\\\\${application}.lnk\\\"  ")
+    SET(CPACK_NSIS_MENU_LINKS "bin/${BATFILE_NAME}" "${application}" )
+    SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\${EXEFILE_NAME}")
+    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
+      "CreateShortCut \\\"$SMPROGRAMS\\\\${application}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}\\\\${application}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\${BATFILE_NAME}\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\${EXEFILE_NAME}\\\"
+    ")
+
     endif()    
 
     
   else(APPLE)
-    #CPack setting specific to MacOS
-    SET(CPACK_GENERATOR "Bundle")
-    SET(CPACK_BUNDLE_ICON "${Monteverdi2_SOURCE_DIR}/Packaging/MacOS/Monteverdi2.icns" )
-    SET(CPACK_BUNDLE_NAME "${application}-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}" )
-    SET(CPACK_BUNDLE_PLIST "${CMAKE_BINARY_DIR}/Packaging/MacOS/${application}-Info.plist" )
-    SET(CPACK_BUNDLE_STARTUP_COMMAND "${Monteverdi2_SOURCE_DIR}/Packaging/MacOS/${application}-StartupCommand" )
-    set(arch_prefix Darwin)
+      set(arch_prefix Darwin)
      if(CMAKE_SIZEOF_VOID_P EQUAL 8)
       set(arch_prefix Darwin64)
-    endif()    
+    endif()  
+    SET(CPACK_GENERATOR "Bundle")
+    SET(CPACK_BUNDLE_ICON "${Monteverdi2_SOURCE_DIR}/Packaging/MacOS/Monteverdi2.icns" )
+    SET(CPACK_BUNDLE_NAME "${application}-${CPACK_PACKAGE_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}" )
+    SET(CPACK_BUNDLE_PLIST "${CMAKE_BINARY_DIR}/Packaging/MacOS/${application}-Info.plist" )
+    SET(CPACK_BUNDLE_STARTUP_COMMAND "${Monteverdi2_SOURCE_DIR}/Packaging/MacOS/${application}-StartupCommand" )
+
   endif()
 
-  
-  #Common CPack configurations
-  
-  #should we handle this when calling function ?
-  #for now mapla has no specific version or it is same as monteverdi2
-  SET(CPACK_PACKAGE_VERSION "0.9.0")
-  SET(CPACK_PACKAGE_VERSION_MAJOR "0")
-  SET(CPACK_PACKAGE_VERSION_MINOR "9")
-  SET(CPACK_PACKAGE_VERSION_PATCH "0")
+  #common cpack configurations.
   
   ##################################
   ##################################
