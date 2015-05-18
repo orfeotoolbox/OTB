@@ -65,9 +65,6 @@ endif()
 
 if(OTB_USE_QT4)
   list(APPEND ${proj}_DEPENDENCIES QT4)
-  if(USE_SYSTEM_QT4 AND UNIX)
-    message(STATUS "  Qt4 is not built by SuperBuild. You need to install it via package manager.")
-  endif()
 endif()
 
 INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
