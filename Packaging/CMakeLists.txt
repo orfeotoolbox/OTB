@@ -16,53 +16,35 @@ function(get_qt_translation_files RESULT)
         list(REMOVE_ITEM translation_files ${translation_item})
       endif()
     endforeach()
-    
+
     set(${RESULT} ${translation_files} PARENT_SCOPE)
 endfunction()
 
 get_qt_translation_files(QT_TRANSLATIONS_FILES)
 
-set(CPACK_PACKAGE_NAME "Monteverdi2")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Monteverdi2")
 
-set(CPACK_PACKAGE_VERSION  "${Monteverdi2_VERSION_STRING}")
-set(CPACK_PACKAGE_VERSION_MAJOR "${Monteverdi2_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${Monteverdi2_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH "${Monteverdi2_VERSION_PATCH}")
-
-set(CPACK_PACKAGE_CONTACT "contact@orfeo-toolbox.org" CACHE STRING "Orfeo toolbox contact email")
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${Monteverdi2_SOURCE_DIR}/Description.txt")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}")
-set(CPACK_RESOURCE_FILE_LICENSE "${Monteverdi2_SOURCE_DIR}/Copyright/Copyright.txt")
-
-# http://www.vtk.org/Bug/view.php?id=7828
-# Need to use the CPACK_PACKAGE_EXECUTABLES
-# otherwise the shortcut in the menu will not
-# appear.
-#set(CPACK_PACKAGE_EXECUTABLES "monteverdi2" "Monteverdi2")
-
-# Manage dependencies between components
-set(CPACK_COMPONENT_DEVELOPMENT_DEPENDS Runtime)
-set(CPACK_COMPONENT_RUNTIME_DEPENDS Resources)
-
-set(CPACK_COMPONENT_RUNTIME_REQUIRED ON)
-set(CPACK_COMPONENT_RESOURCES_REQUIRED ON)
-set(CPACK_COMPONENT_RESOURCES_HIDDEN ON)
-
-set(CPACK_COMPONENT_RUNTIME_DESCRIPTION "Monteverdi2")
-
-# Don't package the Developement component
-set(CPACK_COMPONENTS_ALL "Runtime;Resources;Unspecified")
 
 if( APPLE )
   add_subdirectory( MacOS )
 endif( APPLE )
 
-if( WIN32 AND NOT UNIX )
+if( WIN32)
   add_subdirectory( Windows )
-endif( WIN32 AND NOT UNIX )
+  endif( WIN32 )
 
-include(InstallRequiredSystemLibraries)
-include(CPack)
+
+ #Resources;Runtime; and Monteverdi are appended to
+#CPACK_COMPONENTS_ALL  in create_cpack_config()
+# SET(CPACK_COMPONENTS_ALL)
+# LIST(APPEND CPACK_COMPONENTS_ALL  Resources)
+# LIST(APPEND CPACK_COMPONENTS_ALL Runtime)
+# LIST(APPEND CPACK_COMPONENTS_ALL ${application})
+ if(WIN32 OR APPLE)
+  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Monteverdi2")
+  create_cpack_config(Monteverdi2)
+
+  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Mapla - Monteverdi2 Application Launcher")
+  create_cpack_config(Mapla)
+endif()
 
 endif()
