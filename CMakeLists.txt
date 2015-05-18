@@ -207,6 +207,9 @@ include( PreventInSourceBuilds )
 include( PreventInstallOnBuildTree )
 include( DeployQtConf )
 
+#function to create nsis installed for monteverdi2 and mapla
+include( CPackFunctions )
+
 #----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
 set( Monteverdi2_CONFIGURE_FILE "ConfigureMonteverdi2.h" )
@@ -263,6 +266,18 @@ if(BUILD_TESTING)
   add_subdirectory(Testing)
 endif()
 
+if(WIN32 OR APPLE)
+  add_custom_target(package
+  COMMAND ${CMAKE_CPACK_COMMAND} "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi2.cmake"
+  DEPENDS PACKAGE_Mapla)
+
+  add_custom_target(PACKAGE_Mapla 
+  COMMAND ${CMAKE_CPACK_COMMAND} "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Mapla.cmake")
+  
+endif()
+
+
+
 #----------------------------------------------------------------------------
 # Generate Monteverdi2Config.cmake
 # Save library dependencies.
@@ -280,3 +295,5 @@ endif()
 #----------------------------------------------------------------------------
 # Setup valgrind option (default hard coded value is ctest is invalid).
 # set(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes --num-callers=50")
+
+
