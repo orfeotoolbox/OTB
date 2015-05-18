@@ -6,7 +6,7 @@ set(__EXTERNAL_${proj}__ 1)
 message(STATUS "Setup muParserX ...")
 
 if(USE_SYSTEM_MUPARSERX)
-  find_package ( MUPARSERX )
+  find_package ( MuParserX )
   add_custom_target(${proj})
   message(STATUS "  Using muParserX system version")
 else()
