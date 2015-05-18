@@ -11,4 +11,4 @@ export ITK_AUTOLOAD_PATH=$RESOURCES/lib/otb/applications
 
 cd $HOME
 
-exec "$RESOURCES/bin/monteverdi2"
+exec "$RESOURCES/bin/@EXE_FILENAME@"

@@ -3,9 +3,9 @@
 <plist version="1.0">
 	<dict>
 		<key>CFBundleExecutable</key>
-		<string>Monteverdi2-@Monteverdi2_VERSION_MAJOR@.@Monteverdi2_VERSION_MINOR@</string>
+		<string>@APPLICATION_NAME@-@Monteverdi2_VERSION_MAJOR@.@Monteverdi2_VERSION_MINOR@</string>
 		<key>CFBundleIconFile</key>
-		<string>Monteverdi2-@Monteverdi2_VERSION_MAJOR@.@Monteverdi2_VERSION_MINOR@.icns</string>
+		<string>@APPLICATION_NAME@-@Monteverdi2_VERSION_MAJOR@.@Monteverdi2_VERSION_MINOR@.icns</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundlePackageType</key>
