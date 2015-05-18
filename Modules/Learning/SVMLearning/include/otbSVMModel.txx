@@ -552,7 +552,10 @@ template <class TValue, class TLabel>
 void
 SVMModel<TValue, TLabel>::SetSupportVectors(svm_node ** sv, int nbOfSupportVector)
 {
-  // TODO: rewrite this to check memory allocation
+  if (!m_Model)
+    {
+    itkExceptionMacro( "Internal SVM model is empty!");
+    }
 
   // erase the old SV
   // delete just the first element, it destoyes the whole pointers (cf SV filling with x_space)
@@ -621,7 +624,10 @@ template <class TValue, class TLabel>
 void
 SVMModel<TValue, TLabel>::SetAlpha(double ** alpha, int nbOfSupportVector)
 {
-  // TODO: Check memory allocation
+  if (!m_Model)
+    {
+    itkExceptionMacro( "Internal SVM model is empty!");
+    }
 
   // Erase the old sv_coef
   for (int i = 0; i < m_Model->nr_class - 1; ++i)
