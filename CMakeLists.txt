@@ -267,7 +267,7 @@ if(BUILD_TESTING)
 endif()
 
 if(WIN32 OR APPLE)
-  add_custom_target(package
+  add_custom_target(packages
   COMMAND ${CMAKE_CPACK_COMMAND} "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi2.cmake"
   DEPENDS PACKAGE_Mapla)
 
