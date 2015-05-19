@@ -7,10 +7,16 @@ endforeach(APP)
 include(BundleUtilities)
 set(BU_CHMOD_BUNDLE_ITEMS ON)
 set(DYLIB_SEARCH_DIRS)
-list(APPEND DYLIB_SEARCH_DIRS @OTB_INSTALL_PREFIX@/lib)        #OTB dylib path
-list(APPEND DYLIB_SEARCH_DIRS @ITK_INSTALL_PREFIX@/lib)        #ITK dylib path
-list(APPEND DYLIB_SEARCH_DIRS @CMAKE_INSTALL_PREFIX@/lib/otb) #monteverdi2 dylib path
-list(APPEND DYLIB_SEARCH_DIRS @CMAKE_INSTALL_PREFIX@/lib/qt4/plugins/sqldrivers) #Qtsqlite plugins
+
+#OTB,ITK dylib path relative to Modules directory
+list(APPEND DYLIB_SEARCH_DIRS "@OTB_MODULES_DIR@/../../../")
+list(APPEND DYLIB_SEARCH_DIRS "@ITK_MODULES_DIR@/../../../")
+
+#monteverdi2 dylib path
+list(APPEND DYLIB_SEARCH_DIRS ${CMAKE_INSTALL_PREFIX}/lib/otb)
+
+#Qtsqlite plugins
+list(APPEND DYLIB_SEARCH_DIRS ${CMAKE_INSTALL_PREFIX}/lib/qt4/plugins/sqldrivers)
 
 fixup_bundle(
   "${CMAKE_INSTALL_PREFIX}/bin/@EXE_FILENAME@"
