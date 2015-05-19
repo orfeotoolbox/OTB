@@ -31,14 +31,14 @@ function(create_cpack_config application)
     
   else(APPLE)
       set(arch_prefix Darwin)
-     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-      set(arch_prefix Darwin64)
-    endif()  
+     #if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+     # set(arch_prefix Darwin64)
+     #endif()  
     SET(CPACK_GENERATOR "Bundle")
     SET(CPACK_BUNDLE_ICON "${Monteverdi2_SOURCE_DIR}/Packaging/MacOS/Monteverdi2.icns" )
     SET(CPACK_BUNDLE_NAME "${application}-${CPACK_PACKAGE_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}" )
     SET(CPACK_BUNDLE_PLIST "${CMAKE_BINARY_DIR}/Packaging/MacOS/${application}-Info.plist" )
-    SET(CPACK_BUNDLE_STARTUP_COMMAND "${Monteverdi2_SOURCE_DIR}/Packaging/MacOS/${application}-StartupCommand" )
+    SET(CPACK_BUNDLE_STARTUP_COMMAND "${CMAKE_BINARY_DIR}/Packaging/MacOS/${application}-StartupCommand" )
 
   endif()
 
