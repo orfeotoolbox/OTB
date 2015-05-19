@@ -440,7 +440,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       itk::EncapsulateMetaData<ImageKeywordlist>(dict,
                                                  MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
     }
-  else
+  /*else
     {
     //
     // For image with world file, we have a non-null GeoTransform, an empty kwl, but no projection ref.
@@ -459,20 +459,26 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     if (resolution != 0)
       idSpacing = 1.0 * vcl_pow((double)2.0, (double)resolution);
 
+ std::cout << "?" << std::endl;
+ std::cout << vcl_abs(origin[0] - 0.5 * spacing[0]) << std::endl;
+  std::cout << vcl_abs(origin[1] - 0.5 * spacing[1]) << std::endl;
+   std::cout << vcl_abs(spacing[0] - idSpacing) << std::endl;
+    std::cout << vcl_abs(spacing[1] - idSpacing) << std::endl;
     const double epsilon = 1.0E-12;
     if ( projRef.empty()
          && vcl_abs(origin[0] - 0.5 * spacing[0]) > epsilon
          && vcl_abs(origin[1] - 0.5 * spacing[1]) > epsilon
-         && vcl_abs(spacing[0] - idSpacing) > epsilon
-         && vcl_abs(spacing[1] - idSpacing) > epsilon)
+         && (vcl_abs(spacing[0] - idSpacing) > epsilon
+         && vcl_abs(spacing[1] - idSpacing) > epsilon))
       {
+          std::cout << "Force the projection ref" << std::endl;
       std::string wgs84ProjRef =
               "GEOGCS[\"GCS_WGS_1984\", DATUM[\"D_WGS_1984\", SPHEROID[\"WGS_1984\", 6378137, 298.257223563]],"
               "PRIMEM[\"Greenwich\", 0], UNIT[\"Degree\", 0.017453292519943295]]";
 
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, wgs84ProjRef);
       }
-    }
+    }*/
 
   // If Skip ProjectionRef is activated, remove ProjRef from dict
   if (m_FilenameHelper->GetSkipCarto())
