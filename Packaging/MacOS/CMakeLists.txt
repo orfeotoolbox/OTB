@@ -48,7 +48,8 @@ file(GLOB OTB_APPS_LIST ${OTB_DIR}/bin/otbapp_*.dylib)
 
 # Install the applications 
 install(FILES ${OTB_APPS_LIST}
-        DESTINATION lib/otb/applications)
+  DESTINATION lib/otb/applications
+  COMPONENT Runtime)
 
 # Retrieve the name of all the applications available
 foreach(APP ${OTB_APPS_LIST})
