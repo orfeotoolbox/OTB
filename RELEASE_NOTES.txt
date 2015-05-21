@@ -1,4 +1,4 @@
-OTB-v.5.0.0 - Changes since version 4.4.0 
+OTB-v.5.0.0 - Changes since version 4.4.0 (2015/02/13)
 ------------------------------------------
 
 * Library:
@@ -23,6 +23,40 @@ OTB-v.5.0.0 - Changes since version 4.4.0
   
   * Doxygen:
     * Classes sorted by module
+
+* Bug fixed:
+  * Monteverdi2
+    * 0001033: Crash when updating no data value in mv2
+
+  * Documentation
+    * 0001028: URL for online application documentation is not available anymore on the orfeo website
+
+  * OTB-lib
+    * 0001039: ITK patches are not always used
+    * 0001045: StreamingStatisticsMapFromLabelImageFilter can't be templated with otb::Image as support image
+    * 0001023: malloc error in otb::SVMModel destructor
+    * 0001041: Optimization of Band Math Image Filter (from 60M cycles to 40M cycles)
+    * 0001040: Optimization of Concatenate VectorImage Filter (from 28M cycles to 8M cycles)
+    * 0001043: Optimization of Multi to Mono Channel Extract ROI (from 8M cycles to 3M cycles)
+    * 0001011: Need safeguards to test for ExtendedFilename parameters
+
+  * OTB-Packaging
+    * 0001027: [ubuntugis package] OTB Applications in Ubuntu package do not use custom version of ITK UnaryFunctorImageFilter
+    * 0001010: OTB MXE binary package is buggy
+
+  * Orfeo Toolbox (OTB)
+    * 0001047: Convolution test needs ITK with USE_FFTD
+    * 0001038: Superbuild configuration fails on Debian Jessie
+    * 0001024: QtWidgetStringListParameter is buggy
+    * 0001026: In command line application launcher, image path and filename can not contain "--"
+    * 0001044: OTB Windows 64bit -error cast from 'const short unsigned int*' to 'long unsigned int
+    * 0001025: QtWidgetListViewParameter gets reset when changing another parameter in applications
+    * 0001014: OTB does not compile with ITK 4.8
+
+  * OTB-applications
+    * 0001032: otbgui_RadiometricIndices output image without spatial reference system EPSG code
+    * 0001037: file and vector outputs need explicit relative paths
+
 
 OTB-v.4.4.0 - Changes since version 4.4.0 (2015/02/13)
 --------------------------------------------------------
