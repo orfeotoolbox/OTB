@@ -11,7 +11,9 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/02/13)
      * Tests and applications are embedded in modules
      * Writing of new module or update of existing modules is simplified by cmake magic
 
-  * Remove deprecated classes
+  * Remove deprecated code
+     * MeanShiftVectorImageFilter  and MeanShiftImageFilter classes
+     * CommandLineLauncher(const char * exp) and Load( const std::string & exp ) methods in CommandLineLauncher class  
        
   * ThirdParties
     * No more internal versions of most third parties (except 6S, siftfast, ossimplugins)
@@ -67,7 +69,7 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/02/13)
     * 0001037: file and vector outputs need explicit relative paths
 
 
-OTB-v.4.4.0 - Changes since version 4.4.0 (2015/02/13)
+OTB-v.4.4.0 - Changes since version 4.2.1 (2015/02/13)
 --------------------------------------------------------
 
 * Library:
