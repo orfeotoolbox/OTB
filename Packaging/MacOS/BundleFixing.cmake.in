@@ -1,25 +1,22 @@
-set(APP_LIST @OTB_APPS_NAME_LIST@)
+set(DYLIBS_SEARCH_DIRS)
+# #OTB,ITK dylib path relative to Modules directory
+ list(APPEND DYLIBS_SEARCH_DIRS "@OTB_MODULES_DIR@/../../../")
+ list(APPEND DYLIBS_SEARCH_DIRS "@ITK_MODULES_DIR@/../../../")
 
+# #monteverdi2 dylib path
+list(APPEND DYLIBS_SEARCH_DIRS ${CMAKE_INSTALL_PREFIX}/lib/otb)
+
+# #Qtsqlite plugins
+list(APPEND DYLIBS_SEARCH_DIRS ${CMAKE_INSTALL_PREFIX}/lib/qt4/plugins/sqldrivers)
+
+set(APP_LIST @OTB_APPS_NAME_LIST@)
+set(DYLIBS_INSTALLED)
 foreach(APP ${APP_LIST})
-  list(APPEND OTB_APPS_LIST_INSTALL ${CMAKE_INSTALL_PREFIX}/lib/otb/applications/${APP})
+  list(APPEND DYLIBS_INSTALLED ${CMAKE_INSTALL_PREFIX}/lib/otb/applications/${APP})
 endforeach(APP)
+
+list(APPEND DYLIBS_INSTALLED "${CMAKE_INSTALL_PREFIX}/lib/qt4/plugins/sqldrivers/libqsqlite.dylib")
 
 include(BundleUtilities)
 set(BU_CHMOD_BUNDLE_ITEMS ON)
-set(DYLIB_SEARCH_DIRS)
-
-#OTB,ITK dylib path relative to Modules directory
-list(APPEND DYLIB_SEARCH_DIRS "@OTB_MODULES_DIR@/../../../")
-list(APPEND DYLIB_SEARCH_DIRS "@ITK_MODULES_DIR@/../../../")
-
-#monteverdi2 dylib path
-list(APPEND DYLIB_SEARCH_DIRS ${CMAKE_INSTALL_PREFIX}/lib/otb)
-
-#Qtsqlite plugins
-list(APPEND DYLIB_SEARCH_DIRS ${CMAKE_INSTALL_PREFIX}/lib/qt4/plugins/sqldrivers)
-
-fixup_bundle(
-  "${CMAKE_INSTALL_PREFIX}/bin/@EXE_FILENAME@"
-  "${OTB_APPS_LIST_INSTALL};${CMAKE_INSTALL_PREFIX}/lib/qt4/plugins/sqldrivers/libqsqlite.dylib"
-  "${DYLIB_SEARCH_DIRS}"
-  )
+fixup_bundle("${CMAKE_INSTALL_PREFIX}/bin/@EXE_FILENAME@" "${DYLIBS_INSTALLED}" "${DYLIBS_SEARCH_DIRS}")
