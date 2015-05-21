@@ -7,6 +7,7 @@ Cyrille Valladeau (CS)
 Julien Radoux (UCL)
 Gr\'egoire Mercier (Telecom Bretagne)
 Vincent Poulain (CNES)
+Christophe Palmann (CS)
 Patrick Imbo (CS)
 Caroline Ruffel (CS)
 Miarintsoa Ramanantsimiavona
@@ -49,6 +50,7 @@ Luc Hermitte (CS)
 Charles Peyrega (CS)
 St\'ephane Albert (CS)
 David Youssefi  (CNES Intern, then CS)
-Mohammed Rashad (CNES Intern)
+Mohammed Rashad (CNES Intern, then CS)
+Remi Cresson (Irstea)
 
 

@@ -71,10 +71,21 @@ OTB.
 OTB and ITK provide a lot of filters allowing to perform basic operations on image layers (thresholding, ratio, layers combinations...).
 It allows to create a processing chain defining at each step operations and to combine them in the data pipeline.
 But the library offers also the possibility to perform more generic complex mathematical operation on images in a single filter: the
-\doxygen{otb}{BandMathImageFilter}.
+\doxygen{otb}{BandMathImageFilter} and more recently the \doxygen{otb}{BandMathImageFilterX}.
+
+\subsection{BandMath filter}
+\label{sec:BandMathImageFilter}
 
 \ifitkFullVersion
 \input{BandMathFilterExample.tex}
+\fi
+
+\subsection{BandMathX filter}
+\label{sec:BandMathImageFilterX}
+A new version of the BandMath filter is now available; among the new functionalities, variables representing multi-band pixels were introduced, as well as variables representing neighborhoods of pixels. The class name is \doxygen{otb}{BandMathImageFilterX}.
+
+\ifitkFullVersion
+\input{BandMathXImageFilterExample.tex}
 \fi
 
 \section{Gradients}

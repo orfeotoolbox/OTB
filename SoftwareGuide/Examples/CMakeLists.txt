@@ -277,6 +277,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/MeanShiftSegmentationFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/HillShadingExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathFilterExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathXImageFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration1.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration2.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration5.cxx
@@ -334,7 +335,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Segmentation/WatershedSegmentation.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/FastMarchingImageFilter.cxx
   #${OTB_SOURCE_DIR}/Examples/Patented/HybridSegmentationFuzzyVoronoi.cxx
-  ${OTB_SOURCE_DIR}/Examples/Patented/FuzzyConnectednessImageFilter.cxx
+  #${OTB_SOURCE_DIR}/Examples/Patented/FuzzyConnectednessImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidAnalysisFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSynthesisFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSegmenterExample.cxx

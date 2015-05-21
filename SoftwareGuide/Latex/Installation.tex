@@ -1,3 +1,5 @@
+\setcounter{secnumdepth}{3}
+
 \chapter{Installation}
 \label{chapter:Installation}
 \index{Installation}
@@ -20,7 +22,9 @@ following:
 
 Based on a visualization framework which used FLTK libraries, Orfeo ToolBox team provides an integrated application which giving graphical access to a lot of OTB functionalities: \textbf{Monteverdi}. Since mid-2013, we also provide a new graphical application based on Qt: \textbf{Monteverdi2}. This new application used the OTB-Applications tools as processing framework. 
    
-There are two ways to install OTB library on your system: installing from a binary distribution or compiling from sources. The choice depends on your system, and on what you intend to do.
+There are two ways to install OTB library on your system: installing from a binary distribution or compiling from sources. 
+The choice depends on your system, and on what you intend to do. If you intend compiling from source, OTB team provides the SuperBuild feature, which is designed to provide an easy access to OTB and its dependencies.
+SuperBuild is available since the release 5.0 (revision c20055670b36 / Tue, 24 Mar 2015 18:22:06).
 
 
 \section{Installing binary packages}
@@ -35,7 +39,7 @@ The binary packages for OTB library are only available on:
 \item MacOSX through MacPorts software  
 \end{itemize}
 
-Currently, no OSGeo4W package is available for the OTB library, you need to build from source to use it on windows platform. However you can fund binary packages for Monteverdi, Monteverdi2 and OTB-Applications (command-line, QT based and python ones).
+Currently, no OSGeo4W package is available for the OTB library, you need to build from source to use it on windows platform. However you can find binary packages for Monteverdi, Monteverdi2 and OTB-Applications (command-line, QT based and python ones).
 
 
 \section{Building from sources}
@@ -44,233 +48,30 @@ OTB has been developed and tested across different combinations of operating sys
 \begin{itemize}
 \item Visual Studio 2010 and higher compiler on MS-Windows
 \item GCC 4.1 and higher on Unix/Linux systems
-\item GCC on MacOSX (10.8 and higher) systems
+\item Clang on MacOSX (10.8 and higher) systems
 \end{itemize}
 
 Given the advanced usage of C++ features in the toolbox, some compilers may have difficulties processing the code. If you are currently using an outdated compiler this may be an excellent excuse for upgrading this old piece of software!
 
-Please note that even if this section only describes how to compile OTB library and applications from sources, Monteverdi1 and Monteverdi2 can be compiled in a similar way.
+\subsection{Preparing CMake}
+\label{sec:CMakeforOTB}
 
-In order to compile and install OTB, you need on your system:
-\begin{itemize}
-  \item \href{http://www.cmake.org/}{CMake} software (binary packages are available for most platforms).
-  \item a compilers of the previous list.
- \end{itemize}
-
-\subsection{Which libraries/packages are needed before compiling and installing OTB?}
-The following table gathered the libraries (mandatory or not) used in the OTB. Some of them are included in the OTB but can be used as external libraries (this the default behavior if they are detected on your platform). 
-
-\begin{center}
-\begin{tiny}
-\begin{table}[!htbp]
-\begin{tabular}{|p{0.15\textwidth}|p{0.45\textwidth}|p{0.1\textwidth}|p{0.15\textwidth}|p{0.1\textwidth}|}
-\hline
-\textbf{Library} & \textbf{Web site} & \textbf{Mandatory} & \textbf{Where} & \textbf{Minimum version} \\
-\hline
-\textbf{ITK} & \url{http://www.itk.org} & yes & Intern/\textbf{Extern} & 4.5.0 \\
-\hline
-\textbf{GDAL} & \url{http://www.gdal.org} & yes & Extern & 1.10 \\
-\hline
-\textbf{OSSIM} & \url{http://www.ossim.org} & yes & \textbf{Intern}/Extern & 1.8.6 \\
-\hline
-\textbf{Curl} & \url{http://www.curl.haxx.se} & no & Extern & - \\
-\hline
-\textbf{FFTW} & \url{http://www.fftw.org} & no & Extern & - \\
-\hline
-\textbf{expat} & \url{http://expat.sourceforge.net/} & yes & Intern/\textbf{Extern} & - \\
-\hline
-\textbf{libtiff} & \url{http://www.libtiff.org} & yes & Extern & - \\
-\hline
-\textbf{libgeotiff} & \url{http://trac.osgeo.org/geotiff/} & yes & Extern & - \\
-\hline
-\textbf{OpenJPEG} & \url{http://code.google.com/p/openjpeg/} & no & Intern & - \\
-\hline
-\textbf{boost} & \url{http://www.boost.org} & no & Intern/\textbf{Extern} & - \\
-\hline
-\textbf{openthreads} & \url{http://www.openscenegraph.org} & no & Intern/\textbf{Extern} & - \\
-\hline
-\textbf{Mapnik} & \url{http://www.mapnik.org} & no & Extern & - \\
-\hline
-\textbf{tinyXML} & \url{http://www.grinninglizard.com/tinyxml} & yes & Intern/\textbf{Extern} & - \\
-\hline
-\textbf{KML} & \url{http://libkml.googlecode.com} & yes & Intern/\textbf{Extern} & - \\
-\hline
-\textbf{6S} & \url{http://6s.ltdri.org} & yes & Intern & - \\
-\hline
-\textbf{edison} & \url{http://www.caip.rutgers.edu/riul/} & yes & Intern & - \\
-\hline
-\textbf{SiftFast} & \url{http://libsift.sourceforge.net} & yes & Intern & - \\
-\hline
-\textbf{MuParser} & \url{http://www.muparser.sourceforge.net} & yes & Intern/\textbf{Extern} & - \\
-\hline
-\textbf{libSVM} & \url{http://www.csie.ntu.edu.tw/~cjlin/libsvm} & yes & Intern & - \\
-\hline
-\textbf{Qt} & \url{http://qt-project.org/} & no & Extern & 4 \\
-\hline
-\end{tabular}
-\caption{Libraries used in the OTB. In the column Where, the default behavior during the configuration of OTB is indicated by when the status is bold. For example, by default external ITK library is used.}
-\label{tab:installation2}
-\end{table}
-\end{tiny}
-\end{center}
-
-For windows user, some of these libraries can be found into the OSGeo4W installer.  
-
-For Monteverdi, in addition to OTB, FLTK is required (\url{http://www.fltk.org}) as an external dependency. Therefore, you need to install it from your package manager or build it from source. For windows users, you can find it through the OSGeo4W installer.
-
-For Monteverdi2, in addition to OTB, Qt4 (\url{http://qt-project.org/}) and Qwt5 (\url{http://qwt.sourceforge.net/}) are required as external dependencies. Therefore, you need to install them from your package manager or build them from source. For windows users, you can find them through the OSGeo4W installer.
-
-You can find all the information to get and install these libraries directly from their respective website.
-
-If you install external libraries through binary packages provided by your operating system or use system libraries, \textbf{be sure to also install libraries headers, which are mandatory to build OTB}.
-
-\subsection{Getting a qualified Gdal library on Linux systems}\label{sec:gdal}
-
-Gdal is a very rich data abstraction library, and there are many compilation time options in Gdal that will impact Gdal and therefore OTB libraries capabilities. There are also options and dependencies that could limit or prevent Orfeo ToolBox from working properly. On linux systems, there are a lot of Gdal binary packages with different configurations. It is therefore very important to know exactly your Gdal configuration before proceeding to the next step.
-
-Here are the things to check:
-\begin{itemize}
-\item Gdal version (should be greater or equal to 1.10),
-\item Gdal library should not expose any Tiff or Geotiff symbol (otherwise it may cause crashes in Orfeo ToolBox),
-\item Gdal should support BigTiff (read or write Tiff files of more than 4 Gb).
-\end{itemize}
-
-\subsubsection{How to check if your Gdal qualifies for Orfeo ToolBox?}
-
-If you already have a Gdal in your system (either from the official package manager of your distributions or from your own build), here is how to check if it qualifies for Orfeo ToolBox.
-
-Gdal version can be checked using the following command:
-\begin{verbatim}
-$ gdal-config --version
-\end{verbatim}
-
-If version is lower than 1.10.0, you should build or install an up-to-date Gdal library.
-
-If you have several versions of Gdal installed in your system, be sure to run this command for the version you intend to. You can check this with:
-\begin{verbatim}
-$ which gdal-config
-\end{verbatim}
-
-Next step is to check if the Gdal library leaks any Tiff or Geotiff symbol. First you need to locate gdal library. If it has been installed system wide, the library will most probably be located in \texttt{/usr/lib}. Otherwise, you need to find where is \texttt{libgdal.so}.
-
-Once you found it, run:
-\begin{verbatim}
-$ nm -D libgdal.so | grep XTIFFOpen
-\end{verbatim}
-
-This should show either nothing, or the following:
-
-\begin{verbatim}
-00000000004b1100 T gdal_XTIFFOpen
-\end{verbatim}
-
-If the command outputs the following:
-
-\begin{verbatim}
-00000000004b1100 T XTIFFOpen
-\end{verbatim}
-
-It means that your Gdal library leaks Tiff and Geotiff symbols. Depending on your system, this might cause random crashes in Orfeo ToolBox when reading or writing Tiff images. In this case it is advised to build or retrieve a Gdal library that does not exhibit this issue.
-
-Last, it might be important for you to be able to read and write Tiff files of more than 4 Gb with Orfeo ToolBox. To check for BigTiff file support, choose an image on your computer and run:
-\begin{verbatim}
-$ gdal_translate -co "BIGTIFF=YES" my_image.png my_image.tif
-\end{verbatim}
-
-If this fails, your Gdal library or the Tiff library it is linked to does not support BigTiff files. In this case it is advised to build or retrieve a Gdal library.
-
-\subsection{Distributions and binary packages repositories known to distribute a qualified Gdal}
-
-Among the different distributions and packages repositories that distribute a qualified Gdal, one can cite:
-\begin{itemize}
-\item The ubuntu-gis unstable ppa (\href{https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable}),
-\item Default package for Ubuntu greater or equal to 14.04.
-\end{itemize}
-
-\subsection{Building your own qualified Gdal}
-
-If do not yet have a Gdal library or suspect that the library you have will not qualify, you can build your own library. After downloading the latest version of gdal source code, run:
-
-\begin{verbatim}
-$ export GDAL_INSTALL_DIR=$HOME/local
-$ ./configure --prefix=$GDAL_INSTALL_DIR \
-  --with-geotiff=internal  \
-  --with-rename-internal-libtiff-symbols=yes \
-  --with-rename-internal-libgeotiff-symbols=yes
-$ make install
-\end{verbatim}
-
-The \texttt{GDAL\_INSTALL\_DIR} environment variable allows to choose where you will install your Gdal library. It is NOT advised to install it system wide. It is recommended to choose a dedicated directory in your home folder. The configuration options will ensure that Gdal will build internal Tiff and Geotiff libraries that supports BigTiff files, while renaming their symbols so that they will not be leaked outside of the library. Depending on your need, feel free to enable more Gdal configuration options.
-
-Once this is done, be sure to update your environment variables:
-\begin{verbatim}
-$ export PATH=$PATH:$GDAL_INSTALL_DIR/bin
-$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GDAL_INSTALL_DIR/lib
-$ export GDAL_DATA=$GDAL_INSTALL_DIR/share/gdal
-\end{verbatim}
-
-Also note that with this Gdal configuration, you will still need to have Tiff and Geotiff libraries and headers available on your system to build OTB (due to third parties requiring them). However, you can use the system packages for those.
-
-\subsection{Getting the OTB source code}
-
-There are three ways of getting the OTB source code:
-\begin{itemize}
-\item Download the latest current release from the \href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page},
-\item Clone the current release with \href{http://mercurial.selenic.com}{Mercurial} from the \href{http://hg.orfeo-toolbox.org/OTB}{OTB mercurial server},
-\item Clone the latest revision with \href{http://mercurial.selenic.com}{Mercurial} from the \href{http://hg.orfeo-toolbox.org/OTB}{OTB mercurial server}.
-\end{itemize}
-
-These last two options need a proper \href{http://mercurial.selenic.com}{Mercurial} installation. To get source code from Mercurial, do:
-\begin{verbatim}
-hg clone http://hg.orfeo-toolbox.org/OTB
-\end{verbatim}
-
-Using Mercurial, you can easily navigate through the different version. For instance, this brings you to the 3.16.0 source code version:
-\begin{verbatim}
-hg update -r 3.16.0
-\end{verbatim}
-
-And this brings you to the latest development version:
-\begin{verbatim}
-hg update
-\end{verbatim}
-
-
-\subsection{Configuring OTB}
-\label{sec:ConfiguringOTB}
-
-\index{Configuration}
+\index{CMake}
+\index{CMake!downloading}
 
 The challenge of supporting OTB across platforms has been solved through the use of CMake, a cross-platform, open-source build system. CMake is used to control the software compilation process using simple platform and compiler independent configuration files.  CMake generates native makefiles and workspaces that can be used in the compiler environment of your choice. CMake is quite sophisticated: it supports complex environments requiring system configuration, compiler feature testing, and code generation.
 
 CMake generates Makefiles under UNIX systems and generates Visual Studio workspaces under Windows (and appropriate build files for other compilers like Borland). The information used by CMake is provided by \code{CMakeLists.txt} files that are present in every directory of the OTB source tree. These files contain information that the user provides to CMake at configuration time. Typical information includes paths to utilities in the system and the selection of software options specified by the user.
 
-\subsubsection{Preparing CMake}
-\label{sec:CMakeforOTB}
-
-\index{CMake}
-\index{CMake!downloading}
 
 CMake can be downloaded at no cost from
 \begin{center}
   \url{http://www.cmake.org}
 \end{center}
 
-OTB requires at least CMake version 2.8.6. You can download binary versions for most of the popular platforms including Windows, Solaris, IRIX, HP, Mac and Linux. Alternatively you can download the source code and build CMake on your system. Follow the instructions in the CMake Web page for downloading and installing the software.
+OTB requires at least CMake version 2.8.6. You can download binary versions for most of the popular platforms including Windows, Solaris, IRIX, HP, Mac and Linux. 
+Alternatively you can download the source code and build CMake on your system. Follow the instructions in the CMake Web page for downloading and installing the software.
 
-\index{CMake!OTB tree}
-Running CMake initially requires that you provide two pieces of
-information:
-\begin{itemize}
-\item Where the source code directory is located (ex.: OTB\_SOURCE\_DIR),
-\item Where the object code is to be produced: (ex.: OTB\_BINARY\_DIR).
-\end{itemize}
-These are referred to as the \emph{source directory} and the \emph{binary directory}.
-We recommend setting the binary directory to be different than the source directory (an
-\emph{out-of-source} build), but OTB will still build if they are set
-to a directory inside the source directory (an \emph{in-source} build).
-
-\subsubsection{Compiling OTB}
 CMake runs in an interactive mode in that you iteratively select
 options and configure according to these options. The iteration
 proceeds until no more options remain to be selected. At this point, a
@@ -289,7 +90,7 @@ As the following figures display it, CMake has a different interface according t
 \label{sec:ConfiguringOTBwithVTK}
 \index{Configuration!with VTK}
 
-\begin{figure}[ht]
+\begin{figure}[tpb]
 \centering
 \includegraphics[width=0.8\textwidth]{ccmakeScreenShot.eps}
 \includegraphics[width=0.8\textwidth]{CMakeSetupScreenShot.eps}
@@ -300,10 +101,194 @@ version based on MFC.}
 \end{figure}
 
 
-\textbf{\underline{On Windows:}}
+
 \index{Preliminary steps}
 
-The OTB needs some external libraries to work, as described in the table \ref{tab:installation2}. To manage correctly and easily the dependencies of OTB under Windows we strongly recommend to install \href{http://trac.osgeo.org/osgeo4w/}{OSGeo4W} tool. This software will provide you with all the necessary dependencies in 32 bit and 64 bit mode. Please follow these steps:
+\index{CMake!OTB tree}
+Running CMake initially requires that you provide three pieces of
+information:
+\begin{itemize}
+\item Where the source code directory is located (ex.: OTB\_SOURCE\_DIR),
+\item Where the object code is to be produced: (ex.: OTB\_BINARY\_DIR),
+\item Where to install the binaries/libraries: (ex.: OTB\_INSTALL\_DIR).
+\end{itemize}
+These are referred to as the \emph{source directory}, the \emph{binary directory} and the \emph{install directory}.
+We recommend setting the binary directory to be different than the source directory (an
+\emph{out-of-source} build), but OTB will still build if they are set
+to a directory inside the source directory (an \emph{in-source} build).
+
+
+The OTB needs some external libraries to work (see table \ref{tab:installation2} below). 
+
+\begin{center}
+\begin{tiny}
+\begin{table}[!htbp]
+\begin{tabular}{|p{0.15\textwidth}|p{0.45\textwidth}|p{0.1\textwidth}|p{0.1\textwidth}|}
+\hline
+\textbf{Library} & \textbf{Web site} & \textbf{Mandatory} & \textbf{Minimum version} \\
+\hline
+\textbf{ITK} & \url{http://www.itk.org} & yes & 4.5.0 \\
+\hline
+\textbf{GDAL} & \url{http://www.gdal.org} & yes & 1.10 \\
+\hline
+\textbf{OSSIM} & \url{http://www.ossim.org} & yes & 1.8.6 \\
+\hline
+\textbf{Curl} & \url{http://www.curl.haxx.se} & no  & - \\
+\hline
+\textbf{FFTW} & \url{http://www.fftw.org} & no  & - \\
+\hline
+\textbf{libgeotiff} & \url{http://trac.osgeo.org/geotiff/} & yes & - \\
+\hline
+\textbf{OpenJPEG} & \url{http://code.google.com/p/openjpeg/} & no & - \\
+\hline
+\textbf{boost} & \url{http://www.boost.org} & yes & - \\
+\hline
+\textbf{openthreads} & \url{http://www.openscenegraph.org} & yes & - \\
+\hline
+\textbf{Mapnik} & \url{http://www.mapnik.org} & no  & - \\
+\hline
+\textbf{tinyXML} & \url{http://www.grinninglizard.com/tinyxml} & yes & - \\
+\hline
+\textbf{6S} & \url{http://6s.ltdri.org} & no & - \\
+\hline
+\textbf{SiftFast} & \url{http://libsift.sourceforge.net} & no  & - \\
+\hline
+\textbf{MuParser} & \url{http://www.muparser.sourceforge.net} & no  & - \\
+\hline
+\textbf{MuParserX} & \url{http://muparserx.beltoforion.de} & no  & 3.0.5 \\
+\hline
+\textbf{libSVM} & \url{http://www.csie.ntu.edu.tw/~cjlin/libsvm} & no  & 2.0 \\
+\hline
+\textbf{Qt} & \url{http://qt-project.org/} & no  & 4 \\
+\hline
+\textbf{OpenCV} & \url{http://opencv.org} & no  & - \\
+\hline
+\end{tabular}
+\caption{Libraries used in the OTB.}
+\label{tab:installation2}
+\end{table}
+\end{tiny}
+\end{center}
+
+To manage correctly and easily the dependencies of OTB (especially under Windows) \textbf{we strongly recommend to use the SuperBuild feature} (see next subsection \ref{sec:SuperBuild}).
+Once the dependencies are built, OTB can finally be compiled : 
+\begin{itemize}
+	\item Just provide the location where you installed the dependencies, 
+	\item Install the ones not provided by SuperBuild
+    \item From the cmake interface, launch 'Configure' and 'Generate'
+    \item Compile and install : call the generator used for your platform : make, nmake, jom, ... 
+\end{itemize}
+
+\textbf{\underline{Compilation awarness}}
+The build process will typically take anywhere from 15 to 30 minutes depending on the performance of your system. If you decide to enable testing as part of the normal build process, about 2500 small tests programs will be compiled. This will verify that the basic components of OTB have been correctly built on your system.
+
+Set the CMake variables \code{BUILD\_TESTING} and \code{BUILD\_EXAMPLES} to ON will activate the compilation of the examples and the tests and slow down the build process. The examples distributed with the toolbox are a helpful resource for learning how to use OTB components but are not essential for the use of the toolbox itself. The testing section includes a large number of small programs that exercise the capabilities of OTB classes. Due to the large number of tests, enabling the testing option will considerably increase the build time.  It is not desirable to enable this option for a first build of the toolbox.
+
+The CMake variable \code{OTB\_BUILD\_DEFAULT\_MODULES} activates all usual modules. This is required to build the examples. If you want to reduce the set of enabled modules, in order to produce a smaller OTB or to avoid some third parties, you have two methods :
+\begin{itemize}
+  \item disable some third party modules with the CMake variables \code{OTB\_USE\_XXX}. All the modules that depend on the corresponding third party will be disabled.
+  \item disable the option \code{OTB\_BUILD\_DEFAULT\_MODULES}, and enable the modules you want. The variables \code{OTBGroup\_XXX} are used to enable all modules in a group. If this variable is off, the user can select which modules in the group should be enabled, using the pattern variable \code{Module\_XXX}.
+\end{itemize}
+
+
+\textbf{Note 1:} Those who want to avoid using the SuperBuild (even partially) or to use additional dependencies not provided by the SuperBuild, should refer to the subsection \ref{sec:manualdependencies}. 
+
+
+
+\textbf{Note 2:} 
+Please note that even if this section only describes how to compile OTB library and applications from sources, Monteverdi1 and Monteverdi2 can be compiled in a similar way.
+
+For Monteverdi, in addition to OTB, FLTK is required (\url{http://www.fltk.org}) as an external dependency. Therefore, you need to install it from your package manager or build it from source. For windows users, you can find it through the OSGeo4W installer.
+
+For Monteverdi2, in addition to OTB, Qt4 (\url{http://qt-project.org/}) and Qwt5 (\url{http://qwt.sourceforge.net/}) are required as external dependencies. Therefore, you need to install them from your package manager or build them from source. For windows users, you can find them through the OSGeo4W installer.
+
+
+\subsection{SuperBuild}
+\label{sec:SuperBuild}
+
+The SuperBuild is a way of compiling dependencies to a project just before you build the project. Thanks to CMake and its ExternalProject module, it is possible to download a source archive, configure, compile and install it when building the main project. This feature has been used in other CMake-based projects (ITK, Slicer, ParaView,...).
+
+In OTB, the SuperBuild is implemented with no impact on the library sources : the sources for SuperBuild are located in the 'OTB/SuperBuild' subdirectory. It is made of CMake scripts and source patches that allow to compile all the dependencies necessary for OTB. Once all the dependencies are compiled and installed, the OTB library is built using those dependencies.
+
+The purpose is to provide an easy way to get OTB and its dependencies, whatever the platform (among Linux, MACOSX and Windows). 
+
+\subsubsection{Requirements}
+There are few requirements to use the SuperBuild :
+\begin{itemize}
+	\item CMake (at least 2.8.11)
+	\item C and C++ compilers
+	\item libtool
+	\item mercurial (if you intend to download OTB sources from the repository) 
+\end{itemize}
+
+There are optional requirements depending on OTB features you want to enable :
+\begin{itemize}
+	\item python (for python wrapping)
+    \item java (for java wrapping) 
+\end{itemize}
+
+\subsubsection{How to use it}
+
+The SuperBuild is made like a standard CMake-type project. You should then prepare three directories (for source, build and install) :
+OTB\textunderscore SOURCE\textunderscore DIR, OTB\textunderscore BINARY\textunderscore DIR, OTB\textunderscore INSTALL\textunderscore DIR.
+
+\begin{itemize}
+	\item Get OTB sources and put them in your source directory (works with revision c20055670b36 and later)
+    \item Go to your build directory and configure CMake using "OTB\textunderscore SOURCE\textunderscore DIR/SuperBuild" as input
+    \begin{itemize}
+        \item Set the CMAKE\textunderscore INSTALL\textunderscore PREFIX to your install directory (OTB\textunderscore INSTALL\textunderscore DIR)
+        \item Online mode (default) : CMake will download all the source archives required to build the dependencies in the folder pointed by the variable DOWNLOAD\textunderscore LOCATION
+        \item Offline mode : if you have already the dependencies archives on your disk, set the variable DOWNLOAD\textunderscore LOCATION to the folder containing those archives. If archives names and MD5 sums match, CMake won't download them. An archive containing all the needed source archives is available on Orfeo ToolBox website, you may download it, uncompress, and point the DOWNLOAD\textunderscore LOCATION variable to the uncompressed folder (see \url{https://www.orfeo-toolbox.org/packages/SuperBuild-archives.tar.bz2}).
+        \item For each dependency, you can use the variable USE\textunderscore SYSTEM\textunderscore XXX to choose whether you want this dependency to be build by SuperBuild or if a system version should be used. 
+    \end{itemize}
+    \item From the cmake interface, launch 'Configure' and 'Generate'
+    \item Compile and install : call the generator used for your platform : make, nmake, jom, ... 
+\end{itemize}
+
+\subsubsection{Current status}
+
+This section details the libraries that are not fully supported by SuperBuild depending on the target platform. 
+
+\textbf{Windows MSVC 2010}
+\newline
+The libraries not handled by SuperBuild are : 
+\begin{itemize}
+	\item PCRE
+\end{itemize}
+
+\textbf{Note} : there is a limitation on the absolute path length for the source directory and build directory : it should not exceed 50 characters. In fact, this limitation is not related to the SuperBuild but comes with OTB.
+
+\textbf{MacOSX 10.10}
+\newline
+The libraries not handled by SuperBuild are : 
+\begin{itemize}
+	\item Boost
+	\item Curl
+	\item PCRE
+	\item PNG
+	\item SWIG
+	\item ZLIB
+	\item QT4
+\end{itemize}
+
+\textbf{Linux}
+\newline
+The libraries not handled by SuperBuild are : 
+\begin{itemize}
+	\item Curl
+	\item PCRE
+	\item QT4
+	\item SWIG
+\end{itemize}
+
+A wiki page is also available here : \url{http://wiki.orfeo-toolbox.org/index.php/SuperBuild}.
+
+\subsection{Manual installation of OTB dependencies}
+\label{sec:manualdependencies}
+
+\subsubsection{Windows}
+
+To manage the dependencies of OTB under Windows without SuperBuild, users should install the \href{http://trac.osgeo.org/osgeo4w/}{OSGeo4W} tool. This software will provide you with all the necessary dependencies in 32 bit and 64 bit mode. Please follow these steps:
 \begin{enumerate}
 \item  Download the installer setup (32/64bit)
 \item  Run the setup installer with Admin Rights
@@ -313,7 +298,7 @@ The OTB needs some external libraries to work, as described in the table \ref{ta
 \item  In the next screen, select a local package directory (idem you must have the write access to this directory)
 \item  Select your Internet connection settings
 \item  Select the default download site
-\item  Select the following packages:
+\item  Select the following packages (except for those eventually installed from SuperBuild):
 	\begin{itemize}
 	\item  msvcrt
 	\item  gdal
@@ -332,16 +317,9 @@ The OTB needs some external libraries to work, as described in the table \ref{ta
 \item  Wait the downloading and the installation of the packages
 \end{enumerate}
 
-Create a directory, where you have write access, to store your work (for example at C:\textbackslash path\textbackslash to\textbackslash MyOTBDir).
-Organize your directories as it :
-\begin{itemize}
-\item MyOTBDir\textbackslash src
-\item MyOTBDir\textbackslash build
-\item MyOTBDir\textbackslash install
-\end{itemize}
-
-Retrieve the latest release of OTB (you can find the latest source \href{http://sourceforge.net/projects/orfeo-toolbox/files}{here}) and unzip it into the previous source directory.
-
+Create a directory, where you have write access, to store your work.
+Download the OTB sources (see subsection \ref{sec:ObtainingTheSoftware}) : OTB\_SOURCE\_DIR.
+Create the two other usual directories OTB\_BINARY\_DIR and OTB\_INSTALL\_DIR.
 
 \index{Configure, Build and Install OTB}
 
@@ -391,8 +369,8 @@ goto :END
 
 :Usage
 echo You need to provide 3 arguments to the script: 
-echo   1. path to the source directory
-echo   2. path to the build directory (an empty directory)
+echo   1. path to the source directory (OTB_SOURCE_DIR)
+echo   2. path to the build directory (OTB_BINARY_DIR)
 echo   3. path to the installation directory (an empty directory)
 GOTO :END
 
@@ -402,49 +380,183 @@ GOTO :END
 
 :END
 \end{verbatim}
-Into a OSGEo4W shell, run the OTB.bat with the right arguments: full path to the OTB src directory, full path to the OTB build directory, full path to the place where install OTB. Take a break, you made it: OTB is installed in your install directory (should be C:\textbackslash path\textbackslash to\textbackslash MyOTBDir\textbackslash install). If you want test: into an OSGeo4W shell, go to the bin directory of the install directory and run HelloWorld.exe. If you want build OTB in Release config, into the OSGeo4W shell, open the OTB.sln and select this configuration from the configuration selector and build the solution.
+Into a OSGEo4W shell, run the OTB.bat with the right arguments: full path to the OTB src directory, full path to the OTB build directory, full path to the place where install OTB. Take a break, you made it: OTB is installed in your install directory. If you want test: into an OSGeo4W shell, go to the bin directory of the install directory and run HelloWorld.exe. If you want build OTB in Release config, into the OSGeo4W shell, open the OTB.sln and select this configuration from the configuration selector and build the solution.
 
 If you want use more recent MS-compiler please change the path to vsvars32.bat file and change the generator used by cmake line. OTB should support compilation under Visual Studio 2012 and 2013. 
 
 That should be all! Otherwise, subscribe to otb-users@googlegroups.com and you will get some help.
 
- 
-\textbf{\underline{On Linux/Unix:}}
-\index{Configuring CMake on Unix}
-On Unix, the binary directory is created by the user and CMake is invoked with the path to the source directory. For example:
-\small
-\begin{verbatim}
-mkdir OTB_BINARY_DIR
-cd OTB_BINARY_DIR
-ccmake ../OTB_SOURCE_DIR
-\end{verbatim}
-\normalsize
 
-Once the interface open, you can push \emph{c} (for Configure), or/and \emph{t} for Toggle (to have access to the advanced variables). If you have follow the previous section every needed libraries are in the
-\emph{/usr} and will be found automatically by CMake. Set the following recommended CMake variables:
+
+\subsubsection{Linux systems : getting a qualified Gdal library }
+\label{sec:gdal}
+Manual installation of OTB dependencies can easily be done under unix platforms, either directly by package managers (be sure to also install libraries headers, which are mandatory to build OTB) or by compiling from sources (follow the build instructions for each particular dependence).
+
+However, special precautions are necessary concerning Gdal.
+    
+Gdal is a very rich data abstraction library, and there are many compilation time options in Gdal that will impact Gdal and therefore OTB libraries capabilities. There are also options and dependencies that could limit or prevent Orfeo ToolBox from working properly. On linux systems, there are a lot of Gdal binary packages with different configurations. It is therefore very important to know exactly your Gdal configuration before proceeding to the next step.
+
+Here are the things to check:
 \begin{itemize}
-\item OTB\_USE\_EXTERNAL\_BOOST:BOOL=ON
-\item OTB\_USE\_CURL:BOOL=ON
-\item OTB\_USE\_EXTERNAL\_EXPAT:BOOL=ON
-\item OTB\_USE\_JPEG2000:BOOL=ON
+	\item Gdal version (should be greater or equal to 1.10),
+	\item Gdal library should not expose any Tiff or Geotiff symbol (otherwise it may cause crashes in Orfeo ToolBox),
+	\item Gdal should support BigTiff (read or write Tiff files of more than 4 Gb).
 \end{itemize}
 
-Push \emph{c} to update CMake until the option \emph{Generate} is accessible in the GUI,
-then push \emph{g} fot \emph{Generate}. The CMake interface will close itself.
-Then, go into your build directory (here OTB\_BINARY\_DIR) and do \emph{make} to launch the compilation.
+\begin{itemize}
+	\item {How to check if your Gdal qualifies for Orfeo ToolBox?}
+\end{itemize}
+If you already have a Gdal in your system (either from the official package manager of your distribution or from your own build), here is how to check if it qualifies for Orfeo ToolBox.
 
-If you want to put OTB in a standard location, you can proceed with:
-
+Gdal version can be checked using the following command:
 \begin{verbatim}
-make install
+$ gdal-config --version
 \end{verbatim}
 
-\textbf{\underline{Compilation awarness}}
-The build process will typically take anywhere from 15 to 30 minutes depending on the performance of your system. If you decide to enable testing as part of the normal build process, about 2500 small tests programs will be compiled. This will verify that the basic components of OTB have been correctly built on your system.
+If version is lower than 1.10.0, you should build or install an up-to-date Gdal library.
 
-Set the CMake variables \code{BUILD\_TESTING} and \code{BUILD\_EXAMPLES} to ON will activate the compilation of the examples and the tests and slow down the build process. The examples distributed with the toolbox are a helpful resource for learning how to use OTB components but are not essential for the use of the toolbox itself. The testing section includes a large number of small programs that exercise the capabilities of OTB classes. Due to the large number of tests, enabling the testing option will considerably increase the build time.  It is not desirable to enable this option for a first build of the toolbox.
+If you have several versions of Gdal installed in your system, be sure to run this command for the version you intend to. You can check this with:
+\begin{verbatim}
+$ which gdal-config
+\end{verbatim}
 
-Set the CMake variable \code{BUILD\_APPLICATION} to ON will activate the compilation of the applications and their launchers needed to use it. A complete list of these applications, described in the OTB Cookbook, can be found on \href{http://orfeo-toolbox.org/Applications/index.html}{OTB Website}.
+Next step is to check if the Gdal library leaks any Tiff or Geotiff symbol. First you need to locate gdal library. If it has been installed system wide, the library will most probably be located in \texttt{/usr/lib}. Otherwise, you need to find where is \texttt{libgdal.so}.
+
+Once you found it, run:
+\begin{verbatim}
+$ nm -D libgdal.so | grep XTIFFOpen
+\end{verbatim}
+
+This should show either nothing, or the following:
+
+\begin{verbatim}
+00000000004b1100 T gdal_XTIFFOpen
+\end{verbatim}
+
+If the command outputs the following:
+
+\begin{verbatim}
+00000000004b1100 T XTIFFOpen
+\end{verbatim}
+
+It means that your Gdal library leaks Tiff and Geotiff symbols. Depending on your system, this might cause random crashes in Orfeo ToolBox when reading or writing Tiff images. In this case it is advised to build or retrieve a Gdal library that does not exhibit this issue.
+
+Last, it might be important for you to be able to read and write Tiff files of more than 4 Gb with Orfeo ToolBox. To check for BigTiff file support, choose an image on your computer and run:
+\begin{verbatim}
+$ gdal_translate -co "BIGTIFF=YES" my_image.png my_image.tif
+\end{verbatim}
+
+If this fails, your Gdal library or the Tiff library it is linked to does not support BigTiff files. In this case it is advised to build or retrieve a Gdal library.
+
+\emph{Distributions and binary packages repositories known to distribute a qualified Gdal}
+
+
+Among the different distributions and packages repositories that distribute a qualified Gdal, one can cite:
+\begin{itemize}
+\item The ubuntu-gis unstable ppa (\href{https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable}),
+\item Default package for Ubuntu greater or equal to 14.04.
+\end{itemize}
+
+\emph{Building your own qualified Gdal}
+
+If do not yet have a Gdal library or suspect that the library you have will not qualify, you can build your own library. After downloading the latest version of gdal source code, run:
+
+\begin{verbatim}
+$ export GDAL_INSTALL_DIR=$HOME/local
+$ ./configure --prefix=$GDAL_INSTALL_DIR \
+  --with-geotiff=internal  \
+  --with-rename-internal-libtiff-symbols=yes \
+  --with-rename-internal-libgeotiff-symbols=yes
+$ make install
+\end{verbatim}
+
+The \texttt{GDAL\_INSTALL\_DIR} environment variable allows to choose where you will install your Gdal library. It is NOT advised to install it system wide. It is recommended to choose a dedicated directory in your home folder. The configuration options will ensure that Gdal will build internal Tiff and Geotiff libraries that supports BigTiff files, while renaming their symbols so that they will not be leaked outside of the library. Depending on your need, feel free to enable more Gdal configuration options.
+
+Once this is done, be sure to update your environment variables:
+\begin{verbatim}
+$ export PATH=$PATH:$GDAL_INSTALL_DIR/bin
+$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GDAL_INSTALL_DIR/lib
+$ export GDAL_DATA=$GDAL_INSTALL_DIR/share/gdal
+\end{verbatim}
+
+Also note that with this Gdal configuration, you will still need to have Tiff and Geotiff libraries and headers available on your system to build OTB (due to third parties requiring them). However, you can use the system packages for those.
+
+\subsection{Custom OTB}
+COMPONENTS
+Since OTB is modularized, it is possible to only build some modules instead of the whole set. 
+You can deactivate each module (and the ones that depend on it) one by one from the cmake interface. 
+You just have to switch off the cmake variable OTB\_BUILD\_DEFAULT\_MODULES, press Configure, and then switch off each Module\_module\_name variable (\*).
+To provide an overview on how things work, the otion COMPONENTS of the cmake command find\_package is used in order to only load the requested modules.
+This module-specific list prevent cmake from performing a blind search; it is also a convienent way to monitor the dependencies of each module.
+
+~ 
+
+Some of the OTB capabilities are considered as optional, and you can deactivate the related modules thanks to the following cmake variables:
+OTB\_USE\_LIBKML, OTB\_USE\_QT4, OTB\_USE\_OPENCV, OTB\_USE\_MUPARSERX, OTB\_USE\_OPENJPEG, OTB\_USE\_CURL, OTB\_USE\_MUPARSER, OTB\_USE\_LIBSVM, OTB\_USE\_MAPNIK, OTB\_USE\_6S, OTB\_USE\_SIFTFAST.
+\textbf{It is very important to notice that these variable override the variable OTB\_BUILD\_DEFAULT\_MODULES.}
+
+The table below shows which modules are deactivated when switching off these variables:
+
+\begin{center}
+\begin{tiny}
+\begin{table}[!htbp]
+\begin{tabular}{|p{0.35\textwidth}|p{0.75\textwidth}|}
+\hline
+\textbf{Cmake variable} & \textbf{Modules} \\
+\hline
+\textbf{OTB\_USE\_LIBKML} & OTBlibkml OTBKMZWriter OTBIOKML OTBAppKMZ \\
+\hline
+\textbf{OTB\_USE\_QT4} & OTBQt4 OTBQtWidget \\
+\hline
+\textbf{OTB\_USE\_OPENCV} & OTBOpenCV \\
+\hline
+\textbf{OTB\_USE\_MUPARSERX} & OTBMuParserX OTBMathParserX OTBAppMathParserX \\
+\hline
+\textbf{OTB\_USE\_OPENJPEG} & OTBOpenJPEG OTBIOJPEG2000 \\
+\hline
+\textbf{OTB\_USE\_CURL} & OTBCurl \\
+\hline
+\textbf{OTB\_USE\_MUPARSER} & OTBMuParser OTBMathParser OTBDempsterShafer OTBAppClassification OTBAppMathParser OTBAppStereo OTBAppProjection OTBAppSegmentation OTBAppClassification OTBRoadExtraction OTBRCC8 OTBCCOBIA OTBAppSegmentation OTBMeanShift OTBAppSegmentation OTBMeanShift OTBAppSegmentation \\
+\hline
+\textbf{OTB\_USE\_LIBSVM} & OTBLibSVM OTBSVMLearning \\
+\hline
+\textbf{OTB\_USE\_MAPNIK} & OTBMapnik OTBVectorDataRendering \\
+\hline
+\textbf{OTB\_USE\_6S} & OTB6S OTBOpticalCalibration OTBAppOpticalCalibration OTBSimulation \\
+\hline
+\textbf{OTB\_USE\_SIFTFAST} & OTBSiftFast \\
+\hline
+\end{tabular}
+\caption{Third parties and related modules.}
+\label{tab:optional}
+\end{table}
+\end{tiny}
+\end{center}
+
+Every cmake variable mentionned in this subsection are set to ON by default, except OTB\_USE\_MAPNIK; this means that, by default, all the modules are built except OTBMapnik and OTBVectorDataRendering.
+
+
+\section{Known issues}
+\label{sec:knownissues}
+
+\begin{itemize}
+\item  openjpeg/ITK 
+\end{itemize}
+
+It is important to know that the OpenJpeg library doesn't support name mangling since version 2.0. 
+As a consequence, if other libraries linked by your project already contain OpenJpeg, there may be a symbol conflict at run-time. 
+For instance, this was observed with OTB build on a recent ITK version (ver. 4). 
+The ITK library already had a version of OpenJpeg in libitkopenjpeg-*.so, which contained the OpenJpeg symbols un-wrapped. 
+These symbols were also loaded by the GDAL driver but only the first ones were used, which caused a crash. 
+
+More information can be found here : \url{http://wiki.orfeo-toolbox.org/index.php/JPEG2000_with_GDAL_OpenJpeg_plugin}
+
+\begin{itemize}
+\item  libkml / Ubuntu 12.04 
+\end{itemize}
+
+Another issue is related to the official package of libkml under Ubuntu 12.4.
+Until this problem is addressed, users of this plateform should disable the option OTB\_USE\_KML, so that OTB won't be built with this third-party.
 
 
 \section{Getting Started With OTB }
@@ -472,7 +584,7 @@ FIND_PACKAGE(OTB REQUIRED)
 INCLUDE(${OTB_USE_FILE})
 
 ADD_EXECUTABLE(HelloWorld HelloWorld.cxx )
-TARGET_LINK_LIBRARIES(HelloWorld OTBIO)
+TARGET_LINK_LIBRARIES(HelloWorld ${OTB_LIBRARIES})
 \end{verbatim}
 
 \normalsize
@@ -512,7 +624,7 @@ include(${OTB_USE_FILE})
 
 add_executable(MyFirstProcessing MyFirstProcessing.cxx )
 
-target_link_libraries(MyFirstProcessing OTBCommon OTBIO )
+target_link_libraries(MyFirstProcessing ${OTB_LIBRARIES} )
 \end{verbatim}
 
 \item Create a MyFirstProcessing.cxx into the src repository with the following lines:

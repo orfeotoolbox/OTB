@@ -1,0 +1,243 @@
+\chapter{Adding New Modules}
+\label{chapter:newModules}
+
+This chapter is concerned with the creation of new modules. 
+The following sections give precise instructions about :
+\begin{itemize}
+	\item the organization of your directories
+	\item the files you need to include
+	\item what they must contain
+	\item ...
+\end{itemize}
+
+\section{How to Write a Module}
+\label{sec:writemodule}
+
+Each module is made of different components, which are described in the following sections.
+
+\section{The otb-module.cmake file}
+
+This file is mandatory. It follows the CMake syntax, and has two purposes: 
+
+\begin{itemize}
+       \item Declare dependencies to other modules, 
+       \item Provide a short description of the module purpose. 
+\end{itemize}
+
+These purposes are fulfilled by a single CMake Macro call: 
+
+\begin{verbatim}
+otb_module(TheModuleName DEPENDS OTBModule1 OTBModule2 ... OTBModuleN DESCRIPTION "A description string")
+\end{verbatim}
+
+\textbf{Note}: You can use the keyword TEST\textunderscore DEPENDS to declare module dependencies that only applies to the tests.
+
+\section{The CMakeLists.txt file}
+
+The CMakeLists.txt file is mandatory. It contains only a few things.
+First, it declares a new CMake project with the name of the module. 
+
+\begin{verbatim}
+project(TheModuleName)
+\end{verbatim}
+
+Second, if the module contain a library (see src folder section bellow), it initializes the TheModuleName\textunderscore LIBRARIES CMake variable (if your module only contains headers or template code, skip this line): 
+
+\begin{verbatim}
+set(TheModuleName_LIBRARIES OTBTheModuleName)
+\end{verbatim}
+
+Finally, it calls a macro that will take care of all the CMake plumbing of the module: 
+
+\begin{verbatim}
+otb_module_impl()
+\end{verbatim}
+
+The overall file should look like this:
+ 
+\begin{verbatim}
+project(TheModuleName)
+set(TheModuleName_LIBRARIES OTBTheModuleName) # only if your module contain a src folder
+otb_module_impl()
+\end{verbatim}
+
+\section{The include folder}
+
+The include folder will contain all your headers (*.h files) and template method boy files (*.txx or *.hxx). It does not require any additional file (in particular, no CMakeLists.txt file is required). 
+
+\section{The src folder }
+
+The src folder contains the internal implementation of your module : 
+
+\begin{itemize}
+       \item  It typically contains cxx source files that will be compiled into a library.  
+       \item  It can contain header files for classes used only within the implementation files of your module. Any header file present in the src folder will not be installed, and will not be available to other modules depending on your module.
+\end{itemize}
+
+If your modules is made of template only code, you do not need a src folder at all.
+
+If present, the src folder requires a CMakeLists.txt file.
+
+The first part of the CMakeLists.txt file is classical, as it builds the library and links it: 
+
+\begin{verbatim}
+set(OTBTheModuleName_SRC
+    sourceFile1.cxx
+    sourceFile2.cxx
+    sourceFile3.cxx
+    ...
+    sourceFileN.cxx)
+
+add_library(OTBTheModuleName ${OTBTheModuleName_SRC})
+
+target_link_libraries(OTBTheModuleName ${OTBModule1_LIBRARIES} ${OTBModule2_LIBRARIES} ... ${OTBModuleN_LIBRARIES})
+\end{verbatim}
+
+\textbf{Notes}: 
+
+\begin{itemize}
+       \item  Library name should match the one declared in the root CMakeLists.txt when setting CMake variable TheModuleName\textunderscore LIBRARIES,   
+       \item  Linked libraries should match the dependencies of your module declared in the root otb-module.cmake file. 
+\end{itemize}
+
+The last line of CMake code takes care of installation instructions: 
+\begin{verbatim}
+otb_module_target(TBTheModuleName)
+\end{verbatim}
+
+The overall CMakeLists.txt file should look like: 
+
+\begin{verbatim}
+set(OTBTheModuleName_SRC
+    sourceFile1.cxx
+    sourceFile2.cxx
+    sourceFile3.cxx
+    ...
+    sourceFileN.cxx)
+
+add_library(OTBTheModuleName ${OTBTheModuleName_SRC})
+
+target_link_libraries(OTBTheModuleName ${OTBModule1_LIBRARIES} ${OTBModule2_LIBRARIES} ... ${OTBModuleN_LIBRARIES})
+
+otb_module_target(TBTheModuleName)
+\end{verbatim}
+
+\section{The app folder }
+
+The app folder contains the code of applications shipped with your module. If your module has no application, you do not need the app folder.
+
+\textbf{Notes}: If your module contains application (and an app folder), do not forget to add the ApplicationEngine in the dependencies listed in the otb-module.cmake file.
+
+In addition to the applications source code, the app folder should contain a CMakeLists.txt file as follows.
+
+For each application, a single call otb\textunderscore create\textunderscore application is required: 
+
+\begin{verbatim}
+otb_create_application(
+ NAME           TheModuleApplication1
+ SOURCES        TheModuleApplication1.cxx
+ LINK_LIBRARIES ${OTBModule1_LIBRARIES} ${OTBModule2_LIBRARIES} ... ${OTBModuleN_LIBRARIES})
+ 
+\end{verbatim}
+
+\section{The test folder }
+
+This folder contains tests of the module. If your module has no test in it (which is not recommended, you do not need it).
+
+The test folder should contain the source files of tests, as well as a CMakeLists.txt file. This file will contain the following.
+
+First, indicate that this folder contains tests. 
+
+\begin{verbatim}
+otb_module_test()
+\end{verbatim}
+
+Then, build the test driver: 
+
+\begin{verbatim}
+set(OTBTheModuleNameTests
+    testFile1.cxx
+    testFile2.cxx
+    ...
+    testFileN.cxx)
+
+add_executable(otbTheModuleNameTestDriver ${OTBTheModuleNameTests})
+
+target_link_libraries(otbTheModuleNameTestDriver ${OTBTheModuleName-Test_LIBRARIES})
+ 
+otb_module_target_label(otbTheModuleNameTestDriver)
+\end{verbatim}
+
+Finally, you can add your tests: 
+
+\begin{verbatim}
+otb_add_test(NAME nameOfTheTest COMMAND otbTheModuleNameTestDriver
+             --compare-image ${EPSILON_8} ... # baseline comparison if needed
+             nameOfTheTestFunction
+             testParameters)
+\end{verbatim}
+
+If your module contains one or more application in the app folder, you should also write tests for them, in the test folder. Running an application test is easily done with the helper macro otb\textunderscore test\textunderscore application: 
+
+\begin{verbatim}
+otb_test_application(NAME   nameofApplication1Test1
+                      APP  TheModuleApplication1
+                      OPTIONS -in1 ${INPUTDATA}/input1.tif
+                              -in2 ${INPUTDATA}/input2.tif
+                              -out ${TEMP}/nameofApplication1Test1_result.tif
+                      VALID   --compare-image ${EPSILON_8}
+                              ${BASELINE}/nameofApplication1Test1_result.tif
+                              ${TEMP}/nameofApplication1Test1_result.tif)
+\end{verbatim}
+
+ToDo: Add instructions for test naming and input/baseline data inclusion.
+
+You overall CMakeLists.txt file should look like: 
+
+\begin{verbatim}
+otb_module_test()
+
+set(OTBTheModuleNameTests
+    testFile1.cxx
+    testFile2.cxx
+    ...
+    testFileN.cxx)
+
+add_executable(otbTheModuleNameTestDriver ${OTBTheModuleNameTests})
+
+target_link_libraries(otbTheModuleNameTestDriver ${OTBTheModuleName-Test_LIBRARIES})
+ 
+otb_module_target_label(otbTheModuleNameTestDriver)
+
+otb_add_test(NAME nameOfTheTest COMMAND otbTheModuleNameTestDriver
+             --compare-image ${EPSILON_8} ... # baseline comparison if needed
+             nameOfTheTestFunction
+             testParameters)
+\end{verbatim}
+
+\section{Including a remote module in OTB  }
+\begin{itemize}
+       \item Local build of a remote module  
+\end{itemize}
+
+To build your new remote module, simply copy the folder containing the module component to Modules/Remote, then run CMake configuration. you should see a new CMake option named MODULE\textunderscore TheModuleName. Simply turn this option to ON, and finish CMake configuration. Your module will be built with the rest of the OTB project. 
+
+\begin{itemize}
+       \item  Sharing your remote module 
+\end{itemize}
+
+To make your remote module available to others when building OTB, you should provide a CMake file named TheModuleName.remote.cmake file for inclusion in the Modules/Remote folder in OTB source tree.
+
+This file should contain the following: 
+
+\begin{verbatim}
+#Contact: Author name <author email adress>
+
+otb_fetch_module(TheModuleName
+  "A description of the module, to appear during CMake configuration step"
+  GIT\textunderscore REPOSITORY http\textunderscore link\textunderscore to\textunderscore a\textunderscore git\textunderscore repository\textunderscore hosting\textunderscore the\textunderscore module
+  GIT\textunderscore TAG the\textunderscore git\textunderscore revision\textunderscore to\textunderscore checkout
+  )
+\end{verbatim}
+This file should be provided along with your remote module inclusion proposal email to the otb-developers list. Please refer to the contributors guidelines for more information (next section). 
+

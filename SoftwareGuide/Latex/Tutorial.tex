@@ -50,7 +50,7 @@ ELSE(OTB_FOUND)
 ENDIF(OTB_FOUND)
 
 ADD_EXECUTABLE(HelloWorldOTB HelloWorldOTB.cxx )
-TARGET_LINK_LIBRARIES(HelloWorldOTB OTBCommon OTBIO)
+TARGET_LINK_LIBRARIES(HelloWorldOTB ${OTB_LIBRARIES})
 \end{verbatim}
 \end{small}
 
@@ -101,7 +101,7 @@ file:
 \begin{small}
 \begin{verbatim}
 ADD_EXECUTABLE(Pipeline Pipeline.cxx )
-TARGET_LINK_LIBRARIES(Pipeline OTBCommon OTBIO)
+TARGET_LINK_LIBRARIES(Pipeline ${OTB_LIBRARIES})
 \end{verbatim}
 \end{small}
 
@@ -153,7 +153,7 @@ Let's first add the 2 following lines to the \code{CMakeLists.txt} file:
 \begin{small}
 \begin{verbatim}
 ADD_EXECUTABLE(FilteringPipeline FilteringPipeline.cxx )
-TARGET_LINK_LIBRARIES(FilteringPipeline OTBCommon OTBIO)
+TARGET_LINK_LIBRARIES(FilteringPipeline ${OTB_LIBRARIES})
 \end{verbatim}
 \end{small}
 
@@ -165,7 +165,7 @@ output.png}.
 You have the filtered version of your image in the \code{output.png} file.
 
 Now, you can practice a bit and try to replace the filter by one of the 150+
-filters which inherit from the \doxygen{otb}{ImageToImageFilter} class. You
+filters which inherit from the \doxygen{itk}{ImageToImageFilter} class. You
 will definitely find some useful filters here!
 
 \section{Handling types: scaling output}
@@ -192,7 +192,7 @@ Add the two lines to the \code{CMakeLists.txt} file:
 \begin{small}
 \begin{verbatim}
 ADD_EXECUTABLE(ScalingPipeline ScalingPipeline.cxx )
-TARGET_LINK_LIBRARIES(ScalingPipeline OTBCommon OTBIO)
+TARGET_LINK_LIBRARIES(ScalingPipeline ${OTB_LIBRARIES})
 \end{verbatim}
 \end{small}
 
@@ -220,7 +220,7 @@ Add the following lines in the \code{CMakeLists.txt} file:
 \begin{small}
 \begin{verbatim}
 ADD_EXECUTABLE(Multispectral Multispectral.cxx )
-TARGET_LINK_LIBRARIES(Multispectral OTBCommon OTBIO)
+TARGET_LINK_LIBRARIES(Multispectral ${OTB_LIBRARIES})
 \end{verbatim}
 \end{small}
 
@@ -244,7 +244,7 @@ Add the following lines in the \code{CMakeLists.txt} file:
 \begin{small}
 \begin{verbatim}
 ADD_EXECUTABLE(SmarterFilteringPipeline SmarterFilteringPipeline.cxx )
-TARGET_LINK_LIBRARIES(SmarterFilteringPipeline OTBCommon OTBIO)
+TARGET_LINK_LIBRARIES(SmarterFilteringPipeline ${OTB_LIBRARIES})
 \end{verbatim}
 \end{small}
 
@@ -299,7 +299,7 @@ First you need to add the following lines in the \code{CMakeLists.txt} file:
 \begin{small}
 \begin{verbatim}
 ADD_EXECUTABLE(OrthoFusion  OrthoFusion.cxx)
-TARGET_LINK_LIBRARIES(OrthoFusion OTBProjections OTBCommon OTBIO)
+TARGET_LINK_LIBRARIES(OrthoFusion ${OTB_LIBRARIES})
 \end{verbatim}
 \end{small}
 
