@@ -3,28 +3,37 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/02/13)
 
 * Library:
 
-  * Core:
-    * Modularization : following the lead of ITK, source code is now organized in
-    modules.
-    * Remove deprecated classes
+  * Modularization
+     * Code is now better organized in groups/modules/classes
+     * ITK CMake architecture to handle module and dependencies is used
+     * Modules can be deactivated at will with dependencies tracking
+     * Third parties software are handled as module and can be deactivated
+     * Tests and applications are embedded in modules
+     * Writing of new module or update of existing modules is simplified by cmake magic
 
+  * Remove deprecated classes
+       
   * ThirdParties
-    * Remove openjpeg from OTB source
-    * Remove LibSVM from OTB source
-    * Remove Edison from OTB source
-    * Remove ConfigFile from OTB source
-    * Remove LibKML from OTB source
-    * Add support for openjpeg 2.1
-    * Clean third parties copyright
+    * No more internal versions of most third parties (except 6S, siftfast, ossimplugins)
+      * Removed openjpeg sources from OTB source
+      * Removed LibSVM sources from OTB source
+      * Removed Edison sources from OTB source
+      * Removed ConfigFile sources from OTB source
+      * Removed LibKML sources from OTB source
+    * Add support for external openjpeg 2.1
+    * Third parties copyrights have been cleaned
 
-  * CMake:
-    * Complete refactoring of CMake scripts
-    * Allow to build OTB and all dependencies with Superbuild
+  * Superbuild
+    * A separate superbuild project has been added in the Superbuild repository
+    * It allows to build all OTB dependencies from source, and then OTB (thus replaces the removed internal versions)
+    * Sources are checked out at configuration time or can be downloaded beforehand
+    * Allow to build a complete OTB with a handful of prerequisites (gcc, cmake, curl)
   
-  * Doxygen:
-    * Classes sorted by module
+  * Doxygen
+    * Classes are now organized by modules
 
 * Bug fixed:
+
   * Monteverdi2
     * 0001033: Crash when updating no data value in mv2
 
