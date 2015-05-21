@@ -1,3 +1,6 @@
+# Search all the applications available in the OTB build dir
+file(GLOB OTB_APPS_LIST ${OTB_DIR}/lib/otb/applications/otbapp_*.dylib)
+
 # Retrieve the name of all the applications available
 set(OTB_APPS_NAME_LIST)
 foreach(APP ${OTB_APPS_LIST})
@@ -32,8 +35,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake.in
                       ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing2.cmake
                       @ONLY)
 
-
-              
 install(DIRECTORY $ENV{GDAL_DATA}
         DESTINATION share
         COMPONENT Resources)
@@ -50,20 +51,16 @@ install(FILES qt.conf
         DESTINATION  bin
         COMPONENT Resources)
 
-# Search all the applications available in the OTB build dir
-file(GLOB OTB_APPS_LIST ${OTB_DIR}/lib/otb/applications/otbapp_*.dylib)
-
 # Install the applications 
 install(FILES ${OTB_APPS_LIST}
   DESTINATION lib/otb/applications
   COMPONENT Runtime)
 
-
 #Use the configured file with the list of apps : monteverdi2
 install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
         COMPONENT Monteverdi2)
-
         
 #Use the configured file with the list of apps : mapla
 install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing2.cmake
-        COMPONENT Mapla)        
+        COMPONENT Mapla)
+
