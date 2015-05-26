@@ -9,4 +9,4 @@ otb_module(OTBLibSVM
     "${DOCUMENTATION}"
   )
 
-otb_module_activation_option("Enable libSVM dependent modules" ON)
+otb_module_activation_option("Enable libSVM dependent modules" OFF)

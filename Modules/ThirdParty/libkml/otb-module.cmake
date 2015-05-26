@@ -9,4 +9,4 @@ otb_module(OTBlibkml
     "${DOCUMENTATION}"
   )
 
-otb_module_activation_option("Enable libkml dependent modules" ON)
+otb_module_activation_option("Enable libkml dependent modules" OFF)

@@ -9,4 +9,4 @@ otb_module(OTBQt4
     "${DOCUMENTATION}"
   )
 
-otb_module_activation_option("Enable Qt4 dependent modules" ON)
+otb_module_activation_option("Enable Qt4 dependent modules" OFF)
