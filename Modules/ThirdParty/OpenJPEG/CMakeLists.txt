@@ -16,6 +16,13 @@ endif()")
   endif()
 
   message(STATUS "Found OpenJPEG : ${OPENJPEG_LIBRARIES} (version ${OPENJPEG_MAJOR_VERSION}.${OPENJPEG_MINOR_VERSION}.${OPENJPEG_BUILD_VERSION})")
+  message(WARNING "There could be a version conflict if ITK also contains an OpenJPEG version. "
+                  "Depending on ITK version and enabled modules, the OpenJPEG headers can be "
+                  "present in ITK include folder. Since the include order between modules is "
+                  "deterministic, the OpenJPEG header from ITK may be included first. To avoid "
+                  "version conflicts, try to use an ITK installed without GDCM nor ITKReview. "
+                  "An alternative fix is to simply hide the header openjpeg.h in the ITK "
+                  "include directory.")
 
   otb_module_impl()
 
