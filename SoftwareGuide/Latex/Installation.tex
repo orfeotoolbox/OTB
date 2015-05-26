@@ -210,7 +210,7 @@ The SuperBuild is a way of compiling dependencies to a project just before you b
 
 In OTB, the SuperBuild is implemented with no impact on the library sources : the sources for SuperBuild are located in the 'OTB/SuperBuild' subdirectory. It is made of CMake scripts and source patches that allow to compile all the dependencies necessary for OTB. Once all the dependencies are compiled and installed, the OTB library is built using those dependencies.
 
-The purpose is to provide an easy way to get OTB and its dependencies, whatever the platform (among Linux, MACOSX and Windows). 
+The purpose is to provide an easy way to get OTB and its dependencies, whatever the platform (among Linux, MacOSX and Windows). 
 
 \subsubsection{Requirements}
 There are few requirements to use the SuperBuild :
@@ -546,8 +546,17 @@ Every cmake variable mentionned in this subsection are set to ON by default, exc
 It is important to know that the OpenJpeg library doesn't support name mangling since version 2.0. 
 As a consequence, if other libraries linked by your project already contain OpenJpeg, there may be a symbol conflict at run-time. 
 For instance, this was observed with OTB build on a recent ITK version (ver. 4). 
-The ITK library already had a version of OpenJpeg in libitkopenjpeg-*.so, which contained the OpenJpeg symbols un-wrapped. 
+The ITK library already had a version of OpenJpeg in libitkopenjpeg-*.so, which contained the OpenJpeg symbols un-wrapped.
 These symbols were also loaded by the GDAL driver but only the first ones were used, which caused a crash. 
+
+Hopefully, thanks to the modular architecture of ITK, the library libitkopenjpeg-*.so is not imported anymore inside OTB.
+However the OpenJPEG headers may be present in ITK include directory. As the current architecture doesn't allow to tune 
+include order between modules, the OpenJPEG header from ITK can be included before your own OpenJPEG install. There are
+two ways to avoid this situation :
+\begin{itemize}
+\item Use an ITK without GDCM nor ITKReview (only these modules depend on OpenJPEG)
+\item Hide the header openjpeg.h in the ITK include directory.
+\end{itemize}
 
 More information can be found here : \url{http://wiki.orfeo-toolbox.org/index.php/JPEG2000_with_GDAL_OpenJpeg_plugin}
 
