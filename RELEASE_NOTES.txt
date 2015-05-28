@@ -1,4 +1,4 @@
-OTB-v.5.0.0 - Changes since version 4.4.0 (2015/02/13)
+OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
 ------------------------------------------
 
 * Library:
@@ -33,6 +33,7 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/02/13)
   
   * Doxygen
     * Classes are now organized by modules
+    * Direct link to official ITK doxygen
 
 * Bug fixed:
 
