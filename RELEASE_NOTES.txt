@@ -41,7 +41,8 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
     * 0001033: Crash when updating no data value in mv2
 
   * Documentation
-    * 0001028: URL for online application documentation is not available anymore on the orfeo website
+    * 0001028: URL for online application documentation is not available anymoreon the orfeo website
+    * 0001006: GetPixel is missing on the otb::Image page
 
   * OTB-lib
     * 0001039: ITK patches are not always used
@@ -51,6 +52,10 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
     * 0001040: Optimization of Concatenate VectorImage Filter (from 28M cycles to 8M cycles)
     * 0001043: Optimization of Multi to Mono Channel Extract ROI (from 8M cycles to 3M cycles)
     * 0001011: Need safeguards to test for ExtendedFilename parameters
+    * 0001035: Unexpected maximum number of reader instances with open-jpeg driver
+    * 0001022: RefineSensorModel Segfault
+    * 0001042: Optimization of Image to VectorImage Cast Filter (from 47M cycles to 7M cycles)
+    * 0000005: can not read unsigned char three channels data into otb::Image<unsigned char,2> properly
 
   * OTB-Packaging
     * 0001027: [ubuntugis package] OTB Applications in Ubuntu package do not use custom version of ITK UnaryFunctorImageFilter
@@ -64,10 +69,15 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
     * 0001044: OTB Windows 64bit -error cast from 'const short unsigned int*' to 'long unsigned int
     * 0001025: QtWidgetListViewParameter gets reset when changing another parameter in applications
     * 0001014: OTB does not compile with ITK 4.8
+    * 0000597: Optical calibration gives values greater than 100% on PHR products
+    * 0001047: Convolution test needs ITK with USE_FFTD
 
   * OTB-applications
     * 0001032: otbgui_RadiometricIndices output image without spatial reference system EPSG code
     * 0001037: file and vector outputs need explicit relative paths
+    * 0001036: TileFusion application crashes with SPOT-7 tiled images
+    * 0000728: Inconsistent polygon number in concatenate vector data output
+    * 0001031: Wrong projection for ouput vector of segmentation application
 
 
 OTB-v.4.4.0 - Changes since version 4.2.1 (2015/02/13)
