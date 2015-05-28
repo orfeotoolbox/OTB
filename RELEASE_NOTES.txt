@@ -71,6 +71,7 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
     * 0001014: OTB does not compile with ITK 4.8
     * 0000597: Optical calibration gives values greater than 100% on PHR products
     * 0001047: Convolution test needs ITK with USE_FFTD
+    * 0001030: When writing images with no SRS / kwl, a default WGS84 projection is assigned in gdalImageIO
 
   * OTB-applications
     * 0001032: otbgui_RadiometricIndices output image without spatial reference system EPSG code
