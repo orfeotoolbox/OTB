@@ -12,8 +12,9 @@ function(create_cpack_config application)
     set(arch_prefix win32)    
     set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
+      set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
       set(arch_prefix win64)
+    endif()        
     SET(CPACK_GENERATOR "NSIS")
     STRING(TOLOWER ${application} application_)
     SET(BATFILE_NAME "${application_}.bat")
@@ -25,9 +26,6 @@ function(create_cpack_config application)
     SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
       "CreateShortCut \\\"$SMPROGRAMS\\\\${application}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}\\\\${application}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\${BATFILE_NAME}\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\${EXEFILE_NAME}\\\"
     ")
-
-    endif()    
-
     
   else(APPLE)
       set(arch_prefix Darwin)
