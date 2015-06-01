@@ -1,14 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 
 BUNDLE="`echo "$0" | sed -e 's/\/Contents\/MacOS\/.*//'`"
-RESOURCES="$BUNDLE/Contents/Resources"
+BUNDLE_BIN_DIR="$BUNDLE/Contents/MacOS"
+BUNDLE_RES_DIR="$BUNDLE/Contents/Resources"
 
-#echo "BUNDLE: $BUNDLE"
-#echo "RESOURCES: $RESOURCES"
+##echo "BUNDLE_BIN_DIR: $BUNDLE_BIN_DIR"
+##echo "BUNDLE_RES_DIR: $BUNDLE_RES_DIR"
 
-export GDAL_DATA=$RESOURCES/share/gdal
-export ITK_AUTOLOAD_PATH=$RESOURCES/lib/otb/applications
+export GDAL_DATA=$BUNDLE_RES_DIR/gdal
+export ITK_AUTOLOAD_PATH=$BUNDLE_BIN_DIR/otb/applications
 
 cd $HOME
 
-exec "$RESOURCES/bin/@EXE_FILENAME@"
+exec "$BUNDLE_BIN_DIR/@EXECUTABLE_NAME@"

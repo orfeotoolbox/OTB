@@ -19,6 +19,11 @@ if(WIN32)
   add_definitions(-DWIN32)
 endif(WIN32)
 
+if(APPLE)
+set(CMAKE_MACOSX_RPATH 1)
+endif()
+
+
 #----------------------------------------------------------------------------
 # ensure DEBUG definitions
 #if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
@@ -174,6 +179,9 @@ endif(OTB_DATA_USE_LARGEINPUT)
 # set the Buildname for the dashboard
 set(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard.")
 
+option(Monteverdi2_USE_CPACK "Generate installer using CPack" OFF)
+mark_as_advanced(Monteverdi2_USE_CPACK)
+
 #----------------------------------------------------------------------------
 # Installation directories:
 # Monteverdi2_INSTALL_BIN_DIR          - binary dir (executables)
@@ -202,12 +210,17 @@ if(NOT Monteverdi2_INSTALL_PACKAGE_DIR)
   set(Monteverdi2_INSTALL_PACKAGE_DIR ${Monteverdi2_INSTALL_LIB_DIR})
 endif(NOT Monteverdi2_INSTALL_PACKAGE_DIR)
 
+if(APPLE AND Monteverdi2_USE_CPACK)
+  set(Monteverdi2_INSTALL_BIN_DIR "MacOS")
+  set(Monteverdi2_INSTALL_DATA_DIR "Resources/otb")
+endif(APPLE AND Monteverdi2_USE_CPACK)
+
 #----------------------------------------------------------------------------
 include( PreventInSourceBuilds )
 include( PreventInstallOnBuildTree )
 include( DeployQtConf )
 
-#function to create nsis installed for monteverdi2 and mapla
+#function to create installer for applications
 include( CPackFunctions )
 
 #----------------------------------------------------------------------------
@@ -235,6 +248,7 @@ set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${Monteverdi2_BINARY_DIR}/lib )
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${Monteverdi2_BINARY_DIR}/lib )
 
 SET(CXX_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
 #----------------------------------------------------------------------------
 # Code location
 add_subdirectory( Code )
@@ -243,7 +257,8 @@ add_subdirectory( Code )
 add_subdirectory( i18n )
 
 # CPack related files
-add_subdirectory( Packaging )
+#We use functions from CMake/CPackFunctions.cmake after OTB 5.0.0
+#add_subdirectory( Packaging )
 
 # Data related files
 add_subdirectory( Data )
@@ -266,17 +281,22 @@ if(BUILD_TESTING)
   add_subdirectory(Testing)
 endif()
 
-if(WIN32 OR APPLE)
-  add_custom_target(package
-  COMMAND ${CMAKE_CPACK_COMMAND} "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi2.cmake"
-  DEPENDS PACKAGE_Mapla)
+if(WIN32 AND Monteverdi2_USE_CPACK)
+  add_custom_target(packages
+    COMMAND ${CMAKE_CPACK_COMMAND}
+    "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi2.cmake" "--verbose"
+    DEPENDS PACKAGE_Mapla)
 
-  add_custom_target(PACKAGE_Mapla 
-  COMMAND ${CMAKE_CPACK_COMMAND} "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Mapla.cmake")
-  
-endif()
+  add_custom_target(PACKAGE_Mapla
+    COMMAND ${CMAKE_CPACK_COMMAND}
+    "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Mapla.cmake" "--verbose"
+    DEPENDS PACKAGE_Mv2)
 
+  add_custom_target(PACKAGE_Mv2
+    COMMAND ${CMAKE_CPACK_COMMAND}
+    "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Mv2.cmake" "--verbose")
 
+endif(WIN32 AND Monteverdi2_USE_CPACK)
 
 #----------------------------------------------------------------------------
 # Generate Monteverdi2Config.cmake
@@ -295,5 +315,3 @@ endif()
 #----------------------------------------------------------------------------
 # Setup valgrind option (default hard coded value is ctest is invalid).
 # set(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes --num-callers=50")
-
-

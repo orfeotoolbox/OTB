@@ -67,7 +67,7 @@ if (WIN32)
   if (MINGW)
     set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
   endif()
- 
+
     # The RC file to be added to source list
     set( Mapla_WIN32_RC_FILE ${CMAKE_CURRENT_BINARY_DIR}/mvdWin32.rc )
 endif()
@@ -96,27 +96,21 @@ endif()
 # endif()
 
 #############################################################################
-# monteverdi2 executable
-add_executable( mapla
-  WIN32
-  main.cxx
+
+# mapla executable
+create_monteverdi_application(NAME mapla
+  SOURCES main.cxx
   ${Mapla_WIN32_RC_FILE}
   ${Mapla_RESOURCES_RCC}
-  #
   ${Mapla_SOURCES}
   ${Mapla_FORMS_HEADERS}
-  ${Mapla_SRC_MOC}  
-)
-
-if (MAPLA_OUTPUT_NAME)
-  set_target_properties(mapla PROPERTIES OUTPUT_NAME ${MAPLA_OUTPUT_NAME})
-endif()
-
-target_link_libraries( mapla
-  # Mapla
-  Monteverdi2_Gui
+  ${Mapla_SRC_MOC}
+  LINK_LIBRARIES Monteverdi2_Gui
   ${QT_QTMAIN_LIBRARY}
-)
+  OUTPUT_NAME ${MAPLA_OUTPUT_NAME}
+  COMPONENT_NAME Mapla
+  )
+
 
 if( OTBQtWidget_LOADED )
   target_link_libraries( mapla
@@ -124,16 +118,3 @@ if( OTBQtWidget_LOADED )
   )
 endif()
 
-# deploy a qt.conf file in the monteverdi2 target build dir
-# to avoid warning on translation discovery
-deploy_qt_conf( monteverdi2 )
-
-#############################################################################
-install(
-  TARGETS mapla
-  RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT Mapla
-  LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Mapla
-  ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Mapla
-)
-
-#############################################################################
