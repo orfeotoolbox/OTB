@@ -67,7 +67,7 @@ if (WIN32)
   if (MINGW)
     set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
   endif()
-  
+
   # The RC file to be added to source list
   set( Monteverdi2_Mv2_WIN32_RC_FILE ${CMAKE_CURRENT_BINARY_DIR}/mvdWin32.rc )
 endif()
@@ -95,35 +95,12 @@ if (OTBQtWidget_LOADED)
     )
 endif()
 
-#############################################################################
-# monteverdi2 executable
-add_executable( mv2
-  WIN32
-  main.cxx
+create_monteverdi_application(NAME mv2
+  SOURCES main.cxx
   ${Monteverdi2_Mv2_WIN32_RC_FILE}
   ${Monteverdi2_Mv2_RESOURCES_RCC}
-  )
-
-if (MV2_OUTPUT_NAME)
-  set_target_properties(mv2 PROPERTIES OUTPUT_NAME ${MV2_OUTPUT_NAME})
-endif()
-
-target_link_libraries( mv2
-  Monteverdi2_Mv2
-  #Monteverdi2_Gui
+  LINK_LIBRARIES Monteverdi2_Mv2
   ${QT_QTMAIN_LIBRARY}
+  OUTPUT_NAME ${MV2_OUTPUT_NAME}
+  COMPONENT_NAME Mv2
   )
-
-# deploy a qt.conf file in the monteverdi2 target build dir
-# to avoid warning on translation discovery
-deploy_qt_conf( mv2 )
-
-#############################################################################
-install(
-  TARGETS mv2
-  RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT Runtime
-  LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Runtime
-  ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Development
-  )
-
-#############################################################################
