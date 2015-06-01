@@ -333,12 +333,7 @@ OTB's version numbers have 3 digits. The first one is for major
 versions, the second one is for minor versions and the last one is for
 bugfixes.
 
-The first version was 1.0.0 in July 2006. Version 1.2.0, 1.4.0 and 1.6.0 were
-released in between. The 2.0.0 major version  was released in December 2007.
-The 2.2.0, 2.4.0 and 2.6.0 ({\em Halloween}) in June, July and November 2008 respectively. The
-2.8.0 ({\em Gong Xi Fa Cai}) came out in January 2009, the 3.0.0 ({\em Manh\~{a} de Carnaval}) in May 2009, the 3.2.0 ({\em 62$^\circ$38${'}$35${''}$S 60$^\circ$14${'}$31${''}$W}) in January 2010, the 3.4.0 ({\em Perl A Rebours}) in July 2010, the 3.6.0 ({\em California Dreamin'}) in October 2010, the 3.8.0 ({\em Pack Ice}) in December 2010, the 3.10.0 ({\em Feli\c{c} aniversari}) in June 2011, the 3.12.0 ({\em $\Pi \lambda \epsilon l \alpha \epsilon \zeta$}) in February 2012, the 3.14.0 ({\em Happy}) in July 2012, the 3.14.1 in October 2012, the 3.16 () in February 2013 , the 3.18 ({\em Seven years of Coding}) in July 2013, the 3.18.1 in July 2013 and the 3.20 in November 2013 ({\em ... (and one more for the road)}). 
-
-The current one is 4.0.0.
+The first version was 1.0.0 in July 2006.The current one is 5.0.0.
 
 \subsubsection{What is a major version?}
 A major version of the library implies the addition of high-level
@@ -397,6 +392,12 @@ following:
 	\item support of ITK 4.X (internal or external)
         \item Clean up: migration of FLTK related code from OTB to
           Monteverdi, remove support for pqxx, gettext and LibLAS.
+    \item{Version 5.X (2015 and later):}
+      \begin{itemize}
+	\item Modularization
+        \item Support Spuperbuild mechanism to build OTB and all dependencies
+          from source
+        \item No more internal versions of most third parties
       \end{itemize}
 
 \end{itemize}
