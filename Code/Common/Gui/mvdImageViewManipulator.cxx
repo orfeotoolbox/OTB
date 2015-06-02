@@ -637,16 +637,16 @@ ImageViewManipulator
         emit DeleteSelectedRequested();
       break;
 
-    case Qt::Key_3:
-      emit ZoomToFullExtentRequested();
+    case Qt::Key_1:
+      emit ZoomToFullResolutionRequested();
       break;
 
     case Qt::Key_2:
       emit ZoomToLayerExtentRequested();
       break;
 
-    case Qt::Key_1:
-      emit ZoomToFullResolutionRequested();
+    case Qt::Key_3:
+      emit ZoomToFullExtentRequested();
       break;
 
     default:
