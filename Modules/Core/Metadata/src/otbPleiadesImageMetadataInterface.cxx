@@ -24,7 +24,7 @@
 #include "otbImageKeywordlist.h"
 #include <boost/lexical_cast.hpp>
 
-//uyseful constants
+//useful constants
 #include <otbMath.h>
 
 namespace otb
