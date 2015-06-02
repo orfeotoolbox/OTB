@@ -385,6 +385,27 @@ public:
   };
 
 
+class vect2scal : public mup::ICallback
+  {
+public:
+    vect2scal():ICallback(mup::cmFUNC, "vect2scal", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vect2scal - Convert one dimensional vector to scalar";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vect2scal(*this);
+    }
+  };
+  
+  
+
 class vcos : public mup::ICallback
   {
 public:
@@ -405,6 +426,25 @@ public:
   };
 
 
+class vacos : public mup::ICallback
+  {
+public:
+    vacos():ICallback(mup::cmFUNC, "vacos", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vacos - Arccosinus for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vacos(*this);
+    }
+  };
+
 class vsin : public mup::ICallback
   {
 public:
@@ -421,6 +461,25 @@ public:
     mup::IToken* Clone() const
     {
       return new vsin(*this);
+    }
+  };
+
+class vasin : public mup::ICallback
+  {
+public:
+    vasin():ICallback(mup::cmFUNC, "vasin", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vasin - Arcsinus for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vasin(*this);
     }
   };
 
@@ -444,6 +503,26 @@ public:
     }
   };
 
+
+class vatan : public mup::ICallback
+  {
+public:
+    vatan():ICallback(mup::cmFUNC, "vatan", 1)
+    {}
+
+    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+
+    const mup::char_type* GetDesc() const
+    {
+      return "vatan - Arctangent for noncomplex vectors & matrices";
+    }
+
+    mup::IToken* Clone() const
+    {
+      return new vatan(*this);
+    }
+  };
+  
 
 class vtanh : public mup::ICallback
   {

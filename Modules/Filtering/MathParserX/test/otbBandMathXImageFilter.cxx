@@ -299,7 +299,7 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
   //filter->SetConstant("expo",expo);
   //filter->SetExpression("conv(kernel1,imageAb1N3x5,imageAb2N3x5); im2b1^1.1; vcos(canal3); mean(imageAb2N3x3); var(imageAb2N3x3); median(imageAb2N3x3)");
   filter->ImportContext(inputFilename); //Equivalent to three commands above
-  filter->SetExpression("(vmax(canal3b1N3x5)+vmin(canal3b1N3x5)) div {2.0} + {imageAb3Var} dv 2.0 + {imageAb2Mini / im2b1Maxi} mlt 3.4 + {imageAb3Mean / imageAb1Sum * imageAb3Var} pw 1.2");
+  filter->SetExpression("(vmax(canal3b1N3x5)+vmin(canal3b1N3x5)) div {2.0} + {imageAb3Var} dv 2.0 + {imageAb2Mini / im2b1Maxi} mlt 3.4 + {imageAb3Mean / imageAb1Sum * imageAb3Var} pw 1.2 ; vect2scal(vacos({0.5}) + vasin({0.5}) + vatan({0.5})) > 2.0 ?{1}:{0}");
   filter->Update();
 
   if (filter->GetNumberOfOutputs() != 2)
@@ -312,7 +312,7 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
   if (output1->GetNumberOfComponentsPerPixel() != 7)
     itkGenericExceptionMacro(<< "Wrong number of components per pixel (input 1).");
 
-  if (output2->GetNumberOfComponentsPerPixel() != 1)
+  if (output2->GetNumberOfComponentsPerPixel() != 2)
     itkGenericExceptionMacro(<< "Wrong number of components per pixel (input 2).");
 
   std::cout << "\n---  Standard Use\n";
@@ -370,6 +370,10 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
       vect2.push_back(it3.GetPixel(i)[0]);
     std::sort(vect2.begin(),vect2.end());
     px2[0] = (vect2.back() + vect2.front())/2.0 + imageAb3Var / 2.0 + (imageAb2Mini / im2b1Maxi)*3.4 + vcl_pow(imageAb3Mean / imageAb1Sum * imageAb3Var,1.2);
+    if ( vcl_acos(0.5)+vcl_asin(0.5)+vcl_atan(0.5) > 2.0 )
+		px2[1]=1.0;
+	else
+		px2[1]=0.0;
 
 
 
@@ -390,10 +394,13 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
 
     //expression 2
     double result8 = itoutput2.GetCenterPixel()[0];
+    double result9 = itoutput2.GetCenterPixel()[1];
     double expected8 = px2[0];
+    double expected9 = px2[1];
     double error8 = (result8 - expected8) * (result8 - expected8) / (result8 + expected8);
+    double error9 = (result9 - expected9) * (result9 - expected9) / (result9 + expected9);
 
-    if ( ( error1 > 1E-9 ) || ( error2 > 1E-9 ) || ( error3 > 1E-9 ) || ( error4 > 1E-9 ) || ( error5 > 1E-9 ) || ( error6 > 1E-9 ) || ( error7 > 1E-9 ) || (error8 > 1E-9) )
+    if ( ( error1 > 1E-9 ) || ( error2 > 1E-9 ) || ( error3 > 1E-9 ) || ( error4 > 1E-9 ) || ( error5 > 1E-9 ) || ( error6 > 1E-9 ) || ( error7 > 1E-9 ) || (error8 > 1E-9) || (error9 > 1E-9))
       {
       itkGenericExceptionMacro( << "TEST FAILLED" << std::endl
          << "Error1 = " << error1  << std::endl
@@ -419,7 +426,10 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
          << "     Expected7 =  " << expected7 << std::endl
          << "Error8 = " << error8 << std::endl
          << "     Result8 =  "   << result8
-         << "     Expected8 =  " << expected8 << std::endl);
+         << "     Expected8 =  " << expected8 << std::endl
+         << "Error9 = " << error9 << std::endl
+         << "     Result9 =  "   << result9
+         << "     Expected9 =  " << expected9 << std::endl);
       }
   }
 

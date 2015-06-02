@@ -77,7 +77,11 @@ public:
     m_MuParserX.DefineFun(new vnorm);
     m_MuParserX.DefineFun(new vmin);
     m_MuParserX.DefineFun(new vmax);
+    m_MuParserX.DefineFun(new vect2scal);
     m_MuParserX.DefineFun(new vcos);
+    m_MuParserX.DefineFun(new vacos);
+    m_MuParserX.DefineFun(new vasin);
+    m_MuParserX.DefineFun(new vatan);
     m_MuParserX.DefineFun(new vsin);
     m_MuParserX.DefineFun(new vtan);
     m_MuParserX.DefineFun(new vtanh);
