@@ -243,6 +243,7 @@ void BandMathXImageFilter<TImage>
         oss << expression[i];
 
     oss << ")";
+    expressionToBePushed = oss.str();
   }
 
   if (m_ManyExpressions)
