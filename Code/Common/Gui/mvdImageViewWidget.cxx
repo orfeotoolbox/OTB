@@ -442,6 +442,30 @@ ImageViewWidget
     SLOT( OnToggleLayerVisibilityRequested( bool ) )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( ZoomToFullResolutionRequested() ),
+    // to:
+    this,
+    SLOT( ZoomToFullResolution() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( ZoomToLayerExtentRequested() ),
+    // to:
+    this,
+    SLOT( ZoomToLayerExtent() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( ZoomToExtentRequested() ),
+    // to:
+    this,
+    SLOT( ZoomToExtent() )
+  );
+
 
   QObject::connect(
     this,
@@ -836,6 +860,8 @@ ImageViewWidget
     {
     case ZOOM_TYPE_EXTENT:
     {
+    qDebug() << "ZOOM_TYPE_EXTENT";
+
     //
     // Calculate center
     PointType origin;
@@ -889,6 +915,8 @@ ImageViewWidget
 
     case ZOOM_TYPE_FULL:
     {
+    qDebug() << "ZOOM_TYPE_FULL";
+
     const AbstractLayerModel * layer = m_Renderer->GetReferenceModel();
     assert( layer!=NULL );
 
@@ -915,6 +943,8 @@ ImageViewWidget
 
     case ZOOM_TYPE_LAYER:
     {
+    qDebug() << "ZOOM_TYPE_LAYER";
+
     assert( GetLayerStack()!=NULL );
 
     //

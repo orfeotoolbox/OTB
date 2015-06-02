@@ -210,6 +210,15 @@ signals:
   /**
    */
   void RotateLayersRequested( int );
+  /**
+   */
+  void ZoomToFullResolutionRequested();
+  /**
+   */
+  void ZoomToLayerExtentRequested();
+  /**
+   */
+  void ZoomToFullExtentRequested();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

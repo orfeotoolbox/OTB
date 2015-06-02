@@ -189,6 +189,9 @@
    <property name="text">
     <string>Zoom to full extent</string>
    </property>
+   <property name="shortcut">
+    <string>3</string>
+   </property>
   </action>
   <action name="action_ZoomFull">
    <property name="enabled">
@@ -200,6 +203,9 @@
    </property>
    <property name="text">
     <string>Zoom to full resolution (1:1)</string>
+   </property>
+   <property name="shortcut">
+    <string>1</string>
    </property>
   </action>
   <action name="action_ZoomLayer">
@@ -215,6 +221,9 @@
    </property>
    <property name="toolTip">
     <string>Zoom to layer extent</string>
+   </property>
+   <property name="shortcut">
+    <string>2</string>
    </property>
   </action>
  </widget>
