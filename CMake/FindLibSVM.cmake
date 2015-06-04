@@ -109,6 +109,7 @@ set ( LIBSVM_LIBRARIES ${LIBSVM_LIBRARY} )
 # link with math library on unix
 if ( UNIX )
   find_library(M_LIB m)
+  mark_as_advanced(M_LIB)
   list (APPEND LIBSVM_LIBRARIES ${M_LIB} )
 endif ()
 
