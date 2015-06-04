@@ -563,6 +563,49 @@ ImageViewManipulator
 
     emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), point );
     }
+  //
+  else if( modifiers==Qt::MetaModifier )
+    {
+    qDebug() << "META+Wheel" << event->delta();
+
+    // Alpha
+    }
+
+  else if( modifiers==(Qt::MetaModifier | Qt::ShiftModifier) )
+    {
+    qDebug() << "META+SHIFT+Wheel" << event->delta();
+
+    // Gamma
+    }
+  //
+  else if( modifiers==Qt::AltModifier )
+    {
+    qDebug() << "ALT+Wheel" << event->delta();
+
+    // Shader-size
+    }
+
+  else if( modifiers==(Qt::AltModifier | Qt::ShiftModifier) )
+    {
+    qDebug() << "ALT+SHIFT+Wheel" << event->delta();
+
+    // Shader-param.
+    }
+  //
+  else if( modifiers==(Qt::ControlModifier | Qt::AltModifier) )
+    {
+    qDebug() << "CTRL+ALT+Wheel" << event->delta();
+
+    // Quantile range.
+    }
+
+  else if( modifiers==(Qt::ControlModifier | Qt::AltModifier | Qt::ShiftModifier) )
+    {
+    qDebug() << "CTRL+ALT+SHIFT+Wheel" << event->delta();
+
+    // Quantile shift.
+    }
+  //
   else if( modifiers==Qt::NoModifier )
     emit RotateLayersRequested(
       event->delta() / (8 * MOUSE_WHEEL_STEP_DEGREES)
