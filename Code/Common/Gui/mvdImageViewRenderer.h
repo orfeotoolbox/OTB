@@ -199,8 +199,6 @@ public slots:
                                         const PointType &,
                                         const DefaultImageType::PixelType& );
 
-  void OnReferenceActorShaderModeChanged(const std::string & mode);
-
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //

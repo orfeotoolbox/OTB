@@ -491,15 +491,6 @@ ImageViewWidget
 
 
   QObject::connect(
-    this,
-    SIGNAL( ReferenceActorShaderModeChanged( const std::string & ) ),
-    // to:
-    m_Renderer,
-    SLOT( OnReferenceActorShaderModeChanged( const std::string & ) )
-  );
-
-
-  QObject::connect(
     m_Renderer,
     SIGNAL( SetProjectionRequired() ),
     // to:

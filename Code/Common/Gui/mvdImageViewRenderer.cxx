@@ -921,12 +921,4 @@ ImageViewRenderer
 }
 
 /******************************************************************************/
-void
-ImageViewRenderer
-::OnReferenceActorShaderModeChanged(const std::string & mode)
-{
-  m_ReferenceActorShaderMode = mode;
-}
-
-/******************************************************************************/
 } // end namespace 'mvd'
