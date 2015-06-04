@@ -121,6 +121,7 @@ macro(otb_create_application)
    list(REMOVE_DUPLICATES OTB_APPLICATIONS_NAME_LIST)
    set(OTB_APPLICATIONS_NAME_LIST ${OTB_APPLICATIONS_NAME_LIST}
        CACHE STRING "List of all applications" FORCE)
+   mark_as_advanced(OTB_APPLICATIONS_NAME_LIST)
 
 endmacro()
 

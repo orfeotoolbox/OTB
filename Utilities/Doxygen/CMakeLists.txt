@@ -94,7 +94,10 @@ foreach( var ${OTB_DOXYGEN_OUTPUT} )
 endforeach()
 
 set(OTB_DOXYGEN_ITK_TAGFILE "" CACHE FILEPATH "Tagfile containing ITK doxygen")
+mark_as_advanced(OTB_DOXYGEN_ITK_TAGFILE)
+
 set(OTB_DOXYGEN_ITK_DOXYGEN_URL "" CACHE STRING "URL to ITK doxygen")
+mark_as_advanced(OTB_DOXYGEN_ITK_DOXYGEN_URL)
 
 if(("${OTB_DOXYGEN_ITK_TAGFILE}" STREQUAL "") OR ("${OTB_DOXYGEN_ITK_DOXYGEN_URL}" STREQUAL ""))
   set(OTB_DOXYGEN_TAGFILE_FIELD "")
