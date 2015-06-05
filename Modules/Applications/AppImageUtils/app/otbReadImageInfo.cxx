@@ -265,26 +265,32 @@ private:
     SetParameterInt("numberbands", inImage->GetNumberOfComponentsPerPixel());
     ossOutput << "\tNumber of bands : " << GetParameterInt("numberbands") << std::endl;
     std::vector<bool> noDataValueAvailable;
-    itk::ExposeMetaData<std::vector<bool> >(inImage->GetMetaDataDictionary(),MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
+    bool ret = itk::ExposeMetaData<std::vector<bool> >(inImage->GetMetaDataDictionary(),MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
 
     std::vector<double> noDataValues;
     itk::ExposeMetaData<std::vector<double> >(inImage->GetMetaDataDictionary(),MetaDataKey::NoDataValue,noDataValues);
 
+
+      ossOutput<<"\tNo data flags :";
+
+      if(ret)
+        {
     
+        for(unsigned int b = 0;b< inImage->GetNumberOfComponentsPerPixel();++b)
+          {
+          ossOutput<<"\n\t\tBand "<<b+1<<": ";
 
-    ossOutput<<"\tNo data flags :";
-
-    for(unsigned int b = 0;b< inImage->GetNumberOfComponentsPerPixel();++b)
-      {
-      ossOutput<<"\n\t\tBand "<<b+1<<": ";
-
-      if(noDataValueAvailable[b])
-        ossOutput<<noDataValues[b];
+          if(noDataValueAvailable[b])
+            ossOutput<<noDataValues[b];
+          else
+            ossOutput<<"No";  
+          }
+        }
       else
-        ossOutput<<"No";  
-      }
-
-    ossOutput<<std::endl;
+        {
+        ossOutput<<" Not found";
+        }
+      ossOutput<<std::endl;
 
     //Get image size
     SetParameterInt("indexx", inImage->GetLargestPossibleRegion().GetIndex()[0]);
