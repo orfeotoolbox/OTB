@@ -25,7 +25,7 @@ namespace otb
 
 template <class TInputValue, class TOutputValue>
 MachineLearningModel<TInputValue,TOutputValue>
-::MachineLearningModel()
+::MachineLearningModel() : m_RegressionMode(false)
 {}
 
 
@@ -33,6 +33,28 @@ template <class TInputValue, class TOutputValue>
 MachineLearningModel<TInputValue,TOutputValue>
 ::~MachineLearningModel()
 {}
+
+template <class TInputValue, class TOutputValue>
+void
+MachineLearningModel<TInputValue,TOutputValue>
+::Train()
+{
+  if(m_RegressionMode)
+    return this->TrainRegression();
+  else
+    return this->TrainClassification();
+}
+template <class TInputValue, class TOutputValue>
+typename MachineLearningModel<TInputValue,TOutputValue>::TargetSampleType
+MachineLearningModel<TInputValue,TOutputValue>
+::Predict(const typename MachineLearningModel<TInputValue,TOutputValue>::InputSampleType& input) const
+{
+  if(m_RegressionMode)
+    return this->PredictRegression(input);
+  else
+    return this->PredictClassification(input);
+}
+
 
 template <class TInputValue, class TOutputValue>
 void
