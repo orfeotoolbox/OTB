@@ -8,7 +8,6 @@ macro(SETUP_SYSTEM_LIBRARY)
     "  Use a system build of ${NEW_SYSLIB_PROJECT}."
     ${NEW_SYSLIB_DEFAULT}
     )
-  mark_as_advanced(USE_SYSTEM_${NEW_SYSLIB_PROJECT})
   set(SYSTEM_${NEW_SYSLIB_PROJECT}_CMAKE_CACHE)
 endmacro(SETUP_SYSTEM_LIBRARY)
 
