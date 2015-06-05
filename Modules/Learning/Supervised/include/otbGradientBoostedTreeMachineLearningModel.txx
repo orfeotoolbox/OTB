@@ -53,7 +53,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
-::Train()
+::TrainClassification()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -80,7 +80,7 @@ template <class TInputValue, class TOutputValue>
 typename GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
-::Predict(const InputSampleType & input) const
+::PredictClassification(const InputSampleType & input) const
 {
   //convert listsample to Mat
   cv::Mat sample;

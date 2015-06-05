@@ -94,10 +94,10 @@ public:
   //@}
 
   /** Train the machine learning model */
-  virtual void Train() = 0;
+  void Train();
 
   /** Predict values using the model */
-  virtual TargetSampleType Predict(const InputSampleType& input) const = 0;
+  TargetSampleType Predict(const InputSampleType& input) const;
 
   /** Classify all samples in InputListSample and fill TargetListSample with the associated label */
   void PredictAll();
@@ -150,6 +150,22 @@ protected:
   /** Target list sample */
   typename TargetListSampleType::Pointer m_TargetListSample;
 
+  /** Train the machine learning model */
+  virtual void TrainRegression()
+  {
+    itkGenericExceptionMacro(<< "Regression mode not implemented.");
+  }
+  virtual void TrainClassification() = 0;
+  /** Predict values using the model */
+  virtual TargetSampleType PredictRegression(const InputSampleType& input) const
+  {
+  itkGenericExceptionMacro(<< "Regression mode not implemented.");
+  (void)input;
+  }
+
+  virtual TargetSampleType PredictClassification(const InputSampleType& input) const = 0;
+
+  bool m_RegressionMode;
 private:
   MachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

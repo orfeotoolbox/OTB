@@ -131,7 +131,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(c
 
 /** Train the machine learning model */
 template<class TInputValue, class TOutputValue>
-void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Train()
+void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TrainClassification()
 {
   //Create the neural network
   const unsigned int nbLayers = m_LayerSizes.size();
@@ -169,7 +169,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Train()
 
 template<class TInputValue, class TOutputValue>
 typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType NeuralNetworkMachineLearningModel<
-    TInputValue, TOutputValue>::Predict(const InputSampleType & input) const
+  TInputValue, TOutputValue>::PredictClassification(const InputSampleType & input) const
 {
   //convert listsample to Mat
   cv::Mat sample;
