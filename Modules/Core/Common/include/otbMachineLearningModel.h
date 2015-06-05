@@ -166,7 +166,8 @@ protected:
   virtual TargetSampleType PredictRegression(const InputSampleType& input) const
   {
   itkGenericExceptionMacro(<< "Regression mode not implemented.");
-  }
+  (void)input;
+}
 
   virtual TargetSampleType PredictClassification(const InputSampleType& input) const = 0;
 
