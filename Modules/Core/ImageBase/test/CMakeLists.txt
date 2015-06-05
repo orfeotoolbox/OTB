@@ -28,6 +28,7 @@ set(OTBImageBaseTests
   otbImageFunctionAdaptor.cxx
   otbMultiChannelExtractROINew.cxx
   otbMetaImageFunction.cxx
+  otbNoDataHelperTest.cxx
   )
 
 add_executable(otbImageBaseTestDriver ${OTBImageBaseTests})
@@ -824,3 +825,6 @@ otb_add_test(NAME ioTvOtbVectorImageTestRadarsat COMMAND otbImageBaseTestDriver
    otbVectorImageLegacyTest
    LARGEINPUT{/RADARSAT1/GOMA/SCENE01/}
    ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
+
+otb_add_test(NAME coreImageBaseNoDataHelperTest COMMAND otbImageBaseTestDriver
+  otbNoDataHelperTest)
