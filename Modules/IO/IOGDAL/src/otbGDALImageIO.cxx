@@ -1758,8 +1758,22 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   otbMsgDevMacro( << "GCP Count: " << dataset->GetGCPCount() );
 
   // Write no-data flags
+  std::vector<bool> noDataValueAvailable;
+  bool ret = itk::ExposeMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
   
+  std::vector<double> noDataValues;
+  itk::ExposeMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValues);
 
+  if(ret)
+    {
+    for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
+      {
+      if(noDataValueAvailable[iBand])
+        {
+        dataset->GetRasterBand(iBand+1)->SetNoDataValue(noDataValues[iBand]);
+        }
+      }
+    }
 }
 
 std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) const
