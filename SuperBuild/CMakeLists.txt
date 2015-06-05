@@ -13,7 +13,7 @@ include(ExternalProject)
 
 
 # TODO BUILD_TESTING is created by default by CTest.cmake, and is ON by default.
-option(BUILD_TESTING "Build OTB tests in Superbuild." OFF)
+option(BUILD_TESTING "Build the testing tree." OFF)
 
 include(CTest)
 include(SuperBuild_Macro)
@@ -26,6 +26,8 @@ mark_as_advanced(DOWNLOAD_LOCATION)
 
 # General options
 option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
+option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
+
 
 # check if superbuild is in OTB source or in stand-alone mode
 set(SUPERBUILD_IN_OTB_TREE OFF)
