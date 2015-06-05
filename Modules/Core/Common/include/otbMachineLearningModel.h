@@ -134,12 +134,6 @@ public:
   itkGetObjectMacro(TargetListSample,TargetListSampleType);
   //@}
 
-  /**\name Classification vs regression mode accessors */
-  //@{
-  itkSetMacro(RegressionMode,bool);
-  itkGetMacro(RegressionMode,bool);
-  //@}
-
 protected:
   /** Constructor */
   MachineLearningModel();
@@ -167,7 +161,7 @@ protected:
   {
   itkGenericExceptionMacro(<< "Regression mode not implemented.");
   (void)input;
-}
+  }
 
   virtual TargetSampleType PredictClassification(const InputSampleType& input) const = 0;
 
