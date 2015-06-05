@@ -77,12 +77,12 @@ public:
 
   void SetInsideValue(const typename TOutputImage::PixelType & value)
   {
-    this->GetFunctor().m_InsideValue(value);
+    this->GetFunctor().m_InsideValue = value;
   }
 
   void SetOutsideValue(const typename TOutputImage::PixelType & value)
   {
-    this->GetFunctor().m_OutsideValue(value);
+    this->GetFunctor().m_OutsideValue = value;
   }
 
 protected:
