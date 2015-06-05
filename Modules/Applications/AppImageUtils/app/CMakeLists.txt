@@ -87,3 +87,8 @@ otb_create_application(
   NAME           SplitImage
   SOURCES        otbSplitImage.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           NoDataMask
+  SOURCES        otbNoDataMask.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
