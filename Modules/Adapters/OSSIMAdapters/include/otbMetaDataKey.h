@@ -67,6 +67,9 @@ namespace MetaDataKey
   extern char const* TileHintX;
   extern char const* TileHintY;
 
+  extern char const * NoDataValueAvailable;
+  extern char const * NoDataValue;
+
 
   enum  KeyType
     {
@@ -77,6 +80,7 @@ namespace MetaDataKey
     TVECTOR,
     TOSSIMKEYWORDLIST,
     TVECTORDATAKEYWORDLIST,
+    TBOOLVECTOR
     };
   /*
   typedef struct
@@ -102,6 +106,7 @@ namespace MetaDataKey
   KeyType GetKeyType(const std::string& name);
 
   typedef std::vector<double>               VectorType;
+  typedef std::vector<bool>                 BoolVectorType;
   typedef itk::VariableLengthVector<double> VariableLengthVectorType;
 }
 

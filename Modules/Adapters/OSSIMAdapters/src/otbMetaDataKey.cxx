@@ -59,6 +59,9 @@ char const* CacheSizeInBytes = "CacheSizeInBytes";
 
 char const* TileHintX = "TileHintX";
 char const* TileHintY = "TileHintY";
+
+char const * NoDataValueAvailable = "NoDataValueAvailable";
+char const * NoDataValue = "NoDataValue";
 }
 
 const MetaDataKey::KeyTypeDef Types[] =
@@ -86,7 +89,9 @@ const MetaDataKey::KeyTypeDef Types[] =
   MetaDataKey::KeyTypeDef(MetaDataKey::SubDatasetIndex,                   MetaDataKey::TENTIER),
   MetaDataKey::KeyTypeDef(MetaDataKey::CacheSizeInBytes,                  MetaDataKey::TENTIER),
   MetaDataKey::KeyTypeDef(MetaDataKey::TileHintX,                         MetaDataKey::TENTIER),
-  MetaDataKey::KeyTypeDef(MetaDataKey::TileHintY,                         MetaDataKey::TENTIER)
+  MetaDataKey::KeyTypeDef(MetaDataKey::TileHintY,                         MetaDataKey::TENTIER),
+  MetaDataKey::KeyTypeDef(MetaDataKey::NoDataValueAvailable,              MetaDataKey::TVECTOR),
+  MetaDataKey::KeyTypeDef(MetaDataKey::NoDataValue,                       MetaDataKey::TVECTOR)
   };
 
 MetaDataKey::KeyType MetaDataKey::GetKeyType(const std::string& name)
