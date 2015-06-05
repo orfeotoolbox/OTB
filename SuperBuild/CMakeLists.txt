@@ -10,6 +10,11 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH})
 
 include(ExternalProject)
+
+
+# TODO BUILD_TESTING is created by default by CTest.cmake, and is ON by default.
+option(BUILD_TESTING "Build OTB tests in Superbuild." OFF)
+
 include(CTest)
 include(SuperBuild_Macro)
 
