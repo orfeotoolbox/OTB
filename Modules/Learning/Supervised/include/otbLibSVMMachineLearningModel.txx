@@ -55,7 +55,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::Train()
+::TrainClassification()
 {
   // Set up SVM's parameters
   // CvSVMParams params;
@@ -80,7 +80,7 @@ template <class TInputValue, class TOutputValue>
 typename LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::Predict(const InputSampleType & input) const
+::PredictClassification(const InputSampleType & input) const
 {
   TargetSampleType target;
 
@@ -114,28 +114,28 @@ bool
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::CanReadFile(const std::string & file)
 {
-   //TODO: Rework.
-   std::ifstream ifs;
-   ifs.open(file.c_str());
+  //TODO: Rework.
+  std::ifstream ifs;
+  ifs.open(file.c_str());
 
-   if(!ifs)
-   {
-      std::cerr<<"Could not read file "<<file<<std::endl;
-      return false;
-   }
+  if(!ifs)
+    {
+    std::cerr<<"Could not read file "<<file<<std::endl;
+    return false;
+    }
 
-   //Read only the first line.
-   std::string line;
-   std::getline(ifs, line);
+  //Read only the first line.
+  std::string line;
+  std::getline(ifs, line);
 
-   //if (line.find(m_SVMModel->getName()) != std::string::npos)
-   if (line.find("svm_type") != std::string::npos)
-   {
-      //std::cout<<"Reading a libSVM model"<<std::endl;
-      return true;
-   }
-   ifs.close();
-   return false;
+  //if (line.find(m_SVMModel->getName()) != std::string::npos)
+  if (line.find("svm_type") != std::string::npos)
+    {
+    //std::cout<<"Reading a libSVM model"<<std::endl;
+    return true;
+    }
+  ifs.close();
+  return false;
 }
 
 template <class TInputValue, class TOutputValue>

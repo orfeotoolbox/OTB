@@ -55,7 +55,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::Train()
+::TrainClassification()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -83,7 +83,7 @@ template <class TInputValue, class TOutputValue>
 typename DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::Predict(const InputSampleType & input) const
+::PredictClassification(const InputSampleType & input) const
 {
   //convert listsample to Mat
   cv::Mat sample;

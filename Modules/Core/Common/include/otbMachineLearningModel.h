@@ -157,10 +157,17 @@ protected:
   typename TargetListSampleType::Pointer m_TargetListSample;
 
   /** Train the machine learning model */
-  virtual void TrainRegression() = 0;
+  virtual void TrainRegression()
+  {
+    itkGenericExceptionMacro(<< "Regression mode not implemented.");
+  }
   virtual void TrainClassification() = 0;
   /** Predict values using the model */
-  virtual TargetSampleType PredictRegression(const InputSampleType& input) const = 0;
+  virtual TargetSampleType PredictRegression(const InputSampleType& input) const
+  {
+  itkGenericExceptionMacro(<< "Regression mode not implemented.");
+  }
+
   virtual TargetSampleType PredictClassification(const InputSampleType& input) const = 0;
 
   bool m_RegressionMode;

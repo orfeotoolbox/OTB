@@ -49,7 +49,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 template <class TInputValue, class TTargetValue>
 void
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::Train()
+::TrainClassification()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -66,7 +66,7 @@ template <class TInputValue, class TTargetValue>
 typename KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::TargetSampleType
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::Predict(const InputSampleType & input) const
+::PredictClassification(const InputSampleType & input) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -181,7 +181,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 
   this->SetInputListSample(samples);
   this->SetTargetListSample(labels);
-  Train();
+  this->Train();
 }
 
 template <class TInputValue, class TTargetValue>

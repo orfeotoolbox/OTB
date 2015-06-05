@@ -64,7 +64,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::Train()
+::TrainClassification()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -109,7 +109,7 @@ template <class TInputValue, class TOutputValue>
 typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::Predict(const InputSampleType & value) const
+::PredictClassification(const InputSampleType & value) const
 {
   //convert listsample to Mat
   cv::Mat sample;
