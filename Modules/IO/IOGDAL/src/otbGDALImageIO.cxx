@@ -1192,6 +1192,34 @@ void GDALImageIO::InternalReadImageInformation()
     this->SetPixelType(VECTOR);
     }
 
+
+  // Read no data value if present
+  std::vector<bool> isNoDataAvailable(dataset->GetRasterCount(),false);
+  std::vector<double> noDataValues(dataset->GetRasterCount(),0);
+  
+  bool noDataFound = false;
+
+  for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
+    {
+    GDALRasterBandH hBand = GDALGetRasterBand(dataset, iBand + 1);
+
+    int success;
+    
+    double ndv = GDALGetRasterNoDataValue(hBand,&success);
+
+    if(success)
+      {
+      noDataFound = true;
+      isNoDataAvailable[iBand]=true;
+      noDataValues[iBand]=ndv;
+      }
+    }
+
+  if(noDataFound)
+    {
+    itk::EncapsulateMetaData<MetaDataKey::BoolVectorType>(dict, MetaDataKey::NoDataValueAvailable, isNoDataAvailable);
+    itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict,MetaDataKey::NoDataValue,noDataValues);
+    }
 }
 
 bool GDALImageIO::CanWriteFile(const char* name)
@@ -1728,6 +1756,9 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   otbMsgDevMacro( << "GCP Projection Ref: "<< dataset->GetGCPProjection() );
   otbMsgDevMacro( << "GCP Count: " << dataset->GetGCPCount() );
+
+  // Write no-data flags
+  
 
 }
 
