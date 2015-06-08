@@ -38,7 +38,7 @@ std::vector<bool> & flags, const std::vector<double> & values) {
   assert(flags.size()>0);
   assert(values.size()>0);
 
-  if(vnl_math_isnan<int>(flags[0]))
+  if(vnl_math_isnan((int)flags[0]))
     return true;
 
 
@@ -61,7 +61,7 @@ template <typename T> bool IsNoData(const itk::VariableLengthVector<T> & pixel, 
 
   for(unsigned int i = 0; i < pixel.Size();++i)
     {
-    if(vnl_math_isnan<T>(pixel[i]) || (flags[i] && (pixel[i] == values[i])))
+    if(vnl_math_isnan(pixel[i]) || (flags[i] && (pixel[i] == values[i])))
       {
       return true;
       }
