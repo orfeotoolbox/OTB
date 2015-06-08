@@ -19,7 +19,7 @@
 #include "otbNoDataHelper.h"
 #include "otbMacro.h"
 
-int otbNoDataHelperTest(int itkNotUsed(argc),char ** itkNotUsed(argv))
+int otbNoDataHelperTest(int itkNotUsed(argc),char * itkNotUsed(argv) [])
 {
   std::vector<bool> b1(1,true);
   std::vector<double> v1(1,0);
@@ -33,7 +33,7 @@ int otbNoDataHelperTest(int itkNotUsed(argc),char ** itkNotUsed(argv))
 
   std::vector<bool> b2(4,true);
   std::vector<double> v2(4,1);
-  
+
   itk::VariableLengthVector<unsigned short int> v(4);
   v.Fill(10);
 

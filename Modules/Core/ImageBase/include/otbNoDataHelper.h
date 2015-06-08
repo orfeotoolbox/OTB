@@ -19,12 +19,12 @@
 #define __otbNoDataHelper_h
 #include <vector>
 #include <cassert>
-#include "otbNoDataHelper.h"
+#include "vnl/vnl_math.h"
 #include <itkVariableLengthVector.h>
 
 namespace otb
 {
-/** 
+/**
 * Test if the pixel corresponds to a no data pixel according to a
 * vector of no data flags, and a vector of no data values.
 * \param pixel The pixel to test
@@ -35,10 +35,10 @@ namespace otb
 */
 template<typename T> bool IsNoData(const T & pixel, const
 std::vector<bool> & flags, const std::vector<double> & values) {
-  assert(flags.size()>0); 
+  assert(flags.size()>0);
   assert(values.size()>0);
 
-  if(std::isnan(flags[0]))
+  if(vnl_math_isnan<int>(flags[0]))
     return true;
 
 
@@ -61,10 +61,10 @@ template <typename T> bool IsNoData(const itk::VariableLengthVector<T> & pixel, 
 
   for(unsigned int i = 0; i < pixel.Size();++i)
     {
-    if(std::isnan(pixel[i]) || (flags[i] && (pixel[i] == values[i])))
+    if(vnl_math_isnan<T>(pixel[i]) || (flags[i] && (pixel[i] == values[i])))
       {
       return true;
-      } 
+      }
     }
   return false;
 }
