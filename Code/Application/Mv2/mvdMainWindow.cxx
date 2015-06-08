@@ -1487,8 +1487,8 @@ MainWindow
       layerModel,
       SIGNAL( SettingsUpdated() ),
       // from:
-      m_ImageView,
-      SLOT( updateGL()  )
+      this,
+      SLOT( OnSettingsUpdated()  )
     );
 
     // Disconnect previously selected quicklook-model from view.
@@ -1497,8 +1497,8 @@ MainWindow
       layerModel,
       SIGNAL( SettingsUpdated() ),
       // from:
-      m_QuicklookViewDock->widget(),
-      SLOT( updateGL()  )
+      this,
+      SLOT( OnSettingsUpdated()  )
     );
 
     //
@@ -1567,16 +1567,16 @@ MainWindow
       layerModel,
       SIGNAL( SettingsUpdated() ),
       // to:
-      m_ImageView,
-      SLOT( updateGL()  )
+      this,
+      SLOT( OnSettingsUpdated()  )
     );
 
     QObject::connect(
       layerModel,
       SIGNAL( SettingsUpdated() ),
       // to:
-      m_QuicklookViewDock->widget(),
-      SLOT( updateGL() )
+      this,
+      SLOT( OnSettingsUpdated() )
     );
 
     //
@@ -1859,6 +1859,29 @@ MainWindow
     ? StackedLayerModel::NIL_INDEX
     : comboBox->currentIndex() - 1
   );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnSettingsUpdated()
+{
+  assert( m_ShaderWidget!=NULL );
+
+  m_ShaderWidget->UpdateSettings();
+
+  //
+
+  assert( m_ImageView!=NULL );
+
+  m_ImageView->updateGL();
+
+  //
+
+  ImageViewWidget * quicklookView = GetQuicklookView();
+  assert( quicklookView!=NULL );
+
+  quicklookView->updateGL();
 }
 
 /*****************************************************************************/

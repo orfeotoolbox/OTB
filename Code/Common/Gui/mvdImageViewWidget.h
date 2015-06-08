@@ -220,6 +220,9 @@ signals:
   /**
    */
   void ScaleChanged( double sx, double sy );
+  /**
+   */
+  void ModelUpdated();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -342,6 +345,9 @@ private slots:
   /**
    */
   void OnToggleLayerVisibilityRequested( bool );
+  /**
+   */
+  void OnResizeShaderRequested( int );
 };
 
 }// end namespace 'mvd'

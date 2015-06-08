@@ -87,10 +87,13 @@ class Monteverdi2_EXPORT ImageViewManipulator :
 public:
   /**
    */
-  static const int DEFAULT_ZOOM_GRANULARITY;
+  static const int DEFAULT_GRANULARITY;
   /**
    */
   static const int DEFAULT_SCROLL_GRANULARITY;
+  /**
+   */
+  static const int DEFAULT_ZOOM_GRANULARITY;
 
 //
 // Public methods.
@@ -219,6 +222,16 @@ signals:
   /**
    */
   void ZoomToFullExtentRequested();
+
+  /**
+   */
+  void ShiftAlphaRequested( int );
+  /**
+   */
+  void ShiftGammaRequested( int );
+  /**
+   */
+  void ResizeShaderRequested( int );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

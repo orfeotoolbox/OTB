@@ -454,6 +454,10 @@ private slots:
 
   /**
    */
+  void OnSettingsUpdated();
+
+  /**
+   */
   void RefreshReferenceLayerComboBox();
 
 };

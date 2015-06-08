@@ -99,8 +99,24 @@ ImageSettingsInterface
 /*****************************************************************************/
 void
 ImageSettingsInterface
+::UpdateSettings()
+{
+  virtual_UpdateSettings();
+}
+
+/*****************************************************************************/
+void
+ImageSettingsInterface
 ::virtual_SetSettings( ImageSettings * )
 {
+}
+
+/*****************************************************************************/
+void
+ImageSettingsInterface
+::virtual_UpdateSettings()
+{
+  virtual_SetSettings( m_Settings );
 }
 
 /*****************************************************************************/

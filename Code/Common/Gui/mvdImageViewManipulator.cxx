@@ -52,8 +52,9 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
-const int ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY = 2;
+const int ImageViewManipulator::DEFAULT_GRANULARITY = 1;
 const int ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY = 4;
+const int ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY = 2;
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -566,30 +567,45 @@ ImageViewManipulator
   //
   else if( modifiers==Qt::MetaModifier )
     {
+    // Alpha
+
     qDebug() << "META+Wheel" << event->delta();
 
-    // Alpha
+    // emit ShiftAlphaRequested(
+    //   event->delta() /
+    //   ( 8 * MOUSE_WHEEL_STEP_DEGREES * ImageViewManipulator::DEFAULT_GRANULARITY )
+    // );
     }
 
   else if( modifiers==(Qt::MetaModifier | Qt::ShiftModifier) )
     {
+    // Gamma
+
     qDebug() << "META+SHIFT+Wheel" << event->delta();
 
-    // Gamma
+    // emit ShiftGammaRequested(
+    //   event->delta() /
+    //   ( 8 * MOUSE_WHEEL_STEP_DEGREES * ImageViewManipulator::DEFAULT_GRANULARITY )
+    // );
     }
   //
   else if( modifiers==Qt::AltModifier )
     {
+    // Shader-size
+
     qDebug() << "ALT+Wheel" << event->delta();
 
-    // Shader-size
+    emit ResizeShaderRequested(
+      event->delta() /
+      ( 8 * MOUSE_WHEEL_STEP_DEGREES * ImageViewManipulator::DEFAULT_GRANULARITY )
+    );
     }
 
   else if( modifiers==(Qt::AltModifier | Qt::ShiftModifier) )
     {
-    qDebug() << "ALT+SHIFT+Wheel" << event->delta();
-
     // Shader-param.
+
+    qDebug() << "ALT+SHIFT+Wheel" << event->delta();
     }
   //
   else if( modifiers==(Qt::ControlModifier | Qt::AltModifier) )

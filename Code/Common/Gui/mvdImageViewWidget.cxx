@@ -325,6 +325,10 @@ ImageViewWidget
 #endif // USE_XP_REGION_OPTION
 
 
+  //
+  // Manipulator -> this
+  //
+
   QObject::connect(
     m_Manipulator,
     SIGNAL( RefreshViewRequested() ),
@@ -466,6 +470,17 @@ ImageViewWidget
     SLOT( ZoomToExtent() )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( ResizeShaderRequested( int ) ),
+    // to:
+    this,
+    SLOT( OnResizeShaderRequested( int ) )
+  );
+
+  //
+  // Renderer -> this
+  //
 
   QObject::connect(
     this,
@@ -1003,6 +1018,14 @@ ImageViewWidget
     this,
     SLOT( updateGL() )
   );
+
+  QObject::connect(
+    this,
+    SIGNAL( ModelUpdated() ),
+    // to:
+    layer,
+    SLOT( OnModelUpdated() )
+  );
 }
 
 /*******************************************************************************/
@@ -1018,6 +1041,14 @@ ImageViewWidget
     // from:
     this,
     SLOT( updateGL() )
+  );
+
+  QObject::disconnect(
+    this,
+    SIGNAL( ModelUpdated() ),
+    // from:
+    layer,
+    SLOT( OnModelUpdated() )
   );
 }
 
@@ -1152,6 +1183,46 @@ ImageViewWidget
   assert( m_Renderer!=NULL );
 
   m_Renderer->RefreshScene();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnResizeShaderRequested( int steps )
+{
+  qDebug() << this << "::OnResizeShaderRequested(" << steps << ")";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
+  assert( layer!=NULL );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
+
+    VectorImageModel * imageModel =
+      qobject_cast< VectorImageModel * >( layer );
+
+    assert( imageModel!=NULL );
+
+    unsigned int size = imageModel->GetSettings().GetSize();
+
+    if( size>=0 )
+      size += steps;
+
+    else if( size>0 )
+      size += steps;
+
+    qDebug() << "shader-size:" << size;
+
+    imageModel->GetSettings().SetSize( size );
+
+    emit ModelUpdated();
+    }
 }
 
 /******************************************************************************/
