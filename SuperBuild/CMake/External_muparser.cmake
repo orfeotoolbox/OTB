@@ -15,7 +15,8 @@ else()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://downloads.sourceforge.net/project/muparser/muparser/Version%202.2.3/muparser_v2_2_3.zip"
+    DOWNLOAD_NAME muparser_v2_2_3.zip
+    URL "https://docs.google.com/uc?export=download&id=0BzuB-ydOOoduLUNRanpDNV9iVk0"
     URL_MD5 9de40ec1dab5bd2787ee344fce5846ad
     BINARY_DIR ${MUPARSER_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
