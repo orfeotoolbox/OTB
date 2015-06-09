@@ -472,10 +472,10 @@ ImageViewWidget
 
   QObject::connect(
     m_Manipulator,
-    SIGNAL( ResizeShaderRequested( int ) ),
+    SIGNAL( ResizeShaderRequested( double ) ),
     // to:
     this,
-    SLOT( OnResizeShaderRequested( int ) )
+    SLOT( OnResizeShaderRequested( double ) )
   );
 
   //
@@ -1188,9 +1188,9 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
-::OnResizeShaderRequested( int steps )
+::OnResizeShaderRequested( double factor )
 {
-  qDebug() << this << "::OnResizeShaderRequested(" << steps << ")";
+  qDebug() << this << "::OnResizeShaderRequested(" << factor << ")";
 
   assert( m_Renderer!=NULL );
 
@@ -1209,17 +1209,9 @@ ImageViewWidget
 
     assert( imageModel!=NULL );
 
-    unsigned int size = imageModel->GetSettings().GetSize();
-
-    if( size>=0 )
-      size += steps;
-
-    else if( size>0 )
-      size += steps;
-
-    qDebug() << "shader-size:" << size;
-
-    imageModel->GetSettings().SetSize( size );
+    imageModel->GetSettings().SetSize(
+      static_cast< double >( imageModel->GetSettings().GetSize() ) * factor
+    );
 
     emit ModelUpdated();
     }

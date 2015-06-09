@@ -35,6 +35,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cmath>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -85,6 +86,9 @@ class Monteverdi2_EXPORT ImageViewManipulator :
 //
 // Constants
 public:
+  /**
+   */
+  static const double DEFAULT_DELTA;
   /**
    */
   static const int DEFAULT_GRANULARITY;
@@ -231,7 +235,7 @@ signals:
   void ShiftGammaRequested( int );
   /**
    */
-  void ResizeShaderRequested( int );
+  void ResizeShaderRequested( double );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -263,6 +267,21 @@ private:
 //
 // Private methods.
 private:
+  /**
+   */
+  template< typename T1, typename T2, typename T3, typename T4 >
+    inline static
+    double Factor( T1 wheel,
+		   T2 degrees,
+		   T3 delta,
+		   T4 granularity );
+  /**
+   */
+  template< typename T1, typename T2 >
+    inline static
+    double Factor( T1 wheel,
+		   T2 degrees );
+
   /**
    */
   void Translate( const QPoint& vector );
@@ -316,6 +335,45 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+template< typename T1, typename T2, typename T3, typename T4 >
+inline
+double
+ImageViewManipulator
+::Factor( T1 wheel, T2 degrees, T3 delta, T4 granularity )
+{
+  // qDebug() << "wheel:" << wheel;
+  // qDebug() << "degrees:" << degrees;
+  // qDebug() << "delta:" << delta;
+  // qDebug() << "granularity:" << granularity;
+
+  if( abs( granularity )<=std::numeric_limits< T1 >::min() )
+    granularity = 1;
+
+  return
+    pow(
+      ( 1.0 + static_cast< double >( delta ) ),
+      static_cast< double >( wheel ) /
+      ( static_cast< double >( granularity ) * static_cast< double >( degrees ) )
+    );
+}
+
+/*****************************************************************************/
+template< typename T1, typename T2 >
+inline
+double
+ImageViewManipulator
+::Factor( T1 wheel, T2 degrees )
+{
+  return
+    ImageViewManipulator::Factor(
+      wheel,
+      degrees,
+      ImageViewManipulator::DEFAULT_DELTA,
+      ImageViewManipulator::DEFAULT_GRANULARITY
+    );
+}
 
 /*****************************************************************************/
 /*

@@ -56,13 +56,14 @@ const int ImageViewManipulator::DEFAULT_GRANULARITY = 1;
 const int ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY = 4;
 const int ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY = 2;
 
+const double ImageViewManipulator::DEFAULT_DELTA = 0.1;
+
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
-
+/*****************************************************************************/
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
 /*****************************************************************************/
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 
@@ -596,8 +597,10 @@ ImageViewManipulator
     qDebug() << "ALT+Wheel" << event->delta();
 
     emit ResizeShaderRequested(
-      event->delta() /
-      ( 8 * MOUSE_WHEEL_STEP_DEGREES * ImageViewManipulator::DEFAULT_GRANULARITY )
+      ImageViewManipulator::Factor(
+	event->delta() / 8,
+	MOUSE_WHEEL_STEP_DEGREES
+      )
     );
     }
 
@@ -858,9 +861,7 @@ ImageViewManipulator
   int granularity = m_ZoomGranularity;
 
   if( granularity==0 )
-    {
     granularity = 1;
-    }
 
   double factor = pow(
     2.0,

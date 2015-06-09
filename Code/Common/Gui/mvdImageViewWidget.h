@@ -347,7 +347,7 @@ private slots:
   void OnToggleLayerVisibilityRequested( bool );
   /**
    */
-  void OnResizeShaderRequested( int );
+  void OnResizeShaderRequested( double );
 };
 
 }// end namespace 'mvd'
