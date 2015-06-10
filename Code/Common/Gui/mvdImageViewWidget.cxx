@@ -478,6 +478,14 @@ ImageViewWidget
     SLOT( OnResizeShaderRequested( double ) )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( ReparamShaderRequested( double ) ),
+    // to:
+    this,
+    SLOT( OnReparamShaderRequested( double ) )
+  );
+
   //
   // Renderer -> this
   //
@@ -1211,6 +1219,38 @@ ImageViewWidget
 
     imageModel->GetSettings().SetSize(
       static_cast< double >( imageModel->GetSettings().GetSize() ) * factor
+    );
+
+    emit ModelUpdated();
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnReparamShaderRequested( double factor )
+{
+  qDebug() << this << "::OnReparamShaderRequested(" << factor << ")";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
+  assert( layer!=NULL );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
+
+    VectorImageModel * imageModel =
+      qobject_cast< VectorImageModel * >( layer );
+
+    assert( imageModel!=NULL );
+
+    imageModel->GetSettings().SetValue(
+      static_cast< double >( imageModel->GetSettings().GetValue() ) * factor
     );
 
     emit ModelUpdated();

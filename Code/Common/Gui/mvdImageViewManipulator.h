@@ -236,6 +236,9 @@ signals:
   /**
    */
   void ResizeShaderRequested( double );
+  /**
+   */
+  void ReparamShaderRequested( double );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

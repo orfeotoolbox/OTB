@@ -598,7 +598,7 @@ ImageViewManipulator
 
     emit ResizeShaderRequested(
       ImageViewManipulator::Factor(
-	event->delta() / 8,
+	degrees,
 	MOUSE_WHEEL_STEP_DEGREES
       )
     );
@@ -609,6 +609,13 @@ ImageViewManipulator
     // Shader-param.
 
     qDebug() << "ALT+SHIFT+Wheel" << event->delta();
+
+    emit ReparamShaderRequested(
+      ImageViewManipulator::Factor(
+	degrees,
+	MOUSE_WHEEL_STEP_DEGREES
+      )
+    );
     }
   //
   else if( modifiers==(Qt::ControlModifier | Qt::AltModifier) )
