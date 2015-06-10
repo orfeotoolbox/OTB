@@ -4,31 +4,36 @@ set(OTBMuParser_SYSTEM_INCLUDE_DIRS ${MUPARSER_INCLUDE_DIRS})
 set(OTBMuParser_LIBRARIES "${MUPARSER_LIBRARIES}")
 set(OTBMuParser_INCLUDE_DIRS ${OTBMuParser_BINARY_DIR}/src)
 
+set(OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS 0)
+if(NOT MUPARSER_VERSION_NUMBER LESS 20000)
+set(OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS 1)
+endif()
+
 # Starting with muparser 2.0.0,
 # intrinsic operators "and", "or", "xor" have been removed
 #  and intrinsic operators "&&" and "||" have been introduced as replacements
-include(CheckCXXSourceRuns)
-set(CMAKE_REQUIRED_INCLUDES ${OTBMuParser_SYSTEM_INCLUDE_DIRS})
-set(CMAKE_REQUIRED_LIBRARIES ${OTBMuParser_LIBRARIES})
-unset(CMAKE_REQUIRED_FLAGS)
-unset(CMAKE_REQUIRED_DEFINES)
-file(READ ${OTBMuParser_SOURCE_DIR}/CMake/otbTestMuParserHasCxxLogicalOperators.cxx
-  OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS_SOURCEFILE)
-check_cxx_source_runs(
-  "${OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS_SOURCEFILE}"
-  OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
-  )
-unset(CMAKE_REQUIRED_INCLUDES)
-unset(CMAKE_REQUIRED_LIBRARIES)
-unset(CMAKE_REQUIRED_FLAGS)
-unset(CMAKE_REQUIRED_DEFINES)
+# include(CheckCXXSourceRuns)
+# set(CMAKE_REQUIRED_INCLUDES ${OTBMuParser_SYSTEM_INCLUDE_DIRS})
+# set(CMAKE_REQUIRED_LIBRARIES ${OTBMuParser_LIBRARIES})
+# unset(CMAKE_REQUIRED_FLAGS)
+# unset(CMAKE_REQUIRED_DEFINES)
+# file(READ ${OTBMuParser_SOURCE_DIR}/CMake/otbTestMuParserHasCxxLogicalOperators.cxx
+  # OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS_SOURCEFILE)
+# check_cxx_source_runs(
+  # "${OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS_SOURCEFILE}"
+  # OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+  # )
+# unset(CMAKE_REQUIRED_INCLUDES)
+# unset(CMAKE_REQUIRED_LIBRARIES)
+# unset(CMAKE_REQUIRED_FLAGS)
+# unset(CMAKE_REQUIRED_DEFINES)
 
 if(OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS)
-  message(STATUS "MuParser version is >= 2.0.0 : "
+  message(STATUS "MuParser version is  ${MUPARSER_VERSION} >= 2.0.0 : "
     "uses '&&' and '||' logical operators, and C++ like "
     "ternary if-then-else operator")
 else()
-  message(STATUS "MuParser version is < 2.0.0  : "
+  message(STATUS "MuParser version is ${MUPARSER_VERSION} < 2.0.0  : "
     "uses 'and' and 'or' logical operators, and ternary "
     "operator 'if( ; ; )'")
 endif()
