@@ -168,7 +168,10 @@ AbstractModelController
   virtual_ResetWidget();
 
   // Signal model has been updated.
+#if 0 // When resetting widget, data is read from model and set into
+      // widget so, there's no need to signal back model update.
   emit ModelUpdated();
+#endif
 }
 
 /*******************************************************************************/
