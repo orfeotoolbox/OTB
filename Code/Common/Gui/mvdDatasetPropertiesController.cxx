@@ -119,9 +119,9 @@ DatasetPropertiesController
 /*******************************************************************************/
 void
 DatasetPropertiesController
-::ResetWidget()
+::virtual_ResetWidget()
 {
-  // qDebug() << this << "::ResetWidget()";
+  // qDebug() << this << "::virtual_ResetWidget()";
 
   //
   // Access model.

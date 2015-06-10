@@ -184,7 +184,7 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
-::ResetWidget()
+::virtual_ResetWidget()
 {
   //
   // Reset color-dynamics widget mode (grayscale/RGB).

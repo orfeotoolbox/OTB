@@ -259,7 +259,7 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::ResetWidget()
+::virtual_ResetWidget()
 {
   RefreshWidget();
 }

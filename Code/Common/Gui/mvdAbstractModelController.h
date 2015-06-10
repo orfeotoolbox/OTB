@@ -125,6 +125,10 @@ public:
 // Slots.
 public slots:
 
+  /**
+   */
+  void ResetWidget();
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -182,10 +186,6 @@ private:
 
   /**
    */
-  void private_ResetWidget();
-
-  /**
-   */
   virtual void Connect( AbstractModel* ) =0;
 
   /**
@@ -198,7 +198,7 @@ private:
 
   /**
    */
-  virtual void ResetWidget() =0;
+  virtual void virtual_ResetWidget() =0;
 
 //
 // Private attributes.

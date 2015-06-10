@@ -139,7 +139,7 @@ ApplicationsToolBoxController
 /*******************************************************************************/
 void
 ApplicationsToolBoxController
-::ResetWidget()
+::virtual_ResetWidget()
 {
   // Reset widget.
   ResetDatasetTree();

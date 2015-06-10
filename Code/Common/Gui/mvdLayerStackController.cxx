@@ -241,7 +241,7 @@ LayerStackController
 /*******************************************************************************/
 void
 LayerStackController
-::ResetWidget()
+::virtual_ResetWidget()
 {
 }
 

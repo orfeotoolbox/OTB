@@ -134,7 +134,7 @@ private:
 
   /**
    */
-  virtual void ResetWidget();
+  virtual void virtual_ResetWidget();
 
 
 //
