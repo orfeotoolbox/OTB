@@ -61,6 +61,7 @@ namespace mvd
 //
 // Internal class pre-declaration.
 class AbstractModel;
+class AbstractModelController;
 class DatasetModel;
 class ImageImporter;
 class VectorImageModel;
@@ -249,6 +250,14 @@ protected:
 		   const QString& dockTitle,
 		   Qt::DockWidgetArea dockArea,
 		   bool isFloating =false );
+  /**
+   */
+  const AbstractModelController * 
+    GetController( const QDockWidget * ) const;
+  /**
+   */
+  AbstractModelController *
+    GetController( const QDockWidget * );
 
   /**
    * \brief Assign model to the controller which is child of given
@@ -382,6 +391,28 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+const AbstractModelController *
+I18nMainWindow
+::GetController( const QDockWidget * dock ) const
+{
+  assert( dock!=NULL );
+
+  return dock->findChild< const AbstractModelController * >();
+}
+
+/*****************************************************************************/
+inline
+AbstractModelController *
+I18nMainWindow
+::GetController( const QDockWidget * dock )
+{
+  assert( dock!=NULL );
+
+  return dock->findChild< AbstractModelController * >();
+}
 
 /*****************************************************************************/
 inline
