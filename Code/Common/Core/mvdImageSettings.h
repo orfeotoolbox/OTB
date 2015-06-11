@@ -396,6 +396,12 @@ ImageSettings
 {
   m_Alpha = alpha;
 
+  if( m_Alpha>1.0 )
+    m_Alpha = 1.0;
+
+  if( m_Alpha<0.0 )
+    m_Alpha = 0.0;
+
   SetModified();
 }
 

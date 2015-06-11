@@ -1871,6 +1871,26 @@ MainWindow
   m_ShaderWidget->UpdateSettings();
 
   //
+  {
+  assert( m_ColorSetupDock!=NULL );
+
+  AbstractModelController * controller = GetController( m_ColorSetupDock );
+  assert( controller!=NULL );
+
+  if( controller->GetModel()!=NULL )
+    controller->ResetWidget();
+  }
+  //
+  {
+  assert( m_ColorDynamicsDock!=NULL );
+
+  AbstractModelController * controller = GetController( m_ColorDynamicsDock );
+  assert( controller!=NULL );
+
+  if( controller->GetModel()!=NULL )
+    controller->ResetWidget();
+  }
+  //
 
   assert( m_ImageView!=NULL );
 

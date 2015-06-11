@@ -94,6 +94,9 @@ public:
   static const int DEFAULT_GRANULARITY;
   /**
    */
+  static const int DEFAULT_ALPHA_GRANULARITY;
+  /**
+   */
   static const int DEFAULT_SCROLL_GRANULARITY;
   /**
    */
@@ -229,7 +232,7 @@ signals:
 
   /**
    */
-  void ShiftAlphaRequested( int );
+  void ShiftAlphaRequested( double );
   /**
    */
   void ShiftGammaRequested( int );
@@ -314,6 +317,9 @@ private:
   /**
    */
   double m_ZoomFactor;
+  /**
+   */
+  int m_AlphaGranularity;
   /**
    */
   int m_ZoomGranularity;

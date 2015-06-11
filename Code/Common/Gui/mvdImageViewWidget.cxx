@@ -486,6 +486,14 @@ ImageViewWidget
     SLOT( OnReparamShaderRequested( double ) )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( ShiftAlphaRequested( double ) ),
+    // to:
+    this,
+    SLOT( OnShiftAlphaRequested( double ) )
+  );
+
   //
   // Renderer -> this
   //
@@ -1383,6 +1391,34 @@ ImageViewWidget
   else
     {
     assert( false && "Unhandled AbstractLayerModel derived type." );
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnShiftAlphaRequested( double delta )
+{
+  qDebug() << this << "::OnShiftAlphaRequested(" << delta << ")";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
+  assert( layer!=NULL );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
+
+    VectorImageModel * imageModel =
+      qobject_cast< VectorImageModel * >( layer );
+
+    imageModel->GetSettings().SetAlpha( imageModel->GetSettings().GetAlpha() + delta );
+
+    emit ModelUpdated();
     }
 }
 

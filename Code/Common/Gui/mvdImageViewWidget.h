@@ -351,6 +351,9 @@ private slots:
   /**
    */
   void OnReparamShaderRequested( double );
+  /**
+   */
+  void OnShiftAlphaRequested( double );
 };
 
 }// end namespace 'mvd'
