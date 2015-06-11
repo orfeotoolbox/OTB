@@ -578,8 +578,7 @@ ImageViewManipulator
     emit ShiftAlphaRequested(
       static_cast< double >(
 	m_AlphaGranularity * event->delta() / ( 8 * MOUSE_WHEEL_STEP_DEGREES )
-      ) /
-      100.0
+      ) / 100
     );
     }
 
@@ -589,12 +588,12 @@ ImageViewManipulator
 
     qDebug() << "META+SHIFT+Wheel" << event->delta();
 
-    // emit ShiftGammaRequested(
-    //   ImageViewManipulator::Factor(
-    // 	degrees,
-    // 	MOUSE_WHEEL_STEP_DEGREES
-    //   )
-    // );
+    emit UpdateGammaRequested(
+      ImageViewManipulator::Factor(
+    	degrees,
+    	MOUSE_WHEEL_STEP_DEGREES
+      )
+    );
     }
   //
   else if( modifiers==Qt::AltModifier )

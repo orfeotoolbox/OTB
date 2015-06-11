@@ -354,6 +354,9 @@ private slots:
   /**
    */
   void OnShiftAlphaRequested( double );
+  /**
+   */
+  void OnUpdateGammaRequested( double );
 };
 
 }// end namespace 'mvd'

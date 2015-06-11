@@ -235,7 +235,7 @@ signals:
   void ShiftAlphaRequested( double );
   /**
    */
-  void ShiftGammaRequested( int );
+  void UpdateGammaRequested( double );
   /**
    */
   void ResizeShaderRequested( double );

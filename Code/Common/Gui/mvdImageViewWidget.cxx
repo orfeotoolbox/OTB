@@ -494,6 +494,14 @@ ImageViewWidget
     SLOT( OnShiftAlphaRequested( double ) )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( UpdateGammaRequested( double ) ),
+    // to:
+    this,
+    SLOT( OnUpdateGammaRequested( double ) )
+  );
+
   //
   // Renderer -> this
   //
@@ -1440,6 +1448,34 @@ ImageViewWidget
   layer->SetVisible( !layer->IsVisible() );
 
   updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnUpdateGammaRequested( double factor )
+{
+  qDebug() << this << "::OnUpdateGammaRequested(" << factor << ")";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
+  assert( layer!=NULL );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
+
+    VectorImageModel * imageModel =
+      qobject_cast< VectorImageModel * >( layer );
+
+    imageModel->GetSettings().SetGamma( imageModel->GetSettings().GetGamma() * factor );
+
+    emit ModelUpdated();
+    }
 }
 
 /******************************************************************************/
