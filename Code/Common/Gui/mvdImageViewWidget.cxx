@@ -502,6 +502,14 @@ ImageViewWidget
     SLOT( OnUpdateGammaRequested( double ) )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( ShiftDynamicsRequested( double ) ),
+    // to:
+    this,
+    SLOT( OnShiftDynamicsRequested( double ) )
+  );
+
   //
   // Renderer -> this
   //
@@ -1425,6 +1433,90 @@ ImageViewWidget
       qobject_cast< VectorImageModel * >( layer );
 
     imageModel->GetSettings().SetAlpha( imageModel->GetSettings().GetAlpha() + delta );
+
+    emit ModelUpdated();
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnShiftDynamicsRequested( double delta )
+{
+  qDebug() << this << "::OnShiftDynamicsRequested(" << delta << ")";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
+  assert( layer!=NULL );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
+
+    VectorImageModel * imageModel =
+      qobject_cast< VectorImageModel * >( layer );
+
+    VectorImageSettings & settings = imageModel->GetSettings();
+
+    HistogramModel * histogram = imageModel->GetHistogramModel();
+    assert( histogram!=NULL );
+
+    // Get min/max pixels.
+    DefaultImageType::PixelType minPx( histogram->GetMinPixel() );
+    DefaultImageType::PixelType maxPx( histogram->GetMaxPixel() );
+
+    // Grayscale
+    if( settings.IsGrayscaleActivated() )
+      {
+      // Get color-setup.
+      unsigned int channel = settings.GetGrayChannel();
+
+      // Get color-dynamics.
+      ParametersType params( settings.GetGrayDynamicsParams() );
+
+      // Compute step.
+      DefaultImageType::PixelType::ValueType step =
+	static_cast< DefaultImageType::PixelType::ValueType >(
+	  delta * ( maxPx[ channel ] - minPx[ channel ]
+	  )
+	);
+
+      // Shift min & max intensities of channel.
+      params[ 0 ] += step;
+      params[ 1 ] += step;
+
+      // Set color-dynamics.
+      settings.SetLowIntensity( RGBW_CHANNEL_WHITE, params[ 0 ] );
+      settings.SetHighIntensity( RGBW_CHANNEL_WHITE, params[ 1 ] );
+      }
+    // RGB
+    else
+      {	
+      // Get color-setup.
+      VectorImageSettings::ChannelVector channels( settings.GetRgbChannels() );
+
+      // Get color-dynamics.
+      ParametersType params(
+	settings.GetRgbDynamicsParams()
+      );
+
+      // Shift intensity for each channel.
+      for( VectorImageSettings::ChannelVector::const_iterator it( channels.begin() );
+	   it!=channels.end();
+	   ++it )
+	params[ *it ] +=
+	  static_cast< DefaultImageType::PixelType::ValueType >(
+	    delta * ( maxPx[ *it ] - minPx[ *it ]
+	    )
+	  );
+
+      // Set shifted intensities.
+      settings.SetRgbDynamicsParams( params );
+      }
 
     emit ModelUpdated();
     }

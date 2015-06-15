@@ -54,6 +54,7 @@ namespace mvd
 
 const int ImageViewManipulator::DEFAULT_GRANULARITY = 1;
 const int ImageViewManipulator::DEFAULT_ALPHA_GRANULARITY = 10;
+const double ImageViewManipulator::DEFAULT_DYNAMICS_GRANULARITY = 0.01;
 const int ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY = 4;
 const int ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY = 2;
 
@@ -79,8 +80,9 @@ ImageViewManipulator
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
   m_ZoomFactor( 1.0 ),
   m_AlphaGranularity( ImageViewManipulator::DEFAULT_ALPHA_GRANULARITY ),
-  m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY ),
+  m_DynamicsGranularity( ImageViewManipulator::DEFAULT_DYNAMICS_GRANULARITY ),
   m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY ),
+  m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY ),
   m_IsMouseDragging( false )
 {
   m_NativeSpacing.Fill( 1.0 );
@@ -97,9 +99,10 @@ ImageViewManipulator
   m_MousePressOrigin(),
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
   m_ZoomFactor( 1.0 ),
-  m_DefaultAlphaGranularity( ImageViewManipulator::DEFAULT_ALPHA_GRANULARITY ),
-  m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY ),
+  m_AlphaGranularity( ImageViewManipulator::DEFAULT_ALPHA_GRANULARITY ),
+  m_DynamicsGranularity( ImageViewManipulator::DEFAULT_DYNAMICS_GRANULARITY ),
   m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY ),
+  m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY ),
   m_IsMouseDragging( false )
 {
   m_ViewSettings->SetUseProjection( true );
@@ -571,21 +574,17 @@ ImageViewManipulator
   //
   else if( modifiers==Qt::MetaModifier )
     {
-    // Alpha
-
     qDebug() << "META+Wheel" << event->delta();
 
     emit ShiftAlphaRequested(
       static_cast< double >(
 	m_AlphaGranularity * event->delta() / ( 8 * MOUSE_WHEEL_STEP_DEGREES )
-      ) / 100
+      ) / 100.0
     );
     }
 
   else if( modifiers==(Qt::MetaModifier | Qt::ShiftModifier) )
     {
-    // Gamma
-
     qDebug() << "META+SHIFT+Wheel" << event->delta();
 
     emit UpdateGammaRequested(
@@ -598,8 +597,6 @@ ImageViewManipulator
   //
   else if( modifiers==Qt::AltModifier )
     {
-    // Shader-size
-
     qDebug() << "ALT+Wheel" << event->delta();
 
     emit ResizeShaderRequested(
@@ -612,8 +609,6 @@ ImageViewManipulator
 
   else if( modifiers==(Qt::AltModifier | Qt::ShiftModifier) )
     {
-    // Shader-param.
-
     qDebug() << "ALT+SHIFT+Wheel" << event->delta();
 
     emit ReparamShaderRequested(
@@ -628,14 +623,15 @@ ImageViewManipulator
     {
     qDebug() << "CTRL+ALT+Wheel" << event->delta();
 
-    // Quantile range.
+    emit ShiftDynamicsRequested(
+      m_DynamicsGranularity *
+      static_cast< double >( event->delta() / ( 8 * MOUSE_WHEEL_STEP_DEGREES ) )
+    );
     }
 
   else if( modifiers==(Qt::ControlModifier | Qt::AltModifier | Qt::ShiftModifier) )
     {
     qDebug() << "CTRL+ALT+SHIFT+Wheel" << event->delta();
-
-    // Quantile shift.
     }
   //
   else if( modifiers==Qt::NoModifier )

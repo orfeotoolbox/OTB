@@ -97,6 +97,9 @@ public:
   static const int DEFAULT_ALPHA_GRANULARITY;
   /**
    */
+  static const double DEFAULT_DYNAMICS_GRANULARITY;
+  /**
+   */
   static const int DEFAULT_SCROLL_GRANULARITY;
   /**
    */
@@ -242,6 +245,9 @@ signals:
   /**
    */
   void ReparamShaderRequested( double );
+  /**
+   */
+  void ShiftDynamicsRequested( double );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -322,10 +328,13 @@ private:
   int m_AlphaGranularity;
   /**
    */
-  int m_ZoomGranularity;
+  double m_DynamicsGranularity;
   /**
    */
   int m_ScrollGranularity;
+  /**
+   */
+  int m_ZoomGranularity;
   /**
    */
   bool m_IsMouseDragging : 1;
