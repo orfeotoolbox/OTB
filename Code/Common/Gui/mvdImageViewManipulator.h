@@ -97,9 +97,6 @@ public:
   static const int DEFAULT_ALPHA_GRANULARITY;
   /**
    */
-  static const double DEFAULT_DYNAMICS_SCALE_GRANULARITY;
-  /**
-   */
   static const double DEFAULT_DYNAMICS_SHIFT_GRANULARITY;
   /**
    */
@@ -332,9 +329,6 @@ private:
   /**
    */
   int m_AlphaGranularity;
-  /**
-   */
-  double m_DynamicsScaleGranularity;
   /**
    */
   double m_DynamicsShiftGranularity;
