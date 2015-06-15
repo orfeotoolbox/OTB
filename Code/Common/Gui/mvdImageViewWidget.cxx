@@ -1442,6 +1442,27 @@ ImageViewWidget
 
     VectorImageSettings & settings = imageModel->GetSettings();
 
+
+    CountType begin = -1;
+    CountType end = -1;
+
+    // Shift intensity for each channel.
+    if( RgbwBounds( begin,
+		    end,
+		    settings.IsGrayscaleActivated() ? RGBW_CHANNEL_WHITE : RGBW_CHANNEL_RGB ) )
+      for( CountType i=begin; i<end; ++i )
+	{
+	RgbwChannel c = static_cast< RgbwChannel >( i );
+
+	ParametersType::ValueType lo = settings.GetLowIntensity( c );
+	ParametersType::ValueType hi = settings.GetHighIntensity( c );
+	ParametersType::ValueType o = ( lo + hi ) / 2;
+
+	settings.SetLowIntensity( c, factor * ( lo - o ) + o );
+	settings.SetHighIntensity( c, factor * ( hi - o ) + o );
+	}
+
+    /*
     // Grayscale
     if( settings.IsGrayscaleActivated() )
       {
@@ -1461,7 +1482,7 @@ ImageViewWidget
       }
     // RGB
     else
-      {	
+      {
       // Get color-setup.
       VectorImageSettings::ChannelVector channels( settings.GetRgbChannels() );
 
@@ -1488,6 +1509,7 @@ ImageViewWidget
       // Set shifted intensities.
       settings.SetRgbDynamicsParams( params );
       }
+    */
 
     emit ModelUpdated();
     }
