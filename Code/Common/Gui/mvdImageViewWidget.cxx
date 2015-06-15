@@ -510,6 +510,14 @@ ImageViewWidget
     SLOT( OnShiftDynamicsRequested( double ) )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( ScaleDynamicsRequested( double ) ),
+    // to:
+    this,
+    SLOT( OnScaleDynamicsRequested( double ) )
+  );
+
   //
   // Renderer -> this
   //
@@ -1407,6 +1415,81 @@ ImageViewWidget
   else
     {
     assert( false && "Unhandled AbstractLayerModel derived type." );
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnScaleDynamicsRequested( double factor )
+{
+  qDebug() << this << "::OnScaleDynamicsRequested(" << factor << ")";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
+  assert( layer!=NULL );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
+
+    VectorImageModel * imageModel =
+      qobject_cast< VectorImageModel * >( layer );
+
+    VectorImageSettings & settings = imageModel->GetSettings();
+
+    // Grayscale
+    if( settings.IsGrayscaleActivated() )
+      {
+      // Get color-dynamics.
+      ParametersType params( settings.GetGrayDynamicsParams() );
+
+      // Compute center value.
+      ParametersType::ValueType center = ( params[ 0 ] + params[ 1 ] ) / 2;
+
+      // Scale color-dynamics around center value.
+      params[ 0 ] = factor * ( params[ 0 ] - center ) + center;
+      params[ 1 ] = factor * ( params[ 1 ] - center ) + center;
+
+      // Set color-dynamics.
+      settings.SetLowIntensity( RGBW_CHANNEL_WHITE, params[ 0 ] );
+      settings.SetHighIntensity( RGBW_CHANNEL_WHITE, params[ 1 ] );
+      }
+    // RGB
+    else
+      {	
+      // Get color-setup.
+      VectorImageSettings::ChannelVector channels( settings.GetRgbChannels() );
+
+      // Get color-dynamics.
+      ParametersType params(
+	settings.GetRgbDynamicsParams()
+      );
+
+      CountType begin = -1;
+      CountType end = -1;
+
+      // Shift intensity for each channel.
+      if( RgbBounds( begin, end, RGBW_CHANNEL_RGB ) )
+	for( CountType i=begin; i<end; ++i )
+	  {
+	  // Compute center value.
+	  ParametersType::ValueType center = ( params[ 2 * i ] + params[ 2 * i + 1 ] ) / 2;
+
+	  // Scale color-dynamics around center value.
+	  params[ 2 * i ] = factor * ( params[ 2 * i ] - center ) + center;
+	  params[ 2 * i + 1 ] = factor * ( params[ 2 * i + 1 ] - center ) + center;
+	  }
+
+      // Set shifted intensities.
+      settings.SetRgbDynamicsParams( params );
+      }
+
+    emit ModelUpdated();
     }
 }
 

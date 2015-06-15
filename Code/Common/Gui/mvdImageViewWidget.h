@@ -360,6 +360,9 @@ private slots:
   /**
    */
   void OnShiftDynamicsRequested( double );
+  /**
+   */
+  void OnScaleDynamicsRequested( double );
 };
 
 }// end namespace 'mvd'

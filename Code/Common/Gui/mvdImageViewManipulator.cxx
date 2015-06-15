@@ -102,7 +102,8 @@ ImageViewManipulator
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
   m_ZoomFactor( 1.0 ),
   m_AlphaGranularity( ImageViewManipulator::DEFAULT_ALPHA_GRANULARITY ),
-  m_DynamicsGranularity( ImageViewManipulator::DEFAULT_DYNAMICS_GRANULARITY ),
+  m_DynamicsScaleGranularity( ImageViewManipulator::DEFAULT_DYNAMICS_SCALE_GRANULARITY ),
+  m_DynamicsShiftGranularity( ImageViewManipulator::DEFAULT_DYNAMICS_GRANULARITY ),
   m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY ),
   m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY ),
   m_IsMouseDragging( false )
@@ -584,7 +585,6 @@ ImageViewManipulator
       ) / 100.0
     );
     }
-
   else if( modifiers==(Qt::MetaModifier | Qt::ShiftModifier) )
     {
     qDebug() << "META+SHIFT+Wheel" << event->delta();
@@ -608,7 +608,6 @@ ImageViewManipulator
       )
     );
     }
-
   else if( modifiers==(Qt::AltModifier | Qt::ShiftModifier) )
     {
     qDebug() << "ALT+SHIFT+Wheel" << event->delta();
@@ -630,10 +629,16 @@ ImageViewManipulator
       static_cast< double >( event->delta() / ( 8 * MOUSE_WHEEL_STEP_DEGREES ) )
     );
     }
-
   else if( modifiers==(Qt::ControlModifier | Qt::AltModifier | Qt::ShiftModifier) )
     {
     qDebug() << "CTRL+ALT+SHIFT+Wheel" << event->delta();
+
+    emit ScaleDynamicsRequested(
+      ImageViewManipulator::Factor(
+	degrees,
+	MOUSE_WHEEL_STEP_DEGREES
+      )
+    );
     }
   //
   else if( modifiers==Qt::NoModifier )

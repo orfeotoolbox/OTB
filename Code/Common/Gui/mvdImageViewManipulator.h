@@ -334,10 +334,10 @@ private:
   int m_AlphaGranularity;
   /**
    */
-  double m_DynamicsShiftGranularity;
+  double m_DynamicsScaleGranularity;
   /**
    */
-  double m_DynamicsScaleGranularity;
+  double m_DynamicsShiftGranularity;
   /**
    */
   int m_ScrollGranularity;
