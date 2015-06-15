@@ -54,7 +54,8 @@ namespace mvd
 
 const int ImageViewManipulator::DEFAULT_GRANULARITY = 1;
 const int ImageViewManipulator::DEFAULT_ALPHA_GRANULARITY = 10;
-const double ImageViewManipulator::DEFAULT_DYNAMICS_GRANULARITY = 0.01;
+const double ImageViewManipulator::DEFAULT_DYNAMICS_SHIFT_GRANULARITY = 0.01;
+const double ImageViewManipulator::DEFAULT_DYNAMICS_SCALE_GRANULARITY = 0.1;
 const int ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY = 4;
 const int ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY = 2;
 
@@ -80,7 +81,8 @@ ImageViewManipulator
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
   m_ZoomFactor( 1.0 ),
   m_AlphaGranularity( ImageViewManipulator::DEFAULT_ALPHA_GRANULARITY ),
-  m_DynamicsGranularity( ImageViewManipulator::DEFAULT_DYNAMICS_GRANULARITY ),
+  m_DynamicsScaleGranularity( ImageViewManipulator::DEFAULT_DYNAMICS_SCALE_GRANULARITY ),
+  m_DynamicsShiftGranularity( ImageViewManipulator::DEFAULT_DYNAMICS_SHIFT_GRANULARITY ),
   m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY ),
   m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY ),
   m_IsMouseDragging( false )
@@ -624,7 +626,7 @@ ImageViewManipulator
     qDebug() << "CTRL+ALT+Wheel" << event->delta();
 
     emit ShiftDynamicsRequested(
-      m_DynamicsGranularity *
+      m_DynamicsShiftGranularity *
       static_cast< double >( event->delta() / ( 8 * MOUSE_WHEEL_STEP_DEGREES ) )
     );
     }

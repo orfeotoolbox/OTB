@@ -97,7 +97,10 @@ public:
   static const int DEFAULT_ALPHA_GRANULARITY;
   /**
    */
-  static const double DEFAULT_DYNAMICS_GRANULARITY;
+  static const double DEFAULT_DYNAMICS_SCALE_GRANULARITY;
+  /**
+   */
+  static const double DEFAULT_DYNAMICS_SHIFT_GRANULARITY;
   /**
    */
   static const int DEFAULT_SCROLL_GRANULARITY;
@@ -248,6 +251,9 @@ signals:
   /**
    */
   void ShiftDynamicsRequested( double );
+  /**
+   */
+  void ScaleDynamicsRequested( double );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -328,7 +334,10 @@ private:
   int m_AlphaGranularity;
   /**
    */
-  double m_DynamicsGranularity;
+  double m_DynamicsShiftGranularity;
+  /**
+   */
+  double m_DynamicsScaleGranularity;
   /**
    */
   int m_ScrollGranularity;
