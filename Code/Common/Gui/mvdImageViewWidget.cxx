@@ -1442,7 +1442,6 @@ ImageViewWidget
 
     VectorImageSettings & settings = imageModel->GetSettings();
 
-
     CountType begin = -1;
     CountType end = -1;
 
@@ -1574,6 +1573,34 @@ ImageViewWidget
     DefaultImageType::PixelType minPx( histogram->GetMinPixel() );
     DefaultImageType::PixelType maxPx( histogram->GetMaxPixel() );
 
+    // Iterator bounds.
+    CountType begin = -1;
+    CountType end = -1;
+
+    // Shift intensity for each channel.
+    if( RgbwBounds( begin,
+		    end,
+		    settings.IsGrayscaleActivated() ? RGBW_CHANNEL_WHITE : RGBW_CHANNEL_RGB ) )
+      for( CountType i=begin; i<end; ++i )
+	{
+	// Channel.
+	RgbwChannel c = static_cast< RgbwChannel >( i );
+
+	// Band.
+	VectorImageSettings::ChannelVector::value_type b = settings.GetSmartChannel( c );
+
+	// Compute step.
+	DefaultImageType::PixelType::ValueType step =
+	  static_cast< DefaultImageType::PixelType::ValueType >(
+	    delta * ( maxPx[ b ] - minPx[ b ] )
+	);
+
+	// Apply step shift.
+	settings.SetLowIntensity( c, settings.GetLowIntensity( c ) + step );
+	settings.SetHighIntensity( c, settings.GetHighIntensity( c ) + step );
+	}
+
+    /*
     // Grayscale
     if( settings.IsGrayscaleActivated() )
       {
@@ -1622,6 +1649,7 @@ ImageViewWidget
       // Set shifted intensities.
       settings.SetRgbDynamicsParams( params );
       }
+    */
 
     emit ModelUpdated();
     }
