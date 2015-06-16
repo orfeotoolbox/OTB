@@ -76,10 +76,9 @@ ImageViewRenderer
   m_GlView( otb::GlView::New() ),
 #ifdef _WIN32
 #else // _WIN32
-  m_ReferencePair( NULL, otb::GlActor::Pointer() ),
+  m_ReferencePair( NULL, otb::GlActor::Pointer() )
 #endif // _WIN32
   // m_ModelActorPairs(),
-  m_ReferenceActorShaderMode( "STANDARD" )
 {
   assert( !m_GlView.IsNull() );
 

@@ -131,17 +131,6 @@ public:
    */
   virtual bool CheckGLCapabilities() const;
 
-  // Set/Get reference actor shader mode 
-  void SetReferenceActorShaderMode(const std::string & mode)
-  {
-    m_ReferenceActorShaderMode = mode;
-  }
-
-  std::string GetReferenceActorShaderMode() const
-  {
-    return m_ReferenceActorShaderMode;
-  }
-
   /**
    */
   inline const otb::ViewSettings::Pointer GetViewSettings() const;
@@ -278,10 +267,6 @@ private:
   /**
    */
   // ModelActorPairMap m_ModelActorPairs;
-
-  /**
-   */ 
-  std::string m_ReferenceActorShaderMode;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
   
