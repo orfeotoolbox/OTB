@@ -134,8 +134,10 @@ public:
   inline const AbstractLayerModel * Front() const;
   inline AbstractLayerModel * Front();
   */
-
   inline ConstIterator Find( const AbstractLayerModel * ) const;
+
+  inline const AbstractLayerModel * Get( const KeyType & ) const;
+  inline AbstractLayerModel * Get( const KeyType & );
 
   inline SizeType GetCount() const;
 
@@ -451,6 +453,27 @@ StackedLayerModel
       return it;
 
   return m_LayerModels.end();
+}
+
+/*****************************************************************************/
+const AbstractLayerModel *
+StackedLayerModel
+::Get( const KeyType & key ) const
+{
+  return const_cast< StackedLayerModel * >( this )->Get( key );
+}
+
+/*****************************************************************************/
+AbstractLayerModel *
+StackedLayerModel
+::Get( const KeyType & key )
+{
+  ConstIterator it( m_LayerModels.find( key ) );
+
+  return
+    it==m_LayerModels.end()
+    ? NULL
+    : it->second;  
 }
 
 /*****************************************************************************/
