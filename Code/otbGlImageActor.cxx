@@ -130,9 +130,11 @@ void GlImageActor::Initialize(const std::string & filename)
 
   m_AvailableResolutions.clear();
 
+  m_AvailableResolutions.push_back(0);
+
   for(unsigned int i =0; i < ovrCount;++i)
     {
-    m_AvailableResolutions.push_back(i);
+    m_AvailableResolutions.push_back(i+1);
     }
 
   m_CurrentResolution = m_AvailableResolutions.front();
@@ -652,8 +654,6 @@ void GlImageActor::UpdateResolution()
   pointB[0]+=100*spacing[0];
   pointC[1]+=100*spacing[1];
 
-  // TODO: This part needs a review
-
   // Transform the spacing vector
   pointA = m_ViewportForwardRotationTransform->TransformPoint(pointA);
   pointA = m_ViewportToImageTransform->TransformPoint(pointA);
@@ -683,6 +683,7 @@ void GlImageActor::UpdateResolution()
   for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
        it != m_AvailableResolutions.end(); ++it)
     {
+
     double diff = 1/((double)(1<<(*it))) - resolution;
 
     if (diff > 0 && vcl_abs(diff) < minDist)
@@ -691,7 +692,7 @@ void GlImageActor::UpdateResolution()
       closest = std::distance(m_AvailableResolutions.begin(),it);
       }
     }
-  
+      
   m_CurrentResolution = closest;
 
   std::ostringstream extFilename;
