@@ -72,7 +72,12 @@ public:
   virtual void Render();
 
   // Automatic color adjustment
-  void AutoColorAdjustment(double & minRed, double & maxRed, double & minGreen, double & maxGreen, double & minBlue, double & maxBlue, bool full = true, double lcp = 0.002, double hcp = 0.002);
+  void AutoColorAdjustment( double & minRed, double & maxRed,
+			    double & minGreen, double & maxGreen,
+			    double & minBlue, double & maxBlue,
+			    bool full = true,
+			    unsigned int refSize = 500,
+			    double lcp = 0.002, double hcp = 0.002 );
 
   const PointType & GetOrigin() const;
 

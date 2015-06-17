@@ -747,11 +747,18 @@ void GlImageActor::UpdateTransforms()
   m_ImageToViewportTransform->InstanciateTransform();
 }
 
-void GlImageActor::AutoColorAdjustment(double & minRed, double & maxRed, double & minGreen, double & maxGreen, double & minBlue, double & maxBlue, bool full, double lcp, double hcp)
+void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
+					double & minGreen, double & maxGreen,
+					double & minBlue, double & maxBlue,
+					bool full,
+					unsigned int refSize,
+					double lcp, double hcp )
 {
   typedef itk::Statistics::ListSample<VectorImageType::PixelType> ListSampleType;
   typedef itk::Statistics::DenseFrequencyContainer2 DFContainerType;
   typedef ListSampleToHistogramListGenerator<ListSampleType, VectorImageType::InternalPixelType, DFContainerType> HistogramsGeneratorType;
+
+  assert( refSize>0 );
 
   ListSampleType::Pointer listSample = ListSampleType::New();
   listSample->SetMeasurementVectorSize(3);
@@ -762,7 +769,7 @@ void GlImageActor::AutoColorAdjustment(double & minRed, double & maxRed, double 
     ReaderType::Pointer reader = ReaderType::New();
     std::ostringstream extFilename;
 
-    unsigned int nb_pixel_ref = 500 * 500;
+    unsigned int nb_pixel_ref = refSize * refSize;
 
     // Compute the diff and keep the index that minimize the distance
     unsigned int resol = 0;
