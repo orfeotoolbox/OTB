@@ -53,7 +53,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    RandomForestsMachineLearningModelFactory::Pointer RFFactory = RandomForestsMachineLearningModelFactory::New();
+    Pointer RFFactory = RandomForestsMachineLearningModelFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(RFFactory);
   }
 

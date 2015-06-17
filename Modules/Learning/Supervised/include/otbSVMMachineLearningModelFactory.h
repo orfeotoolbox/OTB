@@ -53,7 +53,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    SVMMachineLearningModelFactory::Pointer SVMFactory = SVMMachineLearningModelFactory::New();
+    Pointer SVMFactory = SVMMachineLearningModelFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(SVMFactory);
   }
 
