@@ -74,6 +74,10 @@ otb_add_test(NAME bfTuStreamingHistogramVIFilterNew COMMAND otbStatisticsTestDri
   otbStreamingHistogramVectorImageFilterNew
   )
 
+otb_add_test(NAME bfTvStreamingHistogramVIFilterTest COMMAND otbStatisticsTestDriver
+  otbStreamingHistogramVectorImageFilterTest
+  )
+
 otb_add_test(NAME bfTuStreamingStatisticsVectorImageFilterNew COMMAND otbStatisticsTestDriver
   otbStreamingStatisticsVectorImageFilterNew)
 

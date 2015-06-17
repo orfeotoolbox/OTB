@@ -8,6 +8,7 @@ void RegisterTests()
   REGISTER_TEST(otbStreamingStatisticsImageFilterNew);
   REGISTER_TEST(otbListSampleToVariableDimensionHistogramGeneratorNew);
   REGISTER_TEST(otbStreamingHistogramVectorImageFilterNew);
+  REGISTER_TEST(otbStreamingHistogramVectorImageFilterTest);
   REGISTER_TEST(otbStreamingStatisticsVectorImageFilterNew);
   REGISTER_TEST(otbRealImageToComplexImageFilterTest);
   REGISTER_TEST(otbHistogramStatisticsFunction);
