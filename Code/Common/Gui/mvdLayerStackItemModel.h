@@ -89,14 +89,14 @@ public:
     //
     COLUMN_INDEX = 0,
     COLUMN_NAME,
-    COLUMN_I,
-    COLUMN_J,
-    COLUMN_R,
-    COLUMN_G,
-    COLUMN_B,
-    COLUMN_X,
-    COLUMN_Y,
-    COLUMN_EPSG,
+    // COLUMN_I,
+    // COLUMN_J,
+    // COLUMN_R,
+    // COLUMN_G,
+    // COLUMN_B,
+    // COLUMN_X,
+    // COLUMN_Y,
+    // COLUMN_EPSG,
     //
     COLUMN_COUNT,
   };

@@ -600,8 +600,8 @@ ColorDynamicsController
     }
     this->blockSignals( thisSignalsBlocked );
 
-    emit LowIntensityChanged( channel, low, false );
-    emit HighIntensityChanged( channel, hi, false );
+    emit LowIntensityChanged( channel, low, true );
+    emit HighIntensityChanged( channel, hi, true );
     }
 }
 
