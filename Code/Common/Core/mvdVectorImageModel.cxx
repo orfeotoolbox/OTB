@@ -63,6 +63,7 @@ namespace mvd
   Context comment for translator.
 */
 
+const unsigned int VectorImageModel::DEFAULT_LOD_SIZE = 512;
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */

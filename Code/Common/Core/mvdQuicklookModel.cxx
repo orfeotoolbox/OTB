@@ -162,7 +162,10 @@ QuicklookModel
 
   // Source stored quicklook image-file.
   // Best fit to 512x512 px² size.
-  SetFilename( quicklookFilename, 512, 512 );
+  SetFilename(
+    quicklookFilename,
+    VectorImageModel::DEFAULT_LOD_SIZE,
+    VectorImageModel::DEFAULT_LOD_SIZE );
 }
 
 /*******************************************************************************/

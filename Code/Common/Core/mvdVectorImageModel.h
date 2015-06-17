@@ -104,6 +104,10 @@ public:
 // Public methods.
 public:
 
+  /**
+   */
+  static const unsigned int DEFAULT_LOD_SIZE;
+
   /** Constructor */
   VectorImageModel( QObject* parent =NULL );
 
