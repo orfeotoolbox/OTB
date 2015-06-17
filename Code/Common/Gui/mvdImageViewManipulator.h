@@ -251,6 +251,9 @@ signals:
   /**
    */
   void ScaleDynamicsRequested( double );
+  /**
+   */
+  void ResetQuantilesRequested( bool );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

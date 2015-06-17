@@ -724,6 +724,10 @@ ImageViewManipulator
       emit ZoomToFullExtentRequested();
       break;
 
+    case Qt::Key_Q:
+      emit ResetQuantilesRequested( modifiers.testFlag( Qt::ShiftModifier ) );
+      break;
+
     default:
       break;
     }

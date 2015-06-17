@@ -363,6 +363,9 @@ private slots:
   /**
    */
   void OnScaleDynamicsRequested( double );
+  /**
+   */
+  void OnResetQuantilesRequested( bool );
 };
 
 }// end namespace 'mvd'

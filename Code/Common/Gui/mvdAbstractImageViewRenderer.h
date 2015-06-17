@@ -169,6 +169,12 @@ public:
 
   /**
    */
+  virtual bool GetLayerDynamics( const StackedLayerModel::KeyType & key,
+				 ParametersType & params,
+				 bool isGlobal ) const =0;
+
+  /**
+   */
   virtual
     AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const =0;
 

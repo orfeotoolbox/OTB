@@ -518,6 +518,14 @@ ImageViewWidget
     SLOT( OnScaleDynamicsRequested( double ) )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( ResetQuantilesRequested( bool ) ),
+    // to:
+    this,
+    SLOT( OnResetQuantilesRequested( bool ) )
+  );
+
   //
   // Renderer -> this
   //
@@ -1223,6 +1231,96 @@ ImageViewWidget
   assert( m_Renderer!=NULL );
 
   m_Renderer->RefreshScene();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnResetQuantilesRequested( bool isGlobal )
+{
+  qDebug() << this << "::OnResetQuantilesRequested(" << isGlobal << ")";
+
+  //
+  // Get layer-stack.
+  StackedLayerModel * layerStack = m_Renderer->GetLayerStack();
+  assert( layerStack!=NULL );
+
+  if( !layerStack->HasCurrent() )
+    return;
+
+  qDebug() << "current:" << FromStdString( layerStack->GetCurrentKey() );
+
+  //
+  // Get dynamics of current layer.
+  assert( m_Renderer!=NULL );
+
+  ParametersType params( 6 );
+
+  if( !m_Renderer->GetLayerDynamics( layerStack->GetCurrentKey(), params, isGlobal ) )
+    return;
+
+  qDebug() << "R: [" << params[ 0 ] << "," << params[ 1 ] << "]";
+  qDebug() << "G: [" << params[ 2 ] << "," << params[ 3 ] << "]";
+  qDebug() << "B: [" << params[ 4 ] << "," << params[ 5 ] << "]";
+
+  //
+  // Apply dynamics to current layer.
+  AbstractLayerModel * layer = layerStack->GetCurrent();
+  assert( layer!=NULL );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
+
+    VectorImageModel * imageModel =
+      qobject_cast< VectorImageModel * >( layer );
+
+    VectorImageSettings & settings = imageModel->GetSettings();
+
+    if( settings.IsGrayscaleActivated() )
+      settings.SetGrayDynamicsParams( params );
+
+    else
+      settings.SetRgbDynamicsParams( params );
+
+    /*
+    HistogramModel * histogram = imageModel->GetHistogramModel();
+    assert( histogram!=NULL );
+
+    // Get min/max pixels.
+    DefaultImageType::PixelType minPx( histogram->GetMinPixel() );
+    DefaultImageType::PixelType maxPx( histogram->GetMaxPixel() );
+
+    // Iterator bounds.
+    CountType begin = -1;
+    CountType end = -1;
+
+    // Shift intensity for each channel.
+    if( RgbwBounds( begin,
+		    end,
+		    settings.IsGrayscaleActivated() ? RGBW_CHANNEL_WHITE : RGBW_CHANNEL_RGB ) )
+      for( CountType i=begin; i<end; ++i )
+	{
+	// Channel.
+	RgbwChannel c = static_cast< RgbwChannel >( i );
+
+	// Band.
+	VectorImageSettings::ChannelVector::value_type b = settings.GetSmartChannel( c );
+
+	// Compute step.
+	DefaultImageType::PixelType::ValueType step =
+	  static_cast< DefaultImageType::PixelType::ValueType >(
+	    delta * ( maxPx[ b ] - minPx[ b ] )
+	);
+
+	// Apply step shift.
+	settings.SetLowIntensity( c, settings.GetLowIntensity( c ) + step );
+	settings.SetHighIntensity( c, settings.GetHighIntensity( c ) + step );
+	}
+    */
+
+    emit ModelUpdated();
+    }
 }
 
 /******************************************************************************/

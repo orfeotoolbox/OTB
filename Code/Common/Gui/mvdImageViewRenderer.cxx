@@ -810,6 +810,36 @@ ImageViewRenderer
 }
 
 /*****************************************************************************/
+bool
+ImageViewRenderer
+::GetLayerDynamics( const StackedLayerModel::KeyType & key,
+		    ParametersType & params,
+		    bool isGlobal ) const
+{
+  assert( !m_GlView.IsNull() );
+
+  // Get actor.
+  otb::GlImageActor::Pointer imageActor(
+    otb::DynamicCast< otb::GlImageActor >(
+      m_GlView->GetActor( key )
+    )
+  );
+
+  if( imageActor.IsNull() )
+    return false;
+
+  // Get dynamics.
+  imageActor->AutoColorAdjustment(
+    params[ 0 ], params[ 1 ],
+    params[ 2 ], params[ 3 ],
+    params[ 4 ], params[ 5 ],
+    isGlobal
+  );
+
+  return true;
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void

@@ -141,6 +141,10 @@ public:
   //
   // AbstractImageViewRenderer overloads.
 
+  virtual bool GetLayerDynamics( const StackedLayerModel::KeyType & key,
+				 ParametersType & params,
+				 bool isGlobal ) const;
+
   virtual const AbstractLayerModel* GetReferenceModel() const;
 
   virtual AbstractLayerModel * GetReferenceModel();
