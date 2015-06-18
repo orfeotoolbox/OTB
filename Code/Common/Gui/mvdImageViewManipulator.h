@@ -260,6 +260,9 @@ signals:
   /**
    */
   void ApplyAllRequested();
+  /**
+   */
+  void SetReferenceRequested();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

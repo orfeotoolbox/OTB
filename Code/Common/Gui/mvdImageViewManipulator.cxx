@@ -748,6 +748,9 @@ ImageViewManipulator
       emit ShaderEffectRequested( EFFECT_NORMAL );
       break;
 
+    case Qt::Key_P:
+      emit SetReferenceRequested();
+
     case Qt::Key_Q:
       emit ResetQuantilesRequested( modifiers.testFlag( Qt::ShiftModifier ) );
       break;

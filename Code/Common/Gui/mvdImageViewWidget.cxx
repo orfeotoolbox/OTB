@@ -542,6 +542,14 @@ ImageViewWidget
     SLOT( OnApplyAllRequested() )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( SetReferenceRequested() ),
+    // to:
+    this,
+    SLOT( OnSetReferenceRequested() )
+  );
+
 
   //
   // Renderer -> this
@@ -1671,6 +1679,24 @@ ImageViewWidget
     {
     assert( false && "Unhandled AbstractLayerModel derived type." );
     }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnSetReferenceRequested()
+{
+  qDebug() << this << "::OnSetReferenceRequested()";
+
+  StackedLayerModel * stackedLayerModel = GetLayerStack();
+
+  if( stackedLayerModel==NULL )
+    return;
+
+  if( !stackedLayerModel->HasCurrent() )
+    return;
+
+  stackedLayerModel->SetReference( stackedLayerModel->GetCurrentKey() );
 }
 
 /******************************************************************************/

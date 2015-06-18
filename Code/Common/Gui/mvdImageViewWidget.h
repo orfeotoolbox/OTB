@@ -372,6 +372,9 @@ private slots:
   /**
    */
   void OnApplyAllRequested();
+  /**
+   */
+  void OnSetReferenceRequested();
 };
 
 }// end namespace 'mvd'
