@@ -41,6 +41,9 @@ else()
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
       ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt 
       ${MUPARSERX_SB_SRC}
+    UPDATE_COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_SOURCE_DIR}/patches/${proj}/mpParserMessageProvider.cpp
+    ${MUPARSERX_SB_SRC}/parser/
     )
   
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
