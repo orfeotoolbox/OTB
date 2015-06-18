@@ -574,7 +574,7 @@ ImageViewManipulator
   //
   else if( modifiers==Qt::MetaModifier )
     {
-    qDebug() << "META+Wheel" << event->delta();
+    // qDebug() << "META+Wheel" << event->delta();
 
     emit ShiftAlphaRequested(
       static_cast< double >(
@@ -584,7 +584,7 @@ ImageViewManipulator
     }
   else if( modifiers==(Qt::MetaModifier | Qt::ShiftModifier) )
     {
-    qDebug() << "META+SHIFT+Wheel" << event->delta();
+    // qDebug() << "META+SHIFT+Wheel" << event->delta();
 
     emit UpdateGammaRequested(
       ImageViewManipulator::Factor(
@@ -596,7 +596,7 @@ ImageViewManipulator
   //
   else if( modifiers==Qt::AltModifier )
     {
-    qDebug() << "ALT+Wheel" << event->delta();
+    // qDebug() << "ALT+Wheel" << event->delta();
 
     emit ResizeShaderRequested(
       ImageViewManipulator::Factor(
@@ -607,7 +607,7 @@ ImageViewManipulator
     }
   else if( modifiers==(Qt::AltModifier | Qt::ShiftModifier) )
     {
-    qDebug() << "ALT+SHIFT+Wheel" << event->delta();
+    // qDebug() << "ALT+SHIFT+Wheel" << event->delta();
 
     emit ReparamShaderRequested(
       ImageViewManipulator::Factor(
@@ -619,7 +619,7 @@ ImageViewManipulator
   //
   else if( modifiers==(Qt::ControlModifier | Qt::AltModifier) )
     {
-    qDebug() << "CTRL+ALT+Wheel" << event->delta();
+    // qDebug() << "CTRL+ALT+Wheel" << event->delta();
 
     emit ShiftDynamicsRequested(
       m_DynamicsShiftGranularity *
@@ -628,7 +628,7 @@ ImageViewManipulator
     }
   else if( modifiers==(Qt::ControlModifier | Qt::AltModifier | Qt::ShiftModifier) )
     {
-    qDebug() << "CTRL+ALT+SHIFT+Wheel" << event->delta();
+    // qDebug() << "CTRL+ALT+SHIFT+Wheel" << event->delta();
 
     emit ScaleDynamicsRequested(
       ImageViewManipulator::Factor(
