@@ -19,7 +19,7 @@
 #define __otbImageToNoDataMaskFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "itkMetaDataDictionary.h"
+#include "itkMetaDataObject.h"
 #include "otbNoDataHelper.h"
 
 namespace otb
