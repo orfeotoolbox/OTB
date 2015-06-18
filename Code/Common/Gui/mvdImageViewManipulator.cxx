@@ -724,6 +724,10 @@ ImageViewManipulator
       emit ZoomToFullExtentRequested();
       break;
 
+    case Qt::Key_A:
+      emit ApplyAllRequested();
+      break;
+
     case Qt::Key_C:
       emit ShaderEffectRequested( EFFECT_CHESSBOARD );
       break;

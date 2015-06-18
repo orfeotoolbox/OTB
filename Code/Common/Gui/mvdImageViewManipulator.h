@@ -257,6 +257,9 @@ signals:
   /**
    */
   void ShaderEffectRequested( Effect );
+  /**
+   */
+  void ApplyAllRequested();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

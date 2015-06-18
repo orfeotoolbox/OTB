@@ -113,7 +113,9 @@ public:
    *
    * \param other
    */
+#if 0
   VectorImageSettings & operator = ( const VectorImageSettings & other );
+#endif
 
   //
   // COLOR COMPOSITION.
@@ -348,6 +350,8 @@ namespace mvd
 {
 
 /*****************************************************************************/
+#if 0
+
 inline
 VectorImageSettings &
 VectorImageSettings
@@ -365,6 +369,8 @@ VectorImageSettings
 
   return *this;
 }
+
+#endif
 
 /*****************************************************************************/
 inline

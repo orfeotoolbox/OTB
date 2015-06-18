@@ -369,6 +369,9 @@ private slots:
   /**
    */
   void OnShaderEffectRequested( Effect );
+  /**
+   */
+  void OnApplyAllRequested();
 };
 
 }// end namespace 'mvd'

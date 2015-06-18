@@ -534,6 +534,15 @@ ImageViewWidget
     SLOT( OnShaderEffectRequested( Effect ) )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( ApplyAllRequested() ),
+    // to:
+    this,
+    SLOT( OnApplyAllRequested() )
+  );
+
+
   //
   // Renderer -> this
   //
@@ -1147,6 +1156,50 @@ ImageViewWidget
   assert( m_Manipulator!=NULL );
 
   m_Manipulator->CenterOn( point );
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnApplyAllRequested()
+{
+  qDebug() << this << "::OnApplyAllRequested()";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * layerStack = m_Renderer->GetLayerStack();
+  assert( layerStack!=NULL );
+
+  AbstractLayerModel * layer = layerStack->GetCurrent();
+  assert( layer!=NULL );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
+
+    VectorImageModel * imageModel =
+      qobject_cast< VectorImageModel * >( layer );
+
+    assert( imageModel!=NULL );
+
+    const VectorImageSettings & settings = imageModel->GetSettings();
+
+    for( StackedLayerModel::ConstIterator it( layerStack->Begin() );
+	 it!=layerStack->End();
+	 ++it )
+      if( it->second!=layer )
+	{
+	if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
+	  {
+	  VectorImageModel * vim =
+	    qobject_cast< VectorImageModel * >( it->second );
+
+	  vim->SetSettings( settings  );
+	  }
+	}
+
+    emit ModelUpdated();
+    }
 }
 
 /******************************************************************************/
