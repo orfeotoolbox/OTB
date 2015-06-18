@@ -526,6 +526,14 @@ ImageViewWidget
     SLOT( OnResetQuantilesRequested( bool ) )
   );
 
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( ShaderEffectRequested( Effect ) ),
+    // to:
+    this,
+    SLOT( OnShaderEffectRequested( Effect ) )
+  );
+
   //
   // Renderer -> this
   //
@@ -1444,81 +1452,6 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
-::OnSelectPreviousLayerRequested()
-{
-  // qDebug() << this << "::OnSelectPreviousLayerRequested()";
-
-  assert( m_Renderer!=NULL );
-
-  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
-  assert( stackedLayerModel!=NULL );
-
-  stackedLayerModel->SelectPrevious();
-
-  updateGL();
-}
-
-/******************************************************************************/
-void
-ImageViewWidget
-::OnSelectNextLayerRequested()
-{
-  // qDebug() << this << "::OnSelectNextLayerRequested()";
-
-  assert( m_Renderer!=NULL );
-
-  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
-  assert( stackedLayerModel!=NULL );
-
-  stackedLayerModel->SelectNext();
-
-  updateGL();
-}
-
-/******************************************************************************/
-void
-ImageViewWidget
-::OnSetProjectionRequired()
-{
-  StackedLayerModel * stackedLayerModel = GetLayerStack();
-
-  if( stackedLayerModel==NULL )
-    return;
-
-
-  const AbstractLayerModel * layer = stackedLayerModel->GetReference();
-  assert( layer!=NULL );
-
-  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
-    {
-    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
-
-    const VectorImageModel * imageModel =
-      qobject_cast< const VectorImageModel * >( layer );
-
-    assert( imageModel!=NULL );
-
-    DefaultImageType::ConstPointer image( imageModel->ToImage() );
-    assert( !image.IsNull() );
-
-    assert( m_Manipulator!=NULL );
-
-    m_Manipulator->SetWkt( image->GetProjectionRef() );
-    m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
-
-    m_Manipulator->SetOrigin( imageModel->GetOrigin() );
-    m_Manipulator->SetSpacing( imageModel->GetSpacing() );
-    m_Manipulator->SetNativeSpacing( imageModel->GetNativeSpacing() );
-    }
-  else
-    {
-    assert( false && "Unhandled AbstractLayerModel derived type." );
-    }
-}
-
-/******************************************************************************/
-void
-ImageViewWidget
 ::OnScaleDynamicsRequested( double factor )
 {
   qDebug() << this << "::OnScaleDynamicsRequested(" << factor << ")";
@@ -1607,6 +1540,113 @@ ImageViewWidget
       settings.SetRgbDynamicsParams( params );
       }
     */
+
+    emit ModelUpdated();
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnSelectPreviousLayerRequested()
+{
+  // qDebug() << this << "::OnSelectPreviousLayerRequested()";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  stackedLayerModel->SelectPrevious();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnSelectNextLayerRequested()
+{
+  // qDebug() << this << "::OnSelectNextLayerRequested()";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  stackedLayerModel->SelectNext();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnSetProjectionRequired()
+{
+  StackedLayerModel * stackedLayerModel = GetLayerStack();
+
+  if( stackedLayerModel==NULL )
+    return;
+
+
+  const AbstractLayerModel * layer = stackedLayerModel->GetReference();
+  assert( layer!=NULL );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
+
+    const VectorImageModel * imageModel =
+      qobject_cast< const VectorImageModel * >( layer );
+
+    assert( imageModel!=NULL );
+
+    DefaultImageType::ConstPointer image( imageModel->ToImage() );
+    assert( !image.IsNull() );
+
+    assert( m_Manipulator!=NULL );
+
+    m_Manipulator->SetWkt( image->GetProjectionRef() );
+    m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
+
+    m_Manipulator->SetOrigin( imageModel->GetOrigin() );
+    m_Manipulator->SetSpacing( imageModel->GetSpacing() );
+    m_Manipulator->SetNativeSpacing( imageModel->GetNativeSpacing() );
+    }
+  else
+    {
+    assert( false && "Unhandled AbstractLayerModel derived type." );
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnShaderEffectRequested( Effect effect )
+{
+  qDebug()
+    << this
+    << "::OnShaderEffectRequested(" << QString( EFFECT_NAME[ effect ] ) << ")";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
+  assert( layer!=NULL );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    assert( layer==qobject_cast< const VectorImageModel * >( layer ) );
+
+    VectorImageModel * imageModel =
+      qobject_cast< VectorImageModel * >( layer );
+
+    assert( imageModel!=NULL );
+
+    imageModel->GetSettings().SetEffect( effect );
 
     emit ModelUpdated();
     }

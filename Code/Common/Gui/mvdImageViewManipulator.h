@@ -254,6 +254,9 @@ signals:
   /**
    */
   void ResetQuantilesRequested( bool );
+  /**
+   */
+  void ShaderEffectRequested( Effect );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

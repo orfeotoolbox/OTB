@@ -366,6 +366,9 @@ private slots:
   /**
    */
   void OnResetQuantilesRequested( bool );
+  /**
+   */
+  void OnShaderEffectRequested( Effect );
 };
 
 }// end namespace 'mvd'

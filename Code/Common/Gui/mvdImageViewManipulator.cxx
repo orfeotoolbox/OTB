@@ -724,8 +724,40 @@ ImageViewManipulator
       emit ZoomToFullExtentRequested();
       break;
 
+    case Qt::Key_C:
+      emit ShaderEffectRequested( EFFECT_CHESSBOARD );
+      break;
+
+    case Qt::Key_G:
+      emit ShaderEffectRequested( EFFECT_GRADIENT );
+      break;
+
+    case Qt::Key_D:
+      emit ShaderEffectRequested( EFFECT_LOCAL_CONTRAST );
+      break;
+
+    case Qt::Key_H:
+      emit ShaderEffectRequested( EFFECT_SWIPE_H );
+      break;
+
+    case Qt::Key_N:
+      emit ShaderEffectRequested( EFFECT_NORMAL );
+      break;
+
     case Qt::Key_Q:
       emit ResetQuantilesRequested( modifiers.testFlag( Qt::ShiftModifier ) );
+      break;
+
+    case Qt::Key_S:
+      emit ShaderEffectRequested( EFFECT_SPECTRAL_ANGLE );
+      break;
+
+    case Qt::Key_T:
+      emit ShaderEffectRequested( EFFECT_LOCAL_TRANSLUCENCY );
+      break;
+
+    case Qt::Key_V:
+      emit ShaderEffectRequested( EFFECT_SWIPE_V );
       break;
 
     default:
