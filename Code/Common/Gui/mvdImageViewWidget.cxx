@@ -735,7 +735,7 @@ ImageViewWidget
 	    << "e:" << extent[ 0 ] << "," << extent[ 1 ];
 #endif // USE_XP_REGION_OPTIM
 
-	  qDebug() << "updateGL(" << in[ 0 ] << "," << in[ 1 ] << ")";
+	  // qDebug() << "updateGL(" << in[ 0 ] << "," << in[ 1 ] << ")";
 
 	  updateGL();
 
@@ -939,7 +939,7 @@ ImageViewWidget
     {
     case ZOOM_TYPE_EXTENT:
     {
-    qDebug() << "ZOOM_TYPE_EXTENT";
+    // qDebug() << "ZOOM_TYPE_EXTENT";
 
     //
     // Calculate center
@@ -994,7 +994,7 @@ ImageViewWidget
 
     case ZOOM_TYPE_FULL:
     {
-    qDebug() << "ZOOM_TYPE_FULL";
+    // qDebug() << "ZOOM_TYPE_FULL";
 
     const AbstractLayerModel * layer = m_Renderer->GetReferenceModel();
     assert( layer!=NULL );
@@ -1022,7 +1022,7 @@ ImageViewWidget
 
     case ZOOM_TYPE_LAYER:
     {
-    qDebug() << "ZOOM_TYPE_LAYER";
+    // qDebug() << "ZOOM_TYPE_LAYER";
 
     assert( GetLayerStack()!=NULL );
 
@@ -1171,7 +1171,7 @@ void
 ImageViewWidget
 ::OnApplyAllRequested()
 {
-  qDebug() << this << "::OnApplyAllRequested()";
+  // qDebug() << this << "::OnApplyAllRequested()";
 
   assert( m_Renderer!=NULL );
 
@@ -1307,7 +1307,7 @@ void
 ImageViewWidget
 ::OnResetQuantilesRequested( bool isGlobal )
 {
-  qDebug() << this << "::OnResetQuantilesRequested(" << isGlobal << ")";
+  // qDebug() << this << "::OnResetQuantilesRequested(" << isGlobal << ")";
 
   //
   // Get layer-stack.
@@ -1317,7 +1317,7 @@ ImageViewWidget
   if( !layerStack->HasCurrent() )
     return;
 
-  qDebug() << "current:" << FromStdString( layerStack->GetCurrentKey() );
+  // qDebug() << "current:" << FromStdString( layerStack->GetCurrentKey() );
 
   //
   // Get dynamics of current layer.
@@ -1328,9 +1328,9 @@ ImageViewWidget
   if( !m_Renderer->GetLayerDynamics( layerStack->GetCurrentKey(), params, isGlobal ) )
     return;
 
-  qDebug() << "R: [" << params[ 0 ] << "," << params[ 1 ] << "]";
-  qDebug() << "G: [" << params[ 2 ] << "," << params[ 3 ] << "]";
-  qDebug() << "B: [" << params[ 4 ] << "," << params[ 5 ] << "]";
+  // qDebug() << "R: [" << params[ 0 ] << "," << params[ 1 ] << "]";
+  // qDebug() << "G: [" << params[ 2 ] << "," << params[ 3 ] << "]";
+  // qDebug() << "B: [" << params[ 4 ] << "," << params[ 5 ] << "]";
 
   //
   // Apply dynamics to current layer.
@@ -1397,7 +1397,7 @@ void
 ImageViewWidget
 ::OnResizeShaderRequested( double factor )
 {
-  qDebug() << this << "::OnResizeShaderRequested(" << factor << ")";
+  // qDebug() << this << "::OnResizeShaderRequested(" << factor << ")";
 
   assert( m_Renderer!=NULL );
 
@@ -1429,7 +1429,7 @@ void
 ImageViewWidget
 ::OnReparamShaderRequested( double factor )
 {
-  qDebug() << this << "::OnReparamShaderRequested(" << factor << ")";
+  // qDebug() << this << "::OnReparamShaderRequested(" << factor << ")";
 
   assert( m_Renderer!=NULL );
 
@@ -1515,7 +1515,7 @@ void
 ImageViewWidget
 ::OnScaleDynamicsRequested( double factor )
 {
-  qDebug() << this << "::OnScaleDynamicsRequested(" << factor << ")";
+  // qDebug() << this << "::OnScaleDynamicsRequested(" << factor << ")";
 
   assert( m_Renderer!=NULL );
 
@@ -1686,7 +1686,7 @@ void
 ImageViewWidget
 ::OnSetReferenceRequested()
 {
-  qDebug() << this << "::OnSetReferenceRequested()";
+  // qDebug() << this << "::OnSetReferenceRequested()";
 
   StackedLayerModel * stackedLayerModel = GetLayerStack();
 
@@ -1704,9 +1704,9 @@ void
 ImageViewWidget
 ::OnShaderEffectRequested( Effect effect )
 {
-  qDebug()
-    << this
-    << "::OnShaderEffectRequested(" << QString( EFFECT_NAME[ effect ] ) << ")";
+  // qDebug()
+  //   << this
+  //   << "::OnShaderEffectRequested(" << QString( EFFECT_NAME[ effect ] ) << ")";
 
   assert( m_Renderer!=NULL );
 
@@ -1736,7 +1736,7 @@ void
 ImageViewWidget
 ::OnShiftAlphaRequested( double delta )
 {
-  qDebug() << this << "::OnShiftAlphaRequested(" << delta << ")";
+  // qDebug() << this << "::OnShiftAlphaRequested(" << delta << ")";
 
   assert( m_Renderer!=NULL );
 
@@ -1764,7 +1764,7 @@ void
 ImageViewWidget
 ::OnShiftDynamicsRequested( double delta )
 {
-  qDebug() << this << "::OnShiftDynamicsRequested(" << delta << ")";
+  // qDebug() << this << "::OnShiftDynamicsRequested(" << delta << ")";
 
   assert( m_Renderer!=NULL );
 
@@ -1897,7 +1897,7 @@ void
 ImageViewWidget
 ::OnUpdateGammaRequested( double factor )
 {
-  qDebug() << this << "::OnUpdateGammaRequested(" << factor << ")";
+  // qDebug() << this << "::OnUpdateGammaRequested(" << factor << ")";
 
   assert( m_Renderer!=NULL );
 
