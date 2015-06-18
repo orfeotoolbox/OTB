@@ -74,8 +74,8 @@ ShaderWidget
 {
   m_UI->setupUi( this );
 
-  for( int i=0; i<ImageSettings::EFFECT_COUNT; ++i )
-    m_UI->effectComboBox->addItem( ImageSettings::EFFECT_NAME[ i ] );
+  for( int i=0; i<EFFECT_COUNT; ++i )
+    m_UI->effectComboBox->addItem( EFFECT_NAME[ i ] );
 
   m_UI->valueLineEdit->setValidator(
     new QDoubleValidator( m_UI->valueLineEdit )
@@ -107,7 +107,7 @@ ShaderWidget
     {
     for( int i=0; i<m_UI->effectComboBox->count(); ++i )
       if( QString::compare( m_UI->effectComboBox->itemText( i ),
-                            ImageSettings::EFFECT_NAME[ settings->GetEffect() ] )==0 )
+                            EFFECT_NAME[ settings->GetEffect() ] )==0 )
         {
         m_UI->effectComboBox->setCurrentIndex( i );
 
@@ -148,13 +148,13 @@ ShaderWidget
   if( !HasSettings() )
     return;
 
-  for( int i=0; i<ImageSettings::EFFECT_COUNT; ++i )
-    if( QString::compare( text, ImageSettings::EFFECT_NAME[ i ] )==0 )
+  for( int i=0; i<EFFECT_COUNT; ++i )
+    if( QString::compare( text, EFFECT_NAME[ i ] )==0 )
       {
       ImageSettings * settings = GetSettings();
       assert( settings!=NULL );
 
-      settings->SetEffect( static_cast< ImageSettings::Effect >( i ) );
+      settings->SetEffect( static_cast< Effect >( i ) );
 
       m_UI->sizeSpinBox->setEnabled( GetSettings()->HasSize() );
       m_UI->valueLineEdit->setEnabled( GetSettings()->HasValue() );

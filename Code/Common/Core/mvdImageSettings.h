@@ -46,7 +46,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+#include "mvdTypes.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -85,28 +85,6 @@ public:
 
   /** */
   typedef double ValueType;
-
-  /**
-   */
-  enum Effect
-  {
-    EFFECT_NONE = -1,
-    //
-    EFFECT_CHESSBOARD = 0,
-    EFFECT_GRADIENT,
-    EFFECT_LOCAL_CONTRAST,
-    EFFECT_LOCAL_TRANSLUCENCY,
-    EFFECT_NORMAL,
-    EFFECT_SPECTRAL_ANGLE,
-    EFFECT_SWIPE_H,
-    EFFECT_SWIPE_V,
-    //
-    EFFECT_COUNT
-  };
-
-  /**
-   */
-  static char const * const  EFFECT_NAME[ EFFECT_COUNT ];
 
 //
 // Public methods.
@@ -328,7 +306,7 @@ ImageSettings
 
 /*****************************************************************************/
 inline
-ImageSettings::Effect
+Effect
 ImageSettings
 ::GetEffect() const
 {

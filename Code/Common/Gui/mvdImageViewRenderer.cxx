@@ -562,16 +562,16 @@ ImageViewRenderer
 
         switch( settings.GetEffect() )
           {
-          case ImageSettings::EFFECT_CHESSBOARD:
+          case EFFECT_CHESSBOARD:
             shader->SetShaderType( otb::SHADER_ALPHA_GRID );
             shader->SetChessboardSize( settings.GetSize() );
             break;
 
-          case ImageSettings::EFFECT_GRADIENT:
+          case EFFECT_GRADIENT:
             shader->SetShaderType( otb::SHADER_GRADIENT );
             break;
 
-          case ImageSettings::EFFECT_LOCAL_CONTRAST:
+          case EFFECT_LOCAL_CONTRAST:
             shader->SetShaderType( otb::SHADER_LOCAL_CONTRAST );
             shader->SetRadius( settings.GetSize() );
             shader->SetLocalContrastRange(
@@ -590,33 +590,33 @@ ImageViewRenderer
             );
             break;
 
-          case ImageSettings::EFFECT_LOCAL_TRANSLUCENCY:
+          case EFFECT_LOCAL_TRANSLUCENCY:
             shader->SetShaderType( otb::SHADER_LOCAL_ALPHA );
             shader->SetRadius( settings.GetValue() );
             break;
 
-          case ImageSettings::EFFECT_NORMAL:
+          case EFFECT_NORMAL:
             shader->SetShaderType( otb::SHADER_STANDARD );
             break;
 
-          case ImageSettings::EFFECT_SPECTRAL_ANGLE:
+          case EFFECT_SPECTRAL_ANGLE:
             shader->SetShaderType( otb::SHADER_SPECTRAL_ANGLE );
             shader->SetRadius( settings.GetSize() );
             shader->SetSpectralAngleRange( settings.GetValue() );
             break;
 
-          case ImageSettings::EFFECT_SWIPE_H:
+          case EFFECT_SWIPE_H:
             shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
             shader->SetVerticalSlider( false );
             break;
 
-          case ImageSettings::EFFECT_SWIPE_V:
+          case EFFECT_SWIPE_V:
             shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
             shader->SetVerticalSlider( true );
             break;
 
           default:
-            assert( false && "Unhandled ImageSettings::Effect value!" );
+            assert( false && "Unhandled mvd::Effect value!" );
             break;
           }
         }

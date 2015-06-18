@@ -689,8 +689,8 @@ ImageViewWidget
       VectorImageModel * imageModel = qobject_cast< VectorImageModel * >( it->second );
       assert( imageModel!=NULL );
 
-      if( imageModel->GetSettings().GetEffect()!=ImageSettings::EFFECT_NONE &&
-	  imageModel->GetSettings().GetEffect()!=ImageSettings::EFFECT_NORMAL )
+      if( imageModel->GetSettings().GetEffect()!=EFFECT_NONE &&
+	  imageModel->GetSettings().GetEffect()!=EFFECT_NORMAL )
 	{
 #if USE_XP_REGION_OPTIM
 	PointType origin;
