@@ -77,7 +77,7 @@ public:
 			    double & minBlue, double & maxBlue,
 			    bool full = true,
 			    unsigned int refSize = 500,
-			    double lcp = 0.002, double hcp = 0.002 );
+			    double lcp = 0.02, double hcp = 0.02 );
 
   const PointType & GetOrigin() const;
 
