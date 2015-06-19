@@ -21,9 +21,17 @@ else()
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj TIFF)
-  
-  ADD_SUPERBUILD_CONFIGURE_VAR(ZLIB_INCLUDE_DIR --with-zlib-include-dir)
-  
+
+  set(TIFF_SB_CONFIG)
+  if(NOT USE_SYSTEM_ZLIB)
+    list(APPEND TIFF_SB_CONFIG "--with-zlib-include-dir=${SB_INSTALL_PREFIX}/include")
+    list(APPEND TIFF_SB_CONFIG "--with-zlib-lib-dir=${SB_INSTALL_PREFIX}/lib")
+  endif()
+  if(NOT USE_SYSTEM_JPEG)
+    list(APPEND TIFF_SB_CONFIG "--with-jpeg-include-dir=${SB_INSTALL_PREFIX}/include")
+    list(APPEND TIFF_SB_CONFIG "--with-jpeg-lib-dir=${SB_INSTALL_PREFIX}/lib")
+  endif()
+
   if(MSVC)
     #is JPEG required for linux also?
     
