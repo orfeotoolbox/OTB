@@ -20,6 +20,7 @@
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkMetaDataObject.h"
+#include "otbMetaDataKey.h"
 #include "otbNoDataHelper.h"
 
 namespace otb
