@@ -73,10 +73,10 @@ namespace mvd
 ImageViewRenderer
 ::ImageViewRenderer( QObject* parent ) :
   AbstractImageViewRenderer( parent ),
-  m_GlView( otb::GlView::New() ),
+  m_GlView( otb::GlView::New() )
 #ifdef _WIN32
 #else // _WIN32
-  m_ReferencePair( NULL, otb::GlActor::Pointer() )
+  ,  m_ReferencePair( NULL, otb::GlActor::Pointer() )
 #endif // _WIN32
   // m_ModelActorPairs(),
 {
@@ -470,7 +470,7 @@ ImageViewRenderer
         const VectorImageSettings & settings =
           vectorImageModel->GetSettings();
 
-        const ImageProperties * properties = 
+        const ImageProperties * properties =
           vectorImageModel->GetProperties();
 
         //
@@ -521,10 +521,10 @@ ImageViewRenderer
           {
           shader->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
           shader->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_WHITE  ) );
-      
+
           shader->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
           shader->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
-      
+
           shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
           shader->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
           }
@@ -532,10 +532,10 @@ ImageViewRenderer
           {
           shader->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_RED ) );
           shader->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_RED  ) );
-      
+
           shader->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_GREEN ) );
           shader->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_GREEN ) );
-      
+
           shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_BLUE ) );
           shader->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_BLUE ) );
           }
@@ -649,7 +649,7 @@ ImageViewRenderer
     m_GlView->ClearActors();
 
   else
-    { 
+    {
       {
       otb::GlView::StringVectorType keys( m_GlView->GetActorsKeys() );
 
