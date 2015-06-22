@@ -400,13 +400,14 @@ MainWindow
     SLOT( CenterOn( const PointType& ) )
   );
 
-  QObject::connect(
-    quicklookManipulator,
-    SIGNAL( RefreshViewRequested() ),
-    // to:
-    m_ImageView,
-    SLOT( updateGL() )
-  );
+  // Not needed anymore becaure already done in ImageViewWidget.
+  // QObject::connect(
+  //   quicklookManipulator,
+  //   SIGNAL( RefreshViewRequested() ),
+  //   // to:
+  //   m_ImageView,
+  //   SLOT( updateGL() )
+  // );
 }
 
 /*****************************************************************************/
@@ -1247,7 +1248,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::on_action_ImportImage_triggered()
+::on_action_OpenImage_triggered()
 {
   //
   // Select filename.
@@ -1892,16 +1893,16 @@ MainWindow
   }
   //
 
-  assert( m_ImageView!=NULL );
+  // assert( m_ImageView!=NULL );
 
-  m_ImageView->updateGL();
+  // m_ImageView->updateGL();
 
   //
 
-  ImageViewWidget * quicklookView = GetQuicklookView();
-  assert( quicklookView!=NULL );
+  // ImageViewWidget * quicklookView = GetQuicklookView();
+  // assert( quicklookView!=NULL );
 
-  quicklookView->updateGL();
+  // quicklookView->updateGL();
 }
 
 /*****************************************************************************/

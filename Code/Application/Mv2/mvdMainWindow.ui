@@ -30,7 +30,7 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_ImportImage"/>
+    <addaction name="action_OpenImage"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -79,7 +79,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="action_ImportImage"/>
+   <addaction name="action_OpenImage"/>
   </widget>
   <widget class="QToolBar" name="m_RenderToolBar">
    <property name="windowTitle">
@@ -108,7 +108,7 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="action_ImportImage">
+  <action name="action_OpenImage">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -117,13 +117,13 @@
      <normaloff>:/icons/action_Open_Icon</normaloff>:/icons/action_Open_Icon</iconset>
    </property>
    <property name="text">
-    <string>&amp;Import image...</string>
+    <string>&amp;Open image(s)...</string>
    </property>
    <property name="iconText">
-    <string>Import image...</string>
+    <string>Open image(s)...</string>
    </property>
    <property name="toolTip">
-    <string>Import image-file.</string>
+    <string>Open image file(s).</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
