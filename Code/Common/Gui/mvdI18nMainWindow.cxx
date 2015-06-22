@@ -41,6 +41,7 @@
 #include "Core/mvdImageImporter.h"
 #include "Core/mvdVectorImageModel.h"
 #include "Gui/mvdAboutDialog.h"
+#include "Gui/mvdKeymapDialog.h"
 #include "Gui/mvdI18nApplication.h"
 #include "Gui/mvdTaskProgressDialog.h"
 
@@ -385,6 +386,16 @@ I18nMainWindow
   AboutDialog aboutDialog( this );
 
   aboutDialog.exec();
+}
+
+/*****************************************************************************/
+void
+I18nMainWindow
+::on_action_Keymap_triggered()
+{
+  KeymapDialog keymapDialog( this );
+
+  keymapDialog.exec();
 }
 
 /*****************************************************************************/
