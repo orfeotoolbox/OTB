@@ -172,6 +172,7 @@ BOUND_NAMES[ BOUND_COUNT ];
 /**
  * Constant naming effect values.
  */
+Monteverdi2_EXPORT
 extern
 char const * const
 EFFECT_NAME[ EFFECT_COUNT ];
@@ -345,7 +346,7 @@ typedef QPair< QString, QString > StringPairType;
 
 /**
  */
-typedef QList< StringPairType > StringPairListType; 
+typedef QList< StringPairType > StringPairListType;
 
 /*******************************************************************************/
 template< typename T >
