@@ -1893,16 +1893,16 @@ MainWindow
   }
   //
 
-  // assert( m_ImageView!=NULL );
+  assert( m_ImageView!=NULL );
 
-  // m_ImageView->updateGL();
+  m_ImageView->updateGL();
 
   //
 
-  // ImageViewWidget * quicklookView = GetQuicklookView();
-  // assert( quicklookView!=NULL );
+  ImageViewWidget * quicklookView = GetQuicklookView();
+  assert( quicklookView!=NULL );
 
-  // quicklookView->updateGL();
+  quicklookView->updateGL();
 }
 
 /*****************************************************************************/
