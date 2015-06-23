@@ -581,6 +581,8 @@ ImageViewManipulator
 	m_AlphaGranularity * event->delta() / ( 8 * MOUSE_WHEEL_STEP_DEGREES )
       ) / 100.0
     );
+
+    emit RefreshViewRequested();
     }
   else if( modifiers==(Qt::MetaModifier | Qt::ShiftModifier) )
     {
@@ -592,6 +594,8 @@ ImageViewManipulator
     	MOUSE_WHEEL_STEP_DEGREES
       )
     );
+
+    emit RefreshViewRequested();
     }
   //
   else if( modifiers==Qt::AltModifier )
@@ -625,6 +629,8 @@ ImageViewManipulator
       m_DynamicsShiftGranularity *
       static_cast< double >( event->delta() / ( 8 * MOUSE_WHEEL_STEP_DEGREES ) )
     );
+
+    emit RefreshViewRequested();
     }
   else if( modifiers==(Qt::ControlModifier | Qt::AltModifier | Qt::ShiftModifier) )
     {
@@ -636,6 +642,8 @@ ImageViewManipulator
 	MOUSE_WHEEL_STEP_DEGREES
       )
     );
+
+    emit RefreshViewRequested();
     }
   //
   else if( modifiers==Qt::NoModifier )
