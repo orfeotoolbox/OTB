@@ -1890,8 +1890,6 @@ ImageViewWidget
     return;
 
   layer->SetVisible( !layer->IsVisible() );
-
-  updateGL();
 }
 
 /******************************************************************************/
