@@ -702,7 +702,7 @@ void
 LayerStackItemModel
 ::OnLayerVisibilityChanged( AbstractLayerModel * layer, bool isVisible )
 {
-  qDebug() << this << "::OnLayerVisibilityChanged(" << layer << "," << isVisible << ")"; 
+  // qDebug() << this << "::OnLayerVisibilityChanged(" << layer << "," << isVisible << ")"; 
 
   assert( m_StackedLayerModel!=NULL );
   assert( m_StackedLayerModel->IndexOf( layer )!=StackedLayerModel::NIL_INDEX );

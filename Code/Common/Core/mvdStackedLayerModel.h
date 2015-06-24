@@ -735,6 +735,9 @@ void
 StackedLayerModel
 ::RotateLayers( int steps )
 {
+  if( IsEmpty() )
+    return;
+
   if( steps>=0 )
     RotateLayerUp( steps % GetCount() );
 
