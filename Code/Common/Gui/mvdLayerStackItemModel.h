@@ -283,6 +283,7 @@ private slots:
   // void OnContentChanged();
   // void OnModelAboutToBeReset();
   // void OnModelReset();
+  void OnLayerAboutToBeDeleted( size_t );
   void OnLayerAdded( size_t );
   void OnLayerDeleted( size_t );
   void OnLayerVisibilityChanged( AbstractLayerModel *, bool );

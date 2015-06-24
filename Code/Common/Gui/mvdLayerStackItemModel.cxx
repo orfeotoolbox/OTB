@@ -185,6 +185,14 @@ LayerStackItemModel
 
     QObject::disconnect(
       m_StackedLayerModel,
+      SIGNAL( LayerAboutToBeDeleted( size_t ) ),
+      // to: 
+      this,
+      SLOT( OnLayerAboutToBeDeleted( size_t ) )
+    );
+
+    QObject::disconnect(
+      m_StackedLayerModel,
       SIGNAL( LayerDeleted( size_t ) ),
       // to: 
       this,
@@ -232,6 +240,14 @@ LayerStackItemModel
     // to: 
     this,
     SLOT( OnLayerAdded( size_t ) )
+  );
+
+  QObject::connect(
+    m_StackedLayerModel,
+    SIGNAL( LayerAboutToBeDeleted( size_t ) ),
+    // to: 
+    this,
+    SLOT( OnLayerAboutToBeDeleted( size_t ) )
   );
 
   QObject::connect(
@@ -664,6 +680,16 @@ LayerStackItemModel
 /*****************************************************************************/
 void
 LayerStackItemModel
+::OnLayerAboutToBeDeleted( size_t index )
+{
+  assert( m_StackedLayerModel!=NULL );
+
+  Disconnect( m_StackedLayerModel->At( index ) );
+}
+
+/*****************************************************************************/
+void
+LayerStackItemModel
 ::OnLayerAdded( size_t index )
 {
   if( !insertRow( index ) )
@@ -682,10 +708,6 @@ void
 LayerStackItemModel
 ::OnLayerDeleted( size_t index )
 {
-  assert( m_StackedLayerModel!=NULL );
-
-  Disconnect( m_StackedLayerModel->At( index ) );
-
 #ifdef _DEBUG
   bool isRowRemoved =
 #endif
