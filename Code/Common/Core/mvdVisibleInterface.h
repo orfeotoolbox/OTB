@@ -110,7 +110,7 @@ protected:
 private:
   /**
    */
-  virtual void virtual_SignalVisibilityChanged( bool ) const;
+  virtual void virtual_SignalVisibilityChanged( bool );
 
 //
 // Private attributes.

@@ -171,6 +171,8 @@ public:
 
   inline bool HasReference() const;
 
+  inline SizeType IndexOf( const AbstractLayerModel * ) const;
+
   inline bool IsEmpty() const;
 
   inline void SetCurrent( SizeType, bool =false );
@@ -600,6 +602,27 @@ StackedLayerModel
 ::GetReferenceIndex() const
 {
   return m_Reference;
+}
+
+
+/*****************************************************************************/
+inline
+StackedLayerModel::SizeType
+StackedLayerModel
+::IndexOf( const AbstractLayerModel * layer ) const
+{
+  KeyType key( KeyOf( layer ) );
+
+  if( key==StackedLayerModel::NIL_KEY )
+    return StackedLayerModel::NIL_INDEX;
+
+  for( KeyVector::size_type i=0;
+       i<m_Keys.size();
+       ++i )
+    if( m_Keys[ i ]==key )
+      return i;
+
+  return StackedLayerModel::NIL_INDEX;
 }
 
 /*****************************************************************************/

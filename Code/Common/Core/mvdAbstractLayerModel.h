@@ -105,7 +105,8 @@ public slots:
 signals:
   /**
    */
-  void VisibilityChanged( bool =true ) const;
+  void VisibilityChanged( bool =true );
+  void VisibilityChanged( AbstractLayerModel *, bool );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -128,7 +129,7 @@ private:
 
   //
   // VisibleInterface overloads.
-  void virtual_SignalVisibilityChanged( bool ) const;
+  void virtual_SignalVisibilityChanged( bool );
 
 //
 // Private attributes.

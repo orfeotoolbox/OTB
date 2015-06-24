@@ -59,6 +59,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class AbstractLayerModel;
 class StackedLayerModel;
 
 /*****************************************************************************/
@@ -255,6 +256,14 @@ protected:
 // Private methods.
 private:
 
+  /**
+   */
+  void Connect( AbstractLayerModel * );
+
+  /**
+   */
+  void Disconnect( AbstractLayerModel * );
+
 
 //
 // Private attributes.
@@ -276,6 +285,7 @@ private slots:
   // void OnModelReset();
   void OnLayerAdded( size_t );
   void OnLayerDeleted( size_t );
+  void OnLayerVisibilityChanged( AbstractLayerModel *, bool );
 };
 
 } // end namespace 'mvd'.

@@ -81,9 +81,10 @@ AbstractLayerModel
 /*******************************************************************************/
 void
 AbstractLayerModel
-::virtual_SignalVisibilityChanged( bool isVisible ) const
+::virtual_SignalVisibilityChanged( bool isVisible )
 {
   emit VisibilityChanged( isVisible );
+  emit VisibilityChanged( this, isVisible );
 }
 
 /*******************************************************************************/

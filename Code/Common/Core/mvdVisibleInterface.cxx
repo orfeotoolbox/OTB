@@ -80,7 +80,7 @@ VisibleInterface
 /*******************************************************************************/
 void
 VisibleInterface
-::virtual_SignalVisibilityChanged( bool ) const
+::virtual_SignalVisibilityChanged( bool )
 {
 }
 

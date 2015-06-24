@@ -116,12 +116,49 @@ LayerStackItemModel
 /*****************************************************************************/
 void
 LayerStackItemModel
+::Connect( AbstractLayerModel * layer )
+{
+  assert( layer!=NULL );
+
+  QObject::connect(
+    layer,
+    SIGNAL( VisibilityChanged( AbstractLayerModel *, bool ) ),
+    // to:*
+    this,
+    SLOT( OnLayerVisibilityChanged( AbstractLayerModel *, bool ) )
+  );
+}
+
+/*****************************************************************************/
+void
+LayerStackItemModel
+::Disconnect( AbstractLayerModel * layer )
+{
+  assert( layer!=NULL );
+
+  QObject::disconnect(
+    layer,
+    SIGNAL( VisibilityChanged( AbstractLayerModel *,  bool ) ),
+    // to:*
+    this,
+    SLOT( OnLayerVisibilityChanged( AbstractLayerModel *, bool ) )
+  );
+}
+
+/*****************************************************************************/
+void
+LayerStackItemModel
 ::SetStack( StackedLayerModel * model )
 {
   // emit layoutAboutToBeChanged();
 
   if( m_StackedLayerModel!=NULL )
     {
+    for( StackedLayerModel::ConstIterator it( m_StackedLayerModel->Begin() );
+         it!=m_StackedLayerModel->End();
+         ++it )
+    Disconnect( it->second );
+
     QObject::disconnect(
       m_StackedLayerModel,
       SIGNAL( ContentAboutToBeReset() ),
@@ -220,6 +257,11 @@ LayerStackItemModel
     this,
     SIGNAL( layoutChanged() )
   );
+
+  for( StackedLayerModel::ConstIterator it( m_StackedLayerModel->Begin() );
+       it!=m_StackedLayerModel->End();
+       ++it )
+    Connect( it->second );
 
   // emit layoutChanged();
 }
@@ -624,7 +666,15 @@ void
 LayerStackItemModel
 ::OnLayerAdded( size_t index )
 {
-  insertRow( index );
+  if( !insertRow( index ) )
+    {
+    assert( false && "QAbstractItemModel::insertRow() failed!" );
+    return;
+    }
+
+  assert( m_StackedLayerModel!=NULL );
+
+  Connect( m_StackedLayerModel->At( index ) );
 }
 
 /*****************************************************************************/
@@ -632,7 +682,40 @@ void
 LayerStackItemModel
 ::OnLayerDeleted( size_t index )
 {
+  assert( m_StackedLayerModel!=NULL );
+
+  Disconnect( m_StackedLayerModel->At( index ) );
+
+#ifdef _DEBUG
+  bool isRowRemoved =
+#endif
+
   removeRow( index );
+
+#ifdef _DEBUG
+  assert( isRowRemoved && "QAbstractItemModel::removeRow() failed!" );
+#endif
+}
+
+/*****************************************************************************/
+void
+LayerStackItemModel
+::OnLayerVisibilityChanged( AbstractLayerModel * layer, bool isVisible )
+{
+  qDebug() << this << "::OnLayerVisibilityChanged(" << layer << "," << isVisible << ")"; 
+
+  assert( m_StackedLayerModel!=NULL );
+  assert( m_StackedLayerModel->IndexOf( layer )!=StackedLayerModel::NIL_INDEX );
+
+  QModelIndex index(
+    createIndex(
+      m_StackedLayerModel->IndexOf( layer ),
+      COLUMN_NAME,
+      layer
+    )
+  );
+
+  emit dataChanged( index, index );
 }
 
 /*****************************************************************************/
