@@ -72,9 +72,13 @@ private:
     SetParameterDescription("outv","Value given in the output mask to pixels that are no data pixels");
     SetDefaultParameterInt("outv",0);
 
-
     AddRAMParameter();
 
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
+    SetDocExampleParameterValue("out", "QB_Toulouse_Ortho_XS_nodatamask.tif uint8");
+    SetDocExampleParameterValue("inv", "255");
+    SetDocExampleParameterValue("outv", "0");
   }
 
   void DoUpdateParameters()
