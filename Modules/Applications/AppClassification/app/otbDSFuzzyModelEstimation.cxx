@@ -166,7 +166,7 @@ private:
     MandatoryOff("optobs");
 
     AddParameter(ParameterType_OutputFilename,"out","Output filename");
-    SetParameterDescription("out","Output model file name (xml file) contains the optimal model to perform informations fusion.");
+    SetParameterDescription("out","Output model file name (xml file) contains the optimal model to perform information fusion.");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("psin", "cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp");

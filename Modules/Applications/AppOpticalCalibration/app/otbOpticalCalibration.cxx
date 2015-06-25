@@ -322,7 +322,7 @@ private:
     AddParameter(ParameterType_InputFilename, "atmo.rsr", "Relative Spectral Response File");
     std::ostringstream oss;
     oss << "Sensor relative spectral response file"<<std::endl;
-    oss << "By default the application gets these informations in the metadata";
+    oss << "By default the application gets this information in the metadata";
     SetParameterDescription("atmo.rsr", oss.str());
     MandatoryOff("atmo.rsr");
 
