@@ -63,7 +63,7 @@ private:
     SetDocSeeAlso("OGRLayerClassifier,ComputeOGRLayersFeaturesStatistics");
     AddDocTag(Tags::Segmentation);
   
-    AddParameter(ParameterType_InputFilename, "inshp", "Name of the input shapefile");
+    AddParameter(ParameterType_InputVectorData, "inshp", "Name of the input shapefile");
     SetParameterDescription("inshp","Name of the input shapefile");
 
     AddParameter(ParameterType_InputFilename, "instats", "XML file containing mean and variance of each feature.");
@@ -121,7 +121,7 @@ private:
 
   void DoExecute()
   {
-	#ifdef OTB_USE_LIBSVM 
+    #ifdef OTB_USE_LIBSVM 
     clock_t tic = clock();
 
     std::string shapefile = GetParameterString("inshp");
@@ -203,9 +203,9 @@ private:
     otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
     
     #else
-	otbAppLogFATAL("Module LIBSVM is not installed. You should consider turning OTB_USE_LIBSVM on during cmake configuration.");
-	#endif
-	
+    otbAppLogFATAL("Module LIBSVM is not installed. You should consider turning OTB_USE_LIBSVM on during cmake configuration.");
+    #endif
+    
     }
 
 };

@@ -70,7 +70,7 @@ private:
 
     AddDocTag(Tags::Vector);
 
-    AddParameter(ParameterType_InputFilename,  "in",   "Input vector dataset");
+    AddParameter(ParameterType_InputVectorData,  "in",   "Input vector dataset");
     SetParameterDescription( "in", "The input vector dataset to be rasterized" );
 
     AddParameter(ParameterType_OutputImage,  "out",   "Ouptut image");
