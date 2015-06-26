@@ -45,7 +45,7 @@ function(create_cpack_config application)
     SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
       "CreateShortCut \\\"$SMPROGRAMS\\\\${application}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}\\\\${application}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\${BATFILE_NAME}\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\${EXEFILE_NAME}\\\"
     ")
-    
+
   else(APPLE)
       set(arch_prefix Darwin)
      if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -112,7 +112,7 @@ function(create_cpack_config application)
 endfunction(create_cpack_config)
 
 
-function(configure_app_package app)
+function(configure_app_package app need_apps)
 
 
   string(TOLOWER ${app} EXECUTABLE_NAME)
@@ -274,16 +274,19 @@ function(configure_app_package app)
 
   ####################### Check otb applications #######################
 
-  file(GLOB OTB_APPS_LIST ${OTB_MODULES_DIR}/../../../otb/applications/otbapp_*${CMAKE_SHARED_LIBRARY_SUFFIX}) # /lib/otb
-  if(NOT OTB_APPS_LIST)
-    message(FATAL_ERROR "No OTB-applications detected")
-  endif()
+  if(need_apps)
+    file(GLOB OTB_APPS_LIST ${OTB_MODULES_DIR}/../../../otb/applications/otbapp_*${CMAKE_SHARED_LIBRARY_SUFFIX}) # /lib/otb
+    if(NOT OTB_APPS_LIST)
+      message(FATAL_ERROR "No OTB-applications detected")
+    endif()
 
-  ## otb apps dir /lib/otb/applications
-  install(
-    DIRECTORY "${OTB_MODULES_DIR}/../../../otb/applications"
-    DESTINATION ${APP_OTBLIBS_DIR}
-    COMPONENT Runtime)
+    ## otb apps dir /lib/otb/applications
+    install(
+      DIRECTORY "${OTB_MODULES_DIR}/../../../otb/applications"
+      DESTINATION ${APP_OTBLIBS_DIR}
+      COMPONENT Runtime)
+
+  endif(need_apps)
 
   ## directories to look for dependencies
   set(SEARCH_DIRS)
@@ -294,6 +297,7 @@ function(configure_app_package app)
 
   ####################### install fixup_bundle code #######################
   ## fixup_bundle code
+  if(need_apps)
   install(
     CODE
     "file(GLOB APP_LIBS \"${CMAKE_INSTALL_PREFIX}/${APP_OTBLIBS_DIR}/applications/otbapp_*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
@@ -303,15 +307,31 @@ function(configure_app_package app)
      fixup_bundle(\"${APP_NAME}\" \"\${APP_LIBS}\" \"${SEARCH_DIRS}\")"
     COMPONENT ${app})
 
+  else(need_apps)
+  install(
+    CODE
+    "file(GLOB APP_LIBS \"${CMAKE_INSTALL_PREFIX}/${APP_QTPLUGINS_DIR}/sqldrivers/${APP_QTSQLITE_FILENAME}\")
+     include(BundleUtilities)
+     set(BU_CHMOD_BUNDLE_ITEMS ON)
+     fixup_bundle(\"${APP_NAME}\" \"\${APP_LIBS}\" \"${SEARCH_DIRS}\")"
+    COMPONENT ${app})
+  endif()
 endfunction(configure_app_package)
 
 
 
 macro(create_monteverdi_application)
 
-  cmake_parse_arguments(APPLICATION  "" "NAME;OUTPUT_NAME;COMPONENT_NAME" "SOURCES;LINK_LIBRARIES" ${ARGN} )
+  cmake_parse_arguments(APPLICATION  "" "NAME;OUTPUT_NAME;COMPONENT_NAME;NEEDS_OTB_APPS" "SOURCES;LINK_LIBRARIES" ${ARGN} )
 
   if(Monteverdi2_USE_CPACK)
+
+    if(NOT DEFINED APPLICATION_NEEDS_OTB_APPS OR APPLICATION_NEEDS_OTB_APPS)
+      set(APPLICATION_NEEDS_OTB_APPS TRUE)
+
+    else()
+      set(APPLICATION_NEEDS_OTB_APPS FALSE)
+    endif()
 
     add_executable(${APPLICATION_NAME}
       WIN32
@@ -334,7 +354,7 @@ macro(create_monteverdi_application)
     set_target_properties(${APPLICATION_NAME} PROPERTIES OUTPUT_NAME ${APPLICATION_OUTPUT_NAME})
     set(EXECUTABLE_NAME ${APPLICATION_OUTPUT_NAME})
   endif()
-  
+
   if(APPLE)
     if(Monteverdi2_USE_CPACK)
       set(MACOS_FILES_DIR "${CMAKE_SOURCE_DIR}/Packaging/MacOS")
@@ -366,7 +386,7 @@ install(
 #############################################################################
 
 if(Monteverdi2_USE_CPACK)
-  configure_app_package(${APPLICATION_COMPONENT_NAME})
+  configure_app_package(${APPLICATION_COMPONENT_NAME} ${APPLICATION_NEEDS_OTB_APPS})
 endif(Monteverdi2_USE_CPACK)
 
 

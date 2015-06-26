@@ -103,4 +103,5 @@ create_monteverdi_application(NAME mv2
   ${QT_QTMAIN_LIBRARY}
   OUTPUT_NAME ${MV2_OUTPUT_NAME}
   COMPONENT_NAME Mv2
+  NEEDS_OTB_APPS FALSE
   )
