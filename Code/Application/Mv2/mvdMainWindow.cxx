@@ -67,6 +67,7 @@
 #include "Gui/mvdFilenameDragAndDropEventFilter.h"
 #include "Gui/mvdHistogramController.h"
 #include "Gui/mvdHistogramWidget.h"
+#include "Gui/mvdKeymapDialog.h"
 #include "Gui/mvdImageViewManipulator.h"
 #include "Gui/mvdImageViewRenderer.h"
 #include "Gui/mvdImageViewWidget.h"
@@ -1245,6 +1246,16 @@ MainWindow
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
+/*****************************************************************************/
+void
+MainWindow
+::on_action_Keymap_triggered()
+{
+  KeymapDialog keymapDialog( this );
+
+  keymapDialog.exec();
+}
+
 /*****************************************************************************/
 void
 MainWindow

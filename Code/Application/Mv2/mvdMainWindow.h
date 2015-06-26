@@ -402,6 +402,13 @@ private:
 //
 // Private slots.
 private slots:
+
+  /**
+   * \brief Qt auto-connected slot which is called when Help/About
+   * menu action is activated.
+   */
+  void on_action_Keymap_triggered();
+
   /**
    * \brief Qt auto-connected slot which is called when 'File/Open
    * image' menu action is triggered.
