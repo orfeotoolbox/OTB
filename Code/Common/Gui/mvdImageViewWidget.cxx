@@ -165,10 +165,10 @@ ImageViewWidget
 
     QObject::disconnect(
       model,
-      SIGNAL( AboutToDeleteLayer( size_t ) ),
+      SIGNAL( LayerAboutToBeDeleted( size_t ) ),
       // from:
       this,
-      SLOT( OnAboutToDeleteLayer( size_t ) )
+      SLOT( LayerAboutToBeDeleted( size_t ) )
     );
 
     QObject::disconnect(
@@ -179,6 +179,7 @@ ImageViewWidget
       SLOT( OnReferenceChanged( size_t ) )
     );
 
+#if 0
     QObject::disconnect(
       model,
       SIGNAL( ContentChanged() ),
@@ -193,6 +194,23 @@ ImageViewWidget
       // from:
       this,
       SLOT( updateGL() )
+    );
+#else
+    QObject::disconnect(
+      model,
+      SIGNAL( ContentChanged() ),
+      // from:
+      this,
+      SLOT( OnContentChanged() )
+    );
+#endif
+
+    QObject::disconnect(
+      model,
+      SIGNAL( ContentReset() ),
+      // from:
+      this,
+      SLOT( OnContentReset() )
     );
 
     QObject::disconnect(
@@ -253,6 +271,7 @@ ImageViewWidget
     SLOT( OnLayerAboutToBeDeleted( size_t ) )
   );
 
+#if 0
   QObject::connect(
     stackedLayerModel,
     SIGNAL( OrderChanged() ),
@@ -261,6 +280,7 @@ ImageViewWidget
     SLOT( updateGL() )
   );
 
+  // Shouldn't UpdateScene() be called before updateGL() !?
   QObject::connect(
     stackedLayerModel,
     SIGNAL( ContentChanged() ),
@@ -268,6 +288,15 @@ ImageViewWidget
     this,
     SLOT( UpdateScene() )
   );
+#else
+  QObject::connect(
+    stackedLayerModel,
+    SIGNAL( ContentChanged() ),
+    // to:
+    this,
+    SLOT( OnContentChanged() )
+  );
+#endif
 
   QObject::connect(
     stackedLayerModel,
@@ -275,6 +304,14 @@ ImageViewWidget
     // to:
     this,
     SLOT( updateGL() )
+  );
+
+  QObject::connect(
+    stackedLayerModel,
+    SIGNAL( ContentReset() ),
+    // to:
+    this,
+    SLOT( OnContentReset() )
   );
 
   QObject::connect(
@@ -1213,9 +1250,33 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
+::OnContentChanged()
+{
+  qDebug() << this << "::OnContentChanged()";
+
+  UpdateScene();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnContentReset()
+{
+  qDebug() << this << "::OnContentReset()";
+
+  UpdateScene();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
 ::OnDeleteAllRequested()
 {
-  // qDebug() << this << "::OnDeleteAllRequested()";
+  qDebug() << this << "::OnDeleteAllRequested()";
 
   assert( m_Renderer!=NULL );
 

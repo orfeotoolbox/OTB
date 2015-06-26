@@ -140,9 +140,13 @@ void
 StackedLayerModel
 ::Clear()
 {
+  bool emitSignal0 = !IsEmpty();
   bool emitSignal1 = !IsEmpty() && m_Current<GetCount();
   bool emitSignal2 = !IsEmpty() && m_Reference<GetCount();
 
+
+  if( emitSignal0 )
+    emit ContentAboutToBeReset();
 
   //
   // Clear current.
@@ -150,7 +154,6 @@ StackedLayerModel
     {
     emit CurrentAboutToBeChanged( StackedLayerModel::NIL_INDEX );
     emit AboutToChangeSelectedLayerModel( KeyType() );
-    emit ContentAboutToBeReset();
     }
 
   m_Current = StackedLayerModel::NIL_INDEX;
@@ -189,7 +192,7 @@ StackedLayerModel
   m_LayerModels.clear();
   m_Keys.clear();
 
-  if( emitSignal1 )
+  if( emitSignal0 )
     emit ContentReset();
 }
 
