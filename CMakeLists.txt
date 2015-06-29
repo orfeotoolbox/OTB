@@ -315,3 +315,61 @@ endif(WIN32 AND Monteverdi2_USE_CPACK)
 #----------------------------------------------------------------------------
 # Setup valgrind option (default hard coded value is ctest is invalid).
 # set(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes --num-callers=50")
+
+if(WIN32 AND CMAKE_CROSSCOMPILING)
+  if(DEFINED MXE_TARGET_DIR)
+    message(STATUS "MXE_TARGET_DIR = ${MXE_TARGET_DIR}")
+    
+    if(MXE_TARGET_DIR MATCHES "i686")
+      set(mxearch x86)
+    elseif(MXE_TARGET_DIR MATCHES "x86_64")
+      set(mxearch x64)
+    endif()
+
+    get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
+    get_filename_component(mxeroot ${mxeroot} PATH)
+
+    file(GLOB pefiles
+      ${CMAKE_INSTALL_PREFIX}/bin/monteverdi2.exe
+      ${CMAKE_INSTALL_PREFIX}/bin/mapla.exe
+      ${CMAKE_INSTALL_PREFIX}/bin/mv2.exe )
+
+    file(WRITE "${CMAKE_BINARY_DIR}/_mingw/CMakeLists.txt"
+      "cmake_minimum_required(VERSION 3.0)
+       include(CMakeParseArguments)
+       set(Monteverdi2_SOURCE_DIR \"${Monteverdi2_SOURCE_DIR}\")
+       set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")
+       set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
+       set(Monteverdi2_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
+       set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
+       set(Monteverdi2_INSTALL_DATA_DIR \"${Monteverdi2_INSTALL_DATA_DIR}\")
+        include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
+        include(${CMAKE_SOURCE_DIR}/CMake/CPackFunctions.cmake)
+        package_mingw(
+        ARCH \"${mxearch}\"
+        MXEROOT \"${mxeroot}\"
+        PEFILES \"${pefiles}\"
+        SEARCHDIRS \"\")")
+
+    add_custom_target(configure-mingw
+      COMMAND ${CMAKE_COMMAND}
+      "${CMAKE_BINARY_DIR}/_mingw"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw")
+
+    add_custom_target(prepare-mingw
+      COMMAND ${CMAKE_COMMAND}
+      "--build" "${CMAKE_BINARY_DIR}/_mingw" "--target" "install"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw"
+      DEPENDS configure-mingw)
+
+    add_custom_target(package-mingw
+      COMMAND ${CMAKE_COMMAND} -E tar cvfz "${CMAKE_BINARY_DIR}/Monteverdi2-MinGW-x86.tar.gz" bin lib share
+      WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}/mingw"
+      DEPENDS prepare-mingw)
+
+  else(DEFINED MXE_TARGET_DIR)
+    message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
+  endif(DEFINED MXE_TARGET_DIR)
+
+endif(WIN32 AND CMAKE_CROSSCOMPILING)
+
