@@ -363,7 +363,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
       DEPENDS configure-mingw)
 
     add_custom_target(package-mingw
-      COMMAND ${CMAKE_COMMAND} -E tar cvfz "${CMAKE_BINARY_DIR}/Monteverdi2-MinGW-x86.tar.gz" bin lib share
+      COMMAND ${CMAKE_COMMAND} -E tar cvfz "${CMAKE_BINARY_DIR}/Monteverdi2-MinGW-${mxearch}.tar.gz" bin lib share
       WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}/mingw"
       DEPENDS prepare-mingw)
 
