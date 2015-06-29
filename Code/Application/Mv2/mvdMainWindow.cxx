@@ -185,6 +185,7 @@ MainWindow
   InitializeStatusBarWidgets();
 
   InitializeRenderToolBar();
+  InitializeShaderToolBar();
 
   assert( m_UI!=NULL );
 }
@@ -937,7 +938,7 @@ MainWindow
 
   {
   m_UI->m_RenderToolBar->addWidget(
-    new QLabel( tr( "Ref.:" ) )
+    new QLabel( tr( "Proj" ) )
   );
 
   QComboBox * comboBox =
@@ -950,15 +951,23 @@ MainWindow
 
   m_UI->m_RenderToolBar->addWidget( comboBox );
   }
+}
 
-  m_UI->m_RenderToolBar->addSeparator();
-
-  {
+/*****************************************************************************/
+void
+MainWindow
+::InitializeShaderToolBar()
+{
   assert( m_ShaderWidget==NULL );
 
-  m_ShaderWidget = new ShaderWidget( m_UI->m_RenderToolBar );
+  {
+  m_UI->m_ShaderToolBar->addWidget(
+    new QLabel( tr( "Layer FX" ) )
+  );
 
-  m_UI->m_RenderToolBar->addWidget( m_ShaderWidget );
+  m_ShaderWidget = new ShaderWidget( m_UI->m_ShaderToolBar );
+
+  m_UI->m_ShaderToolBar->addWidget( m_ShaderWidget );
   }
 }
 

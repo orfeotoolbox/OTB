@@ -258,6 +258,10 @@ private:
 
   /**
    */
+  void InitializeShaderToolBar();
+
+  /**
+   */
   void InitializeStatusBarWidgets();
 
   /**
