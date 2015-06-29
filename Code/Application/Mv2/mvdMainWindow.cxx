@@ -947,7 +947,16 @@ MainWindow
   assert( comboBox!=NULL );
 
   comboBox->setObjectName( "referenceLayerComboBox" );
-  comboBox->setMinimumSize( QSize( 128, 0 ) );
+  comboBox->setMinimumSize(
+    QSize(
+#ifdef _DEBUG
+      116,
+#else
+      128,
+#endif
+      0
+    )
+  );
 
   m_UI->m_RenderToolBar->addWidget( comboBox );
   }
