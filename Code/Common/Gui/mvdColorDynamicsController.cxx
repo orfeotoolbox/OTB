@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program:   Montemitverdi2
+  Program:   Monteverdi2
   Language:  C++
 
 
