@@ -945,6 +945,8 @@ MainWindow
   QComboBox * comboBox =
     new QComboBox( m_UI->m_RenderToolBar );
 
+  comboBox->setToolTip( tr( "Select projection used as reference for the view." ) );
+
   assert( comboBox!=NULL );
 
   comboBox->setObjectName( "referenceLayerComboBox" );
