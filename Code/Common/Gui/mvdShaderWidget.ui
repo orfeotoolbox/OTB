@@ -25,6 +25,9 @@
      <property name="enabled">
       <bool>false</bool>
      </property>
+     <property name="toolTip">
+      <string>Select effect to apply to selected layer.</string>
+     </property>
      <property name="insertPolicy">
       <enum>QComboBox::InsertAlphabetically</enum>
      </property>
@@ -44,6 +47,9 @@
     <widget class="QSpinBox" name="sizeSpinBox">
      <property name="enabled">
       <bool>false</bool>
+     </property>
+     <property name="toolTip">
+      <string>Edit effect-brush size.</string>
      </property>
      <property name="maximum">
       <number>1000000000</number>
@@ -73,6 +79,9 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>Edit effect-parameter value.</string>
      </property>
     </widget>
    </item>
