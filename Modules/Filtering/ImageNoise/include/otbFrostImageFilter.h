@@ -29,18 +29,11 @@ namespace otb
  * \brief Anti-speckle image filter
  *
  * Uses a negative exponential convolution kernel.
- * The output of the filter for pixel p is:
- *      \f$ \hat I_{s}=\sum_{p\in\eta_{p}} m_{p}I_{p} \f$
- *
- * where :   \f$ m_{p}=\frac{KC_{s}^{2}\exp(-KC_{s}^{2}d_{s, p})}{\sum_{p\in\eta_{p}} KC_{s}^{2}\exp(-KC_{s}^{2}d_{s, p})} \f$
- *    and  \f$ d_{s, p}=\sqrt{(i-i_{p})^2+(j-j_{p})^2} \f$
- *
- * \f$ K \f$     : the decrease coefficient
- * \f$ (i, j)\f$ : the coordinates of the pixel inside the region
- * defined by \f$ \eta_{s} \f$
- * \f$ (i_{p}, j_{p})\f$ : the coordinates of the pixels belonging to \f$ \eta_{p} \subset \eta_{s} \f$
- * \f$ C_{s}\f$ : the variation coefficient computed over \f$ \eta_{p}\f$
- *
+ * The kernel is defined as follows:
+ * exp(-A*D), where 
+ * D is the distance from the current pixel to the center pixel
+ * A = k*Ci*Ci  with Ci = VAR[I]/ (E[I]*E[I])
+ * The final result is normalized by the sum of the kernel coefficients.
  *
  * \ingroup OTBImageNoise
  */
@@ -92,9 +85,9 @@ public:
   /** Get the radius used to define the neighborhood for the filter calculation. */
   itkGetConstReferenceMacro(Radius, SizeType);
 
-  /** Set The numbers of view used for the filter calculation. */
+  /** Set the damping factor. */
   itkSetMacro(Deramp, double);
-  /** Get The numbers of view used for the filter calculation. */
+  /** Get the damping factor. */
   itkGetConstReferenceMacro(Deramp, double);
 
   /** To be allowed to use the pipeline method FrostImageFilter needs

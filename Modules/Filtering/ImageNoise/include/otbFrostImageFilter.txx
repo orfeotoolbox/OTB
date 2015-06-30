@@ -38,7 +38,7 @@ template <class TInputImage, class TOutputImage>
 FrostImageFilter<TInputImage, TOutputImage>::FrostImageFilter()
 {
   m_Radius.Fill(1);
-  m_Deramp = 0.1;
+  m_Deramp = 2;
 }
 
 template <class TInputImage, class TOutputImage>
@@ -135,54 +135,66 @@ void FrostImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
     unsigned int neighborhoodSize = bit.Size();
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
+    
     bit.GoToBegin();
+    it.GoToBegin();
 
     while (!bit.IsAtEnd())
       {
       sum  = itk::NumericTraits<InputRealType>::Zero;
       sum2 = itk::NumericTraits<InputRealType>::Zero;
+      
       for (i = 0; i < neighborhoodSize; ++i)
         {
         dPixel = static_cast<double>(bit.GetPixel(i));
         sum += dPixel;
-        sum2 += dPixel * dPixel;
         }
-      Mean   = sum  / double(neighborhoodSize);
-      Variance  = sum2 / double(neighborhoodSize) - Mean * Mean;
-
-      if (Mean == 0)
+      Mean   = sum / static_cast<double>(neighborhoodSize);
+      
+      for (i = 0; i < neighborhoodSize; ++i)
         {
-        Alpha = 0;
+        dPixel = static_cast<double>(bit.GetPixel(i));
+        sum2 += (dPixel-Mean) * (dPixel-Mean);
         }
-      else
-        {
-        Alpha = m_Deramp * Variance / (Mean * Mean);
-        }
+      Variance  = sum2 / double(neighborhoodSize-1);
 
-      NormFilter  = 0.0;
-      FrostFilter = 0.0;
+      const double epsilon = 0.0000000001;
+      if (vcl_abs(Mean) < epsilon)
+      {
+        dPixel = itk::NumericTraits<OutputPixelType>::Zero;
+      }
+      else if (vcl_abs(Variance) < epsilon)
+      {
+		dPixel = Mean;
+      }
+	  else
+	  {
+		  Alpha = m_Deramp * Variance / (Mean * Mean);
 
-      const int rad_x = m_Radius[0];
-      const int rad_y = m_Radius[1];
+		  NormFilter  = 0.0;
+		  FrostFilter = 0.0;
 
-      for (int x = -rad_x; x <= rad_x; ++x)
-        {
-        for (int y = -rad_y; y <= rad_y; ++y)
-          {
-          double Dist = vcl_sqrt(static_cast<double>(x * x + y * y));
-          off[0] = x;
-          off[1] = y;
+		  const int rad_x = m_Radius[0];
+		  const int rad_y = m_Radius[1];
 
-          dPixel = static_cast<double>(bit.GetPixel(off));
+		  for (int x = -rad_x; x <= rad_x; ++x)
+			{
+			for (int y = -rad_y; y <= rad_y; ++y)
+			  {
+			  double Dist = vcl_sqrt(static_cast<double>(x * x + y * y));
+			  off[0] = x;
+			  off[1] = y;
 
-          CoefFilter = Alpha * vcl_exp(-Alpha * Dist);
-          NormFilter += CoefFilter;
-          FrostFilter += (CoefFilter * dPixel);
-          }
-        }
+			  dPixel = static_cast<double>(bit.GetPixel(off));
 
-      if (NormFilter == 0.) dPixel = 0.;
-      else dPixel = FrostFilter / NormFilter;
+			  CoefFilter = vcl_exp(-Alpha * Dist);
+			  NormFilter += CoefFilter;
+			  FrostFilter += (CoefFilter * dPixel);
+			  }
+			}
+
+		  dPixel = FrostFilter / NormFilter;
+	  }
 
       it.Set(static_cast<OutputPixelType>(dPixel));
 
