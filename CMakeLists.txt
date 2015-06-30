@@ -326,6 +326,8 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
       set(mxearch x64)
     endif()
 
+    set(archive_name ${CMAKE_PROJECT_NAME}-MinGW-${mxearch})
+
     get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
     get_filename_component(mxeroot ${mxeroot} PATH)
 
@@ -335,7 +337,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
       ${CMAKE_INSTALL_PREFIX}/bin/mv2.exe )
 
     file(WRITE "${CMAKE_BINARY_DIR}/_mingw/CMakeLists.txt"
-      "cmake_minimum_required(VERSION 3.0)
+      "cmake_minimum_required(VERSION 2.6)
        include(CMakeParseArguments)
        set(Monteverdi2_SOURCE_DIR \"${Monteverdi2_SOURCE_DIR}\")
        set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")
@@ -348,6 +350,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
         package_mingw(
         ARCH \"${mxearch}\"
         MXEROOT \"${mxeroot}\"
+        PREFIX_DIR \"${archive_name}\"
         PEFILES \"${pefiles}\"
         SEARCHDIRS \"\")")
 
@@ -362,11 +365,17 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw"
       DEPENDS configure-mingw)
 
-    add_custom_target(package-mingw
-      COMMAND ${CMAKE_COMMAND} -E tar cvfz "${CMAKE_BINARY_DIR}/Monteverdi2-MinGW-${mxearch}.tar.gz" bin lib share
-      WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}/mingw"
-      DEPENDS prepare-mingw)
-
+    find_program(ZIP_EXECUTABLE zip)
+    
+    if(ZIP_EXECUTABLE)
+      add_custom_target(package-mingw
+        COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
+        WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
+        DEPENDS prepare-mingw)
+    else()
+      message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
+    endif()
+    
   else(DEFINED MXE_TARGET_DIR)
     message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
   endif(DEFINED MXE_TARGET_DIR)
