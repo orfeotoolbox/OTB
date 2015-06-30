@@ -328,6 +328,8 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
 
     set(archive_name ${CMAKE_PROJECT_NAME}-MinGW-${mxearch})
 
+    execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
+        
     get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
     get_filename_component(mxeroot ${mxeroot} PATH)
 
