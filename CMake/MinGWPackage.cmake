@@ -1,17 +1,17 @@
 macro(package_mingw)
-  cmake_parse_arguments(PACKAGE  "" "ARCH;MXEROOT" "SEARCHDIRS;PEFILES" ${ARGN} )
+  cmake_parse_arguments(PACKAGE  "" "PREFIX_DIR;ARCH;MXEROOT" "SEARCHDIRS;PEFILES" ${ARGN} )
 
   ###   ${PACKAGE_EXENAME} #name of executable
   #${PACKAGE_ARCH} #x86/x64
   #${PACKAGE_SEARCHDIRS}
-
-  set(PACKAGE_PREFIX_DIR "mingw")
+  ####set(PACKAGE_PREFIX_DIR "mingw")
+  
   if("${PACKAGE_ARCH}" STREQUAL "x86")
     set(MXE_BIN_DIR "${PACKAGE_MXEROOT}/usr/i686-w64-mingw32.shared/bin")
   elseif("${PACKAGE_ARCH}" STREQUAL "x64")
     set(MXE_BIN_DIR "${PACKAGE_MXEROOT}/usr/x86_64-w64-mingw32.shared/bin")
   endif()
-  
+
   list(APPEND PACKAGE_SEARCHDIRS ${MXE_BIN_DIR})
   list(APPEND PACKAGE_SEARCHDIRS "${MXE_BIN_DIR}/../qt/bin") #Qt
   list(APPEND PACKAGE_SEARCHDIRS "${MXE_BIN_DIR}/../qt/lib") #Qwt
@@ -76,6 +76,14 @@ SET(SYSTEM_DLLS
   OLEAUT32.dll
   COMCTL32.DLL
   WINMM.DLL
+
+  SHELL32.dll
+  WLDAP32.dll
+  OPENGL32.dll
+  GLU32.dll
+  comdlg32.dll
+  IMM32.dll
+  WINMM.dll
   WINSPOOL.DRV)
 
 ## http://www.cmake.org/Wiki/CMakeMacroListOperations
@@ -117,10 +125,12 @@ function(process_deps infile)
           else()
             ##message(STATUS "skipping..${infile}")
           endif()
+          if(NOT EXISTS ${CMAKE_OBJDUMP})
+            message(FATAL_ERROR "objdump executable not found. please check CMAKE_OBJDUMP is set to correct cross compiled executable")
+          endif()  
           execute_process(COMMAND ${CMAKE_OBJDUMP} "-p" "${SEARCHDIR}/${infile}"  OUTPUT_VARIABLE dlldeps)
           string(REGEX MATCHALL "DLL.Name..[A-Za-z(0-9\\.0-9)+_\\-]*" OUT "${dlldeps}")
-          string(REGEX REPLACE "DLL.Name.." "" OUT "${OUT}")
-
+          string(REGEX REPLACE "DLL.Name.." "" OUT "${OUT}")  
           foreach(o ${OUT})
             process_deps(${o})
           endforeach()
@@ -170,16 +180,13 @@ function(install_common)
 
   ####################### install GDAL data #######################
 
-  file(TO_CMAKE_PATH "$ENV{GDAL_DATA}" GDAL_DATA)
-  if(NOT GDAL_DATA)
-    message(FATAL_ERROR "Cannot generate installer without GDAL_DATA : GDAL_DATA")
+  set(GDAL_DATA ${MXE_BIN_DIR}/../share/gdal)
+  if(NOT EXISTS "${GDAL_DATA}/epsg.wkt")
+    message(FATAL_ERROR "Cannot generate package without GDAL_DATA : ${GDAL_DATA}")
   endif()
 
-  # Need to include csv files provided with GDAL that contains some needed EPSG definitions
-  find_path(GDAL_DATA epsg.wkt $ENV{GDAL_DATA})
-
   install(
-    DIRECTORY $ENV{GDAL_DATA}
+    DIRECTORY ${GDAL_DATA}
     DESTINATION ${APP_DATA_DIR})
 
   ####################### Check otb applications #######################
@@ -194,6 +201,5 @@ function(install_common)
     DIRECTORY "${OTB_MODULES_DIR}/../../../otb/applications"
     DESTINATION ${APP_OTBLIBS_DIR})
 
-  
 endfunction()  
 
