@@ -156,3 +156,28 @@ include(SystemCheckup)
 
 # Main external projet : dependencies are included (if needed) in each external project
 include(External_otb)
+
+#check compiler is gnu?
+if(UNIX AND NOT APPLE)
+
+  set(archive_name ${CMAKE_PROJECT_NAME}-${OTB_VERSION_STRING}-Linux64)
+
+  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
+
+  #should we add otbiceviewer.exe?
+  file(GLOB pefiles
+    ${CMAKE_INSTALL_PREFIX}/bin/otbApplicationLaunch*
+    ${CMAKE_INSTALL_PREFIX}/bin/otbTestDriver )
+
+  file(WRITE "${CMAKE_BINARY_DIR}/PACKAGE_OTB/src/CMakeLists.txt"
+    "cmake_minimum_required(VERSION 2.6)
+       include(CMakeParseArguments)
+       set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
+       set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
+        include(${CMAKE_SOURCE_DIR}/CMake/External_package.cmake)
+        superbuild_package(
+        OUTDIR \"${archive_name}\"
+        PEFILES \"${pefiles}\"
+        SEARCHDIRS \"\")")
+
+endif(UNIX AND NOT APPLE)
