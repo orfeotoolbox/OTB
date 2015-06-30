@@ -1789,8 +1789,6 @@ ImageViewWidget
     imageModel->GetSettings().SetEffect( effect );
 
     emit ModelUpdated();
-
-    updateGL();
     }
 }
 
