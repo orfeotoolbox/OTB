@@ -395,3 +395,66 @@ add_subdirectory(Utilities/Doxygen)
 # TODO cleanup
 # Create target to download data from the OTBData group. This must come after
 # all tests have been added that reference the group, so we put it last.
+
+
+if(WIN32 AND CMAKE_CROSSCOMPILING)
+  if(DEFINED MXE_TARGET_DIR)
+
+    file(GLOB pefiles
+      ${CMAKE_INSTALL_PREFIX}/bin/otbApplication*.exe
+      ${CMAKE_INSTALL_PREFIX}/bin/otbTestDriver.exe)
+
+    message(STATUS "MXE_TARGET_DIR = ${MXE_TARGET_DIR}")
+
+    if(MXE_TARGET_DIR MATCHES "i686")
+      set(mxearch x86)
+    elseif(MXE_TARGET_DIR MATCHES "x86_64")
+      set(mxearch x64)
+    endif()
+
+    set(archive_name ${CMAKE_PROJECT_NAME}-MinGW-${mxearch})
+
+    execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
+    
+    get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
+    get_filename_component(mxeroot ${mxeroot} PATH)
+
+    file(WRITE "${CMAKE_BINARY_DIR}/_mingw/CMakeLists.txt"
+      "cmake_minimum_required(VERSION 2.6)
+       include(CMakeParseArguments)
+       set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
+        include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
+        package_mingw(
+        ARCH \"${mxearch}\"
+        MXEROOT \"${mxeroot}\"
+        PREFIX_DIR \"${archive_name}\"
+        PEFILES \"${pefiles}\"
+        SEARCHDIRS \"\")")
+
+    add_custom_target(configure-mingw
+      COMMAND ${CMAKE_COMMAND}
+      "${CMAKE_BINARY_DIR}/_mingw"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw")
+
+    add_custom_target(prepare-mingw
+      COMMAND ${CMAKE_COMMAND}
+      "--build" "${CMAKE_BINARY_DIR}/_mingw" "--target" "install"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw"
+      DEPENDS configure-mingw)
+
+    find_program(ZIP_EXECUTABLE zip)
+    
+    if(ZIP_EXECUTABLE)
+      add_custom_target(package-mingw
+        COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
+        WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
+        DEPENDS prepare-mingw)
+    else()
+      message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
+    endif()
+    
+  else(DEFINED MXE_TARGET_DIR)
+    message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
+  endif(DEFINED MXE_TARGET_DIR)
+
+endif(WIN32 AND CMAKE_CROSSCOMPILING)
