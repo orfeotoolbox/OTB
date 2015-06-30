@@ -419,7 +419,8 @@ MainWindow
 {
   m_UI->menu_View->addAction( m_UI->m_ToolBar->toggleViewAction() );
   m_UI->menu_View->addAction( m_UI->m_RenderToolBar->toggleViewAction() );
-  
+  m_UI->menu_View->addAction( m_UI->m_ShaderToolBar->toggleViewAction() );
+
   m_UI->menu_View->addSeparator();
 
   m_UI->menu_View->addAction( m_ColorSetupDock->toggleViewAction() );
