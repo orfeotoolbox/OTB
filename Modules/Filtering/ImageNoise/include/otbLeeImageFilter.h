@@ -34,7 +34,7 @@ namespace otb
 R=I*W+E[I]*(1-W), where
 W=1-Cu*Cu/(Ci*Ci)
 Cu = 1/sqrt(nb of look)
-Ci = sqrt(VAR[i])/E[I]
+Ci = sqrt(VAR[I])/E[I]
 
  *
  *

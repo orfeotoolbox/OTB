@@ -28,7 +28,7 @@ namespace otb
 /** \class KuanImageFilter
  * \brief Anti-speckle image filter
  *
- * This class implements Gamma MAP filter for despeckleing of SAR
+ * This class implements Kuan filter for despeckleing of SAR
  * images. 
  *
  *
