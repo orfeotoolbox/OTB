@@ -160,23 +160,25 @@ include(External_otb)
 #check compiler is gnu?
 if(UNIX AND NOT APPLE)
 
+#  include(External_package)
   set(archive_name ${CMAKE_PROJECT_NAME}-${OTB_VERSION_STRING}-Linux64)
 
   execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
-
+  execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/PACKAGE_OTB/src/")
   #should we add otbiceviewer.exe?
   file(GLOB pefiles
     ${CMAKE_INSTALL_PREFIX}/bin/otbApplicationLaunch*
     ${CMAKE_INSTALL_PREFIX}/bin/otbTestDriver )
 
-  file(WRITE "${CMAKE_BINARY_DIR}/PACKAGE_OTB/src/CMakeLists.txt"
+  file(WRITE "${CMAKE_BINARY_DIR}/PACKAGE_OTB/src/PACKAGE_OTB/CMakeLists.txt"
     "cmake_minimum_required(VERSION 2.6)
        include(CMakeParseArguments)
        set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
-       set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
-        include(${CMAKE_SOURCE_DIR}/CMake/External_package.cmake)
+       set(CMAKE_INSTALL_PREFIX \"${SB_INSTALL_PREFIX}\")
+        include(${CMAKE_SOURCE_DIR}/CMake/Package_Macro.cmake)
         superbuild_package(
         OUTDIR \"${archive_name}\"
+        INSTALLDIR \"${SB_INSTALL_PREFIX}\"
         PEFILES \"${pefiles}\"
         SEARCHDIRS \"\")")
 
