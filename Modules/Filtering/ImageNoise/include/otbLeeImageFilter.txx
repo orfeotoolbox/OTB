@@ -102,7 +102,6 @@ void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
   itk::ConstNeighborhoodIterator<InputImageType> bit;
   itk::ImageRegionIterator<OutputImageType>      it;
 
-  // Allocate output
   typename OutputImageType::Pointer     output = this->GetOutput();
   typename InputImageType::ConstPointer input  = this->GetInput();
 
@@ -120,11 +119,10 @@ void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
   InputRealType sum;
   InputRealType sum2;
 
-  double Cr2, Cv2, E_I, I, Var_I, dPixel;
+  double Ci2, Cu2, w, E_I, I, Var_I, dPixel;
 
   //Compute the ratio using the number of looks
-  Cv2 = 1. / (vcl_sqrt(m_NbLooks));
-  Cv2 *= Cv2;
+  Cu2 = 1.0/m_NbLooks;
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
@@ -134,39 +132,60 @@ void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
     const unsigned int neighborhoodSize = bit.Size();
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
+    
     bit.GoToBegin();
+	it.GoToBegin();
+
 
     while (!bit.IsAtEnd())
       {
       sum = itk::NumericTraits<InputRealType>::Zero;
       sum2 = itk::NumericTraits<InputRealType>::Zero;
+      
       //Parcours du voisinage
       for (i = 0; i < neighborhoodSize; ++i)
         {
         dPixel = static_cast<double>(bit.GetPixel(i));
         sum += dPixel;
-        sum2 += dPixel * dPixel;
         }
       E_I   = sum / static_cast<double>(neighborhoodSize);
-      Var_I = sum2 / static_cast<double>(neighborhoodSize) - E_I * E_I;
+      
+      for (i = 0; i < neighborhoodSize; ++i)
+        {
+        dPixel = static_cast<double>(bit.GetPixel(i));
+        sum2 += (dPixel-E_I) * (dPixel-E_I);
+        }
+      Var_I = sum2 / static_cast<double>(neighborhoodSize -1);
+      
       I = static_cast<double>(bit.GetCenterPixel());
+      
+      Ci2    = Var_I / (E_I * E_I);
 
       const double epsilon = 0.0000000001;
       if (vcl_abs(E_I) < epsilon)
-        {
+      {
         dPixel = itk::NumericTraits<OutputPixelType>::Zero;
-        }
+      }
+      else if (vcl_abs(Var_I) < epsilon)
+      {
+		dPixel = E_I;
+      }
+      else if (Ci2 < Cu2)
+      {
+		dPixel = E_I;
+      }
       else
-        {
-        Cr2    = Var_I / (E_I * E_I);
-        dPixel = E_I + ((I - E_I) * (Cr2)) / (Cr2 + Cv2);
-
-        }
-      // get the mean value
+      {
+		w = 1 - Cu2 / Ci2;
+		dPixel = I*w + E_I*(1-w);
+      }
+      
+      // set the weighted value
       it.Set(static_cast<OutputPixelType>(dPixel));
 
       ++bit;
       ++it;
+      
       progress.CompletedPixel();
       }
     }

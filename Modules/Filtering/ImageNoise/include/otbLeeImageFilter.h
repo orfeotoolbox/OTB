@@ -29,13 +29,13 @@ namespace otb
  * \brief Anti-speckle image filter
  *
  * This class implements Lee's filter for despeckleing of SAR
- * images. The estimated reflectivity \f$R\f$ is computed as follows:
+ * images. The estimated reflectivity R is computed as follows:
 
-\f[R = E[I] + b(I-E[I]) \f] with
-\f$ b = C^2_r / ( C^2_r + C^2_v )\f$ and \f$C_v =
-\frac{1}{\sqrt{L}}\f$,  where
-\f$L\f$ the image number of looks and
-\f$C_r = \frac{\sqrt{Var(I)}}{E[I]} \f$ and  \f$Var(I) = E[I^2] - E[I]^2\f$.
+R=I*W+E[I]*(1-W), where
+W=1-Cu*Cu/(Ci*Ci)
+Cu = 1/sqrt(nb of look)
+Ci = sqrt(VAR[i])/E[I]
+
  *
  *
  * \ingroup OTBImageNoise
