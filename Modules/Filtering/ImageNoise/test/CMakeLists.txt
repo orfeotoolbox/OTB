@@ -29,14 +29,13 @@ otb_add_test(NAME bfTvFiltreLee1CanalPoupees COMMAND otbImageNoiseTestDriver
   ${TEMP}/bfFiltreLee_05_05_04.tif
   05 05 4.0)
 
-
 otb_add_test(NAME bfTvFiltreLee COMMAND otbImageNoiseTestDriver
-  --compare-image ${EPSILON_7}  ${BASELINE}/GomaLee.tif 
-  ${TEMP}/bfFiltreLee_02_02_12.tif
+  --compare-image ${EPSILON_7}  ${BASELINE}/bfFiltreLee_05_05_12.tif
+  ${TEMP}/bfFiltreLee_05_05_12.tif
   otbLeeFilter
   ${INPUTDATA}/GomaAvant.png    #poupees.hdr
-  ${TEMP}/bfFiltreLee_02_02_12.tif
-  02 02 12.0)
+  ${TEMP}/bfFiltreLee_05_05_12.tif
+  05 05 12.0)
 
 otb_add_test(NAME bfTuFrostFilterNew COMMAND otbImageNoiseTestDriver
   otbFrostFilterNew)
