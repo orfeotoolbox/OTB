@@ -5,6 +5,7 @@ otbImageNoiseTestDriver.cxx
 otbFrostFilter.cxx
 otbLeeFilter.cxx
 otbGammaMAPFilter.cxx
+otbKuanFilter.cxx
 otbFrostFilterNew.cxx
 )
 
@@ -45,6 +46,14 @@ otb_add_test(NAME bfTvFiltreGammaMAP COMMAND otbImageNoiseTestDriver
   otbGammaMAPFilter
   ${INPUTDATA}/GomaAvant.png    #poupees.hdr
   ${TEMP}/bfFiltreGammaMAP_05_05_12.tif
+  05 05 12.0)  
+  
+otb_add_test(NAME bfTvFiltreKuan COMMAND otbImageNoiseTestDriver
+  --compare-image ${EPSILON_7}  ${BASELINE}/bfFiltreKuan_05_05_12.tif
+  ${TEMP}/bfFiltreKuan_05_05_12.tif
+  otbKuanFilter
+  ${INPUTDATA}/GomaAvant.png    #poupees.hdr
+  ${TEMP}/bfFiltreKuan_05_05_12.tif
   05 05 12.0)  
   
 
