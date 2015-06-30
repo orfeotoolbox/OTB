@@ -271,7 +271,6 @@ ImageViewWidget
     SLOT( OnLayerAboutToBeDeleted( size_t ) )
   );
 
-#if 0
   QObject::connect(
     stackedLayerModel,
     SIGNAL( OrderChanged() ),
@@ -280,13 +279,21 @@ ImageViewWidget
     SLOT( updateGL() )
   );
 
-  // Shouldn't UpdateScene() be called before updateGL() !?
+#if 0
   QObject::connect(
     stackedLayerModel,
     SIGNAL( ContentChanged() ),
     // to:
     this,
     SLOT( UpdateScene() )
+  );
+
+  QObject::connect(
+    stackedLayerModel,
+    SIGNAL( ContentChanged() ),
+    // to:
+    this,
+    SLOT( updateGL() )
   );
 #else
   QObject::connect(
@@ -297,14 +304,6 @@ ImageViewWidget
     SLOT( OnContentChanged() )
   );
 #endif
-
-  QObject::connect(
-    stackedLayerModel,
-    SIGNAL( ContentChanged() ),
-    // to:
-    this,
-    SLOT( updateGL() )
-  );
 
   QObject::connect(
     stackedLayerModel,
