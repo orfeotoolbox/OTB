@@ -322,16 +322,18 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
     
     if(MXE_TARGET_DIR MATCHES "i686")
       set(mxearch x86)
+      set(archive_name ${CMAKE_PROJECT_NAME}-${Monteverdi2_VERSION_STRING}-win32)
     elseif(MXE_TARGET_DIR MATCHES "x86_64")
       set(mxearch x64)
+      set(archive_name ${CMAKE_PROJECT_NAME}-${Monteverdi2_VERSION_STRING}-win64)
     endif()
-
-    set(archive_name ${CMAKE_PROJECT_NAME}-MinGW-${mxearch})
 
     execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
         
     get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
     get_filename_component(mxeroot ${mxeroot} PATH)
+
+    #should we add otbiceviewer.exe?
 
     file(GLOB pefiles
       ${CMAKE_INSTALL_PREFIX}/bin/monteverdi2.exe
