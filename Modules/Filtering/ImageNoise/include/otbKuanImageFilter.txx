@@ -119,11 +119,10 @@ void KuanImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
   InputRealType sum;
   InputRealType sum2;
 
-  double Ci, Ci2, Cu, Cu2, w, E_I, I, Var_I, dPixel, alpha, b, d, Cmax;
+  double  Ci2, Cu2, w, E_I, I, Var_I, dPixel;
 
   //Compute the ratio using the number of looks
   Cu2 = 1.0/m_NbLooks;
-  Cu = vcl_sqrt(Cu2);
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
@@ -161,7 +160,6 @@ void KuanImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
       I = static_cast<double>(bit.GetCenterPixel());
       
       Ci2 = Var_I / (E_I * E_I);
-      Ci  = vcl_sqrt(Ci2);
 
       const double epsilon = 0.0000000001;
       if (vcl_abs(E_I) < epsilon)

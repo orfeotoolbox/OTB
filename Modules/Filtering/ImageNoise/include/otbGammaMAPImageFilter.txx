@@ -119,7 +119,7 @@ void GammaMAPImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
   InputRealType sum;
   InputRealType sum2;
 
-  double Ci, Ci2, Cu, Cu2, w, E_I, I, Var_I, dPixel, alpha, b, d, Cmax;
+  double Ci, Ci2, Cu, Cu2, E_I, I, Var_I, dPixel, alpha, b, d, Cmax;
 
   //Compute the ratio using the number of looks
   Cu2 = 1.0/m_NbLooks;
