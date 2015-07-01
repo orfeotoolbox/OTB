@@ -178,7 +178,7 @@ void GammaMAPImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
       }
       else
       {
-        Cmax = vcl_sqrt(2) * Cu;
+        Cmax = vcl_sqrt(2.0) * Cu;
       
         if (Ci < Cmax) 
         {
