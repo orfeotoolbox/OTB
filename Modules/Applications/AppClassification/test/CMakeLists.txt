@@ -1,6 +1,14 @@
 otb_module_test()
 #----------- ComputeOGRLayersFeaturesStatistics TESTS ----------------
-
+otb_test_application(NAME apTvClComputeOGRLayersFeaturesStatistics
+                     APP  ComputeOGRLayersFeaturesStatistics
+                     OPTIONS -inshp ${INPUTDATA}/Classification/apTvClLabeledVector.shp
+                             -feat meanB0 meanB1 meanB2 meanB3 varB0 varB1 varB2 varB3
+                             -outstats ${TEMP}/apTvClComputeOGRLayersFeaturesStatistics.xml
+                     VALID   --compare-ascii ${NOTOL}
+                             ${OTBAPP_BASELINE_FILES}/apTvClComputeOGRLayersFeaturesStatistics.xml
+                             ${TEMP}/apTvClComputeOGRLayersFeaturesStatistics.xml)
+                             
 #----------- SOMClassification TESTS ----------------
 otb_test_application(NAME apTvClSOMClassificationSmall
                      APP  SOMClassification
@@ -302,6 +310,17 @@ set_tests_properties(apTvClImageSVMClassifierQB123_1 PROPERTIES DEPENDS apTvClTr
 endif()
 
 #----------- TrainOGRLayersClassifier TESTS ----------------
+otb_test_application(NAME apTvClTrainOGRLayersClassifier
+                     APP  TrainOGRLayersClassifier
+                     OPTIONS -inshp ${INPUTDATA}/Classification/apTvClLabeledVector.shp
+                             -feat meanB0 meanB1 meanB2 meanB3 varB0 varB1 varB2 varB3
+                             -instats ${TEMP}/apTvClComputeOGRLayersFeaturesStatistics.xml
+                             -outsvm ${TEMP}/apTvClModel.svm
+                     VALID   --compare-ascii ${NOTOL}
+                             ${OTBAPP_BASELINE_FILES}/apTvClModel.svm
+                             ${TEMP}/apTvClModel.svm)
+
+set_tests_properties(apTvClTrainOGRLayersClassifier PROPERTIES DEPENDS apTvClComputeOGRLayersFeaturesStatistics) 
 
 #----------- ComputeConfusionMatrix TESTS ----------------
 otb_test_application(NAME apTvComputeConfusionMatrixV
@@ -481,95 +500,95 @@ otb_test_application(NAME apTvFusionOfClassificationsMV2Inputs
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/NDVI.TIF}
-                			 -vd LARGEINPUT{DEMPSTER-SHAFER/wrongroads.shp}
-                			 -expr  "(b1 > 0.4)"
-  						     -field "NONDVI"
-                			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr.shp)
+                             -vd LARGEINPUT{DEMPSTER-SHAFER/wrongroads.shp}
+                             -expr  "(b1 > 0.4)"
+                             -field "NONDVI"
+                             -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr.shp)
 
 # FIXME cascade dependencies to largeinput repository
 if(OTB_DATA_USE_LARGEINPUT)
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/SpectralAngleRoad.TIF}
-                			 -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_RoadExtractionApplication.shp
-                			 -expr  "(b1 > 0.25)"
-  						     -field "ROADSA"
-                			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication.shp)
+                             -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_RoadExtractionApplication.shp
+                             -expr  "(b1 > 0.25)"
+                             -field "ROADSA"
+                             -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication.shp)
 
 set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_RoadExtractionApplication)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/SpectralAngleRoad.TIF}
-                			 -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr.shp
-                			 -expr  "(b1 > 0.25)"
-  						     -field "ROADSA"
-                			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr.shp)
+                             -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr.shp
+                             -expr  "(b1 > 0.25)"
+                             -field "ROADSA"
+                             -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr.shp)
 
 set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/BUILDINGS.TIF}
-                			 -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr.shp
-                			 -expr  "(b1 == 0)"
-  						     -field "NOBUIL"
-                			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
-                     VALID	 --compare-ogr 0.0
-                     		 ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
-                   			 ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp)
+                             -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr.shp
+                             -expr  "(b1 == 0)"
+                             -field "NOBUIL"
+                             -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
+                     VALID   --compare-ogr 0.0
+                             ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
+                             ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp)
 
 set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_wr)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_RoadExtractionApplication
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/NDVI.TIF}
-                			 -vd LARGEINPUT{DEMPSTER-SHAFER/road_extraction.shp}
-                			 -expr  "(b1 > 0.4)"
-  						     -field "NONDVI"
-                			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_RoadExtractionApplication.shp)
+                             -vd LARGEINPUT{DEMPSTER-SHAFER/road_extraction.shp}
+                             -expr  "(b1 > 0.4)"
+                             -field "NONDVI"
+                             -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_RoadExtractionApplication.shp)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_gt
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/NDVI.TIF}
-                			 -vd LARGEINPUT{DEMPSTER-SHAFER/roads_ground_truth.shp}
-                			 -expr  "(b1 > 0.4)"
-  						     -field NONDVI
-                			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage.shp)
+                             -vd LARGEINPUT{DEMPSTER-SHAFER/roads_ground_truth.shp}
+                             -expr  "(b1 > 0.4)"
+                             -field NONDVI
+                             -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage.shp)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/SpectralAngleRoad.TIF}
-                			 -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage.shp
-                			 -expr  "(b1 > 0.25)"
-  						     -field "ROADSA"
-                			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt.shp)
+                             -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage.shp
+                             -expr  "(b1 > 0.25)"
+                             -field "ROADSA"
+                             -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt.shp)
 
 set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_gt)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/BUILDINGS.TIF}
-                			 -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt.shp
-                			 -expr  "(b1 == 0)"
-  						     -field "NOBUIL"
-                			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
-                     VALID	 --compare-ogr 0.0
-                     		 ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
-                   			 ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp)
+                             -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt.shp
+                             -expr  "(b1 == 0)"
+                             -field "NOBUIL"
+                             -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
+                     VALID   --compare-ogr 0.0
+                             ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
+                             ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp)
 
 set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt) 
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/BUILDINGS.TIF}
-                			 -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication.shp
-                			 -expr  "(b1 == 0)"
-  						     -field "NOBUIL"
-                			 -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp
-                     VALID	 --compare-ogr 0.0
-                     		 ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp
-                   			 ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp)
+                             -vd ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication.shp
+                             -expr  "(b1 == 0)"
+                             -field "NOBUIL"
+                             -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp
+                     VALID   --compare-ogr 0.0
+                             ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp
+                             ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp)
 
 set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication) 
 endif()
@@ -703,24 +722,24 @@ endif()
 otb_test_application(NAME apTvCdbDSFuzzyModelEstimation_LI_autoInit
                      APP  DSFuzzyModelEstimation
                      OPTIONS -psin ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
-                		     -nsin ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
-                		     -belsup "ROADSA"
-                		     -plasup "NONDVI" "ROADSA" "NOBUIL"
-                		     -desclist "NONDVI" "ROADSA" "NOBUIL"
-                		     -maxnbit 4
-                		     -optobs true
-                		     -out ${TEMP}/apTvCdbDSFuzzyModelEstimatorOutput_LI_autoInit.xml)
+                             -nsin ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
+                             -belsup "ROADSA"
+                             -plasup "NONDVI" "ROADSA" "NOBUIL"
+                             -desclist "NONDVI" "ROADSA" "NOBUIL"
+                             -maxnbit 4
+                             -optobs true
+                             -out ${TEMP}/apTvCdbDSFuzzyModelEstimatorOutput_LI_autoInit.xml)
 
 otb_test_application(NAME apTvCdbDSFuzzyModelEstimation_LI
                      APP  DSFuzzyModelEstimation
                      OPTIONS -psin ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
-                		     -nsin ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
-                		     -belsup "ROADSA"
-                		     -plasup "NONDVI" "ROADSA" "NOBUIL"
-                		     -initmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel_Init.xml
-                		     -maxnbit 4
-                		     -optobs true
-                		     -out ${TEMP}/apTvCdbDSFuzzyModelEstimatorOutput_LI.xml)
+                             -nsin ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
+                             -belsup "ROADSA"
+                             -plasup "NONDVI" "ROADSA" "NOBUIL"
+                             -initmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel_Init.xml
+                             -maxnbit 4
+                             -optobs true
+                             -out ${TEMP}/apTvCdbDSFuzzyModelEstimatorOutput_LI.xml)
 
 
 #----------- ClassificationMapRegularization TESTS ----------------
@@ -773,30 +792,30 @@ otb_test_application(NAME apTvClComputeImagesStatisticsQB123
 otb_test_application(NAME cdbTvVectorDataDSValidationGroundTruth_LI
                      APP  VectorDataDSValidation
                      OPTIONS -in ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
-                		     -belsup "ROADSA"
-                		     -plasup "NONDVI" "ROADSA" "NOBUIL"
-                		     -descmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel.xml
-                		     -out ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_gt.shp
-					VALID	 --compare-ogr 0.0
-							 ${OTBAPP_BASELINE_FILES}/cdbTvVectorDataDSValidationOutpout_LI_gt.shp
-							 ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_gt.shp)
+                             -belsup "ROADSA"
+                             -plasup "NONDVI" "ROADSA" "NOBUIL"
+                             -descmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel.xml
+                             -out ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_gt.shp
+                    VALID    --compare-ogr 0.0
+                             ${OTBAPP_BASELINE_FILES}/cdbTvVectorDataDSValidationOutpout_LI_gt.shp
+                             ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_gt.shp)
 
 otb_test_application(NAME apTvCdbVectorDataDSValidationRoadExtractionApplication_LI
                      APP  VectorDataDSValidation
                      OPTIONS -in ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp
-                		     -belsup "ROADSA"
-                		     -plasup "NONDVI" "ROADSA" "NOBUIL"
-                		     -descmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel.xml
-                		     -out ${TEMP}/apTvCdbVectorDataDSValidationOutpout_LI_RoadExtractionApplication.shp)
+                             -belsup "ROADSA"
+                             -plasup "NONDVI" "ROADSA" "NOBUIL"
+                             -descmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel.xml
+                             -out ${TEMP}/apTvCdbVectorDataDSValidationOutpout_LI_RoadExtractionApplication.shp)
 
 otb_test_application(NAME cdbTvVectorDataDSValidationWrongRoads_LI
                      APP  VectorDataDSValidation
                      OPTIONS -in ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
-                		     -belsup "ROADSA"
-                		     -plasup "NONDVI" "ROADSA" "NOBUIL"
-                		     -descmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel.xml
-                		     -out ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp
-					VALID	 --compare-ogr 0.0
-							 ${OTBAPP_BASELINE_FILES}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp
-							 ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp)
+                             -belsup "ROADSA"
+                             -plasup "NONDVI" "ROADSA" "NOBUIL"
+                             -descmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel.xml
+                             -out ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp
+                    VALID    --compare-ogr 0.0
+                             ${OTBAPP_BASELINE_FILES}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp
+                             ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp)
 
