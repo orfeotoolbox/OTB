@@ -12,13 +12,13 @@ if(USE_SYSTEM_GDAL)
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using GDAL SuperBuild version")
-  
+
   # declare dependencies
   set(${proj}_DEPENDENCIES TIFF GEOTIFF PNG JPEG OPENJPEG SQLITE GEOS ZLIB EXPAT LIBKML CURL)
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj GDAL)
-  
+
   ADD_SUPERBUILD_CONFIGURE_VAR(TIFF_ROOT     --with-libtiff)
   ADD_SUPERBUILD_CONFIGURE_VAR(GEOTIFF_ROOT  --with-geotiff)
   ADD_SUPERBUILD_CONFIGURE_VAR(PNG_ROOT      --with-png)
@@ -28,13 +28,13 @@ else()
   ADD_SUPERBUILD_CONFIGURE_VAR(ZLIB_ROOT     --with-libz)
   ADD_SUPERBUILD_CONFIGURE_VAR(EXPAT_ROOT    --with-expat)
   ADD_SUPERBUILD_CONFIGURE_VAR(LIBKML_ROOT   --with-libkml)
-  ADD_SUPERBUILD_CONFIGURE_VAR(CURL_ROOT     --with-curl)
-  if(MSVC)
-    ADD_SUPERBUILD_CONFIGURE_VAR(GEOS_ROOT     --with-geos)
-  else()
+  if(NOT USE_SYSTEM_CURL)
+    ADD_SUPERBUILD_CONFIGURE_VAR(CURL_ROOT     --with-curl "/bin/curl-config")
+  endif()
+  if(NOT USE_SYSTEM_GEOS)
     ADD_SUPERBUILD_CONFIGURE_VAR(GEOS_ROOT     --with-geos "/bin/geos-config")
   endif()
-  
+
   #if(USE_SYSTEM_TIFF)
   #  if(NOT SYSTEM_TIFF_PREFIX STREQUAL "")
   #    list(APPEND GDAL_SB_CONFIG --with-libtiff=${SYSTEM_TIFF_PREFIX})
@@ -42,11 +42,11 @@ else()
   #else()
   #  list(APPEND GDAL_SB_CONFIG --with-libtiff=${SB_INSTALL_PREFIX})
   #endif()
-  
+
   if(UNIX)
     set(GDAL_SB_EXTRA_OPTIONS "" CACHE STRING "Extra options to be passed to GDAL configure script")
     mark_as_advanced(GDAL_SB_EXTRA_OPTIONS)
-    
+
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz"
@@ -55,12 +55,12 @@ else()
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       DEPENDS ${${proj}_DEPENDENCIES}
-      UPDATE_COMMAND  ${CMAKE_COMMAND} -E copy_directory ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}        
-      PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath      
-      CONFIGURE_COMMAND 
+      UPDATE_COMMAND  ${CMAKE_COMMAND} -E copy_directory ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
+      PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
+      CONFIGURE_COMMAND
         # use 'env' because CTest launcher doesn't perform shell interpretation
         ${SB_ENV_CONFIGURE_CMD}
-        ${GDAL_SB_BUILD_DIR}/configure 
+        ${GDAL_SB_BUILD_DIR}/configure
         --prefix=${SB_INSTALL_PREFIX}
         --enable-static=no
         --without-ogdi
@@ -73,14 +73,14 @@ else()
 
   else(MSVC)
   ##add libkml
-  ##https://trac.osgeo.org/gdal/ticket/5725     
-  ##is needed for SQLITE driver 
+  ##https://trac.osgeo.org/gdal/ticket/5725
+  ##is needed for SQLITE driver
     list(REMOVE_ITEM ${proj}_DEPENDENCIES LIBKML)
 
-    STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})    
+    STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
     STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
     configure_file(${CMAKE_SOURCE_DIR}/patches/${proj}/nmake_gdal_extra.opt.in ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
-      
+
     ExternalProject_Add(${proj}
        PREFIX ${proj}
        URL "http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz"
@@ -96,15 +96,15 @@ else()
        BUILD_COMMAND nmake /f ${GDAL_SB_BUILD_DIR}/makefile.vc MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
        INSTALL_COMMAND nmake /f ${GDAL_SB_BUILD_DIR}/makefile.vc devinstall MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
     )
-    
+
   endif()
-  
+
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
     set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/gdal_i.lib)
   elseif(UNIX)
     set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgdal${CMAKE_SHARED_LIBRARY_SUFFIX})
-  endif() 
-  
+  endif()
+
 endif()
 endif()
