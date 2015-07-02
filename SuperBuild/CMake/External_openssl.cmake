@@ -58,8 +58,16 @@ else()
       CONFIGURE_COMMAND ${CMAKE_COMMAND} -E chdir ${OPENSSL_SB_BUILD_DIR} ./config ${OPENSSL_BUILD_ARCH}
       --prefix=${SB_INSTALL_PREFIX} shared zlib zlib-dynamic -I${SB_INSTALL_PREFIX}/include -L${SB_INSTALL_PREFIX}/lib
       BUILD_COMMAND $(MAKE)
-      INSTALL_COMMAND $(MAKE) install
-      )
+      INSTALL_COMMAND $(MAKE) install)
+
+    ExternalProject_Add_Step(${proj} remove_static
+      COMMAND ${CMAKE_COMMAND} -E remove
+      ${SB_INSTALL_PREFIX}/lib/libssl.a
+      ${SB_INSTALL_PREFIX}/lib/libcrypto.a
+      ${SB_INSTALL_PREFIX}/bin/openssl
+      ${SB_INSTALL_PREFIX}/bin/c_rehash
+      DEPENDEES install)
+
   endif()
   
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)

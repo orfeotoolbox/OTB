@@ -28,8 +28,12 @@ else()
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DBUILD_TESTING:BOOL=OFF
       -DGEOS_ENABLE_TESTS:BOOL=OFF
-      CMAKE_COMMAND ${SB_CMAKE_COMMAND}  
-  )
+      CMAKE_COMMAND ${SB_CMAKE_COMMAND} )
+
+    ExternalProject_Add_Step(${proj} remove_static
+      COMMAND ${CMAKE_COMMAND} -E remove
+      ${SB_INSTALL_PREFIX}/lib/libgeos.a
+      DEPENDEES install)
   
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)

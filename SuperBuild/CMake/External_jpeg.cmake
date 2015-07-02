@@ -49,8 +49,8 @@ else()
         ${JPEG_SB_BUILD_DIR}/configure
         --prefix=${SB_INSTALL_PREFIX}
         --enable-shared=yes
-      BUILD_COMMAND $(MAKE)
-      INSTALL_COMMAND $(MAKE) install
+      BUILD_COMMAND $(MAKE) bin_PROGRAMS=
+      INSTALL_COMMAND $(MAKE) install bin_PROGRAMS=
       DEPENDS ${${proj}_DEPENDENCIES}
       )
     
@@ -60,7 +60,10 @@ else()
       DEPENDEES patch update
       DEPENDERS configure
       )
-    
+
+    ExternalProject_Add_Step(${proj} remove_static
+      COMMAND ${CMAKE_COMMAND} -E remove ${SB_INSTALL_PREFIX}/lib/libjpeg.a
+      DEPENDEES install)
   endif()
   
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
