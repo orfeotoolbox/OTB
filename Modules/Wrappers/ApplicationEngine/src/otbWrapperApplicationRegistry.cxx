@@ -73,6 +73,14 @@ ApplicationRegistry::AddApplicationPath(std::string newpath)
 
   // Reload factories to take into account new path
   itk::ObjectFactoryBase::ReHash();
+  
+  std::ostringstream resetEnvPath;
+  resetEnvPath << "ITK_AUTOLOAD_PATH=";
+  if (currentEnv)
+    {
+    resetEnvPath << currentEnv;
+    }
+  itksys::SystemTools::PutEnv(resetEnvPath.str().c_str());
 
 }
 
@@ -81,42 +89,22 @@ ApplicationRegistry::CreateApplication(const std::string& name)
 {
   ApplicationPointer appli;
 
-  std::list<ApplicationPointer> possibleApp;
-  std::list<LightObject::Pointer> allobjects = itk::ObjectFactoryBase::CreateAllInstance("otbWrapperApplication");
-
-  // Downcast and Sanity check
-  for (std::list<LightObject::Pointer>::iterator i = allobjects.begin(); i != allobjects.end(); ++i)
+  LightObject::Pointer possibleApp = itk::ObjectFactoryBase::CreateInstance(name.c_str());
+  
+  if (possibleApp.IsNotNull())
     {
-    Application* app = dynamic_cast<Application*> (i->GetPointer());
+    // Downcast
+    Application* app = dynamic_cast<Application*> (possibleApp.GetPointer());
     if (app)
       {
-      possibleApp.push_back(app);
+        appli = app;
       }
     else
       {
-      otbMsgDevMacro( << "Error ApplicationRegistry factory did not return an Application: " << (*i)->GetNameOfClass() << std::endl );
+      otbMsgDevMacro( << "Error ApplicationRegistry factory did not return an Application: " << possibleApp->GetNameOfClass() << std::endl );
       }
     }
-
-  // Return the app with the desired name
-  for(std::list<ApplicationPointer>::iterator k = possibleApp.begin();
-      k != possibleApp.end(); ++k)
-    {
-    try
-      {
-      (*k)->Init();
-      if ( (*k)->GetName() == name )
-        {
-        appli = *k;
-        break;
-        }
-      }
-    catch(...)
-      {
-      otbMsgDevMacro( << "Error a faulty Application has been detected: "<<(*k)->GetNameOfClass() << std::endl );
-      }
-    }
-
+  
   return appli;
 }
 
