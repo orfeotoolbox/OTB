@@ -31,14 +31,18 @@ else()
       -DCMAKE_BUILD_TYPE:STRING=Release
       #-DCMAKE_CXX_COMPILER:FILEPATH=${CMAKE_CXX_COMPILER}
       #-DCMAKE_C_COMPILER:FILEPATH=${CMAKE_C_COMPILER}
-      -DBUILD_SHARED_LIBS:BOOL=ON
-  )
+      -DBUILD_SHARED_LIBS:BOOL=ON)
+
+    if(UNIX)
+      ExternalProject_Add_Step(${proj} remove_static
+        COMMAND ${CMAKE_COMMAND} -E remove ${SB_INSTALL_PREFIX}/lib/libz.a
+        DEPENDEES install)  
+    endif()
   
     if(MSVC)
       ExternalProject_Add_Step(${proj} msvc_copy_hell
         COMMAND ${CMAKE_COMMAND} -E copy ${ZLIB_SB_BUILD_DIR}/zlib.lib ${SB_INSTALL_PREFIX}/lib/zdll.lib
-        DEPENDEES install
-      )  
+        DEPENDEES install)  
     endif()
     
     set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
