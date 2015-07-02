@@ -217,7 +217,6 @@ set(libminizip_la_SOURCES
   ${libminizip_la_SOURCES_DIR}/iomem_simple.c
 )
 
-
 if(MSVC)
   list(APPEND libminizip_la_SOURCES ${libminizip_la_SOURCES_DIR}/iowin32.c)
 endif()
@@ -294,10 +293,11 @@ set(libkml_SOURCES
         ${libkmlengine_la_SOURCES}
         ${libkmlregionator_la_SOURCES}
         ${libkmlxsd_la_SOURCES}
-        ${libminizip_la_SOURCES}
-        ${liburiparser_la_SOURCES}
+#        ${libminizip_la_SOURCES}
+#        ${liburiparser_la_SOURCES}
 #        ${libzlib_src_la_SOURCES}
-        )
+)
+
 # Adjust the compiler flags to avoid problems with ossim code.
 if(CMAKE_COMPILER_IS_GNUCXX)
   foreach(f ${libkml_SOURCES} )
@@ -328,7 +328,8 @@ include_directories(${ZLIB_INCLUDE_DIR})
 # Minizip
 
 add_library(minizip ${libminizip_la_SOURCES} )
-target_link_libraries(minizip )
+
+add_library(uriparser ${liburiparser_la_SOURCES})
 
 if(NOT LIBKML_COMPILE_ZLIB)
   target_link_libraries(minizip ${ZLIB_LIBRARY})
@@ -337,65 +338,71 @@ message(STATUS " Building zlib from thirdparty")
 endif()
 
 install(TARGETS minizip
-    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION lib COMPONENT Development)
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib)
 
+install(TARGETS uriparser
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib)
+
+  
 
 # Base
-add_library(kmlbase ${libkmlbase_la_SOURCES} ${liburiparser_la_SOURCES})
-target_link_libraries(kmlbase ${EXPAT_LIBRARY} minizip)
+add_library(kmlbase ${libkmlbase_la_SOURCES})
+add_dependencies(kmlbase minizip uriparser)
+target_link_libraries(kmlbase ${EXPAT_LIBRARY} minizip uriparser)
 
 install(TARGETS kmlbase
-    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION lib COMPONENT Development)
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib)
 
 # DOM
 add_library(kmldom ${libkmldom_la_SOURCES} )
 target_link_libraries(kmldom kmlbase)
 
 install(TARGETS kmldom
-    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION lib COMPONENT Development)
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib)
 
 # Engine
 add_library(kmlengine ${libkmlengine_la_SOURCES} )
 target_link_libraries(kmlengine kmlbase kmldom)
 
 install(TARGETS kmlengine
-    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION lib COMPONENT Development)
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib)
 
 # Convenience
 add_library(kmlconvenience ${libkmlconvenience_la_SOURCES} )
 target_link_libraries(kmlconvenience kmlbase kmldom kmlengine)
 
 install(TARGETS kmlconvenience
-    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION lib COMPONENT Development)
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib)
 
 # Regionator
 add_library(kmlregionator ${libkmlregionator_la_SOURCES} )
 target_link_libraries(kmlregionator kmlbase kmlconvenience kmldom kmlengine)
 
 install(TARGETS kmlregionator
-    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION lib COMPONENT Development)
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib)
 
 # XSD
 add_library(kmlxsd ${libkmlxsd_la_SOURCES} )
 target_link_libraries(kmlxsd kmlbase)
 
 install(TARGETS kmlxsd
-    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION lib COMPONENT Development)
-
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib)
 
 # install all headers
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/kml
