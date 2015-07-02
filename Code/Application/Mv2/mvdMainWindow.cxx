@@ -127,7 +127,9 @@ MainWindow
 #endif
   m_ImageView( NULL ),
   m_QuicklookViewDock( NULL ),
+#if USE_TABBED_VIEW
   m_CentralTabWidget( NULL ),
+#endif // USE_TABBED_VIEW
   m_StatusBarWidget( NULL ),
   m_ShaderWidget( NULL ),
   m_FilenameDragAndDropEventFilter( NULL )
@@ -303,13 +305,14 @@ MainWindow
 
   //
   // close tabs handling
+#if USE_TABBED_VIEW
   QObject::connect(
     m_CentralTabWidget,
     SIGNAL( tabCloseRequested( int ) ),
     this,
     SLOT( OnTabCloseRequested( int ) )
   );
-
+#endif // USE_TABBED_VIEW
 
   //
   // Image views
@@ -902,6 +905,7 @@ void
 MainWindow
 ::InitializeCentralWidget()
 {
+#if USE_TABBED_VIEW
   // Create central tab-widget for multi-view support.
   assert( m_CentralTabWidget==NULL );
   m_CentralTabWidget = new QTabWidget( this );
@@ -915,11 +919,13 @@ MainWindow
   //
   // access to the quicklook tabBar to remove the close button
   QTabBar* tabBar = m_CentralTabWidget->findChild< QTabBar* >();
+#endif // USE_TABBED_VIEW
 
   // Initialize image-view.
   assert( m_ImageView==NULL );
   m_ImageView = CreateImageViewWidget();
 
+#if USE_TABBED_VIEW
   // Add first tab: image-view.
   int index = m_CentralTabWidget->addTab(
     m_ImageView,
@@ -928,6 +934,11 @@ MainWindow
 
   tabBar->setTabButton( index, QTabBar::RightSide, 0);
   tabBar->setTabButton( index, QTabBar::LeftSide, 0);
+
+#else // USE_TABBED_VIEW
+  setCentralWidget( m_ImageView );
+
+#endif // USE_TABBED_VIEW
 }
 
 /*****************************************************************************/
@@ -1702,6 +1713,8 @@ MainWindow
 
   assert( appWidget!=NULL );
 
+#if USE_TABBED_VIEW
+
   //
   // add the application in a tab
   // TODO : check if this application is already opened ???
@@ -1712,11 +1725,17 @@ MainWindow
   // done. Focus on the newly added tab
   m_CentralTabWidget->setCurrentIndex( tabIndex );
 
+#else // USE_TABBED_VIEW
+
+  assert( false && "OTB-Application widget newed and not linked to QApplication interface." );
+
+#endif // USE_TABBED_VIEW
+
   //
   // connections. not using m_CentralTabWidget->currentWidget() leads
   // to a wrong connection!!!!
   QObject::connect(
-    m_CentralTabWidget->currentWidget(),
+    appWidget,
     SIGNAL( OTBApplicationOutputImageChanged( const QString&,
 					      const QString& ) ),
     // to:
@@ -1735,19 +1754,25 @@ MainWindow
 
   //
   // on quit widget signal, close its tab
+#if USE_TABBED_VIEW
+
   QObject::connect(
-    m_CentralTabWidget->currentWidget(),
+    appWidget,
     SIGNAL( QuitSignal() ),
     // to:
     this,
     SLOT( OnTabCloseRequested() )
     );
 
-#endif
+#endif // USE_TABBED_VIEW
+
+#endif // defined( OTB_USE_QT4 ) && USE_OTB_APPS
 
 }
 
 /*****************************************************************************/
+#if USE_TABBED_VIEW
+
 void
 MainWindow
 ::OnTabCloseRequested()
@@ -1759,7 +1784,11 @@ MainWindow
   OnTabCloseRequested( currentIndex );
 }
 
+#endif // USE_TABBED_VIEW
+
 /*****************************************************************************/
+#if USE_TABBED_VIEW
+
 void
 MainWindow
 ::OnTabCloseRequested( int index )
@@ -1794,6 +1823,8 @@ MainWindow
   delete appWidget;
   appWidget = NULL;
 }
+
+#endif // USE_TABBED_VIEW
 
 /*****************************************************************************/
 void

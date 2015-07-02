@@ -25,6 +25,7 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+#define USE_TABBED_VIEW 0
 #define USE_PIXEL_DESCRIPTION ( ( defined( _DEBUG ) && 0 ) || 0 )
 
 
@@ -211,11 +212,15 @@ protected slots:
 
   /**
    */
+#if USE_TABBED_VIEW
   void OnTabCloseRequested( int index );
+#endif
 
   /**
    */
+#if USE_TABBED_VIEW
   void OnTabCloseRequested();
+#endif
 
   /** */
   void OnOTBApplicationOutputImageChanged( const QString & appName,
@@ -387,7 +392,9 @@ private:
 
   /**
    */
+#if USE_TABBED_VIEW
   QTabWidget* m_CentralTabWidget;
+#endif // USE_TABBED_VIEW
 
   /**
    */
