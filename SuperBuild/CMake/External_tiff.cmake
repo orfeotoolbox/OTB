@@ -85,8 +85,8 @@ else()
         --prefix=${SB_INSTALL_PREFIX}
         --enable-static=no
         ${TIFF_SB_CONFIG}
-      BUILD_COMMAND $(MAKE)
-      INSTALL_COMMAND $(MAKE) install
+      BUILD_COMMAND $(MAKE) bin_PROGRAMS=
+      INSTALL_COMMAND $(MAKE) install bin_PROGRAMS=
       DEPENDS ${${proj}_DEPENDENCIES}
       )
     
