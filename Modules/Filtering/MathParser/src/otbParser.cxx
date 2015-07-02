@@ -59,6 +59,7 @@ public:
   {
     m_MuParser.DefineFun("ndvi", Self::NDVI);
     m_MuParser.DefineFun("NDVI", Self::NDVI);
+    m_MuParser.DefineFun("atan2", Self::ATAN2);
 
 #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
     /* Starting with muParser 2.0.0, logical operators have been
@@ -204,6 +205,11 @@ private:
       return 0.;
       }
     return (niri-r)/(niri+r);
+  }
+  
+  static ValueType ATAN2(ValueType y, ValueType x)
+  {
+    return vcl_atan2(y,x);
   }
 
 #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
