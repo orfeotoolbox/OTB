@@ -160,22 +160,22 @@ include(External_otb)
 #check compiler is gnu?
 if(UNIX AND NOT APPLE)
 
-  include(External_package)
-  set(ARCHIVE_NAME OTB-5.0.0-Linux64)
+  # include(External_package)
+  # set(ARCHIVE_NAME OTB-5.0.0-Linux64)
 
-  file(GLOB PEFILES
-    ${CMAKE_INSTALL_PREFIX}/bin/otbApplicationLaunch*
-    ${CMAKE_INSTALL_PREFIX}/bin/otbTestDriver )
+  # file(GLOB PEFILES
+  #   ${CMAKE_INSTALL_PREFIX}/bin/otbApplicationLaunch*
+  #   ${CMAKE_INSTALL_PREFIX}/bin/otbTestDriver )
 
-  file(WRITE "${CMAKE_BINARY_DIR}/PACKAGE-OTB/src/PACKAGE-OTB/CMakeLists.txt"
-    "cmake_minimum_required(VERSION 2.6)
-       include(CMakeParseArguments)
-       set(CMAKE_INSTALL_PREFIX \"${SB_INSTALL_PREFIX}\")
-       include(${CMAKE_SOURCE_DIR}/CMake/Package_Macro.cmake)
-       superbuild_package(
-       OUTDIR \"${ARCHIVE_NAME}\"
-       INSTALLDIR \"${SB_INSTALL_PREFIX}\"
-       PEFILES \"${PEFILES}\"
-       SEARCHDIRS \"\")")
+  # file(WRITE "${CMAKE_BINARY_DIR}/PACKAGE-OTB/src/PACKAGE-OTB/CMakeLists.txt"
+  #   "cmake_minimum_required(VERSION 2.6)
+  #      include(CMakeParseArguments)
+  #      set(CMAKE_INSTALL_PREFIX \"${SB_INSTALL_PREFIX}\")
+  #      include(${CMAKE_SOURCE_DIR}/CMake/Package_Macro.cmake)
+  #      superbuild_package(
+  #      OUTDIR \"${ARCHIVE_NAME}\"
+  #      INSTALLDIR \"${SB_INSTALL_PREFIX}\"
+  #      PEFILES \"${PEFILES}\"
+  #      SEARCHDIRS \"\")")
 
 endif(UNIX AND NOT APPLE)

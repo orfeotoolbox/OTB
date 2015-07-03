@@ -2,7 +2,7 @@ macro(superbuild_package)
   cmake_parse_arguments(PACKAGE  "" "OUTDIR;INSTALLDIR" "SEARCHDIRS;PEFILES" ${ARGN} )
 
   find_program(OBJDUMP_PROGRAM "objdump")
-  set(PATCHELF_PROGRAM "/home/mrashad/build/patchelf-0.8/src/patchelf")
+  set(PATCHELF_PROGRAM "/home/mrashad/Tools/patchelf-0.8/src/patchelf")
 
   list(APPEND PACKAGE_SEARCHDIRS "${PACKAGE_INSTALLDIR}/bin") #exe
   list(APPEND PACKAGE_SEARCHDIRS "${PACKAGE_INSTALLDIR}/lib") #so
@@ -25,8 +25,7 @@ macro(superbuild_package)
   list(LENGTH notfound_dlls nos)
   if(${nos} GREATER 0)
     STRING(REPLACE ".so;" ".so," notfound ${notfound_dlls})
-     message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}
-Please consider adding their paths to SEARCHDIRS when calling superbuild_package macro.")
+    message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}. Please consider adding their paths to SEARCHDIRS when calling superbuild_package macro.")
   endif()
 
 endmacro(superbuild_package)
@@ -80,10 +79,10 @@ function(process_deps infile)
           #     DESTINATION ${PACKAGE_OUTDIR}/lib)
 
 
-            add_custom_target(RPATH_${bn}
-               INSTALL
-               POST_BUILD
-               COMMAND ${PATCHELF_PROGRAM} "--set-rpath" "../lib" "${PACKAGE_OUTDIR}/lib/${infile}")
+          # add_custom_target(RPATH_${bn}
+          #   INSTALL
+          #     POST_BUILD
+          #     COMMAND ${PATCHELF_PROGRAM} "--set-rpath" "../lib" "${PACKAGE_INSTALLDIR}/${PACKAGE_OUTDIR}/bin/${infile}")
 
           #else() #we assume it is executable
             # install(FILES "${SEARCHDIR}/${infile}"
@@ -91,8 +90,9 @@ function(process_deps infile)
 
             file(GLOB sofiles "${SEARCHDIR}/${bn}*")
             foreach(sofile ${sofiles})
-            install(FILES "${sofile}"
-              DESTINATION ${PACKAGE_OUTDIR}/bin)
+            install(TARGETS "${sofile}"
+              DESTINATION ${PACKAGE_OUTDIR}/bin
+              PERMISSIONS )
             endforeach()
           #endif()
 
