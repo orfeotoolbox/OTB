@@ -98,6 +98,7 @@ ApplicationRegistry::CreateApplication(const std::string& name)
     if (app)
       {
         appli = app;
+        appli->Init();
       }
     else
       {
