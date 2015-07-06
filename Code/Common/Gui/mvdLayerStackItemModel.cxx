@@ -63,7 +63,7 @@ namespace
 QVariant
 HEADERS[ LayerStackItemModel::COLUMN_COUNT ] =
 {
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Index" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Proj" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Name" ) ),
   // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "I" ) ),
   // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "J" ) ),
@@ -331,9 +331,9 @@ LayerStackItemModel
     case Qt::DisplayRole:
       switch( index.column() )
         {
-        case COLUMN_INDEX:
+        case COLUMN_PROJ:
           // qDebug() << "index:" << index.row();
-          return index.row();
+          return "?";
           break;
 
         case COLUMN_NAME:

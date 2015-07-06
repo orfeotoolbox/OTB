@@ -88,7 +88,7 @@ public:
   {
     COLUMN_NONE = -1,
     //
-    COLUMN_INDEX = 0,
+    COLUMN_PROJ = 0,
     COLUMN_NAME,
     // COLUMN_I,
     // COLUMN_J,
