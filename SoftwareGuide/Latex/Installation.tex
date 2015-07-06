@@ -247,6 +247,28 @@ OTB\textunderscore SOURCE\textunderscore DIR, OTB\textunderscore BINARY\textunde
 
 Please note that during the CMake configuration step, you may see warnings coming from the system checkup script ('SuperBuild/CMake/SystemCheckup.cmake'). They appear when CMake tries to find existing libraries on your system so it may report warnings for missing or incomplete libraries. For the SuperBuild process, you can safely ignore those warnings.
 
+After SuperBuild compilation, your build directory will be organized with the following pattern :
+\begin{itemize}
+  \item BUILD_DIRECTORY \hfill \textit{your SuperBuild build directory}
+  \begin{itemize}
+    \item EXPAT
+    \begin{itemize}
+      \item src \hfill \textit{Expat sources}
+      \item build \hfill \textit{Expat build directory}
+    \end{itemize}
+    \item GDAL
+    \begin{itemize}
+      \item src \hfill \textit{Gdal sources}
+      \item build \hfill \textit{Gdal build directory}
+    \end{itemize}
+    \item \textit{(other dependencies\ldots)}
+    \item OTB
+    \begin{itemize}
+      \item build \hfill \textit{OTB build directory}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
 \subsubsection{Current status}
 
 This section details the libraries that are not fully supported by SuperBuild depending on the target platform. 
