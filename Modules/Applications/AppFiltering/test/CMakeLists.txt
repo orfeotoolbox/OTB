@@ -30,4 +30,48 @@ otb_test_application(NAME  apTvUtSmoothingTest_OutXML
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtSmoothingTest.tif
                              ${TEMP}/apTvUtSmoothingTest_OutXML.tif)
+                             
+                             
+otb_test_application(NAME  apTvDespeckleLee
+                     APP  Despeckle
+                     OPTIONS -in ${INPUTDATA}/GomaAvant.tif
+               	             -out ${TEMP}/bfFiltreLee_05_05_12_app.tif
+                             -filter lee
+                             -filter.lee.rad 5
+                             -filter.lee.nblooks 12
+                     VALID   --compare-image ${EPSILON_7}
+                             ${BASELINE}/bfFiltreLee_05_05_12.tif
+                             ${TEMP}/bfFiltreLee_05_05_12_app.tif)
+                             
+otb_test_application(NAME  apTvDespeckleFrost
+                     APP  Despeckle
+                     OPTIONS -in ${INPUTDATA}/GomaAvant.tif
+               	             -out ${TEMP}/bfFiltreFrost_05_05_12_app.tif
+                             -filter frost
+                             -filter.frost.rad 5
+                             -filter.frost.deramp 0.1
+                     VALID   --compare-image ${EPSILON_7}
+                             ${BASELINE}/bfFiltreLee_05_05_12.tif
+                             ${TEMP}/bfFiltreLee_05_05_12_app.tif)
 
+otb_test_application(NAME  apTvDespeckleGammaMAP
+                     APP  Despeckle
+                     OPTIONS -in ${INPUTDATA}/GomaAvant.tif
+               	             -out ${TEMP}/bfFiltreGammaMAP_05_05_12_app.tif
+                             -filter gammamap
+                             -filter.gammamap.rad 5
+                             -filter.gammamap.nblooks 12
+                     VALID   --compare-image ${EPSILON_7}
+                             ${BASELINE}/bfFiltreGammaMAP_05_05_12.tif
+                             ${TEMP}/bfFiltreGammaMAP_05_05_12_app.tif)                      
+                             
+otb_test_application(NAME  apTvDespeckleKuan
+                     APP  Despeckle
+                     OPTIONS -in ${INPUTDATA}/GomaAvant.tif
+               	             -out ${TEMP}/bfFiltreKuan_05_05_12_app.tif
+                             -filter kuan
+                             -filter.kuan.rad 5
+                             -filter.kuan.nblooks 12
+                     VALID   --compare-image ${EPSILON_7}
+                             ${BASELINE}/bfFiltreKuan_05_05_12.tif
+                             ${TEMP}/bfFiltreKuan_05_05_12_app.tif)
