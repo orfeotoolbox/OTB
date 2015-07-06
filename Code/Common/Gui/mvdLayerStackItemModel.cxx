@@ -363,6 +363,20 @@ LayerStackItemModel
           break;
         }
       break;
+    
+    case Qt::FontRole:
+      assert( index.row()>=0 );
+
+      if( static_cast< StackedLayerModel::SizeType >( index.row() )==
+	  m_StackedLayerModel->GetReferenceIndex() )
+	{
+	QFont font;
+
+	font.setBold( true );
+
+	return font;
+	}
+      break;
 
     default:
       break;
