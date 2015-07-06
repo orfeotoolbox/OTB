@@ -162,7 +162,7 @@ LayerStackItemModel
     QObject::disconnect(
       m_StackedLayerModel,
       SIGNAL( ContentAboutToBeReset() ),
-      // to:
+      // from:
       this,
       SIGNAL( modelAboutToBeReset() )
     );
@@ -170,7 +170,7 @@ LayerStackItemModel
     QObject::disconnect(
       m_StackedLayerModel,
       SIGNAL( ContentReset() ),
-      // to:
+      // from:
       this,
       SIGNAL( modelReset() )
     );
@@ -178,7 +178,7 @@ LayerStackItemModel
     QObject::disconnect(
       m_StackedLayerModel,
       SIGNAL( LayerAdded( size_t ) ),
-      // to: 
+      // from: 
       this,
       SLOT( OnLayerAdded( size_t ) )
     );
@@ -186,7 +186,7 @@ LayerStackItemModel
     QObject::disconnect(
       m_StackedLayerModel,
       SIGNAL( LayerAboutToBeDeleted( size_t ) ),
-      // to: 
+      // from: 
       this,
       SLOT( OnLayerAboutToBeDeleted( size_t ) )
     );
@@ -194,7 +194,7 @@ LayerStackItemModel
     QObject::disconnect(
       m_StackedLayerModel,
       SIGNAL( LayerDeleted( size_t ) ),
-      // to: 
+      // from: 
       this,
       SLOT( OnLayerDeleted( size_t ) )
     );
@@ -202,7 +202,7 @@ LayerStackItemModel
     QObject::disconnect(
       m_StackedLayerModel,
       SIGNAL( OrderAboutToBeChanged() ),
-      // to:
+      // from:
       this,
       SIGNAL( layoutAboutToBeChanged() )
     );
@@ -210,9 +210,17 @@ LayerStackItemModel
     QObject::disconnect(
       m_StackedLayerModel,
       SIGNAL( OrderChanged() ),
-      // to:
+      // from:
       this,
       SIGNAL( layoutChanged() )
+    );
+
+    QObject::disconnect(
+      m_StackedLayerModel,
+      SIGNAL( ReferenceChanged( size_t ) ),
+      // from:
+      this,
+      SLOT( OnReferenceChanged( size_t ) )
     );
     }
 
@@ -272,6 +280,14 @@ LayerStackItemModel
     // to:
     this,
     SIGNAL( layoutChanged() )
+  );
+
+  QObject::connect(
+    m_StackedLayerModel,
+    SIGNAL( ReferenceChanged( size_t ) ),
+    // to:
+    this,
+    SLOT( OnReferenceChanged( size_t ) )
   );
 
   for( StackedLayerModel::ConstIterator it( m_StackedLayerModel->Begin() );
@@ -769,6 +785,24 @@ LayerStackItemModel
 // {
 //   qDebug() << this << "::OnModelReset()";
 // }
+/*****************************************************************************/
+void
+LayerStackItemModel
+::OnReferenceChanged( size_t index )
+{
+  qDebug() << this << "::OnReferenceChanged(" << index << ")";
+
+  assert( m_StackedLayerModel!=NULL );
+
+  AbstractLayerModel * layer = m_StackedLayerModel->GetReference();
+
+  assert( LayerStackItemModel::COLUMN_COUNT>0 );
+
+  emit dataChanged(
+    createIndex( index, 0, layer ),
+    createIndex( index, LayerStackItemModel::COLUMN_COUNT - 1, layer )
+  );
+}
 
 /*****************************************************************************/
 

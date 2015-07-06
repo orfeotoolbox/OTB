@@ -287,6 +287,7 @@ private slots:
   void OnLayerAdded( size_t );
   void OnLayerDeleted( size_t );
   void OnLayerVisibilityChanged( AbstractLayerModel *, bool );
+  void OnReferenceChanged( size_t );
 };
 
 } // end namespace 'mvd'.
