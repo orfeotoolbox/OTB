@@ -1066,12 +1066,18 @@ void
 MainWindow
 ::ImportImage( const QString& filename, bool forceCreate )
 {
+  qDebug() << this << "::ImportImage(" << filename << "," << forceCreate << ")";
+
+  //
+  // Import image file.
   VectorImageModel * imageModel = ImportImage( filename, -1, -1 );
   // assert( imageModel );
 
   if( imageModel==NULL )
     return;
 
+  //
+  // Get stacked-layer.
   assert( Application::Instance() );
   assert(
     Application::Instance()->GetModel()==
@@ -1083,18 +1089,38 @@ MainWindow
 
   assert( stackedLayerModel!=NULL );
 
+  //
+  // Bypass rendering of image-views.
+  assert( m_ImageView!=NULL );
+  bool bypassImageView = m_ImageView->SetBypassRenderingEnabled( true );
+
+  ImageViewWidget * quicklookView = GetQuicklookView();
+  assert( quicklookView!=NULL );
+
+  bool bypassQuicklookView = quicklookView->SetBypassRenderingEnabled( true );
+
+  //
+  // Store imgae-mode in layer-stack.
   stackedLayerModel->Add( imageModel );
 
   imageModel->setParent( stackedLayerModel );
 
   stackedLayerModel->SetCurrent( imageModel );
 
-  if( !stackedLayerModel->HasReference() )
-    {
+  bool hasReference = stackedLayerModel->HasReference();
+
+  if( !hasReference )
     stackedLayerModel->SetReference( imageModel  );
 
+  //
+  // Activate rendering of image-views.
+  m_ImageView->SetBypassRenderingEnabled( bypassImageView );
+  quicklookView->SetBypassRenderingEnabled( bypassQuicklookView );
+
+  //
+  // Set zoom-level which forces image-views refresh.
+  if( !hasReference )
     UserZoomExtent();
-    }
 }
 
 /*****************************************************************************/

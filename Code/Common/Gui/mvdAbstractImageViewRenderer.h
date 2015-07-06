@@ -202,6 +202,13 @@ public:
                           const IndexType&,
                           bool isPhysical ) const =0;
 
+  /**
+   */
+  inline bool SetBypassRenderingEnabled( bool );
+  /**
+   */
+  inline bool IsBypassRenderingEnabled() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots
@@ -226,7 +233,8 @@ protected:
    */
   AbstractImageViewRenderer( QObject* parent = NULL ) :
     QObject( parent ),
-    m_StackedLayerModel( NULL )
+    m_StackedLayerModel( NULL ),
+    m_BypassRenderingEnabled( false )
   {
   }
 
@@ -265,6 +273,9 @@ private:
   /**
    */
   StackedLayerModel * m_StackedLayerModel;
+  /**
+   */
+  bool m_BypassRenderingEnabled: 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -330,6 +341,28 @@ AbstractImageViewRenderer
   virtual_UpdateScene();
 
   virtual_FinishScene();
+}
+
+/*****************************************************************************/
+inline
+bool
+AbstractImageViewRenderer
+::IsBypassRenderingEnabled() const
+{
+  return m_BypassRenderingEnabled;
+}
+
+/*****************************************************************************/
+inline
+bool
+AbstractImageViewRenderer
+::SetBypassRenderingEnabled( bool isEnabled )
+{
+  bool bypass = m_BypassRenderingEnabled;
+
+  m_BypassRenderingEnabled = isEnabled;
+
+  return bypass;
 }
 
 /*****************************************************************************/

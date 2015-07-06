@@ -1161,6 +1161,26 @@ ImageViewWidget
   );
 }
 
+/*****************************************************************************/
+bool
+ImageViewWidget
+::IsBypassRenderingEnabled() const
+{
+  assert( m_Renderer!=NULL );
+
+  return m_Renderer->IsBypassRenderingEnabled();
+}
+
+/*****************************************************************************/
+bool
+ImageViewWidget
+::SetBypassRenderingEnabled( bool isEnabled )
+{
+  assert( m_Renderer!=NULL );
+
+  return m_Renderer->SetBypassRenderingEnabled( isEnabled );
+}
+
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /******************************************************************************/

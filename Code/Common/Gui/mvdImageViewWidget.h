@@ -156,6 +156,13 @@ public:
    */
   inline const AbstractImageViewRenderer* GetRenderer() const;
 
+  /**
+   */
+  bool SetBypassRenderingEnabled( bool );
+  /**
+   */
+  bool IsBypassRenderingEnabled() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

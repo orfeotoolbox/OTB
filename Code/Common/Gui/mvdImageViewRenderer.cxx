@@ -331,7 +331,7 @@ ImageViewRenderer
 {
   assert( !m_GlView.IsNull() );
 
-  // qDebug() << this << "::PaintGL(" << c << ")";
+  qDebug() << this << "::PaintGL(" << c << ")";
 
   // qDebug() << m_GlView.GetPointer();
 
@@ -355,6 +355,11 @@ ImageViewRenderer
   UpdateActors( c );
 
   //
+  // Bypass rendering if needed.
+  if( IsBypassRenderingEnabled() )
+    return;
+
+  //
   // Pre-render scene.
   m_GlView->BeforeRendering();
   {
@@ -363,11 +368,17 @@ ImageViewRenderer
   switch( c->m_RenderMode )
     {
     case RenderingContext::RENDER_MODE_LIGHT:
+      qDebug() << "otb::GlView::LightRender()";
       m_GlView->LightRender();
       break;
 
     case RenderingContext::RENDER_MODE_FULL:
+      qDebug() << "otb::GlView::HeavyRender()";
       m_GlView->HeavyRender();
+      break;
+
+    default:
+      assert( false && "Unhandled RenderingContext::RenderModel value!" );
       break;
     }
   }
@@ -722,7 +733,7 @@ void
 ImageViewRenderer
 ::virtual_RefreshScene()
 {
-  // qDebug() << this << "::virtual_RefreshScene()";
+  qDebug() << this << "::virtual_RefreshScene()";
 
   StackedLayerModel * stackedLayerModel = GetLayerStack();
 
