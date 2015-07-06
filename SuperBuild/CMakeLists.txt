@@ -141,7 +141,7 @@ option(OTB_USE_QT4 "Enable module QT4 in OTB" ON)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
 
 # set OTB_DATA_ROOT to run test
-find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../OTB-Data)
+find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
 
 if(ENABLE_OTB_LARGE_INPUTS)
   find_path(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
@@ -152,7 +152,24 @@ option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SW
 option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
 # do a system checkup
-include(SystemCheckup)
+if (NOT EXISTS "${CMAKE_BINARY_DIR}/CMake/SystemCheckup")
+  file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/CMake/SystemCheckup")
+endif()
+execute_process(COMMAND ${CMAKE_COMMAND} ${CMAKE_SOURCE_DIR}/CMake/SystemCheckup
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMake/SystemCheckup
+                OUTPUT_QUIET
+                ERROR_QUIET)
+file(STRINGS "${CMAKE_BINARY_DIR}/CMake/SystemCheckup/SystemCheckupResult.txt" _SYSTEM_CHECKUP_CONTENT)
+message(STATUS "|----------------------------------------------------------")
+message(STATUS "|----------------- System checkup results -----------------")
+message(STATUS "| The following libraries have been found on your system.")
+message(STATUS "| You can choose to use them (instead of superbuild versions)")
+message(STATUS "| by setting the corresponding option USE_SYSTEM_XXX.")
+message(STATUS "|----------------------------------------------------------")
+foreach(lib ${_SYSTEM_CHECKUP_CONTENT})
+  message(STATUS "| ${lib}")
+  message(STATUS "|----------------------------------------------------------")
+endforeach()
 
 # Main external projet : dependencies are included (if needed) in each external project
 include(External_otb)

@@ -1,14 +1,12 @@
 # Script to analyse the OTB dependencies already present
+cmake_minimum_required(VERSION 2.8.7)
+project(SystemCheckup)
 
-message(STATUS "|----------------------------------------------------------")
-message(STATUS "|----------------- System checkup results -----------------")
-message(STATUS "| The following libraries have been found on your system.")
-message(STATUS "| You can choose to use them (instead of superbuild versions)")
-message(STATUS "| by setting the corresponding option USE_SYSTEM_XXX.")
-
-# try to hide the Superbuild install dir, CMAKE_SYSTEM_PREFIX_PATH
-# contains the CMAKE_INSTALL_PREFIX (-> superbuild libs)
-list(REMOVE_ITEM CMAKE_SYSTEM_PREFIX_PATH ${CMAKE_INSTALL_PREFIX})
+if (EXISTS ${CMAKE_SOURCE_DIR}/../../../CMake)
+  set(CMAKE_MODULE_PATH
+    ${CMAKE_SOURCE_DIR}/../../../CMake
+    ${CMAKE_MODULE_PATH})
+endif()
 
 # macro to encapsulate a find_package(XXX QUIET)
 # output variables are :
@@ -31,8 +29,6 @@ macro(SB_CHECKUP_FIND_PACKAGE var)
 
   if(_SB_CHECKUP_${_uppervar}_FOUND)
     set(_var_name ${_SB_CHECKUP_${_uppervar}_NAME})
-    message(STATUS "|----------------------------------------------------------")
-    message(STATUS "|${var} found")
     if(DEFINED ${_var_name}_VERSION)
       set(_SB_CHECKUP_${_uppervar}_VERSION ${${_var_name}_VERSION})
     elseif(DEFINED ${_var_name}_VERSION_STRING)
@@ -54,11 +50,6 @@ macro(SB_CHECKUP_FIND_PACKAGE var)
           _SB_CHECKUP_${_uppervar}_VERSION
           ${_tmp_ver_num_})
     endif()
-    # display version number
-    if(_SB_CHECKUP_${_uppervar}_VERSION MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+\$")
-      message(STATUS "|  version = ${_SB_CHECKUP_${_uppervar}_VERSION}")
-    endif()
-    
   endif()
 endmacro(SB_CHECKUP_FIND_PACKAGE)
 
@@ -101,12 +92,34 @@ macro(SB_CHECKUP_FIND_VERSIONS lib header major_name minor_name patch_name)
         math(EXPR _SB_CHECKUP_${_upperlib}_VERSION_NUMBER
           "((${_SB_CHECKUP_${_upperlib}_VERSION_MAJOR})*100+${_SB_CHECKUP_${_upperlib}_VERSION_MINOR})*100+${_SB_CHECKUP_${_upperlib}_VERSION_PATCH}")
         set(_SB_CHECKUP_${_upperlib}_VERSION "${_SB_CHECKUP_${_upperlib}_VERSION_MAJOR}.${_SB_CHECKUP_${_upperlib}_VERSION_MINOR}.${_SB_CHECKUP_${_upperlib}_VERSION_PATCH}")
-        message(STATUS "|  version = ${_SB_CHECKUP_${_upperlib}_VERSION}")
         break()
       endif()
     endforeach()
   endif()
 endmacro(SB_CHECKUP_FIND_VERSIONS)
+
+macro(SB_CHECKUP_WRITE_RESULT lib)
+  string(TOUPPER ${lib} _upperlib)
+  if (_SB_CHECKUP_${_upperlib}_FOUND)
+    if (${_SB_CHECKUP_${_upperlib}_NAME}_DIR)
+      set(_OUTPUT_LOCATION ${${_SB_CHECKUP_${_upperlib}_NAME}_DIR})
+    elseif (${lib}_DIR)
+      set(_OUTPUT_LOCATION ${${lib}_DIR})
+    elseif (${_SB_CHECKUP_${_upperlib}_NAME}_LIBRARY)
+      set(_OUTPUT_LOCATION ${${_SB_CHECKUP_${_upperlib}_NAME}_LIBRARY})
+    elseif (${_SB_CHECKUP_${_upperlib}_NAME}_LIBRARIES)
+      set(_OUTPUT_LOCATION ${${_SB_CHECKUP_${_upperlib}_NAME}_LIBRARIES})
+    elseif (${lib}_LIBRARIES)
+      set(_OUTPUT_LOCATION ${${lib}_LIBRARIES})
+    else()
+      set(_OUTPUT_LOCATION "(unknown)")
+    endif()
+    file(APPEND "${CMAKE_BINARY_DIR}/SystemCheckupResult.txt" "${lib}\t(${_SB_CHECKUP_${_upperlib}_VERSION}) \t: ${_OUTPUT_LOCATION}\n")
+  endif()
+endmacro(SB_CHECKUP_WRITE_RESULT)
+
+# TODO clear output file
+file(WRITE "${CMAKE_BINARY_DIR}/SystemCheckupResult.txt" "")
 
 # Boost
 SB_CHECKUP_FIND_PACKAGE(Boost)
@@ -116,12 +129,13 @@ if(_SB_CHECKUP_BOOST_VERSION MATCHES "^[0-9]+\$")
   math(EXPR _SB_CHECKUP_BOOST_VERSION_MINOR "((${_SB_CHECKUP_BOOST_VERSION_NUMBER})/100)%1000")
   math(EXPR _SB_CHECKUP_BOOST_VERSION_MAJOR "(${_SB_CHECKUP_BOOST_VERSION_NUMBER})/100000")
   set(_SB_CHECKUP_BOOST_VERSION "${_SB_CHECKUP_BOOST_VERSION_MAJOR}.${_SB_CHECKUP_BOOST_VERSION_MINOR}.${_SB_CHECKUP_BOOST_VERSION_PATCH}")
-  message(STATUS "|  version = ${_SB_CHECKUP_BOOST_VERSION}")
 endif()
+SB_CHECKUP_WRITE_RESULT(Boost)
 
 # Curl
 SB_CHECKUP_FIND_PACKAGE(CURL)
 SB_CHECKUP_SPLIT_VERSION(CURL)
+SB_CHECKUP_WRITE_RESULT(CURL)
 
 # GDAL
 SB_CHECKUP_FIND_PACKAGE(GDAL)
@@ -132,12 +146,15 @@ if(NOT _SB_CHECKUP_GDAL_VERSION)
                            GDAL_VERSION_MINOR
                            GDAL_VERSION_REV)
 endif()
+SB_CHECKUP_WRITE_RESULT(GDAL)
 
 # GeoTIFF
 SB_CHECKUP_FIND_PACKAGE(GeoTIFF)
+SB_CHECKUP_WRITE_RESULT(GeoTIFF)
 
 # ITK
 SB_CHECKUP_FIND_PACKAGE(ITK)
+SB_CHECKUP_WRITE_RESULT(ITK)
 
 # libkml
 SB_CHECKUP_FIND_PACKAGE(LibKML)
@@ -148,20 +165,25 @@ if(NOT _SB_CHECKUP_LIBKML_VERSION)
                            LIBKML_MINOR_VERSION
                            LIBKML_MICRO_VERSION)
 endif()
+SB_CHECKUP_WRITE_RESULT(LibKML)
 
 # LibSVM
 SB_CHECKUP_FIND_PACKAGE(LibSVM)
 SB_CHECKUP_SPLIT_VERSION(LibSVM)
+SB_CHECKUP_WRITE_RESULT(LibSVM)
 
 # muParser
 SB_CHECKUP_FIND_PACKAGE(MuParser)
+SB_CHECKUP_WRITE_RESULT(MuParser)
 
 # muParserX
 SB_CHECKUP_FIND_PACKAGE(MuParserX)
+SB_CHECKUP_WRITE_RESULT(MuParserX)
 
 # OpenCV
 SB_CHECKUP_FIND_PACKAGE(OpenCV)
 SB_CHECKUP_SPLIT_VERSION(OpenCV)
+SB_CHECKUP_WRITE_RESULT(OpenCV)
 
 # OpenJPEG
 SB_CHECKUP_FIND_PACKAGE(OpenJPEG)
@@ -172,24 +194,24 @@ if(NOT _SB_CHECKUP_OPENJPEG_VERSION)
                            OPJ_VERSION_MINOR
                            OPJ_VERSION_BUILD)
 endif()
+SB_CHECKUP_WRITE_RESULT(OpenJPEG)
 
 # OpenThreads
 SB_CHECKUP_FIND_PACKAGE(OpenThreads)
+SB_CHECKUP_WRITE_RESULT(OpenThreads)
 
 # OSSIM
 SB_CHECKUP_FIND_PACKAGE(Ossim)
+SB_CHECKUP_WRITE_RESULT(Ossim)
 
 # Qt4
 SB_CHECKUP_FIND_PACKAGE(Qt4)
 if(_SB_CHECKUP_QT4_FOUND)
   set(_SB_CHECKUP_QT4_VERSION "${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}")
-  message(STATUS "|  version = ${_SB_CHECKUP_QT4_VERSION}")
   SB_CHECKUP_SPLIT_VERSION(Qt4)
 endif()
+SB_CHECKUP_WRITE_RESULT(Qt4)
 
 # TinyXML
 SB_CHECKUP_FIND_PACKAGE(TinyXML)
-
-message(STATUS "|----------------------------------------------------------")
-# restore real install prefix
-list(APPEND CMAKE_SYSTEM_PREFIX_PATH ${CMAKE_INSTALL_PREFIX})
+SB_CHECKUP_WRITE_RESULT(TinyXML)
