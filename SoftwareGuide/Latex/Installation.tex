@@ -245,6 +245,8 @@ OTB\textunderscore SOURCE\textunderscore DIR, OTB\textunderscore BINARY\textunde
     \item Compile and install : call the generator used for your platform : make, nmake, jom, ... 
 \end{itemize}
 
+Please note that during the CMake configuration step, you may see warnings coming from the system checkup script ('SuperBuild/CMake/SystemCheckup.cmake'). They appear when CMake tries to find existing libraries on your system so it may report warnings for missing or incomplete libraries. For the SuperBuild process, you can safely ignore those warnings.
+
 \subsubsection{Current status}
 
 This section details the libraries that are not fully supported by SuperBuild depending on the target platform. 
