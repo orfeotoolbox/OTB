@@ -1271,7 +1271,7 @@ void
 ImageViewWidget
 ::OnContentChanged()
 {
-  qDebug() << this << "::OnContentChanged()";
+  // qDebug() << this << "::OnContentChanged()";
 
   UpdateScene();
 
@@ -1283,7 +1283,7 @@ void
 ImageViewWidget
 ::OnContentReset()
 {
-  qDebug() << this << "::OnContentReset()";
+  // qDebug() << this << "::OnContentReset()";
 
   UpdateScene();
 
@@ -1295,7 +1295,7 @@ void
 ImageViewWidget
 ::OnDeleteAllRequested()
 {
-  qDebug() << this << "::OnDeleteAllRequested()";
+  // qDebug() << this << "::OnDeleteAllRequested()";
 
   assert( m_Renderer!=NULL );
 

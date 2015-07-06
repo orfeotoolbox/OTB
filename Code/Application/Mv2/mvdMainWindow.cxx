@@ -1066,7 +1066,7 @@ void
 MainWindow
 ::ImportImage( const QString& filename, bool forceCreate )
 {
-  qDebug() << this << "::ImportImage(" << filename << "," << forceCreate << ")";
+  // qDebug() << this << "::ImportImage(" << filename << "," << forceCreate << ")";
 
   //
   // Import image file.
