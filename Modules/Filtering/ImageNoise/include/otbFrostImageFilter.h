@@ -35,6 +35,8 @@ namespace otb
  * A = k*Ci*Ci  with Ci = VAR[I]/ (E[I]*E[I])
  * The final result is normalized by the sum of the kernel coefficients.
  *
+ * (http://www.isprs.org/proceedings/XXXV/congress/comm2/papers/110.pdf)
+ * 
  * \ingroup OTBImageNoise
  */
 

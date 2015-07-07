@@ -31,7 +31,8 @@ namespace otb
  * This class implements Gamma MAP filter for despeckleing of SAR
  * images. 
  *
- *
+ * (http://www.isprs.org/proceedings/XXXV/congress/comm2/papers/110.pdf)
+ * 
  * \ingroup OTBImageNoise
  */
 
