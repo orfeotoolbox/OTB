@@ -19,11 +19,11 @@ fi
 # works for install tree
 if [ -d $CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@ ]
 then
-  ITK_AUTOLOAD_PATH=$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@:$ITK_AUTOLOAD_PATH
+  OTB_APPLICATION_PATH=$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@:$OTB_APPLICATION_PATH
 fi
 
 # export it to make it available to otbApplicationLauncherCommandLine environment
-export ITK_AUTOLOAD_PATH
+export OTB_APPLICATION_PATH
 
 # start the application
 $OTB_CLI_LAUNCHER "$@"

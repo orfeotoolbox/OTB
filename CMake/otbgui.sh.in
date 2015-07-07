@@ -19,11 +19,11 @@ fi
 # use the default install tree path for applications
 if [ -d $CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@ ]
 then
-  ITK_AUTOLOAD_PATH=$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@:$ITK_AUTOLOAD_PATH
+  OTB_APPLICATION_PATH=$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@:$OTB_APPLICATION_PATH
 fi
 
 # export it to make it available to otbApplicationLauncherCommandLine environment
-export ITK_AUTOLOAD_PATH
+export OTB_APPLICATION_PATH
 
 # avoid numerical issues caused by locale
 export LC_NUMERIC=C

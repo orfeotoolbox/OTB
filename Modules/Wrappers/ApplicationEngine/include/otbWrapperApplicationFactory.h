@@ -18,6 +18,7 @@
 #ifndef __otbWrapperApplicationFactory_h
 #define __otbWrapperApplicationFactory_h
 
+#include "otbWrapperApplicationFactoryBase.h"
 #include "itkVersion.h"
 
 namespace otb
@@ -26,12 +27,12 @@ namespace Wrapper
 {
 
 template < class TApplication >
-class ITK_ABI_EXPORT ApplicationFactory : public itk::ObjectFactoryBase
+class ITK_ABI_EXPORT ApplicationFactory : public ApplicationFactoryBase
 {
 public:
   /** Standard class typedefs. */
   typedef ApplicationFactory            Self;
-  typedef itk::ObjectFactoryBase        Superclass;
+  typedef ApplicationFactoryBase        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -50,7 +51,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ApplicationFactory, itk::ObjectFactoryBase);
+  itkTypeMacro(ApplicationFactory, ApplicationFactoryBase);
   
   void SetClassName(const char* name)
   {

@@ -26,6 +26,7 @@ set(OTBApplicationEngine_SRC
   otbWrapperApplication.cxx
   otbWrapperChoiceParameter.cxx
   otbWrapperApplicationRegistry.cxx
+  otbWrapperApplicationFactoryBase.cxx
   )
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})

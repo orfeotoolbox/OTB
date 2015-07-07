@@ -17,7 +17,7 @@ if exist %CURRENT_SCRIPT_DIR%otbApplicationLauncherCommandLine.exe (
 setlocal
 :: works for install tree
 if exist %CURRENT_SCRIPT_DIR%../@OTB_INSTALL_APP_DIR@ (
-  set ITK_AUTOLOAD_PATH=%CURRENT_SCRIPT_DIR%../@OTB_INSTALL_APP_DIR@;%ITK_AUTOLOAD_PATH%
+  set OTB_APPLICATION_PATH=%CURRENT_SCRIPT_DIR%../@OTB_INSTALL_APP_DIR@;%OTB_APPLICATION_PATH%
 )
 
 :: start the application

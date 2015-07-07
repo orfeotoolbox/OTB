@@ -39,7 +39,7 @@ class ITK_ABI_EXPORT ApplicationRegistry : public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef ApplicationRegistry            Self;
+  typedef ApplicationRegistry           Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -64,6 +64,10 @@ public:
   /** Create the specified Application */
   static Application::Pointer CreateApplication(const std::string& applicationName);
 
+  /** Create the specified Application (faster)
+   *  method using dynamic library name to load the right module */
+  static Application::Pointer CreateApplicationFaster(const std::string& applicationName);
+
 
 protected:
   ApplicationRegistry();
@@ -72,6 +76,8 @@ protected:
 private:
   ApplicationRegistry(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+  
+  static void RefreshApplicationFactories();
 
 };
 
