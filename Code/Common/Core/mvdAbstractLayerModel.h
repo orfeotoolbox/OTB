@@ -89,8 +89,28 @@ class Monteverdi2_EXPORT AbstractLayerModel :
 // Public methods.
 public:
 
+  enum SpatialReferenceType
+  {
+    SRT_UNKNOWN,
+    SRT_SENSOR,
+    SRT_CARTO,
+    SRT_GEO,
+  };
+
   /** \brief Destructor. */
   virtual ~AbstractLayerModel();
+
+  /**
+   */
+  SpatialReferenceType GetSpatialReferenceType() const;
+
+  /**
+   */
+  std::string GetWkt() const;
+
+  /**
+   */
+  std::string GetAuthorityCode( bool =false ) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -117,6 +137,10 @@ protected:
   /** \brief Constructor. */
   AbstractLayerModel( QObject* parent =NULL );
 
+  /**
+   */
+  bool HasKwl() const;
+
 //
 // Protected attributes.
 protected:
@@ -126,6 +150,14 @@ protected:
 //
 // Private methods.
 private:
+
+  /**
+   */
+  virtual std::string virtual_GetWkt() const =0;
+
+  /**
+   */
+  virtual bool virtual_HasKwl() const;
 
   //
   // VisibleInterface overloads.

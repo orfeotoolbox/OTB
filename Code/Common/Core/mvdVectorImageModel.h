@@ -301,6 +301,12 @@ private:
   void BuildGdalOverviews();
 
   //
+  // AbstractLayerModel overrides.
+
+  virtual std::string virtual_GetWkt() const;
+  virtual bool virtual_HasKwl() const;
+
+  //
   // AbstractImageModel overrides.
 
   virtual void virtual_SetCurrentLod( CountType lod );

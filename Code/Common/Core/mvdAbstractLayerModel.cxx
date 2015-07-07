@@ -28,6 +28,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include "ogr_spatialref.h"
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -54,6 +55,8 @@ namespace mvd
 
 namespace
 {
+char const * const STR_SENSOR = QT_TRANSLATE_NOOP( "mvd::AbstractLayerModel", "Sensor" );
+char const * const STR_UNKNOWN = QT_TRANSLATE_NOOP( "mvd::AbstractLayerModel", "Unknown" );
 } // end of anonymous namespace.
 
 
@@ -76,6 +79,87 @@ AbstractLayerModel
 AbstractLayerModel
 ::~AbstractLayerModel()
 {
+}
+
+/*******************************************************************************/
+AbstractLayerModel::SpatialReferenceType
+AbstractLayerModel
+::GetSpatialReferenceType() const
+{
+  std::string wkt( GetWkt() );
+
+  if( wkt.empty() )
+    return
+      HasKwl()
+      ? SRT_SENSOR
+      : SRT_UNKNOWN;
+
+  OGRSpatialReference ogr_sr( wkt.c_str() );
+
+  const char * epsg = ogr_sr.GetAuthorityCode( "PROJCS" );
+
+  if( epsg!=NULL && strcmp( epsg, "" )!=0 )
+    return SRT_CARTO;
+
+  epsg = ogr_sr.GetAuthorityCode( "GEOGCS" );
+
+  if( epsg!=NULL && strcmp( epsg, "" )!=0 )
+    return SRT_GEO;
+
+  return SRT_UNKNOWN;
+}
+
+/*******************************************************************************/
+std::string
+AbstractLayerModel
+::GetWkt() const
+{
+  return virtual_GetWkt();
+}
+
+/*******************************************************************************/
+bool
+AbstractLayerModel
+::HasKwl() const
+{
+  return virtual_HasKwl();
+}
+
+/*******************************************************************************/
+std::string
+AbstractLayerModel
+::GetAuthorityCode( bool isEnhanced ) const
+{
+  std::string wkt( GetWkt() );
+
+  if( wkt.empty() )
+    return
+      !isEnhanced
+      ? std::string()
+      : ( HasKwl()
+	  ? STR_SENSOR
+	  : STR_UNKNOWN );
+
+  OGRSpatialReference ogr_sr( wkt.c_str() );
+
+  const char * epsg = ogr_sr.GetAuthorityCode( "PROJCS" );
+
+  if( epsg!=NULL && strcmp( epsg, "" )!=0 )
+    return epsg;
+
+  epsg = ogr_sr.GetAuthorityCode( "GEOGCS" );
+
+  assert( epsg!=NULL && strcmp( epsg, "" )!=0 );
+
+  return epsg;
+}
+
+/*******************************************************************************/
+bool
+AbstractLayerModel
+::virtual_HasKwl() const
+{
+  return false;
 }
 
 /*******************************************************************************/

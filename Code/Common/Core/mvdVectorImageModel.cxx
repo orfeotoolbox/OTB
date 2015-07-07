@@ -669,6 +669,26 @@ VectorImageModel
 }
 
 /*****************************************************************************/
+std::string
+VectorImageModel
+::virtual_GetWkt() const
+{
+  assert( !m_Image.IsNull() );
+
+  return m_Image->GetProjectionRef();
+}
+
+/*****************************************************************************/
+bool
+VectorImageModel
+::virtual_HasKwl() const
+{
+  assert( !m_Image.IsNull() );
+
+  return !m_Image->GetImageKeywordlist().GetSize()>0;
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
