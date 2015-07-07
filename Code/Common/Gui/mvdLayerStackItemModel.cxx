@@ -316,6 +316,7 @@ LayerStackItemModel
 ::data( const QModelIndex & index, int role ) const
 {
   // qDebug() << this << "::data(" << index << "," << role << ")";
+
   switch( role )
     {
     case Qt::CheckStateRole:
@@ -348,9 +349,15 @@ LayerStackItemModel
       switch( index.column() )
         {
         case COLUMN_PROJ:
-          // qDebug() << "index:" << index.row();
-          return "?";
-          break;
+	  {
+	  assert( m_StackedLayerModel!=NULL );
+
+	  const AbstractLayerModel * layerModel =
+	    static_cast< AbstractLayerModel * >( index.internalPointer() );
+
+	  return FromStdString( layerModel->GetAuthorityCode( true ) );
+	  }
+	  break;
 
         case COLUMN_NAME:
           assert( m_StackedLayerModel!=NULL );
@@ -381,6 +388,7 @@ LayerStackItemModel
       break;
     
     case Qt::FontRole:
+      assert( m_StackedLayerModel!=NULL );
       assert( index.row()>=0 );
 
       if( static_cast< StackedLayerModel::SizeType >( index.row() )==
