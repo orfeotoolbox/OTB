@@ -136,6 +136,14 @@ LayerStackWidget
     this,
     SIGNAL( DeleteButtonClicked() )
   );
+
+  QObject::connect(
+    m_UI->projectionButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( ProjectionButtonClicked() )
+  );
 }
 
 /*******************************************************************************/

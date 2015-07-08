@@ -140,6 +140,9 @@ signals:
   /**
    */
   void DeleteButtonClicked();
+  /**
+   */
+  void ProjectionButtonClicked();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
