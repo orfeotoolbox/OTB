@@ -3,11 +3,11 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 otb_add_test(NAME bfTeLeeImageFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
-    ${BASELINE}/GomaSmallLeeFiltered.png
-    ${TEMP}/GomaSmallLeeFiltered.png
+    ${BASELINE}/GomaSmallLeeFiltered.tif
+    ${TEMP}/GomaSmallLeeFiltered.tif
   Execute $<TARGET_FILE:LeeImageFilter>
-    ${INPUTDATA}/GomaSmall.png
-    ${TEMP}/GomaSmallLeeFiltered.png
+    ${INPUTDATA}/GomaSmall.tif
+    ${TEMP}/GomaSmallLeeFiltered.tif
     3 1
 )
 
@@ -15,11 +15,11 @@ otb_add_test(NAME bfTeLeeImageFilterTest COMMAND ${OTB_TEST_DRIVER}
 
 otb_add_test(NAME bfTeFrostImageFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
-    ${BASELINE}/GomaSmallFrostFiltered.png
-    ${TEMP}/GomaSmallFrostFiltered.png
+    ${BASELINE}/GomaSmallFrostFiltered.tif
+    ${TEMP}/GomaSmallFrostFiltered.tif
   Execute $<TARGET_FILE:FrostImageFilter>
-    ${INPUTDATA}/GomaSmall.png
-    ${TEMP}/GomaSmallFrostFiltered.png
+    ${INPUTDATA}/GomaSmall.tif
+    ${TEMP}/GomaSmallFrostFiltered.tif
     5 0.1
 )
 
