@@ -1,0 +1,34 @@
+#!/bin/bash
+
+cd `dirname $0`
+OUT=`pwd`
+
+PATCH_ELF_EXE=$OUT/tools/patchelf
+
+#setup bin and lib dirs
+INSTALL_LIBDIRS=$OUT/lib
+INSTALL_BINDIRS=$OUT/bin
+
+echo "Configuring..."
+#run patchelf to set rpath
+for lib in $INSTALL_LIBDIRS/*.so*; do
+ #   echo "adding rpath to $lib"
+    $PATCH_ELF_EXE --set-rpath "$OUT/lib" $lib;
+done
+
+#run patchelf on otbapp_
+for lib in $INSTALL_LIBDIRS/otb/applications/*.so*; do
+#    echo "adding rpath to $lib"
+    $PATCH_ELF_EXE --set-rpath "$OUT/lib" $lib;
+done
+
+#run patchelf on otb executables
+for bin in "$INSTALL_BINDIRS/otbTestDriver" "`ls $INSTALL_BINDIRS/otbApplicationLaunch*`"; do
+#    echo "adding rpath to $bin"
+    $PATCH_ELF_EXE --set-rpath "$OUT/lib" $bin;
+done
+
+
+rm -fr $OUT/tools
+
+rm -f $OUT/pkgsetup
