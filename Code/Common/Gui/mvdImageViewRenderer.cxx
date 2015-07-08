@@ -603,7 +603,7 @@ ImageViewRenderer
 
           case EFFECT_LOCAL_TRANSLUCENCY:
             shader->SetShaderType( otb::SHADER_LOCAL_ALPHA );
-            shader->SetRadius( settings.GetValue() );
+            shader->SetRadius( settings.GetSize() );
             break;
 
           case EFFECT_NORMAL:
