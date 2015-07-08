@@ -154,6 +154,8 @@ public:
   AbstractLayerModel * GetCurrent() const;
   AbstractLayerModel * GetCurrent();
 
+  inline SizeType GetCurrentIndex() const;
+
   inline const KeyType & GetCurrentKey() const;
 
   template< typename T >
@@ -524,6 +526,15 @@ StackedLayerModel
 ::GetCurrent() const
 {
   return const_cast< StackedLayerModel * >( this )->GetCurrent();
+}
+
+/*****************************************************************************/
+inline
+StackedLayerModel::SizeType
+StackedLayerModel
+::GetCurrentIndex() const
+{
+  return m_Current;
 }
 
 /*****************************************************************************/
