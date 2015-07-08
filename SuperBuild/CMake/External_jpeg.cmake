@@ -29,11 +29,10 @@ else()
         -DWITH_SIMD:BOOL=OFF
         -DWITH_TURBOJPEG:BOOL=OFF        
         -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
-        PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/${proj}/jconfigint.h.in ${JPEG_SB_SRC}/win/
-        )
+        PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/${proj}/jconfigint.h.in ${JPEG_SB_SRC}/win/  )
 
     else()
-  
+      
       ExternalProject_Add(${proj}
         PREFIX ${proj}
         URL "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/libjpeg-turbo-1.4.1.tar.gz"
@@ -58,6 +57,10 @@ else()
         DEPENDEES patch update
         DEPENDERS configure )
 
+      ExternalProject_Add_Step(${proj} remove_static
+        COMMAND ${CMAKE_COMMAND} -E remove -f ${SB_INSTALL_PREFIX}/lib/libturbojpeg.a
+        DEPENDEES install  )
+      
     endif()
 
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
