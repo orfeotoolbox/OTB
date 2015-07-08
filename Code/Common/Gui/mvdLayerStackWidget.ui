@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>188</width>
+    <width>224</width>
     <height>124</height>
    </rect>
   </property>
@@ -95,18 +95,18 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="deleteButton">
+      <widget class="QToolButton" name="deleteButton_2">
        <property name="text">
         <string/>
        </property>
        <property name="icon">
         <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
-         <normaloff>:/icons/action_LauerDelete_Icon</normaloff>:/icons/action_LauerDelete_Icon</iconset>
+         <normaloff>:/icons/action_LayerProjection_Icon</normaloff>:/icons/action_LayerProjection_Icon</iconset>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer">
+      <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -117,6 +117,17 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QToolButton" name="deleteButton">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerDelete_Icon</normaloff>:/icons/action_LayerDelete_Icon</iconset>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
