@@ -685,7 +685,7 @@ VectorImageModel
 {
   assert( !m_Image.IsNull() );
 
-  return !m_Image->GetImageKeywordlist().GetSize()>0;
+  return m_Image->GetImageKeywordlist().GetSize()>0;
 }
 
 /*****************************************************************************/
