@@ -190,5 +190,17 @@ if(GDAL_CONFIG_CHECKING)
           message(STATUS "Check if Gdal qualifies for Orfeo ToolBox -- no.")
 	endif()
 
+  if(NOT GDAL_VERSION)
+    if(EXISTS "${TEMP}/gdalVersion.txt")
+      file(READ "${TEMP}/gdalVersion.txt" GDAL_VERSION)
+    endif()
+  endif()
+  message(STATUS "  Version : ${GDAL_VERSION}")
+  message(STATUS "  Drivers for JPEG 2000 : ")
+  message(STATUS "    Jasper : ${GDAL_HAS_J2K_JG2000}")
+  message(STATUS "    OpenJPEG : ${GDAL_HAS_J2K_OPJG}")
+  message(STATUS "    Kakadu : ${GDAL_HAS_J2K_KAK}")
+  message(STATUS "    ECW : ${GDAL_HAS_J2K_ECW}")
+
 
 endif() #GDAL_CONFIG_CHECKING
