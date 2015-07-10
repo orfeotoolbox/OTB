@@ -10,6 +10,8 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH})
 
+include(CTest)
+
 #----------------------------------------------------------------------------
 # ensure WIN32 definition
 if(WIN32)
