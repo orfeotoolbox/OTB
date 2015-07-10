@@ -1,3 +1,4 @@
+if(EXISTS "${PROJECT_SOURCE_DIR}/.hg")
 find_package(Mercurial)
 if(Mercurial_FOUND)
   message(STATUS "Repository status :")
@@ -23,4 +24,28 @@ if(Mercurial_FOUND)
     mark_as_advanced(OTB_DATA_WC_REVISION)
   endif()
 
+endif()
+endif()
+
+if(EXISTS "${PROJECT_SOURCE_DIR}/.git")
+  find_package(Git)
+  if(GIT_FOUND)
+    execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=oneline
+      WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+      OUTPUT_VARIABLE OTB_WC_VERSION
+      OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+    execute_process(COMMAND ${GIT_EXECUTABLE} status -s
+      WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+      OUTPUT_VARIABLE OTB_WC_STATUS
+      OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+    message(STATUS "Repository status :")
+    message(STATUS "  Repository revision is ${OTB_WC_VERSION}")
+    if(OTB_WC_STATUS)
+      message(STATUS "  Local file modifications:")
+      string(REPLACE "\n" "\n--     " OTB_WC_STATUS_PRETTYPRINT "    ${OTB_WC_STATUS}")
+      message(STATUS "${OTB_WC_STATUS_PRETTYPRINT}")
+    else()
+      message(STATUS "  No files modified locally")
+    endif()
+  endif()
 endif()
