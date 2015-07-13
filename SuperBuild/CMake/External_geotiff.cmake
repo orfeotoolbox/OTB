@@ -14,7 +14,8 @@ else()
   message(STATUS "  Using GeoTIFF SuperBuild version")
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES TIFF PROJ JPEG ZLIB)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF PROJ JPEG ZLIB)
+
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj GEOTIFF)

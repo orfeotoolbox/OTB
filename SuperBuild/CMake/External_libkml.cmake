@@ -12,8 +12,11 @@ if(USE_SYSTEM_LIBKML)
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using libKML SuperBuild version")
+  
   # declare dependencies
-  set(${proj}_DEPENDENCIES EXPAT ZLIB BOOST)
+  ##set(${proj}_DEPENDENCIES EXPAT ZLIB BOOST)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} EXPAT ZLIB BOOST)
+  
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj LIBKML)

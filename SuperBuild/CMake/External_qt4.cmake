@@ -21,11 +21,11 @@ else()
   endif()
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES ZLIB TIFF PNG SQLITE)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB TIFF PNG SQLITE)
+  
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj QT4)
-  
  
   #use system libs always for Qt4 as we build them from source or have already in system
   set(QT4_SB_CONFIG)

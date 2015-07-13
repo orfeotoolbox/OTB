@@ -14,7 +14,8 @@ else()
   message(STATUS "  Using GDAL SuperBuild version")
 
   # declare dependencies
-  set(${proj}_DEPENDENCIES TIFF GEOTIFF PNG JPEG OPENJPEG SQLITE GEOS ZLIB EXPAT LIBKML CURL)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF GEOTIFF PNG JPEG OPENJPEG SQLITE GEOS ZLIB EXPAT LIBKML)
+
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj GDAL)
@@ -28,13 +29,9 @@ else()
   ADD_SUPERBUILD_CONFIGURE_VAR(ZLIB_ROOT     --with-libz)
   ADD_SUPERBUILD_CONFIGURE_VAR(EXPAT_ROOT    --with-expat)
   ADD_SUPERBUILD_CONFIGURE_VAR(LIBKML_ROOT   --with-libkml)
-  if(NOT USE_SYSTEM_CURL)
-    ADD_SUPERBUILD_CONFIGURE_VAR(CURL_ROOT     --with-curl "/bin/curl-config")
-  endif()
-  if(NOT USE_SYSTEM_GEOS)
-    ADD_SUPERBUILD_CONFIGURE_VAR(GEOS_ROOT     --with-geos "/bin/geos-config")
-  endif()
-
+  ADD_SUPERBUILD_CONFIGURE_VAR(CURL_ROOT     --with-curl "/bin/curl-config")
+  ADD_SUPERBUILD_CONFIGURE_VAR(GEOS_ROOT     --with-geos "/bin/geos-config")
+  
   #if(USE_SYSTEM_TIFF)
   #  if(NOT SYSTEM_TIFF_PREFIX STREQUAL "")
   #    list(APPEND GDAL_SB_CONFIG --with-libtiff=${SYSTEM_TIFF_PREFIX})

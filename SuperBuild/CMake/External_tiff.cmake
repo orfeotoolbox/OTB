@@ -14,10 +14,8 @@ else()
   message(STATUS "  Using libtiff SuperBuild version")
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES ZLIB)
-  if(MSVC)
-    list(APPEND ${proj}_DEPENDENCIES JPEG)
-  endif()
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB JPEG)
+
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj TIFF)

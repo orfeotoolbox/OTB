@@ -20,7 +20,8 @@ else()
   message(STATUS "  Using OSSIM SuperBuild version")
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES TIFF GEOTIFF GEOS JPEG OPENTHREADS)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF GEOTIFF GEOS JPEG OPENTHREADS)
+
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj OSSIM)

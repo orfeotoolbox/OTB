@@ -107,7 +107,8 @@ else()
   endforeach()
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES TIFF EXPAT PNG ZLIB FFTW)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF EXPAT PNG ZLIB FFTW)
+
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj ITK)

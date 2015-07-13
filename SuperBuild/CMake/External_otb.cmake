@@ -27,13 +27,7 @@ else()
     )
 endif()
 
-set(${proj}_DEPENDENCIES
-    GDAL
-    OSSIM
-    ITK
-    TINYXML
-    BOOST
-    )
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} GDAL OSSIM ITK TINYXML BOOST)
 
 if(OTB_USE_CURL)
   list(APPEND ${proj}_DEPENDENCIES CURL)

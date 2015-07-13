@@ -12,9 +12,7 @@ if(USE_SYSTEM_ZLIB)
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using zlib SuperBuild version")
-  # declare dependencies
-  
-  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
+
   # set proj back to its original value
   set(proj ZLIB)
   

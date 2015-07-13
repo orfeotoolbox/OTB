@@ -14,10 +14,8 @@ else()
   message(STATUS "  Using cURL SuperBuild version")
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES ZLIB)
-  if(NOT USE_SYSTEM_OPENSSL)
-    list(APPEND ${proj}_DEPENDENCIES OPENSSL)
-  endif()
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB OPENSSL)
+
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj CURL)

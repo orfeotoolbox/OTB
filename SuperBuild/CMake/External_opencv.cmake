@@ -14,7 +14,8 @@ else()
   message(STATUS "  Using OpenCV SuperBuild version")
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES ZLIB TIFF PNG)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB TIFF PNG)
+  
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj OPENCV)
