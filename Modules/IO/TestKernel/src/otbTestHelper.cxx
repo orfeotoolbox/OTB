@@ -1141,17 +1141,17 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   otbCheckStringValue("INFO: using driver", ref_poDriver->GetName(), test_poDriver->GetName(), nbdiff, m_ReportErrors);
 
-  std::string strRefName(ref_poDS->GetName());
-  std::string strTestName(test_poDS->GetName());
-  if (strRefName != strTestName)
-    {
-    if (!m_ReportErrors)
-      {
-      otbPrintDiff("WARNING: INFO: Internal data source name poDS->GetName() were different",
-                   strRefName,
-                   strTestName);
-      }
-    }
+  // std::string strRefName(ref_poDS->GetName());
+  // std::string strTestName(test_poDS->GetName());
+  // if (strRefName != strTestName)
+  //   {
+  //   if (!m_ReportErrors)
+  //     {
+  //     otbPrintDiff("WARNING: INFO: Internal data source name poDS->GetName() were different",
+  //                  strRefName,
+  //                  strTestName);
+  //     }
+  //   }
 
   /* -------------------------------------------------------------------- */
   /*      Process each data source layer.                                 */
