@@ -1,11 +1,16 @@
 
 message(STATUS "Setup OTB Packaging...")
 
-set(PACKAGE_VERSION 5.0.0) #should take from cmake instead of hardcoded value
+set(PACKAGE_VERSION 5.0.0) #should take from cmake automatically or update with every release?
 set(PACKAGE_NAME OTB)
 set(PACKAGE_LONG_NAME OrfeoToolBox)
 
-set(ARCHIVE_NAME ${PACKAGE_NAME}-${PACKAGE_VERSION}-Linux64)
+set(PACKAGE_ARCH Linux32)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  set(PACKAGE_ARCH Linux64)
+endif()
+
+set(ARCHIVE_NAME ${PACKAGE_NAME}-${PACKAGE_VERSION}-${PACKAGE_ARCH})
 
 set(MAKESELF_SCRIPT ${CMAKE_BINARY_DIR}/PACKAGE-OTB/build/makeself.sh)
 
@@ -30,7 +35,7 @@ file(WRITE "${CMAKE_BINARY_DIR}/PACKAGE-OTB/src/PACKAGE-OTB/CMakeLists.txt"
     COMMAND ${CMAKE_COMMAND}
     "${CMAKE_BINARY_DIR}/PACKAGE-OTB/src/PACKAGE-OTB"
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/PACKAGE-OTB/build" )
-  
+
   add_custom_target(PACKAGE-OTB-build
     COMMAND ${CMAKE_COMMAND}
     "--build" "${CMAKE_BINARY_DIR}/PACKAGE-OTB/build" "--target" "install"
@@ -38,10 +43,10 @@ file(WRITE "${CMAKE_BINARY_DIR}/PACKAGE-OTB/src/PACKAGE-OTB/CMakeLists.txt"
     DEPENDS PACKAGE-OTB-configure)
 
   add_custom_target(PACKAGE-OTB
-    COMMAND ${MAKESELF_SCRIPT} "--target" "${ARCHIVE_NAME}" "${SB_INSTALL_PREFIX}/${ARCHIVE_NAME}" "${ARCHIVE_NAME}.bin" "${PACKAGE_LONG_NAME} ${PACKAGE_VERSION}" "./pkgsetup"
+    COMMAND ${MAKESELF_SCRIPT} "--target" "${ARCHIVE_NAME}" "${SB_INSTALL_PREFIX}/${ARCHIVE_NAME}" "${ARCHIVE_NAME}.run" "${PACKAGE_LONG_NAME} ${PACKAGE_VERSION}" "./pkgsetup"
     DEPENDS PACKAGE-OTB-build)
-  
+
   add_custom_target(PACKAGE-OTB-clean
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/PACKAGE-OTB"
-    COMMAND ${CMAKE_COMMAND} -E remove "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.bin"
+    COMMAND ${CMAKE_COMMAND} -E remove "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.run"
     COMMAND ${CMAKE_COMMAND} "${CMAKE_BINARY_DIR}" WORKING_DIRECTORY "${CMAKE_BINARY_DIR}" )
