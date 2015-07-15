@@ -331,7 +331,7 @@ ImageViewRenderer
 {
   assert( !m_GlView.IsNull() );
 
-  // qDebug() << this << "::PaintGL(" << c << ")";
+  qDebug() << this << "::PaintGL(" << c << ")";
 
   // qDebug() << m_GlView.GetPointer();
 
@@ -358,6 +358,8 @@ ImageViewRenderer
   // Bypass rendering if needed.
   if( IsBypassRenderingEnabled() )
     return;
+
+  qDebug() << this << "-> render";
 
   //
   // Pre-render scene.
@@ -733,7 +735,7 @@ void
 ImageViewRenderer
 ::virtual_RefreshScene()
 {
-  // qDebug() << this << "::virtual_RefreshScene()";
+  qDebug() << this << "::virtual_RefreshScene()";
 
   StackedLayerModel * stackedLayerModel = GetLayerStack();
 
