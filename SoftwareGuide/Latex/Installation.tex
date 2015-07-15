@@ -175,7 +175,7 @@ Once the dependencies are built, OTB can finally be compiled :
 \begin{itemize}
 	\item Just provide the location where you installed the dependencies, 
 	\item Install the ones not provided by SuperBuild
-    \item From the cmake interface, launch 'Configure' and 'Generate'
+    \item From the CMake interface, launch 'Configure' and 'Generate'
     \item Compile and install : call the generator used for your platform : make, nmake, jom, ... 
 \end{itemize}
 
@@ -241,7 +241,7 @@ OTB\textunderscore SOURCE\textunderscore DIR, OTB\textunderscore BINARY\textunde
         \item Offline mode : if you have already the dependencies archives on your disk, set the variable DOWNLOAD\textunderscore LOCATION to the folder containing those archives. If archives names and MD5 sums match, CMake won't download them. An archive containing all the needed source archives is available on Orfeo ToolBox website, you may download it, uncompress, and point the DOWNLOAD\textunderscore LOCATION variable to the uncompressed folder (see \url{https://www.orfeo-toolbox.org/packages/SuperBuild-archives.tar.bz2}).
         \item For each dependency, you can use the variable USE\textunderscore SYSTEM\textunderscore XXX to choose whether you want this dependency to be build by SuperBuild or if a system version should be used. 
     \end{itemize}
-    \item From the cmake interface, launch 'Configure' and 'Generate'
+    \item From the CMake interface, launch 'Configure' and 'Generate'
     \item Compile and install : call the generator used for your platform : make, nmake, jom, ... 
 \end{itemize}
 
@@ -249,7 +249,7 @@ Please note that during the CMake configuration step, you may see warnings comin
 
 After SuperBuild compilation, your build directory will be organized with the following pattern :
 \begin{itemize}
-  \item BUILD_DIRECTORY \hfill \textit{your SuperBuild build directory}
+  \item BUILD\_DIRECTORY \hfill \textit{your SuperBuild build directory}
   \begin{itemize}
     \item EXPAT
     \begin{itemize}
@@ -406,7 +406,7 @@ GOTO :END
 \end{verbatim}
 Into a OSGEo4W shell, run the OTB.bat with the right arguments: full path to the OTB src directory, full path to the OTB build directory, full path to the place where install OTB. Take a break, you made it: OTB is installed in your install directory. If you want test: into an OSGeo4W shell, go to the bin directory of the install directory and run HelloWorld.exe. If you want build OTB in Release config, into the OSGeo4W shell, open the OTB.sln and select this configuration from the configuration selector and build the solution.
 
-If you want use more recent MS-compiler please change the path to vsvars32.bat file and change the generator used by cmake line. OTB should support compilation under Visual Studio 2012 and 2013. 
+If you want use more recent MS-compiler please change the path to vsvars32.bat file and change the generator used by CMake line. OTB should support compilation under Visual Studio 2012 and 2013. 
 
 That should be all! Otherwise, subscribe to otb-users@googlegroups.com and you will get some help.
 
@@ -506,49 +506,46 @@ $ export GDAL_DATA=$GDAL_INSTALL_DIR/share/gdal
 Also note that with this Gdal configuration, you will still need to have Tiff and Geotiff libraries and headers available on your system to build OTB (due to third parties requiring them). However, you can use the system packages for those.
 
 \subsection{Custom OTB}
-COMPONENTS
 Since OTB is modularized, it is possible to only build some modules instead of the whole set. 
-You can deactivate each module (and the ones that depend on it) one by one from the cmake interface. 
-You just have to switch off the cmake variable OTB\_BUILD\_DEFAULT\_MODULES, press Configure, and then switch off each Module\_module\_name variable (\*).
-To provide an overview on how things work, the otion COMPONENTS of the cmake command find\_package is used in order to only load the requested modules.
-This module-specific list prevent cmake from performing a blind search; it is also a convienent way to monitor the dependencies of each module.
+You can deactivate each module (and the ones that depend on it) one by one from the CMake interface. 
+You just have to switch off the CMake variable OTB\_BUILD\_DEFAULT\_MODULES, press Configure, and then switch off each Module\_module\_name variable (\*).
+To provide an overview on how things work, the option COMPONENTS of the CMake command find\_package is used in order to only load the requested modules.
+This module-specific list prevent CMake from performing a blind search; it is also a convienent way to monitor the dependencies of each module.
 
-~ 
+\begin{verbatim}
+find_package(OTB COMPONENTS OTBCommon OTBTransform [...])
+\end{verbatim} 
 
-Some of the OTB capabilities are considered as optional, and you can deactivate the related modules thanks to the following cmake variables:
-OTB\_USE\_LIBKML, OTB\_USE\_QT4, OTB\_USE\_OPENCV, OTB\_USE\_MUPARSERX, OTB\_USE\_OPENJPEG, OTB\_USE\_CURL, OTB\_USE\_MUPARSER, OTB\_USE\_LIBSVM, OTB\_USE\_MAPNIK, OTB\_USE\_6S, OTB\_USE\_SIFTFAST.
-\textbf{It is very important to notice that these variable override the variable OTB\_BUILD\_DEFAULT\_MODULES.}
-
-The table below shows which modules are deactivated when switching off these variables:
+Some of the OTB capabilities are considered as optional, and you can deactivate the related modules thanks to a set of CMake variables starting with OTB\_USE\_\ldots 
 
 \begin{center}
 \begin{tiny}
 \begin{table}[!htbp]
-\begin{tabular}{|p{0.35\textwidth}|p{0.75\textwidth}|}
+\begin{tabular}{|l|l|p{0.52\textwidth}|}
 \hline
-\textbf{Cmake variable} & \textbf{Modules} \\
+\textbf{CMake variable} & \textbf{3rd party module} & \textbf{Modules depending on it} \\
 \hline
-\textbf{OTB\_USE\_LIBKML} & OTBlibkml OTBKMZWriter OTBIOKML OTBAppKMZ \\
+\textbf{OTB\_USE\_LIBKML} & OTBlibkml & OTBKMZWriter OTBIOKML OTBAppKMZ \\
 \hline
-\textbf{OTB\_USE\_QT4} & OTBQt4 OTBQtWidget \\
+\textbf{OTB\_USE\_QT4} & OTBQt4 & OTBQtWidget \\
 \hline
-\textbf{OTB\_USE\_OPENCV} & OTBOpenCV \\
+\textbf{OTB\_USE\_OPENCV} & OTBOpenCV & \\
 \hline
-\textbf{OTB\_USE\_MUPARSERX} & OTBMuParserX OTBMathParserX OTBAppMathParserX \\
+\textbf{OTB\_USE\_MUPARSERX} & OTBMuParserX & OTBMathParserX OTBAppMathParserX \\
 \hline
-\textbf{OTB\_USE\_OPENJPEG} & OTBOpenJPEG OTBIOJPEG2000 \\
+\textbf{OTB\_USE\_OPENJPEG} & OTBOpenJPEG & OTBIOJPEG2000 \\
 \hline
-\textbf{OTB\_USE\_CURL} & OTBCurl \\
+\textbf{OTB\_USE\_CURL} & OTBCurl & \\
 \hline
-\textbf{OTB\_USE\_MUPARSER} & OTBMuParser OTBMathParser OTBDempsterShafer OTBAppClassification OTBAppMathParser OTBAppStereo OTBAppProjection OTBAppSegmentation OTBAppClassification OTBRoadExtraction OTBRCC8 OTBCCOBIA OTBAppSegmentation OTBMeanShift OTBAppSegmentation OTBMeanShift OTBAppSegmentation \\
+\textbf{OTB\_USE\_MUPARSER} & OTBMuParser & OTBMathParser OTBDempsterShafer OTBAppClassification OTBAppMathParser OTBAppStereo OTBAppProjection OTBAppSegmentation OTBAppClassification OTBRoadExtraction OTBRCC8 OTBCCOBIA OTBAppSegmentation OTBMeanShift OTBAppSegmentation OTBMeanShift OTBAppSegmentation \\
 \hline
-\textbf{OTB\_USE\_LIBSVM} & OTBLibSVM OTBSVMLearning \\
+\textbf{OTB\_USE\_LIBSVM} & OTBLibSVM & OTBSVMLearning \\
 \hline
-\textbf{OTB\_USE\_MAPNIK} & OTBMapnik OTBVectorDataRendering \\
+\textbf{OTB\_USE\_MAPNIK} & OTBMapnik & OTBVectorDataRendering \\
 \hline
-\textbf{OTB\_USE\_6S} & OTB6S OTBOpticalCalibration OTBAppOpticalCalibration OTBSimulation \\
+\textbf{OTB\_USE\_6S} & OTB6S & OTBOpticalCalibration OTBAppOpticalCalibration OTBSimulation \\
 \hline
-\textbf{OTB\_USE\_SIFTFAST} & OTBSiftFast \\
+\textbf{OTB\_USE\_SIFTFAST} & OTBSiftFast & \\
 \hline
 \end{tabular}
 \caption{Third parties and related modules.}
@@ -557,7 +554,125 @@ The table below shows which modules are deactivated when switching off these var
 \end{tiny}
 \end{center}
 
-Every cmake variable mentionned in this subsection are set to ON by default, except OTB\_USE\_MAPNIK; this means that, by default, all the modules are built except OTBMapnik and OTBVectorDataRendering.
+The table above shows which third party modules are associated to these variables, and which other modules depend on it. \textbf{It is very important to notice that these variable override the variable OTB\_BUILD\_DEFAULT\_MODULES.}.
+
+Every CMake variable mentionned in this subsection is set to OFF by default except OTB\_USE\_6S and OTB\_USE\_SIFTFAST (which are internal dependencies) so that first build will always be successful. The list of default modules is then the complete module list minus the ones disabled by third parties : 
+
+\begin{multicols}{3}
+\small
+OTB6S \\
+OTBAnomalyDetection \\
+OTBAppChangeDetection \\
+OTBAppDescriptors \\
+OTBAppDimensionalityReduction \\
+OTBAppEdge \\
+OTBAppFiltering \\
+OTBAppFusion \\
+OTBAppHyperspectral \\
+OTBAppImageUtils \\
+OTBAppIndices \\
+OTBApplicationEngine \\
+OTBAppMoments \\
+OTBAppMorphology \\
+OTBAppOpticalCalibration \\
+OTBAppSARCalibration \\
+OTBAppTest \\
+OTBAppTextures \\
+OTBAppVectorDataTranslation \\
+OTBAppVectorUtils \\
+OTBBoost \\
+OTBBoostAdapters \\
+OTBCarto \\
+OTBChangeDetection \\
+OTBCloudDetection \\
+OTBColorMap \\
+OTBCommandLine \\
+OTBCommandLineParser \\
+OTBCommon \\
+OTBComplexImage \\
+OTBConversion \\
+OTBConvolution \\
+OTBCorner \\
+OTBCurlAdapters \\
+OTBDEM \\
+OTBDensity \\
+OTBDescriptors \\
+OTBDimensionalityReduction \\
+OTBDisparityMap \\
+OTBDisplacementField \\
+OTBEdge \\
+OTBEndmembersExtraction \\
+OTBExtendedFilename \\
+OTBFuzzy \\
+OTBGDAL \\
+OTBGdalAdapters \\
+OTBGeoTIFF \\
+OTBImageBase \\
+OTBImageIO \\
+OTBImageManipulation \\
+OTBImageNoise \\
+OTBIndices \\
+OTBInterpolation \\
+OTBIOBSQ \\
+OTBIOGDAL \\
+OTBIOLUM \\
+OTBIOMSTAR \\
+OTBIOMW \\
+OTBIOONERA \\
+OTBIORAD \\
+OTBIOTileMap \\
+OTBIOXML \\
+OTBITK \\
+OTBLabelling \\
+OTBLabelMap \\
+OTBLandSatClassifier \\
+OTBLearningBase \\
+OTBMajorityVoting \\
+OTBMarkov \\
+OTBMetadata \\
+OTBMetrics \\
+OTBMoments \\
+OTBMorphologicalProfiles \\
+OTBMorphologicalPyramid \\
+OTBObjectDetection \\
+OTBObjectList \\
+OTBOGRProcessing \\
+OTBOpenThreads \\
+OTBOpenThreadsAdapters \\
+OTBOpticalCalibration \\
+OTBOssim \\
+OTBOSSIMAdapters \\
+OTBOssimPlugins \\
+OTBPanSharpening \\
+OTBPath \\
+OTBPointSet \\
+OTBPolarimetry \\
+OTBProjection \\
+OTBSARCalibration \\
+OTBSeamCarving \\
+OTBSiftFast \\
+OTBSimulation \\
+OTBSmoothing \\
+OTBSOM \\
+OTBSpatialObjects \\
+OTBStatistics \\
+OTBStereo \\
+OTBStreaming \\
+OTBSupervised \\
+OTBSWIGWrapper \\
+OTBTestKernel \\
+OTBTextures \\
+OTBTimeSeries \\
+OTBTinyXML \\
+OTBTransform \\
+OTBUnmixing \\
+OTBUrbanArea \\
+OTBVectorDataBase \\
+OTBVectorDataIO \\
+OTBVectorDataManipulation \\
+OTBWatersheds \\
+OTBWavelet \\
+\end{multicols}
 
 
 \section{Known issues}
