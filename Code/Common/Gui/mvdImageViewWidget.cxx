@@ -370,7 +370,7 @@ ImageViewWidget
     SIGNAL( RefreshViewRequested() ),
     // to:
     this,
-    SLOT( updateGL() )
+    SLOT( OnRefreshViewRequested() )
   );
 
   QObject::connect(
@@ -1380,6 +1380,18 @@ ImageViewWidget
   assert( m_Renderer!=NULL );
 
   m_Renderer->RefreshScene();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnRefreshViewRequested()
+{
+  qDebug() << this << "::OnRefreshViewRequested()";
+
+  updateGL();
 }
 
 /******************************************************************************/
@@ -2003,6 +2015,8 @@ void
 ImageViewWidget
 ::OnUpdateProjectionRequired()
 {
+  qDebug() << this << "::OnUpdateProjection()";
+
   // Reminder: specific #include "mvdImageViewRenderer.h"
   assert( m_Manipulator!=NULL );
 

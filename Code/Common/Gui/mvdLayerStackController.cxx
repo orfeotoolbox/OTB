@@ -122,6 +122,14 @@ LayerStackController
     SLOT( OnSelectionChanged( int ) )
   );
 
+  QObject::connect(
+    widget,
+    SIGNAL( ProjectionButtonClicked() ),
+    // to:
+    this,
+    SLOT( OnProjectionButtonClicked() )
+  );  
+
 
   QObject::connect(
     widget,
@@ -199,6 +207,15 @@ LayerStackController
 
   QObject::disconnect(
     widget,
+    SIGNAL( ProjectionButtonClicked() ),
+    // from:
+    this,
+    SLOT( OnProjectionButtonClicked() )
+  );  
+
+
+  QObject::disconnect(
+    widget,
     SIGNAL( TopButtonClicked() ),
     // from:
     model,
@@ -259,6 +276,20 @@ LayerStackController
   assert( model!=NULL );
 
   model->SetCurrent( index );
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::OnProjectionButtonClicked()
+{
+  qDebug() << this << "::OnProjectionButtonClicked()";
+
+  assert( GetModel()==GetModel< StackedLayerModel >() );
+  StackedLayerModel * model = GetModel< StackedLayerModel >();
+  assert( model!=NULL );
+
+  model->SetReference( model->GetCurrentIndex() );
 }
 
 /*******************************************************************************/

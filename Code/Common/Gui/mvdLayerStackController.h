@@ -155,6 +155,9 @@ private slots:
   /**
    */
   void OnStackedLayerCurrentChanged( size_t );
+  /**
+   */
+  void OnProjectionButtonClicked();
 };
 
 } // end namespace 'mvd'.
