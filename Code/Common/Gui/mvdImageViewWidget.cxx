@@ -1389,7 +1389,7 @@ void
 ImageViewWidget
 ::OnRefreshViewRequested()
 {
-  qDebug() << this << "::OnRefreshViewRequested()";
+  // qDebug() << this << "::OnRefreshViewRequested()";
 
   updateGL();
 }
@@ -2015,7 +2015,7 @@ void
 ImageViewWidget
 ::OnUpdateProjectionRequired()
 {
-  qDebug() << this << "::OnUpdateProjection()";
+  // qDebug() << this << "::OnUpdateProjectionRequired()";
 
   // Reminder: specific #include "mvdImageViewRenderer.h"
   assert( m_Manipulator!=NULL );

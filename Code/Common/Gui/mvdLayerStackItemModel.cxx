@@ -798,7 +798,7 @@ void
 LayerStackItemModel
 ::OnReferenceChanged( size_t index )
 {
-  qDebug() << this << "::OnReferenceChanged(" << index << ")";
+  // qDebug() << this << "::OnReferenceChanged(" << index << ")";
 
   assert( m_StackedLayerModel!=NULL );
 
