@@ -1,5 +1,6 @@
 set(OTBSupervised_SRC
   otbMachineLearningModelFactoryBase.cxx
+  otbMachineLearningUtils.cxx
   )
 
 add_library(OTBSupervised ${OTBSupervised_SRC})
