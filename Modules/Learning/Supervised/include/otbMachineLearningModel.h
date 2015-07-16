@@ -58,7 +58,7 @@ namespace otb
  * \sa ImageClassificationFilter
  *
  *
- * \ingroup OTBCommon
+ * \ingroup OTBSupervised
  */
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT MachineLearningModel
