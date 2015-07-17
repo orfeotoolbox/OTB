@@ -197,7 +197,10 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
 
   if (quality != NULL)
     {
-    itkExceptionMacro("Confidence index not available for this classifier !");
+    if (!this->HasConfidenceIndex())
+      {
+      itkExceptionMacro("Confidence index not available for this classifier !");
+      }
     }
 
   return target;

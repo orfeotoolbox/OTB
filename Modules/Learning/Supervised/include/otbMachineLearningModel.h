@@ -123,6 +123,9 @@ public:
   virtual bool CanWriteFile(const std::string &)  = 0;
   //@}
 
+  /** Query capacity to produce a confidence index */
+  virtual bool HasConfidenceIndex() const {return false;}
+
   /**\name Input list of samples accessors */
   //@{
   itkSetObjectMacro(InputListSample,InputListSampleType);
