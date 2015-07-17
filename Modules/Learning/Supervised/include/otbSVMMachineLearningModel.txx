@@ -108,7 +108,7 @@ template <class TInputValue, class TOutputValue>
 typename SVMMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input) const
+::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -120,6 +120,11 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
   TargetSampleType target;
 
   target[0] = static_cast<TOutputValue>(result);
+
+  if (quality != NULL)
+    {
+    itkExceptionMacro("Confidence index not available for this classifier !");
+    }
 
   return target;
 }

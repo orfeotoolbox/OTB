@@ -83,7 +83,7 @@ template <class TInputValue, class TOutputValue>
 typename DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input) const
+::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -95,6 +95,11 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
   TargetSampleType target;
 
   target[0] = static_cast<TOutputValue>(result);
+
+  if (quality != NULL)
+    {
+    itkExceptionMacro("Confidence index not available for this classifier !");
+    }
 
   return target;
 }

@@ -66,7 +66,7 @@ template <class TInputValue, class TTargetValue>
 typename KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::TargetSampleType
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::PredictClassification(const InputSampleType & input) const
+::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -77,6 +77,11 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   TargetSampleType target;
 
   target[0] = static_cast<TTargetValue>(result);
+
+  if (quality != NULL)
+    {
+    itkExceptionMacro("Confidence index not available for this classifier !");
+    }
 
   return target;
 }

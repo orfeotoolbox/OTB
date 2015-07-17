@@ -109,7 +109,7 @@ template <class TInputValue, class TOutputValue>
 typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & value) const
+::PredictClassification(const InputSampleType & value, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -121,6 +121,11 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   TargetSampleType target;
 
   target[0] = static_cast<TOutputValue>(result);
+
+  if (quality != NULL)
+    {
+    itkExceptionMacro("Confidence index not available for this classifier !");
+    }
 
   return target[0];
 }

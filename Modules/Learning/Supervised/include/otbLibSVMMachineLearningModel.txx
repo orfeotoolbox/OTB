@@ -80,7 +80,7 @@ template <class TInputValue, class TOutputValue>
 typename LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input) const
+::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   TargetSampleType target;
 
@@ -89,6 +89,11 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   MeasurementVectorFunctorType mfunctor;
 
   target = m_SVMestimator->GetModel()->EvaluateLabel(mfunctor(input));
+
+  if (quality != NULL)
+    {
+    itkExceptionMacro("Confidence index not available for this classifier !");
+    }
 
   return target;
 }

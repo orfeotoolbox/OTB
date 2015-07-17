@@ -46,6 +46,7 @@ public:
   typedef typename Superclass::TargetValueType            TargetValueType;
   typedef typename Superclass::TargetSampleType           TargetSampleType;
   typedef typename Superclass::TargetListSampleType       TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
 
   typedef std::map<TargetValueType, unsigned int>         MapOfLabelsType;
 
@@ -180,7 +181,7 @@ protected:
   /** Train the machine learning model */
   virtual void TrainClassification();
   /** Predict values using the model */
-  virtual TargetSampleType PredictClassification(const InputSampleType& input) const;
+  virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
 private:
   NeuralNetworkMachineLearningModel(const Self &); //purposely not implemented

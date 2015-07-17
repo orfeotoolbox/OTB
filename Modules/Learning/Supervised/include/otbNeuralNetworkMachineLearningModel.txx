@@ -169,7 +169,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TrainClassifi
 
 template<class TInputValue, class TOutputValue>
 typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType NeuralNetworkMachineLearningModel<
-  TInputValue, TOutputValue>::PredictClassification(const InputSampleType & input) const
+  TInputValue, TOutputValue>::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -193,6 +193,11 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
       maxResponse = currentResponse;
       target[0] = m_CvMatOfLabels->data.i[itLabel];
       }
+    }
+
+  if (quality != NULL)
+    {
+    itkExceptionMacro("Confidence index not available for this classifier !");
     }
 
   return target;
