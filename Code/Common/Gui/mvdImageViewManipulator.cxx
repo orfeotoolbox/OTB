@@ -105,8 +105,6 @@ ImageViewManipulator
   m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY ),
   m_IsMouseDragging( false )
 {
-  m_ViewSettings->SetUseProjection( true );
-
   m_NativeSpacing.Fill( 1.0 );
 }
 
@@ -199,11 +197,6 @@ ImageViewManipulator
   assert( !m_ViewSettings.IsNull() );
 
   m_ViewSettings->SetWkt( wkt );
-#if 0
-  m_ViewSettings->SetUseProjection( !wkt.empty() );
-#else
-  m_ViewSettings->SetUseProjection( true );
-#endif
 }
 
 /******************************************************************************/
