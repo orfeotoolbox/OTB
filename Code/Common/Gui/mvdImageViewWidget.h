@@ -339,6 +339,9 @@ private slots:
   void OnReferenceChanged( size_t );
   /**
    */
+  void OnClearProjectionRequired();
+  /**
+   */
   void OnSetProjectionRequired();
   /**
    */

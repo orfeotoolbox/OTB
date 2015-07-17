@@ -197,6 +197,7 @@ public slots:
 //
 // SIGNALS.
 signals:
+  void ClearProjectionRequired();
   void SetProjectionRequired();
   void UpdateProjectionRequired();
 
@@ -251,6 +252,7 @@ private:
 // Private methods.
 private:
 
+  virtual void virtual_ClearProjection() {};
   virtual void virtual_SetProjection() {};
   virtual void virtual_UpdateProjection() {};
 

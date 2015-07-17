@@ -616,6 +616,14 @@ ImageViewWidget
 
   QObject::connect(
     m_Renderer,
+    SIGNAL( ClearProjectionRequired() ),
+    // to:
+    this,
+    SLOT( OnClearProjectionRequired() )
+  );
+
+  QObject::connect(
+    m_Renderer,
     SIGNAL( SetProjectionRequired() ),
     // to:
     this,
@@ -989,22 +997,25 @@ ImageViewWidget
     //
     // Get spacing of reference layer.
     const AbstractLayerModel * layer = m_Renderer->GetReferenceModel();
-    assert( layer!=NULL );
+    // assert( layer!=NULL );
 
-    if( layer->inherits( AbstractImageModel::staticMetaObject.className() ) )
+    if( layer!=NULL )
       {
-      const AbstractImageModel * imageModel =
-        qobject_cast< const AbstractImageModel * >( layer );
+      if( layer->inherits( AbstractImageModel::staticMetaObject.className() ) )
+	{
+	const AbstractImageModel * imageModel =
+	  qobject_cast< const AbstractImageModel * >( layer );
 
-      assert( imageModel!=NULL );
+	assert( imageModel!=NULL );
 
-      spacing = imageModel->GetSpacing();
+	spacing = imageModel->GetSpacing();
 
-      assert( spacing[ 0 ]!=0.0 );
-      assert( spacing[ 1 ]!=0.0 );
+	assert( spacing[ 0 ]!=0.0 );
+	assert( spacing[ 1 ]!=0.0 );
+	}
+      else
+	assert( false && "Unhandled AbstractLayerModel derived type." );
       }
-    else
-      assert( false && "Unhandled AbstractLayerModel derived type." );
 
     //
     // Get Viewport size.
@@ -1033,19 +1044,22 @@ ImageViewWidget
     // qDebug() << "ZOOM_TYPE_FULL";
 
     const AbstractLayerModel * layer = m_Renderer->GetReferenceModel();
-    assert( layer!=NULL );
+    // assert( layer!=NULL );
 
-    if( layer->inherits( AbstractImageModel::staticMetaObject.className() ) )
+    if( layer!=NULL )
       {
-      const AbstractImageModel * imageModel =
-        qobject_cast< const AbstractImageModel * >( layer );
+      if( layer->inherits( AbstractImageModel::staticMetaObject.className() ) )
+	{
+	const AbstractImageModel * imageModel =
+	  qobject_cast< const AbstractImageModel * >( layer );
         
-      assert( imageModel!=NULL );
+	assert( imageModel!=NULL );
 
-      spacing = imageModel->GetSpacing();
+	spacing = imageModel->GetSpacing();
+	}
+      else
+	assert( false && "Unhandled AbstractLayerModel derived class." );
       }
-    else
-      assert( false && "Unhandled AbstractLayerModel derived class." );
 
     PointType origin;
     PointType extent;
@@ -1264,6 +1278,27 @@ ImageViewWidget
 
     emit ModelUpdated();
     }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnClearProjectionRequired()
+{
+  qDebug() << this << "::OnClearProjectionRequested()";
+
+  assert( m_Manipulator!=NULL );
+  
+  m_Manipulator->SetWkt( std::string() );
+  m_Manipulator->SetKeywordList( otb::ViewSettings::KeywordListType() );
+
+  // m_Manipulator->SetOrigin( imageModel->GetOrigin() );
+  // m_Manipulator->SetSpacing( imageModel->GetSpacing() );
+  // m_Manipulator->SetNativeSpacing( imageModel->GetNativeSpacing() );
+
+  ZoomToExtent();
+
+  updateGL();
 }
 
 /******************************************************************************/
@@ -2096,8 +2131,8 @@ ImageViewWidget
 {
   assert( m_Renderer!=NULL );
 
-  if( m_Renderer->GetReferenceModel< AbstractImageModel >()==NULL )
-    return;
+  // if( m_Renderer->GetReferenceModel< AbstractImageModel >()==NULL )
+  //   return;
 
   // Scale and center.
   Center( ImageViewWidget::ZOOM_TYPE_EXTENT );
@@ -2127,8 +2162,8 @@ ImageViewWidget
 {
   assert( m_Renderer!=NULL );
 
-  if( m_Renderer->GetReferenceModel< AbstractImageModel >()==NULL )
-    return;
+  // if( m_Renderer->GetReferenceModel< AbstractImageModel >()==NULL )
+  //   return;
 
   // Scale and center.
   Center( ImageViewWidget::ZOOM_TYPE_FULL );

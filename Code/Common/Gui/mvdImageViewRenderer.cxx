@@ -80,10 +80,10 @@ ImageViewRenderer
 #endif // _WIN32
   // m_ModelActorPairs(),
 {
-  assert( !m_GlView.IsNull() );
+  // assert( !m_GlView.IsNull() );
 
-  assert( m_GlView->GetSettings()!=NULL );
-  m_GlView->GetSettings()->SetUseProjection( true );
+  // assert( m_GlView->GetSettings()!=NULL );
+  // m_GlView->GetSettings()->SetUseProjection( true );
 
 #ifdef _WIN32
   m_ReferencePair.first = NULL;
@@ -737,23 +737,63 @@ ImageViewRenderer
 {
   // qDebug() << this << "::virtual_RefreshScene()";
 
+  //
+  // Get layer-stack.
   StackedLayerModel * stackedLayerModel = GetLayerStack();
 
-  if( stackedLayerModel==NULL || stackedLayerModel->IsEmpty() )
+  //
+  // Check if empty.
+  if( stackedLayerModel==NULL ||
+      stackedLayerModel->IsEmpty() )
     {
     m_ReferencePair.first = NULL;
     m_ReferencePair.second = otb::GlActor::Pointer();
+
+    // virtual_ClearProjection();
+
+    // assert( !m_GlView.IsNull() );
+    // assert( m_GlView->GetSettings() );
+
+    // m_GlView->GetSettings()->SetUseProjection( false );
 
     // emit ClearProjectionRequired();
 
     return;
     }
 
+  //
+  // Check if non-projected mode.
+  if( !stackedLayerModel->HasReference() )
+    {
+    m_ReferencePair.first = NULL;
+    m_ReferencePair.second = otb::GlActor::Pointer();
 
+    virtual_ClearProjection();
+
+    assert( !m_GlView.IsNull() );
+    assert( m_GlView->GetSettings() );
+
+    m_GlView->GetSettings()->SetUseProjection( false );
+
+    emit ClearProjectionRequired();
+
+    return;
+    }
+
+  //
+  // Otherwise, it's projected mode.
+  assert( !m_GlView.IsNull() );
+  assert( m_GlView->GetSettings()!=NULL );
+
+  m_GlView->GetSettings()->SetUseProjection( true );
+
+
+  //
+  // Store reference-pair.
   ModelActorPair referencePair( m_ReferencePair );
 
   //
-  // Remember first vector image-model as reference image-model.
+  // Remember first layer-model as projection reference.
   m_ReferencePair.first = stackedLayerModel->GetReference();
 
   StackedLayerModel::KeyType referenceKey(
