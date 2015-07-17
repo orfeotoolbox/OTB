@@ -130,6 +130,13 @@ VectorImageModel
   // Remember native spacing
   m_NativeSpacing = m_ImageFileReader->GetOutput()->GetSpacing();
 
+  qDebug()
+    << filename
+    << "\norigin:"
+    << m_ImageFileReader->GetOutput()->GetOrigin()[ 0 ]
+    << m_ImageFileReader->GetOutput()->GetOrigin()[ 1 ]
+    << "\nspacing:" << m_NativeSpacing[ 0 ] << m_NativeSpacing[ 1 ];
+
   
   // Setup GenericRSTransform
   m_GenericRSTransform = otb::GenericRSTransform<>::New();
