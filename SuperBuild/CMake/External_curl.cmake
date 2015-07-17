@@ -20,7 +20,7 @@ else()
   # set proj back to its original value
   set(proj CURL)
   
-  if(USE_SYSTEM_GEOS)
+  if(USE_SYSTEM_GEOS) #why geos here?. discuss with GP.
     ADD_SUPERBUILD_CMAKE_VAR(ZLIB_ROOT)
   endif()
   
