@@ -42,9 +42,9 @@ macro(superbuild_package)
   configure_file(${SETUP_SCRIPT_SRC}
     ${CMAKE_BINARY_DIR}/pkgsetup @ONLY)
 
-  file(COPY ${CMAKE_BINARY_DIR}/pkgsetup
+  install(FILES ${CMAKE_BINARY_DIR}/pkgsetup
     DESTINATION ${PACKAGE_OUTDIR}
-    FILE_PERMISSIONS
+    PERMISSIONS
       OWNER_READ OWNER_WRITE OWNER_EXECUTE
       GROUP_READ GROUP_EXECUTE
       WORLD_READ WORLD_EXECUTE)
