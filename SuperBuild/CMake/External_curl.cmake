@@ -7,7 +7,6 @@ message(STATUS "Setup cURL ...")
 
 if(USE_SYSTEM_CURL)
   find_package ( CURL )
-  add_custom_target(${proj})
   message(STATUS "  Using cURL system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

@@ -7,7 +7,6 @@ message(STATUS "Setup Zlib ...")
 
 if(USE_SYSTEM_ZLIB)
   find_package(ZLIB)
-  add_custom_target(${proj})
   message(STATUS "  Using Zlib system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

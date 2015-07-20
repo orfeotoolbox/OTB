@@ -7,7 +7,6 @@ message(STATUS "Setup OpenSSL ...")
 
 if(USE_SYSTEM_OPENSSL)
   find_package ( OPENSSL )
-  add_custom_target(${proj})
   message(STATUS "  Using OpenSSL system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

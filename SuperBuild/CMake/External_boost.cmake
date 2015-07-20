@@ -21,7 +21,7 @@ if(USE_SYSTEM_BOOST)
     1.35.0
     COMPONENTS unit_test_framework
     )
-  add_custom_target(${proj})
+  
   message(STATUS "  Using Boost system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

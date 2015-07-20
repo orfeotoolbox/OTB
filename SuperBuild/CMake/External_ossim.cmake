@@ -13,7 +13,6 @@ message(STATUS "Setup Ossim...")
 
 if(USE_SYSTEM_OSSIM)
   find_package ( Ossim )
-  add_custom_target(${proj})
   message(STATUS "  Using OSSIM system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
