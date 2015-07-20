@@ -40,8 +40,14 @@ macro(superbuild_package)
 
   set(PKG_OUTPUT_DIR "${PACKAGE_INSTALLDIR}/${PACKAGE_OUTDIR}")
   configure_file(${SETUP_SCRIPT_SRC}
-    ${PACKAGE_INSTALLDIR}/${PACKAGE_OUTDIR}/pkgsetup @ONLY)
+    ${CMAKE_BINARY_DIR}/pkgsetup @ONLY)
 
+  file(COPY ${CMAKE_BINARY_DIR}/pkgsetup
+    DESTINATION ${PACKAGE_OUTDIR}
+    FILE_PERMISSIONS
+      OWNER_READ OWNER_WRITE OWNER_EXECUTE
+      GROUP_READ GROUP_EXECUTE
+      WORLD_READ WORLD_EXECUTE)
   
 endmacro(superbuild_package)
 
