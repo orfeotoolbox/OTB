@@ -65,7 +65,6 @@ macro(SETUP_SUPERBUILD)
 endmacro(SETUP_SUPERBUILD)
 
 macro(ADDTO_DEPENDENCIES_IF_NOT_SYSTEM proj)
-  set(${proj}_DEPENDENCIES)
   foreach(dep ${ARGN})
     if(NOT USE_SYSTEM_${dep})
       list(APPEND ${proj}_DEPENDENCIES ${dep})

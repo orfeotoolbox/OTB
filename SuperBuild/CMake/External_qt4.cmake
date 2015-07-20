@@ -20,7 +20,7 @@ else()
   endif()
   
   # declare dependencies
-  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB TIFF PNG SQLITE)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB TIFF PNG SQLITE FREETYPE)
   
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
