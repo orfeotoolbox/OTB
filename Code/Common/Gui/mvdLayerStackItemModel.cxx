@@ -303,7 +303,7 @@ LayerStackItemModel
 /*****************************************************************************/
 int
 LayerStackItemModel
-::columnCount( const QModelIndex & parent ) const
+::columnCount( const QModelIndex & ) const
 {
   // qDebug() << this << "::columnCount(" << parent << ")";
 
@@ -570,7 +570,7 @@ LayerStackItemModel
 /*****************************************************************************/
 QModelIndex
 LayerStackItemModel
-::parent( const QModelIndex & index ) const
+::parent( const QModelIndex & ) const
 {
   // qDebug() << this << "::parent(" << index << ")";
 
@@ -760,7 +760,7 @@ LayerStackItemModel
 /*****************************************************************************/
 void
 LayerStackItemModel
-::OnLayerVisibilityChanged( AbstractLayerModel * layer, bool isVisible )
+::OnLayerVisibilityChanged( AbstractLayerModel * layer, bool )
 {
   // qDebug() << this << "::OnLayerVisibilityChanged(" << layer << "," << isVisible << ")"; 
 

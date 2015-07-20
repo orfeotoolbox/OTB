@@ -108,7 +108,6 @@ HistogramPlotPicker
 ::HistogramPlotPicker( const PlotCurveVector& curves,
 		       int xAxis,
 		       int yAxis,
-		       int selectionFlags,
 		       DisplayMode trackerMode,
 		       QwtPlotCanvas* canvas ) :
   QwtPlotPicker(

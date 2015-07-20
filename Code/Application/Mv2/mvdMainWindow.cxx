@@ -1065,7 +1065,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::ImportImage( const QString& filename, bool forceCreate )
+::ImportImage( const QString& filename )
 {
   // qDebug() << this << "::ImportImage(" << filename << "," << forceCreate << ")";
 
@@ -1380,7 +1380,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeModel( const AbstractModel * model )
+::OnAboutToChangeModel( const AbstractModel * )
 {
   // qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
@@ -1497,7 +1497,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & key )
+::OnAboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & )
 {
   // qDebug()
   //   << this
@@ -1623,7 +1623,7 @@ MainWindow
   // MODEL(s).
   //
 
-  AbstractLayerModel * layerModel = stackedLayerModel->GetCurrent();
+  AbstractLayerModel * layerModel = stackedLayerModel->Get( key );
 
   if( !layerModel )
     return;
@@ -1719,13 +1719,13 @@ MainWindow
 }
 
 /*****************************************************************************/
-void
-MainWindow
-::OnApplicationToLaunchSelected( const QString& appName,
-				 const QString& docName)
-{
 #if defined( OTB_USE_QT4 ) && USE_OTB_APPS
 
+void
+MainWindow
+::OnApplicationToLaunchSelected( const QString & appName,
+				 const QString & docName )
+{
   assert( Application::ConstInstance()!=NULL );
   assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );
   assert(
@@ -1792,10 +1792,9 @@ MainWindow
     );
 
 #endif // USE_TABBED_VIEW
+}
 
 #endif // defined( OTB_USE_QT4 ) && USE_OTB_APPS
-
-}
 
 /*****************************************************************************/
 #if USE_TABBED_VIEW
@@ -1856,7 +1855,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnOTBApplicationOutputImageChanged( const QString& appName,
+::OnOTBApplicationOutputImageChanged( const QString &,
 				      const QString & outfname )
 {
   //
@@ -1867,7 +1866,7 @@ MainWindow
   // catalog database.
 
   // import the result image into the database
-  ImportImage( outfname, true );
+  ImportImage( outfname );
 }
 
 /*****************************************************************************/
@@ -1904,14 +1903,19 @@ MainWindow
   StackedLayerModel * model = 
     I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
 
-  assert( model!=NULL );
+  // assert( model!=NULL );
 
   //
   // Update widget from model.
+  // comboBox->setCurrentIndex(
+  //   model->GetReferenceIndex()>=model->GetCount()
+  //   ? 0 // comboBox->count() - 1
+  //   : model->GetReferenceIndex() + 1
+  // );
   comboBox->setCurrentIndex(
-    model->GetReferenceIndex()>=model->GetCount()
-    ? 0 // comboBox->count() - 1
-    : model->GetReferenceIndex() + 1
+    index>=model->GetCount()
+    ? 0
+    : index + 1
   );
 }
 

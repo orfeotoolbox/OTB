@@ -623,7 +623,10 @@ DatabaseConnection
 ::FindNode( SqlId id ) const
 {
   QSqlQuery query(
-    ExecuteSelectQuery( SQLQ_SELECT_NODE )
+    ExecuteSelectQuery(
+      SQLQ_SELECT_NODE,
+      QVariantList() << id
+    )
   );
 
   QUERY_NEXT( query );

@@ -80,7 +80,7 @@ TreeWidgetItemDragAndDropEventFilter
 /*****************************************************************************/
 bool
 TreeWidgetItemDragAndDropEventFilter
-::DragEnterEvent( QObject* object, QDragEnterEvent* event )
+::DragEnterEvent( QObject *, QDragEnterEvent* event )
 {
   //
   // Bypass event its MIME data does not contain not URL(s).
@@ -100,7 +100,7 @@ TreeWidgetItemDragAndDropEventFilter
 /*****************************************************************************/
 bool
 TreeWidgetItemDragAndDropEventFilter
-::DragLeaveEvent( QObject* object, QDragLeaveEvent* event )
+::DragLeaveEvent( QObject *, QDragLeaveEvent * )
 {
   //
   // Nothing to do: bypass event & let default behaviour occur.
@@ -110,7 +110,7 @@ TreeWidgetItemDragAndDropEventFilter
 /*****************************************************************************/
 bool
 TreeWidgetItemDragAndDropEventFilter
-::DragMoveEvent( QObject* object, QDragMoveEvent* event )
+::DragMoveEvent( QObject *, QDragMoveEvent * )
 {
   //
   // Nothing to do: bypass event & let default behaviour occur.
@@ -120,7 +120,7 @@ TreeWidgetItemDragAndDropEventFilter
 /*****************************************************************************/
 bool
 TreeWidgetItemDragAndDropEventFilter
-::DropEvent( QObject* object, QDropEvent* event )
+::DropEvent( QObject *, QDropEvent * event )
 {
   assert( event!=NULL );
   assert( event->mimeData()!=NULL );

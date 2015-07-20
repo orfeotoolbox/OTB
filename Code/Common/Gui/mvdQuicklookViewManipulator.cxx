@@ -245,10 +245,10 @@ QuicklookViewManipulator
 /*****************************************************************************/
 void
 QuicklookViewManipulator
-::OnRoiChanged( const PointType& origin,
-                const SizeType& size,
-                const SpacingType& spacing,
-                const PointType& center )
+::OnRoiChanged( const PointType & origin,
+                const SizeType & size,
+                const SpacingType & spacing,
+                const PointType & )
 {
   /*
   qDebug() << this << ":OnRoiChanged()";

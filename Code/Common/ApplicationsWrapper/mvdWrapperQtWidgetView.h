@@ -287,7 +287,7 @@ QtWidgetView
 inline
 void
 QtWidgetView
-::OnProgressReportEnd( int status )
+::OnProgressReportEnd( int )
 {
   SetClosable( true );
 }

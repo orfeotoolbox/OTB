@@ -49,7 +49,7 @@ namespace mvd
 /*******************************************************************************/
 KeymapDialog
 ::KeymapDialog( QWidget* parent, Qt::WindowFlags flags ) :
-  QDialog( parent ),
+  QDialog( parent, flags ),
   m_UI( new mvd::Ui::KeymapDialog() )
 {
   m_UI->setupUi( this );

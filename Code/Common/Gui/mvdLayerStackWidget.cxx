@@ -227,7 +227,7 @@ LayerStackWidget
 void
 LayerStackWidget
 ::OnCurrentRowChanged( const QModelIndex & current,
-                       const QModelIndex & previous )
+                       const QModelIndex & )
 {
   // qDebug()
   //   << this
@@ -240,7 +240,7 @@ LayerStackWidget
 void
 LayerStackWidget
 ::OnSelectionChanged( const QItemSelection & selected,
-                      const QItemSelection & deselected )
+                      const QItemSelection & )
 {
   // qDebug()
   //   << this

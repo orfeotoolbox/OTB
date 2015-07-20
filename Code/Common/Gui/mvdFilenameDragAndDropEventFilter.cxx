@@ -136,7 +136,7 @@ FilenameDragAndDropEventFilter
 /*****************************************************************************/
 bool
 FilenameDragAndDropEventFilter
-::DragMoveEvent( QObject* object, QDragMoveEvent* event )
+::DragMoveEvent( QObject *, QDragMoveEvent * )
 {
   // qDebug() << this << "::DragMoveEvent(" << object << "," << event << ");";
 

@@ -261,7 +261,7 @@ public:
 
   inline const PointType& GetLastPhysicalCenter() const ;
 
-  inline const double GetLastIsotropicZoom() const ;
+  inline double GetLastIsotropicZoom() const ;
 
   // load placename
   void LoadImagePlacename();
@@ -616,7 +616,6 @@ DatasetModel
 
 /*****************************************************************************/
 inline
-const
 double
 DatasetModel
 ::GetLastIsotropicZoom() const

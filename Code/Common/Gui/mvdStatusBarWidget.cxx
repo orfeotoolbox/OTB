@@ -95,7 +95,7 @@ StatusBarWidget
 /*****************************************************************************/
 void
 StatusBarWidget
-::SetScale( double sx, double sy )
+::SetScale( double sx, double )
 {
   // qDebug() << this << "::SetScale(" << sx << "," << sy << ")";
 

@@ -90,7 +90,7 @@ OTBApplicationsModel
 /*******************************************************************************/
 void
 OTBApplicationsModel
-::virtual_BuildModel( void* context )
+::virtual_BuildModel( void * )
 {
   // nothing to do
 }

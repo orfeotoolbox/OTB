@@ -129,7 +129,7 @@ public slots:
 
   /**
    */
-  inline void ImportImage( const QString & filename );
+  void ImportImage( const QString & filename );
 
   /**
    */
@@ -160,10 +160,6 @@ signals:
 //
 // Protected methods.
 protected:
-
-  /**
-   */
-  void ImportImage( const QString& filename, bool forceCreate );
 
   using I18nMainWindow::ImportImage;
 
@@ -208,7 +204,9 @@ protected slots:
 
   /**
    */
+#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
   void OnApplicationToLaunchSelected( const QString & appName, const QString & docName );
+#endif // defined( OTB_USE_QT4 ) && USE_OTB_APPS
 
   /**
    */
@@ -520,14 +518,6 @@ MainWindow
 ::GetQuicklookView()
 {
   return qobject_cast< ImageViewWidget* >( m_QuicklookViewDock->widget() );
-}
-
-/*****************************************************************************/
-void
-MainWindow
-::ImportImage( const QString & filename )
-{
-  ImportImage( filename, true );
 }
 
 /*****************************************************************************/

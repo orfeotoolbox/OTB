@@ -83,6 +83,7 @@ QtWidgetView
                 bool isStandalone,
 		QWidget* parent,
 		Qt::WindowFlags flags ) :
+  QWidget( parent, flags ),
   m_Application( otbApp ),
   m_Model( NULL ),
   m_ExecButton( NULL ),

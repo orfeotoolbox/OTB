@@ -62,7 +62,7 @@ namespace
  *
  * It is defined (statically) as a constant for translation purposes.
  */
-const char*
+char const * const
 ENHANCED_BAND_NAMES[ 10 ] = {
   QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Red" ),
   QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Green" ),

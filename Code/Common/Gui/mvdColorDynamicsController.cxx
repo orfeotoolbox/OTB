@@ -798,7 +798,7 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
-::OnRgbChannelIndexChanged( RgbwChannel channel, int band )
+::OnRgbChannelIndexChanged( RgbwChannel channel, int )
 {
   /*
   qDebug()
@@ -819,7 +819,7 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
-::OnGrayChannelIndexChanged( int band )
+::OnGrayChannelIndexChanged( int )
 {
   /*
   qDebug()
@@ -1176,7 +1176,7 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
-::OnApplyAllClicked( RgbwChannel channel, double low, double high )
+::OnApplyAllClicked( RgbwChannel, double low, double high )
 {
   /*
   qDebug()
@@ -1288,7 +1288,8 @@ ColorDynamicsController
   assert( colorDynWgt!=NULL );
 
   // Store property.
-  properties->SetNoDataEnabled( colorDynWgt->IsNoDataChecked() );
+  // properties->SetNoDataEnabled( colorDynWgt->IsNoDataChecked() );
+  properties->SetNoDataEnabled( enabled );
 
   //
   colorDynWgt->SetNoDataButtonChecked( false );
@@ -1320,7 +1321,8 @@ ColorDynamicsController
   assert( colorDynWgt!=NULL );
 
   // Store property.
-  properties->SetNoData( colorDynWgt->GetNoDataValue() );
+  // properties->SetNoData( colorDynWgt->GetNoDataValue() );
+  properties->SetNoData( value );
 
   //
   colorDynWgt->SetNoDataButtonChecked( false );
@@ -1365,12 +1367,13 @@ ColorDynamicsController
   assert( imageModel!=NULL );
 
   // Get widget.
-  assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
-  ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
-  assert( widget!=NULL );
+  // assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
+  // ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
+  // assert( widget!=NULL );
 
   // Store gamma into settings.
-  imageModel->GetSettings().SetGamma( widget->GetGamma() );
+  // imageModel->GetSettings().SetGamma( widget->GetGamma() );
+  imageModel->GetSettings().SetGamma( value );
 
   // Emit refresh signal.
   emit ModelUpdated();

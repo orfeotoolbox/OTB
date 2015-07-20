@@ -245,7 +245,7 @@ private:
   /**
    */
   template< typename TImageModel >
-    void template_BuildModel_M( BuildContext* context =NULL );
+    void template_BuildModel_M( BuildContext * =NULL );
 
   //
   // SerializableInterface overrides.
@@ -477,7 +477,7 @@ HistogramModel
 template< typename TImageModel >
 void
 HistogramModel
-::template_BuildModel_M( BuildContext* context )
+::template_BuildModel_M( BuildContext * )
 {
   QTime lMain;
   QTime lPass1;

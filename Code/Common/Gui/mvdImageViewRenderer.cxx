@@ -902,7 +902,7 @@ void
 ImageViewRenderer
 ::OnPhysicalCursorPositionChanged( const QPoint & screen,
                                    const PointType & view,
-                                   const PointType & point,
+                                   const PointType &,
                                    const DefaultImageType::PixelType & )
 {
   // qDebug() << "::OnPhysicalCursorPositionChanged(" << screen << ")";

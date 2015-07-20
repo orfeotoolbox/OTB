@@ -717,8 +717,8 @@ VectorImageModel
 /*****************************************************************************/
 void
 VectorImageModel
-::OnPhysicalCursorPositionChanged( const QPoint & screen,
-                                   const PointType & view,
+::OnPhysicalCursorPositionChanged( const QPoint &,
+                                   const PointType &,
                                    const PointType & point,
                                    const DefaultImageType::PixelType& pixel )
 {

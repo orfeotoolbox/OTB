@@ -66,7 +66,7 @@ namespace mvd
 /*******************************************************************************/
 PreferencesDialog
 ::PreferencesDialog( QWidget* parent, Qt::WindowFlags flags ) :
-  QDialog( parent ),
+  QDialog( parent, flags ),
   m_UI( new mvd::Ui::PreferencesDialog() ),
   m_ElevationSetupModified(false),
   m_ResultsDirModified(false)

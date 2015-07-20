@@ -267,7 +267,7 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::ResetDatasetTree( const StringPairListType& datasets )
+::ResetDatasetTree( const StringPairListType & )
 {
   //
   // Access widget.
@@ -957,7 +957,7 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::OnCurrentDatasetChanged( const QString& id, const QString& previousId )
+::OnCurrentDatasetChanged( const QString & id, const QString & )
 {
   // qDebug() << this << "::OnCurrentDatasetChanged(" << id << ")";
 

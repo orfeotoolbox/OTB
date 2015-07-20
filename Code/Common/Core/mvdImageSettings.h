@@ -146,7 +146,7 @@ public:
 
   /**
    */
-  inline char const * const GetValueName() const;
+  inline const char * GetValueName() const;
 
   /**
    */
@@ -315,7 +315,7 @@ ImageSettings
 
 /*****************************************************************************/
 inline
-char const * const
+const char *
 ImageSettings
 ::GetValueName() const
 {

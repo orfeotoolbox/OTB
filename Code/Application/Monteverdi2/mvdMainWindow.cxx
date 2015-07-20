@@ -1106,7 +1106,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeModel( const AbstractModel* model )
+::OnAboutToChangeModel( const AbstractModel * )
 {
   // qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
@@ -1198,7 +1198,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeSelectedDatasetModel( const DatasetModel* model )
+::OnAboutToChangeSelectedDatasetModel( const DatasetModel * )
 {
   // qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
 
@@ -1653,7 +1653,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnOTBApplicationOutputImageChanged( const QString& appName,
+::OnOTBApplicationOutputImageChanged( const QString &,
 				      const QString & outfname )
 {
   //

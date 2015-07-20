@@ -919,7 +919,7 @@ void
 DatasetModel
 ::OnRoiChanged( const PointType& center,
                 double sx,
-                double sy )
+                double )
 {
   /*
   qDebug()

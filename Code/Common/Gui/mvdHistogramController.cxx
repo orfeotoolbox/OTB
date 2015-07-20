@@ -70,7 +70,7 @@ HistogramController
 /*******************************************************************************/
 void
 HistogramController
-::Connect( AbstractModel* model )
+::Connect( AbstractModel * )
 {
   // HistogramWidget* widget = GetWidget< HistogramWidget >();
 
@@ -84,7 +84,7 @@ HistogramController
 /*******************************************************************************/
 void
 HistogramController
-::Disconnect( AbstractModel* model )
+::Disconnect( AbstractModel * )
 {
   // HistogramWidget* widget = GetWidget< HistogramWidget >();
 
@@ -184,7 +184,7 @@ HistogramController
 /*****************************************************************************/
 void
 HistogramController
-::OnRgbChannelIndexChanged( RgbwChannel channel, int band )
+::OnRgbChannelIndexChanged( RgbwChannel channel, int )
 {
   /*
   qDebug()
@@ -200,7 +200,7 @@ HistogramController
 /*****************************************************************************/
 void
 HistogramController
-::OnGrayChannelIndexChanged( int band )
+::OnGrayChannelIndexChanged( int )
 {
   /*
   qDebug()

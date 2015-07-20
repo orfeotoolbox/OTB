@@ -1408,7 +1408,7 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
-::OnReferenceChanged( size_t index )
+::OnReferenceChanged( size_t )
 {
   // qDebug() << this << "::OnReferenceChanged(" << index << ")";
 
@@ -1586,10 +1586,10 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
-::OnRoiChanged( const PointType& point,
-                const SizeType& size,
-                const SpacingType& spacing,
-                const PointType& center )
+::OnRoiChanged( const PointType &,
+                const SizeType &,
+                const SpacingType & spacing,
+                const PointType & center )
 {
   assert( m_Renderer!=NULL );
 

@@ -184,7 +184,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeModel( const AbstractModel* model )
+::OnAboutToChangeModel( const AbstractModel * )
 {
   // qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
@@ -204,8 +204,8 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnApplicationToLaunchSelected( const QString& appName,
-				 const QString& docName)
+::OnApplicationToLaunchSelected( const QString & appName,
+				 const QString & )
 {
 #ifdef OTB_USE_QT4
 
