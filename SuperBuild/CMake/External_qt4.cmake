@@ -49,8 +49,14 @@ else()
       PATCH_COMMAND ${CMAKE_COMMAND} -E copy
         ${CMAKE_BINARY_DIR}/configure_qt4.bat
         ${QT4_SB_SRC}
-      DEPENDS ${${proj}_DEPENDENCIES}
-      )
+        DEPENDS ${${proj}_DEPENDENCIES} )
+
+    ExternalProject_Add_Step(${proj} _jpeg_lib_name
+      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/${proj}/qjpeghandler.pri
+      ${QT4_SB_SRC}/src/gui/image/
+      DEPENDEES patch update
+      DEPENDERS configure  )
+
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}

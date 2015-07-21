@@ -17,7 +17,7 @@ GDAL_HOME="@CMAKE_WIN_INSTALL_PREFIX@"
 #if using an external jpeg library uncomment the follwing lines
 JPEG_EXTERNAL_LIB = 1
 JPEGDIR = @CMAKE_WIN_INSTALL_PREFIX@\include
-JPEG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\libjpeg.lib
+JPEG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\jpeg.lib
 
 #if using an external png library uncomment the follwing lines
 PNG_EXTERNAL_LIB = 1
@@ -86,7 +86,7 @@ OPENJPEG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\openjp2.lib
 #		$(LIBKML_DIR)/third_party\expat.win32/libexpat.lib \
 #		$(LIBKML_DIR)/third_party\uriparser-0.7.5.win32/release/uriparser.lib \
 #		$(LIBKML_DIR)/third_party\zlib-1.2.3.win32/lib/minizip.lib \
-#		$(LIBKML_DIR)/third_party\zlib-1.2.3.win32/lib/zlib.lib		
+#		$(LIBKML_DIR)/third_party\zlib-1.2.3.win32/lib/zlib.lib
 
 
 # Uncomment the following and update to enable NCSA HDF Release 4 support.
@@ -97,5 +97,4 @@ OPENJPEG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\openjp2.lib
 # Uncomment the following and update to enable NCSA HDF Release 5 support.
 #HDF5_PLUGIN = NO
 #HDF5_DIR =	c:\warmerda\supportlibs\hdf5\5-164-win
-#HDF5_LIB =	$(HDF5_DIR)\dll\hdf5dll.lib 
-
+#HDF5_LIB =	$(HDF5_DIR)\dll\hdf5dll.lib
