@@ -17,14 +17,14 @@ if(USE_SYSTEM_OSSIM)
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using OSSIM SuperBuild version")
-
+  
   # declare dependencies
-  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF GEOTIFF GEOS JPEG OPENTHREADS)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF GEOTIFF GEOS JPEG OPENTHREADS FREETYPE)
 
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj OSSIM)
-
+  
   ADD_SUPERBUILD_CMAKE_VAR(TIFF_INCLUDE_DIR)
   ADD_SUPERBUILD_CMAKE_VAR(TIFF_LIBRARY)
   ADD_SUPERBUILD_CMAKE_VAR(GEOTIFF_INCLUDE_DIR)
@@ -35,13 +35,15 @@ else()
   ADD_SUPERBUILD_CMAKE_VAR(JPEG_LIBRARY)
   ADD_SUPERBUILD_CMAKE_VAR(OPENTHREADS_INCLUDE_DIR)
   ADD_SUPERBUILD_CMAKE_VAR(OPENTHREADS_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(FREETYPE_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(FREETYPE_LIBRARY)
 
   set(OSSIM_CXX_FLAGS  -D__STDC_CONSTANT_MACROS)
-
+  
   if(MSVC)
     set(OSSIM_CXX_FLAGS /EHsc)
   endif()
-
+  
   if(0)
     # SVN version
     ExternalProject_Add(ossim_cmakemodules
@@ -54,9 +56,9 @@ else()
       PATCH_COMMAND ${CMAKE_COMMAND} -E copy
         ${CMAKE_SOURCE_DIR}/patches/${proj}/OssimUtilities.cmake
         ${CMAKE_BINARY_DIR}/${proj}/_cmakemodules/src/ossim_cmakemodules)
-
+      
     list(APPEND ${proj}_DEPENDENCIES ossim_cmakemodules)
-
+  
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       SVN_REPOSITORY "http://svn.osgeo.org/ossim/trunk/ossim/"
@@ -72,7 +74,6 @@ else()
         -DBUILD_OSSIM_MPI_SUPPORT:BOOL=OFF
         -DBUILD_OSSIM_APPS:BOOL=OFF
         -DBUILD_OSSIM_FRAMEWORKS:BOOL=OFF
-        -DBUILD_OSSIM_FREETYPE_SUPPORT:BOOL=OFF
         -DINSTALL_ARCHIVE_DIR:STRING=lib
         -DINSTALL_LIBRARY_DIR:STRING=lib
         -DCMAKE_PREFIX_PATH:STRING=${SB_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}
@@ -80,7 +81,7 @@ else()
       DEPENDS ${${proj}_DEPENDENCIES}
       CMAKE_COMMAND ${SB_CMAKE_COMMAND}
       )
-
+      
       ExternalProject_Add_Step(${proj} copy_CMakeModules
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_BINARY_DIR}/${proj}/_cmakemodules/src/ossim_cmakemodules ${OSSIM_SB_SRC}/CMakeModules
@@ -103,7 +104,7 @@ else()
         -DCMAKE_BUILD_TYPE:STRING=Release
         -DCMAKE_CXX_FLAGS:STRING=${OSSIM_CXX_FLAGS}
         -DBUILD_OSSIM_MPI_SUPPORT:BOOL=OFF
-        -DBUILD_OSSIM_FREETYPE_SUPPORT:BOOL=OFF
+        -DBUILD_OSSIM_FREETYPE_SUPPORT:BOOL=ON
         -DBUILD_OSSIM_APPS:BOOL=OFF
         -DBUILD_OSSIM_FRAMEWORKS:BOOL=OFF
         -DINSTALL_ARCHIVE_DIR:STRING=lib
@@ -117,14 +118,14 @@ else()
       CMAKE_COMMAND ${SB_CMAKE_COMMAND}
       )
   endif()
-
+  
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
     set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/ossim.lib)
   elseif(UNIX)
     set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libossim${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-
+  
 endif()
 
 endif()
