@@ -7,7 +7,6 @@ message(STATUS "Setup libtiff...")
 
 if(USE_SYSTEM_TIFF)
   find_package ( TIFF )
-  add_custom_target(${proj})
   message(STATUS "  Using libtiff system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
