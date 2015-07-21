@@ -40,6 +40,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>
   SetEmissionH(false);
   SetEmissionV(false);
   SetGain(1);
+  SetMode(0);
   m_ArchitectureType = PolarimetricData::New();
 }
 
