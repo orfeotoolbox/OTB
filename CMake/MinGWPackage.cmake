@@ -1,11 +1,12 @@
 macro(package_mingw)
-  cmake_parse_arguments(PACKAGE  "" "PREFIX_DIR;ARCH;MXEROOT" "SEARCHDIRS;PEFILES" ${ARGN} )
+  cmake_parse_arguments(PACKAGE  "" "PREFIX_DIR;ARCH;MXEROOT;USE_QT4" "SEARCHDIRS;PEFILES" ${ARGN} )
 
-  ###   ${PACKAGE_EXENAME} #name of executable
-  #${PACKAGE_ARCH} #x86/x64
-  #${PACKAGE_SEARCHDIRS}
-  ####set(PACKAGE_PREFIX_DIR "mingw")
-  
+  list(APPEND PACKAGE_PEFILES ${CMAKE_INSTALL_PREFIX}/bin/otbApplicationLauncherCommandLine.exe)
+  list(APPEND PACKAGE_PEFILES ${CMAKE_INSTALL_PREFIX}/bin/otbTestDriver.exe)
+  if(PACKAGE_USE_QT4)
+    list(APPEND PACKAGE_PEFILES ${CMAKE_INSTALL_PREFIX}/bin/otbApplicationLauncherQt.exe)
+  endif()
+
   if("${PACKAGE_ARCH}" STREQUAL "x86")
     set(MXE_BIN_DIR "${PACKAGE_MXEROOT}/usr/i686-w64-mingw32.shared/bin")
     set(MXE_OBJDUMP "${PACKAGE_MXEROOT}/usr/bin/i686-w64-mingw32.shared-objdump")
@@ -24,7 +25,7 @@ macro(package_mingw)
 
   file(GLOB otbapps_list ${CMAKE_INSTALL_PREFIX}/lib/otb/applications/otbapp_*dll) # /lib/otb
   list(APPEND PACKAGE_PEFILES ${otbapps_list})
- 
+
   set(alldlls)
   set(notfound_dlls)
   foreach(infile ${PACKAGE_PEFILES})
@@ -38,7 +39,7 @@ macro(package_mingw)
     message(FATAL_ERROR "Following dlls were not found: ${notfound}
                    Please consider adding their paths to SEARCHDIRS when calling package_mingw macro.")
   endif()
-  
+
 endmacro(package_mingw)
 
 SET(SYSTEM_DLLS
@@ -91,7 +92,7 @@ endmacro()
 function(process_deps infile)
 
   get_filename_component(bn ${infile} NAME)
-  
+
   list_contains(contains "${bn}" "${alldlls}")
   if(NOT contains)
     set(DLL_FOUND FALSE)
@@ -99,7 +100,7 @@ function(process_deps infile)
       if(NOT DLL_FOUND)
         if(EXISTS ${SEARCHDIR}/${infile})
           set(DLL_FOUND TRUE)
-         
+
           message(STATUS "Processing ${SEARCHDIR}/${infile}")
           if(NOT "${infile}" MATCHES "otbapp")
             install(
@@ -113,7 +114,7 @@ function(process_deps infile)
           endif()
           execute_process(COMMAND ${MXE_OBJDUMP} "-p" "${SEARCHDIR}/${infile}"  OUTPUT_VARIABLE dlldeps)
           string(REGEX MATCHALL "DLL.Name..[A-Za-z(0-9\\.0-9)+_\\-]*" OUT "${dlldeps}")
-          string(REGEX REPLACE "DLL.Name.." "" OUT "${OUT}")  
+          string(REGEX REPLACE "DLL.Name.." "" OUT "${OUT}")
           foreach(o ${OUT})
             process_deps(${o})
           endforeach()
@@ -127,11 +128,11 @@ function(process_deps infile)
         set(notfound_dlls "${notfound_dlls};${infile}")
       endif()
     else(NOT DLL_FOUND)
-      
-      set( alldlls "${alldlls};${bn}" PARENT_SCOPE )  
+
+      set( alldlls "${alldlls};${bn}" PARENT_SCOPE )
     endif(NOT DLL_FOUND)
-    
-    set(notfound_dlls "${notfound_dlls}" PARENT_SCOPE )    
+
+    set(notfound_dlls "${notfound_dlls}" PARENT_SCOPE )
    endif()
 endfunction()
 
@@ -158,7 +159,7 @@ function(install_common)
   if(NOT OTB_APPS_LIST)
     message(FATAL_ERROR "No OTB-applications detected")
   endif()
-  
+
   ## otb apps dir /lib/otb/applications
   install(
     DIRECTORY "${CMAKE_INSTALL_PREFIX}/lib/otb/applications"
@@ -181,5 +182,4 @@ function(install_common)
   endif()
 
 
-endfunction()  
-
+endfunction()
