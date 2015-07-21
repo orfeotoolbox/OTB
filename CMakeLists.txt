@@ -6,7 +6,7 @@ endif()
 
 foreach(p
     CMP0025 # CMake 3.0
-    CMP0042 # CMake 3.0 
+    CMP0042 # CMake 3.0
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
@@ -248,7 +248,7 @@ set(EPSILON_15 0.000000000000001)
 #
 function(otb_add_test)
   set(largeinput_regex "LARGEINPUT{([^;{}\r\n]*)}")
-  
+
   set(_depends_on_largeinput OFF)
   foreach(arg IN LISTS ARGN)
      if("x${arg}" MATCHES "${largeinput_regex}")
@@ -400,9 +400,7 @@ add_subdirectory(Utilities/Doxygen)
 if(WIN32 AND CMAKE_CROSSCOMPILING)
   if(DEFINED MXE_TARGET_DIR)
 
-    file(GLOB pefiles
-      ${CMAKE_INSTALL_PREFIX}/bin/otbApplication*.exe
-      ${CMAKE_INSTALL_PREFIX}/bin/otbTestDriver.exe)
+    set(pefiles)
 
     message(STATUS "MXE_TARGET_DIR = ${MXE_TARGET_DIR}")
 
@@ -415,7 +413,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
     endif()
 
     execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
-    
+
     get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
     get_filename_component(mxeroot ${mxeroot} PATH)
 
@@ -429,6 +427,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
         MXEROOT \"${mxeroot}\"
         PREFIX_DIR \"${archive_name}\"
         PEFILES \"${pefiles}\"
+        USE_QT4 1
         SEARCHDIRS \"\")")
 
     add_custom_target(configure-mingw
@@ -443,7 +442,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
       DEPENDS configure-mingw)
 
     find_program(ZIP_EXECUTABLE zip)
-    
+
     if(ZIP_EXECUTABLE)
       add_custom_target(package-mingw
         COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
@@ -452,7 +451,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
     else()
       message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
     endif()
-    
+
   else(DEFINED MXE_TARGET_DIR)
     message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
   endif(DEFINED MXE_TARGET_DIR)
