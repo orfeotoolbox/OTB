@@ -1070,14 +1070,6 @@ MainWindow
   // qDebug() << this << "::ImportImage(" << filename << "," << forceCreate << ")";
 
   //
-  // Import image file.
-  VectorImageModel * imageModel = ImportImage( filename, -1, -1 );
-  // assert( imageModel );
-
-  if( imageModel==NULL )
-    return;
-
-  //
   // Get stacked-layer.
   assert( Application::Instance() );
   assert(
@@ -1091,6 +1083,59 @@ MainWindow
   assert( stackedLayerModel!=NULL );
 
   //
+  // Count images regarding their spatial-reference type.
+  size_t gcs = 0; // Geo/Carto/Sensor
+  size_t unk = 0; // Unknown
+
+  stackedLayerModel->CountSRT( unk, gcs, gcs, gcs );
+
+  //
+  //
+  SpatialReferenceType srt = GetSpatialReferenceType( ToStdString( filename ) );
+
+  QMessageBox::StandardButton button = QMessageBox::NoButton;
+
+  if( unk==0 && gcs>0 && srt==SRT_UNKNOWN )
+    {
+    button =
+      QMessageBox::warning(
+	this,
+	tr( "Monteverdi2 - Warning!" ),
+	tr( "No projection information (geographical or cartographical coordinate-system or sensor model) has been found for image. While already loaded images all have some, they are displayed in a geo-referenced view.\n\nLoading '%1' will cause the display to switch to a non geo-referenced view (where images are displayed relatively regarding their origin and spacing)." )
+	.arg( filename ),
+	QMessageBox::Ok | QMessageBox::Cancel
+      );
+    }
+
+  if( button==QMessageBox::Cancel )
+    return;
+
+  /*
+  switch( button )
+    {
+    case QMessageBox::Cancel:
+      return;
+      break;
+
+    case QMessageBox::Ok:
+      // Disable reference-layer combo-box.
+      // Disable layer-stack projection-button.
+      break;
+
+    default:
+      assert( false && "Unhandled QMessageBox::StandardButton value!" );
+      break;
+    }
+  */
+
+  //
+  // Import image file.
+  VectorImageModel * imageModel = ImportImage( filename, -1, -1 );
+
+  if( imageModel==NULL )
+    return;
+
+  //
   // Bypass rendering of image-views.
   assert( m_ImageView!=NULL );
   bool bypassImageView = m_ImageView->SetBypassRenderingEnabled( true );
@@ -1101,7 +1146,7 @@ MainWindow
   bool bypassQuicklookView = quicklookView->SetBypassRenderingEnabled( true );
 
   //
-  // Store imgae-mode in layer-stack.
+  // Store image-mode in layer-stack.
   stackedLayerModel->Add( imageModel );
 
   imageModel->setParent( stackedLayerModel );
@@ -1110,8 +1155,11 @@ MainWindow
 
   bool hasReference = stackedLayerModel->HasReference();
 
-  if( !hasReference )
+  if( !hasReference && srt!=SRT_UNKNOWN )
     stackedLayerModel->SetReference( imageModel  );
+
+  else if( hasReference && srt==SRT_UNKNOWN )
+    stackedLayerModel->SetReference( StackedLayerModel::NIL_INDEX );
 
   //
   // Activate rendering of image-views.
@@ -1239,17 +1287,20 @@ MainWindow
       qDebug() << "Unhandled AbstractLayerModel subclass.";
     }
 
+  {
+  size_t gcs = 0; // Geo/Carto/Sensor
+  size_t unk = 0; // Unknown
 
-#if 1
+  model->CountSRT( unk, gcs, gcs, gcs );
+
+  comboBox->setEnabled( model->GetCount()>0 && unk==0 );
+  }
+
   comboBox->setCurrentIndex(
     model->GetReferenceIndex()>=model->GetCount()
     ? 0 // comboBox->count() - 1
     : model->GetReferenceIndex() + 1
   );
-#endif
-
-
-  comboBox->setEnabled( model->GetCount()>0 );
 }
 
 /*****************************************************************************/
@@ -1999,7 +2050,7 @@ MainWindow
   quicklookView->updateGL();
 }
 
-/*****************************************************************************/
+/****************************************************************************/
 void
 MainWindow
 ::RefreshReferenceLayerComboBox()
