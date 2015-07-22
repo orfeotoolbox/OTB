@@ -1285,7 +1285,7 @@ void
 ImageViewWidget
 ::OnClearProjectionRequired()
 {
-  qDebug() << this << "::OnClearProjectionRequested()";
+  // qDebug() << this << "::OnClearProjectionRequested()";
 
   assert( m_Manipulator!=NULL );
   
