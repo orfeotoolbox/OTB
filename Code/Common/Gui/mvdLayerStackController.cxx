@@ -315,7 +315,7 @@ void
 LayerStackController
 ::OnProjectionButtonClicked()
 {
-  qDebug() << this << "::OnProjectionButtonClicked()";
+  // qDebug() << this << "::OnProjectionButtonClicked()";
 
   assert( GetModel()==GetModel< StackedLayerModel >() );
   StackedLayerModel * model = GetModel< StackedLayerModel >();
