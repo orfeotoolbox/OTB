@@ -128,6 +128,11 @@ public:
   inline bool Contains( const KeyType & key ) const;
   bool Contains( const AbstractLayerModel * ) const;
 
+  void CountSRT( size_t & unknown,
+		 size_t & carto,
+		 size_t & geo,
+		 size_t & sensor ) const;
+
   inline ConstIterator End() const;
 
   /*

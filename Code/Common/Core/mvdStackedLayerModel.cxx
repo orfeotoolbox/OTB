@@ -213,6 +213,41 @@ StackedLayerModel
 /*****************************************************************************/
 void
 StackedLayerModel
+::CountSRT( SizeType & unk,
+	    SizeType & crt,
+	    SizeType & geo,
+	    SizeType & ssr ) const
+{
+  for( LayerModelMap::const_iterator it( m_LayerModels.begin() );
+       it!=m_LayerModels.end();
+       ++it )
+    {
+    assert( it->second!=NULL );
+
+    switch( it->second->GetSpatialReferenceType() )
+      {
+      case SRT_UNKNOWN:
+	++ unk;
+	break;
+
+      case SRT_CARTO:
+	++ crt;
+	break;
+
+      case SRT_GEO:
+	++ geo;
+	break;
+
+      case SRT_SENSOR:
+	++ ssr;
+	break;
+      }
+    }
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
 ::Delete( SizeType index )
 {
   // qDebug() << this << "::Delete(" << index << ")";
