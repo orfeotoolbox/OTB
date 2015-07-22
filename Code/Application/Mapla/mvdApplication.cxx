@@ -87,7 +87,7 @@ Application
   setObjectName( "Application" );
 
   InitializeCore(
-    PROJECT_NAME, Monteverdi2_VERSION_STRING,
+    "Monteverdi2 Application Launcher", Monteverdi2_VERSION_STRING,
     "OrfeoToolBox", "orfeo-toolbox.org"
   );
 }

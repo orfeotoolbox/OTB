@@ -54,8 +54,8 @@ AboutDialog
 {
   m_UI->setupUi( this );
 
-  m_UI->m_ProjectLabel->setText( PROJECT_NAME );
-  m_UI->m_VersionLabel->setText( Monteverdi2_VERSION_STRING );
+  m_UI->m_ProjectLabel->setText( qApp->applicationName() );
+  m_UI->m_VersionLabel->setText( qApp->applicationVersion() );
 }
 
 /*******************************************************************************/
