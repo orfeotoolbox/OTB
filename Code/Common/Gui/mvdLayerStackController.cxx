@@ -103,6 +103,22 @@ LayerStackController
     SLOT( OnStackedLayerCurrentChanged( size_t ) )
   );
 
+  QObject::connect(
+    model,
+    SIGNAL( ContentChanged() ),
+    // to:
+    this,
+    SLOT( UpdateProjectionMode() )
+  );
+
+  QObject::connect(
+    model,
+    SIGNAL( ContentReset() ),
+    // to:
+    this,
+    SLOT( UpdateProjectionMode() )
+  );
+
 
   LayerStackWidget * widget = GetWidget< LayerStackWidget >();
   assert( widget!=NULL );
@@ -183,9 +199,25 @@ LayerStackController
   QObject::disconnect(
     model,
     SIGNAL( CurrentChanged( size_t ) ),
-    // to:
+    // from:
     this,
     SLOT( OnStackedLayerCurrentChanged( size_t ) )
+  );
+
+  QObject::disconnect(
+    model,
+    SIGNAL( ContentChanged() ),
+    // from:
+    this,
+    SLOT( UpdateProjectionMode() )
+  );
+
+  QObject::disconnect(
+    model,
+    SIGNAL( ContentReset() ),
+    // from:
+    this,
+    SLOT( UpdateProjectionMode() )
   );
 
 
@@ -323,6 +355,27 @@ LayerStackController
   widget->SetCurrent( index );
   }
   widget->blockSignals( signalsBlocked );
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::UpdateProjectionMode()
+{
+  assert( GetModel()==GetModel< StackedLayerModel >() );
+  StackedLayerModel * model = GetModel< StackedLayerModel >();
+  assert( model!=NULL );
+
+  size_t unk = 0;
+  size_t gcs = 0;
+
+  model->CountSRT( unk, gcs, gcs, gcs );
+
+  assert( GetWidget()==GetWidget< LayerStackWidget >() );
+  LayerStackWidget * widget = GetWidget< LayerStackWidget >();
+  assert( widget!=NULL );
+
+  widget->SetProjectionEnabled( unk==0 );
 }
 
 } // end namespace 'mvd'

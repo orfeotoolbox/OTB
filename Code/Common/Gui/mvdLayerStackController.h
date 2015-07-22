@@ -158,6 +158,9 @@ private slots:
   /**
    */
   void OnProjectionButtonClicked();
+  /**
+   */
+  void UpdateProjectionMode();
 };
 
 } // end namespace 'mvd'.

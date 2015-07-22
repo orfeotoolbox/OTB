@@ -108,6 +108,10 @@ public:
    */
   void SetCurrent( int );
 
+  /**
+   */
+  void SetProjectionEnabled( bool );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

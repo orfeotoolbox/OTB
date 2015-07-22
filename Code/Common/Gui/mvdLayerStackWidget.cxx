@@ -222,6 +222,16 @@ LayerStackWidget
 }
 
 /*******************************************************************************/
+void
+LayerStackWidget
+::SetProjectionEnabled( bool enabled )
+{
+  assert( m_UI->projectionButton!=NULL );
+
+  m_UI->projectionButton->setEnabled( enabled );
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void
