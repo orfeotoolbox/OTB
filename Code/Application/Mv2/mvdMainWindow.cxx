@@ -1222,6 +1222,14 @@ MainWindow
 
   QObject::connect(
     model,
+    SIGNAL( ContentReset() ),
+    // to:
+    this,
+    SLOT( RefreshReferenceLayerComboBox() )
+  );
+
+  QObject::connect(
+    model,
     SIGNAL( OrderChanged() ),
     // to:
     this,
@@ -1328,6 +1336,14 @@ MainWindow
     QObject::disconnect(
       model,
       SIGNAL( ContentChanged() ),
+      // to:
+      this,
+      SLOT( RefreshReferenceLayerComboBox() )
+    );
+
+    QObject::disconnect(
+      model,
+      SIGNAL( ContentReset() ),
       // to:
       this,
       SLOT( RefreshReferenceLayerComboBox() )
