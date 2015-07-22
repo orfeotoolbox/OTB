@@ -38,6 +38,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdTypes.h"
+
 
 namespace mvd
 {
@@ -62,7 +64,49 @@ char const * const STR_UNKNOWN = QT_TRANSLATE_NOOP( "mvd::AbstractLayerModel", "
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
+/*****************************************************************************/
+SpatialReferenceType
+GetSpatialReferenceType( const std::string & filename )
+{
+  DefaultImageFileReaderType::Pointer reader( DefaultImageFileReaderType::New() );
+  assert( !reader.IsNull() );
 
+  reader->SetFileName( filename );
+  reader->UpdateOutputInformation();
+
+  DefaultImageType * image = reader->GetOutput();
+  assert( image!=NULL );
+
+  return GetSpatialReferenceType(
+    image->GetProjectionRef(),
+    image->GetImageKeywordlist().GetSize()>0
+  );
+}
+
+/*****************************************************************************/
+SpatialReferenceType
+GetSpatialReferenceType( const std::string & wkt, bool hasKwl )
+{
+  if( wkt.empty() )
+    return
+      hasKwl
+      ? SRT_SENSOR
+      : SRT_UNKNOWN;
+
+  OGRSpatialReference ogr_sr( wkt.c_str() );
+
+  const char * epsg = ogr_sr.GetAuthorityCode( "PROJCS" );
+
+  if( epsg!=NULL && strcmp( epsg, "" )!=0 )
+    return SRT_CARTO;
+
+  epsg = ogr_sr.GetAuthorityCode( "GEOGCS" );
+
+  if( epsg!=NULL && strcmp( epsg, "" )!=0 )
+    return SRT_GEO;
+
+  return SRT_UNKNOWN;
+}
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
@@ -82,31 +126,11 @@ AbstractLayerModel
 }
 
 /*******************************************************************************/
-AbstractLayerModel::SpatialReferenceType
+SpatialReferenceType
 AbstractLayerModel
 ::GetSpatialReferenceType() const
 {
-  std::string wkt( GetWkt() );
-
-  if( wkt.empty() )
-    return
-      HasKwl()
-      ? SRT_SENSOR
-      : SRT_UNKNOWN;
-
-  OGRSpatialReference ogr_sr( wkt.c_str() );
-
-  const char * epsg = ogr_sr.GetAuthorityCode( "PROJCS" );
-
-  if( epsg!=NULL && strcmp( epsg, "" )!=0 )
-    return SRT_CARTO;
-
-  epsg = ogr_sr.GetAuthorityCode( "GEOGCS" );
-
-  if( epsg!=NULL && strcmp( epsg, "" )!=0 )
-    return SRT_GEO;
-
-  return SRT_UNKNOWN;
+  return mvd::GetSpatialReferenceType( GetWkt(), HasKwl() );
 }
 
 /*******************************************************************************/

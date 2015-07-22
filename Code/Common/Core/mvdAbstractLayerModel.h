@@ -66,6 +66,30 @@ namespace mvd
 // Internal classes pre-declaration.
 
 
+//
+// Global types.
+
+/**
+ */
+enum SpatialReferenceType
+{
+  SRT_UNKNOWN =0,
+  SRT_CARTO,
+  SRT_GEO,
+  SRT_SENSOR,
+};
+
+//
+// Global functions.
+
+/**
+ */
+SpatialReferenceType GetSpatialReferenceType( const std::string & filename );
+
+/**
+ */
+SpatialReferenceType GetSpatialReferenceType( const std::string & wkt, bool hasKwl );
+
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
@@ -88,14 +112,6 @@ class Monteverdi2_EXPORT AbstractLayerModel :
 //
 // Public methods.
 public:
-
-  enum SpatialReferenceType
-  {
-    SRT_UNKNOWN,
-    SRT_SENSOR,
-    SRT_CARTO,
-    SRT_GEO,
-  };
 
   /** \brief Destructor. */
   virtual ~AbstractLayerModel();
