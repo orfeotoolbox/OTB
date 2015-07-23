@@ -1823,7 +1823,13 @@ ImageViewWidget
   if( !stackedLayerModel->HasCurrent() )
     return;
 
-  stackedLayerModel->SetReference( stackedLayerModel->GetCurrentKey() );
+  size_t unk = 0;
+  size_t gcs = 0;
+
+  stackedLayerModel->CountSRT( unk, gcs, gcs, gcs );
+
+  if( unk==0 )
+    stackedLayerModel->SetReference( stackedLayerModel->GetCurrentKey() );
 }
 
 /******************************************************************************/
