@@ -20,7 +20,7 @@
 
 
 
-void error_callback(int error, const char* description)
+void error_callback(int, const char* description)
 {
   std::cerr<<description<<std::endl;
 }

@@ -688,7 +688,7 @@ void IceViewer::static_scroll_callback(GLFWwindow * window, double xoffset, doub
   instance->scroll_callback(window,xoffset,yoffset);
 }
 
-void IceViewer::error_callback(int error, const char* description)
+void IceViewer::error_callback(int, const char* description)
 {
   itkGenericExceptionMacro(<<description);
 }
@@ -724,7 +724,7 @@ void IceViewer::scroll_callback(GLFWwindow * window, double xoffset, double yoff
     }
 }
 
-bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, double yoffset)
+bool IceViewer::scroll_callback_image(GLFWwindow * window, double, double yoffset)
 {
   double factor = (yoffset>0) ? 1/m_Factor : m_Factor;
   otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
@@ -812,7 +812,7 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
   return false;
 }
 
-bool IceViewer::scroll_callback_vector(GLFWwindow * window, double xoffset, double yoffset)
+bool IceViewer::scroll_callback_vector(GLFWwindow * window, double, double yoffset)
 { 
   double factor = (yoffset>0) ? 1/m_Factor : m_Factor;
   otb::GlVectorActor::Pointer currentVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
@@ -875,7 +875,7 @@ bool IceViewer::scroll_callback_vector(GLFWwindow * window, double xoffset, doub
 }
 
 
-void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypos)
+void IceViewer::cursor_pos_callback(GLFWwindow * window, double, double)
 {
   double posx, posy,vpx,vpy;
   glfwGetCursorPos(m_Window,&posx,&posy);
@@ -1222,7 +1222,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     }
 }
 
-bool IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, int action, int mods)
+bool IceViewer::key_callback_image(GLFWwindow* window, int key, int, int action, int)
 {
   double posx,posy,vpx,vpy;
   glfwGetCursorPos(m_Window,&posx,&posy);
@@ -1384,7 +1384,7 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
   return true;
 }
 
-bool IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, int action, int mods)
+bool IceViewer::key_callback_vector(GLFWwindow*, int key, int, int action, int)
 {
   otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
@@ -1414,7 +1414,7 @@ bool IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, i
   return false;
 }
 
-void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int action, int mode)
+void IceViewer::mouse_button_callback(GLFWwindow *, int button, int action, int)
 {
   if(button == GLFW_MOUSE_BUTTON_1)
     {
@@ -1458,7 +1458,7 @@ void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int actio
     }
 }
 
-void IceViewer::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void IceViewer::framebuffer_size_callback(GLFWwindow*, int width, int height)
 {
   otb::ViewSettings::PointType center = m_View->GetSettings()->GetViewportCenter();
 
