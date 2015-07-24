@@ -300,6 +300,34 @@ typedef mvd::VectorImageType DefaultImageType;
  */
 typedef mvd::VectorImageFileReaderType DefaultImageFileReaderType;
 
+/**
+ */
+struct PixelInfo
+{
+  typedef std::vector< PixelInfo > Vector;
+
+  PixelInfo() :
+    m_Key(),
+    m_Point(),
+    m_Index(),
+    m_Pixel(),
+    m_HasPoint( false ),
+    m_HasIndex( false ),
+    m_HasPixel( false )
+  {
+  }
+
+  std::string m_Key;
+
+  DefaultImageType::PointType m_Point;
+  DefaultImageType::IndexType m_Index;
+  DefaultImageType::PixelType m_Pixel;
+
+  bool m_HasPoint: 1;
+  bool m_HasIndex: 1;
+  bool m_HasPixel: 1;
+};
+
 /*******************************************************************************/
 /* Type definitions for wrapped applications                                   */
 

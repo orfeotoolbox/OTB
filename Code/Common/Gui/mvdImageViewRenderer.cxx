@@ -392,11 +392,10 @@ ImageViewRenderer
 }
 
 /*****************************************************************************/
-bool
+void
 ImageViewRenderer
-::Pick( const PointType& in,
-        PointType& out,
-        DefaultImageType::PixelType& pixel )
+::Pick( const PointType & ptView,
+	PixelInfo::Vector & pixels )
 {
   /*
   qDebug()
@@ -405,20 +404,53 @@ ImageViewRenderer
     << ")";
   */
 
-  otb::GlImageActor::Pointer glImageActor(
-    GetReferenceActor< otb::GlImageActor >()
-  );
-
-  if( glImageActor.IsNull() )
-    return false;
+  assert( !m_GlView.IsNull() );
 
   //
-  // Compute output/physical point.
-  out = glImageActor->ViewportToImageTransform( in, true );
+  // Get actor keys.
+  otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
 
-  //
-  // Read pixel value.
-  return glImageActor->GetPixelFromViewport( in, pixel );
+  // Prepare picked pixels container.
+  pixels.resize( keys.size() );
+
+  // Pick each layer.
+  size_t i = 0;
+
+  for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
+       it != keys.end();
+       ++ it, ++ i )
+    {
+    // Register layer key.
+    pixels[ i ].m_Key = *it;
+
+    // Get actor.
+    otb::GlActor::Pointer actor( m_GlView->GetActor( *it ) );
+    assert( !actor.IsNull() );
+
+    // Get geo-interface.
+    const otb::GeoInterface * geoInterface =
+      dynamic_cast< const otb::GeoInterface * >( actor.GetPointer() );
+    assert( geoInterface!=NULL );
+
+    // Compute physical point.
+    pixels[ i ].m_HasPoint =
+      geoInterface->TransformFromViewport( pixels[ i ].m_Point, ptView, true );
+
+    // If image-actor...
+    otb::GlImageActor::Pointer imageActor( otb::DynamicCast< otb::GlImageActor >( actor ) );
+
+    if( !imageActor.IsNull() )
+      {
+      // ...Get pixel and it's index.
+      pixels[ i ].m_HasIndex =
+      pixels[ i ].m_HasPixel =
+	imageActor->GetPixel(
+	  pixels[ i ].m_Point,
+	  pixels[ i ].m_Pixel,
+	  pixels[ i ].m_Index
+	);
+      }
+    }
 }
 
 /*****************************************************************************/

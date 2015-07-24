@@ -169,9 +169,8 @@ public:
   virtual
   void PaintGL( const AbstractImageViewRenderer::RenderingContext* context );
 
-  virtual bool Pick( const PointType& in,
-                     PointType& out,
-                     DefaultImageType::PixelType& pixel );
+  virtual void Pick( const PointType & view,
+                     PixelInfo::Vector & pixels );
 
   virtual bool Transform( PointType& point,
                           const IndexType&,
@@ -240,14 +239,6 @@ private:
     std::pair< AbstractLayerModel *, otb::GlActor::Pointer >
     ModelActorPair;
 
-  /**
-   */
-  // typedef std::map< std::string, ModelActorPair > ModelActorPairMap;
-
-  /**
-   */
-  // typedef ModelActorPairMap::key_type Key;
-
 //
 // Private methods.
 private:
@@ -259,7 +250,6 @@ private:
   //
   // AbstractImageViewRenderer overloads.
 
-  // virtual void virtual_SetLayerStack( StackedLayerModel * );
   virtual void virtual_UpdateScene();
   virtual void virtual_RefreshScene();
 
@@ -269,10 +259,6 @@ private:
   /**
    */
   ModelActorPair m_ReferencePair;
-
-  /**
-   */
-  // ModelActorPairMap m_ModelActorPairs;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
   

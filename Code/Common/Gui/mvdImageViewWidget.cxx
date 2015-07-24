@@ -711,42 +711,58 @@ ImageViewWidget
 {
   assert( event!=NULL );
 
+  // Superclass default behaviour.
   QGLWidget::mouseMoveEvent( event );
 
+  // Delegate behaviour.
   m_Manipulator->MouseMoveEvent( event );
 
-  // Qt::MouseButtons buttons = event->buttons();
-  // Qt::KeyboardModifiers modifiers = event->modifiers();
+  //
+  // Get layer-stack.
+  const StackedLayerModel * stackedLayerModel = GetLayerStack();
+  assert( stackedLayerModel!=NULL );
 
-
+  //
+  // Pixel-picking special behaviour.
+  //
+  {
   // Transform coordinates from widget space to viewport space.
   assert( m_Manipulator!=NULL );
 
-  PointType in;
+  PointType ptView;
 
-  m_Manipulator->Transform( in, event->pos() );
-
-  // qDebug() << "--------";
-  // qDebug() << "mouse:" << in[ 0 ] << "," << in[ 1 ];
+  m_Manipulator->Transform( ptView, event->pos() );
 
   //
   // Pick pixel of point in viewport space and return point in image
   // space.
   assert( m_Renderer!=NULL );
 
-  PointType out;
-  DefaultImageType::PixelType pixel;
+  PixelInfo::Vector pixels;
 
-  m_Renderer->Pick( in, out, pixel );
+  m_Renderer->Pick( ptView, pixels );
 
-  // qDebug() << "PhysicalCursorPositionChanged(" << event->pos() << ")";
+  //
+  // Emit reference-layer pixel data.
+  if( stackedLayerModel->HasCurrent() )
+    emit PhysicalCursorPositionChanged(
+      event->pos(),
+      ptView,
+      pixels[ stackedLayerModel->GetCurrentIndex() ].m_Point,
+      pixels[ stackedLayerModel->GetCurrentIndex() ].m_Pixel );
+  else
+    emit PhysicalCursorPositionChanged(
+      event->pos(),
+      ptView,
+      PointType(),
+      DefaultImageType::PixelType()
+    );
+  }
 
-  emit PhysicalCursorPositionChanged( event->pos(), in, out, pixel );
-
+  //
+  // Update view depending on shader status special behaviour.
+  //
   {
-  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
-  assert( stackedLayerModel!=NULL );
-
   for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
        it!=stackedLayerModel->End();
        ++ it )

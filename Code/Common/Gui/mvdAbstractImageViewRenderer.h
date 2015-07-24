@@ -192,9 +192,8 @@ public:
 
   /**
    */
-  virtual bool Pick( const PointType& in,
-                     PointType& out,
-                     DefaultImageType::PixelType& pixel ) =0;
+  virtual void Pick( const PointType & view,
+                     PixelInfo::Vector & pixels ) =0;
 
   /**
    */
