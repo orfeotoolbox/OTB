@@ -605,28 +605,59 @@ GlImageActor::PointType GlImageActor::ImageToViewportTransform(const PointType &
 
 }
 
-bool GlImageActor::GetPixelFromViewport(const PointType & in, PixelType& pixel) const
+
+bool
+GlImageActor
+::GetPixelFromViewport( const PointType & in,
+			PixelType & pixel ) const
 {
-  PointType imgPoint = ViewportToImageTransform(in);
+  PointType p;
+  IndexType i;
+
+  return GetPixelFromViewport( in, pixel, p, i );
+}
 
 
+bool
+GlImageActor
+::GetPixelFromViewport( const PointType & ptView,
+			PixelType & pixel,
+			PointType & ptPhysical,
+			IndexType & index ) const
+{
+  ptPhysical = ViewportToImageTransform( ptView );
 
-  // Transform to index at current resolution
-  IndexType idx;
-  idx[0] = static_cast<unsigned int>((imgPoint[0]-m_FileReader->GetOutput()->GetOrigin()[0])/m_FileReader->GetOutput()->GetSpacing()[0]);
-  idx[1] = static_cast<unsigned int>((imgPoint[1]-m_FileReader->GetOutput()->GetOrigin()[1])/m_FileReader->GetOutput()->GetSpacing()[1]);
+  return GetPixel( ptPhysical, pixel, index );
+}
+
+
+bool
+GlImageActor
+::GetPixel( const PointType & physical,
+	    PixelType & pixel,
+	    IndexType & index ) const
+{
+  // // Transform to index at current resolution
+  // idx[ 0 ] = static_cast<unsigned int>((imgPoint[0]-m_FileReader->GetOutput()->GetOrigin()[0])/m_FileReader->GetOutput()->GetSpacing()[0]);
+  // idx[ 1 ] = static_cast<unsigned int>((imgPoint[1]-m_FileReader->GetOutput()->GetOrigin()[1])/m_FileReader->GetOutput()->GetSpacing()[1]);
+
+  // Better use ITK method?
+  m_FileReader->GetOutput()->TransformPhysicalPointToIndex( physical, index );
 
   // Look-up tiles
   for (TileVectorType::const_iterator it = m_LoadedTiles.begin();
        it!=m_LoadedTiles.end();
        ++it)
     {
-    if(it->m_ImageRegion.IsInside(idx))
+    if(it->m_ImageRegion.IsInside(index))
       {
-      idx[0]-=it->m_ImageRegion.GetIndex()[0];
-      idx[1]-=it->m_ImageRegion.GetIndex()[1];
-      pixel = it->m_Image->GetPixel(idx);
-      
+      IndexType idx;
+
+      idx[ 0 ] = index[ 0 ] - it->m_ImageRegion.GetIndex()[ 0 ];
+      idx[ 1 ] = index[ 1 ] - it->m_ImageRegion.GetIndex()[ 1 ];
+
+      pixel = it->m_Image->GetPixel( idx );
+
       return true;
       }
     }

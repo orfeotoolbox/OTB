@@ -132,7 +132,14 @@ public:
 
   PointType ImageToViewportTransform(const PointType & in, bool physical = true) const;
   
-  bool GetPixelFromViewport(const PointType & in, PixelType & pixel) const;
+  bool GetPixelFromViewport( const PointType & in, PixelType & pixel ) const;
+
+  bool GetPixelFromViewport( const PointType & view,
+			     PixelType & pixel,
+			     PointType & physical,
+			     IndexType & index ) const;
+
+  bool GetPixel( const PointType & physical, PixelType & pixel, IndexType & index ) const;
 
   itkGetObjectMacro(Shader,FragmentShader);
   itkSetObjectMacro(Shader,FragmentShader);
