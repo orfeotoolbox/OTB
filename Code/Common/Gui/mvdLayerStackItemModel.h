@@ -97,7 +97,6 @@ public:
     // COLUMN_B,
     // COLUMN_X,
     // COLUMN_Y,
-    // COLUMN_EPSG,
     //
     COLUMN_COUNT,
   };
@@ -114,7 +113,6 @@ public:
     ITEM_ROLE_B,
     ITEM_ROLE_X,
     ITEM_ROLE_Y,
-    ITEM_ROLE_EPSG,
     //
     ITEM_ROLE_NONE,
     //

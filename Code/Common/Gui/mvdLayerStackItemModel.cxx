@@ -72,7 +72,6 @@ HEADERS[ LayerStackItemModel::COLUMN_COUNT ] =
   // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Blue" ) ),
   // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "X" ) ),
   // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Y" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "EPSG" ) ),
 };
 
 } // end of anonymous namespace.
