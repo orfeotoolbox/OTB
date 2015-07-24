@@ -205,6 +205,11 @@ signals:
                                       const PointType & physical,
                                       const DefaultImageType::PixelType & );
 
+  /**
+   */
+  void PixelInfoChanged( const QPoint & screen,
+			 const PointType & view,
+			 const PixelInfo::Vector & pixels );
 
   /**
    */

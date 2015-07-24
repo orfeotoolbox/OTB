@@ -722,6 +722,8 @@ ImageViewWidget
 
   //
   // Emit reference-layer pixel data.
+  emit PixelInfoChanged( event->pos(), ptView, pixels );
+
   if( stackedLayerModel->HasCurrent() )
     emit PhysicalCursorPositionChanged(
       event->pos(),
