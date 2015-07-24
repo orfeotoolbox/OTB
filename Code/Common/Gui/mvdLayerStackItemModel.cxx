@@ -316,6 +316,19 @@ LayerStackItemModel
 {
   // qDebug() << this << "::data(" << index << "," << role << ")";
 
+  // Get layer.
+  assert( m_StackedLayerModel!=NULL );
+
+  assert( index.isValid() );
+  assert( !index.parent().isValid() );
+  assert( index.internalPointer()!=NULL );
+
+  const AbstractLayerModel * layer =
+    static_cast< const AbstractLayerModel * >( index.internalPointer() );
+
+  assert( layer!=NULL );
+
+  // Return data given role.
   switch( role )
     {
     case Qt::CheckStateRole:
@@ -323,17 +336,10 @@ LayerStackItemModel
         return QVariant();
       else
         {
-        assert( !index.parent().isValid() );
-        assert( index.internalPointer()!=NULL );
+        assert( layer==dynamic_cast< const VisibleInterface * >( layer ) );
 
-        AbstractLayerModel * layer =
-          static_cast< AbstractLayerModel * >( index.internalPointer() );
-
-        assert( layer!=NULL );
-        assert( layer==dynamic_cast< VisibleInterface * >( layer ) );
-
-        VisibleInterface * interface =
-          dynamic_cast< VisibleInterface * >( layer );
+        const VisibleInterface * interface =
+          dynamic_cast< const VisibleInterface * >( layer );
 
         assert( interface!=NULL );
 
@@ -348,30 +354,15 @@ LayerStackItemModel
       switch( index.column() )
         {
         case COLUMN_PROJ:
-	  {
-	  assert( m_StackedLayerModel!=NULL );
-
-	  const AbstractLayerModel * layerModel =
-	    static_cast< AbstractLayerModel * >( index.internalPointer() );
-
-	  return FromStdString( layerModel->GetAuthorityCode( true ) );
-	  }
+	  return FromStdString( layer->GetAuthorityCode( true ) );
 	  break;
 
         case COLUMN_NAME:
-          assert( m_StackedLayerModel!=NULL );
-
-          const AbstractLayerModel * layerModel =
-            static_cast< AbstractLayerModel * >( index.internalPointer() );
-          // m_StackedLayerModel->At( index.row() );
-
-          assert( layerModel!=NULL );
-
-          if( layerModel->inherits(
+          if( layer->inherits(
                 VectorImageModel::staticMetaObject.className() ) )
             {
             const VectorImageModel * vectorImageModel =
-              qobject_cast< const VectorImageModel * >( layerModel );
+              qobject_cast< const VectorImageModel * >( layer );
             assert( vectorImageModel!=NULL );
 
             // qDebug() << "filename:" << vectorImageModel->GetFilename();
@@ -387,7 +378,6 @@ LayerStackItemModel
       break;
     
     case Qt::FontRole:
-      assert( m_StackedLayerModel!=NULL );
       assert( index.row()>=0 );
 
       if( static_cast< StackedLayerModel::SizeType >( index.row() )==
