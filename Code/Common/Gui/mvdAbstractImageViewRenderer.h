@@ -215,6 +215,10 @@ public slots:
   inline void UpdateScene();
   inline void RefreshScene();
 
+  virtual void UpdatePixelInfo( const QPoint & point,
+				const PointType & view,
+				const PixelInfo::Vector & pixels ) =0;
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //

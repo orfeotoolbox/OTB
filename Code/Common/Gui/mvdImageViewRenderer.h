@@ -186,10 +186,9 @@ public:
 
 // public slots
 public slots:
-  void OnPhysicalCursorPositionChanged( const QPoint &,
-                                        const PointType &,
-                                        const PointType &,
-                                        const DefaultImageType::PixelType& );
+  virtual void UpdatePixelInfo( const QPoint & screen,
+				const PointType & view,
+				const PixelInfo::Vector & pixels );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

@@ -592,29 +592,6 @@ ImageViewWidget
   //
 
   QObject::connect(
-    this,
-    SIGNAL(
-      PhysicalCursorPositionChanged(
-        const QPoint &,
-        const PointType &,
-        const PointType &,
-        const DefaultImageType::PixelType &
-      )
-    ),
-    // to:
-    m_Renderer,
-    SLOT(
-      OnPhysicalCursorPositionChanged(
-        const QPoint &,
-        const PointType &,
-        const PointType &,
-        const DefaultImageType::PixelType &
-      )
-    )
-  );
-
-
-  QObject::connect(
     m_Renderer,
     SIGNAL( ClearProjectionRequired() ),
     // to:
@@ -741,6 +718,7 @@ ImageViewWidget
   PixelInfo::Vector pixels;
 
   m_Renderer->Pick( ptView, pixels );
+  m_Renderer->UpdatePixelInfo( event->pos(), ptView, pixels );
 
   //
   // Emit reference-layer pixel data.

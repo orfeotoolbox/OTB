@@ -932,66 +932,38 @@ ImageViewRenderer
 /*****************************************************************************/
 void
 ImageViewRenderer
-::OnPhysicalCursorPositionChanged( const QPoint & screen,
-                                   const PointType & view,
-                                   const PointType &,
-                                   const DefaultImageType::PixelType & )
+::UpdatePixelInfo( const QPoint & screen,
+		   const PointType & view,
+		   const PixelInfo::Vector & pixels )
 {
-  // qDebug() << "::OnPhysicalCursorPositionChanged(" << screen << ")";
+  qDebug() << "::UpdatePixelInfo(" << screen << ", [" << view[ 0 ] << ";" << view[ 1 ] << "] )";
 
-  if( GetLayerStack()==NULL )
-    return;
+  assert( !m_GlView.IsNull() );
 
-  for( StackedLayerModel::ConstIterator it( GetLayerStack()->Begin() );
-       it!=GetLayerStack()->End();
-       ++it )
+  for( PixelInfo::Vector::const_iterator it( pixels.begin() );
+       it != pixels.end();
+       ++ it )
     {
-    assert( !it->first.empty() );
-    assert( it->second!=NULL );
+    assert( !it->m_Key.empty() );
 
-    if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
+    //
+    // Check GL-view.
+    assert( m_GlView->ContainsActor( it->m_Key ) );
+
+    //
+    // Get GL image-actor.
+    otb::GlImageActor::Pointer glImageActor(
+      otb::DynamicCast< otb::GlImageActor >(
+	m_GlView->GetActor( it->m_Key )
+      )
+    );
+
+    if( !glImageActor.IsNull() )
       {
-      //
-      // Check GL-view.
-      assert( m_GlView->ContainsActor( it->first ) );
-
-      //
-      // Get GL image-actor.
-      otb::GlImageActor::Pointer glImageActor(
-        otb::DynamicCast< otb::GlImageActor >(
-          m_GlView->GetActor( it->first )
-        )
-      );
-
-      assert( !glImageActor.IsNull() );
-
-      //
-      // Transform point from viewport to screen.
-#if 0
-      PointType p_view;
-
-      p_view = glImageActor->ImageToViewportTransform( point, true );
-
-      PointType p_screen;
-
-      m_GlView->GetSettings()->ViewportToScreenTransform(
-        p_view[ 0 ], p_view[ 1 ],
-        p_screen[ 0 ], p_screen[ 1 ]
-      );
-
-      p_screen[ 1 ] =
-        m_GlView->GetSettings()->GetViewportSize()[ 1 ] - p_screen[ 1 ];
-#endif
-
-      //
-      // Get pixel RGB.
-      DefaultImageType::PixelType pixel;
-
-      glImageActor->GetPixelFromViewport( view, pixel );
-
       //
       // Get shader.
       otb::FragmentShader::Pointer fshader( glImageActor->GetShader() );
+      assert( !fshader.IsNull() );
 
       otb::StandardShader::Pointer shader(
         otb::DynamicCast< otb::StandardShader >(
@@ -1002,10 +974,9 @@ ImageViewRenderer
       assert( !shader.IsNull() );
 
       //
-      //
+      // Update cursor position of shader.
       PointType p_screen;
 
-      assert( !m_GlView.IsNull() );
       assert( m_GlView->GetSettings()!=NULL );
 
       p_screen[ 0 ] = screen.x();
@@ -1023,16 +994,16 @@ ImageViewRenderer
           ]
         );
 
-      if( pixel.Size()>0 )
-        {
-        shader->SetCurrentRed( pixel[ 0 ] );
-        shader->SetCurrentGreen( pixel[ 1 ] );
-        shader->SetCurrentBlue( pixel[ 2 ] );
-        }
-      }
-    //
-    else
-      {
+      //
+      // Update pixel-info of shader.
+      if( it->m_HasPixel )
+	{
+	assert( it->m_Pixel.Size()>0 );
+
+	shader->SetCurrentRed( it->m_Pixel[ 0 ] );
+	shader->SetCurrentGreen( it->m_Pixel[ 1 ] );
+	shader->SetCurrentBlue( it->m_Pixel[ 2 ] );
+	}
       }
     }
 }
