@@ -126,6 +126,8 @@ StackedLayerModel
 
   emit ContentAboutToBeChanged();
 
+  ClearPixelInfos();
+
   m_LayerModels.insert( LayerModelMap::value_type( key, model ) );
   m_Keys.push_back( key );
 
@@ -176,6 +178,8 @@ StackedLayerModel
 
   //
   // Clear content.
+  ClearPixelInfos();
+
   for( LayerModelMap::iterator it( m_LayerModels.begin() );
        it!=m_LayerModels.end();
        ++it )
@@ -295,6 +299,8 @@ StackedLayerModel
 
   //
   // Remove item.
+  ClearPixelInfos();
+
   if( it->second->parent()==this )
     {
     delete it->second;
@@ -360,6 +366,8 @@ StackedLayerModel
 
   emit OrderAboutToBeChanged();
   {
+  ClearPixelInfos();
+
   std::swap(
     *( m_Keys.begin() + index ),
     *( m_Keys.begin() + next )
@@ -400,6 +408,8 @@ StackedLayerModel
   // Move element.
   emit OrderAboutToBeChanged();
   {
+  ClearPixelInfos();
+
   KeyType key( m_Keys[ index ] );
 
   m_Keys.erase( m_Keys.begin() + index );
@@ -468,6 +478,8 @@ StackedLayerModel
 
   emit OrderAboutToBeChanged();
   {
+  ClearPixelInfos();
+
   std::swap(
     *( m_Keys.begin() + index ),
     *( m_Keys.begin() + prev )
@@ -508,6 +520,8 @@ StackedLayerModel
 
   emit OrderAboutToBeChanged();
   {
+  ClearPixelInfos();
+
   std::rotate( m_Keys.begin(), m_Keys.begin() + index, m_Keys.end() );
   }
   emit OrderChanged();
@@ -557,6 +571,8 @@ StackedLayerModel
 
   emit OrderAboutToBeChanged();
   {
+  ClearPixelInfos();
+
   std::rotate( m_Keys.rbegin(), m_Keys.rbegin() + index, m_Keys.rend()  );
   }
   emit OrderChanged();

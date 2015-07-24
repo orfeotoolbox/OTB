@@ -49,6 +49,7 @@
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdAbstractModel.h"
 #endif //tag=QT4-boost-compatibility
+#include "mvdTypes.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -182,6 +183,9 @@ public:
 
   inline bool IsEmpty() const;
 
+  inline const PixelInfo::Vector & PixelInfos() const;
+  inline PixelInfo::Vector & PixelInfos();
+
   inline void SetCurrent( SizeType, bool =false );
   void SetCurrent( const KeyType & );
   void SetCurrent( const AbstractLayerModel * );
@@ -247,6 +251,8 @@ protected:
 private:
   static KeyType GenerateKey( AbstractLayerModel * );
 
+  inline void ClearPixelInfos();
+
   void Delete( SizeType );
 
   inline SizeType FindKey( const KeyType & ) const;
@@ -279,6 +285,8 @@ private:
   KeyVector m_Keys;
   SizeType m_Current;
   SizeType m_Reference;
+
+  PixelInfo::Vector m_PixelInfos;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -369,6 +377,15 @@ StackedLayerModel
 ::Begin() const
 {
   return m_LayerModels.begin();
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::ClearPixelInfos()
+{
+  m_PixelInfos.reserve( 0 );
 }
 
 /*****************************************************************************/
@@ -714,6 +731,24 @@ StackedLayerModel
     index>=GetCount()
     ? 0
     : ( index + 1 ) % GetCount();
+}
+
+/*****************************************************************************/
+inline
+const PixelInfo::Vector &
+StackedLayerModel
+::PixelInfos() const
+{
+  return m_PixelInfos;
+}
+
+/*****************************************************************************/
+inline
+PixelInfo::Vector &
+StackedLayerModel
+::PixelInfos()
+{
+  return m_PixelInfos;
 }
 
 /*****************************************************************************/

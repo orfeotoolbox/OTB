@@ -696,7 +696,7 @@ ImageViewWidget
 
   //
   // Get layer-stack.
-  const StackedLayerModel * stackedLayerModel = GetLayerStack();
+  StackedLayerModel * stackedLayerModel = GetLayerStack();
   assert( stackedLayerModel!=NULL );
 
   //
@@ -715,14 +715,15 @@ ImageViewWidget
   // space.
   assert( m_Renderer!=NULL );
 
-  PixelInfo::Vector pixels;
+  PixelInfo::Vector & pixels = stackedLayerModel->PixelInfos();
 
   m_Renderer->Pick( ptView, pixels );
+
   m_Renderer->UpdatePixelInfo( event->pos(), ptView, pixels );
 
   //
   // Emit reference-layer pixel data.
-  emit PixelInfoChanged( event->pos(), ptView, pixels );
+  emit PixelInfoChanged( event->pos(), ptView, stackedLayerModel->PixelInfos() );
 
   if( stackedLayerModel->HasCurrent() )
     emit PhysicalCursorPositionChanged(
