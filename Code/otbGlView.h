@@ -202,12 +202,6 @@ public:
 			  double norm = 1000.0 ) const;
 
   /**
-   * Reproject viewport center and spacing into given actor's
-   * coordinate system.
-   */
-  // bool Reproject( const KeyType & key, double  norm );
-
-  /**
    */
   template< typename P >
   void GetExtent( P & origin, P & extent ) const;
