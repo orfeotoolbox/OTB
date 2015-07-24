@@ -49,8 +49,8 @@ private:
     // Documentation
     SetDocName("SARPolarSynth");
     SetDocLongDescription("This application gives, for each pixel, the power that would have been received by a SAR system with a basis different from the classical (H,V) one (polarimetric synthetis).\n" 
-						  "The new basis is indicated through two Jones vectors, defined by the user thanks to orientation (psi) and ellipticity (khi) parameters.\n"
-						  "These paramters are namely psii, khii, psir and khir. The suffixes (i) and (r) refer to the transmiting antenna and the receiving antenna respectively.\n"
+						  "The new basis A and B are indicated through two Jones vectors, defined by the user thanks to orientation (psi) and ellipticity (khi) parameters.\n"
+						  "These parameters are namely psii, khii, psir and khir. The suffixes (i) and (r) refer to the transmiting antenna and the receiving antenna respectively.\n"
 						  "Orientations and ellipticities are given in degrees, and are between -90°/90° and -45°/45° respectively.\n " 
 						  "\n"
 						  "Four polarization architectures can be processed : \n"
@@ -73,7 +73,9 @@ private:
 						  "\n"
 						  "Finally, the result of the polarimetric synthetis is expressed in the power domain, through a one-band scalar image.\n"
 						  "Note: this application doesn't take into account the terms which do not depend on the polarization of the antennas. \n"
-						  "The parameter gain can be used for this purpose (final power = gain x synthetized power). ");
+						  "The parameter gain can be used for this purpose.\n"
+						  "\n"
+						  "The final formula is thus : P = gain x | B^T . [S] . A |², where A ans B are two Jones vectors and S is a Sinclair matrix.");
 						  
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
