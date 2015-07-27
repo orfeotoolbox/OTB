@@ -25,7 +25,7 @@ namespace otb
 
 template <class TInputValue, class TOutputValue, class TConfidenceValue>
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
-::MachineLearningModel() : m_RegressionMode(false)
+::MachineLearningModel() : m_RegressionMode(false),m_ConfidenceIndex(false)
 {}
 
 

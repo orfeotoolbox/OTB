@@ -80,7 +80,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 
   if (quality != NULL)
     {
-    if (!this->HasConfidenceIndex())
+    if (!this->m_ConfidenceIndex)
       {
       itkExceptionMacro("Confidence index not available for this classifier !");
       }

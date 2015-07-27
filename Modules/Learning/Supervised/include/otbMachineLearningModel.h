@@ -124,7 +124,7 @@ public:
   //@}
 
   /** Query capacity to produce a confidence index */
-  virtual bool HasConfidenceIndex() const {return false;}
+  bool HasConfidenceIndex() const {return m_ConfidenceIndex;}
 
   /**\name Input list of samples accessors */
   //@{
@@ -172,6 +172,9 @@ protected:
   virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality = NULL) const = 0;
 
   bool m_RegressionMode;
+  
+  /** flag that tells if the model support confidence index output */
+  bool m_ConfidenceIndex;
 private:
   MachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
