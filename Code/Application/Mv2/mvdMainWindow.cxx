@@ -1286,8 +1286,8 @@ MainWindow
       assert( vectorImageModel!=NULL );
 
       comboBox->addItem(
-        QString( "%1: %2" )
-        .arg( comboBox->count() - 1 )
+        QString( "%1 (%2)" )
+        .arg( layer->GetAuthorityCode( true ).c_str()  )
         .arg( QFileInfo( vectorImageModel->GetFilename() ).fileName() )
       );
       }
