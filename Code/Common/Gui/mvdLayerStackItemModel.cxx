@@ -458,6 +458,24 @@ LayerStackItemModel
 	}
       break;
 
+    case Qt::ToolTipRole:
+      switch( index.column() )
+	{
+	case COLUMN_NAME:
+	  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+	    {
+            const VectorImageModel * vectorImageModel =
+              qobject_cast< const VectorImageModel * >( layer );
+            assert( vectorImageModel!=NULL );
+
+            // qDebug() << "filename:" << vectorImageModel->GetFilename();
+
+            return vectorImageModel->GetFilename();
+	    }
+	  break;
+	}
+      break;
+
     default:
       break;
     }
