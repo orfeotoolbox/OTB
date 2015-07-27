@@ -126,7 +126,7 @@ public:
 
   /**
    */
-  std::string GetAuthorityCode( bool =false ) const;
+  std::string GetAuthorityCode( bool ) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
