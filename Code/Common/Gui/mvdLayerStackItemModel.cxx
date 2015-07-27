@@ -65,13 +65,13 @@ HEADERS[ LayerStackItemModel::COLUMN_COUNT ] =
 {
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Proj" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Name" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "I" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "J" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Red" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Green" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Blue" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "X" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Y" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "I" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "J" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Red" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Green" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Blue" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "X" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Y" ) ),
 };
 
 } // end of anonymous namespace.
@@ -221,6 +221,14 @@ LayerStackItemModel
       this,
       SLOT( OnReferenceChanged( size_t ) )
     );
+
+    QObject::disconnect(
+      m_StackedLayerModel,
+      SIGNAL( PixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) ),
+      // from:
+      this,
+      SLOT( OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) )
+    );
     }
 
   m_StackedLayerModel = model;
@@ -287,6 +295,14 @@ LayerStackItemModel
     // to:
     this,
     SLOT( OnReferenceChanged( size_t ) )
+  );
+
+  QObject::connect(
+    m_StackedLayerModel,
+    SIGNAL( PixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) ),
+    // to:
+    this,
+    SLOT( OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) )
   );
 
   for( StackedLayerModel::ConstIterator it( m_StackedLayerModel->Begin() );
@@ -374,6 +390,41 @@ LayerStackItemModel
             qDebug() << "Unhandled AbstractLayerModel subclass.";
             }
           break;
+
+	case COLUMN_I:
+	{
+	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
+
+	assert( index.row()>=0 );
+
+	if( index.row()>=0 &&
+	    static_cast< size_t >( index.row() )<pixels.size() &&
+	    pixels[ index.row() ].m_HasIndex )
+	  return
+	    static_cast< qlonglong >( pixels[ index.row() ].m_Index[ 0 ] );
+	else
+	  return QVariant();
+	}
+	break;
+
+	case COLUMN_J:
+	{
+	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
+
+	assert( index.row()>=0 );
+
+	if( index.row()>=0 &&
+	    static_cast< size_t >( index.row() )<pixels.size() &&
+	    pixels[ index.row() ].m_HasIndex )
+	  return
+	    static_cast< qlonglong >( pixels[ index.row() ].m_Index[ 1 ] );
+	else
+	  return QVariant();
+	}
+	break;
+
+	default:
+	  break;
         }
       break;
     
@@ -765,6 +816,20 @@ LayerStackItemModel
   );
 
   emit dataChanged( index, index );
+}
+
+/*****************************************************************************/
+void
+LayerStackItemModel
+::OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & pixels )
+{
+  if( pixels.empty() )
+    return;
+
+  emit dataChanged(
+    index( 0, COLUMN_I ),
+    index( pixels.size() - 1, COLUMN_COUNT - 1 )
+  );
 }
 
 /*****************************************************************************/

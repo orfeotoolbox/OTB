@@ -44,6 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -90,13 +91,13 @@ public:
     //
     COLUMN_PROJ = 0,
     COLUMN_NAME,
-    // COLUMN_I,
-    // COLUMN_J,
-    // COLUMN_R,
-    // COLUMN_G,
-    // COLUMN_B,
-    // COLUMN_X,
-    // COLUMN_Y,
+    COLUMN_I,
+    COLUMN_J,
+    COLUMN_R,
+    COLUMN_G,
+    COLUMN_B,
+    COLUMN_X,
+    COLUMN_Y,
     //
     COLUMN_COUNT,
   };
@@ -286,6 +287,7 @@ private slots:
   void OnLayerDeleted( size_t );
   void OnLayerVisibilityChanged( AbstractLayerModel *, bool );
   void OnReferenceChanged( size_t );
+  void OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & );
 };
 
 } // end namespace 'mvd'.

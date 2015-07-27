@@ -715,11 +715,15 @@ ImageViewWidget
   // space.
   assert( m_Renderer!=NULL );
 
+  stackedLayerModel->BeginEditPixelInfo();
+
   PixelInfo::Vector & pixels = stackedLayerModel->PixelInfos();
 
   m_Renderer->Pick( ptView, pixels );
 
   m_Renderer->UpdatePixelInfo( event->pos(), ptView, pixels );
+
+  stackedLayerModel->EndEditPixelInfo( event->pos(), ptView );
 
   //
   // Emit reference-layer pixel data.
