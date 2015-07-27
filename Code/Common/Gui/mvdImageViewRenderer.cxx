@@ -430,18 +430,26 @@ ImageViewRenderer
     // Get geo-interface.
     const otb::GeoInterface * geoInterface =
       dynamic_cast< const otb::GeoInterface * >( actor.GetPointer() );
-    assert( geoInterface!=NULL );
 
-    // Compute physical point.
-    pixels[ i ].m_HasPoint =
-      geoInterface->TransformFromViewport( pixels[ i ].m_Point, ptView, true );
+    // If geo-interface...
+    if( geoInterface!=NULL )
+      {
+      // ...compute physical point.
+      pixels[ i ].m_HasPoint =
+	geoInterface->TransformFromViewport( pixels[ i ].m_Point, ptView, true );
+      }
+    else
+      {
+      pixels[ i ].m_HasPoint = false;
+      pixels[ i ].m_Point = PointType();
+      }
 
     // If image-actor...
     otb::GlImageActor::Pointer imageActor( otb::DynamicCast< otb::GlImageActor >( actor ) );
 
     if( !imageActor.IsNull() )
       {
-      // ...Get pixel and it's index.
+      // ...get pixel and it's index.
       pixels[ i ].m_HasIndex =
       pixels[ i ].m_HasPixel =
 	imageActor->GetPixel(
@@ -933,10 +941,13 @@ ImageViewRenderer
 void
 ImageViewRenderer
 ::UpdatePixelInfo( const QPoint & screen,
-		   const PointType & view,
+		   const PointType & /* view */,
 		   const PixelInfo::Vector & pixels )
 {
-  qDebug() << "::UpdatePixelInfo(" << screen << ", [" << view[ 0 ] << ";" << view[ 1 ] << "] )";
+  // qDebug()
+  //   << this << "::UpdatePixelInfo("
+  //   << screen << ", [" << view[ 0 ] << ";" << view[ 1 ]
+  //   << "] )";
 
   assert( !m_GlView.IsNull() );
 
