@@ -392,21 +392,6 @@ LayerStackItemModel
           break;
 
 	case COLUMN_I:
-	{
-	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
-
-	assert( index.row()>=0 );
-
-	if( index.row()>=0 &&
-	    static_cast< size_t >( index.row() )<pixels.size() &&
-	    pixels[ index.row() ].m_HasIndex )
-	  return
-	    static_cast< qlonglong >( pixels[ index.row() ].m_Index[ 0 ] );
-	else
-	  return QVariant();
-	}
-	break;
-
 	case COLUMN_J:
 	{
 	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
@@ -417,9 +402,40 @@ LayerStackItemModel
 	    static_cast< size_t >( index.row() )<pixels.size() &&
 	    pixels[ index.row() ].m_HasIndex )
 	  return
-	    static_cast< qlonglong >( pixels[ index.row() ].m_Index[ 1 ] );
+	    static_cast< qlonglong >( pixels[ index.row() ].m_Index[ index.column() - COLUMN_I ] );
 	else
 	  return QVariant();
+	}
+	break;
+
+	case COLUMN_R:
+	case COLUMN_G:
+	case COLUMN_B:
+	{
+	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
+
+	assert( index.row()>=0 );
+
+	if( index.row()>=0 &&
+	    static_cast< size_t >( index.row() )<pixels.size() &&
+	    pixels[ index.row() ].m_HasPixel )
+	  return
+	    pixels[ index.row() ].m_Pixel[ index.column() - COLUMN_R ];
+	}
+	break;
+
+	case COLUMN_X:
+	case COLUMN_Y:
+	{
+	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
+
+	assert( index.row()>=0 );
+
+	if( index.row()>=0 &&
+	    static_cast< size_t >( index.row() )<pixels.size() &&
+	    pixels[ index.row() ].m_HasPoint )
+	  return
+	    pixels[ index.row() ].m_Point[ index.column() - COLUMN_X ];
 	}
 	break;
 
