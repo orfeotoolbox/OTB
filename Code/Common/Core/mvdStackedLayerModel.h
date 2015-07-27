@@ -124,6 +124,8 @@ public:
 
   inline ConstIterator Begin() const;
 
+  inline void BeginEditPixelInfo() {};
+
   void Clear();
 
   inline bool Contains( const KeyType & key ) const;
@@ -135,6 +137,8 @@ public:
 		 size_t & sensor ) const;
 
   inline ConstIterator End() const;
+
+  inline void EndEditPixelInfo( const QPoint &, const PointType & );
 
   /*
   inline const AbstractLayerModel * Front() const;
@@ -230,6 +234,8 @@ signals:
 
   void OrderAboutToBeChanged();
   void OrderChanged();
+
+  void PixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & );
 
   void ReferenceAboutToBeChanged( size_t );
   void ReferenceChanged( size_t );
@@ -465,6 +471,15 @@ StackedLayerModel
 ::End() const
 {
   return m_LayerModels.end();
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::EndEditPixelInfo( const QPoint & screen, const PointType & view )
+{
+  emit PixelInfoChanged( screen, view, m_PixelInfos );
 }
 
 /*****************************************************************************/
