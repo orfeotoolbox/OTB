@@ -96,7 +96,7 @@ public:
   /**
    * Get the output confidence map
    */
-  const ConfidenceImageType * GetOutputConfidence(void);
+  ConfidenceImageType * GetOutputConfidence(void);
 
 protected:
   /** Constructor */
