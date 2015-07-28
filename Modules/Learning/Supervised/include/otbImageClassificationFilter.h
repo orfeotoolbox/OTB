@@ -20,6 +20,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbMachineLearningModel.h"
+#include "otbImage.h"
 
 namespace otb
 {
@@ -68,6 +69,9 @@ public:
   typedef MachineLearningModel<ValueType, LabelType> ModelType;
   typedef typename ModelType::Pointer    ModelPointerType;
 
+  typedef otb::Image<double>                    ConfidenceImageType;
+  typedef typename ConfidenceImageType::Pointer ConfidenceImagePointerType;
+
   /** Set/Get the model */
   itkSetObjectMacro(Model, ModelType);
   itkGetObjectMacro(Model, ModelType);
@@ -88,6 +92,11 @@ public:
    * \return The mask.
    */
   const MaskImageType * GetInputMask(void);
+
+  /**
+   * Get the output confidence map
+   */
+  const ConfidenceImageType * GetOutputConfidence(void);
 
 protected:
   /** Constructor */
@@ -110,7 +119,8 @@ private:
   ModelPointerType m_Model;
   /** Default label for invalid pixels (when using a mask) */
   LabelType m_DefaultLabel;
-
+  /** Flag to produce the confidence map */
+  bool m_UseConfidenceMap;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
