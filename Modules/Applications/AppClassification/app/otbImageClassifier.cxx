@@ -59,6 +59,7 @@ public:
   typedef ClassificationFilterType::ValueType                                                  ValueType;
   typedef ClassificationFilterType::LabelType                                                  LabelType;
   typedef otb::MachineLearningModelFactory<ValueType, LabelType>                               MachineLearningModelFactoryType;
+  typedef ClassificationFilterType::ConfidenceImageType                                        ConfidenceImageType;
 
 private:
   void DoInit()
@@ -93,6 +94,11 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out", "Output image containing class labels");
     SetParameterOutputImagePixelType( "out", ImagePixelType_uint8);
+
+    AddParameter(ParameterType_OutputImage, "confmap",  "Confidence map");
+    SetParameterDescription( "confmap", "Confidence map of the produced classification. Meaning depends on the model.");
+    SetParameterOutputImagePixelType( "confmap", ImagePixelType_double);
+    MandatoryOff("confmap");
 
     AddRAMParameter();
 
@@ -171,6 +177,15 @@ private:
       }
 
     SetParameterOutputImage<OutputImageType>("out", m_ClassificationFilter->GetOutput());
+
+    // output confidence map
+    if (IsParameterEnabled("confmap") && HasValue("confmap"))
+      {
+      if (m_Model->HasConfidenceIndex())
+        {
+        SetParameterOutputImage<ConfidenceImageType>("confmap",m_ClassificationFilter->GetOutputConfidence());
+        }
+      }
   }
 
   ClassificationFilterType::Pointer m_ClassificationFilter;
