@@ -486,6 +486,8 @@ MainWindow
 
     assert( vectorImageModel==qobject_cast< VectorImageModel * >( model ) );
 
+#if USE_PIXEL_DESCRIPTION
+
     //
     // send the physical point of the clicked point in screen
     // vectorImageModel is in charge of pixel information computation
@@ -532,6 +534,8 @@ MainWindow
         )
       )
     );
+
+#endif // USE_PIXEL_DESCRIPTION
 
     //
     // Connect the status-bar widget to the vector-image corresponding
@@ -720,6 +724,8 @@ MainWindow
       vectorImageModel==qobject_cast< const VectorImageModel * >( model )
     );
 
+#if USE_PIXEL_DESCRIPTION
+
     //
     // send the physical point of the clicked point in screen
     // vectorImageModel is in charge of pixel information computation
@@ -766,6 +772,8 @@ MainWindow
         )
       )
     );
+
+#endif // USE_PIXEL_DESCRIPTION
 
     //
     // disconnect the statusBar widget to the vectorImage corresponding
