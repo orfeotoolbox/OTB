@@ -2024,19 +2024,36 @@ MainWindow
 
   m_StatusBarWidget->SetPixelIndex( pixels[ current ].m_Index, pixels[ current ].m_HasIndex );
 
-  QString text(
-    tr( "(%1%2 ; %3%4)" )
-    .arg( "N" ).arg( 0.0 )
-    .arg( "E" ).arg( 0.0 )
-  );
+  QString text;
+
+  if( pixels[ current ].m_HasPoint )
+    {
+    assert( stackedLayerModel->GetCurrent()!=NULL );
+
+    PointType wgs84;
+    double alt = std::numeric_limits< double >::quiet_NaN();
+
+    stackedLayerModel->GetCurrent()->ToWgs84( pixels[ current ].m_Point, wgs84, alt );
+
+    text =
+      tr( "(%1 %2 ; %3 %4 ; %5)" )
+      .arg( wgs84[ 0 ]>=0.0 ? "N" : "S" ).arg( fabs( wgs84[ 1 ] ) )
+      .arg( wgs84[ 1 ]>=0.0 ? "E" : "W" ).arg( fabs( wgs84[ 0 ] ) )
+      .arg( alt );
+    }
 
   if( pixels[ current ].m_HasPixel )
+    {
+    if( !text.isEmpty() )
+      text.append( " " );
+
     text.append(
-      tr( " [ R: %5 ; G: %6 ; B: %7 ]" )
+      tr( " [ R: %1 ; G: %2 ; B: %3 ]" )
       .arg( pixels[ current ].m_Pixel[ 0 ] )
       .arg( pixels[ current ].m_Pixel[ 1 ] )
       .arg( pixels[ current ].m_Pixel[ 2 ] )
     );
+    }
 
   m_StatusBarWidget->SetText( text );
 }
