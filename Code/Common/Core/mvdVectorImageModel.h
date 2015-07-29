@@ -150,7 +150,7 @@ public:
   inline void SetSettings( const VectorImageSettings & settings );
 
   /** */
-  inline otb::GenericRSTransform<> * GetGenericRSTransform();
+  inline const otb::GenericRSTransform<> * GetGenericRSTransform() const;
 
   /**
    * Width and height are added to compute the best level of detail to
@@ -405,9 +405,9 @@ VectorImageModel
 
 /*****************************************************************************/
 inline
-otb::GenericRSTransform<>*
+const otb::GenericRSTransform<> *
 VectorImageModel
-::GetGenericRSTransform()
+::GetGenericRSTransform() const
 {
   return m_GenericRSTransform;
 }
