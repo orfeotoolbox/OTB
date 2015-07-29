@@ -76,4 +76,7 @@ void RegisterTests()
   REGISTER_TEST(otbFunctionWithNeighborhoodToImageFilterNew);
   REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValue);
   REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValueNew);
+  REGISTER_TEST(otbNRIBandImagesToOneNComplexBandsImage);
+  REGISTER_TEST(otbOneRIBandImageToOneComplexBandImage);
+  REGISTER_TEST(otbTwoNRIBandsImageToNComplexBandsImage);
 }
