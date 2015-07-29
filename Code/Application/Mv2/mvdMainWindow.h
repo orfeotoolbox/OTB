@@ -298,11 +298,7 @@ private:
 
   /**
    */
-  void ConnectStatusBar( AbstractLayerModel * model );
-
-  /**
-   */
-  void DisconnectStatusBar( const AbstractLayerModel * model );
+  void ConnectStatusBar();
 
 #if USE_PIXEL_DESCRIPTION
 
