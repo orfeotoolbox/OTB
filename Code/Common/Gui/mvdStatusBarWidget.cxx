@@ -79,12 +79,32 @@ StatusBarWidget
 }
 
 /*****************************************************************************/
+QString
+StatusBarWidget
+::ZoomLevel( double scale )
+{
+  if( scale>1.0 )
+    return QString( "%1:1" ).arg( scale );
+
+  else if( scale<1.0 )
+    return QString( "1:%1" ).arg( 1.0 / scale );
+
+  else
+    return "1:1";
+
+  return QString(); // QString( ":" );
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
 StatusBarWidget
-::SetPixelIndex( const IndexType& pixel, bool isInsideRegion )
+::SetPixelIndex( const IndexType & pixel, bool isInsideRegion )
 {
+  assert( m_UI!=NULL );
+  assert( m_UI->pixelIndexLineEdit!=NULL );
+
   m_UI->pixelIndexLineEdit->setText(
     isInsideRegion
     ? QString( "%1, %2" ).arg( pixel[ 0 ] ).arg( pixel[ 1 ] )
@@ -99,14 +119,12 @@ StatusBarWidget
 {
   // qDebug() << this << "::SetScale(" << sx << "," << sy << ")";
 
-  QString zoomLevel( StatusBarWidget::ZoomLevel( sx ) );
-
   /*
   if( sx!=sy )
     zoomLevel.append( "/" + StatusBarWidget::ZoomLevel( sy ) );
   */
 
-  m_UI->scaleLineEdit->setText( zoomLevel );
+  m_UI->scaleLineEdit->setText( StatusBarWidget::ZoomLevel( sx ) );
 }
 
 /*****************************************************************************/
@@ -124,8 +142,11 @@ StatusBarWidget
 /*****************************************************************************/
 void
 StatusBarWidget
-::SetPixelRadiometryText( const QString& text )
+::SetText( const QString & text )
 {
+  assert( m_UI!=NULL );
+  assert( m_UI->pixelIndexLineEdit!=NULL );
+
   m_UI->pixelRadiometryLabel->setText( text );
 }
 

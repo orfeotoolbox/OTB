@@ -472,6 +472,10 @@ private slots:
    */
   void RefreshReferenceLayerComboBox();
 
+  /**
+   */
+  void OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & );
+
 };
 
 } // end namespace 'mvd'

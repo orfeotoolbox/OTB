@@ -476,6 +476,14 @@ MainWindow
     m_ImageView,
     SLOT( CenterOnSelected( const IndexType& ) )
   );
+
+  QObject::connect(
+    m_ImageView,
+    SIGNAL( PixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) ),
+    // to:
+    this,
+    SLOT( OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) )
+  );
 }
 
 /*****************************************************************************/
@@ -1978,6 +1986,59 @@ MainWindow
   SetupReferenceLayerComboBox(
     I18nCoreApplication::Instance()->GetModel< StackedLayerModel >()
   );
+}
+
+/****************************************************************************/
+void
+MainWindow
+::OnPixelInfoChanged( const QPoint &,
+		      const PointType &,
+		      const PixelInfo::Vector & pixels )
+{
+  //
+  // Get stacked-layer.
+  assert( Application::Instance() );
+  assert(
+    Application::Instance()->GetModel()==
+    Application::Instance()->GetModel< StackedLayerModel >()
+  );
+
+  const StackedLayerModel * stackedLayerModel =
+    Application::Instance()->GetModel< StackedLayerModel >();
+
+  assert( stackedLayerModel!=NULL );
+
+  if( !stackedLayerModel->HasCurrent() )
+    {
+    m_StatusBarWidget->SetPixelIndex( IndexType(), false );
+    m_StatusBarWidget->SetText( QString() );
+
+    m_StatusBarWidget->setEnabled( false );
+    return;
+    }
+
+  m_StatusBarWidget->setEnabled( true );
+
+  StackedLayerModel::SizeType current = stackedLayerModel->GetCurrentIndex();
+  assert( current!=StackedLayerModel::NIL_INDEX );
+
+  m_StatusBarWidget->SetPixelIndex( pixels[ current ].m_Index, pixels[ current ].m_HasIndex );
+
+  QString text(
+    tr( "(%1%2 ; %3%4)" )
+    .arg( "N" ).arg( 0.0 )
+    .arg( "E" ).arg( 0.0 )
+  );
+
+  if( pixels[ current ].m_HasPixel )
+    text.append(
+      tr( " [ R: %5 ; G: %6 ; B: %7 ]" )
+      .arg( pixels[ current ].m_Pixel[ 0 ] )
+      .arg( pixels[ current ].m_Pixel[ 1 ] )
+      .arg( pixels[ current ].m_Pixel[ 2 ] )
+    );
+
+  m_StatusBarWidget->SetText( text );
 }
 
 } // end namespace 'mvd'
