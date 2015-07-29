@@ -559,6 +559,122 @@ MainWindow
 }
 
 /*****************************************************************************/
+void
+MainWindow
+::DisconnectStatusBar( const AbstractLayerModel * model )
+{
+  assert( m_StatusBarWidget!=NULL );
+
+  assert( m_ImageView!=NULL );
+
+  QObject::disconnect(
+    m_ImageView,
+    SIGNAL( ScaleChanged( double, double ) ),
+    // to:
+    m_StatusBarWidget,
+    SLOT( SetScale( double, double ) )
+  );
+
+  QObject::disconnect(
+    m_StatusBarWidget,
+    SIGNAL( ScaleChanged( double ) ),
+    // to:
+    m_ImageView->GetManipulator(),
+    SLOT( ZoomTo( double ) )
+  );
+
+  QObject::disconnect(
+    m_StatusBarWidget,
+    SIGNAL( PixelIndexChanged( const IndexType& ) ),
+    // to:
+    m_ImageView,
+    SLOT( CenterOnSelected( const IndexType& ) )
+  );
+
+  if( model==NULL )
+    return;
+
+  if( model->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    // Access vector-image model.
+    const VectorImageModel* vectorImageModel =
+      qobject_cast< const VectorImageModel * >( model );
+
+    assert(
+      vectorImageModel==qobject_cast< const VectorImageModel * >( model )
+    );
+
+#if USE_PIXEL_DESCRIPTION
+
+    //
+    // send the physical point of the clicked point in screen
+    // vectorImageModel is in charge of pixel information computation
+    QObject::disconnect(
+      m_ImageView,
+      SIGNAL(
+        PhysicalCursorPositionChanged(
+          const QPoint &,
+          const PointType &,
+          const PointType &,
+          const DefaultImageType::PixelType &
+        )
+      ),
+      // to:
+      vectorImageModel,
+      SLOT(
+        OnPhysicalCursorPositionChanged(
+          const QPoint &,
+          const PointType &,
+          const PointType &,
+          const DefaultImageType::PixelType &
+        )
+      )
+    );
+
+    QObject::disconnect(
+      GetQuicklookView(),
+      SIGNAL(
+        PhysicalCursorPositionChanged(
+          const QPoint &,
+          const PointType &,
+          const PointType &,
+          const DefaultImageType::PixelType &
+        )
+      ),
+      // to:
+      vectorImageModel,
+      SLOT(
+        OnPhysicalCursorPositionChanged(
+          const QPoint &,
+          const PointType &,
+          const PointType &,
+          const DefaultImageType::PixelType&
+        )
+      )
+    );
+
+#endif // USE_PIXEL_DESCRIPTION
+
+    //
+    // disconnect the statusBar widget to the vectorImage corresponding
+    // signal
+    QObject::disconnect(
+      vectorImageModel,
+      SIGNAL( CurrentIndexUpdated( const IndexType&, bool ) ),
+      m_StatusBarWidget,
+      SLOT( SetPixelIndex( const IndexType&, bool ) )
+      );
+
+    QObject::disconnect(
+      vectorImageModel,
+      SIGNAL( CurrentRadioUpdated(const QString& ) ),
+      m_StatusBarWidget,
+      SLOT( SetPixelRadiometryText(const QString &) )
+      );
+    }
+}
+
+/*****************************************************************************/
 #if USE_PIXEL_DESCRIPTION
 
 void
@@ -677,122 +793,6 @@ MainWindow
 }
 
 #endif // USE_PIXEL_DESCRIPTION
-
-/*****************************************************************************/
-void
-MainWindow
-::DisconnectStatusBar( const AbstractLayerModel * model )
-{
-  assert( m_StatusBarWidget!=NULL );
-
-  assert( m_ImageView!=NULL );
-
-  QObject::disconnect(
-    m_ImageView,
-    SIGNAL( ScaleChanged( double, double ) ),
-    // to:
-    m_StatusBarWidget,
-    SLOT( SetScale( double, double ) )
-  );
-
-  QObject::disconnect(
-    m_StatusBarWidget,
-    SIGNAL( ScaleChanged( double ) ),
-    // to:
-    m_ImageView->GetManipulator(),
-    SLOT( ZoomTo( double ) )
-  );
-
-  QObject::disconnect(
-    m_StatusBarWidget,
-    SIGNAL( PixelIndexChanged( const IndexType& ) ),
-    // to:
-    m_ImageView,
-    SLOT( CenterOnSelected( const IndexType& ) )
-  );
-
-  if( model==NULL )
-    return;
-
-  if( model->inherits( VectorImageModel::staticMetaObject.className() ) )
-    {
-    // Access vector-image model.
-    const VectorImageModel* vectorImageModel =
-      qobject_cast< const VectorImageModel * >( model );
-
-    assert(
-      vectorImageModel==qobject_cast< const VectorImageModel * >( model )
-    );
-
-#if USE_PIXEL_DESCRIPTION
-
-    //
-    // send the physical point of the clicked point in screen
-    // vectorImageModel is in charge of pixel information computation
-    QObject::disconnect(
-      m_ImageView,
-      SIGNAL(
-        PhysicalCursorPositionChanged(
-          const QPoint &,
-          const PointType &,
-          const PointType &,
-          const DefaultImageType::PixelType &
-        )
-      ),
-      // to:
-      vectorImageModel,
-      SLOT(
-        OnPhysicalCursorPositionChanged(
-          const QPoint &,
-          const PointType &,
-          const PointType &,
-          const DefaultImageType::PixelType &
-        )
-      )
-    );
-
-    QObject::disconnect(
-      GetQuicklookView(),
-      SIGNAL(
-        PhysicalCursorPositionChanged(
-          const QPoint &,
-          const PointType &,
-          const PointType &,
-          const DefaultImageType::PixelType &
-        )
-      ),
-      // to:
-      vectorImageModel,
-      SLOT(
-        OnPhysicalCursorPositionChanged(
-          const QPoint &,
-          const PointType &,
-          const PointType &,
-          const DefaultImageType::PixelType&
-        )
-      )
-    );
-
-#endif // USE_PIXEL_DESCRIPTION
-
-    //
-    // disconnect the statusBar widget to the vectorImage corresponding
-    // signal
-    QObject::disconnect(
-      vectorImageModel,
-      SIGNAL( CurrentIndexUpdated( const IndexType&, bool ) ),
-      m_StatusBarWidget,
-      SLOT( SetPixelIndex( const IndexType&, bool ) )
-      );
-
-    QObject::disconnect(
-      vectorImageModel,
-      SIGNAL( CurrentRadioUpdated(const QString& ) ),
-      m_StatusBarWidget,
-      SLOT( SetPixelRadiometryText(const QString &) )
-      );
-    }
-}
 
 /*****************************************************************************/
 void
