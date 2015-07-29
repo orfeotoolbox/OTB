@@ -96,7 +96,7 @@ private:
     AddParameter(ParameterType_ComplexInputImage,  "invv",   "Input Image");
     SetParameterDescription("invv", "Input image (VV)");
     
-    AddParameter(ParameterType_ComplexOutputImage, "out",  "Output Image");
+    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image");
     
     AddParameter(ParameterType_Choice, "decomp", "Decompositions");
