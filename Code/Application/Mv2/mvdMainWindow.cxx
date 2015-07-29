@@ -383,17 +383,13 @@ MainWindow
 
   QObject::connect(
     m_ImageView,
-    SIGNAL(
-      RoiChanged(
-        const PointType&, const SizeType&, const SpacingType&, const PointType&
-      )
+    SIGNAL( RoiChanged(
+        const PointType &, const SizeType &, const SpacingType &, const PointType & )
     ),
     // to:
     quicklookManipulator,
-    SLOT(
-      OnRoiChanged(
-        const PointType&, const SizeType&, const SpacingType&, const PointType&
-      )
+    SLOT( OnRoiChanged(
+        const PointType &, const SizeType &, const SpacingType &, const PointType & )
     )
   );
 
@@ -476,7 +472,7 @@ MainWindow
     SIGNAL( PixelIndexChanged( const IndexType& ) ),
     // to:
     m_ImageView,
-    SLOT( CenterOn( const IndexType& ) )
+    SLOT( CenterOnSelected( const IndexType& ) )
   );
 
   if( model==NULL )
@@ -708,7 +704,7 @@ MainWindow
     SIGNAL( PixelIndexChanged( const IndexType& ) ),
     // to:
     m_ImageView,
-    SLOT( CenterOn( const IndexType& ) )
+    SLOT( CenterOnSelected( const IndexType& ) )
   );
 
   if( model==NULL )

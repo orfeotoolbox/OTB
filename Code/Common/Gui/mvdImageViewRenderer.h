@@ -172,9 +172,10 @@ public:
   virtual void Pick( const PointType & view,
                      PixelInfo::Vector & pixels );
 
-  virtual bool Transform( PointType& point,
-                          const IndexType&,
-                          bool isPhysical ) const;
+  virtual bool TransformToView( PointType & point,
+				const StackedLayerModel::KeyType &,
+				const IndexType &,
+				bool isPhysical ) const;
 
   bool
     Reproject( PointType & center,

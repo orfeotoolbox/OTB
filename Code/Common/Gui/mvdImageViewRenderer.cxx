@@ -464,21 +464,27 @@ ImageViewRenderer
 /*****************************************************************************/
 bool
 ImageViewRenderer
-::Transform( PointType& point, const IndexType& index, bool isPhysical ) const
+::TransformToView( PointType & point,
+		   const StackedLayerModel::KeyType & key,
+		   const IndexType & index,
+		   bool isPhysical ) const
 {
-  otb::GlImageActor::ConstPointer glImageActor(
-    GetReferenceActor< otb::GlImageActor >()
-  );
+  assert( !m_GlView.IsNull() );
+  assert( !key.empty() );
 
-  if( glImageActor.IsNull() )
+  otb::GlActor::Pointer actor( m_GlView->GetActor( key ) );
+  assert( !actor.IsNull() );
+
+  const otb::GeoInterface * geo =
+    dynamic_cast< const otb::GeoInterface * >( actor.GetPointer() );
+
+  if( geo==NULL )
     return false;
 
   point[ 0 ] = static_cast< double >( index[ 0 ] );
   point[ 1 ] = static_cast< double >( index[ 1 ] );
 
-  point = glImageActor->ImageToViewportTransform( point, isPhysical );
-
-  return true;
+  return geo->TransformToViewport( point, point, isPhysical );
 }
 
 /*****************************************************************************/

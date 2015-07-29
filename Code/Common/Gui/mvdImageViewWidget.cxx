@@ -383,33 +383,25 @@ ImageViewWidget
 
   QObject::connect(
     m_Manipulator,
-    SIGNAL(
-      RoiChanged(
-        const PointType&, const SizeType&, const SpacingType&, const PointType&
-      )
+    SIGNAL( RoiChanged(
+	      const PointType &, const SizeType &, const SpacingType &, const PointType & )
     ),
     // to:
     this,
-    SIGNAL(
-      RoiChanged(
-        const PointType&, const SizeType&, const SpacingType&, const PointType&
-      )
+    SIGNAL( RoiChanged(
+	      const PointType&, const SizeType&, const SpacingType&, const PointType& )
     )
   );
 
   QObject::connect(
     m_Manipulator,
-    SIGNAL(
-      RoiChanged(
-        const PointType&, const SizeType&, const SpacingType&, const PointType&
-      )
+    SIGNAL( RoiChanged(
+        const PointType &, const SizeType &, const SpacingType &, const PointType & )
     ),
     // to:
     this,
-    SLOT(
-      OnRoiChanged(
-        const PointType&, const SizeType&, const SpacingType&, const PointType&
-      )
+    SLOT( OnRoiChanged(
+	    const PointType &, const SizeType &, const SpacingType &, const PointType & )
     )
   );
 
@@ -1201,7 +1193,7 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
-::CenterOn( const IndexType& index )
+::CenterOnSelected( const IndexType & index )
 {
   /*
   assert( m_Renderer!=NULL );
@@ -1227,9 +1219,15 @@ ImageViewWidget
 
   assert( m_Renderer!=NULL );
 
+  const StackedLayerModel * layerStack = m_Renderer->GetLayerStack();
+  assert( layerStack!=NULL );
+
+  if( !layerStack->HasCurrent() )
+    return;
+
   PointType point;
 
-  if( !m_Renderer->Transform( point, index, false ) )
+  if( !m_Renderer->TransformToView( point, layerStack->GetCurrentKey(), index, false ) )
     return;
 
   assert( m_Manipulator!=NULL );

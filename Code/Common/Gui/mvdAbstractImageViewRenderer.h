@@ -196,9 +196,10 @@ public:
 
   /**
    */
-  virtual bool Transform( PointType& point,
-                          const IndexType&,
-                          bool isPhysical ) const =0;
+  virtual bool TransformToView( PointType & point,
+				const StackedLayerModel::KeyType &,
+				const IndexType &,
+				bool isPhysical ) const =0;
 
   /**
    */

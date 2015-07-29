@@ -173,7 +173,7 @@ public slots:
   void UpdateScene();
   /**
    */
-  void CenterOn( const IndexType& index );
+  void CenterOnSelected( const IndexType& index );
   /**
    */
   void CenterOn( const PointType& center, double scale );
