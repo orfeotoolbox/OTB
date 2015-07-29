@@ -110,8 +110,7 @@ GetSpatialReferenceType( const std::string & wkt, bool hasKwl )
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
-/*******************************************************************************/
+/*****************************************************************************/
 AbstractLayerModel
 ::AbstractLayerModel( QObject* parent ) :
   AbstractModel( parent ),
@@ -142,14 +141,6 @@ AbstractLayerModel
 }
 
 /*******************************************************************************/
-bool
-AbstractLayerModel
-::HasKwl() const
-{
-  return virtual_HasKwl();
-}
-
-/*******************************************************************************/
 std::string
 AbstractLayerModel
 ::GetAuthorityCode( bool isEnhanced ) const
@@ -176,6 +167,22 @@ AbstractLayerModel
   assert( epsg!=NULL && strcmp( epsg, "" )!=0 );
 
   return epsg;
+}
+
+/*******************************************************************************/
+bool
+AbstractLayerModel
+::HasKwl() const
+{
+  return virtual_HasKwl();
+}
+
+/*****************************************************************************/
+void
+AbstractLayerModel
+::ToWgs84( const PointType & p, PointType & wgs84, double & alt) const
+{
+  virtual_ToWgs84( p, wgs84, alt );
 }
 
 /*******************************************************************************/

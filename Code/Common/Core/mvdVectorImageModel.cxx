@@ -76,7 +76,7 @@ VectorImageModel
   m_Settings(),
   m_Filename(),
   m_LodCount( -1 ),
-  m_GenericRSTransform()
+  m_ToWgs84()
 {
 }
 
@@ -139,10 +139,10 @@ VectorImageModel
 
   
   // Setup GenericRSTransform
-  m_GenericRSTransform = otb::GenericRSTransform<>::New();
-  m_GenericRSTransform->SetInputDictionary(m_ImageFileReader->GetOutput()->GetMetaDataDictionary());
-  m_GenericRSTransform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
-  m_GenericRSTransform->InstanciateTransform();
+  m_ToWgs84 = otb::GenericRSTransform<>::New();
+  m_ToWgs84->SetInputDictionary(m_ImageFileReader->GetOutput()->GetMetaDataDictionary());
+  m_ToWgs84->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
+  m_ToWgs84->InstanciateTransform();
 
   //Compute estimated spacing here
   //m_EstimatedGroundSpacing
@@ -152,9 +152,9 @@ VectorImageModel
   GroundSpacingImageType::Pointer GroundSpacing = GroundSpacingImageType::New();
   GroundSpacing->SetInputImage(m_ImageFileReader->GetOutput());
   
-  if (m_GenericRSTransform->IsUpToDate())
+  if (m_ToWgs84->IsUpToDate())
     {
-    if (m_GenericRSTransform->GetTransformAccuracy() != otb::Projection::UNKNOWN)
+    if (m_ToWgs84->GetTransformAccuracy() != otb::Projection::UNKNOWN)
       {
       IndexType  index;
       vnl_random rand;
@@ -696,6 +696,25 @@ VectorImageModel
 }
 
 /*****************************************************************************/
+void
+VectorImageModel
+::virtual_ToWgs84( const PointType & physical,
+		   PointType & wgs84,
+		   double & alt ) const
+{
+  assert( !m_ToWgs84.IsNull() );
+  assert( m_ToWgs84->IsUpToDate() );
+
+  wgs84 = m_ToWgs84->TransformPoint( physical );
+
+  alt =
+    otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(
+      wgs84[ 0 ],
+      wgs84[ 1 ]
+    );
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
@@ -823,8 +842,11 @@ VectorImageModel
       // TODO : Is there a better method to detect no geoinfo available ?
       if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0) 
         {
+	assert( !m_ToWgs84.IsNull() );
+
         PointType wgs84;
-        wgs84 = GetGenericRSTransform()->TransformPoint(point);
+
+        wgs84 = m_ToWgs84->TransformPoint( point );
       
         ossGeographicLong.precision(6);
         ossGeographicLat.precision(6);

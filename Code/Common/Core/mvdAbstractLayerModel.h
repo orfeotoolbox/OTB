@@ -48,6 +48,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "Core/mvdAbstractModel.h"
+#include "Core/mvdTypes.h"
 #include "Core/mvdVisibleInterface.h"
 #endif //tag=QT4-boost-compatibility
 
@@ -128,6 +129,10 @@ public:
    */
   std::string GetAuthorityCode( bool ) const;
 
+  /**
+   */
+  void ToWgs84( const PointType &, PointType & wgs84, double & alt ) const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -175,9 +180,13 @@ private:
    */
   virtual bool virtual_HasKwl() const;
 
+  /**
+   */
+  virtual void virtual_ToWgs84( const PointType &, PointType & wgs84, double & alt ) const =0;
+
   //
   // VisibleInterface overloads.
-  void virtual_SignalVisibilityChanged( bool );
+  virtual void virtual_SignalVisibilityChanged( bool );
 
 //
 // Private attributes.

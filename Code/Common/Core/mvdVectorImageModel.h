@@ -305,6 +305,9 @@ private:
 
   virtual std::string virtual_GetWkt() const;
   virtual bool virtual_HasKwl() const;
+  virtual void virtual_ToWgs84( const PointType &,
+				PointType &,
+				double & alt ) const;
 
   //
   // AbstractImageModel overrides.
@@ -331,7 +334,7 @@ private:
   CountType m_LodCount;
 
   //  Generic RS Transform to get lat/long coordinates 
-  otb::GenericRSTransform<>::Pointer m_GenericRSTransform;
+  otb::GenericRSTransform<>::Pointer m_ToWgs84;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -409,7 +412,7 @@ const otb::GenericRSTransform<> *
 VectorImageModel
 ::GetGenericRSTransform() const
 {
-  return m_GenericRSTransform;
+  return m_ToWgs84;
 }
 
 /*****************************************************************************/
