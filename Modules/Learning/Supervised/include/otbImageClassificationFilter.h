@@ -80,6 +80,10 @@ public:
   itkSetMacro(DefaultLabel, LabelType);
   itkGetMacro(DefaultLabel, LabelType);
 
+  /** Set/Get the confidence map flag */
+  itkSetMacro(UseConfidenceMap, bool);
+  itkGetMacro(UseConfidenceMap, bool);
+
   /**
    * If set, only pixels within the mask will be classified.
    * All pixels with a value greater than 0 in the mask, will be classified.
@@ -119,7 +123,7 @@ private:
   ModelPointerType m_Model;
   /** Default label for invalid pixels (when using a mask) */
   LabelType m_DefaultLabel;
-  /** Flag to produce the confidence map */
+  /** Flag to produce the confidence map (if the model supports it) */
   bool m_UseConfidenceMap;
 };
 } // End namespace otb

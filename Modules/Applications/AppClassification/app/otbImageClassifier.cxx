@@ -181,6 +181,7 @@ private:
     // output confidence map
     if (IsParameterEnabled("confmap") && HasValue("confmap"))
       {
+      m_ClassificationFilter->SetUseConfidenceMap(true);
       if (m_Model->HasConfidenceIndex())
         {
         SetParameterOutputImage<ConfidenceImageType>("confmap",m_ClassificationFilter->GetOutputConfidence());

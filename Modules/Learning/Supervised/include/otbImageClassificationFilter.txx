@@ -84,7 +84,6 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     {
     itkGenericExceptionMacro(<< "No model for classification");
     }
-  m_UseConfidenceMap = m_Model->HasConfidenceIndex();
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
@@ -119,8 +118,9 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     }
 
   // setup iterator for confidence map
+  bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex());
   ConfidenceMapIteratorType confidenceIt;
-  if (m_UseConfidenceMap)
+  if (computeConfidenceMap)
     {
     confidenceIt = ConfidenceMapIteratorType(confidencePtr,outputRegionForThread);
     confidenceIt.GoToBegin();
@@ -142,7 +142,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     if (validPoint)
       {
       // Classifify
-      if (m_UseConfidenceMap)
+      if (computeConfidenceMap)
         {
         outIt.Set(m_Model->Predict(inIt.Get(),&confidenceIndex)[0]);
         }
@@ -157,7 +157,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
       outIt.Set(m_DefaultLabel);
       confidenceIndex = 0.0;
       }
-    if (m_UseConfidenceMap)
+    if (computeConfidenceMap)
       {
       confidenceIt.Set(confidenceIndex);
       ++confidenceIt;
