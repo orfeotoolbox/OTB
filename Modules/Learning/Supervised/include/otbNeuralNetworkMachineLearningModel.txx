@@ -207,7 +207,7 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
 
   if (quality != NULL)
     {
-    (*quality) = static_cast<double>(maxResponse) - static_cast<ConfidenceValueType>(secondResponse);
+    (*quality) = static_cast<ConfidenceValueType>(maxResponse) - static_cast<ConfidenceValueType>(secondResponse);
     }
 
   return target;
