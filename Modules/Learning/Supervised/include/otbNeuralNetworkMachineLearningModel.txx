@@ -183,7 +183,7 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
   TargetSampleType target;
   float currentResponse = 0;
   float maxResponse = response.at<float> (0, 0);
-  float secondResponse = response.at<float> (0, 0);
+  float secondResponse = -1e10;
   target[0] = m_CvMatOfLabels->data.i[0];
 
   unsigned int nbClasses = m_CvMatOfLabels->cols;
