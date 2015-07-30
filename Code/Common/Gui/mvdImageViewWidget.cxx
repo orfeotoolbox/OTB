@@ -1592,12 +1592,10 @@ ImageViewWidget
 {
   assert( m_Renderer!=NULL );
 
-  /*
-  qDebug()
-    << this << "::OnRoiChanged("
-    << "[" << point[ 0 ] << "," << point[ 1 ] << "]"
-    << "[" << center[ 0 ] << "," << center[ 1 ] << "]";
-  */
+  // qDebug()
+  //   << this << "::OnRoiChanged("
+  //   << "[" << point[ 0 ] << "," << point[ 1 ] << "]"
+  //   << "[" << center[ 0 ] << "," << center[ 1 ] << "]";
 
   emit CenterChanged( center );
 
@@ -1624,10 +1622,12 @@ ImageViewWidget
   double sy = ( spacing[ 1 ]>0.0 ? 1.0 : -1.0 ) / spacing[ 1 ];
 #endif
 
-  /*
-  qDebug() << "sx:" << sx << "; sy:" << sy;
-  qDebug() << "rsx:" << rsx << "; rsy:" << rsy;
-  */
+  
+  // qDebug() << "sx:" << sx << "; sy:" << sy;
+  // qDebug() << "rsx:" << rsx << "; rsy:" << rsy;
+
+  // Refresh view.
+  updateGL();
 
   // Emit absolute scale.
   emit ScaleChanged( rsx, rsy );
