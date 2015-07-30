@@ -37,6 +37,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
  m_SplitCrit(CvBoost::DEFAULT),
  m_MaxDepth(1)
 {
+  this->m_ConfidenceIndex = true;
 }
 
 
@@ -93,10 +94,8 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
 
   if (quality != NULL)
     {
-    if (!this->m_ConfidenceIndex)
-      {
-      itkExceptionMacro("Confidence index not available for this classifier !");
-      }
+    (*quality) = static_cast<ConfidenceValueType>(
+      m_BoostModel->predict(sample,missing,cv::Range::all(),false,true));
     }
 
   return target;

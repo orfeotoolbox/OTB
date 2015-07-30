@@ -49,6 +49,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
  m_OutputNu(0),
  m_OutputP(0)
 {
+  this->m_ConfidenceIndex = true;
 }
 
 
@@ -123,10 +124,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 
   if (quality != NULL)
     {
-    if (!this->m_ConfidenceIndex)
-      {
-      itkExceptionMacro("Confidence index not available for this classifier !");
-      }
+    (*quality) = m_SVMModel->predict(sample,true);
     }
 
   return target;

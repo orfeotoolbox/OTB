@@ -42,6 +42,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
  m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS),
  m_RegressionMode(false)
 {
+  this->m_ConfidenceIndex = true;
 }
 
 
@@ -124,10 +125,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
   if (quality != NULL)
     {
-    if (!this->m_ConfidenceIndex)
-      {
-      itkExceptionMacro("Confidence index not available for this classifier !");
-      }
+    (*quality) = m_RFModel->predict_prob(sample);
     }
 
   return target[0];

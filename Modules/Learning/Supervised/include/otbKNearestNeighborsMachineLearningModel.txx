@@ -35,6 +35,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
  m_K(32),
  m_IsRegression(false)
 {
+  this->m_ConfidenceIndex = true;
 }
 
 
@@ -72,20 +73,30 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   cv::Mat sample;
   otb::SampleToMat<InputSampleType>(input, sample);
 
-  double result = m_KNearestModel->find_nearest(sample, m_K);
+  float result;
+
+  if (quality != NULL)
+    {
+    cv::Mat nearest(1,m_K,CV_32FC1);
+    result = m_KNearestModel->find_nearest(sample, m_K,0,0,&nearest,0);
+    unsigned int accuracy = 0;
+    for (int k=0 ; k < m_K ; ++k)
+      {
+      if (nearest.at<float>(0,k) == result)
+        {
+        accuracy++;
+        }
+      }
+    (*quality) = static_cast<ConfidenceValueType>(accuracy);
+    }
+  else
+    {
+    result = m_KNearestModel->find_nearest(sample, m_K);
+    }
 
   TargetSampleType target;
 
   target[0] = static_cast<TTargetValue>(result);
-
-  if (quality != NULL)
-    {
-    if (!this->m_ConfidenceIndex)
-      {
-      itkExceptionMacro("Confidence index not available for this classifier !");
-      }
-    }
-
   return target;
 }
 

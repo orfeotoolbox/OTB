@@ -42,6 +42,7 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachi
   m_Epsilon(0.01),
   m_CvMatOfLabels(0)
 {
+  this->m_ConfidenceIndex = true;
 }
 
 template<class TInputValue, class TOutputValue>
@@ -182,6 +183,7 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
   TargetSampleType target;
   float currentResponse = 0;
   float maxResponse = response.at<float> (0, 0);
+  float secondResponse = response.at<float> (0, 0);
   target[0] = m_CvMatOfLabels->data.i[0];
 
   unsigned int nbClasses = m_CvMatOfLabels->cols;
@@ -190,17 +192,22 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
     currentResponse = response.at<float> (0, itLabel);
     if (currentResponse > maxResponse)
       {
+      secondResponse = maxResponse;
       maxResponse = currentResponse;
       target[0] = m_CvMatOfLabels->data.i[itLabel];
+      }
+    else
+      {
+      if (currentResponse > secondResponse)
+        {
+        secondResponse = currentResponse;
+        }
       }
     }
 
   if (quality != NULL)
     {
-    if (!this->m_ConfidenceIndex)
-      {
-      itkExceptionMacro("Confidence index not available for this classifier !");
-      }
+    (*quality) = static_cast<double>(maxResponse) - static_cast<ConfidenceValueType>(secondResponse);
     }
 
   return target;
