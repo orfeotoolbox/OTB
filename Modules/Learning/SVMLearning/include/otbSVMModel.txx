@@ -464,7 +464,7 @@ SVMModel<TValue, TLabel>::EvaluateProbabilities(const MeasurementType& measure) 
     itkExceptionMacro(<< "Model is not up-to-date, can not predict probabilities");
     }
 
-  if (svm_check_probability_model(m_Model) == 0)
+  if (!this->HasProbabilities())
     {
     throw itk::ExceptionObject(__FILE__, __LINE__,
                                "Model does not support probability estimates", ITK_LOCATION);

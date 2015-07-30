@@ -307,6 +307,12 @@ public:
     return static_cast<bool>(m_Parameters.probability);
   }
 
+  /** Test if the model has probabilities */
+  bool HasProbabilities(void) const
+    {
+    return static_cast<bool>(svm_check_probability_model(m_Model));
+    }
+
   /** Return number of support vectors */
   int GetNumberOfSupportVectors(void) const
   {
