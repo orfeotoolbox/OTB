@@ -186,6 +186,11 @@ private:
         {
         SetParameterOutputImage<ConfidenceImageType>("confmap",m_ClassificationFilter->GetOutputConfidence());
         }
+      else
+        {
+        otbAppLogWARNING("Confidence map requested but the classifier doesn't support it!");
+        this->DisableParameter("confmap");
+        }
       }
   }
 
