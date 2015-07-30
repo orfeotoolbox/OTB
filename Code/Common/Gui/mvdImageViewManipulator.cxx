@@ -261,8 +261,6 @@ ImageViewManipulator
   m_ViewSettings->Center( point );
 
   emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), point );
-
-  // emit RenderingContextChanged(point,GetSpacing()[0]);
 }
 
 /******************************************************************************/
@@ -474,22 +472,6 @@ ImageViewManipulator
       m_MousePressPosition = QPoint();
       m_MousePressOrigin = PointType();
       m_IsMouseDragging = false;
-
-      /*
-      emit RoiChanged(
-        GetOrigin(),
-        GetViewportSize(),
-        GetSpacing(),
-        m_ViewSettings->GetViewportCenter()
-      );
-      */
-
-      /*
-      center[0] = GetOrigin()[0]+GetViewportSize()[0]*GetSpacing()[0];
-      center[1] = GetOrigin()[1]+GetViewportSize()[1]*GetSpacing()[1];
-      
-      emit RenderingContextChanged(center,GetSpacing()[0]);
-      */
 
       emit RefreshViewRequested();
       break;
