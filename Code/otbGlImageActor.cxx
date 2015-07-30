@@ -637,24 +637,25 @@ GlImageActor
 	    PixelType & pixel,
 	    IndexType & index ) const
 {
-  // // Transform to index at current resolution
-  // idx[ 0 ] = static_cast<unsigned int>((imgPoint[0]-m_FileReader->GetOutput()->GetOrigin()[0])/m_FileReader->GetOutput()->GetSpacing()[0]);
-  // idx[ 1 ] = static_cast<unsigned int>((imgPoint[1]-m_FileReader->GetOutput()->GetOrigin()[1])/m_FileReader->GetOutput()->GetSpacing()[1]);
+  // First, we need to return index in full img (not in overviews)
+  index[ 0 ] = static_cast<unsigned int>((physical[0]-m_Origin[0])/m_Spacing[0]);
+  index[ 1 ] = static_cast<unsigned int>((physical[1]-m_Origin[1])/m_Spacing[1]);
 
-  // Better use ITK method?
-  m_FileReader->GetOutput()->TransformPhysicalPointToIndex( physical, index );
+  // Then, we need to find the index in the currently loaded overview
+  IndexType ovrIndex;
+  m_FileReader->GetOutput()->TransformPhysicalPointToIndex( physical, ovrIndex );
 
-  // Look-up tiles
+  // And look it up in loaded tiles
   for (TileVectorType::const_iterator it = m_LoadedTiles.begin();
        it!=m_LoadedTiles.end();
        ++it)
     {
-    if(it->m_ImageRegion.IsInside(index))
+    if(it->m_ImageRegion.IsInside(ovrIndex))
       {
       IndexType idx;
 
-      idx[ 0 ] = index[ 0 ] - it->m_ImageRegion.GetIndex()[ 0 ];
-      idx[ 1 ] = index[ 1 ] - it->m_ImageRegion.GetIndex()[ 1 ];
+      idx[ 0 ] = ovrIndex[ 0 ] - it->m_ImageRegion.GetIndex()[ 0 ];
+      idx[ 1 ] = ovrIndex[ 1 ] - it->m_ImageRegion.GetIndex()[ 1 ];
 
       pixel = it->m_Image->GetPixel( idx );
 
