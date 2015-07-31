@@ -319,7 +319,7 @@ endif(WIN32 AND Monteverdi2_USE_CPACK)
 if(WIN32 AND CMAKE_CROSSCOMPILING)
   if(DEFINED MXE_TARGET_DIR)
     message(STATUS "MXE_TARGET_DIR = ${MXE_TARGET_DIR}")
-    
+
     if(MXE_TARGET_DIR MATCHES "i686")
       set(mxearch x86)
       set(archive_name ${CMAKE_PROJECT_NAME}-${Monteverdi2_VERSION_STRING}-win32)
@@ -329,16 +329,17 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
     endif()
 
     execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
-        
+
     get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
     get_filename_component(mxeroot ${mxeroot} PATH)
 
     #should we add otbiceviewer.exe?
 
-    file(GLOB pefiles
+    set(pefiles
       ${CMAKE_INSTALL_PREFIX}/bin/monteverdi2.exe
-      ${CMAKE_INSTALL_PREFIX}/bin/mapla.exe
-      ${CMAKE_INSTALL_PREFIX}/bin/mv2.exe )
+      ${CMAKE_INSTALL_PREFIX}/bin/mapla.exe)
+
+
 
     file(WRITE "${CMAKE_BINARY_DIR}/_mingw/CMakeLists.txt"
       "cmake_minimum_required(VERSION 2.6)
@@ -356,12 +357,59 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
         MXEROOT \"${mxeroot}\"
         PREFIX_DIR \"${archive_name}\"
         PEFILES \"${pefiles}\"
+        NEEDS_OTB_APPS TRUE,
         SEARCHDIRS \"\")")
+
+    string(REPLACE "${CMAKE_PROJECT_NAME}" "Mv2" archive_name_mv2 ${archive_name})
+    set(pefiles_mv2 ${CMAKE_INSTALL_PREFIX}/bin/mv2.exe)
+
+
+    file(WRITE "${CMAKE_BINARY_DIR}/_mingw_mv2/CMakeLists.txt"
+      "cmake_minimum_required(VERSION 2.6)
+       include(CMakeParseArguments)
+       set(Monteverdi2_SOURCE_DIR \"${Monteverdi2_SOURCE_DIR}\")
+       set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")
+       set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
+       set(Monteverdi2_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
+       set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
+       set(Monteverdi2_INSTALL_DATA_DIR \"${Monteverdi2_INSTALL_DATA_DIR}\")
+        include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
+        include(${CMAKE_SOURCE_DIR}/CMake/CPackFunctions.cmake)
+        package_mingw(
+        ARCH \"${mxearch}\"
+        MXEROOT \"${mxeroot}\"
+        PREFIX_DIR \"${archive_name_mv2}\"
+        PEFILES \"${pefiles_mv2}\"
+        NEEDS_OTB_APPS FALSE,
+        SEARCHDIRS \"\")")
+
+    add_custom_target(configure-mingw_mv2
+      COMMAND ${CMAKE_COMMAND}
+      "${CMAKE_BINARY_DIR}/_mingw_mv2"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw_mv2")
+
+    add_custom_target(prepare-mingw_mv2
+      COMMAND ${CMAKE_COMMAND}
+      "--build" "${CMAKE_BINARY_DIR}/_mingw_mv2" "--target" "install"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw_mv2"
+      DEPENDS configure-mingw_mv2)
+
+    find_program(ZIP_EXECUTABLE zip)
+
+    if(ZIP_EXECUTABLE)
+      add_custom_target(package-mingw_mv2
+        COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name_mv2}.zip" "${archive_name_mv2}"
+        WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
+        DEPENDS prepare-mingw_mv2)
+    else()
+      message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
+    endif()
 
     add_custom_target(configure-mingw
       COMMAND ${CMAKE_COMMAND}
       "${CMAKE_BINARY_DIR}/_mingw"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw")
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw"
+      DEPENDS package-mingw_mv2)
 
     add_custom_target(prepare-mingw
       COMMAND ${CMAKE_COMMAND}
@@ -370,7 +418,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
       DEPENDS configure-mingw)
 
     find_program(ZIP_EXECUTABLE zip)
-    
+
     if(ZIP_EXECUTABLE)
       add_custom_target(package-mingw
         COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
@@ -379,10 +427,9 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
     else()
       message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
     endif()
-    
+
   else(DEFINED MXE_TARGET_DIR)
     message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
   endif(DEFINED MXE_TARGET_DIR)
 
 endif(WIN32 AND CMAKE_CROSSCOMPILING)
-

@@ -1,11 +1,11 @@
 macro(package_mingw)
-  cmake_parse_arguments(PACKAGE  "" "PREFIX_DIR;ARCH;MXEROOT" "SEARCHDIRS;PEFILES" ${ARGN} )
+  cmake_parse_arguments(PACKAGE  "" "PREFIX_DIR;ARCH;MXEROOT;NEEDS_OTB_APPS" "SEARCHDIRS;PEFILES" ${ARGN} )
 
   ###   ${PACKAGE_EXENAME} #name of executable
   #${PACKAGE_ARCH} #x86/x64
   #${PACKAGE_SEARCHDIRS}
   ####set(PACKAGE_PREFIX_DIR "mingw")
-  
+
   if("${PACKAGE_ARCH}" STREQUAL "x86")
     set(MXE_BIN_DIR "${PACKAGE_MXEROOT}/usr/i686-w64-mingw32.shared/bin")
     set(MXE_OBJDUMP "${PACKAGE_MXEROOT}/usr/bin/i686-w64-mingw32.shared-objdump")
@@ -18,9 +18,11 @@ macro(package_mingw)
   list(APPEND PACKAGE_SEARCHDIRS "${MXE_BIN_DIR}/../qt/bin") #Qt
   list(APPEND PACKAGE_SEARCHDIRS "${MXE_BIN_DIR}/../qt/lib") #Qwt
   list(APPEND PACKAGE_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/bin") #mvd
-  list(APPEND PACKAGE_SEARCHDIRS "${OTB_MODULES_DIR}/../../../otb/applications") #otb apps
 
-  install_common()
+  if(PACKAGE_NEEDS_OTB_APPS)
+    list(APPEND PACKAGE_SEARCHDIRS "${OTB_MODULES_DIR}/../../../otb/applications") #otb apps
+  endif()
+  install_common(${PACKAGE_NEEDS_OTB_APPS})
 
   ##################################"#monteverdi2 stuff ##################################################
   file(GLOB MVD_BATFILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/*.bat)
@@ -29,7 +31,7 @@ macro(package_mingw)
       FILES ${MVD_BATFILE}
       DESTINATION "${PACKAGE_PREFIX_DIR}/bin")
   endforeach()
-  
+
   file(GLOB APP_TS_FILES ${Monteverdi2_SOURCE_DIR}/i18n/*.ts) # qm files
   foreach(APP_TS_FILE ${APP_TS_FILES})
     get_filename_component(APP_TS_FILENAME ${APP_TS_FILE} NAME_WE)
@@ -40,10 +42,11 @@ macro(package_mingw)
 
 
   #dependency resolution based on copydlldeps.sh from mxe by Timothy Gu
+  if(PACKAGE_NEEDS_OTB_APPS)
+    file(GLOB otbapps_list ${OTB_MODULES_DIR}/../../../otb/applications/otbapp_*dll) # /lib/otb
+    list(APPEND PACKAGE_PEFILES ${otbapps_list})
+  endif()
 
-  file(GLOB otbapps_list ${OTB_MODULES_DIR}/../../../otb/applications/otbapp_*dll) # /lib/otb
-  list(APPEND PACKAGE_PEFILES ${otbapps_list})
- 
   set(alldlls)
   set(notfound_dlls)
   foreach(infile ${PACKAGE_PEFILES})
@@ -53,14 +56,14 @@ macro(package_mingw)
 
   list(LENGTH notfound_dlls nos)
   if(${nos} GREATER 0)
-    STRING(REPLACE ".dll" ".dll," notfound ${notfound_dlls})
+    string(REPLACE ".dll" ".dll," notfound ${notfound_dlls})
     message(FATAL_ERROR "Following dlls were not found: ${notfound}
                    Please consider adding their paths to SEARCHDIRS when calling package_mingw macro.")
   endif()
-  
+
 endmacro(package_mingw)
 
-SET(SYSTEM_DLLS
+set(SYSTEM_DLLS
   msvc.*dll
   USER32.dll
   GDI32.dll
@@ -89,7 +92,7 @@ SET(SYSTEM_DLLS
   WINSPOOL.DRV)
 
 ## http://www.cmake.org/Wiki/CMakeMacroListOperations
-macro(IS_SYSTEM_DLL matched value)
+macro(is_system_dll matched value)
   set(${matched})
   foreach (pattern ${SYSTEM_DLLS})
     if(${value} MATCHES ${pattern})
@@ -110,7 +113,7 @@ endmacro()
 function(process_deps infile)
 
   get_filename_component(bn ${infile} NAME)
-  
+
   list_contains(contains "${bn}" "${alldlls}")
   if(NOT contains)
     set(DLL_FOUND FALSE)
@@ -118,7 +121,7 @@ function(process_deps infile)
       if(NOT DLL_FOUND)
         if(EXISTS ${SEARCHDIR}/${infile})
           set(DLL_FOUND TRUE)
-         
+
           message(STATUS "Processing ${SEARCHDIR}/${infile}")
           if(NOT "${infile}" MATCHES "otbapp")
             install(
@@ -129,10 +132,10 @@ function(process_deps infile)
           endif()
           if(NOT EXISTS ${MXE_OBJDUMP})
             message(FATAL_ERROR "objdump executable not found. please check MXE_OBJDUMP is set to correct cross compiled executable")
-          endif()  
+          endif()
           execute_process(COMMAND ${MXE_OBJDUMP} "-p" "${SEARCHDIR}/${infile}"  OUTPUT_VARIABLE dlldeps)
           string(REGEX MATCHALL "DLL.Name..[A-Za-z(0-9\\.0-9)+_\\-]*" OUT "${dlldeps}")
-          string(REGEX REPLACE "DLL.Name.." "" OUT "${OUT}")  
+          string(REGEX REPLACE "DLL.Name.." "" OUT "${OUT}")
           foreach(o ${OUT})
             process_deps(${o})
           endforeach()
@@ -146,15 +149,15 @@ function(process_deps infile)
         set(notfound_dlls "${notfound_dlls};${infile}")
       endif()
     else(NOT DLL_FOUND)
-      
-      set( alldlls "${alldlls};${bn}" PARENT_SCOPE )  
+
+      set( alldlls "${alldlls};${bn}" PARENT_SCOPE )
     endif(NOT DLL_FOUND)
-    
-    set(notfound_dlls "${notfound_dlls}" PARENT_SCOPE )    
+
+    set(notfound_dlls "${notfound_dlls}" PARENT_SCOPE )
    endif()
 endfunction()
 
-function(install_common)
+function(install_common need_otb_apps)
   set(APP_PREFIX_DIR "${PACKAGE_PREFIX_DIR}")
   set(APP_BIN_DIR "${APP_PREFIX_DIR}/bin")
   set(APP_QTSQLITE_FILENAME "qsqlite4.dll")
@@ -192,16 +195,16 @@ function(install_common)
     DESTINATION ${APP_DATA_DIR})
 
   ####################### Check otb applications #######################
+  if(need_otb_apps)
+    file(GLOB OTB_APPS_LIST ${OTB_MODULES_DIR}/../../../otb/applications/otbapp_*dll) # /lib/otb
+    if(NOT OTB_APPS_LIST)
+      message(FATAL_ERROR "No OTB-applications detected")
+    endif()
 
-  file(GLOB OTB_APPS_LIST ${OTB_MODULES_DIR}/../../../otb/applications/otbapp_*dll) # /lib/otb
-  if(NOT OTB_APPS_LIST)
-    message(FATAL_ERROR "No OTB-applications detected")
+    ## otb apps dir /lib/otb/applications
+    install(
+      DIRECTORY "${OTB_MODULES_DIR}/../../../otb/applications"
+      DESTINATION ${APP_OTBLIBS_DIR})
   endif()
-  
-  ## otb apps dir /lib/otb/applications
-  install(
-    DIRECTORY "${OTB_MODULES_DIR}/../../../otb/applications"
-    DESTINATION ${APP_OTBLIBS_DIR})
 
-endfunction()  
-
+endfunction()
