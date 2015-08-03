@@ -84,8 +84,6 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 {
   TargetSampleType target;
 
-  otbMsgDevMacro(<< "Starting iterations ");
-
   MeasurementVectorFunctorType mfunctor;
 
   target = m_SVMestimator->GetModel()->EvaluateLabel(mfunctor(input));
