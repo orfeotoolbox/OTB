@@ -51,6 +51,36 @@ std::vector<bool> & flags, const std::vector<double> & values) {
     return false;
     }
 }
+
+/**
+*/
+template<typename T> T ChangeNoData(const T & pixel, const
+                                    std::vector<bool> & flags,
+                                    const std::vector<double> & values,
+                                    const std::vector<double> & newValues) {
+  assert(flags.size()>0);
+  assert(values.size()>0);
+  assert(newValues.size()>0);
+  
+  if(vnl_math_isnan(pixel))
+    {
+    return static_cast<T>(newValues[0]);
+    }
+
+  if(flags[0])
+    {
+    if (pixel == values[0])
+      {
+      return static_cast<T>(newValues[0]);
+      }
+    }
+  else
+    {
+    return pixel;
+    }
+}
+
+
 /**
  * Specialization of IsNoData function to handle itk::VariableLengthVector
  */
@@ -68,6 +98,34 @@ template <typename T> bool IsNoData(const itk::VariableLengthVector<T> & pixel, 
     }
   return false;
 }
+
+template <typename T> itk::VariableLengthVector<T> ChangeNoData(const itk::VariableLengthVector<T> & pixel,
+                                                                const std::vector<bool> & flags,
+                                                                const std::vector<double> & values,
+                                                                const std::vector<double> & newValues)
+{
+  assert(flags.size()>=pixel.Size());
+  assert(values.size()>=pixel.Size());
+  assert(newValues.size()>=pixel.Size());
+
+  itk::VariableLengthVector<T> outPixel(pixel.Size());
+  
+  for(unsigned int i = 0; i < pixel.Size();++i)
+    {
+    if(vnl_math_isnan(pixel[i]) || (flags[i] && (pixel[i] == values[i])))
+      {
+      outPixel[i] = newValues[i];
+      }
+    else
+      {
+      outPixel[i] = pixel[i];
+      }
+    }
+
+  return outPixel;
+  
+}
+
 
 
 } // End namespace otb
