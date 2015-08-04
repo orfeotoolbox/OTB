@@ -135,6 +135,8 @@ public:
 
   void UpdateRotation(const PointType & newCenter, double newAngle);
 
+  double GetScale( const PointType & origin, const PointType & extent, bool isSigned ) const;
+
 protected:
   ViewSettings();
 

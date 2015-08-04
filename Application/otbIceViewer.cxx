@@ -1163,30 +1163,52 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
 
   if(key == GLFW_KEY_Z && action == GLFW_PRESS)
     {
-    double ulx(0),uly(0),lrx(0),lry(0);
+    // double ulx(0),uly(0),lrx(0),lry(0);
 
-    if(currentVectorActor.IsNotNull())
-      {
-      currentVectorActor->GetExtent(ulx,uly,lrx,lry);
-      }
-    else if(currentImageActor.IsNotNull())
-      {
-      currentImageActor->GetExtent(ulx,uly,lrx,lry);
-      }
+    // if(currentVectorActor.IsNotNull())
+    //   {
+    //   currentVectorActor->GetExtent(ulx,uly,lrx,lry);
+    //   }
+    // else if(currentImageActor.IsNotNull())
+    //   {
+    //   currentImageActor->GetExtent(ulx,uly,lrx,lry);
+    //   }
      
+    // otb::ViewSettings::PointType center;
+    // center[0] = 0.5*(ulx+lrx);
+    // center[1] = 0.5*(uly+lry);
+     
+    // double spacingx = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
+    // double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
+     
+    // otb::ViewSettings::SpacingType spacing;
+    // spacing.Fill(std::max(spacingx,spacingy));
+    // spacing[1] *= (m_View->GetSettings()->GetSpacing()[1]>0?1:-1);
+
+    assert( !m_View.IsNull() );
+
     otb::ViewSettings::PointType center;
-    center[0] = 0.5*(ulx+lrx);
-    center[1] = 0.5*(uly+lry);
-     
-    double spacingx = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
-    double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
-     
     otb::ViewSettings::SpacingType spacing;
-    spacing.Fill(std::max(spacingx,spacingy));
-    spacing[1] *= (m_View->GetSettings()->GetSpacing()[1]>0?1:-1);
-     
-    m_View->GetSettings()->SetSpacing(spacing);
-    m_View->GetSettings()->Center(center);
+
+    if( m_View->ZoomToLayer( m_SelectedActor, center, spacing ) )
+      {
+      m_View->GetSettings()->SetSpacing( spacing );
+      m_View->GetSettings()->Center( center );
+      }
+    }
+
+  if(key == GLFW_KEY_A && action == GLFW_PRESS)
+    {
+    assert( !m_View.IsNull() );
+
+    otb::ViewSettings::PointType center;
+    otb::ViewSettings::SpacingType spacing;
+
+    if( m_View->ZoomToFull( m_SelectedActor, center, spacing ) )
+      {
+      m_View->GetSettings()->SetSpacing( spacing );
+      m_View->GetSettings()->Center( center );
+      }
     }
 
   if(key == GLFW_KEY_F1 && action == GLFW_PRESS)
@@ -1345,6 +1367,7 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
     shader->SetMaxBlue(maxBlue);
     }
 
+  /*
   // Zoom to full resolution of an image
   if(key == GLFW_KEY_A && action == GLFW_PRESS)
     {
@@ -1358,6 +1381,10 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
 
     GlImageActor::SpacingType spacing = m_View->GetSettings()->GetSpacing();
 
+    std::cout << "vp:" << vpCenter[ 0 ] << ", " << vpCenter[ 1 ] << std::endl;
+    std::cout << "im-1:" << imCenter[ 0 ] << ", " << imCenter[ 1 ] << std::endl;
+    std::cout << "im-2:" << imCenter2[ 0 ] << ", " << imCenter2[ 1 ] << std::endl << std::endl;
+
     spacing[0]=spacing[0]/(length/1000);
 
     
@@ -1368,12 +1395,17 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
     
     length = vcl_sqrt((imCenter[0]-imCenter2[0])*(imCenter[0]-imCenter2[0])+(imCenter[1]-imCenter2[1])*(imCenter[1]-imCenter2[1]));
 
+    std::cout << "vp:" << vpCenter[ 0 ] << ", " << vpCenter[ 1 ] << std::endl;
+    std::cout << "im-1:" << imCenter[ 0 ] << ", " << imCenter[ 1 ] << std::endl;
+    std::cout << "im-2:" << imCenter2[ 0 ] << ", " << imCenter2[ 1 ] << std::endl << std::endl;
+
     spacing[1]=spacing[1]/(length/1000);
     
     vpCenter = m_View->GetSettings()->GetViewportCenter();
     m_View->GetSettings()->SetSpacing(spacing);
     m_View->GetSettings()->Center(vpCenter);
     }
+  */
 
   //Activate/Deactivate the use no-data
   if(key == GLFW_KEY_N && action == GLFW_PRESS)

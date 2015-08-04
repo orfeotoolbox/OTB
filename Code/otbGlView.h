@@ -204,7 +204,25 @@ public:
   /**
    */
   template< typename P >
-  void GetExtent( P & origin, P & extent ) const;
+  bool GetExtent( P & origin, P & extent ) const;
+
+  /**
+   */
+  template< typename Point, typename Spacing >
+  bool ZoomToExtent( Point & center, Spacing & spacing ) const;
+
+  /**
+   */
+  template< typename Point, typename Spacing >
+  bool ZoomToLayer( const KeyType & key, Point & center, Spacing & spacing ) const;
+
+  /**
+   */
+  template< typename Point, typename Spacing >
+  bool ZoomToFull( const KeyType & key,
+		   Point & center,
+		   Spacing & spacing,
+		   double units = 1000.0 ) const;
 
 protected:
   GlView();
@@ -309,7 +327,7 @@ GlView
 
 
 template< typename P >
-void
+bool
 GlView
 ::GetExtent( P & origin, P & extent ) const
 {
@@ -318,7 +336,7 @@ GlView
     origin[ 0 ] = origin[ 1 ] = 0;
     extent[ 0 ] = extent[ 1 ] = 0;
 
-    return;
+    return false;
     }
 
 
@@ -365,6 +383,159 @@ GlView
     if( e[ 1 ]>extent[ 1 ] )
       extent[ 1 ] = e[ 1 ];
     }
+
+  return true;
+}
+
+
+template< typename Point, typename Spacing >
+bool
+GlView
+::ZoomToExtent( Point & center, Spacing & spacing ) const
+{
+  Point o;
+  Point e;
+
+  // Get origin and extent of all layers in viewport system.
+  if( !GetExtent( o, e ) )
+    return false;
+
+  // Compute center point.
+  center.SetToMidPoint( o, e );
+
+  // Get scale of (o, e) in viewport.
+  //
+  // Since (A) origin=min( min[ i ] ) and extent=Max( Max[ i ] ),
+  // resulting signed scale is always positive but, for numerical
+  // safety, absolute scale is computed here.
+  assert( !m_Settings.IsNull() );
+  double scale = m_Settings->GetScale( o, e, true );
+
+  // Compute scaled spacing.
+  //
+  // Since multiple layers of, maybe of different spacing signs, are
+  // mixed for display, and since proposition (A), neither sign of
+  // selected nor projection-reference layer spacing could be applied
+  // to scale factor.
+  //
+  // In both cases, some layers may be displayed mirrored because of
+  // their spacing signs.
+  //
+  // It is the role of the renderer to display them properly.
+  spacing[ 0 ] = scale;
+  spacing[ 1 ] = scale;
+
+  // Ok.
+  return true;
+}
+
+
+template< typename Point, typename Spacing >
+bool
+GlView
+::ZoomToLayer( const KeyType & key, Point & center, Spacing & spacing ) const
+{
+  Point o;
+  Point e;
+
+  // Get selected layer actor.
+  assert( !key.empty() );
+
+  GlActor::Pointer actor( GetActor( key ) );
+  assert( !actor.IsNull() );
+
+  // Get origin and extent of layer.
+  actor->GetExtent( o[ 0 ], o[ 1 ], e[ 0 ], e[ 1 ] );
+
+  // Compute center point.
+  center.SetToMidPoint( o, e );
+
+  // Get scale of (o, e) in viewport.
+  assert( !m_Settings.IsNull() );
+  double scale = m_Settings->GetScale( o, e, true );
+
+  // Set spacing to scale level of origin-extent.
+  //
+  // Since multiple layers of, maybe of different spacing signs, are
+  // mixed for display neither sign of selected nor
+  // projection-reference layer spacing could be applied to scale
+  // factor.
+  //
+  // In both cases, some layers may be displayed mirrored because of
+  // their spacing signs.
+  //
+  // It is the role of the renderer to display them properly.
+  spacing[ 0 ] = scale;
+  spacing[ 1 ] = scale;
+
+  // Ok.
+  return true;
+}
+
+
+template< typename Point, typename Spacing >
+bool
+GlView
+::ZoomToFull( const KeyType & key, Point & center, Spacing & spacing, double units ) const
+{
+  // Get selected layer actor.
+  assert( !key.empty() );
+
+  GlActor::Pointer actor( GetActor( key ) );
+  assert( !actor.IsNull() );
+
+  // Get geo-interface.
+  const GeoInterface * geo = dynamic_cast< const GeoInterface * >( actor.GetPointer() );
+
+  if( geo==NULL )
+    return false;
+
+  // Get viewport current center and spacing.
+  assert( !m_Settings.IsNull() );
+
+  center = m_Settings->GetViewportCenter();
+  spacing = m_Settings->GetSpacing();
+
+  // Transform center point to image space..
+  Point o;
+
+  if( !geo->TransformFromViewport( o, center, false ) )
+    return false;
+
+  // Consider arbitrary point on the X-axis.
+  Point e;
+
+  e[ 0 ] = center[ 0 ] + units * spacing[ 0 ];
+  e[ 1 ] = center[ 1 ];
+
+  // Transform considered point.
+  if( !geo->TransformFromViewport( e, e, false ) )
+    return false;
+
+  // Compute extent vector.
+  e[ 0 ] -= o[ 0 ];
+  e[ 1 ] -= o[ 1 ];
+
+  // Apply extent vector length to view spacing.
+  spacing[ 0 ] = units * spacing[ 0 ] / vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
+
+  // Consider arbitrary point on the Y-axis.
+  e[ 0 ] = center[ 0 ];
+  e[ 1 ] = center[ 1 ] + units * spacing[ 1 ];
+
+  // Transform considered point.
+  if( !geo->TransformFromViewport( e, e, false ) )
+    return false;
+
+  // Compute extent vector.
+  e[ 0 ] -= o[ 0 ];
+  e[ 1 ] -= o[ 1 ];
+
+  // Apply extent vector length to view spacing.
+  spacing[ 1 ] = units * spacing[ 1 ] / vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
+
+  // Ok.
+  return true;
 }
 
 
