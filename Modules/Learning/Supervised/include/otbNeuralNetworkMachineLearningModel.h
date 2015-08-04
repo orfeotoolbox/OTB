@@ -40,21 +40,19 @@ public:
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  // Input related typedefs
-  typedef TInputValue                                     InputValueType;
-  typedef itk::VariableLengthVector<InputValueType>       InputSampleType;
-  typedef itk::Statistics::ListSample<InputSampleType>    InputListSampleType;
-
-  // Target related typedefs
-  typedef TTargetValue                                    TargetValueType;
-  typedef itk::FixedArray<TargetValueType,1>              TargetSampleType;
-  typedef itk::Statistics::ListSample<TargetSampleType>   TargetListSampleType;
+  typedef typename Superclass::InputValueType             InputValueType;
+  typedef typename Superclass::InputSampleType            InputSampleType;
+  typedef typename Superclass::InputListSampleType        InputListSampleType;
+  typedef typename Superclass::TargetValueType            TargetValueType;
+  typedef typename Superclass::TargetSampleType           TargetSampleType;
+  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
 
   typedef std::map<TargetValueType, unsigned int>         MapOfLabelsType;
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
-  itkTypeMacro(NeuralNetworkMachineLearningModel, itk::MachineLearningModel);
+  itkTypeMacro(NeuralNetworkMachineLearningModel, MachineLearningModel);
 
   /** Setters/Getters to the train method
    *  2 methods are available:
@@ -183,7 +181,7 @@ protected:
   /** Train the machine learning model */
   virtual void TrainClassification();
   /** Predict values using the model */
-  virtual TargetSampleType PredictClassification(const InputSampleType& input) const;
+  virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
 private:
   NeuralNetworkMachineLearningModel(const Self &); //purposely not implemented

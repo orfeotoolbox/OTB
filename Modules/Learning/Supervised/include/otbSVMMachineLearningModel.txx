@@ -49,6 +49,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
  m_OutputNu(0),
  m_OutputP(0)
 {
+  this->m_ConfidenceIndex = true;
 }
 
 
@@ -108,7 +109,7 @@ template <class TInputValue, class TOutputValue>
 typename SVMMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input) const
+::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -120,6 +121,11 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
   TargetSampleType target;
 
   target[0] = static_cast<TOutputValue>(result);
+
+  if (quality != NULL)
+    {
+    (*quality) = m_SVMModel->predict(sample,true);
+    }
 
   return target;
 }

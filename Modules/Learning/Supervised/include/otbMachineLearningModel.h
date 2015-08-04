@@ -60,7 +60,7 @@ namespace otb
  *
  * \ingroup OTBSupervised
  */
-template <class TInputValue, class TTargetValue>
+template <class TInputValue, class TTargetValue, class TConfidenceValue = double >
 class ITK_EXPORT MachineLearningModel
   : public itk::Object
 {
@@ -87,6 +87,9 @@ public:
   typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
   //@}
 
+  /**\name Confidence value typedef */
+  typedef TConfidenceValue                              ConfidenceValueType;
+
   /**\name Standard macros */
   //@{
   /** Run-time type information (and related methods). */
@@ -97,7 +100,7 @@ public:
   void Train();
 
   /** Predict values using the model */
-  TargetSampleType Predict(const InputSampleType& input) const;
+  TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = NULL) const;
 
   /** Classify all samples in InputListSample and fill TargetListSample with the associated label */
   void PredictAll();
@@ -119,6 +122,9 @@ public:
   /** Is the input model file writable and compatible with the corresponding classifier ? */
   virtual bool CanWriteFile(const std::string &)  = 0;
   //@}
+
+  /** Query capacity to produce a confidence index */
+  bool HasConfidenceIndex() const {return m_ConfidenceIndex;}
 
   /**\name Input list of samples accessors */
   //@{
@@ -163,9 +169,12 @@ protected:
   (void)input;
   }
 
-  virtual TargetSampleType PredictClassification(const InputSampleType& input) const = 0;
+  virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality = NULL) const = 0;
 
   bool m_RegressionMode;
+  
+  /** flag that tells if the model support confidence index output */
+  bool m_ConfidenceIndex;
 private:
   MachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

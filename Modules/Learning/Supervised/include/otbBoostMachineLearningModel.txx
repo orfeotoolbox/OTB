@@ -37,6 +37,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
  m_SplitCrit(CvBoost::DEFAULT),
  m_MaxDepth(1)
 {
+  this->m_ConfidenceIndex = true;
 }
 
 
@@ -76,7 +77,7 @@ template <class TInputValue, class TOutputValue>
 typename BoostMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 BoostMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input) const
+::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -90,6 +91,12 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
   TargetSampleType target;
 
   target[0] = static_cast<TOutputValue>(result);
+
+  if (quality != NULL)
+    {
+    (*quality) = static_cast<ConfidenceValueType>(
+      m_BoostModel->predict(sample,missing,cv::Range::all(),false,true));
+    }
 
   return target;
 }

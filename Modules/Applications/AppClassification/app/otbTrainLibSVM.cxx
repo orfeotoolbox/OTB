@@ -42,6 +42,9 @@ namespace Wrapper
     AddParameter(ParameterType_Empty, "classifier.libsvm.opt", "Parameters optimization");
     MandatoryOff("classifier.libsvm.opt");
     SetParameterDescription("classifier.libsvm.opt", "SVM parameters optimization flag.");
+    AddParameter(ParameterType_Empty, "classifier.libsvm.prob", "Probability estimation");
+    MandatoryOff("classifier.libsvm.prob");
+    SetParameterDescription("classifier.libsvm.prob", "Probability estimation flag.");
   }
 
 
@@ -55,6 +58,10 @@ namespace Wrapper
     if (IsParameterEnabled("classifier.libsvm.opt"))
       {
       libSVMClassifier->SetParameterOptimization(true);
+      }
+    if (IsParameterEnabled("classifier.libsvm.prob"))
+      {
+      libSVMClassifier->SetDoProbabilityEstimates(true);
       }
     libSVMClassifier->SetC(GetParameterFloat("classifier.libsvm.c"));
 

@@ -74,19 +74,46 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   m_SVMestimator->SetTrainingSampleList(this->GetTargetListSample());
 
   m_SVMestimator->Update();
+
+  this->m_ConfidenceIndex = m_DoProbabilityEstimates;
 }
 
 template <class TInputValue, class TOutputValue>
 typename LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input) const
+::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   TargetSampleType target;
 
   MeasurementVectorFunctorType mfunctor;
 
   target = m_SVMestimator->GetModel()->EvaluateLabel(mfunctor(input));
+
+  if (quality != NULL)
+    {
+    if (!this->m_ConfidenceIndex)
+      {
+      itkExceptionMacro("Confidence index not available for this classifier !");
+      }
+    typename SVMEstimatorType::ModelType::ProbabilitiesVectorType probaVector =
+        m_SVMestimator->GetModel()->EvaluateProbabilities(mfunctor(input));
+    double maxProb = 0.0;
+    double secProb = 0.0;
+    for (unsigned int i=0 ; i<probaVector.Size() ; ++i)
+      {
+      if (maxProb < probaVector[i])
+        {
+          secProb = maxProb;
+          maxProb = probaVector[i];
+        }
+      else if (secProb < probaVector[i])
+        {
+          secProb = probaVector[i];
+        }
+      }
+    (*quality) = static_cast<ConfidenceValueType>(maxProb - secProb);
+    }
 
   return target;
 }
@@ -105,6 +132,8 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & itkNotUsed(name))
 {
   m_SVMestimator->GetModel()->LoadModel(filename.c_str());
+
+  this->m_ConfidenceIndex = m_SVMestimator->GetModel()->HasProbabilities();
 }
 
 template <class TInputValue, class TOutputValue>

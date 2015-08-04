@@ -23,20 +23,20 @@
 namespace otb
 {
 
-template <class TInputValue, class TOutputValue>
-MachineLearningModel<TInputValue,TOutputValue>
-::MachineLearningModel() : m_RegressionMode(false)
+template <class TInputValue, class TOutputValue, class TConfidenceValue>
+MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
+::MachineLearningModel() : m_RegressionMode(false),m_ConfidenceIndex(false)
 {}
 
 
-template <class TInputValue, class TOutputValue>
-MachineLearningModel<TInputValue,TOutputValue>
+template <class TInputValue, class TOutputValue, class TConfidenceValue>
+MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::~MachineLearningModel()
 {}
 
-template <class TInputValue, class TOutputValue>
+template <class TInputValue, class TOutputValue, class TConfidenceValue>
 void
-MachineLearningModel<TInputValue,TOutputValue>
+MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::Train()
 {
   if(m_RegressionMode)
@@ -45,20 +45,20 @@ MachineLearningModel<TInputValue,TOutputValue>
     return this->TrainClassification();
 }
 
-template <class TInputValue, class TOutputValue>
-typename MachineLearningModel<TInputValue,TOutputValue>::TargetSampleType
-MachineLearningModel<TInputValue,TOutputValue>
-::Predict(const typename MachineLearningModel<TInputValue,TOutputValue>::InputSampleType& input) const
+template <class TInputValue, class TOutputValue, class TConfidenceValue>
+typename MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>::TargetSampleType
+MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
+::Predict(const InputSampleType& input, ConfidenceValueType *quality) const
 {
   if(m_RegressionMode)
     return this->PredictRegression(input);
   else
-    return this->PredictClassification(input);
+    return this->PredictClassification(input,quality);
 }
 
-template <class TInputValue, class TOutputValue>
+template <class TInputValue, class TOutputValue, class TConfidenceValue>
 void
-MachineLearningModel<TInputValue,TOutputValue>
+MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::PredictAll()
 {
   TargetListSampleType * targets = this->GetTargetListSample();
@@ -71,9 +71,9 @@ MachineLearningModel<TInputValue,TOutputValue>
     }
 }
 
-template <class TInputValue, class TOutputValue>
+template <class TInputValue, class TOutputValue, class TConfidenceValue>
 void
-MachineLearningModel<TInputValue,TOutputValue>
+MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation

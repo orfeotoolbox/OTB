@@ -40,15 +40,13 @@ public:
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  // Input related typedefs
-  typedef TInputValue                                   InputValueType;
-  typedef itk::VariableLengthVector<InputValueType>     InputSampleType;
-  typedef itk::Statistics::ListSample<InputSampleType>  InputListSampleType;
-
-  // Target related typedefs
-  typedef TTargetValue                                  TargetValueType;
-  typedef itk::FixedArray<TargetValueType,1>            TargetSampleType;
-  typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
+  typedef typename Superclass::InputValueType             InputValueType;
+  typedef typename Superclass::InputSampleType            InputSampleType;
+  typedef typename Superclass::InputListSampleType        InputListSampleType;
+  typedef typename Superclass::TargetValueType            TargetValueType;
+  typedef typename Superclass::TargetSampleType           TargetSampleType;
+  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
   
   // Other
   typedef itk::VariableSizeMatrix<float>                VariableImportanceMatrixType;
@@ -59,7 +57,7 @@ public:
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
-  itkTypeMacro(RandomForestsMachineLearningModel, itk::MachineLearningModel);
+  itkTypeMacro(RandomForestsMachineLearningModel, MachineLearningModel);
 
   /** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="");
@@ -144,7 +142,7 @@ protected:
   /** Train the machine learning model */
   virtual void TrainClassification();
   /** Predict values using the model */
-  virtual TargetSampleType PredictClassification(const InputSampleType& input) const;
+  virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
 private:
   RandomForestsMachineLearningModel(const Self &); //purposely not implemented
