@@ -478,7 +478,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                         // Handle space in filename. Only for input
                         // files or directories
                         if (type == ParameterType_Directory         || type == ParameterType_InputFilename ||
-                            type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
+                            type == ParameterType_ComplexInputImage || type == ParameterType_ComplexOutputImage ||
+                            type == ParameterType_InputImage ||
                             type == ParameterType_InputVectorData   || type == ParameterType_OutputVectorData )
                           {
                           for(unsigned int j=1; j<values.size(); j++)
@@ -499,6 +500,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
             type == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_InputFilename ||
             type == ParameterType_InputFilenameList || type == ParameterType_OutputFilename ||
             type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
+            type == ParameterType_ComplexOutputImage ||
             type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||
             type == ParameterType_OutputVectorData || type == ParameterType_RAM ||
             type == ParameterType_OutputProcessXML) // || type == ParameterType_InputProcessXML)
