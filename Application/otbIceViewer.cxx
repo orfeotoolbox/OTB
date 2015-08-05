@@ -1211,6 +1211,20 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
       }
     }
 
+  if(key == GLFW_KEY_Q && action == GLFW_PRESS)
+    {
+    assert( !m_View.IsNull() );
+
+    otb::ViewSettings::PointType center;
+    otb::ViewSettings::SpacingType spacing;
+
+    if( m_View->ZoomToExtent( center, spacing ) )
+      {
+      m_View->GetSettings()->SetSpacing( spacing );
+      m_View->GetSettings()->Center( center );
+      }
+    }
+
   if(key == GLFW_KEY_F1 && action == GLFW_PRESS)
     {
     m_DisplayHelp = true;
@@ -1367,7 +1381,7 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
     shader->SetMaxBlue(maxBlue);
     }
 
-  /*
+#if 0
   // Zoom to full resolution of an image
   if(key == GLFW_KEY_A && action == GLFW_PRESS)
     {
@@ -1405,7 +1419,7 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
     m_View->GetSettings()->SetSpacing(spacing);
     m_View->GetSettings()->Center(vpCenter);
     }
-  */
+#endif
 
   //Activate/Deactivate the use no-data
   if(key == GLFW_KEY_N && action == GLFW_PRESS)
