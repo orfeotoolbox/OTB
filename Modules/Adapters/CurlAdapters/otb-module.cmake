@@ -10,6 +10,7 @@ otb_module(OTBCurlAdapters
 
   TEST_DEPENDS
     OTBTestKernel
+    OTBTinyXML
 
   DESCRIPTION
     "${DOCUMENTATION}"
