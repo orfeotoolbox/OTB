@@ -1096,8 +1096,10 @@ ImageViewWidget
 
     //
     // Get spacing of layer in viewport system.
+    /* Needless and not X/Y uniform!
     spacing[ 0 ] = ( extent[ 0 ] - origin[ 0 ] ) / size[ 0 ];
     spacing[ 1 ] = ( extent[ 1 ] - origin[ 1 ] ) / size[ 1 ];
+    */
 
     //
     // Calculate spacing.
