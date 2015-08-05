@@ -17,35 +17,55 @@ if(Mercurial_FOUND)
   string(REGEX REPLACE "\n" ";" OTB_WC_STATUS "${OTB_WC_STATUS}")
   set(OTB_WC_STATUS ${OTB_WC_STATUS} CACHE STRING "Repository status" FORCE)
   mark_as_advanced(OTB_WC_STATUS)
-
-  if(OTB_DATA_ROOT)
-    Mercurial_WC_IDENTIFY(${OTB_DATA_ROOT} OTB_DATA)
-    set(OTB_DATA_WC_REVISION ${OTB_DATA_WC_REVISION} CACHE STRING "Repository version" FORCE)
-    mark_as_advanced(OTB_DATA_WC_REVISION)
-  endif()
-
 endif()
 endif()
 
 if(EXISTS "${PROJECT_SOURCE_DIR}/.git")
   find_package(Git)
   if(GIT_FOUND)
-    execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=oneline
+    execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:%H
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-      OUTPUT_VARIABLE OTB_WC_VERSION
+      OUTPUT_VARIABLE OTB_WC_REVISION
       OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
     execute_process(COMMAND ${GIT_EXECUTABLE} status -s
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
       OUTPUT_VARIABLE OTB_WC_STATUS
       OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
     message(STATUS "Repository status :")
-    message(STATUS "  Repository revision is ${OTB_WC_VERSION}")
+    message(STATUS "  Repository revision is ${OTB_WC_REVISION}")
     if(OTB_WC_STATUS)
       message(STATUS "  Local file modifications:")
       string(REPLACE "\n" "\n--     " OTB_WC_STATUS_PRETTYPRINT "    ${OTB_WC_STATUS}")
       message(STATUS "${OTB_WC_STATUS_PRETTYPRINT}")
     else()
       message(STATUS "  No files modified locally")
+    endif()
+  endif()
+endif()
+
+if(OTB_DATA_ROOT)
+  if(EXISTS "${OTB_DATA_ROOT}/.hg")
+    if(NOT Mercurial_FOUND)
+      find_package(Mercurial)
+    endif()
+    if(Mercurial_FOUND)
+      Mercurial_WC_IDENTIFY(${OTB_DATA_ROOT} OTB_DATA)
+      set(OTB_DATA_WC_REVISION ${OTB_DATA_WC_REVISION} CACHE STRING "Repository version" FORCE)
+      mark_as_advanced(OTB_DATA_WC_REVISION)
+    endif()
+  endif()
+  
+  if(EXISTS "${OTB_DATA_ROOT}/.git")
+    if(NOT GIT_FOUND)
+      find_package(Git)
+    endif()
+    if(GIT_FOUND)
+      execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:%H
+        WORKING_DIRECTORY ${OTB_DATA_ROOT}
+        OUTPUT_VARIABLE OTB_DATA_WC_REVISION
+        OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+      set(OTB_DATA_WC_REVISION ${OTB_DATA_WC_REVISION} CACHE STRING "Repository version" FORCE)
+      mark_as_advanced(OTB_DATA_WC_REVISION)
     endif()
   endif()
 endif()
