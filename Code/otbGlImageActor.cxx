@@ -920,9 +920,6 @@ GlImageActor
 
   out = p;
 
-  out[ 0 ] = p[ 0 ];
-  out[ 1 ] = p[ 1 ];
-
   return true;
 }
 
@@ -951,9 +948,6 @@ GlImageActor
     return false;
 
   out = p;
-
-  out[ 0 ] = p[ 0 ];
-  out[ 1 ] = p[ 1 ];
 
   return true;
 }
