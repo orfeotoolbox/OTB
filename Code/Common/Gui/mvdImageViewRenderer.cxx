@@ -73,7 +73,8 @@ namespace mvd
 ImageViewRenderer
 ::ImageViewRenderer( QObject* parent ) :
   AbstractImageViewRenderer( parent ),
-  m_GlView( otb::GlView::New() )
+  m_GlView( otb::GlView::New() ),
+  m_EffectsEnabled( true )
 #ifdef _WIN32
 #else // _WIN32
   ,  m_ReferencePair( NULL, otb::GlActor::Pointer() )
@@ -610,74 +611,74 @@ ImageViewRenderer
           shader->SetNoData( properties->GetNoData() );
           }
 
-        //
-        // Apply shader properties.
-        //
-        // qDebug()
-        //   << "alpha:" << settings.GetAlpha()
-        //   << "'" << it->first.c_str() << "'";
+	//
+	// Apply shader properties.
+	//
+	// qDebug()
+	//   << "alpha:" << settings.GetAlpha()
+	//   << "'" << it->first.c_str() << "'";
+	shader->SetAlpha( settings.GetAlpha() );
 
-        shader->SetAlpha( settings.GetAlpha() );
+	if( m_EffectsEnabled )
+	  switch( settings.GetEffect() )
+	    {
+	    case EFFECT_CHESSBOARD:
+	      shader->SetShaderType( otb::SHADER_ALPHA_GRID );
+	      shader->SetChessboardSize( settings.GetSize() );
+	      break;
 
-        switch( settings.GetEffect() )
-          {
-          case EFFECT_CHESSBOARD:
-            shader->SetShaderType( otb::SHADER_ALPHA_GRID );
-            shader->SetChessboardSize( settings.GetSize() );
-            break;
+	    case EFFECT_GRADIENT:
+	      shader->SetShaderType( otb::SHADER_GRADIENT );
+	      break;
 
-          case EFFECT_GRADIENT:
-            shader->SetShaderType( otb::SHADER_GRADIENT );
-            break;
-
-          case EFFECT_LOCAL_CONTRAST:
-            shader->SetShaderType( otb::SHADER_LOCAL_CONTRAST );
-            shader->SetRadius( settings.GetSize() );
-            shader->SetLocalContrastRange(
+	    case EFFECT_LOCAL_CONTRAST:
+	      shader->SetShaderType( otb::SHADER_LOCAL_CONTRAST );
+	      shader->SetRadius( settings.GetSize() );
+	      shader->SetLocalContrastRange(
 #if 0
-              settings.GetValue() *
-              std::max(
-                std::max(
-                  shader->GetMaxRed() - shader->GetMinRed(),
-                  shader->GetMaxGreen() - shader->GetMinGreen()
-                ),
-                shader->GetMaxBlue() - shader->GetMinBlue()
-              )
+		settings.GetValue() *
+		std::max(
+		  std::max(
+		    shader->GetMaxRed() - shader->GetMinRed(),
+		    shader->GetMaxGreen() - shader->GetMinGreen()
+		  ),
+		  shader->GetMaxBlue() - shader->GetMinBlue()
+		)
 #else
-              settings.GetValue()
+		settings.GetValue()
 #endif
-            );
-            break;
+	      );
+	      break;
 
-          case EFFECT_LOCAL_TRANSLUCENCY:
-            shader->SetShaderType( otb::SHADER_LOCAL_ALPHA );
-            shader->SetRadius( settings.GetSize() );
-            break;
+	    case EFFECT_LOCAL_TRANSLUCENCY:
+	      shader->SetShaderType( otb::SHADER_LOCAL_ALPHA );
+	      shader->SetRadius( settings.GetSize() );
+	      break;
 
-          case EFFECT_NORMAL:
-            shader->SetShaderType( otb::SHADER_STANDARD );
-            break;
+	    case EFFECT_NORMAL:
+	      shader->SetShaderType( otb::SHADER_STANDARD );
+	      break;
 
-          case EFFECT_SPECTRAL_ANGLE:
-            shader->SetShaderType( otb::SHADER_SPECTRAL_ANGLE );
-            shader->SetRadius( settings.GetSize() );
-            shader->SetSpectralAngleRange( settings.GetValue() );
-            break;
+	    case EFFECT_SPECTRAL_ANGLE:
+	      shader->SetShaderType( otb::SHADER_SPECTRAL_ANGLE );
+	      shader->SetRadius( settings.GetSize() );
+	      shader->SetSpectralAngleRange( settings.GetValue() );
+	      break;
 
-          case EFFECT_SWIPE_H:
-            shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
-            shader->SetVerticalSlider( false );
-            break;
+	    case EFFECT_SWIPE_H:
+	      shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
+	      shader->SetVerticalSlider( false );
+	      break;
 
-          case EFFECT_SWIPE_V:
-            shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
-            shader->SetVerticalSlider( true );
-            break;
+	    case EFFECT_SWIPE_V:
+	      shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
+	      shader->SetVerticalSlider( true );
+	      break;
 
-          default:
-            assert( false && "Unhandled mvd::Effect value!" );
-            break;
-          }
+	    default:
+	      assert( false && "Unhandled mvd::Effect value!" );
+	      break;
+	    }
         }
       //
       else

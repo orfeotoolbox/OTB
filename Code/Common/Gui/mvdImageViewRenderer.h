@@ -227,6 +227,9 @@ protected:
   /**
    */
   otb::GlView::Pointer m_GlView;
+  /**
+   */
+  bool m_EffectsEnabled: 1;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
