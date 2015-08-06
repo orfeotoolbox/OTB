@@ -421,11 +421,12 @@ GlView
   Point o;
   Point e;
 
-  // Get selected layer actor.
-  assert( !key.empty() );
-
+  // Get layer actor.
   GlActor::Pointer actor( GetActor( key ) );
-  assert( !actor.IsNull() );
+
+  // If not found...
+  if( actor.IsNull() )
+    return false;
 
   // Get origin and extent of layer.
   actor->GetExtent( o[ 0 ], o[ 1 ], e[ 0 ], e[ 1 ] );
@@ -474,11 +475,12 @@ bool
 GlView
 ::ZoomToFull( const KeyType & key, Point & center, Spacing & spacing, double units ) const
 {
-  // Get selected layer actor.
-  assert( !key.empty() );
-
+  // Get layer actor.
   GlActor::Pointer actor( GetActor( key ) );
-  assert( !actor.IsNull() );
+
+  // If not found...
+  if( actor.IsNull() )
+    return false;
 
   // Get geo-interface.
   const GeoInterface * geo = dynamic_cast< const GeoInterface * >( actor.GetPointer() );
