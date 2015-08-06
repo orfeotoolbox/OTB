@@ -748,17 +748,6 @@ MainWindow
     Qt::RightDockWidgetArea
   );
 
-  // Layer-stack editor.
-  assert( m_LayerStackDock==NULL );
-  m_LayerStackDock = AddDockWidget<
-    LayerStackWidget, LayerStackController, QDockWidget >(
-      "LAYER_STACK",
-      tr( "Layer stack" ),
-      Qt::RightDockWidgetArea
-    );
-
-  tabifyDockWidget( m_QuicklookViewDock, m_LayerStackDock );
-
   // Histogram-view.
   assert( m_HistogramDock==NULL );
   m_HistogramDock =
@@ -809,6 +798,21 @@ MainWindow
 
   // Tabify dock-widgets.
   tabifyDockWidget( m_ColorSetupDock, m_ColorDynamicsDock );
+
+
+  //
+  // Bottom pane
+  //
+
+  // Layer-stack editor.
+  assert( m_LayerStackDock==NULL );
+  m_LayerStackDock = AddDockWidget<
+    LayerStackWidget, LayerStackController, QDockWidget >(
+      "LAYER_STACK",
+      tr( "Layer stack" ),
+      Qt::BottomDockWidgetArea
+    );
+
 }
 
 /*****************************************************************************/
