@@ -207,6 +207,25 @@ public:
   /**
    */
   inline bool IsBypassRenderingEnabled() const;
+  /**
+   */
+  inline bool ZoomToRegion( const PointType & origin,
+			    const PointType & extent,
+			    PointType & center,
+			    SpacingType & spacing ) const;
+  /**
+   */
+  inline bool ZoomToExtent( PointType & center, SpacingType & spacing ) const;
+  /**
+   */
+  inline bool ZoomToLayer( const StackedLayerModel::KeyType & key,
+			   PointType & center,
+			   SpacingType & spacing ) const;
+  /**
+   */
+  inline bool ZoomToFull( const StackedLayerModel::KeyType & key,
+			  PointType & center,
+			  SpacingType & spacing ) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -269,6 +288,30 @@ private:
   /**
    */
   virtual void virtual_FinishScene() {};
+
+  /**
+   */
+  virtual bool virtual_ZoomToRegion( const PointType &,
+				     const PointType &,
+				     PointType &,
+				     SpacingType & ) const
+  { return false; }
+  /**
+   */
+  virtual bool virtual_ZoomToExtent( PointType &, SpacingType & ) const
+  { return false; }
+  /**
+   */
+  virtual bool virtual_ZoomToLayer( const StackedLayerModel::KeyType &,
+				    PointType &,
+				    SpacingType & ) const
+  { return false; }
+  /**
+   */
+  virtual bool virtual_ZoomToFull( const StackedLayerModel::KeyType &,
+				   PointType &,
+				   SpacingType & ) const
+  { return false; }
 
 //
 // Private attributes.
@@ -388,6 +431,49 @@ AbstractImageViewRenderer
 ::RefreshScene()
 {
   virtual_RefreshScene();
+}
+
+/*****************************************************************************/
+inline
+bool
+AbstractImageViewRenderer
+::ZoomToExtent( PointType & center, SpacingType & spacing ) const
+{
+  return virtual_ZoomToExtent( center, spacing );
+}
+
+/*****************************************************************************/
+inline
+bool
+AbstractImageViewRenderer
+::ZoomToLayer( const StackedLayerModel::KeyType & key,
+	       PointType & center,
+	       SpacingType & spacing) const
+{
+  return virtual_ZoomToLayer( key, center, spacing );
+}
+
+/*****************************************************************************/
+inline
+bool
+AbstractImageViewRenderer
+::ZoomToRegion( const PointType & origin,
+		const PointType & extent,
+		PointType & center,
+		SpacingType & spacing ) const
+{
+  return virtual_ZoomToRegion( origin, extent, center, spacing );
+}
+
+/*****************************************************************************/
+inline
+bool
+AbstractImageViewRenderer
+::ZoomToFull( const StackedLayerModel::KeyType & key,
+	      PointType & center,
+	      SpacingType & spacing ) const
+{
+  return virtual_ZoomToFull( key, center, spacing );
 }
 
 } // end namespace 'mvd'
