@@ -219,6 +219,14 @@ public:
   /**
    */
   template< typename Point, typename Spacing >
+  bool ZoomToRegion( const Point & origin,
+		     const Point & extent,
+		     Point & center,
+		     Spacing & spacing ) const;
+
+  /**
+   */
+  template< typename Point, typename Spacing >
   bool ZoomToFull( const KeyType & key,
 		   Point & center,
 		   Spacing & spacing,
@@ -400,33 +408,8 @@ GlView
   if( !GetExtent( o, e ) )
     return false;
 
-  // Compute center point.
-  center.SetToMidPoint( o, e );
-
-  // Get scale of (o, e) in viewport.
-  //
-  // Since (A) origin=min( min[ i ] ) and extent=Max( Max[ i ] ),
-  // resulting signed scale is always positive but, for numerical
-  // safety, absolute scale is computed here.
-  assert( !m_Settings.IsNull() );
-  double scale = m_Settings->GetScale( o, e, true );
-
-  // Compute scaled spacing.
-  //
-  // Since multiple layers of, maybe of different spacing signs, are
-  // mixed for display, and since proposition (A), neither sign of
-  // selected nor projection-reference layer spacing could be applied
-  // to scale factor.
-  //
-  // In both cases, some layers may be displayed mirrored because of
-  // their spacing signs.
-  //
-  // It is the role of the renderer to display them properly.
-  spacing[ 0 ] = scale;
-  spacing[ 1 ] = scale;
-
-  // Ok.
-  return true;
+  // Zoom to overall region.
+  return ZoomToRegion( o, e, center, spacing );
 }
 
 
@@ -447,12 +430,25 @@ GlView
   // Get origin and extent of layer.
   actor->GetExtent( o[ 0 ], o[ 1 ], e[ 0 ], e[ 1 ] );
 
+  // Zoom layer region.
+  return ZoomToRegion( o, e, center, spacing );
+}
+
+
+template< typename Point, typename Spacing >
+bool
+GlView
+::ZoomToRegion( const Point & origin,
+		const Point & extent,
+		Point & center,
+		Spacing & spacing ) const
+{
   // Compute center point.
-  center.SetToMidPoint( o, e );
+  center.SetToMidPoint( origin, extent );
 
   // Get scale of (o, e) in viewport.
   assert( !m_Settings.IsNull() );
-  double scale = m_Settings->GetScale( o, e, true );
+  double scale = m_Settings->GetScale( origin, extent, true );
 
   // Set spacing to scale level of origin-extent.
   //

@@ -180,13 +180,10 @@ ViewSettings
   spacing[ 0 ] = ( extent[ 0 ] - origin[ 0 ] ) / m_ViewportSize[ 0 ];
   spacing[ 1 ] = ( extent[ 1 ] - origin[ 1 ] ) / m_ViewportSize[ 1 ];
 
-  assert( spacing[ 0 ]>=0.0 );
-  assert( spacing[ 1 ]>=0.0 );
-
   SpacingType scale( spacing );
 
-  scale[ 0 ] = fabs( scale[ 0 ] );
-  scale[ 1 ] = fabs( scale[ 1 ] );
+  scale[ 0 ] = vcl_abs( scale[ 0 ] );
+  scale[ 1 ] = vcl_abs( scale[ 1 ] );
 
   if( scale[ 0 ]>scale[ 1 ] )
     return
