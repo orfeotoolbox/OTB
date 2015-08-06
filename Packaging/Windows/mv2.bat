@@ -7,7 +7,8 @@
 
 :: Set GDAL_DATA env. variable
 @set GDAL_DATA=%CURRENT_SCRIPT_DIR%..\share\gdal
-@set ITK_AUTOLOAD_PATH=%CURRENT_SCRIPT_DIR%..\lib\otb\applications
+:: Performance issue: do not set ITK_AUTOLOAD_PATH to avoid loading of OTB-Applications.
+:: @set ITK_AUTOLOAD_PATH=%CURRENT_SCRIPT_DIR%..\lib\otb\applications
 
 :: Set current dir to HOME dir because Monteverdi generates temporary files and need write access
 @cd %HOMEDRIVE%%HOMEPATH%
