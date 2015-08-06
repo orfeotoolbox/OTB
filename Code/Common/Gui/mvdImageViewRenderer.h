@@ -253,6 +253,21 @@ private:
   virtual void virtual_UpdateScene();
   virtual void virtual_RefreshScene();
 
+  virtual bool virtual_ZoomToRegion( const PointType & origin,
+				     const PointType & extent,
+				     PointType & center,
+				     SpacingType & spacing ) const;
+
+  virtual bool virtual_ZoomToExtent( PointType & center, SpacingType & spacing ) const;
+
+  virtual bool virtual_ZoomToLayer( const StackedLayerModel::KeyType & key,
+				    PointType & center,
+				    SpacingType & spacing ) const;
+
+  virtual bool virtual_ZoomToFull( const StackedLayerModel::KeyType & key,
+				   PointType & center,
+				   SpacingType & spacing ) const;
+
 //
 // Private attributes.
 private:

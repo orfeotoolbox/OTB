@@ -1026,4 +1026,51 @@ ImageViewRenderer
 }
 
 /******************************************************************************/
+bool
+ImageViewRenderer
+::virtual_ZoomToRegion( const PointType & origin,
+			const PointType & extent,
+			PointType & center,
+			SpacingType & spacing ) const
+{
+  assert( !m_GlView.IsNull() );
+
+  return m_GlView->ZoomToRegion( origin, extent, center, spacing );
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::virtual_ZoomToExtent( PointType & center, SpacingType & spacing ) const
+{
+  assert( !m_GlView.IsNull() );
+
+  return m_GlView->ZoomToExtent( center, spacing );
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::virtual_ZoomToLayer( const StackedLayerModel::KeyType & key,
+		       PointType & center,
+		       SpacingType & spacing ) const
+{
+  assert( !m_GlView.IsNull() );
+
+  return m_GlView->ZoomToLayer( key, center, spacing );
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::virtual_ZoomToFull( const StackedLayerModel::KeyType & key,
+		      PointType & center,
+		      SpacingType & spacing ) const
+{
+  assert( !m_GlView.IsNull() );
+
+  return m_GlView->ZoomToFull( key, center, spacing );
+}
+
+/******************************************************************************/
 } // end namespace 'mvd'

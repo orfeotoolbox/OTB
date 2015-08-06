@@ -971,145 +971,23 @@ ImageViewWidget
   center[ 0 ] = center[ 1 ] = 0.0;
   spacing[ 0 ] = spacing[ 1 ] = 1.0;
 
+  bool result = false;
 
   switch( zoom )
     {
     case ZOOM_TYPE_EXTENT:
-    {
-    // qDebug() << "ZOOM_TYPE_EXTENT";
-
-    //
-    // Calculate center
-    PointType origin;
-    PointType extent;
-
-    m_Renderer->GetViewExtent( origin, extent );
-
-    center.SetToMidPoint( origin, extent );
-
-    //
-    // Get spacing of reference layer.
-    const AbstractLayerModel * layer = m_Renderer->GetReferenceModel();
-    // assert( layer!=NULL );
-
-    if( layer!=NULL )
-      {
-      if( layer->inherits( AbstractImageModel::staticMetaObject.className() ) )
-	{
-	const AbstractImageModel * imageModel =
-	  qobject_cast< const AbstractImageModel * >( layer );
-
-	assert( imageModel!=NULL );
-
-	spacing = imageModel->GetSpacing();
-
-	assert( spacing[ 0 ]!=0.0 );
-	assert( spacing[ 1 ]!=0.0 );
-	}
-      else
-	assert( false && "Unhandled AbstractLayerModel derived type." );
-      }
-
-    //
-    // Get Viewport size.
-    SizeType size( m_Manipulator->GetViewportSize() );
-
-    //
-    // Calculate scale.
-    double scale = 
-      std::max(
-        fabs( extent[ 0 ] - origin[ 0 ] ) / static_cast< double >( size[ 0 ] ),
-        fabs( extent[ 1 ] - origin[ 1 ] ) / static_cast< double >( size[ 1 ] )
-      );
-
-    //
-    // Calculate spacing.
-    //
-    // Scale of Viewport is a spacing, sign of spacing needs to be
-    // reported back.
-    spacing[ 0 ] = ( spacing[ 0 ] >=0.0 ? 1.0 : -1.0 ) * scale;
-    spacing[ 1 ] = ( spacing[ 1 ] >=0.0 ? 1.0 : -1.0 ) * scale;
-    }
-    break;
+      result = m_Renderer->ZoomToExtent( center, spacing );
+      break;
 
     case ZOOM_TYPE_FULL:
-    {
-    // qDebug() << "ZOOM_TYPE_FULL";
-
-    const AbstractLayerModel * layer = m_Renderer->GetReferenceModel();
-    // assert( layer!=NULL );
-
-    if( layer!=NULL )
-      {
-      if( layer->inherits( AbstractImageModel::staticMetaObject.className() ) )
-	{
-	const AbstractImageModel * imageModel =
-	  qobject_cast< const AbstractImageModel * >( layer );
-        
-	assert( imageModel!=NULL );
-
-	spacing = imageModel->GetSpacing();
-	}
-      else
-	assert( false && "Unhandled AbstractLayerModel derived class." );
-      }
-
-    PointType origin;
-    PointType extent;
-
-    m_Renderer->GetReferenceExtent( origin, extent );
-
-    center.SetToMidPoint( origin, extent );
-    }
-    break;
+      assert( GetLayerStack()!=NULL );
+      result = m_Renderer->ZoomToFull( GetLayerStack()->GetCurrentKey(), center, spacing );
+      break;
 
     case ZOOM_TYPE_LAYER:
-    {
-    // qDebug() << "ZOOM_TYPE_LAYER";
-
-    assert( GetLayerStack()!=NULL );
-
-    //
-    // Calculate center
-    PointType origin;
-    PointType extent;
-
-    m_Renderer->GetLayerExtent(
-      m_Renderer->GetLayerStack()->GetCurrentKey(),
-      origin,
-      extent
-    );
-
-    center.SetToMidPoint( origin, extent );
-
-    //
-    // Get Viewport size.
-    SizeType size( m_Manipulator->GetViewportSize() );
-
-    //
-    // Calculate scale.
-    double scale = 
-      std::max(
-        fabs( extent[ 0 ] - origin[ 0 ] ) / static_cast< double >( size[ 0 ] ),
-        fabs( extent[ 1 ] - origin[ 1 ] ) / static_cast< double >( size[ 1 ] )
-      );
-
-    //
-    // Get spacing of layer in viewport system.
-    /* Needless and not X/Y uniform!
-    spacing[ 0 ] = ( extent[ 0 ] - origin[ 0 ] ) / size[ 0 ];
-    spacing[ 1 ] = ( extent[ 1 ] - origin[ 1 ] ) / size[ 1 ];
-    */
-
-    //
-    // Calculate spacing.
-    //
-    // Scale of Viewport is a spacing, sign of spacing needs to be
-    // reported back.
-    spacing[ 0 ] = ( spacing[ 0 ] >=0.0 ? 1.0 : -1.0 ) * scale;
-    spacing[ 1 ] = ( spacing[ 1 ] >=0.0 ? 1.0 : -1.0 ) * scale;
-    }
-    break;
+      assert( GetLayerStack()!=NULL );
+      result = m_Renderer->ZoomToLayer( GetLayerStack()->GetCurrentKey(), center, spacing );
+      break;
 
     default:
       assert( false && "Unhandled ImageViewWidget::ZoomType value!" );
@@ -1118,8 +996,11 @@ ImageViewWidget
 
   //
   // Center on middle point.
-  m_Manipulator->SetSpacing( spacing );
-  m_Manipulator->CenterOn( center );
+  if( result )
+    {
+    m_Manipulator->SetSpacing( spacing );
+    m_Manipulator->CenterOn( center );
+    }
 }
 
 /*******************************************************************************/
