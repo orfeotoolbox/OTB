@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>224</width>
+    <width>239</width>
     <height>124</height>
    </rect>
   </property>
@@ -38,6 +38,9 @@
    </item>
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>3</number>
+     </property>
      <item>
       <widget class="QToolButton" name="topButton">
        <property name="toolTip">
@@ -102,6 +105,17 @@
        <property name="icon">
         <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
          <normaloff>:/icons/action_LayerProjection_Icon</normaloff>:/icons/action_LayerProjection_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="applyButton">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+         <normaloff>:/icons/actino_ApplyAll_Icon</normaloff>:/icons/actino_ApplyAll_Icon</iconset>
        </property>
       </widget>
      </item>
