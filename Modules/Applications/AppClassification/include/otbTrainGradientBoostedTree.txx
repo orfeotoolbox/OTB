@@ -74,11 +74,11 @@ LearningApplicationBase<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 LearningApplicationBase<TInputValue,TOutputValue>
-::TrainGradientBoostedTree(ListSampleType::Pointer trainingListSample,
-                           TargetListSampleType::Pointer trainingLabeledListSample,
+::TrainGradientBoostedTree(typename ListSampleType::Pointer trainingListSample,
+                           typename TargetListSampleType::Pointer trainingLabeledListSample,
                            std::string modelPath)
 {
-  GradientBoostedTreeType::Pointer classifier = GradientBoostedTreeType::New();
+  typename GradientBoostedTreeType::Pointer classifier = GradientBoostedTreeType::New();
   classifier->SetInputListSample(trainingListSample);
   classifier->SetTargetListSample(trainingLabeledListSample);
   classifier->SetWeakCount(GetParameterInt("classifier.gbt.w"));

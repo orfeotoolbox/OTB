@@ -102,11 +102,11 @@ LearningApplicationBase<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 LearningApplicationBase<TInputValue,TOutputValue>
-::TrainRandomForests(ListSampleType::Pointer trainingListSample,
-                     TargetListSampleType::Pointer trainingLabeledListSample,
+::TrainRandomForests(typename ListSampleType::Pointer trainingListSample,
+                     typename TargetListSampleType::Pointer trainingLabeledListSample,
                      std::string modelPath)
 {
-  RandomForestType::Pointer classifier = RandomForestType::New();
+  typename RandomForestType::Pointer classifier = RandomForestType::New();
   classifier->SetInputListSample(trainingListSample);
   classifier->SetTargetListSample(trainingLabeledListSample);
   classifier->SetMaxDepth(GetParameterInt("classifier.rf.max"));

@@ -126,11 +126,11 @@ LearningApplicationBase<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 LearningApplicationBase<TInputValue,TOutputValue>
-::TrainNeuralNetwork(ListSampleType::Pointer trainingListSample,
-                     TargetListSampleType::Pointer trainingLabeledListSample,
+::TrainNeuralNetwork(typename ListSampleType::Pointer trainingListSample,
+                     typename TargetListSampleType::Pointer trainingLabeledListSample,
                      std::string modelPath)
 {
-  NeuralNetworkType::Pointer classifier = NeuralNetworkType::New();
+  typename NeuralNetworkType::Pointer classifier = NeuralNetworkType::New();
   classifier->SetInputListSample(trainingListSample);
   classifier->SetTargetListSample(trainingLabeledListSample);
 
@@ -161,7 +161,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
 
   unsigned int nbClasses = 0;
-  LabelType currentLabel = 0, prevLabel = 0;
+  TargetSampleType currentLabel = 0, prevLabel = 0;
   for (unsigned int itLab = 0; itLab < trainingLabeledListSample->Size(); ++itLab)
     {
     currentLabel = trainingLabeledListSample->GetMeasurementVector(itLab);

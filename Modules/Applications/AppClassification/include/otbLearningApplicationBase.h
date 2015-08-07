@@ -61,8 +61,6 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkNewMacro(Self)
-
   itkTypeMacro(LearningApplicationBase, otb::Application)
 
   typedef TInputValue                             InputValueType;
@@ -75,7 +73,7 @@ public:
   typedef otb::MachineLearningModelFactory<
             InputValueType, OutputValueType>             ModelFactoryType;
   typedef typename ModelFactoryType::MachineLearningModelTypePointer ModelPointerType;
-  typedef typename ModelFactoryType::MachineLearningModel            ModelType;
+  typedef typename ModelFactoryType::MachineLearningModelType        ModelType;
   
   typedef typename ModelType::InputSampleType     SampleType;
   typedef typename ModelType::InputListSampleType ListSampleType;
@@ -99,12 +97,18 @@ public:
 #endif
  
 protected:
-  using Superclass::AddParameter;
-  friend void InitSVMParams(LearningApplicationBase & app);
+  LearningApplicationBase();
+  
+//  using Superclass::AddParameter;
+//  friend void InitSVMParams(LearningApplicationBase & app);
 
-  void Train(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath, std::string modelName);
+  void Train(typename ListSampleType::Pointer trainingListSample,
+             typename TargetListSampleType::Pointer trainingLabeledListSample,
+             std::string modelPath);
 
-  void Classify(ListSampleType::Pointer validationListSample, TargetListSampleType::Pointer predictedList, std::string modelPath);
+  void Classify(typename ListSampleType::Pointer validationListSample,
+                typename TargetListSampleType::Pointer predictedList,
+                std::string modelPath);
 
   void DoInit();
 
@@ -113,7 +117,9 @@ private:
 #ifdef OTB_USE_LIBSVM 
   void InitLibSVMParams();
 
-  void TrainLibSVM(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample);
+  void TrainLibSVM(typename ListSampleType::Pointer trainingListSample,
+                   typename TargetListSampleType::Pointer trainingLabeledListSample,
+                   std::string modelPath);
 #endif  
 
 #ifdef OTB_USE_OPENCV
@@ -126,14 +132,30 @@ private:
   void InitRandomForestsParams();
   void InitKNNParams();
 
-  void TrainBoost(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
-  void TrainSVM(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
-  void TrainDecisionTree(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
-  void TrainGradientBoostedTree(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
-  void TrainNeuralNetwork(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
-  void TrainNormalBayes(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
-  void TrainRandomForests(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
-  void TrainKNN(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
+  void TrainBoost(typename ListSampleType::Pointer trainingListSample,
+                  typename TargetListSampleType::Pointer trainingLabeledListSample,
+                  std::string modelPath);
+  void TrainSVM(typename ListSampleType::Pointer trainingListSample,
+                typename TargetListSampleType::Pointer trainingLabeledListSample,
+                std::string modelPath);
+  void TrainDecisionTree(typename ListSampleType::Pointer trainingListSample,
+                         typename TargetListSampleType::Pointer trainingLabeledListSample,
+                         std::string modelPath);
+  void TrainGradientBoostedTree(typename ListSampleType::Pointer trainingListSample,
+                                typename TargetListSampleType::Pointer trainingLabeledListSample,
+                                std::string modelPath);
+  void TrainNeuralNetwork(typename ListSampleType::Pointer trainingListSample,
+                          typename TargetListSampleType::Pointer trainingLabeledListSample,
+                          std::string modelPath);
+  void TrainNormalBayes(typename ListSampleType::Pointer trainingListSample,
+                        typename TargetListSampleType::Pointer trainingLabeledListSample,
+                        std::string modelPath);
+  void TrainRandomForests(typename ListSampleType::Pointer trainingListSample,
+                          typename TargetListSampleType::Pointer trainingLabeledListSample,
+                          std::string modelPath);
+  void TrainKNN(typename ListSampleType::Pointer trainingListSample,
+                typename TargetListSampleType::Pointer trainingLabeledListSample,
+                std::string modelPath);
 #endif
 
   bool m_RegressionFlag;
@@ -152,7 +174,7 @@ private:
 #include "otbTrainNeuralNetwork.txx"
 #include "otbTrainNormalBayes.txx"
 #include "otbTrainRandomForests.txx"
-#include "otbTrainSVM.cxx"
+#include "otbTrainSVM.txx"
 #endif
 #ifdef OTB_USE_LIBSVM
 #include "otbTrainLibSVM.txx"

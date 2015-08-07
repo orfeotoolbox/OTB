@@ -53,11 +53,11 @@ namespace Wrapper
   template <class TInputValue, class TOutputValue>
   void
   LearningApplicationBase<TInputValue,TOutputValue>
-  ::TrainLibSVM(ListSampleType::Pointer trainingListSample,
-                TargetListSampleType::Pointer trainingLabeledListSample,
+  ::TrainLibSVM(typename ListSampleType::Pointer trainingListSample,
+                typename TargetListSampleType::Pointer trainingLabeledListSample,
                 std::string modelPath)
   {
-    LibSVMType::Pointer libSVMClassifier = LibSVMType::New();
+    typename LibSVMType::Pointer libSVMClassifier = LibSVMType::New();
     libSVMClassifier->SetInputListSample(trainingListSample);
     libSVMClassifier->SetTargetListSample(trainingLabeledListSample);
     //SVM Option

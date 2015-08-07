@@ -82,11 +82,11 @@ namespace Wrapper
   template <class TInputValue, class TOutputValue>
   void
   LearningApplicationBase<TInputValue,TOutputValue>
-  ::TrainSVM(ListSampleType::Pointer trainingListSample,
-             TargetListSampleType::Pointer trainingLabeledListSample,
+  ::TrainSVM(typename ListSampleType::Pointer trainingListSample,
+             typename TargetListSampleType::Pointer trainingLabeledListSample,
              std::string modelPath)
   {
-    SVMType::Pointer SVMClassifier = SVMType::New();
+    typename SVMType::Pointer SVMClassifier = SVMType::New();
     SVMClassifier->SetInputListSample(trainingListSample);
     SVMClassifier->SetTargetListSample(trainingLabeledListSample);
     switch (GetParameterInt("classifier.svm.k"))

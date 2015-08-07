@@ -42,11 +42,11 @@ namespace Wrapper
   template <class TInputValue, class TOutputValue>
   void
   LearningApplicationBase<TInputValue,TOutputValue>
-  ::TrainKNN(ListSampleType::Pointer trainingListSample,
-             TargetListSampleType::Pointer trainingLabeledListSample,
+  ::TrainKNN(typename ListSampleType::Pointer trainingListSample,
+             typename TargetListSampleType::Pointer trainingLabeledListSample,
              std::string modelPath)
   {
-    KNNType::Pointer knnClassifier = KNNType::New();
+    typename KNNType::Pointer knnClassifier = KNNType::New();
     knnClassifier->SetInputListSample(trainingListSample);
     knnClassifier->SetTargetListSample(trainingLabeledListSample);
     knnClassifier->SetK(GetParameterInt("classifier.knn.k"));

@@ -61,11 +61,11 @@ namespace Wrapper
   template <class TInputValue, class TOutputValue>
   void
   LearningApplicationBase<TInputValue,TOutputValue>
-  ::TrainBoost(ListSampleType::Pointer trainingListSample,
-               TargetListSampleType::Pointer trainingLabeledListSample,
+  ::TrainBoost(typename ListSampleType::Pointer trainingListSample,
+               typename TargetListSampleType::Pointer trainingLabeledListSample,
                std::string modelPath)
   {
-    BoostType::Pointer boostClassifier = BoostType::New();
+    typename BoostType::Pointer boostClassifier = BoostType::New();
     boostClassifier->SetInputListSample(trainingListSample);
     boostClassifier->SetTargetListSample(trainingLabeledListSample);
     boostClassifier->SetBoostType(GetParameterInt("classifier.boost.t"));

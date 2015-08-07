@@ -55,15 +55,13 @@ LearningApplicationBase<TInputValue,TOutputValue>
   InitRandomForestsParams();
   InitKNNParams();
 #endif
-
-  AddRANDParameter();
 }
 
 template <class TInputValue, class TOutputValue>
 void
 LearningApplicationBase<TInputValue,TOutputValue>
-::Classify(ListSampleType::Pointer validationListSample,
-           TargetListSampleType::Pointer predictedList,
+::Classify(typename ListSampleType::Pointer validationListSample,
+           typename TargetListSampleType::Pointer predictedList,
            std::string modelPath)
 {
   //Classification
@@ -84,11 +82,11 @@ LearningApplicationBase<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 LearningApplicationBase<TInputValue,TOutputValue>
-::Train(ListSampleType::Pointer trainingListSample,
-        TargetListSampleType::Pointer trainingLabeledListSample,
-        std::string modelPath,
-        std::string modelName)
+::Train(typename ListSampleType::Pointer trainingListSample,
+        typename TargetListSampleType::Pointer trainingLabeledListSample,
+        std::string modelPath)
 {
+  const std::string modelName = GetParameterString("classifier");
   if (modelName == "libsvm")
     {
 	#ifdef OTB_USE_LIBSVM

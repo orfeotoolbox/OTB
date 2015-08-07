@@ -88,11 +88,11 @@ LearningApplicationBase<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 LearningApplicationBase<TInputValue,TOutputValue>
-::TrainDecisionTree(ListSampleType::Pointer trainingListSample,
-                    TargetListSampleType::Pointer trainingLabeledListSample,
+::TrainDecisionTree(typename ListSampleType::Pointer trainingListSample,
+                    typename TargetListSampleType::Pointer trainingLabeledListSample,
                     std::string modelPath)
 {
-  DecisionTreeType::Pointer classifier = DecisionTreeType::New();
+  typename DecisionTreeType::Pointer classifier = DecisionTreeType::New();
   classifier->SetInputListSample(trainingListSample);
   classifier->SetTargetListSample(trainingLabeledListSample);
   classifier->SetMaxDepth(GetParameterInt("classifier.dt.max"));

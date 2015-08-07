@@ -37,11 +37,11 @@ namespace Wrapper
   template <class TInputValue, class TOutputValue>
   void
   LearningApplicationBase<TInputValue,TOutputValue>
-  ::TrainNormalBayes(ListSampleType::Pointer trainingListSample,
-                     TargetListSampleType::Pointer trainingLabeledListSample,
+  ::TrainNormalBayes(typename ListSampleType::Pointer trainingListSample,
+                     typename TargetListSampleType::Pointer trainingLabeledListSample,
                      std::string modelPath)
   {
-    NormalBayesType::Pointer classifier = NormalBayesType::New();
+    typename NormalBayesType::Pointer classifier = NormalBayesType::New();
     classifier->SetInputListSample(trainingListSample);
     classifier->SetTargetListSample(trainingLabeledListSample);
     classifier->Train();
