@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>239</width>
+    <width>272</width>
     <height>124</height>
    </rect>
   </property>
@@ -116,6 +116,20 @@
        <property name="icon">
         <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
          <normaloff>:/icons/action_ApplyAll_Icon</normaloff>:/icons/action_ApplyAll_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="applyButton_2">
+       <property name="toolTip">
+        <string>Reload data file.</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_Reload_Icon</normaloff>:/icons/action_Reload_Icon</iconset>
        </property>
       </widget>
      </item>
