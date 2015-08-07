@@ -115,7 +115,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
-         <normaloff>:/icons/actino_ApplyAll_Icon</normaloff>:/icons/actino_ApplyAll_Icon</iconset>
+         <normaloff>:/icons/action_ApplyAll_Icon</normaloff>:/icons/action_ApplyAll_Icon</iconset>
        </property>
       </widget>
      </item>
