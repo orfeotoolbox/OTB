@@ -65,16 +65,9 @@ otb_create_application(
   SOURCES        otbKMeansClassification.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-set(TrainImagesClassifier_SRC 
-  otbTrainSVM.cxx  otbTrainBoost.cxx otbTrainDecisionTree.cxx
-  otbTrainGradientBoostedTree.cxx otbTrainNeuralNetwork.cxx
-  otbTrainNormalBayes.cxx otbTrainRandomForests.cxx otbTrainKNN.cxx
-  otbTrainLibSVM.cxx
-  otbTrainImagesClassifier.cxx)
-
 otb_create_application(
   NAME           TrainImagesClassifier
-  SOURCES        ${TrainImagesClassifier_SRC}
+  SOURCES        otbTrainImagesClassifier.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
