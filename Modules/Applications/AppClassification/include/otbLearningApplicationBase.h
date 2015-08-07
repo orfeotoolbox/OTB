@@ -19,12 +19,12 @@
 
 #include "otbConfigure.h"
 
-#include "otbWrapperApplicationFactory.h"
+#include "otbWrapperApplication.h"
 
 #include <iostream>
 
 // ListSample
-#include "otbListSampleGenerator.h"
+#include "itkListSample.h"
 #include "itkVariableLengthVector.h"
 
 //Estimator
@@ -44,21 +44,6 @@
 #ifdef OTB_USE_LIBSVM 
 #include "otbLibSVMMachineLearningModel.h"
 #endif
-
-// Statistic XML Reader
-#include "otbStatisticsXMLFileReader.h"
-
-#include "itkTimeProbe.h"
-#include "otbStandardFilterWatcher.h"
-
-// Normalize the samples
-#include "otbShiftScaleSampleListFilter.h"
-
-// List sample concatenation
-#include "otbConcatenateSampleListFilter.h"
-
-// Balancing ListSample
-#include "otbListSampleToBalancedListSampleFilter.h"
 
 namespace otb
 {
@@ -97,21 +82,6 @@ public:
   
   typedef typename ModelType::TargetSampleType      TargetSampleType;
   typedef typename ModelType::TargetListSampleType  TargetListSampleType;
-
-  // SampleList manipulation
-  typedef otb::ListSampleGenerator<SampleImageType, VectorDataType> ListSampleGeneratorType;
-
-  typedef ListSampleGeneratorType::LabelType LabelType;
-  typedef ListSampleGeneratorType::ListLabelType LabelListSampleType;
-  typedef otb::Statistics::ConcatenateSampleListFilter<ListSampleType> ConcatenateListSampleFilterType;
-  typedef otb::Statistics::ConcatenateSampleListFilter<LabelListSampleType> ConcatenateLabelListSampleFilterType;
-
-  // Statistic XML file Reader
-  typedef otb::StatisticsXMLFileReader<SampleType> StatisticsReader;
-
-  // Enhance List Sample  typedef otb::Statistics::ListSampleToBalancedListSampleFilter<ListSampleType, LabelListSampleType>      BalancingListSampleFilterType;
-  typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
-
   
 #ifdef OTB_USE_OPENCV
   typedef otb::RandomForestsMachineLearningModel<InputValueType, OutputValueType> RandomForestType;
@@ -132,13 +102,20 @@ protected:
   using Superclass::AddParameter;
   friend void InitSVMParams(LearningApplicationBase & app);
 
-private:
+  void Train(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath, std::string modelName);
+
+  void Classify(ListSampleType::Pointer validationListSample, TargetListSampleType::Pointer predictedList, std::string modelPath);
+
   void DoInit();
+
+private:
 
 #ifdef OTB_USE_LIBSVM 
   void InitLibSVMParams();
+
+  void TrainLibSVM(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample);
 #endif  
-  
+
 #ifdef OTB_USE_OPENCV
   void InitBoostParams();
   void InitSVMParams();
@@ -148,13 +125,7 @@ private:
   void InitNormalBayesParams();
   void InitRandomForestsParams();
   void InitKNNParams();
-#endif
 
-#ifdef OTB_USE_LIBSVM 
-  void TrainLibSVM(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample);
-#endif 
-  
-#ifdef OTB_USE_OPENCV
   void TrainBoost(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
   void TrainSVM(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
   void TrainDecisionTree(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
@@ -165,12 +136,7 @@ private:
   void TrainKNN(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
 #endif
 
-  void Train(ListSampleType::Pointer trainingListSample, TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath, std::string modelName);
-
-  void Classify(ListSampleType::Pointer validationListSample, TargetListSampleType::Pointer predictedList, std::string modelPath);
-
   bool m_RegressionFlag;
-
 };
 
 }
