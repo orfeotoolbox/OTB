@@ -412,6 +412,33 @@ MainWindow
   //   m_ImageView,
   //   SLOT( updateGL() )
   // );
+
+  //
+  // Connect controllers to image-views.
+  //
+
+  {
+  assert( m_LayerStackDock!=NULL );
+
+  AbstractModelController * controller = GetController( m_LayerStackDock );
+  assert( controller!=NULL );
+
+  QObject::connect(
+    controller,
+    SIGNAL( ApplyAllRequested() ),
+    // to:
+    m_ImageView,
+    SLOT( OnApplyAllRequested() )
+  );
+
+  QObject::connect(
+    controller,
+    SIGNAL( ApplyAllRequested() ),
+    // to:
+    quicklookView,
+    SLOT( OnApplyAllRequested() )
+  );
+  }
 }
 
 /*****************************************************************************/

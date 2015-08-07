@@ -186,6 +186,14 @@ LayerStackController
     model,
     SLOT( DeleteCurrent() )
   );
+
+  QObject::connect(
+    widget,
+    SIGNAL( ApplyButtonClicked() ),
+    // to:
+    this,
+    SIGNAL( ApplyAllRequested() )
+  );
 }
 
 /*******************************************************************************/
@@ -284,6 +292,14 @@ LayerStackController
     // from:
     model,
     SLOT( DeleteCurrent() )
+  );
+
+  QObject::connect(
+    widget,
+    SIGNAL( ApplyButtonClicked() ),
+    // to:
+    this,
+    SIGNAL( ApplyAllRequested() )
   );
 }
 

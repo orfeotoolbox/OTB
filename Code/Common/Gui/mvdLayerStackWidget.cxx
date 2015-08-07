@@ -144,6 +144,14 @@ LayerStackWidget
     this,
     SIGNAL( ProjectionButtonClicked() )
   );
+
+  QObject::connect(
+    m_UI->applyButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( ApplyButtonClicked() )
+  );
 }
 
 /*******************************************************************************/

@@ -101,6 +101,9 @@ public slots:
 //
 // Signals.
 signals:
+  /**
+   */
+  void ApplyAllRequested();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
