@@ -1,6 +1,6 @@
 <RCC>
   <qresource prefix="/icons">
-    <file alias="actino_ApplyAll_Icon">../../../Data/Icons/check_24x24.png</file>
+    <file alias="action_ApplyAll_Icon">../../../Data/Icons/check_24x24.png</file>
     <file alias="action_LayerUp_Icon">../../../Data/Icons/layer-up_24x24.png</file>
     <file alias="action_LayerProjection_Icon">../../../Data/Icons/projection_24x24.png</file>
     <file alias="action_LayerBottom_Icon">../../../Data/Icons/layer-bottom_24x24.png</file>
