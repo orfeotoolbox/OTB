@@ -14,16 +14,19 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-
-#include "otbTrainImagesClassifier.h"
-
+#ifndef __otbTrainKNN_txx
+#define __otbTrainKNN_txx
+#include "otbLearningApplicationBase.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-#ifdef OTB_USE_OPENCV
-  void TrainImagesClassifier::InitKNNParams()
+
+  template <class TInputValue, class TOutputValue>
+  void
+  LearningApplicationBase<TInputValue,TOutputValue>
+  ::InitKNNParams()
   {
     AddChoice("classifier.knn", "KNN classifier");
     SetParameterDescription("classifier.knn", "This group of parameters allows to set KNN classifier parameters. "
@@ -36,8 +39,12 @@ namespace Wrapper
 
   }
 
-
-  void TrainImagesClassifier::TrainKNN(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
+  template <class TInputValue, class TOutputValue>
+  void
+  LearningApplicationBase<TInputValue,TOutputValue>
+  ::TrainKNN(ListSampleType::Pointer trainingListSample,
+             TargetListSampleType::Pointer trainingLabeledListSample,
+             std::string modelPath)
   {
     KNNType::Pointer knnClassifier = KNNType::New();
     knnClassifier->SetInputListSample(trainingListSample);
@@ -45,8 +52,10 @@ namespace Wrapper
     knnClassifier->SetK(GetParameterInt("classifier.knn.k"));
 
     knnClassifier->Train();
-    knnClassifier->Save(GetParameterString("io.out"));
+    knnClassifier->Save(modelPath);
   }
-#endif
+
 } //end namespace wrapper
 } //end namespace otb
+
+#endif

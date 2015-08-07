@@ -14,15 +14,19 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-
-#include "otbTrainImagesClassifier.h"
+#ifndef __otbTrainGradientBoostedTree_txx
+#define __otbTrainGradientBoostedTree_txx
+#include "otbLearningApplicationBase.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-#ifdef OTB_USE_OPENCV
-void TrainImagesClassifier::InitGradientBoostedTreeParams()
+
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::InitGradientBoostedTreeParams()
 {
   AddChoice("classifier.gbt", "Gradient Boosted Tree classifier");
   SetParameterDescription(
@@ -67,8 +71,12 @@ void TrainImagesClassifier::InitGradientBoostedTreeParams()
 
 }
 
-void TrainImagesClassifier::TrainGradientBoostedTree(
-    ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::TrainGradientBoostedTree(ListSampleType::Pointer trainingListSample,
+                           TargetListSampleType::Pointer trainingLabeledListSample,
+                           std::string modelPath)
 {
   GradientBoostedTreeType::Pointer classifier = GradientBoostedTreeType::New();
   classifier->SetInputListSample(trainingListSample);
@@ -79,8 +87,10 @@ void TrainImagesClassifier::TrainGradientBoostedTree(
   classifier->SetMaxDepth(GetParameterInt("classifier.gbt.max"));
 
   classifier->Train();
-  classifier->Save(GetParameterString("io.out"));
+  classifier->Save(modelPath);
 }
-#endif
+
 } //end namespace wrapper
 } //end namespace otb
+
+#endif

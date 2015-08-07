@@ -14,16 +14,20 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-
+#ifndef __otbTrainNeuralNetwork_txx
+#define __otbTrainNeuralNetwork_txx
 #include <boost/lexical_cast.hpp>
-#include "otbTrainImagesClassifier.h"
+#include "otbLearningApplicationBase.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-#ifdef OTB_USE_OPENCV
-void TrainImagesClassifier::InitNeuralNetworkParams()
+
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::InitNeuralNetworkParams()
 {
   AddChoice("classifier.ann", "Artificial Neural Network classifier");
   SetParameterDescription("classifier.ann",
@@ -119,8 +123,12 @@ void TrainImagesClassifier::InitNeuralNetworkParams()
 
 }
 
-void TrainImagesClassifier::TrainNeuralNetwork(ListSampleType::Pointer trainingListSample,
-                                                              LabelListSampleType::Pointer trainingLabeledListSample)
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::TrainNeuralNetwork(ListSampleType::Pointer trainingListSample,
+                     TargetListSampleType::Pointer trainingLabeledListSample,
+                     std::string modelPath)
 {
   NeuralNetworkType::Pointer classifier = NeuralNetworkType::New();
   classifier->SetInputListSample(trainingListSample);
@@ -208,8 +216,10 @@ void TrainImagesClassifier::TrainNeuralNetwork(ListSampleType::Pointer trainingL
   classifier->SetEpsilon(GetParameterFloat("classifier.ann.eps"));
   classifier->SetMaxIter(GetParameterInt("classifier.ann.iter"));
   classifier->Train();
-  classifier->Save(GetParameterString("io.out"));
+  classifier->Save(modelPath);
 }
-#endif
+
 } //end namespace wrapper
 } //end namespace otb
+
+#endif

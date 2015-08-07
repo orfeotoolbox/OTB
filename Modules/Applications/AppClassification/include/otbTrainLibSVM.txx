@@ -14,16 +14,19 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-
-#include "otbTrainImagesClassifier.h"
-
+#ifndef __otbTrainLibSVM_txx
+#define __otbTrainLibSVM_txx
+#include "otbLearningApplicationBase.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-#ifdef OTB_USE_LIBSVM
-  void TrainImagesClassifier::InitLibSVMParams()
+
+  template <class TInputValue, class TOutputValue>
+  void
+  LearningApplicationBase<TInputValue,TOutputValue>
+  ::InitLibSVMParams()
   {
     AddChoice("classifier.libsvm", "LibSVM classifier");
     SetParameterDescription("classifier.libsvm", "This group of parameters allows to set SVM classifier parameters.");
@@ -47,8 +50,12 @@ namespace Wrapper
     SetParameterDescription("classifier.libsvm.prob", "Probability estimation flag.");
   }
 
-
-  void TrainImagesClassifier::TrainLibSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
+  template <class TInputValue, class TOutputValue>
+  void
+  LearningApplicationBase<TInputValue,TOutputValue>
+  ::TrainLibSVM(ListSampleType::Pointer trainingListSample,
+                TargetListSampleType::Pointer trainingLabeledListSample,
+                std::string modelPath)
   {
     LibSVMType::Pointer libSVMClassifier = LibSVMType::New();
     libSVMClassifier->SetInputListSample(trainingListSample);
@@ -84,8 +91,10 @@ namespace Wrapper
         break;
       }
     libSVMClassifier->Train();
-    libSVMClassifier->Save(GetParameterString("io.out"));
+    libSVMClassifier->Save(modelPath);
   }
-#endif
+
 } //end namespace wrapper
 } //end namespace otb
+
+#endif

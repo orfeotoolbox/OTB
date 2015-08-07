@@ -14,15 +14,19 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-
-#include "otbTrainImagesClassifier.h"
+#ifndef __otbTrainDecisionTree_txx
+#define __otbTrainDecisionTree_txx
+#include "otbLearningApplicationBase.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-#ifdef OTB_USE_OPENCV
-void TrainImagesClassifier::InitDecisionTreeParams()
+
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::InitDecisionTreeParams()
 {
   AddChoice("classifier.dt", "Decision Tree classifier");
   SetParameterDescription("classifier.dt",
@@ -81,8 +85,12 @@ void TrainImagesClassifier::InitDecisionTreeParams()
 
 }
 
-void TrainImagesClassifier::TrainDecisionTree(ListSampleType::Pointer trainingListSample,
-                                                             LabelListSampleType::Pointer trainingLabeledListSample)
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::TrainDecisionTree(ListSampleType::Pointer trainingListSample,
+                    TargetListSampleType::Pointer trainingLabeledListSample,
+                    std::string modelPath)
 {
   DecisionTreeType::Pointer classifier = DecisionTreeType::New();
   classifier->SetInputListSample(trainingListSample);
@@ -101,8 +109,10 @@ void TrainImagesClassifier::TrainDecisionTree(ListSampleType::Pointer trainingLi
     classifier->SetTruncatePrunedTree(false);
     }
   classifier->Train();
-  classifier->Save(GetParameterString("io.out"));
+  classifier->Save(modelPath);
 }
-#endif
+
 } //end namespace wrapper
 } //end namespace otb
+
+#endif

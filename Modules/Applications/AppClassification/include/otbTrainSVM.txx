@@ -14,16 +14,19 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-
-#include "otbTrainImagesClassifier.h"
-
+#ifndef __otbTrainSVM_txx
+#define __otbTrainSVM_txx
+#include "otbLearningApplicationBase.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-#ifdef OTB_USE_OPENCV
-  void TrainImagesClassifier::InitSVMParams()
+
+  template <class TInputValue, class TOutputValue>
+  void
+  LearningApplicationBase<TInputValue,TOutputValue>
+  ::InitSVMParams()
   {
     AddChoice("classifier.svm", "SVM classifier (OpenCV)");
     SetParameterDescription("classifier.svm", "This group of parameters allows to set SVM classifier parameters. "
@@ -76,7 +79,12 @@ namespace Wrapper
                             "because the samples are not identically processed within OpenCV.");
   }
 
-  void TrainImagesClassifier::TrainSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
+  template <class TInputValue, class TOutputValue>
+  void
+  LearningApplicationBase<TInputValue,TOutputValue>
+  ::TrainSVM(ListSampleType::Pointer trainingListSample,
+             TargetListSampleType::Pointer trainingLabeledListSample,
+             std::string modelPath)
   {
     SVMType::Pointer SVMClassifier = SVMType::New();
     SVMClassifier->SetInputListSample(trainingListSample);
@@ -142,7 +150,7 @@ namespace Wrapper
       SVMClassifier->SetParameterOptimization(true);
     }
     SVMClassifier->Train();
-    SVMClassifier->Save(GetParameterString("io.out"));
+    SVMClassifier->Save(modelPath);
 
     // Update the displayed parameters in the GUI after the training process, for further use of them
     SetParameterFloat("classifier.svm.c", static_cast<float> (SVMClassifier->GetOutputC()));
@@ -152,7 +160,8 @@ namespace Wrapper
     SetParameterFloat("classifier.svm.gamma", static_cast<float> (SVMClassifier->GetOutputGamma()));
     SetParameterFloat("classifier.svm.degree", static_cast<float> (SVMClassifier->GetOutputDegree()));
   }
-#endif
 
 } //end namespace wrapper
 } //end namespace otb
+
+#endif
