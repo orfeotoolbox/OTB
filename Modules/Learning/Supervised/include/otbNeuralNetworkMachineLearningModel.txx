@@ -52,7 +52,7 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::~NeuralNetworkMach
   cvReleaseMat(&m_CvMatOfLabels);
 }
 
-/** Train the machine learning model */
+/** Sets the topology of the NN */
 template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetLayerSizes(const std::vector<unsigned int> layers)
 {
