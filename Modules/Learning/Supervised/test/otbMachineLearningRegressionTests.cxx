@@ -143,7 +143,7 @@ int otbSVMRegressionLinearMonovariate(int itkNotUsed(argc),
 
   LinearFunctionSampleGenerator<PrecisionType> lfsg(1.0, 0.0);
   std::cout << "Generating samples\n";
-  lfsg.GenerateSamples(-0.5, 0.5, 20000);
+  lfsg.GenerateSamples(-0.5, 0.5, 200);
   typedef otb::SVMMachineLearningModel<InputValueRegressionType,
                                        TargetValueRegressionType> 
     SVMType;
@@ -154,7 +154,7 @@ int otbSVMRegressionLinearMonovariate(int itkNotUsed(argc),
   regression->SetKernelType(CvSVM::RBF);
   regression->SetTermCriteriaType(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS);
   regression->SetMaxIter(100000);
-  regression->SetEpsilon(FLT_EPSILON);
+  regression->SetEpsilon(1e-5);
   regression->SetParameterOptimization(true);
 
   regression->SetInputListSample(lfsg.m_isl);
