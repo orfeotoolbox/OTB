@@ -155,7 +155,9 @@ void
 SVMMachineLearningModel<TInputValue,TOutputValue>
 ::TrainRegression()
 {
-  m_SVMType = CvSVM::NU_SVR;
+  if(m_SVMType != CvSVM::NU_SVR &&
+     m_SVMType != CvSVM::EPS_SVR)
+    m_SVMType = CvSVM::NU_SVR;
   this->InternalTrain();
 }
 
@@ -212,12 +214,12 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
     //if (line.find(m_SVMModel->getName()) != std::string::npos)
     if (line.find(CV_TYPE_NAME_ML_SVM) != std::string::npos)
       {
-         //std::cout<<"Reading a "<<CV_TYPE_NAME_ML_SVM<<" model"<<std::endl;
-         return true;
+      //std::cout<<"Reading a "<<CV_TYPE_NAME_ML_SVM<<" model"<<std::endl;
+      return true;
       }
-   }
-   ifs.close();
-   return false;
+    }
+  ifs.close();
+  return false;
 }
 
 template <class TInputValue, class TOutputValue>
