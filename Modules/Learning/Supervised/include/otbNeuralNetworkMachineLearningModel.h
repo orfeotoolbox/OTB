@@ -178,10 +178,13 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Train the machine learning model */
+  /** Train the machine learning model for classidication*/
   virtual void TrainClassification();
-  /** Predict values using the model */
+  /** Predict values using the model in classification mode*/
   virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+
+  /** Train the machine learning model for regression*/
+  virtual void TrainRegression();
 
 private:
   NeuralNetworkMachineLearningModel(const Self &); //purposely not implemented
