@@ -37,6 +37,7 @@ struct LinearFunctionSampleGenerator
     : m_a(a), m_b(b), m_NbInputVars(1), m_NbOutputVars(1) {
     m_isl = InputListSampleRegressionType::New();
     m_tsl = TargetListSampleRegressionType::New();
+    std::srand(0);
   };
   void GenerateSamples(TPrecision sMin, TPrecision sMax, size_t nbSamples)
   {
