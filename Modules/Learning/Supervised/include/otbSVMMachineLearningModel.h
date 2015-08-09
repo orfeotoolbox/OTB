@@ -126,14 +126,21 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Train the machine learning model */
+  /** Train the machine learning model for classification*/
   virtual void TrainClassification();
-  /** Predict values using the model */
+  /** Predict values using the model for classification*/
   virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+
+  /** Train the machine learning model for regression*/
+  virtual void TrainRegression();
+  /** Predict values using the model for regression*/
+  virtual TargetSampleType PredictRegression(const InputSampleType& input) const;
 
 private:
   SVMMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+  virtual void InternalTrain();
+  virtual TargetSampleType InternalPredict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
   CvSVM * m_SVMModel;
   int m_SVMType;
