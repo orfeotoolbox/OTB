@@ -193,6 +193,10 @@ private:
   NeuralNetworkMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+  void CreateNetwork();
+  CvANN_MLP_TrainParams SetNetworkParameters();
+  void SetupNetworkAndTrain(cv::Mat& labels);
+
   CvANN_MLP * m_ANNModel;
   int m_TrainMethod;
   int m_ActivateFunction;
