@@ -140,6 +140,12 @@ public:
   itkGetObjectMacro(TargetListSample,TargetListSampleType);
   //@}
 
+  /**\name Use model in regression mode */
+  //@{
+  itkSetMacro(RegressionMode,bool);
+  itkGetMacro(RegressionMode,bool);
+  //@}
+
 protected:
   /** Constructor */
   MachineLearningModel();
