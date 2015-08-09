@@ -137,3 +137,30 @@ int otbNeuralNetworkRegressionLinearMonovariate(int itkNotUsed(argc),
 }
 
   
+int otbSVMRegressionLinearMonovariate(int itkNotUsed(argc), 
+                                      char * itkNotUsed(argv) [])
+{
+
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(1.0, 0.0);
+  std::cout << "Generating samples\n";
+  lfsg.GenerateSamples(-0.5, 0.5, 20000);
+  typedef otb::SVMMachineLearningModel<InputValueRegressionType,
+                                       TargetValueRegressionType> 
+    SVMType;
+  SVMType::Pointer regression = SVMType::New();
+
+  regression->SetRegressionMode(1);
+  regression->SetNu(0.5);
+  regression->SetKernelType(CvSVM::RBF);
+  regression->SetTermCriteriaType(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS);
+  regression->SetMaxIter(100000);
+  regression->SetEpsilon(FLT_EPSILON);
+  regression->SetParameterOptimization(true);
+
+  regression->SetInputListSample(lfsg.m_isl);
+  regression->SetTargetListSample(lfsg.m_tsl);
+  std::cout << "Training\n";
+  regression->Train();
+
+  return validate(lfsg, regression);
+}

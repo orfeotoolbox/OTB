@@ -14,6 +14,10 @@ otb_add_test(NAME leTvANNMachineLearningModelRegression COMMAND otbSupervisedTes
   otbNeuralNetworkRegressionLinearMonovariate
   )
 
+otb_add_test(NAME leTvSVMMachineLearningModelRegression COMMAND otbSupervisedTestDriver
+  otbSVMRegressionLinearMonovariate
+  )
+
 otb_add_test(NAME leTuSVMMachineLearningModelNew COMMAND otbSupervisedTestDriver
   otbSVMMachineLearningModelNew)
 

@@ -49,6 +49,7 @@ void RegisterTests()
   REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelNew);
   REGISTER_TEST(otbGradientBoostedTreeMachineLearningModel);
   REGISTER_TEST(otbNeuralNetworkRegressionLinearMonovariate);
+  REGISTER_TEST(otbSVMRegressionLinearMonovariate);
 #endif
   
     REGISTER_TEST(otbImageClassificationFilterNew);
