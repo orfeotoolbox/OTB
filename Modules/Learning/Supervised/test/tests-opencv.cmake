@@ -10,11 +10,11 @@ otb_add_test(NAME leTvANNMachineLearningModel COMMAND otbSupervisedTestDriver
   ${TEMP}/ann_model.txt
   )
 
-otb_add_test(NAME leTvANNMachineLearningModelRegression COMMAND otbSupervisedTestDriver
+otb_add_test(NAME leTvANNMachineLearningModelRegLinMono COMMAND otbSupervisedTestDriver
   otbNeuralNetworkRegressionLinearMonovariate
   )
 
-otb_add_test(NAME leTvSVMMachineLearningModelRegression COMMAND otbSupervisedTestDriver
+otb_add_test(NAME leTvSVMMachineLearningModelRegLinMono COMMAND otbSupervisedTestDriver
   otbSVMRegressionLinearMonovariate
   )
 
