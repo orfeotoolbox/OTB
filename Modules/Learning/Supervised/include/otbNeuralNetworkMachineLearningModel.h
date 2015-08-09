@@ -186,6 +186,9 @@ protected:
   /** Train the machine learning model for regression*/
   virtual void TrainRegression();
 
+  /** Predict values using the model for regression*/
+  virtual TargetSampleType PredictRegression(const InputSampleType& input) const;
+
 private:
   NeuralNetworkMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

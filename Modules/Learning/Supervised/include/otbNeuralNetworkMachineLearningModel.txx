@@ -223,7 +223,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TrainRegressi
   if ( nbLayers == 0 )
     itkExceptionMacro(<< "Number of layers in the Neural Network must be >= 3")
 
-  cv::Mat layers = cv::Mat(nbLayers, 1, CV_32SC1);
+      cv::Mat layers = cv::Mat(nbLayers, 1, CV_32SC1);
   for (unsigned int i = 0; i < nbLayers; i++)
     {
     layers.row(i) = m_LayerSizes[i];
@@ -249,6 +249,23 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TrainRegressi
 
   //train the Neural network model
   m_ANNModel->train(samples, matOutputANN, cv::Mat(), cv::Mat(), params);
+}
+
+template<class TInputValue, class TOutputValue>
+typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType NeuralNetworkMachineLearningModel<
+  TInputValue, TOutputValue>::PredictRegression(const InputSampleType & input) const
+{
+  //convert listsample to Mat
+  cv::Mat sample;
+
+  otb::SampleToMat<InputSampleType>(input, sample);
+
+  cv::Mat response;
+  m_ANNModel->predict(sample, response);
+
+  TargetSampleType target;
+  target[0] = response.at<float> (0, 0);
+  return target;
 }
 
 template<class TInputValue, class TOutputValue>
