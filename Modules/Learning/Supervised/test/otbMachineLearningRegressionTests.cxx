@@ -18,6 +18,7 @@
 
 
 #include "otbNeuralNetworkMachineLearningModel.h"
+#include "otbSVMMachineLearningModel.h"
 
 typedef float PrecisionType;
 typedef otb::MachineLearningModel<PrecisionType,PrecisionType>   MachineLearningModelRegressionType;
@@ -33,6 +34,7 @@ const double epsilon = 0.1;
 template <typename TPrecision>
 struct LinearFunctionSampleGenerator
 {
+  typedef TPrecision PrecisionType;
   LinearFunctionSampleGenerator(TPrecision a, TPrecision b)
     : m_a(a), m_b(b), m_NbInputVars(1), m_NbOutputVars(1) {
     m_isl = InputListSampleRegressionType::New();
@@ -67,6 +69,34 @@ struct LinearFunctionSampleGenerator
 
 };
 
+template <typename SampleGeneratorType, typename RegressionType>
+int validate(SampleGeneratorType& sg, RegressionType& rgrsn)
+{
+  std::cout << "Validation\n";
+  //Check the prediction accuracy
+  typename InputListSampleRegressionType::Iterator sampleIt = sg.m_isl->Begin();
+  typename TargetListSampleRegressionType::Iterator resultIt = sg.m_tsl->Begin();
+  typename InputListSampleRegressionType::Iterator sampleLast = sg.m_isl->End();
+  typename TargetListSampleRegressionType::Iterator resultLast = sg.m_tsl->End();
+  typename SampleGeneratorType::PrecisionType rmse = 0.0;
+  size_t nbSamples = 0;
+  while(sampleIt != sampleLast && resultIt != resultLast)
+    {
+    typename SampleGeneratorType::PrecisionType invalue = sampleIt.GetMeasurementVector()[0];
+    typename SampleGeneratorType::PrecisionType prediction = rgrsn->Predict(sampleIt.GetMeasurementVector())[0];
+    typename SampleGeneratorType::PrecisionType expected = resultIt.GetMeasurementVector()[0];
+    rmse += pow(prediction - expected, 2.0);
+    ++sampleIt;
+    ++resultIt;
+    ++nbSamples;
+    } 
+
+  rmse /= nbSamples;
+  if(rmse > epsilon)
+    return EXIT_FAILURE;
+
+  return EXIT_SUCCESS;
+}
 
 int otbNeuralNetworkRegressionLinearMonovariate(int itkNotUsed(argc), 
                                                 char * itkNotUsed(argv) [])
@@ -103,30 +133,7 @@ int otbNeuralNetworkRegressionLinearMonovariate(int itkNotUsed(argc),
   std::cout << "Training\n";
   regression->Train();
 
-  std::cout << "Validation\n";
-  //Check the prediction accuracy
-  typename InputListSampleRegressionType::Iterator sampleIt = lfsg.m_isl->Begin();
-  typename TargetListSampleRegressionType::Iterator resultIt = lfsg.m_tsl->Begin();
-  typename InputListSampleRegressionType::Iterator sampleLast = lfsg.m_isl->End();
-  typename TargetListSampleRegressionType::Iterator resultLast = lfsg.m_tsl->End();
-  PrecisionType rmse = 0.0;
-  size_t nbSamples = 0;
-  while(sampleIt != sampleLast && resultIt != resultLast)
-    {
-    PrecisionType invalue = sampleIt.GetMeasurementVector()[0];
-    PrecisionType prediction = regression->Predict(sampleIt.GetMeasurementVector())[0];
-    PrecisionType expected = resultIt.GetMeasurementVector()[0];
-    rmse += pow(prediction - expected, 2.0);
-    ++sampleIt;
-    ++resultIt;
-    ++nbSamples;
-    } 
-
-  rmse /= nbSamples;
-  if(rmse > epsilon)
-    return EXIT_FAILURE;
-
-  return EXIT_SUCCESS;
+  return validate(lfsg, regression);
 }
 
   
