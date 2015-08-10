@@ -71,6 +71,11 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
+  NAME           TrainRegression
+  SOURCES        otbTrainRegression.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
   NAME           DSFuzzyModelEstimation
   SOURCES        otbDSFuzzyModelEstimation.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
