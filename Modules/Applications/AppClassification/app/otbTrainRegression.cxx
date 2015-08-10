@@ -123,6 +123,7 @@ void DoInit()
   SetParameterDescription("io.il", "A list of input images. Last band should contain the output value to predict.");
   AddParameter(ParameterType_InputFilename, "io.csv", "Input CSV file");
   SetParameterDescription("io.csv","Input CSV file containing the predictors, and the output values in last column. Only used when no input image is given");
+  MandatoryOff("io.csv");
   
   AddParameter(ParameterType_InputFilename, "io.imstat", "Input XML image statistics file");
   MandatoryOff("io.imstat");
@@ -223,7 +224,6 @@ void DoExecute()
     envelopeFilter->Update();
     
     VectorDataType::Pointer envelope = envelopeFilter->GetOutput();
-    envelope->DisconnectPipeline();
     
     TreeIteratorType itVector(envelope->GetDataTree());
     for (itVector.GoToBegin(); !itVector.IsAtEnd(); ++itVector)
@@ -357,7 +357,8 @@ void DoExecute()
   // Performances estimation
   //--------------------------
   ListSampleType::Pointer performanceListSample;
-  TargetListSampleType::Pointer predictedList;
+  TargetListSampleType::Pointer predictedList = TargetListSampleType::New();
+  predictedList->SetMeasurementVectorSize(1);
   TargetListSampleType::Pointer performanceLabeledListSample;
 
   //Test the input validation set size
