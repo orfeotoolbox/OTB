@@ -112,6 +112,8 @@ protected:
 
   void DoInit();
 
+  bool m_RegressionFlag;
+
 private:
 
 #ifdef OTB_USE_LIBSVM 
@@ -157,8 +159,6 @@ private:
                 typename TargetListSampleType::Pointer trainingLabeledListSample,
                 std::string modelPath);
 #endif
-
-  bool m_RegressionFlag;
 };
 
 }
