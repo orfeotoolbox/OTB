@@ -79,6 +79,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
                            std::string modelPath)
 {
   typename GradientBoostedTreeType::Pointer classifier = GradientBoostedTreeType::New();
+  classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);
   classifier->SetTargetListSample(trainingLabeledListSample);
   classifier->SetWeakCount(GetParameterInt("classifier.gbt.w"));

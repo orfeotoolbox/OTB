@@ -66,6 +66,7 @@ namespace Wrapper
                std::string modelPath)
   {
     typename BoostType::Pointer boostClassifier = BoostType::New();
+    boostClassifier->SetRegressionMode(this->m_RegressionFlag);
     boostClassifier->SetInputListSample(trainingListSample);
     boostClassifier->SetTargetListSample(trainingLabeledListSample);
     boostClassifier->SetBoostType(GetParameterInt("classifier.boost.t"));

@@ -131,6 +131,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
                      std::string modelPath)
 {
   typename NeuralNetworkType::Pointer classifier = NeuralNetworkType::New();
+  classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);
   classifier->SetTargetListSample(trainingLabeledListSample);
 

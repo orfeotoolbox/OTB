@@ -93,6 +93,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
                     std::string modelPath)
 {
   typename DecisionTreeType::Pointer classifier = DecisionTreeType::New();
+  classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);
   classifier->SetTargetListSample(trainingLabeledListSample);
   classifier->SetMaxDepth(GetParameterInt("classifier.dt.max"));

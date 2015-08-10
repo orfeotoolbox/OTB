@@ -47,6 +47,7 @@ namespace Wrapper
              std::string modelPath)
   {
     typename KNNType::Pointer knnClassifier = KNNType::New();
+    knnClassifier->SetRegressionMode(this->m_RegressionFlag);
     knnClassifier->SetInputListSample(trainingListSample);
     knnClassifier->SetTargetListSample(trainingLabeledListSample);
     knnClassifier->SetK(GetParameterInt("classifier.knn.k"));

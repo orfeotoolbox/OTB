@@ -58,6 +58,7 @@ namespace Wrapper
                 std::string modelPath)
   {
     typename LibSVMType::Pointer libSVMClassifier = LibSVMType::New();
+    libSVMClassifier->SetRegressionMode(this->m_RegressionFlag);
     libSVMClassifier->SetInputListSample(trainingListSample);
     libSVMClassifier->SetTargetListSample(trainingLabeledListSample);
     //SVM Option

@@ -107,6 +107,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
                      std::string modelPath)
 {
   typename RandomForestType::Pointer classifier = RandomForestType::New();
+  classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);
   classifier->SetTargetListSample(trainingLabeledListSample);
   classifier->SetMaxDepth(GetParameterInt("classifier.rf.max"));

@@ -74,6 +74,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
     }
 
   model->Load(modelPath);
+  model->SetRegressionMode(this->m_RegressionFlag);
   model->SetInputListSample(validationListSample);
   model->SetTargetListSample(predictedList);
   model->PredictAll();

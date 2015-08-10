@@ -42,6 +42,7 @@ namespace Wrapper
                      std::string modelPath)
   {
     typename NormalBayesType::Pointer classifier = NormalBayesType::New();
+    classifier->SetRegressionMode(this->m_RegressionFlag);
     classifier->SetInputListSample(trainingListSample);
     classifier->SetTargetListSample(trainingLabeledListSample);
     classifier->Train();
