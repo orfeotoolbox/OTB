@@ -85,11 +85,11 @@ enum SpatialReferenceType
 
 /**
  */
-SpatialReferenceType GetSpatialReferenceType( const std::string & filename );
+Monteverdi2_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & filename );
 
 /**
  */
-SpatialReferenceType GetSpatialReferenceType( const std::string & wkt, bool hasKwl );
+Monteverdi2_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & wkt, bool hasKwl );
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
