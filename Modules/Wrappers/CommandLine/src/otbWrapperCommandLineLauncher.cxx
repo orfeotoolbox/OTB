@@ -467,6 +467,31 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                         return INVALIDNUMBEROFVALUE;
                         }
                     }
+                  else if (type == ParameterType_ComplexOutputImage)
+                    {
+                    m_Application->SetParameterString(paramKey, values[0]);
+                    // Check if pixel type is given
+                    if (values.size() == 2)
+                      {
+                      ComplexImagePixelType outPixType = ComplexImagePixelType_float;
+                      if (values[1] == "cfloat")
+                        outPixType = ComplexImagePixelType_float;
+                      else if (values[1] == "cdouble")
+                        outPixType = ComplexImagePixelType_double;
+                      else
+                        {
+                        return WRONGPARAMETERVALUE;
+                        }
+                      dynamic_cast<ComplexOutputImageParameter *> (param.GetPointer())->SetComplexPixelType(outPixType);
+                      }
+                    else
+                      if (values.size() != 1 && values.size() != 2)
+                        {
+                        std::cerr << "ERROR: Invalid number of value for: \"" << paramKey
+                                  << "\", invalid number of values " << values.size() << std::endl;
+                        return INVALIDNUMBEROFVALUE;
+                        }
+                    }
                   else
                     if (type == ParameterType_ListView)
                       {
@@ -478,7 +503,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                         // Handle space in filename. Only for input
                         // files or directories
                         if (type == ParameterType_Directory         || type == ParameterType_InputFilename ||
-                            type == ParameterType_ComplexInputImage || type == ParameterType_ComplexOutputImage ||
+                            type == ParameterType_ComplexInputImage ||
                             type == ParameterType_InputImage ||
                             type == ParameterType_InputVectorData   || type == ParameterType_OutputVectorData )
                           {
@@ -498,10 +523,10 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         // Single value parameter
         if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int ||
             type == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_InputFilename ||
-            type == ParameterType_InputFilenameList || type == ParameterType_OutputFilename ||
+            type == ParameterType_OutputFilename ||
             type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
             type == ParameterType_ComplexOutputImage ||
-            type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||
+            type == ParameterType_InputVectorData ||
             type == ParameterType_OutputVectorData || type == ParameterType_RAM ||
             type == ParameterType_OutputProcessXML) // || type == ParameterType_InputProcessXML)
           {
@@ -802,7 +827,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "<string>        ";
     }
-  else if (type == ParameterType_OutputImage)
+  else if (type == ParameterType_OutputImage || type == ParameterType_ComplexOutputImage)
     {
     oss << "<string> [pixel]";
     }
@@ -822,6 +847,12 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << " [pixel=uint8/uint16/int16/uint32/int32/float/double]";
     oss << " (default value is float)";
+    }
+
+  if (type == ParameterType_ComplexOutputImage)
+    {
+    oss << " [pixel=cfloat/cdouble]";
+    oss << " (default value is cfloat)";
     }
 
 
