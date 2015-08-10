@@ -380,7 +380,6 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
         MXEROOT \"${mxeroot}\"
         PREFIX_DIR \"${archive_name_mv2}\"
         PEFILES \"${pefiles_mv2}\"
-        NEEDS_OTB_APPS FALSE,
         SEARCHDIRS \"\")")
 
     add_custom_target(configure-mingw_mv2
