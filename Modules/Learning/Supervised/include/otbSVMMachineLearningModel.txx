@@ -167,7 +167,7 @@ typename SVMMachineLearningModel<TInputValue,TOutputValue>
 SVMMachineLearningModel<TInputValue,TOutputValue>
 ::PredictRegression(const InputSampleType & input) const
 {
-  return this->InternalPredict(input, false);
+  return this->InternalPredict(input, NULL);
 }
 
 template <class TInputValue, class TOutputValue>
