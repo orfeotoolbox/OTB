@@ -19,6 +19,12 @@ macro(package_mingw)
   list(APPEND PACKAGE_SEARCHDIRS "${MXE_BIN_DIR}/../qt/lib") #Qwt
   list(APPEND PACKAGE_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/bin") #mvd
 
+  if(NOT DEFINED PACKAGE_NEEDS_OTB_APPS)
+    set(PACKAGE_NEEDS_OTB_APPS FALSE)
+  else()
+    set(PACKAGE_NEEDS_OTB_APPS TRUE)
+  endif()
+
   if(PACKAGE_NEEDS_OTB_APPS)
     list(APPEND PACKAGE_SEARCHDIRS "${OTB_MODULES_DIR}/../../../otb/applications") #otb apps
   endif()
