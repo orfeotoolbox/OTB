@@ -451,17 +451,7 @@ GlView
   assert( !m_Settings.IsNull() );
   double scale = m_Settings->GetScale( origin, extent, true );
 
-  // Set spacing to scale level of origin-extent.
-  //
-  // Since multiple layers of, maybe of different spacing signs, are
-  // mixed for display neither sign of selected nor
-  // projection-reference layer spacing could be applied to scale
-  // factor.
-  //
-  // In both cases, some layers may be displayed mirrored because of
-  // their spacing signs.
-  //
-  // It is the role of the renderer to display them properly.
+  // Apply signed scale.
   spacing[ 0 ] = scale;
   spacing[ 1 ] = scale;
 
@@ -497,7 +487,7 @@ GlView
   // Transform center point to image space..
   Point o;
 
-  if( !geo->TransformFromViewport( o, center, false ) )
+  if( !geo->TransformFromViewport( o, center, true ) )
     return false;
 
   // Consider arbitrary point on the X-axis.
@@ -507,7 +497,7 @@ GlView
   e[ 1 ] = center[ 1 ];
 
   // Transform considered point.
-  if( !geo->TransformFromViewport( e, e, false ) )
+  if( !geo->TransformFromViewport( e, e, true ) )
     return false;
 
   // Compute extent vector.
@@ -522,7 +512,7 @@ GlView
   e[ 1 ] = center[ 1 ] + units * spacing[ 1 ];
 
   // Transform considered point.
-  if( !geo->TransformFromViewport( e, e, false ) )
+  if( !geo->TransformFromViewport( e, e, true ) )
     return false;
 
   // Compute extent vector.
