@@ -99,31 +99,6 @@ ImageSettings
 }
 
 /*****************************************************************************/
-void
-ImageSettings
-::SetValue( double value )
-{
-  switch( m_Effect )
-    {
-    case EFFECT_LOCAL_CONTRAST:
-      // qDebug() << "Range = " << value;
-      m_Range = value;
-      break;
-
-    case EFFECT_SPECTRAL_ANGLE :
-      // qDebug() << "Angle = " << value;
-      m_Angle = value;
-      break;
-
-    default:
-      assert( false && "No value for this shader effect." );
-      break;
-    }
-
-  SetModified();
-}
-
-/*****************************************************************************/
 double
 ImageSettings
 ::GetValue() const
@@ -146,6 +121,31 @@ ImageSettings
     }
 
   return std::numeric_limits< double >::signaling_NaN();
+}
+
+/*****************************************************************************/
+void
+ImageSettings
+::SetValue( double value )
+{
+  switch( m_Effect )
+    {
+    case EFFECT_LOCAL_CONTRAST:
+      // qDebug() << "Range = " << value;
+      m_Range = value;
+      break;
+
+    case EFFECT_SPECTRAL_ANGLE :
+      // qDebug() << "Angle = " << value;
+      m_Angle = value;
+      break;
+
+    default:
+      assert( false && "No value for this shader effect." );
+      break;
+    }
+
+  SetModified();
 }
 
 /*****************************************************************************/
