@@ -294,7 +294,7 @@ LayerStackController
     SLOT( DeleteCurrent() )
   );
 
-  QObject::connect(
+  QObject::disconnect(
     widget,
     SIGNAL( ApplyButtonClicked() ),
     // to:
