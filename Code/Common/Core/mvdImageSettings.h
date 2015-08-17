@@ -122,6 +122,10 @@ public:
 
   /**
    */
+  const char * GetEffectName() const;
+
+  /**
+   */
   inline bool HasSize() const;
 
   /**

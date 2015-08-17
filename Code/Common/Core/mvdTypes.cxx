@@ -55,6 +55,7 @@ BOUND_NAMES[ BOUND_COUNT ] = {
 char const * const
 EFFECT_NAME[ EFFECT_COUNT ] =
 {
+  QT_TRANSLATE_NOOP( "mvd", "None" ),
   QT_TRANSLATE_NOOP( "mvd", "Chessboard" ),
   QT_TRANSLATE_NOOP( "mvd", "Gradient" ),
   QT_TRANSLATE_NOOP( "mvd", "Local contrast" ),

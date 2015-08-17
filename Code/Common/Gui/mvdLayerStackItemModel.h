@@ -91,6 +91,7 @@ public:
     //
     COLUMN_PROJ = 0,
     COLUMN_NAME,
+    COLUMN_EFFECT,
     COLUMN_I,
     COLUMN_J,
     COLUMN_R,

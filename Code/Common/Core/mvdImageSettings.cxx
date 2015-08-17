@@ -99,6 +99,16 @@ ImageSettings
 }
 
 /*****************************************************************************/
+const char *
+ImageSettings
+::GetEffectName() const
+{
+  assert( m_Effect>=0 && m_Effect<EFFECT_COUNT );
+
+  return EFFECT_NAME[ m_Effect ];
+}
+
+/*****************************************************************************/
 double
 ImageSettings
 ::GetValue() const

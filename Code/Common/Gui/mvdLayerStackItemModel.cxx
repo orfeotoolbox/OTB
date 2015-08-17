@@ -65,6 +65,7 @@ HEADERS[ LayerStackItemModel::COLUMN_COUNT ] =
 {
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Proj" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Name" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Effect" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "I" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "J" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Red" ) ),
@@ -390,6 +391,22 @@ LayerStackItemModel
             qDebug() << "Unhandled AbstractLayerModel subclass.";
             }
           break;
+
+	case COLUMN_EFFECT:
+          if( layer->inherits(
+                VectorImageModel::staticMetaObject.className() ) )
+            {
+            const VectorImageModel * vectorImageModel =
+              qobject_cast< const VectorImageModel * >( layer );
+            assert( vectorImageModel!=NULL );
+
+	    return vectorImageModel->GetSettings().GetEffectName();
+            }
+          else
+            {
+            qDebug() << "Unhandled AbstractLayerModel subclass.";
+            }
+	  break;
 
 	case COLUMN_I:
 	case COLUMN_J:
