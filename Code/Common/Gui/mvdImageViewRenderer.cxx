@@ -1036,7 +1036,19 @@ ImageViewRenderer
 {
   assert( !m_GlView.IsNull() );
 
-  return m_GlView->ZoomToRegion( origin, extent, center, spacing );
+  // Use spacing of viewport as native spacing of reference layer
+  // because it has already been set for projection.
+  //
+  // Same as of Ice-viewer.
+
+  return
+    m_GlView->ZoomToRegion(
+      origin,
+      extent,
+      m_GlView->GetSettings()->GetSpacing(),
+      center,
+      spacing
+    );
 }
 
 /******************************************************************************/
@@ -1046,7 +1058,17 @@ ImageViewRenderer
 {
   assert( !m_GlView.IsNull() );
 
-  return m_GlView->ZoomToExtent( center, spacing );
+  // Use spacing of viewport as native spacing of reference layer
+  // because it has already been set for projection.
+  //
+  // Same as of Ice-viewer.
+
+  return
+    m_GlView->ZoomToExtent(
+      m_GlView->GetSettings()->GetSpacing(),
+      center,
+      spacing
+    );
 }
 
 /******************************************************************************/
@@ -1058,7 +1080,18 @@ ImageViewRenderer
 {
   assert( !m_GlView.IsNull() );
 
-  return m_GlView->ZoomToLayer( key, center, spacing );
+  // Use spacing of viewport as native spacing of reference layer
+  // because it has already been set for projection.
+  //
+  // Same as of Ice-viewer.
+
+  return
+    m_GlView->ZoomToLayer(
+      key,
+      m_GlView->GetSettings()->GetSpacing(),
+      center,
+      spacing
+    );
 }
 
 /******************************************************************************/
