@@ -209,18 +209,24 @@ public:
   /**
    */
   template< typename Point, typename Spacing >
-  bool ZoomToExtent( Point & center, Spacing & spacing ) const;
+  bool ZoomToExtent( const Spacing & native,
+		     Point & center,
+		     Spacing & spacing ) const;
 
   /**
    */
   template< typename Point, typename Spacing >
-  bool ZoomToLayer( const KeyType & key, Point & center, Spacing & spacing ) const;
+  bool ZoomToLayer( const KeyType & key,
+		    const Spacing & native,
+		    Point & center,
+		    Spacing & spacing ) const;
 
   /**
    */
   template< typename Point, typename Spacing >
   bool ZoomToRegion( const Point & origin,
 		     const Point & extent,
+		     const Spacing & native,
 		     Point & center,
 		     Spacing & spacing ) const;
 
@@ -399,7 +405,7 @@ GlView
 template< typename Point, typename Spacing >
 bool
 GlView
-::ZoomToExtent( Point & center, Spacing & spacing ) const
+::ZoomToExtent( const Spacing & native, Point & center, Spacing & spacing ) const
 {
   Point o;
   Point e;
@@ -409,14 +415,17 @@ GlView
     return false;
 
   // Zoom to overall region.
-  return ZoomToRegion( o, e, center, spacing );
+  return ZoomToRegion( o, e, native, center, spacing );
 }
 
 
 template< typename Point, typename Spacing >
 bool
 GlView
-::ZoomToLayer( const KeyType & key, Point & center, Spacing & spacing ) const
+::ZoomToLayer( const KeyType & key,
+	       const Spacing & native,
+	       Point & center,
+	       Spacing & spacing ) const
 {
   Point o;
   Point e;
@@ -432,7 +441,7 @@ GlView
   actor->GetExtent( o[ 0 ], o[ 1 ], e[ 0 ], e[ 1 ] );
 
   // Zoom layer region.
-  return ZoomToRegion( o, e, center, spacing );
+  return ZoomToRegion( o, e, native, center, spacing );
 }
 
 
@@ -441,6 +450,7 @@ bool
 GlView
 ::ZoomToRegion( const Point & origin,
 		const Point & extent,
+		const Spacing & native,
 		Point & center,
 		Spacing & spacing ) const
 {
@@ -451,9 +461,33 @@ GlView
   assert( !m_Settings.IsNull() );
   double scale = m_Settings->GetScale( origin, extent, true );
 
+  /*
+  assert( !std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() ||
+	  ( std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() &&
+	    native[ 0 ]!=std::numeric_limits< typename Spacing::ValueType >::quiet_NaN()
+	  )
+  );
+  assert( !std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() ||
+	  ( std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() &&
+	  native[ 1 ]!=std::numeric_limits< typename Spacing::ValueType >::quiet_NaN()
+	  )
+  );
+
+  assert( !std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() ||
+	  ( std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() &&
+	    native[ 0 ]!=std::numeric_limits< typename Spacing::ValueType >::quiet_NaN()
+	  )
+  );
+  assert( !std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() ||
+	  ( std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() &&
+	  native[ 1 ]!=std::numeric_limits< typename Spacing::ValueType >::quiet_NaN()
+	  )
+  );
+  */
+
   // Apply signed scale.
-  spacing[ 0 ] = scale;
-  spacing[ 1 ] = scale;
+  spacing[ 0 ] = ( native[ 0 ]<0.0 ? -1 : +1 ) * scale;
+  spacing[ 1 ] = ( native[ 1 ]<0.0 ? -1 : +1 ) * scale;
 
   // Ok.
   return true;
@@ -463,7 +497,10 @@ GlView
 template< typename Point, typename Spacing >
 bool
 GlView
-::ZoomToFull( const KeyType & key, Point & center, Spacing & spacing, double units ) const
+::ZoomToFull( const KeyType & key,
+	      Point & center,
+	      Spacing & spacing,
+	      double units ) const
 {
   // Get layer actor.
   GlActor::Pointer actor( GetActor( key ) );
@@ -473,7 +510,8 @@ GlView
     return false;
 
   // Get geo-interface.
-  const GeoInterface * geo = dynamic_cast< const GeoInterface * >( actor.GetPointer() );
+  const GeoInterface * geo =
+    dynamic_cast< const GeoInterface * >( actor.GetPointer() );
 
   if( geo==NULL )
     return false;
@@ -490,6 +528,7 @@ GlView
   if( !geo->TransformFromViewport( o, center, true ) )
     return false;
 
+  //
   // Consider arbitrary point on the X-axis.
   Point e;
 
@@ -505,8 +544,11 @@ GlView
   e[ 1 ] -= o[ 1 ];
 
   // Apply extent vector length to view spacing.
-  spacing[ 0 ] = units * spacing[ 0 ] / vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
+  spacing[ 0 ] =
+    units * spacing[ 0 ] /
+    vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
 
+  //
   // Consider arbitrary point on the Y-axis.
   e[ 0 ] = center[ 0 ];
   e[ 1 ] = center[ 1 ] + units * spacing[ 1 ];
@@ -520,8 +562,11 @@ GlView
   e[ 1 ] -= o[ 1 ];
 
   // Apply extent vector length to view spacing.
-  spacing[ 1 ] = units * spacing[ 1 ] / vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
+  spacing[ 1 ] =
+    units * spacing[ 1 ] /
+    vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
 
+  //
   // Ok.
   return true;
 }
