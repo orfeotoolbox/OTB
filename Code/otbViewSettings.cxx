@@ -190,13 +190,11 @@ ViewSettings
       isSigned
       ? spacing[ 0 ]
       : scale[ 0 ];
-  else
-    return
-      isSigned
-      ? spacing[ 1 ]
-      : scale[ 1 ];
 
-  return std::numeric_limits< SpacingType::ValueType >::signaling_NaN();
+  return
+    isSigned
+    ? spacing[ 1 ]
+    : scale[ 1 ];
 }
 
 
