@@ -1190,7 +1190,10 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     otb::ViewSettings::PointType center;
     otb::ViewSettings::SpacingType spacing;
 
-    if( m_View->ZoomToLayer( m_SelectedActor, center, spacing ) )
+    if( m_View->ZoomToLayer( m_SelectedActor,
+			     m_View->GetSettings()->GetSpacing(),
+			     center,
+			     spacing ) )
       {
       m_View->GetSettings()->SetSpacing( spacing );
       m_View->GetSettings()->Center( center );
@@ -1218,7 +1221,9 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     otb::ViewSettings::PointType center;
     otb::ViewSettings::SpacingType spacing;
 
-    if( m_View->ZoomToExtent( center, spacing ) )
+    if( m_View->ZoomToExtent( m_View->GetSettings()->GetSpacing(),
+			      center,
+			      spacing ) )
       {
       m_View->GetSettings()->SetSpacing( spacing );
       m_View->GetSettings()->Center( center );
