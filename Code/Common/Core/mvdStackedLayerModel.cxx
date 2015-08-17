@@ -309,20 +309,12 @@ StackedLayerModel
   it = m_LayerModels.end();
 
   //
-<<<<<<< Updated upstream
-  // Emit about to change current item.
-=======
   // Update current pointer.
->>>>>>> Stashed changes
   if( emitCurrentChanged )
     SetCurrent( current, true );
 
   //
-<<<<<<< Updated upstream
-  // Emit about to change reference item.
-=======
   // Update reference pointer.
->>>>>>> Stashed changes
   if( emitReferenceChanged )
     SetReference(
       index>=m_Reference
