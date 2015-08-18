@@ -60,6 +60,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class AbstractImageModel;
 class AbstractLayerModel;
 class StackedLayerModel;
 
@@ -289,6 +290,7 @@ private slots:
   void OnLayerVisibilityChanged( AbstractLayerModel *, bool );
   void OnReferenceChanged( size_t );
   void OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & );
+  void OnImageSettingsUpdated( AbstractImageModel * );
 };
 
 } // end namespace 'mvd'.

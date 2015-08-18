@@ -127,6 +127,17 @@ LayerStackItemModel
     this,
     SLOT( OnLayerVisibilityChanged( AbstractLayerModel *, bool ) )
   );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    QObject::connect(
+      layer,
+      SIGNAL( SettingsUpdated( AbstractImageModel * ) ),
+      // to:
+      this,
+      SLOT( OnImageSettingsUpdated( AbstractImageModel * ) )
+    );
+    }
 }
 
 /*****************************************************************************/
@@ -139,10 +150,21 @@ LayerStackItemModel
   QObject::disconnect(
     layer,
     SIGNAL( VisibilityChanged( AbstractLayerModel *,  bool ) ),
-    // to:*
+    // from:
     this,
     SLOT( OnLayerVisibilityChanged( AbstractLayerModel *, bool ) )
   );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    QObject::disconnect(
+      layer,
+      SIGNAL( SettingsUpdated( AbstractImageModel * ) ),
+      // from:
+      this,
+      SLOT( OnImageSettingsUpdated( AbstractImageModel * ) )
+    );
+    }
 }
 
 /*****************************************************************************/
@@ -809,6 +831,25 @@ LayerStackItemModel
 /*****************************************************************************/
 void
 LayerStackItemModel
+::OnImageSettingsUpdated( AbstractImageModel * image )
+{
+  qDebug() << this << "::OnImageSettingsUpdated(" << image << ")";
+
+  assert( m_StackedLayerModel!=NULL );
+
+  StackedLayerModel::SizeType row = m_StackedLayerModel->IndexOf( image );
+
+  assert( row!=StackedLayerModel::NIL_INDEX );
+
+  emit dataChanged(
+    createIndex( row, LayerStackItemModel::COLUMN_EFFECT, image ),
+    createIndex( row, LayerStackItemModel::COLUMN_EFFECT, image )
+  );
+}
+
+/*****************************************************************************/
+void
+LayerStackItemModel
 ::OnLayerAboutToBeDeleted( size_t index )
 {
   assert( m_StackedLayerModel!=NULL );
@@ -898,6 +939,7 @@ LayerStackItemModel
 // {
 //   qDebug() << this << "::OnModelReset()";
 // }
+
 /*****************************************************************************/
 void
 LayerStackItemModel
