@@ -1570,16 +1570,6 @@ MainWindow
       SLOT( OnSettingsUpdated()  )
     );
 
-    // Disconnect previously selected quicklook-model from view.
-    // TODO: Remove quicklook temporary hack by better design.
-    QObject::disconnect(
-      layerModel,
-      SIGNAL( SettingsUpdated() ),
-      // from:
-      this,
-      SLOT( OnSettingsUpdated()  )
-    );
-
     //
     // Disconnect shader-widget from model-updated slot.
     QObject::disconnect(
@@ -1646,14 +1636,6 @@ MainWindow
       // to:
       this,
       SLOT( OnSettingsUpdated()  )
-    );
-
-    QObject::connect(
-      layerModel,
-      SIGNAL( SettingsUpdated() ),
-      // to:
-      this,
-      SLOT( OnSettingsUpdated() )
     );
 
     //
