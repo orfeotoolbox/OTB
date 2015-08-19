@@ -32,13 +32,20 @@ namespace Wrapper
     SetParameterDescription("classifier.svm", "This group of parameters allows to set SVM classifier parameters. "
         "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/support_vector_machines.html}.");
     AddParameter(ParameterType_Choice, "classifier.svm.m", "SVM Model Type");
-    AddChoice("classifier.svm.m.csvc", "C support vector classification");
-    AddChoice("classifier.svm.m.nusvc", "Nu support vector classification");
-    AddChoice("classifier.svm.m.oneclass", "Distribution estimation (One Class SVM)");
-    //AddChoice("classifier.svm.m.epssvr", "Epsilon Support Vector Regression");
-    //AddChoice("classifier.svm.m.nusvr", "Nu Support Vector Regression");
-    SetParameterString("classifier.svm.m", "csvc");
     SetParameterDescription("classifier.svm.m", "Type of SVM formulation.");
+    if (this->m_RegressionFlag)
+      {
+      AddChoice("classifier.svm.m.epssvr", "Epsilon Support Vector Regression");
+      AddChoice("classifier.svm.m.nusvr", "Nu Support Vector Regression");
+      SetParameterString("classifier.svm.m", "epssvr");
+      }
+    else
+      {
+      AddChoice("classifier.svm.m.csvc", "C support vector classification");
+      AddChoice("classifier.svm.m.nusvc", "Nu support vector classification");
+      AddChoice("classifier.svm.m.oneclass", "Distribution estimation (One Class SVM)");
+      SetParameterString("classifier.svm.m", "csvc");
+      }
     AddParameter(ParameterType_Choice, "classifier.svm.k", "SVM Kernel Type");
     AddChoice("classifier.svm.k.linear", "Linear");
     AddChoice("classifier.svm.k.rbf", "Gaussian radial basis function");
@@ -55,9 +62,12 @@ namespace Wrapper
                  "Parameter nu of a SVM optimization problem (NU_SVC / ONE_CLASS)");
     SetParameterFloat("classifier.svm.nu", 0.0);
     SetParameterDescription("classifier.svm.nu", "Parameter nu of a SVM optimization problem.");
-    //AddParameter(ParameterType_Float, "classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR)");
-    //SetParameterFloat("classifier.svm.p", 0.0);
-    //SetParameterDescription("classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
+    if (this->m_RegressionFlag)
+      {
+      AddParameter(ParameterType_Float, "classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR)");
+      SetParameterFloat("classifier.svm.p", 1.0);
+      SetParameterDescription("classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
+      }
     AddParameter(ParameterType_Float, "classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID)");
     SetParameterFloat("classifier.svm.coef0", 0.0);
     SetParameterDescription("classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID).");
@@ -113,36 +123,52 @@ namespace Wrapper
         std::cout << "CvSVM::LINEAR = " << CvSVM::LINEAR << std::endl;
         break;
       }
-    switch (GetParameterInt("classifier.svm.m"))
+    if (this->m_RegressionFlag)
       {
-      case 0: // C_SVC
-        SVMClassifier->SetSVMType(CvSVM::C_SVC);
-        std::cout << "CvSVM::C_SVC = " << CvSVM::C_SVC << std::endl;
-        break;
-      case 1: // NU_SVC
-        SVMClassifier->SetSVMType(CvSVM::NU_SVC);
-        std::cout << "CvSVM::NU_SVC = " << CvSVM::NU_SVC << std::endl;
-        break;
-      case 2: // ONE_CLASS
-        SVMClassifier->SetSVMType(CvSVM::ONE_CLASS);
-        std::cout << "CvSVM::ONE_CLASS = " << CvSVM::ONE_CLASS << std::endl;
-        break;
-        /*case 3: // EPS_SVR
-         SVMClassifier->SetSVMType(CvSVM::EPS_SVR);
-         std::cout<<"CvSVM::EPS_SVR = "<<CvSVM::EPS_SVR<<std::endl;
-         break;
-         case 4: // NU_SVR
-         SVMClassifier->SetSVMType(CvSVM::NU_SVR);
-         std::cout<<"CvSVM::NU_SVR = "<<CvSVM::NU_SVR<<std::endl;
-         break; */
-      default: // DEFAULT = C_SVC
-        SVMClassifier->SetSVMType(CvSVM::C_SVC);
-        std::cout << "CvSVM::C_SVC = " << CvSVM::C_SVC << std::endl;
-        break;
+      switch (GetParameterInt("classifier.svm.m"))
+        {
+        case 0: // EPS_SVR
+           SVMClassifier->SetSVMType(CvSVM::EPS_SVR);
+           std::cout<<"CvSVM::EPS_SVR = "<<CvSVM::EPS_SVR<<std::endl;
+           break;
+        case 1: // NU_SVR
+           SVMClassifier->SetSVMType(CvSVM::NU_SVR);
+           std::cout<<"CvSVM::NU_SVR = "<<CvSVM::NU_SVR<<std::endl;
+           break;
+        default: // DEFAULT = EPS_SVR
+          SVMClassifier->SetSVMType(CvSVM::EPS_SVR);
+          std::cout << "CvSVM::EPS_SVR = " << CvSVM::EPS_SVR << std::endl;
+          break;
+        }
+      }
+    else
+      {
+      switch (GetParameterInt("classifier.svm.m"))
+        {
+        case 0: // C_SVC
+          SVMClassifier->SetSVMType(CvSVM::C_SVC);
+          std::cout << "CvSVM::C_SVC = " << CvSVM::C_SVC << std::endl;
+          break;
+        case 1: // NU_SVC
+          SVMClassifier->SetSVMType(CvSVM::NU_SVC);
+          std::cout << "CvSVM::NU_SVC = " << CvSVM::NU_SVC << std::endl;
+          break;
+        case 2: // ONE_CLASS
+          SVMClassifier->SetSVMType(CvSVM::ONE_CLASS);
+          std::cout << "CvSVM::ONE_CLASS = " << CvSVM::ONE_CLASS << std::endl;
+          break;
+        default: // DEFAULT = C_SVC
+          SVMClassifier->SetSVMType(CvSVM::C_SVC);
+          std::cout << "CvSVM::C_SVC = " << CvSVM::C_SVC << std::endl;
+          break;
+        }
       }
     SVMClassifier->SetC(GetParameterFloat("classifier.svm.c"));
     SVMClassifier->SetNu(GetParameterFloat("classifier.svm.nu"));
-    //SVMClassifier->SetP(GetParameterFloat("classifier.svm.p"));
+    if (this->m_RegressionFlag)
+      {
+      SVMClassifier->SetP(GetParameterFloat("classifier.svm.p"));
+      }
     SVMClassifier->SetCoef0(GetParameterFloat("classifier.svm.coef0"));
     SVMClassifier->SetGamma(GetParameterFloat("classifier.svm.gamma"));
     SVMClassifier->SetDegree(GetParameterFloat("classifier.svm.degree"));
@@ -156,7 +182,10 @@ namespace Wrapper
     // Update the displayed parameters in the GUI after the training process, for further use of them
     SetParameterFloat("classifier.svm.c", static_cast<float> (SVMClassifier->GetOutputC()));
     SetParameterFloat("classifier.svm.nu", static_cast<float> (SVMClassifier->GetOutputNu()));
-    //SetParameterFloat("classifier.svm.p", static_cast<float> (SVMClassifier->GetOutputP()));
+    if (this->m_RegressionFlag)
+      {
+      SetParameterFloat("classifier.svm.p", static_cast<float> (SVMClassifier->GetOutputP()));
+      }
     SetParameterFloat("classifier.svm.coef0", static_cast<float> (SVMClassifier->GetOutputCoef0()));
     SetParameterFloat("classifier.svm.gamma", static_cast<float> (SVMClassifier->GetOutputGamma()));
     SetParameterFloat("classifier.svm.degree", static_cast<float> (SVMClassifier->GetOutputDegree()));
