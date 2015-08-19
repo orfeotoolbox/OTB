@@ -172,6 +172,8 @@ public:
 
   virtual void MouseReleaseEvent( QMouseEvent* event );
 
+  virtual void MouseDoubleClickEvent( QMouseEvent * );
+
   virtual void WheelEvent( QWheelEvent* event);
 
   virtual void ResizeEvent( QResizeEvent* event );

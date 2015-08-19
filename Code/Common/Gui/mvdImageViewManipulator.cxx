@@ -366,9 +366,10 @@ void
 ImageViewManipulator
 ::MousePressEvent( QMouseEvent* event )
 {
-  assert( event!=NULL );
 
-  // qDebug() << this << ":" << event;
+  qDebug() << this << "::MousePressEvent(" << event << ")";
+
+  assert( event!=NULL );
 
   switch( event->button() )
     {
@@ -415,6 +416,8 @@ void
 ImageViewManipulator
 ::MouseMoveEvent( QMouseEvent* event )
 {
+  // qDebug() << this << "::MouseMoveEvent(" << event << ")";
+
   assert( event!=NULL );
 
   /*
@@ -451,6 +454,8 @@ void
 ImageViewManipulator
 ::MouseReleaseEvent( QMouseEvent* event)
 {
+  qDebug() << this << "::MouseReleaseEvent(" << event << ")";
+
   assert( event!=NULL );
 
   /*
@@ -492,6 +497,29 @@ ImageViewManipulator
     default:
       assert( false && "Unhandled Qt::MouseButton." );
       break;
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::MouseDoubleClickEvent( QMouseEvent * event )
+{
+  qDebug() << this << "::MouseDoubleClickEvent(" << event << ")";
+
+  assert( event!=NULL );
+
+  if( event->button()==Qt::LeftButton && event->modifiers()==Qt::NoModifier )
+    {
+    PointType center;
+
+    assert( !m_ViewSettings.IsNull() );
+
+    const QPoint & p = event->pos();
+
+    m_ViewSettings->ScreenToViewPortTransform( p.x(), p.y(), center[ 0 ], center[ 1 ] );
+
+    CenterOn( center );
     }
 }
 

@@ -806,6 +806,18 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
+::mouseDoubleClickEvent( QMouseEvent* event )
+{
+  assert( event!=NULL );
+
+  QGLWidget::mouseDoubleClickEvent( event );
+
+  m_Manipulator->MouseDoubleClickEvent(event);
+}
+
+/*******************************************************************************/
+void
+ImageViewWidget
 ::wheelEvent( QWheelEvent* event )
 {
   assert( event!=NULL );

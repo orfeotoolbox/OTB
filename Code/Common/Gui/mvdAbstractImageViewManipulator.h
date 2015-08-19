@@ -162,6 +162,9 @@ public:
   /**
    */
   virtual void MouseReleaseEvent( QMouseEvent* event ) =0;
+  /**
+   */
+  virtual void MouseDoubleClickEvent( QMouseEvent * ) {};
 
   /**
    */
