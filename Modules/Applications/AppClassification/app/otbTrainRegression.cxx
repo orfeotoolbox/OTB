@@ -405,6 +405,14 @@ void DoExecute()
     statisticsReader->SetFileName(GetParameterString("io.imstat"));
     meanMeasurementVector = statisticsReader->GetStatisticVectorByName("mean");
     stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
+    // handle stat file without output normalization
+    if (meanMeasurementVector.Size() == nbFeatures)
+      {
+      meanMeasurementVector.SetSize(nbBands,false);
+      meanMeasurementVector[nbFeatures] = 0.0;
+      stddevMeasurementVector.SetSize(nbBands,false);
+      stddevMeasurementVector[nbFeatures] = 1.0;
+      }
     }
   else
     {
