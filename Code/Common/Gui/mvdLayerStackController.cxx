@@ -108,7 +108,7 @@ LayerStackController
     SIGNAL( ContentChanged() ),
     // to:
     this,
-    SLOT( UpdateProjectionMode() )
+    SLOT( OnStackedLayerContentChanged() )
   );
 
   QObject::connect(
@@ -116,7 +116,7 @@ LayerStackController
     SIGNAL( ContentReset() ),
     // to:
     this,
-    SLOT( UpdateProjectionMode() )
+    SLOT( OnStackedLayerContentReset() )
   );
 
 
@@ -217,7 +217,7 @@ LayerStackController
     SIGNAL( ContentChanged() ),
     // from:
     this,
-    SLOT( UpdateProjectionMode() )
+    SLOT( OnStackedLayerContentChanged() )
   );
 
   QObject::disconnect(
@@ -225,7 +225,7 @@ LayerStackController
     SIGNAL( ContentReset() ),
     // from:
     this,
-    SLOT( UpdateProjectionMode() )
+    SLOT( OnStackedLayerContentReset() )
   );
 
 
@@ -311,6 +311,37 @@ LayerStackController
 }
 
 /*******************************************************************************/
+void
+LayerStackController
+::UpdateButtonsState()
+{
+  assert( GetModel()==GetModel< StackedLayerModel >() );
+  StackedLayerModel * model = GetModel< StackedLayerModel >();
+  assert( model!=NULL );
+
+  assert( GetWidget()==GetWidget< LayerStackWidget >() );
+  LayerStackWidget * widget = GetWidget< LayerStackWidget >();
+  assert( widget!=NULL );
+
+  {
+  size_t unk = 0;
+  size_t gcs = 0;
+
+  model->CountSRT( unk, gcs, gcs, gcs );
+    
+  widget->SetProjectionEnabled( unk==0 && !model->IsEmpty() );
+  }
+
+  widget->SetDeleteEnabled( !model->IsEmpty() );
+
+  widget->SetReloadEnabled( !model->IsEmpty() );
+
+  widget->SetMoveEnabled( model->GetCount()>1 );
+
+  widget->SetApplyEnabled( model->GetCount()>1 );
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void
@@ -376,22 +407,21 @@ LayerStackController
 /*******************************************************************************/
 void
 LayerStackController
-::UpdateProjectionMode()
+::OnStackedLayerContentChanged()
 {
-  assert( GetModel()==GetModel< StackedLayerModel >() );
-  StackedLayerModel * model = GetModel< StackedLayerModel >();
-  assert( model!=NULL );
+  qDebug() << this << "::OnStackedLayerContentChanged()";
 
-  size_t unk = 0;
-  size_t gcs = 0;
+  UpdateButtonsState();
+}
 
-  model->CountSRT( unk, gcs, gcs, gcs );
+/*******************************************************************************/
+void
+LayerStackController
+::OnStackedLayerContentReset()
+{
+  qDebug() << this << "::OnStackedLayerContentChanged()";
 
-  assert( GetWidget()==GetWidget< LayerStackWidget >() );
-  LayerStackWidget * widget = GetWidget< LayerStackWidget >();
-  assert( widget!=NULL );
-
-  widget->SetProjectionEnabled( unk==0 );
+  UpdateButtonsState();
 }
 
 } // end namespace 'mvd'

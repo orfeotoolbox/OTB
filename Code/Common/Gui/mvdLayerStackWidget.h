@@ -110,7 +110,23 @@ public:
 
   /**
    */
+  void SetApplyEnabled( bool );
+
+  /**
+   */
+  void SetDeleteEnabled( bool );
+
+  /**
+   */
+  void SetMoveEnabled( bool );
+
+  /**
+   */
   void SetProjectionEnabled( bool );
+
+  /**
+   */
+  void SetReloadEnabled( bool );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

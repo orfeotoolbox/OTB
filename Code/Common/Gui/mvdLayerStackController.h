@@ -120,6 +120,10 @@ protected:
 //
 // Private methods.
 private:
+  /**
+   */
+  void UpdateButtonsState();
+
   //
   // AbstractModelController overloads.
 
@@ -163,7 +167,10 @@ private slots:
   void OnProjectionButtonClicked();
   /**
    */
-  void UpdateProjectionMode();
+  void OnStackedLayerContentChanged();
+  /**
+   */
+  void OnStackedLayerContentReset();
 };
 
 } // end namespace 'mvd'.

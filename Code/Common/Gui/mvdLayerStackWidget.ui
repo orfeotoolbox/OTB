@@ -120,7 +120,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="applyButton_2">
+      <widget class="QToolButton" name="reloadButton">
        <property name="toolTip">
         <string>Reload data file.</string>
        </property>

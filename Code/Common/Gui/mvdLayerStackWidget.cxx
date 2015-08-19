@@ -202,6 +202,16 @@ LayerStackWidget
 /*******************************************************************************/
 void
 LayerStackWidget
+::SetApplyEnabled( bool enabled )
+{
+  assert( m_UI->applyButton!=NULL );
+
+  m_UI->applyButton->setEnabled( enabled );
+}
+
+/*******************************************************************************/
+void
+LayerStackWidget
 ::SetCurrent( int row )
 {
   assert( m_UI->treeView->selectionModel()!=NULL );
@@ -232,11 +242,55 @@ LayerStackWidget
 /*******************************************************************************/
 void
 LayerStackWidget
+::SetDeleteEnabled( bool enabled )
+{
+  assert( m_UI!=NULL );
+
+  assert( m_UI->deleteButton!=NULL );
+
+  m_UI->deleteButton->setEnabled( enabled );
+}
+
+/*******************************************************************************/
+void
+LayerStackWidget
+::SetMoveEnabled( bool enabled )
+{
+  assert( m_UI!=NULL );
+
+  assert( m_UI->upButton!=NULL );
+  assert( m_UI->downButton!=NULL );
+  assert( m_UI->topButton!=NULL );
+  assert( m_UI->bottomButton!=NULL );
+
+  m_UI->upButton->setEnabled( enabled );
+  m_UI->downButton->setEnabled( enabled );
+  m_UI->topButton->setEnabled( enabled );
+  m_UI->bottomButton->setEnabled( enabled );
+}
+
+/*******************************************************************************/
+void
+LayerStackWidget
 ::SetProjectionEnabled( bool enabled )
 {
+  assert( m_UI!=NULL );
+
   assert( m_UI->projectionButton!=NULL );
 
   m_UI->projectionButton->setEnabled( enabled );
+}
+
+/*******************************************************************************/
+void
+LayerStackWidget
+::SetReloadEnabled( bool enabled )
+{
+  assert( m_UI!=NULL );
+
+  assert( m_UI->reloadButton!=NULL );
+
+  m_UI->reloadButton->setEnabled( enabled );
 }
 
 /*******************************************************************************/
