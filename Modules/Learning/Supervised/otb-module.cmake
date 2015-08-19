@@ -1,4 +1,4 @@
-set(DOCUMENTATION "This module provides the Orfeo Toolbox supervised 
+set(DOCUMENTATION "This module provides the Orfeo Toolbox supervised
 classification and regression framework, currently based on
 OpenCV and/or libSVM")
 
@@ -7,6 +7,7 @@ otb_module(OTBSupervised
     OTBBoost
     OTBCommon
     OTBITK
+    OTBImageBase
 
   OPTIONAL_DEPENDS
     OTBOpenCV
