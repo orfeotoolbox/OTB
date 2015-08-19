@@ -1143,7 +1143,8 @@ ImageViewWidget
   assert( layerStack!=NULL );
 
   AbstractLayerModel * layer = layerStack->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
