@@ -802,6 +802,8 @@ MainWindow
       false
     );
 
+  tabifyDockWidget( m_QuicklookViewDock, m_HistogramDock );
+
 #if USE_PIXEL_DESCRIPTION
 
   // Pixel Description (no controller needed here / direct update of
