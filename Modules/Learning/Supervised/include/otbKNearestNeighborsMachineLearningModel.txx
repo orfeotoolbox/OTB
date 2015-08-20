@@ -32,8 +32,7 @@ template <class TInputValue, class TTargetValue>
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::KNearestNeighborsMachineLearningModel() :
  m_KNearestModel (new CvKNearest),
- m_K(32),
- m_IsRegression(false)
+ m_K(32)
 {
   this->m_ConfidenceIndex = true;
 }
@@ -60,7 +59,15 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(), labels);
 
   //train the KNN model
-  m_KNearestModel->train(samples, labels, cv::Mat(), m_IsRegression, m_K, false);
+  m_KNearestModel->train(samples, labels, cv::Mat(), this->m_RegressionMode, m_K, false);
+}
+
+template <class TInputValue, class TTargetValue>
+void
+KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
+::TrainRegression()
+{
+  TrainClassification();
 }
 
 template <class TInputValue, class TTargetValue>
@@ -101,6 +108,15 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 }
 
 template <class TInputValue, class TTargetValue>
+typename KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
+::TargetSampleType
+KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
+::PredictRegression(const InputSampleType & input) const
+{
+  return PredictClassification(input,NULL);
+}
+
+template <class TInputValue, class TTargetValue>
 void
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::Save(const std::string & filename, const std::string & itkNotUsed(name))
@@ -111,7 +127,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   std::ofstream ofs(filename.c_str());
   //Save K parameter and IsRegression flag.
   ofs << "K=" << m_K << "\n";
-  ofs << "IsRegression=" << m_IsRegression << "\n";
+  ofs << "IsRegression=" << this->m_RegressionMode << "\n";
 
   //Save the samples. First column is the Label and other columns are the sample data.
   typename InputListSampleType::ConstIterator sampleIt = this->GetInputListSample()->Begin();
@@ -154,7 +170,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   std::getline(ifs, line);
   pos = line.find_first_of("=", 0);
   nextpos = line.find_first_of(" \n\r", pos+1);
-  this->SetIsRegression(boost::lexical_cast<bool>(line.substr(pos+1, nextpos-pos-1)));
+  this->SetRegressionMode(boost::lexical_cast<bool>(line.substr(pos+1, nextpos-pos-1)));
 
   //Clear previous listSample (if any)
   typename InputListSampleType::Pointer samples = InputListSampleType::New();

@@ -58,13 +58,6 @@ public:
   itkGetMacro(K, int);
   itkSetMacro(K, int);
 
-  /** Setters/Getters to IsRegression flag
-   *  Default is False
-   *  \see http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html
-   */
-  itkGetMacro(IsRegression, bool);
-  itkSetMacro(IsRegression, bool);
-
   /** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="");
 
@@ -95,13 +88,15 @@ protected:
   /** Predict values using the model */
   virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
+  virtual void TrainRegression();
+  virtual TargetSampleType PredictRegression(const InputSampleType& input) const;
+
 private:
   KNearestNeighborsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   CvKNearest * m_KNearestModel;
   int m_K;
-  bool m_IsRegression;
 };
 } // end namespace otb
 
