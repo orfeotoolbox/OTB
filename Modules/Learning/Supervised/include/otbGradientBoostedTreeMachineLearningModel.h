@@ -130,6 +130,9 @@ protected:
   /** Predict values using the model */
   virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
+  virtual void TrainRegression();
+  virtual TargetSampleType PredictRegression(const InputSampleType& input) const;
+
 private:
   GradientBoostedTreeMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -142,7 +145,6 @@ private:
   double m_SubSamplePortion;
   int m_MaxDepth;
   bool m_UseSurrogates;
-  bool m_IsRegression;
 
 
 };

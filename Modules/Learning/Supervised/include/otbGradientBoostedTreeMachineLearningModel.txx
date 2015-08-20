@@ -36,8 +36,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
  m_Shrinkage(0.01),
  m_SubSamplePortion(0.8),
  m_MaxDepth(3),
- m_UseSurrogates(false),
- m_IsRegression(false)
+ m_UseSurrogates(false)
 {
 }
 
@@ -62,7 +61,6 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
-
   CvGBTreesParams params = CvGBTreesParams(m_LossFunctionType, m_WeakCount, m_Shrinkage, m_SubSamplePortion,
                                            m_MaxDepth, m_UseSurrogates);
 
@@ -70,10 +68,18 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
   var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
 
-  if (!m_IsRegression) //Classification
+  if (!this->m_RegressionMode) //Classification
     var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
 
   m_GBTreeModel->train(samples,CV_ROW_SAMPLE,labels,cv::Mat(),cv::Mat(),var_type,cv::Mat(),params, false);
+}
+
+template <class TInputValue, class TOutputValue>
+void
+GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
+::TrainRegression()
+{
+  this->TrainClassification();
 }
 
 template <class TInputValue, class TOutputValue>
@@ -102,6 +108,15 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
     }
 
   return target;
+}
+
+template <class TInputValue, class TOutputValue>
+typename GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
+::TargetSampleType
+GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
+::PredictRegression(const InputSampleType & input) const
+{
+  return this->PredictClassification(input, NULL);
 }
 
 template <class TInputValue, class TOutputValue>
