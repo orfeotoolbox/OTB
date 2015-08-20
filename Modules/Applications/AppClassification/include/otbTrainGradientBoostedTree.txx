@@ -33,8 +33,15 @@ LearningApplicationBase<TInputValue,TOutputValue>
       "classifier.gbt",
       "This group of parameters allows to set Gradient Boosted Tree classifier parameters. "
       "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/gradient_boosted_trees.html}.");
-  //LossFunctionType : not exposed, as only one type is used for Classification,
-  // the other three are used for regression.
+
+  if (m_RegressionFlag)
+    {
+    AddParameter(ParameterType_Choice, "classifier.gbt.t", "Loss Function Type");
+    SetParameterDescription("classifier.gbt.t","Type of loss functionused for training.");
+    AddChoice("classifier.gbt.t.sqr","Squared Loss");
+    AddChoice("classifier.gbt.t.abs","Absolute Loss");
+    AddChoice("classifier.gbt.t.hub","Huber Loss");
+    }
 
   //WeakCount
   AddParameter(ParameterType_Int, "classifier.gbt.w", "Number of boosting algorithm iterations");
@@ -86,6 +93,29 @@ LearningApplicationBase<TInputValue,TOutputValue>
   classifier->SetShrinkage(GetParameterFloat("classifier.gbt.s"));
   classifier->SetSubSamplePortion(GetParameterFloat("classifier.gbt.p"));
   classifier->SetMaxDepth(GetParameterInt("classifier.gbt.max"));
+
+  if (m_RegressionFlag)
+    {
+    switch (GetParameterInt("classifier.gbt.t"))
+      {
+      case 0: // SQUARED_LOSS
+        classifier->SetLossFunctionType(CvGBTrees::SQUARED_LOSS);
+        break;
+      case 1: // ABSOLUTE_LOSS
+        classifier->SetLossFunctionType(CvGBTrees::ABSOLUTE_LOSS);
+        break;
+      case 2: // HUBER_LOSS
+        classifier->SetLossFunctionType(CvGBTrees::HUBER_LOSS);
+        break;
+      default:
+        classifier->SetLossFunctionType(CvGBTrees::SQUARED_LOSS);
+        break;
+      }
+    }
+  else
+    {
+    classifier->SetLossFunctionType(CvGBTrees::DEVIANCE_LOSS);
+    }
 
   classifier->Train();
   classifier->Save(modelPath);
