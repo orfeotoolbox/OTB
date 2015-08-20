@@ -30,6 +30,32 @@
 namespace otb
 {
 
+template< typename T >
+void
+assert_quiet_NaN( T val )
+{
+  assert( !std::numeric_limits< T >::has_quiet_NaN ||
+	  ( std::numeric_limits< T >::has_quiet_NaN &&
+	    val!=std::numeric_limits< T >::quiet_NaN() ) );
+}
+
+template< typename T >
+void
+assert_signaling_NaN( T val )
+{
+  assert( !std::numeric_limits< T >::has_signaling_NaN ||
+	  ( std::numeric_limits< T >::has_signaling_NaN &&
+	    val!=std::numeric_limits< T >::signaling_NaN() ) );
+}
+
+template< typename T >
+void
+assert_NaN( T val )
+{
+  assert_quiet_NaN( val );
+  assert_signaling_NaN( val );
+}
+
 /** 
  * The GlView class acts like an OpenGl scene where actors deriving
  * from the GlActor class can be rendered. The GlView class contains the
@@ -267,6 +293,13 @@ GlView
 		     const S2 & vspacing,
 		     double norm ) const
 {
+  assert_NaN( vcenter[ 0 ] );
+  assert_NaN( vcenter[ 1 ] );
+
+  assert_NaN( vspacing[ 0 ] );
+  assert_NaN( vspacing[ 1 ] );
+
+
   //
   // Reference actor has not been found.
   otb::GlActor::Pointer actor( GetActor( key ) );
@@ -336,6 +369,16 @@ GlView
   if( y[ 1 ]<0.0 )
     spacing[ 1 ] = -spacing[ 1 ];
 
+  //
+  // Chech outputs.
+  assert_NaN( center[ 0 ] );
+  assert_NaN( center[ 1 ] );
+
+  assert_NaN( spacing[ 0 ] );
+  assert_NaN( spacing[ 1 ] );
+
+  //
+  // Ok.
   return true;
 }
 
