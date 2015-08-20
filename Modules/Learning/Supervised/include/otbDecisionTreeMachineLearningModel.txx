@@ -38,7 +38,6 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
  m_MaxCategories(10),
  m_CVFolds(10),
  m_Use1seRule(true),
- m_IsRegression(false),
  m_TruncatePrunedTree(true)
 {
 }
@@ -73,10 +72,18 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
   var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
 
-  if (!m_IsRegression) //Classification
+  if (!this->m_RegressionMode) //Classification
     var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
 
   m_DTreeModel->train(samples,CV_ROW_SAMPLE,labels,cv::Mat(),cv::Mat(),var_type,cv::Mat(),params);
+}
+
+template <class TInputValue, class TOutputValue>
+void
+DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
+::TrainRegression()
+{
+  this->TrainClassification();
 }
 
 template <class TInputValue, class TOutputValue>
@@ -105,6 +112,15 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
     }
 
   return target;
+}
+
+template <class TInputValue, class TOutputValue>
+typename DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
+::TargetSampleType
+DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
+::PredictRegression(const InputSampleType & input) const
+{
+  return this->PredictClassification(input, NULL);
 }
 
 template <class TInputValue, class TOutputValue>
