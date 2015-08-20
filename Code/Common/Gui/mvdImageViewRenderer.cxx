@@ -655,6 +655,7 @@ ImageViewRenderer
 	      shader->SetRadius( settings.GetSize() );
 	      break;
 
+	    case EFFECT_NONE:
 	    case EFFECT_NORMAL:
 	      shader->SetShaderType( otb::SHADER_STANDARD );
 	      break;
