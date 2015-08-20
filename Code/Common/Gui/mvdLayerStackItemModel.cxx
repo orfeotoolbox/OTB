@@ -833,7 +833,7 @@ void
 LayerStackItemModel
 ::OnImageSettingsUpdated( AbstractImageModel * image )
 {
-  qDebug() << this << "::OnImageSettingsUpdated(" << image << ")";
+  // qDebug() << this << "::OnImageSettingsUpdated(" << image << ")";
 
   assert( m_StackedLayerModel!=NULL );
 

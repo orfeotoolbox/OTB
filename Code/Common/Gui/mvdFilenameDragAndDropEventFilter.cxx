@@ -78,10 +78,10 @@ FilenameDragAndDropEventFilter
 /*****************************************************************************/
 bool
 FilenameDragAndDropEventFilter
-::DragEnterEvent( QObject* object, QDragEnterEvent* event )
+::DragEnterEvent( QObject * /* object */, QDragEnterEvent* event )
 {
-  qDebug() << this << "::DragEnterEvent(" << object << "," << event << ")";
-  qDebug() << event->mimeData()->formats();
+  // qDebug() << this << "::DragEnterEvent(" << object << "," << event << ")";
+  // qDebug() << event->mimeData()->formats();
 
   //
   // Bypass event its MIME data does not contain not URL(s).
@@ -98,8 +98,9 @@ FilenameDragAndDropEventFilter
        it!=urls.end();
        ++it )
     {
-    qDebug() << *it;
-    qDebug() << it->scheme() << it->scheme().compare( "file", Qt::CaseInsensitive );
+    // qDebug() << *it;
+    // qDebug() << it->scheme()
+    // 	     << it->scheme().compare( "file", Qt::CaseInsensitive );
 
 #if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
     if( it->scheme().compare( "file", Qt::CaseInsensitive )!=0 )
@@ -124,9 +125,9 @@ FilenameDragAndDropEventFilter
 /*****************************************************************************/
 bool
 FilenameDragAndDropEventFilter
-::DragLeaveEvent( QObject* object, QDragLeaveEvent* event )
+::DragLeaveEvent( QObject * /* object */, QDragLeaveEvent * /* event */ )
 {
-  qDebug() << this << "::DragLeaveEvent(" << object << "," << event << ")";
+  // qDebug() << this << "::DragLeaveEvent(" << object << "," << event << ")";
 
   //
   // Nothing to do: bypass event & let default behaviour occur.
@@ -158,9 +159,9 @@ FilenameDragAndDropEventFilter
 /*****************************************************************************/
 bool
 FilenameDragAndDropEventFilter
-::DropEvent( QObject* object, QDropEvent* event )
+::DropEvent( QObject * /* object */, QDropEvent * event )
 {
-  qDebug() << this << "::DropEvent(" << object << "," << event << ")";
+  // qDebug() << this << "::DropEvent(" << object << "," << event << ")";
 
   assert( event!=NULL );
   assert( event->mimeData()!=NULL );
