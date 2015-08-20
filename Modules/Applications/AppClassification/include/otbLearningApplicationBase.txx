@@ -47,11 +47,17 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
 #ifdef OTB_USE_OPENCV
   InitSVMParams();
-  InitBoostParams();
+  if (!m_RegressionFlag)
+    {
+    InitBoostParams();  // Regression not supported
+    }
   InitDecisionTreeParams();
   InitGradientBoostedTreeParams();
   InitNeuralNetworkParams();
-  InitNormalBayesParams();
+  if (!m_RegressionFlag)
+    {
+    InitNormalBayesParams(); // Regression not supported
+    }
   InitRandomForestsParams();
   InitKNNParams();
 #endif
