@@ -367,7 +367,7 @@ ImageViewManipulator
 ::MousePressEvent( QMouseEvent* event )
 {
 
-  qDebug() << this << "::MousePressEvent(" << event << ")";
+  // qDebug() << this << "::MousePressEvent(" << event << ")";
 
   assert( event!=NULL );
 
@@ -454,7 +454,7 @@ void
 ImageViewManipulator
 ::MouseReleaseEvent( QMouseEvent* event)
 {
-  qDebug() << this << "::MouseReleaseEvent(" << event << ")";
+  // qDebug() << this << "::MouseReleaseEvent(" << event << ")";
 
   assert( event!=NULL );
 
@@ -505,7 +505,7 @@ void
 ImageViewManipulator
 ::MouseDoubleClickEvent( QMouseEvent * event )
 {
-  qDebug() << this << "::MouseDoubleClickEvent(" << event << ")";
+  // qDebug() << this << "::MouseDoubleClickEvent(" << event << ")";
 
   assert( event!=NULL );
 

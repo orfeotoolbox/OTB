@@ -409,7 +409,7 @@ void
 LayerStackController
 ::OnStackedLayerContentChanged()
 {
-  qDebug() << this << "::OnStackedLayerContentChanged()";
+  // qDebug() << this << "::OnStackedLayerContentChanged()";
 
   UpdateButtonsState();
 }
@@ -419,7 +419,7 @@ void
 LayerStackController
 ::OnStackedLayerContentReset()
 {
-  qDebug() << this << "::OnStackedLayerContentChanged()";
+  // qDebug() << this << "::OnStackedLayerContentChanged()";
 
   UpdateButtonsState();
 }
