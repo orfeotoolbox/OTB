@@ -128,6 +128,10 @@ public:
    */
   void SetReloadEnabled( bool );
 
+  /**
+   */
+  void InstallEventFilter( QObject * filter );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

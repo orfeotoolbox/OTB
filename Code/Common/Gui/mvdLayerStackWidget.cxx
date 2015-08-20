@@ -184,6 +184,17 @@ LayerStackWidget
 }
 
 /*******************************************************************************/
+void
+LayerStackWidget
+::InstallEventFilter( QObject * filter )
+{
+  assert( m_UI!=NULL );
+  assert( m_UI->treeView!=NULL );
+
+  m_UI->treeView->installEventFilter( filter );
+}
+
+/*******************************************************************************/
 // void
 // LayerStackWidget
 // ::SetModel( LayerStackItemModel * itemModel )

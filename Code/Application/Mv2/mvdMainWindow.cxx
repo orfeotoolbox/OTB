@@ -320,6 +320,22 @@ MainWindow
   ConnectImageViews();
 
   ConnectStatusBar();
+
+  //
+  // When everything is connected, install event-filter.
+  assert( m_ImageView!=NULL );
+  m_ImageView->installEventFilter( m_FilenameDragAndDropEventFilter );
+
+  {
+  assert( GetController( m_LayerStackDock )!=NULL );
+
+  LayerStackWidget * layerStackWidget =
+    GetController( m_LayerStackDock )->GetWidget< LayerStackWidget >();
+
+  assert( layerStackWidget!=NULL );
+
+  layerStackWidget->InstallEventFilter( m_FilenameDragAndDropEventFilter );
+  }
 }
 
 /*****************************************************************************/
