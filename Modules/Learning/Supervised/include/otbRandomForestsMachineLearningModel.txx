@@ -39,8 +39,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
  m_MaxNumberOfVariables(0),
  m_MaxNumberOfTrees(100),
  m_ForestAccuracy(0.01),
- m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS),
- m_RegressionMode(false)
+ m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS)
 {
   this->m_ConfidenceIndex = true;
 }
@@ -96,7 +95,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
   var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
 
-  if(m_RegressionMode)
+  if(this->m_RegressionMode)
     var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_NUMERICAL;
   else
     var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
@@ -104,6 +103,14 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   //train the RT model
   m_RFModel->train(samples, CV_ROW_SAMPLE, labels,
                    cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
+}
+
+template <class TInputValue, class TOutputValue>
+void
+RandomForestsMachineLearningModel<TInputValue,TOutputValue>
+::TrainRegression()
+{
+  TrainClassification();
 }
 
 template <class TInputValue, class TOutputValue>
@@ -129,6 +136,15 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
     }
 
   return target[0];
+}
+
+template <class TInputValue, class TOutputValue>
+typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
+::TargetSampleType
+RandomForestsMachineLearningModel<TInputValue,TOutputValue>
+::PredictRegression(const InputSampleType & value) const
+{
+  return PredictClassification(value, NULL);
 }
 
 template <class TInputValue, class TOutputValue>

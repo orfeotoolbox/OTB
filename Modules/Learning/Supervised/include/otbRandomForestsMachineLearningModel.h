@@ -115,9 +115,6 @@ public:
   itkGetMacro(TerminationCriteria, int);
   itkSetMacro(TerminationCriteria, int);
 
-  itkGetMacro(RegressionMode, bool);
-  itkSetMacro(RegressionMode, bool);
-
   /** Returns a matrix containing variable importance */
   VariableImportanceMatrixType GetVariableImportance();
   
@@ -143,6 +140,9 @@ protected:
   virtual void TrainClassification();
   /** Predict values using the model */
   virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+
+  virtual void TrainRegression();
+  virtual TargetSampleType PredictRegression(const InputSampleType& input) const;
 
 private:
   RandomForestsMachineLearningModel(const Self &); //purposely not implemented
@@ -208,8 +208,6 @@ private:
   float m_ForestAccuracy;
   /** The type of the termination criteria */
   int m_TerminationCriteria;
-  /** Perform regression instead of classification */
-  bool m_RegressionMode;
 };
 } // end namespace otb
 
