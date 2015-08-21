@@ -16,9 +16,23 @@
 
  =========================================================================*/
 
+#include "otbConfigure.h"
 
+#include "itkMersenneTwisterRandomVariateGenerator.h"
+
+#ifdef OTB_USE_OPENCV
 #include "otbNeuralNetworkMachineLearningModel.h"
 #include "otbSVMMachineLearningModel.h"
+#include "otbBoostMachineLearningModel.h"
+#include "otbDecisionTreeMachineLearningModel.h"
+#include "otbGradientBoostedTreeMachineLearningModel.h"
+#include "otbKNearestNeighborsMachineLearningModel.h"
+#include "otbRandomForestsMachineLearningModel.h"
+#endif
+
+#ifdef OTB_USE_LIBSVM
+#include "otbLibSVMMachineLearningModel.h"
+#endif
 
 typedef float PrecisionType;
 typedef otb::MachineLearningModel<PrecisionType,PrecisionType>   MachineLearningModelRegressionType;
@@ -28,8 +42,17 @@ typedef MachineLearningModelRegressionType::InputListSampleType  InputListSample
 typedef MachineLearningModelRegressionType::TargetValueType      TargetValueRegressionType;
 typedef MachineLearningModelRegressionType::TargetSampleType     TargetSampleRegressionType;
 typedef MachineLearningModelRegressionType::TargetListSampleType TargetListSampleRegressionType;
+typedef itk::Statistics::MersenneTwisterRandomVariateGenerator   RandomGeneratorType;
 
 const double epsilon = 0.1;
+
+typedef struct RegressionTestParamStruct
+{
+  double vMin;
+  double vMax;
+  size_t count;
+  double eps;
+} RegressionTestParam;
 
 template <typename TPrecision>
 struct LinearFunctionSampleGenerator
@@ -39,24 +62,28 @@ struct LinearFunctionSampleGenerator
     : m_a(a), m_b(b), m_NbInputVars(1), m_NbOutputVars(1) {
     m_isl = InputListSampleRegressionType::New();
     m_tsl = TargetListSampleRegressionType::New();
-    std::srand(0);
   };
   void GenerateSamples(TPrecision sMin, TPrecision sMax, size_t nbSamples)
   {
+    m_isl->Clear();
+    m_tsl->Clear();
     m_isl->SetMeasurementVectorSize(m_NbInputVars);
     m_tsl->SetMeasurementVectorSize(m_NbOutputVars);
+
+    RandomGeneratorType::Pointer randomGenerator = RandomGeneratorType::GetInstance();
+    InputSampleRegressionType inputSample;
+    inputSample.SetSize(m_NbInputVars);
+    TargetSampleRegressionType outputSample;
 
     TPrecision sampleStep = (sMax-sMin)/nbSamples;
     for(size_t i=0; i<nbSamples; ++i)
       {
-      InputSampleRegressionType inputSample;
-      inputSample.Reserve(m_NbInputVars);
-      TPrecision x = std::rand()/static_cast<TPrecision>(RAND_MAX)*nbSamples;
+      TPrecision x = randomGenerator->GetUniformVariate(0.0, 1.0) * static_cast<TPrecision>(nbSamples);
       TPrecision inputValue = sMin+ x*sampleStep;
       inputSample[0] = inputValue;
-      TPrecision outputValue = m_a*inputValue+m_b;
+      outputSample[0] = m_a*inputValue+m_b;
       m_isl->PushBack(inputSample);
-      m_tsl->PushBack(outputValue);
+      m_tsl->PushBack(outputSample);
       }
   }
 
@@ -66,47 +93,87 @@ struct LinearFunctionSampleGenerator
   const size_t m_NbOutputVars;
   InputListSampleRegressionType::Pointer m_isl;
   TargetListSampleRegressionType::Pointer m_tsl;
-
 };
 
 template <typename SampleGeneratorType, typename RegressionType>
-int validate(SampleGeneratorType& sg, RegressionType& rgrsn)
+int testRegression(SampleGeneratorType& sg, RegressionType& rgrsn, RegressionTestParam param)
 {
-  std::cout << "Validation\n";
+  std::cout << "Generating training samples" << std::endl;
+  sg.GenerateSamples(param.vMin, param.vMax, param.count);
+
+  rgrsn->SetInputListSample(sg.m_isl);
+  rgrsn->SetTargetListSample(sg.m_tsl);
+  std::cout << "Training" << std::endl;
+  rgrsn->Train();
+
+  std::cout << "Generate validation samples"<<std::endl;
+  sg.GenerateSamples(param.vMin, param.vMax, param.count);
+
+  std::cout << "Validation" << std::endl;
   //Check the prediction accuracy
   typename InputListSampleRegressionType::Iterator sampleIt = sg.m_isl->Begin();
   typename TargetListSampleRegressionType::Iterator resultIt = sg.m_tsl->Begin();
   typename InputListSampleRegressionType::Iterator sampleLast = sg.m_isl->End();
   typename TargetListSampleRegressionType::Iterator resultLast = sg.m_tsl->End();
   typename SampleGeneratorType::PrecisionType rmse = 0.0;
-  size_t nbSamples = 0;
   while(sampleIt != sampleLast && resultIt != resultLast)
     {
-    typename SampleGeneratorType::PrecisionType invalue = sampleIt.GetMeasurementVector()[0];
+    //typename SampleGeneratorType::PrecisionType invalue = sampleIt.GetMeasurementVector()[0];
     typename SampleGeneratorType::PrecisionType prediction = rgrsn->Predict(sampleIt.GetMeasurementVector())[0];
     typename SampleGeneratorType::PrecisionType expected = resultIt.GetMeasurementVector()[0];
     rmse += pow(prediction - expected, 2.0);
     ++sampleIt;
     ++resultIt;
-    ++nbSamples;
     } 
 
-  rmse /= nbSamples;
-  if(rmse > epsilon)
+  rmse = sqrt( rmse / static_cast<double>(param.count) );
+  std::cout << "RMSE = "<< rmse << std::endl;
+  if(rmse > param.eps)
     return EXIT_FAILURE;
 
   return EXIT_SUCCESS;
 }
 
-int otbNeuralNetworkRegressionLinearMonovariate(int itkNotUsed(argc), 
+#ifdef OTB_USE_LIBSVM
+int otbLibSVMRegressionLinearMonovariate(int itkNotUsed(argc),
+                                      char * itkNotUsed(argv) [])
+{
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+
+  RegressionTestParam param;
+  param.vMin = -0.5;
+  param.vMax = 0.5;
+  param.count = 200;
+  param.eps = 0.1;
+
+  typedef otb::LibSVMMachineLearningModel<InputValueRegressionType,
+                                       TargetValueRegressionType>
+    libsvmType;
+  libsvmType::Pointer regression = libsvmType::New();
+  regression->SetRegressionMode(true);
+  regression->SetSVMType(EPSILON_SVR);
+  regression->SetKernelType(RBF);
+  regression->SetEpsilon(1e-5);
+  regression->SetParameterOptimization(true);
+
+  return testRegression(lfsg,regression,param);
+}
+#endif
+
+#ifdef OTB_USE_OPENCV
+int otbNeuralNetworkRegressionLinearMonovariate(int itkNotUsed(argc),
                                                 char * itkNotUsed(argv) [])
 {
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
 
-  LinearFunctionSampleGenerator<PrecisionType> lfsg(1.0, 0.0);
-  std::cout << "Generating samples\n";
-  lfsg.GenerateSamples(-0.5, 0.5, 20000);
+  RegressionTestParam param;
+  param.vMin = -0.5;
+  param.vMax = 0.5;
+  param.count = 20000;
+  param.eps = 0.1;
+
   typedef otb::NeuralNetworkMachineLearningModel<InputValueRegressionType,
-                                                 TargetValueRegressionType> 
+                                                 TargetValueRegressionType>
     NeuralNetworkType;
   NeuralNetworkType::Pointer regression = NeuralNetworkType::New();
 
@@ -126,26 +193,25 @@ int otbNeuralNetworkRegressionLinearMonovariate(int itkNotUsed(argc),
   regression->SetRegPropDWMin(1e-7);
   regression->SetTermCriteriaType(CV_TERMCRIT_EPS);
   regression->SetEpsilon(1e-5);
-  regression->SetMaxIter(1e20);
+  regression->SetMaxIter(1e4);
 
-  regression->SetInputListSample(lfsg.m_isl);
-  regression->SetTargetListSample(lfsg.m_tsl);
-  std::cout << "Training\n";
-  regression->Train();
-
-  return validate(lfsg, regression);
+  return testRegression(lfsg,regression,param);
 }
 
   
-int otbSVMRegressionLinearMonovariate(int itkNotUsed(argc), 
+int otbSVMRegressionLinearMonovariate(int itkNotUsed(argc),
                                       char * itkNotUsed(argv) [])
 {
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
 
-  LinearFunctionSampleGenerator<PrecisionType> lfsg(1.0, 0.0);
-  std::cout << "Generating samples\n";
-  lfsg.GenerateSamples(-0.5, 0.5, 200);
+  RegressionTestParam param;
+  param.vMin = -0.5;
+  param.vMax = 0.5;
+  param.count = 200;
+  param.eps = 0.1;
+
   typedef otb::SVMMachineLearningModel<InputValueRegressionType,
-                                       TargetValueRegressionType> 
+                                       TargetValueRegressionType>
     SVMType;
   SVMType::Pointer regression = SVMType::New();
 
@@ -157,10 +223,88 @@ int otbSVMRegressionLinearMonovariate(int itkNotUsed(argc),
   regression->SetEpsilon(1e-5);
   regression->SetParameterOptimization(true);
 
-  regression->SetInputListSample(lfsg.m_isl);
-  regression->SetTargetListSample(lfsg.m_tsl);
-  std::cout << "Training\n";
-  regression->Train();
-
-  return validate(lfsg, regression);
+  return testRegression(lfsg,regression,param);
 }
+
+int otbDecisionTreeRegressionLinearMonovariate(int itkNotUsed(argc),
+                                      char * itkNotUsed(argv) [])
+{
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+
+  RegressionTestParam param;
+  param.vMin = -0.5;
+  param.vMax = 0.5;
+  param.count = 200;
+  param.eps = 0.1;
+
+  typedef otb::DecisionTreeMachineLearningModel<InputValueRegressionType,
+                                       TargetValueRegressionType>
+    DTreeType;
+  DTreeType::Pointer regression = DTreeType::New();
+  regression->SetRegressionMode(true);
+
+  return testRegression(lfsg,regression,param);
+}
+
+int otbGradientBoostedTreeRegressionLinearMonovariate(int itkNotUsed(argc),
+                                      char * itkNotUsed(argv) [])
+{
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+
+  RegressionTestParam param;
+  param.vMin = -0.5;
+  param.vMax = 0.5;
+  param.count = 200;
+  param.eps = 0.1;
+
+  typedef otb::GradientBoostedTreeMachineLearningModel<InputValueRegressionType,
+                                       TargetValueRegressionType>
+    GBTreeType;
+  GBTreeType::Pointer regression = GBTreeType::New();
+  regression->SetRegressionMode(true);
+  regression->SetLossFunctionType(CvGBTrees::SQUARED_LOSS);
+
+  return testRegression(lfsg,regression,param);
+}
+
+int otbKNearestNeighborsRegressionLinearMonovariate(int itkNotUsed(argc),
+                                      char * itkNotUsed(argv) [])
+{
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+
+  RegressionTestParam param;
+  param.vMin = -0.5;
+  param.vMax = 0.5;
+  param.count = 200;
+  param.eps = 0.1;
+
+  typedef otb::KNearestNeighborsMachineLearningModel<InputValueRegressionType,
+                                       TargetValueRegressionType>
+    KNNType;
+  KNNType::Pointer regression = KNNType::New();
+  regression->SetRegressionMode(true);
+  regression->SetK(1);
+
+  return testRegression(lfsg,regression,param);
+}
+
+int otbRandomForestsRegressionLinearMonovariate(int itkNotUsed(argc),
+                                      char * itkNotUsed(argv) [])
+{
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+
+  RegressionTestParam param;
+  param.vMin = -0.5;
+  param.vMax = 0.5;
+  param.count = 200;
+  param.eps = 0.1;
+
+  typedef otb::RandomForestsMachineLearningModel<InputValueRegressionType,
+                                       TargetValueRegressionType>
+    RFType;
+  RFType::Pointer regression = RFType::New();
+  regression->SetRegressionMode(true);
+
+  return testRegression(lfsg,regression,param);
+}
+#endif
