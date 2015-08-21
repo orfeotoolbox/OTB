@@ -17,6 +17,7 @@ otb_module(OTBSupervised
     OTBTestKernel
     OTBImageIO
     OTBImageBase
+    OTBBoost
 
   DESCRIPTION
     "${DOCUMENTATION}"
