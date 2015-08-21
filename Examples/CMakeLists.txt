@@ -100,6 +100,11 @@ else()
       message(FATAL_ERROR "BUILD_EXAMPLES requires ${_activationOption} to be ON")
     endif()
   endforeach()
+
+  find_package(OTB REQUIRED)
+  include(${OTB_USE_FILE})
+  message(STATUS "Found OTB: ${OTB_USE_FILE}")
+
 endif()
 
 set(OTB_TEST_DRIVER otbTestDriver)
