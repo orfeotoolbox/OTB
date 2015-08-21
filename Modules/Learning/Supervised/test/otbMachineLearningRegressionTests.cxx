@@ -95,6 +95,96 @@ struct LinearFunctionSampleGenerator
   TargetListSampleRegressionType::Pointer m_tsl;
 };
 
+template <typename TPrecision>
+struct BilinearFunctionSampleGenerator
+{
+  typedef TPrecision PrecisionType;
+  BilinearFunctionSampleGenerator(TPrecision a, TPrecision b, TPrecision c)
+    : m_a(a), m_b(b), m_c(c), m_NbInputVars(2), m_NbOutputVars(1) {
+    m_isl = InputListSampleRegressionType::New();
+    m_tsl = TargetListSampleRegressionType::New();
+  };
+  void GenerateSamples(TPrecision sMin, TPrecision sMax, size_t nbSamples)
+  {
+    m_isl->Clear();
+    m_tsl->Clear();
+    m_isl->SetMeasurementVectorSize(m_NbInputVars);
+    m_tsl->SetMeasurementVectorSize(m_NbOutputVars);
+
+    RandomGeneratorType::Pointer randomGenerator = RandomGeneratorType::GetInstance();
+    InputSampleRegressionType inputSample;
+    inputSample.SetSize(m_NbInputVars);
+    TargetSampleRegressionType outputSample;
+
+    TPrecision sampleStep = (sMax-sMin)/nbSamples;
+    for(size_t i=0; i<nbSamples; ++i)
+      {
+      TPrecision x = randomGenerator->GetUniformVariate(0.0, 1.0) * static_cast<TPrecision>(nbSamples);
+      TPrecision inputValue1 = sMin+ x*sampleStep;
+      x = randomGenerator->GetUniformVariate(0.0, 1.0) * static_cast<TPrecision>(nbSamples);
+      TPrecision inputValue2 = sMin+ x*sampleStep;
+      inputSample[0] = inputValue1;
+      inputSample[1] = inputValue2;
+      outputSample[0] = m_a*inputValue1+m_b*inputValue2+m_c;
+      m_isl->PushBack(inputSample);
+      m_tsl->PushBack(outputSample);
+      }
+  }
+
+  TPrecision m_a;
+  TPrecision m_b;
+  TPrecision m_c;
+  const size_t m_NbInputVars;
+  const size_t m_NbOutputVars;
+  InputListSampleRegressionType::Pointer m_isl;
+  TargetListSampleRegressionType::Pointer m_tsl;
+};
+
+template <typename TPrecision>
+struct PolynomialFunctionSampleGenerator
+{
+  typedef TPrecision PrecisionType;
+  PolynomialFunctionSampleGenerator(std::vector<TPrecision> c)
+    : m_c(c), m_NbInputVars(1), m_NbOutputVars(1) {
+    m_isl = InputListSampleRegressionType::New();
+    m_tsl = TargetListSampleRegressionType::New();
+  };
+  void GenerateSamples(TPrecision sMin, TPrecision sMax, size_t nbSamples)
+  {
+    m_isl->Clear();
+    m_tsl->Clear();
+    m_isl->SetMeasurementVectorSize(m_NbInputVars);
+    m_tsl->SetMeasurementVectorSize(m_NbOutputVars);
+
+    RandomGeneratorType::Pointer randomGenerator = RandomGeneratorType::GetInstance();
+    InputSampleRegressionType inputSample;
+    inputSample.SetSize(m_NbInputVars);
+    TargetSampleRegressionType outputSample;
+
+    TPrecision sampleStep = (sMax-sMin)/nbSamples;
+    for(size_t i=0; i<nbSamples; ++i)
+      {
+      TPrecision x = randomGenerator->GetUniformVariate(0.0, 1.0) * static_cast<TPrecision>(nbSamples);
+      TPrecision inputValue = sMin+ x*sampleStep;
+      inputSample[0] = inputValue;
+      TPrecision y = 0.0;
+      for (unsigned int j=0; j<m_c.size() ; ++j)
+        {
+        y += m_c[j] * pow(static_cast<double>(inputValue), static_cast<double>(j));
+        }
+      outputSample[0] = y;
+      m_isl->PushBack(inputSample);
+      m_tsl->PushBack(outputSample);
+      }
+  }
+
+  std::vector<TPrecision> m_c;
+  const size_t m_NbInputVars;
+  const size_t m_NbOutputVars;
+  InputListSampleRegressionType::Pointer m_isl;
+  TargetListSampleRegressionType::Pointer m_tsl;
+};
+
 template <typename SampleGeneratorType, typename RegressionType>
 int testRegression(SampleGeneratorType& sg, RegressionType& rgrsn, RegressionTestParam param)
 {
