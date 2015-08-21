@@ -32,7 +32,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
  m_RFModel (new CvRTrees),
  m_MaxDepth(5),
  m_MinSampleCount(10),
- m_RegressionAccuracy(0),
+ m_RegressionAccuracy(0.01),
  m_ComputeSurrogateSplit(false),
  m_MaxNumberOfCategories(10),
  m_CalculateVariableImportance(false),
