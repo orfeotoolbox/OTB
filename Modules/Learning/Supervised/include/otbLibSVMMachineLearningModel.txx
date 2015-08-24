@@ -34,7 +34,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   m_SVMestimator->SetKernelType(LINEAR);
   m_SVMestimator->SetParametersOptimization(false);
   m_SVMestimator->DoProbabilityEstimates(false);
-  m_SVMestimator->SetEpsilon(1e-6);
+  //m_SVMestimator->SetEpsilon(1e-6);
 }
 
 
