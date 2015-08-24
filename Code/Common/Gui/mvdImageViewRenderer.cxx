@@ -395,7 +395,7 @@ ImageViewRenderer
 void
 ImageViewRenderer
 ::Pick( const PointType & ptView,
-	PixelInfo::Vector & pixels )
+	PixelInfo::Vector & pixels ) const
 {
   // qDebug()
   //   << this << "::Pick("

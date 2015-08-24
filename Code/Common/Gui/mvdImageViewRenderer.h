@@ -170,7 +170,7 @@ public:
   void PaintGL( const AbstractImageViewRenderer::RenderingContext* context );
 
   virtual void Pick( const PointType & view,
-                     PixelInfo::Vector & pixels );
+                     PixelInfo::Vector & pixels ) const;
 
   virtual void GetResolutions( PixelInfo::Vector & pixels ) const;
 

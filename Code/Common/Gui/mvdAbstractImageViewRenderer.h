@@ -192,7 +192,7 @@ public:
   /**
    */
   virtual void Pick( const PointType & view,
-                     PixelInfo::Vector & pixels ) =0;
+                     PixelInfo::Vector & pixels ) const = 0;
 
   /**
    */
