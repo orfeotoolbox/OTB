@@ -44,7 +44,7 @@
      <item>
       <widget class="QToolButton" name="topButton">
        <property name="toolTip">
-        <string>Move layer to top of stack.</string>
+        <string>Move selected layer to top of stack</string>
        </property>
        <property name="text">
         <string/>
@@ -58,7 +58,7 @@
      <item>
       <widget class="QToolButton" name="upButton">
        <property name="toolTip">
-        <string>Move layer up in to stack.</string>
+        <string>Move selected layer up within the stack</string>
        </property>
        <property name="text">
         <string/>
@@ -72,7 +72,7 @@
      <item>
       <widget class="QToolButton" name="downButton">
        <property name="toolTip">
-        <string>Move layer down in the stack.</string>
+        <string>Move selected layer down within the stack</string>
        </property>
        <property name="text">
         <string/>
@@ -86,7 +86,7 @@
      <item>
       <widget class="QToolButton" name="bottomButton">
        <property name="toolTip">
-        <string>Move layer to bottom of stack.</string>
+        <string>Move selected layer to bottom of stack</string>
        </property>
        <property name="text">
         <string/>
@@ -99,6 +99,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="projectionButton">
+       <property name="toolTip">
+        <string>Use selected layer as projection reference</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -110,6 +113,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="applyButton">
+       <property name="toolTip">
+        <string>Apply all display settings (color-setup, color-dynamics, shader etc.) of selected layer to all other layers</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -122,7 +128,7 @@
      <item>
       <widget class="QToolButton" name="reloadButton">
        <property name="toolTip">
-        <string>Reload data file.</string>
+        <string>Reload data file</string>
        </property>
        <property name="text">
         <string/>
@@ -148,6 +154,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="deleteButton">
+       <property name="toolTip">
+        <string>Delete selected layer</string>
+       </property>
        <property name="text">
         <string/>
        </property>
