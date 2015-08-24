@@ -162,6 +162,12 @@ public:
   /**
    */
   bool IsBypassRenderingEnabled() const;
+  /**
+   */
+  void SetPickingEnabled( bool );
+  /**
+   */
+  bool IsPickingEnabled() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -265,6 +271,9 @@ protected:
 //
 // Protected attributes.
 protected:
+  /**
+   */
+  bool m_IsPickingEnabled : 1;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 

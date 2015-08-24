@@ -172,6 +172,8 @@ public:
   virtual void Pick( const PointType & view,
                      PixelInfo::Vector & pixels );
 
+  virtual void GetResolutions( PixelInfo::Vector & pixels ) const;
+
   virtual bool TransformToView( PointType & point,
 				const StackedLayerModel::KeyType &,
 				const IndexType &,

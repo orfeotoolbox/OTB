@@ -74,6 +74,7 @@ ImageViewWidget
                    const QGLWidget* shareWidget,
                    Qt::WindowFlags flags ) :
   QGLWidget( parent, shareWidget, flags ),
+  m_IsPickingEnabled( true ),
   m_Manipulator( NULL ),
   m_Renderer( NULL )
 #if USE_XP_REGION_OPTIM
@@ -656,6 +657,21 @@ ImageViewWidget
   m_Renderer->PaintGL( context );
 
   //
+  // Post-rendering tasks.
+  if( !m_Renderer->IsBypassRenderingEnabled() &&
+      m_IsPickingEnabled )
+    {
+    StackedLayerModel * layerStack = GetLayerStack();
+    assert( layerStack!=NULL );
+
+    layerStack->BeginEditResolutions();
+
+    m_Renderer->GetResolutions( layerStack->PixelInfos() );
+
+    layerStack->EndEditResolutions();
+    }
+
+  //
   // Relase rendering-context.
   delete context;
   context = NULL;
@@ -694,47 +710,48 @@ ImageViewWidget
   //
   // Pixel-picking special behaviour.
   //
-  {
-  // Transform coordinates from widget space to viewport space.
-  assert( m_Manipulator!=NULL );
+  if( m_IsPickingEnabled )
+    {
+    // Transform coordinates from widget space to viewport space.
+    assert( m_Manipulator!=NULL );
 
-  PointType ptView;
+    PointType ptView;
 
-  m_Manipulator->Transform( ptView, event->pos() );
+    m_Manipulator->Transform( ptView, event->pos() );
 
-  //
-  // Pick pixel of point in viewport space and return point in image
-  // space.
-  assert( m_Renderer!=NULL );
+    //
+    // Pick pixel of point in viewport space and return point in image
+    // space.
+    assert( m_Renderer!=NULL );
 
-  stackedLayerModel->BeginEditPixelInfo();
+    stackedLayerModel->BeginEditPixelInfo();
 
-  PixelInfo::Vector & pixels = stackedLayerModel->PixelInfos();
+    PixelInfo::Vector & pixels = stackedLayerModel->PixelInfos();
 
-  m_Renderer->Pick( ptView, pixels );
+    m_Renderer->Pick( ptView, pixels );
 
-  m_Renderer->UpdatePixelInfo( event->pos(), ptView, pixels );
+    m_Renderer->UpdatePixelInfo( event->pos(), ptView, pixels );
 
-  stackedLayerModel->EndEditPixelInfo( event->pos(), ptView );
+    stackedLayerModel->EndEditPixelInfo( event->pos(), ptView );
 
-  //
-  // Emit reference-layer pixel data.
-  emit PixelInfoChanged( event->pos(), ptView, stackedLayerModel->PixelInfos() );
+    //
+    // Emit reference-layer pixel data.
+    emit PixelInfoChanged( event->pos(), ptView, stackedLayerModel->PixelInfos() );
 
-  if( stackedLayerModel->HasCurrent() )
-    emit PhysicalCursorPositionChanged(
-      event->pos(),
-      ptView,
-      pixels[ stackedLayerModel->GetCurrentIndex() ].m_Point,
-      pixels[ stackedLayerModel->GetCurrentIndex() ].m_Pixel );
-  else
-    emit PhysicalCursorPositionChanged(
-      event->pos(),
-      ptView,
-      PointType(),
-      DefaultImageType::PixelType()
-    );
-  }
+    if( stackedLayerModel->HasCurrent() )
+      emit PhysicalCursorPositionChanged(
+	event->pos(),
+	ptView,
+	pixels[ stackedLayerModel->GetCurrentIndex() ].m_Point,
+	pixels[ stackedLayerModel->GetCurrentIndex() ].m_Pixel );
+    else
+      emit PhysicalCursorPositionChanged(
+	event->pos(),
+	ptView,
+	PointType(),
+	DefaultImageType::PixelType()
+      );
+    }
 
   //
   // Update view depending on shader status special behaviour.
@@ -1081,6 +1098,22 @@ ImageViewWidget
   assert( m_Renderer!=NULL );
 
   return m_Renderer->SetBypassRenderingEnabled( isEnabled );
+}
+
+/*****************************************************************************/
+bool
+ImageViewWidget
+::IsPickingEnabled() const
+{
+  return m_IsPickingEnabled;
+}
+
+/*****************************************************************************/
+void
+ImageViewWidget
+::SetPickingEnabled( bool isEnabled )
+{
+  m_IsPickingEnabled = isEnabled;
 }
 
 /*******************************************************************************/

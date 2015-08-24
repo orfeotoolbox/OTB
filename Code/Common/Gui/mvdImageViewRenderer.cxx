@@ -68,7 +68,6 @@ namespace mvd
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
 /*****************************************************************************/
 ImageViewRenderer
 ::ImageViewRenderer( QObject* parent ) :
@@ -398,12 +397,10 @@ ImageViewRenderer
 ::Pick( const PointType & ptView,
 	PixelInfo::Vector & pixels )
 {
-  /*
-  qDebug()
-    << this << "::Pick("
-    << in[ 0 ] << "," << in[ 1 ]
-    << ")";
-  */
+  // qDebug()
+  //   << this << "::Pick("
+  //   << ptView[ 0 ] << "," << ptView[ 1 ]
+  //   << ")";
 
   assert( !m_GlView.IsNull() );
 
@@ -450,7 +447,7 @@ ImageViewRenderer
 
     if( !imageActor.IsNull() )
       {
-      // ...get pixel and it's index.
+      // ...get pixel and it's index...
       pixels[ i ].m_HasIndex =
       pixels[ i ].m_HasPixel =
 	imageActor->GetPixel(
@@ -458,6 +455,59 @@ ImageViewRenderer
 	  pixels[ i ].m_Pixel,
 	  pixels[ i ].m_Index
 	);
+
+      // ...and get resolutions.
+      pixels[ i ].m_HasResolution = true;
+      pixels[ i ].m_Resolution = imageActor->GetCurrentResolution();
+      }
+    }
+}
+
+/*****************************************************************************/
+void
+ImageViewRenderer
+::GetResolutions( PixelInfo::Vector & pixels ) const
+{
+  // qDebug() << this << "::GetResolutions()";
+
+  assert( !m_GlView.IsNull() );
+
+  //
+  // Get actor keys.
+  otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
+
+  if( keys.empty() )
+    return;
+
+  // Resize pixels container, if needed.
+  if( keys.size()!=pixels.size() )
+    pixels.resize( keys.size() );
+
+  // Pick each layer.
+  size_t i = 0;
+
+  for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
+       it != keys.end();
+       ++ it, ++ i )
+    {
+    // Check layer key.
+    pixels[ i ].m_Key = *it;
+
+    // Get actor.
+    otb::GlActor::Pointer actor( m_GlView->GetActor( *it ) );
+    assert( !actor.IsNull() );
+
+    // If image-actor...
+    otb::GlImageActor::Pointer imageActor( otb::DynamicCast< otb::GlImageActor >( actor ) );
+
+    if( !imageActor.IsNull() )
+      {
+      pixels[ i ].m_HasResolution = true;
+      pixels[ i ].m_Resolution = imageActor->GetCurrentResolution();
+      }
+    else
+      {
+      pixels[ i ].m_HasResolution = false;
       }
     }
 }

@@ -196,6 +196,10 @@ public:
 
   /**
    */
+  virtual void GetResolutions( PixelInfo::Vector & pixels ) const =0;
+
+  /**
+   */
   virtual bool TransformToView( PointType & point,
 				const StackedLayerModel::KeyType &,
 				const IndexType &,

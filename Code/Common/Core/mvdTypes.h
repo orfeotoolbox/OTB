@@ -313,7 +313,8 @@ struct PixelInfo
     m_Pixel(),
     m_HasPoint( false ),
     m_HasIndex( false ),
-    m_HasPixel( false )
+    m_HasPixel( false ),
+    m_HasResolution( false )
   {
   }
 
@@ -322,10 +323,12 @@ struct PixelInfo
   DefaultImageType::PointType m_Point;
   DefaultImageType::IndexType m_Index;
   DefaultImageType::PixelType m_Pixel;
+  unsigned int m_Resolution;
 
   bool m_HasPoint: 1;
   bool m_HasIndex: 1;
   bool m_HasPixel: 1;
+  bool m_HasResolution: 1;
 };
 
 /*******************************************************************************/

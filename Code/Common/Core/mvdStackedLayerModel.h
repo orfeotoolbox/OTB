@@ -126,6 +126,8 @@ public:
 
   inline void BeginEditPixelInfo() {};
 
+  void BeginEditResolutions() {};
+
   void Clear();
 
   inline bool Contains( const KeyType & key ) const;
@@ -139,6 +141,8 @@ public:
   inline ConstIterator End() const;
 
   inline void EndEditPixelInfo( const QPoint &, const PointType & );
+
+  void EndEditResolutions();
 
   /*
   inline const AbstractLayerModel * Front() const;
@@ -240,6 +244,8 @@ signals:
   void ReferenceAboutToBeChanged( size_t );
   void ReferenceChanged( size_t );
 
+  void ResolutionsChanged( const PixelInfo::Vector & );
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
@@ -292,6 +298,10 @@ private:
   SizeType m_Current;
   SizeType m_Reference;
 
+  // Usually, information is a singular term which denotes a
+  // plural. Since there's a container of several pixel-infos and we
+  // usually name container variables by using the plural form, an 's'
+  // is appended to PixelInfo. 
   PixelInfo::Vector m_PixelInfos;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/

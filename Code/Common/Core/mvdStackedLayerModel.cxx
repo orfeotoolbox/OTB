@@ -337,6 +337,16 @@ StackedLayerModel
   emit ContentChanged();
 }
 
+/*****************************************************************************/
+void
+StackedLayerModel
+::EndEditResolutions()
+{
+  // qDebug() << this << "::EndEditResolutions()";
+
+  emit ResolutionsChanged( m_PixelInfos );
+}
+
 /*******************************************************************************/
 std::string
 StackedLayerModel

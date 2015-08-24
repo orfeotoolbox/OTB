@@ -91,6 +91,7 @@ public:
     COLUMN_NONE = -1,
     //
     COLUMN_PROJ = 0,
+    COLUMN_RESOLUTION,
     COLUMN_NAME,
     COLUMN_EFFECT,
     COLUMN_I,
@@ -291,6 +292,7 @@ private slots:
   void OnReferenceChanged( size_t );
   void OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & );
   void OnImageSettingsUpdated( AbstractImageModel * );
+  void OnResolutionsChanged( const PixelInfo::Vector & );
 };
 
 } // end namespace 'mvd'.

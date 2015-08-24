@@ -64,6 +64,7 @@ QVariant
 HEADERS[ LayerStackItemModel::COLUMN_COUNT ] =
 {
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Proj" ) ),
+  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Res" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Name" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Effect" ) ),
   QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "I" ) ),
@@ -252,6 +253,14 @@ LayerStackItemModel
       this,
       SLOT( OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) )
     );
+
+    QObject::disconnect(
+      m_StackedLayerModel,
+      SIGNAL( ResolutionsChanged( const PixelInfo::Vector & ) ),
+      // from:
+      this,
+      SLOT( ResolutionsChanged( const PixelInfo::Vector & ) )
+    );
     }
 
   m_StackedLayerModel = model;
@@ -328,6 +337,14 @@ LayerStackItemModel
     SLOT( OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) )
   );
 
+    QObject::connect(
+      m_StackedLayerModel,
+      SIGNAL( ResolutionsChanged( const PixelInfo::Vector & ) ),
+      // to:
+      this,
+      SLOT( OnResolutionsChanged( const PixelInfo::Vector & ) )
+    );
+
   for( StackedLayerModel::ConstIterator it( m_StackedLayerModel->Begin() );
        it!=m_StackedLayerModel->End();
        ++it )
@@ -395,6 +412,22 @@ LayerStackItemModel
         case COLUMN_PROJ:
 	  return FromStdString( layer->GetAuthorityCode( true ) );
 	  break;
+
+	case COLUMN_RESOLUTION:
+	{
+	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
+
+	assert( index.row()>=0 );
+
+	if( index.row()>=0 &&
+	    static_cast< size_t >( index.row() )<pixels.size() &&
+	    pixels[ index.row() ].m_HasResolution )
+	  return
+	    static_cast< qlonglong >( pixels[ index.row() ].m_Resolution );
+	else
+	  return QVariant();
+	}
+	break;
 
         case COLUMN_NAME:
           if( layer->inherits(
@@ -476,7 +509,7 @@ LayerStackItemModel
 	  return
 	    pixels[ index.row() ].m_Point[ index.column() - COLUMN_X ];
 	}
-	break;
+	  break;
 
 	default:
 	  break;
@@ -956,6 +989,20 @@ LayerStackItemModel
   emit dataChanged(
     createIndex( index, 0, layer ),
     createIndex( index, LayerStackItemModel::COLUMN_COUNT - 1, layer )
+  );
+}
+
+/*****************************************************************************/
+void
+LayerStackItemModel
+::OnResolutionsChanged( const PixelInfo::Vector & pixels )
+{
+  if( pixels.empty() )
+    return;
+
+  emit dataChanged(
+    index( 0, COLUMN_RESOLUTION ),
+    index( pixels.size() - 1, COLUMN_RESOLUTION )
   );
 }
 

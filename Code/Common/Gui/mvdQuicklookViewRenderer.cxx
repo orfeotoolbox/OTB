@@ -152,7 +152,7 @@ QuicklookViewRenderer
   assert( !m_GlView.IsNull() );
 
 
-  std::string key( m_GlView->AddActor( m_GlRoiActor ) );
+  std::string key( m_GlView->AddActor( m_GlRoiActor, "ROI" ) );
 
   m_GlRoiActor->SetVisible( true );
 

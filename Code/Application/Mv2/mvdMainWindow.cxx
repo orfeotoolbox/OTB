@@ -1014,6 +1014,8 @@ MainWindow
     sharedGlWidget
   );
 
+  quicklookView->SetPickingEnabled( false );
+
   quicklookView->setMinimumSize(  64,  64 );
   quicklookView->setMaximumSize( 512, 512 );
   quicklookView->setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum );
