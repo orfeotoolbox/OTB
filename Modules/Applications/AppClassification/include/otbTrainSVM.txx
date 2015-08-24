@@ -68,19 +68,19 @@ namespace Wrapper
       SetParameterFloat("classifier.svm.p", 1.0);
       SetParameterDescription("classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
 
-      AddParameter(ParameterType_Choice, "classifier.svm.termcrit", "Termination criteria");
-      SetParameterDescription("classifier.svm.termcrit","Termination criteria for iterative algorithm");
-      AddChoice("classifier.svm.termcrit.iter", "Stops when Max_iteration is reached.");
-      AddChoice("classifier.svm.termcrit.eps", "Stops when accuracy is lower than epsilon.");
-      AddChoice("classifier.svm.termcrit.itereps", "Stops when either iteration or epsilon criteria is true");
+      AddParameter(ParameterType_Choice, "classifier.svm.term", "Termination criteria");
+      SetParameterDescription("classifier.svm.term","Termination criteria for iterative algorithm");
+      AddChoice("classifier.svm.term.iter", "Stops when Max_iteration is reached.");
+      AddChoice("classifier.svm.term.eps", "Stops when accuracy is lower than epsilon.");
+      AddChoice("classifier.svm.term.all", "Stops when either iteration or epsilon criteria is true");
 
-      AddParameter(ParameterType_Float, "classifier.svm.maxiter", "Maximum iteration");
-      SetParameterFloat("classifier.svm.maxiter", 1000);
-      SetParameterDescription("classifier.svm.maxiter", "Maximum number of iterations (corresponds to the termination criteria 'iter').");
+      AddParameter(ParameterType_Float, "classifier.svm.iter", "Maximum iteration");
+      SetParameterFloat("classifier.svm.iter", 1000);
+      SetParameterDescription("classifier.svm.iter", "Maximum number of iterations (corresponds to the termination criteria 'iter').");
 
-      AddParameter(ParameterType_Float, "classifier.svm.epsilon", "Epsilon accuracy threshold");
-      SetParameterFloat("classifier.svm.epsilon", FLT_EPSILON);
-      SetParameterDescription("classifier.svm.epsilon", "Epsilon accuracy (corresponds to the termination criteria 'eps').");
+      AddParameter(ParameterType_Float, "classifier.svm.eps", "Epsilon accuracy threshold");
+      SetParameterFloat("classifier.svm.eps", FLT_EPSILON);
+      SetParameterDescription("classifier.svm.eps", "Epsilon accuracy (corresponds to the termination criteria 'eps').");
       }
     AddParameter(ParameterType_Float, "classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID)");
     SetParameterFloat("classifier.svm.coef0", 0.0);
@@ -182,7 +182,7 @@ namespace Wrapper
     if (this->m_RegressionFlag)
       {
       SVMClassifier->SetP(GetParameterFloat("classifier.svm.p"));
-      switch (GetParameterInt("classifier.svm.termcrit"))
+      switch (GetParameterInt("classifier.svm.term"))
         {
         case 0: // ITER
           SVMClassifier->SetTermCriteriaType(CV_TERMCRIT_ITER);
@@ -197,8 +197,8 @@ namespace Wrapper
           SVMClassifier->SetTermCriteriaType(CV_TERMCRIT_ITER);
           break;
         }
-      SVMClassifier->SetMaxIter(GetParameterInt("classifier.svm.maxiter"));
-      SVMClassifier->SetEpsilon(GetParameterFloat("classifier.svm.epsilon"));
+      SVMClassifier->SetMaxIter(GetParameterInt("classifier.svm.iter"));
+      SVMClassifier->SetEpsilon(GetParameterFloat("classifier.svm.eps"));
       }
     SVMClassifier->SetCoef0(GetParameterFloat("classifier.svm.coef0"));
     SVMClassifier->SetGamma(GetParameterFloat("classifier.svm.gamma"));
