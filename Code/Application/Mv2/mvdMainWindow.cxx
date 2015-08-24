@@ -2044,7 +2044,7 @@ MainWindow
   if( !stackedLayerModel->HasCurrent() )
     {
     m_StatusBarWidget->SetPixelIndex( IndexType(), false );
-    m_StatusBarWidget->SetText( QString() );
+    m_StatusBarWidget->SetText( tr( "Select layer..." ) );
 
     m_StatusBarWidget->setEnabled( false );
     return;
@@ -2059,7 +2059,8 @@ MainWindow
 
   QString text;
 
-  if( pixels[ current ].m_HasPoint )
+  if( pixels[ current ].m_HasPoint &&
+      stackedLayerModel->HasReference() )
     {
     assert( stackedLayerModel->GetCurrent()!=NULL );
 
@@ -2081,7 +2082,7 @@ MainWindow
       text.append( " " );
 
     text.append(
-      tr( " [ R: %1 ; G: %2 ; B: %3 ]" )
+      tr( "[ R: %1 ; G: %2 ; B: %3 ]" )
       .arg( pixels[ current ].m_Pixel[ 0 ] )
       .arg( pixels[ current ].m_Pixel[ 1 ] )
       .arg( pixels[ current ].m_Pixel[ 2 ] )
