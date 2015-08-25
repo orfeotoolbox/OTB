@@ -15,7 +15,6 @@
 #include <ossimPluginConstants.h>
 #include <ossim/projection/ossimSensorModel.h>
 #include <ossim/projection/ossimCoarseGridModel.h>
-
 #include <list>
 #include <vector>
 
@@ -23,7 +22,9 @@ namespace ossimplugins
 {
 
 class PlatformPosition;
+
 class SensorParams;
+
 class RefPoint;
 class SarSensor;
 class JSDDateTime;
@@ -47,6 +48,24 @@ public:
    /** @brief Destructor */
    virtual ~ossimGeometricSarSensorModel();
 
+//   ossimRefPtr <PlatformPosition2> thePlatformPosition;
+//   SensorParams* theSensorParams;
+//   SensorParams2 theSensorParams;
+
+   void finalize(const ossimKeywordlist& kwl)
+   {
+//       ossimKeywordlist ppKwl;
+//       kwl.extractKeysThatMatch(ppKwl, "orbitList.*");
+//       size_t ppcount = atoi(ppKwl.find("orbitList.count"));
+//       thePlatformPosition = new PlatformPosition2(ppcount);
+//       thePlatformPosition->loadState(ppKwl, "orbitList.");
+//
+//       ossimKeywordlist sensorKwl;
+//       kwl.extractKeysThatMatch(sensorKwl, "sensor_params.*");
+//       theSensorParams = new SensorParams();
+//       theSensorParams->loadState(sensorKwl, "sensor_params.");
+   }
+
    /**
     * @brief This function associates an image column number to a slant range when the image is georeferenced (ground projected)
     * @param col Column coordinate of the image point
@@ -64,7 +83,7 @@ public:
     * @param line Line coordinate of the image point
     */
    virtual JSDDateTime getTime(double line) const;
- 
+
    /**
     * @brief This function associates an image line number to a platform position and speed
     * @param line Line coordinate of the image point
@@ -178,7 +197,7 @@ public:
 
 protected:
    /**
-    * @brief Creates replacement coarse grid model if user requested via ossim preferences 
+    * @brief Creates replacement coarse grid model if user requested via ossim preferences
     * keyword "geometric_sar_sensor_model.create_ocg: <bool>"
     * @return true if load OK, false on error
     */
