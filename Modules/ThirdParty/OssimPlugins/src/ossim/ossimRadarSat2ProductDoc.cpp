@@ -465,7 +465,7 @@ bool ossimRadarSat2ProductDoc::initGsd(const ossimXmlDocument* xdoc,
       ossimString s;
       if ( getSampledPixelSpacing(xdoc, s) )
       {
-         gsd.x = s.toFloat64();
+         gsd.x = ossimString::toFloat64(s);
       }
       else
       {
@@ -473,7 +473,7 @@ bool ossimRadarSat2ProductDoc::initGsd(const ossimXmlDocument* xdoc,
       }
       if ( getSampledLineSpacing(xdoc, s) )
       {
-         gsd.y = s.toFloat64(s);
+         gsd.y = ossimString::toFloat64(s);
       }
       else
       {
@@ -889,15 +889,15 @@ bool ossimRadarSat2ProductDoc::getImageFile(const ossimXmlDocument* xdoc,
 {
    bool result = false;
    ossimString fileName;
-   
+
    ossimString path = "/product/imageAttributes/fullResolutionImageData";
-   
+
    if ( ossim::getPath(path, xdoc, fileName) )
    {
       result = true;
       s = fileName;
    }
-   
+
    return result;
 }
 
