@@ -829,7 +829,7 @@ ImageViewWidget
 
   QGLWidget::mouseDoubleClickEvent( event );
 
-  m_Manipulator->MouseDoubleClickEvent(event);
+  m_Manipulator->MouseDoubleClickEvent( event );
 }
 
 /*******************************************************************************/
