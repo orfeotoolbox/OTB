@@ -353,7 +353,7 @@ ImageMetadataInterfaceBase::GetNumberOfBands() const
   return value;
 }
 
-std::vector<std::string>
+ImageMetadataInterfaceBase::StringVectorType
 ImageMetadataInterfaceBase::GetBandName() const
 {
   ImageKeywordlistType imageKeywordlist;
@@ -447,7 +447,7 @@ ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, 
 {
 
   std::vector<std::string> keys = dict.GetKeys();
- 
+
 // an extra dependency just for printing is a bad idea.
 //  VectorDataKeywordlist    vectorDataKeywordlistValue;
   unsigned int             i(0);
@@ -479,13 +479,13 @@ ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, 
       {
       VectorType vvalue;
       itk::ExposeMetaData<VectorType>(dict2, keys[itkey], vvalue);
-      
+
       for (i = 0; i < vvalue.size(); ++i)
         {
         os << indent << "---> " << keys[itkey] << "[" << i << "] = " << vvalue[i] << std::endl;
         }
       vvalue.clear();
-      
+
       break;
       }
       case MetaDataKey::TDOUBLE:
@@ -509,7 +509,7 @@ ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, 
       {
       ImageKeywordlist         kwl;
       itk::ExposeMetaData<ImageKeywordlist>(dict2, keys[itkey], kwl);
-      
+
       os << indent << "---> " << keys[itkey] << std::endl;
       kwl.Print(os);
       break;
@@ -539,7 +539,7 @@ ImageMetadataInterfaceBase
   os << indent << "Initialized: " << (canRead ? true : false) << std::endl;
   if (canRead)
     {
-    std::vector<unsigned int> defaultDisplay = this->GetDefaultDisplay();
+    UIntVectorType defaultDisplay = this->GetDefaultDisplay();
     os << indent << "Default RGB Display: ["
                  << defaultDisplay[0] << ", "
                  << defaultDisplay[1] << ", "
@@ -562,7 +562,7 @@ ImageMetadataInterfaceBase
     os << indent << "SensorID:        " << this->GetSensorID( ) << std::endl;
     os << indent << "NumberOfBands:   " << this->GetNumberOfBands( ) << std::endl;
 
-    std::vector<std::string> bandNameList = this->GetBandName();
+    StringVectorType bandNameList = this->GetBandName();
     if (bandNameList.size() == 1)
       {
       os << indent << "BandName:        " << bandNameList[0] << std::endl;
@@ -571,7 +571,7 @@ ImageMetadataInterfaceBase
       if (bandNameList.size() > 1)
         {
         os << indent << "BandNameList:        ";
-        for (std::vector<std::string>::iterator it = bandNameList.begin(); it != bandNameList.end(); ++it)
+        for (StringVectorType::iterator it = bandNameList.begin(); it != bandNameList.end(); ++it)
           {
           os << *it << ", ";
           }
