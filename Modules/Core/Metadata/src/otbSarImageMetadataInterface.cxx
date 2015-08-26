@@ -31,6 +31,56 @@ SarImageMetadataInterface
 }
 
 
+const std::string
+SarImageMetadataInterface
+::GetProductType() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+    {
+    itkExceptionMacro(<< "Invalid Metadata");
+    }
+
+    ImageKeywordlistType imageKeywordlist;
+
+    if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+      {
+      itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+      }
+
+    if (imageKeywordlist.HasKey("support_data.product_type"))
+      {
+      const std::string product_type = imageKeywordlist.GetMetadataByKey("support_data.product_type");
+      return product_type;
+      }
+    return "";
+}
+
+const std::string
+SarImageMetadataInterface
+::GetAcquisitionMode() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+    {
+    itkExceptionMacro(<< "Invalid Metadata");
+    }
+
+    ImageKeywordlistType imageKeywordlist;
+
+    if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+      {
+      itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+      }
+
+    if (imageKeywordlist.HasKey("support_data.acquisition_mode"))
+      {
+      const std::string acquisition_mode = imageKeywordlist.GetMetadataByKey("support_data.acquisition_mode");
+      return acquisition_mode;
+      }
+    return "";
+}
+
 SarImageMetadataInterface::RealType
 SarImageMetadataInterface
 ::GetRadiometricCalibrationScale() const
@@ -62,7 +112,6 @@ SarImageMetadataInterface
 {
   return SarImageMetadataInterface::GetConstantValuePointSet(0.0);
 }
-
 
 SarImageMetadataInterface::PointSetPointer
 SarImageMetadataInterface

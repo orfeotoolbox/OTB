@@ -19,9 +19,11 @@
 #define __otbSarImageMetadataInterface_h
 
 #include <string>
-
+#include <vector>
 #include "otbImageMetadataInterfaceBase.h"
 #include "itkPointSet.h"
+#include "otbSarCalibrationLookupData.h"
+#include "otbStringUtils.h"
 
 namespace otb
 {
@@ -50,11 +52,12 @@ public:
   typedef Superclass::VectorType                     VectorType;
   typedef Superclass::VariableLengthVectorType       VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType           ImageKeywordlistType;
+  typedef Superclass::UIntVectorType                 UIntVectorType;
+  typedef Superclass::StringVectorType               StringVectorType;
   typedef itk::PointSet<double, 2>                   PointSetType;
   typedef PointSetType::Pointer                      PointSetPointer;
   typedef double                                     RealType;
   typedef PointSetType::PointType                    PointType;
-
 
   virtual RealType   GetRadiometricCalibrationScale() const;
 
@@ -75,10 +78,22 @@ public:
   virtual double GetRadarFrequency () const = 0;
   virtual double GetCenterIncidenceAngle() const = 0;
 
-  /** Get the enhanced band names (No enhanced band name support for SAR) */
-  std::vector<std::string> GetEnhancedBandNames() const
+  virtual SarCalibrationLookupData* GetCalibrationLookupData(const std::string) = 0;
+
+  virtual bool HasCalibrationLookupData() const
   {
-    std::vector<std::string> nothing;
+    return false;
+  }
+
+
+  virtual const std::string GetProductType() const;
+
+  virtual const std::string GetAcquisitionMode() const;
+
+  /** Get the enhanced band names (No enhanced band name support for SAR) */
+  StringVectorType GetEnhancedBandNames() const
+  {
+    StringVectorType nothing;
     return nothing;
   }
 
