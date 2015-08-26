@@ -17,8 +17,6 @@
 =========================================================================*/
 
 #include "otbTerraSarImageMetadataInterface.h"
-
-#include <boost/algorithm/string.hpp>
 #include "otbMath.h"
 #include "itkIndex.h"
 #include "itkMetaDataObject.h"
@@ -1200,13 +1198,11 @@ TerraSarImageMetadataInterface
   return polynomSize;
 }
 
-
-  /** Get the R, G, B channel */
-std::vector<unsigned int>
-TerraSarImageMetadataInterface
-::GetDefaultDisplay() const
+/** Get the R, G, B channel */
+TerraSarImageMetadataInterface::UIntVectorType
+TerraSarImageMetadataInterface::GetDefaultDisplay() const
 {
-  std::vector<unsigned int> rgb(3);
+  UIntVectorType rgb(3);
   rgb[0] = 0;
   rgb[1] = 0;
   rgb[2] = 0;

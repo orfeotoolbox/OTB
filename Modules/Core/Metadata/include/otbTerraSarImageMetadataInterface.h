@@ -48,7 +48,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(TerraSarImageMetadataInterface, otbSarImageMetadataInterface);
 
-  typedef itk::ImageBase<2>                     ImageType;
+  typedef Superclass::ImageType                ImageType;
   typedef ImageType::IndexType                  IndexType;
   typedef std::vector<IndexType>                IndexVectorType;
   typedef itk::MetaDataDictionary               MetaDataDictionaryType;
@@ -57,11 +57,11 @@ public:
   typedef Superclass::ImageKeywordlistType      ImageKeywordlistType;
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<DoubleVectorType>         DoubleVectorVectorType;
-  typedef std::vector<unsigned int>             UIntVectorType;
-
+  typedef Superclass::UIntVectorType            UIntVectorType;
+  typedef Superclass::StringVectorType          StringVectorType;
   typedef Superclass::PointSetType              PointSetType;
   typedef Superclass::PointSetPointer           PointSetPointer;
-  typedef double                                RealType;
+  typedef Superclass::RealType                  RealType;
 
   /** Get the imaging start acquisition day from the ossim metadata */
   int GetDay() const;
@@ -111,6 +111,11 @@ public:
   /** Get noise reference point list */
   DoubleVectorType GetNoiseReferencePointList() const;
 
+  SarCalibrationLookupData* GetCalibrationLookupData(const std::string type)
+  {
+    return (new SarCalibrationLookupData(type));
+  }
+
   /** Get the radar frequency */
   double GetRadarFrequency() const;
 
@@ -152,7 +157,7 @@ public:
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-  std::vector<unsigned int> GetDefaultDisplay() const;
+  UIntVectorType GetDefaultDisplay() const;
 
 protected:
   TerraSarImageMetadataInterface();
