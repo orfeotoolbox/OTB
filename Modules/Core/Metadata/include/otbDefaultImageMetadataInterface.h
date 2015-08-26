@@ -144,7 +144,7 @@ public:
   }
 
   /** Get the enhanced band names */
-  std::vector<std::string> GetEnhancedBandNames() const
+  StringVectorType GetEnhancedBandNames() const
   {
     itkExceptionMacro("GetEnhancedBandNames not implemented in DefaultImageMetadataInterface, no captor type found");
   }
@@ -163,10 +163,10 @@ public:
    *         When one spectral band is available : the only band is given to the R, G and B channel.
    *
    */
-  std::vector<unsigned int> GetDefaultDisplay() const
+  UIntVectorType GetDefaultDisplay() const
   {
     unsigned int i = 0;
-    std::vector<unsigned int> rgb(3);
+    UIntVectorType rgb(3);
 
     if (this->GetNumberOfBands() == 0)
       {
