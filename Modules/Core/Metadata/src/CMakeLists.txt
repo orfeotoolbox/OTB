@@ -1,33 +1,51 @@
 set(OTBMetadata_SRC
-  otbWorldView2ImageMetadataInterface.cxx
-  otbQuickBirdImageMetadataInterface.cxx
   otbWorldView2ImageMetadataInterfaceFactory.cxx
-  otbTerraSarImageMetadataInterface.cxx
-  otbImageMetadataInterfaceBase.cxx
+  otbWorldView2ImageMetadataInterface.cxx
+
+  otbQuickBirdImageMetadataInterfaceFactory.cxx
+  otbQuickBirdImageMetadataInterface.cxx
+
   otbImageMetadataInterfaceFactory.cxx
-  otbFormosatImageMetadataInterface.cxx
+  otbImageMetadataInterfaceBase.cxx
+
   otbSpotImageMetadataInterfaceFactory.cxx
+  otbSpotImageMetadataInterface.cxx
+
   otbDefaultImageMetadataInterfaceFactory.cxx
   otbSarDefaultImageMetadataInterfaceFactory.cxx
   otbOpticalDefaultImageMetadataInterfaceFactory.cxx
-  otbSpotImageMetadataInterface.cxx
+
   otbFormosatImageMetadataInterfaceFactory.cxx
+  otbFormosatImageMetadataInterface.cxx
+
   otbOpticalImageMetadataInterfaceFactory.cxx
-  otbSpot6ImageMetadataInterfaceFactory.cxx
-  otbSarImageMetadataInterfaceFactory.cxx
-  otbSpot6ImageMetadataInterface.cxx
-  otbIkonosImageMetadataInterface.cxx
-  otbPleiadesImageMetadataInterface.cxx
-  otbQuickBirdImageMetadataInterfaceFactory.cxx
   otbOpticalImageMetadataInterface.cxx
+
+  otbSpot6ImageMetadataInterfaceFactory.cxx
+  otbSpot6ImageMetadataInterface.cxx
+
   otbIkonosImageMetadataInterfaceFactory.cxx
-  otbSarImageMetadataInterface.cxx
+  otbIkonosImageMetadataInterface.cxx
+
   otbPleiadesImageMetadataInterfaceFactory.cxx
+  otbPleiadesImageMetadataInterface.cxx
+
+  otbSarImageMetadataInterfaceFactory.cxx
+  otbSarImageMetadataInterface.cxx
+
   otbTerraSarImageMetadataInterfaceFactory.cxx
+  otbTerraSarImageMetadataInterface.cxx
+
+  otbSentinel1ImageMetadataInterfaceFactory.cxx
+  otbSentinel1ImageMetadataInterface.cxx
+
+  otbRadarsat2ImageMetadataInterfaceFactory.cxx
+  otbRadarsat2ImageMetadataInterface.cxx
+
   )
 
 add_library(OTBMetadata ${OTBMetadata_SRC})
-target_link_libraries(OTBMetadata 
+target_link_libraries(OTBMetadata
   ${OTBBoost_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}
