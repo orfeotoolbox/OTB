@@ -53,7 +53,8 @@ public:
   typedef MetaDataKey::VariableLengthVectorType VariableLengthVectorType;
   typedef ImageKeywordlist                      ImageKeywordlistType;
   typedef unsigned int                          UnsignedIntType;
-
+  typedef std::vector<UnsignedIntType>          UIntVectorType;
+  typedef std::vector<std::string>              StringVectorType;
 
   /** Set the image used to get the metadata */
   void SetImage (ImageType* image)
@@ -139,8 +140,8 @@ public:
   //otbMetadataGetMacro(NumberOfBands, unsigned int);
 
   /** Get the band name from the ossim metadata */
-  std::vector<std::string> GetBandName() const;
-  //otbMetadataGetMacro(BandName, std::vector<std::string>);
+  StringVectorType GetBandName() const;
+  //otbMetadataGetMacro(BandName, StringVectorType);
 
   /** Get the x pixel spacing*/
   double GetXPixelSpacing() const;
@@ -184,11 +185,11 @@ public:
   //otbMetadataGetMacro(ProductionYear, int);
 
   /** Convert the band names provided by ossim to the official band names  */
-  virtual std::vector<std::string> GetEnhancedBandNames () const = 0;
+  virtual StringVectorType GetEnhancedBandNames () const = 0;
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-  virtual std::vector<unsigned int> GetDefaultDisplay() const = 0;
+  virtual UIntVectorType GetDefaultDisplay() const = 0;
 
   virtual bool CanRead() const = 0;
 

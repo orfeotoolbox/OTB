@@ -58,8 +58,12 @@ public:
   typedef double                                     RealType;
   typedef PointSetType::PointType                    PointType;
 
+  SarCalibrationLookupData* GetCalibrationLookupData(const std::string /*type*/)
+  {
+    itkExceptionMacro("GetLookupTable(std::string type) not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
 
-  RealType   GetRadiometricCalibrationScale() const
+  RealType GetRadiometricCalibrationScale() const
   {
     itkExceptionMacro("GetRadiometricCalibrationScale() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
@@ -194,9 +198,9 @@ public:
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-    std::vector<unsigned int> GetDefaultDisplay() const
+    UIntVectorType GetDefaultDisplay() const
   {
-    std::vector<unsigned int> rgb(3);
+    UIntVectorType rgb(3);
     rgb[0] = 0;
     rgb[1] = 0;
     rgb[2] = 0;
