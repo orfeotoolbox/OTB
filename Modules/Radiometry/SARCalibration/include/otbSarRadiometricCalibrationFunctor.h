@@ -51,6 +51,7 @@ public:
     m_AntennaPatternOldGain = 1.0;
     m_AntennaPatternNewGain = 1.0;
     m_RangeSpreadLoss = 1.0;
+    m_LutValue = 1.0;
   };
 
   ~SarRadiometricCalibrationFunctor(){};
@@ -65,6 +66,7 @@ public:
     sigma *= m_AntennaPatternOldGain;
     sigma /= m_AntennaPatternNewGain;
     sigma *= m_RangeSpreadLoss;
+    sigma /= m_LutValue;
 
     if(sigma < 0.0)
     {
@@ -73,6 +75,14 @@ public:
 
     return static_cast<OutputType>(sigma);
   }
+
+
+  void SetLutValue(RealType value)
+  {
+    m_LutValue = value;
+  }
+
+  RealType  m_LutValue;
 
   /** Set offset method */
   void SetNoise(RealType value)

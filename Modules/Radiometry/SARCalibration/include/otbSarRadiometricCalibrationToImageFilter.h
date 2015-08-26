@@ -76,19 +76,28 @@ public:
   typedef typename FunctionType::ParametricFunctionConstPointer ParametricFunctionConstPointer;
   typedef typename FunctionType::ParametricFunctionType         ParametricFunctionType;
 
+  void SetupCalibrator();
+
   void SetEnableNoise(bool inArg)
   {
     this->GetFunction()->SetEnableNoise(inArg);
   }
+
+
+
 protected:
   SarRadiometricCalibrationToImageFilter();
   virtual ~SarRadiometricCalibrationToImageFilter() {}
 
   /** Update the function list and input parameters*/
   virtual void BeforeThreadedGenerateData();
+
 private:
+
   SarRadiometricCalibrationToImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  bool m_Initialized;
 
 };
 

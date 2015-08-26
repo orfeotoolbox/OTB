@@ -20,11 +20,10 @@
 
 #include "otbSarRadiometricCalibrationFunctor.h"
 #include "otbSarParametricMapFunction.h"
-
+#include "otbSarCalibrationLookupData.h"
 
 namespace otb
 {
-
 /**
  * \class SarRadiometricCalibrationFunction
  * \brief Calculate the backscatter for the given pixel
@@ -71,7 +70,6 @@ public:
 
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
-
   /** Datatype used for the evaluation */
   typedef double                                                 RealType;
   typedef otb::Functor::SarRadiometricCalibrationFunctor<RealType, RealType>           FunctorType;
@@ -81,23 +79,22 @@ public:
   typedef typename ParametricFunctionType::Pointer                    ParametricFunctionPointer;
   typedef typename ParametricFunctionType::ConstPointer               ParametricFunctionConstPointer;
 
-  /** Evaluate the function at non-integer positions */
-  virtual OutputType Evaluate(const PointType& point) const;
-
   /** Evalulate the function at specified index */
-  virtual OutputType EvaluateAtIndex(const IndexType& index) const
+  virtual OutputType EvaluateAtIndex(const IndexType& index) const;
+
+  /** Evaluate the function at non-integer positions */
+  virtual OutputType Evaluate(const PointType& point) const
   {
-    PointType point;
-    this->GetInputImage()->TransformIndexToPhysicalPoint( index, point);
-    return this->Evaluate(point);
+    IndexType index;
+    this->ConvertPointToNearestIndex(point, index);
+    return this->EvaluateAtIndex(index);
   }
 
-  virtual OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const
+  virtual OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const
   {
-    PointType point;
-    this->GetInputImage()->TransformContinuousIndexToPhysicalPoint( cindex, point);
-    return this->Evaluate(point);
+    IndexType index;
+    this->ConvertContinuousIndexToNearestIndex(cindex, index);
+    return this->EvaluateAtIndex(index);
   }
 
   /** Set the input image.
@@ -140,11 +137,36 @@ public:
   itkGetConstObjectMacro(RangeSpreadLoss, ParametricFunctionType);
   itkGetObjectMacro(RangeSpreadLoss, ParametricFunctionType);
 
+  SarCalibrationLookupData* m_Lut;
+  void SetCalibrationLookupData(SarCalibrationLookupData* lut)
+  {
+    m_Lut = lut;
+  }
+
+  itkSetMacro(ApplyAntennaPatternGain, bool);
+  itkGetMacro(ApplyAntennaPatternGain, bool);
+
+  itkSetMacro(ApplyIncidenceAngleCorrection, bool);
+  itkGetMacro(ApplyIncidenceAngleCorrection, bool);
+
+  itkSetMacro(ApplyRangeSpreadingLossCorrection, bool);
+  itkGetMacro(ApplyRangeSpreadingLossCorrection, bool);
+
+  itkSetMacro(ApplyLookupDataCorrection, bool);
+  itkGetMacro(ApplyLookupDataCorrection, bool);
+
 
 protected:
   SarRadiometricCalibrationFunction();
   virtual ~SarRadiometricCalibrationFunction(){}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+
+
+  bool m_ApplyAntennaPatternGain;
+  bool m_ApplyIncidenceAngleCorrection;
+  bool m_ApplyRangeSpreadingLossCorrection;
+  bool m_ApplyLookupDataCorrection;
 
 private:
   SarRadiometricCalibrationFunction(const Self &);  //purposely not implemented
@@ -157,6 +179,7 @@ private:
   ParametricFunctionPointer   m_AntennaPatternOldGain;
   ParametricFunctionPointer   m_IncidenceAngle;
   ParametricFunctionPointer   m_RangeSpreadLoss;
+
 };
 
 } // end namespace otb

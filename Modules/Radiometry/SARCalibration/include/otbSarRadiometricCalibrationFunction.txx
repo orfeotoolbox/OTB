@@ -24,7 +24,6 @@
 
 namespace otb
 {
-
 /**
  * Constructor
  */
@@ -45,6 +44,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   m_AntennaPatternOldGain->SetConstantValue(1.0);
   m_IncidenceAngle->SetConstantValue(CONST_PI_2);
   m_RangeSpreadLoss->SetConstantValue(1.0);
+  m_Lut = 0; //new LookupTableBase();
 }
 
 /**
@@ -75,17 +75,13 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   this->Superclass::PrintSelf(os, indent);
 }
 
-/**
- *
- */
+
 template <class TInputImage, class TCoordRep>
 typename SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 ::OutputType
 SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
-::Evaluate(const PointType& point) const
+::EvaluateAtIndex(const IndexType& index) const
 {
-  IndexType index;
-  this->GetInputImage()->TransformPhysicalPointToIndex(point, index);
 
   if (!this->GetInputImage())
     {
@@ -99,18 +95,44 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     return (itk::NumericTraits<OutputType>::max());
     }
 
+
+  PointType point;
+  if (m_ApplyAntennaPatternGain || m_ApplyIncidenceAngleCorrection || m_ApplyRangeSpreadingLossCorrection)
+    this->GetInputImage()->TransformIndexToPhysicalPoint( index, point);
+
+
   FunctorType functor;
   if (m_EnableNoise)
     {
     functor.SetNoise(static_cast<FunctorRealType>(m_Noise->Evaluate(point)));
     }
   functor.SetScale(m_Scale);
-  functor.SetAntennaPatternNewGain(static_cast<FunctorRealType>(m_AntennaPatternNewGain->Evaluate(point)));
-  functor.SetAntennaPatternOldGain(static_cast<FunctorRealType>(m_AntennaPatternOldGain->Evaluate(point)));
-  functor.SetIncidenceAngle(static_cast<FunctorRealType>(m_IncidenceAngle->Evaluate(point)));
-  functor.SetRangeSpreadLoss(static_cast<FunctorRealType>(m_RangeSpreadLoss->Evaluate(point)));
+
+
+  if (m_ApplyAntennaPatternGain)
+    {
+    functor.SetAntennaPatternNewGain(static_cast<FunctorRealType>(m_AntennaPatternNewGain->Evaluate(point)));
+    functor.SetAntennaPatternOldGain(static_cast<FunctorRealType>(m_AntennaPatternOldGain->Evaluate(point)));
+    }
+
+    if (m_ApplyIncidenceAngleCorrection)
+    {
+    functor.SetIncidenceAngle(static_cast<FunctorRealType>(m_IncidenceAngle->Evaluate(point)));
+    }
+
+    if (m_ApplyRangeSpreadingLossCorrection)
+    {
+    functor.SetRangeSpreadLoss(static_cast<FunctorRealType>(m_RangeSpreadLoss->Evaluate(point)));
+    }
+
+    if (m_ApplyLookupDataCorrection)
+    {
+    FunctorRealType lutVal = m_Lut->GetValue(index[0], index[1]);
+    functor.SetLutValue(lutVal * lutVal);
+    }
 
   const RealType value = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
+
   RealType result = functor(value);
 
   return static_cast<OutputType>(result);
