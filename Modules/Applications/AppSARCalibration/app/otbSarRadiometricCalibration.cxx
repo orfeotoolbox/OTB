@@ -24,7 +24,6 @@ namespace otb
 {
 namespace Wrapper
 {
-
 class SarRadiometricCalibration : public Application
 {
 public:
@@ -40,7 +39,7 @@ public:
   itkTypeMacro(SarRadiometricCalibration, otb::Application);
 
   typedef otb::SarRadiometricCalibrationToImageFilter<ComplexFloatImageType,
-                                                      ComplexFloatImageType>     CalibrationFilterType;
+                                                      FloatImageType>     CalibrationFilterType;
 
 private:
   void DoInit()
@@ -61,7 +60,7 @@ private:
     AddParameter(ParameterType_ComplexInputImage,  "in", "Input Complex Image");
     SetParameterDescription("in", "Input complex image");
 
-    AddParameter(ParameterType_ComplexOutputImage,  "out", "Output Image");
+    AddParameter(ParameterType_OutputImage,  "out", "Output Image");
     SetParameterDescription("out", "Output calibrated complex image");
 
     AddRAMParameter();
@@ -83,6 +82,8 @@ private:
     // Get the input complex image
     ComplexFloatImageType*  floatComplexImage = GetParameterComplexFloatImage("in");
 
+    floatComplexImage->UpdateOutputInformation();
+
     // Set the filer input
     m_CalibrationFilter = CalibrationFilterType::New();
     m_CalibrationFilter->SetInput(floatComplexImage);
@@ -93,10 +94,13 @@ private:
       }
 
     // Set the output image
-    SetParameterComplexOutputImage("out", m_CalibrationFilter->GetOutput());
+    SetParameterOutputImage("out", m_CalibrationFilter->GetOutput());
+    //SetParameterComplexOutputImage("out", m_CalibrationFilter->GetOutput());
+
   }
 
   CalibrationFilterType::Pointer   m_CalibrationFilter;
+
 };
 }
 }
