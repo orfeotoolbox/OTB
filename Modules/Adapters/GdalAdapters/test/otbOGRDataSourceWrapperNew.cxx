@@ -124,22 +124,22 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_new_shp)
     }
 
   const std::string k_shp = boost::unit_test::framework::master_test_suite().argv[1];
-  const std::string k_one = k_shp;
+  const std::string k_one_ = k_shp;
   ogr::DataSource::Pointer ds = ogr::DataSource::New(k_shp+".shp", ogr::DataSource::Modes::Overwrite);
 
   BOOST_CHECK_EQUAL(ds->GetLayersCount(), 0);
-  ogr::Layer l = ds -> CreateLayer(k_one);
+  ogr::Layer l = ds -> CreateLayer(k_one_);
   BOOST_CHECK_EQUAL(ds->GetLayersCount(), 1);
   BOOST_CHECK_EQUAL(l.GetFeatureCount(false), 0);
   BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 0);
   ogr::Layer l0 = ds->GetLayerChecked(0);
   BOOST_CHECK_THROW(ds->GetLayerChecked(1), itk::ExceptionObject);
-  BOOST_CHECK_EQUAL(l.GetName(), k_one);
-  BOOST_CHECK_EQUAL(l0.GetName(), k_one);
-  BOOST_CHECK_EQUAL(l0.GetName(), k_one);
+  BOOST_CHECK_EQUAL(l.GetName(), k_one_);
+  BOOST_CHECK_EQUAL(l0.GetName(), k_one_);
+  BOOST_CHECK_EQUAL(l0.GetName(), k_one_);
 
-  BOOST_CHECK_EQUAL(ds->GetLayer(k_one).GetName(), k_one);
-  BOOST_CHECK_EQUAL(ds->GetLayerChecked(k_one).GetName(), k_one);
+  BOOST_CHECK_EQUAL(ds->GetLayer(k_one_).GetName(), k_one_);
+  BOOST_CHECK_EQUAL(ds->GetLayerChecked(k_one_).GetName(), k_one_);
   BOOST_ASSERT(! ds->GetLayer(k_two));
   BOOST_CHECK_THROW(ds->GetLayerChecked(k_two), itk::ExceptionObject);
 
