@@ -18,19 +18,17 @@
 
 #include "otbPleiadesImageMetadataInterface.h"
 
-#include <boost/algorithm/string.hpp>
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
-#include <boost/lexical_cast.hpp>
+
+#include "otbStringUtils.h"
 
 //useful constants
 #include <otbMath.h>
 
 namespace otb
 {
-using boost::lexical_cast;
-using boost::bad_lexical_cast;
 
 PleiadesImageMetadataInterface
 ::PleiadesImageMetadataInterface()
@@ -225,9 +223,9 @@ PleiadesImageMetadataInterface::GetDay() const
   int value;
   try
     {
-    value = lexical_cast<int> (outputValues[2]);
+    value = boost::lexical_cast<int> (outputValues[2]);
     }
-  catch (bad_lexical_cast &)
+  catch (boost::bad_lexical_cast &)
     {
     itkExceptionMacro(<< "Invalid Day");
     }
@@ -263,9 +261,9 @@ PleiadesImageMetadataInterface::GetMonth() const
   int value;
   try
     {
-    value = lexical_cast<int> (outputValues[1]);
+    value = boost::lexical_cast<int> (outputValues[1]);
     }
-  catch (bad_lexical_cast &)
+  catch (boost::bad_lexical_cast &)
     {
     itkExceptionMacro(<< "Invalid Month");
     }
@@ -300,9 +298,9 @@ PleiadesImageMetadataInterface::GetYear() const
   int value;
   try
     {
-    value = lexical_cast<int> (outputValues[0]);
+    value = boost::lexical_cast<int> (outputValues[0]);
     }
-  catch (bad_lexical_cast &)
+  catch (boost::bad_lexical_cast &)
     {
     itkExceptionMacro(<< "Invalid Year");
     }
@@ -337,9 +335,9 @@ PleiadesImageMetadataInterface::GetHour() const
   int value;
   try
     {
-    value = lexical_cast<int> (outputValues[3]);
+    value = boost::lexical_cast<int> (outputValues[3]);
     }
-  catch (bad_lexical_cast &)
+  catch (boost::bad_lexical_cast &)
     {
     itkExceptionMacro(<< "Invalid Hour");
     }
@@ -374,9 +372,9 @@ PleiadesImageMetadataInterface::GetMinute() const
   int value;
   try
     {
-    value = lexical_cast<int> (outputValues[4]);
+    value = boost::lexical_cast<int> (outputValues[4]);
     }
-  catch (bad_lexical_cast &)
+  catch (boost::bad_lexical_cast &)
     {
     itkExceptionMacro(<< "Invalid Minute");
     }
@@ -411,9 +409,9 @@ PleiadesImageMetadataInterface::GetProductionDay() const
   int value;
   try
     {
-    value = lexical_cast<int> (outputValues[2]);
+    value = boost::lexical_cast<int> (outputValues[2]);
     }
-  catch (bad_lexical_cast &)
+  catch (boost::bad_lexical_cast &)
     {
     itkExceptionMacro(<< "Invalid Day");
     }
@@ -448,9 +446,9 @@ PleiadesImageMetadataInterface::GetProductionMonth() const
   int value;
   try
     {
-    value = lexical_cast<int> (outputValues[1]);
+    value = boost::lexical_cast<int> (outputValues[1]);
     }
-  catch (bad_lexical_cast &)
+  catch (boost::bad_lexical_cast &)
     {
     itkExceptionMacro(<< "Invalid Month");
     }
@@ -487,9 +485,9 @@ PleiadesImageMetadataInterface::GetProductionYear() const
   int value;
   try
     {
-    value = lexical_cast<int> (outputValues[0]);
+    value = boost::lexical_cast<int> (outputValues[0]);
     }
-  catch (bad_lexical_cast &)
+  catch (boost::bad_lexical_cast &)
     {
     itkExceptionMacro(<< "Invalid Year");
     }

@@ -17,8 +17,6 @@
 =========================================================================*/
 
 #include "otbTerraSarImageMetadataInterface.h"
-
-#include <boost/algorithm/string.hpp>
 #include "otbMath.h"
 #include "itkIndex.h"
 #include "itkMetaDataObject.h"
@@ -1179,8 +1177,8 @@ TerraSarImageMetadataInterface
   for (unsigned int i = 0; i < cornerIncidenceAngleIndex.size(); ++i)
     {
 
-    p0[0] = cornerIncidenceAngleIndex.at(i)[0];
-    p0[1] = cornerIncidenceAngleIndex.at(i)[1];
+    p0[0] = cornerIncidenceAngleIndex[i][0];
+    p0[1] = cornerIncidenceAngleIndex[i][1];
 
     points->SetPoint(noPoint, p0);
     points->SetPointData(noPoint, cornerIncidenceAngleValue[i] * CONST_PI_180);
@@ -1200,13 +1198,11 @@ TerraSarImageMetadataInterface
   return polynomSize;
 }
 
-
-  /** Get the R, G, B channel */
-std::vector<unsigned int>
-TerraSarImageMetadataInterface
-::GetDefaultDisplay() const
+/** Get the R, G, B channel */
+TerraSarImageMetadataInterface::UIntVectorType
+TerraSarImageMetadataInterface::GetDefaultDisplay() const
 {
-  std::vector<unsigned int> rgb(3);
+  UIntVectorType rgb(3);
   rgb[0] = 0;
   rgb[1] = 0;
   rgb[2] = 0;
