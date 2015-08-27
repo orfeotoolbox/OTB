@@ -201,6 +201,8 @@ private:
 
 bool CurlHelper::TestUrlAvailability(const std::string& url) const
 {
+  (void)url;
+
 #ifdef OTB_USE_CURL
   // Set up a curl resource
   CurlResource::Pointer curlResource = CurlResource::New();
@@ -259,6 +261,7 @@ bool CurlHelper::IsCurlReturnHttpError(const std::string& url) const
 
   return false;
 #else
+  (void)url;
   otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
   return false;
 #endif
@@ -298,6 +301,8 @@ int CurlHelper::RetrieveUrlInMemory(const std::string& url, std::string& output)
   otbMsgDevMacro(<< " -> " << res);
   return res;
 #else
+  (void)url;
+  (void)output;
   otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
   return -1;
 #endif
@@ -341,6 +346,8 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
   otbMsgDevMacro(<< " -> " << res);
   return res;
 #else
+  (void)urlString;
+  (void)filename;
   otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
   return -1;
 #endif
@@ -348,7 +355,7 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
 
 int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
                                   const std::vector<std::string>& listFilename,
-                                  int itkNotUsed(maxConnect)) const
+                                  int maxConnect) const
 {
 
 #ifdef OTB_USE_CURL
@@ -493,6 +500,9 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   return res;
 #endif
 #else
+  (void)maxConnect;
+  (void)listURLs;
+  (void)listFilename;
   otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
   return -1;
 #endif
