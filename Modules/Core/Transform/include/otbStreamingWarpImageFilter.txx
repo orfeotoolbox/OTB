@@ -24,6 +24,9 @@
 #include "otbStreamingWarpImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 
+#include "itkMetaDataObject.h"
+#include "otbMetaDataKey.h"
+
 namespace otb
 {
 
@@ -201,6 +204,40 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
     }
  }
 
+
+template<class TInputImage, class TOutputImage, class TDisplacementField>
+void
+StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
+::GenerateOutputInformation()
+{
+  Superclass::GenerateOutputInformation();
+
+  // Set the NoData flag to the edge padding value
+  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
+  std::vector<bool> noDataValueAvailable;
+  bool ret = itk::ExposeMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
+  if (!ret)
+    {
+    noDataValueAvailable.resize(this->GetOutput()->GetNumberOfComponentsPerPixel(),false);
+    }
+  std::vector<double> noDataValue;
+  ret = itk::ExposeMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValue);
+  if (!ret)
+    {
+    noDataValue.resize(this->GetOutput()->GetNumberOfComponentsPerPixel(),0.0);
+    }
+  PixelType edgePadding = this->GetEdgePaddingValue();
+  for (unsigned int i=0; i<noDataValueAvailable.size() ; ++i)
+    {
+    if (!noDataValueAvailable[i])
+      {
+      noDataValueAvailable[i] = true;
+      noDataValue[i] = edgePadding[i];
+      }
+    }
+  itk::EncapsulateMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
+  itk::EncapsulateMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValue);
+}
 
 template<class TInputImage, class TOutputImage, class TDisplacementField>
 void
