@@ -150,8 +150,8 @@ else()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://sourceforge.net/projects/itk/files/itk/4.7/InsightToolkit-4.7.1.tar.gz/download"
-    URL_MD5 c2cbf3eb34df41548a5b9615ea250e7d
+    URL "http://sourceforge.net/projects/itk/files/itk/4.8/InsightToolkit-4.8.0.tar.xz/download"
+    URL_MD5 c92f1a95379759427c9f6e7eb3e77c11
     SOURCE_DIR ${ITK_SB_SRC}
     BINARY_DIR ${ITK_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -171,9 +171,6 @@ else()
       -DITK_USE_SYSTEM_TIFF:BOOL=ON
       -DITK_USE_SYSTEM_PNG:BOOL=ON
       ${ITK_SB_CONFIG}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
-      ${CMAKE_SOURCE_DIR}/patches/ITK/hashtable.hxx.in
-      ${ITK_SB_SRC}/Modules/ThirdParty/KWSys/src/KWSys
     DEPENDS ${${proj}_DEPENDENCIES}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
