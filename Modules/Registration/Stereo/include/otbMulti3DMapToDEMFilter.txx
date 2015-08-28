@@ -337,7 +337,14 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateOutpu
     m_IsGeographic = oSRS.IsGeographic(); // TODO check if this test is valid for all projection systems
     }
 
-
+  // Set the NoData value
+  std::vector<bool> noDataValueAvailable;
+  noDataValueAvailable.push_back(true);
+  std::vector<double> noDataValue;
+  noDataValue.push_back(m_NoDataValue);
+  itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
+  itk::EncapsulateMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValue);
 }
 
 template<class T3DImage, class TMaskImage, class TOutputDEMImage>
