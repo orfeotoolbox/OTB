@@ -18,9 +18,9 @@
 
 #include "otbWorldView2ImageMetadataInterface.h"
 
-#include <boost/algorithm/string.hpp>
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
+#include "otbStringUtils.h"
 
 namespace otb
 {

@@ -1177,8 +1177,8 @@ TerraSarImageMetadataInterface
   for (unsigned int i = 0; i < cornerIncidenceAngleIndex.size(); ++i)
     {
 
-    p0[0] = cornerIncidenceAngleIndex.at(i)[0];
-    p0[1] = cornerIncidenceAngleIndex.at(i)[1];
+    p0[0] = cornerIncidenceAngleIndex[i][0];
+    p0[1] = cornerIncidenceAngleIndex[i][1];
 
     points->SetPoint(noPoint, p0);
     points->SetPointData(noPoint, cornerIncidenceAngleValue[i] * CONST_PI_180);
