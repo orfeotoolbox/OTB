@@ -264,6 +264,9 @@ public:
     m_Resampler->SetDisplacementFilterNumberOfThreads(nbThread);
   }
 
+  /** Override itk::ProcessObject method to let the internal filter do the propagation */
+  virtual void PropagateRequestedRegion(itk::DataObject *output);
+
 protected:
   GenericRSResampleImageFilter();
   /** Destructor */
@@ -272,8 +275,6 @@ protected:
   virtual void GenerateData();
 
   virtual void GenerateOutputInformation();
-
-  virtual void GenerateInputRequestedRegion();
 
   virtual void UpdateTransform();
 
