@@ -24,6 +24,8 @@
 #include "otbSentinel1ImageMetadataInterfaceFactory.h"
 #include "otbTerraSarImageMetadataInterfaceFactory.h"
 #include "otbRadarsat2ImageMetadataInterfaceFactory.h"
+#include "otbCosmoSkymedImageMetadataInterfaceFactory.h"
+
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 
@@ -82,6 +84,7 @@ SarImageMetadataInterfaceFactory
       itk::ObjectFactoryBase::RegisterFactory( TerraSarImageMetadataInterfaceFactory::New() );
       itk::ObjectFactoryBase::RegisterFactory( Sentinel1ImageMetadataInterfaceFactory::New() );
       itk::ObjectFactoryBase::RegisterFactory( Radarsat2ImageMetadataInterfaceFactory::New() );
+      itk::ObjectFactoryBase::RegisterFactory( CosmoSkymedImageMetadataInterfaceFactory::New() );
       firstTime = false;
       }
     }

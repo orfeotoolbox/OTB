@@ -42,6 +42,9 @@ set(OTBMetadata_SRC
   otbRadarsat2ImageMetadataInterfaceFactory.cxx
   otbRadarsat2ImageMetadataInterface.cxx
 
+  otbCosmoSkymedImageMetadataInterfaceFactory.cxx
+  otbCosmoSkymedImageMetadataInterface.cxx
+
   )
 
 add_library(OTBMetadata ${OTBMetadata_SRC})
