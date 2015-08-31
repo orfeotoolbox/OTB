@@ -116,116 +116,74 @@ Sentinel1ImageMetadataInterface
 
   }
 
-int
-Sentinel1ImageMetadataInterface::GetDay() const
+void
+Sentinel1ImageMetadataInterface
+::ParseDateTime(const char* key, std::vector<int>& dateFields) const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
+  if(dateFields.size() < 1 )
     {
-    itkExceptionMacro(<< "Invalid Metadata, not a sentinel-1 Image");
+    //parse from keyword list
+    if (!this->CanRead())
+      {
+      itkExceptionMacro(<< "Invalid Metadata, not a valid product");
+      }
+
+    const ImageKeywordlistType imageKeywordlist  = this->GetImageKeywordlist();
+    if (!imageKeywordlist.HasKey(key))
+      {
+      itkExceptionMacro( << "no key named " << key );
+      }
+
+    const std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
+    Utils::ConvertStringToVector(date_time_str, dateFields, " T:-.");
     }
 
-  ImageKeywordlistType imageKeywordlist;
+}
 
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+int
+Sentinel1ImageMetadataInterface::GetYear() const
+{
+  int value = 0;
+  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  if(m_AcquisitionDateFields.size() > 0 )
     {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+    value = boost::lexical_cast<int>( m_AcquisitionDateFields[0] );
     }
-
-  if (!imageKeywordlist.HasKey("support_data.image_date"))
+  else
     {
-    return -1;
+    itkExceptionMacro( << "Invalid year" );
     }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
-  std::vector<std::string> outputValues;
-
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
-
-  int value;
-  try
-    {
-    value = boost::lexical_cast<int> (outputValues[2]);
-    }
-  catch (boost::bad_lexical_cast &)
-    {
-    itkExceptionMacro(<< "Invalid Day");
-    }
-
   return value;
 }
 
 int
 Sentinel1ImageMetadataInterface::GetMonth() const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
+  int value = 0;
+  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  if(m_AcquisitionDateFields.size() > 1 )
     {
-    itkExceptionMacro(<< "Invalid Metadata, not a sentinel-1 Image");
+    value = boost::lexical_cast<int>( m_AcquisitionDateFields[1] );
     }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  else
     {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
-
-  if (!imageKeywordlist.HasKey("support_data.image_date"))
-    {
-    return -1;
-    }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
-  std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
-
-  int value;
-  try
-    {
-    value = boost::lexical_cast<int> (outputValues[1]);
-    }
-  catch (boost::bad_lexical_cast &)
-    {
-    itkExceptionMacro(<< "Invalid Month");
+    itkExceptionMacro( << "Invalid month" );
     }
   return value;
 }
 
 int
-Sentinel1ImageMetadataInterface::GetYear() const
+Sentinel1ImageMetadataInterface::GetDay() const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
+  int value = 0;
+  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  if(m_AcquisitionDateFields.size() > 2 )
     {
-    itkExceptionMacro(<< "Invalid Metadata, not a sentinel-1 Image");
+    value = boost::lexical_cast<int>( m_AcquisitionDateFields[2] );
     }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  else
     {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
-
-  if (!imageKeywordlist.HasKey("support_data.image_date"))
-    {
-    return -1;
-    }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
-
-  std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
-
-  int value;
-  try
-    {
-    value = boost::lexical_cast<int> (outputValues[0]);
-    }
-  catch (boost::bad_lexical_cast &)
-    {
-    itkExceptionMacro(<< "Invalid Year");
+    itkExceptionMacro( << "Invalid day" );
     }
   return value;
 }
@@ -233,36 +191,15 @@ Sentinel1ImageMetadataInterface::GetYear() const
 int
 Sentinel1ImageMetadataInterface::GetHour() const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
+  int value = 0;
+  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  if(m_AcquisitionDateFields.size() > 3 )
     {
-    itkExceptionMacro(<< "Invalid Metadata, not a sentinel-1 Image");
+    value = boost::lexical_cast<int>( m_AcquisitionDateFields[3] );
     }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  else
     {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
-
-  if (!imageKeywordlist.HasKey("support_data.image_date"))
-    {
-    return -1;
-    }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
-  std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
-
-  int value;
-  try
-    {
-    value = boost::lexical_cast<int> (outputValues[3]);
-    }
-  catch (boost::bad_lexical_cast &)
-    {
-    itkExceptionMacro(<< "Invalid Hour");
+    itkExceptionMacro( << "Invalid hour" );
     }
   return value;
 }
@@ -270,36 +207,64 @@ Sentinel1ImageMetadataInterface::GetHour() const
 int
 Sentinel1ImageMetadataInterface::GetMinute() const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
+  int value = 0;
+  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  if(m_AcquisitionDateFields.size() > 4 )
     {
-    itkExceptionMacro(<< "Invalid Metadata, not a sentinel-1 Image");
+    value = boost::lexical_cast<int>( m_AcquisitionDateFields[4] );
     }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  else
     {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+    itkExceptionMacro( << "Invalid minute" );
     }
+  return value;
+}
 
-  if (!imageKeywordlist.HasKey("support_data.image_date"))
+int
+Sentinel1ImageMetadataInterface::GetProductionYear() const
+{
+  int value = 0;
+  ParseDateTime("support_data.date", m_ProductionDateFields);
+  if(m_ProductionDateFields.size() > 0 )
     {
-    return -1;
+    value = boost::lexical_cast<int>( m_ProductionDateFields[0] );
     }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
-  std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
-
-  int value;
-  try
+  else
     {
-    value = boost::lexical_cast<int> (outputValues[4]);
+    itkExceptionMacro( << "Invalid production year" );
     }
-  catch (boost::bad_lexical_cast &)
+  return value;
+
+}
+
+int
+Sentinel1ImageMetadataInterface::GetProductionMonth() const
+{
+  int value = 0;
+  ParseDateTime("support_data.date", m_ProductionDateFields);
+  if(m_ProductionDateFields.size() > 1 )
     {
-    itkExceptionMacro(<< "Invalid Minute");
+    value = boost::lexical_cast<int>( m_ProductionDateFields[1] );
+    }
+  else
+    {
+    itkExceptionMacro( << "Invalid production month" );
+    }
+  return value;
+}
+
+int
+Sentinel1ImageMetadataInterface::GetProductionDay() const
+{
+  int value = 0;
+  ParseDateTime("support_data.date", m_ProductionDateFields);
+  if(m_ProductionDateFields.size() > 2 )
+    {
+    value = boost::lexical_cast<int>( m_ProductionDateFields[2] );
+    }
+  else
+    {
+    itkExceptionMacro( << "Invalid production day" );
     }
   return value;
 }
@@ -307,7 +272,27 @@ Sentinel1ImageMetadataInterface::GetMinute() const
 double
 Sentinel1ImageMetadataInterface::GetPRF() const
 {
-  return 0;
+  double value = 0;
+  const ImageKeywordlistType imageKeywordlist  = this->GetImageKeywordlist();
+  if (!imageKeywordlist.HasKey("support_data.pulse_repetition_frequency"))
+    {
+    return value;
+    }
+
+  value = boost::lexical_cast<double> ( imageKeywordlist.GetMetadataByKey("support_data.pulse_repetition_frequency") );
+
+  return value;
+}
+
+
+Sentinel1ImageMetadataInterface::UIntVectorType
+Sentinel1ImageMetadataInterface::GetDefaultDisplay() const
+{
+  UIntVectorType rgb(3);
+  rgb[0] = 0;
+  rgb[1] = 0;
+  rgb[2] = 0;
+  return rgb;
 }
 
 double
@@ -326,34 +311,6 @@ double
 Sentinel1ImageMetadataInterface::GetCenterIncidenceAngle() const
 {
   return 0;
-}
-
-int
-Sentinel1ImageMetadataInterface::GetProductionDay() const
-{
-  return 0;
-}
-
-int
-Sentinel1ImageMetadataInterface::GetProductionMonth() const
-{
-  return 0;
-}
-
-int
-Sentinel1ImageMetadataInterface::GetProductionYear() const
-{
-  return 0;
-}
-
-Sentinel1ImageMetadataInterface::UIntVectorType
-Sentinel1ImageMetadataInterface::GetDefaultDisplay() const
-{
-  UIntVectorType rgb(3);
-  rgb[0] = 0;
-  rgb[1] = 0;
-  rgb[2] = 0;
-  return rgb;
 }
 
 } // end namespace otb
