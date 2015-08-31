@@ -23,7 +23,7 @@
 
 #include "otbStreamingWarpImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
-
+#include "itkDefaultConvertPixelTraits.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
 
@@ -232,7 +232,7 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
     if (!noDataValueAvailable[i])
       {
       noDataValueAvailable[i] = true;
-      noDataValue[i] = edgePadding[i];
+      noDataValue[i] = itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i,edgePadding);
       }
     }
   itk::EncapsulateMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
