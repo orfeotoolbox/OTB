@@ -45,12 +45,15 @@ static ossimTrace traceDebug = ossimTrace("ossimPluginProjectionFactory:debug");
 
 namespace ossimplugins
 {
+
+   bool ossimPluginProjectionFactory::initalized_;
+
+   ossimPluginProjectionFactory ossimPluginProjectionFactory::factoryInstance;
+
 ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
 {
-   static ossimPluginProjectionFactory* factoryInstance =
-      new ossimPluginProjectionFactory();
+   return initalized_ ? &factoryInstance : 0;
 
-   return factoryInstance;
 }
 
 ossimProjection* ossimPluginProjectionFactory::createProjection(
@@ -147,6 +150,27 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          model = 0;
       }
    }
+
+   // // CosmoSkymed
+   // if ( !projection )
+   // {
+   //    if(traceDebug())
+   //    {
+   //       ossimNotify(ossimNotifyLevel_DEBUG)
+   //          << MODULE << " DEBUG: testing ossimCosmoSkymedModel" << std::endl;
+   //    }
+
+   //    ossimRefPtr<ossimCosmoSkymedModel> model = new ossimCosmoSkymedModel();
+   //    if ( model->open(filename) )
+   //    {
+   //       projection = model.get();
+   //    }
+   //    else
+   //    {
+   //       model = 0;
+   //    }
+   // }
+
 
    // TerrSar
    if ( !projection )
@@ -349,10 +373,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
         	   << MODULE << " DEBUG: Entering ...." << std::endl;
    }
 
-   //   else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
-   //    {
-   //      return new ossimCosmoSkymedModel;
-   //   }
+   // else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
+   // {
+   //    return new ossimCosmoSkymedModel;
+   // }
    if (name == STATIC_TYPE_NAME(ossimRadarSat2Model))
    {
       return new ossimRadarSat2Model;
@@ -550,7 +574,7 @@ void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typ
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
-   //typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
+//   typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimAlosPalsarModel));
