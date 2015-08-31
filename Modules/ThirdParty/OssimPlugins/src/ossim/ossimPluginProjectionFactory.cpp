@@ -52,6 +52,7 @@ namespace ossimplugins
    ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
    {
       return initalized_ ? &factoryInstance : 0;
+
    }
 
 ossimProjection* ossimPluginProjectionFactory::createProjection(
@@ -129,7 +130,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          model = 0;
       }
    }
-
 
    //if(traceDebug())
    // // CosmoSkymed
