@@ -163,10 +163,9 @@ protected:
   }
   virtual void TrainClassification() = 0;
   /** Predict values using the model */
-  virtual TargetSampleType PredictRegression(const InputSampleType& input) const
+  virtual TargetSampleType PredictRegression(const InputSampleType& itkNotUsed(input)) const
   {
   itkGenericExceptionMacro(<< "Regression mode not implemented.");
-  (void)input;
   }
 
   virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality = NULL) const = 0;
