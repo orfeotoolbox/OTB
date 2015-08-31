@@ -150,8 +150,8 @@ else()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://sourceforge.net/projects/itk/files/itk/4.8/InsightToolkit-4.8.0.tar.xz/download"
-    URL_MD5 c92f1a95379759427c9f6e7eb3e77c11
+    URL "http://sourceforge.net/projects/itk/files/itk/4.8/InsightToolkit-4.8.0.tar.gz/download"
+    URL_MD5 2d62f628d9e96cc790fa37947a0f9bc3
     SOURCE_DIR ${ITK_SB_SRC}
     BINARY_DIR ${ITK_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
