@@ -1,9 +1,5 @@
 #include "ossimSentinel1Model.h"
 
-#include <ossim/support_data/ossimSupportFilesList.h>
-#include <ossim/base/ossimPreferences.h>
-#include <ossim/elevation/ossimElevManager.h>
-
 namespace ossimplugins
 {
 
