@@ -332,7 +332,7 @@ namespace ossimplugins
                       true);
 
       theManifestKwl.add(prefix,
-                      "processing_time",
+                      ossimKeywordNames::DATE_KW,
                       safeProcessing->getAttributeValue("start"),
                       true);
 
