@@ -745,15 +745,27 @@ void GlImageActor::UpdateTransforms()
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
 
+  bool hasChanged = false;
+
   if(!settings->GetUseProjection() || m_ViewportToImageTransform.IsNull() || m_ImageToViewportTransform.IsNull())
     {
+    // std::cout << "Proj: OFF" << std::endl;
+
     m_ViewportToImageTransform = RSTransformType::New();
     m_ImageToViewportTransform = RSTransformType::New();
+
+    hasChanged = true;
     }
 
   bool geometryChanged = settings->GetGeometryChanged();
 
-  geometryChanged = geometryChanged 
+  // std::cout << std::hex << this << " geometry-changed: " << geometryChanged;
+
+  // bool isEqualOrNot = m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt();
+
+  // std::cout << std::hex << this << " WKT-changed: " << isEqualOrNot << std::endl;
+
+    geometryChanged = geometryChanged
   || (m_ViewportToImageTransform.IsNotNull() && m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt())
   || (m_ImageToViewportTransform.IsNotNull() && m_ImageToViewportTransform->GetOutputProjectionRef() != settings->GetWkt())
     || (m_ViewportToImageTransform.IsNotNull() && !(m_ViewportToImageTransform->GetInputKeywordList() == settings->GetKeywordList()))
@@ -761,6 +773,8 @@ void GlImageActor::UpdateTransforms()
 
   if(settings->GetUseProjection() && geometryChanged)
     {
+    // std::cout << "Proj: ON" << std::endl;
+
     m_ViewportToImageTransform = RSTransformType::New();
     m_ImageToViewportTransform = RSTransformType::New();
 
@@ -773,10 +787,17 @@ void GlImageActor::UpdateTransforms()
     m_ImageToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
     m_ImageToViewportTransform->SetInputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
     m_ImageToViewportTransform->SetInputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
+
+    hasChanged = true;
     }
 
-  m_ViewportToImageTransform->InstanciateTransform();
-  m_ImageToViewportTransform->InstanciateTransform();
+  if( hasChanged )
+    {
+    // std::cout << "-> Instanciate @ " << std::hex << this << std::endl;
+
+    m_ViewportToImageTransform->InstanciateTransform();
+    m_ImageToViewportTransform->InstanciateTransform();
+    }
 }
 
 void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
