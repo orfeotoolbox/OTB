@@ -332,6 +332,7 @@ ImageViewRenderer
   assert( !m_GlView.IsNull() );
 
   // qDebug() << this << "::PaintGL(" << c << ")";
+  // qDebug() << "{";
 
   // qDebug() << m_GlView.GetPointer();
 
@@ -389,6 +390,8 @@ ImageViewRenderer
   m_GlView->AfterRendering();
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
+
+  // qDebug() << "}";
 }
 
 /*****************************************************************************/
