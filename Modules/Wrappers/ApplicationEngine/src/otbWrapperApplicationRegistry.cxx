@@ -111,7 +111,7 @@ typedef itk::ObjectFactoryBase * ( *ITK_LOAD_FUNCTION )();
 Application::Pointer
 ApplicationRegistry::CreateApplicationFaster(const std::string& name)
 {
-  ApplicationPointer appli;
+  ApplicationPointer appli = NULL;
 
   std::string appExtension = itksys::DynamicLoader::LibExtension();
 #ifdef __APPLE__
@@ -172,10 +172,11 @@ ApplicationRegistry::CreateApplicationFaster(const std::string& name)
         if ( loadfunction )
           {
           itk::ObjectFactoryBase *newfactory = ( *loadfunction )( );
+          // Downcast
+          ApplicationFactoryBase* appFactory = dynamic_cast<ApplicationFactoryBase*>(newfactory);
 
-          if (dynamic_cast<ApplicationFactoryBase*>(newfactory))
+          if (appFactory)
             {
-            ApplicationFactoryBase* appFactory = dynamic_cast<ApplicationFactoryBase*>(newfactory);
             appli = appFactory->CreateApplication(name.c_str());
             appli->Init();
             break;
