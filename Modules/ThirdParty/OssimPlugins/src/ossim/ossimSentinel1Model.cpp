@@ -11,13 +11,13 @@ namespace ossimplugins
    static ossimTrace traceExec  ("ossimSentinel1Model:exec");
    static ossimTrace traceDebug ("ossimSentinel1Model:debug");
 
-   RTTI_DEF1(ossimSentinel1Model, "ossimSentinel1Model", ossimSensorModel);
+   RTTI_DEF1(ossimSentinel1Model, "ossimSentinel1Model", ossimSarModel);
 
 //*************************************************************************************************
 // Constructor
 //*************************************************************************************************
    ossimSentinel1Model::ossimSentinel1Model()
-      : ossimSensorModel()
+      : ossimSarModel()
    {
       theManifestDoc = new ossimXmlDocument();
       theProduct = new ossimSentinel1ProductDoc();
@@ -41,7 +41,7 @@ namespace ossimplugins
 // Constructor
 //*************************************************************************************************
    ossimSentinel1Model::ossimSentinel1Model(const ossimSentinel1Model& rhs)
-      :ossimSensorModel(rhs)
+      :ossimSarModel(rhs)
    {
 
    }
@@ -106,7 +106,7 @@ namespace ossimplugins
             kwl.addList(theProduct->getProductKwl(), true);
             //   theProduct->saveState(kwl, prefix);
          }
-         ossimSensorModel::saveState(kwl, prefix);
+         ossimSarModel::saveState(kwl, prefix);
          return true;
    }
 
@@ -119,7 +119,7 @@ namespace ossimplugins
    {
       //theManifestKwl.addList(kwl, true);
 
-      ossimSensorModel::loadState(kwl, prefix);
+      ossimSarModel::loadState(kwl, prefix);
       return true;
    }
 
@@ -259,169 +259,6 @@ namespace ossimplugins
 
    }
 
-   void ossimSentinel1Model::lineSampleToWorld(const ossimDpt& image_point, ossimGpt& gpt) const
-   {
-
-      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::lineSampleToWorld ";
-
-      if (traceDebug())
-         ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << __LINE__ << " entering..." << std::endl;
-
-      if(image_point.hasNans())
-      {
-         gpt.makeNan();
-         return;
-      }
-      //***
-      // Extrapolate if image point is outside image:
-      //***
-      if (!insideImage(image_point)&&(!theExtrapolateImageFlag))
-      {
-         gpt = extrapolate(image_point);
-         return;
-      }
-
-      //***
-      // Determine imaging ray and invoke elevation source object's services to
-      // intersect ray with terrain model:
-      //***
-      //    ossimEcefRay ray;    In the case of SAR sensors, ray intersection does not have meaning anymore...
-      //    imagingRay(image_point, ray);
-      //    ossimElevManager::instance()->intersectRay(ray, gpt);
-
-      static const double LON_LAT_THRESHOLD  = .00001; // acceptable lon lat error (degrees)
-      static const int    MAX_NUM_ITERATIONS = 30;
-      static const double LON_LAT_STEP       = .00001;
-      int iters = 0;
-
-      //
-      // Utilize iterative scheme for arriving at ground point. Begin with guess
-      // at RefGndPt:
-      //
-      gpt.lond(theRefGndPt.lond());
-      gpt.latd(theRefGndPt.latd());
-      gpt.height(ossimElevManager::instance()->getHeightAboveEllipsoid(gpt));
-
-      ossimGpt gpt_dlat;
-      ossimGpt gpt_dlon;
-
-      ossimDpt ip, ip_dlat, ip_dlon;
-      double du_dlat, du_dlon, dv_dlat, dv_dlon;
-      double delta_lat, delta_lon, delta_u, delta_v;
-      double inverse_norm;
-      bool done = false;
-
-      //***
-      // Begin iterations:
-      //***
-      do
-      {
-         //***
-         // establish perturbed ground points about the guessed point:
-         //***
-         gpt_dlat.latd(gpt.latd() + LON_LAT_STEP);
-         gpt_dlat.lond(gpt.lond());
-         gpt_dlat.height(ossimElevManager::instance()->getHeightAboveEllipsoid(gpt_dlat));
-         gpt_dlon.latd(gpt.latd());
-         gpt_dlon.lond(gpt.lond() + LON_LAT_STEP);
-         gpt_dlon.height(ossimElevManager::instance()->getHeightAboveEllipsoid(gpt_dlon));
-
-         //***
-         // Compute numerical partials at current guessed point:
-         //***
-         worldToLineSample(gpt, ip);
-         worldToLineSample(gpt_dlat, ip_dlat);
-         worldToLineSample(gpt_dlon, ip_dlon);
-
-         if(ip.hasNans() || ip_dlat.hasNans() || ip_dlon.hasNans())
-         {
-            gpt.makeNan();
-            return;
-         }
-
-         du_dlat = (ip_dlat.u - ip.u) / LON_LAT_STEP;
-         du_dlon = (ip_dlon.u - ip.u) / LON_LAT_STEP;
-         dv_dlat = (ip_dlat.v - ip.v) / LON_LAT_STEP;
-         dv_dlon = (ip_dlon.v - ip.v) / LON_LAT_STEP;
-
-         //
-         // Test for convergence:
-         //
-         delta_u = image_point.u - ip.u;
-         delta_v = image_point.v - ip.v;
-
-         //
-         // Compute linearized estimate of ground point given ip delta:
-      //
-         inverse_norm = du_dlon*dv_dlat - dv_dlon*du_dlat; // fg-eh
-
-         if (!::ossim::almostEqual(inverse_norm, 0.0, DBL_EPSILON))
-         {
-            delta_lon = (delta_u*dv_dlat - delta_v*du_dlat)/inverse_norm;
-            delta_lat = (delta_v*du_dlon - delta_u*dv_dlon)/inverse_norm;
-            gpt.latd(gpt.latd() + delta_lat);
-            gpt.lond(gpt.lond() + delta_lon);
-            gpt.height(ossimElevManager::instance()->getHeightAboveEllipsoid(gpt));
-         }
-         else
-         {
-            delta_lon = 0;
-            delta_lat = 0;
-         }
-         done = ((fabs(delta_lon) < LON_LAT_THRESHOLD) && (fabs(delta_lat) < LON_LAT_THRESHOLD));
-         iters++;
-      } while ((!done) && (iters < MAX_NUM_ITERATIONS));
-
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG) << MODULE  << __LINE__ << "image_point = " << image_point << std::endl;
-         //       ossimNotify(ossimNotifyLevel_DEBUG) << "ray = " << ray << std::endl;
-         ossimNotify(ossimNotifyLevel_DEBUG) << MODULE  << __LINE__ << "gpt = " << gpt << std::endl;
-      }
-
-      if (traceDebug())
-         ossimNotify(ossimNotifyLevel_DEBUG) << MODULE  << __LINE__ << "returning..." << std::endl;
-
-      return;
-
-
-   }
-
-   void ossimSentinel1Model::lineSampleHeightToWorld(const ossimDpt& image_point,
-                                                     const double&   height_ellip,
-                                                     ossimGpt&       worldPt) const
-   {
-
-   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
    bool ossimSentinel1Model::getImageId( ossimString& s) const
    {
@@ -450,7 +287,7 @@ namespace ossimplugins
    {
 
       static const char MODULE[] = "ossimSentinel1SafeManifest::getAnnotationFileLocation";
-      traceDebug.setTraceFlag(true);
+      //traceDebug.setTraceFlag(true);
       const ossimString prefix = "support_data.";
       const ossimString xpath =  "/xfdu:XFDU/dataObjectSection/dataObject";
 

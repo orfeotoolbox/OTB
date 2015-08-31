@@ -12,7 +12,7 @@
 
 #include <ossim/projection/ossimSensorModel.h>
 #include <ossim/projection/ossimCoarseGridModel.h>
-
+#include <ossim/projection/ossimSarModel.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimXmlNode.h>
@@ -30,7 +30,7 @@
 namespace ossimplugins
 {
 
-   class OSSIM_PLUGINS_DLL ossimSentinel1Model : public ossimSensorModel
+   class OSSIM_PLUGINS_DLL ossimSentinel1Model : public ossimSarModel
    {
    public:
       /*!
@@ -120,15 +120,6 @@ namespace ossimplugins
     bool findSafeManifest(const ossimFilename& file, ossimFilename& safeFile);
 
     void clearFields();
-
-
-    inline virtual bool useForward() const {return false;}
-
-    virtual void lineSampleToWorld(const ossimDpt& image_point, ossimGpt& gpt) const;
-
-    virtual void lineSampleHeightToWorld(const ossimDpt& image_point,
-                                         const double&   height_ellip,
-                                         ossimGpt&       worldPt) const;
 
 
    protected:
