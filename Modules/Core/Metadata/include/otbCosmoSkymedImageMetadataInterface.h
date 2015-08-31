@@ -55,6 +55,8 @@ public:
   typedef Superclass::RealType                  RealType;
 
 
+  std::string GetSensorID() const;
+
   /** check sensor ID */
   bool CanRead() const;
 
@@ -83,7 +85,10 @@ public:
   double GetCenterIncidenceAngle() const;
 
   /*get lookup data for calulating backscatter */
-  SarCalibrationLookupData* GetCalibrationLookupData(const std::string type);
+  SarCalibrationLookupData* GetCalibrationLookupData(const std::string type)
+  {
+    return (new SarCalibrationLookupData(type));
+  }
 
   bool HasCalibrationLookupData() const
   {
