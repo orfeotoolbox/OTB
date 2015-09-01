@@ -132,7 +132,8 @@ MainWindow
 #endif // USE_TABBED_VIEW
   m_StatusBarWidget( NULL ),
   m_ShaderWidget( NULL ),
-  m_FilenameDragAndDropEventFilter( NULL )
+  m_FilenameDragAndDropEventFilter( NULL ),
+  m_GLSL140( -2 )
 {
   m_UI->setupUi( this );
 
@@ -160,7 +161,7 @@ MainWindow
 /*****************************************************************************/
 bool
 MainWindow
-::CheckGLCapabilities() const
+::CheckGLCapabilities()
 {
   assert( m_ImageView!=NULL );
   assert( m_ImageView->GetRenderer()!=NULL );
@@ -169,7 +170,7 @@ MainWindow
       m_ImageView->GetRenderer()==NULL )
     return false;
 
-  return m_ImageView->GetRenderer()->CheckGLCapabilities();
+  return m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 );
 }
 
 /*****************************************************************************/
@@ -948,7 +949,7 @@ MainWindow
     new QLabel( tr( "Layer FX" ) )
   );
 
-  m_ShaderWidget = new ShaderWidget( m_UI->m_ShaderToolBar );
+  m_ShaderWidget = new ShaderWidget( m_GLSL140>=0, m_UI->m_ShaderToolBar );
 
   m_UI->m_ShaderToolBar->addWidget( m_ShaderWidget );
   }

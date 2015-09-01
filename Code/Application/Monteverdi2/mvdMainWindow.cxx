@@ -156,7 +156,7 @@ MainWindow
       m_ImageView->GetRenderer()==NULL )
     return false;
 
-  return m_ImageView->GetRenderer()->CheckGLCapabilities();
+  return m_ImageView->GetRenderer()->CheckGLCapabilities( NULL );
 }
 
 /*****************************************************************************/

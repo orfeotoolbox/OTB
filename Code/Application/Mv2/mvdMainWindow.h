@@ -119,7 +119,7 @@ public:
 
   /**
    */
-  bool CheckGLCapabilities() const;
+  bool CheckGLCapabilities();
 
   /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
 
@@ -401,6 +401,10 @@ private:
   /**
    */
   FilenameDragAndDropEventFilter* m_FilenameDragAndDropEventFilter;
+
+  /**
+   */
+  int m_GLSL140;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

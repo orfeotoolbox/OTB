@@ -93,7 +93,9 @@ class Monteverdi2_EXPORT ShaderWidget :
 public:
 
   /** \brief Constructor. */
-  ShaderWidget( QWidget * parent =NULL, Qt::WindowFlags flags =0 );
+  ShaderWidget( bool hasGLSL140,
+		QWidget * parent =NULL,
+		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~ShaderWidget();

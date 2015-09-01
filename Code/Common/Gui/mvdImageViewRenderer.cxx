@@ -101,7 +101,7 @@ ImageViewRenderer
 /*****************************************************************************/
 bool
 ImageViewRenderer
-::CheckGLCapabilities() const
+::CheckGLCapabilities( int * glsl140 ) const
 {
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
   return true;
@@ -128,6 +128,9 @@ ImageViewRenderer
   try
     {
     isOk = otb::GlVersionChecker::CheckGLCapabilities( glVersion, glslVersion );
+
+    if( glsl140!=NULL )
+      *glsl140 = otb::GlVersionChecker::VerCmp( glslVersion, "1.40" );
 
     //
     // Trace runtime OpenGL and GLSL versions.
