@@ -136,6 +136,7 @@ ShaderWidget
       ? ToQString( settings->GetValue() )
       : QString()
     );
+    m_UI->valueLineEdit->setCursorPosition( 0 );
     }
 }
 
