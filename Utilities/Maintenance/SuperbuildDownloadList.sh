@@ -57,3 +57,6 @@ echo "Create archive..."
 
 cd ${OUTPUT_DIR}
 tar -cjf SuperBuild-archives.tar.bz2 -C ${DOWNLOAD_DIR} ${DOWNLOAD_NAMES}
+
+echo "Compute md5sum..."
+md5sum SuperBuild-archives.tar.bz2 >SuperBuild-archives.md5
