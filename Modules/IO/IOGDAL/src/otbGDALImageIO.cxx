@@ -40,7 +40,8 @@
 
 #include "otbGDALDriverManagerWrapper.h"
 
-#include <boost/algorithm/string/predicate.hpp>
+#include "otbStringUtils.h"
+
 #include "otbOGRHelpers.h"
 
 #include "stdint.h" //needed for uintptr_t
@@ -487,9 +488,9 @@ void GDALImageIO::ReadImageInformation()
 }
 
 unsigned int GDALImageIO::GetOverviewsCount()
-{ 
+{
   GDALDataset* dataset = m_Dataset->GetDataSet();
- 
+
   // JPEG2000 case : use the number of overviews actually in the dataset
   if (m_Dataset->IsJPEG2000())
     {
@@ -523,23 +524,23 @@ std::vector<std::string> GDALImageIO::GetOverviewsInfo()
   unsigned lOverviewsCount = this->GetOverviewsCount();
   if ( lOverviewsCount == 0)
     return desc;
-    
+
   unsigned int originalWidth = m_OriginalDimensions[0];
-  unsigned int originalHeight = m_OriginalDimensions[1];  
- 
+  unsigned int originalHeight = m_OriginalDimensions[1];
+
   // Get the overview sizes
   for( unsigned int iOverview = 0; iOverview < lOverviewsCount; iOverview++ )
     {
     // For each resolution we will compute the tile dim and image dim
-    std::ostringstream oss;    
+    std::ostringstream oss;
     unsigned int w = uint_ceildivpow2( originalWidth, iOverview);
     unsigned int h = uint_ceildivpow2( originalHeight, iOverview);
-    
+
     oss << "Overview level: " << iOverview << " (Image [w x h]: " << w << "x" << h << ")";
-    
+
     desc.push_back(oss.str());
     }
-    
+
   return desc;
 }
 
@@ -548,7 +549,7 @@ void GDALImageIO::InternalReadImageInformation()
   itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
                                     MetaDataKey::ResolutionFactor,
                                     m_ResolutionFactor);
-                                    
+
   itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
                                     MetaDataKey::SubDatasetIndex,
                                     m_DatasetNumber);
@@ -1050,9 +1051,17 @@ void GDALImageIO::InternalReadImageInformation()
       std::ostringstream lStream;
       lStream << MetaDataKey::MetadataKey << cpt;
       key = lStream.str();
+      std::vector<std::string> keyvals;
+      Utils::ConvertStringToVector(static_cast<std::string>(papszMetadata[cpt]),keyvals, "=");
+      if(keyvals.size() == 2)
+        {
+        itk::EncapsulateMetaData<std::string>(dict, keyvals[0], static_cast<std::string>(keyvals[1]));
+        }
+      else
+        {
+        otbMsgDevMacro(<< "cannot parse metadata from GDAL. papszMetadata[" << cpt << "] =" << papszMetadata[cpt]  );
+        }
 
-      itk::EncapsulateMetaData<std::string>(dict, key,
-                                            static_cast<std::string>(papszMetadata[cpt]));
       }
     }
 
@@ -1072,13 +1081,13 @@ void GDALImageIO::InternalReadImageInformation()
         {
         std::string key;
         int cptOffset = CSLCount(papszMetadata);
-        
+
         for (int cpt = 0; gmlMetadata[cpt] != NULL; ++cpt)
           {
           std::ostringstream lStream;
           lStream << MetaDataKey::MetadataKey << (cpt+cptOffset);
           key = lStream.str();
-          
+
           itk::EncapsulateMetaData<std::string>(dict, key,
                                                 static_cast<std::string>(gmlMetadata[cpt]));
           }
@@ -1196,7 +1205,7 @@ void GDALImageIO::InternalReadImageInformation()
   // Read no data value if present
   std::vector<bool> isNoDataAvailable(dataset->GetRasterCount(),false);
   std::vector<double> noDataValues(dataset->GetRasterCount(),0);
-  
+
   bool noDataFound = false;
 
   for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
@@ -1204,7 +1213,7 @@ void GDALImageIO::InternalReadImageInformation()
     GDALRasterBandH hBand = GDALGetRasterBand(dataset, iBand + 1);
 
     int success;
-    
+
     double ndv = GDALGetRasterNoDataValue(hBand,&success);
 
     if(success)
@@ -1760,7 +1769,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   // Write no-data flags
   std::vector<bool> noDataValueAvailable;
   bool ret = itk::ExposeMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
-  
+
   std::vector<double> noDataValues;
   itk::ExposeMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValues);
 
