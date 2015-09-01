@@ -334,6 +334,7 @@ ImageSettings
 {
   return
     m_Effect==EFFECT_CHESSBOARD ||
+    m_Effect==EFFECT_GRADIENT ||
     m_Effect==EFFECT_LOCAL_CONTRAST ||
     m_Effect==EFFECT_LOCAL_TRANSLUCENCY ||
     m_Effect==EFFECT_SPECTRAL_ANGLE;
