@@ -19,10 +19,11 @@
 #define otbStringUtils_h
 
 #include <string>
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string.hpp>
 #include <vector>
 #include <cstdlib>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 
 
 namespace boost {
