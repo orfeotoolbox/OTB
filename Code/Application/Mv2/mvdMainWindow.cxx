@@ -170,7 +170,14 @@ MainWindow
       m_ImageView->GetRenderer()==NULL )
     return false;
 
-  return m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 );
+  if( !m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 ) )
+    return false;
+
+  assert( m_ShaderWidget!=NULL );
+
+  m_ShaderWidget->SetGLSL140Enabled( m_GLSL140>=0 );
+
+  return true;
 }
 
 /*****************************************************************************/
@@ -949,7 +956,7 @@ MainWindow
     new QLabel( tr( "Layer FX" ) )
   );
 
-  m_ShaderWidget = new ShaderWidget( m_GLSL140>=0, m_UI->m_ShaderToolBar );
+  m_ShaderWidget = new ShaderWidget( m_UI->m_ShaderToolBar );
 
   m_UI->m_ShaderToolBar->addWidget( m_ShaderWidget );
   }

@@ -68,15 +68,14 @@ namespace mvd
 
 /*******************************************************************************/
 ShaderWidget
-::ShaderWidget( bool hasGLSL140, QWidget * parent, Qt::WindowFlags flags  ):
+::ShaderWidget( QWidget * parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
   m_UI( new mvd::Ui::ShaderWidget() )
 {
   m_UI->setupUi( this );
 
   for( int i=0; i<EFFECT_COUNT; ++i )
-    if( hasGLSL140 || i!=EFFECT_GRADIENT )
-      m_UI->effectComboBox->addItem( EFFECT_NAME[ i ] );
+    m_UI->effectComboBox->addItem( EFFECT_NAME[ i ] );
 
   m_UI->valueLineEdit->setValidator(
     new QDoubleValidator( m_UI->valueLineEdit )
@@ -89,6 +88,22 @@ ShaderWidget
 {
   delete m_UI;
   m_UI = NULL;
+}
+
+/*******************************************************************************/
+void
+ShaderWidget
+::SetGLSL140Enabled( bool isEnabled )
+{
+  int index = m_UI->effectComboBox->findText( EFFECT_NAME[ EFFECT_GRADIENT ] );
+
+  if( isEnabled )
+    {
+    if( index<0 )
+      m_UI->effectComboBox->addItem( EFFECT_NAME[ EFFECT_GRADIENT ] );
+    }
+  else if( index>=0 )
+    m_UI->effectComboBox->removeItem( index );
 }
 
 /*******************************************************************************/

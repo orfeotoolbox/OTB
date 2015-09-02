@@ -93,12 +93,15 @@ class Monteverdi2_EXPORT ShaderWidget :
 public:
 
   /** \brief Constructor. */
-  ShaderWidget( bool hasGLSL140,
-		QWidget * parent =NULL,
+  ShaderWidget( QWidget * parent =NULL,
 		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~ShaderWidget();
+
+  /**
+   */
+  void SetGLSL140Enabled( bool );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
