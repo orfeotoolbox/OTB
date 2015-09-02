@@ -685,6 +685,7 @@ ImageViewRenderer
 
 	    case EFFECT_GRADIENT:
 	      shader->SetShaderType( otb::SHADER_GRADIENT );
+	      shader->SetRadius( settings.GetSize() );
 	      break;
 
 	    case EFFECT_LOCAL_CONTRAST:
