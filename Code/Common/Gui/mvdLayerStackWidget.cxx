@@ -81,6 +81,8 @@ LayerStackWidget
   ism = NULL;
   }
 
+  InstallEventFilter( this );
+
   QObject::connect(
     m_UI->treeView->selectionModel(),
     SIGNAL( currentRowChanged( const QModelIndex &,  const QModelIndex & ) ),
@@ -134,7 +136,7 @@ LayerStackWidget
     SIGNAL( clicked() ),
     // to:
     this,
-    SIGNAL( DeleteButtonClicked() )
+    SIGNAL( DeleteLayerRequested() )
   );
 
   QObject::connect(
@@ -160,6 +162,51 @@ LayerStackWidget
 {
   delete m_UI;
   m_UI = NULL;
+}
+
+/*******************************************************************************/
+bool
+LayerStackWidget
+::eventFilter( QObject * object, QEvent * event )
+{
+  assert( object==m_UI->treeView );
+  assert( event!=NULL );
+
+  if( object!=m_UI->treeView )
+    return false;
+
+  switch( event->type() )
+    {
+    case QEvent::KeyRelease :
+    {
+    QKeyEvent * keyEvent = dynamic_cast< QKeyEvent * >( event );
+    assert( keyEvent!=NULL );
+
+    switch( keyEvent->key() )
+      {
+      case Qt::Key_Delete:
+	if( keyEvent->modifiers()==Qt::NoModifier )
+	  {
+	  emit DeleteLayerRequested();
+
+	  return true;
+	  }
+	else if( keyEvent->modifiers()==Qt::ShiftModifier )
+	  {
+	  emit DeleteAllLayersRequested();
+
+	  return true;
+	  }
+	break;
+      }
+    }
+    break;
+
+    default:
+      break;
+    }
+
+  return false;
 }
 
 /*******************************************************************************/

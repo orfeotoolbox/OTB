@@ -128,8 +128,6 @@ public:
 
   void BeginEditResolutions() {};
 
-  void Clear();
-
   inline bool Contains( const KeyType & key ) const;
   bool Contains( const AbstractLayerModel * ) const;
 
@@ -207,6 +205,7 @@ public:
 //
 // Public SLOTS.
 public slots:
+  void Clear();
   inline void DeleteCurrent();
   inline void LowerCurrent();
   inline void MoveCurrentToBottom();

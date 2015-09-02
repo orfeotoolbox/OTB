@@ -181,10 +181,18 @@ LayerStackController
 
   QObject::connect(
     widget,
-    SIGNAL( DeleteButtonClicked() ),
+    SIGNAL( DeleteLayerRequested() ),
     // to:
     model,
     SLOT( DeleteCurrent() )
+  );
+
+  QObject::connect(
+    widget,
+    SIGNAL( DeleteAllLayersRequested() ),
+    // to:
+    model,
+    SLOT( Clear() )
   );
 
   QObject::connect(
@@ -288,10 +296,18 @@ LayerStackController
 
   QObject::disconnect(
     widget,
-    SIGNAL( DeleteButtonClicked() ),
+    SIGNAL( DeleteLayerRequested() ),
     // from:
     model,
     SLOT( DeleteCurrent() )
+  );
+
+  QObject::disconnect(
+    widget,
+    SIGNAL( DeleteAllLayersRequested() ),
+    // from:
+    model,
+    SLOT( Clear() )
   );
 
   QObject::disconnect(

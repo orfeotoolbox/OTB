@@ -132,6 +132,15 @@ public:
    */
   void InstallEventFilter( QObject * filter );
 
+  //
+  // QObject overloads.
+  //
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qobject.html#eventFilter
+   */
+  virtual bool eventFilter( QObject * watched, QEvent * event );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -163,7 +172,10 @@ signals:
   void DownButtonClicked();
   /**
    */
-  void DeleteButtonClicked();
+  void DeleteLayerRequested();
+  /**
+   */
+  void DeleteAllLayersRequested();
   /**
    */
   void ProjectionButtonClicked();
