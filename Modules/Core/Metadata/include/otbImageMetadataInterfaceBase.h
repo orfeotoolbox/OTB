@@ -107,6 +107,12 @@ public:
   double GetGCPZ(unsigned int GCPnum) const;
 //  otbMetadataGetGCPnumMacro(GCPZ, double, GCPnum, unsigned int);
 
+  /** 
+   * Get The no data flags if existing
+   * return False otherwise
+   */
+  bool GetNoDataFlags(std::vector<bool> & flags, std::vector<double> & values) const;
+
   /** Get the six coefficients of affine geoTtransform. */
 
   VectorType GetGeoTransform() const;

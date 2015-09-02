@@ -222,6 +222,17 @@ ImageMetadataInterfaceBase::GetGCPZ(unsigned int GCPnum) const
   else return (0);
 }
 
+bool
+ImageMetadataInterfaceBase::GetNoDataFlags(std::vector<bool> & flags, std::vector<double> & values) const
+{
+  bool ret = itk::ExposeMetaData<std::vector<bool> >(this->GetMetaDataDictionary(),MetaDataKey::NoDataValueAvailable,flags);
+
+  if (ret)
+    ret = itk::ExposeMetaData<std::vector<double> >(this->GetMetaDataDictionary(),MetaDataKey::NoDataValue,values);
+
+  return ret;
+}
+
 ImageMetadataInterfaceBase::VectorType
 ImageMetadataInterfaceBase::GetGeoTransform() const
 {
