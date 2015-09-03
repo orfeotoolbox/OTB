@@ -50,6 +50,29 @@ namespace otb
 namespace Wrapper
 {
 
+/** \class LearningApplicationBase
+ *  \brief LearningApplicationBase is the base class for application that
+ *         use machine learning model.
+ *
+ * This base class offers a DoInit() method to initialize all the parameters
+ * related to machine learning models. They will all be in the choice parameter
+ * named "classifier". The class also offers generic Train() and Classify()
+ * methods. The classes derived from LearningApplicationBase only need these
+ * 3 methods to handle the machine learning model.
+ *
+ * There are multiple machine learning models in OTB, some imported from OpenCV,
+ * and one imported from LibSVM. They all have different parameters. The
+ * purpose of this class is to handle the creation of all parameters related to
+ * machine learning models (in DoInit() ), and to dispatch the calls to
+ * specific train functions in function Train(). This class also handles the
+ * two learning modes : classification and regression. By default,
+ * classification mode is enabled. For regression, child classes should
+ * initialize the m_RegressionFlag to true in their constructor and use a
+ * continuous numeric type as output template TOutputValue.
+ *
+ * \sa TrainImagesClassifier
+ * \sa TrainRegression
+ */
 template <class TInputValue, class TOutputValue>
 class LearningApplicationBase: public Application
 {
@@ -98,24 +121,29 @@ public:
  
 protected:
   LearningApplicationBase();
-  
-//  using Superclass::AddParameter;
-//  friend void InitSVMParams(LearningApplicationBase & app);
 
+  /** Generic method to train and save the machine learning model. This method
+   * uses specific train methods depending on the chosen model.*/
   void Train(typename ListSampleType::Pointer trainingListSample,
              typename TargetListSampleType::Pointer trainingLabeledListSample,
              std::string modelPath);
 
+  /** Generic method to load a model file and use it to classify a sample list*/
   void Classify(typename ListSampleType::Pointer validationListSample,
                 typename TargetListSampleType::Pointer predictedList,
                 std::string modelPath);
 
+  /** Init method that creates all the parameters for machine learning models */
   void DoInit();
 
+  /** Flag to switch between classification and regression mode.
+   * False by default, child classes may change it in their constructor */
   bool m_RegressionFlag;
 
 private:
 
+  /** Specific Init and Train methods for each machine learning model */
+  //@{
 #ifdef OTB_USE_LIBSVM 
   void InitLibSVMParams();
 
@@ -159,6 +187,7 @@ private:
                 typename TargetListSampleType::Pointer trainingLabeledListSample,
                 std::string modelPath);
 #endif
+  //@}
 };
 
 }

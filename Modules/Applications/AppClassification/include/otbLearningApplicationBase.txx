@@ -37,6 +37,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
 {
   AddDocTag(Tags::Learning);
 
+  // main choice parameter that will contain all machine learning options
   AddParameter(ParameterType_Choice, "classifier", "Classifier to use for the training");
   SetParameterDescription("classifier", "Choice of the classifier to use for the training.");
 
@@ -70,7 +71,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
            typename TargetListSampleType::Pointer predictedList,
            std::string modelPath)
 {
-  //Classification
+  // load a machine learning model from file and predict the input sample list
   ModelPointerType model = ModelFactoryType::CreateMachineLearningModel(modelPath,
                                                                         ModelFactoryType::ReadMode);
 
@@ -93,7 +94,9 @@ LearningApplicationBase<TInputValue,TOutputValue>
         typename TargetListSampleType::Pointer trainingLabeledListSample,
         std::string modelPath)
 {
+  // get the name of the chosen machine learning model
   const std::string modelName = GetParameterString("classifier");
+  // call specific train function
   if (modelName == "libsvm")
     {
 	#ifdef OTB_USE_LIBSVM
