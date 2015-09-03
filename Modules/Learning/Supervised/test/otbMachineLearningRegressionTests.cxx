@@ -306,6 +306,7 @@ int otbSVMRegressionLinearMonovariate(int itkNotUsed(argc),
   SVMType::Pointer regression = SVMType::New();
 
   regression->SetRegressionMode(1);
+  regression->SetSVMType(CvSVM::NU_SVR);
   regression->SetNu(0.5);
   regression->SetKernelType(CvSVM::RBF);
   regression->SetTermCriteriaType(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS);
