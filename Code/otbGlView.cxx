@@ -106,6 +106,8 @@ void GlView::BeforeRendering()
 
 void GlView::AfterRendering()
 {
+  // std::cout << "geometry-changed: FALSE" << std::endl;
+
   m_Settings->SetGeometryChanged(false);
   glPopMatrix();
 }

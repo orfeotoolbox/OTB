@@ -104,6 +104,9 @@ GlImageActor::MetaDataDictionaryType & GlImageActor::GetMetaDataDictionary() con
 
 void GlImageActor::Initialize(const std::string & filename)
 {
+  // std::cout
+  //   << std::hex << this << "::Initialize( '" << filename << "' )" << std::endl;
+
   // First, clean up any previous data
   this->ClearLoadedTiles();
 
@@ -737,6 +740,8 @@ void GlImageActor::UpdateResolution()
 
 void GlImageActor::UpdateTransforms()
 {
+  // std::cout << std::hex << this << "::UpdateTransforms()" << std::endl;
+
   if(m_FileName == "")
     {
     return;
@@ -793,7 +798,7 @@ void GlImageActor::UpdateTransforms()
 
   if( hasChanged )
     {
-    // std::cout << "-> Instanciate @ " << std::hex << this << std::endl;
+    // std::cout << std::hex << this << " -> InstanciateTransform()" << std::endl;
 
     m_ViewportToImageTransform->InstanciateTransform();
     m_ImageToViewportTransform->InstanciateTransform();
