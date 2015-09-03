@@ -107,6 +107,10 @@ signals:
    */
   void FilenameDropped( const QString& filename );
 
+  /**
+   */
+  void FilenamesDropped( const QStringList & );
+
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

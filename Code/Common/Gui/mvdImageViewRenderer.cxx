@@ -361,9 +361,14 @@ ImageViewRenderer
   //
   // Bypass rendering if needed.
   if( IsBypassRenderingEnabled() )
-    return;
+    {
+    // qDebug() << "}\n";
 
-  // qDebug() << this << "-> render";
+    return;
+    }
+
+  // qDebug() << m_GlView.GetPointer() << "::BeforeRendering()";
+  // qDebug() << "{";
 
   //
   // Pre-render scene.
@@ -392,9 +397,12 @@ ImageViewRenderer
   // Post-render scene.
   m_GlView->AfterRendering();
 
+  // qDebug() << "}";
+  // qDebug() << m_GlView.GetPointer() << "::AfterRendering()";
+
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 
-  // qDebug() << "}";
+  // qDebug() << "}\n";
 }
 
 /*****************************************************************************/

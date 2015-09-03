@@ -143,10 +143,10 @@ MainWindow
 
   QObject::connect(
     m_FilenameDragAndDropEventFilter,
-    SIGNAL( FilenameDropped( const QString & ) ),
+    SIGNAL( FilenamesDropped( const QStringList & ) ),
     // to:
     this,
-    SLOT( ImportImage( const QString & ) )
+    SLOT( ImportImages( const QStringList & ) )
   );
 }
 
@@ -1131,14 +1131,36 @@ MainWindow
     stackedLayerModel->SetReference( StackedLayerModel::NIL_INDEX );
 
   //
-  // Activate rendering of image-views.
-  m_ImageView->SetBypassRenderingEnabled( bypassImageView );
-  quicklookView->SetBypassRenderingEnabled( bypassQuicklookView );
-
-  //
   // Set zoom-level which forces image-views refresh.
   if( !hasReference )
     UserZoomExtent();
+
+  //
+  // Activate rendering of image-views.
+  m_ImageView->SetBypassRenderingEnabled( bypassImageView );
+  quicklookView->SetBypassRenderingEnabled( bypassQuicklookView );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::ImportImages( const QStringList & filenames )
+{
+  if( filenames.isEmpty() )
+    return;
+
+  for( QStringList::const_iterator it( filenames.constBegin() );
+       it!=filenames.end();
+       ++it )
+    ImportImage( *it );
+
+  assert( m_ImageView!=NULL );
+  m_ImageView->updateGL();
+
+  ImageViewWidget * quicklookView = GetQuicklookView();
+  assert( quicklookView!=NULL );
+
+  quicklookView->updateGL();
 }
 
 /*****************************************************************************/

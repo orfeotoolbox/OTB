@@ -177,6 +177,8 @@ FilenameDragAndDropEventFilter
 
   QUrlList urls( event->mimeData()->urls() );
 
+  QStringList filenames;
+
   for( QUrlList::const_iterator it( urls.begin() );
        it!=urls.end();
        ++it )
@@ -187,7 +189,9 @@ FilenameDragAndDropEventFilter
     if( it->isLocalFile() )
 #endif  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
       {
-        emit FilenameDropped( it->toLocalFile() );
+      filenames.push_back( it->toLocalFile() );
+
+      emit FilenameDropped( filenames.back() );
       }
     else
       {
@@ -195,6 +199,8 @@ FilenameDragAndDropEventFilter
       }
     }
  
+  emit FilenamesDropped( filenames );
+
   //
   // Eatup event.
   return true;

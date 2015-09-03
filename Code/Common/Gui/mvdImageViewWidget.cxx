@@ -1224,6 +1224,11 @@ ImageViewWidget
   // m_Manipulator->SetSpacing( imageModel->GetSpacing() );
   // m_Manipulator->SetNativeSpacing( imageModel->GetNativeSpacing() );
 
+  assert( m_Renderer!=NULL );
+
+  if( m_Renderer->IsBypassRenderingEnabled() )
+    return;
+
   ZoomToExtent();
 
   updateGL();
