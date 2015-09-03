@@ -50,6 +50,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
  m_OutputP(0)
 {
   this->m_ConfidenceIndex = true;
+  this->m_IsRegressionSupported = true;
 }
 
 
@@ -64,8 +65,16 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::InternalTrain()
+::Train()
 {
+  // Check that the SVM type is compatible with the chosen mode (classif/regression)
+  if ( bool(m_SVMType == CvSVM::NU_SVR || m_SVMType == CvSVM::EPS_SVR) != this->m_RegressionMode)
+    {
+    itkGenericExceptionMacro("SVM type incompatible with chosen mode (classification or regression."
+                             "SVM types for classification are C_SVC, NU_SVC, ONE_CLASS. "
+                             "SVM types for regression are NU_SVR, EPS_SVR");
+    }
+
   //convert listsample to opencv matrix
   cv::Mat samples;
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
@@ -105,21 +114,11 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 
 }
 
-/** Train the machine learning model for classification*/
-template <class TInputValue, class TOutputValue>
-void
-SVMMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
-{
-  m_SVMType = CvSVM::C_SVC;
-  this->InternalTrain();
-}
-
 template <class TInputValue, class TOutputValue>
 typename SVMMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::InternalPredict(const InputSampleType & input, ConfidenceValueType *quality) const
+::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -138,36 +137,6 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
     }
 
   return target;
-}
-
-template <class TInputValue, class TOutputValue>
-typename SVMMachineLearningModel<TInputValue,TOutputValue>
-::TargetSampleType
-SVMMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
-{
-  return this->InternalPredict(input, quality);
-}
-
-/** Train the machine learning model for regression*/
-template <class TInputValue, class TOutputValue>
-void
-SVMMachineLearningModel<TInputValue,TOutputValue>
-::TrainRegression()
-{
-  if(m_SVMType != CvSVM::NU_SVR &&
-     m_SVMType != CvSVM::EPS_SVR)
-    m_SVMType = CvSVM::NU_SVR;
-  this->InternalTrain();
-}
-
-template <class TInputValue, class TOutputValue>
-typename SVMMachineLearningModel<TInputValue,TOutputValue>
-::TargetSampleType
-SVMMachineLearningModel<TInputValue,TOutputValue>
-::PredictRegression(const InputSampleType & input) const
-{
-  return this->InternalPredict(input, NULL);
 }
 
 template <class TInputValue, class TOutputValue>

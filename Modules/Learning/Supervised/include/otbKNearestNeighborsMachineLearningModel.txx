@@ -35,6 +35,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
  m_K(32)
 {
   this->m_ConfidenceIndex = true;
+  this->m_IsRegressionSupported = true;
 }
 
 
@@ -49,7 +50,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 template <class TInputValue, class TTargetValue>
 void
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::TrainClassification()
+::Train()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -63,18 +64,10 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 }
 
 template <class TInputValue, class TTargetValue>
-void
-KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::TrainRegression()
-{
-  TrainClassification();
-}
-
-template <class TInputValue, class TTargetValue>
 typename KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::TargetSampleType
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
+::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -105,15 +98,6 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 
   target[0] = static_cast<TTargetValue>(result);
   return target;
-}
-
-template <class TInputValue, class TTargetValue>
-typename KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::TargetSampleType
-KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::PredictRegression(const InputSampleType & input) const
-{
-  return PredictClassification(input,NULL);
 }
 
 template <class TInputValue, class TTargetValue>

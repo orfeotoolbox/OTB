@@ -35,6 +35,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   m_SVMestimator->SetParametersOptimization(false);
   m_SVMestimator->DoProbabilityEstimates(false);
   //m_SVMestimator->SetEpsilon(1e-6);
+  this->m_IsRegressionSupported = true;
 }
 
 
@@ -49,7 +50,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
+::Train()
 {
   // Set up SVM's parameters
   // CvSVMParams params;
@@ -67,18 +68,10 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::TrainRegression()
-{
-  TrainClassification();
-}
-
-template <class TInputValue, class TOutputValue>
 typename LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
+::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   TargetSampleType target;
 
@@ -112,15 +105,6 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
     }
 
   return target;
-}
-
-template <class TInputValue, class TOutputValue>
-typename LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::TargetSampleType
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::PredictRegression(const InputSampleType & input) const
-{
-  return PredictClassification(input,NULL);
 }
 
 template <class TInputValue, class TOutputValue>

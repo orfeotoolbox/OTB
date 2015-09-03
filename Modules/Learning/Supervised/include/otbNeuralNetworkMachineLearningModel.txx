@@ -43,6 +43,7 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachi
   m_CvMatOfLabels(0)
 {
   this->m_ConfidenceIndex = true;
+  this->m_IsRegressionSupported = true;
 }
 
 template<class TInputValue, class TOutputValue>
@@ -176,17 +177,26 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetupNetworkA
 
 /** Train the machine learning model for classification*/
 template<class TInputValue, class TOutputValue>
-void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TrainClassification()
+void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Train()
 {
   //Transform the targets into a matrix of labels
   cv::Mat matOutputANN;
-  LabelsToMat(this->GetTargetListSample(), matOutputANN);
+  if (this->m_RegressionMode)
+    {
+    // MODE REGRESSION
+    otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(), matOutputANN);
+    }
+  else
+    {
+    // MODE CLASSIFICATION : store the map between internal labels and output labels
+    LabelsToMat(this->GetTargetListSample(), matOutputANN);
+    }
   this->SetupNetworkAndTrain(matOutputANN);
 }
 
 template<class TInputValue, class TOutputValue>
 typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType NeuralNetworkMachineLearningModel<
-  TInputValue, TOutputValue>::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
+  TInputValue, TOutputValue>::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -199,6 +209,15 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
   TargetSampleType target;
   float currentResponse = 0;
   float maxResponse = response.at<float> (0, 0);
+
+  if (this->m_RegressionMode)
+    {
+    // MODE REGRESSION : only output first response
+    target[0] = maxResponse;
+    return target;
+    }
+
+  // MODE CLASSIFICATION : find the highest response
   float secondResponse = -1e10;
   target[0] = m_CvMatOfLabels->data.i[0];
 
@@ -226,33 +245,6 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
     (*quality) = static_cast<ConfidenceValueType>(maxResponse) - static_cast<ConfidenceValueType>(secondResponse);
     }
 
-  return target;
-}
-
-/** Train the machine learning model for regression*/
-template<class TInputValue, class TOutputValue>
-void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TrainRegression()
-{
-  //Transform the targets into an OpenCV matrix
-  cv::Mat matOutputANN;
-  otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(), matOutputANN);
-  this->SetupNetworkAndTrain(matOutputANN);
-}
-
-template<class TInputValue, class TOutputValue>
-typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType NeuralNetworkMachineLearningModel<
-  TInputValue, TOutputValue>::PredictRegression(const InputSampleType & input) const
-{
-  //convert listsample to Mat
-  cv::Mat sample;
-
-  otb::SampleToMat<InputSampleType>(input, sample);
-
-  cv::Mat response;
-  m_ANNModel->predict(sample, response);
-
-  TargetSampleType target;
-  target[0] = response.at<float> (0, 0);
   return target;
 }
 

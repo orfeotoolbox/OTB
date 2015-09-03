@@ -45,7 +45,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
+::Train()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -61,7 +61,7 @@ template <class TInputValue, class TOutputValue>
 typename NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
+::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;

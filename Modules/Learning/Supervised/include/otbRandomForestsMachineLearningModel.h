@@ -59,6 +59,11 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(RandomForestsMachineLearningModel, MachineLearningModel);
 
+  /** Train the machine learning model */
+  virtual void Train();
+  /** Predict values using the model */
+  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+
   /** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="");
 
@@ -135,14 +140,6 @@ protected:
 
   /* /\** Target list sample *\/ */
   /* typename TargetListSampleType::Pointer m_TargetListSample; */
-
-  /** Train the machine learning model */
-  virtual void TrainClassification();
-  /** Predict values using the model */
-  virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
-
-  virtual void TrainRegression();
-  virtual TargetSampleType PredictRegression(const InputSampleType& input) const;
 
 private:
   RandomForestsMachineLearningModel(const Self &); //purposely not implemented

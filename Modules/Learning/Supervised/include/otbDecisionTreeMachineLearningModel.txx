@@ -40,6 +40,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
  m_Use1seRule(true),
  m_TruncatePrunedTree(true)
 {
+  this->m_IsRegressionSupported = true;
 }
 
 
@@ -54,7 +55,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
+::Train()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -79,18 +80,10 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
-DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::TrainRegression()
-{
-  this->TrainClassification();
-}
-
-template <class TInputValue, class TOutputValue>
 typename DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
+::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -112,15 +105,6 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
     }
 
   return target;
-}
-
-template <class TInputValue, class TOutputValue>
-typename DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::TargetSampleType
-DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::PredictRegression(const InputSampleType & input) const
-{
-  return this->PredictClassification(input, NULL);
 }
 
 template <class TInputValue, class TOutputValue>

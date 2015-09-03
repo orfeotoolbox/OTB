@@ -97,10 +97,10 @@ public:
   //@}
 
   /** Train the machine learning model */
-  void Train();
+  virtual void Train() =0;
 
   /** Predict values using the model */
-  TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = NULL) const;
+  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = NULL) const = 0;
 
   /** Classify all samples in InputListSample and fill TargetListSample with the associated label */
   void PredictAll();
@@ -142,8 +142,8 @@ public:
 
   /**\name Use model in regression mode */
   //@{
-  itkSetMacro(RegressionMode,bool);
   itkGetMacro(RegressionMode,bool);
+  void SetRegressionMode(bool flag);
   //@}
 
 protected:
@@ -162,23 +162,14 @@ protected:
   /** Target list sample */
   typename TargetListSampleType::Pointer m_TargetListSample;
 
-  /** Train the machine learning model */
-  virtual void TrainRegression()
-  {
-    itkGenericExceptionMacro(<< "Regression mode not implemented.");
-  }
-  virtual void TrainClassification() = 0;
-  /** Predict values using the model */
-  virtual TargetSampleType PredictRegression(const InputSampleType& input) const
-  {
-  itkGenericExceptionMacro(<< "Regression mode not implemented.");
-  (void)input;
-  }
-
-  virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality = NULL) const = 0;
-
+  /** flag to choose between classification and regression modes */
   bool m_RegressionMode;
   
+  /** flag that indicates if the model supports regression, child
+   *  classes should modify it in their constructor if they support
+   *  regression mode */
+  bool m_IsRegressionSupported;
+
   /** flag that tells if the model support confidence index output */
   bool m_ConfidenceIndex;
 private:

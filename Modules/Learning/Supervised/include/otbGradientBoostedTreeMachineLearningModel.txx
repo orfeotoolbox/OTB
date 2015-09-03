@@ -38,6 +38,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
  m_MaxDepth(3),
  m_UseSurrogates(false)
 {
+  this->m_IsRegressionSupported = true;
 }
 
 
@@ -52,7 +53,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
+::Train()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -75,18 +76,10 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
-GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
-::TrainRegression()
-{
-  this->TrainClassification();
-}
-
-template <class TInputValue, class TOutputValue>
 typename GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
+::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -108,15 +101,6 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
     }
 
   return target;
-}
-
-template <class TInputValue, class TOutputValue>
-typename GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
-::TargetSampleType
-GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
-::PredictRegression(const InputSampleType & input) const
-{
-  return this->PredictClassification(input, NULL);
 }
 
 template <class TInputValue, class TOutputValue>

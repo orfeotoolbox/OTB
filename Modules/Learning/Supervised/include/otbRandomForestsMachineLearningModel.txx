@@ -42,6 +42,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
  m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS)
 {
   this->m_ConfidenceIndex = true;
+  this->m_IsRegressionSupported = true;
 }
 
 
@@ -64,7 +65,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
+::Train()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -106,18 +107,10 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
-RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::TrainRegression()
-{
-  TrainClassification();
-}
-
-template <class TInputValue, class TOutputValue>
 typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & value, ConfidenceValueType *quality) const
+::Predict(const InputSampleType & value, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -136,15 +129,6 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
     }
 
   return target[0];
-}
-
-template <class TInputValue, class TOutputValue>
-typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::TargetSampleType
-RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::PredictRegression(const InputSampleType & value) const
-{
-  return PredictClassification(value, NULL);
 }
 
 template <class TInputValue, class TOutputValue>
