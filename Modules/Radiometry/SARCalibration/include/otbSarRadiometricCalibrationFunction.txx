@@ -45,6 +45,8 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   m_IncidenceAngle->SetConstantValue(CONST_PI_2);
   m_RangeSpreadLoss->SetConstantValue(1.0);
   m_Lut = 0; //new LookupTableBase();
+
+  m_RescalingFactor = 1.0;
 }
 
 /**
@@ -62,6 +64,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   m_AntennaPatternNewGain->SetInputImage(ptr);
   m_AntennaPatternOldGain->SetInputImage(ptr);
   m_RangeSpreadLoss->SetInputImage(ptr);
+
 }
 
 /**
@@ -131,6 +134,10 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     functor.SetLutValue(lutVal * lutVal);
     }
 
+    if (m_ApplyRescalingFactor)
+    {
+    functor.SetRescalingFactor(m_RescalingFactor);
+    }
   const RealType value = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
 
   RealType result = functor(value);

@@ -155,6 +155,10 @@ public:
   itkSetMacro(ApplyLookupDataCorrection, bool);
   itkGetMacro(ApplyLookupDataCorrection, bool);
 
+  itkSetMacro(ApplyRescalingFactor, bool);
+  itkGetMacro(ApplyRescalingFactor, bool);
+
+  itkSetMacro(RescalingFactor, FunctorRealType);
 
 protected:
   SarRadiometricCalibrationFunction();
@@ -167,12 +171,15 @@ protected:
   bool m_ApplyIncidenceAngleCorrection;
   bool m_ApplyRangeSpreadingLossCorrection;
   bool m_ApplyLookupDataCorrection;
+  bool m_ApplyRescalingFactor;
+
 
 private:
   SarRadiometricCalibrationFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
   FunctorRealType             m_Scale;
+  FunctorRealType             m_RescalingFactor;
   ParametricFunctionPointer   m_Noise;
   bool                        m_EnableNoise;
   ParametricFunctionPointer   m_AntennaPatternNewGain;

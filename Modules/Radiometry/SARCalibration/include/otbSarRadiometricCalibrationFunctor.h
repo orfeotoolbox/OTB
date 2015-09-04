@@ -21,6 +21,8 @@
 
 #include "otbMath.h"
 #include "itkNumericTraits.h"
+#include <iomanip>
+#include <iostream>
 
 namespace otb
 {
@@ -52,6 +54,7 @@ public:
     m_AntennaPatternNewGain = 1.0;
     m_RangeSpreadLoss = 1.0;
     m_LutValue = 1.0;
+    m_RescalingFactor = 1.0;
   };
 
   ~SarRadiometricCalibrationFunctor(){};
@@ -67,6 +70,7 @@ public:
     sigma /= m_AntennaPatternNewGain;
     sigma *= m_RangeSpreadLoss;
     sigma /= m_LutValue;
+    sigma /= m_RescalingFactor;
 
     if(sigma < 0.0)
     {
@@ -75,6 +79,14 @@ public:
 
     return static_cast<OutputType>(sigma);
   }
+
+
+  void SetRescalingFactor(RealType value)
+  {
+    m_RescalingFactor = value;
+  }
+
+  RealType  m_RescalingFactor;
 
 
   void SetLutValue(RealType value)

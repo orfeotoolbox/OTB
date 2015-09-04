@@ -54,6 +54,7 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
   function->SetApplyAntennaPatternGain(!apply);
   function->SetApplyIncidenceAngleCorrection(!apply);
   function->SetApplyRangeSpreadingLossCorrection(!apply);
+  function->SetApplyRescalingFactor(!apply);
   function->SetApplyLookupDataCorrection(apply);
 
   function->SetScale(imageMetadataInterface->GetRadiometricCalibrationScale());
@@ -86,19 +87,6 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
     ParametricFunctionPointer   incidenceAngle;
     incidenceAngle = function->GetIncidenceAngle();
     incidenceAngle->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle());
-
-    typename ParametricFunctionType::PointType point;
-    point.Fill(0);
-    typename ParametricFunctionType::PointSetType::PixelType pointValue;
-    pointValue = itk::NumericTraits<typename ParametricFunctionType::PointSetType::PixelType>::Zero;
-    unsigned int nbRecords = imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetNumberOfPoints();
-
-    // Fill the linear system
-    for (unsigned int i = 0; i < nbRecords; ++i)
-      {
-      imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetPoint(i, &point);
-      imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetPointData(i, &pointValue);
-      }
     incidenceAngle->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationIncidenceAnglePolynomialDegree());
     incidenceAngle->EvaluateParametricCoefficient();
     }
@@ -115,6 +103,13 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
     {
     function->SetCalibrationLookupData(imageMetadataInterface->GetCalibrationLookupData("sigma"));
     }
+
+  /*  http://www.e-geos.it/products/pdf/COSMO-SkyMed-Image_Calibration.pdf */
+  if (function->GetApplyRescalingFactor())
+    {
+    function->SetRescalingFactor(imageMetadataInterface->GetRescalingFactor());
+    }
+
   m_Initialized = true;
 
 }
