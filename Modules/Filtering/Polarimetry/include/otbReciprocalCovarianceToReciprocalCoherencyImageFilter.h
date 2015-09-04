@@ -69,7 +69,7 @@ public:
      * \f$ C_{23} = S_{hv}*S_{vv}^* \f$
      * \f$ C_{33} = S_{vv}*S_{vv}^* \f$
      */
-    const ComplexType C11 =  static_cast<ComplexType>(Covariance[0]);
+    /*const ComplexType C11 =  static_cast<ComplexType>(Covariance[0]);
     const ComplexType C12 =  static_cast<ComplexType>(Covariance[1]);
     const ComplexType C13 =  static_cast<ComplexType>(Covariance[2]);
     const ComplexType C22 =  static_cast<ComplexType>(Covariance[3]);
@@ -85,7 +85,26 @@ public:
     result[2] = static_cast<OutputValueType>( C12 + C32 );
     result[3] = static_cast<OutputValueType>( 0.5*(C11 - C13 - C31 + C33) );
     result[4] = static_cast<OutputValueType>( C12 - C32 );
-    result[5] = static_cast<OutputValueType>( 2.0 * C22 );
+    result[5] = static_cast<OutputValueType>( 2.0 * C22 );*/
+    
+    const ComplexType A =  static_cast<ComplexType>(Covariance[0]);
+    const ComplexType B =  static_cast<ComplexType>(Covariance[1]);
+    const ComplexType C =  static_cast<ComplexType>(Covariance[2]);
+    const ComplexType E =  static_cast<ComplexType>(Covariance[3]);
+    const ComplexType F =  static_cast<ComplexType>(Covariance[4]);
+    const ComplexType I =  static_cast<ComplexType>(Covariance[5]);
+    
+    const ComplexType two = ComplexType(2.0, 0.0);
+    const ComplexType rootTwo = ComplexType(vcl_sqrt(2.0), 0.0);
+    
+    result[0] = static_cast<OutputValueType>( I + C + vcl_conj(C) + A );
+    result[1] = static_cast<OutputValueType>( -I - C + vcl_conj(C) + A );
+    result[2] = static_cast<OutputValueType>( rootTwo*B + rootTwo*vcl_conj(F) );
+    result[3] = static_cast<OutputValueType>( I - C - vcl_conj(C) + A );
+    result[4] = static_cast<OutputValueType>( rootTwo*B - rootTwo*vcl_conj(F) );
+    result[5] = static_cast<OutputValueType>( two * E );
+
+    result /= 2.0;
 
     return result;
     }
