@@ -32,23 +32,14 @@ namespace Functor {
  *  Extract from Antennas for radar and communications Harold Mott p 317.
  *
  *  Output value are:
- *  - channel #0 : \f$ 0.25 * (C_{1}+C_{3}+4*C_{2}-2*C_{6}-4*C_{5}-4*C_{9}) \f$
- *  - channel #1 : \f$ 0.25 * (C_{1}-C_{3}+2*C_{5}+2*C_{9} - 0.5\mathcal{i}.(C_{4}+C_{7}+C_{8}) \f$
- *  - channel #2 : \f$ 0.25 * (C_{1}+C_{3}-4*C_{2}-2*C_{6} - \mathcal{i}.(C_{4}+C_{8}) \f$
- *  - channel #3 : \f$ 0.25 * (C_{1}+C_{3}+2*C_{6} \f$
- *  - channel #4 : \f$ 0.25 * (C_{1}-C_{3}+2*C_{5}-2*C_{9} - 0.5\mathcal{i}.(C_{4}-C_{7}+C_{8}) \f$
- *  - channel #5 : \f$ 0.25 * (C_{1}+C_{3}+4*C_{2}-2*C_{6}+4*C_{5}+4*C_{9}) \f$
+ *  - channel #0 : \f$ 0.25 * (C33-i.\sqrt{2}.C23-C13+i.\sqrt{2}.C23^{*}-C13^{*}+2.C22-i.\sqrt{2}.C12+i.\sqrt{2}.C12^{*}+C11) \f$
+ *  - channel #1 : \f$ 0.25 * (i.\sqrt{2}.C33+2.C23-i.\sqrt{2}.C13+i.\sqrt{2}.C13^{*}+2.C12^{*}-i.\sqrt{2}.C11) \f$
+ *  - channel #2 : \f$ 0.25 * (-C33+i.\sqrt{2}.C23+C13+i.\sqrt{2}.C23^{*}+C13^{*}+2.C22-i.\sqrt{2}.C12-i.\sqrt{2}.C12^{*}-C11 ) \f$
+ *  - channel #3 : \f$ 0.25 * (2.C33+2.C13+2.C13^{*}+2.C11)\f$
+ *  - channel #4 : \f$ 0.25 * (i.\sqrt{2}.C33+i.\sqrt{2}.C13+2.C23^{*}-i.\sqrt{2}.C13^{*}+2.C12-i.\sqrt{2}.C11) \f$
+ *  - channel #5 : \f$ 0.25 * (C33+i.\sqrt{2}.C23-C13-i.\sqrt{2}.C23^{*}-C13^{*}+2.C22+i.\sqrt{2}.C12-i.\sqrt{2}.C12^{*}+C11) \f$
  *
- *  Where:
- *  - \f$ C_{1} = S_{hh}*S_{hh}}^{*} = \mathcal{Re}(input[0]) \f$
- *  - \f$ C_{2} = S_{hv}*S_{hv}}^{*} = \mathcal{Re}(input[3]) \f$
- *  - \f$ C_{3} = S_{vv}*S_{vv}}^{*} = \mathcal{Re}(input[5]) \f$
- *  - \f$ C_{4} = \mathcal{Re}(S_{hh}*S_{hv}}^{*}) = \mathcal{Re}(input[1]) \f$
- *  - \f$ C_{5} = \mathcal{Im}(S_{hh}*S_{hv}}^{*}) = \mathcal{Im}(input[1]) \f$
- *  - \f$ C_{6} = \mathcal{Re}(S_{hh}*S_{vv}}^{*}) = \mathcal{Re}(input[2]) \f$
- *  - \f$ C_{7} = \mathcal{Im}(S_{hh}*S_{vv}}^{*}) = \mathcal{Im}(input[2]) \f$
- *  - \f$ C_{8} = \mathcal{Re}(S_{hv}*S_{vv}}^{*}) = \mathcal{Re}(input[4]) \f$
- *  - \f$ C_{9} = \mathcal{Im}(S_{hv}*S_{vv}}^{*} = \mathcal{Im}(input[4])) \f$
+ *  Where Cij are related to the elements of the reciprocal linear covariance matrix.
  *
  * The output pixel has 6 channels : the diagonal and the upper element of the reciprocal matrix.
  * Element are stored from left to right, line by line.
@@ -75,51 +66,25 @@ public:
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
     result.Fill(0.0);
-
-    /*const RealType C1 =  static_cast<RealType>(Covariance[0].real()); // C1  <hh.hh*>
-    const RealType C2 =  static_cast<RealType>(Covariance[3].real()); // C2  <hv.hv*>
-    const RealType C3 =  static_cast<RealType>(Covariance[5].real()); // C3  <vv.vv*>
-    const RealType C4 =  static_cast<RealType>(Covariance[1].real()); // C4  Re<hh.hv*>
-    const RealType C5 =  static_cast<RealType>(Covariance[1].imag()); // C5  Im<hh.hv*>
-    const RealType C6 =  static_cast<RealType>(Covariance[2].real()); // C6  Re<hh.vv*>
-    const RealType C7 =  static_cast<RealType>(Covariance[2].imag()); // C7  Im<hh.vv*>
-    const RealType C8 =  static_cast<RealType>(Covariance[4].real()); // C8  Re<hv.vv*>
-    const RealType C9 =  static_cast<RealType>(Covariance[4].imag()); // C9  Im<hv.vv*>
-
-    const RealType llrrReal = 0.25 * ( C1 + C3 - 4*C2 -2*C6);
-    const RealType llrrImag = -(C4 + C8);
-
-    const RealType lllrReal = 0.25 * ( C1 - C3 - 2*C5 + 2*C9);
-    const RealType lllrImag = -0.5*(C7+C4+C8);
-
-    const RealType rrlrReal = 0.25 * ( C1 -C3 + 2*C5 - 2*C9);
-    const RealType rrlrImag = 0.5 * (C4+C8-C7);
-
-    result[0] = ComplexType(0.25 * ( C1 + C3 + 4*C2 - 2*C6 - 4*C5 - 4*C9));
-    result[1] = ComplexType(lllrReal, lllrImag);
-    result[2] = ComplexType(llrrReal, llrrImag);
-    result[3] = ComplexType(0.25 * ( C1 + C3 + 2*C6));
-    result[4] = ComplexType(rrlrReal, -rrlrImag);
-    result[5] = ComplexType(0.25 * ( C1 + C3 + 4*C2 - 2*C6 + 4*C5 + 4*C9));*/
     
     
-    const ComplexType A =  static_cast<ComplexType>(  Covariance[0]    );     //   <hh.hh*>
-    const ComplexType B =  static_cast<ComplexType>(  Covariance[1]    );     //   <sqrt(2).hh.hv*>
-    const ComplexType C =  static_cast<ComplexType>(  Covariance[2]    );     //   <hh.vv*>
-    const ComplexType E =  static_cast<ComplexType>(  Covariance[3]    );     //   <2.hv.hv*>
-    const ComplexType F =  static_cast<ComplexType>(  Covariance[4]    );     //   <sqrt(2).hv.vv*>
-    const ComplexType I =  static_cast<ComplexType>(  Covariance[5]    );     //   <vv.vv*>
+    const ComplexType C11 =  static_cast<ComplexType>(  Covariance[0]    );     //   <hh.hh*>
+    const ComplexType C12 =  static_cast<ComplexType>(  Covariance[1]    );     //   <sqrt(2).hh.hv*>
+    const ComplexType C13 =  static_cast<ComplexType>(  Covariance[2]    );     //   <hh.vv*>
+    const ComplexType C22 =  static_cast<ComplexType>(  Covariance[3]    );     //   <2.hv.hv*>
+    const ComplexType C23 =  static_cast<ComplexType>(  Covariance[4]    );     //   <sqrt(2).hv.vv*>
+    const ComplexType C33 =  static_cast<ComplexType>(  Covariance[5]    );     //   <vv.vv*>
     
     
     const ComplexType cst1 = ComplexType(0.0, vcl_sqrt(2.0));
     const ComplexType two = ComplexType(2.0, 0 );
 
-    result[0] = static_cast<ComplexType>( I-cst1*F-C+cst1*vcl_conj(F)-vcl_conj(C)+two*E-cst1*B+cst1*vcl_conj(B)+A  ) ;
-    result[1] = static_cast<ComplexType>( cst1*I+two*F-cst1*C+cst1*vcl_conj(C)+two*vcl_conj(B)-cst1*A );
-    result[2] = static_cast<ComplexType>( -I+cst1*F+C+cst1*vcl_conj(F)+vcl_conj(C)+two*E-cst1*B-cst1*vcl_conj(B)-A  ) ;
-    result[3] = static_cast<ComplexType>( two*I+two*C+two*vcl_conj(C)+two*A ) ;
-    result[4] = static_cast<ComplexType>( cst1*I+cst1*C+two*vcl_conj(F)-cst1*vcl_conj(C)+two*B-cst1*A ) ;
-    result[5] = static_cast<ComplexType>( I+cst1*F-C-cst1*vcl_conj(F)-vcl_conj(C)+two*E+cst1*B-cst1*vcl_conj(B)+A ) ;
+    result[0] = static_cast<ComplexType>( C33-cst1*C23-C13+cst1*vcl_conj(C23)-vcl_conj(C13)+two*C22-cst1*C12+cst1*vcl_conj(C12)+C11  ) ;
+    result[1] = static_cast<ComplexType>( cst1*C33+two*C23-cst1*C13+cst1*vcl_conj(C13)+two*vcl_conj(C12)-cst1*C11 );
+    result[2] = static_cast<ComplexType>( -C33+cst1*C23+C13+cst1*vcl_conj(C23)+vcl_conj(C13)+two*C22-cst1*C12-cst1*vcl_conj(C12)-C11  ) ;
+    result[3] = static_cast<ComplexType>( two*C33+two*C13+two*vcl_conj(C13)+two*C11 ) ;
+    result[4] = static_cast<ComplexType>( cst1*C33+cst1*C13+two*vcl_conj(C23)-cst1*vcl_conj(C13)+two*C12-cst1*C11 ) ;
+    result[5] = static_cast<ComplexType>( C33+cst1*C23-C13-cst1*vcl_conj(C23)-vcl_conj(C13)+two*C22+cst1*C12-cst1*vcl_conj(C12)+C11 ) ;
 
 	result /= 4.0;
 
