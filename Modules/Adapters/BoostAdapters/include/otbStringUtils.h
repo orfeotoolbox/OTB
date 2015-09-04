@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <iostream>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/predicate.hpp>
