@@ -155,6 +155,12 @@ SarImageMetadataInterface
   return polynomialDegree;
 }
 
+double
+SarImageMetadataInterface
+::GetRescalingFactor() const
+{
+  return 1.0;
+}
 SarImageMetadataInterface::IndexType
 SarImageMetadataInterface
 ::GetRadiometricCalibrationNoisePolynomialDegree() const

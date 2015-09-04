@@ -85,6 +85,7 @@ public:
     return false;
   }
 
+  virtual double GetRescalingFactor() const;
 
   virtual const std::string GetProductType() const;
 

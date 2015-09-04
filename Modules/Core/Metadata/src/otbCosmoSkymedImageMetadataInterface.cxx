@@ -18,13 +18,15 @@
 
 #include "otbSarImageMetadataInterface.h"
 #include "otbCosmoSkymedImageMetadataInterface.h"
-
 #include "otbMacro.h"
-#include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
+//#include "otbImageKeywordlist.h"
 
 //useful constants
-#include <otbMath.h>
+#include "otbMath.h"
+
+
+#include <iomanip>
+#include <iostream>
 
 namespace otb
 {
@@ -37,7 +39,7 @@ CosmoSkymedImageMetadataInterface
 bool
 CosmoSkymedImageMetadataInterface::CanRead() const
 {
-  std::string sensorID = GetSensorID();
+  std::string sensorID = this->GetSensorID();
 
   if (sensorID.find("CSK") != std::string::npos)
     {
@@ -47,26 +49,114 @@ CosmoSkymedImageMetadataInterface::CanRead() const
     return false;
 }
 
+std::string
+CosmoSkymedImageMetadataInterface::GetSensorID() const
+{
+   std::string sensorId;
+   GetMetadataValueByKey("Mission_ID", sensorId);
+   return sensorId;
+}
+
+CosmoSkymedImageMetadataInterface::PointSetPointer
+CosmoSkymedImageMetadataInterface
+::GetRadiometricCalibrationIncidenceAngle() const
+{
+  PointSetPointer points = PointSetType::New();
+  double refIncidenceAngle = 1.0;
+  std::string refIncidenceAngleCompensation = "";
+
+  GetMetadataValueByKey("Incidence_Angle_Compensation_Geometry", refIncidenceAngleCompensation);
+  if (!refIncidenceAngleCompensation.empty())
+    {
+    GetMetadataValueByKey<double>("Reference_Incidence_Angle", refIncidenceAngle);
+    refIncidenceAngle *=  CONST_PI_180;
+    }
+
+  points->Initialize();
+  PointType p0;
+  p0[0] = 0; p0[0] = 0;
+  points->SetPoint(0, p0);
+  points->SetPointData(0, refIncidenceAngle);
+  return points;
+}
+
+CosmoSkymedImageMetadataInterface::PointSetPointer
+CosmoSkymedImageMetadataInterface
+::GetRadiometricCalibrationRangeSpreadLoss() const
+{
+  PointSetPointer points = PointSetType::New();
+  double rangeSpreadLoss = 0.0;
+  int referenceSlantRange = 1.0;
+  int referenceSlantRangeExponent = 1.0;
+  std::string rangeSpreadLossCompensation = "";
+
+  GetMetadataValueByKey("Range_Spreading_Loss_Compensation_Geometry", rangeSpreadLossCompensation);
+  if (!rangeSpreadLossCompensation.empty())
+    {
+    GetMetadataValueByKey<int>("Reference_Slant_Range", referenceSlantRange);
+    GetMetadataValueByKey<int>("Reference_Slant_Range_Exponent", referenceSlantRangeExponent);
+    rangeSpreadLoss = vcl_pow(referenceSlantRange, 2 * referenceSlantRangeExponent);
+    }
+
+  points->Initialize();
+  PointType p0;
+  p0[0] = 0; p0[0] = 0;
+  points->SetPoint(0, p0);
+  points->SetPointData(0, rangeSpreadLoss);
+  return points;
+}
+
+double
+CosmoSkymedImageMetadataInterface
+::GetRescalingFactor() const
+{
+  std::string calibrationConstantCompensation = "";
+  double rescalingFactor = 1.0;
+  double calibrationConstant = 1.0;
+  GetMetadataValueByKey("Calibration_Constant_Compensation_Flag", calibrationConstantCompensation);
+    if (calibrationConstantCompensation.empty())
+    {
+    std::string prefix = "S01";
+    unsigned int datasetIndex = 1;
+    GetMetadataValueByKey<unsigned int>(MetaDataKey::SubDatasetIndex, datasetIndex);
+    std::string datasetName;
+    std::stringstream strm;
+    strm << "SUBDATASET_" <<  datasetIndex+1 << "_NAME";
+    GetMetadataValueByKey(strm.str().c_str(), datasetName);
+    size_t start = datasetName.find("://");
+    if( start  !=std::string::npos )
+      {
+      datasetName = datasetName.substr(start+3,datasetName.size()-1);
+      size_t end = datasetName.find("/");
+      if( end  !=std::string::npos )
+        {
+        prefix = datasetName.substr(0, end);
+        }
+    }
+    const std::string key = prefix + "_Calibration_Constant";
+
+    GetMetadataValueByKey<double>(key.c_str(), calibrationConstant);
+    }
+
+  GetMetadataValueByKey<double>("Rescaling_Factor", rescalingFactor);
+
+  rescalingFactor  *= rescalingFactor * calibrationConstant;
+  return rescalingFactor;
+}
+
 void
 CosmoSkymedImageMetadataInterface
 ::ParseDateTime(const char* key, std::vector<int>& dateFields) const
 {
   if(dateFields.size() < 1 )
     {
-    //parse from keyword list
     if (!this->CanRead())
       {
-      itkExceptionMacro(<< "Invalid Metadata, not a valid product");
+      itkExceptionMacro(<< "Invalid Metadata, not a valid ComsoSkymed product");
       }
-
-    const ImageKeywordlistType imageKeywordlist  = this->GetImageKeywordlist();
-    if (!imageKeywordlist.HasKey(key))
-      {
-      itkExceptionMacro( << "no key named " << key );
-      }
-
-    const std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
-    Utils::ConvertStringToVector(date_time_str, dateFields, " T:-.");
+    std::string dateTimeUTCString;
+    GetMetadataValueByKey(key, dateTimeUTCString);
+    Utils::ConvertStringToVector(dateTimeUTCString, dateFields, " T:-.");
     }
 }
 
@@ -74,7 +164,7 @@ int
 CosmoSkymedImageMetadataInterface::GetYear() const
 {
   int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  ParseDateTime("Scene_Sensing_Start_UTC", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 0 )
     {
     value = boost::lexical_cast<int>( m_AcquisitionDateFields[0] );
@@ -90,7 +180,7 @@ int
 CosmoSkymedImageMetadataInterface::GetMonth() const
 {
   int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  ParseDateTime("Scene_Sensing_Start_UTC", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 1 )
     {
     value = boost::lexical_cast<int>( m_AcquisitionDateFields[1] );
@@ -106,7 +196,7 @@ int
 CosmoSkymedImageMetadataInterface::GetDay() const
 {
   int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  ParseDateTime("Scene_Sensing_Start_UTC", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 2 )
     {
     value = boost::lexical_cast<int>( m_AcquisitionDateFields[2] );
@@ -122,7 +212,7 @@ int
 CosmoSkymedImageMetadataInterface::GetHour() const
 {
   int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  ParseDateTime("Scene_Sensing_Start_UTC", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 3 )
     {
     value = boost::lexical_cast<int>( m_AcquisitionDateFields[3] );
@@ -138,7 +228,7 @@ int
 CosmoSkymedImageMetadataInterface::GetMinute() const
 {
   int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  ParseDateTime("Scene_Sensing_Start_UTC", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 4 )
     {
     value = boost::lexical_cast<int>( m_AcquisitionDateFields[4] );
@@ -154,7 +244,7 @@ int
 CosmoSkymedImageMetadataInterface::GetProductionYear() const
 {
   int value = 0;
-  ParseDateTime("support_data.date", m_ProductionDateFields);
+  ParseDateTime("Product_Generation_UTC", m_ProductionDateFields);
   if(m_ProductionDateFields.size() > 0 )
     {
     value = boost::lexical_cast<int>( m_ProductionDateFields[0] );
@@ -171,7 +261,7 @@ int
 CosmoSkymedImageMetadataInterface::GetProductionMonth() const
 {
   int value = 0;
-  ParseDateTime("support_data.date", m_ProductionDateFields);
+  ParseDateTime("Product_Generation_UTC", m_ProductionDateFields);
   if(m_ProductionDateFields.size() > 1 )
     {
     value = boost::lexical_cast<int>( m_ProductionDateFields[1] );
@@ -187,7 +277,7 @@ int
 CosmoSkymedImageMetadataInterface::GetProductionDay() const
 {
   int value = 0;
-  ParseDateTime("support_data.date", m_ProductionDateFields);
+  ParseDateTime("Product_Generation_UTC", m_ProductionDateFields);
   if(m_ProductionDateFields.size() > 2 )
     {
     value = boost::lexical_cast<int>( m_ProductionDateFields[2] );
@@ -196,21 +286,6 @@ CosmoSkymedImageMetadataInterface::GetProductionDay() const
     {
     itkExceptionMacro( << "Invalid production day" );
     }
-  return value;
-}
-
-double
-CosmoSkymedImageMetadataInterface::GetPRF() const
-{
-  double value = 0;
-  const ImageKeywordlistType imageKeywordlist  = this->GetImageKeywordlist();
-  if (!imageKeywordlist.HasKey("support_data.pulse_repetition_frequency"))
-    {
-    return value;
-    }
-
-  value = boost::lexical_cast<double> ( imageKeywordlist.GetMetadataByKey("support_data.pulse_repetition_frequency") );
-
   return value;
 }
 
@@ -225,19 +300,48 @@ CosmoSkymedImageMetadataInterface::GetDefaultDisplay() const
 }
 
 double
-CosmoSkymedImageMetadataInterface::GetRSF() const
+CosmoSkymedImageMetadataInterface::GetPRF() const
 {
-  return 0;
+  double prf = 0;
+  std::string prefix = "S01";
+  unsigned int datasetIndex = 1;
+  GetMetadataValueByKey<unsigned int>(MetaDataKey::SubDatasetIndex, datasetIndex);
+  std::string datasetName;
+  std::stringstream strm;
+  strm << "SUBDATASET_" <<  datasetIndex+1 << "_NAME";
+  GetMetadataValueByKey(strm.str().c_str(), datasetName);
+  size_t start = datasetName.find("://");
+  if( start  !=std::string::npos )
+    {
+    datasetName = datasetName.substr(start+3,datasetName.size()-1);
+    size_t end = datasetName.find("/");
+    if( end  !=std::string::npos )
+      {
+      prefix = datasetName.substr(0, end);
+      }
+    }
+
+  const std::string key = prefix + "_PRF";
+  GetMetadataValueByKey<double>(key.c_str(), prf);
+  return prf;
 }
 
 double
 CosmoSkymedImageMetadataInterface::GetRadarFrequency() const
 {
-  return 0;
+  double radarFrequency = 0;
+  GetMetadataValueByKey<double>("Radar_Frequency", radarFrequency);
+  return radarFrequency;
 }
 
 double
 CosmoSkymedImageMetadataInterface::GetCenterIncidenceAngle() const
+{
+  return 0;
+}
+
+double
+CosmoSkymedImageMetadataInterface::GetRSF() const
 {
   return 0;
 }

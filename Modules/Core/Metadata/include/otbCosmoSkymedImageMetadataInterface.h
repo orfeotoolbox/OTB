@@ -19,7 +19,7 @@
 #define __otbSentinel1ImageMetadataInterface_h
 
 #include "otbSarImageMetadataInterface.h"
-
+#include "itkMetaDataObject.h"
 
 namespace otb
 {
@@ -94,6 +94,99 @@ public:
   {
     return false;
   }
+
+  void GetMetadataValueByKey(const char*k, std::string& result) const
+  {
+    const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+
+    if ( dict.HasKey(k) )
+      {
+      //using double here is not working at times.
+      itk::ExposeMetaData<std::string>(dict, k, result);
+      }
+    else
+      {
+//      itkExceptionMacro( << "No metadata entry with  key: '" << k << "' found in GetMetaDataDictionary");
+      }
+  }
+
+
+  template<typename T>
+    void GetMetadataValueByKey(const char*k, T& result) const
+  {
+    const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+
+    if ( dict.HasKey(k) )
+      {
+      std::string v;
+      //using double here is not working at times.
+      itk::ExposeMetaData<std::string>(dict, k, v);
+      //if string do not do lexical_cast
+      result = boost::lexical_cast<double>(v);
+      }
+    else
+      {
+//      itkExceptionMacro( << "No metadata entry with  key: '" << k << "' found in GetMetaDataDictionary");
+      }
+  }
+
+
+  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const;
+
+  PointSetPointer GetRadiometricCalibrationRangeSpreadLoss() const;
+
+
+PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const
+{
+  PointSetPointer points = PointSetType::New();
+
+  points->Initialize();
+  double rangeSpreadLoss = 1.0;
+
+  // const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+
+  // if ( dict.HasKey("Reference_Incidence_Angle") )
+  //   {
+  //   itk::ExposeMetaData<double>(dict, "Reference_Incidence_Angle", rangeSpreadLoss);
+  //   }
+  // else
+  //   {
+  //   itkExceptionMacro( << "No 'Reference_Incidence_Angle' key found in this->GetMetaDataDictionary()")
+  //   }
+
+  PointType p0;   p0[0] = 0; p0[0] = 1;   points->SetPoint(0, p0);
+  points->SetPointData(0, rangeSpreadLoss);
+
+  return points;
+}
+
+
+PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const
+{
+  PointSetPointer points = PointSetType::New();
+
+  points->Initialize();
+  double rangeSpreadLoss = 1.0;
+
+  // const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+
+  // if ( dict.HasKey("Reference_Incidence_Angle") )
+  //   {
+  //   itk::ExposeMetaData<double>(dict, "Reference_Incidence_Angle", rangeSpreadLoss);
+  //   }
+  // else
+  //   {
+  //   itkExceptionMacro( << "No 'Reference_Incidence_Angle' key found in this->GetMetaDataDictionary()")
+  //   }
+
+  PointType p0;   p0[0] = 0; p0[0] = 1;   points->SetPoint(0, p0);
+  points->SetPointData(0, rangeSpreadLoss);
+
+  return points;
+}
+
+
+double GetRescalingFactor() const;
 
 
 /* Helper function to parse date and time into a std::vector<std::string>
