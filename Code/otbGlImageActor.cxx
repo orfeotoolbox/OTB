@@ -752,7 +752,11 @@ void GlImageActor::UpdateTransforms()
 
   bool hasChanged = false;
 
-  if(!settings->GetUseProjection() || m_ViewportToImageTransform.IsNull() || m_ImageToViewportTransform.IsNull())
+  bool geometryChanged = settings->GetGeometryChanged();
+
+  if( ( !settings->GetUseProjection() && geometryChanged ) ||
+      m_ViewportToImageTransform.IsNull() ||
+      m_ImageToViewportTransform.IsNull())
     {
     // std::cout << "Proj: OFF" << std::endl;
 
@@ -761,8 +765,6 @@ void GlImageActor::UpdateTransforms()
 
     hasChanged = true;
     }
-
-  bool geometryChanged = settings->GetGeometryChanged();
 
   // std::cout << std::hex << this << " geometry-changed: " << geometryChanged;
 
