@@ -564,6 +564,7 @@ void GDALImageIO::InternalReadImageInformation()
     {
     // this happen in the case of a hdf file with SUBDATASETS
     // Note: we assume that the datasets are in order
+    //only first subdataset is read if there are multiple subdatasets.
     char** papszMetadata;
     papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
     //TODO: we might want to keep the list of names somewhere, at least the number of datasets
@@ -578,7 +579,11 @@ void GDALImageIO::InternalReadImageInformation()
           otbMsgDevMacro(<< "- key:  " << key);
           otbMsgDevMacro(<< "- name: " << name);
           // check if this is a dataset name
-          if (key.find("_NAME") != std::string::npos) names.push_back(name);
+          if (key.find("_NAME") != std::string::npos)
+            {
+            names.push_back(name);
+            }
+          itk::EncapsulateMetaData<std::string>(this->GetMetaDataDictionary(), key, name);
           }
         }
       }
@@ -1044,24 +1049,13 @@ void GDALImageIO::InternalReadImageInformation()
   papszMetadata = dataset->GetMetadata(NULL);
   if (CSLCount(papszMetadata) > 0)
     {
-    std::string key;
-
+    const std::string defValue= "TRUE";
     for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
       {
-      std::ostringstream lStream;
-      lStream << MetaDataKey::MetadataKey << cpt;
-      key = lStream.str();
-      std::vector<std::string> keyvals;
-      Utils::ConvertStringToVector(static_cast<std::string>(papszMetadata[cpt]),keyvals, "=");
-      if(keyvals.size() == 2)
-        {
-        itk::EncapsulateMetaData<std::string>(dict, keyvals[0], static_cast<std::string>(keyvals[1]));
-        }
-      else
-        {
-        otbMsgDevMacro(<< "cannot parse metadata from GDAL. papszMetadata[" << cpt << "] =" << papszMetadata[cpt]  );
-        }
-
+      std::string mkey;
+      std::string mvalue;
+      Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszMetadata[cpt]), mkey, mvalue, defValue);
+      itk::EncapsulateMetaData<std::string>(dict, mkey, mvalue);
       }
     }
 
@@ -1101,18 +1095,17 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
 
   papszMetadata = dataset->GetMetadata("SUBDATASETS");
+
   if (CSLCount(papszMetadata) > 0)
     {
-    std::string key;
 
+    const std::string defValue= "TRUE";
     for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
       {
-      std::ostringstream lStream;
-      lStream << MetaDataKey::SubMetadataKey << cpt;
-      key = lStream.str();
-
-      itk::EncapsulateMetaData<std::string>(dict, key,
-                                            static_cast<std::string>(papszMetadata[cpt]));
+      std::string mkey;
+      std::string mvalue;
+      Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszMetadata[cpt]), mkey, mvalue, defValue);
+      itk::EncapsulateMetaData<std::string>(dict, "SubMetadata." + mkey, mvalue);
       }
     }
 
