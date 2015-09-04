@@ -20,6 +20,7 @@
 #define __ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
+#include "vcl_complex.h"
 
 namespace otb
  {
@@ -75,7 +76,7 @@ public:
     result.SetSize(m_NumberOfComponentsPerPixel);
     result.Fill(0.0);
 
-    const RealType C1 =  static_cast<RealType>(Covariance[0].real()); // C1  <hh.hh*>
+    /*const RealType C1 =  static_cast<RealType>(Covariance[0].real()); // C1  <hh.hh*>
     const RealType C2 =  static_cast<RealType>(Covariance[3].real()); // C2  <hv.hv*>
     const RealType C3 =  static_cast<RealType>(Covariance[5].real()); // C3  <vv.vv*>
     const RealType C4 =  static_cast<RealType>(Covariance[1].real()); // C4  Re<hh.hv*>
@@ -99,7 +100,28 @@ public:
     result[2] = ComplexType(llrrReal, llrrImag);
     result[3] = ComplexType(0.25 * ( C1 + C3 + 2*C6));
     result[4] = ComplexType(rrlrReal, -rrlrImag);
-    result[5] = ComplexType(0.25 * ( C1 + C3 + 4*C2 - 2*C6 + 4*C5 + 4*C9));
+    result[5] = ComplexType(0.25 * ( C1 + C3 + 4*C2 - 2*C6 + 4*C5 + 4*C9));*/
+    
+    
+    const ComplexType A =  static_cast<ComplexType>(  Covariance[0]    );     //   <hh.hh*>
+    const ComplexType B =  static_cast<ComplexType>(  Covariance[1]    );     //   <sqrt(2).hh.hv*>
+    const ComplexType C =  static_cast<ComplexType>(  Covariance[2]    );     //   <hh.vv*>
+    const ComplexType E =  static_cast<ComplexType>(  Covariance[3]    );     //   <2.hv.hv*>
+    const ComplexType F =  static_cast<ComplexType>(  Covariance[4]    );     //   <sqrt(2).hv.vv*>
+    const ComplexType I =  static_cast<ComplexType>(  Covariance[5]    );     //   <vv.vv*>
+    
+    
+    const ComplexType cst1 = ComplexType(0.0, vcl_sqrt(2.0));
+    const ComplexType two = ComplexType(2.0, 0 );
+
+    result[0] = static_cast<ComplexType>( I-cst1*F-C+cst1*vcl_conj(F)-vcl_conj(C)+two*E-cst1*B+cst1*vcl_conj(B)+A  ) ;
+    result[1] = static_cast<ComplexType>( cst1*I+two*F-cst1*C+cst1*vcl_conj(C)+two*vcl_conj(B)-cst1*A );
+    result[2] = static_cast<ComplexType>( -I+cst1*F+C+cst1*vcl_conj(F)+vcl_conj(C)+two*E-cst1*B-cst1*vcl_conj(B)-A  ) ;
+    result[3] = static_cast<ComplexType>( two*I+two*C+two*vcl_conj(C)+two*A ) ;
+    result[4] = static_cast<ComplexType>( cst1*I+cst1*C+two*vcl_conj(F)-cst1*vcl_conj(C)+two*B-cst1*A ) ;
+    result[5] = static_cast<ComplexType>( I+cst1*F-C-cst1*vcl_conj(F)-vcl_conj(C)+two*E+cst1*B-cst1*vcl_conj(B)+A ) ;
+
+	result /= 4.0;
 
     return result;
     }
