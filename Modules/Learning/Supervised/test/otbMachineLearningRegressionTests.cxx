@@ -219,23 +219,17 @@ int testRegression(SampleGeneratorType& sg, RegressionType& rgrsn, RegressionTes
   rmse = sqrt( rmse / static_cast<double>(param.count) );
   std::cout << "RMSE = "<< rmse << std::endl;
   if(rmse > param.eps)
+    {
+    std::cout << "Failed : RMSE above expected precision !" << std::endl;
     return EXIT_FAILURE;
+    }
 
   return EXIT_SUCCESS;
 }
 
 #ifdef OTB_USE_LIBSVM
-int otbLibSVMRegressionLinearMonovariate(int itkNotUsed(argc),
-                                      char * itkNotUsed(argv) [])
+MachineLearningModelRegressionType::Pointer getLibSVMRegressionModel()
 {
-  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
-
-  RegressionTestParam param;
-  param.vMin = -0.5;
-  param.vMax = 0.5;
-  param.count = 200;
-  param.eps = 0.1;
-
   typedef otb::LibSVMMachineLearningModel<InputValueRegressionType,
                                        TargetValueRegressionType>
     libsvmType;
@@ -245,23 +239,59 @@ int otbLibSVMRegressionLinearMonovariate(int itkNotUsed(argc),
   regression->SetKernelType(RBF);
   regression->SetEpsilon(1e-5);
   regression->SetParameterOptimization(true);
-
-  return testRegression(lfsg,regression,param);
+  return regression.GetPointer();
 }
-#endif
 
-#ifdef OTB_USE_OPENCV
-int otbNeuralNetworkRegressionLinearMonovariate(int itkNotUsed(argc),
-                                                char * itkNotUsed(argv) [])
+int otbLibSVMRegressionTests(int itkNotUsed(argc),
+                             char * itkNotUsed(argv) [])
 {
-  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  int status = EXIT_SUCCESS;
+  int ret;
+  MachineLearningModelRegressionType::Pointer regression;
 
   RegressionTestParam param;
   param.vMin = -0.5;
   param.vMax = 0.5;
-  param.count = 20000;
+  param.count = 200;
   param.eps = 0.1;
 
+  std::cout << "Testing regression on a linear monovariate function" << std::endl;
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  regression = getLibSVMRegressionModel();
+  ret = testRegression(lfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a bilinear function" << std::endl;
+  BilinearFunctionSampleGenerator<PrecisionType> bfsg(2.0,-1.0,1.0);
+  regression = getLibSVMRegressionModel();
+  ret = testRegression(bfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a polynomial function" << std::endl;
+  std::vector<PrecisionType> coeffs;
+  coeffs.push_back(0.0);
+  coeffs.push_back(-1.0);
+  coeffs.push_back(0.0);
+  coeffs.push_back(4.0);
+  PolynomialFunctionSampleGenerator<PrecisionType> pfsg(coeffs);
+  regression = getLibSVMRegressionModel();
+  ret = testRegression(pfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  return status;
+}
+
+#endif
+
+#ifdef OTB_USE_OPENCV
+MachineLearningModelRegressionType::Pointer getNeuralNetworkRegressionModel(unsigned int nbInputVar)
+{
   typedef otb::NeuralNetworkMachineLearningModel<InputValueRegressionType,
                                                  TargetValueRegressionType>
     NeuralNetworkType;
@@ -270,7 +300,7 @@ int otbNeuralNetworkRegressionLinearMonovariate(int itkNotUsed(argc),
   regression->SetRegressionMode(1);
   regression->SetTrainMethod(CvANN_MLP_TrainParams::BACKPROP);
   std::vector<unsigned int> layerSizes;
-  layerSizes.push_back(1);
+  layerSizes.push_back(nbInputVar);
   layerSizes.push_back(5);
   layerSizes.push_back(1);
   regression->SetLayerSizes(layerSizes);
@@ -284,22 +314,57 @@ int otbNeuralNetworkRegressionLinearMonovariate(int itkNotUsed(argc),
   regression->SetTermCriteriaType(CV_TERMCRIT_EPS);
   regression->SetEpsilon(1e-5);
   regression->SetMaxIter(1e4);
-
-  return testRegression(lfsg,regression,param);
+  return regression.GetPointer();
 }
 
-  
-int otbSVMRegressionLinearMonovariate(int itkNotUsed(argc),
-                                      char * itkNotUsed(argv) [])
+int otbNeuralNetworkRegressionTests(int itkNotUsed(argc),
+                                    char * itkNotUsed(argv) [])
 {
-  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  int status = EXIT_SUCCESS;
+  int ret;
+  MachineLearningModelRegressionType::Pointer regression;
 
   RegressionTestParam param;
   param.vMin = -0.5;
   param.vMax = 0.5;
-  param.count = 200;
+  param.count = 20000;
   param.eps = 0.1;
 
+  std::cout << "Testing regression on a linear monovariate function" << std::endl;
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  regression = getNeuralNetworkRegressionModel(1);
+  ret = testRegression(lfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a bilinear function" << std::endl;
+  BilinearFunctionSampleGenerator<PrecisionType> bfsg(2.0,-1.0,1.0);
+  regression = getNeuralNetworkRegressionModel(2);
+  ret = testRegression(bfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a polynomial function" << std::endl;
+  std::vector<PrecisionType> coeffs;
+  coeffs.push_back(0.0);
+  coeffs.push_back(-1.0);
+  coeffs.push_back(0.0);
+  coeffs.push_back(4.0);
+  PolynomialFunctionSampleGenerator<PrecisionType> pfsg(coeffs);
+  regression = getNeuralNetworkRegressionModel(1);
+  ret = testRegression(pfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  return status;
+}
+
+
+MachineLearningModelRegressionType::Pointer getSVMRegressionModel()
+{
   typedef otb::SVMMachineLearningModel<InputValueRegressionType,
                                        TargetValueRegressionType>
     SVMType;
@@ -313,14 +378,15 @@ int otbSVMRegressionLinearMonovariate(int itkNotUsed(argc),
   regression->SetMaxIter(100000);
   regression->SetEpsilon(1e-5);
   regression->SetParameterOptimization(true);
-
-  return testRegression(lfsg,regression,param);
+  return regression.GetPointer();
 }
 
-int otbDecisionTreeRegressionLinearMonovariate(int itkNotUsed(argc),
+int otbSVMRegressionTests(int itkNotUsed(argc),
                                       char * itkNotUsed(argv) [])
 {
-  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  int status = EXIT_SUCCESS;
+  int ret;
+  MachineLearningModelRegressionType::Pointer regression;
 
   RegressionTestParam param;
   param.vMin = -0.5;
@@ -328,19 +394,56 @@ int otbDecisionTreeRegressionLinearMonovariate(int itkNotUsed(argc),
   param.count = 200;
   param.eps = 0.1;
 
+  std::cout << "Testing regression on a linear monovariate function" << std::endl;
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  regression = getSVMRegressionModel();
+  ret = testRegression(lfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a bilinear function" << std::endl;
+  BilinearFunctionSampleGenerator<PrecisionType> bfsg(2.0,-1.0,1.0);
+  regression = getSVMRegressionModel();
+  ret = testRegression(bfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a polynomial function" << std::endl;
+  std::vector<PrecisionType> coeffs;
+  coeffs.push_back(0.0);
+  coeffs.push_back(-1.0);
+  coeffs.push_back(0.0);
+  coeffs.push_back(4.0);
+  PolynomialFunctionSampleGenerator<PrecisionType> pfsg(coeffs);
+  regression = getSVMRegressionModel();
+  ret = testRegression(pfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  return status;
+}
+
+
+MachineLearningModelRegressionType::Pointer getDecisionTreeRegressionModel()
+{
   typedef otb::DecisionTreeMachineLearningModel<InputValueRegressionType,
                                        TargetValueRegressionType>
     DTreeType;
   DTreeType::Pointer regression = DTreeType::New();
   regression->SetRegressionMode(true);
-
-  return testRegression(lfsg,regression,param);
+  regression->SetRegressionAccuracy(0.005);
+  return regression.GetPointer();
 }
 
-int otbGradientBoostedTreeRegressionLinearMonovariate(int itkNotUsed(argc),
+int otbDecisionTreeRegressionTests(int itkNotUsed(argc),
                                       char * itkNotUsed(argv) [])
 {
-  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  int status = EXIT_SUCCESS;
+  int ret;
+  MachineLearningModelRegressionType::Pointer regression;
 
   RegressionTestParam param;
   param.vMin = -0.5;
@@ -348,20 +451,61 @@ int otbGradientBoostedTreeRegressionLinearMonovariate(int itkNotUsed(argc),
   param.count = 200;
   param.eps = 0.1;
 
+  std::cout << "Testing regression on a linear monovariate function" << std::endl;
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  regression = getDecisionTreeRegressionModel();
+  ret = testRegression(lfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a bilinear function" << std::endl;
+  BilinearFunctionSampleGenerator<PrecisionType> bfsg(2.0,-1.0,1.0);
+  regression = getDecisionTreeRegressionModel();
+  // increase the number of training samples for bilinear function
+  param.count = 1000;
+  ret = testRegression(bfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a polynomial function" << std::endl;
+  std::vector<PrecisionType> coeffs;
+  coeffs.push_back(0.0);
+  coeffs.push_back(-1.0);
+  coeffs.push_back(0.0);
+  coeffs.push_back(4.0);
+  PolynomialFunctionSampleGenerator<PrecisionType> pfsg(coeffs);
+  param.count = 200;
+  regression = getDecisionTreeRegressionModel();
+  ret = testRegression(pfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  return status;
+}
+
+
+MachineLearningModelRegressionType::Pointer getGradientBoostedTreeRegressionModel()
+{
   typedef otb::GradientBoostedTreeMachineLearningModel<InputValueRegressionType,
                                        TargetValueRegressionType>
     GBTreeType;
   GBTreeType::Pointer regression = GBTreeType::New();
   regression->SetRegressionMode(true);
+  regression->SetShrinkage(0.1);
+  regression->SetSubSamplePortion(0.8);
   regression->SetLossFunctionType(CvGBTrees::SQUARED_LOSS);
-
-  return testRegression(lfsg,regression,param);
+  return regression.GetPointer();
 }
 
-int otbKNearestNeighborsRegressionLinearMonovariate(int itkNotUsed(argc),
+int otbGradientBoostedTreeRegressionTests(int itkNotUsed(argc),
                                       char * itkNotUsed(argv) [])
 {
-  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  int status = EXIT_SUCCESS;
+  int ret;
+  MachineLearningModelRegressionType::Pointer regression;
 
   RegressionTestParam param;
   param.vMin = -0.5;
@@ -369,20 +513,59 @@ int otbKNearestNeighborsRegressionLinearMonovariate(int itkNotUsed(argc),
   param.count = 200;
   param.eps = 0.1;
 
+  std::cout << "Testing regression on a linear monovariate function" << std::endl;
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  regression = getGradientBoostedTreeRegressionModel();
+  ret = testRegression(lfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a bilinear function" << std::endl;
+  BilinearFunctionSampleGenerator<PrecisionType> bfsg(2.0,-1.0,1.0);
+  // increase number of training samples for bilinear function
+  param.count = 1000;
+  regression = getGradientBoostedTreeRegressionModel();
+  ret = testRegression(bfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a polynomial function" << std::endl;
+  std::vector<PrecisionType> coeffs;
+  coeffs.push_back(0.0);
+  coeffs.push_back(-1.0);
+  coeffs.push_back(0.0);
+  coeffs.push_back(4.0);
+  PolynomialFunctionSampleGenerator<PrecisionType> pfsg(coeffs);
+  param.count = 200;
+  regression = getGradientBoostedTreeRegressionModel();
+  ret = testRegression(pfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  return status;
+}
+
+
+MachineLearningModelRegressionType::Pointer getKNearestNeighborsRegressionModel()
+{
   typedef otb::KNearestNeighborsMachineLearningModel<InputValueRegressionType,
                                        TargetValueRegressionType>
     KNNType;
   KNNType::Pointer regression = KNNType::New();
   regression->SetRegressionMode(true);
   regression->SetK(1);
-
-  return testRegression(lfsg,regression,param);
+  return regression.GetPointer();
 }
 
-int otbRandomForestsRegressionLinearMonovariate(int itkNotUsed(argc),
+int otbKNearestNeighborsRegressionTests(int itkNotUsed(argc),
                                       char * itkNotUsed(argv) [])
 {
-  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  int status = EXIT_SUCCESS;
+  int ret;
+  MachineLearningModelRegressionType::Pointer regression;
 
   RegressionTestParam param;
   param.vMin = -0.5;
@@ -390,12 +573,96 @@ int otbRandomForestsRegressionLinearMonovariate(int itkNotUsed(argc),
   param.count = 200;
   param.eps = 0.1;
 
+  std::cout << "Testing regression on a linear monovariate function" << std::endl;
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  regression = getKNearestNeighborsRegressionModel();
+  ret = testRegression(lfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a bilinear function" << std::endl;
+  BilinearFunctionSampleGenerator<PrecisionType> bfsg(2.0,-1.0,1.0);
+  regression = getKNearestNeighborsRegressionModel();
+  ret = testRegression(bfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a polynomial function" << std::endl;
+  std::vector<PrecisionType> coeffs;
+  coeffs.push_back(0.0);
+  coeffs.push_back(-1.0);
+  coeffs.push_back(0.0);
+  coeffs.push_back(4.0);
+  PolynomialFunctionSampleGenerator<PrecisionType> pfsg(coeffs);
+  regression = getKNearestNeighborsRegressionModel();
+  ret = testRegression(pfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  return status;
+}
+
+
+MachineLearningModelRegressionType::Pointer getRandomForestsRegressionModel()
+{
   typedef otb::RandomForestsMachineLearningModel<InputValueRegressionType,
                                        TargetValueRegressionType>
     RFType;
   RFType::Pointer regression = RFType::New();
   regression->SetRegressionMode(true);
+  regression->SetRegressionAccuracy(0.005);
+  return regression.GetPointer();
+}
 
-  return testRegression(lfsg,regression,param);
+
+int otbRandomForestsRegressionTests(int itkNotUsed(argc),
+                                      char * itkNotUsed(argv) [])
+{
+  int status = EXIT_SUCCESS;
+  int ret;
+  MachineLearningModelRegressionType::Pointer regression;
+
+  RegressionTestParam param;
+  param.vMin = -0.5;
+  param.vMax = 0.5;
+  param.count = 200;
+  param.eps = 0.1;
+
+  std::cout << "Testing regression on a linear monovariate function" << std::endl;
+  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
+  regression = getRandomForestsRegressionModel();
+  ret = testRegression(lfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a bilinear function" << std::endl;
+  BilinearFunctionSampleGenerator<PrecisionType> bfsg(2.0,-1.0,1.0);
+  // increase number of training samples for bilinear function
+  param.count = 1000;
+  regression = getRandomForestsRegressionModel();
+  ret = testRegression(bfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  std::cout << "Testing regression on a polynomial function" << std::endl;
+  std::vector<PrecisionType> coeffs;
+  coeffs.push_back(0.0);
+  coeffs.push_back(-1.0);
+  coeffs.push_back(0.0);
+  coeffs.push_back(4.0);
+  PolynomialFunctionSampleGenerator<PrecisionType> pfsg(coeffs);
+  param.count = 200;
+  regression = getRandomForestsRegressionModel();
+  ret = testRegression(pfsg,regression,param);
+  if (ret == EXIT_FAILURE)
+    {
+    status = EXIT_FAILURE;
+    }
+  return status;
 }
 #endif

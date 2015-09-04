@@ -11,28 +11,28 @@ otb_add_test(NAME leTvANNMachineLearningModel COMMAND otbSupervisedTestDriver
   )
 
 # ------------------ Regression tests --------------------
-otb_add_test(NAME leTvANNMachineLearningModelRegLinMono COMMAND otbSupervisedTestDriver
-  otbNeuralNetworkRegressionLinearMonovariate
+otb_add_test(NAME leTvANNMachineLearningModelReg COMMAND otbSupervisedTestDriver
+  otbNeuralNetworkRegressionTests
   )
 
-otb_add_test(NAME leTvSVMMachineLearningModelRegLinMono COMMAND otbSupervisedTestDriver
-  otbSVMRegressionLinearMonovariate
+otb_add_test(NAME leTvSVMMachineLearningModelReg COMMAND otbSupervisedTestDriver
+  otbSVMRegressionTests
   )
 
-otb_add_test(NAME leTvDecisionTreeMachineLearningModelRegLinMono COMMAND otbSupervisedTestDriver
-  otbDecisionTreeRegressionLinearMonovariate
+otb_add_test(NAME leTvDecisionTreeMachineLearningModelReg COMMAND otbSupervisedTestDriver
+  otbDecisionTreeRegressionTests
   )
 
-otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModelRegLinMono COMMAND otbSupervisedTestDriver
-  otbGradientBoostedTreeRegressionLinearMonovariate
+otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModelReg COMMAND otbSupervisedTestDriver
+  otbGradientBoostedTreeRegressionTests
   )
 
-otb_add_test(NAME leTvKNearestNeighborsMachineLearningModelRegLinMono COMMAND otbSupervisedTestDriver
-  otbKNearestNeighborsRegressionLinearMonovariate
+otb_add_test(NAME leTvKNearestNeighborsMachineLearningModelReg COMMAND otbSupervisedTestDriver
+  otbKNearestNeighborsRegressionTests
   )
 
-otb_add_test(NAME leTvRandomForestsMachineLearningModelRegLinMono COMMAND otbSupervisedTestDriver
-  otbRandomForestsRegressionLinearMonovariate
+otb_add_test(NAME leTvRandomForestsMachineLearningModelReg COMMAND otbSupervisedTestDriver
+  otbRandomForestsRegressionTests
   )
 # --------------------------------------------------------------
 
