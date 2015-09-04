@@ -72,7 +72,7 @@ otb_add_test(NAME saTuReciprocalLinearCovarianceToReciprocalCircularCovarianceIm
   )
 
 otb_add_test(NAME saTvReciprocalCovarianceToReciprocalCoherencyImageFilter COMMAND otbPolarimetryTestDriver
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMLCToCoherencyImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
   ${TEMP}/saTvMLCToCoherencyImageFilter.tif
   otbReciprocalCovarianceToReciprocalCoherencyImageFilter
   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
@@ -291,7 +291,7 @@ otb_add_test(NAME saTvSinclairReciprocalImageFilter_SinclairToReciprocalCoherenc
  
 
 otb_add_test(NAME saTvReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter COMMAND otbPolarimetryTestDriver
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix.tif
   ${TEMP}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
   otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
