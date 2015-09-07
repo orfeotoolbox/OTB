@@ -130,6 +130,9 @@
        <property name="toolTip">
         <string>Reload data file</string>
        </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
        <property name="text">
         <string/>
        </property>

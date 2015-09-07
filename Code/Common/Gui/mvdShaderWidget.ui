@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="locale">
+   <locale language="C" country="AnyCountry"/>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="spacing">
     <number>3</number>
