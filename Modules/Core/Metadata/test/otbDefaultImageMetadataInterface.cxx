@@ -31,6 +31,26 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
 
   hasRisedException = false;
 
+  const std::string sensorId = obj->GetSensorID();
+
+  std::cout << "SensorID:" << sensorId  << std::endl;
+
+  if( sensorId.empty() ||  sensorId != "UNKNOWN")
+    {
+    std::cerr << " Should has raise an exception 'GetSensorID()' !" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  const std::string imageId = obj->GetImageID();
+
+  std::cout  << "ImageID:" << imageId  << std::endl;
+
+  if( imageId.empty() ||  imageId != "UNKNOWN")
+    {
+    std::cerr << " Should has raise an exception 'GetImageID()' !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
   try
     {
       std::cout << obj->GetPhysicalBias() << std::endl;
