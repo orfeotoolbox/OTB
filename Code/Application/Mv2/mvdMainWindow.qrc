@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icons">
+    <file alias="action_LayerDeleteAll_Icon">../../../Data/Icons/layers-remove_24x24.png</file>
     <file alias="action_Reload_Icon">../../../Data/Icons/reload_24x24.png</file>
     <file alias="action_ApplyAll_Icon">../../../Data/Icons/check_24x24.png</file>
     <file alias="action_LayerProjection_Icon">../../../Data/Icons/projection_24x24.png</file>

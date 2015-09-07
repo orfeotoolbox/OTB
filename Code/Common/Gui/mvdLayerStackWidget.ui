@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>272</width>
+    <width>305</width>
     <height>124</height>
    </rect>
   </property>
@@ -22,6 +22,9 @@
    </property>
    <item row="1" column="0">
     <widget class="QTreeView" name="treeView">
+     <property name="locale">
+      <locale language="C" country="AnyCountry"/>
+     </property>
      <property name="dragEnabled">
       <bool>false</bool>
      </property>
@@ -46,6 +49,9 @@
        <property name="toolTip">
         <string>Move selected layer to top of stack</string>
        </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -59,6 +65,9 @@
       <widget class="QToolButton" name="upButton">
        <property name="toolTip">
         <string>Move selected layer up within the stack</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
        </property>
        <property name="text">
         <string/>
@@ -74,6 +83,9 @@
        <property name="toolTip">
         <string>Move selected layer down within the stack</string>
        </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -87,6 +99,9 @@
       <widget class="QToolButton" name="bottomButton">
        <property name="toolTip">
         <string>Move selected layer to bottom of stack</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
        </property>
        <property name="text">
         <string/>
@@ -102,6 +117,9 @@
        <property name="toolTip">
         <string>Use selected layer as projection reference</string>
        </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -115,6 +133,9 @@
       <widget class="QToolButton" name="applyButton">
        <property name="toolTip">
         <string>Apply all display settings (color-setup, color-dynamics, shader etc.) of selected layer to all other layers</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
        </property>
        <property name="text">
         <string/>
@@ -144,6 +165,9 @@
      </item>
      <item>
       <spacer name="horizontalSpacer">
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -156,9 +180,29 @@
       </spacer>
      </item>
      <item>
+      <widget class="QToolButton" name="deleteAllButton">
+       <property name="toolTip">
+        <string>Delete all layers</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerDeleteAll_Icon</normaloff>:/icons/action_LayerDeleteAll_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="deleteButton">
        <property name="toolTip">
         <string>Delete selected layer</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
        </property>
        <property name="text">
         <string/>
