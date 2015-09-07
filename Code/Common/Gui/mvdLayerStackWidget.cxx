@@ -72,6 +72,8 @@ LayerStackWidget
 {
   m_UI->setupUi( this );
 
+  m_UI->reloadButton->setVisible( false );
+
   {
   QItemSelectionModel * ism = m_UI->treeView->selectionModel();
 
