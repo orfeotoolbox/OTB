@@ -53,6 +53,16 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
+  std::string GetSensorID() const
+  {
+    return "UNKNOWN";
+  }
+
+  std::string GetImageID() const
+  {
+    return "UNKNOWN";
+  }
+
   /** Get the radiometric bias from the ossim metadata */
   VariableLengthVectorType GetPhysicalBias() const
   {
