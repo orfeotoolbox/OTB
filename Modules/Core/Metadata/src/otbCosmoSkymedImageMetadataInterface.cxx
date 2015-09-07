@@ -150,6 +150,22 @@ CosmoSkymedImageMetadataInterface
   rescalingFactor  *= rescalingFactor * calibrationConstant;
   return rescalingFactor;
 }
+void
+CosmoSkymedImageMetadataInterface
+::GetValueFromMetadataDictionary(const char*k, std::string& result) const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+
+  if ( dict.HasKey(k) )
+    {
+    //using double here is not working at times.
+    itk::ExposeMetaData<std::string>(dict, k, result);
+    }
+  else
+    {
+    // itkExceptionMacro( << "No metadata entry with  key: '" << k << "' found in GetMetaDataDictionary");
+    }
+  }
 
 void
 CosmoSkymedImageMetadataInterface

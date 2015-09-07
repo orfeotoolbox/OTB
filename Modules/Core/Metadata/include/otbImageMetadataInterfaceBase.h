@@ -136,7 +136,7 @@ public:
   //otbMetadataGetMacro(SensorID, std::string);
 
   /** Get the number of bands from the ossim metadata */
-  unsigned int GetNumberOfBands() const;
+  virtual unsigned int GetNumberOfBands() const;
   //otbMetadataGetMacro(NumberOfBands, unsigned int);
 
   /** Get the band name from the ossim metadata */

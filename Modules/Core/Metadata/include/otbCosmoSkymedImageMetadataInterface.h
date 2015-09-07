@@ -97,20 +97,7 @@ public:
 
   std::string GetImageID() const;
 
-  void GetValueFromMetadataDictionary(const char*k, std::string& result) const
-  {
-    const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-    if ( dict.HasKey(k) )
-      {
-      //using double here is not working at times.
-      itk::ExposeMetaData<std::string>(dict, k, result);
-      }
-    else
-      {
-//      itkExceptionMacro( << "No metadata entry with  key: '" << k << "' found in GetMetaDataDictionary");
-      }
-  }
+  void GetValueFromMetadataDictionary(const char*k, std::string& result) const;
 
 
   template<typename T>
@@ -132,63 +119,17 @@ public:
       }
   }
 
+  /*GDALImageIO must export number of bands to have the correct value */
+  unsigned int GetNumberOfBands() const
+  {
+  return 2;
+  }
 
   PointSetPointer GetRadiometricCalibrationIncidenceAngle() const;
 
   PointSetPointer GetRadiometricCalibrationRangeSpreadLoss() const;
 
-
-PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const
-{
-  PointSetPointer points = PointSetType::New();
-
-  points->Initialize();
-  double rangeSpreadLoss = 1.0;
-
-  // const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  // if ( dict.HasKey("Reference_Incidence_Angle") )
-  //   {
-  //   itk::ExposeMetaData<double>(dict, "Reference_Incidence_Angle", rangeSpreadLoss);
-  //   }
-  // else
-  //   {
-  //   itkExceptionMacro( << "No 'Reference_Incidence_Angle' key found in this->GetMetaDataDictionary()")
-  //   }
-
-  PointType p0;   p0[0] = 0; p0[0] = 1;   points->SetPoint(0, p0);
-  points->SetPointData(0, rangeSpreadLoss);
-
-  return points;
-}
-
-
-PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const
-{
-  PointSetPointer points = PointSetType::New();
-
-  points->Initialize();
-  double rangeSpreadLoss = 1.0;
-
-  // const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  // if ( dict.HasKey("Reference_Incidence_Angle") )
-  //   {
-  //   itk::ExposeMetaData<double>(dict, "Reference_Incidence_Angle", rangeSpreadLoss);
-  //   }
-  // else
-  //   {
-  //   itkExceptionMacro( << "No 'Reference_Incidence_Angle' key found in this->GetMetaDataDictionary()")
-  //   }
-
-  PointType p0;   p0[0] = 0; p0[0] = 1;   points->SetPoint(0, p0);
-  points->SetPointData(0, rangeSpreadLoss);
-
-  return points;
-}
-
-
-double GetRescalingFactor() const;
+  double GetRescalingFactor() const;
 
 
 /* Helper function to parse date and time into a std::vector<std::string>
