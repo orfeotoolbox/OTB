@@ -197,6 +197,14 @@ LayerStackController
 
   QObject::connect(
     widget,
+    SIGNAL( RotateLayersRequested( int ) ),
+    // to:
+    model,
+    SLOT( RotateLayers( int ) )
+  );
+
+  QObject::connect(
+    widget,
     SIGNAL( ApplyButtonClicked() ),
     // to:
     this,
@@ -308,6 +316,14 @@ LayerStackController
     // from:
     model,
     SLOT( Clear() )
+  );
+
+  QObject::disconnect(
+    widget,
+    SIGNAL( RotateLayersRequested( int ) ),
+    // from:
+    model,
+    SLOT( RotateLayers( int ) )
   );
 
   QObject::disconnect(

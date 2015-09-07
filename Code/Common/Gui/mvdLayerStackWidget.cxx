@@ -39,6 +39,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Gui/mvdGui.h"
 #include "Gui/mvdLayerStackItemModel.h"
 
 namespace mvd
@@ -179,6 +180,8 @@ LayerStackWidget
 
   switch( event->type() )
     {
+    //
+    // KEY RELEASE
     case QEvent::KeyRelease :
     {
     QKeyEvent * keyEvent = dynamic_cast< QKeyEvent * >( event );
@@ -203,7 +206,25 @@ LayerStackWidget
       }
     }
     break;
+    //
+    // MOUSE-WHEEL
+    case QEvent::Wheel :
+    {
+    QWheelEvent * wheelEvent = dynamic_cast< QWheelEvent * >( event );
+    assert( wheelEvent!=NULL );
 
+    if( wheelEvent->modifiers()==Qt::ControlModifier )
+      {
+      emit RotateLayersRequested(
+    	wheelEvent->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)
+      );
+
+      return true;
+      }
+    }
+    break;
+    //
+    // other.
     default:
       break;
     }

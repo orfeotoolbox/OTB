@@ -178,6 +178,9 @@ signals:
   void DeleteAllLayersRequested();
   /**
    */
+  void RotateLayersRequested( int );
+  /**
+   */
   void ProjectionButtonClicked();
   /**
    */
