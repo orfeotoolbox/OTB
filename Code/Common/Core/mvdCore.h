@@ -100,6 +100,48 @@ extern Monteverdi2_EXPORT
 const char*
 RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ];
 
+/**
+ */
+enum Bound
+{
+  BOUND_LOWER = 0,
+  BOUND_UPPER,
+  BOUND_COUNT
+};
+
+/**
+ * Constant naming bound values.
+ */
+extern
+const char*
+BOUND_NAMES[ BOUND_COUNT ];
+
+/**
+ */
+enum Effect
+{
+  EFFECT_NONE = -1,
+  //
+  EFFECT_CHESSBOARD = 0,
+  EFFECT_GRADIENT,
+  EFFECT_LOCAL_CONTRAST,
+  EFFECT_LOCAL_TRANSLUCENCY,
+  EFFECT_NORMAL,
+  EFFECT_SPECTRAL_ANGLE,
+  EFFECT_SWIPE_H,
+  EFFECT_SWIPE_V,
+  //
+  EFFECT_COUNT
+};
+
+/**
+ * Constant naming effect values.
+ */
+Monteverdi2_EXPORT
+extern
+char const * const
+EFFECT_NAME[ EFFECT_COUNT ];
+
 } // end of namespace mvd.
 
 

@@ -42,6 +42,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdCore.h"
 #include "Gui/mvdAbstractImageViewRenderer.h"
 
 #define USE_XP_REGION_OPTIM 0

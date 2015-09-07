@@ -54,6 +54,7 @@
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdAbstractModel.h"
 #include "mvdAlgorithm.h"
+#include "mvdCore.h"
 #include "mvdSerializableInterface.h"
 #endif //tag=QT4-boost-compatibility
 
