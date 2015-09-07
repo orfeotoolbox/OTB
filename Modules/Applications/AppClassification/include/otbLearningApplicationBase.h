@@ -64,11 +64,17 @@ namespace Wrapper
  * and one imported from LibSVM. They all have different parameters. The
  * purpose of this class is to handle the creation of all parameters related to
  * machine learning models (in DoInit() ), and to dispatch the calls to
- * specific train functions in function Train(). This class also handles the
- * two learning modes : classification and regression. By default,
- * classification mode is enabled. For regression, child classes should
- * initialize the m_RegressionFlag to true in their constructor and use a
- * continuous numeric type as output template TOutputValue.
+ * specific train functions in function Train().
+ *
+ * This class is templated over scalar types for input and output values.
+ * Typically, the input value type will be either float of double. The choice
+ * of an output value type depends on the learning mode. This base class
+ * supports both classification and regression modes. For classification
+ * (enabled by default), the output value type corresponds to a class
+ * identifier so integer types suit well. For regression, the output value
+ * should not be an integer type, but rather a floating point type. In addition,
+ * an application deriving this base class for regression should initialize
+ * the m_RegressionFlag to true in their constructor.
  *
  * \sa TrainImagesClassifier
  * \sa TrainRegression
