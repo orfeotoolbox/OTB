@@ -143,6 +143,14 @@ LayerStackWidget
   );
 
   QObject::connect(
+    m_UI->deleteAllButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( DeleteAllLayersRequested() )
+  );
+
+  QObject::connect(
     m_UI->projectionButton,
     SIGNAL( clicked() ),
     // to:
