@@ -496,6 +496,20 @@ bool ossimRadarSat2ProductDoc::initGsd(const ossimXmlDocument* xdoc,
    return result;
 }
 
+
+
+bool ossimRadarSat2ProductDoc::getAcquistionDate(const ossimXmlDocument* xdoc, ossimString& adate)
+{
+   ossimString path = "/product/sourceAttributes/rawDataStartTime";
+   return ossim::getPath(path, xdoc, adate);
+}
+
+bool ossimRadarSat2ProductDoc::getProductionDate(const ossimXmlDocument* xdoc, ossimString& pdate)
+{
+   ossimString path = "/product/imageGenerationParameters/generalProcessingInformation/processingTime";
+   return ossim::getPath(path, xdoc, pdate);
+}
+
 bool ossimRadarSat2ProductDoc::initTiePoints(const ossimXmlDocument* xdoc,
                                              std::list<ossimGpt>& gcp,
                                              std::list<ossimDpt>& icp) const

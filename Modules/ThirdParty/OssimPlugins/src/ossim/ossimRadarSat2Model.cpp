@@ -47,21 +47,24 @@ RTTI_DEF1(ossimRadarSat2Model, "ossimRadarSat2Model", ossimGeometricSarSensorMod
 
 
 ossimRadarSat2Model::ossimRadarSat2Model()
-   :
-   ossimGeometricSarSensorModel(),
-   _n_srgr(0),
-   _srgr_update(),
-   _SrGr_R0()
+   :  ossimGeometricSarSensorModel()
+   , _n_srgr(0)
+   , _srgr_update()
+   , _SrGr_R0()
+   , theAcquisitionDateUTCString("")
+   , theProductionDateUTCString("")
 {
 }
 
 ossimRadarSat2Model::ossimRadarSat2Model(const ossimRadarSat2Model& rhs)
-   :
-   ossimGeometricSarSensorModel(rhs),
-   _n_srgr(rhs._n_srgr),
-   _srgr_update(rhs._srgr_update),
-   _SrGr_R0(rhs._SrGr_R0)
+   : ossimGeometricSarSensorModel(rhs)
+   , _n_srgr(rhs._n_srgr)
+   , _srgr_update(rhs._srgr_update)
+   , _SrGr_R0(rhs._SrGr_R0)
+   , theProductionDateUTCString(rhs.theProductionDateUTCString)
+   , theAcquisitionDateUTCString(rhs.theAcquisitionDateUTCString)
 {
+
 }
 
 ossimRadarSat2Model::~ossimRadarSat2Model()
@@ -211,6 +214,16 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
             if (result)
             {
                theMeanGSD = (theGSD.x + theGSD.y)/2.0;
+            }
+
+            if (result)
+            {
+               result = rsDoc.getAcquistionDate(xdoc, theAcquisitionDateUTCString);
+            }
+
+            if (result)
+            {
+               result = rsDoc.getProductionDate(xdoc, theProductionDateUTCString);
             }
 
             if (result)
@@ -1246,6 +1259,27 @@ bool ossimRadarSat2Model::saveState(ossimKeywordlist& kwl,
    // Save our state:
    kwl.add(prefix, PRODUCT_XML_FILE_KW, _productXmlFile.c_str());
    kwl.add(prefix, NUMBER_SRGR_COEFFICIENTS_KW, _n_srgr);
+
+   if(! theProductionDateUTCString.empty())
+      kwl.add("support_data.",
+              ossimKeywordNames::DATE_KW,
+              theProductionDateUTCString.c_str(),
+              true);
+
+   if(! theAcquisitionDateUTCString.empty())
+      kwl.add("support_data.",
+              ossimKeywordNames::IMAGE_DATE_KW,
+              theAcquisitionDateUTCString.c_str(),
+              true);
+
+   //RK ...fix this part as part of refractoring
+   //if(theSLC)// numBands*=2; // real and imaginary
+
+
+   kwl.add("support_data.",
+           ossimKeywordNames::NUMBER_BANDS_KW,
+           2,
+           true);
 
    // Make sure all the arrays are equal in size.
    const ossim_uint32 COUNT = static_cast<ossim_uint32>(_n_srgr);
