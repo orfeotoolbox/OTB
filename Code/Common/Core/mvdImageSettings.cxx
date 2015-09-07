@@ -151,7 +151,6 @@ ImageSettings
       break;
 
     default:
-      assert( false && "No value for this shader effect." );
       break;
     }
 
