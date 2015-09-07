@@ -159,6 +159,17 @@ private:
   Radarsat2ImageMetadataInterface(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+/* Helper function to parse date and time into a std::vector<std::string>
+ * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
+ * the date-time string is to be found in keywordlist with key 'key'
+ * fills argument dateFields of type std::vector<std::string> which is mutable!
+ * TODO: move this method into base class
+ */
+  void ParseDateTime(const char* key, std::vector<int>& dateFields) const;
+
+  mutable std::vector<int> m_ProductionDateFields;
+  mutable std::vector<int> m_AcquisitionDateFields;
+
 };
 
 } // end namespace otb
