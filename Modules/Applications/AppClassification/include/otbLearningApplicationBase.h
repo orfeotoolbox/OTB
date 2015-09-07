@@ -72,6 +72,8 @@ namespace Wrapper
  *
  * \sa TrainImagesClassifier
  * \sa TrainRegression
+ *
+ * \ingroup OTBAppClassification
  */
 template <class TInputValue, class TOutputValue>
 class LearningApplicationBase: public Application
