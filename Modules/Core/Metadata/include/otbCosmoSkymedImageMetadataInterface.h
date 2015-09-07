@@ -95,7 +95,9 @@ public:
     return false;
   }
 
-  void GetMetadataValueByKey(const char*k, std::string& result) const
+  std::string GetImageID() const;
+
+  void GetValueFromMetadataDictionary(const char*k, std::string& result) const
   {
     const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
@@ -112,7 +114,7 @@ public:
 
 
   template<typename T>
-    void GetMetadataValueByKey(const char*k, T& result) const
+    void GetValueFromMetadataDictionary(const char*k, T& result) const
   {
     const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 

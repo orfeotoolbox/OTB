@@ -53,8 +53,15 @@ std::string
 CosmoSkymedImageMetadataInterface::GetSensorID() const
 {
    std::string sensorId;
-   GetMetadataValueByKey("Mission_ID", sensorId);
+   GetValueFromMetadataDictionary("Mission_ID", sensorId);
    return sensorId;
+}
+std::string
+CosmoSkymedImageMetadataInterface::GetImageID() const
+{
+  std::string imageId;
+  GetValueFromMetadataDictionary("Programmed_Image_ID", imageId);
+  return imageId;
 }
 
 CosmoSkymedImageMetadataInterface::PointSetPointer
@@ -65,10 +72,10 @@ CosmoSkymedImageMetadataInterface
   double refIncidenceAngle = 1.0;
   std::string refIncidenceAngleCompensation = "";
 
-  GetMetadataValueByKey("Incidence_Angle_Compensation_Geometry", refIncidenceAngleCompensation);
+  GetValueFromMetadataDictionary("Incidence_Angle_Compensation_Geometry", refIncidenceAngleCompensation);
   if (!refIncidenceAngleCompensation.empty())
     {
-    GetMetadataValueByKey<double>("Reference_Incidence_Angle", refIncidenceAngle);
+    GetValueFromMetadataDictionary<double>("Reference_Incidence_Angle", refIncidenceAngle);
     refIncidenceAngle *=  CONST_PI_180;
     }
 
@@ -90,11 +97,11 @@ CosmoSkymedImageMetadataInterface
   int referenceSlantRangeExponent = 1.0;
   std::string rangeSpreadLossCompensation = "";
 
-  GetMetadataValueByKey("Range_Spreading_Loss_Compensation_Geometry", rangeSpreadLossCompensation);
+  GetValueFromMetadataDictionary("Range_Spreading_Loss_Compensation_Geometry", rangeSpreadLossCompensation);
   if (!rangeSpreadLossCompensation.empty())
     {
-    GetMetadataValueByKey<int>("Reference_Slant_Range", referenceSlantRange);
-    GetMetadataValueByKey<int>("Reference_Slant_Range_Exponent", referenceSlantRangeExponent);
+    GetValueFromMetadataDictionary<int>("Reference_Slant_Range", referenceSlantRange);
+    GetValueFromMetadataDictionary<int>("Reference_Slant_Range_Exponent", referenceSlantRangeExponent);
     rangeSpreadLoss = vcl_pow(referenceSlantRange, 2 * referenceSlantRangeExponent);
     }
 
@@ -113,16 +120,16 @@ CosmoSkymedImageMetadataInterface
   std::string calibrationConstantCompensation = "";
   double rescalingFactor = 1.0;
   double calibrationConstant = 1.0;
-  GetMetadataValueByKey("Calibration_Constant_Compensation_Flag", calibrationConstantCompensation);
+  GetValueFromMetadataDictionary("Calibration_Constant_Compensation_Flag", calibrationConstantCompensation);
     if (calibrationConstantCompensation.empty())
     {
     std::string prefix = "S01";
     unsigned int datasetIndex = 1;
-    GetMetadataValueByKey<unsigned int>(MetaDataKey::SubDatasetIndex, datasetIndex);
+    GetValueFromMetadataDictionary<unsigned int>(MetaDataKey::SubDatasetIndex, datasetIndex);
     std::string datasetName;
     std::stringstream strm;
     strm << "SUBDATASET_" <<  datasetIndex+1 << "_NAME";
-    GetMetadataValueByKey(strm.str().c_str(), datasetName);
+    GetValueFromMetadataDictionary(strm.str().c_str(), datasetName);
     size_t start = datasetName.find("://");
     if( start  !=std::string::npos )
       {
@@ -135,10 +142,10 @@ CosmoSkymedImageMetadataInterface
     }
     const std::string key = prefix + "_Calibration_Constant";
 
-    GetMetadataValueByKey<double>(key.c_str(), calibrationConstant);
+    GetValueFromMetadataDictionary<double>(key.c_str(), calibrationConstant);
     }
 
-  GetMetadataValueByKey<double>("Rescaling_Factor", rescalingFactor);
+  GetValueFromMetadataDictionary<double>("Rescaling_Factor", rescalingFactor);
 
   rescalingFactor  *= rescalingFactor * calibrationConstant;
   return rescalingFactor;
@@ -155,7 +162,7 @@ CosmoSkymedImageMetadataInterface
       itkExceptionMacro(<< "Invalid Metadata, not a valid ComsoSkymed product");
       }
     std::string dateTimeUTCString;
-    GetMetadataValueByKey(key, dateTimeUTCString);
+    GetValueFromMetadataDictionary(key, dateTimeUTCString);
     Utils::ConvertStringToVector(dateTimeUTCString, dateFields, " T:-.");
     }
 }
@@ -305,11 +312,11 @@ CosmoSkymedImageMetadataInterface::GetPRF() const
   double prf = 0;
   std::string prefix = "S01";
   unsigned int datasetIndex = 1;
-  GetMetadataValueByKey<unsigned int>(MetaDataKey::SubDatasetIndex, datasetIndex);
+  GetValueFromMetadataDictionary<unsigned int>(MetaDataKey::SubDatasetIndex, datasetIndex);
   std::string datasetName;
   std::stringstream strm;
   strm << "SUBDATASET_" <<  datasetIndex+1 << "_NAME";
-  GetMetadataValueByKey(strm.str().c_str(), datasetName);
+  GetValueFromMetadataDictionary(strm.str().c_str(), datasetName);
   size_t start = datasetName.find("://");
   if( start  !=std::string::npos )
     {
@@ -322,7 +329,7 @@ CosmoSkymedImageMetadataInterface::GetPRF() const
     }
 
   const std::string key = prefix + "_PRF";
-  GetMetadataValueByKey<double>(key.c_str(), prf);
+  GetValueFromMetadataDictionary<double>(key.c_str(), prf);
   return prf;
 }
 
@@ -330,7 +337,7 @@ double
 CosmoSkymedImageMetadataInterface::GetRadarFrequency() const
 {
   double radarFrequency = 0;
-  GetMetadataValueByKey<double>("Radar_Frequency", radarFrequency);
+  GetValueFromMetadataDictionary<double>("Radar_Frequency", radarFrequency);
   return radarFrequency;
 }
 

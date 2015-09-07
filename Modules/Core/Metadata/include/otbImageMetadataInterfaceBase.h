@@ -195,6 +195,8 @@ public:
 
   static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
 
+  virtual std::string GetImageID() const;
+
 protected:
   ImageMetadataInterfaceBase();
   virtual ~ImageMetadataInterfaceBase() {}

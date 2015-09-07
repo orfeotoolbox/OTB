@@ -332,6 +332,18 @@ ImageMetadataInterfaceBase::GetSensorID() const
   return imageKeywordlist.GetMetadataByKey("sensor");
 }
 
+std::string
+ImageMetadataInterfaceBase::GetImageID() const
+{
+  const ImageKeywordlist kwl = this->GetImageKeywordlist();
+  std::string value;
+  if (kwl.HasKey("image_id"))
+    {
+    value = kwl.GetMetadataByKey("image_id");
+    }
+  return value;
+}
+
 unsigned int
 ImageMetadataInterfaceBase::GetNumberOfBands() const
 {
