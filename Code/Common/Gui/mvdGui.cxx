@@ -62,6 +62,8 @@ namespace
 {
 } // end of anonymous namespace.
 
+const int MOUSE_WHEEL_STEP_DEGREES = 15;
+const int MOUSE_WHEEL_STEP_FACTOR = 8;
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */

@@ -34,9 +34,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Gui/mvdGui.h"
 #include "Gui/mvdImageViewRenderer.h"
-
-#define MOUSE_WHEEL_STEP_DEGREES 15
 
 namespace mvd
 {
@@ -562,7 +561,7 @@ ImageViewManipulator
   // Delta is rotation distance in number of 8th of degrees (see
   // http://qt-project.org/doc/qt-4.8/qwheelevent.html#delta).
   assert( event->delta()!=0 );
-  int degrees = event->delta() / 8;
+  int degrees = event->delta() / MOUSE_WHEEL_STEP_FACTOR;
 
   if( modifiers==Qt::ControlModifier )
     {
@@ -581,7 +580,8 @@ ImageViewManipulator
 
     emit ShiftAlphaRequested(
       static_cast< double >(
-	m_AlphaGranularity * event->delta() / ( 8 * MOUSE_WHEEL_STEP_DEGREES )
+	m_AlphaGranularity * event->delta() /
+	( MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES )
       ) / 100.0
     );
     }
@@ -626,7 +626,10 @@ ImageViewManipulator
 
     emit ShiftDynamicsRequested(
       m_DynamicsShiftGranularity *
-      static_cast< double >( event->delta() / ( 8 * MOUSE_WHEEL_STEP_DEGREES ) )
+      static_cast< double >(
+	event->delta() /
+	( MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES )
+      )
     );
     }
   else if( modifiers==(Qt::ControlModifier | Qt::AltModifier | Qt::ShiftModifier) )
@@ -643,7 +646,7 @@ ImageViewManipulator
   //
   else if( modifiers==Qt::NoModifier )
     emit RotateLayersRequested(
-      event->delta() / (8 * MOUSE_WHEEL_STEP_DEGREES)
+      event->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)
     );
 }
 

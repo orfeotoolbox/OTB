@@ -64,6 +64,24 @@ namespace mvd
 
 
 /*****************************************************************************/
+/* CONSTANTS SECTION                                                         */
+
+/**
+ */
+namespace mvd
+{
+
+/**
+ */
+extern const int MOUSE_WHEEL_STEP_DEGREES;
+
+/**
+ */
+extern const int MOUSE_WHEEL_STEP_FACTOR;
+
+} // end of namespace 'mvd'.
+
+/*****************************************************************************/
 /* COMMON DECLARATION SECTION                                                */
 
 namespace mvd
