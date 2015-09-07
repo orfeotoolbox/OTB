@@ -19,6 +19,9 @@ otbSpotImageMetadataInterfaceNew.cxx
 otbQuickBirdImageMetadataInterfaceNew.cxx
 otbIkonosImageMetadataInterfaceNew.cxx
 otbTerraSarImageMetadataInterfaceNew.cxx
+otbSentinel1ImageMetadataInterfaceNew.cxx
+otbRadarsat2ImageMetadataInterfaceNew.cxx
+otbCosmoSkymedImageMetadataInterfaceNew.cxx
 otbWorldView2ImageMetadataInterfaceNew.cxx
 otbDefaultImageMetadataInterface.cxx
 otbImageMetadataInterfaceTest2.cxx
@@ -33,45 +36,54 @@ otb_module_target_label(otbMetadataTestDriver)
 otb_add_test(NAME ioTuOpticalDefaultImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
   otbOpticalDefaultImageMetadataInterfaceNew )
 
-otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1dims COMMAND otbMetadataTestDriver
-  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1dims.txt
-  ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
-  otbSarImageMetadataInterfaceTest
-  LARGEINPUT{TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos}
-  ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
+otb_add_test(NAME ioTuSentinel1ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  otbSentinel1ImageMetadataInterfaceNew )
+
+otb_add_test(NAME ioTuRadarsat2ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  otbRadarsat2ImageMetadataInterfaceNew )
+
+otb_add_test(NAME ioTuCosmoSkymedImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  otbCosmoSkymedImageMetadataInterfaceNew )
+
+otb_add_test(NAME ioTuSarDefaultImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  otbSarDefaultImageMetadataInterfaceNew )
+
+otb_add_test(NAME ioTuSarDefaultImageMetadataInterfaceFactoryNew COMMAND otbMetadataTestDriver
+  otbSarDefaultImageMetadataInterfaceFactoryNew )
+
+otb_add_test(NAME ioTuFormosatImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  otbFormosatImageMetadataInterfaceNew
   )
 
-otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingVVCosFile COMMAND otbMetadataTestDriver
-  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
-  ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
-  otbSarImageMetadataInterfaceTest
-  LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos}
-  ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
+otb_add_test(NAME ioTuSpot6ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  otbSpot6ImageMetadataInterfaceNew
   )
 
-otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1TORONTO COMMAND otbMetadataTestDriver
-  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
-  ${TEMP}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
-  otbSarImageMetadataInterfaceTest
-  LARGEINPUT{TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos}
-  ${TEMP}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
+otb_add_test(NAME ioTuSpotImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  otbSpotImageMetadataInterfaceNew
   )
 
-otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingXmlFile COMMAND otbMetadataTestDriver
-  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
-  ${TEMP}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
-  otbSarImageMetadataInterfaceTest
-  LARGEINPUT{TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml}
-  ${TEMP}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
+otb_add_test(NAME ioTuQuickBirdImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  otbQuickBirdImageMetadataInterfaceNew
   )
 
-otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingHHCosFile COMMAND otbMetadataTestDriver
-  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
-  ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
-  otbSarImageMetadataInterfaceTest
-  LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos}
-  ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
+otb_add_test(NAME ioTuIkonosImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  otbIkonosImageMetadataInterfaceNew
   )
+
+otb_add_test(NAME ioTuTerraSarImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  otbTerraSarImageMetadataInterfaceNew
+  )
+
+otb_add_test(NAME ioTuWorldView2ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  otbWorldView2ImageMetadataInterfaceNew
+  )
+
+otb_add_test(NAME ioTuOpticalDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
+  otbOpticalDefaultImageMetadataInterface )
+
+otb_add_test(NAME ioTvDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
+  otbDefaultImageMetadataInterface )
 
 otb_add_test(NAME ioTuDefaultImageMetadataInterfaceFactoryNew COMMAND otbMetadataTestDriver
   otbDefaultImageMetadataInterfaceFactoryNew )
@@ -80,8 +92,43 @@ otb_add_test(NAME ioTuOpticalDefaultImageMetadataInterfaceFactoryNew COMMAND otb
   otbOpticalDefaultImageMetadataInterfaceFactoryNew )
 
 otb_add_test(NAME ioTuPleiadesImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbPleiadesImageMetadataInterfaceNew
+ otbPleiadesImageMetadataInterfaceNew
   )
+
+otb_add_test(NAME ioTvSentinel1ImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_Sentinel1.txt
+  ${TEMP}/ioTvImageMetadataInterfaceBase_Sentinel1.txt
+  otbImageMetadataInterfaceBaseTest
+  LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
+  ${TEMP}/ioTvImageMetadataInterfaceBase_Sentinel1.txt
+  )
+
+otb_add_test(NAME ioTvRadarsat2ImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_Radarsat2.txt
+  ${TEMP}/ioTvImageMetadataInterfaceBase_Radarsat2.txt
+  otbImageMetadataInterfaceBaseTest
+  LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HV.tif}
+  ${TEMP}/ioTvImageMetadataInterfaceBase_Radarsat2.txt
+  )
+
+otb_add_test(NAME ioTvCosmoSkymedImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_CosmoSkymed.txt
+  ${TEMP}/ioTvImageMetadataInterfaceBase_CosmoSkymed.txt
+  otbImageMetadataInterfaceBaseTest
+  LARGEINPUT{COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5}
+  ${TEMP}/ioTvImageMetadataInterfaceBase_CosmoSkymed.txt
+  )
+
+otb_add_test(NAME ioTvImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterface.txt
+  ${TEMP}/ioTvImageMetadataInterface.txt
+  otbImageMetadataInterfaceTest2
+  ${EXAMPLEDATA}/qb_RoadExtract.tif
+  ${TEMP}/ioTvImageMetadataInterface.txt
+  )
+
+otb_add_test(NAME ioTuSarDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
+  otbSarDefaultImageMetadataInterface )
 
 otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_SPOT COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_SPOT.txt
@@ -187,12 +234,6 @@ otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_TSX1TORONTO COMMAND otbMeta
   ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
   )
 
-otb_add_test(NAME ioTuSarDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
-  otbSarDefaultImageMetadataInterface )
-
-otb_add_test(NAME ioTuSarDefaultImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbSarDefaultImageMetadataInterfaceNew )
-
 otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_QBCevennes COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
   ${TEMP}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
@@ -257,49 +298,44 @@ otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_FORMOSAT2 COMMAND otbMet
   ${TEMP}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
   )
 
-otb_add_test(NAME ioTuSarDefaultImageMetadataInterfaceFactoryNew COMMAND otbMetadataTestDriver
-  otbSarDefaultImageMetadataInterfaceFactoryNew )
-
-otb_add_test(NAME ioTuFormosatImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbFormosatImageMetadataInterfaceNew
+otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1dims COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1dims.txt
+  ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
+  otbSarImageMetadataInterfaceTest
+  LARGEINPUT{TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos}
+  ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
   )
 
-otb_add_test(NAME ioTuOpticalDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
-  otbOpticalDefaultImageMetadataInterface )
-
-otb_add_test(NAME ioTuSpot6ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbSpot6ImageMetadataInterfaceNew
+otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingVVCosFile COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
+  ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
+  otbSarImageMetadataInterfaceTest
+  LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos}
+  ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
   )
 
-otb_add_test(NAME ioTuSpotImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbSpotImageMetadataInterfaceNew
+otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1TORONTO COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
+  ${TEMP}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
+  otbSarImageMetadataInterfaceTest
+  LARGEINPUT{TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos}
+  ${TEMP}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
   )
 
-otb_add_test(NAME ioTuQuickBirdImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbQuickBirdImageMetadataInterfaceNew
+otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingXmlFile COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
+  ${TEMP}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
+  otbSarImageMetadataInterfaceTest
+  LARGEINPUT{TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml}
+  ${TEMP}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
   )
 
-otb_add_test(NAME ioTuIkonosImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbIkonosImageMetadataInterfaceNew
-  )
-
-otb_add_test(NAME ioTuTerraSarImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbTerraSarImageMetadataInterfaceNew
-  )
-
-otb_add_test(NAME ioTuWorldView2ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbWorldView2ImageMetadataInterfaceNew
-  )
-
-otb_add_test(NAME ioTuDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
-  otbDefaultImageMetadataInterface )
-
-otb_add_test(NAME ioTvImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
-  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterface.txt
-  ${TEMP}/ioTvImageMetadataInterface.txt
-  otbImageMetadataInterfaceTest2
-  ${EXAMPLEDATA}/qb_RoadExtract.tif
-  ${TEMP}/ioTvImageMetadataInterface.txt
+otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingHHCosFile COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
+  ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
+  otbSarImageMetadataInterfaceTest
+  LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos}
+  ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
   )
 
 set( GenericTestPHR_TESTNB 0)
