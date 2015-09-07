@@ -18,6 +18,9 @@ void RegisterTests()
   REGISTER_TEST(otbQuickBirdImageMetadataInterfaceNew);
   REGISTER_TEST(otbIkonosImageMetadataInterfaceNew);
   REGISTER_TEST(otbTerraSarImageMetadataInterfaceNew);
+  REGISTER_TEST(otbRadarsat2ImageMetadataInterfaceNew);
+  REGISTER_TEST(otbSentinel1ImageMetadataInterfaceNew);
+  REGISTER_TEST(otbCosmoSkymedImageMetadataInterfaceNew);
   REGISTER_TEST(otbWorldView2ImageMetadataInterfaceNew);
   REGISTER_TEST(otbDefaultImageMetadataInterface);
   REGISTER_TEST(otbImageMetadataInterfaceTest2);
