@@ -95,7 +95,7 @@ otb_add_test(NAME ioTuPleiadesImageMetadataInterfaceNew COMMAND otbMetadataTestD
  otbPleiadesImageMetadataInterfaceNew
   )
 
-otb_add_test(NAME ioTvSentinel1ImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
+otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_Sentinel1 COMMAND otbMetadataTestDriver
   --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_Sentinel1.txt
   ${TEMP}/ioTvImageMetadataInterfaceBase_Sentinel1.txt
   otbImageMetadataInterfaceBaseTest
@@ -103,7 +103,7 @@ otb_add_test(NAME ioTvSentinel1ImageMetadataInterfaceTest COMMAND otbMetadataTes
   ${TEMP}/ioTvImageMetadataInterfaceBase_Sentinel1.txt
   )
 
-otb_add_test(NAME ioTvRadarsat2ImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
+otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_Radarsat2 COMMAND otbMetadataTestDriver
   --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_Radarsat2.txt
   ${TEMP}/ioTvImageMetadataInterfaceBase_Radarsat2.txt
   otbImageMetadataInterfaceBaseTest
@@ -111,7 +111,7 @@ otb_add_test(NAME ioTvRadarsat2ImageMetadataInterfaceTest COMMAND otbMetadataTes
   ${TEMP}/ioTvImageMetadataInterfaceBase_Radarsat2.txt
   )
 
-otb_add_test(NAME ioTvCosmoSkymedImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
+otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_CosmoSkymed COMMAND otbMetadataTestDriver
   --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_CosmoSkymed.txt
   ${TEMP}/ioTvImageMetadataInterfaceBase_CosmoSkymed.txt
   otbImageMetadataInterfaceBaseTest
