@@ -11,6 +11,7 @@ namespace ossimplugins
 
    static const char LOAD_FROM_PRODUCT_FILE_KW[] = "load_from_product_file_flag";
    static const char PRODUCT_XML_FILE_KW[] = "product_xml_filename";
+   static const char SUPPORT_DATA_KW[] = "support_data.";
 
    ossimSentinel1ProductDoc::ossimSentinel1ProductDoc ()
       : ossimErrorStatusInterface ()
@@ -137,7 +138,7 @@ namespace ossimplugins
       annotationDir.findAllFilesThatMatch(files, ".xml");
       std::vector<ossimFilename>::const_iterator it = files.begin();
 
-      const ossimString manifestPrefix = "support_data.";
+
 
       for (int count=0; it != files.end(); ++it,  ++count)
       {
@@ -178,7 +179,7 @@ namespace ossimplugins
                          adsHeader->getChildTextValue("stopTime"),
                          true);
          //RK maybe use this->getManifestPrefix()
-         theProductKwl.add("manifestPrefix.",
+         theProductKwl.add("SUPPORT_DATA_KW.",
                       "mds1_tx_rx_polar",
                       polarisation,
                       true);
@@ -187,17 +188,17 @@ namespace ossimplugins
 
          const ossimRefPtr<ossimXmlNode> productInformation = theProductXmlDocument->getRoot()->findFirstNode("generalAnnotation/productInformation");
 
-         theProductKwl.add(manifestPrefix,
+         theProductKwl.add(SUPPORT_DATA_KW,
                          "data_take_id",
                          adsHeader->getChildTextValue("missionDataTakeId"),
                          true);
 
-         theProductKwl.add(manifestPrefix,
+         theProductKwl.add(SUPPORT_DATA_KW,
                          "slice_num",
                          imageInformation->getChildTextValue("sliceNumber"),
                          true);
 
-         theProductKwl.add(manifestPrefix,
+         theProductKwl.add(SUPPORT_DATA_KW,
                          "line_time_interval",
                          imageInformation->getChildTextValue("azimuthTimeInterval"),
                          true);
@@ -228,22 +229,22 @@ namespace ossimplugins
          {
             // these should be the same for all swaths
             //RK div by oneMillion taken from S1tlbx
-            theProductKwl.add(manifestPrefix,
+            theProductKwl.add(SUPPORT_DATA_KW,
                             "range_sampling_rate",
                             productInformation->getChildTextValue("rangeSamplingRate").toFloat64() / oneMillion,
                             true);
 
-            theProductKwl.add(manifestPrefix,
+            theProductKwl.add(SUPPORT_DATA_KW,
                             "radar_frequency",
                             productInformation->getChildTextValue("radarFrequency").toFloat64()  /  oneMillion,
                             true);
 
-            theProductKwl.add(manifestPrefix,
+            theProductKwl.add(SUPPORT_DATA_KW,
                             "line_time_interval",
                             imageInformation->getChildTextValue("azimuthTimeInterval"),
                             true);
 
-            theProductKwl.add(manifestPrefix,
+            theProductKwl.add(SUPPORT_DATA_KW,
                             "slant_range_to_first_pixel",
                             imageInformation->getChildTextValue("slantRangeTime").toFloat64() * halfLightSpeed,
                             true);
@@ -251,7 +252,7 @@ namespace ossimplugins
             const ossimRefPtr<ossimXmlNode> downlinkInformation =
                theProductXmlDocument->getRoot()->findFirstNode("generalAnnotation/downlinkInformationList/downlinkInformation");
 
-            theProductKwl.add(manifestPrefix,
+            theProductKwl.add(SUPPORT_DATA_KW,
                             "pulse_repetition_frequency",
                             downlinkInformation->getChildTextValue("prf"),
                             true);
@@ -261,34 +262,34 @@ namespace ossimplugins
             const ossimRefPtr<ossimXmlNode> rangeProcessingNode = swathProcParams->findFirstNode("rangeProcessing");
             const ossimRefPtr<ossimXmlNode> azimuthProcessingNode = swathProcParams->findFirstNode("azimuthProcessing");
 
-            theProductKwl.add(manifestPrefix,
+            theProductKwl.add(SUPPORT_DATA_KW,
                             "azimuth_bandwidth",
                             azimuthProcessingNode->getChildTextValue("processingBandwidth").toFloat64() /  oneMillion,
                             true);
 
-            theProductKwl.add(manifestPrefix,
+            theProductKwl.add(SUPPORT_DATA_KW,
                             "range_bandwidth",
                             rangeProcessingNode->getChildTextValue("processingBandwidth").toFloat64()  /  oneMillion,
                             true);
 
-            theProductKwl.add(manifestPrefix,
+            theProductKwl.add(SUPPORT_DATA_KW,
                             "range_looks",
                             rangeProcessingNode->getChildTextValue("numberOfLooks"),
                             true);
 
-            theProductKwl.add(manifestPrefix,
+            theProductKwl.add(SUPPORT_DATA_KW,
                             "azimuth_looks",
                             azimuthProcessingNode->getChildTextValue("numberOfLooks"),
                             true);
 
             if(!theTOPSAR || !theSLC)
             {
-               theProductKwl.add(manifestPrefix,
+               theProductKwl.add(SUPPORT_DATA_KW,
                                ossimKeywordNames::NUMBER_SAMPLES_KW,
                                imageInformation->getChildTextValue("numberOfSamples"),
                                true);
 
-               theProductKwl.add(manifestPrefix,
+               theProductKwl.add(SUPPORT_DATA_KW,
                                ossimKeywordNames::NUMBER_LINES_KW,
                                imageInformation->getChildTextValue("numberOfLines"),
                             true);
@@ -298,7 +299,7 @@ namespace ossimplugins
             addOrbitStateVectors(orbitList);
 
             const ossimRefPtr<ossimXmlNode> coordinateConversionList = theProductXmlDocument->getRoot()->findFirstNode("coordinateConversion/coordinateConversionList");
-            addSRGRCoefficients(manifestPrefix, coordinateConversionList);
+            addSRGRCoefficients(SUPPORT_DATA_KW, coordinateConversionList);
 
             const ossimRefPtr<ossimXmlNode> dcEstimateList = theProductXmlDocument->getRoot()->findFirstNode("dopplerCentroid/dcEstimateList");
             addDopplerCentroidCoefficients(dcEstimateList);
@@ -307,26 +308,31 @@ namespace ossimplugins
          }
 
          ++numBands;
-
       }
 
-      theProductKwl.add(manifestPrefix,
+      if(theSLC)
+      {
+         numBands = numBands * 2; // real and imaginary
+      }
+
+
+      theProductKwl.add(SUPPORT_DATA_KW,
                       "range_spacing",
                       theRangeSpacingTotal / (double)numBands,
                       true);
 
-      theProductKwl.add(manifestPrefix,
+      theProductKwl.add(SUPPORT_DATA_KW,
                       "azimuth_spacing",
                       theAzimuthSpacingTotal / (double)numBands,
                       true);
 
-      theProductKwl.add(manifestPrefix,
+      theProductKwl.add(SUPPORT_DATA_KW,
                       "avg_scene_height",
                       heightSum / (double)files.size(),
                       true);
 
-      theProductKwl.add(manifestPrefix,
-                      "num_bands",
+      theProductKwl.add(SUPPORT_DATA_KW,
+                      ossimKeywordNames::NUMBER_BANDS_KW,
                       numBands,
                       true);
       return true;
@@ -435,8 +441,8 @@ namespace ossimplugins
 
    bool ossimSentinel1ProductDoc::initImageSize(ossimIpt& imageSize) const
    {
-      const ossimString samples_str = theProductKwl.find("support_data.", ossimKeywordNames::NUMBER_SAMPLES_KW);
-      const ossimString lines_str = theProductKwl.find("support_data.", ossimKeywordNames::NUMBER_LINES_KW);
+      const ossimString samples_str = theProductKwl.find(SUPPORT_DATA_KW, ossimKeywordNames::NUMBER_SAMPLES_KW);
+      const ossimString lines_str = theProductKwl.find(SUPPORT_DATA_KW, ossimKeywordNames::NUMBER_LINES_KW);
 
       imageSize.samp =  samples_str.toInt();
       imageSize.line =  lines_str.toInt();
