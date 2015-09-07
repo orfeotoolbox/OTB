@@ -275,7 +275,7 @@ private:
 
       if(ret)
         {
-    
+
         for(unsigned int b = 0;b< inImage->GetNumberOfComponentsPerPixel();++b)
           {
           ossOutput<<"\n\t\tBand "<<b+1<<": ";
@@ -283,7 +283,7 @@ private:
           if(noDataValueAvailable[b])
             ossOutput<<noDataValues[b];
           else
-            ossOutput<<"No";  
+            ossOutput<<"No";
           }
         }
       else
@@ -344,13 +344,12 @@ private:
       ossOutput <<  GetParameterString("sensor");
 
     ossOutput << std::endl;
-
+    std::string id;
+    SetParameterString("id", metadataInterface->GetImageID());
     ossOutput << "\tImage identification number: ";
-    if (metadataInterface->GetImageKeywordlist().HasKey("image_id"))
-      {
-      SetParameterString("id", metadataInterface->GetImageKeywordlist().GetMetadataByKey("image_id"));
-      ossOutput << GetParameterString("id");
-      }
+    if(!GetParameterString("id").empty())
+      ossOutput <<  GetParameterString("id");
+
     ossOutput << std::endl;
     SetParameterString("projectionref", metadataInterface->GetProjectionRef());
     if (!GetParameterString("projectionref").empty())
