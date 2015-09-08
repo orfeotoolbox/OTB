@@ -112,7 +112,6 @@ public:
   itkSetMacro(LookupSelected, short);
   itkGetConstMacro(LookupSelected, short);
 
-  short m_LookupSelected;
 
 protected:
   /** Default ctor */
@@ -132,6 +131,8 @@ private:
   /** flag to prevent calling SetupCalibator() multiple times. This happens as
     * the Before ThreadedGenerateData() of the filter is called more times */
   bool m_Initialized;
+
+  short m_LookupSelected;
 
 };
 

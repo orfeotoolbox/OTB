@@ -174,20 +174,20 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Flags to indiciate if these values needs to be applied in calibration*/
-  bool m_ApplyAntennaPatternGain;
-  bool m_ApplyIncidenceAngleCorrection;
-  bool m_ApplyRangeSpreadingLossCorrection;
-  bool m_ApplyLookupDataCorrection;
-  bool m_ApplyRescalingFactor;
 
 private:
   SarRadiometricCalibrationFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
   FunctorRealType             m_Scale;
-  FunctorRealType             m_RescalingFactor;
-  ParametricFunctionPointer   m_Noise;
   bool                        m_EnableNoise;
+  FunctorRealType             m_RescalingFactor;
+  bool                        m_ApplyAntennaPatternGain;
+  bool                        m_ApplyIncidenceAngleCorrection;
+  bool                        m_ApplyRangeSpreadingLossCorrection;
+  bool                        m_ApplyLookupDataCorrection;
+  bool                        m_ApplyRescalingFactor;
+  ParametricFunctionPointer   m_Noise;
   ParametricFunctionPointer   m_AntennaPatternNewGain;
   ParametricFunctionPointer   m_AntennaPatternOldGain;
   ParametricFunctionPointer   m_IncidenceAngle;
