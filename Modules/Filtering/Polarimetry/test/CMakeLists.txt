@@ -315,7 +315,7 @@ otb_add_test(NAME saTuReciprocalCovarianceToCoherencyDegreeImageFilterNew COMMAN
   )
 
 otb_add_test(NAME saTvMuellerToReciprocalCovarianceImageFilter COMMAND otbPolarimetryTestDriver
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMuellerToMLCImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
   ${TEMP}/saTvMuellerToMLCImageFilter.tif
   otbMuellerToReciprocalCovarianceImageFilter
   ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif
