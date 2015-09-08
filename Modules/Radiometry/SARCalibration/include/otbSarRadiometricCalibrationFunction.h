@@ -108,7 +108,7 @@ public:
   itkSetMacro(Scale, FunctorRealType);
   itkGetMacro(Scale, FunctorRealType);
 
-  /** Get/Set the Offset value */
+  /** Get/Set the Noise value */
   itkSetObjectMacro(Noise, ParametricFunctionType);
   itkGetConstObjectMacro(Noise, ParametricFunctionType);
   itkGetObjectMacro(Noise, ParametricFunctionType);
@@ -137,12 +137,10 @@ public:
   itkGetConstObjectMacro(RangeSpreadLoss, ParametricFunctionType);
   itkGetObjectMacro(RangeSpreadLoss, ParametricFunctionType);
 
-  SarCalibrationLookupData* m_Lut;
-  void SetCalibrationLookupData(SarCalibrationLookupData* lut)
-  {
-    m_Lut = lut;
-  }
+  /** Set the RescalingFactor value */
+  itkSetMacro(RescalingFactor, FunctorRealType);
 
+  /** Get/Set flag to indicate if these are used */
   itkSetMacro(ApplyAntennaPatternGain, bool);
   itkGetMacro(ApplyAntennaPatternGain, bool);
 
@@ -158,21 +156,29 @@ public:
   itkSetMacro(ApplyRescalingFactor, bool);
   itkGetMacro(ApplyRescalingFactor, bool);
 
-  itkSetMacro(RescalingFactor, FunctorRealType);
+  /** Set SetCalibrationLookupData instance */
+  void SetCalibrationLookupData(SarCalibrationLookupData* lut)
+  {
+    m_Lut = lut;
+  }
 
 protected:
+
+  /** ctor */
   SarRadiometricCalibrationFunction();
+
+  /** default, empty, virtual dtor */
   virtual ~SarRadiometricCalibrationFunction(){}
+
+  /** print method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-
-
+  /** Flags to indiciate if these values needs to be applied in calibration*/
   bool m_ApplyAntennaPatternGain;
   bool m_ApplyIncidenceAngleCorrection;
   bool m_ApplyRangeSpreadingLossCorrection;
   bool m_ApplyLookupDataCorrection;
   bool m_ApplyRescalingFactor;
-
 
 private:
   SarRadiometricCalibrationFunction(const Self &);  //purposely not implemented
@@ -186,6 +192,7 @@ private:
   ParametricFunctionPointer   m_AntennaPatternOldGain;
   ParametricFunctionPointer   m_IncidenceAngle;
   ParametricFunctionPointer   m_RangeSpreadLoss;
+  SarCalibrationLookupData*   m_Lut;
 
 };
 

@@ -28,9 +28,31 @@ namespace otb
 {
 
 /** \class SarRadiometricCalibrationToImageFilter
-  * \brief Evaluates the SarRadiometricCalibrationFunction onto a source image
+ * \brief Evaluates the SarRadiometricCalibrationFunction onto a source image
+ * The SetupCalibrator is called by application which create an SarIMI from
+ * input metadatadictionary. It will then reads Scale, Noise,
+ * Old antenna pattern gain, New antenna pattern gain, rangespreadloss,
+ * incidence angle. All these are set to the imageFunction used to compute the
+ * backscatter value.
+ *
+ * Noise, Antenna pattern gain (old && new), range spread loss, incidence angle
+ * data members used in this class are all instances of SarPrametricFunction
+ * class. Each have a Evaluate() method and a special
+ * EvaluateParametricCoefficient() which computes the actual value.
+ *
+ * OTB 5.2.0 - added two more values, Rescaling factor and lookupdata from IMI
+ * to have the generic equation form. The improvement of SarCalibation is
+ * discussed in jira story #863
+
  *
  * The function has to inherit from itkImageFunction
+ * See Also:	SarParametricFunction, SarCalibrationLookupBase
+ * The equation for computaion is evalue in otbSarRadiometricCalibationFunctor
+ * class. Below lised are the references used to do the calibation of respective
+ * products. Retreived on 08-Sept-2015, 12:26:30
+ * Sentinel1   - https://sentinel.esa.int/web/sentinel/sentinel-1-sar-wiki/-/wiki/Sentinel%20One/Application+of+Radiometric+Calibration+LUT
+ * Radarsat2   - http://gs.mdacorporation.com/products/sensor/radarsat2/RS2_Product_Description.pdf
+ * CosmoSkymed - http://www.e-geos.it/products/pdf/COSMO-SkyMed-Image_Calibration.pdf
  *
  * \ingroup ImageFilters
  *
@@ -76,8 +98,12 @@ public:
   typedef typename FunctionType::ParametricFunctionConstPointer ParametricFunctionConstPointer;
   typedef typename FunctionType::ParametricFunctionType         ParametricFunctionType;
 
+  /** Create the ImageMetadataInteface class and prepare values required for
+    * Calibration. BeforeThreadedGenerateData() of the filter is called more times
+    * and hence use SetupCalibrator with a m_Initialized flag  */
   void SetupCalibrator();
 
+  /** Enable/disable the noise flag in SarRadiometricCalibrationFunction */
   void SetEnableNoise(bool inArg)
   {
     this->GetFunction()->SetEnableNoise(inArg);
@@ -86,7 +112,10 @@ public:
 
 
 protected:
+  /** Default ctor */
   SarRadiometricCalibrationToImageFilter();
+
+  /** Empty, default virtual dtor */
   virtual ~SarRadiometricCalibrationToImageFilter() {}
 
   /** Update the function list and input parameters*/
@@ -97,6 +126,8 @@ private:
   SarRadiometricCalibrationToImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+  /** flag to prevent calling SetupCalibator() multiple times. This happens as
+    * the Before ThreadedGenerateData() of the filter is called more times */
   bool m_Initialized;
 
 };

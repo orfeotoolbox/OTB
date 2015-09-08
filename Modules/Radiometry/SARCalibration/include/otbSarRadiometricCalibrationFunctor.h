@@ -23,7 +23,6 @@
 #include "itkNumericTraits.h"
 #include <iomanip>
 #include <iostream>
-
 namespace otb
 {
 
@@ -32,7 +31,8 @@ namespace Functor
 /**
  * \class SarRadiometricCalibrationFunctor
  * \brief Compute the backscatter value.
- *  \f$ \sigma^{0} = (scale * DN^{2} + offset) * sin( \theta_{inc}) * OldGain / NewGain * RangeSpreadLoss \f$
+ *  \f$ \sigma^{0} = ( ( (scale * DN^{2} + offset) * sin( \theta_{inc}) * OldGain /
+ * NewGain * RangeSpreadLoss ) /  LookupValue ) / RescalingFactor ) \f$
  *
  *
  * \ingroup OTBSARCalibration
@@ -69,7 +69,10 @@ public:
     sigma *= m_AntennaPatternOldGain;
     sigma /= m_AntennaPatternNewGain;
     sigma *= m_RangeSpreadLoss;
+    /** Lookup value has effect on for some sensors which does not required the
+* above values (incidence angle, rangespreadloss etc.. */
     sigma /= m_LutValue;
+    /** rescling factor has effect only with CosmoSkymed Products */
     sigma /= m_RescalingFactor;
 
     if(sigma < 0.0)
@@ -80,29 +83,25 @@ public:
     return static_cast<OutputType>(sigma);
   }
 
-
+  /** Set RescalingFactor method */
   void SetRescalingFactor(RealType value)
   {
     m_RescalingFactor = value;
   }
 
-  RealType  m_RescalingFactor;
-
-
+  /** Set LookupValue method */
   void SetLutValue(RealType value)
   {
     m_LutValue = value;
   }
 
-  RealType  m_LutValue;
-
-  /** Set offset method */
+  /** Set noise method */
   void SetNoise(RealType value)
   {
     m_Noise = value;
   }
 
-  /** Get offset method */
+  /** Get noise method */
   RealType GetNoise() const
   {
     return m_Noise;
@@ -162,7 +161,7 @@ public:
     m_RangeSpreadLoss = value;
   }
 
-  /** Get scale method */
+  /** Get rangeSpreadLoss method */
   RealType GetRangeSpreadLoss() const
   {
     return m_RangeSpreadLoss;
@@ -175,6 +174,9 @@ private:
   RealType   m_AntennaPatternOldGain;
   RealType   m_IncidenceAngle;
   RealType   m_RangeSpreadLoss;
+  RealType  m_LutValue;
+  RealType  m_RescalingFactor;
+
 };
 }
 
