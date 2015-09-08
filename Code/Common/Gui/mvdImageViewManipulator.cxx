@@ -696,19 +696,31 @@ ImageViewManipulator
       break;
 
     case Qt::Key_PageUp:
-      emit RaiseLayerRequested();
+      if( event->modifiers()==Qt::ShiftModifier )
+	emit LayerToTopRequested();
+      else
+	emit RaiseLayerRequested();
       break;
 
     case Qt::Key_PageDown:
-      emit LowerLayerRequested();
+      if( event->modifiers()==Qt::ShiftModifier )
+	emit LayerToBottomRequested();
+      else
+	emit LowerLayerRequested();
       break;
 
     case Qt::Key_Home:
-      emit SelectPreviousLayerRequested();
+      if( event->modifiers()==Qt::ShiftModifier )
+	emit SelectFirstLayerRequested();
+      else
+	emit SelectPreviousLayerRequested();
       break;
 
     case Qt::Key_End:
-      emit SelectNextLayerRequested();
+      if( event->modifiers()==Qt::ShiftModifier )
+	emit SelectLastLayerRequested();
+      else
+	emit SelectNextLayerRequested();
       break;
 
     case Qt::Key_Delete:

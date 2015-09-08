@@ -231,6 +231,22 @@ ImageViewWidget
       model,
       SLOT( RotateLayers( int ) )
     );
+
+    QObject::disconnect(
+      m_Manipulator,
+      SIGNAL( LayerToTopRequested() ),
+      // from:
+      model,
+      SLOT( MoveCurrentToTop() )
+    );
+
+    QObject::disconnect(
+      m_Manipulator,
+      SIGNAL( LayerToBottomRequested() ),
+      // from:
+      model,
+      SLOT( MoveCurrentToBottom() )
+    );
     }
   }
 
@@ -249,6 +265,22 @@ ImageViewWidget
     // to:
     stackedLayerModel,
     SLOT( RotateLayers( int ) )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( LayerToTopRequested() ),
+    // to:
+    stackedLayerModel,
+    SLOT( MoveCurrentToTop() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( LayerToBottomRequested() ),
+    // to:
+    stackedLayerModel,
+    SLOT( MoveCurrentToBottom() )
   );
 
   //
@@ -449,6 +481,22 @@ ImageViewWidget
     // to:
     this,
     SLOT( OnSelectNextLayerRequested() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( SelectFirstLayerRequested() ),
+    // to:
+    this,
+    SLOT( OnSelectFirstLayerRequested() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( SelectLastLayerRequested() ),
+    // to:
+    this,
+    SLOT( OnSelectLastLayerRequested() )
   );
 
   QObject::connect(
@@ -1664,6 +1712,40 @@ ImageViewWidget
 
     emit ModelUpdated();
     }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnSelectFirstLayerRequested()
+{
+  // qDebug() << this << "::OnSelectFirstLayerRequested()";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  stackedLayerModel->SelectFirst();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnSelectLastLayerRequested()
+{
+  // qDebug() << this << "::OnSelectLastLayerRequested()";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  stackedLayerModel->SelectLast();
+
+  updateGL();
 }
 
 /******************************************************************************/

@@ -334,6 +334,12 @@ private slots:
                      const PointType& );
   /**
    */
+  void OnSelectFirstLayerRequested();
+  /**
+   */
+  void OnSelectLastLayerRequested();
+  /**
+   */
   void OnSelectPreviousLayerRequested();
   /**
    */

@@ -212,6 +212,8 @@ public slots:
   inline void MoveCurrentToTop();
   inline void RaiseCurrent();
   inline void RotateLayers( int );
+  inline void SelectFirst();
+  inline void SelectLast();
   inline void SelectPrevious();
   inline void SelectNext();
 
@@ -818,6 +820,30 @@ StackedLayerModel
 
   else
     RotateLayerDown( ( -steps ) % GetCount() );
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::SelectFirst()
+{
+  if( GetCount()<1 )
+    return;
+
+  SetCurrent( SizeType( 0 ) );
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::SelectLast()
+{
+  if( GetCount()<1 )
+    return;
+
+  SetCurrent( m_Keys.size() - 1 );
 }
 
 /*****************************************************************************/

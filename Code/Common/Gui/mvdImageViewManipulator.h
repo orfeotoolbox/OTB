@@ -209,10 +209,22 @@ signals:
   void LowerLayerRequested();
   /**
    */
+  void LayerToTopRequested();
+  /**
+   */
+  void LayerToBottomRequested();
+  /**
+   */
   void SelectNextLayerRequested();
   /**
    */
   void SelectPreviousLayerRequested();
+  /**
+   */
+  void SelectFirstLayerRequested();
+  /**
+   */
+  void SelectLastLayerRequested();
   /**
    */
   void DeleteAllRequested();
