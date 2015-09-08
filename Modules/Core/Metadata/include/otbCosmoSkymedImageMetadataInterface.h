@@ -85,7 +85,7 @@ public:
   double GetCenterIncidenceAngle() const;
 
   /*get lookup data for calulating backscatter */
-  SarCalibrationLookupData* GetCalibrationLookupData(const std::string type)
+  SarCalibrationLookupData* GetCalibrationLookupData(const short type)
   {
     return (new SarCalibrationLookupData(type));
   }
