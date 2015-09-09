@@ -23,6 +23,7 @@
 #include "otbOpenCVUtils.h"
 
 #include <fstream>
+#include <set>
 #include "itkMacro.h"
 
 namespace otb
@@ -32,7 +33,8 @@ template <class TInputValue, class TTargetValue>
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::KNearestNeighborsMachineLearningModel() :
  m_KNearestModel (new CvKNearest),
- m_K(32)
+ m_K(32),
+ m_DecisionRule(KNN_VOTING)
 {
   this->m_ConfidenceIndex = true;
   this->m_IsRegressionSupported = true;
@@ -59,6 +61,22 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(), labels);
 
+  // update decision rule if needed
+  if (this->m_RegressionMode)
+    {
+    if (this->m_DecisionRule == KNN_VOTING)
+      {
+      this->SetDecisionRule(KNN_MEAN);
+      }
+    }
+  else
+    {
+    if (this->m_DecisionRule != KNN_VOTING)
+      {
+      this->SetDecisionRule(KNN_VOTING);
+      }
+    }
+
   //train the KNN model
   m_KNearestModel->train(samples, labels, cv::Mat(), this->m_RegressionMode, m_K, false);
 }
@@ -74,11 +92,13 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   otb::SampleToMat<InputSampleType>(input, sample);
 
   float result;
+  cv::Mat nearest(1,m_K,CV_32FC1);
+  result = m_KNearestModel->find_nearest(sample, m_K,0,0,&nearest,0);
 
+  // compute quality if asked (only happens in classification mode)
   if (quality != NULL)
     {
-    cv::Mat nearest(1,m_K,CV_32FC1);
-    result = m_KNearestModel->find_nearest(sample, m_K,0,0,&nearest,0);
+    assert(!this->m_RegressionMode);
     unsigned int accuracy = 0;
     for (int k=0 ; k < m_K ; ++k)
       {
@@ -89,9 +109,22 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
       }
     (*quality) = static_cast<ConfidenceValueType>(accuracy);
     }
-  else
+
+  // Decision rule :
+  //  VOTING is OpenCV default behaviour for classification
+  //  MEAN is OpenCV default behaviour for regression
+  //  MEDIAN : only case that must be handled here
+  if (this->m_DecisionRule == KNN_MEDIAN)
     {
-    result = m_KNearestModel->find_nearest(sample, m_K);
+    std::multiset<float> values;
+    for (int k=0 ; k < m_K ; ++k)
+      {
+      values.insert(nearest.at<float>(0,k));
+      }
+    std::multiset<float>::iterator median = values.begin();
+    int pos = (m_K >> 1);
+    for (int k=0 ; k < pos ; ++k , ++median) {}
+    result = *median;
     }
 
   TargetSampleType target;
@@ -106,12 +139,14 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::Save(const std::string & filename, const std::string & itkNotUsed(name))
 {
   //there is no m_KNearestModel->save(filename.c_str(), name.c_str()).
-  //We need to save the K parameter and IsRegression flag used and the samples.
+  //We need to save the K parameter, IsRegression flag, DecisionRule and the samples.
 
   std::ofstream ofs(filename.c_str());
   //Save K parameter and IsRegression flag.
   ofs << "K=" << m_K << "\n";
   ofs << "IsRegression=" << this->m_RegressionMode << "\n";
+  // Save the DecisionRule
+  ofs << "DecisionRule=" << m_DecisionRule << "\n";
 
   //Save the samples. First column is the Label and other columns are the sample data.
   typename InputListSampleType::ConstIterator sampleIt = this->GetInputListSample()->Begin();
@@ -155,6 +190,11 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   pos = line.find_first_of("=", 0);
   nextpos = line.find_first_of(" \n\r", pos+1);
   this->SetRegressionMode(boost::lexical_cast<bool>(line.substr(pos+1, nextpos-pos-1)));
+  //third line is the DecisionRule parameter
+  std::getline(ifs, line);
+  pos = line.find_first_of("=", 0);
+  nextpos = line.find_first_of(" \n\r", pos+1);
+  this->SetDecisionRule(boost::lexical_cast<int>(line.substr(pos+1, nextpos-pos-1)));
 
   //Clear previous listSample (if any)
   typename InputListSampleType::Pointer samples = InputListSampleType::New();

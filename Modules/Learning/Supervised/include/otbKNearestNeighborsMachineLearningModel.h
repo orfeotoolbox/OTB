@@ -58,6 +58,19 @@ public:
   itkGetMacro(K, int);
   itkSetMacro(K, int);
 
+  /** Decision rule once the KNN are found :
+   *  [for classification]
+   *   - KNN_VOTING : output value with maximum occurences (for classification)
+   *  [for regression]
+   *   - KNN_MEAN : output mean value of neighbors
+   *   - KNN_MEDIAN : output median value of neighbors
+   */
+  enum {KNN_VOTING, KNN_MEAN, KNN_MEDIAN};
+
+  /** Setters/Getters to the decision rule */
+  itkGetMacro(DecisionRule, int);
+  itkSetMacro(DecisionRule, int);
+
   /** Train the machine learning model */
   virtual void Train();
   /** Predict values using the model */
@@ -94,6 +107,8 @@ private:
 
   CvKNearest * m_KNearestModel;
   int m_K;
+
+  int m_DecisionRule;
 };
 } // end namespace otb
 
