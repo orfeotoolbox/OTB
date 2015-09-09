@@ -37,6 +37,18 @@ namespace Wrapper
     SetParameterInt("classifier.knn.k", 32);
     SetParameterDescription("classifier.knn.k","The number of neighbors to use.");
 
+    if (this->m_RegressionFlag)
+      {
+      // Decision rule : mean / median
+      AddParameter(ParameterType_Choice, "classifier.knn.rule", "Decision rule");
+      SetParameterDescription("classifier.knn.rule", "Decision rule for regression output");
+
+      AddChoice("classifier.knn.rule.mean", "Mean of neighbors values");
+      SetParameterDescription("classifier.knn.rule.mean","Returns the mean of neighbors values");
+
+      AddChoice("classifier.knn.rule.median", "Median of neighbors values");
+      SetParameterDescription("classifier.knn.rule.median","Returns the median of neighbors values");
+      }
   }
 
   template <class TInputValue, class TOutputValue>
@@ -51,6 +63,18 @@ namespace Wrapper
     knnClassifier->SetInputListSample(trainingListSample);
     knnClassifier->SetTargetListSample(trainingLabeledListSample);
     knnClassifier->SetK(GetParameterInt("classifier.knn.k"));
+    if (this->m_RegressionFlag)
+      {
+      std::string decision = this->GetParameterString("classifier.knn.rule");
+      if (decision == "mean")
+        {
+        knnClassifier->SetDecisionRule(KNNType::KNN_MEAN);
+        }
+      else if (decision == "median")
+        {
+        knnClassifier->SetDecisionRule(KNNType::KNN_MEDIAN);
+        }
+      }
 
     knnClassifier->Train();
     knnClassifier->Save(modelPath);
