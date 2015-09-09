@@ -556,7 +556,8 @@ MachineLearningModelRegressionType::Pointer getKNearestNeighborsRegressionModel(
     KNNType;
   KNNType::Pointer regression = KNNType::New();
   regression->SetRegressionMode(true);
-  regression->SetK(1);
+  regression->SetK(5);
+  regression->SetDecisionRule(KNNType::KNN_MEDIAN);
   return regression.GetPointer();
 }
 
