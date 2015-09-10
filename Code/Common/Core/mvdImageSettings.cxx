@@ -126,7 +126,6 @@ ImageSettings
       break;
 
     default:
-      return std::numeric_limits< double >::signaling_NaN();
       break;
     }
 
