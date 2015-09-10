@@ -768,6 +768,7 @@ ImageViewManipulator
 
     case Qt::Key_P:
       emit SetReferenceRequested();
+      break;
 
     case Qt::Key_Q:
       emit ResetQuantilesRequested( modifiers.testFlag( Qt::ShiftModifier ) );
