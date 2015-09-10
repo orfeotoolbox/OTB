@@ -1034,7 +1034,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::ImportImage( const QString& filename )
+::ImportImage( const QString& filename, StackedLayerModel::SizeType index )
 {
   // qDebug() << this << "::ImportImage(" << filename << "," << forceCreate << ")";
 
@@ -1116,7 +1116,7 @@ MainWindow
 
   //
   // Store image-mode in layer-stack.
-  stackedLayerModel->Add( imageModel );
+  stackedLayerModel->Insert( imageModel, index );
 
   imageModel->setParent( stackedLayerModel );
 
@@ -1149,10 +1149,21 @@ MainWindow
   if( filenames.isEmpty() )
     return;
 
-  for( QStringList::const_iterator it( filenames.constBegin() );
-       it!=filenames.end();
-       ++it )
-    ImportImage( *it );
+
+  if( filenames.count()==1 )
+    ImportImage( filenames.front(), 0 );
+
+  else
+    {
+    StackedLayerModel::SizeType i = 0;
+
+    for( QStringList::const_iterator it( filenames.constBegin() );
+         it!=filenames.end();
+	 ++it )
+      {
+        ImportImage( *it, i ++ );
+      }
+    }
 
   assert( m_ImageView!=NULL );
   m_ImageView->updateGL();
@@ -1902,7 +1913,7 @@ MainWindow
   // catalog database.
 
   // import the result image into the database
-  ImportImage( outfname );
+  ImportImage( outfname, false );
 }
 
 /*****************************************************************************/

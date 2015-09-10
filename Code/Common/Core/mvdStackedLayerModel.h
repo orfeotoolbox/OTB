@@ -187,6 +187,8 @@ public:
 
   inline SizeType IndexOf( const AbstractLayerModel * ) const;
 
+  KeyType Insert( AbstractLayerModel *, SizeType index );
+
   inline bool IsEmpty() const;
 
   inline const PixelInfo::Vector & PixelInfos() const;
