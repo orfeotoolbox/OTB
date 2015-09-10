@@ -234,10 +234,8 @@ ImageViewRenderer
   if( actor.IsNull() )
     {
     origin[ 0 ] = origin[ 1 ] = 0;
-    origin[ 1 ] = origin[ 1 ] = 0;
 
     extent[ 0 ] = extent[ 1 ] = 0;
-    extent[ 1 ] = extent[ 1 ] = 0;
 
     return;
     }
