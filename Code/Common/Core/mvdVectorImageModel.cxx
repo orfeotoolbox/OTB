@@ -217,18 +217,6 @@ VectorImageModel
   // TODO: this choice should be done by the user during the import of the file
   bool forceToCacheOvw = true;
 
-  if (!hasOverviewsSupport)
-    {
-    // the current file doesn't have overviews available and the ImageIO doesn't support overviews
-    throw std::runtime_error(
-      ToStdString(
-	tr( "The ImageIO used to read this file doesn't support Overviews." )
-      )
-    );
-    }
-
-  // Else:
-
   qWarning() << tr( "The ImageIO used to read this file supports overviews." );
 
   if( nbOfAvailableOvw>0 )
