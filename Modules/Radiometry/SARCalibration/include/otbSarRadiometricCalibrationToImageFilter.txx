@@ -35,8 +35,9 @@ template<class TInputImage, class TOutputImage>
 SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
 ::SarRadiometricCalibrationToImageFilter()
 : m_Initialized(false)
+, m_LookupSelected(0)
 {
-  this->SetNumberOfThreads( 1 );
+
 }
 
 /*This method is called once from BeforeThreadedGenerateData(). Usage of this
@@ -137,7 +138,7 @@ See Also: otbSentinel1ImageMetadataInterface, otbTerraSarImageMetadataInterface,
 *otbRadarsat2ImageMetadataInterface  */
   if (function->GetApplyLookupDataCorrection())
     {
-    function->SetCalibrationLookupData(imageMetadataInterface->GetCalibrationLookupData("sigma"));
+    function->SetCalibrationLookupData(imageMetadataInterface->GetCalibrationLookupData(this->GetLookupSelected()));
     }
 
 
