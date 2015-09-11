@@ -58,7 +58,7 @@ public:
   typedef double                                     RealType;
   typedef PointSetType::PointType                    PointType;
 
-  SarCalibrationLookupData* GetCalibrationLookupData(const std::string /*type*/)
+  SarCalibrationLookupData* GetCalibrationLookupData(const short /*type*/)
   {
     itkExceptionMacro("GetLookupTable(std::string type) not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }

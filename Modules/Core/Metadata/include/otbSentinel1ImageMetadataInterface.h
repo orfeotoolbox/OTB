@@ -58,7 +58,7 @@ public:
     lineTimeInterval = (lt - ft) / ((lines - 1) * 1.0f);
   }
 
-  Sentinel1CalibrationLookupData(std::string type, double ft, double lt,
+  Sentinel1CalibrationLookupData(short type, double ft, double lt,
                                  int lines, int c,
                                  std::vector<Sentinel1CalibrationStruct> vlist)
     : SarCalibrationLookupData(type)
@@ -183,7 +183,7 @@ public:
   double GetCenterIncidenceAngle() const;
 
   /*get lookup data for calulating backscatter */
-  SarCalibrationLookupData* GetCalibrationLookupData(const std::string type);
+  SarCalibrationLookupData* GetCalibrationLookupData(const short type);
 
   bool HasCalibrationLookupData() const
   {

@@ -50,7 +50,7 @@ namespace otb
 
     }
 
-    Radarsat2CalibrationLookupData(const std::string type)
+    Radarsat2CalibrationLookupData(const short type)
       : SarCalibrationLookupData(type)
       , offset(0)
     {
@@ -140,7 +140,7 @@ public:
   double GetCenterIncidenceAngle() const;
 
   /*get lookup data for calulating backscatter */
-  SarCalibrationLookupData* GetCalibrationLookupData(const std::string type);
+  SarCalibrationLookupData* GetCalibrationLookupData(const short type);
 
   bool HasCalibrationLookupData() const
   {
