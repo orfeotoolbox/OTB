@@ -111,7 +111,7 @@ public:
   /** Get noise reference point list */
   DoubleVectorType GetNoiseReferencePointList() const;
 
-  SarCalibrationLookupData* GetCalibrationLookupData(const short type)
+  SarCalibrationLookupData* GetCalibrationLookupData(const std::string type)
   {
     return (new SarCalibrationLookupData(type));
   }

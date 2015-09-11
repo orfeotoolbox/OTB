@@ -4,20 +4,12 @@
 
 namespace otb {
 
-
 class SarCalibrationLookupData {
 
   public:
 
-  enum {
-    SIGMA = 0,
-    BETA,
-    GAMMA,
-    DN
-  };
-
   SarCalibrationLookupData()
-    :dtype(0)
+    :dtype("sigma")
   {
 
   }
@@ -27,7 +19,7 @@ class SarCalibrationLookupData {
     return "SarCalibrationLookupData";
   }
 
-  SarCalibrationLookupData(short t)
+  SarCalibrationLookupData(std::string t)
     :dtype(t)
   {
 
@@ -46,7 +38,7 @@ class SarCalibrationLookupData {
 
 private:
 
-short dtype;
+std::string dtype;
 
 };
 

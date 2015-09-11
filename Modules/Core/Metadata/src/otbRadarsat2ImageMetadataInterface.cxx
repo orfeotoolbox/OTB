@@ -49,43 +49,30 @@ Radarsat2ImageMetadataInterface::CanRead() const
 
 SarCalibrationLookupData*
 Radarsat2ImageMetadataInterface::
-GetCalibrationLookupData(const short type)
+GetCalibrationLookupData(std::string type)
   {
    std::string lut = "SigmaNought";
 
-   switch (type)
-     {
-     case SarCalibrationLookupData::SIGMA:
-     {
-     lut = "SigmaNought";
-     }
-     break;
-
-     case SarCalibrationLookupData::BETA:
-     {
-     lut = "BetaNought";
-     }
-     break;
-
-     case SarCalibrationLookupData::GAMMA:
-     {
-     lut = "GammaNought";
-     }
-     break;
-
-     case SarCalibrationLookupData::DN:
-     {
-     lut = "DN";
-     }
-     break;
-
-     default:
-     {
-     lut = "SigmaNought";
-     }
-     break;
-     }
-
+  if (type == "sigma")
+    {
+    lut = "SigmaNought";
+    }
+  else if(type == "beta")
+    {
+    lut = "BetaNought";
+    }
+  else if(type == "gamma")
+    {
+    lut = "GammaNought";
+    }
+  else if(type == "dn")
+    {
+    lut = "DN";
+    }
+  else
+    {
+    itkExceptionMacro( << "unknown calibration type");
+    }
 
   const ImageKeywordlistType imageKeywordlist =  this->GetImageKeywordlist();
   const std::string key = "referenceNoiseLevel[" + lut + "].gain";
