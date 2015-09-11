@@ -136,8 +136,10 @@ protected:
   virtual ~ChangeNoDataValueFilter()
   {}
 
-  virtual void BeforeThreadedGenerateData()
+  virtual void GenerateOutputInformation()
   {
+    Superclass::GenerateOutputInformation();
+
     std::vector<bool> noDataValueAvailable;
     std::vector<double> noDataValues;
 
@@ -151,17 +153,12 @@ protected:
 
     this->GetFunctor().m_Flags = noDataValueAvailable;
     this->GetFunctor().m_Values = noDataValues;
-  }
-
-  virtual void GenerateOutputInformation()
-  {
-    Superclass::GenerateOutputInformation();
-
-    std::vector<bool> flags = this->GetFunctor().m_Flags;
+    
+    std::vector<bool> flags = noDataValueAvailable;
     
     if(this->GetFunctor().m_NaNIsNoData)
       {
-      flags = std::vector<bool>(true,flags.size());
+      flags = std::vector<bool>(flags.size(),true);
       }
     
     WriteNoDataFlags(flags,this->GetFunctor().m_NewValues,this->GetOutput()->GetMetaDataDictionary());
