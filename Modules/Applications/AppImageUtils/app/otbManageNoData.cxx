@@ -26,11 +26,11 @@ namespace otb
 namespace Wrapper
 {
 
-class NoDataMask : public Application
+class ManageNoData : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef NoDataMask                       Self;
+  typedef ManageNoData                       Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -38,7 +38,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(NoDataMask, otb::Application);
+  itkTypeMacro(ManageNoData, otb::Application);
 
   /** Filters typedef */
   typedef otb::ImageToNoDataMaskFilter<FloatVectorImageType,UInt8ImageType> FilterType;
@@ -47,8 +47,8 @@ public:
 private:
   void DoInit()
   {
-    SetName("NoDataMask");
-    SetDescription("NoDataMask");
+    SetName("ManageNoData");
+    SetDescription("ManageNoData");
     // Documentation
     SetDocName("No Data Mask management");
     SetDocLongDescription("This application builds a nodata mask from the no data flags found in metadata or from NaN pixels.");
@@ -136,5 +136,5 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::NoDataMask)
+OTB_APPLICATION_EXPORT(otb::Wrapper::ManageNoData)
 
