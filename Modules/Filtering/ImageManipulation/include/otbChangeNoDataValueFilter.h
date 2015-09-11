@@ -27,6 +27,11 @@ namespace otb
 {
 namespace Functor
 {
+/** \class ChangeNoDataFunctor
+ *  \brief Functor used by ChangeNoDataValueFilter
+ *
+ *  See ChangeNoDataValueFilter for complete documentation. 
+ */
 template <typename TInputPixel, typename TOutputPixel> 
 class ChangeNoDataFunctor
 {
@@ -34,24 +39,53 @@ public:
   ChangeNoDataFunctor():
     m_Flags(),
     m_Values(),
-    m_NewValues()
+    m_NewValues(),
+    m_NaNIsNoData(false)
   {}
   virtual ~ChangeNoDataFunctor(){}
 
   inline TOutputPixel operator()(const TInputPixel& in) const
   {
-    return otb::ChangeNoData(in,m_Flags,m_Values,m_NewValues);
+    return otb::ChangeNoData(in,m_Flags,m_Values,m_NewValues,m_NaNIsNoData);
   }
 
   std::vector<bool>   m_Flags;
   std::vector<double> m_Values;
   std::vector<double> m_NewValues;
+  bool                m_NaNIsNoData;
 };
 
 } // End namespace Functor
 
-
-
+/** \class ChangeNoDataValueFilter
+ *  \brief Change no-data flags and values and replace them in image
+ *  
+ *  This filter reads the no-data flags (a boolean vector indicating
+ *  for each band if a no-data value exists) and values (the actual
+ *  value to be used as no-data for each band), and allows to change
+ *  this value.
+ * 
+ *  The algorithm is the following: for each pixel, for each channel
+ *  in the pixel, if there is a no-data value for this channel
+ *  (according to no-data flags) and the current channel value equals
+ *  to the no-data value set for this channel, then the value is
+ *  changed for the new no-data value specified by the
+ *  users. Otherwise, value remains untouched.
+ * 
+ *  If NaNIsNoData is true:
+ *  - NaN values will be considered as no data and replaced as well
+ *  - Output image will have no-data flags and values for all bands
+ *
+ *  If NaNIsNoData is false:
+ *  - Band for which input no-data flags is false will remain
+ *    untouched
+ *  - Output image will have no-data flags and values only for bands
+ *    for which input no-data flag is true.
+ * 
+ * \ingroup Streamed
+ * \ingroup MultiThreaded
+ * \ingroup OTBImageManipulation
+ */
 template <typename TInputImage, typename TOutputImage>
 class ChangeNoDataValueFilter
   : public itk::UnaryFunctorImageFilter<TInputImage,
@@ -75,9 +109,24 @@ public:
   /** Creation through object factory macro */
   itkTypeMacro(ChangeNoDataValueFilter, itk::ImageToImageFilter);
 
+  /**
+   * Set the new no-data values
+   * \param newValues The vector of new no-data values (size should be
+   * >= to number of bands)
+   */
   void SetNewNoDataValues(std::vector<double> & newValues)
   {
     this->GetFunctor().m_NewValues = newValues;
+  }
+
+   /**
+   * Set the NaN is no data flags
+   * \param nanIsNoData If true, NaN values will be considered as
+   * no-data as well (default is false)
+   */
+  void SetNaNIsNoData(bool nanIsNoData)
+  {
+    this->GetFunctor().m_NaNIsNoData = nanIsNoData;
   }
 
 protected:
@@ -108,7 +157,14 @@ protected:
   {
     Superclass::GenerateOutputInformation();
 
-    WriteNoDataFlags(this->GetFunctor().m_Flags,this->GetFunctor().m_NewValues,this->GetOutput()->GetMetaDataDictionary());
+    std::vector<bool> flags = this->GetFunctor().m_Flags;
+    
+    if(this->GetFunctor().m_NaNIsNoData)
+      {
+      flags = std::vector<bool>(true,flags.size());
+      }
+    
+    WriteNoDataFlags(flags,this->GetFunctor().m_NewValues,this->GetOutput()->GetMetaDataDictionary());
   }
 
 private:
