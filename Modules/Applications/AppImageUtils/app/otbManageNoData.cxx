@@ -48,10 +48,10 @@ private:
   void DoInit()
   {
     SetName("ManageNoData");
-    SetDescription("ManageNoData");
+    SetDescription("Manage No-Data");
     // Documentation
-    SetDocName("No Data Mask management");
-    SetDocLongDescription("This application builds a nodata mask from the no data flags found in metadata or from NaN pixels.");
+    SetDocName("No Data management");
+    SetDocLongDescription("This application has two modes. The first allows to build a mask of no-data pixels from the no-data flags read from the image file. The second allows to update the change the no-data value of an image (pixels value and metadata). This last mode also allows to replace NaN in images with a proper no-data value. To do so, one should activate the NaN is no-data option.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("BanMath");
@@ -65,7 +65,11 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image");
 
-
+    AddParameter(ParameterType_Empty,"usenan", "Consider NaN as no-data");
+    SetParameterDescription("usenan","If active, the application will consider NaN as no-data values as well");
+    MandatoryOff("usenan");
+    DisableParameter("usenan");
+   
     AddParameter(ParameterType_Choice,"mode","No-data handling mode");
     SetParameterDescription("mode","Allows to choose between different no-data handling options");
 
@@ -109,11 +113,12 @@ private:
     m_Filter = FilterType::New();
     m_Filter->SetInsideValue(this->GetParameterFloat("mode.buildmask.inv"));
     m_Filter->SetOutsideValue(this->GetParameterFloat("mode.buildmask.outv"));
+    m_Filter->SetNaNIsNoData(IsParameterEnabled("usenan"));
     m_Filter->SetInput(inputPtr);
 
     m_ChangeNoDataFilter = ChangeNoDataFilterType::New();
     m_ChangeNoDataFilter->SetInput(inputPtr);
-
+    m_ChangeNoDataFilter->SetNaNIsNoData(IsParameterEnabled("usenan"));
 
     std::vector<double> newNoData(inputPtr->GetNumberOfComponentsPerPixel(),GetParameterFloat("mode.changevalue.newv"));
 
