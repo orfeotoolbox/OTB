@@ -18,8 +18,10 @@
 
 #include "otbImageMetadataInterfaceBase.h"
 
+#include "otbNoDataHelper.h"
 #include "itkMetaDataObject.h"
 #include "itksys/SystemTools.hxx"
+
 
 namespace otb
 {
@@ -225,12 +227,7 @@ ImageMetadataInterfaceBase::GetGCPZ(unsigned int GCPnum) const
 bool
 ImageMetadataInterfaceBase::GetNoDataFlags(std::vector<bool> & flags, std::vector<double> & values) const
 {
-  bool ret = itk::ExposeMetaData<std::vector<bool> >(this->GetMetaDataDictionary(),MetaDataKey::NoDataValueAvailable,flags);
-
-  if (ret)
-    ret = itk::ExposeMetaData<std::vector<double> >(this->GetMetaDataDictionary(),MetaDataKey::NoDataValue,values);
-
-  return ret;
+  return ReadNoDataFlags(this->GetMetaDataDictionary(),flags,values);
 }
 
 ImageMetadataInterfaceBase::VectorType
