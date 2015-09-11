@@ -22,8 +22,26 @@
 #include "vnl/vnl_math.h"
 #include <itkVariableLengthVector.h>
 
+namespace itk
+{
+class MetaDataDictionary;
+}
+
 namespace otb
 {
+
+/** 
+ * Reads no data flag from the MetaDataDictionnary dict to flags and values
+ * vectors. Returns true upon success. 
+ */
+bool ReadNoDataFlags(const itk::MetaDataDictionary& dict, std::vector<bool> & flags, std::vector<double> & values);
+
+/** 
+ * Write no data flags to the MetaDataDictionnary dict from flags and values
+ * vectors. Returns true upon success. 
+ */
+void WriteNoDataFlags(const std::vector<bool> & flags, const std::vector<double> & values, itk::MetaDataDictionary& dict);
+
 /**
 * Test if the pixel corresponds to a no data pixel according to a
 * vector of no data flags, and a vector of no data values.
@@ -139,7 +157,6 @@ template <typename T> itk::VariableLengthVector<T> ChangeNoData(const itk::Varia
     }
 
   return outPixel;
-  
 }
 
 

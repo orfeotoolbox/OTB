@@ -1,5 +1,6 @@
 set(OTBImageBase_SRC
   otbImageIOBase.cxx
+  otbNoDataHelper.cxx
   )
 
 add_library(OTBImageBase ${OTBImageBase_SRC})
