@@ -90,23 +90,17 @@ protected:
   virtual void BeforeThreadedGenerateData()
   {
     std::vector<bool> noDataValueAvailable;
-    bool ret = itk::ExposeMetaData<std::vector<bool> >(this->GetInput()->GetMetaDataDictionary(),MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
+    std::vector<double> noDataValues;
+
+    bool ret = ReadNoDataFlags(this->GetInput()->GetMetaDataDictionary(),noDataValueAvailable,noDataValues);
 
     if(!ret)
       {
       noDataValueAvailable.resize(this->GetInput()->GetNumberOfComponentsPerPixel(),false);
-      }
-
-    this->GetFunctor().m_Flags = noDataValueAvailable;
-
-    std::vector<double> noDataValues;
-    ret = itk::ExposeMetaData<std::vector<double> >(this->GetInput()->GetMetaDataDictionary(),MetaDataKey::NoDataValue,noDataValues);
-
-    if(!ret)
-      {
       noDataValues.resize(this->GetInput()->GetNumberOfComponentsPerPixel(),0);
       }
 
+    this->GetFunctor().m_Flags = noDataValueAvailable;
     this->GetFunctor().m_Values = noDataValues;
   }
 
@@ -114,12 +108,7 @@ protected:
   {
     Superclass::GenerateOutputInformation();
 
-    std::vector<bool> newAvail(this->GetFunctor().m_NewValues.size(),true);
-    
-    itk::EncapsulateMetaData<std::vector<bool> >(this->GetOutput()->GetMetaDataDictionary(),MetaDataKey::NoDataValueAvailable,newAvail);
-    
-    itk::EncapsulateMetaData<std::vector<double> >(this->GetOutput()->GetMetaDataDictionary(),MetaDataKey::NoDataValue,this->GetFunctor().m_NewValues);
-    
+    WriteNoDataFlags(this->GetFunctor().m_Flags,this->GetFunctor().m_NewValues,this->GetOutput()->GetMetaDataDictionary());
   }
 
 private:

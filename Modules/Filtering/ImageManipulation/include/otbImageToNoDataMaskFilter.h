@@ -97,23 +97,11 @@ protected:
   virtual void BeforeThreadedGenerateData()
   {
     std::vector<bool> noDataValueAvailable;
-    bool ret = itk::ExposeMetaData<std::vector<bool> >(this->GetInput()->GetMetaDataDictionary(),MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
-
-    if(!ret)
-      {
-      noDataValueAvailable.resize(this->GetInput()->GetNumberOfComponentsPerPixel(),false);
-      }
-
-    this->GetFunctor().m_Flags = noDataValueAvailable;
-
     std::vector<double> noDataValues;
-    ret = itk::ExposeMetaData<std::vector<double> >(this->GetInput()->GetMetaDataDictionary(),MetaDataKey::NoDataValue,noDataValues);
 
-    if(!ret)
-      {
-      noDataValues.resize(this->GetInput()->GetNumberOfComponentsPerPixel(),0);
-      }
-
+    ReadNoDataFlags(this->GetInput()->GetMetaDataDictionary(),noDataValueAvailable,noDataValues);
+    
+    this->GetFunctor().m_Flags = noDataValueAvailable;
     this->GetFunctor().m_Values = noDataValues;
   }
 
