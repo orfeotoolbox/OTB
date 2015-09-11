@@ -101,17 +101,11 @@ template<typename T> T ChangeNoData(const T & pixel, const
     return static_cast<T>(newValues[0]);
     }
 
-  if(flags[0])
+  if(flags[0] && pixel == values[0])
     {
-    if (pixel == values[0])
-      {
-      return static_cast<T>(newValues[0]);
-      }
+    return static_cast<T>(newValues[0]);
     }
-  else
-    {
-    return pixel;
-    }
+  return pixel;
 }
 
 
