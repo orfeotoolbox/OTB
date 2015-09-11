@@ -30,26 +30,36 @@ namespace Functor {
  * \brief Evaluate the reciprocal Mueller matrix from the reciprocal coherency matrix image
  *
  * Outpus are:
- * - channel #0 : \f$ 0.5*\mathcal{Re}( Coherency[0]+Coherency[3]+Coherency[5]) \f$
- * - channel #1 : \f$ 0.5*\mathcal{Re}( Coherency[0]+Coherency[3]-Coherency[5]) \f$
- * - channel #2 : \f$ 0.5*\mathcal{Re}( Coherency[0]-Coherency[3]+Coherency[5]) \f$
- * - channel #3 : \f$ 0.5*\mathcal{Re}(-Coherency[0]+Coherency[3]+Coherency[5]) \f$
- * - channel #4 : \f$ \mathcal{Re}(Coherency[1]) \f$
- * - channel #5 : \f$ \mathcal{Re}(Coherency[2]) \f$
- * - channel #6 : \f$ \mathcal{Im}(Coherency[4]) \f$
- * - channel #7 : \f$ \mathcal{Re}(Coherency[4]) \f$
- * - channel #8 : \f$ \mathcal{Im}(Coherency[2]) \f$
- * - channel #9 : \f$ \mathcal{Im}(Coherency[1]) \f$
+ * - channel #0 : \f$ 0.5*( C_{11}+C_{22}+C_{33} ) \f$
+ * - channel #1 : \f$ Re(C_{12}) + Im(C_{22}) \f$
+ * - channel #2 : \f$ Re(C_{13}) \f$
+ * - channel #3 : \f$ Im(C_{23}) \f$
+ * - channel #4 : \f$ Re(C_{12}) \f$
+ * - channel #5 : \f$ 0.5*( C_{11}+C_{22}-C_{33} ) \f$
+ * - channel #6 : \f$ Re(C_{23}) \f$
+ * - channel #7 : \f$ Im(C_{13}) \f$
+ * - channel #8 : \f$ -Re(C_{13}) \f$
+ * - channel #9 : \f$ -Re(C_{23}) \f$
+ * - channel #10 : \f$ 0.5.Re(VAL1) \f$
+ * - channel #11 : \f$ 0.5.Im(VAL0) \f$
+ * - channel #12 : \f$ Im(C_{23}) \f$
+ * - channel #13 : \f$ Im(C_{13}) \f$
+ * - channel #14 : \f$ 0.5.Im(VAL1^{*}) \f$
+ * - channel #15 : \f$ 0.5.Re(VAL0) \f$
  *
+ * With:
+ * VAL0 = C_{33}+C_{12}-C_{11}-(C_{12}-C_{22})^{*}   
+ * VAL1 = -C_{33}+C_{12}-C_{11}-(C_{12}-C_{22})^{*} 
+ * 
  * Where Coherency is the input pixel and contains:
- * - channel #0 : \f$ (S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*} \f$
- * - channel #1 : \f$ (S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*} \f$
- * - channel #2 : \f$ (S_{hh}+S_{vv}).(2*S_{hv})^{*} \f$
- * - channel #3 : \f$ (S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*} \f$
- * - channel #4 : \f$ (S_{hh}-S_{vv}).(2*S_{hv})^{*} \f$
- * - channel #5 : \f$ (2*S_{hv}).(2*S_{hv})^{*} \f$
+ * - channel #0 : \f$ 0.5*(S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*} \f$
+ * - channel #1 : \f$ 0.5*(S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*} \f$
+ * - channel #2 : \f$ 0.5*(S_{hh}+S_{vv}).(2*S_{hv})^{*} \f$
+ * - channel #3 : \f$ 0.5*(S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*} \f$
+ * - channel #4 : \f$ 0.5*(S_{hh}-S_{vv}).(2*S_{hv})^{*} \f$
+ * - channel #5 : \f$ 0.5*(2*S_{hv}).(2*S_{hv})^{*} \f$
  *
- * The output pixel has 10 channels : the diagonal and the upper element of the matrix.
+ * The output pixel has 16 channels
  * Element are stored from left to right, line by line.
  *
  * \ingroup SARPolarimetry
