@@ -70,6 +70,7 @@ otbSpectralAngleDistanceImageFilter.cxx
 otbFunctionWithNeighborhoodToImageFilterNew.cxx
 otbEuclideanDistanceMetricWithMissingValue.cxx
 otbEuclideanDistanceMetricWithMissingValueNew.cxx
+otbChangeNoDataValueFilter.cxx
 )
 
 add_executable(otbImageManipulationTestDriver ${OTBImageManipulationTests})
@@ -669,3 +670,6 @@ otb_add_test(NAME bfTvEuclideanDistanceMetricWithMissingValue COMMAND otbImageMa
   otbEuclideanDistanceMetricWithMissingValue)
 otb_add_test(NAME bfTuEuclideanDistanceMetricWithMissingValueNew COMMAND otbImageManipulationTestDriver
   otbEuclideanDistanceMetricWithMissingValueNew)
+
+otb_add_test(NAME filteringImageManipulationChangeNoDataValueFilter COMMAND otbImageManipulationTestDriver
+             otbChangeNoDataValueFilter)

@@ -76,4 +76,5 @@ void RegisterTests()
   REGISTER_TEST(otbFunctionWithNeighborhoodToImageFilterNew);
   REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValue);
   REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValueNew);
+  REGISTER_TEST(otbChangeNoDataValueFilter);
 }
