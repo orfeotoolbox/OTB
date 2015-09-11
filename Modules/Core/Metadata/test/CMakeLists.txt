@@ -354,5 +354,5 @@ foreach( current_file ${GenericTestSPOT6_DATA_INPUTS} )
 endforeach()
 
 
-otb_add_test(NAME coreMetaDataNoDataHelperTest COMMAND otbMetaDataTestDriver
+otb_add_test(NAME coreMetaDataNoDataHelperTest COMMAND otbMetadataTestDriver
   otbNoDataHelperTest)
