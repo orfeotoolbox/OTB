@@ -49,43 +49,21 @@ Sentinel1ImageMetadataInterface::CanRead() const
 
 SarCalibrationLookupData*
 Sentinel1ImageMetadataInterface
-::GetCalibrationLookupData(const short type)
+::GetCalibrationLookupData(const std::string type)
   {
     bool sigmaLut = false;
     bool betaLut = false;
     bool gammaLut = false;
     bool dnLut = false;
 
-    switch (type)
-      {
-      case SarCalibrationLookupData::SIGMA:
-      {
-      sigmaLut = true;
-      }
-      break;
-
-      case SarCalibrationLookupData::BETA:
-      {
+    if( type == "beta")
       betaLut = true;
-      }
-      break;
-
-      case SarCalibrationLookupData::GAMMA:
-      {
+    else if( type == "gamma")
       gammaLut = true;
-      }
-      break;
-
-      case SarCalibrationLookupData::DN:
-      {
+    else if( type == "dn")
       dnLut = true;
-      }
-      break;
-
-      default:
-        sigmaLut = true;
-        break;
-      }
+    else
+      sigmaLut = true;
 
   const ImageKeywordlistType imageKeywordlist =  this->GetImageKeywordlist();
 

@@ -109,8 +109,6 @@ public:
     this->GetFunction()->SetEnableNoise(inArg);
   }
 
-  itkSetMacro(LookupSelected, short);
-  itkGetConstMacro(LookupSelected, short);
 
 
 protected:

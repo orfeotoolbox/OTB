@@ -78,7 +78,7 @@ public:
   virtual double GetRadarFrequency () const = 0;
   virtual double GetCenterIncidenceAngle() const = 0;
 
-  virtual SarCalibrationLookupData* GetCalibrationLookupData(const short) = 0;
+  virtual SarCalibrationLookupData* GetCalibrationLookupData(const std::string) = 0;
 
   virtual bool HasCalibrationLookupData() const
   {
