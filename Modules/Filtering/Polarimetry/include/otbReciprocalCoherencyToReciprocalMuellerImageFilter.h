@@ -72,17 +72,28 @@ public:
     const double T1 = static_cast<double>(Coherency[0].real());
     const double T2 = static_cast<double>(Coherency[3].real());
     const double T3 = static_cast<double>(Coherency[5].real());
+    
+    ComplexType VAL4 = static_cast<ComplexType>( (Coherency[1] - Coherency[3]) );
+    ComplexType VAL5 = static_cast<ComplexType>( (Coherency[1] - Coherency[0]) );
+	ComplexType VAL0 = static_cast<ComplexType>( Coherency[5] + VAL5 - vcl_conj(VAL4) );
+    ComplexType VAL1 = static_cast<ComplexType>( -Coherency[5] + VAL5 - vcl_conj(VAL4) );
 
-    result[0] = 0.5*(T1+T2+T3);                               // A0+B0
-    result[1] = 0.5*(T1+T2-T3);                               // A0+B
-    result[2] = 0.5*(T1-T2+T3);                               // A0-B
-    result[3] = 0.5*(-T1+T2+T3);                              // -A0+B0
-    result[4] = static_cast<double>( Coherency[1].real() );  // C
-    result[5] = static_cast<double>( Coherency[2].real() );  // H
-    result[6] = static_cast<double>( Coherency[4].imag() );  // F
-    result[7] = static_cast<double>( Coherency[4].real() );  // E
-    result[8] = static_cast<double>( Coherency[2].imag() );  // G
-    result[9] = -static_cast<double>( Coherency[1].imag() ); // D
+    result[0] = 0.5*(T1+T2+T3);                               
+    result[1] = static_cast<double>( Coherency[1].real()+Coherency[3].imag() );
+    result[2] = static_cast<double>( Coherency[2].real() );   
+    result[3] = static_cast<double>( Coherency[4].imag() );                           
+    result[4] = static_cast<double>( Coherency[1].real() );  
+    result[5] = 0.5*(T1+T2-T3); 
+    result[6] = static_cast<double>( Coherency[4].real() );
+    result[7] = static_cast<double>( Coherency[2].imag() ); 
+    result[8] = static_cast<double>( -Coherency[2].real() );
+    result[9] = static_cast<double>( -Coherency[4].real() );
+	result[10] = static_cast<double>( 0.5*VAL1.real() ); 
+	result[11] = static_cast<double>( 0.5*VAL0.imag() ); 
+	result[12] = static_cast<double>( Coherency[4].imag() ); 
+	result[13] = static_cast<double>( Coherency[2].imag() );
+	result[14] = static_cast<double>( 0.5*vcl_conj(VAL1).imag() ); 
+	result[15] = static_cast<double>( 0.5*VAL0.real() ); 
 
     return result;
     }
@@ -99,7 +110,7 @@ public:
    virtual ~ReciprocalCoherencyToReciprocalMuellerFunctor() {}
 
 private:
-   itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 10);
+   itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 16);
 };
 }
 
