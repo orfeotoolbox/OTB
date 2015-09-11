@@ -77,4 +77,5 @@ void RegisterTests()
   REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValue);
   REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValueNew);
   REGISTER_TEST(otbChangeNoDataValueFilter);
+  REGISTER_TEST(otbImageToNoDataMaskFilter);
 }
