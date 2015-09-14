@@ -231,6 +231,11 @@ ImageViewManipulator
   ImageViewRenderer::RenderingContext * const context =
     dynamic_cast< ImageViewRenderer::RenderingContext * const >( c );
 
+  // Coverity-19840
+  // {
+  assert( context!=NULL );
+  // }
+
   context->m_RenderMode =
     m_IsMouseDragging
     ? AbstractImageViewRenderer::RenderingContext::RENDER_MODE_LIGHT
