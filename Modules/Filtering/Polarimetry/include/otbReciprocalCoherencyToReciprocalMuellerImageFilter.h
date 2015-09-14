@@ -85,8 +85,8 @@ public:
     
     ComplexType VAL4 = static_cast<ComplexType>( (Coherency[1] - Coherency[3]) );
     ComplexType VAL5 = static_cast<ComplexType>( (Coherency[1] - Coherency[0]) );
-	ComplexType VAL0 = static_cast<ComplexType>( Coherency[5] + VAL5 - vcl_conj(VAL4) );
-    ComplexType VAL1 = static_cast<ComplexType>( -Coherency[5] + VAL5 - vcl_conj(VAL4) );
+	ComplexType VAL0 = static_cast<ComplexType>( Coherency[5] ) + VAL5 - vcl_conj(VAL4);
+    ComplexType VAL1 = static_cast<ComplexType>( -Coherency[5] ) + VAL5 - vcl_conj(VAL4);
 
     result[0] = 0.5*(T1+T2+T3);                               
     result[1] = static_cast<double>( Coherency[1].real()+Coherency[3].imag() );
