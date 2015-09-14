@@ -51,9 +51,10 @@
 
 enum ERROR_CODE
 {
-  ERROR_CODE_CACHE_DIR = -1,
-  ERROR_CODE_DATABASE = -2,
-  ERROR_CODE_GL_VERSION = -3,
+  ERROR_CODE_I18N = -1,
+  ERROR_CODE_CACHE_DIR = -2,
+  ERROR_CODE_DATABASE = -3,
+  ERROR_CODE_GL_VERSION = -4,
 };
 
 /*****************************************************************************/
@@ -79,8 +80,45 @@ main( int argc, char* argv[] )
 
   //
   // 1. Initialize application and sync settings.
-  mvd::Application application( &qtApp );
-  application.Initialize();
+  //
+  // Coverity-14835
+  // {
+  mvd::Application * application = NULL;
+
+  try
+    {
+    application = new mvd::Application( &qtApp );
+    assert( application!=NULL );
+
+    throw std::runtime_error( "test" );
+
+    application->Initialize();
+    }
+  catch( std::exception & exc )
+    {
+    QMessageBox::StandardButton button =
+      QMessageBox::question(
+	NULL,
+	QCoreApplication::translate(
+	  "Mv2",
+	  "Mv2 - Question!"
+	),
+	QCoreApplication::translate(
+	  "Mv2",
+	  "The following exception has been caught while initializing the software:\n"
+	  "'%1'\n\n"
+	  "The application may not function as expeceted. Do you want to continue?"
+	)
+	.arg( exc.what() ),
+	QMessageBox::Yes | QMessageBox::No,
+	QMessageBox::Yes
+      );
+
+    if( button==QMessageBox::No )
+      return ERROR_CODE_I18N;
+    }
+  // }
+  // Coverity-14835
 
   //
   // 2. Initialize main-window (UI).
@@ -123,8 +161,15 @@ main( int argc, char* argv[] )
   int result = QCoreApplication::instance()->exec();
 
   /*
-  application.CloseDatabase();
+  application->CloseDatabase();
   */
+
+  // Coverity-14835
+  // {
+  delete application;
+  application = NULL;
+  // }
+  // Coverity-14835
 
   return result;
 }
