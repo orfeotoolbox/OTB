@@ -114,6 +114,11 @@ QuicklookViewManipulator
   QuicklookViewRenderer::RenderingContext * const context =
     dynamic_cast< QuicklookViewRenderer::RenderingContext * const >( c );
 
+  // Coverity-19843.
+  // {
+  assert( context!=NULL );
+  // }
+
   context->m_RoiOrigin = m_RoiOrigin;
   context->m_RoiExtent = m_RoiOrigin;
 
