@@ -75,7 +75,7 @@ private:
 						  "Note: this application doesn't take into account the terms which do not depend on the polarization of the antennas. \n"
 						  "The parameter gain can be used for this purpose.\n"
 						  "\n"
-						  "The final formula is thus : P = gain x | B^T . [S] . A |², where A ans B are two Jones vectors and S is a Sinclair matrix.");
+						  "The final formula is thus : P = | B^T . [S] . A |², where A ans B are two Jones vectors and S is a Sinclair matrix.");
 						  
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -128,10 +128,6 @@ private:
     AddChoice("mode.cross","Crosspolarization");
     SetParameterDescription("mode.cross","Crosspolarization");
     
-    AddParameter(ParameterType_Float,"gain","Gain");
-    SetParameterDescription("gain","Gain (final power = gain x synthetized power)");
-    SetMinimumParameterFloatValue("gain",0.0);
-    MandatoryOff("gain");
 
     AddRAMParameter();
 
@@ -142,7 +138,6 @@ private:
     SetDefaultParameterFloat("khir",  0.);
     SetDefaultParameterInt("emissionh", 0);
     SetDefaultParameterInt("emissionv", 0);
-    SetDefaultParameterFloat("gain",  1.0);
 	SetDefaultParameterFloat("mode",  0);
 
     // Doc example parameter settings
@@ -169,7 +164,6 @@ private:
     m_MCPSFilter->SetKhiR(GetParameterFloat("khir"));
     m_MCPSFilter->SetEmissionH(GetParameterInt("emissionh"));
     m_MCPSFilter->SetEmissionV(GetParameterInt("emissionv"));
-	m_MCPSFilter->SetGain(GetParameterFloat("gain"));
 	m_MCPSFilter->SetMode(GetParameterInt("mode"));  
 	  
     ComplexFloatVectorImageType* inVImage = GetParameterComplexImage("in");
