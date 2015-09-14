@@ -238,6 +238,9 @@ ImageViewWidget
   // Insert image-models into image-view renderer.
   m_Renderer->SetLayerStack( stackedLayerModel );
 
+  // Coverity-19846.
+  if( stackedLayerModel==NULL )
+    return;
 
   //
   // Connect layer-stack model to this widget manipulator.
