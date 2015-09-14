@@ -166,9 +166,11 @@ MainWindow
   assert( m_ImageView!=NULL );
   assert( m_ImageView->GetRenderer()!=NULL );
 
-  if( m_ImageView==NULL ||
-      m_ImageView->GetRenderer()==NULL )
-    return false;
+  // Coverity-19845
+  //
+  // if( m_ImageView==NULL ||
+  //     m_ImageView->GetRenderer()==NULL )
+  //   return false;
 
   if( !m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 ) )
     return false;
