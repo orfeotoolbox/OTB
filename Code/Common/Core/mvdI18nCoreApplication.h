@@ -773,11 +773,11 @@ I18nCoreApplication
       break;
 
     case QSettings::AccessError:
-      throw SystemError( ToStdString( tr( "Settings-file access error." ) ) );
+      throw SystemError( ToStdString( tr( "Cannot access settings file." ) ) );
       break;
 
     case QSettings::FormatError:
-      throw SystemError( ToStdString( tr( "Settings-file format error." ) ) );
+      throw SystemError( ToStdString( tr( "Bad settings file format." ) ) );
       break;
 
     default:
