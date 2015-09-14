@@ -66,7 +66,12 @@ namespace mvd
 PixelDescriptionWidget
 ::PixelDescriptionWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
-  m_UI( new mvd::Ui::PixelDescriptionWidget() )
+  m_UI( new mvd::Ui::PixelDescriptionWidget() ),
+  m_CartographicRootItem( NULL ),
+  m_GeographicRootItem( NULL ),
+  m_PixelValueRootItem( NULL ),
+  m_CartographicItem( NULL ),
+  m_GeographicItem( NULL )
 {
   m_UI->setupUi( this );
 
