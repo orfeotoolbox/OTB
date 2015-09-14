@@ -810,6 +810,11 @@ ImageViewRenderer
           VectorImageModel * vectorImageModel =
             dynamic_cast< VectorImageModel * >( it->second );
 
+	  // Coverity-19839
+	  // {
+	  assert( vectorImageModel!=NULL );
+	  // }
+
 	  // qDebug()
 	  //   << QString( "Adding image-actor from file '%1'..." )
 	  //   .arg( vectorImageModel->GetFilename() );

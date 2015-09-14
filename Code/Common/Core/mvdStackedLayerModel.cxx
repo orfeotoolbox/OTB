@@ -333,7 +333,7 @@ StackedLayerModel::KeyType
 StackedLayerModel
 ::Insert( AbstractLayerModel * model, SizeType index )
 {
-  qDebug() << this << "::Insert(" << model << "," << index << ")";
+  // qDebug() << this << "::Insert(" << model << "," << index << ")";
 
   //
   // Check given model.
