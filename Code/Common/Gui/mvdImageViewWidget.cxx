@@ -180,23 +180,6 @@ ImageViewWidget
       SLOT( OnReferenceChanged( size_t ) )
     );
 
-#if 0
-    QObject::disconnect(
-      model,
-      SIGNAL( ContentChanged() ),
-      // from:
-      this,
-      SLOT( UpdateScene() )
-    );
-
-    QObject::disconnect(
-      model,
-      SIGNAL( ContentChanged() ),
-      // from:
-      this,
-      SLOT( updateGL() )
-    );
-#else
     QObject::disconnect(
       model,
       SIGNAL( ContentChanged() ),
@@ -204,7 +187,6 @@ ImageViewWidget
       this,
       SLOT( OnContentChanged() )
     );
-#endif
 
     QObject::disconnect(
       model,
@@ -312,23 +294,6 @@ ImageViewWidget
     SLOT( updateGL() )
   );
 
-#if 0
-  QObject::connect(
-    stackedLayerModel,
-    SIGNAL( ContentChanged() ),
-    // to:
-    this,
-    SLOT( UpdateScene() )
-  );
-
-  QObject::connect(
-    stackedLayerModel,
-    SIGNAL( ContentChanged() ),
-    // to:
-    this,
-    SLOT( updateGL() )
-  );
-#else
   QObject::connect(
     stackedLayerModel,
     SIGNAL( ContentChanged() ),
@@ -336,7 +301,6 @@ ImageViewWidget
     this,
     SLOT( OnContentChanged() )
   );
-#endif
 
   QObject::connect(
     stackedLayerModel,
