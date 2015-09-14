@@ -31,6 +31,7 @@ namespace Functor
  *  \brief Functor used by ImageToNoDataMaskFilter
  *
  *  See ImageToNoDataMaskFilter for complete documentation. 
+ *  \ingroup OTBImageManipulation
  */
 template <typename TInputPixel, typename TOutputPixel> 
 class NoDataFunctor

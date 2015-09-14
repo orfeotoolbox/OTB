@@ -31,6 +31,7 @@ namespace Functor
  *  \brief Functor used by ChangeNoDataValueFilter
  *
  *  See ChangeNoDataValueFilter for complete documentation. 
+ *  \ingroup OTBImageManipulation
  */
 template <typename TInputPixel, typename TOutputPixel> 
 class ChangeNoDataFunctor
