@@ -212,7 +212,7 @@ VectorImageModel
 ::BuildGdalOverviews()
 {
   // Build overviews if necessary
-  bool hasOverviewsSupport = (m_ImageFileReader->GetOverviewsCount()>0);
+  // bool hasOverviewsSupport = (m_ImageFileReader->GetOverviewsCount()>0);
   int nbOfAvailableOvw = m_ImageFileReader->GetOverviewsCount();
   // TODO: this choice should be done by the user during the import of the file
   bool forceToCacheOvw = true;
