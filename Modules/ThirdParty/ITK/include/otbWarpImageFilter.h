@@ -257,7 +257,7 @@ private:
   /** This function should be in an interpolator but none of the ITK
    * interpolators at this point handle edge conditions properly
    */
-  DisplacementType EvaluateDisplacementAtPhysicalPoint(const PointType &p);
+  DisplacementType EvaluateDisplacementAtPhysicalPoint(const PointType &p, const DisplacementFieldType *fieldPtr);
 
   PixelType                  m_EdgePaddingValue;
   SpacingType                m_OutputSpacing;
