@@ -175,6 +175,7 @@ private:
   struct Flags
   {
     Flags() :
+      m_IsModified( false ),
       m_NoData( false )
     {
     }
