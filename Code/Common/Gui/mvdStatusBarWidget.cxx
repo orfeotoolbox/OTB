@@ -89,10 +89,7 @@ StatusBarWidget
   else if( scale<1.0 )
     return QString( "1:%1" ).arg( 1.0 / scale );
 
-  else
-    return "1:1";
-
-  return QString(); // QString( ":" );
+  return "1:1";
 }
 
 /*****************************************************************************/
