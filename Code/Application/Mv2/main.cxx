@@ -90,8 +90,6 @@ main( int argc, char* argv[] )
     application = new mvd::Application( &qtApp );
     assert( application!=NULL );
 
-    throw std::runtime_error( "test" );
-
     application->Initialize();
     }
   catch( std::exception & exc )
