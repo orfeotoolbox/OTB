@@ -303,34 +303,35 @@ private:
     AddChoice("conv.mlinearcovariancetocircularcovariance","7 Monostatic : Covariance matrix to circular covariance matrix (complex output)"); 
     SetParameterDescription("conv.mlinearcovariancetocircularcovariance","7 Monostatic : Covariance matrix to circular covariance matrix (complex output)");  
     
+    // #8
+    // MuellerToReciprocalCovarianceImageFilter 
+    AddChoice("conv.muellertomcovariance","8 Bi/mono : Mueller matrix to monostatic covariance matrix");
+    SetParameterDescription("conv.muellertomcovariance","8 Bi/mono : Mueller matrix to monostatic covariance matrix");
+    
     //Bistatic case
     
-    // #8
-    // SinclairToCoherency
-    AddChoice("conv.bsinclairtocoherency","8 Bistatic : Sinclair matrix to coherency matrix (complex output)");
-    SetParameterDescription("conv.bsinclairtocoherency","8 Bistatic : Sinclair matrix to coherency matrix (complex output)");
-    
     // #9
-    // SinclairToCovariance  
-    AddChoice("conv.bsinclairtocovariance","9 Bistatic : Sinclair matrix to covariance matrix (complex output)");
-    SetParameterDescription("conv.bsinclairtocovariance","9 Bistatic : Sinclair matrix to covariance matrix (complex output)");
+    // SinclairToCoherency
+    AddChoice("conv.bsinclairtocoherency","9 Bistatic : Sinclair matrix to coherency matrix (complex output)");
+    SetParameterDescription("conv.bsinclairtocoherency","9 Bistatic : Sinclair matrix to coherency matrix (complex output)");
     
     // #10
+    // SinclairToCovariance  
+    AddChoice("conv.bsinclairtocovariance","10 Bistatic : Sinclair matrix to covariance matrix (complex output)");
+    SetParameterDescription("conv.bsinclairtocovariance","10 Bistatic : Sinclair matrix to covariance matrix (complex output)");
+    
+    // #11
     // SinclairToCircularCovariance 
-    AddChoice("conv.bsinclairtocircovariance","10 Bistatic : Sinclair matrix to circular covariance matrix (complex output)");
-    SetParameterDescription("conv.bsinclairtocircovariance","10 Bistatic : Sinclair matrix to circular covariance matrix (complex output)");
+    AddChoice("conv.bsinclairtocircovariance","11 Bistatic : Sinclair matrix to circular covariance matrix (complex output)");
+    SetParameterDescription("conv.bsinclairtocircovariance","11 Bistatic : Sinclair matrix to circular covariance matrix (complex output)");
     
     //Both case
     
-    // #11
-    // SinclairToMueller
-    AddChoice("conv.sinclairtomueller","11 Bi/mono : Sinclair matrix to Mueller matrix");
-    SetParameterDescription("conv.sinclairtomueller","11 Bi/mono : Sinclair matrix to Mueller matrix");
-    
     // #12
-    // MuellerToReciprocalCovarianceImageFilter 
-    AddChoice("conv.muellertomcovariance","12 Bi/mono : Mueller matrix to monostatic covariance matrix");
-    SetParameterDescription("conv.muellertomcovariance","12 Bi/mono : Mueller matrix to monostatic covariance matrix");
+    // SinclairToMueller
+    AddChoice("conv.sinclairtomueller","12 Bi/mono : Sinclair matrix to Mueller matrix");
+    SetParameterDescription("conv.sinclairtomueller","12 Bi/mono : Sinclair matrix to Mueller matrix");
+    
     
     // #13
     // MuellerToPolarisationDegreeAndPowerImageFilter
@@ -355,7 +356,7 @@ private:
     
     int convType = GetParameterInt("conv");
     
-    if ( (convType>=0) && (convType<=2)) //Monostatic case : multi one-band inputs
+    if ( (convType>=0) && (convType<=2)) //msinclairtocoherency msinclairtocovariance msinclairtocircovariance
 	{
 	    GetParameterByKey("inc")->SetActive(false);
 	    GetParameterByKey("inf")->SetActive(false); 
@@ -366,7 +367,7 @@ private:
 	    GetParameterByKey("outc")->SetActive(true);
 	    GetParameterByKey("outf")->SetActive(false);
 	}
-	else if ( (convType>=3) && (convType<=6)) //Monostatic case : one multi-band input
+	else if ( (convType>=3) && (convType<=6)) // mcoherencytomueller mcovariancetocoherencydegree mcovariancetocoherency mlinearcovariancetocircularcovariance
 	{  
 	    GetParameterByKey("inc")->SetActive(true);
 	    GetParameterByKey("inf")->SetActive(false); 
@@ -386,7 +387,18 @@ private:
 			GetParameterByKey("outf")->SetActive(false);
 		}
 	}
-	else if ( (convType>=7) && (convType<=10)) //Bistatic case : multi one-band inputs
+	else if ( convType==7) // muellertomcovariance
+	{
+		GetParameterByKey("inc")->SetActive(false);
+	    GetParameterByKey("inf")->SetActive(true); 
+	    GetParameterByKey("inhh")->SetActive(false);
+	    GetParameterByKey("inhv")->SetActive(false); 
+	    GetParameterByKey("invh")->SetActive(false);
+	    GetParameterByKey("invv")->SetActive(false); 
+	    GetParameterByKey("outc")->SetActive(true);
+		GetParameterByKey("outf")->SetActive(false);	
+	}
+	else if ( (convType>=8) && (convType<=11)) // bsinclairtocoherency bsinclairtocovariance bsinclairtocircovariance sinclairtomueller
 	{
 	    GetParameterByKey("inc")->SetActive(false);
 	    GetParameterByKey("inf")->SetActive(false); 
@@ -395,7 +407,7 @@ private:
 	    GetParameterByKey("invh")->SetActive(true);
 	    GetParameterByKey("invv")->SetActive(true); 
 	    	    
-	    if (convType == 10)
+	    if (convType == 11)
 	    {
 			GetParameterByKey("outc")->SetActive(false);
 			GetParameterByKey("outf")->SetActive(true);
@@ -407,7 +419,7 @@ private:
 		}
 	    
 	}
-	else if ( (convType>=11) && (convType<=12)) //Bistatic case : one multi-band input
+	else if ( convType==12 )  // muellertopoldegandpower
 	{
 	    GetParameterByKey("inc")->SetActive(false);
 	    GetParameterByKey("inf")->SetActive(true); 
@@ -415,17 +427,8 @@ private:
 	    GetParameterByKey("inhv")->SetActive(false); 
 	    GetParameterByKey("invh")->SetActive(false);
 	    GetParameterByKey("invv")->SetActive(false); 
-	    	    
-	    if (convType == 12)
-	    {
-			GetParameterByKey("outc")->SetActive(false);
-			GetParameterByKey("outf")->SetActive(true);
-		}
-		else
-		{
-			GetParameterByKey("outc")->SetActive(true);
-			GetParameterByKey("outf")->SetActive(false);
-		}
+	    GetParameterByKey("outc")->SetActive(false);
+		GetParameterByKey("outf")->SetActive(true);	    
 	}
 	
     
@@ -455,7 +458,7 @@ private:
 	        otbAppLogFATAL( << "No output image provided; please, set the parameter 'outc' or 'outf'.");
 
 	
-	if ( (convType>=0) && (convType<=2)) //Monostatic case : multi one-band inputs
+	if ( (convType>=0) && (convType<=2)) //msinclairtocoherency msinclairtocovariance msinclairtocircovariance
 	{
 		if ( (!inhv) && (!invh) )
 	        otbAppLogFATAL( << "Parameter 'inhv' or 'invh' not set.");
@@ -466,17 +469,17 @@ private:
 	        
 	}
 	
-	else if ( (convType>=3) && (convType<=6)) //Monostatic case : one multi-band input
+	else if ( (convType>=3) && (convType<=6)) // mcoherencytomueller mcovariancetocoherencydegree mcovariancetocoherency mlinearcovariancetocircularcovariance
 	{
 		if ( !inc )
 	        otbAppLogFATAL( << "Parameter 'inc' not set.");
 	}
-	else if ( (convType>=7) && (convType<=10)) //Bistatic case : multi one-band inputs
+	else if ( (convType>=8) && (convType<=11)) // bsinclairtocoherency bsinclairtocovariance bsinclairtocircovariance sinclairtomueller
 	{
 	    if ( (!inhh) || (!inhv) || (!invh) || (!invv) )
 	        otbAppLogFATAL( << "Please, ensure that HH, HV, VH and VV complex images have been provided (paramaters inhh, inhv, invh, invv).");
 	}
-	else if ( (convType>=11) && (convType<=12)) //Bistatic case : one multi-band input
+	else if ( (convType==7) || (convType==12) ) // muellertomcovariance muellertopoldegandpower
 	{
 		if ( !inf )
 	        otbAppLogFATAL( << "Parameter 'inf' not set.");
@@ -546,7 +549,7 @@ private:
 		m_RCRMFilter = RCRMFilterType::New();
 		m_RCRMFilter->SetInput(GetParameterComplexFloatVectorImage("inc"));
 		
-		SetParameterOutputImage("outf", m_RCRMFilter->GetOutput() ); // input : 6 complex channels | 10 real channels
+		SetParameterOutputImage("outf", m_RCRMFilter->GetOutput() ); // input : 6 complex channels | 16 real channels
 		
 		break;
 		
@@ -583,11 +586,22 @@ private:
 		break;
 		
 		
+		case 7: // MuellerToReciprocalCovarianceImageFilter
+		
+		m_MRCFilter = MRCFilterType::New();
+		
+		m_MRCFilter->SetInput(GetParameterFloatVectorImage("inf"));
+		
+		SetParameterComplexOutputImage("outc", m_MRCFilter->GetOutput() ); // input : 16 real channels | output : 6 complex channels
+		
+		break;
+		
+		
 	    //***************************************
 		//*               BISTATIC              * 
 		//***************************************
 		
-	    case 7: // SinclairToCoherency
+	    case 8: // SinclairToCoherency
 			
 	  	m_CohSRFilter = CohSRFilterType::New();
 	  	
@@ -602,7 +616,7 @@ private:
 		
 			
     
-		case 8: // SinclairToCovariance	
+		case 9: // SinclairToCovariance	
 		
 		m_CovSRFilter = CovSRFilterType::New();
 		
@@ -616,7 +630,7 @@ private:
 		break;
 		
 		
-		case 9: // SinclairToCircularCovariance
+		case 10: // SinclairToCircularCovariance
 		
 		m_CCSRFilter = CCSRFilterType::New();
 		
@@ -629,8 +643,13 @@ private:
 		
 		break;
 		
+		
+		//***************************************
+		//*             BOTH CASES              * 
+		//***************************************
+		
 				
-		case 10: // SinclairToMueller
+		case 11: // SinclairToMueller
 		
 		m_MSRFilter = MSRFilterType::New();
 		
@@ -640,17 +659,6 @@ private:
 		m_MSRFilter->SetInputVV(GetParameterComplexFloatImage("invv"));
 		
 		SetParameterOutputImage("outf", m_MSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 16 real channels
-		
-		break;
-		
-		
-		case 11: // MuellerToReciprocalCovarianceImageFilter
-		
-		m_MRCFilter = MRCFilterType::New();
-		
-		m_MRCFilter->SetInput(GetParameterFloatVectorImage("inf"));
-		
-		SetParameterComplexOutputImage("outc", m_MRCFilter->GetOutput() ); // input : 16 real channels | output : 6 complex channels
 		
 		break;
 		
