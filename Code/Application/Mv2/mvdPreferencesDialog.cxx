@@ -73,12 +73,7 @@ PreferencesDialog
 {
   m_UI->setupUi( this );
 
-  m_UI->cacheDirPathLineEdit->setText(
-    I18nApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_CACHE_DIR
-    )
-    .toString()
-  );
+  m_UI->settingsGroupBox->setVisible( false );
 
   m_UI->resultDirPathLineEdit->setText(
     I18nApplication::Instance()->RetrieveSettingsKey(
