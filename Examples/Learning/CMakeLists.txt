@@ -12,6 +12,7 @@ target_link_libraries(SOMClassifierExample ${OTB_LIBRARIES})
 add_executable(SOMExample SOMExample.cxx)
 target_link_libraries(SOMExample ${OTB_LIBRARIES})
 
+if(OTBSVMLearning_LOADED)
 add_executable(SVMImageClassificationExample SVMImageClassificationExample.cxx)
 target_link_libraries(SVMImageClassificationExample ${OTB_LIBRARIES})
 
@@ -29,13 +30,15 @@ target_link_libraries(SVMPointSetExample ${OTB_LIBRARIES})
 
 add_executable(SVMPointSetModelEstimatorExample SVMPointSetModelEstimatorExample.cxx)
 target_link_libraries(SVMPointSetModelEstimatorExample ${OTB_LIBRARIES})
+endif()
 
+if(OTBOpenCV_LOADED)
 add_executable(TrainMachineLearningModelFromImagesExample TrainMachineLearningModelFromImagesExample.cxx)
 target_link_libraries(TrainMachineLearningModelFromImagesExample ${OTB_LIBRARIES})
 
 add_executable(TrainMachineLearningModelFromSamplesExample TrainMachineLearningModelFromSamplesExample.cxx)
 target_link_libraries(TrainMachineLearningModelFromSamplesExample ${OTB_LIBRARIES})
-
+endif()
 
 if(BUILD_TESTING)
   add_subdirectory(test)

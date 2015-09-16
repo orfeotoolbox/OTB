@@ -84,7 +84,7 @@ otb_add_test(NAME bfTeIndexedToRGBExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/buildingExtractionRGB.png
     ${TEMP}/buildingExtractionIndexed_scaled.png
 )
-
+if(OTBMeanShift_LOADED)
 otb_add_test(NAME bfTeMeanShiftSegmentationFilterExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 4
     ${BASELINE}/MSClusteredOutput.tif
@@ -107,7 +107,7 @@ otb_add_test(NAME bfTeMeanShiftSegmentationFilterExampleTest COMMAND ${OTB_TEST_
     100
     0.1
 )
-
+endif()
 # ------- HillShadingExampleTest ----------
 
 otb_add_test(NAME bfTeHillShadingExampleTest COMMAND ${OTB_TEST_DRIVER}

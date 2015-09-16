@@ -43,6 +43,7 @@ otb_add_test(NAME prTeDEMHandlerExampleTest COMMAND ${OTB_TEST_DRIVER}
     0.001
 )
 
+if(OTBKMZWriter_LOADED)
 otb_add_test(NAME ioTeImageToKmzAndMapFileProductExample COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:ImageToKmzAndMapFileProductExample>
     ${OTB_DATA_ROOT}/Input/Haiti1_sr10.jpeg
@@ -78,6 +79,7 @@ otb_add_test(NAME ioTeImageToKmzAndMapFileProductExample COMMAND ${OTB_TEST_DRIV
     42.000000  232.000000 -72.426552 18.540876 0.000000
 )
 set_property(TEST ioTeImageToKmzAndMapFileProductExample PROPERTY RESOURCE_LOCK web_access)
+endif()
 
 otb_add_test(NAME ioTeTileMapImageIOExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image 10.0
