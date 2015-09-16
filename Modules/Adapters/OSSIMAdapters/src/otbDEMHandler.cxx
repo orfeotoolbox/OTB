@@ -52,6 +52,8 @@ DEMHandler
   m_GeoidFile(""),
   m_DefaultHeightAboveEllipsoid(0)
 {
+  assert( ossimElevManager::instance()!=NULL );
+
   ossimElevManager::instance()->setDefaultHeightAboveEllipsoid(m_DefaultHeightAboveEllipsoid);
   // Force geoid fallback
   ossimElevManager::instance()->setUseGeoidIfNullFlag(true);
@@ -61,6 +63,8 @@ void
 DEMHandler
 ::OpenDEMDirectory(const char* DEMDirectory)
 {
+  assert( ossimElevManager::instance()!=NULL );
+
   ossimFilename ossimDEMDir( DEMDirectory );
 
   if (!ossimElevManager::instance()->loadElevationPath(ossimDEMDir))
@@ -91,7 +95,6 @@ DEMHandler
 ::ClearDEMs()
 {
   assert( ossimElevManager::instance()!=NULL );
-  assert( ossimElevManager::instance()!=NULL );
 
   ossimElevManager::instance()->clear();
 }
@@ -108,6 +111,8 @@ bool
 DEMHandler
 ::IsValidDEMDirectory(const char* DEMDirectory)
 {
+  assert( ossimElevManager::instance()!=NULL );
+
   //Try to load elevation source
   bool result = ossimElevManager::instance()->loadElevationPath(DEMDirectory);
 
@@ -141,6 +146,8 @@ DEMHandler
 
       // The previous flag will be ignored if
       // defaultHeightAboveEllipsoid is not NaN
+      assert( ossimElevManager::instance()!=NULL );
+
       ossimElevManager::instance()->setDefaultHeightAboveEllipsoid(ossim::nan());
 
       }
@@ -165,9 +172,14 @@ DEMHandler
 {
   double   height;
   ossimGpt ossimWorldPoint;
+
   ossimWorldPoint.lon = lon;
   ossimWorldPoint.lat = lat;
+
+  assert( ossimElevManager::instance()!=NULL );
+
   height = ossimElevManager::instance()->getHeightAboveMSL(ossimWorldPoint);
+
   return height;
 }
 
@@ -184,8 +196,12 @@ DEMHandler
 {
   double   height;
   ossimGpt ossimWorldPoint;
+
   ossimWorldPoint.lon = lon;
   ossimWorldPoint.lat = lat;
+
+  assert( ossimElevManager::instance()!=NULL );
+
   height = ossimElevManager::instance()->getHeightAboveEllipsoid(ossimWorldPoint);
 
   return height;
@@ -205,6 +221,9 @@ DEMHandler
   // Ossim does not allow to retrieve the default height above
   // ellipsoid We therefore must keep it on our side
   m_DefaultHeightAboveEllipsoid = h;
+
+  assert( ossimElevManager::instance()!=NULL );
+
   ossimElevManager::instance()->setDefaultHeightAboveEllipsoid(h);
 }
 
@@ -223,6 +242,8 @@ std::string DEMHandler::GetDEMDirectory(unsigned int idx) const
 
   if(ossimElevManager::instance()->getNumberOfElevationDatabases() > 0)
     {
+    assert( ossimElevManager::instance()!=NULL );
+
     demDir = ossimElevManager::instance()->getElevationDatabase(idx)->getConnectionString().string();
     }
   return demDir;
