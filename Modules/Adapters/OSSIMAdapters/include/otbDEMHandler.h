@@ -143,8 +143,6 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  ossimElevManager* m_ElevManager;
-
   // Ossim does not allow to retrieve the geoid file path
   // We therefore must keep it on our side
   std::string m_GeoidFile;

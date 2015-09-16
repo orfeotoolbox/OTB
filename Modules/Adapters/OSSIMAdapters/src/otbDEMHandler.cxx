@@ -49,13 +49,12 @@ DEMHandler::Pointer DEMHandler::Instance()
 
 DEMHandler
 ::DEMHandler() :
-  m_ElevManager(ossimElevManager::instance()),
   m_GeoidFile(""),
   m_DefaultHeightAboveEllipsoid(0)
 {
-  m_ElevManager->setDefaultHeightAboveEllipsoid(m_DefaultHeightAboveEllipsoid);
+  ossimElevManager::instance()->setDefaultHeightAboveEllipsoid(m_DefaultHeightAboveEllipsoid);
   // Force geoid fallback
-  m_ElevManager->setUseGeoidIfNullFlag(true);
+  ossimElevManager::instance()->setUseGeoidIfNullFlag(true);
 }
 
 void
@@ -64,7 +63,7 @@ DEMHandler
 {
   ossimFilename ossimDEMDir( DEMDirectory );
 
-  if (!m_ElevManager->loadElevationPath(ossimDEMDir))
+  if (!ossimElevManager::instance()->loadElevationPath(ossimDEMDir))
     {
     // In ossim elevation database factory code, the
     // ossimImageElevationDatabase is explicitly disabled by a #if 0
@@ -81,7 +80,7 @@ DEMHandler
     else
       {
       otbMsgDevMacro(<< "DEM directory contains general elevation image files: " << ossimDEMDir);
-      m_ElevManager->addDatabase(imageElevationDatabase.get());
+      ossimElevManager::instance()->addDatabase(imageElevationDatabase.get());
       }
     }
 }
@@ -92,7 +91,7 @@ DEMHandler
 ::ClearDEMs()
 {
   assert( ossimElevManager::instance()!=NULL );
-  assert( m_ElevManager!=NULL );
+  assert( ossimElevManager::instance()!=NULL );
 
   ossimElevManager::instance()->clear();
 }
@@ -110,7 +109,7 @@ DEMHandler
 ::IsValidDEMDirectory(const char* DEMDirectory)
 {
   //Try to load elevation source
-  bool result = m_ElevManager->loadElevationPath(DEMDirectory);
+  bool result = ossimElevManager::instance()->loadElevationPath(DEMDirectory);
 
   if (!result)
     {
@@ -142,7 +141,7 @@ DEMHandler
 
       // The previous flag will be ignored if
       // defaultHeightAboveEllipsoid is not NaN
-      m_ElevManager->setDefaultHeightAboveEllipsoid(ossim::nan());
+      ossimElevManager::instance()->setDefaultHeightAboveEllipsoid(ossim::nan());
 
       }
     else
@@ -168,7 +167,7 @@ DEMHandler
   ossimGpt ossimWorldPoint;
   ossimWorldPoint.lon = lon;
   ossimWorldPoint.lat = lat;
-  height = m_ElevManager->getHeightAboveMSL(ossimWorldPoint);
+  height = ossimElevManager::instance()->getHeightAboveMSL(ossimWorldPoint);
   return height;
 }
 
@@ -187,7 +186,7 @@ DEMHandler
   ossimGpt ossimWorldPoint;
   ossimWorldPoint.lon = lon;
   ossimWorldPoint.lat = lat;
-  height = m_ElevManager->getHeightAboveEllipsoid(ossimWorldPoint);
+  height = ossimElevManager::instance()->getHeightAboveEllipsoid(ossimWorldPoint);
 
   return height;
 }
@@ -206,7 +205,7 @@ DEMHandler
   // Ossim does not allow to retrieve the default height above
   // ellipsoid We therefore must keep it on our side
   m_DefaultHeightAboveEllipsoid = h;
-  m_ElevManager->setDefaultHeightAboveEllipsoid(h);
+  ossimElevManager::instance()->setDefaultHeightAboveEllipsoid(h);
 }
 
 double
@@ -222,9 +221,9 @@ std::string DEMHandler::GetDEMDirectory(unsigned int idx) const
 {
   std::string demDir = "";
 
-  if(m_ElevManager->getNumberOfElevationDatabases() > 0)
+  if(ossimElevManager::instance()->getNumberOfElevationDatabases() > 0)
     {
-    demDir = m_ElevManager->getElevationDatabase(idx)->getConnectionString().string();
+    demDir = ossimElevManager::instance()->getElevationDatabase(idx)->getConnectionString().string();
     }
   return demDir;
 }
