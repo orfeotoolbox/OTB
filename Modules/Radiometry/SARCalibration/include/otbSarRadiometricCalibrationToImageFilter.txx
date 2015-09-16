@@ -45,16 +45,24 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
 * fail. */
 template<class TInputImage, class TOutputImage>
 void
+SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation( )
 {
   // Retrieving input/output pointers
-  InputImagePointerType      inputPtr = this->GetInput();
+  InputImagePointer      inputPtr = this->GetInput();
+
+
+  if (inputPtr.IsNull())
+    {
+    itkExceptionMacro(<< "At least one input is missing."
+                      << " Input is missing :" << inputPtr.GetPointer() );
+      }
 
   /** cretate a SarImageMetadataInterface instance from
    * GetMetaDataDictionary(). This will return the appropriate IMI depending on
    * the Sensor information & co available in GetMetaDataDictionary()  */
   SarImageMetadataInterface::Pointer imageMetadataInterface = SarImageMetadataInterfaceFactory::CreateIMI(
-      this->GetInput()->GetMetaDataDictionary());
+      inputPtr->GetMetaDataDictionary());
 
   /** Get the SarRadiometricCalibrationFunction function instance.  */
   FunctionPointer function = this->GetFunction();
@@ -146,10 +154,6 @@ See Also: otbSentinel1ImageMetadataInterface, otbTerraSarImageMetadataInterface,
     {
     function->SetRescalingFactor(imageMetadataInterface->GetRescalingFactor());
     }
-
-  /** m_Initialized to true to prevent further calls    */
-  m_Initialized = true;
-
 }
 
 template<class TInputImage, class TOutputImage>

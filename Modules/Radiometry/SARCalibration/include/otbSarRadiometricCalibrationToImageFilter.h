@@ -126,10 +126,6 @@ private:
   SarRadiometricCalibrationToImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /** flag to prevent calling SetupCalibator() multiple times. This happens as
-    * the Before ThreadedGenerateData() of the filter is called more times */
-  bool m_Initialized;
-
   short m_LookupSelected;
 
 };
