@@ -62,8 +62,7 @@ void
 DEMHandler
 ::OpenDEMDirectory(const char* DEMDirectory)
 {
-  ossimFilename ossimDEMDir;
-  ossimDEMDir = ossimFilename(DEMDirectory);
+  ossimFilename ossimDEMDir( DEMDirectory );
 
   if (!m_ElevManager->loadElevationPath(ossimDEMDir))
     {
@@ -86,6 +85,18 @@ DEMHandler
       }
     }
 }
+
+
+void
+DEMHandler
+::ClearDEMs()
+{
+  assert( ossimElevManager::instance()!=NULL );
+  assert( m_ElevManager!=NULL );
+
+  ossimElevManager::instance()->clear();
+}
+
 
 void
 DEMHandler

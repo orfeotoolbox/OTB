@@ -132,6 +132,11 @@ public:
   /** Get Goid file */
   std::string GetGeoidFile() const;
 
+  /**
+   * Removes all the ossimElevationDatabases from the ossimElevManager.
+   */
+  void ClearDEMs();
+
 protected:
   DEMHandler();
   virtual ~DEMHandler() {}
