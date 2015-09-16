@@ -179,7 +179,7 @@ namespace ossimplugins
                          adsHeader->getChildTextValue("stopTime"),
                          true);
          //RK maybe use this->getManifestPrefix()
-         theProductKwl.add("SUPPORT_DATA_KW.",
+         theProductKwl.add(SUPPORT_DATA_KW,
                       "mds1_tx_rx_polar",
                       polarisation,
                       true);

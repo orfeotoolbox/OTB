@@ -79,7 +79,7 @@ namespace ossimplugins
       // Set the flags back.
       out.flags(f);
 //      return ossimGeometricSarSensorModel::print(out);
-      return ossimSensorModel::print(out);
+      return ossimSarModel::print(out);
 
    }
 
@@ -95,6 +95,11 @@ namespace ossimplugins
               "ossimSentinel1Model",
               true);
 
+      kwl.add("support_data.",
+              "calibration_lookup_flag",
+              "true",
+              true);
+
       kwl.addList(theManifestKwl, true);
 
          if(theProduct.get())
@@ -102,7 +107,9 @@ namespace ossimplugins
             kwl.addList(theProduct->getProductKwl(), true);
             //   theProduct->saveState(kwl, prefix);
          }
+
          ossimSarModel::saveState(kwl, prefix);
+
          return true;
    }
 
@@ -369,15 +376,20 @@ namespace ossimplugins
          }
       }
 
-      theManifestKwl.add(prefix,
-                      "acquisition_mode",
-                      acquisition_mode,
-                      true);
+      if(acquisition_mode == "SM" )
+         theAcquisitionMode =  ossimSarModel::STRIPMAP;
+
+      // theManifestKwl.add(prefix,
+      //                 "acquisition_mode",
+      //                 acquisition_mode,
+      //                 true);
 
       theManifestKwl.add(prefix,
                       "swath",
                       swath,
                       true);
+
+
 
       if (acquisition_mode == "IW" || acquisition_mode == "EW")
          theProduct->setTOPSAR(true);

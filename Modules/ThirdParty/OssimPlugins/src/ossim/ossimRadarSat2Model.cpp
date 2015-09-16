@@ -1260,6 +1260,12 @@ bool ossimRadarSat2Model::saveState(ossimKeywordlist& kwl,
    kwl.add(prefix, PRODUCT_XML_FILE_KW, _productXmlFile.c_str());
    kwl.add(prefix, NUMBER_SRGR_COEFFICIENTS_KW, _n_srgr);
 
+   kwl.add("support_data.",
+           "calibration_lookup_flag",
+           "true",
+           true);
+
+
    if(! theProductionDateUTCString.empty())
       kwl.add("support_data.",
               ossimKeywordNames::DATE_KW,
