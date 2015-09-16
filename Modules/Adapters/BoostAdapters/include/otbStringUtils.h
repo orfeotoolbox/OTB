@@ -77,21 +77,6 @@ namespace otb
 namespace Utils
 {
 
-template<typename T>
-void split(std::string const& s, char const* delims, T& ret)
-{
-  T output;
-  char const* p = s.c_str();
-  char const* q = strpbrk(p+1, delims);
-  for( ; q != NULL; q = strpbrk(p, delims) )
-  {
-    output.push_back(typename T::value_type(p, q));
-    p = q + 1;
-  }
-
-  output.swap(ret);
-}
-
 /**\ingroup Utils
    * - convert a delimitter seperated string to std::vector of type T
    * \tparam vec - std::vector of type T. Specialized boost::lexical_cast is used
@@ -182,9 +167,5 @@ void SplitStringToSingleKeyValue(const std::string& str,
 }
 } // end namespace Utils
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbStringUtils.txx"
-#endif
 
 #endif //otbStringUtils_h
