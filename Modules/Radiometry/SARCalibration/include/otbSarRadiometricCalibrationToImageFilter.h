@@ -98,8 +98,6 @@ public:
   typedef typename FunctionType::ParametricFunctionConstPointer ParametricFunctionConstPointer;
   typedef typename FunctionType::ParametricFunctionType         ParametricFunctionType;
 
-  /** Generate output information */
-  void GenerateOutputInformation();
 
   /** Enable/disable the noise flag in SarRadiometricCalibrationFunction */
   void SetEnableNoise(bool inArg)
@@ -118,6 +116,9 @@ protected:
   /** Empty, default virtual dtor */
   virtual ~SarRadiometricCalibrationToImageFilter() {}
 
+  /** Generate output information */
+  virtual void GenerateOutputInformation();
+
   /** Update the function list and input parameters*/
   virtual void BeforeThreadedGenerateData();
 
@@ -125,6 +126,7 @@ private:
 
   SarRadiometricCalibrationToImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
 
   short m_LookupSelected;
 
