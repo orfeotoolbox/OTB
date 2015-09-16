@@ -28,8 +28,8 @@ namespace otb
 SarImageMetadataInterface
 ::SarImageMetadataInterface()
 {
-}
 
+}
 
 const std::string
 SarImageMetadataInterface
@@ -79,6 +79,38 @@ SarImageMetadataInterface
       return acquisition_mode;
       }
     return "";
+}
+
+void
+SarImageMetadataInterface
+::CreateCalibrationLookupData(const short itkNotUsed(t))
+{
+
+}
+
+const SarImageMetadataInterface::LookupDataPointerType
+SarImageMetadataInterface
+::GetCalibrationLookupData(const short type)
+{
+  if (HasCalibrationLookupDataFlag())
+    {
+    CreateCalibrationLookupData(type);
+    }
+
+  return m_SarLut;
+}
+
+bool
+SarImageMetadataInterface
+::HasCalibrationLookupDataFlag() const
+{
+  const ImageKeywordlist imageKeywordlist = this->GetImageKeywordlist();
+  /* checking if the key exist is more than enough */
+  if (imageKeywordlist.HasKey("support_data.calibration_lookup_flag"))
+    {
+    return true;
+    }
+  return false;
 }
 
 SarImageMetadataInterface::RealType

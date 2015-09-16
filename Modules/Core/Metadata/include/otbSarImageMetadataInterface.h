@@ -58,6 +58,19 @@ public:
   typedef PointSetType::Pointer                      PointSetPointer;
   typedef double                                     RealType;
   typedef PointSetType::PointType                    PointType;
+  typedef SarCalibrationLookupData                   LookupDataType;
+  typedef typename LookupDataType::Pointer          LookupDataPointerType;
+
+  virtual void CreateCalibrationLookupData(const short t);
+
+  const LookupDataPointerType GetCalibrationLookupData(const short type);
+
+  bool HasCalibrationLookupDataFlag() const;
+
+  void SetCalibrationLookupData(LookupDataType* lut)
+  {
+    m_SarLut = lut;
+  }
 
   virtual RealType   GetRadiometricCalibrationScale() const;
 
@@ -78,12 +91,7 @@ public:
   virtual double GetRadarFrequency () const = 0;
   virtual double GetCenterIncidenceAngle() const = 0;
 
-  virtual SarCalibrationLookupData* GetCalibrationLookupData(const short) = 0;
 
-  virtual bool HasCalibrationLookupData() const
-  {
-    return false;
-  }
 
   virtual double GetRescalingFactor() const;
 
@@ -107,9 +115,13 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  LookupDataPointerType m_SarLut;
+
+
 private:
   SarImageMetadataInterface(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
 };
 
 } // end namespace otb
