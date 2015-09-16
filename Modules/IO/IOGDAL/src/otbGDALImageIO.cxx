@@ -1075,7 +1075,7 @@ void GDALImageIO::InternalReadImageInformation()
       if (CSLCount(gmlMetadata) > 0)
         {
         std::string key;
-        int cptOffset = CSLCount(papszMetadata);
+        //int cptOffset = CSLCount(papszMetadata);
 
         for (int cpt = 0; gmlMetadata[cpt] != NULL; ++cpt)
           {
@@ -1098,8 +1098,6 @@ void GDALImageIO::InternalReadImageInformation()
 
   if (CSLCount(papszMetadata) > 0)
     {
-
-    const std::string defValue= "TRUE";
     for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
       {
       std::string mkey;

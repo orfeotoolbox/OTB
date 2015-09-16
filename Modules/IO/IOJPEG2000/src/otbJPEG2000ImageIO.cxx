@@ -44,6 +44,8 @@
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 
+#include "otbStringUtils.h"
+
 void OpjImageDestroy(opj_image_t * img)
 {
   if(img)
