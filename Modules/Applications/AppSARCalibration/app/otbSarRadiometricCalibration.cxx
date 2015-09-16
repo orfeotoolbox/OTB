@@ -86,14 +86,14 @@ private:
   }
 
   void DoUpdateParameters()
-  {   }
+  {
+
+  }
 
   void DoExecute()
   {
     // Get the input complex image
     ComplexFloatImageType*  floatComplexImage = GetParameterComplexFloatImage("in");
-
-    floatComplexImage->UpdateOutputInformation();
 
     // Set the filer input
     m_CalibrationFilter = CalibrationFilterType::New();
