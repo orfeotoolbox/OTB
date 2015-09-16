@@ -111,11 +111,6 @@ public:
   /** Get noise reference point list */
   DoubleVectorType GetNoiseReferencePointList() const;
 
-  SarCalibrationLookupData* GetCalibrationLookupData(const short type)
-  {
-    return (new SarCalibrationLookupData(type));
-  }
-
   /** Get the radar frequency */
   double GetRadarFrequency() const;
 

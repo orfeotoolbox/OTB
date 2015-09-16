@@ -32,6 +32,7 @@ namespace otb
 Radarsat2ImageMetadataInterface
 ::Radarsat2ImageMetadataInterface()
 {
+
 }
 
 bool
@@ -47,20 +48,15 @@ Radarsat2ImageMetadataInterface::CanRead() const
     return false;
 }
 
-SarCalibrationLookupData*
+
+void
 Radarsat2ImageMetadataInterface::
-GetCalibrationLookupData(const short type)
+CreateCalibrationLookupData(const short type)
   {
    std::string lut = "SigmaNought";
 
    switch (type)
      {
-     case SarCalibrationLookupData::SIGMA:
-     {
-     lut = "SigmaNought";
-     }
-     break;
-
      case SarCalibrationLookupData::BETA:
      {
      lut = "BetaNought";
@@ -79,6 +75,7 @@ GetCalibrationLookupData(const short type)
      }
      break;
 
+     case SarCalibrationLookupData::SIGMA:
      default:
      {
      lut = "SigmaNought";
@@ -86,14 +83,21 @@ GetCalibrationLookupData(const short type)
      break;
      }
 
-
   const ImageKeywordlistType imageKeywordlist =  this->GetImageKeywordlist();
   const std::string key = "referenceNoiseLevel[" + lut + "].gain";
-  Radarsat2CalibrationLookupData *lutData = new Radarsat2CalibrationLookupData(type);
-  Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].gain"), lutData->list);
-//  lutData->offset = boost::lexical_cast<int>(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].offset"));
 
-  return lutData;
+  Radarsat2CalibrationLookupData::GainListType glist;
+  int offset = 0;
+
+  Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].gain"), glist);
+
+  boost::lexical_cast<int>(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].offset"));
+
+  Radarsat2CalibrationLookupData::Pointer sarLut;
+  sarLut = Radarsat2CalibrationLookupData::New();
+  sarLut->InitParameters(type, offset, glist);
+  this->SetCalibrationLookupData(sarLut);
+
 }
 
 void

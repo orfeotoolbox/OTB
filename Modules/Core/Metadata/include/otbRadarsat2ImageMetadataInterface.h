@@ -30,59 +30,6 @@ namespace otb
  * \ingroup OTBMetadata
  */
 
-  class Radarsat2CalibrationLookupData : public SarCalibrationLookupData
-  {
-
-  public:
-    std::vector<float> list;
-    int offset;
-
-    std::string GetNameOfClass()
-    {
-      return "Radarsat2CalibrationLookupData";
-    }
-
-
-    Radarsat2CalibrationLookupData()
-      : SarCalibrationLookupData()
-      , offset(0)
-    {
-
-    }
-
-    Radarsat2CalibrationLookupData(const short type)
-      : SarCalibrationLookupData(type)
-      , offset(0)
-    {
-
-    }
-
-    virtual ~Radarsat2CalibrationLookupData()
-    {
-
-    }
-
-    virtual double GetValue(int x, int /*y*/)
-    {
-      double lutVal = 1.0;
-
-      const size_t pos =  x + offset;
-      if(pos  < list.size())
-        {
-        lutVal = list[pos];
-        }
-      else
-        {
-//      itkExceptionMacro( << "error: (pos < list.size() )" << pos << " < " << list.size())
-        }
-
-      return lutVal;
-    }
-
-  };
-
-
-
 class ITK_ABI_EXPORT Radarsat2ImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
@@ -103,7 +50,8 @@ public:
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
-
+  typedef Superclass::LookupDataPointerType LookupDataPointerType;
+//  typedef Radarsat2CalibrationLookupData::Pointer          LookupDataPointerType;
 
   /*ImageMetadataInterfaceBase pure virtuals */
   /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
@@ -140,12 +88,7 @@ public:
   double GetCenterIncidenceAngle() const;
 
   /*get lookup data for calulating backscatter */
-  SarCalibrationLookupData* GetCalibrationLookupData(const short type);
-
-  bool HasCalibrationLookupData() const
-  {
-    return true;
-  }
+  void CreateCalibrationLookupData(const short type);
 
 
 protected:
@@ -169,6 +112,89 @@ private:
 
   mutable std::vector<int> m_ProductionDateFields;
   mutable std::vector<int> m_AcquisitionDateFields;
+
+};
+
+
+class Radarsat2CalibrationLookupData : public SarCalibrationLookupData
+{
+
+public:
+
+  /** Standard typedefs */
+  typedef Radarsat2CalibrationLookupData   Self;
+  typedef SarCalibrationLookupData         Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
+
+  /** Creation through the object factory */
+  itkNewMacro(Self);
+
+  /** RTTI */
+  itkTypeMacro(Radarsat2CalibrationLookupData, SarCalibrationLookupData);
+
+  typedef itk::IndexValueType IndexValueType;
+
+  typedef std::vector<float> GainListType;
+
+
+  Radarsat2CalibrationLookupData()
+    : m_Offset(0)
+  {
+
+  }
+
+  virtual ~Radarsat2CalibrationLookupData()
+  {
+
+  }
+
+  void InitParameters(short type, int offset,  GainListType gains)
+  {
+    this->SetType(type);
+    m_Offset = offset;
+    m_Gains = gains;
+  }
+
+  double GetValue(const IndexValueType x, const IndexValueType itkNotUsed(y))
+  {
+    double lutVal = 1.0;
+
+    const size_t pos =  x + m_Offset;
+    if(pos  < m_Gains.size())
+      {
+      lutVal = m_Gains[pos];
+      }
+    else
+      {
+      //itkExceptionMacro( << "error: (pos < list.size() )" << pos << " < " << list.size())
+      }
+    return lutVal;
+  }
+
+  void PrintSelf(std::ostream & os, itk::Indent indent) const
+  {
+    os << indent << " offset:'" << m_Offset << "'" << std::endl;
+    os <<  " referenceNoiseLevel.gain: " << std::endl;
+    std::vector<float>::const_iterator it = m_Gains.begin();
+    while (it != m_Gains.end())
+      {
+      os << (*it) << " ";
+      ++it;
+      }
+    os << std::endl;
+
+    Superclass::PrintSelf(os, indent);
+  }
+
+private:
+
+  Radarsat2CalibrationLookupData(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+
+  GainListType m_Gains;
+  int m_Offset;
+
 
 };
 

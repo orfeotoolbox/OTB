@@ -32,6 +32,7 @@ namespace otb
 Sentinel1ImageMetadataInterface
 ::Sentinel1ImageMetadataInterface()
 {
+
 }
 
 bool
@@ -47,9 +48,9 @@ Sentinel1ImageMetadataInterface::CanRead() const
     return false;
 }
 
-SarCalibrationLookupData*
+void
 Sentinel1ImageMetadataInterface
-::GetCalibrationLookupData(const short type)
+::CreateCalibrationLookupData(const short type)
   {
     bool sigmaLut = false;
     bool betaLut = false;
@@ -58,12 +59,6 @@ Sentinel1ImageMetadataInterface
 
     switch (type)
       {
-      case SarCalibrationLookupData::SIGMA:
-      {
-      sigmaLut = true;
-      }
-      break;
-
       case SarCalibrationLookupData::BETA:
       {
       betaLut = true;
@@ -82,6 +77,7 @@ Sentinel1ImageMetadataInterface
       }
       break;
 
+      case SarCalibrationLookupData::SIGMA:
       default:
         sigmaLut = true;
         break;
@@ -134,7 +130,12 @@ Sentinel1ImageMetadataInterface
 
     }
 
-  return (new Sentinel1CalibrationLookupData(type, firstLineTime, lastLineTime, numOfLines, count, calibrationVectorList));
+//if(m_SarLut.IsNull())
+  Sentinel1CalibrationLookupData::Pointer sarLut;
+  sarLut = Sentinel1CalibrationLookupData::New();
+  sarLut->InitParameters(type, firstLineTime, lastLineTime, numOfLines, count, calibrationVectorList);
+  this->SetCalibrationLookupData(sarLut);
+
 
   }
 

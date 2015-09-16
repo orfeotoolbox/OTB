@@ -84,21 +84,9 @@ public:
 
   double GetCenterIncidenceAngle() const;
 
-  /*get lookup data for calulating backscatter */
-  SarCalibrationLookupData* GetCalibrationLookupData(const short type)
-  {
-    return (new SarCalibrationLookupData(type));
-  }
-
-  bool HasCalibrationLookupData() const
-  {
-    return false;
-  }
-
   std::string GetImageID() const;
 
   void GetValueFromMetadataDictionary(const char*k, std::string& result) const;
-
 
   template<typename T>
     void GetValueFromMetadataDictionary(const char*k, T& result) const
