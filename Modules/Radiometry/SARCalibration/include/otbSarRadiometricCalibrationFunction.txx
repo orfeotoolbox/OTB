@@ -33,10 +33,10 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 : m_Scale(1.0)
 , m_EnableNoise(false)
 , m_RescalingFactor(1.0)
-, m_ApplyAntennaPatternGain(false)
-, m_ApplyIncidenceAngleCorrection(false)
-, m_ApplyRangeSpreadLossCorrection(false)
-, m_ApplyLookupDataCorrection(true)
+, m_ApplyAntennaPatternGain(true)
+, m_ApplyIncidenceAngleCorrection(true)
+, m_ApplyRangeSpreadLossCorrection(true)
+, m_ApplyLookupDataCorrection(false)
 , m_ApplyRescalingFactor(false)
 
 {
