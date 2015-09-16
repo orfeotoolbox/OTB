@@ -98,10 +98,8 @@ public:
   typedef typename FunctionType::ParametricFunctionConstPointer ParametricFunctionConstPointer;
   typedef typename FunctionType::ParametricFunctionType         ParametricFunctionType;
 
-  /** Create the ImageMetadataInteface class and prepare values required for
-    * Calibration. BeforeThreadedGenerateData() of the filter is called more times
-    * and hence use SetupCalibrator with a m_Initialized flag  */
-  void SetupCalibrator();
+  /** Generate output information */
+  void GenerateOutputInformation();
 
   /** Enable/disable the noise flag in SarRadiometricCalibrationFunction */
   void SetEnableNoise(bool inArg)

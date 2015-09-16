@@ -72,8 +72,8 @@ public:
 
   /** Datatype used for the evaluation */
   typedef double                                                 RealType;
-  typedef otb::Functor::SarRadiometricCalibrationFunctor<RealType, RealType>           FunctorType;
-  typedef typename FunctorType::RealType                        FunctorRealType;
+//  typedef otb::Functor::SarRadiometricCalibrationFunctor<RealType, RealType>           FunctorType;
+//  typedef typename FunctorType::RealType                        FunctorRealType;
 
   typedef otb::SarParametricMapFunction<InputImageType>               ParametricFunctionType;
   typedef typename ParametricFunctionType::Pointer                    ParametricFunctionPointer;
@@ -105,8 +105,8 @@ public:
 
 
   /** Get/Set the Scale value */
-  itkSetMacro(Scale, FunctorRealType);
-  itkGetMacro(Scale, FunctorRealType);
+  itkSetMacro(Scale, RealType);
+  itkGetMacro(Scale, RealType);
 
   /** Get/Set the Noise value */
   itkSetObjectMacro(Noise, ParametricFunctionType);
@@ -138,7 +138,7 @@ public:
   itkGetObjectMacro(RangeSpreadLoss, ParametricFunctionType);
 
   /** Set the RescalingFactor value */
-  itkSetMacro(RescalingFactor, FunctorRealType);
+  itkSetMacro(RescalingFactor, RealType);
 
   /** Get/Set flag to indicate if these are used */
   itkSetMacro(ApplyAntennaPatternGain, bool);
@@ -147,8 +147,8 @@ public:
   itkSetMacro(ApplyIncidenceAngleCorrection, bool);
   itkGetMacro(ApplyIncidenceAngleCorrection, bool);
 
-  itkSetMacro(ApplyRangeSpreadingLossCorrection, bool);
-  itkGetMacro(ApplyRangeSpreadingLossCorrection, bool);
+  itkSetMacro(ApplyRangeSpreadLossCorrection, bool);
+  itkGetMacro(ApplyRangeSpreadLossCorrection, bool);
 
   itkSetMacro(ApplyLookupDataCorrection, bool);
   itkGetMacro(ApplyLookupDataCorrection, bool);
@@ -156,8 +156,10 @@ public:
   itkSetMacro(ApplyRescalingFactor, bool);
   itkGetMacro(ApplyRescalingFactor, bool);
 
+    typedef SarCalibrationLookupData::Pointer LookupDataPointer;
+
   /** Set SetCalibrationLookupData instance */
-  void SetCalibrationLookupData(SarCalibrationLookupData* lut)
+  void SetCalibrationLookupData(LookupDataPointer lut)
   {
     m_Lut = lut;
   }
@@ -179,12 +181,12 @@ private:
   SarRadiometricCalibrationFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
-  FunctorRealType             m_Scale;
+  RealType             m_Scale;
   bool                        m_EnableNoise;
-  FunctorRealType             m_RescalingFactor;
+  RealType             m_RescalingFactor;
   bool                        m_ApplyAntennaPatternGain;
   bool                        m_ApplyIncidenceAngleCorrection;
-  bool                        m_ApplyRangeSpreadingLossCorrection;
+  bool                        m_ApplyRangeSpreadLossCorrection;
   bool                        m_ApplyLookupDataCorrection;
   bool                        m_ApplyRescalingFactor;
   ParametricFunctionPointer   m_Noise;
@@ -192,7 +194,8 @@ private:
   ParametricFunctionPointer   m_AntennaPatternOldGain;
   ParametricFunctionPointer   m_IncidenceAngle;
   ParametricFunctionPointer   m_RangeSpreadLoss;
-  SarCalibrationLookupData*   m_Lut;
+  LookupDataPointer   m_Lut;
+
 
 };
 

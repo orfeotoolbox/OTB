@@ -35,7 +35,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 , m_RescalingFactor(1.0)
 , m_ApplyAntennaPatternGain(false)
 , m_ApplyIncidenceAngleCorrection(false)
-, m_ApplyRangeSpreadingLossCorrection(false)
+, m_ApplyRangeSpreadLossCorrection(false)
 , m_ApplyLookupDataCorrection(true)
 , m_ApplyRescalingFactor(false)
 
@@ -54,7 +54,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   m_IncidenceAngle->SetConstantValue(CONST_PI_2);
   m_RangeSpreadLoss->SetConstantValue(1.0);
 
-  m_Lut = 0; //new LookupTableBase();
+//  m_Lut = 0; //new LookupTableBase();
 
 }
 
@@ -97,12 +97,6 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
 
-  if (!this->GetInputImage())
-    {
-    itkDebugMacro( <<"ERROR with GetInputImage()");
-    return (itk::NumericTraits<OutputType>::max());
-    }
-
   if (!this->IsInsideBuffer(index))
     {
     itkDebugMacro( << "ERROR with IsInsideBuffer");
@@ -111,59 +105,61 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 
   /* convert index to point */
   PointType point;
-  if (m_ApplyAntennaPatternGain || m_ApplyIncidenceAngleCorrection || m_ApplyRangeSpreadingLossCorrection)
+  if (m_ApplyAntennaPatternGain || m_ApplyIncidenceAngleCorrection || m_ApplyRangeSpreadLossCorrection)
     this->GetInputImage()->TransformIndexToPhysicalPoint( index, point);
 
-  /** instiantiate otbSarRadiometricCalibrationFunctor  */
-  FunctorType functor;
+  /** digitalNumber:
+    * The pixel is of type of std::complex and we use vcl_abs to get real + imaginary as RealType */
 
-  /** Apply noise if enabled. Default is 1.0 */
+  RealType digitalNumber = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
+  RealType sigma = m_Scale * digitalNumber * digitalNumber;
+
+  /** substract noise if enabled. */
   if (m_EnableNoise)
     {
-    functor.SetNoise(static_cast<FunctorRealType>(m_Noise->Evaluate(point)));
+    sigma  -= static_cast<RealType>(m_Noise->Evaluate(point));
     }
-  functor.SetScale(m_Scale);
 
-    /** Apply antenna pattern gain if needed. Default is 1.0 */
+  /** Apply incidence angle correction if needed */
+  if (m_ApplyIncidenceAngleCorrection)
+    {
+    sigma *= vcl_sin(static_cast<RealType>(m_IncidenceAngle->Evaluate(point)));
+    }
+
+  /** Apply old and new antenna pattern gain. */
   if (m_ApplyAntennaPatternGain)
     {
-    functor.SetAntennaPatternNewGain(static_cast<FunctorRealType>(m_AntennaPatternNewGain->Evaluate(point)));
-    functor.SetAntennaPatternOldGain(static_cast<FunctorRealType>(m_AntennaPatternOldGain->Evaluate(point)));
+    sigma *= static_cast<RealType>(m_AntennaPatternNewGain->Evaluate(point));
+    sigma /= static_cast<RealType>(m_AntennaPatternOldGain->Evaluate(point));
     }
 
-    /** Apply incidence angle correction if needed. Default is 1.0 */
-    if (m_ApplyIncidenceAngleCorrection)
+  /** Apply range spread loss if needed. */
+  if (m_ApplyRangeSpreadLossCorrection)
     {
-    functor.SetIncidenceAngle(static_cast<FunctorRealType>(m_IncidenceAngle->Evaluate(point)));
+    sigma *= static_cast<RealType>(m_RangeSpreadLoss->Evaluate(point));
     }
 
-    /** Apply range spread loss if needed. Default is 1.0 */
-    if (m_ApplyRangeSpreadingLossCorrection)
+  /** Lookup value has effect on for some sensors which does not required the
+    * above values (incidence angle, rangespreadloss etc.. */
+  if (m_ApplyLookupDataCorrection)
     {
-    functor.SetRangeSpreadLoss(static_cast<FunctorRealType>(m_RangeSpreadLoss->Evaluate(point)));
+    RealType lutVal = static_cast<RealType>(m_Lut->GetValue(index[0], index[1]));
+    sigma /= vcl_pow(lutVal, 2);
     }
 
-    /** Apply lookup value if needed. Default is 1.0 */
-    if (m_ApplyLookupDataCorrection)
+  /** rescaling factor has effect only with CosmoSkymed Products */
+  if (m_ApplyRescalingFactor)
     {
-    FunctorRealType lutVal = m_Lut->GetValue(index[0], index[1]);
-    functor.SetLutValue(lutVal * lutVal);
+    sigma /= m_RescalingFactor;
     }
 
-    /** Apply rescaling factor if needed. Default is 1.0 */
-    if (m_ApplyRescalingFactor)
+
+  if(sigma < 0.0)
     {
-    functor.SetRescalingFactor(m_RescalingFactor);
+    sigma = 0.0;
     }
 
-    /** Get pixel value.  The pixel is of type of std::complex and we use
-      * vcl_abs to get real + imaginary as RealType */
-    const RealType value = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
-
-  /** Do the computation via the functor's () operator*/
-  RealType result = functor(value);
-
-  return static_cast<OutputType>(result);
+  return static_cast<OutputType>(sigma);
 }
 
 } // end namespace otb

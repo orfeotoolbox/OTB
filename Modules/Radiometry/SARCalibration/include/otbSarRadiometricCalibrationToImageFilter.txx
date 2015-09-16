@@ -45,9 +45,10 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
 * fail. */
 template<class TInputImage, class TOutputImage>
 void
-SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
-::SetupCalibrator()
+::GenerateOutputInformation( )
 {
+  // Retrieving input/output pointers
+  InputImagePointerType      inputPtr = this->GetInput();
 
   /** cretate a SarImageMetadataInterface instance from
    * GetMetaDataDictionary(). This will return the appropriate IMI depending on
@@ -60,13 +61,12 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
 
   /** check if there is a calibration lookupdata is available with the
 * product. eg. Sentinel1. This means
-* A. The computation of the backscatter is based on this lookup value( whose computation vary from sensor to sensor).*
+* A. The computation of the backscatter is based on this lookup value which
+* depends on the given product.*
 * B. The other value such as antenna pattern gain, rangespread loss, incidence
 * angle has no effect in calibration  */
 
-
-
-  bool apply = imageMetadataInterface->HasCalibrationLookupData();
+  bool apply = imageMetadataInterface->HasCalibrationLookupDataFlag();
   /* Below lines will toggle the necessary flags which can help skip some
 * computation. For example, if there is lookup value and ofcourse antenna
 * pattern gain is not required. Even if we try to compute the value with
@@ -76,7 +76,7 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
  */
   function->SetApplyAntennaPatternGain(!apply);
   function->SetApplyIncidenceAngleCorrection(!apply);
-  function->SetApplyRangeSpreadingLossCorrection(!apply);
+  function->SetApplyRangeSpreadLossCorrection(!apply);
   function->SetApplyRescalingFactor(!apply);
   function->SetApplyLookupDataCorrection(apply);
 
@@ -119,7 +119,7 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
     }
 
     /* Compute Range spread Loss */
-  if (function->GetApplyRangeSpreadingLossCorrection())
+  if (function->GetApplyRangeSpreadLossCorrection())
     {
     ParametricFunctionPointer   rangeSpreadLoss;
     rangeSpreadLoss = function->GetRangeSpreadLoss();
@@ -141,7 +141,6 @@ See Also: otbSentinel1ImageMetadataInterface, otbTerraSarImageMetadataInterface,
     function->SetCalibrationLookupData(imageMetadataInterface->GetCalibrationLookupData(this->GetLookupSelected()));
     }
 
-
   /** This was introduced for cosmoskymed which required a rescaling factor */
   if (function->GetApplyRescalingFactor())
     {
@@ -160,10 +159,6 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
 {
   // will SetInputImage on the function
   Superclass::BeforeThreadedGenerateData();
-
-  /** Call SetupCalibation on first call to BeforeThreadedGenerateData( ) */
-  if( !m_Initialized)
-    this->SetupCalibrator();
 
 }
 
