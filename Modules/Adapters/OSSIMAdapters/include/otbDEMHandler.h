@@ -108,8 +108,8 @@ public:
   virtual bool IsValidDEMDirectory(const char* DEMDirectory);
 
   /** Open geoid file. */
-  virtual void OpenGeoidFile(const char* geoidFile);
-  virtual void OpenGeoidFile(const std::string& geoidFile);
+  virtual bool OpenGeoidFile(const char* geoidFile);
+  virtual bool OpenGeoidFile(const std::string& geoidFile);
 
   /** Compute the height above MSL(Mean Sea Level) of a geographic point. */
   virtual double GetHeightAboveMSL(double lon, double lat) const;

@@ -126,7 +126,7 @@ DEMHandler
   return result;
 }
 
-void
+bool
 DEMHandler
 ::OpenGeoidFile(const char* geoidFile)
 {
@@ -150,20 +150,27 @@ DEMHandler
 
       ossimElevManager::instance()->setDefaultHeightAboveEllipsoid(ossim::nan());
 
+      return true;
       }
     else
       {
       otbMsgDevMacro(<< "Failure opening geoid");
       geoidPtr.release();
+
+      itkExceptionMacro( << "Failed to open geoid file: '" << geoidFile << "'" );
+
+      return false;
       }
     }
+
+  return false;
 }
 
-void
+bool
 DEMHandler
 ::OpenGeoidFile(const std::string& geoidFile)
 {
-  OpenGeoidFile(geoidFile.c_str());
+  return OpenGeoidFile(geoidFile.c_str());
 }
 
 double
