@@ -1047,6 +1047,7 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
 
   papszMetadata = dataset->GetMetadata(NULL);
+
   const std::string defValue= "TRUE";
   if (CSLCount(papszMetadata) > 0)
     {
@@ -1711,6 +1712,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     if (boost::starts_with(tag, metadataKeyPrefix))
       {
       itk::ExposeMetaData<std::string>(dict, tag, svalue);
+      tag = tag.substr(metadataKeyPrefix.size());
       dataset->SetMetadataItem(tag.c_str(), svalue.c_str(), NULL);
       }
     }
@@ -1721,6 +1723,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   itk::ExposeMetaData<ImageKeywordlist>(dict,
                                         MetaDataKey::OSSIMKeywordlistKey,
                                         otb_kwl);
+
   if( otb_kwl.GetSize() != 0 )
     {
     GDALRPCInfo gdalRpcStruct;
