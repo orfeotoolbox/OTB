@@ -133,7 +133,7 @@ public:
   std::string GetGeoidFile() const;
 
   /**
-   * Removes all the ossimElevationDatabases from the ossimElevManager.
+   * Remove all the ossimElevationDatabases from the ossimElevManager.
    */
   void ClearDEMs();
 
