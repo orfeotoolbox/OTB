@@ -564,6 +564,8 @@ void
 I18nCoreApplication
 ::ElevationSetup()
 {
+  assert( !otb::DEMHandler::Instance().IsNull() );
+
   otb::DEMHandler::Pointer demHandlerInstance( otb::DEMHandler::Instance() );
 
   if( I18nCoreApplication::HasSettingsKey(
@@ -625,6 +627,10 @@ I18nCoreApplication
 			    "no DEM will be used: " ) ).c_str()
 	<< err.what();
       }
+    }
+  else
+    {
+    otb::DEMHandler::Instance()->ClearDEMs();
     }
 }
 
