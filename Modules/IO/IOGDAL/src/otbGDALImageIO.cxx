@@ -1047,15 +1047,16 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
 
   papszMetadata = dataset->GetMetadata(NULL);
+  const std::string defValue= "TRUE";
   if (CSLCount(papszMetadata) > 0)
     {
-    const std::string defValue= "TRUE";
     for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
       {
       std::string mkey;
       std::string mvalue;
+      std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
       Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszMetadata[cpt]), mkey, mvalue, defValue);
-      itk::EncapsulateMetaData<std::string>(dict, mkey, mvalue);
+      itk::EncapsulateMetaData<std::string>(dict, metadataKeyPrefix + mkey, mvalue);
       }
     }
 
@@ -1078,12 +1079,11 @@ void GDALImageIO::InternalReadImageInformation()
 
         for (int cpt = 0; gmlMetadata[cpt] != NULL; ++cpt)
           {
-          std::ostringstream lStream;
-          lStream << MetaDataKey::MetadataKey << (cpt+cptOffset);
-          key = lStream.str();
-
-          itk::EncapsulateMetaData<std::string>(dict, key,
-                                                static_cast<std::string>(gmlMetadata[cpt]));
+          std::string mkey;
+          std::string mvalue;
+          std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
+          Utils::SplitStringToSingleKeyValue(static_cast<std::string>(gmlMetadata[cpt]), mkey, mvalue, defValue);
+          itk::EncapsulateMetaData<std::string>(dict, metadataKeyPrefix + mkey, mvalue);
           }
         }
       }
@@ -1705,19 +1705,15 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   std::string              svalue = "";
   std::vector<std::string>   keys = dict.GetKeys();
-  std::string const   metadataKey = MetaDataKey::MetadataKey;
+  std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
 
   for (unsigned int itkey = 0; itkey < keys.size(); ++itkey)
     {
-    /// \todo Why not <tt>keys[itkey] == MetadataKey::MetadataKey</tt> ?
-    if (keys[itkey].compare(0, metadataKey.length(), metadataKey) == 0)
+    const std::string tag = keys[itkey];
+    if (boost::starts_with(tag, metadataKeyPrefix))
       {
-      itk::ExposeMetaData<std::string>(dict, keys[itkey], svalue);
-      unsigned int equalityPos = svalue.find_first_of('=');
-      std::string  tag = svalue.substr(0, equalityPos);
-      std::string  value = svalue.substr(equalityPos + 1);
-      otbMsgDevMacro(<< "Metadata: " << tag << "=" << value);
-      dataset->SetMetadataItem(tag.c_str(), value.c_str(), NULL);
+      itk::ExposeMetaData<std::string>(dict, tag, svalue);
+      dataset->SetMetadataItem(tag.c_str(), svalue.c_str(), NULL);
       }
     }
 

@@ -305,7 +305,7 @@ private:
 int JPEG2000InternalReader::Open(const char *filename, unsigned int resolution)
 {
   this->Clean();
-  
+
   std::string str(filename);
   this->m_FileName = str;
 
@@ -427,11 +427,11 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
   parameters.cp_reduce = static_cast<int>(this->m_ResolutionFactor);
 
   // Set default event mgr
-  // catch events using our callbacks and give a local context      
+  // catch events using our callbacks and give a local context
   opj_set_info_handler(codec.get(), info_callback,00);
   opj_set_warning_handler(codec.get(), warning_callback,00);
   opj_set_error_handler(codec.get(), error_callback,00);
-  
+
   // Setup the decoder decoding parameters using user parameters
   if (!opj_setup_decoder(codec.get(), &parameters))
     {
@@ -500,18 +500,18 @@ int JPEG2000InternalReader::Initialize()
 
     if (!codec)
       {
-      std::cerr << "ERROR codec creation" << std::endl  ;  
+      std::cerr << "ERROR codec creation" << std::endl  ;
       this->Clean();
       return 0;
       }
-    
+
     // Setting default parameters
     opj_dparameters_t parameters;
     opj_set_default_decoder_parameters(&parameters);
     parameters.cp_reduce = static_cast<int>(this->m_ResolutionFactor);
 
     // Set default event mgr
-    // catch events using our callbacks and give a local context      
+    // catch events using our callbacks and give a local context
     opj_set_info_handler(codec.get(), info_callback,00);
     opj_set_warning_handler(codec.get(), warning_callback,00);
     opj_set_error_handler(codec.get(), error_callback,00);
@@ -530,12 +530,12 @@ int JPEG2000InternalReader::Initialize()
 
     if (!opj_read_header(stream.get(), codec.get(),&unsafeOpjImgPtr))
       {
-      std::cerr << "ERROR read header" << std::endl;    
+      std::cerr << "ERROR read header" << std::endl;
       boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
       this->Clean();
       return 0;
       }
-    
+
     boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
 
     // Get the codestream information
@@ -608,16 +608,16 @@ bool JPEG2000InternalReader::CanRead()
        }
      return true;
      }
-   else 
+   else
      {
-     std::cerr  << this->m_Width << ", " 
-                << this->m_Height << ", " 
-                << this->m_TileWidth << ", " 
-                << this->m_TileHeight << ", " 
-                << this->m_XNbOfTile << ", " 
-                << this->m_YNbOfTile<< ", " 
-                << this->m_NbOfComponent 
-                << std::endl ;    
+     std::cerr  << this->m_Width << ", "
+                << this->m_Height << ", "
+                << this->m_TileWidth << ", "
+                << this->m_TileHeight << ", "
+                << this->m_XNbOfTile << ", "
+                << this->m_YNbOfTile<< ", "
+                << this->m_NbOfComponent
+                << std::endl ;
      std::cout << "HERE1" << std::endl;
      return false;
      }
@@ -1366,15 +1366,14 @@ void JPEG2000ImageIO::ReadImageInformation()
     if (CSLCount(papszGMLMetadata) > 0)
       {
       otbMsgDevMacro(<< "JPEG2000 file has GMLMetadata!");
-      std::string key;
-
+      const std::string defValue= "TRUE";
       for (int cpt = 0; papszGMLMetadata[cpt] != NULL; ++cpt)
         {
-        std::ostringstream lStream;
-        lStream << MetaDataKey::MetadataKey << cpt;
-        key = lStream.str();
-
-        itk::EncapsulateMetaData<std::string>(dict, key, static_cast<std::string> (papszGMLMetadata[cpt]));
+        std::string mkey;
+        std::string mvalue;
+        std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
+        Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszGMLMetadata[cpt]), mkey, mvalue, defValue);
+        itk::EncapsulateMetaData<std::string>(dict, metadataKeyPrefix + mkey, mvalue);
         otbMsgDevMacro( << static_cast<std::string>(papszGMLMetadata[cpt]));
         }
       }
