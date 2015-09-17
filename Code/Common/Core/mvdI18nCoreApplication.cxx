@@ -432,8 +432,7 @@ I18nCoreApplication
   m_CacheDir(),
   m_Settings( NULL ),
   m_Model( NULL ),
-  m_IsRunningFromBuildDir( false ),
-  m_HasGeoidChanged( false )
+  m_IsRunningFromBuildDir( false )
 {
   if( m_Instance!=NULL )
     {
