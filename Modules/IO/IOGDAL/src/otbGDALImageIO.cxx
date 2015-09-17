@@ -1708,7 +1708,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   for (unsigned int itkey = 0; itkey < keys.size(); ++itkey)
     {
-    const std::string tag = keys[itkey];
+    std::string tag = keys[itkey];
     if (boost::starts_with(tag, metadataKeyPrefix))
       {
       itk::ExposeMetaData<std::string>(dict, tag, svalue);
