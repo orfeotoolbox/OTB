@@ -241,6 +241,10 @@ public:
    */
   inline bool IsCacheDirValid() const;
 
+  /**
+   */
+  inline bool HasGeoidChanged() const;
+
   //
   // STATIC methods.
   //
@@ -542,7 +546,10 @@ private:
 
   /**
    */
-  bool m_IsRunningFromBuildDir;
+  bool m_IsRunningFromBuildDir: 1;
+  /**
+   */
+  bool m_HasGeoidChanged: 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -659,6 +666,15 @@ I18nCoreApplication
 }
 
 /*****************************************************************************/
+inline
+bool
+I18nCoreApplication
+::HasGeoidChanged() const
+{
+  return I18nCoreApplication::m_HasGeoidChanged;
+}
+
+/*****************************************************************************/
 QDir&
 I18nCoreApplication
 ::GetCacheDir()
@@ -696,6 +712,21 @@ I18nCoreApplication
   assert( m_Settings != NULL );
 
   // qDebug() << this << "::StoreSettingsKey(" << key << ", " << value << ")";
+
+  if( !m_HasGeoidChanged &&
+      ( ( key == I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE &&
+	  value != RetrieveSettingsKey(
+	    I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE
+	  )
+        ) ||
+	( key == I18nCoreApplication::SETTINGS_KEY_GEOID_PATH &&
+	  value != RetrieveSettingsKey(
+	    I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
+	  )
+	) ) )
+    {
+    m_HasGeoidChanged = true;
+    }
 
   m_Settings->setValue( I18nCoreApplication::SETTINGS_KEYS[ key ], value );
 
