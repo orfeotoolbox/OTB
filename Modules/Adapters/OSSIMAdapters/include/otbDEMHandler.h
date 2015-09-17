@@ -125,6 +125,10 @@ public:
   /** Set the default height above ellipsoid in case no information is available*/
   double GetDefaultHeightAboveEllipsoid() const;
 
+  /**
+   * @return The number of elevation databases in the <code>ossimElevManager</code>.
+   */
+  unsigned int GetDEMCount() const;
 
   /** Get DEM directory */
   std::string GetDEMDirectory(unsigned int idx = 0) const;

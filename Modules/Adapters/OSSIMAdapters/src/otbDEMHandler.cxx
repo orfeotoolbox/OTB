@@ -243,6 +243,15 @@ DEMHandler
   return m_DefaultHeightAboveEllipsoid;
 }
 
+unsigned int
+DEMHandler
+::GetDEMCount() const
+{
+  assert( ossimElevManager::instance()!=NULL );
+
+  return ossimElevManager::instance()->getNumberOfElevationDatabases();
+}
+
 std::string DEMHandler::GetDEMDirectory(unsigned int idx) const
 {
   std::string demDir = "";
