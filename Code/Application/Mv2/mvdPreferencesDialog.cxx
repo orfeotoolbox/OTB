@@ -168,26 +168,34 @@ PreferencesDialog
     }
 
   I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE,
+    this->m_UI->srtmCheckbox->isChecked()
+  );
+  I18nApplication::Instance()->StoreSettingsKey(
     I18nCoreApplication::SETTINGS_KEY_SRTM_DIR,
     QDir::cleanPath( m_UI->srtmLineEdit->text()
     )
+  );
+
+  I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE,
+    this->m_UI->geoidCheckbox->isChecked()
   );
   I18nApplication::Instance()->StoreSettingsKey(
     I18nCoreApplication::SETTINGS_KEY_GEOID_PATH,
     m_UI->geoidLineEdit->text()
   );
-  I18nApplication::Instance()->StoreSettingsKey(
-    I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE,
-    this->m_UI->srtmCheckbox->isChecked()
-  );
-  I18nApplication::Instance()->StoreSettingsKey(
-    I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE,
-    this->m_UI->geoidCheckbox->isChecked()
-  );
 
   if( m_ElevationSetupModified )
     {
-    I18nApplication::Instance()->ElevationSetup();
+    if( !I18nApplication::Instance()->ElevationSetup() )
+      {
+      QMessageBox::warning(
+	this,
+	"Monteverdi2 - Warning!",
+	tr( "Geoid file has changed since application has been started. This setting needs the application to be restarted to be taken into account." )
+      );
+      }
 
     m_ElevationSetupModified = false;
     }
