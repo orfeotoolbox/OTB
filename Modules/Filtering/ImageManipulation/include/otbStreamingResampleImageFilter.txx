@@ -50,7 +50,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   progress->RegisterInternalFilter(m_WarpFilter, 1.f);
 
   m_WarpFilter->GraftOutput(this->GetOutput());
-  m_WarpFilter->Update();
+  m_WarpFilter->UpdateOutputData(m_WarpFilter->GetOutput());
   this->GraftOutput(m_WarpFilter->GetOutput());
 }
 
@@ -62,41 +62,14 @@ void
 StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
 ::GenerateOutputInformation()
 {
-  // call the superclass's implementation of this method
-  Superclass::GenerateOutputInformation();
-
-  typename OutputImageType::Pointer outputPtr = this->GetOutput();
-
-  outputPtr->SetSpacing( this->GetOutputSpacing() );
-  outputPtr->SetOrigin(  this->GetOutputOrigin() );
-
-  typename OutputImageType::RegionType region;
-  region.SetSize( this->GetOutputSize() );
-  region.SetIndex(this->GetOutputStartIndex() );
-
-  outputPtr->SetLargestPossibleRegion(region);
-
   // check the output spacing of the displacement field
   if(this->GetDisplacementFieldSpacing()== itk::NumericTraits<SpacingType>::ZeroValue())
     {
     this->SetDisplacementFieldSpacing(2.*this->GetOutputSpacing());
     }
-}
 
-template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
-void
-StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
-::GenerateInputRequestedRegion()
-{
-  // Retrieve output pointer
-  OutputImageType * outputPtr = this->GetOutput();
-
-  // Retrieve input pointer
-  const InputImageType * inputPtr = this->GetInput();
-
-  // Retrieve output requested region
-  RegionType requestedRegion = outputPtr->GetRequestedRegion();
-  SizeType largestSize       = outputPtr->GetLargestPossibleRegion().GetSize();
+  // Retrieve output largest region
+  SizeType largestSize       = this->GetOutputSize();
 
   // Set up displacement field filter
   SizeType displacementFieldLargestSize;
@@ -117,10 +90,20 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   m_DisplacementFilter->SetOutputSize(displacementFieldLargestSize);
   m_DisplacementFilter->SetOutputIndex(this->GetOutputStartIndex());
 
-  // Generate input requested region
-  m_WarpFilter->SetInput(inputPtr);
-  m_WarpFilter->GetOutput()->UpdateOutputInformation();
-  m_WarpFilter->GetOutput()->SetRequestedRegion(requestedRegion);
+  m_WarpFilter->SetInput(this->GetInput());
+  m_WarpFilter->GraftOutput(this->GetOutput());
+  m_WarpFilter->UpdateOutputInformation();
+  this->GraftOutput(m_WarpFilter->GetOutput());
+}
+
+template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
+void
+StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
+::PropagateRequestedRegion(itk::DataObject *output)
+{
+  if (this->m_Updating) return;
+
+  m_WarpFilter->GetOutput()->SetRequestedRegion(output);
   m_WarpFilter->GetOutput()->PropagateRequestedRegion();
 }
 
