@@ -137,24 +137,6 @@ void
 PreferencesDialog
 ::on_buttonBox_accepted()
 {
-//
-// Code is temporarily disabled (waiting for client approval about
-// what to do).
-//
-// Selecting cache-dir during application run induces GUI and
-// DatabaseModel refreshed along with checking consistency of selected
-// directory content.
-#if 0
-  if (m_CacheDirRootModified)
-    {
-    // Create the cache dir
-    I18nApplication::Instance()->MakeCacheDir(m_CacheDirRoot);
-
-    // Save the cache directory into the settings file
-    I18nApplication::Instance()->WriteCacheDirIntoSettings();
-    }
-#endif
-
   if( m_ResultsDirModified )
     {
     // Set the result dir
