@@ -613,6 +613,8 @@ I18nCoreApplication
 
     try
       {
+      demHandlerInstance->ClearDEMs();
+
       demHandlerInstance->OpenDEMDirectory(
 	ToStdString(
 	  I18nCoreApplication::RetrieveSettingsKey(
