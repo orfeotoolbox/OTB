@@ -164,6 +164,7 @@ protected:
                      const KernelIteratorType kernelBegin,
                      const KernelIteratorType kernelEnd);
 
+  virtual void GenerateOutputInformation();
 
 private:
   NeighborhoodMajorityVotingImageFilter(const Self&); //purposely not implemented
