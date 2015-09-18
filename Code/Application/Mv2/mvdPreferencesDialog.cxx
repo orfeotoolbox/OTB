@@ -169,9 +169,23 @@ PreferencesDialog
 
   if( m_ElevationSetupModified )
     {
-    I18nApplication::Instance()->ElevationSetup();
-
-    m_ElevationSetupModified = false;
+    try
+      {
+      I18nApplication::Instance()->ElevationSetup();
+      }
+    catch( const std::exception & exception )
+      {
+      QMessageBox::warning(
+	this,
+	"Mv2",
+	tr(
+	  "The following exception has been caught when setting up "
+	  "Elevation Settings:\n\n%1."
+	).arg( exception.what() )
+      );
+      }
+ 
+      m_ElevationSetupModified = false;
     }
 
   close();
