@@ -102,9 +102,9 @@ main( int argc, char* argv[] )
 	),
 	QCoreApplication::translate(
 	  "Monteverdi2",
-	  "The following exception has been caught while initializing the software:\n"
-	  "'%1'\n\n"
-	  "The application may not function as expeceted. Do you want to continue?"
+	  "The following exception has been caught while initializing the software:\n\n"
+	  "%1\n\n"
+	  "The application may not function as expected. Do you want to continue?"
 	)
 	.arg( exc.what() ),
 	QMessageBox::Yes | QMessageBox::No,
