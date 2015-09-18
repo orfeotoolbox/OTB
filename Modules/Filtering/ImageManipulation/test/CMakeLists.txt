@@ -70,6 +70,9 @@ otbSpectralAngleDistanceImageFilter.cxx
 otbFunctionWithNeighborhoodToImageFilterNew.cxx
 otbEuclideanDistanceMetricWithMissingValue.cxx
 otbEuclideanDistanceMetricWithMissingValueNew.cxx
+otbNRIBandImagesToOneNComplexBandsImage.cxx
+otbOneRIBandImageToOneComplexBandImage.cxx
+otbTwoNRIBandsImageToNComplexBandsImage.cxx
 otbChangeNoDataValueFilter.cxx
 otbImageToNoDataMaskFilter.cxx
 )
@@ -671,6 +674,36 @@ otb_add_test(NAME bfTvEuclideanDistanceMetricWithMissingValue COMMAND otbImageMa
   otbEuclideanDistanceMetricWithMissingValue)
 otb_add_test(NAME bfTuEuclideanDistanceMetricWithMissingValueNew COMMAND otbImageManipulationTestDriver
   otbEuclideanDistanceMetricWithMissingValueNew)
+
+otb_add_test(NAME bfTvTwoNRIBandsImageToNComplexBandsImage COMMAND otbImageManipulationTestDriver
+  --compare-image ${EPSILON_7}
+  ${BASELINE}/bfTvNRIBandImagesToOneNComplexBandsImage.tif
+  ${TEMP}/bfTvTwoNRIBandsImageToNComplexBandsImage.tif
+  otbTwoNRIBandsImageToNComplexBandsImage
+  ${INPUTDATA}/RSAT_imagery_HH_HV_VV.tif
+  ${TEMP}/bfTvTwoNRIBandsImageToNComplexBandsImage.tif
+  )
+  
+  
+otb_add_test(NAME bfTvNRIBandImagesToOneNComplexBandsImage COMMAND otbImageManipulationTestDriver
+  --compare-image ${EPSILON_7}
+  ${BASELINE}/bfTvNRIBandImagesToOneNComplexBandsImage.tif
+  ${TEMP}/bfTvNRIBandImagesToOneNComplexBandsImage.tif
+  otbNRIBandImagesToOneNComplexBandsImage 
+  ${INPUTDATA}/RSAT_imagery_HH.tif
+  ${INPUTDATA}/RSAT_imagery_HV.tif
+  ${INPUTDATA}/RSAT_imagery_VV.tif
+  ${TEMP}/bfTvNRIBandImagesToOneNComplexBandsImage.tif
+  )
+  
+otb_add_test(NAME bfTvOneRIBandImageToOneComplexBandImage COMMAND otbImageManipulationTestDriver
+  --compare-image ${EPSILON_3}
+  ${INPUTDATA}/RSAT_imageryC_HH.tif
+  ${TEMP}/bfTvOneRIBandImageToOneComplexBandImage.tif
+  otbOneRIBandImageToOneComplexBandImage
+  ${INPUTDATA}/RSAT_imagery_HH.tif
+  ${TEMP}/bfTvOneRIBandImageToOneComplexBandImage.tif
+  )
 
 otb_add_test(NAME filteringImageManipulationChangeNoDataValueFilter COMMAND otbImageManipulationTestDriver
   otbChangeNoDataValueFilter)
