@@ -9,8 +9,8 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Some parts of this code are covered by the GET copyright.
-  See GETCopyright.txt for details.
+  Some parts of this code are covered by the IMT copyright.
+  See IMTCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
