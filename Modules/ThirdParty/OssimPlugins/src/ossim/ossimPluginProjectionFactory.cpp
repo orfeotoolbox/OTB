@@ -30,7 +30,7 @@
 #include <ossim/base/ossimNotifyContext.h>
 #include "ossimTileMapModel.h"
 #include "ossimSpot6Model.h"
-
+#include "ossimSentinel1Model.h"
 //***
 // Define Trace flags for use within this file:
 //***
@@ -62,14 +62,35 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    ossimRefPtr<ossimProjection> projection = 0;
    //traceDebug.setTraceFlag(true);
 
-   if(traceDebug())
+   // Sentinel1
+   if ( !projection )
    {
-    	ossimNotify(ossimNotifyLevel_DEBUG)
-        	   << MODULE << " DEBUG: testing ossimRadarSat2Model" << std::endl;
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG: testing ossimSentinel1Model" << std::endl;
+      }
+
+      ossimRefPtr<ossimSentinel1Model> model = new ossimSentinel1Model();
+      if ( model->open(filename) )
+      {
+         projection = model.get();
+      }
+      else
+      {
+         model = 0;
+      }
    }
 
    if ( !projection )
    {
+
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG: testing ossimRadarSat2Model" << std::endl;
+      }
+
       ossimRefPtr<ossimRadarSat2Model> model = new ossimRadarSat2Model();
       if ( model->open(filename) )
       {
@@ -301,6 +322,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       }
    }
 
+
    //***
    // ADD_MODEL: (Please leave this comment for the next programmer)
    //***
@@ -382,6 +404,11 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    {
      return new ossimSpot6Model;
    }
+   else if (name == STATIC_TYPE_NAME(ossimSentinel1Model))
+   {
+     return new ossimSentinel1Model;
+   }
+
 
    //***
    // ADD_MODEL: (Please leave this comment for the next programmer)
@@ -497,6 +524,15 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          }
       }
 
+      else if (type == "ossimSentinel1Model")
+      {
+         result = new ossimSentinel1Model();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+
    //***
    // ADD_MODEL: (Please leave this comment for the next programmer)
    //***
@@ -545,6 +581,7 @@ void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typ
    typeList.push_back(STATIC_TYPE_NAME(ossimFormosatModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimPleiadesModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimSentinel1Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimSpot6Model));
 
    //***
