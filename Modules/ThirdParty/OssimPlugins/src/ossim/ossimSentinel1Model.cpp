@@ -78,8 +78,7 @@ namespace ossimplugins
 
       // Set the flags back.
       out.flags(f);
-//      return ossimGeometricSarSensorModel::print(out);
-      return ossimSensorModel::print(out);
+      return ossimSarModel::print(out);
 
    }
 
@@ -93,6 +92,11 @@ namespace ossimplugins
       kwl.add(prefix,
               ossimKeywordNames::TYPE_KW,
               "ossimSentinel1Model",
+              true);
+
+      kwl.add("support_data.",
+              "calibration_lookup_flag",
+              "true",
               true);
 
       kwl.addList(theManifestKwl, true);
