@@ -128,9 +128,6 @@ namespace ossimplugins
    {
       bool commonMetadataRetrieved = false;
       double heightSum = 0.0;
-      double oneMillion = 1000000.0;
-      double lightSpeed = 299792458.0; //  m / s
-      double halfLightSpeed = lightSpeed / 2.0;
       int numBands = 0;
 
       ossimDirectory annotationDir( theManifestDirectory.dirCat( "annotation") );
@@ -230,14 +227,14 @@ namespace ossimplugins
             // these should be the same for all swaths
             //RK div by oneMillion taken from S1tlbx
             theProductKwl.add(SUPPORT_DATA_PREFIX,
-                            "range_sampling_rate",
-                            productInformation->getChildTextValue("rangeSamplingRate").toFloat64() / oneMillion,
-                            true);
+                              "range_sampling_rate",
+                              productInformation->getChildTextValue("rangeSamplingRate"),
+                              true);
 
             theProductKwl.add(SUPPORT_DATA_PREFIX,
-                            "radar_frequency",
-                            productInformation->getChildTextValue("radarFrequency").toFloat64()  /  oneMillion,
-                            true);
+                              "radar_frequency",
+                              productInformation->getChildTextValue("radarFrequency"),
+                              true);
 
             theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "line_time_interval",
@@ -245,9 +242,9 @@ namespace ossimplugins
                             true);
 
             theProductKwl.add(SUPPORT_DATA_PREFIX,
-                            "slant_range_to_first_pixel",
-                            imageInformation->getChildTextValue("slantRangeTime").toFloat64() * halfLightSpeed,
-                            true);
+                              "slant_range_to_first_pixel",
+                              imageInformation->getChildTextValue("slantRangeTime"),
+                              true);
 
             const ossimRefPtr<ossimXmlNode> downlinkInformation =
                theProductXmlDocument->getRoot()->findFirstNode("generalAnnotation/downlinkInformationList/downlinkInformation");
@@ -264,12 +261,12 @@ namespace ossimplugins
 
             theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "azimuth_bandwidth",
-                            azimuthProcessingNode->getChildTextValue("processingBandwidth").toFloat64() /  oneMillion,
+                              azimuthProcessingNode->getChildTextValue("processingBandwidth"),
                             true);
 
             theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "range_bandwidth",
-                            rangeProcessingNode->getChildTextValue("processingBandwidth").toFloat64()  /  oneMillion,
+                              rangeProcessingNode->getChildTextValue("processingBandwidth"),
                             true);
 
             theProductKwl.add(SUPPORT_DATA_PREFIX,
