@@ -92,7 +92,7 @@ otb_add_test(NAME coTvImageRegionAdaptativeSplitterShiftedROISmallStream COMMAND
   ${BASELINE_FILES}/coTvImageRegionAdaptativeSplitterShiftedROISmallStreamOutput.txt
   ${TEMP}/coTvImageRegionAdaptativeSplitterShiftedROISmallStreamOutput.txt
   otbImageRegionAdaptativeSplitter
-  1000 1000 4000 4000 2000 2000 5
+  1000 1000 4000 4000 2000 2000 10
   ${TEMP}/coTvImageRegionAdaptativeSplitterShiftedROISmallStreamOutput.txt
   )
 
