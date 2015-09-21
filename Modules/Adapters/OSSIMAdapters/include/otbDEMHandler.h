@@ -107,8 +107,28 @@ public:
   /** return true if the directoty contain DEM */
   virtual bool IsValidDEMDirectory(const char* DEMDirectory);
 
-  /** Open geoid file. */
+  /**
+   * \brief Open geoid file given its filename or throw an exception
+   * if geoid-file could not be loaded.
+   *
+   * \param geoidFile The filename of the geoid-file.
+   *
+   * \return <code>true</code> if geoid file has been changed or
+   * <code>false</code> if geod-file have been set before and could
+   * not be changed.
+   */
   virtual bool OpenGeoidFile(const char* geoidFile);
+
+  /**
+   * \brief Open geoid file given its filename or throw an exception
+   * if geoid-file could not be loaded.
+   *
+   * \param geoidFile The filename of the geoid-file.
+   *
+   * \return <code>true</code> if geoid file has been changed or
+   * <code>false</code> if geod-file have been set before and could
+   * not be changed.
+   */
   virtual bool OpenGeoidFile(const std::string& geoidFile);
 
   /** Compute the height above MSL(Mean Sea Level) of a geographic point. */
@@ -126,7 +146,8 @@ public:
   double GetDefaultHeightAboveEllipsoid() const;
 
   /**
-   * @return The number of elevation databases in the <code>ossimElevManager</code>.
+   * \return The number of elevation databases in the
+   * <code>ossimElevManager</code>.
    */
   unsigned int GetDEMCount() const;
 
@@ -137,7 +158,8 @@ public:
   std::string GetGeoidFile() const;
 
   /**
-   * Remove all the ossimElevationDatabases from the ossimElevManager.
+   * \brief Remove all the ossimElevationDatabases from the
+   * <code>ossimElevManager</code>.
    */
   void ClearDEMs();
 
