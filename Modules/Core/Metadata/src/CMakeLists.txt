@@ -39,6 +39,7 @@ set(OTBMetadata_SRC
   otbSentinel1ImageMetadataInterfaceFactory.cxx
   otbSentinel1ImageMetadataInterface.cxx
 
+  otbNoDataHelper.cxx
   )
 
 add_library(OTBMetadata ${OTBMetadata_SRC})

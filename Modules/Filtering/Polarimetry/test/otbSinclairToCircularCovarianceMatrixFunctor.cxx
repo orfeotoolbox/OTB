@@ -31,14 +31,14 @@ int otbSinclairToCircularCovarianceMatrixFunctor(int itkNotUsed(argc), char * it
   OutputType outputFunct;
 
   result[0] = ComplexType( 32.,  0. );
-  result[1] = ComplexType(  0., 24. );
-  result[2] = ComplexType(  0., 16.);
-  result[3] = ComplexType( -8.,   0  );
+  result[1] = ComplexType(  24., 0. );
+  result[2] = ComplexType(  16., 0.);
+  result[3] = ComplexType( 8.,   0  );
   result[4] = ComplexType( 18.,   0. );
   result[5] = ComplexType( 12. ,  0. );
-  result[6] = ComplexType(  0. ,  6. );
+  result[6] = ComplexType(  6. ,  0. );
   result[7] = ComplexType(  8,    0. );
-  result[8] = ComplexType(  0,    4. );
+  result[8] = ComplexType(  4.,   0. );
   result[9] = ComplexType(  2,    0. );
 
   outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.), ComplexType(4., 1.) );

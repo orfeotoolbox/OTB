@@ -22,4 +22,5 @@ void RegisterTests()
   REGISTER_TEST(otbWorldView2ImageMetadataInterfaceNew);
   REGISTER_TEST(otbDefaultImageMetadataInterface);
   REGISTER_TEST(otbImageMetadataInterfaceTest2);
+  REGISTER_TEST(otbNoDataHelperTest);
 }

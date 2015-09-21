@@ -9,12 +9,12 @@ otb_module(OTBMetadata
     OTBITK
     OTBOSSIMAdapters
     OTBCommon
-
+    
   TEST_DEPENDS
     OTBTestKernel
     OTBImageIO
     OTBImageBase
-
+    
   DESCRIPTION
     "${DOCUMENTATION}"
 )

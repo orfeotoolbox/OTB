@@ -17,6 +17,7 @@
 =========================================================================*/
 
 #include "otbNoDataHelper.h"
+#include "itkMetaDataDictionary.h"
 #include "otbMacro.h"
 
 int otbNoDataHelperTest(int itkNotUsed(argc),char * itkNotUsed(argv) [])
@@ -24,6 +25,11 @@ int otbNoDataHelperTest(int itkNotUsed(argc),char * itkNotUsed(argv) [])
   std::vector<bool> b1(1,true);
   std::vector<double> v1(1,0);
 
+  itk::MetaDataDictionary dict;
+
+  otb::WriteNoDataFlags(b1,v1,dict);
+  otb::ReadNoDataFlags(dict,b1,v1);
+  
   otbControlConditionTestMacro(otb::IsNoData(10,b1,v1)," wrong output of IsNoData function");
   otbControlConditionTestMacro(!otb::IsNoData(0,b1,v1)," wrong output of IsNoData function");
   b1[0]=false;
