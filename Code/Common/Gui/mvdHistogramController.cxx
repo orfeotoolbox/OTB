@@ -167,10 +167,10 @@ HistogramController
     widget->SetLowMarker( chan, settings.GetLowIntensity( chan ) );
     widget->SetHighMarker( chan, settings.GetHighIntensity( chan ) );
 
-    delete x;
+    delete[] x;
     x = NULL;
 
-    delete y;
+    delete[] y;
     y = NULL;
     }
 
