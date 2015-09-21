@@ -1062,7 +1062,26 @@ MainWindow
 
   //
   //
-  SpatialReferenceType srt = GetSpatialReferenceType( ToStdString( filename ) );
+  // Coverity-112757
+  // {
+  SpatialReferenceType srt = SRT_UNKNOWN;
+
+  try
+    {
+    srt = GetSpatialReferenceType( ToStdString( filename ) );
+    }
+  catch( const std::exception & exception )
+    {
+    QMessageBox::warning(
+      this,
+      "Warning!",
+      tr( "Exception caught while checking Spatial Reference Type of image-file '%1':\n\n%2" )
+      .arg( filename )
+      .arg( exception.what() )
+    );
+    }
+  // }
+  // Coverity-112757.
 
   QMessageBox::StandardButton button = QMessageBox::NoButton;
 
