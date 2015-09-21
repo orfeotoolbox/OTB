@@ -11,7 +11,7 @@ namespace ossimplugins
 
    static const char LOAD_FROM_PRODUCT_FILE_KW[] = "load_from_product_file_flag";
    static const char PRODUCT_XML_FILE_KW[] = "product_xml_filename";
-   static const char SUPPORT_DATA_KW[] = "support_data.";
+   static const char SUPPORT_DATA_PREFIX[] = "support_data.";
 
    ossimSentinel1ProductDoc::ossimSentinel1ProductDoc ()
       : ossimErrorStatusInterface ()
@@ -179,7 +179,7 @@ namespace ossimplugins
                          adsHeader->getChildTextValue("stopTime"),
                          true);
          //RK maybe use this->getManifestPrefix()
-         theProductKwl.add("SUPPORT_DATA_KW.",
+         theProductKwl.add(SUPPORT_DATA_PREFIX,
                       "mds1_tx_rx_polar",
                       polarisation,
                       true);
@@ -188,17 +188,17 @@ namespace ossimplugins
 
          const ossimRefPtr<ossimXmlNode> productInformation = theProductXmlDocument->getRoot()->findFirstNode("generalAnnotation/productInformation");
 
-         theProductKwl.add(SUPPORT_DATA_KW,
+         theProductKwl.add(SUPPORT_DATA_PREFIX,
                          "data_take_id",
                          adsHeader->getChildTextValue("missionDataTakeId"),
                          true);
 
-         theProductKwl.add(SUPPORT_DATA_KW,
+         theProductKwl.add(SUPPORT_DATA_PREFIX,
                          "slice_num",
                          imageInformation->getChildTextValue("sliceNumber"),
                          true);
 
-         theProductKwl.add(SUPPORT_DATA_KW,
+         theProductKwl.add(SUPPORT_DATA_PREFIX,
                          "line_time_interval",
                          imageInformation->getChildTextValue("azimuthTimeInterval"),
                          true);
@@ -229,22 +229,22 @@ namespace ossimplugins
          {
             // these should be the same for all swaths
             //RK div by oneMillion taken from S1tlbx
-            theProductKwl.add(SUPPORT_DATA_KW,
+            theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "range_sampling_rate",
                             productInformation->getChildTextValue("rangeSamplingRate").toFloat64() / oneMillion,
                             true);
 
-            theProductKwl.add(SUPPORT_DATA_KW,
+            theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "radar_frequency",
                             productInformation->getChildTextValue("radarFrequency").toFloat64()  /  oneMillion,
                             true);
 
-            theProductKwl.add(SUPPORT_DATA_KW,
+            theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "line_time_interval",
                             imageInformation->getChildTextValue("azimuthTimeInterval"),
                             true);
 
-            theProductKwl.add(SUPPORT_DATA_KW,
+            theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "slant_range_to_first_pixel",
                             imageInformation->getChildTextValue("slantRangeTime").toFloat64() * halfLightSpeed,
                             true);
@@ -252,7 +252,7 @@ namespace ossimplugins
             const ossimRefPtr<ossimXmlNode> downlinkInformation =
                theProductXmlDocument->getRoot()->findFirstNode("generalAnnotation/downlinkInformationList/downlinkInformation");
 
-            theProductKwl.add(SUPPORT_DATA_KW,
+            theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "pulse_repetition_frequency",
                             downlinkInformation->getChildTextValue("prf"),
                             true);
@@ -262,34 +262,34 @@ namespace ossimplugins
             const ossimRefPtr<ossimXmlNode> rangeProcessingNode = swathProcParams->findFirstNode("rangeProcessing");
             const ossimRefPtr<ossimXmlNode> azimuthProcessingNode = swathProcParams->findFirstNode("azimuthProcessing");
 
-            theProductKwl.add(SUPPORT_DATA_KW,
+            theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "azimuth_bandwidth",
                             azimuthProcessingNode->getChildTextValue("processingBandwidth").toFloat64() /  oneMillion,
                             true);
 
-            theProductKwl.add(SUPPORT_DATA_KW,
+            theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "range_bandwidth",
                             rangeProcessingNode->getChildTextValue("processingBandwidth").toFloat64()  /  oneMillion,
                             true);
 
-            theProductKwl.add(SUPPORT_DATA_KW,
+            theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "range_looks",
                             rangeProcessingNode->getChildTextValue("numberOfLooks"),
                             true);
 
-            theProductKwl.add(SUPPORT_DATA_KW,
+            theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "azimuth_looks",
                             azimuthProcessingNode->getChildTextValue("numberOfLooks"),
                             true);
 
             if(!theTOPSAR || !theSLC)
             {
-               theProductKwl.add(SUPPORT_DATA_KW,
+               theProductKwl.add(SUPPORT_DATA_PREFIX,
                                ossimKeywordNames::NUMBER_SAMPLES_KW,
                                imageInformation->getChildTextValue("numberOfSamples"),
                                true);
 
-               theProductKwl.add(SUPPORT_DATA_KW,
+               theProductKwl.add(SUPPORT_DATA_PREFIX,
                                ossimKeywordNames::NUMBER_LINES_KW,
                                imageInformation->getChildTextValue("numberOfLines"),
                             true);
@@ -299,7 +299,7 @@ namespace ossimplugins
             addOrbitStateVectors(orbitList);
 
             const ossimRefPtr<ossimXmlNode> coordinateConversionList = theProductXmlDocument->getRoot()->findFirstNode("coordinateConversion/coordinateConversionList");
-            addSRGRCoefficients(SUPPORT_DATA_KW, coordinateConversionList);
+            addSRGRCoefficients(SUPPORT_DATA_PREFIX, coordinateConversionList);
 
             const ossimRefPtr<ossimXmlNode> dcEstimateList = theProductXmlDocument->getRoot()->findFirstNode("dopplerCentroid/dcEstimateList");
             addDopplerCentroidCoefficients(dcEstimateList);
@@ -316,22 +316,22 @@ namespace ossimplugins
       }
 
 
-      theProductKwl.add(SUPPORT_DATA_KW,
+      theProductKwl.add(SUPPORT_DATA_PREFIX,
                       "range_spacing",
                       theRangeSpacingTotal / (double)numBands,
                       true);
 
-      theProductKwl.add(SUPPORT_DATA_KW,
+      theProductKwl.add(SUPPORT_DATA_PREFIX,
                       "azimuth_spacing",
                       theAzimuthSpacingTotal / (double)numBands,
                       true);
 
-      theProductKwl.add(SUPPORT_DATA_KW,
+      theProductKwl.add(SUPPORT_DATA_PREFIX,
                       "avg_scene_height",
                       heightSum / (double)files.size(),
                       true);
 
-      theProductKwl.add(SUPPORT_DATA_KW,
+      theProductKwl.add(SUPPORT_DATA_PREFIX,
                       ossimKeywordNames::NUMBER_BANDS_KW,
                       numBands,
                       true);
@@ -441,8 +441,8 @@ namespace ossimplugins
 
    bool ossimSentinel1ProductDoc::initImageSize(ossimIpt& imageSize) const
    {
-      const ossimString samples_str = theProductKwl.find(SUPPORT_DATA_KW, ossimKeywordNames::NUMBER_SAMPLES_KW);
-      const ossimString lines_str = theProductKwl.find(SUPPORT_DATA_KW, ossimKeywordNames::NUMBER_LINES_KW);
+      const ossimString samples_str = theProductKwl.find(SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_SAMPLES_KW);
+      const ossimString lines_str = theProductKwl.find(SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_LINES_KW);
 
       imageSize.samp =  samples_str.toInt();
       imageSize.line =  lines_str.toInt();
