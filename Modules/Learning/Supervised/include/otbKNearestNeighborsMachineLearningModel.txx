@@ -145,8 +145,11 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   //Save K parameter and IsRegression flag.
   ofs << "K=" << m_K << "\n";
   ofs << "IsRegression=" << this->m_RegressionMode << "\n";
-  // Save the DecisionRule
-  ofs << "DecisionRule=" << m_DecisionRule << "\n";
+  // Save the DecisionRule if regression
+  if (this->m_RegressionMode)
+    {
+    ofs << "DecisionRule=" << m_DecisionRule << "\n";
+    }
 
   //Save the samples. First column is the Label and other columns are the sample data.
   typename InputListSampleType::ConstIterator sampleIt = this->GetInputListSample()->Begin();
@@ -190,12 +193,14 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   pos = line.find_first_of("=", 0);
   nextpos = line.find_first_of(" \n\r", pos+1);
   this->SetRegressionMode(boost::lexical_cast<bool>(line.substr(pos+1, nextpos-pos-1)));
-  //third line is the DecisionRule parameter
-  std::getline(ifs, line);
-  pos = line.find_first_of("=", 0);
-  nextpos = line.find_first_of(" \n\r", pos+1);
-  this->SetDecisionRule(boost::lexical_cast<int>(line.substr(pos+1, nextpos-pos-1)));
-
+  //third line is the DecisionRule parameter (only for regression)
+  if (this->m_RegressionMode)
+    {
+    std::getline(ifs, line);
+    pos = line.find_first_of("=", 0);
+    nextpos = line.find_first_of(" \n\r", pos+1);
+    this->SetDecisionRule(boost::lexical_cast<int>(line.substr(pos+1, nextpos-pos-1)));
+    }
   //Clear previous listSample (if any)
   typename InputListSampleType::Pointer samples = InputListSampleType::New();
   typename TargetListSampleType::Pointer labels = TargetListSampleType::New();
