@@ -162,18 +162,25 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
 
   unsigned int nbClasses = 0;
-  TargetSampleType currentLabel = 0, prevLabel = 0;
-  for (unsigned int itLab = 0; itLab < trainingLabeledListSample->Size(); ++itLab)
+  if (this->m_RegressionFlag)
     {
-    currentLabel = trainingLabeledListSample->GetMeasurementVector(itLab);
-    if ((currentLabel != prevLabel) || (itLab == 0))
+    layerSizes.push_back(1);
+    }
+  else
+    {
+    TargetSampleType currentLabel = 0, prevLabel = 0;
+    for (unsigned int itLab = 0; itLab < trainingLabeledListSample->Size(); ++itLab)
       {
-      ++nbClasses;
+      currentLabel = trainingLabeledListSample->GetMeasurementVector(itLab);
+      if ((currentLabel != prevLabel) || (itLab == 0))
+        {
+        ++nbClasses;
+        }
+      prevLabel = currentLabel;
       }
-    prevLabel = currentLabel;
+    layerSizes.push_back(nbClasses);
     }
 
-  layerSizes.push_back(nbClasses);
   classifier->SetLayerSizes(layerSizes);
 
   switch (GetParameterInt("classifier.ann.f"))
