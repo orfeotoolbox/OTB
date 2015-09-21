@@ -201,6 +201,11 @@ QuicklookViewRenderer
   const QuicklookViewRenderer::RenderingContext * context =
     dynamic_cast< const QuicklookViewRenderer::RenderingContext * >( c );
 
+  // Coverity-19842
+  // {
+  assert( context!=NULL );
+  // }
+
   /*
   qDebug()
     << "ROI-origin:"
