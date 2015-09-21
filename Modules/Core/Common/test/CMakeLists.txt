@@ -78,6 +78,24 @@ otb_add_test(NAME coTvImageRegionAdaptativeSplitterStripLargeStream COMMAND otbC
   ${TEMP}/coTvImageRegionAdaptativeSplitterStripLargeStreamOutput.txt
   )
 
+otb_add_test(NAME coTvImageRegionAdaptativeSplitterShiftedROILargeStream COMMAND otbCommonTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/coTvImageRegionAdaptativeSplitterShiftedROILargeStreamOutput.txt
+  ${TEMP}/coTvImageRegionAdaptativeSplitterShiftedROILargeStreamOutput.txt
+  otbImageRegionAdaptativeSplitter
+  1000 1000 4000 4000 2000 2000 5
+  ${TEMP}/coTvImageRegionAdaptativeSplitterShiftedROILargeStreamOutput.txt
+  )
+
+otb_add_test(NAME coTvImageRegionAdaptativeSplitterShiftedROISmallStream COMMAND otbCommonTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/coTvImageRegionAdaptativeSplitterShiftedROISmallStreamOutput.txt
+  ${TEMP}/coTvImageRegionAdaptativeSplitterShiftedROISmallStreamOutput.txt
+  otbImageRegionAdaptativeSplitter
+  1000 1000 4000 4000 2000 2000 5
+  ${TEMP}/coTvImageRegionAdaptativeSplitterShiftedROISmallStreamOutput.txt
+  )
+
 otb_add_test(NAME coTuRGBAPixelConverter COMMAND otbCommonTestDriver
   otbRGBAPixelConverterNew
   )
