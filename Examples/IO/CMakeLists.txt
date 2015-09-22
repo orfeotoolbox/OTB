@@ -30,7 +30,7 @@ target_link_libraries(ImageReadWrite ${OTB_LIBRARIES})
 add_executable(ImageSeriesIOExample ImageSeriesIOExample.cxx)
 target_link_libraries(ImageSeriesIOExample ${OTB_LIBRARIES})
 
-if(OTBKMZWriter_LOADED)
+if(OTBlibkml_LOADED)
 add_executable(ImageToKmzAndMapFileProductExample ImageToKmzAndMapFileProductExample.cxx)
 target_link_libraries(ImageToKmzAndMapFileProductExample ${OTB_LIBRARIES})
 endif()

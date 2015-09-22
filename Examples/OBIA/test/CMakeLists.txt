@@ -22,7 +22,7 @@ otb_add_test(NAME trTeOBIAShapeAttributeComputationTest COMMAND ${OTB_TEST_DRIVE
     ${TEMP}/OBIAShapeAttribute.txt
 )
 
-if(OTBMeanShift_LOADED)
+if(OTBMathParser_LOADED)
 otb_add_test(NAME trTeOBIARadiometricAttributesLabelMapFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${NOTOL}
     ${BASELINE}/OBIARadiometricAttributes.png

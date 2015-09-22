@@ -12,7 +12,7 @@ target_link_libraries(SOMClassifierExample ${OTB_LIBRARIES})
 add_executable(SOMExample SOMExample.cxx)
 target_link_libraries(SOMExample ${OTB_LIBRARIES})
 
-if(OTBSVMLearning_LOADED)
+if(OTBLibSVM_LOADED)
 add_executable(SVMImageClassificationExample SVMImageClassificationExample.cxx)
 target_link_libraries(SVMImageClassificationExample ${OTB_LIBRARIES})
 

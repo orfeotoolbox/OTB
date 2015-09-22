@@ -3,7 +3,7 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 # ------- SVMImageClassificationExampleTest----------
 
-if(OTBSVMLearning_LOADED)
+if(OTBLibSVM_LOADED)
 otb_add_test(NAME leTeSVMImageClassificationExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/ROI_QB_MUL_1_SVN_CLASS.png

@@ -1,6 +1,7 @@
 project(SimulationExamples)
 
-if(OTBSimulation_LOADED)
+#OTBSimulation -> OTBOpticalCalibration -> OTB6S
+if(OTB6S_LOADED)
 add_executable(LAIAndPROSAILToSensorResponse LAIAndPROSAILToSensorResponse.cxx)
 target_link_libraries(LAIAndPROSAILToSensorResponse ${OTB_LIBRARIES})
 

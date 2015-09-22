@@ -18,7 +18,8 @@ target_link_libraries(CorrelationLineDetectorExample ${OTB_LIBRARIES})
 add_executable(EdgeDensityExample EdgeDensityExample.cxx)
 target_link_libraries(EdgeDensityExample ${OTB_LIBRARIES})
 
-if(OTBRoadExtraction_LOADED)
+#OTBRoadExtraction depends OTBMathParser. But OTB_USE_MUPARSER is OFF
+if(OTBMathParser_LOADED)
 add_executable(ExtractRoadByStepsExample ExtractRoadByStepsExample.cxx)
 target_link_libraries(ExtractRoadByStepsExample ${OTB_LIBRARIES})
 

@@ -43,7 +43,7 @@ otb_add_test(NAME prTeDEMHandlerExampleTest COMMAND ${OTB_TEST_DRIVER}
     0.001
 )
 
-if(OTBKMZWriter_LOADED)
+if(OTBlibkml_LOADED)
 otb_add_test(NAME ioTeImageToKmzAndMapFileProductExample COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:ImageToKmzAndMapFileProductExample>
     ${OTB_DATA_ROOT}/Input/Haiti1_sr10.jpeg

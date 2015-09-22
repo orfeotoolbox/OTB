@@ -3,7 +3,8 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 # ------- ProsailModelExampleTest ----------
 
-if(OTBSimulation_LOADED)
+#OTBSimulation -> OTBOpticalCalibration -> OTB6S
+if(OTB6S_LOADED)
 otb_add_test(NAME siTvProsailModelExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-ascii ${EPSILON_3}
     ${BASELINE}/siTvProsailModelExampleTest.txt
