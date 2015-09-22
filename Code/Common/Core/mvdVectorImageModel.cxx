@@ -302,6 +302,23 @@ VectorImageModel
   VectorImageSettings * const  settings =
     static_cast< VectorImageSettings * const >( buildContext->m_Settings );
 
+
+// Fetch the no data flags if any
+  otb::ImageMetadataInterfaceBase::ConstPointer metaData(
+    GetMetaDataInterface()
+    );
+
+  std::vector<double> values;
+  std::vector<bool> flags;
+
+  bool ret = metaData->GetNoDataFlags(flags,values);
+
+  if(ret && !values.empty() && !flags.empty() && flags[0])
+    {
+    GetProperties()->SetNoDataEnabled(true);
+    GetProperties()->SetNoData(values[0]);
+    }
+  
   //
   // Step #1: Perform pre-process of AbstractModel::BuildModel()
   // pattern.
@@ -333,7 +350,7 @@ VectorImageModel
   // Remember image properties.
   if( buildContext->m_Properties!=NULL )
     SetProperties( *buildContext->m_Properties );
-
+  
   // Apply settings to child QuicklookModel.
   ApplySettings();
 }
