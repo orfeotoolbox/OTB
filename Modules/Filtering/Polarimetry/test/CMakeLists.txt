@@ -72,7 +72,7 @@ otb_add_test(NAME saTuReciprocalLinearCovarianceToReciprocalCircularCovarianceIm
   )
 
 otb_add_test(NAME saTvReciprocalCovarianceToReciprocalCoherencyImageFilter COMMAND otbPolarimetryTestDriver
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMLCToCoherencyImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
   ${TEMP}/saTvMLCToCoherencyImageFilter.tif
   otbReciprocalCovarianceToReciprocalCoherencyImageFilter
   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
@@ -291,7 +291,7 @@ otb_add_test(NAME saTvSinclairReciprocalImageFilter_SinclairToReciprocalCoherenc
  
 
 otb_add_test(NAME saTvReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter COMMAND otbPolarimetryTestDriver
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix.tif
   ${TEMP}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
   otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
@@ -299,7 +299,7 @@ otb_add_test(NAME saTvReciprocalLinearCovarianceToReciprocalCircularCovarianceIm
   )
 
 otb_add_test(NAME saTvReciprocalCoherencyToReciprocalMuellerImageFilter COMMAND otbPolarimetryTestDriver
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvReciprocalCoherencyToMuellerImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif 
   ${TEMP}/saTvReciprocalCoherencyToMuellerImageFilter.tif
   otbReciprocalCoherencyToReciprocalMuellerImageFilter
   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
@@ -315,7 +315,7 @@ otb_add_test(NAME saTuReciprocalCovarianceToCoherencyDegreeImageFilterNew COMMAN
   )
 
 otb_add_test(NAME saTvMuellerToReciprocalCovarianceImageFilter COMMAND otbPolarimetryTestDriver
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMuellerToMLCImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
   ${TEMP}/saTvMuellerToMLCImageFilter.tif
   otbMuellerToReciprocalCovarianceImageFilter
   ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif

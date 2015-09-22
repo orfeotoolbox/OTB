@@ -50,8 +50,8 @@ namespace Functor
  * With :
  * - \f$ T_{xx} = -S_{hh} \f$
  * - \f$ T_{xy} = -S_{hv} \f$
- * - \f$ T_{yx} = -S_{vh} \f$
- * - \f$ T_{yy} = -S_{vv} \f$
+ * - \f$ T_{yx} = S_{vh} \f$
+ * - \f$ T_{yy} = S_{vv} \f$
  *
  * Output is a not a complex. The output pixel has 16 channels : each element of the Mueller matrix.
  * The order of the channels corresponds to :

@@ -79,34 +79,29 @@ public:
     const double M12 =  static_cast<double>(Mueller[1]);
     const double M13 =  static_cast<double>(Mueller[2]);
     const double M14 =  static_cast<double>(Mueller[3]);
-    const double M21 =  static_cast<double>(Mueller[4]);
     const double M22 =  static_cast<double>(Mueller[5]);
     const double M23 =  static_cast<double>(Mueller[6]);
     const double M24 =  static_cast<double>(Mueller[7]);
-    const double M31 =  static_cast<double>(Mueller[8]);
-    const double M32 =  static_cast<double>(Mueller[9]);
     const double M33 =  static_cast<double>(Mueller[10]);
     const double M34 =  static_cast<double>(Mueller[11]);
-    const double M41 =  static_cast<double>(Mueller[12]);
-    const double M42 =  static_cast<double>(Mueller[13]);
-    const double M43 =  static_cast<double>(Mueller[14]);
     const double M44 =  static_cast<double>(Mueller[15]);
 
-    const ComplexType hhhh(M11+M22+M12+M21, 0.0);
-    const ComplexType hvhv(M11+M12-M21-M22, 0.0);
-    const ComplexType vvvv(M11+M22-M12-M21, 0.0);
-    const ComplexType hhhv(M13+M23, M14+M24);
-    const ComplexType hhvv(-M33-M44, M43-M34);
-    const ComplexType hvvv(M32-M31, M41-M42);
+    
+    const ComplexType A(0.5*(M11+M22+2*M12));
+    const ComplexType B(0.5*vcl_sqrt(2.0)*(M13+M23), 0.5*vcl_sqrt(2.0)*(M14+M24));
+    const ComplexType C(-0.5*(M33+M44), -M34);
+    const ComplexType E(M11-M22, 0.0);
+    const ComplexType F(0.5*vcl_sqrt(2.0)*(M13-M23), 0.5*vcl_sqrt(2.0)*(M14-M24));
+    const ComplexType I(0.5*(M11+M22-2*M12));
 
-    result[0] = static_cast<OutputValueType>( hhhh );
-    result[1] = static_cast<OutputValueType>( 2.* hhhv );
-    result[2] = static_cast<OutputValueType>( hhvv );
-    result[3] = static_cast<OutputValueType>( 4.* hvhv );
-    result[4] = static_cast<OutputValueType>( 2.* hvvv );
-    result[5] = static_cast<OutputValueType>( vvvv );
+    result[0] = static_cast<OutputValueType>( A );
+    result[1] = static_cast<OutputValueType>( B );
+    result[2] = static_cast<OutputValueType>( C );
+    result[3] = static_cast<OutputValueType>( E );
+    result[4] = static_cast<OutputValueType>( F );
+    result[5] = static_cast<OutputValueType>( I );
 
-    return 0.5*result;
+    return result;
   }
 
   unsigned int GetOutputSize()

@@ -70,7 +70,7 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
     {
     otbMsgDebugMacro(<< "refLabels size = " << m_ReferenceLabels->Size() <<
                      " / proLabels size = " << m_ProducedLabels->Size());
-    throw itk::ExceptionObject(__FILE__, __LINE__, "ListSample size missmatch", ITK_LOCATION);
+    throw itk::ExceptionObject(__FILE__, __LINE__, "ListSample size mismatch", ITK_LOCATION);
     }
 
   m_NumberOfSamples = m_ReferenceLabels->Size();
