@@ -53,6 +53,8 @@ public:
   typedef MetaDataKey::VariableLengthVectorType VariableLengthVectorType;
   typedef ImageKeywordlist                      ImageKeywordlistType;
   typedef unsigned int                          UnsignedIntType;
+  typedef std::vector<std::string>              StringVectorType;
+  typedef std::vector<unsigned int>             UIntVectorType;
 
 
   /** Set the image used to get the metadata */
@@ -80,7 +82,7 @@ public:
   std::string GetGCPProjection() const;
 //  otbMetadataGetMacro(GCPProjection, std::string);
 
-  unsigned int GetGCPCount() const;
+  UnsignedIntType GetGCPCount() const;
 //  otbMetadataGetMacro(GCPCount, unsigned int);
 
   OTB_GCP& GetGCPs(unsigned int GCPnum);
@@ -107,7 +109,7 @@ public:
   double GetGCPZ(unsigned int GCPnum) const;
 //  otbMetadataGetGCPnumMacro(GCPZ, double, GCPnum, unsigned int);
 
-  /** 
+  /**
    * Get The no data flags if existing
    * return False otherwise
    */
@@ -141,11 +143,11 @@ public:
   //otbMetadataGetMacro(SensorID, std::string);
 
   /** Get the number of bands from the ossim metadata */
-  unsigned int GetNumberOfBands() const;
+  UnsignedIntType GetNumberOfBands() const;
   //otbMetadataGetMacro(NumberOfBands, unsigned int);
 
   /** Get the band name from the ossim metadata */
-  std::vector<std::string> GetBandName() const;
+  StringVectorType GetBandName() const;
   //otbMetadataGetMacro(BandName, std::vector<std::string>);
 
   /** Get the x pixel spacing*/
@@ -155,7 +157,6 @@ public:
   /** Get the y pixel spacing*/
   double GetYPixelSpacing() const;
   //otbMetadataGetMacro(YPixelSpacing, double);
-
 
   /** Get the imaging acquisition day from the ossim metadata */
   virtual int GetDay() const = 0;
@@ -190,11 +191,11 @@ public:
   //otbMetadataGetMacro(ProductionYear, int);
 
   /** Convert the band names provided by ossim to the official band names  */
-  virtual std::vector<std::string> GetEnhancedBandNames () const = 0;
+  virtual StringVectorType GetEnhancedBandNames () const = 0;
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-  virtual std::vector<unsigned int> GetDefaultDisplay() const = 0;
+  virtual UIntVectorType GetDefaultDisplay() const = 0;
 
   virtual bool CanRead() const = 0;
 
