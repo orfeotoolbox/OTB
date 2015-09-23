@@ -67,6 +67,7 @@ OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolato
 
     // Fill the GenericRSTransform with those information
     this->SetOutputProjectionRef(projectionRef);
+    this->UpdateTransform();
     }
 }
 
