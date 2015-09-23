@@ -77,6 +77,7 @@ class AbstractLayerModel;
 // Gui
 class FilenameDragAndDropEventFilter;
 class ImageViewWidget;
+class KeymapDialog;
 class LayerStackWidget;
 class ShaderWidget;
 class StatusBarWidget;
@@ -402,6 +403,10 @@ private:
   /**
    */
   FilenameDragAndDropEventFilter* m_FilenameDragAndDropEventFilter;
+
+  /**
+   */
+  KeymapDialog * m_KeymapDialog;
 
   /**
    */

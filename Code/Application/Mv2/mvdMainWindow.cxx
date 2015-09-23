@@ -133,9 +133,14 @@ MainWindow
   m_StatusBarWidget( NULL ),
   m_ShaderWidget( NULL ),
   m_FilenameDragAndDropEventFilter( NULL ),
+  m_KeymapDialog( NULL ),
   m_GLSL140( -2 )
 {
   m_UI->setupUi( this );
+
+  //
+  //
+  m_KeymapDialog = new KeymapDialog( this );
 
   //
   // Event filters.
@@ -1400,9 +1405,12 @@ void
 MainWindow
 ::on_action_Keymap_triggered()
 {
-  KeymapDialog keymapDialog( this );
+  assert( m_KeymapDialog!=NULL );
 
-  keymapDialog.exec();
+  if( m_KeymapDialog->isVisible() )
+    return;
+
+  m_KeymapDialog->show();
 }
 
 /*****************************************************************************/
