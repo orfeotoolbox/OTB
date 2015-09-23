@@ -78,13 +78,13 @@ public:
 
     VNLMatrixType vnlMat(3, 3, 0.);
     vnlMat[0][0] = ComplexType(T0,  0.);
-    vnlMat[0][1] = std::conj(ComplexType(Coherency[1]));
-    vnlMat[0][2] = std::conj(ComplexType(Coherency[2]));
-    vnlMat[1][0] = ComplexType(Coherency[1]);
+    vnlMat[0][1] = ComplexType(Coherency[1]);
+    vnlMat[0][2] = ComplexType(Coherency[2]);
+    vnlMat[1][0] = std::conj(ComplexType(Coherency[1]));
     vnlMat[1][1] = ComplexType(T1,  0.);
-    vnlMat[1][2] = std::conj(ComplexType(Coherency[4]));
-    vnlMat[2][0] = ComplexType(Coherency[2]);
-    vnlMat[2][1] = ComplexType(Coherency[4]);
+    vnlMat[1][2] = ComplexType(Coherency[4]);
+    vnlMat[2][0] = std::conj(ComplexType(Coherency[2]));
+    vnlMat[2][1] = std::conj(ComplexType(Coherency[4]));
     vnlMat[2][2] = ComplexType(T2,  0.);
 
     // Only compute the left symetry to respect the previous Hermitian Analisys code
