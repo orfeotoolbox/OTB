@@ -272,7 +272,7 @@ otb_add_test(NAME seTeLabelizeNeighborhoodConnectedImageFilterTest COMMAND ${OTB
 
 
 # ------- StreamingMeanShiftSegmentationTest ----------
-
+if(OTBMathParser_LOADED)
 otb_add_test(NAME seTeStreamingMeanShiftSegmentationTest COMMAND ${OTB_TEST_DRIVER}
   # --compare-ogr ${NOTOL}
   # ${BASELINE_FILES}/seTeStreamingMeanShiftSegmentationTest.shp
@@ -291,3 +291,4 @@ otb_add_test(NAME seTeStreamingMeanShiftSegmentationTest COMMAND ${OTB_TEST_DRIV
     1 #Simplify Flag
     0.2 #Simplification tolerance
 )
+endif()
