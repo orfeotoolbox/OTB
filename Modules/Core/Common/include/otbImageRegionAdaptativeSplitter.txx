@@ -112,8 +112,8 @@ ImageRegionAdaptativeSplitter<VImageDimension>
   // First, we need to get which tiles are covered by ROI
   firstTileCovered[0] = m_ImageRegion.GetIndex()[0] / m_TileHint[0];
   firstTileCovered[1] = m_ImageRegion.GetIndex()[1] / m_TileHint[1];
-  tilesPerDim[0] = (m_ImageRegion.GetIndex()[0] + m_ImageRegion.GetSize()[0] -1 + m_TileHint[0] -1) / m_TileHint[0] - firstTileCovered[0];
-  tilesPerDim[1] = (m_ImageRegion.GetIndex()[1] + m_ImageRegion.GetSize()[1] -1 + m_TileHint[1] -1) / m_TileHint[1] - firstTileCovered[1];
+  tilesPerDim[0] = (m_ImageRegion.GetIndex()[0] + m_ImageRegion.GetSize()[0] + m_TileHint[0] -1) / m_TileHint[0] - firstTileCovered[0];
+  tilesPerDim[1] = (m_ImageRegion.GetIndex()[1] + m_ImageRegion.GetSize()[1] + m_TileHint[1] -1) / m_TileHint[1] - firstTileCovered[1];
   
   unsigned int totalTiles = tilesPerDim[0] * tilesPerDim[1];
 
