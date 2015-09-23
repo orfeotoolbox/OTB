@@ -27,58 +27,6 @@
 #include <boost/algorithm/string/predicate.hpp>
 
 
-namespace boost {
-
-/* Sadly, MSVC is still stuck is some bizzare era. It still doesn't have strtol
- * yet. https://connect.microsoft.com/VisualStudio/feedback/details/758053/missing-strtold-strtoll-strtoull-functions-from-stdlib-h.
- * So It is impossible to take care of small performance issues in this awesome
- * compiler. Hence ifndef 'ing MSVC */
-#ifdef _MSC_VER
-/* I want raw performance when converting string to int,float and double
- * and I don't want to use strtod, atoi everywhere. so here we are specializing
- * boost::lexical_cast. */
-
-template<>
-inline int lexical_cast(const std::string& arg)
-{
-  char* stop;
-  int res = std::strtol( arg.c_str(), &stop, 10);
-    if ( *stop != 0 ) throw_exception(bad_lexical_cast(typeid(int), typeid(std::string)));
-    return res;
-}
-
-template<>
-inline float lexical_cast(const std::string& arg)
-{
-    char* stop;
-    float res = std::strtof( arg.c_str(), &stop);
-    if ( *stop != 0 ) throw_exception(bad_lexical_cast(typeid(float), typeid(std::string)));
-    return res;
-}
-
-template<>
-inline double lexical_cast(const std::string& arg)
-{
-    char* stop;
-    double res = std::strtod( arg.c_str(), &stop);
-    if ( *stop != 0 ) throw_exception(bad_lexical_cast(typeid(double), typeid(std::string)));
-    return res;
-}
-
-#endif
-/* there could also be specialised vice-versa conversion below */
-// template<>
-// inline std::string lexical_cast(const int& arg)
-// {
-//     char buffer[20]; // large enough for arg < 2^200
-
-//     ltoa( arg, buffer, 10 );
-//     return std::string( buffer ); // RVO will take place here
-// }
-
-}//namespace boost
-
-
 namespace otb
 {
 namespace Utils
@@ -96,7 +44,7 @@ template<typename T>
 void
 ConvertStringToVector(std::string const &str, T& ret, const char *  delims=" ")
 {
-  std::vector<std::string> splitted;
+  std::vector< boost::iterator_range<std::string::iterator> > splitted;
 
   boost::split(splitted, str, boost::is_any_of(delims));
 
@@ -109,9 +57,8 @@ ConvertStringToVector(std::string const &str, T& ret, const char *  delims=" ")
       }
     catch (boost::bad_lexical_cast &)
       {
-      std::cerr << "Error getting value" << value << "  at " << __FILE__ << ":" << __LINE__ << std::endl;
-      }
 
+      }
     ret.push_back(value);
     }
 }
@@ -162,7 +109,8 @@ void SplitStringToSingleKeyValue(const std::string& str,
       }
     catch (boost::bad_lexical_cast &)
       {
-      std::cerr << "Error getting value" << value_ << "  at " << __FILE__ << ":" << __LINE__ << std::endl;
+
+      //std::cerr << "Error getting value" << value_ << "  at " << __FILE__ << ":" << __LINE__ << std::endl;
       }
     }
   else
