@@ -78,19 +78,100 @@ public:
 
     VNLMatrixType vnlMat(3, 3, 0.);
     vnlMat[0][0] = ComplexType(T0,  0.);
-    vnlMat[0][1] = std::conj(ComplexType(Coherency[1]));
-    vnlMat[0][2] = std::conj(ComplexType(Coherency[2]));
-    vnlMat[1][0] = ComplexType(Coherency[1]);
+    vnlMat[0][1] = ComplexType(Coherency[1]);
+    vnlMat[0][2] = ComplexType(Coherency[2]);
+    vnlMat[1][0] = std::conj(ComplexType(Coherency[1]));
     vnlMat[1][1] = ComplexType(T1,  0.);
-    vnlMat[1][2] = std::conj(ComplexType(Coherency[4]));
-    vnlMat[2][0] = ComplexType(Coherency[2]);
-    vnlMat[2][1] = ComplexType(Coherency[4]);
+    vnlMat[1][2] = ComplexType(Coherency[4]);
+    vnlMat[2][0] = std::conj(ComplexType(Coherency[2]));
+    vnlMat[2][1] = std::conj(ComplexType(Coherency[4]));
     vnlMat[2][2] = ComplexType(T2,  0.);
+
+	//Compute eig. vect. and val. analytically (from http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.469.9724&rep=rep1&type=pdf)
+	ComplexType a  = static_cast<ComplexType>(Coherency[0]);
+    ComplexType z1 = static_cast<ComplexType>(Coherency[1]);
+    ComplexType z2 = static_cast<ComplexType>(Coherency[2]);
+    
+	ComplexType z1p = std::conj(static_cast<ComplexType>(Coherency[1]));
+    ComplexType b = static_cast<ComplexType>(Coherency[3]);
+    ComplexType z3 = static_cast<ComplexType>(Coherency[4]);
+    	
+    ComplexType z2p = std::conj(static_cast<ComplexType>(Coherency[2]));
+    ComplexType z3p = std::conj(static_cast<ComplexType>(Coherency[4]));
+    ComplexType c = static_cast<ComplexType>(Coherency[5]);
+    
+	ComplexType S1 = a*b+a*c+b*c-z1*z1p-z2*z2p-z3*z3p;
+	ComplexType S2 = a*a-a*b+b*b-a*c-b*c+c*c+ComplexType(3.,0.)*(z1*z1p+z2*z2p+z3*z3p);
+	ComplexType det = a*b*c - c*z1*z1p - b*z2*z2p + z1*z2p*z3 + z1p*z2*z3p - a*z3*z3p;
+	ComplexType trace = a+b+c;
+	ComplexType S3 = ComplexType(27.,0.)*det-ComplexType(9.,0.)*S1*trace+ComplexType(2.,0.)*trace*trace*trace;
+	S3 += std::sqrt(S3*S3-ComplexType(4.,0.)*S2*S2*S2);
+
+	// eig val #1
+	ComplexType L1 = ( ComplexType(pow(2.,1./3.),0.)*S2 ) / ( ComplexType(3.,0.)*pow(S3,1./3.) ) ;
+	L1 += ComplexType(1./3.,0.)*trace + pow(S3,1./3.) / ComplexType(3*pow(2.,1./3.),0.);
+	
+	// eig val #2
+	ComplexType L2 = -ComplexType(1.,sqrt(3.))*S2 / ( ComplexType(3*pow(2.,2./3.),0.)*pow(S3,1./3.) );
+	L2 += ComplexType(1./3.,0.)*trace - ComplexType(1.,-sqrt(3.))*pow(S3,1./3.)/ComplexType(6.0*pow(2.0,1./3.),0.) ;
+	
+	// eig val #3
+	ComplexType L3 = -ComplexType(1.,-sqrt(3.))*S2 / ( ComplexType(3*pow(2.,2./3.),0.)*pow(S3,1./3.) );
+	L3 += ComplexType(1./3.,0.)*trace - ComplexType(1.,sqrt(3.))*pow(S3,1./3.)/ComplexType(6.0*pow(2.0,1./3.),0.) ;
+	
+	
+	// eig vect #1
+	ComplexType Li=L1;
+	ComplexType e11=(Li-c)/z2p+( ((Li-c)*z1p+z2p*z3)*z3p ) / ( ((b-Li)*z2p-z1p*z3p)*z2p  );
+	ComplexType e12=((Li-c)*z1p+z2p*z3) / ((b-Li)*z2p-z1p*z3p) ;
+	ComplexType e13 = 1.0 ;
+	
+	// eig vect #2
+	Li=L2;
+	ComplexType e21=(Li-c)/z2p+( ((Li-c)*z1p+z2p*z3)*z3p ) / ( ((b-Li)*z2p-z1p*z3p)*z2p  );
+	ComplexType e22=((Li-c)*z1p+z2p*z3) / ((b-Li)*z2p-z1p*z3p) ;
+	ComplexType e23 = 1.0 ;
+	
+	// eig vect #3
+	Li=L3;
+	ComplexType e31=(Li-c)/z2p+( ((Li-c)*z1p+z2p*z3)*z3p ) / ( ((b-Li)*z2p-z1p*z3p)*z2p  );
+	ComplexType e32=((Li-c)*z1p+z2p*z3) / ((b-Li)*z2p-z1p*z3p) ;
+	ComplexType e33 = 1.0 ;
+	
+	/*std::cout << ">>>>>>>>>>>>>> L1 = " << L1 << std::endl;
+	std::cout << ">>>>>>>>>>>>>> L2 = " << L2 << std::endl;
+	std::cout << ">>>>>>>>>>>>>> L3 = " << L3 << std::endl;
+	std::cout << ">>>>>>>>>>>>>> e11 = " << e11 << std::endl;
+	std::cout << ">>>>>>>>>>>>>> e21 = " << e21 << std::endl;
+	std::cout << ">>>>>>>>>>>>>> e31 = " << e31 << std::endl;*/
+	
 
     // Only compute the left symetry to respect the previous Hermitian Analisys code
     vnl_complex_eigensystem syst(vnlMat, false, true);
     const VNLMatrixType eigenVectors( syst.L );
     const VNLVectorType eigenValues(syst.W);
+	//std::cout << ">>>>>>>>>>>>>> EVal = " << eigenValues << std::endl;
+	//std::cout << ">>>>>>>>>>>>>> EVect = " << eigenVectors << std::endl;
+	
+	VNLMatrixType myEVect(3, 3, 0.);
+    myEVect[0][0] = e11;
+    myEVect[0][1] = e12;
+    myEVect[0][2] = e13;
+    myEVect[1][0] = e21;
+    myEVect[1][1] = e22;
+    myEVect[1][2] = e23;
+    myEVect[2][0] = e31;
+    myEVect[2][1] = e32;
+    myEVect[2][2] = e33;
+    
+    VNLMatrixType unit(3, 3, 0.);
+    //unit[0][0]=1; unit[1][1]=1; unit[2][2]=1; 
+    unit.set_identity();
+	std::cout << ">>>>>>>>>>>>>> myEVect*conj_trans(myEVect) = " << (unit - myEVect*myEVect.conjugate_transpose() ).operator_inf_norm() << std::endl;
+	std::cout << ">>>>>>>>>>>>>> EVect*conj_trans(EVect) = " << ( unit - eigenVectors*eigenVectors.conjugate_transpose() ).operator_inf_norm() << std::endl;
+	//std::cout << ">>>>>>>>>>>>>> eigenValues = " << eigenValues << std::endl;
+	//std::cout << ">>>>>>>>>>>>>> " << eigenVectors[0][0] << " " << eigenVectors[1][0] << " " << eigenVectors[2][0] << " " << std::endl;
+	
 
     // Entropy estimation
     double totalEigenValues(0.0);
