@@ -33,7 +33,7 @@ namespace Utils
 {
 template <typename T>
 inline
-T LexicalCast(std::string const& in, std::string const& kind) {
+T LexicalCast(boost::iterator_range<std::string::const_iterator> const& in, std::string const& kind) {
     try
     {
         return boost::lexical_cast<T>(in);
@@ -65,7 +65,9 @@ template<typename T>
 void
 ConvertStringToVector(std::string const &str, T& ret, std::string const& errmsg, const char *  delims=" ")
 {
-  std::vector< std::string > splitted;
+  typedef std::vector<boost::iterator_range<std::string::const_iterator> > ListType;
+
+  ListType splitted;
 
   boost::split(splitted, str, boost::is_any_of(delims));
 
@@ -113,8 +115,7 @@ void SplitStringToSingleKeyValue(const std::string& str,
 
   if( it != splitted.end())
     {
-    const std::string v = std::string((*it).begin(), (*it).end());
-    value =  LexicalCast<T>(v, errmsg);
+    value =  LexicalCast<T>((*it), errmsg);
     boost::trim(value);
     ++it;
     }
