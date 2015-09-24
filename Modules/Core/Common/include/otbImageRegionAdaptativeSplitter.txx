@@ -186,7 +186,9 @@ ImageRegionAdaptativeSplitter<VImageDimension>
 
     unsigned int i = 1;
 
-    while(totalTiles * (divideTiles[0] * divideTiles[1]) < m_RequestedNumberOfSplits)
+    // Exit condition if divideTiles=m_TileHint (i.e. no more subdivision available)
+    while(totalTiles * (divideTiles[0] * divideTiles[1]) < m_RequestedNumberOfSplits
+      && (divideTiles[0] < m_TileHint[0] || divideTiles[1] < m_TileHint[1]))
       {
       if(divideTiles[i] < m_TileHint[i])
         {
@@ -200,6 +202,8 @@ ImageRegionAdaptativeSplitter<VImageDimension>
     splitSize[0] = (m_TileHint[0] + divideTiles[0] - 1)/ divideTiles[0];
     splitSize[1] = (m_TileHint[1] + divideTiles[1] - 1)/ divideTiles[1];
 
+    RegionType tileHintRegion;
+    tileHintRegion.SetSize(m_TileHint);
     // Fill the tiling scheme
     for(unsigned int tiley = 0; tiley < tilesPerDim[1]; ++tiley)
       {
@@ -219,13 +223,21 @@ ImageRegionAdaptativeSplitter<VImageDimension>
             newSplit.SetIndex(newSplitIndex);
             newSplit.SetSize(splitSize);
 
+            tileHintRegion.SetIndex(0, tilex * m_TileHint[0]);
+            tileHintRegion.SetIndex(1, tiley * m_TileHint[1]);
+
             bool cropped = newSplit.Crop(m_ImageRegion);
 
             // If newSplit could not be cropped, it means that it is
             // outside m_ImageRegion. In this case we ignore it.
             if(cropped)
               {
-              m_StreamVector.push_back(newSplit);
+              // check that the split stays inside its tile
+              cropped = newSplit.Crop(tileHintRegion);
+              if (cropped)
+                {
+                m_StreamVector.push_back(newSplit);
+                }
               }
             }
           }
