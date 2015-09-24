@@ -23,4 +23,5 @@ void RegisterTests()
   REGISTER_TEST(otbDefaultImageMetadataInterface);
   REGISTER_TEST(otbImageMetadataInterfaceTest2);
   REGISTER_TEST(otbNoDataHelperTest);
+  REGISTER_TEST(otbSarCalibrationLookupDataTest);
 }
