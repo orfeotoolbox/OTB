@@ -1,6 +1,16 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+//
+// License:  LGPL-2
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #ifndef ossimSentinel1ProductDoc_HEADER
 #define ossimSentinel1ProductDoc_HEADER
-
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimIpt.h>
