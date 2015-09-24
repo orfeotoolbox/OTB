@@ -24,6 +24,7 @@ otbWorldView2ImageMetadataInterfaceNew.cxx
 otbDefaultImageMetadataInterface.cxx
 otbImageMetadataInterfaceTest2.cxx
 otbNoDataHelperTest.cxx
+otbSarCalibrationLookupDataTest.cxx
 )
 
 add_executable(otbMetadataTestDriver ${OTBMetadataTests})
@@ -365,6 +366,13 @@ foreach( current_file ${GenericTestSPOT6_DATA_INPUTS} )
     )
 endforeach()
 
-
 otb_add_test(NAME coreMetaDataNoDataHelperTest COMMAND otbMetadataTestDriver
   otbNoDataHelperTest)
+
+otb_add_test(NAME ioTvSarCalibrationLookupDataTest_SENTINEL1 COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvSarCalibrationLookupDataTest_SENTINEL1.txt
+  ${TEMP}/ioTvSarCalibrationLookupDataTest_SENTINEL1.txt
+  otbSarCalibrationLookupDataTest
+  ${INPUTDATA}/SENTINEL1_SLC_S6_1S_extract_300_300.tif?&geom=${INPUTDATA}/SENTINEL1_SLC_S6_1S_extract_300_300.geom
+  ${TEMP}/ioTvSarCalibrationLookupDataTest_SENTINEL1.txt
+  )
