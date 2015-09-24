@@ -2,7 +2,7 @@ otb_module_test()
 
 set(OTBTexturesTests
 otbTexturesTestDriver.cxx
-otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator.cxx
+#otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator.cxx
 otbScalarImageToHigherOrderTexturesFilter.cxx
 otbHaralickTexturesImageFunction.cxx
 otbGreyLevelCooccurrenceIndexedList.cxx
@@ -15,7 +15,7 @@ otbScalarImageToAdvancedTexturesFilterNew.cxx
 otbGreyLevelCooccurrenceIndexedListNew.cxx
 otbScalarImageToAdvancedTexturesFilter.cxx
 otbScalarImageToPanTexTextureFilter.cxx
-otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew.cxx
+#otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew.cxx
 )
 
 add_executable(otbTexturesTestDriver ${OTBTexturesTests})
@@ -24,9 +24,9 @@ otb_module_target_label(otbTexturesTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator COMMAND otbTexturesTestDriver
-  otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator
-  )
+# otb_add_test(NAME feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator COMMAND otbTexturesTestDriver
+#   otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator
+#   )
 
 otb_add_test(NAME feTuScalarImageToHigherOrderTexturesFilterNew COMMAND otbTexturesTestDriver
   otbScalarImageToHigherOrderTexturesFilterNew
@@ -159,7 +159,6 @@ otb_add_test(NAME feTvScalarImageToPanTexTextureFilter COMMAND otbTexturesTestDr
   ${TEMP}/feTvScalarImageToPanTexTextureFilterOutput
   8 5)
 
-otb_add_test(NAME feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew COMMAND otbTexturesTestDriver
-  otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew
-  )
-
+# otb_add_test(NAME feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew COMMAND otbTexturesTestDriver
+#   otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew
+#   )

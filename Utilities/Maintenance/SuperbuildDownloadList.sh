@@ -1,2 +1,2 @@
 #/bin/bash
-grep "http" ../../SuperBuild/CMake/*.cmake | grep URL | cut -d "\"" -f 2 | sed "s/\/download$//" | sort | uniq
+grep -h -E "^[^#]*\"https?://.*(\.tar\.gz|\.tar\.bz2|\.tgz|\.tar\.xz|\.zip|export=download).*\"" ../../SuperBuild/CMake/*.cmake | grep -o -E "https?://[^\"]*" | sed "s/\/download$//" | sort | uniq

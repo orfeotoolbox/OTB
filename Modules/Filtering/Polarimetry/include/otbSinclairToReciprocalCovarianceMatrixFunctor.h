@@ -30,10 +30,10 @@ namespace Functor
  *
  *  Output value are:
  *  - channel #0 : \f$ S_{hh}.S_{hh}^{*} \f$
- *  - channel #1 : \f$ S_{hh}.S_{hv}^{*} \f$
+ *  - channel #1 : \f$ \sqrt{2}.S_{hh}.S_{hv}^{*} \f$
  *  - channel #2 : \f$ S_{hh}.S_{vv}^{*} \f$
- *  - channel #3 : \f$ S_{hv}.S_{hv}^{*} \f$
- *  - channel #4 : \f$ S_{hv}.S_{vv}^{*} \f$
+ *  - channel #3 : \f$ 2.S_{hv}.S_{hv}^{*} \f$
+ *  - channel #4 : \f$ \sqrt{2}.S_{hv}.S_{vv}^{*} \f$
  *  - channel #5 : \f$ S_{vv}.S_{vv}^{*} \f$
  *
  * This is a adaptation of the SinclairToCovarianceMatrixFunctor, where \f$ S_{hv}=S_{vh} \f$.
@@ -71,12 +71,12 @@ public:
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
-
+    
     result[0] = static_cast<OutputValueType>( std::norm( S_hh ) );
-    result[1] = static_cast<OutputValueType>( S_hh*vcl_conj(S_hv) );
+    result[1] = static_cast<OutputValueType>( vcl_sqrt(2.0)*S_hh*vcl_conj(S_hv) );
     result[2] = static_cast<OutputValueType>( S_hh*vcl_conj(S_vv) );
-    result[3] = static_cast<OutputValueType>( std::norm( S_hv ) );
-    result[4] = static_cast<OutputValueType>( S_hv*vcl_conj(S_vv) );
+    result[3] = static_cast<OutputValueType>( 2.0*std::norm( S_hv ) );
+    result[4] = static_cast<OutputValueType>( vcl_sqrt(2.0)*S_hv*vcl_conj(S_vv) );
     result[5] = static_cast<OutputValueType>( std::norm( S_vv ) );
 
     return (result);

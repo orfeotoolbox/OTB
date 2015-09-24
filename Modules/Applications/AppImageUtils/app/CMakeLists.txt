@@ -89,6 +89,6 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           NoDataMask
-  SOURCES        otbNoDataMask.cxx
+  NAME           ManageNoData
+  SOURCES        otbManageNoData.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})

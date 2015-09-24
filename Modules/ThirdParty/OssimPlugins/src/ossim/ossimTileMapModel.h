@@ -37,10 +37,13 @@ public:
   /*!
    * CONSTRUCTORS:
    */
+
+  using ossimOptimizableProjection::operator=;
+
   ossimTileMapModel();
   ossimTileMapModel(const ossimKeywordlist& geom_kwl);
   ossimTileMapModel(const ossimTileMapModel& rhs);
-  
+
   virtual ~ossimTileMapModel(){};
 
   enum ProjectionType
@@ -51,17 +54,18 @@ public:
     SOM_MAP,
     SOM_ORBIT
   };
-  
+
+
+
   /*!
    * Returns pointer to a new instance, copy of this.
    */
   virtual ossimObject* dup() const { return 0; } // TBR
-  
+
   /*!
    * Extends base-class implementation. Dumps contents of object to ostream.
    */
   virtual std::ostream& print(std::ostream& out) const;
-  
 
 
   bool open(const ossimFilename& file);
@@ -72,16 +76,16 @@ public:
    */
   virtual bool saveState(ossimKeywordlist& kwl,
                          const char* prefix=0) const;
-  
+
   virtual bool loadState(const ossimKeywordlist& kwl,
                          const char* prefix=0);
-  
+
   /*!
    * Writes a template of geom keywords processed by loadState and saveState
    * to output stream.
    */
   static void writeGeomTemplate(ostream& os);
-  
+
   //***
   // Overrides base class pure virtual.
   //***
@@ -92,7 +96,7 @@ public:
                                        ossimGpt&       worldPoint) const;
   virtual void lineSampleToWorld(const ossimDpt& image_point,
                                  ossimGpt&       worldPoint) const;
-  
+
   /*!
    * Set/Get the depth of the quadtree decomposition
    *
@@ -104,18 +108,18 @@ public:
   {
     return qDepth;
   }
-  
-  
+
+
   /*!
    * ossimOptimizableProjection
    */
   inline virtual bool useForward()const {return true;} //!image to ground faster
 
-  
-protected:
-  
 
-  
+protected:
+
+
+
   //***
   // Image constant parameters:
   //***
@@ -129,17 +133,17 @@ protected:
   int              theWrsRowNumber;
   double           theMeridianalAngle;
   double           thePositionError;
- 
+
   ProjectionType       theProjectionType;
   ossimRefPtr<ossimMapProjection>  theMapProjection;
- 
+
   double           theMapAzimAngle;
   double           theMapAzimCos;
   double           theMapAzimSin;
   double           theMap2IcRotAngle;
   double           theMap2IcRotCos;
   double           theMap2IcRotSin;
- // 
+ //
  // //***
  // // Adjustable parameters:
  // //***
@@ -151,15 +155,15 @@ protected:
   double           theYawOffset;
   double           theYawRate;
   double           theMapRotation;
- // 
+ //
  // //***
  // // Quantities derived from the adjustable parameters:
  // //***
   NEWMAT::Matrix   theRollRotMat;
 
-  unsigned int qDepth;  
+  unsigned int qDepth;
   TYPE_DATA
-  
+
 
 };
 } // End: namespace ossimplugins

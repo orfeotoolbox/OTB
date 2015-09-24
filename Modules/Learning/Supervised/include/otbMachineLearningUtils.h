@@ -19,6 +19,7 @@
 #define __otbMachineLearningUtils_h
 
 #include "otbMachineLearningModel.h"
+#include "vcl_deprecated_header.h"
 
 typedef otb::MachineLearningModel<float,short>         MachineLearningModelType;
 typedef MachineLearningModelType::InputValueType       InputValueType;

@@ -23,6 +23,7 @@
 #include <otbMachineLearningModel.h>
 #include "otbConfusionMatrixCalculator.h"
 
+#include <boost/algorithm/string.hpp>
 
 typedef otb::MachineLearningModel<float,short>         MachineLearningModelType;
 typedef MachineLearningModelType::InputValueType       InputValueType;
@@ -59,11 +60,11 @@ bool ReadDataFile(const std::string & infname, InputListSampleType * samples, Ta
     {
     std::string line;
     std::getline(ifs, line);
+    boost::algorithm::trim(line);
 
     if(nbfeatures == 0)
       {
-      nbfeatures = std::count(line.begin(),line.end(),' ')-1;
-      //std::cout<<"Found "<<nbfeatures<<" features per samples"<<std::endl;
+      nbfeatures = std::count(line.begin(),line.end(),' ');
       }
 
     if(line.size()>1)
@@ -84,7 +85,7 @@ bool ReadDataFile(const std::string & infname, InputListSampleType * samples, Ta
         {
         std::string::size_type nextpos = line.find_first_of(" ", pos+1);
 
-        if(nextpos == std::string::npos)
+        if(pos == std::string::npos)
           {
           endOfLine = true;
           nextpos = line.size()-1;

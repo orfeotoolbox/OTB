@@ -18,6 +18,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "otb_tinyxml.h"
 #include "otbCurlHelper.h"
 
 int otbIsNightlyRevision(int argc, char * argv[])
@@ -33,8 +34,23 @@ int otbIsNightlyRevision(int argc, char * argv[])
 
   otb::CurlHelper::Pointer curl = otb::CurlHelper::New();
 
+  std::string curlOutput;
+  curl->RetrieveUrlInMemory(nightlyRevisionUrl, curlOutput);
+
   std::string nightlyRevision;
-  curl->RetrieveUrlInMemory(nightlyRevisionUrl, nightlyRevision);
+  TiXmlDocument doc;
+  doc.Parse(curlOutput.c_str());
+
+  TiXmlHandle docHandle(&doc);
+
+  TiXmlElement* commitChild = docHandle.FirstChild("html").FirstChild("body").Child("div",3).FirstChild("table").Child("tr",4).Child("td",1).Element();
+  if (commitChild)
+    {
+    if (strcmp(commitChild->Attribute("class"),"sha1") == 0)
+      {
+      nightlyRevision = std::string(commitChild->GetText());
+      }
+    }
 
   if (nightlyRevision == wcRevision)
     {
