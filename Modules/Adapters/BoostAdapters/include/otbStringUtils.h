@@ -48,8 +48,9 @@ T LexicalCast(std::string const& in, std::string const& kind) {
 
 /**\ingroup Utils
    * - convert a delimitter seperated string to std::vector of type T
-   * \tparam vec - std::vector of type T. Specialized boost::lexical_cast is used
+   * \tparam vec - std::vector of type T.
    * \tparam str - input string
+  *  \terrmsg    - a msg to be shown if there is lexical_cast exception.
    * \tparam delims - delimitter space is default
    * \t param T& ret - std::vector of type T
    */
@@ -74,14 +75,12 @@ SplitStringToSingleKeyValue - split a given std::string of into key value based
 on given delimitter string. default delimitter is '='. If the string doesnot
 have a delimitter the key is set to input string and value is set to defValue.
 
-This function is templated over value type. It uses specialized
-boost::lexical_cast if the T is not of type std::string. only primitive types
-
 Arugments are:
   str      - reference to input string of type std::string
   key      - reference to std::string where key will be stored
   value    - reference to T where value will be stored
   defValue - default value if there is no delimitter found. (informally TRUE)
+  errmsg   - a msg to be shown if there is lexical_cast exception.
   delims   - const std::string which contains the delimtter used. Default is '='
   doTrim   - option to perform boost::trim() over key and values. Default is true.
 */
