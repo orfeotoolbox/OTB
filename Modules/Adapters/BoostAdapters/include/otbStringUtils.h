@@ -81,10 +81,9 @@ ConvertStringToVector(std::string const &str, T& ret, std::string const& errmsg,
  * string. default delimitter is '='. If the string does not have a delimitter
  * the key is set to input string and value is set to defValue.
  * \param[in] str  input string
- * \param key An std::string reference where key will be stored
- * \param value a reference of \cT where value will be stored
- * \param defValue a default value if there is no delimitter fo
- * \param doTrim check to perform boost::trim() ob key and values. Default is true.
+ * \param key[out] An std::string reference where key will be stored
+ * \param value[out] a reference of \cT where value will be stored
+ * \param defValue[in] a default value if there is no delimitter fo
  * \param[in] errmsg a msg complement used to build the error message to
 be shown if there is \c lexical_cast exception. See \cotb:Utils::LexicalCast().
  * \param delims  delimitter characters (space is default)
@@ -98,32 +97,30 @@ cannot be converted into a valid \c T instance.
 template<typename T>
 void SplitStringToSingleKeyValue(const std::string& str,
                                  std::string& key, T& value, const T& defValue,
-                                 std::string const& errmsg, const std::string delims="=", bool doTrim=true)
+                                 std::string const& errmsg, const std::string delims="=")
 {
-  std::size_t pos = str.find(delims);
-  if (pos == std::string::npos)
-    {
-    key = str;
-    value = defValue;
-    }
-  key = str.substr(0, pos);
 
-  std::string value_ = str.substr(pos+delims.size(), str.size() - 1 );
+  typedef std::list<boost::iterator_range<std::string::const_iterator> > ListType;
 
-  //do optional trim
-  if(doTrim)
-    {
-    boost::trim_left(key);
-    boost::trim_right(value_);
-    }
+  ListType splitted;
 
-  if(typeid(value) != typeid(key))
+  boost::split( splitted, str, boost::is_any_of(delims), boost::token_compress_on );
+
+  typename ListType::iterator it = splitted.begin();
+  key.assign((*it).begin(), (*it).end());
+  boost::trim(key);
+  ++it;
+
+  if( it != splitted.end())
     {
-    value = LexicalCast<T>(value_, errmsg);
+    const std::string v = std::string((*it).begin(), (*it).end());
+    value =  LexicalCast<T>(v, errmsg);
+    boost::trim(value);
+    ++it;
     }
   else
     {
-    value.swap(value_);
+    value = defValue;
     }
 }
 } // end namespace Utils
