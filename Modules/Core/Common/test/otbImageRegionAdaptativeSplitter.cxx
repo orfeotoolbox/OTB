@@ -59,16 +59,63 @@ int otbImageRegionAdaptativeSplitter(int itkNotUsed(argc), char * argv[])
 
 
   unsigned int nbSplits = splitter->GetNumberOfSplits(region, requestedNbSplits);
+  std::vector<RegionType> splits;
 
   outfile<<splitter<<std::endl;
   outfile<<"Split map: "<<std::endl;
 
   for(unsigned int i = 0; i < nbSplits; ++i)
     {
-    outfile<<"Split "<<i<<": "<<splitter->GetSplit(i, requestedNbSplits, region);
+    RegionType tmpRegion = splitter->GetSplit(i, requestedNbSplits, region);
+    splits.push_back(tmpRegion);
+    outfile<<"Split "<<i<<": "<<tmpRegion;
     }
 
   outfile.close();
+
+  // Basic consistency check on split map
+  if (requestedNbSplits != nbSplits)
+    {
+    std::cout << "Wrong number of splits : got "<<nbSplits<<" , expected "<<requestedNbSplits<< std::endl;
+    }
+  IndexType tmpIndex;
+  for (unsigned int i=regionIndex[0] ; i<(regionIndex[0]+regionSize[0]) ; ++i)
+    {
+    for (unsigned int j=regionIndex[1] ; j<(regionIndex[1]+regionSize[1]) ; ++j)
+      {
+      tmpIndex[0] = i;
+      tmpIndex[1] = j;
+      unsigned int count = 0;
+      for (unsigned int k=0 ; k<nbSplits ; ++k )
+        {
+        if (splits[k].IsInside(tmpIndex))
+          {
+          count++;
+          }
+        }
+      if (count == 0)
+        {
+        std::cout << "Index ["<<i<<","<<j<<"] is missing in split map" << std::endl;
+        return EXIT_FAILURE;
+        }
+      if (count > 1)
+        {
+        std::cout << "Index ["<<i<<","<<j<<"] occurs more than once in the split map" << std::endl;
+        return EXIT_FAILURE;
+        }
+      }
+    }
+
+  unsigned int pixelInSplit = 0;
+  for (unsigned int k=0 ; k<nbSplits ; ++k )
+    {
+    pixelInSplit += splits[k].GetSize(0) * splits[k].GetSize(1);
+    }
+  if (pixelInSplit != regionSize[0]*regionSize[1])
+    {
+    std::cout << "Wrong number of pixels in split : got "<<pixelInSplit << " , expected "<< regionSize[0]*regionSize[1] << std::endl;
+    return EXIT_FAILURE;
+    }
 
   return EXIT_SUCCESS;
 }
