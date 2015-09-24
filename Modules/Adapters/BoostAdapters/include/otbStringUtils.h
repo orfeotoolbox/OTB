@@ -20,17 +20,31 @@
 
 #include <string>
 #include <vector>
-#include <cstdlib>
-#include <iostream>
+#include <limits>
+#include <stdexcept>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/utility/enable_if.hpp>
 
 
 namespace otb
 {
 namespace Utils
 {
+template <typename T>
+inline
+T LexicalCast(std::string const& in, std::string const& kind) {
+    try
+    {
+        return boost::lexical_cast<T>(in);
+    }
+    catch (boost::bad_lexical_cast &) {
+        std::ostringstream oss;
+        oss << "Cannot decode " << in << " as this is not a valid value for " << kind;
+        throw std::runtime_error(oss.str());
+    }
+}
 
 /**\ingroup Utils
    * - convert a delimitter seperated string to std::vector of type T
@@ -39,26 +53,18 @@ namespace Utils
    * \tparam delims - delimitter space is default
    * \t param T& ret - std::vector of type T
    */
-
 template<typename T>
 void
-ConvertStringToVector(std::string const &str, T& ret, const char *  delims=" ")
+ConvertStringToVector(std::string const &str, T& ret, std::string const& errmsg, const char *  delims=" ")
 {
-  std::vector< boost::iterator_range<std::string::iterator> > splitted;
+  std::vector< std::string > splitted;
 
   boost::split(splitted, str, boost::is_any_of(delims));
 
   for(size_t i = 0; i < splitted.size(); i++)
     {
     typename T::value_type value;
-    try
-      {
-      value = boost::lexical_cast<typename T::value_type> (splitted[i]);
-      }
-    catch (boost::bad_lexical_cast &)
-      {
-
-      }
+    value = LexicalCast<typename T::value_type> (splitted[i], errmsg);
     ret.push_back(value);
     }
 }
@@ -82,7 +88,7 @@ Arugments are:
 template<typename T>
 void SplitStringToSingleKeyValue(const std::string& str,
                                  std::string& key, T& value, const T& defValue,
-                                 const std::string delims="=", bool doTrim=true)
+                                 std::string const& errmsg, const std::string delims="=", bool doTrim=true)
 {
   std::size_t pos = str.find(delims);
   if (pos == std::string::npos)
@@ -103,15 +109,7 @@ void SplitStringToSingleKeyValue(const std::string& str,
 
   if(typeid(value) != typeid(key))
     {
-    try
-      {
-      value = boost::lexical_cast<T>(value_);
-      }
-    catch (boost::bad_lexical_cast &)
-      {
-
-      //std::cerr << "Error getting value" << value_ << "  at " << __FILE__ << ":" << __LINE__ << std::endl;
-      }
+    value = LexicalCast<T>(value_, errmsg);
     }
   else
     {
