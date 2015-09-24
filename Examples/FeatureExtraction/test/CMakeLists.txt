@@ -107,7 +107,7 @@ otb_add_test(NAME feTeRatioLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 # ------- AlignmentsExampleTest----------
-
+if(OTBMathParser_LOADED)
 otb_add_test(NAME feTeAlignmentsExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/QB_SuburbAlign.png
@@ -144,6 +144,8 @@ otb_add_test(NAME feTeExtractRoadExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/ExtractRoadExampleOutput.png
     337 557 432 859 1.0 0.00005 1.0 0.39269 1.0 10.0 25.
 )
+
+endif()
 
 # ------- SeamCarvingExamplesTest----------
 

@@ -73,6 +73,8 @@ otbEuclideanDistanceMetricWithMissingValueNew.cxx
 otbNRIBandImagesToOneNComplexBandsImage.cxx
 otbOneRIBandImageToOneComplexBandImage.cxx
 otbTwoNRIBandsImageToNComplexBandsImage.cxx
+otbChangeNoDataValueFilter.cxx
+otbImageToNoDataMaskFilter.cxx
 )
 
 add_executable(otbImageManipulationTestDriver ${OTBImageManipulationTests})
@@ -672,8 +674,7 @@ otb_add_test(NAME bfTvEuclideanDistanceMetricWithMissingValue COMMAND otbImageMa
   otbEuclideanDistanceMetricWithMissingValue)
 otb_add_test(NAME bfTuEuclideanDistanceMetricWithMissingValueNew COMMAND otbImageManipulationTestDriver
   otbEuclideanDistanceMetricWithMissingValueNew)
-  
-  
+
 otb_add_test(NAME bfTvTwoNRIBandsImageToNComplexBandsImage COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvNRIBandImagesToOneNComplexBandsImage.tif
@@ -704,3 +705,8 @@ otb_add_test(NAME bfTvOneRIBandImageToOneComplexBandImage COMMAND otbImageManipu
   ${TEMP}/bfTvOneRIBandImageToOneComplexBandImage.tif
   )
 
+otb_add_test(NAME filteringImageManipulationChangeNoDataValueFilter COMMAND otbImageManipulationTestDriver
+  otbChangeNoDataValueFilter)
+
+otb_add_test(NAME filteringImageManipulationImageToNoDataMaskFilter COMMAND otbImageManipulationTestDriver
+  otbImageToNoDataMaskFilter)

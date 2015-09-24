@@ -22,6 +22,7 @@ otbTerraSarImageMetadataInterfaceNew.cxx
 otbWorldView2ImageMetadataInterfaceNew.cxx
 otbDefaultImageMetadataInterface.cxx
 otbImageMetadataInterfaceTest2.cxx
+otbNoDataHelperTest.cxx
 )
 
 add_executable(otbMetadataTestDriver ${OTBMetadataTests})
@@ -351,3 +352,7 @@ foreach( current_file ${GenericTestSPOT6_DATA_INPUTS} )
       ${TEMP}/ioTvOpticalImageMetadataInterface_${current_type}_OUT.txt
     )
 endforeach()
+
+
+otb_add_test(NAME coreMetaDataNoDataHelperTest COMMAND otbMetadataTestDriver
+  otbNoDataHelperTest)
