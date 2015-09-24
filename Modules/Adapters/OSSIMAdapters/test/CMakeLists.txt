@@ -301,7 +301,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid_NoData COMMAND ot
   otbDEMHandlerTest
   no
   no
-  nil
   40
   8.687917
   44.237917
@@ -314,7 +313,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_NoSRTM_Geoid COMMAND otbOSSIMAdaptersT
   otbDEMHandlerTest
   no
   ${INPUTDATA}/DEM/egm96.grd
-  true
   40
   8.434583
   44.647083
@@ -327,7 +325,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_BadSRTM_Geoid COMMAND otbOSSIMAd
   otbDEMHandlerTest
   ${INPUTDATA}/poupeesTIF/
   ${INPUTDATA}/DEM/egm96.grd
-  true
   40
   8.434583
   44.647083
@@ -341,7 +338,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid COMMAND otbOSSIMAdapter
   otbDEMHandlerTest
   no
   no
-  nil
   40
   8.434583
   44.647083
@@ -354,7 +350,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_NoSRTM_Geoid COMMAND otbOSSIMAda
   otbDEMHandlerTest
   no
   ${INPUTDATA}/DEM/egm96.grd
-  true
   40
   8.434583
   44.647083
@@ -367,7 +362,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid COMMAND otbOSSIMAdapt
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   ${INPUTDATA}/DEM/egm96.grd
-  true
   40
   8.434583
   44.647083
@@ -380,7 +374,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoSRTMCoverage COMMAND ot
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   no
-  nil
   20
   10. # Point not covered
   10. # Point not covered
@@ -393,7 +386,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoSRTMCoverage COMM
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   no
-  nil
   20
   10. # Point not covered
   10. # Point not covered
@@ -406,7 +398,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_NoGeoid COMMAND otbOSSIMAdaptersT
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   no
-  nil
   40
   8.434583
   44.647083
@@ -419,7 +410,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid COMMAND otbOSSIMAda
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   no
-  nil
   40
   8.434583
   44.647083
@@ -432,7 +422,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoData COMMAND otbOSS
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   ${INPUTDATA}/DEM/egm96.grd
-  true
   40
   8.687917
   44.237917
@@ -445,7 +434,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid COMMAND otbOSSIMAd
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   ${INPUTDATA}/poupees.jpg
-  false
   40
   8.434583
   44.647083
@@ -458,7 +446,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoData COMMAND otbOSSIMAd
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   no
-  nil
   40
   8.687917
   44.237917
@@ -471,7 +458,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_BDALTI_TIF_NoGeoid COMMAND otbOS
   otbDEMHandlerTest
   LARGEINPUT{BD_ALTI/}
   no
-  nil
   800
   7.283262
   48.598675
@@ -484,7 +470,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoData COMMAND otbOSSIMAdap
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   ${INPUTDATA}/DEM/egm96.grd
-  true
   40
   8.687917
   44.237917
@@ -497,7 +482,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid_NoData COMMAND otbOSSIM
   otbDEMHandlerTest
   no
   no
-  nil
   40
   8.687917
   44.237917
@@ -510,7 +494,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_Geoid COMMAND otbOSSIMAdaptersTes
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   ${INPUTDATA}/DEM/egm96.grd
-  true
   40
   8.434583
   44.647083
@@ -523,7 +506,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid COMMAND otbOSSIMA
   otbDEMHandlerTest
   no
   no
-  nil
   40
   8.434583
   44.647083
@@ -536,7 +518,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoSRTMCoverage COMMAND otbO
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   ${INPUTDATA}/DEM/egm96.grd
-  true
   20
   10. # Point not covered
   10. # Point not covered
@@ -549,7 +530,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoSRTMCoverage COMMAN
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   ${INPUTDATA}/DEM/egm96.grd
-  true
   20
   10. # Point not covered
   10. # Point not covered
@@ -562,7 +542,6 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoData COMMAND otbO
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
   no
-  nil
   40
   8.687917
   44.237917

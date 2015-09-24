@@ -21,22 +21,21 @@
 
 int otbDEMHandlerTest(int argc, char * argv[])
 {
-  if(argc!=10)
+  if(argc!=9)
     {
-    std::cerr<<"Usage: "<<argv[0]<<" demdir[path|no] geoid[path|no] geoidValid[true|anything] defaultHeight longitude latitude aboveMSLFlag targetValue tolerance"<<std::endl;
+    std::cerr<<"Usage: "<<argv[0]<<" demdir[path|no] geoid[path|no] defaultHeight longitude latitude aboveMSLFlag targetValue tolerance"<<std::endl;
     return EXIT_FAILURE;
     }
 
 
   std::string demdir   = argv[1];
   std::string geoid    = argv[2];
-  std::string isGeoidValid( argv[ 3 ] ); 
-  double defaultHeight = atof(argv[4]);
-  double longitude      = atof(argv[5]);
-  double latitude     = atof(argv[6]);
-  bool aboveMSL        = atoi(argv[7]);
-  double target        = atof(argv[8]);
-  double tolerance     = atof(argv[9]);
+  double defaultHeight = atof(argv[3]);
+  double longitude      = atof(argv[4]);
+  double latitude     = atof(argv[5]);
+  bool aboveMSL        = atoi(argv[6]);
+  double target        = atof(argv[7]);
+  double tolerance     = atof(argv[8]);
 
   otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
   demHandler->SetDefaultHeightAboveEllipsoid(defaultHeight);
@@ -60,20 +59,7 @@ int otbDEMHandlerTest(int argc, char * argv[])
 
   if(geoid != "no")
     {
-    try
-      {
-      demHandler->OpenGeoidFile(geoid);
-      }
-    catch( const std::exception & exception )
-      {
-      std::cout
-	<< "Exception thrown while opening geod-file '" << geoid << "':" << std::endl
-	<< exception.what();
-
-      if( isGeoidValid=="true" )
-	fail = true;
-      }
-
+    demHandler->OpenGeoidFile(geoid);
     std::cout<<"GetGeoidFile() = "<<demHandler->GetGeoidFile()<<std::endl;
     }
 
