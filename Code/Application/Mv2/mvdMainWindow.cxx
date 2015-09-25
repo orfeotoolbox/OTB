@@ -1095,7 +1095,7 @@ MainWindow
     button =
       QMessageBox::warning(
 	this,
-	tr( "Monteverdi2 - Warning!" ),
+	tr( "Warning!" ),
 	tr( "No projection information (geographical or cartographical coordinate-system or sensor model) has been found for image. While already loaded images all have some, they are displayed in a geo-referenced view.\n\nLoading '%1' will cause the display to switch to a non geo-referenced view (where images are displayed relatively regarding their origin and spacing)." )
 	.arg( filename ),
 	QMessageBox::Ok | QMessageBox::Cancel
@@ -1911,7 +1911,7 @@ MainWindow
     {
     QMessageBox::warning(
       this,
-      tr( "Monteverdi2 - Warning!" ),
+      tr( "Warning!" ),
       tr( "Tab cannot be closed while OTB application is running." )
     );
    

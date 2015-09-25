@@ -97,11 +97,11 @@ main( int argc, char* argv[] )
       QMessageBox::question(
 	NULL,
 	QCoreApplication::translate(
-	  "Mv2",
-	  "Mv2 - Question!"
+	  "Mapla",
+	  "Question!"
 	),
 	QCoreApplication::translate(
-	  "Mv2",
+	  "Mapla",
 	  "The following exception has been caught while initializing the software:\n\n"
 	  "%1\n\n"
 	  "The application may not function as expected. Do you want to continue?"

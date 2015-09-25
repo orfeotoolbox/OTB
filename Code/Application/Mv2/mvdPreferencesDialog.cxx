@@ -177,7 +177,7 @@ PreferencesDialog
       {
       QMessageBox::warning(
 	this,
-	"Mv2",
+	PROJECT_NAME,
 	tr(
 	  "The following exception has been caught when setting up "
 	  "Elevation Settings:\n\n%1."

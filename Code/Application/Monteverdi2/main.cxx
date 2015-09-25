@@ -97,11 +97,11 @@ main( int argc, char* argv[] )
       QMessageBox::question(
 	NULL,
 	QCoreApplication::translate(
-	  "Monteverdi2",
-	  "Monteverdi2 - Question!"
+	  PROJECT_NAME,
+	  "Question!"
 	),
 	QCoreApplication::translate(
-	  "Monteverdi2",
+	  PROJECT_NAME,
 	  "The following exception has been caught while initializing the software:\n\n"
 	  "%1\n\n"
 	  "The application may not function as expected. Do you want to continue?"
@@ -133,11 +133,11 @@ main( int argc, char* argv[] )
     QMessageBox::critical(
       &mainWindow,
       QCoreApplication::translate(
-	"Monteverdi2",
-	"Monteverdi2 - Critical error!"
+	PROJECT_NAME,
+	"Critical error!"
       ),
       QCoreApplication::translate(
-	"Monteverdi2",
+	PROJECT_NAME,
 	"Error while creating cache repository.\n\n"
 	"%1\n\n"
 	"Application will exit!"
@@ -160,11 +160,11 @@ main( int argc, char* argv[] )
         QMessageBox::warning(
           &mainWindow,
           QCoreApplication::translate(
-            "Monteverdi2",
-            "Monteverdi2 - Warning!"
+            PROJECT_NAME,
+            "Warning!"
           ),
           QCoreApplication::translate(
-            "Monteverdi2",
+            PROJECT_NAME,
             "There are %1 outdated dataset(s) in cache-directory.\n\n"
             "Please remove cache-directory '%2' and restart Monteverdi2\n\n"
             "Do you want to delete cache-directory '%2' before quitting Monteverdi2?"
@@ -189,11 +189,11 @@ main( int argc, char* argv[] )
           QMessageBox::critical(
             &mainWindow,
             QCoreApplication::translate(
-              "Monteverdi2",
-              "Monteverdi2 - Critical error!"
+              PROJECT_NAME,
+              "Critical error!"
             ),
             QCoreApplication::translate(
-              "Monteverdi2",
+              PROJECT_NAME,
               "Your Monteverdi2 cache-directory is set to your home directory '%1'. Deletion of cache-directory is aborted to avoid unrecoverable loss of all your account data.\n\nIt is generally a bad idea to set Monteverdi2 cache-directory to your home directory. Please choose another sub-directory.\n\nApplication will now exit."
             )
             .arg( application->GetCacheDir().path() ),
@@ -216,11 +216,11 @@ main( int argc, char* argv[] )
     QMessageBox::critical(
       &mainWindow,
       QCoreApplication::translate(
-        "Monteverdi2",
-        "Monteverdi2 - Critical error!"
+        PROJECT_NAME,
+        "Critical error!"
       ),
       QCoreApplication::translate(
-        "Monteverdi2",
+        PROJECT_NAME,
         "Failed to open Monteverdi2 database.\n\nApplication will now exit!\n\n%2\n\nPlease, remove your Monteverdi2 cache-directory."
       )
       .arg( exc.what() ),

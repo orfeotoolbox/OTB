@@ -1635,7 +1635,7 @@ MainWindow
     {
     QMessageBox::warning(
       this,
-      tr( "Monteverdi2 - Warning!" ),
+      tr( "Warning!" ),
       tr( "Tab cannot be closed while OTB application is running." )
     );
    

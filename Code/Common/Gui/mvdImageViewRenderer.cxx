@@ -145,7 +145,7 @@ ImageViewRenderer
     {
     QMessageBox::critical(
       qobject_cast< QWidget* >( parent() ),
-      tr( "Monteverdi2 - Critical error!"),
+      tr( "Critical error!"),
       ToQString( exc.what() )
     );
     }
@@ -172,7 +172,7 @@ ImageViewRenderer
 
   QMessageBox::critical(
     qobject_cast< QWidget* >( parent() ),
-    tr( "Monteverdi2 - Critical error!" ),
+    tr( "Critical error!" ),
     message
   );
 
