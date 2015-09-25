@@ -139,41 +139,51 @@ bool
 ImageKeywordlist::
 convertToGDALRPC(GDALRPCInfo &rpc) const
 {
-  ossimKeywordlist geom_kwl;
+   /* ossimRpcModel::loadState() actually expects certain keyword values to be
+    * present in the keywordlist. So We check a single keyword value
+    * (polynomial_format) first.  Even though it is not enough to ensure a valid
+    * ossimRpcModel by checking for presence of one single key but atleast we
+    * are sure about not to create an ossimRpcModel.
+    *
+    * The current mechanism creates ossimRpcModel instance, calls loadState()
+    * and fails. The below check for 'polynomial_format' save us from creating
+    * an ossimRpcModel which will be invalid if the 'polynomial_format' is not
+    * present.
+    */
+   if( m_Keywordlist.find("polynomial_format") != m_Keywordlist.end() )
+   {
+      ossimKeywordlist geom_kwl;
+      this->convertToOSSIMKeywordlist(geom_kwl);
 
-  this->convertToOSSIMKeywordlist(geom_kwl);
-
-  if( geom_kwl.hasKey("polynomial_format")) //RK
-  {
-  ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
-  if (rpcModel->loadState(geom_kwl))
-    {
-    ossimRpcModel::rpcModelStruct ossimRpcStruct;
-    rpcModel->getRpcParameters(ossimRpcStruct);
-
-    if (ossimRpcStruct.type == 'B')
+      ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
+      if (rpcModel->loadState(geom_kwl))
       {
-      rpc.dfSAMP_OFF = ossimRpcStruct.sampOffset;
-      rpc.dfLINE_OFF = ossimRpcStruct.lineOffset;
-      rpc.dfSAMP_SCALE = ossimRpcStruct.sampScale;
-      rpc.dfLINE_SCALE = ossimRpcStruct.lineScale;
-      rpc.dfLAT_OFF = ossimRpcStruct.latOffset;
-      rpc.dfLONG_OFF = ossimRpcStruct.lonOffset;
-      rpc.dfHEIGHT_OFF = ossimRpcStruct.hgtOffset;
-      rpc.dfLAT_SCALE = ossimRpcStruct.latScale;
-      rpc.dfLONG_SCALE = ossimRpcStruct.lonScale;
-      rpc.dfHEIGHT_SCALE = ossimRpcStruct.hgtScale;
+         ossimRpcModel::rpcModelStruct ossimRpcStruct;
+         rpcModel->getRpcParameters(ossimRpcStruct);
 
-      memcpy(rpc.adfLINE_NUM_COEFF, ossimRpcStruct.lineNumCoef, sizeof(double) * 20);
-      memcpy(rpc.adfLINE_DEN_COEFF, ossimRpcStruct.lineDenCoef, sizeof(double) * 20);
-      memcpy(rpc.adfSAMP_NUM_COEFF, ossimRpcStruct.sampNumCoef, sizeof(double) * 20);
-      memcpy(rpc.adfSAMP_DEN_COEFF, ossimRpcStruct.sampDenCoef, sizeof(double) * 20);
+         if (ossimRpcStruct.type == 'B')
+         {
+            rpc.dfSAMP_OFF = ossimRpcStruct.sampOffset;
+            rpc.dfLINE_OFF = ossimRpcStruct.lineOffset;
+            rpc.dfSAMP_SCALE = ossimRpcStruct.sampScale;
+            rpc.dfLINE_SCALE = ossimRpcStruct.lineScale;
+            rpc.dfLAT_OFF = ossimRpcStruct.latOffset;
+            rpc.dfLONG_OFF = ossimRpcStruct.lonOffset;
+            rpc.dfHEIGHT_OFF = ossimRpcStruct.hgtOffset;
+            rpc.dfLAT_SCALE = ossimRpcStruct.latScale;
+            rpc.dfLONG_SCALE = ossimRpcStruct.lonScale;
+            rpc.dfHEIGHT_SCALE = ossimRpcStruct.hgtScale;
 
-      return true;
+            memcpy(rpc.adfLINE_NUM_COEFF, ossimRpcStruct.lineNumCoef, sizeof(double) * 20);
+            memcpy(rpc.adfLINE_DEN_COEFF, ossimRpcStruct.lineDenCoef, sizeof(double) * 20);
+            memcpy(rpc.adfSAMP_NUM_COEFF, ossimRpcStruct.sampNumCoef, sizeof(double) * 20);
+            memcpy(rpc.adfSAMP_DEN_COEFF, ossimRpcStruct.sampDenCoef, sizeof(double) * 20);
+
+            return true;
+         }
       }
-    }
-  }
-  return false;
+   }
+   return false;
 }
 
 void
