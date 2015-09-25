@@ -18,6 +18,8 @@
 #include "otbDEMHandler.h"
 #include "otbMacro.h"
 
+#include <cassert>
+
 #include "ossim/elevation/ossimElevManager.h"
 #include "ossim/base/ossimGeoidManager.h"
 #include "ossim/base/ossimFilename.h"
