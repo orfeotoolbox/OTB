@@ -31,12 +31,12 @@ namespace otb
 {
 namespace Utils
 {
-template <typename T>
+template <typename Res, typename In >
 inline
-T LexicalCast(boost::iterator_range<std::string::const_iterator> const& in, std::string const& kind) {
+Res LexicalCast(In const& in, std::string const& kind) {
     try
     {
-        return boost::lexical_cast<T>(in);
+        return boost::lexical_cast<Res>(in);
     }
     catch (boost::bad_lexical_cast &) {
         std::ostringstream oss;
@@ -102,21 +102,20 @@ void SplitStringToSingleKeyValue(const std::string& str,
                                  std::string const& errmsg, const std::string delims="=")
 {
 
-  typedef std::list<boost::iterator_range<std::string::const_iterator> > ListType;
+  typedef boost::iterator_range<std::string::const_iterator> BoostRangeIteratorType;
+  typedef std::list< BoostRangeIteratorType > ListType;
 
   ListType splitted;
 
   boost::split( splitted, str, boost::is_any_of(delims), boost::token_compress_on );
 
   typename ListType::iterator it = splitted.begin();
-  key.assign((*it).begin(), (*it).end());
-  boost::trim(key);
+  boost::trim_copy_if(key, (*it));
   ++it;
 
   if( it != splitted.end())
     {
-    value =  LexicalCast<T>((*it), errmsg);
-    boost::trim(value);
+    value =  LexicalCast<T>(boost::trim_copy(*it), errmsg);
     ++it;
     }
   else
