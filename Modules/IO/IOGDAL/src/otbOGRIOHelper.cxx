@@ -649,7 +649,7 @@ void OGRIOHelper
 
 unsigned int OGRIOHelper
 ::ProcessNodeWrite(InternalTreeNodeType * source,
-                   OGRDataSource * m_DataSource,
+                   GDALDataset * m_DataSource,
                    OGRGeometryCollection * ogrCollection,
                    OGRLayer * ogrCurrentLayer,
                    OGRSpatialReference * oSRS)
@@ -1025,7 +1025,7 @@ unsigned int OGRIOHelper
  **/
 std::vector<OGRLayer*> OGRIOHelper
 ::ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source,
-                                 OGRDataSource * inMemoryDataSource,
+                                 GDALDataset * inMemoryDataSource,
                                  OGRLayer* ogrCurrentLayer,
                                  OGRSpatialReference * oSRS)
 {
@@ -1034,8 +1034,8 @@ std::vector<OGRLayer*> OGRIOHelper
   if (inMemoryDataSource == NULL)
     {
     const char * driverName = "Memory";
-    OGRSFDriver * ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
-    inMemoryDataSource = ogrDriver->CreateDataSource("tempDataSource",NULL);
+    GDALDriver * ogrDriver = GetGDALDriverManager()->GetDriverByName(driverName);
+    inMemoryDataSource = ogrDriver->Create("tempDataSource",0,0,0,GDT_Unknown,NULL);
     }
 
   std::vector<OGRLayer*>  ogrLayerVector;

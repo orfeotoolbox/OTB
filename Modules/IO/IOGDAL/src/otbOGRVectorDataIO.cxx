@@ -46,7 +46,7 @@ OGRVectorDataIO::~OGRVectorDataIO()
 {
   if (m_DataSource != NULL)
     {
-    OGRDataSource::DestroyDataSource(m_DataSource);
+    GDALClose(m_DataSource);
     }
 }
 
@@ -54,13 +54,16 @@ OGRVectorDataIO::~OGRVectorDataIO()
 bool
 OGRVectorDataIO::CanReadFile(const char* filename) const
 {
-  OGRDataSource * poDS = OGRSFDriverRegistrar::Open(filename, FALSE);
+
+
+  GDALDataset * poDS = (GDALDataset *)GDALOpen(filename, GA_ReadOnly);
+  
   if (poDS == NULL)
     {
     return false;
     }
 //     std::cout << poDS->GetDriver()->GetName() << std::endl;
-  OGRDataSource::DestroyDataSource(poDS);
+ GDALClose(poDS);
   return true;
 }
 
@@ -88,10 +91,10 @@ OGRVectorDataIO
 
   if (m_DataSource != NULL)
     {
-    OGRDataSource::DestroyDataSource(m_DataSource);
+    GDALClose(m_DataSource);
     }
 
-  m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), FALSE);
+  m_DataSource = (GDALDataset *)GDALOpen(this->m_FileName.c_str(), GA_ReadOnly);
 
   if (m_DataSource == NULL)
     {
@@ -176,7 +179,7 @@ OGRVectorDataIO
 
     } // end For each layer
 
-  OGRDataSource::DestroyDataSource(m_DataSource);
+  GDALClose(m_DataSource);
   m_DataSource = NULL;
 }
 
@@ -208,8 +211,8 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
 
 
   //Find first the OGR driver
-  OGRSFDriver * ogrDriver =
-    OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(this->GetOGRDriverName(this->m_FileName).data());
+  GDALDriver * ogrDriver =
+    GetGDALDriverManager()->GetDriverByName(this->GetOGRDriverName(this->m_FileName).data());
 
   if (ogrDriver == NULL)
     {
@@ -219,25 +222,25 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
   // free an existing previous data source, if any
   if (m_DataSource != NULL)
     {
-    OGRDataSource::DestroyDataSource(m_DataSource);
+    GDALClose(m_DataSource);
     }
 
   // Erase the dataSource if already exist
   //TODO investigate the possibility of giving the option OVERWRITE=YES to the CreateDataSource method
-  OGRDataSource * poDS = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
+  GDALDataset * poDS = (GDALDataset *)GDALOpen(this->m_FileName.c_str(), GA_Update);
   if (poDS != NULL)
     {
     //Erase the data if possible
-    if (poDS->GetDriver()->TestCapability(ODrCDeleteDataSource))
+    if (poDS->TestCapability(ODrCDeleteDataSource))
       {
       //Delete datasource
-      poDS->GetDriver()->DeleteDataSource(this->m_FileName.c_str());
+      ogrDriver->Delete(this->m_FileName.c_str());
       }
     }
-  OGRDataSource::DestroyDataSource(poDS);
+  GDALClose(poDS);
 
   // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
-  m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), papszOptions);
+  m_DataSource = ogrDriver->Create(this->m_FileName.c_str(),0,0,0,GDT_Unknown,papszOptions);
 
   // check the created data source
   if (m_DataSource == NULL)
@@ -292,7 +295,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
   otbMsgDevMacro( << "layerKept " << layerKept );
   (void)layerKept; // keep compiler happy
 
-  OGRDataSource::DestroyDataSource(m_DataSource);
+  GDALClose(m_DataSource);
   m_DataSource = NULL;
 
   if (oSRS != NULL)

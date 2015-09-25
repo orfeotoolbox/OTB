@@ -23,7 +23,7 @@
 #include "otbVectorDataIOBase.h"
 #include "otbVectorData.h"
 
-class OGRDataSource;
+class GDALDataset;
 
 namespace otb
 {
@@ -116,7 +116,7 @@ private:
 
   std::string GetOGRDriverName(std::string name) const;
 
-  OGRDataSource * m_DataSource;
+  GDALDataset * m_DataSource;
 
 };
 
