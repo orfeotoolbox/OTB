@@ -376,13 +376,13 @@ namespace ossimplugins
          }
       }
 
-      if(acquisition_mode == "SM" )
-         theAcquisitionMode =  ossimSarModel::STRIPMAP;
+      // if(acquisition_mode == "SM" )
+      //    theAcquisitionMode =  ossimSarModel::STRIPMAP;
 
-      // theManifestKwl.add(prefix,
-      //                 "acquisition_mode",
-      //                 acquisition_mode,
-      //                 true);
+      theManifestKwl.add(prefix,
+                      "acquisition_mode",
+                      acquisition_mode,
+                      true);
 
       theManifestKwl.add(prefix,
                       "swath",
