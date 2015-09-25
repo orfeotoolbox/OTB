@@ -38,9 +38,9 @@
 // to the compilation mode of the client code.
 
 inline
-OGRDataSource & otb::ogr::DataSource::ogr()
+GDALDataset & otb::ogr::DataSource::ogr()
 {
-  assert(m_DataSource && "OGRDataSource not initialized");
+  assert(m_DataSource && "GDALDataset not initialized");
   return *m_DataSource;
 }
 
