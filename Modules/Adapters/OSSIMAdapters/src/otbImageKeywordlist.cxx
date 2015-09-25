@@ -182,7 +182,6 @@ convertToGDALRPC(GDALRPCInfo &rpc) const
       }
    }
    return false;
->>>>>>> b6d7b16... BUG: check 'polynomial_format' key on internal keywordmap
 }
 
 void
