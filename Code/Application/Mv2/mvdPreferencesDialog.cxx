@@ -150,37 +150,44 @@ PreferencesDialog
     }
 
   I18nApplication::Instance()->StoreSettingsKey(
-    I18nCoreApplication::SETTINGS_KEY_SRTM_DIR,
-    QDir::cleanPath( m_UI->srtmLineEdit->text()
-    )
-  );
-  I18nApplication::Instance()->StoreSettingsKey(
-    I18nCoreApplication::SETTINGS_KEY_GEOID_PATH,
-    m_UI->geoidLineEdit->text()
-  );
-  I18nApplication::Instance()->StoreSettingsKey(
     I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE,
     this->m_UI->srtmCheckbox->isChecked()
   );
   I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_SRTM_DIR,
+    QDir::cleanPath( m_UI->srtmLineEdit->text()
+    )
+  );
+
+  I18nApplication::Instance()->StoreSettingsKey(
     I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE,
     this->m_UI->geoidCheckbox->isChecked()
+  );
+  I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_GEOID_PATH,
+    m_UI->geoidLineEdit->text()
   );
 
   if( m_ElevationSetupModified )
     {
     try
       {
-      I18nApplication::Instance()->ElevationSetup();
+      if( !I18nApplication::Instance()->ElevationSetup() )
+	{
+	QMessageBox::warning(
+	  this,
+	  "Warning!",
+	  tr( "Geoid file has changed since application has been started. This setting needs the application to be restarted to be taken into account." )
+	);
+	}
       }
     catch( const std::exception & exception )
       {
       QMessageBox::warning(
 	this,
-	PROJECT_NAME,
+	"Warning!",
 	tr(
-	  "The following exception has been caught when setting up "
-	  "Elevation Settings:\n\n%1."
+	  "The following exception has been caught when setting up Elevation Settings:\n\n%1."
 	).arg( exception.what() )
       );
       }

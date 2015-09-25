@@ -425,8 +425,7 @@ I18nCoreApplication
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
-/*******************************************************************************/
+/*****************************************************************************/
 I18nCoreApplication
 ::I18nCoreApplication( QCoreApplication* qtApp ) :
   QObject( qtApp ),
@@ -560,11 +559,15 @@ I18nCoreApplication
 }
 
 /*******************************************************************************/
-void
+bool
 I18nCoreApplication
 ::ElevationSetup()
 {
+  assert( !otb::DEMHandler::Instance().IsNull() );
+
   otb::DEMHandler::Pointer demHandlerInstance( otb::DEMHandler::Instance() );
+
+  bool geoidUpdated = false;
 
   if( I18nCoreApplication::HasSettingsKey(
 	I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE ) &&
@@ -579,13 +582,14 @@ I18nCoreApplication
 
     try
       {
-      demHandlerInstance->OpenGeoidFile(
-	ToStdString(
-	  I18nCoreApplication::RetrieveSettingsKey(
-	    I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
-	  ).toString()
-	)
-      );
+      geoidUpdated =
+	demHandlerInstance->OpenGeoidFile(
+	  ToStdString(
+	    I18nCoreApplication::RetrieveSettingsKey(
+	      I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
+	    ).toString()
+	  )
+	);
       }
     catch( const std::exception & err )
       {
@@ -611,6 +615,8 @@ I18nCoreApplication
 
     try
       {
+      demHandlerInstance->ClearDEMs();
+
       demHandlerInstance->OpenDEMDirectory(
 	ToStdString(
 	  I18nCoreApplication::RetrieveSettingsKey(
@@ -630,6 +636,12 @@ I18nCoreApplication
       throw;
       }
     }
+  else
+    {
+    otb::DEMHandler::Instance()->ClearDEMs();
+    }
+
+  return geoidUpdated;
 }
 
 /*******************************************************************************/

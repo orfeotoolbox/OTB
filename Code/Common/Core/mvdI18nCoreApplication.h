@@ -216,7 +216,7 @@ public:
    * \brief setup elevation management
    * 
    */
-  void ElevationSetup();
+  bool ElevationSetup();
 
   //
   // APPLICATION SETTINGS.
@@ -691,9 +691,9 @@ I18nCoreApplication
 inline
 void
 I18nCoreApplication
-::StoreSettingsKey( const SettingsKey& key, const QVariant& value )
+::StoreSettingsKey( const SettingsKey & key, const QVariant & value )
 {
-  assert( m_Settings!=NULL );
+  assert( m_Settings != NULL );
 
   // qDebug() << this << "::StoreSettingsKey(" << key << ", " << value << ")";
 
