@@ -29,7 +29,7 @@ namespace otb
 
 /** \class SarRadiometricCalibrationToImageFilter
  * \brief Evaluates the SarRadiometricCalibrationFunction onto a source image
- * The SetupCalibrator is called by application which create an SarIMI from
+ * The BeforeThreadedGenerateData create an SarIMI from
  * input metadatadictionary. It will then reads Scale, Noise,
  * Old antenna pattern gain, New antenna pattern gain, rangespreadloss,
  * incidence angle. All these are set to the imageFunction used to compute the
@@ -107,8 +107,6 @@ public:
 
   itkSetMacro(LookupSelected, short);
   itkGetConstMacro(LookupSelected, short);
-
-  short m_LookupSelected;
 
 protected:
   /** Default ctor */
