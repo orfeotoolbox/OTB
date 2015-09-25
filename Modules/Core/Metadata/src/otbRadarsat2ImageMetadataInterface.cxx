@@ -89,9 +89,9 @@ CreateCalibrationLookupData(const short type)
   Radarsat2CalibrationLookupData::GainListType glist;
   int offset = 0;
 
-  Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].gain"), glist);
+  Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].gain"), glist, "referenceNoiseLevel[" + lut + "].gain");
 
-  boost::lexical_cast<int>(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].offset"));
+  Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].offset"), "referenceNoiseLevel[" + lut + "].offset");
 
   Radarsat2CalibrationLookupData::Pointer sarLut;
   sarLut = Radarsat2CalibrationLookupData::New();

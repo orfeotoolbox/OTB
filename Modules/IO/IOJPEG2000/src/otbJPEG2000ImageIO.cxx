@@ -1374,7 +1374,7 @@ void JPEG2000ImageIO::ReadImageInformation()
         std::string mkey;
         std::string mvalue;
         std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
-        Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszGMLMetadata[cpt]), mkey, mvalue, defValue);
+        Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszGMLMetadata[cpt]), mkey, mvalue, defValue, papszGMLMetadata[cpt]);
         itk::EncapsulateMetaData<std::string>(dict, metadataKeyPrefix + mkey, mvalue);
         otbMsgDevMacro( << static_cast<std::string>(papszGMLMetadata[cpt]));
         }

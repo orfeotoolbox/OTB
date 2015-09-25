@@ -142,7 +142,7 @@ CosmoSkymedImageMetadataInterface
     }
     const std::string key = prefix + "_Calibration_Constant";
 
-    GetValueFromMetadataDictionary<double>(key.c_str(), calibrationConstant);
+    GetValueFromMetadataDictionary<double>(key, calibrationConstant);
     }
 
   GetValueFromMetadataDictionary<double>("Rescaling_Factor", rescalingFactor);
@@ -152,20 +152,10 @@ CosmoSkymedImageMetadataInterface
 }
 void
 CosmoSkymedImageMetadataInterface
-::GetValueFromMetadataDictionary(const char*k, std::string& result) const
+::GetValueFromMetadataDictionary(std::string const key, std::string& result) const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  if ( dict.HasKey(k) )
-    {
-    //using double here is not working at times.
-    itk::ExposeMetaData<std::string>(dict, k, result);
-    }
-  else
-    {
-    // itkExceptionMacro( << "No metadata entry with  key: '" << k << "' found in GetMetaDataDictionary");
-    }
-  }
+  GetValueFromMetadataDictionary<std::string>(key, result);
+}
 
 void
 CosmoSkymedImageMetadataInterface
@@ -178,8 +168,9 @@ CosmoSkymedImageMetadataInterface
       itkExceptionMacro(<< "Invalid Metadata, not a valid ComsoSkymed product");
       }
     std::string dateTimeUTCString;
-    GetValueFromMetadataDictionary(key, dateTimeUTCString);
-    Utils::ConvertStringToVector(dateTimeUTCString, dateFields, " T:-.");
+    std::string const prefix = MetaDataKey::MetadataKeyPrefix;
+    GetValueFromMetadataDictionary(prefix + key, dateTimeUTCString);
+    Utils::ConvertStringToVector(dateTimeUTCString, dateFields, prefix + key, " T:-.");
     }
 }
 

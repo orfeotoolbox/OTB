@@ -1056,7 +1056,7 @@ void GDALImageIO::InternalReadImageInformation()
       std::string mkey;
       std::string mvalue;
       std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
-      Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszMetadata[cpt]), mkey, mvalue, defValue);
+      Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszMetadata[cpt]), mkey, mvalue, defValue, papszMetadata[cpt]);
       itk::EncapsulateMetaData<std::string>(dict, metadataKeyPrefix + mkey, mvalue);
       }
     }
@@ -1083,7 +1083,7 @@ void GDALImageIO::InternalReadImageInformation()
           std::string mkey;
           std::string mvalue;
           std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
-          Utils::SplitStringToSingleKeyValue(static_cast<std::string>(gmlMetadata[cpt]), mkey, mvalue, defValue);
+          Utils::SplitStringToSingleKeyValue(static_cast<std::string>(gmlMetadata[cpt]), mkey, mvalue, defValue, papszMetadata[cpt]);
           itk::EncapsulateMetaData<std::string>(dict, metadataKeyPrefix + mkey, mvalue);
           }
         }
@@ -1103,7 +1103,7 @@ void GDALImageIO::InternalReadImageInformation()
       {
       std::string mkey;
       std::string mvalue;
-      Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszMetadata[cpt]), mkey, mvalue, defValue);
+      Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszMetadata[cpt]), mkey, mvalue, defValue, papszMetadata[cpt]);
       itk::EncapsulateMetaData<std::string>(dict, "SubMetadata." + mkey, mvalue);
       }
     }

@@ -86,24 +86,24 @@ public:
 
   std::string GetImageID() const;
 
-  void GetValueFromMetadataDictionary(const char*k, std::string& result) const;
+  void GetValueFromMetadataDictionary(std::string const key, std::string& result) const;
 
   template<typename T>
-    void GetValueFromMetadataDictionary(const char*k, T& result) const
+    void GetValueFromMetadataDictionary(std::string const key, T& result) const
   {
     const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
+    std::string const k = MetaDataKey::MetadataKeyPrefix + key;
     if ( dict.HasKey(k) )
       {
       std::string v;
-      //using double here is not working at times.
+      //using Template type T directly is not working. So I need to get it as
+      //string and use Utils::LexicalCast.
       itk::ExposeMetaData<std::string>(dict, k, v);
-      //if string do not do lexical_cast
-      result = boost::lexical_cast<double>(v);
+      result = Utils::LexicalCast<T>(v, k);
       }
     else
       {
-//      itkExceptionMacro( << "No metadata entry with  key: '" << k << "' found in GetMetaDataDictionary");
+      itkExceptionMacro( << "No metadata entry with  key: '" << k << "' found in GetMetaDataDictionary");
       }
   }
 
