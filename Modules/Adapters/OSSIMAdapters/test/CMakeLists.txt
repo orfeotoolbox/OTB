@@ -441,6 +441,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid COMMAND otbOSSIMAd
   339.513
   0.001
   )
+set_property(TEST uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid PROPERTY WILL_FAIL true)
 
 otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoData COMMAND otbOSSIMAdaptersTestDriver
   otbDEMHandlerTest
