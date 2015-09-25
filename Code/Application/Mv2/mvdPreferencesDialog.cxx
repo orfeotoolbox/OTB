@@ -172,7 +172,7 @@ PreferencesDialog
     {
     try
       {
-      if( !I18nApplication::Instance()->ElevationSetup() )
+      if( I18nApplication::Instance()->ElevationSetup() )
 	{
 	QMessageBox::warning(
 	  this,
@@ -187,7 +187,7 @@ PreferencesDialog
 	this,
 	"Warning!",
 	tr(
-	  "The following exception has been caught when setting up Elevation Settings:\n\n%1."
+	  "The following exception has been caught when setting up Elevation Settings:\n\n%1"
 	).arg( exception.what() )
       );
       }
@@ -199,24 +199,46 @@ PreferencesDialog
 }
 
 /*******************************************************************************/
-void PreferencesDialog
+void
+PreferencesDialog
 ::on_srtmCheckbox_clicked()
 {
-  this->m_UI->srtmLineEdit->setEnabled(this->m_UI->srtmCheckbox->isChecked());
-  this->m_UI->srtmButton->setEnabled(this->m_UI->srtmCheckbox->isChecked());
+  m_UI->srtmLineEdit->setEnabled( m_UI->srtmCheckbox->isChecked() );
+  m_UI->srtmButton->setEnabled( m_UI->srtmCheckbox->isChecked() );
+
   m_ElevationSetupModified = true;
 }
 
-void PreferencesDialog
+/*****************************************************************************/
+void
+PreferencesDialog
+::on_srtmLineEdit_textChanged( const QString & )
+{
+  m_ElevationSetupModified = true;
+}
+
+/*****************************************************************************/
+void
+PreferencesDialog
 ::on_geoidCheckbox_clicked()
 {
-  this->m_UI->geoidLineEdit->setEnabled(this->m_UI->geoidCheckbox->isChecked());
-  this->m_UI->geoidButton->setEnabled(this->m_UI->geoidCheckbox->isChecked());
+  m_UI->geoidLineEdit->setEnabled( m_UI->geoidCheckbox->isChecked() );
+  m_UI->geoidButton->setEnabled( m_UI->geoidCheckbox->isChecked() );
+
   m_ElevationSetupModified = true;
 }
 
+/*****************************************************************************/
+void
+PreferencesDialog
+::on_geoidLineEdit_textChanged( const QString & )
+{
+  m_ElevationSetupModified = true;
+}
 
-void PreferencesDialog
+/*****************************************************************************/
+void
+PreferencesDialog
 ::on_srtmButton_clicked()
 {
   while (true)
@@ -238,8 +260,9 @@ void PreferencesDialog
     }
 }
 
-
-void PreferencesDialog
+/*****************************************************************************/
+void
+PreferencesDialog
 ::on_geoidButton_clicked()
 {
   while (true)
@@ -261,8 +284,9 @@ void PreferencesDialog
     }
 }
 
-
-void PreferencesDialog
+/*****************************************************************************/
+void
+PreferencesDialog
 ::on_resultDirButton_clicked()
 {
   while (true)
@@ -283,7 +307,6 @@ void PreferencesDialog
       }
     }
 }
-
 
 /*******************************************************************************/
 

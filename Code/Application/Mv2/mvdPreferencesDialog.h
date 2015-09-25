@@ -137,12 +137,13 @@ private slots:
 
 
   void on_srtmCheckbox_clicked();
-
   void on_geoidCheckbox_clicked();
 
   void on_srtmButton_clicked();
-
   void on_geoidButton_clicked();
+
+  void on_srtmLineEdit_textChanged( const QString & );
+  void on_geoidLineEdit_textChanged( const QString & );
 
   void on_resultDirButton_clicked();
 

@@ -582,14 +582,35 @@ I18nCoreApplication
 
     try
       {
+      QString filename(
+	I18nCoreApplication::RetrieveSettingsKey(
+	  I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
+	).toString()
+      );
+
       geoidUpdated =
 	demHandlerInstance->OpenGeoidFile(
 	  ToStdString(
-	    I18nCoreApplication::RetrieveSettingsKey(
-	      I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
-	    ).toString()
+	    filename
 	  )
 	);
+
+      // BUGFIX: When geoid file has not been updated by
+      // otb::DEMHandler, the filename may be erronous and unchecked
+      // so, add a check, in this case, to report input error to the
+      // user.
+      if( !geoidUpdated )
+	{
+	QFileInfo finfo( filename );
+
+	if( !finfo.exists() )
+	  throw std::runtime_error(
+	    ToStdString(
+	      tr( "Geoid file '%1' not found!" )
+	      .arg( filename )
+	    )
+	  );
+	}
       }
     catch( const std::exception & err )
       {
@@ -601,6 +622,8 @@ I18nCoreApplication
       throw;
       }
     }
+  else
+    geoidUpdated = true;
 
   if( I18nCoreApplication::HasSettingsKey(
 	I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ) &&
