@@ -110,7 +110,8 @@ void SplitStringToSingleKeyValue(const std::string& str,
   boost::split( splitted, str, boost::is_any_of(delims), boost::token_compress_on );
 
   typename ListType::iterator it = splitted.begin();
-  boost::trim_copy_if(key, (*it));
+  BoostRangeIteratorType kIt = boost::trim_copy((*it));
+  key.assign( kIt.begin(), kIt.end());
   ++it;
 
   if( it != splitted.end())
