@@ -44,6 +44,8 @@
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 
+#include "otbStringUtils.h"
+
 void OpjImageDestroy(opj_image_t * img)
 {
   if(img)
@@ -1366,15 +1368,14 @@ void JPEG2000ImageIO::ReadImageInformation()
     if (CSLCount(papszGMLMetadata) > 0)
       {
       otbMsgDevMacro(<< "JPEG2000 file has GMLMetadata!");
-      std::string key;
-
+      const std::string defValue= "TRUE";
       for (int cpt = 0; papszGMLMetadata[cpt] != NULL; ++cpt)
         {
-        std::ostringstream lStream;
-        lStream << MetaDataKey::MetadataKey << cpt;
-        key = lStream.str();
-
-        itk::EncapsulateMetaData<std::string>(dict, key, static_cast<std::string> (papszGMLMetadata[cpt]));
+        std::string mkey;
+        std::string mvalue;
+        std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
+        Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszGMLMetadata[cpt]), mkey, mvalue, defValue, papszGMLMetadata[cpt]);
+        itk::EncapsulateMetaData<std::string>(dict, metadataKeyPrefix + mkey, mvalue);
         otbMsgDevMacro( << static_cast<std::string>(papszGMLMetadata[cpt]));
         }
       }

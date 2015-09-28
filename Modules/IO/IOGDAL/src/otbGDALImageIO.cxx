@@ -40,7 +40,8 @@
 
 #include "otbGDALDriverManagerWrapper.h"
 
-#include <boost/algorithm/string/predicate.hpp>
+#include "otbStringUtils.h"
+
 #include "otbOGRHelpers.h"
 
 #include "stdint.h" //needed for uintptr_t
@@ -487,9 +488,9 @@ void GDALImageIO::ReadImageInformation()
 }
 
 unsigned int GDALImageIO::GetOverviewsCount()
-{ 
+{
   GDALDataset* dataset = m_Dataset->GetDataSet();
- 
+
   // JPEG2000 case : use the number of overviews actually in the dataset
   if (m_Dataset->IsJPEG2000())
     {
@@ -523,23 +524,23 @@ std::vector<std::string> GDALImageIO::GetOverviewsInfo()
   unsigned lOverviewsCount = this->GetOverviewsCount();
   if ( lOverviewsCount == 0)
     return desc;
-    
+
   unsigned int originalWidth = m_OriginalDimensions[0];
-  unsigned int originalHeight = m_OriginalDimensions[1];  
- 
+  unsigned int originalHeight = m_OriginalDimensions[1];
+
   // Get the overview sizes
   for( unsigned int iOverview = 0; iOverview < lOverviewsCount; iOverview++ )
     {
     // For each resolution we will compute the tile dim and image dim
-    std::ostringstream oss;    
+    std::ostringstream oss;
     unsigned int w = uint_ceildivpow2( originalWidth, iOverview);
     unsigned int h = uint_ceildivpow2( originalHeight, iOverview);
-    
+
     oss << "Overview level: " << iOverview << " (Image [w x h]: " << w << "x" << h << ")";
-    
+
     desc.push_back(oss.str());
     }
-    
+
   return desc;
 }
 
@@ -548,7 +549,7 @@ void GDALImageIO::InternalReadImageInformation()
   itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
                                     MetaDataKey::ResolutionFactor,
                                     m_ResolutionFactor);
-                                    
+
   itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
                                     MetaDataKey::SubDatasetIndex,
                                     m_DatasetNumber);
@@ -563,6 +564,7 @@ void GDALImageIO::InternalReadImageInformation()
     {
     // this happen in the case of a hdf file with SUBDATASETS
     // Note: we assume that the datasets are in order
+    //only first subdataset is read if there are multiple subdatasets.
     char** papszMetadata;
     papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
     //TODO: we might want to keep the list of names somewhere, at least the number of datasets
@@ -577,7 +579,11 @@ void GDALImageIO::InternalReadImageInformation()
           otbMsgDevMacro(<< "- key:  " << key);
           otbMsgDevMacro(<< "- name: " << name);
           // check if this is a dataset name
-          if (key.find("_NAME") != std::string::npos) names.push_back(name);
+          if (key.find("_NAME") != std::string::npos)
+            {
+            names.push_back(name);
+            }
+          itk::EncapsulateMetaData<std::string>(this->GetMetaDataDictionary(), key, name);
           }
         }
       }
@@ -1041,18 +1047,17 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
 
   papszMetadata = dataset->GetMetadata(NULL);
+
+  const std::string defValue= "TRUE";
   if (CSLCount(papszMetadata) > 0)
     {
-    std::string key;
-
     for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
       {
-      std::ostringstream lStream;
-      lStream << MetaDataKey::MetadataKey << cpt;
-      key = lStream.str();
-
-      itk::EncapsulateMetaData<std::string>(dict, key,
-                                            static_cast<std::string>(papszMetadata[cpt]));
+      std::string mkey;
+      std::string mvalue;
+      std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
+      Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszMetadata[cpt]), mkey, mvalue, defValue, papszMetadata[cpt]);
+      itk::EncapsulateMetaData<std::string>(dict, metadataKeyPrefix + mkey, mvalue);
       }
     }
 
@@ -1071,16 +1076,15 @@ void GDALImageIO::InternalReadImageInformation()
       if (CSLCount(gmlMetadata) > 0)
         {
         std::string key;
-        int cptOffset = CSLCount(papszMetadata);
-        
+        //int cptOffset = CSLCount(papszMetadata);
+
         for (int cpt = 0; gmlMetadata[cpt] != NULL; ++cpt)
           {
-          std::ostringstream lStream;
-          lStream << MetaDataKey::MetadataKey << (cpt+cptOffset);
-          key = lStream.str();
-          
-          itk::EncapsulateMetaData<std::string>(dict, key,
-                                                static_cast<std::string>(gmlMetadata[cpt]));
+          std::string mkey;
+          std::string mvalue;
+          std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
+          Utils::SplitStringToSingleKeyValue(static_cast<std::string>(gmlMetadata[cpt]), mkey, mvalue, defValue, papszMetadata[cpt]);
+          itk::EncapsulateMetaData<std::string>(dict, metadataKeyPrefix + mkey, mvalue);
           }
         }
       }
@@ -1092,18 +1096,15 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
 
   papszMetadata = dataset->GetMetadata("SUBDATASETS");
+
   if (CSLCount(papszMetadata) > 0)
     {
-    std::string key;
-
     for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
       {
-      std::ostringstream lStream;
-      lStream << MetaDataKey::SubMetadataKey << cpt;
-      key = lStream.str();
-
-      itk::EncapsulateMetaData<std::string>(dict, key,
-                                            static_cast<std::string>(papszMetadata[cpt]));
+      std::string mkey;
+      std::string mvalue;
+      Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszMetadata[cpt]), mkey, mvalue, defValue, papszMetadata[cpt]);
+      itk::EncapsulateMetaData<std::string>(dict, "SubMetadata." + mkey, mvalue);
       }
     }
 
@@ -1196,7 +1197,7 @@ void GDALImageIO::InternalReadImageInformation()
   // Read no data value if present
   std::vector<bool> isNoDataAvailable(dataset->GetRasterCount(),false);
   std::vector<double> noDataValues(dataset->GetRasterCount(),0);
-  
+
   bool noDataFound = false;
 
   for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
@@ -1204,7 +1205,7 @@ void GDALImageIO::InternalReadImageInformation()
     GDALRasterBandH hBand = GDALGetRasterBand(dataset, iBand + 1);
 
     int success;
-    
+
     double ndv = GDALGetRasterNoDataValue(hBand,&success);
 
     if(success)
@@ -1703,19 +1704,16 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   std::string              svalue = "";
   std::vector<std::string>   keys = dict.GetKeys();
-  std::string const   metadataKey = MetaDataKey::MetadataKey;
+  std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
 
   for (unsigned int itkey = 0; itkey < keys.size(); ++itkey)
     {
-    /// \todo Why not <tt>keys[itkey] == MetadataKey::MetadataKey</tt> ?
-    if (keys[itkey].compare(0, metadataKey.length(), metadataKey) == 0)
+    std::string tag = keys[itkey];
+    if (boost::starts_with(tag, metadataKeyPrefix))
       {
-      itk::ExposeMetaData<std::string>(dict, keys[itkey], svalue);
-      unsigned int equalityPos = svalue.find_first_of('=');
-      std::string  tag = svalue.substr(0, equalityPos);
-      std::string  value = svalue.substr(equalityPos + 1);
-      otbMsgDevMacro(<< "Metadata: " << tag << "=" << value);
-      dataset->SetMetadataItem(tag.c_str(), value.c_str(), NULL);
+      itk::ExposeMetaData<std::string>(dict, tag, svalue);
+      tag = tag.substr(metadataKeyPrefix.size());
+      dataset->SetMetadataItem(tag.c_str(), svalue.c_str(), NULL);
       }
     }
 
@@ -1725,6 +1723,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   itk::ExposeMetaData<ImageKeywordlist>(dict,
                                         MetaDataKey::OSSIMKeywordlistKey,
                                         otb_kwl);
+
   if( otb_kwl.GetSize() != 0 )
     {
     GDALRPCInfo gdalRpcStruct;
@@ -1760,7 +1759,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   // Write no-data flags
   std::vector<bool> noDataValueAvailable;
   bool ret = itk::ExposeMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
-  
+
   std::vector<double> noDataValues;
   itk::ExposeMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValues);
 
@@ -1881,14 +1880,7 @@ bool GDALImageIO::GetOriginFromGMLBox(std::vector<double> &origin)
     return false;
     }
 
-  std::vector<itksys::String> originValues;
-  originValues = itksys::SystemTools::SplitString(originTag->GetText(),' ', false);
-
-  // Compute origin in GDAL convention (the half-pixel shift is applied later)
-  std::istringstream ss0 (originValues[0]);
-  std::istringstream ss1 (originValues[1]);
-  ss0 >> origin[1];
-  ss1 >> origin[0];
+  Utils::ConvertStringToVector(originTag->GetText(), origin, originTag->GetText());
   origin[0] += -1.0;
   origin[1] += -1.0;
 
