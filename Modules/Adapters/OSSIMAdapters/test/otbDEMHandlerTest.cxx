@@ -59,7 +59,19 @@ int otbDEMHandlerTest(int argc, char * argv[])
 
   if(geoid != "no")
     {
-    demHandler->OpenGeoidFile(geoid);
+    try
+      {
+      demHandler->OpenGeoidFile(geoid);
+      }
+    catch( const std::exception & exception )
+      {
+      std::cout
+	<< "Exception thrown while opening geod-file '" << geoid << "':" << std::endl
+	<< exception.what();
+
+      fail = true;
+      }
+
     std::cout<<"GetGeoidFile() = "<<demHandler->GetGeoidFile()<<std::endl;
     }
 

@@ -21,7 +21,7 @@
     See CrispCopyright.txt for details.
   
   * Parts of the code have been developped by Gregoire Mercier.
-    See GETCopyright.txt for details.
+    See IMTCopyright.txt for details.
 
   --------------------------- DEPENDENCIES ----------------------------------
   Several utilities are mandatory dependencies used by the OTB library :

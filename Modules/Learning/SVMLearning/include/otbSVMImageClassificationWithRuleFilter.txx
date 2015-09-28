@@ -10,7 +10,7 @@
   See OTBCopyright.txt for details.
 
   Copyright (c) Institut Telecom; Telecom bretagne. All rights reserved.
-  See ITCopyright.txt for details.
+  See IMTCopyright.txt for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR

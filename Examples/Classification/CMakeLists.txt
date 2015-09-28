@@ -6,9 +6,11 @@ target_link_libraries(BayesianPluginClassifier ${OTB_LIBRARIES})
 add_executable(ClassificationMapRegularizationExample ClassificationMapRegularizationExample.cxx)
 target_link_libraries(ClassificationMapRegularizationExample ${OTB_LIBRARIES})
 
+#OTBDempsterShafer depends OTBMathParser. But OTB_USE_MUPARSER is OFF
+if(OTBMathParser_LOADED)
 add_executable(DempsterShaferFusionOfClassificationMapsExample DempsterShaferFusionOfClassificationMapsExample.cxx)
 target_link_libraries(DempsterShaferFusionOfClassificationMapsExample ${OTB_LIBRARIES})
-
+endif()
 add_executable(ExpectationMaximizationMixtureModelEstimator ExpectationMaximizationMixtureModelEstimator.cxx)
 target_link_libraries(ExpectationMaximizationMixtureModelEstimator ${OTB_LIBRARIES})
 
