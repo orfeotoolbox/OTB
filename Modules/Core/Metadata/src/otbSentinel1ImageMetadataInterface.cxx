@@ -104,33 +104,32 @@ Sentinel1ImageMetadataInterface
     std::stringstream prefix;
     prefix << "calibration.calibrationVector[" << i << "].";
 
-    calibrationVector.line = boost::lexical_cast<int>(imageKeywordlist.GetMetadataByKey(prefix.str() + "line"));
+    calibrationVector.line = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(prefix.str() + "line"), prefix.str() + "line");
 
-    calibrationVector.timeMJD =  boost::lexical_cast<double>(imageKeywordlist.GetMetadataByKey(prefix.str() + "azimuthTime"));
+    calibrationVector.timeMJD =  Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey(prefix.str() + "azimuthTime"), prefix.str() + "azimuthTime");
 
-    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "pixel"), calibrationVector.pixels);
+    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "pixel"), calibrationVector.pixels, prefix.str() + "pixel");
 
     if (sigmaLut) {
-    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "sigmaNought"), calibrationVector.vect);
+    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "sigmaNought"), calibrationVector.vect, prefix.str() + "sigmaNought");
       }
 
     if (betaLut) {
-    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "betaNought"), calibrationVector.vect);
+    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "betaNought"), calibrationVector.vect, prefix.str() + "betaNought");
     }
 
     if (gammaLut) {
-    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "gamma"), calibrationVector.vect);
+    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "gamma"), calibrationVector.vect, prefix.str() + "gamma");
     }
 
     if (dnLut) {
-    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "dn"), calibrationVector.vect);
+    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "dn"), calibrationVector.vect, prefix.str() + "dn");
     }
 
     calibrationVectorList[i] = calibrationVector;
 
     }
 
-//if(m_SarLut.IsNull())
   Sentinel1CalibrationLookupData::Pointer sarLut;
   sarLut = Sentinel1CalibrationLookupData::New();
   sarLut->InitParameters(type, firstLineTime, lastLineTime, numOfLines, count, calibrationVectorList);
