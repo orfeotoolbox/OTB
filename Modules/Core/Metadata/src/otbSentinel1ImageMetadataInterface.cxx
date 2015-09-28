@@ -85,15 +85,15 @@ Sentinel1ImageMetadataInterface
 
   const ImageKeywordlistType imageKeywordlist =  this->GetImageKeywordlist();
 
-  const double firstLineTime = boost::lexical_cast<double>(imageKeywordlist.GetMetadataByKey("calibration.startTime"));
+  const double firstLineTime = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("calibration.startTime"), "calibration.startTime(double)");
 
-  const double lastLineTime = boost::lexical_cast<double>(imageKeywordlist.GetMetadataByKey("calibration.stopTime"));
+  const double lastLineTime = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("calibration.stopTime"), "calibration.stopTime(double)");
 
   const std::string bandPrefix = "Band[0]."; //make && use GetBandPrefix(subSwath, polarisation)
 
-  const int numOfLines = boost::lexical_cast<int>(imageKeywordlist.GetMetadataByKey(bandPrefix + "number_lines"));
+  const int numOfLines = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(bandPrefix + "number_lines"), bandPrefix + "number_lines(int)");
 
-  const int count = boost::lexical_cast<int>(imageKeywordlist.GetMetadataByKey("calibration.count"));
+  const int count = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("calibration.count"), "calibration.count");
 
   std::vector<Sentinel1CalibrationStruct> calibrationVectorList(count);
 
@@ -157,7 +157,7 @@ Sentinel1ImageMetadataInterface
       }
 
     const std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
-    Utils::ConvertStringToVector(date_time_str, dateFields, " T:-.");
+    Utils::ConvertStringToVector(date_time_str, dateFields, key, " T:-.");
     }
 
 }
@@ -169,7 +169,7 @@ Sentinel1ImageMetadataInterface::GetYear() const
   ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 0 )
     {
-    value = boost::lexical_cast<int>( m_AcquisitionDateFields[0] );
+    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[0], " support_data.image_date:year(int)" );
     }
   else
     {
@@ -185,7 +185,7 @@ Sentinel1ImageMetadataInterface::GetMonth() const
   ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 1 )
     {
-    value = boost::lexical_cast<int>( m_AcquisitionDateFields[1] );
+    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[1], " support_data.image_date:month(int)" );
     }
   else
     {
@@ -201,7 +201,7 @@ Sentinel1ImageMetadataInterface::GetDay() const
   ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 2 )
     {
-    value = boost::lexical_cast<int>( m_AcquisitionDateFields[2] );
+    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[2], " support_data.image_date:day(int)");
     }
   else
     {
@@ -217,7 +217,7 @@ Sentinel1ImageMetadataInterface::GetHour() const
   ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 3 )
     {
-    value = boost::lexical_cast<int>( m_AcquisitionDateFields[3] );
+    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[3], " support_data.image_date:hour(int)");
     }
   else
     {
@@ -233,7 +233,7 @@ Sentinel1ImageMetadataInterface::GetMinute() const
   ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 4 )
     {
-    value = boost::lexical_cast<int>( m_AcquisitionDateFields[4] );
+    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[4], " support_data.image_date:minute(int)");
     }
   else
     {
@@ -249,7 +249,7 @@ Sentinel1ImageMetadataInterface::GetProductionYear() const
   ParseDateTime("support_data.date", m_ProductionDateFields);
   if(m_ProductionDateFields.size() > 0 )
     {
-    value = boost::lexical_cast<int>( m_ProductionDateFields[0] );
+    value = Utils::LexicalCast<int>( m_ProductionDateFields[0], " support_data.date:year(int)" );
     }
   else
     {
@@ -266,7 +266,7 @@ Sentinel1ImageMetadataInterface::GetProductionMonth() const
   ParseDateTime("support_data.date", m_ProductionDateFields);
   if(m_ProductionDateFields.size() > 1 )
     {
-    value = boost::lexical_cast<int>( m_ProductionDateFields[1] );
+    value = Utils::LexicalCast<int>( m_ProductionDateFields[1], " support_data.date:month(int)" );
     }
   else
     {
@@ -282,7 +282,7 @@ Sentinel1ImageMetadataInterface::GetProductionDay() const
   ParseDateTime("support_data.date", m_ProductionDateFields);
   if(m_ProductionDateFields.size() > 2 )
     {
-    value = boost::lexical_cast<int>( m_ProductionDateFields[2] );
+    value = Utils::LexicalCast<int>( m_ProductionDateFields[2], " support_data.date:day(int)" );
     }
   else
     {
@@ -301,7 +301,8 @@ Sentinel1ImageMetadataInterface::GetPRF() const
     return value;
     }
 
-  value = boost::lexical_cast<double> ( imageKeywordlist.GetMetadataByKey("support_data.pulse_repetition_frequency") );
+  value = Utils::LexicalCast<double>( imageKeywordlist.GetMetadataByKey("support_data.pulse_repetition_frequency"),
+                                      "support_data.pulse_repetition_frequency(double)" );
 
   return value;
 }
