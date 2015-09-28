@@ -168,16 +168,14 @@ LearningApplicationBase<TInputValue,TOutputValue>
     }
   else
     {
-    TargetSampleType currentLabel = 0, prevLabel = 0;
+    std::set<TargetValueType> labelSet;
+    TargetSampleType currentLabel;
     for (unsigned int itLab = 0; itLab < trainingLabeledListSample->Size(); ++itLab)
       {
       currentLabel = trainingLabeledListSample->GetMeasurementVector(itLab);
-      if ((currentLabel != prevLabel) || (itLab == 0))
-        {
-        ++nbClasses;
-        }
-      prevLabel = currentLabel;
+      labelSet.insert(currentLabel[0]);
       }
+    nbClasses = labelSet.size();
     layerSizes.push_back(nbClasses);
     }
 

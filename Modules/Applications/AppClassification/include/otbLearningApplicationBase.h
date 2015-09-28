@@ -111,6 +111,7 @@ public:
   
   typedef typename ModelType::TargetSampleType      TargetSampleType;
   typedef typename ModelType::TargetListSampleType  TargetListSampleType;
+  typedef typename ModelType::TargetValueType       TargetValueType;
   
 #ifdef OTB_USE_OPENCV
   typedef otb::RandomForestsMachineLearningModel<InputValueType, OutputValueType> RandomForestType;
