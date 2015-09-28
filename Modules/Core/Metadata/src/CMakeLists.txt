@@ -39,6 +39,9 @@ set(OTBMetadata_SRC
   otbSentinel1ImageMetadataInterfaceFactory.cxx
   otbSentinel1ImageMetadataInterface.cxx
 
+  otbCosmoSkymedImageMetadataInterfaceFactory.cxx
+  otbCosmoSkymedImageMetadataInterface.cxx
+
   otbNoDataHelper.cxx
   )
 
