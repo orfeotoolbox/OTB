@@ -33,8 +33,8 @@ include_directories(
   #
   ${Monteverdi2_SOURCE_DIR}/Code/Common
   #
-  ${Monteverdi2_SOURCE_DIR}/Code/Application/Mv2
-  ${Monteverdi2_BINARY_DIR}/Code/Application/Mv2
+  ${Monteverdi2_SOURCE_DIR}/Code/Application/Monteverdi
+  ${Monteverdi2_BINARY_DIR}/Code/Application/Monteverdi
   #
   ${Monteverdi2_SOURCE_DIR}/Data/Icons
   )
@@ -95,13 +95,13 @@ if (OTBQtWidget_LOADED)
     )
 endif()
 
-create_monteverdi_application(NAME mv2
+create_monteverdi_application(NAME monteverdi
   SOURCES main.cxx
   ${Monteverdi2_Mv2_WIN32_RC_FILE}
   ${Monteverdi2_Mv2_RESOURCES_RCC}
   LINK_LIBRARIES Monteverdi2_Mv2
   ${QT_QTMAIN_LIBRARY}
   OUTPUT_NAME ${MV2_OUTPUT_NAME}
-  COMPONENT_NAME Mv2
+  COMPONENT_NAME Monteverdi
   NEEDS_OTB_APPS FALSE
   )
