@@ -25,6 +25,7 @@ otbDefaultImageMetadataInterface.cxx
 otbImageMetadataInterfaceTest2.cxx
 otbNoDataHelperTest.cxx
 otbSarCalibrationLookupDataTest.cxx
+otbCosmoSkymedImageMetadataInterfaceNew.cxx
 )
 
 add_executable(otbMetadataTestDriver ${OTBMetadataTests})
@@ -75,7 +76,7 @@ otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingHHCosF
   LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos}
   ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
   )
-
+#SENTINEL1
 otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_Sentinel1 COMMAND otbMetadataTestDriver
   --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_Sentinel1.txt
   ${TEMP}/ioTvImageMetadataInterfaceBase_Sentinel1.txt
@@ -83,9 +84,19 @@ otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_Sentinel1 COMMAND otbMetada
   LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
   ${TEMP}/ioTvImageMetadataInterfaceBase_Sentinel1.txt
   )
-
 otb_add_test(NAME ioTuSentinel1ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
   otbSentinel1ImageMetadataInterfaceNew )
+
+#COSMOSKYMED
+otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_COSMOSKYMED COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_COSMOSKYMED.txt
+  ${TEMP}/ioTvImageMetadataInterfaceBase_COSMOSKYMED.txt
+  otbImageMetadataInterfaceBaseTest
+  LARGEINPUT{COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5}
+  ${TEMP}/ioTvImageMetadataInterfaceBase_COSMOSKYMED.txt
+  )
+otb_add_test(NAME ioTuCosmoSkymedImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  ioTuCosmoSkymedImageMetadataInterfaceNew )
 
 otb_add_test(NAME ioTuDefaultImageMetadataInterfaceFactoryNew COMMAND otbMetadataTestDriver
   otbDefaultImageMetadataInterfaceFactoryNew )
@@ -375,4 +386,12 @@ otb_add_test(NAME ioTvSarCalibrationLookupDataTest_SENTINEL1 COMMAND otbMetadata
   otbSarCalibrationLookupDataTest
   ${INPUTDATA}/SENTINEL1_SLC_S6_1S_extract_300_300.tif?&geom=${INPUTDATA}/SENTINEL1_SLC_S6_1S_extract_300_300.geom
   ${TEMP}/ioTvSarCalibrationLookupDataTest_SENTINEL1.txt
+  )
+
+otb_add_test(NAME ioTvSarCalibrationLookupDataTest_COSMOSKYMED COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvSarCalibrationLookupDataTest_COSMOSKYMED.txt
+  ${TEMP}/ioTvSarCalibrationLookupDataTest_COSMOSKYMED.txt
+  otbSarCalibrationLookupDataTest
+  ${INPUTDATA}/COSMOSKYMED_extract_300_300.tif?&geom=${INPUTDATA}/COSMOSKYMED_extract_300_300.geom
+  ${TEMP}/ioTvSarCalibrationLookupDataTest_COSMOSKYMED.txt
   )
