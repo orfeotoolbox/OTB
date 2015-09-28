@@ -35,6 +35,9 @@ char const* GCPCountKey = "GCPCount";
 
 char const* GeoTransformKey = "GeoTransform";
 
+char const* MetadataKeyPrefix = "Metadata.";
+char const* SubMetadataKeyPrefix = "SubMetadata.";
+
 char const* MetadataKey = "Metadata_";
 char const* SubMetadataKey = "SubMetadata_";
 
