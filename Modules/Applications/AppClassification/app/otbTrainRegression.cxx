@@ -47,12 +47,12 @@ namespace otb
 namespace Wrapper
 {
 
-class TrainRegression: public LearningApplicationBase<float,int>
+class TrainRegression: public LearningApplicationBase<float,float>
 {
 public:
   /** Standard class typedefs. */
   typedef TrainRegression Self;
-  typedef LearningApplicationBase<float,int> Superclass;
+  typedef LearningApplicationBase<float,float> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
