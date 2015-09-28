@@ -15,8 +15,8 @@ include_directories(
   
   ${Monteverdi2_SOURCE_DIR}/Code/Common
   
-  ${Monteverdi2_SOURCE_DIR}/Code/Application/Monteverdi2
-  ${Monteverdi2_BINARY_DIR}/Code/Application/Monteverdi2
+  ${Monteverdi2_SOURCE_DIR}/Code/Application/Monteverdi
+  ${Monteverdi2_BINARY_DIR}/Code/Application/Monteverdi
   )
 
 #-------------- Monteverdi Application Tests ---------------------------------
@@ -30,4 +30,4 @@ mvdMonteverdi2ApplicationTest.cxx
 )
 
 add_executable(mvdApplicationTests mvdApplicationTests.cxx ${Application_SRCS})
-target_link_libraries(mvdApplicationTests Monteverdi2_Catalogue ${OTB_LIBRARIES})
+target_link_libraries(mvdApplicationTests Monteverdi2_Mv2 ${OTB_LIBRARIES})
