@@ -70,7 +70,7 @@ namespace Wrapper
 
       AddParameter(ParameterType_Choice, "classifier.svm.term", "Termination criteria");
       SetParameterDescription("classifier.svm.term","Termination criteria for iterative algorithm");
-      AddChoice("classifier.svm.term.iter", "Stops when Max_iteration is reached.");
+      AddChoice("classifier.svm.term.iter", "Stops when maximum iteration is reached.");
       AddChoice("classifier.svm.term.eps", "Stops when accuracy is lower than epsilon.");
       AddChoice("classifier.svm.term.all", "Stops when either iteration or epsilon criteria is true");
 
