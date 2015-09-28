@@ -42,6 +42,9 @@ namespace MetaDataKey
 
   extern char const* GeoTransformKey;
 
+  extern char const* MetadataKeyPrefix;
+  extern char const* SubMetadataKeyPrefix;
+
   extern char const* MetadataKey;
   extern char const* SubMetadataKey;
 
