@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -24,7 +24,7 @@
 // Configuration include.
 //// Included at first position before any other ones.
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
 
@@ -144,7 +144,7 @@ typedef unsigned int CountType;
 
 /**
  */
-typedef Monteverdi2_FLOATING_TYPE RealType;
+typedef Monteverdi_FLOATING_TYPE RealType;
 
 /**
  */
@@ -185,19 +185,19 @@ typedef itk::Array< double > ParametersType;
 
 /**
  */
-typedef itk::ImageRegion< Monteverdi2_DIMENSION > ImageRegionType;
+typedef itk::ImageRegion< Monteverdi_DIMENSION > ImageRegionType;
 
 /**
  */
-typedef itk::Index< Monteverdi2_DIMENSION > IndexType;
+typedef itk::Index< Monteverdi_DIMENSION > IndexType;
 
 /**
  */
-typedef itk::Size< Monteverdi2_DIMENSION > SizeType;
+typedef itk::Size< Monteverdi_DIMENSION > SizeType;
 
 /**
  */
-typedef itk::ImageBase< Monteverdi2_DIMENSION > ImageBaseType;
+typedef itk::ImageBase< Monteverdi_DIMENSION > ImageBaseType;
 
 /*******************************************************************************/
 /* Type definitions for scalar/mono-band images.                               */
@@ -205,7 +205,7 @@ typedef itk::ImageBase< Monteverdi2_DIMENSION > ImageBaseType;
 /**
  */
 typedef
-otb::Image< ComponentType, Monteverdi2_DIMENSION >
+otb::Image< ComponentType, Monteverdi_DIMENSION >
 ScalarImageType;
 
 /**
@@ -224,7 +224,7 @@ otb::ImageFileWriter< ScalarImageType > ScalarImageFileWriterType;
 /**
  */
 typedef
-otb::VectorImage< ComponentType, Monteverdi2_DIMENSION >
+otb::VectorImage< ComponentType, Monteverdi_DIMENSION >
 VectorImageType;
 
 /**

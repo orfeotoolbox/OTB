@@ -1,7 +1,7 @@
 
 
 # Get the translation files coming with Qt, and install them in the bundle
-# They are loaded by Monteverdi2.
+# They are loaded by Monteverdi.
 function(get_qt_translation_files RESULT)
     # These files are the "qt_<localename>.qm" files
     # They are located in QT_TRANSLATIONS_DIR, which comes from FindQt4
@@ -21,11 +21,11 @@ endfunction()
 function(create_cpack_config application)
 
   #should we handle this when calling function ?
-  #for now mapla has no specific version or it is same as monteverdi2
-  SET(CPACK_PACKAGE_VERSION "${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}.${Monteverdi2_VERSION_PATCH}")
-  SET(CPACK_PACKAGE_VERSION_MAJOR "${Monteverdi2_VERSION_MAJOR}")
-  SET(CPACK_PACKAGE_VERSION_MINOR "${Monteverdi2_VERSION_MINOR}")
-  SET(CPACK_PACKAGE_VERSION_PATCH "${Monteverdi2_VERSION_PATCH}")
+  #for now mapla has no specific version or it is same as monteverdi
+  SET(CPACK_PACKAGE_VERSION "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}")
+  SET(CPACK_PACKAGE_VERSION_MAJOR "${Monteverdi_VERSION_MAJOR}")
+  SET(CPACK_PACKAGE_VERSION_MINOR "${Monteverdi_VERSION_MINOR}")
+  SET(CPACK_PACKAGE_VERSION_PATCH "${Monteverdi_VERSION_PATCH}")
 
   if(WIN32)
     set(arch_prefix win32)
@@ -52,10 +52,10 @@ function(create_cpack_config application)
       set(arch_prefix Darwin64)
     endif()
     SET(CPACK_GENERATOR "Bundle")
-    SET(CPACK_BUNDLE_ICON "${Monteverdi2_SOURCE_DIR}/Packaging/MacOS/Monteverdi2.icns" )
-    SET(CPACK_BUNDLE_NAME "${application}-${CPACK_PACKAGE_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}" )
+    SET(CPACK_BUNDLE_ICON "${Monteverdi_SOURCE_DIR}/Packaging/MacOS/Monteverdi.icns" )
+    SET(CPACK_BUNDLE_NAME "${application}-${CPACK_PACKAGE_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}" )
     SET(CPACK_BUNDLE_PLIST "${CMAKE_BINARY_DIR}/Packaging/MacOS/${application}-Info.plist" )
-    SET(CPACK_BUNDLE_STARTUP_COMMAND "${Monteverdi2_SOURCE_DIR}/Packaging/MacOS/${application}-StartupCommand" )
+    SET(CPACK_BUNDLE_STARTUP_COMMAND "${Monteverdi_SOURCE_DIR}/Packaging/MacOS/${application}-StartupCommand" )
 
   endif()
 
@@ -68,17 +68,17 @@ function(create_cpack_config application)
   ##################################
 
   SET(CPACK_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
-  SET(CPACK_MODULE_PATH "${Monteverdi2_SOURCE_DIR}/CMake")
+  SET(CPACK_MODULE_PATH "${Monteverdi_SOURCE_DIR}/CMake")
   SET(CPACK_NSIS_INSTALLER_ICON_CODE "")
   SET(CPACK_NSIS_INSTALLER_MUI_ICON_CODE "")
   SET(CPACK_PACKAGE_CONTACT "contact@orfeo-toolbox.org")
   SET(CPACK_PACKAGE_DEFAULT_LOCATION "/")
-  SET(CPACK_PACKAGE_DESCRIPTION_FILE "${Monteverdi2_SOURCE_DIR}/Description.txt")
+  SET(CPACK_PACKAGE_DESCRIPTION_FILE "${Monteverdi_SOURCE_DIR}/Description.txt")
 
-  SET(CPACK_RESOURCE_FILE_LICENSE "${Monteverdi2_SOURCE_DIR}/Copyright/Copyright.txt")
+  SET(CPACK_RESOURCE_FILE_LICENSE "${Monteverdi_SOURCE_DIR}/Copyright/Copyright.txt")
   SET(CPACK_OUTPUT_CONFIG_FILE "${CMAKE_BINARY_DIR}/CPackConfig-${application}.cmake")
-  SET(CPACK_NSIS_MUI_ICON    "${Monteverdi2_SOURCE_DIR}/Data/Icons/monteverdi2.ico")
-  SET(CPACK_NSIS_MUI_UNIICON "${Monteverdi2_SOURCE_DIR}/Data/Icons/monteverdi2.ico")
+  SET(CPACK_NSIS_MUI_ICON    "${Monteverdi_SOURCE_DIR}/Data/Icons/monteverdi.ico")
+  SET(CPACK_NSIS_MUI_UNIICON "${Monteverdi_SOURCE_DIR}/Data/Icons/monteverdi.ico")
 
   SET(CPACK_COMPONENTS_ALL)
   LIST(APPEND CPACK_COMPONENTS_ALL  "Resources")
@@ -93,7 +93,7 @@ function(create_cpack_config application)
   SET(CPACK_COMPONENT_RESOURCES_HIDDEN ON)
 
   SET(CPACK_COMPONENT_MAPLA_REQUIRED ON)
-  SET(CPACK_COMPONENT_MONTEVERDI2_REQUIRED ON)
+  SET(CPACK_COMPONENT_MONTEVERDI_REQUIRED ON)
 
   SET(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${application};ALL;/")
 
@@ -125,7 +125,7 @@ function(configure_app_package app need_apps)
 
     # The following DLL handling is very specific
     # both to OSGeo4W flavour (32 bit or 64 bit), OSGeo4W package state
-    # and the compiler used to make the Monteverdi2 installer (VC2010)
+    # and the compiler used to make the Monteverdi installer (VC2010)
     # Don't expect too much of it without VC2010.
 
     # For some reason, fixup_bundle won't package the msvc runtime dll
@@ -175,11 +175,11 @@ function(configure_app_package app need_apps)
       COMPONENT Runtime)
 
     install(
-      FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/${EXECUTABLE_NAME}.bat
+      FILES ${Monteverdi_SOURCE_DIR}/Packaging/Windows/${EXECUTABLE_NAME}.bat
       DESTINATION bin
       COMPONENT ${app})
 
-    if(Monteverdi2_USE_CPACK )
+    if(Monteverdi_USE_CPACK )
       set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${app}")
       create_cpack_config(${app})
     endif()
@@ -197,7 +197,7 @@ function(configure_app_package app need_apps)
     set(APP_DATA_DIR ${APP_PREFIX_DIR}/Resources/gdal)
 
     install(
-      FILES ${CMAKE_SOURCE_DIR}/Packaging/MacOS/Monteverdi2.icns
+      FILES ${CMAKE_SOURCE_DIR}/Packaging/MacOS/Monteverdi.icns
       DESTINATION ${APP_PREFIX_DIR}/Resources
       COMPONENT Resources)
 
@@ -224,7 +224,7 @@ function(configure_app_package app need_apps)
       get_filename_component(APP_TS_FILENAME ${APP_TS_FILE} NAME_WE)
       install(
         FILES ${CMAKE_BINARY_DIR}/i18n/${APP_TS_FILENAME}.qm
-        DESTINATION ${APP_PREFIX_DIR}/${Monteverdi2_INSTALL_DATA_DIR}/i18n/
+        DESTINATION ${APP_PREFIX_DIR}/${Monteverdi_INSTALL_DATA_DIR}/i18n/
         COMPONENT Resources)
     endforeach()
 
@@ -257,7 +257,7 @@ function(configure_app_package app need_apps)
 
   file(TO_CMAKE_PATH "$ENV{GDAL_DATA}" GDAL_DATA)
   if(NOT GDAL_DATA)
-    if(Monteverdi2_USE_CPACK)
+    if(Monteverdi_USE_CPACK)
       message(FATAL_ERROR "Cannot generate installer without GDAL_DATA : GDAL_DATA")
     else()
       message(WARNING "Cannot generate installer without GDAL_DATA : GDAL_DATA")
@@ -324,7 +324,7 @@ macro(create_monteverdi_application)
 
   cmake_parse_arguments(APPLICATION  "" "NAME;OUTPUT_NAME;COMPONENT_NAME;NEEDS_OTB_APPS" "SOURCES;LINK_LIBRARIES" ${ARGN} )
 
-  if(Monteverdi2_USE_CPACK)
+  if(Monteverdi_USE_CPACK)
 
     if(NOT DEFINED APPLICATION_NEEDS_OTB_APPS OR APPLICATION_NEEDS_OTB_APPS)
       set(APPLICATION_NEEDS_OTB_APPS TRUE)
@@ -356,7 +356,7 @@ macro(create_monteverdi_application)
   endif()
 
   if(APPLE)
-    if(Monteverdi2_USE_CPACK)
+    if(Monteverdi_USE_CPACK)
       set(MACOS_FILES_DIR "${CMAKE_SOURCE_DIR}/Packaging/MacOS")
 
       configure_file(${MACOS_FILES_DIR}/Info.plist.in
@@ -368,7 +368,7 @@ macro(create_monteverdi_application)
 	      @ONLY)
 
       set_target_properties(${APPLICATION_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Code/Application/${APPLICATION_NAME}/Info.plist")
-    endif(Monteverdi2_USE_CPACK)
+    endif(Monteverdi_USE_CPACK)
 
   endif(APPLE)
 
@@ -378,16 +378,16 @@ macro(create_monteverdi_application)
 install(
   TARGETS ${APPLICATION_NAME}
   BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT ${APPLICATION_COMPONENT_NAME}
-  RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT ${APPLICATION_COMPONENT_NAME}
-  LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT ${APPLICATION_COMPONENT_NAME}
-  ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT ${APPLICATION_COMPONENT_NAME}
+  RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR} COMPONENT ${APPLICATION_COMPONENT_NAME}
+  LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT ${APPLICATION_COMPONENT_NAME}
+  ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT ${APPLICATION_COMPONENT_NAME}
   )
 
 #############################################################################
 
-if(Monteverdi2_USE_CPACK)
+if(Monteverdi_USE_CPACK)
   configure_app_package(${APPLICATION_COMPONENT_NAME} ${APPLICATION_NEEDS_OTB_APPS})
-endif(Monteverdi2_USE_CPACK)
+endif(Monteverdi_USE_CPACK)
 
 
 endmacro(create_monteverdi_application)

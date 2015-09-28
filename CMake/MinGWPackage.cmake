@@ -30,21 +30,21 @@ macro(package_mingw)
   endif()
   install_common(${PACKAGE_NEEDS_OTB_APPS})
 
-  ##################################"#monteverdi2 stuff ##################################################
-  file(GLOB MVD_BATFILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/*.bat)
+  ################################### Monteverdi stuff ######################
+  file(GLOB MVD_BATFILES ${Monteverdi_SOURCE_DIR}/Packaging/Windows/*.bat)
   foreach(MVD_BATFILE ${MVD_BATFILES})
     install(
       FILES ${MVD_BATFILE}
       DESTINATION "${PACKAGE_PREFIX_DIR}/bin")
   endforeach()
 
-  file(GLOB APP_TS_FILES ${Monteverdi2_SOURCE_DIR}/i18n/*.ts) # qm files
+  file(GLOB APP_TS_FILES ${Monteverdi_SOURCE_DIR}/i18n/*.ts) # qm files
   foreach(APP_TS_FILE ${APP_TS_FILES})
     get_filename_component(APP_TS_FILENAME ${APP_TS_FILE} NAME_WE)
-    install(FILES ${Monteverdi2_BINARY_DIR}/i18n/${APP_TS_FILENAME}.qm
-      DESTINATION ${PACKAGE_PREFIX_DIR}/${Monteverdi2_INSTALL_DATA_DIR}/i18n)
+    install(FILES ${Monteverdi_BINARY_DIR}/i18n/${APP_TS_FILENAME}.qm
+      DESTINATION ${PACKAGE_PREFIX_DIR}/${Monteverdi_INSTALL_DATA_DIR}/i18n)
   endforeach()
-  ##################################"#monteverdi2 stuff ##################################################
+  ################################### Monteverdi stuff ######################
 
 
   #dependency resolution based on copydlldeps.sh from mxe by Timothy Gu

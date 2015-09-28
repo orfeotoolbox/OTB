@@ -34,15 +34,15 @@
     </message>
 </context>
 <context>
-    <name>Monteverdi2</name>
+    <name>Monteverdi</name>
     <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
     </message>
     <message>
-        <source>Monteverdi2 - Critical error!</source>
-        <translation>Monteverdi2 - Erreur critique !</translation>
+        <source>Monteverdi - Critical error!</source>
+        <translation>Monteverdi - Erreur critique !</translation>
     </message>
     <message>
         <source>Error when creating repository cache-directory:
@@ -53,20 +53,20 @@ Application will exit!</source>
 L&apos;application va se terminer !</translation>
     </message>
     <message>
-        <source>Monteverdi2 - Warning!</source>
-        <translation>Monteverdi2 - Avertissement !</translation>
+        <source>Monteverdi - Warning!</source>
+        <translation>Monteverdi - Avertissement !</translation>
     </message>
     <message>
         <source>There are %1 outdated dataset(s) in cache-directory.
 
-Please remove cache-directory &apos;%2&apos; and restart Monteverdi2
+Please remove cache-directory &apos;%2&apos; and restart Monteverdi
 
-Do you want to delete cache-directory &apos;%2&apos; before quitting Monteverdi2?</source>
+Do you want to delete cache-directory &apos;%2&apos; before quitting Monteverdi?</source>
         <translation>Il y a %1 jeu(x) de données obsolète(s) dans le répertoire de cache.
 
-Veuillez supprimer le répertoire de cache  &apos;%2&apos; avant de redémarrer Monteverdi2.
+Veuillez supprimer le répertoire de cache  &apos;%2&apos; avant de redémarrer Monteverdi.
 
-Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Monteverdi2 ?</translation>
+Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Monteverdi ?</translation>
     </message>
     <message>
         <source>Tryed to remove home dir.</source>
@@ -85,32 +85,32 @@ Application will exit!</source>
 L&apos;application va se terminer !</translation>
     </message>
     <message>
-        <source>Your Monteverdi2 cache-directory is set to your home directory &apos;%1&apos;. Deletion of cache-directory is aborted to avoid unrecoverable loss of all your account data.
+        <source>Your Monteverdi cache-directory is set to your home directory &apos;%1&apos;. Deletion of cache-directory is aborted to avoid unrecoverable loss of all your account data.
 
-It is generally a bad idea to set Monteverdi2 cache-directory to your home directory. Please choose another sub-directory.
+It is generally a bad idea to set Monteverdi cache-directory to your home directory. Please choose another sub-directory.
 
 Application will now exit.</source>
-        <translation>Le répertoire de cache Monteverdi2 est défini comme étant votre répertoire d&apos;accueil &apos;%1&apos;. La suppression du répertoire de cache est annulée pour éviter toute perte irrémédiable de données.
+        <translation>Le répertoire de cache Monteverdi est défini comme étant votre répertoire d&apos;accueil &apos;%1&apos;. La suppression du répertoire de cache est annulée pour éviter toute perte irrémédiable de données.
 
-Il n&apos;est générallement pas conseillé de définir le répertoire de cache de Monteverdi2 comment étant votre répertoire d&apos;accueil. Veuillez, s&apos;il vous plait, choisir un autre sous-répertoire.
+Il n&apos;est générallement pas conseillé de définir le répertoire de cache de Monteverdi comment étant votre répertoire d&apos;accueil. Veuillez, s&apos;il vous plait, choisir un autre sous-répertoire.
 
 L&apos;apllication va se terminer.</translation>
     </message>
     <message>
-        <source>Failed to open Monteverdi2 database.
+        <source>Failed to open Monteverdi database.
 
 Application will now exit!
 
 %2
 
-Please, remove your Monteverdi2 cache-directory.</source>
-        <translation>Échec lors de l&apos;ouverture de la base de données Monteverdi2.
+Please, remove your Monteverdi cache-directory.</source>
+        <translation>Échec lors de l&apos;ouverture de la base de données Monteverdi.
 
 L&apos;application va se terminer !
 
 %2
 
-Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi2.</translation>
+Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.</translation>
     </message>
 </context>
 <context>
@@ -131,11 +131,11 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi2
         <translation>À propos de...</translation>
     </message>
     <message>
-        <source>Monteverdi2</source>
+        <source>Monteverdi</source>
         <translation></translation>
     </message>
     <message>
-        <source>&lt;br /&gt;&lt;p&gt;Copyright (c) Centre National d&apos;Etudes Spatiales. All rights reserved.&lt;/p&gt;&lt;p&gt;See Copyright.txt for details.&lt;/p&gt;&lt;br /&gt;&lt;p&gt;Monteverdi2 is distributed under the CeCILL licence version 2. See&lt;/p&gt;&lt;p&gt;Licence_CeCILL_V2-en.txt or&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt&quot;&gt;http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt&lt;/a&gt; for more details.&lt;/p&gt;&lt;br /&gt;&lt;p&gt;This software is distributed WITHOUT ANY WARRANTY; without even&lt;/p&gt;&lt;p&gt;the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR&lt;/p&gt;&lt;p&gt;PURPOSE.  See the above copyright notices for more information&lt;/a&gt;.&lt;/p&gt;&lt;br /&gt;</source>
+        <source>&lt;br /&gt;&lt;p&gt;Copyright (c) Centre National d&apos;Etudes Spatiales. All rights reserved.&lt;/p&gt;&lt;p&gt;See Copyright.txt for details.&lt;/p&gt;&lt;br /&gt;&lt;p&gt;Monteverdi is distributed under the CeCILL licence version 2. See&lt;/p&gt;&lt;p&gt;Licence_CeCILL_V2-en.txt or&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt&quot;&gt;http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt&lt;/a&gt; for more details.&lt;/p&gt;&lt;br /&gt;&lt;p&gt;This software is distributed WITHOUT ANY WARRANTY; without even&lt;/p&gt;&lt;p&gt;the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR&lt;/p&gt;&lt;p&gt;PURPOSE.  See the above copyright notices for more information&lt;/a&gt;.&lt;/p&gt;&lt;br /&gt;</source>
         <translation></translation>
     </message>
     <message>
@@ -1399,14 +1399,14 @@ Do you want to save settings before quitting?</source>
 Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
-        <source>Monteverdi2 maintains a repository where cached data related to images is stored (such as, for example, color-settings, histogram, quicklook etc.).
+        <source>Monteverdi maintains a repository where cached data related to images is stored (such as, for example, color-settings, histogram, quicklook etc.).
 
 Default cache-directory location is: &apos;%1&apos;.
 
 Warning:
 - Your account needs to have write access to this directory;
 - Please be aware that this directory can consume significant disk space.</source>
-        <translation>Monteverdi2 maintient un dépôt où sont stockées des données additionnelles liées à chaque image (par exemple, réglage d&apos;affichage, histogrammes, aperçus etc.).
+        <translation>Monteverdi maintient un dépôt où sont stockées des données additionnelles liées à chaque image (par exemple, réglage d&apos;affichage, histogrammes, aperçus etc.).
 
 L&apos;emplacement par défaut du répertoire de cache est : &apos;%1&apos;.
 
@@ -1415,12 +1415,12 @@ Attention :
 - Soyez conscients que ce répertoire peut grossir and consommer un espace disque significatif.</translation>
     </message>
     <message>
-        <source>Please, select directory where the Monteverdi2 cache repository will be stored.</source>
-        <translation>Veuillez sélectionner le répertoire où sera stocké le dépôt de Monteverdi2.</translation>
+        <source>Please, select directory where the Monteverdi cache repository will be stored.</source>
+        <translation>Veuillez sélectionner le répertoire où sera stocké le dépôt de Monteverdi.</translation>
     </message>
     <message>
-        <source>Welcome new Monteverdi2 user!</source>
-        <translation>Bienvenu, nouvel utilisateur Monteverdi2 !</translation>
+        <source>Welcome new Monteverdi user!</source>
+        <translation>Bienvenu, nouvel utilisateur Monteverdi !</translation>
     </message>
     <message>
         <source>The selected directory already contain a mvd2 directory, no new database will be created</source>
@@ -1487,8 +1487,8 @@ Attention :
         <translation>Version OpenGL &apos;%1&apos; détectée avec GLSL version &apos;%2&apos;.</translation>
     </message>
     <message>
-        <source>Monteverdi2 - Critical error!</source>
-        <translation>Monteverdi2 - Erreur critique !</translation>
+        <source>Monteverdi - Critical error!</source>
+        <translation>Monteverdi - Erreur critique !</translation>
     </message>
     <message>
         <source>Current OpenGL version is &apos;%1&apos; supporting OpenGL Shading-Language (GLSL) version &apos;%2&apos;.
@@ -1648,7 +1648,7 @@ Merci d&apos;en choisir un autre.</translation>
 Warning:
 You need to have write access to this directory.
 Be aware that this directory can grow and consume a significant disk space.</source>
-        <translation type="obsolete">Monteverdi2 maintient un répertoire pour stocker des données additionnelles liées à chaque image (réglage d&apos;affichage, histogrammes, aperçus...).
+        <translation type="obsolete">Monteverdi maintient un répertoire pour stocker des données additionnelles liées à chaque image (réglage d&apos;affichage, histogrammes, aperçus...).
 
 Attention:
 Vous devez posséder les droits d&apos;écriture sur ce répertoire.
@@ -1661,8 +1661,8 @@ Soyez conscients que ce répertoire peut grossir and consommer un espace disque 
 (&apos;Non&apos; utilisera l&apos;emplacement par défaut : %1)</translation>
     </message>
     <message>
-        <source>Select the repository to store the cache repository for Monteverdi2</source>
-        <translation type="obsolete">Sélectionnez le répertoire où stocker le cache de Monteverdi2</translation>
+        <source>Select the repository to store the cache repository for Monteverdi</source>
+        <translation type="obsolete">Sélectionnez le répertoire où stocker le cache de Monteverdi</translation>
     </message>
     <message>
         <source>Error</source>
@@ -1744,7 +1744,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Welcome new Montevedi2 user !</source>
-        <translation type="obsolete">Bienvenu, nouvel utilisateur Monteverdi2 !</translation>
+        <translation type="obsolete">Bienvenu, nouvel utilisateur Monteverdi !</translation>
     </message>
     <message>
         <source>Import image-file.</source>
@@ -1767,8 +1767,8 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
         <translation>Ctrl+-</translation>
     </message>
     <message>
-        <source>Monteverdi2 - Warning!</source>
-        <translation>Monteverdi2 - Avertissement !</translation>
+        <source>Monteverdi - Warning!</source>
+        <translation>Monteverdi - Avertissement !</translation>
     </message>
     <message>
         <source>Histogram</source>
@@ -1926,8 +1926,8 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
         <translation></translation>
     </message>
     <message>
-        <source>Select the repository to store the cache repository for Monteverdi2</source>
-        <translation type="obsolete">Sélectionnez le répertoire où stocker le cache de Monteverdi2</translation>
+        <source>Select the repository to store the cache repository for Monteverdi</source>
+        <translation type="obsolete">Sélectionnez le répertoire où stocker le cache de Monteverdi</translation>
     </message>
     <message>
         <source>Warning</source>

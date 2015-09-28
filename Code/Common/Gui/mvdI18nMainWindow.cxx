@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -305,11 +305,11 @@ I18nMainWindow
 
   QMessageBox messageBox;
 
-  messageBox.setWindowTitle( tr( "Welcome new Monteverdi2 user!" ) );
+  messageBox.setWindowTitle( tr( "Welcome new Monteverdi user!" ) );
 
   messageBox.setText(
     tr(
-      "Monteverdi2 maintains a repository where cached data related to images is stored "
+      "Monteverdi maintains a repository where cached data related to images is stored "
       "(such as, for example, color-settings, histogram, quicklook etc.)."
       "\n\n"
       "Default cache-directory location is: '%1'."
@@ -335,7 +335,7 @@ I18nMainWindow
       I18nMainWindow::GetExistingDirectory(
         this,
         tr(
-          "Please, select directory where the Monteverdi2"
+          "Please, select directory where the Monteverdi"
           " cache repository will be stored."
         ),
         dir.path()

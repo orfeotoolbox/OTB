@@ -18,7 +18,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -31,7 +31,7 @@
 #include "mvdApplication.h"
 #include "mvdMainWindow.h"
 
-int mvdMonteverdi2ApplicationTest(int argc, char* argv[])
+int mvdMonteverdiApplicationTest(int argc, char* argv[])
 {
   QApplication qtApp( argc, argv );
 

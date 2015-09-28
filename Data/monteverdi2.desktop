@@ -1,13 +1,13 @@
 [Desktop Entry]
 Type=Application
-Name=Monteverdi2
-Name[fr_FR]=Monteverdi2
+Name=Monteverdi
+Name[fr_FR]=Monteverdi
 GenericName=Image processing
 Comment=Remote sensing image processing application based on OrfeoToolbox
-TryExec=/usr/bin/monteverdi2
-Exec=/usr/bin/monteverdi2 %F
+TryExec=/usr/bin/monteverdi
+Exec=/usr/bin/monteverdi %F
 Terminal=false
 StartupNotify=false
-Icon=monteverdi2
+Icon=monteverdi
 Categories=Education;Science;ImageProcessing;Geography;Qt;
 MimeType=image/tiff;image/jpeg;image/jp2;application/x-esri-shape;

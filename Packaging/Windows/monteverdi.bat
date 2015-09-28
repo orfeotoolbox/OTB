@@ -14,4 +14,4 @@
 @cd %HOMEDRIVE%%HOMEPATH%
 
 :: Start Monteverdi
-@start "Monteverdi2 Viewer" /B "%CURRENT_SCRIPT_DIR%mv2.exe" %*
+@start "Monteverdi Viewer" /B "%CURRENT_SCRIPT_DIR%monteverdi.exe" %*

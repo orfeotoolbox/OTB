@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -698,7 +698,7 @@ I18nCoreApplication
   QDir prefix( bin_dir );
   while ( prefix.cdUp() )
     {
-    if ( QDir(prefix).cd(Monteverdi2_INSTALL_BIN_DIR) )
+    if ( QDir(prefix).cd(Monteverdi_INSTALL_BIN_DIR) )
       {
       prefixFound = true;
       break;
@@ -716,7 +716,7 @@ I18nCoreApplication
   QDir i18n_dir( prefix );
 
   // At this point the candidate install prefix can also be the build dir root
-  if ( prefix.exists( Monteverdi2_CONFIGURE_FILE )
+  if ( prefix.exists( Monteverdi_CONFIGURE_FILE )
        && i18n_dir.cd("i18n") )
     {
     m_IsRunningFromBuildDir = true;
@@ -739,7 +739,7 @@ I18nCoreApplication
       << tr( "Running from install directory '%1'." )
       .arg( prefix.path() );
 
-    if (i18n_dir.cd(Monteverdi2_INSTALL_DATA_I18N_DIR))
+    if (i18n_dir.cd(Monteverdi_INSTALL_DATA_I18N_DIR))
       {
       qDebug()
 	<< tr( "Loading translation files from directory '%1'." )
@@ -753,7 +753,7 @@ I18nCoreApplication
 	  .arg( QDir::cleanPath(
 		  prefix.path()
 		  + QDir::separator()
-		  + Monteverdi2_INSTALL_DATA_I18N_DIR
+		  + Monteverdi_INSTALL_DATA_I18N_DIR
 		)
 	  )
 	)
@@ -778,7 +778,7 @@ I18nCoreApplication
   try
     {
     //
-    // 3.2 Stack Monteverdi2 translator as prioritary over Qt translator.
+    // 3.2 Stack Monteverdi translator as prioritary over Qt translator.
     LoadAndInstallTranslator( sys_lc.name(), i18n_dir.path() );
     }
   catch( std::exception& exc )

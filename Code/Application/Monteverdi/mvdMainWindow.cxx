@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
   Date:      $Date$
   Version:   $Revision$

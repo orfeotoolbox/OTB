@@ -46,7 +46,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Monteverdi2</string>
+          <string>Monteverdi</string>
          </property>
          <property name="scaledContents">
           <bool>false</bool>
@@ -98,7 +98,7 @@
         <enum>QFrame::NoFrame</enum>
        </property>
        <property name="text">
-        <string>&lt;br /&gt;&lt;p&gt;Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.&lt;/p&gt;&lt;p&gt;See Copyright.txt for details.&lt;/p&gt;&lt;br /&gt;&lt;p&gt;Monteverdi2 is distributed under the CeCILL licence version 2. See&lt;/p&gt;&lt;p&gt;Licence_CeCILL_V2-en.txt or&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt&quot;&gt;http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt&lt;/a&gt; for more details.&lt;/p&gt;&lt;br /&gt;&lt;p&gt;This software is distributed WITHOUT ANY WARRANTY; without even&lt;/p&gt;&lt;p&gt;the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR&lt;/p&gt;&lt;p&gt;PURPOSE.  See the above copyright notices for more information&lt;/a&gt;.&lt;/p&gt;&lt;br /&gt;</string>
+        <string>&lt;br /&gt;&lt;p&gt;Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.&lt;/p&gt;&lt;p&gt;See Copyright.txt for details.&lt;/p&gt;&lt;br /&gt;&lt;p&gt;Monteverdi is distributed under the CeCILL licence version 2. See&lt;/p&gt;&lt;p&gt;Licence_CeCILL_V2-en.txt or&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt&quot;&gt;http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt&lt;/a&gt; for more details.&lt;/p&gt;&lt;br /&gt;&lt;p&gt;This software is distributed WITHOUT ANY WARRANTY; without even&lt;/p&gt;&lt;p&gt;the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR&lt;/p&gt;&lt;p&gt;PURPOSE.  See the above copyright notices for more information&lt;/a&gt;.&lt;/p&gt;&lt;br /&gt;</string>
        </property>
       </widget>
      </item>

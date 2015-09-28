@@ -1,7 +1,7 @@
 <RCC>
   <qresource prefix="/icons">
     <file>../../../Data/Icons/zoom-1to1.png</file>
-    <file alias="otb">../../../Data/Icons/monteverdi2-32x32.png</file>
+    <file alias="otb">../../../Data/Icons/monteverdi-32x32.png</file>
     <file alias="process">../../../Data/Icons/alg.png</file>
     <file>../../../Data/Icons/execute.png</file>
     <file>../../../Data/Icons/locked.png</file>
@@ -14,7 +14,7 @@
     <file alias="action_Open_Icon">../../../Data/Icons/document-open_32x32.png</file>
   </qresource>
   <qresource prefix="/images">
-    <file alias="application_icon">../../../Data/Icons/monteverdi2-128x128.png</file>
-    <file alias="application_splash">../../../Data/Icons/monteverdi2-splash.png</file>
+    <file alias="application_icon">../../../Data/Icons/monteverdi-128x128.png</file>
+    <file alias="application_splash">../../../Data/Icons/monteverdi-splash.png</file>
   </qresource>
 </RCC>

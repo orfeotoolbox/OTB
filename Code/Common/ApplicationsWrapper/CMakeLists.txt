@@ -26,13 +26,13 @@ set( Common_ApplicationsWrapper_HEADERS_MOC
 #############################################################################
 
 include_directories(
-  ${Monteverdi2_BINARY_DIR}
+  ${Monteverdi_BINARY_DIR}
   #
-  ${Monteverdi2_SOURCE_DIR}/Code/Common
-  #${Monteverdi2_SOURCE_DIR}/Code/Common/ApplicationsWrapper
+  ${Monteverdi_SOURCE_DIR}/Code/Common
+  #${Monteverdi_SOURCE_DIR}/Code/Common/ApplicationsWrapper
   #
-  ${Monteverdi2_BINARY_DIR}/Code/Common
-  ${Monteverdi2_BINARY_DIR}/Code/Common/ApplicationsWrapper
+  ${Monteverdi_BINARY_DIR}/Code/Common
+  ${Monteverdi_BINARY_DIR}/Code/Common/ApplicationsWrapper
 )
 
 #############################################################################
@@ -50,7 +50,7 @@ add_to_qt4_i18n_sources(
 )
 
 #############################################################################
-add_library(Monteverdi2_ApplicationsWrapper
+add_library(Monteverdi_ApplicationsWrapper
   ${Common_ApplicationsWrapper_SOURCES}
   ${Common_ApplicationsWrapper_FORMS_HEADERS}
   ${Common_ApplicationsWrapper_SRC_MOC}
@@ -58,26 +58,26 @@ add_library(Monteverdi2_ApplicationsWrapper
 )
 
 #############################################################################
-target_link_libraries(Monteverdi2_ApplicationsWrapper
-  Monteverdi2_Core
-  Monteverdi2_Gui
+target_link_libraries(Monteverdi_ApplicationsWrapper
+  Monteverdi_Core
+  Monteverdi_Gui
   ${OTB_LIBRARIES}
   ${OPENGL_LIBRARIES}
   Qt4::QtGui
   Qt4::QtOpenGL # Why OpenGL?
 )
 
-set_target_properties(Monteverdi2_ApplicationsWrapper
-  PROPERTIES ${Monteverdi2_LIBRARY_PROPERTIES}
+set_target_properties(Monteverdi_ApplicationsWrapper
+  PROPERTIES ${Monteverdi_LIBRARY_PROPERTIES}
 )
 
 #############################################################################
 # INSTALL Common application.
 install(
-  TARGETS Monteverdi2_ApplicationsWrapper
-  RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT Runtime
-  LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Runtime
-  ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Development
+  TARGETS Monteverdi_ApplicationsWrapper
+  RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR} COMPONENT Runtime
+  LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Runtime
+  ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Development
 )
 
 #############################################################################

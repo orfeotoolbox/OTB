@@ -13,4 +13,4 @@
 @cd %HOMEDRIVE%%HOMEPATH%
 
 :: Start Monteverdi
-@start "Monteverdi2 Application Launcher" /B "%CURRENT_SCRIPT_DIR%mapla.exe" %*
+@start "Monteverdi Application Launcher" /B "%CURRENT_SCRIPT_DIR%mapla.exe" %*

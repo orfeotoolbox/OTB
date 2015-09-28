@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -20,7 +20,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 
 /*****************************************************************************/
@@ -166,8 +166,8 @@ main( int argc, char* argv[] )
           QCoreApplication::translate(
             PROJECT_NAME,
             "There are %1 outdated dataset(s) in cache-directory.\n\n"
-            "Please remove cache-directory '%2' and restart Monteverdi2\n\n"
-            "Do you want to delete cache-directory '%2' before quitting Monteverdi2?"
+            "Please remove cache-directory '%2' and restart Monteverdi\n\n"
+            "Do you want to delete cache-directory '%2' before quitting Monteverdi?"
           ).arg( nb ).arg( application->GetCacheDir().path() ),
           QMessageBox::Yes | QMessageBox::No,
           QMessageBox::Yes
@@ -180,7 +180,7 @@ main( int argc, char* argv[] )
           // throw std::runtime_error(
           //   mvd::ToStdString(
           //     QCoreApplication::translate(
-          //       "Monteverdi2",
+          //       "Monteverdi",
           //       "Tryed to remove home dir."
           //     )
           //   )
@@ -194,7 +194,7 @@ main( int argc, char* argv[] )
             ),
             QCoreApplication::translate(
               PROJECT_NAME,
-              "Your Monteverdi2 cache-directory is set to your home directory '%1'. Deletion of cache-directory is aborted to avoid unrecoverable loss of all your account data.\n\nIt is generally a bad idea to set Monteverdi2 cache-directory to your home directory. Please choose another sub-directory.\n\nApplication will now exit."
+              "Your Monteverdi cache-directory is set to your home directory '%1'. Deletion of cache-directory is aborted to avoid unrecoverable loss of all your account data.\n\nIt is generally a bad idea to set Monteverdi cache-directory to your home directory. Please choose another sub-directory.\n\nApplication will now exit."
             )
             .arg( application->GetCacheDir().path() ),
             QMessageBox::Ok
@@ -221,7 +221,7 @@ main( int argc, char* argv[] )
       ),
       QCoreApplication::translate(
         PROJECT_NAME,
-        "Failed to open Monteverdi2 database.\n\nApplication will now exit!\n\n%2\n\nPlease, remove your Monteverdi2 cache-directory."
+        "Failed to open Monteverdi database.\n\nApplication will now exit!\n\n%2\n\nPlease, remove your Monteverdi cache-directory."
       )
       .arg( exc.what() ),
       QMessageBox::Ok

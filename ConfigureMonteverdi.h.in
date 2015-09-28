@@ -1,41 +1,41 @@
-#ifndef __ConfigureMonteverdi2_h
-#define __ConfigureMonteverdi2_h
+#ifndef __ConfigureMonteverdi_h
+#define __ConfigureMonteverdi_h
 
 //
 // Windows DLL import/export macros.
 #cmakedefine BUILD_SHARED_LIBS
 #if defined( _WIN32 ) || defined( _WIN64 ) || defined(WIN32)
    #ifdef  BUILD_SHARED_LIBS
-      #define Monteverdi2_IMPORT __declspec(dllimport)
-      #define Monteverdi2_EXPORT __declspec(dllexport)
+      #define Monteverdi_IMPORT __declspec(dllimport)
+      #define Monteverdi_EXPORT __declspec(dllexport)
    #else
       // Empty definition when build statically.
-      #define Monteverdi2_IMPORT
-      #define Monteverdi2_EXPORT
+      #define Monteverdi_IMPORT
+      #define Monteverdi_EXPORT
    #endif
 #else 
    //Empty definition on non Windows plateforms.
-   #define Monteverdi2_IMPORT
-   #define Monteverdi2_EXPORT
+   #define Monteverdi_IMPORT
+   #define Monteverdi_EXPORT
 #endif
 
 //
-// Monteverdi2 project
+// Monteverdi project
 #define PROJECT_NAME "@PROJECT_NAME@"
 
 //
-// Monteverdi2 version.
-#define Monteverdi2_VERSION_MAJOR @Monteverdi2_VERSION_MAJOR@
-#define Monteverdi2_VERSION_MINOR @Monteverdi2_VERSION_MINOR@
-#define Monteverdi2_VERSION_PATCH @Monteverdi2_VERSION_PATCH@
-#define Monteverdi2_VERSION_STRING "@Monteverdi2_VERSION_STRING@"
+// Monteverdi version.
+#define Monteverdi_VERSION_MAJOR @Monteverdi_VERSION_MAJOR@
+#define Monteverdi_VERSION_MINOR @Monteverdi_VERSION_MINOR@
+#define Monteverdi_VERSION_PATCH @Monteverdi_VERSION_PATCH@
+#define Monteverdi_VERSION_STRING "@Monteverdi_VERSION_STRING@"
 
 //
-// Monteverdi2 data version.
-#define Monteverdi2_DATA_VERSION_MAJOR @Monteverdi2_DATA_VERSION_MAJOR@
-#define Monteverdi2_DATA_VERSION_MINOR @Monteverdi2_DATA_VERSION_MINOR@
-#define Monteverdi2_DATA_VERSION_PATCH @Monteverdi2_DATA_VERSION_PATCH@
-#define Monteverdi2_DATA_VERSION_STRING "@Monteverdi2_DATA_VERSION_STRING@"
+// Monteverdi data version.
+#define Monteverdi_DATA_VERSION_MAJOR @Monteverdi_DATA_VERSION_MAJOR@
+#define Monteverdi_DATA_VERSION_MINOR @Monteverdi_DATA_VERSION_MINOR@
+#define Monteverdi_DATA_VERSION_PATCH @Monteverdi_DATA_VERSION_PATCH@
+#define Monteverdi_DATA_VERSION_STRING "@Monteverdi_DATA_VERSION_STRING@"
 
 //
 //
@@ -46,22 +46,22 @@
 
 //
 // Directories
-#define Monteverdi2_INSTALL_BIN_DIR "@Monteverdi2_INSTALL_BIN_DIR@"
-#define Monteverdi2_INSTALL_INCLUDE_DIR "@Monteverdi2_INSTALL_INCLUDE_DIR@"
-#define Monteverdi2_INSTALL_LIB_DIR "@Monteverdi2_INSTALL_LIB_DIR@"
-#define Monteverdi2_INSTALL_DATA_DIR "@Monteverdi2_INSTALL_DATA_DIR@"
+#define Monteverdi_INSTALL_BIN_DIR "@Monteverdi_INSTALL_BIN_DIR@"
+#define Monteverdi_INSTALL_INCLUDE_DIR "@Monteverdi_INSTALL_INCLUDE_DIR@"
+#define Monteverdi_INSTALL_LIB_DIR "@Monteverdi_INSTALL_LIB_DIR@"
+#define Monteverdi_INSTALL_DATA_DIR "@Monteverdi_INSTALL_DATA_DIR@"
 //
 // Sub-directories
-#define Monteverdi2_INSTALL_DATA_I18N_DIR Monteverdi2_INSTALL_DATA_DIR "/i18n"
+#define Monteverdi_INSTALL_DATA_I18N_DIR Monteverdi_INSTALL_DATA_DIR "/i18n"
 
 //
 // Files
-#define Monteverdi2_CONFIGURE_FILE "@Monteverdi2_CONFIGURE_FILE@"
+#define Monteverdi_CONFIGURE_FILE "@Monteverdi_CONFIGURE_FILE@"
 
 //
 // Miscellaneous
-#define Monteverdi2_FLOATING_TYPE @Monteverdi2_FLOATING_TYPE@
-#define Monteverdi2_DIMENSION int( 2 )
+#define Monteverdi_FLOATING_TYPE @Monteverdi_FLOATING_TYPE@
+#define Monteverdi_DIMENSION int( 2 )
 
 //
 // Qt Message handling and logging.
@@ -141,4 +141,4 @@
 // #if (defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
 #define USE_OPTION_SAMPLE ((defined( _DEBUG )  && 0) || 0)
 
-#endif // __ConfigureMonteverdi2_h
+#endif // __ConfigureMonteverdi_h

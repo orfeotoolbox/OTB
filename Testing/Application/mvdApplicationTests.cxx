@@ -26,5 +26,5 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(mvdMonteverdi2ApplicationTest);
+  REGISTER_TEST(mvdMonteverdiApplicationTest);
 }

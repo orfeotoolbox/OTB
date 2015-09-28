@@ -56,7 +56,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
          <normaloff>:/icons/action_LayerTop_Icon</normaloff>:/icons/action_LayerTop_Icon</iconset>
        </property>
       </widget>
@@ -73,7 +73,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
          <normaloff>:/icons/action_LayerUp_Icon</normaloff>:/icons/action_LayerUp_Icon</iconset>
        </property>
       </widget>
@@ -90,7 +90,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
          <normaloff>:/icons/action_LayerDown_Icon</normaloff>:/icons/action_LayerDown_Icon</iconset>
        </property>
       </widget>
@@ -107,7 +107,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
          <normaloff>:/icons/action_LayerBottom_Icon</normaloff>:/icons/action_LayerBottom_Icon</iconset>
        </property>
       </widget>
@@ -124,7 +124,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
          <normaloff>:/icons/action_LayerProjection_Icon</normaloff>:/icons/action_LayerProjection_Icon</iconset>
        </property>
       </widget>
@@ -141,7 +141,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
          <normaloff>:/icons/action_ApplyAll_Icon</normaloff>:/icons/action_ApplyAll_Icon</iconset>
        </property>
       </widget>
@@ -158,7 +158,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
          <normaloff>:/icons/action_Reload_Icon</normaloff>:/icons/action_Reload_Icon</iconset>
        </property>
       </widget>
@@ -191,7 +191,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
          <normaloff>:/icons/action_LayerDeleteAll_Icon</normaloff>:/icons/action_LayerDeleteAll_Icon</iconset>
        </property>
       </widget>
@@ -208,7 +208,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
          <normaloff>:/icons/action_LayerDelete_Icon</normaloff>:/icons/action_LayerDelete_Icon</iconset>
        </property>
       </widget>
@@ -218,7 +218,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../Application/Monteverdi2/mvdMainWindow.qrc"/>
+  <include location="../../Application/Monteverdi/mvdMainWindow.qrc"/>
  </resources>
  <connections/>
 </ui>

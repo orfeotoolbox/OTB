@@ -1,4 +1,4 @@
-PROJECT(Monteverdi2)
+PROJECT(Monteverdi)
 
 cmake_minimum_required(VERSION 2.6)
 
@@ -32,26 +32,26 @@ endif()
 set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG" )
 
 #----------------------------------------------------------------------------
-# Monteverdi2 version number.  An even minor number corresponds to releases.
-set(Monteverdi2_VERSION_MAJOR "0")
-set(Monteverdi2_VERSION_MINOR "9")
-set(Monteverdi2_VERSION_PATCH "0")
+# Monteverdi version number.  An even minor number corresponds to releases.
+set(Monteverdi_VERSION_MAJOR "0")
+set(Monteverdi_VERSION_MINOR "9")
+set(Monteverdi_VERSION_PATCH "0")
 
 #----------------------------------------------------------------------------
-# Monteverdi2 data version number.  An even minor number corresponds to releases.
-set(Monteverdi2_DATA_VERSION_MAJOR "1")
-set(Monteverdi2_DATA_VERSION_MINOR "0")
-set(Monteverdi2_DATA_VERSION_PATCH "0")
+# Monteverdi data version number.  An even minor number corresponds to releases.
+set(Monteverdi_DATA_VERSION_MAJOR "1")
+set(Monteverdi_DATA_VERSION_MINOR "0")
+set(Monteverdi_DATA_VERSION_PATCH "0")
 
 #----------------------------------------------------------------------------
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
-set(Monteverdi2_VERSION_STRING "${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}.${Monteverdi2_VERSION_PATCH}")
+set(Monteverdi_VERSION_STRING "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}")
 #----------------------------------------------------------------------------
-set(Monteverdi2_DATA_VERSION_STRING "${Monteverdi2_DATA_VERSION_MAJOR}.${Monteverdi2_DATA_VERSION_MINOR}.${Monteverdi2_DATA_VERSION_PATCH}")
+set(Monteverdi_DATA_VERSION_STRING "${Monteverdi_DATA_VERSION_MAJOR}.${Monteverdi_DATA_VERSION_MINOR}.${Monteverdi_DATA_VERSION_PATCH}")
 
 #----------------------------------------------------------------------------
-set(Monteverdi2_FLOATING_TYPE "float" CACHE STRING "The type of data in which input images are read (double/float)." )
+set(Monteverdi_FLOATING_TYPE "float" CACHE STRING "The type of data in which input images are read (double/float)." )
 
 #----------------------------------------------------------------------------
 #Prevents conflicts with visual min/max function
@@ -141,20 +141,20 @@ find_package(GLEW REQUIRED)
 #----------------------------------------------------------------------------
 find_package(Mercurial QUIET)
 if(Mercurial_FOUND)
-  Mercurial_WC_IDENTIFY(${PROJECT_SOURCE_DIR} Monteverdi2)
+  Mercurial_WC_IDENTIFY(${PROJECT_SOURCE_DIR} Monteverdi)
   message(STATUS "Mercurial version is ${Mercurial_VERSION_HG}.")
-  message(STATUS "Repository revision is ${Monteverdi2_WC_REVISION}.")
-  set(Monteverdi2_WC_REVISION ${Monteverdi2_WC_REVISION} CACHE STRING "Repository version." FORCE)
-  mark_as_advanced(Monteverdi2_WC_REVISION)
-  if(Monteverdi2_WC_STATUS)
+  message(STATUS "Repository revision is ${Monteverdi_WC_REVISION}.")
+  set(Monteverdi_WC_REVISION ${Monteverdi_WC_REVISION} CACHE STRING "Repository version." FORCE)
+  mark_as_advanced(Monteverdi_WC_REVISION)
+  if(Monteverdi_WC_STATUS)
     message(STATUS "Local file modifications:")
-    message(STATUS ${Monteverdi2_WC_STATUS})
-  else(Monteverdi2_WC_STATUS)
+    message(STATUS ${Monteverdi_WC_STATUS})
+  else(Monteverdi_WC_STATUS)
     message(STATUS "No files modified locally")
-  endif(Monteverdi2_WC_STATUS)
-  string(REGEX REPLACE "\n" ";" Monteverdi2_WC_STATUS "${Monteverdi2_WC_STATUS}")
-  set(Monteverdi2_WC_STATUS ${Monteverdi2_WC_STATUS} CACHE STRING "Repository status." FORCE)
-  mark_as_advanced(Monteverdi2_WC_STATUS)
+  endif(Monteverdi_WC_STATUS)
+  string(REGEX REPLACE "\n" ";" Monteverdi_WC_STATUS "${Monteverdi_WC_STATUS}")
+  set(Monteverdi_WC_STATUS ${Monteverdi_WC_STATUS} CACHE STRING "Repository status." FORCE)
+  mark_as_advanced(Monteverdi_WC_STATUS)
 endif(Mercurial_FOUND)
 
 #----------------------------------------------------------------------------
@@ -179,41 +179,41 @@ endif(OTB_DATA_USE_LARGEINPUT)
 # set the Buildname for the dashboard
 set(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard.")
 
-option(Monteverdi2_USE_CPACK "Generate installer using CPack" OFF)
-mark_as_advanced(Monteverdi2_USE_CPACK)
+option(Monteverdi_USE_CPACK "Generate installer using CPack" OFF)
+mark_as_advanced(Monteverdi_USE_CPACK)
 
 #----------------------------------------------------------------------------
 # Installation directories:
-# Monteverdi2_INSTALL_BIN_DIR          - binary dir (executables)
-# Monteverdi2_INSTALL_LIB_DIR          - library dir (libs)
-# Monteverdi2_INSTALL_DATA_DIR         - share dir (say, examples, data, etc)
-# Monteverdi2_INSTALL_INCLUDE_DIR      - include dir (headers)
-# Monteverdi2_INSTALL_PACKAGE_DIR      - package/export configuration files
+# Monteverdi_INSTALL_BIN_DIR          - binary dir (executables)
+# Monteverdi_INSTALL_LIB_DIR          - library dir (libs)
+# Monteverdi_INSTALL_DATA_DIR         - share dir (say, examples, data, etc)
+# Monteverdi_INSTALL_INCLUDE_DIR      - include dir (headers)
+# Monteverdi_INSTALL_PACKAGE_DIR      - package/export configuration files
 
-if(NOT Monteverdi2_INSTALL_BIN_DIR)
-  set(Monteverdi2_INSTALL_BIN_DIR "bin")
-endif(NOT Monteverdi2_INSTALL_BIN_DIR)
+if(NOT Monteverdi_INSTALL_BIN_DIR)
+  set(Monteverdi_INSTALL_BIN_DIR "bin")
+endif(NOT Monteverdi_INSTALL_BIN_DIR)
 
-if(NOT Monteverdi2_INSTALL_LIB_DIR)
-  set(Monteverdi2_INSTALL_LIB_DIR "lib/otb")
-endif(NOT Monteverdi2_INSTALL_LIB_DIR)
+if(NOT Monteverdi_INSTALL_LIB_DIR)
+  set(Monteverdi_INSTALL_LIB_DIR "lib/otb")
+endif(NOT Monteverdi_INSTALL_LIB_DIR)
 
-if(NOT Monteverdi2_INSTALL_DATA_DIR)
-  set(Monteverdi2_INSTALL_DATA_DIR "share/otb")
-endif(NOT Monteverdi2_INSTALL_DATA_DIR)
+if(NOT Monteverdi_INSTALL_DATA_DIR)
+  set(Monteverdi_INSTALL_DATA_DIR "share/otb")
+endif(NOT Monteverdi_INSTALL_DATA_DIR)
 
-if(NOT Monteverdi2_INSTALL_INCLUDE_DIR)
-  set(Monteverdi2_INSTALL_INCLUDE_DIR "include/otb")
-endif(NOT Monteverdi2_INSTALL_INCLUDE_DIR)
+if(NOT Monteverdi_INSTALL_INCLUDE_DIR)
+  set(Monteverdi_INSTALL_INCLUDE_DIR "include/otb")
+endif(NOT Monteverdi_INSTALL_INCLUDE_DIR)
 
-if(NOT Monteverdi2_INSTALL_PACKAGE_DIR)
-  set(Monteverdi2_INSTALL_PACKAGE_DIR ${Monteverdi2_INSTALL_LIB_DIR})
-endif(NOT Monteverdi2_INSTALL_PACKAGE_DIR)
+if(NOT Monteverdi_INSTALL_PACKAGE_DIR)
+  set(Monteverdi_INSTALL_PACKAGE_DIR ${Monteverdi_INSTALL_LIB_DIR})
+endif(NOT Monteverdi_INSTALL_PACKAGE_DIR)
 
-if(APPLE AND Monteverdi2_USE_CPACK)
-  set(Monteverdi2_INSTALL_BIN_DIR "MacOS")
-  set(Monteverdi2_INSTALL_DATA_DIR "Resources/otb")
-endif(APPLE AND Monteverdi2_USE_CPACK)
+if(APPLE AND Monteverdi_USE_CPACK)
+  set(Monteverdi_INSTALL_BIN_DIR "MacOS")
+  set(Monteverdi_INSTALL_DATA_DIR "Resources/otb")
+endif(APPLE AND Monteverdi_USE_CPACK)
 
 #----------------------------------------------------------------------------
 include( PreventInSourceBuilds )
@@ -225,15 +225,15 @@ include( CPackFunctions )
 
 #----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
-set( Monteverdi2_CONFIGURE_FILE "ConfigureMonteverdi2.h" )
+set( Monteverdi_CONFIGURE_FILE "ConfigureMonteverdi.h" )
 configure_file(
-  ${Monteverdi2_SOURCE_DIR}/${Monteverdi2_CONFIGURE_FILE}.in
-  ${Monteverdi2_BINARY_DIR}/${Monteverdi2_CONFIGURE_FILE}
+  ${Monteverdi_SOURCE_DIR}/${Monteverdi_CONFIGURE_FILE}.in
+  ${Monteverdi_BINARY_DIR}/${Monteverdi_CONFIGURE_FILE}
 )
 
-set(Monteverdi2_LIBRARY_PROPERTIES
-    VERSION   "${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}.${Monteverdi2_VERSION_PATCH}"
-    SOVERSION "${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}"
+set(Monteverdi_LIBRARY_PROPERTIES
+    VERSION   "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}"
+    SOVERSION "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}"
 )
 
 #----------------------------------------------------------------------------
@@ -243,9 +243,9 @@ set(Monteverdi2_LIBRARY_PROPERTIES
 
 #-----------------------------------------------------------------------------
 # Output (build) directories.
-set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${Monteverdi2_BINARY_DIR}/bin )
-set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${Monteverdi2_BINARY_DIR}/lib )
-set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${Monteverdi2_BINARY_DIR}/lib )
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${Monteverdi_BINARY_DIR}/bin )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${Monteverdi_BINARY_DIR}/lib )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${Monteverdi_BINARY_DIR}/lib )
 
 SET(CXX_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
@@ -281,36 +281,32 @@ if(BUILD_TESTING)
   add_subdirectory(Testing)
 endif()
 
-if(WIN32 AND Monteverdi2_USE_CPACK)
+if(WIN32 AND Monteverdi_USE_CPACK)
   add_custom_target(packages
     COMMAND ${CMAKE_CPACK_COMMAND}
-    "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi2.cmake" "--verbose"
+    "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi.cmake" "--verbose"
     DEPENDS PACKAGE_Mapla)
 
   add_custom_target(PACKAGE_Mapla
     COMMAND ${CMAKE_CPACK_COMMAND}
     "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Mapla.cmake" "--verbose"
-    DEPENDS PACKAGE_Mv2)
+    DEPENDS PACKAGE_Monteverdi)
 
-  add_custom_target(PACKAGE_Mv2
-    COMMAND ${CMAKE_CPACK_COMMAND}
-    "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Mv2.cmake" "--verbose")
-
-endif(WIN32 AND Monteverdi2_USE_CPACK)
+endif(WIN32 AND Monteverdi_USE_CPACK)
 
 #----------------------------------------------------------------------------
-# Generate Monteverdi2Config.cmake
+# Generate MonteverdiConfig.cmake
 # Save library dependencies.
-# set(Monteverdi2_LIBRARY_DEPENDS_FILE ${Monteverdi2_BINARY_DIR}/Monteverdi2LibraryDepends.cmake)
-# export_library_dependencies(${Monteverdi2_LIBRARY_DEPENDS_FILE})
+# set(Monteverdi_LIBRARY_DEPENDS_FILE ${Monteverdi_BINARY_DIR}/MonteverdiLibraryDepends.cmake)
+# export_library_dependencies(${Monteverdi_LIBRARY_DEPENDS_FILE})
 
 # # Library directory.
-# set(Monteverdi2_LIBRARY_DIRS ${OTB_LIBRARY_DIRS} ${LIBRARY_OUTPUT_PATH})
-# set(Monteverdi2_USE_FILE ${Monteverdi2_BINARY_DIR}/UseMonteverdi2.cmake)
-# configure_file(${Monteverdi2_SOURCE_DIR}/Monteverdi2Config.cmake.in
-#                ${Monteverdi2_BINARY_DIR}/Monteverdi2Config.cmake @ONLY IMMEDIATE)
-# configure_file(${Monteverdi2_SOURCE_DIR}/UseMonteverdi2.cmake.in
-#                ${Monteverdi2_USE_FILE} @ONLY IMMEDIATE)
+# set(Monteverdi_LIBRARY_DIRS ${OTB_LIBRARY_DIRS} ${LIBRARY_OUTPUT_PATH})
+# set(Monteverdi_USE_FILE ${Monteverdi_BINARY_DIR}/UseMonteverdi.cmake)
+# configure_file(${Monteverdi_SOURCE_DIR}/MonteverdiConfig.cmake.in
+#                ${Monteverdi_BINARY_DIR}/MonteverdiConfig.cmake @ONLY IMMEDIATE)
+# configure_file(${Monteverdi_SOURCE_DIR}/UseMonteverdi.cmake.in
+#                ${Monteverdi_USE_FILE} @ONLY IMMEDIATE)
 
 #----------------------------------------------------------------------------
 # Setup valgrind option (default hard coded value is ctest is invalid).
@@ -322,10 +318,10 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
 
     if(MXE_TARGET_DIR MATCHES "i686")
       set(mxearch x86)
-      set(archive_name ${CMAKE_PROJECT_NAME}-${Monteverdi2_VERSION_STRING}-win32)
+      set(archive_name ${CMAKE_PROJECT_NAME}-${Monteverdi_VERSION_STRING}-win32)
     elseif(MXE_TARGET_DIR MATCHES "x86_64")
       set(mxearch x64)
-      set(archive_name ${CMAKE_PROJECT_NAME}-${Monteverdi2_VERSION_STRING}-win64)
+      set(archive_name ${CMAKE_PROJECT_NAME}-${Monteverdi_VERSION_STRING}-win64)
     endif()
 
     execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
@@ -336,7 +332,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
     #should we add otbiceviewer.exe?
 
     set(pefiles
-      ${CMAKE_INSTALL_PREFIX}/bin/monteverdi2.exe
+      ${CMAKE_INSTALL_PREFIX}/bin/monteverdi.exe
       ${CMAKE_INSTALL_PREFIX}/bin/mapla.exe)
 
 
@@ -344,12 +340,12 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
     file(WRITE "${CMAKE_BINARY_DIR}/_mingw/CMakeLists.txt"
       "cmake_minimum_required(VERSION 2.6)
        include(CMakeParseArguments)
-       set(Monteverdi2_SOURCE_DIR \"${Monteverdi2_SOURCE_DIR}\")
+       set(Monteverdi_SOURCE_DIR \"${Monteverdi_SOURCE_DIR}\")
        set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")
        set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
-       set(Monteverdi2_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
+       set(Monteverdi_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
        set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
-       set(Monteverdi2_INSTALL_DATA_DIR \"${Monteverdi2_INSTALL_DATA_DIR}\")
+       set(Monteverdi_INSTALL_DATA_DIR \"${Monteverdi_INSTALL_DATA_DIR}\")
         include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
         include(${CMAKE_SOURCE_DIR}/CMake/CPackFunctions.cmake)
         package_mingw(
@@ -360,46 +356,46 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
         NEEDS_OTB_APPS TRUE,
         SEARCHDIRS \"\")")
 
-    string(REPLACE "${CMAKE_PROJECT_NAME}" "Mv2" archive_name_mv2 ${archive_name})
-    set(pefiles_mv2 ${CMAKE_INSTALL_PREFIX}/bin/mv2.exe)
+    string(REPLACE "${CMAKE_PROJECT_NAME}" "Monteverdi" archive_name_monteverdi ${archive_name})
+    set(pefiles_monteverdi ${CMAKE_INSTALL_PREFIX}/bin/monteverdi.exe)
 
 
-    file(WRITE "${CMAKE_BINARY_DIR}/_mingw_mv2/CMakeLists.txt"
+    file(WRITE "${CMAKE_BINARY_DIR}/_mingw_monteverdi/CMakeLists.txt"
       "cmake_minimum_required(VERSION 2.6)
        include(CMakeParseArguments)
-       set(Monteverdi2_SOURCE_DIR \"${Monteverdi2_SOURCE_DIR}\")
+       set(Monteverdi_SOURCE_DIR \"${Monteverdi_SOURCE_DIR}\")
        set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")
        set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
-       set(Monteverdi2_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
+       set(Monteverdi_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
        set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
-       set(Monteverdi2_INSTALL_DATA_DIR \"${Monteverdi2_INSTALL_DATA_DIR}\")
+       set(Monteverdi_INSTALL_DATA_DIR \"${Monteverdi_INSTALL_DATA_DIR}\")
         include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
         include(${CMAKE_SOURCE_DIR}/CMake/CPackFunctions.cmake)
         package_mingw(
         ARCH \"${mxearch}\"
         MXEROOT \"${mxeroot}\"
-        PREFIX_DIR \"${archive_name_mv2}\"
-        PEFILES \"${pefiles_mv2}\"
+        PREFIX_DIR \"${archive_name_monteverdi}\"
+        PEFILES \"${pefiles_monteverdi}\"
         SEARCHDIRS \"\")")
 
-    add_custom_target(configure-mingw_mv2
+    add_custom_target(configure-mingw_monteverdi
       COMMAND ${CMAKE_COMMAND}
-      "${CMAKE_BINARY_DIR}/_mingw_mv2"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw_mv2")
+      "${CMAKE_BINARY_DIR}/_mingw_monteverdi"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw_monteverdi")
 
-    add_custom_target(prepare-mingw_mv2
+    add_custom_target(prepare-mingw_monteverdi
       COMMAND ${CMAKE_COMMAND}
-      "--build" "${CMAKE_BINARY_DIR}/_mingw_mv2" "--target" "install"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw_mv2"
-      DEPENDS configure-mingw_mv2)
+      "--build" "${CMAKE_BINARY_DIR}/_mingw_monteverdi" "--target" "install"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw_monteverdi"
+      DEPENDS configure-mingw_monteverdi)
 
     find_program(ZIP_EXECUTABLE zip)
 
     if(ZIP_EXECUTABLE)
-      add_custom_target(package-mingw_mv2
-        COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name_mv2}.zip" "${archive_name_mv2}"
+      add_custom_target(package-mingw_monteverdi
+        COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name_monteverdi}.zip" "${archive_name_monteverdi}"
         WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
-        DEPENDS prepare-mingw_mv2)
+        DEPENDS prepare-mingw_monteverdi)
     else()
       message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
     endif()
@@ -408,7 +404,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
       COMMAND ${CMAKE_COMMAND}
       "${CMAKE_BINARY_DIR}/_mingw"
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw"
-      DEPENDS package-mingw_mv2)
+      DEPENDS package-mingw_monteverdi)
 
     add_custom_target(prepare-mingw
       COMMAND ${CMAKE_COMMAND}

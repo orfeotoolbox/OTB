@@ -70,13 +70,13 @@ set( Common_Core_HEADERS_MOC
 #############################################################################
 # Includes
 include_directories(
-  ${Monteverdi2_BINARY_DIR}
+  ${Monteverdi_BINARY_DIR}
   #
-  ${Monteverdi2_SOURCE_DIR}/Code/Common
-  #${Monteverdi2_SOURCE_DIR}/Code/Common/Core
+  ${Monteverdi_SOURCE_DIR}/Code/Common
+  #${Monteverdi_SOURCE_DIR}/Code/Common/Core
   #
-  ${Monteverdi2_BINARY_DIR}/Code/Common
-  ${Monteverdi2_BINARY_DIR}/Code/Common/Core
+  ${Monteverdi_BINARY_DIR}/Code/Common
+  ${Monteverdi_BINARY_DIR}/Code/Common/Core
 )
 
 #############################################################################
@@ -92,13 +92,13 @@ add_to_qt4_i18n_sources(
 )
 
 #############################################################################
-add_library(Monteverdi2_Core
+add_library(Monteverdi_Core
   ${Common_Core_SOURCES}
   ${Common_Core_SRC_MOC}
 )
 
 #############################################################################
-target_link_libraries(Monteverdi2_Core
+target_link_libraries(Monteverdi_Core
   ${OTB_LIBRARIES}
   Qt4::QtCore
   Qt4::QtSql
@@ -106,22 +106,22 @@ target_link_libraries(Monteverdi2_Core
 )
 
 #############################################################################
-set_target_properties(Monteverdi2_Core
-  PROPERTIES ${Monteverdi2_LIBRARY_PROPERTIES}
+set_target_properties(Monteverdi_Core
+  PROPERTIES ${Monteverdi_LIBRARY_PROPERTIES}
 )
 
 #############################################################################
 if( GENERATE_SQL )
-  add_dependencies( Monteverdi2_Core Monteverdi2_Sql )
+  add_dependencies( Monteverdi_Core Monteverdi_Sql )
 endif( GENERATE_SQL )
 
 #############################################################################
 # INSTALL Common application.
 install(
-  TARGETS Monteverdi2_Core
-  RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT Runtime
-  LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Runtime
-  ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Development
+  TARGETS Monteverdi_Core
+  RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR} COMPONENT Runtime
+  LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Runtime
+  ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Development
 )
 
 #############################################################################

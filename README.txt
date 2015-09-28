@@ -9,7 +9,7 @@ greater usability and operationnality.
 We therefore decided to rework the Monteverdi concept into a brand new software,
 enlightened by this experience.
 
-Here are suggested steps for the Monteverdi2 beginner.
+Here are suggested steps for the Monteverdi beginner.
 
 1) Get the software.
 
@@ -21,10 +21,10 @@ Here are suggested steps for the Monteverdi2 beginner.
    system, and other system variables.
 
    Create a binary directory, and then run cmake. Provide to CMake
-   the source directory of Monteverdi2 and the binary directory that you
+   the source directory of Monteverdi and the binary directory that you
    just created.
 
-   Monteverdi2 depends on OTB. You have to fill up the OTB_DIR variable with the
+   Monteverdi depends on OTB. You have to fill up the OTB_DIR variable with the
    location of the compiled OTB. If you use ccmake or cmake-gui, you have an
    inteface to enter the value.
 
@@ -37,7 +37,7 @@ You can get support :
 1. Using the OTB community site at http://orfeo-toolbox.org/
 2. Joining the otb-users mailing list at http://groups.google.com/group/otb-users
 
-Monteverdi2 source code is available at http://hg.orfeo-toolbox.org/Monteverdi2
+Monteverdi source code is available at http://hg.orfeo-toolbox.org/Monteverdi
 
 There is many ways to join us in the OTB adventure and the more people
 contribute, the better the library is for everybody! See at
