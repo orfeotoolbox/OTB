@@ -574,16 +574,19 @@ void GDALImageIO::InternalReadImageInformation()
       for( int cpt = 0; papszMetadata[cpt] != NULL; ++cpt )
         {
         std::string key, name;
-        if (System::ParseHdfSubsetName(papszMetadata[cpt], key, name))
+        const std::string defval = "TRUE";
+        std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
+        Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszMetadata[cpt]), key, name, defval, papszMetadata[cpt]);
+        if (!key.empty())
           {
           otbMsgDevMacro(<< "- key:  " << key);
           otbMsgDevMacro(<< "- name: " << name);
           // check if this is a dataset name
-          if (key.find("_NAME") != std::string::npos)
+          if (boost::ends_with(key, "_NAME"))
             {
             names.push_back(name);
             }
-          itk::EncapsulateMetaData<std::string>(this->GetMetaDataDictionary(), key, name);
+          itk::EncapsulateMetaData<std::string>(this->GetMetaDataDictionary(), metadataKeyPrefix + key, name);
           }
         }
       }
