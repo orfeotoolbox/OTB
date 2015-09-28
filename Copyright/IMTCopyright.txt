@@ -1,10 +1,8 @@
 Parts of the code have been developped by Gregoire Mercier from 
-Groupe des Ecoles des Telecommunications / Ecole Nationale Superieure 
-des Telecommunications de Bretagne (GET/ENST Bretagne) during 
-CNES R&T contrats funded by the French Centre National d'Etudes 
-Spatiales, CNES.
+Institut Mines-Telecom / Telecom Bretagne during CNES R&T contrats 
+funded by the French Centre National d'Etudes Spatiales, CNES.
 
-Copyright (c) GET / ENST Bretagne 
+Copyright (c) Institut Mines-Telecom 
 
 This code has been integrated into the ORFEO Toolbox (OTB) under 
 the CeCILL licence version 2. See Licence_CeCILL_V2-en.txt or

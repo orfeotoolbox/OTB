@@ -70,12 +70,12 @@ int otbChangeNoDataValueFilter(int itkNotUsed(argc),char * itkNotUsed(argv) [])
   
   for(it.GoToBegin();!it.IsAtEnd();++it,++count)
     {
-    if (count%2 == 0 and it.Get()!=-20.)
+    if (count%2 == 0 && it.Get()!=-20.)
       {
       std::cerr<<"Pixel should have new no-data value"<<std::endl;
       failed = true;
       }
-    else if(count%2 == 1 and it.Get()!=10.)
+    else if(count%2 == 1 && it.Get()!=10.)
       {
       std::cerr<<"Pixel value should be unchanged"<<std::endl;
       failed = true;

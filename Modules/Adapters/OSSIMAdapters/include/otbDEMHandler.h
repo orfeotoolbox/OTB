@@ -107,9 +107,29 @@ public:
   /** return true if the directoty contain DEM */
   virtual bool IsValidDEMDirectory(const char* DEMDirectory);
 
-  /** Open geoid file. */
-  virtual void OpenGeoidFile(const char* geoidFile);
-  virtual void OpenGeoidFile(const std::string& geoidFile);
+  /**
+   * \brief Open geoid file given its filename or throw an exception
+   * if geoid-file could not be loaded.
+   *
+   * \param geoidFile The filename of the geoid-file.
+   *
+   * \return <code>true</code> if geoid file has been changed or
+   * <code>false</code> if geod-file have been set before and could
+   * not be changed.
+   */
+  virtual bool OpenGeoidFile(const char* geoidFile);
+
+  /**
+   * \brief Open geoid file given its filename or throw an exception
+   * if geoid-file could not be loaded.
+   *
+   * \param geoidFile The filename of the geoid-file.
+   *
+   * \return <code>true</code> if geoid file has been changed or
+   * <code>false</code> if geod-file have been set before and could
+   * not be changed.
+   */
+  virtual bool OpenGeoidFile(const std::string& geoidFile);
 
   /** Compute the height above MSL(Mean Sea Level) of a geographic point. */
   virtual double GetHeightAboveMSL(double lon, double lat) const;
@@ -125,6 +145,11 @@ public:
   /** Set the default height above ellipsoid in case no information is available*/
   double GetDefaultHeightAboveEllipsoid() const;
 
+  /**
+   * \return The number of elevation databases in the
+   * <code>ossimElevManager</code>.
+   */
+  unsigned int GetDEMCount() const;
 
   /** Get DEM directory */
   std::string GetDEMDirectory(unsigned int idx = 0) const;
@@ -132,13 +157,17 @@ public:
   /** Get Goid file */
   std::string GetGeoidFile() const;
 
+  /**
+   * \brief Remove all the ossimElevationDatabases from the
+   * <code>ossimElevManager</code>.
+   */
+  void ClearDEMs();
+
 protected:
   DEMHandler();
   virtual ~DEMHandler() {}
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  ossimElevManager* m_ElevManager;
 
   // Ossim does not allow to retrieve the geoid file path
   // We therefore must keep it on our side

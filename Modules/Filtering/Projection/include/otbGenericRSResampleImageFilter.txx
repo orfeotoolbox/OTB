@@ -101,6 +101,15 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   if (m_EstimateOutputRpcModel)
     this->EstimateOutputRpcModel();
 
+  // Estimate the input rpc model if it is needed
+  if (m_EstimateInputRpcModel && !m_RpcEstimationUpdated)
+    {
+    this->EstimateInputRpcModel();
+    }
+
+  // Instanciate the RS transform
+  this->UpdateTransform();
+
   m_Resampler->SetInput(this->GetInput());
   m_Resampler->SetTransform(m_Transform);
   m_Resampler->SetDisplacementFieldSpacing(this->GetDisplacementFieldSpacing());
@@ -176,15 +185,6 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::PropagateRequestedRegion(itk::DataObject *output)
 {
   if (this->m_Updating) return;
-
-  // Estimate the input rpc model if it is needed
-  if (m_EstimateInputRpcModel && !m_RpcEstimationUpdated)
-    {
-    this->EstimateInputRpcModel();
-    }
-
-  // Instanciate the RS transform
-  this->UpdateTransform();
 
   // Retrieve output requested region
   m_Resampler->GetOutput()->SetRequestedRegion(output);
