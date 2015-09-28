@@ -69,12 +69,12 @@ int otbImageToNoDataMaskFilter(int itkNotUsed(argc),char * itkNotUsed(argv) [])
   
   for(it.GoToBegin();!it.IsAtEnd();++it,++count)
     {
-    if (count%2 == 0 and it.Get()!=0)
+    if (count%2 == 0 && it.Get()!=0)
       {
       std::cerr<<"Pixel should be masked"<<std::endl;
       failed = true;
       }
-    else if(count%2 == 1 and it.Get()!=255)
+    else if(count%2 == 1 && it.Get()!=255)
       {
       std::cerr<<"Pixel should not be masked"<<std::endl;
       failed = true;

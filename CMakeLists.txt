@@ -392,6 +392,17 @@ endif()
 # Provide an option for generating documentation.
 add_subdirectory(Utilities/Doxygen)
 
+#----------------------------------------------------------------------
+# Provide a target to generate the SuperBuild archive (only for Unix)
+if(UNIX)
+  add_custom_target(SuperBuild-archive
+    COMMAND ./SuperbuildDownloadList.sh
+      ${OTB_BINARY_DIR}/Download
+      ${OTB_BINARY_DIR}
+    WORKING_DIRECTORY ${OTB_SOURCE_DIR}/Utilities/Maintenance
+    )
+endif()
+
 # TODO cleanup
 # Create target to download data from the OTBData group. This must come after
 # all tests have been added that reference the group, so we put it last.
