@@ -141,7 +141,7 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
 {
   bool update = (mode != Modes::Read);
 
-  GDALDataset * source = (GDALDataset *)GDALOpen(datasourceName.c_str(), (update?GA_Update:GA_ReadOnly));
+  GDALDataset * source = (GDALDataset *)GDALOpenEx(datasourceName.c_str(), (update? GDAL_OF_UPDATE : GDAL_OF_READONLY) | GDAL_OF_VECTOR,NULL,NULL,NULL);
   if (!source)
     {
     // In read mode, this is a failure
@@ -179,7 +179,7 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
 void DeleteDataSource(std::string const& datasourceName)
 {
   // Attempt to delete the datasource if it already exists
-  GDALDataset * poDS = (GDALDataset *)GDALOpen(datasourceName.c_str(), GA_Update);
+  GDALDataset * poDS = (GDALDataset *)GDALOpenEx(datasourceName.c_str(), GDAL_OF_UPDATE | GDAL_OF_VECTOR,NULL,NULL,NULL);
 
   if (poDS != NULL)
     {

@@ -56,10 +56,11 @@ OGRVectorDataIO::CanReadFile(const char* filename) const
 {
 
 
-  GDALDataset * poDS = (GDALDataset *)GDALOpen(filename, GA_ReadOnly);
+  GDALDataset * poDS = (GDALDataset *)GDALOpenEx(filename, GDAL_OF_READONLY | GDAL_OF_VECTOR, NULL, NULL,NULL);
   
   if (poDS == NULL)
     {
+    std::cerr<<"Can not read file "<<filename<<" with GDALOpen"<<std::endl;
     return false;
     }
 //     std::cout << poDS->GetDriver()->GetName() << std::endl;
@@ -94,7 +95,7 @@ OGRVectorDataIO
     GDALClose(m_DataSource);
     }
 
-  m_DataSource = (GDALDataset *)GDALOpen(this->m_FileName.c_str(), GA_ReadOnly);
+  m_DataSource = (GDALDataset *)GDALOpenEx(this->m_FileName.c_str(), GA_ReadOnly| GDAL_OF_VECTOR,NULL,NULL,NULL);
 
   if (m_DataSource == NULL)
     {
@@ -227,7 +228,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
 
   // Erase the dataSource if already exist
   //TODO investigate the possibility of giving the option OVERWRITE=YES to the CreateDataSource method
-  GDALDataset * poDS = (GDALDataset *)GDALOpen(this->m_FileName.c_str(), GA_Update);
+  GDALDataset * poDS = (GDALDataset *)GDALOpenEx(this->m_FileName.c_str(), GDAL_OF_UPDATE | GDAL_OF_VECTOR,NULL,NULL,NULL);
   if (poDS != NULL)
     {
     //Erase the data if possible
