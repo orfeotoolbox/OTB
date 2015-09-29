@@ -36,6 +36,7 @@ set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG" )
 set(Monteverdi_VERSION_MAJOR "3")
 set(Monteverdi_VERSION_MINOR "0")
 set(Monteverdi_VERSION_PATCH "0")
+set(Monteverdi_VERSION_SUFFIX "-beta")
 
 #----------------------------------------------------------------------------
 # Monteverdi data version number.  An even minor number corresponds to releases.
@@ -46,9 +47,16 @@ set(Monteverdi_DATA_VERSION_PATCH "0")
 #----------------------------------------------------------------------------
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
-set(Monteverdi_VERSION_STRING "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}")
+set(
+  Monteverdi_VERSION_STRING
+  "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
+)
+
 #----------------------------------------------------------------------------
-set(Monteverdi_DATA_VERSION_STRING "${Monteverdi_DATA_VERSION_MAJOR}.${Monteverdi_DATA_VERSION_MINOR}.${Monteverdi_DATA_VERSION_PATCH}")
+set(
+  Monteverdi_DATA_VERSION_STRING
+  "${Monteverdi_DATA_VERSION_MAJOR}.${Monteverdi_DATA_VERSION_MINOR}.${Monteverdi_DATA_VERSION_PATCH}"
+)
 
 #----------------------------------------------------------------------------
 set(Monteverdi_FLOATING_TYPE "float" CACHE STRING "The type of data in which input images are read (double/float)." )

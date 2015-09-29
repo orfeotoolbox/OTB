@@ -28,6 +28,8 @@
 #define Monteverdi_VERSION_MAJOR @Monteverdi_VERSION_MAJOR@
 #define Monteverdi_VERSION_MINOR @Monteverdi_VERSION_MINOR@
 #define Monteverdi_VERSION_PATCH @Monteverdi_VERSION_PATCH@
+#define Monteverdi_VERSION_SUFFIX @Monteverdi_VERSION_SUFFIX@
+
 #define Monteverdi_VERSION_STRING "@Monteverdi_VERSION_STRING@"
 
 //
@@ -35,6 +37,7 @@
 #define Monteverdi_DATA_VERSION_MAJOR @Monteverdi_DATA_VERSION_MAJOR@
 #define Monteverdi_DATA_VERSION_MINOR @Monteverdi_DATA_VERSION_MINOR@
 #define Monteverdi_DATA_VERSION_PATCH @Monteverdi_DATA_VERSION_PATCH@
+
 #define Monteverdi_DATA_VERSION_STRING "@Monteverdi_DATA_VERSION_STRING@"
 
 //
