@@ -58,12 +58,23 @@ public:
   itkGetMacro(K, int);
   itkSetMacro(K, int);
 
-  /** Setters/Getters to IsRegression flag
-   *  Default is False
-   *  \see http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html
+  /** Decision rule once the KNN are found :
+   *  [for classification]
+   *   - KNN_VOTING : output value with maximum occurences (for classification)
+   *  [for regression]
+   *   - KNN_MEAN : output mean value of neighbors
+   *   - KNN_MEDIAN : output median value of neighbors
    */
-  itkGetMacro(IsRegression, bool);
-  itkSetMacro(IsRegression, bool);
+  enum {KNN_VOTING, KNN_MEAN, KNN_MEDIAN};
+
+  /** Setters/Getters to the decision rule */
+  itkGetMacro(DecisionRule, int);
+  itkSetMacro(DecisionRule, int);
+
+  /** Train the machine learning model */
+  virtual void Train();
+  /** Predict values using the model */
+  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
   /** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="");
@@ -90,18 +101,14 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Train the machine learning model */
-  virtual void TrainClassification();
-  /** Predict values using the model */
-  virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
-
 private:
   KNearestNeighborsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   CvKNearest * m_KNearestModel;
   int m_K;
-  bool m_IsRegression;
+
+  int m_DecisionRule;
 };
 } // end namespace otb
 

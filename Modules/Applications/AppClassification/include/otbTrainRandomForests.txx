@@ -14,15 +14,19 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-
-#include "otbTrainImagesClassifier.h"
+#ifndef __otbTrainRandomForests_txx
+#define __otbTrainRandomForests_txx
+#include "otbLearningApplicationBase.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-#ifdef OTB_USE_OPENCV
-void TrainImagesClassifier::InitRandomForestsParams()
+
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::InitRandomForestsParams()
 {
   AddChoice("classifier.rf", "Random forests classifier");
   SetParameterDescription("classifier.rf",
@@ -95,10 +99,15 @@ void TrainImagesClassifier::InitRandomForestsParams()
   //TerminationCriteria not exposed
 }
 
-void TrainImagesClassifier::TrainRandomForests(ListSampleType::Pointer trainingListSample,
-                                                              LabelListSampleType::Pointer trainingLabeledListSample)
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::TrainRandomForests(typename ListSampleType::Pointer trainingListSample,
+                     typename TargetListSampleType::Pointer trainingLabeledListSample,
+                     std::string modelPath)
 {
-  RandomForestType::Pointer classifier = RandomForestType::New();
+  typename RandomForestType::Pointer classifier = RandomForestType::New();
+  classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);
   classifier->SetTargetListSample(trainingLabeledListSample);
   classifier->SetMaxDepth(GetParameterInt("classifier.rf.max"));
@@ -110,8 +119,10 @@ void TrainImagesClassifier::TrainRandomForests(ListSampleType::Pointer trainingL
   classifier->SetForestAccuracy(GetParameterFloat("classifier.rf.acc"));
 
   classifier->Train();
-  classifier->Save(GetParameterString("io.out"));
+  classifier->Save(modelPath);
 }
-#endif
+
 } //end namespace wrapper
 } //end namespace otb
+
+#endif

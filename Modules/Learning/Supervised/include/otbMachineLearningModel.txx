@@ -25,7 +25,10 @@ namespace otb
 
 template <class TInputValue, class TOutputValue, class TConfidenceValue>
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
-::MachineLearningModel() : m_RegressionMode(false),m_ConfidenceIndex(false)
+::MachineLearningModel() :
+  m_RegressionMode(false),
+  m_IsRegressionSupported(false),
+  m_ConfidenceIndex(false)
 {}
 
 
@@ -37,23 +40,17 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 template <class TInputValue, class TOutputValue, class TConfidenceValue>
 void
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
-::Train()
+::SetRegressionMode(bool flag)
 {
-  if(m_RegressionMode)
-    return this->TrainRegression();
-  else
-    return this->TrainClassification();
-}
-
-template <class TInputValue, class TOutputValue, class TConfidenceValue>
-typename MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>::TargetSampleType
-MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
-::Predict(const InputSampleType& input, ConfidenceValueType *quality) const
-{
-  if(m_RegressionMode)
-    return this->PredictRegression(input);
-  else
-    return this->PredictClassification(input,quality);
+  if (flag && !m_IsRegressionSupported)
+    {
+    itkGenericExceptionMacro(<< "Regression mode not implemented.");
+    }
+  if (m_RegressionMode != flag)
+    {
+    m_RegressionMode = flag;
+    this->Modified();
+    }
 }
 
 template <class TInputValue, class TOutputValue, class TConfidenceValue>
