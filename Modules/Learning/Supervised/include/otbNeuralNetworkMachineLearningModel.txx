@@ -73,10 +73,14 @@ template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(const TargetListSampleType * labels,
                                                                                cv::Mat & output)
 {
-  unsigned int nbSamples = labels->Size();
+  unsigned int nbSamples = 0;
+  if (labels != NULL)
+    {
+    nbSamples = labels->Size();
+    }
 
   // Check for valid listSample
-  if (labels != NULL && nbSamples > 0)
+  if (nbSamples > 0)
     {
     // Build an iterator
     typename TargetListSampleType::ConstIterator labelSampleIt = labels->Begin();
