@@ -22,6 +22,8 @@
 #include "otbReciprocalHAlphaImageFilter.h"
 #include "otbSinclairReciprocalImageFilter.h"
 #include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
+#include "otbPerBandVectorImageFilter.h"
+#include "itkMeanImageFilter.h"
 
 
 namespace otb
@@ -56,7 +58,9 @@ public:
   typedef otb::ReciprocalHAlphaImageFilter<ComplexFloatVectorImageType, FloatVectorImageType> 			HAFilterType;
   
   
-  
+  typedef itk::MeanImageFilter<ComplexFloatImageType, ComplexFloatImageType>         MeanFilterType;
+  typedef otb::PerBandVectorImageFilter<ComplexFloatVectorImageType, ComplexFloatVectorImageType, MeanFilterType> PerBandMeanFilterType;
+  //FloatImageType
 
   /** Standard macro */
   itkNewMacro(Self);
@@ -67,14 +71,17 @@ private:
   void DoInit()
   {
     SetName("SARDecompositions");
-    SetDescription("From one-band complex images (HH, HV or VH, VV), returns the selected decomposition.");
+    SetDescription("From one-band complex images (each one related to an element of the Sinclair matrix), returns the selected decomposition.");
 
     // Documentation
     SetDocName("SARDecompositions");
-    SetDocLongDescription("From one-band complex images (HH, HV, VH, VV), returns the selected decomposition.\n"
+    SetDocLongDescription("From one-band complex images (HH, HV, VH, VV), returns the selected decomposition.\n \n"
 						  "The H-alpha-A decomposition is currently the only one available; it is implemented for the monostatic case (transmitter and receiver are co-located).\n"
 						  "User must provide three one-band complex images HH, HV or VH, and VV (monostatic case <=> HV = VH).\n"
-						  "The applications returns a float vector image, made of three channels : H (entropy), Alpha, A (Anisotropy)." );
+						  "The H-alpha-A decomposition consists in averaging 3x3 complex coherency matrices (incoherent analysis); the user must provide the size of the averaging window, thanks to the parameter inco.kernelsize.\n "
+						  "The applications returns a float vector image, made up of three channels : H (entropy), Alpha, A (Anisotropy)." );
+						  
+						  
 						  
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -102,6 +109,15 @@ private:
     AddParameter(ParameterType_Choice, "decomp", "Decompositions");
     AddChoice("decomp.haa","H-alpha-A decomposition");
     SetParameterDescription("decomp.haa","H-alpha-A decomposition");
+    
+    AddParameter(ParameterType_Group,"inco","Incoherent decompositions");
+    SetParameterDescription("inco","This group allows to set parameters related to the incoherent decompositions.");
+    
+    AddParameter(ParameterType_Int, "inco.kernelsize",   "Kernel size for spatial incoherent averaging.");
+    SetParameterDescription("inco.kernelsize", "Minute (0-59)");
+    SetMinimumParameterIntValue("inco.kernelsize", 1);
+    SetDefaultParameterInt("inco.kernelsize", 3);
+    MandatoryOff("inco.kernelsize");
 
     AddRAMParameter();
 
@@ -136,6 +152,7 @@ private:
 		
 		m_SRFilter = SRFilterType::New();
 		m_HAFilter = HAFilterType::New();
+		m_MeanFilter = PerBandMeanFilterType::New();
 		
 		if (inhv)
 		  m_SRFilter->SetInputHV_VH(GetParameterComplexFloatImage("inhv"));
@@ -145,8 +162,13 @@ private:
 		m_SRFilter->SetInputHH(GetParameterComplexFloatImage("inhh"));
 		m_SRFilter->SetInputVV(GetParameterComplexFloatImage("invv"));
 		
-		m_HAFilter->SetInput(m_SRFilter->GetOutput());
-
+		MeanFilterType::InputSizeType radius;
+        radius.Fill( GetParameterInt("inco.kernelsize") );
+        m_MeanFilter->GetFilter()->SetRadius(radius);
+		
+		
+		m_MeanFilter->SetInput(m_SRFilter->GetOutput());
+		m_HAFilter->SetInput(m_MeanFilter->GetOutput());
 		SetParameterOutputImage("out", m_HAFilter->GetOutput() );
     
 		break;
@@ -157,7 +179,7 @@ private:
   //MCPSFilterType::Pointer m_MCPSFilter;
   SRFilterType::Pointer m_SRFilter;
   HAFilterType::Pointer m_HAFilter;
-
+  PerBandMeanFilterType::Pointer m_MeanFilter;
   
 }; 
 
