@@ -63,7 +63,10 @@ otb_add_test(NAME saTvReciprocalHAlphaImageFilter COMMAND otbPolarimetryTestDriv
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvReciprocalHAlphaImageFilter.tif
   ${TEMP}/saTvReciprocalHAlphaImageFilter.tif
   otbReciprocalHAlphaImageFilter
-  ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
+  ${INPUTDATA}/RSAT_imagery_HH.tif
+  ${INPUTDATA}/RSAT_imagery_HV.tif
+  ${INPUTDATA}/RSAT_imagery_VV.tif
+  5
   ${TEMP}/saTvReciprocalHAlphaImageFilter.tif
   )
 
@@ -299,7 +302,7 @@ otb_add_test(NAME saTvReciprocalLinearCovarianceToReciprocalCircularCovarianceIm
   )
 
 otb_add_test(NAME saTvReciprocalCoherencyToReciprocalMuellerImageFilter COMMAND otbPolarimetryTestDriver
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvReciprocalCoherencyToMuellerImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif 
   ${TEMP}/saTvReciprocalCoherencyToMuellerImageFilter.tif
   otbReciprocalCoherencyToReciprocalMuellerImageFilter
   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif

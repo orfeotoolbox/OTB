@@ -68,7 +68,6 @@ int otbMuellerToReciprocalCovarianceFunctor(int itkNotUsed(argc), char * itkNotU
       vcl_abs(result[5].imag()-outputFunct[5].imag()) > 1e-10    )
 
     {
-		std::cout.precision(15);
       std::cout<<"Test gives :"<<std::endl;
       std::cout<<outputFunct<<std::endl;
       std::cout<<"Wanted results are :"<<std::endl;

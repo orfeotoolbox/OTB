@@ -381,19 +381,11 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
   SVMType::Pointer classifier = SVMType::New();
 
   //Init SVM type in regression mode
-  //Available mode for regression in  openCV are eps_svr and nu_svr
+  classifier->SetRegressionMode(1);
   classifier->SetSVMType(CvSVM::EPS_SVR);
-  //classifier->SetSVMType(CvSVM::NU_SVR);
-
-  //P should be >0. Increasing value give better result. Need to investigate why.
   classifier->SetP(10);
-
-  //IN case you're using nu_svr you should set nu to a positive value between 0
-  //and 1.
-  //classifier->SetNu(0.9);
-
-  //Use RBF kernel.Don't know what is recommended in case of svm regression
   classifier->SetKernelType(CvSVM::RBF);
+
 
   classifier->SetInputListSample(samples);
   classifier->SetTargetListSample(labels);
@@ -432,6 +424,7 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
     }
   else
     {
+    std::cout << age << "\t" << predicted->GetMeasurementVector(0)[0] << "\n";
     return EXIT_FAILURE;
     }
 }
@@ -447,9 +440,9 @@ int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
 {
   if (argc != 3 )
     {
-      std::cout<<"Wrong number of arguments "<<std::endl;
-      std::cout<<"Usage : sample file, output file"<<std::endl;
-      return EXIT_FAILURE;
+    std::cout<<"Wrong number of arguments "<<std::endl;
+    std::cout<<"Usage : sample file, output file"<<std::endl;
+    return EXIT_FAILURE;
     }
 
   typedef otb::KNearestNeighborsMachineLearningModel<InputValueType,TargetValueType> KNearestNeighborsType;
@@ -528,11 +521,11 @@ int otbRandomForestsMachineLearningModelNew(int itkNotUsed(argc), char * itkNotU
 int otbRandomForestsMachineLearningModel(int argc, char * argv[])
 {
   if (argc != 3 )
-  {
+    {
     std::cout<<"Wrong number of arguments "<<std::endl;
     std::cout<<"Usage : sample file, output file "<<std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   typedef otb::RandomForestsMachineLearningModel<InputValueType,TargetValueType> RandomForestType;
   InputListSampleType::Pointer samples = InputListSampleType::New();
@@ -620,9 +613,9 @@ int otbBoostMachineLearningModel(int argc, char * argv[])
 {
   if (argc != 3 )
     {
-      std::cout<<"Wrong number of arguments "<<std::endl;
-      std::cout<<"Usage : sample file, output file "<<std::endl;
-      return EXIT_FAILURE;
+    std::cout<<"Wrong number of arguments "<<std::endl;
+    std::cout<<"Usage : sample file, output file "<<std::endl;
+    return EXIT_FAILURE;
     }
 
   typedef otb::BoostMachineLearningModel<InputValueType, TargetValueType> BoostType;

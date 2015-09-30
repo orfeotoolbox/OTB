@@ -7,6 +7,7 @@ otbConfusionMatrixMeasurementsTest.cxx
 otbMachineLearningModelCanRead.cxx
 otbTrainMachineLearningModel.cxx
 otbImageClassificationFilter.cxx
+otbMachineLearningRegressionTests.cxx
 )
 
 add_executable(otbSupervisedTestDriver ${OTBSupervisedTests})

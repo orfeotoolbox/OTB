@@ -147,11 +147,10 @@ public:
     return m_Priors;
   }
 
-  /** Setters/Getters to IsRegression flag
-   *  Default is False
-   */
-  itkGetMacro(IsRegression, bool);
-  itkSetMacro(IsRegression, bool);
+  /** Train the machine learning model */
+  virtual void Train();
+  /** Predict values using the model */
+  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
   /** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="");
@@ -178,11 +177,6 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Train the machine learning model */
-  virtual void TrainClassification();
-  /** Predict values using the model */
-  virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
-
 private:
   DecisionTreeMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -196,7 +190,6 @@ private:
   int m_MaxCategories;
   int m_CVFolds;
   bool m_Use1seRule;
-  bool m_IsRegression;
   bool m_TruncatePrunedTree;
   std::vector<float> m_Priors;
 

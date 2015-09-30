@@ -24,8 +24,10 @@ target_link_libraries(OtsuMultipleThresholdImageFilter ${OTB_LIBRARIES})
 add_executable(OtsuThresholdImageFilter OtsuThresholdImageFilter.cxx)
 target_link_libraries(OtsuThresholdImageFilter ${OTB_LIBRARIES})
 
-add_executable(StreamingMeanShiftSegmentation StreamingMeanShiftSegmentation.cxx)
-target_link_libraries(StreamingMeanShiftSegmentation ${OTB_LIBRARIES})
+if(OTBMathParser_LOADED)
+  add_executable(StreamingMeanShiftSegmentation StreamingMeanShiftSegmentation.cxx)
+  target_link_libraries(StreamingMeanShiftSegmentation ${OTB_LIBRARIES})
+endif()
 
 add_executable(VectorConfidenceConnected VectorConfidenceConnected.cxx)
 target_link_libraries(VectorConfidenceConnected ${OTB_LIBRARIES})

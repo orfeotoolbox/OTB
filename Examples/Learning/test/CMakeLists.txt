@@ -3,6 +3,7 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 # ------- SVMImageClassificationExampleTest----------
 
+if(OTBLibSVM_LOADED)
 otb_add_test(NAME leTeSVMImageClassificationExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/ROI_QB_MUL_1_SVN_CLASS.png
@@ -26,18 +27,6 @@ otb_add_test(NAME leTeSVMImageEstimatorClassificationMultiExampleTest COMMAND ${
     ${TEMP}/ROI_QB_MUL_1_SVN_CLASS_MULTI_Rescaled.png
 )
 
-# ------- GenerateTrainingImageExampleTest----------
-
-otb_add_test(NAME leTeGenerateTrainingImageExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/ROI_QB_MUL_4_training.png
-    ${TEMP}/ROI_QB_MUL_4_training.png
-  Execute $<TARGET_FILE:GenerateTrainingImageExample>
-    ${INPUTDATA}/ROI_QB_MUL_4.tif
-    ${INPUTDATA}/LearningROIs.txt
-    ${TEMP}/ROI_QB_MUL_4_training.png
-)
-
 # ------- SVMImageModelEstimatorExampleTest----------
 
 otb_add_test(NAME leTeSVMImageModelEstimatorExampleTest COMMAND ${OTB_TEST_DRIVER}
@@ -51,6 +40,18 @@ otb_add_test(NAME leTeSVMImageModelEstimatorExampleTest COMMAND ${OTB_TEST_DRIVE
     ${TEMP}/svm_image_model.svn
 )
 
+endif()
+# ------- GenerateTrainingImageExampleTest----------
+
+otb_add_test(NAME leTeGenerateTrainingImageExampleTest COMMAND ${OTB_TEST_DRIVER}
+  --compare-n-images ${NOTOL} 1
+    ${BASELINE}/ROI_QB_MUL_4_training.png
+    ${TEMP}/ROI_QB_MUL_4_training.png
+  Execute $<TARGET_FILE:GenerateTrainingImageExample>
+    ${INPUTDATA}/ROI_QB_MUL_4.tif
+    ${INPUTDATA}/LearningROIs.txt
+    ${TEMP}/ROI_QB_MUL_4_training.png
+)
 
 # ------- SOMExampleTest----------
 

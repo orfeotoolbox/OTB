@@ -24,6 +24,7 @@ set(OTBMetadata_SRC
   otbSarImageMetadataInterface.cxx
   otbPleiadesImageMetadataInterfaceFactory.cxx
   otbTerraSarImageMetadataInterfaceFactory.cxx
+  otbNoDataHelper.cxx
   )
 
 add_library(OTBMetadata ${OTBMetadata_SRC})
