@@ -65,10 +65,10 @@ ImageSettings
 {
   NULL,
   NULL,
-  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Range" ),
+  QT_TRANSLATE_NOOP( "mvd::ImageSettings", "Range" ),
   NULL,
   NULL,
-  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Angle" ),
+  QT_TRANSLATE_NOOP( "mvd::ImageSettings", "Angle" ),
   NULL,
   NULL,
 };
@@ -104,8 +104,13 @@ ImageSettings
 ::GetEffectName() const
 {
   assert( m_Effect>=0 && m_Effect<EFFECT_COUNT );
+  assert( qApp!=NULL );
 
-  return EFFECT_NAME[ m_Effect ];
+  return
+    qApp->translate(
+      "mvd", EFFECT_NAME[ m_Effect ]
+    )
+    .toLocal8Bit().constData();
 }
 
 /*****************************************************************************/

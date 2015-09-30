@@ -60,20 +60,20 @@ namespace mvd
 namespace
 {
 
-QVariant
+const char * const
 HEADERS[ LayerStackItemModel::COLUMN_COUNT ] =
 {
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Proj" ) ),
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Res" ) ),
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Name" ) ),
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Effect" ) ),
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "I" ) ),
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "J" ) ),
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Red" ) ),
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Green" ) ),
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Blue" ) ),
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "X" ) ),
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Y" ) ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Proj" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Res" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Name" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Effect" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "I" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "J" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Red" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Green" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Blue" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "X" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Y" ),
 };
 
 } // end of anonymous namespace.
@@ -621,7 +621,7 @@ LayerStackItemModel
     {
     case Qt::DisplayRole:
       assert( section>=0 && section<COLUMN_COUNT );
-      return HEADERS[ section ];
+      return tr( HEADERS[ section ] );
       break;
 
     default:
@@ -636,7 +636,7 @@ LayerStackItemModel
         {
         case Qt::DisplayRole:
           assert( section>=0 && section<COLUMN_COUNT );
-          return HEADERS[ section ];
+          return tr( HEADERS[ section ] );
           break;
         default:
           break;

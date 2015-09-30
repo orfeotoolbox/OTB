@@ -38,7 +38,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
+#include "Core/mvdAlgorithm.h"
+#include "Core/mvdTypes.h"
 
 
 namespace mvd
@@ -152,8 +153,8 @@ AbstractLayerModel
       !isEnhanced
       ? std::string()
       : ( HasKwl()
-	  ? STR_SENSOR
-	  : STR_UNKNOWN );
+	  ? ToStdString( tr( STR_SENSOR ) )
+	  : ToStdString( tr( STR_UNKNOWN ) ) );
 
   OGRSpatialReference ogr_sr( wkt.c_str() );
 

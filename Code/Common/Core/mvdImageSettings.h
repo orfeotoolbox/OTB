@@ -323,7 +323,14 @@ const char *
 ImageSettings
 ::GetValueName() const
 {
-  return ImageSettings::EFFECT_VALUE_NAME[ m_Effect ];
+  assert( qApp!=NULL );
+
+  return
+    qApp->translate(
+      "mvd::ImageSettings",
+      ImageSettings::EFFECT_VALUE_NAME[ m_Effect ]
+    )
+    .toLocal8Bit().constData();
 }
 
 /*****************************************************************************/

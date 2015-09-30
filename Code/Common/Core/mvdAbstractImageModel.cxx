@@ -201,12 +201,22 @@ AbstractImageModel
     qBandNames1 =  ToQStringList( stdBandNames1 );
     QStringList qBandNames2( ToQStringList( stdBandNames2 ) );
 
+    assert( qApp!=NULL );
+
     QStringList::iterator it1( qBandNames1.begin() );
     QStringList::const_iterator it2( qBandNames2.begin() );
+
     for( ; it1!=qBandNames1.end(); ++it1, ++it2 )
       {
       if( !it2->isEmpty() )
-        it1->append( " (" + *it2 + ")" );
+        it1->append(
+	  " (" +
+	  qApp->translate(
+	    "mvd::AbstractImageModel",
+	    it2->toAscii().constData()
+	  )
+	  + ")"
+	);
       }
     }
 

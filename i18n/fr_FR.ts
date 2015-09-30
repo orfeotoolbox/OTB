@@ -3597,7 +3597,7 @@ La navigation en résolution sera plus lente.</translation>
     </message>
 </context>
 <context>
-    <name>mvd::VectorImageSettings</name>
+    <name>mvd::ImageSettings</name>
     <message>
         <source>Range</source>
         <translation>Plage</translation>

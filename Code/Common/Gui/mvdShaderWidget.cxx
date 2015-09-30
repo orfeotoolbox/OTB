@@ -74,8 +74,10 @@ ShaderWidget
 {
   m_UI->setupUi( this );
 
+  assert( qApp!=NULL );
+
   for( int i=0; i<EFFECT_COUNT; ++i )
-    m_UI->effectComboBox->addItem( EFFECT_NAME[ i ] );
+    m_UI->effectComboBox->addItem( qApp->translate( "mvd", EFFECT_NAME[ i ] ) );
 
   m_UI->valueLineEdit->setValidator(
     new QDoubleValidator( m_UI->valueLineEdit )
@@ -95,12 +97,17 @@ void
 ShaderWidget
 ::SetGLSL140Enabled( bool isEnabled )
 {
-  int index = m_UI->effectComboBox->findText( EFFECT_NAME[ EFFECT_GRADIENT ] );
+  assert( qApp!=NULL );
+
+  int index =
+    m_UI->effectComboBox->findText(
+      qApp->translate( "mvd", EFFECT_NAME[ EFFECT_GRADIENT ] )
+    );
 
   if( isEnabled )
     {
     if( index<0 )
-      m_UI->effectComboBox->addItem( EFFECT_NAME[ EFFECT_GRADIENT ] );
+      m_UI->effectComboBox->addItem( tr( "mvd", EFFECT_NAME[ EFFECT_GRADIENT ] ) );
     }
   else if( index>=0 )
     m_UI->effectComboBox->removeItem( index );
@@ -121,9 +128,13 @@ ShaderWidget
 
   if( settings!=NULL )
     {
+    assert( qApp!=NULL );
+
     for( int i=0; i<m_UI->effectComboBox->count(); ++i )
-      if( QString::compare( m_UI->effectComboBox->itemText( i ),
-                            EFFECT_NAME[ settings->GetEffect() ] )==0 )
+      if( m_UI->effectComboBox->itemText( i )
+	  .compare(
+	    qApp->translate( "mvd",
+			     EFFECT_NAME[ settings->GetEffect() ] ) )==0 )
         {
         m_UI->effectComboBox->setCurrentIndex( i );
 
@@ -165,8 +176,10 @@ ShaderWidget
   if( !HasSettings() )
     return;
 
+  assert( qApp!=NULL );
+
   for( int i=0; i<EFFECT_COUNT; ++i )
-    if( QString::compare( text, EFFECT_NAME[ i ] )==0 )
+    if( QString::compare( text, qApp->translate( "mvd", EFFECT_NAME[ i ] ) )==0 )
       {
       ImageSettings * settings = GetSettings();
       assert( settings!=NULL );
