@@ -447,7 +447,7 @@ I18nCoreApplication
     {
     throw std::invalid_argument(
       ToStdString(
-	tr( "Class 'I18nCoreApplication' instance must be provided a"
+	tr( "Class 'I18nCoreApplication' instance must be provided a "
 	    "QCoreApplication' pointer at construction time!" )
       )
     );
