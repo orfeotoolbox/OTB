@@ -101,7 +101,7 @@ create_monteverdi_application(NAME monteverdi
   ${Monteverdi_App_RESOURCES_RCC}
   LINK_LIBRARIES Monteverdi_App
   ${QT_QTMAIN_LIBRARY}
-  OUTPUT_NAME ${MV2_OUTPUT_NAME}
+  OUTPUT_NAME ${Monteverdi_App_OUTPUT_NAME}
   COMPONENT_NAME Monteverdi
   NEEDS_OTB_APPS FALSE
   )
