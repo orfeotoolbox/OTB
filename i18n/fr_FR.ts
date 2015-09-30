@@ -5,32 +5,32 @@
     <name>ColorSetupController</name>
     <message>
         <source>BAND 0</source>
-        <translation type="obsolete">BANDE 0</translation>
+        <translation>BANDE 0</translation>
     </message>
 </context>
 <context>
     <name>ColorSetupWidget</name>
     <message>
         <source>BAND %1</source>
-        <translation type="obsolete">BANDE %1</translation>
+        <translation>BANDE %1</translation>
     </message>
 </context>
 <context>
     <name>DatabaseBrowserController</name>
     <message>
         <source>Warning!</source>
-        <translation type="obsolete">Avertissement !</translation>
+        <translation>Avertissement !</translation>
     </message>
 </context>
 <context>
     <name>HistogramWidget</name>
     <message>
         <source>White</source>
-        <translation type="obsolete">Gris</translation>
+        <translation>Gris</translation>
     </message>
     <message>
         <source>RGB</source>
-        <translation type="obsolete">RVB</translation>
+        <translation>RVB</translation>
     </message>
 </context>
 <context>
@@ -61,19 +61,19 @@ Il se peut que l&apos;application ne fonctionne pas comme prévu. Voulez-vous co
     </message>
     <message>
         <source>Monteverdi - Critical error!</source>
-        <translation type="obsolete">Monteverdi - Erreur critique !</translation>
+        <translation>Monteverdi - Erreur critique !</translation>
     </message>
     <message>
         <source>Error when creating repository cache-directory:
 %1
 Application will exit!</source>
-        <translation type="obsolete">Une erreur s&apos;est produite lors de la création du répertoire de cache :
+        <translation>Une erreur s&apos;est produite lors de la création du répertoire de cache :
 %1
 L&apos;application va se terminer !</translation>
     </message>
     <message>
         <source>Monteverdi - Warning!</source>
-        <translation type="obsolete">Monteverdi - Avertissement !</translation>
+        <translation>Monteverdi - Avertissement !</translation>
     </message>
     <message>
         <source>There are %1 outdated dataset(s) in cache-directory.
@@ -81,7 +81,7 @@ L&apos;application va se terminer !</translation>
 Please remove cache-directory &apos;%2&apos; and restart Monteverdi
 
 Do you want to delete cache-directory &apos;%2&apos; before quitting Monteverdi?</source>
-        <translation type="obsolete">Il y a %1 jeu(x) de données obsolète(s) dans le répertoire de cache.
+        <translation>Il y a %1 jeu(x) de données obsolète(s) dans le répertoire de cache.
 
 Veuillez supprimer le répertoire de cache  &apos;%2&apos; avant de redémarrer Monteverdi.
 
@@ -89,7 +89,7 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Tryed to remove home dir.</source>
-        <translation type="obsolete">Tentative de suppression du compte utilisateur.</translation>
+        <translation>Tentative de suppression du compte utilisateur.</translation>
     </message>
     <message>
         <source>Error while creating cache repository.
@@ -97,7 +97,7 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
 %1
 
 Application will exit!</source>
-        <translation type="obsolete">Erreur durant la création du répertoire de cache.
+        <translation>Erreur durant la création du répertoire de cache.
 
 %1
 
@@ -109,7 +109,7 @@ L&apos;application va se terminer !</translation>
 It is generally a bad idea to set Monteverdi cache-directory to your home directory. Please choose another sub-directory.
 
 Application will now exit.</source>
-        <translation type="obsolete">Le répertoire de cache Monteverdi est défini comme étant votre répertoire d&apos;accueil &apos;%1&apos;. La suppression du répertoire de cache est annulée pour éviter toute perte irrémédiable de données.
+        <translation>Le répertoire de cache Monteverdi est défini comme étant votre répertoire d&apos;accueil &apos;%1&apos;. La suppression du répertoire de cache est annulée pour éviter toute perte irrémédiable de données.
 
 Il n&apos;est générallement pas conseillé de définir le répertoire de cache de Monteverdi comment étant votre répertoire d&apos;accueil. Veuillez, s&apos;il vous plait, choisir un autre sous-répertoire.
 
@@ -123,7 +123,7 @@ Application will now exit!
 %2
 
 Please, remove your Monteverdi cache-directory.</source>
-        <translation type="obsolete">Échec lors de l&apos;ouverture de la base de données Monteverdi.
+        <translation>Échec lors de l&apos;ouverture de la base de données Monteverdi.
 
 L&apos;application va se terminer !
 
@@ -147,7 +147,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     <name>mvd</name>
     <message>
         <source>Chessboard</source>
-        <translation>Echiquier</translation>
+        <translation>Échiquier</translation>
     </message>
     <message>
         <source>Gradient</source>
@@ -398,7 +398,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     <name>mvd::CheckableLineEdit</name>
     <message>
         <source>Enabled</source>
-        <translation type="obsolete">Activé</translation>
+        <translation>Activé</translation>
     </message>
     <message>
         <source></source>
@@ -438,19 +438,19 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Apply to all</source>
-        <translation type="obsolete">Appliquer à tous</translation>
+        <translation>Appliquer à tous</translation>
     </message>
     <message>
         <source>Intensity</source>
-        <translation type="obsolete">Intensité</translation>
+        <translation>Intensité</translation>
     </message>
     <message>
         <source>Set the lower intensity threshold. Values bellow this threshold will be clamped to 0.</source>
-        <translation type="obsolete">Règle le seuil bas pour l&apos;intensité. Les valeurs en dessous de ce seuil seront clampées à 0.</translation>
+        <translation>Règle le seuil bas pour l&apos;intensité. Les valeurs en dessous de ce seuil seront clampées à 0.</translation>
     </message>
     <message>
         <source>Set the higher intensity threshold. Values bellow this threshold will be clamped to 255.</source>
-        <translation type="obsolete">Règle le seuil haut pour l&apos;intensité. Les valeurs au dessus de ce seuil seront clampées à 255.</translation>
+        <translation>Règle le seuil haut pour l&apos;intensité. Les valeurs au dessus de ce seuil seront clampées à 255.</translation>
     </message>
     <message>
         <source>Set the intensity low and high thresholds to the minimum and maximum values of the current band.</source>
@@ -474,7 +474,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Defaults</source>
-        <translation type="obsolete">Défaut</translation>
+        <translation>Défaut</translation>
     </message>
     <message>
         <source></source>
@@ -483,7 +483,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Apply all</source>
-        <translation type="obsolete">Appliquer à tous</translation>
+        <translation>Appliquer à tous</translation>
     </message>
     <message>
         <source>min/Max</source>
@@ -491,11 +491,11 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Quantile:</source>
-        <translation type="obsolete">Quantile:</translation>
+        <translation>Quantile:</translation>
     </message>
     <message>
         <source>Intensity:</source>
-        <translation type="obsolete">Intensité:</translation>
+        <translation>Intensité:</translation>
     </message>
     <message>
         <source>2%</source>
@@ -643,35 +643,35 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Red</source>
-        <translation type="obsolete">Rouge</translation>
+        <translation>Rouge</translation>
     </message>
     <message>
         <source>Green</source>
-        <translation type="obsolete">Vert</translation>
+        <translation>Vert</translation>
     </message>
     <message>
         <source>Blue</source>
-        <translation type="obsolete">Bleu</translation>
+        <translation>Bleu</translation>
     </message>
     <message>
         <source>Yellow</source>
-        <translation type="obsolete">Jaune</translation>
+        <translation>Jaune</translation>
     </message>
     <message>
         <source>Coastal</source>
-        <translation type="obsolete">Côtier</translation>
+        <translation>Côtier</translation>
     </message>
     <message>
         <source>NIR</source>
-        <translation type="obsolete">PIR</translation>
+        <translation>PIR</translation>
     </message>
     <message>
         <source>NIR1</source>
-        <translation type="obsolete">PIR1</translation>
+        <translation>PIR1</translation>
     </message>
     <message>
         <source>NIR2</source>
-        <translation type="obsolete">PIR2</translation>
+        <translation>PIR2</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;color:#EEEEEE;background-color:#111111&quot;&gt;&amp;nbsp;&lt;b&gt;W&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
@@ -727,7 +727,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Inconsistent Dataset disabled</source>
-        <translation type="obsolete">Jeu de données inconsistent désactivé</translation>
+        <translation>Jeu de données inconsistent désactivé</translation>
     </message>
     <message>
         <source>Warning!</source>
@@ -757,11 +757,11 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     <message>
         <source>
 - &apos;%1&apos;</source>
-        <translation type="obsolete">- &apos;%1&apos;</translation>
+        <translation>- &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Delete:%1</source>
-        <translation type="obsolete">Supprimer : %1</translation>
+        <translation>Supprimer : %1</translation>
     </message>
     <message>
         <source>Error!</source>
@@ -792,7 +792,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Datasets</source>
-        <translation type="obsolete">Jeux de données</translation>
+        <translation>Jeux de données</translation>
     </message>
     <message>
         <source></source>
@@ -801,7 +801,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Search Dataset ...</source>
-        <translation type="obsolete">Rechercher un jeu de données...</translation>
+        <translation>Rechercher un jeu de données...</translation>
     </message>
     <message>
         <source>Search Dataset...</source>
@@ -893,15 +893,15 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Failed to remove file &apos;%1&apos;.</source>
-        <translation type="obsolete">Échec de la suppression du fichier &apos;%1&apos;.</translation>
+        <translation>Échec de la suppression du fichier &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Failed to access parent directory of &apos;%1&apos;.</source>
-        <translation type="obsolete">Echec de l&apos;accès au répertoire parent &apos;%1&apos;.</translation>
+        <translation>Echec de l&apos;accès au répertoire parent &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Failed to remove dataset directory &apos;%1&apos;.</source>
-        <translation type="obsolete">Echec lors de la suppression du répertoire du dataset &apos;%1&apos;.</translation>
+        <translation>Echec lors de la suppression du répertoire du dataset &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>%1 outdated datasets. Please clear cache directory.</source>
@@ -929,11 +929,11 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Delete Dataset</source>
-        <translation type="obsolete">Supprimer dataset</translation>
+        <translation>Supprimer dataset</translation>
     </message>
     <message>
         <source>Rename Dataset</source>
-        <translation type="obsolete">Renommer dataset</translation>
+        <translation>Renommer dataset</translation>
     </message>
     <message>
         <source>Delete dataset</source>
@@ -1069,11 +1069,11 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Exception caught when checking version of dataset &apos;%1&apos;: </source>
-        <translation type="obsolete">Exception rattrapée lors de la vérification de la version du jeu de données &apos;%1&apos;:</translation>
+        <translation>Exception rattrapée lors de la vérification de la version du jeu de données &apos;%1&apos;:</translation>
     </message>
     <message>
         <source>Exception caught when checking for version of dataset &apos;%1&apos;: </source>
-        <translation type="obsolete">Exception rattrapée lors de la vérification de la version du dataset &apos;%1&apos;:</translation>
+        <translation>Exception rattrapée lors de la vérification de la version du dataset &apos;%1&apos;:</translation>
     </message>
     <message>
         <source>Exception caught when checking version of dataset &apos;%1&apos;.</source>
@@ -1149,15 +1149,15 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Unable to list suppored OpenGL versions using QGLFormat. Qt version is %1. Please upgrade to Qt 4.7.0 or newer.</source>
-        <translation type="obsolete">Impossible de lister les version OpenGL supportés via QGLFormat. Qt version is %1. Veuillez actualiser Qt à la version 4.7.0 ou plus.  </translation>
+        <translation>Impossible de lister les version OpenGL supportés via QGLFormat. Qt version is %1. Veuillez actualiser Qt à la version 4.7.0 ou plus.  </translation>
     </message>
     <message>
         <source>Runtime version of OpenGL used by Qt %1: %2.%3.</source>
-        <translation type="obsolete">Version OpenGL utilisée par Qt %1 : %2.%3 durant l&apos;exécution.</translation>
+        <translation>Version OpenGL utilisée par Qt %1 : %2.%3 durant l&apos;exécution.</translation>
     </message>
     <message>
         <source>Version(s) of OpenGL supported by Qt %1:</source>
-        <translation type="obsolete">Version(s) OpenGL supportées par Qt %1:</translation>
+        <translation>Version(s) OpenGL supportées par Qt %1:</translation>
     </message>
 </context>
 <context>
@@ -1184,36 +1184,28 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
         <translation></translation>
     </message>
     <message>
-        <source>%1: Generating histogram (I)...</source>
-        <translation type="obsolete">%1: Génération de l&apos;histogramme (I)...</translation>
-    </message>
-    <message>
         <source>%1: Pass #1 - finding pixel min/maxes...</source>
-        <translation type="obsolete">%1: Passe #1 - Recherche des min/max des pixels...</translation>
+        <translation>%1: Passe #1 - Recherche des min/max des pixels...</translation>
     </message>
     <message>
         <source>%1: Pass #1 - done (%2 ms).</source>
-        <translation type="obsolete">%1: Pass #1 - terminé (%2 ms).</translation>
+        <translation>%1: Passe #1 - terminé (%2 ms).</translation>
     </message>
     <message>
         <source>%1: Pass #2 - computing histogram...</source>
-        <translation type="obsolete">%1: Pass #2 - calcul de l&apos;histogramme...</translation>
+        <translation>%1: Passe #2 - calcul de l&apos;histogramme...</translation>
     </message>
     <message>
         <source>%1: Pass #2 - done (%2 ms).</source>
-        <translation type="obsolete">%1: Pass #2 - terminé (%2 ms).</translation>
-    </message>
-    <message>
-        <source>%1: Histogram (I) generated (%2 ms).</source>
-        <translation type="obsolete">%1: Histogramme (I) généré (%2 ms).</translation>
+        <translation>%1: Passe #2 - terminé (%2 ms).</translation>
     </message>
     <message>
         <source>%1: Generating histogram (M)...</source>
-        <translation type="obsolete">%1: Generation de l&apos;histogramme (M)...</translation>
+        <translation>%1: Generation de l&apos;histogramme (M)...</translation>
     </message>
     <message>
         <source>%1: Histogram (M) generated (%2 ms).</source>
-        <translation type="obsolete">%1: Histogramme (M) généré (%2 ms).</translation>
+        <translation>%1: Histogramme (M) généré (%2 ms).</translation>
     </message>
     <message>
         <source>%1: Reading histogram...</source>
@@ -1301,51 +1293,51 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Running from build directory &apos;%1&apos;.</source>
-        <translation type="obsolete">Exécution depuis le répertoire de compilation &apos;%1&apos;.</translation>
+        <translation>Exécution depuis le répertoire de compilation &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Running from install directory &apos;%1&apos;.</source>
-        <translation type="obsolete">Exécution depuis le répertoire d&apos;installation &apos;%1&apos;.</translation>
+        <translation>Exécution depuis le répertoire d&apos;installation &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Failed to load &apos;%1&apos; translation file from &apos;%2&apos;.</source>
-        <translation type="obsolete">Échec de chargement du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
+        <translation>Échec de chargement du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>Warning!</source>
-        <translation type="obsolete">Avertissement !</translation>
+        <translation>Avertissement !</translation>
     </message>
     <message>
         <source>Successfully loaded &apos;%1&apos; translation file from &apos;%2&apos;.</source>
-        <translation type="obsolete">Chargement réussi du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
+        <translation>Chargement réussi du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>Executable dir : %1</source>
-        <translation type="obsolete">Répertoire de l&apos;exécutable : %1</translation>
+        <translation>Répertoire de l&apos;exécutable : %1</translation>
     </message>
     <message>
         <source>Candidate install prefix found : %1</source>
-        <translation type="obsolete">Répertoire d&apos;installation pontentiel trouvé : %1</translation>
+        <translation>Répertoire d&apos;installation pontentiel trouvé : %1</translation>
     </message>
     <message>
         <source>Unable to locate translation files</source>
-        <translation type="obsolete">Impossible de trouver les fichiers de traductions</translation>
+        <translation>Impossible de trouver les fichiers de traductions</translation>
     </message>
     <message>
         <source>Critical error</source>
-        <translation type="obsolete">Erreur critique</translation>
+        <translation>Erreur critique</translation>
     </message>
     <message>
         <source>Using translation dir &apos;%1&apos;.</source>
-        <translation type="obsolete">Utilisation du répertoire de traduction :%1&apos;.</translation>
+        <translation>Utilisation du répertoire de traduction :%1&apos;.</translation>
     </message>
     <message>
         <source>Failed to access translation-files directory &apos;%1&apos;</source>
-        <translation type="obsolete">Echec de l&apos;accès au répertoire de fichiers de traduction : &apos;%1&apos;</translation>
+        <translation>Echec de l&apos;accès au répertoire de fichiers de traduction : &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Cache directory created at %1</source>
-        <translation type="obsolete">Répertoire de cache créé dans %1</translation>
+        <translation>Répertoire de cache créé dans %1</translation>
     </message>
 </context>
 <context>
@@ -1384,11 +1376,11 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>An error occured while loading the geoid file, no geoid file will be used.</source>
-        <translation type="obsolete">Une erreur s&apos;est produite lors du chargement du fichier geoide, aucun fichier geoide ne sera utilisé.</translation>
+        <translation>Une erreur s&apos;est produite lors du chargement du fichier geoide, aucun fichier geoide ne sera utilisé.</translation>
     </message>
     <message>
         <source>An error occured while loading the DEM directory, no DEM will be used.</source>
-        <translation type="obsolete">Une erreur s&apos;est produite lors du chargement depuis le répertoire MNT, aucun MNT ne sera utilisé.</translation>
+        <translation>Une erreur s&apos;est produite lors du chargement depuis le répertoire MNT, aucun MNT ne sera utilisé.</translation>
     </message>
     <message>
         <source>Failed to locate translation files directory &apos;i18n&apos; in &apos;%1&apos;.</source>
@@ -1420,11 +1412,11 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>An error occured while loading the geoid file, no geoid file will be used: </source>
-        <translation type="obsolete">Une erreur s&apos;est produite lors du chargement du fichier geoide, aucun fichier geoide ne sera utilisé : </translation>
+        <translation>Une erreur s&apos;est produite lors du chargement du fichier geoide, aucun fichier geoide ne sera utilisé : </translation>
     </message>
     <message>
         <source>An error occured while loading the DEM directory, no DEM will be used: </source>
-        <translation type="obsolete">Une erreur s&apos;est produite lors du chargement depuis le répertoire MNT, aucun MNT ne sera utilisé : </translation>
+        <translation>Une erreur s&apos;est produite lors du chargement depuis le répertoire MNT, aucun MNT ne sera utilisé : </translation>
     </message>
     <message>
         <source>Failed to remove file &apos;%1&apos;.</source>
@@ -1458,6 +1450,10 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
         <source>An error occured while loading the DEM directory, no DEM will be used:</source>
         <translation>Une erreur s&apos;est produite durant le chargement du répertoire MNT, aucun MNT ne sera utilisé :</translation>
     </message>
+    <message>
+        <source>Class &apos;I18nCoreApplication&apos; instance must be provided a QCoreApplication&apos; pointer at construction time!</source>
+        <translation>Il faut fournir un pointeur vers une instance de &quot;QCoreApplication&quot; lors de la construction d&apos;une instance de la classe &quot;I18nCoreApplication&quot; !</translation>
+    </message>
 </context>
 <context>
     <name>mvd::I18nMainWindow</name>
@@ -1468,7 +1464,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Welcome new </source>
-        <translation type="obsolete">Bienvenu nouvel </translation>
+        <translation>Bienvenu nouvel </translation>
     </message>
     <message>
         <source>Do you want to specify a custom repository location?</source>
@@ -1476,7 +1472,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Please, select directory where the </source>
-        <translation type="obsolete">Veuillez sélectionner un répertoire où </translation>
+        <translation>Veuillez sélectionner un répertoire où </translation>
     </message>
     <message>
         <source>Dataset has been modified.
@@ -1594,7 +1590,7 @@ Attention :
     </message>
     <message>
         <source>Monteverdi - Critical error!</source>
-        <translation type="obsolete">Monteverdi - Erreur critique !</translation>
+        <translation>Monteverdi - Erreur critique !</translation>
     </message>
     <message>
         <source>Current OpenGL version is &apos;%1&apos; supporting OpenGL Shading-Language (GLSL) version &apos;%2&apos;.
@@ -2138,7 +2134,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Mouse wheel&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rotate layers up/down&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Droid Sans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -2777,15 +2773,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Open...</source>
-        <translation type="obsolete">&amp;Ouvrir...</translation>
+        <translation>&amp;Ouvrir...</translation>
     </message>
     <message>
         <source>Open...</source>
-        <translation type="obsolete">Ouvrir...</translation>
+        <translation>Ouvrir...</translation>
     </message>
     <message>
         <source>Open file.</source>
-        <translation type="obsolete">Ouvrir fichier.</translation>
+        <translation>Ouvrir fichier.</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
@@ -2793,7 +2789,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Location</source>
-        <translation type="obsolete">Localisation</translation>
+        <translation>Localisation</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -2826,40 +2822,40 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Quicklook</source>
-        <translation type="obsolete">Aperçu</translation>
+        <translation>Aperçu</translation>
     </message>
     <message>
         <source>Quicklook (show/hide).</source>
-        <translation type="obsolete">Aperçu (montrer/cacher).</translation>
+        <translation>Aperçu (montrer/cacher).</translation>
     </message>
     <message>
         <source>Video color setup</source>
-        <translation type="obsolete">Choix des canaux</translation>
+        <translation>Choix des canaux</translation>
     </message>
     <message>
         <source>Video color setup (show/hide).</source>
-        <translation type="obsolete">Choix des canaux (montrer/cacher).</translation>
+        <translation>Choix des canaux (montrer/cacher).</translation>
     </message>
     <message>
         <source>Video color dynamics</source>
-        <translation type="obsolete">Réglage de la dynamique</translation>
+        <translation>Réglage de la dynamique</translation>
     </message>
     <message>
         <source>Video color dynamics (show/hide).</source>
-        <translation type="obsolete">Réglage de la dynamique (montrer/cacher).</translation>
+        <translation>Réglage de la dynamique (montrer/cacher).</translation>
     </message>
     <message>
         <source> bands, </source>
-        <translation type="obsolete"> bandes, </translation>
+        <translation> bandes, </translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="obsolete">Attention</translation>
+        <translation>Attention</translation>
     </message>
     <message>
         <source>This repository seems incorrect to store the cache directory.
 Please choose another one.</source>
-        <translation type="obsolete">Ce répertoire semble incorrect pour stocker le répertoire de cache.
+        <translation>Ce répertoire semble incorrect pour stocker le répertoire de cache.
 Merci d&apos;en choisir un autre.</translation>
     </message>
     <message>
@@ -2868,7 +2864,7 @@ Merci d&apos;en choisir un autre.</translation>
 Warning:
 You need to have write access to this directory.
 Be aware that this directory can grow and consume a significant disk space.</source>
-        <translation type="obsolete">Monteverdi maintient un répertoire pour stocker des données additionnelles liées à chaque image (réglage d&apos;affichage, histogrammes, aperçus...).
+        <translation>Monteverdi maintient un répertoire pour stocker des données additionnelles liées à chaque image (réglage d&apos;affichage, histogrammes, aperçus...).
 
 Attention:
 Vous devez posséder les droits d&apos;écriture sur ce répertoire.
@@ -2877,34 +2873,34 @@ Soyez conscients que ce répertoire peut grossir and consommer un espace disque 
     <message>
         <source>Do you want to specify a custom location ?
 (No will use the default location: %1)</source>
-        <translation type="obsolete">Voulez-vous spécifier un emplacement personnalisé ?
+        <translation>Voulez-vous spécifier un emplacement personnalisé ?
 (&apos;Non&apos; utilisera l&apos;emplacement par défaut : %1)</translation>
     </message>
     <message>
         <source>Select the repository to store the cache repository for Monteverdi</source>
-        <translation type="obsolete">Sélectionnez le répertoire où stocker le cache de Monteverdi</translation>
+        <translation>Sélectionnez le répertoire où stocker le cache de Monteverdi</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="obsolete">Erreur</translation>
+        <translation>Erreur</translation>
     </message>
     <message>
         <source>Dataset has been modified.
 Do you want to save settings before quitting?</source>
-        <translation type="obsolete">Jeu de données modifié.
+        <translation>Jeu de données modifié.
 Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>&amp;Open image...</source>
-        <translation type="obsolete">&amp;Ouvrir image...</translation>
+        <translation>&amp;Ouvrir image...</translation>
     </message>
     <message>
         <source>Open image...</source>
-        <translation type="obsolete">Nouvelle image...</translation>
+        <translation>Nouvelle image...</translation>
     </message>
     <message>
         <source>Open image-file.</source>
-        <translation type="obsolete">Nouveau fichier image.</translation>
+        <translation>Nouveau fichier image.</translation>
     </message>
     <message>
         <source>Zoom in</source>
@@ -2916,11 +2912,11 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Zoom to image extent</source>
-        <translation type="obsolete">Zoomer sur l&apos;étendue</translation>
+        <translation>Zoomer sur l&apos;étendue</translation>
     </message>
     <message>
         <source>Zoom to full resolution</source>
-        <translation type="obsolete">Zoomer à pleine résolution</translation>
+        <translation>Zoomer à pleine résolution</translation>
     </message>
     <message>
         <source>Tool bar</source>
@@ -2928,7 +2924,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Database browser</source>
-        <translation type="obsolete">Navigateur de base de données</translation>
+        <translation>Navigateur de base de données</translation>
     </message>
     <message>
         <source>Pixel Description</source>
@@ -2936,7 +2932,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Dataset properties</source>
-        <translation type="obsolete">Propriétés du dataset</translation>
+        <translation>Propriétés du dataset</translation>
     </message>
     <message>
         <source>OTB Applications browser</source>
@@ -2964,7 +2960,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Welcome new Montevedi2 user !</source>
-        <translation type="obsolete">Bienvenu, nouvel utilisateur Monteverdi !</translation>
+        <translation>Bienvenu, nouvel utilisateur Monteverdi !</translation>
     </message>
     <message>
         <source>Import image-file.</source>
@@ -2988,7 +2984,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Monteverdi - Warning!</source>
-        <translation type="obsolete">Monteverdi - Avertissement !</translation>
+        <translation>Monteverdi - Avertissement !</translation>
     </message>
     <message>
         <source>Histogram</source>
@@ -2996,15 +2992,15 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Quicklook view (Ice)</source>
-        <translation type="obsolete">Apperçu (Ice)</translation>
+        <translation>Apperçu (Ice)</translation>
     </message>
     <message>
         <source>Image view (Ice)</source>
-        <translation type="obsolete">Vue image (Ice)</translation>
+        <translation>Vue image (Ice)</translation>
     </message>
     <message>
         <source>Database browser (test)</source>
-        <translation type="obsolete">Navigateur de base de données</translation>
+        <translation>Navigateur de base de données</translation>
     </message>
     <message>
         <source>Render-mode toolbar</source>
@@ -3232,7 +3228,7 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
     </message>
     <message>
         <source>Cache directory</source>
-        <translation type="obsolete">Répertoire de cache</translation>
+        <translation>Répertoire de cache</translation>
     </message>
     <message>
         <source>...</source>
@@ -3245,21 +3241,21 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
     </message>
     <message>
         <source>Select the repository to store the cache repository for Monteverdi</source>
-        <translation type="obsolete">Sélectionnez le répertoire où stocker le cache de Monteverdi</translation>
+        <translation>Sélectionnez le répertoire où stocker le cache de Monteverdi</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="obsolete">Attention</translation>
+        <translation>Attention</translation>
     </message>
     <message>
         <source>This repository &apos;%1&apos; seems incorrect to store the cache directory.
 Please choose another one.</source>
-        <translation type="obsolete">Le répertoire &apos;%1&apos; semble incorrect pour stocker le cache.
+        <translation>Le répertoire &apos;%1&apos; semble incorrect pour stocker le cache.
 Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Location of user dataset-repository.</source>
-        <translation type="obsolete">Localisation du dépôt de dataset utilisateur.</translation>
+        <translation>Localisation du dépôt de dataset utilisateur.</translation>
     </message>
     <message>
         <source>Results directory</source>
@@ -3279,11 +3275,11 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>SRTM Directory</source>
-        <translation type="obsolete">Répertoire MNT</translation>
+        <translation>Répertoire MNT</translation>
     </message>
     <message>
         <source>Select the directory containing SRTM tiles.</source>
-        <translation type="obsolete">Veuillez choisir le répertoire contenant les tuiles SRTM.</translation>
+        <translation>Veuillez choisir le répertoire contenant les tuiles SRTM.</translation>
     </message>
     <message>
         <source>Select a geoid file.</source>
@@ -3408,23 +3404,23 @@ Merci d&apos;en sélectionner un autre.</translation>
     <name>mvd::StatusBarWidget</name>
     <message>
         <source>Index:</source>
-        <translation type="obsolete">Indice:</translation>
+        <translation>Indice:</translation>
     </message>
     <message>
         <source>Physical: [xxx, yyy]</source>
-        <translation type="obsolete">Physique: [xxx, yyy]</translation>
+        <translation>Physique: [xxx, yyy]</translation>
     </message>
     <message>
         <source>WGS84: [lon, lat]</source>
-        <translation type="obsolete">WGS84: [lon, lat]</translation>
+        <translation>WGS84: [lon, lat]</translation>
     </message>
     <message>
         <source>Radiometry: [0 1 2]</source>
-        <translation type="obsolete">Radiométrie: [0 1 2]</translation>
+        <translation>Radiométrie: [0 1 2]</translation>
     </message>
     <message>
         <source>Zoom Level:</source>
-        <translation type="obsolete">Niveau de zoom:</translation>
+        <translation>Niveau de zoom:</translation>
     </message>
     <message>
         <source></source>
@@ -3453,11 +3449,11 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>System error %1: &apos;%2&apos;.</source>
-        <translation type="obsolete">Erreur système %1: &apos;%2.</translation>
+        <translation>Erreur système %1: &apos;%2.</translation>
     </message>
     <message>
         <source>System error %1: &apos;%2&apos; %3.</source>
-        <translation type="obsolete">Erruur système %1: &apos;%2&apos; %3.</translation>
+        <translation>Erruur système %1: &apos;%2&apos; %3.</translation>
     </message>
 </context>
 <context>
@@ -3529,11 +3525,11 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Radiometry</source>
-        <translation type="obsolete">Radiométrie</translation>
+        <translation>Radiométrie</translation>
     </message>
     <message>
         <source>The ImageIO used to read this file doesn&apos;t support Overviews.</source>
-        <translation type="obsolete">Ce format de fichier ne permet pas d&apos;utiliser les pyramides multi-résolution.</translation>
+        <translation>Ce format de fichier ne permet pas d&apos;utiliser les pyramides multi-résolution.</translation>
     </message>
     <message>
         <source>The ImageIO used to read this file supports overviews.</source>
@@ -3545,7 +3541,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Caching of overviews.</source>
-        <translation type="obsolete">Mise en cache de la pyramide multi-résolution.</translation>
+        <translation>Mise en cache de la pyramide multi-résolution.</translation>
     </message>
     <message>
         <source>Letting GDAL decimate the file on-the-fly !</source>
@@ -3553,12 +3549,12 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>The file already has overviews !</source>
-        <translation type="obsolete">Le fichier a déjà une pyramide multi-résolution !</translation>
+        <translation>Le fichier a déjà une pyramide multi-résolution !</translation>
     </message>
     <message>
         <source>OTB can not read this file (&apos;%1&apos;).
 Please check.</source>
-        <translation type="obsolete">OTB ne peut pas lire le fichier (&apos;%1&apos;).
+        <translation>OTB ne peut pas lire le fichier (&apos;%1&apos;).
 Merci de vérifier.</translation>
     </message>
     <message>
@@ -3569,7 +3565,7 @@ La navigation en résolution sera plus lente.</translation>
     </message>
     <message>
         <source>The file already has overviews!</source>
-        <translation type="obsolete">Le fichier a déjà une pyramide multi-résolution !</translation>
+        <translation>Le fichier a déjà une pyramide multi-résolution !</translation>
     </message>
     <message>
         <source>Cartographic</source>
@@ -3647,14 +3643,14 @@ La navigation en résolution sera plus lente.</translation>
     <name>mvd::Wrapper::QtWidgetFileSelection</name>
     <message>
         <source>Drag and drop a dataset here.</source>
-        <translation type="obsolete">Glisser-déposer un jeu de données ici.</translation>
+        <translation>Glisser-déposer un jeu de données ici.</translation>
     </message>
 </context>
 <context>
     <name>mvd::Wrapper::QtWidgetInputImageParameter</name>
     <message>
         <source>Drag and drop a dataset here.</source>
-        <translation type="obsolete">Glisser-déposer un jeu de données ici.</translation>
+        <translation>Glisser-déposer un jeu de données ici.</translation>
     </message>
 </context>
 <context>
@@ -3673,7 +3669,7 @@ Veuillez, s&apos;il vous plait, vous référer à la documentation de &apos;%1&a
         <source>&apos;%1&apos; has succeeded with return status %2.
 Result(s) will be imported as dataset(s).
 Please check &apos;%1&apos; log tab.</source>
-        <translation type="obsolete">L&apos;exécution de &apos;%1&apos; a réussi avec le code de retour %2.
+        <translation>L&apos;exécution de &apos;%1&apos; a réussi avec le code de retour %2.
 Les résultats seront importés en tant que jeu de données.
 Veuillez, s&apos;il vous plait, vérifier l&apos;onglet du journal de &apos;%1&apos;.</translation>
     </message>
@@ -3686,7 +3682,7 @@ Veuillez, s&apos;il vous plait, vérifier l&apos;onglet du journal de &apos;%1&a
         <source>&apos;%1&apos; has succeeded.
 Result(s) will be imported as dataset(s).
 </source>
-        <translation type="obsolete">&apos;%1&apos; exécuté avec succès.
+        <translation>&apos;%1&apos; exécuté avec succès.
 Le(s) résultat(s) vont être importés en tant que jeu de données.</translation>
     </message>
 </context>
