@@ -17,3 +17,4 @@
 /* Show developper debug messages */
 #cmakedefine OTB_SHOW_ALL_MSG_DEBUG
 
+#cmakedefine OTB_USE_GDAL_20

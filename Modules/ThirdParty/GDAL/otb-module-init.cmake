@@ -23,7 +23,7 @@ if(GDAL_CONFIG_CHECKING)
 	#------------------- TESTS ---------------------
 	# Version of GDAL  
 	try_run(RUN_RESULT_VERSION COMPILE_RESULT_VERSION ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalVersionTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS ${TEMP}/gdalVersion.txt ${MIN_MAJOR_VERSION} ${MIN_MINOR_VERSION})
-
+  
 	# Has OGR
 	try_compile(GDAL_HAS_OGR ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalOGRTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}")
 
@@ -85,6 +85,15 @@ if(GDAL_CONFIG_CHECKING)
 		file(READ "${TEMP}/gdalVersion.txt" DETECTED_VERSION)
 		message(WARNING "Version of GDAL must be >= " ${MIN_MAJOR_VERSION} "." ${MIN_MINOR_VERSION} " : " ${DETECTED_VERSION} " detected.")
 		set(GDAL_QUALIFIES FALSE)
+  else((${RUN_RESULT_VERSION} EQUAL 1))
+    file(READ "${TEMP}/gdalVersion.txt" DETECTED_VERSION)
+    string(SUBSTRING ${DETECTED_VERSION} 0 2 VER2)
+    if(${VER2} EQUAL "2.")
+      message("-- Gdal >= 2.0.0 detected")
+      set(OTB_USE_GDAL_20 true CACHE INTERNAL "True if GDAL >= 2.0.0 has been detected" FORCE )
+    else(${VER2} EQUAL "2.")
+      set(OTB_USE_GDAL_20 false CACHE INTERNAL "True if GDAL >= 2.0.0 has been detected" FORCE )
+    endif()
 	endif()
 		
 	if (NOT GDAL_HAS_OGR)
