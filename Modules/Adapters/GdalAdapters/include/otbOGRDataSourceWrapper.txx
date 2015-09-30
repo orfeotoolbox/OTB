@@ -38,7 +38,7 @@
 // to the compilation mode of the client code.
 
 inline
-GDALDataset & otb::ogr::DataSource::ogr()
+otb::OGRVersionProxy::GDALDatasetType & otb::ogr::DataSource::ogr()
 {
   assert(m_DataSource && "GDALDataset not initialized");
   return *m_DataSource;

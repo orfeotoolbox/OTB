@@ -34,7 +34,6 @@
 #include "otbOGRDriversInit.h"
 #include "otbSystem.h"
 // OGR includes
-#include "ogrsf_frmts.h"
 
 /*===========================================================================*/
 /*=======================[ construction/destruction ]========================*/
@@ -45,15 +44,13 @@ bool otb::ogr::DataSource::Clear()
   return true;
 }
 
-void otb::ogr::DataSource::Reset(GDALDataset * source)
+void otb::ogr::DataSource::Reset(otb::OGRVersionProxy::GDALDatasetType * source)
 {
   if (m_DataSource) {
     // OGR makes a pointless check for non-nullity in
     // GDALDataset::DestroyDataSource (pointless because "delete 0" is
     // perfectly valid -> it's a no-op)
-    // JML: GDALClose is said to be better for windows than calling
-    // delete operator
-    GDALClose(m_DataSource); // void, noexcept
+    OGRVersionProxy::Close(m_DataSource); // void, noexcept
   }
   m_DataSource = source;
 }
@@ -121,15 +118,15 @@ otb::ogr::DataSource::DataSource()
 {
   Drivers::Init();
 
-  GDALDriver * d = GetGDALDriverManager()->GetDriverByName("Memory");
+  OGRVersionProxy::GDALDriverType * d = OGRVersionProxy::GetDriverByName("Memory");
   assert(d && "OGR Memory driver not found");
-  m_DataSource = d->Create("in-memory",0,0,0,GDT_Unknown,NULL);
+  m_DataSource = OGRVersionProxy::Create(d,"in-memory");
   if (!m_DataSource) {
     itkExceptionMacro(<< "Failed to create OGRMemDataSource: " << CPLGetLastErrorMsg());
   }
 }
 
-otb::ogr::DataSource::DataSource(GDALDataset * source, Modes::type mode)
+otb::ogr::DataSource::DataSource(otb::OGRVersionProxy::GDALDatasetType * source, Modes::type mode)
 : m_DataSource(source),
   m_OpenMode(mode),
   m_FirstModifiableLayerID(0)
@@ -141,7 +138,7 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
 {
   bool update = (mode != Modes::Read);
 
-  GDALDataset * source = (GDALDataset *)GDALOpenEx(datasourceName.c_str(), (update? GDAL_OF_UPDATE : GDAL_OF_READONLY) | GDAL_OF_VECTOR,NULL,NULL,NULL);
+  OGRVersionProxy::GDALDatasetType * source = OGRVersionProxy::Open(datasourceName.c_str(),!update);
   if (!source)
     {
     // In read mode, this is a failure
@@ -160,14 +157,14 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
         <<datasourceName<<">.");
       }
 
-    GDALDriver * d = GetGDALDriverManager()->GetDriverByName(driverName);
+    OGRVersionProxy::GDALDriverType * d = OGRVersionProxy::GetDriverByName(driverName);
 
     if(!d)
       {
       itkGenericExceptionMacro(<<"Could not create OGR driver "<<driverName<<", check your OGR configuration for available drivers.");
       }
 
-    source = d->Create(datasourceName.c_str(),0,0,0,GDT_Unknown,NULL);
+    source = OGRVersionProxy::Create(d,datasourceName.c_str());
     if (!source) {
       itkGenericExceptionMacro(<< "Failed to create GDALDataset <"<<datasourceName
         <<"> (driver name: <" << driverName<<">: " << CPLGetLastErrorMsg());
@@ -179,30 +176,30 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
 void DeleteDataSource(std::string const& datasourceName)
 {
   // Attempt to delete the datasource if it already exists
-  GDALDataset * poDS = (GDALDataset *)GDALOpenEx(datasourceName.c_str(), GDAL_OF_UPDATE | GDAL_OF_VECTOR,NULL,NULL,NULL);
+  otb::OGRVersionProxy::GDALDatasetType * poDS = otb::OGRVersionProxy::Open(datasourceName.c_str(),false);
 
   if (poDS != NULL)
     {
-    GDALDriver * ogrDriver = poDS->GetDriver();
+    otb::OGRVersionProxy::GDALDriverType * ogrDriver = poDS->GetDriver();
    
     //Erase the data if possible
-    if (poDS->TestCapability(ODrCDeleteDataSource))
+    if (otb::OGRVersionProxy::TestCapability(ogrDriver,poDS,ODrCDeleteDataSource))
       {
       //Delete datasource
-      OGRErr ret = ogrDriver->Delete(datasourceName.c_str());
-      if (ret != OGRERR_NONE)
+      bool ret = otb::OGRVersionProxy::Delete(ogrDriver,datasourceName.c_str());
+     if (!ret)
         {
-         GDALClose(poDS);
+        otb::OGRVersionProxy::Close(poDS);
         itkGenericExceptionMacro(<< "Deletion of data source " << datasourceName
                         << " failed: " << CPLGetLastErrorMsg());
         }
       }
     else
       {
-       GDALClose(poDS);
+      otb::OGRVersionProxy::Close(poDS);
       itkGenericExceptionMacro(<< "Cannot delete data source " << datasourceName);
       }
-     GDALClose(poDS);
+    otb::OGRVersionProxy::Close(poDS);
     } // if (poDS != NULL)
 }
 
@@ -226,7 +223,7 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
 
 /*static*/
 otb::ogr::DataSource::Pointer
-otb::ogr::DataSource::New(GDALDataset * source, Modes::type mode)
+otb::ogr::DataSource::New(otb::OGRVersionProxy::GDALDatasetType * source, Modes::type mode)
 {
   Pointer res = new DataSource(source, mode);
   res->UnRegister();
@@ -297,7 +294,7 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
     if (!ol)
       {
       itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
-        << "> in the GDALDataset file <" << GetFileListAsString()
+                               << "> in the GDALDataset file <" << otb::OGRVersionProxy::GetDatasetDescription(m_DataSource)
         <<">: " << CPLGetLastErrorMsg());
       }
 
@@ -320,7 +317,7 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
       if (!ol)
         {        
         itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
-                                 << "> in the GDALDataset file <" << GetFileListAsString()
+                                 << "> in the GDALDataset file <" <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource)
           <<">: " << CPLGetLastErrorMsg());
         }
 
@@ -345,7 +342,7 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
       {
       
       itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
-        << "> in the GDALDataset file <" << GetFileListAsString()
+        << "> in the GDALDataset file <" <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource)
         <<">: " << CPLGetLastErrorMsg());
       }
 
@@ -389,7 +386,7 @@ otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
     {    
     itkGenericExceptionMacro(<< "Failed to copy the layer <"
       << srcLayer.GetName() << "> into the new layer <" <<newName
-      << "> in the GDALDataset file <" << GetFileListAsString()
+      << "> in the GDALDataset file <" <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource)
       <<">: " << CPLGetLastErrorMsg());
     }
   const bool modifiable = true;
@@ -422,14 +419,14 @@ void otb::ogr::DataSource::DeleteLayer(size_t i)
     {
     
     itkExceptionMacro(<< "Cannot delete " << i << "th layer in the GDALDataset <"
-                      << GetFileListAsString() << "> as it contains only " << nb_layers << "layers.");
+                      <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << "> as it contains only " << nb_layers << "layers.");
     }
   const OGRErr err = m_DataSource->DeleteLayer(int(i));
   if (err != OGRERR_NONE)
     {
     
     itkExceptionMacro(<< "Cannot delete " << i << "th layer in the GDALDataset <"
-                      << GetFileListAsString() << ">: " << CPLGetLastErrorMsg());
+                      <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << ">: " << CPLGetLastErrorMsg());
     }
 }
 
@@ -486,7 +483,7 @@ size_t otb::ogr::DataSource::GetLayerID(std::string const& name) const
   if (id < 0)
     {
     itkExceptionMacro( << "Cannot fetch any layer named <" << name
-                       << "> in the GDALDataset <" << GetFileListAsString() << ">: "
+                       << "> in the GDALDataset <" <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << ">: "
       << CPLGetLastErrorMsg());
     }
   return 0; // keep compiler happy
@@ -499,13 +496,13 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(size_t i)
   if (int(i) >= nb_layers)
     {
     itkExceptionMacro(<< "Cannot fetch " << i << "th layer in the GDALDataset <"
-                      << GetFileListAsString() << "> as it contains only " << nb_layers << "layers.");
+                      << otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << "> as it contains only " << nb_layers << "layers.");
     }
   OGRLayer * layer_ptr = m_DataSource->GetLayer(int(i));
   if (!layer_ptr)
     {
     itkExceptionMacro( << "Unexpected error: cannot fetch " << i << "th layer in the GDALDataset <"
-      << GetFileListAsString() << ">: " << CPLGetLastErrorMsg());
+                       << otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << ">: " << CPLGetLastErrorMsg());
     }
   return otb::ogr::Layer(layer_ptr, IsLayerModifiable(i));
 }
@@ -531,7 +528,7 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(std::string const& name)
   if (!layer_ptr)
     {
     itkExceptionMacro( << "Cannot fetch any layer named <" << name
-      << "> in the GDALDataset <" << GetFileListAsString() << ">: "
+      << "> in the GDALDataset <" << otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << ">: "
       << CPLGetLastErrorMsg());
     }
   return otb::ogr::Layer(layer_ptr, IsLayerModifiable(name));
@@ -556,7 +553,7 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
     {
 #if defined(PREFER_EXCEPTION)
     itkExceptionMacro( << "Unexpected error: cannot execute the SQL request <" << statement
-      << "> in the GDALDataset <" << GetFileListAsString() << ">: " << CPLGetLastErrorMsg());
+      << "> in the GDALDataset <" <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << ">: " << CPLGetLastErrorMsg());
 #else
     // Cannot use the deleter made for result sets obtained from
     // GDALDataset::ExecuteSQL because it checks for non-nullity....
@@ -699,30 +696,17 @@ void otb::ogr::DataSource::PrintSelf(
 bool otb::ogr::DataSource::HasCapability(std::string const& capabilityName) const
 {
   assert(m_DataSource && "Datasource not initialized");
-  return m_DataSource->TestCapability(capabilityName.c_str());
+  return otb::OGRVersionProxy::TestCapability(m_DataSource->GetDriver(),m_DataSource,capabilityName.c_str());
 }
 
 void otb::ogr::DataSource::SyncToDisk()
 {
   assert(m_DataSource && "Datasource not initialized");
-  m_DataSource->FlushCache();
-}
+  bool ret = otb::OGRVersionProxy::SyncToDisk(m_DataSource);
 
-std::string otb::ogr::DataSource::GetFileListAsString() const
-{
-  char ** files = m_DataSource->GetFileList();
-
-  std::string files_str="";
-      
-  if(files)
+  if(!ret)
     {
-    unsigned int i = 0;
-    while(files[i]!=NULL)
-      {
-      files_str+=std::string(files[i])+" ";
-      ++i;
-      }
-    CSLDestroy(files);
+    itkExceptionMacro( << "Cannot flush the pending of the OGRDataSource <"
+                       << otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << ">: " << CPLGetLastErrorMsg());
     }
-  return files_str;
 }

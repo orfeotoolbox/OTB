@@ -32,8 +32,8 @@
 #include "itkObjectFactory.h" // that should have been included by itkMacro.h
 
 #include "otbOGRLayerWrapper.h"
+#include "otbOGRVersionProxy.h"
 
-class GDALDataset;
 class OGRLayer;
 class OGRSpatialReference;
 class OGRGeometry;
@@ -147,7 +147,7 @@ public:
    * \note No condition is assumed on the non-nullity of \c source.
    * \see \c DataSource(GDALDataset *)
    */
-  static Pointer New(GDALDataset * sourcemode, Modes::type mode = Modes::Read);
+  static Pointer New(OGRVersionProxy::GDALDatasetType * sourcemode, Modes::type mode = Modes::Read);
   //@}
 
   /**\name Projection Reference property */
@@ -284,7 +284,7 @@ public:
    * \throw None
    * \post Assumes ownership of the \c source.
    */
-  void Reset(GDALDataset * source);
+  void Reset(OGRVersionProxy::GDALDatasetType * source);
 
   /**\name Layers modification */
   //@{
@@ -480,7 +480,7 @@ public:
    * \warning You must under no circonstance try to delete the \c GDALDataset
    * obtained this way.
    */
-  GDALDataset & ogr();
+    OGRVersionProxy::GDALDatasetType & ogr();
 
 protected:
   /** Default constructor.
@@ -496,7 +496,7 @@ protected:
   /** Init constructor.
    * \post The newly constructed object owns the \c source parameter.
    */
-  DataSource(GDALDataset * source, Modes::type mode);
+  DataSource(OGRVersionProxy::GDALDatasetType * source, Modes::type mode);
   /** Destructor.
    * \post The \c GDALDataset owned is released (if not null).
    */
@@ -529,12 +529,8 @@ private:
   size_t GetLayerID(std::string const& name) const;
   int GetLayerIDUnchecked(std::string const& name) const;
 
-  /** Return a string containing space separated items retrieved by
-  the GetFileList() method in GDALDataset (for error reporting) */
-  std::string GetFileListAsString() const;
-
 private:
-  GDALDataset  *m_DataSource;
+  OGRVersionProxy::GDALDatasetType *m_DataSource;
   Modes::type    m_OpenMode;
   int            m_FirstModifiableLayerID;
   }; // end class DataSource

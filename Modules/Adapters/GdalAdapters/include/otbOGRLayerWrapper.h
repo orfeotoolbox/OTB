@@ -24,11 +24,11 @@ PURPOSE.  See the above copyright notices for more information.
 #include <boost/utility/enable_if.hpp>
 // #include "itkIndent.h", included from field
 #include "otbOGRFeatureWrapper.h"
+#include "otbOGRVersionProxy.h"
 
 // #include "ogr_core.h" // OGRwkbGeometryType, included from feature -> field
 // Forward declarations
 class OGRLayer;
-class GDALDataset;
 class OGRGeometry;
 class OGRFeatureDefn;
 
@@ -105,7 +105,7 @@ public:
    * OGRDataSource::ExecuteSQL(). It's actually the constructor called by \c
    * DataSource::ExecuteSQL().
    */
-  Layer(OGRLayer* layer, GDALDataset& sourceInChargeOfLifeTime, bool modifiable);
+    Layer(OGRLayer* layer, otb::OGRVersionProxy::GDALDatasetType& sourceInChargeOfLifeTime, bool modifiable);
   //@}
 
   /**\name Features collection */
