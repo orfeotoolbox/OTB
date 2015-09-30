@@ -211,7 +211,7 @@ int testRegression(SampleGeneratorType& sg, RegressionType& rgrsn, RegressionTes
     //typename SampleGeneratorType::PrecisionType invalue = sampleIt.GetMeasurementVector()[0];
     typename SampleGeneratorType::PrecisionType prediction = rgrsn->Predict(sampleIt.GetMeasurementVector())[0];
     typename SampleGeneratorType::PrecisionType expected = resultIt.GetMeasurementVector()[0];
-    rmse += pow(prediction - expected, 2.0);
+    rmse += std::pow(prediction - expected, static_cast<PrecisionType>(2.0));
     ++sampleIt;
     ++resultIt;
     } 
