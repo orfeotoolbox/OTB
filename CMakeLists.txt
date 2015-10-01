@@ -289,150 +289,41 @@ if(BUILD_TESTING)
   add_subdirectory(Testing)
 endif()
 
-if(WIN32 AND Monteverdi_USE_CPACK)
-  add_custom_target(packages
-    COMMAND ${CMAKE_CPACK_COMMAND}
-    "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi.cmake" "--verbose"
-    DEPENDS PACKAGE_Mapla)
+############## Packaging stuff for Windows ####################
+#cpack has a built-in target called 'package'. In our case we create two standalone installers with
+#and uses a custom target named packages.
+if(WIN32)
+  if(Monteverdi_USE_CPACK)
+    add_custom_target(packages
+      COMMAND ${CMAKE_CPACK_COMMAND}
+      "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi.cmake" "--verbose"
+      DEPENDS PACKAGE_Mapla)
+    
+    add_custom_target(PACKAGE_Mapla
+      COMMAND ${CMAKE_CPACK_COMMAND}
+      "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Mapla.cmake" "--verbose"
+      DEPENDS PACKAGE_Monteverdi)
+    
+  endif() # (Monteverdi_USE_CPACK)
+  
+  if(CMAKE_CROSSCOMPILING)
+    
+    #print MXE_TARGET_DIR for the sake of debugging. This is visible on on dashboard log
+    if(DEFINED MXE_TARGET_DIR)
+      message(STATUS "MXE_TARGET_DIR = ${MXE_TARGET_DIR}")
+    endif() # (DEFINED MXE_TARGET_DIR)
+    
+    #add custom target that create mapla and monteverdi2 archives.
+    add_custom_target(packages
+      COMMAND ${CMAKE_COMMAND} -E touch mingw-package
+      WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
+      DEPENDS
+      create-Monteverdi-mingw-archive
+      create-Mapla-mingw-archive)
+    
+  endif() # (CMAKE_CROSSCOMPILING)
+endif() # (WIN32)
 
-  add_custom_target(PACKAGE_Mapla
-    COMMAND ${CMAKE_CPACK_COMMAND}
-    "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Mapla.cmake" "--verbose"
-    DEPENDS PACKAGE_Monteverdi)
-
-endif(WIN32 AND Monteverdi_USE_CPACK)
-
-#----------------------------------------------------------------------------
-# Generate MonteverdiConfig.cmake
-# Save library dependencies.
-# set(Monteverdi_LIBRARY_DEPENDS_FILE ${Monteverdi_BINARY_DIR}/MonteverdiLibraryDepends.cmake)
-# export_library_dependencies(${Monteverdi_LIBRARY_DEPENDS_FILE})
-
-# # Library directory.
-# set(Monteverdi_LIBRARY_DIRS ${OTB_LIBRARY_DIRS} ${LIBRARY_OUTPUT_PATH})
-# set(Monteverdi_USE_FILE ${Monteverdi_BINARY_DIR}/UseMonteverdi.cmake)
-# configure_file(${Monteverdi_SOURCE_DIR}/MonteverdiConfig.cmake.in
-#                ${Monteverdi_BINARY_DIR}/MonteverdiConfig.cmake @ONLY IMMEDIATE)
-# configure_file(${Monteverdi_SOURCE_DIR}/UseMonteverdi.cmake.in
-#                ${Monteverdi_USE_FILE} @ONLY IMMEDIATE)
-
-#----------------------------------------------------------------------------
-# Setup valgrind option (default hard coded value is ctest is invalid).
-# set(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes --num-callers=50")
-
-if(WIN32 AND CMAKE_CROSSCOMPILING)
-  if(DEFINED MXE_TARGET_DIR)
-    message(STATUS "MXE_TARGET_DIR = ${MXE_TARGET_DIR}")
-
-    if(MXE_TARGET_DIR MATCHES "i686")
-      set(mxearch x86)
-      set(archive_name ${CMAKE_PROJECT_NAME}-${Monteverdi_VERSION_STRING}-win32)
-    elseif(MXE_TARGET_DIR MATCHES "x86_64")
-      set(mxearch x64)
-      set(archive_name ${CMAKE_PROJECT_NAME}-${Monteverdi_VERSION_STRING}-win64)
-    endif()
-
-    execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
-
-    get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
-    get_filename_component(mxeroot ${mxeroot} PATH)
-
-    #should we add otbiceviewer.exe?
-
-    set(pefiles
-      ${CMAKE_INSTALL_PREFIX}/bin/monteverdi.exe
-      ${CMAKE_INSTALL_PREFIX}/bin/mapla.exe)
-
-
-
-    file(WRITE "${CMAKE_BINARY_DIR}/_mingw/CMakeLists.txt"
-      "cmake_minimum_required(VERSION 2.6)
-       include(CMakeParseArguments)
-       set(Monteverdi_SOURCE_DIR \"${Monteverdi_SOURCE_DIR}\")
-       set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")
-       set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
-       set(Monteverdi_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
-       set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
-       set(Monteverdi_INSTALL_DATA_DIR \"${Monteverdi_INSTALL_DATA_DIR}\")
-        include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
-        include(${CMAKE_SOURCE_DIR}/CMake/CPackFunctions.cmake)
-        package_mingw(
-        ARCH \"${mxearch}\"
-        MXEROOT \"${mxeroot}\"
-        PREFIX_DIR \"${archive_name}\"
-        PEFILES \"${pefiles}\"
-        NEEDS_OTB_APPS TRUE,
-        SEARCHDIRS \"\")")
-
-    string(REPLACE "${CMAKE_PROJECT_NAME}" "Monteverdi" archive_name_monteverdi ${archive_name})
-    set(pefiles_monteverdi ${CMAKE_INSTALL_PREFIX}/bin/monteverdi.exe)
-
-
-    file(WRITE "${CMAKE_BINARY_DIR}/_mingw_monteverdi/CMakeLists.txt"
-      "cmake_minimum_required(VERSION 2.6)
-       include(CMakeParseArguments)
-       set(Monteverdi_SOURCE_DIR \"${Monteverdi_SOURCE_DIR}\")
-       set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")
-       set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
-       set(Monteverdi_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
-       set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
-       set(Monteverdi_INSTALL_DATA_DIR \"${Monteverdi_INSTALL_DATA_DIR}\")
-        include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
-        include(${CMAKE_SOURCE_DIR}/CMake/CPackFunctions.cmake)
-        package_mingw(
-        ARCH \"${mxearch}\"
-        MXEROOT \"${mxeroot}\"
-        PREFIX_DIR \"${archive_name_monteverdi}\"
-        PEFILES \"${pefiles_monteverdi}\"
-        SEARCHDIRS \"\")")
-
-    add_custom_target(configure-mingw_monteverdi
-      COMMAND ${CMAKE_COMMAND}
-      "${CMAKE_BINARY_DIR}/_mingw_monteverdi"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw_monteverdi")
-
-    add_custom_target(prepare-mingw_monteverdi
-      COMMAND ${CMAKE_COMMAND}
-      "--build" "${CMAKE_BINARY_DIR}/_mingw_monteverdi" "--target" "install"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw_monteverdi"
-      DEPENDS configure-mingw_monteverdi)
-
-    find_program(ZIP_EXECUTABLE zip)
-
-    if(ZIP_EXECUTABLE)
-      add_custom_target(package-mingw_monteverdi
-        COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name_monteverdi}.zip" "${archive_name_monteverdi}"
-        WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
-        DEPENDS prepare-mingw_monteverdi)
-    else()
-      message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
-    endif()
-
-    add_custom_target(configure-mingw
-      COMMAND ${CMAKE_COMMAND}
-      "${CMAKE_BINARY_DIR}/_mingw"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw"
-      DEPENDS package-mingw_monteverdi)
-
-    add_custom_target(prepare-mingw
-      COMMAND ${CMAKE_COMMAND}
-      "--build" "${CMAKE_BINARY_DIR}/_mingw" "--target" "install"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw"
-      DEPENDS configure-mingw)
-
-    find_program(ZIP_EXECUTABLE zip)
-
-    if(ZIP_EXECUTABLE)
-      add_custom_target(package-mingw
-        COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
-        WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
-        DEPENDS prepare-mingw)
-    else()
-      message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
-    endif()
-
-  else(DEFINED MXE_TARGET_DIR)
-    message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
-  endif(DEFINED MXE_TARGET_DIR)
-
-endif(WIN32 AND CMAKE_CROSSCOMPILING)
+#For MacOS, cmake + cpack generate a .app with a cpack built-in target 'package'.
+#So we call 'make package' on that platform to generate .app and then manually create .dmg using hdutil
+#For linux: the packages are provided via respecitive package management tool. (deb, rpm etc..)

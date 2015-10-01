@@ -1,11 +1,6 @@
 macro(package_mingw)
   cmake_parse_arguments(PACKAGE  "" "PREFIX_DIR;ARCH;MXEROOT;NEEDS_OTB_APPS" "SEARCHDIRS;PEFILES" ${ARGN} )
 
-  ###   ${PACKAGE_EXENAME} #name of executable
-  #${PACKAGE_ARCH} #x86/x64
-  #${PACKAGE_SEARCHDIRS}
-  ####set(PACKAGE_PREFIX_DIR "mingw")
-
   if("${PACKAGE_ARCH}" STREQUAL "x86")
     set(MXE_BIN_DIR "${PACKAGE_MXEROOT}/usr/i686-w64-mingw32.shared/bin")
     set(MXE_OBJDUMP "${PACKAGE_MXEROOT}/usr/bin/i686-w64-mingw32.shared-objdump")
@@ -19,34 +14,26 @@ macro(package_mingw)
   list(APPEND PACKAGE_SEARCHDIRS "${MXE_BIN_DIR}/../qt/lib") #Qwt
   list(APPEND PACKAGE_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/bin") #mvd
 
-  if(NOT DEFINED PACKAGE_NEEDS_OTB_APPS)
-    set(PACKAGE_NEEDS_OTB_APPS FALSE)
-  else()
-    set(PACKAGE_NEEDS_OTB_APPS TRUE)
-  endif()
-
+  install_common(${PACKAGE_PREFIX_DIR} ${PACKAGE_NEEDS_OTB_APPS})
   if(PACKAGE_NEEDS_OTB_APPS)
     list(APPEND PACKAGE_SEARCHDIRS "${OTB_MODULES_DIR}/../../../otb/applications") #otb apps
   endif()
-  install_common(${PACKAGE_NEEDS_OTB_APPS})
 
-  ################################### Monteverdi stuff ######################
-  file(GLOB MVD_BATFILES ${Monteverdi_SOURCE_DIR}/Packaging/Windows/*.bat)
-  foreach(MVD_BATFILE ${MVD_BATFILES})
-    install(
-      FILES ${MVD_BATFILE}
-      DESTINATION "${PACKAGE_PREFIX_DIR}/bin")
+    foreach(exe_file ${PACKAGE_PEFILES})
+      get_filename_component(base_name ${exe_file} NAME_WE)
+      install(FILES ${Monteverdi_SOURCE_DIR}/Packaging/Windows/${base_name}.bat
+        DESTINATION ${PACKAGE_PREFIX_DIR}/bin)
   endforeach()
 
+
+  #qt4 translations
   file(GLOB APP_TS_FILES ${Monteverdi_SOURCE_DIR}/i18n/*.ts) # qm files
   foreach(APP_TS_FILE ${APP_TS_FILES})
     get_filename_component(APP_TS_FILENAME ${APP_TS_FILE} NAME_WE)
     install(FILES ${Monteverdi_BINARY_DIR}/i18n/${APP_TS_FILENAME}.qm
       DESTINATION ${PACKAGE_PREFIX_DIR}/${Monteverdi_INSTALL_DATA_DIR}/i18n)
   endforeach()
-  ################################### Monteverdi stuff ######################
-
-
+  
   #dependency resolution based on copydlldeps.sh from mxe by Timothy Gu
   if(PACKAGE_NEEDS_OTB_APPS)
     file(GLOB otbapps_list ${OTB_MODULES_DIR}/../../../otb/applications/otbapp_*dll) # /lib/otb
@@ -130,8 +117,7 @@ function(process_deps infile)
 
           message(STATUS "Processing ${SEARCHDIR}/${infile}")
           if(NOT "${infile}" MATCHES "otbapp")
-            install(
-              FILES "${SEARCHDIR}/${infile}"
+            install(FILES "${SEARCHDIR}/${infile}"
               DESTINATION ${PACKAGE_PREFIX_DIR}/bin)
           else()
             ##message(STATUS "skipping..${infile}")
@@ -163,8 +149,8 @@ function(process_deps infile)
    endif()
 endfunction()
 
-function(install_common need_otb_apps)
-  set(APP_PREFIX_DIR "${PACKAGE_PREFIX_DIR}")
+function(install_common outdir need_otb_apps)
+  set(APP_PREFIX_DIR "${outdir}")
   set(APP_BIN_DIR "${APP_PREFIX_DIR}/bin")
   set(APP_QTSQLITE_FILENAME "qsqlite4.dll")
   set(APP_QTPLUGINS_DIR "${APP_PREFIX_DIR}/lib/qt4/plugins")
@@ -178,15 +164,13 @@ function(install_common need_otb_apps)
                   Plugins=../lib/qt4/plugins
                 \")" )
 
-  install(
-    FILES ${QT_PLUGINS_DIR}/sqldrivers/${APP_QTSQLITE_FILENAME}
+  install(FILES ${QT_PLUGINS_DIR}/sqldrivers/${APP_QTSQLITE_FILENAME}
     DESTINATION ${APP_QTPLUGINS_DIR}/sqldrivers)
 
   ####################### install translations #######################
   get_qt_translation_files(QT_TRANSLATIONS_FILES)
 
-  install(
-    FILES ${QT_TRANSLATIONS_FILES}
+  install(FILES ${QT_TRANSLATIONS_FILES}
     DESTINATION ${APP_I18N_DIR})
 
   ####################### install GDAL data #######################
@@ -196,8 +180,7 @@ function(install_common need_otb_apps)
     message(FATAL_ERROR "Cannot generate package without GDAL_DATA : ${GDAL_DATA}")
   endif()
 
-  install(
-    DIRECTORY ${GDAL_DATA}
+  install(DIRECTORY ${GDAL_DATA}
     DESTINATION ${APP_DATA_DIR})
 
   ####################### Check otb applications #######################
@@ -208,8 +191,7 @@ function(install_common need_otb_apps)
     endif()
 
     ## otb apps dir /lib/otb/applications
-    install(
-      DIRECTORY "${OTB_MODULES_DIR}/../../../otb/applications"
+    install(DIRECTORY "${OTB_MODULES_DIR}/../../../otb/applications"
       DESTINATION ${APP_OTBLIBS_DIR})
   endif()
 
