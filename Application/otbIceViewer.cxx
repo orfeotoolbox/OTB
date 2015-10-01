@@ -288,8 +288,10 @@ void IceViewer::Start()
     m_View->GetSettings()->SetWkt(firstActor->GetWkt());
     m_View->GetSettings()->SetKeywordList(firstActor->GetKwl());
     m_View->GetSettings()->UseProjectionOn();
+
     firstActor->ProcessViewSettings();
     firstActor->GetExtent(ulx,uly,lrx,lry);
+
     if(firstActor->GetSpacing()[1] < 0)
       {
       shouldHaveNegativeSpacing = true;

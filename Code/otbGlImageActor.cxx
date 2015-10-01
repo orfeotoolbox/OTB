@@ -45,8 +45,8 @@ GlImageActor::GlImageActor()
     m_Spacing(),
     m_NumberOfComponents(0),
     m_Shader(StandardShader::New()),
-    m_ViewportToImageTransform(RSTransformType::New()),
-    m_ImageToViewportTransform(RSTransformType::New()),
+    m_ViewportToImageTransform(),
+    m_ImageToViewportTransform(),
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
     m_ViewportBackwardRotationTransform(RigidTransformType::New())
 {}
