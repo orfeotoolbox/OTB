@@ -65,113 +65,113 @@ public:
 
   
   //Monostatic case
-    typedef otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor<ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatVectorImageType::PixelType>								RCoherencyFunctorType;
+    typedef otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor<ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleVectorImageType::PixelType>								RCoherencyFunctorType;
                                     
-    typedef otb::Functor::SinclairToReciprocalCovarianceMatrixFunctor<ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatVectorImageType::PixelType>								RCovarianceFunctorType;
+    typedef otb::Functor::SinclairToReciprocalCovarianceMatrixFunctor<ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleVectorImageType::PixelType>								RCovarianceFunctorType;
                                     
-    typedef otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatVectorImageType::PixelType>								RCircularCovarianceFunctorType;
+    typedef otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleVectorImageType::PixelType>								RCircularCovarianceFunctorType;
                                                                   
                                     								
-    typedef SinclairReciprocalImageFilter<ComplexFloatImageType, 
-											 ComplexFloatImageType, 
-											 ComplexFloatImageType, 
-											 ComplexFloatVectorImageType, 
+    typedef SinclairReciprocalImageFilter<ComplexDoubleImageType, 
+											 ComplexDoubleImageType, 
+											 ComplexDoubleImageType, 
+											 ComplexDoubleVectorImageType, 
 											 RCoherencyFunctorType > 									RCohSRFilterType;
 											 
 											 
-    typedef SinclairReciprocalImageFilter<ComplexFloatImageType, 
-											 ComplexFloatImageType, 
-											 ComplexFloatImageType, 
-											 ComplexFloatVectorImageType, 
+    typedef SinclairReciprocalImageFilter<ComplexDoubleImageType, 
+											 ComplexDoubleImageType, 
+											 ComplexDoubleImageType, 
+											 ComplexDoubleVectorImageType, 
 											 RCovarianceFunctorType > 									RCovSRFilterType;
 											 
-	typedef SinclairReciprocalImageFilter<ComplexFloatImageType, 
-											 ComplexFloatImageType, 
-											 ComplexFloatImageType, 
-											 ComplexFloatVectorImageType, 
+	typedef SinclairReciprocalImageFilter<ComplexDoubleImageType, 
+											 ComplexDoubleImageType, 
+											 ComplexDoubleImageType, 
+											 ComplexDoubleVectorImageType, 
 											 RCircularCovarianceFunctorType > 							RCCSRFilterType;
 											 
 											 
-    typedef otb::ReciprocalCoherencyToReciprocalMuellerImageFilter<ComplexFloatVectorImageType, FloatVectorImageType> RCRMFilterType;
+    typedef otb::ReciprocalCoherencyToReciprocalMuellerImageFilter<ComplexDoubleVectorImageType, DoubleVectorImageType> RCRMFilterType;
 	
-	typedef otb::ReciprocalCovarianceToCoherencyDegreeImageFilter<ComplexFloatVectorImageType, ComplexFloatVectorImageType> RCCDFilterType;
+	typedef otb::ReciprocalCovarianceToCoherencyDegreeImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> RCCDFilterType;
 	
-	typedef otb::ReciprocalCovarianceToReciprocalCoherencyImageFilter<ComplexFloatVectorImageType, ComplexFloatVectorImageType> RCRCFilterType;
+	typedef otb::ReciprocalCovarianceToReciprocalCoherencyImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> RCRCFilterType;
 	
-	typedef otb::ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter<ComplexFloatVectorImageType, ComplexFloatVectorImageType> RLCRCCFilterType;
+	typedef otb::ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> RLCRCCFilterType;
 											 
   
 	//Bistatic case
-	typedef otb::Functor::SinclairToCoherencyMatrixFunctor<ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatVectorImageType::PixelType>								CoherencyFunctorType;
+	typedef otb::Functor::SinclairToCoherencyMatrixFunctor<ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleVectorImageType::PixelType>								CoherencyFunctorType;
                                     
                                     
-	typedef otb::Functor::SinclairToCovarianceMatrixFunctor<ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatVectorImageType::PixelType>								CovarianceFunctorType;
+	typedef otb::Functor::SinclairToCovarianceMatrixFunctor<ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleVectorImageType::PixelType>								CovarianceFunctorType;
                                     
                                    
-	typedef otb::Functor::SinclairToCircularCovarianceMatrixFunctor<ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatVectorImageType::PixelType>								CircularCovarianceFunctorType;
+	typedef otb::Functor::SinclairToCircularCovarianceMatrixFunctor<ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleVectorImageType::PixelType>								CircularCovarianceFunctorType;
                                     
                                     	
-    typedef otb::Functor::SinclairToMuellerMatrixFunctor<ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    FloatVectorImageType::PixelType>									MuellerFunctorType;
+    typedef otb::Functor::SinclairToMuellerMatrixFunctor<ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    DoubleVectorImageType::PixelType>									MuellerFunctorType;
                                     
     
-    typedef SinclairImageFilter<ComplexFloatImageType, 
-											 ComplexFloatImageType, 
-											 ComplexFloatImageType,
-											 ComplexFloatImageType, 
-											 ComplexFloatVectorImageType, 
+    typedef SinclairImageFilter<ComplexDoubleImageType, 
+											 ComplexDoubleImageType, 
+											 ComplexDoubleImageType,
+											 ComplexDoubleImageType, 
+											 ComplexDoubleVectorImageType, 
 											 CoherencyFunctorType > 									CohSRFilterType;
 											 
 											 
-    typedef SinclairImageFilter<ComplexFloatImageType, 
-											 ComplexFloatImageType,
-											 ComplexFloatImageType, 
-											 ComplexFloatImageType, 
-											 ComplexFloatVectorImageType, 
+    typedef SinclairImageFilter<ComplexDoubleImageType, 
+											 ComplexDoubleImageType,
+											 ComplexDoubleImageType, 
+											 ComplexDoubleImageType, 
+											 ComplexDoubleVectorImageType, 
 											 CovarianceFunctorType > 									CovSRFilterType;
 											 
-	typedef SinclairImageFilter<ComplexFloatImageType, 
-											 ComplexFloatImageType, 
-											 ComplexFloatImageType,
-											 ComplexFloatImageType, 
-											 ComplexFloatVectorImageType, 
+	typedef SinclairImageFilter<ComplexDoubleImageType, 
+											 ComplexDoubleImageType, 
+											 ComplexDoubleImageType,
+											 ComplexDoubleImageType, 
+											 ComplexDoubleVectorImageType, 
 											 CircularCovarianceFunctorType > 							CCSRFilterType;
                                     
-	typedef SinclairImageFilter<ComplexFloatImageType, 
-											 ComplexFloatImageType, 
-											 ComplexFloatImageType,
-											 ComplexFloatImageType, 
-											 FloatVectorImageType, 
+	typedef SinclairImageFilter<ComplexDoubleImageType, 
+											 ComplexDoubleImageType, 
+											 ComplexDoubleImageType,
+											 ComplexDoubleImageType, 
+											 DoubleVectorImageType, 
 											 MuellerFunctorType > 										MSRFilterType;
 											 
 											 
-	typedef otb::MuellerToReciprocalCovarianceImageFilter<FloatVectorImageType, ComplexFloatVectorImageType>  MRCFilterType;									 
+	typedef otb::MuellerToReciprocalCovarianceImageFilter<DoubleVectorImageType, ComplexDoubleVectorImageType>  MRCFilterType;									 
 	
-	typedef otb::MuellerToPolarisationDegreeAndPowerImageFilter<FloatVectorImageType, FloatVectorImageType>   MPDPFilterType;
+	typedef otb::MuellerToPolarisationDegreeAndPowerImageFilter<DoubleVectorImageType, DoubleVectorImageType>   MPDPFilterType;
   
   
 
@@ -497,12 +497,12 @@ private:
 	  	m_RCohSRFilter = RCohSRFilterType::New();
 	  	
 	    if (inhv)
-		  m_RCohSRFilter->SetInputHV_VH(GetParameterComplexFloatImage("inhv"));
+		  m_RCohSRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("inhv"));
 	    else if (invh)
-		  m_RCohSRFilter->SetInputHV_VH(GetParameterComplexFloatImage("invh"));
+		  m_RCohSRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("invh"));
 	  	
-		m_RCohSRFilter->SetInputHH(GetParameterComplexFloatImage("inhh"));
-		m_RCohSRFilter->SetInputVV(GetParameterComplexFloatImage("invv"));
+		m_RCohSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
+		m_RCohSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
 		SetParameterComplexOutputImage("outc", m_RCohSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
 		
@@ -514,12 +514,12 @@ private:
 		m_RCovSRFilter = RCovSRFilterType::New();
 		
 		if (inhv)
-		  m_RCohSRFilter->SetInputHV_VH(GetParameterComplexFloatImage("inhv"));
+		  m_RCovSRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("inhv"));
 	    else if (invh)
-		  m_RCohSRFilter->SetInputHV_VH(GetParameterComplexFloatImage("invh"));
+		  m_RCovSRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("invh"));
 		
-		m_RCovSRFilter->SetInputHH(GetParameterComplexFloatImage("inhh"));
-		m_RCovSRFilter->SetInputVV(GetParameterComplexFloatImage("invv"));
+		m_RCovSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
+		m_RCovSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
 		SetParameterComplexOutputImage("outc", m_RCovSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
 		
@@ -532,12 +532,12 @@ private:
 		m_RCCSRFilter = RCCSRFilterType::New();
 		
 		if (inhv)
-		  m_RCohSRFilter->SetInputHV_VH(GetParameterComplexFloatImage("inhv"));
+		  m_RCCSRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("inhv"));
 	    else if (invh)
-		  m_RCohSRFilter->SetInputHV_VH(GetParameterComplexFloatImage("invh"));
+		  m_RCCSRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("invh"));
 		
-		m_RCCSRFilter->SetInputHH(GetParameterComplexFloatImage("inhh"));
-		m_RCCSRFilter->SetInputVV(GetParameterComplexFloatImage("invv"));
+		m_RCCSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
+		m_RCCSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
 		SetParameterComplexOutputImage("outc", m_RCCSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
 		
@@ -547,7 +547,7 @@ private:
 	    case 3: // ReciprocalCoherencyToReciprocalMuellerImageFilter
 		
 		m_RCRMFilter = RCRMFilterType::New();
-		m_RCRMFilter->SetInput(GetParameterComplexFloatVectorImage("inc"));
+		m_RCRMFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
 		
 		SetParameterOutputImage("outf", m_RCRMFilter->GetOutput() ); // input : 6 complex channels | 16 real channels
 		
@@ -558,7 +558,7 @@ private:
 		case 4: // ReciprocalCovarianceToCoherencyDegreeImageFilter
 		
 		m_RCCDFilter = RCCDFilterType::New();
-		m_RCCDFilter->SetInput(GetParameterComplexFloatVectorImage("inc"));
+		m_RCCDFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
 		
 		SetParameterComplexOutputImage("outc", m_RCCDFilter->GetOutput() ); // input : 6 complex channels | 3 complex channels
 		
@@ -568,7 +568,7 @@ private:
 	    case 5: // ReciprocalCovarianceToReciprocalCoherencyImageFilter
 		
 		m_RCRCFilter = RCRCFilterType::New();
-		m_RCRCFilter->SetInput(GetParameterComplexFloatVectorImage("inc"));
+		m_RCRCFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
 		
 		SetParameterComplexOutputImage("outc", m_RCRCFilter->GetOutput() ); // input : 6 complex channels | 6 complex channels
 		
@@ -579,7 +579,7 @@ private:
 	    case 6: // ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
 		
 		m_RLCRCCFilter = RLCRCCFilterType::New();
-		m_RLCRCCFilter->SetInput(GetParameterComplexFloatVectorImage("inc"));
+		m_RLCRCCFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
 		
 		SetParameterComplexOutputImage("outc", m_RLCRCCFilter->GetOutput() ); // input : 6 complex channels | output : 6 complex channels
 		
@@ -590,7 +590,7 @@ private:
 		
 		m_MRCFilter = MRCFilterType::New();
 		
-		m_MRCFilter->SetInput(GetParameterFloatVectorImage("inf"));
+		m_MRCFilter->SetInput(GetParameterDoubleVectorImage("inf"));
 		
 		SetParameterComplexOutputImage("outc", m_MRCFilter->GetOutput() ); // input : 16 real channels | output : 6 complex channels
 		
@@ -605,10 +605,10 @@ private:
 			
 	  	m_CohSRFilter = CohSRFilterType::New();
 	  	
-		m_CohSRFilter->SetInputHH(GetParameterComplexFloatImage("inhh"));
-		m_CohSRFilter->SetInputHV(GetParameterComplexFloatImage("inhv"));
-		m_CohSRFilter->SetInputVH(GetParameterComplexFloatImage("invh"));
-		m_CohSRFilter->SetInputVV(GetParameterComplexFloatImage("invv"));
+		m_CohSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
+		m_CohSRFilter->SetInputHV(GetParameterComplexDoubleImage("inhv"));
+		m_CohSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
+		m_CohSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
 		SetParameterComplexOutputImage("outc", m_CohSRFilter->GetOutput() ); // input : 4 x 1 complex channel | 10 complex channels
 		
@@ -620,10 +620,10 @@ private:
 		
 		m_CovSRFilter = CovSRFilterType::New();
 		
-		m_CovSRFilter->SetInputHH(GetParameterComplexFloatImage("inhh"));
-		m_CovSRFilter->SetInputHV(GetParameterComplexFloatImage("inhv"));
-		m_CovSRFilter->SetInputVH(GetParameterComplexFloatImage("invh"));
-		m_CovSRFilter->SetInputVV(GetParameterComplexFloatImage("invv"));
+		m_CovSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
+		m_CovSRFilter->SetInputHV(GetParameterComplexDoubleImage("inhv"));
+		m_CovSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
+		m_CovSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
 		SetParameterComplexOutputImage("outc", m_CovSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 10 complex channels
 		
@@ -634,10 +634,10 @@ private:
 		
 		m_CCSRFilter = CCSRFilterType::New();
 		
-		m_CCSRFilter->SetInputHH(GetParameterComplexFloatImage("inhh"));
-		m_CCSRFilter->SetInputHV(GetParameterComplexFloatImage("inhv"));
-		m_CCSRFilter->SetInputVH(GetParameterComplexFloatImage("invh"));
-		m_CCSRFilter->SetInputVV(GetParameterComplexFloatImage("invv"));
+		m_CCSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
+		m_CCSRFilter->SetInputHV(GetParameterComplexDoubleImage("inhv"));
+		m_CCSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
+		m_CCSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
 		SetParameterComplexOutputImage("outc", m_CCSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 10 complex channels
 		
@@ -650,13 +650,13 @@ private:
 		
 				
 		case 11: // SinclairToMueller
-		
+		std::cout << "taloula 1" << std::endl;
 		m_MSRFilter = MSRFilterType::New();
 		
-		m_MSRFilter->SetInputHH(GetParameterComplexFloatImage("inhh"));
-		m_MSRFilter->SetInputHV(GetParameterComplexFloatImage("inhv"));
-		m_MSRFilter->SetInputVH(GetParameterComplexFloatImage("invh"));
-		m_MSRFilter->SetInputVV(GetParameterComplexFloatImage("invv"));
+		m_MSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
+		m_MSRFilter->SetInputHV(GetParameterComplexDoubleImage("inhv"));
+		m_MSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
+		m_MSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
 		SetParameterOutputImage("outf", m_MSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 16 real channels
 		
@@ -666,7 +666,7 @@ private:
 		case 12: // MuellerToPolarisationDegreeAndPowerImageFilter
 		m_MPDPFilter = MPDPFilterType::New();
 		
-		m_MPDPFilter->SetInput(GetParameterFloatVectorImage("inf"));
+		m_MPDPFilter->SetInput(GetParameterDoubleVectorImage("inf"));
 		
 		SetParameterOutputImage("outf", m_MPDPFilter->GetOutput() ); //  input : 16 real channels | output : 4 real channels
 		
@@ -692,6 +692,8 @@ private:
   CovSRFilterType::Pointer m_CovSRFilter;
   CCSRFilterType::Pointer  m_CCSRFilter;
   MSRFilterType::Pointer   m_MSRFilter;
+  
+  //Both cases
   MRCFilterType::Pointer   m_MRCFilter;
   MPDPFilterType::Pointer  m_MPDPFilter;
   
