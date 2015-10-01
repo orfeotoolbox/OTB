@@ -325,6 +325,5 @@ if(WIN32)
   endif() # (CMAKE_CROSSCOMPILING)
 endif() # (WIN32)
 
-#For MacOS, cmake + cpack generate a .app with a cpack built-in target 'package'.
-#So we call 'make package' on that platform to generate .app and then manually create .dmg using hdutil
-#For linux: the packages are provided via respecitive package management tool. (deb, rpm etc..)
+#For MacOS and Windows platform, we create a custom target called packages to generate packages
+#For linux: the packages are provided via respective package management tool. (deb, rpm etc..)
