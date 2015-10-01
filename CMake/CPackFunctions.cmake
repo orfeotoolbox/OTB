@@ -280,7 +280,7 @@ function(configure_app_package app with_otb_apps)
     set(APP_QTPLUGINS_DIR ${APP_PREFIX_DIR}/plugins)
     set(APP_OTBLIBS_DIR ${APP_PREFIX_DIR}/MacOS/otb)
     set(APP_I18N_DIR ${APP_PREFIX_DIR}/Resources/otb/translations) #translations
-    set(APP_DATA_DIR ${APP_PREFIX_DIR}/Resources/gdal)
+    set(APP_DATA_DIR ${APP_PREFIX_DIR}/Resources)
 
     install(FILES ${CMAKE_SOURCE_DIR}/Packaging/MacOS/Monteverdi.icns
       DESTINATION ${APP_PREFIX_DIR}/Resources
