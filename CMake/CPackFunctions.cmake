@@ -335,6 +335,7 @@ function(configure_app_package app with_otb_apps)
 
   ####################### install GDAL data #######################
 
+  
   if(NOT DEFINED GDAL_DATA)
     file(TO_CMAKE_PATH "$ENV{GDAL_DATA}" GDAL_DATA)
     if(NOT GDAL_DATA)
@@ -411,13 +412,18 @@ macro(create_monteverdi_application)
     add_executable(${APPLICATION_NAME}
       WIN32
       ${APPLICATION_SOURCES})
+  elseif(APPLE)
+    add_executable(${APPLICATION_NAME}
+      MACOSX_BUNDLE
+      ${APPLICATION_SOURCES})
+    
+  else() #Linux
+    add_executable(${APPLICATION_NAME}
+      ${APPLICATION_SOURCES})
   endif()
 
   set(EXECUTABLE_NAME ${APPLICATION_NAME})
   if(APPLE)
-    add_executable(${APPLICATION_NAME}
-      MACOSX_BUNDLE
-      ${APPLICATION_SOURCES})
     
     string(SUBSTRING ${APPLICATION_NAME} 0 1 FIRST_LETTER)
     string(TOUPPER ${FIRST_LETTER} FIRST_LETTER)
@@ -458,6 +464,11 @@ install(TARGETS ${APPLICATION_NAME}
 
 #############################################################################
 
-configure_app_package(${APPLICATION_COMPONENT_NAME} ${APPLICATION_NEEDS_OTB_APPS})
-
+if(WIN32)
+  if(CMAKE_CROSSCOMPILING OR Monteverdi_USE_CPACK)
+    configure_app_package(${APPLICATION_COMPONENT_NAME} ${APPLICATION_NEEDS_OTB_APPS})
+  endif()
+elseif(APPLE AND Monteverdi_USE_CPACK)
+  configure_app_package(${APPLICATION_COMPONENT_NAME} ${APPLICATION_NEEDS_OTB_APPS})
+endif()
 endmacro(create_monteverdi_application)
