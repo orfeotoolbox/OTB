@@ -50,6 +50,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
  m_OutputP(0)
 {
   this->m_ConfidenceIndex = true;
+  this->m_IsRegressionSupported = true;
 }
 
 
@@ -64,8 +65,16 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
+::Train()
 {
+  // Check that the SVM type is compatible with the chosen mode (classif/regression)
+  if ( bool(m_SVMType == CvSVM::NU_SVR || m_SVMType == CvSVM::EPS_SVR) != this->m_RegressionMode)
+    {
+    itkGenericExceptionMacro("SVM type incompatible with chosen mode (classification or regression."
+                             "SVM types for classification are C_SVC, NU_SVC, ONE_CLASS. "
+                             "SVM types for regression are NU_SVR, EPS_SVR");
+    }
+
   //convert listsample to opencv matrix
   cv::Mat samples;
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
@@ -109,7 +118,7 @@ template <class TInputValue, class TOutputValue>
 typename SVMMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
+::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -135,10 +144,10 @@ void
 SVMMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
-       if (name == "")
-              m_SVMModel->save(filename.c_str(), 0);
-       else
-              m_SVMModel->save(filename.c_str(), name.c_str());
+  if (name == "")
+    m_SVMModel->save(filename.c_str(), 0);
+  else
+    m_SVMModel->save(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>
@@ -147,9 +156,9 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
   if (name == "")
-         m_SVMModel->load(filename.c_str(), 0);
+    m_SVMModel->load(filename.c_str(), 0);
   else
-         m_SVMModel->load(filename.c_str(), name.c_str());
+    m_SVMModel->load(filename.c_str(), name.c_str());
 }
 
 template <class TInputValue, class TOutputValue>
@@ -157,29 +166,29 @@ bool
 SVMMachineLearningModel<TInputValue,TOutputValue>
 ::CanReadFile(const std::string & file)
 {
-   std::ifstream ifs;
-   ifs.open(file.c_str());
+  std::ifstream ifs;
+  ifs.open(file.c_str());
 
-   if(!ifs)
-   {
-      std::cerr<<"Could not read file "<<file<<std::endl;
-      return false;
-   }
+  if(!ifs)
+    {
+    std::cerr<<"Could not read file "<<file<<std::endl;
+    return false;
+    }
 
-   while (!ifs.eof())
-   {
-      std::string line;
-      std::getline(ifs, line);
+  while (!ifs.eof())
+    {
+    std::string line;
+    std::getline(ifs, line);
 
-      //if (line.find(m_SVMModel->getName()) != std::string::npos)
-      if (line.find(CV_TYPE_NAME_ML_SVM) != std::string::npos)
+    //if (line.find(m_SVMModel->getName()) != std::string::npos)
+    if (line.find(CV_TYPE_NAME_ML_SVM) != std::string::npos)
       {
-         //std::cout<<"Reading a "<<CV_TYPE_NAME_ML_SVM<<" model"<<std::endl;
-         return true;
+      //std::cout<<"Reading a "<<CV_TYPE_NAME_ML_SVM<<" model"<<std::endl;
+      return true;
       }
-   }
-   ifs.close();
-   return false;
+    }
+  ifs.close();
+  return false;
 }
 
 template <class TInputValue, class TOutputValue>

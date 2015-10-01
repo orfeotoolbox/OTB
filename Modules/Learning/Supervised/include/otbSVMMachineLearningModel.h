@@ -51,6 +51,11 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(SVMMachineLearningModel, MachineLearningModel);
 
+  /** Train the machine learning model */
+  virtual void Train();
+  /** Predict values using the model */
+  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+
   /** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="");
 
@@ -125,11 +130,6 @@ protected:
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  /** Train the machine learning model */
-  virtual void TrainClassification();
-  /** Predict values using the model */
-  virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
 private:
   SVMMachineLearningModel(const Self &); //purposely not implemented
