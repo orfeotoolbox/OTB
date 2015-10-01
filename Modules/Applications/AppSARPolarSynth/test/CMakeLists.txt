@@ -9,7 +9,5 @@ otb_test_application(NAME  apTvSARPolarSynth
                              -khii 0.0
                              -psir 0.0
                              -khir 0.0
-                     VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/saTvMultiPolarimetricSynthesis1.tif
-                             ${TEMP}/resApMultiPolarimetricSynthesis1.tif)
+                     )
                              
