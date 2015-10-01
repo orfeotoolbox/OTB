@@ -293,16 +293,17 @@ endif()
 #cpack has a built-in target called 'package'. In our case we create two standalone installers with
 #and uses a custom target named packages.
 if(WIN32)
+  #RK: two packages
+  create_cpack_config()
   if(Monteverdi_USE_CPACK)
     add_custom_target(packages
       COMMAND ${CMAKE_CPACK_COMMAND}
-      "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi.cmake" "--verbose"
-      DEPENDS PACKAGE_Mapla)
+      "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi.cmake" "--verbose" )
     
-    add_custom_target(PACKAGE_Mapla
-      COMMAND ${CMAKE_CPACK_COMMAND}
-      "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Mapla.cmake" "--verbose"
-      DEPENDS PACKAGE_Monteverdi)
+    #   add_custom_target(PACKAGE_Mapla
+    #     COMMAND ${CMAKE_CPACK_COMMAND}
+    #     "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Mapla.cmake" "--verbose"
+    #     DEPENDS PACKAGE_Monteverdi)
     
   endif() # (Monteverdi_USE_CPACK)
   
