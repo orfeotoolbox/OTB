@@ -10,7 +10,5 @@ otb_test_application(NAME  apTvSARDecompositions
 							 -decomp haa
 							 -out ${TEMP}/apTvReciprocalHAlpha.tif
 							 
-                     VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/apTvReciprocalHAlpha.tif
-                             ${TEMP}/apTvReciprocalHAlpha.tif)
+                     )
                              
