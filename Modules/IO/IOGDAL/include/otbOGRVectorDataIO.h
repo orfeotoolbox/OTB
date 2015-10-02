@@ -23,7 +23,7 @@
 #include "otbVectorDataIOBase.h"
 #include "otbVectorData.h"
 
-class GDALDataset;
+#include "otbOGRVersionProxy.h"
 
 namespace otb
 {
@@ -116,7 +116,7 @@ private:
 
   std::string GetOGRDriverName(std::string name) const;
 
-  GDALDataset * m_DataSource;
+  OGRVersionProxy::GDALDatasetType * m_DataSource;
 
 };
 
