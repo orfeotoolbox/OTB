@@ -42,24 +42,24 @@ public:
 
   
   
-  typedef otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor<ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatImageType::PixelType,
-                                    ComplexFloatVectorImageType::PixelType>								FunctorType;
+  typedef otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor<ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleImageType::PixelType,
+                                    ComplexDoubleVectorImageType::PixelType>								FunctorType;
                                     
                                     								
-  typedef SinclairReciprocalImageFilter<ComplexFloatImageType, 
-											 ComplexFloatImageType, 
-											 ComplexFloatImageType, 
-											 ComplexFloatVectorImageType, 
+  typedef SinclairReciprocalImageFilter<ComplexDoubleImageType, 
+											 ComplexDoubleImageType, 
+											 ComplexDoubleImageType, 
+											 ComplexDoubleVectorImageType, 
 											 FunctorType > 												SRFilterType;
   
   
-  typedef otb::ReciprocalHAlphaImageFilter<ComplexFloatVectorImageType, FloatVectorImageType> 			HAFilterType;
+  typedef otb::ReciprocalHAlphaImageFilter<ComplexDoubleVectorImageType, DoubleVectorImageType> 			HAFilterType;
   
   
-  typedef itk::MeanImageFilter<ComplexFloatImageType, ComplexFloatImageType>         MeanFilterType;
-  typedef otb::PerBandVectorImageFilter<ComplexFloatVectorImageType, ComplexFloatVectorImageType, MeanFilterType> PerBandMeanFilterType;
+  typedef itk::MeanImageFilter<ComplexDoubleImageType, ComplexDoubleImageType>         MeanFilterType;
+  typedef otb::PerBandVectorImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType, MeanFilterType> PerBandMeanFilterType;
   //FloatImageType
 
   /** Standard macro */
@@ -155,12 +155,12 @@ private:
 		m_MeanFilter = PerBandMeanFilterType::New();
 		
 		if (inhv)
-		  m_SRFilter->SetInputHV_VH(GetParameterComplexFloatImage("inhv"));
+		  m_SRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("inhv"));
 	    else if (invh)
-		  m_SRFilter->SetInputHV_VH(GetParameterComplexFloatImage("invh"));
+		  m_SRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("invh"));
 
-		m_SRFilter->SetInputHH(GetParameterComplexFloatImage("inhh"));
-		m_SRFilter->SetInputVV(GetParameterComplexFloatImage("invv"));
+		m_SRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
+		m_SRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
 		MeanFilterType::InputSizeType radius;
         radius.Fill( GetParameterInt("inco.kernelsize") );
