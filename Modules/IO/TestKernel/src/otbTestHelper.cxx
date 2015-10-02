@@ -27,6 +27,8 @@
 #include <algorithm>
 #include <string>
 
+#include "ogrsf_frmts.h"
+
 #include "itksys/SystemTools.hxx"
 #include "itksys/Directory.hxx"
 #include "itksys/RegularExpression.hxx"
@@ -37,6 +39,9 @@
 #include "otbDifferenceImageFilter.h"
 #include "otbPrintableImageFilter.h"
 #include "otbStreamingShrinkImageFilter.h"
+#include "otbOGRVersionProxy.h"
+
+#include "otbConfigure.h"
 
 #define ITK_TEST_DIMENSION_MAX 6
 
@@ -44,16 +49,6 @@
 #include "cpl_conv.h"
 #include "cpl_string.h"
 #include "cpl_multiproc.h"
-#include "ogr_api.h"
-
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
-#include "ogrsf_frmts.h"
-#pragma GCC diagnostic pop
-#else
-#include "ogrsf_frmts.h"
-#endif
 
 #define otbPrintDiff(comment, refStr, testStr) \
   std::cout << "   ----    '" << comment << "' checking   ---------------------------" << std::endl; \
@@ -1074,27 +1069,27 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   /*      Open data source.                                               */
   /* -------------------------------------------------------------------- */
-  GDALDataset *ref_poDS = NULL;
-  GDALDriver *  ref_poDriver = NULL;
+  otb::OGRVersionProxy::GDALDatasetType *ref_poDS = NULL;
+  otb::OGRVersionProxy::GDALDriverType *  ref_poDriver = NULL;
   //OGRGeometry *  ref_poSpatialFilter = NULL;
-  GDALDataset *test_poDS = NULL;
-  GDALDriver *  test_poDriver = NULL;
+  otb::OGRVersionProxy::GDALDatasetType *test_poDS = NULL;
+  otb::OGRVersionProxy::GDALDriverType *  test_poDriver = NULL;
   //OGRGeometry *  test_poSpatialFilter = NULL;
 
-  ref_poDS = (GDALDataset*)GDALOpenEx(ref_pszDataSource, GDAL_OF_UPDATE | GDAL_OF_VECTOR,NULL,NULL,NULL);
+  ref_poDS = otb::OGRVersionProxy::Open(ref_pszDataSource, false);
   if (ref_poDS == NULL && !bReadOnly)
     {
-    ref_poDS = (GDALDataset*)GDALOpenEx(ref_pszDataSource, GDAL_OF_READONLY | GDAL_OF_VECTOR,NULL,NULL,NULL);
+    ref_poDS = otb::OGRVersionProxy::Open(ref_pszDataSource, true);
     if (ref_poDS != NULL && m_ReportErrors)
       {
       std::cout << "Had to open REF data source read-only.\n";
       bReadOnly = TRUE;
       }
     }
-  test_poDS = (GDALDataset*)GDALOpenEx(test_pszDataSource, (bReadOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,NULL,NULL,NULL);
+  test_poDS = otb::OGRVersionProxy::Open(ref_pszDataSource, bReadOnly);
   if (test_poDS == NULL && !bReadOnly)
     {
-    test_poDS = (GDALDataset*)GDALOpenEx(test_pszDataSource, GDAL_OF_READONLY | GDAL_OF_VECTOR,NULL,NULL,NULL);
+    test_poDS = otb::OGRVersionProxy::Open(ref_pszDataSource, bReadOnly);
     if (test_poDS != NULL && m_ReportErrors)
       {
       std::cout << "Had to open REF data source read-only.\n";
@@ -1106,14 +1101,15 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   if (ref_poDS == NULL)
     {
-    GDALDriverManager * ref_poR = GetGDALDriverManager();
-
+   
     if (m_ReportErrors)
-      std::cout << "FAILURE:\n"
-      "Unable to open REF datasource `" << ref_pszDataSource << "' with the following drivers." << std::endl;
-    for (int iDriver = 0; iDriver < ref_poR->GetDriverCount(); ++iDriver)
+      std::cout << "FAILURE:\n" "Unable to open REF datasource `" << ref_pszDataSource << "' with the following drivers." << std::endl;
+
+    std::vector<std::string> drivers = OGRVersionProxy::GetAvailableDriversAsStringVector();
+    
+    for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
       {
-      std::cout << "  -> " << GDALGetDriverShortName(ref_poR->GetDriver(iDriver)) << std::endl;
+      std::cout << "  -> " << *it << std::endl;
       }
     return (1);
     }
@@ -1122,14 +1118,15 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
 
   if (test_poDS == NULL)
     {
-    GDALDriverManager *test_poR = GetGDALDriverManager();
-
     if (m_ReportErrors)
       std::cout << "FAILURE:\n"
       "Unable to open TEST datasource `" << test_pszDataSource << "' with the following drivers." << std::endl;
-    for (int iDriver = 0; iDriver < test_poR->GetDriverCount(); ++iDriver)
+
+    std::vector<std::string> drivers = OGRVersionProxy::GetAvailableDriversAsStringVector();
+    
+    for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
       {
-      std::cout << "  -> " << GDALGetDriverShortName(test_poR->GetDriver(iDriver)) << std::endl;
+      std::cout << "  -> " << *it << std::endl;
       }
     return (1);
     }
@@ -1143,12 +1140,12 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
 
   // TODO: Improve this check as it will stop as soon as one of the
   // list ends (i.e. it does not guarantee that all files are present)
-  char ** refFileList = ref_poDS->GetFileList();
-  char ** testFileList = test_poDS->GetFileList();
+  std::vector<std::string> refFileList = otb::OGRVersionProxy::GetFileListAsStringVector(ref_poDS);
+  std::vector<std::string> testFileList = otb::OGRVersionProxy::GetFileListAsStringVector(test_poDS);
 
   unsigned int fileId = 0;
 
-  while (refFileList[fileId] && testFileList[fileId])
+  while (fileId < refFileList.size() && fileId < testFileList.size())
     {
     std::string strRefName(refFileList[fileId]);
     std::string strTestName(testFileList[fileId]);
@@ -1163,9 +1160,6 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       }
     ++fileId;
     }
-
-  CSLDestroy(refFileList);
-  CSLDestroy(testFileList);
   
   /* -------------------------------------------------------------------- */
   /*      Process each data source layer.                                 */
