@@ -81,4 +81,5 @@ void RegisterTests()
   REGISTER_TEST(otbTwoNRIBandsImageToNComplexBandsImage);
   REGISTER_TEST(otbChangeNoDataValueFilter);
   REGISTER_TEST(otbImageToNoDataMaskFilter);
+  REGISTER_TEST(otbChangeInformationImageFilter);
 }

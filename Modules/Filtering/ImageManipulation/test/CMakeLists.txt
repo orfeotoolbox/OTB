@@ -75,6 +75,7 @@ otbOneRIBandImageToOneComplexBandImage.cxx
 otbTwoNRIBandsImageToNComplexBandsImage.cxx
 otbChangeNoDataValueFilter.cxx
 otbImageToNoDataMaskFilter.cxx
+otbChangeInformationImageFilter.cxx
 )
 
 add_executable(otbImageManipulationTestDriver ${OTBImageManipulationTests})
@@ -710,3 +711,9 @@ otb_add_test(NAME filteringImageManipulationChangeNoDataValueFilter COMMAND otbI
 
 otb_add_test(NAME filteringImageManipulationImageToNoDataMaskFilter COMMAND otbImageManipulationTestDriver
   otbImageToNoDataMaskFilter)
+
+otb_add_test(NAME bfTvChangeInformationImageFilter COMMAND  otbImageManipulationTestDriver
+  otbChangeInformationImageFilter
+  ${INPUTDATA}/WV2_PAN_ROI_1000_100.tif
+  ${TEMP}/otbChangeInformationImageFilter.tif
+  )
