@@ -529,6 +529,9 @@ private:
   size_t GetLayerID(std::string const& name) const;
   int GetLayerIDUnchecked(std::string const& name) const;
 
+  /** Get a string describing the dataset */
+  std::string GetDatasetDescription() const;
+    
 private:
   OGRVersionProxy::GDALDatasetType *m_DataSource;
   Modes::type    m_OpenMode;

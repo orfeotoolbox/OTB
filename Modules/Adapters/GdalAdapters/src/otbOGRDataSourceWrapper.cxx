@@ -292,9 +292,9 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
     OGRLayer * ol = m_DataSource->CreateLayer(
       name.c_str(), poSpatialRef, eGType, otb::ogr::StringListConverter(papszOptions).to_ogr());
     if (!ol)
-      {
+      { 
       itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
-                               << "> in the GDALDataset file <" << otb::OGRVersionProxy::GetDatasetDescription(m_DataSource)
+                               << "> in the GDALDataset file <" << GetDatasetDescription()
         <<">: " << CPLGetLastErrorMsg());
       }
 
@@ -315,9 +315,9 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
       OGRLayer * ol = m_DataSource->CreateLayer(
         name.c_str(), poSpatialRef, eGType, otb::ogr::StringListConverter(papszOptions).to_ogr());
       if (!ol)
-        {        
+        {
         itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
-                                 << "> in the GDALDataset file <" <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource)
+                                 << "> in the GDALDataset file <" <<  GetDatasetDescription()
           <<">: " << CPLGetLastErrorMsg());
         }
 
@@ -340,9 +340,8 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
       name.c_str(), poSpatialRef, eGType, otb::ogr::StringListConverter(papszOptions).to_ogr());
     if (!ol)
       {
-      
       itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
-        << "> in the GDALDataset file <" <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource)
+                               << "> in the GDALDataset file <" <<  GetDatasetDescription()
         <<">: " << CPLGetLastErrorMsg());
       }
 
@@ -386,7 +385,7 @@ otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
     {    
     itkGenericExceptionMacro(<< "Failed to copy the layer <"
       << srcLayer.GetName() << "> into the new layer <" <<newName
-      << "> in the GDALDataset file <" <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource)
+                             << "> in the GDALDataset file <" <<  GetDatasetDescription()
       <<">: " << CPLGetLastErrorMsg());
     }
   const bool modifiable = true;
@@ -416,17 +415,15 @@ void otb::ogr::DataSource::DeleteLayer(size_t i)
 
   const int nb_layers = GetLayersCount();
   if (int(i) >= nb_layers)
-    {
-    
+    {      
     itkExceptionMacro(<< "Cannot delete " << i << "th layer in the GDALDataset <"
-                      <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << "> as it contains only " << nb_layers << "layers.");
+                      <<  GetDatasetDescription() << "> as it contains only " << nb_layers << "layers.");
     }
   const OGRErr err = m_DataSource->DeleteLayer(int(i));
   if (err != OGRERR_NONE)
     {
-    
     itkExceptionMacro(<< "Cannot delete " << i << "th layer in the GDALDataset <"
-                      <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << ">: " << CPLGetLastErrorMsg());
+                      <<  GetDatasetDescription() << ">: " << CPLGetLastErrorMsg());
     }
 }
 
@@ -481,9 +478,9 @@ size_t otb::ogr::DataSource::GetLayerID(std::string const& name) const
 {
   int const id = GetLayerIDUnchecked(name);
   if (id < 0)
-    {
+    {    
     itkExceptionMacro( << "Cannot fetch any layer named <" << name
-                       << "> in the GDALDataset <" <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << ">: "
+                       << "> in the GDALDataset <" <<  GetDatasetDescription() << ">: "
       << CPLGetLastErrorMsg());
     }
   return 0; // keep compiler happy
@@ -494,15 +491,15 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(size_t i)
   assert(m_DataSource && "Datasource not initialized");
   const int nb_layers = GetLayersCount();
   if (int(i) >= nb_layers)
-    {
+    {    
     itkExceptionMacro(<< "Cannot fetch " << i << "th layer in the GDALDataset <"
-                      << otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << "> as it contains only " << nb_layers << "layers.");
+                      << GetDatasetDescription() << "> as it contains only " << nb_layers << "layers.");
     }
   OGRLayer * layer_ptr = m_DataSource->GetLayer(int(i));
   if (!layer_ptr)
     {
     itkExceptionMacro( << "Unexpected error: cannot fetch " << i << "th layer in the GDALDataset <"
-                       << otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << ">: " << CPLGetLastErrorMsg());
+                       << GetDatasetDescription() << ">: " << CPLGetLastErrorMsg());
     }
   return otb::ogr::Layer(layer_ptr, IsLayerModifiable(i));
 }
@@ -528,7 +525,7 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(std::string const& name)
   if (!layer_ptr)
     {
     itkExceptionMacro( << "Cannot fetch any layer named <" << name
-      << "> in the GDALDataset <" << otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << ">: "
+      << "> in the GDALDataset <" << GetDatasetDescription() << ">: "
       << CPLGetLastErrorMsg());
     }
   return otb::ogr::Layer(layer_ptr, IsLayerModifiable(name));
@@ -553,7 +550,7 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
     {
 #if defined(PREFER_EXCEPTION)
     itkExceptionMacro( << "Unexpected error: cannot execute the SQL request <" << statement
-      << "> in the GDALDataset <" <<  otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << ">: " << CPLGetLastErrorMsg());
+      << "> in the GDALDataset <" <<  GetDatasetDescription() << ">: " << CPLGetLastErrorMsg());
 #else
     // Cannot use the deleter made for result sets obtained from
     // GDALDataset::ExecuteSQL because it checks for non-nullity....
@@ -707,6 +704,17 @@ void otb::ogr::DataSource::SyncToDisk()
   if(!ret)
     {
     itkExceptionMacro( << "Cannot flush the pending of the OGRDataSource <"
-                       << otb::OGRVersionProxy::GetDatasetDescription(m_DataSource) << ">: " << CPLGetLastErrorMsg());
+                       << GetDatasetDescription() << ">: " << CPLGetLastErrorMsg());
     }
+}
+
+
+std::string otb::ogr::DataSource::GetDatasetDescription() const
+{
+  std::vector<std::string> files = otb::OGRVersionProxy::GetFileListAsStringVector(m_DataSource);
+  std::string description = "";
+  for(std::vector<std::string>::const_iterator it = files.begin();it!=files.end();++it)
+    description+=(*it)+", ";
+
+  return description;
 }
