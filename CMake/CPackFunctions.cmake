@@ -19,13 +19,16 @@ endfunction()
 #function(create_cpack_config application)
 function(create_cpack_config)
 
+
   #should we handle this when calling function ?
   #for now mapla has no specific version or it is same as monteverdi
-  SET(CPACK_PACKAGE_VERSION "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}")
+  SET(CPACK_PACKAGE_VERSION "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}")
   SET(CPACK_PACKAGE_VERSION_MAJOR "${Monteverdi_VERSION_MAJOR}")
   SET(CPACK_PACKAGE_VERSION_MINOR "${Monteverdi_VERSION_MINOR}")
   SET(CPACK_PACKAGE_VERSION_PATCH "${Monteverdi_VERSION_PATCH}")
-
+  #monteverdi short version string - eg: 3.0.0-beta
+  SET(PACKAGE_SHORT_VERSION_STRING ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}${Monteverdi_VERSION_SUFFIX})
+    
   if(WIN32)
     set(arch_prefix win32)
     set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
@@ -34,6 +37,8 @@ function(create_cpack_config)
       set(arch_prefix win64)
     endif()
     SET(CPACK_GENERATOR "NSIS")
+    SET(CPACK_NSIS_MODIFY_PATH OFF)
+        SET(CPACK_NSIS_CONTACT "contact@orfeo-toolbox.org")
     
     #RK: two packages.
     #STRING(TOLOWER ${application} application_)
@@ -47,18 +52,22 @@ function(create_cpack_config)
     #   "CreateShortCut \\\"$SMPROGRAMS\\\\${application}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}\\\\${application}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\${BATFILE_NAME}\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\${EXEFILE_NAME}\\\"
     # ")
 
-    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
-      "CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}\\\\Monteverdi.lnk\\\" \\\"$INSTDIR\\\\bin\\\\monteverdi.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\monteverdi.exe\\\"
-    ")
-    
-    LIST(APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS
-      "CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}\\\\Mapla.lnk\\\" \\\"$INSTDIR\\\\bin\\\\mapla.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\mapla.exe\\\"
-    ")
-
-    SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
-      "Delete \\\"$SMPROGRAMS\\\\Monteverdi-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}\\\\Monteverdi.lnk\\\"  ")
-    LIST(APPEND CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
-    "Delete \\\"$SMPROGRAMS\\\\Monteverdi-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}\\\\Mapla.lnk\\\"  ")
+SET(application "Monteverdi")
+SET(startmenufolder "${application}-${PACKAGE_SHORT_VERSION_STRING}")
+  
+#set(CPACK_NSIS_DEFINES "  !define MUI_STARTMENUPAGE_DEFAULTFOLDER \\\"${startmenufolder} (${arch_prefix})\\\"")
+#SET(CPACK_PACKAGE_EXECUTABLES "monteverdi.bat" "Monteverdi")
+#SET(CPACK_CREATE_DESKTOP_LINKS "monteverdi.bat" )
+ 
+SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\monteverdi.exe")
+SET(CPACK_PACKAGE_ICON   "${Monteverdi_SOURCE_DIR}\\\\Data\\\\Icons\\\\monteverdi.ico")
+SET(CPACK_NSIS_CREATE_ICONS "CreateShortCut '$SMPROGRAMS\\\\${startmenufolder}\\\\Monteverdi.lnk'  '$INSTDIR\\\\bin\\\\monteverdi.bat' ")
+SET(CPACK_NSIS_CREATE_ICONS_EXTRA "CreateShortCut '$SMPROGRAMS\\\\${startmenufolder}\\\\Mapla.lnk'     '$INSTDIR\\\\bin\\\\mapla.bat' ")
+SET(CPACK_NSIS_MUI_FINISHPAGE_RUN "monteverdi.bat")
+SET(CPACK_NSIS_DELETE_ICONS
+      "Delete \\\"$SMPROGRAMS\\\\${startmenufolder}\\\\Monteverdi.lnk\\\" ")
+SET(CPACK_NSIS_DELETE_ICONS_EXTRA
+      "Delete \\\"$SMPROGRAMS\\\\${startmenufolder}\\\\Mapla.lnk\\\" ")
 
   else(APPLE)
       set(arch_prefix Darwin)
@@ -67,7 +76,7 @@ function(create_cpack_config)
     endif()
     SET(CPACK_GENERATOR "Bundle")
     SET(CPACK_BUNDLE_ICON "${Monteverdi_SOURCE_DIR}/Packaging/MacOS/Monteverdi.icns" )
-    SET(CPACK_BUNDLE_NAME "${application}-${CPACK_PACKAGE_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}" )
+    SET(CPACK_BUNDLE_NAME "${application}-${PACKAGE_SHORT_VERSION_STRING}" )
     SET(CPACK_BUNDLE_PLIST "${CMAKE_BINARY_DIR}/Packaging/MacOS/${application}-Info.plist" )
     SET(CPACK_BUNDLE_STARTUP_COMMAND "${Monteverdi_SOURCE_DIR}/Packaging/MacOS/${application}-StartupCommand" )
 
@@ -114,27 +123,25 @@ function(create_cpack_config)
 
   SET(CPACK_COMPONENT_RESOURCES_HIDDEN ON)
 
+  if(APPLE)
   SET(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${application};ALL;/")
+  else(WIN32)
+    SET(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};ALL;ALL;/")
+  endif()
+  SET(CPACK_PACKAGE_VENDOR "OTB Team")
   
-  SET(CPACK_PACKAGE_VENDOR "CNES")
-
- 
-  #RK: two packages
-  #SET(CPACK_PACKAGE_NAME "${application}")
-  SET(CPACK_PACKAGE_NAME "Monteverdi")
-
-  #RK: for two packages -${application} ->  Monteverdi
-  SET(CPACK_NSIS_DISPLAY_NAME "Monteverdi-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
-  SET(CPACK_NSIS_PACKAGE_NAME "Monteverdi-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
-  SET(CPACK_PACKAGE_INSTALL_DIRECTORY "Monteverdi-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
-  SET(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Monteverdi-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
-
-  SET(CPACK_PACKAGE_FILE_NAME "Monteverdi-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-${arch_prefix}")
+  SET(CPACK_PACKAGE_NAME "${application}")
+  SET(CPACK_NSIS_DISPLAY_NAME "${application}-${PACKAGE_SHORT_VERSION_STRING}")
+  SET(CPACK_NSIS_PACKAGE_NAME "${application}-${PACKAGE_SHORT_VERSION_STRING}")
+  SET(CPACK_PACKAGE_INSTALL_DIRECTORY "${application}-${PACKAGE_SHORT_VERSION_STRING}")
+  SET(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${application}-${PACKAGE_SHORT_VERSION_STRING}")
+  SET(CPACK_PACKAGE_FILE_NAME "${application}-${CPACK_PACKAGE_VERSION}-${arch_prefix}")
 
   INCLUDE(InstallRequiredSystemLibraries)
   INCLUDE(CPack)
 
 endfunction(create_cpack_config)
+
 
 
 function(configure_app_package app with_otb_apps)
