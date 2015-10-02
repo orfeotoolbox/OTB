@@ -136,7 +136,7 @@ public:
         if (p[k]<m_Epsilon) //n=log(n)-->0 when n-->0
 			plog[k]=0.0;
 		else
-			plog[k]=-p[k]*log(p[k])/log(3);
+			plog[k]=-p[k]*log(p[k])/log(3.0);
       }
 
 	entropy = 0.0;
