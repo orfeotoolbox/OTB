@@ -34,7 +34,7 @@ public:
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
 
-  typedef MultiChannelsPolarimetricSynthesisFilter<ComplexFloatVectorImageType, FloatImageType>        MCPSFilterType;
+  typedef MultiChannelsPolarimetricSynthesisFilter<ComplexDoubleVectorImageType, FloatImageType>        MCPSFilterType;
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -166,7 +166,7 @@ private:
     m_MCPSFilter->SetEmissionV(GetParameterInt("emissionv"));
 	m_MCPSFilter->SetMode(GetParameterInt("mode"));  
 	  
-    ComplexFloatVectorImageType* inVImage = GetParameterComplexImage("in");
+    ComplexDoubleVectorImageType* inVImage = GetParameterComplexDoubleVectorImage("in");
     inVImage->UpdateOutputInformation();
     int nbBands = inVImage->GetNumberOfComponentsPerPixel();
     otbAppLogINFO( << "nbBands = " << nbBands);
