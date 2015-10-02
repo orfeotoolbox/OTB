@@ -24,11 +24,11 @@ PURPOSE.  See the above copyright notices for more information.
 #include <boost/utility/enable_if.hpp>
 // #include "itkIndent.h", included from field
 #include "otbOGRFeatureWrapper.h"
+#include "otbOGRVersionProxy.h"
 
 // #include "ogr_core.h" // OGRwkbGeometryType, included from feature -> field
 // Forward declarations
 class OGRLayer;
-class OGRDataSource;
 class OGRGeometry;
 class OGRFeatureDefn;
 
@@ -94,7 +94,7 @@ public:
   /**
    * Init constructor for layers that need to be released.
    * \param layer  \c OGRLayer owned by the client code.
-   * \param sourceInChargeOfLifeTime  reference to the actual \c OGRDataSource
+   * \param sourceInChargeOfLifeTime  reference to the actual \c GDALDataset
    * that knows how to release the layer.
    * \post In this case, \c m_datasource is left null: we suppose (for now, that
    * the layer won't need access to the datasource meta-information).
@@ -105,7 +105,7 @@ public:
    * OGRDataSource::ExecuteSQL(). It's actually the constructor called by \c
    * DataSource::ExecuteSQL().
    */
-  Layer(OGRLayer* layer, OGRDataSource& sourceInChargeOfLifeTime, bool modifiable);
+    Layer(OGRLayer* layer, otb::OGRVersionProxy::GDALDatasetType& sourceInChargeOfLifeTime, bool modifiable);
   //@}
 
   /**\name Features collection */

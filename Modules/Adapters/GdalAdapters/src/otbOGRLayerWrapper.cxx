@@ -27,10 +27,10 @@
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
-#include "ogrsf_frmts.h" // OGRDataSource & OGRLayer
+#include "gdal_priv.h"// GDALDataset
 #pragma GCC diagnostic pop
 #else
-#include "ogrsf_frmts.h" // OGRDataSource & OGRLayer
+#include "gdal_priv.h" // GDALDataset
 #endif
 
 #include "otbOGRDataSourceWrapper.h"
@@ -60,8 +60,8 @@ otb::ogr::Layer::Layer(OGRLayer* layer, bool modifiable)
 {
 }
 
-otb::ogr::Layer::Layer(OGRLayer* layer, OGRDataSource& sourceInChargeOfLifeTime, bool modifiable)
-:   m_Layer(layer,  boost::bind(&OGRDataSource::ReleaseResultSet, boost::ref(sourceInChargeOfLifeTime), _1))
+otb::ogr::Layer::Layer(OGRLayer* layer, otb::OGRVersionProxy::GDALDatasetType& sourceInChargeOfLifeTime, bool modifiable)
+:   m_Layer(layer,  boost::bind(&otb::OGRVersionProxy::GDALDatasetType::ReleaseResultSet, boost::ref(sourceInChargeOfLifeTime), _1))
   , m_Modifiable(modifiable)
 {
   assert(layer && "A null OGRlayer cannot belong to an OGRDataSource" );
