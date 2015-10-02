@@ -17,7 +17,14 @@
 =========================================================================*/
 #include "otbOGRVersionProxy.h"
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ogrsf_frmts.h"
+#pragma GCC diagnostic pop
+#else
+#include "ogrsf_frmts.h"
+#endif
 
 namespace otb
 {
@@ -66,9 +73,13 @@ std::string OGRVersionProxy::GetDriverClassName()
   return std::string("OGRSFDriver");
 }
 
-std::string OGRVersionProxy::GetDatasetDescription(GDALDatasetType * dataset)
+std::vector<std::string> OGRVersionProxy::GetFileListAsStringVector(GDALDatasetType * dataset)
 {
-  return std::string(dataset->GetName());
+  std::vector<std::string> ret;
+
+  ret.push_back(std::string(dataset->GetName()));
+  
+  return ret;
 }
 
 bool OGRVersionProxy::SyncToDisk(GDALDatasetType * dataset)
@@ -76,6 +87,20 @@ bool OGRVersionProxy::SyncToDisk(GDALDatasetType * dataset)
   const OGRErr res= dataset->SyncToDisk();
 
   return (res == OGRERR_NONE);
+}
+
+std::vector<std::string> OGRVersionProxy::GetAvailableDriversAsStringVector()
+{
+  std::vector<std::string> ret;
+  
+  int nbDrivers = OGRSFDriverRegistrar::GetRegistrar()->GetDriverCount();
+  
+  for(int i = 0; i < nbDrivers;++i)
+    {
+    ret.push_back(OGRSFDriverRegistrar::GetRegistrar()->GetDriver(i)->GetName());
+    }
+
+  return ret;
 }
 
 } // end namespace

@@ -17,7 +17,14 @@
 =========================================================================*/
 #include "otbOGRVersionProxy.h"
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "gdal_priv.h"
+#pragma GCC diagnostic pop
+#else
+#include "gdal_priv.h"
+#endif
 
 namespace otb
 {
@@ -66,8 +73,10 @@ std::string OGRVersionProxy::GetDriverClassName()
   return std::string("GDALDriver");
 }
 
-std::string OGRVersionProxy::GetDatasetDescription(GDALDatasetType * dataset)
+std::vector<std::string> OGRVersionProxy::GetFileListAsStringVector(GDALDatasetType * dataset)
 {
+  std::vector<std::string> ret;
+  
   char ** files = dataset->GetFileList();
 
   std::string files_str="";
@@ -77,12 +86,13 @@ std::string OGRVersionProxy::GetDatasetDescription(GDALDatasetType * dataset)
     unsigned int i = 0;
     while(files[i]!=NULL)
       {
-      files_str+=std::string(files[i])+" ";
+      ret.push_back(std::string(files[i]));
       ++i;
       }
     CSLDestroy(files);
     }
-  return files_str;
+
+  return ret;
 }
 
 bool OGRVersionProxy::SyncToDisk(GDALDatasetType * dataset)
@@ -90,6 +100,20 @@ bool OGRVersionProxy::SyncToDisk(GDALDatasetType * dataset)
   dataset->FlushCache();
 
   return true;
+}
+
+std::vector<std::string> OGRVersionProxy::GetAvailableDriversAsStringVector()
+{
+  std::vector<std::string> ret;
+  
+  int nbDrivers = GetGDALDriverManager()->GetDriverCount();
+  
+  for(int i = 0; i < nbDrivers;++i)
+    {
+    ret.push_back(GDALGetDriverShortName(GetGDALDriverManager()->GetDriver(i)));
+    }
+
+  return ret;
 }
 
 } // end namespace
