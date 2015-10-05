@@ -52,6 +52,7 @@ CosmoSkymedImageMetadataInterface::CanRead() const
 std::string
 CosmoSkymedImageMetadataInterface::GetSensorID() const
 {
+
    std::string sensorId;
    GetValueFromMetadataDictionary("Mission_ID", sensorId);
    return sensorId;
@@ -169,7 +170,7 @@ CosmoSkymedImageMetadataInterface
       }
     std::string dateTimeUTCString;
     std::string const prefix = MetaDataKey::MetadataKeyPrefix;
-    GetValueFromMetadataDictionary(prefix + key, dateTimeUTCString);
+    GetValueFromMetadataDictionary(key, dateTimeUTCString);
     Utils::ConvertStringToVector(dateTimeUTCString, dateFields, prefix + key, " T:-.");
     }
 }
