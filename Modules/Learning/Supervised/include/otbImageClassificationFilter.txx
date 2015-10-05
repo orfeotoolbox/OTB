@@ -118,7 +118,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     }
 
   // setup iterator for confidence map
-  bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex());
+  bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex() && !m_Model->GetRegressionMode());
   ConfidenceMapIteratorType confidenceIt;
   if (computeConfidenceMap)
     {

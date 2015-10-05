@@ -841,3 +841,36 @@ otb_test_application(NAME cdbTvVectorDataDSValidationWrongRoads_LI
                              ${OTBAPP_BASELINE_FILES}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp
                              ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp)
 
+if(OTB_USE_OPENCV)
+#----------- TrainRegression TESTS ----------------
+# y = 0.01*x^2 + 1.5*x - 300
+otb_test_application(NAME apTvClTrainRegressionTest_monovar
+                     APP  TrainRegression
+                     OPTIONS -io.il ${INPUTDATA}/QB_Toulouse_Ortho_regression.tif
+                             -io.imstat ${INPUTDATA}/QB_Toulouse_Ortho_regression.xml
+                             -io.out ${TEMP}/apTvClTrainRegressionTest_monovar.rf
+                             -sample.mt 20000
+                             -sample.mv 20000
+                             -sample.vtr 0.5
+                             -rand 121212
+                             -classifier rf
+                             -classifier.rf.ra 0.0001
+                             -classifier.rf.max 6
+                             -classifier.rf.acc 0.0005
+                    VALID    --compare-ascii ${NOTOL}
+                             ${OTBAPP_BASELINE_FILES}/apTvClTrainRegressionTest_monovar.rf
+                             ${TEMP}/apTvClTrainRegressionTest_monovar.rf)
+
+#----------- PredictRegression TESTS ----------------
+otb_test_application(NAME apTvClPredictRegressionTest_monovar
+                     APP PredictRegression
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -model ${OTBAPP_BASELINE_FILES}/apTvClTrainRegressionTest_monovar.rf
+                             -imstat ${INPUTDATA}/QB_Toulouse_Ortho_regression.xml
+                             -out ${TEMP}/apTvClPredictRegressionTest_monovar.tif
+                    VALID    --compare-image 1
+                             ${OTBAPP_BASELINE}/apTvClPredictRegressionTest_monovar.tif
+                             ${TEMP}/apTvClPredictRegressionTest_monovar.tif)
+
+endif()
+
