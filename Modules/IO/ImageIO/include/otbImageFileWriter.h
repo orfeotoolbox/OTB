@@ -167,6 +167,9 @@ public:
    *  has no output. */
   virtual void Update();
 
+  /** create <filename>.geom file from MetaDataDictionary */
+  void CreateGeomFileFromMetadataDictionary(const itk::MetaDataDictionary &dict, const std::string filename) const;
+
   /** ImageFileWriter Methods */
   virtual void SetFileName(const char* extendedFileName);
   virtual void SetFileName(std::string extendedFileName);
