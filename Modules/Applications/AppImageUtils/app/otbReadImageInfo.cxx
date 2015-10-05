@@ -275,7 +275,7 @@ private:
 
       if(ret)
         {
-    
+
         for(unsigned int b = 0;b< inImage->GetNumberOfComponentsPerPixel();++b)
           {
           ossOutput<<"\n\t\tBand "<<b+1<<": ";
@@ -283,7 +283,7 @@ private:
           if(noDataValueAvailable[b])
             ossOutput<<noDataValues[b];
           else
-            ossOutput<<"No";  
+            ossOutput<<"No";
           }
         }
       else
@@ -291,6 +291,7 @@ private:
         ossOutput<<" Not found";
         }
       ossOutput<<std::endl;
+
 
     //Get image size
     SetParameterInt("indexx", inImage->GetLargestPossibleRegion().GetIndex()[0]);
@@ -336,6 +337,23 @@ private:
 
     ossOutput << "\tEstimated ground spacing (in meters): [" << GetParameterFloat("estimatedgroundspacingx") << "," << GetParameterFloat("estimatedgroundspacingy") << "]" << std::endl;
 
+    //report subdatasets if any
+      int subDatasetCount = 0;
+      itk::ExposeMetaData<int>(inImage->GetMetaDataDictionary(),"Metadata.SUBDATASET_COUNT",subDatasetCount);
+      if( subDatasetCount > 0)
+        {
+        ossOutput << "Subdatasets:" << std::endl;
+        std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
+        std::string subDatasetName;
+        for ( int subindex = 1; subindex <= subDatasetCount; ++subindex)
+          {
+          std::stringstream subkey;
+          subkey << metadataKeyPrefix << "SUBDATASET_" << subindex << "_NAME";
+          itk::ExposeMetaData<std::string>(inImage->GetMetaDataDictionary(),subkey.str(),subDatasetName);
+          ossOutput << "\tSubdataset_" << subindex << "_name: " << subDatasetName << std::endl;
+          }
+        }
+
     ossOutput << std::endl << "Image acquisition information:" << std::endl;
 
     SetParameterString("sensor", metadataInterface->GetSensorID());
@@ -346,11 +364,10 @@ private:
     ossOutput << std::endl;
 
     ossOutput << "\tImage identification number: ";
-    if (metadataInterface->GetImageKeywordlist().HasKey("image_id"))
-      {
-      SetParameterString("id", metadataInterface->GetImageKeywordlist().GetMetadataByKey("image_id"));
-      ossOutput << GetParameterString("id");
-      }
+    SetParameterString("id", metadataInterface->GetImageID());
+    if (!GetParameterString("id").empty())
+      ossOutput <<  GetParameterString("id");
+
     ossOutput << std::endl;
     SetParameterString("projectionref", metadataInterface->GetProjectionRef());
     if (!GetParameterString("projectionref").empty())

@@ -571,11 +571,11 @@ void GDALImageIO::InternalReadImageInformation()
     std::vector<std::string> names;
     if( CSLCount(papszMetadata) > 0 )
       {
+      std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
       for( int cpt = 0; papszMetadata[cpt] != NULL; ++cpt )
         {
         std::string key, name;
         const std::string defval = "TRUE";
-        std::string const metadataKeyPrefix = MetaDataKey::MetadataKeyPrefix;
         Utils::SplitStringToSingleKeyValue(static_cast<std::string>(papszMetadata[cpt]), key, name, defval, papszMetadata[cpt]);
         if (!key.empty())
           {
@@ -589,6 +589,7 @@ void GDALImageIO::InternalReadImageInformation()
           itk::EncapsulateMetaData<std::string>(this->GetMetaDataDictionary(), metadataKeyPrefix + key, name);
           }
         }
+      itk::EncapsulateMetaData<int>(this->GetMetaDataDictionary(), metadataKeyPrefix + "SUBDATASET_COUNT", names.size());
       }
     if (m_DatasetNumber < names.size())
       {
