@@ -6,7 +6,7 @@ set(OTBAppFiltering_LINK_LIBS
 )
 
 otb_create_application(
-  NAME           SARConvert
-  SOURCES        otbSARConvert.cxx
+  NAME           SARPolarMatrixConvert
+  SOURCES        otbSARPolarMatrixConvert.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 

@@ -1,6 +1,6 @@
 set(DOCUMENTATION "Basic filters application.")
 
-otb_module(OTBAppSARConvert
+otb_module(OTBAppSARPolarMatrixConvert
   DEPENDS
     OTBPolarimetry
     OTBImageManipulation

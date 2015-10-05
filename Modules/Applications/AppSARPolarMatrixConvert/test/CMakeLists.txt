@@ -1,157 +1,157 @@
 otb_module_test()
-#----------- SARConvert TESTS ----------------
+#----------- SARPolarMatrixConvert TESTS ----------------
 
 #1
-otb_test_application(NAME  apTvSARConvertRecCoherency
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertRecCoherency
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inhh ${INPUTDATA}/RSAT_imageryC_HH.tif
 							 -inhv ${INPUTDATA}/RSAT_imageryC_HV.tif
 							 -invv ${INPUTDATA}/RSAT_imageryC_VV.tif
 							 -conv msinclairtocoherency 
-							 -outc ${TEMP}/apTvSARConvertRecCoherency.tif
+							 -outc ${TEMP}/apTvSARPolarMatrixConvertRecCoherency.tif
 							 
                      )
             
 #2                            
-otb_test_application(NAME  apTvSARConvertRecCovariance
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertRecCovariance
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inhh ${INPUTDATA}/RSAT_imageryC_HH.tif
 							 -inhv ${INPUTDATA}/RSAT_imageryC_HV.tif
 							 -invv ${INPUTDATA}/RSAT_imageryC_VV.tif
 							 -conv msinclairtocovariance 
-							 -outc ${TEMP}/apTvSARConvertRecCovariance.tif
+							 -outc ${TEMP}/apTvSARPolarMatrixConvertRecCovariance.tif
 							 
                      )
 
 #3
-otb_test_application(NAME  apTvSARConvertRecCirCovariance
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertRecCirCovariance
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inhh ${INPUTDATA}/RSAT_imageryC_HH.tif
 							 -inhv ${INPUTDATA}/RSAT_imageryC_HV.tif
 							 -invv ${INPUTDATA}/RSAT_imageryC_VV.tif
 							 -conv msinclairtocircovariance 
-							 -outc ${TEMP}/apTvSARConvertRecCirCovariance.tif
+							 -outc ${TEMP}/apTvSARPolarMatrixConvertRecCirCovariance.tif
 							 
                      )
 
 #4
-otb_test_application(NAME  apTvSARConvertRecCohToMueller
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertRecCohToMueller
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inc ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
 							 -conv mcoherencytomueller
-							 -outf ${TEMP}/apTvSARConvertRecCohToMueller.tif
+							 -outf ${TEMP}/apTvSARPolarMatrixConvertRecCohToMueller.tif
 							 
                      )
                              
                              
 #5
-otb_test_application(NAME  apTvSARConvertRecCovToCohDeg
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertRecCovToCohDeg
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inc ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
 							 -conv mcovariancetocoherencydegree
-							 -outc ${TEMP}/apTvSARConvertRecCovToCohDeg.tif
+							 -outc ${TEMP}/apTvSARPolarMatrixConvertRecCovToCohDeg.tif
 							 
                      )
                              
 
 #6 - interleaved (failed)
-otb_test_application(NAME  apTvSARConvertRecCovToRecCoh
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertRecCovToRecCoh
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inc ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
 							 -conv mcovariancetocoherency
-							 -outc ${TEMP}/apTvSARConvertRecCovToRecCoh.tif
+							 -outc ${TEMP}/apTvSARPolarMatrixConvertRecCovToRecCoh.tif
 							 
                      )
 
 #7 - interleaved (failed)
-otb_test_application(NAME  apTvSARConvertRecLinCovToRecCirCov
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertRecLinCovToRecCirCov
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inc ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
 							 -conv mlinearcovariancetocircularcovariance
-							 -outc ${TEMP}/apTvSARConvertRecCovToRecCoh.tif
+							 -outc ${TEMP}/apTvSARPolarMatrixConvertRecCovToRecCoh.tif
 							 
                      )
                              
                              
 #8 - interleaved (failed)
-otb_test_application(NAME  apTvSARConvertMuellerToRecCov
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertMuellerToRecCov
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inf ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif
 							 -conv muellertomcovariance
-							 -outc ${TEMP}/apTvSARConvertMuellerToRecCov.tif
+							 -outc ${TEMP}/apTvSARPolarMatrixConvertMuellerToRecCov.tif
 							 
                      )
 
 
 #9
-otb_test_application(NAME  apTvSARConvertBiSincToCoherency
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertBiSincToCoherency
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inhh ${INPUTDATA}/RSAT_imageryC_HH.tif
 							 -inhv ${INPUTDATA}/RSAT_imageryC_HV.tif
 							 -invh ${INPUTDATA}/RSAT_imageryC_VH.tif
 							 -invv ${INPUTDATA}/RSAT_imageryC_VV.tif
 							 -conv bsinclairtocoherency
-							 -outc ${TEMP}/apTvSARConvertBiSincToCoherency.tif
+							 -outc ${TEMP}/apTvSARPolarMatrixConvertBiSincToCoherency.tif
 							 
                      )
                              
                              
 #10
-otb_test_application(NAME  apTvSARConvertBiSincToCovariance
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertBiSincToCovariance
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inhh ${INPUTDATA}/RSAT_imageryC_HH.tif
 							 -inhv ${INPUTDATA}/RSAT_imageryC_HV.tif
 							 -invh ${INPUTDATA}/RSAT_imageryC_VH.tif
 							 -invv ${INPUTDATA}/RSAT_imageryC_VV.tif
 							 -conv bsinclairtocovariance
-							 -outc ${TEMP}/apTvSARConvertBiSincToCovariance.tif
+							 -outc ${TEMP}/apTvSARPolarMatrixConvertBiSincToCovariance.tif
 							 
                      )
                              
 #11
-otb_test_application(NAME  apTvSARConvertBiSincToCirCovariance
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertBiSincToCirCovariance
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inhh ${INPUTDATA}/RSAT_imageryC_HH.tif
 							 -inhv ${INPUTDATA}/RSAT_imageryC_HV.tif
 							 -invh ${INPUTDATA}/RSAT_imageryC_VH.tif
 							 -invv ${INPUTDATA}/RSAT_imageryC_VV.tif
 							 -conv bsinclairtocircovariance
-							 -outc ${TEMP}/apTvSARConvertBiSincToCirCovariance.tif
+							 -outc ${TEMP}/apTvSARPolarMatrixConvertBiSincToCirCovariance.tif
 							 
                      )
    
                              
 #12 - interleaved (failed)
-otb_test_application(NAME  apTvSARConvertSincToMueller
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertSincToMueller
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inhh ${INPUTDATA}/RSAT_imageryC_HH.tif
 							 -inhv ${INPUTDATA}/RSAT_imageryC_HV.tif
 							 -invh ${INPUTDATA}/RSAT_imageryC_HV.tif #monostatic
 							 -invv ${INPUTDATA}/RSAT_imageryC_VV.tif
 							 -conv sinclairtomueller
-							 -outf ${TEMP}/apTvSARConvertSincToMueller.tif
+							 -outf ${TEMP}/apTvSARPolarMatrixConvertSincToMueller.tif
 							 
                      )
                              
                              
 #13 
-otb_test_application(NAME  apTvSARConvertMuellerToPolDeGPow
-                     APP  SARConvert
+otb_test_application(NAME  apTvSARPolarMatrixConvertMuellerToPolDeGPow
+                     APP  SARPolarMatrixConvert
                      OPTIONS 
 							 -inf ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif
 							 -conv muellertopoldegandpower
-							 -outf ${TEMP}/apTvSARConvertMuellerToPolDeGPow.tif
+							 -outf ${TEMP}/apTvSARPolarMatrixConvertMuellerToPolDeGPow.tif
 							 
                      )

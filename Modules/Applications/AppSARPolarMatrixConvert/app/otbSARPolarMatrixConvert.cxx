@@ -54,11 +54,11 @@ namespace otb
 namespace Wrapper
 {
 
-class SARConvert : public Application
+class SARPolarMatrixConvert : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef SARConvert                   Self;
+  typedef SARPolarMatrixConvert                   Self;
   typedef Application                         Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
@@ -178,16 +178,16 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(SARConvert, otb::Application);
+  itkTypeMacro(SARPolarMatrixConvert, otb::Application);
 
 private:
   void DoInit()
   {
-    SetName("SARConvert");
+    SetName("SARPolarMatrixConvert");
     SetDescription("This applications allows converting classical polarimetric matrices to each other.");
 
     // Documentation
-    SetDocName("SARConvert");
+    SetDocName("SARPolarMatrixConvert");
     SetDocLongDescription(
     
     "This application allows converting classical polarimetric matrices to each other.\n"
@@ -706,4 +706,4 @@ private:
 } //end namespace Wrapper
 } //end namespace otb
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::SARConvert)
+OTB_APPLICATION_EXPORT(otb::Wrapper::SARPolarMatrixConvert)
