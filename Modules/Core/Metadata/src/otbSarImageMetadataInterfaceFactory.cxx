@@ -23,6 +23,7 @@
 // SAR Sensors
 #include "otbTerraSarImageMetadataInterfaceFactory.h"
 #include "otbSentinel1ImageMetadataInterfaceFactory.h"
+#include "otbCosmoSkymedImageMetadataInterfaceFactory.h"
 
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
@@ -81,6 +82,7 @@ SarImageMetadataInterfaceFactory
       {
       itk::ObjectFactoryBase::RegisterFactory(TerraSarImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(Sentinel1ImageMetadataInterfaceFactory::New());
+      itk::ObjectFactoryBase::RegisterFactory(CosmoSkymedImageMetadataInterfaceFactory::New());
       firstTime = false;
       }
     }
