@@ -340,6 +340,24 @@ ImageMetadataInterfaceBase::GetSensorID() const
   return imageKeywordlist.GetMetadataByKey("sensor");
 }
 
+std::string
+ImageMetadataInterfaceBase::GetImageID() const
+{
+  ImageKeywordlistType imageKeywordlist;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+    }
+  if (!imageKeywordlist.HasKey("image_id"))
+    {
+    return "";
+    }
+
+  return imageKeywordlist.GetMetadataByKey("image_id");
+}
+
 unsigned int
 ImageMetadataInterfaceBase::GetNumberOfBands() const
 {
@@ -455,7 +473,7 @@ ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, 
 {
 
   std::vector<std::string> keys = dict.GetKeys();
- 
+
 // an extra dependency just for printing is a bad idea.
 //  VectorDataKeywordlist    vectorDataKeywordlistValue;
   unsigned int             i(0);
@@ -487,13 +505,13 @@ ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, 
       {
       VectorType vvalue;
       itk::ExposeMetaData<VectorType>(dict2, keys[itkey], vvalue);
-      
+
       for (i = 0; i < vvalue.size(); ++i)
         {
         os << indent << "---> " << keys[itkey] << "[" << i << "] = " << vvalue[i] << std::endl;
         }
       vvalue.clear();
-      
+
       break;
       }
       case MetaDataKey::TDOUBLE:
@@ -517,7 +535,7 @@ ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, 
       {
       ImageKeywordlist         kwl;
       itk::ExposeMetaData<ImageKeywordlist>(dict2, keys[itkey], kwl);
-      
+
       os << indent << "---> " << keys[itkey] << std::endl;
       kwl.Print(os);
       break;
