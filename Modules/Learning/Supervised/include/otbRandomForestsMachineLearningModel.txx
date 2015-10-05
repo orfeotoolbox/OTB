@@ -32,17 +32,17 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
  m_RFModel (new CvRTrees),
  m_MaxDepth(5),
  m_MinSampleCount(10),
- m_RegressionAccuracy(0),
+ m_RegressionAccuracy(0.01),
  m_ComputeSurrogateSplit(false),
  m_MaxNumberOfCategories(10),
  m_CalculateVariableImportance(false),
  m_MaxNumberOfVariables(0),
  m_MaxNumberOfTrees(100),
  m_ForestAccuracy(0.01),
- m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS),
- m_RegressionMode(false)
+ m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS)
 {
   this->m_ConfidenceIndex = true;
+  this->m_IsRegressionSupported = true;
 }
 
 
@@ -65,7 +65,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
+::Train()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -96,7 +96,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
   var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
 
-  if(m_RegressionMode)
+  if(this->m_RegressionMode)
     var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_NUMERICAL;
   else
     var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
@@ -110,7 +110,7 @@ template <class TInputValue, class TOutputValue>
 typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & value, ConfidenceValueType *quality) const
+::Predict(const InputSampleType & value, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
