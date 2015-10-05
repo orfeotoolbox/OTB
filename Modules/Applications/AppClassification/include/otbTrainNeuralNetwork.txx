@@ -14,16 +14,20 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-
+#ifndef __otbTrainNeuralNetwork_txx
+#define __otbTrainNeuralNetwork_txx
 #include <boost/lexical_cast.hpp>
-#include "otbTrainImagesClassifier.h"
+#include "otbLearningApplicationBase.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-#ifdef OTB_USE_OPENCV
-void TrainImagesClassifier::InitNeuralNetworkParams()
+
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::InitNeuralNetworkParams()
 {
   AddChoice("classifier.ann", "Artificial Neural Network classifier");
   SetParameterDescription("classifier.ann",
@@ -119,10 +123,15 @@ void TrainImagesClassifier::InitNeuralNetworkParams()
 
 }
 
-void TrainImagesClassifier::TrainNeuralNetwork(ListSampleType::Pointer trainingListSample,
-                                                              LabelListSampleType::Pointer trainingLabeledListSample)
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::TrainNeuralNetwork(typename ListSampleType::Pointer trainingListSample,
+                     typename TargetListSampleType::Pointer trainingLabeledListSample,
+                     std::string modelPath)
 {
-  NeuralNetworkType::Pointer classifier = NeuralNetworkType::New();
+  typename NeuralNetworkType::Pointer classifier = NeuralNetworkType::New();
+  classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);
   classifier->SetTargetListSample(trainingLabeledListSample);
 
@@ -153,18 +162,23 @@ void TrainImagesClassifier::TrainNeuralNetwork(ListSampleType::Pointer trainingL
 
 
   unsigned int nbClasses = 0;
-  LabelType currentLabel = 0, prevLabel = 0;
-  for (unsigned int itLab = 0; itLab < trainingLabeledListSample->Size(); ++itLab)
+  if (this->m_RegressionFlag)
     {
-    currentLabel = trainingLabeledListSample->GetMeasurementVector(itLab);
-    if ((currentLabel != prevLabel) || (itLab == 0))
+    layerSizes.push_back(1);
+    }
+  else
+    {
+    std::set<TargetValueType> labelSet;
+    TargetSampleType currentLabel;
+    for (unsigned int itLab = 0; itLab < trainingLabeledListSample->Size(); ++itLab)
       {
-      ++nbClasses;
+      currentLabel = trainingLabeledListSample->GetMeasurementVector(itLab);
+      labelSet.insert(currentLabel[0]);
       }
-    prevLabel = currentLabel;
+    nbClasses = labelSet.size();
+    layerSizes.push_back(nbClasses);
     }
 
-  layerSizes.push_back(nbClasses);
   classifier->SetLayerSizes(layerSizes);
 
   switch (GetParameterInt("classifier.ann.f"))
@@ -208,8 +222,10 @@ void TrainImagesClassifier::TrainNeuralNetwork(ListSampleType::Pointer trainingL
   classifier->SetEpsilon(GetParameterFloat("classifier.ann.eps"));
   classifier->SetMaxIter(GetParameterInt("classifier.ann.iter"));
   classifier->Train();
-  classifier->Save(GetParameterString("io.out"));
+  classifier->Save(modelPath);
 }
-#endif
+
 } //end namespace wrapper
 } //end namespace otb
+
+#endif

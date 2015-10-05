@@ -14,16 +14,19 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-
-#include "otbTrainImagesClassifier.h"
-
+#ifndef __otbTrainBoost_txx
+#define __otbTrainBoost_txx
+#include "otbLearningApplicationBase.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-#ifdef OTB_USE_OPENCV
-  void TrainImagesClassifier::InitBoostParams()
+
+  template <class TInputValue, class TOutputValue>
+  void
+  LearningApplicationBase<TInputValue,TOutputValue>
+  ::InitBoostParams()
   {
     AddChoice("classifier.boost", "Boost classifier");
     SetParameterDescription("classifier.boost", "This group of parameters allows to set Boost classifier parameters. "
@@ -55,10 +58,15 @@ namespace Wrapper
     SetParameterDescription("classifier.boost.m","Maximum depth of the tree.");
   }
 
-
-  void TrainImagesClassifier::TrainBoost(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
+  template <class TInputValue, class TOutputValue>
+  void
+  LearningApplicationBase<TInputValue,TOutputValue>
+  ::TrainBoost(typename ListSampleType::Pointer trainingListSample,
+               typename TargetListSampleType::Pointer trainingLabeledListSample,
+               std::string modelPath)
   {
-    BoostType::Pointer boostClassifier = BoostType::New();
+    typename BoostType::Pointer boostClassifier = BoostType::New();
+    boostClassifier->SetRegressionMode(this->m_RegressionFlag);
     boostClassifier->SetInputListSample(trainingListSample);
     boostClassifier->SetTargetListSample(trainingLabeledListSample);
     boostClassifier->SetBoostType(GetParameterInt("classifier.boost.t"));
@@ -67,9 +75,10 @@ namespace Wrapper
     boostClassifier->SetMaxDepth(GetParameterInt("classifier.boost.m"));
 
     boostClassifier->Train();
-    boostClassifier->Save(GetParameterString("io.out"));
+    boostClassifier->Save(modelPath);
   }
-#endif
 
 } //end namespace wrapper
 } //end namespace otb
+
+#endif

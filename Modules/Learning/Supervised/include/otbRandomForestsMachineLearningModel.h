@@ -59,6 +59,11 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(RandomForestsMachineLearningModel, MachineLearningModel);
 
+  /** Train the machine learning model */
+  virtual void Train();
+  /** Predict values using the model */
+  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+
   /** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="");
 
@@ -115,9 +120,6 @@ public:
   itkGetMacro(TerminationCriteria, int);
   itkSetMacro(TerminationCriteria, int);
 
-  itkGetMacro(RegressionMode, bool);
-  itkSetMacro(RegressionMode, bool);
-
   /** Returns a matrix containing variable importance */
   VariableImportanceMatrixType GetVariableImportance();
   
@@ -138,11 +140,6 @@ protected:
 
   /* /\** Target list sample *\/ */
   /* typename TargetListSampleType::Pointer m_TargetListSample; */
-
-  /** Train the machine learning model */
-  virtual void TrainClassification();
-  /** Predict values using the model */
-  virtual TargetSampleType PredictClassification(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
 private:
   RandomForestsMachineLearningModel(const Self &); //purposely not implemented
@@ -208,8 +205,6 @@ private:
   float m_ForestAccuracy;
   /** The type of the termination criteria */
   int m_TerminationCriteria;
-  /** Perform regression instead of classification */
-  bool m_RegressionMode;
 };
 } // end namespace otb
 

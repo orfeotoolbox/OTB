@@ -14,16 +14,19 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-
-#include "otbTrainImagesClassifier.h"
-
+#ifndef __otbTrainNormalBayes_txx
+#define __otbTrainNormalBayes_txx
+#include "otbLearningApplicationBase.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-#ifdef OTB_USE_OPENCV
-  void TrainImagesClassifier::InitNormalBayesParams()
+
+  template <class TInputValue, class TOutputValue>
+  void
+  LearningApplicationBase<TInputValue,TOutputValue>
+  ::InitNormalBayesParams()
   {
     AddChoice("classifier.bayes", "Normal Bayes classifier");
     SetParameterDescription("classifier.bayes", "Use a Normal Bayes Classifier. "
@@ -31,15 +34,22 @@ namespace Wrapper
 
   }
 
-
-  void TrainImagesClassifier::TrainNormalBayes(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
+  template <class TInputValue, class TOutputValue>
+  void
+  LearningApplicationBase<TInputValue,TOutputValue>
+  ::TrainNormalBayes(typename ListSampleType::Pointer trainingListSample,
+                     typename TargetListSampleType::Pointer trainingLabeledListSample,
+                     std::string modelPath)
   {
-    NormalBayesType::Pointer classifier = NormalBayesType::New();
+    typename NormalBayesType::Pointer classifier = NormalBayesType::New();
+    classifier->SetRegressionMode(this->m_RegressionFlag);
     classifier->SetInputListSample(trainingListSample);
     classifier->SetTargetListSample(trainingLabeledListSample);
     classifier->Train();
-    classifier->Save(GetParameterString("io.out"));
+    classifier->Save(modelPath);
   }
-#endif
+
 } //end namespace wrapper
 } //end namespace otb
+
+#endif

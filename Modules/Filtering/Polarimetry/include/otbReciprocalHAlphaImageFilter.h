@@ -78,13 +78,13 @@ public:
 
     VNLMatrixType vnlMat(3, 3, 0.);
     vnlMat[0][0] = ComplexType(T0,  0.);
-    vnlMat[0][1] = std::conj(ComplexType(Coherency[1]));
-    vnlMat[0][2] = std::conj(ComplexType(Coherency[2]));
-    vnlMat[1][0] = ComplexType(Coherency[1]);
+    vnlMat[0][1] = ComplexType(Coherency[1]);
+    vnlMat[0][2] = ComplexType(Coherency[2]);
+    vnlMat[1][0] = std::conj(ComplexType(Coherency[1]));
     vnlMat[1][1] = ComplexType(T1,  0.);
-    vnlMat[1][2] = std::conj(ComplexType(Coherency[4]));
-    vnlMat[2][0] = ComplexType(Coherency[2]);
-    vnlMat[2][1] = ComplexType(Coherency[4]);
+    vnlMat[1][2] = ComplexType(Coherency[4]);
+    vnlMat[2][0] = std::conj(ComplexType(Coherency[2]));
+    vnlMat[2][1] = std::conj(ComplexType(Coherency[4]));
     vnlMat[2][2] = ComplexType(T2,  0.);
 
     // Only compute the left symetry to respect the previous Hermitian Analisys code
@@ -95,6 +95,7 @@ public:
     // Entropy estimation
     double totalEigenValues(0.0);
     double p[3];
+    double plog[3];
     double entropy;
     double alpha;
     double anisotropy;
@@ -120,45 +121,31 @@ public:
           }
       }
 
-    totalEigenValues = sortedRealEigenValues[0] + sortedRealEigenValues[1] + sortedRealEigenValues[2];
-    if (totalEigenValues <m_Epsilon)
-      {
-        totalEigenValues = m_Epsilon;
-      }
-
+    totalEigenValues = 0.0;
     for (unsigned int k = 0; k < 3; ++k)
       {
-        p[k] = std::max(sortedRealEigenValues[k], 0.) / totalEigenValues;
+        sortedRealEigenValues[k] = std::max(sortedRealEigenValues[k], 0.);
+        totalEigenValues += sortedRealEigenValues[k];
       }
 
-    if ( (p[0] < m_Epsilon) || (p[1] < m_Epsilon) || (p[2] < m_Epsilon) )
+      
+    for (unsigned int k = 0; k < 3; ++k)
       {
-        entropy =0.0;
+        p[k] = sortedRealEigenValues[k] / totalEigenValues;
+        
+        if (p[k]<m_Epsilon) //n=log(n)-->0 when n-->0
+			plog[k]=0.0;
+		else
+			plog[k]=-p[k]*log(p[k])/log(3.0);
       }
-    else
-      {
-        entropy = p[0]*log(p[0]) + p[1]*log(p[1]) + p[2]*log(p[2]);
-        entropy /= -log(3.);
-      }
+
+	entropy = 0.0;
+	for (unsigned int k = 0; k < 3; ++k)
+			entropy += plog[k];
 
     // alpha estimation
     double val0, val1, val2;
     double a0, a1, a2;
-
-    for(unsigned int k = 0; k < 3; ++k)
-      {
-         p[k] = sortedRealEigenValues[k] / totalEigenValues;
-
-         if (p[k] < 0.)
-           {
-             p[k] = 0.;
-           }
-
-         if (p[k] > 1.)
-           {
-             p[k] = 1.;
-           }
-      }
 
     val0 = std::abs(sortedGreaterEigenVector[0]);
     a0=acos(vcl_abs(val0)) * CONST_180_PI;
@@ -171,13 +158,9 @@ public:
 
     alpha=p[0]*a0 + p[1]*a1 + p[2]*a2;
 
-    if (alpha>90)
-      {
-        alpha=0.;
-      }
-
     // Anisotropy estimation
     anisotropy=(sortedRealEigenValues[1] - sortedRealEigenValues[2])/(sortedRealEigenValues[1] + sortedRealEigenValues[2] + m_Epsilon);
+
 
     result[0] = static_cast<OutputValueType>(entropy);
     result[1] = static_cast<OutputValueType>(alpha);

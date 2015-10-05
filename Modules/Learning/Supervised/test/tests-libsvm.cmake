@@ -22,3 +22,7 @@ otb_add_test(NAME leTuLibSVMMachineLearningModelCanRead COMMAND otbSupervisedTes
   ${TEMP}/libsvm_model.txt
   )
 set_property(TEST leTuLibSVMMachineLearningModelCanRead PROPERTY DEPENDS leTvLibSVMMachineLearningModel)
+
+otb_add_test(NAME leTvLibSVMMachineLearningModelReg COMMAND otbSupervisedTestDriver
+  otbLibSVMRegressionTests
+  )
