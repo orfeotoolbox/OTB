@@ -380,6 +380,24 @@ ReadGeometryFromGEOMFile(const std::string& filename)
 {
   ossimKeywordlist geom_kwl;
   ImageKeywordlist otb_kwl;
+  ifstream testFile(filename.c_str());
+  if (testFile.good())
+  {
+     std::string firstLine;
+     getline(testFile, firstLine);
+     /* check to skip creating a valid ossim kwl. because if the condition
+        validates to true then we are having a geom that does not have a
+        corresponding valid ossim sensor model. */
+     if( firstLine.find( "// !OSSIM") != std::string::npos)
+     {
+        otbMsgDevMacro( << ".geom file not created by OSSIM. Returning empty kwl" <<  filename << std::endl);
+        testFile.close();
+        return otb_kwl;
+     }
+  }
+
+  testFile.close();
+
   ossimFilename ossimGeomFile = ossimFilename(filename);
 
   if (ossimGeomFile.exists() && ossimGeomFile.isFile())
