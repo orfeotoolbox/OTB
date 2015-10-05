@@ -41,8 +41,16 @@ GlROIActor::GlROIActor()
     m_VpLL(),
     m_VpLR()
 {
+  m_UL.Fill( 0 );
+  m_LR.Fill( 0 );
+
   m_Color.Fill(0);
   m_Color[0]=1.0;
+
+  m_VpUL.Fill( 0 );
+  m_VpUR.Fill( 0 );
+  m_VpLL.Fill( 0 );
+  m_VpLR.Fill( 0 );
 }
 
 GlROIActor::~GlROIActor()
