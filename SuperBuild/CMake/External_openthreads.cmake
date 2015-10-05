@@ -40,7 +40,7 @@ else()
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "http://www.openscenegraph.org/downloads/developer_releases/OpenSceneGraph-3.2.0.zip"
+      URL "http://trac.openscenegraph.org/downloads/developer_releases/OpenSceneGraph-3.2.0.zip"
       URL_MD5 4980f8692712a24d4c99f363f80c6814
       SOURCE_DIR ${OPENTHREADS_SB_SRC}
       BINARY_DIR ${OPENTHREADS_SB_BUILD_DIR}
