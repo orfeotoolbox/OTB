@@ -381,17 +381,17 @@ ReadGeometryFromITKMetadata(const itk::MetaDataDictionary dictionary)
   ossimKeywordlist ossim_kwl;
 
   std::vector<std::string> mkeys = dictionary.GetKeys();
-
   std::vector<std::string>::const_iterator itKey = mkeys.begin();
   while (itKey != mkeys.end() )
   {
      std::string mvalue;
      itk::ExposeMetaData<std::string>(dictionary, (*itKey), mvalue);
-//     otb_kwl.AddKey((*itKey), mvalue);
+     //  if ((*itKey) == "Metadata.Mission_ID")
      ossim_kwl.add((*itKey).c_str(), mvalue.c_str(), false);
      ++itKey;
   }
 
+  /* remove metadata values from GDALIO in the ossimkeywordlist */
   ossim_kwl.remove("ResolutionFactor");
   ossim_kwl.remove("SubDatasetIndex");
   ossim_kwl.remove("TileHintX");
@@ -405,17 +405,19 @@ ReadGeometryFromITKMetadata(const itk::MetaDataDictionary dictionary)
   ossim_kwl.remove("LowerRightCorner");
 
   ossimRefPtr<ossimplugins::ossimCosmoSkymedModel> csk = new ossimplugins::ossimCosmoSkymedModel();
-
-  bool valid = csk->loadState(ossim_kwl);
-  if (valid)
+  /* This method copies some of metadata values into an ossimkeywordnames
+     eg: Metadata.Mission_ID -> sensor
+         Metadata.Programmed_Image_ID -> image_id
+   */
+  bool updated = csk->updateMetadata(ossim_kwl);
+  if (updated)
   {
-     std::cerr << ossim_kwl;
-
+     /* convert ossimkeywordlist to otb imagekeywordlist */
+     otb_kwl.SetKeywordlist(ossim_kwl);
+//  otb_kwl.Print(std::cerr);
   }
 
-  otb_kwl.SetKeywordlist(ossim_kwl);
-//  otb_kwl.Print(std::cerr);
-   return otb_kwl;
+  return otb_kwl;
 }
 
 ImageKeywordlist

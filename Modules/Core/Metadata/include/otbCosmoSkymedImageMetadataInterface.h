@@ -56,8 +56,6 @@ public:
   typedef Superclass::RealType                  RealType;
 
 
-  std::string GetSensorID() const;
-
   /** check sensor ID */
   bool CanRead() const;
 
@@ -87,19 +85,17 @@ public:
 
   std::string GetImageID() const;
 
-  void GetValueFromMetadataDictionary(std::string const key, std::string& result) const;
+  void GetValueFromKeywordlist(std::string const key, std::string& result) const;
 
   template<typename T>
-    void GetValueFromMetadataDictionary(std::string const key, T& result) const
+    void GetValueFromKeywordlist(std::string const key, T& result) const
   {
-    const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+    const ImageKeywordlist imageKeywordlist = this->GetImageKeywordlist();
     std::string const k = MetaDataKey::MetadataKeyPrefix + key;
-    if ( dict.HasKey(k) )
+    if (imageKeywordlist.HasKey(k))
       {
       std::string v;
-      //using Template type T directly is not working. So I need to get it as
-      //string and use Utils::LexicalCast.
-      itk::ExposeMetaData<std::string>(dict, k, v);
+      v = imageKeywordlist.GetMetadataByKey(k);
       result = Utils::LexicalCast<T>(v, k);
       }
     else
