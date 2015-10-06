@@ -20,6 +20,7 @@
 
 #include "otbSarImageMetadataInterface.h"
 #include "itkMetaDataObject.h"
+#include "itkMetaDataDictionary.h"
 
 namespace otb
 {

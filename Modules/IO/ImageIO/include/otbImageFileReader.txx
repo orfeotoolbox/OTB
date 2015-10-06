@@ -316,7 +316,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   bool lVectorImage = false;
   if (strcmp(output->GetNameOfClass(), "VectorImage") == 0)
     lVectorImage= true;
-  
+
   this->m_ImageIO->SetOutputImagePixelType(PixelIsComplex(dummy),lVectorImage);
 
   // Pass the dataset number (used for hdf files for example)
@@ -426,14 +426,19 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   if (!m_FilenameHelper->ExtGEOMFileNameIsSet())
     {
     otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist,!m_FilenameHelper->GetSkipRpcTag());
-    otbMsgDevMacro(<< "Loading internal kwl");
+    itkWarningMacro(<< "Loading internal kwl");
     }
   else
     {
     otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
-    otbMsgDevMacro(<< "Loading external kwl");
+    itkWarningMacro(<< "Loading external kwl");
     }
 
+    if( otb_kwl.GetSize() == 0 )
+    {
+    otb_kwl = ReadGeometryFromITKMetadata(dict);
+    itkWarningMacro(<< "Loading kwl from itk::MetadataDictonary");
+    }
   // Don't add an empty ossim keyword list
   if( otb_kwl.GetSize() != 0 )
     {
@@ -670,15 +675,15 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   return this->m_ImageIO->GetOverviewsCount();
  }
- 
- 
+
+
 template <class TOutputImage, class ConvertPixelTraits>
 std::vector<std::string>
 ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GetOverviewsInfo()
  {
   this->UpdateOutputInformation();
-  
+
   return this->m_ImageIO->GetOverviewsInfo();
  }
 

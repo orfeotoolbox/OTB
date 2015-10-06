@@ -30,7 +30,7 @@
 #include "ossim/ossimTileMapModel.h"
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/projection/ossimRpcModel.h"
-
+#include "ossimCosmoSkymedModel.h"
 #include "otbSensorModelAdapter.h"
 
 namespace otb
@@ -374,29 +374,55 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
 
   return otb_kwl;
 }
+ImageKeywordlist
+ReadGeometryFromITKMetadata(const itk::MetaDataDictionary dictionary)
+{
+  ImageKeywordlist otb_kwl;
+  ossimKeywordlist ossim_kwl;
+
+  std::vector<std::string> mkeys = dictionary.GetKeys();
+
+  std::vector<std::string>::const_iterator itKey = mkeys.begin();
+  while (itKey != mkeys.end() )
+  {
+     std::string mvalue;
+     itk::ExposeMetaData<std::string>(dictionary, (*itKey), mvalue);
+//     otb_kwl.AddKey((*itKey), mvalue);
+     ossim_kwl.add((*itKey).c_str(), mvalue.c_str(), false);
+     ++itKey;
+  }
+
+  ossim_kwl.remove("ResolutionFactor");
+  ossim_kwl.remove("SubDatasetIndex");
+  ossim_kwl.remove("TileHintX");
+  ossim_kwl.remove("TileHintY");
+  ossim_kwl.remove("UpperLeftCorner");
+  ossim_kwl.remove("UpperRightCorner");
+  ossim_kwl.remove("CacheSizeInBytes");
+  ossim_kwl.remove("DriverLongName");
+  ossim_kwl.remove("DriverShortName");
+  ossim_kwl.remove("LowerLeftCorner");
+  ossim_kwl.remove("LowerRightCorner");
+
+  ossimRefPtr<ossimplugins::ossimCosmoSkymedModel> csk = new ossimplugins::ossimCosmoSkymedModel();
+
+  bool valid = csk->loadState(ossim_kwl);
+  if (valid)
+  {
+     std::cerr << ossim_kwl;
+
+  }
+
+  otb_kwl.SetKeywordlist(ossim_kwl);
+//  otb_kwl.Print(std::cerr);
+   return otb_kwl;
+}
 
 ImageKeywordlist
 ReadGeometryFromGEOMFile(const std::string& filename)
 {
   ossimKeywordlist geom_kwl;
   ImageKeywordlist otb_kwl;
-  ifstream testFile(filename.c_str());
-  if (testFile.good())
-  {
-     std::string firstLine;
-     getline(testFile, firstLine);
-     /* check to skip creating a valid ossim kwl. because if the condition
-        validates to true then we are having a geom that does not have a
-        corresponding valid ossim sensor model. */
-     if( firstLine.find( "// !OSSIM") != std::string::npos)
-     {
-        otbMsgDevMacro( << ".geom file not created by OSSIM. Returning empty kwl" <<  filename << std::endl);
-        testFile.close();
-        return otb_kwl;
-     }
-  }
-
-  testFile.close();
 
   ossimFilename ossimGeomFile = ossimFilename(filename);
 

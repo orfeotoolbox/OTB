@@ -49,22 +49,6 @@ CosmoSkymedImageMetadataInterface::CanRead() const
     return false;
 }
 
-std::string
-CosmoSkymedImageMetadataInterface::GetSensorID() const
-{
-
-   std::string sensorId;
-   GetValueFromMetadataDictionary("Mission_ID", sensorId);
-   return sensorId;
-}
-std::string
-CosmoSkymedImageMetadataInterface::GetImageID() const
-{
-  std::string imageId;
-  GetValueFromMetadataDictionary("Programmed_Image_ID", imageId);
-  return imageId;
-}
-
 CosmoSkymedImageMetadataInterface::PointSetPointer
 CosmoSkymedImageMetadataInterface
 ::GetRadiometricCalibrationIncidenceAngle() const

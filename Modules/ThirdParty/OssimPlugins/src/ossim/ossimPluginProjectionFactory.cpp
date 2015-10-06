@@ -30,6 +30,7 @@
 #include "ossimTileMapModel.h"
 #include "ossimSpot6Model.h"
 #include "ossimSentinel1Model.h"
+#include "ossimCosmoSkymedModel.h"
 //***
 // Define Trace flags for use within this file:
 //***
@@ -383,7 +384,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    {
      return new ossimSentinel1Model;
    }
-
+   else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
+   {
+     return new ossimCosmoSkymedModel;
+   }
 
    //***
    // ADD_MODEL: (Please leave this comment for the next programmer)
@@ -502,6 +506,14 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       else if (type == "ossimSentinel1Model")
       {
          result = new ossimSentinel1Model();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+      else if (type == "ossimCosmoSkymedModel")
+      {
+         result = new ossimCosmoSkymedModel();
          if ( !result->loadState(kwl, prefix) )
          {
             result = 0;

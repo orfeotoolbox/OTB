@@ -139,10 +139,10 @@ public:
   const ImageKeywordlistType GetImageKeywordlist() const;
 
   /** Get the sensor ID from the ossim metadata */
-  virtual std::string GetSensorID() const;
+  std::string GetSensorID() const;
   //otbMetadataGetMacro(SensorID, std::string);
 
-  virtual std::string GetImageID() const;
+  std::string GetImageID() const;
 
   /** Get the number of bands from the ossim metadata */
   UnsignedIntType GetNumberOfBands() const;

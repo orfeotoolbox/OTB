@@ -25,6 +25,8 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "itkMetaDataDictionary.h"
+#include "itkMetaDataObject.h"
 
 //forward declaration
 class ossimKeywordlist;
@@ -112,7 +114,7 @@ public:
   virtual void AddKey(const std::string& key, const std::string& value);
 
   virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
-  
+
   /** try to convert the image keywordlist into a GDALRpcInfo structure
    *  return true if successful, false otherwise */
   virtual bool convertToGDALRPC(GDALRPCInfo &rpc) const;
@@ -151,6 +153,7 @@ std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
 ImageKeywordlist ReadGeometryFromImage(const std::string& filename, bool checkRpcTag=true);
 ImageKeywordlist ReadGeometryFromGEOMFile(const std::string& filename);
 ImageKeywordlist ReadGeometryFromRPCTag(const std::string& filename);
+ImageKeywordlist ReadGeometryFromITKMetadata(const itk::MetaDataDictionary dict);
 void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename);
 
 inline
