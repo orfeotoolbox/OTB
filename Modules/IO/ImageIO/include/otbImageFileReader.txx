@@ -426,25 +426,27 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   if (!m_FilenameHelper->ExtGEOMFileNameIsSet())
     {
     otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist,!m_FilenameHelper->GetSkipRpcTag());
-    itkWarningMacro(<< "Loading internal kwl");
+    otbMsgDevMacro(<< "Loading internal kwl");
     }
   else
     {
     otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
-    itkWarningMacro(<< "Loading external kwl");
+    otbMsgDevMacro(<< "Loading external kwl");
     }
 
-    if( otb_kwl.GetSize() == 0 )
+  if( otb_kwl.GetSize() == 0 )
     {
     otb_kwl = ReadGeometryFromITKMetadata(dict);
-    itkWarningMacro(<< "Loading kwl from itk::MetadataDictonary");
+    otbMsgDevMacro(<< "Loading kwl from itk::MetadataDictonary");
     }
+
   // Don't add an empty ossim keyword list
   if( otb_kwl.GetSize() != 0 )
     {
-      itk::EncapsulateMetaData<ImageKeywordlist>(dict,
-                                                 MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict,
+                                               MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
     }
+
   /*else
     {
     //

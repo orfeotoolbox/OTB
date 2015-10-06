@@ -59,8 +59,14 @@ ossimCosmoSkymedModel
 
 bool
 ossimCosmoSkymedModel
-::updateMetadata(const ossimKeywordlist& kwl)
+::updateMetadata(ossimKeywordlist& kwl)
 {
+   theSensorID = kwl.find("Metadata.Mission_ID");
+   theImageID = kwl.find("Metadata.Programmed_Image_ID");
+
+   kwl.add("sensor", kwl.find("Metadata.Mission_ID"));
+   kwl.add("image_id", kwl.find("Metadata.Programmed_Image_ID"));
+
    return true;
 }
 
@@ -76,9 +82,6 @@ bool
 ossimCosmoSkymedModel
 ::loadState(const ossimKeywordlist& kwl, const char* prefix)
 {
-   theSensorID = kwl.find("Metadata.Mission_ID");
-   theImageID = kwl.find("Metadata.Programmed_Image_ID");
-
    ossimSarModel::loadState(kwl, prefix);
    return true;
 }

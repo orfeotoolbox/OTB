@@ -39,7 +39,7 @@ public:
    */
   ~ossimCosmoSkymedModel();
 
-   bool updateMetadata(const ossimKeywordlist& kwl);
+   bool updateMetadata(ossimKeywordlist& kwl);
 
    /*!
     * Returns pointer to a new instance, copy of this.
