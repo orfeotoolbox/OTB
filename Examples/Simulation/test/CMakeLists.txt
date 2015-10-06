@@ -3,6 +3,8 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
 # ------- ProsailModelExampleTest ----------
 
+#OTBSimulation -> OTBOpticalCalibration -> OTB6S
+if(OTB6S_LOADED)
 otb_add_test(NAME siTvProsailModelExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-ascii ${EPSILON_3}
     ${BASELINE}/siTvProsailModelExampleTest.txt
@@ -25,20 +27,6 @@ otb_add_test(NAME siTvProsailModelExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/siTvProsailModelExampleTest.txt
 )
 
-
-otb_add_test(NAME siTvLAIFromNDVIImageTransfromExampleTest  COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${EPSILON_8}
-    ${OTB_DATA_ROOT}/Baseline/OTB/Images/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
-    ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
-  Execute $<TARGET_FILE:LAIFromNDVIImageTransform>
-    ${INPUTDATA}/verySmallFSATSW.tif
-    ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
-    ${TEMP}/verySmallFSATSW_visu.png
-    ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW_visu.png
-    1  # red
-    4  # nir
-)
-
 otb_add_test(NAME siTvLAIAndPROSAILToSensorResponseExampleTest  COMMAND ${OTB_TEST_DRIVER}
 --compare-image ${EPSILON_8}
   ${OTBAPP_BASELINE}/siTvLAIAndPROSAILToSensorResponseSmall.tif
@@ -53,4 +41,19 @@ Execute $<TARGET_FILE:LAIAndPROSAILToSensorResponse>
   ${OTB_DATA_ROOT}/Input/Radiometry/FORMOSAT2/RSI/rep6S.dat
   5
   ${OTB_DATA_ROOT}/Input/
+)
+
+endif()
+
+otb_add_test(NAME siTvLAIFromNDVIImageTransfromExampleTest  COMMAND ${OTB_TEST_DRIVER}
+  --compare-image ${EPSILON_8}
+    ${OTB_DATA_ROOT}/Baseline/OTB/Images/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
+    ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
+  Execute $<TARGET_FILE:LAIFromNDVIImageTransform>
+    ${INPUTDATA}/verySmallFSATSW.tif
+    ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
+    ${TEMP}/verySmallFSATSW_visu.png
+    ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW_visu.png
+    1  # red
+    4  # nir
 )

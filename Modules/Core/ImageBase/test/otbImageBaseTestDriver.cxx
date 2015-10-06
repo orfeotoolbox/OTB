@@ -31,5 +31,4 @@ void RegisterTests()
   REGISTER_TEST(otbMultiChannelExtractROINew);
   REGISTER_TEST(otbMetaImageFunction);
   REGISTER_TEST(otbMetaImageFunctionNew);
-  REGISTER_TEST(otbNoDataHelperTest);
 }

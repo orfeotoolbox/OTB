@@ -42,9 +42,9 @@ namespace Functor
  *  - channel #9 : \f$ S_{rr}.S_{rr}^{*} \f$
  *
  * With:
- * - \f$ S_{ll} = 0.5 * (-S_{hh}-i*S_{hv}-i*S_{vh}+S_{vv}) \f$
- * - \f$ S_{lr} = 0.5 * (-S_{hh}+i*S_{hv}-i*S_{vh}+S_{vv}) \f$
- * - \f$ S_{rl} = 0.5 * (-S_{hh}-i*S_{hv}+i*S_{vh}-S_{vv}) \f$
+ * - \f$ S_{ll} = 0.5 * (S_{hh}+i*S_{hv}+i*S_{vh}-S_{vv}) \f$
+ * - \f$ S_{lr} = 0.5 * (i*S_{hh}+S_{hv}-S_{vh}+i*S_{vv}) \f$
+ * - \f$ S_{rl} = 0.5 * (i*S_{hh}-S_{hv}+S_{vh}+i*S_{vv}) \f$
  * - \f$ S_{rr} = 0.5 * (-S_{hh}+i*S_{hv}+i*S_{vh}+S_{vv}) \f$
  *
  * Extract from Antennas for radar and communications Harold Mott p 317.
@@ -89,12 +89,14 @@ public:
     result.SetSize(m_NumberOfComponentsPerPixel);
     const ComplexType jS_hv = S_hv * ComplexType(0., 1.);
     const ComplexType jS_vh = S_vh * ComplexType(0., 1.);
-
+    const ComplexType jS_hh = S_hh * ComplexType(0., 1.);
+    const ComplexType jS_vv = S_vv * ComplexType(0., 1.);
+    
     const ComplexType coef(0.5);
 
-    const ComplexType Sll = coef*( -S_hh-jS_hv-jS_vh+S_vv );
-    const ComplexType Slr = coef*( -S_hh+jS_hv-jS_vh-S_vv );
-    const ComplexType Srl = coef*( -S_hh-jS_hv+jS_vh-S_vv );
+    const ComplexType Sll = coef*( S_hh+jS_hv+jS_vh-S_vv );
+    const ComplexType Slr = coef*( jS_hh+S_hv-S_vh+jS_vv );
+    const ComplexType Srl = coef*( jS_hh-S_hv+S_vh+jS_vv );
     const ComplexType Srr = coef*( -S_hh+jS_hv+jS_vh+S_vv );
 
     //const ComplexType conjSll = vcl_conj(Sll);

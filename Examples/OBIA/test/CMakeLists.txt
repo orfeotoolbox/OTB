@@ -22,6 +22,7 @@ otb_add_test(NAME trTeOBIAShapeAttributeComputationTest COMMAND ${OTB_TEST_DRIVE
     ${TEMP}/OBIAShapeAttribute.txt
 )
 
+if(OTBMathParser_LOADED)
 otb_add_test(NAME trTeOBIARadiometricAttributesLabelMapFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${NOTOL}
     ${BASELINE}/OBIARadiometricAttributes.png
@@ -38,6 +39,7 @@ otb_add_test(NAME trTeOBIARadiometricAttributesLabelMapFilterTest COMMAND ${OTB_
     50
     1.0
 )
+endif()
 
 otb_add_test(NAME trTeLabelMapToVectorData COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:LabelMapToVectorData>

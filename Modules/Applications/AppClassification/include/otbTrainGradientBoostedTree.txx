@@ -14,23 +14,34 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-
-#include "otbTrainImagesClassifier.h"
+#ifndef __otbTrainGradientBoostedTree_txx
+#define __otbTrainGradientBoostedTree_txx
+#include "otbLearningApplicationBase.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-#ifdef OTB_USE_OPENCV
-void TrainImagesClassifier::InitGradientBoostedTreeParams()
+
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::InitGradientBoostedTreeParams()
 {
   AddChoice("classifier.gbt", "Gradient Boosted Tree classifier");
   SetParameterDescription(
       "classifier.gbt",
       "This group of parameters allows to set Gradient Boosted Tree classifier parameters. "
       "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/gradient_boosted_trees.html}.");
-  //LossFunctionType : not exposed, as only one type is used for Classification,
-  // the other three are used for regression.
+
+  if (m_RegressionFlag)
+    {
+    AddParameter(ParameterType_Choice, "classifier.gbt.t", "Loss Function Type");
+    SetParameterDescription("classifier.gbt.t","Type of loss functionused for training.");
+    AddChoice("classifier.gbt.t.sqr","Squared Loss");
+    AddChoice("classifier.gbt.t.abs","Absolute Loss");
+    AddChoice("classifier.gbt.t.hub","Huber Loss");
+    }
 
   //WeakCount
   AddParameter(ParameterType_Int, "classifier.gbt.w", "Number of boosting algorithm iterations");
@@ -67,10 +78,15 @@ void TrainImagesClassifier::InitGradientBoostedTreeParams()
 
 }
 
-void TrainImagesClassifier::TrainGradientBoostedTree(
-    ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample)
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::TrainGradientBoostedTree(typename ListSampleType::Pointer trainingListSample,
+                           typename TargetListSampleType::Pointer trainingLabeledListSample,
+                           std::string modelPath)
 {
-  GradientBoostedTreeType::Pointer classifier = GradientBoostedTreeType::New();
+  typename GradientBoostedTreeType::Pointer classifier = GradientBoostedTreeType::New();
+  classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);
   classifier->SetTargetListSample(trainingLabeledListSample);
   classifier->SetWeakCount(GetParameterInt("classifier.gbt.w"));
@@ -78,9 +94,34 @@ void TrainImagesClassifier::TrainGradientBoostedTree(
   classifier->SetSubSamplePortion(GetParameterFloat("classifier.gbt.p"));
   classifier->SetMaxDepth(GetParameterInt("classifier.gbt.max"));
 
+  if (m_RegressionFlag)
+    {
+    switch (GetParameterInt("classifier.gbt.t"))
+      {
+      case 0: // SQUARED_LOSS
+        classifier->SetLossFunctionType(CvGBTrees::SQUARED_LOSS);
+        break;
+      case 1: // ABSOLUTE_LOSS
+        classifier->SetLossFunctionType(CvGBTrees::ABSOLUTE_LOSS);
+        break;
+      case 2: // HUBER_LOSS
+        classifier->SetLossFunctionType(CvGBTrees::HUBER_LOSS);
+        break;
+      default:
+        classifier->SetLossFunctionType(CvGBTrees::SQUARED_LOSS);
+        break;
+      }
+    }
+  else
+    {
+    classifier->SetLossFunctionType(CvGBTrees::DEVIANCE_LOSS);
+    }
+
   classifier->Train();
-  classifier->Save(GetParameterString("io.out"));
+  classifier->Save(modelPath);
 }
-#endif
+
 } //end namespace wrapper
 } //end namespace otb
+
+#endif

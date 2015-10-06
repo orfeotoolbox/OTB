@@ -51,8 +51,8 @@ otb_test_application(NAME  apTvDespeckleFrost
                              -filter.frost.rad 5
                              -filter.frost.deramp 0.1
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/bfFiltreLee_05_05_12.tif
-                             ${TEMP}/bfFiltreLee_05_05_12_app.tif)
+                             ${BASELINE}/bfFiltreFrost_05_05_12_app.tif
+                             ${TEMP}/bfFiltreFrost_05_05_12_app.tif)
 
 otb_test_application(NAME  apTvDespeckleGammaMAP
                      APP  Despeckle
