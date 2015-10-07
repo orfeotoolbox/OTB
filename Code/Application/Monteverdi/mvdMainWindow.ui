@@ -58,9 +58,16 @@
     </property>
     <addaction name="action_Preferences"/>
    </widget>
+   <widget class="QMenu" name="menu_Processing">
+    <property name="title">
+     <string>&amp;Processing</string>
+    </property>
+    <addaction name="action_LoadOTBApplications"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
    <addaction name="menu_View"/>
+   <addaction name="menu_Processing"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="m_StatusBar"/>
@@ -244,6 +251,14 @@
    </property>
    <property name="toolTip">
     <string>Display keyboard and mouse key mapping</string>
+   </property>
+  </action>
+  <action name="action_LoadOTBApplications">
+   <property name="text">
+    <string>Load OTB-&amp;Applications</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
  </widget>
