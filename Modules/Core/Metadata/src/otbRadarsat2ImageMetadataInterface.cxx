@@ -115,11 +115,12 @@ Radarsat2ImageMetadataInterface
     const ImageKeywordlistType imageKeywordlist  = this->GetImageKeywordlist();
     if (!imageKeywordlist.HasKey(key))
       {
-      itkExceptionMacro( << "no key named " << key );
+      itkExceptionMacro( << "no key named '" << key << "'");
       }
 
     const std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
-    Utils::ConvertStringToVector(date_time_str, dateFields, " T:.Z" "T:.Z");
+
+    Utils::ConvertStringToVector(date_time_str.substr(0, date_time_str.size()-1), dateFields, key, "-T:.");
     }
 }
 
