@@ -19,9 +19,11 @@
 #define __otbSarImageMetadataInterface_h
 
 #include <string>
-
+#include <vector>
 #include "otbImageMetadataInterfaceBase.h"
 #include "itkPointSet.h"
+#include "otbSarCalibrationLookupData.h"
+#include "otbStringUtils.h"
 
 namespace otb
 {
@@ -50,11 +52,25 @@ public:
   typedef Superclass::VectorType                     VectorType;
   typedef Superclass::VariableLengthVectorType       VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType           ImageKeywordlistType;
+  typedef Superclass::UIntVectorType                 UIntVectorType;
+  typedef Superclass::StringVectorType               StringVectorType;
   typedef itk::PointSet<double, 2>                   PointSetType;
   typedef PointSetType::Pointer                      PointSetPointer;
   typedef double                                     RealType;
   typedef PointSetType::PointType                    PointType;
+  typedef SarCalibrationLookupData                   LookupDataType;
+  typedef typename LookupDataType::Pointer          LookupDataPointerType;
 
+  virtual void CreateCalibrationLookupData(const short t);
+
+  const LookupDataPointerType GetCalibrationLookupData(const short type);
+
+  bool HasCalibrationLookupDataFlag() const;
+
+  void SetCalibrationLookupData(LookupDataType* lut)
+  {
+    m_SarLut = lut;
+  }
 
   virtual RealType   GetRadiometricCalibrationScale() const;
 
@@ -75,10 +91,18 @@ public:
   virtual double GetRadarFrequency () const = 0;
   virtual double GetCenterIncidenceAngle() const = 0;
 
+
+
+  virtual double GetRescalingFactor() const;
+
+  virtual const std::string GetProductType() const;
+
+  virtual const std::string GetAcquisitionMode() const;
+
   /** Get the enhanced band names (No enhanced band name support for SAR) */
-  std::vector<std::string> GetEnhancedBandNames() const
+  StringVectorType GetEnhancedBandNames() const
   {
-    std::vector<std::string> nothing;
+    StringVectorType nothing;
     return nothing;
   }
 
@@ -91,9 +115,13 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  LookupDataPointerType m_SarLut;
+
+
 private:
   SarImageMetadataInterface(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
 };
 
 } // end namespace otb
