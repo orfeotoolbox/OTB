@@ -74,6 +74,8 @@ VectorImageSettings
   m_GrayDynamicsParams( 6 ),
   m_Gamma( 1.0 )
 {
+  m_RgbDynamicsParams.Fill( 0 );
+  m_GrayDynamicsParams.Fill( 0 );
 }
 
 /***************************************************************************/
