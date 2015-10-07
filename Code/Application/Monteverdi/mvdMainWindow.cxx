@@ -1800,7 +1800,11 @@ MainWindow
 void
 MainWindow
 ::OnApplicationToLaunchSelected( const QString & appName,
-				 const QString & docName )
+#if USE_TABBED_VIEW
+				 const QString & docName
+#else
+				 const QString & )
+#endif
 {
   assert( Application::ConstInstance()!=NULL );
   assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );
