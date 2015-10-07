@@ -34,7 +34,7 @@
 
 
 #ifndef USE_OTB_APPS
-#  define USE_OTB_APPS ( ( defined( _DEBUG ) && 0 ) || 0 )
+#  define USE_OTB_APPS ( ( defined( _DEBUG ) && 0 ) || 1 )
 #endif
 
 //
