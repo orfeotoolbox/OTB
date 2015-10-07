@@ -112,7 +112,6 @@ private:
 
     // Set the output image
     SetParameterOutputImage("out", m_CalibrationFilter->GetOutput());
-    //SetParameterComplexOutputImage("out", m_CalibrationFilter->GetOutput());
 
   }
 
