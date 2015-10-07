@@ -24,7 +24,6 @@ namespace otb
 {
 namespace Wrapper
 {
-
 class SarRadiometricCalibration : public Application
 {
 public:
@@ -40,7 +39,7 @@ public:
   itkTypeMacro(SarRadiometricCalibration, otb::Application);
 
   typedef otb::SarRadiometricCalibrationToImageFilter<ComplexFloatImageType,
-                                                      ComplexFloatImageType>     CalibrationFilterType;
+                                                      FloatImageType>     CalibrationFilterType;
 
 private:
   void DoInit()
@@ -61,7 +60,7 @@ private:
     AddParameter(ParameterType_ComplexInputImage,  "in", "Input Complex Image");
     SetParameterDescription("in", "Input complex image");
 
-    AddParameter(ParameterType_ComplexOutputImage,  "out", "Output Image");
+    AddParameter(ParameterType_OutputImage,  "out", "Output Image");
     SetParameterDescription("out", "Output calibrated complex image");
 
     AddRAMParameter();
@@ -70,13 +69,26 @@ private:
     SetParameterDescription("noise", "Flag to disable noise");
     MandatoryOff("noise");
 
+    AddParameter(ParameterType_Choice, "lut", "Lookup table sigma /gamma/ beta/ DN");
+    AddChoice("lut.sigma", "Use sigma nought lookup");
+    SetParameterDescription("lut.sigma","Use Sigma nought lookup value from product metadata");
+    AddChoice("lut.gamma", "Use gamma nought lookup");
+    SetParameterDescription("lut.gamma","Use Gamma nought lookup value from product metadata");
+    AddChoice("lut.beta", "Use beta nought lookup");
+    SetParameterDescription("lut.beta","Use Beta nought lookup value from product metadata");
+    AddChoice("lut.dn", "Use DN value lookup");
+    SetParameterDescription("lut.dn","Use DN value lookup value from product metadata");
+    SetDefaultParameterInt("lut", 0);
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "RSAT_imagery_HH.tif");
     SetDocExampleParameterValue("out", "SarRadiometricCalibration.tif" );
   }
 
   void DoUpdateParameters()
-  { }
+  {
+
+  }
 
   void DoExecute()
   {
@@ -92,11 +104,20 @@ private:
       m_CalibrationFilter->SetEnableNoise(false);
       }
 
+    short lut = 0;
+
+    lut = GetParameterInt("lut");
+
+    m_CalibrationFilter->SetLookupSelected(lut);
+
     // Set the output image
-    SetParameterComplexOutputImage("out", m_CalibrationFilter->GetOutput());
+    SetParameterOutputImage("out", m_CalibrationFilter->GetOutput());
+    //SetParameterComplexOutputImage("out", m_CalibrationFilter->GetOutput());
+
   }
 
   CalibrationFilterType::Pointer   m_CalibrationFilter;
+
 };
 }
 }
