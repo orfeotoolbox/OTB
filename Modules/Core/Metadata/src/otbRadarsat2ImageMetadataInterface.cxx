@@ -119,7 +119,7 @@ Radarsat2ImageMetadataInterface
       }
 
     const std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
-    Utils::ConvertStringToVector(date_time_str, dateFields, " T:-.");
+    Utils::ConvertStringToVector(date_time_str, dateFields, " T:.Z" "T:.Z");
     }
 }
 
@@ -130,11 +130,7 @@ Radarsat2ImageMetadataInterface::GetYear() const
   ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 0 )
     {
-    value = boost::lexical_cast<int>( m_AcquisitionDateFields[0] );
-    }
-  else
-    {
-    itkExceptionMacro( << "Invalid year" );
+    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[0], "support_data.image_date(year)" );
     }
   return value;
 }
@@ -146,11 +142,7 @@ Radarsat2ImageMetadataInterface::GetMonth() const
   ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 1 )
     {
-    value = boost::lexical_cast<int>( m_AcquisitionDateFields[1] );
-    }
-  else
-    {
-    itkExceptionMacro( << "Invalid month" );
+    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[1], "support_data.image_date(month)" );
     }
   return value;
 }
@@ -162,11 +154,7 @@ Radarsat2ImageMetadataInterface::GetDay() const
   ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 2 )
     {
-    value = boost::lexical_cast<int>( m_AcquisitionDateFields[2] );
-    }
-  else
-    {
-    itkExceptionMacro( << "Invalid day" );
+    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[2], "support_data.image_date(day)" );
     }
   return value;
 }
@@ -178,11 +166,7 @@ Radarsat2ImageMetadataInterface::GetHour() const
   ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 3 )
     {
-    value = boost::lexical_cast<int>( m_AcquisitionDateFields[3] );
-    }
-  else
-    {
-    itkExceptionMacro( << "Invalid hour" );
+    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[3], "support_data.image_date(hour)" );
     }
   return value;
 }
@@ -194,11 +178,7 @@ Radarsat2ImageMetadataInterface::GetMinute() const
   ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
   if(m_AcquisitionDateFields.size() > 4 )
     {
-    value = boost::lexical_cast<int>( m_AcquisitionDateFields[4] );
-    }
-  else
-    {
-    itkExceptionMacro( << "Invalid minute" );
+    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[4], "support_data.image_date(minute)" );
     }
   return value;
 }
@@ -210,11 +190,7 @@ Radarsat2ImageMetadataInterface::GetProductionYear() const
   ParseDateTime("support_data.date", m_ProductionDateFields);
   if(m_ProductionDateFields.size() > 0 )
     {
-    value = boost::lexical_cast<int>( m_ProductionDateFields[0] );
-    }
-  else
-    {
-    itkExceptionMacro( << "Invalid production year" );
+    value = Utils::LexicalCast<int>( m_ProductionDateFields[0], "support_data.image_date(year)" );
     }
   return value;
 
@@ -227,11 +203,7 @@ Radarsat2ImageMetadataInterface::GetProductionMonth() const
   ParseDateTime("support_data.date", m_ProductionDateFields);
   if(m_ProductionDateFields.size() > 1 )
     {
-    value = boost::lexical_cast<int>( m_ProductionDateFields[1] );
-    }
-  else
-    {
-    itkExceptionMacro( << "Invalid production month" );
+    value = Utils::LexicalCast<int>( m_ProductionDateFields[1], "support_data.image_date(production month)" );
     }
   return value;
 }
@@ -243,11 +215,7 @@ Radarsat2ImageMetadataInterface::GetProductionDay() const
   ParseDateTime("support_data.date", m_ProductionDateFields);
   if(m_ProductionDateFields.size() > 2 )
     {
-    value = boost::lexical_cast<int>( m_ProductionDateFields[2] );
-    }
-  else
-    {
-    itkExceptionMacro( << "Invalid production day" );
+    value = Utils::LexicalCast<int>( m_ProductionDateFields[2], "support_data.image_date(production day)" );
     }
   return value;
 }
