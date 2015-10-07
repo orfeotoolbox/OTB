@@ -20,11 +20,10 @@
 
 #include "otbSarRadiometricCalibrationFunctor.h"
 #include "otbSarParametricMapFunction.h"
-
+#include "otbSarCalibrationLookupData.h"
 
 namespace otb
 {
-
 /**
  * \class SarRadiometricCalibrationFunction
  * \brief Calculate the backscatter for the given pixel
@@ -71,33 +70,31 @@ public:
 
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
-
   /** Datatype used for the evaluation */
   typedef double                                                 RealType;
-  typedef otb::Functor::SarRadiometricCalibrationFunctor<RealType, RealType>           FunctorType;
-  typedef typename FunctorType::RealType                        FunctorRealType;
+//  typedef otb::Functor::SarRadiometricCalibrationFunctor<RealType, RealType>           FunctorType;
+//  typedef typename FunctorType::RealType                        FunctorRealType;
 
   typedef otb::SarParametricMapFunction<InputImageType>               ParametricFunctionType;
   typedef typename ParametricFunctionType::Pointer                    ParametricFunctionPointer;
   typedef typename ParametricFunctionType::ConstPointer               ParametricFunctionConstPointer;
 
-  /** Evaluate the function at non-integer positions */
-  virtual OutputType Evaluate(const PointType& point) const;
-
   /** Evalulate the function at specified index */
-  virtual OutputType EvaluateAtIndex(const IndexType& index) const
+  virtual OutputType EvaluateAtIndex(const IndexType& index) const;
+
+  /** Evaluate the function at non-integer positions */
+  virtual OutputType Evaluate(const PointType& point) const
   {
-    PointType point;
-    this->GetInputImage()->TransformIndexToPhysicalPoint( index, point);
-    return this->Evaluate(point);
+    IndexType index;
+    this->ConvertPointToNearestIndex(point, index);
+    return this->EvaluateAtIndex(index);
   }
 
-  virtual OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const
+  virtual OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const
   {
-    PointType point;
-    this->GetInputImage()->TransformContinuousIndexToPhysicalPoint( cindex, point);
-    return this->Evaluate(point);
+    IndexType index;
+    this->ConvertContinuousIndexToNearestIndex(cindex, index);
+    return this->EvaluateAtIndex(index);
   }
 
   /** Set the input image.
@@ -108,10 +105,10 @@ public:
 
 
   /** Get/Set the Scale value */
-  itkSetMacro(Scale, FunctorRealType);
-  itkGetMacro(Scale, FunctorRealType);
+  itkSetMacro(Scale, RealType);
+  itkGetMacro(Scale, RealType);
 
-  /** Get/Set the Offset value */
+  /** Get/Set the Noise value */
   itkSetObjectMacro(Noise, ParametricFunctionType);
   itkGetConstObjectMacro(Noise, ParametricFunctionType);
   itkGetObjectMacro(Noise, ParametricFunctionType);
@@ -140,23 +137,66 @@ public:
   itkGetConstObjectMacro(RangeSpreadLoss, ParametricFunctionType);
   itkGetObjectMacro(RangeSpreadLoss, ParametricFunctionType);
 
+  /** Set the RescalingFactor value */
+  itkSetMacro(RescalingFactor, RealType);
+
+  /** Get/Set flag to indicate if these are used */
+  itkSetMacro(ApplyAntennaPatternGain, bool);
+  itkGetMacro(ApplyAntennaPatternGain, bool);
+
+  itkSetMacro(ApplyIncidenceAngleCorrection, bool);
+  itkGetMacro(ApplyIncidenceAngleCorrection, bool);
+
+  itkSetMacro(ApplyRangeSpreadLossCorrection, bool);
+  itkGetMacro(ApplyRangeSpreadLossCorrection, bool);
+
+  itkSetMacro(ApplyLookupDataCorrection, bool);
+  itkGetMacro(ApplyLookupDataCorrection, bool);
+
+  itkSetMacro(ApplyRescalingFactor, bool);
+  itkGetMacro(ApplyRescalingFactor, bool);
+
+    typedef SarCalibrationLookupData::Pointer LookupDataPointer;
+
+  /** Set SetCalibrationLookupData instance */
+  void SetCalibrationLookupData(LookupDataPointer lut)
+  {
+    m_Lut = lut;
+  }
 
 protected:
+
+  /** ctor */
   SarRadiometricCalibrationFunction();
+
+  /** default, empty, virtual dtor */
   virtual ~SarRadiometricCalibrationFunction(){}
+
+  /** print method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  /** Flags to indiciate if these values needs to be applied in calibration*/
 
 private:
   SarRadiometricCalibrationFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
-  FunctorRealType             m_Scale;
-  ParametricFunctionPointer   m_Noise;
+  RealType             m_Scale;
   bool                        m_EnableNoise;
+  RealType             m_RescalingFactor;
+  bool                        m_ApplyAntennaPatternGain;
+  bool                        m_ApplyIncidenceAngleCorrection;
+  bool                        m_ApplyRangeSpreadLossCorrection;
+  bool                        m_ApplyLookupDataCorrection;
+  bool                        m_ApplyRescalingFactor;
+  ParametricFunctionPointer   m_Noise;
   ParametricFunctionPointer   m_AntennaPatternNewGain;
   ParametricFunctionPointer   m_AntennaPatternOldGain;
   ParametricFunctionPointer   m_IncidenceAngle;
   ParametricFunctionPointer   m_RangeSpreadLoss;
+  LookupDataPointer   m_Lut;
+
+
 };
 
 } // end namespace otb
