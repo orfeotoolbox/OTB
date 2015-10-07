@@ -39,6 +39,9 @@ set(OTBMetadata_SRC
   otbSentinel1ImageMetadataInterfaceFactory.cxx
   otbSentinel1ImageMetadataInterface.cxx
 
+  otbRadarsat2ImageMetadataInterfaceFactory.cxx
+  otbRadarsat2ImageMetadataInterface.cxx
+
   otbNoDataHelper.cxx
   )
 
