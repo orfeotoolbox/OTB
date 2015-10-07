@@ -18,10 +18,9 @@
 #ifndef __otbSarRadiometricCalibrationFunction_h
 #define __otbSarRadiometricCalibrationFunction_h
 
-#include "otbSarRadiometricCalibrationFunctor.h"
 #include "otbSarParametricMapFunction.h"
 #include "otbSarCalibrationLookupData.h"
-
+#include "otbMath.h"
 namespace otb
 {
 /**
