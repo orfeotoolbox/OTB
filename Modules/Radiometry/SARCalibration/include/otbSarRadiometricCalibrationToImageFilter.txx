@@ -39,9 +39,6 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
 
 }
 
-/*This method is called once from BeforeThreadedGenerateData(). Usage of this
-* outside or without a call to BeforeThreadedGenerateData() is supposed to
-* fail. */
 template<class TInputImage, class TOutputImage>
 void
 SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>

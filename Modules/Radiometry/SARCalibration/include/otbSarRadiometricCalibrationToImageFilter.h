@@ -29,30 +29,28 @@ namespace otb
 
 /** \class SarRadiometricCalibrationToImageFilter
  * \brief Evaluates the SarRadiometricCalibrationFunction onto a source image
- * The BeforeThreadedGenerateData create an SarIMI from
- * input metadatadictionary. It will then reads Scale, Noise,
- * Old antenna pattern gain, New antenna pattern gain, rangespreadloss,
- * incidence angle. All these are set to the imageFunction used to compute the
- * backscatter value.
+ * The BeforeThreadedGenerateData create a SarImageMetadataInterface based on
+ * input metadata dictionary. The nature of product(TerrSARX, Sentinel1, etc..)
+ * are thus detected  automatically from this. The filter then reads necessary
+ * parameters required to perform SarCalibration in a generic way.
+ *
+ * BeforeThreadedGenerateData() instanciate a SarRadiometricCalibrationFunction
+ * and pass the values taken from SarImageMetadataInterface instance to it. This
+ * is where the actual computation of sigma (backscatter) occurs.
  *
  * Noise, Antenna pattern gain (old && new), range spread loss, incidence angle
  * data members used in this class are all instances of SarPrametricFunction
  * class. Each have a Evaluate() method and a special
  * EvaluateParametricCoefficient() which computes the actual value.
  *
- * OTB 5.2.0 - added two more values, Rescaling factor and lookupdata from IMI
- * to have the generic equation form. The improvement of SarCalibation is
- * discussed in jira story #863
-
+ * The technical details and more discussion of SarCalibration can be found in jira
+ * story #863.
  *
- * The function has to inherit from itkImageFunction
- * See Also:	SarParametricFunction, SarCalibrationLookupBase
- * The equation for computaion is evalue in otbSarRadiometricCalibationFunctor
- * class. Below lised are the references used to do the calibation of respective
- * products. Retreived on 08-Sept-2015, 12:26:30
- * Sentinel1   - https://sentinel.esa.int/web/sentinel/sentinel-1-sar-wiki/-/wiki/Sentinel%20One/Application+of+Radiometric+Calibration+LUT
- * Radarsat2   - http://gs.mdacorporation.com/products/sensor/radarsat2/RS2_Product_Description.pdf
- * CosmoSkymed - http://www.e-geos.it/products/pdf/COSMO-SkyMed-Image_Calibration.pdf
+ * \see \c otb::SarParametricFunction
+ * \see \c otb::SarCalibrationLookupBase
+ * References (Retreived on 08-Sept-2015)
+ * Sentinel1 - https://sentinel.esa.int/web/sentinel/sentinel-1-sar-wiki/-/wiki/Sentinel%20One/Application+of+Radiometric+Calibration+LUT
+ * Radarsat2 - http://gs.mdacorporation.com/products/sensor/radarsat2/RS2_Product_Description.pdf
  *
  * \ingroup ImageFilters
  *
