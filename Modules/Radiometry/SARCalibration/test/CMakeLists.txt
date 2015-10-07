@@ -18,8 +18,6 @@ otbSarRadiometricCalibrationToImageFilterCompareTest.cxx
 otbSarBrightnessFunctor.cxx
 otbSarBrightnessFunctionWithoutNoise.cxx
 otbSarRadiometricCalibrationFunction.cxx
-otbSarRadiometricCalibrationFunctor.cxx
-otbSarRadiometricCalibrationFunctorWithoutNoise.cxx
 otbSarRadiometricCalibrationFunctionWithoutNoise.cxx
 otbTerraSarBrightnessImageComplexFilterTest.cxx
 otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest.cxx
@@ -149,17 +147,6 @@ otb_add_test(NAME raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWith
   11 11 650 750 # Extract
   )
 
-#CosmoSkymed
-otb_add_test(NAME raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_COSMOSKYMED COMMAND  otbSARCalibrationTestDriver
-  --compare-image ${EPSILON_12}
-  ${BASELINE}/raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_COSMOSKYMED_HH.tif
-  ${TEMP}/raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_COSMOSKYMED_HH.tif
-  otbSarRadiometricCalibrationToImageFilterWithComplexPixelTestWithoutNoise
-  LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HV.tif}
-  ${TEMP}/raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_COSMOSKYMED_HH.tif
-  13 19 650 750 # Extract
-  )
-
 otb_add_test(NAME raTuSarBrightnessFunctorWithoutNoise COMMAND otbSARCalibrationTestDriver
   otbSarBrightnessFunctorWithoutNoise
   )
@@ -223,13 +210,6 @@ otb_add_test(NAME raTvSarRadiometricCalibrationFunction COMMAND otbSARCalibratio
   ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithNoise.txt
   )
 
-otb_add_test(NAME raTuSarRadiometricCalibrationFunctor COMMAND otbSARCalibrationTestDriver
-  otbSarRadiometricCalibrationFunctor
-  )
-
-otb_add_test(NAME raTuSarRadiometricCalibrationFunctorWithoutNoise COMMAND otbSARCalibrationTestDriver
-  otbSarRadiometricCalibrationFunctorWithoutNoise
-  )
 
 otb_add_test(NAME raTvSarRadiometricCalibrationFunctionWithoutNoise COMMAND otbSARCalibrationTestDriver
   --compare-ascii ${NOTOL}
