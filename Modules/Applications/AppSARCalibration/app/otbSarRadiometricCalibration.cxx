@@ -45,7 +45,7 @@ private:
   void DoInit()
   {
     SetName("SarRadiometricCalibration");
-    SetDescription("Perform SAR calibration on input complex images");
+    SetDescription("Perform SAR calibration on input complex images. The following product types are supported. TerraSARX, Sentinel1 L1, Radarsat2");
 
     // Documentation
     SetDocName("SAR Radiometric calibration");
