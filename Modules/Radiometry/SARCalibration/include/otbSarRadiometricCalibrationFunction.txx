@@ -109,7 +109,13 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     this->GetInputImage()->TransformIndexToPhysicalPoint( index, point);
 
   /** digitalNumber:
-    * The pixel is of type of std::complex and we use vcl_abs to get real + imaginary as RealType */
+    * For complex pixel type, vcl_abs() returns the modulus. which is
+    * sqrt((I*I) + (Q*Q)). Where I and Q are real and imaginary part of the
+    * complex pixel. So to to get (I*I) + (Q*Q) in our calculation, the output
+    * of vcl_abs() is squared. See below (digitalNumber * digitalNumber) where
+    * digitalNumber is the output of vcl_abs() which is sqrt((I*I) + (Q*Q)). For
+    * non-complex pixel types, vcl_abs() simply returns absolute value.
+    */
 
   RealType digitalNumber = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
   RealType sigma = m_Scale * digitalNumber * digitalNumber;
