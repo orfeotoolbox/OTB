@@ -27,6 +27,12 @@ namespace otb
 {
 namespace Functor
 {
+/** \class NoDataFunctor
+ *  \brief Functor used by ImageToNoDataMaskFilter
+ *
+ *  See ImageToNoDataMaskFilter for complete documentation. 
+ *  \ingroup OTBImageManipulation
+ */
 template <typename TInputPixel, typename TOutputPixel> 
 class NoDataFunctor
 {
@@ -35,25 +41,42 @@ public:
     m_Flags(),
     m_Values(),
     m_OutsideValue(0),
-    m_InsideValue(1)
+    m_InsideValue(1),
+    m_NaNIsNoData(false)
   {}
   virtual ~NoDataFunctor(){}
 
   inline TOutputPixel operator()(const TInputPixel& in) const
   {
-    return otb::IsNoData(in,m_Flags,m_Values)?m_OutsideValue:m_InsideValue;
+    return otb::IsNoData(in,m_Flags,m_Values,m_NaNIsNoData)?m_OutsideValue:m_InsideValue;
   }
 
   std::vector<bool>   m_Flags;
   std::vector<double> m_Values;
   TOutputPixel        m_OutsideValue;
   TOutputPixel        m_InsideValue;
+  bool                m_NaNIsNoData;
 };
 
 } // End namespace Functor
 
 
-
+/** \class ImageToNoDataMaskFilter 
+ *  \brief Builds a no-data mask image from no-data flags and values
+ *  
+ *  This filter reads the no-data flags (a boolean vector indicating
+ *  for each band if a no-data value exists) and values (the actual
+ *  value to be used as no-data for each band) from
+ *  MetaDataDictionary, and builds a binary mask indicating presence
+ *  or absence of no-data for each pixel.
+ * 
+ *  If NaNIsNoData is true, NaN pixels will also be considered as
+ *  no-data pixels.
+ * 
+ * \ingroup Streamed
+ * \ingroup MultiThreaded
+ * \ingroup OTBImageManipulation
+ */
 template <typename TInputImage, typename TOutputImage>
 class ImageToNoDataMaskFilter
   : public itk::UnaryFunctorImageFilter<TInputImage,
@@ -77,14 +100,30 @@ public:
   /** Creation through object factory macro */
   itkTypeMacro(SpectralAngleDistanceImageFilter, itk::ImageToImageFilter);
 
+  /**
+   * Set inside value of output mask. This value will be used to
+   * indicate absence of no-data for the pixel in the output mask
+   */ 
   void SetInsideValue(const typename TOutputImage::PixelType & value)
   {
     this->GetFunctor().m_InsideValue = value;
   }
-
+  /**
+   * Set outside value of output mask. This value will be used to
+   * indicate presence of no-data for the pixel in the output mask
+   */ 
   void SetOutsideValue(const typename TOutputImage::PixelType & value)
   {
     this->GetFunctor().m_OutsideValue = value;
+  }
+  /**
+   * Set the NaN is no data flags
+   * \param nanIsNoData If true, NaN values will be considered as
+   * no-data as well (default is false)
+   */
+  void SetNaNIsNoData(bool nanIsNoData)
+  {
+    this->GetFunctor().m_NaNIsNoData=nanIsNoData;
   }
 
 protected:
@@ -97,23 +136,11 @@ protected:
   virtual void BeforeThreadedGenerateData()
   {
     std::vector<bool> noDataValueAvailable;
-    bool ret = itk::ExposeMetaData<std::vector<bool> >(this->GetInput()->GetMetaDataDictionary(),MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
-
-    if(!ret)
-      {
-      noDataValueAvailable.resize(this->GetInput()->GetNumberOfComponentsPerPixel(),false);
-      }
-
-    this->GetFunctor().m_Flags = noDataValueAvailable;
-
     std::vector<double> noDataValues;
-    ret = itk::ExposeMetaData<std::vector<double> >(this->GetInput()->GetMetaDataDictionary(),MetaDataKey::NoDataValue,noDataValues);
 
-    if(!ret)
-      {
-      noDataValues.resize(this->GetInput()->GetNumberOfComponentsPerPixel(),0);
-      }
-
+    ReadNoDataFlags(this->GetInput()->GetMetaDataDictionary(),noDataValueAvailable,noDataValues);
+    
+    this->GetFunctor().m_Flags = noDataValueAvailable;
     this->GetFunctor().m_Values = noDataValues;
   }
 

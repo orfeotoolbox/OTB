@@ -10,6 +10,7 @@ otb_module(OTBImageManipulation
     OTBCommon
     OTBITK
     OTBImageBase
+    OTBMetadata
     OTBInterpolation
     OTBObjectList
     OTBStreaming

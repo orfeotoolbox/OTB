@@ -43,12 +43,12 @@ int otbMuellerToReciprocalCovarianceFunctor(int itkNotUsed(argc), char * itkNotU
       val += 0.5;
     }
 
-  result[0] = ComplexType(2.5, 0.);
-  result[1] = ComplexType(4., 5.);
-  result[2] = ComplexType(-6.25, 0.75);
-  result[3] = ComplexType(-8, 0.);
-  result[4] = ComplexType(0.5, -0.5);
-  result[5] = ComplexType(0., 0.);
+  result[0] = ComplexType(1.75,0);
+  result[1] = ComplexType(2.82842712474619,3.53553390593274);
+  result[2] = ComplexType(-6.25,-5.5);
+  result[3] = ComplexType(-2.5,0);
+  result[4] = ComplexType(-1.4142135623731,-1.4142135623731);
+  result[5] = ComplexType(0.75,0);
 
   FunctorType funct;
   outputFunct = funct.operator ()( input );

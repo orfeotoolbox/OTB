@@ -107,10 +107,14 @@ ImageRegionAdaptativeSplitter<VImageDimension>
   // Now we can handle the case where we have a tile hint and a
   // non-trivial requested number of splits
   SizeType tilesPerDim, splitsPerDim;
+  IndexType firstTileCovered;
 
-  tilesPerDim[0] = (m_ImageRegion.GetSize()[0] + m_TileHint[0] -1) / m_TileHint[0];
-  tilesPerDim[1] = (m_ImageRegion.GetSize()[1] + m_TileHint[1] -1) / m_TileHint[1];
-
+  // First, we need to get which tiles are covered by ROI
+  firstTileCovered[0] = m_ImageRegion.GetIndex()[0] / m_TileHint[0];
+  firstTileCovered[1] = m_ImageRegion.GetIndex()[1] / m_TileHint[1];
+  tilesPerDim[0] = (m_ImageRegion.GetIndex()[0] + m_ImageRegion.GetSize()[0] + m_TileHint[0] -1) / m_TileHint[0] - firstTileCovered[0];
+  tilesPerDim[1] = (m_ImageRegion.GetIndex()[1] + m_ImageRegion.GetSize()[1] + m_TileHint[1] -1) / m_TileHint[1] - firstTileCovered[1];
+  
   unsigned int totalTiles = tilesPerDim[0] * tilesPerDim[1];
 
   // In this case, we have to group input tiles
@@ -134,13 +138,14 @@ ImageRegionAdaptativeSplitter<VImageDimension>
       i = (i+1)%2;
       }
 
+   
     splitsPerDim[0] = tilesPerDim[0] / groupTiles[0];
+    splitsPerDim[1] = tilesPerDim[1] / groupTiles[1];
 
     // Handle the last small tile if any
     if(tilesPerDim[0] % groupTiles[0] > 0)
       splitsPerDim[0]++;
 
-    splitsPerDim[1] = tilesPerDim[1] / groupTiles[1];
     if(tilesPerDim[1] % groupTiles[1] > 0)
       splitsPerDim[1]++;
 
@@ -157,8 +162,8 @@ ImageRegionAdaptativeSplitter<VImageDimension>
         newSplitSize[0] = groupTiles[0] * m_TileHint[0];
         newSplitSize[1] = groupTiles[1] * m_TileHint[1];
 
-        newSplitIndex[0] = splitx * newSplitSize[0];
-        newSplitIndex[1] = splity * newSplitSize[1];
+        newSplitIndex[0] = firstTileCovered[0] * m_TileHint[0] + splitx * newSplitSize[0];
+        newSplitIndex[1] = firstTileCovered[1] * m_TileHint[1] + splity * newSplitSize[1];
 
         newSplit.SetIndex(newSplitIndex);
         newSplit.SetSize(newSplitSize);
@@ -181,7 +186,9 @@ ImageRegionAdaptativeSplitter<VImageDimension>
 
     unsigned int i = 1;
 
-    while(totalTiles * (divideTiles[0] * divideTiles[1]) < m_RequestedNumberOfSplits)
+    // Exit condition if divideTiles=m_TileHint (i.e. no more subdivision available)
+    while(totalTiles * (divideTiles[0] * divideTiles[1]) < m_RequestedNumberOfSplits
+      && (divideTiles[0] < m_TileHint[0] || divideTiles[1] < m_TileHint[1]))
       {
       if(divideTiles[i] < m_TileHint[i])
         {
@@ -195,6 +202,8 @@ ImageRegionAdaptativeSplitter<VImageDimension>
     splitSize[0] = (m_TileHint[0] + divideTiles[0] - 1)/ divideTiles[0];
     splitSize[1] = (m_TileHint[1] + divideTiles[1] - 1)/ divideTiles[1];
 
+    RegionType tileHintRegion;
+    tileHintRegion.SetSize(m_TileHint);
     // Fill the tiling scheme
     for(unsigned int tiley = 0; tiley < tilesPerDim[1]; ++tiley)
       {
@@ -208,11 +217,14 @@ ImageRegionAdaptativeSplitter<VImageDimension>
             RegionType newSplit;
             IndexType newSplitIndex;
 
-            newSplitIndex[0] = tilex * m_TileHint[0] + divx * splitSize[0];
-            newSplitIndex[1] = tiley * m_TileHint[1] + divy * splitSize[1];
+            newSplitIndex[0] = (tilex + firstTileCovered[0]) * m_TileHint[0] + divx * splitSize[0];
+            newSplitIndex[1] = (tiley + firstTileCovered[1]) * m_TileHint[1] + divy * splitSize[1];
 
             newSplit.SetIndex(newSplitIndex);
             newSplit.SetSize(splitSize);
+
+            tileHintRegion.SetIndex(0, tilex * m_TileHint[0]);
+            tileHintRegion.SetIndex(1, tiley * m_TileHint[1]);
 
             bool cropped = newSplit.Crop(m_ImageRegion);
 
@@ -220,7 +232,12 @@ ImageRegionAdaptativeSplitter<VImageDimension>
             // outside m_ImageRegion. In this case we ignore it.
             if(cropped)
               {
-              m_StreamVector.push_back(newSplit);
+              // check that the split stays inside its tile
+              cropped = newSplit.Crop(tileHintRegion);
+              if (cropped)
+                {
+                m_StreamVector.push_back(newSplit);
+                }
               }
             }
           }

@@ -9,8 +9,8 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Some parts of this code are covered by the GET copyright.
-  See GETCopyright.txt for details.
+  Some parts of this code are covered by the IMT copyright.
+  See IMTCopyright.txt for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -150,7 +150,7 @@ SEMClassifier<TInputImage, TOutputImage>
   else
     {
     otbMsgDebugMacro(<< "m_ClassLabels size = " << GetClassLabels().size() << " / m_Sample size = " << m_NbSamples);
-    throw itk::ExceptionObject(__FILE__, __LINE__, "Vector size missmatch", ITK_LOCATION);
+    throw itk::ExceptionObject(__FILE__, __LINE__, "Vector size mismatch", ITK_LOCATION);
     }
 }
 
@@ -214,7 +214,7 @@ SEMClassifier<TInputImage, TOutputImage>
     otbMsgDebugMacro(
       << "m_ClassLabels size = " << GetClassLabels().size() << " size of the image = " << theSize <<
       " / m_Sample size = " << m_NbSamples);
-    throw itk::ExceptionObject(__FILE__, __LINE__, "Vector size missmatch", ITK_LOCATION);
+    throw itk::ExceptionObject(__FILE__, __LINE__, "Vector size mismatch", ITK_LOCATION);
     }
 }
 
@@ -264,7 +264,7 @@ SEMClassifier<TInputImage, TOutputImage>
     typename TInputImage::SizeType size = m_Sample->GetBufferedRegion().GetSize();
     if ((size[0] * size[1]) != m_ClassLabels.size())
       throw itk::ExceptionObject(__FILE__, __LINE__,
-                                 "Vector size missmatch", ITK_LOCATION);
+                                 "Vector size mismatch", ITK_LOCATION);
     }
 }
 
@@ -315,7 +315,7 @@ SEMClassifier<TInputImage,TOutputImage>
   m_ComponentVector.clear();
   m_ComponentVector.resize(this->GetNumberOfClasses());
   m_ComponentDeclared = 0;
-  
+
 }
 
 template <class TInputImage, class TOutputImage>
@@ -353,7 +353,7 @@ SEMClassifier<TInputImage, TOutputImage>
         {
         //label = (int) floor( 0.5 + nbClassesDbl * ran / double(RAND_MAX+1) );
         label = rand() % nbClasses;
-        if (label >= nbClasses) 
+        if (label >= nbClasses)
           {
           label = nbClasses - 1;
           }

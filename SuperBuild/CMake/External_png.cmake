@@ -23,7 +23,7 @@ else()
   
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "http://sourceforge.net/projects/libpng/files/libpng16/1.6.16/lpng1616.zip/download"
+      URL "http://sourceforge.net/projects/libpng/files/libpng16/older-releases/1.6.16/lpng1616.zip/download"
       URL_MD5 c90c9587c9a5c735327fb3f6900f6b03
       BINARY_DIR ${PNG_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}

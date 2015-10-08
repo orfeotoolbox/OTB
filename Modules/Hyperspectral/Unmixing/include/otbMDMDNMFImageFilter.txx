@@ -193,13 +193,13 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   //    = (A*S-X) * (transpose(S)) + m_LambdD*(A-1/nbBands*ones(L, L)*A)
   //    = (A*S-X) * (transpose(S)) + m_LambdD*A- m_LambdD*/nbBands*ones(L, L)*A)
 
-  MatrixType onesA;
   VectorType sumColulmnsOfA;
   sumColulmnsOfA.set_size(A.cols());
   unsigned int nbBands = A.rows();
 
-  // Computing vector onesA
-  for (unsigned int j=0; j<onesA.size(); ++j)
+  // Computing ones*A : all rows are the same,
+  // (ones*A)[i,j] = sum(k=0 to nbBands, A[k,j])
+  for (unsigned int j=0; j<A.cols(); ++j)
     {
     sumColulmnsOfA(j) = A.get_column(j).sum();
     }

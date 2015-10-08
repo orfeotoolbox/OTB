@@ -58,19 +58,19 @@ generate: ${WRAPPERS} gdal_array_wrap.cpp
 	-grep "1\.3\.40" extensions/gdal_wrap.cpp >/dev/null && cat python3.2.patch | sed "s/gdal_wrap/osr_wrap/" | patch -p0
 	-grep "1\.3\.40" extensions/gdal_wrap.cpp >/dev/null && cat python3.2.patch | sed "s/gdal_wrap\.cpp/gdalconst_wrap\.c/" | patch -p0
 	-grep "1\.3\.40" extensions/gdal_wrap.cpp >/dev/null && cat python3.2.patch | sed "s/gdal_wrap/gdal_array_wrap/" | patch -p0
-    
+
 build:
 	$(PYTHON) setup.py build
 
 egg:
 	$(PYTHON) setup.py bdist_egg 
-	
+
 install:
 
 ifeq ($(PY_HAVE_SETUPTOOLS),1)
-	$(PYTHON) setup.py install 
+	$(PYTHON) setup.py install --prefix=$(DESTDIR)$(prefix) --install-purelib=$(prefix)/lib --install-scripts=$(prefix)/bin --install-platlib=$(prefix)/lib
 else
-	$(PYTHON) setup.py install --prefix=$(DESTDIR) --prefix=$(prefix)
+	$(PYTHON) setup.py install --prefix=$(DESTDIR)$(prefix)
 endif
 
 	for f in $(SCRIPTS) ; do $(INSTALL) ./scripts/$$f $(DESTDIR)$(INST_BIN) ; done
