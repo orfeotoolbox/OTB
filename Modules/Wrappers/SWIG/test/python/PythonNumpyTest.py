@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+# Author: Rashad Kanavath <rashad.kanavath@c-s.fr>
+#
+# Copyright: (c) CS Systemes d'information. All rights reserved
+#
+#  Example on testing numpy
+#
+
 import sys
 import os
 #from scipy import misc

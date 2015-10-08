@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-
+# Authors: Rashad Kanavath <rashad.kanavath@c-s.fr>
+#          Julien Malik <julien.malik@c-s.fr>
+#
+# Copyright: (c) CS Systemes d'information. All rights reserved
 #
 #  Example on the use of otb "pythonization"
 #

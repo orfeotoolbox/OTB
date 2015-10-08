@@ -6,13 +6,16 @@
   Version:   $Revision$
 
 
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
+  Copyright:
+    Centre National d'Etudes Spatiales,
+    CS Systemes d'information.
 
+ See OTBCopyright.txt, CSCopyright.txt for details.
+ All rights reserved.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
