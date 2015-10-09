@@ -387,11 +387,3 @@ otb_add_test(NAME ioTvSarCalibrationLookupDataTest_SENTINEL1 COMMAND otbMetadata
   ${INPUTDATA}/SENTINEL1_SLC_S6_1S_extract_300_300.tif?&geom=${INPUTDATA}/SENTINEL1_SLC_S6_1S_extract_300_300.geom
   ${TEMP}/ioTvSarCalibrationLookupDataTest_SENTINEL1.txt
   )
-
-otb_add_test(NAME ioTvSarCalibrationLookupDataTest_COSMOSKYMED COMMAND otbMetadataTestDriver
-  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvSarCalibrationLookupDataTest_COSMOSKYMED.txt
-  ${TEMP}/ioTvSarCalibrationLookupDataTest_COSMOSKYMED.txt
-  otbSarCalibrationLookupDataTest
-  ${INPUTDATA}/COSMOSKYMED_extract_300_300.tif?&geom=${INPUTDATA}/COSMOSKYMED_extract_300_300.geom
-  ${TEMP}/ioTvSarCalibrationLookupDataTest_COSMOSKYMED.txt
-  )
