@@ -45,11 +45,11 @@ private:
   void DoInit()
   {
     SetName("SarRadiometricCalibration");
-    SetDescription("Perform SAR calibration on input complex images. The following product types are supported. TerraSARX, Sentinel1 L1, Radarsat2");
+    SetDescription("Perform radiometric calibration of SAR images. Since OTB 5.2, following product types are supported. TerraSARX, Sentinel1 L1, Radarsat2.\n The application allow s one to read complex and non-complex(intensity) band images.");
 
     // Documentation
     SetDocName("SAR Radiometric calibration");
-    SetDocLongDescription("This application performs SAR calibration on input complex images.");
+    SetDocLongDescription("This application performs radiometric calibration of SAR images. Since OTB 5.2, following product types are supported. TerraSARX, Sentinel1 L1, Radarsat2.\n The application allows one to read images with complex and non-complex pixel types(intensity band). For non-complex type, the application reads it as std::complex() with imaginary part set to zero. ");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -57,16 +57,16 @@ private:
     AddDocTag(Tags::Calibration);
     AddDocTag(Tags::SAR);
 
-    AddParameter(ParameterType_ComplexInputImage,  "in", "Input Complex Image");
+    AddParameter(ParameterType_ComplexInputImage,  "in", "Input Image");
     SetParameterDescription("in", "Input complex image");
 
     AddParameter(ParameterType_OutputImage,  "out", "Output Image");
-    SetParameterDescription("out", "Output calibrated complex image");
+    SetParameterDescription("out", "Output calibrated image. This image contains the backscatter (sigmaNought) of the input image.");
 
     AddRAMParameter();
 
     AddParameter(ParameterType_Empty, "noise", "Disable Noise");
-    SetParameterDescription("noise", "Flag to disable noise");
+    SetParameterDescription("noise", "Flag to disable noise. For 5.2.0 release, the noise values are only read by TerraSARX product. Hence for other sensors this flag has no effect.");
     MandatoryOff("noise");
 
     AddParameter(ParameterType_Choice, "lut", "Lookup table sigma /gamma/ beta/ DN");
