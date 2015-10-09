@@ -59,7 +59,7 @@ otb_test_application(NAME  apTvSARPolarMatrixConvertRecCovToCohDeg
                      )
                              
 
-#6 - interleaved (failed)
+#6 
 otb_test_application(NAME  apTvSARPolarMatrixConvertRecCovToRecCoh
                      APP  SARPolarMatrixConvert
                      OPTIONS 
@@ -69,7 +69,7 @@ otb_test_application(NAME  apTvSARPolarMatrixConvertRecCovToRecCoh
 							 
                      )
 
-#7 - interleaved (failed)
+#7 
 otb_test_application(NAME  apTvSARPolarMatrixConvertRecLinCovToRecCirCov
                      APP  SARPolarMatrixConvert
                      OPTIONS 
@@ -80,7 +80,7 @@ otb_test_application(NAME  apTvSARPolarMatrixConvertRecLinCovToRecCirCov
                      )
                              
                              
-#8 - interleaved (failed)
+#8 
 otb_test_application(NAME  apTvSARPolarMatrixConvertMuellerToRecCov
                      APP  SARPolarMatrixConvert
                      OPTIONS 
@@ -132,7 +132,7 @@ otb_test_application(NAME  apTvSARPolarMatrixConvertBiSincToCirCovariance
                      )
    
                              
-#12 - interleaved (failed)
+#12 
 otb_test_application(NAME  apTvSARPolarMatrixConvertSincToMueller
                      APP  SARPolarMatrixConvert
                      OPTIONS 
