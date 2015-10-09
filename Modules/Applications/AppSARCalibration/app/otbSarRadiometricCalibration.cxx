@@ -45,11 +45,11 @@ private:
   void DoInit()
   {
     SetName("SarRadiometricCalibration");
-    SetDescription("Perform radiometric calibration of SAR images. Since OTB 5.2, following product types are supported. TerraSARX, Sentinel1 L1, Radarsat2.\n The application allow s one to read complex and non-complex(intensity) band images.");
+    SetDescription("Perform radiometric calibration of SAR images. Following sensors are supported: TerraSAR-X, Sentinel1 and Radarsat-2.Both Single Look Complex(SLC) and detected products are supported as input.\n");
 
     // Documentation
     SetDocName("SAR Radiometric calibration");
-    SetDocLongDescription("This application performs radiometric calibration of SAR images. Since OTB 5.2, following product types are supported. TerraSARX, Sentinel1 L1, Radarsat2.\n The application allows one to read images with complex and non-complex pixel types(intensity band). For non-complex type, the application reads it as std::complex() with imaginary part set to zero. ");
+    SetDocLongDescription("The objective of SAR calibration is to provide imagery in which the pixel values can be directly related to the radar backscatter of the scene. This application allows to compute Sigma Naught (Radiometric Calibration) for TerraSAR-X, Sentinel1 L1 and Radarsat-2 sensors. Metadata are automatically retrieved from image products.The application supports complex and non-complex images (SLC or detected products).\n");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -70,7 +70,7 @@ private:
     MandatoryOff("noise");
 
     AddParameter(ParameterType_Choice, "lut", "Lookup table sigma /gamma/ beta/ DN.");
-    SetParameterDescription("lut", "Lookup table values are not available with all SAR products. The products that provide lookup table with metadata are: Sentinel1, Radarsat2.");
+    SetParameterDescription("lut", "Lookup table values are not available with all SAR products. Products that provide lookup table with metadata are: Sentinel1, Radarsat2.");
     AddChoice("lut.sigma", "Use sigma nought lookup");
     SetParameterDescription("lut.sigma","Use Sigma nought lookup value from product metadata");
     AddChoice("lut.gamma", "Use gamma nought lookup");
