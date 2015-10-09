@@ -85,7 +85,7 @@ private:
 						  
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("");
+    SetDocSeeAlso("SARPolarMatrixConvert, SARPolarSynth");
 
     AddDocTag(Tags::SAR);
 

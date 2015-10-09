@@ -225,7 +225,7 @@ private:
 						  
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("");
+    SetDocSeeAlso("SARPolarSynth, SARDecompositions");
 
     AddDocTag(Tags::SAR);
 

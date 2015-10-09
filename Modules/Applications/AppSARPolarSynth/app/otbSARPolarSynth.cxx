@@ -79,7 +79,7 @@ private:
 						  
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("");
+    SetDocSeeAlso("SARDecompositions, SARPolarMatrixConvert");
 
     AddDocTag(Tags::SAR);
 
