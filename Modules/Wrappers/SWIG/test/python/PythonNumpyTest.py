@@ -15,8 +15,8 @@ import otbApplication
 
 #from PIL import Image as PILImage
 
-inFile = sys.argv[1]
-prefix = sys.argv[2]
+inFile  = sys.argv[1]
+outFile = sys.argv[2]
 # pilimage = PILImage.open(inFile)
 # npimage = np.asarray(pilimage)
 # print npimage.dtype
@@ -60,5 +60,5 @@ Smoothing = otbApplication.Registry.CreateApplication("Smoothing")
 #take numpy output from Convert application and feed into Smoothing
 Smoothing.SetVectorImageFromNumpyArray("in", ConvertOut)
 Smoothing.SetParameterString("type", 'anidif')
-Smoothing.SetParameterString("out", argv[2])
+Smoothing.SetParameterString("out", outFile)
 Smoothing.ExecuteAndWriteOutput()
