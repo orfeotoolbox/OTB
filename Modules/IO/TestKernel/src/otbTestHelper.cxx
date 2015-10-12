@@ -1080,20 +1080,22 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   if (ref_poDS == NULL && !bReadOnly)
     {
     ref_poDS = otb::OGRVersionProxy::Open(ref_pszDataSource, true);
+    bReadOnly = TRUE;
     if (ref_poDS != NULL && m_ReportErrors)
       {
-      std::cout << "Had to open REF data source read-only.\n";
-      bReadOnly = TRUE;
+      std::cout << "Had to open REF data source read-only."<<std::endl;
       }
     }
   test_poDS = otb::OGRVersionProxy::Open(ref_pszDataSource, bReadOnly);
   if (test_poDS == NULL && !bReadOnly)
     {
     test_poDS = otb::OGRVersionProxy::Open(ref_pszDataSource, bReadOnly);
+
+    bReadOnly = TRUE;
+    
     if (test_poDS != NULL && m_ReportErrors)
       {
-      std::cout << "Had to open REF data source read-only.\n";
-      bReadOnly = TRUE;
+      std::cout << "Had to open TEST data source read-only."<<std::endl;
       }
     }
   /* -------------------------------------------------------------------- */
@@ -1103,30 +1105,33 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
     {
    
     if (m_ReportErrors)
+      {
       std::cout << "FAILURE:\n" "Unable to open REF datasource `" << ref_pszDataSource << "' with the following drivers." << std::endl;
 
-    std::vector<std::string> drivers = OGRVersionProxy::GetAvailableDriversAsStringVector();
+      std::vector<std::string> drivers = OGRVersionProxy::GetAvailableDriversAsStringVector();
     
-    for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
-      {
-      std::cout << "  -> " << *it << std::endl;
+      for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
+        {
+        std::cout << "  -> " << *it << std::endl;
+        }
       }
     return (1);
     }
-  ref_poDriver = test_poDS->GetDriver();
+  ref_poDriver = ref_poDS->GetDriver();
   CPLAssert(ref_poDriver != NULL);
 
   if (test_poDS == NULL)
     {
     if (m_ReportErrors)
-      std::cout << "FAILURE:\n"
-      "Unable to open TEST datasource `" << test_pszDataSource << "' with the following drivers." << std::endl;
-
-    std::vector<std::string> drivers = OGRVersionProxy::GetAvailableDriversAsStringVector();
-    
-    for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
       {
-      std::cout << "  -> " << *it << std::endl;
+      std::cout << "FAILURE:\n""Unable to open TEST datasource `" << test_pszDataSource << "' with the following drivers." << std::endl;
+
+      std::vector<std::string> drivers = OGRVersionProxy::GetAvailableDriversAsStringVector();
+      
+      for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
+        {
+        std::cout << "  -> " << *it << std::endl;
+        }
       }
     return (1);
     }
