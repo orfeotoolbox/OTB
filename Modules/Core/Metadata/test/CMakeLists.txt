@@ -96,7 +96,7 @@ otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_COSMOSKYMED COMMAND otbMeta
   ${TEMP}/ioTvImageMetadataInterfaceBase_COSMOSKYMED.txt
   )
 otb_add_test(NAME ioTuCosmoSkymedImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  ioTuCosmoSkymedImageMetadataInterfaceNew )
+  otbCosmoSkymedImageMetadataInterfaceNew )
 
 otb_add_test(NAME ioTuDefaultImageMetadataInterfaceFactoryNew COMMAND otbMetadataTestDriver
   otbDefaultImageMetadataInterfaceFactoryNew )
