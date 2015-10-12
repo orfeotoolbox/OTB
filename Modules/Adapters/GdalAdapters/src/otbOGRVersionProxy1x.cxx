@@ -42,7 +42,12 @@ void OGRVersionProxy::Close(GDALDatasetType * dataset)
   
 OGRVersionProxy::GDALDatasetType * OGRVersionProxy::Create(GDALDriverType * driver, const char * name)
 {
-  return driver->CreateDataSource(name);
+  GDALDatasetType * ds = driver->CreateDataSource(name);
+
+  if(ds)  
+    ds->SetDriver(driver);
+  
+  return ds;
 }
 
 bool OGRVersionProxy::Delete(GDALDriverType * driver, const char * name)
