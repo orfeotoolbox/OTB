@@ -25,8 +25,7 @@
 #include "otbVectorData.h"
 
 #include "gdal.h"
-#include "ogr_api.h"
-#include <ogrsf_frmts.h>
+#include "otbOGRVersionProxy.h"
 
 namespace otb {
 
@@ -134,7 +133,7 @@ protected:
 
     if (m_OGRDataSourcePointer != NULL)
       {
-      OGRDataSource::DestroyDataSource(m_OGRDataSourcePointer);
+      ogr::version_proxy::Close(m_OGRDataSourcePointer);
       }
   }
 
@@ -146,7 +145,7 @@ private:
   VectorDataToLabelImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  OGRDataSource*                m_OGRDataSourcePointer;
+  ogr::version_proxy::GDALDatasetType * m_OGRDataSourcePointer;
 
   // Vector Of OGRGeometyH
   std::vector< OGRGeometryH >   m_SrcDataSetGeometries;
