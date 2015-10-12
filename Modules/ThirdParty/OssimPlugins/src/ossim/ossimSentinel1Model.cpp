@@ -40,8 +40,8 @@ namespace ossimplugins
 //*************************************************************************************************
    ossimSentinel1Model::ossimSentinel1Model(const ossimSentinel1Model& rhs)
       :ossimSarModel(rhs)
-      , theOCN(rhs.isOCN())
-      , theSLC(rhs.isSLC())
+      , theOCN(rhs.theOCN)
+      , theSLC(rhs.theSLC)
 
    {
 
