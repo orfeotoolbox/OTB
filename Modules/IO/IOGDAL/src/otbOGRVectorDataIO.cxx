@@ -46,7 +46,7 @@ OGRVectorDataIO::~OGRVectorDataIO()
 {
   if (m_DataSource != NULL)
     {
-    GDALClose(m_DataSource);
+    otb::OGRVersionProxy::Close(m_DataSource);
     }
 }
 
@@ -294,7 +294,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   otbMsgDevMacro( << "layerKept " << layerKept );
   (void)layerKept; // keep compiler happy
 
-  GDALClose(m_DataSource);
+  otb::OGRVersionProxy::Close(m_DataSource);
   m_DataSource = NULL;
 
   if (oSRS != NULL)
