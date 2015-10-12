@@ -128,7 +128,7 @@ namespace ossimplugins
    {
       bool commonMetadataRetrieved = false;
       double heightSum = 0.0;
-      int numBands = 0;
+      int numBands = 1;
 
       ossimDirectory annotationDir( theManifestDirectory.dirCat( "annotation") );
       std::vector<ossimFilename> files;
