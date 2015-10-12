@@ -209,8 +209,12 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
                result = rsDoc.getSatellite(xdoc, theSensorID);
             }
 
+            if (result)
+            {
             // Set the base class gsd:
             result = rsDoc.initGsd(xdoc, theGSD);
+            }
+
             if (result)
             {
                theMeanGSD = (theGSD.x + theGSD.y)/2.0;
