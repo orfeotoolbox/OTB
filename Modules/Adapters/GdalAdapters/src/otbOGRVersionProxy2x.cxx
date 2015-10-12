@@ -73,25 +73,45 @@ std::string OGRVersionProxy::GetDriverClassName()
   return std::string("GDALDriver");
 }
 
+namespace raii
+{
+// This class is used in the next function, so as to prevent any
+// ressource leak on char ** returned by dataset->GetFileList()
+class CharPPCapsule
+{
+public:
+  CharPPCapsule(char ** in)
+  {
+    m_P = in;
+  }
+
+  ~CharPPCapsule()
+  {
+    if(m_P)
+      CSLDestroy(m_P);
+  }
+
+  char ** m_P;
+};
+}
+
 std::vector<std::string> OGRVersionProxy::GetFileListAsStringVector(GDALDatasetType * dataset)
 {
   std::vector<std::string> ret;
   
-  char ** files = dataset->GetFileList();
+  raii::CharPPCapsule capsule(dataset->GetFileList());
 
   std::string files_str="";
       
-  if(files)
+  if(capsule.m_P)
     {
     unsigned int i = 0;
-    while(files[i]!=NULL)
+    while(capsule.m_P[i]!=NULL)
       {
-      ret.push_back(std::string(files[i]));
+      ret.push_back(std::string(capsule.m_P[i]));
       ++i;
       }
-    CSLDestroy(files);
     }
-
   return ret;
 }
 
