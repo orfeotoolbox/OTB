@@ -124,6 +124,7 @@ namespace ossimplugins
     }
 
     bool isSLC() { return  theSLC; }
+    bool isOCN() { return  theOCN; }
 
     bool initSRGR()
     {
