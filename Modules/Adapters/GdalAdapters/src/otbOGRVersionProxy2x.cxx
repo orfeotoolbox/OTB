@@ -81,16 +81,21 @@ class CharPPCapsule
 {
 public:
   CharPPCapsule(char ** in)
-  {
-    m_P = in;
-  }
+    : m_P(in)
+  {}
 
+  const char ** P() const
+  {
+    return const_cast<const char **>(m_P);
+  }
+  
   ~CharPPCapsule()
   {
     if(m_P)
       CSLDestroy(m_P);
   }
 
+private:
   char ** m_P;
 };
 }
@@ -103,14 +108,14 @@ std::vector<std::string> OGRVersionProxy::GetFileListAsStringVector(GDALDatasetT
 
   std::string files_str="";
       
-  if(capsule.m_P)
+  if(capsule.P())
     {
     unsigned int i = 0;
-    while(capsule.m_P[i]!=NULL)
+    while(capsule.P()[i]!=NULL)
       {
-      ret.push_back(std::string(capsule.m_P[i]));
+      ret.push_back(std::string(capsule.P()[i]));
       ++i;
-      }
+      } 
     }
   return ret;
 }
