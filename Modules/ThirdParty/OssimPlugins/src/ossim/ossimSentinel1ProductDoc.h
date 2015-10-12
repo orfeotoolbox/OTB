@@ -85,12 +85,12 @@ namespace ossimplugins
       }
 
 
-      inline bool setSLC(bool b)
+      inline void setSLC(bool b)
       {
          theSLC = true;
       }
 
-      inline bool setTOPSAR(bool b)
+      inline void setTOPSAR(bool b)
       {
          theTOPSAR = true;
       }
