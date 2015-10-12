@@ -14,6 +14,8 @@ namespace ossimplugins
 //*************************************************************************************************
    ossimSentinel1Model::ossimSentinel1Model()
       : ossimSarModel()
+      , theOCN(false)
+      , theSLC(false)
    {
       theManifestDoc = new ossimXmlDocument();
       theProduct = new ossimSentinel1ProductDoc();
@@ -38,6 +40,9 @@ namespace ossimplugins
 //*************************************************************************************************
    ossimSentinel1Model::ossimSentinel1Model(const ossimSentinel1Model& rhs)
       :ossimSarModel(rhs)
+      , theOCN(rhs.isOCN())
+      , theSLC(rhs.isSLC())
+
    {
 
    }
