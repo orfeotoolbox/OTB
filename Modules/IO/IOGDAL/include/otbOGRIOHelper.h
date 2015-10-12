@@ -64,14 +64,14 @@ public:
 
 
   unsigned int ProcessNodeWrite(InternalTreeNodeType * source,
-                                OGRVersionProxy::GDALDatasetType * m_DataSource,
+                                ogr::version_proxy::GDALDatasetType * m_DataSource,
                                 OGRGeometryCollection * ogrCollection,
                                 OGRLayer * ogrCurrentLayer,
                                 OGRSpatialReference * oSRS);
 
   /** Return a list of OGRLayer * */
   std::vector<OGRLayer*> ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source,
-                                                        OGRVersionProxy::GDALDatasetType * dummyDatasource,
+                                                        ogr::version_proxy::GDALDatasetType * dummyDatasource,
                                                         OGRLayer* ogrCurrentLayer,
                                                         OGRSpatialReference * oSRS);
 

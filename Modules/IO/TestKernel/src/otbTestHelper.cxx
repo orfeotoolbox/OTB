@@ -1069,27 +1069,27 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   /*      Open data source.                                               */
   /* -------------------------------------------------------------------- */
-  otb::OGRVersionProxy::GDALDatasetType *ref_poDS = NULL;
-  otb::OGRVersionProxy::GDALDriverType *  ref_poDriver = NULL;
+  otb::ogr::version_proxy::GDALDatasetType *ref_poDS = NULL;
+  otb::ogr::version_proxy::GDALDriverType *  ref_poDriver = NULL;
   //OGRGeometry *  ref_poSpatialFilter = NULL;
-  otb::OGRVersionProxy::GDALDatasetType *test_poDS = NULL;
-  otb::OGRVersionProxy::GDALDriverType *  test_poDriver = NULL;
+  otb::ogr::version_proxy::GDALDatasetType *test_poDS = NULL;
+  otb::ogr::version_proxy::GDALDriverType *  test_poDriver = NULL;
   //OGRGeometry *  test_poSpatialFilter = NULL;
 
-  ref_poDS = otb::OGRVersionProxy::Open(ref_pszDataSource, false);
+  ref_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, false);
   if (ref_poDS == NULL && !bReadOnly)
     {
-    ref_poDS = otb::OGRVersionProxy::Open(ref_pszDataSource, true);
+    ref_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, true);
     bReadOnly = TRUE;
     if (ref_poDS != NULL && m_ReportErrors)
       {
       std::cout << "Had to open REF data source read-only."<<std::endl;
       }
     }
-  test_poDS = otb::OGRVersionProxy::Open(ref_pszDataSource, bReadOnly);
+  test_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, bReadOnly);
   if (test_poDS == NULL && !bReadOnly)
     {
-    test_poDS = otb::OGRVersionProxy::Open(ref_pszDataSource, bReadOnly);
+    test_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, bReadOnly);
 
     bReadOnly = TRUE;
     
@@ -1108,7 +1108,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       {
       std::cout << "FAILURE:\n" "Unable to open REF datasource `" << ref_pszDataSource << "' with the following drivers." << std::endl;
 
-      std::vector<std::string> drivers = OGRVersionProxy::GetAvailableDriversAsStringVector();
+      std::vector<std::string> drivers = ogr::version_proxy::GetAvailableDriversAsStringVector();
     
       for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
         {
@@ -1126,7 +1126,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       {
       std::cout << "FAILURE:\n""Unable to open TEST datasource `" << test_pszDataSource << "' with the following drivers." << std::endl;
 
-      std::vector<std::string> drivers = OGRVersionProxy::GetAvailableDriversAsStringVector();
+      std::vector<std::string> drivers = ogr::version_proxy::GetAvailableDriversAsStringVector();
       
       for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
         {
@@ -1145,8 +1145,8 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
 
   // TODO: Improve this check as it will stop as soon as one of the
   // list ends (i.e. it does not guarantee that all files are present)
-  std::vector<std::string> refFileList = otb::OGRVersionProxy::GetFileListAsStringVector(ref_poDS);
-  std::vector<std::string> testFileList = otb::OGRVersionProxy::GetFileListAsStringVector(test_poDS);
+  std::vector<std::string> refFileList = otb::ogr::version_proxy::GetFileListAsStringVector(ref_poDS);
+  std::vector<std::string> testFileList = otb::ogr::version_proxy::GetFileListAsStringVector(test_poDS);
 
   unsigned int fileId = 0;
 

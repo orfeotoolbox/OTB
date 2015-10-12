@@ -32,25 +32,27 @@ class OGRSFDriver;
 
 namespace otb
 {
+namespace ogr
+{
+namespace version_proxy
+{
+
 /** 
- * \brief This class serves as a proxy hiding interface changes in gdal 2.0 
+ * This namespace holds proxy functions hiding interface changes in gdal 2.0 
  *
- * This static class serves as a proxy hiding interface changes in OGR
+ * This namespace holds proxy functions hiding interface changes in OGR
  * dataset between gdal 1.x (x>10) and gdal 2.x. It defines a common
  * interface that should be used in place of calling directly the
- * wrapped gdal methods.
+ * wrapped gdal functions.
  * 
  * Whenever GDALDataset and GDALDriver have to be used to open a
  * vector dataset (or OGRDataSource an OGRSFDriver for gdal 1.x), one
- * should use OGRVersionProxy type members GDALDatasetType and
+ * should use ogr::version_proxy types GDALDatasetType and
  * GDALDriverType.
  * 
- * See static method documentation for details.
+ * See function documentation for details.
  */
 
-class OGRVersionProxy
-{
-public:
   #ifdef OTB_USE_GDAL_20
   typedef GDALDataset GDALDatasetType;
   typedef GDALDriver GDALDriverType;
@@ -60,7 +62,7 @@ public:
 #endif
 
   /** 
-   * This method opens a file, possibly in read-only mode, and returns
+   * This function opens a file, possibly in read-only mode, and returns
    * a dataset.
    *
    * Calls OGRSFDriverRegistrar::Open for gdal 1.x implementation and GDALopenEx for
@@ -70,10 +72,10 @@ public:
    * \param readOnly: If true, dataset is open in read-only mode.
    * \return NULL if file could not be open.
    */ 
-  static GDALDatasetType * Open(const char * filename, bool readOnly = true);
+  GDALDatasetType * Open(const char * filename, bool readOnly = true);
 
   /**
-   * This method closes a dataset.
+   * This function closes a dataset.
    *
    * Calls OGRDataSource::DestroyDataSource for gdal 1.x
    * implementation and GDALClose for gdal 2.x implementation.
@@ -81,10 +83,10 @@ public:
    * \param dataset Pointer to the dataset to close. Will not be
    * checked for null pointer.
    */
-  static void Close(GDALDatasetType * dataset);
+  void Close(GDALDatasetType * dataset);
 
   /**
-   * This method creates a new dataset.
+   * This function creates a new dataset.
    *
    * Calls OGRSFDriver::CreateDataSource for gdal 1.x implementation
    * and GDALDriver::Create with (0,0) raster size for gdal 2.x
@@ -97,11 +99,11 @@ public:
    * 
    * \return NULL if dataset could not be created.
    */
-  static GDALDatasetType * Create(GDALDriverType * driver, const char * name);
+  GDALDatasetType * Create(GDALDriverType * driver, const char * name);
 
 
   /**
-   * This method physically deletes an existing dataset.
+   * This function physically deletes an existing dataset.
    * 
    * Calls OGRDataSource::DeleteDataSource for gdal 1.x implementation
    * and GDALDriver::Delete for gdal 2.x implementation.
@@ -111,10 +113,10 @@ public:
    *
    * \param name Name of the dataset to destroy.
    */ 
-  static bool Delete(GDALDriverType * driver, const char * name);
+  bool Delete(GDALDriverType * driver, const char * name);
 
   /**
-   * This method returns a pointer to the driver from its name.
+   * This function returns a pointer to the driver from its name.
    * 
    * Calls OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName() for
    * gdal 1.x implementation and
@@ -125,7 +127,7 @@ public:
    * 
    * \return NULL if no driver could be retrieved.
    */
-  static GDALDriverType *  GetDriverByName(const char * name);
+  GDALDriverType *  GetDriverByName(const char * name);
 
   /**
    * Test driver and dataset for a given capability.
@@ -143,7 +145,7 @@ public:
    *
    * \return True if the capability is supported.
    */
-  static bool TestCapability(const GDALDriverType * driver, const GDALDatasetType * dataset, const char * capability);
+  bool TestCapability(const GDALDriverType * driver, const GDALDatasetType * dataset, const char * capability);
 
   /**
    * Sync dataset to disk.
@@ -156,19 +158,19 @@ public:
    *
    * \return True if sync went on without any error.
    */
-  static bool SyncToDisk(GDALDatasetType * dataset);
+  bool SyncToDisk(GDALDatasetType * dataset);
 
   /**
    * \return The name of the dataset class behind the implementation
    * (OGRDataSource for gdal 1.x and GdalDataset for gdal 2.x)
    */
-  static std::string GetDatasetClassName();
+  std::string GetDatasetClassName();
 
   /**
    * \return The name of the driver class behind the implementation
    * (OGRSFDriver for gdal 1.x and GDALDriver for gdal 2.x)
    */
-  static std::string GetDriverClassName();
+  std::string GetDriverClassName();
 
   /**
    * Return the list of files composing the dataset.
@@ -182,7 +184,7 @@ public:
    * 
    * \return A vector of string containing the list of files.
    */
-  static std::vector<std::string> GetFileListAsStringVector(GDALDatasetType * dataset);
+  std::vector<std::string> GetFileListAsStringVector(GDALDatasetType * dataset);
 
   /** 
    * Return the list of available drivers.
@@ -193,14 +195,10 @@ public:
    *
    * \return A vector of string containing the list of available drivers.
    */  
-  static std::vector<std::string> GetAvailableDriversAsStringVector();
+  std::vector<std::string> GetAvailableDriversAsStringVector();
 
-private:
-  OGRVersionProxy(); // purposely not implemented
-  OGRVersionProxy(const OGRVersionProxy&); // purposely not implemented
-  void operator=(const OGRVersionProxy&); // purposely not implemented
-};
-
+}
+}
 } // end namespace otb
 
 #endif

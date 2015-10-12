@@ -105,7 +105,7 @@ public:
    * OGRDataSource::ExecuteSQL(). It's actually the constructor called by \c
    * DataSource::ExecuteSQL().
    */
-    Layer(OGRLayer* layer, otb::OGRVersionProxy::GDALDatasetType& sourceInChargeOfLifeTime, bool modifiable);
+    Layer(OGRLayer* layer, otb::ogr::version_proxy::GDALDatasetType& sourceInChargeOfLifeTime, bool modifiable);
   //@}
 
   /**\name Features collection */

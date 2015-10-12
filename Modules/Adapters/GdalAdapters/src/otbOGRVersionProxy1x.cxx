@@ -28,19 +28,22 @@
 
 namespace otb
 {
+namespace ogr
+{
+namespace version_proxy
+{
 
-
-OGRVersionProxy::GDALDatasetType * OGRVersionProxy::Open(const char * filename, bool readOnly)
+GDALDatasetType * Open(const char * filename, bool readOnly)
 {
   return OGRSFDriverRegistrar::Open(filename,!readOnly);
 }
 
-void OGRVersionProxy::Close(GDALDatasetType * dataset)
+void Close(GDALDatasetType * dataset)
 {
   OGRDataSource::DestroyDataSource(dataset);
 }
   
-OGRVersionProxy::GDALDatasetType * OGRVersionProxy::Create(GDALDriverType * driver, const char * name)
+GDALDatasetType * Create(GDALDriverType * driver, const char * name)
 {
   GDALDatasetType * ds = driver->CreateDataSource(name);
 
@@ -50,35 +53,35 @@ OGRVersionProxy::GDALDatasetType * OGRVersionProxy::Create(GDALDriverType * driv
   return ds;
 }
 
-bool OGRVersionProxy::Delete(GDALDriverType * driver, const char * name)
+bool Delete(GDALDriverType * driver, const char * name)
 {
   OGRErr ret = driver->DeleteDataSource(name);
 
   return (ret == OGRERR_NONE);
 }
 
-OGRVersionProxy::GDALDriverType *  OGRVersionProxy::GetDriverByName(const char * name)
+GDALDriverType *  GetDriverByName(const char * name)
 {
   return OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(name);
 }
 
-bool OGRVersionProxy::TestCapability(const GDALDriverType * driver, const GDALDatasetType *, const char * capability)
+bool TestCapability(const GDALDriverType * driver, const GDALDatasetType *, const char * capability)
 {
   // Class OGRDataSource is not const correct
   return const_cast<GDALDriverType * >(driver)->TestCapability(capability);
 }
 
-std::string OGRVersionProxy::GetDatasetClassName()
+std::string GetDatasetClassName()
 {
   return std::string("OGRDataSource");
 }
 
-std::string OGRVersionProxy::GetDriverClassName()
+std::string GetDriverClassName()
 {
   return std::string("OGRSFDriver");
 }
 
-std::vector<std::string> OGRVersionProxy::GetFileListAsStringVector(GDALDatasetType * dataset)
+std::vector<std::string> GetFileListAsStringVector(GDALDatasetType * dataset)
 {
   std::vector<std::string> ret;
 
@@ -87,14 +90,14 @@ std::vector<std::string> OGRVersionProxy::GetFileListAsStringVector(GDALDatasetT
   return ret;
 }
 
-bool OGRVersionProxy::SyncToDisk(GDALDatasetType * dataset)
+bool SyncToDisk(GDALDatasetType * dataset)
 {
   const OGRErr res= dataset->SyncToDisk();
 
   return (res == OGRERR_NONE);
 }
 
-std::vector<std::string> OGRVersionProxy::GetAvailableDriversAsStringVector()
+std::vector<std::string> GetAvailableDriversAsStringVector()
 {
   std::vector<std::string> ret;
   
@@ -108,4 +111,6 @@ std::vector<std::string> OGRVersionProxy::GetAvailableDriversAsStringVector()
   return ret;
 }
 
+}
+}
 } // end namespace

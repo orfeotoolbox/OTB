@@ -147,7 +147,7 @@ public:
    * \note No condition is assumed on the non-nullity of \c source.
    * \see \c DataSource(GDALDataset *)
    */
-  static Pointer New(OGRVersionProxy::GDALDatasetType * sourcemode, Modes::type mode = Modes::Read);
+  static Pointer New(ogr::version_proxy::GDALDatasetType * sourcemode, Modes::type mode = Modes::Read);
   //@}
 
   /**\name Projection Reference property */
@@ -284,7 +284,7 @@ public:
    * \throw None
    * \post Assumes ownership of the \c source.
    */
-  void Reset(OGRVersionProxy::GDALDatasetType * source);
+  void Reset(ogr::version_proxy::GDALDatasetType * source);
 
   /**\name Layers modification */
   //@{
@@ -480,7 +480,7 @@ public:
    * \warning You must under no circonstance try to delete the \c GDALDataset
    * obtained this way.
    */
-    OGRVersionProxy::GDALDatasetType & ogr();
+    ogr::version_proxy::GDALDatasetType & ogr();
 
 protected:
   /** Default constructor.
@@ -496,7 +496,7 @@ protected:
   /** Init constructor.
    * \post The newly constructed object owns the \c source parameter.
    */
-  DataSource(OGRVersionProxy::GDALDatasetType * source, Modes::type mode);
+  DataSource(ogr::version_proxy::GDALDatasetType * source, Modes::type mode);
   /** Destructor.
    * \post The \c GDALDataset owned is released (if not null).
    */
@@ -533,7 +533,7 @@ private:
   std::string GetDatasetDescription() const;
     
 private:
-  OGRVersionProxy::GDALDatasetType *m_DataSource;
+  ogr::version_proxy::GDALDatasetType *m_DataSource;
   Modes::type    m_OpenMode;
   int            m_FirstModifiableLayerID;
   }; // end class DataSource

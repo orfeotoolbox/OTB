@@ -44,13 +44,13 @@ bool otb::ogr::DataSource::Clear()
   return true;
 }
 
-void otb::ogr::DataSource::Reset(otb::OGRVersionProxy::GDALDatasetType * source)
+void otb::ogr::DataSource::Reset(otb::ogr::version_proxy::GDALDatasetType * source)
 {
   if (m_DataSource) {
     // OGR makes a pointless check for non-nullity in
     // GDALDataset::DestroyDataSource (pointless because "delete 0" is
     // perfectly valid -> it's a no-op)
-    OGRVersionProxy::Close(m_DataSource); // void, noexcept
+    ogr::version_proxy::Close(m_DataSource); // void, noexcept
   }
   m_DataSource = source;
 }
@@ -118,15 +118,15 @@ otb::ogr::DataSource::DataSource()
 {
   Drivers::Init();
 
-  OGRVersionProxy::GDALDriverType * d = OGRVersionProxy::GetDriverByName("Memory");
+  ogr::version_proxy::GDALDriverType * d = ogr::version_proxy::GetDriverByName("Memory");
   assert(d && "OGR Memory driver not found");
-  m_DataSource = OGRVersionProxy::Create(d,"in-memory");
+  m_DataSource = ogr::version_proxy::Create(d,"in-memory");
   if (!m_DataSource) {
     itkExceptionMacro(<< "Failed to create OGRMemDataSource: " << CPLGetLastErrorMsg());
   }
 }
 
-otb::ogr::DataSource::DataSource(otb::OGRVersionProxy::GDALDatasetType * source, Modes::type mode)
+otb::ogr::DataSource::DataSource(otb::ogr::version_proxy::GDALDatasetType * source, Modes::type mode)
 : m_DataSource(source),
   m_OpenMode(mode),
   m_FirstModifiableLayerID(0)
@@ -138,7 +138,7 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
 {
   bool update = (mode != Modes::Read);
 
-  OGRVersionProxy::GDALDatasetType * source = OGRVersionProxy::Open(datasourceName.c_str(),!update);
+  ogr::version_proxy::GDALDatasetType * source = ogr::version_proxy::Open(datasourceName.c_str(),!update);
   if (!source)
     {
     // In read mode, this is a failure
@@ -157,14 +157,14 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
         <<datasourceName<<">.");
       }
 
-    OGRVersionProxy::GDALDriverType * d = OGRVersionProxy::GetDriverByName(driverName);
+    ogr::version_proxy::GDALDriverType * d = ogr::version_proxy::GetDriverByName(driverName);
 
     if(!d)
       {
       itkGenericExceptionMacro(<<"Could not create OGR driver "<<driverName<<", check your OGR configuration for available drivers.");
       }
 
-    source = OGRVersionProxy::Create(d,datasourceName.c_str());
+    source = ogr::version_proxy::Create(d,datasourceName.c_str());
     if (!source) {
       itkGenericExceptionMacro(<< "Failed to create GDALDataset <"<<datasourceName
         <<"> (driver name: <" << driverName<<">: " << CPLGetLastErrorMsg());
@@ -176,30 +176,30 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
 void DeleteDataSource(std::string const& datasourceName)
 {
   // Attempt to delete the datasource if it already exists
-  otb::OGRVersionProxy::GDALDatasetType * poDS = otb::OGRVersionProxy::Open(datasourceName.c_str(),false);
+  otb::ogr::version_proxy::GDALDatasetType * poDS = otb::ogr::version_proxy::Open(datasourceName.c_str(),false);
 
   if (poDS != NULL)
     {
-    otb::OGRVersionProxy::GDALDriverType * ogrDriver = poDS->GetDriver();
+    otb::ogr::version_proxy::GDALDriverType * ogrDriver = poDS->GetDriver();
    
     //Erase the data if possible
-    if (otb::OGRVersionProxy::TestCapability(ogrDriver,poDS,ODrCDeleteDataSource))
+    if (otb::ogr::version_proxy::TestCapability(ogrDriver,poDS,ODrCDeleteDataSource))
       {
       //Delete datasource
-      bool ret = otb::OGRVersionProxy::Delete(ogrDriver,datasourceName.c_str());
+      bool ret = otb::ogr::version_proxy::Delete(ogrDriver,datasourceName.c_str());
      if (!ret)
         {
-        otb::OGRVersionProxy::Close(poDS);
+        otb::ogr::version_proxy::Close(poDS);
         itkGenericExceptionMacro(<< "Deletion of data source " << datasourceName
                         << " failed: " << CPLGetLastErrorMsg());
         }
       }
     else
       {
-      otb::OGRVersionProxy::Close(poDS);
+      otb::ogr::version_proxy::Close(poDS);
       itkGenericExceptionMacro(<< "Cannot delete data source " << datasourceName);
       }
-    otb::OGRVersionProxy::Close(poDS);
+    otb::ogr::version_proxy::Close(poDS);
     } // if (poDS != NULL)
 }
 
@@ -223,7 +223,7 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
 
 /*static*/
 otb::ogr::DataSource::Pointer
-otb::ogr::DataSource::New(otb::OGRVersionProxy::GDALDatasetType * source, Modes::type mode)
+otb::ogr::DataSource::New(otb::ogr::version_proxy::GDALDatasetType * source, Modes::type mode)
 {
   Pointer res = new DataSource(source, mode);
   res->UnRegister();
@@ -693,13 +693,13 @@ void otb::ogr::DataSource::PrintSelf(
 bool otb::ogr::DataSource::HasCapability(std::string const& capabilityName) const
 {
   assert(m_DataSource && "Datasource not initialized");
-  return otb::OGRVersionProxy::TestCapability(m_DataSource->GetDriver(),m_DataSource,capabilityName.c_str());
+  return otb::ogr::version_proxy::TestCapability(m_DataSource->GetDriver(),m_DataSource,capabilityName.c_str());
 }
 
 void otb::ogr::DataSource::SyncToDisk()
 {
   assert(m_DataSource && "Datasource not initialized");
-  bool ret = otb::OGRVersionProxy::SyncToDisk(m_DataSource);
+  bool ret = otb::ogr::version_proxy::SyncToDisk(m_DataSource);
 
   if(!ret)
     {
@@ -711,7 +711,7 @@ void otb::ogr::DataSource::SyncToDisk()
 
 std::string otb::ogr::DataSource::GetDatasetDescription() const
 {
-  std::vector<std::string> files = otb::OGRVersionProxy::GetFileListAsStringVector(m_DataSource);
+  std::vector<std::string> files = otb::ogr::version_proxy::GetFileListAsStringVector(m_DataSource);
   std::string description = "";
   for(std::vector<std::string>::const_iterator it = files.begin();it!=files.end();++it)
     description+=(*it)+", ";

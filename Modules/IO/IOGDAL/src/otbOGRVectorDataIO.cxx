@@ -46,7 +46,7 @@ OGRVectorDataIO::~OGRVectorDataIO()
 {
   if (m_DataSource != NULL)
     {
-    otb::OGRVersionProxy::Close(m_DataSource);
+    otb::ogr::version_proxy::Close(m_DataSource);
     }
 }
 
@@ -54,7 +54,7 @@ OGRVectorDataIO::~OGRVectorDataIO()
 bool
 OGRVectorDataIO::CanReadFile(const char* filename) const
 {
-  otb::OGRVersionProxy::GDALDatasetType * poDS = OGRVersionProxy::Open(filename, true);
+  otb::ogr::version_proxy::GDALDatasetType * poDS = ogr::version_proxy::Open(filename, true);
   
   if (poDS == NULL)
     {
@@ -62,7 +62,7 @@ OGRVectorDataIO::CanReadFile(const char* filename) const
     return false;
     }
 //     std::cout << poDS->GetDriver()->GetName() << std::endl;
-  OGRVersionProxy::Close(poDS);
+  ogr::version_proxy::Close(poDS);
   return true;
 }
 
@@ -90,10 +90,10 @@ OGRVectorDataIO
 
   if (m_DataSource != NULL)
     {
-    OGRVersionProxy::Close(m_DataSource);
+    ogr::version_proxy::Close(m_DataSource);
     }
 
-  m_DataSource = OGRVersionProxy::Open(this->m_FileName.c_str(),true);
+  m_DataSource = ogr::version_proxy::Open(this->m_FileName.c_str(),true);
 
   if (m_DataSource == NULL)
     {
@@ -210,8 +210,8 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
 
 
   //Find first the OGR driver
-  OGRVersionProxy::GDALDriverType * ogrDriver =
-    OGRVersionProxy::GetDriverByName(this->GetOGRDriverName(this->m_FileName).data());
+  ogr::version_proxy::GDALDriverType * ogrDriver =
+    ogr::version_proxy::GetDriverByName(this->GetOGRDriverName(this->m_FileName).data());
 
   if (ogrDriver == NULL)
     {
@@ -221,25 +221,25 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   // free an existing previous data source, if any
   if (m_DataSource != NULL)
     {
-    OGRVersionProxy::Close(m_DataSource);
+    ogr::version_proxy::Close(m_DataSource);
     }
 
   // Erase the dataSource if already exist
   //TODO investigate the possibility of giving the option OVERWRITE=YES to the CreateDataSource method
-  OGRVersionProxy::GDALDatasetType * poDS = OGRVersionProxy::Open(this->m_FileName.c_str(),false);
+  ogr::version_proxy::GDALDatasetType * poDS = ogr::version_proxy::Open(this->m_FileName.c_str(),false);
   if (poDS != NULL)
     {
     //Erase the data if possible
-    if (OGRVersionProxy::TestCapability(ogrDriver,poDS,ODrCDeleteDataSource))
+    if (ogr::version_proxy::TestCapability(ogrDriver,poDS,ODrCDeleteDataSource))
       {
       //Delete datasource
-      OGRVersionProxy::Delete(ogrDriver,m_FileName.c_str());
+      ogr::version_proxy::Delete(ogrDriver,m_FileName.c_str());
       }
     }
-  OGRVersionProxy::Close(poDS);
+  ogr::version_proxy::Close(poDS);
 
   // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
-  m_DataSource = OGRVersionProxy::Create(ogrDriver,this->m_FileName.c_str());
+  m_DataSource = ogr::version_proxy::Create(ogrDriver,this->m_FileName.c_str());
 
   // check the created data source
   if (m_DataSource == NULL)
@@ -294,7 +294,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   otbMsgDevMacro( << "layerKept " << layerKept );
   (void)layerKept; // keep compiler happy
 
-  otb::OGRVersionProxy::Close(m_DataSource);
+  otb::ogr::version_proxy::Close(m_DataSource);
   m_DataSource = NULL;
 
   if (oSRS != NULL)

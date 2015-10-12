@@ -116,7 +116,7 @@ private:
 
   std::string GetOGRDriverName(std::string name) const;
 
-  OGRVersionProxy::GDALDatasetType * m_DataSource;
+  ogr::version_proxy::GDALDatasetType * m_DataSource;
 
 };
 

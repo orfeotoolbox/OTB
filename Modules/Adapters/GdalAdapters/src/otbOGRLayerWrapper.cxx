@@ -60,8 +60,8 @@ otb::ogr::Layer::Layer(OGRLayer* layer, bool modifiable)
 {
 }
 
-otb::ogr::Layer::Layer(OGRLayer* layer, otb::OGRVersionProxy::GDALDatasetType& sourceInChargeOfLifeTime, bool modifiable)
-:   m_Layer(layer,  boost::bind(&otb::OGRVersionProxy::GDALDatasetType::ReleaseResultSet, boost::ref(sourceInChargeOfLifeTime), _1))
+otb::ogr::Layer::Layer(OGRLayer* layer, otb::ogr::version_proxy::GDALDatasetType& sourceInChargeOfLifeTime, bool modifiable)
+:   m_Layer(layer,  boost::bind(&otb::ogr::version_proxy::GDALDatasetType::ReleaseResultSet, boost::ref(sourceInChargeOfLifeTime), _1))
   , m_Modifiable(modifiable)
 {
   assert(layer && "A null OGRlayer cannot belong to an OGRDataSource" );
