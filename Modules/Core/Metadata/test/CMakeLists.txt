@@ -25,6 +25,7 @@ otbDefaultImageMetadataInterface.cxx
 otbImageMetadataInterfaceTest2.cxx
 otbNoDataHelperTest.cxx
 otbSarCalibrationLookupDataTest.cxx
+otbRadarsat2ImageMetadataInterfaceNew.cxx
 )
 
 add_executable(otbMetadataTestDriver ${OTBMetadataTests})
