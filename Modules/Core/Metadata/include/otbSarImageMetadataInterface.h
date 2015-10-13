@@ -59,7 +59,7 @@ public:
   typedef double                                     RealType;
   typedef PointSetType::PointType                    PointType;
   typedef SarCalibrationLookupData                   LookupDataType;
-  typedef typename LookupDataType::Pointer          LookupDataPointerType;
+  typedef LookupDataType::Pointer                    LookupDataPointerType;
 
   virtual void CreateCalibrationLookupData(const short t);
 
