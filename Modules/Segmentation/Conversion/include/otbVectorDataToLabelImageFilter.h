@@ -25,6 +25,7 @@
 #include "otbVectorData.h"
 
 #include "gdal.h"
+#include "ogr_api.h"
 #include "otbOGRVersionProxy.h"
 
 namespace otb {
