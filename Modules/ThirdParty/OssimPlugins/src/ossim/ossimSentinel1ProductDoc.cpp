@@ -128,14 +128,15 @@ namespace ossimplugins
    {
       bool commonMetadataRetrieved = false;
       double heightSum = 0.0;
-      int numBands = 1;
+      int numBands = 0;
 
       ossimDirectory annotationDir( theManifestDirectory.dirCat( "annotation") );
       std::vector<ossimFilename> files;
       annotationDir.findAllFilesThatMatch(files, ".xml");
       std::vector<ossimFilename>::const_iterator it = files.begin();
 
-
+      /* avoid zero value for numBands. This will result in division by zero below */
+      if( files.size() < 1 ) numBands = 1;
 
       for (int count=0; it != files.end(); ++it,  ++count)
       {
