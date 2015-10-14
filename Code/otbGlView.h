@@ -390,8 +390,8 @@ GlView
 {
   if( m_Actors.empty() )
     {
-    origin[ 0 ] = origin[ 1 ] = 0;
-    extent[ 0 ] = extent[ 1 ] = 0;
+    origin.Fill( 0 );
+    extent.Fill( 0 );
 
     return false;
     }
@@ -409,6 +409,9 @@ GlView
     {
     P o;
     P e;
+
+    o.Fill( 0 );
+    e.Fill( 0 );
 
     assert( !it->second.IsNull() );
 
@@ -452,6 +455,9 @@ GlView
 {
   Point o;
   Point e;
+
+  o.Fill( 0 );
+  e.Fill( 0 );
 
   // Get origin and extent of all layers in viewport system.
   if( !GetExtent( o, e ) )

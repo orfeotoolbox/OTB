@@ -46,6 +46,8 @@ StandardShader::StandardShader()
     m_VerticalSlider(false),
     m_ShaderType(SHADER_STANDARD)
 {
+  m_Center.Fill( 0 );
+
   this->BuildShader();
 }
 
