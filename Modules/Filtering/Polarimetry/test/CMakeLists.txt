@@ -204,13 +204,13 @@ otb_add_test(NAME saTvSinclairImageFilter_SinclairToCoherency COMMAND otbPolarim
   
 otb_add_test(NAME saTvSinclairImageFilter_SinclairToCoherency_C COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvSinclairImageFilter_SinclairToCoherency.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency_C.tif
   otbSinclairImageFilter
   SinclairToCoherencyMatrix
   ${INPUTDATA}/RSAT_imageryC_HH.tif
   ${INPUTDATA}/RSAT_imageryC_HV.tif
   ${INPUTDATA}/RSAT_imageryC_VV.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency_C.tif
   )
 
 otb_add_test(NAME saTuReciprocalCovarianceToReciprocalCoherencyImageFilterNew COMMAND otbPolarimetryTestDriver
