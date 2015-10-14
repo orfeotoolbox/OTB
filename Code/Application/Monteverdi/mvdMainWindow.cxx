@@ -286,36 +286,6 @@ MainWindow
   //
   // OTB application support.
 #if defined( OTB_USE_QT4 ) && USE_OTB_APPS
-  //
-  // Done here cause needed to be done once and only once.
-  SetControllerModel(
-    m_OtbApplicationsBrowserDock,
-    Application::Instance()->GetOTBApplicationsModel()
-  );
-
-  //
-  // need to get the ApplicationToolBox widget to setup connections.
-  // a double click on the tree widget should trigger a signal connected
-  // to this MainWindow slot. this slot will be in charge of getting the
-  // widget of the application selected, and show it in the
-  // MainWindow centralView.
-
-  // # Step 1 : get the ApplicationToolBoxWidget
-  ApplicationsToolBox* appWidget =
-    qobject_cast< ApplicationsToolBox * >(
-      m_OtbApplicationsBrowserDock->findChild< ApplicationsToolBox* >()
-    );
-  assert( appWidget!=NULL );
-
-  // # Step 2 : setup connections
-  QObject::connect(
-    appWidget,
-    SIGNAL( ApplicationToLaunchSelected(const QString &, const QString &) ),
-    this,
-    SLOT( OnApplicationToLaunchSelected(const QString &, const QString &) )
-  );
-
-  // # Step 3 : connect close slots
 #endif
 
   //
@@ -496,11 +466,6 @@ MainWindow
 #if USE_PIXEL_DESCRIPTION
   m_UI->menu_View->addAction( m_PixelDescriptionDock->toggleViewAction() );
 #endif // USE_PIXEL_DESCRIPTION
-
-#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
-  m_UI->menu_View->addAction(
-    m_OtbApplicationsBrowserDock->toggleViewAction() );
-#endif
 }
 
 /*****************************************************************************/
@@ -779,19 +744,6 @@ MainWindow
 
   //
   // Left pane.
-
-#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
-  // OTB-applications browser.
-  assert( m_OtbApplicationsBrowserDock==NULL );
-  m_OtbApplicationsBrowserDock =
-    AddDockWidget
-    < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
-    ( "APPLICATIONS_BROWSER",
-      tr( "OTB Applications browser" ),
-      Qt::LeftDockWidgetArea );
-
-  // tabifyDockWidget( m_DatasetPropertiesDock, m_OtbApplicationsBrowserDock );
-#endif
 
   //
   // Right pane.
@@ -1397,6 +1349,80 @@ MainWindow
   comboBox->clear();
   comboBox->setEnabled( false );
 }
+
+/****************************************************************************/
+#if USE_OTB_APPS
+
+void
+MainWindow
+::SetupOTBApplications()
+{
+  qDebug() << this << "::SetupOTBApplications()";
+  qDebug() << "{";
+
+  assert( m_OtbApplicationsBrowserDock==NULL );
+
+  //
+  // Load OTB-applications and create browser in dock-widget .
+  m_OtbApplicationsBrowserDock =
+    AddDockWidget
+    < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
+    ( "APPLICATIONS_BROWSER",
+      tr( "OTB-Applications browser" ),
+      Qt::LeftDockWidgetArea,
+      true
+    );
+
+  // tabifyDockWidget( m_DatasetPropertiesDock, m_OtbApplicationsBrowserDock );
+
+  SetControllerModel(
+    m_OtbApplicationsBrowserDock,
+    Application::Instance()->GetOTBApplicationsModel()
+  );
+
+  //
+  // Connect signals.
+  //
+  // need to get the ApplicationToolBox widget to setup connections.
+  // a double click on the tree widget should trigger a signal connected
+  // to this MainWindow slot. this slot will be in charge of getting the
+  // widget of the application selected, and show it in the
+  // MainWindow centralView.
+
+  // # Step 1 : get the ApplicationToolBoxWidget
+  ApplicationsToolBox* appWidget =
+    qobject_cast< ApplicationsToolBox * >(
+      m_OtbApplicationsBrowserDock->findChild< ApplicationsToolBox* >()
+    );
+  assert( appWidget!=NULL );
+
+  // # Step 2 : setup connections
+  QObject::connect(
+    appWidget,
+    SIGNAL( ApplicationToLaunchSelected(const QString &, const QString &) ),
+    this,
+    SLOT( OnApplicationToLaunchSelected(const QString &, const QString &) )
+  );
+
+  // # Step 3 : connect close slots
+  // TODO
+
+  //
+  // Update main-window UI.
+  m_UI->action_LoadOTBApplications->setEnabled( false );
+
+  m_UI->menu_View->addAction(
+    m_OtbApplicationsBrowserDock->toggleViewAction()
+  );
+
+  m_UI->menu_View->addAction(
+    m_OtbApplicationsBrowserDock->toggleViewAction()
+  );
+
+  qDebug() << "}";
+}
+
+#endif // USE_OTB_APPS
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
@@ -2164,6 +2190,16 @@ MainWindow
     }
 
   m_StatusBarWidget->SetText( text );
+}
+
+/****************************************************************************/
+void
+MainWindow
+::on_action_LoadOTBApplications_triggered()
+{
+#if USE_OTB_APPS
+  SetupOTBApplications();
+#endif // USE_OTB_APPS
 }
 
 } // end namespace 'mvd'

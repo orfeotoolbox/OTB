@@ -271,6 +271,12 @@ private:
 
   /**
    */
+#if USE_OTB_APPS
+  void SetupOTBApplications();
+#endif // USE_OTB_APPS
+
+  /**
+   */
   inline
     const ImageViewWidget* GetQuicklookView() const;
   /**
@@ -423,6 +429,10 @@ private slots:
    * menu action is activated.
    */
   void on_action_Keymap_triggered();
+
+  /**
+   */
+  void on_action_LoadOTBApplications_triggered();
 
   /**
    * \brief Qt auto-connected slot which is called when 'File/Open
