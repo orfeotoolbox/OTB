@@ -48,7 +48,7 @@ else()
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "https://www.orfeo-toolbox.org/packages/ossim-minimal-r23537.tar.gz"
-    URL_MD5 d41d8cd98f00b204e9800998ecf8427e
+    URL_MD5 f77d574ab2817bcc36633f77824facb5
     BINARY_DIR ${OSSIM_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
