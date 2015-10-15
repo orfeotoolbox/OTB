@@ -108,12 +108,9 @@ namespace version_proxy
    * Calls OGRDataSource::DeleteDataSource for gdal 1.x implementation
    * and GDALDriver::Delete for gdal 2.x implementation.
    *
-   * \param driver Pointer to the driver used for creation. Will not
-   * be checked for null pointer.
-   *
    * \param name Name of the dataset to destroy.
    */ 
-  bool Delete(GDALDriverType * driver, const char * name);
+  bool Delete(const char * name);
 
   /**
    * This function returns a pointer to the driver from its name.
@@ -128,24 +125,6 @@ namespace version_proxy
    * \return NULL if no driver could be retrieved.
    */
   GDALDriverType *  GetDriverByName(const char * name);
-
-  /**
-   * Test driver and dataset for a given capability.
-   *
-   * Calls OGRSFDriver::TestCapability for gdal 1.x implementation and
-   * GDALDataset::TestCapability for gdal 2.x implementation.
-   *
-   * \param driver Pointer to the driver to test. Will not
-   * be checked for null pointer.
-   *
-   * \param dataset Pointer to the dataset to test. Will not be
-   * checked for null pointer.
-   *
-   * \param capability Name of the capability to test.
-   *
-   * \return True if the capability is supported.
-   */
-  bool TestCapability(const GDALDriverType * driver, const GDALDatasetType * dataset, const char * capability);
 
   /**
    * Sync dataset to disk.

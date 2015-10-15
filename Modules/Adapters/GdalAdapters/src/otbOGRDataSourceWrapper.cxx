@@ -175,32 +175,12 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
 
 void DeleteDataSource(std::string const& datasourceName)
 {
-  // Attempt to delete the datasource if it already exists
-  otb::ogr::version_proxy::GDALDatasetType * poDS = otb::ogr::version_proxy::Open(datasourceName.c_str(),false);
-
-  if (poDS != NULL)
+  bool ret = otb::ogr::version_proxy::Delete(datasourceName.c_str());
+  if (!ret)
     {
-    otb::ogr::version_proxy::GDALDriverType * ogrDriver = poDS->GetDriver();
-   
-    //Erase the data if possible
-    if (otb::ogr::version_proxy::TestCapability(ogrDriver,poDS,ODrCDeleteDataSource))
-      {
-      //Delete datasource
-      bool ret = otb::ogr::version_proxy::Delete(ogrDriver,datasourceName.c_str());
-     if (!ret)
-        {
-        otb::ogr::version_proxy::Close(poDS);
-        itkGenericExceptionMacro(<< "Deletion of data source " << datasourceName
-                        << " failed: " << CPLGetLastErrorMsg());
-        }
-      }
-    else
-      {
-      otb::ogr::version_proxy::Close(poDS);
-      itkGenericExceptionMacro(<< "Cannot delete data source " << datasourceName);
-      }
-    otb::ogr::version_proxy::Close(poDS);
-    } // if (poDS != NULL)
+    itkGenericExceptionMacro(<< "Deletion of data source " << datasourceName
+                             << " failed: " << CPLGetLastErrorMsg());
+    }
 }
 
 otb::ogr::DataSource::Pointer
@@ -213,7 +193,14 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
 
   Drivers::Init();
 
-  if (mode == Modes::Overwrite)
+  ogr::version_proxy::GDALDatasetType * ds = ogr::version_proxy::Open(datasourceName.c_str(),true);
+
+  bool ds_exists = (ds!=NULL);
+
+  ogr::version_proxy::Close(ds);
+  
+
+  if (ds_exists && mode == Modes::Overwrite)
     {
     DeleteDataSource(datasourceName);
     }
@@ -693,7 +680,7 @@ void otb::ogr::DataSource::PrintSelf(
 bool otb::ogr::DataSource::HasCapability(std::string const& capabilityName) const
 {
   assert(m_DataSource && "Datasource not initialized");
-  return otb::ogr::version_proxy::TestCapability(m_DataSource->GetDriver(),m_DataSource,capabilityName.c_str());
+  return m_DataSource->TestCapability(capabilityName.c_str());
 }
 
 void otb::ogr::DataSource::SyncToDisk()

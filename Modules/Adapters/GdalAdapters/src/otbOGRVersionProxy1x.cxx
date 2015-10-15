@@ -53,22 +53,30 @@ GDALDatasetType * Create(GDALDriverType * driver, const char * name)
   return ds;
 }
 
-bool Delete(GDALDriverType * driver, const char * name)
+bool Delete(const char * name)
 {
-  OGRErr ret = driver->DeleteDataSource(name);
+  // Open dataset
+  GDALDatasetType * poDS = Open(name,false);
+  GDALDriverType * poDriver = NULL;
+  if(poDS)
+    {
+    poDriver = poDS->GetDriver();
+    Close(poDS);
+    }
 
-  return (ret == OGRERR_NONE);
+  if(poDriver && poDriver->TestCapability(ODrCDeleteDataSource))
+    {
+    
+    OGRErr ret = poDriver->DeleteDataSource(name);
+    return (ret == OGRERR_NONE);
+    }
+
+  return false;
 }
 
 GDALDriverType *  GetDriverByName(const char * name)
 {
   return OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(name);
-}
-
-bool TestCapability(const GDALDriverType * driver, const GDALDatasetType *, const char * capability)
-{
-  // Class OGRDataSource is not const correct
-  return const_cast<GDALDriverType * >(driver)->TestCapability(capability);
 }
 
 std::string GetDatasetClassName()

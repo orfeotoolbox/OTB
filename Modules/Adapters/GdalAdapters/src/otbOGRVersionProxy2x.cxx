@@ -26,6 +26,7 @@
 #include "gdal_priv.h"
 #endif
 
+
 namespace otb
 {
 namespace ogr
@@ -48,22 +49,29 @@ GDALDatasetType * Create(GDALDriverType * driver, const char * name)
   return driver->Create(name,0,0,0,GDT_Unknown,NULL);
 }
 
-bool Delete(GDALDriverType * driver, const char * name)
+bool Delete(const char * name)
 {
-  OGRErr ret = driver->Delete(name);
+  // Open dataset
+  GDALDatasetType * poDS = otb::ogr::version_proxy::Open(name,false);
+  GDALDriverType * poDriver = NULL;
+  if(poDS)
+    {
+    poDriver = poDS->GetDriver();
+    Close(poDS);
+    }
 
-  return (ret == OGRERR_NONE);
+  if(poDriver)
+    {
+    OGRErr ret = poDriver->Delete(name);
+
+    return (ret == OGRERR_NONE);
+    }
+  return false;
 }
 
 GDALDriverType *  GetDriverByName(const char * name)
 {
   return GetGDALDriverManager()->GetDriverByName(name);
-}
-
-bool TestCapability(const GDALDriverType *, const GDALDatasetType * dataset, const char * capability)
-{
-  // Const correctness problem in GDALDataset class
-  return const_cast<GDALDatasetType *>(dataset)->TestCapability(capability);
 }
 
 std::string GetDatasetClassName()
