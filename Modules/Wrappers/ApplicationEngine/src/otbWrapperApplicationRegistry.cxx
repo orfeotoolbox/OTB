@@ -20,12 +20,38 @@
 #include "otbMacro.h"
 #include "itksys/SystemTools.hxx"
 #include "itkDynamicLoader.h"
+#include "itkDirectory.h"
+#include "itkMutexLock.h"
+#include "itkMutexLockHolder.h"
+
 #include <iterator>
 
 namespace otb
 {
 namespace Wrapper
 {
+
+class ApplicationPrivateRegistry
+{
+public:
+  typedef std::pair<Application*, void* > AppHandlePairType;
+  typedef std::list<AppHandlePairType>    AppHandleContainerType;
+
+  ~ApplicationPrivateRegistry()
+  {
+  AppHandleContainerType::iterator it;
+  for (it = m_Container.begin() ; it != m_Container.end() ; ++it)
+    {
+    itk::DynamicLoader::CloseLibrary( (*it).second);
+    }
+  m_Container.clear();
+  }
+
+  AppHandleContainerType m_Container;
+};
+// static finalizer to close opened libraries
+static ApplicationPrivateRegistry m_ApplicationPrivateRegistryGlobal;
+
 
 ApplicationRegistry::ApplicationRegistry()
 {
@@ -72,34 +98,34 @@ ApplicationRegistry::AddApplicationPath(std::string newpath)
 }
 
 Application::Pointer
-ApplicationRegistry::CreateApplication(const std::string& name)
+ApplicationRegistry::CreateApplication(const std::string& name, bool useFactory)
 {
   ApplicationPointer appli;
 
-  // Fast search
+  // Fast search : uses OTB_APPLICATION_PATH
   appli = ApplicationRegistry::CreateApplicationFaster(name);
   if (appli.IsNotNull())
     {
     return appli;
     }
 
-  // Classic search
-  ApplicationRegistry::RefreshApplicationFactories();
-
-  LightObject::Pointer possibleApp = itk::ObjectFactoryBase::CreateInstance(name.c_str());
-  
-  if (possibleApp.IsNotNull())
+  // Classic search : uses factories registered by ITK ( see ITK_AUTOLOAD_PATH )
+  if (useFactory)
     {
-    // Downcast
-    Application* app = dynamic_cast<Application*> (possibleApp.GetPointer());
-    if (app)
+    LightObject::Pointer possibleApp = itk::ObjectFactoryBase::CreateInstance(name.c_str());
+    if (possibleApp.IsNotNull())
       {
-        appli = app;
-        appli->Init();
-      }
-    else
-      {
-      otbMsgDevMacro( << "Error ApplicationRegistry factory did not return an Application: " << possibleApp->GetNameOfClass() << std::endl );
+      // Downcast
+      Application* app = dynamic_cast<Application*> (possibleApp.GetPointer());
+      if (app)
+        {
+          appli = app;
+          appli->Init();
+        }
+      else
+        {
+        otbMsgDevMacro( << "Error ApplicationRegistry factory did not return an Application: " << possibleApp->GetNameOfClass() << std::endl );
+        }
       }
     }
   
@@ -133,19 +159,8 @@ ApplicationRegistry::CreateApplicationFaster(const std::string& name)
 #endif
 
   const char* otbAppPath = itksys::SystemTools::GetEnv("OTB_APPLICATION_PATH");
-  const char* itkLoadPath = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
 
-  std::ostringstream currentPath;
-  if (otbAppPath)
-    {
-    currentPath << otbAppPath << pathSeparator;
-    }
-  if (itkLoadPath)
-    {
-    currentPath << itkLoadPath;
-    }
-
-  std::vector<itksys::String> pathList = itksys::SystemTools::SplitString(currentPath.str().c_str(),pathSeparator,false);
+  std::vector<itksys::String> pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
   for (unsigned int i=0 ; i<pathList.size() ; ++i)
     {
     std::string possiblePath = pathList[i];
@@ -155,41 +170,10 @@ ApplicationRegistry::CreateApplicationFaster(const std::string& name)
       }
     possiblePath += appLibName.str();
 
-    if (itksys::SystemTools::FileExists(possiblePath.c_str(),true))
+    appli = LoadApplicationFromPath(possiblePath,name);
+    if (appli.IsNotNull())
       {
-      itk::LibHandle   lib = itk::DynamicLoader::OpenLibrary( possiblePath.c_str() );
-      if ( lib )
-        {
-        /**
-         * Look for the symbol itkLoad in the library
-         */
-        ITK_LOAD_FUNCTION loadfunction =
-          ( ITK_LOAD_FUNCTION ) itk::DynamicLoader::GetSymbolAddress(lib, "itkLoad");
-        /**
-         * if the symbol is found call it to create the factory
-         * from the library
-         */
-        if ( loadfunction )
-          {
-          itk::ObjectFactoryBase *newfactory = ( *loadfunction )( );
-          // Downcast
-          ApplicationFactoryBase* appFactory = dynamic_cast<ApplicationFactoryBase*>(newfactory);
-
-          if (appFactory)
-            {
-            appli = appFactory->CreateApplication(name.c_str());
-            appli->Init();
-            break;
-            }
-          }
-        else
-          {
-          // In the past, some platforms crashed on the call
-          // DynamicLoader::CloseLibrary(lib) if the lib has symbols
-          // that the current executable is using.
-          itk::DynamicLoader::CloseLibrary(lib);
-          }
-        }
+      break;
       }
     }
 
@@ -197,56 +181,16 @@ ApplicationRegistry::CreateApplicationFaster(const std::string& name)
 }
 
 std::vector<std::string>
-ApplicationRegistry::GetAvailableApplications()
+ApplicationRegistry::GetAvailableApplications(bool useFactory)
 {
   ApplicationPointer appli;
-
-  ApplicationRegistry::RefreshApplicationFactories();
-
-  std::list<ApplicationPointer> possibleApp;
-  std::list<LightObject::Pointer> allobjects = itk::ObjectFactoryBase::CreateAllInstance("otbWrapperApplication");
-
-  // Downcast and Sanity check
-  for (std::list<LightObject::Pointer>::iterator i = allobjects.begin(); i != allobjects.end(); ++i)
-    {
-    Application* io = dynamic_cast<Application*> (i->GetPointer());
-    if (io)
-      {
-      possibleApp.push_back(io);
-      }
-    else
-      {
-      otbMsgDevMacro( "Error ApplicationRegistry factory did not return an Application: " << (*i)->GetNameOfClass() << std::endl );
-      }
-    }
-
-  // Get all the app names
-  // If ITK_AUTOLOAD_PATH contains several times the same path, then the same app appear several times
-  // Use a temporary std::set to fix this
   std::set<std::string> appSet;
-  for(std::list<ApplicationPointer>::iterator k = possibleApp.begin();
-      k != possibleApp.end(); ++k)
-    {
-    (*k)->Init();
-    appSet.insert((*k)->GetName());
-    }
 
-  std::vector<std::string> appVec;
-  std::copy(appSet.begin(), appSet.end(), std::back_inserter(appVec));
-  return appVec;
-}
-
-void
-ApplicationRegistry::RefreshApplicationFactories()
-{
-  std::ostringstream putEnvPath;
-  putEnvPath << "ITK_AUTOLOAD_PATH=";
-
-  // Can be NULL if the env var is not set
-  const char* currentEnv = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
-
-  // OTB specific application path
-  const char* otbApplicationPath = itksys::SystemTools::GetEnv("OTB_APPLICATION_PATH");
+  std::string appPrefix("otbapp_");
+  std::string appExtension = itksys::DynamicLoader::LibExtension();
+#ifdef __APPLE__
+  appExtension = ".dylib";
+#endif
 
 #if defined(WIN32)
   const char pathSeparator = ';';
@@ -254,29 +198,123 @@ ApplicationRegistry::RefreshApplicationFactories()
   const char pathSeparator = ':';
 #endif
 
-  if (otbApplicationPath)
+#ifdef _WIN32
+  const char sep = '\\';
+#else
+  const char sep = '/';
+#endif
+
+  const char* otbAppPath = itksys::SystemTools::GetEnv("OTB_APPLICATION_PATH");
+  std::vector<itksys::String> pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
+  for (unsigned int k=0 ; k<pathList.size() ; ++k)
     {
-    putEnvPath << otbApplicationPath << pathSeparator;
+    itk::Directory::Pointer dir = itk::Directory::New();
+    if (!dir->Load(pathList[k].c_str()))
+      {
+      continue;
+      }
+    for (unsigned int i = 0; i < dir->GetNumberOfFiles(); i++)
+      {
+      const char *filename = dir->GetFile(i);
+      std::string sfilename(filename);
+      std::string::size_type extPos = sfilename.rfind(appExtension);
+      std::string::size_type prefixPos = sfilename.find(appPrefix);
+
+      // Check if current file is a shared lib with the right pattern
+      if (extPos + appExtension.size() == sfilename.size() &&
+          prefixPos == 0)
+        {
+        std::string name = sfilename.substr(appPrefix.size(),extPos-appPrefix.size());
+        std::string fullpath = pathList[k];
+        if (!fullpath.empty() && fullpath[fullpath.size() - 1] != sep)
+          {
+          fullpath.push_back(sep);
+          }
+        fullpath.append(sfilename);
+        appli = LoadApplicationFromPath(fullpath,name);
+        if (appli.IsNotNull())
+          {
+          appSet.insert(name);
+          }
+        appli = NULL;
+        }
+      }
     }
 
-  if (currentEnv)
+  if (useFactory)
     {
-    putEnvPath << currentEnv;
+    std::list<LightObject::Pointer> allobjects = itk::ObjectFactoryBase::CreateAllInstance("otbWrapperApplication");
+    // Downcast and Sanity check
+    for (std::list<LightObject::Pointer>::iterator i = allobjects.begin(); i != allobjects.end(); ++i)
+      {
+      Application* app = dynamic_cast<Application*> (i->GetPointer());
+      if (app)
+        {
+        app->Init();
+        std::string curName(app->GetName());
+        appSet.insert(curName);
+        }
+      else
+        {
+        otbMsgDevMacro( << "Error ApplicationRegistry factory did not return an Application: " << (*i)->GetNameOfClass() << std::endl );
+        }
+      }
     }
 
-  // do NOT use putenv() directly, since the string memory must be managed carefully
-  itksys::SystemTools::PutEnv(putEnvPath.str().c_str());
+  std::vector<std::string> appVec;
+  std::copy(appSet.begin(), appSet.end(), std::back_inserter(appVec));
+  return appVec;
+}
 
-  // Reload factories to take into account new path
-  itk::ObjectFactoryBase::ReHash();
 
-  std::ostringstream resetEnvPath;
-  resetEnvPath << "ITK_AUTOLOAD_PATH=";
-  if (currentEnv)
+Application::Pointer
+ApplicationRegistry::LoadApplicationFromPath(std::string path,std::string name)
+{
+  Application::Pointer appli;
+
+  static itk::SimpleMutexLock mutex;
+
+  if (itksys::SystemTools::FileExists(path.c_str(),true))
     {
-    resetEnvPath << currentEnv;
+    itk::LibHandle lib = itk::DynamicLoader::OpenLibrary(path.c_str());
+    if (lib)
+      {
+      /**
+       * Look for the symbol itkLoad in the library
+       */
+      ITK_LOAD_FUNCTION loadfunction =
+        ( ITK_LOAD_FUNCTION ) itk::DynamicLoader::GetSymbolAddress(lib, "itkLoad");
+      /**
+       * if the symbol is found call it to create the factory
+       * from the library
+       */
+      if ( loadfunction )
+        {
+        itk::ObjectFactoryBase *newfactory = ( *loadfunction )( );
+        // Downcast
+        ApplicationFactoryBase* appFactory = dynamic_cast<ApplicationFactoryBase*>(newfactory);
+
+        if (appFactory)
+          {
+          appli = appFactory->CreateApplication(name.c_str());
+          if (appli.IsNotNull())
+            {
+            appli->Init();
+            // mutex lock to ensure thread safety
+            itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
+
+            ApplicationPrivateRegistry::AppHandlePairType curPair;
+            curPair.first = appli.GetPointer();
+            curPair.second = (void*) lib;
+            m_ApplicationPrivateRegistryGlobal.m_Container.push_back(curPair);
+            return appli;
+            }
+          }
+        }
+      itk::DynamicLoader::CloseLibrary(lib);
+      }
     }
-  itksys::SystemTools::PutEnv(resetEnvPath.str().c_str());
+  return appli;
 }
 
 

@@ -59,15 +59,14 @@ public:
   static void AddApplicationPath(std::string path);
 
   /** Return the list of available applications */
-  static std::vector<std::string> GetAvailableApplications();
+  static std::vector<std::string> GetAvailableApplications(bool useFactory=false);
 
   /** Create the specified Application */
-  static Application::Pointer CreateApplication(const std::string& applicationName);
+  static Application::Pointer CreateApplication(const std::string& applicationName, bool useFactory=false);
 
   /** Create the specified Application (faster)
    *  method using dynamic library name to load the right module */
   static Application::Pointer CreateApplicationFaster(const std::string& applicationName);
-
 
 protected:
   ApplicationRegistry();
@@ -76,8 +75,9 @@ protected:
 private:
   ApplicationRegistry(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
-  static void RefreshApplicationFactories();
+
+  /** Load an application from a shared library */
+  static Application::Pointer LoadApplicationFromPath(std::string path,std::string name);
 
 };
 
