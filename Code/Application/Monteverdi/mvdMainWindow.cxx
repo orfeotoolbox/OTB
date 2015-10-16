@@ -1403,8 +1403,8 @@ void
 MainWindow
 ::SetupOTBApplications()
 {
-  qDebug() << this << "::SetupOTBApplications()";
-  qDebug() << "{";
+  // qDebug() << this << "::SetupOTBApplications()";
+  // qDebug() << "{";
 
   assert( m_OtbApplicationsBrowserDock==NULL );
 
@@ -1465,7 +1465,7 @@ MainWindow
     m_OtbApplicationsBrowserDock->toggleViewAction()
   );
 
-  qDebug() << "}";
+  // qDebug() << "}";
 }
 
 #endif // USE_OTB_APPS
