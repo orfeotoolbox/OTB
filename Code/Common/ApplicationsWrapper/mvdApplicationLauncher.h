@@ -99,8 +99,10 @@ public:
    * the given OTB application.
    */
   Wrapper::QtWidgetView*
-    NewOtbApplicationWidget( const QString& appName,
-                             bool isStandalone =false ) const;
+    NewOtbApplicationWidget( const QString & appName,
+                             bool isStandalone =false,
+			     QWidget * parent =NULL,
+			     Qt::WindowFlags =0 ) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

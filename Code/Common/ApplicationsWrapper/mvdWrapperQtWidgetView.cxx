@@ -69,6 +69,9 @@ namespace Wrapper
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
+char const * const
+QtWidgetView
+::OBJECT_NAME = "mvd::Wrapper::QtWidgetView";
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -76,10 +79,9 @@ namespace Wrapper
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
-/*******************************************************************************/
+/*****************************************************************************/
 QtWidgetView
-::QtWidgetView( otb::Wrapper::Application::Pointer otbApp,
+::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
                 bool isStandalone,
 		QWidget* parent,
 		Qt::WindowFlags flags ) :
@@ -92,6 +94,8 @@ QtWidgetView
   m_IsClosable( true ),
   m_IsStandalone( isStandalone )
 {
+  setObjectName( QtWidgetView::OBJECT_NAME );
+
   m_Model = new otb::Wrapper::QtWidgetModel( otbApp );
 
   QObject::connect(
@@ -237,8 +241,11 @@ QtWidgetView
   m_QuitButton = new QPushButton(footerGroup);
   m_QuitButton->setText(QObject::tr("Quit"));
   connect(
-    m_QuitButton, SIGNAL( clicked() ),
-    this, SLOT( CloseSlot() )
+    m_QuitButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SLOT( close() )
   );
 
   // Put the buttons on the right
@@ -280,8 +287,8 @@ QtWidgetView
 
   SetupWidget( widget, InputFilenameInitializer() );
   SetupWidget( widget, InputFilenameListInitializer( this ) );
-  SetupWidget( widget, InputImageInitializer( !m_IsStandalone ) );
-  SetupWidget( widget, InputImageListInitializer( this, !m_IsStandalone ) );
+  SetupWidget( widget, InputImageInitializer( false /* !m_IsStandalone */) );
+  SetupWidget( widget, InputImageListInitializer( this, false /* !m_IsStandalone */ ) );
   SetupWidget( widget, InputVectorDataInitializer() );
   SetupWidget( widget, InputVectorDataListInitializer( this ) );
 #if defined( _DEBUG )
@@ -308,19 +315,37 @@ QtWidgetView
 }
 
 /*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
 void
 QtWidgetView
-::CloseSlot()
+::closeEvent( QCloseEvent * event )
 {
-  // Close the widget
-  this->close();
+  assert( event!=NULL );
 
-  // Emit a signal to close any widget that this gui belonging to
+  if( !IsClosable() )
+    {
+    assert( !m_Application.IsNull() );
+
+    QMessageBox::warning(
+      this,
+      tr( "Warning!" ),
+      tr( "OTB-Application '%1' cannot be closed while running!")
+      .arg( m_Application->GetDocName() )
+    );
+
+    event->ignore();
+
+    return;
+    }
+
+  QWidget::closeEvent( event );
+
   emit QuitSignal();
+
+  deleteLater();
 }
 
+/*******************************************************************************/
+/* SLOTS                                                                       */
 /*******************************************************************************/
 void
 QtWidgetView

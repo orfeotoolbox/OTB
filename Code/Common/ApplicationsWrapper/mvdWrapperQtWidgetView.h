@@ -97,8 +97,12 @@ class Monteverdi_EXPORT QtWidgetView :
 // Public methods.
 public:
 
+  /**
+   */
+  static char const * const OBJECT_NAME;
+
   /** \brief Constructor. */
-  QtWidgetView( otb::Wrapper::Application::Pointer otbApp,
+  QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
                 bool isStandalone,
 		QWidget* parent =0,
 		Qt::WindowFlags flags =0 );
@@ -142,14 +146,6 @@ public:
 // Public SLOTS.
 public slots:
 
-  // slot in charge of emiting a signal to the catalogue mainWindow.
-  // when received, the main application need to get the output
-  // image filename{s} set by the user in this OTB application (if any).
-  void OnApplicationExecutionDone( int );
-
-  // application closed
-  void CloseSlot();
-
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -162,6 +158,21 @@ signals:
   void ExecuteAndWriteOutput();
 
   void ExecutionDone( int nbOutputs );
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
+
+//
+// Protected methods.
+protected:
+
+  //
+  // QWidget overloads.
+
+  virtual void closeEvent( QCloseEvent * event );
+
+//
+// Protected attributes.
+protected:
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -206,6 +217,11 @@ private:
 //
 // Slots.
 private slots:
+
+  // slot in charge of emiting a signal to the catalogue mainWindow.
+  // when received, the main application need to get the output
+  // image filename{s} set by the user in this OTB application (if any).
+  void OnApplicationExecutionDone( int );
 
   void UpdateMessageAfterApplicationReady(bool val);
 

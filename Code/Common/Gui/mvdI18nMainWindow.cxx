@@ -256,7 +256,7 @@ I18nMainWindow
 /*****************************************************************************/
 void
 I18nMainWindow
-::closeEvent( QCloseEvent* event )
+::closeEvent( QCloseEvent * event )
 {
   assert( event!=NULL );
 
@@ -290,6 +290,8 @@ I18nMainWindow
       assert( false );
       break;
     }
+
+  QMainWindow::closeEvent( event );
 }
 
 /*****************************************************************************/

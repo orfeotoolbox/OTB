@@ -82,7 +82,10 @@ ApplicationLauncher
 /*******************************************************************************/
 Wrapper::QtWidgetView*
 ApplicationLauncher
-::NewOtbApplicationWidget( const QString& appName, bool isStandalone ) const
+::NewOtbApplicationWidget( const QString & appName,
+			   bool isStandalone,
+			   QWidget * parent,
+			   Qt::WindowFlags flags ) const
 {
   // Create module
   otb::Wrapper::Application::Pointer otbApp(
@@ -192,7 +195,8 @@ ApplicationLauncher
     }
 
   // Create GUI based on module
-  Wrapper::QtWidgetView* gui = new Wrapper::QtWidgetView( otbApp, isStandalone );
+  Wrapper::QtWidgetView* gui =
+    new Wrapper::QtWidgetView( otbApp, isStandalone, parent, flags );
 
   gui->CreateGui();
 

@@ -284,11 +284,6 @@ MainWindow
   );
 
   //
-  // OTB application support.
-#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
-#endif
-
-  //
   // close tabs handling
 #if USE_TABBED_VIEW
   QObject::connect(
@@ -1157,6 +1152,57 @@ void
 MainWindow
 ::closeEvent( QCloseEvent* event )
 {
+  assert( event!=NULL );
+
+  //
+  // List OTB-application widgets.
+  typedef QList< mvd::Wrapper::QtWidgetView * > QtWidgetViewList;
+
+  QtWidgetViewList children( findChildren< mvd::Wrapper::QtWidgetView * >() );
+
+  QStringList names;
+
+  //
+  // Find out which OTB-applications are running.
+  for( QtWidgetViewList::iterator it( children.begin() );
+       it!=children.end();
+       ++ it )
+    {
+    assert( *it );
+
+    if( !( *it )->IsClosable() )
+      {
+      assert( !( *it )->GetApplication().IsNull() );
+
+      // qDebug() << "OTB-application:" << ( *it )->GetApplication()->GetDocName();
+
+      names.push_back( ( *it )->GetApplication()->GetDocName() );
+      }
+    }
+
+  //
+  // If some OTB-application is running, display warning, names and
+  // prevent to close.
+  if( !names.isEmpty() )
+    {
+    QMessageBox::warning(
+      this,
+      tr( "Warning!" ),
+      tr(
+	PROJECT_NAME
+	" cannot exit while some OTB-application is running!\n\n"
+	"Please wait for following OTB-applicatio(s) to exit:\n- %1"
+      )
+      .arg( names.join( "\n- " ) )
+    );
+
+    event->ignore();
+
+    return;
+    }
+
+  //
+  // Otherwise, close.
   I18nMainWindow::closeEvent( event );
 }
 
@@ -1826,11 +1872,7 @@ MainWindow
 void
 MainWindow
 ::OnApplicationToLaunchSelected( const QString & appName,
-#if USE_TABBED_VIEW
-				 const QString & docName
-#else
-				 const QString & )
-#endif
+				 const QString & docName )
 {
   assert( Application::ConstInstance()!=NULL );
   assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );
@@ -1838,11 +1880,19 @@ MainWindow
     Application::ConstInstance()->GetOTBApplicationsModel()->GetLauncher()!=NULL
   );
 
-  Wrapper::QtWidgetView* appWidget =
+  Wrapper::QtWidgetView * appWidget =
     Application::ConstInstance()
     ->GetOTBApplicationsModel()
     ->GetLauncher()
-    ->NewOtbApplicationWidget( appName );
+    ->NewOtbApplicationWidget(
+      appName,
+      true
+#if USE_TABBED_VIEW
+#else // USE_TABBED_VIEW
+      , this
+      , Qt::Window
+#endif // USE_TABBED_VIEW
+    );
 
   assert( appWidget!=NULL );
 
@@ -1860,7 +1910,9 @@ MainWindow
 
 #else // USE_TABBED_VIEW
 
-  assert( false && "OTB-Application widget newed and not linked to QApplication interface." );
+  appWidget->setWindowTitle( docName );
+
+  appWidget->show();
 
 #endif // USE_TABBED_VIEW
 
@@ -1896,6 +1948,8 @@ MainWindow
     this,
     SLOT( OnTabCloseRequested() )
     );
+
+#else // USE_TABBED_VIEW
 
 #endif // USE_TABBED_VIEW
 }
