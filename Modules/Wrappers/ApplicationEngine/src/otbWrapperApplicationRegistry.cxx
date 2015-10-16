@@ -159,8 +159,11 @@ ApplicationRegistry::CreateApplicationFaster(const std::string& name)
 #endif
 
   const char* otbAppPath = itksys::SystemTools::GetEnv("OTB_APPLICATION_PATH");
-
-  std::vector<itksys::String> pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
+  std::vector<itksys::String> pathList;
+  if (otbAppPath)
+    {
+    pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
+    }
   for (unsigned int i=0 ; i<pathList.size() ; ++i)
     {
     std::string possiblePath = pathList[i];
@@ -205,7 +208,11 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
 #endif
 
   const char* otbAppPath = itksys::SystemTools::GetEnv("OTB_APPLICATION_PATH");
-  std::vector<itksys::String> pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
+  std::vector<itksys::String> pathList;
+  if (otbAppPath)
+    {
+    pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
+    }
   for (unsigned int k=0 ; k<pathList.size() ; ++k)
     {
     itk::Directory::Pointer dir = itk::Directory::New();
