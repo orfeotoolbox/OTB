@@ -499,7 +499,7 @@ SetupForFilenameDrop( W* widget, const char* text )
   {
   if( text!=NULL )
     {
-    lineEdit->setText(
+    lineEdit->setPlaceholderText(
       QCoreApplication::translate(
         "mvd::Wrapper::QtWidgetView",
         text
@@ -552,7 +552,7 @@ SetupForDatasetDrop( W* widget, const char* text )
   {
   if( text!=NULL )
     {
-    lineEdit->setText(
+    lineEdit->setPlaceholderText(
       QCoreApplication::translate(
         "mvd::Wrapper::QtWidgetView",
         text
