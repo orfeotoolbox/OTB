@@ -37,6 +37,58 @@ public:
   typedef std::pair<Application*, void* > AppHandlePairType;
   typedef std::list<AppHandlePairType>    AppHandleContainerType;
 
+  /** Add a pair (application, library handle) in the private registry */
+  bool AddPair(Application *app, void *handle)
+    {
+    AppHandlePairType pair;
+    if (app && handle)
+      {
+      // mutex lock to ensure thread safety
+      itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
+      pair.first = app;
+      pair.second = handle;
+      m_Container.push_back(pair);
+      return true;
+      }
+    return false;
+    }
+
+  /** When an application is deleted, unregister its pointer from private registry */
+  void UnregisterApp(const Application *app)
+    {
+    if (app)
+      {
+      // mutex lock to ensure thread safety
+      itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
+      AppHandleContainerType::iterator it = m_Container.begin();
+      while (it != m_Container.end())
+        {
+        if ((*it).first == app)
+          {
+          (*it).first = NULL;
+          }
+        ++it;
+        }
+      }
+    }
+
+  /** Release the library handles from applications already deleted */
+  void ReleaseUnusedHandle()
+    {
+    itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
+    AppHandleContainerType::iterator it;
+    for (it = m_Container.begin() ; it != m_Container.end() ; ++it)
+      {
+      if ((*it).first == NULL)
+        {
+        itk::DynamicLoader::CloseLibrary( (*it).second);
+        (*it).second = NULL;
+        }
+      }
+    m_Container.remove(AppHandlePairType(NULL,NULL));
+    }
+
+  /** close all handles at program exit */
   ~ApplicationPrivateRegistry()
   {
   AppHandleContainerType::iterator it;
@@ -47,11 +99,25 @@ public:
   m_Container.clear();
   }
 
+private:
   AppHandleContainerType m_Container;
+
+  itk::SimpleMutexLock m_Mutex;
 };
 // static finalizer to close opened libraries
 static ApplicationPrivateRegistry m_ApplicationPrivateRegistryGlobal;
 
+// Define callbacks to unregister applications in ApplicationPrivateRegistry
+void DeleteAppCallback(itk::Object *obj,const itk::EventObject &, void *)
+  {
+  Application *appPtr = dynamic_cast<Application*>(obj);
+  m_ApplicationPrivateRegistryGlobal.UnregisterApp(appPtr);
+  }
+void DeleteAppConstCallback(const itk::Object *obj,const itk::EventObject &, void *)
+  {
+  const Application *appPtr = dynamic_cast<const Application*>(obj);
+  m_ApplicationPrivateRegistryGlobal.UnregisterApp(appPtr);
+  }
 
 ApplicationRegistry::ApplicationRegistry()
 {
@@ -69,6 +135,8 @@ ApplicationRegistry::SetApplicationPath(std::string newpath)
 
   // do NOT use putenv() directly, since the string memory must be managed carefully
   itksys::SystemTools::PutEnv(putEnvPath.str().c_str());
+
+  // TODO  : releaseUnusedHandle() ?
 }
 
 void
@@ -186,6 +254,8 @@ ApplicationRegistry::CreateApplicationFaster(const std::string& name)
 std::vector<std::string>
 ApplicationRegistry::GetAvailableApplications(bool useFactory)
 {
+  // TODO  : releaseUnusedHandle() ?
+
   ApplicationPointer appli;
   std::set<std::string> appSet;
 
@@ -279,8 +349,6 @@ ApplicationRegistry::LoadApplicationFromPath(std::string path,std::string name)
 {
   Application::Pointer appli;
 
-  static itk::SimpleMutexLock mutex;
-
   if (itksys::SystemTools::FileExists(path.c_str(),true))
     {
     itk::LibHandle lib = itk::DynamicLoader::OpenLibrary(path.c_str());
@@ -307,13 +375,13 @@ ApplicationRegistry::LoadApplicationFromPath(std::string path,std::string name)
           if (appli.IsNotNull())
             {
             appli->Init();
-            // mutex lock to ensure thread safety
-            itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
-
-            ApplicationPrivateRegistry::AppHandlePairType curPair;
-            curPair.first = appli.GetPointer();
-            curPair.second = (void*) lib;
-            m_ApplicationPrivateRegistryGlobal.m_Container.push_back(curPair);
+            // register library handle
+            m_ApplicationPrivateRegistryGlobal.AddPair(appli.GetPointer(), (void*) lib);
+            // set a callback on DeleteEvent
+            itk::CStyleCommand::Pointer command = itk::CStyleCommand::New();
+            command->SetCallback(&DeleteAppCallback);
+            command->SetConstCallback(&DeleteAppConstCallback);
+            appli->AddObserver(itk::DeleteEvent(),command);
             return appli;
             }
           }
