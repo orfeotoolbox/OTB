@@ -1,7 +1,7 @@
 set(TEST_DRIVER otbTestDriver
     --add-before-env PYTHONPATH        "${OTBSWIGWrapper_BINARY_DIR}/src"
     --add-before-env PYTHONPATH        $<TARGET_FILE_DIR:_otbApplication>
-    --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )
+    --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )
 
 add_test( NAME pyTvSmoothing
           COMMAND ${TEST_DRIVER} Execute

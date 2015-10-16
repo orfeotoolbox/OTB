@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
     std::copy(argv + 2, argv + argc, std::back_inserter(modulePathList));
 
     // Load the path in the environment
-    std::string specificEnv("ITK_AUTOLOAD_PATH=");
+    std::string specificEnv("OTB_APPLICATION_PATH");
     std::list<std::string>::const_iterator it = modulePathList.begin();
     while( it != modulePathList.end() )
       {
@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
     {
     std::cerr << "Could not find application " << moduleName << std::endl;
 
-    const char* modulePath = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
+    const char* modulePath = itksys::SystemTools::GetEnv(specificEnv.c_str());
     std::cout << "Module search path : " << (modulePath ? modulePath : "") << std::endl;
     std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
 
