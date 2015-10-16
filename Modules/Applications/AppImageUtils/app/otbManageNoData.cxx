@@ -23,6 +23,7 @@
 #include "itkMaskImageFilter.h"
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImageListToVectorImageFilter.h"
+#include "otbChangeInformationImageFilter.h"
 
 namespace otb
 {
@@ -51,6 +52,7 @@ public:
   typedef otb::VectorImageToImageListFilter<FloatVectorImageType,ImageListType> VectorToListFilterType;
   typedef otb::ImageListToVectorImageFilter<ImageListType,FloatVectorImageType> ListToVectorFilterType;
   typedef itk::MaskImageFilter<FloatImageType,UInt8ImageType,FloatImageType> MaskFilterType;
+  typedef otb::ChangeInformationImageFilter<FloatVectorImageType> ChangeInfoFilterType;
 
 private:
   void DoInit()
@@ -185,13 +187,18 @@ private:
         }
       m_L2V = ListToVectorFilterType::New();
       m_L2V->SetInput(outputList);
-
-      itk::MetaDataDictionary &outDict = m_L2V->GetOutput()->GetMetaDataDictionary();
       if (!ret)
         {
-        otb::WriteNoDataFlags(flags,values,outDict);
+        m_MetaDataChanger = ChangeInfoFilterType::New();
+        m_MetaDataChanger->SetInput(m_L2V->GetOutput());
+        m_MetaDataChanger->SetOutputMetaData<std::vector<bool> >(otb::MetaDataKey::NoDataValueAvailable,&flags);
+        m_MetaDataChanger->SetOutputMetaData<std::vector<double> >(otb::MetaDataKey::NoDataValue,&values);
+        SetParameterOutputImage("out",m_MetaDataChanger->GetOutput());
         }
-      SetParameterOutputImage("out",m_L2V->GetOutput());
+      else
+        {
+        SetParameterOutputImage("out",m_L2V->GetOutput());
+        }
       }
   }
 
@@ -200,6 +207,7 @@ private:
   std::vector<MaskFilterType::Pointer> m_MaskFilters;
   VectorToListFilterType::Pointer m_V2L;
   ListToVectorFilterType::Pointer m_L2V;
+  ChangeInfoFilterType::Pointer m_MetaDataChanger;
 };
 
 }
