@@ -59,10 +59,10 @@ public:
   static void AddApplicationPath(std::string path);
 
   /** Return the list of available applications */
-  static std::vector<std::string> GetAvailableApplications(bool useFactory=false);
+  static std::vector<std::string> GetAvailableApplications(bool useFactory=true);
 
   /** Create the specified Application */
-  static Application::Pointer CreateApplication(const std::string& applicationName, bool useFactory=false);
+  static Application::Pointer CreateApplication(const std::string& applicationName, bool useFactory=true);
 
   /** Create the specified Application (faster)
    *  method using dynamic library name to load the right module */
