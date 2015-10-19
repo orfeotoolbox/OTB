@@ -137,6 +137,7 @@ public:
 			plog[k]=0.0;
 		else
 			plog[k]=-p[k]*log(p[k])/log(3.0);
+
       }
 
 	entropy = 0.0;
