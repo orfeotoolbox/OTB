@@ -241,7 +241,7 @@ class OutputImageInitializer : public std::unary_function<
   >
 {
 public:
-  inline OutputImageInitializer( const QString& prefix );
+  inline OutputImageInitializer( const QString & prefix );
 
   inline result_type operator () ( argument_type widget ) const;
 
@@ -624,7 +624,7 @@ SetupOutputFilename( W* widget,
 template< typename F >
 inline
 void
-SetupWidget( QWidget* widget, const F& functor )
+SetupWidget( QWidget * widget, const F & functor )
 {
   typedef typename F::argument_type Widget;
   typedef QList< Widget > WidgetList;

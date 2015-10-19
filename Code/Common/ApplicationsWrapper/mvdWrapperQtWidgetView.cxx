@@ -281,7 +281,7 @@ QtWidgetView
 /*******************************************************************************/
 void
 QtWidgetView
-::SetupParameterWidgets( QWidget* widget )
+::SetupParameterWidgets( QWidget * widget )
 {
   assert( widget!=NULL );
 
@@ -357,17 +357,10 @@ QtWidgetView
   otb::Wrapper::Application::Pointer otbApp( m_Model->GetApplication() );
 
   StringVector paramKeys( otbApp->GetParametersKeys() );
-
-  bool isSure = true;
-
-  /*
-  typedef QVector< QFileInfo > FileInfoVector;
-
-  FileInfoVector fileInfos;
-  */
+  QStringList filenames;
 
   for( StringVector::const_iterator it( paramKeys.begin() );
-       it!=paramKeys.end() && isSure;
+       it!=paramKeys.end();
        ++it )
     {
     if( otbApp->IsParameterEnabled( *it, true ) &&
@@ -385,12 +378,6 @@ QtWidgetView
       switch( otbApp->GetParameterType( *it ) )
 	{
 	case otb::Wrapper::ParameterType_OutputFilename:
-	  /*
-	  assert(
-	    otb::DynamicCast< otb::Wrapper::OutputImageParameter >( param )
-	    == param
-	  );
-	  */
 	  filename =
 	    otb::DynamicCast< otb::Wrapper::OutputFilenameParameter >( param )
 	    ->GetValue();
@@ -424,40 +411,43 @@ QtWidgetView
 	  break;
 	}
 
-      if( !filename.empty() )
-	{
-	// qDebug()
-	//   << it->c_str() << ":" << QString( filename.c_str() );
-
-	QFileInfo fileInfo( filename.c_str() );
-
-	if( fileInfo.exists() )
-	  {
-	  QMessageBox::StandardButton questionButton =
-	    QMessageBox::question(
-	      this,
-	      tr( PROJECT_NAME ),
-	      tr( "Are you sure you want to overwrite file '%1'?" )
-	      .arg( filename.c_str() ),
-	      QMessageBox::Yes | QMessageBox::No,
-	      QMessageBox::No
-	    );
-
-	  if( questionButton==QMessageBox::Yes )
-	    {
-	    /*
-	      fileInfos.push_back( fileInfo );
-	    */
-	    }
-	  else
-	    isSure = false;
-	  }
-	}
+      if( QFileInfo( filename.c_str() ).exists() )
+	filenames.push_back( filename.c_str() );
       }
     }
 
-  if( !isSure )
+  {
+  QString message;
+
+  if( filenames.size()==1 )
+    {
+    // qDebug()
+    //   << it->c_str() << ":" << QString( filename.c_str() );
+
+    message =
+      tr( "Are you sure you want to overwrite file '%1'?" )
+      .arg( filenames.front() );
+    }
+  else if( filenames.size()>1 )
+    {
+    message =
+      tr( "Following files will be overwritten. Are you sure you want to continue?\n- %1" )
+      .arg( filenames.join( "\n- " ) );
+    }
+
+  QMessageBox::StandardButton button =
+    QMessageBox::question(
+      this,
+      PROJECT_NAME,
+      message,
+      QMessageBox::Yes | QMessageBox::No,
+      QMessageBox::No
+    );
+
+  if( button==QMessageBox::No )
     return;
+  }
+
 
   /* U N S A F E
   // BUGFIX: Mantis-750
