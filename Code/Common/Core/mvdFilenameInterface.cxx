@@ -83,6 +83,8 @@ FilenameInterface
 ::SetFilename( const QString & filename )
 {
   m_Filename = filename;
+
+  virtual_SetFilename( filename );
 }
 
 /*****************************************************************************/

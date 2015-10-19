@@ -71,10 +71,10 @@ const unsigned int VectorImageModel::DEFAULT_LOD_SIZE = 512;
 VectorImageModel
 ::VectorImageModel( QObject* parent ) :
   AbstractImageModel( parent ),
+  FilenameInterface(),
   m_Image(),
   m_ImageFileReader(),
   m_Settings(),
-  m_Filename(),
   m_LodCount( -1 ),
   m_ToWgs84()
 {
@@ -112,12 +112,12 @@ VectorImageModel
   setObjectName( filename );
 
   // 1. store the input filename
-  m_Filename = filename;
+  FilenameInterface::SetFilename( filename );
 
   // Get the largest possible region of the image
   m_ImageFileReader = DefaultImageFileReaderType::New();
 
-  m_ImageFileReader->SetFileName( ToStdString( m_Filename ) );
+  m_ImageFileReader->SetFileName( ToStdString( GetFilename() ) );
   m_ImageFileReader->UpdateOutputInformation();
 
   // Retrieve the list of Lod from file
@@ -246,7 +246,7 @@ VectorImageModel
   assert( m_LodCount!=static_cast< unsigned int >( -1 ) );
   // m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
 
-  std::string tempfilename( ToStdString( m_Filename ) );
+  std::string tempfilename( ToStdString( GetFilename() ) );
 
   filter->SetInputFileName(tempfilename);
   filter->SetResamplingMethod(otb::AVERAGE);
@@ -537,7 +537,7 @@ VectorImageModel
 ::virtual_SetCurrentLod( CountType lod )
 {
   // new filename if lod is not 0
-  QString lodFilename( m_Filename );
+  QString lodFilename( GetFilename() );
 
   // If model is a multi-resolution image.
   lodFilename.append( QString( "?&resol=%1" ).arg( lod ) );
