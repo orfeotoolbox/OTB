@@ -17,14 +17,14 @@ if(USE_SYSTEM_OSSIM)
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using OSSIM SuperBuild version")
-  
+
   # declare dependencies
   ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF GEOTIFF GEOS JPEG OPENTHREADS FREETYPE)
 
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj OSSIM)
-  
+
   ADD_SUPERBUILD_CMAKE_VAR(TIFF_INCLUDE_DIR)
   ADD_SUPERBUILD_CMAKE_VAR(TIFF_LIBRARY)
   ADD_SUPERBUILD_CMAKE_VAR(GEOTIFF_INCLUDE_DIR)
@@ -39,16 +39,16 @@ else()
   ADD_SUPERBUILD_CMAKE_VAR(FREETYPE_LIBRARY)
 
   set(OSSIM_CXX_FLAGS  -D__STDC_CONSTANT_MACROS)
-  
+
   if(MSVC)
     set(OSSIM_CXX_FLAGS /EHsc)
   endif()
-  
+
   # archive version
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "https://www.orfeo-toolbox.org/packages/ossim-minimal-r23537.tar.gz"
-    URL_MD5 1a37403053711447a8f174bb875cca6b
+    URL_MD5 f77d574ab2817bcc36633f77824facb5
     BINARY_DIR ${OSSIM_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -70,14 +70,14 @@ else()
     DEPENDS ${${proj}_DEPENDENCIES}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
-  
+
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
     set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/ossim.lib)
   elseif(UNIX)
     set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libossim${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-  
+
 endif()
 
 endif()

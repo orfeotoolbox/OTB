@@ -30,6 +30,7 @@ ExtendedFilenameHelper
     itkGenericExceptionMacro( << "Filename is NULL" );
   }
   this->m_ExtendedFileName = extFname;
+  this->m_OptionMap.clear();
   std::vector<std::string> tmp1;
   std::vector<std::string> tmp2;
   if (!m_ExtendedFileName.empty())
