@@ -67,9 +67,8 @@ int main(int argc, char* argv[])
 
     {
     std::cerr << "Could not find application " << moduleName << std::endl;
-    std::string specificEnv("OTB_APPLICATION_PATH");
-    const char* modulePath = itksys::SystemTools::GetEnv(specificEnv.c_str());
-    std::cout << "Module search path : " << (modulePath ? modulePath : "") << std::endl;
+    std::string modulePath = ApplicationRegistry::GetApplicationPath();
+    std::cout << "Module search path : " << modulePath << std::endl;
     std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
 
     std::cout << "Available applications : " << (list.empty() ? "None" : "") << std::endl;
