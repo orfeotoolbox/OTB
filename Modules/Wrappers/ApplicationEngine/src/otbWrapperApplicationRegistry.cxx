@@ -31,6 +31,9 @@ namespace otb
 namespace Wrapper
 {
 
+// Constant : environment variable for application path
+static const char OTB_APPLICATION_VAR[] = "OTB_APPLICATION_PATH";
+
 class ApplicationPrivateRegistry
 {
 public:
@@ -131,7 +134,7 @@ void
 ApplicationRegistry::SetApplicationPath(std::string newpath)
 {
   std::ostringstream putEnvPath;
-  putEnvPath << "OTB_APPLICATION_PATH=" << newpath;
+  putEnvPath << OTB_APPLICATION_VAR << "=" << newpath;
 
   // do NOT use putenv() directly, since the string memory must be managed carefully
   itksys::SystemTools::PutEnv(putEnvPath.str().c_str());
@@ -141,10 +144,10 @@ void
 ApplicationRegistry::AddApplicationPath(std::string newpath)
 {
   std::ostringstream putEnvPath;
-  putEnvPath << "OTB_APPLICATION_PATH=";
+  putEnvPath << OTB_APPLICATION_VAR <<"=";
 
   // Can be NULL if the env var is not set
-  const char* currentEnv = itksys::SystemTools::GetEnv("OTB_APPLICATION_PATH");
+  const char* currentEnv = itksys::SystemTools::GetEnv(OTB_APPLICATION_VAR);
 
 #if defined(WIN32)
   const char pathSeparator = ';';
@@ -161,6 +164,19 @@ ApplicationRegistry::AddApplicationPath(std::string newpath)
 
   // do NOT use putenv() directly, since the string memory must be managed carefully
   itksys::SystemTools::PutEnv(putEnvPath.str().c_str());
+}
+
+std::string
+ApplicationRegistry::GetApplicationPath()
+{
+  std::string ret;
+  // Can be NULL if the env var is not set
+  const char* currentEnv = itksys::SystemTools::GetEnv(OTB_APPLICATION_VAR);
+  if (currentEnv)
+    {
+    ret = std::string(currentEnv);
+    }
+  return ret;
 }
 
 Application::Pointer
@@ -224,11 +240,11 @@ ApplicationRegistry::CreateApplicationFaster(const std::string& name)
   const char sep = '/';
 #endif
 
-  const char* otbAppPath = itksys::SystemTools::GetEnv("OTB_APPLICATION_PATH");
+  std::string otbAppPath = GetApplicationPath();
   std::vector<itksys::String> pathList;
-  if (otbAppPath)
+  if (!otbAppPath.empty())
     {
-    pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
+    pathList = itksys::SystemTools::SplitString(otbAppPath.c_str(),pathSeparator,false);
     }
   for (unsigned int i=0 ; i<pathList.size() ; ++i)
     {
@@ -273,11 +289,11 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
   const char sep = '/';
 #endif
 
-  const char* otbAppPath = itksys::SystemTools::GetEnv("OTB_APPLICATION_PATH");
+  std::string otbAppPath = GetApplicationPath();
   std::vector<itksys::String> pathList;
-  if (otbAppPath)
+  if (!otbAppPath.empty())
     {
-    pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
+    pathList = itksys::SystemTools::SplitString(otbAppPath.c_str(),pathSeparator,false);
     }
   for (unsigned int k=0 ; k<pathList.size() ; ++k)
     {

@@ -58,6 +58,9 @@ public:
   /** Add the specified path to the list of application search path */
   static void AddApplicationPath(std::string path);
 
+  /** Return the application search path */
+  static std::string GetApplicationPath();
+
   /** Return the list of available applications */
   static std::vector<std::string> GetAvailableApplications(bool useFactory=true);
 
