@@ -92,7 +92,7 @@ private:
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out", "Output image containing class labels");
-    SetParameterOutputImagePixelType( "out", ImagePixelType_uint8);
+    SetParameterOutputImagePixelType( "out", ImagePixelType_uint16);
 
     AddRAMParameter();
 
