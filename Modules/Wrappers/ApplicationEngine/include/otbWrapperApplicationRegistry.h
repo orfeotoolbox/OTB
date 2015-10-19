@@ -68,6 +68,9 @@ public:
    *  method using dynamic library name to load the right module */
   static Application::Pointer CreateApplicationFaster(const std::string& applicationName);
 
+  /** Clean registry by releasing unused modules */
+  static void CleanRegistry();
+
 protected:
   ApplicationRegistry();
   virtual ~ApplicationRegistry();

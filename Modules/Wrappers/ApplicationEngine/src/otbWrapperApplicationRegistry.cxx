@@ -135,8 +135,6 @@ ApplicationRegistry::SetApplicationPath(std::string newpath)
 
   // do NOT use putenv() directly, since the string memory must be managed carefully
   itksys::SystemTools::PutEnv(putEnvPath.str().c_str());
-
-  // TODO  : releaseUnusedHandle() ?
 }
 
 void
@@ -254,8 +252,6 @@ ApplicationRegistry::CreateApplicationFaster(const std::string& name)
 std::vector<std::string>
 ApplicationRegistry::GetAvailableApplications(bool useFactory)
 {
-  // TODO  : releaseUnusedHandle() ?
-
   ApplicationPointer appli;
   std::set<std::string> appSet;
 
@@ -343,6 +339,11 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
   return appVec;
 }
 
+void
+ApplicationRegistry::CleanRegistry()
+{
+  m_ApplicationPrivateRegistryGlobal.ReleaseUnusedHandle();
+}
 
 Application::Pointer
 ApplicationRegistry::LoadApplicationFromPath(std::string path,std::string name)
