@@ -16,6 +16,7 @@ set( Common_Core_SOURCES
   mvdDatabaseModel.cxx
   mvdDatabaseQueries.cxx
   mvdDatasetModel.cxx
+  mvdFilenameInterface.cxx
   mvdHistogramModel.cxx
   mvdI18nCoreApplication.cxx
   mvdImageImporter.cxx
