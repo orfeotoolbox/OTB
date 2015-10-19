@@ -109,12 +109,12 @@ otb_add_test(NAME saTvMultiChannelsPolarimetricSynthesisFilter COMMAND otbPolari
 
 otb_add_test(NAME saTvMultiChannelsPolarimetricSynthesisFilter_C COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvMultiPolarimetricSynthesis2.tif
-  ${TEMP}/resMultiPolarimetricSynthesis2.tif
+  ${TEMP}/resMultiPolarimetricSynthesis2_C.tif
   otbMultiChannelsPolarimetricSynthesisFilter
   ${INPUTDATA}/RSAT_imageryC_HH.tif
   ${INPUTDATA}/RSAT_imageryC_HV.tif
   ${INPUTDATA}/RSAT_imageryC_VV.tif
-  ${TEMP}/resMultiPolarimetricSynthesis2.tif
+  ${TEMP}/resMultiPolarimetricSynthesis2_C.tif
   32.0     # PsiI
   22.0     # KhiI
   58.0     # PsiR
@@ -134,13 +134,13 @@ otb_add_test(NAME saTvSinclairImageFilter_SinclairToMueller COMMAND otbPolarimet
   
 otb_add_test(NAME saTvSinclairImageFilter_SinclairToMueller_C COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToMueller.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToMueller_C.tif
   otbSinclairImageFilter
   SinclairToMuellerMatrix
   ${INPUTDATA}/RSAT_imageryC_HH.tif
   ${INPUTDATA}/RSAT_imageryC_HV.tif
   ${INPUTDATA}/RSAT_imageryC_VV.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToMueller.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToMueller_C.tif
   )
 
 otb_add_test(NAME saTvSinclairImageFilter_SinclairToCovariance COMMAND otbPolarimetryTestDriver
@@ -156,13 +156,13 @@ otb_add_test(NAME saTvSinclairImageFilter_SinclairToCovariance COMMAND otbPolari
   
 otb_add_test(NAME saTvSinclairImageFilter_SinclairToCovariance_C COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvSinclairImageFilter_SinclairToCovariance.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToCovariance.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToCovariance_C.tif
   otbSinclairImageFilter
   SinclairToCovarianceMatrix
   ${INPUTDATA}/RSAT_imageryC_HH.tif
   ${INPUTDATA}/RSAT_imageryC_HV.tif
   ${INPUTDATA}/RSAT_imageryC_VV.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToCovariance.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToCovariance_C.tif
   )
 
 otb_add_test(NAME saTuSinclairImageFilterNew COMMAND otbPolarimetryTestDriver
@@ -182,13 +182,13 @@ otb_add_test(NAME saTvSinclairImageFilter_SinclairToCircularCovarianceMatrix COM
   
 otb_add_test(NAME saTvSinclairImageFilter_SinclairToCircularCovarianceMatrix_C COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvSinclairImageFilter_SinclairToCircularCovarianceMatrix.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToCircularCovarianceMatrix.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToCircularCovarianceMatrix_C.tif
   otbSinclairImageFilter
   SinclairToCircularCovarianceMatrix
   ${INPUTDATA}/RSAT_imageryC_HH.tif
   ${INPUTDATA}/RSAT_imageryC_HV.tif
   ${INPUTDATA}/RSAT_imageryC_VV.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToCircularCovarianceMatrix.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToCircularCovarianceMatrix_C.tif
   )
 
 otb_add_test(NAME saTvSinclairImageFilter_SinclairToCoherency COMMAND otbPolarimetryTestDriver
@@ -204,13 +204,13 @@ otb_add_test(NAME saTvSinclairImageFilter_SinclairToCoherency COMMAND otbPolarim
   
 otb_add_test(NAME saTvSinclairImageFilter_SinclairToCoherency_C COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvSinclairImageFilter_SinclairToCoherency.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency_C.tif
   otbSinclairImageFilter
   SinclairToCoherencyMatrix
   ${INPUTDATA}/RSAT_imageryC_HH.tif
   ${INPUTDATA}/RSAT_imageryC_HV.tif
   ${INPUTDATA}/RSAT_imageryC_VV.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency_C.tif
   )
 
 otb_add_test(NAME saTuReciprocalCovarianceToReciprocalCoherencyImageFilterNew COMMAND otbPolarimetryTestDriver
@@ -238,13 +238,13 @@ otb_add_test(NAME saTvSinclairReciprocalImageFilter_SinclairToReciprocalCovarian
   
 otb_add_test(NAME saTvSinclairReciprocalImageFilter_SinclairToReciprocalCovariance_C COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCovariance_C.tif
   otbSinclairReciprocalImageFilter
   SinclairToReciprocalCovarianceMatrix
   ${INPUTDATA}/RSAT_imageryC_HH.tif
   ${INPUTDATA}/RSAT_imageryC_HV.tif
   ${INPUTDATA}/RSAT_imageryC_VV.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCovariance_C.tif
   )
 
 otb_add_test(NAME saTvSinclairReciprocalImageFilter_SinclairToReciprocalCircularCovarianceMatrix COMMAND otbPolarimetryTestDriver
@@ -261,13 +261,13 @@ otb_add_test(NAME saTvSinclairReciprocalImageFilter_SinclairToReciprocalCircular
   
 otb_add_test(NAME saTvSinclairReciprocalImageFilter_SinclairToReciprocalCircularCovarianceMatrix_C COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix_C.tif
   otbSinclairReciprocalImageFilter
   SinclairToReciprocalCircularCovarianceMatrix
   ${INPUTDATA}/RSAT_imageryC_HH.tif
   ${INPUTDATA}/RSAT_imageryC_HV.tif
   ${INPUTDATA}/RSAT_imageryC_VV.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix_C.tif
   )
 
 otb_add_test(NAME saTvSinclairReciprocalImageFilter_SinclairToReciprocalCoherency COMMAND otbPolarimetryTestDriver
@@ -283,13 +283,13 @@ otb_add_test(NAME saTvSinclairReciprocalImageFilter_SinclairToReciprocalCoherenc
   
 otb_add_test(NAME saTvSinclairReciprocalImageFilter_SinclairToReciprocalCoherency_C COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCoherency_C.tif
   otbSinclairReciprocalImageFilter
   SinclairToReciprocalCoherencyMatrix
   ${INPUTDATA}/RSAT_imageryC_HH.tif
   ${INPUTDATA}/RSAT_imageryC_HV.tif
   ${INPUTDATA}/RSAT_imageryC_VV.tif
-  ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
+  ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCoherency_C.tif
   )
  
 
