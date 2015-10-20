@@ -118,9 +118,9 @@ Radarsat2ImageMetadataInterface
       itkExceptionMacro( << "no key named '" << key << "'");
       }
 
-    const std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
-
-    Utils::ConvertStringToVector(date_time_str.substr(0, date_time_str.size()-1), dateFields, key, "-T:.");
+    std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
+    date_time_str.resize(date_time_str.size() - 1);
+    Utils::ConvertStringToVector(date_time_str, dateFields, key, "-T:.");
     }
 }
 
