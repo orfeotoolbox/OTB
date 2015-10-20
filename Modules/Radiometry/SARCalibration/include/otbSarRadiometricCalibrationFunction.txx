@@ -150,7 +150,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   if (m_ApplyLookupDataCorrection)
     {
     RealType lutVal = static_cast<RealType>(m_Lut->GetValue(index[0], index[1]));
-    sigma /= vcl_pow(lutVal, 2);
+    sigma /= lutVal * lutVal;
     }
 
   /** rescaling factor has effect only with CosmoSkymed Products */
