@@ -135,7 +135,8 @@ namespace ossimplugins
       annotationDir.findAllFilesThatMatch(files, ".xml");
       std::vector<ossimFilename>::const_iterator it = files.begin();
 
-
+      /* avoid zero value for numBands. This will result in division by zero below */
+      if( files.size() < 1 ) numBands = 1;
 
       for (int count=0; it != files.end(); ++it,  ++count)
       {

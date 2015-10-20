@@ -107,15 +107,15 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       }
    }
 
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-             << MODULE << " DEBUG: testing ossimPleiadesModel" << std::endl;
-   }
-
    // Pleiades
    if ( !projection )
    {
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG: testing ossimPleiadesModel" << std::endl;
+      }
+
       ossimRefPtr<ossimPleiadesModel> model = new ossimPleiadesModel();
       if ( model->open(filename) )
       {
@@ -127,14 +127,14 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       }
    }
 
-   if(traceDebug())
-   	{
-    	ossimNotify(ossimNotifyLevel_DEBUG)
-        	   << MODULE << " DEBUG: testing ossimTerraSarModel" << std::endl;
-    }
-
    if ( !projection )
    {
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG: testing ossimTerraSarModel" << std::endl;
+      }
+
       ossimRefPtr<ossimTerraSarModel> model = new ossimTerraSarModel();
 
      if ( model->open(filename) )
@@ -152,8 +152,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       }
    }
 
-
-   // TerrSar
+   // ErsSar
    if ( !projection )
    {
       if(traceDebug())
@@ -161,7 +160,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          ossimNotify(ossimNotifyLevel_DEBUG)
             << MODULE << " DEBUG: testing ossimErsSarModel" << std::endl;
       }
-
       ossimRefPtr<ossimErsSarModel> model = new ossimErsSarModel();
       if ( model->open(filename) )
       {
@@ -218,7 +216,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          ossimNotify(ossimNotifyLevel_DEBUG)
             << MODULE << " DEBUG: testing ossimAlosPalsarModel" << std::endl;
       }
-     ossimRefPtr<ossimAlosPalsarModel> model = new ossimAlosPalsarModel();
+      ossimRefPtr<ossimAlosPalsarModel> model = new ossimAlosPalsarModel();
      if (model->open(filename))
      {
        projection = model.get();
@@ -264,6 +262,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          }
       }
    }
+
    if (!projection)
    {
       if(traceDebug())
@@ -271,7 +270,8 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          ossimNotify(ossimNotifyLevel_DEBUG)
             << MODULE << " DEBUG: testing ossimTileMapModel" << std::endl;
       }
-     ossimRefPtr<ossimTileMapModel> model = new ossimTileMapModel();
+
+      ossimRefPtr<ossimTileMapModel> model = new ossimTileMapModel();
      if (model->open(filename))
      {
        projection = model.get();

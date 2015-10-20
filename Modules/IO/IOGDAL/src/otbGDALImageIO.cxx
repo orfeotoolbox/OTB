@@ -1684,6 +1684,28 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     {
     dataset->SetProjection(projectionRef.c_str());
     }
+  else
+    {
+    /* -------------------------------------------------------------------- */
+    /* Set the RPC coeffs if no projection available (since GDAL 1.10.0)    */
+    /* -------------------------------------------------------------------- */
+#if GDAL_VERSION_NUM >= 1100000
+    ImageKeywordlist otb_kwl;
+    itk::ExposeMetaData<ImageKeywordlist>(dict,
+                                          MetaDataKey::OSSIMKeywordlistKey,
+                                          otb_kwl);
+    if( otb_kwl.GetSize() != 0 )
+      {
+      GDALRPCInfo gdalRpcStruct;
+      if ( otb_kwl.convertToGDALRPC(gdalRpcStruct) )
+        {
+        char **rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
+        dataset->SetMetadata(rpcMetadata, "RPC");
+        CSLDestroy( rpcMetadata );
+        }
+      }
+#endif
+    }
 
   /* -------------------------------------------------------------------- */
   /*  Set the six coefficients of affine geoTransform                     */
@@ -1721,26 +1743,6 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       }
     }
 
-#if GDAL_VERSION_NUM >= 1100000
-  // Report any RPC coefficients (feature available since GDAL 1.10.0)
-  ImageKeywordlist otb_kwl;
-  itk::ExposeMetaData<ImageKeywordlist>(dict,
-                                        MetaDataKey::OSSIMKeywordlistKey,
-                                        otb_kwl);
-
-  if( otb_kwl.GetSize() != 0 )
-    {
-    GDALRPCInfo gdalRpcStruct;
-    if ( otb_kwl.convertToGDALRPC(gdalRpcStruct) )
-      {
-      char **rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
-      dataset->SetMetadata(rpcMetadata, "RPC");
-      CSLDestroy( rpcMetadata );
-      }
-    }
-#endif
-
-  // END
 
   // Dataset info
   otbMsgDevMacro( << "**** WriteImageInformation() DATASET INFO: ****" );
