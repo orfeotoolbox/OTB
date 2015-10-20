@@ -24,6 +24,10 @@ if ( OTB_WRAP_PYTHON )
 
   # Run swig
   set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_GLOBAL_FLAGS})
+  if(NUMPY_FOUND)
+    include_directories(${NUMPY_INCLUDE_DIRS})
+    list(APPEND CMAKE_SWIG_FLAGS  "-DOTB_SWIGNUMPY=1")
+  endif()
   set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
   set(SWIG_MODULE_otbApplication_EXTRA_DEPS
        ${CMAKE_CURRENT_SOURCE_DIR}/Python.i
@@ -42,7 +46,7 @@ if ( OTB_WRAP_PYTHON )
       COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/CMake/PythonCompile.py otbApplication.py
       DEPENDS _otbApplication
     )
-    
+
   otb_module_target_label( _otbApplication )
 
   install( TARGETS _otbApplication
@@ -80,7 +84,7 @@ if ( OTB_WRAP_JAVA )
 
   # Add target for org.otb.Application.jar
   add_custom_target(org_otb_Application_jar ALL DEPENDS org.otb.application.jar)
-  
+
   otb_module_target_label( org_otb_Application_jar )
 
   # Add custom command and target to compile the generated files and put them in a jar file
@@ -106,4 +110,3 @@ if ( OTB_WRAP_JAVA )
           COMPONENT RuntimeLibraries )
 
 endif()
-
