@@ -46,7 +46,10 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAbstractLayerModel.h"
+#include "Core/mvdFilenameInterface.h"
 #include "Core/mvdI18nCoreApplication.h"
+#include "Core/mvdStackedLayerModel.h"
 #include "ApplicationsWrapper/mvdWrapperQtWidgetParameterInitializers.h"
 
 namespace mvd
@@ -65,6 +68,57 @@ namespace Wrapper
 /*****************************************************************************/
 /* INTERNAL TYPES                                                            */
 
+class KeyLayerAccumulator :
+    public std::unary_function< StackedLayerModel::ConstIterator::value_type,
+				void >
+{
+public:
+  typedef
+  std::unary_function< StackedLayerModel::ConstIterator::value_type, void >
+    SuperType;
+
+  typedef std::list< SuperType::argument_type > KeyLayerPairList;
+
+  KeyLayerAccumulator( const std::string & filename,
+		       KeyLayerPairList & klp ) :
+    m_KeyLayerPairs( klp ),
+    m_Filename( FromStdString( filename ) ),
+    m_Count( 0 )
+  {
+  }
+
+  void
+  operator () ( const SuperType::argument_type & pair )
+  {
+    const FilenameInterface * interface =
+      dynamic_cast< const FilenameInterface * >( pair.second );
+
+    if( interface!=NULL &&
+	m_Filename.compare( interface->GetFilename() )==0 )
+      {
+      qDebug() << m_Filename << "==" << interface->GetFilename();
+
+      m_KeyLayerPairs.push_back( pair );
+
+      ++ m_Count;
+      }
+  }
+
+  std::size_t
+  GetCount() const
+  {
+    return m_Count;
+  }
+
+
+public:
+  KeyLayerPairList & m_KeyLayerPairs;
+
+
+private:
+  QString m_Filename;
+  std::size_t m_Count;
+};
 
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
@@ -354,10 +408,23 @@ QtWidgetView
   assert( m_Model!=NULL );
   assert( m_Model->GetApplication()!=NULL );
 
+
+  assert( I18nCoreApplication::Instance()!=NULL );
+
+  //
+  // Get layer-stack, if any.
+  StackedLayerModel * layerStack =
+    I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
+
   otb::Wrapper::Application::Pointer otbApp( m_Model->GetApplication() );
 
+  //
+  // Check output parameters of OTB-application.
   StringVector paramKeys( otbApp->GetParametersKeys() );
-  QStringList filenames;
+  QStringList filenames1;
+
+  KeyLayerAccumulator::KeyLayerPairList layers;
+  QStringList filenames2;
 
   for( StringVector::const_iterator it( paramKeys.begin() );
        it!=paramKeys.end();
@@ -412,40 +479,100 @@ QtWidgetView
 	}
 
       if( QFileInfo( filename.c_str() ).exists() )
-	filenames.push_back( filename.c_str() );
+	filenames1.push_back( filename.c_str() );
+
+      if( layerStack!=NULL )
+	{
+	KeyLayerAccumulator accumulator(
+	  std::for_each(
+	    layerStack->Begin(),
+	    layerStack->End(), KeyLayerAccumulator( filename, layers )
+	  )
+	);
+
+	if( accumulator.GetCount()>0 )
+	  filenames2.push_back( filename.c_str() );
+	}
       }
     }
 
   {
   QString message;
 
-  if( filenames.size()==1 )
+  if( filenames1.size()==1 )
     {
     // qDebug()
     //   << it->c_str() << ":" << QString( filename.c_str() );
 
     message =
       tr( "Are you sure you want to overwrite file '%1'?" )
-      .arg( filenames.front() );
+      .arg( filenames1.front() );
     }
-  else if( filenames.size()>1 )
+  else if( filenames1.size()>1 )
     {
     message =
       tr( "Following files will be overwritten. Are you sure you want to continue?\n- %1" )
-      .arg( filenames.join( "\n- " ) );
+      .arg( filenames1.join( "\n- " ) );
     }
 
-  QMessageBox::StandardButton button =
-    QMessageBox::question(
-      this,
-      PROJECT_NAME,
-      message,
-      QMessageBox::Yes | QMessageBox::No,
-      QMessageBox::No
-    );
+  if( !message.isEmpty() )
+    {
+    QMessageBox::StandardButton button =
+      QMessageBox::question(
+	this,
+	PROJECT_NAME,
+	message,
+	QMessageBox::Yes | QMessageBox::No,
+	QMessageBox::No
+      );
 
-  if( button==QMessageBox::No )
-    return;
+    if( button==QMessageBox::No )
+      return;
+    }
+  }
+
+  {
+  QString message;
+
+  if( filenames2.size()==1 )
+    {
+    // qDebug()
+    //   << it->c_str() << ":" << QString( filename.c_str() );
+
+    message =
+      tr( "File '%1' is being viewed in " PROJECT_NAME " and will be concurrently overwritten by running this %2. File will be removed from layer-stack before running %2 and reloaded after.\n\nDo you want to continue?" )
+      .arg( filenames2.front() )
+      .arg( otbApp->GetDocName() );
+    }
+  else if( filenames2.size()>1 )
+    {
+    message =
+      tr( "Following files are being viewed in " PROJECT_NAME " and will be concurrently overwritter by running %2. Files will be removed from layer-stack before running %2. Do you want to continue?\n- %1" )
+      .arg( filenames2.join( "\n- " ) )
+      .arg( otbApp->GetDocName() );
+    }
+
+  if( !message.isEmpty() )
+    {
+    QMessageBox::StandardButton button =
+      QMessageBox::question(
+	this,
+	PROJECT_NAME,
+	message,
+	QMessageBox::Yes | QMessageBox::No,
+	QMessageBox::No
+      );
+
+    if( button==QMessageBox::No )
+      return;
+
+    while( !layers.empty() )
+      {
+      layerStack->Delete( layers.front().first );
+
+      layers.pop_front();
+      }
+    }
   }
 
 
