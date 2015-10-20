@@ -6,13 +6,16 @@
   Version:   $Revision$
 
 
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
+  Copyright:
+    Centre National d'Etudes Spatiales,
+    CS Systemes d'information.
 
+ See OTBCopyright.txt, CSCopyright.txt for details.
+ All rights reserved.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbWrapperSWIGIncludes_h
@@ -27,5 +30,7 @@ typedef otb::Wrapper::Application::Pointer               Application_Pointer;
 typedef otb::Wrapper::ApplicationRegistry                Registry;
 typedef otb::Wrapper::AddProcessToWatchEvent             AddProcessToWatchEvent;
 typedef otb::Wrapper::DocExampleStructure                DocExampleStructure;
-
+typedef otb::Wrapper::Parameter                          Parameter;
+typedef otb::Wrapper::OutputImageParameter               OutputImageParameter;
+typedef otb::Wrapper::InputImageParameter                InputImageParameter;
 #endif
