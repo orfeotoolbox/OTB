@@ -208,6 +208,7 @@ public:
 // Public SLOTS.
 public slots:
   void Clear();
+  inline void Delete( const KeyType & );
   inline void DeleteCurrent();
   inline void LowerCurrent();
   inline void MoveCurrentToBottom();
@@ -414,6 +415,17 @@ StackedLayerModel
 ::Contains( const KeyType & key ) const
 {
   return m_LayerModels.find( key )!=m_LayerModels.end();
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::Delete( const KeyType & key )
+{
+  // qDebug() << this << "::Delete(" << key << ")";
+
+  Delete( FindKey( key ) );
 }
 
 /*****************************************************************************/
