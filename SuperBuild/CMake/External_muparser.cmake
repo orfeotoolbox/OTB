@@ -15,8 +15,8 @@ else()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://downloads.sourceforge.net/project/muparser/muparser/Version%202.2.3/muparser_v2_2_3.zip"
-    URL_MD5 9de40ec1dab5bd2787ee344fce5846ad
+    URL "https://github.com/beltoforion/muparser/archive/v2.2.5.zip"
+    URL_MD5 63eb1e609008cd5a5dc42cd414828edb
     BINARY_DIR ${MUPARSER_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
