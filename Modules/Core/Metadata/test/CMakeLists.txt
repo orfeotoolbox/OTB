@@ -25,6 +25,7 @@ otbDefaultImageMetadataInterface.cxx
 otbImageMetadataInterfaceTest2.cxx
 otbNoDataHelperTest.cxx
 otbSarCalibrationLookupDataTest.cxx
+otbRadarsat2ImageMetadataInterfaceNew.cxx
 )
 
 add_executable(otbMetadataTestDriver ${OTBMetadataTests})
@@ -76,16 +77,27 @@ otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingHHCosF
   ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
   )
 
-otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_Sentinel1 COMMAND otbMetadataTestDriver
-  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_Sentinel1.txt
-  ${TEMP}/ioTvImageMetadataInterfaceBase_Sentinel1.txt
+otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_SENTINEL1 COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_SENTINEL1.txt
+  ${TEMP}/ioTvImageMetadataInterfaceBase_SENTINEL1.txt
   otbImageMetadataInterfaceBaseTest
   LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
-  ${TEMP}/ioTvImageMetadataInterfaceBase_Sentinel1.txt
+  ${TEMP}/ioTvImageMetadataInterfaceBase_SENTINEL1.txt
+  )
+
+otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_RADARSAT2 COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_RADARSAT2.txt
+  ${TEMP}/ioTvImageMetadataInterfaceBase_RADARSAT2.txt
+  otbImageMetadataInterfaceBaseTest
+  LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HV.tif}
+  ${TEMP}/ioTvImageMetadataInterfaceBase_RADARSAT2.txt
   )
 
 otb_add_test(NAME ioTuSentinel1ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
   otbSentinel1ImageMetadataInterfaceNew )
+
+otb_add_test(NAME ioTuRadarsat2ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
+  otbRadarsat2ImageMetadataInterfaceNew )
 
 otb_add_test(NAME ioTuDefaultImageMetadataInterfaceFactoryNew COMMAND otbMetadataTestDriver
   otbDefaultImageMetadataInterfaceFactoryNew )
@@ -375,4 +387,12 @@ otb_add_test(NAME ioTvSarCalibrationLookupDataTest_SENTINEL1 COMMAND otbMetadata
   otbSarCalibrationLookupDataTest
   ${INPUTDATA}/SENTINEL1_SLC_S6_1S_extract_300_300.tif?&geom=${INPUTDATA}/SENTINEL1_SLC_S6_1S_extract_300_300.geom
   ${TEMP}/ioTvSarCalibrationLookupDataTest_SENTINEL1.txt
+  )
+
+otb_add_test(NAME ioTvSarCalibrationLookupDataTest_RADARSAT2 COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
+  ${TEMP}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
+  otbSarCalibrationLookupDataTest
+  ${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.tif?&geom=${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.geom
+  ${TEMP}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
   )

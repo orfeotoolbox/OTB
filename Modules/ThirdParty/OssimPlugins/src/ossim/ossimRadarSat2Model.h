@@ -169,6 +169,11 @@ private:
     */
    int   _n_srgr;
 
+   //RK remove this part soon and use kwl directly.
+   ossimString theAcquisitionDateUTCString;
+
+   ossimString theProductionDateUTCString;
+
    /**
     * @brief Slant Range FOR EACH Ground Range coefficient sets update times
     */

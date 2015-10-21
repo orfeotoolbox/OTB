@@ -18,8 +18,6 @@ otbSarRadiometricCalibrationToImageFilterCompareTest.cxx
 otbSarBrightnessFunctor.cxx
 otbSarBrightnessFunctionWithoutNoise.cxx
 otbSarRadiometricCalibrationFunction.cxx
-otbSarRadiometricCalibrationFunctor.cxx
-otbSarRadiometricCalibrationFunctorWithoutNoise.cxx
 otbSarRadiometricCalibrationFunctionWithoutNoise.cxx
 otbTerraSarBrightnessImageComplexFilterTest.cxx
 otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest.cxx
@@ -127,6 +125,28 @@ otb_add_test(NAME raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWith
   1000 1000 250 250 # Extract
   )
 
+#Sentinel-1 L1, SLC
+otb_add_test(NAME raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_SENTINEL1 COMMAND  otbSARCalibrationTestDriver
+  --compare-image ${EPSILON_12}
+  ${BASELINE}/raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_SENTINEL1_VV.tif
+  ${TEMP}/raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_SENTINEL1_VV.tif
+  otbSarRadiometricCalibrationToImageFilterWithComplexPixelTestWithoutNoise
+  LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
+  ${TEMP}/raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_SENTINEL1_VV.tif
+  1100 1900 450 450 # Extract
+  )
+
+#Radarsat2
+otb_add_test(NAME raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_RADARSAT2 COMMAND  otbSARCalibrationTestDriver
+  --compare-image ${EPSILON_12}
+  ${BASELINE}/raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_RADARSAT2_HV.tif
+  ${TEMP}/raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_RADARSAT2_HV.tif
+  otbSarRadiometricCalibrationToImageFilterWithComplexPixelTestWithoutNoise
+  LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HV.tif}
+  ${TEMP}/raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_RADARSAT2_HV.tif
+  11 11 650 750 # Extract
+  )
+
 otb_add_test(NAME raTuSarBrightnessFunctorWithoutNoise COMMAND otbSARCalibrationTestDriver
   otbSarBrightnessFunctorWithoutNoise
   )
@@ -190,13 +210,6 @@ otb_add_test(NAME raTvSarRadiometricCalibrationFunction COMMAND otbSARCalibratio
   ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithNoise.txt
   )
 
-otb_add_test(NAME raTuSarRadiometricCalibrationFunctor COMMAND otbSARCalibrationTestDriver
-  otbSarRadiometricCalibrationFunctor
-  )
-
-otb_add_test(NAME raTuSarRadiometricCalibrationFunctorWithoutNoise COMMAND otbSARCalibrationTestDriver
-  otbSarRadiometricCalibrationFunctorWithoutNoise
-  )
 
 otb_add_test(NAME raTvSarRadiometricCalibrationFunctionWithoutNoise COMMAND otbSARCalibrationTestDriver
   --compare-ascii ${NOTOL}
@@ -259,4 +272,3 @@ otb_add_test(NAME raTvSarBrightnessToImageFilter COMMAND  otbSARCalibrationTestD
   ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
   1000 1000 250 250 # Extract
   )
-

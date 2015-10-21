@@ -42,7 +42,6 @@ namespace ossimplugins
       :ossimSarModel(rhs)
       , theOCN(rhs.theOCN)
       , theSLC(rhs.theSLC)
-
    {
 
    }
