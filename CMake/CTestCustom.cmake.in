@@ -63,5 +63,7 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   # Ignore clang's summary warning, assuming prior text has matched some
   # other warning expression:
   "[0-9,]+ warnings? generated."
-
+  ".*include.opencv2.*warning.*"
+  ".*warning:.*deprecated.*"
+  ".*vcl_deprecated_header.*"
   )

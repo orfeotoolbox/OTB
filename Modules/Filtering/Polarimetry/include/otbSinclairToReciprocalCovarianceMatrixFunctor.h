@@ -19,6 +19,8 @@
 #define __otbSinclairToReciprocalCovarianceMatrixFunctor_h
 
 #include "vcl_complex.h"
+#include "otbMath.h"
+#include "vnl/vnl_matrix.h"
 
 namespace otb
 {
@@ -61,6 +63,7 @@ class SinclairToReciprocalCovarianceMatrixFunctor
 public:
   /** Some typedefs. */
   typedef typename std::complex <double>           ComplexType;
+  typedef vnl_matrix<ComplexType>       		   VNLMatrixType;
   typedef typename TOutput::ValueType              OutputValueType;
   inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv, const TInput3& Svv)
   {
@@ -72,12 +75,19 @@ public:
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
     
-    result[0] = static_cast<OutputValueType>( std::norm( S_hh ) );
-    result[1] = static_cast<OutputValueType>( vcl_sqrt(2.0)*S_hh*vcl_conj(S_hv) );
-    result[2] = static_cast<OutputValueType>( S_hh*vcl_conj(S_vv) );
-    result[3] = static_cast<OutputValueType>( 2.0*std::norm( S_hv ) );
-    result[4] = static_cast<OutputValueType>( vcl_sqrt(2.0)*S_hv*vcl_conj(S_vv) );
-    result[5] = static_cast<OutputValueType>( std::norm( S_vv ) );
+    VNLMatrixType f3l(3, 1, 0.);
+    f3l[0][0]=S_hh;
+    f3l[1][0]=ComplexType(std::sqrt(2.0),0.0)*S_hv;
+    f3l[2][0]=S_vv;
+    
+    VNLMatrixType res = f3l*f3l.conjugate_transpose();
+    
+    result[0] = static_cast<OutputValueType>( res[0][0] );
+    result[1] = static_cast<OutputValueType>( res[0][1] );
+    result[2] = static_cast<OutputValueType>( res[0][2] );
+    result[3] = static_cast<OutputValueType>( res[1][1] );
+    result[4] = static_cast<OutputValueType>( res[1][2] );
+    result[5] = static_cast<OutputValueType>( res[2][2] );
 
     return (result);
   }
