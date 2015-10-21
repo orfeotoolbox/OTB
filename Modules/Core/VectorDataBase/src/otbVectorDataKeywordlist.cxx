@@ -20,6 +20,8 @@
 
 #include "otbVectorDataKeywordlist.h"
 
+#include "otbConfigure.h"
+
 namespace otb
 {
 
@@ -98,6 +100,14 @@ VectorDataKeywordlist
         ss << std::setprecision(15) << m_FieldList[i].second.Integer;
         return ss.str();
         }
+#ifdef OTB_USE_GDAL_20
+      if (m_FieldList[i].first->GetType() == OFTInteger64)
+        {
+        std::ostringstream ss;
+        ss << std::setprecision(15) << m_FieldList[i].second.Integer64;
+        return ss.str();
+        }
+#endif     
       if (m_FieldList[i].first->GetType() == OFTReal)
         {
         std::ostringstream ss;
@@ -428,6 +438,11 @@ VectorDataKeywordlist::CopyFieldList(const Self& kwl)
       std::cerr << "Type not handled for Integer conversion"<<std::endl;
       break;
       }
+      default:
+      {
+      std::cerr << "Type not handled for Integer conversion"<<std::endl;
+      break;
+      }      
       }
     }
 }
@@ -506,6 +521,16 @@ VectorDataKeywordlist
              << field.second.Date.Hour << field.second.Date.Minute << field.second.Date.Second;
       break;
       }
+#ifdef OTB_USE_GDAL_20
+    case OFTInteger64:
+    {
+    output << std::setprecision(15)<<field.second.Integer64;
+    break;
+    }
+#endif     
+    default:
+      output << "Type not handled for printing";
+      break;
     }
   output << std::endl;
   return output.str();
@@ -524,6 +549,14 @@ VectorDataKeywordlist
       outField.second.Integer = field.second.Integer;
       break;
       }
+#ifdef OTB_USE_GDAL_20
+    case OFTInteger64:
+    {
+    outField.second.Integer64 = field.second.Integer64;
+    break;
+    }
+#endif     
+
     case OFTIntegerList:
       {
       std::cerr << "OGR type not handled" << std::endl;
@@ -590,6 +623,11 @@ VectorDataKeywordlist
       outField.second.Date.Hour = field.second.Date.Hour;
       outField.second.Date.Minute = field.second.Date.Minute;
       outField.second.Date.Second = field.second.Date.Second;
+      break;
+      }
+    default:
+      {
+      std::cerr << "OGR type not handled" << std::endl;
       break;
       }
     }
