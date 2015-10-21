@@ -165,6 +165,21 @@ VectorDataKeywordlist
           {
           return (int)(m_FieldList[i].second.Integer);
           }
+#ifdef OTB_USE_GDAL_20
+        // Some fields that were OFTInteger with gdal 1.x are now
+        // exposed as OFTInteger64. So as to make the old code still
+        // work with the same data, here we downcast to Integer (if
+        // and only if no overflow occur).
+        if (m_FieldList[i].first->GetType() == OFTInteger64)
+          {
+          if(m_FieldList[i].second.Integer64 > itk::NumericTraits<int>::max())
+            {
+            itkExceptionMacro(<<"value "<<m_FieldList[i].second.Integer64<<" of field "<<m_FieldList[i].first->GetNameRef()<<" can not be safely casted to 32 bits integer");
+            }
+          
+          return static_cast<int>(m_FieldList[i].second.Integer64);
+          }
+#endif    
         if (m_FieldList[i].first->GetType() == OFTReal)
           {
           return (int)(m_FieldList[i].second.Real);
