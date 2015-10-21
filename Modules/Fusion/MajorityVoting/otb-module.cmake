@@ -5,6 +5,7 @@ this label value (see also DempsterShafer module).")
 otb_module(OTBMajorityVoting
   DEPENDS
     OTBITK
+    OTBOSSIMAdapters
 
   TEST_DEPENDS
     OTBTestKernel

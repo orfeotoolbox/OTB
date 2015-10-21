@@ -20,6 +20,8 @@
 #include "otbOGRIOHelper.h"
 #include "otbGdalDataTypeBridge.h"
 #include "otbImageMetadataInterfaceFactory.h"
+#include "itkMetaDataObject.h"
+#include "otbMetaDataKey.h"
 
 #include "gdal_alg.h"
 #include "stdint.h" //needed for uintptr_t
@@ -164,6 +166,15 @@ OGRDataSourceToLabelImageFilter<TOutputImage>
          m_SrcDataSetLayers.push_back( &(ogrDS->GetLayer(layer).ogr()) );
       }
     }
+
+  // Set the NoData value using the background
+  const unsigned int & nbBands =  outputPtr->GetNumberOfComponentsPerPixel();
+  std::vector<bool> noDataValueAvailable;
+  noDataValueAvailable.resize(nbBands,true);
+  std::vector<double> noDataValue;
+  noDataValue.resize(nbBands,static_cast<double>(m_BackgroundValue));
+  itk::EncapsulateMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
+  itk::EncapsulateMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValue);
 }
 
 template< class TOutputImage>

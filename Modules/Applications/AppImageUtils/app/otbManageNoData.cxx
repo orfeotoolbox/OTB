@@ -20,6 +20,10 @@
 
 #include "otbImageToNoDataMaskFilter.h"
 #include "otbChangeNoDataValueFilter.h"
+#include "itkMaskImageFilter.h"
+#include "otbVectorImageToImageListFilter.h"
+#include "otbImageListToVectorImageFilter.h"
+#include "otbChangeInformationImageFilter.h"
 
 namespace otb
 {
@@ -44,6 +48,12 @@ public:
   typedef otb::ImageToNoDataMaskFilter<FloatVectorImageType,UInt8ImageType> FilterType;
   typedef otb::ChangeNoDataValueFilter<FloatVectorImageType,FloatVectorImageType> ChangeNoDataFilterType;
   
+  typedef otb::ImageList<FloatImageType> ImageListType;
+  typedef otb::VectorImageToImageListFilter<FloatVectorImageType,ImageListType> VectorToListFilterType;
+  typedef otb::ImageListToVectorImageFilter<ImageListType,FloatVectorImageType> ListToVectorFilterType;
+  typedef itk::MaskImageFilter<FloatImageType,UInt8ImageType,FloatImageType> MaskFilterType;
+  typedef otb::ChangeInformationImageFilter<FloatVectorImageType> ChangeInfoFilterType;
+
 private:
   void DoInit()
   {
@@ -89,8 +99,14 @@ private:
     SetParameterDescription("mode.changevalue.newv","The new no-data value");
     SetDefaultParameterInt("mode.changevalue.newv",0);
 
+    AddChoice("mode.apply","Apply a mask as no-data");
+
+    SetParameterDescription("mode.apply","Apply an external mask to an image using the no-data value of the input image");
+    AddParameter(ParameterType_InputImage, "mode.apply.mask", "Mask image");
+    SetParameterDescription("mode.apply.mask","Mask to be applied on input image (valid pixels have non null values)");
+
     SetParameterString("mode","buildmask");
-    
+
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -132,10 +148,66 @@ private:
       {
       SetParameterOutputImage("out",m_ChangeNoDataFilter->GetOutput());
       }
+    else if (GetParameterString("mode") == "apply")
+      {
+      m_MaskFilters.clear();
+      UInt8ImageType::Pointer maskPtr = this->GetParameterImage<UInt8ImageType>("mode.apply.mask");
+      unsigned int nbBands = inputPtr->GetNumberOfComponentsPerPixel();
+      itk::MetaDataDictionary &dict = inputPtr->GetMetaDataDictionary();
+      std::vector<bool> flags;
+      std::vector<double> values;
+      bool ret = otb::ReadNoDataFlags(dict,flags,values);
+      if (!ret)
+        {
+        flags.resize(nbBands,true);
+        values.resize(nbBands,0.0);
+        }
+
+      m_V2L = VectorToListFilterType::New();
+      m_V2L->SetInput(inputPtr);
+      ImageListType::Pointer inputList = m_V2L->GetOutput();
+      inputList->UpdateOutputInformation();
+      ImageListType::Pointer outputList = ImageListType::New();
+      for (unsigned int i=0 ; i<nbBands ; ++i)
+        {
+        if (flags[i])
+          {
+          MaskFilterType::Pointer masker = MaskFilterType::New();
+          masker->SetInput(inputList->GetNthElement(i));
+          masker->SetMaskImage(maskPtr);
+          masker->SetMaskingValue(0);
+          masker->SetOutsideValue(values[i]);
+          outputList->PushBack(masker->GetOutput());
+          m_MaskFilters.push_back(masker);
+          }
+        else
+          {
+          outputList->PushBack(inputList->GetNthElement(i));
+          }
+        }
+      m_L2V = ListToVectorFilterType::New();
+      m_L2V->SetInput(outputList);
+      if (!ret)
+        {
+        m_MetaDataChanger = ChangeInfoFilterType::New();
+        m_MetaDataChanger->SetInput(m_L2V->GetOutput());
+        m_MetaDataChanger->SetOutputMetaData<std::vector<bool> >(otb::MetaDataKey::NoDataValueAvailable,&flags);
+        m_MetaDataChanger->SetOutputMetaData<std::vector<double> >(otb::MetaDataKey::NoDataValue,&values);
+        SetParameterOutputImage("out",m_MetaDataChanger->GetOutput());
+        }
+      else
+        {
+        SetParameterOutputImage("out",m_L2V->GetOutput());
+        }
+      }
   }
 
   FilterType::Pointer m_Filter;
   ChangeNoDataFilterType::Pointer m_ChangeNoDataFilter;
+  std::vector<MaskFilterType::Pointer> m_MaskFilters;
+  VectorToListFilterType::Pointer m_V2L;
+  ListToVectorFilterType::Pointer m_L2V;
+  ChangeInfoFilterType::Pointer m_MetaDataChanger;
 };
 
 }
