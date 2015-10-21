@@ -90,33 +90,39 @@ VectorDataKeywordlist
     {
     if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
       {
-      if (m_FieldList[i].first->GetType() == OFTString)
+      switch(m_FieldList[i].first->GetType())
+        {
+        case OFTString:
         {
         return m_FieldList[i].second.String;
         }
-      if (m_FieldList[i].first->GetType() == OFTInteger)
+        case OFTInteger:
         {
         std::ostringstream ss;
         ss << std::setprecision(15) << m_FieldList[i].second.Integer;
         return ss.str();
         }
 #ifdef OTB_USE_GDAL_20
-      if (m_FieldList[i].first->GetType() == OFTInteger64)
+        case OFTInteger64:
         {
         std::ostringstream ss;
         ss << std::setprecision(15) << m_FieldList[i].second.Integer64;
         return ss.str();
         }
 #endif     
-      if (m_FieldList[i].first->GetType() == OFTReal)
+        case OFTReal:
         {
         std::ostringstream ss;
         ss << std::setprecision(15) << m_FieldList[i].second.Real;
         return ss.str();
         }
-      itkExceptionMacro(
-        << "This type (" << m_FieldList[i].first->GetType() <<
-        ") is not handled (yet) by GetFieldAsString(), please request for it");
+        default:
+        {
+          itkExceptionMacro(
+            << "This type (" << m_FieldList[i].first->GetType() <<
+            ") is not handled (yet) by GetFieldAsString(), please request for it");
+        }
+        }
       }
     }
   return "";
@@ -130,24 +136,30 @@ VectorDataKeywordlist
       {
       if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
         {
-        if (m_FieldList[i].first->GetType() == OFTInteger)
+        switch (m_FieldList[i].first->GetType())
+          {
+          case OFTInteger:
           {
           return (double)(m_FieldList[i].second.Integer);
           }
-        if (m_FieldList[i].first->GetType() == OFTReal)
+          case OFTReal:
           {
           return (double)(m_FieldList[i].second.Real);
           }
-        if (m_FieldList[i].first->GetType() == OFTString)
+          case OFTString:
           {
           std::istringstream is(m_FieldList[i].second.String);
           double value;
           is >> value;
           return value;
           }
-        itkExceptionMacro(
-          << "This type (" << m_FieldList[i].first->GetType() <<
-          ") is not handled (yet) by GetFieldAsDouble(), please request for it");
+          default:
+          {
+            itkExceptionMacro(
+              << "This type (" << m_FieldList[i].first->GetType() <<
+              ") is not handled (yet) by GetFieldAsDouble(), please request for it");
+          }
+          }
         }
       }
     return 0.;
@@ -161,16 +173,18 @@ VectorDataKeywordlist
       {
       if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
         {
-        if (m_FieldList[i].first->GetType() == OFTInteger)
+        switch(m_FieldList[i].first->GetType())
           {
-          return (int)(m_FieldList[i].second.Integer);
-          }
+          case OFTInteger:
+          {
+        return (int)(m_FieldList[i].second.Integer);
+        }
 #ifdef OTB_USE_GDAL_20
         // Some fields that were OFTInteger with gdal 1.x are now
         // exposed as OFTInteger64. So as to make the old code still
         // work with the same data, here we downcast to Integer (if
         // and only if no overflow occur).
-        if (m_FieldList[i].first->GetType() == OFTInteger64)
+        case OFTInteger64:
           {
           if(m_FieldList[i].second.Integer64 > itk::NumericTraits<int>::max())
             {
@@ -180,7 +194,7 @@ VectorDataKeywordlist
           return static_cast<int>(m_FieldList[i].second.Integer64);
           }
 #endif    
-        if (m_FieldList[i].first->GetType() == OFTReal)
+        case OFTReal:
           {
           return (int)(m_FieldList[i].second.Real);
           }
@@ -191,11 +205,15 @@ VectorDataKeywordlist
           is >> value;
           return value;
           }
+        default:
+        {
         itkExceptionMacro(
           << "This type (" << m_FieldList[i].first->GetType() <<
           ") is not handled (yet) by GetFieldAsInt(), please request for it");
         }
-      }
+        }
+        }
+        }
     return 0.;
 }
 
