@@ -476,12 +476,16 @@ OutputImageInitializer
   assert( widget!=NULL );
   assert( I18nCoreApplication::ConstInstance()!=NULL );
 
-  SetupOutputFilename(
-    widget,
-    I18nCoreApplication::ConstInstance()->GetResultsDir(),
-    m_Prefix,
-    ".tif"
-  );
+  if( m_Prefix.isEmpty() )
+    SetupForFilenameDrop( widget, "You can drop filename here." );
+
+  else
+    SetupOutputFilename(
+      widget,
+      I18nCoreApplication::ConstInstance()->GetResultsDir(),
+      m_Prefix,
+      ".tif"
+    );
 }
 
 /*****************************************************************************/

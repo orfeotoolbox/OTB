@@ -349,8 +349,14 @@ QtWidgetView
   SetupWidget( widget, ToolTipInitializer() );
 #endif
 
-  if( !m_IsStandalone )
-    SetupWidget( widget, OutputImageInitializer( m_Application->GetName() ) );
+  SetupWidget(
+    widget,
+    OutputImageInitializer(
+      m_IsStandalone
+      ? QString()
+      : m_Application->GetName()
+    )
+  );
 }
 
 /*******************************************************************************/
