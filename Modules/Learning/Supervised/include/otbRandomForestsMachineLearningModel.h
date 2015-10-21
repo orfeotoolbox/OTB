@@ -24,8 +24,9 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 #include "itkVariableSizeMatrix.h"
+#include "otbCvRTrees.h"
 
-class CvRTrees;
+class CvRTreesWrapper;
 
 namespace otb
 {
@@ -53,7 +54,7 @@ public:
 
 
   //opencv typedef
-  typedef CvRTrees RFType;
+  typedef CvRTreesWrapper RFType;
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
@@ -145,7 +146,7 @@ private:
   RandomForestsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  CvRTrees * m_RFModel;
+  CvRTreesWrapper * m_RFModel;
   /** The depth of the tree. A low value will likely underfit and conversely a
    * high value will likely overfit. The optimal value can be obtained using cross
    * validation or other suitable methods. */
@@ -189,7 +190,7 @@ private:
    * first category. */
   std::vector<float> m_Priors;
   /** If true then variable importance will be calculated and then it can be
-   * retrieved by CvRTrees::get_var_importance(). */
+   * retrieved by CvRTreesWrapper::get_var_importance(). */
   bool m_CalculateVariableImportance;
   /** The size of the randomly selected subset of features at each tree node and
    * that are used to find the best split(s). If you set it to 0 then the size will

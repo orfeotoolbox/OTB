@@ -29,17 +29,17 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::RandomForestsMachineLearningModel() :
- m_RFModel (new CvRTrees),
- m_MaxDepth(5),
- m_MinSampleCount(10),
- m_RegressionAccuracy(0.01),
- m_ComputeSurrogateSplit(false),
- m_MaxNumberOfCategories(10),
- m_CalculateVariableImportance(false),
- m_MaxNumberOfVariables(0),
- m_MaxNumberOfTrees(100),
- m_ForestAccuracy(0.01),
- m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS)
+  m_RFModel (new CvRTreesWrapper),
+  m_MaxDepth(5),
+  m_MinSampleCount(10),
+  m_RegressionAccuracy(0.01),
+  m_ComputeSurrogateSplit(false),
+  m_MaxNumberOfCategories(10),
+  m_CalculateVariableImportance(false),
+  m_MaxNumberOfVariables(0),
+  m_MaxNumberOfTrees(100),
+  m_ForestAccuracy(0.01),
+  m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS)
 {
   this->m_ConfidenceIndex = true;
   this->m_IsRegressionSupported = true;
@@ -125,7 +125,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
   if (quality != NULL)
     {
-    (*quality) = m_RFModel->predict_prob(sample);
+    (*quality) = m_RFModel->predict_confidence(sample);
     }
 
   return target[0];
@@ -158,23 +158,23 @@ bool
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::CanReadFile(const std::string & file)
 {
-   std::ifstream ifs;
-   ifs.open(file.c_str());
+  std::ifstream ifs;
+  ifs.open(file.c_str());
 
-   if(!ifs)
-   {
-      std::cerr<<"Could not read file "<<file<<std::endl;
-      return false;
-   }
+  if(!ifs)
+    {
+    std::cerr<<"Could not read file "<<file<<std::endl;
+    return false;
+    }
 
 
-   while (!ifs.eof())
-   {
-      std::string line;
-      std::getline(ifs, line);
+  while (!ifs.eof())
+    {
+    std::string line;
+    std::getline(ifs, line);
 
-      //if (line.find(m_RFModel->getName()) != std::string::npos)
-      if (line.find(CV_TYPE_NAME_ML_RTREES) != std::string::npos)
+    //if (line.find(m_RFModel->getName()) != std::string::npos)
+    if (line.find(CV_TYPE_NAME_ML_RTREES) != std::string::npos)
       {
          //std::cout<<"Reading a "<<CV_TYPE_NAME_ML_RTREES<<" model"<<std::endl;
          return true;
