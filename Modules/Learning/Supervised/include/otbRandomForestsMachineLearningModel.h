@@ -24,7 +24,7 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 #include "itkVariableSizeMatrix.h"
-#include "otbCvRTrees.h"
+#include "otbCvRTreesWrapper.h"
 
 class CvRTreesWrapper;
 
