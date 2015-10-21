@@ -52,6 +52,7 @@ otb_add_test(NAME raTeNDVIRAndNIRVegetationIndexImageFilterTest COMMAND ${OTB_TE
     ${TEMP}/NDVIRAndNIRVegetationIndex4.tif
 )
 
+if(OTBOpticalCalibration_LOADED)
 otb_add_test(NAME raTeAtmosphericCorrectionSequencementTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${EPSILON_8}
     ${BASELINE}/Example_RomaniaAtmosphericCorrectionSequencement.tif
@@ -82,3 +83,4 @@ otb_add_test(NAME raTeAtmosphericCorrectionSequencementTest COMMAND ${OTB_TEST_D
     2       # Radius;
     0.020   # pixel spacing in kilometers
 )
+endif()

@@ -20,10 +20,6 @@
 
 #include <fstream>
 #include "otbLibSVMMachineLearningModel.h"
-//#include "otbOpenCVUtils.h"
-
-// SVM estimator
-//#include "otbSVMSampleListModelEstimator.h"
 
 namespace otb
 {
@@ -32,15 +28,14 @@ template <class TInputValue, class TOutputValue>
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::LibSVMMachineLearningModel()
 {
-  // m_SVMModel = new CvSVM;
-  // m_SVMType = CvSVM::C_SVC;
-  m_KernelType = LINEAR;
-  // m_TermCriteriaType = CV_TERMCRIT_ITER;
-  m_C = 1.0;
-  // m_Epsilon = 1e-6;
-  m_ParameterOptimization = false;
-  m_DoProbabilityEstimates = false;
   m_SVMestimator = SVMEstimatorType::New();
+  m_SVMestimator->SetSVMType(C_SVC);
+  m_SVMestimator->SetC(1.0);
+  m_SVMestimator->SetKernelType(LINEAR);
+  m_SVMestimator->SetParametersOptimization(false);
+  m_SVMestimator->DoProbabilityEstimates(false);
+  //m_SVMestimator->SetEpsilon(1e-6);
+  this->m_IsRegressionSupported = true;
 }
 
 
@@ -55,7 +50,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
+::Train()
 {
   // Set up SVM's parameters
   // CvSVMParams params;
@@ -64,25 +59,19 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   // params.term_crit   = cvTermCriteria(m_TermCriteriaType, m_MaxIter, m_Epsilon);
 
   // // Train the SVM
-
-  m_SVMestimator->SetC(m_C);
-  m_SVMestimator->SetKernelType(m_KernelType);
-  m_SVMestimator->SetParametersOptimization(m_ParameterOptimization);
-  m_SVMestimator->DoProbabilityEstimates(m_DoProbabilityEstimates);
-
   m_SVMestimator->SetInputSampleList(this->GetInputListSample());
   m_SVMestimator->SetTrainingSampleList(this->GetTargetListSample());
 
   m_SVMestimator->Update();
 
-  this->m_ConfidenceIndex = m_DoProbabilityEstimates;
+  this->m_ConfidenceIndex = this->GetDoProbabilityEstimates();
 }
 
 template <class TInputValue, class TOutputValue>
 typename LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
+::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   TargetSampleType target;
 

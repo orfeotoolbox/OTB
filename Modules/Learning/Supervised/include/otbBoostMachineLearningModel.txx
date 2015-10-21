@@ -52,7 +52,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 BoostMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
+::Train()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -77,7 +77,7 @@ template <class TInputValue, class TOutputValue>
 typename BoostMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 BoostMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input, ConfidenceValueType *quality) const
+::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;

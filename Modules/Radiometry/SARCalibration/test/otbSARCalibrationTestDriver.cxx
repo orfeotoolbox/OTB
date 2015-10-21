@@ -17,8 +17,6 @@ void RegisterTests()
   REGISTER_TEST(otbSarBrightnessFunctor);
   REGISTER_TEST(otbSarBrightnessFunctionWithoutNoise);
   REGISTER_TEST(otbSarRadiometricCalibrationFunction);
-  REGISTER_TEST(otbSarRadiometricCalibrationFunctor);
-  REGISTER_TEST(otbSarRadiometricCalibrationFunctorWithoutNoise);
   REGISTER_TEST(otbSarRadiometricCalibrationFunctionWithoutNoise);
   REGISTER_TEST(otbTerraSarBrightnessImageComplexFilterTest);
   REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest);
