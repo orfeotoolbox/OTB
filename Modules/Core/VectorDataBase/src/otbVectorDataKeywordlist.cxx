@@ -408,51 +408,6 @@ VectorDataKeywordlist::CopyFieldList(const Self& kwl)
                              kwl.GetNthField(idx).second.Real);
       break;
       }
-      case OFTIntegerList:
-      {
-      std::cerr << "Type not handled for Integer conversion" <<std::endl;
-      break;
-      }
-      case OFTRealList:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTStringList:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTWideString:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTWideStringList:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTBinary:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTDate:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTTime:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTDateTime:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
       default:
       {
       std::cerr << "Type not handled for Integer conversion"<<std::endl;
@@ -477,19 +432,9 @@ VectorDataKeywordlist
       output << field.second.Integer;
       break;
       }
-    case OFTIntegerList:
-      {
-      output << "Type not handled for printing";
-      break;
-      }
     case OFTReal:
       {
       output << field.second.Real;
-      break;
-      }
-    case OFTRealList:
-      {
-      std::cerr << "Type not handled for printing" << std::endl;
       break;
       }
     case OFTString:
@@ -498,26 +443,6 @@ VectorDataKeywordlist
         {
         output << field.second.String;
         }
-      break;
-      }
-    case OFTStringList:
-      {
-      output << "Type not handled for printing";
-      break;
-      }
-    case OFTWideString:
-      {
-      output << "Type not handled for printing";
-      break;
-      }
-    case OFTWideStringList:
-      {
-      output << "Type not handled for printing";
-      break;
-      }
-    case OFTBinary:
-      {
-      output << "Type not handled for printing";
       break;
       }
     case OFTDate:
@@ -571,20 +496,9 @@ VectorDataKeywordlist
     break;
     }
 #endif     
-
-    case OFTIntegerList:
-      {
-      std::cerr << "OGR type not handled" << std::endl;
-      break;
-      }
     case OFTReal:
       {
       outField.second.Real = field.second.Real;
-      break;
-      }
-    case OFTRealList:
-      {
-      std::cerr << "OGR type not handled" << std::endl;
       break;
       }
     case OFTString:
@@ -594,26 +508,6 @@ VectorDataKeywordlist
         CPLFree(outField.second.String);
         outField.second.String = CPLStrdup(field.second.String);
         }
-      break;
-      }
-    case OFTStringList:
-      {
-      std::cerr << "OGR type not handled" << std::endl;
-      break;
-      }
-    case OFTWideString:
-      {
-      std::cerr << "OGR type not handled" << std::endl;
-      break;
-      }
-    case OFTWideStringList:
-      {
-      std::cerr << "OGR type not handled" << std::endl;
-      break;
-      }
-    case OFTBinary:
-      {
-      std::cerr << "OGR type not handled" << std::endl;
       break;
       }
     case OFTDate:
