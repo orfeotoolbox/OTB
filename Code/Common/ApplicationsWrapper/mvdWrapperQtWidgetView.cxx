@@ -349,6 +349,8 @@ QtWidgetView
   SetupWidget( widget, ToolTipInitializer() );
 #endif
 
+  SetupWidget( widget, OutputFilenameInitializer() );
+
   SetupWidget(
     widget,
     OutputImageInitializer(
@@ -357,6 +359,8 @@ QtWidgetView
       : m_Application->GetName()
     )
   );
+
+  SetupWidget( widget, OutputVectorDataInitializer() );
 }
 
 /*******************************************************************************/

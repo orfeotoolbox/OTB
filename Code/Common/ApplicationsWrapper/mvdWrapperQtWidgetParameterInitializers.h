@@ -51,7 +51,9 @@
 #include "otbWrapperQtWidgetInputImageListParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
+#include "otbWrapperQtWidgetOutputFilenameParameter.h"
 #include "otbWrapperQtWidgetOutputImageParameter.h"
+#include "otbWrapperQtWidgetOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
 #endif //tag=QT4-boost-compatibility
 
@@ -247,6 +249,38 @@ public:
 
 private:
   QString m_Prefix;
+};
+
+/**
+ * \class OutputVectorDataInitializer
+ *
+ * \brief WIP.
+ */
+class OutputVectorDataInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetOutputVectorDataParameter*,
+  void
+  >
+{
+public:
+  inline result_type operator () ( argument_type widget ) const;
+
+private:
+};
+
+/**
+ * \class OutputFilenameInitializer
+ *
+ * \brief WIP.
+ */
+class OutputFilenameInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetOutputFilenameParameter*,
+  void
+  >
+{
+public:
+  inline result_type operator () ( argument_type widget ) const;
+
+private:
 };
 
 /**
@@ -486,6 +520,28 @@ OutputImageInitializer
       m_Prefix,
       ".tif"
     );
+}
+
+/*****************************************************************************/
+inline
+OutputVectorDataInitializer::result_type
+OutputVectorDataInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  SetupForFilenameDrop( widget, "You can drop filename here." );
+}
+
+/*****************************************************************************/
+inline
+OutputFilenameInitializer::result_type
+OutputFilenameInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  SetupForFilenameDrop( widget, "You can drop filename here." );
 }
 
 /*****************************************************************************/
