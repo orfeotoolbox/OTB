@@ -22,6 +22,9 @@
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 
+#include "itkMetaDataObject.h"
+#include "otbMetaDataKey.h"
+
 namespace otb
 {
 /**
@@ -84,6 +87,23 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 }
 /* ************************************************************************************************************** */
 
+template <class TInputImage, class TOutputImage, class TMaskImage>
+void
+DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
+::GenerateOutputInformation()
+{
+  Superclass::GenerateOutputInformation();
+
+  // Set the NoData value
+  std::vector<bool> noDataValueAvailable;
+  noDataValueAvailable.push_back(true);
+  std::vector<double> noDataValue;
+  noDataValue.push_back(m_LabelForNoDataPixels);
+  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
+  itk::EncapsulateMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValue);
+}
+/* ************************************************************************************************************** */
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void

@@ -205,6 +205,18 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 
   horizOut->CopyInformation(leftIn);
   vertiOut->CopyInformation(leftIn);
+
+  // Set the NoData value
+  std::vector<bool> noDataValueAvailable;
+  noDataValueAvailable.push_back(true);
+  std::vector<double> noDataValue;
+  noDataValue.push_back(m_NoDataValue);
+  itk::MetaDataDictionary& dict = horizOut->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
+  itk::EncapsulateMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValue);
+  dict = vertiOut->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
+  itk::EncapsulateMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValue);
 }
 
 template <class TDisparityImage, class TGridImage, class TSensorImage, class TMaskImage>
