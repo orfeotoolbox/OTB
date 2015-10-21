@@ -395,10 +395,16 @@ InputImageListInitializer
 {
   assert( widget!=NULL );
 
-  QObject::connect(
-    widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
-    m_View, SLOT( OnFileSelectionWidgetAdded1( QWidget * ) )
-  );
+  if( m_SupportsDataset )
+    QObject::connect(
+      widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
+      m_View, SLOT( OnFileSelectionWidgetAdded1( QWidget * ) )
+    );
+  else
+    QObject::connect(
+      widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
+      m_View, SLOT( OnFileSelectionWidgetAdded0( QWidget * ) )
+    );
 
   SetupWidget( widget, FileSelectionInitializer( m_SupportsDataset ) );
 }
