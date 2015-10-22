@@ -197,6 +197,17 @@ public:
     insertRows( int row,
                 int count,
                 const QModelIndex & parent = QModelIndex() );
+
+  /**
+   * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#mimeData
+   */
+  virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
+
+  /**
+   * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#mimeTypes
+   */
+  virtual QStringList mimeTypes() const;
+
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
    */

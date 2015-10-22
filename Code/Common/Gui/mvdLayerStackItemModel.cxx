@@ -590,7 +590,10 @@ LayerStackItemModel
     ;
 
   if( index.column()==COLUMN_NAME )
-    flags |= Qt::ItemIsUserCheckable | Qt::ItemIsEditable;
+    flags |=
+        Qt::ItemIsUserCheckable
+      | Qt::ItemIsEditable
+      | Qt::ItemIsDragEnabled;
 
   return flags;
 }
@@ -711,6 +714,53 @@ LayerStackItemModel
   // emit dataChanged( index( row, 0 ), index( last, columnCount() - 1 ) );
 
   return true;
+}
+
+/*****************************************************************************/
+QMimeData *
+LayerStackItemModel
+::mimeData( const QModelIndexList & indexes ) const
+{
+  QMimeData * mimeData = QAbstractItemModel::mimeData( indexes );
+  assert( mimeData!=NULL );
+
+  typedef QList< QUrl > UrlList;
+
+  UrlList urls;
+
+  foreach( const QModelIndex & index, indexes )
+    if( index.isValid() )
+      {
+      assert( index.internalPointer()!=NULL );
+
+      AbstractLayerModel * layer =
+	static_cast< AbstractLayerModel * >( index.internalPointer() );
+
+      FilenameInterface * interface =
+	dynamic_cast< FilenameInterface * >( layer );
+
+      urls << QUrl::fromLocalFile( interface->GetFilename() );
+      }
+
+  mimeData->setUrls( urls );
+
+  // qDebug() << this << "mime-data:" << mimeData;
+
+  return mimeData;
+}
+
+/*****************************************************************************/
+QStringList
+LayerStackItemModel
+::mimeTypes() const
+{
+  QStringList mimeTypes( QAbstractItemModel::mimeTypes() );
+
+  mimeTypes << "text/uri-list";
+
+  qDebug() << this << "mime-types:" << mimeTypes;
+
+  return mimeTypes;
 }
 
 /*****************************************************************************/
