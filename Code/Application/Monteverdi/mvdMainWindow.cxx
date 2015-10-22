@@ -1415,11 +1415,11 @@ MainWindow
     < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
     ( "APPLICATIONS_BROWSER",
       tr( "OTB-Applications browser" ),
-      Qt::LeftDockWidgetArea,
+      Qt::RightDockWidgetArea,
       true
     );
 
-  // tabifyDockWidget( m_DatasetPropertiesDock, m_OtbApplicationsBrowserDock );
+  tabifyDockWidget( m_HistogramDock, m_OtbApplicationsBrowserDock );
 
   SetControllerModel(
     m_OtbApplicationsBrowserDock,
