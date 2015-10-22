@@ -151,6 +151,31 @@ main( int argc, char* argv[] )
 
   filenames.pop_front();
 
+  {
+  bool otbApplications = false;
+
+  for( QStringList::iterator it( filenames.begin() );
+       it!=filenames.end(); )
+    if( it->compare( "-a" )==0 ||
+	it->compare( "--applications" )==0 )
+      {
+      if( !otbApplications )
+	{
+#if USE_OTB_APPS
+	mainWindow.SetupOTBApplications();
+#else // USE_OTB_APPS
+	qWarning() << "OTB-applications support is not included in this build.";
+#endif // USE_OTB_APPS
+
+	it = filenames.erase( it );
+	}
+      }
+    else
+      {
+      ++ it;
+      }
+  }
+
   mainWindow.ImportImages( filenames );
  
 

@@ -159,7 +159,7 @@ ApplicationsBrowser
 
   //
   // get all the applications in the search path
-  StringVector vapp = GetAvailableApplications();
+  StringVector vapp( GetAvailableApplications() );
 
   //
   // Fill the  map as following

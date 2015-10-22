@@ -122,6 +122,12 @@ public:
    */
   bool CheckGLCapabilities();
 
+  /**
+   */
+#if USE_OTB_APPS
+  void SetupOTBApplications();
+#endif // USE_OTB_APPS
+
   /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
 
 //
@@ -268,12 +274,6 @@ private:
   /**
    */
   void InitializeStatusBarWidgets();
-
-  /**
-   */
-#if USE_OTB_APPS
-  void SetupOTBApplications();
-#endif // USE_OTB_APPS
 
   /**
    */
