@@ -94,6 +94,10 @@ public:
   /** close all handles at program exit */
   ~ApplicationPrivateRegistry()
   {
+  // unregister all ITK factories, because some of them could have been
+  // registered by the shared libs we are about to close.
+  itk::ObjectFactoryBase::UnRegisterAllFactories();
+  // Close all opened shared libs
   AppHandleContainerType::iterator it;
   for (it = m_Container.begin() ; it != m_Container.end() ; ++it)
     {
