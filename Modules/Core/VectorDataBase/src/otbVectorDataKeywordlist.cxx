@@ -198,7 +198,7 @@ VectorDataKeywordlist
           {
           return (int)(m_FieldList[i].second.Real);
           }
-        if (m_FieldList[i].first->GetType() == OFTString)
+        case OFTString:
           {
           std::istringstream is(m_FieldList[i].second.String);
           int value;
