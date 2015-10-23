@@ -118,9 +118,9 @@ VectorDataKeywordlist
         }
         default:
         {
-          itkExceptionMacro(
-            << "This type (" << m_FieldList[i].first->GetType() <<
-            ") is not handled (yet) by GetFieldAsString(), please request for it");
+        itkExceptionMacro(
+          << "Type of field " << m_FieldList[i].first->GetNameRef() << " (" << m_FieldList[i].first->GetType() <<
+          ") is not handled (yet) by GetFieldAsString(), please request for it");
         }
         }
       }
@@ -155,9 +155,9 @@ VectorDataKeywordlist
           }
           default:
           {
-            itkExceptionMacro(
-              << "This type (" << m_FieldList[i].first->GetType() <<
-              ") is not handled (yet) by GetFieldAsDouble(), please request for it");
+           itkExceptionMacro(
+             << "Type of field " << m_FieldList[i].first->GetNameRef() << " (" << m_FieldList[i].first->GetType() <<
+             ") is not handled (yet) by GetFieldAsDouble(), please request for it");
           }
           }
         }
@@ -208,7 +208,7 @@ VectorDataKeywordlist
         default:
         {
         itkExceptionMacro(
-          << "This type (" << m_FieldList[i].first->GetType() <<
+          << "Type of field " << m_FieldList[i].first->GetNameRef() << " (" << m_FieldList[i].first->GetType() <<
           ") is not handled (yet) by GetFieldAsInt(), please request for it");
         }
         }
