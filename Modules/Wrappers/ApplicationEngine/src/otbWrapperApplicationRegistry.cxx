@@ -84,11 +84,11 @@ public:
       {
       if ((*it).first == NULL)
         {
-        itk::DynamicLoader::CloseLibrary( (*it).second);
+        itk::DynamicLoader::CloseLibrary( static_cast<itk::LibHandle>((*it).second));
         (*it).second = NULL;
         }
       }
-    m_Container.remove(AppHandlePairType(NULL,NULL));
+    m_Container.remove(AppHandlePairType((Application*) NULL, (void*) NULL));
     }
 
   /** close all handles at program exit */
@@ -97,7 +97,7 @@ public:
   AppHandleContainerType::iterator it;
   for (it = m_Container.begin() ; it != m_Container.end() ; ++it)
     {
-    itk::DynamicLoader::CloseLibrary( (*it).second);
+    itk::DynamicLoader::CloseLibrary( static_cast<itk::LibHandle>((*it).second));
     }
   m_Container.clear();
   }
