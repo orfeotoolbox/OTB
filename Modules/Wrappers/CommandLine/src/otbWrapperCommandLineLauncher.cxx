@@ -321,9 +321,8 @@ void CommandLineLauncher::LoadApplication()
   if (m_Application.IsNull())
     {
     std::cerr << "ERROR: Could not find application \"" << moduleName << "\"" << std::endl;
-
-    const char * ITK_AUTOLOAD_PATH = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
-    std::cerr << "ERROR: Module search path: " << (ITK_AUTOLOAD_PATH ? ITK_AUTOLOAD_PATH : "none (check ITK_AUTOLOAD_PATH)") << std::endl;
+    std::string modulePath = ApplicationRegistry::GetApplicationPath();
+    std::cerr << "ERROR: Module search path: " << (modulePath.empty() ? "none (check OTB_APPLICATION_PATH)" : modulePath) << std::endl;
 
     std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
     if (list.size() == 0)
