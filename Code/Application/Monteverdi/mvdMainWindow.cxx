@@ -1203,6 +1203,35 @@ MainWindow
       }
   }
 
+
+  {
+    assert( I18nCoreApplication::Instance()!=NULL );
+    assert( I18nCoreApplication::Instance()->GetModel()==
+	    I18nCoreApplication::Instance()->GetModel< StackedLayerModel >() );
+
+    StackedLayerModel * stackedLayerModel =
+      I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
+
+    if( stackedLayerModel!=NULL &&
+	!stackedLayerModel->IsEmpty() )
+      {
+      QMessageBox::StandardButton button =
+	QMessageBox::question(
+	  this,
+	  PROJECT_NAME,
+	  tr( "Some files have been loaded. Are you sure you want to quit?" ),
+	  QMessageBox::Yes | QMessageBox::No
+	);
+
+      if( button==QMessageBox::No )
+	{
+	event->ignore();
+
+	return;
+	}
+      }
+  }
+
   //
   // Otherwise, close.
   I18nMainWindow::closeEvent( event );
