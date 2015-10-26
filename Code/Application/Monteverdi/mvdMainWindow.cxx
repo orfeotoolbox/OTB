@@ -1154,52 +1154,54 @@ MainWindow
 {
   assert( event!=NULL );
 
-  //
-  // List OTB-application widgets.
-  typedef QList< mvd::Wrapper::QtWidgetView * > QtWidgetViewList;
+  {
+    //
+    // List OTB-application widgets.
+    typedef QList< mvd::Wrapper::QtWidgetView * > QtWidgetViewList;
 
-  QtWidgetViewList children( findChildren< mvd::Wrapper::QtWidgetView * >() );
+    QtWidgetViewList children( findChildren< mvd::Wrapper::QtWidgetView * >() );
 
-  QStringList names;
+    QStringList names;
 
-  //
-  // Find out which OTB-applications are running.
-  for( QtWidgetViewList::iterator it( children.begin() );
-       it!=children.end();
-       ++ it )
-    {
-    assert( *it );
-
-    if( !( *it )->IsClosable() )
+    //
+    // Find out which OTB-applications are running.
+    for( QtWidgetViewList::iterator it( children.begin() );
+	 it!=children.end();
+	 ++ it )
       {
-      assert( !( *it )->GetApplication().IsNull() );
+      assert( *it );
 
-      // qDebug() << "OTB-application:" << ( *it )->GetApplication()->GetDocName();
+      if( !( *it )->IsClosable() )
+	{
+	assert( !( *it )->GetApplication().IsNull() );
 
-      names.push_back( ( *it )->GetApplication()->GetDocName() );
+	// qDebug() << "OTB-application:" << ( *it )->GetApplication()->GetDocName();
+
+	names.push_back( ( *it )->GetApplication()->GetDocName() );
+	}
       }
-    }
 
-  //
-  // If some OTB-application is running, display warning, names and
-  // prevent to close.
-  if( !names.isEmpty() )
-    {
-    QMessageBox::warning(
-      this,
-      tr( "Warning!" ),
-      tr(
-	PROJECT_NAME
-	" cannot exit while some OTB-application is running!\n\n"
-	"Please wait for following OTB-applicatio(s) to exit:\n- %1"
-      )
-      .arg( names.join( "\n- " ) )
-    );
+    //
+    // If some OTB-application is running, display warning, names and
+    // prevent to close.
+    if( !names.isEmpty() )
+      {
+      QMessageBox::warning(
+	this,
+	tr( "Warning!" ),
+	tr(
+	  PROJECT_NAME
+	  " cannot exit while some OTB-application is running!\n\n"
+	  "Please wait for following OTB-applicatio(s) to exit:\n- %1"
+	)
+	.arg( names.join( "\n- " ) )
+      );
 
-    event->ignore();
+      event->ignore();
 
-    return;
-    }
+      return;
+      }
+  }
 
   //
   // Otherwise, close.
