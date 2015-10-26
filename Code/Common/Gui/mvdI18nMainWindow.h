@@ -336,10 +336,6 @@ private:
 
   /**
    */
-  inline QMessageBox::StandardButton ConfirmSaveQuit( bool canBeCancelled );
-
-  /**
-   */
   
 //
 // Private attributes.
@@ -428,24 +424,6 @@ I18nMainWindow
   assert( controller!=NULL );
 
   controller->SetModel( model );
-}
-
-/*****************************************************************************/
-inline
-QMessageBox::StandardButton
-I18nMainWindow
-::ConfirmSaveQuit( bool canBeCancelled )
-{
-  return QMessageBox::question(
-    this,
-    tr( PROJECT_NAME ),
-    tr( "Dataset has been modified.\n"
-	"Do you want to save settings before quitting?" ),
-    QMessageBox::Save |
-    QMessageBox::Discard |
-    ( canBeCancelled ? QMessageBox::Cancel : QMessageBox::NoButton ),
-    QMessageBox::Save
-  );
 }
 
 /*****************************************************************************/

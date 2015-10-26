@@ -258,39 +258,6 @@ void
 I18nMainWindow
 ::closeEvent( QCloseEvent * event )
 {
-  assert( event!=NULL );
-
-  // Ensure there is an application instance.
-  assert( I18nApplication::ConstInstance()!=NULL );
-
-  // Get model.
-  AbstractModel* model = I18nApplication::Instance()->GetModel();
-
-  if( model==NULL || !model->IsModified() )
-    return;
-
-  QMessageBox::StandardButton clickedButton = ConfirmSaveQuit( true );
-
-  switch( clickedButton )
-    {
-    case QMessageBox::Save:
-      model->Save();
-      break;
-
-    case QMessageBox::Discard:
-      break;
-
-    case QMessageBox::Cancel:
-      // Ignore event: do not close/quit.
-      event->ignore();
-      break;
-
-    default:
-      // should never be reached.
-      assert( false );
-      break;
-    }
-
   QMainWindow::closeEvent( event );
 }
 

@@ -249,6 +249,10 @@ private:
   void ConnectPixelDescriptionWidget(DatasetModel * model);
   void DisconnectPixelDescriptionWidget(const DatasetModel * model);
 
+  /**
+   */
+  inline QMessageBox::StandardButton ConfirmSaveQuit( bool canBeCancelled );
+
   //
   // I18nMainWindow overrides.
 
@@ -411,6 +415,26 @@ MainWindow
 ::GetQuicklookView()
 {
   return qobject_cast< ImageViewWidget* >( m_QuicklookViewDock->widget() );
+}
+
+/*****************************************************************************/
+inline
+QMessageBox::StandardButton
+MainWindow
+::ConfirmSaveQuit( bool canBeCancelled )
+{
+  // TODO: Should me moved into Monteverdi2.
+
+  return QMessageBox::question(
+    this,
+    tr( PROJECT_NAME ),
+    tr( "Dataset has been modified.\n"
+	"Do you want to save settings before quitting?" ),
+    QMessageBox::Save |
+    QMessageBox::Discard |
+    ( canBeCancelled ? QMessageBox::Cancel : QMessageBox::NoButton ),
+    QMessageBox::Save
+  );
 }
 
 } // end namespace 'mvd'
