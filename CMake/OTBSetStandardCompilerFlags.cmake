@@ -132,6 +132,20 @@ endfunction()
 
 
 macro(check_compiler_platform_flags)
+  # Since CMake 2.8.11, the size of the stack is not modified by CMake on
+  # windows platform, it uses the default size: with visual compiler it is 1Mbyte
+  # which is to lower for us (thanks to 6S code).
+  if(WIN32)
+    if (${CMAKE_VERSION} VERSION_GREATER "2.8.10.2")
+      if("${CMAKE_EXE_LINKER_FLAGS}" MATCHES "/STACK:[0-9]+")
+          message(STATUS "The size of the stack is already defined, so we dont't modified it.")
+      else()
+          set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} /STACK:10000000")
+          message(STATUS "Increase the size of the stack to 10Mbytes.")
+      endif()
+    endif()
+  endif()
+
   # On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
   # warnings
   if(WIN32)
