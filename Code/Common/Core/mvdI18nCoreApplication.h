@@ -225,17 +225,17 @@ public:
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline bool HasSettingsKey( const SettingsKey& key ) const;
+  inline bool HasSettingsKey( SettingsKey ) const;
 
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline void StoreSettingsKey( const SettingsKey& key, const QVariant& value );
+  inline void StoreSettingsKey( SettingsKey, const QVariant& value );
 
   /**
    */
   // TODO: Move method into Application class.
-  inline QVariant RetrieveSettingsKey( const SettingsKey& key ) const;
+  inline QVariant RetrieveSettingsKey( SettingsKey ) const;
 
   /**
    */
@@ -319,6 +319,10 @@ public:
    */
   static
     void DeleteDatasetModel( const QString& hash );
+
+  //
+  // NON-STATIC methods.
+  //
 
   /**
    * \brief Get the cache directory.
@@ -445,17 +449,17 @@ protected:
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline bool HasSettingsKey( const QString& key ) const;
+  inline bool HasSettingsKey( const QString & key ) const;
 
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline void StoreSettingsKey( const QString& key, const QVariant& value );
+  inline void StoreSettingsKey( const QString & key, const QVariant& value );
 
   /**
    */
   // TODO: Move method into Application class.
-  inline QVariant RetrieveSettingsKey( const QString& key ) const;
+  inline QVariant RetrieveSettingsKey( const QString & key ) const;
 
 //
 // Protected attributes.
@@ -678,48 +682,34 @@ I18nCoreApplication
 inline
 bool
 I18nCoreApplication
-::HasSettingsKey( const SettingsKey& key ) const
+::HasSettingsKey( SettingsKey key ) const
 {
-  assert( m_Settings!=NULL );
-
-  SynchronizeSettings();
-
-  return m_Settings->contains( I18nCoreApplication::SETTINGS_KEYS[ key ] );
+  return HasSettingsKey( I18nCoreApplication::SETTINGS_KEYS[ key ] );
 }
 
 /*****************************************************************************/
 inline
 void
 I18nCoreApplication
-::StoreSettingsKey( const SettingsKey & key, const QVariant & value )
+::StoreSettingsKey( SettingsKey key, const QVariant & value )
 {
-  assert( m_Settings != NULL );
-
-  // qDebug() << this << "::StoreSettingsKey(" << key << ", " << value << ")";
-
-  m_Settings->setValue( I18nCoreApplication::SETTINGS_KEYS[ key ], value );
-
-  SynchronizeSettings();
+  StoreSettingsKey( I18nCoreApplication::SETTINGS_KEYS[ key ], value );
 }
 
 /*****************************************************************************/
 inline
 QVariant
 I18nCoreApplication
-::RetrieveSettingsKey( const SettingsKey& key ) const
+::RetrieveSettingsKey( SettingsKey key ) const
 {
-  assert( m_Settings!=NULL );
-
-  SynchronizeSettings();
-
-  return m_Settings->value( I18nCoreApplication::SETTINGS_KEYS[ key ] );
+  return RetrieveSettingsKey( I18nCoreApplication::SETTINGS_KEYS[ key ] );
 }
 
 /*****************************************************************************/
 inline
 bool
 I18nCoreApplication
-::HasSettingsKey( const QString& key ) const
+::HasSettingsKey( const QString & key ) const
 {
   assert( m_Settings!=NULL );
 
@@ -732,7 +722,7 @@ I18nCoreApplication
 inline
 void
 I18nCoreApplication
-::StoreSettingsKey( const QString& key, const QVariant& value )
+::StoreSettingsKey( const QString & key, const QVariant& value )
 {
   assert( m_Settings!=NULL );
 
@@ -747,7 +737,7 @@ I18nCoreApplication
 inline
 QVariant
 I18nCoreApplication
-::RetrieveSettingsKey( const QString& key ) const
+::RetrieveSettingsKey( const QString & key ) const
 {
   assert( m_Settings!=NULL );
 
