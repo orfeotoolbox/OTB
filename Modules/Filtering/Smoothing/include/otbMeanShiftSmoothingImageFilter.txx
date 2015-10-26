@@ -375,7 +375,9 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   neighborhoodRegion.SetSize(regionSize);
 
   RealType weightSum = 0;
-  RealVector jointNeighbor(ImageDimension + m_NumberOfComponentsPerPixel), shifts(ImageDimension + m_NumberOfComponentsPerPixel);
+  RealVector oneOverBandwidth(jointDimension), shifts(jointDimension);
+  for (unsigned int comp = 0; comp < jointDimension; comp++)
+    oneOverBandwidth[comp] = 1.0/bandwidth[comp];
 
   // An iterator on the neighborhood of the current pixel (in joint
   // spatial-range domain)
@@ -385,7 +387,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   it.GoToBegin();
   while (!it.IsAtEnd())
     {
-    jointNeighbor = it.Get();
+    const RealType *jointNeighbor = it.GetPixelPointer();
 
     // Compute the squared norm of the difference
     // This is the L2 norm, TODO: replace by the templated norm
@@ -393,7 +395,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     for (unsigned int comp = 0; comp < jointDimension; comp++)
       {
       shifts[comp] = jointNeighbor[comp] - jointPixel[comp];
-      double d = shifts[comp]/bandwidth[comp];
+      double d = shifts[comp] * oneOverBandwidth[comp];
       norm2 += d*d;
       }
 
@@ -554,7 +556,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   typename OutputImageType::PixelType rangePixel(m_NumberOfComponentsPerPixel);
   typename OutputSpatialImageType::PixelType spatialPixel(ImageDimension);
 
-  RealVector jointPixel;
+  RealVector jointPixel(jointDimension);
 
   RealVector bandwidth(jointDimension);
   for (unsigned int comp = 0; comp < ImageDimension; comp++)
@@ -612,7 +614,9 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
 
     // get input pixel in the joint spatial-range domain (with components
     // normalized by bandwith)
-    jointPixel = jointIt.Get(); // Pixel in the joint spatial-range domain
+    const RealVector &jointPixelVal = jointIt.Get(); // Pixel in the joint spatial-range domain
+    for (unsigned int comp = 0; comp < jointDimension; comp++)
+      jointPixel[comp] = jointPixelVal[comp];
 
     for (unsigned int comp = ImageDimension; comp < jointDimension; comp++)
       bandwidth[comp] = m_RangeBandwidthRamp*jointPixel[comp]+m_RangeBandwidth;
