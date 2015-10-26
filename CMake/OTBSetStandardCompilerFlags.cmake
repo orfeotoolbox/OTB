@@ -144,7 +144,7 @@ macro(check_compiler_platform_flags)
           message(STATUS "The stack size is set to 10 Mbytes (/STACK:10000000).")
       endif()
     endif() #if (${CMAKE_VERSION..
-  else(MINGW)
+  elseif(MINGW)
     set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} -Wl,--stack,10000000")
     message(STATUS "The stack size is set to 10 Mbytes (-Wl,--stack,10000000).")
   endif() # if(MSVC)
