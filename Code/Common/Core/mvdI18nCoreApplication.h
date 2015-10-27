@@ -239,6 +239,21 @@ public:
 
   /**
    */
+  // TODO: Move method into ApplicationSettings class.
+  inline bool HasSettingsKey( const QString & key ) const;
+
+  /**
+   */
+  // TODO: Move method into ApplicationSettings class.
+  inline void StoreSettingsKey( const QString & key, const QVariant& value );
+
+  /**
+   */
+  // TODO: Move method into Application class.
+  inline QVariant RetrieveSettingsKey( const QString & key ) const;
+
+  /**
+   */
   inline bool IsCacheDirValid() const;
 
   //
@@ -446,21 +461,6 @@ protected:
    */
   inline void SynchronizeSettings() const;
 
-  /**
-   */
-  // TODO: Move method into ApplicationSettings class.
-  inline bool HasSettingsKey( const QString & key ) const;
-
-  /**
-   */
-  // TODO: Move method into ApplicationSettings class.
-  inline void StoreSettingsKey( const QString & key, const QVariant& value );
-
-  /**
-   */
-  // TODO: Move method into Application class.
-  inline QVariant RetrieveSettingsKey( const QString & key ) const;
-
 //
 // Protected attributes.
 protected:
@@ -536,7 +536,7 @@ private:
   /**
    * \brief Application settings 
    */
-  QSettings* m_Settings;
+  QSettings * m_Settings;
 
   /**
    * \brief AbstractModel of the Model-View-Controller design pattern

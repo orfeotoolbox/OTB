@@ -337,6 +337,48 @@ I18nMainWindow
 }
 
 /*****************************************************************************/
+void
+I18nMainWindow
+::SaveLayout() const
+{
+  qDebug() << this << "::SaveLayout()";
+
+  assert( I18nCoreApplication::Instance()!=NULL );
+
+  QString name( objectName() );
+
+  I18nCoreApplication::Instance()
+    ->StoreSettingsKey( name + "Geometry", saveGeometry() );
+
+  I18nCoreApplication::Instance()
+    ->StoreSettingsKey( name + "State", saveState( 0 ) );
+}
+
+/*****************************************************************************/
+bool
+I18nMainWindow
+::RestoreLayout()
+{
+  qDebug() << this << "::RestoreLayout()";
+
+  I18nCoreApplication * application = I18nCoreApplication::Instance();
+  assert( application!=NULL );
+
+  QString name( objectName() );
+  assert( !name.isEmpty() );
+
+  if( !restoreGeometry(
+	application->RetrieveSettingsKey( name + "Geometry" ).toByteArray() ) )
+    return false;
+
+  return
+    restoreState(
+      application->RetrieveSettingsKey( name + "State" ).toByteArray(),
+      0
+    );
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void

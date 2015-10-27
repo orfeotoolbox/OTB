@@ -285,6 +285,14 @@ protected:
                  int width,
                  int height );
 
+  /**
+   */
+  void SaveLayout() const;
+
+  /**
+   */
+  bool RestoreLayout();
+
   //
   // QMainWindow overrides.
 

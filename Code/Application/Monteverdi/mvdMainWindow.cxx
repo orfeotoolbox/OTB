@@ -192,7 +192,9 @@ void
 MainWindow
 ::virtual_SetupUI()
 {
-  setObjectName( "mvd::MainWindow" );
+  assert( m_UI!=NULL );
+
+  setObjectName( PROJECT_NAME );
   setWindowTitle( PROJECT_NAME );
 
   InitializeCentralWidget();
@@ -204,7 +206,10 @@ MainWindow
   InitializeRenderToolBar();
   InitializeShaderToolBar();
 
-  assert( m_UI!=NULL );
+  if( !RestoreLayout() )
+    {
+    qWarning() << "Failed to restore window layout!";
+    }
 }
 
 /*****************************************************************************/
@@ -1231,6 +1236,10 @@ MainWindow
 	}
       }
   }
+
+
+  SaveLayout();
+
 
   //
   // Otherwise, close.
