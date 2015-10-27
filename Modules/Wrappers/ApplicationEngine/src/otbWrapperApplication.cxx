@@ -657,6 +657,29 @@ void Application::SetDefaultParameterFloat(std::string parameter, float value)
     }
 }
 
+void Application::SetDefaultOutputPixelType(std::string parameter, ImagePixelType type)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+  if (paramDown)
+    {
+    paramDown->SetDefaultPixelType(type);
+    paramDown->SetPixelType(type);
+    }
+}
+
+void
+Application::SetDefaultOutputComplexPixelType(std::string parameter, ComplexImagePixelType type)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
+  if (paramDown)
+    {
+    paramDown->SetDefaultComplexPixelType(type);
+    paramDown->SetComplexPixelType(type);
+    }
+}
+
 void Application::SetMinimumParameterIntValue(std::string parameter, int value)
 {
   Parameter* param = GetParameterByKey(parameter);

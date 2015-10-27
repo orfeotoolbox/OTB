@@ -247,6 +247,20 @@ public:
    */
   void SetDefaultParameterFloat(std::string parameter, float value);
 
+  /** Set a default pixel type for an output image parameter
+   *
+   * \param[in] parameter Name of the output image parameter
+   * \param[in] type Default pixel type
+   */
+  void SetDefaultOutputPixelType(std::string parameter, ImagePixelType type);
+
+  /** Set a default complex pixel type for an output complex image parameter
+   *
+   * \param[in] parameter Name of the output complex image parameter
+   * \param[in] type Default complex pixel type
+   */
+  void SetDefaultOutputComplexPixelType(std::string parameter, ComplexImagePixelType type);
+
  /* Set a minimum int value, must used in the
    * DoInit when setting a value by default
    * for the parameter
