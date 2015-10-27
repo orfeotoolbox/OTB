@@ -93,7 +93,7 @@ private:
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out", "Output image containing class labels");
-    SetParameterOutputImagePixelType( "out", ImagePixelType_uint8);
+    SetDefaultOutputPixelType( "out", ImagePixelType_uint8);
 
     AddParameter(ParameterType_OutputImage, "confmap",  "Confidence map");
     SetParameterDescription( "confmap", "Confidence map of the produced classification. The confidence index depends on the model : \n"
@@ -107,7 +107,7 @@ private:
       "    * NormalBayes : (not supported)\n"
       "    * RandomForest : proportion of decision trees that classified the sample to the second class (only works for 2-class models)\n"
       "    * SVM : distance to margin (only works for 2-class models)\n");
-    SetParameterOutputImagePixelType( "confmap", ImagePixelType_double);
+    SetDefaultOutputPixelType( "confmap", ImagePixelType_double);
     MandatoryOff("confmap");
 
     AddRAMParameter();
