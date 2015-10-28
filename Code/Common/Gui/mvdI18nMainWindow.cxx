@@ -341,7 +341,7 @@ void
 I18nMainWindow
 ::SaveLayout( int version ) const
 {
-  qDebug() << this << "::SaveLayout()";
+  // qDebug() << this << "::SaveLayout()";
 
   assert( I18nCoreApplication::Instance()!=NULL );
 
@@ -359,7 +359,7 @@ bool
 I18nMainWindow
 ::RestoreLayout( int version )
 {
-  qDebug() << this << "::RestoreLayout()";
+  // qDebug() << this << "::RestoreLayout()";
 
   I18nCoreApplication * application = I18nCoreApplication::Instance();
   assert( application!=NULL );

@@ -758,7 +758,7 @@ LayerStackItemModel
 
   mimeTypes << "text/uri-list";
 
-  qDebug() << this << "mime-types:" << mimeTypes;
+  // qDebug() << this << "mime-types:" << mimeTypes;
 
   return mimeTypes;
 }
