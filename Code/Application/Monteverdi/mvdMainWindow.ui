@@ -31,6 +31,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_OpenImage"/>
+    <addaction name="action_LoadOTBApplications"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -58,16 +59,9 @@
     </property>
     <addaction name="action_Preferences"/>
    </widget>
-   <widget class="QMenu" name="menu_Processing">
-    <property name="title">
-     <string>&amp;Processing</string>
-    </property>
-    <addaction name="action_LoadOTBApplications"/>
-   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
    <addaction name="menu_View"/>
-   <addaction name="menu_Processing"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="m_StatusBar"/>
