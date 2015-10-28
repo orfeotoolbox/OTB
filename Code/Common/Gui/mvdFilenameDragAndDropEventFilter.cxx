@@ -78,13 +78,13 @@ FilenameDragAndDropEventFilter
 /*****************************************************************************/
 bool
 FilenameDragAndDropEventFilter
-::DragEnterEvent( QObject * /* object */, QDragEnterEvent* event )
+::DragEnterEvent( QObject * watched, QDragEnterEvent* event )
 {
   // qDebug() << this << "::DragEnterEvent(" << object << "," << event << ")";
   // qDebug() << event->mimeData()->formats();
 
   //
-  // Bypass event its MIME data does not contain not URL(s).
+  // Bypass event its MIME data does not contain any URL(s).
   if( !event->mimeData()->hasUrls() )
     return false;
 
@@ -102,14 +102,17 @@ FilenameDragAndDropEventFilter
     // qDebug() << it->scheme()
     // 	     << it->scheme().compare( "file", Qt::CaseInsensitive );
 
+    if(
 #if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-    if( it->scheme().compare( "file", Qt::CaseInsensitive )!=0 )
+      it->scheme().compare( "file", Qt::CaseInsensitive )!=0
 #else // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-      if( !it->isLocalFile() )
+      !it->isLocalFile()
 #endif  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-        {
-        return false;
-        }
+      || event->source()==watched
+    )
+      {
+      return false;
+      }
     }
 
   //
@@ -159,7 +162,7 @@ FilenameDragAndDropEventFilter
 /*****************************************************************************/
 bool
 FilenameDragAndDropEventFilter
-::DropEvent( QObject * /* object */, QDropEvent * event )
+::DropEvent( QObject * watched, QDropEvent * event )
 {
   // qDebug() << this << "::DropEvent(" << object << "," << event << ")";
 
@@ -189,13 +192,16 @@ FilenameDragAndDropEventFilter
     if( it->isLocalFile() )
 #endif  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
       {
-      filenames.push_back( it->toLocalFile() );
+      if( event->source()!=watched )
+	{
+	filenames.push_back( it->toLocalFile() );
 
-      emit FilenameDropped( filenames.back() );
+	emit FilenameDropped( filenames.back() );
+	}
       }
     else
       {
-      qWarning() << "Dropped URL is not a local filename." << *it;
+      qWarning() << "Dropped URL is not a local filename:" << *it;
       }
     }
  
