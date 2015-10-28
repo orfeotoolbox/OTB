@@ -45,7 +45,6 @@ set(CTEST_CUSTOM_COVERAGE_EXCLUDE
 
 set(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
-  "vcl_deprecated_header"
   "backward_warning"
   "warning LNK4221"
   "ranlib:.*file:.*has no symbols"
@@ -64,6 +63,9 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   # other warning expression:
   "[0-9,]+ warnings? generated."
   ".*include.opencv2.*warning.*"
-  ".*warning:.*deprecated.*"
-  ".*vcl_deprecated_header.*"
+  ".*include.kml.*warning.*"
+  ".*include.ogr_feature.*warning.*"
+  ".*itksys.SharedForward.h.*warning.*"
+  ".*vcl_deprecated_header.h.*"
+  ".*otbCurlHelper.cxx:356.*warning.*maxConnect.*"
   )
