@@ -144,19 +144,8 @@ FilenameDragAndDropEventFilter
 {
   // qDebug() << this << "::DragMoveEvent(" << object << "," << event << ");";
 
-#if 0
-  //
-  // Bypass event its MIME data does not contain not URL(s).
-  if( !event->mimeData()->hasUrls() )
-    return false;
-
-  //
-  // Otherwise, eatup event.
-  return true;
-#else
   // Nothing to do: bypass event & let default behaviour occur.
   return false;
-#endif
 }
 
 /*****************************************************************************/
