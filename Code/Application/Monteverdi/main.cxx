@@ -55,6 +55,7 @@ enum ERROR_CODE
   ERROR_CODE_CACHE_DIR = -2,
   ERROR_CODE_DATABASE = -3,
   ERROR_CODE_GL_VERSION = -4,
+  ERROR_CODE_USAGE = -5,
 };
 
 /*****************************************************************************/
@@ -77,6 +78,35 @@ main( int argc, char* argv[] )
   splash.show();
   qtApp.processEvents();//This is used to accept a click on the screen so that user can cancel the screen
 #endif
+
+  //
+  // 0bis. Parse pre-initialization command-line arguments.
+  QStringList args( qtApp.arguments() );
+  {
+  for( QStringList::iterator it( args.begin() );
+       it!=args.end(); )
+    if( it->compare( "-h" )==0 ||
+	it->compare( "--help" )==0 )
+      {
+      std::cout
+	<< mvd::ToStdString(
+	  QCoreApplication::translate(
+	    PROJECT_NAME,
+	    "Usage: %1 [-h|--help] [-a|--applications] [<filename>...]\n"
+	    "  -h, --help         display this help message.\n"
+	    "  -a, --applications load OTB-applications from OTB_APPLICATIONS_PATH."
+	  )
+	  .arg( basename( argv[ 0 ] ) )
+	)
+	<< std::endl;
+
+      return ERROR_CODE_USAGE;
+      }
+    else
+      {
+      ++ it;
+      }
+  }
 
   //
   // 1. Initialize application and sync settings.
@@ -147,15 +177,12 @@ main( int argc, char* argv[] )
 
   //
   // 5. Parse command-line filenames.
-  QStringList filenames( qtApp.arguments() );
-
-  filenames.pop_front();
-
+  args.pop_front();
   {
   bool otbApplications = false;
 
-  for( QStringList::iterator it( filenames.begin() );
-       it!=filenames.end(); )
+  for( QStringList::iterator it( args.begin() );
+       it!=args.end(); )
     if( it->compare( "-a" )==0 ||
 	it->compare( "--applications" )==0 )
       {
@@ -167,7 +194,7 @@ main( int argc, char* argv[] )
 	qWarning() << "OTB-applications support is not included in this build.";
 #endif // USE_OTB_APPS
 
-	it = filenames.erase( it );
+	it = args.erase( it );
 	}
       }
     else
@@ -176,8 +203,8 @@ main( int argc, char* argv[] )
       }
   }
 
-  mainWindow.ImportImages( filenames );
- 
+  mainWindow.ImportImages( args );
+
 
   //
   // 6. Let's go: run the application and return exit code.
