@@ -41,6 +41,10 @@
 #define Monteverdi_DATA_VERSION_STRING "@Monteverdi_DATA_VERSION_STRING@"
 
 //
+// Monteverdi data version.
+#define Monteverdi_UI_VERSION @Monteverdi_UI_VERSION@
+
+//
 //
 #define OTB_VERSION_CHECK( M, m, p )					\
   (OTB_VERSION_MAJOR>(M) ||						\

@@ -206,7 +206,7 @@ MainWindow
   InitializeRenderToolBar();
   InitializeShaderToolBar();
 
-  if( !RestoreLayout() )
+  if( !RestoreLayout( Monteverdi_UI_VERSION ) )
     {
     qWarning() << "Failed to restore window layout!";
     }
@@ -1238,7 +1238,7 @@ MainWindow
   }
 
 
-  SaveLayout();
+  SaveLayout( Monteverdi_UI_VERSION );
 
 
   //

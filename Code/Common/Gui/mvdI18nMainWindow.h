@@ -287,11 +287,11 @@ protected:
 
   /**
    */
-  void SaveLayout() const;
+  void SaveLayout( int version ) const;
 
   /**
    */
-  bool RestoreLayout();
+  bool RestoreLayout( int version );
 
   //
   // QMainWindow overrides.

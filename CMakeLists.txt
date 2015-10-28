@@ -45,6 +45,13 @@ set(Monteverdi_DATA_VERSION_MINOR "0")
 set(Monteverdi_DATA_VERSION_PATCH "0")
 
 #----------------------------------------------------------------------------
+# Monteverdi UI version.
+#
+# Used to identify UI version for Qt Save/Restore layout. Must be incremented
+# each time a widget is added to the UI.
+set(Monteverdi_UI_VERSION "1")
+
+#----------------------------------------------------------------------------
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
 set(

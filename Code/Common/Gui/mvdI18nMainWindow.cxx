@@ -339,7 +339,7 @@ I18nMainWindow
 /*****************************************************************************/
 void
 I18nMainWindow
-::SaveLayout() const
+::SaveLayout( int version ) const
 {
   qDebug() << this << "::SaveLayout()";
 
@@ -351,13 +351,13 @@ I18nMainWindow
     ->StoreSettingsKey( name + "Geometry", saveGeometry() );
 
   I18nCoreApplication::Instance()
-    ->StoreSettingsKey( name + "State", saveState( 0 ) );
+    ->StoreSettingsKey( name + "State", saveState( version ) );
 }
 
 /*****************************************************************************/
 bool
 I18nMainWindow
-::RestoreLayout()
+::RestoreLayout( int version )
 {
   qDebug() << this << "::RestoreLayout()";
 
@@ -374,7 +374,7 @@ I18nMainWindow
   return
     restoreState(
       application->RetrieveSettingsKey( name + "State" ).toByteArray(),
-      0
+      version
     );
 }
 
