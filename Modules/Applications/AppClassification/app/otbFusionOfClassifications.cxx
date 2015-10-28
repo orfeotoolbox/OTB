@@ -156,6 +156,7 @@ private:
 
     AddParameter(ParameterType_OutputImage,"out","The output classification image");
     SetParameterDescription("out","The output classification image resulting from the fusion of the input classification images.");
+    SetDefaultOutputPixelType("out",ImagePixelType_uint8);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "classification1.tif classification2.tif classification3.tif");

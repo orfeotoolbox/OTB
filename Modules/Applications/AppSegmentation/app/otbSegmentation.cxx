@@ -251,6 +251,7 @@ private:
     //Raster mode parameters
     AddParameter(ParameterType_OutputImage,  "mode.raster.out",    "Output labeled image");
     SetParameterDescription( "mode.raster.out", "The output labeled image.");
+    SetDefaultOutputPixelType("mode.raster.out",ImagePixelType_uint32);
 
     //Streaming vectorization parameters
     AddParameter(ParameterType_OutputFilename, "mode.vector.out", "Output vector file");

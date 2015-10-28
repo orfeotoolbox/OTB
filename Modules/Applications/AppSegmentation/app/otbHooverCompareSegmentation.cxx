@@ -165,10 +165,12 @@ private:
 
     AddParameter(ParameterType_OutputImage,  "outgt",    "Colored ground truth output");
     SetParameterDescription( "outgt", "The colored ground truth output image." );
+    SetDefaultOutputPixelType("outgt",ImagePixelType_uint8);
     MandatoryOff("outgt");
 
     AddParameter(ParameterType_OutputImage,  "outms",    "Colored machine segmentation output");
     SetParameterDescription( "outms", "The colored machine segmentation output image." );
+    SetDefaultOutputPixelType("outms",ImagePixelType_uint8);
     MandatoryOff("outms");
 
     // TODO : add color settings ?
