@@ -77,6 +77,8 @@ else()
       -DBUILD_opencv_video:BOOL=OFF
       -DBUILD_opencv_videostab:BOOL=OFF
       -DBUILD_opencv_world:BOOL=OFF
+      -DWITH_CUDA:BOOL=OFF
+      -DWITH_OPENCL:BOOL=OFF
       ${OPENCV_SB_CONFIG}
     DEPENDS ${${proj}_DEPENDENCIES}
     )
