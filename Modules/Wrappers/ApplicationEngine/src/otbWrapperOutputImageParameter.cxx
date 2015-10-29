@@ -25,7 +25,9 @@ namespace Wrapper
 {
 
 OutputImageParameter::OutputImageParameter()
-  : m_PixelType(ImagePixelType_float), m_RAMValue(0)
+  : m_PixelType(ImagePixelType_float),
+    m_DefaultPixelType(ImagePixelType_float),
+    m_RAMValue(0)
 {
   this->SetName("Output Image");
   this->SetKey("out");
@@ -34,6 +36,50 @@ OutputImageParameter::OutputImageParameter()
 
 OutputImageParameter::~OutputImageParameter()
 {
+}
+
+std::string OutputImageParameter::ConvertPixelTypeToString(ImagePixelType type)
+{
+  std::string ret;
+  switch(type)
+    {
+    case ImagePixelType_uint8:
+      {
+      ret = "uint8";
+      break;
+      }
+    case ImagePixelType_int16:
+      {
+      ret = "int16";
+      break;
+      }
+    case ImagePixelType_uint16:
+      {
+      ret = "uint16";
+      break;
+      }
+    case ImagePixelType_int32:
+      {
+      ret = "int32";
+      break;
+      }
+    case ImagePixelType_uint32:
+      {
+      ret = "uint32";
+      break;
+      }
+    case ImagePixelType_float:
+      {
+      ret = "float";
+      break;
+      }
+    case ImagePixelType_double:
+      {
+      ret = "double";
+      break;
+      }
+    }
+  return ret;
 }
 
 void OutputImageParameter::InitializeWriters()

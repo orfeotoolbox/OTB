@@ -155,6 +155,7 @@ private:
 
     AddParameter(ParameterType_OutputImage, "io.outmask", "The output mask corresponding to all criterions");
     SetParameterDescription("io.outmask","A mask image corresponding to all citerions (see masking parameters). Only required if variance threshold or nodata criterions are set.");
+    SetDefaultOutputPixelType("io.outmask",ImagePixelType_uint8);
     DisableParameter("io.outmask");
     MandatoryOff("io.outmask");
 

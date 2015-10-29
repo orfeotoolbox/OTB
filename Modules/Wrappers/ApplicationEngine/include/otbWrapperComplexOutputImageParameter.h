@@ -61,13 +61,26 @@ public:
   /** Return any value */
   ImageBaseType* GetValue( void );
 
-  /** Set/Get PixelType to be used when saving */
+  /** Set/Get m_ComplexPixelType to be used when saving */
   itkSetMacro(ComplexPixelType, ComplexImagePixelType);
   itkGetMacro(ComplexPixelType, ComplexImagePixelType);
+
+  /** Set/Get m_DefaultComplexPixelType*/
+  itkSetMacro(DefaultComplexPixelType, ComplexImagePixelType);
+  itkGetMacro(DefaultComplexPixelType, ComplexImagePixelType);
 
   /** Set/Get available RAM value */
   itkSetMacro(RAMValue, unsigned int);
   itkGetMacro(RAMValue, unsigned int);
+
+  /** Implement the reset method (replace pixel type by default type) */
+  virtual void Reset()
+  {
+    m_ComplexPixelType = m_DefaultComplexPixelType;
+  }
+
+  /** Static method to convert pixel type into string */
+  static std::string ConvertPixelTypeToString(ComplexImagePixelType type);
 
   /** Return true if a filename is set */
   bool HasValue() const;
@@ -106,7 +119,7 @@ protected:
   ImageBaseType::Pointer m_Image;
   std::string            m_FileName;
   ComplexImagePixelType         m_ComplexPixelType;
-
+  ComplexImagePixelType         m_DefaultComplexPixelType;
 
   typedef otb::ImageFileWriter<ComplexFloatImageType>  ComplexFloatWriterType;
   typedef otb::ImageFileWriter<ComplexDoubleImageType> ComplexDoubleWriterType;

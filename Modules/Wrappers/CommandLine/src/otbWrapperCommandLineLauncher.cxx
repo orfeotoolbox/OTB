@@ -844,14 +844,26 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
 
   if (type == ParameterType_OutputImage)
     {
+    OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param.GetPointer());
+    std::string defPixType("float");
+    if (paramDown)
+      {
+      defPixType = OutputImageParameter::ConvertPixelTypeToString(paramDown->GetDefaultPixelType());
+      }
     oss << " [pixel=uint8/uint16/int16/uint32/int32/float/double]";
-    oss << " (default value is float)";
+    oss << " (default value is " << defPixType <<")";
     }
 
   if (type == ParameterType_ComplexOutputImage)
     {
+    ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param.GetPointer());
+    std::string defPixType("cfloat");
+    if (paramDown)
+      {
+      defPixType = ComplexOutputImageParameter::ConvertPixelTypeToString(paramDown->GetDefaultComplexPixelType());
+      }
     oss << " [pixel=cfloat/cdouble]";
-    oss << " (default value is cfloat)";
+    oss << " (default value is "<< defPixType <<")";
     }
 
 
