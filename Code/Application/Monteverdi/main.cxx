@@ -96,7 +96,7 @@ main( int argc, char* argv[] )
 	    "  -h, --help         display this help message.\n"
 	    "  -a, --applications load OTB-applications from OTB_APPLICATIONS_PATH."
 	  )
-	  .arg( basename( argv[ 0 ] ) )
+	  .arg( QFileInfo( argv[ 0 ] ).baseName() )
 	)
 	<< std::endl;
 
