@@ -1204,6 +1204,7 @@ ImageViewWidget
     assert( imageModel!=NULL );
 
     const VectorImageSettings & settings = imageModel->GetSettings();
+    const ImageProperties * properties = imageModel->GetProperties();
 
     for( StackedLayerModel::ConstIterator it( layerStack->Begin() );
 	 it!=layerStack->End();
@@ -1214,6 +1215,17 @@ ImageViewWidget
 	  {
 	  VectorImageModel * vim =
 	    qobject_cast< VectorImageModel * >( it->second );
+
+	  bool needsRefresh = *vim->GetProperties() != *properties;
+
+	  vim->SetProperties( *properties );
+
+	  if( needsRefresh )
+	    {
+	    // qDebug() << "Refreshing histogram...";
+
+	    vim->RefreshHistogram();
+	    }
 
 	  vim->SetSettings( settings  );
 	  }

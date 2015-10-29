@@ -85,6 +85,24 @@ ImageProperties
 }
 
 /*******************************************************************************/
+bool
+ImageProperties
+::operator == ( const ImageProperties & other ) const
+{
+  return
+    other.m_Flags.m_NoData==m_Flags.m_NoData &&
+    other.m_NoData==m_NoData;
+}
+
+/*******************************************************************************/
+bool
+ImageProperties
+::operator != ( const ImageProperties & other ) const
+{
+  return !operator == ( other );
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 

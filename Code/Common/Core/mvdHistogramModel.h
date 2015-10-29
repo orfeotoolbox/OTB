@@ -59,6 +59,7 @@
 #endif //tag=QT4-boost-compatibility
 
 #define HISTOGRAM_CURVE_TYPE 2
+#define USE_FULL_IMAGE_FOR_PASS_1 0
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -490,14 +491,22 @@ HistogramModel
     .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
 
 
-  AbstractImageModel* parentImageModel =
+#if USE_FULL_IMAGE_FOR_PASS_1
+  TImageModel * parentImageModel =
+    qobject_cast< TImageModel * >( parent() );
+
+#else // USE_FULL_IMAGE_FOR_PASS_1
+  AbstractImageModel * parentImageModel =
     qobject_cast< AbstractImageModel* >( parent() );
+
+#endif // USE_FULL_IMAGE_FOR_PASS_1
+
   assert( parentImageModel!=NULL );
 
-  ImageProperties* imageProperties = parentImageModel->GetProperties();
+  ImageProperties * imageProperties = parentImageModel->GetProperties();
   assert( imageProperties!=NULL );
 
-  TImageModel* imageModel = parentImageModel->GetQuicklookModel();
+  TImageModel * imageModel = parentImageModel->GetQuicklookModel();
 
   if( imageModel==NULL )
     imageModel = qobject_cast< TImageModel * >( parentImageModel );
@@ -554,7 +563,14 @@ HistogramModel
 
   typename StatisticsFilter::Pointer filterStats( StatisticsFilter::New() );
 
+#if USE_FULL_IMAGE_FOR_PASS_1
+  filterStats->SetInput( parentImageModel->ToImage() );
+
+#else // USE_FULL_IMAGE_FOR_PASS_1
   filterStats->SetInput( imageModel->ToImage() );
+
+#endif // USE_FULL_IMAGE_FOR_PASS_1
+
   filterStats->SetEnableMinMax( true );
   filterStats->SetIgnoreUserDefinedValue( imageProperties->IsNoDataEnabled() );
   filterStats->SetUserIgnoredValue( imageProperties->GetNoData() );

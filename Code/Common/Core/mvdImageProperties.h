@@ -135,6 +135,14 @@ public:
    */
   inline ComponentType GetNoData() const;
 
+  /**
+   */
+  bool operator == ( const ImageProperties & ) const;
+
+  /**
+   */
+  bool operator != ( const ImageProperties & ) const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
