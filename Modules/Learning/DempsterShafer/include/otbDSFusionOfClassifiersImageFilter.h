@@ -139,6 +139,8 @@ protected:
   /** Destructor */
   virtual ~DSFusionOfClassifiersImageFilter() {}
 
+  /** Generate output information */
+  virtual void GenerateOutputInformation();
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
   /** Before threaded generate data */

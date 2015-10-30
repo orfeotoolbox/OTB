@@ -47,21 +47,24 @@ RTTI_DEF1(ossimRadarSat2Model, "ossimRadarSat2Model", ossimGeometricSarSensorMod
 
 
 ossimRadarSat2Model::ossimRadarSat2Model()
-   :
-   ossimGeometricSarSensorModel(),
-   _n_srgr(0),
-   _srgr_update(),
-   _SrGr_R0()
+   :  ossimGeometricSarSensorModel()
+   , _n_srgr(0)
+   , _srgr_update()
+   , _SrGr_R0()
+   , theAcquisitionDateUTCString("")
+   , theProductionDateUTCString("")
 {
 }
 
 ossimRadarSat2Model::ossimRadarSat2Model(const ossimRadarSat2Model& rhs)
-   :
-   ossimGeometricSarSensorModel(rhs),
-   _n_srgr(rhs._n_srgr),
-   _srgr_update(rhs._srgr_update),
-   _SrGr_R0(rhs._SrGr_R0)
+   : ossimGeometricSarSensorModel(rhs)
+   , _n_srgr(rhs._n_srgr)
+   , _srgr_update(rhs._srgr_update)
+   , _SrGr_R0(rhs._SrGr_R0)
+   , theProductionDateUTCString(rhs.theProductionDateUTCString)
+   , theAcquisitionDateUTCString(rhs.theAcquisitionDateUTCString)
 {
+
 }
 
 ossimRadarSat2Model::~ossimRadarSat2Model()
@@ -81,15 +84,15 @@ ossimObject* ossimRadarSat2Model::dup() const
 double ossimRadarSat2Model::getSlantRangeFromGeoreferenced(double col) const
 {
    if (_n_srgr==0) return(-1) ;
-   
+
    double relativeGroundRange, slantRange = 0.0 ;
-   
+
    // in the case of Georeferenced images, _refPoint->get_distance()
    // contains the ground range
    relativeGroundRange = _refPoint->get_distance() + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* theGSD.x;
    //relativeGroundRange = 1 + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* theGSD.x;
    //relativeGroundRange = (8.78400000e+03)*theGSD.x;
-   
+
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -100,15 +103,15 @@ double ossimRadarSat2Model::getSlantRangeFromGeoreferenced(double col) const
          << "\n_refPoint->get_pix_col() : " << _refPoint->get_pix_col()
          << "\n relativeGroundRange : " << relativeGroundRange << endl;
    }
-   
+
    int numSet = FindSRGRSetNumber((_refPoint->get_ephemeris())->get_date()) ;
    /**
     * @todo : could be improved (date choice)
     */
-   
+
    for (int i=0 ; i < static_cast<int>(_SrGr_coeffs[numSet].size()); i++)
    {
-      
+
       slantRange += _SrGr_coeffs[numSet][i]*pow(relativeGroundRange,i) ;
    }
 
@@ -160,6 +163,8 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
 
          if (result)
          {
+            _productXmlFile = xmlFile;
+
             if (traceDebug())
             {
                ossimNotify(ossimNotifyLevel_DEBUG)
@@ -204,11 +209,25 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
                result = rsDoc.getSatellite(xdoc, theSensorID);
             }
 
+            if (result)
+            {
             // Set the base class gsd:
             result = rsDoc.initGsd(xdoc, theGSD);
+            }
+
             if (result)
             {
                theMeanGSD = (theGSD.x + theGSD.y)/2.0;
+            }
+
+            if (result)
+            {
+               result = rsDoc.getAcquistionDate(xdoc, theAcquisitionDateUTCString);
+            }
+
+            if (result)
+            {
+               result = rsDoc.getProductionDate(xdoc, theProductionDateUTCString);
             }
 
             if (result)
@@ -226,7 +245,7 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
                      if (result)
                      {
                         result = initRefPoint(xdoc, rsDoc);
-                     
+
                      	  if (result)
                         {
                         result = InitRefNoiseLevel(xdoc);
@@ -246,7 +265,6 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
 
    if (result)
    {
-      _productXmlFile = xmlFile;
       ossimSupportFilesList::instance()->add(_productXmlFile);
    }
    else
@@ -273,7 +291,7 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
             << "ul, ur, lr, ll " << ul << ", " << ur
             << ", " << lr << " , " << ll << endl;
       }
-      
+
       setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
 
       // OSSIM preferences specifies whether a coarse grid needs to be generated:
@@ -336,7 +354,7 @@ std::ostream& ossimRadarSat2Model::print(std::ostream& out) const
    }
 
    ossimGeometricSarSensorModel::print(out);
-   
+
 
    // Reset flags.
    out.setf(f);
@@ -523,7 +541,7 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl,
       date->set_decimal(time - floor(time)) ;
    }
    delete date;//FIXME to confirm
-  
+
    if(_platformPosition != 0)
    {
       Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
@@ -928,7 +946,7 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
 
    double distance = 1;
 
-   // Only set distance to 
+   // Only set distance to
    if (!_isProductGeoreferenced)
    {
 	   if ( !rsDoc.getSlantRangeNearEdge(xdoc, s) )
@@ -936,9 +954,9 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
 		   if (traceDebug())
 		   {
 			   ossimNotify(ossimNotifyLevel_DEBUG)
-    
+
 				   << MODULE << "getSlantRangeNearEdge error! exiting\n";
-		   }      
+		   }
 		   return false;
 	   }
 	   distance = s.toDouble();
@@ -981,7 +999,8 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
 bool ossimRadarSat2Model::InitLut( const ossimXmlDocument* xmlDocument,
    			RadarSat2NoiseLevel& noise)
 {
-   static const char MODULE[] = "ossimRadarSat2Model::initLut";
+   static const char MODULE[] = "ossimRadarSat2Model::InitLut";
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
@@ -992,8 +1011,8 @@ bool ossimRadarSat2Model::InitLut( const ossimXmlDocument* xmlDocument,
    std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
    std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
    ossimFilename  lutXmlFile;
-      
-   incidenceAngleCorrectionName = noise.get_incidenceAngleCorrectionName();     
+
+   incidenceAngleCorrectionName = noise.get_incidenceAngleCorrectionName();
 
    xpath = "/product/imageAttributes/lookupTable";
    xml_nodes.clear();
@@ -1009,8 +1028,8 @@ bool ossimRadarSat2Model::InitLut( const ossimXmlDocument* xmlDocument,
                		<< std::endl;
       }
       return false;
-   }  
-        
+   }
+
    node = xml_nodes.begin();
    while (node != xml_nodes.end())
    {
@@ -1024,56 +1043,67 @@ bool ossimRadarSat2Model::InitLut( const ossimXmlDocument* xmlDocument,
       			//---
       			// Instantiate the XML parser:
       			//---
-      			ossimXmlDocument* xmlLutDocument = new ossimXmlDocument();
-      			if ( xmlLutDocument->openFile(lutXmlFile) )
+           ossimRefPtr<ossimXmlDocument> xmlLutDocument;
+           xmlLutDocument = new ossimXmlDocument();
+           if ( xmlLutDocument.get()->openFile(lutXmlFile) )
       			{
-   					std::vector<ossimRefPtr<ossimXmlNode> > xml_lutNodes;
-   					ossimString s;
-   					
-   					xpath = "/lut/offset";
-   					xml_lutNodes.clear();
-   					xmlLutDocument->findNodes(xpath, xml_lutNodes);   					
-   					if(xml_lutNodes.size() == 0)
-   					{
-     					setErrorStatus();
-     					if(traceDebug())
-     					{
-  	    					ossimNotify(ossimNotifyLevel_DEBUG)
+               const ossimRefPtr<ossimXmlNode> lutRoot = xmlLutDocument.get()->getRoot(); //->findFirstNode("lut");
+
+               if(! lutRoot.get())
+               {
+                  setErrorStatus();
+                  if(traceDebug())
+                  {
+                     ossimNotify(ossimNotifyLevel_DEBUG)
     		      					<< MODULE << " DEBUG:"
-            	  					<< "\nCould not find: " << xpath
-               						<< std::endl;
-      					}
-      					return false;
-   					}
-   					ossim_float64 offset = xml_lutNodes[0]->getText().toFloat64();  
-					noise.set_offset(offset);				
-								
-   					xpath = "/lut/gains";
-   					xml_lutNodes.clear();
-   					xmlLutDocument->findNodes(xpath, xml_lutNodes);   					
-   					if(xml_lutNodes.size() == 0)
-   					{
-     					setErrorStatus();
-     					if(traceDebug())
-     					{
-  	    					ossimNotify(ossimNotifyLevel_DEBUG)
+                        << "\nCould not find: lut"  << std::endl;
+                  }
+                  return false;
+               }
+
+               ossimString offsetVal = lutRoot->getChildTextValue("offset");
+               if( !offsetVal.empty())
+               {
+                  noise.set_offset(offsetVal.toFloat64());
+               }
+               else
+               {
+                  setErrorStatus();
+                  if(traceDebug())
+                  {
+                     ossimNotify(ossimNotifyLevel_DEBUG)
     		      					<< MODULE << " DEBUG:"
-            	  					<< "\nCould not find: " << xpath
-               						<< std::endl;
-      					}
-      					return false;
-   					}  
-					noise.set_gain(xml_lutNodes[0]->getText());	
-				}
+                        << "\nCould not find: offset"  << std::endl;
+                  }
+                  return false;
+               }
+
+               ossimString gainVal = lutRoot->getChildTextValue("gains");
+               if( !gainVal.empty())
+               {
+                  noise.set_gain(gainVal);
+               }
+               else
+               {
+                  setErrorStatus();
+                  if(traceDebug())
+                  {
+                     ossimNotify(ossimNotifyLevel_DEBUG)
+    		      					<< MODULE << " DEBUG:"
+                        << "\nCould not find: gains"  << std::endl;
+                  }
+                  return false;
+               }
+            }
    			}
 		}
-    	++node;	
+    	++node;
    }
 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
-   }   
+   }
 
    return true;
 }
@@ -1095,8 +1125,8 @@ bool ossimRadarSat2Model::InitRefNoiseLevel(
    }
 
    _noiseLevel.clear();
-   
-   
+
+
    xpath = "/product/sourceAttributes/radarParameters/referenceNoiseLevel";
    xml_nodes.clear();
    xmlDocument->findNodes(xpath, xml_nodes);
@@ -1111,14 +1141,14 @@ bool ossimRadarSat2Model::InitRefNoiseLevel(
                		<< std::endl;
       }
       return false;
-   }  
-        
+   }
+
    node = xml_nodes.begin();
    while (node != xml_nodes.end())
    {
-   	
-   	ev.set_incidenceAngleCorrectionName( (*node)->getAttributeValue("incidenceAngleCorrection") ); 
-   	
+
+   	ev.set_incidenceAngleCorrectionName( (*node)->getAttributeValue("incidenceAngleCorrection") );
+
     sub_nodes.clear();
     xpath = "pixelFirstNoiseValue";
     (*node)->findChildNodes(xpath, sub_nodes);
@@ -1185,10 +1215,10 @@ bool ossimRadarSat2Model::InitRefNoiseLevel(
          }
       	return false;
     }
-   	ev.set_units( sub_nodes[0]->getAttributeValue("units") ); 
+   	ev.set_units( sub_nodes[0]->getAttributeValue("units") );
 
 
-    std::vector<ossimString> s2;      
+    std::vector<ossimString> s2;
     std::vector<ossim_float64> noiseLevelValues;
     s2.clear();
     noiseLevelValues.clear();
@@ -1197,7 +1227,7 @@ bool ossimRadarSat2Model::InitRefNoiseLevel(
 	{
 		noiseLevelValues.push_back( s2[i].toFloat64() );
 	}
-   	ev.set_noiseLevelValues( noiseLevelValues ); 
+   	ev.set_noiseLevelValues( noiseLevelValues );
 
 	InitLut(xmlDocument, ev);
 
@@ -1206,11 +1236,11 @@ bool ossimRadarSat2Model::InitRefNoiseLevel(
 
     ++node;
    }
- 
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
-   }   
+   }
 
    return true;
 }
@@ -1233,6 +1263,33 @@ bool ossimRadarSat2Model::saveState(ossimKeywordlist& kwl,
    // Save our state:
    kwl.add(prefix, PRODUCT_XML_FILE_KW, _productXmlFile.c_str());
    kwl.add(prefix, NUMBER_SRGR_COEFFICIENTS_KW, _n_srgr);
+
+   kwl.add("support_data.",
+           "calibration_lookup_flag",
+           "true",
+           true);
+
+
+   if(! theProductionDateUTCString.empty())
+      kwl.add("support_data.",
+              ossimKeywordNames::DATE_KW,
+              theProductionDateUTCString.c_str(),
+              true);
+
+   if(! theAcquisitionDateUTCString.empty())
+      kwl.add("support_data.",
+              ossimKeywordNames::IMAGE_DATE_KW,
+              theAcquisitionDateUTCString.c_str(),
+              true);
+
+   //RK ...fix this part as part of refractoring
+   //if(theSLC)// numBands*=2; // real and imaginary
+
+
+   kwl.add("support_data.",
+           ossimKeywordNames::NUMBER_BANDS_KW,
+           2,
+           true);
 
    // Make sure all the arrays are equal in size.
    const ossim_uint32 COUNT = static_cast<ossim_uint32>(_n_srgr);
@@ -1282,10 +1339,10 @@ bool ossimRadarSat2Model::saveState(ossimKeywordlist& kwl,
    if (result)
    {
       	for(ossim_uint32 i = 0; i < _noiseLevel.size(); ++i)
-   		{	
+   		{
    				_noiseLevel[i].saveState(kwl, prefix);
    		}
-       
+
    }
 
    //---
@@ -1485,9 +1542,9 @@ bool ossimRadarSat2Model::loadState (const ossimKeywordlist &kwl,
 	if(result)
 	{
       	for(ossim_uint32 i = 0; i < _noiseLevel.size(); ++i)
-   		{	
+   		{
    				_noiseLevel[i].loadState(kwl, prefix);
-   		}		
+   		}
 	}
 
    if (traceDebug())

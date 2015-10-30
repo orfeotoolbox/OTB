@@ -675,7 +675,8 @@ private:
        //and recomputed FID for each features (without holes).
         //Note : the GetDriver() Method has not been encapsulated in otb::ogr::DataSource,
         //so we must access the OGR pointer by using .ogr()
-       std::string driverName(ogrDS->ogr().GetDriver()->GetName());
+
+        std::string driverName(ogrDS->ogr().GetDriver()->GetName());
        if ( driverName.find("ESRI Shapefile") != std::string::npos)
          {
            otbAppLogINFO(<<"REPACK the Shapefile ..."<<std::endl);

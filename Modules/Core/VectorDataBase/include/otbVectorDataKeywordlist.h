@@ -141,8 +141,9 @@ public:
 
   /** Constructor */
   VectorDataKeywordlist();
+
   /** Destructor */
-  virtual ~VectorDataKeywordlist();
+  ~VectorDataKeywordlist();
 
   /** Constructor by copy (deep copy)*/
   VectorDataKeywordlist(const Self& other);

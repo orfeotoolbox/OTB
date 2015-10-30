@@ -1,7 +1,7 @@
 include( UseJava )
 
 set(TEST_DRIVER otbTestDriver
-    --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_Smoothing>
+    --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_Smoothing>
 )
 
 set( PATH_SEPARATOR ":")

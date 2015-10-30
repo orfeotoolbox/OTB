@@ -39,7 +39,6 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
     std::copy(argv + 1, argv + argc, std::back_inserter(modulePathList));
 
     // Load the path in the environment
-    std::string specificEnv("ITK_AUTOLOAD_PATH=");
     std::list<std::string>::const_iterator it = modulePathList.begin();
     while( it != modulePathList.end() )
       {

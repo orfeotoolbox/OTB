@@ -10,6 +10,12 @@ set(OTBGdalAdapters_SRC
   otbOGRDataSourceWrapper.cxx
   )
 
+if(OTB_USE_GDAL_20)
+  set(OTBGdalAdapters_SRC ${OTBGdalAdapters_SRC} otbOGRVersionProxy2x.cxx)
+else(Otb_use_gdal_20)
+  set(OTBGdalAdapters_SRC ${OTBGdalAdapters_SRC} otbOGRVersionProxy1x.cxx)
+endif(OTB_USE_GDAL_20)
+
 add_library(OTBGdalAdapters ${OTBGdalAdapters_SRC})
 target_link_libraries(OTBGdalAdapters 
   ${OTBBoost_LIBRARIES}

@@ -247,13 +247,13 @@ public:
         otb::Wrapper::Parameter *parameter = $self->GetParameterList()->GetParameterByKey(pkey); \
         InputImageParameter* inputImageParam = dynamic_cast<InputImageParameter*>(parameter); \
         typedef otb::##ImageClass##<##PixelDataType##>   ImageType;     \
-        typename ImageType::Pointer output = ImageType::New();          \
-        typedef typename ImageType::SizeType        SizeType;           \
-        typedef typename ImageType::IndexType       IndexType;          \
-        typedef typename ImageType::RegionType      RegionType;         \
-        typedef typename ImageType::PointType       PointType;          \
-        typedef typename ImageType::SpacingType     SpacingType;        \
-        typedef typename ImageType::DirectionType   DirectionType;      \
+        ImageType::Pointer output = ImageType::New();          \
+        typedef ImageType::SizeType        SizeType;           \
+        typedef ImageType::IndexType       IndexType;          \
+        typedef ImageType::RegionType      RegionType;         \
+        typedef ImageType::PointType       PointType;          \
+        typedef ImageType::SpacingType     SpacingType;        \
+        typedef ImageType::DirectionType   DirectionType;      \
         IndexType start;                                                \
         DirectionType direction;                                        \
         start.Fill( 0 );                                                \
@@ -313,14 +313,14 @@ public:
         otb::Wrapper::Parameter *parameter = $self->GetParameterList()->GetParameterByKey(pkey); \
         OutputImageParameter* outputImageParam = dynamic_cast<OutputImageParameter*>(parameter); \
         typedef itk::ImageBase<2> ImageBaseType;                        \
-        typedef typename ImageBaseType::RegionType RegionType;          \
+        typedef ImageBaseType::RegionType RegionType;          \
         ImageBaseType::Pointer imageBase;                               \
         imageBase = outputImageParam->GetValue();                       \
         imageBase->Update();                                            \
-        typedef typename ImageBaseType::SizeType        SizeType;       \
-        typedef typename ImageBaseType::IndexType       IndexType;      \
-        typedef typename ImageBaseType::PointType       PointType;      \
-        typedef typename ImageBaseType::SpacingType     SpacingType;    \
+        typedef ImageBaseType::SizeType        SizeType;       \
+        typedef ImageBaseType::IndexType       IndexType;      \
+        typedef ImageBaseType::PointType       PointType;      \
+        typedef ImageBaseType::SpacingType     SpacingType;    \
         RegionType region = imageBase->GetBufferedRegion();             \
         SizeType size =  region.GetSize();                              \
         *dim1 = size[1];                                                \

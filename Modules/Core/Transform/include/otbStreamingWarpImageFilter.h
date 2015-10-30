@@ -93,6 +93,8 @@ protected:
    */
   virtual void GenerateInputRequestedRegion();
 
+  virtual void GenerateOutputInformation();
+
   /**
    * Re-implement the method ThreadedGenerateData to mask area outside the deformation grid
    */

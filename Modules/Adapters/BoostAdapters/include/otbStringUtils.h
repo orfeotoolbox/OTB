@@ -40,7 +40,7 @@ Res LexicalCast(In const& in, std::string const& kind) {
     }
     catch (boost::bad_lexical_cast &) {
         std::ostringstream oss;
-        oss << "Cannot decode " << in << " as this is not a valid value for " << kind;
+        oss << "Cannot decode '" << in << "' as this is not a valid value for '" << kind << "'";
         throw std::runtime_error(oss.str());
     }
 }

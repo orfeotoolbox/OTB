@@ -23,6 +23,9 @@
 // gets integrated into the main directories.
 
 #include "otbNeighborhoodMajorityVotingImageFilter.h"
+#include "itkDefaultConvertPixelTraits.h"
+#include "itkMetaDataObject.h"
+#include "otbMetaDataKey.h"
 
 namespace otb
 {
@@ -116,6 +119,30 @@ const KernelIteratorType kernelEnd)
   }
 
   return majorityLabel;
+}
+
+template<class TInputImage, class TOutputImage, class TKernel>
+void
+NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage, TKernel>
+::GenerateOutputInformation()
+{
+  Superclass::GenerateOutputInformation();
+
+  TOutputImage* outputPtr = this->GetOutput();
+
+  // Set the NoData value using the background
+  const unsigned int & nbBands =  outputPtr->GetNumberOfComponentsPerPixel();
+  std::vector<bool> noDataValueAvailable;
+  noDataValueAvailable.resize(nbBands,true);
+  std::vector<double> noDataValue;
+  noDataValue.resize(nbBands,0.0);
+  for (unsigned int i=0 ; i<nbBands ; ++i)
+    {
+    noDataValue[i] = itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i,m_LabelForNoDataPixels);
+    }
+  itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
+  itk::EncapsulateMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValue);
 }
 
 } // end namespace otb
