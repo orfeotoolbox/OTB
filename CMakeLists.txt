@@ -6,7 +6,8 @@ endif()
 
 foreach(p
     CMP0025 # CMake 3.0
-    CMP0042 # CMake 3.0 
+    CMP0042 # CMake 3.0
+    CMP0058
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
@@ -248,7 +249,7 @@ set(EPSILON_15 0.000000000000001)
 #
 function(otb_add_test)
   set(largeinput_regex "LARGEINPUT{([^;{}\r\n]*)}")
-  
+
   set(_depends_on_largeinput OFF)
   foreach(arg IN LISTS ARGN)
      if("x${arg}" MATCHES "${largeinput_regex}")
