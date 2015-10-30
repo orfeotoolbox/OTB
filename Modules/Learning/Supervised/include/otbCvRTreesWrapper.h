@@ -57,7 +57,7 @@ public:
       }
     // We only sort the 2 greatest elements
     std::nth_element(classVotes.begin(), classVotes.begin()+1, 
-                     classVotes.end(), std::greater<>());
+                     classVotes.end(), std::greater<unsigned int>());
     float confidence = static_cast<float>(classVotes[0]-classVotes[1])/ntrees;
     return confidence;
   };
