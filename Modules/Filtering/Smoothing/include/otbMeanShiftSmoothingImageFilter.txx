@@ -375,9 +375,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   neighborhoodRegion.SetSize(regionSize);
 
   RealType weightSum = 0;
-  RealVector oneOverBandwidth(jointDimension), shifts(jointDimension);
-  for (unsigned int comp = 0; comp < jointDimension; comp++)
-    oneOverBandwidth[comp] = 1.0/bandwidth[comp];
+  RealVector shifts(jointDimension);
 
   // An iterator on the neighborhood of the current pixel (in joint
   // spatial-range domain)
@@ -395,7 +393,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     for (unsigned int comp = 0; comp < jointDimension; comp++)
       {
       shifts[comp] = jointNeighbor[comp] - jointPixel[comp];
-      double d = shifts[comp] * oneOverBandwidth[comp];
+      double d = shifts[comp] / bandwidth[comp];
       norm2 += d*d;
       }
 
