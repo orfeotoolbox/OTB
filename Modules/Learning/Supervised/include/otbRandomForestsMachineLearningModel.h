@@ -121,6 +121,9 @@ public:
   itkGetMacro(TerminationCriteria, int);
   itkSetMacro(TerminationCriteria, int);
 
+  itkGetMacro(CoputeMargin, bool);
+  itkSetMacro(ComputeMargin, bool);
+
   /** Returns a matrix containing variable importance */
   VariableImportanceMatrixType GetVariableImportance();
   
@@ -206,6 +209,10 @@ private:
   float m_ForestAccuracy;
   /** The type of the termination criteria */
   int m_TerminationCriteria;
+  /** Wether to compute margin (difference in probability between the
+   * 2 most voted classes) instead of confidence (probability of the most
+   * voted class) in prediction*/
+  bool m_ComputeMargin;
 };
 } // end namespace otb
 
