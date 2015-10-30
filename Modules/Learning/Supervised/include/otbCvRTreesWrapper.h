@@ -19,9 +19,6 @@
 #define __otbCvRTreesWrapper_h
 
 #include "otbOpenCVUtils.h"
-#include <vector>
-#include <algorithm>
-
 
 namespace otb
 {
@@ -34,8 +31,8 @@ namespace otb
 class CV_EXPORTS_W CvRTreesWrapper : public CvRTrees
 {
 public:
-  CvRTreesWrapper(){};
-  virtual ~CvRTreesWrapper(){};
+  CvRTreesWrapper();
+  virtual ~CvRTreesWrapper();
   
   /** Predict the confidence of the classifcation by computing the 
       difference in votes between the first and second most voted classes.
@@ -45,29 +42,7 @@ public:
   */
   float predict_confidence(const cv::Mat& sample, 
                            const cv::Mat& missing = 
-                           cv::Mat()) const
-  {
-    // Sanity check (division by ntrees later on)
-    if(ntrees == 0)
-      {
-      return 0.;
-      }
-      
-    std::vector<unsigned int> classVotes(nclasses);
-    for( int k = 0; k < ntrees; k++ )
-      {
-      CvDTreeNode* predicted_node = trees[k]->predict( sample, missing );
-      int class_idx = predicted_node->class_idx;
-      CV_Assert( 0 <= class_idx && class_idx < nclasses );
-      ++classVotes[class_idx];
-      }
-    // We only sort the 2 greatest elements
-    std::nth_element(classVotes.begin(), classVotes.begin()+1, 
-                     classVotes.end(), std::greater<unsigned int>());
-    float confidence = static_cast<float>(classVotes[0]-classVotes[1])/ntrees;
-    return confidence;
-  };
-
+                           cv::Mat()) const;
 };
 
 }

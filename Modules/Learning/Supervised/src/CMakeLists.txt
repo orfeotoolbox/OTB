@@ -1,4 +1,5 @@
 set(OTBSupervised_SRC
+  otbCvRTreesWrapper.cxx
   otbMachineLearningModelFactoryBase.cxx
   otbMachineLearningUtils.cxx
   )
