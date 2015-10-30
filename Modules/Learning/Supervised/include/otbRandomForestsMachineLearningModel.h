@@ -121,7 +121,7 @@ public:
   itkGetMacro(TerminationCriteria, int);
   itkSetMacro(TerminationCriteria, int);
 
-  itkGetMacro(CoputeMargin, bool);
+  itkGetMacro(ComputeMargin, bool);
   itkSetMacro(ComputeMargin, bool);
 
   /** Returns a matrix containing variable importance */
