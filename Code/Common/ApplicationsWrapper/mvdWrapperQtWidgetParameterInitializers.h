@@ -107,6 +107,13 @@ SetupOutputFilename( W* widget,
 
 /**
  */
+template< typename W >
+void
+SetupOutputFilename( W * widget,
+                     const QDir & =QDir::current() );
+
+/**
+ */
 template< typename F >
 inline void SetupWidget( QWidget * widget, const F& functor );
 
@@ -517,8 +524,14 @@ OutputImageInitializer
   assert( I18nCoreApplication::ConstInstance()!=NULL );
 
   if( m_Prefix.isEmpty() )
+    {
     SetupForFilenameDrop( widget, "You can drop filename here." );
 
+    assert( qApp!=NULL );
+    assert( !qApp->arguments().empty() );
+
+    SetupOutputFilename( widget );
+    }
   else
     SetupOutputFilename(
       widget,
@@ -537,6 +550,11 @@ OutputVectorDataInitializer
   assert( widget!=NULL );
 
   SetupForFilenameDrop( widget, "You can drop filename here." );
+
+  // assert( qApp!=NULL );
+  // assert( !qApp->arguments().empty() );
+
+  // SetupOutputFilename( widget );
 }
 
 /*****************************************************************************/
@@ -548,6 +566,11 @@ OutputFilenameInitializer
   assert( widget!=NULL );
 
   SetupForFilenameDrop( widget, "You can drop filename here." );
+
+  // assert( qApp!=NULL );
+  // assert( !qApp->arguments().empty() );
+
+  // SetupOutputFilename( widget );
 }
 
 /*****************************************************************************/
@@ -682,6 +705,17 @@ SetupOutputFilename( W* widget,
   widget->SetFileName(
     dir.absoluteFilePath( prefix + id + extension )
   );
+
+  widget->UpdateGUI();
+}
+
+/*****************************************************************************/
+template< typename W >
+void
+SetupOutputFilename( W * widget,
+                     const QDir & dir )
+{
+  widget->SetFileName( dir.path() );
 
   widget->UpdateGUI();
 }
