@@ -47,6 +47,12 @@ public:
                            const cv::Mat& missing = 
                            cv::Mat()) const
   {
+    // Sanity check (division by ntrees later on)
+    if(ntrees == 0)
+      {
+      return 0.;
+      }
+      
     std::vector<unsigned int> classVotes(nclasses);
     for( int k = 0; k < ntrees; k++ )
       {
