@@ -37,6 +37,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAbstractLayerModel.h"
+#include "Core/mvdFilenameInterface.h"
 #include "Core/mvdStackedLayerModel.h"
 #include "Gui/mvdLayerStackItemModel.h"
 #include "Gui/mvdLayerStackWidget.h"
@@ -197,6 +199,14 @@ LayerStackController
 
   QObject::connect(
     widget,
+    SIGNAL( CopyLayerRequested( const AbstractLayerModel * ) ),
+    // to:
+    this,
+    SLOT( OnCopyLayerRequested( const AbstractLayerModel * ) )
+  );
+
+  QObject::connect(
+    widget,
     SIGNAL( RotateLayersRequested( int ) ),
     // to:
     model,
@@ -320,6 +330,14 @@ LayerStackController
 
   QObject::disconnect(
     widget,
+    SIGNAL( CopyLayerRequested( const AbstractLayerModel * ) ),
+    // from:
+    this,
+    SLOT( OnCopyLayerRequested( const AbstractLayerModel * ) )
+  );
+
+  QObject::disconnect(
+    widget,
     SIGNAL( RotateLayersRequested( int ) ),
     // from:
     model,
@@ -375,6 +393,39 @@ LayerStackController
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
+/*******************************************************************************/
+void
+LayerStackController
+::OnCopyLayerRequested( const AbstractLayerModel * layer )
+{
+  // qDebug() << this << "::OnCopyLayerRequested(" << layer << ")";
+
+  assert( layer!=NULL );
+
+  const FilenameInterface * interface =
+    dynamic_cast< const FilenameInterface * >( layer );
+
+  if( interface==NULL )
+    return;
+
+  assert( qApp!=NULL );
+  assert( qApp->clipboard()!=NULL );
+  assert( qApp->clipboard()->mimeData()!=NULL );
+
+  QList< QUrl > urls;
+  
+  urls << QUrl::fromLocalFile( interface->GetFilename() );
+
+  qDebug() << "URLs:" << urls;
+
+  QMimeData * mimeData = new QMimeData();
+
+  mimeData->setUrls( urls );
+  mimeData->setText( interface->GetFilename() );
+
+  qApp->clipboard()->setMimeData( mimeData );
+}
+
 /*******************************************************************************/
 void
 LayerStackController

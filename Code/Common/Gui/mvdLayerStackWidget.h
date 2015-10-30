@@ -57,6 +57,7 @@ namespace
 
 namespace mvd
 {
+class AbstractLayerModel;
 class LayerStackItemModel;
 
 //
@@ -185,6 +186,9 @@ signals:
   /**
    */
   void ApplyButtonClicked();
+  /**
+   */
+  void CopyLayerRequested( const AbstractLayerModel * );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

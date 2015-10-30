@@ -136,6 +136,10 @@ public:
 
   /**
    */
+  static const AbstractLayerModel * GetLayer( const QModelIndex & );
+
+  /**
+   */
   void SetStack( StackedLayerModel * );
 
   //

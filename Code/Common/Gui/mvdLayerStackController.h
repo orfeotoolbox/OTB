@@ -59,6 +59,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class AbstractLayerModel;
 class LayerStackWidget;
 
 
@@ -171,6 +172,9 @@ private slots:
   /**
    */
   void OnStackedLayerContentReset();
+  /**
+   */
+  void OnCopyLayerRequested( const AbstractLayerModel * );
 };
 
 } // end namespace 'mvd'.

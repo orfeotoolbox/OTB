@@ -198,6 +198,20 @@ LayerStackWidget
 
     switch( keyEvent->key() )
       {
+      case Qt::Key_C:
+	if( keyEvent->modifiers()==Qt::ControlModifier &&
+	    m_UI->treeView->currentIndex().isValid() )
+	  {
+	  emit CopyLayerRequested(
+	    LayerStackItemModel::GetLayer(
+	      m_UI->treeView->currentIndex()
+	    )
+	  );
+
+	  return true;
+	  }
+	break;
+      //
       case Qt::Key_Delete:
 	if( keyEvent->modifiers()==Qt::NoModifier )
 	  {

@@ -81,7 +81,22 @@ HEADERS[ LayerStackItemModel::COLUMN_COUNT ] =
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
+/*****************************************************************************/
+const AbstractLayerModel *
+LayerStackItemModel
+::GetLayer( const QModelIndex & index )
+{
+  assert( index.isValid() );
+  assert( !index.parent().isValid() );
 
+  assert(
+    index.internalPointer()==
+    static_cast< const AbstractLayerModel * >( index.internalPointer() )
+  );
+
+  return
+    static_cast< const AbstractLayerModel * >( index.internalPointer() );
+}
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
