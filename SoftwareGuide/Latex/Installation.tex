@@ -48,38 +48,10 @@ version based on MFC.}
 \label{fig:CMakeGUI}
 \end{figure}
 
-\section{Linux}
-\label{sec:compiling-linux}
-
-There are two ways of compiling OTB from sources, depending on how you want to manage dependencies.
-
-\subsection{Building OTB and all dependencies (aka SuperBuild)}
-\subsection{Building only OTB (all dependencies must be available)}
-
-\section{Mac OS X}
-\label{sec:compiling-macosx}
-
-\section{Windows}
-\label{sec:compiling-windows}
-
------------
-
-\index{CMake!OTB tree}
-Running CMake initially requires that you provide three pieces of
-information:
-\begin{itemize}
-\item Where the source code directory is located (ex.: OTB\_SOURCE\_DIR),
-\item Where the object code is to be produced: (ex.: OTB\_BINARY\_DIR),
-\item Where to install the binaries/libraries: (ex.: OTB\_INSTALL\_DIR).
-\end{itemize}
-These are referred to as the \emph{source directory}, the \emph{binary directory} and the \emph{install directory}.
-We recommend setting the binary directory to be different than the source directory (an
-\emph{out-of-source} build), but OTB will still build if they are set
-to a directory inside the source directory (an \emph{in-source} build).
-
-
-The OTB needs some external libraries to work (see table \ref{tab:installation2} below). 
-
+OTB depends on a number of external libraries.
+Some are mandatory, meaning that OTB cannot be compiled without them, while other are optional and can be activated or
+not during the build process.
+See table \ref{tab:otb-dependencies} for the full list of dependencies.
 \begin{center}
 \begin{tiny}
 \begin{table}[!htbp]
@@ -125,10 +97,51 @@ The OTB needs some external libraries to work (see table \ref{tab:installation2}
 \hline
 \end{tabular}
 \caption{Libraries used in the OTB.}
-\label{tab:installation2}
+\label{tab:otb-dependencies}
 \end{table}
 \end{tiny}
 \end{center}
+
+\section{Linux}
+\label{sec:compiling-linux}
+
+There are two ways of compiling OTB from sources, depending on how you want to manage dependencies.
+- discuss dependencies
+- other requirements
+
+common cmake variables between super and normal: examples, tests, etc.
+
+\subsection{Building OTB and all dependencies (aka SuperBuild)}
+
+cmake variables
+procedure
+
+\subsection{Building only OTB (all dependencies must be available)}
+
+cmake variables
+procedure
+
+\section{Mac OS X}
+\label{sec:compiling-macosx}
+
+\section{Windows}
+\label{sec:compiling-windows}
+
+-----------
+
+Running CMake initially requires that you provide three pieces of
+information:
+\begin{itemize}
+\item Where the source code directory is located (ex.: OTB\_SOURCE\_DIR),
+\item Where the object code is to be produced: (ex.: OTB\_BINARY\_DIR),
+\item Where to install the binaries/libraries: (ex.: OTB\_INSTALL\_DIR).
+\end{itemize}
+These are referred to as the \emph{source directory}, the \emph{binary directory} and the \emph{install directory}.
+We recommend setting the binary directory to be different than the source directory (an
+\emph{out-of-source} build), but OTB will still build if they are set
+to a directory inside the source directory (an \emph{in-source} build).
+
+
 
 To manage correctly and easily the dependencies of OTB (especially under Windows) \textbf{we strongly recommend to use the SuperBuild feature} (see next subsection \ref{sec:SuperBuild}).
 Once the dependencies are built, OTB can finally be compiled : 
