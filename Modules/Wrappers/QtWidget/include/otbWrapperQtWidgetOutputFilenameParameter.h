@@ -45,8 +45,10 @@ public:
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
 
-protected slots:
+public slots:
   void SetFileName( const QString& value );
+
+protected slots:
   void SelectFile();
 
 private:
