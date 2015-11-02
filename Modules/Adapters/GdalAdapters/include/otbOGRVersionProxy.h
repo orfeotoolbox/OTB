@@ -126,6 +126,9 @@ namespace version_proxy
    */
   GDALDriverType *  GetDriverByName(const char * name);
 
+
+  std::string GetDriverNameFromDataSource(const GDALDatasetType * ds);
+
   /**
    * Sync dataset to disk.
    *
