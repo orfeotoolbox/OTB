@@ -73,10 +73,10 @@ int main (int argc, char **argv)
       = workingInplace ? input
       : outputIsStdout ? 0
       :                  otb::ogr::DataSource::New( outputFile, otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
-    std::cout << "input: " << input -> ogr().GetName() << " should be: " << inputFile << "\n";
+    std::cout << "input: " << otb::ogr::version_proxy::GetFileListAsStringVector(&input->ogr())[0] << " should be: " << inputFile << "\n";
     if (output)
       {
-      std::cout << "output: " << output -> ogr().GetName() << " should be: " << outputFile << "\n";
+      std::cout << "output: " << otb::ogr::version_proxy::GetFileListAsStringVector(&output->ogr())[0] << " should be: " << outputFile << "\n";
       }
     // std::cout << "\n";
 
