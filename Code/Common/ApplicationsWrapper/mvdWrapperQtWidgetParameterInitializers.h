@@ -551,10 +551,10 @@ OutputVectorDataInitializer
 
   SetupForFilenameDrop( widget, "You can drop filename here." );
 
-  // assert( qApp!=NULL );
-  // assert( !qApp->arguments().empty() );
+  assert( qApp!=NULL );
+  assert( !qApp->arguments().empty() );
 
-  // SetupOutputFilename( widget );
+  SetupOutputFilename( widget );
 }
 
 /*****************************************************************************/
@@ -567,10 +567,10 @@ OutputFilenameInitializer
 
   SetupForFilenameDrop( widget, "You can drop filename here." );
 
-  // assert( qApp!=NULL );
-  // assert( !qApp->arguments().empty() );
+  assert( qApp!=NULL );
+  assert( !qApp->arguments().empty() );
 
-  // SetupOutputFilename( widget );
+  SetupOutputFilename( widget );
 }
 
 /*****************************************************************************/
