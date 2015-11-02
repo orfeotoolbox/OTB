@@ -4,34 +4,9 @@
 #
 #####################################################
 #
-# To Build the OTB Software Guide,
-#
-# Compile and build the OTB binaries. You will need to build the Examples in
-# the Insight directory with the CMakeLists.txt file in Insight/
-#
-# Run this CMakeLists.txt file and set BUILD_FIGURES  'ON'. Specify the
-# directory containing the Insight executables. Specify OTB data paths.
-# The default data path inferred is Insight/Examples/Data. This should suffice
-# for building the SoftwareGuide. Should more paths be need add them in a colon
-# seperated list.
-#
-# Make
-# Make
-#
-# More than one make may be necessary to ensure generation of the index
-#
-# If BUILD_FIGURES is set to ON, the examples source files are parsed for
-# command line argument tags and if found executed to generate output
-# images, if not the images are expected to be present in the Art/ folder
-# in PNG/XFIG/JPEG/EPS format.
-#
-# Since generating figures may take a while, you may set BUILD_FIGURES to
-# OFF. In this case, all figures are expected to be present in the Art/
-# folder in PNG/XFIG/JPEG/EPS format.
-#
-#
-
-
+# Documentation on how to build the Software Guide
+# is available on OTB Wiki at:
+# http://wiki.orfeo-toolbox.org/index.php/Compiling_documentation
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
