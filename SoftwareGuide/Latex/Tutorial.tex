@@ -21,6 +21,8 @@ first few which cover the basics you'll use almost everywhere.
 
 \index{Hello World}
 
+\subsection{Linux and Mac OS X}
+
 Let's start by the typical {\em Hello world} program. We are going to compile
 this C++ program linking to your new OTB.
 
@@ -85,6 +87,118 @@ Ok, well done! You've just compiled and executed your first OTB program. Actuall
 using OTB for that is not very useful, and we doubt that you downloaded OTB only
 to do that. It's time to move on to a more advanced level.
 
+\subsection{Build your first application based on the OTB library on Windows platform}
+\label{sec:FirstWinAppOTB}
+
+Create a directory (with write access) where to store your work (for example at C:\textbackslash path\textbackslash to\textbackslash MyFirstCode).
+Organize your repository as it :
+\begin{itemize}
+\item MyFirstCode\textbackslash src
+\item MyFirstCode\textbackslash build
+\end{itemize}
+
+Follow the following steps:
+\begin{enumerate}
+\item Create a CMakeLists.txt into the src repository with the following lines:
+
+
+\begin{verbatim}
+
+project(MyFirstProcessing)
+
+cmake_minimum_required(VERSION 2.8)
+
+find_package(OTB REQUIRED)
+include(${OTB_USE_FILE})
+
+add_executable(MyFirstProcessing MyFirstProcessing.cxx )
+
+target_link_libraries(MyFirstProcessing ${OTB_LIBRARIES} )
+\end{verbatim}
+
+\item Create a MyFirstProcessing.cxx into the src repository with the following lines:
+\begin{verbatim}
+#include "otbImage.h"
+#include "otbVectorImage.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
+#include "otbMultiToMonoChannelExtractROI.h"
+
+int main(int argc, char* argv[])
+{
+  if (argc < 3)
+  {
+    std::cerr << "Usage: " << std::endl;
+    std::cerr << argv[0] << "  inputImageFile  outputImageFile" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  typedef unsigned short PixelType;
+  typedef otb::Image <PixelType, 2> ImageType;
+  typedef otb::VectorImage <PixelType, 2> VectorImageType;
+  typedef otb::MultiToMonoChannelExtractROI <PixelType, PixelType> FilterType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
+
+  FilterType::Pointer filter = FilterType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
+
+  reader->SetFileName(argv[1]);
+  filter->SetInput(reader->GetOutput());
+  writer->SetFileName(argv[2]);
+  writer->SetInput(filter->GetOutput());
+
+  return EXIT_SUCCESS;
+}
+\end{verbatim}
+\item create a file named BuildMyFirstProcessing.bat into the MyFirstCode directory with the following lines:
+\begin{verbatim}
+@echo off
+
+set /A ARGS_COUNT=0    
+for %%A in (%*) do set /A ARGS_COUNT+=1  
+if %ARGS_COUNT% NEQ 3 (goto :Usage)
+
+if NOT DEFINED OSGEO4W_ROOT (goto :NoOSGEO4W)
+	
+set src_dir=%1
+set build_dir=%2
+set otb_install_dir=%3 
+set current_dir=%CD%
+
+cd %build_dir%
+
+cmake %src_dir% ^
+      -DCMAKE_INCLUDE_PATH:PATH="%OSGEO4W_ROOT%\include" ^
+      -DCMAKE_LIBRARY_PATH:PATH="%OSGEO4W_ROOT%\lib" ^
+      -DOTB_DIR:PATH=%otb_install_dir% ^
+      -DCMAKE_CONFIGURATION_TYPES:STRING=Release
+
+cmake --build . --target INSTALL --config Release
+
+cd %current_dir%
+
+goto :END
+
+:Usage
+echo You need to provide 3 arguments to the script: 
+echo   1. path to the source directory
+echo   2. path to the build directory
+echo   3. path to the installation directory 
+GOTO :END
+
+:NoOSGEO4W
+echo You need to run this script from an OSGeo4W shell
+GOTO :END
+
+:END
+\end{verbatim}
+\item into a OSGEo4W shell, run the configure.bat with the right arguments: full path to your src directory, full path to your build directory, full path to the place where find OTBConfig.cmake file (should be C:\textbackslash path\textbackslash to\textbackslash MyOTBDir\textbackslash install\textbackslash lib\textbackslash otb).
+\item into the OSGeo4W shell, open the MyFirstProcessing.sln
+\item build the solution
+\item into the OSGeo4W shell, go to the bin\textbackslash Release directory and run MyFirstProcessing.exe. You can try for example with the otb\_logo.tif file which can be found into the OTB source.
+\end{enumerate}
 
 \section{Pipeline basics: read and write}
 \label{sec:TutorialPipeline}
