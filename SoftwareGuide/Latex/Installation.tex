@@ -1,49 +1,13 @@
 \setcounter{secnumdepth}{3}
 
-\chapter{Installation}
+\chapter{Compiling OTB from source}
 \label{chapter:Installation}
 \index{Installation}
 
-This section describes the process for installing OTB on your system. OTB is a toolbox, and as such, once it is installed in your computer, it provides by default a set of useful libraries. You can use these libraries to build your own applications based on it. What OTB does provide, besides the toolbox, is a large set of test files and examples that will introduce you to OTB concepts and will show you how to use OTB in your own projects.
-
-Since the release 3.12, OTB embeds a specific framework to generate applications in a more user-friendly way. OTB provides for each application one shared library (also known as plugin). This plugin can be auto-loaded into appropriate tools without recompiling, and is able to fully describe its own parameters, behavior and documentation.
-
-The tools to use these plugins can be extended, but OTB is shipped with the
-following:
-\begin{itemize}
-\item A command-line launcher,
-\item A graphical launcher, with an auto-generated Qt interface,
-  providing ergonomic parameters setting, display of documentation,
-  and progress reporting,
-\item A C and SWIG interface, which means that any application can be
-  loaded, set up and executed into a high-level language such as \textbf{Python}
-  for instance.
-\end{itemize}
-
-Based on a visualization framework which used FLTK libraries, Orfeo ToolBox team provides an integrated application which giving graphical access to a lot of OTB functionalities: \textbf{Monteverdi}. Since mid-2013, we also provide a new graphical application based on Qt: \textbf{Monteverdi2}. This new application used the OTB-Applications tools as processing framework. 
-   
 There are two ways to install OTB library on your system: installing from a binary distribution or compiling from sources. 
-The choice depends on your system, and on what you intend to do. If you intend compiling from source, OTB team provides the SuperBuild feature, which is designed to provide an easy access to OTB and its dependencies.
-SuperBuild is available since the release 5.0 (revision c20055670b36 / Tue, 24 Mar 2015 18:22:06).
+You can find information about the installation of binary packages for OTB-Applications and Monteverdi and Monteverdi2 (if they are available on your platform) in the OTB-Cookbook.
+This chapter covers installation from sources, also known as compiling.
 
-
-\section{Installing binary packages}
-\label{sec:install_binaries}
-
-You can find all information about the installation of binary packages for OTB-Applications, Monteverdi and Monteverdi2 (if they are available on your platform) into the OTB-Cookbook.
-
-The binary packages for OTB library are only available on:
-\begin{itemize}
-\item Ubuntu 12.04 and higher
-\item OpenSuse 12.X and higher
-\item MacOSX through MacPorts software  
-\end{itemize}
-
-Currently, no OSGeo4W package is available for the OTB library, you need to build from source to use it on windows platform. However you can find binary packages for Monteverdi, Monteverdi2 and OTB-Applications (command-line, QT based and python ones).
-
-
-\section{Building from sources}
-\label{sec:source}
 OTB has been developed and tested across different combinations of operating systems, compilers, and hardware platforms including MS-Windows, Linux on Intel-compatible hardware and Mac OSX.  It is known to work with the following compilers in 32/64 bit:
 \begin{itemize}
 \item Visual Studio 2010 and higher compiler on MS-Windows
@@ -51,26 +15,18 @@ OTB has been developed and tested across different combinations of operating sys
 \item Clang on MacOSX (10.8 and higher) systems
 \end{itemize}
 
-Given the advanced usage of C++ features in the toolbox, some compilers may have difficulties processing the code. If you are currently using an outdated compiler this may be an excellent excuse for upgrading this old piece of software!
-
-\subsection{Preparing CMake}
-\label{sec:CMakeforOTB}
-
 \index{CMake}
-\index{CMake!downloading}
+The challenge of supporting OTB across platforms has been solved through the use of CMake, a cross-platform, open-source
+build system. CMake is used to control the software compilation process using simple platform and compiler independent
+configuration files.  CMake generates native makefiles and workspaces that can be used in the compiler environment of
+your choice. CMake is quite sophisticated: it supports complex environments requiring system configuration, compiler
+feature testing, and code generation.
 
-The challenge of supporting OTB across platforms has been solved through the use of CMake, a cross-platform, open-source build system. CMake is used to control the software compilation process using simple platform and compiler independent configuration files.  CMake generates native makefiles and workspaces that can be used in the compiler environment of your choice. CMake is quite sophisticated: it supports complex environments requiring system configuration, compiler feature testing, and code generation.
-
-CMake generates Makefiles under UNIX systems and generates Visual Studio workspaces under Windows (and appropriate build files for other compilers like Borland). The information used by CMake is provided by \code{CMakeLists.txt} files that are present in every directory of the OTB source tree. These files contain information that the user provides to CMake at configuration time. Typical information includes paths to utilities in the system and the selection of software options specified by the user.
-
-
-CMake can be downloaded at no cost from
-\begin{center}
-  \url{http://www.cmake.org}
-\end{center}
-
-OTB requires at least CMake version 2.8.6. You can download binary versions for most of the popular platforms including Windows, Solaris, IRIX, HP, Mac and Linux. 
-Alternatively you can download the source code and build CMake on your system. Follow the instructions in the CMake Web page for downloading and installing the software.
+CMake generates Makefiles under UNIX systems and generates Visual Studio workspaces under Windows (and appropriate build
+files for other compilers like Borland). The information used by CMake is provided by \code{CMakeLists.txt} files that
+are present in every directory of the OTB source tree. These files contain information that the user provides to CMake
+at configuration time. Typical information includes paths to utilities in the system and the selection of software
+options specified by the user.
 
 CMake runs in an interactive mode in that you iteratively select
 options and configure according to these options. The iteration
@@ -78,17 +34,9 @@ proceeds until no more options remain to be selected. At this point, a
 generation step produces the appropriate build files for your
 configuration.
 
-This interactive configuration process can be better understood if you
-imagine that you are walking through a decision tree.  Every option that you
-select introduces the possibility that new, dependent options may become
-relevant. These new options are presented by CMake at the top of the options
-list in its interface.  Only when no new options appear after a configuration
-iteration can you be sure that the necessary decisions have all been made. At
-this point build files are generated for the current configuration.
-
-As the following figures display it, CMake has a different interface according to your systems.
-\label{sec:ConfiguringOTBwithVTK}
-\index{Configuration!with VTK}
+As shown in figure \ref{fig:CMakeGUI}, CMake has a different interfaces according to your system.
+Refer to section~\ref{sec:compiling-linux} for Linux build instructions, \ref{sec:compiling-windows} for Windows
+and \ref{sec:compiling-macosx} for Mac~OS~X.
 
 \begin{figure}[tpb]
 \centering
@@ -100,9 +48,21 @@ version based on MFC.}
 \label{fig:CMakeGUI}
 \end{figure}
 
+\section{Linux}
+\label{sec:compiling-linux}
 
+There are two ways of compiling OTB from sources, depending on how you want to manage dependencies.
 
-\index{Preliminary steps}
+\subsection{Building OTB and all dependencies (aka SuperBuild)}
+\subsection{Building only OTB (all dependencies must be available)}
+
+\section{Mac OS X}
+\label{sec:compiling-macosx}
+
+\section{Windows}
+\label{sec:compiling-windows}
+
+-----------
 
 \index{CMake!OTB tree}
 Running CMake initially requires that you provide three pieces of
@@ -189,19 +149,6 @@ The CMake variable \code{OTB\_BUILD\_DEFAULT\_MODULES} activates all usual modul
   \item disable some third party modules with the CMake variables \code{OTB\_USE\_XXX}. All the modules that depend on the corresponding third party will be disabled.
   \item disable the option \code{OTB\_BUILD\_DEFAULT\_MODULES}, and enable the modules you want. The variables \code{OTBGroup\_XXX} are used to enable all modules in a group. If this variable is off, the user can select which modules in the group should be enabled, using the pattern variable \code{Module\_XXX}.
 \end{itemize}
-
-
-\textbf{Note 1:} Those who want to avoid using the SuperBuild (even partially) or to use additional dependencies not provided by the SuperBuild, should refer to the subsection \ref{sec:manualdependencies}. 
-
-
-
-\textbf{Note 2:} 
-Please note that even if this section only describes how to compile OTB library and applications from sources, Monteverdi1 and Monteverdi2 can be compiled in a similar way.
-
-For Monteverdi, in addition to OTB, FLTK is required (\url{http://www.fltk.org}) as an external dependency. Therefore, you need to install it from your package manager or build it from source. For windows users, you can find it through the OSGeo4W installer.
-
-For Monteverdi2, in addition to OTB, Qt4 (\url{http://qt-project.org/}) and Qwt5 (\url{http://qwt.sourceforge.net/}) are required as external dependencies. Therefore, you need to install them from your package manager or build them from source. For windows users, you can find them through the OSGeo4W installer.
-
 
 \subsection{SuperBuild}
 \label{sec:SuperBuild}
@@ -309,108 +256,6 @@ A wiki page is also available here : \url{http://wiki.orfeo-toolbox.org/index.ph
 
 \subsection{Manual installation of OTB dependencies}
 \label{sec:manualdependencies}
-
-\subsubsection{Windows}
-
-To manage the dependencies of OTB under Windows without SuperBuild, users should install the \href{http://trac.osgeo.org/osgeo4w/}{OSGeo4W} tool. This software will provide you with all the necessary dependencies in 32 bit and 64 bit mode. Please follow these steps:
-\begin{enumerate}
-\item  Download the installer setup (32/64bit)
-\item  Run the setup installer with Admin Rights
-\item  Select Advanced Install
-\item  Select Install from Internet
-\item  Keep as much as possible the default values about root directory and other parameters. You must have the write access to this root directory. 
-\item  In the next screen, select a local package directory (idem you must have the write access to this directory)
-\item  Select your Internet connection settings
-\item  Select the default download site
-\item  Select the following packages (except for those eventually installed from SuperBuild):
-	\begin{itemize}
-	\item  msvcrt
-	\item  gdal
-	\item  curl
-	\item  expat 
-	\item  ossim
-	\item  opencv
-	\item  qt4-devel
-	\item  swig
-	\item  python
-	\item  fftw-devel
-	\item  libtiff
-	\end{itemize}
-\item  Run the installation process
-\item  Accept all the dependencies required by the selected packages
-\item  Wait the downloading and the installation of the packages
-\end{enumerate}
-
-Create a directory, where you have write access, to store your work.
-Download the OTB sources (see subsection \ref{sec:ObtainingTheSoftware}) : OTB\_SOURCE\_DIR.
-Create the two other usual directories OTB\_BINARY\_DIR and OTB\_INSTALL\_DIR.
-
-\index{Configure, Build and Install OTB}
-
-We will describe here how to compile and install the library with the main functionalities in Release and ReleaseWithDebugInfo mode.
-Create an OTB.bat file into your MyOTBDir and copy paste the following lines:
-
-\begin{verbatim}
-@echo off
-
-call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\Tools\vsvars32.bat"
-
-set /A ARGS_COUNT=0    
-for %%A in (%*) do set /A ARGS_COUNT+=1  
-if %ARGS_COUNT% NEQ 3 (goto :Usage)
-
-if NOT DEFINED OSGEO4W_ROOT (goto :NoOSGEO4W)
-	
-set src_dir=%1
-set build_dir=%2
-set otb_install_dir=%3
-set current_dir=%CD%
-
-set LANG=C
-set ITK_AUTOLOAD_PATH=
-set PYTHONPATH=
-set PATH=%OSGEO4W_ROOT%\apps\swigwin\;%PATH%
-
-cd %build_dir%
-
-cmake 	%src_dir% ^
-	-G "Visual Studio 10" ^
-	-DBUILD_EXAMPLES:BOOL=ON ^
-	-DOTB_WRAP_QT:BOOL=ON ^
-	-DOTB_WRAP_PYTHON:BOOL=ON ^
-	-DPYTHON_LIBRARY:FILEPATH="%OSGEO4W_ROOT%/apps/Python27/libs/python27.lib" ^
-	-DPYTHON_INCLUDE_DIR:PATH="%OSGEO4W_ROOT%/apps/Python27/include" ^
-	-DPYTHON_EXECUTABLE:FILEPATH="%OSGEO4W_ROOT%/bin/python.exe" ^
-	-DOTB_USE_OPENCV:BOOL=ON ^
-	-DCMAKE_INSTALL_PREFIX:PATH=%otb_install_dir% ^
-	-DCMAKE_CONFIGURATION_TYPES:STRING=Release;RelWithDebInfo
-
-cmake --build . --target INSTALL --config RelWithDebInfo
-
-cd %current_dir%
-
-goto :END
-
-:Usage
-echo You need to provide 3 arguments to the script: 
-echo   1. path to the source directory (OTB_SOURCE_DIR)
-echo   2. path to the build directory (OTB_BINARY_DIR)
-echo   3. path to the installation directory (an empty directory)
-GOTO :END
-
-:NoOSGEO4W
-echo You need to run this script from an OSGeo4W shell
-GOTO :END
-
-:END
-\end{verbatim}
-Into a OSGEo4W shell, run the OTB.bat with the right arguments: full path to the OTB src directory, full path to the OTB build directory, full path to the place where install OTB. Take a break, you made it: OTB is installed in your install directory. If you want test: into an OSGeo4W shell, go to the bin directory of the install directory and run HelloWorld.exe. If you want build OTB in Release config, into the OSGeo4W shell, open the OTB.sln and select this configuration from the configuration selector and build the solution.
-
-If you want use more recent MS-compiler please change the path to vsvars32.bat file and change the generator used by CMake line. OTB should support compilation under Visual Studio 2012 and 2013. 
-
-That should be all! Otherwise, subscribe to otb-users@googlegroups.com and you will get some help.
-
-
 
 \subsubsection{Linux systems : getting a qualified Gdal library }
 \label{sec:gdal}
