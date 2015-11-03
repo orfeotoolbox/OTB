@@ -109,12 +109,12 @@ See table \ref{tab:otb-dependencies} for the full list of dependencies.
 \subsection{Setting up the build environment}
 
 The first thing to do is to create a directory for working with OTB.
-This guide will use \texttt{~/OTB} but you are free to choose something else.
+This guide will use \texttt{\~/OTB} but you are free to choose something else.
 In this directory, there will be three locations:
 \begin{itemize}
-\item \texttt{~/OTB/otb} for the source file obtained from the git repository
-\item \texttt{~/OTB/build} for the intermediate build objects, CMake specific files, libraries and binaries.
-\item \texttt{~/OTB/install}, the installation directory for OTB once it is built.
+\item \texttt{\~/OTB/otb} for the source file obtained from the git repository
+\item \texttt{\~/OTB/build} for the intermediate build objects, CMake specific files, libraries and binaries.
+\item \texttt{\~/OTB/install}, the installation directory for OTB once it is built.
 A system location (\texttt{/usr/local} for example) can also be used, but installing locally is more flexible and does
 not require root access.
 \end{itemize}
@@ -131,6 +131,7 @@ The OTB project uses a git branching model where \texttt{develop} is the current
 It contains the latest patches and represents the work in progress towards the next release.
 For more information on OTB and git, including how to decide which branch to want to compile, please see the
 OTB wiki page at \url{http://wiki.orfeo-toolbox.org/index.php/Git}.
+
 Checkout the relevant branch now:
 \begin{verbatim}
 $ cd ~/OTB/otb
@@ -148,17 +149,93 @@ This method requires more work but provides more flexibility.
 \end{itemize}
 If you do not know which method to use and just want to compile OTB with all its modules, use SuperBuild.
 
+\begin{center}
+\begin{tiny}
+\begin{table}[!htbp]
+\begin{tabular}{p{0.25\textwidth}p{0.60\textwidth}}
+\hline
+\textbf{CMake variable} & \textbf{Value} \\
+\hline
+\texttt{BUILD\_DIRECTORY}               & Directory where build files and binaries are put, e.g. \texttt{\~/OTB/build} \\
+\texttt{CMAKE\_INSTALL\_PREFIX}         & Installation directory, target for \texttt{make install} \\
+\texttt{BUILD\_EXAMPLES}                & Activate compilation of OTB examples \\
+\texttt{BUILD\_TESTING}                 & Activate compilation of the tests \\
+\texttt{OTB\_BUILD\_DEFAULT\_MODULES}   & Activate all usual modules, required to build the examples \\
+\texttt{OTB\_USE\_\textit{XXX}}         & Activate module \textit{XXX} \\
+\texttt{OTBGroup\_\textit{XXX}}         & Enable modules in the group \textit{XXX} \\
+\texttt{OTB\_DATA\_ROOT}                & otb-data repository \\
+\texttt{OTB\_WRAP\_PYTHON}              & Enable Python wrapper \\
+\texttt{OTB\_WRAP\_JAVA}                & Enable Java wrapper \\
+
+\hline
+\multicolumn{2}{l}{\small \textbf{SuperBuild only}} \\ 
+\texttt{DOWNLOAD\_LOCATION}             & Location to download dependencies \\
+\texttt{USE\_SYSTEM\_\textit{XXX}}      & Use the system's \textit{XXX} library \\
+
+\hline
+\end{tabular}
+\caption{Important CMake configuration variables in OTB}
+\label{tab:installation-cmake-variables}
+\end{table}
+\end{tiny}
+\end{center}
+
 \subsection{Building OTB and all dependencies (aka SuperBuild)}
 \label{sec:installation-linux-superbuild}
 
-cmake variables
-procedure
+The SuperBuild is a way of compiling dependencies to a project just before you build the project. Thanks to CMake and
+its ExternalProject module, it is possible to download a source archive, configure, compile and install it when building
+the main project. This feature has been used in other CMake-based projects (ITK, Slicer, ParaView,...).
+In OTB, the SuperBuild is implemented with no impact on the library sources : the sources for SuperBuild are located in
+the 'OTB/SuperBuild' subdirectory. It is made of CMake scripts and source patches that allow to compile all the
+dependencies necessary for OTB. Once all the dependencies are compiled and installed, the OTB library is built using
+those dependencies.
+
+OTB's compilation is customized by specifying configuration variables.
+The most important configuration variables are shown in table~\ref{tab:installation-cmake-variables}.
+The simplest way to provide configuration variables is via the command line \texttt{-D} option:
+\begin{verbatim}
+$ cd ~/OTB/build
+$ cmake -D CMAKE_INSTALL_LOCATION=~/OTB/install ../otb/SuperBuild
+\end{verbatim}
+A pre-load script can also be used with the \texttt{-C} options (see
+\url{https://cmake.org/cmake/help/v3.4/manual/cmake.1.html#options}).
+Another option is to set variables manually with \texttt{cmake-gui} or \texttt{ccmake}.
+
+During the configuration step, the SuperBuild will detect any existing dependencies installed as systems libraries.
+Wheter to use them can be controlled via the \texttt{USE\_SYSTEM\_\textit{XXX}} (see
+table~\ref{tab:installation-cmake-variables}).
+
+SuperBuild downloads dependencies into the \texttt{DOWNLOAD\_LOCATION} directory, which will be
+\texttt{\~/OTB/build/Downloads} in our example.
+Dependencies can be downloaded manually into this directory before the compilation step.
+This can be usefull if you wish to bypass a proxy, intend to compile OTB without an internet conection, or other network
+constraint.
+
+You are now ready to compile OTB! Simply use the make command (other targets can be generated with CMake's \texttt{-G}
+option):
+\begin{verbatim}
+$ cd ~/OTB/build
+$ make
+\end{verbatim}
+
+The installation target will copy the binaries and libraries to the installation location:
+\begin{verbatim}
+$ make install
+\end{verbatim}
+
+A wiki page detailing the status of SuperBuild on various platforms is also available here:
+\url{http://wiki.orfeo-toolbox.org/index.php/SuperBuild}.
 
 \subsection{Building only OTB (all dependencies must be available)}
 \label{sec:installation-linux-normalbuild}
 
 cmake variables
+itk and OTB\_USE dependency mechanism
 procedure
+
+minimum command with all defaults
+cmake -DINSTALL ../qksjfm
 
 \section{Mac OS X}
 \label{sec:compiling-macosx}
@@ -168,54 +245,14 @@ procedure
 
 -----------
 
-
-Once the dependencies are built, OTB can finally be compiled : 
-\begin{itemize}
-	\item Just provide the location where you installed the dependencies, 
-	\item Install the ones not provided by SuperBuild
-    \item From the CMake interface, launch 'Configure' and 'Generate'
-    \item Compile and install : call the generator used for your platform : make, nmake, jom, ... 
-\end{itemize}
-
-\textbf{\underline{Compilation awarness}}
-The build process will typically take anywhere from 15 to 30 minutes depending on the performance of your system. If you decide to enable testing as part of the normal build process, about 2500 small tests programs will be compiled. This will verify that the basic components of OTB have been correctly built on your system.
-
-Set the CMake variables \code{BUILD\_TESTING} and \code{BUILD\_EXAMPLES} to ON will activate the compilation of the examples and the tests and slow down the build process. The examples distributed with the toolbox are a helpful resource for learning how to use OTB components but are not essential for the use of the toolbox itself. The testing section includes a large number of small programs that exercise the capabilities of OTB classes. Due to the large number of tests, enabling the testing option will considerably increase the build time.  It is not desirable to enable this option for a first build of the toolbox.
-
-The CMake variable \code{OTB\_BUILD\_DEFAULT\_MODULES} activates all usual modules. This is required to build the examples. If you want to reduce the set of enabled modules, in order to produce a smaller OTB or to avoid some third parties, you have two methods :
+The CMake variable \code{OTB\_BUILD\_DEFAULT\_MODULES}  If you want to reduce the set of enabled modules, in order to produce a smaller OTB or to avoid some third parties, you have two methods :
 \begin{itemize}
   \item disable some third party modules with the CMake variables \code{OTB\_USE\_XXX}. All the modules that depend on the corresponding third party will be disabled.
   \item disable the option \code{OTB\_BUILD\_DEFAULT\_MODULES}, and enable the modules you want. The variables \code{OTBGroup\_XXX} are used to enable all modules in a group. If this variable is off, the user can select which modules in the group should be enabled, using the pattern variable \code{Module\_XXX}.
 \end{itemize}
 
-\subsection{SuperBuild}
-\label{sec:SuperBuild}
-
-The SuperBuild is a way of compiling dependencies to a project just before you build the project. Thanks to CMake and its ExternalProject module, it is possible to download a source archive, configure, compile and install it when building the main project. This feature has been used in other CMake-based projects (ITK, Slicer, ParaView,...).
-
-In OTB, the SuperBuild is implemented with no impact on the library sources : the sources for SuperBuild are located in the 'OTB/SuperBuild' subdirectory. It is made of CMake scripts and source patches that allow to compile all the dependencies necessary for OTB. Once all the dependencies are compiled and installed, the OTB library is built using those dependencies.
-
-The purpose is to provide an easy way to get OTB and its dependencies, whatever the platform (among Linux, MacOSX and Windows). 
-
-\subsubsection{Requirements}
-There are few requirements to use the SuperBuild :
-\begin{itemize}
-	\item CMake (at least 2.8.11)
-	\item C and C++ compilers
-	\item libtool
-	\item mercurial (if you intend to download OTB sources from the repository) 
-\end{itemize}
-
-There are optional requirements depending on OTB features you want to enable :
-\begin{itemize}
-	\item python (for python wrapping)
-    \item java (for java wrapping) 
-\end{itemize}
-
 \subsubsection{How to use it}
 
-The SuperBuild is made like a standard CMake-type project. You should then prepare three directories (for source, build and install) :
-OTB\textunderscore SOURCE\textunderscore DIR, OTB\textunderscore BINARY\textunderscore DIR, OTB\textunderscore INSTALL\textunderscore DIR.
 
 \begin{itemize}
 	\item Get OTB sources and put them in your source directory (works with revision c20055670b36 and later)
@@ -289,8 +326,6 @@ The libraries not handled by SuperBuild are :
 	\item QT4
 	\item SWIG
 \end{itemize}
-
-A wiki page is also available here : \url{http://wiki.orfeo-toolbox.org/index.php/SuperBuild}.
 
 \subsection{Manual installation of OTB dependencies}
 \label{sec:manualdependencies}
