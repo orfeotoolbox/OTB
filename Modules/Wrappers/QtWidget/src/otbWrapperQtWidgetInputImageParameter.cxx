@@ -78,6 +78,16 @@ void QtWidgetInputImageParameter::SelectFile()
   fileDialog.setFileMode(QFileDialog::ExistingFile);
   fileDialog.setNameFilter("Raster files (*)");
 
+  assert( m_Input!=NULL );
+
+  QFileInfo finfo( m_Input->text() );
+
+  fileDialog.setDirectory(
+    finfo.isDir()
+    ? finfo.absoluteFilePath()
+    : finfo.absoluteDir()
+  );
+
   if (fileDialog.exec())
     {
     if ( this->SetFileName(fileDialog.selectedFiles().at(0)) == true )

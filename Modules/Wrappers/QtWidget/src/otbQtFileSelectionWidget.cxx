@@ -70,6 +70,14 @@ void QtFileSelectionWidget::SelectFile()
   fileDialog.setFileMode(QFileDialog::ExistingFile);
   fileDialog.setNameFilter("All files (*)");
 
+  QFileInfo finfo( QString::fromStdString( GetFilename() ) );
+
+  fileDialog.setDirectory(
+    finfo.isDir()
+    ? finfo.absoluteFilePath()
+    : finfo.absoluteDir()
+  );
+
   if (fileDialog.exec())
     {
     QString filemane(fileDialog.selectedFiles().at(0));

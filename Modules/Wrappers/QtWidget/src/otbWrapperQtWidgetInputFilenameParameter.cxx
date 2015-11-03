@@ -71,7 +71,9 @@ void QtWidgetInputFilenameParameter::DoCreateWidget()
 void QtWidgetInputFilenameParameter::SelectFile()
 {
   QFileDialog fileDialog;
+
   fileDialog.setConfirmOverwrite(true);
+
   switch(m_FilenameParam->GetRole())
     {
     case Role_Input:
@@ -89,6 +91,18 @@ void QtWidgetInputFilenameParameter::SelectFile()
     }
 
   fileDialog.setNameFilter("File (*)");
+
+
+  assert( m_Input!=NULL );
+
+  QFileInfo finfo( m_Input->text() );
+
+  fileDialog.setDirectory(
+    finfo.isDir()
+    ? finfo.absoluteFilePath()
+    : finfo.absoluteDir()
+  );
+
 
   if (fileDialog.exec())
     {

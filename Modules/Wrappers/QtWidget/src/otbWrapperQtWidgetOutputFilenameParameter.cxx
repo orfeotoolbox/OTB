@@ -86,6 +86,18 @@ void QtWidgetOutputFilenameParameter::SelectFile()
 
   fileDialog.setNameFilter("File (*)");
 
+
+  assert( m_Input!=NULL );
+
+  QFileInfo finfo( m_Input->text() );
+
+  fileDialog.setDirectory(
+    finfo.isDir()
+    ? finfo.absoluteFilePath()
+    : finfo.absoluteDir()
+  );
+
+
   if (fileDialog.exec())
     {
     this->SetFileName(fileDialog.selectedFiles().at(0));

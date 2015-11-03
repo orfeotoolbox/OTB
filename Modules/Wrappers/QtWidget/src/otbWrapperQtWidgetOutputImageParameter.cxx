@@ -84,9 +84,22 @@ void QtWidgetOutputImageParameter::DoCreateWidget()
 void QtWidgetOutputImageParameter::SelectFile()
 {
   QFileDialog fileDialog;
+
   fileDialog.setConfirmOverwrite(true);
   fileDialog.setFileMode(QFileDialog::AnyFile);
   fileDialog.setNameFilter("Raster files (*)");
+
+
+  assert( m_Input!=NULL );
+
+  QFileInfo finfo( m_Input->text() );
+
+  fileDialog.setDirectory(
+    finfo.isDir()
+    ? finfo.absoluteFilePath()
+    : finfo.absoluteDir()
+  );
+
 
   if (fileDialog.exec())
     {
