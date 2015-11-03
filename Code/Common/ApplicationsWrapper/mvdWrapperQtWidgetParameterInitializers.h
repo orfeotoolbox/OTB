@@ -459,7 +459,7 @@ InputVectorDataInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget );
+  SetupForFilenameDrop( widget, "You can drop filename here." );
 }
 
 /*****************************************************************************/
