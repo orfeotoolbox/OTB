@@ -42,8 +42,9 @@ public:
   QtWidgetOutputProcessXMLParameter(OutputProcessXMLParameter*, QtWidgetModel*);
   virtual ~QtWidgetOutputProcessXMLParameter();
 
-protected slots:
   void SetFileName( const QString& value );
+
+protected slots:
   void SelectFile();
 
 private:
