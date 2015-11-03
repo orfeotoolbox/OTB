@@ -152,6 +152,11 @@ std::vector<std::string> GetAvailableDriversAsStringVector()
   return ret;
 }
 
+std::string GetDriverNameFromDataSource(const GDALDatasetType * ds)
+{
+  return std::string(const_cast<GDALDatasetType *>(ds)->GetDriverName());
+}
+
 }
 }
 } // end namespace

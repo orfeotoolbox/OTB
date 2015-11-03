@@ -21,6 +21,7 @@
 #include "otbVectorDataKeywordlist.h"
 
 #include "otbConfigure.h"
+#include "itkNumericTraits.h"
 
 namespace otb
 {

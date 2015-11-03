@@ -1092,7 +1092,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
     test_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, bReadOnly);
 
     bReadOnly = TRUE;
-    
+
     if (test_poDS != NULL && m_ReportErrors)
       {
       std::cout << "Had to open TEST data source read-only."<<std::endl;
@@ -1103,13 +1103,13 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   if (ref_poDS == NULL)
     {
-   
+
     if (m_ReportErrors)
       {
       std::cout << "FAILURE:\n" "Unable to open REF datasource `" << ref_pszDataSource << "' with the following drivers." << std::endl;
 
       std::vector<std::string> drivers = ogr::version_proxy::GetAvailableDriversAsStringVector();
-    
+
       for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
         {
         std::cout << "  -> " << *it << std::endl;
@@ -1127,7 +1127,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       std::cout << "FAILURE:\n""Unable to open TEST datasource `" << test_pszDataSource << "' with the following drivers." << std::endl;
 
       std::vector<std::string> drivers = ogr::version_proxy::GetAvailableDriversAsStringVector();
-      
+
       for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
         {
         std::cout << "  -> " << *it << std::endl;
@@ -1165,7 +1165,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       }
     ++fileId;
     }
-  
+
   /* -------------------------------------------------------------------- */
   /*      Process each data source layer.                                 */
   /* -------------------------------------------------------------------- */
@@ -1269,7 +1269,7 @@ void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOp
     return;
     }
 
-  fprintf(fpOut, "OGRFeature:%lld\n", feature->GetFID());
+  fprintf(fpOut, "OGRFeature:%ld\n", feature->GetFID());
 
   const char* pszDisplayFields =
     CSLFetchNameValue(papszOptions, "DISPLAY_FIELDS");

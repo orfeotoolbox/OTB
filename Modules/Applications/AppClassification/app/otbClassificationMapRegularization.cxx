@@ -78,7 +78,7 @@ private:
 
     AddParameter(ParameterType_OutputImage, "io.out",  "Output regularized image");
     SetParameterDescription( "io.out", "The output regularized labeled image.");
-    SetParameterOutputImagePixelType( "io.out", ImagePixelType_uint8);
+    SetDefaultOutputPixelType( "io.out", ImagePixelType_uint8);
 
 
     AddParameter(ParameterType_Group,"ip","Regularization parameters");

@@ -291,6 +291,7 @@ private:
     SetParameterDescription("in", "Input image filename");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out","Output image filename");
+    SetDefaultOutputPixelType("out",ImagePixelType_uint8);
 
     AddRAMParameter();
 

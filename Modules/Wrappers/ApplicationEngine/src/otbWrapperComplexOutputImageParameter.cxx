@@ -26,7 +26,9 @@ namespace Wrapper
 {
 
 ComplexOutputImageParameter::ComplexOutputImageParameter()
-  : m_ComplexPixelType(ComplexImagePixelType_float), m_RAMValue(0)
+  : m_ComplexPixelType(ComplexImagePixelType_float),
+    m_DefaultComplexPixelType(ComplexImagePixelType_float),
+    m_RAMValue(0)
 {
   this->SetName("Complex Output Image");
   this->SetKey("cout");
@@ -34,6 +36,26 @@ ComplexOutputImageParameter::ComplexOutputImageParameter()
 
 ComplexOutputImageParameter::~ComplexOutputImageParameter()
 {
+}
+
+std::string
+ComplexOutputImageParameter::ConvertPixelTypeToString(ComplexImagePixelType type)
+{
+  std::string ret;
+  switch(type)
+    {
+    case ComplexImagePixelType_float:
+      {
+      ret = "cfloat";
+      break;
+      }
+    case ComplexImagePixelType_double:
+      {
+      ret = "cdouble";
+      break;
+      }
+    }
+  return ret;
 }
 
 void ComplexOutputImageParameter::InitializeWriters()

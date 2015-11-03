@@ -7,6 +7,7 @@ endif()
 foreach(p
     CMP0025 # CMake 3.0
     CMP0042 # CMake 3.0
+    CMP0058
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
@@ -65,7 +66,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "5")
-set(OTB_VERSION_MINOR "0")
+set(OTB_VERSION_MINOR "2")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 

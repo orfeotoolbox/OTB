@@ -66,9 +66,22 @@ public:
   itkSetMacro(PixelType, ImagePixelType);
   itkGetMacro(PixelType, ImagePixelType);
 
+  /** Set/Get DefaultPixelType  */
+  itkSetMacro(DefaultPixelType, ImagePixelType);
+  itkGetMacro(DefaultPixelType, ImagePixelType);
+
   /** Set/Get available RAM value */
   itkSetMacro(RAMValue, unsigned int);
   itkGetMacro(RAMValue, unsigned int);
+
+  /** Implement the reset method (replace pixel type by default type) */
+  virtual void Reset()
+  {
+    m_PixelType = m_DefaultPixelType;
+  }
+
+  /** Static method to convert pixel type into string */
+  static std::string ConvertPixelTypeToString(ImagePixelType type);
 
   /** Return true if a filename is set */
   bool HasValue() const;
@@ -113,6 +126,7 @@ protected:
   ImageBaseType::Pointer m_Image;
   std::string            m_FileName;
   ImagePixelType         m_PixelType;
+  ImagePixelType         m_DefaultPixelType;
 
   typedef otb::ImageFileWriter<UInt8ImageType>  UInt8WriterType;
   typedef otb::ImageFileWriter<Int16ImageType>  Int16WriterType;
