@@ -44,7 +44,7 @@
 #include "itkWindowedSincInterpolateImageFunction.h"
 #include "itkGradientDescentOptimizer.h"
 #include "otbBSplinesInterpolateDisplacementFieldGenerator.h"
-#include "otbWarpImageFilter.h"
+#include "itkWarpImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbImageFileReader.h"
@@ -411,7 +411,7 @@ int main(int argc, char* argv[])
 
   // Software Guide :  BeginCodeSnippet
 
-  typedef otb::WarpImageFilter<ImageType, ImageType,
+  typedef itk::WarpImageFilter<ImageType, ImageType,
       DisplacementFieldType> ImageWarperType;
   // Software Guide : EndCodeSnippet
 

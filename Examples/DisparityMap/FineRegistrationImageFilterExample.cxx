@@ -42,7 +42,7 @@
 #include "otbImageFileReader.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkRecursiveGaussianImageFilter.h"
-#include "otbWarpImageFilter.h"
+#include "itkWarpImageFilter.h"
 #include "itkMeanReciprocalSquareDifferenceImageToImageMetric.h"
 
 // Software Guide : BeginCodeSnippet
@@ -252,7 +252,7 @@ int main(int argc, char** argv)
   dfWriter->SetFileName(argv[4]);
   dfWriter->Update();
 
-  typedef otb::WarpImageFilter<InputImageType, InputImageType,
+  typedef itk::WarpImageFilter<InputImageType, InputImageType,
       DisplacementFieldType> WarperType;
   WarperType::Pointer warper = WarperType::New();
 

@@ -18,7 +18,7 @@
 #ifndef __otbStreamingWarpImageFilter_h
 #define __otbStreamingWarpImageFilter_h
 
-#include "otbWarpImageFilter.h"
+#include "itkWarpImageFilter.h"
 #include "otbStreamingTraits.h"
 
 namespace otb
@@ -47,12 +47,12 @@ namespace otb
 
 template <class TInputImage, class TOutputImage, class TDisplacementField>
 class ITK_EXPORT StreamingWarpImageFilter
-  :  public otb::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
+  :  public itk::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
 {
 public:
   /** Standard class typedefs. */
   typedef StreamingWarpImageFilter                                            Self;
-  typedef otb::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField> Superclass;
+  typedef itk::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField> Superclass;
   typedef itk::SmartPointer<Self>                                             Pointer;
   typedef itk::SmartPointer<const Self>                                       ConstPointer;
 
