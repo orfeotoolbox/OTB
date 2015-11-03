@@ -317,7 +317,11 @@ OGRLayerStreamStitchingFilter<TInputImage>
                ogr::Field field = upper.feat[0];
                try
                  {
+                 #ifdef OTB_USE_GDAL_20
+                 fusionFeature[0].SetValue(field.GetValue<GIntBig>());
+                 #else
                  fusionFeature[0].SetValue(field.GetValue<int>());
+                 #endif
                  m_OGRLayer.CreateFeature(fusionFeature);
                  m_OGRLayer.DeleteFeature(lower.feat.GetFID());
                  m_OGRLayer.DeleteFeature(upper.feat.GetFID());
