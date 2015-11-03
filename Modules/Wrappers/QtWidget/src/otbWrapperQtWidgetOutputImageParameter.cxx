@@ -92,14 +92,16 @@ void QtWidgetOutputImageParameter::SelectFile()
 
   assert( m_Input!=NULL );
 
-  QFileInfo finfo( m_Input->text() );
+  if( !m_Input->text().isEmpty() )
+    {
+    QFileInfo finfo( m_Input->text() );
 
-  fileDialog.setDirectory(
-    finfo.isDir()
-    ? finfo.absoluteFilePath()
-    : finfo.absoluteDir()
-  );
-
+    fileDialog.setDirectory(
+      finfo.isDir()
+      ? finfo.absoluteFilePath()
+      : finfo.absoluteDir()
+    );
+    }
 
   if (fileDialog.exec())
     {
