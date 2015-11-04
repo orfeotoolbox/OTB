@@ -807,7 +807,8 @@ void Application::SetParameterString(std::string parameter, std::string value)
   else if (dynamic_cast<InputProcessXMLParameter*>(param))
     {
     InputProcessXMLParameter* paramDown = dynamic_cast<InputProcessXMLParameter*>(param);
-    paramDown->SetValue(value);
+    if ( !paramDown->SetFileName(value) )
+      otbAppLogCRITICAL( <<"Invalid XML parameter filename " << value <<".");
     }
 }
 

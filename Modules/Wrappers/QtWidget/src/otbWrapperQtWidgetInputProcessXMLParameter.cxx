@@ -34,10 +34,13 @@ QtWidgetInputProcessXMLParameter::~QtWidgetInputProcessXMLParameter()
 
 void QtWidgetInputProcessXMLParameter::DoUpdateGUI()
 {
-  // Update the lineEdit
-  QString text( m_XMLParam->GetFileName() );
-  if (text != m_Input->text())
-    m_Input->setText(text);
+  if (m_XMLParam->HasUserValue())
+    {
+    // Update the lineEdit
+    QString text( m_XMLParam->GetFileName() );
+    if (text != m_Input->text())
+      m_Input->setText(text);
+    }
 }
 
 void QtWidgetInputProcessXMLParameter::DoCreateWidget()
@@ -85,15 +88,13 @@ void QtWidgetInputProcessXMLParameter::SelectFile()
 void QtWidgetInputProcessXMLParameter::SetFileName(const QString& value)
 {
   // load xml file name
-  m_XMLParam->SetValue(value.toAscii().constData());
-
-  // notify of value change
-  QString key( m_XMLParam->GetKey() );
-
-  emit ParameterChanged(key);
-
-  GetModel()->UpdateAllWidgets();
-
+  if (m_XMLParam->SetFileName(value.toAscii().constData()))
+    {
+    // notify of value change
+    QString key( m_XMLParam->GetKey() );
+    emit ParameterChanged(key);
+    GetModel()->UpdateAllWidgets();
+    }
 }
 
 }
