@@ -105,7 +105,7 @@ private:
       "    * KNearestNeighbors : number of neighbors with the same label\n"
       "    * NeuralNetwork : difference between the two highest responses\n"
       "    * NormalBayes : (not supported)\n"
-      "    * RandomForest : proportion of decision trees that classified the sample to the second class (only works for 2-class models)\n"
+      "    * RandomForest : Confidence (proportion of votes for the majority class). Margin (normalized difference of the votes of the 2 majority classes) is not available for now.\n"
       "    * SVM : distance to margin (only works for 2-class models)\n");
     SetDefaultOutputPixelType( "confmap", ImagePixelType_double);
     MandatoryOff("confmap");
