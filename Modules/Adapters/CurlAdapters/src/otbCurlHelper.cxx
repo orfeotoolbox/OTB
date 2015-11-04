@@ -480,6 +480,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
 
   return 0;
 #else
+  (void)maxConnect;
   //fallback on non curl multi
   otbMsgDevMacro(<< "Curl multi is not available, fallback on standard");
 
