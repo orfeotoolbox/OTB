@@ -41,6 +41,34 @@ InputProcessXMLParameter::~InputProcessXMLParameter()
 
 }
 
+bool
+InputProcessXMLParameter::SetFileName(std::string value)
+{
+  // Check if the filename is not empty
+  if(!value.empty())
+    {
+    // Check that the right extension is given : expected .xml
+    if (itksys::SystemTools::GetFilenameLastExtension(value) == ".xml")
+      {
+      if (itksys::SystemTools::FileExists(value.c_str(),true))
+        {
+        this->SetValue(value);
+        return true;
+        }
+      }
+    }
+  return false;
+}
+
+void
+InputProcessXMLParameter::SetValue(const std::string value)
+{
+  itkDebugMacro("setting member m_FileName to " << value);
+  this->m_FileName = value;
+  SetActive(true);
+  this->Modified();
+}
+
 ImagePixelType
 InputProcessXMLParameter::GetPixelTypeFromString(std::string strType)
 {
@@ -134,18 +162,6 @@ InputProcessXMLParameter::GetChildNodeTextOf(TiXmlElement *parentElement, std::s
 int
 InputProcessXMLParameter::Read(Application::Pointer this_)
 {
-
-  // Check if the filename is not empty
-  if(m_FileName.empty())
-    itkExceptionMacro(<<"The XML input FileName is empty, please set the filename via the method SetFileName");
-
-  // Check that the right extension is given : expected .xml
-  if (itksys::SystemTools::GetFilenameLastExtension(m_FileName) != ".xml")
-    {
-    itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName) << " " << m_FileName << " "
-                      <<" is a wrong Extension FileName : Expected .xml");
-    }
-
   // Open the xml file
   TiXmlDocument doc;
 

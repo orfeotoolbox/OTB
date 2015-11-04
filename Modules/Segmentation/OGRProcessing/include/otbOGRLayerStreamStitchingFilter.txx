@@ -318,8 +318,22 @@ OGRLayerStreamStitchingFilter<TInputImage>
                try
                  {
                  #ifdef OTB_USE_GDAL_20
-                 fusionFeature[0].SetValue(field.GetValue<GIntBig>());
+                 // In this case, the feature id can be either
+                 // OFTInteger64 or OFTInteger
+                 switch(field.GetType())
+                   {
+                   case OFTInteger64:
+                   {
+                   fusionFeature[0].SetValue(field.GetValue<GIntBig>());
+                   break;
+                   }
+                   default:
+                   {
+                   fusionFeature[0].SetValue(field.GetValue<int>());
+                   }
+                   }
                  #else
+                 // Only OFTInteger supported in this case
                  fusionFeature[0].SetValue(field.GetValue<int>());
                  #endif
                  m_OGRLayer.CreateFeature(fusionFeature);

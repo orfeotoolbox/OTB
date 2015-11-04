@@ -103,7 +103,7 @@ endif()
 if(OTB_USE_OPENCV)
   list(APPEND classifierList "SVM" "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
 endif()
-set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN")
+set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
 
 # Loop on classifiers
 foreach(classifier ${classifierList})
