@@ -49,10 +49,12 @@
 #include "otbWrapperQtWidgetInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetInputImageParameter.h"
 #include "otbWrapperQtWidgetInputImageListParameter.h"
+#include "otbWrapperQtWidgetInputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
 #include "otbWrapperQtWidgetOutputFilenameParameter.h"
 #include "otbWrapperQtWidgetOutputImageParameter.h"
+#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
 #endif //tag=QT4-boost-compatibility
@@ -240,6 +242,19 @@ private:
 };
 
 /**
+ * \class InputProcessXMLInitializer
+ *
+ * \brief WIP.
+ */
+class InputProcessXMLInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetInputProcessXMLParameter *,
+  void >
+{
+public:
+  inline result_type operator () ( argument_type widget ) const;
+};
+
+/**
  * \class OutputImageInitializer
  *
  * \brief WIP.
@@ -281,6 +296,22 @@ private:
  */
 class OutputFilenameInitializer : public std::unary_function<
   otb::Wrapper::QtWidgetOutputFilenameParameter*,
+  void
+  >
+{
+public:
+  inline result_type operator () ( argument_type widget ) const;
+
+private:
+};
+
+/**
+ * \class OutputProcessXMLInitializer
+ *
+ * \brief WIP.
+ */
+class OutputProcessXMLInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetOutputProcessXMLParameter *,
   void
   >
 {
@@ -488,6 +519,17 @@ InputVectorDataListInitializer
 
 /*****************************************************************************/
 inline
+InputProcessXMLInitializer::result_type
+InputProcessXMLInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  SetupForFilenameDrop( widget, "You can drop filename here." );
+}
+
+/*****************************************************************************/
+inline
 ToolTipInitializer::result_type
 ToolTipInitializer
 ::operator () ( argument_type widget ) const
@@ -551,10 +593,10 @@ OutputVectorDataInitializer
 
   SetupForFilenameDrop( widget, "You can drop filename here." );
 
-  // assert( qApp!=NULL );
-  // assert( !qApp->arguments().empty() );
+  assert( qApp!=NULL );
+  assert( !qApp->arguments().empty() );
 
-  // SetupOutputFilename( widget );
+  SetupOutputFilename( widget );
 }
 
 /*****************************************************************************/
@@ -567,10 +609,26 @@ OutputFilenameInitializer
 
   SetupForFilenameDrop( widget, "You can drop filename here." );
 
-  // assert( qApp!=NULL );
-  // assert( !qApp->arguments().empty() );
+  assert( qApp!=NULL );
+  assert( !qApp->arguments().empty() );
 
-  // SetupOutputFilename( widget );
+  SetupOutputFilename( widget );
+}
+
+/*****************************************************************************/
+inline
+OutputProcessXMLInitializer::result_type
+OutputProcessXMLInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  SetupForFilenameDrop( widget, "You can drop filename here." );
+
+  assert( qApp!=NULL );
+  assert( !qApp->arguments().empty() );
+
+  SetupOutputFilename( widget );
 }
 
 /*****************************************************************************/
@@ -580,7 +638,7 @@ SetupForFilenameDrop( W* widget, const char* text )
 {
   assert( widget!=NULL );
 
-  QLineEdit* lineEdit = widget->GetInput();
+  QLineEdit * lineEdit = widget->GetInput();
 
   //
   // Setup widget.
