@@ -16,10 +16,6 @@ addons:
     - libopencv-dev
     - libtinyxml-dev
     - libopenthreads-dev
-    - libgeos-dev
-    - libtiff-dev
-    - libpng-dev
-    - libjpeg-dev
     - libfftw3-dev
     - libfreetype6-dev
 
