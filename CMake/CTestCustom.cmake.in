@@ -18,7 +18,7 @@
 #----------------------------------------------------------------------
 
 set(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 1000000)
-set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 2000)
+set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 300)
 set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS 50)
 
 
@@ -67,16 +67,16 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*include.ogr_feature.*warning.*"
   ".*itksys.SharedForward.h.*warning.*"
   ".*vcl_deprecated_header.h.*"
-  ".*otbCurlHelper.cxx:356.*warning.*maxConnect.*"
-  ".*include.ITK-4.*[Ww]arning.*"
-  ".*include.curl.curl.h.*[Ww]arning.*"
-  ".*include.ossim.*[Ww]arning.*"
-  ".*include.ogr_core.h.*[Ww]arning.*"
-  ".*include.ogr_srs_api.h.*[Ww]arning.*"
-  ".*include.ogrsf_frmts.h.*[Ww]arning.*"
-  ".*include.ogr_geometry.h.*[Ww]arning.*"
-  ".*include.ogr_spatialref.h.*[Ww]arning.*"
-  ".*include.cpl_error.h.*[Ww]arning.*"
-  ".*vnl.vnl_numeric_traits.h.*[Ww]arning.*"
-  ".*vcl_config_compiler.h.*[Ww]arning.*"
+  ".*otbCurlHelper.cxx:.*warning.*maxConnect.*"
+  ".*include.ITK-4.*warning.*"
+  ".*include.curl.curl.h.*warning.*"
+  ".*include.ossim.*warning.*"
+  ".*include.ogr_core.h.*warning.*"
+  ".*include.ogr_srs_api.h.*warning.*"
+  ".*include.ogrsf_frmts.h.*warning.*"
+  ".*include.ogr_geometry.h.*warning.*"
+  ".*include.ogr_spatialref.h.*warning.*"
+  ".*include.cpl_error.h.*warning.*"
+  ".*vnl.vnl_numeric_traits.h.*warning.*"
+  ".*vcl_config_compiler.h.*warning.*"
   )
