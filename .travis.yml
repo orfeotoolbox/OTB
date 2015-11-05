@@ -21,12 +21,13 @@ addons:
     - libfftw3-dev
 
 before_script:
-  - export SOURCE_DIR=`$PWD`
+  - export SOURCE_DIR=$PWD
   - cd /tmp
   - wget https://cmake.org/files/v3.4/cmake-3.4.0-rc3-Linux-x86_64.tar.gz --no-check-certificate
   - tar -xzf cmake-3.4.0-rc3-Linux-x86_64.tar.gz
   - wget https://github.com/martine/ninja/releases/download/v1.6.0/ninja-linux.zip --no-check-certificate
   - unzip ninja-linux.zip
+  - echo $SOURCE_DIR
   - cd $SOURCE_DIR
   - mkdir build
   - cd build
