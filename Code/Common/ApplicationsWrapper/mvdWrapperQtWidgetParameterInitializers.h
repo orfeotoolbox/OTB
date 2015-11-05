@@ -628,7 +628,10 @@ OutputProcessXMLInitializer
   assert( qApp!=NULL );
   assert( !qApp->arguments().empty() );
 
-  SetupOutputFilename( widget );
+  // MANTIS-1103
+  // {
+  // SetupOutputFilename( widget );
+  // }
 }
 
 /*****************************************************************************/
