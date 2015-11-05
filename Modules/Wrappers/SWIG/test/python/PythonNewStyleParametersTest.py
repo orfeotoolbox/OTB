@@ -87,8 +87,8 @@ app.SetParameterString('outputs.mode', 'orthofit')
 cm_assert(app.OUTPUTS.MODE, 'orthofit')
 
 #14 - inputxml parameter set
-app.INXML = 'input.xml'
-cm_assert(app.GetParameterString('inxml'), 'input.xml')
+app.INXML = argv[3]
+cm_assert(app.GetParameterString('inxml'), argv[3])
 
 #15 - outputxml parameter get
 app.SetParameterString('outxml', 'output.xml')

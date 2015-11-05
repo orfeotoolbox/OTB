@@ -82,4 +82,5 @@ add_test( NAME pyTvNewStyleParameters
           COMMAND ${TEST_DRIVER} Execute
           ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonNewStyleParametersTest.py
           ${OTB_DATA_ROOT}/Input/poupees.tif
-          ${TEMP}/pyTvNewStyleParametersTest.tif )
+          ${TEMP}/pyTvNewStyleParametersTest.tif
+          ${OTB_DATA_ROOT}/Input/apTvUtSmoothingTest_OutXML.xml)
