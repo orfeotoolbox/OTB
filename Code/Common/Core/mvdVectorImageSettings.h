@@ -355,7 +355,7 @@ namespace mvd
 inline
 VectorImageSettings &
 VectorImageSettings
-::operator=( const VectorImageSettings & other )
+::operator = ( const VectorImageSettings & other )
 {
   if( &other==this )
     return *this;

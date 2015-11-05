@@ -1216,18 +1216,55 @@ ImageViewWidget
 	  VectorImageModel * vim =
 	    qobject_cast< VectorImageModel * >( it->second );
 
-	  bool needsRefresh = *vim->GetProperties() != *properties;
+	  //
+	  // Properties.
+	  {
+	    bool needsRefresh = *vim->GetProperties() != *properties;
 
-	  vim->SetProperties( *properties );
+	    vim->SetProperties( *properties );
 
-	  if( needsRefresh )
+	    if( needsRefresh )
+	      {
+	      // qDebug() << "Refreshing histogram...";
+
+	      vim->RefreshHistogram();
+	      }
+	  }
+	  //
+	  // Settings
+	  {
+	    // Find RGB-channels max component.
+	    VectorImageSettings::ChannelVector::value_type rgbChannel = 0;
 	    {
-	    // qDebug() << "Refreshing histogram...";
+	      const VectorImageSettings::ChannelVector & rgb(
+		settings.GetRgbChannels()
+	      );
 
-	    vim->RefreshHistogram();
+	      for( VectorImageSettings::ChannelVector::const_iterator it(
+		     rgb.begin()
+		   );
+		   it!=rgb.end();
+		   ++it )
+		if( *it > rgbChannel )
+		  rgbChannel = *it;
 	    }
 
-	  vim->SetSettings( settings  );
+	    CountType nbComponents = vim->GetNbComponents();
+
+	    qDebug()
+	      << vim->GetFilename()
+	      << nbComponents
+	      << rgbChannel
+	      << settings.GetGrayChannel()
+	      << ( settings.GetGrayChannel()<nbComponents &&
+		   rgbChannel<nbComponents
+		   ? "true"
+		   : "false" );
+
+	    if( rgbChannel<nbComponents &&
+		settings.GetGrayChannel()<nbComponents )
+	      vim->SetSettings( settings );
+	  }
 	  }
 	}
 
