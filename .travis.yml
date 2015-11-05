@@ -5,10 +5,52 @@ sudo: required
 compiler:
 - clang
 
+addons:
+  apt:
+    packages:
+    - cmake
+    - libboost-dev
+    - libgdal-dev
+    - libgeotiff-dev
+    - libboost-graph-dev
+    - libqt4-dev
+    - libqtcore4
+    - libqtgui4
+    - libopencv-dev
+    - libtinyxml-dev
+    - libopenthreads-dev
+    - libfftw-dev
+
 before_script:
 - mkdir build
 - cd build
-- sudo apt-get update -qq
-- sudo apt-get install boost-devel libgdal-dev libgeotiff-dev libboost-graph-dev libqt4-dev libqtcore4 libqtgui4 libopencv-dev libossim-dev libinsighttoolkit4-dev libtinyxml-dev
 
-script: cmake -DCMAKE_INSTALL_PREFIX=../install .. && make
+script: cmake ../SuperBuild \
+ -DCMAKE_INSTALL_PREFIX=../install \
+ -DUSE_SYSTEM_TIFF:BOOL=ON \
+ -DUSE_SYSTEM_ZLIB:BOOL=ON \
+ -DUSE_SYSTEM_GEOTIFF:BOOL=ON \
+ -DUSE_SYSTEM_JPEG:BOOL=ON \
+ -DUSE_SYSTEM_SQLITE:BOOL=ON \
+ -DUSE_SYSTEM_CURL:BOOL=ON \
+ -DUSE_SYSTEM_PNG:BOOL=ON  \
+ -DUSE_SYSTEM_OPENCV:BOOL=ON \
+ -DUSE_SYSTEM_QT4:BOOL=ON \
+ -DUSE_SYSTEM_GEOS:BOOL=ON \
+ -DUSE_SYSTEM_FFTW:BOOL=ON \
+ -DUSE_SYSTEM_PROJ:BOOL=ON \
+ -DUSE_SYSTEM_EXPAT:BOOL=ON \
+ -DUSE_SYSTEM_BOOST:BOOL=ON \
+ -DUSE_SYSTEM_LIBKML:BOOL=ON \
+ -DUSE_SYSTEM_TINYXML:BOOL=ON \
+ -DUSE_SYSTEM_OPENJPEG:BOOL=ON \
+ -DUSE_SYSTEM_OPENTHREADS:BOOL=ON \
+ -DUSE_SYSTEM_GDAL:BOOL=ON \
+ -DUSE_SYSTEM_ITK:BOOL=OFF \
+ -DUSE_SYSTEM_MUPARSER:BOOL=ON \
+ -DUSE_SYSTEM_MUPARSERX:BOOL=OFF \
+ -DUSE_SYSTEM_OSSIM:BOOL=OFF \
+ -DOTB_USE_OPENJPEG:BOOL=OFF \
+ -DOTB_USE_MUPARSER:BOOL=OFF \
+ -DOTB_USE_MUPARSERX:BOOL=OFF \
+make
