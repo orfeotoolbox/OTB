@@ -21,10 +21,13 @@ addons:
     - libfftw3-dev
 
 before_script:
-  - wget https://cmake.org/files/v3.4/cmake-3.4.0-rc3-Linux-x86_64.tar.gz -O /tmp/cmake-3.4.0-rc3-Linux-x86_64.tar.gz --no-check-certificate
-  - tar -xzf /tmp/cmake-3.4.0-rc3-Linux-x86_64.tar.gz
-  - wget https://github.com/martine/ninja/releases/download/v1.6.0/ninja-linux.zip -O /tmp/ninja-linux.zip --no-check-certificate
-  - unzip /tmp/ninja-linux.zip
+  - export SOURCE_DIR=`$PWD`
+  - cd /tmp
+  - wget https://cmake.org/files/v3.4/cmake-3.4.0-rc3-Linux-x86_64.tar.gz --no-check-certificate
+  - tar -xzf cmake-3.4.0-rc3-Linux-x86_64.tar.gz
+  - wget https://github.com/martine/ninja/releases/download/v1.6.0/ninja-linux.zip --no-check-certificate
+  - unzip ninja-linux.zip
+  - cd $SOURCE_DIR
   - mkdir build
   - cd build
 
