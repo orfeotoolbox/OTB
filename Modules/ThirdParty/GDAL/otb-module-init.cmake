@@ -111,8 +111,8 @@ if(GDAL_CONFIG_CHECKING)
 	else()
 
 		if (NOT GDAL_HAS_J2K_JG2000 AND NOT GDAL_HAS_J2K_OPJG AND NOT GDAL_HAS_J2K_KAK AND NOT GDAL_HAS_J2K_ECW)
-		message(WARNING "No Jpeg2000 driver found (compatible drivers are : OpenJpeg, Kakadu, ECW).")
-		set(GDAL_QUALIFIES FALSE)
+		message(STATUS "No Jpeg2000 driver found (compatible drivers are : OpenJpeg, Kakadu, ECW).")
+		#set(GDAL_QUALIFIES FALSE)
 		endif()
 			
 		if (NOT GDAL_HAS_JPEG)
