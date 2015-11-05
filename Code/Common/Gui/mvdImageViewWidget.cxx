@@ -1251,15 +1251,15 @@ ImageViewWidget
 
 	    CountType nbComponents = vim->GetNbComponents();
 
-	    qDebug()
-	      << vim->GetFilename()
-	      << nbComponents
-	      << rgbChannel
-	      << settings.GetGrayChannel()
-	      << ( settings.GetGrayChannel()<nbComponents &&
-		   rgbChannel<nbComponents
-		   ? "true"
-		   : "false" );
+	    // qDebug()
+	    //   << vim->GetFilename()
+	    //   << nbComponents
+	    //   << rgbChannel
+	    //   << settings.GetGrayChannel()
+	    //   << ( settings.GetGrayChannel()<nbComponents &&
+	    // 	   rgbChannel<nbComponents
+	    // 	   ? "true"
+	    // 	   : "false" );
 
 	    if( rgbChannel<nbComponents &&
 		settings.GetGrayChannel()<nbComponents )
