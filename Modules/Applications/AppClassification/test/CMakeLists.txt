@@ -169,7 +169,7 @@ foreach(classifier ${classifierList})
                        NAME     apTvClMethod${classifier}ImageClassifierQB1
                        APP      ImageClassifier
                        OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-                                -model ${ascii_ref_path}/${OUTMODELFILE}
+                                -model ${INPUTDATA}/Classification/${OUTMODELFILE}
                                 -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
                                 -out ${TEMP}/${OUTRASTER} ${raster_output_option}
 
@@ -182,7 +182,7 @@ foreach(classifier ${classifierList})
                        NAME     apTvClMethod${classifier}ImageClassifierQB1
                        APP      ImageClassifier
                        OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-                                -model ${ascii_ref_path}/${OUTMODELFILE}
+                                -model ${INPUTDATA}/Classification/${OUTMODELFILE}
                                 -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
                                 -out ${TEMP}/${OUTRASTER} ${raster_output_option}
                                 -confmap ${TEMP}/${OUTCONFMAP}
