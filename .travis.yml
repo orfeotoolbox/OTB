@@ -26,4 +26,4 @@ before_script:
   - mkdir build
   - cd build
 
-script: /tmp/cmake-3.4.0-rc3-Linux-x86_64/bin/cmake -DCMAKE_MAKE_PROGRAM=/tmp/ninja -DCMAKE_CXX_FLAGS="-Wno-gnu -Wno-overloaded-virtual -Wno-\\#warnings" -DCMAKE_PREFIX_PATH=/tmp/OTB-xdk-Linux64 -DCMAKE_INSTALL_PREFIX=../install -G "Ninja" $SOURCE_DIR && /tmp/ninja
+script: /tmp/cmake-3.4.0-rc3-Linux-x86_64/bin/cmake -DCMAKE_MAKE_PROGRAM=/tmp/ninja -DCMAKE_CXX_FLAGS="-Wno-gnu -Wno-unused-parameter -Wno-overloaded-virtual -Wno-\\#warnings" -DCMAKE_PREFIX_PATH=/tmp/OTB-xdk-Linux64 -DCMAKE_INSTALL_PREFIX=../install -G "Ninja" $SOURCE_DIR && /tmp/ninja
