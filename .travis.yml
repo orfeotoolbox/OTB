@@ -19,17 +19,11 @@ before_script:
   - tar -xzf cmake-3.4.0-rc3-Linux-x86_64.tar.gz
   - wget https://github.com/martine/ninja/releases/download/v1.6.0/ninja-linux.zip --no-check-certificate
   - unzip ninja-linux.zip
-  - wget https://www.orfeo-toolbox.org/srpms/OTB-5.0.0-Linux64.run  --no-check-certificate
-  - wget https://www.orfeo-toolbox.org/srpms/OTB-headers.tar.gz --no-check-certificate
-  - chmod +x /tmp/OTB-5.0.0-Linux64.run
-  - /tmp/OTB-5.0.0-Linux64.run
-  - cd /tmp/OTB-5.0.0-Linux64
-  - tar xf /tmp/OTB-headers.tar.gz
-  - sed -i 's,/home/mrashad/Dashboard/OTB/install,/tmp/OTB-5.0.0-Linux64,g' lib/cmake/ITK-4.8/Modules/ITKZLIB.cmake
-  - sed -i 's,/home/mrashad/Dashboard/OTB/install,/tmp/OTB-5.0.0-Linux64,g' lib/cmake/ITK-4.8/ITKConfig.cmake
-  - sed -i 's,/home/mrashad/Dashboard/OTB/install,/tmp/OTB-5.0.0-Linux64,g' lib/cmake/ITK-4.8/ITKTargets-release.cmake
+  - wget https://www.orfeo-toolbox.org/packages/xdk/OTB-xdk-Linux64.run  --no-check-certificate
+  - chmod +x /tmp/OTB-xdk-Linux64.run
+  - /tmp/OTB-xdk-Linux64.run
   - cd $SOURCE_DIR/../
   - mkdir build
   - cd build
 
-script: /tmp/cmake-3.4.0-rc3-Linux-x86_64/bin/cmake -DCMAKE_MAKE_PROGRAM=/tmp/ninja -DCMAKE_CXX_FLAGS="-Wno-gnu -Wno-overloaded-virtual -Wno-\\#warnings" -DCMAKE_PREFIX_PATH=/tmp/OTB-5.0.0-Linux64 -DCMAKE_INSTALL_PREFIX=../install -G "Ninja" $SOURCE_DIR && /tmp/ninja
+script: /tmp/cmake-3.4.0-rc3-Linux-x86_64/bin/cmake -DCMAKE_MAKE_PROGRAM=/tmp/ninja -DCMAKE_CXX_FLAGS="-Wno-gnu -Wno-overloaded-virtual -Wno-\\#warnings" -DCMAKE_PREFIX_PATH=/tmp/OTB-xdk-Linux64 -DCMAKE_INSTALL_PREFIX=../install -G "Ninja" $SOURCE_DIR && /tmp/ninja
