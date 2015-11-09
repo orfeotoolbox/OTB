@@ -119,7 +119,7 @@ foreach(classifier ${classifierList})
                        APP      TrainImagesClassifier
                        OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
                                 -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-                                -io.imstat ${ascii_ref_path}/clImageStatisticsQB1${stat_input_format}
+                                -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
                                 -classifier ${lclassifier}
                                 ${${lclassifier}_parameters}
                                 -io.out ${TEMP}/${OUTMODELFILE}
@@ -135,7 +135,7 @@ foreach(classifier ${classifierList})
                        APP      TrainImagesClassifier
                        OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
                                 -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-                                -io.imstat ${ascii_ref_path}/clImageStatisticsQB1${stat_input_format}
+                                -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
                                 -classifier ${lclassifier}
                                 ${${lclassifier}_parameters}
                                 -io.out ${TEMP}/OutXML1_${OUTMODELFILE}
@@ -153,7 +153,7 @@ foreach(classifier ${classifierList})
                        OPTIONS  -inxml ${INPUTDATA}/cl${classifier}_OutXML1.xml
                                 -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
                                 -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-                                -io.imstat ${ascii_ref_path}/clImageStatisticsQB1${stat_input_format}
+                                -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
                                 -io.out ${TEMP}/OutXML2_${OUTMODELFILE}
 
                        VALID    ${ascii_comparison}
@@ -170,7 +170,7 @@ foreach(classifier ${classifierList})
                        APP      ImageClassifier
                        OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
                                 -model ${ascii_ref_path}/${OUTMODELFILE}
-                                -imstat ${ascii_ref_path}/clImageStatisticsQB1${stat_input_format}
+                                -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
                                 -out ${TEMP}/${OUTRASTER} ${raster_output_option}
 
                        VALID    ${raster_comparison}
@@ -183,7 +183,7 @@ foreach(classifier ${classifierList})
                        APP      ImageClassifier
                        OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
                                 -model ${ascii_ref_path}/${OUTMODELFILE}
-                                -imstat ${ascii_ref_path}/clImageStatisticsQB1${stat_input_format}
+                                -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
                                 -out ${TEMP}/${OUTRASTER} ${raster_output_option}
                                 -confmap ${TEMP}/${OUTCONFMAP}
 
@@ -198,137 +198,117 @@ foreach(classifier ${classifierList})
 endforeach()
 
 if(OTB_USE_LIBSVM)
-otb_test_application(NAME apTvClImageSVMClassifierQB2
+  otb_test_application(NAME apTvClImageSVMClassifierQB2
                       APP  ImageClassifier
                       OPTIONS -in      ${INPUTDATA}/Classification/QB_2_ortho.tif
-                              -imstat  ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
-                              -model   ${TEMP}/clsvmModelQB1.svm
+                              -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
+                              -model   ${INPUTDATA}/Classification/clsvmModelQB1.svm
                               -out     ${TEMP}/clLabeledImageQB2.tif
                       VALID   --compare-image ${NOTOL}
                               ${OTBAPP_BASELINE}/clLabeledImageQB2.tif
                               ${TEMP}/clLabeledImageQB2.tif)
 
-set_tests_properties(apTvClImageSVMClassifierQB2 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
-
-otb_test_application(NAME apTvClImageSVMClassifierQB3
+  otb_test_application(NAME apTvClImageSVMClassifierQB3
                       APP  ImageClassifier
                       OPTIONS -in      ${INPUTDATA}/Classification/QB_3_ortho.tif
-                              -imstat  ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
-                              -model   ${TEMP}/clsvmModelQB1.svm
+                              -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
+                              -model   ${INPUTDATA}/Classification/clsvmModelQB1.svm
                               -out     ${TEMP}/clLabeledImageQB3.tif
                       VALID   --compare-image ${NOTOL}
                               ${OTBAPP_BASELINE}/clLabeledImageQB3.tif
                               ${TEMP}/clLabeledImageQB3.tif)
 
-set_tests_properties(apTvClImageSVMClassifierQB3 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
-
-otb_test_application(NAME apTvClImageSVMClassifierQB1
+  otb_test_application(NAME apTvClImageSVMClassifierQB1
                       APP  ImageClassifier
                       OPTIONS -in      ${INPUTDATA}/Classification/QB_1_ortho.tif
-                              -imstat  ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
-                              -model   ${TEMP}/clsvmModelQB1.svm
+                              -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
+                              -model   ${INPUTDATA}/Classification/clsvmModelQB1.svm
                               -out     ${TEMP}/clLabeledImageQB1.tif
                       VALID   --compare-image ${NOTOL}
                               ${OTBAPP_BASELINE}/clLabeledImageQB1.tif
                               ${TEMP}/clLabeledImageQB1.tif)
 
-set_tests_properties(apTvClImageSVMClassifierQB1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
-
   otb_test_application(NAME apTvClImageSVMClassifierQB456_6
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_6_extract.tif
                                -mask    ${INPUTDATA}/Classification/QB_6_mask.tif
-                               -imstat  ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
-                               -model   ${TEMP}/clsvmModelQB456.svm
+                               -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB456.xml
+                               -model   ${INPUTDATA}/Classification/clsvmModelQB456.svm
                                -out     ${TEMP}/clLabeledImageQB456_6.tif
                        VALID   --compare-image ${NOTOL}
                                ${OTBAPP_BASELINE}/clLabeledImageQB456_6.tif
                                ${TEMP}/clLabeledImageQB456_6.tif)
 
- set_tests_properties(apTvClImageSVMClassifierQB456_6 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB456)
-
   otb_test_application(NAME apTvClImageSVMClassifierQB456_4
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_4_extract.tif
-                               -imstat  ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
-                               -model   ${TEMP}/clsvmModelQB456.svm
+                               -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB456.xml
+                               -model   ${INPUTDATA}/Classification/clsvmModelQB456.svm
                                -out     ${TEMP}/clLabeledImageQB456_4.tif
                        VALID   --compare-image ${NOTOL}
                                ${OTBAPP_BASELINE}/clLabeledImageQB456_4.tif
                                ${TEMP}/clLabeledImageQB456_4.tif)
 
-set_tests_properties(apTvClImageSVMClassifierQB456_4 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB456)
-
   otb_test_application(NAME apTvClImageSVMClassifierQB456_5
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_5_extract.tif
-                               -imstat  ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
-                               -model   ${TEMP}/clsvmModelQB456.svm
+                               -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB456.xml
+                               -model   ${INPUTDATA}/Classification/clsvmModelQB456.svm
                                -out     ${TEMP}/clLabeledImageQB456_5.tif
                        VALID   --compare-image ${NOTOL}
                                ${OTBAPP_BASELINE}/clLabeledImageQB456_5.tif
                                ${TEMP}/clLabeledImageQB456_5.tif)
 
-set_tests_properties(apTvClImageSVMClassifierQB456_5 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB456)
-
   otb_test_application(NAME apTvClImageSVMClassifierQB123_6
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_6_extract.tif
-                               -imstat  ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
-                               -model   ${TEMP}/clsvmModelQB123.svm
+                               -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB123.xml
+                               -model   ${INPUTDATA}/Classification/clsvmModelQB123.svm
                                -out     ${TEMP}/clLabeledImageQB123_6.tif
                        VALID   --compare-image ${NOTOL}
                                ${OTBAPP_BASELINE}/clLabeledImageQB123_6.tif
                                ${TEMP}/clLabeledImageQB123_6.tif)
 
-  set_tests_properties(apTvClImageSVMClassifierQB123_6 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
-
   otb_test_application(NAME apTvClImageSVMClassifierQB456_1
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_1_ortho.tif
-                               -imstat  ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
-                               -model   ${TEMP}/clsvmModelQB456.svm
+                               -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB456.xml
+                               -model   ${INPUTDATA}/Classification/clsvmModelQB456.svm
                                -out     ${TEMP}/clLabeledImageQB456_1.tif
                        VALID   --compare-image ${NOTOL}
                                ${OTBAPP_BASELINE}/clLabeledImageQB456_1.tif
                                ${TEMP}/clLabeledImageQB456_1.tif)
 
-set_tests_properties(apTvClImageSVMClassifierQB456_1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB456)
-
   otb_test_application(NAME apTvClImageSVMClassifierQB123_3
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_3_ortho.tif
-                               -imstat  ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
-                               -model   ${TEMP}/clsvmModelQB123.svm
+                               -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB123.xml
+                               -model   ${INPUTDATA}/Classification/clsvmModelQB123.svm
                                -out     ${TEMP}/clLabeledImageQB123_3.tif
                        VALID   --compare-image ${NOTOL}
                                ${OTBAPP_BASELINE}/clLabeledImageQB123_3.tif
                                ${TEMP}/clLabeledImageQB123_3.tif)
 
-  set_tests_properties(apTvClImageSVMClassifierQB123_3 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
-
   otb_test_application(NAME apTvClImageSVMClassifierQB123_2
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_2_ortho.tif
-                               -imstat  ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
-                               -model   ${TEMP}/clsvmModelQB123.svm
+                               -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB123.xml
+                               -model   ${INPUTDATA}/Classification/clsvmModelQB123.svm
                                -out     ${TEMP}/clLabeledImageQB123_2.tif
                        VALID   --compare-image ${NOTOL}
                                ${OTBAPP_BASELINE}/clLabeledImageQB123_2.tif
                                ${TEMP}/clLabeledImageQB123_2.tif)
 
-  set_tests_properties(apTvClImageSVMClassifierQB123_2 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
   otb_test_application(NAME apTvClImageSVMClassifierQB123_1
                        APP  ImageClassifier
                        OPTIONS -in      ${INPUTDATA}/Classification/QB_1_ortho.tif
-                               -imstat  ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
-                               -model   ${TEMP}/clsvmModelQB123.svm
+                               -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB123.xml
+                               -model   ${INPUTDATA}/Classification/clsvmModelQB123.svm
                                -out     ${TEMP}/clLabeledImageQB123_1.tif
                        VALID   --compare-image ${NOTOL}
                                ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
                                ${TEMP}/clLabeledImageQB123_1.tif)
 
-set_tests_properties(apTvClImageSVMClassifierQB123_1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
 endif()
 
 #----------- TrainOGRLayersClassifier TESTS ----------------
@@ -639,7 +619,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
                               -inxml ${INPUTDATA}/clsvmModelQB1_OutXML.xml
                               -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
                               -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
-                              -io.imstat ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1.xml
+                              -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
                               -sample.mv 100
                               -sample.mt 100
                               -sample.vtr 0.5
@@ -650,13 +630,11 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1_allOpt_InXML.svm)
 
-set_tests_properties(apTvClTrainSVMImagesClassifierQB1_allOpt_InXML PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1) 
-
 otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_OutXML
                       APP  TrainImagesClassifier
                       OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
                               -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
-                              -io.imstat ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1.xml
+                              -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
                               -classifier libsvm
                               -classifier.libsvm.opt true
                               -io.out ${TEMP}/clsvmModelQB1_OutXML.svm
@@ -666,8 +644,6 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_OutXML
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1_OutXML.svm)
 
-set_tests_properties(apTvClTrainSVMImagesClassifierQB1_OutXML PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1) 
-
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB123
                        APP  TrainImagesClassifier
                        OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
@@ -676,7 +652,7 @@ set_tests_properties(apTvClTrainSVMImagesClassifierQB1_OutXML PROPERTIES DEPENDS
                                -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
                                       ${INPUTDATA}/Classification/VectorData_QB2.shp
                                       ${INPUTDATA}/Classification/VectorData_QB3.shp
-                               -io.imstat ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
+                               -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB123.xml
                                -classifier libsvm
                                -classifier.libsvm.opt true
                                -io.out ${TEMP}/clsvmModelQB123.svm
@@ -685,13 +661,11 @@ set_tests_properties(apTvClTrainSVMImagesClassifierQB1_OutXML PROPERTIES DEPENDS
                                ${OTBAPP_BASELINE_FILES}/clsvmModelQB123.svm
                                ${TEMP}/clsvmModelQB123.svm)
 
-set_tests_properties(apTvClTrainSVMImagesClassifierQB123 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB123) 
-
 otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1
                       APP  TrainImagesClassifier
                       OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
                               -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
-                              -io.imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
+                              -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
                               -classifier libsvm
                               -classifier.libsvm.opt true
                               -io.out ${TEMP}/clsvmModelQB1.svm
@@ -699,8 +673,6 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1
                       VALID   --compare-ascii ${NOTOL}
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1.svm)
-
-set_tests_properties(apTvClTrainSVMImagesClassifierQB1 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1) 
 
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB456
                        APP  TrainImagesClassifier
@@ -710,7 +682,7 @@ set_tests_properties(apTvClTrainSVMImagesClassifierQB1 PROPERTIES DEPENDS apTvCl
                                -io.vd ${INPUTDATA}/Classification/VectorData_QB4.shp
                                       ${INPUTDATA}/Classification/VectorData_QB5.shp
                                       ${INPUTDATA}/Classification/VectorData_QB6.shp
-                               -io.imstat ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
+                               -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB456.xml
                                -classifier libsvm
                                -classifier.libsvm.opt true
                                -io.out ${TEMP}/clsvmModelQB456.svm
@@ -719,13 +691,11 @@ set_tests_properties(apTvClTrainSVMImagesClassifierQB1 PROPERTIES DEPENDS apTvCl
                                ${OTBAPP_BASELINE_FILES}/clsvmModelQB456.svm
                                ${TEMP}/clsvmModelQB456.svm)
 
-set_tests_properties(apTvClTrainSVMImagesClassifierQB456 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB456)
-
 otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
                       APP  TrainImagesClassifier
                       OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
                               -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
-                              -io.imstat ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1.xml
+                              -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
                               -classifier libsvm
                               -sample.mv 100
                               -sample.mt 100
@@ -736,8 +706,6 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
                       VALID   --compare-ascii ${NOTOL}
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1_allOpt.svm)
-
-set_tests_properties(apTvClTrainSVMImagesClassifierQB1_allOpt PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1)
 endif()
 
 #----------- DSFuzzyModelEstimation TESTS ----------------
