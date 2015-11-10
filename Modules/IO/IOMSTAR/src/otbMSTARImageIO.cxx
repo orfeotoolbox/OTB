@@ -704,26 +704,24 @@ void MSTARImageIO::PrintSelf(std::ostream& os, itk::Indent indent) const
 float MSTARImageIO::byteswap_SR_IR(unsigned char *pointer)
 {
   float *       temp;
-  unsigned char iarray[4], *charptr;
+  unsigned char iarray[4];
 
   iarray[0] = *(pointer + 3);
   iarray[1] = *(pointer + 2);
   iarray[2] = *(pointer + 1);
   iarray[3] = *(pointer);
-  charptr = iarray;
-  temp    = (float *) charptr;
+  temp    = (float *) iarray ;
   return *(temp);
 }
 
 unsigned short MSTARImageIO::byteswap_SUS_IUS(unsigned char *pointer)
 {
   unsigned short *temp;
-  unsigned char   iarray[2], *charptr;
+  unsigned char   iarray[2];
 
   iarray[0] = *(pointer + 1);
   iarray[1] = *(pointer);
-  charptr = iarray;
-  temp    = (unsigned short *) charptr;
+  temp    = (unsigned short *) iarray;
   return *(temp);
 }
 
