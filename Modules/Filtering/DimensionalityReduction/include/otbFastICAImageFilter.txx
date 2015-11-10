@@ -103,24 +103,19 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
           "Class should be templeted with FORWARD or INVERSE only...",
           ITK_LOCATION );
   }
-}
 
-template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
-void
-FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
-::GenerateData ()
-{
   switch ( static_cast<int>(DirectionOfTransformation) )
     {
     case static_cast<int>(Transform::FORWARD):
-      return ForwardGenerateData();
+    {
+    ForwardGenerateOutputInformation();
+    break;
+    }
     case static_cast<int>(Transform::INVERSE):
-      return ReverseGenerateData();
-    default:
-      throw itk::ExceptionObject(__FILE__, __LINE__,
-                                 "Class should be templated with FORWARD or INVERSE only...",
-                                 ITK_LOCATION );
+    {
+    ReverseGenerateOutputInformation();
+    break;
+    }
     }
 }
 
@@ -128,13 +123,13 @@ template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
-::ForwardGenerateData ()
+::ForwardGenerateOutputInformation()
 {
   typename InputImageType::Pointer inputImgPtr
     = const_cast<InputImageType*>( this->GetInput() );
 
   m_PCAFilter->SetInput( inputImgPtr );
-  m_PCAFilter->Update();
+  m_PCAFilter->GetOutput()->UpdateOutputInformation();
 
   if ( !m_GivenTransformationMatrix )
   {
@@ -157,19 +152,15 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   m_TransformFilter->SetInput( m_PCAFilter->GetOutput() );
   m_TransformFilter->SetMatrix( m_TransformationMatrix.GetVnlMatrix() );
-  m_TransformFilter->GraftOutput( this->GetOutput() );
-  m_TransformFilter->Update();
-
-  this->GraftOutput( m_TransformFilter->GetOutput() );
 }
 
 template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
-::ReverseGenerateData ()
+::ReverseGenerateOutputInformation()
 {
-  if ( !m_GivenTransformationMatrix )
+ if ( !m_GivenTransformationMatrix )
   {
     throw itk::ExceptionObject( __FILE__, __LINE__,
                                 "No Transformation matrix given",
@@ -200,9 +191,48 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
    * have not been given at this point
    */
   m_PCAFilter->SetInput( m_TransformFilter->GetOutput() );
+}
+
+
+template < class TInputImage, class TOutputImage,
+            Transform::TransformDirection TDirectionOfTransformation >
+void
+FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
+::GenerateData ()
+{
+  switch ( static_cast<int>(DirectionOfTransformation) )
+    {
+    case static_cast<int>(Transform::FORWARD):
+      return ForwardGenerateData();
+    case static_cast<int>(Transform::INVERSE):
+      return ReverseGenerateData();
+    default:
+      throw itk::ExceptionObject(__FILE__, __LINE__,
+                                 "Class should be templated with FORWARD or INVERSE only...",
+                                 ITK_LOCATION );
+    }
+}
+
+template < class TInputImage, class TOutputImage,
+            Transform::TransformDirection TDirectionOfTransformation >
+void
+FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
+::ForwardGenerateData ()
+{
+  m_TransformFilter->GraftOutput( this->GetOutput() );
+  m_TransformFilter->Update();
+
+  this->GraftOutput( m_TransformFilter->GetOutput() );
+}
+
+template < class TInputImage, class TOutputImage,
+            Transform::TransformDirection TDirectionOfTransformation >
+void
+FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
+::ReverseGenerateData ()
+{
   m_PCAFilter->GraftOutput( this->GetOutput() );
   m_PCAFilter->Update();
-
   this->GraftOutput( m_PCAFilter->GetOutput() );
 }
 
@@ -285,7 +315,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   if ( size != this->GetNumberOfPrincipalComponentsRequired() )
     {
-    this->m_TransformationMatrix = W.get_n_rows( 0, this->GetNumberOfPrincipalComponentsRequired() );
+    this->m_TransformationMatrix = W.get_n_columns( 0, this->GetNumberOfPrincipalComponentsRequired() );
     }
   else
     {

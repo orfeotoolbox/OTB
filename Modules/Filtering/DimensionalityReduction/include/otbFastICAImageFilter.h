@@ -164,6 +164,8 @@ protected:
   virtual void GenerateData ();
 
   /** Internal methods */
+  void ForwardGenerateOutputInformation();
+  void ReverseGenerateOutputInformation();
   virtual void ForwardGenerateData();
   virtual void ReverseGenerateData();
 
