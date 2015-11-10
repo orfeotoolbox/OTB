@@ -104,7 +104,6 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
       m_NumberOfPrincipalComponentsRequired = 0;
       this->GetOutput()->SetNumberOfComponentsPerPixel( theOutputDimension );
-
       break;
     }
     default: // should not go so far...
@@ -112,26 +111,21 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
           "Class should be templeted with FORWARD or INVERSE only...",
           ITK_LOCATION );
   }
-}
 
-template <class TInputImage, class TOutputImage,
-            class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
-void
-MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
-::GenerateData ()
-{
+
   switch ( static_cast<int>(DirectionOfTransformation) )
-  {
-  case static_cast<int>(Transform::FORWARD):
-    return ForwardGenerateData();
-  case static_cast<int>(Transform::INVERSE):
-    return ReverseGenerateData();
-  default: // should not go so far
-    throw itk::ExceptionObject(__FILE__, __LINE__,
-                               "Class should be templated with FORWARD or INVERSE only...",
-                               ITK_LOCATION );
-  }
+    {
+    case static_cast<int>(Transform::FORWARD):
+    {
+    ForwardGenerateOutputInformation();
+    break;
+    }
+    case static_cast<int>(Transform::INVERSE):
+    {
+    ReverseGenerateOutputInformation();
+    break;
+    }
+    }
 }
 
 template <class TInputImage, class TOutputImage,
@@ -139,7 +133,7 @@ template <class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
-::ForwardGenerateData ()
+::ForwardGenerateOutputInformation()
 {
   typename InputImageType::Pointer inputImgPtr
     = const_cast<InputImageType*>( this->GetInput() );
@@ -157,10 +151,10 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
     m_Normalizer->SetUseStdDev( false );
 
   m_Normalizer->SetInput( inputImgPtr );
-  m_Normalizer->Update();
+  m_Normalizer->GetOutput()->UpdateOutputInformation();
 
   if ( !m_GivenMeanValues )
-    m_MeanValues = m_Normalizer->GetFunctor().GetMean();
+    m_MeanValues = m_Normalizer->GetCovarianceEstimator()->GetMean();
 
   if ( m_UseNormalization )
   {
@@ -213,11 +207,6 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   m_Transformer->SetInput( m_Normalizer->GetOutput() );
   m_Transformer->SetMatrix( m_TransformationMatrix.GetVnlMatrix() );
-  m_Transformer->GraftOutput( this->GetOutput() );
-  m_Transformer->Update();
-
-  this->GraftOutput( m_Transformer->GetOutput() );
-
 }
 
 template <class TInputImage, class TOutputImage,
@@ -225,9 +214,9 @@ template <class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
-::ReverseGenerateData ()
+::ReverseGenerateOutputInformation()
 {
-  if ( !m_GivenTransformationMatrix )
+ if ( !m_GivenTransformationMatrix )
   {
     if ( !m_GivenCovarianceMatrix )
     {
@@ -313,12 +302,55 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
       revMean[i] = - m_MeanValues[i];
     m_Normalizer->SetMean( revMean );
     m_Normalizer->SetUseStdDev( false );
-  }
+  }  
 
   m_Normalizer->SetInput( m_Transformer->GetOutput() );
+ 
+
+}
+
+
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
+            Transform::TransformDirection TDirectionOfTransformation >
+void
+MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
+::GenerateData ()
+{
+  switch ( static_cast<int>(DirectionOfTransformation) )
+  {
+  case static_cast<int>(Transform::FORWARD):
+    return ForwardGenerateData();
+  case static_cast<int>(Transform::INVERSE):
+    return ReverseGenerateData();
+  default: // should not go so far
+    throw itk::ExceptionObject(__FILE__, __LINE__,
+                               "Class should be templated with FORWARD or INVERSE only...",
+                               ITK_LOCATION );
+  }
+}
+
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
+            Transform::TransformDirection TDirectionOfTransformation >
+void
+MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
+::ForwardGenerateData ()
+{
+  m_Transformer->GraftOutput( this->GetOutput() );
+  m_Transformer->Update();
+  this->GraftOutput( m_Transformer->GetOutput() );
+}
+
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
+            Transform::TransformDirection TDirectionOfTransformation >
+void
+MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
+::ReverseGenerateData ()
+{
   m_Normalizer->GraftOutput( this->GetOutput() );
   m_Normalizer->Update();
-
   this->GraftOutput( m_Normalizer->GetOutput() );
 }
 
