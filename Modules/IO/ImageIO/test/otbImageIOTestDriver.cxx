@@ -82,6 +82,7 @@ void RegisterTests()
   REGISTER_TEST(otbImageFileReaderRADComplexDouble);
   REGISTER_TEST(otbPipeline);
   REGISTER_TEST(otbStreamingImageFilterTest);
+  REGISTER_TEST(otbStreamingImageFileWriterTest);
   REGISTER_TEST(otbImageFileWriterRGBTest);
   REGISTER_TEST(otbMonobandScalarToImageComplexFloat);
   REGISTER_TEST(otbMonobandScalarToImageComplexDouble);
