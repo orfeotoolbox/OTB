@@ -312,10 +312,20 @@ template < class TInputImage, class TOutputImage,
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ReverseGenerateData ()
-{    
-    m_Normalizer->GraftOutput( this->GetOutput() );
+{
+
+  if ( m_GivenStdDevValues || m_GivenMeanValues )
+    {
+    m_Normalizer->GraftOutput(this->GetOutput());
     m_Normalizer->Update();
-    this->GraftOutput( m_Normalizer->GetOutput() );
+    this->GraftOutput(m_Normalizer->GetOutput());
+    }
+  else
+    {
+    m_Transformer->GraftOutput( this->GetOutput() );
+    m_Transformer->Update();
+    this->GraftOutput( m_Transformer->GetOutput() );
+    }
 }
 
 template < class TInputImage, class TOutputImage,
