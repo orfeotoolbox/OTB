@@ -7,18 +7,26 @@ if(MSVC)
 set(BUILD_SHARED_LIBS OFF) #force off
 endif()
 
-file(GLOB tinyXMLlib_SRCS "*.cpp")
-file(GLOB tinyXMLlib_HDRS "*.h")
+
+set(tinyXMLlib_SRCS
+  tinystr.cpp
+  tinyxml.cpp
+  tinyxmlerror.cpp
+  tinyxmlparser.cpp)
+
+set(tinyXMLlib_HDRS
+  tinystr.h
+  tinyxml.h)
+
 add_library(tinyxml ${tinyXMLlib_SRCS})
 
 install(TARGETS tinyxml
-    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-    LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION lib COMPONENT Development)
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)
 
 install(FILES ${tinyXMLlib_HDRS}
-    DESTINATION include
-    COMPONENT Development)
+  DESTINATION include)
 
 
 #set(TINYXML_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR})
