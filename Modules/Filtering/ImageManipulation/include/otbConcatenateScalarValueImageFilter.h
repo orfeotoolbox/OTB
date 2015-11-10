@@ -55,7 +55,7 @@ public:
     m_ScalarValue = p;
   }
 
-  bool operator !=(const ConcatenateScalarValueFunctor& other) const
+  bool operator !=(const ConcatenateScalarValueFunctor& itkNotUsed(other)) const
   {
     return false;
   }

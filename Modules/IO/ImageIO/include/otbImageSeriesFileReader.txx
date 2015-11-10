@@ -47,7 +47,7 @@ ImageSeriesFileReader<TImage, TInternalImage>
 template <class TImage, class TInternalImage>
 void
 ImageSeriesFileReader<TImage, TInternalImage>
-::GenerateData(DataObjectPointerArraySizeType idx)
+::GenerateData(DataObjectPointerArraySizeType itkNotUsed(idx))
 {
   std::ostringstream msg;
   msg << "Something wrong... Check the template definition of this class in the program...\n";

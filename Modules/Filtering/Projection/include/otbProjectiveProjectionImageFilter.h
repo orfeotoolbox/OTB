@@ -60,7 +60,7 @@ public:
     m_OutputSize = m_ProjectionDirection.Size();
   }
 
-  bool operator !=(const ProjectiveProjectionFunctor& other) const
+  bool operator !=(const ProjectiveProjectionFunctor& itkNotUsed(other)) const
   {
     return false;
   }

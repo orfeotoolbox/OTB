@@ -52,7 +52,7 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
 template <class TInput, class TOutput, class TPrecision>
 bool
 NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
-::operator != (const Self& other) const
+::operator != (const Self& itkNotUsed(other)) const
 {
   return true;
 }
@@ -60,7 +60,7 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
 template <class TInput, class TOutput, class TPrecision>
 bool
 NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
-::operator == (const Self& other) const
+::operator == (const Self& itkNotUsed(other)) const
 {
   return false;
 }
