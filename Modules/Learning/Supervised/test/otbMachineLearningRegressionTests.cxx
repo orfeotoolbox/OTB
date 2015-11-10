@@ -44,8 +44,6 @@ typedef MachineLearningModelRegressionType::TargetSampleType     TargetSampleReg
 typedef MachineLearningModelRegressionType::TargetListSampleType TargetListSampleRegressionType;
 typedef itk::Statistics::MersenneTwisterRandomVariateGenerator   RandomGeneratorType;
 
-const double epsilon = 0.1;
-
 typedef struct RegressionTestParamStruct
 {
   double vMin;
