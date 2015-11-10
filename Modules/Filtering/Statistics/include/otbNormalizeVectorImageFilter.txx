@@ -35,6 +35,22 @@ NormalizeVectorImageFilter< TInputImage, TOutputImage >
   m_CovarianceEstimator = CovarianceEstimatorFilterType::New();
 }
 
+
+template < class TInputImage, class TOutputImage >
+void
+NormalizeVectorImageFilter< TInputImage, TOutputImage >
+::GenerateOutputInformation()
+{
+  // Call superclass implementation
+  Superclass::GenerateOutputInformation();
+
+  if( (m_UseMean && !m_IsGivenMean) || (m_UseStdDev && !m_IsGivenStdDev))
+    {
+    m_CovarianceEstimator->SetInput( const_cast<InputImageType*>( this->GetInput() ) );
+    m_CovarianceEstimator->Update();
+    }  
+}
+
 template < class TInputImage, class TOutputImage >
 void
 NormalizeVectorImageFilter< TInputImage, TOutputImage >
@@ -56,9 +72,6 @@ NormalizeVectorImageFilter< TInputImage, TOutputImage >
 
   if ( !m_IsGivenMean )
   {
-    m_CovarianceEstimator->SetInput( const_cast<InputImageType*>( this->GetInput() ) );
-    m_CovarianceEstimator->Update();
-
     this->GetFunctor().SetMean( m_CovarianceEstimator->GetMean() );
 
     if ( !m_IsGivenStdDev && m_UseStdDev )

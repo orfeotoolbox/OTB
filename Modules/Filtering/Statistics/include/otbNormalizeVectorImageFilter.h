@@ -195,6 +195,7 @@ protected:
   NormalizeVectorImageFilter ();
   virtual ~NormalizeVectorImageFilter() { }
 
+  void GenerateOutputInformation();
   void BeforeThreadedGenerateData();
 
 private:
