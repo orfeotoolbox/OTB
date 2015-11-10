@@ -48,15 +48,9 @@ NormalizeVectorImageFilter< TInputImage, TOutputImage >
     {
     m_CovarianceEstimator->SetInput( const_cast<InputImageType*>( this->GetInput() ) );
     m_CovarianceEstimator->Update();
-    }  
-}
+    }
 
-template < class TInputImage, class TOutputImage >
-void
-NormalizeVectorImageFilter< TInputImage, TOutputImage >
-::BeforeThreadedGenerateData ()
-{
-  if ( !m_UseMean )
+    if ( !m_UseMean )
   {
     typename TInputImage::PixelType vector ( this->GetInput()->GetNumberOfComponentsPerPixel() );
     vector.Fill( itk::NumericTraits< typename TInputImage::PixelType::ValueType >::Zero );
@@ -84,6 +78,7 @@ NormalizeVectorImageFilter< TInputImage, TOutputImage >
       this->GetFunctor().SetStdDev( sigma );
     }
   }
+
 }
 
 } // end of namespace otb

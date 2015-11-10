@@ -196,7 +196,7 @@ protected:
   virtual ~NormalizeVectorImageFilter() { }
 
   void GenerateOutputInformation();
-  void BeforeThreadedGenerateData();
+
 
 private:
   NormalizeVectorImageFilter ( const Self & );
