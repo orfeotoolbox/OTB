@@ -294,17 +294,21 @@ private:
         filter->SetUseNormalization(normalize);
         filter->GetNoiseImageFilter()->SetRadius(radius);
 
+        m_ForwardFilter->GetOutput()->UpdateOutputInformation();
+        
         if (invTransform)
           {
-          m_ForwardFilter->Update();
           otbAppLogDEBUG( << "Compute Inverse Transform");
           invFilter->SetInput(m_ForwardFilter->GetOutput());
+          otbAppLogINFO( << "Normalization MeanValue:"<<filter->GetMeanValues() );
           invFilter->SetMeanValues(filter->GetMeanValues());
           if (normalize)
             {
+            otbAppLogINFO( << "Normalization StdDevValue:"<<filter->GetStdDevValues() );
             invFilter->SetStdDevValues(filter->GetStdDevValues());
+            
             }
-
+          invFilter->SetUseNormalization(normalize);
           invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
           m_TransformationMatrix = invFilter->GetTransformationMatrix();
           }
