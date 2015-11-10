@@ -43,7 +43,7 @@ public:
   DotProductFunctor() {}
   virtual ~DotProductFunctor() {}
 
-  bool operator !=(const DotProductFunctor& other) const
+  bool operator !=(const DotProductFunctor& itkNotUsed(other)) const
   {
     return false;
   }

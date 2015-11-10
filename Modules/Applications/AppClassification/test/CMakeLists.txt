@@ -407,9 +407,9 @@ otb_test_application(NAME apTvFusionOfClassificationsDSPrecision6Inputs
 
 otb_test_application(NAME apTvFusionOfClassificationsMV3Inputs
                      APP  FusionOfClassifications
-                     OPTIONS -il ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
-                                 ${OTBAPP_BASELINE}/clLabeledImageQB456_1.tif
-                                 ${OTBAPP_BASELINE}/clLabeledImageQB1.tif
+                     OPTIONS -il ${INPUTDATA}/Classification/clLabeledImageQB123_1.tif
+                                 ${INPUTDATA}/Classification/clLabeledImageQB456_1.tif
+                                 ${INPUTDATA}/Classification/clLabeledImageQB1.tif
                              -method majorityvoting
                              -undecidedlabel 100
                              -out ${TEMP}/apTvFusionOfClassificationsMV3InputsOutput.tif uint16
@@ -488,8 +488,8 @@ otb_test_application(NAME apTvFusionOfClassificationsDSAccuracy6Inputs
 
 otb_test_application(NAME apTvFusionOfClassificationsMV2Inputs
                      APP  FusionOfClassifications
-                     OPTIONS -il ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
-                                 ${OTBAPP_BASELINE}/clLabeledImageQB456_1.tif
+                     OPTIONS -il ${INPUTDATA}/Classification/clLabeledImageQB123_1.tif
+                                 ${INPUTDATA}/Classification/clLabeledImageQB456_1.tif
                              -method majorityvoting
                              -undecidedlabel 100
                              -out ${TEMP}/apTvFusionOfClassificationsMV2InputsOutput.tif uint16

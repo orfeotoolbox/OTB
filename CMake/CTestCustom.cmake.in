@@ -63,6 +63,7 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   # other warning expression:
   "[0-9,]+ warnings? generated."
   ".*include.opencv2.*warning.*"
+  ".*include.opencv2.*note.*"
   ".*include.kml.*warning.*"
   ".*include.ogr_feature.*warning.*"
   ".*itksys.SharedForward.h.*warning.*"
@@ -71,6 +72,7 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*include.ITK-4.*warning.*"
   ".*include.curl.curl.h.*warning.*"
   ".*include.ossim.*warning.*"
+  ".*include.ossim.*note.*"
   ".*include.ogr_core.h.*warning.*"
   ".*include.ogr_srs_api.h.*warning.*"
   ".*include.ogrsf_frmts.h.*warning.*"
@@ -79,4 +81,5 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*include.cpl_error.h.*warning.*"
   ".*vnl.vnl_numeric_traits.h.*warning.*"
   ".*vcl_config_compiler.h.*warning.*"
+  ".*boost.move.unique_ptr.hpp:.*"
   )
