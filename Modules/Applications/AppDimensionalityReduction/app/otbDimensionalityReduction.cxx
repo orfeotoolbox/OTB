@@ -104,6 +104,7 @@ private:
     SetParameterDescription("in", "The input image to apply dimensionality reduction.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "output image. Components are ordered by decreasing eigenvalues.");
+    MandatoryOff("out");
     AddParameter(ParameterType_Group, "rescale", "Rescale Output.");
 
     MandatoryOff("rescale");
@@ -236,6 +237,7 @@ private:
       // PCA Algorithm
       case 0:
         {
+
         otbAppLogDEBUG( << "PCA Algorithm ");
         PCAForwardFilterType::Pointer filter = PCAForwardFilterType::New();
         m_ForwardFilter = filter;
@@ -245,18 +247,20 @@ private:
 
         filter->SetInput(GetParameterFloatVectorImage("in"));
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
-        filter->SetUseNormalization(normalize);
-        m_ForwardFilter->Update();
-
+        filter->SetUseNormalization(normalize);        
+        m_ForwardFilter->GetOutput()->UpdateOutputInformation();
+        
         if (invTransform)
-          {
+          {  
           invFilter->SetInput(m_ForwardFilter->GetOutput());
           if (normalize)
             {
-            otbAppLogINFO( << "Normalization MeanValue :"<<filter->GetMeanValues()<<
-                "StdValue :" <<filter->GetStdDevValues() );
+            otbAppLogINFO( << "Normalization MeanValue:"<<filter->GetMeanValues() );
             invFilter->SetMeanValues(filter->GetMeanValues());
-            invFilter->SetStdDevValues(filter->GetStdDevValues());
+            // By default normalization by std dev is deactivated in
+            //forward filter, and GetStdDevValues() returns an empty
+            //vector, which confuses the invFilter.
+            //invFilter->SetStdDevValues(filter->GetStdDevValues());
             }
 
           invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
@@ -289,9 +293,10 @@ private:
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
         filter->SetUseNormalization(normalize);
         filter->GetNoiseImageFilter()->SetRadius(radius);
-        m_ForwardFilter->Update();
+
         if (invTransform)
           {
+          m_ForwardFilter->Update();
           otbAppLogDEBUG( << "Compute Inverse Transform");
           invFilter->SetInput(m_ForwardFilter->GetOutput());
           invFilter->SetMeanValues(filter->GetMeanValues());
@@ -314,8 +319,6 @@ private:
         MAFForwardFilterType::Pointer filter = MAFForwardFilterType::New();
         m_ForwardFilter = filter;
         filter->SetInput(GetParameterFloatVectorImage("in"));
-        m_ForwardFilter->Update();
-
         otbAppLogINFO( << "V :"<<std::endl<<filter->GetV()<<"Auto-Correlation :"<<std::endl <<filter->GetAutoCorrelation() );
 
         break;
@@ -336,10 +339,10 @@ private:
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
         filter->SetNumberOfIterations(nbIterations);
         filter->SetMu(mu);
-        m_ForwardFilter->Update();
 
         if (invTransform)
           {
+          m_ForwardFilter->Update();
           otbAppLogDEBUG( << "Compute Inverse Transform");
           invFilter->SetInput(m_ForwardFilter->GetOutput());
 
