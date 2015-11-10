@@ -105,32 +105,28 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
                                  "Class should be templeted with FORWARD or INVERSE only...",
                                  ITK_LOCATION );
     }
-}
 
-template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
-void
-PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
-::GenerateData ()
-{
+  
   switch ( static_cast<int>(DirectionOfTransformation) )
-  {
-  case static_cast<int>(Transform::FORWARD):
-      return ForwardGenerateData();
+    {
+    case static_cast<int>(Transform::FORWARD):
+    {
+    ForwardGenerateOutputInformation();
+    break;
+    }
     case static_cast<int>(Transform::INVERSE):
-      return ReverseGenerateData();
-    default:
-      throw itk::ExceptionObject(__FILE__, __LINE__,
-          "Class should be templated with FORWARD or INVERSE only...",
-          ITK_LOCATION );
-  }
+    {
+    ReverseGenerateOutputInformation();
+    break;
+    }
+    }
 }
 
 template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
-::ForwardGenerateData ()
+::ForwardGenerateOutputInformation()
 {
   typename InputImageType::Pointer inputImgPtr
     = const_cast<InputImageType*>( this->GetInput() );
@@ -150,7 +146,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
         if ( m_GivenStdDevValues )
           m_Normalizer->SetStdDev( m_StdDevValues );
 
-        m_Normalizer->Update();
+        m_Normalizer->GetOutput()->UpdateOutputInformation();
 
         if ( !m_GivenMeanValues )
         {
@@ -167,8 +163,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
         else
         {
           m_CovarianceEstimator->SetInput( m_Normalizer->GetOutput() );
-          m_CovarianceEstimator->Update();
-
+          m_CovarianceEstimator->UpdateOutputInformation();
           m_CovarianceMatrix = m_CovarianceEstimator->GetCovariance();
         }
 
@@ -200,23 +195,18 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   }
 
   if ( m_TransformationMatrix.GetVnlMatrix().empty() )
-  {
+    {
     throw itk::ExceptionObject( __FILE__, __LINE__,
-          "Empty transformation matrix",
-          ITK_LOCATION);
-  }
-
-  m_Transformer->SetMatrix( m_TransformationMatrix.GetVnlMatrix() );
-  m_Transformer->GraftOutput( this->GetOutput() );
-  m_Transformer->Update();
-  this->GraftOutput( m_Transformer->GetOutput() );
+                                "Empty transformation matrix",
+                                ITK_LOCATION);
+    }
 }
 
 template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
-::ReverseGenerateData ()
+::ReverseGenerateOutputInformation()
 {
   if ( !m_GivenTransformationMatrix )
   {
@@ -248,11 +238,10 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   m_Transformer->SetInput( this->GetInput() );
   m_Transformer->SetMatrix( m_TransformationMatrix.GetVnlMatrix() );
+  m_Normalizer->SetInput( m_Transformer->GetOutput() );
 
-  if ( m_GivenMeanValues || m_GivenStdDevValues )
+  if ( m_GivenStdDevValues || m_GivenMeanValues )
   {
-    m_Normalizer->SetInput( m_Transformer->GetOutput() );
-
     if ( m_GivenStdDevValues )
     {
       VectorType revStdDev ( m_StdDevValues.Size() );
@@ -278,17 +267,55 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       }
       m_Normalizer->SetMean( revMean );
     }
+  }
+  else
+    {
+    m_Normalizer->SetUseMean(false);
+    m_Normalizer->SetUseStdDev(false);
+    }
+}
 
+
+template < class TInputImage, class TOutputImage,
+            Transform::TransformDirection TDirectionOfTransformation >
+void
+PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
+::GenerateData ()
+{
+  switch ( static_cast<int>(DirectionOfTransformation) )
+  {
+  case static_cast<int>(Transform::FORWARD):
+      return ForwardGenerateData();
+    case static_cast<int>(Transform::INVERSE):
+      return ReverseGenerateData();
+    default:
+      throw itk::ExceptionObject(__FILE__, __LINE__,
+          "Class should be templated with FORWARD or INVERSE only...",
+          ITK_LOCATION );
+  }
+}
+
+template < class TInputImage, class TOutputImage,
+            Transform::TransformDirection TDirectionOfTransformation >
+void
+PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
+::ForwardGenerateData ()
+{
+  m_Transformer->SetMatrix( m_TransformationMatrix.GetVnlMatrix() );
+  m_Transformer->GraftOutput( this->GetOutput() );
+  m_Transformer->Update();
+  this->GraftOutput( m_Transformer->GetOutput() );
+}
+
+template < class TInputImage, class TOutputImage,
+            Transform::TransformDirection TDirectionOfTransformation >
+void
+PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
+::ReverseGenerateData ()
+{    
     m_Normalizer->GraftOutput( this->GetOutput() );
     m_Normalizer->Update();
     this->GraftOutput( m_Normalizer->GetOutput() );
-  }
-  else
-  {
-    m_Transformer->GraftOutput( this->GetOutput() );
-    m_Transformer->Update();
-    this->GraftOutput( m_Transformer->GetOutput() );
-  }
 }
 
 template < class TInputImage, class TOutputImage,

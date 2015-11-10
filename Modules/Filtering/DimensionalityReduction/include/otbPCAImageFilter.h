@@ -178,9 +178,11 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Internal methods */
+  virtual void ForwardGenerateOutputInformation();
+  virtual void ReverseGenerateOutputInformation();
   virtual void ForwardGenerateData();
   virtual void ReverseGenerateData();
-
+  
   void GenerateTransformationMatrix();
 
   /** Internal attributes */
