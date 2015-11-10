@@ -86,7 +86,7 @@ public:
 
   virtual OutputType Evaluate( const DataNodeType& node ) const;
 
-  std::string GetExpression(std::string expression) const
+  std::string GetExpression() const
   {
     return m_ParserConditionFunctor->GetExpression();
   }
