@@ -24,7 +24,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputFloat);
   REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputDouble);
   REGISTER_TEST(otbReadingComplexDataIntoComplexImageTest);
-  REGISTER_TEST(otbStreamingImageFileWriterTest);
   REGISTER_TEST(otbImageFileReaderRADInt);
   REGISTER_TEST(otbImageFileReaderRGBTest);
   REGISTER_TEST(otbImageMetadataStreamingFileWriterTest);

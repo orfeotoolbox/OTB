@@ -255,7 +255,6 @@ otb_add_test(NAME ioTvStreamingIFWriterLUMWithoutStreaming COMMAND otbImageIOTes
   otbStreamingImageFileWriterTest
   ${TEMP}/ioImageFileReaderPNG2LUM.lum
   ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithoutStreaming.lum
-  0 # StreamingImageFileWriter
   0 # NumberOfStreamDivisions
   )
 set_property(TEST ioTvStreamingIFWriterLUMWithoutStreaming PROPERTY DEPENDS ioTvImageFileReaderPNG2LUM)
@@ -266,7 +265,6 @@ otb_add_test(NAME ioTvStreamingIFWriterBSQWithoutStreaming COMMAND otbImageIOTes
   otbStreamingImageFileWriterTest
   ${INPUTDATA}/poupees_1canal.c1.hdr
   ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.hdr
-  0 # Streaming
   0
   )
 set_property(TEST ioTvStreamingIFWriterBSQWithoutStreaming PROPERTY DEPENDS ioTvImageFileReaderPNG2BSQ)
@@ -277,7 +275,6 @@ otb_add_test(NAME ioTvStreamingWithIFWriterLUMWithStreaming COMMAND otbImageIOTe
   otbStreamingImageFileWriterTest
   ${TEMP}/ioImageFileReaderPNG2LUM.lum
   ${TEMP}/ioStreamingWithImageFileWriterLUM2LUMWithStreaming_10.lum
-  0 # StreamingImageFileWriter
   10 # NumberOfStreamDivisions
   )
 set_property(TEST ioTvStreamingWithIFWriterLUMWithStreaming PROPERTY DEPENDS ioTvImageFileReaderPNG2LUM)
@@ -288,7 +285,6 @@ otb_add_test(NAME ioTvStreamingWithIFWriterBSQWithStreaming COMMAND otbImageIOTe
   otbStreamingImageFileWriterTest
   ${TEMP}/ioImageFileReaderPNG2BSQ.hd
   ${TEMP}/ioStreamingWithImageFileWriterBSQ2BSQWithStreaming_10.hd
-  0 # StreamingImageFileWriter
   10 # NumberOfStreamDivisions
   )
 set_property(TEST ioTvStreamingWithIFWriterBSQWithStreaming PROPERTY DEPENDS ioTvImageFileReaderPNG2BSQ)
@@ -299,7 +295,6 @@ otb_add_test(NAME ioTvStreamingIFWriterBSQWithStreaming COMMAND otbImageIOTestDr
   otbStreamingImageFileWriterTest
   ${INPUTDATA}/poupees_1canal.c1.hdr
   ${TEMP}/ioStreamingImageFileWriterBSQWithStreaming_100.hdr
-  1 # Streaming
   100
   )
 set_property(TEST ioTvStreamingIFWriterBSQWithStreaming PROPERTY DEPENDS ioTvImageFileReaderPNG2BSQ)
@@ -310,7 +305,6 @@ otb_add_test(NAME ioTvStreamingIFWriterLUMWithStreaming COMMAND otbImageIOTestDr
   otbStreamingImageFileWriterTest
   ${TEMP}/ioImageFileReaderPNG2LUM.lum
   ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithStreaming_10.lum
-  1 # StreamingImageFileWriter
   10 # NumberOfStreamDivisions
   )
 set_property(TEST ioTvStreamingIFWriterLUMWithStreaming PROPERTY DEPENDS ioTvImageFileReaderPNG2LUM)
@@ -322,7 +316,7 @@ otb_add_test(NAME ioTvReadingComplexDataIntoComplexImage COMMAND otbImageIOTestD
   )
 
 otb_add_test(NAME ioTvStreamingImageFilterBSQ2PNG COMMAND otbImageIOTestDriver
-   --compare-image ${EPSILON_9}   
+   --compare-image ${EPSILON_9}
    ${TEMP}/ioImageFileReaderPNG2BSQ.hd
    ${TEMP}/ioStreamingImageFilterTestBSQ.png
    otbStreamingImageFilterTest
@@ -1308,4 +1302,3 @@ otb_add_test(NAME  ioTvImageFileReaderPNG2ENVI COMMAND otbImageIOTestDriver
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileReaderPNG2ENVI.hdr )
 set_tests_properties(ioTvImageFileReaderPNG2ENVI PROPERTIES DEPENDS ioTvImageFileReaderPNG2BSQ)
-
