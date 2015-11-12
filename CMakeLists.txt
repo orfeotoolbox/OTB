@@ -63,10 +63,6 @@ include(OTBModuleRemote)
 
 set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 
-#Please also update PACKAGE_VERSION var in SuperBuild/CMake/External_package.cmake
-#when updating values below. There is no direct way to get OTB_VERSION_STRING value
-#there.. other than I use an file(READ ... REGEX) option.
-#Manually updating PACKAGE_VERSION seems way better than using read file and stuff.
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "5")
