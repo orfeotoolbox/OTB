@@ -12,12 +12,12 @@ if(USE_SYSTEM_ITK)
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using ITK SuperBuild version")
-  
+
   # if(MSVC)
     # set(ITK_SB_SRC "C:/Temp/ITK")
     # set(ITK_SB_BUILD_DIR ${ITK_SB_SRC}/build)
   # endif()
-  
+
   set(ITK_ENABLED_MODULES
     Common
     FiniteDifference
@@ -100,18 +100,18 @@ else()
     Voronoi
     Watersheds
     )
-  
+
   set(ITK_MODULES_CMAKE_CACHE)
   foreach(ITK_MODULE ${ITK_ENABLED_MODULES})
     list(APPEND ITK_MODULES_CMAKE_CACHE -DModule_ITK${ITK_MODULE}:BOOL=ON)
   endforeach()
-  
+
   # declare dependencies
   set(${proj}_DEPENDENCIES TIFF EXPAT PNG ZLIB FFTW)
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj ITK)
-  
+
   ADD_SUPERBUILD_CMAKE_VAR(TIFF_INCLUDE_DIR)
   ADD_SUPERBUILD_CMAKE_VAR(TIFF_LIBRARY)
   ADD_SUPERBUILD_CMAKE_VAR(EXPAT_INCLUDE_DIR)
@@ -120,7 +120,7 @@ else()
   ADD_SUPERBUILD_CMAKE_VAR(PNG_LIBRARY)
   ADD_SUPERBUILD_CMAKE_VAR(ZLIB_INCLUDE_DIR)
   ADD_SUPERBUILD_CMAKE_VAR(ZLIB_LIBRARY)
-  
+
   # By default activate FFTW, but with an external fftw build
   # These variables are used in ITK to initialize the value of the ITK_USE_FFTW_XXX options
   if (WIN32)
@@ -129,14 +129,14 @@ else()
       -DUSE_FFTWD:BOOL=OFF
       )
   else()
-    list(APPEND ITK_SB_CONFIG 
+    list(APPEND ITK_SB_CONFIG
       -DUSE_FFTWF:BOOL=ON
       -DUSE_FFTWD:BOOL=ON
       -DUSE_SYSTEM_FFTW:BOOL=ON
       )
     ADD_SUPERBUILD_CMAKE_VAR(FFTW_INCLUDE_PATH)
   endif()
-  
+
   # forward compilation flags
   set(ITK_SB_COMPILATION_FLAGS
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
@@ -147,11 +147,11 @@ else()
     -DCMAKE_SHARED_LINKER_FLAGS:STRING=${CMAKE_SHARED_LINKER_FLAGS}
     -DCMAKE_STATIC_LINKER_FLAGS:STRING=${CMAKE_STATIC_LINKER_FLAGS}
     )
-  
+
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://sourceforge.net/projects/itk/files/itk/4.7/InsightToolkit-4.7.1.tar.gz/download"
-    URL_MD5 c2cbf3eb34df41548a5b9615ea250e7d
+    URL "http://sourceforge.net/projects/itk/files/itk/4.8/InsightToolkit-4.8.1.tar.gz/download"
+    URL_MD5 b1ed53604de854501cb61f34f410420e
     SOURCE_DIR ${ITK_SB_SRC}
     BINARY_DIR ${ITK_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -171,19 +171,19 @@ else()
       -DITK_USE_SYSTEM_TIFF:BOOL=ON
       -DITK_USE_SYSTEM_PNG:BOOL=ON
       ${ITK_SB_CONFIG}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
+    PATCH_COMMAND ${CMAKE_COMMAND} -E copy
       ${CMAKE_SOURCE_DIR}/patches/ITK/hashtable.hxx.in
       ${ITK_SB_SRC}/Modules/ThirdParty/KWSys/src/KWSys
     DEPENDS ${${proj}_DEPENDENCIES}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
-  
+
   # write patch in binary dir
-  #file(WRITE ${CMAKE_BINARY_DIR}/itk_patch_1.cmake 
-  #  "configure_file(${CMAKE_SOURCE_DIR}/patches_ITK/hashtable.hxx.in 
+  #file(WRITE ${CMAKE_BINARY_DIR}/itk_patch_1.cmake
+  #  "configure_file(${CMAKE_SOURCE_DIR}/patches_ITK/hashtable.hxx.in
   #   ${ITK_SB_SRC}/Modules/ThirdParty/KWSys/src/KWSys/hashtable.hxx.in COPYONLY)")
-  
+
   set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-4.6)
-  
+
 endif()
 endif()
