@@ -705,12 +705,13 @@ float MSTARImageIO::byteswap_SR_IR(unsigned char *pointer)
 {
   float *       temp;
   unsigned char iarray[4];
-
+  void *vptr;
   iarray[0] = *(pointer + 3);
   iarray[1] = *(pointer + 2);
   iarray[2] = *(pointer + 1);
   iarray[3] = *(pointer);
-  temp    = (float *) iarray ;
+  vptr = static_cast<void*>(iarray);
+  temp = static_cast<float*>(vptr);
   return *(temp);
 }
 
@@ -718,10 +719,11 @@ unsigned short MSTARImageIO::byteswap_SUS_IUS(unsigned char *pointer)
 {
   unsigned short *temp;
   unsigned char   iarray[2];
-
+  void *vptr;
   iarray[0] = *(pointer + 1);
   iarray[1] = *(pointer);
-  temp    = (unsigned short *) iarray;
+  vptr = static_cast<void*>(iarray);
+  temp = static_cast<unsigned short*>(vptr);
   return *(temp);
 }
 
