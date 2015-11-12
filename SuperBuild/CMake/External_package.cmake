@@ -1,7 +1,7 @@
 
 message(STATUS "Setup OTB Packaging...")
 
-set(PACKAGE_VERSION 5.0.0) #should take from cmake automatically or update with every release?
+set(PACKAGE_VERSION 5.2.0)
 set(PACKAGE_NAME OTB)
 set(PACKAGE_LONG_NAME OrfeoToolBox)
 
