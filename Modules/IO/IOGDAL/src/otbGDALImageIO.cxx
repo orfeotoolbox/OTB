@@ -493,11 +493,13 @@ unsigned int GDALImageIO::GetOverviewsCount()
   // JPEG2000 case : use the number of overviews actually in the dataset
   if (m_Dataset->IsJPEG2000())
     {
-    return dataset->GetRasterBand(1)->GetOverviewCount();
+    // Include the full resolution in overviews count
+    return dataset->GetRasterBand(1)->GetOverviewCount()+1;
     }
 
   if (dataset->GetRasterBand(1)->GetOverviewCount())
-    return dataset->GetRasterBand(1)->GetOverviewCount();
+    // Include the full resolution in overviews count
+    return dataset->GetRasterBand(1)->GetOverviewCount()+1;
 
   // default case: compute overviews until one of the dimensions is 1
   bool flagStop = false;
@@ -520,26 +522,54 @@ unsigned int GDALImageIO::GetOverviewsCount()
 std::vector<std::string> GDALImageIO::GetOverviewsInfo()
 {
   std::vector<std::string> desc;
-  unsigned lOverviewsCount = this->GetOverviewsCount();
-  if ( lOverviewsCount == 0)
+
+  // This should never happen, according to implementation of GetOverviewCount()
+  if (this->GetOverviewsCount() == 0)
     return desc;
-    
-  unsigned int originalWidth = m_OriginalDimensions[0];
-  unsigned int originalHeight = m_OriginalDimensions[1];  
- 
-  // Get the overview sizes
-  for( unsigned int iOverview = 0; iOverview < lOverviewsCount; iOverview++ )
+
+  std::ostringstream oss;
+  
+  // If gdal exposes actual overviews
+  unsigned int lOverviewsCount = m_Dataset->GetDataSet()->GetRasterBand(1)->GetOverviewCount();
+  
+  if (lOverviewsCount)
     {
-    // For each resolution we will compute the tile dim and image dim
-    std::ostringstream oss;    
-    unsigned int w = uint_ceildivpow2( originalWidth, iOverview);
-    unsigned int h = uint_ceildivpow2( originalHeight, iOverview);
+    unsigned int x = m_OriginalDimensions[0];
+    unsigned int y = m_OriginalDimensions[1];
     
-    oss << "Overview level: " << iOverview << " (Image [w x h]: " << w << "x" << h << ")";
-    
+    oss.str("");
+    oss << "Resolution: 0 (Image [w x h]: " << x << "x" << y << ")";
     desc.push_back(oss.str());
-    }
     
+    for( unsigned int iOverview = 0; iOverview < lOverviewsCount; iOverview++ )
+      {
+      x = m_Dataset->GetDataSet()->GetRasterBand(1)->GetOverview(iOverview)->GetXSize();
+      y = m_Dataset->GetDataSet()->GetRasterBand(1)->GetOverview(iOverview)->GetYSize();
+      oss.str("");
+      oss << "Resolution: " << iOverview+1 << " (Image [w x h]: " << x << "x" << y << ")";
+      desc.push_back(oss.str());
+      }
+    }
+  else
+    {
+    // Fall back to gdal implicit overviews
+    lOverviewsCount = this->GetOverviewsCount();
+    
+    unsigned int originalWidth = m_OriginalDimensions[0];
+    unsigned int originalHeight = m_OriginalDimensions[1];  
+    
+    // Get the overview sizes
+    for( unsigned int iOverview = 0; iOverview < lOverviewsCount; iOverview++ )
+      {
+      // For each resolution we will compute the tile dim and image dim
+      unsigned int w = uint_ceildivpow2( originalWidth, iOverview);
+      unsigned int h = uint_ceildivpow2( originalHeight, iOverview);
+      oss.str("");
+      oss << "Resolution: " << iOverview << " (Image [w x h]: " << w << "x" << h << ")";
+      desc.push_back(oss.str());
+      }
+    }
+  
   return desc;
 }
 
