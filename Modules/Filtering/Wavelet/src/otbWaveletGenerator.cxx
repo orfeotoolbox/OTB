@@ -45,7 +45,7 @@ WaveletGenerator<TMotherWaveletOperator>
 template <Wavelet::Wavelet TMotherWaveletOperator>
 void
 WaveletGenerator<TMotherWaveletOperator>
-::GetLowPassCoefficientVector(CoefficientVector& coeff) const
+::GetLowPassCoefficientVector(CoefficientVector& itkNotUsed(coeff)) const
 {
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
@@ -56,7 +56,7 @@ WaveletGenerator<TMotherWaveletOperator>
 template <Wavelet::Wavelet TMotherWaveletOperator>
 void
 WaveletGenerator<TMotherWaveletOperator>
-::GetHighPassCoefficientVector(CoefficientVector& coeff) const
+::GetHighPassCoefficientVector(CoefficientVector& itkNotUsed(coeff)) const
 {
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;

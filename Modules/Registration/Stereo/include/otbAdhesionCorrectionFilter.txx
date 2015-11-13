@@ -632,7 +632,7 @@ AdhesionCorrectionFilter<TImage, TMask>
               int l=-2-win;
               index2[0] = index_pos[0] + i;
               index2[1] = index_pos[1] + l;
-              while (old_maskPtr->GetPixel(index2) == 0)
+              while (old_maskPtr->GetBufferedRegion().IsInside(index2) && old_maskPtr->GetPixel(index2) == 0)
                 {
                 l++;
                 index2[1] = index_pos[1] + l;

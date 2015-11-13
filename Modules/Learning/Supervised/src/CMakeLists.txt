@@ -1,11 +1,10 @@
 set(OTBSupervised_SRC
   otbCvRTreesWrapper.cxx
   otbMachineLearningModelFactoryBase.cxx
-  otbMachineLearningUtils.cxx
   )
 
 add_library(OTBSupervised ${OTBSupervised_SRC})
-target_link_libraries(OTBSupervised 
+target_link_libraries(OTBSupervised
   ${OTBCommon_LIBRARIES}
   ${OTBSVMLearning_LIBRARIES}
   ${OTBOpenCV_LIBRARIES}

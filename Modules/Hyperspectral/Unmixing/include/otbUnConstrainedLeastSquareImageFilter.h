@@ -54,7 +54,7 @@ public:
     return m_OutputSize;
   }
 
-  bool operator != (const UnConstrainedLeastSquareFunctor& other) const
+  bool operator != (const UnConstrainedLeastSquareFunctor& itkNotUsed(other)) const
   {
     return true;
   }

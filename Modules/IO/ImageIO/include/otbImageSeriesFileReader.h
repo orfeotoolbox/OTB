@@ -110,7 +110,7 @@ protected:
   /** TestBandSelection
    * Tests the coherency of the Meta File (especifically band selection) with the image types
    */
-  virtual void TestBandSelection(std::vector<unsigned int>& bands) {}
+  virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) {}
 
   /** GenerateData
    * This method will be specialised if template definitions follow:

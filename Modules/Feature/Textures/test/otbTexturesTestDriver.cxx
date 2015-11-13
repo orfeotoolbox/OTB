@@ -1,7 +1,6 @@
 #include "otbTestMain.h"
 void RegisterTests()
 {
-/*DEPRECATED REGISTER_TEST(otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator); */
   REGISTER_TEST(otbScalarImageToHigherOrderTexturesFilterNew);
   REGISTER_TEST(otbScalarImageToHigherOrderTexturesFilter);
   REGISTER_TEST(otbHaralickTexturesImageFunctionNew);
@@ -16,5 +15,4 @@ void RegisterTests()
   REGISTER_TEST(otbGreyLevelCooccurrenceIndexedListNew);
   REGISTER_TEST(otbScalarImageToAdvancedTexturesFilter);
   REGISTER_TEST(otbScalarImageToPanTexTextureFilter);
-/*DEPRECATED   REGISTER_TEST(otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew); */
 }

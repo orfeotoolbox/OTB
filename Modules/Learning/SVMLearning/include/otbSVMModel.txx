@@ -622,7 +622,7 @@ SVMModel<TValue, TLabel>::SetSupportVectors(svm_node ** sv, int nbOfSupportVecto
 
 template <class TValue, class TLabel>
 void
-SVMModel<TValue, TLabel>::SetAlpha(double ** alpha, int nbOfSupportVector)
+SVMModel<TValue, TLabel>::SetAlpha(double ** alpha, int itkNotUsed(nbOfSupportVector))
 {
   if (!m_Model)
     {

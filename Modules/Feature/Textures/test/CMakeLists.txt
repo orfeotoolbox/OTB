@@ -2,7 +2,6 @@ otb_module_test()
 
 set(OTBTexturesTests
 otbTexturesTestDriver.cxx
-#otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator.cxx
 otbScalarImageToHigherOrderTexturesFilter.cxx
 otbHaralickTexturesImageFunction.cxx
 otbGreyLevelCooccurrenceIndexedList.cxx
@@ -15,18 +14,11 @@ otbScalarImageToAdvancedTexturesFilterNew.cxx
 otbGreyLevelCooccurrenceIndexedListNew.cxx
 otbScalarImageToAdvancedTexturesFilter.cxx
 otbScalarImageToPanTexTextureFilter.cxx
-#otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew.cxx
 )
 
 add_executable(otbTexturesTestDriver ${OTBTexturesTests})
 target_link_libraries(otbTexturesTestDriver ${OTBTextures-Test_LIBRARIES})
 otb_module_target_label(otbTexturesTestDriver)
-
-# Tests Declaration
-
-# otb_add_test(NAME feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator COMMAND otbTexturesTestDriver
-#   otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator
-#   )
 
 otb_add_test(NAME feTuScalarImageToHigherOrderTexturesFilterNew COMMAND otbTexturesTestDriver
   otbScalarImageToHigherOrderTexturesFilterNew
@@ -158,7 +150,3 @@ otb_add_test(NAME feTvScalarImageToPanTexTextureFilter COMMAND otbTexturesTestDr
   ${INPUTDATA}/Mire_Cosinus.png
   ${TEMP}/feTvScalarImageToPanTexTextureFilterOutput
   8 5)
-
-# otb_add_test(NAME feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew COMMAND otbTexturesTestDriver
-#   otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew
-#   )
