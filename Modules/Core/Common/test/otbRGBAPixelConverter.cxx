@@ -52,12 +52,13 @@ int otbRGBAPixelConverter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   typedef unsigned int                                           PixelType0;
   typedef double                                                 PixelType1;
   typedef itk::RGBAPixel<unsigned int>                           PixelType2;
-  typedef itk::RGBPixel<double>                                  PixelType3;
+  typedef itk::RGBAPixel<double>                                 PixelType3;
+  typedef itk::RGBPixel<double>                                  PixelType4;
 
   typedef otb::RGBAPixelConverter<PixelType0, PixelType0>        ConverterType0;
   typedef otb::RGBAPixelConverter<PixelType1, PixelType0>        ConverterType1;
-  typedef otb::RGBAPixelConverter<PixelType0, PixelType2>        ConverterType2;
-  typedef otb::RGBAPixelConverter<PixelType0, PixelType3>        ConverterType3;
+  typedef otb::RGBAPixelConverter<PixelType0, PixelType3>        ConverterType2;
+  typedef otb::RGBAPixelConverter<PixelType0, PixelType4>        ConverterType3;
 
   // Instantiating object
   ConverterType0::Pointer converter0 = ConverterType0::New();
@@ -74,19 +75,19 @@ int otbRGBAPixelConverter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   std::cout << "outputPixel0: " << outputPixel0 << std::endl;
   if(outputPixel0 != 112)
     {
-    itkGenericExceptionMacro(<< "RGBA<unsigned int> 2 unsigned int Failled");
+    itkGenericExceptionMacro(<< "RGBA<unsigned int> 2 unsigned int Failed");
     }
 
-  PixelType2 pixel1;
-  pixel1[0] = 125;
-  pixel1[1] = 105;
-  pixel1[2] = 145;
-  pixel1[3] = 0.75;
+  PixelType3 pixel1;
+  pixel1[0] = 125.0;
+  pixel1[1] = 105.0;
+  pixel1[2] = 145.0;
+  pixel1[3] = 191.0;
   ConverterType1::OutputPixelType outputPixel1 = converter1->Convert(pixel1);
   std::cout << "outputPixel1: " << outputPixel1 << std::endl;
   if(outputPixel1 != 112)
     {
-    itkGenericExceptionMacro(<< "RGBA<double> 2 unsigned int  Failled");
+    itkGenericExceptionMacro(<< "RGBA<double> 2 unsigned int  Failed");
     }
 
   PixelType2 pixel2;
@@ -98,7 +99,7 @@ int otbRGBAPixelConverter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   std::cout << "outputPixel2: " << outputPixel2 << std::endl;
   if(outputPixel2[0] != 125 || outputPixel2[1] != 105 || outputPixel2[2] != 145 || outputPixel2[3] != 0 )
     {
-    itkGenericExceptionMacro(<< "RGBA<unsigned int> 2 RGBA<double>  Failled");
+    itkGenericExceptionMacro(<< "RGBA<unsigned int> 2 RGBA<double>  Failed");
     }
 
   PixelType2 pixel3;
@@ -110,7 +111,7 @@ int otbRGBAPixelConverter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   std::cout << "outputPixel3: " << outputPixel3 << std::endl;
   if(outputPixel3[0] != 125 || outputPixel3[1] != 105 || outputPixel3[2] != 145)
     {
-    itkGenericExceptionMacro(<< "RGBA<unsigned int> 2 RGB<double>  Failled");
+    itkGenericExceptionMacro(<< "RGBA<unsigned int> 2 RGB<double>  Failed");
     }
 
 
