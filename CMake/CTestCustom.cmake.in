@@ -66,6 +66,7 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*include.opencv2.*note.*"
   ".*include.kml.*warning.*"
   ".*include.ogr_feature.*warning.*"
+  ".*include.ogr_feature.*note.*"
   ".*itksys.SharedForward.h.*warning.*"
   ".*vcl_deprecated_header.h.*"
   ".*otbCurlHelper.cxx:.*warning.*maxConnect.*"
@@ -82,5 +83,5 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*vnl.vnl_numeric_traits.h.*warning.*"
   ".*vcl_config_compiler.h.*warning.*"
   ".*boost.move.unique_ptr.hpp:.*"
-  ".*include.mpValue.h.*[Ww]arning.*\[-Wc\+\+11-extensions\]"
+  ".*include.mpValue.h.*[Ww]arning.*\\[-Wc\\+\\+11-extensions\\]"
   )
