@@ -58,8 +58,11 @@ int otbGDALOverviewsBuilder(int itkNotUsed(argc), char* argv[])
   io->ReadImageInformation();
   //std::cout << io->GetOverviewsCount() << std::endl;
 
-  if (io->GetOverviewsCount() != static_cast<unsigned int>(nbResolution)-1 )
+  if (io->GetOverviewsCount() != static_cast<unsigned int>(nbResolution) )
+    {
+    std::cout << "Got "<<io->GetOverviewsCount()<< " overviews, expected "<< nbResolution << std::endl;
     return EXIT_FAILURE;
+    }
 
   return EXIT_SUCCESS;
 }
