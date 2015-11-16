@@ -28,6 +28,14 @@ class CvSVM;
 
 namespace otb
 {
+/** 
+* \brief OpenCV implementation of SVM algorithm.
+* 
+* This machine learning model uses the OpenCV implementation of the
+* SVM algorithm. Since this implementation is buggy in the linear
+* case, we recommend users to use the LibSVM implementation instead,
+* through the otb::LibSVMMachineLearningModel.
+*/ 
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT SVMMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>

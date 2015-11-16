@@ -78,7 +78,7 @@ set(knn_output_format ".knn")
 
 # Training algorithms parameters
 set(libsvm_parameters "-classifier.libsvm.opt" "true" "-classifier.libsvm.prob" "true")
-set(svm_parameters "-classifier.svm.opt" "true")
+#set(svm_parameters "-classifier.svm.opt" "true")
 set(boost_parameters "")
 set(dt_parameters "")
 set(gbt_parameters "")
@@ -101,7 +101,8 @@ if(OTB_USE_LIBSVM)
   list(APPEND classifierList "LIBSVM")
 endif()
 if(OTB_USE_OPENCV)
-  list(APPEND classifierList "SVM" "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
+  #list(APPEND classifierList "SVM" "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
+  list(APPEND classifierList "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
 endif()
 set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
 

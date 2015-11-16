@@ -47,7 +47,9 @@ LearningApplicationBase<TInputValue,TOutputValue>
 #endif
 
 #ifdef OTB_USE_OPENCV
-  InitSVMParams();
+  // OpenCV SVM implementation is buggy with linear kernel
+  // Users should use the libSVM implementation instead.
+  // InitSVMParams();
   if (!m_RegressionFlag)
     {
     InitBoostParams();  // Regression not supported
@@ -105,14 +107,16 @@ LearningApplicationBase<TInputValue,TOutputValue>
     otbAppLogFATAL("Module LIBSVM is not installed. You should consider turning OTB_USE_LIBSVM on during cmake configuration.");
     #endif
     }
-  else if (modelName == "svm")
-    {
-	#ifdef OTB_USE_OPENCV
-    TrainSVM(trainingListSample, trainingLabeledListSample, modelPath);
-    #else
-    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-    #endif
-    }
+  // OpenCV SVM implementation is buggy with linear kernel
+  // Users should use the libSVM implementation instead.
+  // else if (modelName == "svm")
+  //  {
+	//  #ifdef OTB_USE_OPENCV
+  //   TrainSVM(trainingListSample, trainingLabeledListSample, modelPath);
+  //  #else
+  //   otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+  //  #endif
+  //  }
   else if (modelName == "boost")
     {
 	#ifdef OTB_USE_OPENCV
