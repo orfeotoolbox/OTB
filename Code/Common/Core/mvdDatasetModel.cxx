@@ -650,12 +650,12 @@ DatasetModel
   PropertyType psize;
   
   //
-  std::string fname = ToStdString( viModel->GetFilename() );
+  std::string fname = QFile::encodeName( viModel->GetFilename() ).constData();
   pfile.first  = ToStdString ( tr("File") );
   pfile.second = itksys::SystemTools::GetFilenameName(fname);
 
   //
-  pdir.first  = ToStdString ( tr("Directory") );
+  pdir.first  = ToStdString( tr("Directory") );
   pdir.second = itksys::SystemTools::GetFilenamePath(fname);;
 
   //

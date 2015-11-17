@@ -117,7 +117,12 @@ VectorImageModel
   // Get the largest possible region of the image
   m_ImageFileReader = DefaultImageFileReaderType::New();
 
-  m_ImageFileReader->SetFileName( ToStdString( GetFilename() ) );
+  qDebug()
+    << this << "\n"
+    << "\tQString:" << GetFilename()
+    << "\tstd::string" << QFile::encodeName( GetFilename() );
+
+  m_ImageFileReader->SetFileName( QFile::encodeName( GetFilename() ) );
   m_ImageFileReader->UpdateOutputInformation();
 
   // Retrieve the list of Lod from file
@@ -246,7 +251,7 @@ VectorImageModel
   assert( m_LodCount!=static_cast< unsigned int >( -1 ) );
   // m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
 
-  std::string tempfilename( ToStdString( GetFilename() ) );
+  std::string tempfilename( QFile::encodeName( GetFilename() ) );
 
   filter->SetInputFileName(tempfilename);
   filter->SetResamplingMethod(otb::AVERAGE);

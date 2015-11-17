@@ -819,10 +819,16 @@ ImageViewRenderer
 	  //   << QString( "Adding image-actor from file '%1'..." )
 	  //   .arg( vectorImageModel->GetFilename() );
 
+	  qDebug()
+	    << this << "\n"
+	    << "\tQString:" << vectorImageModel->GetFilename()
+	    << "\tstd::string" << QFile::encodeName( vectorImageModel->GetFilename() );
+
           glImageActor->Initialize(
-            ToStdString(
+            QFile::encodeName(
               vectorImageModel->GetFilename()
             )
+	    .constData()
           );
 
           m_GlView->AddActor( glImageActor, it->first );

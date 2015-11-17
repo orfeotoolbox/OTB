@@ -1025,7 +1025,12 @@ MainWindow
 
   try
     {
-    srt = GetSpatialReferenceType( ToStdString( filename ) );
+    qDebug()
+      << this << "\n"
+      << "\tQString:" << filename
+      << "\tstd::string" << QFile::encodeName( filename );
+
+    srt = GetSpatialReferenceType( QFile::encodeName( filename ).constData() );
     }
   catch( const std::exception & exception )
     {

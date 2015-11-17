@@ -590,7 +590,7 @@ I18nCoreApplication
 
       geoidUpdated =
 	demHandlerInstance->OpenGeoidFile(
-	  ToStdString(
+	  QFile::encodeName(
 	    filename
 	  )
 	);
@@ -641,7 +641,7 @@ I18nCoreApplication
       demHandlerInstance->ClearDEMs();
 
       demHandlerInstance->OpenDEMDirectory(
-	ToStdString(
+	QFile::encodeName(
 	  I18nCoreApplication::RetrieveSettingsKey(
 	    I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
 	  )
