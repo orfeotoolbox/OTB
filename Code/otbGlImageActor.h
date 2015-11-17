@@ -114,6 +114,9 @@ public:
   itkGetMacro(CurrentResolution,unsigned int);
   itkGetMacro(LargestRegion,RegionType);
 
+  itkSetMacro(TileSize,unsigned int);
+  itkGetMacro(TileSize,unsigned int);
+
   void SetResolutionAlgorithm(ResolutionAlgorithm::type alg)
   {
     m_ResolutionAlgorithm = alg;

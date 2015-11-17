@@ -422,7 +422,9 @@ void GlImageActor::CleanLoadedTiles()
        || it->m_Resolution != m_CurrentResolution
        || it->m_RedIdx != m_RedIdx
        || it->m_GreenIdx != m_GreenIdx
-       || it->m_BlueIdx != m_BlueIdx)
+       || it->m_BlueIdx != m_BlueIdx
+       || it->m_ImageRegion.GetSize()[0]!=m_TileSize
+       || it->m_ImageRegion.GetSize()[1]!=m_TileSize)
       {     
       // Tile will not be used anymore, unload it from GPU
       UnloadTile(*it);
