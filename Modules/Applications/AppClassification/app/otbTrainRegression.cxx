@@ -169,7 +169,7 @@ void DoInit()
   SetDocExampleParameterValue("io.il", "training_dataset.tif");
   SetDocExampleParameterValue("io.out", "regression_model.txt");
   SetDocExampleParameterValue("io.imstat", "training_statistics.xml");
-  SetDocExampleParameterValue("classifier", "svm");
+  SetDocExampleParameterValue("classifier", "libsvm");
 }
 
 void DoUpdateParameters()
