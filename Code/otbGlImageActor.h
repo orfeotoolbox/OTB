@@ -25,6 +25,7 @@
 #include "otbFragmentShader.h"
 #include "otbImageFileReader.h"
 #include "otbMultiChannelExtractROI.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVectorImage.h"
 
 #include "itkCenteredRigid2DTransform.h"
@@ -47,6 +48,7 @@ public:
   itkNewMacro(Self);
 
   typedef VectorImage<float>                              VectorImageType;
+  typedef VectorImage<unsigned char>                      UCharVectorImageType;
   typedef VectorImageType::PixelType                      PixelType;
   typedef VectorImageType::ImageKeywordlistType           ImageKeywordlistType;
   typedef itk::MetaDataDictionary                        MetaDataDictionaryType;
@@ -55,7 +57,8 @@ public:
   typedef VectorImageType::RegionType                     RegionType;
   typedef VectorImageType::SpacingType                    SpacingType;
   typedef VectorImageType::PointType                      PointType;
-
+  typedef VectorRescaleIntensityImageFilter<VectorImageType,UCharVectorImageType> RescaleFilterType;
+  
   struct ResolutionAlgorithm
   {
     enum type
@@ -220,7 +223,8 @@ protected:
         m_Resolution(1),
         m_RedIdx(1),
         m_GreenIdx(2),
-        m_BlueIdx(3)
+        m_BlueIdx(3),
+        m_RescaleFilter(NULL)
     {
       m_UL.Fill(0);
       m_UR.Fill(0);
@@ -240,6 +244,7 @@ protected:
     unsigned int m_RedIdx;
     unsigned int m_GreenIdx;
     unsigned int m_BlueIdx;
+    RescaleFilterType::Pointer m_RescaleFilter;
   };
 
   typedef std::vector<Tile>                                                       TileVectorType;    
@@ -304,6 +309,8 @@ private:
   RigidTransformType::Pointer m_ViewportBackwardRotationTransform;
 
   ResolutionAlgorithm::type m_ResolutionAlgorithm;
+
+  bool m_SoftwareRendering;
 
 }; // End class GlImageActor
 
