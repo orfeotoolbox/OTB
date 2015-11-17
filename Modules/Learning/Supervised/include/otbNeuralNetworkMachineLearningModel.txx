@@ -281,27 +281,28 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const st
   if ( !name.empty() )
     lname = name.c_str();
 
-  CvFileStorage* fs = 0;
-  CvFileNode* model_node = 0;
-  fs = cvOpenFileStorage(filename.c_str(), 0, CV_STORAGE_READ);
-  if ( !fs )
+  cv::FileNode model_node;
+  cv::FileStorage fs(filename,cv::FileStorage::READ);
+  if (!fs.isOpened())
     {
     itkExceptionMacro("Could not open the file " << filename << " for reading");
     }
 
   if( lname )
-    model_node = cvGetFileNodeByName(fs, 0, lname);
+    model_node = fs[lname];
   else
     {
-    CvFileNode* root = cvGetRootFileNode( fs );
-    if( root->data.seq->total > 0 )
-      model_node = (CvFileNode*)cvGetSeqElem( root->data.seq, 0 );
+    cv::FileNode root = fs.root();
+    if ( root.size() > 0)
+      {
+      model_node = *(root.begin());
+      }
     }
 
-  m_ANNModel->read(fs, model_node);
-  m_CvMatOfLabels = (CvMat*)cvReadByName( fs, model_node, "class_labels" );
+  m_ANNModel->read(*fs,*model_node);
+  m_CvMatOfLabels = (CvMat*)cvReadByName( *fs, *model_node, "class_labels" );
 
-  cvReleaseFileStorage(&fs);
+  fs.release();
 }
 
 template<class TInputValue, class TOutputValue>
