@@ -56,6 +56,19 @@ public:
   typedef VectorImageType::SpacingType                    SpacingType;
   typedef VectorImageType::PointType                      PointType;
 
+  struct ResolutionAlgorithm
+  {
+    enum type
+    {
+      Invalid,
+      Nearest, ///<Use the nearest resolution (lower or upper)
+      Nearest_Lower, ///<Use the nearest lower resolution (better for
+                     ///performances, poorer quality
+      Nearest_Upper,///<Use the nearest upper resolution (lower
+                    ///performances, better quality)
+      MAX__};
+    };
+  
   // Initialize with a new image
   void Initialize(const std::string & filename);
 
@@ -100,6 +113,16 @@ public:
   itkGetMacro(NumberOfComponents,unsigned int);
   itkGetMacro(CurrentResolution,unsigned int);
   itkGetMacro(LargestRegion,RegionType);
+
+  void SetResolutionAlgorithm(ResolutionAlgorithm::type alg)
+  {
+    m_ResolutionAlgorithm = alg;
+  }
+
+  ResolutionAlgorithm::type GetResolutionAlgorithm() const
+  {
+    return m_ResolutionAlgorithm;
+  }
 
   virtual void SetRedIdx(const unsigned int idx)
   {
@@ -276,6 +299,8 @@ private:
 
   RigidTransformType::Pointer m_ViewportForwardRotationTransform;
   RigidTransformType::Pointer m_ViewportBackwardRotationTransform;
+
+  ResolutionAlgorithm::type m_ResolutionAlgorithm;
 
 }; // End class GlImageActor
 

@@ -48,7 +48,8 @@ GlImageActor::GlImageActor()
     m_ViewportToImageTransform(),
     m_ImageToViewportTransform(),
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
-    m_ViewportBackwardRotationTransform(RigidTransformType::New())
+    m_ViewportBackwardRotationTransform(RigidTransformType::New()),
+    m_ResolutionAlgorithm(ResolutionAlgorithm::Nearest)
 {}
 
 GlImageActor::~GlImageActor()
@@ -721,7 +722,10 @@ void GlImageActor::UpdateResolution()
 
     double diff = 1/((double)(1<<(*it))) - resolution;
 
-    if (diff > 0 && vcl_abs(diff) < minDist)
+    if (((m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower && diff < 0)
+         ||(m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper && diff > 0)
+         ||(m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest))
+    && vcl_abs(diff) < minDist)
       {
       minDist = vcl_abs(diff);
       closest = std::distance(m_AvailableResolutions.begin(),it);
