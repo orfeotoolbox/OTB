@@ -89,7 +89,7 @@ main( int argc, char* argv[] )
 	it->compare( "--help" )==0 )
       {
       std::cout
-	<< mvd::ToStdString(
+	<< mvd::ToLocalStdString(
 	  QCoreApplication::translate(
 	    PROJECT_NAME,
 	    "Usage: %1 [-h|--help] [-a|--applications] [<filename>...]\n"

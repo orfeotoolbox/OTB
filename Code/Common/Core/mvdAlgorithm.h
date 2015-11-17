@@ -243,6 +243,18 @@ QString
 FromStdString( const std::string& str );
 
 /**
+ */
+inline
+std::string
+ToLocalStdString( const QString & );
+
+/**
+ */
+inline
+const char *
+ToLocalString( const QString & );
+
+/**
  * \brief Convert and copy a QString to a STL std::string.
  *
  * The Unicode data is converted to 8-bit using the QString::toAscii()
@@ -465,6 +477,22 @@ AppendToQStringList( QStringList& qsl, const StringVector& sv )
     }
 
   return qsl;
+}
+
+/*******************************************************************************/
+inline
+std::string
+ToLocalStdString( const QString & str )
+{
+  return std::string( str.toLocal8Bit().constData() );
+}
+
+/*******************************************************************************/
+inline
+const char *
+ToLocalString( const QString & str )
+{
+  return str.toLocal8Bit().constData();
 }
 
 /*******************************************************************************/
