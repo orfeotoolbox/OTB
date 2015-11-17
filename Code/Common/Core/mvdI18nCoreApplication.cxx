@@ -672,10 +672,43 @@ void
 I18nCoreApplication
 ::InitializeLocale()
 {
-  QTextCodec::setCodecForTr( QTextCodec::codecForName( "utf8" ) );
-  //QTextCodec::setCodecForLocale( QTextCodec::codecForName("utf8") );
-  QTextCodec::setCodecForCStrings( QTextCodec::codecForName("utf8") );
-  
+  {
+  typedef QList< QByteArray > ByteArrayList;
+
+  ByteArrayList codecs( QTextCodec::availableCodecs() );
+
+  qDebug() << "Available codecs:";
+
+  foreach( const QByteArray & codec, codecs )
+    qDebug() << "\t" << codec;
+  }
+
+  // Literal strings to be translated are UTF-8 encoded because source
+  // files are UTF-8 encoded.
+  QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
+
+  // QTextCodec::setCodecForLocale( QTextCodec::codecForName("UTF-8") );
+
+  // QTextCodec::setCodecForCStrings( QTextCodec::codecForName("System") );
+
+  qWarning()
+    << "Codec for C-strings:"
+    << ( QTextCodec::codecForCStrings()!=NULL
+	 ? QTextCodec::codecForCStrings()->name()
+	 : "none" );
+
+  qWarning()
+    << "Codec for Locale:"
+    << ( QTextCodec::codecForLocale()!=NULL
+	 ? QTextCodec::codecForLocale()->name()
+	 : "none" );
+
+  qWarning()
+    << "Codec for Tr:"
+    << ( QTextCodec::codecForTr()!=NULL
+	 ? QTextCodec::codecForTr()->name()
+	 : "none" );
+
 
   //
   // 1. default UI language is english (no translation).
