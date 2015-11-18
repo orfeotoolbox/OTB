@@ -50,7 +50,7 @@ GlImageActor::GlImageActor()
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
     m_ViewportBackwardRotationTransform(RigidTransformType::New()),
     m_ResolutionAlgorithm(ResolutionAlgorithm::Nearest),
-    m_SoftwareRendering(true)
+    m_SoftwareRendering(false)
 {}
 
 GlImageActor::~GlImageActor()
