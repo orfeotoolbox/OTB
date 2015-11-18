@@ -309,7 +309,10 @@ void GlImageActor::Render()
       mins.Fill(0);
       maxs.Fill(255);
         
-      double gamma = 1.0;
+      double gamma(1.0);
+
+      bool useNoData(false);
+      double noData(0.);
       
       StandardShader::Pointer shader = dynamic_cast<StandardShader *>(m_Shader.GetPointer());
 
@@ -325,6 +328,14 @@ void GlImageActor::Render()
         maxs[2] = shader->GetMaxBlue();
 
         gamma = shader->GetGamma();
+
+        useNoData = shader->GetUseNoData();
+
+        if(useNoData)
+          {
+          noData = shader->GetNoData();
+          }
+        
         }
       
       omins.Fill(0);
@@ -340,12 +351,15 @@ void GlImageActor::Render()
 
 
       itk::ImageRegionConstIterator<UCharVectorImageType> imIt(it->m_RescaleFilter->GetOutput(),it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion());
+      itk::ImageRegionConstIterator<VectorImageType> inIt(it->m_Image,it->m_Image->GetLargestPossibleRegion());
+
+      
       
       unsigned char * buffer = new unsigned char[4*it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
       
       unsigned int idx = 0;
       
-      for(imIt.GoToBegin();!imIt.IsAtEnd();++imIt)
+      for(imIt.GoToBegin(),inIt.GoToBegin();!imIt.IsAtEnd()&&!inIt.IsAtEnd();++imIt,++inIt)
         {
         buffer[idx] = static_cast<unsigned char>(imIt.Get()[2]);
         ++idx;
@@ -354,6 +368,12 @@ void GlImageActor::Render()
         buffer[idx] = static_cast<unsigned char>(imIt.Get()[0]);
         ++idx;
         buffer[idx] = 255;
+
+        if(useNoData && (inIt.Get()[0] == noData ||inIt.Get()[1] == noData ||inIt.Get()[2] == noData))
+          {
+          buffer[idx] = 0;
+          }
+        
         ++idx;
         }
 
