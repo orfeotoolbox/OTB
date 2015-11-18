@@ -306,7 +306,11 @@ void GlImageActor::Render()
         }
       
       VectorImageType::PixelType mins(3),maxs(3),omins(3),omaxs(3);
-
+      mins.Fill(0);
+      maxs.Fill(255);
+        
+      double gamma = 1.0;
+      
       StandardShader::Pointer shader = dynamic_cast<StandardShader *>(m_Shader.GetPointer());
 
       if(shader)
@@ -319,11 +323,8 @@ void GlImageActor::Render()
         maxs[0] = shader->GetMaxRed();
         maxs[1] = shader->GetMaxGreen();
         maxs[2] = shader->GetMaxBlue();
-        }
-      else
-        {
-        mins.Fill(0);
-        maxs.Fill(255);
+
+        gamma = shader->GetGamma();
         }
       
       omins.Fill(0);
@@ -333,6 +334,7 @@ void GlImageActor::Render()
       it->m_RescaleFilter->SetInputMaximum(maxs);
       it->m_RescaleFilter->SetOutputMinimum(omins);
       it->m_RescaleFilter->SetOutputMaximum(omaxs);
+      it->m_RescaleFilter->SetGamma(gamma);
       
       it->m_RescaleFilter->Update();
 
