@@ -78,6 +78,9 @@ const char* I18nCoreApplication::SETTINGS_KEYS[ SETTINGS_KEY_COUNT ] =
   "srtmDirActive",
   "geoidPath",
   "geoidPathActive",
+  "resolutionAlgorithm",
+  "tileSize",
+  "pixelColor",
 };
 
 /*****************************************************************************/
