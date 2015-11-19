@@ -65,6 +65,16 @@ namespace
 const int MOUSE_WHEEL_STEP_DEGREES = 15;
 const int MOUSE_WHEEL_STEP_FACTOR = 8;
 
+char const * const
+RESOLUTION_NAME[ RESOLUTION_COUNT ] =
+{
+  // QT_TRANSLATE_NOOP( "mvd", "None" ),
+  QT_TRANSLATE_NOOP( "mvd", "Nearest" ),
+  QT_TRANSLATE_NOOP( "mvd", "Lower bound" ),
+  QT_TRANSLATE_NOOP( "mvd", "Upper bound" ),
+};
+
+
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
