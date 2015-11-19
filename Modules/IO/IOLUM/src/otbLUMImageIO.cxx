@@ -218,6 +218,7 @@ bool LUMImageIO::InternalReadHeaderInformation(std::fstream& file, const bool re
   char        TypeCode[5];
   file.seekg(8, std::ios::beg);
   file.read((char*) (TypeCode), 4);
+  TypeCode[4] = '\0';
   int lTaille = CaiGetTypeLum(TypeCode,
                               lStrTypeImage,
                               lNbBits,
