@@ -151,25 +151,32 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
-         <widget class="QRadioButton" name="shaderRadioButton">
-          <property name="text">
-           <string>OpenGL shader</string>
+        <item row="1" column="1" colspan="2">
+         <widget class="QComboBox" name="resolutionComboBox"/>
+        </item>
+        <item row="2" column="1" colspan="2">
+         <widget class="QSpinBox" name="tileSizeSpinBox">
+          <property name="minimum">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <number>4096</number>
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
+        <item row="3" column="1">
          <widget class="QRadioButton" name="otbRadioButton">
           <property name="text">
            <string>OTB filter</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1" colspan="2">
-         <widget class="QSpinBox" name="tileSizeSpinBox"/>
-        </item>
-        <item row="1" column="1" colspan="2">
-         <widget class="QComboBox" name="resolutionComboBox"/>
+        <item row="3" column="2">
+         <widget class="QRadioButton" name="shaderRadioButton">
+          <property name="text">
+           <string>OpenGL shader</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
