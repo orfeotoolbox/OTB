@@ -120,8 +120,8 @@ private:
    */
   Ui::PreferencesDialog* m_UI;
 
-  bool m_ElevationSetupModified;
-  bool m_ResultsDirModified;
+  bool m_ResultsDirModified: 1;
+  bool m_ElevationSetupModified: 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

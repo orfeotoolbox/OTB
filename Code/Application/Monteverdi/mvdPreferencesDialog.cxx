@@ -38,6 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Gui/mvdGui.h"
 #include "Gui/mvdI18nApplication.h"
 #include "Gui/mvdI18nMainWindow.h"
 
@@ -68,13 +69,23 @@ PreferencesDialog
 ::PreferencesDialog( QWidget* parent, Qt::WindowFlags flags ) :
   QDialog( parent, flags ),
   m_UI( new mvd::Ui::PreferencesDialog() ),
-  m_ElevationSetupModified(false),
-  m_ResultsDirModified(false)
+  m_ResultsDirModified( false ),
+  m_ElevationSetupModified( false )
 {
+  assert( m_UI!=NULL );
+  assert( I18nApplication::Instance()!=NULL );
+
   m_UI->setupUi( this );
 
+  //
+  // Runtime UI initilization.
   m_UI->settingsGroupBox->setVisible( false );
 
+  for( int i=0; i<RESOLUTION_COUNT; ++i )
+    m_UI->resolutionComboBox->addItem( tr( RESOLUTION_NAME[ i ] ) );
+
+  //
+  // General settings.
   m_UI->resultDirPathLineEdit->setText(
     I18nApplication::Instance()->RetrieveSettingsKey(
       I18nCoreApplication::SETTINGS_KEY_RESULTS_DIR
@@ -82,6 +93,65 @@ PreferencesDialog
     .toString()
   );
 
+  //
+  // Rendering settings.
+  {
+  QVariant value(
+    I18nApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_RESOLUTION
+    )
+  );
+
+  m_UI->resolutionComboBox->setCurrentIndex(
+    !value.isValid()
+    ? RESOLUTION_NEAREST
+    : value.toInt()
+  );
+  }
+
+  {
+  QVariant value(
+    I18nApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_TILE_SIZE
+    )
+  );
+
+  m_UI->tileSizeSpinBox->setValue(
+    !value.isValid()
+    ? 256
+    : value.toInt()
+  );
+  }
+
+  {
+  QVariant value(
+    I18nApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_PIXEL
+    )
+  );
+
+  if( !value.isValid() )
+    m_UI->shaderRadioButton->setChecked( true );
+
+  else
+    switch( value.toInt() )
+      {
+      case PIXEL_OTB:
+	m_UI->otbRadioButton->setChecked( true );
+	break;
+
+      case PIXEL_GLSL:
+	m_UI->shaderRadioButton->setChecked( true );
+	break;
+
+      default:
+	assert( false && "Unexpected Pixel enum value." );
+	break;
+      }
+  }
+
+  //
+  // Elevation management settings.
   m_UI->srtmLineEdit->setText(
     I18nApplication::Instance()->RetrieveSettingsKey(
       I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
@@ -137,6 +207,8 @@ void
 PreferencesDialog
 ::on_buttonBox_accepted()
 {
+  //
+  // General settings.
   if( m_ResultsDirModified )
     {
     // Set the result dir
@@ -151,7 +223,7 @@ PreferencesDialog
 
   I18nApplication::Instance()->StoreSettingsKey(
     I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE,
-    this->m_UI->srtmCheckbox->isChecked()
+    m_UI->srtmCheckbox->isChecked()
   );
   I18nApplication::Instance()->StoreSettingsKey(
     I18nCoreApplication::SETTINGS_KEY_SRTM_DIR,
@@ -161,13 +233,37 @@ PreferencesDialog
 
   I18nApplication::Instance()->StoreSettingsKey(
     I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE,
-    this->m_UI->geoidCheckbox->isChecked()
+    m_UI->geoidCheckbox->isChecked()
   );
   I18nApplication::Instance()->StoreSettingsKey(
     I18nCoreApplication::SETTINGS_KEY_GEOID_PATH,
     m_UI->geoidLineEdit->text()
   );
 
+  //
+  // Rendering settings.
+  I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_RESOLUTION,
+    m_UI->resolutionComboBox->currentIndex()
+  );
+
+  I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_TILE_SIZE,
+    m_UI->tileSizeSpinBox->value()
+  );
+
+
+  I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_PIXEL,
+    m_UI->shaderRadioButton->isChecked()
+    ? PIXEL_GLSL
+    : ( m_UI->otbRadioButton->isChecked()
+	? PIXEL_OTB
+	: PIXEL_NONE )
+  );
+
+  //
+  // Elevation management settings.
   if( m_ElevationSetupModified )
     {
     try
