@@ -23,7 +23,7 @@
 #include <otbMachineLearningModel.h>
 #include "otbConfusionMatrixCalculator.h"
 
-#include <boost/algorithm/string.hpp>
+#include "otb_boost_string_header.h"
 
 typedef otb::MachineLearningModel<float,short>         MachineLearningModelType;
 typedef MachineLearningModelType::InputValueType       InputValueType;
