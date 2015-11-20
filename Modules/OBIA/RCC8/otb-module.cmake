@@ -12,7 +12,7 @@ otb_module(OTBRCC8
     OTBImageManipulation
     OTBPath
     OTBCommon
-    OTBBoost
+    OTBBoostAdapters
     OTBObjectList
 
   TEST_DEPENDS
