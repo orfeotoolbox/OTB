@@ -5,7 +5,7 @@ than the ITK one.")
 
 otb_module(OTBMarkov
   DEPENDS
-    OTBBoost
+    OTBBoostAdapters
     OTBCommon
     OTBITK
 
