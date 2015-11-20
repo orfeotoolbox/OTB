@@ -548,7 +548,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
   typename OutputImageType::PointType pointRefStep;
   typename OutputImageType::RegionType requestedRegion = outputPtr->GetRequestedRegion();
 
-  typename TOutputDEMImage::SpacingType step = outputPtr->GetSpacing();
+//  typename TOutputDEMImage::SpacingType step = outputPtr->GetSpacing();
 
   //convert requested region to Long/Lat
 
