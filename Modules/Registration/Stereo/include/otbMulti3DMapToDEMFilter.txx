@@ -552,7 +552,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
 
   //convert requested region to Long/Lat
 
-  typename TOutputDEMImage::SizeType size = requestedRegion.GetSize();
+//  typename TOutputDEMImage::SizeType size = requestedRegion.GetSize();
 
   typename TOutputDEMImage::IndexType index = requestedRegion.GetIndex();
   outputPtr->TransformIndexToPhysicalPoint(index, pointRef);
