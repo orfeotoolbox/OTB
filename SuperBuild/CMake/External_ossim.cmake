@@ -62,6 +62,13 @@ else()
     -DBUILD_OSSIM_APPS:BOOL=OFF
     -DBUILD_OSSIM_TEST_APPS:BOOL=OFF
     -DBUILD_OSSIM_FRAMEWORKS:BOOL=OFF
+    -DBUILD_OMS:BOOL=OFF
+    -DBUILD_CSMAPI:BOOL=OFF
+    -DBUILD_OSSIMGUI:BOOL=OFF
+    -DBUILD_OSSIMPLANET:BOOL=OFF
+    -DBUILD_OSSIMPLANETQT:BOOL=OFF
+    -DBUILD_OSSIMPREDATOR:BOOL=OFF
+    -DBUILD_OSSIMQT:BOOL=OFF
     -DBUILD_WMS:BOOL=OFF
     -DINSTALL_ARCHIVE_DIR:STRING=lib
     -DINSTALL_LIBRARY_DIR:STRING=lib
@@ -70,6 +77,14 @@ else()
     DEPENDS ${${proj}_DEPENDENCIES}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
+
+  ExternalProject_Add_Step(${proj} patch_cmakelist
+      COMMAND ${CMAKE_COMMAND} -E copy
+      ${OSSIM_SB_SRC}/ossim_package_support/cmake/CMakeLists.txt ${OSSIM_SB_SRC}
+      COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${OSSIM_SB_SRC}/ossim_package_support/cmake/CMakeModules ${OSSIM_SB_SRC}/CMakeModules
+      DEPENDEES patch
+      DEPENDERS configure )
 
   if(MSVC)
     ExternalProject_Add_Step(${proj} patch_ossim_src
