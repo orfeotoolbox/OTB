@@ -556,14 +556,16 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
 
   typename TOutputDEMImage::IndexType index = requestedRegion.GetIndex();
   outputPtr->TransformIndexToPhysicalPoint(index, pointRef);
+  /*
   InputInternalPixelType regionLong1 = pointRef[0];
   InputInternalPixelType regionLat1 = pointRef[1];
   InputInternalPixelType regionLong2 = pointRef[0] + size[0] * step[0];
   InputInternalPixelType regionLat2 = pointRef[1] + size[1] * step[1];
   InputInternalPixelType minLong = std::min(regionLong1, regionLong2);
-  // InputInternalPixelType minLat = std::min(regionLat1, regionLat2);
-  // InputInternalPixelType maxLong = std::max(regionLong1, regionLong2);
-  // InputInternalPixelType maxLat = std::max(regionLat1, regionLat2);
+  InputInternalPixelType minLat = std::min(regionLat1, regionLat2);
+  InputInternalPixelType maxLong = std::max(regionLong1, regionLong2);
+  InputInternalPixelType maxLat = std::max(regionLat1, regionLat2);
+  */
 
   TOutputDEMImage * tmpDEM = NULL;
   AccumulatorImageType *tmpAcc = NULL;
