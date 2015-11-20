@@ -27,7 +27,14 @@
 #include <algorithm>
 #include <string>
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ogrsf_frmts.h"
+#pragma GCC diagnostic pop
+#else
+#include "ogrsf_frmts.h"
+#endif
 
 #include "itksys/SystemTools.hxx"
 #include "itksys/Directory.hxx"

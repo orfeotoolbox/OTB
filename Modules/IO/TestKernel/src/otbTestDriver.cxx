@@ -31,7 +31,7 @@
 
 // include SharedForward to avoid duplicating the code which find the library path variable
 // name and the path separator
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #include "itksys/SharedForward.h"
