@@ -44,10 +44,22 @@
 
 #include "otbInverseSensorModel.h"
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ossim/imaging/ossimImageHandler.h"
 #include "ossim/base/ossimKeywordlist.h"
 #include "ossim/imaging/ossimImageHandlerRegistry.h"
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
+#pragma GCC diagnostic pop
+#else
+#include "ossim/imaging/ossimImageHandler.h"
+#include "ossim/base/ossimKeywordlist.h"
+#include "ossim/imaging/ossimImageHandlerRegistry.h"
+#include "ossim/projection/ossimProjectionFactoryRegistry.h"
+#endif
 
 int otbCreateProjectionWithOSSIM(int argc, char* argv[])
 {
