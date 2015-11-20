@@ -120,6 +120,10 @@ public:
   itkSetMacro(TileSize,unsigned int);
   itkGetMacro(TileSize,unsigned int);
 
+  itkBooleanMacro(SoftwareRendering );
+  itkSetMacro(SoftwareRendering, bool );
+  itkGetMacro(SoftwareRendering, bool );
+
   void SetResolutionAlgorithm(ResolutionAlgorithm::type alg)
   {
     m_ResolutionAlgorithm = alg;
