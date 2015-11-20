@@ -85,9 +85,9 @@ else()
       BUILD_COMMAND $(MAKE) bin_PROGRAMS=
       INSTALL_COMMAND $(MAKE) install bin_PROGRAMS=
       DEPENDS ${${proj}_DEPENDENCIES}
-      PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
-        ${CMAKE_SOURCE_DIR}/patches/${proj}/configure
-        ${GEOTIFF_SB_SRC}
+      #PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
+      #  ${CMAKE_SOURCE_DIR}/patches/${proj}/configure
+      #  ${GEOTIFF_SB_SRC}
       )
     
     ExternalProject_Add_Step(${proj} copy_source
