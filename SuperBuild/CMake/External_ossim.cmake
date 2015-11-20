@@ -47,8 +47,8 @@ else()
   # archive version
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "https://www.orfeo-toolbox.org/packages/ossim-minimal-r23537.tar.gz"
-    URL_MD5 f77d574ab2817bcc36633f77824facb5
+    URL "http://download.osgeo.org/ossim/source/ossim-1.8.20/ossim-1.8.20-1.tar.gz"
+    URL_MD5 87c861c005a180343a2fdaf1d54d9b58
     BINARY_DIR ${OSSIM_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
