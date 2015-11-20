@@ -40,7 +40,8 @@
 
 #include "otbGDALDriverManagerWrapper.h"
 
-#include <boost/algorithm/string/predicate.hpp>
+#include "otb_boost_string_header.h"
+
 #include "otbOGRHelpers.h"
 
 #include "stdint.h" //needed for uintptr_t
@@ -487,9 +488,9 @@ void GDALImageIO::ReadImageInformation()
 }
 
 unsigned int GDALImageIO::GetOverviewsCount()
-{ 
+{
   GDALDataset* dataset = m_Dataset->GetDataSet();
- 
+
   // JPEG2000 case : use the number of overviews actually in the dataset
   if (m_Dataset->IsJPEG2000())
     {
@@ -528,19 +529,19 @@ std::vector<std::string> GDALImageIO::GetOverviewsInfo()
     return desc;
 
   std::ostringstream oss;
-  
+
   // If gdal exposes actual overviews
   unsigned int lOverviewsCount = m_Dataset->GetDataSet()->GetRasterBand(1)->GetOverviewCount();
-  
+
   if (lOverviewsCount)
     {
     unsigned int x = m_OriginalDimensions[0];
     unsigned int y = m_OriginalDimensions[1];
-    
+
     oss.str("");
     oss << "Resolution: 0 (Image [w x h]: " << x << "x" << y << ")";
     desc.push_back(oss.str());
-    
+
     for( unsigned int iOverview = 0; iOverview < lOverviewsCount; iOverview++ )
       {
       x = m_Dataset->GetDataSet()->GetRasterBand(1)->GetOverview(iOverview)->GetXSize();
@@ -554,10 +555,10 @@ std::vector<std::string> GDALImageIO::GetOverviewsInfo()
     {
     // Fall back to gdal implicit overviews
     lOverviewsCount = this->GetOverviewsCount();
-    
+
     unsigned int originalWidth = m_OriginalDimensions[0];
-    unsigned int originalHeight = m_OriginalDimensions[1];  
-    
+    unsigned int originalHeight = m_OriginalDimensions[1];
+
     // Get the overview sizes
     for( unsigned int iOverview = 0; iOverview < lOverviewsCount; iOverview++ )
       {
@@ -569,7 +570,7 @@ std::vector<std::string> GDALImageIO::GetOverviewsInfo()
       desc.push_back(oss.str());
       }
     }
-  
+
   return desc;
 }
 
@@ -578,7 +579,7 @@ void GDALImageIO::InternalReadImageInformation()
   itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
                                     MetaDataKey::ResolutionFactor,
                                     m_ResolutionFactor);
-                                    
+
   itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
                                     MetaDataKey::SubDatasetIndex,
                                     m_DatasetNumber);
@@ -1102,13 +1103,13 @@ void GDALImageIO::InternalReadImageInformation()
         {
         std::string key;
         int cptOffset = CSLCount(papszMetadata);
-        
+
         for (int cpt = 0; gmlMetadata[cpt] != NULL; ++cpt)
           {
           std::ostringstream lStream;
           lStream << MetaDataKey::MetadataKey << (cpt+cptOffset);
           key = lStream.str();
-          
+
           itk::EncapsulateMetaData<std::string>(dict, key,
                                                 static_cast<std::string>(gmlMetadata[cpt]));
           }
@@ -1226,7 +1227,7 @@ void GDALImageIO::InternalReadImageInformation()
   // Read no data value if present
   std::vector<bool> isNoDataAvailable(dataset->GetRasterCount(),false);
   std::vector<double> noDataValues(dataset->GetRasterCount(),0);
-  
+
   bool noDataFound = false;
 
   for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
@@ -1234,7 +1235,7 @@ void GDALImageIO::InternalReadImageInformation()
     GDALRasterBandH hBand = GDALGetRasterBand(dataset, iBand + 1);
 
     int success;
-    
+
     double ndv = GDALGetRasterNoDataValue(hBand,&success);
 
     if(success)
@@ -1795,7 +1796,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   // Write no-data flags
   std::vector<bool> noDataValueAvailable;
   bool ret = itk::ExposeMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
-  
+
   std::vector<double> noDataValues;
   itk::ExposeMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValues);
 

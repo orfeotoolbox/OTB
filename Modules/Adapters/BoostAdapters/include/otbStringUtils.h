@@ -18,14 +18,26 @@
 #ifndef otbStringUtils_h
 #define otbStringUtils_h
 
+
 #include <string>
 #include <vector>
 #include <limits>
 #include <stdexcept>
+
+#if defined(__GNUC__) || (__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/utility/enable_if.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/predicate.hpp>
+#include <boost/utility/enable_if.hpp>
+#endif
 
 namespace otb
 {

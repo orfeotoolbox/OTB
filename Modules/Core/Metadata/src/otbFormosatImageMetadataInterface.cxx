@@ -18,11 +18,11 @@
 
 #include "otbFormosatImageMetadataInterface.h"
 
-#include <boost/algorithm/string.hpp>
 #include "otbMacro.h"
 #include "otbMath.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
+#include "otbStringUtils.h"
 
 namespace otb
 {

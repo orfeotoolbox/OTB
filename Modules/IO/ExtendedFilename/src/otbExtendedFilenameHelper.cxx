@@ -16,8 +16,7 @@
 
 =========================================================================*/
 #include "otbExtendedFilenameHelper.h"
-#include <boost/algorithm/string.hpp>
-
+#include "otb_boost_string_header.h"
 namespace otb
 {
 
@@ -58,7 +57,7 @@ ExtendedFilenameHelper
 								itkWarningMacro("Duplicated option detected: " << tmp[0] << ". Using value " << tmp[1] << ".");
 							}
 					  }
-				  else 
+				  else
 					itkGenericExceptionMacro( << "Value for option '" << tmp[0] << "' is not set.");
 				}
         }
@@ -75,4 +74,3 @@ ExtendedFilenameHelper
 }
 
 } // end namespace otb
-

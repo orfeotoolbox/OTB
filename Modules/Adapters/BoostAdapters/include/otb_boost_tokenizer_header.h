@@ -15,20 +15,19 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbWrapperInputImageParameter.h"
-#include "itksys/SystemTools.hxx"
-#include "otbWrapperTypes.h"
-#include "otbWrapperInputImageParameterMacros.h"
-#include "otb_boost_string_header.h"
+#ifndef otb_boost_tokenizer_header_h
+#define otb_boost_tokenizer_header_h
 
-namespace otb
-{
-namespace Wrapper
-{
-otbGetImageMacro(UInt8Image);
-otbGetImageMacro(UInt8VectorImage)
-otbGenericCastImageMacro(UInt8ImageType, SimpleCastImage, )
-otbGenericCastImageMacro(UInt8VectorImageType, SimpleCastImage, Vector)
-otbGenericCastImageMacro(UInt8ImageType, CastVectorImageFromImage, Vector)
-}
-}
+#if defined(__GNUC__) || (__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#include <boost/foreach.hpp>
+#include <boost/tokenizer.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <boost/foreach.hpp>
+#include <boost/tokenizer.hpp>
+#endif
+
+
+#endif

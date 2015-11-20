@@ -6,7 +6,7 @@ into account the neighborhood contribution.")
 otb_module(OTBOpticalCalibration
   DEPENDS
     OTB6S
-    OTBBoost
+    OTBBoostAdapters
     OTBCommon
     OTBITK
     OTBImageBase

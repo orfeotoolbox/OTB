@@ -19,7 +19,7 @@
 #define __otbVectorDataIntoImageProjectionFilter_txx
 
 #include "otbVectorDataIntoImageProjectionFilter.h"
-#include "boost/algorithm/string.hpp"
+#include "otb_boost_string_header.h"
 
 namespace otb
 {

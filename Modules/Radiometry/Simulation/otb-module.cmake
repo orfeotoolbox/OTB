@@ -15,7 +15,7 @@ otb_module(OTBSimulation
     OTBIndices
     OTBCommon
     OTBInterpolation
-    OTBBoost
+    OTBBoostAdapters
     OTBOpticalCalibration
     OTBObjectList
 

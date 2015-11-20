@@ -10,7 +10,7 @@ otb_module(OTBIOGDAL
     OTBCommon
     OTBTinyXML
     OTBGDAL
-    OTBBoost
+    OTBBoostAdapters
     OTBOSSIMAdapters
 
   TEST_DEPENDS

@@ -18,12 +18,10 @@
 
 #include "otbSpot6ImageMetadataInterface.h"
 
-#include <boost/algorithm/string.hpp>
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
-#include <boost/lexical_cast.hpp>
-
+#include "otbStringUtils.h"
 
 namespace otb
 {
