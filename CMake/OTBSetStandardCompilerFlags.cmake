@@ -313,3 +313,16 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_WARNING_FLAGS}")
 #-----------------------------------------------------------------------------
 #Check the set of platform flags the compiler supports
 check_compiler_platform_flags()
+
+
+# dashboard build
+if(NOT "$ENV{DASHBOARD_TEST_FROM_CTEST}" STREQUAL "")
+  if(UNIX)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cpp")
+    else()
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-#warnings")
+    endif() #CMAKE_COMPILER_IS_GNUCXX
+  endif() #UNIX
+
+endif()
