@@ -21,6 +21,7 @@
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wcast-align"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
