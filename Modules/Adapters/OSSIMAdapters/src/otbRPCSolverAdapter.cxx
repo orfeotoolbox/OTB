@@ -20,10 +20,23 @@
 #include "otbImageKeywordlist.h"
 #include "otbMacro.h"
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ossim/projection/ossimRpcSolver.h"
 #include "ossim/projection/ossimProjection.h"
 #include "ossim/projection/ossimRpcProjection.h"
 #include "ossim/imaging/ossimImageGeometry.h"
+#pragma GCC diagnostic pop
+#else
+#include "ossim/projection/ossimRpcSolver.h"
+#include "ossim/projection/ossimProjection.h"
+#include "ossim/projection/ossimRpcProjection.h"
+#include "ossim/imaging/ossimImageGeometry.h"
+#endif
+
 
 namespace otb
 {

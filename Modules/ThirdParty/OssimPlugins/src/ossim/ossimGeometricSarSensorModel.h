@@ -12,9 +12,21 @@
 #ifndef ossimGeometricSarSensorModel_H
 #define ossimGeometricSarSensorModel_H 1
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <ossimPluginConstants.h>
 #include <ossim/projection/ossimSensorModel.h>
 #include <ossim/projection/ossimCoarseGridModel.h>
+#pragma GCC diagnostic pop
+#else
+#include <ossimPluginConstants.h>
+#include <ossim/projection/ossimSensorModel.h>
+#include <ossim/projection/ossimCoarseGridModel.h>
+#endif
+
 #include <list>
 #include <vector>
 

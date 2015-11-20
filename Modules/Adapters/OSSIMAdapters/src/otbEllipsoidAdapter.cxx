@@ -18,7 +18,18 @@
 
 #include "otbEllipsoidAdapter.h"
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ossim/base/ossimEllipsoid.h"
+#pragma GCC diagnostic pop
+#else
+#include "ossim/base/ossimEllipsoid.h"
+#endif
+
+
 
 namespace otb
 {

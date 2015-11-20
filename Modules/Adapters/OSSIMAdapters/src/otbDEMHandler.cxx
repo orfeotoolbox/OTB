@@ -20,6 +20,10 @@
 
 #include <cassert>
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #include "ossim/elevation/ossimElevManager.h"
 #include "ossim/base/ossimGeoidManager.h"
 #include "ossim/base/ossimFilename.h"
@@ -27,6 +31,18 @@
 #include "ossim/base/ossimGeoidEgm96.h"
 #include "ossim/base/ossimRefPtr.h"
 #include <ossim/elevation/ossimImageElevationDatabase.h>
+#pragma GCC diagnostic pop
+#else
+#include "ossim/elevation/ossimElevManager.h"
+#include "ossim/base/ossimGeoidManager.h"
+#include "ossim/base/ossimFilename.h"
+#include "ossim/base/ossimDirectory.h"
+#include "ossim/base/ossimGeoidEgm96.h"
+#include "ossim/base/ossimRefPtr.h"
+#include <ossim/elevation/ossimImageElevationDatabase.h>
+#endif
+
+
 
 namespace otb
 {
