@@ -44,6 +44,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAbstractLayerModel.h"
 #include "Core/mvdAlgorithm.h"
+#include "Core/mvdI18nCoreApplication.h"
 #include "Core/mvdTypes.h"
 #include "Core/mvdVectorImageModel.h"
 
@@ -64,6 +65,71 @@ namespace mvd
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
+
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
+/*****************************************************************************/
+ImageViewRenderer::RenderingContext
+::RenderingContext() :
+  AbstractImageViewRenderer::RenderingContext(),
+  m_Resolution( RESOLUTION_NEAREST ),
+  m_Pixel( PIXEL_GLSL ),
+  m_TileSize( 256 )
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+  ,m_ViewSettings()
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
+{
+  assert( I18nCoreApplication::ConstInstance()!=NULL );
+
+  //
+  // Rendering settings.
+  {
+  QVariant value(
+    I18nCoreApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_RESOLUTION
+    )
+  );
+
+  m_Resolution =
+    !value.isValid()
+    ? RESOLUTION_NEAREST
+    : static_cast< Resolution >( value.toInt() );
+  }
+
+  {
+  QVariant value(
+    I18nCoreApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_TILE_SIZE
+    )
+  );
+
+  m_TileSize =
+    !value.isValid()
+    ? 256
+    : value.toInt();
+  }
+
+  {
+  QVariant value(
+    I18nCoreApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_PIXEL
+    )
+  );
+
+  m_Pixel =
+    !value.isValid()
+    ? PIXEL_GLSL
+    : static_cast< Pixel >( value.toInt() );
+  }
+}
+
+/*****************************************************************************/
+ImageViewRenderer::RenderingContext
+::~RenderingContext()
+{
+}
 
 
 /*****************************************************************************/
@@ -553,12 +619,12 @@ ImageViewRenderer
 /*****************************************************************************/
 void
 ImageViewRenderer
-::UpdateActors( const AbstractImageViewRenderer::RenderingContext * )
+::UpdateActors( const AbstractImageViewRenderer::RenderingContext * context )
 {
   // qDebug() << this << "::virtual_UpdateActors()";
 
   assert( !m_GlView.IsNull() );
-
+  assert( context!=NULL );
 
   StackedLayerModel * stackedLayerModel = GetLayerStack();
   assert( stackedLayerModel!=NULL );
@@ -611,6 +677,56 @@ ImageViewRenderer
         );
         assert( !imageActor.IsNull() );
 
+	//
+	// Apply rendering parameters.
+	{
+	const RenderingContext * ctxt = static_cast< const RenderingContext * >( context );
+
+	switch( ctxt->m_Resolution )
+	  {
+	  case RESOLUTION_NEAREST:
+	    imageActor->SetResolutionAlgorithm(
+	      otb::GlImageActor::ResolutionAlgorithm::Nearest
+	    );
+	    break;
+
+	  case RESOLUTION_LOWER:
+	    imageActor->SetResolutionAlgorithm(
+	      otb::GlImageActor::ResolutionAlgorithm::Nearest_Lower
+	    );
+	    break;
+
+	  case RESOLUTION_UPPER:
+	    imageActor->SetResolutionAlgorithm(
+	      otb::GlImageActor::ResolutionAlgorithm::Nearest_Upper
+	    );
+	    break;
+
+	  default:
+	    assert( false && "Unexpected Resolution enum value." );
+	    break;
+	  }
+
+	imageActor->SetTileSize( ctxt->m_TileSize );
+
+	switch( ctxt->m_Pixel )
+	  {
+	  case PIXEL_OTB:
+	    imageActor->SoftwareRenderingOn();
+	    break;
+
+	  case PIXEL_GLSL:
+	    imageActor->SoftwareRenderingOff();
+	    break;
+
+	  default:
+	    assert( false && "Unexpected Pixel enum value." );
+	    break;
+	  }
+	}
+
+	//
+	// Apply visibility.
         imageActor->SetVisible( vectorImageModel->IsVisible() );
 
         //
