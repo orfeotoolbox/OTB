@@ -31,6 +31,7 @@
 #endif
 
 #ifdef OTB_USE_LIBSVM
+const double epsilon = 0.1;
 #include "otbLibSVMMachineLearningModel.h"
 #endif
 
@@ -212,7 +213,7 @@ int testRegression(SampleGeneratorType& sg, RegressionType& rgrsn, RegressionTes
     rmse += std::pow(prediction - expected, static_cast<PrecisionType>(2.0));
     ++sampleIt;
     ++resultIt;
-    } 
+    }
 
   rmse = sqrt( rmse / static_cast<double>(param.count) );
   std::cout << "RMSE = "<< rmse << std::endl;
