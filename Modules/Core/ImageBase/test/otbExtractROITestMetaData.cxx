@@ -28,7 +28,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "boost/algorithm/string.hpp"
+#include "otb_boost_string_header.h"
 
 int otbExtractROITestMetaData(int itkNotUsed(argc), char * argv[])
 {

@@ -21,7 +21,7 @@
 #include <fstream>
 #include <algorithm>
 #include <cctype>
-#include "otb_boost_string_header_h"
+#include "otb_boost_string_header.h"
 #include "itksys/SystemTools.hxx"
 
 #include "otbSpotImageMetadataInterface.h"

@@ -9,7 +9,7 @@ otb_module(OTBEndmembersExtraction
     OTBDimensionalityReduction
     OTBImageManipulation
     OTBProjection
-    OTBBoost
+    OTBBoostAdapters
     OTBCommon
 
   TEST_DEPENDS

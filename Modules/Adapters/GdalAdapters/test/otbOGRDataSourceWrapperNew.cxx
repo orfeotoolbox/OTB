@@ -23,7 +23,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 #include <boost/foreach.hpp>
-#include <boost/algorithm/string.hpp>
+#include "otb_boost_string_header.h"
 #include "itksys/SystemTools.hxx"
 #include "otbOGRDataSourceWrapper.h"
 
