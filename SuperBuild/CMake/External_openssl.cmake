@@ -33,8 +33,8 @@ else()
     STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
     ExternalProject_Add(${proj}
         PREFIX ${proj}
-        URL "https://github.com/openssl/openssl/archive/OpenSSL_1_0_1e.zip"
-        URL_MD5 de0f06b07dad7ec8b220336530be1feb
+        URL "https://github.com/openssl/openssl/archive/OpenSSL_1_0_1p.tar.gz"
+        URL_MD5 6bc1f9a9d9d474aceceb377e758e48ec
         DEPENDS ${${proj}_DEPENDENCIES}
         BINARY_DIR ${OPENSSL_SB_BUILD_DIR}
         INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -49,8 +49,8 @@ else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       DEPENDS ${${proj}_DEPENDENCIES}
-      URL "https://github.com/openssl/openssl/archive/OpenSSL_1_0_1e.zip"
-      URL_MD5 de0f06b07dad7ec8b220336530be1feb
+      URL "https://github.com/openssl/openssl/archive/OpenSSL_1_0_1p.tar.gz"
+      URL_MD5 6bc1f9a9d9d474aceceb377e758e48ec
       BINARY_DIR ${OPENSSL_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

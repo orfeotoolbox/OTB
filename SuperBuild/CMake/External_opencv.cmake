@@ -28,8 +28,8 @@ else()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.10/opencv-2.4.10.zip/download"
-    URL_MD5 ec63952d3a3dff965d5fdde765926821
+    URL "http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.11/opencv-2.4.11.zip/download"
+    URL_MD5 32f498451bff1817a60e1aabc2939575
     BINARY_DIR ${OPENCV_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

@@ -14,8 +14,8 @@ else()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://download.savannah.gnu.org/releases/freetype/freetype-2.6.tar.gz"
-    URL_MD5 1d733ea6c1b7b3df38169fbdbec47d2b
+    URL "http://download.savannah.gnu.org/releases/freetype/freetype-2.6.1.tar.gz"
+    URL_MD5 348e667d728c597360e4a87c16556597
     BINARY_DIR ${FREETYPE_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

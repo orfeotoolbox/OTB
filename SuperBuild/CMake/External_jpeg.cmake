@@ -15,8 +15,8 @@ else()
   if(WIN32)
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/libjpeg-turbo-1.4.1.tar.gz"
-      URL_MD5 b1f6b84859a16b8ebdcda951fa07c3f2
+      URL "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.2/libjpeg-turbo-1.4.2.tar.gz/download"
+      URL_MD5 86b0d5f7507c2e6c21c00219162c3c44
       SOURCE_DIR ${JPEG_SB_SRC}
       BINARY_DIR ${JPEG_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -34,8 +34,8 @@ else()
       
       ExternalProject_Add(${proj}
         PREFIX ${proj}
-        URL "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/libjpeg-turbo-1.4.1.tar.gz"
-        URL_MD5 b1f6b84859a16b8ebdcda951fa07c3f2
+        URL "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.2/libjpeg-turbo-1.4.2.tar.gz/download"
+        URL_MD5 86b0d5f7507c2e6c21c00219162c3c44
         BINARY_DIR ${JPEG_SB_BUILD_DIR}
         INSTALL_DIR ${SB_INSTALL_PREFIX}
         DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

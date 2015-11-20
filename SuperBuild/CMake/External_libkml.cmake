@@ -28,8 +28,8 @@ else()
 
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://ftp.de.debian.org/debian/pool/main/libk/libkml/libkml_1.3.0~r863.orig.tar.gz"
-    URL_MD5 211ed5fdf2dd45aeb9c0abc8e1fe42be
+    URL "http://ftp.de.debian.org/debian/pool/main/libk/libkml/libkml_1.3.0~rc0.orig.tar.gz"
+    URL_MD5 b3be0ce2b3bf8725d5f8c6073822916f
     BINARY_DIR ${LIBKML_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
