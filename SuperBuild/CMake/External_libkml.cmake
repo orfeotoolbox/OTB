@@ -28,21 +28,18 @@ else()
 
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://ftp.de.debian.org/debian/pool/main/libk/libkml/libkml_1.3.0~rc0.orig.tar.gz"
-    URL_MD5 b3be0ce2b3bf8725d5f8c6073822916f
+    URL "http://ftp.de.debian.org/debian/pool/main/libk/libkml/libkml_1.3.0~r863.orig.tar.gz"
+    URL_MD5 211ed5fdf2dd45aeb9c0abc8e1fe42be
     BINARY_DIR ${LIBKML_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
     DEPENDS ${${proj}_DEPENDENCIES}
-    #PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory  ${CMAKE_SOURCE_DIR}/patches/${proj} ${LIBKML_SB_SRC}
+    PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory  ${CMAKE_SOURCE_DIR}/patches/${proj} ${LIBKML_SB_SRC}
     CMAKE_CACHE_ARGS
       -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
       -DCMAKE_BUILD_TYPE:STRING=Release
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DCMAKE_PREFIX_PATH:STRING=${SB_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}
-      -DWITH_JAVA:BOOL=OFF
-      -DWITH_PYTHON:BOOL=OFF
-      -DWITH_SWIG:BOOL=OFF
       ${LIBKML_SB_CONFIG}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
