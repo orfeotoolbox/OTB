@@ -18,9 +18,21 @@
 #include <stdlib.h>
 #include <iostream>
 
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/base/ossimFilename.h>
+#pragma GCC diagnostic pop
+#else
+#include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/imaging/ossimImageHandlerRegistry.h>
+#include <ossim/base/ossimFilename.h>
+#endif
 
 // This test demonstrate that handler->close() does not release the file descriptor for jpeg files.
 

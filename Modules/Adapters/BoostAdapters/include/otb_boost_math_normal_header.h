@@ -18,7 +18,7 @@
 #ifndef otb_boost_math_normal_header_h
 #define otb_boost_math_normal_header_h
 
-#if defined(__GNUC__) || (__clang__)
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <boost/math/distributions/normal.hpp>

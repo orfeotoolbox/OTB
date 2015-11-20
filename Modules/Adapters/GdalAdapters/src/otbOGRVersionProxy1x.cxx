@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbOGRVersionProxy.h"
 
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "ogrsf_frmts.h"
@@ -42,14 +42,14 @@ void Close(GDALDatasetType * dataset)
 {
   OGRDataSource::DestroyDataSource(dataset);
 }
-  
+
 GDALDatasetType * Create(GDALDriverType * driver, const char * name)
 {
   GDALDatasetType * ds = driver->CreateDataSource(name);
 
-  if(ds)  
+  if(ds)
     ds->SetDriver(driver);
-  
+
   return ds;
 }
 
@@ -66,7 +66,7 @@ bool Delete(const char * name)
 
   if(poDriver && poDriver->TestCapability(ODrCDeleteDataSource))
     {
-    
+
     OGRErr ret = poDriver->DeleteDataSource(name);
     return (ret == OGRERR_NONE);
     }
@@ -94,7 +94,7 @@ std::vector<std::string> GetFileListAsStringVector(GDALDatasetType * dataset)
   std::vector<std::string> ret;
 
   ret.push_back(std::string(dataset->GetName()));
-  
+
   return ret;
 }
 
@@ -108,9 +108,9 @@ bool SyncToDisk(GDALDatasetType * dataset)
 std::vector<std::string> GetAvailableDriversAsStringVector()
 {
   std::vector<std::string> ret;
-  
+
   int nbDrivers = OGRSFDriverRegistrar::GetRegistrar()->GetDriverCount();
-  
+
   for(int i = 0; i < nbDrivers;++i)
     {
     ret.push_back(OGRSFDriverRegistrar::GetRegistrar()->GetDriver(i)->GetName());

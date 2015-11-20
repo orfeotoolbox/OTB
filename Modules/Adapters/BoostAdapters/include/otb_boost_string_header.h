@@ -18,7 +18,7 @@
 #ifndef otb_boost_string_header_h
 #define otb_boost_string_header_h
 
-#if defined(__GNUC__) || (__clang__)
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #include <boost/algorithm/string.hpp>
