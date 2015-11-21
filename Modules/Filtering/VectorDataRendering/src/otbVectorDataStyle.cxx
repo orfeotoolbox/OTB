@@ -17,12 +17,27 @@
 =========================================================================*/
 
 #include "otbVectorDataStyle.h"
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <mapnik/filter_factory.hpp>
 #include <mapnik/rule.hpp>
 #include <mapnik/text_symbolizer.hpp>
 #ifndef OTB_MAPNIK_COMPATIBILITY_API07
 #include <mapnik/feature_type_style.hpp>
 #endif
+#pragma GCC diagnostic pop
+#else
+#include <mapnik/filter_factory.hpp>
+#include <mapnik/rule.hpp>
+#include <mapnik/text_symbolizer.hpp>
+#ifndef OTB_MAPNIK_COMPATIBILITY_API07
+#include <mapnik/feature_type_style.hpp>
+#endif
+#endif
+
+
 
 namespace otb
 {

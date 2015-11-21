@@ -23,8 +23,17 @@
 #include "otbRGBAPixelConverter.h"
 #include "otbVectorDataExtractROI.h"
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <mapnik/memory_datasource.hpp>
 #include <mapnik/map.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <mapnik/memory_datasource.hpp>
+#include <mapnik/map.hpp>
+#endif
+
 
 namespace otb
 {
