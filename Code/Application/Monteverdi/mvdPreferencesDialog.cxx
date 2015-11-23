@@ -82,7 +82,9 @@ PreferencesDialog
   m_UI->settingsGroupBox->setVisible( false );
 
   for( int i=0; i<RESOLUTION_COUNT; ++i )
-    m_UI->resolutionComboBox->addItem( tr( RESOLUTION_NAME[ i ] ) );
+    m_UI->resolutionComboBox->addItem(
+      QApplication::translate( "mvd", RESOLUTION_NAME[ i ] )
+    );
 
   //
   // General settings.
