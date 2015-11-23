@@ -682,6 +682,7 @@ ImageViewRenderer
 	{
 	const RenderingContext * ctxt = static_cast< const RenderingContext * >( context );
 
+	// Resolution
 	switch( ctxt->m_Resolution )
 	  {
 	  case RESOLUTION_NEAREST:
@@ -707,8 +708,10 @@ ImageViewRenderer
 	    break;
 	  }
 
+	// Tile-size
 	imageActor->SetTileSize( ctxt->m_TileSize );
 
+	// Pixel color-mode.
 	switch( ctxt->m_Pixel )
 	  {
 	  case PIXEL_OTB:
