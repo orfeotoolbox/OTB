@@ -116,7 +116,7 @@ private:
 
   std::string GetOGRDriverName(std::string name) const;
 
-  void OGRVectorDataIO::CloseInternalDataSource();
+  void CloseInternalDataSource();
 
   ogr::version_proxy::GDALDatasetType * m_DataSource;
 
