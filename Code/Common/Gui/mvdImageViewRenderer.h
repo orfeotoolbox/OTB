@@ -52,6 +52,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Gui/mvdAbstractImageViewRenderer.h"
+#include "Gui/mvdGui.h"
 
 
 /*****************************************************************************/
@@ -100,20 +101,28 @@ public:
   {
     /**
      */
-    inline
-    RenderingContext() :
-      AbstractImageViewRenderer::RenderingContext()
+    RenderingContext();
+
+    /**
+     */
+    virtual ~RenderingContext();
+
+    /**
+     */
+    Resolution m_Resolution;
+
+    /**
+     */
+    Pixel m_Pixel;
+
+    /**
+     */
+    int m_TileSize;
+
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
-      ,m_ViewSettings()
-#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
-    {
-    }
-
-    virtual ~RenderingContext() {}
-
-#if USE_VIEW_SETTINGS_SIDE_EFFECT
-#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+    /**
+     */
     otb::ViewSettings::Pointer m_ViewSettings;
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
   };

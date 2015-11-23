@@ -82,6 +82,56 @@ extern const int MOUSE_WHEEL_STEP_FACTOR;
 } // end of namespace 'mvd'.
 
 /*****************************************************************************/
+/* TYPE DEFINITION SECTION                                                   */
+
+namespace mvd
+{
+
+/**
+ */
+enum Pixel
+{
+  PIXEL_NONE = -1,
+  //
+  PIXEL_OTB = 0,
+  PIXEL_GLSL,
+  //
+  PIXEL_COUNT
+};
+
+/**
+ * Constant naming effect values.
+ */
+Monteverdi_EXPORT
+extern
+char const * const
+PIXEL_NAME[ PIXEL_COUNT ];
+
+/**
+ */
+enum Resolution
+{
+  RESOLUTION_NONE = -1,
+  //
+  RESOLUTION_NEAREST = 0,
+  RESOLUTION_LOWER,
+  RESOLUTION_UPPER,
+  //
+  RESOLUTION_COUNT
+};
+
+/**
+ * Constant naming effect values.
+ */
+Monteverdi_EXPORT
+extern
+char const * const
+RESOLUTION_NAME[ RESOLUTION_COUNT ];
+
+} // End of namespace 'mvd'.
+
+
+/*****************************************************************************/
 /* COMMON DECLARATION SECTION                                                */
 
 namespace mvd
