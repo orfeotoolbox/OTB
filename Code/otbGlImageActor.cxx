@@ -287,22 +287,22 @@ bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
 
 void GlImageActor::Render()
 {
-  std::cout
-    << "otb::GlImageActor@" << std::hex << this << std::dec << std::endl
-    << "\tresolution: " << m_ResolutionAlgorithm << std::endl
-    << "\tpixel: " << m_SoftwareRendering << std::endl
-    << "\ttile: " << m_TileSize << std::endl;
+  // std::cout
+  //   << "otb::GlImageActor@" << std::hex << this << std::dec << std::endl
+  //   << "\tresolution: " << m_ResolutionAlgorithm << std::endl
+  //   << "\tpixel: " << m_SoftwareRendering << std::endl
+  //   << "\ttile: " << m_TileSize << std::endl;
 
   if(!m_SoftwareRendering)
     {
-    std::cout << "\tGLSL" << std::endl;
+    // std::cout << "\tGLSL" << std::endl;
 
     m_Shader->LoadShader();
     m_Shader->SetupShader();
     }
   else
     {
-    std::cout << "\tOTB" << std::endl;
+    // std::cout << "\tOTB" << std::endl;
 
     for(TileVectorType::iterator it = m_LoadedTiles.begin();
         it != m_LoadedTiles.end(); ++it)
