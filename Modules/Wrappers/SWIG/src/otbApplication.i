@@ -585,13 +585,16 @@ class ApplicationProxy(object):
 		      self.SetParameterValue(attr.lower(), value)
 		    else:
 		      raise AttributeError
-      }
+
+            }
 }
 #endif
 
 #if OTB_SWIGNUMPY
-%extend Application {
-  %pythoncode {
+%extend Application
+{
+  %pythoncode
+    {
 
     def SetImageFromNumpyArray(self, paramKey, npArray):
       """
@@ -727,7 +730,7 @@ class ApplicationProxy(object):
       numpy_vector_image = numpy_vector_image[:,:,1]
       return numpy_vector_image
 
-    }
+          }
 }
 
 #endif /* OTB_SWIGNUMPY */
