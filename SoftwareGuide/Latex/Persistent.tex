@@ -168,7 +168,7 @@ temporary results will be computed for each piece of stream.
 
 \begin{lstlisting}
 virtual void ThreadedGenerateData(const RegionType&
-                                  outputRegionForThread, int threadId)
+                                  outputRegionForThread, itk::ThreadIdType threadId)
 {
 // Enable progress reporting
 itk::ProgressReporter(this,threadId,outputRegionForThread.GetNumberOfPixels());
