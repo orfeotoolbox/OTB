@@ -46,7 +46,7 @@ OGRVectorDataIO::~OGRVectorDataIO()
 {
   if (m_DataSource != NULL)
     {
-    otb::ogr::version_proxy::Close(m_DataSource);
+    this->CloseInternalDataSource();
     }
 }
 
@@ -90,7 +90,7 @@ OGRVectorDataIO
 
   if (m_DataSource != NULL)
     {
-    ogr::version_proxy::Close(m_DataSource);
+    this->CloseInternalDataSource();
     }
 
   m_DataSource = ogr::version_proxy::Open(this->m_FileName.c_str(),true);
@@ -178,7 +178,13 @@ OGRVectorDataIO
 
     } // end For each layer
 
-  GDALClose(m_DataSource);
+  this->CloseInternalDataSource();
+}
+
+void OGRVectorDataIO::CloseInternalDataSource()
+{
+  assert(m_DataSource != NULL && "m_DataSource cannot be NULL");
+  ogr::version_proxy::Close(m_DataSource);
   m_DataSource = NULL;
 }
 

@@ -19,10 +19,10 @@
 #define __otbOGRVectorDataIO_h
 
 #include <string>
+#include <cassert>
 
 #include "otbVectorDataIOBase.h"
 #include "otbVectorData.h"
-
 #include "otbOGRVersionProxy.h"
 
 namespace otb
@@ -115,6 +115,8 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   std::string GetOGRDriverName(std::string name) const;
+
+  void OGRVectorDataIO::CloseInternalDataSource();
 
   ogr::version_proxy::GDALDatasetType * m_DataSource;
 
