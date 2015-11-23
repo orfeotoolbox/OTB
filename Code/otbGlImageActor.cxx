@@ -288,7 +288,7 @@ bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
 void GlImageActor::Render()
 {
   std::cout
-    << "otb::GlImageActor@" << std::hex << this << std::endl
+    << "otb::GlImageActor@" << std::hex << this << std::dec << std::endl
     << "\tresolution: " << m_ResolutionAlgorithm << std::endl
     << "\tpixel: " << m_SoftwareRendering << std::endl
     << "\ttile: " << m_TileSize << std::endl;
