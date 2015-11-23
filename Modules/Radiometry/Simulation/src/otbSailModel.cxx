@@ -508,7 +508,7 @@ SailModel
       x2 = excent/sqrt(1.+excent*excent*vcl_tan(tl2)*vcl_tan(tl2));
       if(excent==1)
       {
-         v = abs(cos(tl1)-cos(tl2));
+         v = vcl_abs(cos(tl1)-cos(tl2));
          temp.push_back( v );
          sum = sum + v;
       }
