@@ -295,14 +295,14 @@ void GlImageActor::Render()
 
   if(!m_SoftwareRendering)
     {
-    std::cout << "\tOTB" << std::endl;
+    std::cout << "\tGLSL" << std::endl;
 
     m_Shader->LoadShader();
     m_Shader->SetupShader();
     }
   else
     {
-    std::cout << "\tGLSL" << std::endl;
+    std::cout << "\tOTB" << std::endl;
 
     for(TileVectorType::iterator it = m_LoadedTiles.begin();
         it != m_LoadedTiles.end(); ++it)
