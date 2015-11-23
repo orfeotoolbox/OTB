@@ -64,14 +64,14 @@ designed to be templated with subclasses of the
 stream the whole image through the templated filter, using a third
 class called \doxygen{otb}{StreamingImageVirtualWriter}. When the
 \verb?Update()? method is called on a
-\doxygen{otb}{PersistentImageFilterStreamingDecorator}, a pipeline
+\doxygen{otb}{PersistentFilterStreamingDecorator}, a pipeline
 plugging the templated subclass of the
 \doxygen{otb}{PersistentImageFilter} to an instance of
 \doxygen{otb}{StreamingImageVirtualWriter} is created. The latter is
 then updated, and acts like a regular
 \doxygen{otb}{ImageFileWriter} but it does not actually write
 anything to the disk : streaming pieces are requested and immediately
-discarded. The \doxygen{otb}{PersistentImageFilterStreamingDecorator}
+discarded. The \doxygen{otb}{PersistentFilterStreamingDecorator}
 also calls the \verb?Reset()? method at the beginning and the
 \verb?Synthetize()? method at the end of the streaming
 process. Therefore, it packages the whole mechanism for the use of a
@@ -90,11 +90,11 @@ image splitting methods (tiles or strips) or the size of the streams
 with respect to some target available amount of memory. Please see the
 class documentation for details. The instance of the
 \doxygen{otb}{StreamingImageVirtualWriter} can be retrieved from the
-\doxygen{otb}{PersistentImageFilterStreamingDecorator} through the
+\doxygen{otb}{PersistentFilterStreamingDecorator} through the
 \verb?GetStreamer()? method.
 
 Though the internal filter of the
-\doxygen{otb}{PersistentImageFilterStreamingDecorator} can be accessed
+\doxygen{otb}{PersistentFilterStreamingDecorator} can be accessed
 through the \verb?GetFilter()? method, the class is often derived to
 package the streaming-decorated filter and wrap the parameters setters
 and getters.
@@ -219,7 +219,7 @@ if(nbPixels!=0)
 \subsection{Second step: Decorating the filter and using it}
 
 Now, to use the filter, one only has to decorate it with the
-\doxygen{otb}{PersistentImageFilterStreamingDecorator}. First step is
+\doxygen{otb}{PersistentFilterStreamingDecorator}. First step is
 to include the appropriate header:
 
 \begin{lstlisting}
@@ -232,7 +232,7 @@ Then, we decorate the filter with some typedefs:
 \begin{lstlisting}
 typedef otb::PersistentMeanImageFilter<ImageType>
   PersitentMeanFilterType;
-typedef otb::PersistentImageFilterStreamingDecorator
+typedef otb::PersistentFilterStreamingDecorator
   < PersitentMeanFilterType> StreamingMeanFilterType;
 \end{lstlisting}
 
@@ -254,7 +254,7 @@ section by deriving a new class from the decorated filter:
 \begin{lstlisting}
 template<class TInputImage >
   class ITK_EXPORT StreamingMeanImageFilter :
-    public PersistentImageFilterStreamingDecorator<
+    public PersistentFilterStreamingDecorator<
            PersistentImageFilter<TInputImage, TInputImage> >
 \end{lstlisting}
 
