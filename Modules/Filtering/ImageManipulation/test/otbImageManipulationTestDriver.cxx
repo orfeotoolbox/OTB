@@ -82,4 +82,5 @@ void RegisterTests()
   REGISTER_TEST(otbChangeNoDataValueFilter);
   REGISTER_TEST(otbImageToNoDataMaskFilter);
   REGISTER_TEST(otbChangeInformationImageFilter);
+  REGISTER_TEST(otbGridResampleImageFilter);
 }
