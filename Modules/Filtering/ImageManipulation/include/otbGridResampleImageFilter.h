@@ -29,8 +29,26 @@ namespace otb
 {
 
 /** \class GridResampleImageFilter
- *  \brief 
+ *  \brief Resample input image on a new origin/spacing/size grid
+ * 
+ *  This filter resample the input image on a new grid defined by
+ *  OutputOrigin, OutputSpacing and OutputSize, using the provided
+ *  interpolator.
+ * 
+ *  This is equivalent to a itk::ResampleImageFilter using an
+ *  itk::IdentityTransform, except that it is slightly more efficient
+ *  and that in this simplified case it is possible to explicitely
+ *  compute the input requested region. The GridResampleImageFilter
+ *  therefore supports streaming, contrary to the
+ *  itk::ResampleImageFilter.
+ *  
+ *  When grid position is outside of the input image domain, the
+ *  default EdgePaddingValue is used.
  *
+ *  If CheckOutputBounds flag is set to true (default value), the
+ *  interpolated value will be checked for output pixel type range
+ *  prior to casting.
+ *   
  * \ingroup OTBImageManipulation
  * \ingroup Streamed
  * \ingroup Threaded
