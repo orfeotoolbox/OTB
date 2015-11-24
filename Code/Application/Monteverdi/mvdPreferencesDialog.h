@@ -122,6 +122,7 @@ private:
 
   bool m_ResultsDirModified: 1;
   bool m_ElevationSetupModified: 1;
+  bool m_PixelModeModified: 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -147,7 +148,8 @@ private slots:
 
   void on_resultDirButton_clicked();
 
-
+  void on_otbRadioButton_toggled( bool );
+  void on_shaderRadioButton_toggled( bool );
 };
 
 } // end namespace 'mvd'

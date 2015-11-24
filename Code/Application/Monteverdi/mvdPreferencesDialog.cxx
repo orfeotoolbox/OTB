@@ -70,128 +70,139 @@ PreferencesDialog
   QDialog( parent, flags ),
   m_UI( new mvd::Ui::PreferencesDialog() ),
   m_ResultsDirModified( false ),
-  m_ElevationSetupModified( false )
+  m_ElevationSetupModified( false ),
+  m_PixelModeModified( false )
 {
   assert( m_UI!=NULL );
   assert( I18nApplication::Instance()!=NULL );
 
   m_UI->setupUi( this );
 
-  //
-  // Runtime UI initilization.
-  m_UI->settingsGroupBox->setVisible( false );
+  {
+    bool wereSignalsBlocked = blockSignals( true );
 
-  for( int i=0; i<RESOLUTION_COUNT; ++i )
-    m_UI->resolutionComboBox->addItem(
-      QApplication::translate( "mvd", RESOLUTION_NAME[ i ] )
+    //
+    // Runtime UI initilization.
+    m_UI->settingsGroupBox->setVisible( false );
+
+    for( int i=0; i<RESOLUTION_COUNT; ++i )
+      m_UI->resolutionComboBox->addItem(
+	QApplication::translate( "mvd", RESOLUTION_NAME[ i ] )
+      );
+
+    //
+    // General settings.
+    m_UI->resultDirPathLineEdit->setText(
+      I18nApplication::Instance()->RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_RESULTS_DIR
+      )
+      .toString()
     );
 
-  //
-  // General settings.
-  m_UI->resultDirPathLineEdit->setText(
-    I18nApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_RESULTS_DIR
-    )
-    .toString()
-  );
+    //
+    // Rendering settings.
+    {
+      QVariant value(
+	I18nApplication::Instance()->RetrieveSettingsKey(
+	  I18nCoreApplication::SETTINGS_KEY_RESOLUTION
+	)
+      );
 
-  //
-  // Rendering settings.
-  {
-  QVariant value(
-    I18nApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_RESOLUTION
-    )
-  );
+      m_UI->resolutionComboBox->setCurrentIndex(
+	!value.isValid()
+	? RESOLUTION_NEAREST
+	: value.toInt()
+      );
+    }
 
-  m_UI->resolutionComboBox->setCurrentIndex(
-    !value.isValid()
-    ? RESOLUTION_NEAREST
-    : value.toInt()
-  );
-  }
+    {
+      QVariant value(
+      I18nApplication::Instance()->RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_TILE_SIZE
+      )
+      );
 
-  {
-  QVariant value(
-    I18nApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_TILE_SIZE
-    )
-  );
+      m_UI->tileSizeSpinBox->setValue(
+	!value.isValid()
+	? 256
+	: value.toInt()
+      );
+    }
 
-  m_UI->tileSizeSpinBox->setValue(
-    !value.isValid()
-    ? 256
-    : value.toInt()
-  );
-  }
+    {
+      QVariant value(
+	I18nApplication::Instance()->RetrieveSettingsKey(
+	  I18nCoreApplication::SETTINGS_KEY_PIXEL
+	)
+      );
 
-  {
-  QVariant value(
-    I18nApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_PIXEL
-    )
-  );
-
-  if( !value.isValid() )
-    m_UI->shaderRadioButton->setChecked( true );
-
-  else
-    switch( value.toInt() )
-      {
-      case PIXEL_OTB:
-	m_UI->otbRadioButton->setChecked( true );
-	break;
-
-      case PIXEL_GLSL:
+      if( !value.isValid() )
 	m_UI->shaderRadioButton->setChecked( true );
-	break;
 
-      default:
-	assert( false && "Unexpected Pixel enum value." );
-	break;
-      }
+      else
+	switch( value.toInt() )
+	  {
+	  case PIXEL_OTB:
+	    m_UI->otbRadioButton->setChecked( true );
+	    break;
+
+	  case PIXEL_GLSL:
+	    m_UI->shaderRadioButton->setChecked( true );
+	    break;
+
+	  default:
+	    assert( false && "Unexpected Pixel enum value." );
+	    break;
+	  }
+    }
+
+    //
+    // Elevation management settings.
+    m_UI->srtmLineEdit->setText(
+      I18nApplication::Instance()->RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
+      )
+      .toString()
+    );
+
+    m_UI->srtmCheckbox->setChecked(
+      I18nApplication::Instance()->RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE
+      )
+      .toBool()
+    );
+    m_UI->srtmLineEdit->setEnabled( m_UI->srtmCheckbox->isChecked() );
+    m_UI->srtmButton->setEnabled( m_UI->srtmCheckbox->isChecked() );
+
+    m_UI->geoidLineEdit->setText(
+      I18nApplication::Instance()->RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
+      )
+      .toString()
+    );
+
+    m_UI->geoidCheckbox->setChecked(
+      I18nApplication::Instance()->RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE
+      )
+      .toBool()
+    );
+
+    m_UI->geoidLineEdit->setEnabled( m_UI->geoidCheckbox->isChecked() );
+    m_UI->geoidButton->setEnabled( m_UI->geoidCheckbox->isChecked() );
+
+    // Connect centralWidget manipulator to Ql renderer when viewportRegionChanged
+    QObject::connect(
+      m_UI->buttonBox, SIGNAL( rejected() ), 
+      this, SLOT( close() )
+    );
+
+    blockSignals( wereSignalsBlocked );
   }
 
-  //
-  // Elevation management settings.
-  m_UI->srtmLineEdit->setText(
-    I18nApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
-    )
-    .toString()
-  );
-
-  m_UI->srtmCheckbox->setChecked(
-    I18nApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE
-    )
-    .toBool()
-  );
-  m_UI->srtmLineEdit->setEnabled( m_UI->srtmCheckbox->isChecked() );
-  m_UI->srtmButton->setEnabled( m_UI->srtmCheckbox->isChecked() );
-
-  m_UI->geoidLineEdit->setText(
-    I18nApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
-    )
-    .toString()
-  );
-
-  m_UI->geoidCheckbox->setChecked(
-    I18nApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE
-    )
-    .toBool()
-  );
-
-  m_UI->geoidLineEdit->setEnabled( m_UI->geoidCheckbox->isChecked() );
-  m_UI->geoidButton->setEnabled( m_UI->geoidCheckbox->isChecked() );
-
-  // Connect centralWidget manipulator to Ql renderer when viewportRegionChanged
-  QObject::connect(
-    m_UI->buttonBox, SIGNAL( rejected() ), 
-    this, SLOT( close() )
-    );
+  // qDebug() << "results-dir:" << m_ResultsDirModified;
+  // qDebug() << "Elevation-setup:" << m_ElevationSetupModified;
+  // qDebug() << "Pixel-mode:" << m_PixelModeModified;
 }
 
 /*******************************************************************************/
@@ -254,15 +265,29 @@ PreferencesDialog
     m_UI->tileSizeSpinBox->value()
   );
 
+  if( m_PixelModeModified )
+    {
+    Pixel pixel =
+      m_UI->shaderRadioButton->isChecked()
+      ? PIXEL_GLSL
+      : ( m_UI->otbRadioButton->isChecked()
+	  ? PIXEL_OTB
+	  : PIXEL_NONE );
 
-  I18nApplication::Instance()->StoreSettingsKey(
-    I18nCoreApplication::SETTINGS_KEY_PIXEL,
-    m_UI->shaderRadioButton->isChecked()
-    ? PIXEL_GLSL
-    : ( m_UI->otbRadioButton->isChecked()
-	? PIXEL_OTB
-	: PIXEL_NONE )
-  );
+    if( pixel==PIXEL_GLSL ||
+	( pixel==PIXEL_OTB &&
+	  QMessageBox::warning(
+	    this,
+	    "Warning!",
+	    tr( "When switching to OTB-filter pixel color-mode GLSL shader effects will be disabled. and shader-effect settings of each layer will be reset to defaults. Are you sure you want to continue?"
+	    ),
+	    QMessageBox::Yes | QMessageBox::No,
+	    QMessageBox::No )==QMessageBox::Yes ) )
+      I18nApplication::Instance()->StoreSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_PIXEL,
+	pixel
+      );
+    }
 
   //
   // Elevation management settings.
@@ -407,5 +432,23 @@ PreferencesDialog
 }
 
 /*******************************************************************************/
+void
+PreferencesDialog
+::on_otbRadioButton_toggled( bool checked )
+{
+  qDebug() << this << "::on_otbRadioButton_toggled(" << checked << ")";
+
+  m_PixelModeModified = true;
+}
+
+/*******************************************************************************/
+void
+PreferencesDialog
+::on_shaderRadioButton_toggled( bool checked )
+{
+  qDebug() << this << "::on_shaderRadioButton_toggled(" << checked << ")";
+
+  m_PixelModeModified = true;
+}
 
 } // end namespace 'mvd'
