@@ -20,6 +20,10 @@
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
+#if defined(OTB_USE_OPENCV) || defined(OTB_USE_LIBSVM)
+const double epsilon = 0.1;
+#endif
+
 #ifdef OTB_USE_OPENCV
 #include "otbNeuralNetworkMachineLearningModel.h"
 #include "otbSVMMachineLearningModel.h"
@@ -31,7 +35,6 @@
 #endif
 
 #ifdef OTB_USE_LIBSVM
-const double epsilon = 0.1;
 #include "otbLibSVMMachineLearningModel.h"
 #endif
 
