@@ -18,7 +18,14 @@
 #ifndef __otbImageFileReader_h
 #define __otbImageFileReader_h
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "itkImageSource.h"
+#pragma GCC diagnostic pop
+#else
+#include "itkImageSource.h"
+#endif
 #include "otbImageIOBase.h"
 #include "itkExceptionObject.h"
 #include "itkImageRegion.h"
@@ -141,13 +148,13 @@ public:
   /** Get the resolution information from the file */
   bool GetResolutionsInfo( std::vector<unsigned int>& res,
                           std::vector<std::string>& desc);
-  
+
   /** Get the number of overviews available into the file specified
    * Returns: overview count, zero if none. */
-  unsigned int GetOverviewsCount(); 
-  
-  
-  /** Get description about overviews available into the file specified 
+  unsigned int GetOverviewsCount();
+
+
+  /** Get description about overviews available into the file specified
    * Returns: overview info, empty if none.*/
   std::vector<std::string> GetOverviewsInfo();
 
