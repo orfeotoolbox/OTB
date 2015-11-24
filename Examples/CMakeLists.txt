@@ -17,6 +17,19 @@ if(PROJECT_NAME STREQUAL "OTBExamples")
 
   include(${CMAKE_CURRENT_SOURCE_DIR}/../CMake/OTBManageLargeInputPaths.cmake)
 
+  # dashboard build. Why do I need to see the deprecated warnings on dashboard!
+  # It just fades the actual warnings and most importantly very annoying.
+  if(NOT "$ENV{DASHBOARD_TEST_FROM_CTEST}" STREQUAL "")
+    if(UNIX)
+      if(CMAKE_COMPILER_IS_GNUCXX)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cpp")
+      else()
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-#warnings")
+      endif() #CMAKE_COMPILER_IS_GNUCXX
+    endif() #UNIX
+  endif()
+
+
   ########################## shamelessly copied from OTB/CMakeLists.txt ##########################
 
   #Generate cmake variables with a set of largeinput data used in tests
