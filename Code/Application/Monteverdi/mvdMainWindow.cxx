@@ -1550,43 +1550,6 @@ MainWindow
   PreferencesDialog prefDialog( this );
 
   prefDialog.exec();
-
-  /*
-  {
-  assert( I18nCoreApplication::ConstInstance()!=NULL );
-
-  QVariant pixel(
-    I18nCoreApplication::ConstInstance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_PIXEL
-    )
-  );
-
-  if( pixel.isValid() )
-    m_ShaderWidget->setEnabled( pixel.toInt()!=0 );
-
-  if( !m_ShaderWidget->isEnabled() )
-    {
-    StackedLayerModel * layerStack =
-      I18nCoreApplication::GetModel< StackedLayerModel >();
-
-    assert( layerStack!=NULL );
-
-    for( StackedLayerModel::Iterator it( layerStack->Begin() );
-	 it!=layerStack->End();
-	 ++ it )
-      if( it->second->inherits(
-	    AbstractImageModel::staticMetaObject.className() ) )
-	{
-	AbstractImageModel * image =
-	  qobject_cast< AbstractImageModel * >( it->second );
-
-	assert( image!=NULL );
-
-	
-	}
-    }
-  }
-  */
 }
 
 /*****************************************************************************/

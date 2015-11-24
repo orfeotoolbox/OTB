@@ -101,7 +101,6 @@ public:
   typedef LayerModelMap::size_type SizeType;
   typedef LayerModelMap::key_type KeyType;
   typedef LayerModelMap::const_iterator ConstIterator;
-  typedef LayerModelMap::iterator Iterator;
   static const SizeType NIL_INDEX;
 
 //
