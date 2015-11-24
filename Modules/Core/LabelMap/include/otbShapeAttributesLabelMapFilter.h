@@ -64,6 +64,8 @@ public:
   typedef SimplifyPathFunctor<PolygonType,
                               PolygonType> SimplifyPolygonFunctorType;
 
+  typedef unsigned int DimensionType;
+
   /** ImageDimension constants */
   itkStaticConstMacro(ImageDimension, unsigned int, TLabelObject::ImageDimension);
   typedef itk::ImageRegion< TLabelObject::ImageDimension > RegionType;
