@@ -15,8 +15,6 @@ if(PROJECT_NAME STREQUAL "OTBExamples")
     include(CTest)
   endif()
 
-  include(${CMAKE_CURRENT_SOURCE_DIR}/../CMake/OTBManageLargeInputPaths.cmake)
-
   # dashboard build. Why do I need to see the deprecated warnings on dashboard!
   # It just fades the actual warnings and most importantly very annoying.
   if(NOT "$ENV{DASHBOARD_TEST_FROM_CTEST}" STREQUAL "")
@@ -93,6 +91,10 @@ if(PROJECT_NAME STREQUAL "OTBExamples")
   endfunction()
 
   ########################## end copied from OTB/CMakeLists.txt ##########################
+else()
+
+  #Examples that require large input cannot be enabled when building as standalone
+  include(${CMAKE_CURRENT_SOURCE_DIR}/../CMake/OTBManageLargeInputPaths.cmake)
 
 endif()
 
