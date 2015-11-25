@@ -74,6 +74,22 @@ RESOLUTION_NAME[ RESOLUTION_COUNT ] =
   QT_TRANSLATE_NOOP( "mvd", "Upper bound" ),
 };
 
+char const * const
+TILE_SIZE_NAME[ TILE_SIZE_COUNT ] =
+{
+  // QT_TRANSLATE_NOOP( "mvd", "None" ),
+  QT_TRANSLATE_NOOP( "mvd", "64" ),
+  QT_TRANSLATE_NOOP( "mvd", "128" ),
+  QT_TRANSLATE_NOOP( "mvd", "256" ),
+  QT_TRANSLATE_NOOP( "mvd", "512" ),
+};
+
+int
+TILE_SIZE_VALUE[ TILE_SIZE_COUNT ] =
+{
+  64, 128, 256, 512,
+};
+
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */

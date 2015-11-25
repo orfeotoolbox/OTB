@@ -108,6 +108,37 @@ extern
 char const * const
 RESOLUTION_NAME[ RESOLUTION_COUNT ];
 
+/**
+ */
+enum TileSize
+{
+  TILE_SIZE_NONE = -1,
+  //
+  TILE_SIZE_64 = 0,
+  TILE_SIZE_128,
+  TILE_SIZE_256,
+  TILE_SIZE_512,
+  //
+  TILE_SIZE_COUNT,
+  //
+  TILE_SIZE_DEFAULT = TILE_SIZE_256,
+};
+
+/**
+ * Constant naming effect values.
+ */
+Monteverdi_EXPORT
+extern
+char const * const
+TILE_SIZE_NAME[ TILE_SIZE_COUNT ];
+
+/**
+ */
+Monteverdi_EXPORT
+extern
+int
+TILE_SIZE_VALUE[ TILE_SIZE_COUNT ];
+
 } // End of namespace 'mvd'.
 
 

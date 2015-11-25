@@ -86,6 +86,11 @@ PreferencesDialog
       QApplication::translate( "mvd", RESOLUTION_NAME[ i ] )
     );
 
+  for( int i=0; i<TILE_SIZE_COUNT; ++i )
+    m_UI->tileSizeComboBox->addItem(
+      QApplication::translate( "mvd", TILE_SIZE_NAME[ i ] )
+    );
+
   //
   // General settings.
   m_UI->resultDirPathLineEdit->setText(
@@ -118,11 +123,17 @@ PreferencesDialog
       )
     );
 
-    m_UI->tileSizeSpinBox->setValue(
-      !value.isValid()
-      ? 256
-      : value.toInt()
-    );
+    m_UI->tileSizeComboBox->setCurrentIndex( TILE_SIZE_DEFAULT );
+
+    int val = value.toInt();
+
+    for( int i=0; i<TILE_SIZE_COUNT; ++i)
+      if( val==TILE_SIZE_VALUE[ i ] )
+	{
+	m_UI->tileSizeComboBox->setCurrentIndex( i );
+
+	break;
+	}
   }
 
   //
@@ -225,10 +236,21 @@ PreferencesDialog
     m_UI->resolutionComboBox->currentIndex()
   );
 
+  {
+  bool isOk = true;
+
+  int value = m_UI->tileSizeComboBox->currentText().toInt( &isOk );
+
+  assert( isOk );
+
+  if( !isOk )
+    value = TILE_SIZE_VALUE[ TILE_SIZE_DEFAULT ];
+
   I18nApplication::Instance()->StoreSettingsKey(
     I18nCoreApplication::SETTINGS_KEY_TILE_SIZE,
-    m_UI->tileSizeSpinBox->value()
+    value
   );
+  }
 
   //
   // Elevation management settings.
