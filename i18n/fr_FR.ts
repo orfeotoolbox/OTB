@@ -199,19 +199,19 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>64</source>
-        <translation type="unfinished">64</translation>
+        <translation>64</translation>
     </message>
     <message>
         <source>128</source>
-        <translation type="unfinished">128</translation>
+        <translation>128</translation>
     </message>
     <message>
         <source>256</source>
-        <translation type="unfinished">256</translation>
+        <translation>256</translation>
     </message>
     <message>
         <source>512</source>
-        <translation type="unfinished">512</translation>
+        <translation>512</translation>
     </message>
 </context>
 <context>
@@ -3405,19 +3405,19 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Size of the image-tile which is loaded when view shifts to an unloaded area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille de la tuille de l&apos;image qui est chargée lorsque la vue se décalle sur une zone non chargée.</translation>
     </message>
     <message>
         <source>Image tile size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Taille de la tuile image</translation>
     </message>
     <message>
         <source>Method to choose level of resolution pyramid when scale is between two levels</source>
-        <translation type="unfinished"></translation>
+        <translation>Méthode permettant de choisir le niveau dans la pyramide multi-résolution lorsque l&apos;échelle se trouve entre deux niveaux.</translation>
     </message>
     <message>
         <source>Level of resolution pyramid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Niveau dans la pyramide de multi-résolution</translation>
     </message>
 </context>
 <context>
