@@ -179,11 +179,11 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>OTB</source>
-        <translation>OTB</translation>
+        <translation type="obsolete">OTB</translation>
     </message>
     <message>
         <source>GLSL</source>
-        <translation>GLSL</translation>
+        <translation type="obsolete">GLSL</translation>
     </message>
     <message>
         <source>Nearest</source>
@@ -196,6 +196,22 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     <message>
         <source>Upper bound</source>
         <translation>Borne supérieure</translation>
+    </message>
+    <message>
+        <source>64</source>
+        <translation type="unfinished">64</translation>
+    </message>
+    <message>
+        <source>128</source>
+        <translation type="unfinished">128</translation>
+    </message>
+    <message>
+        <source>256</source>
+        <translation type="unfinished">256</translation>
+    </message>
+    <message>
+        <source>512</source>
+        <translation type="unfinished">512</translation>
     </message>
 </context>
 <context>
@@ -3369,23 +3385,39 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Tile size</source>
-        <translation>Taille de tuile</translation>
+        <translation type="obsolete">Taille de tuile</translation>
     </message>
     <message>
         <source>Pixel</source>
-        <translation>Pixel</translation>
+        <translation type="obsolete">Pixel</translation>
     </message>
     <message>
         <source>Resolution</source>
-        <translation>Resolution</translation>
+        <translation type="obsolete">Resolution</translation>
     </message>
     <message>
         <source>OTB filter</source>
-        <translation>Filtre OTB</translation>
+        <translation type="obsolete">Filtre OTB</translation>
     </message>
     <message>
         <source>OpenGL shader</source>
-        <translation>OpenGL shader</translation>
+        <translation type="obsolete">OpenGL shader</translation>
+    </message>
+    <message>
+        <source>Size of the image-tile which is loaded when view shifts to an unloaded area.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image tile size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Method to choose level of resolution pyramid when scale is between two levels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Level of resolution pyramid</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
