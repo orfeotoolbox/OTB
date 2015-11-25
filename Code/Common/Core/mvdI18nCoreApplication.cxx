@@ -80,7 +80,6 @@ const char* I18nCoreApplication::SETTINGS_KEYS[ SETTINGS_KEY_COUNT ] =
   "geoidPathActive",
   "resolutionAlgorithm",
   "tileSize",
-  "pixelColor",
 };
 
 /*****************************************************************************/

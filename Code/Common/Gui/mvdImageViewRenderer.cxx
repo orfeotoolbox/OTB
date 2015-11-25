@@ -74,7 +74,6 @@ ImageViewRenderer::RenderingContext
 ::RenderingContext() :
   AbstractImageViewRenderer::RenderingContext(),
   m_Resolution( RESOLUTION_NEAREST ),
-  m_Pixel( PIXEL_GLSL ),
   m_TileSize( 256 )
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
@@ -109,19 +108,6 @@ ImageViewRenderer::RenderingContext
     !value.isValid()
     ? 256
     : value.toInt();
-  }
-
-  {
-  QVariant value(
-    I18nCoreApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_PIXEL
-    )
-  );
-
-  m_Pixel =
-    !value.isValid()
-    ? PIXEL_GLSL
-    : static_cast< Pixel >( value.toInt() );
   }
 }
 
@@ -710,22 +696,6 @@ ImageViewRenderer
 
 	// Tile-size
 	imageActor->SetTileSize( ctxt->m_TileSize );
-
-	// Pixel color-mode.
-	switch( ctxt->m_Pixel )
-	  {
-	  case PIXEL_OTB:
-	    imageActor->SoftwareRenderingOn();
-	    break;
-
-	  case PIXEL_GLSL:
-	    imageActor->SoftwareRenderingOff();
-	    break;
-
-	  default:
-	    assert( false && "Unexpected Pixel enum value." );
-	    break;
-	  }
 	}
 
 	//

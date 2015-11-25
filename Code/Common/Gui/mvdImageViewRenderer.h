@@ -113,10 +113,6 @@ public:
 
     /**
      */
-    Pixel m_Pixel;
-
-    /**
-     */
     int m_TileSize;
 
 #if USE_VIEW_SETTINGS_SIDE_EFFECT

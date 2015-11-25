@@ -125,33 +125,6 @@ PreferencesDialog
     );
   }
 
-  {
-    QVariant value(
-      I18nApplication::Instance()->RetrieveSettingsKey(
-	I18nCoreApplication::SETTINGS_KEY_PIXEL
-      )
-    );
-
-    if( !value.isValid() )
-      m_UI->shaderRadioButton->setChecked( true );
-
-    else
-      switch( value.toInt() )
-	{
-	case PIXEL_OTB:
-	  m_UI->otbRadioButton->setChecked( true );
-	  break;
-
-	case PIXEL_GLSL:
-	  m_UI->shaderRadioButton->setChecked( true );
-	  break;
-
-	default:
-	  assert( false && "Unexpected Pixel enum value." );
-	  break;
-	}
-  }
-
   //
   // Elevation management settings.
   m_UI->srtmLineEdit->setText(
@@ -255,15 +228,6 @@ PreferencesDialog
   I18nApplication::Instance()->StoreSettingsKey(
     I18nCoreApplication::SETTINGS_KEY_TILE_SIZE,
     m_UI->tileSizeSpinBox->value()
-  );
-
-  I18nApplication::Instance()->StoreSettingsKey(
-    I18nCoreApplication::SETTINGS_KEY_PIXEL,
-      m_UI->shaderRadioButton->isChecked()
-      ? PIXEL_GLSL
-      : ( m_UI->otbRadioButton->isChecked()
-	  ? PIXEL_OTB
-	  : PIXEL_NONE )
   );
 
   //

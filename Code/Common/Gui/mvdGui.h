@@ -89,26 +89,6 @@ namespace mvd
 
 /**
  */
-enum Pixel
-{
-  PIXEL_NONE = -1,
-  //
-  PIXEL_OTB = 0,
-  PIXEL_GLSL,
-  //
-  PIXEL_COUNT
-};
-
-/**
- * Constant naming effect values.
- */
-Monteverdi_EXPORT
-extern
-char const * const
-PIXEL_NAME[ PIXEL_COUNT ];
-
-/**
- */
 enum Resolution
 {
   RESOLUTION_NONE = -1,

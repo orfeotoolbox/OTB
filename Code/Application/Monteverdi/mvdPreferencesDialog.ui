@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>445</width>
-    <height>356</height>
+    <height>328</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -125,19 +125,6 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="pixelLabel">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Pixel</string>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="resolutionLabel">
           <property name="sizePolicy">
@@ -161,20 +148,6 @@
           </property>
           <property name="maximum">
            <number>4096</number>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QRadioButton" name="otbRadioButton">
-          <property name="text">
-           <string>OTB filter</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QRadioButton" name="shaderRadioButton">
-          <property name="text">
-           <string>OpenGL shader</string>
           </property>
          </widget>
         </item>
