@@ -439,7 +439,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
         MXEROOT \"${mxeroot}\"
         PREFIX_DIR \"${archive_name}\"
         PEFILES \"${pefiles}\"
-        USE_QT4 1
+        WITH_OTBGUI 1
         SEARCHDIRS \"\")")
 
     add_custom_target(configure-mingw
@@ -456,7 +456,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
     find_program(ZIP_EXECUTABLE zip)
 
     if(ZIP_EXECUTABLE)
-      add_custom_target(package-mingw
+      add_custom_target(packages
         COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
         WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
         DEPENDS prepare-mingw)

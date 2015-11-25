@@ -1,9 +1,9 @@
 macro(package_mingw)
-  cmake_parse_arguments(PACKAGE  "" "PREFIX_DIR;ARCH;MXEROOT;USE_QT4" "SEARCHDIRS;PEFILES" ${ARGN} )
+  cmake_parse_arguments(PACKAGE  "" "PREFIX_DIR;ARCH;MXEROOT;WITH_OTBGUI" "SEARCHDIRS;PEFILES" ${ARGN} )
 
   list(APPEND PACKAGE_PEFILES ${CMAKE_INSTALL_PREFIX}/bin/otbApplicationLauncherCommandLine.exe)
   list(APPEND PACKAGE_PEFILES ${CMAKE_INSTALL_PREFIX}/bin/otbTestDriver.exe)
-  if(PACKAGE_USE_QT4)
+  if(PACKAGE_WITH_OTBGUI)
     list(APPEND PACKAGE_PEFILES ${CMAKE_INSTALL_PREFIX}/bin/otbApplicationLauncherQt.exe)
   endif()
 
@@ -21,7 +21,7 @@ macro(package_mingw)
   list(APPEND PACKAGE_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/bin") #mvd
   list(APPEND PACKAGE_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/lib/otb/applications") #otb apps
 
-  install_common()
+  install_common(${PACKAGE_WITH_OTBGUI})
 
   file(GLOB otbapps_list ${CMAKE_INSTALL_PREFIX}/lib/otb/applications/otbapp_*dll) # /lib/otb
   list(APPEND PACKAGE_PEFILES ${otbapps_list})
@@ -136,7 +136,7 @@ function(process_deps infile)
    endif()
 endfunction()
 
-function(install_common)
+function(install_common with_otbgui)
   set(APP_PREFIX_DIR "${PACKAGE_PREFIX_DIR}")
   set(APP_BIN_DIR "${APP_PREFIX_DIR}/bin")
   set(APP_OTBLIBS_DIR "${APP_PREFIX_DIR}/lib/otb")
@@ -172,7 +172,7 @@ function(install_common)
       DESTINATION ${APP_BIN_DIR})
   endforeach()
 
-  if(OTB_USE_QT4)
+  if(with_otbgui)
     file(GLOB GUI_SCRIPTS ${CMAKE_INSTALL_PREFIX}/bin/otbgui*)
     foreach(GUI_SCRIPT ${GUI_SCRIPTS})
       install(
