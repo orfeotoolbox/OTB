@@ -37,8 +37,8 @@ else()
     
      ExternalProject_Add(${proj}_build
       PREFIX ${proj}
-      URL "http://download.osgeo.org/libtiff/tiff-4.0.3.tar.gz"
-      URL_MD5 051c1068e6a0627f461948c365290410
+      URL "http://download.osgeo.org/libtiff/tiff-4.0.6.tar.gz"
+      URL_MD5 d1d2e940dea0b5ad435f21f03d96dd72
       SOURCE_DIR ${TIFF_SB_SRC}
       BINARY_DIR ${TIFF_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -69,8 +69,8 @@ else()
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "http://download.osgeo.org/libtiff/tiff-4.0.3.tar.gz"
-      URL_MD5 051c1068e6a0627f461948c365290410
+      URL "http://download.osgeo.org/libtiff/tiff-4.0.6.tar.gz"
+      URL_MD5 d1d2e940dea0b5ad435f21f03d96dd72
       BINARY_DIR ${TIFF_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

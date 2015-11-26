@@ -45,8 +45,8 @@ else()
 
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.0.tar.gz"
-      URL_MD5 efa7b418bc00228fcda4da63557e40c2
+      URL "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.1.tar.gz"
+      URL_MD5 48bdf817e6e7a37671cc1f41b01e10fc
       BINARY_DIR ${GEOTIFF_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -70,8 +70,8 @@ else()
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.0.tar.gz"
-      URL_MD5 efa7b418bc00228fcda4da63557e40c2
+      URL "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.1.tar.gz"
+      URL_MD5 48bdf817e6e7a37671cc1f41b01e10fc
       BINARY_DIR ${GEOTIFF_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -85,9 +85,9 @@ else()
       BUILD_COMMAND $(MAKE) bin_PROGRAMS=
       INSTALL_COMMAND $(MAKE) install bin_PROGRAMS=
       DEPENDS ${${proj}_DEPENDENCIES}
-      PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
-        ${CMAKE_SOURCE_DIR}/patches/${proj}/configure
-        ${GEOTIFF_SB_SRC}
+      #PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
+      #  ${CMAKE_SOURCE_DIR}/patches/${proj}/configure
+      #  ${GEOTIFF_SB_SRC}
       )
     
     ExternalProject_Add_Step(${proj} copy_source
