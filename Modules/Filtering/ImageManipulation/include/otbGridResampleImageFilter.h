@@ -152,9 +152,37 @@ protected:
 
   virtual void AfterThreadedGenerateData();
 
-  virtual OutputPixelType CastPixelWithBoundsChecking( const InterpolatorOutputType value,
-                                                       const InterpolatorComponentType minComponent,
-                                                       const InterpolatorComponentType maxComponent) const;
+  inline OutputPixelType CastPixelWithBoundsChecking( const InterpolatorOutputType& value,
+                                                       const InterpolatorComponentType& minComponent,
+                                                       const InterpolatorComponentType& maxComponent) const
+  {
+    // Method imported from itk::ResampleImageFilter
+    const unsigned int nComponents = InterpolatorConvertType::GetNumberOfComponents(value);
+    OutputPixelType outputValue;
+    
+    itk::NumericTraits<OutputPixelType>::SetLength( outputValue, nComponents );
+    
+    for (unsigned int n=0; n<nComponents; n++)
+      {
+      InterpolatorComponentType component = InterpolatorConvertType::GetNthComponent( n, value );
+      
+      if ( m_CheckOutputBounds && component < minComponent )
+        {
+        OutputPixelConvertType::SetNthComponent( n, outputValue, static_cast<OutputPixelComponentType>( minComponent ) );
+        }
+      else if ( m_CheckOutputBounds && component > maxComponent )
+        {
+        OutputPixelConvertType::SetNthComponent( n, outputValue, static_cast<OutputPixelComponentType>( maxComponent ) );
+        }
+      else
+        {
+        OutputPixelConvertType::SetNthComponent(n, outputValue,
+                                                static_cast<OutputPixelComponentType>( component ) );
+        }
+      }
+    
+    return outputValue;
+  }
   
   
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -176,6 +204,12 @@ private:
   
   InterpolatorPointerType m_Interpolator;        // Interpolator used
                                                  // for resampling
+
+  OutputImageRegionType   m_ReachableOutputRegion; // Internal
+                                                   // variable for
+                                                   // speed-up. Computed
+                                                   // in BeforeThreadedGenerateData
+  
 };
 
 } // namespace otb

@@ -24,7 +24,7 @@
 
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
-#include "itkImageRegionIteratorWithIndex.h"
+#include "itkImageScanlineIterator.h"
 
 namespace otb
 {
@@ -39,7 +39,8 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
     m_OutputSpacing(),
     m_EdgePaddingValue(),
     m_CheckOutputBounds(true),
-    m_Interpolator()
+    m_Interpolator(),
+    m_ReachableOutputRegion()
 {
   // Set linear interpolator as default
   m_Interpolator = dynamic_cast<InterpolatorType *>(DefaultInterpolatorType::New().GetPointer());
@@ -123,6 +124,8 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
   // Get output image requested region corners as Index
   outULIndex = outputRequestedRegion.GetIndex();
   outLRIndex = outULIndex+outputRequestedRegion.GetSize();
+  outLRIndex[0]-=1;
+  outLRIndex[1]-=1;
   
   // Transform to physiscal points
   PointType outULPoint,outLRPoint;
@@ -219,6 +222,38 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
       }
     }
 
+  // Compute ReachableOutputRegion
+  // InputImage buffered region corresponds to a region of the ouptut
+  // image. Computing it beforehand allows to save IsInsideBuffer
+  // calls in the interpolation loop
+  IndexType inUL = this->GetInput()->GetBufferedRegion().GetIndex();
+  IndexType inLR = this->GetInput()->GetBufferedRegion().GetIndex() + this->GetInput()->GetBufferedRegion().GetSize();
+  inLR[0]-=1;
+  inLR[1]-=1;
+  
+  PointType inULp, inLRp;
+  this->GetInput()->TransformIndexToPhysicalPoint(inUL,inULp);
+  this->GetInput()->TransformIndexToPhysicalPoint(inLR,inLRp);
+
+  ContinuousInputIndexType outUL;
+  ContinuousInputIndexType outLR;
+  this->GetOutput()->TransformPhysicalPointToContinuousIndex(inULp,outUL);
+  this->GetOutput()->TransformPhysicalPointToContinuousIndex(inLRp,outLR);
+
+  IndexType outputIndex;
+  // This needs to take into account negative spacing
+  outputIndex[0] = vcl_floor(std::min(outUL[0],outLR[0]));
+  outputIndex[1] = vcl_floor(std::min(outUL[1],outLR[1]));
+
+  SizeType outputSize;
+  outputSize[0] = vcl_floor(std::max(outUL[0],outLR[0])) - outputIndex[0] + 1;
+  outputSize[1] = vcl_floor(std::max(outUL[1],outLR[1])) - outputIndex[1] + 1;
+
+  m_ReachableOutputRegion.SetIndex(outputIndex);
+  m_ReachableOutputRegion.SetSize(outputSize);
+
+  // Fill buffer with default value
+  this->GetOutput()->FillBuffer(m_EdgePaddingValue);
 }
 
 template <typename TInputImage, typename TOutputImage,
@@ -242,47 +277,59 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
   const InterpolatorComponentType maxOutputValue = static_cast< InterpolatorComponentType >( maxValue );
 
   // Iterator on the output region for current thread
-  itk::ImageRegionIteratorWithIndex<OutputImageType> outIt(outputPtr, outputRegionForThread);
+  OutputImageRegionType regionToCompute = outputRegionForThread;
+  regionToCompute.Crop(m_ReachableOutputRegion);
+
+  itk::ImageScanlineIterator<OutputImageType> outIt(outputPtr, regionToCompute);
 
   // Support for progress methods/callbacks
   itk::ProgressReporter progress( this,
-                             threadId,
-                             outputRegionForThread.GetNumberOfPixels() );
+                                  threadId,
+                                  regionToCompute.GetSize()[1]);
 
   // Temporary variables for loop
   PointType outPoint;
   ContinuousInputIndexType inCIndex;
-  InterpolatorOutputType interpolatorValue;
-  OutputPixelType outputValue;
+  InterpolatorOutputType interpolatorValue; //(this->GetOutput()->GetNumberOfComponentsPerPixel());
+  OutputPixelType outputValue; //(this->GetOutput()->GetNumberOfComponentsPerPixel());
+  double delta;
 
+  // TODO: assert outputPtr->GetSpacing() != 0 here
+  assert(outputPtr->GetSpacing()[0]!=0&&"Null spacing will cause division by zero.");
+  delta = outputPtr->GetSpacing()[0]/inputPtr->GetSpacing()[0];
   
   // Iterate through the output region
-  for(outIt.GoToBegin();!outIt.IsAtEnd();++outIt)
+  outIt.GoToBegin();
+  
+  while(!outIt.IsAtEnd())
     {
     // Map output index to input continuous index
     outputPtr->TransformIndexToPhysicalPoint(outIt.GetIndex(),outPoint);
     inputPtr->TransformPhysicalPointToContinuousIndex(outPoint,inCIndex);
 
-    // If inside buffer
-    if(m_Interpolator->IsInsideBuffer(inCIndex))
+    while(!outIt.IsAtEndOfLine())
       {
       // Interpolate
       interpolatorValue = m_Interpolator->EvaluateAtContinuousIndex(inCIndex);
-
+      
       // Cast and check bounds
       outputValue = this->CastPixelWithBoundsChecking(interpolatorValue,minOutputValue,maxOutputValue);
-
+  
       // Set output value
       outIt.Set(outputValue);
-      }
-    else
-      {
-      // Else output is EdgePaddingValue
-      outIt.Set(m_EdgePaddingValue);
-      }
 
-    // Report progress
-    progress.CompletedPixel();
+      // move one pixel forward
+      ++outIt;
+
+      // Update input position
+      inCIndex[0]+=delta;
+      }
+    
+      // Report progress
+      progress.CompletedPixel();
+
+      // Move to next line
+      outIt.NextLine();
     }
 
 }
@@ -296,47 +343,6 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
   // Disconnect input image from the interpolator
   m_Interpolator->SetInputImage(ITK_NULLPTR);
 }
-
-/**
- * Cast from interpolator output to pixel type
- */
-template< typename TInputImage, typename TOutputImage,
-          typename TInterpolatorPrecision >
-typename GridResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecision >
-::OutputPixelType
-GridResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecision >
-::CastPixelWithBoundsChecking(const InterpolatorOutputType value,
-                              const InterpolatorComponentType minComponent,
-                              const InterpolatorComponentType maxComponent ) const
-{
-  // Method imported from itk::ResampleImageFilter
-  const unsigned int nComponents = InterpolatorConvertType::GetNumberOfComponents(value);
-  OutputPixelType outputValue;
-
-  itk::NumericTraits<OutputPixelType>::SetLength( outputValue, nComponents );
-
-  for (unsigned int n=0; n<nComponents; n++)
-    {
-    InterpolatorComponentType component = InterpolatorConvertType::GetNthComponent( n, value );
-
-    if ( m_CheckOutputBounds && component < minComponent )
-      {
-      OutputPixelConvertType::SetNthComponent( n, outputValue, static_cast<OutputPixelComponentType>( minComponent ) );
-      }
-    else if ( m_CheckOutputBounds && component > maxComponent )
-      {
-      OutputPixelConvertType::SetNthComponent( n, outputValue, static_cast<OutputPixelComponentType>( maxComponent ) );
-      }
-    else
-      {
-      OutputPixelConvertType::SetNthComponent(n, outputValue,
-                                        static_cast<OutputPixelComponentType>( component ) );
-      }
-    }
-
-  return outputValue;
-}
-
 
 
 template <typename TInputImage, typename TOutputImage,
