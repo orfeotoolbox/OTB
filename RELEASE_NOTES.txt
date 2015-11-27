@@ -25,15 +25,24 @@ OTB-v.5.2.0 - Changes since version 5.0.0 (2015/11/02)
 
   * SuperBuild
     * Provide a script to build the all-in-one SuperBuild archive (RFC-5)
+    * Upgrade dependencies versions in SuperBuild (RFC-19)
     * New dependency : Freetype 2.6
-    * ITK 4.7.1 -> 4.8
+    * ITK 4.7.1 -> 4.8.1
     * JPEG v9a -> turbo 1.4.1
     * OpenThreads 3.2 -> 3.4
-    * Ossim r23092 -> r23537
+    * Ossim r23092 -> 1.8.20-1
+    * GeoTIFF 1.4.0 -> 1.4.1
+    * muParser 2.2.3 -> 2.2.5
+    * OpenCV 2.4.10 -> 2.4.11
+    * OpenSSL 1.0.1e -> 1.0.1p
+    * Qt 4.8.6 -> 4.8.7
+    * Swig 3.0.5 -> 3.0.7
+    * TIFF 4.0.3 -> 4.0.6
 
 * Bug fixed:
 
   * Monteverdi2
+    * 0001100: Crash when trying to Apply same parameters (dynamic, effects, color map...) on images with different number of bands
     * 0001072: I18nCoreApplication::ElevationSetup() exceptions not displayed
     * 0001070: otb::DEMHandler not updated properly when resetting DEM-directory and/or Geoid-file.
 
@@ -41,21 +50,35 @@ OTB-v.5.2.0 - Changes since version 5.0.0 (2015/11/02)
     * 0001049: Last Monteverdi2 and Mapla release Win package crash when we try to import JP2 file
 
   * Orfeo Toolbox (OTB)
+    * 0001093: CMake with Ninja generator configure fails when OTB_USE_QT4=ON
+    * 0001092: ITK (4.7.1) provided by SuperBuild do not compile with GCC version > 5
+    * 0001090: SuperBuild Openthread download link broken
+    * 0001088: Fedora 22 copr repo for OTB
     * 0001084: Deactivate all 3rd part components in OpenCV configuration
     * 0001081: GDAL RPC tags export prevent correct export of wkt in ortho-rectified image
+    * 0001080: there are some characters can not be recognized, which make compile errors
     * 0001077: Superbuild: Broken open scene graph archive link
-    * 0001069: Unable to install gdal python bindings in custom install directory with OTB Superbuild
-    * 0001065: Buiild OTB Examples based on available modules in OTB installation
     * 0001075: prTeEstimateRPCSensorModelExampleTest  always failing in examples
     * 0001074: Missing ITCopyright.txt in OTB sources
+    * 0001069: Unable to install gdal python bindings in custom install directory with OTB Superbuild
+    * 0001068: crash in otbcli_LSMSSegmentation
     * 0001066: missing file(Capitole-Shadows) from OTB-Data
+    * 0001065: Buiild OTB Examples based on available modules in OTB installation
+    * 0001056: ComputeImagesStatistics applications produces incorrect std
     * 0001055: SuperBuild builds ogr2ogr without sqlite driver
 
   * OTB-lib
+    * 0001098: Exception raised when typing in input process XML parameter
+    * 0001097: Cannot manually type in input vector data line-edit.
     * 0001085: Add a ::GetInput() accessor  to QtWidgetOutputImage/FilenameParameter
     * 0001083: Extended filename parameters not updated when calling ImageFileReader<>::SetFileName() several times
+    * 0001082: ImageFileReader<> crashes after ApplicationRegistry::RefreshApplicationFactories() is called
     * 0001078: Exception thrown (OTB-Ice) when opening image without projection info
     * 0001071: Add otb::DEMHandler ::ClearDEMDirectory() and ::ClearGeoidFile() interface.
+
+  * OTB-applications
+    * 0001076: Application ComputeImagesStatistics gives wrong standard deviation
+    * 0001059: Input and output image parameters require absolute path
 
 
 OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
