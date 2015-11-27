@@ -1276,7 +1276,7 @@ void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOp
     return;
     }
 
-  fprintf(fpOut, "OGRFeature:%ld\n", feature->GetFID());
+  fprintf(fpOut, "OGRFeature:%lld\n", (GIntBig) feature->GetFID());
 
   const char* pszDisplayFields =
     CSLFetchNameValue(papszOptions, "DISPLAY_FIELDS");
