@@ -52,5 +52,7 @@ St\'ephane Albert (CS)
 David Youssefi  (CNES Intern, then CS)
 Mohammed Rashad (CNES Intern, then CS)
 Remi Cresson (Irstea)
+Laurentiu Nicola (CS Romania)
+Victor Poughon (CNES)
 
 
