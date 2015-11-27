@@ -720,7 +720,7 @@ QtWidgetView
 
 	emit OTBApplicationOutputImageChanged(
 	  QString( otbApp->GetName() ),
-	  QString( outputParam->GetFileName() )
+	  QFile::decodeName( outputParam->GetFileName() )
 	);
 	/*
 	}

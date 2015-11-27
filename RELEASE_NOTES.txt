@@ -1,6 +1,89 @@
-==========================
- Monteverdi2 Release Note
-==========================
+=========================
+ Monteverdi Release Note
+=========================
+
+Monteverdi 3.0.0 - Changes since version 0.8.1 (June 1st, 2015)
+===============================================================
+
+* Versionning
+  - Monteverdi2 discontinued and becomes Monteverdi 3.0.0
+  - MApLa (Monteverdi Application Launcher) has been created.
+
+* Repository data
+  - The cache directory and persitent database has been abandonned: Monteverdi 3 works more like a viewer than a catalogue.
+
+* OTB-application features
+  - OTB-applications are now loaded on demand via the File/Load OTB-applications menu item.
+  - The OTB-applications browser dock-widget is now floating by default but can still be docked.
+  - OTB-applications pannels are now opened as pop-up dialogs (same as in OTB) instead of being tabbed.
+
+* GUI features
+
+  - Internationalization:
+    + Updated French translation.
+
+  - Color dynamics:
+    + Added alpha (translucency) control.
+
+  - Multi-image management:
+    + Several images can be loaded and viewed simultaneously.
+    + Added layer-stack dock-widget to manage layers (order, delete, drop from file manager etc.) and display some information (sensor-mode, mutli-resolution pyramid level, effect, index undex cursor, pixel intensities for RGB bands, physical position under cursor).
+
+  - Rendering/Image navigation:
+    + Dynamic reprojection of all images in projection of selected image.
+    + Added per-layer dynamic mouse-cursor effects (chessboard, gradient, local contrast, local translucency, spectral angle, swipe).
+    + Improved zooming functions (zoom to overall extent, zoom to layer extent, zoom to 1:1 scale).
+    + Added keyboard & mouse shortcuts to improve interactive navigation & edit per-layer effects (see Help/Keymap... menu item).
+
+  - Miscellaneous UI features:
+    + Added rendering preferences (level of multi-resolution pyramid algorithm, image tile-size).
+    + Added Help/Keymap... documentation.
+    + Added save/restore window layout.
+
+* Mapla features
+  - Standalone program
+  - Consists of a main-window containing the OTB-application browser
+  - Ability to launch several OTB-application pannels as pop-up dialogs.
+
+* Bugfixes:
+  - MANTIS-1104: Crash as soon as I open an image
+    (http://bugs.orfeo-toolbox.org/view.php?id=1104)
+  - MANTIS-1100: Crash when trying to Apply same parameters (dynamic, effects, color map...) on images with different number of bands
+    (http://bugs.orfeo-toolbox.org/view.php?id=1100)
+  - MANTIS-1072: I18nCoreApplication::ElevationSetup() exceptions not displayed
+    (http://bugs.orfeo-toolbox.org/view.php?id=1072)
+  - MANTIS-1070: otb::DEMHandler not updated properly when resetting DEM-directory and/or Geoid-file
+    (http://bugs.orfeo-toolbox.org/view.php?id=1070)
+  - MANTIS-1064: Exception thrown () when moving image in layer-stack by drag-n-dropping
+    (http://bugs.orfeo-toolbox.org/view.php?id=1064)
+  - MANTIS-1015: libxml-dev dependency missing for libotb-dev
+    (http://bugs.orfeo-toolbox.org/view.php?id=1015)
+  - MANTIS-902: Report missing otbIce headers when building Monteverdi2
+    (http://bugs.orfeo-toolbox.org/view.php?id=902)
+  - MANTIS-894: Monteverdi 2 does not support LUM image format, contrary to Monteverdi 1
+    (http://bugs.orfeo-toolbox.org/view.php?id=894)
+  - MANTIS-1017: Missing gdal-bin dependency in package libotb-dev
+    (http://bugs.orfeo-toolbox.org/view.php?id=1017)
+  - MANTIS-1033: Crash when updating no data value in mv2
+    (http://bugs.orfeo-toolbox.org/view.php?id=1033)
+  - MANTIS-897: Most of OTB applications crash with JP2 image as input
+    (http://bugs.orfeo-toolbox.org/view.php?id=897)
+  - MANTIS-634: Steps of Quantiles spin-box are to coarse
+    (http://bugs.orfeo-toolbox.org/view.php?id=634)
+  - MANTIS-639: Using keyboard arrows with Monteverdi2 maximized grabs all keyboards events
+    (http://bugs.orfeo-toolbox.org/view.php?id=639)
+  - MANTIS-633: Can not edit spinner fields in Video Color Dynamics widget
+    (http://bugs.orfeo-toolbox.org/view.php?id=633)
+  - MANTIS-637: Displacements associated with vertical keyboard arrows are inverted with respect to Monteverdi 1.x
+    (http://bugs.orfeo-toolbox.org/view.php?id=637)
+  - MANTIS-636: Displacement related to keyboard arrows is to small
+    (http://bugs.orfeo-toolbox.org/view.php?id=636)
+  - MANTIS-645:  Viewport goes black or diminish when maximising or resizing the window after opening image
+    (http://bugs.orfeo-toolbox.org/view.php?id=645)
+  - MANTIS-646: Viewport is black or diminish when maximising or resizing the window before opening image
+    (http://bugs.orfeo-toolbox.org/view.php?id=646)
+  - MANTIS-654: When minimzing the window, all widgets are closed
+    (http://bugs.orfeo-toolbox.org/view.php?id=654)
 
 Monteverdi2-0.8.0 - Changes since version 0.6.0 (September 4th, 2014)
 =====================================================================
