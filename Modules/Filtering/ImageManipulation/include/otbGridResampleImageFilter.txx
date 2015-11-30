@@ -251,9 +251,6 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
 
   m_ReachableOutputRegion.SetIndex(outputIndex);
   m_ReachableOutputRegion.SetSize(outputSize);
-
-  // Fill buffer with default value
-  this->GetOutput()->FillBuffer(m_EdgePaddingValue);
 }
 
 template <typename TInputImage, typename TOutputImage,
@@ -279,6 +276,19 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
   // Iterator on the output region for current thread
   OutputImageRegionType regionToCompute = outputRegionForThread;
   regionToCompute.Crop(m_ReachableOutputRegion);
+
+  // Fill thread buffer
+  itk::ImageScanlineIterator<OutputImageType> outItFull(outputPtr,outputRegionForThread);
+  outItFull.GoToBegin();
+  while(!outItFull.IsAtEnd())
+    {
+    while(!outItFull.IsAtEndOfLine())
+      {
+      outItFull.Set(m_EdgePaddingValue);
+      ++outItFull;
+      }
+    outItFull.NextLine();
+    }
 
   itk::ImageScanlineIterator<OutputImageType> outIt(outputPtr, regionToCompute);
 
