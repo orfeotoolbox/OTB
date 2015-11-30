@@ -119,8 +119,11 @@ VectorImageModel
 
   qDebug()
     << this << "\n"
-    << "\tQString:" << GetFilename()
-    << "\tstd::string" << QFile::encodeName( GetFilename() );
+    << "\tQString:" << GetFilename();
+
+  std::cout
+    << "\tstd::string: " << QFile::encodeName( GetFilename() ).constData()
+    << std::endl;
 
   m_ImageFileReader->SetFileName( QFile::encodeName( GetFilename() ) );
   m_ImageFileReader->UpdateOutputInformation();
