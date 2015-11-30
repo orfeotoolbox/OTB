@@ -24,6 +24,8 @@
 #include "itkIdentityTransform.h"
 #include "itkTestingComparisonImageFilter.h"
 
+#include "otbImageFileWriter.h"
+
 int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
 
@@ -53,6 +55,9 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   size.Fill(100);
 
   randomImageSource->SetSize(size);
+  randomImageSource->SetMin(0);
+  randomImageSource->SetMax(1000);
+  
   randomImageSource->Update();
 
   filter->SetInput(randomImageSource->GetOutput());
@@ -98,6 +103,12 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
     {
     std::cerr<<"Output of itk::GridResampleImageFilter does not match output of itk::ResampleImageFilter with same parameters"<<std::endl;
 
+    typedef otb::ImageFileWriter<ImageType> WriterType;
+    WriterType::Pointer writer = WriterType::New();
+    writer->SetInput(comparisonFilter->GetOutput());
+    writer->SetFileName("otbGridResampleImageFilterTestOutput.tif");
+    writer->Update();
+    
     return EXIT_FAILURE;
     }
   
