@@ -39,7 +39,12 @@ QtWidgetInputFilenameParameter::~QtWidgetInputFilenameParameter()
 void QtWidgetInputFilenameParameter::DoUpdateGUI()
 {
   // Update the lineEdit
-  QString text( m_FilenameParam->GetValue().c_str() );
+  QString text(
+    QFile::decodeName(
+      m_FilenameParam->GetValue().c_str()
+    )
+  );
+
   if (text != m_Input->text())
     m_Input->setText(text);
 }
@@ -109,7 +114,8 @@ void QtWidgetInputFilenameParameter::SelectFile()
 
   if (fileDialog.exec())
     {
-    this->SetFileName(fileDialog.selectedFiles().at(0));
+    this->SetFileName( fileDialog.selectedFiles().at(0) );
+
     m_Input->setText(fileDialog.selectedFiles().at(0));
     }
 }
@@ -117,7 +123,9 @@ void QtWidgetInputFilenameParameter::SelectFile()
 void QtWidgetInputFilenameParameter::SetFileName(const QString& value)
 {
   // save value
-  m_FilenameParam->SetValue(value.toAscii().constData());
+  m_FilenameParam->SetValue(
+    QFile::encodeName( value ).constData()
+  );
 
   // notify of value change
   QString key( m_FilenameParam->GetKey() );

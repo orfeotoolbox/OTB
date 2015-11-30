@@ -94,7 +94,7 @@ void QtWidgetOutputVectorDataParameter::SelectFile()
 void QtWidgetOutputVectorDataParameter::SetFileName(const QString& value)
 {
   // save value
-  m_FileName = value.toAscii().constData();
+  m_FileName = QFile::encodeName( value ).constData();
 
   m_OutputVectorDataParam->SetFileName(m_FileName);
 

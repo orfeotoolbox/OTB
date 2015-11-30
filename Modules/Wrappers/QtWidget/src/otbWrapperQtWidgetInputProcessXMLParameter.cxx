@@ -37,7 +37,10 @@ void QtWidgetInputProcessXMLParameter::DoUpdateGUI()
   if (m_XMLParam->HasUserValue())
     {
     // Update the lineEdit
-    QString text( m_XMLParam->GetFileName() );
+    QString text(
+      QFile::decodeName( m_XMLParam->GetFileName() )
+    );
+
     if (text != m_Input->text())
       m_Input->setText(text);
     }
@@ -90,9 +93,11 @@ void QtWidgetInputProcessXMLParameter::SelectFile()
   if (fileDialog.exec())
     {
     QString name = fileDialog.selectedFiles().at(0);
+
     if( !name.isEmpty() )
       {
-      this->SetFileName(name);
+      this->SetFileName( name );
+
       m_Input->setText(name);
       }
     }
@@ -101,7 +106,8 @@ void QtWidgetInputProcessXMLParameter::SelectFile()
 void QtWidgetInputProcessXMLParameter::SetFileName(const QString& value)
 {
   // load xml file name
-  if (m_XMLParam->SetFileName(value.toAscii().constData()))
+  if( m_XMLParam->SetFileName(
+	QFile::encodeName( value ).constData() ) )
     {
     // notify of value change
     QString key( m_XMLParam->GetKey() );

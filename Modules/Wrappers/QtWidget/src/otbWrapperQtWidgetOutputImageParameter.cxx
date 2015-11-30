@@ -38,7 +38,10 @@ void QtWidgetOutputImageParameter::DoUpdateGUI()
   // Update the lineEdit
   if (m_Input->text() != m_OutputImageParam->GetFileName())
     {
-    m_Input->setText(m_OutputImageParam->GetFileName());
+    m_Input->setText(
+      QFile::decodeName( m_OutputImageParam->GetFileName() )
+    );
+
     m_ComboBox->setCurrentIndex(m_OutputImageParam->GetPixelType());
     }
 }
@@ -113,7 +116,7 @@ void QtWidgetOutputImageParameter::SelectFile()
 void QtWidgetOutputImageParameter::SetFileName(const QString& value)
 {
   // save value
-  m_FileName = value.toAscii().constData();
+  m_FileName = QFile::encodeName( value ).constData();
 
   m_OutputImageParam->SetFileName(m_FileName);
 
