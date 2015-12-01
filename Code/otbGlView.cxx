@@ -214,6 +214,8 @@ void GlView::LightRender()
     if(actIt != m_Actors.end() && actIt->second->GetVisible())
       {
       actIt->second->Render();
+
+      actIt->second->GeometryChangedOff();
       }
     }
 }

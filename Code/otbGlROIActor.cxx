@@ -56,6 +56,29 @@ GlROIActor::GlROIActor()
 GlROIActor::~GlROIActor()
 {}
 
+
+void
+GlROIActor
+::SetUL( const PointType & p )
+{
+  if( p!=m_UL )
+    GeometryChangedOn();
+
+  m_UL = p;
+}
+
+
+void
+GlROIActor
+::SetLR( const PointType & p )
+{
+  if( p!=m_LR )
+    GeometryChangedOn();
+
+  m_LR = p;
+}
+
+
 void GlROIActor::SetKwl(const ImageKeywordlistType & kwl)
 {
   m_Kwl = kwl;
@@ -77,7 +100,10 @@ void GlROIActor::ProcessViewSettings()
   ViewSettings::ConstPointer settings = this->GetSettings();
 
   
-  if((m_ViewportToImageTransform.IsNull() || m_ImageToViewportTransform.IsNull()) || (settings->GetUseProjection() || settings->GetGeometryChanged()))
+  if( ( m_ViewportToImageTransform.IsNull() ||
+	m_ImageToViewportTransform.IsNull() ) ||
+      ( settings->GetUseProjection() ||
+	settings->GetGeometryChanged() ) )
     {
     UpdateTransforms();
 
