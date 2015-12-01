@@ -613,7 +613,9 @@ ImageViewRenderer
   assert( context!=NULL );
 
   StackedLayerModel * stackedLayerModel = GetLayerStack();
-  assert( stackedLayerModel!=NULL );
+
+  if( stackedLayerModel==NULL )
+    return;
 
   /*
   otb::GlImageActor::Pointer refImageActor(
