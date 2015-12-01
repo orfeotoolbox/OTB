@@ -108,7 +108,7 @@ int otbAmplitudeFunctorTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
       funct.SetChannelList(channels);
       output = funct.operator ()(rgbaPixel);
       result = vcl_sqrt(rgbaPixel[i] * rgbaPixel[i] + rgbaPixel[j] * rgbaPixel[j]);
-      if( abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
+      if( std::abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
         {
           std::cout << "vectorPixelType Test RGBAPixelType failed for channels " << i<< " and "
               << j << " !" << std::endl;
