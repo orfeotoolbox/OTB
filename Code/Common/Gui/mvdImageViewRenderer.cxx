@@ -132,11 +132,6 @@ ImageViewRenderer
 #endif // _WIN32
   // m_ModelActorPairs(),
 {
-  // assert( !m_GlView.IsNull() );
-
-  // assert( m_GlView->GetSettings()!=NULL );
-  // m_GlView->GetSettings()->SetUseProjection( true );
-
 #ifdef _WIN32
   m_ReferencePair.first = NULL;
   // m_ReferencePair.second is initialized by otb::GlActor::Pointer default constructor.
@@ -210,7 +205,6 @@ ImageViewRenderer
   //
   // Construct message.
   QString message(
-    // tr( "Current OpenGL version is '%1' supporting GLSL version '%2'.\nRequired OpenGL version is '%3' with Shading-Laguage version '%4'.\nPlease upgrade your graphics driver and hardware for the application to run properly on this platform.\nUsing the application on this platform may lead to unknown behaviour. Would you still like to continue using the application?" )
     tr( "Current OpenGL version is '%1' supporting OpenGL Shading-Language (GLSL) version '%2'.\nRequired OpenGL version is at least '%3' with GLSL version at least '%4'.\nPlease upgrade your graphics driver and/or hardware for the application to run properly on this platform.\nIf you are running the application under some remote-desktop service, runtime OpenGL and GLSL versions may differ from those running directly on remote platform.\nPlease contact your system administrator.\nApplication will now exit!" )
     .arg( glVersion )
     .arg( glslVersion )
@@ -360,18 +354,6 @@ ImageViewRenderer
   // qDebug() << "{";
 
   // qDebug() << m_GlView.GetPointer();
-
-  /*
-  //
-  // Get appropriate rendering-context.
-  assert( c==dynamic_cast< RenderingContext* >( c ) );
-  RenderingContext* context = dynamic_cast< RenderingContext* >( c );
-  assert( context!=NULL );
-
-  //
-  // Set view settings.
-  m_GlView->SetSettings( context->m_ViewSettings );
-  */
 
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING && 0
 
@@ -588,12 +570,6 @@ ImageViewRenderer
 
   if( stackedLayerModel==NULL )
     return;
-
-  /*
-  otb::GlImageActor::Pointer refImageActor(
-    GetReferenceActor< otb::GlImageActor >()
-  );
-  */
 
   for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
        it!=stackedLayerModel->End();
