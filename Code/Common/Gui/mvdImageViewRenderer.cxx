@@ -342,39 +342,11 @@ ImageViewRenderer
 {
   // qDebug() << this << "::ResizeGL(" << width << "," << height << ")";
 
-  /*
-  // Should be done here and not in OTB-Ice render routine.
-  glViewport(
-    0,
-    0,
-    static_cast< GLint >( width ),
-    static_cast< GLint >( height )
-  );
-  */
-
   assert( !m_GlView.IsNull() );
 
   // qDebug() << m_GlView.GetPointer();
 
   m_GlView->Resize( width, height );
-
-  /*
-  glViewport(
-    0, 0,
-    static_cast< GLint >( width ), static_cast< GLint >( height )
-  );
-
-  glMatrixMode( GL_MODELVIEW );
-  glLoadIdentity();
-
-  glMatrixMode( GL_PROJECTION );
-  glLoadIdentity();
-  glOrtho(
-    0, static_cast< GLint >( width ),
-    0, static_cast< GLint >( height ),
-    0, 1
-  );
-  */
 }
 
 /*****************************************************************************/
