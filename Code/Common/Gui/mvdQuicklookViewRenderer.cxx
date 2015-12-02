@@ -169,18 +169,6 @@ QuicklookViewRenderer
   m_GlRoiActor->SetAlpha( 0.2 );
 
   m_GlView->MoveActorToEndOfRenderingOrder( key, true );
-
-#if 0
-  otb::GlImageActor::Pointer referenceGlImageActor(
-    GetReferenceActor< otb::GlImageActor >()
-  );
-
-  if( referenceGlImageActor.IsNull() )
-    return;
-
-  m_GlRoiActor->SetKwl( referenceGlImageActor->GetKwl() );
-  m_GlRoiActor->SetWkt( referenceGlImageActor->GetWkt() );
-#endif
 }
 
 /*****************************************************************************/
