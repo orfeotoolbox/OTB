@@ -96,13 +96,14 @@ void GlROIActor::GetExtent(double & ulx, double & uly, double & lrx, double & lr
 
 void GlROIActor::ProcessViewSettings()
 {
-  // Is there anything to do ?
-  ViewSettings::ConstPointer settings = this->GetSettings();
+  std::cout << std::hex << this << "::ProcessViewSettings()" << std::endl;
 
   UpdateTransforms();
 
   if( GetGeometryChanged() )
     {
+    std::cout << std::hex << this << "ROI" << std::endl;
+
     PointType ur;
     PointType ll;
 
@@ -159,7 +160,7 @@ void GlROIActor::UpdateTransforms()
   // std::cout << std::hex << this << "::UpdateTransforms()" << std::endl;
 
   // Retrieve settings
-  ViewSettings::ConstPointer settings = this->GetSettings();
+  ViewSettings::ConstPointer settings( this->GetSettings() );
 
   if( settings->GetUseProjection() )
     {
