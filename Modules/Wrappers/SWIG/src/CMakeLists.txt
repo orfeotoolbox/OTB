@@ -84,7 +84,12 @@ if ( OTB_WRAP_JAVA )
        OTBApplicationEngine)
   SWIG_add_module ( otbApplicationJava java otbApplication.i otbApplicationJAVA_wrap.cxx)
   SWIG_link_libraries(otbApplicationJava OTBApplicationEngine )
-  set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationJAVA_wrap.cxx COMPILE_FLAGS "-w")
+  
+  if(MSVC)
+    set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationJAVA_wrap.cxx COMPILE_FLAGS "/wd4005" )
+  else()
+    set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationJAVA_wrap.cxx COMPILE_FLAGS "-w")
+  endif()
 
   # Add target for org.otb.Application.jar
   add_custom_target(org_otb_Application_jar ALL DEPENDS org.otb.application.jar)
