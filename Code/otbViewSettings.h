@@ -70,11 +70,11 @@ public:
   void SetWkt(const std::string & wkt)
   {
     // std::cout << "Wkt: '" << m_Wkt << "' -> '" << wkt << "'" << std::endl;    
-    std::cout << std::hex << this << "::SetWkt(" << (m_Wkt!=wkt) << ")" << std::endl;
+    // std::cout << std::hex << this << "::SetWkt(" << (m_Wkt!=wkt) << ")" << std::endl;
 
     if(m_Wkt != wkt)
       {
-      std::cout << "geometry-changed: TRUE" << std::endl;
+      // std::cout << "geometry-changed: TRUE" << std::endl;
 
       m_Wkt = wkt;
       m_GeometryChanged = true;
@@ -85,11 +85,11 @@ public:
 
   void SetUseProjection(bool usep)
   {
-    std::cout << std::hex << this << "::SetUseProjection(" << usep << ")" << std::endl;
+    // std::cout << std::hex << this << "::SetUseProjection(" << usep << ")" << std::endl;
 
     if(m_UseProjection != usep)
       {
-      std::cout << "geometry-changed: TRUE " << std::endl;
+      // std::cout << "geometry-changed: TRUE " << std::endl;
 
       m_UseProjection = usep;
       m_GeometryChanged = true;
@@ -104,11 +104,11 @@ public:
 
   void SetKeywordList(const KeywordListType& kwl)
   {
-    std::cout << std::hex << this << "::SetKeywordList()" << std::endl;
+    // std::cout << std::hex << this << "::SetKeywordList()" << std::endl;
 
     if(!(m_KeywordList==kwl))
       {
-      std::cout << "geometry-changed: TRUE" << std::endl;
+      // std::cout << "geometry-changed: TRUE" << std::endl;
 
       m_KeywordList = kwl;
       m_GeometryChanged = true;
