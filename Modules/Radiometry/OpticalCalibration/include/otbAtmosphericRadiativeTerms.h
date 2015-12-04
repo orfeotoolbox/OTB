@@ -181,7 +181,8 @@ public:
 
   typedef AtmosphericRadiativeTermsSingleChannel::Pointer ValueType;
   typedef std::vector<ValueType>                          VectorValueType;
-  typedef std::vector<double>                             DataVectorType;
+  typedef std::vector<double>                                DataVectorType;
+  typedef DataVectorType::size_type                      DataVectorSizeType;
   /**
    * Set/Get the values.
    */
@@ -255,7 +256,7 @@ public:
   const ValueType GetValueByIndex(unsigned int id) const;
 
   /** Initialization method.*/
-  void ValuesInitialization(unsigned int nbChannel);
+  void ValuesInitialization(DataVectorSizeType nbChannel);
 
 protected:
   /** Constructor */
