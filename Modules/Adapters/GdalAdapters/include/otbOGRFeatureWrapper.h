@@ -188,7 +188,7 @@ public:
    * \invariant <tt>m_Feature != 0</tt>
    * \sa \c OGRFeature::GetFieldCount()
    */
-  size_t GetSize() const;
+  int GetSize() const;
   /**
    * Read-Write access to the i-th field.
    * \invariant <tt>m_Feature != 0</tt>

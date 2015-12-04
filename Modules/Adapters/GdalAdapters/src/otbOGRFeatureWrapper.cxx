@@ -121,7 +121,7 @@ bool otb::ogr::operator==(otb::ogr::Feature const& lhs, otb::ogr::Feature const&
 /*===========================================================================*/
 /*================================[ Fields ]=================================*/
 /*===========================================================================*/
-size_t otb::ogr::Feature::GetSize() const {
+int otb::ogr::Feature::GetSize() const {
   return ogr().GetFieldCount();
 }
 

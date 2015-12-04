@@ -713,9 +713,9 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)
   l.CreateField(k_f5);
 
   ogr::Feature g0(defn);
-  const size_t NbFields = defn.GetFieldCount();
+  const int NbFields = defn.GetFieldCount();
   BOOST_CHECK_EQUAL(NbFields, g0.GetSize());
-  for (size_t i=0; i!=NbFields; ++i)
+  for (int i=0; i!=NbFields; ++i)
     {
     BOOST_ASSERT(!g0[i].HasBeenSet());
     }
