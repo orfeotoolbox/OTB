@@ -37,7 +37,7 @@ ObjectList<TObject>
 template <class TObject>
 void
 ObjectList<TObject>
-::Reserve(unsigned int size)
+::Reserve(InternalContainerSizeType size)
 {
   m_InternalContainer.reserve(size);
 }
@@ -46,7 +46,7 @@ ObjectList<TObject>
  * \return The capacity of the vector.
  */
 template <class TObject>
-unsigned int
+typename ObjectList<TObject>::InternalContainerSizeType
 ObjectList<TObject>
 ::Capacity(void) const
 {
@@ -57,7 +57,7 @@ ObjectList<TObject>
  * \return The number of elements in the vector.
  */
 template <class TObject>
-unsigned int
+typename ObjectList<TObject>::InternalContainerSizeType
 ObjectList<TObject>
 ::Size(void) const
 {
@@ -70,7 +70,7 @@ ObjectList<TObject>
 template <class TObject>
 void
 ObjectList<TObject>
-::Resize(unsigned int size)
+::Resize(InternalContainerSizeType size)
 {
   m_InternalContainer.resize(size);
 }
