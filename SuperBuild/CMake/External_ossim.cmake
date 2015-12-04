@@ -72,18 +72,33 @@ else()
     DEPENDS ${${proj}_DEPENDENCIES}
     )
 
-  if(MSVC)
-    ExternalProject_Add_Step(${proj} patch_ossim_src
-      COMMAND ${CMAKE_COMMAND} -E copy_directory
-      ${CMAKE_SOURCE_DIR}/patches/ossim/src ${OSSIM_SB_SRC}/ossim/src
-      DEPENDEES patch_ossim_include
-      DEPENDERS configure )
+  if(WIN32)
+    if(MSVC)
+      ExternalProject_Add_Step(${proj} patch_ossim_src
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/patches/ossim/src ${OSSIM_SB_SRC}/ossim/src
+        DEPENDEES patch_ossim_include
+        DEPENDERS configure )
 
-    ExternalProject_Add_Step(${proj} patch_ossim_include
-      COMMAND ${CMAKE_COMMAND} -E copy_directory
-      ${CMAKE_SOURCE_DIR}/patches/ossim/include ${OSSIM_SB_SRC}/ossim/include
+      ExternalProject_Add_Step(${proj} patch_ossim_include
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/patches/ossim/include ${OSSIM_SB_SRC}/ossim/include
+        DEPENDEES patch_ossim_cmake1
+        DEPENDERS patch_ossim_src )
+        
+    endif()
+    
+    ExternalProject_Add_Step(${proj} patch_ossim_cmake1
+      COMMAND ${CMAKE_COMMAND} -E copy
+      ${CMAKE_SOURCE_DIR}/patches/ossim/CMakeLists.txt ${OSSIM_SB_SRC}/ossim/
+      DEPENDEES patch_ossim_cmake2
+      DEPENDERS patch_ossim_include )
+      
+    ExternalProject_Add_Step(${proj} patch_ossim_cmake2
+      COMMAND ${CMAKE_COMMAND} -E copy
+      ${CMAKE_SOURCE_DIR}/patches/ossim/OssimUtilities.cmake ${OSSIM_SB_SRC}/ossim_package_support/cmake/CMakeModules
       DEPENDEES patch
-      DEPENDERS patch_ossim_src )
+      DEPENDERS patch_ossim_cmake1 )      
   endif()
 
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
