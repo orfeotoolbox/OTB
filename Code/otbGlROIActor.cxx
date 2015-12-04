@@ -96,13 +96,16 @@ void GlROIActor::GetExtent(double & ulx, double & uly, double & lrx, double & lr
 
 void GlROIActor::ProcessViewSettings()
 {
-  std::cout << std::hex << this << "::ProcessViewSettings()" << std::endl;
+  // std::cout << std::hex << this << "::ProcessViewSettings()" << std::endl;
 
   UpdateTransforms();
 
-  if( GetGeometryChanged() )
+  assert( GetSettings()!=NULL );
+
+  if( GetGeometryChanged() ||
+      GetSettings()->GetGeometryChanged() )
     {
-    std::cout << std::hex << this << "ROI" << std::endl;
+    std::cout << "otb::GlRoiActor@" << std::hex << this << " -> ROI" << std::endl;
 
     PointType ur;
     PointType ll;
@@ -166,7 +169,9 @@ void GlROIActor::UpdateTransforms()
     {
     if( settings->GetGeometryChanged() )
       {
-      // std::cout << "Proj: ON" << std::endl;
+      std::cout
+	<< "otb::GlROIActor@" << std::hex << this
+	<< " Proj: ON" << std::endl;
 
       m_ImageToViewportTransform = RSTransformType::New();
       m_ViewportToImageTransform = RSTransformType::New();
@@ -191,7 +196,9 @@ void GlROIActor::UpdateTransforms()
 	m_ImageToViewportTransform.IsNull() ||
 	m_ViewportToImageTransform.IsNull() )
       {
-      // std::cout << "Proj: OFF" << std::endl;
+      std::cout
+	<< "otb::GlROIActor@" << std::hex << this
+	<< " Proj: OFF" << std::endl;
 
       m_ImageToViewportTransform = RSTransformType::New();
       m_ViewportToImageTransform = RSTransformType::New();

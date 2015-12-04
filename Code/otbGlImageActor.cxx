@@ -907,7 +907,9 @@ void GlImageActor::UpdateTransforms()
       m_ViewportToImageTransform.IsNull() ||
       m_ImageToViewportTransform.IsNull())
     {
-    // std::cout << "Proj: OFF" << std::endl;
+    std::cout
+      << "otb::GlImageActor@" << std::hex << this
+      << " Proj: OFF" << std::endl;
 
     m_ViewportToImageTransform = RSTransformType::New();
     m_ImageToViewportTransform = RSTransformType::New();
@@ -929,7 +931,9 @@ void GlImageActor::UpdateTransforms()
 
   if(settings->GetUseProjection() && geometryChanged)
     {
-    // std::cout << "Proj: ON" << std::endl;
+    std::cout
+      << "otb::GlImageActor@" << std::hex << this
+      << " Proj: ON" << std::endl;
 
     m_ViewportToImageTransform = RSTransformType::New();
     m_ImageToViewportTransform = RSTransformType::New();
