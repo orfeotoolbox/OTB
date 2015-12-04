@@ -99,6 +99,8 @@ public:
   //
   // ImageViewManipulator overloads.
 
+  virtual ZoomType GetFixedZoomType() const;
+
   virtual
     void
     SetupRenderingContext(

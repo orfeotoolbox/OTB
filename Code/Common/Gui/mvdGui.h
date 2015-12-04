@@ -139,6 +139,19 @@ extern
 int
 TILE_SIZE_VALUE[ TILE_SIZE_COUNT ];
 
+/**
+ */
+enum ZoomType
+{
+  ZOOM_TYPE_NONE = -1,
+  //
+  ZOOM_TYPE_EXTENT,
+  ZOOM_TYPE_FULL,
+  ZOOM_TYPE_LAYER,
+  //
+  ZOOM_TYPE_COUNT
+};
+
 } // End of namespace 'mvd'.
 
 
