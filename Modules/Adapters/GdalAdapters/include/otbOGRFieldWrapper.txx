@@ -386,7 +386,7 @@ inline
 void otb::ogr::Field::CheckInvariants() const
 {
   assert(m_Feature && "OGR Fields must be associated to a valid feature");
-  assert(int(m_index) < m_Feature->GetFieldCount() && "Out-of-range index for a OGR field");
+  assert(m_index < m_Feature->GetFieldCount() && "Out-of-range index for a OGR field");
   assert(m_Feature->GetFieldDefnRef(m_index) && "No definition available for the OGR field");
 }
 
