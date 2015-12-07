@@ -52,6 +52,11 @@ namespace mvd
   Context comment for translator.
 */
 
+bool
+IsPathModified( I18nCoreApplication::SettingsKey,
+		bool,
+		I18nCoreApplication::SettingsKey,
+		const QString & );
 
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
@@ -59,18 +64,48 @@ namespace mvd
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
+/*****************************************************************************/
+bool
+IsPathModified( I18nCoreApplication::SettingsKey enabledKey,
+		bool isEnabled,
+		I18nCoreApplication::SettingsKey pathKey,
+		const QString & pathname )
+{
+  qDebug()
+    << "::IsPathModified("
+    << I18nApplication::Instance()->RetrieveSettingsKey( enabledKey ).toBool()
+    << ","
+    << isEnabled
+    << ","
+    << I18nApplication::Instance()->RetrieveSettingsKey(
+         pathKey
+       ).toString()
+    << ","
+    << pathname
+    << ")";
 
+  return
+    I18nApplication::Instance()->RetrieveSettingsKey( enabledKey ).toBool()
+    != isEnabled
+    ||
+    QDir(
+      I18nApplication::Instance()->RetrieveSettingsKey(
+	pathKey
+      ).toString()
+    )
+    != QDir( pathname );
+}
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
-/*******************************************************************************/
+/*****************************************************************************/
 PreferencesDialog
 ::PreferencesDialog( QWidget* parent, Qt::WindowFlags flags ) :
   QDialog( parent, flags ),
   m_UI( new mvd::Ui::PreferencesDialog() ),
   m_ResultsDirModified( false ),
-  m_ElevationSetupModified( false )
+  m_GeoidFileModified( false ),
+  m_SrtmDirModified( false )
 {
   assert( m_UI!=NULL );
   assert( I18nApplication::Instance()!=NULL );
@@ -99,7 +134,6 @@ PreferencesDialog
     )
     .toString()
   );
-
   //
   // Rendering settings.
   {
@@ -177,11 +211,16 @@ PreferencesDialog
     this, SLOT( close() )
   );
 
-  // qDebug() << "results-dir:" << m_ResultsDirModified;
-  // qDebug() << "Elevation-setup:" << m_ElevationSetupModified;
+  assert( !m_ResultsDirModified );
+  assert( !m_GeoidFileModified );
+  assert( !m_SrtmDirModified );
+
+  qDebug() << "results-dir:" << m_ResultsDirModified;
+  qDebug() << "geoid-file:" << m_GeoidFileModified;
+  qDebug() << "srtm-dir:" << m_SrtmDirModified;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 PreferencesDialog
 ::~PreferencesDialog()
 {
@@ -189,9 +228,9 @@ PreferencesDialog
   m_UI = NULL;
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
+/*****************************************************************************/
+/* SLOTS                                                                     */
+/*****************************************************************************/
 void
 PreferencesDialog
 ::on_buttonBox_accepted()
@@ -206,8 +245,6 @@ PreferencesDialog
       QDir::cleanPath( m_UI->resultDirPathLineEdit->text()
       )
     );
-   
-    m_ResultsDirModified = false;
     }
 
   I18nApplication::Instance()->StoreSettingsKey(
@@ -254,7 +291,7 @@ PreferencesDialog
 
   //
   // Elevation management settings.
-  if( m_ElevationSetupModified )
+  if( m_GeoidFileModified )
     {
     try
       {
@@ -277,121 +314,139 @@ PreferencesDialog
 	).arg( exception.what() )
       );
       }
- 
-      m_ElevationSetupModified = false;
     }
+
+  m_ResultsDirModified = false;
+  m_GeoidFileModified = false;
+  m_SrtmDirModified = false;
 
   close();
 }
 
-/*******************************************************************************/
-void
-PreferencesDialog
-::on_srtmCheckbox_clicked()
-{
-  m_UI->srtmLineEdit->setEnabled( m_UI->srtmCheckbox->isChecked() );
-  m_UI->srtmButton->setEnabled( m_UI->srtmCheckbox->isChecked() );
-
-  m_ElevationSetupModified = true;
-}
-
 /*****************************************************************************/
 void
 PreferencesDialog
-::on_srtmLineEdit_textChanged( const QString & )
+::on_srtmCheckbox_toggled( bool checked )
 {
-  m_ElevationSetupModified = true;
+  assert( m_UI!=NULL );
+
+  m_UI->srtmLineEdit->setEnabled( checked );
+  m_UI->srtmButton->setEnabled( checked );
+
+  m_SrtmDirModified =
+    IsPathModified(
+      I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE,
+      checked,
+      I18nCoreApplication::SETTINGS_KEY_SRTM_DIR,
+      m_UI->srtmLineEdit->text()
+    );
 }
 
-/*****************************************************************************/
+/***************************************************************************/
 void
 PreferencesDialog
-::on_geoidCheckbox_clicked()
+::on_srtmLineEdit_textChanged( const QString & text )
 {
-  m_UI->geoidLineEdit->setEnabled( m_UI->geoidCheckbox->isChecked() );
-  m_UI->geoidButton->setEnabled( m_UI->geoidCheckbox->isChecked() );
+  assert( m_UI!=NULL );
 
-  m_ElevationSetupModified = true;
+  m_SrtmDirModified = 
+    IsPathModified(
+      I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE,
+      m_UI->srtmCheckbox->isChecked(),
+      I18nCoreApplication::SETTINGS_KEY_SRTM_DIR,
+      text
+    );
 }
 
-/*****************************************************************************/
+/***************************************************************************/
 void
 PreferencesDialog
-::on_geoidLineEdit_textChanged( const QString & )
+::on_geoidCheckbox_toggled( bool checked )
 {
-  m_ElevationSetupModified = true;
+  m_UI->geoidLineEdit->setEnabled( checked );
+  m_UI->geoidButton->setEnabled( checked );
+
+  m_GeoidFileModified =
+    IsPathModified(
+      I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE,
+      checked,
+      I18nCoreApplication::SETTINGS_KEY_GEOID_PATH,
+      m_UI->geoidLineEdit->text()
+    );
 }
 
-/*****************************************************************************/
+/***************************************************************************/
+void
+PreferencesDialog
+::on_geoidLineEdit_textChanged( const QString & text )
+{
+  m_GeoidFileModified =
+    IsPathModified(
+      I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE,
+      m_UI->geoidCheckbox->isChecked(),
+      I18nCoreApplication::SETTINGS_KEY_GEOID_PATH,
+      text
+    );
+}
+
+/***************************************************************************/
 void
 PreferencesDialog
 ::on_srtmButton_clicked()
 {
-  while (true)
-    {
-    QString srtmDirStr = I18nMainWindow::GetExistingDirectory(
-        this,
-        tr("Select the directory containing DEM files."));
-    if (srtmDirStr.isEmpty())
-      { // User push default button => don't modify the value
-      break;
-      }
-    else
-      { // User select something, test if it is correct
-        QDir displayedDir (srtmDirStr);
-        m_UI->srtmLineEdit->setText(displayedDir.absolutePath());
-        m_ElevationSetupModified = true;
-        break;
-      }
-    }
+  QString srtmDir(
+    I18nMainWindow::GetExistingDirectory(
+      this,
+      tr( "Select the directory containing DEM files." )
+    )
+  );
+
+  if( srtmDir.isEmpty() )
+    return;
+
+  m_UI->srtmLineEdit->setText(
+    QDir( srtmDir ).absolutePath()
+  );
 }
 
-/*****************************************************************************/
+/***************************************************************************/
 void
 PreferencesDialog
 ::on_geoidButton_clicked()
 {
-  while (true)
-    {
-    QString geoidStr = I18nMainWindow::GetOpenFileName(
-        this,
-        tr("Select a geoid file."));
-    if (geoidStr.isEmpty())
-      { // User push default button => don't modify the value
-      break;
-      }
-    else
-      { // User select something, test if it is correct
-        QDir displayedDir (geoidStr);
-        m_UI->geoidLineEdit->setText(displayedDir.absolutePath());
-        m_ElevationSetupModified = true;
-        break;
-      }
-    }
+  QString geoidFile(
+    I18nMainWindow::GetOpenFileName(
+      this,
+      tr( "Select a geoid file." )
+    )
+  );
+
+  if( geoidFile.isEmpty() )
+    return;
+
+  m_UI->geoidLineEdit->setText(
+    QDir( geoidFile ).absolutePath()
+  );
 }
 
-/*****************************************************************************/
+/***************************************************************************/
 void
 PreferencesDialog
 ::on_resultDirButton_clicked()
 {
-  while (true)
-    {
-    QString resultsDirStr = I18nMainWindow::GetExistingDirectory(
-        this,
-        tr("Select the default directory for results data: "));
-    if (resultsDirStr.isEmpty())
-      { // User push default button => don't modify the value
-      break;
-      }
-    else
-      { // User select something, test if it is correct
-        QDir displayedDir (resultsDirStr);
-        m_UI->resultDirPathLineEdit->setText(displayedDir.absolutePath());
-        m_ResultsDirModified = true;
-        break;
-      }
-    }
+  QString resultsDir(
+    I18nMainWindow::GetExistingDirectory(
+      this,
+      tr( "Select the default directory for results data: " )
+    )
+  );
+
+  if( resultsDir.isEmpty() )
+    return;
+
+  m_UI->resultDirPathLineEdit->setText(
+    QDir( resultsDir ).absolutePath()
+  );
 }
 
 } // end namespace 'mvd'

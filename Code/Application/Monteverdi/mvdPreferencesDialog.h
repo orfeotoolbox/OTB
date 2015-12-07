@@ -45,7 +45,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
-
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
@@ -121,7 +120,8 @@ private:
   Ui::PreferencesDialog* m_UI;
 
   bool m_ResultsDirModified: 1;
-  bool m_ElevationSetupModified: 1;
+  bool m_GeoidFileModified: 1;
+  bool m_SrtmDirModified: 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -136,8 +136,8 @@ private slots:
   void on_buttonBox_accepted();
 
 
-  void on_srtmCheckbox_clicked();
-  void on_geoidCheckbox_clicked();
+  void on_srtmCheckbox_toggled( bool );
+  void on_geoidCheckbox_toggled( bool );
 
   void on_srtmButton_clicked();
   void on_geoidButton_clicked();
