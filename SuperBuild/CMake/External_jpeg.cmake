@@ -33,11 +33,15 @@ else()
     -DWITH_SIMD=FALSE
     -DWITH_TURBOJPEG=FALSE
     CMAKE_COMMAND ${SB_CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${SB_INSTALL_PREFIX}
+    PATCH_COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/patches/${proj}/patch.cmake
     )
-  ExternalProject_Add_Step(${proj} patch_cmake
-    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/patches/${proj}/patch.cmake
-    WORKING_DIRECTORY ${JPEG_SB_SRC}
-    DEPENDEES configure  )
+
+  if(MSVC)
+    ExternalProject_Add_Step(${proj} patch_jconfigint
+      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/${proj}/jconfigint.h.in ${JPEG_SB_SRC}/win/
+      DEPENDERS configure)
+  endif()
+
 
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
     if(WIN32)
