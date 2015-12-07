@@ -153,6 +153,9 @@ option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)"
 
 option(GENERATE_XDK "Generate an .run with all dependencies. supported only on Linux" OFF)
 
+configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
+  ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
+
 # do a system checkup
 if (NOT EXISTS "${CMAKE_BINARY_DIR}/CMake/SystemCheckup")
   file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/CMake/SystemCheckup")

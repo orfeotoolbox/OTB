@@ -1,0 +1,14 @@
+set(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 1000000)
+set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 300)
+set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS 50)
+
+set(CTEST_CUSTOM_WARNING_EXCEPTION
+  ${CTEST_CUSTOM_WARNING_EXCEPTION}
+  ".*SuperBuild.LIBKML.*warning.*"
+  ".*SuperBuild.GEOS.*warning.*"
+  ".*SuperBuild.JPEG.*"
+  ".*SuperBuild.TIFF.*warning.*"
+  ".*SuperBuild.GEOTIFF.*warning.*"
+  ".*SuperBuild.GDAL.config.status.*WARNING.*"
+  ".*SuperBuild.OSSIM.*warning.*"
+  )
