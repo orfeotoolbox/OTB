@@ -40,10 +40,12 @@ else()
       COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/${proj}/jconfigint.h.in ${JPEG_SB_SRC}/win/
       DEPENDERS configure)
   endif()
+
   if(UNIX)
     ExternalProject_Add_Step(${proj} patch_setmode
       COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/patches/${proj}/patch.cmake
-      DEPENDERS configure)
+      WORKING_DIRECTORY ${JPEG_SB_SRC}
+      DEPENDEES update)
   endif()
 
 
