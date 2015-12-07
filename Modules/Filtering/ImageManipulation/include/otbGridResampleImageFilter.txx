@@ -47,6 +47,12 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
 
   // Initialize EdgePaddingValue
   m_EdgePaddingValue = itk::NumericTraits<OutputPixelType>::ZeroValue(m_EdgePaddingValue);
+
+  // Initialize origin and spacing
+  m_OutputOrigin.Fill(0.);
+  m_OutputSpacing.Fill(1.);
+  m_OutputStartIndex.Fill(0);
+  m_OutputSize.Fill(0);
 }
 
 
@@ -157,7 +163,6 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
   typename TInputImage::RegionType inputRequestedRegion;
   inputRequestedRegion.SetIndex(inULIndex);
   inputRequestedRegion.SetSize(inSize);
-
 
   // Compute the padding due to the interpolator
   unsigned int interpolatorRadius =
