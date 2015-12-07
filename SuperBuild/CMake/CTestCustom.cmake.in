@@ -5,8 +5,8 @@ set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS 50)
 set(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
   ".*SuperBuild.LIBKML.*warning.*"
-  ".*SuperBuild.GEOS.*warning.*"
-  ".*SuperBuild.JPEG.*"
+  ".*SuperBuild.GEOS.*"
+  ".*SuperBuild.JPEG.*warning"
   ".*SuperBuild.TIFF.*warning.*"
   ".*SuperBuild.GEOTIFF.*warning.*"
   ".*SuperBuild.GDAL.config.status.*WARNING.*"
