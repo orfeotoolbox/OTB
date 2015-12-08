@@ -23,11 +23,9 @@ else()
     BINARY_DIR ${JPEG_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-    DEPENDS ${${proj}_DEPENDENCIES}
     CMAKE_ARGS
     -DCMAKE_BUILD_TYPE=Release
     -DCMAKE_C_FLAGS=-DSIZEOF_SIZE_T=${JPEG_SIZEOF_SIZE_T}
-    -DCMAKE_VERBOSE_MAKEFILE=TRUE
     -DENABLE_SHARED=TRUE
     -DENABLE_STATIC=FALSE
     -DWITH_SIMD=FALSE
@@ -38,6 +36,7 @@ else()
   if(MSVC)
     ExternalProject_Add_Step(${proj} patch_jconfigint
       COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/${proj}/jconfigint.h.in ${JPEG_SB_SRC}/win/
+      DEPENDEES update
       DEPENDERS configure)
   endif()
 
