@@ -150,6 +150,8 @@ public:
 
   virtual PointType GetCenter() const;
 
+  virtual ZoomType GetFixedZoomType() const;
+
   //
   // Controls.
 

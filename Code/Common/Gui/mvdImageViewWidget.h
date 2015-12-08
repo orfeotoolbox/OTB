@@ -44,6 +44,8 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdCore.h"
 #include "Gui/mvdAbstractImageViewRenderer.h"
+#include "Gui/mvdGui.h"
+
 
 #define USE_XP_REGION_OPTIM 0
 
@@ -82,18 +84,6 @@ class Monteverdi_EXPORT ImageViewWidget :
 //
 // Public types.
 public:
-  /**
-   */
-  enum ZoomType
-  {
-    ZOOM_TYPE_NONE = -1,
-    //
-    ZOOM_TYPE_EXTENT,
-    ZOOM_TYPE_FULL,
-    ZOOM_TYPE_LAYER,
-    //
-    ZOOM_TYPE_COUNT
-  };
 
 //
 // Public methods.
@@ -309,6 +299,10 @@ private:
   /**
    */
   void Disconnect( AbstractLayerModel * );
+
+  /**
+   */
+  bool ApplyFixedZoomType();
 
 //
 // Private attributes.

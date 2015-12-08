@@ -1001,13 +1001,15 @@ void
 ImageViewWidget
 ::Center( ZoomType zoom )
 {
+  // if( zoom==ZOOM_TYPE_EXTENT )
+  //   qDebug() << this << "::Center( ZOOM_TYPE_EXTENT );";
+
   assert(
     zoom==ZOOM_TYPE_EXTENT || zoom==ZOOM_TYPE_FULL || zoom==ZOOM_TYPE_LAYER
   );
 
   assert( m_Renderer!=NULL );
   assert( m_Manipulator!=NULL );
-
 
   PointType center;
   SpacingType spacing;
@@ -1129,6 +1131,23 @@ ImageViewWidget
 ::SetPickingEnabled( bool isEnabled )
 {
   m_IsPickingEnabled = isEnabled;
+}
+
+/*******************************************************************************/
+bool
+ImageViewWidget
+::ApplyFixedZoomType()
+{
+  assert( m_Manipulator!=NULL );
+
+  ZoomType zoom = m_Manipulator->GetFixedZoomType();
+
+  if( zoom==ZOOM_TYPE_NONE || zoom>=ZOOM_TYPE_COUNT )
+    return false;
+
+  Center( zoom );
+
+  return true;
 }
 
 /*******************************************************************************/
@@ -1295,7 +1314,8 @@ ImageViewWidget
 
   ZoomToExtent();
 
-  updateGL();
+  // Done in ::ZoomToExtent().
+  // updateGL();
 }
 
 /******************************************************************************/
@@ -1307,7 +1327,8 @@ ImageViewWidget
 
   UpdateScene();
 
-  updateGL();
+  if( !ApplyFixedZoomType() )
+    updateGL();
 }
 
 /******************************************************************************/
@@ -1319,7 +1340,8 @@ ImageViewWidget
 
   UpdateScene();
 
-  updateGL();
+  if( !ApplyFixedZoomType() )
+    updateGL();
 }
 
 /******************************************************************************/
@@ -1624,6 +1646,8 @@ ImageViewWidget
   // qDebug() << "sx:" << sx << "; sy:" << sy;
   // qDebug() << "rsx:" << rsx << "; rsy:" << rsy;
 
+  // qDebug() << this << "::updateGL()";
+
   // Refresh view.
   updateGL();
 
@@ -1803,6 +1827,8 @@ void
 ImageViewWidget
 ::OnSetProjectionRequired()
 {
+  // qDebug() << this << "::OnSetProjection()";
+
   StackedLayerModel * stackedLayerModel = GetLayerStack();
 
   if( stackedLayerModel==NULL )
@@ -1837,6 +1863,8 @@ ImageViewWidget
     {
     assert( false && "Unhandled AbstractLayerModel derived type." );
     }
+
+  ApplyFixedZoomType();
 }
 
 /******************************************************************************/
@@ -2172,7 +2200,7 @@ ImageViewWidget
   //   return;
 
   // Scale and center.
-  Center( ImageViewWidget::ZOOM_TYPE_EXTENT );
+  Center( ZOOM_TYPE_EXTENT );
 
   // Refresh view.
   updateGL();
@@ -2186,7 +2214,7 @@ ImageViewWidget
   assert( m_Renderer!=NULL );
 
   // Scale and center.
-  Center( ImageViewWidget::ZOOM_TYPE_LAYER );
+  Center( ZOOM_TYPE_LAYER );
 
   // Refresh view.
   updateGL();
@@ -2203,7 +2231,7 @@ ImageViewWidget
   //   return;
 
   // Scale and center.
-  Center( ImageViewWidget::ZOOM_TYPE_FULL );
+  Center( ZOOM_TYPE_FULL );
 
   // Refresh view.
   updateGL();

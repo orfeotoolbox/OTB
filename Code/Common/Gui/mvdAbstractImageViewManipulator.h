@@ -47,6 +47,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdTypes.h"
 #include "Gui/mvdAbstractImageViewRenderer.h"
+#include "Gui/mvdGui.h"
 
 
 /*****************************************************************************/
@@ -127,6 +128,10 @@ public:
   /**
    */
   virtual PointType GetCenter() const =0;
+
+  /**
+   */
+  virtual ZoomType GetFixedZoomType() const =0;
 
   //
   // Controls
