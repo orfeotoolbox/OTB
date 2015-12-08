@@ -22,17 +22,29 @@ configuration files.  CMake generates native makefiles and workspaces that can b
 your choice. CMake is quite sophisticated: it supports complex environments requiring system configuration, compiler
 feature testing, and code generation.
 
-CMake generates Makefiles under UNIX systems and generates Visual Studio workspaces under Windows (and appropriate build
-files for other compilers like Borland). The information used by CMake is provided by \code{CMakeLists.txt} files that
+CMake supports several generators to produce the compilation scripts, dependending on the platform and compiler. It can use :
+\begin{itemize}
+\item Makefiles for Unix systems
+\item Visual Studio workspaces for Windows
+\item NMake Makefiles for Windows
+\item Ninja scripts
+\item and many more ...
+\end{itemize}
+The information used by CMake is provided by \code{CMakeLists.txt} files that
 are present in every directory of the OTB source tree. These files contain information that the user provides to CMake
 at configuration time. Typical information includes paths to utilities in the system and the selection of software
 options specified by the user.
 
-CMake runs in an interactive mode in that you iteratively select
+There are (at least) two ways to use CMake :
+\begin{itemize}
+\item Using the command \texttt{ccmake} (on Unix) or \texttt{cmake-gui} (on Windows): 
+it provides an interactive mode in which you iteratively select
 options and configure according to these options. The iteration
 proceeds until no more options remain to be selected. At this point, a
 generation step produces the appropriate build files for your
-configuration.
+configuration. This is the easiest way to start.
+\item Using the command \texttt{cmake} : it is a non-interactive polyvalent tool designed for scripting. It can run both \textit{configure} and \textit{generate} steps.
+\end{itemize}
 
 As shown in figure \ref{fig:CMakeGUI}, CMake has a different interfaces according to your system.
 Refer to section~\ref{sec:compiling-linux} for Linux build instructions, 
@@ -49,6 +61,12 @@ version based on MFC.}
 \label{fig:CMakeGUI}
 \end{figure}
 
+For more information on CMake, check :
+\begin{center}
+\url{http://www.cmake.org}
+\end{center}
+
+\index{Dependencies}
 OTB depends on a number of external libraries.
 Some are mandatory, meaning that OTB cannot be compiled without them, while others are optional and can be activated or
 not during the build process.
@@ -209,7 +227,10 @@ SuperBuild downloads dependencies into the \texttt{DOWNLOAD\_LOCATION} directory
 \texttt{$\sim$/OTB/build/Downloads} in our example.
 Dependencies can be downloaded manually into this directory before the compilation step.
 This can be usefull if you wish to bypass a proxy, intend to compile OTB without an internet conection, or other network
-constraint.
+constraint. You can find a complete bundle with all dependencies sources on the Orfeo ToolBox website (pick the 'SuperBuild-archives' corresponding to the OTB version you want to build) :
+\begin{center}
+\url{https://www.orfeo-toolbox.org/packages}
+\end{center}
 
 You are now ready to compile OTB!
 Simply use the make command (other targets can be generated with CMake's \texttt{-G} option):
