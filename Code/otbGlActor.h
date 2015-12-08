@@ -47,6 +47,10 @@ public:
   itkSetStringMacro(Name);
   itkGetStringMacro(Name);
 
+  itkSetMacro( GeometryChanged, bool );
+  itkGetMacro( GeometryChanged, bool );
+  itkBooleanMacro( GeometryChanged );
+
   // Retrieve the full extent of the actor
   virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const = 0;
 
@@ -76,6 +80,10 @@ private:
 
   // Name field
   std::string m_Name;
+
+  /**
+   */
+  bool m_GeometryChanged: 1;
 
 }; // End class GlActor
 

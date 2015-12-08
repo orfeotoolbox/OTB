@@ -57,10 +57,12 @@ public:
   // Gl rendering of current state
   virtual void Render();
 
-  itkSetMacro(UL,PointType);
+  void SetUL( const PointType & );
+
   itkGetConstReferenceMacro(UL,PointType);
 
-  itkSetMacro(LR,PointType);
+  void SetLR( const PointType & );
+
   itkGetConstReferenceMacro(LR,PointType);
 
   itkSetStringMacro(Wkt);

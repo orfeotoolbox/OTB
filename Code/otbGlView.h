@@ -293,6 +293,8 @@ GlView
 		     const S2 & vspacing,
 		     double norm ) const
 {
+  // std::cout << "otb::GlView@" << std::hex << this << std::endl << "{" << std::endl;
+
   assert_NaN( vcenter[ 0 ] );
   assert_NaN( vcenter[ 1 ] );
 
@@ -328,8 +330,17 @@ GlView
 
   x[ 0 ] += norm * vspacing[ 0 ]; 
 
+  // std::cout << "X {" << std::endl;
+
   if( !geo->TransformFromViewport( x, x, true ) )
     return false;
+
+  // std::cout << "x: " << x[ 0 ] << ", " << x[ 1 ] << std::endl;
+
+  // assert_NaN( x[ 0 ] );
+  // assert_NaN( x[ 1 ] );
+
+  // std::cout << "}" << std::endl;
 
   //
   // Compute transformed Y-axis extremity.
@@ -337,8 +348,17 @@ GlView
 
   y[ 1 ] += norm * vspacing[ 1 ];
 
+  std::cout << "Y {" << std::endl;
+
   if( !geo->TransformFromViewport( y, y, true ) )
     return false; 
+
+  // std::cout << "y: " << y[ 0 ] << ", " << y[ 1 ] << std::endl;
+
+  // assert_NaN( y[ 0 ] );
+  // assert_NaN( y[ 1 ] );
+
+  // std::cout << "}" << std::endl;
 
   //
   // Compute transformed spacing.
@@ -376,6 +396,8 @@ GlView
 
   assert_NaN( spacing[ 0 ] );
   assert_NaN( spacing[ 1 ] );
+
+  // std::cout << "} otb::GlView@" << std::hex << this << std::endl;
 
   //
   // Ok.

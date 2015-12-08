@@ -22,7 +22,8 @@ namespace otb
 GlActor::GlActor()
   : m_Settings(ViewSettings::New()),
     m_Visible(true),
-    m_Name("Actor")
+    m_Name("Actor"),
+    m_GeometryChanged( false )
 {}
 
 GlActor::~GlActor()

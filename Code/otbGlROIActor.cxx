@@ -56,6 +56,29 @@ GlROIActor::GlROIActor()
 GlROIActor::~GlROIActor()
 {}
 
+
+void
+GlROIActor
+::SetUL( const PointType & p )
+{
+  if( p!=m_UL )
+    GeometryChangedOn();
+
+  m_UL = p;
+}
+
+
+void
+GlROIActor
+::SetLR( const PointType & p )
+{
+  if( p!=m_LR )
+    GeometryChangedOn();
+
+  m_LR = p;
+}
+
+
 void GlROIActor::SetKwl(const ImageKeywordlistType & kwl)
 {
   m_Kwl = kwl;
@@ -73,26 +96,33 @@ void GlROIActor::GetExtent(double & ulx, double & uly, double & lrx, double & lr
 
 void GlROIActor::ProcessViewSettings()
 {
-  // Is there anything to do ?
-  ViewSettings::ConstPointer settings = this->GetSettings();
+  // std::cout << std::hex << this << "::ProcessViewSettings()" << std::endl;
 
-  
-  if((m_ViewportToImageTransform.IsNull() || m_ImageToViewportTransform.IsNull()) || (settings->GetUseProjection() || settings->GetGeometryChanged()))
+  UpdateTransforms();
+
+  assert( GetSettings()!=NULL );
+
+  if( GetGeometryChanged() ||
+      GetSettings()->GetGeometryChanged() )
     {
-    UpdateTransforms();
+    // std::cout << "otb::GlRoiActor@" << std::hex << this << " -> ROI" << std::endl;
 
-    PointType ur,ll;
+    PointType ur;
+    PointType ll;
 
     ur = m_UL;
-    ur[0] = m_LR[0];
-    
+    ur[ 0 ] = m_LR[ 0 ];
+
     ll = m_LR;
-    ll[0] = m_UL[0];
-    
-    m_VpUL = m_ImageToViewportTransform->TransformPoint(m_UL);
-    m_VpUR = m_ImageToViewportTransform->TransformPoint(ur);
-    m_VpLL = m_ImageToViewportTransform->TransformPoint(ll);
-    m_VpLR = m_ImageToViewportTransform->TransformPoint(m_LR);
+    ll[ 0 ] = m_UL[ 0 ];
+
+    assert( !m_ImageToViewportTransform.IsNull() );
+    assert( !m_ViewportToImageTransform.IsNull() );
+
+    m_VpUL = m_ImageToViewportTransform->TransformPoint( m_UL );
+    m_VpUR = m_ImageToViewportTransform->TransformPoint( ur );
+    m_VpLL = m_ImageToViewportTransform->TransformPoint( ll );
+    m_VpLR = m_ImageToViewportTransform->TransformPoint( m_LR );
     }
 }
 
@@ -130,26 +160,53 @@ void GlROIActor::Render()
 
 void GlROIActor::UpdateTransforms()
 {
+  // std::cout << std::hex << this << "::UpdateTransforms()" << std::endl;
+
   // Retrieve settings
-  ViewSettings::ConstPointer settings = this->GetSettings();
+  ViewSettings::ConstPointer settings( this->GetSettings() );
 
-  m_ViewportToImageTransform = RSTransformType::New();
-  m_ImageToViewportTransform = RSTransformType::New(); 
-
-  if(settings->GetUseProjection())
+  if( settings->GetUseProjection() )
     {
-    m_ViewportToImageTransform->SetInputProjectionRef(settings->GetWkt());
-    m_ViewportToImageTransform->SetInputKeywordList(settings->GetKeywordList());
-    m_ViewportToImageTransform->SetOutputProjectionRef(m_Wkt);
-    m_ViewportToImageTransform->SetOutputKeywordList(m_Kwl);
+    if( settings->GetGeometryChanged() )
+      {
+      // std::cout
+      // 	<< "otb::GlROIActor@" << std::hex << this
+      // 	<< " Proj: ON" << std::endl;
 
-    m_ImageToViewportTransform->SetOutputProjectionRef(settings->GetWkt());
-    m_ImageToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
-    m_ImageToViewportTransform->SetInputProjectionRef(m_Wkt);
-    m_ImageToViewportTransform->SetInputKeywordList(m_Kwl);
+      m_ImageToViewportTransform = RSTransformType::New();
+      m_ViewportToImageTransform = RSTransformType::New();
+
+      m_ViewportToImageTransform->SetInputProjectionRef( settings->GetWkt() );
+      m_ViewportToImageTransform->SetInputKeywordList( settings->GetKeywordList() );
+      m_ViewportToImageTransform->SetOutputProjectionRef( m_Wkt );
+      m_ViewportToImageTransform->SetOutputKeywordList( m_Kwl );
+
+      m_ImageToViewportTransform->SetInputProjectionRef( m_Wkt );
+      m_ImageToViewportTransform->SetInputKeywordList( m_Kwl );
+      m_ImageToViewportTransform->SetOutputProjectionRef( settings->GetWkt() );
+      m_ImageToViewportTransform->SetOutputKeywordList( settings->GetKeywordList() );
+
+      m_ViewportToImageTransform->InstanciateTransform();
+      m_ImageToViewportTransform->InstanciateTransform();
+      }
     }
-  m_ViewportToImageTransform->InstanciateTransform();
-  m_ImageToViewportTransform->InstanciateTransform();
+  else
+    {
+    if( settings->GetGeometryChanged() ||
+	m_ImageToViewportTransform.IsNull() ||
+	m_ViewportToImageTransform.IsNull() )
+      {
+      // std::cout
+      // 	<< "otb::GlROIActor@" << std::hex << this
+      // 	<< " Proj: OFF" << std::endl;
+
+      m_ImageToViewportTransform = RSTransformType::New();
+      m_ViewportToImageTransform = RSTransformType::New();
+
+      m_ImageToViewportTransform->InstanciateTransform();
+      m_ViewportToImageTransform->InstanciateTransform();
+      }
+    }
 }
 
 }
