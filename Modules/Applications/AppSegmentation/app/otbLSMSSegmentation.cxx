@@ -20,13 +20,13 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbExtractROI.h"
 #include "otbConnectedComponentMuParserFunctor.h"
-#include "otbBandMathImageFilter.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkStatisticsImageFilter.h"
 #include "itkChangeLabelImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkScalarConnectedComponentImageFilter.h"
 #include "otbConcatenateVectorImageFilter.h"
+#include "otbAffineFunctor.h"
 
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbImportGeoInformationImageFilter.h"
@@ -70,13 +70,20 @@ public:
   typedef otb::Functor::ConnectedComponentMuParserFunctor<ImageType::PixelType>  CCFunctorType;
   typedef itk::ConnectedComponentFunctorImageFilter<ImageType, LabelImageType, CCFunctorType, otb::Image<unsigned int> > CCFilterType;
   typedef itk::ScalarConnectedComponentImageFilter<LabelImageType, LabelImageType> ScalarCCFilterType;
-  typedef otb::BandMathImageFilter<LabelImageType> BandMathImageFilterType;
   typedef itk::StatisticsImageFilter<LabelImageType> StatisticsImageFilterType;
   typedef itk::ChangeLabelImageFilter<LabelImageType,LabelImageType> ChangeLabelImageFilterType;
   typedef otb::ImportGeoInformationImageFilter<LabelImageType,ImageType> ImportGeoInformationImageFilterType;
   typedef itk::ImageRegionConstIterator<LabelImageType> LabelImageIterator;
 
   typedef otb::ConcatenateVectorImageFilter <ImageType,ImageType,ImageType> ConcatenateType;
+  typedef otb::Functor::AffineFunctor<
+    LabelImagePixelType,
+    LabelImagePixelType,
+    LabelImagePixelType>                      AffineFunctorType;
+  typedef itk::UnaryFunctorImageFilter<
+    LabelImageType,
+    LabelImageType,
+    AffineFunctorType>                        LabelShiftFilterType;
 
   LSMSSegmentation(): m_FinalReader(),m_ImportGeoInformationFilter(),m_FilesToRemoveAfterExecute(),m_TmpDirCleanup(false){}
 
@@ -401,14 +408,12 @@ private:
         ccFilter->GetFunctor().SetExpression(expr.str());
         ccFilter->Update();
 
-        std::stringstream ssexpr;
-        ssexpr<<"label+"<<regionCount;
-
         //Shifting
-        BandMathImageFilterType::Pointer labelBandMath = BandMathImageFilterType::New();
-        labelBandMath->SetNthInput(0,ccFilter->GetOutput(),"label");
-        labelBandMath->SetExpression(ssexpr.str());
-        labelBandMath->Update();
+        LabelShiftFilterType::Pointer labelShiftFilter = LabelShiftFilterType::New();
+        labelShiftFilter->SetInput(ccFilter->GetOutput());
+        labelShiftFilter->GetFunctor().SetA(1);
+        labelShiftFilter->GetFunctor().SetB(regionCount);
+        labelShiftFilter->Update();
 
         //Maximum label calculation for the shifting
         StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
@@ -416,7 +421,7 @@ private:
         stats->Update();
         regionCount+=stats->GetMaximum();
 
-        std::string filename = WriteTile(labelBandMath->GetOutput(),row,column,"SEG");
+        std::string filename = WriteTile(labelShiftFilter->GetOutput(),row,column,"SEG");
         }
 
 
