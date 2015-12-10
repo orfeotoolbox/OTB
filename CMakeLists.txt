@@ -304,23 +304,23 @@ if(WIN32)
   create_cpack_config()
   if(Monteverdi_USE_CPACK)
     add_custom_target(packages
-      COMMAND ${CMAKE_CPACK_COMMAND}
-      "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi.cmake" "--verbose" )
-    
+    COMMAND ${CMAKE_COMMAND} "--build" "${CMAKE_BINARY_DIR}" "--target" "install"
+    COMMAND ${CMAKE_CPACK_COMMAND} "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi.cmake" "--verbose")
+
     #   add_custom_target(PACKAGE_Mapla
     #     COMMAND ${CMAKE_CPACK_COMMAND}
     #     "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Mapla.cmake" "--verbose"
     #     DEPENDS PACKAGE_Monteverdi)
-    
+
   endif() # (Monteverdi_USE_CPACK)
-  
+
   if(CMAKE_CROSSCOMPILING)
-    
+ 
     #print MXE_TARGET_DIR for the sake of debugging. This is visible on on dashboard log
     if(DEFINED MXE_TARGET_DIR)
       message(STATUS "MXE_TARGET_DIR = ${MXE_TARGET_DIR}")
     endif() # (DEFINED MXE_TARGET_DIR)
-    
+
     #add custom target that create mapla and monteverdi2 archives.
     add_custom_target(packages
       COMMAND ${CMAKE_COMMAND} -E touch mingw-package
@@ -328,7 +328,7 @@ if(WIN32)
       DEPENDS
       create-Monteverdi-mingw-archive
       create-Mapla-mingw-archive)
-    
+
   endif() # (CMAKE_CROSSCOMPILING)
 endif() # (WIN32)
 
