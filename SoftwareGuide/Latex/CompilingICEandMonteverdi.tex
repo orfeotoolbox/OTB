@@ -1,0 +1,83 @@
+\setcounter{secnumdepth}{3}
+
+\chapter{Compiling ICE and Monteverdi from source}
+\label{chapter:CompilingIceandMonteverdi}
+
+\section{Linux and Mac OS X}
+
+Compiling ICE and Monteverdi from source follows the same procedure as a regular CMake project: setup a directory for an
+out-of-source build, configure and compile.
+
+\subsection{ICE}
+
+Setup an out-of-source build environment (this guide uses \texttt{$\sim$/ICE} but feel free to choose anything):
+\begin{verbatim}
+$ mkdir ~/ICE
+$ cd ~/ICE
+$ git clone https://git@git.orfeo-toolbox.org/git/ice.git
+$ mkdir build
+$ mkdir install
+\end{verbatim}
+
+Remember to checkout the develop branch if you want the current development version:
+\begin{verbatim}
+$ cd ~/ICE/ice
+$ git checkout develop
+\end{verbatim}
+
+CMake will need to be able to find your OTB installation location.
+Ensure the \texttt{OTB\_DIR} variable is set to \texttt{FindOTB.cmake} file location.
+For example, if you installed OTB in \texttt{$\sim$/OTB/install}:
+\begin{verbatim}
+$ cd ~/ICE/build
+$ cmake -DCMAKE_INSTALL_PREFIX=~/ICE/install \\
+        -DOTB_DIR=~/OTB/install/lib/cmake/OTB-5.0 \\
+        ../ice
+$ make
+$ make install
+\end{verbatim}
+
+\subsection{Monteverdi}
+
+Make sure OTB is compiled with \texttt{OTB\_USE\_QT4} set to ON.
+Setup another out-of-source build environment for Monteverdi:
+\begin{verbatim}
+$ mkdir ~/monteverdi
+$ cd ~/monteverdi
+$ git clone https://git@git.orfeo-toolbox.org/git/monteverdi2.git
+$ mkdir build
+$ mkdir install
+\end{verbatim}
+
+Remember to checkout the develop branch if you want the current development version:
+\begin{verbatim}
+$ cd ~/monteverdi/monteverdi2
+$ git checkout develop
+\end{verbatim}
+
+CMake needs to find both OTB, ICE and QWT installation locations.
+For example, set an CMake cache pre-population script with the following content:
+\begin{verbatim}
+# monteverdi-configuration.cmake
+set(CMAKE_INSTALL_PREFIX "~/monteverdi/install" CACHE STRING "" FORCE)
+set(OTB_DIR "~/OTB/install/lib/cmake/OTB-5.0" CACHE STRING "" FORCE)
+set(ICE_INCLUDE_DIR "~/ICE/install/include" CACHE STRING "" FORCE)
+set(ICE_LIBRARY  "~/ICE/install/lib/libOTBIce.so" CACHE STRING "" FORCE)
+set(QWT_INCLUDE_DIR "/usr/include/qwt5-qt4" CACHE STRING "" FORCE)
+set(QWT_LIBRARY "/usr/lib64/libqwt.so.5" CACHE STRING "" FORCE)
+\end{verbatim}
+
+Configure and compile monteverdi:
+\begin{verbatim}
+$ cd ~/monteverdi/build
+$ cmake -C monteverdi-configuration.cmake ../monteverdi2
+$ make
+$ make install
+\end{verbatim}
+
+\section{Windows}
+
+Everything that is needed for Ice and Monteverdi development on Windows, including compiling from source, is covered in details on the OTB wiki at:
+\begin{center}
+\url{http://wiki.orfeo-toolbox.org/index.php/OTB_development_on_Windows}
+\end{center}

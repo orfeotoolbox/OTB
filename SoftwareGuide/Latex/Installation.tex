@@ -1,49 +1,13 @@
 \setcounter{secnumdepth}{3}
 
-\chapter{Installation}
+\chapter{Compiling OTB from source}
 \label{chapter:Installation}
 \index{Installation}
 
-This section describes the process for installing OTB on your system. OTB is a toolbox, and as such, once it is installed in your computer, it provides by default a set of useful libraries. You can use these libraries to build your own applications based on it. What OTB does provide, besides the toolbox, is a large set of test files and examples that will introduce you to OTB concepts and will show you how to use OTB in your own projects.
-
-Since the release 3.12, OTB embeds a specific framework to generate applications in a more user-friendly way. OTB provides for each application one shared library (also known as plugin). This plugin can be auto-loaded into appropriate tools without recompiling, and is able to fully describe its own parameters, behavior and documentation.
-
-The tools to use these plugins can be extended, but OTB is shipped with the
-following:
-\begin{itemize}
-\item A command-line launcher,
-\item A graphical launcher, with an auto-generated Qt interface,
-  providing ergonomic parameters setting, display of documentation,
-  and progress reporting,
-\item A C and SWIG interface, which means that any application can be
-  loaded, set up and executed into a high-level language such as \textbf{Python}
-  for instance.
-\end{itemize}
-
-Based on a visualization framework which used FLTK libraries, Orfeo ToolBox team provides an integrated application which giving graphical access to a lot of OTB functionalities: \textbf{Monteverdi}. Since mid-2013, we also provide a new graphical application based on Qt: \textbf{Monteverdi2}. This new application used the OTB-Applications tools as processing framework. 
-   
 There are two ways to install OTB library on your system: installing from a binary distribution or compiling from sources. 
-The choice depends on your system, and on what you intend to do. If you intend compiling from source, OTB team provides the SuperBuild feature, which is designed to provide an easy access to OTB and its dependencies.
-SuperBuild is available since the release 5.0 (revision c20055670b36 / Tue, 24 Mar 2015 18:22:06).
+You can find information about the installation of binary packages for OTB and Monteverdi in the OTB-Cookbook.
+This chapter covers installation from sources, also known as compiling.
 
-
-\section{Installing binary packages}
-\label{sec:install_binaries}
-
-You can find all information about the installation of binary packages for OTB-Applications, Monteverdi and Monteverdi2 (if they are available on your platform) into the OTB-Cookbook.
-
-The binary packages for OTB library are only available on:
-\begin{itemize}
-\item Ubuntu 12.04 and higher
-\item OpenSuse 12.X and higher
-\item MacOSX through MacPorts software  
-\end{itemize}
-
-Currently, no OSGeo4W package is available for the OTB library, you need to build from source to use it on windows platform. However you can find binary packages for Monteverdi, Monteverdi2 and OTB-Applications (command-line, QT based and python ones).
-
-
-\section{Building from sources}
-\label{sec:source}
 OTB has been developed and tested across different combinations of operating systems, compilers, and hardware platforms including MS-Windows, Linux on Intel-compatible hardware and Mac OSX.  It is known to work with the following compilers in 32/64 bit:
 \begin{itemize}
 \item Visual Studio 2010 and higher compiler on MS-Windows
@@ -51,44 +15,41 @@ OTB has been developed and tested across different combinations of operating sys
 \item Clang on MacOSX (10.8 and higher) systems
 \end{itemize}
 
-Given the advanced usage of C++ features in the toolbox, some compilers may have difficulties processing the code. If you are currently using an outdated compiler this may be an excellent excuse for upgrading this old piece of software!
-
-\subsection{Preparing CMake}
-\label{sec:CMakeforOTB}
-
 \index{CMake}
-\index{CMake!downloading}
+The challenge of supporting OTB across platforms has been solved through the use of CMake, a cross-platform, open-source
+build system. CMake is used to control the software compilation process using simple platform and compiler independent
+configuration files.  CMake generates native makefiles and workspaces that can be used in the compiler environment of
+your choice. CMake is quite sophisticated: it supports complex environments requiring system configuration, compiler
+feature testing, and code generation.
 
-The challenge of supporting OTB across platforms has been solved through the use of CMake, a cross-platform, open-source build system. CMake is used to control the software compilation process using simple platform and compiler independent configuration files.  CMake generates native makefiles and workspaces that can be used in the compiler environment of your choice. CMake is quite sophisticated: it supports complex environments requiring system configuration, compiler feature testing, and code generation.
+CMake supports several generators to produce the compilation scripts, dependending on the platform and compiler. It can use :
+\begin{itemize}
+\item Makefiles for Unix systems
+\item Visual Studio workspaces for Windows
+\item NMake Makefiles for Windows
+\item Ninja scripts
+\item and many more ...
+\end{itemize}
+The information used by CMake is provided by \code{CMakeLists.txt} files that
+are present in every directory of the OTB source tree. These files contain information that the user provides to CMake
+at configuration time. Typical information includes paths to utilities in the system and the selection of software
+options specified by the user.
 
-CMake generates Makefiles under UNIX systems and generates Visual Studio workspaces under Windows (and appropriate build files for other compilers like Borland). The information used by CMake is provided by \code{CMakeLists.txt} files that are present in every directory of the OTB source tree. These files contain information that the user provides to CMake at configuration time. Typical information includes paths to utilities in the system and the selection of software options specified by the user.
-
-
-CMake can be downloaded at no cost from
-\begin{center}
-  \url{http://www.cmake.org}
-\end{center}
-
-OTB requires at least CMake version 2.8.6. You can download binary versions for most of the popular platforms including Windows, Solaris, IRIX, HP, Mac and Linux. 
-Alternatively you can download the source code and build CMake on your system. Follow the instructions in the CMake Web page for downloading and installing the software.
-
-CMake runs in an interactive mode in that you iteratively select
+There are (at least) two ways to use CMake :
+\begin{itemize}
+\item Using the command \texttt{ccmake} (on Unix) or \texttt{cmake-gui} (on Windows): 
+it provides an interactive mode in which you iteratively select
 options and configure according to these options. The iteration
 proceeds until no more options remain to be selected. At this point, a
 generation step produces the appropriate build files for your
-configuration.
+configuration. This is the easiest way to start.
+\item Using the command \texttt{cmake} : it is a non-interactive polyvalent tool designed for scripting. It can run both \textit{configure} and \textit{generate} steps.
+\end{itemize}
 
-This interactive configuration process can be better understood if you
-imagine that you are walking through a decision tree.  Every option that you
-select introduces the possibility that new, dependent options may become
-relevant. These new options are presented by CMake at the top of the options
-list in its interface.  Only when no new options appear after a configuration
-iteration can you be sure that the necessary decisions have all been made. At
-this point build files are generated for the current configuration.
-
-As the following figures display it, CMake has a different interface according to your systems.
-\label{sec:ConfiguringOTBwithVTK}
-\index{Configuration!with VTK}
+As shown in figure \ref{fig:CMakeGUI}, CMake has a different interfaces according to your system.
+Refer to section~\ref{sec:compiling-linux} for Linux build instructions, 
+\ref{sec:compiling-macosx} for Mac~OS~X,
+and \ref{sec:compiling-windows} for Windows.
 
 \begin{figure}[tpb]
 \centering
@@ -100,26 +61,16 @@ version based on MFC.}
 \label{fig:CMakeGUI}
 \end{figure}
 
+For more information on CMake, check :
+\begin{center}
+\url{http://www.cmake.org}
+\end{center}
 
-
-\index{Preliminary steps}
-
-\index{CMake!OTB tree}
-Running CMake initially requires that you provide three pieces of
-information:
-\begin{itemize}
-\item Where the source code directory is located (ex.: OTB\_SOURCE\_DIR),
-\item Where the object code is to be produced: (ex.: OTB\_BINARY\_DIR),
-\item Where to install the binaries/libraries: (ex.: OTB\_INSTALL\_DIR).
-\end{itemize}
-These are referred to as the \emph{source directory}, the \emph{binary directory} and the \emph{install directory}.
-We recommend setting the binary directory to be different than the source directory (an
-\emph{out-of-source} build), but OTB will still build if they are set
-to a directory inside the source directory (an \emph{in-source} build).
-
-
-The OTB needs some external libraries to work (see table \ref{tab:installation2} below). 
-
+\index{Dependencies}
+OTB depends on a number of external libraries.
+Some are mandatory, meaning that OTB cannot be compiled without them, while others are optional and can be activated or
+not during the build process.
+See table \ref{tab:otb-dependencies} for the full list of dependencies.
 \begin{center}
 \begin{tiny}
 \begin{table}[!htbp]
@@ -164,359 +115,179 @@ The OTB needs some external libraries to work (see table \ref{tab:installation2}
 \textbf{OpenCV} & \url{http://opencv.org} & no  & 2 \\
 \hline
 \end{tabular}
-\caption{Libraries used in the OTB.}
-\label{tab:installation2}
+\caption{External libraries used in OTB.}
+\label{tab:otb-dependencies}
 \end{table}
 \end{tiny}
 \end{center}
 
-To manage correctly and easily the dependencies of OTB (especially under Windows) \textbf{we strongly recommend to use the SuperBuild feature} (see next subsection \ref{sec:SuperBuild}).
-Once the dependencies are built, OTB can finally be compiled : 
+\section{Linux and Mac OS X}
+\label{sec:compiling-linux}
+
+\subsection{Setting up the build environment}
+
+The first thing to do is to create a directory for working with OTB.
+This guide will use \texttt{$\sim$/OTB} but you are free to choose something else.
+In this directory, there will be three locations:
 \begin{itemize}
-	\item Just provide the location where you installed the dependencies, 
-	\item Install the ones not provided by SuperBuild
-    \item From the CMake interface, launch 'Configure' and 'Generate'
-    \item Compile and install : call the generator used for your platform : make, nmake, jom, ... 
+\item \texttt{$\sim$/OTB/otb} for the source file obtained from the git repository
+\item \texttt{$\sim$/OTB/build} for the intermediate build objects, CMake specific files, libraries and binaries.
+\item \texttt{$\sim$/OTB/install}, the installation directory for OTB once it is built.
+A system location (\texttt{/usr/local} for example) can also be used, but installing locally is more flexible and does
+not require root access.
 \end{itemize}
-
-\textbf{\underline{Compilation awarness}}
-The build process will typically take anywhere from 15 to 30 minutes depending on the performance of your system. If you decide to enable testing as part of the normal build process, about 2500 small tests programs will be compiled. This will verify that the basic components of OTB have been correctly built on your system.
-
-Set the CMake variables \code{BUILD\_TESTING} and \code{BUILD\_EXAMPLES} to ON will activate the compilation of the examples and the tests and slow down the build process. The examples distributed with the toolbox are a helpful resource for learning how to use OTB components but are not essential for the use of the toolbox itself. The testing section includes a large number of small programs that exercise the capabilities of OTB classes. Due to the large number of tests, enabling the testing option will considerably increase the build time.  It is not desirable to enable this option for a first build of the toolbox.
-
-The CMake variable \code{OTB\_BUILD\_DEFAULT\_MODULES} activates all usual modules. This is required to build the examples. If you want to reduce the set of enabled modules, in order to produce a smaller OTB or to avoid some third parties, you have two methods :
-\begin{itemize}
-  \item disable some third party modules with the CMake variables \code{OTB\_USE\_XXX}. All the modules that depend on the corresponding third party will be disabled.
-  \item disable the option \code{OTB\_BUILD\_DEFAULT\_MODULES}, and enable the modules you want. The variables \code{OTBGroup\_XXX} are used to enable all modules in a group. If this variable is off, the user can select which modules in the group should be enabled, using the pattern variable \code{Module\_XXX}.
-\end{itemize}
-
-
-\textbf{Note 1:} Those who want to avoid using the SuperBuild (even partially) or to use additional dependencies not provided by the SuperBuild, should refer to the subsection \ref{sec:manualdependencies}. 
-
-
-
-\textbf{Note 2:} 
-Please note that even if this section only describes how to compile OTB library and applications from sources, Monteverdi1 and Monteverdi2 can be compiled in a similar way.
-
-For Monteverdi, in addition to OTB, FLTK is required (\url{http://www.fltk.org}) as an external dependency. Therefore, you need to install it from your package manager or build it from source. For windows users, you can find it through the OSGeo4W installer.
-
-For Monteverdi2, in addition to OTB, Qt4 (\url{http://qt-project.org/}) and Qwt5 (\url{http://qwt.sourceforge.net/}) are required as external dependencies. Therefore, you need to install them from your package manager or build them from source. For windows users, you can find them through the OSGeo4W installer.
-
-
-\subsection{SuperBuild}
-\label{sec:SuperBuild}
-
-The SuperBuild is a way of compiling dependencies to a project just before you build the project. Thanks to CMake and its ExternalProject module, it is possible to download a source archive, configure, compile and install it when building the main project. This feature has been used in other CMake-based projects (ITK, Slicer, ParaView,...).
-
-In OTB, the SuperBuild is implemented with no impact on the library sources : the sources for SuperBuild are located in the 'OTB/SuperBuild' subdirectory. It is made of CMake scripts and source patches that allow to compile all the dependencies necessary for OTB. Once all the dependencies are compiled and installed, the OTB library is built using those dependencies.
-
-The purpose is to provide an easy way to get OTB and its dependencies, whatever the platform (among Linux, MacOSX and Windows). 
-
-\subsubsection{Requirements}
-There are few requirements to use the SuperBuild :
-\begin{itemize}
-	\item CMake (at least 2.8.11)
-	\item C and C++ compilers
-	\item libtool
-	\item mercurial (if you intend to download OTB sources from the repository) 
-\end{itemize}
-
-There are optional requirements depending on OTB features you want to enable :
-\begin{itemize}
-	\item python (for python wrapping)
-    \item java (for java wrapping) 
-\end{itemize}
-
-\subsubsection{How to use it}
-
-The SuperBuild is made like a standard CMake-type project. You should then prepare three directories (for source, build and install) :
-OTB\textunderscore SOURCE\textunderscore DIR, OTB\textunderscore BINARY\textunderscore DIR, OTB\textunderscore INSTALL\textunderscore DIR.
-
-\begin{itemize}
-	\item Get OTB sources and put them in your source directory (works with revision c20055670b36 and later)
-    \item Go to your build directory and configure CMake using "OTB\textunderscore SOURCE\textunderscore DIR/SuperBuild" as input
-    \begin{itemize}
-        \item Set the CMAKE\textunderscore INSTALL\textunderscore PREFIX to your install directory (OTB\textunderscore INSTALL\textunderscore DIR)
-        \item Online mode (default) : CMake will download all the source archives required to build the dependencies in the folder pointed by the variable DOWNLOAD\textunderscore LOCATION
-        \item Offline mode : if you have already the dependencies archives on your disk, set the variable DOWNLOAD\textunderscore LOCATION to the folder containing those archives. If archives names and MD5 sums match, CMake won't download them. An archive containing all the needed source archives is available on Orfeo ToolBox website, you may download it, uncompress, and point the DOWNLOAD\textunderscore LOCATION variable to the uncompressed folder (see \url{https://www.orfeo-toolbox.org/packages/SuperBuild-archives.tar.bz2}).
-        \item For each dependency, you can use the variable USE\textunderscore SYSTEM\textunderscore XXX to choose whether you want this dependency to be build by SuperBuild or if a system version should be used. 
-    \end{itemize}
-    \item From the CMake interface, launch 'Configure' and 'Generate'
-    \item Compile and install : call the generator used for your platform : make, nmake, jom, ... 
-\end{itemize}
-
-Please note that during the CMake configuration step, you may see warnings coming from the system checkup script ('SuperBuild/CMake/SystemCheckup.cmake'). They appear when CMake tries to find existing libraries on your system so it may report warnings for missing or incomplete libraries. For the SuperBuild process, you can safely ignore those warnings.
-
-After SuperBuild compilation, your build directory will be organized with the following pattern :
-\begin{itemize}
-  \item BUILD\_DIRECTORY \hfill \textit{your SuperBuild build directory}
-  \begin{itemize}
-    \item EXPAT
-    \begin{itemize}
-      \item src \hfill \textit{Expat sources}
-      \item build \hfill \textit{Expat build directory}
-    \end{itemize}
-    \item GDAL
-    \begin{itemize}
-      \item src \hfill \textit{Gdal sources}
-      \item build \hfill \textit{Gdal build directory}
-    \end{itemize}
-    \item \textit{(other dependencies\ldots)}
-    \item OTB
-    \begin{itemize}
-      \item build \hfill \textit{OTB build directory}
-    \end{itemize}
-  \end{itemize}
-\end{itemize}
-
-\subsubsection{Current status}
-
-This section details the libraries that are not fully supported by SuperBuild depending on the target platform. 
-
-\textbf{Windows MSVC 2010}
-\newline
-The libraries not handled by SuperBuild are : 
-\begin{itemize}
-	\item PCRE
-\end{itemize}
-
-\textbf{Note} : there is a limitation on the absolute path length for the source directory and build directory : it should not exceed 50 characters. In fact, this limitation is not related to the SuperBuild but comes with OTB.
-
-\textbf{MacOSX 10.10}
-\newline
-The libraries not handled by SuperBuild are : 
-\begin{itemize}
-	\item Boost
-	\item Curl
-	\item PCRE
-	\item PNG
-	\item SWIG
-	\item ZLIB
-	\item QT4
-\end{itemize}
-
-\textbf{Linux}
-\newline
-The libraries not handled by SuperBuild are : 
-\begin{itemize}
-	\item Curl
-	\item PCRE
-	\item QT4
-	\item SWIG
-\end{itemize}
-
-A wiki page is also available here : \url{http://wiki.orfeo-toolbox.org/index.php/SuperBuild}.
-
-\subsection{Manual installation of OTB dependencies}
-\label{sec:manualdependencies}
-
-\subsubsection{Windows}
-
-To manage the dependencies of OTB under Windows without SuperBuild, users should install the \href{http://trac.osgeo.org/osgeo4w/}{OSGeo4W} tool. This software will provide you with all the necessary dependencies in 32 bit and 64 bit mode. Please follow these steps:
-\begin{enumerate}
-\item  Download the installer setup (32/64bit)
-\item  Run the setup installer with Admin Rights
-\item  Select Advanced Install
-\item  Select Install from Internet
-\item  Keep as much as possible the default values about root directory and other parameters. You must have the write access to this root directory. 
-\item  In the next screen, select a local package directory (idem you must have the write access to this directory)
-\item  Select your Internet connection settings
-\item  Select the default download site
-\item  Select the following packages (except for those eventually installed from SuperBuild):
-	\begin{itemize}
-	\item  msvcrt
-	\item  gdal
-	\item  curl
-	\item  expat 
-	\item  ossim
-	\item  opencv
-	\item  qt4-devel
-	\item  swig
-	\item  python
-	\item  fftw-devel
-	\item  libtiff
-	\end{itemize}
-\item  Run the installation process
-\item  Accept all the dependencies required by the selected packages
-\item  Wait the downloading and the installation of the packages
-\end{enumerate}
-
-Create a directory, where you have write access, to store your work.
-Download the OTB sources (see subsection \ref{sec:ObtainingTheSoftware}) : OTB\_SOURCE\_DIR.
-Create the two other usual directories OTB\_BINARY\_DIR and OTB\_INSTALL\_DIR.
-
-\index{Configure, Build and Install OTB}
-
-We will describe here how to compile and install the library with the main functionalities in Release and ReleaseWithDebugInfo mode.
-Create an OTB.bat file into your MyOTBDir and copy paste the following lines:
-
+To setup this structure, the following commands can be used:
 \begin{verbatim}
-@echo off
-
-call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\Tools\vsvars32.bat"
-
-set /A ARGS_COUNT=0    
-for %%A in (%*) do set /A ARGS_COUNT+=1  
-if %ARGS_COUNT% NEQ 3 (goto :Usage)
-
-if NOT DEFINED OSGEO4W_ROOT (goto :NoOSGEO4W)
-	
-set src_dir=%1
-set build_dir=%2
-set otb_install_dir=%3
-set current_dir=%CD%
-
-set LANG=C
-set ITK_AUTOLOAD_PATH=
-set PYTHONPATH=
-set PATH=%OSGEO4W_ROOT%\apps\swigwin\;%PATH%
-
-cd %build_dir%
-
-cmake 	%src_dir% ^
-	-G "Visual Studio 10" ^
-	-DBUILD_EXAMPLES:BOOL=ON ^
-	-DOTB_WRAP_QT:BOOL=ON ^
-	-DOTB_WRAP_PYTHON:BOOL=ON ^
-	-DPYTHON_LIBRARY:FILEPATH="%OSGEO4W_ROOT%/apps/Python27/libs/python27.lib" ^
-	-DPYTHON_INCLUDE_DIR:PATH="%OSGEO4W_ROOT%/apps/Python27/include" ^
-	-DPYTHON_EXECUTABLE:FILEPATH="%OSGEO4W_ROOT%/bin/python.exe" ^
-	-DOTB_USE_OPENCV:BOOL=ON ^
-	-DCMAKE_INSTALL_PREFIX:PATH=%otb_install_dir% ^
-	-DCMAKE_CONFIGURATION_TYPES:STRING=Release;RelWithDebInfo
-
-cmake --build . --target INSTALL --config RelWithDebInfo
-
-cd %current_dir%
-
-goto :END
-
-:Usage
-echo You need to provide 3 arguments to the script: 
-echo   1. path to the source directory (OTB_SOURCE_DIR)
-echo   2. path to the build directory (OTB_BINARY_DIR)
-echo   3. path to the installation directory (an empty directory)
-GOTO :END
-
-:NoOSGEO4W
-echo You need to run this script from an OSGeo4W shell
-GOTO :END
-
-:END
-\end{verbatim}
-Into a OSGEo4W shell, run the OTB.bat with the right arguments: full path to the OTB src directory, full path to the OTB build directory, full path to the place where install OTB. Take a break, you made it: OTB is installed in your install directory. If you want test: into an OSGeo4W shell, go to the bin directory of the install directory and run HelloWorld.exe. If you want build OTB in Release config, into the OSGeo4W shell, open the OTB.sln and select this configuration from the configuration selector and build the solution.
-
-If you want use more recent MS-compiler please change the path to vsvars32.bat file and change the generator used by CMake line. OTB should support compilation under Visual Studio 2012 and 2013. 
-
-That should be all! Otherwise, subscribe to otb-users@googlegroups.com and you will get some help.
-
-
-
-\subsubsection{Linux systems : getting a qualified Gdal library }
-\label{sec:gdal}
-Manual installation of OTB dependencies can easily be done under unix platforms, either directly by package managers (be sure to also install libraries headers, which are mandatory to build OTB) or by compiling from sources (follow the build instructions for each particular dependence).
-
-However, special precautions are necessary concerning Gdal.
-    
-Gdal is a very rich data abstraction library, and there are many compilation time options in Gdal that will impact Gdal and therefore OTB libraries capabilities. There are also options and dependencies that could limit or prevent Orfeo ToolBox from working properly. On linux systems, there are a lot of Gdal binary packages with different configurations. It is therefore very important to know exactly your Gdal configuration before proceeding to the next step.
-
-Here are the things to check:
-\begin{itemize}
-	\item Gdal version (should be greater or equal to 1.10),
-	\item Gdal library should not expose any Tiff or Geotiff symbol (otherwise it may cause crashes in Orfeo ToolBox),
-	\item Gdal should support BigTiff (read or write Tiff files of more than 4 Gb).
-\end{itemize}
-
-\begin{itemize}
-	\item {How to check if your Gdal qualifies for Orfeo ToolBox?}
-\end{itemize}
-If you already have a Gdal in your system (either from the official package manager of your distribution or from your own build), here is how to check if it qualifies for Orfeo ToolBox.
-
-Gdal version can be checked using the following command:
-\begin{verbatim}
-$ gdal-config --version
+$ mkdir ~/OTB
+$ cd ~/OTB
+$ git clone https://git@git.orfeo-toolbox.org/git/otb.git
+$ mkdir build
+$ mkdir install
 \end{verbatim}
 
-If version is lower than 1.10.0, you should build or install an up-to-date Gdal library.
+The OTB project uses a git branching model where \texttt{develop} is the current development version.
+It contains the latest patches and represents the work in progress towards the next release.
+For more information on OTB and git, including how to decide which branch to want to compile, please see the
+OTB wiki page at \url{http://wiki.orfeo-toolbox.org/index.php/Git}.
 
-If you have several versions of Gdal installed in your system, be sure to run this command for the version you intend to. You can check this with:
+Checkout the relevant branch now:
 \begin{verbatim}
-$ which gdal-config
+$ cd ~/OTB/otb
+$ git checkout develop
 \end{verbatim}
 
-Next step is to check if the Gdal library leaks any Tiff or Geotiff symbol. First you need to locate gdal library. If it has been installed system wide, the library will most probably be located in \texttt{/usr/lib}. Otherwise, you need to find where is \texttt{libgdal.so}.
-
-Once you found it, run:
-\begin{verbatim}
-$ nm -D libgdal.so | grep XTIFFOpen
-\end{verbatim}
-
-This should show either nothing, or the following:
-
-\begin{verbatim}
-00000000004b1100 T gdal_XTIFFOpen
-\end{verbatim}
-
-If the command outputs the following:
-
-\begin{verbatim}
-00000000004b1100 T XTIFFOpen
-\end{verbatim}
-
-It means that your Gdal library leaks Tiff and Geotiff symbols. Depending on your system, this might cause random crashes in Orfeo ToolBox when reading or writing Tiff images. In this case it is advised to build or retrieve a Gdal library that does not exhibit this issue.
-
-Last, it might be important for you to be able to read and write Tiff files of more than 4 Gb with Orfeo ToolBox. To check for BigTiff file support, choose an image on your computer and run:
-\begin{verbatim}
-$ gdal_translate -co "BIGTIFF=YES" my_image.png my_image.tif
-\end{verbatim}
-
-If this fails, your Gdal library or the Tiff library it is linked to does not support BigTiff files. In this case it is advised to build or retrieve a Gdal library.
-
-\emph{Distributions and binary packages repositories known to distribute a qualified Gdal}
-
-
-Among the different distributions and packages repositories that distribute a qualified Gdal, one can cite:
+Now you must decide which build method you will use.
+There are two ways of compiling OTB from sources, depending on how you want to manage dependencies.
+Both methods rely on CMake.
 \begin{itemize}
-\item The ubuntu-gis unstable ppa (\href{https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable}),
-\item Default package for Ubuntu greater or equal to 14.04.
+\item SuperBuild (go to section~\ref{sec:installation-linux-superbuild}). All OTB dependencies are automatically downloaded and compiled.
+This method is the easiest to use and provides a complete OTB with minimal effort.
+\item Normal build (go to section~\ref{sec:installation-linux-normalbuild}). OTB dependencies must already be compiled and available on your system.
+This method requires more work but provides more flexibility.
 \end{itemize}
+If you do not know which method to use and just want to compile OTB with all its modules, use SuperBuild.
 
-\emph{Building your own qualified Gdal}
+\begin{center}
+\begin{tiny}
+\begin{table}[!htbp]
+\begin{tabular}{p{0.35\textwidth}p{0.65\textwidth}}
+\hline
+\textbf{CMake variable} & \textbf{Value} \\
+\hline
+\texttt{CMAKE\_INSTALL\_PREFIX}         & Installation directory, target for \texttt{make install} \\
+\texttt{BUILD\_EXAMPLES}                & Activate compilation of OTB examples \\
+\texttt{BUILD\_TESTING}                 & Activate compilation of the tests \\
+\texttt{OTB\_BUILD\_DEFAULT\_MODULES}   & Activate all usual modules, required to build the examples \\
+\texttt{OTB\_USE\_\textit{XXX}}         & Activate module \textit{XXX} \\
+\texttt{OTBGroup\_\textit{XXX}}         & Enable modules in the group \textit{XXX} \\
+\texttt{OTB\_DATA\_ROOT}                & otb-data repository \\
+\texttt{OTB\_WRAP\_PYTHON}              & Enable Python wrapper \\
+\texttt{OTB\_WRAP\_JAVA}                & Enable Java wrapper \\
 
-If do not yet have a Gdal library or suspect that the library you have will not qualify, you can build your own library. After downloading the latest version of gdal source code, run:
+\hline
+\multicolumn{2}{l}{\small \textbf{SuperBuild only}} \\ 
+\texttt{DOWNLOAD\_LOCATION}             & Location to download dependencies \\
+\texttt{USE\_SYSTEM\_\textit{XXX}}      & Use the system's \textit{XXX} library \\
 
+\hline
+\end{tabular}
+\caption{Important CMake configuration variables in OTB}
+\label{tab:installation-cmake-variables}
+\end{table}
+\end{tiny}
+\end{center}
+
+\subsection{SuperBuild: Build OTB and all dependencies}
+\label{sec:installation-linux-superbuild}
+
+The SuperBuild is a way of compiling dependencies to a project just before you build the project. Thanks to CMake and
+its ExternalProject module, it is possible to download a source archive, configure, compile and install it when building
+the main project. This feature has been used in other CMake-based projects (ITK, Slicer, ParaView,...).
+In OTB, the SuperBuild is implemented with no impact on the library sources : the sources for SuperBuild are located in
+the 'OTB/SuperBuild' subdirectory. It is made of CMake scripts and source patches that allow to compile all the
+dependencies necessary for OTB. Once all the dependencies are compiled and installed, the OTB library is built using
+those dependencies.
+
+OTB's compilation is customized by specifying configuration variables.
+The most important configuration variables are shown in table~\ref{tab:installation-cmake-variables}.
+The simplest way to provide configuration variables is via the command line \texttt{-D} option:
 \begin{verbatim}
-$ export GDAL_INSTALL_DIR=$HOME/local
-$ ./configure --prefix=$GDAL_INSTALL_DIR \
-  --with-geotiff=internal  \
-  --with-rename-internal-libtiff-symbols=yes \
-  --with-rename-internal-libgeotiff-symbols=yes
+$ cd ~/OTB/build
+$ cmake -D CMAKE_INSTALL_LOCATION=~/OTB/install ../otb/SuperBuild
+\end{verbatim}
+A pre-load script can also be used with the \texttt{-C} options (see
+\url{https://cmake.org/cmake/help/v3.4/manual/cmake.1.html#options}).
+Another option is to set variables manually with \texttt{cmake-gui} or \texttt{ccmake}.
+
+During the configuration step, the SuperBuild will detect any existing dependencies installed as systems libraries.
+Wheter to use them can be controlled via the \texttt{USE\_SYSTEM\_\textit{XXX}} (see
+table~\ref{tab:installation-cmake-variables}).
+
+SuperBuild downloads dependencies into the \texttt{DOWNLOAD\_LOCATION} directory, which will be
+\texttt{$\sim$/OTB/build/Downloads} in our example.
+Dependencies can be downloaded manually into this directory before the compilation step.
+This can be usefull if you wish to bypass a proxy, intend to compile OTB without an internet conection, or other network
+constraint. You can find a complete bundle with all dependencies sources on the Orfeo ToolBox website (pick the 'SuperBuild-archives' corresponding to the OTB version you want to build) :
+\begin{center}
+\url{https://www.orfeo-toolbox.org/packages}
+\end{center}
+
+You are now ready to compile OTB!
+Simply use the make command (other targets can be generated with CMake's \texttt{-G} option):
+\begin{verbatim}
+$ cd ~/OTB/build
+$ make
+\end{verbatim}
+
+The installation target will copy the binaries and libraries to the installation location:
+\begin{verbatim}
 $ make install
 \end{verbatim}
 
-The \texttt{GDAL\_INSTALL\_DIR} environment variable allows to choose where you will install your Gdal library. It is NOT advised to install it system wide. It is recommended to choose a dedicated directory in your home folder. The configuration options will ensure that Gdal will build internal Tiff and Geotiff libraries that supports BigTiff files, while renaming their symbols so that they will not be leaked outside of the library. Depending on your need, feel free to enable more Gdal configuration options.
+A wiki page detailing the status of SuperBuild on various platforms is also available here:
+\url{http://wiki.orfeo-toolbox.org/index.php/SuperBuild}.
 
-Once this is done, be sure to update your environment variables:
+\subsection{Normal build: Build only OTB}
+\label{sec:installation-linux-normalbuild}
+
+Once all OTB dependencies are availables on your system, use CMake to generate a Makefile:
 \begin{verbatim}
-$ export PATH=$PATH:$GDAL_INSTALL_DIR/bin
-$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GDAL_INSTALL_DIR/lib
-$ export GDAL_DATA=$GDAL_INSTALL_DIR/share/gdal
+$ cd ~/OTB/build
+$ cmake -C configuration.cmake ../otb
 \end{verbatim}
+The script \texttt{configuration.cmake} needs to contain dependencies location if CMake cannot find them automatically.
+This can be done with the \texttt{\textit{XXX}\_DIR} variables containing the directories which contain the
+FindXXX.cmake scripts, or with the \texttt{\textit{XXX}\_INCLUDEDIR} and \texttt{\textit{XXX}\_LIBRARY} variables.
 
-Also note that with this Gdal configuration, you will still need to have Tiff and Geotiff libraries and headers available on your system to build OTB (due to third parties requiring them). However, you can use the system packages for those.
+Additionally, decide which module you wish to enable, together with tests and examples.
+Refer to table~\ref{tab:installation-cmake-variables} for the list of CMake variables.
 
-\subsection{Custom OTB}
 Since OTB is modularized, it is possible to only build some modules instead of the whole set. 
-You can deactivate each module (and the ones that depend on it) one by one from the CMake interface. 
-You just have to switch off the CMake variable OTB\_BUILD\_DEFAULT\_MODULES, press Configure, and then switch off each Module\_module\_name variable (\*).
-To provide an overview on how things work, the option COMPONENTS of the CMake command find\_package is used in order to only load the requested modules.
-This module-specific list prevent CMake from performing a blind search; it is also a convienent way to monitor the dependencies of each module.
-
+To deactivate a module (and the ones that depend on it) switch off the CMake variable OTB\_BUILD\_DEFAULT\_MODULES,
+configure, and then switch off each \texttt{Module\_module\_name} variable.
+To provide an overview on how things work, the option \texttt{COMPONENTS} of the CMake command find\_package is used in
+order to only load the requested modules.
+This module-specific list prevent CMake from performing a blind search; it is also a convienent way to monitor the
+dependencies of each module.
 \begin{verbatim}
 find_package(OTB COMPONENTS OTBCommon OTBTransform [...])
 \end{verbatim} 
 
-Some of the OTB capabilities are considered as optional, and you can deactivate the related modules thanks to a set of CMake variables starting with OTB\_USE\_\ldots 
+Some of the OTB capabilities are considered as optional, and you can deactivate the related modules thanks to a set of
+CMake variables starting with \texttt{OTB\_USE\_\textit{XXX}}.
+Table~\ref{tab:optional} shows which modules are associated to these variables. It is very important to notice that
+these variable override the variable OTB\_BUILD\_DEFAULT\_MODULES.
+
+You are now ready to compile OTB!
+Simply use the make command (other targets can be generated with CMake's \texttt{-G} option):
+\begin{verbatim}
+$ make
+\end{verbatim}
+
+The installation target will copy the binaries and libraries to the installation location:
+\begin{verbatim}
+$ make install
+\end{verbatim}
 
 \begin{center}
 \begin{tiny}
@@ -554,126 +325,13 @@ Some of the OTB capabilities are considered as optional, and you can deactivate 
 \end{tiny}
 \end{center}
 
-The table above shows which third party modules are associated to these variables, and which other modules depend on it. \textbf{It is very important to notice that these variable override the variable OTB\_BUILD\_DEFAULT\_MODULES.}.
+\section{Windows}
+\label{sec:compiling-windows}
 
-Every CMake variable mentionned in this subsection is set to OFF by default except OTB\_USE\_6S and OTB\_USE\_SIFTFAST (which are internal dependencies) so that first build will always be successful. The list of default modules is then the complete module list minus the ones disabled by third parties : 
-
-\begin{multicols}{3}
-\small
-OTB6S \\
-OTBAnomalyDetection \\
-OTBAppChangeDetection \\
-OTBAppDescriptors \\
-OTBAppDimensionalityReduction \\
-OTBAppEdge \\
-OTBAppFiltering \\
-OTBAppFusion \\
-OTBAppHyperspectral \\
-OTBAppImageUtils \\
-OTBAppIndices \\
-OTBApplicationEngine \\
-OTBAppMoments \\
-OTBAppMorphology \\
-OTBAppOpticalCalibration \\
-OTBAppSARCalibration \\
-OTBAppTest \\
-OTBAppTextures \\
-OTBAppVectorDataTranslation \\
-OTBAppVectorUtils \\
-OTBBoost \\
-OTBBoostAdapters \\
-OTBCarto \\
-OTBChangeDetection \\
-OTBCloudDetection \\
-OTBColorMap \\
-OTBCommandLine \\
-OTBCommandLineParser \\
-OTBCommon \\
-OTBComplexImage \\
-OTBConversion \\
-OTBConvolution \\
-OTBCorner \\
-OTBCurlAdapters \\
-OTBDEM \\
-OTBDensity \\
-OTBDescriptors \\
-OTBDimensionalityReduction \\
-OTBDisparityMap \\
-OTBDisplacementField \\
-OTBEdge \\
-OTBEndmembersExtraction \\
-OTBExtendedFilename \\
-OTBFuzzy \\
-OTBGDAL \\
-OTBGdalAdapters \\
-OTBGeoTIFF \\
-OTBImageBase \\
-OTBImageIO \\
-OTBImageManipulation \\
-OTBImageNoise \\
-OTBIndices \\
-OTBInterpolation \\
-OTBIOBSQ \\
-OTBIOGDAL \\
-OTBIOLUM \\
-OTBIOMSTAR \\
-OTBIOMW \\
-OTBIOONERA \\
-OTBIORAD \\
-OTBIOTileMap \\
-OTBIOXML \\
-OTBITK \\
-OTBLabelling \\
-OTBLabelMap \\
-OTBLandSatClassifier \\
-OTBLearningBase \\
-OTBMajorityVoting \\
-OTBMarkov \\
-OTBMetadata \\
-OTBMetrics \\
-OTBMoments \\
-OTBMorphologicalProfiles \\
-OTBMorphologicalPyramid \\
-OTBObjectDetection \\
-OTBObjectList \\
-OTBOGRProcessing \\
-OTBOpenThreads \\
-OTBOpenThreadsAdapters \\
-OTBOpticalCalibration \\
-OTBOssim \\
-OTBOSSIMAdapters \\
-OTBOssimPlugins \\
-OTBPanSharpening \\
-OTBPath \\
-OTBPointSet \\
-OTBPolarimetry \\
-OTBProjection \\
-OTBSARCalibration \\
-OTBSeamCarving \\
-OTBSiftFast \\
-OTBSimulation \\
-OTBSmoothing \\
-OTBSOM \\
-OTBSpatialObjects \\
-OTBStatistics \\
-OTBStereo \\
-OTBStreaming \\
-OTBSupervised \\
-OTBSWIGWrapper \\
-OTBTestKernel \\
-OTBTextures \\
-OTBTimeSeries \\
-OTBTinyXML \\
-OTBTransform \\
-OTBUnmixing \\
-OTBUrbanArea \\
-OTBVectorDataBase \\
-OTBVectorDataIO \\
-OTBVectorDataManipulation \\
-OTBWatersheds \\
-OTBWavelet \\
-\end{multicols}
-
+Everything that is needed for OTB development on Windows, including compiling from source, is covered in details on the OTB wiki at:
+\begin{center}
+\url{http://wiki.orfeo-toolbox.org/index.php/OTB_development_on_Windows}
+\end{center}
 
 \section{Known issues}
 \label{sec:knownissues}
@@ -706,155 +364,3 @@ More information can be found here : \url{http://wiki.orfeo-toolbox.org/index.ph
 Another issue is related to the official package of libkml under Ubuntu 12.4.
 Until this problem is addressed, users of this plateform should disable the option OTB\_USE\_KML, so that OTB won't be built with this third-party.
 
-
-\section{Getting Started With OTB }
-\label{sec:GettingStartedWithOTB}
-
-The simplest way to create a new project with OTB is to create a new directory somewhere in your disk and create two files in it. The first one is a \code{CMakeLists.txt} file that will be used by CMake to generate a Makefile (if you are using UNIX) or a Visual Studio workspace (if you are using MS-Windows).  The second file is an actual C++ program that will exercise some of the large number of classes available in OTB. The details of these files are described in the following section. Under Windows, we provide a specifc example to show you how to proceed.  
-
-For Unix users, once both files are in your directory you can run CMake in order to configure your project. Under UNIX, you can cd to your newly created directory and type ``\code{ccmake .}''. Note the ``.'' in the command line for indicating that the \code{CMakeLists.txt} file is in the current directory. The curses interface will require you to provide the directory where OTB was built. This is the same path that you indicated for the \code{OTB\_BINARY\_DIR} variable at the time of configuring OTB. Then CMake will require you to provide the path to the binary directory where OTB was built. The OTB binary directory will contain a file named \code{OTBConfig.cmake} generated during the configuration process at the time OTB was built.  From this file, CMake will recover all the information required to configure your new OTB project.
-
-
-\subsection{Hello World !}
-\label{sec:HelloWorldOTB}
-
-This section is dedicated to Unix or Linux or MacOsX users, the next section provide specific information for Windows users.
-
-\index{Hello World}
-
-Here is the content of the two files to write in your new project. These two files can be found in the \code{OTB/Examples/Installation} directory. The \code{CMakeLists.txt} file contains the following lines:
-
-\small
-\begin{verbatim}
-PROJECT(HelloWorld)
-
-FIND_PACKAGE(OTB REQUIRED)
-INCLUDE(${OTB_USE_FILE})
-
-ADD_EXECUTABLE(HelloWorld HelloWorld.cxx )
-TARGET_LINK_LIBRARIES(HelloWorld ${OTB_LIBRARIES})
-\end{verbatim}
-
-\normalsize
-
-The first line defines the name of your project. The second line loads a CMake file with a predefined strategy for finding OTB \footnote{Similar files are provided in CMake for other commonly used libraries, all of them named \code{Find*.cmake}}. If the strategy for finding OTB fails, CMake will prompt you for the directory where OTB is installed in your system. In that case you will write this information in the \code{OTB\_DIR} variable. The line \code{INCLUDE(\$\{USE\_OTB\_FILE\})} loads the \code{UseOTB.cmake} file to set all the configuration information from OTB.
-
-The line \code{ADD\_EXECUTABLE} defines as its first argument the name of the executable that will be produced as result of this project. The remaining arguments of \code{ADD\_EXECUTABLE} are the names of the source files to be compiled and linked.  Finally, the \code{TARGET\_LINK\_LIBRARIES} line specifies which OTB libraries will be linked against this project.
-
-\input HelloWorld.tex
-
-At this point you have successfully installed and compiled OTB, and created your first simple program. If you have difficulties, please join the otb-users mailing list (Section~\ref{sec:JoinMailList} on page \pageref{sec:JoinMailList}) and post questions there.
-
-
-\subsection{Build your first application based on the OTB library on Windows platform}
-\label{sec:FirstWinAppOTB}
-
-Create a directory (with write access) where to store your work (for example at C:\textbackslash path\textbackslash to\textbackslash MyFirstCode).
-Organize your repository as it :
-\begin{itemize}
-\item MyFirstCode\textbackslash src
-\item MyFirstCode\textbackslash build
-\end{itemize}
-
-Follow the following steps:
-\begin{enumerate}
-\item Create a CMakeLists.txt into the src repository with the following lines:
-
-
-\begin{verbatim}
-
-project(MyFirstProcessing)
-
-cmake_minimum_required(VERSION 2.8)
-
-find_package(OTB REQUIRED)
-include(${OTB_USE_FILE})
-
-add_executable(MyFirstProcessing MyFirstProcessing.cxx )
-
-target_link_libraries(MyFirstProcessing ${OTB_LIBRARIES} )
-\end{verbatim}
-
-\item Create a MyFirstProcessing.cxx into the src repository with the following lines:
-\begin{verbatim}
-#include "otbImage.h"
-#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
-#include "otbMultiToMonoChannelExtractROI.h"
-
-int main(int argc, char* argv[])
-{
-  if (argc < 3)
-  {
-    std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << "  inputImageFile  outputImageFile" << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  typedef unsigned short PixelType;
-  typedef otb::Image <PixelType, 2> ImageType;
-  typedef otb::VectorImage <PixelType, 2> VectorImageType;
-  typedef otb::MultiToMonoChannelExtractROI <PixelType, PixelType> FilterType;
-  typedef otb::ImageFileReader<VectorImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-
-  FilterType::Pointer filter = FilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
-
-  reader->SetFileName(argv[1]);
-  filter->SetInput(reader->GetOutput());
-  writer->SetFileName(argv[2]);
-  writer->SetInput(filter->GetOutput());
-
-  return EXIT_SUCCESS;
-}
-\end{verbatim}
-\item create a file named BuildMyFirstProcessing.bat into the MyFirstCode directory with the following lines:
-\begin{verbatim}
-@echo off
-
-set /A ARGS_COUNT=0    
-for %%A in (%*) do set /A ARGS_COUNT+=1  
-if %ARGS_COUNT% NEQ 3 (goto :Usage)
-
-if NOT DEFINED OSGEO4W_ROOT (goto :NoOSGEO4W)
-	
-set src_dir=%1
-set build_dir=%2
-set otb_install_dir=%3 
-set current_dir=%CD%
-
-cd %build_dir%
-
-cmake %src_dir% ^
-      -DCMAKE_INCLUDE_PATH:PATH="%OSGEO4W_ROOT%\include" ^
-      -DCMAKE_LIBRARY_PATH:PATH="%OSGEO4W_ROOT%\lib" ^
-      -DOTB_DIR:PATH=%otb_install_dir% ^
-      -DCMAKE_CONFIGURATION_TYPES:STRING=Release
-
-cmake --build . --target INSTALL --config Release
-
-cd %current_dir%
-
-goto :END
-
-:Usage
-echo You need to provide 3 arguments to the script: 
-echo   1. path to the source directory
-echo   2. path to the build directory
-echo   3. path to the installation directory 
-GOTO :END
-
-:NoOSGEO4W
-echo You need to run this script from an OSGeo4W shell
-GOTO :END
-
-:END
-\end{verbatim}
-\item into a OSGEo4W shell, run the configure.bat with the right arguments: full path to your src directory, full path to your build directory, full path to the place where find OTBConfig.cmake file (should be C:\textbackslash path\textbackslash to\textbackslash MyOTBDir\textbackslash install\textbackslash lib\textbackslash otb).
-\item into the OSGeo4W shell, open the MyFirstProcessing.sln
-\item build the solution
-\item into the OSGeo4W shell, go to the bin\textbackslash Release directory and run MyFirstProcessing.exe. You can try for example with the otb\_logo.tif file which can be found into the OTB source.
-\end{enumerate}
