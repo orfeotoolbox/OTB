@@ -75,7 +75,7 @@ private:
 						  "Note: this application doesn't take into account the terms which do not depend on the polarization of the antennas. \n"
 						  "The parameter gain can be used for this purpose.\n"
 						  "\n"
-						  "The final formula is thus : P = | B^T . [S] . A |², where A ans B are two Jones vectors and S is a Sinclair matrix.");
+						  "More details can be found in the OTB CookBook (SAR processing chapter).");
 						  
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
