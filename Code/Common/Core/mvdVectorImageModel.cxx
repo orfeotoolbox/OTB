@@ -117,13 +117,13 @@ VectorImageModel
   // Get the largest possible region of the image
   m_ImageFileReader = DefaultImageFileReaderType::New();
 
-  qDebug()
-    << this << "\n"
-    << "\tQString:" << GetFilename();
+  // qDebug()
+  //   << this << "\n"
+  //   << "\tQString:" << GetFilename();
 
-  std::cout
-    << "\tstd::string: " << QFile::encodeName( GetFilename() ).constData()
-    << std::endl;
+  // std::cout
+  //   << "\tstd::string: " << QFile::encodeName( GetFilename() ).constData()
+  //   << std::endl;
 
   m_ImageFileReader->SetFileName( QFile::encodeName( GetFilename() ) );
   m_ImageFileReader->UpdateOutputInformation();
