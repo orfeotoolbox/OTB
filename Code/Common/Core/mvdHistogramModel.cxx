@@ -73,12 +73,24 @@ HistogramModel
   m_MinPixel(),
   m_MaxPixel()
 {
+  m_MinPixel.Fill( 0 );
+  m_MaxPixel.Fill( 0 );
 }
 
 /*******************************************************************************/
 HistogramModel
 ::~HistogramModel()
 {
+}
+
+/*******************************************************************************/
+bool
+HistogramModel
+::IsValid() const
+{
+  // qDebug() << this << "::IsValid() ->" << ( !m_Histograms.IsNull() && m_Histograms->Size()>0 );
+
+  return !m_Histograms.IsNull() && m_Histograms->Size()>0;
 }
 
 /*******************************************************************************/

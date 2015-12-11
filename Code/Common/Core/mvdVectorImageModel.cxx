@@ -441,12 +441,16 @@ VectorImageModel
 
     GetSettings().SetLowIntensity(
       channel,
-      histogramModel->Quantile( band , 0.02, BOUND_LOWER )
+      !histogramModel->IsValid()
+      ? min[ band ]
+      : histogramModel->Quantile( band , 0.02, BOUND_LOWER )
     );
 
     GetSettings().SetHighIntensity(
       channel,
-      histogramModel->Quantile( band , 0.02, BOUND_UPPER )
+      !histogramModel->IsValid()
+      ? max[ band ]
+      : histogramModel->Quantile( band , 0.02, BOUND_UPPER )
     );
     }
 }

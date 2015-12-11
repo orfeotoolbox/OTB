@@ -230,6 +230,8 @@ void
 AbstractImageModel
 ::RefreshHistogram( void* const context )
 {
+  // qDebug() << this << "::RefreshHistogram(" << context << ")";
+
   // Remember existing child histogram.
   HistogramModel* currentHistogramModel = GetHistogramModel();
 

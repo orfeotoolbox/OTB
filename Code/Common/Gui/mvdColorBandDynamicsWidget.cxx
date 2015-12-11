@@ -255,6 +255,8 @@ void
 ColorBandDynamicsWidget
 ::on_lowIntensityLineEdit_textChanged( const QString& text )
 {
+  // qDebug() << this << "::on_lowIntensityLineEdit_textChanged(" << text << ")";
+
   bool isOk = true;
   double value = text.toDouble( &isOk );
 
@@ -277,6 +279,8 @@ void
 ColorBandDynamicsWidget
 ::on_highIntensityLineEdit_textChanged( const QString& text )
 {
+  // qDebug() << this << "::on_lowIntensityLineEdit_textChanged(" << text << ")";
+
   bool isOk = true;
   double value = text.toDouble( &isOk );
 

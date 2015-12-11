@@ -127,6 +127,9 @@ HistogramController
   HistogramModel* model = imageModel->GetHistogramModel();
   assert( model!=NULL );
 
+  if( !model->IsValid() )
+    return;
+
   assert( GetWidget()==GetWidget< HistogramWidget >() );
   HistogramWidget* widget = GetWidget< HistogramWidget >();
   assert( widget!=NULL );
