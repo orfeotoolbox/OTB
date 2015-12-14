@@ -1,6 +1,5 @@
 macro(package_mingw)
   cmake_parse_arguments(PACKAGE  "" "PREFIX_DIR;ARCH;MXEROOT;NEEDS_OTB_APPS" "SEARCHDIRS;PEFILES" ${ARGN} )
-
   if("${PACKAGE_ARCH}" STREQUAL "x86")
     set(MXE_BIN_DIR "${PACKAGE_MXEROOT}/usr/i686-w64-mingw32.shared/bin")
     set(MXE_OBJDUMP "${PACKAGE_MXEROOT}/usr/bin/i686-w64-mingw32.shared-objdump")
@@ -9,6 +8,8 @@ macro(package_mingw)
     set(MXE_OBJDUMP "${PACKAGE_MXEROOT}/usr/bin/x86_64-w64-mingw32.shared-objdump")
   endif()
 
+  file(GLOB MXE_GCC_LIB_DIR "${MXE_BIN_DIR}/gcc*")
+  list(APPEND PACKAGE_SEARCHDIRS ${MXE_GCC_LIB_DIR})
   list(APPEND PACKAGE_SEARCHDIRS ${MXE_BIN_DIR})
   list(APPEND PACKAGE_SEARCHDIRS "${MXE_BIN_DIR}/../qt/bin") #Qt
   list(APPEND PACKAGE_SEARCHDIRS "${MXE_BIN_DIR}/../qt/lib") #Qwt
@@ -82,6 +83,11 @@ set(SYSTEM_DLLS
   comdlg32.dll
   IMM32.dll
   WINMM.dll
+  Secur32.dll
+  LIBEAY32.dll
+  SHFOLDER.DLL
+  SSLEAY32.dll
+  WSOCK32.DLL
   WINSPOOL.DRV)
 
 ## http://www.cmake.org/Wiki/CMakeMacroListOperations
