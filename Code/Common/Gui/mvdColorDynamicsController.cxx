@@ -262,7 +262,7 @@ ColorDynamicsController
     colorBandDynWgt->SetHighIntensity( 1.0 );
 
     colorBandDynWgt->SetLowQuantile( 2.0 );
-    colorBandDynWgt->SetLowQuantile( 2.0 );
+    colorBandDynWgt->SetHighQuantile( 2.0 );
     }
     colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
