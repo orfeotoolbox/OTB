@@ -34,7 +34,7 @@ macro(package_mingw)
     install(FILES ${Monteverdi_BINARY_DIR}/i18n/${APP_TS_FILENAME}.qm
       DESTINATION ${PACKAGE_PREFIX_DIR}/${Monteverdi_INSTALL_DATA_DIR}/i18n)
   endforeach()
-  
+
   #dependency resolution based on copydlldeps.sh from mxe by Timothy Gu
   if(PACKAGE_NEEDS_OTB_APPS)
     file(GLOB otbapps_list ${OTB_MODULES_DIR}/../../../otb/applications/otbapp_*dll) # /lib/otb
@@ -59,42 +59,36 @@ endmacro(package_mingw)
 
 set(SYSTEM_DLLS
   msvc.*dll
-  USER32.dll
-  GDI32.dll
-  SHELL32.DLL
-  KERNEL32.dll
-  ADVAPI32.dll
-  CRYPT32.dll
-  WS2_32.dll
+  user32.dll
+  gdi32.dll
+  shell32.dll
+  kernel32.dll
+  advapi32.dll
+  crypt32.dll
+  ws2_32.dll
   wldap32.dll
   ole32.dll
-  OPENGL32.DLL
-  GLU32.DLL
-  COMDLG32.DLL
-  IMM32.DLL
-  OLEAUT32.dll
-  COMCTL32.DLL
-  WINMM.DLL
-
-  SHELL32.dll
-  WLDAP32.dll
-  OPENGL32.dll
-  GLU32.dll
+  opengl32.dll
+  glu32.dll
   comdlg32.dll
-  IMM32.dll
-  WINMM.dll
-  Secur32.dll
-  LIBEAY32.dll
-  SHFOLDER.DLL
-  SSLEAY32.dll
-  WSOCK32.DLL
-  WINSPOOL.DRV)
+  imm32.dll
+  oleaut32.dll
+  comctl32.dll
+  winmm.dll
+  secur32.dll
+  libeay32.dll
+  shfolder.dll
+  ssleay32.dll
+  wsock32.dll
+  winspool.drv)
 
 ## http://www.cmake.org/Wiki/CMakeMacroListOperations
 macro(is_system_dll matched value)
   set(${matched})
+  string(TOLOWER ${value} value_)
   foreach (pattern ${SYSTEM_DLLS})
-    if(${value} MATCHES ${pattern})
+    string(TOLOWER ${pattern} pattern_)
+    if(${value_} MATCHES ${pattern_})
       set(${matched} TRUE)
     endif()
   endforeach()
