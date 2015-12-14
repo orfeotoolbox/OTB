@@ -145,7 +145,7 @@ PreferencesDialog
 
     m_UI->resolutionComboBox->setCurrentIndex(
       !value.isValid()
-      ? RESOLUTION_NEAREST
+      ? RESOLUTION_LOWER
       : value.toInt()
     );
   }
