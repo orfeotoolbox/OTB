@@ -206,6 +206,22 @@ ColorBandDynamicsWidget
 /*****************************************************************************/
 void
 ColorBandDynamicsWidget
+::SetLinkButtonEnabled( bool enabled )
+{
+  return m_UI->linkButton->setEnabled( enabled );
+}
+
+/*****************************************************************************/
+void
+ColorBandDynamicsWidget
+::SetDefaultsButtonEnabled( bool enabled )
+{
+  return m_UI->defaultsButton->setEnabled( enabled );
+}
+
+/*****************************************************************************/
+void
+ColorBandDynamicsWidget
 ::SetChannelLabel( RgbwChannel channel )
 {
   m_Channel = channel;

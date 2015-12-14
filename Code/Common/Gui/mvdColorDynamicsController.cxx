@@ -207,6 +207,10 @@ ColorDynamicsController
   //
   // Reset color-dynamics widget.
 
+  // Set constrained editing ON/OFF.
+  // (must be called before settings intensity/quantiles)
+  SetBoundsEnabled( channels );
+
   // Set ranges.
   ResetIntensityRanges( channels );
 
@@ -254,6 +258,7 @@ ColorDynamicsController
     bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
     {
     colorBandDynWgt->SetBounded( true );
+    colorBandDynWgt->SetLinkButtonEnabled( true );
 
     colorBandDynWgt->SetMinIntensity( 0.0 );
     colorBandDynWgt->SetMaxIntensity( 1.0 );
@@ -669,6 +674,61 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
+::SetBoundsEnabled( RgbwChannel channels )
+{
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = -1;
+  CountType end = -1;
+
+  if( !RgbwBounds( begin, end, channels ) )
+    return;
+
+  //
+  // Access color-dynamics widget.
+  ColorDynamicsWidget * colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
+  assert( colorDynamicsWidget!=NULL );
+
+  //
+  // Access image-model.
+  const VectorImageModel * imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  //
+  // Access histogram-model.
+  assert( imageModel->GetHistogramModel()!=NULL );
+  bool hasValidHistogram = imageModel->GetHistogramModel()->IsValid();
+
+  // Block this controller's signals to prevent display refreshed
+  // but let let widget(s) signal their changes so linked values
+  // will be correctly updated.
+  bool thisSignalsBlocked = this->blockSignals( true );
+  {
+  // Assign values to controlled widget.
+  for( CountType i=begin; i<end; ++i )
+    {
+    RgbwChannel channel = static_cast< RgbwChannel >( i );
+
+    ColorBandDynamicsWidget * colorBandDynWgt =
+      colorDynamicsWidget->GetChannel( channel );
+
+    // Block widget's signals...
+    //...but force call to valueChanged() slot to force refresh.
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
+    {
+    colorBandDynWgt->SetBounded( hasValidHistogram );
+    colorBandDynWgt->SetLinkButtonEnabled( hasValidHistogram );
+    colorBandDynWgt->SetDefaultsButtonEnabled( hasValidHistogram );
+    }
+    colorBandDynWgt->blockSignals( widgetSignalsBlocked );
+    }
+  }
+  this->blockSignals( thisSignalsBlocked );
+}
+
+/*****************************************************************************/
+void
+ColorDynamicsController
 ::ResetQuantiles( RgbwChannel channels )
 {
   //
@@ -682,7 +742,7 @@ ColorDynamicsController
   //
   // Access color-dynamics widget.
   ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
-
+  assert( colorDynamicsWidget!=NULL );
 
   // Block this controller's signals to prevent display refreshed
   // but let let widget(s) signal their changes so linked values
@@ -694,7 +754,7 @@ ColorDynamicsController
     {
     RgbwChannel channel = static_cast< RgbwChannel >( i );
 
-    ColorBandDynamicsWidget* colorBandDynWgt =
+    ColorBandDynamicsWidget * colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
 
     // Block widget's signals...
@@ -776,14 +836,16 @@ ColorDynamicsController
   imageModel->RefreshHistogram();
 
   // Refresh color-dynamics.
-  ResetQuantiles(
-    RGBW_CHANNEL_ALL
-    /*
-    imageModel->GetSettings().IsGrayscaleActivated()
-    ? RGBW_CHANNEL_WHITE
-    : RGBW_CHANNEL_RGB
-    */
-  );
+  {
+    assert( imageModel->GetHistogramModel()!=NULL );
+
+    SetBoundsEnabled( RGBW_CHANNEL_ALL );
+
+    if( imageModel->GetHistogramModel()->IsValid() )
+      ResetQuantiles( RGBW_CHANNEL_ALL );
+    else
+      ResetIntensities( RGBW_CHANNEL_ALL );
+  }
 
   // Signal histogram has been refreshed.
   emit HistogramRefreshed();
@@ -1031,8 +1093,8 @@ ColorDynamicsController
   const HistogramModel * histogramModel = imageModel->GetHistogramModel();
   assert( histogramModel!=NULL );
 
-  if( !histogramModel->IsValid() )
-    return;
+  // if( !histogramModel->IsValid() )
+  //   return;
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -1048,7 +1110,7 @@ ColorDynamicsController
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynWgt->GetChannel( chan );
 
-    if( colorBandDynWgt->IsBounded() )
+    if( colorBandDynWgt->IsBounded() && histogramModel->IsValid() )
       {
       // Block widget signals to prevent recursive signal/slot loops.
       bool wgtSignalsBlocked = colorBandDynWgt->blockSignals( true );
@@ -1097,8 +1159,8 @@ ColorDynamicsController
   const HistogramModel * histogramModel = imageModel->GetHistogramModel();
   assert( histogramModel!=NULL );
 
-  if( !histogramModel->IsValid() )
-    return;
+  // if( !histogramModel->IsValid() )
+  //   return;
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -1114,7 +1176,7 @@ ColorDynamicsController
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynWgt->GetChannel( chan );
 
-    if( colorBandDynWgt->IsBounded() )
+    if( colorBandDynWgt->IsBounded() && histogramModel->IsValid() )
       {
       // Block widget signals to prevent recursive signal/slot loops.
       bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );

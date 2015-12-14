@@ -172,11 +172,6 @@ private:
 
   virtual void Disconnect( AbstractModel* );
 
-
-//
-// Private attributes.
-private:
-
   /**
    * \brief Reset intensity ranges to default values for given RGB
    * channels.
@@ -255,6 +250,14 @@ private:
   /**
    */
   void SetGamma();
+
+  /**
+   */
+  void SetBoundsEnabled( RgbwChannel );
+
+//
+// Private attributes.
+private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

@@ -182,6 +182,12 @@ public:
   /**
    */
   void SetBounded( bool enabled );
+  /**
+   */
+  void SetLinkButtonEnabled( bool );
+  /**
+   */
+  void SetDefaultsButtonEnabled( bool );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
