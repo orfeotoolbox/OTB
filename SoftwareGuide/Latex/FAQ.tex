@@ -133,22 +133,19 @@ Moreover you can found the last release of Monteverdi and OTB applications throu
 the OSGeo4W installer. 
 
 \subsection{How to get the latest bleeding-edge version?}\label{sec:FAQMercurial}
-You can get the current development version, as our repository is public, using Mercurial (available at \url{http://www.selenic.com/mercurial}). Be aware that, even if the golden rule is {\em what is committed will compile}, this is not always the case. Changes are usually more than ten per day.
+You can get the current development version, as our repository is public, using Git (available at \url{http://git-scm.com}). Be aware that, even if the golden rule is {\em what is committed will compile}, this is not always the case. Changes are usually more than ten per day.
 
 The first time, you can get the source code using:
 \begin{verbatim}
-      hg clone http://hg.orfeo-toolbox.org/OTB
+      git clone https://git@git.orfeo-toolbox.org/git/otb.git
 \end{verbatim}
 
 Then you can build OTB as usual using this directory as the source (refer to build instructions).
-
 Later if you want to update your source, from the OTB source directory, just do:
 \begin{verbatim}
-      hg pull -u
+      git pull
 \end{verbatim}
-
-A simple \texttt{make} in your OTB binary directory will be enough to update the library (recompiling only the necessary stuff).
-
+A simple \texttt{make} in your OTB binary directory will be enough to update the library (recompiling only the necessary files).
 
 \section{Special issues about compiling OTB from source}
 \label{sec:FAQInstall}
@@ -296,16 +293,16 @@ Once OTB is built with the tests, you just have to go to the binary directory wh
 
 \subsection{How to get the test data?}\label{sec:FAQTestData}
 
-Data used for the tests are also versioned using Mercurial (see \ref{sec:FAQMercurial}).
+Data used for the tests are also versioned using Git (see \ref{sec:FAQMercurial}).
 
 You can get the base doing:
 \begin{verbatim}
-      hg clone http://hg.orfeo-toolbox.org/OTB-Data
+      git clone https://git@git.orfeo-toolbox.org/git/otb-data.git
 \end{verbatim}
 
 This is about 1~GB of data, so it will take a while, but you have to do it only once, as after, a simple
 \begin{verbatim}
-      hg pull -u
+      git pull
 \end{verbatim}
 will update you to the latest version of the repository.
 
@@ -403,5 +400,5 @@ following:
 
 \end{itemize}
 
-You can find more information in the \href{http://hg.orfeo-toolbox.org/OTB/file/tip/RELEASE_NOTES.txt}{RELEASE\_NOTES.txt}.
+You can find more information in the \href{https://git.orfeo-toolbox.org/otb.git/blob/HEAD:/RELEASE_NOTES.txt}{RELEASE\_NOTES.txt}.
 %% \subsection{When will feature X or Y be included in OTB?}
