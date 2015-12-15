@@ -1101,6 +1101,24 @@ MainWindow
   bool bypassQuicklookView = quicklookView->SetBypassRenderingEnabled( true );
 
   //
+  // Block some signals.
+  //
+  // BUGFIX: MANTIS-1120
+  // {
+  assert( m_UI!=NULL );
+  assert( m_UI->m_RenderToolBar!=NULL );
+
+  QComboBox * referenceLayerComboBox =
+    m_UI->m_RenderToolBar->findChild< QComboBox * >(
+      REFERENCE_LAYER_COMBOBOX_NAME
+    );
+
+  assert( referenceLayerComboBox!=NULL );
+
+  bool signalsBlocked = referenceLayerComboBox->blockSignals( true );
+  // }
+
+  //
   // Store image-mode in layer-stack.
   stackedLayerModel->Insert( imageModel, index );
 
@@ -1122,9 +1140,18 @@ MainWindow
     UserZoomExtent();
 
   //
-  // Activate rendering of image-views.
+  // Re-activate rendering of image-views.
   m_ImageView->SetBypassRenderingEnabled( bypassImageView );
   quicklookView->SetBypassRenderingEnabled( bypassQuicklookView );
+
+  //
+  // Un-block some signals.
+  //
+  // BUGFIX: MANTIS-1120
+  // {
+  referenceLayerComboBox->blockSignals( signalsBlocked );
+  // }
+  //
 }
 
 /*****************************************************************************/
