@@ -265,12 +265,18 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
       ul[1] = (buffered.GetIndex()[1]+buffered.GetSize()[1]-1);
 
     ur = ul;
-    ur[0] += 1;
     ll = ul;
-    ll[1] += 1;
     lr = ul;
-    lr[0] += 1;
-    lr[1] += 1;
+    if (ul[0] < static_cast<IndexValueType>(buffered.GetIndex()[0] + buffered.GetSize()[0]-1))
+      {
+      ur[0] += 1;
+      lr[0] += 1;
+      }
+    if (ul[1] < static_cast<IndexValueType>(buffered.GetIndex()[1] + buffered.GetSize()[1]-1))
+      {
+      ll[1] += 1;
+      lr[1] += 1;
+      }
 
     double rx = tmpIndex[0] - static_cast<double>(ul[0]);
     double ry = tmpIndex[1] - static_cast<double>(ul[1]);
