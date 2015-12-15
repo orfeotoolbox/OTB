@@ -1170,6 +1170,8 @@ bool
 ImageViewRenderer
 ::virtual_ZoomToExtent( PointType & center, SpacingType & spacing ) const
 {
+  qDebug() << this << "::virtual_ZoomToExtent()";
+
   assert( !m_GlView.IsNull() );
 
   // Use spacing of viewport as native spacing of reference layer
