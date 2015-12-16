@@ -1170,7 +1170,7 @@ bool
 ImageViewRenderer
 ::virtual_ZoomToExtent( PointType & center, SpacingType & spacing ) const
 {
-  qDebug() << this << "::virtual_ZoomToExtent()";
+  // qDebug() << this << "::virtual_ZoomToExtent()";
 
   assert( !m_GlView.IsNull() );
 
