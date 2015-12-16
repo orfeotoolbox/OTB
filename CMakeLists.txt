@@ -36,7 +36,7 @@ set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG" )
 set(Monteverdi_VERSION_MAJOR "3")
 set(Monteverdi_VERSION_MINOR "0")
 set(Monteverdi_VERSION_PATCH "0")
-set(Monteverdi_VERSION_SUFFIX "-RC1")
+set(Monteverdi_VERSION_SUFFIX "")
 
 #----------------------------------------------------------------------------
 # Monteverdi data version number.  An even minor number corresponds to releases.
