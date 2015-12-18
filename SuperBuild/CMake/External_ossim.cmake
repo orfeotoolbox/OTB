@@ -49,7 +49,7 @@ else()
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "https://www.orfeo-toolbox.org/packages/ossim-minimal-r23537.tar.gz"
-    URL_MD5 40f406c0da9cc188092582b3bdb20a80
+    URL_MD5 f77d574ab2817bcc36633f77824facb5
     BINARY_DIR ${OSSIM_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -67,8 +67,9 @@ else()
     -DCMAKE_PREFIX_PATH:STRING=${SB_INSTALL_PREFIX}
     ${OSSIM_SB_CONFIG}
     DEPENDS ${${proj}_DEPENDENCIES}
-    CONFIGURE_COMMAND ${SB_CMAKE_COMMAND} ${OSSIM_SB_SRC}/ossim
+    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
+
 
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
