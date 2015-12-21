@@ -1,4 +1,4 @@
-Ice v.0.4.0 - Changes since version 0.3.0 (2015/05/29)
+Ice v.0.4.0 - Changes since version 0.3.0 (2015/12/22)
 ------------------------------------------
 * Features;
   * Split otb::GlImageActor::GetPixelFromView() in two methods
