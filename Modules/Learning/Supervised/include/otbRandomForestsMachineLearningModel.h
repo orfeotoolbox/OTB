@@ -24,8 +24,9 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 #include "itkVariableSizeMatrix.h"
+#include "otbCvRTreesWrapper.h"
 
-class CvRTrees;
+class CvRTreesWrapper;
 
 namespace otb
 {
@@ -40,26 +41,29 @@ public:
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  // Input related typedefs
-  typedef TInputValue                                   InputValueType;
-  typedef itk::VariableLengthVector<InputValueType>     InputSampleType;
-  typedef itk::Statistics::ListSample<InputSampleType>  InputListSampleType;
-
-  // Target related typedefs
-  typedef TTargetValue                                  TargetValueType;
-  typedef itk::FixedArray<TargetValueType,1>            TargetSampleType;
-  typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
+  typedef typename Superclass::InputValueType             InputValueType;
+  typedef typename Superclass::InputSampleType            InputSampleType;
+  typedef typename Superclass::InputListSampleType        InputListSampleType;
+  typedef typename Superclass::TargetValueType            TargetValueType;
+  typedef typename Superclass::TargetSampleType           TargetSampleType;
+  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
   
   // Other
   typedef itk::VariableSizeMatrix<float>                VariableImportanceMatrixType;
 
 
   //opencv typedef
-  typedef CvRTrees RFType;
+  typedef CvRTreesWrapper RFType;
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
-  itkTypeMacro(RandomForestsMachineLearningModel, itk::MachineLearningModel);
+  itkTypeMacro(RandomForestsMachineLearningModel, MachineLearningModel);
+
+  /** Train the machine learning model */
+  virtual void Train();
+  /** Predict values using the model */
+  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
   /** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="");
@@ -117,8 +121,8 @@ public:
   itkGetMacro(TerminationCriteria, int);
   itkSetMacro(TerminationCriteria, int);
 
-  itkGetMacro(RegressionMode, bool);
-  itkSetMacro(RegressionMode, bool);
+  itkGetMacro(ComputeMargin, bool);
+  itkSetMacro(ComputeMargin, bool);
 
   /** Returns a matrix containing variable importance */
   VariableImportanceMatrixType GetVariableImportance();
@@ -141,16 +145,11 @@ protected:
   /* /\** Target list sample *\/ */
   /* typename TargetListSampleType::Pointer m_TargetListSample; */
 
-  /** Train the machine learning model */
-  virtual void TrainClassification();
-  /** Predict values using the model */
-  virtual TargetSampleType PredictClassification(const InputSampleType& input) const;
-
 private:
   RandomForestsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  CvRTrees * m_RFModel;
+  CvRTreesWrapper * m_RFModel;
   /** The depth of the tree. A low value will likely underfit and conversely a
    * high value will likely overfit. The optimal value can be obtained using cross
    * validation or other suitable methods. */
@@ -194,7 +193,7 @@ private:
    * first category. */
   std::vector<float> m_Priors;
   /** If true then variable importance will be calculated and then it can be
-   * retrieved by CvRTrees::get_var_importance(). */
+   * retrieved by CvRTreesWrapper::get_var_importance(). */
   bool m_CalculateVariableImportance;
   /** The size of the randomly selected subset of features at each tree node and
    * that are used to find the best split(s). If you set it to 0 then the size will
@@ -210,8 +209,10 @@ private:
   float m_ForestAccuracy;
   /** The type of the termination criteria */
   int m_TerminationCriteria;
-  /** Perform regression instead of classification */
-  bool m_RegressionMode;
+  /** Wether to compute margin (difference in probability between the
+   * 2 most voted classes) instead of confidence (probability of the most
+   * voted class) in prediction*/
+  bool m_ComputeMargin;
 };
 } // end namespace otb
 

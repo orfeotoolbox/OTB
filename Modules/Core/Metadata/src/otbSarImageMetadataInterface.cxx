@@ -28,8 +28,90 @@ namespace otb
 SarImageMetadataInterface
 ::SarImageMetadataInterface()
 {
+
 }
 
+const std::string
+SarImageMetadataInterface
+::GetProductType() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+    {
+    itkExceptionMacro(<< "Invalid Metadata");
+    }
+
+    ImageKeywordlistType imageKeywordlist;
+
+    if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+      {
+      itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+      }
+
+    if (imageKeywordlist.HasKey("support_data.product_type"))
+      {
+      const std::string product_type = imageKeywordlist.GetMetadataByKey("support_data.product_type");
+      return product_type;
+      }
+    return "";
+}
+
+const std::string
+SarImageMetadataInterface
+::GetAcquisitionMode() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+    {
+    itkExceptionMacro(<< "Invalid Metadata");
+    }
+
+    ImageKeywordlistType imageKeywordlist;
+
+    if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+      {
+      itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+      }
+
+    if (imageKeywordlist.HasKey("support_data.acquisition_mode"))
+      {
+      const std::string acquisition_mode = imageKeywordlist.GetMetadataByKey("support_data.acquisition_mode");
+      return acquisition_mode;
+      }
+    return "";
+}
+
+void
+SarImageMetadataInterface
+::CreateCalibrationLookupData(const short itkNotUsed(t))
+{
+
+}
+
+const SarImageMetadataInterface::LookupDataPointerType
+SarImageMetadataInterface
+::GetCalibrationLookupData(const short type)
+{
+  if (HasCalibrationLookupDataFlag())
+    {
+    CreateCalibrationLookupData(type);
+    }
+
+  return m_SarLut;
+}
+
+bool
+SarImageMetadataInterface
+::HasCalibrationLookupDataFlag() const
+{
+  const ImageKeywordlist imageKeywordlist = this->GetImageKeywordlist();
+  /* checking if the key exist is more than enough */
+  if (imageKeywordlist.HasKey("support_data.calibration_lookup_flag"))
+    {
+    return true;
+    }
+  return false;
+}
 
 SarImageMetadataInterface::RealType
 SarImageMetadataInterface
@@ -62,7 +144,6 @@ SarImageMetadataInterface
 {
   return SarImageMetadataInterface::GetConstantValuePointSet(0.0);
 }
-
 
 SarImageMetadataInterface::PointSetPointer
 SarImageMetadataInterface
@@ -106,6 +187,12 @@ SarImageMetadataInterface
   return polynomialDegree;
 }
 
+double
+SarImageMetadataInterface
+::GetRescalingFactor() const
+{
+  return 1.0;
+}
 SarImageMetadataInterface::IndexType
 SarImageMetadataInterface
 ::GetRadiometricCalibrationNoisePolynomialDegree() const

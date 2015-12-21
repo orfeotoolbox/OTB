@@ -34,10 +34,16 @@ QtWidgetInputProcessXMLParameter::~QtWidgetInputProcessXMLParameter()
 
 void QtWidgetInputProcessXMLParameter::DoUpdateGUI()
 {
-  // Update the lineEdit
-  QString text( m_XMLParam->GetFileName() );
-  if (text != m_Input->text())
-    m_Input->setText(text);
+  if (m_XMLParam->HasUserValue())
+    {
+    // Update the lineEdit
+    QString text(
+      QFile::decodeName( m_XMLParam->GetFileName() )
+    );
+
+    if (text != m_Input->text())
+      m_Input->setText(text);
+    }
 }
 
 void QtWidgetInputProcessXMLParameter::DoCreateWidget()
@@ -71,12 +77,27 @@ void QtWidgetInputProcessXMLParameter::SelectFile()
   fileDialog.setFileMode(QFileDialog::AnyFile);
   fileDialog.setNameFilter("XML File (*.xml)");
 
+  assert( m_Input!=NULL );
+
+  if( !m_Input->text().isEmpty() )
+    {
+    QFileInfo finfo( m_Input->text() );
+
+    fileDialog.setDirectory(
+      finfo.isDir()
+      ? finfo.absoluteFilePath()
+      : finfo.absoluteDir()
+    );
+    }
+
   if (fileDialog.exec())
     {
     QString name = fileDialog.selectedFiles().at(0);
+
     if( !name.isEmpty() )
       {
-      this->SetFileName(name);
+      this->SetFileName( name );
+
       m_Input->setText(name);
       }
     }
@@ -85,15 +106,14 @@ void QtWidgetInputProcessXMLParameter::SelectFile()
 void QtWidgetInputProcessXMLParameter::SetFileName(const QString& value)
 {
   // load xml file name
-  m_XMLParam->SetValue(value.toAscii().constData());
-
-  // notify of value change
-  QString key( m_XMLParam->GetKey() );
-
-  emit ParameterChanged(key);
-
-  GetModel()->UpdateAllWidgets();
-
+  if( m_XMLParam->SetFileName(
+	QFile::encodeName( value ).constData() ) )
+    {
+    // notify of value change
+    QString key( m_XMLParam->GetKey() );
+    emit ParameterChanged(key);
+    GetModel()->UpdateAllWidgets();
+    }
 }
 
 }

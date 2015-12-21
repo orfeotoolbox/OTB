@@ -16,7 +16,7 @@
 
 =========================================================================*/
 #include "otbExtendedFilenameToReaderOptions.h"
-#include <boost/algorithm/string.hpp>
+#include "otb_boost_string_header.h"
 
 namespace otb
 {
@@ -43,7 +43,7 @@ ExtendedFilenameToReaderOptions
 
   m_Options.skipGeom.first  = false;
   m_Options.skipGeom.second = false;
-  
+
   m_Options.skipRpcTag.first  = false;
   m_Options.skipRpcTag.second = false;
 
@@ -122,7 +122,7 @@ ExtendedFilenameToReaderOptions
       m_Options.skipRpcTag.second = true;
       }
     }
-  
+
   //Option Checking
   MapIteratorType it;
   for ( it=map.begin(); it != map.end(); it++ )

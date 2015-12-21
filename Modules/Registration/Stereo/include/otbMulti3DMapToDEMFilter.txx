@@ -337,7 +337,14 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateOutpu
     m_IsGeographic = oSRS.IsGeographic(); // TODO check if this test is valid for all projection systems
     }
 
-
+  // Set the NoData value
+  std::vector<bool> noDataValueAvailable;
+  noDataValueAvailable.push_back(true);
+  std::vector<double> noDataValue;
+  noDataValue.push_back(m_NoDataValue);
+  itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
+  itk::EncapsulateMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,noDataValue);
 }
 
 template<class T3DImage, class TMaskImage, class TOutputDEMImage>
@@ -541,22 +548,24 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
   typename OutputImageType::PointType pointRefStep;
   typename OutputImageType::RegionType requestedRegion = outputPtr->GetRequestedRegion();
 
-  typename TOutputDEMImage::SpacingType step = outputPtr->GetSpacing();
+//  typename TOutputDEMImage::SpacingType step = outputPtr->GetSpacing();
 
   //convert requested region to Long/Lat
 
-  typename TOutputDEMImage::SizeType size = requestedRegion.GetSize();
+//  typename TOutputDEMImage::SizeType size = requestedRegion.GetSize();
 
   typename TOutputDEMImage::IndexType index = requestedRegion.GetIndex();
   outputPtr->TransformIndexToPhysicalPoint(index, pointRef);
+  /*
   InputInternalPixelType regionLong1 = pointRef[0];
   InputInternalPixelType regionLat1 = pointRef[1];
   InputInternalPixelType regionLong2 = pointRef[0] + size[0] * step[0];
   InputInternalPixelType regionLat2 = pointRef[1] + size[1] * step[1];
   InputInternalPixelType minLong = std::min(regionLong1, regionLong2);
-  // InputInternalPixelType minLat = std::min(regionLat1, regionLat2);
-  // InputInternalPixelType maxLong = std::max(regionLong1, regionLong2);
-  // InputInternalPixelType maxLat = std::max(regionLat1, regionLat2);
+  InputInternalPixelType minLat = std::min(regionLat1, regionLat2);
+  InputInternalPixelType maxLong = std::max(regionLong1, regionLong2);
+  InputInternalPixelType maxLat = std::max(regionLat1, regionLat2);
+  */
 
   TOutputDEMImage * tmpDEM = NULL;
   AccumulatorImageType *tmpAcc = NULL;

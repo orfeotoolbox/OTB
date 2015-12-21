@@ -59,6 +59,7 @@ public:
   typedef ClassificationFilterType::ValueType                                                  ValueType;
   typedef ClassificationFilterType::LabelType                                                  LabelType;
   typedef otb::MachineLearningModelFactory<ValueType, LabelType>                               MachineLearningModelFactoryType;
+  typedef ClassificationFilterType::ConfidenceImageType                                        ConfidenceImageType;
 
 private:
   void DoInit()
@@ -92,7 +93,22 @@ private:
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out", "Output image containing class labels");
-    SetParameterOutputImagePixelType( "out", ImagePixelType_uint8);
+    SetDefaultOutputPixelType( "out", ImagePixelType_uint8);
+
+    AddParameter(ParameterType_OutputImage, "confmap",  "Confidence map");
+    SetParameterDescription( "confmap", "Confidence map of the produced classification. The confidence index depends on the model : \n"
+      "  - LibSVM : difference between the two highest probabilities (needs a model with probability estimates, so that classes probabilities can be computed for each sample)\n"
+      "  - OpenCV\n"
+      "    * Boost : sum of votes\n"
+      "    * DecisionTree : (not supported)\n"
+      "    * GradientBoostedTree : (not supported)\n"
+      "    * KNearestNeighbors : number of neighbors with the same label\n"
+      "    * NeuralNetwork : difference between the two highest responses\n"
+      "    * NormalBayes : (not supported)\n"
+      "    * RandomForest : Confidence (proportion of votes for the majority class). Margin (normalized difference of the votes of the 2 majority classes) is not available for now.\n"
+      "    * SVM : distance to margin (only works for 2-class models)\n");
+    SetDefaultOutputPixelType( "confmap", ImagePixelType_double);
+    MandatoryOff("confmap");
 
     AddRAMParameter();
 
@@ -171,6 +187,21 @@ private:
       }
 
     SetParameterOutputImage<OutputImageType>("out", m_ClassificationFilter->GetOutput());
+
+    // output confidence map
+    if (IsParameterEnabled("confmap") && HasValue("confmap"))
+      {
+      m_ClassificationFilter->SetUseConfidenceMap(true);
+      if (m_Model->HasConfidenceIndex())
+        {
+        SetParameterOutputImage<ConfidenceImageType>("confmap",m_ClassificationFilter->GetOutputConfidence());
+        }
+      else
+        {
+        otbAppLogWARNING("Confidence map requested but the classifier doesn't support it!");
+        this->DisableParameter("confmap");
+        }
+      }
   }
 
   ClassificationFilterType::Pointer m_ClassificationFilter;

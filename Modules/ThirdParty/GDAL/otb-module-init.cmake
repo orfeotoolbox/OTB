@@ -8,6 +8,10 @@ if(NOT GDAL_FOUND)
  message(FATAL_ERROR "Cannot find GDAL. Set GDAL_INCLUDE_DIR and GDAL_LIBRARY")
 endif()
 
+#Allow to deactivate GDAL checking (done by default)
+set(GDAL_CONFIG_CHECKING ON CACHE BOOL "Tests to check gdal config." FORCE)
+mark_as_advanced(GDAL_CONFIG_CHECKING)
+
 if(GDAL_CONFIG_CHECKING)
 	set(MIN_MAJOR_VERSION 1)
 	set(MIN_MINOR_VERSION 10)
@@ -23,7 +27,7 @@ if(GDAL_CONFIG_CHECKING)
 	#------------------- TESTS ---------------------
 	# Version of GDAL  
 	try_run(RUN_RESULT_VERSION COMPILE_RESULT_VERSION ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalVersionTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}" ARGS ${TEMP}/gdalVersion.txt ${MIN_MAJOR_VERSION} ${MIN_MINOR_VERSION})
-
+  
 	# Has OGR
 	try_compile(GDAL_HAS_OGR ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalOGRTest.cxx CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}")
 
@@ -85,6 +89,15 @@ if(GDAL_CONFIG_CHECKING)
 		file(READ "${TEMP}/gdalVersion.txt" DETECTED_VERSION)
 		message(WARNING "Version of GDAL must be >= " ${MIN_MAJOR_VERSION} "." ${MIN_MINOR_VERSION} " : " ${DETECTED_VERSION} " detected.")
 		set(GDAL_QUALIFIES FALSE)
+  else((${RUN_RESULT_VERSION} EQUAL 1))
+    file(READ "${TEMP}/gdalVersion.txt" DETECTED_VERSION)
+    string(SUBSTRING ${DETECTED_VERSION} 0 2 VER2)
+    if(${VER2} EQUAL "2.")
+      message(STATUS "Gdal >= 2.0.0 detected")
+      set(OTB_USE_GDAL_20 true CACHE INTERNAL "True if GDAL >= 2.0.0 has been detected" FORCE )
+    else(${VER2} EQUAL "2.")
+      set(OTB_USE_GDAL_20 false CACHE INTERNAL "True if GDAL >= 2.0.0 has been detected" FORCE )
+    endif()
 	endif()
 		
 	if (NOT GDAL_HAS_OGR)
@@ -98,8 +111,8 @@ if(GDAL_CONFIG_CHECKING)
 	else()
 
 		if (NOT GDAL_HAS_J2K_JG2000 AND NOT GDAL_HAS_J2K_OPJG AND NOT GDAL_HAS_J2K_KAK AND NOT GDAL_HAS_J2K_ECW)
-		message(WARNING "No Jpeg2000 driver found (compatible drivers are : OpenJpeg, Kakadu, ECW).")
-		set(GDAL_QUALIFIES FALSE)
+		message(STATUS "No Jpeg2000 driver found (compatible drivers are : OpenJpeg, Kakadu, ECW).")
+		#set(GDAL_QUALIFIES FALSE)
 		endif()
 			
 		if (NOT GDAL_HAS_JPEG)
@@ -190,5 +203,24 @@ if(GDAL_CONFIG_CHECKING)
           message(STATUS "Check if Gdal qualifies for Orfeo ToolBox -- no.")
 	endif()
 
+  if(NOT GDAL_VERSION)
+    if(EXISTS "${TEMP}/gdalVersion.txt")
+      file(READ "${TEMP}/gdalVersion.txt" GDAL_VERSION)
+    endif()
+  endif()
+  message(STATUS "  Version : ${GDAL_VERSION}")
+  message(STATUS "  Drivers for JPEG 2000 : ")
+  if(GDAL_HAS_J2K_JG2000)
+    message(STATUS "    Jasper (will not be used)")
+  endif()
+  if(GDAL_HAS_J2K_OPJG)
+    message(STATUS "    OpenJPEG")
+  endif()
+  if(GDAL_HAS_J2K_KAK)
+    message(STATUS "    Kakadu")
+  endif()
+  if(GDAL_HAS_J2K_ECW)
+    message(STATUS "    ECW")
+  endif()
 
 endif() #GDAL_CONFIG_CHECKING

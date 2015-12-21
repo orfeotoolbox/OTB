@@ -23,6 +23,7 @@
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
 #include "otbOGRFieldWrapper.h"
+#include "otbConfigure.h"
 #include <cassert>
 #include <vector>
 #include <boost/mpl/map.hpp>
@@ -39,7 +40,7 @@
 // #include "boost/type_traits/is_array.hpp"
 #include "boost/type_traits/is_contiguous.h" // from OTB actually
 
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "ogr_feature.h"  // OGRFeature::*field_getters
@@ -84,6 +85,10 @@ typedef boost::mpl::map
   , pair<char*                   , int_<OFTString> >
   , pair<char const*             , int_<OFTString> >
   , pair<std::vector<std::string>, int_<OFTStringList> >
+  #ifdef OTB_USE_GDAL_20
+    , pair<GIntBig, int_<OFTInteger64> >
+    , pair<std::vector<GIntBig>, int_<OFTInteger64List> >
+  #endif
   // OFTBinary
   // OFTDate
   // OFTTime
@@ -312,6 +317,10 @@ typedef map
   , pair<int_<OFTRealList>,    MemberContainerGetterPtr<double, &OGRFeature::GetFieldAsDoubleList> >
   , pair<int_<OFTString>,      MemberGetterPtr<char const*,     &OGRFeature::GetFieldAsString, std::string> >
   , pair<int_<OFTStringList>,  StringListMemberGetterPtr<std::vector<std::string> > >
+  #ifdef OTB_USE_GDAL_20
+  , pair<int_<OFTInteger64>, MemberGetterPtr<GIntBig, &OGRFeature::GetFieldAsInteger64> >
+  , pair<int_<OFTInteger64List>, MemberContainerGetterPtr<GIntBig, &OGRFeature::GetFieldAsInteger64List> >
+  #endif
   > FieldGetters_Map;
 
 /**\ingroup GeometryInternals
@@ -327,6 +336,10 @@ typedef map
   , pair<int_<OFTRealList>,    MemberContainerSetterPtr<double, &OGRFeature::SetField> >
   , pair<int_<OFTString>,      MemberSetterPtr<char const*,     &OGRFeature::SetField/*, std::string*/> >
   , pair<int_<OFTStringList>,  StringListMemberSetterPtr<std::vector<std::string> > >
+  #ifdef OTB_USE_GDAL_20
+  , pair<int_<OFTInteger64>, MemberSetterPtr<GIntBig, &OGRFeature::SetField> >
+  , pair<int_<OFTInteger64List>, MemberContainerSetterPtr<const GIntBig, &OGRFeature::SetField> >
+  #endif
   > FieldSetters_Map;
 
 /**\ingroup GeometryInternals
@@ -373,7 +386,7 @@ inline
 void otb::ogr::Field::CheckInvariants() const
 {
   assert(m_Feature && "OGR Fields must be associated to a valid feature");
-  assert(int(m_index) < m_Feature->GetFieldCount() && "Out-of-range index for a OGR field");
+  assert(m_index < m_Feature->GetFieldCount() && "Out-of-range index for a OGR field");
   assert(m_Feature->GetFieldDefnRef(m_index) && "No definition available for the OGR field");
 }
 

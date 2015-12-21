@@ -36,7 +36,10 @@ QtWidgetComplexOutputImageParameter::~QtWidgetComplexOutputImageParameter()
 void QtWidgetComplexOutputImageParameter::DoUpdateGUI()
 {
   // Update the lineEdit
-  QString text( m_OutputImageParam->GetFileName() );
+  QString text(
+    QFile::decodeName( m_OutputImageParam->GetFileName() )
+  );
+
   if (text != m_Input->text())
     m_Input->setText(text);
 }
@@ -91,7 +94,7 @@ void QtWidgetComplexOutputImageParameter::SelectFile()
 void QtWidgetComplexOutputImageParameter::SetFileName(const QString& value)
 {
   // save value
-  m_FileName = value.toAscii().constData();
+  m_FileName = QFile::encodeName( value ).constData();
 
   m_OutputImageParam->SetFileName(m_FileName);
 

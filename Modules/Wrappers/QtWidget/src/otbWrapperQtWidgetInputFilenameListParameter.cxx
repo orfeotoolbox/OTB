@@ -47,7 +47,11 @@ void QtWidgetInputFilenameListParameter::DoUpdateGUI()
   std::vector<std::string>::iterator it;
   for (it = fileList.begin(); it != fileList.end(); ++it)
     {
-      m_FileSelectionList[i++]->GetInput()->setText(QString( (*it).c_str() ));
+      m_FileSelectionList[i++]->GetInput()->setText(
+	QFile::decodeName(
+	  it->c_str()
+	)
+      );
     }
 }
 

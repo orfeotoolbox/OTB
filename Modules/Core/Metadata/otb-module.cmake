@@ -5,16 +5,16 @@ are supported. for instance: Pleiades, SPOT6, TerraSar, and so on).")
 otb_module(OTBMetadata
   DEPENDS
     OTBObjectList
-    OTBBoost
+    OTBBoostAdapters
     OTBITK
     OTBOSSIMAdapters
     OTBCommon
-
+    
   TEST_DEPENDS
     OTBTestKernel
     OTBImageIO
     OTBImageBase
-
+    
   DESCRIPTION
     "${DOCUMENTATION}"
 )

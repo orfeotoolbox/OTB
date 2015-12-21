@@ -24,9 +24,22 @@
 #include "otbImageKeywordlist.h"
 
 #include "ossim/base/ossimKeywordlist.h"
+
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "ossim/projection/ossimProjection.h"
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/base/ossimFilename.h"
+#pragma GCC diagnostic pop
+#else
+#include "ossim/projection/ossimProjection.h"
+#include "ossim/projection/ossimProjectionFactoryRegistry.h"
+#include "ossim/base/ossimFilename.h"
+#endif
+
+
 
 #include "ossim/ossimPluginProjectionFactory.h"
 

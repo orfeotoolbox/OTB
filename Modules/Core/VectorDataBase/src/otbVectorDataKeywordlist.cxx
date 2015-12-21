@@ -20,6 +20,9 @@
 
 #include "otbVectorDataKeywordlist.h"
 
+#include "otbConfigure.h"
+#include "itkNumericTraits.h"
+
 namespace otb
 {
 
@@ -88,25 +91,39 @@ VectorDataKeywordlist
     {
     if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
       {
-      if (m_FieldList[i].first->GetType() == OFTString)
+      switch(m_FieldList[i].first->GetType())
+        {
+        case OFTString:
         {
         return m_FieldList[i].second.String;
         }
-      if (m_FieldList[i].first->GetType() == OFTInteger)
+        case OFTInteger:
         {
         std::ostringstream ss;
         ss << std::setprecision(15) << m_FieldList[i].second.Integer;
         return ss.str();
         }
-      if (m_FieldList[i].first->GetType() == OFTReal)
+#ifdef OTB_USE_GDAL_20
+        case OFTInteger64:
+        {
+        std::ostringstream ss;
+        ss << std::setprecision(15) << m_FieldList[i].second.Integer64;
+        return ss.str();
+        }
+#endif     
+        case OFTReal:
         {
         std::ostringstream ss;
         ss << std::setprecision(15) << m_FieldList[i].second.Real;
         return ss.str();
         }
-      itkExceptionMacro(
-        << "This type (" << m_FieldList[i].first->GetType() <<
-        ") is not handled (yet) by GetFieldAsString(), please request for it");
+        default:
+        {
+        itkExceptionMacro(
+          << "Type of field " << m_FieldList[i].first->GetNameRef() << " (" << m_FieldList[i].first->GetType() <<
+          ") is not handled (yet) by GetFieldAsString(), please request for it");
+        }
+        }
       }
     }
   return "";
@@ -120,24 +137,30 @@ VectorDataKeywordlist
       {
       if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
         {
-        if (m_FieldList[i].first->GetType() == OFTInteger)
+        switch (m_FieldList[i].first->GetType())
+          {
+          case OFTInteger:
           {
           return (double)(m_FieldList[i].second.Integer);
           }
-        if (m_FieldList[i].first->GetType() == OFTReal)
+          case OFTReal:
           {
           return (double)(m_FieldList[i].second.Real);
           }
-        if (m_FieldList[i].first->GetType() == OFTString)
+          case OFTString:
           {
           std::istringstream is(m_FieldList[i].second.String);
           double value;
           is >> value;
           return value;
           }
-        itkExceptionMacro(
-          << "This type (" << m_FieldList[i].first->GetType() <<
-          ") is not handled (yet) by GetFieldAsDouble(), please request for it");
+          default:
+          {
+           itkExceptionMacro(
+             << "Type of field " << m_FieldList[i].first->GetNameRef() << " (" << m_FieldList[i].first->GetType() <<
+             ") is not handled (yet) by GetFieldAsDouble(), please request for it");
+          }
+          }
         }
       }
     return 0.;
@@ -151,26 +174,47 @@ VectorDataKeywordlist
       {
       if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
         {
-        if (m_FieldList[i].first->GetType() == OFTInteger)
+        switch(m_FieldList[i].first->GetType())
           {
-          return (int)(m_FieldList[i].second.Integer);
+          case OFTInteger:
+          {
+        return (int)(m_FieldList[i].second.Integer);
+        }
+#ifdef OTB_USE_GDAL_20
+        // Some fields that were OFTInteger with gdal 1.x are now
+        // exposed as OFTInteger64. So as to make the old code still
+        // work with the same data, here we downcast to Integer (if
+        // and only if no overflow occur).
+        case OFTInteger64:
+          {
+          if(m_FieldList[i].second.Integer64 > itk::NumericTraits<int>::max())
+            {
+            itkExceptionMacro(<<"value "<<m_FieldList[i].second.Integer64<<" of field "<<m_FieldList[i].first->GetNameRef()<<" can not be safely casted to 32 bits integer");
+            }
+          
+          return static_cast<int>(m_FieldList[i].second.Integer64);
           }
-        if (m_FieldList[i].first->GetType() == OFTReal)
+#endif    
+        case OFTReal:
           {
           return (int)(m_FieldList[i].second.Real);
           }
-        if (m_FieldList[i].first->GetType() == OFTString)
+        case OFTString:
           {
           std::istringstream is(m_FieldList[i].second.String);
           int value;
           is >> value;
           return value;
           }
+        default:
+        {
         itkExceptionMacro(
-          << "This type (" << m_FieldList[i].first->GetType() <<
+          << "Type of field " << m_FieldList[i].first->GetNameRef() << " (" << m_FieldList[i].first->GetType() <<
           ") is not handled (yet) by GetFieldAsInt(), please request for it");
         }
-      }
+        }
+        }
+        }
     return 0.;
 }
 
@@ -383,51 +427,11 @@ VectorDataKeywordlist::CopyFieldList(const Self& kwl)
                              kwl.GetNthField(idx).second.Real);
       break;
       }
-      case OFTIntegerList:
-      {
-      std::cerr << "Type not handled for Integer conversion" <<std::endl;
-      break;
-      }
-      case OFTRealList:
+      default:
       {
       std::cerr << "Type not handled for Integer conversion"<<std::endl;
       break;
-      }
-      case OFTStringList:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTWideString:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTWideStringList:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTBinary:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTDate:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTTime:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
-      case OFTDateTime:
-      {
-      std::cerr << "Type not handled for Integer conversion"<<std::endl;
-      break;
-      }
+      }      
       }
     }
 }
@@ -447,19 +451,9 @@ VectorDataKeywordlist
       output << field.second.Integer;
       break;
       }
-    case OFTIntegerList:
-      {
-      output << "Type not handled for printing";
-      break;
-      }
     case OFTReal:
       {
       output << field.second.Real;
-      break;
-      }
-    case OFTRealList:
-      {
-      std::cerr << "Type not handled for printing" << std::endl;
       break;
       }
     case OFTString:
@@ -468,26 +462,6 @@ VectorDataKeywordlist
         {
         output << field.second.String;
         }
-      break;
-      }
-    case OFTStringList:
-      {
-      output << "Type not handled for printing";
-      break;
-      }
-    case OFTWideString:
-      {
-      output << "Type not handled for printing";
-      break;
-      }
-    case OFTWideStringList:
-      {
-      output << "Type not handled for printing";
-      break;
-      }
-    case OFTBinary:
-      {
-      output << "Type not handled for printing";
       break;
       }
     case OFTDate:
@@ -506,6 +480,16 @@ VectorDataKeywordlist
              << field.second.Date.Hour << field.second.Date.Minute << field.second.Date.Second;
       break;
       }
+#ifdef OTB_USE_GDAL_20
+    case OFTInteger64:
+    {
+    output << std::setprecision(15)<<field.second.Integer64;
+    break;
+    }
+#endif     
+    default:
+      output << "Type not handled for printing";
+      break;
     }
   output << std::endl;
   return output.str();
@@ -524,19 +508,16 @@ VectorDataKeywordlist
       outField.second.Integer = field.second.Integer;
       break;
       }
-    case OFTIntegerList:
-      {
-      std::cerr << "OGR type not handled" << std::endl;
-      break;
-      }
+#ifdef OTB_USE_GDAL_20
+    case OFTInteger64:
+    {
+    outField.second.Integer64 = field.second.Integer64;
+    break;
+    }
+#endif     
     case OFTReal:
       {
       outField.second.Real = field.second.Real;
-      break;
-      }
-    case OFTRealList:
-      {
-      std::cerr << "OGR type not handled" << std::endl;
       break;
       }
     case OFTString:
@@ -546,26 +527,6 @@ VectorDataKeywordlist
         CPLFree(outField.second.String);
         outField.second.String = CPLStrdup(field.second.String);
         }
-      break;
-      }
-    case OFTStringList:
-      {
-      std::cerr << "OGR type not handled" << std::endl;
-      break;
-      }
-    case OFTWideString:
-      {
-      std::cerr << "OGR type not handled" << std::endl;
-      break;
-      }
-    case OFTWideStringList:
-      {
-      std::cerr << "OGR type not handled" << std::endl;
-      break;
-      }
-    case OFTBinary:
-      {
-      std::cerr << "OGR type not handled" << std::endl;
       break;
       }
     case OFTDate:
@@ -590,6 +551,11 @@ VectorDataKeywordlist
       outField.second.Date.Hour = field.second.Date.Hour;
       outField.second.Date.Minute = field.second.Date.Minute;
       outField.second.Date.Second = field.second.Date.Second;
+      break;
+      }
+    default:
+      {
+      std::cerr << "OGR type not handled" << std::endl;
       break;
       }
     }

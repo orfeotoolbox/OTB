@@ -1,7 +1,6 @@
 set(OTBCommon_SRC
   otbStandardFilterWatcher.cxx
   otbFilterWatcherBase.cxx
-  otbMachineLearningUtils.cxx
   otbSystem.cxx
   otbStandardWriterWatcher.cxx
   otbUtils.cxx

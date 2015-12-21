@@ -27,6 +27,15 @@
 #include <algorithm>
 #include <string>
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#include "ogrsf_frmts.h"
+#pragma GCC diagnostic pop
+#else
+#include "ogrsf_frmts.h"
+#endif
+
 #include "itksys/SystemTools.hxx"
 #include "itksys/Directory.hxx"
 #include "itksys/RegularExpression.hxx"
@@ -37,6 +46,9 @@
 #include "otbDifferenceImageFilter.h"
 #include "otbPrintableImageFilter.h"
 #include "otbStreamingShrinkImageFilter.h"
+#include "otbOGRVersionProxy.h"
+
+#include "otbConfigure.h"
 
 #define ITK_TEST_DIMENSION_MAX 6
 
@@ -44,16 +56,6 @@
 #include "cpl_conv.h"
 #include "cpl_string.h"
 #include "cpl_multiproc.h"
-#include "ogr_api.h"
-
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
-#include "ogrsf_frmts.h"
-#pragma GCC diagnostic pop
-#else
-#include "ogrsf_frmts.h"
-#endif
 
 #define otbPrintDiff(comment, refStr, testStr) \
   std::cout << "   ----    '" << comment << "' checking   ---------------------------" << std::endl; \
@@ -1074,33 +1076,33 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   /*      Open data source.                                               */
   /* -------------------------------------------------------------------- */
-  OGRDataSource *ref_poDS = NULL;
-  OGRSFDriver *  ref_poDriver = NULL;
+  otb::ogr::version_proxy::GDALDatasetType *ref_poDS = NULL;
+  otb::ogr::version_proxy::GDALDriverType *  ref_poDriver = NULL;
   //OGRGeometry *  ref_poSpatialFilter = NULL;
-  OGRDataSource *test_poDS = NULL;
-  OGRSFDriver *  test_poDriver = NULL;
+  otb::ogr::version_proxy::GDALDatasetType *test_poDS = NULL;
+  otb::ogr::version_proxy::GDALDriverType *  test_poDriver = NULL;
   //OGRGeometry *  test_poSpatialFilter = NULL;
 
-  OGRRegisterAll();
-
-  ref_poDS = OGRSFDriverRegistrar::Open(ref_pszDataSource, !bReadOnly, &ref_poDriver);
+  ref_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, false);
   if (ref_poDS == NULL && !bReadOnly)
     {
-    ref_poDS = OGRSFDriverRegistrar::Open(ref_pszDataSource, FALSE, &ref_poDriver);
+    ref_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, true);
+    bReadOnly = TRUE;
     if (ref_poDS != NULL && m_ReportErrors)
       {
-      std::cout << "Had to open REF data source read-only.\n";
-      bReadOnly = TRUE;
+      std::cout << "Had to open REF data source read-only."<<std::endl;
       }
     }
-  test_poDS = OGRSFDriverRegistrar::Open(test_pszDataSource, !bReadOnly, &test_poDriver);
+  test_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, bReadOnly);
   if (test_poDS == NULL && !bReadOnly)
     {
-    test_poDS = OGRSFDriverRegistrar::Open(test_pszDataSource, FALSE, &test_poDriver);
+    test_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, bReadOnly);
+
+    bReadOnly = TRUE;
+
     if (test_poDS != NULL && m_ReportErrors)
       {
-      std::cout << "Had to open REF data source read-only.\n";
-      bReadOnly = TRUE;
+      std::cout << "Had to open TEST data source read-only."<<std::endl;
       }
     }
   /* -------------------------------------------------------------------- */
@@ -1108,49 +1110,67 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   if (ref_poDS == NULL)
     {
-    OGRSFDriverRegistrar *ref_poR = OGRSFDriverRegistrar::GetRegistrar();
 
     if (m_ReportErrors)
-      std::cout << "FAILURE:\n"
-      "Unable to open REF datasource `" << ref_pszDataSource << "' with the following drivers." << std::endl;
-    for (int iDriver = 0; iDriver < ref_poR->GetDriverCount(); ++iDriver)
       {
-      std::cout << "  -> " << ref_poR->GetDriver(iDriver)->GetName() << std::endl;
+      std::cout << "FAILURE:\n" "Unable to open REF datasource `" << ref_pszDataSource << "' with the following drivers." << std::endl;
+
+      std::vector<std::string> drivers = ogr::version_proxy::GetAvailableDriversAsStringVector();
+
+      for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
+        {
+        std::cout << "  -> " << *it << std::endl;
+        }
       }
     return (1);
     }
+  ref_poDriver = ref_poDS->GetDriver();
   CPLAssert(ref_poDriver != NULL);
 
   if (test_poDS == NULL)
     {
-    OGRSFDriverRegistrar *test_poR = OGRSFDriverRegistrar::GetRegistrar();
-
     if (m_ReportErrors)
-      std::cout << "FAILURE:\n"
-      "Unable to open TEST datasource `" << test_pszDataSource << "' with the following drivers." << std::endl;
-    for (int iDriver = 0; iDriver < test_poR->GetDriverCount(); ++iDriver)
       {
-      std::cout << "  -> " << test_poR->GetDriver(iDriver)->GetName() << std::endl;
+      std::cout << "FAILURE:\n""Unable to open TEST datasource `" << test_pszDataSource << "' with the following drivers." << std::endl;
+
+      std::vector<std::string> drivers = ogr::version_proxy::GetAvailableDriversAsStringVector();
+
+      for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
+        {
+        std::cout << "  -> " << *it << std::endl;
+        }
       }
     return (1);
     }
+  test_poDriver = test_poDS->GetDriver();
   CPLAssert(test_poDriver != NULL);
 
   /* -------------------------------------------------------------------- */
   /*      Some information messages.                                      */
   /* -------------------------------------------------------------------- */
-  otbCheckStringValue("INFO: using driver", ref_poDriver->GetName(), test_poDriver->GetName(), nbdiff, m_ReportErrors);
+  otbCheckStringValue("INFO: using driver", GDALGetDriverShortName(ref_poDriver), GDALGetDriverShortName(test_poDriver), nbdiff, m_ReportErrors);
 
-  std::string strRefName(ref_poDS->GetName());
-  std::string strTestName(test_poDS->GetName());
-  if (strRefName != strTestName)
+  // TODO: Improve this check as it will stop as soon as one of the
+  // list ends (i.e. it does not guarantee that all files are present)
+  std::vector<std::string> refFileList = otb::ogr::version_proxy::GetFileListAsStringVector(ref_poDS);
+  std::vector<std::string> testFileList = otb::ogr::version_proxy::GetFileListAsStringVector(test_poDS);
+
+  unsigned int fileId = 0;
+
+  while (fileId < refFileList.size() && fileId < testFileList.size())
     {
-    if (!m_ReportErrors)
+    std::string strRefName(refFileList[fileId]);
+    std::string strTestName(testFileList[fileId]);
+    if (strRefName != strTestName)
       {
-      otbPrintDiff("WARNING: INFO: Internal data source name poDS->GetName() were different",
-                   strRefName,
-                   strTestName);
+      if (!m_ReportErrors)
+        {
+        otbPrintDiff("WARNING: INFO: Internal data source files were different",
+                     strRefName,
+                     strTestName);
+        }
       }
+    ++fileId;
     }
 
   /* -------------------------------------------------------------------- */
@@ -1240,8 +1260,8 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   /*      Close down.                                                     */
   /* -------------------------------------------------------------------- */
-  OGRDataSource::DestroyDataSource( ref_poDS );
-  OGRDataSource::DestroyDataSource( test_poDS );
+  GDALClose( ref_poDS );
+  GDALClose( test_poDS );
 
   return (nbdiff != 0) ? 1 : 0;
 }
@@ -1256,7 +1276,7 @@ void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOp
     return;
     }
 
-  fprintf(fpOut, "OGRFeature:%ld\n", feature->GetFID());
+  fprintf(fpOut, "OGRFeature:%lld\n", (GIntBig) feature->GetFID());
 
   const char* pszDisplayFields =
     CSLFetchNameValue(papszOptions, "DISPLAY_FIELDS");
@@ -1373,6 +1393,8 @@ void TestHelper::DumpOGRGeometry(FILE* fp, OGRGeometry* geometry, const char * p
         break;
         }
       case wkbLinearRing:
+        break;
+      default:
         break;
       }
     }

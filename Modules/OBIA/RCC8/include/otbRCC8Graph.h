@@ -26,8 +26,7 @@
 #define BOOST_NO_0X_HDR_INITIALIZER_LIST
 #endif
 
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/adjacency_list.hpp>
+#include "otb_boost_graph_header.h"
 
 #include "otbImage.h"
 #include "otbImageList.h"

@@ -19,6 +19,10 @@
 #ifndef __otbMapnikAdapter_h
 #define __otbMapnikAdapter_h
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <mapnik/datasource_cache.hpp>
 #include <mapnik/font_engine_freetype.hpp>
 #include <mapnik/agg_renderer.hpp>
@@ -30,6 +34,20 @@
 #include <mapnik/layer.hpp>
 #include <mapnik/map.hpp>
 #include <mapnik/value.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <mapnik/datasource_cache.hpp>
+#include <mapnik/font_engine_freetype.hpp>
+#include <mapnik/agg_renderer.hpp>
+#include <mapnik/filter_factory.hpp>
+#include <mapnik/color_factory.hpp>
+#include <mapnik/image_util.hpp>
+#include <mapnik/config_error.hpp>
+#include <mapnik/memory_datasource.hpp>
+#include <mapnik/layer.hpp>
+#include <mapnik/map.hpp>
+#include <mapnik/value.hpp>
+#endif
 
 #ifdef OTB_MAPNIK_COMPATIBILITY_API07
 namespace mapnik {

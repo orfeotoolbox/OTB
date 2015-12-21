@@ -23,6 +23,11 @@
 #include "otbMacro.h"
 #include "otbUtils.h"
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ossim/projection/ossimMapProjection.h"
 #include "ossim/projection/ossimMapProjectionFactory.h"
 #include "ossim/base/ossimGpt.h"
@@ -32,16 +37,36 @@
 #include "ossim/base/ossimEllipsoidFactory.h"
 #include "ossim/base/ossimString.h"
 #include "gdal/ossimOgcWktTranslator.h"
-
 #include "ossim/projection/ossimUtmProjection.h"
 #include "ossim/projection/ossimLambertConformalConicProjection.h"
 #include "ossim/projection/ossimTransMercatorProjection.h"
 #include "ossim/projection/ossimEckert4Projection.h"
 #include "ossim/projection/ossimMollweidProjection.h"
 #include "ossim/projection/ossimSinusoidalProjection.h"
-
 #include "ossim/support_data/ossimSpaceImagingGeom.h"
 #include "ossim/base/ossimKeywordNames.h"
+#pragma GCC diagnostic pop
+#else
+#include "ossim/projection/ossimMapProjection.h"
+#include "ossim/projection/ossimMapProjectionFactory.h"
+#include "ossim/base/ossimGpt.h"
+#include "ossim/base/ossimDpt.h"
+#include "ossim/projection/ossimProjection.h"
+#include "ossim/base/ossimEllipsoid.h"
+#include "ossim/base/ossimEllipsoidFactory.h"
+#include "ossim/base/ossimString.h"
+#include "gdal/ossimOgcWktTranslator.h"
+#include "ossim/projection/ossimUtmProjection.h"
+#include "ossim/projection/ossimLambertConformalConicProjection.h"
+#include "ossim/projection/ossimTransMercatorProjection.h"
+#include "ossim/projection/ossimEckert4Projection.h"
+#include "ossim/projection/ossimMollweidProjection.h"
+#include "ossim/projection/ossimSinusoidalProjection.h"
+#include "ossim/support_data/ossimSpaceImagingGeom.h"
+#include "ossim/base/ossimKeywordNames.h"
+
+#endif
+
 
 
 namespace otb

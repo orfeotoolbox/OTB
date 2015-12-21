@@ -87,6 +87,7 @@ private:
 
     AddParameter(ParameterType_OutputImage,  "out",   "OutputImage");
     SetParameterDescription("out", "Output classified image (each pixel contains the index of its corresponding vector in the SOM).");
+    SetDefaultOutputPixelType("out",ImagePixelType_uint8);
 
     AddParameter(ParameterType_InputImage,  "vm",   "ValidityMask");
     SetParameterDescription("vm", "Validity mask (only pixels corresponding to a mask value greater than 0 will be used for learning)");

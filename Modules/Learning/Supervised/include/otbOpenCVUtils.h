@@ -19,8 +19,27 @@
 #define __otbOpenCVUtils_h
 
 #include <opencv2/core/core_c.h>
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-align"
 #include <opencv2/core/core.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <opencv2/core/core.hpp>
+#endif
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #include <opencv2/ml/ml.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <opencv2/ml/ml.hpp>
+#endif
+
+
+
 #include "itkListSample.h"
 
 namespace otb

@@ -7,14 +7,14 @@ message(STATUS "Setup OpenCV...")
 
 if(USE_SYSTEM_OPENCV)
   find_package ( OpenCV )
-  add_custom_target(${proj})
   message(STATUS "  Using OpenCV system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using OpenCV SuperBuild version")
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES ZLIB TIFF PNG)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB TIFF PNG)
+  
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj OPENCV)
@@ -28,8 +28,8 @@ else()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.10/opencv-2.4.10.zip/download"
-    URL_MD5 ec63952d3a3dff965d5fdde765926821
+    URL "http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.11/opencv-2.4.11.zip/download"
+    URL_MD5 32f498451bff1817a60e1aabc2939575
     BINARY_DIR ${OPENCV_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -77,6 +77,8 @@ else()
       -DBUILD_opencv_video:BOOL=OFF
       -DBUILD_opencv_videostab:BOOL=OFF
       -DBUILD_opencv_world:BOOL=OFF
+      -DWITH_CUDA:BOOL=OFF
+      -DWITH_OPENCL:BOOL=OFF
       ${OPENCV_SB_CONFIG}
     DEPENDS ${${proj}_DEPENDENCIES}
     )

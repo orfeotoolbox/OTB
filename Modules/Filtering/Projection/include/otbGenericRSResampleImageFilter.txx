@@ -67,7 +67,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   progress->RegisterInternalFilter(m_Resampler, 1.f);
 
   m_Resampler->GraftOutput(this->GetOutput());
-  m_Resampler->Update();
+  m_Resampler->UpdateOutputData(m_Resampler->GetOutput());
   this->GraftOutput(m_Resampler->GetOutput());
 }
 
@@ -82,36 +82,35 @@ void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
-  // call the superclass's implementation of this method
-  Superclass::GenerateOutputInformation();
+  // Estimate the output rpc Model if needed
+  if (m_EstimateOutputRpcModel)
+    this->EstimateOutputRpcModel();
 
-  typename OutputImageType::Pointer outputPtr = this->GetOutput();
+  // Estimate the input rpc model if it is needed
+  if (m_EstimateInputRpcModel && !m_RpcEstimationUpdated)
+    {
+    this->EstimateInputRpcModel();
+    }
 
-  outputPtr->SetSpacing( this->GetOutputSpacing() );
-  outputPtr->SetOrigin( this->GetOutputOrigin() );
+  // Instanciate the RS transform
+  this->UpdateTransform();
 
-  typename OutputImageType::RegionType region;
-  region.SetSize(this->GetOutputSize());
-  region.SetIndex(this->GetOutputStartIndex() );
+  m_Resampler->SetInput(this->GetInput());
+  m_Resampler->SetTransform(m_Transform);
+  m_Resampler->SetDisplacementFieldSpacing(this->GetDisplacementFieldSpacing());
+  m_Resampler->GraftOutput(this->GetOutput());
+  m_Resampler->UpdateOutputInformation();
+  this->GraftOutput(m_Resampler->GetOutput());
 
-  outputPtr->SetLargestPossibleRegion(region);
-
-  // Get the Output MetaData Dictionary
-  itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
-
-  // Encapsulate the   metadata set by the user
+  // Encapsulate output projRef and keywordlist
+  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
                                         this->GetOutputProjectionRef());
-
   if (this->GetOutputKeywordList().GetSize() > 0)
     {
     itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
                                                this->GetOutputKeywordList());
     }
-
-  // Estimate the output rpc Model if needed
-  if (m_EstimateOutputRpcModel)
-    this->EstimateOutputRpcModel();
 }
 
 /**
@@ -122,13 +121,14 @@ void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::EstimateOutputRpcModel()
 {
-  // Get the output dictionary
-  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-
   // Temp image : not allocated but with the same metadata than the
   // output
   typename OutputImageType::Pointer tempPtr = OutputImageType::New();
-  tempPtr->SetRegions(this->GetOutput()->GetLargestPossibleRegion());
+
+  typename OutputImageType::RegionType region;
+  region.SetSize(this->GetOutputSize());
+  region.SetIndex(this->GetOutputStartIndex() );
+  tempPtr->SetRegions(region);
 
   // Encapsulate the output metadata in the temp image
   itk::MetaDataDictionary& tempDict = tempPtr->GetMetaDataDictionary();
@@ -144,10 +144,6 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   // Encapsulate the estimated rpc model in the output
   if (m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist().GetSize() > 0)
     {
-    // Fill the output dict
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict,
-                                               MetaDataKey::OSSIMKeywordlistKey,
-                                               m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
     // Fill the transform with the right kwl
     m_Transform->SetInputKeywordList( m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
     }
@@ -171,41 +167,17 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   m_Transform->InstanciateTransform();
 }
 
- /**
-  * Generate Input requested region does only propagate the output
-  * requested region.
-  */
- template <class TInputImage, class TOutputImage>
- void
- GenericRSResampleImageFilter<TInputImage, TOutputImage>
- ::GenerateInputRequestedRegion()
- {
-   // Retrieve output pointer
-   OutputImageType * outputPtr = this->GetOutput();
+template <class TInputImage, class TOutputImage>
+void
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
+::PropagateRequestedRegion(itk::DataObject *output)
+{
+  if (this->m_Updating) return;
 
-   // Retrieve input pointer
-   const InputImageType * inputPtr = this->GetInput();
-
-   // Retrieve output requested region
-   RegionType requestedRegion = outputPtr->GetRequestedRegion();
-
-   // Estimate the input rpc model if it is needed
-   if (m_EstimateInputRpcModel && !m_RpcEstimationUpdated)
-     {
-     this->EstimateInputRpcModel();
-     }
-
-   // Instanciate the RS transform
-   this->UpdateTransform();
-
-   // Generate input requested region
-   m_Resampler->SetInput(inputPtr);
-   m_Resampler->SetTransform(m_Transform);
-   m_Resampler->SetDisplacementFieldSpacing(this->GetDisplacementFieldSpacing());
-   m_Resampler->GetOutput()->UpdateOutputInformation();
-   m_Resampler->GetOutput()->SetRequestedRegion(requestedRegion);
-   m_Resampler->GetOutput()->PropagateRequestedRegion();
- }
+  // Retrieve output requested region
+  m_Resampler->GetOutput()->SetRequestedRegion(output);
+  m_Resampler->GetOutput()->PropagateRequestedRegion();
+}
 
 
  /**

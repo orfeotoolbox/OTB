@@ -1,7 +1,7 @@
 set(TEST_DRIVER otbTestDriver
     --add-before-env PYTHONPATH        "${OTBSWIGWrapper_BINARY_DIR}/src"
     --add-before-env PYTHONPATH        $<TARGET_FILE_DIR:_otbApplication>
-    --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )
+    --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )
 
 add_test( NAME pyTvSmoothing
           COMMAND ${TEST_DRIVER} Execute
@@ -72,3 +72,20 @@ add_test( NAME pyTvBandMathInXML
                   ${TEMP}/pyTvBandMathInXML.tif
                   )
 
+add_test( NAME pyTvNumpyIO
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonNumpyTest.py
+                  ${OTB_DATA_ROOT}/Examples/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                  ${TEMP}/pyTvNumpyIO_SmoothingOut.png )
+
+add_test( NAME pyTvNewStyleParameters
+          COMMAND ${TEST_DRIVER} Execute
+          ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonNewStyleParametersTest.py
+          ${OTB_DATA_ROOT}/Input/poupees.tif
+          ${TEMP}/pyTvNewStyleParametersTest.tif
+          ${OTB_DATA_ROOT}/Input/apTvUtSmoothingTest_OutXML.xml)
+
+add_test( NAME pyTvNewStyleParametersInstanciateAll
+          COMMAND ${TEST_DRIVER} Execute
+          ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonNewStyleParametersInstanciateAllTest.py
+          )

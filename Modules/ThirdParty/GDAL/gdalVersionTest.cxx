@@ -55,7 +55,7 @@ int main(int argc, char * argv[])
 	}
 
   
-  if ( (UIntVect[0]<MAJOR) || (UIntVect[1]<MINOR) )
+  if ( (UIntVect[0]==MAJOR && UIntVect[1]<MINOR) || (UIntVect[0]<MAJOR) )
 	{
 		cout << "WARNING : Version of GDAL must be >= " << MAJOR << "." << MINOR << " : " << UIntVect[0] << "." << UIntVect[1] << " detected)." << endl;
 		return 1;

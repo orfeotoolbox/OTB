@@ -42,6 +42,8 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachi
   m_Epsilon(0.01),
   m_CvMatOfLabels(0)
 {
+  this->m_ConfidenceIndex = true;
+  this->m_IsRegressionSupported = true;
 }
 
 template<class TInputValue, class TOutputValue>
@@ -51,7 +53,7 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::~NeuralNetworkMach
   cvReleaseMat(&m_CvMatOfLabels);
 }
 
-/** Train the machine learning model */
+/** Sets the topology of the NN */
 template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetLayerSizes(const std::vector<unsigned int> layers)
 {
@@ -71,10 +73,14 @@ template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(const TargetListSampleType * labels,
                                                                                cv::Mat & output)
 {
-  unsigned int nbSamples = labels->Size();
+  unsigned int nbSamples = 0;
+  if (labels != NULL)
+    {
+    nbSamples = labels->Size();
+    }
 
   // Check for valid listSample
-  if (labels != NULL && nbSamples > 0)
+  if (nbSamples > 0)
     {
     // Build an iterator
     typename TargetListSampleType::ConstIterator labelSampleIt = labels->Begin();
@@ -129,9 +135,8 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(c
     }
 }
 
-/** Train the machine learning model */
 template<class TInputValue, class TOutputValue>
-void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TrainClassification()
+void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CreateNetwork()
 {
   //Create the neural network
   const unsigned int nbLayers = m_LayerSizes.size();
@@ -146,14 +151,11 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TrainClassifi
     }
 
   m_ANNModel->create(layers, m_ActivateFunction, m_Alpha, m_Beta);
+}
 
-  //convert listsample to opencv matrix
-  cv::Mat samples;
-  otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
-
-  cv::Mat matOutputANN;
-  LabelsToMat(this->GetTargetListSample(), matOutputANN);
-
+template<class TInputValue, class TOutputValue>
+CvANN_MLP_TrainParams NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetNetworkParameters()
+{
   CvANN_MLP_TrainParams params;
   params.train_method = m_TrainMethod;
   params.bp_dw_scale = m_BackPropDWScale;
@@ -162,14 +164,43 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TrainClassifi
   params.rp_dw_min = m_RegPropDWMin;
   CvTermCriteria term_crit = cvTermCriteria(m_TermCriteriaType, m_MaxIter, m_Epsilon);
   params.term_crit = term_crit;
+  return params;
+}
 
+template<class TInputValue, class TOutputValue>
+void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetupNetworkAndTrain(cv::Mat& labels)
+{
+  //convert listsample to opencv matrix
+  cv::Mat samples;
+  otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
+  this->CreateNetwork();
+  CvANN_MLP_TrainParams params = this->SetNetworkParameters();
   //train the Neural network model
-  m_ANNModel->train(samples, matOutputANN, cv::Mat(), cv::Mat(), params);
+  m_ANNModel->train(samples, labels, cv::Mat(), cv::Mat(), params);
+}
+
+/** Train the machine learning model for classification*/
+template<class TInputValue, class TOutputValue>
+void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Train()
+{
+  //Transform the targets into a matrix of labels
+  cv::Mat matOutputANN;
+  if (this->m_RegressionMode)
+    {
+    // MODE REGRESSION
+    otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(), matOutputANN);
+    }
+  else
+    {
+    // MODE CLASSIFICATION : store the map between internal labels and output labels
+    LabelsToMat(this->GetTargetListSample(), matOutputANN);
+    }
+  this->SetupNetworkAndTrain(matOutputANN);
 }
 
 template<class TInputValue, class TOutputValue>
 typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType NeuralNetworkMachineLearningModel<
-  TInputValue, TOutputValue>::PredictClassification(const InputSampleType & input) const
+  TInputValue, TOutputValue>::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -182,6 +213,16 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
   TargetSampleType target;
   float currentResponse = 0;
   float maxResponse = response.at<float> (0, 0);
+
+  if (this->m_RegressionMode)
+    {
+    // MODE REGRESSION : only output first response
+    target[0] = maxResponse;
+    return target;
+    }
+
+  // MODE CLASSIFICATION : find the highest response
+  float secondResponse = -1e10;
   target[0] = m_CvMatOfLabels->data.i[0];
 
   unsigned int nbClasses = m_CvMatOfLabels->cols;
@@ -190,9 +231,22 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
     currentResponse = response.at<float> (0, itLabel);
     if (currentResponse > maxResponse)
       {
+      secondResponse = maxResponse;
       maxResponse = currentResponse;
       target[0] = m_CvMatOfLabels->data.i[itLabel];
       }
+    else
+      {
+      if (currentResponse > secondResponse)
+        {
+        secondResponse = currentResponse;
+        }
+      }
+    }
+
+  if (quality != NULL)
+    {
+    (*quality) = static_cast<ConfidenceValueType>(maxResponse) - static_cast<ConfidenceValueType>(secondResponse);
     }
 
   return target;
@@ -227,27 +281,28 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const st
   if ( !name.empty() )
     lname = name.c_str();
 
-  CvFileStorage* fs = 0;
-  CvFileNode* model_node = 0;
-  fs = cvOpenFileStorage(filename.c_str(), 0, CV_STORAGE_READ);
-  if ( !fs )
+  cv::FileNode model_node;
+  cv::FileStorage fs(filename,cv::FileStorage::READ);
+  if (!fs.isOpened())
     {
     itkExceptionMacro("Could not open the file " << filename << " for reading");
     }
 
   if( lname )
-    model_node = cvGetFileNodeByName(fs, 0, lname);
+    model_node = fs[lname];
   else
     {
-    CvFileNode* root = cvGetRootFileNode( fs );
-    if( root->data.seq->total > 0 )
-      model_node = (CvFileNode*)cvGetSeqElem( root->data.seq, 0 );
+    cv::FileNode root = fs.root();
+    if ( root.size() > 0)
+      {
+      model_node = *(root.begin());
+      }
     }
 
-  m_ANNModel->read(fs, model_node);
-  m_CvMatOfLabels = (CvMat*)cvReadByName( fs, model_node, "class_labels" );
+  m_ANNModel->read(*fs,*model_node);
+  m_CvMatOfLabels = (CvMat*)cvReadByName( *fs, *model_node, "class_labels" );
 
-  cvReleaseFileStorage(&fs);
+  fs.release();
 }
 
 template<class TInputValue, class TOutputValue>

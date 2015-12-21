@@ -64,6 +64,14 @@ macro(SETUP_SUPERBUILD)
   set(_SB_${NEW_SB_PROJECT}_ROOT ${SB_INSTALL_PREFIX})
 endmacro(SETUP_SUPERBUILD)
 
+macro(ADDTO_DEPENDENCIES_IF_NOT_SYSTEM proj)
+  foreach(dep ${ARGN})
+    if(NOT USE_SYSTEM_${dep})
+      list(APPEND ${proj}_DEPENDENCIES ${dep})
+    endif()
+  endforeach()
+endmacro(ADDTO_DEPENDENCIES_IF_NOT_SYSTEM)
+
 # Macro to include dependencies
 macro(INCLUDE_SUPERBUILD_DEPENDENCIES)
   foreach(dep ${ARGV})

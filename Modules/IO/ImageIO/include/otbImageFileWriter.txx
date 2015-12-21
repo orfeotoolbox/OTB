@@ -42,8 +42,7 @@
 #include "otbRAMDrivenTiledStreamingManager.h"
 #include "otbRAMDrivenAdaptativeStreamingManager.h"
 
-#include <boost/foreach.hpp>
-#include <boost/tokenizer.hpp>
+#include "otb_boost_tokenizer_header.h"
 
 namespace otb
 {

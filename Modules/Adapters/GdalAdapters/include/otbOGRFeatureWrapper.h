@@ -188,21 +188,21 @@ public:
    * \invariant <tt>m_Feature != 0</tt>
    * \sa \c OGRFeature::GetFieldCount()
    */
-  size_t GetSize() const;
+  int GetSize() const;
   /**
    * Read-Write access to the i-th field.
    * \invariant <tt>m_Feature != 0</tt>
    * \pre <tt>index < GetSize()</tt>
    * \throw None
    */
-  Field       operator[](size_t index);
+  Field       operator[](int index);
   /**
    * Read-only access to the i-th field.
    * \invariant <tt>m_Feature != 0</tt>
    * \pre <tt>index < GetSize()</tt>
    * \throw None
    */
-  Field const operator[](size_t index) const;
+  Field const operator[](int index) const;
   /**
    * Read-Write access to a field by name.
    * \invariant <tt>m_Feature != 0</tt>
@@ -221,7 +221,7 @@ public:
    * \throw None
    * \sa \c OGRFeature::GetFieldDefnRef()
    */
-  FieldDefn   GetFieldDefn(size_t index) const;
+  FieldDefn   GetFieldDefn(int index) const;
   /** Accessor to the definition of a field gven its name.
    * \invariant <tt>m_Feature != 0</tt>
    * \throw itk::ExceptionObject if no field named \c name exists.
@@ -314,9 +314,9 @@ private:
   void               UncheckedSetFrom(Feature const& rhs, int *map, bool mustForgive = true);
   void               UncheckedSetFrom(Feature const& rhs, bool mustForgive = true);
   void               UncheckedPrintSelf(std::ostream &os, itk::Indent indent) const;
-  Field              UncheckedGetElement(size_t index);
+  Field              UncheckedGetElement(int index);
   Field              UncheckedGetElement(std::string const& name);
-  FieldDefn          UncheckedGetFieldDefn(size_t index) const;
+  FieldDefn          UncheckedGetFieldDefn(int index) const;
   FieldDefn          UncheckedGetFieldDefn(std::string const& name) const;
   int                UncheckedGetFieldIndex(std::string const& name) const;
   long               UncheckedGetFID() const;

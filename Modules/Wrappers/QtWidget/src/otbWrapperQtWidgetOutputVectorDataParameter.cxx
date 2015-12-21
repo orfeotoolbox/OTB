@@ -66,9 +66,23 @@ void QtWidgetOutputVectorDataParameter::DoCreateWidget()
 void QtWidgetOutputVectorDataParameter::SelectFile()
 {
   QFileDialog fileDialog;
+
   fileDialog.setConfirmOverwrite(true);
   fileDialog.setFileMode(QFileDialog::AnyFile);
   fileDialog.setNameFilter("Vector data files (*)");
+
+  assert( m_Input!=NULL );
+
+  if( !m_Input->text().isEmpty() )
+    {
+    QFileInfo finfo( m_Input->text() );
+
+    fileDialog.setDirectory(
+      finfo.isDir()
+      ? finfo.absoluteFilePath()
+      : finfo.absoluteDir()
+    );
+    }
 
   if (fileDialog.exec())
     {
@@ -80,7 +94,7 @@ void QtWidgetOutputVectorDataParameter::SelectFile()
 void QtWidgetOutputVectorDataParameter::SetFileName(const QString& value)
 {
   // save value
-  m_FileName = value.toAscii().constData();
+  m_FileName = QFile::encodeName( value ).constData();
 
   m_OutputVectorDataParam->SetFileName(m_FileName);
 

@@ -7,23 +7,26 @@ message(STATUS "Setup OpenJpeg...")
 
 if(USE_SYSTEM_OPENJPEG)
   # TODO : FindOpenJPEG.cmake
-  # find_package ( OpenJPEG )
-  add_custom_target(${proj})
+  find_package ( OpenJPEG )
   message(STATUS "  Using OpenJpeg system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using OpenJPEG SuperBuild version")
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES TIFF ZLIB)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB TIFF PNG)
+
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj OPENJPEG)
-  
+
   ADD_SUPERBUILD_CMAKE_VAR(TIFF_INCLUDE_DIR)
   ADD_SUPERBUILD_CMAKE_VAR(TIFF_LIBRARY)
   ADD_SUPERBUILD_CMAKE_VAR(ZLIB_INCLUDE_DIR)
   ADD_SUPERBUILD_CMAKE_VAR(ZLIB_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(PNG_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(PNG_LIBRARY)
+  
 
   if(MSVC)
   #TODO: add LCMS dependency

@@ -3,8 +3,11 @@ project(RadiometryExamples)
 add_executable(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx)
 target_link_libraries(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ${OTB_LIBRARIES})
 
+#OTBOpticalCalibration -> OTB6S
+if(OTB6S_LOADED)
 add_executable(AtmosphericCorrectionSequencement AtmosphericCorrectionSequencement.cxx)
 target_link_libraries(AtmosphericCorrectionSequencement ${OTB_LIBRARIES})
+endif()
 
 add_executable(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx)
 target_link_libraries(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter ${OTB_LIBRARIES})

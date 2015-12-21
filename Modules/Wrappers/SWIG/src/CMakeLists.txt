@@ -24,6 +24,10 @@ if ( OTB_WRAP_PYTHON )
 
   # Run swig
   set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_GLOBAL_FLAGS})
+  if(NUMPY_FOUND)
+    include_directories(${NUMPY_INCLUDE_DIRS})
+    list(APPEND CMAKE_SWIG_FLAGS  "-DOTB_SWIGNUMPY=1")
+  endif()
   set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
   set(SWIG_MODULE_otbApplication_EXTRA_DEPS
        ${CMAKE_CURRENT_SOURCE_DIR}/Python.i
@@ -32,7 +36,11 @@ if ( OTB_WRAP_PYTHON )
        OTBApplicationEngine)
   SWIG_add_module( otbApplication python otbApplication.i otbApplicationPYTHON_wrap.cxx itkPyCommand.cxx )
   SWIG_link_libraries( otbApplication ${PYTHON_LIBRARIES} OTBApplicationEngine )
-  set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "-w" )
+  if(MSVC)
+    set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "/wd4005" )
+  else()
+    set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "-w" )
+  endif()
 
   # byte-compile the resulting python file
   add_custom_command(
@@ -42,7 +50,7 @@ if ( OTB_WRAP_PYTHON )
       COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/CMake/PythonCompile.py otbApplication.py
       DEPENDS _otbApplication
     )
-    
+
   otb_module_target_label( _otbApplication )
 
   install( TARGETS _otbApplication
@@ -76,11 +84,16 @@ if ( OTB_WRAP_JAVA )
        OTBApplicationEngine)
   SWIG_add_module ( otbApplicationJava java otbApplication.i otbApplicationJAVA_wrap.cxx)
   SWIG_link_libraries(otbApplicationJava OTBApplicationEngine )
-  set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationJAVA_wrap.cxx COMPILE_FLAGS "-w")
+  
+  if(MSVC)
+    set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationJAVA_wrap.cxx COMPILE_FLAGS "/wd4005" )
+  else()
+    set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationJAVA_wrap.cxx COMPILE_FLAGS "-w")
+  endif()
 
   # Add target for org.otb.Application.jar
   add_custom_target(org_otb_Application_jar ALL DEPENDS org.otb.application.jar)
-  
+
   otb_module_target_label( org_otb_Application_jar )
 
   # Add custom command and target to compile the generated files and put them in a jar file
@@ -106,4 +119,3 @@ if ( OTB_WRAP_JAVA )
           COMPONENT RuntimeLibraries )
 
 endif()
-

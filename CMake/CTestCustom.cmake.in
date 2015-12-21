@@ -45,7 +45,6 @@ set(CTEST_CUSTOM_COVERAGE_EXCLUDE
 
 set(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
-  "vcl_deprecated_header"
   "backward_warning"
   "warning LNK4221"
   "ranlib:.*file:.*has no symbols"
@@ -63,5 +62,27 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   # Ignore clang's summary warning, assuming prior text has matched some
   # other warning expression:
   "[0-9,]+ warnings? generated."
-
+  ".*include.opencv2.*warning.*"
+  ".*include.opencv2.*note.*"
+  ".*include.kml.*warning.*"
+  ".*include.ogr_feature.*warning.*"
+  ".*include.ogr_feature.*note.*"
+  ".*itksys.SharedForward.h.*warning.*"
+  ".*vcl_deprecated_header.h.*"
+  ".*otbCurlHelper.cxx:.*warning.*maxConnect.*"
+  ".*include.ITK-4.*warning.*"
+  ".*include.curl.curl.h.*warning.*"
+  ".*include.ossim.*warning.*"
+  ".*include.ossim.*note.*"
+  ".*include.ogr_core.h.*warning.*"
+  ".*include.ogr_srs_api.h.*warning.*"
+  ".*include.ogrsf_frmts.h.*warning.*"
+  ".*include.ogr_geometry.h.*warning.*"
+  ".*include.ogr_spatialref.h.*warning.*"
+  ".*include.cpl_error.h.*warning.*"
+  ".*vnl.vnl_numeric_traits.h.*warning.*"
+  ".*vcl_config_compiler.h.*warning.*"
+  ".*boost.move.unique_ptr.hpp:.*"
+  ".*include.mpValue.h.*[Ww]arning.*\\[-Wc\\+\\+11-extensions\\]"
+  ".*itksys.SharedForward.h.*warning.*itksys_shared_forward_to_real.*"
   )

@@ -31,6 +31,9 @@ namespace Statistics {
  *
  *  \f[ output = \frac{input - shift}{scale} \f]
  *
+ *  Beware that the behaviour differs from itk::ShiftScaleImageFilter
+ *  (which add shift instead of subtracting it).
+ *
  * Standard casting is applied between input and output type.
  *
  * Shifts and scales can be set via the SetShift() and SetScales() methods.

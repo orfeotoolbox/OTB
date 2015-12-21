@@ -181,6 +181,7 @@ private:
     SetParameterDescription("in", "Input image to classify.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "Output image containing the class indexes.");
+    SetDefaultOutputPixelType("out",ImagePixelType_uint8);
 
     AddRAMParameter();
 

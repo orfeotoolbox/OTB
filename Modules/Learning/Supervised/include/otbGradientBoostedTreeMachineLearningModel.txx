@@ -36,9 +36,9 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
  m_Shrinkage(0.01),
  m_SubSamplePortion(0.8),
  m_MaxDepth(3),
- m_UseSurrogates(false),
- m_IsRegression(false)
+ m_UseSurrogates(false)
 {
+  this->m_IsRegressionSupported = true;
 }
 
 
@@ -53,7 +53,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
+::Train()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -62,7 +62,6 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
-
   CvGBTreesParams params = CvGBTreesParams(m_LossFunctionType, m_WeakCount, m_Shrinkage, m_SubSamplePortion,
                                            m_MaxDepth, m_UseSurrogates);
 
@@ -70,7 +69,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
   var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
 
-  if (!m_IsRegression) //Classification
+  if (!this->m_RegressionMode) //Classification
     var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
 
   m_GBTreeModel->train(samples,CV_ROW_SAMPLE,labels,cv::Mat(),cv::Mat(),var_type,cv::Mat(),params, false);
@@ -80,7 +79,7 @@ template <class TInputValue, class TOutputValue>
 typename GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input) const
+::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -92,6 +91,14 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
   TargetSampleType target;
 
   target[0] = static_cast<TOutputValue>(result);
+
+  if (quality != NULL)
+    {
+    if (!this->m_ConfidenceIndex)
+      {
+      itkExceptionMacro("Confidence index not available for this classifier !");
+      }
+    }
 
   return target;
 }

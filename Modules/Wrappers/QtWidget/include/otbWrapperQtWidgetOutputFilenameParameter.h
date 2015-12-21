@@ -42,8 +42,13 @@ public:
   QtWidgetOutputFilenameParameter(OutputFilenameParameter*, QtWidgetModel*);
   virtual ~QtWidgetOutputFilenameParameter();
 
-protected slots:
+  inline const QLineEdit* GetInput() const;
+  inline QLineEdit* GetInput();
+
+public slots:
   void SetFileName( const QString& value );
+
+protected slots:
   void SelectFile();
 
 private:
@@ -61,6 +66,23 @@ private:
   QLineEdit*    m_Input;
   QPushButton * m_Button;
 };
+
+
+inline
+const QLineEdit*
+QtWidgetOutputFilenameParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+inline
+QLineEdit*
+QtWidgetOutputFilenameParameter
+::GetInput()
+{
+  return m_Input;
+}
 
 
 }

@@ -7,22 +7,19 @@ message(STATUS "Setup cURL ...")
 
 if(USE_SYSTEM_CURL)
   find_package ( CURL )
-  add_custom_target(${proj})
   message(STATUS "  Using cURL system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using cURL SuperBuild version")
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES ZLIB)
-  if(NOT USE_SYSTEM_OPENSSL)
-    list(APPEND ${proj}_DEPENDENCIES OPENSSL)
-  endif()
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB OPENSSL)
+
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj CURL)
   
-  if(USE_SYSTEM_GEOS)
+  if(USE_SYSTEM_GEOS) #why geos here?. discuss with GP.
     ADD_SUPERBUILD_CMAKE_VAR(ZLIB_ROOT)
   endif()
   

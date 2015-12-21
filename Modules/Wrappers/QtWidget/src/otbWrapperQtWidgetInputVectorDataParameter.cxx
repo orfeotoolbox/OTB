@@ -38,9 +38,15 @@ QtWidgetInputVectorDataParameter::~QtWidgetInputVectorDataParameter()
 void QtWidgetInputVectorDataParameter::DoUpdateGUI()
 {
   //update lineedit
-  QString text( m_InputVectorDataParam->GetFileName().c_str() );
-  if (text != m_Input->text())
-    m_Input->setText(text);
+  if(m_InputVectorDataParam->HasUserValue())
+    {
+    QString text(
+      QFile::decodeName( m_InputVectorDataParam->GetFileName().c_str() )
+    );
+
+    if (text != m_Input->text())
+      m_Input->setText(text);
+    }
 }
 
 void QtWidgetInputVectorDataParameter::DoCreateWidget()
@@ -74,9 +80,22 @@ void QtWidgetInputVectorDataParameter::SelectFile()
   fileDialog.setFileMode(QFileDialog::ExistingFile);
   fileDialog.setNameFilter("Vector data files (*)");
 
+  assert( m_Input!=NULL );
+
+  if( !m_Input->text().isEmpty() )
+    {
+    QFileInfo finfo( m_Input->text() );
+
+    fileDialog.setDirectory(
+      finfo.isDir()
+      ? finfo.absoluteFilePath()
+      : finfo.absoluteDir()
+    );
+    }
+
   if (fileDialog.exec())
     {
-    if ( this->SetFileName(fileDialog.selectedFiles().at(0)) == true )
+    if ( this->SetFileName( fileDialog.selectedFiles().at(0) )  == true )
     {
       m_Input->setText(fileDialog.selectedFiles().at(0));
     }
@@ -84,7 +103,7 @@ void QtWidgetInputVectorDataParameter::SelectFile()
       {
       std::ostringstream oss;
       oss << "The given file "
-          << fileDialog.selectedFiles().at(0).toAscii().constData()
+          << QFile::encodeName( fileDialog.selectedFiles().at( 0 ) ).constData()
           << " is not valid.";
       this->GetModel()->SendLogWARNING( oss.str() );
       }
@@ -95,7 +114,8 @@ bool QtWidgetInputVectorDataParameter::SetFileName(const QString& value)
 {
   bool res = true;
   // save value
-  if(m_InputVectorDataParam->SetFromFileName(value.toAscii().constData()) == true)
+  if( m_InputVectorDataParam->SetFromFileName(
+	QFile::encodeName( value ).constData() ) == true )
     {
     // notify of value change
     QString key( m_InputVectorDataParam->GetKey() );

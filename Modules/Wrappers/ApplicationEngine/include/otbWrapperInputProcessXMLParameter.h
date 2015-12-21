@@ -43,19 +43,10 @@ public:
   // Get Value
   //TODO otbGetObjectMemberMacro(StringParam, Value , std::string);
 
-  void SetFileName(std::string value)
-  {
-    this->SetValue(value);
-  }
+  bool SetFileName(std::string value);
 
   // Set Value
-  virtual void SetValue(const std::string value)
-    {
-    itkDebugMacro("setting member m_FileName to " << value);
-    this->m_FileName = value;
-    SetActive(true);
-    this->Modified();
-    }
+  virtual void SetValue(const std::string value);
 
   ImagePixelType GetPixelTypeFromString(std::string pixTypeAsString);
 

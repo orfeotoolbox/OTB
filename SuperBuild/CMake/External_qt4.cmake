@@ -7,7 +7,6 @@ message(STATUS "Setup Qt4 ...")
 
 if(USE_SYSTEM_QT4)
   find_package ( Qt4 )
-  add_custom_target(${proj})
   message(STATUS "  Using Qt4 system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
@@ -21,11 +20,11 @@ else()
   endif()
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES ZLIB TIFF PNG SQLITE)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB TIFF PNG SQLITE FREETYPE)
+  
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj QT4)
-  
  
   #use system libs always for Qt4 as we build them from source or have already in system
   set(QT4_SB_CONFIG)
@@ -40,8 +39,8 @@ else()
     
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "http://download.qt-project.org/official_releases/qt/4.8/4.8.6/qt-everywhere-opensource-src-4.8.6.tar.gz"
-      URL_MD5 2edbe4d6c2eff33ef91732602f3518eb
+      URL "http://download.qt.io/official_releases/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz"
+      URL_MD5 d990ee66bf7ab0c785589776f35ba6ad
       BINARY_DIR ${QT4_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -50,13 +49,19 @@ else()
       PATCH_COMMAND ${CMAKE_COMMAND} -E copy
         ${CMAKE_BINARY_DIR}/configure_qt4.bat
         ${QT4_SB_SRC}
-      DEPENDS ${${proj}_DEPENDENCIES}
-      )
+        DEPENDS ${${proj}_DEPENDENCIES} )
+
+    ExternalProject_Add_Step(${proj} _jpeg_lib_name
+      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/${proj}/qjpeghandler.pri
+      ${QT4_SB_SRC}/src/gui/image/
+      DEPENDEES patch update
+      DEPENDERS configure  )
+
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "http://download.qt-project.org/official_releases/qt/4.8/4.8.6/qt-everywhere-opensource-src-4.8.6.tar.gz"
-      URL_MD5 2edbe4d6c2eff33ef91732602f3518eb
+      URL "http://download.qt.io/official_releases/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz"
+      URL_MD5 d990ee66bf7ab0c785589776f35ba6ad
       BINARY_DIR ${QT4_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

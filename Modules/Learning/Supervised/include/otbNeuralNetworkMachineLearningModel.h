@@ -21,8 +21,25 @@
 #include "otbRequiresOpenCVCheck.h"
 
 #include <opencv2/core/core_c.h>
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-align"
 #include <opencv2/core/core.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <opencv2/core/core.hpp>
+#endif
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #include <opencv2/ml/ml.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <opencv2/ml/ml.hpp>
+#endif
+
 #include "itkLightObject.h"
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
@@ -40,21 +57,19 @@ public:
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  // Input related typedefs
-  typedef TInputValue                                     InputValueType;
-  typedef itk::VariableLengthVector<InputValueType>       InputSampleType;
-  typedef itk::Statistics::ListSample<InputSampleType>    InputListSampleType;
-
-  // Target related typedefs
-  typedef TTargetValue                                    TargetValueType;
-  typedef itk::FixedArray<TargetValueType,1>              TargetSampleType;
-  typedef itk::Statistics::ListSample<TargetSampleType>   TargetListSampleType;
+  typedef typename Superclass::InputValueType             InputValueType;
+  typedef typename Superclass::InputSampleType            InputSampleType;
+  typedef typename Superclass::InputListSampleType        InputListSampleType;
+  typedef typename Superclass::TargetValueType            TargetValueType;
+  typedef typename Superclass::TargetSampleType           TargetSampleType;
+  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
 
   typedef std::map<TargetValueType, unsigned int>         MapOfLabelsType;
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
-  itkTypeMacro(NeuralNetworkMachineLearningModel, itk::MachineLearningModel);
+  itkTypeMacro(NeuralNetworkMachineLearningModel, MachineLearningModel);
 
   /** Setters/Getters to the train method
    *  2 methods are available:
@@ -153,6 +168,11 @@ public:
   itkGetMacro(Epsilon, double);
   itkSetMacro(Epsilon, double);
 
+  /** Train the machine learning model */
+  virtual void Train();
+  /** Predict values using the model */
+  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+
   /** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="");
 
@@ -180,14 +200,13 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Train the machine learning model */
-  virtual void TrainClassification();
-  /** Predict values using the model */
-  virtual TargetSampleType PredictClassification(const InputSampleType& input) const;
-
 private:
   NeuralNetworkMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  void CreateNetwork();
+  CvANN_MLP_TrainParams SetNetworkParameters();
+  void SetupNetworkAndTrain(cv::Mat& labels);
 
   CvANN_MLP * m_ANNModel;
   int m_TrainMethod;

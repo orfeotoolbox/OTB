@@ -7,7 +7,7 @@ solvers, re-project input vector data over input images, and so on.")
 
 otb_module(OTBProjection
   DEPENDS
-    OTBBoost
+    OTBBoostAdapters
     OTBCommon
     OTBGDAL
     OTBGdalAdapters

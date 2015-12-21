@@ -25,6 +25,7 @@ if ( OTB_WRAP_PYTHON )
   check_PIC_flag ( Python )
   find_package ( PythonLibs REQUIRED )
   find_package ( PythonInterp REQUIRED )
+  find_package ( Numpy )
 endif()
 
 #

@@ -90,6 +90,7 @@ private:
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription( "out", "The output image. The output image is the input image where the minimal regions have been merged." );
+    SetDefaultOutputPixelType("out",ImagePixelType_uint32);
 
     AddParameter(ParameterType_Int, "minsize", "Minimum Region Size");
     SetParameterDescription("minsize", "Minimum Region Size. If, after the segmentation, a region is of size lower than this criterion, the region is merged with the \"nearest\" region (radiometrically).");

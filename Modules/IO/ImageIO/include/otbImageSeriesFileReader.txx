@@ -9,8 +9,8 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
-  See ITCopyright.txt for details.
+  Copyright (c) Institut Mines-Telecom. All rights reserved.
+  See IMTCopyright.txt for details.
 
          This software is distributed WITHOUT ANY WARRANTY; without even
          the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -47,7 +47,7 @@ ImageSeriesFileReader<TImage, TInternalImage>
 template <class TImage, class TInternalImage>
 void
 ImageSeriesFileReader<TImage, TInternalImage>
-::GenerateData(DataObjectPointerArraySizeType idx)
+::GenerateData(DataObjectPointerArraySizeType itkNotUsed(idx))
 {
   std::ostringstream msg;
   msg << "Something wrong... Check the template definition of this class in the program...\n";

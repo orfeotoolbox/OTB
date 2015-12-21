@@ -1,3 +1,94 @@
+OTB-v.5.2.0 - Changes since version 5.0.0 (2015/12/22)
+------------------------------------------
+* Library (the corresponding requests for changes are mentioned):
+
+  * Core
+    * Read, write and manage no-data flags (RFC-1 & RFC-14)
+    * Improve otb::DEMHandler interface (RFC-2)
+    * Build examples based on available modules in OTB installation (RFC-3)
+    * Helper functions for string operations using boost (RFC-6)
+    * Gdal 2.0 support (RFC-11)
+    * Enhancement of python wrapping (RFC-12)
+
+  * Machine Learning
+    * Provide quality index for classification
+    * Regression mode in OTB and OTBApp (RFC-7)
+
+  * SAR
+    * Add basic support for Sentinel1 Product (RFC-4)
+    * Update SAR radiometric calibration application in OTB (RFC-9)
+    * New applications for SAR processing (RFC-10)
+
+  * Applications
+    * Improve ApplicationRegistry for application loading (RFC-15)
+    * Provide a default output pixel type in applications (RFC-17)
+
+  * SuperBuild
+    * Provide a script to build the all-in-one SuperBuild archive (RFC-5)
+    * Upgrade dependencies versions in SuperBuild (RFC-19)
+    * New dependency : Freetype 2.6
+    * ITK 4.7.1 -> 4.8.1
+    * JPEG v9a -> turbo 1.4.1
+    * OpenThreads 3.2 -> 3.4
+    * Ossim r23092 -> r23537
+    * GeoTIFF 1.4.0 -> 1.4.1
+    * muParser 2.2.3 -> 2.2.5
+    * OpenCV 2.4.10 -> 2.4.11
+    * OpenSSL 1.0.1e -> 1.0.1p
+    * Qt 4.8.6 -> 4.8.7
+    * Swig 3.0.5 -> 3.0.7
+    * TIFF 4.0.3 -> 4.0.6
+
+* Bug fixed:
+
+  * Monteverdi2
+    * 0001120: Unwanted zoom-to-extent when loading second image
+    * 0001103: OutputProcessXMLParameter pre-initialization used even if disabled.
+    * 0001111: Geoid-file <arning message needs restart displayed when not needed.
+    * 0001118: Crash when restoring UI layout if quicklook view is visible at startup.
+    * 0001104: Crash as soon as I open an image
+    * 0001100: Crash when trying to Apply same parameters (dynamic, effects, color map...) on images with different number of bands
+    * 0001072: I18nCoreApplication::ElevationSetup() exceptions not displayed
+    * 0001070: otb::DEMHandler not updated properly when resetting DEM-directory and/or Geoid-file.
+
+  * OTB-Packaging
+    * 0001049: Last Monteverdi2 and Mapla release Win package crash when we try to import JP2 file
+
+  * Orfeo Toolbox (OTB)
+    * 0001051: CMake warnings when preparing SuperBuild configuration
+    * 0001068: crash in otbcli_LSMSSegmentation
+    * 0001080: there are some characters can not be recognized, which make compile errors
+    * 0001088: Fedora 22 copr repo for OTB
+    * 0001092: ITK (4.7.1) provided by SuperBuild do not compile with GCC version > 5
+    * 0001090: SuperBuild Openthread download link broken
+    * 0001081: GDAL RPC tags export prevent correct export of wkt in ortho-rectified image
+    * 0001056: ComputeImagesStatistics applications produces incorrect std
+    * 0001093: CMake with Ninja generator configure fails when OTB_USE_QT4=ON
+    * 0001084: Deactivate all 3rd part components in OpenCV configuration
+    * 0001077: Superbuild: Broken open scene graph archive link
+    * 0001069: Unable to install gdal python bindings in custom install directory with OTB Superbuild
+    * 0001065: Build OTB Examples based on available modules in OTB installation
+    * 0001075: prTeEstimateRPCSensorModelExampleTest  always failing in examples
+    * 0001074: Missing ITCopyright.txt in OTB sources
+    * 0001066: missing file(Capitole-Shadows) from OTB-Data
+    * 0001055: SuperBuild builds ogr2ogr without sqlite driver
+
+  * OTB-lib
+    * 0001082: ImageFileReader<> crashes after ApplicationRegistry::RefreshApplicationFactories() is called
+    * 0001098: Exception raised when typing in input process XML parameter
+    * 0001097: Cannot manually type in input vector data line-edit.
+    * 0001085: Add a ::GetInput() accessor  to QtWidgetOutputImage/FilenameParameter
+    * 0001083: Extended filename parameters not updated when calling ImageFileReader<>::SetFileName() several times
+    * 0001078: Exception thrown (OTB-Ice) when opening image without projection info
+    * 0001071: Add otb::DEMHandler ::ClearDEMDirectory() and ::ClearGeoidFile() interface.
+
+  * OTB-applications
+    * 0001119: Band Math X cannot manage large neighborhood (>=25x25 pixels)
+    * 0001112: File not found if filename contains accents when using GUI
+    * 0001059: Input and output image parameters require absolute path
+    * 0001076: Application ComputeImagesStatistics gives wrong standard deviation
+
+
 OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
 ------------------------------------------
 

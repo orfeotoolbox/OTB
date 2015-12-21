@@ -7,7 +7,6 @@ message(STATUS "Setup LibSVM...")
 
 if(USE_SYSTEM_LIBSVM)
   find_package ( LibSVM )
-  add_custom_target(${proj})
   message(STATUS "  Using LibSVM system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

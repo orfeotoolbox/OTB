@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbGDALDriverManagerWrapper.h"
 #include <vector>
-#include <boost/algorithm/string/predicate.hpp>
+#include "otb_boost_string_header.h"
 #include "otbSystem.h"
 
 namespace otb
@@ -65,7 +65,7 @@ GDALDatasetWrapper::IsJPEG2000() const
 GDALDriverManagerWrapper::GDALDriverManagerWrapper()
 {
     GDALAllRegister();
-    
+
     GDALDriver* driver = 0;
 
     // Ignore incompatible Jpeg2000 drivers (Jasper)

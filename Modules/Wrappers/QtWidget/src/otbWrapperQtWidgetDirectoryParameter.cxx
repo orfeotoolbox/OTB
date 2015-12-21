@@ -35,7 +35,12 @@ QtWidgetDirectoryParameter::~QtWidgetDirectoryParameter()
 void QtWidgetDirectoryParameter::DoUpdateGUI()
 {
   // Update the lineEdit
-  QString text( m_DirectoryParam->GetValue().c_str() );
+  QString text(
+    QFile::decodeName(
+      m_DirectoryParam->GetValue().c_str()
+    )
+  );
+
   m_Input->setText(text);
 }
 
@@ -72,7 +77,8 @@ void QtWidgetDirectoryParameter::SelectFile()
 
   if (fileDialog.exec())
     {
-    this->SetFileName(fileDialog.selectedFiles().at(0));
+    this->SetFileName( fileDialog.selectedFiles().at(0) );
+
     m_Input->setText(fileDialog.selectedFiles().at(0));
     }
 }
@@ -80,7 +86,9 @@ void QtWidgetDirectoryParameter::SelectFile()
 void QtWidgetDirectoryParameter::SetFileName(const QString& value)
 {
   // save value
-  m_DirectoryParam->SetValue(value.toAscii().constData());
+  m_DirectoryParam->SetValue(
+    QFile::encodeName( value ).constData()
+  );
 
   // notify of value change
   QString key( m_DirectoryParam->GetKey() );

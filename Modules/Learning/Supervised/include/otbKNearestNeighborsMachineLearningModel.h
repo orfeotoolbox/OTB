@@ -39,19 +39,17 @@ public:
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  // Input related typedefs
-  typedef TInputValue                                     InputValueType;
-  typedef itk::VariableLengthVector<InputValueType>       InputSampleType;
-  typedef itk::Statistics::ListSample<InputSampleType>    InputListSampleType;
-
-  // Target related typedefs
-  typedef TTargetValue                                    TargetValueType;
-  typedef itk::FixedArray<TargetValueType,1>              TargetSampleType;
-  typedef itk::Statistics::ListSample<TargetSampleType>   TargetListSampleType;
+  typedef typename Superclass::InputValueType             InputValueType;
+  typedef typename Superclass::InputSampleType            InputSampleType;
+  typedef typename Superclass::InputListSampleType        InputListSampleType;
+  typedef typename Superclass::TargetValueType            TargetValueType;
+  typedef typename Superclass::TargetSampleType           TargetSampleType;
+  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
-  itkTypeMacro(KNearestNeighborsMachineLearningModel, itk::MachineLearningModel);
+  itkTypeMacro(KNearestNeighborsMachineLearningModel, MachineLearningModel);
 
   /** Setters/Getters to the number of neighbors to use
    *  Default is 32
@@ -60,12 +58,23 @@ public:
   itkGetMacro(K, int);
   itkSetMacro(K, int);
 
-  /** Setters/Getters to IsRegression flag
-   *  Default is False
-   *  \see http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html
+  /** Decision rule once the KNN are found :
+   *  [for classification]
+   *   - KNN_VOTING : output value with maximum occurences (for classification)
+   *  [for regression]
+   *   - KNN_MEAN : output mean value of neighbors
+   *   - KNN_MEDIAN : output median value of neighbors
    */
-  itkGetMacro(IsRegression, bool);
-  itkSetMacro(IsRegression, bool);
+  enum {KNN_VOTING, KNN_MEAN, KNN_MEDIAN};
+
+  /** Setters/Getters to the decision rule */
+  itkGetMacro(DecisionRule, int);
+  itkSetMacro(DecisionRule, int);
+
+  /** Train the machine learning model */
+  virtual void Train();
+  /** Predict values using the model */
+  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
   /** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="");
@@ -92,18 +101,14 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Train the machine learning model */
-  virtual void TrainClassification();
-  /** Predict values using the model */
-  virtual TargetSampleType PredictClassification(const InputSampleType& input) const;
-
 private:
   KNearestNeighborsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   CvKNearest * m_KNearestModel;
   int m_K;
-  bool m_IsRegression;
+
+  int m_DecisionRule;
 };
 } // end namespace otb
 

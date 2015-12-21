@@ -28,7 +28,7 @@ set(OTBImageBaseTests
   otbImageFunctionAdaptor.cxx
   otbMultiChannelExtractROINew.cxx
   otbMetaImageFunction.cxx
-  otbNoDataHelperTest.cxx
+
   )
 
 add_executable(otbImageBaseTestDriver ${OTBImageBaseTests})
@@ -165,6 +165,7 @@ otb_add_test(NAME coTvMultiChannelROI_RGB2NG_PNG3 COMMAND otbImageBaseTestDriver
 otb_add_test(NAME ioTvMultiDatasetReading2 COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
   ${TEMP}/ioTvMultiDatasetReading2.txt
+  --ignore-lines-with 1 Pointer:
   otbVectorImageTest
   ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=5
   ${TEMP}/ioTvMultiDatasetReading2.txt
@@ -173,6 +174,7 @@ otb_add_test(NAME ioTvMultiDatasetReading2 COMMAND otbImageBaseTestDriver
 otb_add_test(NAME ioTvMultiDatasetReading1 COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
   ${TEMP}/ioTvMultiDatasetReading1.txt
+  --ignore-lines-with 1 Pointer:
   otbVectorImageTest
   ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=0
   ${TEMP}/ioTvMultiDatasetReading1.txt
@@ -825,6 +827,3 @@ otb_add_test(NAME ioTvOtbVectorImageTestRadarsat COMMAND otbImageBaseTestDriver
    otbVectorImageLegacyTest
    LARGEINPUT{/RADARSAT1/GOMA/SCENE01/}
    ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
-
-otb_add_test(NAME coreImageBaseNoDataHelperTest COMMAND otbImageBaseTestDriver
-  otbNoDataHelperTest)

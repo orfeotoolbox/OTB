@@ -11,6 +11,7 @@ ExternalProject_Add(${proj}
   PREFIX ${proj}
   URL "http://nixos.org/releases/patchelf/patchelf-0.8/patchelf-0.8.tar.gz"
   URL_MD5 407b229e6a681ffb0e2cdd5915cb2d01
+  DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   SOURCE_DIR ${PKGTOOLS_SB_SRC}
   BINARY_DIR ${PKGTOOLS_SB_BUILD_DIR}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}

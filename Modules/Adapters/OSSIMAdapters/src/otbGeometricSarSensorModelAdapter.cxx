@@ -21,10 +21,22 @@
 #include "otbMacro.h"
 #include "otbImageKeywordlist.h"
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ossim/ossimGeometricSarSensorModel.h"
 #include "ossim/projection/ossimProjection.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 #include "ossim/otb/JSDDateTime.h"
+#pragma GCC diagnostic pop
+#else
+#include "ossim/ossimGeometricSarSensorModel.h"
+#include "ossim/projection/ossimProjection.h"
+#include "ossim/ossimPluginProjectionFactory.h"
+#include "ossim/otb/JSDDateTime.h"
+#endif
 
 
 namespace otb {

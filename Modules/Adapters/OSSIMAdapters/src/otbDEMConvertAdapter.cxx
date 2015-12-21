@@ -21,6 +21,11 @@
 #include "itkMacro.h"
 
 // OSSIM include
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ossim/base/ossimKeywordNames.h"
 #include "ossim/base/ossimStdOutProgress.h"
 #include "ossim/base/ossimFilename.h"
@@ -35,6 +40,23 @@
 #include "ossim/imaging/ossimCacheTileSource.h"
 #include "ossim/imaging/ossimBandSelector.h"
 #include "ossim/imaging/ossimCibCadrgTileSource.h"
+#pragma GCC diagnostic pop
+#else
+#include "ossim/base/ossimKeywordNames.h"
+#include "ossim/base/ossimStdOutProgress.h"
+#include "ossim/base/ossimFilename.h"
+#include "ossim/base/ossimKeywordlist.h"
+#include "ossim/imaging/ossimJpegWriter.h"
+#include "ossim/imaging/ossimImageHandler.h"
+#include "ossim/imaging/ossimImageSource.h"
+#include "ossim/imaging/ossimImageHandlerRegistry.h"
+#include "ossim/imaging/ossimImageWriterFactoryRegistry.h"
+#include "ossim/imaging/ossimImageWriterFactory.h"
+#include "ossim/imaging/ossimImageFileWriter.h"
+#include "ossim/imaging/ossimCacheTileSource.h"
+#include "ossim/imaging/ossimBandSelector.h"
+#include "ossim/imaging/ossimCibCadrgTileSource.h"
+#endif
 
 namespace otb
 {

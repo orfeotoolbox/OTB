@@ -8,7 +8,6 @@ message(STATUS "Setup FFTW ...")
 if(USE_SYSTEM_FFTW)
   # TODO : use ITK's FindFFTW
   #find_package ( FFTW )
-  add_custom_target(${proj})
   message(STATUS "  Using FFTW system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

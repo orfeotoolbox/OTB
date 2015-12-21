@@ -251,6 +251,7 @@ private:
     //Raster mode parameters
     AddParameter(ParameterType_OutputImage,  "mode.raster.out",    "Output labeled image");
     SetParameterDescription( "mode.raster.out", "The output labeled image.");
+    SetDefaultOutputPixelType("mode.raster.out",ImagePixelType_uint32);
 
     //Streaming vectorization parameters
     AddParameter(ParameterType_OutputFilename, "mode.vector.out", "Output vector file");
@@ -675,7 +676,8 @@ private:
        //and recomputed FID for each features (without holes).
         //Note : the GetDriver() Method has not been encapsulated in otb::ogr::DataSource,
         //so we must access the OGR pointer by using .ogr()
-       std::string driverName(ogrDS->ogr().GetDriver()->GetName());
+
+        std::string driverName(otb::ogr::version_proxy::GetDriverNameFromDataSource(&ogrDS->ogr()));
        if ( driverName.find("ESRI Shapefile") != std::string::npos)
          {
            otbAppLogINFO(<<"REPACK the Shapefile ..."<<std::endl);

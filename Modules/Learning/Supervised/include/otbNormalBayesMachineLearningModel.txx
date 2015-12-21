@@ -45,7 +45,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
+::Train()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -61,7 +61,7 @@ template <class TInputValue, class TOutputValue>
 typename NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & input) const
+::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -75,6 +75,14 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
   TargetSampleType target;
 
   target[0] = static_cast<TOutputValue>(result);
+
+  if (quality != NULL)
+    {
+    if (!this->HasConfidenceIndex())
+      {
+      itkExceptionMacro("Confidence index not available for this classifier !");
+      }
+    }
 
   return target;
 }

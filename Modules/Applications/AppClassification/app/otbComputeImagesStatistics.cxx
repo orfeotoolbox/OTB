@@ -140,7 +140,7 @@ private:
         variance[itBand] += (size[0] * size[1] - 1) * (statsEstimator->GetCovariance())(itBand, itBand);
         }
       //Increment nbSamples
-      nbSamples += size[0] * size[1] * nbBands;
+      nbSamples += size[0] * size[1];
       }
 
     //Divide by the number of input images to get the mean over all layers

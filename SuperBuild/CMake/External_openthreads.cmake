@@ -11,7 +11,6 @@ endif()
 
 if(USE_SYSTEM_OPENTHREADS)
   find_package ( OpenThreads )
-  add_custom_target(${proj})
   message(STATUS "  Using OpenThread system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
@@ -40,8 +39,8 @@ else()
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "http://www.openscenegraph.org/downloads/developer_releases/OpenSceneGraph-3.2.0.zip"
-      URL_MD5 4980f8692712a24d4c99f363f80c6814
+      URL "http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-3.4.0/source/OpenSceneGraph-3.4.0.zip"
+      URL_MD5 a5e762c64373a46932e444f6f7332496
       SOURCE_DIR ${OPENTHREADS_SB_SRC}
       BINARY_DIR ${OPENTHREADS_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}

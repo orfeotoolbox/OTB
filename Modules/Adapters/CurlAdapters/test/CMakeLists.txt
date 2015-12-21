@@ -14,11 +14,11 @@ otb_module_target_label(otbCurlAdaptersTestDriver)
 otb_add_test(NAME tsTvDataIsNightlyRevision COMMAND otbCurlAdaptersTestDriver
   otbIsNightlyRevision
   ${OTB_DATA_WC_REVISION}
-  http://hg.orfeo-toolbox.org/nightly/dataNightlyNumber )
+  https://git.orfeo-toolbox.org/otb-data.git/commit/refs/heads/nightly )
 set_property(TEST tsTvDataIsNightlyRevision PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME tsTvIsNightlyRevision COMMAND otbCurlAdaptersTestDriver
   otbIsNightlyRevision
   ${OTB_WC_REVISION}
-  http://hg.orfeo-toolbox.org/nightly/libNightlyNumber )
+  https://git.orfeo-toolbox.org/otb.git/commit/refs/heads/nightly )
 set_property(TEST tsTvIsNightlyRevision PROPERTY RESOURCE_LOCK web_access)

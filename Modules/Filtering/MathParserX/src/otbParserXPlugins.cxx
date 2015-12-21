@@ -66,7 +66,7 @@ void dotpr::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
       int nbrows = m1.GetRows();
       int nbcols = m1.GetCols();
 
-      mup::matrix_type res(1,a_iArgc-1,0);
+      mup::matrix_type res(1,a_iArgc-1,0.);
 
       for (int k=1; k<a_iArgc; ++k)
       {
@@ -360,7 +360,7 @@ void cat::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
       }
 
       // The return value is passed by writing it to the reference ret
-      mup::matrix_type res(1,vect.size(),0);
+      mup::matrix_type res(1,vect.size(),0.);
       for (unsigned int j=0; j<vect.size(); j++)
             res.At(0,j) = vect[j];
       *ret = res;
@@ -410,7 +410,7 @@ void mean::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
       }
 
       // The return value is passed by writing it to the reference ret
-      mup::matrix_type res(1,vect.size(),0);
+      mup::matrix_type res(1,vect.size(),0.);
       for (unsigned int j=0; j<vect.size(); j++)
             res.At(0,j) = vect[j];
       *ret = res;
@@ -467,9 +467,9 @@ void var::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
       }
 
       // The return value is passed by writing it to the reference ret
-      mup::matrix_type res(1,vect.size(),0);
+      mup::matrix_type res(1,vect.size(),0.);
       for (unsigned int j=0; j<vect.size(); j++)
-            res.At(0,j) = vect[j];
+        res.At(0,j) = static_cast<mup::float_type>(vect[j]);
       *ret = res;
     }
 
@@ -567,9 +567,9 @@ void median::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a
       }
 
       // The return value is passed by writing it to the reference ret
-      mup::matrix_type res(1,vect.size(),0);
+      mup::matrix_type res(1,vect.size(),0.);
       for (unsigned int j=0; j<vect.size(); j++)
-            res.At(0,j) = vect[j];
+        res.At(0,j) = static_cast<mup::float_type>(vect[j]);
       *ret = res;
     }
 
@@ -634,9 +634,9 @@ void maj::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
       }
 
       // The return value is passed by writing it to the reference ret
-      mup::matrix_type res(1,vect.size(),0);
+      mup::matrix_type res(1,vect.size(),0.);
       for (unsigned int j=0; j<vect.size(); j++)
-            res.At(0,j) = vect[j];
+        res.At(0,j) = static_cast<mup::float_type>(vect[j]);
       *ret = res;
     }
 
@@ -744,12 +744,8 @@ void vect2scal::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, in
       // Get the argument from the argument input vector
       const mup::matrix_type a = a_pArg[0]->GetArray();
 
-
-      int nbrows = a.GetRows();
-      int nbcols = a.GetCols();
-      
-      assert(nbrows == 1);
-      assert(nbcols == 1);
+      assert(a.GetRows() == 1);
+      assert(a.GetCols() == 1);
 
       mup::float_type res;
 

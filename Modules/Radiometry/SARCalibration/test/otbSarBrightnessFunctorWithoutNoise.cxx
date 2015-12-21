@@ -16,8 +16,8 @@
 
 =========================================================================*/
 #include "itkMacro.h"
-
 #include "otbSarBrightnessFunctor.h"
+#include "otbMath.h"
 
 int otbSarBrightnessFunctorWithoutNoise(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
@@ -30,51 +30,51 @@ int otbSarBrightnessFunctorWithoutNoise(int itkNotUsed(argc), char * itkNotUsed(
 
   // With Noise
   functWithNoise.SetNoise( 0.0);
-  if( abs(functWithNoise.GetNoise() -0.0) > 0.0)
+  if( vcl_abs(functWithNoise.GetNoise() -0.0) > 0.0)
   {
     return false;
   }
   functWithNoise.SetScale( 10.0);
-  if( abs(functWithNoise.GetScale() -10.0) > 0.0)
+  if( vcl_abs(functWithNoise.GetScale() -10.0) > 0.0)
   {
     return false;
   }
   functWithNoise.SetAntennaPatternNewGain( 10.0);
-  if( abs(functWithNoise.GetAntennaPatternNewGain() -10.0) > 0.0)
+  if( vcl_abs(functWithNoise.GetAntennaPatternNewGain() -10.0) > 0.0)
   {
     return false;
   }
   functWithNoise.SetAntennaPatternOldGain( 10.0);
-  if( abs(functWithNoise.GetAntennaPatternOldGain() -10.0) > 0.0)
+  if( vcl_abs(functWithNoise.GetAntennaPatternOldGain() -10.0) > 0.0)
   {
     return false;
   }
 
   functWithNoise.SetRangeSpreadLoss( 10.0);
-  if( abs(functWithNoise.GetRangeSpreadLoss() -10.0) > 0.0)
+  if( vcl_abs(functWithNoise.GetRangeSpreadLoss() -10.0) > 0.0)
   {
     return false;
   }
 
   // Without Noise
   functWithoutNoise.SetScale(10.0);
-  if (abs(functWithoutNoise.GetScale() - 10.0) > 0.0)
+  if (vcl_abs(functWithoutNoise.GetScale() - 10.0) > 0.0)
     {
     return false;
     }
   functWithoutNoise.SetAntennaPatternNewGain(10.0);
-  if (abs(functWithoutNoise.GetAntennaPatternNewGain() - 10.0) > 0.0)
+  if (vcl_abs(functWithoutNoise.GetAntennaPatternNewGain() - 10.0) > 0.0)
     {
     return false;
     }
   functWithoutNoise.SetAntennaPatternOldGain(10.0);
-  if (abs(functWithoutNoise.GetAntennaPatternOldGain() - 10.0) > 0.0)
+  if (vcl_abs(functWithoutNoise.GetAntennaPatternOldGain() - 10.0) > 0.0)
     {
     return false;
     }
 
   functWithoutNoise.SetRangeSpreadLoss(10.0);
-  if (abs(functWithoutNoise.GetRangeSpreadLoss() - 10.0) > 0.0)
+  if (vcl_abs(functWithoutNoise.GetRangeSpreadLoss() - 10.0) > 0.0)
     {
     return false;
     }

@@ -16,11 +16,9 @@
 
 =========================================================================*/
 #include "otbExtendedFilenameToWriterOptions.h"
-#include <boost/algorithm/string.hpp>
+#include "otb_boost_string_header.h"
 #include <itksys/RegularExpression.hxx>
-
-#include <boost/foreach.hpp>
-#include <boost/tokenizer.hpp>
+#include "otb_boost_tokenizer_header.h"
 
 namespace otb
 {

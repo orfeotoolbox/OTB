@@ -57,7 +57,7 @@ LOGLUV_SUPPORT	= 1
 JPEG_SUPPORT = 1
 JPEGDIR 	 = @CMAKE_WIN_INSTALL_PREFIX@
 JPEG_INCLUDE = -I$(JPEGDIR)\include
-JPEG_LIB 	 = $(JPEGDIR)\lib\libjpeg.lib
+JPEG_LIB 	 = $(JPEGDIR)\lib\jpeg.lib
 
 #
 # Uncomment and edit following lines to enable ZIP support

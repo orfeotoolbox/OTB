@@ -321,9 +321,8 @@ void CommandLineLauncher::LoadApplication()
   if (m_Application.IsNull())
     {
     std::cerr << "ERROR: Could not find application \"" << moduleName << "\"" << std::endl;
-
-    const char * ITK_AUTOLOAD_PATH = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
-    std::cerr << "ERROR: Module search path: " << (ITK_AUTOLOAD_PATH ? ITK_AUTOLOAD_PATH : "none (check ITK_AUTOLOAD_PATH)") << std::endl;
+    std::string modulePath = ApplicationRegistry::GetApplicationPath();
+    std::cerr << "ERROR: Module search path: " << (modulePath.empty() ? "none (check OTB_APPLICATION_PATH)" : modulePath) << std::endl;
 
     std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
     if (list.size() == 0)
@@ -467,6 +466,31 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                         return INVALIDNUMBEROFVALUE;
                         }
                     }
+                  else if (type == ParameterType_ComplexOutputImage)
+                    {
+                    m_Application->SetParameterString(paramKey, values[0]);
+                    // Check if pixel type is given
+                    if (values.size() == 2)
+                      {
+                      ComplexImagePixelType outPixType = ComplexImagePixelType_float;
+                      if (values[1] == "cfloat")
+                        outPixType = ComplexImagePixelType_float;
+                      else if (values[1] == "cdouble")
+                        outPixType = ComplexImagePixelType_double;
+                      else
+                        {
+                        return WRONGPARAMETERVALUE;
+                        }
+                      dynamic_cast<ComplexOutputImageParameter *> (param.GetPointer())->SetComplexPixelType(outPixType);
+                      }
+                    else
+                      if (values.size() != 1 && values.size() != 2)
+                        {
+                        std::cerr << "ERROR: Invalid number of value for: \"" << paramKey
+                                  << "\", invalid number of values " << values.size() << std::endl;
+                        return INVALIDNUMBEROFVALUE;
+                        }
+                    }
                   else
                     if (type == ParameterType_ListView)
                       {
@@ -478,7 +502,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                         // Handle space in filename. Only for input
                         // files or directories
                         if (type == ParameterType_Directory         || type == ParameterType_InputFilename ||
-                            type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
+                            type == ParameterType_ComplexInputImage ||
+                            type == ParameterType_InputImage ||
                             type == ParameterType_InputVectorData   || type == ParameterType_OutputVectorData )
                           {
                           for(unsigned int j=1; j<values.size(); j++)
@@ -497,9 +522,10 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         // Single value parameter
         if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int ||
             type == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_InputFilename ||
-            type == ParameterType_InputFilenameList || type == ParameterType_OutputFilename ||
+            type == ParameterType_OutputFilename ||
             type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
-            type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||
+            type == ParameterType_ComplexOutputImage ||
+            type == ParameterType_InputVectorData ||
             type == ParameterType_OutputVectorData || type == ParameterType_RAM ||
             type == ParameterType_OutputProcessXML) // || type == ParameterType_InputProcessXML)
           {
@@ -800,7 +826,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "<string>        ";
     }
-  else if (type == ParameterType_OutputImage)
+  else if (type == ParameterType_OutputImage || type == ParameterType_ComplexOutputImage)
     {
     oss << "<string> [pixel]";
     }
@@ -818,8 +844,26 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
 
   if (type == ParameterType_OutputImage)
     {
+    OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param.GetPointer());
+    std::string defPixType("float");
+    if (paramDown)
+      {
+      defPixType = OutputImageParameter::ConvertPixelTypeToString(paramDown->GetDefaultPixelType());
+      }
     oss << " [pixel=uint8/uint16/int16/uint32/int32/float/double]";
-    oss << " (default value is float)";
+    oss << " (default value is " << defPixType <<")";
+    }
+
+  if (type == ParameterType_ComplexOutputImage)
+    {
+    ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param.GetPointer());
+    std::string defPixType("cfloat");
+    if (paramDown)
+      {
+      defPixType = ComplexOutputImageParameter::ConvertPixelTypeToString(paramDown->GetDefaultComplexPixelType());
+      }
+    oss << " [pixel=cfloat/cdouble]";
+    oss << " (default value is "<< defPixType <<")";
     }
 
 

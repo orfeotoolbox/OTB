@@ -18,7 +18,7 @@
 #include "itkNumericTraits.h"
 
 #include "otbSailModel.h"
-#include <boost/math/special_functions/expint.hpp>
+#include "otb_boost_expint_header.h"
 #include <boost/shared_ptr.hpp>
 #include "otbMath.h"
 
@@ -457,7 +457,7 @@ SailModel
 
       absh = (1-rddt-(1-rsoil0)*(tdd+(tdd*rdd*rsoil0)/dn));
       absv = (1-rsdt-(1-rsoil0)*(tss+(tss*rsoil0*rdd+tsd)/dn));
-      
+
       SpectralResponseType::PairType response;
       response.first=lambda/1000.0;
       response.second=resh;
@@ -508,7 +508,7 @@ SailModel
       x2 = excent/sqrt(1.+excent*excent*vcl_tan(tl2)*vcl_tan(tl2));
       if(excent==1)
       {
-         v = abs(cos(tl1)-cos(tl2));
+         v = vcl_abs(cos(tl1)-cos(tl2));
          temp.push_back( v );
          sum = sum + v;
       }
@@ -709,4 +709,3 @@ SailModel
 
 }
 } // end namespace otb
-

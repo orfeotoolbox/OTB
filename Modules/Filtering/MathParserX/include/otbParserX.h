@@ -20,7 +20,15 @@
 
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
+
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wc++11-extensions"
 #include "mpParser.h"
+#pragma GCC diagnostic pop
+#else
+#include "mpParser.h"
+#endif
 
 namespace otb
 {
@@ -76,7 +84,7 @@ public:
 
   /** Return the list of variables */
   const mup::var_maptype& GetVar() const;
- 
+
   /** Return the list of expression variables (only make sense after having set up an expression) */
   const mup::var_maptype& GetExprVar() const;
 

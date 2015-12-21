@@ -18,7 +18,15 @@
 #ifndef __otbImage_h
 #define __otbImage_h
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "itkImage.h"
+#pragma GCC diagnostic pop
+#else
+#include "itkImage.h"
+#endif
+
 #include "otbImageMetadataInterfaceBase.h"
 
 namespace otb

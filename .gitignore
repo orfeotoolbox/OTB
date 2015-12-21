@@ -1,0 +1,10 @@
+syntax: glob
+*~
+.*.swp
+*.orig
+*.pyc
+.\#*
+\#*\#
+tags
+*vim*
+*.template

@@ -29,19 +29,21 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::RandomForestsMachineLearningModel() :
- m_RFModel (new CvRTrees),
- m_MaxDepth(5),
- m_MinSampleCount(10),
- m_RegressionAccuracy(0),
- m_ComputeSurrogateSplit(false),
- m_MaxNumberOfCategories(10),
- m_CalculateVariableImportance(false),
- m_MaxNumberOfVariables(0),
- m_MaxNumberOfTrees(100),
- m_ForestAccuracy(0.01),
- m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS),
- m_RegressionMode(false)
+  m_RFModel (new CvRTreesWrapper),
+  m_MaxDepth(5),
+  m_MinSampleCount(10),
+  m_RegressionAccuracy(0.01),
+  m_ComputeSurrogateSplit(false),
+  m_MaxNumberOfCategories(10),
+  m_CalculateVariableImportance(false),
+  m_MaxNumberOfVariables(0),
+  m_MaxNumberOfTrees(100),
+  m_ForestAccuracy(0.01),
+  m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS),
+  m_ComputeMargin(false)
 {
+  this->m_ConfidenceIndex = true;
+  this->m_IsRegressionSupported = true;
 }
 
 
@@ -64,7 +66,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::TrainClassification()
+::Train()
 {
   //convert listsample to opencv matrix
   cv::Mat samples;
@@ -90,12 +92,12 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
                                  m_MaxNumberOfTrees,            // max number of trees in the forest
                                  m_ForestAccuracy,              // forest accuracy
                                  m_TerminationCriteria          // termination criteria
-                                 );
+    );
 
   cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
   var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
 
-  if(m_RegressionMode)
+  if(this->m_RegressionMode)
     var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_NUMERICAL;
   else
     var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
@@ -109,7 +111,7 @@ template <class TInputValue, class TOutputValue>
 typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::PredictClassification(const InputSampleType & value) const
+::Predict(const InputSampleType & value, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -121,6 +123,14 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   TargetSampleType target;
 
   target[0] = static_cast<TOutputValue>(result);
+
+  if (quality != NULL)
+    {
+    if(m_ComputeMargin)
+      (*quality) = m_RFModel->predict_margin(sample);
+    else
+      (*quality) = m_RFModel->predict_confidence(sample);
+    }
 
   return target[0];
 }
@@ -152,30 +162,30 @@ bool
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::CanReadFile(const std::string & file)
 {
-   std::ifstream ifs;
-   ifs.open(file.c_str());
+  std::ifstream ifs;
+  ifs.open(file.c_str());
 
-   if(!ifs)
-   {
-      std::cerr<<"Could not read file "<<file<<std::endl;
-      return false;
-   }
+  if(!ifs)
+    {
+    std::cerr<<"Could not read file "<<file<<std::endl;
+    return false;
+    }
 
 
-   while (!ifs.eof())
-   {
-      std::string line;
-      std::getline(ifs, line);
+  while (!ifs.eof())
+    {
+    std::string line;
+    std::getline(ifs, line);
 
-      //if (line.find(m_RFModel->getName()) != std::string::npos)
-      if (line.find(CV_TYPE_NAME_ML_RTREES) != std::string::npos)
+    //if (line.find(m_RFModel->getName()) != std::string::npos)
+    if (line.find(CV_TYPE_NAME_ML_RTREES) != std::string::npos)
       {
-         //std::cout<<"Reading a "<<CV_TYPE_NAME_ML_RTREES<<" model"<<std::endl;
-         return true;
+      //std::cout<<"Reading a "<<CV_TYPE_NAME_ML_RTREES<<" model"<<std::endl;
+      return true;
       }
-   }
-   ifs.close();
-   return false;
+    }
+  ifs.close();
+  return false;
 }
 
 template <class TInputValue, class TOutputValue>

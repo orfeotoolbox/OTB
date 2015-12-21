@@ -48,7 +48,7 @@ otb_add_test(NAME prTeVectorDataProjectionExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${BASELINE}/vectorDataProjectionExample.shp
     ${TEMP}/vectorDataProjectionExample.shp
   Execute $<TARGET_FILE:VectorDataProjectionExample>
-    ${INPUTDATA}/Capitole-Shadows.kml
+    ${OTB_DATA_ROOT}/Input/Capitole-Shadows.kml
     LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
     ${TEMP}/vectorDataProjectionExample.shp
 )
@@ -58,7 +58,7 @@ otb_add_test(NAME prTeGeometriesProjectionTest COMMAND ${OTB_TEST_DRIVER}
     ${BASELINE}/geometriesProjectionExample.shp
     ${TEMP}/geometriesProjectionExample.shp
   Execute $<TARGET_FILE:GeometriesProjectionExample>
-    ${INPUTDATA}/Capitole-Shadows.shp
+    ${OTB_DATA_ROOT}/Input/Capitole-Shadows.shp
     LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
     ${TEMP}/geometriesProjectionExample.shp
 )
@@ -68,7 +68,7 @@ otb_add_test(NAME prTeEstimateRPCSensorModelExampleTest COMMAND ${OTB_TEST_DRIVE
   --compare-ascii ${EPSILON_4}
     ${BASELINE}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
     ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
-  --ignore-lines-with 5 PipelineMTime ImportImageContaine Source: Image Time:
+  --ignore-lines-with 6 PipelineMTime ImportImageContaine Source: Image Time: Pointer:
   Execute $<TARGET_FILE:EstimateRPCSensorModelExample>
     LARGEINPUT{SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT}
     ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
@@ -88,6 +88,10 @@ otb_add_test(NAME prTeEstimateRPCSensorModelExampleTest COMMAND ${OTB_TEST_DRIVE
     2803 1942 -22.958868 -42.808235 0.
     980 2734 -22.99534 -43.309672 0.
     713 2754 -23.007862 -43.365307 0.
+    72 2955 -23.012153 -43.541331 0.
+    2884 1898 -22.954691 -42.786188 0.
+    2539 47 -22.616041 -42.777877 0.
+    577 183 -22.551654 -43.271813 0.
 )
 
 otb_add_test(NAME prTePlaceNameToLonLatExampleTest COMMAND ${OTB_TEST_DRIVER}

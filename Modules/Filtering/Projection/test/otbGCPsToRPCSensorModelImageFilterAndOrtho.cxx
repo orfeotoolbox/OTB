@@ -116,6 +116,7 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   orthoRectifFilter->SetMapProjection(utmMapProjection);
 
   ImageType::PixelType no_data(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+  no_data.Fill(0.0);
   orthoRectifFilter->SetEdgePaddingValue(no_data);
 
   // Displacement Field spacing

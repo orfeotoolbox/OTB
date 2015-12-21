@@ -18,7 +18,7 @@
 
 #include "otbSpotImageMetadataInterface.h"
 
-#include <boost/algorithm/string.hpp>
+#include "otbStringUtils.h"
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"

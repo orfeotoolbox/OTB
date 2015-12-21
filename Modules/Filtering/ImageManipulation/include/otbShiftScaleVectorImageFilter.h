@@ -142,6 +142,14 @@ private:
 /** \class ShiftScaleVectorImageFilter
  *  \brief This filter performs a shift and scaling of a vector image on a per band basis.
  *
+ *  For each band, the following formula is applied :
+ *
+ *  \f[ output = \frac{input - shift}{scale} \f]
+ *
+ *  Beware that the behaviour differs from itk::ShiftScaleImageFilter
+ *  (which add shift instead of subtracting it).
+ *
+ *  \sa VectorShiftScale
  *  \ingroup IntensityImageFilters
  *  \ingroup MultiThreaded
  *

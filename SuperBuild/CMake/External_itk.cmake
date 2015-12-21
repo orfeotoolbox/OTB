@@ -7,7 +7,6 @@ message(STATUS "Setup ITK...")
 
 if(USE_SYSTEM_ITK)
   find_package ( ITK )
-  add_custom_target(${proj})
   message(STATUS "  Using ITK system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
@@ -107,7 +106,8 @@ else()
   endforeach()
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES TIFF EXPAT PNG ZLIB FFTW)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF EXPAT PNG ZLIB FFTW)
+
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj ITK)
@@ -150,8 +150,8 @@ else()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://sourceforge.net/projects/itk/files/itk/4.7/InsightToolkit-4.7.1.tar.gz/download"
-    URL_MD5 c2cbf3eb34df41548a5b9615ea250e7d
+    URL "http://sourceforge.net/projects/itk/files/itk/4.8/InsightToolkit-4.8.1.tar.gz/download"
+    URL_MD5 b1ed53604de854501cb61f34f410420e
     SOURCE_DIR ${ITK_SB_SRC}
     BINARY_DIR ${ITK_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -171,19 +171,11 @@ else()
       -DITK_USE_SYSTEM_TIFF:BOOL=ON
       -DITK_USE_SYSTEM_PNG:BOOL=ON
       ${ITK_SB_CONFIG}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
-      ${CMAKE_SOURCE_DIR}/patches/ITK/hashtable.hxx.in
-      ${ITK_SB_SRC}/Modules/ThirdParty/KWSys/src/KWSys
     DEPENDS ${${proj}_DEPENDENCIES}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
   
-  # write patch in binary dir
-  #file(WRITE ${CMAKE_BINARY_DIR}/itk_patch_1.cmake 
-  #  "configure_file(${CMAKE_SOURCE_DIR}/patches_ITK/hashtable.hxx.in 
-  #   ${ITK_SB_SRC}/Modules/ThirdParty/KWSys/src/KWSys/hashtable.hxx.in COPYONLY)")
-  
-  set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-4.6)
+  set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-4.8)
   
 endif()
 endif()

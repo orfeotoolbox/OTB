@@ -259,7 +259,7 @@ void otb::FieldCopyTransformation::fieldsTransform(
   // two fields: "Description" and "Name"
   //assert(inFeature.GetSize() == outFeature.GetSize());
 
-  for (size_t i=0,N=inFeature.GetSize(); i!=N; ++i)
+  for (int i=0,N=inFeature.GetSize(); i!=N; ++i)
     {
     int const indexNewField = m_SourceToDestFieldIndicesMap[i];
     outFeature[indexNewField].Assign(inFeature[i]);

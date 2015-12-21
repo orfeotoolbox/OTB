@@ -27,10 +27,8 @@
 
 #include "gdal.h"
 #include "gdal_alg.h"
-
-#include <ogrsf_frmts.h>
-#include "ogr_api.h"
 #include "ogr_srs_api.h"
+#include "otbOGRVersionProxy.h"
 
 namespace otb {
 
@@ -142,7 +140,7 @@ protected:
   {
     if (m_OGRDataSourcePointer != NULL)
       {
-      OGRDataSource::DestroyDataSource(m_OGRDataSourcePointer);
+      ogr::version_proxy::Close(m_OGRDataSourcePointer);
       }
   }
 
@@ -154,7 +152,7 @@ private:
   RasterizeVectorDataFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  OGRDataSource*              m_OGRDataSourcePointer;
+  ogr::version_proxy::GDALDatasetType * m_OGRDataSourcePointer;
 
   // Vector Of LayersH
   std::vector< OGRLayerH >    m_SrcDataSetLayers;

@@ -920,7 +920,8 @@ unsigned int JPEG2000ImageIO::GetOverviewsCount()
     itkExceptionMacro(<< "Available resolutions in JPEG2000 is empty");
     }
 
-  return tempResList.size() - 1;
+  // count includes full resolution
+  return tempResList.size();
 }
 
 // Read image

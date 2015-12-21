@@ -42,11 +42,16 @@ public:
   QtWidgetOutputVectorDataParameter(OutputVectorDataParameter*, QtWidgetModel*);
   virtual ~QtWidgetOutputVectorDataParameter();
 
+  inline const QLineEdit* GetInput() const;
+  inline QLineEdit* GetInput();
+
   /** Get the PixelType*/
   //itkGetMacro(PixelType, int);
 
-protected slots:
+public slots:
   void SetFileName( const QString& value );
+
+protected slots:
   void SelectFile();
 
 private:
@@ -68,6 +73,23 @@ private:
 
 };
 
+
+
+inline
+const QLineEdit*
+QtWidgetOutputVectorDataParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+inline
+QLineEdit*
+QtWidgetOutputVectorDataParameter
+::GetInput()
+{
+  return m_Input;
+}
 
 }
 }

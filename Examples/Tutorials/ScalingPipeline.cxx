@@ -28,7 +28,7 @@
 // the result for proper display.
 //
 // We include the required header including the header
-// for the \doxygen{itk}{CannyEdgeImageFilter} and the
+// for the \doxygen{itk}{CannyEdgeDetectionImageFilter} and the
 // \doxygen{itk}{RescaleIntensityImageFilter}.
 //
 //  Software Guide : EndLatex

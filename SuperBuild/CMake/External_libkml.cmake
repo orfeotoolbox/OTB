@@ -7,17 +7,19 @@ message(STATUS "Setup libKML ...")
 
 if(USE_SYSTEM_LIBKML)
   find_package ( LibKML )
-  add_custom_target(${proj})
   message(STATUS "  Using libKML system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using libKML SuperBuild version")
+
   # declare dependencies
-  set(${proj}_DEPENDENCIES EXPAT ZLIB BOOST)
+  ##set(${proj}_DEPENDENCIES EXPAT ZLIB BOOST)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} EXPAT ZLIB BOOST)
+
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj LIBKML)
-  
+
   ADD_SUPERBUILD_CMAKE_VAR(EXPAT_INCLUDE_DIR)
   ADD_SUPERBUILD_CMAKE_VAR(EXPAT_LIBRARY)
   ADD_SUPERBUILD_CMAKE_VAR(ZLIB_INCLUDE_DIR)
@@ -32,7 +34,7 @@ else()
     INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
     DEPENDS ${${proj}_DEPENDENCIES}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory  ${CMAKE_SOURCE_DIR}/patches/${proj} ${LIBKML_SB_SRC}    
+    PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory  ${CMAKE_SOURCE_DIR}/patches/${proj} ${LIBKML_SB_SRC}
     CMAKE_CACHE_ARGS
       -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
       -DCMAKE_BUILD_TYPE:STRING=Release
@@ -41,14 +43,17 @@ else()
       ${LIBKML_SB_CONFIG}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
-  
+
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
+    list(APPEND _SB_${proj}_BASE_LIBRARY ${SB_INSTALL_PREFIX}/lib/kmlbase.lib)
     if(USE_SYSTEM_EXPAT)
-      set(_SB_${proj}_BASE_LIBRARY ${SB_INSTALL_PREFIX}/lib/kmlbase.lib;${EXPAT_LIBRARY})
+      list(APPEND _SB_${proj}_BASE_LIBRARY ${EXPAT_LIBRARY})
     else()
-      set(_SB_${proj}_BASE_LIBRARY ${SB_INSTALL_PREFIX}/lib/kmlbase.lib;${_SB_EXPAT_LIBRARY})
+      list(APPEND _SB_${proj}_BASE_LIBRARY ${_SB_EXPAT_LIBRARY})
     endif()
+    list(APPEND _SB_${proj}_BASE_LIBRARY ${SB_INSTALL_PREFIX}/lib/uriparser.lib)
+
     set(_SB_${proj}_CONVENIENCE_LIBRARY ${SB_INSTALL_PREFIX}/lib/kmlconvenience.lib)
     set(_SB_${proj}_DOM_LIBRARY ${SB_INSTALL_PREFIX}/lib/kmldom.lib)
     set(_SB_${proj}_ENGINE_LIBRARY ${SB_INSTALL_PREFIX}/lib/kmlengine.lib)
@@ -64,6 +69,6 @@ else()
     set(_SB_${proj}_XSD_LIBRARY ${SB_INSTALL_PREFIX}/lib/libkmlxsd${CMAKE_SHARED_LIBRARY_SUFFIX})
     set(_SB_${proj}_MINIZIP_LIBRARY ${SB_INSTALL_PREFIX}/lib/libminizip${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-  
+
 endif()
 endif()

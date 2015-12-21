@@ -64,9 +64,9 @@ AtmosphericRadiativeTerms
 
 void
 AtmosphericRadiativeTerms
-::ValuesInitialization(unsigned int nbChannel)
+::ValuesInitialization(DataVectorSizeType nbChannel)
 {
-  for (unsigned int j = 0; j < nbChannel; ++j)
+  for (DataVectorSizeType j = 0; j < nbChannel; ++j)
     {
     ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
     m_Values.push_back(temp);

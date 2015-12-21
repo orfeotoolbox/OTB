@@ -9,8 +9,8 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
-  See ITCopyright.txt for details.
+  Copyright (c) Institut Mines-Telecom. All rights reserved.
+  See IMTCopyright.txt for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -45,7 +45,7 @@ WaveletGenerator<TMotherWaveletOperator>
 template <Wavelet::Wavelet TMotherWaveletOperator>
 void
 WaveletGenerator<TMotherWaveletOperator>
-::GetLowPassCoefficientVector(CoefficientVector& coeff) const
+::GetLowPassCoefficientVector(CoefficientVector& itkNotUsed(coeff)) const
 {
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
@@ -56,7 +56,7 @@ WaveletGenerator<TMotherWaveletOperator>
 template <Wavelet::Wavelet TMotherWaveletOperator>
 void
 WaveletGenerator<TMotherWaveletOperator>
-::GetHighPassCoefficientVector(CoefficientVector& coeff) const
+::GetHighPassCoefficientVector(CoefficientVector& itkNotUsed(coeff)) const
 {
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;

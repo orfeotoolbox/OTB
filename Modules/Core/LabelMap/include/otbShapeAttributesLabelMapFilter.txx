@@ -202,13 +202,13 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 
   // compute the size per pixel, to be used later
   double sizePerPixel = 1;
-  for (int i = 0; i < LabelObjectType::ImageDimension; ++i)
+  for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
     sizePerPixel *= vcl_abs(m_LabelImage->GetSpacing()[i]);
     }
 
   typename std::vector<double> sizePerPixelPerDimension;
-  for (int i = 0; i < LabelObjectType::ImageDimension; ++i)
+  for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
     sizePerPixelPerDimension.push_back(sizePerPixel / vcl_abs(m_LabelImage->GetSpacing()[i]));
     }
@@ -216,7 +216,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   // compute the max the index on the border of the image
   typename LabelObjectType::IndexType borderMin = m_LabelImage->GetLargestPossibleRegion().GetIndex();
   typename LabelObjectType::IndexType borderMax = borderMin;
-  for (int i = 0; i < LabelObjectType::ImageDimension; ++i)
+  for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
     borderMax[i] += borderMin[i] + m_LabelImage->GetLargestPossibleRegion().GetSize()[i] - 1;
     }
@@ -251,7 +251,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 
     // update the centroid - and report the progress
     // first, update the axes which are not 0
-    for (int i = 1; i < LabelObjectType::ImageDimension; ++i)
+    for (DimensionType i = 1; i < LabelObjectType::ImageDimension; ++i)
       {
       centroid[i] += length * idx[i];
       }
@@ -259,7 +259,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     centroid[0] += idx[0] * length + (length * (length - 1)) / 2.0;
 
     // update the mins and maxs
-    for (int i = 0; i < LabelObjectType::ImageDimension; ++i)
+    for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
       {
       if (idx[i] < mins[i])
         {
@@ -278,7 +278,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 
     // object is on a border ?
     bool isOnBorder = false;
-    for (int i = 1; i < LabelObjectType::ImageDimension; ++i)
+    for (DimensionType i = 1; i < LabelObjectType::ImageDimension; ++i)
       {
       if (idx[i] == borderMin[i] || idx[i] == borderMax[i])
         {
@@ -326,7 +326,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
       physicalSizeOnBorder += sizePerPixelPerDimension[0];
       }
     // then the other dimensions
-    for (int i = 1; i < LabelObjectType::ImageDimension; ++i)
+    for (DimensionType i = 1; i < LabelObjectType::ImageDimension; ++i)
       {
       if (idx[i] == borderMin[i])
         {
@@ -375,13 +375,13 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
                                       + spacing[0] *
                                       (length - 1) * ((spacing[0] * (2 * length - 1)) / 6.0 + physicalPosition[0]));
     // the other ones
-    for (int i = 1; i < LabelObjectType::ImageDimension; ++i)
+    for (DimensionType i = 1; i < LabelObjectType::ImageDimension; ++i)
       {
       // do this one here to avoid the double assigment in the following loop
       // when i == j
       centralMoments[i][i] += length * physicalPosition[i] * physicalPosition[i];
       // central moments are symetrics, so avoid to compute them 2 times
-      for (int j = i + 1; j < LabelObjectType::ImageDimension; ++j)
+      for (DimensionType j = i + 1; j < LabelObjectType::ImageDimension; ++j)
         {
         // note that we won't use that code if the image dimension is less than 3
         // --> the tests should be in 3D at least
@@ -401,14 +401,14 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   typename TLabelImage::SizeType regionSize;
   double                         minSize = itk::NumericTraits<double>::max();
   double                         maxSize = itk::NumericTraits<double>::NonpositiveMin();
-  for (int i = 0; i < LabelObjectType::ImageDimension; ++i)
+  for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
     centroid[i] /= size;
     regionSize[i] = maxs[i] - mins[i] + 1;
     double s = regionSize[i] * vcl_abs(m_LabelImage->GetSpacing()[i]);
     minSize = std::min(s, minSize);
     maxSize = std::max(s, maxSize);
-    for (unsigned int j = 0; j < LabelObjectType::ImageDimension; ++j)
+    for (DimensionType j = 0; j < LabelObjectType::ImageDimension; ++j)
       {
       centralMoments[i][j] /= size;
       }
@@ -418,9 +418,9 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   m_LabelImage->TransformContinuousIndexToPhysicalPoint(centroid, physicalCentroid);
 
   // Center the second order moments
-  for (unsigned int i = 0; i < LabelObjectType::ImageDimension; ++i)
+  for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
-    for (unsigned int j = 0; j < LabelObjectType::ImageDimension; ++j)
+    for (DimensionType j = 0; j < LabelObjectType::ImageDimension; ++j)
       {
       centralMoments[i][j] -= physicalCentroid[i] * physicalCentroid[j];
       }
@@ -444,12 +444,12 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   vnl_diag_matrix<vcl_complex<double> > eigenval = eigenrot.D;
   vcl_complex<double> det(1.0, 0.0);
 
-  for (unsigned int i = 0; i < LabelObjectType::ImageDimension; ++i)
+  for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
     det *= eigenval(i, i);
     }
 
-  for (unsigned int i = 0; i < LabelObjectType::ImageDimension; ++i)
+  for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
     principalAxes[LabelObjectType::ImageDimension - 1][i] *= std::real(det);
     }
@@ -469,12 +469,12 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   // compute equilalent ellipsoid radius
   itk::Vector<double, LabelObjectType::ImageDimension> ellipsoidSize;
   double                                               edet = 1.0;
-  for (unsigned int i = 0; i < LabelObjectType::ImageDimension; ++i)
+  for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
     edet *= principalMoments[i];
     }
   edet = vcl_pow(edet, 1.0 / LabelObjectType::ImageDimension);
-  for (unsigned int i = 0; i < LabelObjectType::ImageDimension; ++i)
+  for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
     ellipsoidSize[i] = 2.0 * equivalentRadius * vcl_sqrt(principalMoments[i] / edet);
     }
@@ -619,7 +619,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
         {
         // Compute the length between the 2 indexes
         double length = 0;
-        for (int i = 0; i < LabelObjectType::ImageDimension; ++i)
+        for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
           {
           length += vcl_pow((iIt1->operator[] (i) - iIt2->operator[] (i)) * m_LabelImage->GetSpacing()[i], 2);
           }
@@ -700,7 +700,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   typename LineImageType::IndexType lIdx;
   typename LineImageType::SizeType lSize;
   RegionType boundingBox = region;
-  for( int i=0; i<ImageDimension-1; i++ )
+  for( DimensionType i=0; i<ImageDimension-1; i++ )
     {
     lIdx[i] = boundingBox.GetIndex()[i+1];
     lSize[i] = boundingBox.GetSize()[i+1];
@@ -725,7 +725,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   while( ! lit.IsAtEnd() )
     {
     const typename TLabelObject::IndexType & idx = lit.GetLine().GetIndex();
-    for( int i=0; i<ImageDimension-1; i++ )
+    for( DimensionType i=0; i<ImageDimension-1; i++ )
       {
       lIdx[i] = idx[i+1];
       }
@@ -764,7 +764,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
       // prepare the offset to be stored in the intercepts map
       typename LineImageType::OffsetType lno = ci.GetNeighborhoodOffset();
       no[0] = 0;
-      for( int i=0; i<ImageDimension-1; i++ )
+      for( DimensionType i=0; i<ImageDimension-1; i++ )
         {
         no[i+1] = vnl_math_abs(lno[i]);
         }

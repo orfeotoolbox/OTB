@@ -46,7 +46,7 @@ OGRVectorDataIO::~OGRVectorDataIO()
 {
   if (m_DataSource != NULL)
     {
-    OGRDataSource::DestroyDataSource(m_DataSource);
+    this->CloseInternalDataSource();
     }
 }
 
@@ -54,13 +54,15 @@ OGRVectorDataIO::~OGRVectorDataIO()
 bool
 OGRVectorDataIO::CanReadFile(const char* filename) const
 {
-  OGRDataSource * poDS = OGRSFDriverRegistrar::Open(filename, FALSE);
+  otb::ogr::version_proxy::GDALDatasetType * poDS = ogr::version_proxy::Open(filename, true);
+  
   if (poDS == NULL)
     {
+    std::cerr<<"Can not read file "<<filename<<" with GDALOpen"<<std::endl;
     return false;
     }
 //     std::cout << poDS->GetDriver()->GetName() << std::endl;
-  OGRDataSource::DestroyDataSource(poDS);
+  ogr::version_proxy::Close(poDS);
   return true;
 }
 
@@ -88,10 +90,10 @@ OGRVectorDataIO
 
   if (m_DataSource != NULL)
     {
-    OGRDataSource::DestroyDataSource(m_DataSource);
+    this->CloseInternalDataSource();
     }
 
-  m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), FALSE);
+  m_DataSource = ogr::version_proxy::Open(this->m_FileName.c_str(),true);
 
   if (m_DataSource == NULL)
     {
@@ -176,7 +178,13 @@ OGRVectorDataIO
 
     } // end For each layer
 
-  OGRDataSource::DestroyDataSource(m_DataSource);
+  this->CloseInternalDataSource();
+}
+
+void OGRVectorDataIO::CloseInternalDataSource()
+{
+  assert(m_DataSource != NULL && "m_DataSource cannot be NULL");
+  ogr::version_proxy::Close(m_DataSource);
   m_DataSource = NULL;
 }
 
@@ -194,7 +202,7 @@ bool OGRVectorDataIO::CanWriteFile(const char* filename) const
 }
 
 
-void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
+void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
 {
   itk::TimeProbe chrono;
   chrono.Start();
@@ -208,8 +216,8 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
 
 
   //Find first the OGR driver
-  OGRSFDriver * ogrDriver =
-    OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(this->GetOGRDriverName(this->m_FileName).data());
+  ogr::version_proxy::GDALDriverType * ogrDriver =
+    ogr::version_proxy::GetDriverByName(this->GetOGRDriverName(this->m_FileName).data());
 
   if (ogrDriver == NULL)
     {
@@ -219,25 +227,14 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
   // free an existing previous data source, if any
   if (m_DataSource != NULL)
     {
-    OGRDataSource::DestroyDataSource(m_DataSource);
+    ogr::version_proxy::Close(m_DataSource);
     }
 
   // Erase the dataSource if already exist
-  //TODO investigate the possibility of giving the option OVERWRITE=YES to the CreateDataSource method
-  OGRDataSource * poDS = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
-  if (poDS != NULL)
-    {
-    //Erase the data if possible
-    if (poDS->GetDriver()->TestCapability(ODrCDeleteDataSource))
-      {
-      //Delete datasource
-      poDS->GetDriver()->DeleteDataSource(this->m_FileName.c_str());
-      }
-    }
-  OGRDataSource::DestroyDataSource(poDS);
+  ogr::version_proxy::Delete(this->m_FileName.c_str());
 
   // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
-  m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), papszOptions);
+  m_DataSource = ogr::version_proxy::Create(ogrDriver,this->m_FileName.c_str());
 
   // check the created data source
   if (m_DataSource == NULL)
@@ -292,7 +289,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
   otbMsgDevMacro( << "layerKept " << layerKept );
   (void)layerKept; // keep compiler happy
 
-  OGRDataSource::DestroyDataSource(m_DataSource);
+  otb::ogr::version_proxy::Close(m_DataSource);
   m_DataSource = NULL;
 
   if (oSRS != NULL)

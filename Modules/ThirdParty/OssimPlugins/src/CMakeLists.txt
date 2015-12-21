@@ -52,7 +52,7 @@ set(ossimplugins_SOURCES
 add_library(otbossimplugins ${ossimplugins_LIBTYPE} ${ossimplugins_SOURCES})
 target_link_libraries(otbossimplugins 
   ${OTBGDAL_LIBRARIES}
-  ${OSSIM_LIBRARIES}
+  ${OTBOssim_LIBRARIES}
   ${OTBGeoTIFF_LIBRARIES}
   )
 

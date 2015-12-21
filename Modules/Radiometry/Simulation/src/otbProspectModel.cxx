@@ -19,7 +19,7 @@
 #include "itkNumericTraits.h"
 
 #include "otbProspectModel.h"
-#include <boost/math/special_functions/expint.hpp>
+#include "otb_boost_expint_header.h"
 #include <boost/shared_ptr.hpp>
 #include "otbMath.h"
 
@@ -256,4 +256,3 @@ ProspectModel
 
 }
 } // end namespace otb
-

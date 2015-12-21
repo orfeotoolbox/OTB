@@ -40,15 +40,13 @@ public:
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  // Input related typedefs
-  typedef TInputValue                                     InputValueType;
-  typedef itk::VariableLengthVector<InputValueType>       InputSampleType;
-  typedef itk::Statistics::ListSample<InputSampleType>    InputListSampleType;
-
-  // Target related typedefs
-  typedef TTargetValue                                    TargetValueType;
-  typedef itk::FixedArray<TargetValueType,1>              TargetSampleType;
-  typedef itk::Statistics::ListSample<TargetSampleType>   TargetListSampleType;
+  typedef typename Superclass::InputValueType             InputValueType;
+  typedef typename Superclass::InputSampleType            InputSampleType;
+  typedef typename Superclass::InputListSampleType        InputListSampleType;
+  typedef typename Superclass::TargetValueType            TargetValueType;
+  typedef typename Superclass::TargetSampleType           TargetSampleType;
+  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
 
   // LibSVM related typedefs
   typedef otb::Functor::VariableLengthVectorToMeasurementVectorFunctor<InputSampleType> MeasurementVectorFunctorType;
@@ -59,7 +57,12 @@ public:
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
-  itkTypeMacro(SVMMachineLearningModel, itk::MachineLearningModel);
+  itkTypeMacro(SVMMachineLearningModel, MachineLearningModel);
+
+  /** Train the machine learning model */
+  virtual void Train();
+  /** Predict values using the model */
+  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
   /** Save the model to file */
   virtual void Save(const std::string &filename, const std::string & name="");
@@ -77,23 +80,40 @@ public:
   //@}
 
   //Setters/Getters to SVM model
-  // itkGetMacro(SVMType, int);
-  // itkSetMacro(SVMType, int);
+  otbGetObjectMemberMacro(SVMestimator, SVMType, int);
+  otbSetObjectMemberMacro(SVMestimator, SVMType, int);
 
-  itkGetMacro(KernelType, int);
-  itkSetMacro(KernelType, int);
+  otbGetObjectMemberMacro(SVMestimator, KernelType, int);
+  otbSetObjectMemberMacro(SVMestimator, KernelType, int);
 
-  itkGetMacro(C, float);
-  itkSetMacro(C, float);
+  otbGetObjectMemberMacro(SVMestimator, C, double);
+  otbSetObjectMemberMacro(SVMestimator, C, double);
 
-  itkGetMacro(ParameterOptimization, bool);
-  itkSetMacro(ParameterOptimization, bool);
- 
-  itkGetMacro(DoProbabilityEstimates, bool);
-  itkSetMacro(DoProbabilityEstimates, bool);
+  // TODO : we should harmonize this parameter name : ParameterOptimization -> ParametersOptimization
+  bool GetParameterOptimization()
+    {
+    return this->m_SVMestimator->GetParametersOptimization();
+    }
+  void SetParameterOptimization(bool value)
+    {
+    this->m_SVMestimator->SetParametersOptimization(value);
+    this->Modified();
+    }
 
-  // itkGetMacro(Epsilon, int);
-  // itkSetMacro(Epsilon, int);
+  otbGetObjectMemberMacro(SVMestimator, DoProbabilityEstimates, bool);
+  void SetDoProbabilityEstimates(bool value)
+    {
+    this->m_SVMestimator->DoProbabilityEstimates(value);
+    }
+
+  otbGetObjectMemberMacro(SVMestimator, Epsilon, double);
+  otbSetObjectMemberMacro(SVMestimator, Epsilon, double);
+
+  otbGetObjectMemberMacro(SVMestimator, P, double);
+  otbSetObjectMemberMacro(SVMestimator, P, double);
+
+  otbGetObjectMemberMacro(SVMestimator, Nu, double);
+  otbSetObjectMemberMacro(SVMestimator, Nu, double);
 
 protected:
   /** Constructor */
@@ -105,19 +125,10 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Train the machine learning model */
-  virtual void TrainClassification();
-  /** Predict values using the model */
-  virtual TargetSampleType PredictClassification(const InputSampleType& input) const;
-
 private:
   LibSVMMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  int m_KernelType;
-  float m_C;
-  bool m_ParameterOptimization;
-  bool m_DoProbabilityEstimates;
   typename SVMEstimatorType::Pointer m_SVMestimator;
 };
 } // end namespace otb

@@ -37,7 +37,7 @@
 #include "otbWrapperParameterKey.h"
 #include "otbWrapperRAMParameter.h"
 
-#include <boost/algorithm/string.hpp>
+#include "otb_boost_string_header.h"
 
 namespace otb
 {

@@ -214,9 +214,8 @@ typename WarpImageFilter<TInputImage,
                          TOutputImage,
                          TDisplacementField>::DisplacementType
 WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
-::EvaluateDisplacementAtPhysicalPoint(const PointType &point)
+::EvaluateDisplacementAtPhysicalPoint(const PointType &point, const DisplacementFieldType *fieldPtr)
 {
-  DisplacementFieldPointer fieldPtr = this->GetDisplacementField();
   itk::ContinuousIndex<double,ImageDimension> index;
   fieldPtr->TransformPhysicalPointToContinuousIndex(point,index);
   unsigned int dim;  // index over dimension
@@ -377,7 +376,7 @@ WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
       index = outputIt.GetIndex();
       outputPtr->TransformIndexToPhysicalPoint( index, point );
 
-      displacement = this->EvaluateDisplacementAtPhysicalPoint(point);
+      displacement = this->EvaluateDisplacementAtPhysicalPoint( point, fieldPtr );
       // compute the required input image point
       for(unsigned int j = 0; j < ImageDimension; j++ )
         {

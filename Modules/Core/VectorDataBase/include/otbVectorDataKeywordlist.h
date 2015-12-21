@@ -21,7 +21,7 @@
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
 #include <vector>
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "ogr_feature.h"
@@ -141,8 +141,9 @@ public:
 
   /** Constructor */
   VectorDataKeywordlist();
+
   /** Destructor */
-  virtual ~VectorDataKeywordlist();
+  ~VectorDataKeywordlist();
 
   /** Constructor by copy (deep copy)*/
   VectorDataKeywordlist(const Self& other);

@@ -13,7 +13,7 @@ otb_module(OTBApplicationEngine
     OTBImageBase
     OTBCommon
     OTBObjectList
-    OTBBoost
+    OTBBoostAdapters
     OTBOSSIMAdapters
     OTBITK
 

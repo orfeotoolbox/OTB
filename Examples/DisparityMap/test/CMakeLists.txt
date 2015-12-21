@@ -17,6 +17,7 @@ otb_add_test(NAME dmTeSimpleDisparityMapEstimationExampleTest COMMAND ${OTB_TEST
     100 10 15 10 10 250 0.9
 )
 
+if(OTBMathParser_LOADED)
 otb_add_test(NAME dmTeStereoReconstructionExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${NOTOL}
     ${BASELINE}/elevationOutput.tif
@@ -28,3 +29,4 @@ otb_add_test(NAME dmTeStereoReconstructionExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/elevationOutputPrintable.png
     140
 )
+endif()

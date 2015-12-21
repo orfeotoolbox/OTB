@@ -7,7 +7,6 @@ message(STATUS "Setup TinyXML ...")
 
 if(USE_SYSTEM_TINYXML)
   find_package ( TinyXML )
-  add_custom_target(${proj})
   message(STATUS "  Using TinyXML system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})

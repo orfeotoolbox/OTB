@@ -16,8 +16,8 @@
 
 =========================================================================*/
 #include "itkMacro.h"
-
 #include "otbSarBrightnessFunctor.h"
+#include "otbMath.h"
 
 int otbSarBrightnessFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
@@ -28,28 +28,28 @@ int otbSarBrightnessFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   FunctorType funct;
 
   funct.SetNoise( 10.0);
-  if( abs(funct.GetNoise() -10.0) > 0.0)
+  if( vcl_abs(funct.GetNoise() -10.0) > 0.0)
   {
     return false;
   }
   funct.SetScale( 10.0);
-  if( abs(funct.GetScale() -10.0) > 0.0)
+  if( vcl_abs(funct.GetScale() -10.0) > 0.0)
   {
     return false;
   }
   funct.SetAntennaPatternNewGain( 10.0);
-  if( abs(funct.GetAntennaPatternNewGain() -10.0) > 0.0)
+  if( vcl_abs(funct.GetAntennaPatternNewGain() -10.0) > 0.0)
   {
     return false;
   }
   funct.SetAntennaPatternOldGain( 10.0);
-  if( abs(funct.GetAntennaPatternOldGain() -10.0) > 0.0)
+  if( vcl_abs(funct.GetAntennaPatternOldGain() -10.0) > 0.0)
   {
     return false;
   }
 
   funct.SetRangeSpreadLoss( 10.0);
-  if( abs(funct.GetRangeSpreadLoss() -10.0) > 0.0)
+  if( vcl_abs(funct.GetRangeSpreadLoss() -10.0) > 0.0)
   {
     return false;
   }

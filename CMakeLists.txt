@@ -6,7 +6,8 @@ endif()
 
 foreach(p
     CMP0025 # CMake 3.0
-    CMP0042 # CMake 3.0 
+    CMP0042 # CMake 3.0
+    CMP0058
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
@@ -65,7 +66,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "5")
-set(OTB_VERSION_MINOR "0")
+set(OTB_VERSION_MINOR "2")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -248,7 +249,7 @@ set(EPSILON_15 0.000000000000001)
 #
 function(otb_add_test)
   set(largeinput_regex "LARGEINPUT{([^;{}\r\n]*)}")
-  
+
   set(_depends_on_largeinput OFF)
   foreach(arg IN LISTS ARGN)
      if("x${arg}" MATCHES "${largeinput_regex}")
@@ -392,6 +393,17 @@ endif()
 # Provide an option for generating documentation.
 add_subdirectory(Utilities/Doxygen)
 
+#----------------------------------------------------------------------
+# Provide a target to generate the SuperBuild archive (only for Unix)
+if(UNIX)
+  add_custom_target(SuperBuild-archive
+    COMMAND ./SuperbuildDownloadList.sh
+      ${OTB_BINARY_DIR}/Download
+      ${OTB_BINARY_DIR}
+    WORKING_DIRECTORY ${OTB_SOURCE_DIR}/Utilities/Maintenance
+    )
+endif()
+
 # TODO cleanup
 # Create target to download data from the OTBData group. This must come after
 # all tests have been added that reference the group, so we put it last.
@@ -400,9 +412,7 @@ add_subdirectory(Utilities/Doxygen)
 if(WIN32 AND CMAKE_CROSSCOMPILING)
   if(DEFINED MXE_TARGET_DIR)
 
-    file(GLOB pefiles
-      ${CMAKE_INSTALL_PREFIX}/bin/otbApplication*.exe
-      ${CMAKE_INSTALL_PREFIX}/bin/otbTestDriver.exe)
+    set(pefiles)
 
     message(STATUS "MXE_TARGET_DIR = ${MXE_TARGET_DIR}")
 
@@ -415,7 +425,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
     endif()
 
     execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
-    
+
     get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
     get_filename_component(mxeroot ${mxeroot} PATH)
 
@@ -429,6 +439,7 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
         MXEROOT \"${mxeroot}\"
         PREFIX_DIR \"${archive_name}\"
         PEFILES \"${pefiles}\"
+        WITH_OTBGUI 1
         SEARCHDIRS \"\")")
 
     add_custom_target(configure-mingw
@@ -443,16 +454,16 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
       DEPENDS configure-mingw)
 
     find_program(ZIP_EXECUTABLE zip)
-    
+
     if(ZIP_EXECUTABLE)
-      add_custom_target(package-mingw
+      add_custom_target(packages
         COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
         WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
         DEPENDS prepare-mingw)
     else()
       message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
     endif()
-    
+
   else(DEFINED MXE_TARGET_DIR)
     message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
   endif(DEFINED MXE_TARGET_DIR)

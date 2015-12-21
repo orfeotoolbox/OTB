@@ -20,6 +20,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include <iostream>
+#include "otbMath.h"
 
 int otbSarBrightnessFunctionWithoutNoise(int itkNotUsed(argc), char* argv[])
 {

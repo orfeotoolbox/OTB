@@ -25,7 +25,6 @@ class OGRFeature;
 #include "ogr_core.h" // OGR enums
 #include "itkIndent.h"
 
-
 namespace otb { namespace ogr {
 
 /*===========================================================================*/
@@ -101,7 +100,7 @@ public:
    * \param[in] index  Index of the field in the \c Feature.
    * \throw None
    */
-  Field(Feature & feature, size_t index);
+  Field(Feature & feature, int index);
   /// %Field definition accessor.
   FieldDefn const& GetDefinition() const
     { return m_Definition; }
@@ -167,6 +166,7 @@ public:
 
   /** \copydoc Field::ogr() const */
   OGRField & ogr();
+    
 private:
   /**\name Unchecked definitions
    * All the definitions that follow do the real work. However, they are not the
@@ -201,10 +201,12 @@ private:
    * All the fields decoding is at the wrong place (\c OGRFeature instead of
    * \c OGRField) => need for an index.
    */
-  size_t                          m_index;
+   
+  int        m_index;
 };
 
-} } // end namespace otb::ogr
+} 
+} // end namespace otb::ogr
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbOGRFieldWrapper.txx"

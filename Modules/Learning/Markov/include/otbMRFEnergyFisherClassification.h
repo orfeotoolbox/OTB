@@ -22,7 +22,7 @@
 
 #include "otbMRFEnergy.h"
 #include "otbMath.h"
-#include <boost/math/special_functions/gamma.hpp>
+#include "otb_boost_math_gamma_header.h"
 
 namespace otb
 {

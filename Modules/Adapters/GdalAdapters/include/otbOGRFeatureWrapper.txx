@@ -66,14 +66,14 @@ void otb::ogr::Feature::SetFrom(Feature const& rhs, int * map, bool mustForgive)
 /*================================[ Fields ]=================================*/
 /*===========================================================================*/
 inline
-otb::ogr::Field otb::ogr::Feature::operator[](size_t index)
+otb::ogr::Field otb::ogr::Feature::operator[](int index)
 {
   assert(index < GetSize() && "out of range field-index."); // also calls CheckInvariants();
   return UncheckedGetElement(index);
 }
 
 inline
-otb::ogr::Field const otb::ogr::Feature::operator[](size_t index) const
+otb::ogr::Field const otb::ogr::Feature::operator[](int index) const
 {
   return const_cast<Feature*>(this)->operator[](index);
 }
@@ -92,7 +92,7 @@ otb::ogr::Field const otb::ogr::Feature::operator[](std::string const& name) con
 }
 
 inline
-otb::ogr::FieldDefn otb::ogr::Feature::GetFieldDefn(size_t index) const
+otb::ogr::FieldDefn otb::ogr::Feature::GetFieldDefn(int index) const
 {
   assert(index < GetSize() && "out of range field-index."); // also calls CheckInvariants();
   return UncheckedGetFieldDefn(index);
@@ -143,10 +143,12 @@ inline
 void otb::ogr::Feature::SetGeometryDirectly(UniqueGeometryPtr geometry)
 {
   CheckInvariants();
+#if !defined(NDEBUG)
   OGRGeometry * g = geometry.get();
+#endif
   UncheckedSetGeometryDirectly(otb::move(geometry));
-  itkAssertOrThrowMacro((m_Feature->GetGeometryRef() == g), "The new geometry hasn't been set as expected");
-  itkAssertOrThrowMacro(!geometry, "UniqueGeometryPtr hasn't released its pointer");
+  assert((m_Feature->GetGeometryRef() == g) && "The new geometry hasn't been set as expected");
+  assert(!geometry && "UniqueGeometryPtr hasn't released its pointer");
 }
 
 inline

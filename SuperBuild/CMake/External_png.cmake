@@ -7,14 +7,13 @@ message(STATUS "Setup libpng...")
 
 if(USE_SYSTEM_PNG)
   find_package ( PNG )
-  add_custom_target(${proj})
   message(STATUS "  Using libpng system version")
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using libpng SuperBuild version")
   
   # declare dependencies
-  set(${proj}_DEPENDENCIES ZLIB)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB)
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj PNG)
@@ -24,7 +23,7 @@ else()
   
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "http://sourceforge.net/projects/libpng/files/libpng16/1.6.16/lpng1616.zip/download"
+      URL "http://sourceforge.net/projects/libpng/files/libpng16/older-releases/1.6.16/lpng1616.zip/download"
       URL_MD5 c90c9587c9a5c735327fb3f6900f6b03
       BINARY_DIR ${PNG_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
