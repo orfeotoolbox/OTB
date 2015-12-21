@@ -30,6 +30,32 @@
 namespace otb
 {
 
+template< typename T >
+void
+assert_quiet_NaN( T val )
+{
+  assert( !std::numeric_limits< T >::has_quiet_NaN ||
+	  ( std::numeric_limits< T >::has_quiet_NaN &&
+	    val!=std::numeric_limits< T >::quiet_NaN() ) );
+}
+
+template< typename T >
+void
+assert_signaling_NaN( T val )
+{
+  assert( !std::numeric_limits< T >::has_signaling_NaN ||
+	  ( std::numeric_limits< T >::has_signaling_NaN &&
+	    val!=std::numeric_limits< T >::signaling_NaN() ) );
+}
+
+template< typename T >
+void
+assert_NaN( T val )
+{
+  assert_quiet_NaN( val );
+  assert_signaling_NaN( val );
+}
+
 /** 
  * The GlView class acts like an OpenGl scene where actors deriving
  * from the GlActor class can be rendered. The GlView class contains the
@@ -202,15 +228,41 @@ public:
 			  double norm = 1000.0 ) const;
 
   /**
-   * Reproject viewport center and spacing into given actor's
-   * coordinate system.
    */
-  // bool Reproject( const KeyType & key, double  norm );
+  template< typename P >
+  bool GetExtent( P & origin, P & extent ) const;
 
   /**
    */
-  template< typename P >
-  void GetExtent( P & origin, P & extent ) const;
+  template< typename Point, typename Spacing >
+  bool ZoomToExtent( const Spacing & native,
+		     Point & center,
+		     Spacing & spacing ) const;
+
+  /**
+   */
+  template< typename Point, typename Spacing >
+  bool ZoomToLayer( const KeyType & key,
+		    const Spacing & native,
+		    Point & center,
+		    Spacing & spacing ) const;
+
+  /**
+   */
+  template< typename Point, typename Spacing >
+  bool ZoomToRegion( const Point & origin,
+		     const Point & extent,
+		     const Spacing & native,
+		     Point & center,
+		     Spacing & spacing ) const;
+
+  /**
+   */
+  template< typename Point, typename Spacing >
+  bool ZoomToFull( const KeyType & key,
+		   Point & center,
+		   Spacing & spacing,
+		   double units = 1000.0 ) const;
 
 protected:
   GlView();
@@ -241,6 +293,15 @@ GlView
 		     const S2 & vspacing,
 		     double norm ) const
 {
+  // std::cout << "otb::GlView@" << std::hex << this << std::endl << "{" << std::endl;
+
+  assert_NaN( vcenter[ 0 ] );
+  assert_NaN( vcenter[ 1 ] );
+
+  assert_NaN( vspacing[ 0 ] );
+  assert_NaN( vspacing[ 1 ] );
+
+
   //
   // Reference actor has not been found.
   otb::GlActor::Pointer actor( GetActor( key ) );
@@ -269,8 +330,17 @@ GlView
 
   x[ 0 ] += norm * vspacing[ 0 ]; 
 
+  // std::cout << "X {" << std::endl;
+
   if( !geo->TransformFromViewport( x, x, true ) )
     return false;
+
+  // std::cout << "x: " << x[ 0 ] << ", " << x[ 1 ] << std::endl;
+
+  // assert_NaN( x[ 0 ] );
+  // assert_NaN( x[ 1 ] );
+
+  // std::cout << "}" << std::endl;
 
   //
   // Compute transformed Y-axis extremity.
@@ -278,8 +348,17 @@ GlView
 
   y[ 1 ] += norm * vspacing[ 1 ];
 
+  std::cout << "Y {" << std::endl;
+
   if( !geo->TransformFromViewport( y, y, true ) )
     return false; 
+
+  // std::cout << "y: " << y[ 0 ] << ", " << y[ 1 ] << std::endl;
+
+  // assert_NaN( y[ 0 ] );
+  // assert_NaN( y[ 1 ] );
+
+  // std::cout << "}" << std::endl;
 
   //
   // Compute transformed spacing.
@@ -310,21 +389,33 @@ GlView
   if( y[ 1 ]<0.0 )
     spacing[ 1 ] = -spacing[ 1 ];
 
+  //
+  // Chech outputs.
+  assert_NaN( center[ 0 ] );
+  assert_NaN( center[ 1 ] );
+
+  assert_NaN( spacing[ 0 ] );
+  assert_NaN( spacing[ 1 ] );
+
+  // std::cout << "} otb::GlView@" << std::hex << this << std::endl;
+
+  //
+  // Ok.
   return true;
 }
 
 
 template< typename P >
-void
+bool
 GlView
 ::GetExtent( P & origin, P & extent ) const
 {
   if( m_Actors.empty() )
     {
-    origin[ 0 ] = origin[ 1 ] = 0;
-    extent[ 0 ] = extent[ 1 ] = 0;
+    origin.Fill( 0 );
+    extent.Fill( 0 );
 
-    return;
+    return false;
     }
 
 
@@ -340,6 +431,9 @@ GlView
     {
     P o;
     P e;
+
+    o.Fill( 0 );
+    e.Fill( 0 );
 
     assert( !it->second.IsNull() );
 
@@ -371,6 +465,181 @@ GlView
     if( e[ 1 ]>extent[ 1 ] )
       extent[ 1 ] = e[ 1 ];
     }
+
+  return true;
+}
+
+
+template< typename Point, typename Spacing >
+bool
+GlView
+::ZoomToExtent( const Spacing & native, Point & center, Spacing & spacing ) const
+{
+  Point o;
+  Point e;
+
+  o.Fill( 0 );
+  e.Fill( 0 );
+
+  // Get origin and extent of all layers in viewport system.
+  if( !GetExtent( o, e ) )
+    return false;
+
+  // Zoom to overall region.
+  return ZoomToRegion( o, e, native, center, spacing );
+}
+
+
+template< typename Point, typename Spacing >
+bool
+GlView
+::ZoomToLayer( const KeyType & key,
+	       const Spacing & native,
+	       Point & center,
+	       Spacing & spacing ) const
+{
+  Point o;
+  Point e;
+
+  // Get layer actor.
+  GlActor::Pointer actor( GetActor( key ) );
+
+  // If not found...
+  if( actor.IsNull() )
+    return false;
+
+  // Get origin and extent of layer.
+  actor->GetExtent( o[ 0 ], o[ 1 ], e[ 0 ], e[ 1 ] );
+
+  // Zoom layer region.
+  return ZoomToRegion( o, e, native, center, spacing );
+}
+
+
+template< typename Point, typename Spacing >
+bool
+GlView
+::ZoomToRegion( const Point & origin,
+		const Point & extent,
+		const Spacing & native,
+		Point & center,
+		Spacing & spacing ) const
+{
+  // Compute center point.
+  center.SetToMidPoint( origin, extent );
+
+  // Get scale of (o, e) in viewport.
+  assert( !m_Settings.IsNull() );
+  double scale = m_Settings->GetScale( origin, extent, true );
+
+  /*
+  assert( !std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() ||
+	  ( std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() &&
+	    native[ 0 ]!=std::numeric_limits< typename Spacing::ValueType >::quiet_NaN()
+	  )
+  );
+  assert( !std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() ||
+	  ( std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() &&
+	  native[ 1 ]!=std::numeric_limits< typename Spacing::ValueType >::quiet_NaN()
+	  )
+  );
+
+  assert( !std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() ||
+	  ( std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() &&
+	    native[ 0 ]!=std::numeric_limits< typename Spacing::ValueType >::quiet_NaN()
+	  )
+  );
+  assert( !std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() ||
+	  ( std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() &&
+	  native[ 1 ]!=std::numeric_limits< typename Spacing::ValueType >::quiet_NaN()
+	  )
+  );
+  */
+
+  // Apply signed scale.
+  spacing[ 0 ] = ( native[ 0 ]<0.0 ? -1 : +1 ) * scale;
+  spacing[ 1 ] = ( native[ 1 ]<0.0 ? -1 : +1 ) * scale;
+
+  // Ok.
+  return true;
+}
+
+
+template< typename Point, typename Spacing >
+bool
+GlView
+::ZoomToFull( const KeyType & key,
+	      Point & center,
+	      Spacing & spacing,
+	      double units ) const
+{
+  // Get layer actor.
+  GlActor::Pointer actor( GetActor( key ) );
+
+  // If not found...
+  if( actor.IsNull() )
+    return false;
+
+  // Get geo-interface.
+  const GeoInterface * geo =
+    dynamic_cast< const GeoInterface * >( actor.GetPointer() );
+
+  if( geo==NULL )
+    return false;
+
+  // Get viewport current center and spacing.
+  assert( !m_Settings.IsNull() );
+
+  center = m_Settings->GetViewportCenter();
+  spacing = m_Settings->GetSpacing();
+
+  // Transform center point to image space..
+  Point o;
+
+  if( !geo->TransformFromViewport( o, center, true ) )
+    return false;
+
+  //
+  // Consider arbitrary point on the X-axis.
+  Point e;
+
+  e[ 0 ] = center[ 0 ] + units * spacing[ 0 ];
+  e[ 1 ] = center[ 1 ];
+
+  // Transform considered point.
+  if( !geo->TransformFromViewport( e, e, true ) )
+    return false;
+
+  // Compute extent vector.
+  e[ 0 ] -= o[ 0 ];
+  e[ 1 ] -= o[ 1 ];
+
+  // Apply extent vector length to view spacing.
+  spacing[ 0 ] =
+    units * spacing[ 0 ] /
+    vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
+
+  //
+  // Consider arbitrary point on the Y-axis.
+  e[ 0 ] = center[ 0 ];
+  e[ 1 ] = center[ 1 ] + units * spacing[ 1 ];
+
+  // Transform considered point.
+  if( !geo->TransformFromViewport( e, e, true ) )
+    return false;
+
+  // Compute extent vector.
+  e[ 0 ] -= o[ 0 ];
+  e[ 1 ] -= o[ 1 ];
+
+  // Apply extent vector length to view spacing.
+  spacing[ 1 ] =
+    units * spacing[ 1 ] /
+    vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
+
+  //
+  // Ok.
+  return true;
 }
 
 

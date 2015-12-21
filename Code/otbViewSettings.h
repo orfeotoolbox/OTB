@@ -69,45 +69,46 @@ public:
   // Order of priority is Wkt, then keywordlist, then unknown
   void SetWkt(const std::string & wkt)
   {
-    // std::cout << "Wkt: '" << m_Wkt << "' -> '" << wkt << "'" << std::endl;
-    
+    // std::cout << "Wkt: '" << m_Wkt << "' -> '" << wkt << "'" << std::endl;    
+    // std::cout << std::hex << this << "::SetWkt(" << (m_Wkt!=wkt) << ")" << std::endl;
+
     if(m_Wkt != wkt)
       {
-      // std::cout << "Geometry changed!" << std::endl;
+      // std::cout << "geometry-changed: TRUE" << std::endl;
 
       m_Wkt = wkt;
       m_GeometryChanged = true;
       }
   }
-  itkGetStringMacro(Wkt);
+
+  itkGetConstReferenceMacro( Wkt, std::string );
 
   void SetUseProjection(bool usep)
   {
-    // std::cout << "Use projection: " << ( usep ? "true" : "false" ) << std::endl;
+    // std::cout << std::hex << this << "::SetUseProjection(" << usep << ")" << std::endl;
 
     if(m_UseProjection != usep)
       {
-      // std::cout << "Geometry changed!" << std::endl;
+      // std::cout << "geometry-changed: TRUE " << std::endl;
 
       m_UseProjection = usep;
       m_GeometryChanged = true;
       }
   }
 
-  itkGetConstReferenceMacro(UseProjection,bool);
+  itkGetConstMacro(UseProjection, bool);
   itkBooleanMacro(UseProjection);
 
   itkSetMacro(GeometryChanged,bool);
-  itkGetMacro(GeometryChanged,bool);
-  itkGetConstReferenceMacro(GeometryChanged,bool);
+  itkGetConstMacro(GeometryChanged,bool);
 
   void SetKeywordList(const KeywordListType& kwl)
   {
-    // std::cout << "Kwl: '" << kwl << "'" << std::endl;
+    // std::cout << std::hex << this << "::SetKeywordList()" << std::endl;
 
     if(!(m_KeywordList==kwl))
       {
-      // std::cout << "Geomtry changed!" << std::endl;
+      // std::cout << "geometry-changed: TRUE" << std::endl;
 
       m_KeywordList = kwl;
       m_GeometryChanged = true;
@@ -134,6 +135,8 @@ public:
   void SetNorthUpAngle();
 
   void UpdateRotation(const PointType & newCenter, double newAngle);
+
+  double GetScale( const PointType & origin, const PointType & extent, bool isSigned ) const;
 
 protected:
   ViewSettings();

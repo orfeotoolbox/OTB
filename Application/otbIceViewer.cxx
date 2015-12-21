@@ -288,8 +288,10 @@ void IceViewer::Start()
     m_View->GetSettings()->SetWkt(firstActor->GetWkt());
     m_View->GetSettings()->SetKeywordList(firstActor->GetKwl());
     m_View->GetSettings()->UseProjectionOn();
+
     firstActor->ProcessViewSettings();
     firstActor->GetExtent(ulx,uly,lrx,lry);
+
     if(firstActor->GetSpacing()[1] < 0)
       {
       shouldHaveNegativeSpacing = true;
@@ -688,7 +690,7 @@ void IceViewer::static_scroll_callback(GLFWwindow * window, double xoffset, doub
   instance->scroll_callback(window,xoffset,yoffset);
 }
 
-void IceViewer::error_callback(int error, const char* description)
+void IceViewer::error_callback(int, const char* description)
 {
   itkGenericExceptionMacro(<<description);
 }
@@ -724,7 +726,7 @@ void IceViewer::scroll_callback(GLFWwindow * window, double xoffset, double yoff
     }
 }
 
-bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, double yoffset)
+bool IceViewer::scroll_callback_image(GLFWwindow * window, double, double yoffset)
 {
   double factor = (yoffset>0) ? 1/m_Factor : m_Factor;
   otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
@@ -812,7 +814,7 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
   return false;
 }
 
-bool IceViewer::scroll_callback_vector(GLFWwindow * window, double xoffset, double yoffset)
+bool IceViewer::scroll_callback_vector(GLFWwindow * window, double, double yoffset)
 { 
   double factor = (yoffset>0) ? 1/m_Factor : m_Factor;
   otb::GlVectorActor::Pointer currentVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
@@ -875,7 +877,7 @@ bool IceViewer::scroll_callback_vector(GLFWwindow * window, double xoffset, doub
 }
 
 
-void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypos)
+void IceViewer::cursor_pos_callback(GLFWwindow * window, double, double)
 {
   double posx, posy,vpx,vpy;
   glfwGetCursorPos(m_Window,&posx,&posy);
@@ -1163,30 +1165,71 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
 
   if(key == GLFW_KEY_Z && action == GLFW_PRESS)
     {
-    double ulx(0),uly(0),lrx(0),lry(0);
+    // double ulx(0),uly(0),lrx(0),lry(0);
 
-    if(currentVectorActor.IsNotNull())
-      {
-      currentVectorActor->GetExtent(ulx,uly,lrx,lry);
-      }
-    else if(currentImageActor.IsNotNull())
-      {
-      currentImageActor->GetExtent(ulx,uly,lrx,lry);
-      }
+    // if(currentVectorActor.IsNotNull())
+    //   {
+    //   currentVectorActor->GetExtent(ulx,uly,lrx,lry);
+    //   }
+    // else if(currentImageActor.IsNotNull())
+    //   {
+    //   currentImageActor->GetExtent(ulx,uly,lrx,lry);
+    //   }
      
+    // otb::ViewSettings::PointType center;
+    // center[0] = 0.5*(ulx+lrx);
+    // center[1] = 0.5*(uly+lry);
+     
+    // double spacingx = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
+    // double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
+     
+    // otb::ViewSettings::SpacingType spacing;
+    // spacing.Fill(std::max(spacingx,spacingy));
+    // spacing[1] *= (m_View->GetSettings()->GetSpacing()[1]>0?1:-1);
+
+    assert( !m_View.IsNull() );
+
     otb::ViewSettings::PointType center;
-    center[0] = 0.5*(ulx+lrx);
-    center[1] = 0.5*(uly+lry);
-     
-    double spacingx = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
-    double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
-     
     otb::ViewSettings::SpacingType spacing;
-    spacing.Fill(std::max(spacingx,spacingy));
-    spacing[1] *= (m_View->GetSettings()->GetSpacing()[1]>0?1:-1);
-     
-    m_View->GetSettings()->SetSpacing(spacing);
-    m_View->GetSettings()->Center(center);
+
+    if( m_View->ZoomToLayer( m_SelectedActor,
+			     m_View->GetSettings()->GetSpacing(),
+			     center,
+			     spacing ) )
+      {
+      m_View->GetSettings()->SetSpacing( spacing );
+      m_View->GetSettings()->Center( center );
+      }
+    }
+
+  if(key == GLFW_KEY_A && action == GLFW_PRESS)
+    {
+    assert( !m_View.IsNull() );
+
+    otb::ViewSettings::PointType center;
+    otb::ViewSettings::SpacingType spacing;
+
+    if( m_View->ZoomToFull( m_SelectedActor, center, spacing ) )
+      {
+      m_View->GetSettings()->SetSpacing( spacing );
+      m_View->GetSettings()->Center( center );
+      }
+    }
+
+  if(key == GLFW_KEY_Q && action == GLFW_PRESS)
+    {
+    assert( !m_View.IsNull() );
+
+    otb::ViewSettings::PointType center;
+    otb::ViewSettings::SpacingType spacing;
+
+    if( m_View->ZoomToExtent( m_View->GetSettings()->GetSpacing(),
+			      center,
+			      spacing ) )
+      {
+      m_View->GetSettings()->SetSpacing( spacing );
+      m_View->GetSettings()->Center( center );
+      }
     }
 
   if(key == GLFW_KEY_F1 && action == GLFW_PRESS)
@@ -1222,7 +1265,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     }
 }
 
-bool IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, int action, int mods)
+bool IceViewer::key_callback_image(GLFWwindow* window, int key, int, int action, int)
 {
   double posx,posy,vpx,vpy;
   glfwGetCursorPos(m_Window,&posx,&posy);
@@ -1345,6 +1388,7 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
     shader->SetMaxBlue(maxBlue);
     }
 
+#if 0
   // Zoom to full resolution of an image
   if(key == GLFW_KEY_A && action == GLFW_PRESS)
     {
@@ -1358,6 +1402,10 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
 
     GlImageActor::SpacingType spacing = m_View->GetSettings()->GetSpacing();
 
+    std::cout << "vp:" << vpCenter[ 0 ] << ", " << vpCenter[ 1 ] << std::endl;
+    std::cout << "im-1:" << imCenter[ 0 ] << ", " << imCenter[ 1 ] << std::endl;
+    std::cout << "im-2:" << imCenter2[ 0 ] << ", " << imCenter2[ 1 ] << std::endl << std::endl;
+
     spacing[0]=spacing[0]/(length/1000);
 
     
@@ -1368,12 +1416,17 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
     
     length = vcl_sqrt((imCenter[0]-imCenter2[0])*(imCenter[0]-imCenter2[0])+(imCenter[1]-imCenter2[1])*(imCenter[1]-imCenter2[1]));
 
+    std::cout << "vp:" << vpCenter[ 0 ] << ", " << vpCenter[ 1 ] << std::endl;
+    std::cout << "im-1:" << imCenter[ 0 ] << ", " << imCenter[ 1 ] << std::endl;
+    std::cout << "im-2:" << imCenter2[ 0 ] << ", " << imCenter2[ 1 ] << std::endl << std::endl;
+
     spacing[1]=spacing[1]/(length/1000);
     
     vpCenter = m_View->GetSettings()->GetViewportCenter();
     m_View->GetSettings()->SetSpacing(spacing);
     m_View->GetSettings()->Center(vpCenter);
     }
+#endif
 
   //Activate/Deactivate the use no-data
   if(key == GLFW_KEY_N && action == GLFW_PRESS)
@@ -1384,7 +1437,7 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
   return true;
 }
 
-bool IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, int action, int mods)
+bool IceViewer::key_callback_vector(GLFWwindow*, int key, int, int action, int)
 {
   otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
@@ -1414,7 +1467,7 @@ bool IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, i
   return false;
 }
 
-void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int action, int mode)
+void IceViewer::mouse_button_callback(GLFWwindow *, int button, int action, int)
 {
   if(button == GLFW_MOUSE_BUTTON_1)
     {
@@ -1458,7 +1511,7 @@ void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int actio
     }
 }
 
-void IceViewer::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void IceViewer::framebuffer_size_callback(GLFWwindow*, int width, int height)
 {
   otb::ViewSettings::PointType center = m_View->GetSettings()->GetViewportCenter();
 

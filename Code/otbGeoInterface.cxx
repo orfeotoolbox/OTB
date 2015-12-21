@@ -36,9 +36,9 @@ GeoInterface
 
 bool
 GeoInterface
-::TransformFromViewport( Point2d & out,
-                         const Point2d & in,
-                         bool isPhysical ) const
+::TransformFromViewport( Point2d &,
+                         const Point2d &,
+                         bool ) const
 {
   return false;
 }
@@ -66,9 +66,9 @@ GeoInterface
 
 bool
 GeoInterface
-::TransformToViewport( Point2d & out,
-                       const Point2d & in,
-                       bool isPhysical ) const
+::TransformToViewport( Point2d &,
+                       const Point2d &,
+                       bool ) const
 {
   return false;
 }

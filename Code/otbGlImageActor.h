@@ -25,6 +25,7 @@
 #include "otbFragmentShader.h"
 #include "otbImageFileReader.h"
 #include "otbMultiChannelExtractROI.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVectorImage.h"
 
 #include "itkCenteredRigid2DTransform.h"
@@ -47,6 +48,7 @@ public:
   itkNewMacro(Self);
 
   typedef VectorImage<float>                              VectorImageType;
+  typedef VectorImage<unsigned char>                      UCharVectorImageType;
   typedef VectorImageType::PixelType                      PixelType;
   typedef VectorImageType::ImageKeywordlistType           ImageKeywordlistType;
   typedef itk::MetaDataDictionary                        MetaDataDictionaryType;
@@ -55,7 +57,21 @@ public:
   typedef VectorImageType::RegionType                     RegionType;
   typedef VectorImageType::SpacingType                    SpacingType;
   typedef VectorImageType::PointType                      PointType;
-
+  typedef VectorRescaleIntensityImageFilter<VectorImageType,UCharVectorImageType> RescaleFilterType;
+  
+  struct ResolutionAlgorithm
+  {
+    enum type
+    {
+      Invalid,
+      Nearest, ///<Use the nearest resolution (lower or upper)
+      Nearest_Lower, ///<Use the nearest lower resolution (better for
+                     ///performances, poorer quality
+      Nearest_Upper,///<Use the nearest upper resolution (lower
+                    ///performances, better quality)
+      MAX__};
+    };
+  
   // Initialize with a new image
   void Initialize(const std::string & filename);
 
@@ -101,6 +117,23 @@ public:
   itkGetMacro(CurrentResolution,unsigned int);
   itkGetMacro(LargestRegion,RegionType);
 
+  itkSetMacro(TileSize,unsigned int);
+  itkGetMacro(TileSize,unsigned int);
+
+  itkBooleanMacro(SoftwareRendering );
+  itkSetMacro(SoftwareRendering, bool );
+  itkGetMacro(SoftwareRendering, bool );
+
+  void SetResolutionAlgorithm(ResolutionAlgorithm::type alg)
+  {
+    m_ResolutionAlgorithm = alg;
+  }
+
+  ResolutionAlgorithm::type GetResolutionAlgorithm() const
+  {
+    return m_ResolutionAlgorithm;
+  }
+
   virtual void SetRedIdx(const unsigned int idx)
   {
   if ( this->m_RedIdx != idx )
@@ -132,7 +165,14 @@ public:
 
   PointType ImageToViewportTransform(const PointType & in, bool physical = true) const;
   
-  bool GetPixelFromViewport(const PointType & in, PixelType & pixel) const;
+  bool GetPixelFromViewport( const PointType & in, PixelType & pixel ) const;
+
+  bool GetPixelFromViewport( const PointType & view,
+			     PixelType & pixel,
+			     PointType & physical,
+			     IndexType & index ) const;
+
+  bool GetPixel( const PointType & physical, PixelType & pixel, IndexType & index ) const;
 
   itkGetObjectMacro(Shader,FragmentShader);
   itkSetObjectMacro(Shader,FragmentShader);
@@ -187,7 +227,8 @@ protected:
         m_Resolution(1),
         m_RedIdx(1),
         m_GreenIdx(2),
-        m_BlueIdx(3)
+        m_BlueIdx(3),
+        m_RescaleFilter(NULL)
     {
       m_UL.Fill(0);
       m_UR.Fill(0);
@@ -207,6 +248,7 @@ protected:
     unsigned int m_RedIdx;
     unsigned int m_GreenIdx;
     unsigned int m_BlueIdx;
+    RescaleFilterType::Pointer m_RescaleFilter;
   };
 
   typedef std::vector<Tile>                                                       TileVectorType;    
@@ -269,6 +311,10 @@ private:
 
   RigidTransformType::Pointer m_ViewportForwardRotationTransform;
   RigidTransformType::Pointer m_ViewportBackwardRotationTransform;
+
+  ResolutionAlgorithm::type m_ResolutionAlgorithm;
+
+  bool m_SoftwareRendering;
 
 }; // End class GlImageActor
 

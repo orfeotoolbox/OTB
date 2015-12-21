@@ -86,7 +86,10 @@ void GlView::BeforeRendering()
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   
-  double ulx, uly, lrx, lry;
+  double ulx = -1.0;
+  double uly = -1.0;
+  double lrx = 1.0;
+  double lry = 1.0;
   
   m_Settings->GetViewportExtent(ulx,uly,lrx,lry);
 
@@ -106,6 +109,8 @@ void GlView::BeforeRendering()
 
 void GlView::AfterRendering()
 {
+  // std::cout << "geometry-changed: FALSE" << std::endl;
+
   m_Settings->SetGeometryChanged(false);
   glPopMatrix();
 }
@@ -209,6 +214,8 @@ void GlView::LightRender()
     if(actIt != m_Actors.end() && actIt->second->GetVisible())
       {
       actIt->second->Render();
+
+      actIt->second->GeometryChangedOff();
       }
     }
 }

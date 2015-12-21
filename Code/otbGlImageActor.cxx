@@ -45,10 +45,12 @@ GlImageActor::GlImageActor()
     m_Spacing(),
     m_NumberOfComponents(0),
     m_Shader(StandardShader::New()),
-    m_ViewportToImageTransform(RSTransformType::New()),
-    m_ImageToViewportTransform(RSTransformType::New()),
+    m_ViewportToImageTransform(),
+    m_ImageToViewportTransform(),
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
-    m_ViewportBackwardRotationTransform(RigidTransformType::New())
+    m_ViewportBackwardRotationTransform(RigidTransformType::New()),
+    m_ResolutionAlgorithm(ResolutionAlgorithm::Nearest),
+    m_SoftwareRendering(false)
 {}
 
 GlImageActor::~GlImageActor()
@@ -104,6 +106,9 @@ GlImageActor::MetaDataDictionaryType & GlImageActor::GetMetaDataDictionary() con
 
 void GlImageActor::Initialize(const std::string & filename)
 {
+  // std::cout
+  //   << std::hex << this << "::Initialize( '" << filename << "' )" << std::endl;
+
   // First, clean up any previous data
   this->ClearLoadedTiles();
 
@@ -282,43 +287,179 @@ bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
 
 void GlImageActor::Render()
 {
-  m_Shader->LoadShader();
-  m_Shader->SetupShader();
+  // std::cout
+  //   << "otb::GlImageActor@" << std::hex << this << std::dec << std::endl
+  //   << "\tresolution: " << m_ResolutionAlgorithm << std::endl
+  //   << "\tpixel: " << m_SoftwareRendering << std::endl
+  //   << "\ttile: " << m_TileSize << std::endl;
 
-  for(TileVectorType::iterator it = m_LoadedTiles.begin();
-      it != m_LoadedTiles.end(); ++it)
+  if(!m_SoftwareRendering)
     {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    // std::cout << "\tGLSL" << std::endl;
 
-     glEnable(GL_TEXTURE_2D);  
-     glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
+    m_Shader->LoadShader();
+    m_Shader->SetupShader();
+    }
+  else
+    {
+    // std::cout << "\tOTB" << std::endl;
 
-     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);     
-     if(m_CurrentResolution == 0)
-       {
-       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-       }
-     else
-       {
-       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-       }
+    for(TileVectorType::iterator it = m_LoadedTiles.begin();
+        it != m_LoadedTiles.end(); ++it)
+      {
+      if(!it->m_RescaleFilter)
+        {
+        it->m_RescaleFilter = RescaleFilterType::New();
+        it->m_RescaleFilter->AutomaticInputMinMaxComputationOff();
+        it->m_RescaleFilter->SetInput(it->m_Image);
+        }
+      
+      VectorImageType::PixelType mins(3),maxs(3),omins(3),omaxs(3);
+      mins.Fill(0);
+      maxs.Fill(255);
+        
+      double gamma(1.0);
 
-     // Reset color before rendering
-     glColor3d(1.0f,1.0f,1.0f);
-     
-     glBegin (GL_QUADS);
-     glTexCoord2f (0.0, 1.0); glVertex2f(it->m_LL[0], it->m_LL[1]);
-     glTexCoord2f (1.0, 1.0); glVertex2f(it->m_LR[0], it->m_LR[1]);
-     glTexCoord2f (1.0, 0.0); glVertex2f(it->m_UR[0], it->m_UR[1]);
-     glTexCoord2f (0.0, 0.0); glVertex2f(it->m_UL[0], it->m_UL[1]);
-     glEnd ();
+      bool useNoData(false);
+      double noData(0.);
+      
+      StandardShader::Pointer shader = dynamic_cast<StandardShader *>(m_Shader.GetPointer());
 
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_BLEND);
+      if(shader)
+        {
+      
+        mins[0] = shader->GetMinRed();
+        mins[1] = shader->GetMinGreen();
+        mins[2] = shader->GetMinBlue();
+    
+        maxs[0] = shader->GetMaxRed();
+        maxs[1] = shader->GetMaxGreen();
+        maxs[2] = shader->GetMaxBlue();
+
+        gamma = shader->GetGamma();
+
+        useNoData = shader->GetUseNoData();
+
+        if(useNoData)
+          {
+          noData = shader->GetNoData();
+          }
+        
+        }
+      
+      omins.Fill(0);
+      omaxs.Fill(255);
+    
+      it->m_RescaleFilter->SetInputMinimum(mins);
+      it->m_RescaleFilter->SetInputMaximum(maxs);
+      it->m_RescaleFilter->SetOutputMinimum(omins);
+      it->m_RescaleFilter->SetOutputMaximum(omaxs);
+      it->m_RescaleFilter->SetGamma(gamma);
+      
+      it->m_RescaleFilter->Update();
+
+
+      itk::ImageRegionConstIterator<UCharVectorImageType> imIt(it->m_RescaleFilter->GetOutput(),it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion());
+      itk::ImageRegionConstIterator<VectorImageType> inIt(it->m_Image,it->m_Image->GetLargestPossibleRegion());
+
+      
+      
+      unsigned char * buffer = new unsigned char[4*it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
+      
+      unsigned int idx = 0;
+      
+      for(imIt.GoToBegin(),inIt.GoToBegin();!imIt.IsAtEnd()&&!inIt.IsAtEnd();++imIt,++inIt)
+        {
+        buffer[idx] = static_cast<unsigned char>(imIt.Get()[2]);
+        ++idx;
+        buffer[idx] = static_cast<unsigned char>(imIt.Get()[1]);
+        ++idx;
+        buffer[idx] = static_cast<unsigned char>(imIt.Get()[0]);
+        ++idx;
+        buffer[idx] = 255;
+
+        if(useNoData && (inIt.Get()[0] == noData ||inIt.Get()[1] == noData ||inIt.Get()[2] == noData))
+          {
+          buffer[idx] = 0;
+          }
+        
+        ++idx;
+        }
+
+      if(!it->m_TextureId)
+        {
+        glGenTextures(1, &(it->m_TextureId));
+        }
+      glBindTexture(GL_TEXTURE_2D, it->m_TextureId);
+#if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+#endif
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+// #if defined(GL_CLAMP_TO_BORDER)      
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
+// #elif defined (GL_CLAMP_TO_BORDER_EXT)
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
+// #elif defined (GL_MIRRORED_REPEAT)
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
+// #endif
+      glTexImage2D(
+        GL_TEXTURE_2D, 0, GL_RGBA8,
+        it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+        it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion().GetSize()[1], 
+        0, GL_BGRA, GL_UNSIGNED_BYTE,
+        buffer);
+
+      it->m_Loaded = true;
+      
+      delete [] buffer;
+      }
+    }
+
+for(TileVectorType::iterator it = m_LoadedTiles.begin();
+    it != m_LoadedTiles.end(); ++it)
+  {
+  
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+  
+  glEnable(GL_TEXTURE_2D);  
+  glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
+  
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);     
+  if(m_CurrentResolution == 0)
+    {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
+  else
+    {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
   
-  m_Shader->UnloadShader();
+  // Reset color before rendering
+  glColor3d(1.0f,1.0f,1.0f);
+  
+  glBegin (GL_QUADS);
+  glTexCoord2f (0.0, 1.0); glVertex2f(it->m_LL[0], it->m_LL[1]);
+  glTexCoord2f (1.0, 1.0); glVertex2f(it->m_LR[0], it->m_LR[1]);
+  glTexCoord2f (1.0, 0.0); glVertex2f(it->m_UR[0], it->m_UR[1]);
+  glTexCoord2f (0.0, 0.0); glVertex2f(it->m_UL[0], it->m_UL[1]);
+  glEnd ();
+  
+  glDisable(GL_TEXTURE_2D);
+  glDisable(GL_BLEND);
+  }
+
+if(!m_SoftwareRendering)
+  {
+    m_Shader->UnloadShader();
+  }
+
 }
 
 void GlImageActor::LoadTile(Tile& tile)
@@ -332,33 +473,35 @@ void GlImageActor::LoadTile(Tile& tile)
   extract->Update();
 
   tile.m_Image = extract->GetOutput();
-  
-  itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
-  
-  float * buffer = new float[4*extract->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
-  
-  unsigned int idx = 0;
-  
-  for(it.GoToBegin();!it.IsAtEnd();++it)
+
+  if(!m_SoftwareRendering)
     {
-    buffer[idx] = static_cast<float>(it.Get()[2]);
-    ++idx;
-    buffer[idx] = static_cast<float>(it.Get()[1]);
-    ++idx;
-    buffer[idx] = static_cast<float>(it.Get()[0]);
-    ++idx;
-    buffer[idx] = 255.;
-    ++idx;
-    }
-  
-  // Now load the texture
-  glGenTextures(1, &(tile.m_TextureId));
-  glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
+    itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
+    
+    float * buffer = new float[4*extract->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
+    
+    unsigned int idx = 0;
+    
+    for(it.GoToBegin();!it.IsAtEnd();++it)
+      {
+      buffer[idx] = static_cast<float>(it.Get()[2]);
+      ++idx;
+      buffer[idx] = static_cast<float>(it.Get()[1]);
+      ++idx;
+      buffer[idx] = static_cast<float>(it.Get()[0]);
+      ++idx;
+      buffer[idx] = 255.;
+      ++idx;
+      }
+    
+    // Now load the texture
+    glGenTextures(1, &(tile.m_TextureId));
+    glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
 #if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 #endif
-  //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 // #if defined(GL_CLAMP_TO_BORDER)      
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
@@ -366,24 +509,25 @@ void GlImageActor::LoadTile(Tile& tile)
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
 // #elif defined (GL_MIRRORED_REPEAT)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
 // #endif
-  glTexImage2D(
-    GL_TEXTURE_2D, 0, GL_RGB32F,
-    extract->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
-    extract->GetOutput()->GetLargestPossibleRegion().GetSize()[1], 
-    0, GL_BGRA, GL_FLOAT,
-    buffer);
-  
-  tile.m_Loaded = true;
-  
-  delete [] buffer;
-  
-  // And push to loaded texture
-  m_LoadedTiles.push_back(tile);
+    glTexImage2D(
+      GL_TEXTURE_2D, 0, GL_RGB32F,
+      extract->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+      extract->GetOutput()->GetLargestPossibleRegion().GetSize()[1], 
+      0, GL_BGRA, GL_FLOAT,
+      buffer);
+    
+    tile.m_Loaded = true;
+    
+    delete [] buffer;
+    }
+    
+    // And push to loaded texture
+    m_LoadedTiles.push_back(tile);
 }
-
+  
 void GlImageActor::UnloadTile(Tile& tile)
 {
   if(tile.m_Loaded)
@@ -418,7 +562,9 @@ void GlImageActor::CleanLoadedTiles()
        || it->m_Resolution != m_CurrentResolution
        || it->m_RedIdx != m_RedIdx
        || it->m_GreenIdx != m_GreenIdx
-       || it->m_BlueIdx != m_BlueIdx)
+       || it->m_BlueIdx != m_BlueIdx
+       || it->m_ImageRegion.GetSize()[0]!=m_TileSize
+       || it->m_ImageRegion.GetSize()[1]!=m_TileSize)
       {     
       // Tile will not be used anymore, unload it from GPU
       UnloadTile(*it);
@@ -605,28 +751,60 @@ GlImageActor::PointType GlImageActor::ImageToViewportTransform(const PointType &
 
 }
 
-bool GlImageActor::GetPixelFromViewport(const PointType & in, PixelType& pixel) const
+
+bool
+GlImageActor
+::GetPixelFromViewport( const PointType & in,
+			PixelType & pixel ) const
 {
-  PointType imgPoint = ViewportToImageTransform(in);
+  PointType p;
+  IndexType i;
+
+  return GetPixelFromViewport( in, pixel, p, i );
+}
 
 
+bool
+GlImageActor
+::GetPixelFromViewport( const PointType & ptView,
+			PixelType & pixel,
+			PointType & ptPhysical,
+			IndexType & index ) const
+{
+  ptPhysical = ViewportToImageTransform( ptView );
 
-  // Transform to index at current resolution
-  IndexType idx;
-  idx[0] = static_cast<unsigned int>((imgPoint[0]-m_FileReader->GetOutput()->GetOrigin()[0])/m_FileReader->GetOutput()->GetSpacing()[0]);
-  idx[1] = static_cast<unsigned int>((imgPoint[1]-m_FileReader->GetOutput()->GetOrigin()[1])/m_FileReader->GetOutput()->GetSpacing()[1]);
+  return GetPixel( ptPhysical, pixel, index );
+}
 
-  // Look-up tiles
+
+bool
+GlImageActor
+::GetPixel( const PointType & physical,
+	    PixelType & pixel,
+	    IndexType & index ) const
+{
+  // First, we need to return index in full img (not in overviews)
+  index[ 0 ] = static_cast<unsigned int>((physical[0]-m_Origin[0])/m_Spacing[0]);
+  index[ 1 ] = static_cast<unsigned int>((physical[1]-m_Origin[1])/m_Spacing[1]);
+
+  // Then, we need to find the index in the currently loaded overview
+  IndexType ovrIndex;
+  m_FileReader->GetOutput()->TransformPhysicalPointToIndex( physical, ovrIndex );
+
+  // And look it up in loaded tiles
   for (TileVectorType::const_iterator it = m_LoadedTiles.begin();
        it!=m_LoadedTiles.end();
        ++it)
     {
-    if(it->m_ImageRegion.IsInside(idx))
+    if(it->m_ImageRegion.IsInside(ovrIndex))
       {
-      idx[0]-=it->m_ImageRegion.GetIndex()[0];
-      idx[1]-=it->m_ImageRegion.GetIndex()[1];
-      pixel = it->m_Image->GetPixel(idx);
-      
+      IndexType idx;
+
+      idx[ 0 ] = ovrIndex[ 0 ] - it->m_ImageRegion.GetIndex()[ 0 ];
+      idx[ 1 ] = ovrIndex[ 1 ] - it->m_ImageRegion.GetIndex()[ 1 ];
+
+      pixel = it->m_Image->GetPixel( idx );
+
       return true;
       }
     }
@@ -686,7 +864,10 @@ void GlImageActor::UpdateResolution()
 
     double diff = 1/((double)(1<<(*it))) - resolution;
 
-    if (diff > 0 && vcl_abs(diff) < minDist)
+    if (((m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower && diff < 0)
+         ||(m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper && diff > 0)
+         ||(m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest))
+    && vcl_abs(diff) < minDist)
       {
       minDist = vcl_abs(diff);
       closest = std::distance(m_AvailableResolutions.begin(),it);
@@ -698,6 +879,9 @@ void GlImageActor::UpdateResolution()
   std::ostringstream extFilename;
   extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
 
+  // ReaderType::New() is forced because of warning message
+  // 'Duplicated option detected: <option>. Using value <value>.'
+  // output by otb::ExtendedFilenameHelper.
   m_FileReader = ReaderType::New();
   m_FileReader->SetFileName(extFilename.str());
   m_FileReader->UpdateOutputInformation();
@@ -705,6 +889,8 @@ void GlImageActor::UpdateResolution()
 
 void GlImageActor::UpdateTransforms()
 {
+  // std::cout << std::hex << this << "::UpdateTransforms()" << std::endl;
+
   if(m_FileName == "")
     {
     return;
@@ -713,15 +899,31 @@ void GlImageActor::UpdateTransforms()
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
 
-  if(!settings->GetUseProjection() || m_ViewportToImageTransform.IsNull() || m_ImageToViewportTransform.IsNull())
-    {
-    m_ViewportToImageTransform = RSTransformType::New();
-    m_ImageToViewportTransform = RSTransformType::New();
-    }
+  bool hasChanged = false;
 
   bool geometryChanged = settings->GetGeometryChanged();
 
-  geometryChanged = geometryChanged 
+  if( ( !settings->GetUseProjection() && geometryChanged ) ||
+      m_ViewportToImageTransform.IsNull() ||
+      m_ImageToViewportTransform.IsNull())
+    {
+    // std::cout
+    //   << "otb::GlImageActor@" << std::hex << this
+    //   << " Proj: OFF" << std::endl;
+
+    m_ViewportToImageTransform = RSTransformType::New();
+    m_ImageToViewportTransform = RSTransformType::New();
+
+    hasChanged = true;
+    }
+
+  // std::cout << std::hex << this << " geometry-changed: " << geometryChanged;
+
+  // bool isEqualOrNot = m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt();
+
+  // std::cout << std::hex << this << " WKT-changed: " << isEqualOrNot << std::endl;
+
+    geometryChanged = geometryChanged
   || (m_ViewportToImageTransform.IsNotNull() && m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt())
   || (m_ImageToViewportTransform.IsNotNull() && m_ImageToViewportTransform->GetOutputProjectionRef() != settings->GetWkt())
     || (m_ViewportToImageTransform.IsNotNull() && !(m_ViewportToImageTransform->GetInputKeywordList() == settings->GetKeywordList()))
@@ -729,6 +931,10 @@ void GlImageActor::UpdateTransforms()
 
   if(settings->GetUseProjection() && geometryChanged)
     {
+    // std::cout
+    //   << "otb::GlImageActor@" << std::hex << this
+    //   << " Proj: ON" << std::endl;
+
     m_ViewportToImageTransform = RSTransformType::New();
     m_ImageToViewportTransform = RSTransformType::New();
 
@@ -741,10 +947,17 @@ void GlImageActor::UpdateTransforms()
     m_ImageToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
     m_ImageToViewportTransform->SetInputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
     m_ImageToViewportTransform->SetInputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
+
+    hasChanged = true;
     }
 
-  m_ViewportToImageTransform->InstanciateTransform();
-  m_ImageToViewportTransform->InstanciateTransform();
+  if( hasChanged )
+    {
+    // std::cout << std::hex << this << " -> InstanciateTransform()" << std::endl;
+
+    m_ViewportToImageTransform->InstanciateTransform();
+    m_ImageToViewportTransform->InstanciateTransform();
+    }
 }
 
 void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
@@ -888,9 +1101,6 @@ GlImageActor
 
   out = p;
 
-  out[ 0 ] = p[ 0 ];
-  out[ 1 ] = p[ 1 ];
-
   return true;
 }
 
@@ -919,9 +1129,6 @@ GlImageActor
     return false;
 
   out = p;
-
-  out[ 0 ] = p[ 0 ];
-  out[ 1 ] = p[ 1 ];
 
   return true;
 }
