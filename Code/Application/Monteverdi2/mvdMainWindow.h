@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -23,7 +23,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -82,7 +82,7 @@ class MainWindow;
  *
  * \brief The application main-widow widget.
  */
-class Monteverdi2_EXPORT MainWindow
+class Monteverdi_EXPORT MainWindow
   : public I18nMainWindow
 {
 
@@ -249,6 +249,10 @@ private:
   void ConnectPixelDescriptionWidget(DatasetModel * model);
   void DisconnectPixelDescriptionWidget(const DatasetModel * model);
 
+  /**
+   */
+  inline QMessageBox::StandardButton ConfirmSaveQuit( bool canBeCancelled );
+
   //
   // I18nMainWindow overrides.
 
@@ -411,6 +415,26 @@ MainWindow
 ::GetQuicklookView()
 {
   return qobject_cast< ImageViewWidget* >( m_QuicklookViewDock->widget() );
+}
+
+/*****************************************************************************/
+inline
+QMessageBox::StandardButton
+MainWindow
+::ConfirmSaveQuit( bool canBeCancelled )
+{
+  // TODO: Should me moved into Monteverdi2.
+
+  return QMessageBox::question(
+    this,
+    tr( PROJECT_NAME ),
+    tr( "Dataset has been modified.\n"
+	"Do you want to save settings before quitting?" ),
+    QMessageBox::Save |
+    QMessageBox::Discard |
+    ( canBeCancelled ? QMessageBox::Cancel : QMessageBox::NoButton ),
+    QMessageBox::Save
+  );
 }
 
 } // end namespace 'mvd'

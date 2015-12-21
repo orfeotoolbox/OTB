@@ -12,10 +12,10 @@ set(Common_TESTS ${CXX_TEST_PATH}/mvdCommonTests)
 set(Common_TESTS1 ${CXX_TEST_PATH}/mvdCommonTests1)
 
 include_directories(
-  ${Monteverdi2_BINARY_DIR}
-  ${Monteverdi2_SOURCE_DIR}/Code/Application/Viewer
-  ${Monteverdi2_SOURCE_DIR}/Code/Common
-  ${Monteverdi2_BINARY_DIR}/Code/Common/
+  ${Monteverdi_BINARY_DIR}
+  ${Monteverdi_SOURCE_DIR}/Code/Application/Viewer
+  ${Monteverdi_SOURCE_DIR}/Code/Common
+  ${Monteverdi_BINARY_DIR}/Code/Common/
   )
 
 # add source files
@@ -30,7 +30,7 @@ endif()
 #-------------- Monteverdi Common Tests ---------------------------------
 
 # Applications toolBox test 
-add_test( apTvMonteverdi2ApplicationsToolBox ${Common_TESTS}
+add_test( apTvMonteverdiApplicationsToolBox ${Common_TESTS}
   mvdApplicationsToolBoxTest
   )
 
@@ -38,13 +38,13 @@ add_test( apTvMonteverdi2ApplicationsToolBox ${Common_TESTS}
 if (OTB_USE_QT4)
 
   # Applications browser test
-  add_test( apTvMonteverdi2ApplicationsBrowser ${Common_TESTS1} 
+  add_test( apTvMonteverdiApplicationsBrowser ${Common_TESTS1} 
     mvdApplicationsBrowserTest
     ${OTB_INSTALL_PREFIX}/lib/otb/applications
     )
   
   # Fill ToolBox algorithms tree
-  add_test( apTvMonteverdi2FillToolBoxTree ${Common_TESTS1}
+  add_test( apTvMonteverdiFillToolBoxTree ${Common_TESTS1}
     mvdFillToolBoxWidgetTreeTest
     ${OTB_INSTALL_PREFIX}/lib/otb/applications
     )
@@ -55,14 +55,14 @@ endif()
 
 add_executable(mvdCommonTests mvdCommonTests.cxx ${Common_SRCS})
 target_link_libraries(mvdCommonTests 
-  Monteverdi2_Gui    
+  Monteverdi_Gui    
   ${OTB_LIBRARIES})
 
 if (OTB_USE_QT4)
   add_executable(mvdCommonTests1 mvdCommonTests1.cxx ${Common_SRCS1})
   target_link_libraries(mvdCommonTests1 
-    Monteverdi2_Gui
-    Monteverdi2_ApplicationsWrapper
+    Monteverdi_Gui
+    Monteverdi_ApplicationsWrapper
     ${OTB_LIBRARIES})
 endif()
 

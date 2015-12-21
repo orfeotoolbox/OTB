@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -655,7 +655,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnAppended( const QwtDoublePoint& pos )
+::OnAppended( const QwtDoublePoint & )
 {
   // qDebug() << this << "::OnAppended(" << pos.x() << ", " << pos.y() << ")";
 }
@@ -663,7 +663,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnAppended( const QPoint& pos )
+::OnAppended( const QPoint & )
 {
   // qDebug() << this << "::OnAppended(" << pos << ")";
 }
@@ -671,7 +671,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnChanged( const QwtPolygon& pa )
+::OnChanged( const QwtPolygon & )
 {
   // qDebug() << this << "::OnChanged(" << pa << ")";
 }
@@ -679,7 +679,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnMoved( const QwtDoublePoint& pos )
+::OnMoved( const QwtDoublePoint & )
 {
   // qDebug() << this << "::OnMoved(" << pos.x() << ", " << pos.y() << ")";
 }
@@ -687,7 +687,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnMoved( const QPoint& pos )
+::OnMoved( const QPoint & )
 {
   // qDebug() << this << "::OnMoved(" << pos << ")";
 }
@@ -695,7 +695,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtDoublePoint& pos )
+::OnSelected( const QwtDoublePoint & )
 {
   // qDebug() << this << "::OnSelected(" << pos.x() << ", " << pos.y() << ")";
 }
@@ -703,7 +703,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtDoubleRect& rect )
+::OnSelected( const QwtDoubleRect & )
 {
   // qDebug() << this << "::OnSelected(" << rect.x() << ", " << rect.y() << ")";
 }
@@ -711,7 +711,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtPolygon& pa )
+::OnSelected( const QwtPolygon & )
 {
   // qDebug() << this << "::OnSelected(" << pa << ")";
 }
@@ -719,7 +719,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtArray< QwtDoublePoint >& pa )
+::OnSelected( const QwtArray< QwtDoublePoint > & )
 {
   // qDebug() << this << "::OnSelected(" << pa << ")";
 }

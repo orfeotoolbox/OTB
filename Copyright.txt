@@ -6,7 +6,7 @@ It can be downloaded from <http://hg.orfeo-toolbox.org/>, using command:
 
     hg clone [-r <version>] http://hg.orfeo-toolbox.org/Monteverdi2
 
-The Monteverdi2 software is developed by the CNES (Centre National d'Etudes Spatiales).
+The Monteverdi software is developed by the CNES (Centre National d'Etudes Spatiales).
 
 
 Internal dependencies (included third-party works):
@@ -45,7 +45,7 @@ Copyright:
 
 License:
 
-    Monteverdi2 is distributed under the CeCILL license version 2. See files
+    Monteverdi is distributed under the CeCILL license version 2. See files
     Licence_CeCILL_V2-en.txt (english version) or Licence_CeCILL_V2-fr.txt
     (french version) for details. These licenses are also available online:
     http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt

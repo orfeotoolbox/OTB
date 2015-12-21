@@ -28,7 +28,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
          <normaloff>:/icons/action_ZoomFull_Icon</normaloff>:/icons/action_ZoomFull_Icon</iconset>
        </property>
       </widget>
@@ -42,7 +42,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
          <normaloff>:/icons/action_ZoomExtent_Icon</normaloff>:/icons/action_ZoomExtent_Icon</iconset>
        </property>
       </widget>
@@ -118,7 +118,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../Application/Monteverdi2/mvdMainWindow.qrc"/>
+  <include location="../../Application/Monteverdi/mvdMainWindow.qrc"/>
  </resources>
  <connections/>
 </ui>

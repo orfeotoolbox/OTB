@@ -18,7 +18,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 //
 // Qt includes (sorted by alphabetic order)

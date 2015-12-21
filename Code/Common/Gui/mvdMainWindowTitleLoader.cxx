@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -54,7 +54,7 @@ MainWindowTitleLoader
 
 #if 0
   std::ostringstream oss;
-  oss<<PROJECT_NAME<<" - "<<otb::System::GetShortFileName(ToStdString(m_Model->GetFilename()));
+  oss<<PROJECT_NAME<<" - "<<otb::System::GetShortFileName( QFile::encodeName( m_Model->GetFilename() ));
   oss<<" ("<<m_Model->GetNbComponents()<<tr(" bands, ").toLatin1().constData();
   oss<<m_Model->GetNativeLargestRegion().GetSize()[0];
   oss<<"x"<<m_Model->GetNativeLargestRegion().GetSize()[1]<<tr(" pixels)").toLatin1().constData();

@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -94,45 +94,11 @@ StackedLayerModel
 }
 
 /*****************************************************************************/
-std::string
+StackedLayerModel::KeyType
 StackedLayerModel
 ::Add( AbstractLayerModel * model )
 {
-  assert( model!=NULL );
-
-  if( model==NULL )
-    {
-    throw
-      std::runtime_error(
-        ToStdString(
-          tr( "Cannot insert NULL AbstractLayerModel." )
-        )
-      );
-    }
-
-  std::string key( StackedLayerModel::GenerateKey( model ) );
-  assert( !key.empty() );
-
-  if( key.empty() )
-    {
-    throw
-      std::runtime_error(
-        ToStdString(
-          tr( "Failed to generate string key for '%1'." )
-          .arg( model->metaObject()->className() )
-        )
-      );
-    }
-
-  emit ContentAboutToBeChanged();
-
-  m_LayerModels.insert( LayerModelMap::value_type( key, model ) );
-  m_Keys.push_back( key );
-
-  emit LayerAdded( m_Keys.size() - 1 );
-  emit ContentChanged();
-
-  return key;
+  return Insert( model, StackedLayerModel::NIL_INDEX );
 }
 
 /*****************************************************************************/
@@ -176,6 +142,8 @@ StackedLayerModel
 
   //
   // Clear content.
+  ClearPixelInfos();
+
   for( LayerModelMap::iterator it( m_LayerModels.begin() );
        it!=m_LayerModels.end();
        ++it )
@@ -208,6 +176,41 @@ StackedLayerModel
       return true;
 
   return false;
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::CountSRT( SizeType & unk,
+	    SizeType & crt,
+	    SizeType & geo,
+	    SizeType & ssr ) const
+{
+  for( LayerModelMap::const_iterator it( m_LayerModels.begin() );
+       it!=m_LayerModels.end();
+       ++it )
+    {
+    assert( it->second!=NULL );
+
+    switch( it->second->GetSpatialReferenceType() )
+      {
+      case SRT_UNKNOWN:
+	++ unk;
+	break;
+
+      case SRT_CARTO:
+	++ crt;
+	break;
+
+      case SRT_GEO:
+	++ geo;
+	break;
+
+      case SRT_SENSOR:
+	++ ssr;
+	break;
+      }
+    }
 }
 
 /*****************************************************************************/
@@ -252,41 +255,30 @@ StackedLayerModel
 
   //
   // Emit signals.
-  if( emitCurrentChanged )
-    emit AboutToChangeSelectedLayerModel( GetKey( current ) );
-
   emit ContentAboutToBeChanged();
   emit LayerAboutToBeDeleted( index );
 
   //
-  // Remove item.
-  if( it->second->parent()==this )
-    {
-    delete it->second;
-    it->second = NULL;
-    }
+  // Clear satellite date.
+  ClearPixelInfos();
+
+  //
+  // Remove layer-model.
+  AbstractLayerModel * layer = it->second;
 
   m_LayerModels.erase( it );
 
   m_Keys.erase( m_Keys.begin() + index );
 
-  emit LayerDeleted( index );
-  emit ContentChanged();
+  it = m_LayerModels.end();
 
   //
-  // Emit about to change current item.
+  // Update pointer to current.
   if( emitCurrentChanged )
-    {
-    emit CurrentAboutToBeChanged( current );
-
-    m_Current = current;
-
-    emit CurrentChanged( current );
-    emit SelectedLayerModelChanged( GetKey( current ) );
-    }
+    SetCurrent( current, true );
 
   //
-  // Emit about to change reference item.
+  // Update reference pointer.
   if( emitReferenceChanged )
     SetReference(
       index>=m_Reference
@@ -294,6 +286,29 @@ StackedLayerModel
       : m_Reference - 1,
       true
     );
+
+  //
+  // Eventually delete layer.
+  if( layer->parent()==this )
+    {
+    delete layer;
+    layer = NULL;
+    }
+
+  //
+  // Emit signals.
+  emit LayerDeleted( index );
+  emit ContentChanged();
+}
+
+/*****************************************************************************/
+void
+StackedLayerModel
+::EndEditResolutions()
+{
+  // qDebug() << this << "::EndEditResolutions()";
+
+  emit ResolutionsChanged( m_PixelInfos );
 }
 
 /*******************************************************************************/
@@ -314,6 +329,86 @@ StackedLayerModel
 }
 
 /*****************************************************************************/
+StackedLayerModel::KeyType
+StackedLayerModel
+::Insert( AbstractLayerModel * model, SizeType index )
+{
+  // qDebug() << this << "::Insert(" << model << "," << index << ")";
+
+  //
+  // Check given model.
+  assert( model!=NULL );
+
+  if( model==NULL )
+    {
+    throw
+      std::runtime_error(
+        ToStdString(
+          tr( "Cannot insert NULL AbstractLayerModel." )
+        )
+      );
+    }
+
+  //
+  // Generate key for new layer.
+  std::string key( StackedLayerModel::GenerateKey( model ) );
+  assert( !key.empty() );
+
+  if( key.empty() )
+    {
+    throw
+      std::runtime_error(
+        ToStdString(
+          tr( "Failed to generate string key for '%1'." )
+          .arg( model->metaObject()->className() )
+        )
+      );
+    }
+
+  //
+  // Clamp index. If out of bounds, insert model at the end of stack.
+  if( index>GetCount() )
+    index = GetCount();
+
+  //
+  // Check if signals have to be emitted.
+  bool emitCurrentChanged = m_Current<GetCount() && index<=m_Current;
+  bool emitReferenceChanged = m_Reference<GetCount() && index<=m_Reference;
+
+  //
+  // Emit signals.
+  emit ContentAboutToBeChanged();
+
+  //
+  // Clear satellite date.
+  ClearPixelInfos();
+
+  //
+  // Insert model.
+  m_LayerModels.insert( LayerModelMap::value_type( key, model ) );
+  m_Keys.insert( m_Keys.begin() + index, key );
+
+  //
+  // Update pointer to current.
+  if( emitCurrentChanged )
+    SetCurrent( m_Current + 1, true );
+
+  //
+  // Update reference pointer.
+  if( emitReferenceChanged )
+    SetReference( m_Reference + 1, true );
+
+  //
+  // Emit signals.
+  emit LayerAdded( index );
+  emit ContentChanged();
+
+  //
+  // Return generated key.
+  return key;
+}
+
+/*****************************************************************************/
 void
 StackedLayerModel
 ::LowerLayer( SizeType index )
@@ -325,6 +420,8 @@ StackedLayerModel
 
   emit OrderAboutToBeChanged();
   {
+  ClearPixelInfos();
+
   std::swap(
     *( m_Keys.begin() + index ),
     *( m_Keys.begin() + next )
@@ -365,6 +462,8 @@ StackedLayerModel
   // Move element.
   emit OrderAboutToBeChanged();
   {
+  ClearPixelInfos();
+
   KeyType key( m_Keys[ index ] );
 
   m_Keys.erase( m_Keys.begin() + index );
@@ -433,6 +532,8 @@ StackedLayerModel
 
   emit OrderAboutToBeChanged();
   {
+  ClearPixelInfos();
+
   std::swap(
     *( m_Keys.begin() + index ),
     *( m_Keys.begin() + prev )
@@ -473,6 +574,8 @@ StackedLayerModel
 
   emit OrderAboutToBeChanged();
   {
+  ClearPixelInfos();
+
   std::rotate( m_Keys.begin(), m_Keys.begin() + index, m_Keys.end() );
   }
   emit OrderChanged();
@@ -522,6 +625,8 @@ StackedLayerModel
 
   emit OrderAboutToBeChanged();
   {
+  ClearPixelInfos();
+
   std::rotate( m_Keys.rbegin(), m_Keys.rbegin() + index, m_Keys.rend()  );
   }
   emit OrderChanged();

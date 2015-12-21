@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -60,19 +60,20 @@ namespace mvd
 namespace
 {
 
-QVariant
+const char * const
 HEADERS[ LayerStackItemModel::COLUMN_COUNT ] =
 {
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Proj" ) ),
-  QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Name" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "I" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "J" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Red" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Green" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Blue" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "X" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Y" ) ),
-  // QVariant( QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "EPSG" ) ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Proj" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Res" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Name" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Effect" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "I" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "J" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Red" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Green" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Blue" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "X" ),
+  QT_TRANSLATE_NOOP( "mvd::LayerStackItemModel", "Y" ),
 };
 
 } // end of anonymous namespace.
@@ -80,7 +81,22 @@ HEADERS[ LayerStackItemModel::COLUMN_COUNT ] =
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
+/*****************************************************************************/
+const AbstractLayerModel *
+LayerStackItemModel
+::GetLayer( const QModelIndex & index )
+{
+  assert( index.isValid() );
+  assert( !index.parent().isValid() );
 
+  assert(
+    index.internalPointer()==
+    static_cast< const AbstractLayerModel * >( index.internalPointer() )
+  );
+
+  return
+    static_cast< const AbstractLayerModel * >( index.internalPointer() );
+}
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
@@ -127,6 +143,17 @@ LayerStackItemModel
     this,
     SLOT( OnLayerVisibilityChanged( AbstractLayerModel *, bool ) )
   );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    QObject::connect(
+      layer,
+      SIGNAL( SettingsUpdated( AbstractImageModel * ) ),
+      // to:
+      this,
+      SLOT( OnImageSettingsUpdated( AbstractImageModel * ) )
+    );
+    }
 }
 
 /*****************************************************************************/
@@ -139,10 +166,21 @@ LayerStackItemModel
   QObject::disconnect(
     layer,
     SIGNAL( VisibilityChanged( AbstractLayerModel *,  bool ) ),
-    // to:*
+    // from:
     this,
     SLOT( OnLayerVisibilityChanged( AbstractLayerModel *, bool ) )
   );
+
+  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+    {
+    QObject::disconnect(
+      layer,
+      SIGNAL( SettingsUpdated( AbstractImageModel * ) ),
+      // from:
+      this,
+      SLOT( OnImageSettingsUpdated( AbstractImageModel * ) )
+    );
+    }
 }
 
 /*****************************************************************************/
@@ -222,6 +260,22 @@ LayerStackItemModel
       this,
       SLOT( OnReferenceChanged( size_t ) )
     );
+
+    QObject::disconnect(
+      m_StackedLayerModel,
+      SIGNAL( PixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) ),
+      // from:
+      this,
+      SLOT( OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) )
+    );
+
+    QObject::disconnect(
+      m_StackedLayerModel,
+      SIGNAL( ResolutionsChanged( const PixelInfo::Vector & ) ),
+      // from:
+      this,
+      SLOT( ResolutionsChanged( const PixelInfo::Vector & ) )
+    );
     }
 
   m_StackedLayerModel = model;
@@ -290,6 +344,22 @@ LayerStackItemModel
     SLOT( OnReferenceChanged( size_t ) )
   );
 
+  QObject::connect(
+    m_StackedLayerModel,
+    SIGNAL( PixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) ),
+    // to:
+    this,
+    SLOT( OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) )
+  );
+
+    QObject::connect(
+      m_StackedLayerModel,
+      SIGNAL( ResolutionsChanged( const PixelInfo::Vector & ) ),
+      // to:
+      this,
+      SLOT( OnResolutionsChanged( const PixelInfo::Vector & ) )
+    );
+
   for( StackedLayerModel::ConstIterator it( m_StackedLayerModel->Begin() );
        it!=m_StackedLayerModel->End();
        ++it )
@@ -303,7 +373,7 @@ LayerStackItemModel
 /*****************************************************************************/
 int
 LayerStackItemModel
-::columnCount( const QModelIndex & parent ) const
+::columnCount( const QModelIndex & ) const
 {
   // qDebug() << this << "::columnCount(" << parent << ")";
 
@@ -317,6 +387,19 @@ LayerStackItemModel
 {
   // qDebug() << this << "::data(" << index << "," << role << ")";
 
+  // Get layer.
+  assert( m_StackedLayerModel!=NULL );
+
+  assert( index.isValid() );
+  assert( !index.parent().isValid() );
+  assert( index.internalPointer()!=NULL );
+
+  const AbstractLayerModel * layer =
+    static_cast< const AbstractLayerModel * >( index.internalPointer() );
+
+  assert( layer!=NULL );
+
+  // Return data given role.
   switch( role )
     {
     case Qt::CheckStateRole:
@@ -324,17 +407,10 @@ LayerStackItemModel
         return QVariant();
       else
         {
-        assert( !index.parent().isValid() );
-        assert( index.internalPointer()!=NULL );
+        assert( layer==dynamic_cast< const VisibleInterface * >( layer ) );
 
-        AbstractLayerModel * layer =
-          static_cast< AbstractLayerModel * >( index.internalPointer() );
-
-        assert( layer!=NULL );
-        assert( layer==dynamic_cast< VisibleInterface * >( layer ) );
-
-        VisibleInterface * interface =
-          dynamic_cast< VisibleInterface * >( layer );
+        const VisibleInterface * interface =
+          dynamic_cast< const VisibleInterface * >( layer );
 
         assert( interface!=NULL );
 
@@ -349,30 +425,31 @@ LayerStackItemModel
       switch( index.column() )
         {
         case COLUMN_PROJ:
-	  {
-	  assert( m_StackedLayerModel!=NULL );
-
-	  const AbstractLayerModel * layerModel =
-	    static_cast< AbstractLayerModel * >( index.internalPointer() );
-
-	  return FromStdString( layerModel->GetAuthorityCode( true ) );
-	  }
+	  return FromStdString( layer->GetAuthorityCode( true ) );
 	  break;
 
+	case COLUMN_RESOLUTION:
+	{
+	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
+
+	assert( index.row()>=0 );
+
+	if( index.row()>=0 &&
+	    static_cast< size_t >( index.row() )<pixels.size() &&
+	    pixels[ index.row() ].m_HasResolution )
+	  return
+	    static_cast< qlonglong >( pixels[ index.row() ].m_Resolution );
+	else
+	  return QVariant();
+	}
+	break;
+
         case COLUMN_NAME:
-          assert( m_StackedLayerModel!=NULL );
-
-          const AbstractLayerModel * layerModel =
-            static_cast< AbstractLayerModel * >( index.internalPointer() );
-          // m_StackedLayerModel->At( index.row() );
-
-          assert( layerModel!=NULL );
-
-          if( layerModel->inherits(
+          if( layer->inherits(
                 VectorImageModel::staticMetaObject.className() ) )
             {
             const VectorImageModel * vectorImageModel =
-              qobject_cast< const VectorImageModel * >( layerModel );
+              qobject_cast< const VectorImageModel * >( layer );
             assert( vectorImageModel!=NULL );
 
             // qDebug() << "filename:" << vectorImageModel->GetFilename();
@@ -384,11 +461,77 @@ LayerStackItemModel
             qDebug() << "Unhandled AbstractLayerModel subclass.";
             }
           break;
+
+	case COLUMN_EFFECT:
+          if( layer->inherits(
+                VectorImageModel::staticMetaObject.className() ) )
+            {
+            const VectorImageModel * vectorImageModel =
+              qobject_cast< const VectorImageModel * >( layer );
+            assert( vectorImageModel!=NULL );
+
+	    return vectorImageModel->GetSettings().GetEffectName();
+            }
+          else
+            {
+            qDebug() << "Unhandled AbstractLayerModel subclass.";
+            }
+	  break;
+
+	case COLUMN_I:
+	case COLUMN_J:
+	{
+	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
+
+	assert( index.row()>=0 );
+
+	if( index.row()>=0 &&
+	    static_cast< size_t >( index.row() )<pixels.size() &&
+	    pixels[ index.row() ].m_HasIndex )
+	  return
+	    static_cast< qlonglong >( pixels[ index.row() ].m_Index[ index.column() - COLUMN_I ] );
+	else
+	  return QVariant();
+	}
+	break;
+
+	case COLUMN_R:
+	case COLUMN_G:
+	case COLUMN_B:
+	{
+	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
+
+	assert( index.row()>=0 );
+
+	if( index.row()>=0 &&
+	    static_cast< size_t >( index.row() )<pixels.size() &&
+	    pixels[ index.row() ].m_HasPixel )
+	  return
+	    pixels[ index.row() ].m_Pixel[ index.column() - COLUMN_R ];
+	}
+	break;
+
+	case COLUMN_X:
+	case COLUMN_Y:
+	{
+	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
+
+	assert( index.row()>=0 );
+
+	if( index.row()>=0 &&
+	    static_cast< size_t >( index.row() )<pixels.size() &&
+	    pixels[ index.row() ].m_HasPoint )
+	  return
+	    pixels[ index.row() ].m_Point[ index.column() - COLUMN_X ];
+	}
+	  break;
+
+	default:
+	  break;
         }
       break;
     
     case Qt::FontRole:
-      assert( m_StackedLayerModel!=NULL );
       assert( index.row()>=0 );
 
       if( static_cast< StackedLayerModel::SizeType >( index.row() )==
@@ -399,6 +542,24 @@ LayerStackItemModel
 	font.setBold( true );
 
 	return font;
+	}
+      break;
+
+    case Qt::ToolTipRole:
+      switch( index.column() )
+	{
+	case COLUMN_NAME:
+	  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
+	    {
+            const VectorImageModel * vectorImageModel =
+              qobject_cast< const VectorImageModel * >( layer );
+            assert( vectorImageModel!=NULL );
+
+            // qDebug() << "filename:" << vectorImageModel->GetFilename();
+
+            return vectorImageModel->GetFilename();
+	    }
+	  break;
 	}
       break;
 
@@ -444,7 +605,10 @@ LayerStackItemModel
     ;
 
   if( index.column()==COLUMN_NAME )
-    flags |= Qt::ItemIsUserCheckable | Qt::ItemIsEditable;
+    flags |=
+        Qt::ItemIsUserCheckable
+      | Qt::ItemIsEditable
+      | Qt::ItemIsDragEnabled;
 
   return flags;
 }
@@ -475,7 +639,7 @@ LayerStackItemModel
     {
     case Qt::DisplayRole:
       assert( section>=0 && section<COLUMN_COUNT );
-      return HEADERS[ section ];
+      return tr( HEADERS[ section ] );
       break;
 
     default:
@@ -490,7 +654,7 @@ LayerStackItemModel
         {
         case Qt::DisplayRole:
           assert( section>=0 && section<COLUMN_COUNT );
-          return HEADERS[ section ];
+          return tr( HEADERS[ section ] );
           break;
         default:
           break;
@@ -568,9 +732,56 @@ LayerStackItemModel
 }
 
 /*****************************************************************************/
+QMimeData *
+LayerStackItemModel
+::mimeData( const QModelIndexList & indexes ) const
+{
+  QMimeData * mimeData = QAbstractItemModel::mimeData( indexes );
+  assert( mimeData!=NULL );
+
+  typedef QList< QUrl > UrlList;
+
+  UrlList urls;
+
+  foreach( const QModelIndex & index, indexes )
+    if( index.isValid() )
+      {
+      assert( index.internalPointer()!=NULL );
+
+      AbstractLayerModel * layer =
+	static_cast< AbstractLayerModel * >( index.internalPointer() );
+
+      FilenameInterface * interface =
+	dynamic_cast< FilenameInterface * >( layer );
+
+      urls << QUrl::fromLocalFile( interface->GetFilename() );
+      }
+
+  mimeData->setUrls( urls );
+
+  // qDebug() << this << "mime-data:" << mimeData;
+
+  return mimeData;
+}
+
+/*****************************************************************************/
+QStringList
+LayerStackItemModel
+::mimeTypes() const
+{
+  QStringList mimeTypes( QAbstractItemModel::mimeTypes() );
+
+  mimeTypes << "text/uri-list";
+
+  // qDebug() << this << "mime-types:" << mimeTypes;
+
+  return mimeTypes;
+}
+
+/*****************************************************************************/
 QModelIndex
 LayerStackItemModel
-::parent( const QModelIndex & index ) const
+::parent( const QModelIndex & ) const
 {
   // qDebug() << this << "::parent(" << index << ")";
 
@@ -718,6 +929,25 @@ LayerStackItemModel
 /*****************************************************************************/
 void
 LayerStackItemModel
+::OnImageSettingsUpdated( AbstractImageModel * image )
+{
+  // qDebug() << this << "::OnImageSettingsUpdated(" << image << ")";
+
+  assert( m_StackedLayerModel!=NULL );
+
+  StackedLayerModel::SizeType row = m_StackedLayerModel->IndexOf( image );
+
+  assert( row!=StackedLayerModel::NIL_INDEX );
+
+  emit dataChanged(
+    createIndex( row, LayerStackItemModel::COLUMN_EFFECT, image ),
+    createIndex( row, LayerStackItemModel::COLUMN_EFFECT, image )
+  );
+}
+
+/*****************************************************************************/
+void
+LayerStackItemModel
 ::OnLayerAboutToBeDeleted( size_t index )
 {
   assert( m_StackedLayerModel!=NULL );
@@ -760,7 +990,7 @@ LayerStackItemModel
 /*****************************************************************************/
 void
 LayerStackItemModel
-::OnLayerVisibilityChanged( AbstractLayerModel * layer, bool isVisible )
+::OnLayerVisibilityChanged( AbstractLayerModel * layer, bool )
 {
   // qDebug() << this << "::OnLayerVisibilityChanged(" << layer << "," << isVisible << ")"; 
 
@@ -779,6 +1009,20 @@ LayerStackItemModel
 }
 
 /*****************************************************************************/
+void
+LayerStackItemModel
+::OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & pixels )
+{
+  if( pixels.empty() )
+    return;
+
+  emit dataChanged(
+    index( 0, COLUMN_I ),
+    index( pixels.size() - 1, COLUMN_COUNT - 1 )
+  );
+}
+
+/*****************************************************************************/
 // void
 // LayerStackItemModel
 // ::OnModelAboutToBeReset()
@@ -793,12 +1037,13 @@ LayerStackItemModel
 // {
 //   qDebug() << this << "::OnModelReset()";
 // }
+
 /*****************************************************************************/
 void
 LayerStackItemModel
 ::OnReferenceChanged( size_t index )
 {
-  qDebug() << this << "::OnReferenceChanged(" << index << ")";
+  // qDebug() << this << "::OnReferenceChanged(" << index << ")";
 
   assert( m_StackedLayerModel!=NULL );
 
@@ -809,6 +1054,20 @@ LayerStackItemModel
   emit dataChanged(
     createIndex( index, 0, layer ),
     createIndex( index, LayerStackItemModel::COLUMN_COUNT - 1, layer )
+  );
+}
+
+/*****************************************************************************/
+void
+LayerStackItemModel
+::OnResolutionsChanged( const PixelInfo::Vector & pixels )
+{
+  if( pixels.empty() )
+    return;
+
+  emit dataChanged(
+    index( 0, COLUMN_RESOLUTION ),
+    index( pixels.size() - 1, COLUMN_RESOLUTION )
   );
 }
 

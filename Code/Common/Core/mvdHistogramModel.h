@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -23,7 +23,7 @@
 // Configuration include.
 //// Included at first position before any other ones.
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
 
@@ -54,10 +54,12 @@
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdAbstractModel.h"
 #include "mvdAlgorithm.h"
+#include "mvdCore.h"
 #include "mvdSerializableInterface.h"
 #endif //tag=QT4-boost-compatibility
 
 #define HISTOGRAM_CURVE_TYPE 2
+#define USE_FULL_IMAGE_FOR_PASS_1 0
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -85,7 +87,7 @@ class AbstractImageModel;
 /**
  * \class HistogramModel
  */
-class Monteverdi2_EXPORT HistogramModel :
+class Monteverdi_EXPORT HistogramModel :
     public AbstractModel,
     private SerializableInterface
 {
@@ -160,6 +162,10 @@ public:
 
   /** \brief Destructor. */
   virtual ~HistogramModel();
+
+  /**
+   */
+  bool IsValid() const;
 
   /** */
   inline MeasurementType Quantile( CountType band, double p ) const;
@@ -245,7 +251,7 @@ private:
   /**
    */
   template< typename TImageModel >
-    void template_BuildModel_M( BuildContext* context =NULL );
+    void template_BuildModel_M( BuildContext * =NULL );
 
   //
   // SerializableInterface overrides.
@@ -477,7 +483,7 @@ HistogramModel
 template< typename TImageModel >
 void
 HistogramModel
-::template_BuildModel_M( BuildContext* context )
+::template_BuildModel_M( BuildContext * )
 {
   QTime lMain;
   QTime lPass1;
@@ -489,14 +495,22 @@ HistogramModel
     .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
 
 
-  AbstractImageModel* parentImageModel =
+#if USE_FULL_IMAGE_FOR_PASS_1
+  TImageModel * parentImageModel =
+    qobject_cast< TImageModel * >( parent() );
+
+#else // USE_FULL_IMAGE_FOR_PASS_1
+  AbstractImageModel * parentImageModel =
     qobject_cast< AbstractImageModel* >( parent() );
+
+#endif // USE_FULL_IMAGE_FOR_PASS_1
+
   assert( parentImageModel!=NULL );
 
-  ImageProperties* imageProperties = parentImageModel->GetProperties();
+  ImageProperties * imageProperties = parentImageModel->GetProperties();
   assert( imageProperties!=NULL );
 
-  TImageModel* imageModel = parentImageModel->GetQuicklookModel();
+  TImageModel * imageModel = parentImageModel->GetQuicklookModel();
 
   if( imageModel==NULL )
     imageModel = qobject_cast< TImageModel * >( parentImageModel );
@@ -507,165 +521,185 @@ HistogramModel
   assert( components>0 );
 
   //
-  // 1st pass: process min/MAX for each band.
+  // Always initialize min and Max pixels.
 
-  qDebug() << tr( "%1: Pass #1 - finding pixel min/maxes..." )
-    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
+  m_MinPixel = DefaultImageType::PixelType( components );
+  m_MaxPixel = DefaultImageType::PixelType( components );
 
-  lPass1.start();
+  m_MinPixel.Fill( 0 );
+  m_MaxPixel.Fill( 1 );
 
-  /*
-  // Connect min/MAX pipe-section.
-  typedef
-    otb::StreamingMinMaxVectorImageFilter<
-      typename TImageModel::SourceImageType >
-    MinMaxFilter;
-
-  typename MinMaxFilter::Pointer filterMinMax( MinMaxFilter::New() );
-
-  filterMinMax->SetInput( imageModel->ToImage() );
-  filterMinMax->GetFilter()->SetNoDataFlag( imageProperties->IsNoDataEnabled() );
-  filterMinMax->GetFilter()->SetNoDataValue( imageProperties->GetNoData() );
-
-  // Connect statistics pipe-section.
-  filterMinMax->Update();
-
-  // Extract-convert-remember min/MAX intensities for each band.
-  m_MinPixel = filterMinMax->GetMinimum();
-  m_MaxPixel = filterMinMax->GetMaximum();
-
-  // qDebug() << "min:" << m_MinPixel << "max:" << m_MaxPixel;
-  // std::cout << "min:" << m_MinPixel << "\tmax:" << m_MaxPixel << std::endl;
-  */
-
-  // Define histogram-filter type.
-  typedef
-    otb::StreamingHistogramVectorImageFilter<
-      typename TImageModel::SourceImageType >
-    HistogramFilter;
-
-
-  // Connect statistics pipe-section.
-  typedef
-    otb::StreamingStatisticsVectorImageFilter<
-      typename TImageModel::SourceImageType >
-    StatisticsFilter;
-
-  typename StatisticsFilter::Pointer filterStats( StatisticsFilter::New() );
-
-  filterStats->SetInput( imageModel->ToImage() );
-  filterStats->SetEnableMinMax( true );
-  filterStats->SetIgnoreUserDefinedValue( imageProperties->IsNoDataEnabled() );
-  filterStats->SetUserIgnoredValue( imageProperties->GetNoData() );
-
-  // Connect statistics pipe-section.
-  filterStats->Update();
-
-  // qDebug() << "min:" << m_MinPixel << "max:" << m_MaxPixel;
-  // std::cout << "min:" << m_MinPixel << "\tmax:" << m_MaxPixel << std::endl;
-
-  // Extract-convert-remember min/MAX intensities for each band.
-  m_MinPixel = filterStats->GetMinimum();
-  m_MaxPixel = filterStats->GetMaximum();
-
-  // Extract sigmas for each band from covariance matrix.
-  typename StatisticsFilter::MatrixType covariance(
-    filterStats->GetFilter()->GetCovariance()
-  );
-
-  typename HistogramFilter::FilterType::CountVectorType bins( components );
-  typename StatisticsFilter::RealPixelType sums( filterStats->GetSum() );
-  typename StatisticsFilter::RealPixelType means( filterStats->GetMean() );
-
-  for( CountType i=0; i<components; ++i )
+  try
     {
-    RealType n = sums[ i ] / means[ i ];
+    //
+    // 1st pass: process min/MAX for each band.
 
-    // qDebug() << "#" << i << ": " << n;
+    qDebug() << QString( "%1: Pass #1 - finding pixel min/maxes..." )
+                .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
 
-    if( n <= 1.0 )
+    lPass1.start();
+
+    // Define histogram-filter type.
+    typedef
+      otb::StreamingHistogramVectorImageFilter<
+	typename TImageModel::SourceImageType >
+      HistogramFilter;
+
+
+    // Connect statistics pipe-section.
+    typedef
+      otb::StreamingStatisticsVectorImageFilter<
+	typename TImageModel::SourceImageType >
+      StatisticsFilter;
+
+    typename StatisticsFilter::Pointer filterStats( StatisticsFilter::New() );
+
+#if USE_FULL_IMAGE_FOR_PASS_1
+    filterStats->SetInput( parentImageModel->ToImage() );
+
+#else // USE_FULL_IMAGE_FOR_PASS_1
+    filterStats->SetInput( imageModel->ToImage() );
+
+#endif // USE_FULL_IMAGE_FOR_PASS_1
+
+    filterStats->SetEnableMinMax( true );
+    filterStats->SetIgnoreUserDefinedValue( imageProperties->IsNoDataEnabled() );
+    filterStats->SetUserIgnoredValue( imageProperties->GetNoData() );
+
+    // Connect statistics pipe-section.
+    filterStats->Update();
+
+    // qDebug() << "min:" << m_MinPixel << "max:" << m_MaxPixel;
+    // std::cout << "min:" << m_MinPixel << "\tmax:" << m_MaxPixel << std::endl;
+
+    // Extract-convert-remember min/MAX intensities for each band.
+    m_MinPixel = filterStats->GetMinimum();
+    m_MaxPixel = filterStats->GetMaximum();
+
+    // Extract sigmas for each band from covariance matrix.
+    typename StatisticsFilter::MatrixType covariance(
+      filterStats->GetFilter()->GetCovariance()
+    );
+
+    typename HistogramFilter::FilterType::CountVectorType bins( components );
+    typename StatisticsFilter::RealPixelType sums( filterStats->GetSum() );
+    typename StatisticsFilter::RealPixelType means( filterStats->GetMean() );
+
+    for( CountType i=0; i<components; ++i )
       {
-      bins[ i ] = 1;
-      }
-    else
-      {
-      RealType sigma = sqrt( covariance( i, i ) );
+      RealType n = sums[ i ] / means[ i ];
 
-      // qDebug() << "#" << i << ":" << sigma;
+      // qDebug() << "#" << i << ": " << n;
 
-      assert( sigma >= 0.0 );
-     
-      if( sigma<=0.0 )
+      if( n <= 1.0 )
 	{
 	bins[ i ] = 1;
 	}
       else
 	{
-	// Scott's formula
-	// See http://en.wikipedia.org/wiki/Histogram#Number_of_bins_and_width
-	RealType h = 3.5 * sigma / pow( n, 1.0 / 3.0 );
+	RealType sigma = sqrt( covariance( i, i ) );
 
-	/*
-	qDebug()
-	  << "#" << i
-	  << ": h = pow(" << n << "," << 1.0 / 3.0 << ") ="
-	  << h;
+	// qDebug() << "#" << i << ":" << sigma;
 
-	qDebug()
-	  << "#" << i
-	  << ": bins[" << i << "] = ceil( ("
-	  << m_MaxPixel[ i ] << "-" << m_MinPixel[ i ] << ") / " << h << ") ="
-	  << ceil( ( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h );
-	*/
+	assert( sigma >= 0.0 );
+     
+	if( sigma<=0.0 )
+	  {
+	  bins[ i ] = 1;
+	  }
+	else
+	  {
+	  // Scott's formula
+	  // See http://en.wikipedia.org/wiki/Histogram#Number_of_bins_and_width
+	  RealType h = 3.5 * sigma / pow( n, 1.0 / 3.0 );
 
-	bins[ i ] = ceil( ( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h );
+	  /*
+	    qDebug()
+	    << "#" << i
+	    << ": h = pow(" << n << "," << 1.0 / 3.0 << ") ="
+	    << h;
+
+	    qDebug()
+	    << "#" << i
+	    << ": bins[" << i << "] = ceil( ("
+	    << m_MaxPixel[ i ] << "-" << m_MinPixel[ i ] << ") / " << h << ") ="
+	    << ceil( ( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h );
+	  */
+
+	  bins[ i ] = ceil( ( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h );
+	  }
 	}
       }
+
+    // std::cout << bins;
+
+    qDebug() << QString( "%1: Pass #1 - done (%2 ms)." )
+      .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+      .arg( lPass1.elapsed() );
+
+    //
+    // 2nd pass: compute histogram.
+
+    qDebug() << QString( "%1: Pass #2 - computing histogram..." )
+      .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
+
+    lPass2.start();
+
+    // Connect histogram-generator pipe-section.
+
+    typename HistogramFilter::Pointer histogramFilter( HistogramFilter::New()  );
+
+    histogramFilter->SetInput( imageModel->ToImage() );
+
+    // Setup histogram filter.
+    histogramFilter->GetFilter()->SetHistogramMin( m_MinPixel );
+    histogramFilter->GetFilter()->SetHistogramMax( m_MaxPixel );
+    histogramFilter->GetFilter()->SetNumberOfBins( bins );
+    histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
+    histogramFilter->GetFilter()->SetNoDataFlag(
+      imageProperties->IsNoDataEnabled() );
+    histogramFilter->GetFilter()->SetNoDataValue( imageProperties->GetNoData() );
+
+    // Go.
+    histogramFilter->Update();
+
+    qDebug() << QString( "%1: Pass #2 - done (%2 ms)." )
+      .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+      .arg( lPass2.elapsed()  );
+
+    //
+    // Reference result.
+    m_Histograms = histogramFilter->GetHistogramList();
+
+    qDebug() << QString( "%1: Histogram (M) generated (%2 ms)." )
+      .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+      .arg( lMain.elapsed() );
     }
+  catch( const std::exception & exception )
+    {
+    qWarning()
+      << tr( "Zero relevant pixels found when computing histogram (probably because of no-data settings)" );
 
-  // std::cout << bins;
+    if( imageProperties->IsNoDataEnabled() )
+      {
+      DefaultImageType::PixelType::ValueType value( imageProperties->GetNoData() );
 
-  qDebug() << tr( "%1: Pass #1 - done (%2 ms)." )
-    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
-    .arg( lPass1.elapsed() );
+      m_MinPixel.Fill( value );
+      m_MaxPixel.Fill( value );
+      }
 
-  //
-  // 2nd pass: compute histogram.
+    qDebug() << QString( "%1: Pass #1 - aborted (%2 ms)." )
+      .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+      .arg( lPass1.elapsed() );
 
-  qDebug() << tr( "%1: Pass #2 - computing histogram..." )
-    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
+    qDebug() << QString( "%1: Pass #2 - aborted (%2 ms)." )
+      .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+      .arg( lPass2.elapsed()  );
 
-  lPass2.start();
-
-  // Connect histogram-generator pipe-section.
-
-  typename HistogramFilter::Pointer histogramFilter( HistogramFilter::New()  );
-
-  histogramFilter->SetInput( imageModel->ToImage() );
-
-  // Setup histogram filter.
-  histogramFilter->GetFilter()->SetHistogramMin( m_MinPixel );
-  histogramFilter->GetFilter()->SetHistogramMax( m_MaxPixel );
-  histogramFilter->GetFilter()->SetNumberOfBins( bins );
-  histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
-  histogramFilter->GetFilter()->SetNoDataFlag(
-    imageProperties->IsNoDataEnabled() );
-  histogramFilter->GetFilter()->SetNoDataValue( imageProperties->GetNoData() );
-
-  // Go.
-  histogramFilter->Update();
-
-  qDebug() << tr( "%1: Pass #2 - done (%2 ms)." )
-    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
-    .arg( lPass2.elapsed()  );
-
-  //
-  // Reference result.
-  m_Histograms = histogramFilter->GetHistogramList();
-
-  qDebug() << tr( "%1: Histogram (M) generated (%2 ms)." )
-    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
-    .arg( lMain.elapsed() );
+    qDebug() << QString( "%1: No Histogram (M) has been generated (%2 ms)." )
+      .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+      .arg( lMain.elapsed() );
+    }
 }
 
 } // end namespace 'mvd'

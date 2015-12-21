@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -156,7 +156,7 @@ MainWindow
       m_ImageView->GetRenderer()==NULL )
     return false;
 
-  return m_ImageView->GetRenderer()->CheckGLCapabilities();
+  return m_ImageView->GetRenderer()->CheckGLCapabilities( NULL );
 }
 
 /*****************************************************************************/
@@ -1021,7 +1021,9 @@ void
 MainWindow
 ::closeEvent( QCloseEvent* event )
 {
-  assert( Application::Instance() );
+  assert( event!=NULL );
+
+  assert( Application::Instance()!=NULL );
   assert(
     Application::Instance()->GetModel()==
     Application::Instance()->GetModel< DatabaseModel >()
@@ -1034,6 +1036,41 @@ MainWindow
 
   if( datasetModel!=NULL )
     datasetModel->Save();
+
+
+  // Ensure there is an application instance.
+  assert( I18nApplication::ConstInstance()!=NULL );
+
+  // Get model.
+  AbstractModel* model = I18nApplication::Instance()->GetModel();
+
+  // Since dataset has been saved (forced) above, this method should
+  // always return here. So, the following code should be removed.
+  if( model==NULL || !model->IsModified() )
+    return;
+
+  QMessageBox::StandardButton clickedButton = ConfirmSaveQuit( true );
+
+  switch( clickedButton )
+    {
+    case QMessageBox::Save:
+      model->Save();
+      break;
+
+    case QMessageBox::Discard:
+      break;
+
+    case QMessageBox::Cancel:
+      // Ignore event: do not close/quit.
+      event->ignore();
+      break;
+
+    default:
+      // should never be reached.
+      assert( false );
+      break;
+    }
+
 
   I18nMainWindow::closeEvent( event );
 }
@@ -1106,7 +1143,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeModel( const AbstractModel* model )
+::OnAboutToChangeModel( const AbstractModel * )
 {
   // qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
@@ -1198,7 +1235,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeSelectedDatasetModel( const DatasetModel* model )
+::OnAboutToChangeSelectedDatasetModel( const DatasetModel * )
 {
   // qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
 
@@ -1635,7 +1672,7 @@ MainWindow
     {
     QMessageBox::warning(
       this,
-      tr( "Monteverdi2 - Warning!" ),
+      tr( "Warning!" ),
       tr( "Tab cannot be closed while OTB application is running." )
     );
    
@@ -1653,7 +1690,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnOTBApplicationOutputImageChanged( const QString& appName,
+::OnOTBApplicationOutputImageChanged( const QString &,
 				      const QString & outfname )
 {
   //

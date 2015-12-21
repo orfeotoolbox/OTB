@@ -31,6 +31,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_OpenImage"/>
+    <addaction name="action_LoadOTBApplications"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -244,6 +245,14 @@
    </property>
    <property name="toolTip">
     <string>Display keyboard and mouse key mapping</string>
+   </property>
+  </action>
+  <action name="action_LoadOTBApplications">
+   <property name="text">
+    <string>Load OTB-&amp;Applications</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
  </widget>

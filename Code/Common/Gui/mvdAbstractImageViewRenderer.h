@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -23,7 +23,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 
 /*****************************************************************************/
@@ -46,7 +46,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdStackedLayerModel.h"
-#include "Core/mvdTypes.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -135,7 +134,7 @@ public:
 
   /**
    */
-  virtual bool CheckGLCapabilities() const =0;
+  virtual bool CheckGLCapabilities( int * ) const =0;
 
   template< typename T >
   const T * GetReferenceModel() const;
@@ -192,15 +191,19 @@ public:
 
   /**
    */
-  virtual bool Pick( const PointType& in,
-                     PointType& out,
-                     DefaultImageType::PixelType& pixel ) =0;
+  virtual void Pick( const PointType & view,
+                     PixelInfo::Vector & pixels ) const = 0;
 
   /**
    */
-  virtual bool Transform( PointType& point,
-                          const IndexType&,
-                          bool isPhysical ) const =0;
+  virtual void GetResolutions( PixelInfo::Vector & pixels ) const =0;
+
+  /**
+   */
+  virtual bool TransformToView( PointType & point,
+				const StackedLayerModel::KeyType &,
+				const IndexType &,
+				bool isPhysical ) const =0;
 
   /**
    */
@@ -208,6 +211,25 @@ public:
   /**
    */
   inline bool IsBypassRenderingEnabled() const;
+  /**
+   */
+  inline bool ZoomToRegion( const PointType & origin,
+			    const PointType & extent,
+			    PointType & center,
+			    SpacingType & spacing ) const;
+  /**
+   */
+  inline bool ZoomToExtent( PointType & center, SpacingType & spacing ) const;
+  /**
+   */
+  inline bool ZoomToLayer( const StackedLayerModel::KeyType & key,
+			   PointType & center,
+			   SpacingType & spacing ) const;
+  /**
+   */
+  inline bool ZoomToFull( const StackedLayerModel::KeyType & key,
+			  PointType & center,
+			  SpacingType & spacing ) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -215,6 +237,10 @@ public:
 public slots:
   inline void UpdateScene();
   inline void RefreshScene();
+
+  virtual void UpdatePixelInfo( const QPoint & point,
+				const PointType & view,
+				const PixelInfo::Vector & pixels ) =0;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -266,6 +292,30 @@ private:
   /**
    */
   virtual void virtual_FinishScene() {};
+
+  /**
+   */
+  virtual bool virtual_ZoomToRegion( const PointType &,
+				     const PointType &,
+				     PointType &,
+				     SpacingType & ) const
+  { return false; }
+  /**
+   */
+  virtual bool virtual_ZoomToExtent( PointType &, SpacingType & ) const
+  { return false; }
+  /**
+   */
+  virtual bool virtual_ZoomToLayer( const StackedLayerModel::KeyType &,
+				    PointType &,
+				    SpacingType & ) const
+  { return false; }
+  /**
+   */
+  virtual bool virtual_ZoomToFull( const StackedLayerModel::KeyType &,
+				   PointType &,
+				   SpacingType & ) const
+  { return false; }
 
 //
 // Private attributes.
@@ -385,6 +435,49 @@ AbstractImageViewRenderer
 ::RefreshScene()
 {
   virtual_RefreshScene();
+}
+
+/*****************************************************************************/
+inline
+bool
+AbstractImageViewRenderer
+::ZoomToExtent( PointType & center, SpacingType & spacing ) const
+{
+  return virtual_ZoomToExtent( center, spacing );
+}
+
+/*****************************************************************************/
+inline
+bool
+AbstractImageViewRenderer
+::ZoomToLayer( const StackedLayerModel::KeyType & key,
+	       PointType & center,
+	       SpacingType & spacing) const
+{
+  return virtual_ZoomToLayer( key, center, spacing );
+}
+
+/*****************************************************************************/
+inline
+bool
+AbstractImageViewRenderer
+::ZoomToRegion( const PointType & origin,
+		const PointType & extent,
+		PointType & center,
+		SpacingType & spacing ) const
+{
+  return virtual_ZoomToRegion( origin, extent, center, spacing );
+}
+
+/*****************************************************************************/
+inline
+bool
+AbstractImageViewRenderer
+::ZoomToFull( const StackedLayerModel::KeyType & key,
+	      PointType & center,
+	      SpacingType & spacing ) const
+{
+  return virtual_ZoomToFull( key, center, spacing );
 }
 
 } // end namespace 'mvd'

@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -23,7 +23,7 @@
 // Configuration include.
 //// Included at first position before any other ones.
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
 
@@ -49,6 +49,7 @@
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdAbstractModel.h"
 #endif //tag=QT4-boost-compatibility
+#include "mvdTypes.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -73,7 +74,7 @@ class AbstractLayerModel;
  *
  * \brief WIP.
  */
-class Monteverdi2_EXPORT StackedLayerModel :
+class Monteverdi_EXPORT StackedLayerModel :
     public AbstractModel
 {
 
@@ -100,7 +101,6 @@ public:
   typedef LayerModelMap::size_type SizeType;
   typedef LayerModelMap::key_type KeyType;
   typedef LayerModelMap::const_iterator ConstIterator;
-
   static const SizeType NIL_INDEX;
 
 //
@@ -123,12 +123,23 @@ public:
 
   inline ConstIterator Begin() const;
 
-  void Clear();
+  inline void BeginEditPixelInfo() {};
+
+  void BeginEditResolutions() {};
 
   inline bool Contains( const KeyType & key ) const;
   bool Contains( const AbstractLayerModel * ) const;
 
+  void CountSRT( size_t & unknown,
+		 size_t & carto,
+		 size_t & geo,
+		 size_t & sensor ) const;
+
   inline ConstIterator End() const;
+
+  inline void EndEditPixelInfo( const QPoint &, const PointType & );
+
+  void EndEditResolutions();
 
   /*
   inline const AbstractLayerModel * Front() const;
@@ -154,6 +165,8 @@ public:
   AbstractLayerModel * GetCurrent() const;
   AbstractLayerModel * GetCurrent();
 
+  inline SizeType GetCurrentIndex() const;
+
   inline const KeyType & GetCurrentKey() const;
 
   template< typename T >
@@ -173,7 +186,12 @@ public:
 
   inline SizeType IndexOf( const AbstractLayerModel * ) const;
 
+  KeyType Insert( AbstractLayerModel *, SizeType index );
+
   inline bool IsEmpty() const;
+
+  inline const PixelInfo::Vector & PixelInfos() const;
+  inline PixelInfo::Vector & PixelInfos();
 
   inline void SetCurrent( SizeType, bool =false );
   void SetCurrent( const KeyType & );
@@ -188,12 +206,16 @@ public:
 //
 // Public SLOTS.
 public slots:
+  void Clear();
+  inline void Delete( const KeyType & );
   inline void DeleteCurrent();
   inline void LowerCurrent();
   inline void MoveCurrentToBottom();
   inline void MoveCurrentToTop();
   inline void RaiseCurrent();
   inline void RotateLayers( int );
+  inline void SelectFirst();
+  inline void SelectLast();
   inline void SelectPrevious();
   inline void SelectNext();
 
@@ -220,8 +242,12 @@ signals:
   void OrderAboutToBeChanged();
   void OrderChanged();
 
+  void PixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & );
+
   void ReferenceAboutToBeChanged( size_t );
   void ReferenceChanged( size_t );
+
+  void ResolutionsChanged( const PixelInfo::Vector & );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -239,6 +265,8 @@ protected:
 // Private methods.
 private:
   static KeyType GenerateKey( AbstractLayerModel * );
+
+  inline void ClearPixelInfos();
 
   void Delete( SizeType );
 
@@ -272,6 +300,12 @@ private:
   KeyVector m_Keys;
   SizeType m_Current;
   SizeType m_Reference;
+
+  // Usually, information is a singular term which denotes a
+  // plural. Since there's a container of several pixel-infos and we
+  // usually name container variables by using the plural form, an 's'
+  // is appended to PixelInfo. 
+  PixelInfo::Vector m_PixelInfos;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -366,11 +400,31 @@ StackedLayerModel
 
 /*****************************************************************************/
 inline
+void
+StackedLayerModel
+::ClearPixelInfos()
+{
+  m_PixelInfos.reserve( 0 );
+}
+
+/*****************************************************************************/
+inline
 bool
 StackedLayerModel
 ::Contains( const KeyType & key ) const
 {
   return m_LayerModels.find( key )!=m_LayerModels.end();
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::Delete( const KeyType & key )
+{
+  // qDebug() << this << "::Delete(" << key << ")";
+
+  Delete( FindKey( key ) );
 }
 
 /*****************************************************************************/
@@ -441,6 +495,15 @@ StackedLayerModel
 ::End() const
 {
   return m_LayerModels.end();
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::EndEditPixelInfo( const QPoint & screen, const PointType & view )
+{
+  emit PixelInfoChanged( screen, view, m_PixelInfos );
 }
 
 /*****************************************************************************/
@@ -524,6 +587,15 @@ StackedLayerModel
 ::GetCurrent() const
 {
   return const_cast< StackedLayerModel * >( this )->GetCurrent();
+}
+
+/*****************************************************************************/
+inline
+StackedLayerModel::SizeType
+StackedLayerModel
+::GetCurrentIndex() const
+{
+  return m_Current;
 }
 
 /*****************************************************************************/
@@ -702,6 +774,24 @@ StackedLayerModel
 
 /*****************************************************************************/
 inline
+const PixelInfo::Vector &
+StackedLayerModel
+::PixelInfos() const
+{
+  return m_PixelInfos;
+}
+
+/*****************************************************************************/
+inline
+PixelInfo::Vector &
+StackedLayerModel
+::PixelInfos()
+{
+  return m_PixelInfos;
+}
+
+/*****************************************************************************/
+inline
 StackedLayerModel::SizeType
 StackedLayerModel
 ::Prev( SizeType index )
@@ -743,6 +833,30 @@ StackedLayerModel
 
   else
     RotateLayerDown( ( -steps ) % GetCount() );
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::SelectFirst()
+{
+  if( GetCount()<1 )
+    return;
+
+  SetCurrent( SizeType( 0 ) );
+}
+
+/*****************************************************************************/
+inline
+void
+StackedLayerModel
+::SelectLast()
+{
+  if( GetCount()<1 )
+    return;
+
+  SetCurrent( m_Keys.size() - 1 );
 }
 
 /*****************************************************************************/

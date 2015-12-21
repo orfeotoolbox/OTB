@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -22,7 +22,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -42,7 +42,10 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdCore.h"
 #include "Gui/mvdAbstractImageViewRenderer.h"
+#include "Gui/mvdGui.h"
+
 
 #define USE_XP_REGION_OPTIM 0
 
@@ -68,7 +71,7 @@ class AbstractImageViewManipulator;
 /** \class ImageViewWidget
  *
  */
-class Monteverdi2_EXPORT ImageViewWidget :
+class Monteverdi_EXPORT ImageViewWidget :
     public QGLWidget
 {
 
@@ -81,18 +84,6 @@ class Monteverdi2_EXPORT ImageViewWidget :
 //
 // Public types.
 public:
-  /**
-   */
-  enum ZoomType
-  {
-    ZOOM_TYPE_NONE = -1,
-    //
-    ZOOM_TYPE_EXTENT,
-    ZOOM_TYPE_FULL,
-    ZOOM_TYPE_LAYER,
-    //
-    ZOOM_TYPE_COUNT
-  };
 
 //
 // Public methods.
@@ -162,6 +153,12 @@ public:
   /**
    */
   bool IsBypassRenderingEnabled() const;
+  /**
+   */
+  void SetPickingEnabled( bool );
+  /**
+   */
+  bool IsPickingEnabled() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -173,7 +170,7 @@ public slots:
   void UpdateScene();
   /**
    */
-  void CenterOn( const IndexType& index );
+  void CenterOnSelected( const IndexType& index );
   /**
    */
   void CenterOn( const PointType& center, double scale );
@@ -205,6 +202,11 @@ signals:
                                       const PointType & physical,
                                       const DefaultImageType::PixelType & );
 
+  /**
+   */
+  void PixelInfoChanged( const QPoint & screen,
+			 const PointType & view,
+			 const PixelInfo::Vector & pixels );
 
   /**
    */
@@ -247,6 +249,7 @@ protected:
   virtual void mouseMoveEvent( QMouseEvent* event );
   virtual void mouseReleaseEvent( QMouseEvent* event );
   virtual void mousePressEvent( QMouseEvent* event );
+  virtual void mouseDoubleClickEvent( QMouseEvent * event );
 
   virtual void wheelEvent( QWheelEvent* event);
 
@@ -259,6 +262,9 @@ protected:
 //
 // Protected attributes.
 protected:
+  /**
+   */
+  bool m_IsPickingEnabled : 1;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -294,6 +300,10 @@ private:
    */
   void Disconnect( AbstractLayerModel * );
 
+  /**
+   */
+  bool ApplyFixedZoomType();
+
 //
 // Private attributes.
 private:
@@ -318,6 +328,12 @@ private slots:
                      const PointType& );
   /**
    */
+  void OnSelectFirstLayerRequested();
+  /**
+   */
+  void OnSelectLastLayerRequested();
+  /**
+   */
   void OnSelectPreviousLayerRequested();
   /**
    */
@@ -337,6 +353,9 @@ private slots:
   /**
    */
   void OnReferenceChanged( size_t );
+  /**
+   */
+  void OnClearProjectionRequired();
   /**
    */
   void OnSetProjectionRequired();
@@ -388,6 +407,9 @@ private slots:
   /**
    */
   void OnContentReset();
+  /**
+   */
+  void OnRefreshViewRequested();
 };
 
 }// end namespace 'mvd'

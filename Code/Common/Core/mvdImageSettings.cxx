@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -65,10 +65,10 @@ ImageSettings
 {
   NULL,
   NULL,
-  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Range" ),
+  QT_TRANSLATE_NOOP( "mvd::ImageSettings", "Range" ),
   NULL,
   NULL,
-  QT_TRANSLATE_NOOP( "mvd::VectorImageSettings", "Angle" ),
+  QT_TRANSLATE_NOOP( "mvd::ImageSettings", "Angle" ),
   NULL,
   NULL,
 };
@@ -99,28 +99,18 @@ ImageSettings
 }
 
 /*****************************************************************************/
-void
+const char *
 ImageSettings
-::SetValue( double value )
+::GetEffectName() const
 {
-  switch( m_Effect )
-    {
-    case EFFECT_LOCAL_CONTRAST:
-      // qDebug() << "Range = " << value;
-      m_Range = value;
-      break;
+  assert( m_Effect>=0 && m_Effect<EFFECT_COUNT );
+  assert( qApp!=NULL );
 
-    case EFFECT_SPECTRAL_ANGLE :
-      // qDebug() << "Angle = " << value;
-      m_Angle = value;
-      break;
-
-    default:
-      assert( false && "No value for this shader effect." );
-      break;
-    }
-
-  SetModified();
+  return
+    qApp->translate(
+      "mvd", EFFECT_NAME[ m_Effect ]
+    )
+    .toLocal8Bit().constData();
 }
 
 /*****************************************************************************/
@@ -141,11 +131,34 @@ ImageSettings
       break;
 
     default:
-      return std::numeric_limits< double >::signaling_NaN();
       break;
     }
 
   return std::numeric_limits< double >::signaling_NaN();
+}
+
+/*****************************************************************************/
+void
+ImageSettings
+::SetValue( double value )
+{
+  switch( m_Effect )
+    {
+    case EFFECT_LOCAL_CONTRAST:
+      // qDebug() << "Range = " << value;
+      m_Range = value;
+      break;
+
+    case EFFECT_SPECTRAL_ANGLE :
+      // qDebug() << "Angle = " << value;
+      m_Angle = value;
+      break;
+
+    default:
+      break;
+    }
+
+  SetModified();
 }
 
 /*****************************************************************************/

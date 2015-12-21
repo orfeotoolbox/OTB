@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -23,7 +23,7 @@
 // Configuration include.
 //// Included at first position before any other ones.
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
 
@@ -48,6 +48,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "Core/mvdAbstractModel.h"
+#include "Core/mvdTypes.h"
 #include "Core/mvdVisibleInterface.h"
 #endif //tag=QT4-boost-compatibility
 
@@ -66,6 +67,30 @@ namespace mvd
 // Internal classes pre-declaration.
 
 
+//
+// Global types.
+
+/**
+ */
+enum SpatialReferenceType
+{
+  SRT_UNKNOWN =0,
+  SRT_CARTO,
+  SRT_GEO,
+  SRT_SENSOR,
+};
+
+//
+// Global functions.
+
+/**
+ */
+Monteverdi_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & filename );
+
+/**
+ */
+Monteverdi_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & wkt, bool hasKwl );
+
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
@@ -74,7 +99,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class Monteverdi2_EXPORT AbstractLayerModel :
+class Monteverdi_EXPORT AbstractLayerModel :
     public AbstractModel,
     public VisibleInterface
 {
@@ -89,14 +114,6 @@ class Monteverdi2_EXPORT AbstractLayerModel :
 // Public methods.
 public:
 
-  enum SpatialReferenceType
-  {
-    SRT_UNKNOWN,
-    SRT_SENSOR,
-    SRT_CARTO,
-    SRT_GEO,
-  };
-
   /** \brief Destructor. */
   virtual ~AbstractLayerModel();
 
@@ -110,7 +127,11 @@ public:
 
   /**
    */
-  std::string GetAuthorityCode( bool =false ) const;
+  std::string GetAuthorityCode( bool ) const;
+
+  /**
+   */
+  void ToWgs84( const PointType &, PointType & wgs84, double & alt ) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -159,9 +180,13 @@ private:
    */
   virtual bool virtual_HasKwl() const;
 
+  /**
+   */
+  virtual void virtual_ToWgs84( const PointType &, PointType & wgs84, double & alt ) const =0;
+
   //
   // VisibleInterface overloads.
-  void virtual_SignalVisibilityChanged( bool );
+  virtual void virtual_SignalVisibilityChanged( bool );
 
 //
 // Private attributes.

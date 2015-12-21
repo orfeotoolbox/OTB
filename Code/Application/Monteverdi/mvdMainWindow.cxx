@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -132,9 +132,15 @@ MainWindow
 #endif // USE_TABBED_VIEW
   m_StatusBarWidget( NULL ),
   m_ShaderWidget( NULL ),
-  m_FilenameDragAndDropEventFilter( NULL )
+  m_FilenameDragAndDropEventFilter( NULL ),
+  m_KeymapDialog( NULL ),
+  m_GLSL140( -2 )
 {
   m_UI->setupUi( this );
+
+  //
+  //
+  m_KeymapDialog = new KeymapDialog( this );
 
   //
   // Event filters.
@@ -142,10 +148,10 @@ MainWindow
 
   QObject::connect(
     m_FilenameDragAndDropEventFilter,
-    SIGNAL( FilenameDropped( const QString & ) ),
+    SIGNAL( FilenamesDropped( const QStringList & ) ),
     // to:
     this,
-    SLOT( ImportImage( const QString & ) )
+    SLOT( ImportImages( const QStringList & ) )
   );
 }
 
@@ -160,16 +166,25 @@ MainWindow
 /*****************************************************************************/
 bool
 MainWindow
-::CheckGLCapabilities() const
+::CheckGLCapabilities()
 {
   assert( m_ImageView!=NULL );
   assert( m_ImageView->GetRenderer()!=NULL );
 
-  if( m_ImageView==NULL ||
-      m_ImageView->GetRenderer()==NULL )
+  // Coverity-19845
+  //
+  // if( m_ImageView==NULL ||
+  //     m_ImageView->GetRenderer()==NULL )
+  //   return false;
+
+  if( !m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 ) )
     return false;
 
-  return m_ImageView->GetRenderer()->CheckGLCapabilities();
+  assert( m_ShaderWidget!=NULL );
+
+  m_ShaderWidget->SetGLSL140Enabled( m_GLSL140>=0 );
+
+  return true;
 }
 
 /*****************************************************************************/
@@ -177,7 +192,9 @@ void
 MainWindow
 ::virtual_SetupUI()
 {
-  setObjectName( "mvd::MainWindow" );
+  assert( m_UI!=NULL );
+
+  setObjectName( PROJECT_NAME );
   setWindowTitle( PROJECT_NAME );
 
   InitializeCentralWidget();
@@ -189,7 +206,10 @@ MainWindow
   InitializeRenderToolBar();
   InitializeShaderToolBar();
 
-  assert( m_UI!=NULL );
+  if( !RestoreLayout( Monteverdi_UI_VERSION ) )
+    {
+    qWarning() << "Failed to restore window layout!";
+    }
 }
 
 /*****************************************************************************/
@@ -269,41 +289,6 @@ MainWindow
   );
 
   //
-  // OTB application support.
-#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
-  //
-  // Done here cause needed to be done once and only once.
-  SetControllerModel(
-    m_OtbApplicationsBrowserDock,
-    Application::Instance()->GetOTBApplicationsModel()
-  );
-
-  //
-  // need to get the ApplicationToolBox widget to setup connections.
-  // a double click on the tree widget should trigger a signal connected
-  // to this MainWindow slot. this slot will be in charge of getting the
-  // widget of the application selected, and show it in the
-  // MainWindow centralView.
-
-  // # Step 1 : get the ApplicationToolBoxWidget
-  ApplicationsToolBox* appWidget =
-    qobject_cast< ApplicationsToolBox * >(
-      m_OtbApplicationsBrowserDock->findChild< ApplicationsToolBox* >()
-    );
-  assert( appWidget!=NULL );
-
-  // # Step 2 : setup connections
-  QObject::connect(
-    appWidget,
-    SIGNAL( ApplicationToLaunchSelected(const QString &, const QString &) ),
-    this,
-    SLOT( OnApplicationToLaunchSelected(const QString &, const QString &) )
-  );
-
-  // # Step 3 : connect close slots
-#endif
-
-  //
   // close tabs handling
 #if USE_TABBED_VIEW
   QObject::connect(
@@ -315,8 +300,27 @@ MainWindow
 #endif // USE_TABBED_VIEW
 
   //
-  // Image views
+  // Other connections.
+
   ConnectImageViews();
+
+  ConnectStatusBar();
+
+  //
+  // When everything is connected, install event-filter.
+  assert( m_ImageView!=NULL );
+  m_ImageView->installEventFilter( m_FilenameDragAndDropEventFilter );
+
+  {
+  assert( GetController( m_LayerStackDock )!=NULL );
+
+  LayerStackWidget * layerStackWidget =
+    GetController( m_LayerStackDock )->GetWidget< LayerStackWidget >();
+
+  assert( layerStackWidget!=NULL );
+
+  layerStackWidget->InstallEventFilter( m_FilenameDragAndDropEventFilter );
+  }
 }
 
 /*****************************************************************************/
@@ -383,17 +387,13 @@ MainWindow
 
   QObject::connect(
     m_ImageView,
-    SIGNAL(
-      RoiChanged(
-        const PointType&, const SizeType&, const SpacingType&, const PointType&
-      )
+    SIGNAL( RoiChanged(
+        const PointType &, const SizeType &, const SpacingType &, const PointType & )
     ),
     // to:
     quicklookManipulator,
-    SLOT(
-      OnRoiChanged(
-        const PointType&, const SizeType&, const SpacingType&, const PointType&
-      )
+    SLOT( OnRoiChanged(
+        const PointType &, const SizeType &, const SpacingType &, const PointType & )
     )
   );
 
@@ -413,6 +413,33 @@ MainWindow
   //   m_ImageView,
   //   SLOT( updateGL() )
   // );
+
+  //
+  // Connect controllers to image-views.
+  //
+
+  {
+  assert( m_LayerStackDock!=NULL );
+
+  AbstractModelController * controller = GetController( m_LayerStackDock );
+  assert( controller!=NULL );
+
+  QObject::connect(
+    controller,
+    SIGNAL( ApplyAllRequested() ),
+    // to:
+    m_ImageView,
+    SLOT( OnApplyAllRequested() )
+  );
+
+  QObject::connect(
+    controller,
+    SIGNAL( ApplyAllRequested() ),
+    // to:
+    quicklookView,
+    SLOT( OnApplyAllRequested() )
+  );
+  }
 }
 
 /*****************************************************************************/
@@ -430,6 +457,7 @@ MainWindow
   m_UI->menu_View->addAction( m_ColorDynamicsDock->toggleViewAction() );
   m_UI->menu_View->addAction( m_HistogramDock->toggleViewAction() );
   m_UI->menu_View->addAction( m_LayerStackDock->toggleViewAction() );
+  m_UI->menu_View->addAction( m_QuicklookViewDock->toggleViewAction() );
 
   m_UI->menu_View->addSeparator();
 
@@ -438,20 +466,14 @@ MainWindow
 #if USE_PIXEL_DESCRIPTION
   m_UI->menu_View->addAction( m_PixelDescriptionDock->toggleViewAction() );
 #endif // USE_PIXEL_DESCRIPTION
-
-#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
-  m_UI->menu_View->addAction(
-    m_OtbApplicationsBrowserDock->toggleViewAction() );
-#endif
 }
 
 /*****************************************************************************/
 void
 MainWindow
-::ConnectStatusBar( AbstractLayerModel * model )
+::ConnectStatusBar()
 {
   assert( m_StatusBarWidget!=NULL );
-
   assert( m_ImageView!=NULL );
 
   QObject::connect(
@@ -475,86 +497,16 @@ MainWindow
     SIGNAL( PixelIndexChanged( const IndexType& ) ),
     // to:
     m_ImageView,
-    SLOT( CenterOn( const IndexType& ) )
+    SLOT( CenterOnSelected( const IndexType& ) )
   );
 
-  if( model==NULL )
-    return;
-
-  // Access vector-image model.
-  if( model->inherits( VectorImageModel::staticMetaObject.className() ) )
-    {
-    VectorImageModel * vectorImageModel =
-      qobject_cast< VectorImageModel * >( model );
-
-    assert( vectorImageModel==qobject_cast< VectorImageModel * >( model ) );
-
-    //
-    // send the physical point of the clicked point in screen
-    // vectorImageModel is in charge of pixel information computation
-    QObject::connect(
-      m_ImageView,
-      SIGNAL(
-        PhysicalCursorPositionChanged(
-          const QPoint &,
-          const PointType &,
-          const PointType &,
-          const DefaultImageType::PixelType &
-        )
-      ),
-      // to:
-      vectorImageModel,
-      SLOT(
-        OnPhysicalCursorPositionChanged(
-          const QPoint &,
-          const PointType &,
-          const PointType &,
-          const DefaultImageType::PixelType&
-        )
-      )
-    );
-
-    QObject::connect(
-      GetQuicklookView(),
-      SIGNAL(
-        PhysicalCursorPositionChanged(
-          const QPoint &,
-          const PointType &,
-          const PointType &,
-          const DefaultImageType::PixelType&
-        )
-      ),
-      // to:
-      vectorImageModel,
-      SLOT(
-        OnPhysicalCursorPositionChanged(
-          const QPoint &,
-          const PointType &,
-          const PointType &,
-          const DefaultImageType::PixelType&
-        )
-      )
-    );
-
-    //
-    // Connect the status-bar widget to the vector-image corresponding
-    // signal.
-    QObject::connect(
-      vectorImageModel,
-      SIGNAL( CurrentIndexUpdated( const IndexType&, bool ) ),
-      // to:
-      m_StatusBarWidget,
-      SLOT( SetPixelIndex( const IndexType&, bool ) )
-    );
-
-    QObject::connect(
-      vectorImageModel,
-      SIGNAL( CurrentRadioUpdated( const QString& ) ),
-      // to:
-      m_StatusBarWidget,
-      SLOT( SetPixelRadiometryText( const QString& ) )
-    );
-    }
+  QObject::connect(
+    m_ImageView,
+    SIGNAL( PixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) ),
+    // to:
+    this,
+    SLOT( OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) )
+  );
 }
 
 /*****************************************************************************/
@@ -574,6 +526,53 @@ MainWindow
 
   assert( vectorImageModel==qobject_cast< VectorImageModel * >( model ) );
   assert( vectorImageModel!=NULL );
+
+  //
+  // send the physical point of the clicked point in screen
+  // vectorImageModel is in charge of pixel information computation
+  QObject::connect(
+    m_ImageView,
+    SIGNAL(
+      PhysicalCursorPositionChanged(
+	const QPoint &,
+	const PointType &,
+	const PointType &,
+	const DefaultImageType::PixelType &
+      )
+    ),
+    // to:
+    vectorImageModel,
+    SLOT(
+      OnPhysicalCursorPositionChanged(
+	const QPoint &,
+	const PointType &,
+	const PointType &,
+	const DefaultImageType::PixelType&
+      )
+    )
+  );
+
+  QObject::connect(
+    GetQuicklookView(),
+    SIGNAL(
+      PhysicalCursorPositionChanged(
+	const QPoint &,
+	const PointType &,
+	const PointType &,
+	const DefaultImageType::PixelType&
+      )
+    ),
+    // to:
+    vectorImageModel,
+    SLOT(
+      OnPhysicalCursorPositionChanged(
+	const QPoint &,
+	const PointType &,
+	const PointType &,
+	const DefaultImageType::PixelType&
+      )
+    )
+  );
 
   // get the PixelDescription widget
   // TODO: Make a widget controller!
@@ -631,6 +630,53 @@ MainWindow
   assert( vectorImageModel==qobject_cast< const VectorImageModel * >( model ) );
   assert( vectorImageModel!=NULL );
 
+  //
+  // send the physical point of the clicked point in screen
+  // vectorImageModel is in charge of pixel information computation
+  QObject::disconnect(
+    m_ImageView,
+    SIGNAL(
+      PhysicalCursorPositionChanged(
+	const QPoint &,
+	const PointType &,
+	const PointType &,
+	const DefaultImageType::PixelType &
+      )
+    ),
+    // to:
+    vectorImageModel,
+    SLOT(
+      OnPhysicalCursorPositionChanged(
+	const QPoint &,
+	const PointType &,
+	const PointType &,
+	const DefaultImageType::PixelType &
+      )
+    )
+  );
+
+  QObject::disconnect(
+    GetQuicklookView(),
+    SIGNAL(
+      PhysicalCursorPositionChanged(
+	const QPoint &,
+	const PointType &,
+	const PointType &,
+	const DefaultImageType::PixelType &
+      )
+    ),
+    // to:
+    vectorImageModel,
+    SLOT(
+      OnPhysicalCursorPositionChanged(
+	const QPoint &,
+	const PointType &,
+	const PointType &,
+	const DefaultImageType::PixelType&
+      )
+    )
+  );
+
   // get the PixelDescription widget
   // TODO: Make a widget controller!
   PixelDescriptionWidget * pixelDescriptionWidget = 
@@ -680,118 +726,6 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::DisconnectStatusBar( const AbstractLayerModel * model )
-{
-  assert( m_StatusBarWidget!=NULL );
-
-  assert( m_ImageView!=NULL );
-
-  QObject::disconnect(
-    m_ImageView,
-    SIGNAL( ScaleChanged( double, double ) ),
-    // to:
-    m_StatusBarWidget,
-    SLOT( SetScale( double, double ) )
-  );
-
-  QObject::disconnect(
-    m_StatusBarWidget,
-    SIGNAL( ScaleChanged( double ) ),
-    // to:
-    m_ImageView->GetManipulator(),
-    SLOT( ZoomTo( double ) )
-  );
-
-  QObject::disconnect(
-    m_StatusBarWidget,
-    SIGNAL( PixelIndexChanged( const IndexType& ) ),
-    // to:
-    m_ImageView,
-    SLOT( CenterOn( const IndexType& ) )
-  );
-
-  if( model==NULL )
-    return;
-
-  if( model->inherits( VectorImageModel::staticMetaObject.className() ) )
-    {
-    // Access vector-image model.
-    const VectorImageModel* vectorImageModel =
-      qobject_cast< const VectorImageModel * >( model );
-
-    assert(
-      vectorImageModel==qobject_cast< const VectorImageModel * >( model )
-    );
-
-    //
-    // send the physical point of the clicked point in screen
-    // vectorImageModel is in charge of pixel information computation
-    QObject::disconnect(
-      m_ImageView,
-      SIGNAL(
-        PhysicalCursorPositionChanged(
-          const QPoint &,
-          const PointType &,
-          const PointType &,
-          const DefaultImageType::PixelType &
-        )
-      ),
-      // to:
-      vectorImageModel,
-      SLOT(
-        OnPhysicalCursorPositionChanged(
-          const QPoint &,
-          const PointType &,
-          const PointType &,
-          const DefaultImageType::PixelType &
-        )
-      )
-    );
-
-    QObject::disconnect(
-      GetQuicklookView(),
-      SIGNAL(
-        PhysicalCursorPositionChanged(
-          const QPoint &,
-          const PointType &,
-          const PointType &,
-          const DefaultImageType::PixelType &
-        )
-      ),
-      // to:
-      vectorImageModel,
-      SLOT(
-        OnPhysicalCursorPositionChanged(
-          const QPoint &,
-          const PointType &,
-          const PointType &,
-          const DefaultImageType::PixelType&
-        )
-      )
-    );
-
-    //
-    // disconnect the statusBar widget to the vectorImage corresponding
-    // signal
-    QObject::disconnect(
-      vectorImageModel,
-      SIGNAL( CurrentIndexUpdated( const IndexType&, bool ) ),
-      m_StatusBarWidget,
-      SLOT( SetPixelIndex( const IndexType&, bool ) )
-      );
-
-    QObject::disconnect(
-      vectorImageModel,
-      SIGNAL( CurrentRadioUpdated(const QString& ) ),
-      m_StatusBarWidget,
-      SLOT( SetPixelRadiometryText(const QString &) )
-      );
-    }
-}
-
-/*****************************************************************************/
-void
-MainWindow
 ::InitializeDockWidgets()
 {
 #define ENABLE_QTOOLBAR_TEST 0
@@ -811,19 +745,6 @@ MainWindow
   //
   // Left pane.
 
-#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
-  // OTB-applications browser.
-  assert( m_OtbApplicationsBrowserDock==NULL );
-  m_OtbApplicationsBrowserDock =
-    AddDockWidget
-    < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
-    ( "APPLICATIONS_BROWSER",
-      tr( "OTB Applications browser" ),
-      Qt::LeftDockWidgetArea );
-
-  // tabifyDockWidget( m_DatasetPropertiesDock, m_OtbApplicationsBrowserDock );
-#endif
-
   //
   // Right pane.
 
@@ -837,17 +758,6 @@ MainWindow
     Qt::RightDockWidgetArea
   );
 
-  // Layer-stack editor.
-  assert( m_LayerStackDock==NULL );
-  m_LayerStackDock = AddDockWidget<
-    LayerStackWidget, LayerStackController, QDockWidget >(
-      "LAYER_STACK",
-      tr( "Layer stack" ),
-      Qt::RightDockWidgetArea
-    );
-
-  tabifyDockWidget( m_QuicklookViewDock, m_LayerStackDock );
-
   // Histogram-view.
   assert( m_HistogramDock==NULL );
   m_HistogramDock =
@@ -858,6 +768,8 @@ MainWindow
       Qt::RightDockWidgetArea,
       false
     );
+
+  tabifyDockWidget( m_QuicklookViewDock, m_HistogramDock );
 
 #if USE_PIXEL_DESCRIPTION
 
@@ -898,6 +810,21 @@ MainWindow
 
   // Tabify dock-widgets.
   tabifyDockWidget( m_ColorSetupDock, m_ColorDynamicsDock );
+
+
+  //
+  // Bottom pane
+  //
+
+  // Layer-stack editor.
+  assert( m_LayerStackDock==NULL );
+  m_LayerStackDock = AddDockWidget<
+    LayerStackWidget, LayerStackController, QDockWidget >(
+      "LAYER_STACK",
+      tr( "Layer stack" ),
+      Qt::BottomDockWidgetArea
+    );
+
 }
 
 /*****************************************************************************/
@@ -1054,6 +981,8 @@ MainWindow
     sharedGlWidget
   );
 
+  quicklookView->SetPickingEnabled( false );
+
   quicklookView->setMinimumSize(  64,  64 );
   quicklookView->setMaximumSize( 512, 512 );
   quicklookView->setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum );
@@ -1064,17 +993,9 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::ImportImage( const QString& filename, bool forceCreate )
+::ImportImage( const QString& filename, StackedLayerModel::SizeType index )
 {
   // qDebug() << this << "::ImportImage(" << filename << "," << forceCreate << ")";
-
-  //
-  // Import image file.
-  VectorImageModel * imageModel = ImportImage( filename, -1, -1 );
-  // assert( imageModel );
-
-  if( imageModel==NULL )
-    return;
 
   //
   // Get stacked-layer.
@@ -1090,6 +1011,86 @@ MainWindow
   assert( stackedLayerModel!=NULL );
 
   //
+  // Count images regarding their spatial-reference type.
+  size_t gcs = 0; // Geo/Carto/Sensor
+  size_t unk = 0; // Unknown
+
+  stackedLayerModel->CountSRT( unk, gcs, gcs, gcs );
+
+  //
+  //
+  // Coverity-112757
+  // {
+  SpatialReferenceType srt = SRT_UNKNOWN;
+
+  try
+    {
+    // qDebug()
+    //   << this << "\n"
+    //   << "\tQString:" << filename;
+
+    // std::cout
+    //   << "\tstd::string: " << QFile::encodeName( filename ).constData()
+    //   << std::endl;
+
+    srt = GetSpatialReferenceType( QFile::encodeName( filename ).constData() );
+    }
+  catch( const std::exception & exception )
+    {
+    QMessageBox::warning(
+      this,
+      "Warning!",
+      tr( "Exception caught while checking Spatial Reference Type of image-file '%1':\n\n%2" )
+      .arg( filename )
+      .arg( exception.what() )
+    );
+    }
+  // }
+  // Coverity-112757.
+
+  QMessageBox::StandardButton button = QMessageBox::NoButton;
+
+  if( unk==0 && gcs>0 && srt==SRT_UNKNOWN )
+    {
+    button =
+      QMessageBox::warning(
+	this,
+	tr( "Warning!" ),
+	tr( "No projection information (geographical or cartographical coordinate-system or sensor model) has been found for image. While already loaded images all have some, they are displayed in a geo-referenced view.\n\nLoading '%1' will cause the display to switch to a non geo-referenced view (where images are displayed relatively regarding their origin and spacing)." )
+	.arg( filename ),
+	QMessageBox::Ok | QMessageBox::Cancel
+      );
+    }
+
+  if( button==QMessageBox::Cancel )
+    return;
+
+  /*
+  switch( button )
+    {
+    case QMessageBox::Cancel:
+      return;
+      break;
+
+    case QMessageBox::Ok:
+      // Disable reference-layer combo-box.
+      // Disable layer-stack projection-button.
+      break;
+
+    default:
+      assert( false && "Unhandled QMessageBox::StandardButton value!" );
+      break;
+    }
+  */
+
+  //
+  // Import image file.
+  VectorImageModel * imageModel = ImportImage( filename, -1, -1 );
+
+  if( imageModel==NULL )
+    return;
+
+  //
   // Bypass rendering of image-views.
   assert( m_ImageView!=NULL );
   bool bypassImageView = m_ImageView->SetBypassRenderingEnabled( true );
@@ -1100,8 +1101,26 @@ MainWindow
   bool bypassQuicklookView = quicklookView->SetBypassRenderingEnabled( true );
 
   //
-  // Store imgae-mode in layer-stack.
-  stackedLayerModel->Add( imageModel );
+  // Block some signals.
+  //
+  // BUGFIX: MANTIS-1120
+  // {
+  assert( m_UI!=NULL );
+  assert( m_UI->m_RenderToolBar!=NULL );
+
+  QComboBox * referenceLayerComboBox =
+    m_UI->m_RenderToolBar->findChild< QComboBox * >(
+      REFERENCE_LAYER_COMBOBOX_NAME
+    );
+
+  assert( referenceLayerComboBox!=NULL );
+
+  bool signalsBlocked = referenceLayerComboBox->blockSignals( true );
+  // }
+
+  //
+  // Store image-mode in layer-stack.
+  stackedLayerModel->Insert( imageModel, index );
 
   imageModel->setParent( stackedLayerModel );
 
@@ -1109,18 +1128,63 @@ MainWindow
 
   bool hasReference = stackedLayerModel->HasReference();
 
-  if( !hasReference )
+  if( !hasReference && srt!=SRT_UNKNOWN )
     stackedLayerModel->SetReference( imageModel  );
 
-  //
-  // Activate rendering of image-views.
-  m_ImageView->SetBypassRenderingEnabled( bypassImageView );
-  quicklookView->SetBypassRenderingEnabled( bypassQuicklookView );
+  else if( hasReference && srt==SRT_UNKNOWN )
+    stackedLayerModel->SetReference( StackedLayerModel::NIL_INDEX );
 
   //
   // Set zoom-level which forces image-views refresh.
   if( !hasReference )
     UserZoomExtent();
+
+  //
+  // Re-activate rendering of image-views.
+  m_ImageView->SetBypassRenderingEnabled( bypassImageView );
+  quicklookView->SetBypassRenderingEnabled( bypassQuicklookView );
+
+  //
+  // Un-block some signals.
+  //
+  // BUGFIX: MANTIS-1120
+  // {
+  referenceLayerComboBox->blockSignals( signalsBlocked );
+  // }
+  //
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::ImportImages( const QStringList & filenames )
+{
+  if( filenames.isEmpty() )
+    return;
+
+
+  if( filenames.count()==1 )
+    ImportImage( filenames.front(), 0 );
+
+  else
+    {
+    StackedLayerModel::SizeType i = 0;
+
+    for( QStringList::const_iterator it( filenames.constBegin() );
+         it!=filenames.end();
+	 ++it )
+      {
+        ImportImage( *it, i ++ );
+      }
+    }
+
+  assert( m_ImageView!=NULL );
+  m_ImageView->updateGL();
+
+  ImageViewWidget * quicklookView = GetQuicklookView();
+  assert( quicklookView!=NULL );
+
+  quicklookView->updateGL();
 }
 
 /*****************************************************************************/
@@ -1128,6 +1192,92 @@ void
 MainWindow
 ::closeEvent( QCloseEvent* event )
 {
+  assert( event!=NULL );
+
+  {
+    //
+    // List OTB-application widgets.
+    typedef QList< mvd::Wrapper::QtWidgetView * > QtWidgetViewList;
+
+    QtWidgetViewList children( findChildren< mvd::Wrapper::QtWidgetView * >() );
+
+    QStringList names;
+
+    //
+    // Find out which OTB-applications are running.
+    for( QtWidgetViewList::iterator it( children.begin() );
+	 it!=children.end();
+	 ++ it )
+      {
+      assert( *it );
+
+      if( !( *it )->IsClosable() )
+	{
+	assert( !( *it )->GetApplication().IsNull() );
+
+	// qDebug() << "OTB-application:" << ( *it )->GetApplication()->GetDocName();
+
+	names.push_back( ( *it )->GetApplication()->GetDocName() );
+	}
+      }
+
+    //
+    // If some OTB-application is running, display warning, names and
+    // prevent to close.
+    if( !names.isEmpty() )
+      {
+      QMessageBox::warning(
+	this,
+	tr( "Warning!" ),
+	tr(
+	  PROJECT_NAME
+	  " cannot exit while some OTB-application is running!\n\n"
+	  "Please wait for following OTB-applicatio(s) to exit:\n- %1"
+	)
+	.arg( names.join( "\n- " ) )
+      );
+
+      event->ignore();
+
+      return;
+      }
+  }
+
+
+  {
+    assert( I18nCoreApplication::Instance()!=NULL );
+    assert( I18nCoreApplication::Instance()->GetModel()==
+	    I18nCoreApplication::Instance()->GetModel< StackedLayerModel >() );
+
+    StackedLayerModel * stackedLayerModel =
+      I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
+
+    if( stackedLayerModel!=NULL &&
+	!stackedLayerModel->IsEmpty() )
+      {
+      QMessageBox::StandardButton button =
+	QMessageBox::question(
+	  this,
+	  PROJECT_NAME,
+	  tr( "Some files have been loaded. Are you sure you want to quit?" ),
+	  QMessageBox::Yes | QMessageBox::No
+	);
+
+      if( button==QMessageBox::No )
+	{
+	event->ignore();
+
+	return;
+	}
+      }
+  }
+
+
+  SaveLayout( Monteverdi_UI_VERSION );
+
+
+  //
+  // Otherwise, close.
   I18nMainWindow::closeEvent( event );
 }
 
@@ -1166,6 +1316,14 @@ MainWindow
   QObject::connect(
     model,
     SIGNAL( ContentChanged() ),
+    // to:
+    this,
+    SLOT( RefreshReferenceLayerComboBox() )
+  );
+
+  QObject::connect(
+    model,
+    SIGNAL( ContentReset() ),
     // to:
     this,
     SLOT( RefreshReferenceLayerComboBox() )
@@ -1229,8 +1387,8 @@ MainWindow
       assert( vectorImageModel!=NULL );
 
       comboBox->addItem(
-        QString( "%1: %2" )
-        .arg( comboBox->count() - 1 )
+        QString( "%1 (%2)" )
+        .arg( layer->GetAuthorityCode( true ).c_str()  )
         .arg( QFileInfo( vectorImageModel->GetFilename() ).fileName() )
       );
       }
@@ -1238,17 +1396,20 @@ MainWindow
       qDebug() << "Unhandled AbstractLayerModel subclass.";
     }
 
+  {
+  size_t gcs = 0; // Geo/Carto/Sensor
+  size_t unk = 0; // Unknown
 
-#if 1
+  model->CountSRT( unk, gcs, gcs, gcs );
+
+  comboBox->setEnabled( model->GetCount()>0 && unk==0 );
+  }
+
   comboBox->setCurrentIndex(
     model->GetReferenceIndex()>=model->GetCount()
     ? 0 // comboBox->count() - 1
     : model->GetReferenceIndex() + 1
   );
-#endif
-
-
-  comboBox->setEnabled( model->GetCount()>0 );
 }
 
 /*****************************************************************************/
@@ -1283,6 +1444,14 @@ MainWindow
 
     QObject::disconnect(
       model,
+      SIGNAL( ContentReset() ),
+      // to:
+      this,
+      SLOT( RefreshReferenceLayerComboBox() )
+    );
+
+    QObject::disconnect(
+      model,
       SIGNAL( OrderChanged() ),
       // to:
       this,
@@ -1302,6 +1471,80 @@ MainWindow
   comboBox->setEnabled( false );
 }
 
+/****************************************************************************/
+#if USE_OTB_APPS
+
+void
+MainWindow
+::SetupOTBApplications()
+{
+  // qDebug() << this << "::SetupOTBApplications()";
+  // qDebug() << "{";
+
+  assert( m_OtbApplicationsBrowserDock==NULL );
+
+  //
+  // Load OTB-applications and create browser in dock-widget .
+  m_OtbApplicationsBrowserDock =
+    AddDockWidget
+    < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
+    ( "APPLICATIONS_BROWSER",
+      tr( "OTB-Applications browser" ),
+      Qt::RightDockWidgetArea,
+      true
+    );
+
+  tabifyDockWidget( m_HistogramDock, m_OtbApplicationsBrowserDock );
+
+  SetControllerModel(
+    m_OtbApplicationsBrowserDock,
+    Application::Instance()->GetOTBApplicationsModel()
+  );
+
+  //
+  // Connect signals.
+  //
+  // need to get the ApplicationToolBox widget to setup connections.
+  // a double click on the tree widget should trigger a signal connected
+  // to this MainWindow slot. this slot will be in charge of getting the
+  // widget of the application selected, and show it in the
+  // MainWindow centralView.
+
+  // # Step 1 : get the ApplicationToolBoxWidget
+  ApplicationsToolBox* appWidget =
+    qobject_cast< ApplicationsToolBox * >(
+      m_OtbApplicationsBrowserDock->findChild< ApplicationsToolBox* >()
+    );
+  assert( appWidget!=NULL );
+
+  // # Step 2 : setup connections
+  QObject::connect(
+    appWidget,
+    SIGNAL( ApplicationToLaunchSelected(const QString &, const QString &) ),
+    this,
+    SLOT( OnApplicationToLaunchSelected(const QString &, const QString &) )
+  );
+
+  // # Step 3 : connect close slots
+  // TODO
+
+  //
+  // Update main-window UI.
+  m_UI->action_LoadOTBApplications->setEnabled( false );
+
+  m_UI->menu_View->addAction(
+    m_OtbApplicationsBrowserDock->toggleViewAction()
+  );
+
+  m_UI->menu_View->addAction(
+    m_OtbApplicationsBrowserDock->toggleViewAction()
+  );
+
+  // qDebug() << "}";
+}
+
+#endif // USE_OTB_APPS
+
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
@@ -1309,9 +1552,12 @@ void
 MainWindow
 ::on_action_Keymap_triggered()
 {
-  KeymapDialog keymapDialog( this );
+  assert( m_KeymapDialog!=NULL );
 
-  keymapDialog.exec();
+  if( m_KeymapDialog->isVisible() )
+    return;
+
+  m_KeymapDialog->show();
 }
 
 /*****************************************************************************/
@@ -1379,7 +1625,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeModel( const AbstractModel * model )
+::OnAboutToChangeModel( const AbstractModel * )
 {
   // qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
@@ -1496,7 +1742,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnAboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & key )
+::OnAboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & )
 {
   // qDebug()
   //   << this
@@ -1561,16 +1807,6 @@ MainWindow
       SLOT( OnSettingsUpdated()  )
     );
 
-    // Disconnect previously selected quicklook-model from view.
-    // TODO: Remove quicklook temporary hack by better design.
-    QObject::disconnect(
-      layerModel,
-      SIGNAL( SettingsUpdated() ),
-      // from:
-      this,
-      SLOT( OnSettingsUpdated()  )
-    );
-
     //
     // Disconnect shader-widget from model-updated slot.
     QObject::disconnect(
@@ -1586,8 +1822,6 @@ MainWindow
     {
     assert( false && "Unhandled AbstractLayerModel derived-type." );
     }
-
-  DisconnectStatusBar( layerModel );
 
 #if USE_PIXEL_DESCRIPTION
   DisconnectPixelDescriptionWidget( layerModel );
@@ -1622,7 +1856,7 @@ MainWindow
   // MODEL(s).
   //
 
-  AbstractLayerModel * layerModel = stackedLayerModel->GetCurrent();
+  AbstractLayerModel * layerModel = stackedLayerModel->Get( key );
 
   if( !layerModel )
     return;
@@ -1639,14 +1873,6 @@ MainWindow
       // to:
       this,
       SLOT( OnSettingsUpdated()  )
-    );
-
-    QObject::connect(
-      layerModel,
-      SIGNAL( SettingsUpdated() ),
-      // to:
-      this,
-      SLOT( OnSettingsUpdated() )
     );
 
     //
@@ -1675,8 +1901,6 @@ MainWindow
     {
     assert( false && "Unhandled AbstractLayerModel derived-type." );
     }
-
-  ConnectStatusBar( layerModel );
 
 #if USE_PIXEL_DESCRIPTION
   ConnectPixelDescriptionWidget( layerModel );
@@ -1718,24 +1942,32 @@ MainWindow
 }
 
 /*****************************************************************************/
-void
-MainWindow
-::OnApplicationToLaunchSelected( const QString& appName,
-				 const QString& docName)
-{
 #if defined( OTB_USE_QT4 ) && USE_OTB_APPS
 
+void
+MainWindow
+::OnApplicationToLaunchSelected( const QString & appName,
+				 const QString & docName )
+{
   assert( Application::ConstInstance()!=NULL );
   assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );
   assert(
     Application::ConstInstance()->GetOTBApplicationsModel()->GetLauncher()!=NULL
   );
 
-  Wrapper::QtWidgetView* appWidget =
+  Wrapper::QtWidgetView * appWidget =
     Application::ConstInstance()
     ->GetOTBApplicationsModel()
     ->GetLauncher()
-    ->NewOtbApplicationWidget( appName );
+    ->NewOtbApplicationWidget(
+      appName,
+      true
+#if USE_TABBED_VIEW
+#else // USE_TABBED_VIEW
+      , this
+      , Qt::Window
+#endif // USE_TABBED_VIEW
+    );
 
   assert( appWidget!=NULL );
 
@@ -1753,7 +1985,9 @@ MainWindow
 
 #else // USE_TABBED_VIEW
 
-  assert( false && "OTB-Application widget newed and not linked to QApplication interface." );
+  appWidget->setWindowTitle( docName );
+
+  appWidget->show();
 
 #endif // USE_TABBED_VIEW
 
@@ -1790,11 +2024,12 @@ MainWindow
     SLOT( OnTabCloseRequested() )
     );
 
+#else // USE_TABBED_VIEW
+
 #endif // USE_TABBED_VIEW
+}
 
 #endif // defined( OTB_USE_QT4 ) && USE_OTB_APPS
-
-}
 
 /*****************************************************************************/
 #if USE_TABBED_VIEW
@@ -1835,7 +2070,7 @@ MainWindow
     {
     QMessageBox::warning(
       this,
-      tr( "Monteverdi2 - Warning!" ),
+      tr( "Warning!" ),
       tr( "Tab cannot be closed while OTB application is running." )
     );
    
@@ -1855,7 +2090,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnOTBApplicationOutputImageChanged( const QString& appName,
+::OnOTBApplicationOutputImageChanged( const QString &,
 				      const QString & outfname )
 {
   //
@@ -1866,7 +2101,7 @@ MainWindow
   // catalog database.
 
   // import the result image into the database
-  ImportImage( outfname, true );
+  ImportImage( outfname, false );
 }
 
 /*****************************************************************************/
@@ -1903,14 +2138,19 @@ MainWindow
   StackedLayerModel * model = 
     I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
 
-  assert( model!=NULL );
+  // assert( model!=NULL );
 
   //
   // Update widget from model.
+  // comboBox->setCurrentIndex(
+  //   model->GetReferenceIndex()>=model->GetCount()
+  //   ? 0 // comboBox->count() - 1
+  //   : model->GetReferenceIndex() + 1
+  // );
   comboBox->setCurrentIndex(
-    model->GetReferenceIndex()>=model->GetCount()
-    ? 0 // comboBox->count() - 1
-    : model->GetReferenceIndex() + 1
+    index>=model->GetCount()
+    ? 0
+    : index + 1
   );
 }
 
@@ -1994,7 +2234,7 @@ MainWindow
   quicklookView->updateGL();
 }
 
-/*****************************************************************************/
+/****************************************************************************/
 void
 MainWindow
 ::RefreshReferenceLayerComboBox()
@@ -2008,6 +2248,87 @@ MainWindow
   SetupReferenceLayerComboBox(
     I18nCoreApplication::Instance()->GetModel< StackedLayerModel >()
   );
+}
+
+/****************************************************************************/
+void
+MainWindow
+::OnPixelInfoChanged( const QPoint &,
+		      const PointType &,
+		      const PixelInfo::Vector & pixels )
+{
+  //
+  // Get stacked-layer.
+  assert( Application::Instance() );
+  assert(
+    Application::Instance()->GetModel()==
+    Application::Instance()->GetModel< StackedLayerModel >()
+  );
+
+  const StackedLayerModel * stackedLayerModel =
+    Application::Instance()->GetModel< StackedLayerModel >();
+
+  assert( stackedLayerModel!=NULL );
+
+  if( !stackedLayerModel->HasCurrent() )
+    {
+    m_StatusBarWidget->SetPixelIndex( IndexType(), false );
+    m_StatusBarWidget->SetText( tr( "Select layer..." ) );
+
+    m_StatusBarWidget->setEnabled( false );
+    return;
+    }
+
+  m_StatusBarWidget->setEnabled( true );
+
+  StackedLayerModel::SizeType current = stackedLayerModel->GetCurrentIndex();
+  assert( current!=StackedLayerModel::NIL_INDEX );
+
+  m_StatusBarWidget->SetPixelIndex( pixels[ current ].m_Index, pixels[ current ].m_HasIndex );
+
+  QString text;
+
+  if( pixels[ current ].m_HasPoint &&
+      stackedLayerModel->HasReference() )
+    {
+    assert( stackedLayerModel->GetCurrent()!=NULL );
+
+    PointType wgs84;
+    double alt = std::numeric_limits< double >::quiet_NaN();
+
+    stackedLayerModel->GetCurrent()->ToWgs84( pixels[ current ].m_Point, wgs84, alt );
+
+    text =
+      tr( "(%1 %2 ; %3 %4 ; %5)" )
+      .arg( wgs84[ 0 ]>=0.0 ? "N" : "S" ).arg( fabs( wgs84[ 1 ] ) )
+      .arg( wgs84[ 1 ]>=0.0 ? "E" : "W" ).arg( fabs( wgs84[ 0 ] ) )
+      .arg( alt );
+    }
+
+  if( pixels[ current ].m_HasPixel )
+    {
+    if( !text.isEmpty() )
+      text.append( " " );
+
+    text.append(
+      tr( "[ R: %1 ; G: %2 ; B: %3 ]" )
+      .arg( pixels[ current ].m_Pixel[ 0 ] )
+      .arg( pixels[ current ].m_Pixel[ 1 ] )
+      .arg( pixels[ current ].m_Pixel[ 2 ] )
+    );
+    }
+
+  m_StatusBarWidget->SetText( text );
+}
+
+/****************************************************************************/
+void
+MainWindow
+::on_action_LoadOTBApplications_triggered()
+{
+#if USE_OTB_APPS
+  SetupOTBApplications();
+#endif // USE_OTB_APPS
 }
 
 } // end namespace 'mvd'

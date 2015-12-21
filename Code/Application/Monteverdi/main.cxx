@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -20,7 +20,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 
 /*****************************************************************************/
@@ -51,9 +51,11 @@
 
 enum ERROR_CODE
 {
-  ERROR_CODE_CACHE_DIR = -1,
-  ERROR_CODE_DATABASE = -2,
-  ERROR_CODE_GL_VERSION = -3,
+  ERROR_CODE_I18N = -1,
+  ERROR_CODE_CACHE_DIR = -2,
+  ERROR_CODE_DATABASE = -3,
+  ERROR_CODE_GL_VERSION = -4,
+  ERROR_CODE_USAGE = -5,
 };
 
 /*****************************************************************************/
@@ -78,9 +80,73 @@ main( int argc, char* argv[] )
 #endif
 
   //
+  // 0bis. Parse pre-initialization command-line arguments.
+  QStringList args( qtApp.arguments() );
+  {
+  for( QStringList::iterator it( args.begin() );
+       it!=args.end(); )
+    if( it->compare( "-h" )==0 ||
+	it->compare( "--help" )==0 )
+      {
+      std::cout
+	<< mvd::ToLocalStdString(
+	  QCoreApplication::translate(
+	    PROJECT_NAME,
+	    "Usage: %1 [-h|--help] [-a|--applications] [<filename>...]\n"
+	    "  -h, --help         display this help message.\n"
+	    "  -a, --applications load OTB-applications from OTB_APPLICATIONS_PATH."
+	  )
+	  .arg( QFileInfo( argv[ 0 ] ).baseName() )
+	)
+	<< std::endl;
+
+      return ERROR_CODE_USAGE;
+      }
+    else
+      {
+      ++ it;
+      }
+  }
+
+  //
   // 1. Initialize application and sync settings.
-  mvd::Application application( &qtApp );
-  application.Initialize();
+  //
+  // Coverity-14835
+  // {
+  mvd::Application * application = NULL;
+
+  try
+    {
+    application = new mvd::Application( &qtApp );
+    assert( application!=NULL );
+
+    application->Initialize();
+    }
+  catch( std::exception & exc )
+    {
+    QMessageBox::StandardButton button =
+      QMessageBox::question(
+	NULL,
+	QCoreApplication::translate(
+	  PROJECT_NAME,
+	  "Question!"
+	),
+	QCoreApplication::translate(
+	  PROJECT_NAME,
+	  "The following exception has been caught while initializing the software:\n\n"
+	  "%1\n\n"
+	  "The application may not function as expected. Do you want to continue?"
+	)
+	.arg( exc.what() ),
+	QMessageBox::Yes | QMessageBox::No,
+	QMessageBox::Yes
+      );
+
+    if( button==QMessageBox::No )
+      return ERROR_CODE_I18N;
+    }
+  // }
+  // Coverity-14835
 
   //
   // 2. Initialize main-window (UI).
@@ -111,20 +177,49 @@ main( int argc, char* argv[] )
 
   //
   // 5. Parse command-line filenames.
-  QStringList filenames( qtApp.arguments() );
+  args.pop_front();
+  {
+  bool otbApplications = false;
 
-  filenames.pop_front();
+  for( QStringList::iterator it( args.begin() );
+       it!=args.end(); )
+    if( it->compare( "-a" )==0 ||
+	it->compare( "--applications" )==0 )
+      {
+      if( !otbApplications )
+	{
+#if USE_OTB_APPS
+	mainWindow.SetupOTBApplications();
+#else // USE_OTB_APPS
+	qWarning() << "OTB-applications support is not included in this build.";
+#endif // USE_OTB_APPS
 
-  mainWindow.ImportImages( filenames );
- 
+	it = args.erase( it );
+	}
+      }
+    else
+      {
+      ++ it;
+      }
+  }
+
+  mainWindow.ImportImages( args );
+
 
   //
   // 6. Let's go: run the application and return exit code.
   int result = QCoreApplication::instance()->exec();
 
   /*
-  application.CloseDatabase();
+  application->CloseDatabase();
   */
+
+  // Coverity-14835
+  // {
+  delete application;
+  application = NULL;
+  // }
+  // Coverity-14835
 
   return result;
 }

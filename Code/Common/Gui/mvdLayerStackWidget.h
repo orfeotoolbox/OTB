@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -22,7 +22,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 
 /*****************************************************************************/
@@ -57,6 +57,7 @@ namespace
 
 namespace mvd
 {
+class AbstractLayerModel;
 class LayerStackItemModel;
 
 //
@@ -76,7 +77,7 @@ class LayerStackWidget;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class Monteverdi2_EXPORT LayerStackWidget :
+class Monteverdi_EXPORT LayerStackWidget :
     public QWidget
 {
 
@@ -107,6 +108,39 @@ public:
   /**
    */
   void SetCurrent( int );
+
+  /**
+   */
+  void SetApplyEnabled( bool );
+
+  /**
+   */
+  void SetDeleteEnabled( bool );
+
+  /**
+   */
+  void SetMoveEnabled( bool );
+
+  /**
+   */
+  void SetProjectionEnabled( bool );
+
+  /**
+   */
+  void SetReloadEnabled( bool );
+
+  /**
+   */
+  void InstallEventFilter( QObject * filter );
+
+  //
+  // QObject overloads.
+  //
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qobject.html#eventFilter
+   */
+  virtual bool eventFilter( QObject * watched, QEvent * event );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -139,7 +173,22 @@ signals:
   void DownButtonClicked();
   /**
    */
-  void DeleteButtonClicked();
+  void DeleteLayerRequested();
+  /**
+   */
+  void DeleteAllLayersRequested();
+  /**
+   */
+  void RotateLayersRequested( int );
+  /**
+   */
+  void ProjectionButtonClicked();
+  /**
+   */
+  void ApplyButtonClicked();
+  /**
+   */
+  void CopyLayerRequested( const AbstractLayerModel * );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

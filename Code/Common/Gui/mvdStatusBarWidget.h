@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -22,7 +22,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 
 /*****************************************************************************/
@@ -75,7 +75,7 @@ class StatusBarWidget;
  * \brief Status Bar widget
  * widget class.
  */
-class Monteverdi2_EXPORT StatusBarWidget :
+class Monteverdi_EXPORT StatusBarWidget :
     public QWidget
 {
 
@@ -103,7 +103,11 @@ public slots:
 
   /**
    */
-  void SetPixelIndex( const IndexType&, bool isInside );
+  void SetPixelIndex( const IndexType &, bool isInside );
+
+  /**
+   */
+  void SetText( const QString & );
 
   /**
    */
@@ -119,7 +123,7 @@ signals:
   void ScaleChanged( double );
   /**
    */
-  void PixelIndexChanged( const IndexType& );
+  void PixelIndexChanged( const IndexType & );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -138,7 +142,7 @@ protected:
 private:
   /**
    */
-  inline static QString ZoomLevel( double scale );
+  static QString ZoomLevel( double scale );
 
 //
 // Private attributes.
@@ -147,7 +151,7 @@ private:
   /**
    * \brief uic generated.
    */
-  Ui::StatusBarWidget* m_UI;
+  Ui::StatusBarWidget * m_UI;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -157,9 +161,6 @@ private slots:
   /**
    */
   // void SetPixelIndexText( const QString& );
-  /**
-   */
-  void SetPixelRadiometryText( const QString& );
   /**
    */
   void on_scaleLineEdit_editingFinished();
@@ -192,30 +193,6 @@ private slots:
 
 namespace mvd
 {
-
-/*****************************************************************************/
-inline
-QString
-StatusBarWidget
-::ZoomLevel( double scale )
-{
-  if( scale>1.0 )
-    {
-    // return ToQString( scale ) + ":1";
-    return QString( "%1:1" ).arg( scale );
-    }
-  else if( scale<1.0 )
-    {
-    // return "1:" + ToQString( 1.0 / scale );
-    return QString( "1:%1" ).arg( 1.0 / scale );
-    }
-  else
-    {
-    return "1:1";
-    }
-
-  return QString( ":" );
-}
 
 } // end namespace 'mvd'
 

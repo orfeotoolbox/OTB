@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -46,7 +46,10 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAbstractLayerModel.h"
+#include "Core/mvdFilenameInterface.h"
 #include "Core/mvdI18nCoreApplication.h"
+#include "Core/mvdStackedLayerModel.h"
 #include "ApplicationsWrapper/mvdWrapperQtWidgetParameterInitializers.h"
 
 namespace mvd
@@ -65,10 +68,64 @@ namespace Wrapper
 /*****************************************************************************/
 /* INTERNAL TYPES                                                            */
 
+class KeyLayerAccumulator :
+    public std::unary_function< StackedLayerModel::ConstIterator::value_type,
+				void >
+{
+public:
+  typedef
+  std::unary_function< StackedLayerModel::ConstIterator::value_type, void >
+    SuperType;
+
+  typedef std::list< SuperType::argument_type > KeyLayerPairList;
+
+  KeyLayerAccumulator( const std::string & filename,
+		       KeyLayerPairList & klp ) :
+    m_KeyLayerPairs( klp ),
+    m_Filename( FromStdString( filename ) ),
+    m_Count( 0 )
+  {
+  }
+
+  void
+  operator () ( const SuperType::argument_type & pair )
+  {
+    const FilenameInterface * interface =
+      dynamic_cast< const FilenameInterface * >( pair.second );
+
+    if( interface!=NULL &&
+	m_Filename.compare( interface->GetFilename() )==0 )
+      {
+      qDebug() << m_Filename << "==" << interface->GetFilename();
+
+      m_KeyLayerPairs.push_back( pair );
+
+      ++ m_Count;
+      }
+  }
+
+  std::size_t
+  GetCount() const
+  {
+    return m_Count;
+  }
+
+
+public:
+  KeyLayerPairList & m_KeyLayerPairs;
+
+
+private:
+  QString m_Filename;
+  std::size_t m_Count;
+};
 
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
+char const * const
+QtWidgetView
+::OBJECT_NAME = "mvd::Wrapper::QtWidgetView";
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -76,13 +133,13 @@ namespace Wrapper
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
-/*******************************************************************************/
+/*****************************************************************************/
 QtWidgetView
-::QtWidgetView( otb::Wrapper::Application::Pointer otbApp,
+::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
                 bool isStandalone,
 		QWidget* parent,
 		Qt::WindowFlags flags ) :
+  QWidget( parent, flags ),
   m_Application( otbApp ),
   m_Model( NULL ),
   m_ExecButton( NULL ),
@@ -91,6 +148,8 @@ QtWidgetView
   m_IsClosable( true ),
   m_IsStandalone( isStandalone )
 {
+  setObjectName( QtWidgetView::OBJECT_NAME );
+
   m_Model = new otb::Wrapper::QtWidgetModel( otbApp );
 
   QObject::connect(
@@ -236,8 +295,11 @@ QtWidgetView
   m_QuitButton = new QPushButton(footerGroup);
   m_QuitButton->setText(QObject::tr("Quit"));
   connect(
-    m_QuitButton, SIGNAL( clicked() ),
-    this, SLOT( CloseSlot() )
+    m_QuitButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SLOT( close() )
   );
 
   // Put the buttons on the right
@@ -273,22 +335,34 @@ QtWidgetView
 /*******************************************************************************/
 void
 QtWidgetView
-::SetupParameterWidgets( QWidget* widget )
+::SetupParameterWidgets( QWidget * widget )
 {
   assert( widget!=NULL );
 
   SetupWidget( widget, InputFilenameInitializer() );
   SetupWidget( widget, InputFilenameListInitializer( this ) );
-  SetupWidget( widget, InputImageInitializer( !m_IsStandalone ) );
-  SetupWidget( widget, InputImageListInitializer( this, !m_IsStandalone ) );
+  SetupWidget( widget, InputImageInitializer( false /* !m_IsStandalone */) );
+  SetupWidget( widget, InputImageListInitializer( this, false /* !m_IsStandalone */ ) );
+  SetupWidget( widget, InputProcessXMLInitializer() );
   SetupWidget( widget, InputVectorDataInitializer() );
   SetupWidget( widget, InputVectorDataListInitializer( this ) );
 #if defined( _DEBUG )
   SetupWidget( widget, ToolTipInitializer() );
 #endif
 
-  if( !m_IsStandalone )
-    SetupWidget( widget, OutputImageInitializer( m_Application->GetName() ) );
+  SetupWidget( widget, OutputFilenameInitializer() );
+  SetupWidget( widget, OutputProcessXMLInitializer() );
+
+  SetupWidget(
+    widget,
+    OutputImageInitializer(
+      m_IsStandalone
+      ? QString()
+      : m_Application->GetName()
+    )
+  );
+
+  SetupWidget( widget, OutputVectorDataInitializer() );
 }
 
 /*******************************************************************************/
@@ -307,19 +381,37 @@ QtWidgetView
 }
 
 /*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
 void
 QtWidgetView
-::CloseSlot()
+::closeEvent( QCloseEvent * event )
 {
-  // Close the widget
-  this->close();
+  assert( event!=NULL );
 
-  // Emit a signal to close any widget that this gui belonging to
+  if( !IsClosable() )
+    {
+    assert( !m_Application.IsNull() );
+
+    QMessageBox::warning(
+      this,
+      tr( "Warning!" ),
+      tr( "OTB-Application '%1' cannot be closed while running!")
+      .arg( m_Application->GetDocName() )
+    );
+
+    event->ignore();
+
+    return;
+    }
+
+  QWidget::closeEvent( event );
+
   emit QuitSignal();
+
+  deleteLater();
 }
 
+/*******************************************************************************/
+/* SLOTS                                                                       */
 /*******************************************************************************/
 void
 QtWidgetView
@@ -328,20 +420,26 @@ QtWidgetView
   assert( m_Model!=NULL );
   assert( m_Model->GetApplication()!=NULL );
 
+
+  assert( I18nCoreApplication::Instance()!=NULL );
+
+  //
+  // Get layer-stack, if any.
+  StackedLayerModel * layerStack =
+    I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
+
   otb::Wrapper::Application::Pointer otbApp( m_Model->GetApplication() );
 
+  //
+  // Check output parameters of OTB-application.
   StringVector paramKeys( otbApp->GetParametersKeys() );
+  QStringList filenames1;
 
-  bool isSure = true;
-
-  /*
-  typedef QVector< QFileInfo > FileInfoVector;
-
-  FileInfoVector fileInfos;
-  */
+  KeyLayerAccumulator::KeyLayerPairList layers;
+  QStringList filenames2;
 
   for( StringVector::const_iterator it( paramKeys.begin() );
-       it!=paramKeys.end() && isSure;
+       it!=paramKeys.end();
        ++it )
     {
     if( otbApp->IsParameterEnabled( *it, true ) &&
@@ -359,12 +457,6 @@ QtWidgetView
       switch( otbApp->GetParameterType( *it ) )
 	{
 	case otb::Wrapper::ParameterType_OutputFilename:
-	  /*
-	  assert(
-	    otb::DynamicCast< otb::Wrapper::OutputImageParameter >( param )
-	    == param
-	  );
-	  */
 	  filename =
 	    otb::DynamicCast< otb::Wrapper::OutputFilenameParameter >( param )
 	    ->GetValue();
@@ -398,40 +490,103 @@ QtWidgetView
 	  break;
 	}
 
-      if( !filename.empty() )
+      if( QFileInfo( filename.c_str() ).exists() )
+	filenames1.push_back( filename.c_str() );
+
+      if( layerStack!=NULL )
 	{
-	// qDebug()
-	//   << it->c_str() << ":" << QString( filename.c_str() );
+	KeyLayerAccumulator accumulator(
+	  std::for_each(
+	    layerStack->Begin(),
+	    layerStack->End(), KeyLayerAccumulator( filename, layers )
+	  )
+	);
 
-	QFileInfo fileInfo( filename.c_str() );
-
-	if( fileInfo.exists() )
-	  {
-	  QMessageBox::StandardButton questionButton =
-	    QMessageBox::question(
-	      this,
-	      tr( PROJECT_NAME ),
-	      tr( "Are you sure you want to overwrite file '%1'?" )
-	      .arg( filename.c_str() ),
-	      QMessageBox::Yes | QMessageBox::No,
-	      QMessageBox::No
-	    );
-
-	  if( questionButton==QMessageBox::Yes )
-	    {
-	    /*
-	      fileInfos.push_back( fileInfo );
-	    */
-	    }
-	  else
-	    isSure = false;
-	  }
+	if( accumulator.GetCount()>0 )
+	  filenames2.push_back( filename.c_str() );
 	}
       }
     }
 
-  if( !isSure )
-    return;
+  {
+  QString message;
+
+  if( filenames1.size()==1 )
+    {
+    // qDebug()
+    //   << it->c_str() << ":" << QString( filename.c_str() );
+
+    message =
+      tr( "Are you sure you want to overwrite file '%1'?" )
+      .arg( filenames1.front() );
+    }
+  else if( filenames1.size()>1 )
+    {
+    message =
+      tr( "Following files will be overwritten. Are you sure you want to continue?\n- %1" )
+      .arg( filenames1.join( "\n- " ) );
+    }
+
+  if( !message.isEmpty() )
+    {
+    QMessageBox::StandardButton button =
+      QMessageBox::question(
+	this,
+	PROJECT_NAME,
+	message,
+	QMessageBox::Yes | QMessageBox::No,
+	QMessageBox::No
+      );
+
+    if( button==QMessageBox::No )
+      return;
+    }
+  }
+
+  {
+  QString message;
+
+  if( filenames2.size()==1 )
+    {
+    // qDebug()
+    //   << it->c_str() << ":" << QString( filename.c_str() );
+
+    message =
+      tr( "File '%1' is being viewed in " PROJECT_NAME " and will be concurrently overwritten by running this %2. File will be removed from layer-stack before running %2 and reloaded after.\n\nDo you want to continue?" )
+      .arg( filenames2.front() )
+      .arg( otbApp->GetDocName() );
+    }
+  else if( filenames2.size()>1 )
+    {
+    message =
+      tr( "Following files are being viewed in " PROJECT_NAME " and will be concurrently overwritter by running %2. Files will be removed from layer-stack before running %2. Do you want to continue?\n- %1" )
+      .arg( filenames2.join( "\n- " ) )
+      .arg( otbApp->GetDocName() );
+    }
+
+  if( !message.isEmpty() )
+    {
+    QMessageBox::StandardButton button =
+      QMessageBox::question(
+	this,
+	PROJECT_NAME,
+	message,
+	QMessageBox::Yes | QMessageBox::No,
+	QMessageBox::No
+      );
+
+    if( button==QMessageBox::No )
+      return;
+
+    while( !layers.empty() )
+      {
+      layerStack->Delete( layers.front().first );
+
+      layers.pop_front();
+      }
+    }
+  }
+
 
   /* U N S A F E
   // BUGFIX: Mantis-750
@@ -565,7 +720,7 @@ QtWidgetView
 
 	emit OTBApplicationOutputImageChanged(
 	  QString( otbApp->GetName() ),
-	  QString( outputParam->GetFileName() )
+	  QFile::decodeName( outputParam->GetFileName() )
 	);
 	/*
 	}

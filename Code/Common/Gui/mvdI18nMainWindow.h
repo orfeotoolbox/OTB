@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -23,7 +23,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 
 /*****************************************************************************/
@@ -74,7 +74,7 @@ class VectorImageModel;
  *
  * \brief Main-window widget base for the i18n application.
  */
-class Monteverdi2_EXPORT I18nMainWindow
+class Monteverdi_EXPORT I18nMainWindow
   : public QMainWindow
 {
 
@@ -285,6 +285,14 @@ protected:
                  int width,
                  int height );
 
+  /**
+   */
+  void SaveLayout( int version ) const;
+
+  /**
+   */
+  bool RestoreLayout( int version );
+
   //
   // QMainWindow overrides.
 
@@ -333,10 +341,6 @@ private:
   /**
    */
   virtual void virtual_InitializeUI();
-
-  /**
-   */
-  inline QMessageBox::StandardButton ConfirmSaveQuit( bool canBeCancelled );
 
   /**
    */
@@ -428,24 +432,6 @@ I18nMainWindow
   assert( controller!=NULL );
 
   controller->SetModel( model );
-}
-
-/*****************************************************************************/
-inline
-QMessageBox::StandardButton
-I18nMainWindow
-::ConfirmSaveQuit( bool canBeCancelled )
-{
-  return QMessageBox::question(
-    this,
-    tr( PROJECT_NAME ),
-    tr( "Dataset has been modified.\n"
-	"Do you want to save settings before quitting?" ),
-    QMessageBox::Save |
-    QMessageBox::Discard |
-    ( canBeCancelled ? QMessageBox::Cancel : QMessageBox::NoButton ),
-    QMessageBox::Save
-  );
 }
 
 /*****************************************************************************/

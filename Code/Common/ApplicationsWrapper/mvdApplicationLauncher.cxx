@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -82,7 +82,10 @@ ApplicationLauncher
 /*******************************************************************************/
 Wrapper::QtWidgetView*
 ApplicationLauncher
-::NewOtbApplicationWidget( const QString& appName, bool isStandalone ) const
+::NewOtbApplicationWidget( const QString & appName,
+			   bool isStandalone,
+			   QWidget * parent,
+			   Qt::WindowFlags flags ) const
 {
   // Create module
   otb::Wrapper::Application::Pointer otbApp(
@@ -192,7 +195,8 @@ ApplicationLauncher
     }
 
   // Create GUI based on module
-  Wrapper::QtWidgetView* gui = new Wrapper::QtWidgetView( otbApp, isStandalone );
+  Wrapper::QtWidgetView* gui =
+    new Wrapper::QtWidgetView( otbApp, isStandalone, parent, flags );
 
   gui->CreateGui();
 

@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -37,6 +37,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAbstractLayerModel.h"
+#include "Core/mvdFilenameInterface.h"
 #include "Core/mvdStackedLayerModel.h"
 #include "Gui/mvdLayerStackItemModel.h"
 #include "Gui/mvdLayerStackWidget.h"
@@ -103,6 +105,22 @@ LayerStackController
     SLOT( OnStackedLayerCurrentChanged( size_t ) )
   );
 
+  QObject::connect(
+    model,
+    SIGNAL( ContentChanged() ),
+    // to:
+    this,
+    SLOT( OnStackedLayerContentChanged() )
+  );
+
+  QObject::connect(
+    model,
+    SIGNAL( ContentReset() ),
+    // to:
+    this,
+    SLOT( OnStackedLayerContentReset() )
+  );
+
 
   LayerStackWidget * widget = GetWidget< LayerStackWidget >();
   assert( widget!=NULL );
@@ -121,6 +139,14 @@ LayerStackController
     this,
     SLOT( OnSelectionChanged( int ) )
   );
+
+  QObject::connect(
+    widget,
+    SIGNAL( ProjectionButtonClicked() ),
+    // to:
+    this,
+    SLOT( OnProjectionButtonClicked() )
+  );  
 
 
   QObject::connect(
@@ -157,10 +183,42 @@ LayerStackController
 
   QObject::connect(
     widget,
-    SIGNAL( DeleteButtonClicked() ),
+    SIGNAL( DeleteLayerRequested() ),
     // to:
     model,
     SLOT( DeleteCurrent() )
+  );
+
+  QObject::connect(
+    widget,
+    SIGNAL( DeleteAllLayersRequested() ),
+    // to:
+    model,
+    SLOT( Clear() )
+  );
+
+  QObject::connect(
+    widget,
+    SIGNAL( CopyLayerRequested( const AbstractLayerModel * ) ),
+    // to:
+    this,
+    SLOT( OnCopyLayerRequested( const AbstractLayerModel * ) )
+  );
+
+  QObject::connect(
+    widget,
+    SIGNAL( RotateLayersRequested( int ) ),
+    // to:
+    model,
+    SLOT( RotateLayers( int ) )
+  );
+
+  QObject::connect(
+    widget,
+    SIGNAL( ApplyButtonClicked() ),
+    // to:
+    this,
+    SIGNAL( ApplyAllRequested() )
   );
 }
 
@@ -175,9 +233,25 @@ LayerStackController
   QObject::disconnect(
     model,
     SIGNAL( CurrentChanged( size_t ) ),
-    // to:
+    // from:
     this,
     SLOT( OnStackedLayerCurrentChanged( size_t ) )
+  );
+
+  QObject::disconnect(
+    model,
+    SIGNAL( ContentChanged() ),
+    // from:
+    this,
+    SLOT( OnStackedLayerContentChanged() )
+  );
+
+  QObject::disconnect(
+    model,
+    SIGNAL( ContentReset() ),
+    // from:
+    this,
+    SLOT( OnStackedLayerContentReset() )
   );
 
 
@@ -199,6 +273,15 @@ LayerStackController
 
   QObject::disconnect(
     widget,
+    SIGNAL( ProjectionButtonClicked() ),
+    // from:
+    this,
+    SLOT( OnProjectionButtonClicked() )
+  );  
+
+
+  QObject::disconnect(
+    widget,
     SIGNAL( TopButtonClicked() ),
     // from:
     model,
@@ -231,10 +314,42 @@ LayerStackController
 
   QObject::disconnect(
     widget,
-    SIGNAL( DeleteButtonClicked() ),
+    SIGNAL( DeleteLayerRequested() ),
     // from:
     model,
     SLOT( DeleteCurrent() )
+  );
+
+  QObject::disconnect(
+    widget,
+    SIGNAL( DeleteAllLayersRequested() ),
+    // from:
+    model,
+    SLOT( Clear() )
+  );
+
+  QObject::disconnect(
+    widget,
+    SIGNAL( CopyLayerRequested( const AbstractLayerModel * ) ),
+    // from:
+    this,
+    SLOT( OnCopyLayerRequested( const AbstractLayerModel * ) )
+  );
+
+  QObject::disconnect(
+    widget,
+    SIGNAL( RotateLayersRequested( int ) ),
+    // from:
+    model,
+    SLOT( RotateLayers( int ) )
+  );
+
+  QObject::disconnect(
+    widget,
+    SIGNAL( ApplyButtonClicked() ),
+    // to:
+    this,
+    SIGNAL( ApplyAllRequested() )
   );
 }
 
@@ -246,7 +361,71 @@ LayerStackController
 }
 
 /*******************************************************************************/
+void
+LayerStackController
+::UpdateButtonsState()
+{
+  assert( GetModel()==GetModel< StackedLayerModel >() );
+  StackedLayerModel * model = GetModel< StackedLayerModel >();
+  assert( model!=NULL );
+
+  assert( GetWidget()==GetWidget< LayerStackWidget >() );
+  LayerStackWidget * widget = GetWidget< LayerStackWidget >();
+  assert( widget!=NULL );
+
+  {
+  size_t unk = 0;
+  size_t gcs = 0;
+
+  model->CountSRT( unk, gcs, gcs, gcs );
+    
+  widget->SetProjectionEnabled( unk==0 && !model->IsEmpty() );
+  }
+
+  widget->SetDeleteEnabled( !model->IsEmpty() );
+
+  widget->SetReloadEnabled( !model->IsEmpty() );
+
+  widget->SetMoveEnabled( model->GetCount()>1 );
+
+  widget->SetApplyEnabled( model->GetCount()>1 );
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
+/*******************************************************************************/
+void
+LayerStackController
+::OnCopyLayerRequested( const AbstractLayerModel * layer )
+{
+  // qDebug() << this << "::OnCopyLayerRequested(" << layer << ")";
+
+  assert( layer!=NULL );
+
+  const FilenameInterface * interface =
+    dynamic_cast< const FilenameInterface * >( layer );
+
+  if( interface==NULL )
+    return;
+
+  assert( qApp!=NULL );
+  assert( qApp->clipboard()!=NULL );
+  assert( qApp->clipboard()->mimeData()!=NULL );
+
+  QList< QUrl > urls;
+  
+  urls << QUrl::fromLocalFile( interface->GetFilename() );
+
+  qDebug() << "URLs:" << urls;
+
+  QMimeData * mimeData = new QMimeData();
+
+  mimeData->setUrls( urls );
+  mimeData->setText( interface->GetFilename() );
+
+  qApp->clipboard()->setMimeData( mimeData );
+}
+
 /*******************************************************************************/
 void
 LayerStackController
@@ -259,6 +438,20 @@ LayerStackController
   assert( model!=NULL );
 
   model->SetCurrent( index );
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::OnProjectionButtonClicked()
+{
+  // qDebug() << this << "::OnProjectionButtonClicked()";
+
+  assert( GetModel()==GetModel< StackedLayerModel >() );
+  StackedLayerModel * model = GetModel< StackedLayerModel >();
+  assert( model!=NULL );
+
+  model->SetReference( model->GetCurrentIndex() );
 }
 
 /*******************************************************************************/
@@ -292,6 +485,26 @@ LayerStackController
   widget->SetCurrent( index );
   }
   widget->blockSignals( signalsBlocked );
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::OnStackedLayerContentChanged()
+{
+  // qDebug() << this << "::OnStackedLayerContentChanged()";
+
+  UpdateButtonsState();
+}
+
+/*******************************************************************************/
+void
+LayerStackController
+::OnStackedLayerContentReset()
+{
+  // qDebug() << this << "::OnStackedLayerContentChanged()";
+
+  UpdateButtonsState();
 }
 
 } // end namespace 'mvd'

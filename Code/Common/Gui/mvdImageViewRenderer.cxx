@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -44,6 +44,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAbstractLayerModel.h"
 #include "Core/mvdAlgorithm.h"
+#include "Core/mvdI18nCoreApplication.h"
 #include "Core/mvdTypes.h"
 #include "Core/mvdVectorImageModel.h"
 
@@ -68,23 +69,69 @@ namespace mvd
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
+/*****************************************************************************/
+ImageViewRenderer::RenderingContext
+::RenderingContext() :
+  AbstractImageViewRenderer::RenderingContext(),
+  m_Resolution( RESOLUTION_NEAREST ),
+  m_TileSize( 256 )
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+  ,m_ViewSettings()
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
+{
+  assert( I18nCoreApplication::ConstInstance()!=NULL );
 
+  //
+  // Rendering settings.
+  {
+  QVariant value(
+    I18nCoreApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_RESOLUTION
+    )
+  );
+
+  m_Resolution =
+    !value.isValid()
+    ? RESOLUTION_NEAREST
+    : static_cast< Resolution >( value.toInt() );
+  }
+
+  {
+  QVariant value(
+    I18nCoreApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_TILE_SIZE
+    )
+  );
+
+  m_TileSize =
+    !value.isValid()
+    ? 256
+    : value.toInt();
+  }
+}
+
+/*****************************************************************************/
+ImageViewRenderer::RenderingContext
+::~RenderingContext()
+{
+}
+
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
 ImageViewRenderer
 ::ImageViewRenderer( QObject* parent ) :
   AbstractImageViewRenderer( parent ),
-  m_GlView( otb::GlView::New() )
+  m_GlView( otb::GlView::New() ),
+  m_EffectsEnabled( true )
 #ifdef _WIN32
 #else // _WIN32
   ,  m_ReferencePair( NULL, otb::GlActor::Pointer() )
 #endif // _WIN32
   // m_ModelActorPairs(),
 {
-  assert( !m_GlView.IsNull() );
-
-  assert( m_GlView->GetSettings()!=NULL );
-  m_GlView->GetSettings()->SetUseProjection( true );
-
 #ifdef _WIN32
   m_ReferencePair.first = NULL;
   // m_ReferencePair.second is initialized by otb::GlActor::Pointer default constructor.
@@ -101,7 +148,7 @@ ImageViewRenderer
 /*****************************************************************************/
 bool
 ImageViewRenderer
-::CheckGLCapabilities() const
+::CheckGLCapabilities( int * glsl140 ) const
 {
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
   return true;
@@ -129,6 +176,9 @@ ImageViewRenderer
     {
     isOk = otb::GlVersionChecker::CheckGLCapabilities( glVersion, glslVersion );
 
+    if( glsl140!=NULL )
+      *glsl140 = otb::GlVersionChecker::VerCmp( glslVersion, "1.40" );
+
     //
     // Trace runtime OpenGL and GLSL versions.
     qWarning() <<
@@ -142,7 +192,7 @@ ImageViewRenderer
     {
     QMessageBox::critical(
       qobject_cast< QWidget* >( parent() ),
-      tr( "Monteverdi2 - Critical error!"),
+      tr( "Critical error!"),
       ToQString( exc.what() )
     );
     }
@@ -155,7 +205,6 @@ ImageViewRenderer
   //
   // Construct message.
   QString message(
-    // tr( "Current OpenGL version is '%1' supporting GLSL version '%2'.\nRequired OpenGL version is '%3' with Shading-Laguage version '%4'.\nPlease upgrade your graphics driver and hardware for the application to run properly on this platform.\nUsing the application on this platform may lead to unknown behaviour. Would you still like to continue using the application?" )
     tr( "Current OpenGL version is '%1' supporting OpenGL Shading-Language (GLSL) version '%2'.\nRequired OpenGL version is at least '%3' with GLSL version at least '%4'.\nPlease upgrade your graphics driver and/or hardware for the application to run properly on this platform.\nIf you are running the application under some remote-desktop service, runtime OpenGL and GLSL versions may differ from those running directly on remote platform.\nPlease contact your system administrator.\nApplication will now exit!" )
     .arg( glVersion )
     .arg( glslVersion )
@@ -169,7 +218,7 @@ ImageViewRenderer
 
   QMessageBox::critical(
     qobject_cast< QWidget* >( parent() ),
-    tr( "Monteverdi2 - Critical error!" ),
+    tr( "Critical error!" ),
     message
   );
 
@@ -231,10 +280,8 @@ ImageViewRenderer
   if( actor.IsNull() )
     {
     origin[ 0 ] = origin[ 1 ] = 0;
-    origin[ 1 ] = origin[ 1 ] = 0;
 
     extent[ 0 ] = extent[ 1 ] = 0;
-    extent[ 1 ] = extent[ 1 ] = 0;
 
     return;
     }
@@ -289,39 +336,11 @@ ImageViewRenderer
 {
   // qDebug() << this << "::ResizeGL(" << width << "," << height << ")";
 
-  /*
-  // Should be done here and not in OTB-Ice render routine.
-  glViewport(
-    0,
-    0,
-    static_cast< GLint >( width ),
-    static_cast< GLint >( height )
-  );
-  */
-
   assert( !m_GlView.IsNull() );
 
   // qDebug() << m_GlView.GetPointer();
 
   m_GlView->Resize( width, height );
-
-  /*
-  glViewport(
-    0, 0,
-    static_cast< GLint >( width ), static_cast< GLint >( height )
-  );
-
-  glMatrixMode( GL_MODELVIEW );
-  glLoadIdentity();
-
-  glMatrixMode( GL_PROJECTION );
-  glLoadIdentity();
-  glOrtho(
-    0, static_cast< GLint >( width ),
-    0, static_cast< GLint >( height ),
-    0, 1
-  );
-  */
 }
 
 /*****************************************************************************/
@@ -332,20 +351,9 @@ ImageViewRenderer
   assert( !m_GlView.IsNull() );
 
   // qDebug() << this << "::PaintGL(" << c << ")";
+  // qDebug() << "{";
 
   // qDebug() << m_GlView.GetPointer();
-
-  /*
-  //
-  // Get appropriate rendering-context.
-  assert( c==dynamic_cast< RenderingContext* >( c ) );
-  RenderingContext* context = dynamic_cast< RenderingContext* >( c );
-  assert( context!=NULL );
-
-  //
-  // Set view settings.
-  m_GlView->SetSettings( context->m_ViewSettings );
-  */
 
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING && 0
 
@@ -357,7 +365,14 @@ ImageViewRenderer
   //
   // Bypass rendering if needed.
   if( IsBypassRenderingEnabled() )
+    {
+    // qDebug() << "}\n";
+
     return;
+    }
+
+  // qDebug() << m_GlView.GetPointer() << "::BeforeRendering()";
+  // qDebug() << "{";
 
   //
   // Pre-render scene.
@@ -386,77 +401,175 @@ ImageViewRenderer
   // Post-render scene.
   m_GlView->AfterRendering();
 
+  // qDebug() << "}";
+  // qDebug() << m_GlView.GetPointer() << "::AfterRendering()";
+
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
-}
 
-/*****************************************************************************/
-bool
-ImageViewRenderer
-::Pick( const PointType& in,
-        PointType& out,
-        DefaultImageType::PixelType& pixel )
-{
-  /*
-  qDebug()
-    << this << "::Pick("
-    << in[ 0 ] << "," << in[ 1 ]
-    << ")";
-  */
-
-  otb::GlImageActor::Pointer glImageActor(
-    GetReferenceActor< otb::GlImageActor >()
-  );
-
-  if( glImageActor.IsNull() )
-    return false;
-
-  //
-  // Compute output/physical point.
-  out = glImageActor->ViewportToImageTransform( in, true );
-
-  //
-  // Read pixel value.
-  return glImageActor->GetPixelFromViewport( in, pixel );
-}
-
-/*****************************************************************************/
-bool
-ImageViewRenderer
-::Transform( PointType& point, const IndexType& index, bool isPhysical ) const
-{
-  otb::GlImageActor::ConstPointer glImageActor(
-    GetReferenceActor< otb::GlImageActor >()
-  );
-
-  if( glImageActor.IsNull() )
-    return false;
-
-  point[ 0 ] = static_cast< double >( index[ 0 ] );
-  point[ 1 ] = static_cast< double >( index[ 1 ] );
-
-  point = glImageActor->ImageToViewportTransform( point, isPhysical );
-
-  return true;
+  // qDebug() << "}\n";
 }
 
 /*****************************************************************************/
 void
 ImageViewRenderer
-::UpdateActors( const AbstractImageViewRenderer::RenderingContext * )
+::Pick( const PointType & ptView,
+	PixelInfo::Vector & pixels ) const
+{
+  // qDebug()
+  //   << this << "::Pick("
+  //   << ptView[ 0 ] << "," << ptView[ 1 ]
+  //   << ")";
+
+  assert( !m_GlView.IsNull() );
+
+  //
+  // Get actor keys.
+  otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
+
+  // Prepare picked pixels container.
+  pixels.resize( keys.size() );
+
+  // Pick each layer.
+  size_t i = 0;
+
+  for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
+       it != keys.end();
+       ++ it, ++ i )
+    {
+    // Register layer key.
+    pixels[ i ].m_Key = *it;
+
+    // Get actor.
+    otb::GlActor::Pointer actor( m_GlView->GetActor( *it ) );
+    assert( !actor.IsNull() );
+
+    // Get geo-interface.
+    const otb::GeoInterface * geoInterface =
+      dynamic_cast< const otb::GeoInterface * >( actor.GetPointer() );
+
+    // If geo-interface...
+    if( geoInterface!=NULL )
+      {
+      // ...compute physical point.
+      pixels[ i ].m_HasPoint =
+	geoInterface->TransformFromViewport( pixels[ i ].m_Point, ptView, true );
+      }
+    else
+      {
+      pixels[ i ].m_HasPoint = false;
+      pixels[ i ].m_Point = PointType();
+      }
+
+    // If image-actor...
+    otb::GlImageActor::Pointer imageActor( otb::DynamicCast< otb::GlImageActor >( actor ) );
+
+    if( !imageActor.IsNull() )
+      {
+      // ...get pixel and it's index...
+      pixels[ i ].m_HasIndex =
+      pixels[ i ].m_HasPixel =
+	imageActor->GetPixel(
+	  pixels[ i ].m_Point,
+	  pixels[ i ].m_Pixel,
+	  pixels[ i ].m_Index
+	);
+
+      // ...and get resolutions.
+      pixels[ i ].m_HasResolution = true;
+      pixels[ i ].m_Resolution = imageActor->GetCurrentResolution();
+      }
+    }
+}
+
+/*****************************************************************************/
+void
+ImageViewRenderer
+::GetResolutions( PixelInfo::Vector & pixels ) const
+{
+  // qDebug() << this << "::GetResolutions()";
+
+  assert( !m_GlView.IsNull() );
+
+  //
+  // Get actor keys.
+  otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
+
+  if( keys.empty() )
+    return;
+
+  // Resize pixels container, if needed.
+  if( keys.size()!=pixels.size() )
+    pixels.resize( keys.size() );
+
+  // Pick each layer.
+  size_t i = 0;
+
+  for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
+       it != keys.end();
+       ++ it, ++ i )
+    {
+    // Check layer key.
+    pixels[ i ].m_Key = *it;
+
+    // Get actor.
+    otb::GlActor::Pointer actor( m_GlView->GetActor( *it ) );
+    assert( !actor.IsNull() );
+
+    // If image-actor...
+    otb::GlImageActor::Pointer imageActor( otb::DynamicCast< otb::GlImageActor >( actor ) );
+
+    if( !imageActor.IsNull() )
+      {
+      pixels[ i ].m_HasResolution = true;
+      pixels[ i ].m_Resolution = imageActor->GetCurrentResolution();
+      }
+    else
+      {
+      pixels[ i ].m_HasResolution = false;
+      }
+    }
+}
+
+/*****************************************************************************/
+bool
+ImageViewRenderer
+::TransformToView( PointType & point,
+		   const StackedLayerModel::KeyType & key,
+		   const IndexType & index,
+		   bool isPhysical ) const
+{
+  assert( !m_GlView.IsNull() );
+  assert( !key.empty() );
+
+  otb::GlActor::Pointer actor( m_GlView->GetActor( key ) );
+  assert( !actor.IsNull() );
+
+  const otb::GeoInterface * geo =
+    dynamic_cast< const otb::GeoInterface * >( actor.GetPointer() );
+
+  if( geo==NULL )
+    return false;
+
+  point[ 0 ] = static_cast< double >( index[ 0 ] );
+  point[ 1 ] = static_cast< double >( index[ 1 ] );
+
+  return geo->TransformToViewport( point, point, isPhysical );
+}
+
+/*****************************************************************************/
+void
+ImageViewRenderer
+::UpdateActors( const AbstractImageViewRenderer::RenderingContext * context )
 {
   // qDebug() << this << "::virtual_UpdateActors()";
 
   assert( !m_GlView.IsNull() );
-
+  assert( context!=NULL );
 
   StackedLayerModel * stackedLayerModel = GetLayerStack();
-  assert( stackedLayerModel!=NULL );
 
-  /*
-  otb::GlImageActor::Pointer refImageActor(
-    GetReferenceActor< otb::GlImageActor >()
-  );
-  */
+  if( stackedLayerModel==NULL )
+    return;
 
   for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
        it!=stackedLayerModel->End();
@@ -500,6 +613,43 @@ ImageViewRenderer
         );
         assert( !imageActor.IsNull() );
 
+	//
+	// Apply rendering parameters.
+	{
+	const RenderingContext * ctxt = static_cast< const RenderingContext * >( context );
+
+	// Resolution
+	switch( ctxt->m_Resolution )
+	  {
+	  case RESOLUTION_NEAREST:
+	    imageActor->SetResolutionAlgorithm(
+	      otb::GlImageActor::ResolutionAlgorithm::Nearest
+	    );
+	    break;
+
+	  case RESOLUTION_LOWER:
+	    imageActor->SetResolutionAlgorithm(
+	      otb::GlImageActor::ResolutionAlgorithm::Nearest_Lower
+	    );
+	    break;
+
+	  case RESOLUTION_UPPER:
+	    imageActor->SetResolutionAlgorithm(
+	      otb::GlImageActor::ResolutionAlgorithm::Nearest_Upper
+	    );
+	    break;
+
+	  default:
+	    assert( false && "Unexpected Resolution enum value." );
+	    break;
+	  }
+
+	// Tile-size
+	imageActor->SetTileSize( ctxt->m_TileSize );
+	}
+
+	//
+	// Apply visibility.
         imageActor->SetVisible( vectorImageModel->IsVisible() );
 
         //
@@ -562,74 +712,76 @@ ImageViewRenderer
           shader->SetNoData( properties->GetNoData() );
           }
 
-        //
-        // Apply shader properties.
-        //
-        // qDebug()
-        //   << "alpha:" << settings.GetAlpha()
-        //   << "'" << it->first.c_str() << "'";
+	//
+	// Apply shader properties.
+	//
+	// qDebug()
+	//   << "alpha:" << settings.GetAlpha()
+	//   << "'" << it->first.c_str() << "'";
+	shader->SetAlpha( settings.GetAlpha() );
 
-        shader->SetAlpha( settings.GetAlpha() );
+	if( m_EffectsEnabled )
+	  switch( settings.GetEffect() )
+	    {
+	    case EFFECT_CHESSBOARD:
+	      shader->SetShaderType( otb::SHADER_ALPHA_GRID );
+	      shader->SetChessboardSize( settings.GetSize() );
+	      break;
 
-        switch( settings.GetEffect() )
-          {
-          case EFFECT_CHESSBOARD:
-            shader->SetShaderType( otb::SHADER_ALPHA_GRID );
-            shader->SetChessboardSize( settings.GetSize() );
-            break;
+	    case EFFECT_GRADIENT:
+	      shader->SetShaderType( otb::SHADER_GRADIENT );
+	      shader->SetRadius( settings.GetSize() );
+	      break;
 
-          case EFFECT_GRADIENT:
-            shader->SetShaderType( otb::SHADER_GRADIENT );
-            break;
-
-          case EFFECT_LOCAL_CONTRAST:
-            shader->SetShaderType( otb::SHADER_LOCAL_CONTRAST );
-            shader->SetRadius( settings.GetSize() );
-            shader->SetLocalContrastRange(
+	    case EFFECT_LOCAL_CONTRAST:
+	      shader->SetShaderType( otb::SHADER_LOCAL_CONTRAST );
+	      shader->SetRadius( settings.GetSize() );
+	      shader->SetLocalContrastRange(
 #if 0
-              settings.GetValue() *
-              std::max(
-                std::max(
-                  shader->GetMaxRed() - shader->GetMinRed(),
-                  shader->GetMaxGreen() - shader->GetMinGreen()
-                ),
-                shader->GetMaxBlue() - shader->GetMinBlue()
-              )
+		settings.GetValue() *
+		std::max(
+		  std::max(
+		    shader->GetMaxRed() - shader->GetMinRed(),
+		    shader->GetMaxGreen() - shader->GetMinGreen()
+		  ),
+		  shader->GetMaxBlue() - shader->GetMinBlue()
+		)
 #else
-              settings.GetValue()
+		settings.GetValue()
 #endif
-            );
-            break;
+	      );
+	      break;
 
-          case EFFECT_LOCAL_TRANSLUCENCY:
-            shader->SetShaderType( otb::SHADER_LOCAL_ALPHA );
-            shader->SetRadius( settings.GetValue() );
-            break;
+	    case EFFECT_LOCAL_TRANSLUCENCY:
+	      shader->SetShaderType( otb::SHADER_LOCAL_ALPHA );
+	      shader->SetRadius( settings.GetSize() );
+	      break;
 
-          case EFFECT_NORMAL:
-            shader->SetShaderType( otb::SHADER_STANDARD );
-            break;
+	    case EFFECT_NONE:
+	    case EFFECT_NORMAL:
+	      shader->SetShaderType( otb::SHADER_STANDARD );
+	      break;
 
-          case EFFECT_SPECTRAL_ANGLE:
-            shader->SetShaderType( otb::SHADER_SPECTRAL_ANGLE );
-            shader->SetRadius( settings.GetSize() );
-            shader->SetSpectralAngleRange( settings.GetValue() );
-            break;
+	    case EFFECT_SPECTRAL_ANGLE:
+	      shader->SetShaderType( otb::SHADER_SPECTRAL_ANGLE );
+	      shader->SetRadius( settings.GetSize() );
+	      shader->SetSpectralAngleRange( settings.GetValue() );
+	      break;
 
-          case EFFECT_SWIPE_H:
-            shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
-            shader->SetVerticalSlider( false );
-            break;
+	    case EFFECT_SWIPE_H:
+	      shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
+	      shader->SetVerticalSlider( false );
+	      break;
 
-          case EFFECT_SWIPE_V:
-            shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
-            shader->SetVerticalSlider( true );
-            break;
+	    case EFFECT_SWIPE_V:
+	      shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
+	      shader->SetVerticalSlider( true );
+	      break;
 
-          default:
-            assert( false && "Unhandled mvd::Effect value!" );
-            break;
-          }
+	    default:
+	      assert( false && "Unhandled mvd::Effect value!" );
+	      break;
+	    }
         }
       //
       else
@@ -697,14 +849,25 @@ ImageViewRenderer
           VectorImageModel * vectorImageModel =
             dynamic_cast< VectorImageModel * >( it->second );
 
+	  // Coverity-19839
+	  // {
+	  assert( vectorImageModel!=NULL );
+	  // }
+
 	  // qDebug()
 	  //   << QString( "Adding image-actor from file '%1'..." )
 	  //   .arg( vectorImageModel->GetFilename() );
 
+	  // qDebug()
+	  //   << this << "\n"
+	  //   << "\tQString:" << vectorImageModel->GetFilename()
+	  //   << "\tstd::string" << QFile::encodeName( vectorImageModel->GetFilename() );
+
           glImageActor->Initialize(
-            ToStdString(
+            QFile::encodeName(
               vectorImageModel->GetFilename()
             )
+	    .constData()
           );
 
           m_GlView->AddActor( glImageActor, it->first );
@@ -735,23 +898,63 @@ ImageViewRenderer
 {
   // qDebug() << this << "::virtual_RefreshScene()";
 
+  //
+  // Get layer-stack.
   StackedLayerModel * stackedLayerModel = GetLayerStack();
 
-  if( stackedLayerModel==NULL || stackedLayerModel->IsEmpty() )
+  //
+  // Check if empty.
+  if( stackedLayerModel==NULL ||
+      stackedLayerModel->IsEmpty() )
     {
     m_ReferencePair.first = NULL;
     m_ReferencePair.second = otb::GlActor::Pointer();
+
+    // virtual_ClearProjection();
+
+    // assert( !m_GlView.IsNull() );
+    // assert( m_GlView->GetSettings() );
+
+    // m_GlView->GetSettings()->SetUseProjection( false );
 
     // emit ClearProjectionRequired();
 
     return;
     }
 
+  //
+  // Check if non-projected mode.
+  if( !stackedLayerModel->HasReference() )
+    {
+    m_ReferencePair.first = NULL;
+    m_ReferencePair.second = otb::GlActor::Pointer();
 
+    virtual_ClearProjection();
+
+    assert( !m_GlView.IsNull() );
+    assert( m_GlView->GetSettings() );
+
+    m_GlView->GetSettings()->SetUseProjection( false );
+
+    emit ClearProjectionRequired();
+
+    return;
+    }
+
+  //
+  // Otherwise, it's projected mode.
+  assert( !m_GlView.IsNull() );
+  assert( m_GlView->GetSettings()!=NULL );
+
+  m_GlView->GetSettings()->SetUseProjection( true );
+
+
+  //
+  // Store reference-pair.
   ModelActorPair referencePair( m_ReferencePair );
 
   //
-  // Remember first vector image-model as reference image-model.
+  // Remember first layer-model as projection reference.
   m_ReferencePair.first = stackedLayerModel->GetReference();
 
   StackedLayerModel::KeyType referenceKey(
@@ -858,66 +1061,41 @@ ImageViewRenderer
 /*****************************************************************************/
 void
 ImageViewRenderer
-::OnPhysicalCursorPositionChanged( const QPoint & screen,
-                                   const PointType & view,
-                                   const PointType & point,
-                                   const DefaultImageType::PixelType & )
+::UpdatePixelInfo( const QPoint & screen,
+		   const PointType & /* view */,
+		   const PixelInfo::Vector & pixels )
 {
-  // qDebug() << "::OnPhysicalCursorPositionChanged(" << screen << ")";
+  // qDebug()
+  //   << this << "::UpdatePixelInfo("
+  //   << screen << ", [" << view[ 0 ] << ";" << view[ 1 ]
+  //   << "] )";
 
-  if( GetLayerStack()==NULL )
-    return;
+  assert( !m_GlView.IsNull() );
 
-  for( StackedLayerModel::ConstIterator it( GetLayerStack()->Begin() );
-       it!=GetLayerStack()->End();
-       ++it )
+  for( PixelInfo::Vector::const_iterator it( pixels.begin() );
+       it != pixels.end();
+       ++ it )
     {
-    assert( !it->first.empty() );
-    assert( it->second!=NULL );
+    assert( !it->m_Key.empty() );
 
-    if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
+    //
+    // Check GL-view.
+    assert( m_GlView->ContainsActor( it->m_Key ) );
+
+    //
+    // Get GL image-actor.
+    otb::GlImageActor::Pointer glImageActor(
+      otb::DynamicCast< otb::GlImageActor >(
+	m_GlView->GetActor( it->m_Key )
+      )
+    );
+
+    if( !glImageActor.IsNull() )
       {
-      //
-      // Check GL-view.
-      assert( m_GlView->ContainsActor( it->first ) );
-
-      //
-      // Get GL image-actor.
-      otb::GlImageActor::Pointer glImageActor(
-        otb::DynamicCast< otb::GlImageActor >(
-          m_GlView->GetActor( it->first )
-        )
-      );
-
-      assert( !glImageActor.IsNull() );
-
-      //
-      // Transform point from viewport to screen.
-#if 0
-      PointType p_view;
-
-      p_view = glImageActor->ImageToViewportTransform( point, true );
-
-      PointType p_screen;
-
-      m_GlView->GetSettings()->ViewportToScreenTransform(
-        p_view[ 0 ], p_view[ 1 ],
-        p_screen[ 0 ], p_screen[ 1 ]
-      );
-
-      p_screen[ 1 ] =
-        m_GlView->GetSettings()->GetViewportSize()[ 1 ] - p_screen[ 1 ];
-#endif
-
-      //
-      // Get pixel RGB.
-      DefaultImageType::PixelType pixel;
-
-      glImageActor->GetPixelFromViewport( view, pixel );
-
       //
       // Get shader.
       otb::FragmentShader::Pointer fshader( glImageActor->GetShader() );
+      assert( !fshader.IsNull() );
 
       otb::StandardShader::Pointer shader(
         otb::DynamicCast< otb::StandardShader >(
@@ -928,10 +1106,9 @@ ImageViewRenderer
       assert( !shader.IsNull() );
 
       //
-      //
+      // Update cursor position of shader.
       PointType p_screen;
 
-      assert( !m_GlView.IsNull() );
       assert( m_GlView->GetSettings()!=NULL );
 
       p_screen[ 0 ] = screen.x();
@@ -949,18 +1126,100 @@ ImageViewRenderer
           ]
         );
 
-      if( pixel.Size()>0 )
-        {
-        shader->SetCurrentRed( pixel[ 0 ] );
-        shader->SetCurrentGreen( pixel[ 1 ] );
-        shader->SetCurrentBlue( pixel[ 2 ] );
-        }
-      }
-    //
-    else
-      {
+      //
+      // Update pixel-info of shader.
+      if( it->m_HasPixel )
+	{
+	assert( it->m_Pixel.Size()>0 );
+
+	shader->SetCurrentRed( it->m_Pixel[ 0 ] );
+	shader->SetCurrentGreen( it->m_Pixel[ 1 ] );
+	shader->SetCurrentBlue( it->m_Pixel[ 2 ] );
+	}
       }
     }
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::virtual_ZoomToRegion( const PointType & origin,
+			const PointType & extent,
+			PointType & center,
+			SpacingType & spacing ) const
+{
+  assert( !m_GlView.IsNull() );
+
+  // Use spacing of viewport as native spacing of reference layer
+  // because it has already been set for projection.
+  //
+  // Same as of Ice-viewer.
+
+  return
+    m_GlView->ZoomToRegion(
+      origin,
+      extent,
+      m_GlView->GetSettings()->GetSpacing(),
+      center,
+      spacing
+    );
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::virtual_ZoomToExtent( PointType & center, SpacingType & spacing ) const
+{
+  // qDebug() << this << "::virtual_ZoomToExtent()";
+
+  assert( !m_GlView.IsNull() );
+
+  // Use spacing of viewport as native spacing of reference layer
+  // because it has already been set for projection.
+  //
+  // Same as of Ice-viewer.
+
+  return
+    m_GlView->ZoomToExtent(
+      m_GlView->GetSettings()->GetSpacing(),
+      center,
+      spacing
+    );
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::virtual_ZoomToLayer( const StackedLayerModel::KeyType & key,
+		       PointType & center,
+		       SpacingType & spacing ) const
+{
+  assert( !m_GlView.IsNull() );
+
+  // Use spacing of viewport as native spacing of reference layer
+  // because it has already been set for projection.
+  //
+  // Same as of Ice-viewer.
+
+  return
+    m_GlView->ZoomToLayer(
+      key,
+      m_GlView->GetSettings()->GetSpacing(),
+      center,
+      spacing
+    );
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::virtual_ZoomToFull( const StackedLayerModel::KeyType & key,
+		      PointType & center,
+		      SpacingType & spacing ) const
+{
+  assert( !m_GlView.IsNull() );
+
+  return m_GlView->ZoomToFull( key, center, spacing );
 }
 
 /******************************************************************************/

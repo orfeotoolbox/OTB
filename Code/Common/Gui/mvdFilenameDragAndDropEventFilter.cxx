@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -78,13 +78,13 @@ FilenameDragAndDropEventFilter
 /*****************************************************************************/
 bool
 FilenameDragAndDropEventFilter
-::DragEnterEvent( QObject* object, QDragEnterEvent* event )
+::DragEnterEvent( QObject * watched, QDragEnterEvent* event )
 {
-  qDebug() << this << "::DragEnterEvent(" << object << "," << event << ")";
-  qDebug() << event->mimeData()->formats();
+  // qDebug() << this << "::DragEnterEvent(" << object << "," << event << ")";
+  // qDebug() << event->mimeData()->formats();
 
   //
-  // Bypass event its MIME data does not contain not URL(s).
+  // Bypass event its MIME data does not contain any URL(s).
   if( !event->mimeData()->hasUrls() )
     return false;
 
@@ -98,17 +98,21 @@ FilenameDragAndDropEventFilter
        it!=urls.end();
        ++it )
     {
-    qDebug() << *it;
-    qDebug() << it->scheme() << it->scheme().compare( "file", Qt::CaseInsensitive );
+    // qDebug() << *it;
+    // qDebug() << it->scheme()
+    // 	     << it->scheme().compare( "file", Qt::CaseInsensitive );
 
+    if(
 #if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-    if( it->scheme().compare( "file", Qt::CaseInsensitive )!=0 )
+      it->scheme().compare( "file", Qt::CaseInsensitive )!=0
 #else // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-      if( !it->isLocalFile() )
+      !it->isLocalFile()
 #endif  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-        {
-        return false;
-        }
+      || event->source()==watched
+    )
+      {
+      return false;
+      }
     }
 
   //
@@ -124,9 +128,9 @@ FilenameDragAndDropEventFilter
 /*****************************************************************************/
 bool
 FilenameDragAndDropEventFilter
-::DragLeaveEvent( QObject* object, QDragLeaveEvent* event )
+::DragLeaveEvent( QObject * /* object */, QDragLeaveEvent * /* event */ )
 {
-  qDebug() << this << "::DragLeaveEvent(" << object << "," << event << ")";
+  // qDebug() << this << "::DragLeaveEvent(" << object << "," << event << ")";
 
   //
   // Nothing to do: bypass event & let default behaviour occur.
@@ -136,31 +140,20 @@ FilenameDragAndDropEventFilter
 /*****************************************************************************/
 bool
 FilenameDragAndDropEventFilter
-::DragMoveEvent( QObject* object, QDragMoveEvent* event )
+::DragMoveEvent( QObject *, QDragMoveEvent * )
 {
   // qDebug() << this << "::DragMoveEvent(" << object << "," << event << ");";
 
-#if 0
-  //
-  // Bypass event its MIME data does not contain not URL(s).
-  if( !event->mimeData()->hasUrls() )
-    return false;
-
-  //
-  // Otherwise, eatup event.
-  return true;
-#else
   // Nothing to do: bypass event & let default behaviour occur.
   return false;
-#endif
 }
 
 /*****************************************************************************/
 bool
 FilenameDragAndDropEventFilter
-::DropEvent( QObject* object, QDropEvent* event )
+::DropEvent( QObject * watched, QDropEvent * event )
 {
-  qDebug() << this << "::DropEvent(" << object << "," << event << ")";
+  // qDebug() << this << "::DropEvent(" << object << "," << event << ")";
 
   assert( event!=NULL );
   assert( event->mimeData()!=NULL );
@@ -176,6 +169,8 @@ FilenameDragAndDropEventFilter
 
   QUrlList urls( event->mimeData()->urls() );
 
+  QStringList filenames;
+
   for( QUrlList::const_iterator it( urls.begin() );
        it!=urls.end();
        ++it )
@@ -186,14 +181,21 @@ FilenameDragAndDropEventFilter
     if( it->isLocalFile() )
 #endif  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
       {
-        emit FilenameDropped( it->toLocalFile() );
+      if( event->source()!=watched )
+	{
+	filenames.push_back( it->toLocalFile() );
+
+	emit FilenameDropped( filenames.back() );
+	}
       }
     else
       {
-      qWarning() << "Dropped URL is not a local filename." << *it;
+      qWarning() << "Dropped URL is not a local filename:" << *it;
       }
     }
  
+  emit FilenamesDropped( filenames );
+
   //
   // Eatup event.
   return true;

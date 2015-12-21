@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -39,6 +39,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Gui/mvdGui.h"
 #include "Gui/mvdLayerStackItemModel.h"
 
 namespace mvd
@@ -72,6 +73,9 @@ LayerStackWidget
 {
   m_UI->setupUi( this );
 
+  m_UI->reloadButton->setVisible( false );
+  m_UI->treeView->setDragEnabled( true );
+
   {
   QItemSelectionModel * ism = m_UI->treeView->selectionModel();
 
@@ -80,6 +84,8 @@ LayerStackWidget
   delete ism;
   ism = NULL;
   }
+
+  InstallEventFilter( this );
 
   QObject::connect(
     m_UI->treeView->selectionModel(),
@@ -134,7 +140,31 @@ LayerStackWidget
     SIGNAL( clicked() ),
     // to:
     this,
-    SIGNAL( DeleteButtonClicked() )
+    SIGNAL( DeleteLayerRequested() )
+  );
+
+  QObject::connect(
+    m_UI->deleteAllButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( DeleteAllLayersRequested() )
+  );
+
+  QObject::connect(
+    m_UI->projectionButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( ProjectionButtonClicked() )
+  );
+
+  QObject::connect(
+    m_UI->applyButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( ApplyButtonClicked() )
   );
 }
 
@@ -144,6 +174,85 @@ LayerStackWidget
 {
   delete m_UI;
   m_UI = NULL;
+}
+
+/*******************************************************************************/
+bool
+LayerStackWidget
+::eventFilter( QObject * object, QEvent * event )
+{
+  assert( object==m_UI->treeView );
+  assert( event!=NULL );
+
+  if( object!=m_UI->treeView )
+    return false;
+
+  switch( event->type() )
+    {
+    //
+    // KEY RELEASE
+    case QEvent::KeyRelease :
+    {
+    QKeyEvent * keyEvent = dynamic_cast< QKeyEvent * >( event );
+    assert( keyEvent!=NULL );
+
+    switch( keyEvent->key() )
+      {
+      case Qt::Key_C:
+	if( keyEvent->modifiers()==Qt::ControlModifier &&
+	    m_UI->treeView->currentIndex().isValid() )
+	  {
+	  emit CopyLayerRequested(
+	    LayerStackItemModel::GetLayer(
+	      m_UI->treeView->currentIndex()
+	    )
+	  );
+
+	  return true;
+	  }
+	break;
+      //
+      case Qt::Key_Delete:
+	if( keyEvent->modifiers()==Qt::NoModifier )
+	  {
+	  emit DeleteLayerRequested();
+
+	  return true;
+	  }
+	else if( keyEvent->modifiers()==Qt::ShiftModifier )
+	  {
+	  emit DeleteAllLayersRequested();
+
+	  return true;
+	  }
+	break;
+      }
+    }
+    break;
+    //
+    // MOUSE-WHEEL
+    case QEvent::Wheel :
+    {
+    QWheelEvent * wheelEvent = dynamic_cast< QWheelEvent * >( event );
+    assert( wheelEvent!=NULL );
+
+    if( wheelEvent->modifiers()==Qt::ControlModifier )
+      {
+      emit RotateLayersRequested(
+    	wheelEvent->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)
+      );
+
+      return true;
+      }
+    }
+    break;
+    //
+    // other.
+    default:
+      break;
+    }
+
+  return false;
 }
 
 /*******************************************************************************/
@@ -168,6 +277,17 @@ LayerStackWidget
 }
 
 /*******************************************************************************/
+void
+LayerStackWidget
+::InstallEventFilter( QObject * filter )
+{
+  assert( m_UI!=NULL );
+  assert( m_UI->treeView!=NULL );
+
+  m_UI->treeView->installEventFilter( filter );
+}
+
+/*******************************************************************************/
 // void
 // LayerStackWidget
 // ::SetModel( LayerStackItemModel * itemModel )
@@ -182,6 +302,16 @@ LayerStackWidget
 //   delete itemSelectionModel;
 //   itemSelectionModel = NULL;
 // }
+
+/*******************************************************************************/
+void
+LayerStackWidget
+::SetApplyEnabled( bool enabled )
+{
+  assert( m_UI->applyButton!=NULL );
+
+  m_UI->applyButton->setEnabled( enabled );
+}
 
 /*******************************************************************************/
 void
@@ -214,12 +344,66 @@ LayerStackWidget
 }
 
 /*******************************************************************************/
+void
+LayerStackWidget
+::SetDeleteEnabled( bool enabled )
+{
+  assert( m_UI!=NULL );
+
+  assert( m_UI->deleteButton!=NULL );
+
+  m_UI->deleteButton->setEnabled( enabled );
+}
+
+/*******************************************************************************/
+void
+LayerStackWidget
+::SetMoveEnabled( bool enabled )
+{
+  assert( m_UI!=NULL );
+
+  assert( m_UI->upButton!=NULL );
+  assert( m_UI->downButton!=NULL );
+  assert( m_UI->topButton!=NULL );
+  assert( m_UI->bottomButton!=NULL );
+
+  m_UI->upButton->setEnabled( enabled );
+  m_UI->downButton->setEnabled( enabled );
+  m_UI->topButton->setEnabled( enabled );
+  m_UI->bottomButton->setEnabled( enabled );
+}
+
+/*******************************************************************************/
+void
+LayerStackWidget
+::SetProjectionEnabled( bool enabled )
+{
+  assert( m_UI!=NULL );
+
+  assert( m_UI->projectionButton!=NULL );
+
+  m_UI->projectionButton->setEnabled( enabled );
+}
+
+/*******************************************************************************/
+void
+LayerStackWidget
+::SetReloadEnabled( bool enabled )
+{
+  assert( m_UI!=NULL );
+
+  assert( m_UI->reloadButton!=NULL );
+
+  m_UI->reloadButton->setEnabled( enabled );
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void
 LayerStackWidget
 ::OnCurrentRowChanged( const QModelIndex & current,
-                       const QModelIndex & previous )
+                       const QModelIndex & )
 {
   // qDebug()
   //   << this
@@ -232,7 +416,7 @@ LayerStackWidget
 void
 LayerStackWidget
 ::OnSelectionChanged( const QItemSelection & selected,
-                      const QItemSelection & deselected )
+                      const QItemSelection & )
 {
   // qDebug()
   //   << this

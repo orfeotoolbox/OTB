@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -62,7 +62,7 @@ namespace
  *
  * It is defined (statically) as a constant for translation purposes.
  */
-const char*
+char const * const
 ENHANCED_BAND_NAMES[ 10 ] = {
   QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Red" ),
   QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Green" ),
@@ -201,12 +201,22 @@ AbstractImageModel
     qBandNames1 =  ToQStringList( stdBandNames1 );
     QStringList qBandNames2( ToQStringList( stdBandNames2 ) );
 
+    assert( qApp!=NULL );
+
     QStringList::iterator it1( qBandNames1.begin() );
     QStringList::const_iterator it2( qBandNames2.begin() );
+
     for( ; it1!=qBandNames1.end(); ++it1, ++it2 )
       {
       if( !it2->isEmpty() )
-        it1->append( " (" + *it2 + ")" );
+        it1->append(
+	  " (" +
+	  qApp->translate(
+	    "mvd::AbstractImageModel",
+	    it2->toAscii().constData()
+	  )
+	  + ")"
+	);
       }
     }
 
@@ -220,6 +230,8 @@ void
 AbstractImageModel
 ::RefreshHistogram( void* const context )
 {
+  // qDebug() << this << "::RefreshHistogram(" << context << ")";
+
   // Remember existing child histogram.
   HistogramModel* currentHistogramModel = GetHistogramModel();
 

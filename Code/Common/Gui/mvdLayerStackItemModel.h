@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -22,7 +22,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 
 /*****************************************************************************/
@@ -44,6 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -59,6 +60,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class AbstractImageModel;
 class AbstractLayerModel;
 class StackedLayerModel;
 
@@ -70,7 +72,7 @@ class StackedLayerModel;
  *
  * \brief WIP.
  */
-class Monteverdi2_EXPORT LayerStackItemModel :
+class Monteverdi_EXPORT LayerStackItemModel :
     public QAbstractItemModel
 {
 
@@ -89,15 +91,16 @@ public:
     COLUMN_NONE = -1,
     //
     COLUMN_PROJ = 0,
+    COLUMN_RESOLUTION,
     COLUMN_NAME,
-    // COLUMN_I,
-    // COLUMN_J,
-    // COLUMN_R,
-    // COLUMN_G,
-    // COLUMN_B,
-    // COLUMN_X,
-    // COLUMN_Y,
-    // COLUMN_EPSG,
+    COLUMN_EFFECT,
+    COLUMN_I,
+    COLUMN_J,
+    COLUMN_R,
+    COLUMN_G,
+    COLUMN_B,
+    COLUMN_X,
+    COLUMN_Y,
     //
     COLUMN_COUNT,
   };
@@ -114,7 +117,6 @@ public:
     ITEM_ROLE_B,
     ITEM_ROLE_X,
     ITEM_ROLE_Y,
-    ITEM_ROLE_EPSG,
     //
     ITEM_ROLE_NONE,
     //
@@ -131,6 +133,10 @@ public:
 
   /** \brief Destructor. */
   virtual ~LayerStackItemModel();
+
+  /**
+   */
+  static const AbstractLayerModel * GetLayer( const QModelIndex & );
 
   /**
    */
@@ -195,6 +201,17 @@ public:
     insertRows( int row,
                 int count,
                 const QModelIndex & parent = QModelIndex() );
+
+  /**
+   * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#mimeData
+   */
+  virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
+
+  /**
+   * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#mimeTypes
+   */
+  virtual QStringList mimeTypes() const;
+
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
    */
@@ -288,6 +305,9 @@ private slots:
   void OnLayerDeleted( size_t );
   void OnLayerVisibilityChanged( AbstractLayerModel *, bool );
   void OnReferenceChanged( size_t );
+  void OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & );
+  void OnImageSettingsUpdated( AbstractImageModel * );
+  void OnResolutionsChanged( const PixelInfo::Vector & );
 };
 
 } // end namespace 'mvd'.

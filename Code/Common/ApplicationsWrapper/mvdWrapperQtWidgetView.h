@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -23,7 +23,7 @@
 // Configuration include.
 //// Included at first position before any other ones.
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
 /*****************************************************************************/
@@ -77,7 +77,7 @@ namespace Wrapper
  * \brief WIP.
  */
 
-class Monteverdi2_EXPORT QtWidgetView :
+class Monteverdi_EXPORT QtWidgetView :
     public QWidget
 {
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -97,8 +97,12 @@ class Monteverdi2_EXPORT QtWidgetView :
 // Public methods.
 public:
 
+  /**
+   */
+  static char const * const OBJECT_NAME;
+
   /** \brief Constructor. */
-  QtWidgetView( otb::Wrapper::Application::Pointer otbApp,
+  QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
                 bool isStandalone,
 		QWidget* parent =0,
 		Qt::WindowFlags flags =0 );
@@ -142,14 +146,6 @@ public:
 // Public SLOTS.
 public slots:
 
-  // slot in charge of emiting a signal to the catalogue mainWindow.
-  // when received, the main application need to get the output
-  // image filename{s} set by the user in this OTB application (if any).
-  void OnApplicationExecutionDone( int );
-
-  // application closed
-  void CloseSlot();
-
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -162,6 +158,21 @@ signals:
   void ExecuteAndWriteOutput();
 
   void ExecutionDone( int nbOutputs );
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
+
+//
+// Protected methods.
+protected:
+
+  //
+  // QWidget overloads.
+
+  virtual void closeEvent( QCloseEvent * event );
+
+//
+// Protected attributes.
+protected:
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -206,6 +217,11 @@ private:
 //
 // Slots.
 private slots:
+
+  // slot in charge of emiting a signal to the catalogue mainWindow.
+  // when received, the main application need to get the output
+  // image filename{s} set by the user in this OTB application (if any).
+  void OnApplicationExecutionDone( int );
 
   void UpdateMessageAfterApplicationReady(bool val);
 
@@ -287,7 +303,7 @@ QtWidgetView
 inline
 void
 QtWidgetView
-::OnProgressReportEnd( int status )
+::OnProgressReportEnd( int )
 {
   SetClosable( true );
 }

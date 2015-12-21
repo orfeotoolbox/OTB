@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -74,6 +74,7 @@ ImageViewWidget
                    const QGLWidget* shareWidget,
                    Qt::WindowFlags flags ) :
   QGLWidget( parent, shareWidget, flags ),
+  m_IsPickingEnabled( true ),
   m_Manipulator( NULL ),
   m_Renderer( NULL )
 #if USE_XP_REGION_OPTIM
@@ -179,23 +180,6 @@ ImageViewWidget
       SLOT( OnReferenceChanged( size_t ) )
     );
 
-#if 0
-    QObject::disconnect(
-      model,
-      SIGNAL( ContentChanged() ),
-      // from:
-      this,
-      SLOT( UpdateScene() )
-    );
-
-    QObject::disconnect(
-      model,
-      SIGNAL( ContentChanged() ),
-      // from:
-      this,
-      SLOT( updateGL() )
-    );
-#else
     QObject::disconnect(
       model,
       SIGNAL( ContentChanged() ),
@@ -203,7 +187,6 @@ ImageViewWidget
       this,
       SLOT( OnContentChanged() )
     );
-#endif
 
     QObject::disconnect(
       model,
@@ -230,6 +213,22 @@ ImageViewWidget
       model,
       SLOT( RotateLayers( int ) )
     );
+
+    QObject::disconnect(
+      m_Manipulator,
+      SIGNAL( LayerToTopRequested() ),
+      // from:
+      model,
+      SLOT( MoveCurrentToTop() )
+    );
+
+    QObject::disconnect(
+      m_Manipulator,
+      SIGNAL( LayerToBottomRequested() ),
+      // from:
+      model,
+      SLOT( MoveCurrentToBottom() )
+    );
     }
   }
 
@@ -239,6 +238,9 @@ ImageViewWidget
   // Insert image-models into image-view renderer.
   m_Renderer->SetLayerStack( stackedLayerModel );
 
+  // Coverity-19846.
+  if( stackedLayerModel==NULL )
+    return;
 
   //
   // Connect layer-stack model to this widget manipulator.
@@ -248,6 +250,22 @@ ImageViewWidget
     // to:
     stackedLayerModel,
     SLOT( RotateLayers( int ) )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( LayerToTopRequested() ),
+    // to:
+    stackedLayerModel,
+    SLOT( MoveCurrentToTop() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( LayerToBottomRequested() ),
+    // to:
+    stackedLayerModel,
+    SLOT( MoveCurrentToBottom() )
   );
 
   //
@@ -279,23 +297,6 @@ ImageViewWidget
     SLOT( updateGL() )
   );
 
-#if 0
-  QObject::connect(
-    stackedLayerModel,
-    SIGNAL( ContentChanged() ),
-    // to:
-    this,
-    SLOT( UpdateScene() )
-  );
-
-  QObject::connect(
-    stackedLayerModel,
-    SIGNAL( ContentChanged() ),
-    // to:
-    this,
-    SLOT( updateGL() )
-  );
-#else
   QObject::connect(
     stackedLayerModel,
     SIGNAL( ContentChanged() ),
@@ -303,7 +304,6 @@ ImageViewWidget
     this,
     SLOT( OnContentChanged() )
   );
-#endif
 
   QObject::connect(
     stackedLayerModel,
@@ -370,7 +370,7 @@ ImageViewWidget
     SIGNAL( RefreshViewRequested() ),
     // to:
     this,
-    SLOT( updateGL() )
+    SLOT( OnRefreshViewRequested() )
   );
 
   QObject::connect(
@@ -383,33 +383,25 @@ ImageViewWidget
 
   QObject::connect(
     m_Manipulator,
-    SIGNAL(
-      RoiChanged(
-        const PointType&, const SizeType&, const SpacingType&, const PointType&
-      )
+    SIGNAL( RoiChanged(
+	      const PointType &, const SizeType &, const SpacingType &, const PointType & )
     ),
     // to:
     this,
-    SIGNAL(
-      RoiChanged(
-        const PointType&, const SizeType&, const SpacingType&, const PointType&
-      )
+    SIGNAL( RoiChanged(
+	      const PointType&, const SizeType&, const SpacingType&, const PointType& )
     )
   );
 
   QObject::connect(
     m_Manipulator,
-    SIGNAL(
-      RoiChanged(
-        const PointType&, const SizeType&, const SpacingType&, const PointType&
-      )
+    SIGNAL( RoiChanged(
+        const PointType &, const SizeType &, const SpacingType &, const PointType & )
     ),
     // to:
     this,
-    SLOT(
-      OnRoiChanged(
-        const PointType&, const SizeType&, const SpacingType&, const PointType&
-      )
+    SLOT( OnRoiChanged(
+	    const PointType &, const SizeType &, const SpacingType &, const PointType & )
     )
   );
 
@@ -456,6 +448,22 @@ ImageViewWidget
     // to:
     this,
     SLOT( OnSelectNextLayerRequested() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( SelectFirstLayerRequested() ),
+    // to:
+    this,
+    SLOT( OnSelectFirstLayerRequested() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( SelectLastLayerRequested() ),
+    // to:
+    this,
+    SLOT( OnSelectLastLayerRequested() )
   );
 
   QObject::connect(
@@ -592,27 +600,12 @@ ImageViewWidget
   //
 
   QObject::connect(
-    this,
-    SIGNAL(
-      PhysicalCursorPositionChanged(
-        const QPoint &,
-        const PointType &,
-        const PointType &,
-        const DefaultImageType::PixelType &
-      )
-    ),
-    // to:
     m_Renderer,
-    SLOT(
-      OnPhysicalCursorPositionChanged(
-        const QPoint &,
-        const PointType &,
-        const PointType &,
-        const DefaultImageType::PixelType &
-      )
-    )
+    SIGNAL( ClearProjectionRequired() ),
+    // to:
+    this,
+    SLOT( OnClearProjectionRequired() )
   );
-
 
   QObject::connect(
     m_Renderer,
@@ -679,6 +672,21 @@ ImageViewWidget
   m_Renderer->PaintGL( context );
 
   //
+  // Post-rendering tasks.
+  if( !m_Renderer->IsBypassRenderingEnabled() &&
+      m_IsPickingEnabled )
+    {
+    StackedLayerModel * layerStack = GetLayerStack();
+    assert( layerStack!=NULL );
+
+    layerStack->BeginEditResolutions();
+
+    m_Renderer->GetResolutions( layerStack->PixelInfos() );
+
+    layerStack->EndEditResolutions();
+    }
+
+  //
   // Relase rendering-context.
   delete context;
   context = NULL;
@@ -703,42 +711,67 @@ ImageViewWidget
 {
   assert( event!=NULL );
 
+  // Superclass default behaviour.
   QGLWidget::mouseMoveEvent( event );
 
+  // Delegate behaviour.
   m_Manipulator->MouseMoveEvent( event );
 
-  // Qt::MouseButtons buttons = event->buttons();
-  // Qt::KeyboardModifiers modifiers = event->modifiers();
-
-
-  // Transform coordinates from widget space to viewport space.
-  assert( m_Manipulator!=NULL );
-
-  PointType in;
-
-  m_Manipulator->Transform( in, event->pos() );
-
-  // qDebug() << "--------";
-  // qDebug() << "mouse:" << in[ 0 ] << "," << in[ 1 ];
-
   //
-  // Pick pixel of point in viewport space and return point in image
-  // space.
-  assert( m_Renderer!=NULL );
-
-  PointType out;
-  DefaultImageType::PixelType pixel;
-
-  m_Renderer->Pick( in, out, pixel );
-
-  // qDebug() << "PhysicalCursorPositionChanged(" << event->pos() << ")";
-
-  emit PhysicalCursorPositionChanged( event->pos(), in, out, pixel );
-
-  {
-  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  // Get layer-stack.
+  StackedLayerModel * stackedLayerModel = GetLayerStack();
   assert( stackedLayerModel!=NULL );
 
+  //
+  // Pixel-picking special behaviour.
+  //
+  if( m_IsPickingEnabled )
+    {
+    // Transform coordinates from widget space to viewport space.
+    assert( m_Manipulator!=NULL );
+
+    PointType ptView;
+
+    m_Manipulator->Transform( ptView, event->pos() );
+
+    //
+    // Pick pixel of point in viewport space and return point in image
+    // space.
+    assert( m_Renderer!=NULL );
+
+    stackedLayerModel->BeginEditPixelInfo();
+
+    PixelInfo::Vector & pixels = stackedLayerModel->PixelInfos();
+
+    m_Renderer->Pick( ptView, pixels );
+
+    m_Renderer->UpdatePixelInfo( event->pos(), ptView, pixels );
+
+    stackedLayerModel->EndEditPixelInfo( event->pos(), ptView );
+
+    //
+    // Emit reference-layer pixel data.
+    emit PixelInfoChanged( event->pos(), ptView, stackedLayerModel->PixelInfos() );
+
+    if( stackedLayerModel->HasCurrent() )
+      emit PhysicalCursorPositionChanged(
+	event->pos(),
+	ptView,
+	pixels[ stackedLayerModel->GetCurrentIndex() ].m_Point,
+	pixels[ stackedLayerModel->GetCurrentIndex() ].m_Pixel );
+    else
+      emit PhysicalCursorPositionChanged(
+	event->pos(),
+	ptView,
+	PointType(),
+	DefaultImageType::PixelType()
+      );
+    }
+
+  //
+  // Update view depending on shader status special behaviour.
+  //
+  {
   for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
        it!=stackedLayerModel->End();
        ++ it )
@@ -800,6 +833,18 @@ ImageViewWidget
   QGLWidget::mouseReleaseEvent( event );
 
   m_Manipulator->MouseReleaseEvent(event);
+}
+
+/*******************************************************************************/
+void
+ImageViewWidget
+::mouseDoubleClickEvent( QMouseEvent* event )
+{
+  assert( event!=NULL );
+
+  QGLWidget::mouseDoubleClickEvent( event );
+
+  m_Manipulator->MouseDoubleClickEvent( event );
 }
 
 /*******************************************************************************/
@@ -956,6 +1001,9 @@ void
 ImageViewWidget
 ::Center( ZoomType zoom )
 {
+  // if( zoom==ZOOM_TYPE_EXTENT )
+  //   qDebug() << this << "::Center( ZOOM_TYPE_EXTENT );";
+
   assert(
     zoom==ZOOM_TYPE_EXTENT || zoom==ZOOM_TYPE_FULL || zoom==ZOOM_TYPE_LAYER
   );
@@ -963,144 +1011,29 @@ ImageViewWidget
   assert( m_Renderer!=NULL );
   assert( m_Manipulator!=NULL );
 
-
   PointType center;
   SpacingType spacing;
 
   center[ 0 ] = center[ 1 ] = 0.0;
   spacing[ 0 ] = spacing[ 1 ] = 1.0;
 
+  bool result = false;
 
   switch( zoom )
     {
     case ZOOM_TYPE_EXTENT:
-    {
-    // qDebug() << "ZOOM_TYPE_EXTENT";
-
-    //
-    // Calculate center
-    PointType origin;
-    PointType extent;
-
-    m_Renderer->GetViewExtent( origin, extent );
-
-    center.SetToMidPoint( origin, extent );
-
-    //
-    // Get spacing of reference layer.
-    const AbstractLayerModel * layer = m_Renderer->GetReferenceModel();
-    assert( layer!=NULL );
-
-    if( layer->inherits( AbstractImageModel::staticMetaObject.className() ) )
-      {
-      const AbstractImageModel * imageModel =
-        qobject_cast< const AbstractImageModel * >( layer );
-
-      assert( imageModel!=NULL );
-
-      spacing = imageModel->GetSpacing();
-
-      assert( spacing[ 0 ]!=0.0 );
-      assert( spacing[ 1 ]!=0.0 );
-      }
-    else
-      assert( false && "Unhandled AbstractLayerModel derived type." );
-
-    //
-    // Get Viewport size.
-    SizeType size( m_Manipulator->GetViewportSize() );
-
-    //
-    // Calculate scale.
-    double scale = 
-      std::max(
-        fabs( extent[ 0 ] - origin[ 0 ] ) / static_cast< double >( size[ 0 ] ),
-        fabs( extent[ 1 ] - origin[ 1 ] ) / static_cast< double >( size[ 1 ] )
-      );
-
-    //
-    // Calculate spacing.
-    //
-    // Scale of Viewport is a spacing, sign of spacing needs to be
-    // reported back.
-    spacing[ 0 ] = ( spacing[ 0 ] >=0.0 ? 1.0 : -1.0 ) * scale;
-    spacing[ 1 ] = ( spacing[ 1 ] >=0.0 ? 1.0 : -1.0 ) * scale;
-    }
-    break;
+      result = m_Renderer->ZoomToExtent( center, spacing );
+      break;
 
     case ZOOM_TYPE_FULL:
-    {
-    // qDebug() << "ZOOM_TYPE_FULL";
-
-    const AbstractLayerModel * layer = m_Renderer->GetReferenceModel();
-    assert( layer!=NULL );
-
-    if( layer->inherits( AbstractImageModel::staticMetaObject.className() ) )
-      {
-      const AbstractImageModel * imageModel =
-        qobject_cast< const AbstractImageModel * >( layer );
-        
-      assert( imageModel!=NULL );
-
-      spacing = imageModel->GetSpacing();
-      }
-    else
-      assert( false && "Unhandled AbstractLayerModel derived class." );
-
-    PointType origin;
-    PointType extent;
-
-    m_Renderer->GetReferenceExtent( origin, extent );
-
-    center.SetToMidPoint( origin, extent );
-    }
-    break;
+      assert( GetLayerStack()!=NULL );
+      result = m_Renderer->ZoomToFull( GetLayerStack()->GetCurrentKey(), center, spacing );
+      break;
 
     case ZOOM_TYPE_LAYER:
-    {
-    // qDebug() << "ZOOM_TYPE_LAYER";
-
-    assert( GetLayerStack()!=NULL );
-
-    //
-    // Calculate center
-    PointType origin;
-    PointType extent;
-
-    m_Renderer->GetLayerExtent(
-      m_Renderer->GetLayerStack()->GetCurrentKey(),
-      origin,
-      extent
-    );
-
-    center.SetToMidPoint( origin, extent );
-
-    //
-    // Get Viewport size.
-    SizeType size( m_Manipulator->GetViewportSize() );
-
-    //
-    // Calculate scale.
-    double scale = 
-      std::max(
-        fabs( extent[ 0 ] - origin[ 0 ] ) / static_cast< double >( size[ 0 ] ),
-        fabs( extent[ 1 ] - origin[ 1 ] ) / static_cast< double >( size[ 1 ] )
-      );
-
-    //
-    // Get spacing of layer in viewport system.
-    spacing[ 0 ] = ( extent[ 0 ] - origin[ 0 ] ) / size[ 0 ];
-    spacing[ 1 ] = ( extent[ 1 ] - origin[ 1 ] ) / size[ 1 ];
-
-    //
-    // Calculate spacing.
-    //
-    // Scale of Viewport is a spacing, sign of spacing needs to be
-    // reported back.
-    spacing[ 0 ] = ( spacing[ 0 ] >=0.0 ? 1.0 : -1.0 ) * scale;
-    spacing[ 1 ] = ( spacing[ 1 ] >=0.0 ? 1.0 : -1.0 ) * scale;
-    }
-    break;
+      assert( GetLayerStack()!=NULL );
+      result = m_Renderer->ZoomToLayer( GetLayerStack()->GetCurrentKey(), center, spacing );
+      break;
 
     default:
       assert( false && "Unhandled ImageViewWidget::ZoomType value!" );
@@ -1109,8 +1042,11 @@ ImageViewWidget
 
   //
   // Center on middle point.
-  m_Manipulator->SetSpacing( spacing );
-  m_Manipulator->CenterOn( center );
+  if( result )
+    {
+    m_Manipulator->SetSpacing( spacing );
+    m_Manipulator->CenterOn( center );
+    }
 }
 
 /*******************************************************************************/
@@ -1181,12 +1117,45 @@ ImageViewWidget
   return m_Renderer->SetBypassRenderingEnabled( isEnabled );
 }
 
+/*****************************************************************************/
+bool
+ImageViewWidget
+::IsPickingEnabled() const
+{
+  return m_IsPickingEnabled;
+}
+
+/*****************************************************************************/
+void
+ImageViewWidget
+::SetPickingEnabled( bool isEnabled )
+{
+  m_IsPickingEnabled = isEnabled;
+}
+
+/*******************************************************************************/
+bool
+ImageViewWidget
+::ApplyFixedZoomType()
+{
+  assert( m_Manipulator!=NULL );
+
+  ZoomType zoom = m_Manipulator->GetFixedZoomType();
+
+  if( zoom==ZOOM_TYPE_NONE || zoom>=ZOOM_TYPE_COUNT )
+    return false;
+
+  Center( zoom );
+
+  return true;
+}
+
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /******************************************************************************/
 void
 ImageViewWidget
-::CenterOn( const IndexType& index )
+::CenterOnSelected( const IndexType & index )
 {
   /*
   assert( m_Renderer!=NULL );
@@ -1212,9 +1181,15 @@ ImageViewWidget
 
   assert( m_Renderer!=NULL );
 
+  const StackedLayerModel * layerStack = m_Renderer->GetLayerStack();
+  assert( layerStack!=NULL );
+
+  if( !layerStack->HasCurrent() )
+    return;
+
   PointType point;
 
-  if( !m_Renderer->Transform( point, index, false ) )
+  if( !m_Renderer->TransformToView( point, layerStack->GetCurrentKey(), index, false ) )
     return;
 
   assert( m_Manipulator!=NULL );
@@ -1235,7 +1210,8 @@ ImageViewWidget
   assert( layerStack!=NULL );
 
   AbstractLayerModel * layer = layerStack->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -1247,6 +1223,7 @@ ImageViewWidget
     assert( imageModel!=NULL );
 
     const VectorImageSettings & settings = imageModel->GetSettings();
+    const ImageProperties * properties = imageModel->GetProperties();
 
     for( StackedLayerModel::ConstIterator it( layerStack->Begin() );
 	 it!=layerStack->End();
@@ -1258,12 +1235,87 @@ ImageViewWidget
 	  VectorImageModel * vim =
 	    qobject_cast< VectorImageModel * >( it->second );
 
-	  vim->SetSettings( settings  );
+	  //
+	  // Properties.
+	  {
+	    bool needsRefresh = *vim->GetProperties() != *properties;
+
+	    vim->SetProperties( *properties );
+
+	    if( needsRefresh )
+	      {
+	      // qDebug() << "Refreshing histogram...";
+
+	      vim->RefreshHistogram();
+	      }
+	  }
+	  //
+	  // Settings
+	  {
+	    // Find RGB-channels max component.
+	    VectorImageSettings::ChannelVector::value_type rgbChannel = 0;
+	    {
+	      const VectorImageSettings::ChannelVector & rgb(
+		settings.GetRgbChannels()
+	      );
+
+	      for( VectorImageSettings::ChannelVector::const_iterator it(
+		     rgb.begin()
+		   );
+		   it!=rgb.end();
+		   ++it )
+		if( *it > rgbChannel )
+		  rgbChannel = *it;
+	    }
+
+	    CountType nbComponents = vim->GetNbComponents();
+
+	    // qDebug()
+	    //   << vim->GetFilename()
+	    //   << nbComponents
+	    //   << rgbChannel
+	    //   << settings.GetGrayChannel()
+	    //   << ( settings.GetGrayChannel()<nbComponents &&
+	    // 	   rgbChannel<nbComponents
+	    // 	   ? "true"
+	    // 	   : "false" );
+
+	    if( rgbChannel<nbComponents &&
+		settings.GetGrayChannel()<nbComponents )
+	      vim->SetSettings( settings );
+	  }
 	  }
 	}
 
     emit ModelUpdated();
     }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnClearProjectionRequired()
+{
+  // qDebug() << this << "::OnClearProjectionRequested()";
+
+  assert( m_Manipulator!=NULL );
+  
+  m_Manipulator->SetWkt( std::string() );
+  m_Manipulator->SetKeywordList( otb::ViewSettings::KeywordListType() );
+
+  // m_Manipulator->SetOrigin( imageModel->GetOrigin() );
+  // m_Manipulator->SetSpacing( imageModel->GetSpacing() );
+  // m_Manipulator->SetNativeSpacing( imageModel->GetNativeSpacing() );
+
+  assert( m_Renderer!=NULL );
+
+  if( m_Renderer->IsBypassRenderingEnabled() )
+    return;
+
+  ZoomToExtent();
+
+  // Done in ::ZoomToExtent().
+  // updateGL();
 }
 
 /******************************************************************************/
@@ -1275,7 +1327,8 @@ ImageViewWidget
 
   UpdateScene();
 
-  updateGL();
+  if( !ApplyFixedZoomType() )
+    updateGL();
 }
 
 /******************************************************************************/
@@ -1287,7 +1340,8 @@ ImageViewWidget
 
   UpdateScene();
 
-  updateGL();
+  if( !ApplyFixedZoomType() )
+    updateGL();
 }
 
 /******************************************************************************/
@@ -1373,13 +1427,25 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
-::OnReferenceChanged( size_t index )
+::OnReferenceChanged( size_t )
 {
   // qDebug() << this << "::OnReferenceChanged(" << index << ")";
 
   assert( m_Renderer!=NULL );
 
   m_Renderer->RefreshScene();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnRefreshViewRequested()
+{
+  // qDebug() << this << "::OnRefreshViewRequested()";
+
+  updateGL();
 }
 
 /******************************************************************************/
@@ -1539,19 +1605,17 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
-::OnRoiChanged( const PointType& point,
-                const SizeType& size,
-                const SpacingType& spacing,
-                const PointType& center )
+::OnRoiChanged( const PointType &,
+                const SizeType &,
+                const SpacingType & spacing,
+                const PointType & center )
 {
   assert( m_Renderer!=NULL );
 
-  /*
-  qDebug()
-    << this << "::OnRoiChanged("
-    << "[" << point[ 0 ] << "," << point[ 1 ] << "]"
-    << "[" << center[ 0 ] << "," << center[ 1 ] << "]";
-  */
+  // qDebug()
+  //   << this << "::OnRoiChanged("
+  //   << "[" << point[ 0 ] << "," << point[ 1 ] << "]"
+  //   << "[" << center[ 0 ] << "," << center[ 1 ] << "]";
 
   emit CenterChanged( center );
 
@@ -1578,10 +1642,14 @@ ImageViewWidget
   double sy = ( spacing[ 1 ]>0.0 ? 1.0 : -1.0 ) / spacing[ 1 ];
 #endif
 
-  /*
-  qDebug() << "sx:" << sx << "; sy:" << sy;
-  qDebug() << "rsx:" << rsx << "; rsy:" << rsy;
-  */
+  
+  // qDebug() << "sx:" << sx << "; sy:" << sy;
+  // qDebug() << "rsx:" << rsx << "; rsy:" << rsy;
+
+  // qDebug() << this << "::updateGL()";
+
+  // Refresh view.
+  updateGL();
 
   // Emit absolute scale.
   emit ScaleChanged( rsx, rsy );
@@ -1689,6 +1757,40 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
+::OnSelectFirstLayerRequested()
+{
+  // qDebug() << this << "::OnSelectFirstLayerRequested()";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  stackedLayerModel->SelectFirst();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnSelectLastLayerRequested()
+{
+  // qDebug() << this << "::OnSelectLastLayerRequested()";
+
+  assert( m_Renderer!=NULL );
+
+  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
+  assert( stackedLayerModel!=NULL );
+
+  stackedLayerModel->SelectLast();
+
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
 ::OnSelectPreviousLayerRequested()
 {
   // qDebug() << this << "::OnSelectPreviousLayerRequested()";
@@ -1725,6 +1827,8 @@ void
 ImageViewWidget
 ::OnSetProjectionRequired()
 {
+  // qDebug() << this << "::OnSetProjection()";
+
   StackedLayerModel * stackedLayerModel = GetLayerStack();
 
   if( stackedLayerModel==NULL )
@@ -1759,6 +1863,8 @@ ImageViewWidget
     {
     assert( false && "Unhandled AbstractLayerModel derived type." );
     }
+
+  ApplyFixedZoomType();
 }
 
 /******************************************************************************/
@@ -1776,7 +1882,13 @@ ImageViewWidget
   if( !stackedLayerModel->HasCurrent() )
     return;
 
-  stackedLayerModel->SetReference( stackedLayerModel->GetCurrentKey() );
+  size_t unk = 0;
+  size_t gcs = 0;
+
+  stackedLayerModel->CountSRT( unk, gcs, gcs, gcs );
+
+  if( unk==0 )
+    stackedLayerModel->SetReference( stackedLayerModel->GetCurrentKey() );
 }
 
 /******************************************************************************/
@@ -2003,6 +2115,8 @@ void
 ImageViewWidget
 ::OnUpdateProjectionRequired()
 {
+  // qDebug() << this << "::OnUpdateProjectionRequired()";
+
   // Reminder: specific #include "mvdImageViewRenderer.h"
   assert( m_Manipulator!=NULL );
 
@@ -2082,11 +2196,11 @@ ImageViewWidget
 {
   assert( m_Renderer!=NULL );
 
-  if( m_Renderer->GetReferenceModel< AbstractImageModel >()==NULL )
-    return;
+  // if( m_Renderer->GetReferenceModel< AbstractImageModel >()==NULL )
+  //   return;
 
   // Scale and center.
-  Center( ImageViewWidget::ZOOM_TYPE_EXTENT );
+  Center( ZOOM_TYPE_EXTENT );
 
   // Refresh view.
   updateGL();
@@ -2100,7 +2214,7 @@ ImageViewWidget
   assert( m_Renderer!=NULL );
 
   // Scale and center.
-  Center( ImageViewWidget::ZOOM_TYPE_LAYER );
+  Center( ZOOM_TYPE_LAYER );
 
   // Refresh view.
   updateGL();
@@ -2113,11 +2227,11 @@ ImageViewWidget
 {
   assert( m_Renderer!=NULL );
 
-  if( m_Renderer->GetReferenceModel< AbstractImageModel >()==NULL )
-    return;
+  // if( m_Renderer->GetReferenceModel< AbstractImageModel >()==NULL )
+  //   return;
 
   // Scale and center.
-  Center( ImageViewWidget::ZOOM_TYPE_FULL );
+  Center( ZOOM_TYPE_FULL );
 
   // Refresh view.
   updateGL();

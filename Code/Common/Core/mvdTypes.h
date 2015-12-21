@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -24,7 +24,7 @@
 // Configuration include.
 //// Included at first position before any other ones.
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
 
@@ -135,48 +135,6 @@ namespace mvd
 /*******************************************************************************/
 /* Enumerations                                                                */
 
-/**
- */
-enum Bound
-{
-  BOUND_LOWER = 0,
-  BOUND_UPPER,
-  BOUND_COUNT
-};
-
-/**
- */
-enum Effect
-{
-  EFFECT_NONE = -1,
-  //
-  EFFECT_CHESSBOARD = 0,
-  EFFECT_GRADIENT,
-  EFFECT_LOCAL_CONTRAST,
-  EFFECT_LOCAL_TRANSLUCENCY,
-  EFFECT_NORMAL,
-  EFFECT_SPECTRAL_ANGLE,
-  EFFECT_SWIPE_H,
-  EFFECT_SWIPE_V,
-  //
-  EFFECT_COUNT
-};
-
-/**
- * Constant naming bound values.
- */
-extern
-const char*
-BOUND_NAMES[ BOUND_COUNT ];
-
-/**
- * Constant naming effect values.
- */
-Monteverdi2_EXPORT
-extern
-char const * const
-EFFECT_NAME[ EFFECT_COUNT ];
-
 /*******************************************************************************/
 /* Type definitions of scalar values.                                          */
 
@@ -186,7 +144,7 @@ typedef unsigned int CountType;
 
 /**
  */
-typedef Monteverdi2_FLOATING_TYPE RealType;
+typedef Monteverdi_FLOATING_TYPE RealType;
 
 /**
  */
@@ -227,19 +185,19 @@ typedef itk::Array< double > ParametersType;
 
 /**
  */
-typedef itk::ImageRegion< Monteverdi2_DIMENSION > ImageRegionType;
+typedef itk::ImageRegion< Monteverdi_DIMENSION > ImageRegionType;
 
 /**
  */
-typedef itk::Index< Monteverdi2_DIMENSION > IndexType;
+typedef itk::Index< Monteverdi_DIMENSION > IndexType;
 
 /**
  */
-typedef itk::Size< Monteverdi2_DIMENSION > SizeType;
+typedef itk::Size< Monteverdi_DIMENSION > SizeType;
 
 /**
  */
-typedef itk::ImageBase< Monteverdi2_DIMENSION > ImageBaseType;
+typedef itk::ImageBase< Monteverdi_DIMENSION > ImageBaseType;
 
 /*******************************************************************************/
 /* Type definitions for scalar/mono-band images.                               */
@@ -247,7 +205,7 @@ typedef itk::ImageBase< Monteverdi2_DIMENSION > ImageBaseType;
 /**
  */
 typedef
-otb::Image< ComponentType, Monteverdi2_DIMENSION >
+otb::Image< ComponentType, Monteverdi_DIMENSION >
 ScalarImageType;
 
 /**
@@ -266,7 +224,7 @@ otb::ImageFileWriter< ScalarImageType > ScalarImageFileWriterType;
 /**
  */
 typedef
-otb::VectorImage< ComponentType, Monteverdi2_DIMENSION >
+otb::VectorImage< ComponentType, Monteverdi_DIMENSION >
 VectorImageType;
 
 /**
@@ -299,6 +257,37 @@ typedef mvd::VectorImageType DefaultImageType;
 /**
  */
 typedef mvd::VectorImageFileReaderType DefaultImageFileReaderType;
+
+/**
+ */
+struct PixelInfo
+{
+  typedef std::vector< PixelInfo > Vector;
+
+  PixelInfo() :
+    m_Key(),
+    m_Point(),
+    m_Index(),
+    m_Pixel(),
+    m_HasPoint( false ),
+    m_HasIndex( false ),
+    m_HasPixel( false ),
+    m_HasResolution( false )
+  {
+  }
+
+  std::string m_Key;
+
+  DefaultImageType::PointType m_Point;
+  DefaultImageType::IndexType m_Index;
+  DefaultImageType::PixelType m_Pixel;
+  unsigned int m_Resolution;
+
+  bool m_HasPoint: 1;
+  bool m_HasIndex: 1;
+  bool m_HasPixel: 1;
+  bool m_HasResolution: 1;
+};
 
 /*******************************************************************************/
 /* Type definitions for wrapped applications                                   */

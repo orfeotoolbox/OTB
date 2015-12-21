@@ -5,14 +5,14 @@
 		<key>CFBundleExecutable</key>
 		<string>@EXECUTABLE_NAME@_start</string>
 		<key>CFBundleIconFile</key>
-		<string>Monteverdi2.icns</string>
+		<string>Monteverdi.icns</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 	  <key>CFBundleLongVersionString</key>
-	  <string>@Monteverdi2_VERSION_MAJOR@.@Monteverdi2_VERSION_MINOR@.@Monteverdi2_VERSION_PATCH@</string>
+	  <string>@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@.@Monteverdi_VERSION_PATCH@</string>
 	  <key>CFBundleShortVersionString</key>
-	  <string>@Monteverdi2_VERSION_MAJOR@.@Monteverdi2_VERSION_MINOR@</string>
+	  <string>@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@</string>
 	</dict>
 </plist>

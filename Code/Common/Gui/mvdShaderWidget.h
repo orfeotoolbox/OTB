@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -22,7 +22,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 
 /*****************************************************************************/
@@ -77,7 +77,7 @@ class ImageSettings;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class Monteverdi2_EXPORT ShaderWidget :
+class Monteverdi_EXPORT ShaderWidget :
   public QWidget,
   public ImageSettingsInterface
 {
@@ -93,10 +93,15 @@ class Monteverdi2_EXPORT ShaderWidget :
 public:
 
   /** \brief Constructor. */
-  ShaderWidget( QWidget * parent =NULL, Qt::WindowFlags flags =0 );
+  ShaderWidget( QWidget * parent =NULL,
+		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~ShaderWidget();
+
+  /**
+   */
+  void SetGLSL140Enabled( bool );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

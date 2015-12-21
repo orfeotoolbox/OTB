@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -24,7 +24,7 @@
 // Configuration include.
 //// Included at first position before any other ones.
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
 
@@ -97,7 +97,7 @@ class VectorImageModel;
  * for example, provide sessio management), the specialized instance
  * can be passed as argument of constructor.
  */
-class Monteverdi2_EXPORT I18nCoreApplication
+class Monteverdi_EXPORT I18nCoreApplication
   : public QObject
 {
 
@@ -118,6 +118,8 @@ public:
     SETTINGS_KEY_IS_SRTM_DIR_ACTIVE,
     SETTINGS_KEY_GEOID_PATH,
     SETTINGS_KEY_IS_GEOID_PATH_ACTIVE,
+    SETTINGS_KEY_RESOLUTION,
+    SETTINGS_KEY_TILE_SIZE,
     //
     SETTINGS_KEY_COUNT
   };
@@ -216,7 +218,7 @@ public:
    * \brief setup elevation management
    * 
    */
-  void ElevationSetup();
+  bool ElevationSetup();
 
   //
   // APPLICATION SETTINGS.
@@ -225,17 +227,32 @@ public:
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline bool HasSettingsKey( const SettingsKey& key ) const;
+  inline bool HasSettingsKey( SettingsKey ) const;
 
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline void StoreSettingsKey( const SettingsKey& key, const QVariant& value );
+  inline void StoreSettingsKey( SettingsKey, const QVariant& value );
 
   /**
    */
   // TODO: Move method into Application class.
-  inline QVariant RetrieveSettingsKey( const SettingsKey& key ) const;
+  inline QVariant RetrieveSettingsKey( SettingsKey ) const;
+
+  /**
+   */
+  // TODO: Move method into ApplicationSettings class.
+  inline bool HasSettingsKey( const QString & key ) const;
+
+  /**
+   */
+  // TODO: Move method into ApplicationSettings class.
+  inline void StoreSettingsKey( const QString & key, const QVariant& value );
+
+  /**
+   */
+  // TODO: Move method into Application class.
+  inline QVariant RetrieveSettingsKey( const QString & key ) const;
 
   /**
    */
@@ -319,6 +336,10 @@ public:
    */
   static
     void DeleteDatasetModel( const QString& hash );
+
+  //
+  // NON-STATIC methods.
+  //
 
   /**
    * \brief Get the cache directory.
@@ -442,21 +463,6 @@ protected:
    */
   inline void SynchronizeSettings() const;
 
-  /**
-   */
-  // TODO: Move method into ApplicationSettings class.
-  inline bool HasSettingsKey( const QString& key ) const;
-
-  /**
-   */
-  // TODO: Move method into ApplicationSettings class.
-  inline void StoreSettingsKey( const QString& key, const QVariant& value );
-
-  /**
-   */
-  // TODO: Move method into Application class.
-  inline QVariant RetrieveSettingsKey( const QString& key ) const;
-
 //
 // Protected attributes.
 protected:
@@ -532,7 +538,7 @@ private:
   /**
    * \brief Application settings 
    */
-  QSettings* m_Settings;
+  QSettings * m_Settings;
 
   /**
    * \brief AbstractModel of the Model-View-Controller design pattern
@@ -678,48 +684,34 @@ I18nCoreApplication
 inline
 bool
 I18nCoreApplication
-::HasSettingsKey( const SettingsKey& key ) const
+::HasSettingsKey( SettingsKey key ) const
 {
-  assert( m_Settings!=NULL );
-
-  SynchronizeSettings();
-
-  return m_Settings->contains( I18nCoreApplication::SETTINGS_KEYS[ key ] );
+  return HasSettingsKey( I18nCoreApplication::SETTINGS_KEYS[ key ] );
 }
 
 /*****************************************************************************/
 inline
 void
 I18nCoreApplication
-::StoreSettingsKey( const SettingsKey& key, const QVariant& value )
+::StoreSettingsKey( SettingsKey key, const QVariant & value )
 {
-  assert( m_Settings!=NULL );
-
-  // qDebug() << this << "::StoreSettingsKey(" << key << ", " << value << ")";
-
-  m_Settings->setValue( I18nCoreApplication::SETTINGS_KEYS[ key ], value );
-
-  SynchronizeSettings();
+  StoreSettingsKey( I18nCoreApplication::SETTINGS_KEYS[ key ], value );
 }
 
 /*****************************************************************************/
 inline
 QVariant
 I18nCoreApplication
-::RetrieveSettingsKey( const SettingsKey& key ) const
+::RetrieveSettingsKey( SettingsKey key ) const
 {
-  assert( m_Settings!=NULL );
-
-  SynchronizeSettings();
-
-  return m_Settings->value( I18nCoreApplication::SETTINGS_KEYS[ key ] );
+  return RetrieveSettingsKey( I18nCoreApplication::SETTINGS_KEYS[ key ] );
 }
 
 /*****************************************************************************/
 inline
 bool
 I18nCoreApplication
-::HasSettingsKey( const QString& key ) const
+::HasSettingsKey( const QString & key ) const
 {
   assert( m_Settings!=NULL );
 
@@ -732,7 +724,7 @@ I18nCoreApplication
 inline
 void
 I18nCoreApplication
-::StoreSettingsKey( const QString& key, const QVariant& value )
+::StoreSettingsKey( const QString & key, const QVariant& value )
 {
   assert( m_Settings!=NULL );
 
@@ -747,7 +739,7 @@ I18nCoreApplication
 inline
 QVariant
 I18nCoreApplication
-::RetrieveSettingsKey( const QString& key ) const
+::RetrieveSettingsKey( const QString & key ) const
 {
   assert( m_Settings!=NULL );
 
@@ -773,11 +765,11 @@ I18nCoreApplication
       break;
 
     case QSettings::AccessError:
-      throw SystemError( ToStdString( tr( "Settings-file access error." ) ) );
+      throw SystemError( ToStdString( tr( "Cannot access settings file." ) ) );
       break;
 
     case QSettings::FormatError:
-      throw SystemError( ToStdString( tr( "Settings-file format error." ) ) );
+      throw SystemError( ToStdString( tr( "Bad settings file format." ) ) );
       break;
 
     default:

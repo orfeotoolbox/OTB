@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -20,7 +20,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 
 /*****************************************************************************/
@@ -50,9 +50,10 @@
 
 enum ERROR_CODE
 {
-  ERROR_CODE_CACHE_DIR = -1,
-  ERROR_CODE_DATABASE = -2,
-  ERROR_CODE_GL_VERSION = -3,
+  ERROR_CODE_I18N = -1,
+  ERROR_CODE_CACHE_DIR = -2,
+  ERROR_CODE_DATABASE = -3,
+  ERROR_CODE_GL_VERSION = -4,
 };
 
 /*****************************************************************************/
@@ -78,8 +79,43 @@ main( int argc, char* argv[] )
 
   //
   // 1. Initialize application and sync settings.
-  mvd::Application application( &qtApp );
-  application.Initialize();
+  //
+  // Coverity-14835
+  // {
+  mvd::Application * application = NULL;
+
+  try
+    {
+    application = new mvd::Application( &qtApp );
+    assert( application!=NULL );
+
+    application->Initialize();
+    }
+  catch( std::exception & exc )
+    {
+    QMessageBox::StandardButton button =
+      QMessageBox::question(
+	NULL,
+	QCoreApplication::translate(
+	  PROJECT_NAME,
+	  "Question!"
+	),
+	QCoreApplication::translate(
+	  PROJECT_NAME,
+	  "The following exception has been caught while initializing the software:\n\n"
+	  "%1\n\n"
+	  "The application may not function as expected. Do you want to continue?"
+	)
+	.arg( exc.what() ),
+	QMessageBox::Yes | QMessageBox::No,
+	QMessageBox::Yes
+      );
+
+    if( button==QMessageBox::No )
+      return ERROR_CODE_I18N;
+    }
+  // }
+  // Coverity-14835
 
   //
   // 2. Initialize main-window (UI).
@@ -97,11 +133,11 @@ main( int argc, char* argv[] )
     QMessageBox::critical(
       &mainWindow,
       QCoreApplication::translate(
-	"Monteverdi2",
-	"Monteverdi2 - Critical error!"
+	PROJECT_NAME,
+	"Critical error!"
       ),
       QCoreApplication::translate(
-	"Monteverdi2",
+	PROJECT_NAME,
 	"Error while creating cache repository.\n\n"
 	"%1\n\n"
 	"Application will exit!"
@@ -116,7 +152,7 @@ main( int argc, char* argv[] )
   // 4. Initialize database.
   try
     {
-    mvd::CountType nb = application.OpenDatabase();
+    mvd::CountType nb = application->OpenDatabase();
 
     if( nb>0 )
       {
@@ -124,27 +160,27 @@ main( int argc, char* argv[] )
         QMessageBox::warning(
           &mainWindow,
           QCoreApplication::translate(
-            "Monteverdi2",
-            "Monteverdi2 - Warning!"
+            PROJECT_NAME,
+            "Warning!"
           ),
           QCoreApplication::translate(
-            "Monteverdi2",
+            PROJECT_NAME,
             "There are %1 outdated dataset(s) in cache-directory.\n\n"
-            "Please remove cache-directory '%2' and restart Monteverdi2\n\n"
-            "Do you want to delete cache-directory '%2' before quitting Monteverdi2?"
-          ).arg( nb ).arg( application.GetCacheDir().path() ),
+            "Please remove cache-directory '%2' and restart Monteverdi\n\n"
+            "Do you want to delete cache-directory '%2' before quitting Monteverdi?"
+          ).arg( nb ).arg( application->GetCacheDir().path() ),
           QMessageBox::Yes | QMessageBox::No,
           QMessageBox::Yes
         );
 
       if( button==QMessageBox::Yes )
         {
-        if( application.GetCacheDir()==QDir::home() )
+        if( application->GetCacheDir()==QDir::home() )
           {
           // throw std::runtime_error(
           //   mvd::ToStdString(
           //     QCoreApplication::translate(
-          //       "Monteverdi2",
+          //       "Monteverdi",
           //       "Tryed to remove home dir."
           //     )
           //   )
@@ -153,21 +189,21 @@ main( int argc, char* argv[] )
           QMessageBox::critical(
             &mainWindow,
             QCoreApplication::translate(
-              "Monteverdi2",
-              "Monteverdi2 - Critical error!"
+              PROJECT_NAME,
+              "Critical error!"
             ),
             QCoreApplication::translate(
-              "Monteverdi2",
-              "Your Monteverdi2 cache-directory is set to your home directory '%1'. Deletion of cache-directory is aborted to avoid unrecoverable loss of all your account data.\n\nIt is generally a bad idea to set Monteverdi2 cache-directory to your home directory. Please choose another sub-directory.\n\nApplication will now exit."
+              PROJECT_NAME,
+              "Your Monteverdi cache-directory is set to your home directory '%1'. Deletion of cache-directory is aborted to avoid unrecoverable loss of all your account data.\n\nIt is generally a bad idea to set Monteverdi cache-directory to your home directory. Please choose another sub-directory.\n\nApplication will now exit."
             )
-            .arg( application.GetCacheDir().path() ),
+            .arg( application->GetCacheDir().path() ),
             QMessageBox::Ok
           );
           }
         else
           {
           itksys::SystemTools::RemoveADirectory(
-            QFile::encodeName( application.GetCacheDir().path() ).constData()
+            QFile::encodeName( application->GetCacheDir().path() ).constData()
           );
           }
         }
@@ -180,12 +216,12 @@ main( int argc, char* argv[] )
     QMessageBox::critical(
       &mainWindow,
       QCoreApplication::translate(
-        "Monteverdi2",
-        "Monteverdi2 - Critical error!"
+        PROJECT_NAME,
+        "Critical error!"
       ),
       QCoreApplication::translate(
-        "Monteverdi2",
-        "Failed to open Monteverdi2 database.\n\nApplication will now exit!\n\n%2\n\nPlease, remove your Monteverdi2 cache-directory."
+        PROJECT_NAME,
+        "Failed to open Monteverdi database.\n\nApplication will now exit!\n\n%2\n\nPlease, remove your Monteverdi cache-directory."
       )
       .arg( exc.what() ),
       QMessageBox::Ok
@@ -217,7 +253,14 @@ main( int argc, char* argv[] )
   // 7. Let's go: run the application and return exit code.
   int result = QCoreApplication::instance()->exec();
 
-  application.CloseDatabase();
+  application->CloseDatabase();
+
+  // Coverity-14835
+  // {
+  delete application;
+  application = NULL;
+  // }
+  // Coverity-14835
 
   return result;
 }

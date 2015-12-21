@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -23,7 +23,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 #define USE_TABBED_VIEW 0
 #define USE_PIXEL_DESCRIPTION ( ( defined( _DEBUG ) && 0 ) || 0 )
@@ -34,7 +34,7 @@
 
 
 #ifndef USE_OTB_APPS
-#  define USE_OTB_APPS ( ( defined( _DEBUG ) && 0 ) || 0 )
+#  define USE_OTB_APPS ( ( defined( _DEBUG ) && 0 ) || 1 )
 #endif
 
 //
@@ -77,6 +77,7 @@ class AbstractLayerModel;
 // Gui
 class FilenameDragAndDropEventFilter;
 class ImageViewWidget;
+class KeymapDialog;
 class LayerStackWidget;
 class ShaderWidget;
 class StatusBarWidget;
@@ -94,7 +95,7 @@ class MainWindow;
  *
  * \brief The application main-widow widget.
  */
-class Monteverdi2_EXPORT MainWindow
+class Monteverdi_EXPORT MainWindow
   : public I18nMainWindow
 {
 
@@ -119,7 +120,13 @@ public:
 
   /**
    */
-  bool CheckGLCapabilities() const;
+  bool CheckGLCapabilities();
+
+  /**
+   */
+#if USE_OTB_APPS
+  void SetupOTBApplications();
+#endif // USE_OTB_APPS
 
   /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
 
@@ -129,11 +136,12 @@ public slots:
 
   /**
    */
-  inline void ImportImage( const QString & filename );
+  void ImportImage( const QString & filename,
+		    StackedLayerModel::SizeType index );
 
   /**
    */
-  inline void ImportImages( const QStringList & filenames );
+  void ImportImages( const QStringList & filenames );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -160,10 +168,6 @@ signals:
 //
 // Protected methods.
 protected:
-
-  /**
-   */
-  void ImportImage( const QString& filename, bool forceCreate );
 
   using I18nMainWindow::ImportImage;
 
@@ -208,7 +212,9 @@ protected slots:
 
   /**
    */
+#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
   void OnApplicationToLaunchSelected( const QString & appName, const QString & docName );
+#endif // defined( OTB_USE_QT4 ) && USE_OTB_APPS
 
   /**
    */
@@ -300,11 +306,7 @@ private:
 
   /**
    */
-  void ConnectStatusBar( AbstractLayerModel * model );
-
-  /**
-   */
-  void DisconnectStatusBar( const AbstractLayerModel * model );
+  void ConnectStatusBar();
 
 #if USE_PIXEL_DESCRIPTION
 
@@ -408,6 +410,14 @@ private:
    */
   FilenameDragAndDropEventFilter* m_FilenameDragAndDropEventFilter;
 
+  /**
+   */
+  KeymapDialog * m_KeymapDialog;
+
+  /**
+   */
+  int m_GLSL140;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -419,6 +429,10 @@ private slots:
    * menu action is activated.
    */
   void on_action_Keymap_triggered();
+
+  /**
+   */
+  void on_action_LoadOTBApplications_triggered();
 
   /**
    * \brief Qt auto-connected slot which is called when 'File/Open
@@ -478,6 +492,10 @@ private slots:
    */
   void RefreshReferenceLayerComboBox();
 
+  /**
+   */
+  void OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & );
+
 };
 
 } // end namespace 'mvd'
@@ -520,28 +538,6 @@ MainWindow
 ::GetQuicklookView()
 {
   return qobject_cast< ImageViewWidget* >( m_QuicklookViewDock->widget() );
-}
-
-/*****************************************************************************/
-void
-MainWindow
-::ImportImage( const QString & filename )
-{
-  ImportImage( filename, true );
-}
-
-/*****************************************************************************/
-void
-MainWindow
-::ImportImages( const QStringList & filenames )
-{
-  if( filenames.isEmpty() )
-    return;
-
-  for( QStringList::const_iterator it( filenames.constBegin() );
-       it!=filenames.end();
-       ++it )
-    ImportImage( *it );
 }
 
 } // end namespace 'mvd'

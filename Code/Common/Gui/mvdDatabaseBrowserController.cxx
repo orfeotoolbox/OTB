@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -267,7 +267,7 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::ResetDatasetTree( const StringPairListType& datasets )
+::ResetDatasetTree( const StringPairListType & )
 {
   //
   // Access widget.
@@ -957,7 +957,7 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::OnCurrentDatasetChanged( const QString& id, const QString& previousId )
+::OnCurrentDatasetChanged( const QString & id, const QString & )
 {
   // qDebug() << this << "::OnCurrentDatasetChanged(" << id << ")";
 

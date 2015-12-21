@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -34,9 +34,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Gui/mvdGui.h"
 #include "Gui/mvdImageViewRenderer.h"
-
-#define MOUSE_WHEEL_STEP_DEGREES 15
 
 namespace mvd
 {
@@ -105,8 +104,6 @@ ImageViewManipulator
   m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY ),
   m_IsMouseDragging( false )
 {
-  m_ViewSettings->SetUseProjection( true );
-
   m_NativeSpacing.Fill( 1.0 );
 }
 
@@ -199,11 +196,6 @@ ImageViewManipulator
   assert( !m_ViewSettings.IsNull() );
 
   m_ViewSettings->SetWkt( wkt );
-#if 0
-  m_ViewSettings->SetUseProjection( !wkt.empty() );
-#else
-  m_ViewSettings->SetUseProjection( true );
-#endif
 }
 
 /******************************************************************************/
@@ -239,6 +231,11 @@ ImageViewManipulator
   ImageViewRenderer::RenderingContext * const context =
     dynamic_cast< ImageViewRenderer::RenderingContext * const >( c );
 
+  // Coverity-19840
+  // {
+  assert( context!=NULL );
+  // }
+
   context->m_RenderMode =
     m_IsMouseDragging
     ? AbstractImageViewRenderer::RenderingContext::RENDER_MODE_LIGHT
@@ -268,8 +265,6 @@ ImageViewManipulator
   m_ViewSettings->Center( point );
 
   emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), point );
-
-  // emit RenderingContextChanged(point,GetSpacing()[0]);
 }
 
 /******************************************************************************/
@@ -375,9 +370,10 @@ void
 ImageViewManipulator
 ::MousePressEvent( QMouseEvent* event )
 {
-  assert( event!=NULL );
 
-  // qDebug() << this << ":" << event;
+  // qDebug() << this << "::MousePressEvent(" << event << ")";
+
+  assert( event!=NULL );
 
   switch( event->button() )
     {
@@ -424,6 +420,8 @@ void
 ImageViewManipulator
 ::MouseMoveEvent( QMouseEvent* event )
 {
+  // qDebug() << this << "::MouseMoveEvent(" << event << ")";
+
   assert( event!=NULL );
 
   /*
@@ -460,6 +458,8 @@ void
 ImageViewManipulator
 ::MouseReleaseEvent( QMouseEvent* event)
 {
+  // qDebug() << this << "::MouseReleaseEvent(" << event << ")";
+
   assert( event!=NULL );
 
   /*
@@ -482,22 +482,6 @@ ImageViewManipulator
       m_MousePressOrigin = PointType();
       m_IsMouseDragging = false;
 
-      /*
-      emit RoiChanged(
-        GetOrigin(),
-        GetViewportSize(),
-        GetSpacing(),
-        m_ViewSettings->GetViewportCenter()
-      );
-      */
-
-      /*
-      center[0] = GetOrigin()[0]+GetViewportSize()[0]*GetSpacing()[0];
-      center[1] = GetOrigin()[1]+GetViewportSize()[1]*GetSpacing()[1];
-      
-      emit RenderingContextChanged(center,GetSpacing()[0]);
-      */
-
       emit RefreshViewRequested();
       break;
 
@@ -517,6 +501,29 @@ ImageViewManipulator
     default:
       assert( false && "Unhandled Qt::MouseButton." );
       break;
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::MouseDoubleClickEvent( QMouseEvent * event )
+{
+  // qDebug() << this << "::MouseDoubleClickEvent(" << event << ")";
+
+  assert( event!=NULL );
+
+  if( event->button()==Qt::LeftButton && event->modifiers()==Qt::NoModifier )
+    {
+    PointType center;
+
+    assert( !m_ViewSettings.IsNull() );
+
+    const QPoint & p = event->pos();
+
+    m_ViewSettings->ScreenToViewPortTransform( p.x(), p.y(), center[ 0 ], center[ 1 ] );
+
+    CenterOn( center );
     }
 }
 
@@ -559,7 +566,7 @@ ImageViewManipulator
   // Delta is rotation distance in number of 8th of degrees (see
   // http://qt-project.org/doc/qt-4.8/qwheelevent.html#delta).
   assert( event->delta()!=0 );
-  int degrees = event->delta() / 8;
+  int degrees = event->delta() / MOUSE_WHEEL_STEP_FACTOR;
 
   if( modifiers==Qt::ControlModifier )
     {
@@ -578,7 +585,8 @@ ImageViewManipulator
 
     emit ShiftAlphaRequested(
       static_cast< double >(
-	m_AlphaGranularity * event->delta() / ( 8 * MOUSE_WHEEL_STEP_DEGREES )
+	m_AlphaGranularity * event->delta() /
+	( MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES )
       ) / 100.0
     );
     }
@@ -623,7 +631,10 @@ ImageViewManipulator
 
     emit ShiftDynamicsRequested(
       m_DynamicsShiftGranularity *
-      static_cast< double >( event->delta() / ( 8 * MOUSE_WHEEL_STEP_DEGREES ) )
+      static_cast< double >(
+	event->delta() /
+	( MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES )
+      )
     );
     }
   else if( modifiers==(Qt::ControlModifier | Qt::AltModifier | Qt::ShiftModifier) )
@@ -640,7 +651,7 @@ ImageViewManipulator
   //
   else if( modifiers==Qt::NoModifier )
     emit RotateLayersRequested(
-      event->delta() / (8 * MOUSE_WHEEL_STEP_DEGREES)
+      event->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)
     );
 }
 
@@ -690,19 +701,31 @@ ImageViewManipulator
       break;
 
     case Qt::Key_PageUp:
-      emit RaiseLayerRequested();
+      if( event->modifiers()==Qt::ShiftModifier )
+	emit LayerToTopRequested();
+      else
+	emit RaiseLayerRequested();
       break;
 
     case Qt::Key_PageDown:
-      emit LowerLayerRequested();
+      if( event->modifiers()==Qt::ShiftModifier )
+	emit LayerToBottomRequested();
+      else
+	emit LowerLayerRequested();
       break;
 
     case Qt::Key_Home:
-      emit SelectPreviousLayerRequested();
+      if( event->modifiers()==Qt::ShiftModifier )
+	emit SelectFirstLayerRequested();
+      else
+	emit SelectPreviousLayerRequested();
       break;
 
     case Qt::Key_End:
-      emit SelectNextLayerRequested();
+      if( event->modifiers()==Qt::ShiftModifier )
+	emit SelectLastLayerRequested();
+      else
+	emit SelectNextLayerRequested();
       break;
 
     case Qt::Key_Delete:
@@ -750,6 +773,7 @@ ImageViewManipulator
 
     case Qt::Key_P:
       emit SetReferenceRequested();
+      break;
 
     case Qt::Key_Q:
       emit ResetQuantilesRequested( modifiers.testFlag( Qt::ShiftModifier ) );
@@ -938,6 +962,14 @@ ImageViewManipulator
   */
 
   m_ViewSettings->Zoom( point, factor );
+}
+
+/*****************************************************************************/
+ZoomType
+ImageViewManipulator
+::GetFixedZoomType() const
+{
+  return ZOOM_TYPE_NONE;
 }
 
 /*****************************************************************************/

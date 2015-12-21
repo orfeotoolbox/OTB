@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -73,12 +73,24 @@ HistogramModel
   m_MinPixel(),
   m_MaxPixel()
 {
+  m_MinPixel.Fill( 0 );
+  m_MaxPixel.Fill( 0 );
 }
 
 /*******************************************************************************/
 HistogramModel
 ::~HistogramModel()
 {
+}
+
+/*******************************************************************************/
+bool
+HistogramModel
+::IsValid() const
+{
+  // qDebug() << this << "::IsValid() ->" << ( !m_Histograms.IsNull() && m_Histograms->Size()>0 );
+
+  return !m_Histograms.IsNull() && m_Histograms->Size()>0;
 }
 
 /*******************************************************************************/
@@ -379,7 +391,7 @@ HistogramModel
 #endif
 
   stream << PROJECT_NAME << endl;
-  stream << Monteverdi2_DATA_VERSION_STRING << endl;
+  stream << Monteverdi_DATA_VERSION_STRING << endl;
   stream << "HISTOGRAM-MODEL" << endl;
 
   WriteStreamTag( stream, "MIN-PIXEL" );

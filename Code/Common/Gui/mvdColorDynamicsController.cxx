@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -207,6 +207,10 @@ ColorDynamicsController
   //
   // Reset color-dynamics widget.
 
+  // Set constrained editing ON/OFF.
+  // (must be called before settings intensity/quantiles)
+  SetBoundsEnabled( channels );
+
   // Set ranges.
   ResetIntensityRanges( channels );
 
@@ -254,6 +258,7 @@ ColorDynamicsController
     bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
     {
     colorBandDynWgt->SetBounded( true );
+    colorBandDynWgt->SetLinkButtonEnabled( true );
 
     colorBandDynWgt->SetMinIntensity( 0.0 );
     colorBandDynWgt->SetMaxIntensity( 1.0 );
@@ -262,7 +267,7 @@ ColorDynamicsController
     colorBandDynWgt->SetHighIntensity( 1.0 );
 
     colorBandDynWgt->SetLowQuantile( 2.0 );
-    colorBandDynWgt->SetLowQuantile( 2.0 );
+    colorBandDynWgt->SetHighQuantile( 2.0 );
     }
     colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
@@ -389,12 +394,10 @@ void
 ColorDynamicsController
 ::ResetIntensityRanges( RgbwChannel channels )
 {
-  /*
   // Trace.
-  qDebug()
-    << this
-    << "::ResetIntensityRanges(" << RGBW_CHANNEL_NAMES[ channels ] << ")";
-  */
+  // qDebug()
+  //   << this
+  //   << "::ResetIntensityRanges(" << RGBW_CHANNEL_NAMES[ channels ] << ")";
 
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -415,8 +418,11 @@ ColorDynamicsController
 
   //
   // Access histogram from generic image-model.
-  const HistogramModel* histogramModel = imageModel->GetHistogramModel();
+  const HistogramModel * histogramModel = imageModel->GetHistogramModel();
   assert( histogramModel!=NULL );
+
+  // if( !histogramModel->IsValid() )
+  //   return;
 
   // Get min/max pixels.
   DefaultImageType::PixelType minPx( histogramModel->GetMinPixel() );
@@ -668,6 +674,61 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
+::SetBoundsEnabled( RgbwChannel channels )
+{
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = -1;
+  CountType end = -1;
+
+  if( !RgbwBounds( begin, end, channels ) )
+    return;
+
+  //
+  // Access color-dynamics widget.
+  ColorDynamicsWidget * colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
+  assert( colorDynamicsWidget!=NULL );
+
+  //
+  // Access image-model.
+  const VectorImageModel * imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  //
+  // Access histogram-model.
+  assert( imageModel->GetHistogramModel()!=NULL );
+  bool hasValidHistogram = imageModel->GetHistogramModel()->IsValid();
+
+  // Block this controller's signals to prevent display refreshed
+  // but let let widget(s) signal their changes so linked values
+  // will be correctly updated.
+  bool thisSignalsBlocked = this->blockSignals( true );
+  {
+  // Assign values to controlled widget.
+  for( CountType i=begin; i<end; ++i )
+    {
+    RgbwChannel channel = static_cast< RgbwChannel >( i );
+
+    ColorBandDynamicsWidget * colorBandDynWgt =
+      colorDynamicsWidget->GetChannel( channel );
+
+    // Block widget's signals...
+    //...but force call to valueChanged() slot to force refresh.
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
+    {
+    colorBandDynWgt->SetBounded( hasValidHistogram );
+    colorBandDynWgt->SetLinkButtonEnabled( hasValidHistogram );
+    colorBandDynWgt->SetDefaultsButtonEnabled( hasValidHistogram );
+    }
+    colorBandDynWgt->blockSignals( widgetSignalsBlocked );
+    }
+  }
+  this->blockSignals( thisSignalsBlocked );
+}
+
+/*****************************************************************************/
+void
+ColorDynamicsController
 ::ResetQuantiles( RgbwChannel channels )
 {
   //
@@ -681,7 +742,7 @@ ColorDynamicsController
   //
   // Access color-dynamics widget.
   ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
-
+  assert( colorDynamicsWidget!=NULL );
 
   // Block this controller's signals to prevent display refreshed
   // but let let widget(s) signal their changes so linked values
@@ -693,7 +754,7 @@ ColorDynamicsController
     {
     RgbwChannel channel = static_cast< RgbwChannel >( i );
 
-    ColorBandDynamicsWidget* colorBandDynWgt =
+    ColorBandDynamicsWidget * colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
 
     // Block widget's signals...
@@ -760,13 +821,11 @@ ColorDynamicsController
 void
 ColorDynamicsController
 ::RefreshHistogram()
-{
-  /*
+{  
   // Trace.
-  qDebug()
-    << this
-    << "::RefreshHistogram()";
-  */
+  // qDebug()
+  //   << this
+  //   << "::RefreshHistogram()";
 
   // Get image-model.
   assert( GetModel()==GetModel< VectorImageModel>() );
@@ -777,14 +836,16 @@ ColorDynamicsController
   imageModel->RefreshHistogram();
 
   // Refresh color-dynamics.
-  ResetQuantiles(
-    RGBW_CHANNEL_ALL
-    /*
-    imageModel->GetSettings().IsGrayscaleActivated()
-    ? RGBW_CHANNEL_WHITE
-    : RGBW_CHANNEL_RGB
-    */
-  );
+  {
+    assert( imageModel->GetHistogramModel()!=NULL );
+
+    SetBoundsEnabled( RGBW_CHANNEL_ALL );
+
+    if( imageModel->GetHistogramModel()->IsValid() )
+      ResetQuantiles( RGBW_CHANNEL_ALL );
+    else
+      ResetIntensities( RGBW_CHANNEL_ALL );
+  }
 
   // Signal histogram has been refreshed.
   emit HistogramRefreshed();
@@ -798,15 +859,13 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
-::OnRgbChannelIndexChanged( RgbwChannel channel, int band )
-{
-  /*
-  qDebug()
-    << this
-    << "::OnRgbChannelIndexChanged("
-    << RGBW_CHANNEL_NAMES[ channel ] << ", " << band <<
-    ")";
-  */
+::OnRgbChannelIndexChanged( RgbwChannel channel, int )
+{  
+  // qDebug()
+  //   << this
+  //   << "::OnRgbChannelIndexChanged("
+  //   << RGBW_CHANNEL_NAMES[ channel ] << ", " << band <<
+  //   ")";
 
   //
   // Reset color-dynamics widget.
@@ -819,13 +878,11 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
-::OnGrayChannelIndexChanged( int band )
+::OnGrayChannelIndexChanged( int )
 {
-  /*
-  qDebug()
-    << this
-    << "::OnGrayChannelIndexChanged(" << band << ")";
-  */
+  // qDebug()
+  //   << this
+  //   << "::OnGrayChannelIndexChanged(" << band << ")";
 
   //
   // Reset color-dynamics widget.
@@ -839,12 +896,10 @@ ColorDynamicsController
 void
 ColorDynamicsController
 ::OnGrayscaleActivated( bool activated )
-{
-  /*
-  qDebug()
-    << this
-    << "::OnGrayscaleActivated(" << activated << ")";
-  */
+{  
+  // qDebug()
+  //   << this
+  //   << "::OnGrayscaleActivated(" << activated << ")";
 
   //
   // Toggle grayscale-mode activation-state of controlled widget.
@@ -866,14 +921,12 @@ ColorDynamicsController
 void
 ColorDynamicsController
 ::OnLowQuantileChanged( RgbwChannel channel, double value )
-{
-  /*
-  qDebug()
-    << this
-    << "::OnLowQuantileChanged("
-    << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
-    << ")";
-  */
+{  
+  // qDebug()
+  //   << this
+  //   << "::OnLowQuantileChanged("
+  //   << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
+  //   << ")";
 
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -886,7 +939,12 @@ ColorDynamicsController
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
-  assert( imageModel->GetHistogramModel()!=NULL );
+
+  const HistogramModel * histogramModel = imageModel->GetHistogramModel();
+  assert( histogramModel!=NULL );
+
+  if( !histogramModel->IsValid() )
+    return;
 
   // Reference settings.
   VectorImageSettings & settings = imageModel->GetSettings();
@@ -903,7 +961,7 @@ ColorDynamicsController
 
     // Calculate quantile intensity.
     HistogramModel::MeasurementType intensity =
-      imageModel->GetHistogramModel()->Quantile(
+      histogramModel->Quantile(
 	settings.GetRgbwChannel( chan ),
 	0.01 * value,
 	BOUND_LOWER
@@ -938,14 +996,12 @@ ColorDynamicsController
 void
 ColorDynamicsController
 ::OnHighQuantileChanged( RgbwChannel channel, double value )
-{
-  /*
-  qDebug()
-    << this
-    << "::OnHighQuantileChanged("
-    << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
-    << ")";
-  */
+{  
+  // qDebug()
+  //   << this
+  //   << "::OnHighQuantileChanged("
+  //   << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
+  //   << ")";
 
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -958,7 +1014,12 @@ ColorDynamicsController
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
-  assert( imageModel->GetHistogramModel()!=NULL );
+
+  const HistogramModel * histogramModel = imageModel->GetHistogramModel();
+  assert( histogramModel!=NULL );
+
+  if( !histogramModel->IsValid() )
+    return;
 
   // Reference settings.
   VectorImageSettings & settings = imageModel->GetSettings();
@@ -975,7 +1036,7 @@ ColorDynamicsController
 
     // Calculate quantile intensity.
     HistogramModel::MeasurementType intensity =
-      imageModel->GetHistogramModel()->Quantile(
+      histogramModel->Quantile(
 	settings.GetRgbwChannel( chan ),
 	0.01 * value,
 	BOUND_UPPER
@@ -1010,14 +1071,12 @@ ColorDynamicsController
 void
 ColorDynamicsController
 ::OnLowIntensityChanged( RgbwChannel channel, double value )
-{
-  /*
-  qDebug()
-    << this
-    << "::OnLowIntensityChanged("
-    << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
-    << ")";
-  */
+{  
+  // qDebug()
+  //   << this
+  //   << "::OnLowIntensityChanged("
+  //   << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
+  //   << ")";
 
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -1030,7 +1089,12 @@ ColorDynamicsController
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
-  assert( imageModel->GetHistogramModel()!=NULL );
+
+  const HistogramModel * histogramModel = imageModel->GetHistogramModel();
+  assert( histogramModel!=NULL );
+
+  // if( !histogramModel->IsValid() )
+  //   return;
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -1046,14 +1110,14 @@ ColorDynamicsController
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynWgt->GetChannel( chan );
 
-    if( colorBandDynWgt->IsBounded() )
+    if( colorBandDynWgt->IsBounded() && histogramModel->IsValid() )
       {
       // Block widget signals to prevent recursive signal/slot loops.
       bool wgtSignalsBlocked = colorBandDynWgt->blockSignals( true );
       {
       // Refresh quantile display.
       colorBandDynWgt->SetLowQuantile(
-	100.0 * imageModel->GetHistogramModel()->Percentile(
+	100.0 * histogramModel->Percentile(
 	  imageModel->GetSettings().GetRgbwChannel( chan ),
 	  value,
 	  BOUND_LOWER )
@@ -1073,14 +1137,12 @@ ColorDynamicsController
 void
 ColorDynamicsController
 ::OnHighIntensityChanged( RgbwChannel channel, double value )
-{
-  /*
-  qDebug()
-    << this
-    << "::OnHighIntensityChanged("
-    << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
-    << ")";
-  */
+{  
+  // qDebug()
+  //   << this
+  //   << "::OnHighIntensityChanged("
+  //   << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
+  //   << ")";
 
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -1093,7 +1155,12 @@ ColorDynamicsController
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
-  assert( imageModel->GetHistogramModel()!=NULL );
+
+  const HistogramModel * histogramModel = imageModel->GetHistogramModel();
+  assert( histogramModel!=NULL );
+
+  // if( !histogramModel->IsValid() )
+  //   return;
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -1109,7 +1176,7 @@ ColorDynamicsController
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynWgt->GetChannel( chan );
 
-    if( colorBandDynWgt->IsBounded() )
+    if( colorBandDynWgt->IsBounded() && histogramModel->IsValid() )
       {
       // Block widget signals to prevent recursive signal/slot loops.
       bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
@@ -1137,12 +1204,10 @@ ColorDynamicsController
 void
 ColorDynamicsController
 ::OnResetIntensityClicked( RgbwChannel channel )
-{
-  /*
-  qDebug()
-    << this
-    << "::OnResetIntensityClicked(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
-  */
+{  
+  // qDebug()
+  //   << this
+  //   << "::OnResetIntensityClicked(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
 
   ResetIntensities( channel );
 
@@ -1157,12 +1222,10 @@ ColorDynamicsController
 void
 ColorDynamicsController
 ::OnResetQuantileClicked( RgbwChannel channel )
-{
-  /*
-  qDebug()
-    << this
-    << "::OnResetQuantileChanged(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
-  */
+{  
+  // qDebug()
+  //   << this
+  //   << "::OnResetQuantileChanged(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
 
   ResetQuantiles( channel );
 
@@ -1176,19 +1239,22 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
-::OnApplyAllClicked( RgbwChannel channel, double low, double high )
-{
-  /*
-  qDebug()
-    << this
-    << "::OnApplyAllChanged("
-    << RGBW_CHANNEL_NAMES[ channel ] << "," << low << "," << high << ")";
-  */
+::OnApplyAllClicked( RgbwChannel, double low, double high )
+{  
+  // qDebug()
+  //   << this
+  //   << "::OnApplyAllChanged("
+  //   << RGBW_CHANNEL_NAMES[ channel ] << "," << low << "," << high << ")";
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
-  assert( imageModel->GetHistogramModel()!=NULL );
+
+  const HistogramModel * histogramModel = imageModel->GetHistogramModel();
+  assert( histogramModel!=NULL );
+
+  if( !histogramModel->IsValid() )
+    return;
 
   // Reference settings.
   VectorImageSettings & settings = imageModel->GetSettings();
@@ -1216,7 +1282,7 @@ ColorDynamicsController
     );
 
     HistogramModel::MeasurementType lintensity =
-      imageModel->GetHistogramModel()->Quantile(
+      histogramModel->Quantile(
         band,
         0.01 * low,
         BOUND_LOWER
@@ -1224,7 +1290,7 @@ ColorDynamicsController
 
     // Calculate quantile intensity.
     HistogramModel::MeasurementType uintensity =
-      imageModel->GetHistogramModel()->Quantile(
+      histogramModel->Quantile(
         band,
         0.01 * high,
         BOUND_UPPER
@@ -1266,13 +1332,11 @@ ColorDynamicsController
 void
 ColorDynamicsController
 ::OnNoDataFlagToggled( bool enabled )
-{
-  /*
+{  
   // Trace.
-  qDebug()
-    << this
-    << "::OnNoDataFlagToggled(" << enabled << ")";
-  */
+  // qDebug()
+  //   << this
+  //   << "::OnNoDataFlagToggled(" << enabled << ")";
 
   // Get image-model.
   assert( GetModel()==GetModel< VectorImageModel>() );
@@ -1288,7 +1352,8 @@ ColorDynamicsController
   assert( colorDynWgt!=NULL );
 
   // Store property.
-  properties->SetNoDataEnabled( colorDynWgt->IsNoDataChecked() );
+  // properties->SetNoDataEnabled( colorDynWgt->IsNoDataChecked() );
+  properties->SetNoDataEnabled( enabled );
 
   //
   colorDynWgt->SetNoDataButtonChecked( false );
@@ -1298,13 +1363,11 @@ ColorDynamicsController
 void
 ColorDynamicsController
 ::OnNoDataValueChanged( double value )
-{
-  /*
+{  
   // Trace.
-  qDebug()
-    << this
-    << "::OnNoDataValueChanged(" << value << ")";
-  */
+  // qDebug()
+  //   << this
+  //   << "::OnNoDataValueChanged(" << value << ")";
 
   // Get image-model.
   assert( GetModel()==GetModel< VectorImageModel>() );
@@ -1320,7 +1383,8 @@ ColorDynamicsController
   assert( colorDynWgt!=NULL );
 
   // Store property.
-  properties->SetNoData( colorDynWgt->GetNoDataValue() );
+  // properties->SetNoData( colorDynWgt->GetNoDataValue() );
+  properties->SetNoData( value );
 
   //
   colorDynWgt->SetNoDataButtonChecked( false );
@@ -1365,12 +1429,13 @@ ColorDynamicsController
   assert( imageModel!=NULL );
 
   // Get widget.
-  assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
-  ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
-  assert( widget!=NULL );
+  // assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
+  // ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
+  // assert( widget!=NULL );
 
   // Store gamma into settings.
-  imageModel->GetSettings().SetGamma( widget->GetGamma() );
+  // imageModel->GetSettings().SetGamma( widget->GetGamma() );
+  imageModel->GetSettings().SetGamma( value );
 
   // Emit refresh signal.
   emit ModelUpdated();

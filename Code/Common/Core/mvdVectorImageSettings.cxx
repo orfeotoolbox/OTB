@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -74,6 +74,8 @@ VectorImageSettings
   m_GrayDynamicsParams( 6 ),
   m_Gamma( 1.0 )
 {
+  m_RgbDynamicsParams.Fill( 0 );
+  m_GrayDynamicsParams.Fill( 0 );
 }
 
 /***************************************************************************/
@@ -81,7 +83,7 @@ VectorImageSettings
 ::VectorImageSettings( const VectorImageSettings & other ) :
   m_RgbChannels( other.m_RgbChannels ),
   m_RgbDynamicsParams( other.m_RgbDynamicsParams ),
-  m_IsGrayscaleActivated( false ),
+  m_IsGrayscaleActivated( other.m_IsGrayscaleActivated ),
   m_GrayChannel( other.m_GrayChannel ),
   m_GrayDynamicsParams( 6 ),
   m_Gamma( other.m_Gamma )

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -256,40 +256,9 @@ I18nMainWindow
 /*****************************************************************************/
 void
 I18nMainWindow
-::closeEvent( QCloseEvent* event )
+::closeEvent( QCloseEvent * event )
 {
-  assert( event!=NULL );
-
-  // Ensure there is an application instance.
-  assert( I18nApplication::ConstInstance()!=NULL );
-
-  // Get model.
-  AbstractModel* model = I18nApplication::Instance()->GetModel();
-
-  if( model==NULL || !model->IsModified() )
-    return;
-
-  QMessageBox::StandardButton clickedButton = ConfirmSaveQuit( true );
-
-  switch( clickedButton )
-    {
-    case QMessageBox::Save:
-      model->Save();
-      break;
-
-    case QMessageBox::Discard:
-      break;
-
-    case QMessageBox::Cancel:
-      // Ignore event: do not close/quit.
-      event->ignore();
-      break;
-
-    default:
-      // should never be reached.
-      assert( false );
-      break;
-    }
+  QMainWindow::closeEvent( event );
 }
 
 /*****************************************************************************/
@@ -305,11 +274,11 @@ I18nMainWindow
 
   QMessageBox messageBox;
 
-  messageBox.setWindowTitle( tr( "Welcome new Monteverdi2 user!" ) );
+  messageBox.setWindowTitle( tr( "Welcome new Monteverdi user!" ) );
 
   messageBox.setText(
     tr(
-      "Monteverdi2 maintains a repository where cached data related to images is stored "
+      "Monteverdi maintains a repository where cached data related to images is stored "
       "(such as, for example, color-settings, histogram, quicklook etc.)."
       "\n\n"
       "Default cache-directory location is: '%1'."
@@ -335,7 +304,7 @@ I18nMainWindow
       I18nMainWindow::GetExistingDirectory(
         this,
         tr(
-          "Please, select directory where the Monteverdi2"
+          "Please, select directory where the Monteverdi"
           " cache repository will be stored."
         ),
         dir.path()
@@ -365,6 +334,48 @@ I18nMainWindow
   // instanciated. So, GUI will be initialized and controller-widgets
   // disabled.
   I18nApplication::Instance()->SetModel( NULL );
+}
+
+/*****************************************************************************/
+void
+I18nMainWindow
+::SaveLayout( int version ) const
+{
+  // qDebug() << this << "::SaveLayout()";
+
+  assert( I18nCoreApplication::Instance()!=NULL );
+
+  QString name( objectName() );
+
+  I18nCoreApplication::Instance()
+    ->StoreSettingsKey( name + "Geometry", saveGeometry() );
+
+  I18nCoreApplication::Instance()
+    ->StoreSettingsKey( name + "State", saveState( version ) );
+}
+
+/*****************************************************************************/
+bool
+I18nMainWindow
+::RestoreLayout( int version )
+{
+  // qDebug() << this << "::RestoreLayout()";
+
+  I18nCoreApplication * application = I18nCoreApplication::Instance();
+  assert( application!=NULL );
+
+  QString name( objectName() );
+  assert( !name.isEmpty() );
+
+  if( !restoreGeometry(
+	application->RetrieveSettingsKey( name + "Geometry" ).toByteArray() ) )
+    return false;
+
+  return
+    restoreState(
+      application->RetrieveSettingsKey( name + "State" ).toByteArray(),
+      version
+    );
 }
 
 /*****************************************************************************/

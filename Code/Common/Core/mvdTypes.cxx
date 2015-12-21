@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -46,23 +46,5 @@ namespace mvd
 */
 
 /*******************************************************************************/
-const char*
-BOUND_NAMES[ BOUND_COUNT ] = {
-  "BOUND_LOWER",
-  "BOUND_UPPER"
-};
-
-char const * const
-EFFECT_NAME[ EFFECT_COUNT ] =
-{
-  QT_TRANSLATE_NOOP( "mvd", "Chessboard" ),
-  QT_TRANSLATE_NOOP( "mvd", "Gradient" ),
-  QT_TRANSLATE_NOOP( "mvd", "Local contrast" ),
-  QT_TRANSLATE_NOOP( "mvd", "Local translucency" ),
-  QT_TRANSLATE_NOOP( "mvd", "Normal" ),
-  QT_TRANSLATE_NOOP( "mvd", "Spectral angle" ),
-  QT_TRANSLATE_NOOP( "mvd", "Swipe (horizontal)" ),
-  QT_TRANSLATE_NOOP( "mvd", "Swipe (vertical)" ),
-};
 
 } // end namespace 'mvd'

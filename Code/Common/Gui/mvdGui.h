@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -23,7 +23,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 
 /*****************************************************************************/
@@ -61,6 +61,98 @@ namespace
 namespace mvd
 {
 } // end namespace 'mvd'
+
+
+/*****************************************************************************/
+/* CONSTANTS SECTION                                                         */
+
+/**
+ */
+namespace mvd
+{
+
+/**
+ */
+extern const int MOUSE_WHEEL_STEP_DEGREES;
+
+/**
+ */
+extern const int MOUSE_WHEEL_STEP_FACTOR;
+
+} // end of namespace 'mvd'.
+
+/*****************************************************************************/
+/* TYPE DEFINITION SECTION                                                   */
+
+namespace mvd
+{
+
+/**
+ */
+enum Resolution
+{
+  RESOLUTION_NONE = -1,
+  //
+  RESOLUTION_NEAREST = 0,
+  RESOLUTION_LOWER,
+  RESOLUTION_UPPER,
+  //
+  RESOLUTION_COUNT
+};
+
+/**
+ * Constant naming effect values.
+ */
+Monteverdi_EXPORT
+extern
+char const * const
+RESOLUTION_NAME[ RESOLUTION_COUNT ];
+
+/**
+ */
+enum TileSize
+{
+  TILE_SIZE_NONE = -1,
+  //
+  TILE_SIZE_64 = 0,
+  TILE_SIZE_128,
+  TILE_SIZE_256,
+  TILE_SIZE_512,
+  //
+  TILE_SIZE_COUNT,
+  //
+  TILE_SIZE_DEFAULT = TILE_SIZE_256,
+};
+
+/**
+ * Constant naming effect values.
+ */
+Monteverdi_EXPORT
+extern
+char const * const
+TILE_SIZE_NAME[ TILE_SIZE_COUNT ];
+
+/**
+ */
+Monteverdi_EXPORT
+extern
+int
+TILE_SIZE_VALUE[ TILE_SIZE_COUNT ];
+
+/**
+ */
+enum ZoomType
+{
+  ZOOM_TYPE_NONE = -1,
+  //
+  ZOOM_TYPE_EXTENT,
+  ZOOM_TYPE_FULL,
+  ZOOM_TYPE_LAYER,
+  //
+  ZOOM_TYPE_COUNT
+};
+
+} // End of namespace 'mvd'.
 
 
 /*****************************************************************************/

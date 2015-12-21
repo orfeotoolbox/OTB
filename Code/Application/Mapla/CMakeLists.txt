@@ -29,14 +29,14 @@ include_directories(
   # ${ICE_INCLUDE_DIRS}
   # ${QWT_INCLUDE_DIRS}
   #
-  ${Monteverdi2_BINARY_DIR}
+  ${Monteverdi_BINARY_DIR}
   #
-  ${Monteverdi2_SOURCE_DIR}/Code/Common
+  ${Monteverdi_SOURCE_DIR}/Code/Common
   #
-  ${Monteverdi2_SOURCE_DIR}/Code/Application/Mapla
-  ${Monteverdi2_BINARY_DIR}/Code/Application/Mapla
+  ${Monteverdi_SOURCE_DIR}/Code/Application/Mapla
+  ${Monteverdi_BINARY_DIR}/Code/Application/Mapla
   #
-  ${Monteverdi2_SOURCE_DIR}/Data/Icons
+  ${Monteverdi_SOURCE_DIR}/Data/Icons
 )
 
 #############################################################################
@@ -57,7 +57,7 @@ add_to_qt4_i18n_sources(
 if (WIN32)
     # Windows Resource file need to have the full path to icon
     # if the .ico is not in the current dir
-    set( Mapla_WIN32_ICON ${Monteverdi2_SOURCE_DIR}/Data/Icons/monteverdi2.ico)
+    set( Mapla_WIN32_ICON ${Monteverdi_SOURCE_DIR}/Data/Icons/monteverdi.ico)
     configure_file(
       ${CMAKE_CURRENT_SOURCE_DIR}/mvdWin32.rc.in
       ${CMAKE_CURRENT_BINARY_DIR}/mvdWin32.rc
@@ -75,7 +75,7 @@ endif()
 
 #############################################################################
 # Mapla library
-# STATIC so that the monteverdi2 executable does not depend on another shared lib
+# STATIC so that the monteverdi executable does not depend on another shared lib
 # The library is also used in tests, waiting for a better test strategy
 # The library is not installed
 
@@ -86,12 +86,12 @@ endif()
 #   ${Mapla_SRC_MOC}
 # )
 # target_link_libraries( Mapla
-#   Monteverdi2_Gui
+#   Monteverdi_Gui
 # )
 
 # if (OTB_USE_QT4)
 # target_link_libraries( Mapla
-#   Monteverdi2_ApplicationsWrapper
+#   Monteverdi_ApplicationsWrapper
 # )
 # endif()
 
@@ -105,7 +105,7 @@ create_monteverdi_application(NAME mapla
   ${Mapla_SOURCES}
   ${Mapla_FORMS_HEADERS}
   ${Mapla_SRC_MOC}
-  LINK_LIBRARIES Monteverdi2_Gui
+  LINK_LIBRARIES Monteverdi_Gui
   ${QT_QTMAIN_LIBRARY}
   OUTPUT_NAME ${MAPLA_OUTPUT_NAME}
   COMPONENT_NAME Mapla
@@ -115,6 +115,6 @@ create_monteverdi_application(NAME mapla
 
 if( OTBQtWidget_LOADED )
   target_link_libraries( mapla
-    Monteverdi2_ApplicationsWrapper
+    Monteverdi_ApplicationsWrapper
   )
 endif()

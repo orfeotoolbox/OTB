@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -70,7 +70,7 @@ HistogramController
 /*******************************************************************************/
 void
 HistogramController
-::Connect( AbstractModel* model )
+::Connect( AbstractModel * )
 {
   // HistogramWidget* widget = GetWidget< HistogramWidget >();
 
@@ -84,7 +84,7 @@ HistogramController
 /*******************************************************************************/
 void
 HistogramController
-::Disconnect( AbstractModel* model )
+::Disconnect( AbstractModel * )
 {
   // HistogramWidget* widget = GetWidget< HistogramWidget >();
 
@@ -127,6 +127,9 @@ HistogramController
   HistogramModel* model = imageModel->GetHistogramModel();
   assert( model!=NULL );
 
+  if( !model->IsValid() )
+    return;
+
   assert( GetWidget()==GetWidget< HistogramWidget >() );
   HistogramWidget* widget = GetWidget< HistogramWidget >();
   assert( widget!=NULL );
@@ -167,10 +170,10 @@ HistogramController
     widget->SetLowMarker( chan, settings.GetLowIntensity( chan ) );
     widget->SetHighMarker( chan, settings.GetHighIntensity( chan ) );
 
-    delete x;
+    delete[] x;
     x = NULL;
 
-    delete y;
+    delete[] y;
     y = NULL;
     }
 
@@ -184,7 +187,7 @@ HistogramController
 /*****************************************************************************/
 void
 HistogramController
-::OnRgbChannelIndexChanged( RgbwChannel channel, int band )
+::OnRgbChannelIndexChanged( RgbwChannel channel, int )
 {
   /*
   qDebug()
@@ -200,7 +203,7 @@ HistogramController
 /*****************************************************************************/
 void
 HistogramController
-::OnGrayChannelIndexChanged( int band )
+::OnGrayChannelIndexChanged( int )
 {
   /*
   qDebug()

@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -23,7 +23,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 //
 #define USE_VIEW_SETTINGS_SIDE_EFFECT 1
@@ -52,6 +52,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Gui/mvdAbstractImageViewRenderer.h"
+#include "Gui/mvdGui.h"
 
 
 /*****************************************************************************/
@@ -79,7 +80,7 @@ namespace mvd
 /**
  * \class ImageViewRenderer
  */
-class Monteverdi2_EXPORT ImageViewRenderer :
+class Monteverdi_EXPORT ImageViewRenderer :
     public AbstractImageViewRenderer
 {
 
@@ -100,20 +101,24 @@ public:
   {
     /**
      */
-    inline
-    RenderingContext() :
-      AbstractImageViewRenderer::RenderingContext()
+    RenderingContext();
+
+    /**
+     */
+    virtual ~RenderingContext();
+
+    /**
+     */
+    Resolution m_Resolution;
+
+    /**
+     */
+    int m_TileSize;
+
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
-      ,m_ViewSettings()
-#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
-    {
-    }
-
-    virtual ~RenderingContext() {}
-
-#if USE_VIEW_SETTINGS_SIDE_EFFECT
-#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+    /**
+     */
     otb::ViewSettings::Pointer m_ViewSettings;
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
   };
@@ -129,7 +134,7 @@ public:
 
   /**
    */
-  virtual bool CheckGLCapabilities() const;
+  virtual bool CheckGLCapabilities( int * ) const;
 
   /**
    */
@@ -169,13 +174,15 @@ public:
   virtual
   void PaintGL( const AbstractImageViewRenderer::RenderingContext* context );
 
-  virtual bool Pick( const PointType& in,
-                     PointType& out,
-                     DefaultImageType::PixelType& pixel );
+  virtual void Pick( const PointType & view,
+                     PixelInfo::Vector & pixels ) const;
 
-  virtual bool Transform( PointType& point,
-                          const IndexType&,
-                          bool isPhysical ) const;
+  virtual void GetResolutions( PixelInfo::Vector & pixels ) const;
+
+  virtual bool TransformToView( PointType & point,
+				const StackedLayerModel::KeyType &,
+				const IndexType &,
+				bool isPhysical ) const;
 
   bool
     Reproject( PointType & center,
@@ -187,16 +194,16 @@ public:
 
 // public slots
 public slots:
-  void OnPhysicalCursorPositionChanged( const QPoint &,
-                                        const PointType &,
-                                        const PointType &,
-                                        const DefaultImageType::PixelType& );
+  virtual void UpdatePixelInfo( const QPoint & screen,
+				const PointType & view,
+				const PixelInfo::Vector & pixels );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // SIGNALS.
 signals:
+  void ClearProjectionRequired();
   void SetProjectionRequired();
   void UpdateProjectionRequired();
 
@@ -227,6 +234,9 @@ protected:
   /**
    */
   otb::GlView::Pointer m_GlView;
+  /**
+   */
+  bool m_EffectsEnabled: 1;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -239,27 +249,34 @@ private:
     std::pair< AbstractLayerModel *, otb::GlActor::Pointer >
     ModelActorPair;
 
-  /**
-   */
-  // typedef std::map< std::string, ModelActorPair > ModelActorPairMap;
-
-  /**
-   */
-  // typedef ModelActorPairMap::key_type Key;
-
 //
 // Private methods.
 private:
 
+  virtual void virtual_ClearProjection() {};
   virtual void virtual_SetProjection() {};
   virtual void virtual_UpdateProjection() {};
 
   //
   // AbstractImageViewRenderer overloads.
 
-  // virtual void virtual_SetLayerStack( StackedLayerModel * );
   virtual void virtual_UpdateScene();
   virtual void virtual_RefreshScene();
+
+  virtual bool virtual_ZoomToRegion( const PointType & origin,
+				     const PointType & extent,
+				     PointType & center,
+				     SpacingType & spacing ) const;
+
+  virtual bool virtual_ZoomToExtent( PointType & center, SpacingType & spacing ) const;
+
+  virtual bool virtual_ZoomToLayer( const StackedLayerModel::KeyType & key,
+				    PointType & center,
+				    SpacingType & spacing ) const;
+
+  virtual bool virtual_ZoomToFull( const StackedLayerModel::KeyType & key,
+				   PointType & center,
+				   SpacingType & spacing ) const;
 
 //
 // Private attributes.
@@ -267,10 +284,6 @@ private:
   /**
    */
   ModelActorPair m_ReferencePair;
-
-  /**
-   */
-  // ModelActorPairMap m_ModelActorPairs;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
   

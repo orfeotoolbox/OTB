@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -23,7 +23,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -61,12 +61,12 @@ class VectorImageModel;
 /**
   * \class MainWindowTitleLoader
   *
-  * \brief Imports an image into a Monteverdi2 dataset
+  * \brief Imports an image into a Monteverdi dataset
   *
   * This class is used to deport the dataset creation
   * in a separate thread
   */
-class Monteverdi2_EXPORT MainWindowTitleLoader : public QObject
+class Monteverdi_EXPORT MainWindowTitleLoader : public QObject
 {
     Q_OBJECT;
 

@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -22,7 +22,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 
 /*****************************************************************************/
@@ -62,7 +62,7 @@ namespace
 {
 } // end of anonymous namespace.
 
-Monteverdi2_EXPORT const char*
+Monteverdi_EXPORT const char*
 RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ] = {
   "RGBW_CHANNEL_RED",
   "RGBW_CHANNEL_GREEN",
@@ -70,6 +70,26 @@ RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ] = {
   "RGBW_CHANNEL_WHITE",
   "RGBW_CHANNEL_RGB",
   "RGBW_CHANNEL_ALL"
+};
+
+const char*
+BOUND_NAMES[ BOUND_COUNT ] = {
+  "BOUND_LOWER",
+  "BOUND_UPPER"
+};
+
+char const * const
+EFFECT_NAME[ EFFECT_COUNT ] =
+{
+  // QT_TRANSLATE_NOOP( "mvd", "None" ),
+  QT_TRANSLATE_NOOP( "mvd", "Chessboard" ),
+  QT_TRANSLATE_NOOP( "mvd", "Gradient" ),
+  QT_TRANSLATE_NOOP( "mvd", "Local contrast" ),
+  QT_TRANSLATE_NOOP( "mvd", "Local translucency" ),
+  QT_TRANSLATE_NOOP( "mvd", "Normal" ),
+  QT_TRANSLATE_NOOP( "mvd", "Spectral angle" ),
+  QT_TRANSLATE_NOOP( "mvd", "Swipe (horizontal)" ),
+  QT_TRANSLATE_NOOP( "mvd", "Swipe (vertical)" ),
 };
 
 

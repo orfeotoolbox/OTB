@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -71,12 +71,12 @@ const unsigned int VectorImageModel::DEFAULT_LOD_SIZE = 512;
 VectorImageModel
 ::VectorImageModel( QObject* parent ) :
   AbstractImageModel( parent ),
+  FilenameInterface(),
   m_Image(),
   m_ImageFileReader(),
   m_Settings(),
-  m_Filename(),
   m_LodCount( -1 ),
-  m_GenericRSTransform()
+  m_ToWgs84()
 {
 }
 
@@ -112,12 +112,20 @@ VectorImageModel
   setObjectName( filename );
 
   // 1. store the input filename
-  m_Filename = filename;
+  FilenameInterface::SetFilename( filename );
 
   // Get the largest possible region of the image
   m_ImageFileReader = DefaultImageFileReaderType::New();
 
-  m_ImageFileReader->SetFileName( ToStdString( m_Filename ) );
+  // qDebug()
+  //   << this << "\n"
+  //   << "\tQString:" << GetFilename();
+
+  // std::cout
+  //   << "\tstd::string: " << QFile::encodeName( GetFilename() ).constData()
+  //   << std::endl;
+
+  m_ImageFileReader->SetFileName( QFile::encodeName( GetFilename() ) );
   m_ImageFileReader->UpdateOutputInformation();
 
   // Retrieve the list of Lod from file
@@ -130,12 +138,19 @@ VectorImageModel
   // Remember native spacing
   m_NativeSpacing = m_ImageFileReader->GetOutput()->GetSpacing();
 
+  // qDebug()
+  //   << filename
+  //   << "\norigin:"
+  //   << m_ImageFileReader->GetOutput()->GetOrigin()[ 0 ]
+  //   << m_ImageFileReader->GetOutput()->GetOrigin()[ 1 ]
+  //   << "\nspacing:" << m_NativeSpacing[ 0 ] << m_NativeSpacing[ 1 ];
+
   
   // Setup GenericRSTransform
-  m_GenericRSTransform = otb::GenericRSTransform<>::New();
-  m_GenericRSTransform->SetInputDictionary(m_ImageFileReader->GetOutput()->GetMetaDataDictionary());
-  m_GenericRSTransform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
-  m_GenericRSTransform->InstanciateTransform();
+  m_ToWgs84 = otb::GenericRSTransform<>::New();
+  m_ToWgs84->SetInputDictionary(m_ImageFileReader->GetOutput()->GetMetaDataDictionary());
+  m_ToWgs84->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
+  m_ToWgs84->InstanciateTransform();
 
   //Compute estimated spacing here
   //m_EstimatedGroundSpacing
@@ -145,9 +160,9 @@ VectorImageModel
   GroundSpacingImageType::Pointer GroundSpacing = GroundSpacingImageType::New();
   GroundSpacing->SetInputImage(m_ImageFileReader->GetOutput());
   
-  if (m_GenericRSTransform->IsUpToDate())
+  if (m_ToWgs84->IsUpToDate())
     {
-    if (m_GenericRSTransform->GetTransformAccuracy() != otb::Projection::UNKNOWN)
+    if (m_ToWgs84->GetTransformAccuracy() != otb::Projection::UNKNOWN)
       {
       IndexType  index;
       vnl_random rand;
@@ -205,22 +220,10 @@ VectorImageModel
 ::BuildGdalOverviews()
 {
   // Build overviews if necessary
-  bool hasOverviewsSupport = (m_ImageFileReader->GetOverviewsCount()>0);
+  // bool hasOverviewsSupport = (m_ImageFileReader->GetOverviewsCount()>0);
   int nbOfAvailableOvw = m_ImageFileReader->GetOverviewsCount();
   // TODO: this choice should be done by the user during the import of the file
   bool forceToCacheOvw = true;
-
-  if (!hasOverviewsSupport)
-    {
-    // the current file doesn't have overviews available and the ImageIO doesn't support overviews
-    throw std::runtime_error(
-      ToStdString(
-	tr( "The ImageIO used to read this file doesn't support Overviews." )
-      )
-    );
-    }
-
-  // Else:
 
   qWarning() << tr( "The ImageIO used to read this file supports overviews." );
 
@@ -251,7 +254,7 @@ VectorImageModel
   assert( m_LodCount!=static_cast< unsigned int >( -1 ) );
   // m_ImageFileReader->GetAvailableResolutions(m_AvailableLod);
 
-  std::string tempfilename( ToStdString( m_Filename ) );
+  std::string tempfilename( QFile::encodeName( GetFilename() ) );
 
   filter->SetInputFileName(tempfilename);
   filter->SetResamplingMethod(otb::AVERAGE);
@@ -307,6 +310,23 @@ VectorImageModel
   VectorImageSettings * const  settings =
     static_cast< VectorImageSettings * const >( buildContext->m_Settings );
 
+
+// Fetch the no data flags if any
+  otb::ImageMetadataInterfaceBase::ConstPointer metaData(
+    GetMetaDataInterface()
+    );
+
+  std::vector<double> values;
+  std::vector<bool> flags;
+
+  bool ret = metaData->GetNoDataFlags(flags,values);
+
+  if(ret && !values.empty() && !flags.empty() && flags[0])
+    {
+    GetProperties()->SetNoDataEnabled(true);
+    GetProperties()->SetNoData(values[0]);
+    }
+  
   //
   // Step #1: Perform pre-process of AbstractModel::BuildModel()
   // pattern.
@@ -338,7 +358,7 @@ VectorImageModel
   // Remember image properties.
   if( buildContext->m_Properties!=NULL )
     SetProperties( *buildContext->m_Properties );
-
+  
   // Apply settings to child QuicklookModel.
   ApplySettings();
 }
@@ -421,12 +441,16 @@ VectorImageModel
 
     GetSettings().SetLowIntensity(
       channel,
-      histogramModel->Quantile( band , 0.02, BOUND_LOWER )
+      !histogramModel->IsValid()
+      ? min[ band ]
+      : histogramModel->Quantile( band , 0.02, BOUND_LOWER )
     );
 
     GetSettings().SetHighIntensity(
       channel,
-      histogramModel->Quantile( band , 0.02, BOUND_UPPER )
+      !histogramModel->IsValid()
+      ? max[ band ]
+      : histogramModel->Quantile( band , 0.02, BOUND_UPPER )
     );
     }
 }
@@ -525,7 +549,7 @@ VectorImageModel
 ::virtual_SetCurrentLod( CountType lod )
 {
   // new filename if lod is not 0
-  QString lodFilename( m_Filename );
+  QString lodFilename( GetFilename() );
 
   // If model is a multi-resolution image.
   lodFilename.append( QString( "?&resol=%1" ).arg( lod ) );
@@ -685,7 +709,26 @@ VectorImageModel
 {
   assert( !m_Image.IsNull() );
 
-  return !m_Image->GetImageKeywordlist().GetSize()>0;
+  return m_Image->GetImageKeywordlist().GetSize()>0;
+}
+
+/*****************************************************************************/
+void
+VectorImageModel
+::virtual_ToWgs84( const PointType & physical,
+		   PointType & wgs84,
+		   double & alt ) const
+{
+  assert( !m_ToWgs84.IsNull() );
+  assert( m_ToWgs84->IsUpToDate() );
+
+  wgs84 = m_ToWgs84->TransformPoint( physical );
+
+  alt =
+    otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(
+      wgs84[ 0 ],
+      wgs84[ 1 ]
+    );
 }
 
 /*****************************************************************************/
@@ -710,8 +753,8 @@ VectorImageModel
 /*****************************************************************************/
 void
 VectorImageModel
-::OnPhysicalCursorPositionChanged( const QPoint & screen,
-                                   const PointType & view,
+::OnPhysicalCursorPositionChanged( const QPoint &,
+                                   const PointType &,
                                    const PointType & point,
                                    const DefaultImageType::PixelType& pixel )
 {
@@ -816,8 +859,11 @@ VectorImageModel
       // TODO : Is there a better method to detect no geoinfo available ?
       if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0) 
         {
+	assert( !m_ToWgs84.IsNull() );
+
         PointType wgs84;
-        wgs84 = GetGenericRSTransform()->TransformPoint(point);
+
+        wgs84 = m_ToWgs84->TransformPoint( point );
       
         ossGeographicLong.precision(6);
         ossGeographicLat.precision(6);

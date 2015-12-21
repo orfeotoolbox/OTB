@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -79,12 +79,29 @@ StatusBarWidget
 }
 
 /*****************************************************************************/
+QString
+StatusBarWidget
+::ZoomLevel( double scale )
+{
+  if( scale>1.0 )
+    return QString( "%1:1" ).arg( scale );
+
+  else if( scale<1.0 )
+    return QString( "1:%1" ).arg( 1.0 / scale );
+
+  return "1:1";
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
 StatusBarWidget
-::SetPixelIndex( const IndexType& pixel, bool isInsideRegion )
+::SetPixelIndex( const IndexType & pixel, bool isInsideRegion )
 {
+  assert( m_UI!=NULL );
+  assert( m_UI->pixelIndexLineEdit!=NULL );
+
   m_UI->pixelIndexLineEdit->setText(
     isInsideRegion
     ? QString( "%1, %2" ).arg( pixel[ 0 ] ).arg( pixel[ 1 ] )
@@ -95,18 +112,16 @@ StatusBarWidget
 /*****************************************************************************/
 void
 StatusBarWidget
-::SetScale( double sx, double sy )
+::SetScale( double sx, double )
 {
   // qDebug() << this << "::SetScale(" << sx << "," << sy << ")";
-
-  QString zoomLevel( StatusBarWidget::ZoomLevel( sx ) );
 
   /*
   if( sx!=sy )
     zoomLevel.append( "/" + StatusBarWidget::ZoomLevel( sy ) );
   */
 
-  m_UI->scaleLineEdit->setText( zoomLevel );
+  m_UI->scaleLineEdit->setText( StatusBarWidget::ZoomLevel( sx ) );
 }
 
 /*****************************************************************************/
@@ -124,8 +139,11 @@ StatusBarWidget
 /*****************************************************************************/
 void
 StatusBarWidget
-::SetPixelRadiometryText( const QString& text )
+::SetText( const QString & text )
 {
+  assert( m_UI!=NULL );
+  assert( m_UI->pixelIndexLineEdit!=NULL );
+
   m_UI->pixelRadiometryLabel->setText( text );
 }
 

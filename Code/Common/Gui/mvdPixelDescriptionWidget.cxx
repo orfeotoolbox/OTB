@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -66,7 +66,12 @@ namespace mvd
 PixelDescriptionWidget
 ::PixelDescriptionWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
-  m_UI( new mvd::Ui::PixelDescriptionWidget() )
+  m_UI( new mvd::Ui::PixelDescriptionWidget() ),
+  m_CartographicRootItem( NULL ),
+  m_GeographicRootItem( NULL ),
+  m_PixelValueRootItem( NULL ),
+  m_CartographicItem( NULL ),
+  m_GeographicItem( NULL )
 {
   m_UI->setupUi( this );
 

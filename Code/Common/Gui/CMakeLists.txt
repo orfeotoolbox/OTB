@@ -137,13 +137,13 @@ set( Common_Gui_RESOURCES
 include_directories(
   ${ICE_INCLUDE_DIRS}
   #
-  ${Monteverdi2_BINARY_DIR}
+  ${Monteverdi_BINARY_DIR}
   #
-  ${Monteverdi2_SOURCE_DIR}/Code/Common
-  #${Monteverdi2_SOURCE_DIR}/Code/Common/Gui
+  ${Monteverdi_SOURCE_DIR}/Code/Common
+  #${Monteverdi_SOURCE_DIR}/Code/Common/Gui
   #
-  ${Monteverdi2_BINARY_DIR}/Code/Common
-  ${Monteverdi2_BINARY_DIR}/Code/Common/Gui
+  ${Monteverdi_BINARY_DIR}/Code/Common
+  ${Monteverdi_BINARY_DIR}/Code/Common/Gui
   #
   ${QWT_INCLUDE_DIRS}
 )
@@ -169,7 +169,7 @@ add_to_qt4_i18n_sources(
 )
 
 #############################################################################
-add_library(Monteverdi2_Gui
+add_library(Monteverdi_Gui
   ${Common_Gui_SOURCES}
   ${Common_Gui_FORMS_HEADERS}
   ${Common_Gui_SRC_MOC}
@@ -177,8 +177,8 @@ add_library(Monteverdi2_Gui
 )
 
 #############################################################################
-target_link_libraries(Monteverdi2_Gui
-  Monteverdi2_Core
+target_link_libraries(Monteverdi_Gui
+  Monteverdi_Core
   ${OTB_LIBRARIES}
   ${ICE_LIBRARIES}
   ${OPENGL_LIBRARIES}
@@ -189,17 +189,17 @@ target_link_libraries(Monteverdi2_Gui
   ${QWT_LIBRARIES}
 )
 
-set_target_properties(Monteverdi2_Gui
-  PROPERTIES ${Monteverdi2_LIBRARY_PROPERTIES}
+set_target_properties(Monteverdi_Gui
+  PROPERTIES ${Monteverdi_LIBRARY_PROPERTIES}
 )
 
 #############################################################################
 # INSTALL Common application.
 install(
-  TARGETS Monteverdi2_Gui
-  RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT Runtime
-  LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Runtime
-  ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Development
+  TARGETS Monteverdi_Gui
+  RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR} COMPONENT Runtime
+  LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Runtime
+  ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Development
 )
 
 #############################################################################

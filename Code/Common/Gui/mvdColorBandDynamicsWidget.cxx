@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -206,6 +206,22 @@ ColorBandDynamicsWidget
 /*****************************************************************************/
 void
 ColorBandDynamicsWidget
+::SetLinkButtonEnabled( bool enabled )
+{
+  return m_UI->linkButton->setEnabled( enabled );
+}
+
+/*****************************************************************************/
+void
+ColorBandDynamicsWidget
+::SetDefaultsButtonEnabled( bool enabled )
+{
+  return m_UI->defaultsButton->setEnabled( enabled );
+}
+
+/*****************************************************************************/
+void
+ColorBandDynamicsWidget
 ::SetChannelLabel( RgbwChannel channel )
 {
   m_Channel = channel;
@@ -255,6 +271,8 @@ void
 ColorBandDynamicsWidget
 ::on_lowIntensityLineEdit_textChanged( const QString& text )
 {
+  // qDebug() << this << "::on_lowIntensityLineEdit_textChanged(" << text << ")";
+
   bool isOk = true;
   double value = text.toDouble( &isOk );
 
@@ -277,6 +295,8 @@ void
 ColorBandDynamicsWidget
 ::on_highIntensityLineEdit_textChanged( const QString& text )
 {
+  // qDebug() << this << "::on_lowIntensityLineEdit_textChanged(" << text << ")";
+
   bool isOk = true;
   double value = text.toDouble( &isOk );
 

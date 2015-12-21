@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -38,6 +38,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAlgorithm.h"
+#include "Core/mvdTypes.h"
+
 
 namespace mvd
 {
@@ -62,35 +65,32 @@ char const * const STR_UNKNOWN = QT_TRANSLATE_NOOP( "mvd::AbstractLayerModel", "
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
+/*****************************************************************************/
+SpatialReferenceType
+GetSpatialReferenceType( const std::string & filename )
+{
+  DefaultImageFileReaderType::Pointer reader( DefaultImageFileReaderType::New() );
+  assert( !reader.IsNull() );
 
+  reader->SetFileName( filename );
+  reader->UpdateOutputInformation();
+
+  DefaultImageType * image = reader->GetOutput();
+  assert( image!=NULL );
+
+  return GetSpatialReferenceType(
+    image->GetProjectionRef(),
+    image->GetImageKeywordlist().GetSize()>0
+  );
+}
 
 /*****************************************************************************/
-/* CLASS IMPLEMENTATION SECTION                                              */
-
-/*******************************************************************************/
-AbstractLayerModel
-::AbstractLayerModel( QObject* parent ) :
-  AbstractModel( parent ),
-  VisibleInterface()
+SpatialReferenceType
+GetSpatialReferenceType( const std::string & wkt, bool hasKwl )
 {
-}
-
-/*******************************************************************************/
-AbstractLayerModel
-::~AbstractLayerModel()
-{
-}
-
-/*******************************************************************************/
-AbstractLayerModel::SpatialReferenceType
-AbstractLayerModel
-::GetSpatialReferenceType() const
-{
-  std::string wkt( GetWkt() );
-
   if( wkt.empty() )
     return
-      HasKwl()
+      hasKwl
       ? SRT_SENSOR
       : SRT_UNKNOWN;
 
@@ -109,20 +109,36 @@ AbstractLayerModel
   return SRT_UNKNOWN;
 }
 
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
+/*****************************************************************************/
+AbstractLayerModel
+::AbstractLayerModel( QObject* parent ) :
+  AbstractModel( parent ),
+  VisibleInterface()
+{
+}
+
+/*******************************************************************************/
+AbstractLayerModel
+::~AbstractLayerModel()
+{
+}
+
+/*******************************************************************************/
+SpatialReferenceType
+AbstractLayerModel
+::GetSpatialReferenceType() const
+{
+  return mvd::GetSpatialReferenceType( GetWkt(), HasKwl() );
+}
+
 /*******************************************************************************/
 std::string
 AbstractLayerModel
 ::GetWkt() const
 {
   return virtual_GetWkt();
-}
-
-/*******************************************************************************/
-bool
-AbstractLayerModel
-::HasKwl() const
-{
-  return virtual_HasKwl();
 }
 
 /*******************************************************************************/
@@ -137,8 +153,8 @@ AbstractLayerModel
       !isEnhanced
       ? std::string()
       : ( HasKwl()
-	  ? STR_SENSOR
-	  : STR_UNKNOWN );
+	  ? ToStdString( tr( STR_SENSOR ) )
+	  : ToStdString( tr( STR_UNKNOWN ) ) );
 
   OGRSpatialReference ogr_sr( wkt.c_str() );
 
@@ -152,6 +168,22 @@ AbstractLayerModel
   assert( epsg!=NULL && strcmp( epsg, "" )!=0 );
 
   return epsg;
+}
+
+/*******************************************************************************/
+bool
+AbstractLayerModel
+::HasKwl() const
+{
+  return virtual_HasKwl();
+}
+
+/*****************************************************************************/
+void
+AbstractLayerModel
+::ToWgs84( const PointType & p, PointType & wgs84, double & alt) const
+{
+  virtual_ToWgs84( p, wgs84, alt );
 }
 
 /*******************************************************************************/

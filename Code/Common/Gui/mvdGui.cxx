@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -22,7 +22,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 
 
 /*****************************************************************************/
@@ -61,6 +61,34 @@ namespace mvd
 namespace
 {
 } // end of anonymous namespace.
+
+const int MOUSE_WHEEL_STEP_DEGREES = 15;
+const int MOUSE_WHEEL_STEP_FACTOR = 8;
+
+char const * const
+RESOLUTION_NAME[ RESOLUTION_COUNT ] =
+{
+  // QT_TRANSLATE_NOOP( "mvd", "None" ),
+  QT_TRANSLATE_NOOP( "mvd", "Nearest" ),
+  QT_TRANSLATE_NOOP( "mvd", "Lower bound" ),
+  QT_TRANSLATE_NOOP( "mvd", "Upper bound" ),
+};
+
+char const * const
+TILE_SIZE_NAME[ TILE_SIZE_COUNT ] =
+{
+  // QT_TRANSLATE_NOOP( "mvd", "None" ),
+  QT_TRANSLATE_NOOP( "mvd", "64" ),
+  QT_TRANSLATE_NOOP( "mvd", "128" ),
+  QT_TRANSLATE_NOOP( "mvd", "256" ),
+  QT_TRANSLATE_NOOP( "mvd", "512" ),
+};
+
+int
+TILE_SIZE_VALUE[ TILE_SIZE_COUNT ] =
+{
+  64, 128, 256, 512,
+};
 
 
 /*****************************************************************************/

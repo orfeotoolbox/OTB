@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -650,12 +650,12 @@ DatasetModel
   PropertyType psize;
   
   //
-  std::string fname = ToStdString( viModel->GetFilename() );
+  std::string fname = QFile::encodeName( viModel->GetFilename() ).constData();
   pfile.first  = ToStdString ( tr("File") );
   pfile.second = itksys::SystemTools::GetFilenameName(fname);
 
   //
-  pdir.first  = ToStdString ( tr("Directory") );
+  pdir.first  = ToStdString( tr("Directory") );
   pdir.second = itksys::SystemTools::GetFilenamePath(fname);;
 
   //
@@ -919,7 +919,7 @@ void
 DatasetModel
 ::OnRoiChanged( const PointType& center,
                 double sx,
-                double sy )
+                double )
 {
   /*
   qDebug()

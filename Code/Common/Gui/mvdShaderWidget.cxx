@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -74,8 +74,10 @@ ShaderWidget
 {
   m_UI->setupUi( this );
 
+  assert( qApp!=NULL );
+
   for( int i=0; i<EFFECT_COUNT; ++i )
-    m_UI->effectComboBox->addItem( EFFECT_NAME[ i ] );
+    m_UI->effectComboBox->addItem( qApp->translate( "mvd", EFFECT_NAME[ i ] ) );
 
   m_UI->valueLineEdit->setValidator(
     new QDoubleValidator( m_UI->valueLineEdit )
@@ -93,6 +95,27 @@ ShaderWidget
 /*******************************************************************************/
 void
 ShaderWidget
+::SetGLSL140Enabled( bool isEnabled )
+{
+  assert( qApp!=NULL );
+
+  int index =
+    m_UI->effectComboBox->findText(
+      qApp->translate( "mvd", EFFECT_NAME[ EFFECT_GRADIENT ] )
+    );
+
+  if( isEnabled )
+    {
+    if( index<0 )
+      m_UI->effectComboBox->addItem( tr( "mvd", EFFECT_NAME[ EFFECT_GRADIENT ] ) );
+    }
+  else if( index>=0 )
+    m_UI->effectComboBox->removeItem( index );
+}
+
+/*******************************************************************************/
+void
+ShaderWidget
 ::virtual_SetSettings( ImageSettings * settings )
 {
   assert( m_UI!=NULL );
@@ -105,9 +128,13 @@ ShaderWidget
 
   if( settings!=NULL )
     {
+    assert( qApp!=NULL );
+
     for( int i=0; i<m_UI->effectComboBox->count(); ++i )
-      if( QString::compare( m_UI->effectComboBox->itemText( i ),
-                            EFFECT_NAME[ settings->GetEffect() ] )==0 )
+      if( m_UI->effectComboBox->itemText( i )
+	  .compare(
+	    qApp->translate( "mvd",
+			     EFFECT_NAME[ settings->GetEffect() ] ) )==0 )
         {
         m_UI->effectComboBox->setCurrentIndex( i );
 
@@ -135,6 +162,7 @@ ShaderWidget
       ? ToQString( settings->GetValue() )
       : QString()
     );
+    m_UI->valueLineEdit->setCursorPosition( 0 );
     }
 }
 
@@ -148,8 +176,10 @@ ShaderWidget
   if( !HasSettings() )
     return;
 
+  assert( qApp!=NULL );
+
   for( int i=0; i<EFFECT_COUNT; ++i )
-    if( QString::compare( text, EFFECT_NAME[ i ] )==0 )
+    if( QString::compare( text, qApp->translate( "mvd", EFFECT_NAME[ i ] ) )==0 )
       {
       ImageSettings * settings = GetSettings();
       assert( settings!=NULL );

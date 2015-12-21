@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -24,7 +24,7 @@
 // Configuration include.
 //// Included at first position before any other ones.
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
 
@@ -54,6 +54,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "Core/mvdAbstractImageModel.h"
+#include "Core/mvdFilenameInterface.h"
 #include "Core/mvdVectorImageSettings.h"
 #include "Core/mvdTypes.h"
 #include "Gui/mvdColorSetupWidget.h"
@@ -82,8 +83,9 @@ class DatasetModel;
 /** \class VectorImageModel
  *
  */
-class Monteverdi2_EXPORT VectorImageModel :
-    public AbstractImageModel
+class Monteverdi_EXPORT VectorImageModel :
+    public AbstractImageModel,
+    public FilenameInterface
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -150,16 +152,13 @@ public:
   inline void SetSettings( const VectorImageSettings & settings );
 
   /** */
-  inline otb::GenericRSTransform<> * GetGenericRSTransform();
+  inline const otb::GenericRSTransform<> * GetGenericRSTransform() const;
 
   /**
    * Width and height are added to compute the best level of detail to
    * load from the image if multi-resolution image.
    */
   void SetFilename( const QString& filename, int width, int height );
-
-  /** Get input filename */
-  inline QString GetFilename() const;
 
   /**
    * Following the zoom factor, get the best level of detail
@@ -305,6 +304,9 @@ private:
 
   virtual std::string virtual_GetWkt() const;
   virtual bool virtual_HasKwl() const;
+  virtual void virtual_ToWgs84( const PointType &,
+				PointType &,
+				double & alt ) const;
 
   //
   // AbstractImageModel overrides.
@@ -324,14 +326,11 @@ private:
    */
   VectorImageSettings m_Settings;
 
-  // store the input image filename
-  QString m_Filename;
-
   /** List of all Level of detail (Resolution) available from the file */
   CountType m_LodCount;
 
   //  Generic RS Transform to get lat/long coordinates 
-  otb::GenericRSTransform<>::Pointer m_GenericRSTransform;
+  otb::GenericRSTransform<>::Pointer m_ToWgs84;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -405,20 +404,11 @@ VectorImageModel
 
 /*****************************************************************************/
 inline
-otb::GenericRSTransform<>*
+const otb::GenericRSTransform<> *
 VectorImageModel
-::GetGenericRSTransform()
+::GetGenericRSTransform() const
 {
-  return m_GenericRSTransform;
-}
-
-/*****************************************************************************/
-inline
-QString
-VectorImageModel
-::GetFilename() const
-{
-  return m_Filename;
+  return m_ToWgs84;
 }
 
 /*****************************************************************************/

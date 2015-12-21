@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -78,6 +78,8 @@ const char* I18nCoreApplication::SETTINGS_KEYS[ SETTINGS_KEY_COUNT ] =
   "srtmDirActive",
   "geoidPath",
   "geoidPathActive",
+  "resolutionAlgorithm",
+  "tileSize",
 };
 
 /*****************************************************************************/
@@ -425,8 +427,7 @@ I18nCoreApplication
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
-/*******************************************************************************/
+/*****************************************************************************/
 I18nCoreApplication
 ::I18nCoreApplication( QCoreApplication* qtApp ) :
   QObject( qtApp ),
@@ -448,7 +449,7 @@ I18nCoreApplication
     {
     throw std::invalid_argument(
       ToStdString(
-	tr( "Class 'I18nCoreApplication' instance must be provided a"
+	tr( "Class 'I18nCoreApplication' instance must be provided a "
 	    "QCoreApplication' pointer at construction time!" )
       )
     );
@@ -560,11 +561,15 @@ I18nCoreApplication
 }
 
 /*******************************************************************************/
-void
+bool
 I18nCoreApplication
 ::ElevationSetup()
 {
+  assert( !otb::DEMHandler::Instance().IsNull() );
+
   otb::DEMHandler::Pointer demHandlerInstance( otb::DEMHandler::Instance() );
+
+  bool geoidUpdated = false;
 
   if( I18nCoreApplication::HasSettingsKey(
 	I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE ) &&
@@ -579,22 +584,48 @@ I18nCoreApplication
 
     try
       {
-      demHandlerInstance->OpenGeoidFile(
-	ToStdString(
-	  I18nCoreApplication::RetrieveSettingsKey(
-	    I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
-	  ).toString()
-	)
+      QString filename(
+	I18nCoreApplication::RetrieveSettingsKey(
+	  I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
+	).toString()
       );
+
+      geoidUpdated =
+	demHandlerInstance->OpenGeoidFile(
+	  QFile::encodeName(
+	    filename
+	  )
+	);
+
+      // BUGFIX: When geoid file has not been updated by
+      // otb::DEMHandler, the filename may be erronous and unchecked
+      // so, add a check, in this case, to report input error to the
+      // user.
+      if( !geoidUpdated )
+	{
+	QFileInfo finfo( filename );
+
+	if( !finfo.exists() )
+	  throw std::runtime_error(
+	    ToStdString(
+	      tr( "Geoid file '%1' not found!" )
+	      .arg( filename )
+	    )
+	  );
+	}
       }
-    catch( std::exception& err )
+    catch( const std::exception & err )
       {
       qWarning()
 	<< ToStdString( tr( "An error occured while loading the geoid file, "
-			    "no geoid file will be used: " ) ).c_str()
+			    "no geoid file will be used:" ) ).c_str()
 	<< err.what();
+
+      throw;
       }
     }
+  else
+    geoidUpdated = true;
 
   if( I18nCoreApplication::HasSettingsKey(
 	I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ) &&
@@ -609,8 +640,10 @@ I18nCoreApplication
 
     try
       {
+      demHandlerInstance->ClearDEMs();
+
       demHandlerInstance->OpenDEMDirectory(
-	ToStdString(
+	QFile::encodeName(
 	  I18nCoreApplication::RetrieveSettingsKey(
 	    I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
 	  )
@@ -618,14 +651,22 @@ I18nCoreApplication
 	)
       );
       }
-    catch( std::exception& err )
+    catch( const std::exception & err )
       {
       qWarning()
 	<< ToStdString( tr( "An error occured while loading the DEM directory, "
-			    "no DEM will be used: " ) ).c_str()
+			    "no DEM will be used:" ) ).c_str()
 	<< err.what();
+
+      throw;
       }
     }
+  else
+    {
+    otb::DEMHandler::Instance()->ClearDEMs();
+    }
+
+  return geoidUpdated;
 }
 
 /*******************************************************************************/
@@ -633,10 +674,43 @@ void
 I18nCoreApplication
 ::InitializeLocale()
 {
-  QTextCodec::setCodecForTr( QTextCodec::codecForName( "utf8" ) );
-  //QTextCodec::setCodecForLocale( QTextCodec::codecForName("utf8") );
-  QTextCodec::setCodecForCStrings( QTextCodec::codecForName("utf8") );
-  
+  {
+  typedef QList< QByteArray > ByteArrayList;
+
+  ByteArrayList codecs( QTextCodec::availableCodecs() );
+
+  qDebug() << "Available codecs:";
+
+  foreach( const QByteArray & codec, codecs )
+    qDebug() << "\t" << codec;
+  }
+
+  // Literal strings to be translated are UTF-8 encoded because source
+  // files are UTF-8 encoded.
+  QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
+
+  // QTextCodec::setCodecForLocale( QTextCodec::codecForName("UTF-8") );
+
+  // QTextCodec::setCodecForCStrings( QTextCodec::codecForName("System") );
+
+  qWarning()
+    << "Codec for C-strings:"
+    << ( QTextCodec::codecForCStrings()!=NULL
+	 ? QTextCodec::codecForCStrings()->name()
+	 : "none" );
+
+  qWarning()
+    << "Codec for Locale:"
+    << ( QTextCodec::codecForLocale()!=NULL
+	 ? QTextCodec::codecForLocale()->name()
+	 : "none" );
+
+  qWarning()
+    << "Codec for Tr:"
+    << ( QTextCodec::codecForTr()!=NULL
+	 ? QTextCodec::codecForTr()->name()
+	 : "none" );
+
 
   //
   // 1. default UI language is english (no translation).
@@ -659,7 +733,7 @@ I18nCoreApplication
   QDir prefix( bin_dir );
   while ( prefix.cdUp() )
     {
-    if ( QDir(prefix).cd(Monteverdi2_INSTALL_BIN_DIR) )
+    if ( QDir(prefix).cd(Monteverdi_INSTALL_BIN_DIR) )
       {
       prefixFound = true;
       break;
@@ -677,7 +751,7 @@ I18nCoreApplication
   QDir i18n_dir( prefix );
 
   // At this point the candidate install prefix can also be the build dir root
-  if ( prefix.exists( Monteverdi2_CONFIGURE_FILE )
+  if ( prefix.exists( Monteverdi_CONFIGURE_FILE )
        && i18n_dir.cd("i18n") )
     {
     m_IsRunningFromBuildDir = true;
@@ -700,7 +774,7 @@ I18nCoreApplication
       << tr( "Running from install directory '%1'." )
       .arg( prefix.path() );
 
-    if (i18n_dir.cd(Monteverdi2_INSTALL_DATA_I18N_DIR))
+    if (i18n_dir.cd(Monteverdi_INSTALL_DATA_I18N_DIR))
       {
       qDebug()
 	<< tr( "Loading translation files from directory '%1'." )
@@ -714,7 +788,7 @@ I18nCoreApplication
 	  .arg( QDir::cleanPath(
 		  prefix.path()
 		  + QDir::separator()
-		  + Monteverdi2_INSTALL_DATA_I18N_DIR
+		  + Monteverdi_INSTALL_DATA_I18N_DIR
 		)
 	  )
 	)
@@ -739,7 +813,7 @@ I18nCoreApplication
   try
     {
     //
-    // 3.2 Stack Monteverdi2 translator as prioritary over Qt translator.
+    // 3.2 Stack Monteverdi translator as prioritary over Qt translator.
     LoadAndInstallTranslator( sys_lc.name(), i18n_dir.path() );
     }
   catch( std::exception& exc )

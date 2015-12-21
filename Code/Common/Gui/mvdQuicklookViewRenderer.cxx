@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -73,6 +73,8 @@ QuicklookViewRenderer
   m_GlRoiActor( otb::GlROIActor::New() )
 {
   assert( !m_GlRoiActor.IsNull() );
+
+  m_EffectsEnabled = false;
 }
 
 /*****************************************************************************/
@@ -150,7 +152,7 @@ QuicklookViewRenderer
   assert( !m_GlView.IsNull() );
 
 
-  std::string key( m_GlView->AddActor( m_GlRoiActor ) );
+  std::string key( m_GlView->AddActor( m_GlRoiActor, "ROI" ) );
 
   m_GlRoiActor->SetVisible( true );
 
@@ -167,18 +169,6 @@ QuicklookViewRenderer
   m_GlRoiActor->SetAlpha( 0.2 );
 
   m_GlView->MoveActorToEndOfRenderingOrder( key, true );
-
-#if 0
-  otb::GlImageActor::Pointer referenceGlImageActor(
-    GetReferenceActor< otb::GlImageActor >()
-  );
-
-  if( referenceGlImageActor.IsNull() )
-    return;
-
-  m_GlRoiActor->SetKwl( referenceGlImageActor->GetKwl() );
-  m_GlRoiActor->SetWkt( referenceGlImageActor->GetWkt() );
-#endif
 }
 
 /*****************************************************************************/
@@ -198,6 +188,11 @@ QuicklookViewRenderer
 
   const QuicklookViewRenderer::RenderingContext * context =
     dynamic_cast< const QuicklookViewRenderer::RenderingContext * >( c );
+
+  // Coverity-19842
+  // {
+  assert( context!=NULL );
+  // }
 
   /*
   qDebug()

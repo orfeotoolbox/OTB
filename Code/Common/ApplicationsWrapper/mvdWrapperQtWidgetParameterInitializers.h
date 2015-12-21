@@ -1,13 +1,13 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Monteverdi
   Language:  C++
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See Copyright.txt for details.
 
-  Monteverdi2 is distributed under the CeCILL licence version 2. See
+  Monteverdi is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
   http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
 
@@ -23,7 +23,7 @@
 // Configuration include.
 //// Included at first position before any other ones.
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "ConfigureMonteverdi2.h"
+#include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
 
@@ -49,9 +49,13 @@
 #include "otbWrapperQtWidgetInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetInputImageParameter.h"
 #include "otbWrapperQtWidgetInputImageListParameter.h"
+#include "otbWrapperQtWidgetInputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
+#include "otbWrapperQtWidgetOutputFilenameParameter.h"
 #include "otbWrapperQtWidgetOutputImageParameter.h"
+#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
+#include "otbWrapperQtWidgetOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
 #endif //tag=QT4-boost-compatibility
 
@@ -102,6 +106,13 @@ SetupOutputFilename( W* widget,
                      const QDir& dir,
                      const QString& prefix,
                      const QString& extension );
+
+/**
+ */
+template< typename W >
+void
+SetupOutputFilename( W * widget,
+                     const QDir & =QDir::current() );
 
 /**
  */
@@ -231,6 +242,19 @@ private:
 };
 
 /**
+ * \class InputProcessXMLInitializer
+ *
+ * \brief WIP.
+ */
+class InputProcessXMLInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetInputProcessXMLParameter *,
+  void >
+{
+public:
+  inline result_type operator () ( argument_type widget ) const;
+};
+
+/**
  * \class OutputImageInitializer
  *
  * \brief WIP.
@@ -241,12 +265,60 @@ class OutputImageInitializer : public std::unary_function<
   >
 {
 public:
-  inline OutputImageInitializer( const QString& prefix );
+  inline OutputImageInitializer( const QString & prefix );
 
   inline result_type operator () ( argument_type widget ) const;
 
 private:
   QString m_Prefix;
+};
+
+/**
+ * \class OutputVectorDataInitializer
+ *
+ * \brief WIP.
+ */
+class OutputVectorDataInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetOutputVectorDataParameter*,
+  void
+  >
+{
+public:
+  inline result_type operator () ( argument_type widget ) const;
+
+private:
+};
+
+/**
+ * \class OutputFilenameInitializer
+ *
+ * \brief WIP.
+ */
+class OutputFilenameInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetOutputFilenameParameter*,
+  void
+  >
+{
+public:
+  inline result_type operator () ( argument_type widget ) const;
+
+private:
+};
+
+/**
+ * \class OutputProcessXMLInitializer
+ *
+ * \brief WIP.
+ */
+class OutputProcessXMLInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetOutputProcessXMLParameter *,
+  void
+  >
+{
+public:
+  inline result_type operator () ( argument_type widget ) const;
+
+private:
 };
 
 /**
@@ -361,10 +433,16 @@ InputImageListInitializer
 {
   assert( widget!=NULL );
 
-  QObject::connect(
-    widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
-    m_View, SLOT( OnFileSelectionWidgetAdded1( QWidget * ) )
-  );
+  if( m_SupportsDataset )
+    QObject::connect(
+      widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
+      m_View, SLOT( OnFileSelectionWidgetAdded1( QWidget * ) )
+    );
+  else
+    QObject::connect(
+      widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
+      m_View, SLOT( OnFileSelectionWidgetAdded0( QWidget * ) )
+    );
 
   SetupWidget( widget, FileSelectionInitializer( m_SupportsDataset ) );
 }
@@ -412,7 +490,7 @@ InputVectorDataInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget );
+  SetupForFilenameDrop( widget, "You can drop filename here." );
 }
 
 /*****************************************************************************/
@@ -437,6 +515,17 @@ InputVectorDataListInitializer
   );
 
   SetupWidget( widget, FileSelectionInitializer( false ) );
+}
+
+/*****************************************************************************/
+inline
+InputProcessXMLInitializer::result_type
+InputProcessXMLInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  SetupForFilenameDrop( widget, "You can drop filename here." );
 }
 
 /*****************************************************************************/
@@ -476,12 +565,73 @@ OutputImageInitializer
   assert( widget!=NULL );
   assert( I18nCoreApplication::ConstInstance()!=NULL );
 
-  SetupOutputFilename(
-    widget,
-    I18nCoreApplication::ConstInstance()->GetResultsDir(),
-    m_Prefix,
-    ".tif"
-  );
+  if( m_Prefix.isEmpty() )
+    {
+    SetupForFilenameDrop( widget, "You can drop filename here." );
+
+    assert( qApp!=NULL );
+    assert( !qApp->arguments().empty() );
+
+    SetupOutputFilename( widget );
+    }
+  else
+    SetupOutputFilename(
+      widget,
+      I18nCoreApplication::ConstInstance()->GetResultsDir(),
+      m_Prefix,
+      ".tif"
+    );
+}
+
+/*****************************************************************************/
+inline
+OutputVectorDataInitializer::result_type
+OutputVectorDataInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  SetupForFilenameDrop( widget, "You can drop filename here." );
+
+  assert( qApp!=NULL );
+  assert( !qApp->arguments().empty() );
+
+  SetupOutputFilename( widget );
+}
+
+/*****************************************************************************/
+inline
+OutputFilenameInitializer::result_type
+OutputFilenameInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  SetupForFilenameDrop( widget, "You can drop filename here." );
+
+  assert( qApp!=NULL );
+  assert( !qApp->arguments().empty() );
+
+  SetupOutputFilename( widget );
+}
+
+/*****************************************************************************/
+inline
+OutputProcessXMLInitializer::result_type
+OutputProcessXMLInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  SetupForFilenameDrop( widget, "You can drop filename here." );
+
+  assert( qApp!=NULL );
+  assert( !qApp->arguments().empty() );
+
+  // MANTIS-1103
+  // {
+  // SetupOutputFilename( widget );
+  // }
 }
 
 /*****************************************************************************/
@@ -491,7 +641,7 @@ SetupForFilenameDrop( W* widget, const char* text )
 {
   assert( widget!=NULL );
 
-  QLineEdit* lineEdit = widget->GetInput();
+  QLineEdit * lineEdit = widget->GetInput();
 
   //
   // Setup widget.
@@ -499,7 +649,7 @@ SetupForFilenameDrop( W* widget, const char* text )
   {
   if( text!=NULL )
     {
-    lineEdit->setText(
+    lineEdit->setPlaceholderText(
       QCoreApplication::translate(
         "mvd::Wrapper::QtWidgetView",
         text
@@ -552,7 +702,7 @@ SetupForDatasetDrop( W* widget, const char* text )
   {
   if( text!=NULL )
     {
-    lineEdit->setText(
+    lineEdit->setPlaceholderText(
       QCoreApplication::translate(
         "mvd::Wrapper::QtWidgetView",
         text
@@ -620,11 +770,22 @@ SetupOutputFilename( W* widget,
   widget->UpdateGUI();
 }
 
+/*****************************************************************************/
+template< typename W >
+void
+SetupOutputFilename( W * widget,
+                     const QDir & dir )
+{
+  widget->SetFileName( dir.path() );
+
+  widget->UpdateGUI();
+}
+
 /*******************************************************************************/
 template< typename F >
 inline
 void
-SetupWidget( QWidget* widget, const F& functor )
+SetupWidget( QWidget * widget, const F & functor )
 {
   typedef typename F::argument_type Widget;
   typedef QList< Widget > WidgetList;
