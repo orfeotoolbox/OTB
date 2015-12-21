@@ -66,9 +66,9 @@ data.
 \subsection{Obtaining the Software}
 \label{sec:ObtainingTheSoftware}
 
-Periodic releases of the software are available on the OTB Web
-site. These official releases are available a few times a year and
-announced on the ORFEO Web pages and mailing lists.
+Periodic releases of the software are available on the OTB Website. These
+official releases are available a few times a year and announced on the ORFEO
+Web pages and mailing lists.
 
 This software guide assumes that you are working with the latest official OTB
 release (available on the OTB Web site). %If you are a new user,
@@ -94,31 +94,33 @@ MS-Windows while the second one is the preferred format for UNIX systems.
 
 Once you unzip or untar the file, a directory called \code{OTB} will be
 created in your disk and you will be ready for starting the configuration
-process described in Section \ref{sec:CMakeforOTB} on page
-\pageref{sec:CMakeforOTB}.
+process described in Section \ref{chapter:Installation}.
 
 
 There are two other ways of getting the OTB source code:
 \begin{itemize}
-\item Clone the current release with \href{http://mercurial.selenic.com}{Mercurial} from the \href{http://hg.orfeo-toolbox.org/OTB}{OTB mercurial server},
-\item Clone the latest revision with \href{http://mercurial.selenic.com}{Mercurial} from the \href{http://hg.orfeo-toolbox.org/OTB}{OTB mercurial server}.
+\item Clone the current release with \href{https://git-scm.com/}{Git} from the
+  \href{https://git.orfeo-toolbox.org/otb.git}{OTB git server}, (master branch)
+\item Clone the latest revision with \href{https://git-scm.com/}{Git} from the
+  \href{https://git.orfeo-toolbox.org/otb.git}{OTB git server} (develop branch).
 \end{itemize}
 
-These last two options need a proper \href{http://mercurial.selenic.com}{Mercurial} installation. To get source code from Mercurial, do:
+These last two options need a proper \href{https://git-scm.com/}{Git} installation. To get source code from Git, do:
 \begin{verbatim}
-hg clone http://hg.orfeo-toolbox.org/OTB
+git clone https://git@git.orfeo-toolbox.org/git/otb.git
 \end{verbatim}
 
-Using Mercurial, you can easily navigate through the different version. For instance, this brings you to the 3.16.0 source code version:
+Using Git, you can easily navigate through the different versions. For instance, this brings you to the 5.2 source code version:
 \begin{verbatim}
-hg update -r 3.16.0
+git checkout release-5.2
 \end{verbatim}
 
 And this brings you to the latest development version:
 \begin{verbatim}
-hg update
+git checkout develop
 \end{verbatim}
 
+You an find more information on the OTB git workflow in the \href{http://wiki.orfeo-toolbox.org/index.php/Git}{wiki}.
 
 \subsection{Directory Structure}
 \label{sec:DirectoryStructure}
@@ -126,8 +128,6 @@ hg update
 To begin your OTB odyssey, you will first need to know something about OTB's
 software organization and directory structure. It is helpful to know enough to
 navigate through the code base to find examples, code, and documentation.
-
-
 
 The \code{OTB} contains the following subdirectories:
 \begin{itemize}
