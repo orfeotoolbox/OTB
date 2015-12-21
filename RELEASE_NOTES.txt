@@ -30,7 +30,7 @@ OTB-v.5.2.0 - Changes since version 5.0.0 (2015/11/02)
     * ITK 4.7.1 -> 4.8.1
     * JPEG v9a -> turbo 1.4.1
     * OpenThreads 3.2 -> 3.4
-    * Ossim r23092 -> 1.8.20-1
+    * Ossim r23092 -> r23537
     * GeoTIFF 1.4.0 -> 1.4.1
     * muParser 2.2.3 -> 2.2.5
     * OpenCV 2.4.10 -> 2.4.11
