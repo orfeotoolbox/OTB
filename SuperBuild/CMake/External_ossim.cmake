@@ -61,6 +61,7 @@ else()
     -DBUILD_OSSIM_MPI_SUPPORT:BOOL=OFF
     -DBUILD_OSSIM_FREETYPE_SUPPORT:BOOL=ON
     -DBUILD_OSSIM_APPS:BOOL=OFF
+    -DBUILD_OSSIM_TESTS:BOOL=OFF
     -DBUILD_OSSIM_FRAMEWORKS:BOOL=OFF
     -DINSTALL_ARCHIVE_DIR:STRING=lib
     -DINSTALL_LIBRARY_DIR:STRING=lib
@@ -70,6 +71,18 @@ else()
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
+  if(MSVC)
+    ExternalProject_Add_Step(${proj} patch_ossim_src
+      COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_SOURCE_DIR}/patches/ossim/src ${OSSIM_SB_SRC}/src
+      DEPENDEES patch_ossim_include
+      DEPENDERS configure )
+    ExternalProject_Add_Step(${proj} patch_ossim_include
+      COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_SOURCE_DIR}/patches/ossim/include ${OSSIM_SB_SRC}/include
+      DEPENDEES patch
+      DEPENDERS patch_ossim_src )
+  endif()
 
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
