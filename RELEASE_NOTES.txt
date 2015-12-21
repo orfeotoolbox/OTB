@@ -2,7 +2,7 @@
  Monteverdi Release Note
 =========================
 
-Monteverdi 3.0.0 - Changes since version 0.8.1 (June 1st, 2015)
+Monteverdi 3.0.0 - Changes since version 0.8.1 (December 22nd, 2015)
 ===============================================================
 
 * Versionning
