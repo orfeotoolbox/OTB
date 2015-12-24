@@ -8,7 +8,7 @@ BUNDLE_RES_DIR="$BUNDLE/Contents/Resources"
 ##echo "BUNDLE_RES_DIR: $BUNDLE_RES_DIR"
 
 export GDAL_DATA=$BUNDLE_RES_DIR/gdal
-export ITK_AUTOLOAD_PATH=$BUNDLE_BIN_DIR/otb/applications
+export OTB_APPLICATION_PATH=$BUNDLE_BIN_DIR/otb/applications
 
 cd $HOME
 
