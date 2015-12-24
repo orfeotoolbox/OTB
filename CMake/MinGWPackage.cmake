@@ -75,10 +75,8 @@ set(SYSTEM_DLLS
   oleaut32.dll
   comctl32.dll
   winmm.dll
-  secur32.dll
-  libeay32.dll
   shfolder.dll
-  ssleay32.dll
+  secur32.dll
   wsock32.dll
   winspool.drv)
 
@@ -99,6 +97,12 @@ macro(list_contains var value)
   foreach(value2 ${ARGN})
     if(${value} STREQUAL ${value2})
       set(${var} TRUE)
+    else()
+      string(TOLOWER ${value} value_)
+      string(TOLOWER ${value2} value2_)
+      if(${value_} STREQUAL ${value2_})
+        set(${var} TRUE)
+      endif()
     endif()
   endforeach(value2)
 endmacro()
@@ -114,7 +118,14 @@ function(process_deps infile)
       if(NOT DLL_FOUND)
         if(EXISTS ${SEARCHDIR}/${infile})
           set(DLL_FOUND TRUE)
-
+        else()
+          string(TOLOWER ${infile} infile_lower)
+          if(EXISTS ${SEARCHDIR}/${infile_lower})
+            set(DLL_FOUND TRUE)
+            set(infile ${infile_lower})
+          endif()
+        endif()
+        if(DLL_FOUND)
           message(STATUS "Processing ${SEARCHDIR}/${infile}")
           if(NOT "${infile}" MATCHES "otbapp")
             install(FILES "${SEARCHDIR}/${infile}"
