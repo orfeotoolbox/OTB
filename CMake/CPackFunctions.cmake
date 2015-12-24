@@ -28,7 +28,7 @@ function(create_cpack_config)
   SET(CPACK_PACKAGE_VERSION_PATCH "${Monteverdi_VERSION_PATCH}")
   #monteverdi short version string - eg: 3.0.0-beta
   SET(PACKAGE_SHORT_VERSION_STRING ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}${Monteverdi_VERSION_SUFFIX})
-    
+
   if(WIN32)
     set(arch_prefix win32)
     set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
@@ -39,7 +39,7 @@ function(create_cpack_config)
     SET(CPACK_GENERATOR "NSIS")
     SET(CPACK_NSIS_MODIFY_PATH OFF)
         SET(CPACK_NSIS_CONTACT "contact@orfeo-toolbox.org")
-    
+
     #RK: two packages.
     #STRING(TOLOWER ${application} application_)
     #SET(EXEFILE_NAME "${application_}.exe")
@@ -54,11 +54,11 @@ function(create_cpack_config)
 
 SET(application "Monteverdi")
 SET(startmenufolder "${application}-${PACKAGE_SHORT_VERSION_STRING}")
-  
+
 #set(CPACK_NSIS_DEFINES "  !define MUI_STARTMENUPAGE_DEFAULTFOLDER \\\"${startmenufolder} (${arch_prefix})\\\"")
 #SET(CPACK_PACKAGE_EXECUTABLES "monteverdi.bat" "Monteverdi")
 #SET(CPACK_CREATE_DESKTOP_LINKS "monteverdi.bat" )
- 
+
 SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\monteverdi.exe")
 SET(CPACK_PACKAGE_ICON   "${Monteverdi_SOURCE_DIR}\\\\Data\\\\Icons\\\\monteverdi.ico")
 SET(CPACK_NSIS_CREATE_ICONS "CreateShortCut '$SMPROGRAMS\\\\${startmenufolder}\\\\Monteverdi.lnk'  '$INSTDIR\\\\bin\\\\monteverdi.bat' ")
@@ -106,7 +106,7 @@ SET(CPACK_NSIS_DELETE_ICONS_EXTRA
   SET(CPACK_COMPONENTS_ALL)
   LIST(APPEND CPACK_COMPONENTS_ALL  "Resources")
   LIST(APPEND CPACK_COMPONENTS_ALL "Runtime")
-  
+
   #RK: two packages
   #LIST(APPEND CPACK_COMPONENTS_ALL "${application}")
   LIST(APPEND CPACK_COMPONENTS_ALL "Monteverdi")
@@ -129,7 +129,7 @@ SET(CPACK_NSIS_DELETE_ICONS_EXTRA
     SET(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};ALL;ALL;/")
   endif()
   SET(CPACK_PACKAGE_VENDOR "OTB Team")
-  
+
   SET(CPACK_PACKAGE_NAME "${application}")
   SET(CPACK_NSIS_DISPLAY_NAME "${application}-${PACKAGE_SHORT_VERSION_STRING}")
   SET(CPACK_NSIS_PACKAGE_NAME "${application}-${PACKAGE_SHORT_VERSION_STRING}")
@@ -145,7 +145,7 @@ endfunction(create_cpack_config)
 
 
 function(configure_app_package app with_otb_apps)
-  
+
   string(TOLOWER ${app} EXECUTABLE_NAME)
   set(APP_QTCONF_DIR bin)
   set(APP_QTSQLITE_FILENAME qsqlite4.dll)
@@ -154,7 +154,7 @@ function(configure_app_package app with_otb_apps)
   set(APP_I18N_DIR lib/qt4/translations)
   set(APP_DATA_DIR share)
   set(APP_NAME "\${CMAKE_INSTALL_PREFIX}/bin/${EXECUTABLE_NAME}.exe")
-  
+
   install(CODE "file(WRITE \"\${CMAKE_INSTALL_PREFIX}/${APP_QTCONF_DIR}/qt.conf\"
                 \"[Paths]
                   Translations=../lib/qt4/translations
@@ -165,16 +165,16 @@ function(configure_app_package app with_otb_apps)
   install(FILES ${Monteverdi_SOURCE_DIR}/Packaging/Windows/${EXECUTABLE_NAME}.bat
     DESTINATION bin
     COMPONENT ${app})
- 
+
   if(WIN32)
-    
+
     if(NOT CMAKE_CROSSCOMPILING AND Monteverdi_USE_CPACK)
-      
+
       file(TO_CMAKE_PATH "$ENV{OSGEO4W_ROOT}" OSGEO4W_ROOT)
       if(NOT OSGEO4W_ROOT)
         message(FATAL_ERROR "Cannot generate installer without OSGeo4W environment : OSGEO4W_ROOT")
       endif(NOT OSGEO4W_ROOT)
-      
+
       # The following DLL handling is very specific
       # both to OSGeo4W flavour (32 bit or 64 bit), OSGeo4W package state
       # and the compiler used to make the Monteverdi installer (VC2010)
@@ -207,18 +207,18 @@ function(configure_app_package app with_otb_apps)
           install( FILES ${dll} DESTINATION bin COMPONENT Runtime )
         endif()
       endforeach()
-      
+
       #RK: two packages
       # set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${app}")
       # create_cpack_config(${app})
 
-    endif() #(NOT CMAKE_CROSSCOMPILING AND Monteverdi_USE_CPACK)      
+    endif() #(NOT CMAKE_CROSSCOMPILING AND Monteverdi_USE_CPACK)
 
 
     if(CMAKE_CROSSCOMPILING)
       if(NOT DEFINED MXE_TARGET_DIR)
         message(FATAL_ERROR "MXE_TARGET_DIR is missing")
-      endif()  
+      endif()
       if(MXE_TARGET_DIR MATCHES "i686")
         set(mxearch x86)
         set(archive_name ${app}-${Monteverdi_VERSION_STRING}-win32)
@@ -226,18 +226,18 @@ function(configure_app_package app with_otb_apps)
         set(mxearch x64)
         set(archive_name ${app}-${Monteverdi_VERSION_STRING}-win64)
       endif()
-      
+
       execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
-      
+
       get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
       get_filename_component(mxeroot ${mxeroot} PATH)
-
       file(WRITE "${CMAKE_BINARY_DIR}/_mingw/${app}/CMakeLists.txt"
         "cmake_minimum_required(VERSION 2.6)
        include(CMakeParseArguments)
        set(Monteverdi_SOURCE_DIR \"${Monteverdi_SOURCE_DIR}\")
        set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")
        set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
+       set(QT_TRANSLATIONS_DIR \"${QT_TRANSLATIONS_DIR}\")
        set(Monteverdi_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
        set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
        set(Monteverdi_INSTALL_DATA_DIR \"${Monteverdi_INSTALL_DATA_DIR}\")
@@ -252,20 +252,20 @@ function(configure_app_package app with_otb_apps)
         SEARCHDIRS \"\")")
 
       set(GDAL_DATA ${MXE_TARGET_DIR}/share/gdal)
-      
+
       add_custom_target(configure-${app}-mingw-package
         COMMAND ${CMAKE_COMMAND}
         "${CMAKE_BINARY_DIR}/_mingw/${app}"
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw/${app}")
-      
+
       add_custom_target(make-${app}-mingw-package
         COMMAND ${CMAKE_COMMAND}
         "--build" "${CMAKE_BINARY_DIR}/_mingw/${app}" "--target" "install"
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw/${app}"
         DEPENDS configure-${app}-mingw-package)
-      
+
       find_program(ZIP_EXECUTABLE zip)
-      
+
       if(ZIP_EXECUTABLE)
         add_custom_target(create-${app}-mingw-archive
           COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
@@ -274,7 +274,7 @@ function(configure_app_package app with_otb_apps)
       else()
         message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
       endif()
-      
+
     endif() # (CMAKE_CROSSCOMPILING)
 
   endif(WIN32)
@@ -342,7 +342,7 @@ function(configure_app_package app with_otb_apps)
 
   ####################### install GDAL data #######################
 
-  
+
   if(NOT DEFINED GDAL_DATA)
     file(TO_CMAKE_PATH "$ENV{GDAL_DATA}" GDAL_DATA)
     if(NOT GDAL_DATA)
@@ -354,7 +354,7 @@ function(configure_app_package app with_otb_apps)
     endif()
   endif() #(DEFINED GDAL_DATA)
   # Need to include csv files provided with GDAL that contains some needed EPSG definitions
-  
+
   install(DIRECTORY ${GDAL_DATA}
     DESTINATION ${APP_DATA_DIR}
     COMPONENT Resources)
@@ -410,7 +410,7 @@ macro(create_monteverdi_application)
   cmake_parse_arguments(APPLICATION  "" "NAME;OUTPUT_NAME;COMPONENT_NAME;NEEDS_OTB_APPS" "SOURCES;LINK_LIBRARIES" ${ARGN} )
 
   if(NOT DEFINED APPLICATION_NEEDS_OTB_APPS OR APPLICATION_NEEDS_OTB_APPS)
-    set(APPLICATION_NEEDS_OTB_APPS TRUE)  
+    set(APPLICATION_NEEDS_OTB_APPS TRUE)
   else()
     set(APPLICATION_NEEDS_OTB_APPS FALSE)
   endif()
@@ -423,7 +423,7 @@ macro(create_monteverdi_application)
     add_executable(${APPLICATION_NAME}
       MACOSX_BUNDLE
       ${APPLICATION_SOURCES})
-    
+
   else() #Linux
     add_executable(${APPLICATION_NAME}
       ${APPLICATION_SOURCES})
@@ -431,7 +431,7 @@ macro(create_monteverdi_application)
 
   set(EXECUTABLE_NAME ${APPLICATION_NAME})
   if(APPLE)
-    
+
     string(SUBSTRING ${APPLICATION_NAME} 0 1 FIRST_LETTER)
     string(TOUPPER ${FIRST_LETTER} FIRST_LETTER)
     string(REGEX REPLACE "^.(.*)" "${FIRST_LETTER}\\1" APPLICATION_OUTPUT_NAME "${APPLICATION_NAME}")
