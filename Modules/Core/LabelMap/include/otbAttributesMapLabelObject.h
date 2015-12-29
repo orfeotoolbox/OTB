@@ -37,7 +37,7 @@ namespace Functor
 {
 
 /** \class AttributesMapLabelObjectAccessor
- *  \brief Allows to acces a given field of an AttributesMapLabelObject
+ *  \brief Allows accessing a given field of an AttributesMapLabelObject
  *
  * The name of the attribute to retrieve can be set by using the
  * SetAttributeName method.
@@ -88,9 +88,9 @@ private:
 
 
 /** \class AttributesMapMeasurementFunctor
-*   \brief This class allows to build a measurement vector from an AttributesMapLabelObject
+*   \brief This class allows building a measurement vector from an AttributesMapLabelObject
 *
-*    It Allows to select only a subset of the available attributes.
+*    It Allows selecting only a subset of the available attributes.
  *
  * \ingroup OTBLabelMap
 */
@@ -156,7 +156,7 @@ private:
  *  store pairs of key, value (of type TAttributesValue) in an internal
  *  map container.
  *
- * As such it allows to store any custom attributes as necessary.
+ * As such it allows storing any custom attributes as necessary.
  *
  * \sa LabelObject, ShapeLabelObject, StatisticsLabelObject
  *

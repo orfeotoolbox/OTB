@@ -56,9 +56,9 @@ namespace otb
  * are sorted by increasing correlation. If number of bands is
  * different, the change maps are sorted by decreasing correlation.
  *
- * The GetV1() and GetV2() methods allow to retrieve the linear
+ * The GetV1() and GetV2() methods allow retrieving the linear
  * combinations used to generate the Mad change maps as a vnl_matrix of
- * double, and the GetRho() method allows to retrieve the correlation
+ * double, and the GetRho() method allows retrieving the correlation
  * associated to each Mad change maps as a vnl_vector.
  *
  * This filter has been implemented from the Matlab code kindly made

@@ -93,7 +93,7 @@ public:
   itkSetMacro(MaxDepth, int);
 
   /** If true then surrogate splits will be built.
-   * These splits allow to work with missing data and compute variable importance correctly.
+   * These splits allow working with missing data and compute variable importance correctly.
    * Default is false
    * \see http://docs.opencv.org/modules/ml/doc/gradient_boosted_trees.html#cvgbtreesparams-cvgbtreesparams
    */

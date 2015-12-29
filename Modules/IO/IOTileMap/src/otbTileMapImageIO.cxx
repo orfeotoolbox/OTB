@@ -209,7 +209,7 @@ void TileMapImageIO::GenerateTileInfo(double x, double y, int numTileX, int numT
   std::ostringstream filename;
   BuildFileName(quad2, filename);
 
-  // Build tile informations
+  // Build tile information
   TileNameAndCoordType lTileInfos;
   lTileInfos.numTileX = numTileX;
   lTileInfos.numTileY = numTileY;

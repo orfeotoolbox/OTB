@@ -90,7 +90,7 @@ SetMinimumParameterIntValue("channel", 1);
 AddRAMParameter();
 
 AddParameter(ParameterType_Group, "parameters", "Texture feature parameters");
-SetParameterDescription("parameters","This group of parameters allows to define texture parameters.");
+SetParameterDescription("parameters","This group of parameters allows one to define texture parameters.");
 
 AddParameter(ParameterType_Int,"parameters.xrad","X Radius");
 SetParameterDescription("parameters.xrad", "X Radius");

@@ -108,7 +108,7 @@ private:
       "matrices (for instance cos, sin, ...). These new operators/ functions keep the original names to which we added the prefix 'v' for vector (vcos, vsin, ...).\n"
       "- mult, div and pow operators, that perform element-wise multiplication, division or exponentiation of vector/matrices (for instance im1 div im2)\n"
       "- mlt, dv and pw operators, that perform multiplication, division or exponentiation of vector/matrices by a scalar (for instance im1 dv 2.0)\n"
-      "- bands, which is a very usefull operator. It allows to select specific bands from an image, and/or to rearrange them in a new vector;\n"
+      "- bands, which is a very usefull operator. It allows selecting specific bands from an image, and/or to rearrange them in a new vector;\n"
       "for instance bands(im1,{1,2,1,1}) produces a vector of 4 components made of band 1, band 2, band 1 and band 1 values from the first input.\n"
       "Note that curly brackets must be used in order to select the desired band indices.\n"
       "... and so on.\n"
@@ -126,7 +126,7 @@ private:
       "In the latter case, elements of a row must be separated by commas, and rows must be separated by semicolons.\n"
       "It is also possible to define expressions within the same txt file, with the pattern #E expr. For instance (two expressions; see also limitations section below):\n\n"
       "#E $dotpr(kernel1,im1b1N3x5); im2b1^expo$\n"
-      "\n- The 'outcontext' parameter allows to save user's constants and expressions (context).\n"
+      "\n- The 'outcontext' parameter allows saving user's constants and expressions (context).\n"
       "- Setting the output image can be done with the 'out' parameter (multi-outputs is not implemented yet).\n"
       "\n\n"
       "Finally, we strongly recommend that the reader takes a look at the cookbook, where additional information can be found (http://www.orfeo-toolbox.org/packages/OTBCookBook.pdf).\n"
@@ -234,5 +234,3 @@ private:
 } // namespace otb
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::BandMathX)
-
-

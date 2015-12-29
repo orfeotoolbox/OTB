@@ -135,8 +135,8 @@ int main(int itkNotUsed(argc), char * argv[])
 //
 // Other useful methods are:
 // \begin{itemize}
-// \item \code{SetNthElement()} and \code{GetNthElement()} allow to
-// randomly access any element of the list.
+// \item \code{SetNthElement()} and \code{GetNthElement()} allow
+// randomly accessing any element of the list.
 // \item \code{Front()} to access to the first element of the list.
 // \item \code{Erase()} to remove an element.
 // \end{itemize}

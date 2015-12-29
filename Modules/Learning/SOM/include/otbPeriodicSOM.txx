@@ -58,7 +58,7 @@ PeriodicSOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBeha
   NeighborhoodIteratorType it(radius, map, mapRegion);
 
   // Here, the periodic update is achieved 'by hand' since
-  // PeriodicBoundaryCondition does not allow to modifiy
+  // PeriodicBoundaryCondition does not allow modifying
   // VectorImage contents
   SizeType  mapSize = mapRegion.GetSize();
   IndexType positionToUpdate;

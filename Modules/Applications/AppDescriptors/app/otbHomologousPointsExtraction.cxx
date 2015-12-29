@@ -81,19 +81,19 @@ private:
   {
     SetName("HomologousPointsExtraction");
     SetDocName("Homologous points extraction");
-    SetDescription("Allows to compute homologous points between images using keypoints");
-    SetDocLongDescription("This application allows to compute homologous points between images using keypoints. "
+    SetDescription("Compute homologous points between images using keypoints");
+    SetDocLongDescription("This application allows computing homologous points between images using keypoints. "
       " SIFT or SURF keypoints can be used and the band on which keypoints are computed can be set independantly for both images."
       " The application offers two modes :"
       " the first is the full mode where keypoints are extracted from the full extent of both images"
       " (please note that in this mode large image file are not supported). "
-      "The second mode, called geobins, allows to set-up spatial binning to get fewer points"
+      "The second mode, called geobins, allows one to set-up spatial binning to get fewer points"
       " spread accross the entire image. "
       "In this mode, the corresponding spatial bin in the second image is estimated using geographical"
       " transform or sensor modelling, and is padded according to the user defined precision. Last, in"
       " both modes the application can filter matches whose colocalisation in first image exceed this precision. "
       "The elevation parameters are to deal more precisely with sensor modelling in case of sensor geometry data. "
-      "The outvector option allows to create a vector file with segments corresponding to the localisation error between the matches."
+      "The outvector option allows creating a vector file with segments corresponding to the localisation error between the matches."
       " It can be useful to assess the precision of a registration for instance."
       " The vector file is always reprojected to EPSG:4326 to allow display in a GIS."
       " This is done via reprojection or by applying the image sensor models.");
@@ -143,8 +143,8 @@ private:
     SetParameterDescription("mode.full","Extract and match all keypoints, loading both images entirely into memory");
 
     AddChoice("mode.geobins","Search keypoints in small spatial bins regularly spread accross first image");
-    SetParameterDescription("mode.geobins","This method allows to retrieve a set of tie points regulary spread accross image 1. Corresponding bins in image 2 are retrieved using sensor and geographical information if available. The first bin position takes into account the margin parameter. Bins are cropped to the largest image region shrinked by the margin parameter for both in1 and in2 images.");
-    
+    SetParameterDescription("mode.geobins","This method allows retrieving a set of tie points regulary spread accross image 1. Corresponding bins in image 2 are retrieved using sensor and geographical information if available. The first bin position takes into account the margin parameter. Bins are cropped to the largest image region shrinked by the margin parameter for both in1 and in2 images.");
+
     AddParameter(ParameterType_Int,"mode.geobins.binsize","Size of bin");
     SetParameterDescription("mode.geobins.binsize","Radius of the spatial bin in pixels");
     SetDefaultParameterInt("mode.geobins.binsize",256);
@@ -154,7 +154,7 @@ private:
     SetParameterDescription("mode.geobins.binsizey","Radius of the spatial bin in pixels (y direction). If not set, the mode.geobins.binsize value is used.");
     SetMinimumParameterIntValue("mode.geobins.binsizey",1);
     MandatoryOff("mode.geobins.binsizey");
-    
+
     AddParameter(ParameterType_Int,"mode.geobins.binstep","Steps between bins");
     SetParameterDescription("mode.geobins.binstep","Steps between bins in pixels");
     SetDefaultParameterInt("mode.geobins.binstep",256);
@@ -175,7 +175,7 @@ private:
     SetDefaultParameterFloat("precision",0.);
 
     AddParameter(ParameterType_Empty,"mfilter","Filter points according to geographical or sensor based colocalisation");
-    SetParameterDescription("mfilter","If enabled, this option allows to filter matches according to colocalisation from sensor or geographical information, using the given tolerancy expressed in pixels");
+    SetParameterDescription("mfilter","If enabled, this option allows one to filter matches according to colocalisation from sensor or geographical information, using the given tolerancy expressed in pixels");
 
     AddParameter(ParameterType_Empty,"2wgs84","If enabled, points from second image will be exported in WGS84");
 
@@ -385,7 +385,7 @@ private:
         {
         bin_size_y = GetParameterInt("mode.geobins.binsizey");
         }
-      
+
       unsigned int bin_step_x = GetParameterInt("mode.geobins.binstep");
       unsigned int bin_step_y = bin_step_x;
 
@@ -393,7 +393,7 @@ private:
         {
         bin_step_y = GetParameterInt("mode.geobins.binstepy");
         }
-      
+
       unsigned int nb_bins_x = static_cast<unsigned int>(vcl_ceil(static_cast<float>(size[0]-2*image_border_margin)/(bin_size_x + bin_step_x)));
       unsigned int nb_bins_y = static_cast<unsigned int>(vcl_ceil(static_cast<float>(size[1]-2*image_border_margin)/(bin_size_y + bin_step_y)));
 

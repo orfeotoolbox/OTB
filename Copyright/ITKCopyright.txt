@@ -17,7 +17,7 @@ of Health. ITK is partially derived from VTK and VXL, hence some code is
 copyrighted accordingly (see VTKCopyright.txt and VXLCopyright.txt).
 
 The copyright of most of the files in the "Utilities" subdirectory is held by
-third parties who allow to distribute this material under a license compatible
+third parties who allow distributing this material under a license compatible
 with the one used by ITK. Please read the content of the subdirectories for
 specific details on those third-party licenses. You will also find details in
 the README.txt file under the "Copyright" subdirectory.

@@ -71,7 +71,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(ImageSeriesFileReaderBase, ImageListSource);
 
   typedef TImage                                      OutputImageType;

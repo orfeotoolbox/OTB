@@ -116,7 +116,7 @@ public:
   }
 
   /** This method provides explicit conversion to itk::ImageRegion<2>,
-   * so as to allow to use RemoteSensingRegion to specify requested
+   * so as to allow using RemoteSensingRegion to specify requested
    * region for images or images iterators.
    */
   const ImageRegionType GetImageRegion()

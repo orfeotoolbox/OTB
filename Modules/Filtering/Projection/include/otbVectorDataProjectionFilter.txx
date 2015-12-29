@@ -262,7 +262,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 }
 
 /**
- * Instanciate the transformation according to informations
+ * Instanciate the transformation according to information
  */
 template <class TInputVectorData, class TOutputVectorData>
 void

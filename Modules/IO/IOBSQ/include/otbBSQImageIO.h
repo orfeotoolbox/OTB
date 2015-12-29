@@ -139,7 +139,7 @@ private:
   BSQImageIO(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /** Internal method to read header informations */
+  /** Internal method to read header information */
   bool InternalReadHeaderInformation(const std::string& file_name, std::fstream& file, const bool reportError);
 
 #define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \

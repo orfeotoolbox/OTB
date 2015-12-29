@@ -33,7 +33,7 @@ namespace otb {
  * defined GCPs. Internally, it uses an ossimRpcSolver, which performs
  * the estimation using the well known least-square method.
  *
- * The UseImageGCPs flag allows to import GCPs from the image
+ * The UseImageGCPs flag allows importing GCPs from the image
  * metadata, if any.
  *
  * GCPs can be passed to the filter using one of the AddGCP method

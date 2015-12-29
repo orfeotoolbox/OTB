@@ -29,7 +29,7 @@ namespace Wrapper
   ::InitBoostParams()
   {
     AddChoice("classifier.boost", "Boost classifier");
-    SetParameterDescription("classifier.boost", "This group of parameters allows to set Boost classifier parameters. "
+    SetParameterDescription("classifier.boost", "This group of parameters allows setting Boost classifier parameters. "
         "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/boosting.html}.");
     //BoostType
     AddParameter(ParameterType_Choice, "classifier.boost.t", "Boost Type");

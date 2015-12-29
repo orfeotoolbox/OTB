@@ -40,7 +40,7 @@ InputVectorDataListParameter::~InputVectorDataListParameter()
 bool
 InputVectorDataListParameter::SetListFromFileName(const std::vector<std::string> & filenames)
 {
-  // First clear previous file choosen
+  // First clear previous file chosen
   this->ClearValue();
 
   bool isOk = true;

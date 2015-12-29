@@ -88,7 +88,7 @@ private:
   {
     SetName("OrthoRectification");
     std::ostringstream oss;
-    oss << "This application allows to ortho-rectify optical images from supported sensors." << std::endl;
+    oss << "This application allows ortho-rectification of optical images from supported sensors." << std::endl;
     SetDescription(oss.str());
     // Documentation
     SetDocName("Ortho-rectification");
@@ -106,7 +106,7 @@ private:
 
     // Set the parameters
     AddParameter(ParameterType_Group,"io","Input and output data");
-    SetParameterDescription("io","This group of parameters allows to set the input and output images.");
+    SetParameterDescription("io","This group of parameters allows setting the input and output images.");
     AddParameter(ParameterType_InputImage, "io.in", "Input Image");
     SetParameterDescription("io.in","The input image to ortho-rectify");
     AddParameter(ParameterType_OutputImage, "io.out", "Output Image");
@@ -117,7 +117,7 @@ private:
 
     // Add the output paramters in a group
     AddParameter(ParameterType_Group, "outputs", "Output Image Grid");
-    SetParameterDescription("outputs","This group of parameters allows to define the grid on which the input image will be resampled.");
+    SetParameterDescription("outputs","This group of parameters allows one to define the grid on which the input image will be resampled.");
 
     // UserDefined values
     AddParameter(ParameterType_Choice, "outputs.mode", "Parameters estimation modes");
@@ -177,7 +177,7 @@ private:
     std::ostringstream isotropOss;
     isotropOss << "Default spacing (pixel size) values are estimated from the sensor modeling of the image. It can therefore result in a non-isotropic spacing. ";
     isotropOss << "This option allows you to force default values to be isotropic (in this case, the minimum of spacing in both direction is applied. ";
-    isotropOss << "Values overriden by user are not affected by this option.";
+    isotropOss << "Values overridden by user are not affected by this option.";
     SetParameterDescription("outputs.isotropic", isotropOss.str());
     EnableParameter("outputs.isotropic");
 
@@ -193,26 +193,26 @@ private:
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
     AddChoice("interpolator.bco",    "Bicubic interpolation");
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
-    SetParameterDescription("interpolator.bco.radius","This parameter allows to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
-    SetParameterDescription("interpolator","This group of parameters allows to define how the input image will be interpolated during resampling.");
+    SetParameterDescription("interpolator.bco.radius","This parameter allows one to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
+    SetParameterDescription("interpolator","This group of parameters allows one to define how the input image will be interpolated during resampling.");
     AddChoice("interpolator.nn",     "Nearest Neighbor interpolation");
     SetParameterDescription("interpolator.nn","Nearest neighbor interpolation leads to poor image quality, but it is very fast.");
     AddChoice("interpolator.linear", "Linear interpolation");
     SetParameterDescription("interpolator.linear","Linear interpolation leads to average image quality but is quite fast");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
     AddParameter(ParameterType_Group,"opt","Speed optimization parameters");
-    SetParameterDescription("opt","This group of parameters allows to optimize processing time.");
+    SetParameterDescription("opt","This group of parameters allows optimization of processing time.");
 
     // Estimate a RPC model (for spot image for instance)
     AddParameter(ParameterType_Int, "opt.rpc", "RPC modeling (points per axis)");
     SetDefaultParameterInt("opt.rpc", 10);
-    SetParameterDescription("opt.rpc","Enabling RPC modeling allows to speed-up SPOT5 ortho-rectification. Value is the number of control points per axis for RPC estimation");
+    SetParameterDescription("opt.rpc","Enabling RPC modeling allows one to speed-up SPOT5 ortho-rectification. Value is the number of control points per axis for RPC estimation");
     DisableParameter("opt.rpc");
     MandatoryOff("opt.rpc");
 
     // RAM available
     AddRAMParameter("opt.ram");
-    SetParameterDescription("opt.ram","This allows to set the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)");
+    SetParameterDescription("opt.ram","This allows setting the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)");
 
     // Displacement Field Spacing
     AddParameter(ParameterType_Float, "opt.gridspacing", "Resampling grid spacing");

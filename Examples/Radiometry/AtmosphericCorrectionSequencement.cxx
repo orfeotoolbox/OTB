@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
 // These {\em containers} will be given to the static function \texttt{Compute}
 // from \doxygen{otb}{RadiometryCorrectionParametersToAtmosphericRadiativeTerms}
 // class, which will call a 6S routine that will compute the needed
-// radiometric informations and store them in a
+// radiometric information and store them in a
 // \doxygen{otb}{AtmosphericRadiativeTerms} class instance.
 // For this,
 // \doxygen{otb}{RadiometryCorrectionParametersToAtmosphericRadiativeTerms},
@@ -461,7 +461,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginLatex
   //
   // Once those parameters are loaded, they are used by the 6S library
-  // to compute the needed radiometric informations. The
+  // to compute the needed radiometric information. The
   // RadiometryCorrectionParametersToAtmosphericRadiativeTerms class
   // provides a static function to perform this step\footnote{Before version
   // 4.2, it was done with the filter
@@ -548,7 +548,7 @@ int main(int argc, char *argv[])
 // Next (and last step) is the neighborhood correction.
 // For this, the SurfaceAdjacencyEffectCorrectionSchemeFilter class is used.
 // The previous surface reflectance inversion is performed under the assumption of a
-// homogeneous ground environment. The following step allows to correct the adjacency
+// homogeneous ground environment. The following step allows correcting the adjacency
 // effect on the radiometry of pixels. The method is based on the decomposition of
 // the observed signal as the summation of the own contribution of the target pixel and
 // of the contributions of neighbored pixels moderated by their distance to the target pixel.

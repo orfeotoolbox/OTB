@@ -104,8 +104,8 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
 
   * Remove deprecated code
      * MeanShiftVectorImageFilter  and MeanShiftImageFilter classes
-     * CommandLineLauncher(const char * exp) and Load( const std::string & exp ) methods in CommandLineLauncher class  
-       
+     * CommandLineLauncher(const char * exp) and Load( const std::string & exp ) methods in CommandLineLauncher class
+
   * ThirdParties
     * No more internal versions of most third parties (except 6S, siftfast, ossimplugins)
       * Removed openjpeg sources from OTB source
@@ -118,10 +118,10 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
 
   * Superbuild
     * A separate superbuild project has been added in the Superbuild repository
-    * It allows to build all OTB dependencies from source, and then OTB (thus replaces the removed internal versions)
+    * This download, configure and build all OTB dependencies from source and then build OTB. It replaces the removed internal versions.
     * Sources are checked out at configuration time or can be downloaded beforehand
-    * Allow to build a complete OTB with a handful of prerequisites (gcc, cmake, curl)
-  
+    * Allow building a complete OTB with a handful of prerequisites (gcc, cmake, curl)
+
   * Doxygen
     * Classes are now organized by modules
     * Direct link to official ITK doxygen
@@ -169,7 +169,7 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
     * 0001037: file and vector outputs need explicit relative paths
     * 0001036: TileFusion application crashes with SPOT-7 tiled images
     * 0000728: Inconsistent polygon number in concatenate vector data output
-    * 0001031: Wrong projection for ouput vector of segmentation application
+    * 0001031: Wrong projection for output vector of segmentation application
 
 
 OTB-v.4.4.0 - Changes since version 4.2.1 (2015/02/13)
@@ -178,8 +178,8 @@ OTB-v.4.4.0 - Changes since version 4.2.1 (2015/02/13)
 * Library:
 
   * Core:
-    * Add a BandMathXImageFilter, otbParserX, otbParserXPlugins filters based on MuParserX  
-    * Correct a lot of issues related to Coverity scan 
+    * Add a BandMathXImageFilter, otbParserX, otbParserXPlugins filters based on MuParserX
+    * Correct a lot of issues related to Coverity scan
     * Giving access to probability estimates mode in libSVMMachineLearningModel and RandomForestsMachineLearningModel
     * Clean and update the header include into OTB
     * Enhance p to xs registration formula
@@ -189,34 +189,34 @@ OTB-v.4.4.0 - Changes since version 4.2.1 (2015/02/13)
     * Add an option to limit the number of samples by class into otbListSampleGenerator
     * Fix BCO interpolation about coefficients normalization
     * Fix missing boost namespace
-    * Fix Production date issue in IkonosImageMetadataInterface 
+    * Fix Production date issue in IkonosImageMetadataInterface
     * Mark ancillary methods as deprecated otbWrapperCommandLineLauncher
-    * Add regression mode to Random Forests 
+    * Add regression mode to Random Forests
     * Add absorptances and fcover to SAIL code
     * Remove MeanShiftKernel file, duplicates of SVMKernel file, and not used anywhere
-    
+
   * CMake:
     * Improve compatibility with cmake 3.0
-     
+
   * Testing:
     * Avoid multiple declaration of same function over different compilation units
     * Add test to use SVM machine learning class in regression mode
     * Remove obsolete and not compiled anymore tests
     * Rewrite add_test declaration to have exe name on the first line. will help modularisation script
     * Use a single cmake var for referencing large inputs
-    
+
   * Documentation:
     * Enhance Doxygen Documentation
-   
+
 * Applications:
   * New:
     * New BandMathX application with awesome mathematical functions
-    * New applications for learning/classification of geometries in a shapefile: 
+    * New applications for learning/classification of geometries in a shapefile:
         * ComputeOGRLayersFeaturesStatistics
         * TrainOGRLayersClassifier
-        * OGRLayerClassifier 
+        * OGRLayerClassifier
   * Updated applications:
-    * Smoothing: add conductance parameter for anidifusion which was added recently in ITK filter 
+    * Smoothing: add conductance parameter for anidifusion which was added recently in ITK filter
     * Smoothing: keep the time step independant from the image spacing
     * HomologousPoint: proper computation of the opposite region
     * Rasterization: fix computation of output image extent
@@ -229,8 +229,8 @@ OTB-v.4.4.0 - Changes since version 4.2.1 (2015/02/13)
     * TrainImagesClassifier: add option to limit the min number of samples to the smallest class
     * MeanShiftSmoothing: add missing ram parameter
     * StereoRectificationGridGenerator: add warning message about image sizes when enabling inverse transformation estimations.
-    
-* Bugs fixed:    
+
+* Bugs fixed:
   * OTB-lib:
     * 0001003: logical bug in IkonosImageMetadataInterface ::GetPhysicalGain(),resolved,fixed,"In IkonosImageMetadataInterface::GetPhysicalGain()
     * 0001005: build error with otbUtilitiesTests
@@ -366,7 +366,7 @@ OTB-v.4.0.0 - Changes since version 3.20 (2014/03/13)
     * Correct multibaseline support
     * Move test related to amplitude and phase functor from visualization to basic filters
 
-  * CMake: 
+  * CMake:
     * Use modern CMake style: no block-end arguments and all CMake command to lower case format
 
   * ThirdParties:
@@ -386,7 +386,7 @@ OTB-v.4.0.0 - Changes since version 3.20 (2014/03/13)
     * Convert : Adding gamma correction method the convert application
     * HomologousPointsExtraction : add mode.geobins.binsizey and mode.geobins.binstepy to allow for anisotropic geobins mode
     * HomologousPointsExtraction : new mode.geobins.margin parameter to only search inside image center.
-    
+
   * Core framework:
     * Improve the support of XML parameters input/output file
     * Improve the input VectorData/Image/Filename parameter to give access to m_Input attribute
@@ -481,13 +481,13 @@ OTB-v.3.20 - Changes since version 3.18.1 (2013/11/13)
     * 0000770: Output parameter does not appear anymore in the command line helper
     * 0000798: All the OTB app parameters are not all saved into the xml output file
     * 0000779: [OTB]otbTrainImagesClassifier generates an output *.CSV confusion matrix with a wrong header
-    * 0000809: LSMS Vectorization application didn't support ouput file with "-" special character
+    * 0000809: LSMS Vectorization application didn't support output file with "-" special character
     * 0000807: otbKmzExport application generate weird kmz if the tilesize parameter is equal to zero
     * 0000808: otbDownloadSRTMTiles application seems to be broken
     * 0000803: otbApplicationLauncherCommandLine -inxml parameter does not retrieve pixel type for output image parameter
     * 0000794: Tiling mechanism didn't work into Large Scale MeanShift  application
     * 0000760: ClassificationMapRegularization output pixel values are always on 8 bits
-    * 0000809: LSMS Vectorization application didn't support ouput file with "-" special character
+    * 0000809: LSMS Vectorization application didn't support output file with "-" special character
     * 0000803: otbApplicationLauncherCommandLine -inxml parameter does not retrieve pixel type for output image parameter
     * 0000736: Error setting the index in RadiometricIndices application via python
     * 0000800: Watershed mode of segmentation application produce an image without CRS even if the input image has one
@@ -530,19 +530,19 @@ OTB-v.3.18.1 - Changes since version 3.18.0 (2013/07/22)
 
   * Examples
     * Update HelloWorld example CMakeLists
- 
+
   * Applications
     * Updated applications
       * Update Stereo application documentation example with new parameters
       * Add a log message about color mapping method used by application
     * Core Framework
       * Intialize properly QtWidgetChoiceParameter
-    * Increase minimun cmake version to 2.8.3 wwhen build applications  
+    * Increase minimun cmake version to 2.8.3 wwhen build applications
 
 OTB-v.3.18 - Changes since version 3.16 (2013/07/05)
 --------------------------------------------------------
 
-Among the classical improvements and bug fixes to exisiting functionnalities, this release provides 
+Among the classical improvements and bug fixes to exisiting functionnalities, this release provides
 the following main functionnalities :
  * Huge improvements in Stereo framework, to compute DEM from stereo pairs :
    check the StereoFramework application !
@@ -551,7 +551,7 @@ the following main functionnalities :
  * A classifiers fusion framework based on Dempster Shafer theory : check the FusionOfClassifications application !
 
 The full list of improvements comes here :
- 
+
 * Library
   * Core and Third Parties
     * Expose Curl timeout as parameter
@@ -560,7 +560,7 @@ The full list of improvements comes here :
     * Removal of old deprecated methods in all OTB classes
     * Fix mangling of internal OpenJPEG
     * Simpler and more automatic configuration and build on Windows based on OSGeo4W
-  
+
   * Basic filters
     * Add NoData value and flag for StreamingMinMaxVectorImageFilter
     * StreamingStatisticsImageFilter & StreamingStatisticsVectorImageFilter : support for skipping Nan and for a background value
@@ -570,7 +570,7 @@ The full list of improvements comes here :
       * DisparityMapTo3DFilter : convert disparity map in epipolar geometry to 3D image in epipolar geometry
       * MultiDisparityMapTo3DFilter : convert several disparity maps in sensor geometry to a 3D image in sensor geometry
       * LineOfSightOptimizer : algorithm to fuse several elevation values by line of sight optimisation
-      * BijectionCoherencyFilter : from 2 disparity maps, compute coherency left-right and right-left, and ouput a mask of coherent disparities
+      * BijectionCoherencyFilter : from 2 disparity maps, compute coherency left-right and right-left, and output a mask of coherent disparities
       * Multi3DToDEMFilter : fuse several 3D images to produce an elevation map
       * DisparityTranslateFilter : filter to translate epipolar disparities into sensor disparities
     * PixelWiseBlockMatchingImageFilter : fix initialisation of metric and disparities
@@ -581,7 +581,7 @@ The full list of improvements comes here :
   * IO
     * GDALImageIO : support reading overviews. "image.tif?&resol=3" is now supported as file name
     * Extended file names now supports the "box" key for writing only a subset of the image
-    
+
   * Learning
     * Generic framework of classification filters, integrating OpenCV classifiers and libSVM
       * New classes
@@ -592,31 +592,31 @@ The full list of improvements comes here :
             BoostMachineLearningModel DecisionTreeMachineLearningModel GradientBoostedTreeMachineLearningModel
             KNearestNeighborsMachineLearningModel NeuralNetworkMachineLearningModel
             NormalBayesMachineLearningModel RandomForestsMachineLearningModel SVMMachineLearningModel
-        
+
     * ConfusionMatrixCalculator : add correspondence between class label and indices
     * ConfusionMatrixMeasurements : add new class for computation of precision, recall and F-score
-    
+
   * Fuzzy
     * New Dempster Shafer based fusion of classifiers framework
       * Theory explained in http://wiki.orfeo-toolbox.org/index.php/Information_fusion_framework
       * New classes : DSFusionOfClassifiersImageFilter, ConfusionMatrixToMassOfBelief
-      
+
   * Segmentation
     * Fix some numerical instabilities in mean shift segmentation filter
-  
+
   * Radiometry
     * Fix spectral sensitivity reading of Pleiades images
     * Add PHR 1B averaged solar irradiance provided by CNES
-    
-  
+
+
   * Applications
     * New applications
       * Added new SRTM tiles downloader (DownloadSRTMTiles)
       * Added new PLY file generator (GeneratePlyFile)
-      * TrainImageClassifier and ImageClassifier : made TrainSVMImageClassifier & ImageSVMClassifier 
+      * TrainImageClassifier and ImageClassifier : made TrainSVMImageClassifier & ImageSVMClassifier
         more generic and expose OpenCV classifiers.
         Check the migration guide at : http://wiki.orfeo-toolbox.org/index.php/Classification_OTB_applications
-      
+
     * Updated applications
       * StereoFramework :
         * Handles several images in input by stereo couples
@@ -641,9 +641,9 @@ The full list of improvements comes here :
     * Core Framework
       * Manage UTF8 paths in GUI
       * Fix a crash in string list parameter widget in GUI
-       
+
 * Monteverdi
-      
+
 * Bug Fixes
   * OTB-lib
     * 0000707: Memory leaks in ApplicationWrappers
@@ -714,7 +714,7 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
       * Made methods stick to what OSSIM does
     * Refactored RpcProjectionAdapter into RpcSolverAdapter
     * Updated ossim to r21971
-   
+
   * IO
     * Added support for GDAL driver creation options in GDALImageIO
     * Added support for external geom files in ImageFileReader
@@ -723,16 +723,16 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
       * Added support for extended filenames in ImageFileReader
       * Added support for extended filenames in ImageFileWriter
     * Refactored StreamingImageFileWriter and ImageFileWriter
-      * ImageFileWriter is now the only class to use 
+      * ImageFileWriter is now the only class to use
       * StreamingImageFileWriter is a deprecated subclass provided for backward compatibility
       * Fixed a bug when the largest possible region could be asked in some cases
-       
+
   * Projections
-    * Refactored the GCPsToSensorModel filter 
+    * Refactored the GCPsToSensorModel filter
 
   * BasicFilters
     * Simplified computation of coefficients in Frost and Lee filters
-      
+
   * Fusion
     * Added the LMVM fusion algorithm (kindly contributed by A. Tzotsos)
 
@@ -750,12 +750,12 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
     * Added segmentation algorithm based on multiscale morphological structures classification
 
   * OBIA
-    * Added a filter to compute mean radiometric values for each segment of a labeled image 
+    * Added a filter to compute mean radiometric values for each segment of a labeled image
 
   * Visualization
     * Added a method to change RegionGlComponent color in ImageView
     * Moved layer description in a single place
-    
+
   * Applications
     * Framework
       * Modified the elevation parameters handling to be consistent with refactoring
@@ -782,7 +782,7 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
       * Added support for large image in image mode of ColorMapping application
       * Added support for histogram clamping settings and mask input in Convert application
       * Added support for UTM zone and hemisphere estimation by default in OrthoRectification application
-      
+
 * Monteverdi
   * Refactored to fit the new elevation configuration method
   * Added Support for extended filenames
@@ -818,7 +818,7 @@ OTB-v.3.14.1 - Changes since version 3.14.0 (2012/10/02)
   * Improve Pleiades support :
     * TOA optical calibration available
     * Improve support of mega tiles products
-  
+
 
 * Monteverdi
   * Support of MacOSX 10.8
@@ -998,7 +998,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
     * Add image origin to ReadImageInfoApplication
     * Use now InputFilenameParameter and OutputFilenameParameter instead
       of FilenameParameter
-    * Use InputFilename and OuputFilename instead of Filename
+    * Use InputFilename and OutputFilename instead of Filename
     * New option in SVMClassifier application: sample.edg (non mandatory)
       to manage special cases with small samples
     * In KMeansClassification, Changing the random intialisation method
@@ -1048,7 +1048,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
 
 * Bug fixes :
   * OTB-lib
-    * 0000532: OTB_SHOW_ALL_MSG_DEBUG option changes 
+    * 0000532: OTB_SHOW_ALL_MSG_DEBUG option changes
                apTvClTrainSVMImagesClassifierQB456 test results
     * 0000568: Unable to compile OTB with a local version of the
                FFTW library
@@ -1089,7 +1089,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
                are located in a directory with spaces in its name
 
   * OTB-Packaging
-    * 0000545: Issues with Monteverdi 1.10 binary 
+    * 0000545: Issues with Monteverdi 1.10 binary
                applications on Mac OSX 10.6  (SL)
     * 0000525: Python not found during ubuntu package build
     * 0000526: Fix input of bfTvPolygonizationRasterization_WGS84
@@ -2017,7 +2017,7 @@ OTB-v.2.6.0 - Changes since version 2.4.0 (2008/10/31)
 OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
 --------------------------------------------------------
 
-    - Added OTB_DISABLE_CXX_EXAMPLES_TESTING : allows to generate or
+    - Added OTB_DISABLE_CXX_EXAMPLES_TESTING : allows generating or
       not only examples testing
     - Added OTB_USE_JPEG2000 : experimental support for jpeg2000
       files.
@@ -2354,7 +2354,7 @@ OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 
     - Added a new tiling streaming mode.
 
-    - Added the otb::ImageGeometryHandler, which allows to handle
+    - Added the otb::ImageGeometryHandler, which allows handling
       seamlessly
       the image geometry information.
 
@@ -2438,16 +2438,16 @@ OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 
 *Applications:
 
-    - Added the otbImageViewerManager application which allows to
-      open multiple images,
+    - Added the otbImageViewerManager application which allows
+      opening multiple images,
       configure viewers and link displays.
 
     - Added the otbRoadExtraction which demonstrates the road
       extraction algorithm
       implemented in the FeatureExtraction module.
 
-    - Added the otbOrthoRectifAppli application which allows to
-      ortho rectify images in
+    - Added the otbOrthoRectifAppli application which allows
+      ortho rectifying images in
       command line using the brand new Projections module of the Orfeo
       ToolBox. Old rigid
       orthoo rectification application has been moved to

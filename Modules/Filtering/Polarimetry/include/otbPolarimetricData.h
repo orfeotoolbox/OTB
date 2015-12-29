@@ -39,7 +39,7 @@ typedef enum
   } ArchitectureType;
 
 /** \class PolarimetricData
-*  \brief This class allows to determine the type of architecture we get.
+*  \brief This class allows determining the type of architecture we get.
 *
 *  HH_HV_VH_VV (0), HH_HV_VV (1), HH_VH_VV (2), HH_HV(3), VH_VV (4), HH_VV (5).
 *

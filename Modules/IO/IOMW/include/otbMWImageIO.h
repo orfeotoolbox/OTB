@@ -141,7 +141,7 @@ private:
 
   std::string GetExtension(const std::string& filename);
 
-  /** Internal method to read header informations */
+  /** Internal method to read header information */
   bool InternalReadHeaderInformation(std::fstream& file, const bool reportError);
   inline void ByteSplitting(unsigned short a, unsigned short& low, unsigned short& high)
   {
