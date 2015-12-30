@@ -41,7 +41,8 @@ class AffineFunctor
 {
 public:
   /// Constructor
-  AffineFunctor() {}
+  AffineFunctor()
+    :m_A(0.){}
 
   /// Constructor
   virtual ~AffineFunctor() {}
