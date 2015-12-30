@@ -32,13 +32,20 @@ endif()
 if(EXISTS "${OSSIM_INCLUDE_DIR}/ossim/imaging/ossimImageRenderer.h")
   file(STRINGS "${OSSIM_INCLUDE_DIR}/ossim/imaging/ossimImageRenderer.h" _ossim_image_renderer_h_CONTENTS REGEX "^// \\$Id: ossimImageRenderer\\.h [0-9.]+ ")
   string(REGEX REPLACE ".*ossimImageRenderer\\.h ([0-9.]+) .*" "\\1" _ossim_svn_revision_hint "${_ossim_image_renderer_h_CONTENTS}")
-  if(NOT "${_ossim_svn_revision_hint}" STREQUAL "23537")
-    message(WARNING "The OSSIM version found doesn't correspond to SVN revision 23537 (the recommended revision for OTB)."
-                      "There are known issues with version 1.8.16 (bugs in Sentinel1 "
-                      "calibration) and with official archive 1.8.20-1 (RpcModel returns "
-                      "nans outside the image extent)")
+
+  if("${_ossim_svn_revision_hint}" LESS "23537")
+    message(WARNING "The OSSIM include directory detected by OTB is: '${OSSIM_INCLUDE_DIR}'."
+      "This version does not have support for SENTINEL-1 products."
+      "Opening an image will result in immediate crash!. "
+      "Please consider updating your ossim to latest stable release.(1.8.20-3)")
+  else()
+    if("${_ossim_svn_revision_hint}" LESS "23664")
+      message(WARNING "The OSSIM include directory detected by OTB is '${OSSIM_INCLUDE_DIR}'."
+        "This version has a critical bug inside ossimRpcModel."
+        "When an input point outside image extent is given the model returns 'NaN'."
+        "Please consider updating your ossim to latest stable release.(1.8.20-3)")
+    endif()
   endif()
-  #message(STATUS "OSSIM SVN rev. hint : ${_ossim_svn_revision_hint}")
 else()
   if(NOT Ossim_FIND_QUIETLY)
     message(WARNING "ossimImageRenderer.h not found !")
@@ -55,5 +62,5 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS( Ossim DEFAULT_MSG OSSIM_LIBRARY OSSIM_INCLUDE
 
 mark_as_advanced( OSSIM_INCLUDE_DIR OSSIM_LIBRARY )
 
-set(OSSIM_LIBRARIES ${OSSIM_LIBRARY})
+set(OSSIM_LIBRARIES "${OSSIM_LIBRARY};${OPENTHREADS_LIBRARY}")
 set(OSSIM_INCLUDE_DIRS ${OSSIM_INCLUDE_DIR})
