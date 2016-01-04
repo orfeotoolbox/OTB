@@ -42,7 +42,7 @@ class AffineFunctor
 public:
   /// Constructor
   AffineFunctor()
-    :m_A(0.){}
+    :m_A(0.), m_B(0.) {}
 
   /// Constructor
   virtual ~AffineFunctor() {}
