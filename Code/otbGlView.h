@@ -525,24 +525,24 @@ GlView
 		Point & center,
 		Spacing & spacing ) const
 {
-  std::cout
-    << std::hex << this
-    << "::ZoomToRegion( "
-    << "[ " << origin[ 0 ] << ", " << origin[ 1 ] << "], "
-    << "[ " << extent[ 0 ] << ", " << extent[ 1 ] << "], "
-    << "[ " << spacing[ 0 ] << ", " << spacing[ 1 ] << "] )"
-    << std::endl;
+  // std::cout
+  //   << std::hex << this
+  //   << "::ZoomToRegion( "
+  //   << "[ " << origin[ 0 ] << ", " << origin[ 1 ] << "], "
+  //   << "[ " << extent[ 0 ] << ", " << extent[ 1 ] << "], "
+  //   << "[ " << spacing[ 0 ] << ", " << spacing[ 1 ] << "] )"
+  //   << std::endl;
 
   // Compute center point.
   center.SetToMidPoint( origin, extent );
 
-  std::cout << "-> center: " << center[ 0 ] << ", " << center[ 1 ] << std::endl;
+  // std::cout << "-> center: " << center[ 0 ] << ", " << center[ 1 ] << std::endl;
 
   // Get scale of (o, e) in viewport.
   assert( !m_Settings.IsNull() );
   double scale = m_Settings->GetScale( origin, extent, true );
 
-  std::cout << "-> scale: " << scale << std::endl;
+  // std::cout << "-> scale: " << scale << std::endl;
 
   /*
   assert( !std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() ||
@@ -572,7 +572,7 @@ GlView
   spacing[ 0 ] = ( native[ 0 ]<0.0 ? -1 : +1 ) * scale;
   spacing[ 1 ] = ( native[ 1 ]<0.0 ? -1 : +1 ) * scale;
 
-  std::cout << "-> spacing: " << center[ 0 ] << ", " << center[ 1 ] << std::endl;
+  // std::cout << "-> spacing: " << center[ 0 ] << ", " << center[ 1 ] << std::endl;
 
   // Ok.
   return true;

@@ -95,12 +95,12 @@ void GlView::BeforeRendering()
 
   glOrtho(ulx, lrx, lry, uly, -1, 1);
 
-  std::cout
-    << "glOrtho( "
-    << ulx << ", " << lrx << ", "
-    << lry << ", " << uly
-    << ", -1, 1 )"
-    << std::endl;
+  // std::cout
+  //   << "glOrtho( "
+  //   << ulx << ", " << lrx << ", "
+  //   << lry << ", " << uly
+  //   << ", -1, 1 )"
+  //   << std::endl;
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
