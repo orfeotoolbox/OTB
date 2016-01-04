@@ -348,7 +348,7 @@ GlView
 
   y[ 1 ] += norm * vspacing[ 1 ];
 
-  std::cout << "Y {" << std::endl;
+  // std::cout << "Y {" << std::endl;
 
   if( !geo->TransformFromViewport( y, y, true ) )
     return false; 
