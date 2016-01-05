@@ -68,6 +68,8 @@ public:
 private:
 
   int m_Mode;
+  
+  DownloadSRTMTiles() : m_Mode(Mode_Download) {}
 
   bool SRTMTileExists(const std::string & url) const
   {
