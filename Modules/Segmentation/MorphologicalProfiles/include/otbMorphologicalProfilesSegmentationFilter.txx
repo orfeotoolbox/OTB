@@ -30,6 +30,7 @@ MorphologicalProfilesSegmentationFilter<TInputImage,TOuputImage,TInternalPrecisi
   m_ProfileSize = 5;
   m_ProfileStart = 1;
   m_ProfileStep = 1;
+  m_Sigma = 0.0;
 
   m_ClassificationFilter = MultiScaleClassificationFilterType::New();
   m_ConnectedComponentsFilter = ConnectedComponentsFilterType::New();

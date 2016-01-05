@@ -79,7 +79,7 @@ class VectorMapping
 public:
   typedef typename TOutput::ValueType ValueType;
 
-  VectorMapping() {}
+  VectorMapping() : m_OutputSize(0) {}
   virtual ~VectorMapping() {}
 
   typedef std::map<TInput, TOutput, VectorLexicographicCompare<TInput> > ChangeMapType;
@@ -636,7 +636,7 @@ private:
         {
         LabelType clabel = mapIt->first;
         meanValue = mapIt->second; //meanValue.Size() is null if label is not present in label image
-        if (meanValue.Size()==0)
+        if (meanValue.Size() != supportImage->GetNumberOfComponentsPerPixel())
           {
           color.Fill(0.0);
           }

@@ -28,6 +28,7 @@ namespace otb
 
 template <class TImage>
 StreamingShrinkStreamingManager<TImage>::StreamingShrinkStreamingManager()
+ : m_ShrinkFactor(10)
 {
 }
 
