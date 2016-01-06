@@ -118,7 +118,7 @@ MRToMSConverter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 MRToMSConverter<TInputImage, TOutputImage>
-::SetInput(InputImageListType * imageList)
+::SetInput(const InputImageListType * imageList)
 {
   this->SetNthInput(2, const_cast<InputImageListType *>(imageList));
 }

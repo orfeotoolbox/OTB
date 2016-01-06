@@ -55,6 +55,7 @@ ConfusionMatrixMeasurements<TConfusionMatrix, TLabel>
   m_TruePositiveValues.Fill(0);
   m_TrueNegativeValues.Fill(0);
 
+  const double epsilon = 0.0000000001;
   double luckyRate = 0.;
   this->m_NumberOfSamples = 0;
   this->m_OverallAccuracy  = 0.;
@@ -82,8 +83,6 @@ ConfusionMatrixMeasurements<TConfusionMatrix, TLabel>
       }
     luckyRate += sum_along_row_i * sum_along_column_i;
     }
-
-  this->m_OverallAccuracy /= static_cast<double>(m_NumberOfSamples);
 
   this->m_TrueNegativeValues.Fill(m_NumberOfSamples);
   this->m_TrueNegativeValues -= this->m_FalseNegativeValues
@@ -116,7 +115,27 @@ ConfusionMatrixMeasurements<TConfusionMatrix, TLabel>
   m_Recalls.Fill(0.);
   m_FScores.Fill(0.);
 
-  const double epsilon = 0.0000000001;
+  if (m_NumberOfSamples > 0)
+    {
+    this->m_OverallAccuracy /= static_cast<double>(m_NumberOfSamples);
+    luckyRate /= vcl_pow(m_NumberOfSamples, 2.0);
+
+    if (vcl_abs(1 - luckyRate) > epsilon)
+      {
+      m_KappaIndex = (m_OverallAccuracy - luckyRate) / (1 - luckyRate);
+      }
+    else
+      {
+      this->m_KappaIndex = 1.;
+      }
+    }
+  else
+    {
+    this->m_OverallAccuracy  = 0.;
+    this->m_KappaIndex = 0.;
+    // no samples, no need to continue
+    return;
+    }
 
   for (unsigned int i = 0; i < m_NumberOfClasses; ++i)
     {
@@ -154,13 +173,6 @@ ConfusionMatrixMeasurements<TConfusionMatrix, TLabel>
       {
       this->m_FScore = 2 * this->m_Recall * this->m_Precision / (this->m_Recall + this->m_Precision);
       }
-    }
-
-  luckyRate /= vcl_pow(m_NumberOfSamples, 2.0);
-
-  if (vcl_abs(1 - luckyRate) > epsilon)
-    {
-    m_KappaIndex = (m_OverallAccuracy - luckyRate) / (1 - luckyRate);
     }
 }
 

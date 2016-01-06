@@ -102,15 +102,14 @@ public:
 
   ArrayType GetUniqueValues() const
   {
+    ArrayType uniqueValues;
     if( !m_Image )
       {
-       itkExceptionMacro(<<"GetUniqueValues(): Null input image pointer.");
+      return uniqueValues;
       }
 
     itk::ImageRegionConstIterator< ImageType > it( m_Image,
                                               m_Image->GetRequestedRegion() );
-
-    ArrayType uniqueValues;
 
     uniqueValues.push_back(it.Get());
     ++it;
@@ -758,6 +757,11 @@ int main(int argc, char *argv[])
 
   UniqueCalculatorType::ArrayType uniqueVals =
       uniqueCalculator->GetUniqueValues();
+  if (uniqueVals.empty())
+    {
+    std::cerr << "No label value found!"<< std::endl;
+    return EXIT_FAILURE;
+    }
   std::cout << "Labels are " << std::endl;
   UniqueCalculatorType::ArrayType::const_iterator uvIt = uniqueVals.begin();
 
