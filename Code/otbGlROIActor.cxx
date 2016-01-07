@@ -91,7 +91,6 @@ void GlROIActor::GetExtent(double & ulx, double & uly, double & lrx, double & lr
   lry = std::max(std::max(m_VpUL[1],m_VpUR[1]),std::max(m_VpLL[1],m_VpLR[1]));
   ulx = std::min(std::min(m_VpUL[0],m_VpUR[0]),std::min(m_VpLL[0],m_VpLR[0]));
   uly = std::min(std::min(m_VpUL[1],m_VpUR[1]),std::min(m_VpLL[1],m_VpLR[1]));
-  
 }
 
 void GlROIActor::ProcessViewSettings()

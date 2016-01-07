@@ -889,11 +889,16 @@ void GlImageActor::UpdateResolution()
 
 void GlImageActor::UpdateTransforms()
 {
-  // std::cout << std::hex << this << "::UpdateTransforms()" << std::endl;
+  std::cout << std::hex << this << "::UpdateTransforms()" << std::endl;
+  std::cout << "{" << std::endl;
+
+  std::cout << "filename: " << m_FileName << std::endl;
 
   if(m_FileName == "")
     {
     return;
+    
+    std::cout << "}" << std::endl;
     }
 
   // Retrieve settings
@@ -907,9 +912,9 @@ void GlImageActor::UpdateTransforms()
       m_ViewportToImageTransform.IsNull() ||
       m_ImageToViewportTransform.IsNull())
     {
-    // std::cout
-    //   << "otb::GlImageActor@" << std::hex << this
-    //   << " Proj: OFF" << std::endl;
+    std::cout
+      << "otb::GlImageActor@" << std::hex << this
+      << " Proj: OFF" << std::endl;
 
     m_ViewportToImageTransform = RSTransformType::New();
     m_ImageToViewportTransform = RSTransformType::New();
@@ -917,11 +922,15 @@ void GlImageActor::UpdateTransforms()
     hasChanged = true;
     }
 
-  // std::cout << std::hex << this << " geometry-changed: " << geometryChanged;
+  std::cout
+    << std::hex << this << std::dec
+    << " geometry-changed: " << geometryChanged << std::endl;
 
-  // bool isEqualOrNot = m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt();
+  bool isEqualOrNot = m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt();
 
-  // std::cout << std::hex << this << " WKT-changed: " << isEqualOrNot << std::endl;
+  std::cout
+    << std::hex << this << std::dec
+    << " WKT-changed: " << isEqualOrNot << std::endl;
 
     geometryChanged = geometryChanged
   || (m_ViewportToImageTransform.IsNotNull() && m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt())
@@ -931,9 +940,9 @@ void GlImageActor::UpdateTransforms()
 
   if(settings->GetUseProjection() && geometryChanged)
     {
-    // std::cout
-    //   << "otb::GlImageActor@" << std::hex << this
-    //   << " Proj: ON" << std::endl;
+    std::cout
+      << "otb::GlImageActor@" << std::hex << this << std::dec
+      << " Proj: ON" << std::endl;
 
     m_ViewportToImageTransform = RSTransformType::New();
     m_ImageToViewportTransform = RSTransformType::New();
@@ -953,11 +962,13 @@ void GlImageActor::UpdateTransforms()
 
   if( hasChanged )
     {
-    // std::cout << std::hex << this << " -> InstanciateTransform()" << std::endl;
+    std::cout << std::hex << this << " -> InstanciateTransform()" << std::endl;
 
     m_ViewportToImageTransform->InstanciateTransform();
     m_ImageToViewportTransform->InstanciateTransform();
     }
+
+  std::cout << "}" << std::endl;
 }
 
 void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
