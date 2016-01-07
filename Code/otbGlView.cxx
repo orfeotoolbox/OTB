@@ -213,33 +213,33 @@ std::vector<std::string> GlView::GetActorsKeys() const
 
 void GlView::LightRender()
 {
-  std::cout
-    << "otb::GlView@" << std::hex << this << std::dec
-    << "::LightRender()" << std::endl;
+  // std::cout
+  //   << "otb::GlView@" << std::hex << this << std::dec
+  //   << "::LightRender()" << std::endl;
 
-  std::cout << "{" << std::endl;
+  // std::cout << "{" << std::endl;
 
-  {
-  double ulx = 0.0;
-  double uly = 0.0;
-  double lrx = 0.0;
-  double lry = 0.0;
+  // {
+  // double ulx = 0.0;
+  // double uly = 0.0;
+  // double lrx = 0.0;
+  // double lry = 0.0;
 
-  m_Settings->GetViewportExtent( ulx, uly, lrx, lry );
+  // m_Settings->GetViewportExtent( ulx, uly, lrx, lry );
 
-  std::cout << "v-origin: " << ulx << ", " << uly << std::endl;
-  std::cout << "v-extent: " << lrx << ", " << lry << std::endl;
-  }
+  // std::cout << "v-origin: " << ulx << ", " << uly << std::endl;
+  // std::cout << "v-extent: " << lrx << ", " << lry << std::endl;
+  // }
 
-  std::cout
-    << "v-spacing: "
-    << m_Settings->GetSpacing()[ 0 ] << ", "
-    << m_Settings->GetSpacing()[ 1 ] << std::endl;
+  // std::cout
+  //   << "v-spacing: "
+  //   << m_Settings->GetSpacing()[ 0 ] << ", "
+  //   << m_Settings->GetSpacing()[ 1 ] << std::endl;
 
-  std::cout
-    << "v-size: "
-    << m_Settings->GetViewportSize()[ 0 ] << ", "
-    << m_Settings->GetViewportSize()[ 1 ] << std::endl;
+  // std::cout
+  //   << "v-size: "
+  //   << m_Settings->GetViewportSize()[ 0 ] << ", "
+  //   << m_Settings->GetViewportSize()[ 1 ] << std::endl;
 
   for(StringVectorType::reverse_iterator it = m_RenderingOrder.rbegin();
       it!=m_RenderingOrder.rend();++it)
@@ -254,7 +254,7 @@ void GlView::LightRender()
       }
     }
 
-  std::cout << "}" << std::endl;
+  // std::cout << "}" << std::endl;
 }
 
 void GlView::HeavyRender()
