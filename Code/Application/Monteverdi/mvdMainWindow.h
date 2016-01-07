@@ -28,6 +28,9 @@
 #define USE_TABBED_VIEW 0
 #define USE_PIXEL_DESCRIPTION ( ( defined( _DEBUG ) && 0 ) || 0 )
 
+#define RENDER_IMAGE_VIEW_DISABLED 0
+#define RENDER_QUICKLOOK_VIEW_DISABLED 0
+
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */

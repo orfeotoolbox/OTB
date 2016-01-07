@@ -84,6 +84,7 @@
 #include "mvdApplication.h"
 #include "mvdPreferencesDialog.h"
 
+
 namespace mvd
 {
 
@@ -1699,10 +1700,14 @@ MainWindow
   // Assign stacked-layer model controller.
   SetControllerModel( m_LayerStackDock, model );
 
+#if !RENDER_IMAGE_VIEW_DISABLED
   m_ImageView->SetLayerStack( stackedLayerModel );
+#endif
 
+#if !RENDER_QUICKLOOK_VIEW_DISABLED
   assert( GetQuicklookView()!=NULL );
   GetQuicklookView()->SetLayerStack( stackedLayerModel );
+#endif
 
   if( stackedLayerModel==NULL )
     return;

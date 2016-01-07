@@ -677,13 +677,16 @@ ImageViewWidget
       m_IsPickingEnabled )
     {
     StackedLayerModel * layerStack = GetLayerStack();
-    assert( layerStack!=NULL );
 
-    layerStack->BeginEditResolutions();
+    // assert( layerStack!=NULL );
+    if( layerStack!=NULL )
+      {
+      layerStack->BeginEditResolutions();
 
-    m_Renderer->GetResolutions( layerStack->PixelInfos() );
+      m_Renderer->GetResolutions( layerStack->PixelInfos() );
 
-    layerStack->EndEditResolutions();
+      layerStack->EndEditResolutions();
+      }
     }
 
   //
@@ -720,7 +723,10 @@ ImageViewWidget
   //
   // Get layer-stack.
   StackedLayerModel * stackedLayerModel = GetLayerStack();
-  assert( stackedLayerModel!=NULL );
+  
+  // assert( stackedLayerModel!=NULL );
+  if( stackedLayerModel==NULL )
+    return;
 
   //
   // Pixel-picking special behaviour.
