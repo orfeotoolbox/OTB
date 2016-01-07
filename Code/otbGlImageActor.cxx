@@ -926,7 +926,8 @@ void GlImageActor::UpdateTransforms()
   //   << std::hex << this << std::dec
   //   << " geometry-changed: " << geometryChanged << std::endl;
 
-  bool isEqualOrNot = m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt();
+  // bool isEqualOrNot =
+  //   m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt();
 
   // std::cout
   //   << std::hex << this << std::dec
