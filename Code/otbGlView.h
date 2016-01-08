@@ -230,7 +230,7 @@ public:
   /**
    */
   template< typename P >
-  bool GetExtent( P & origin, P & extent ) const;
+  bool GetExtent( P & origin, P & extent, bool isOverlay =false ) const;
 
   /**
    */
@@ -408,7 +408,7 @@ GlView
 template< typename P >
 bool
 GlView
-::GetExtent( P & origin, P & extent ) const
+::GetExtent( P & origin, P & extent, bool isOverlay ) const
 {
   if( m_Actors.empty() )
     {
@@ -429,41 +429,44 @@ GlView
        it!=m_Actors.end();
        ++it )
     {
-    P o;
-    P e;
-
-    o.Fill( 0 );
-    e.Fill( 0 );
-
     assert( !it->second.IsNull() );
 
-    it->second->GetExtent( o[ 0 ], o[ 1 ], e[ 0 ], e[ 1 ] );
+    if( it->second->GetOverlay()==isOverlay )
+      {
+      P o;
+      P e;
+
+      o.Fill( 0 );
+      e.Fill( 0 );
+
+      it->second->GetExtent( o[ 0 ], o[ 1 ], e[ 0 ], e[ 1 ] );
 
 
-    if( o[ 0 ]<origin[ 0 ] )
-      origin[ 0 ] = o[ 0 ];
+      if( o[ 0 ]<origin[ 0 ] )
+	origin[ 0 ] = o[ 0 ];
 
-    if( o[ 1 ]<origin[ 1 ] )
-      origin[ 1 ] = o[ 1 ];
+      if( o[ 1 ]<origin[ 1 ] )
+	origin[ 1 ] = o[ 1 ];
 
-    if( o[ 0 ]>extent[ 0 ] )
-      extent[ 0 ] = o[ 0 ];
+      if( o[ 0 ]>extent[ 0 ] )
+	extent[ 0 ] = o[ 0 ];
 
-    if( o[ 1 ]>extent[ 1 ] )
-      extent[ 1 ] = o[ 1 ];
+      if( o[ 1 ]>extent[ 1 ] )
+	extent[ 1 ] = o[ 1 ];
 
 
-    if( e[ 0 ]<origin[ 0 ] )
-      origin[ 0 ] = e[ 0 ];
+      if( e[ 0 ]<origin[ 0 ] )
+	origin[ 0 ] = e[ 0 ];
 
-    if( e[ 1 ]<origin[ 1 ] )
-      origin[ 1 ] = e[ 1 ];
+      if( e[ 1 ]<origin[ 1 ] )
+	origin[ 1 ] = e[ 1 ];
 
-    if( e[ 0 ]>extent[ 0 ] )
-      extent[ 0 ] = e[ 0 ];
+      if( e[ 0 ]>extent[ 0 ] )
+	extent[ 0 ] = e[ 0 ];
 
-    if( e[ 1 ]>extent[ 1 ] )
-      extent[ 1 ] = e[ 1 ];
+      if( e[ 1 ]>extent[ 1 ] )
+	extent[ 1 ] = e[ 1 ];
+      }
     }
 
   return true;
@@ -484,6 +487,9 @@ GlView
   // Get origin and extent of all layers in viewport system.
   if( !GetExtent( o, e ) )
     return false;
+
+  // std::cout << "origin: [ " << o[ 0 ] << ", " << o[ 1 ] << " ]" << std::endl;
+  // std::cout << "extent: [ " << e[ 0 ] << ", " << e[ 1 ] << " ]" << std::endl;
 
   // Zoom to overall region.
   return ZoomToRegion( o, e, native, center, spacing );

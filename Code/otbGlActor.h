@@ -51,6 +51,10 @@ public:
   itkGetMacro( GeometryChanged, bool );
   itkBooleanMacro( GeometryChanged );
 
+  itkSetMacro( Overlay, bool );
+  itkGetMacro( Overlay, bool );
+  itkBooleanMacro( Overlay );
+
   // Retrieve the full extent of the actor
   virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const = 0;
 
@@ -75,15 +79,19 @@ private:
 
   ViewSettings::Pointer m_Settings;
 
-  // Visibility flag
-  bool m_Visible;
-
   // Name field
   std::string m_Name;
+
+  // Visibility flag
+  bool m_Visible: 1;
 
   /**
    */
   bool m_GeometryChanged: 1;
+
+  /**
+   */
+  bool m_Overlay: 1;
 
 }; // End class GlActor
 
