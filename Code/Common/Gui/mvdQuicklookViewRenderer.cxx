@@ -155,6 +155,7 @@ QuicklookViewRenderer
   std::string key( m_GlView->AddActor( m_GlRoiActor, "ROI" ) );
 
   m_GlRoiActor->SetVisible( true );
+  m_GlRoiActor->SetOverlay( true );
 
   // qDebug() << "Added roi-actor:" << FromStdString( key );
 
