@@ -523,6 +523,8 @@ HistogramWidget
 	  ? i<RGBW_CHANNEL_WHITE
 	  : i==index ); 
 
+    assert( i<HistogramWidget::CURVE_COUNT );
+
     m_PlotCurves[ i ]->setVisible( isVisible );
     m_LowPlotMarkers[ i ]->setVisible( isVisible );
     m_HighPlotMarkers[ i ]->setVisible( isVisible );
