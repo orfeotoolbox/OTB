@@ -34,7 +34,7 @@ template <class TInputImage, class TOutputImage>
 Resampler<TInputImage, TOutputImage>
 ::Resampler()
 {
-  for (int i = 0; i < InputImageType::ImageDimension; ++i)
+  for (unsigned int i = 0; i < InputImageType::ImageDimension; ++i)
     {
     m_Size[i] = 0;
     }

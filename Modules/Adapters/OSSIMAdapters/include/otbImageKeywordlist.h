@@ -81,6 +81,7 @@ public:
   //{return "ImageKeywordlist"; }
 
   typedef std::map<std::string, std::string> KeywordlistMap;
+  typedef KeywordlistMap::size_type KeywordlistMapSizeType;
 
   /** Get the internal map container */
   const KeywordlistMap& GetKeywordlist() const
@@ -94,8 +95,8 @@ public:
   {
     m_Keywordlist.clear();
   }
-
-  unsigned int GetSize(void) const
+ 
+  KeywordlistMapSizeType GetSize(void) const
   {
     return m_Keywordlist.size();
   }

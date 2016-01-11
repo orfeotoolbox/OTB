@@ -129,16 +129,18 @@ public:
   itkGetMacro(MeanRM, AttributesValueType);
   itkGetMacro(MeanRN, AttributesValueType);
 
-  itkStaticConstMacro(ATTRIBUTE_CD, AttributeType, 100);
-  itkStaticConstMacro(ATTRIBUTE_OS, AttributeType, 101);
-  itkStaticConstMacro(ATTRIBUTE_US, AttributeType, 102);
-  itkStaticConstMacro(ATTRIBUTE_M,  AttributeType, 103);
-  itkStaticConstMacro(ATTRIBUTE_N,  AttributeType, 104);
-  itkStaticConstMacro(ATTRIBUTE_RC, AttributeType, 105);
-  itkStaticConstMacro(ATTRIBUTE_RF, AttributeType, 106);
-  itkStaticConstMacro(ATTRIBUTE_RA, AttributeType, 107);
-  itkStaticConstMacro(ATTRIBUTE_RM, AttributeType, 108);
-  itkStaticConstMacro(ATTRIBUTE_RN, AttributeType, 109);
+  enum AttributeTypes {
+    ATTRIBUTE_CD=100,
+    ATTRIBUTE_OS,
+    ATTRIBUTE_US,
+    ATTRIBUTE_M,
+    ATTRIBUTE_N,
+    ATTRIBUTE_RC,
+    ATTRIBUTE_RF,
+    ATTRIBUTE_RA,
+    ATTRIBUTE_RM,
+    ATTRIBUTE_RN
+  };
 
   static std::string GetNameFromAttribute( const AttributeType & a )
     {

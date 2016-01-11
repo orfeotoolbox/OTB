@@ -39,8 +39,8 @@ else()
     
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "http://download.qt-project.org/official_releases/qt/4.8/4.8.6/qt-everywhere-opensource-src-4.8.6.tar.gz"
-      URL_MD5 2edbe4d6c2eff33ef91732602f3518eb
+      URL "http://download.qt.io/official_releases/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz"
+      URL_MD5 d990ee66bf7ab0c785589776f35ba6ad
       BINARY_DIR ${QT4_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -60,8 +60,8 @@ else()
   else()
     ExternalProject_Add(${proj}
       PREFIX ${proj}
-      URL "http://download.qt-project.org/official_releases/qt/4.8/4.8.6/qt-everywhere-opensource-src-4.8.6.tar.gz"
-      URL_MD5 2edbe4d6c2eff33ef91732602f3518eb
+      URL "http://download.qt.io/official_releases/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz"
+      URL_MD5 d990ee66bf7ab0c785589776f35ba6ad
       BINARY_DIR ${QT4_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

@@ -33,6 +33,7 @@
 #include "cpl_error.h"
 #include "itkMacro.h"
 
+
 /*===========================================================================*/
 /*======================[ Construction / Destruction ]=======================*/
 /*===========================================================================*/
@@ -91,11 +92,11 @@ void otb::ogr::Feature::UncheckedSetFrom(Feature const& rhs, int * map, bool mus
 /*===========================================================================*/
 void otb::ogr::Feature::UncheckedPrintSelf(std::ostream & os, itk::Indent indent) const
 {
-  const size_t nbFields = m_Feature->GetFieldCount();
+  const int nbFields = m_Feature->GetFieldCount();
   os << indent << "+";
   os << " " << nbFields << " fields\n";
   indent = indent.GetNextIndent();
-  for (size_t i=0; i!=nbFields; ++i)
+  for (int i=0; i!=nbFields; ++i)
     {
     assert(ogr().GetFieldDefnRef(i) && "No definition associated to the i-th field");
     Field const& field = (*this)[i];
@@ -120,11 +121,11 @@ bool otb::ogr::operator==(otb::ogr::Feature const& lhs, otb::ogr::Feature const&
 /*===========================================================================*/
 /*================================[ Fields ]=================================*/
 /*===========================================================================*/
-size_t otb::ogr::Feature::GetSize() const {
+int otb::ogr::Feature::GetSize() const {
   return ogr().GetFieldCount();
 }
 
-otb::ogr::Field otb::ogr::Feature::UncheckedGetElement(size_t index)
+otb::ogr::Field otb::ogr::Feature::UncheckedGetElement(int index)
 {
   Field field(*this, index);
   return field;
@@ -136,7 +137,7 @@ otb::ogr::Field otb::ogr::Feature::UncheckedGetElement(std::string const& name)
   return this->operator[](index);
 }
 
-otb::ogr::FieldDefn otb::ogr::Feature::UncheckedGetFieldDefn(size_t index) const
+otb::ogr::FieldDefn otb::ogr::Feature::UncheckedGetFieldDefn(int index) const
 {
   return FieldDefn(*m_Feature->GetFieldDefnRef(index));
 }
@@ -151,7 +152,9 @@ otb::ogr::FieldDefn otb::ogr::Feature::UncheckedGetFieldDefn(std::string const& 
   return this->GetFieldDefn(index);
 }
 
-int otb::ogr::Feature::UncheckedGetFieldIndex(std::string const& name) const
+int
+otb::ogr::Feature
+::UncheckedGetFieldIndex(std::string const& name) const
 {
   const int index = m_Feature->GetFieldIndex(name.c_str());
   if (index < 0)

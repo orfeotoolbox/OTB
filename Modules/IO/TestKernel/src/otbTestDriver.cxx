@@ -179,7 +179,7 @@ int main(int ac, char* av[])
   argv[remainingArgs.size() + 1] = NULL;
 
   /** Call to the otbTestMain */
-  return otbTestMain(remainingArgs.size(), argv);
+  return otbTestMain(static_cast<int>(remainingArgs.size()), argv);
 
 }
 

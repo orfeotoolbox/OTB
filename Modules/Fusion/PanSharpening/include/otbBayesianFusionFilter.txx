@@ -227,7 +227,7 @@ BayesianFusionFilter<TInputMultiSpectralImage,
    *  To modify using - method operator. If we use it now -> exceptionmacro (no GetClassName...)
    * S = S-xxTbTb;
    **/
-  if ((S.Cols() != xxTbTb.Cols()) || (S.Cols() != xxTbTb.Cols()))
+  if ((S.Rows() != xxTbTb.Rows()) || (S.Cols() != xxTbTb.Cols()))
     {
     itkExceptionMacro(<< "Matrix with size (" << S.Rows() << "," <<
                       S.Cols() << ") cannot be subtracted from matrix with size (" <<
@@ -281,8 +281,8 @@ BayesianFusionFilter<TInputMultiSpectralImage,
    *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
    *  m_Vcondopt = 2 *m_Lambda*varPan+2*m_CovarianceInvMatrix*(1-m_Lambda)+eye;
    **/
-  if ((m_Vcondopt.Cols() != varPan.Cols()) || (m_Vcondopt.Cols() != varPan.Cols())
-      || (m_Vcondopt.Cols() != m_CovarianceInvMatrix.Cols()) || (m_Vcondopt.Cols() != m_CovarianceInvMatrix.Cols()))
+  if ((m_Vcondopt.Rows() != varPan.Rows()) || (m_Vcondopt.Cols() != varPan.Cols())
+      || (m_Vcondopt.Rows() != m_CovarianceInvMatrix.Rows()) || (m_Vcondopt.Cols() != m_CovarianceInvMatrix.Cols()))
     {
     itkExceptionMacro(<< "Matrix with size (" << m_Vcondopt.Rows() << "," <<
                       m_Vcondopt.Cols() << ") cannot be subtracted from matrix with size (" <<

@@ -42,6 +42,7 @@ else()
 
   if(MSVC)
     set(OSSIM_CXX_FLAGS /EHsc)
+    list(APPEND OSSIM_SB_CONFIG "-GNMake\ Makefiles")
   endif()
 
   # archive version
@@ -60,12 +61,12 @@ else()
     -DBUILD_OSSIM_MPI_SUPPORT:BOOL=OFF
     -DBUILD_OSSIM_FREETYPE_SUPPORT:BOOL=ON
     -DBUILD_OSSIM_APPS:BOOL=OFF
+    -DBUILD_OSSIM_TESTS:BOOL=OFF
     -DBUILD_OSSIM_TEST_APPS:BOOL=OFF
     -DBUILD_OSSIM_FRAMEWORKS:BOOL=OFF
-    -DBUILD_WMS:BOOL=OFF
     -DINSTALL_ARCHIVE_DIR:STRING=lib
     -DINSTALL_LIBRARY_DIR:STRING=lib
-    -DCMAKE_PREFIX_PATH:STRING=${SB_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}
+    -DCMAKE_PREFIX_PATH:STRING=${SB_INSTALL_PREFIX}
     ${OSSIM_SB_CONFIG}
     DEPENDS ${${proj}_DEPENDENCIES}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
@@ -77,7 +78,6 @@ else()
       ${CMAKE_SOURCE_DIR}/patches/ossim/src ${OSSIM_SB_SRC}/src
       DEPENDEES patch_ossim_include
       DEPENDERS configure )
-
     ExternalProject_Add_Step(${proj} patch_ossim_include
       COMMAND ${CMAKE_COMMAND} -E copy_directory
       ${CMAKE_SOURCE_DIR}/patches/ossim/include ${OSSIM_SB_SRC}/include

@@ -114,7 +114,7 @@ std::ostream & otb::ogr::operator<<(std::ostream & os, otb::ogr::FieldDefn const
 /*=================================[ Field ]=================================*/
 /*===========================================================================*/
 
-otb::ogr::Field::Field(otb::ogr::Feature & feature, size_t index)
+otb::ogr::Field::Field(otb::ogr::Feature & feature, int index)
 : m_Definition(*feature.ogr().GetFieldDefnRef(index))
 , m_Feature(feature.sptr())
 , m_index(index)

@@ -133,7 +133,7 @@ ComplexOutputImageParameter::Write()
     }
   else if (dynamic_cast<ComplexDoubleImageType*>(m_Image.GetPointer()))
     {
-    SwitchImageWrite<DoubleImageType>();
+    SwitchImageWrite<ComplexDoubleImageType>();
     }
   else if (dynamic_cast<ComplexFloatVectorImageType*>(m_Image.GetPointer()))
     {

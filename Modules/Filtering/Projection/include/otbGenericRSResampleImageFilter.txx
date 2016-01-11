@@ -82,21 +82,6 @@ void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
-  typename OutputImageType::Pointer outputPtr = this->GetOutput();
-
-  // Get the Output MetaData Dictionary
-  itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
-
-  // Encapsulate the   metadata set by the user
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
-                                        this->GetOutputProjectionRef());
-
-  if (this->GetOutputKeywordList().GetSize() > 0)
-    {
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
-                                               this->GetOutputKeywordList());
-    }
-
   // Estimate the output rpc Model if needed
   if (m_EstimateOutputRpcModel)
     this->EstimateOutputRpcModel();
@@ -116,6 +101,16 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   m_Resampler->GraftOutput(this->GetOutput());
   m_Resampler->UpdateOutputInformation();
   this->GraftOutput(m_Resampler->GetOutput());
+
+  // Encapsulate output projRef and keywordlist
+  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
+                                        this->GetOutputProjectionRef());
+  if (this->GetOutputKeywordList().GetSize() > 0)
+    {
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
+                                               this->GetOutputKeywordList());
+    }
 }
 
 /**
@@ -126,9 +121,6 @@ void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::EstimateOutputRpcModel()
 {
-  // Get the output dictionary
-  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-
   // Temp image : not allocated but with the same metadata than the
   // output
   typename OutputImageType::Pointer tempPtr = OutputImageType::New();
@@ -152,10 +144,6 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   // Encapsulate the estimated rpc model in the output
   if (m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist().GetSize() > 0)
     {
-    // Fill the output dict
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict,
-                                               MetaDataKey::OSSIMKeywordlistKey,
-                                               m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
     // Fill the transform with the right kwl
     m_Transform->SetInputKeywordList( m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
     }

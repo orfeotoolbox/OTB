@@ -29,6 +29,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 ChangeLabelImageFilter<TInputImage, TOutputImage>
 ::ChangeLabelImageFilter()
+  : m_NumberOfComponentsPerPixel(0)
 {
 }
 

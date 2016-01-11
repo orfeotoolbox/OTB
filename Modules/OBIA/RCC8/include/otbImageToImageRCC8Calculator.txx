@@ -142,7 +142,7 @@ ImageToImageRCC8Calculator<TInputImage>
   typename ImageType::SizeType  size;
   typename ImageType::IndexType index;
 
-  for (int i = 0; i < ImageType::ImageDimension; ++i)
+  for (unsigned int i = 0; i < ImageType::ImageDimension; ++i)
     {
     index[i] = std::min(region1.GetIndex()[i], region2.GetIndex()[i]);
     int potSize = std::max(region1.GetIndex()[i] + region1.GetSize()[i],

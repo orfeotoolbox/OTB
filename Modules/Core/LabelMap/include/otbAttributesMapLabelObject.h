@@ -18,7 +18,15 @@
 #ifndef __otbAttributesMapLabelObject_h
 #define __otbAttributesMapLabelObject_h
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "itkShapeLabelObject.h"
+#pragma GCC diagnostic pop
+#else
+#include "itkShapeLabelObject.h"
+#endif
+
 #include "otbPolygon.h"
 #include <map>
 

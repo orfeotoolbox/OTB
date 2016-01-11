@@ -84,13 +84,13 @@ SOMWithMissingValue<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighbor
 
     // The neighborhood is of elliptic shape
     double theDistance = itk::NumericTraits<double>::Zero;
-    for (int j = 0; j < MapType::ImageDimension; ++j)
+    for (unsigned int j = 0; j < MapType::ImageDimension; ++j)
       theDistance += pow(static_cast<double>(offset[j]), 2.0)
                      / pow(static_cast<double>(radius[j]), 2.0);
 
     if (theDistance <= 1.0)
       {
-      for (int j = 0; j < MapType::ImageDimension; ++j)
+      for (unsigned int j = 0; j < MapType::ImageDimension; ++j)
         {
         int pos = offset[j] + position[j];
         positionToUpdate[j] = (pos >= 0) ?

@@ -75,7 +75,8 @@ public:
   typedef RCC8InEdgeIterator<OutputGraphType>  InEdgeIteratorType;
   typedef RCC8OutEdgeIterator<OutputGraphType> OutEdgeIteratorType;
 
-  typedef std::pair<unsigned int, unsigned int> EdgePairType;
+  typedef typename VertexIteratorType::VertexDescriptorType EdgePairElementType;
+  typedef std::pair<EdgePairElementType, EdgePairElementType> EdgePairType;
   typedef std::map<EdgePairType, RCC8ValueType> EdgeMapType;
   typedef std::vector<EdgeMapType>              EdgeMapVectorType;
 

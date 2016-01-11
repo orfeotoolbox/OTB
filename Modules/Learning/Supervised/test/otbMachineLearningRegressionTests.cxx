@@ -20,6 +20,10 @@
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
+#if defined(OTB_USE_OPENCV) || defined(OTB_USE_LIBSVM)
+const double otb_epsilon_01 = 0.1;
+#endif
+
 #ifdef OTB_USE_OPENCV
 #include "otbNeuralNetworkMachineLearningModel.h"
 #include "otbSVMMachineLearningModel.h"
@@ -31,7 +35,6 @@
 #endif
 
 #ifdef OTB_USE_LIBSVM
-const double epsilon = 0.1;
 #include "otbLibSVMMachineLearningModel.h"
 #endif
 
@@ -252,7 +255,7 @@ int otbLibSVMRegressionTests(int itkNotUsed(argc),
   param.vMin = -0.5;
   param.vMax = 0.5;
   param.count = 200;
-  param.eps = epsilon;
+  param.eps = otb_epsilon_01;
 
   std::cout << "Testing regression on a linear monovariate function" << std::endl;
   LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
@@ -327,7 +330,7 @@ int otbNeuralNetworkRegressionTests(int itkNotUsed(argc),
   param.vMin = -0.5;
   param.vMax = 0.5;
   param.count = 20000;
-  param.eps = epsilon;
+  param.eps = otb_epsilon_01;
 
   std::cout << "Testing regression on a linear monovariate function" << std::endl;
   LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
@@ -391,7 +394,7 @@ int otbSVMRegressionTests(int itkNotUsed(argc),
   param.vMin = -0.5;
   param.vMax = 0.5;
   param.count = 200;
-  param.eps = epsilon;
+  param.eps = otb_epsilon_01;
 
   std::cout << "Testing regression on a linear monovariate function" << std::endl;
   LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
@@ -448,7 +451,7 @@ int otbDecisionTreeRegressionTests(int itkNotUsed(argc),
   param.vMin = -0.5;
   param.vMax = 0.5;
   param.count = 200;
-  param.eps = epsilon;
+  param.eps = otb_epsilon_01;
 
   std::cout << "Testing regression on a linear monovariate function" << std::endl;
   LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
@@ -510,7 +513,7 @@ int otbGradientBoostedTreeRegressionTests(int itkNotUsed(argc),
   param.vMin = -0.5;
   param.vMax = 0.5;
   param.count = 200;
-  param.eps = epsilon;
+  param.eps = otb_epsilon_01;
 
   std::cout << "Testing regression on a linear monovariate function" << std::endl;
   LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
@@ -571,7 +574,7 @@ int otbKNearestNeighborsRegressionTests(int itkNotUsed(argc),
   param.vMin = -0.5;
   param.vMax = 0.5;
   param.count = 200;
-  param.eps = epsilon;
+  param.eps = otb_epsilon_01;
 
   std::cout << "Testing regression on a linear monovariate function" << std::endl;
   LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
@@ -629,7 +632,7 @@ int otbRandomForestsRegressionTests(int itkNotUsed(argc),
   param.vMin = -0.5;
   param.vMax = 0.5;
   param.count = 200;
-  param.eps = epsilon;
+  param.eps = otb_epsilon_01;
 
   std::cout << "Testing regression on a linear monovariate function" << std::endl;
   LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);

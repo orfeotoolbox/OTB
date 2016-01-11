@@ -24,6 +24,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ossim/elevation/ossimElevManager.h"
 #include "ossim/base/ossimGeoidManager.h"
 #include "ossim/base/ossimFilename.h"

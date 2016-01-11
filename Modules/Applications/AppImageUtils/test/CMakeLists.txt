@@ -112,7 +112,7 @@ otb_test_application(NAME  apTvUtReadImageInfoRpcTag
                      APP  ReadImageInfo
                      OPTIONS -in ${INPUTDATA}/QB_TOULOUSE_RpcTag_100_100.tif
                              -outkwl ${TEMP}/apTvUtReadImageInfoRpcTag.geom
-                     VALID   --compare-ascii ${EPSILON_7}
+                     VALID   --compare-ascii ${EPSILON_5}
                              ${BASELINE_FILES}/apTvUtReadImageInfoRpcTag.geom
                        ${TEMP}/apTvUtReadImageInfoRpcTag.geom)
 

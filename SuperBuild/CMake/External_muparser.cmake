@@ -14,9 +14,8 @@ else()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    DOWNLOAD_NAME muparser_v2_2_3.zip
-    URL "https://docs.google.com/uc?export=download&id=0BzuB-ydOOoduLUNRanpDNV9iVk0"
-    URL_MD5 9de40ec1dab5bd2787ee344fce5846ad
+    URL "https://github.com/beltoforion/muparser/archive/v2.2.5.tar.gz"
+    URL_MD5 02dae671aa5ad955fdcbcd3fee313fb7
     BINARY_DIR ${MUPARSER_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

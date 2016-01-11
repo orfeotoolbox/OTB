@@ -34,7 +34,12 @@ QtWidgetComplexInputImageParameter::~QtWidgetComplexInputImageParameter()
 
 void QtWidgetComplexInputImageParameter::DoUpdateGUI()
 {
-  QString text( m_ComplexInputImageParam->GetFileName().c_str() );
+  QString text(
+    QFile::decodeName(
+      m_ComplexInputImageParam->GetFileName().c_str()
+    )
+  );
+
   if (text != m_Input->text())
     m_Input->setText(text);
 }
@@ -72,7 +77,8 @@ void QtWidgetComplexInputImageParameter::SelectFile()
 
   if (fileDialog.exec())
     {
-    this->SetFileName(fileDialog.selectedFiles().at(0));
+    this->SetFileName( fileDialog.selectedFiles().at(0) );
+
     m_Input->setText(fileDialog.selectedFiles().at(0));
     }
 }
@@ -80,7 +86,9 @@ void QtWidgetComplexInputImageParameter::SelectFile()
 void QtWidgetComplexInputImageParameter::SetFileName(const QString& value)
 {
   // save value
-  m_ComplexInputImageParam->SetFromFileName(value.toAscii().constData());
+  m_ComplexInputImageParam->SetFromFileName(
+    QFile::encodeName( value ).constData()
+  );
 
   // notify of value change
   QString key( m_ComplexInputImageParam->GetKey() );

@@ -18,7 +18,15 @@
 #ifndef __otbPolyLineParametricPathWithValue_h
 #define __otbPolyLineParametricPathWithValue_h
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "itkPolyLineParametricPath.h"
+#pragma GCC diagnostic pop
+#else
+#include "itkPolyLineParametricPath.h"
+#endif
+
 #include "itkMetaDataObject.h"
 #include "otbRemoteSensingRegion.h"
 #include "otbMacro.h"

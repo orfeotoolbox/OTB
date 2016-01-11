@@ -377,11 +377,11 @@ public:
    * \sa \c feature_iter
    * Depending of the actual driver (i.e. \c OGRDriver), this may be done in O(N).
    */
-  const_iterator cstart_at(size_t index) const;
+  const_iterator cstart_at(GIntBig index) const;
   /** \copydoc cstart_at */
-  const_iterator start_at (size_t index) const { return cstart_at(index); }
+  const_iterator start_at (GIntBig index) const { return cstart_at(index); }
   /** \copydoc cstart_at */
-  iterator       start_at (size_t index);
+  iterator       start_at (GIntBig index);
   //@}
 
   /**\name Features definition
@@ -426,7 +426,7 @@ public:
    * \pre To be available, this function requires OTB to be compiled against OGR
    * v1.9.0 at least.
    */
-  void DeleteField(size_t fieldIndex);
+  void DeleteField(int fieldIndex);
 
   /**
    * Changes the definition of the i-th field.

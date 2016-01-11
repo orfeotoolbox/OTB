@@ -27,11 +27,11 @@
 #include "otbDEMToImageGenerator.h"
 
 #include "otbVarianceImageFilter.h"
-#include "otbBandMathImageFilter.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 #include "otbVectorImageToImageListFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
+#include "otbImageToNoDataMaskFilter.h"
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkVectorCastImageFilter.h"
@@ -239,6 +239,8 @@ public:
         FloatImageType>                             BijectionFilterType;
 
     typedef itk::ImageToImageFilter<FloatImageType,FloatImageType>  FilterType;
+
+    typedef otb::ImageToNoDataMaskFilter<FloatImageType,FloatImageType> NoDataMaskFilterType;
 private:
 
   StereoFramework()
@@ -1113,9 +1115,10 @@ private:
 
       m_Filters.push_back(disparityTranslateFilter.GetPointer());
 
-      BandMathFilterType::Pointer dispTranslateMaskFilter = BandMathFilterType::New();
-      dispTranslateMaskFilter->SetNthInput(0, disparityTranslateFilter->GetHorizontalDisparityMapOutput(), "hdisp");
-      dispTranslateMaskFilter->SetExpression("hdisp!=-32768");
+      NoDataMaskFilterType::Pointer dispTranslateMaskFilter = NoDataMaskFilterType::New();
+      dispTranslateMaskFilter->SetInput(disparityTranslateFilter->GetHorizontalDisparityMapOutput());
+      dispTranslateMaskFilter->SetInsideValue(1);
+      dispTranslateMaskFilter->SetOutsideValue(0);
       m_Filters.push_back(dispTranslateMaskFilter.GetPointer());
 
       FloatImageType::Pointer hDispOutput2 = disparityTranslateFilter->GetHorizontalDisparityMapOutput();

@@ -1,9 +1,9 @@
 macro(package_mingw)
-  cmake_parse_arguments(PACKAGE  "" "PREFIX_DIR;ARCH;MXEROOT;USE_QT4" "SEARCHDIRS;PEFILES" ${ARGN} )
+  cmake_parse_arguments(PACKAGE  "" "PREFIX_DIR;ARCH;MXEROOT;WITH_OTBGUI" "SEARCHDIRS;PEFILES" ${ARGN} )
 
   list(APPEND PACKAGE_PEFILES ${CMAKE_INSTALL_PREFIX}/bin/otbApplicationLauncherCommandLine.exe)
   list(APPEND PACKAGE_PEFILES ${CMAKE_INSTALL_PREFIX}/bin/otbTestDriver.exe)
-  if(PACKAGE_USE_QT4)
+  if(PACKAGE_WITH_OTBGUI)
     list(APPEND PACKAGE_PEFILES ${CMAKE_INSTALL_PREFIX}/bin/otbApplicationLauncherQt.exe)
   endif()
 
@@ -15,13 +15,15 @@ macro(package_mingw)
     set(MXE_OBJDUMP "${PACKAGE_MXEROOT}/usr/bin/x86_64-w64-mingw32.shared-objdump")
   endif()
 
+  file(GLOB MXE_GCC_LIB_DIR "${MXE_BIN_DIR}/gcc*")
+  list(APPEND PACKAGE_SEARCHDIRS ${MXE_GCC_LIB_DIR})
   list(APPEND PACKAGE_SEARCHDIRS ${MXE_BIN_DIR})
   list(APPEND PACKAGE_SEARCHDIRS "${MXE_BIN_DIR}/../qt/bin") #Qt
   list(APPEND PACKAGE_SEARCHDIRS "${MXE_BIN_DIR}/../qt/lib") #Qwt
   list(APPEND PACKAGE_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/bin") #mvd
   list(APPEND PACKAGE_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/lib/otb/applications") #otb apps
 
-  install_common()
+  install_common(${PACKAGE_WITH_OTBGUI})
 
   file(GLOB otbapps_list ${CMAKE_INSTALL_PREFIX}/lib/otb/applications/otbapp_*dll) # /lib/otb
   list(APPEND PACKAGE_PEFILES ${otbapps_list})
@@ -42,39 +44,35 @@ macro(package_mingw)
 
 endmacro(package_mingw)
 
-SET(SYSTEM_DLLS
+set(SYSTEM_DLLS
   msvc.*dll
-  USER32.dll
-  GDI32.dll
-  SHELL32.DLL
-  KERNEL32.dll
-  ADVAPI32.dll
-  CRYPT32.dll
-  WS2_32.dll
+  user32.dll
+  gdi32.dll
+  shell32.dll
+  kernel32.dll
+  advapi32.dll
+  crypt32.dll
+  ws2_32.dll
   wldap32.dll
   ole32.dll
-  OPENGL32.DLL
-  GLU32.DLL
-  COMDLG32.DLL
-  IMM32.DLL
-  OLEAUT32.dll
-  COMCTL32.DLL
-  WINMM.DLL
-
-  SHELL32.dll
-  WLDAP32.dll
-  OPENGL32.dll
-  GLU32.dll
+  opengl32.dll
+  glu32.dll
   comdlg32.dll
-  IMM32.dll
-  WINMM.dll
-  WINSPOOL.DRV)
+  imm32.dll
+  oleaut32.dll
+  comctl32.dll
+  winmm.dll
+  shfolder.dll
+  secur32.dll
+  wsock32.dll
+  winspool.drv)
 
-## http://www.cmake.org/Wiki/CMakeMacroListOperations
-macro(IS_SYSTEM_DLL matched value)
+macro(is_system_dll matched value)
   set(${matched})
+  string(TOLOWER ${value} value_)
   foreach (pattern ${SYSTEM_DLLS})
-    if(${value} MATCHES ${pattern})
+    string(TOLOWER ${pattern} pattern_)
+    if(${value_} MATCHES ${pattern_})
       set(${matched} TRUE)
     endif()
   endforeach()
@@ -90,9 +88,7 @@ macro(list_contains var value)
 endmacro()
 
 function(process_deps infile)
-
   get_filename_component(bn ${infile} NAME)
-
   list_contains(contains "${bn}" "${alldlls}")
   if(NOT contains)
     set(DLL_FOUND FALSE)
@@ -100,14 +96,20 @@ function(process_deps infile)
       if(NOT DLL_FOUND)
         if(EXISTS ${SEARCHDIR}/${infile})
           set(DLL_FOUND TRUE)
-
+        else()
+          string(TOLOWER ${infile} infile_lower)
+          if(EXISTS ${SEARCHDIR}/${infile_lower})
+            set(DLL_FOUND TRUE)
+            set(infile ${infile_lower})
+          endif()
+        endif()
+        if(DLL_FOUND)
           message(STATUS "Processing ${SEARCHDIR}/${infile}")
           if(NOT "${infile}" MATCHES "otbapp")
-            install(
-              FILES "${SEARCHDIR}/${infile}"
+            install(FILES "${SEARCHDIR}/${infile}"
               DESTINATION ${PACKAGE_PREFIX_DIR}/bin)
           else()
-
+            ##message(STATUS "skipping..${infile}")
           endif()
           if(NOT EXISTS ${MXE_OBJDUMP})
             message(FATAL_ERROR "objdump executable not found. please check MXE_OBJDUMP is set to correct cross compiled executable")
@@ -136,7 +138,7 @@ function(process_deps infile)
    endif()
 endfunction()
 
-function(install_common)
+function(install_common with_otbgui)
   set(APP_PREFIX_DIR "${PACKAGE_PREFIX_DIR}")
   set(APP_BIN_DIR "${APP_PREFIX_DIR}/bin")
   set(APP_OTBLIBS_DIR "${APP_PREFIX_DIR}/lib/otb")
@@ -172,7 +174,7 @@ function(install_common)
       DESTINATION ${APP_BIN_DIR})
   endforeach()
 
-  if(OTB_USE_QT4)
+  if(with_otbgui)
     file(GLOB GUI_SCRIPTS ${CMAKE_INSTALL_PREFIX}/bin/otbgui*)
     foreach(GUI_SCRIPT ${GUI_SCRIPTS})
       install(

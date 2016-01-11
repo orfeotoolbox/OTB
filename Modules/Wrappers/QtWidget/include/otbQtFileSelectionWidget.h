@@ -55,7 +55,7 @@ public:
 
   std::string GetFilename()
   {
-    return m_Input->text().toAscii().constData();
+    return QFile::encodeName( m_Input->text() ).constData();
   }
 
   void ClearFilename()

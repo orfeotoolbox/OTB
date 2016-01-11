@@ -52,27 +52,28 @@ public:
   typedef TObject                        ObjectType;
   typedef itk::SmartPointer<ObjectType>  ObjectPointerType;
   typedef std::vector<ObjectPointerType> InternalContainerType;
+  typedef typename InternalContainerType::size_type InternalContainerSizeType;
 
   /**
    * Set the minimum capacity of the vector.
    * \param size Size of the vector to reserve.
    */
-  void Reserve(unsigned int size);
+  void Reserve(InternalContainerSizeType size);
   /**
    * Get the capacity of the vector.
    * \return The capacity of the vector.
    */
-  unsigned int Capacity(void) const;
+  InternalContainerSizeType Capacity(void) const;
   /**
    * Get the number of elements in the vector.
    * \return The number of elements in the vector.
    */
-  unsigned int Size(void) const;
+  InternalContainerSizeType Size(void) const;
   /**
    * Resize the maximal list capacity.
    * \param size The new maximal size of the list.
    */
-  void Resize(unsigned int size);
+  void Resize(InternalContainerSizeType size);
   /**
    * Append an element to the list.
    * \param element Pointer to the element to append.

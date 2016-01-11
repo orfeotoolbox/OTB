@@ -1,5 +1,6 @@
 #/bin/bash
 
+export LC_ALL=C
 if [ $# -eq 2 ]; then
 DOWNLOAD_DIR=$(readlink -f $1)
 OUTPUT_DIR=$(readlink -f $2)
@@ -42,8 +43,14 @@ for url in ${DOWNLOAD_LIST}; do
 
   download_errors=$(grep "ERROR" download.log)
   if [ "$download_errors" != "" ]; then
-    echo "=== Error downloading ${file_name} ==="
-    cat download.log
+      echo "[OTB] Error downloading ${file_name}"
+      echo "[OTB] Check your internet connectivity first!."
+      echo "[OTB] Check your firewall or proxy settings and then try again."
+      echo "[OTB] If you find that ${url} is unavailable,"
+      echo "         please file a bug immediately on bugs.orfeo-toolbox.org."
+      echo "   "
+      cat download.log
+      exit 1
   else
     if [ "$file_name" != "" ]; then
       DOWNLOAD_NAMES="${DOWNLOAD_NAMES} ${file_name}"

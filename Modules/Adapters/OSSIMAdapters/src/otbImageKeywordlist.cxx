@@ -514,7 +514,7 @@ ReadGeometryFromRPCTag(const std::string& filename)
         // Method can throw ossimException.
         rpcModel->computeGsd();
         }
-      catch (const ossimException& e)
+      catch (const ossimException& itkNotUsed(e))
         {
         otbMsgDevMacro(<< "OSSIM Compute ground sampling distance FAILED ! ");
         }
