@@ -71,18 +71,18 @@ IsPathModified( I18nCoreApplication::SettingsKey enabledKey,
 		I18nCoreApplication::SettingsKey pathKey,
 		const QString & pathname )
 {
-  qDebug()
-    << "::IsPathModified("
-    << I18nApplication::Instance()->RetrieveSettingsKey( enabledKey ).toBool()
-    << ","
-    << isEnabled
-    << ","
-    << I18nApplication::Instance()->RetrieveSettingsKey(
-         pathKey
-       ).toString()
-    << ","
-    << pathname
-    << ")";
+  // qDebug()
+  //   << "::IsPathModified("
+  //   << I18nApplication::Instance()->RetrieveSettingsKey( enabledKey ).toBool()
+  //   << ","
+  //   << isEnabled
+  //   << ","
+  //   << I18nApplication::Instance()->RetrieveSettingsKey(
+  //        pathKey
+  //      ).toString()
+  //   << ","
+  //   << pathname
+  //   << ")";
 
   return
     I18nApplication::Instance()->RetrieveSettingsKey( enabledKey ).toBool()
@@ -215,9 +215,9 @@ PreferencesDialog
   assert( !m_GeoidFileModified );
   assert( !m_SrtmDirModified );
 
-  qDebug() << "results-dir:" << m_ResultsDirModified;
-  qDebug() << "geoid-file:" << m_GeoidFileModified;
-  qDebug() << "srtm-dir:" << m_SrtmDirModified;
+  // qDebug() << "results-dir:" << m_ResultsDirModified;
+  // qDebug() << "geoid-file:" << m_GeoidFileModified;
+  // qDebug() << "srtm-dir:" << m_SrtmDirModified;
 }
 
 /*****************************************************************************/
