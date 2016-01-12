@@ -107,7 +107,7 @@ private:
     SetDescription("Resamples an image according to a resampling grid");
 
     SetDocName("Grid Based Image Resampling");
-    SetDocLongDescription("This application allows to perform image resampling from an input resampling grid.");
+    SetDocLongDescription("This application allows performing image resampling from an input resampling grid.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
 
@@ -116,7 +116,7 @@ private:
     SetDocSeeAlso("otbStereorecificationGridGeneration");
 
     AddParameter(ParameterType_Group,"io","Input and output data");
-    SetParameterDescription("io","This group of parameters allows to set the input and output images.");
+    SetParameterDescription("io","This group of parameters allows setting the input and output images.");
     AddParameter(ParameterType_InputImage,"io.in","Input image");
     SetParameterDescription("io.in","The input image to resample");
     AddParameter(ParameterType_OutputImage, "io.out", "Output Image");
@@ -126,7 +126,7 @@ private:
     AddParameter(ParameterType_InputImage,"grid.in","Input resampling grid");
     SetParameterDescription("grid.in","The resampling grid");
     AddParameter(ParameterType_Choice,   "grid.type", "Grid Type");
-    SetParameterDescription("grid.type","Allows to choose between two grid types");
+    SetParameterDescription("grid.type","allows one to choose between two grid types");
     AddChoice("grid.type.def","Displacement  grid: $G(x_out,y_out) = (x_in-x_out, y_in-y_out)$");
     SetParameterDescription("grid.type.def","A deformation grid contains at each grid position the offset to apply to this position in order to get to the corresponding point in the input image to resample");
     AddChoice("grid.type.loc","Localisation grid: $G(x_out,y_out) = (x_in, y_in)$");
@@ -161,14 +161,14 @@ private:
 
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
-    SetParameterDescription("interpolator","This group of parameters allows to define how the input image will be interpolated during resampling.");
+    SetParameterDescription("interpolator","This group of parameters allows one to define how the input image will be interpolated during resampling.");
     AddChoice("interpolator.nn",     "Nearest Neighbor interpolation");
     SetParameterDescription("interpolator.nn","Nearest neighbor interpolation leads to poor image quality, but it is very fast.");
     AddChoice("interpolator.linear", "Linear interpolation");
     SetParameterDescription("interpolator.linear","Linear interpolation leads to average image quality but is quite fast");
     AddChoice("interpolator.bco",    "Bicubic interpolation");
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
-    SetParameterDescription("interpolator.bco.radius","This parameter allows to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
+    SetParameterDescription("interpolator.bco.radius","This parameter allows controlling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
     SetParameterString("interpolator","bco");
 

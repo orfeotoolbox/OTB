@@ -39,7 +39,7 @@ namespace otb
  *  - P1 and P2 are on different side of the streaming line
  *  - P1 and P2 intersect each other.
  *  - P2 has the largest intersection with P1 among all other polygons Pi intersecting P1.
- *  The \c SetStreamSize() method allows to retrieve the number of streams in row and column,
+ *  The \c SetStreamSize() method allows retrieving the number of streams in row and column,
  *  and their pixel coordinates.
  *  The input image is used to transform pixel coordinates of the streaming lines into
  *  coordinate system of the image, which must be the same as the one in the OGR input file.
@@ -134,7 +134,7 @@ protected:
   void ProcessStreamingLine(bool line, itk::ProgressReporter &progress);
   /** get length in case of  OGRGeometryCollection.
    * This function recodes the get_lenght method available since gdal 1.8.0
-   * in the case of OGRGeometryCollection. The aim is allow to access polygon stiching
+   * in the case of OGRGeometryCollection. The aim is to allow accessing polygon stiching
    * functionalities with gdal 1.6.
    */
   double GetLengthOGRGeometryCollection(OGRGeometryCollection * intersection);

@@ -63,7 +63,7 @@ public:
  *  we can assume that the direction of a road on our scalar product image is positive (greater
  *  than \f$ \pi/8 \f$).
  *  Therefore in the input modulus and direction images, pixels whose direction is lower than
- *  this threshold are supressed
+ *  this threshold are suppressed
  *  (in fact, their intensity is set to 0).
  *
  * \sa NeighborhoodScalarProductFilter

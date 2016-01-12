@@ -32,7 +32,7 @@ namespace otb {
  * when projecting an image in a target SRS. The user can set the
  * target projectionRef via SetOutputProjectionRef(std::string).
  *
- * This class allow to force using a desired spacing. For
+ * This class allows forcing use of a desired spacing. For
  * instance, if one need to compute the output Size  of an
  * image in the UTM srs with a spacing of 5 m, it can be set via the
  * method ForceSpacingTo(spacing).

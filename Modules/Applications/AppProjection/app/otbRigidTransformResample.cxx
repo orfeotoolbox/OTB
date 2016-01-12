@@ -100,7 +100,7 @@ private:
 
     //Transform
     AddParameter(ParameterType_Group,"transform","Transform parameters");
-    SetParameterDescription("transform","This group of parameters allows to set the transformation to apply.");
+    SetParameterDescription("transform","This group of parameters allows setting the transformation to apply.");
 
     AddParameter(ParameterType_Choice, "transform.type", "Type of transformation");
     SetParameterDescription("transform.type","Type of transformation. Available transformations are spatial scaling, translation and rotation with scaling factor");
@@ -148,20 +148,20 @@ private:
 
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
-    SetParameterDescription("interpolator","This group of parameters allows to define how the input image will be interpolated during resampling.");
+    SetParameterDescription("interpolator","This group of parameters allows one to define how the input image will be interpolated during resampling.");
     AddChoice("interpolator.nn",     "Nearest Neighbor interpolation");
     SetParameterDescription("interpolator.nn","Nearest neighbor interpolation leads to poor image quality, but it is very fast.");
     AddChoice("interpolator.linear", "Linear interpolation");
     SetParameterDescription("interpolator.linear","Linear interpolation leads to average image quality but is quite fast");
     AddChoice("interpolator.bco",    "Bicubic interpolation");
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
-    SetParameterDescription("interpolator.bco.radius","This parameter allows to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
+    SetParameterDescription("interpolator.bco.radius","This parameter allows controlling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
     SetParameterString("interpolator","bco");
 
     // RAM available
     AddRAMParameter("ram");
-    SetParameterDescription("ram","This allows to set the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)");
+    SetParameterDescription("ram","This allows setting the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_toulouse_sub.tif");

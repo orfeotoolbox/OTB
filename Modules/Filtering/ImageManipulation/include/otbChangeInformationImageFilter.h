@@ -28,8 +28,8 @@ namespace otb
  * \class ChangeInformationImageFilter
  * \brief Filter to modify image metadata
  *
- * The base class is itk::ChangeInformationImageFilter that allows to
- * modifiy origin, spacing, direction and buffered region. This deriving
+ * The base class is itk::ChangeInformationImageFilter that allows
+ * modifying origin, spacing, direction and buffered region. This deriving
  * filter adds the support of MetaDataDictionary.
  *
  * \ingroup OTBImageManipulation

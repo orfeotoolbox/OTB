@@ -28,7 +28,7 @@ namespace otb {
 
 /**
  * \class WorldFile
- * \brief Handles the world file that associates geographic informations to png, jpg
+ * \brief Handles the world file that associates geographic information to png, jpg
  *
  *  The world file format is detailed at
  *  http://en.wikipedia.org/wiki/World_file

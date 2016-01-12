@@ -151,7 +151,7 @@ int main( int argc, char* argv[])
 //
 //  Now we can define the mathematical expression to perform on the layers (b1, b2, b3, b4).
 //  The filter takes advantage of the parsing capabilities of the muParser library and
-//  allows to set the expression as on a digital calculator.
+//  allows setting the expression as on a digital calculator.
 //
 //  The expression below returns 255 if the ratio $(NIR-RED)/(NIR+RED)$ is greater than 0.4 and 0 if not.
 //

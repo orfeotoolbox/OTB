@@ -522,7 +522,7 @@ private:
 
 #if 0
   /** Related DataSource.
-   * Needed to acces OTB meta informations.
+   * Needed to acces OTB meta information.
    */
   DataSourcePtr m_DataSource;
 #endif

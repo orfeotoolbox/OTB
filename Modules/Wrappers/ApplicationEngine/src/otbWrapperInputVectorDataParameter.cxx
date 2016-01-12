@@ -37,7 +37,7 @@ InputVectorDataParameter::~InputVectorDataParameter()
 bool
 InputVectorDataParameter::SetFromFileName(const std::string& filename)
 {
-  // First clear previous file choosen
+  // First clear previous file chosen
   this->ClearValue();
 
   // TODO : when the logger will be available, redirect the exception

@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
   //  \item PSI 0
   //  \end{itemize}
   //
-  //  More informations and data about leaf properties can be found at \emph{St\'{e}phane Jacquemoud} \href{http://teledetection.ipgp.jussieu.fr/opticleaf/}{OPTICLEAF} website.
+  //  More information and data about leaf properties can be found at \emph{St\'{e}phane Jacquemoud} \href{http://teledetection.ipgp.jussieu.fr/opticleaf/}{OPTICLEAF} website.
   //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;

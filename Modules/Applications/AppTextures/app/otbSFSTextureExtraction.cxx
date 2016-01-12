@@ -81,7 +81,7 @@ SetMinimumParameterIntValue("channel", 1);
 AddRAMParameter();
 
 AddParameter(ParameterType_Group, "parameters", "Texture feature parameters");
-SetParameterDescription("parameters","This group of parameters allows to define SFS texture parameters.\
+SetParameterDescription("parameters","This group of parameters allows one to define SFS texture parameters.\
     The available texture features are SFS'Length, SFS'Width, SFS'PSI, SFS'W-Mean, SFS'Ratio and SFS'SD.\
     They are provided in this exact order in the output image.");
 

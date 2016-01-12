@@ -496,7 +496,7 @@ CommandLineParser::GetKeyList( const std::string & exp  )
 
   while( found != std::string::npos )
     {
-    // Supress everything before the key
+    // Suppress everything before the key
     cutExp = cutExp.substr(found+2, exp.size());
     // Search the end of the key (a space)
     std::size_t foundSpace = cutExp.find(" ");

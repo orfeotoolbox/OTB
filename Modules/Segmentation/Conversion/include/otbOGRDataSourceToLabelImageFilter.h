@@ -43,7 +43,7 @@ namespace otb {
  *  Please note that the background value is also used in
  *  BurnAttributeModeOn() to fill areas where there are no geometries.
  *
- *  Setting the output raster informations can be done in two ways by:
+ *  Setting the output raster information can be done in two ways by:
  *    - Setting the Origin/Size/Spacing of the output image
  *    - Using an existing image as support via SetOutputParametersFromImage(ImageBase)
  *

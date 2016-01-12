@@ -184,7 +184,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   //  The methods \code{SetLengthLine()} and \code{SetWidthLine()}
-  //  allow to set the minimum length and the typical witdh of the
+  //  allow setting the minimum length and the typical witdh of the
   //  lines which are to be detected.
   //
   //  \index{otb::LineRatioDetector!SetWidthLine()}

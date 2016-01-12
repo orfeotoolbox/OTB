@@ -52,7 +52,7 @@ protected slots:
   virtual void UpFile();
   virtual void DownFile();
   virtual void AddFile();
-  virtual void SupressFile();
+  virtual void SuppressFile();
   virtual void EraseFile();
   virtual void UpdateVectorDataList();
 

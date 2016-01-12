@@ -187,7 +187,7 @@ ModelComponentBase<TSample>
 ::GenerateData()
 {
   /** subclasses should override this function to perform
-   *  parameter estimation. But it allows to switch m_SampleModified
+   *  parameter estimation. But it allows switching m_SampleModified
    *  when necessary.
    */
   m_SampleModified = 0;

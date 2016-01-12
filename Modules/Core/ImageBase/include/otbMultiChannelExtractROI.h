@@ -31,7 +31,7 @@ namespace otb
  * \brief Extract a spatial or spectral subset of a multi-channel image.
  *
  * It is possible to extract all the channels from the input image or only those specified by the user.
- * The SetChannel() method allows to select one channel.
+ * The SetChannel() method allows selecting one channel.
  * The SetFirstChannel() and SetLastChannel() methods allow the user to define a list of channels.
  *
  * \note If no channels are specified, then all channels from the input image are selected.

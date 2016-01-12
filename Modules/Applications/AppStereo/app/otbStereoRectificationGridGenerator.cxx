@@ -111,7 +111,7 @@ private:
     SetDocSeeAlso("otbGridBasedImageResampling");
 
     AddParameter(ParameterType_Group,"io","Input and output data");
-    SetParameterDescription("io","This group of parameters allows to set the input and output images.");
+    SetParameterDescription("io","This group of parameters allows setting the input and output images.");
     AddParameter(ParameterType_InputImage,"io.inleft","Left input image");
     SetParameterDescription("io.inleft","The left input image to resample");
 
@@ -155,11 +155,11 @@ private:
     DisableParameter("epi.elevation.avgdem.maxdisp");
 
     AddParameter(ParameterType_Float,"epi.scale","Scale of epipolar images");
-    SetParameterDescription("epi.scale","The scale parameter allows to generated zoomed-in (scale < 1) or zoomed-out (scale > 1) epipolar images.");
+    SetParameterDescription("epi.scale","The scale parameter allows generating zoomed-in (scale < 1) or zoomed-out (scale > 1) epipolar images.");
     SetDefaultParameterFloat("epi.scale",1.);
 
     AddParameter(ParameterType_Int,"epi.step","Step of the deformation grid (in nb. of pixels)");
-    SetParameterDescription("epi.step","Stereo-rectification deformation grid only varies slowly. Therefore, it is recommanded to use a coarser grid (higher step value) in case of large images");
+    SetParameterDescription("epi.step","Stereo-rectification deformation grid only varies slowly. Therefore, it is recommended to use a coarser grid (higher step value) in case of large images");
     SetDefaultParameterInt("epi.step",1);
 
     AddParameter(ParameterType_Int,"epi.rectsizex","Rectified image size X");
@@ -175,7 +175,7 @@ private:
     SetParameterRole("epi.baseline", Role_Output);
 
     AddParameter(ParameterType_Group,"inverse","Write inverse fields");
-    SetParameterDescription("inverse","This group of parameter allows to generate the inverse fields as well");
+    SetParameterDescription("inverse","This group of parameter allows generating the inverse fields as well");
 
     AddParameter(ParameterType_OutputImage, "inverse.outleft", "Left inverse deformation grid");
     SetParameterDescription("inverse.outleft","The output deformation grid to be used to resample the epipolar left image");
@@ -186,7 +186,7 @@ private:
     MandatoryOff("inverse.outright");
 
     AddParameter(ParameterType_Int, "inverse.ssrate", "Sub-sampling rate for inversion");
-    SetParameterDescription("inverse.ssrate","Grid inversion is an heavy process that implies spline regression on control points. To avoid eating to much memory, this parameter allows to first sub-sample the field to invert.");
+    SetParameterDescription("inverse.ssrate","Grid inversion is an heavy process that implies spline regression on control points. To avoid eating to much memory, this parameter allows one to first sub-sample the field to invert.");
     SetDefaultParameterInt("inverse.ssrate",16);
     SetMinimumParameterIntValue("inverse.ssrate",1);
 
@@ -285,7 +285,7 @@ private:
       FloatVectorImageType::PointType lorigin = GetParameterImage("io.inleft")->GetOrigin();
       FloatVectorImageType::SpacingType lspacing = GetParameterImage("io.inleft")->GetSpacing();
       FloatVectorImageType::SizeType lsize = GetParameterImage("io.inleft")->GetLargestPossibleRegion().GetSize();
-  
+
       if (lsize[0]*lsize[1]>256*256)
         otbAppLogWARNING("Left image's size (" << lsize[0] << "x" << lsize[1] << ") may result in a too high computational demand. Please consider setting inverse.ssrate parameter correctly (actual value is " << GetParameterInt("inverse.ssrate") << ").");
 

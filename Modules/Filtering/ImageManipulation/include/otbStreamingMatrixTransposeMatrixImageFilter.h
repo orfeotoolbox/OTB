@@ -187,7 +187,7 @@ private:
 /** \class StreamingMatrixTransposeMatrixImageFilter
  * \brief This class streams the whole input image through the PersistentMatrixTransposeMatrixImageFilter.
  *
- * This way, it allows to compute \f[X^T.Y \f] where \f[X\f] and \f[Y\f] are the input images.
+ * This way, it allows computing \f[X^T.Y \f] where \f[X\f] and \f[Y\f] are the input images.
  * first order global statistics of this image. It calls the Reset() method of the
  * PersistentMatrixTransposeMatrixImageFilter before streaming the image and the
  * Synthetize() method of the PersistentMatrixTransposeMatrixImageFilter after having streamed the image

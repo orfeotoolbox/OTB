@@ -31,7 +31,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
 {
   AddChoice("classifier.ann", "Artificial Neural Network classifier");
   SetParameterDescription("classifier.ann",
-                          "This group of parameters allows to set Artificial Neural Network classifier parameters. "
+                          "This group of parameters allows setting Artificial Neural Network classifier parameters. "
                           "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/neural_networks.html}.");
 
   //TrainMethod

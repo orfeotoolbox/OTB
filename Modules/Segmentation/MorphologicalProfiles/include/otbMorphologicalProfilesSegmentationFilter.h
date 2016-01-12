@@ -54,14 +54,14 @@ namespace otb
  *
  * \ingroup OTBMorphologicalProfiles
 */
-template <class TInputImage,  class TOuputImage, class TInternalPrecision = float, class TStructuringElement = itk::BinaryBallStructuringElement<typename TInputImage::PixelType, TInputImage::ImageDimension> >
+template <class TInputImage,  class TOutputImage, class TInternalPrecision = float, class TStructuringElement = itk::BinaryBallStructuringElement<typename TInputImage::PixelType, TInputImage::ImageDimension> >
 class ITK_EXPORT MorphologicalProfilesSegmentationFilter
-  : public itk::ImageToImageFilter<TInputImage, TOuputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
 /** Standard Self typedef */
 typedef MorphologicalProfilesSegmentationFilter Self;
-typedef itk::ImageToImageFilter<TInputImage, TOuputImage> Superclass;
+typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
 
 typedef itk::SmartPointer<Self>       Pointer;
 typedef itk::SmartPointer<const Self> ConstPointer;
@@ -69,7 +69,7 @@ typedef itk::SmartPointer<const Self> ConstPointer;
 /** Some convenient typedefs. */
 typedef TInputImage                        InputImageType;
 typedef typename InputImageType::PixelType InputPixelType;
-typedef TOuputImage                        OutputImageType;
+typedef TOutputImage                       OutputImageType;
 typedef otb::Image<TInternalPrecision>     InternalImageType;
 
 typedef TStructuringElement                StructuringElementType;

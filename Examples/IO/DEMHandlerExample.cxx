@@ -68,9 +68,9 @@ if(argc!=8)
 
 // Software Guide : BeginLatex
 //
-// It allows to configure a directory containing DEM tiles (DTED or SRTM
+// It allows configuring a directory containing DEM tiles (DTED or SRTM
 // supported) using the \code{OpenDEMDirectory()} method. The \code{OpenGeoidFile()} method
-// allows to input a geoid file as well. Last, a default height above ellipsoid
+// allows inputting a geoid file as well. Last, a default height above ellipsoid
 // can be set using the \code{SetDefaultHeightAboveEllipsoid()} method.
 //
 // Software Guide : EndLatex

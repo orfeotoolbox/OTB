@@ -63,7 +63,7 @@ public:
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /**
-   * There is no runtime informations macro since
+   * There is no runtime information macro since
    * this class has to be considered to as a simple VectorImage
    * // itkTypeMacro(SOMMap, VectorImage);
    * */

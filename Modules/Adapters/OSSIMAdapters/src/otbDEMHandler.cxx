@@ -156,7 +156,7 @@ DEMHandler
     ossimRefPtr<ossimGeoid> geoidPtr = new ossimGeoidEgm96(geoid);
     if (geoidPtr->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
       {
-      // Ossim does not allow to retrieve the geoid file path
+      // Ossim does not allow retrieving the geoid file path
       // We therefore must keep it on our side
       m_GeoidFile = geoidFile;
       otbMsgDevMacro(<< "Geoid successfully opened");
@@ -244,7 +244,7 @@ void
 DEMHandler
 ::SetDefaultHeightAboveEllipsoid(double h)
 {
-  // Ossim does not allow to retrieve the default height above
+  // Ossim does not allow retrieving the default height above
   // ellipsoid We therefore must keep it on our side
   m_DefaultHeightAboveEllipsoid = h;
 
@@ -257,7 +257,7 @@ double
 DEMHandler
 ::GetDefaultHeightAboveEllipsoid() const
 {
-  // Ossim does not allow to retrieve the default height above
+  // Ossim does not allow retrieving the default height above
   // ellipsoid We therefore must keep it on our side
   return m_DefaultHeightAboveEllipsoid;
 }
@@ -286,7 +286,7 @@ std::string DEMHandler::GetDEMDirectory(unsigned int idx) const
 
 std::string DEMHandler::GetGeoidFile() const
 {
-  // Ossim does not allow to retrieve the geoid file path
+  // Ossim does not allow retrieving the geoid file path
   // We therefore must keep it on our side
   return m_GeoidFile;
 }
