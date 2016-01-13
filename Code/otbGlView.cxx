@@ -369,37 +369,6 @@ GlView
 
 void
 GlView
-::ReadPixels( RgbaPixelBuffer & buffer ) const
-{
-  assert( !m_Settings.IsNull() );
-
-  buffer.m_Width = m_Settings->GetViewportSize()[ 0 ];
-  buffer.m_Height = m_Settings->GetViewportSize()[ 1 ];
-
-  buffer.SetPixels( new RgbaPixelBuffer::Pixel[ buffer.m_Width * buffer.m_Height ] );
-
-  glReadPixels(
-    0, 0,
-    buffer.m_Width, buffer.m_Height,
-    GL_RGBA, GL_UNSIGNED_INT,
-    reinterpret_cast< void * >( buffer.Pixels() )
-  );
-
-  if( glGetError()!=GL_NO_ERROR )
-    throw std::runtime_error(
-      std::string(
-	reinterpret_cast< const char * >(
-	  gluErrorString(
-	    glGetError()
-	  )
-	)
-      )
-    );
-}
-
-
-void
-GlView
 ::SaveScreenshot( const std::string & filename ) const
 {
   //
