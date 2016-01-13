@@ -28,8 +28,12 @@
 #include <cstring>
 #include <cassert>
 
+#include "itkRGBAPixel.h"
 
 #include "otbGeoInterface.h"
+#include "otbImage.h"
+#include "otbImageFileWriter.h"
+#include "otbImportImageFilter.h"
 
 
 namespace otb
@@ -360,6 +364,170 @@ GlView
     thisKeys.begin(), 
     thisKeys.end()
   );
+}
+
+
+void
+GlView
+::ReadPixels( RgbaPixelBuffer & buffer ) const
+{
+  assert( !m_Settings.IsNull() );
+
+  buffer.m_Width = m_Settings->GetViewportSize()[ 0 ];
+  buffer.m_Height = m_Settings->GetViewportSize()[ 1 ];
+
+  buffer.SetPixels( new RgbaPixelBuffer::Pixel[ buffer.m_Width * buffer.m_Height ] );
+
+  glReadPixels(
+    0, 0,
+    buffer.m_Width, buffer.m_Height,
+    GL_RGBA, GL_UNSIGNED_INT,
+    reinterpret_cast< void * >( buffer.Pixels() )
+  );
+
+  if( glGetError()!=GL_NO_ERROR )
+    throw std::runtime_error(
+      std::string(
+	reinterpret_cast< const char * >(
+	  gluErrorString(
+	    glGetError()
+	  )
+	)
+      )
+    );
+}
+
+
+void
+GlView
+::SaveScreenshot( const std::string & filename ) const
+{
+  //
+  // Check input(s).
+  assert( !filename.empty() );
+
+  //
+  // Get size of viewport.
+  assert( !m_Settings.IsNull() );
+
+  ViewSettings::SizeType size( m_Settings->GetViewportSize() );
+
+  assert( size[ 0 ]>0 && size[ 1 ]>0 );
+
+  //
+  // Define types.
+  typedef itk::RGBPixel< GLubyte > RgbPixel;
+  typedef otb::Image< RgbPixel > RgbImage;
+  typedef otb::ImportImageFilter< RgbImage > ImportRgbImageFilter;
+  typedef otb::ImageFileWriter< RgbImage > RgbImageFileWriter;
+
+  //
+  // Setup OpenGL pixel storage.
+  glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+
+  //
+  // Check against OpenGL error and throw exception if any.
+  assert( glGetError()==GL_NO_ERROR );
+
+  if( glGetError()!=GL_NO_ERROR )
+    throw std::runtime_error(
+      std::string(
+	reinterpret_cast< const char * >(
+	  gluErrorString(
+	    glGetError()
+	  )
+	)
+      )
+    );
+
+  //
+  // Read OpenGL pixel buffer.
+  unsigned long count = size[ 0 ] * size[ 1 ];
+
+  assert( RgbPixel::Length==3 );
+  assert( sizeof( GLubyte )==1 );
+
+  RgbPixel::ValueType * glBuffer = new RgbPixel::ValueType[ RgbPixel::Length  * count ];
+  assert( glBuffer!=NULL );
+
+  glReadPixels( 
+    0, 0,
+    size[ 0 ], size[ 1 ],
+    GL_RGB, GL_UNSIGNED_BYTE,
+    glBuffer
+  );
+
+  //
+  // Check against OpenGL error and throw exception if any.
+  assert( glGetError()==GL_NO_ERROR );
+
+  if( glGetError()!=GL_NO_ERROR )
+    throw std::runtime_error(
+      std::string(
+	reinterpret_cast< const char * >(
+	  gluErrorString(
+	    glGetError()
+	  )
+	)
+      )
+    );
+
+  //
+  // Copy & flip OpenGL pixel buffer into itk::RGBAPixel<> buffer.
+  RgbPixel * itkBuffer = new RgbPixel[ count ];
+  assert( itkBuffer );
+
+  for( unsigned long j=0; j<size[ 1 ]; ++j )
+    for( unsigned long i=0; i<size[ 0 ]; ++i )
+      {
+      unsigned long glOffset = RgbPixel::Length * ( size[ 0 ] * j + i );
+      assert( glOffset < RgbPixel::Length * count );
+
+      unsigned long itkOffset = size[ 0 ] * ( size[ 1 ] - 1 - j ) + i;
+      assert( itkOffset<count );
+
+      itkBuffer[ itkOffset ][ 0 ] = glBuffer[ glOffset + 0 ];
+      itkBuffer[ itkOffset ][ 1 ] = glBuffer[ glOffset + 1 ];
+      itkBuffer[ itkOffset ][ 2 ] = glBuffer[ glOffset + 2 ];
+      }
+
+  delete[] glBuffer;
+  glBuffer = NULL;
+
+  //
+  // Setup import RGBA-image filter.
+  ImportRgbImageFilter::Pointer filter( ImportRgbImageFilter::New() );
+  assert( !filter.IsNull() );
+
+  ImportRgbImageFilter::RegionType::IndexType index;
+  index.Fill( 0 );
+
+  filter->SetRegion( ImportRgbImageFilter::RegionType( index, size ) );
+
+  // Pass ownership of allocated buffer to ImportRgbImageFilter. So,
+  // it will be deleted automatically in case an exception is thrown.
+  filter->SetImportPointer(
+    itkBuffer,
+    count,
+    true
+  );
+
+  //
+  // Setup RGBA-image file-writer.
+  RgbImageFileWriter::Pointer writer( RgbImageFileWriter::New() );
+  assert( !writer.IsNull() );
+
+  writer->SetInput( filter->GetOutput() );
+  writer->SetFileName( filename );
+
+  //
+  // Run.
+  writer->Update();
+
+  //
+  // Allocated buffer will be freed by RgbImportImageFilter.
+  // delete[] itkBuffer;
+  // itkBuffer = NULL;
 }
 
 }

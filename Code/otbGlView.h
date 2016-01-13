@@ -82,6 +82,69 @@ public:
   typedef std::map<std::string,ActorType::Pointer>        ActorMapType;
   typedef std::vector<std::string>                        StringVectorType;
 
+
+  /**
+   */
+
+  
+  struct RgbaPixelBuffer
+  {
+    struct Pixel
+    {
+      typedef unsigned int Value;
+
+      Value m_R;
+      Value m_G;
+      Value m_B;
+      Value m_A;
+    };
+
+    RgbaPixelBuffer() :
+      m_Width( 0 ),
+      m_Height( 0 ),
+      m_Pixels( NULL )
+    {
+    }
+
+    ~RgbaPixelBuffer()
+    {
+      delete[] m_Pixels;
+      m_Pixels = NULL;
+    }
+
+    void SetPixels( Pixel * pixels )
+    {
+      assert( pixels!=m_Pixels );
+
+      if( m_Pixels!=pixels )
+  	return;
+
+      delete[] m_Pixels;
+      m_Pixels = pixels;
+    }
+
+    const Pixel * Pixels() const
+    {
+      return m_Pixels;
+    }
+
+    Pixel * Pixels()
+    {
+      return m_Pixels;
+    }
+
+    unsigned int m_Width;
+    unsigned int m_Height;
+
+
+  private:
+    RgbaPixelBuffer( const RgbaPixelBuffer & );
+    RgbaPixelBuffer & operator = ( const RgbaPixelBuffer & );
+
+    Pixel * m_Pixels;
+  };
+
+
   /**
    * Type definition for otb::GlActor storage key.
    */
@@ -263,6 +326,14 @@ public:
 		   Point & center,
 		   Spacing & spacing,
 		   double units = 1000.0 ) const;
+
+  /**
+   */
+  void ReadPixels( RgbaPixelBuffer & buffer ) const;
+
+  /**
+   */
+  void SaveScreenshot( const std::string & filename ) const;
 
 protected:
   GlView();
