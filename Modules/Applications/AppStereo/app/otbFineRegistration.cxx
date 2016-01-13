@@ -199,11 +199,11 @@ private:
     SetParameterDescription( "m", "Choose the metric used for block matching. Available metrics are cross-correlation (CC), cross-correlation with subtracted mean (CCSM), mean-square difference (MSD), mean reciprocal square difference (MRSD) and mutual information (MI). Default is cross-correlation" );
     MandatoryOff("m");
 
-    AddParameter(ParameterType_Float,  "spa",   "SubPixelAccuracy");
-    SetParameterDescription( "spa", "Metric extrema location will be refined up to the given accuracy. Default is 0.01" );
-    SetDefaultParameterFloat("spa", 0.01);
-    SetMinimumParameterFloatValue("spa", 0.0);
-    MandatoryOff("spa");
+    AddParameter(ParameterType_Float,  "cva",   "ConvergenceAccuracy");
+    SetParameterDescription( "cva", "Metric extrema will be refined up to the given accuracy. Default is 0.01" );
+    SetDefaultParameterFloat("cva", 0.01);
+    SetMinimumParameterFloatValue("cva", 0.0);
+    MandatoryOff("cva");
 
     AddParameter(ParameterType_Float,  "vmlt",   "Validity Mask Lower Threshold");
     SetParameterDescription( "vmlt", "Lower threshold to obtain a validity mask." );
@@ -249,7 +249,7 @@ private:
     radius[0] = GetParameterInt("mrx");
     radius[1] = GetParameterInt("mry");
 
-    double accuracy = static_cast<double>(GetParameterFloat("spa"));
+    double accuracy = static_cast<double>(GetParameterFloat("cva"));
 
     ssrate[0] = GetParameterFloat("ssrx");
     ssrate[1] = GetParameterFloat("ssry");
@@ -270,7 +270,7 @@ private:
     m_Registration = RegistrationFilterType::New();
     m_Registration->SetRadius(radius);
     m_Registration->SetSearchRadius(sradius);
-    m_Registration->SetSubPixelAccuracy(accuracy);
+    m_Registration->SetConvergenceAccuracy(accuracy);
     m_Registration->SetGridStep(ssrate);
     m_Registration->SetInitialOffset(initialOffset);
 

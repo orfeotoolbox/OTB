@@ -39,8 +39,8 @@ namespace otb
  * deriving from the itk::ImageToImageMetric. The MinimizeOn()/MinimizeOff() flag allows searching for
  * minimum or maximum depending on the metric (default is On).
  *
- * Once a coarse (pixel wise) offset has been found, this match is further refined using dichotomic search
- * until sub-pixel accuracy given by the SetSubPixelAccuracy() is reached.
+ * Once a coarse (pixel wise) offset has been found, this match is further refined using golden section search search
+ * until convergence accuracy (given by the SetConvergenceAccuracy()) is reached, or when the max number of iteration () is reached.
  *
  * The filter proposes two outputs: GetOutput() return the image of the metric optimum at each location, and
  * the GetOutputDisplacementField() method returns the corresponding offset.
@@ -132,9 +132,13 @@ public:
   itkSetMacro(SearchRadius, SizeType);
   itkGetMacro(SearchRadius, SizeType);
 
-  /** Set/Get subpixel accuracy */
-  itkSetMacro(SubPixelAccuracy, double);
-  itkGetMacro(SubPixelAccuracy, double);
+  /** Set/Get convergence accuracy */
+  itkSetMacro(ConvergenceAccuracy, double);
+  itkGetMacro(ConvergenceAccuracy, double);
+  
+  /** Set/Get max number of iterations */
+  itkSetMacro(MaxIter, int);
+  itkGetMacro(MaxIter, int);
 
   /** True if metric should be minimized. False otherwise */
   itkSetMacro(Minimize, bool);
@@ -206,7 +210,10 @@ private:
   bool                          m_UseSpacing;
 
   /** Search step */
-  double                        m_SubPixelAccuracy;
+  double                        m_ConvergenceAccuracy;
+  
+  /** Max number of iterations */
+  int                           m_MaxIter;
 
   /** The interpolator */
   InterpolatorPointerType       m_Interpolator;
