@@ -184,6 +184,8 @@ public:
 				const IndexType &,
 				bool isPhysical ) const;
 
+  virtual void SaveScreenshot( const QString & ) const;
+
   bool
     Reproject( PointType & center,
                SpacingType & spacing,

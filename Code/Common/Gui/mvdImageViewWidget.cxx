@@ -29,6 +29,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <exception>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -592,6 +593,14 @@ ImageViewWidget
     // to:
     this,
     SLOT( OnSetReferenceRequested() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( TakeScreenshotRequested() ),
+    // to:
+    this,
+    SLOT( OnTakeScreenshotRequested() )
   );
 
 
@@ -2073,6 +2082,39 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
+::OnTakeScreenshotRequested()
+{
+  QString filename(
+    QFileDialog::getSaveFileName(
+      this,
+      tr( "Save screenshot..." )
+    )
+  );
+
+  if( filename.isEmpty() )
+    return;
+
+  assert( m_Renderer!=NULL );
+
+  try
+    {
+    m_Renderer->SaveScreenshot( filename );
+    }
+  catch( const std::exception & exception )
+    {
+    QMessageBox::warning(
+      this,
+      "Warning!",
+      tr( "Exception caught while saving screenshot into file '%1':\n\n%2" )
+      .arg( filename )
+      .arg( exception.what() )
+    );
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
 ::OnToggleLayerVisibilityRequested( bool )
 {
   assert( m_Renderer!=NULL );
@@ -2097,6 +2139,7 @@ ImageViewWidget
 
   assert( m_Renderer!=NULL );
 
+  
   StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
   assert( stackedLayerModel!=NULL );
 

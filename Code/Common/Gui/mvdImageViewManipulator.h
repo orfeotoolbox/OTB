@@ -280,6 +280,9 @@ signals:
   /**
    */
   void SetReferenceRequested();
+  /**
+   */
+  void TakeScreenshotRequested();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

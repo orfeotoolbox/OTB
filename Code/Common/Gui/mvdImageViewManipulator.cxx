@@ -772,7 +772,10 @@ ImageViewManipulator
       break;
 
     case Qt::Key_P:
-      emit SetReferenceRequested();
+      if( modifiers.testFlag( Qt::ControlModifier ) )
+	emit TakeScreenshotRequested();
+      else
+	emit SetReferenceRequested();
       break;
 
     case Qt::Key_Q:

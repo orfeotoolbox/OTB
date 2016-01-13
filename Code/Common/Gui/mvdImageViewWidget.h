@@ -410,6 +410,9 @@ private slots:
   /**
    */
   void OnRefreshViewRequested();
+  /**
+   */
+  void OnTakeScreenshotRequested();
 };
 
 }// end namespace 'mvd'
