@@ -48,13 +48,13 @@ else()
   # archive version
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "https://www.orfeo-toolbox.org/packages/ossim-minimal-r23537.tar.gz"
-    URL_MD5 f77d574ab2817bcc36633f77824facb5
+    URL "http://download.osgeo.org/ossim/source/ossim-1.8.20/ossim-1.8.20-3.tar.gz"
+    URL_MD5 eb2265db0d4d9201e255b92317121cfd
     BINARY_DIR ${OSSIM_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
     CMAKE_CACHE_ARGS
-    -DProject_WC_REVISION:STRING=23537
+    -DProject_WC_REVISION:STRING=23665
     -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
     -DCMAKE_BUILD_TYPE:STRING=Release
     -DCMAKE_CXX_FLAGS:STRING=${OSSIM_CXX_FLAGS}
@@ -72,18 +72,25 @@ else()
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
-  if(MSVC)
-    ExternalProject_Add_Step(${proj} patch_ossim_src
-      COMMAND ${CMAKE_COMMAND} -E copy_directory
-      ${CMAKE_SOURCE_DIR}/patches/ossim/src ${OSSIM_SB_SRC}/src
-      DEPENDEES patch_ossim_include
-      DEPENDERS configure )
-    ExternalProject_Add_Step(${proj} patch_ossim_include
-      COMMAND ${CMAKE_COMMAND} -E copy_directory
-      ${CMAKE_SOURCE_DIR}/patches/ossim/include ${OSSIM_SB_SRC}/include
-      DEPENDEES patch
-      DEPENDERS patch_ossim_src )
-  endif()
+  ExternalProject_Add_Step(${proj} patch_no_cmakelists
+    COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
+    ${OSSIM_SB_SRC}
+    DEPENDEES patch
+    DEPENDERS configure )
+
+  # if(MSVC)
+  #   ExternalProject_Add_Step(${proj} patch_ossim_src
+  #     COMMAND ${CMAKE_COMMAND} -E copy_directory
+  #     ${CMAKE_SOURCE_DIR}/patches/ossim/src ${OSSIM_SB_SRC}/src
+  #     DEPENDEES patch_ossim_include
+  #     DEPENDERS configure )
+  #   ExternalProject_Add_Step(${proj} patch_ossim_include
+  #     COMMAND ${CMAKE_COMMAND} -E copy_directory
+  #     ${CMAKE_SOURCE_DIR}/patches/ossim/include ${OSSIM_SB_SRC}/include
+  #     DEPENDEES patch
+  #     DEPENDERS patch_ossim_src )
+  # endif()
 
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
