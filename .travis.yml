@@ -13,17 +13,18 @@ addons:
     - libqtgui4
 
 before_script:
-  - export SOURCE_DIR=$PWD
+  - export MAKE_CMD=/tmp/ninja
+  - export CMAKE_GEN='Ninja'
   - cd /tmp
-  - wget https://cmake.org/files/v3.4/cmake-3.4.0-rc3-Linux-x86_64.tar.gz --no-check-certificate
-  - tar -xzf cmake-3.4.0-rc3-Linux-x86_64.tar.gz
+  -
+  - wget https://cmake.org/files/v3.4/cmake-3.4.1-Linux-x86_64.tar.gz --no-check-certificate
+  - wget https://raw.githubusercontent.com/rkanavath/otb_cmake_scripts/master/rashad-cm.cmake --no-check-certificate
+  - tar -xzf cmake-3.4.1-Linux-x86_64.tar.gz
   - wget https://github.com/martine/ninja/releases/download/v1.6.0/ninja-linux.zip --no-check-certificate
   - unzip ninja-linux.zip
   - wget https://www.orfeo-toolbox.org/packages/xdk/OTB-xdk-Linux64.run  --no-check-certificate
   - chmod +x /tmp/OTB-xdk-Linux64.run
   - /tmp/OTB-xdk-Linux64.run
-  - cd $SOURCE_DIR/../
-  - mkdir build
-  - cd build
 
-script: /tmp/cmake-3.4.0-rc3-Linux-x86_64/bin/cmake -DCMAKE_MAKE_PROGRAM=/tmp/ninja -DCMAKE_CXX_FLAGS="-Wno-gnu -Wno-unused-parameter -Wno-overloaded-virtual -Wno-\\#warnings" -DCMAKE_PREFIX_PATH=/tmp/OTB-xdk-Linux64 -DCMAKE_INSTALL_PREFIX=../install -G "Ninja" $SOURCE_DIR && /tmp/ninja
+
+script: /tmp/cmake-3.4.1-Linux-x86_64/bin/ctest -VV -S /tmp/rashad-cm.cmake
