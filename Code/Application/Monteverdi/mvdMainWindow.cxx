@@ -1596,6 +1596,16 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
+::on_action_SaveScreenshot_triggered()
+{
+  assert( m_ImageView!=NULL );
+
+  m_ImageView->SaveScreenshot();
+}
+
+/*****************************************************************************/
+void
+MainWindow
 ::on_action_ZoomIn_triggered()
 {
   emit UserZoomIn();

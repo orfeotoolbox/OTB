@@ -600,7 +600,7 @@ ImageViewWidget
     SIGNAL( TakeScreenshotRequested() ),
     // to:
     this,
-    SLOT( OnTakeScreenshotRequested() )
+    SLOT( SaveScreenshot() )
   );
 
 
@@ -2082,7 +2082,7 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
-::OnTakeScreenshotRequested()
+::SaveScreenshot()
 {
   QString filename(
     QFileDialog::getSaveFileName(

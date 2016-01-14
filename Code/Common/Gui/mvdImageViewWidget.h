@@ -176,6 +176,9 @@ public slots:
   void CenterOn( const PointType& center, double scale );
   /**
    */
+  void SaveScreenshot();
+  /**
+   */
   void ZoomToExtent();
   /**
    */
@@ -410,9 +413,6 @@ private slots:
   /**
    */
   void OnRefreshViewRequested();
-  /**
-   */
-  void OnTakeScreenshotRequested();
 };
 
 }// end namespace 'mvd'
