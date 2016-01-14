@@ -52,6 +52,7 @@
     <addaction name="action_ZoomExtent"/>
     <addaction name="action_ZoomLayer"/>
     <addaction name="separator"/>
+    <addaction name="action_SaveScreenshot"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
@@ -98,6 +99,7 @@
    <addaction name="action_ZoomExtent"/>
    <addaction name="action_ZoomLayer"/>
    <addaction name="action_ZoomFull"/>
+   <addaction name="action_SaveScreenshot"/>
   </widget>
   <widget class="QToolBar" name="m_ShaderToolBar">
    <property name="windowTitle">
@@ -253,6 +255,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="action_SaveScreenshot">
+   <property name="icon">
+    <iconset resource="mvdMainWindow.qrc">
+     <normaloff>:/icons/action_SaveScreenshot_Icon</normaloff>:/icons/action_SaveScreenshot_Icon</iconset>
+   </property>
+   <property name="text">
+    <string>Save screenshot</string>
+   </property>
+   <property name="toolTip">
+    <string>Take screenshot of image-view and save it into file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>
