@@ -7,7 +7,6 @@ if(MSVC)
 set(BUILD_SHARED_LIBS OFF) #force off
 endif()
 
-add_definitions(-DTINYXML_USE_STL=1)
 
 set(tinyXMLlib_SRCS
   tinystr.cpp
@@ -28,3 +27,7 @@ install(TARGETS tinyxml
 
 install(FILES ${tinyXMLlib_HDRS}
   DESTINATION include)
+
+
+#set(TINYXML_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR})
+#set(TINYXML_LIBRARIES tinyXML)
