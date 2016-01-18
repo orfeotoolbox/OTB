@@ -896,9 +896,8 @@ void GlImageActor::UpdateTransforms()
 
   if(m_FileName == "")
     {
+    // std::cout << "}" << std::endl;
     return;
-    
-    std::cout << "}" << std::endl;
     }
 
   // Retrieve settings
