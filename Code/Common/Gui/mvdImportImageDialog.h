@@ -137,9 +137,29 @@ private:
    */
   void Setup( const QString & filename );
 
+  /**
+   */
+  void SetSubDatasetsCheckState( Qt::CheckState );
+
+//
+// Private types.
+private:
+  enum DatasetColumns
+  {
+    DATASET_COLUMN_INDEX = 0,
+    DATASET_COLUMN_DESC,
+    DATASET_COLUMN_NAME,
+    //
+    DATASET_COLUMN_COUNT
+  };
+
 //
 // Private attributes.
 private:
+  /**
+   */
+  static char const * const DATASET_COLUMN_NAMES[ DATASET_COLUMN_COUNT ];
+
   /**
    * \brief uic generated.
    */
@@ -154,6 +174,15 @@ private:
 //
 // Slots.
 private slots:
+  /**
+   */
+  void on_allButton_clicked();
+  /**
+   */
+  void on_invertButton_clicked();
+  /**
+   */
+  void on_noneButton_clicked();
 };
 
 } // end namespace 'mvd'

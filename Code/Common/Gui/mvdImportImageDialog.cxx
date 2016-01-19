@@ -57,6 +57,14 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
+char const * const
+ImportImageDialog
+::DATASET_COLUMN_NAMES[ ImportImageDialog::DATASET_COLUMN_COUNT ] =
+{
+  QT_TRANSLATE_NOOP( "mvd::ImportImageDialog", "Index" ),
+  QT_TRANSLATE_NOOP( "mvd::ImportImageDialog", "Desc" ),
+  QT_TRANSLATE_NOOP( "mvd::ImportImageDialog", "Name" ),
+};
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -99,6 +107,9 @@ void
 ImportImageDialog
 ::Setup( const QString & filename )
 {
+  assert( m_UI!=NULL );
+  assert( m_UI->datasetTreeView!=NULL );
+
   QStandardItemModel * itemModel = NULL;
 
   //
@@ -118,12 +129,13 @@ ImportImageDialog
   // Setup item-model
   assert( itemModel!=NULL );
 
-  itemModel->setColumnCount( 3 );
+  itemModel->setColumnCount( DATASET_COLUMN_COUNT );
 
   {
     QStringList headers;
 
-    headers << "Index" << "Description" << "Name";
+    for( int i=0; i<DATASET_COLUMN_COUNT; ++i )
+      headers << QApplication::translate( "mvd", DATASET_COLUMN_NAMES[ i ] );
 
     itemModel->setHorizontalHeaderLabels( headers );
   }
@@ -178,7 +190,79 @@ ImportImageDialog
 }
 
 /*****************************************************************************/
+void
+ImportImageDialog
+::SetSubDatasetsCheckState( Qt::CheckState state )
+{
+  assert( m_UI!=NULL );
+  assert( m_UI->datasetTreeView!=NULL );
+
+  assert(
+    m_UI->datasetTreeView->model()==
+    qobject_cast< QStandardItemModel * >( m_UI->datasetTreeView->model() )
+  );
+
+  QStandardItemModel * itemModel =
+    qobject_cast< QStandardItemModel * >( m_UI->datasetTreeView->model() );
+
+  assert( itemModel!=NULL );
+
+  for( int i=0; i<itemModel->rowCount(); ++i )
+    {
+    assert( itemModel->item( i, DATASET_COLUMN_DESC )!=NULL );
+
+    itemModel->item( i, DATASET_COLUMN_DESC )->setCheckState( state );
+    }
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
+void
+ImportImageDialog
+::on_allButton_clicked()
+{
+  SetSubDatasetsCheckState( Qt::Checked );
+}
+
+/*****************************************************************************/
+void
+ImportImageDialog
+::on_invertButton_clicked()
+{
+  assert( m_UI!=NULL );
+  assert( m_UI->datasetTreeView!=NULL );
+
+  assert(
+    m_UI->datasetTreeView->model()==
+    qobject_cast< QStandardItemModel * >( m_UI->datasetTreeView->model() )
+  );
+
+  QStandardItemModel * itemModel =
+    qobject_cast< QStandardItemModel * >( m_UI->datasetTreeView->model() );
+
+  assert( itemModel!=NULL );
+
+  for( int i=0; i<itemModel->rowCount(); ++i )
+    {
+    QStandardItem * item = itemModel->item( i, DATASET_COLUMN_DESC );
+
+    assert( item!=NULL );
+
+    item->setCheckState(
+      item->checkState()==Qt::Unchecked
+      ? Qt::Checked
+      : Qt::Unchecked
+    );
+    }
+}
+
+/*****************************************************************************/
+void
+ImportImageDialog
+::on_noneButton_clicked()
+{
+  SetSubDatasetsCheckState( Qt::Unchecked );
+}
 
 } // end namespace 'mvd'
