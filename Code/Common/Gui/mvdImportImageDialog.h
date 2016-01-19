@@ -89,11 +89,21 @@ class Monteverdi_EXPORT ImportImageDialog :
 // Public methods.
 public:
 
+//
+// Public methods.
+public:
+
   /** \brief Constructor. */
-  ImportImageDialog( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  ImportImageDialog( const QString & filename,
+		     QWidget* parent = NULL,
+		     Qt::WindowFlags flags = 0 );
 
   /** \brief Destructor. */
   virtual ~ImportImageDialog();
+
+  /**
+   */
+  bool HasSubDatasets() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -123,6 +133,10 @@ protected:
 // Private methods.
 private:
 
+  /**
+   */
+  void Setup( const QString & filename );
+
 //
 // Private attributes.
 private:
@@ -130,6 +144,10 @@ private:
    * \brief uic generated.
    */
   Ui::ImportImageDialog * m_UI;
+
+  /**
+   */
+  bool m_HasSubDatasets : 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
