@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Import image</string>
   </property>
   <property name="locale">
    <locale language="C" country="AnyCountry"/>
@@ -23,13 +23,47 @@
       <string>Dataset</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="margin">
-       <number>4</number>
-      </property>
-      <property name="spacing">
-       <number>0</number>
-      </property>
       <item row="0" column="0">
+       <widget class="QPushButton" name="allButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>All</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="noneButton">
+        <property name="text">
+         <string>None</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="invertButton">
+        <property name="text">
+         <string>Invert</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>320</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0" colspan="4">
        <widget class="QTreeView" name="datasetTreeView"/>
       </item>
      </layout>
