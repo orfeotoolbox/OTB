@@ -960,7 +960,18 @@ void GDALImageIO::InternalReadImageInformation()
   gcpCount = dataset->GetGCPCount();
   if (gcpCount > 0)
     {
-    std::string gcpProjectionKey = static_cast<std::string>(dataset->GetGCPProjection());
+    std::string gcpProjectionKey;
+
+    {
+    // Declare gcpProj in local scope. So, it won't be available outside.
+    const char * gcpProj = dataset->GetGCPProjection();
+
+    // assert( gcpProj!=NULL );
+
+    if( gcpProj!=NULL )
+      gcpProjectionKey = gcpProj;
+    }
+
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionKey);
 
     if (gcpProjectionKey.empty())
