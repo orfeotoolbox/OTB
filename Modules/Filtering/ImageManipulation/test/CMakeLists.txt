@@ -76,6 +76,7 @@ otbTwoNRIBandsImageToNComplexBandsImage.cxx
 otbChangeNoDataValueFilter.cxx
 otbImageToNoDataMaskFilter.cxx
 otbChangeInformationImageFilter.cxx
+otbMaskedIteratorDecorator.cxx
 )
 
 add_executable(otbImageManipulationTestDriver ${OTBImageManipulationTests})
@@ -716,3 +717,19 @@ otb_add_test(NAME bfTvChangeInformationImageFilter COMMAND  otbImageManipulation
   otbChangeInformationImageFilter
   ${INPUTDATA}/WV2_PAN_ROI_1000_100.tif
   )
+
+otb_add_test(NAME TuMaskedIteratorDecoratorNew COMMAND otbImageManipulationTestDriver
+  otbMaskedIteratorDecoratorNew
+)
+
+otb_add_test(NAME TvMaskedIteratorDecoratorForward COMMAND otbImageManipulationTestDriver
+  otbMaskedIteratorDecoratorForward
+)
+
+otb_add_test(NAME TvMaskedIteratorDecoratorReverse COMMAND otbImageManipulationTestDriver
+  otbMaskedIteratorDecoratorReverse
+)
+
+otb_add_test(NAME TvMaskedIteratorDecoratorBijective COMMAND otbImageManipulationTestDriver
+  otbMaskedIteratorDecoratorBijective
+)
