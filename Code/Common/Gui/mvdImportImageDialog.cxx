@@ -95,6 +95,34 @@ ImportImageDialog
 }
 
 /*****************************************************************************/
+void
+ImportImageDialog
+::GetSubDatasets( IntVector & dataset ) const
+{
+  assert( m_UI!=NULL );
+  assert( m_UI->datasetTreeView!=NULL );
+
+  assert(
+    m_UI->datasetTreeView->model()==
+    qobject_cast< QStandardItemModel * >( m_UI->datasetTreeView->model() )
+  );
+
+  QStandardItemModel * itemModel =
+    qobject_cast< QStandardItemModel * >( m_UI->datasetTreeView->model() );
+
+  assert( itemModel!=NULL );
+
+  for( int i=0; i<itemModel->rowCount(); ++i )
+    {
+    assert( itemModel->item( i, DATASET_COLUMN_DESC )!=NULL );
+
+    if( itemModel->item( i, DATASET_COLUMN_DESC )
+	->checkState()==Qt::Checked )
+      dataset.push_back( i );
+    }
+}
+
+/*****************************************************************************/
 bool
 ImportImageDialog
 ::HasSubDatasets() const

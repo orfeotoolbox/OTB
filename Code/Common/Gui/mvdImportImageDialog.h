@@ -44,6 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -100,6 +101,10 @@ public:
 
   /** \brief Destructor. */
   virtual ~ImportImageDialog();
+
+  /**
+   */
+  void GetSubDatasets( IntVector & ) const;
 
   /**
    */
