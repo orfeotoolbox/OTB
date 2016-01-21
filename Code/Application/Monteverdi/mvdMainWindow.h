@@ -139,8 +139,8 @@ public slots:
 
   /**
    */
-  void ImportImage( const QString & filename,
-		    StackedLayerModel::SizeType index );
+  CountType ImportImage( const QString & filename,
+			 StackedLayerModel::SizeType index );
 
   /**
    */
