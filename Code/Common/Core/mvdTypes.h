@@ -163,6 +163,10 @@ typedef std::vector< std::string > StringVector;
 
 /**
  */
+typedef std::vector< int > IntVector;
+
+/**
+ */
 typedef std::vector< unsigned int > UIntVector;
 
 /**
