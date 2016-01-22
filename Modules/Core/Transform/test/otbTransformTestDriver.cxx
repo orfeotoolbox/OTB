@@ -12,10 +12,10 @@ void RegisterTests()
   REGISTER_TEST(otbGenericRSTransformNew);
   REGISTER_TEST(otbLogPolarTransformNew);
   REGISTER_TEST(otbForwardSensorModelGrid);
-  REGISTER_TEST(otbSensorModel);
+  //##>REGISTER_TEST(otbSensorModel);
   REGISTER_TEST(otbGeocentricTransform);
   REGISTER_TEST(otbCreateProjectionWithOTB);
-  REGISTER_TEST(otbSensorModelGrid);
+  //##>REGISTER_TEST(otbSensorModelGrid);
   REGISTER_TEST(otbGeocentricTransformNew);
   REGISTER_TEST(otbGenericMapProjection);
   REGISTER_TEST(otbStreamingWarpImageFilter);

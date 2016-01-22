@@ -10,7 +10,7 @@ void RegisterTests()
   REGISTER_TEST(otbComplexToVectorImageCastFilterTest);
   REGISTER_TEST(otbMultiChannelExtractROI);
   REGISTER_TEST(otbVectorImageLegacyTest);
-  REGISTER_TEST(otbVectorImageTest);
+  //##>REGISTER_TEST(otbVectorImageTest);
   REGISTER_TEST(otbExtractROITestMetaData);
   REGISTER_TEST(otbTestMultiExtractMultiUpdate);
   REGISTER_TEST(otbExtractROI);

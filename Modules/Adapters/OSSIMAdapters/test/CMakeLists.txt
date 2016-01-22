@@ -2,7 +2,7 @@ otb_module_test()
 
 set(OTBOSSIMAdaptersTests
 otbOSSIMAdaptersTestDriver.cxx
-otbImageKeywordlist.cxx
+##>otbImageKeywordlist.cxx
 otbOssimJpegFileRessourceLeakTest.cxx
 otbMapProjectionAdapterTest.cxx
 otbOssimElevManagerTest2.cxx

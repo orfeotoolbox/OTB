@@ -123,34 +123,34 @@ int otbVectorImageLegacyTest(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbVectorImageTest(int argc, char* argv[])
-{
-  if (argc < 3)
-    {
-    std::cout << argv[0] << "<image> <output information>" << std::endl;
-    return EXIT_FAILURE;
-    }
-  const char * inputFilename  = argv[1];
-  const char * outputAsciiFilename  = argv[2];
+/*##>int otbVectorImageTest(int argc, char* argv[])
+##>{
+##>  if (argc < 3)
+##>    {
+##>    std::cout << argv[0] << "<image> <output information>" << std::endl;
+##>    return EXIT_FAILURE;
+##>    }
+##>  const char * inputFilename  = argv[1];
+##>  const char * outputAsciiFilename  = argv[2];
 
-  typedef double PixelType;
-  const unsigned int Dimension = 2;
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+##>  typedef double PixelType;
+##> const unsigned int Dimension = 2;
+##>  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+##>  typedef otb::ImageFileReader<ImageType> ReaderType;
+##>  ReaderType::Pointer reader = ReaderType::New();
 
-  reader->SetFileName(inputFilename);
-  reader->UpdateOutputInformation();
+##>  reader->SetFileName(inputFilename);
+##>  reader->UpdateOutputInformation();
 
-  std::ofstream file;
-  ImageType::Pointer image = ImageType::New();
-  image = reader->GetOutput();
-  std::cout << image << std::endl;
-  file.open(outputAsciiFilename);
-  file << std::setprecision(15);
-  file << image;
-  file.close();
+##>  std::ofstream file;
+##>  ImageType::Pointer image = ImageType::New();
+##>  image = reader->GetOutput();
+##>  std::cout << image << std::endl;
+##>  file.open(outputAsciiFilename);
+##>  file << std::setprecision(15);
+##>  file << image;
+##>  file.close();
 
-  return EXIT_SUCCESS;
-}
+##>  return EXIT_SUCCESS;
+##>}*/

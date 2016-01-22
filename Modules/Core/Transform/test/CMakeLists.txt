@@ -13,10 +13,10 @@ otbLogPolarTransform.cxx
 otbGenericRSTransformNew.cxx
 otbLogPolarTransformNew.cxx
 otbForwardSensorModelGrid.cxx
-otbSensorModel.cxx
+##>otbSensorModel.cxx
 otbGeocentricTransform.cxx
 otbCreateProjectionWithOTB.cxx
-otbSensorModelGrid.cxx
+##>otbSensorModelGrid.cxx
 otbGeocentricTransformNew.cxx
 otbGenericMapProjection.cxx
 otbStreamingWarpImageFilter.cxx
