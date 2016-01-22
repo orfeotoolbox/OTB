@@ -4,7 +4,7 @@ set(OTBTransformTests
 otbTransformTestDriver.cxx
 otbGenericRSTransformWithSRID.cxx
 otbCreateInverseForwardSensorModel.cxx
-otbForwardBackwardProjectionConsistency.cxx
+##>otbForwardBackwardProjectionConsistency.cxx
 otbGenericRSTransform.cxx
 otbCreateProjectionWithOSSIM.cxx
 otbLogPolarTransformResample.cxx
@@ -12,7 +12,7 @@ otbStreamingWarpImageFilterNew.cxx
 otbLogPolarTransform.cxx
 otbGenericRSTransformNew.cxx
 otbLogPolarTransformNew.cxx
-otbForwardSensorModelGrid.cxx
+##>otbForwardSensorModelGrid.cxx
 ##>otbSensorModel.cxx
 otbGeocentricTransform.cxx
 otbCreateProjectionWithOTB.cxx

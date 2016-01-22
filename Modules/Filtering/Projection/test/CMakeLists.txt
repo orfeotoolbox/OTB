@@ -3,7 +3,7 @@ otb_module_test()
 set(OTBProjectionTests
 otbProjectionTestDriver.cxx
 otbVectorDataProjectionFilterFromGeoToMap.cxx
-otbOrthoRectificationFilter.cxx
+##>otbOrthoRectificationFilter.cxx
 otbGCPsToRPCSensorModelImageFilterNew.cxx
 otbMapProjection.cxx
 otbGenericRSResampleImageFilter.cxx
@@ -13,15 +13,15 @@ otbLeastSquareAffineTransformEstimatorNew.cxx
 otbVectorDataTransformFilter.cxx
 otbRationalTransformToDisplacementFieldSource.cxx
 otbImportGeoInformationImageFilterNew.cxx
-otbOrthoRectificationFilterWithDEM.cxx
-otbGenericRSTransformGenericConversionCheckingFromGCP.cxx
+##>otbOrthoRectificationFilterWithDEM.cxx
+##>otbGenericRSTransformGenericConversionCheckingFromGCP.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx
 otbCompositeTransformNew.cxx
 otbRationalTransform.cxx
 otbGeometriesProjectionFilterFromMapToSensor.cxx
 otbImageToEnvelopeVectorDataFilter.cxx
 otbMapProjectionsNew.cxx
-otbOrthoRectificationMonoThreadFilter.cxx
+##>otbOrthoRectificationMonoThreadFilter.cxx
 otbOrthoRectificationFilterNew.cxx
 otbImageToGenericRSOutputParameters.cxx
 otbGeometriesProjectionFilterFromMapToGeo.cxx

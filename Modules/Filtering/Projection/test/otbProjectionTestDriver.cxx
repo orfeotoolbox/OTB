@@ -2,8 +2,8 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbVectorDataProjectionFilterFromGeoToMap);
-  REGISTER_TEST(otbOrthoRectificationFilter);
-  REGISTER_TEST(otbOrthoRectificationComplexFilter);
+  //##>REGISTER_TEST(otbOrthoRectificationFilter);
+  //##>REGISTER_TEST(otbOrthoRectificationComplexFilter);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterNew);
   REGISTER_TEST(otbMapProjection);
   REGISTER_TEST(otbGenericRSResampleImageFilterNew);
@@ -16,8 +16,8 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataTransformFilter);
   REGISTER_TEST(otbRationalTransformToDisplacementFieldSourceTest);
   REGISTER_TEST(otbImportGeoInformationImageFilterNew);
-  REGISTER_TEST(otbOrthoRectificationFilterWithDEM);
-  REGISTER_TEST(otbGenericRSTransformGenericConversionCheckingFromGCP);
+  //##>REGISTER_TEST(otbOrthoRectificationFilterWithDEM);
+  //##>REGISTER_TEST(otbGenericRSTransformGenericConversionCheckingFromGCP);
   REGISTER_TEST(otbVectorDataProjectionFilterFromMapToSensor);
   REGISTER_TEST(otbCompositeTransformNew);
   REGISTER_TEST(otbRationalTransformNew);
@@ -27,7 +27,7 @@ void RegisterTests()
   REGISTER_TEST(otbImageToEnvelopeVectorDataFilter);
   REGISTER_TEST(otbMapProjectionsNew);
   REGISTER_TEST(otbMapProjectionsTest);
-  REGISTER_TEST(otbOrthoRectificationMonoThreadFilter);
+  //##>REGISTER_TEST(otbOrthoRectificationMonoThreadFilter);
   REGISTER_TEST(otbOrthoRectificationFilterNew);
   REGISTER_TEST(otbImageToGenericRSOutputParametersNew);
   REGISTER_TEST(otbImageToGenericRSOutputParameters);
