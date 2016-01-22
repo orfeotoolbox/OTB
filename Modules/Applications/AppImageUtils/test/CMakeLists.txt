@@ -108,45 +108,45 @@ otb_test_application(NAME apTuUtReadImageInfoExtendedFilename_reader
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipgeom=true&skipcarto=true
                      )
 
-otb_test_application(NAME  apTvUtReadImageInfoRpcTag
-                     APP  ReadImageInfo
-                     OPTIONS -in ${INPUTDATA}/QB_TOULOUSE_RpcTag_100_100.tif
-                             -outkwl ${TEMP}/apTvUtReadImageInfoRpcTag.geom
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/apTvUtReadImageInfoRpcTag.geom
-                       ${TEMP}/apTvUtReadImageInfoRpcTag.geom)
+##>otb_test_application(NAME  apTvUtReadImageInfoRpcTag
+                     ##>APP  ReadImageInfo
+                     ##>OPTIONS -in ${INPUTDATA}/QB_TOULOUSE_RpcTag_100_100.tif
+                             ##>-outkwl ${TEMP}/apTvUtReadImageInfoRpcTag.geom
+                     ##>VALID   --compare-ascii ${EPSILON_7}
+                             ##>${BASELINE_FILES}/apTvUtReadImageInfoRpcTag.geom
+                       ##>${TEMP}/apTvUtReadImageInfoRpcTag.geom)
 
-otb_test_application(NAME  apTvUtReadImageInfoTest
-                     APP  ReadImageInfo
-                     OPTIONS -in ${INPUTDATA}/poupees.tif
-                     TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoTest.txt
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/apTvUtReadImageInfoTest.txt
-                	     ${TEMP}/apTvUtReadImageInfoTest.txt)
+##>otb_test_application(NAME  apTvUtReadImageInfoTest
+                     ##>APP  ReadImageInfo
+                     ##>OPTIONS -in ${INPUTDATA}/poupees.tif
+                     ##>TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoTest.txt
+                     ##>VALID   --compare-ascii ${EPSILON_7}
+                             ##>${BASELINE_FILES}/apTvUtReadImageInfoTest.txt
+                	     ##>${TEMP}/apTvUtReadImageInfoTest.txt)
 
-otb_test_application(NAME  apTvUtReadImageInfoSpot5
-                     APP  ReadImageInfo
-                     OPTIONS -in LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
-                     TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoSpot5.txt
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/apTvUtReadImageInfoSpot5.txt
-                	     ${TEMP}/apTvUtReadImageInfoSpot5.txt)
+##>otb_test_application(NAME  apTvUtReadImageInfoSpot5
+                     ##>APP  ReadImageInfo
+                     ##>OPTIONS -in LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
+                     ##>TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoSpot5.txt
+                     ##>VALID   --compare-ascii ${EPSILON_7}
+                             ##>${BASELINE_FILES}/apTvUtReadImageInfoSpot5.txt
+                	     ##>${TEMP}/apTvUtReadImageInfoSpot5.txt)
 
-otb_test_application(NAME  apTvUtReadImageInfoERS
-                     APP  ReadImageInfo
-                     OPTIONS -in LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
-                     TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoERS.txt
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/apTvUtReadImageInfoERS.txt
-                	     ${TEMP}/apTvUtReadImageInfoERS.txt)
+##>otb_test_application(NAME  apTvUtReadImageInfoERS
+                     ##>APP  ReadImageInfo
+                     ##>OPTIONS -in LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
+                     ##>TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoERS.txt
+                     ##>VALID   --compare-ascii ${EPSILON_7}
+                             ##>${BASELINE_FILES}/apTvUtReadImageInfoERS.txt
+                	     ##>${TEMP}/apTvUtReadImageInfoERS.txt)
 
-otb_test_application(NAME  apTvUtReadImageInfoRADARSAT1
-                     APP  ReadImageInfo
-                     OPTIONS -in LARGEINPUT{RADARSAT1/GOMA/SCENE01/DAT_01.001}
-                     TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoRADARSAT1.txt
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/apTvUtReadImageInfoRADARSAT1.txt
-                	     ${TEMP}/apTvUtReadImageInfoRADARSAT1.txt)
+##>otb_test_application(NAME  apTvUtReadImageInfoRADARSAT1
+                     ##>APP  ReadImageInfo
+                     ##>OPTIONS -in LARGEINPUT{RADARSAT1/GOMA/SCENE01/DAT_01.001}
+                     ##>TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoRADARSAT1.txt
+                     ##>VALID   --compare-ascii ${EPSILON_7}
+                             ##>${BASELINE_FILES}/apTvUtReadImageInfoRADARSAT1.txt
+                	     ##>${TEMP}/apTvUtReadImageInfoRADARSAT1.txt)
 
 
 #----------- Quicklook TESTS ----------------

@@ -19,55 +19,55 @@ otb_module_target_label(otbOSSIMAdaptersTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME ioTvImageKeywordlistSPOT5 COMMAND otbOSSIMAdaptersTestDriver
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
-  ${TEMP}/ioTvImageKeywordlistSpot5.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
-  ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
-  --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
-  otbImageKeywordlist
-  LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
-  ${TEMP}/ioTvImageKeywordlistSpot5.txt
-  ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistSPOT5 COMMAND otbOSSIMAdaptersTestDriver
+  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
+  ##>${TEMP}/ioTvImageKeywordlistSpot5.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
+  ##>${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
+  ##>--ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
+  ##>${TEMP}/ioTvImageKeywordlistSpot5.txt
+  ##>${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
+  ##>)
 
-otb_add_test(NAME ioTvImageKeywordlistTerraSarX_Upsala COMMAND otbOSSIMAdaptersTestDriver
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
-  --ignore-lines-with 1 product_xml_filename
-  otbImageKeywordlist
-  LARGEINPUT{TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml}
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistTerraSarX_Upsala COMMAND otbOSSIMAdaptersTestDriver
+  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
+  ##>${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
+  ##>${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
+  ##>--ignore-lines-with 1 product_xml_filename
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml}
+  ##>${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
+  ##>${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
+  ##>)
 
-otb_add_test(NAME ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf COMMAND otbOSSIMAdaptersTestDriver
-  --compare-n-ascii ${EPSILON_6} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf_saveState_loadState.txt
-  otbImageKeywordlist
-  LARGEINPUT{RADARSAT1/SARDEGNA/scene01/dat_01.001}
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf COMMAND otbOSSIMAdaptersTestDriver
+  ##>--compare-n-ascii ${EPSILON_6} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf_saveState_loadState.txt
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{RADARSAT1/SARDEGNA/scene01/dat_01.001}
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf_saveState_loadState.txt
+  ##>)
 
-otb_add_test(NAME ioTvImageKeywordlistRadarSat1_SARDEGNA COMMAND otbOSSIMAdaptersTestDriver
-  --compare-n-ascii ${EPSILON_6} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
-  otbImageKeywordlist
-  LARGEINPUT{RADARSAT1/SARDEGNA/scene01/dat_01.001}
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistRadarSat1_SARDEGNA COMMAND otbOSSIMAdaptersTestDriver
+  ##>--compare-n-ascii ${EPSILON_6} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{RADARSAT1/SARDEGNA/scene01/dat_01.001}
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
+  ##>)
 
 otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingXmlFile COMMAND otbOSSIMAdaptersTestDriver
   otbImageKeywordlist
@@ -76,30 +76,30 @@ otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingXmlFile COMMAN
   ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
   )
 
-otb_add_test(NAME ioTvImageKeywordlistTerraSarX_Toronto COMMAND otbOSSIMAdaptersTestDriver
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
-  --ignore-lines-with 1 product_xml_filename
-  otbImageKeywordlist
-  LARGEINPUT{TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml}
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistTerraSarX_Toronto COMMAND otbOSSIMAdaptersTestDriver
+  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
+  ##>${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
+  ##>${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
+  ##>--ignore-lines-with 1 product_xml_filename
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml}
+  ##>${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
+  ##>${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
+  ##>)
 
-otb_add_test(NAME ioTvImageKeywordlistErs COMMAND otbOSSIMAdaptersTestDriver
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
-  ${TEMP}/ioTvImageKeywordlistErs.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
-  ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
-  otbImageKeywordlist
-  LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
-  ${TEMP}/ioTvImageKeywordlistErs.txt
-  ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistErs COMMAND otbOSSIMAdaptersTestDriver
+  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
+  ##>${TEMP}/ioTvImageKeywordlistErs.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
+  ##>${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
+  ##>${TEMP}/ioTvImageKeywordlistErs.txt
+  ##>${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
+  ##>)
 
 otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingHHFile COMMAND otbOSSIMAdaptersTestDriver
   otbImageKeywordlist
@@ -108,55 +108,55 @@ otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingHHFile COMMAND
   ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
   )
 
-otb_add_test(NAME ioTvImageKeywordlistTerraSarX COMMAND otbOSSIMAdaptersTestDriver
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
-  ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
-  --ignore-lines-with 1 product_xml_filename
-  otbImageKeywordlist
-  LARGEINPUT{TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml}
-  ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistTerraSarX COMMAND otbOSSIMAdaptersTestDriver
+  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
+  ##>${TEMP}/ioTvImageKeywordlistTerraSarX.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
+  ##>${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
+  ##>--ignore-lines-with 1 product_xml_filename
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml}
+  ##>${TEMP}/ioTvImageKeywordlistTerraSarX.txt
+  ##>${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
+  ##>)
 
-otb_add_test(NAME ioTvImageKeywordlistRadarSat1_GOMA_vdf COMMAND otbOSSIMAdaptersTestDriver
-  --compare-n-ascii ${EPSILON_6} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf_saveState_loadState.txt
-  otbImageKeywordlist
-  LARGEINPUT{RADARSAT1/GOMA/SCENE01/VDF_DAT.001}
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistRadarSat1_GOMA_vdf COMMAND otbOSSIMAdaptersTestDriver
+  ##>--compare-n-ascii ${EPSILON_6} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf_saveState_loadState.txt
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{RADARSAT1/GOMA/SCENE01/VDF_DAT.001}
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf_saveState_loadState.txt
+  ##>)
 
-otb_add_test(NAME ioTvImageKeywordlistRadarSat2 COMMAND otbOSSIMAdaptersTestDriver
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
-  --ignore-lines-with 1 product_xml_filename
-  otbImageKeywordlist
-  LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml}
-  ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistRadarSat2 COMMAND otbOSSIMAdaptersTestDriver
+  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat2.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
+  ##>--ignore-lines-with 1 product_xml_filename
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml}
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat2.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
+  ##>)
 
-otb_add_test(NAME ioTvImageKeywordlistRapidEye COMMAND otbOSSIMAdaptersTestDriver
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
-  ${TEMP}/ioTvImageKeywordlistRapidEye.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
-  ${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
-  otbImageKeywordlist
-  LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
-  ${TEMP}/ioTvImageKeywordlistRapidEye.txt
-  ${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistRapidEye COMMAND otbOSSIMAdaptersTestDriver
+  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
+  ##>${TEMP}/ioTvImageKeywordlistRapidEye.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
+  ##>${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
+  ##>${TEMP}/ioTvImageKeywordlistRapidEye.txt
+  ##>${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
+  ##>)
 
 otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingVVFile COMMAND otbOSSIMAdaptersTestDriver
   otbImageKeywordlist
@@ -165,80 +165,80 @@ otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingVVFile COMMAND
   ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
   )
 
-otb_add_test(NAME ioTvImageKeywordlistFORMOSAT2 COMMAND otbOSSIMAdaptersTestDriver
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistFORMOSAT2.txt
-  ${TEMP}/ioTvImageKeywordlistFORMOSAT2.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistFORMOSAT2.txt
-  ${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
-  --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
-  otbImageKeywordlist
-  LARGEINPUT{FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF}
-  ${TEMP}/ioTvImageKeywordlistFORMOSAT2.txt
-  ${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistFORMOSAT2 COMMAND otbOSSIMAdaptersTestDriver
+  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistFORMOSAT2.txt
+  ##>${TEMP}/ioTvImageKeywordlistFORMOSAT2.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistFORMOSAT2.txt
+  ##>${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
+  ##>--ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF}
+  ##>${TEMP}/ioTvImageKeywordlistFORMOSAT2.txt
+  ##>${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
+  ##>)
 
-otb_add_test(NAME ioTvImageKeywordlistAlosPalsar COMMAND otbOSSIMAdaptersTestDriver
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
-  ${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
-  ${TEMP}/ioTvImageKeywordlistAlosPalsar_saveState_loadState.txt
-  otbImageKeywordlist
-  LARGEINPUT{PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A}
-  ${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
-  ${TEMP}/ioTvImageKeywordlistAlosPalsar_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistAlosPalsar COMMAND otbOSSIMAdaptersTestDriver
+  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
+  ##>${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
+  ##>${TEMP}/ioTvImageKeywordlistAlosPalsar_saveState_loadState.txt
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A}
+  ##>${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
+  ##>${TEMP}/ioTvImageKeywordlistAlosPalsar_saveState_loadState.txt
+  ##>)
 
-otb_add_test(NAME ioTvImageKeywordlistEnvisatAsar COMMAND otbOSSIMAdaptersTestDriver
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
-  ${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
-  ${TEMP}/ioTvImageKeywordlistEnvisatAsar_saveState_loadState.txt
-  otbImageKeywordlist
-  LARGEINPUT{ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1}
-  ${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
-  ${TEMP}/ioTvImageKeywordlistEnvisatAsar_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistEnvisatAsar COMMAND otbOSSIMAdaptersTestDriver
+  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
+  ##>${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
+  ##>${TEMP}/ioTvImageKeywordlistEnvisatAsar_saveState_loadState.txt
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1}
+  ##>${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
+  ##>${TEMP}/ioTvImageKeywordlistEnvisatAsar_saveState_loadState.txt
+  ##>)
 
-otb_add_test(NAME ioTvImageKeywordlistRadarSat1_GOMA COMMAND otbOSSIMAdaptersTestDriver
-  --compare-n-ascii ${EPSILON_6} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_saveState_loadState.txt
-  otbImageKeywordlist
-  LARGEINPUT{RADARSAT1/GOMA/SCENE01/DAT_01.001}
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA.txt
-  ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistRadarSat1_GOMA COMMAND otbOSSIMAdaptersTestDriver
+  ##>--compare-n-ascii ${EPSILON_6} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_saveState_loadState.txt
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{RADARSAT1/GOMA/SCENE01/DAT_01.001}
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA.txt
+  ##>${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_saveState_loadState.txt
+  ##>)
 
-otb_add_test(NAME ioTvImageKeywordlistIkonos COMMAND otbOSSIMAdaptersTestDriver
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
-  ${TEMP}/ioTvImageKeywordlistIkonos.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
-  ${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
-  --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
-  otbImageKeywordlist
-  LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif}
-  ${TEMP}/ioTvImageKeywordlistIkonos.txt
-  ${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistIkonos COMMAND otbOSSIMAdaptersTestDriver
+  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
+  ##>${TEMP}/ioTvImageKeywordlistIkonos.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
+  ##>${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
+  ##>--ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif}
+  ##>${TEMP}/ioTvImageKeywordlistIkonos.txt
+  ##>${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
+  ##>)
 
-otb_add_test(NAME ioTvImageKeywordlistQuickbird COMMAND otbOSSIMAdaptersTestDriver
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-  ${BASELINE_FILES}/ioTvImageKeywordlistQuickbird.txt
-  ${TEMP}/ioTvImageKeywordlistQuickbird.txt
-  ${BASELINE_FILES}/ioTvImageKeywordlistQuickbird.txt
-  ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
-  --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
-  otbImageKeywordlist
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  ${TEMP}/ioTvImageKeywordlistQuickbird.txt
-  ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTvImageKeywordlistQuickbird COMMAND otbOSSIMAdaptersTestDriver
+  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistQuickbird.txt
+  ##>${TEMP}/ioTvImageKeywordlistQuickbird.txt
+  ##>${BASELINE_FILES}/ioTvImageKeywordlistQuickbird.txt
+  ##>${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
+  ##>--ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+  ##>otbImageKeywordlist
+  ##>LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  ##>${TEMP}/ioTvImageKeywordlistQuickbird.txt
+  ##>${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
+  ##>)
 
 otb_add_test(NAME ioTvOssimJpegFileRessourceLeak COMMAND otbOSSIMAdaptersTestDriver
   otbOssimJpegFileRessourceLeakTest
@@ -599,52 +599,52 @@ otb_add_test(NAME uaTvRPCSolverAdapterValidationTest COMMAND otbOSSIMAdaptersTes
   )
 
 
-if(OTB_DATA_USE_LARGEINPUT)
+##>if(OTB_DATA_USE_LARGEINPUT)
 
-  set( GenericTestPHR_TESTNB 0)
+  ##>set( GenericTestPHR_TESTNB 0)
 
-  foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
-    list(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type )
-    math(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
+  ##>foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
+    ##>list(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type )
+    ##>math(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
 
-      # Get and manipulate ImageKeywordlist
-      otb_add_test(NAME ioTvImageKeywordlist_${current_type} COMMAND otbOSSIMAdaptersTestDriver
-                  --ignore-order --compare-n-ascii ${NOTOL} 2
-                 ${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
-                 ${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
-                 ${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
-                 ${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
-                 --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
-                 otbImageKeywordlist
-                  ${current_file}
-                  ${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
-                  ${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
-              )
+      ##># Get and manipulate ImageKeywordlist
+      ##>otb_add_test(NAME ioTvImageKeywordlist_${current_type} COMMAND otbOSSIMAdaptersTestDriver
+                  ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+                 ##>${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
+                 ##>${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
+                 ##>${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
+                 ##>${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
+                 ##>--ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+                 ##>otbImageKeywordlist
+                  ##>${current_file}
+                  ##>${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
+                  ##>${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
+              ##>)
 
-  endforeach()
+  ##>endforeach()
 
 
-  set( GenericTestSPOT6_TESTNB 0)
+  ##>set( GenericTestSPOT6_TESTNB 0)
 
-  foreach( current_file ${GenericTestSPOT6_DATA_INPUTS} )
-    list(GET GenericTestSPOT6_DATA_TYPES   ${GenericTestSPOT6_TESTNB} current_type )
-    math(EXPR GenericTestSPOT6_TESTNB "${GenericTestSPOT6_TESTNB} + 1")
+  ##>foreach( current_file ${GenericTestSPOT6_DATA_INPUTS} )
+    ##>list(GET GenericTestSPOT6_DATA_TYPES   ${GenericTestSPOT6_TESTNB} current_type )
+    ##>math(EXPR GenericTestSPOT6_TESTNB "${GenericTestSPOT6_TESTNB} + 1")
 
-      # Get and manipulate ImageKeywordlist
-      otb_add_test(NAME ioTvImageKeywordlist_${current_type} COMMAND otbOSSIMAdaptersTestDriver
-               --ignore-order --compare-n-ascii ${NOTOL} 2
-                 ${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
-                 ${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
-                 ${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
-                 ${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
-               --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
-               otbImageKeywordlist
-                  ${current_file}
-                  ${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
-                  ${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
-              )
+      ##># Get and manipulate ImageKeywordlist
+      ##>otb_add_test(NAME ioTvImageKeywordlist_${current_type} COMMAND otbOSSIMAdaptersTestDriver
+               ##>--ignore-order --compare-n-ascii ${NOTOL} 2
+                 ##>${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
+                 ##>${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
+                 ##>${BASELINE_FILES}/ioTvImageKeywordlist_${current_type}.txt
+                 ##>${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
+               ##>--ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+               ##>otbImageKeywordlist
+                  ##>${current_file}
+                  ##>${TEMP}/ioTvImageKeywordlist_${current_type}_OUT.txt
+                  ##>${TEMP}/ioTvImageKeywordlist_${current_type}_saveState_loadState_OUT.txt
+              ##>)
 
-  endforeach()
+  ##>endforeach()
 
-endif()
+##>endif()
 
