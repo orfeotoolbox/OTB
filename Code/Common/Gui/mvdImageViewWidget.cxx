@@ -2087,7 +2087,13 @@ ImageViewWidget
   QString filename(
     QFileDialog::getSaveFileName(
       this,
-      tr( "Save screenshot..." )
+      tr( "Save screenshot..." ),
+      QString( "/home/salbert/monteverdi-%1-%2.png" )
+      .arg( Monteverdi_VERSION_STRING )
+      .arg(
+	QDateTime::currentDateTime().toString( "yyyyMMdd-hhmm-ss-zzz" )
+      ),
+      tr( "Images (*.png *.jpg)" )
     )
   );
 
