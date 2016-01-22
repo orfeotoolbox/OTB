@@ -597,10 +597,10 @@ ImageViewWidget
 
   QObject::connect(
     m_Manipulator,
-    SIGNAL( TakeScreenshotRequested() ),
+    SIGNAL( TakeScreenshotRequested( bool ) ),
     // to:
     this,
-    SLOT( SaveScreenshot() )
+    SLOT( SaveScreenshot( bool ) )
   );
 
 
@@ -2082,20 +2082,26 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
-::SaveScreenshot()
+::SaveScreenshot( bool isQuickMode )
 {
   QString filename(
-    QFileDialog::getSaveFileName(
-      this,
-      tr( "Save screenshot..." ),
-      QString( "/home/salbert/monteverdi-%1-%2.png" )
-      .arg( Monteverdi_VERSION_STRING )
-      .arg(
-	QDateTime::currentDateTime().toString( "yyyyMMdd-hhmm-ss-zzz" )
-      ),
-      tr( "Images (*.png *.jpg)" )
+    QString( "monteverdi-%1-%2.png" )
+    .arg( Monteverdi_VERSION_STRING )
+    .arg(
+      QDateTime::currentDateTime().toString( "yyyyMMdd-hhmm-ss-zzz" )
     )
   );
+
+  if( isQuickMode )
+    filename = QDir::home().filePath( filename );
+  else
+    filename =
+      QFileDialog::getSaveFileName(
+	this,
+	tr( "Save screenshot..." ),
+	QDir::current().filePath( filename ),
+	tr( "Images (*.png *.jpg)" )
+      );
 
   if( filename.isEmpty() )
     return;

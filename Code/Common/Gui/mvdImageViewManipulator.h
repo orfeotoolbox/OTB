@@ -282,7 +282,7 @@ signals:
   void SetReferenceRequested();
   /**
    */
-  void TakeScreenshotRequested();
+  void TakeScreenshotRequested( bool isQuickMode );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

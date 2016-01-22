@@ -1600,7 +1600,7 @@ MainWindow
 {
   assert( m_ImageView!=NULL );
 
-  m_ImageView->SaveScreenshot();
+  m_ImageView->SaveScreenshot( false );
 }
 
 /*****************************************************************************/

@@ -773,7 +773,7 @@ ImageViewManipulator
 
     case Qt::Key_P:
       if( modifiers.testFlag( Qt::ControlModifier ) )
-	emit TakeScreenshotRequested();
+	emit TakeScreenshotRequested( modifiers.testFlag( Qt::ShiftModifier )  );
       else
 	emit SetReferenceRequested();
       break;

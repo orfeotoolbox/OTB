@@ -176,7 +176,7 @@ public slots:
   void CenterOn( const PointType& center, double scale );
   /**
    */
-  void SaveScreenshot();
+  void SaveScreenshot( bool );
   /**
    */
   void ZoomToExtent();
