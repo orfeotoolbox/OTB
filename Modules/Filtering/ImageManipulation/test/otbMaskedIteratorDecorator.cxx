@@ -22,6 +22,7 @@
 #include "itkImageRegionReverseIterator.h"
 #include "itkImageRandomIteratorWithIndex.h"
 #include "itkImageScanlineIterator.h"
+#include "itkImageRandomNonRepeatingIteratorWithIndex.h"
 #include "otbSubsampledImageRegionIterator.h"
 
 #include "otbMaskedIteratorDecorator.h"
@@ -175,73 +176,34 @@ int otbMaskedIteratorDecoratorBijective(int itkNotUsed(argc), char * itkNotUsed(
   return BijectiveTest<ImageType, itk::ImageRegionIterator>()
       && BijectiveTest<ImageType, itk::ImageRegionConstIterator>()
       && BijectiveTest<ImageType, itk::ImageRandomConstIteratorWithIndex>()
-      //&& BijectiveTest<ImageType, itk::ImageRegionReverseIterator>() // IsAtEnd not a const method
-      //&& BijectiveTest<ImageType, itk::ImageLinearIteratorWithIndex>(); // does not implement GoToEnd
-      //&& BijectiveTest<ImageType, otb::PolyLineImageIterator>() // header not found
       && BijectiveTest<ImageType, otb::SubsampledImageRegionIterator>()
-      //&& BijectiveTest<ImageType, itk::PathIterator>() // different template interface, testable but not with BijectiveTest
-      //&& BijectiveTest<ImageType, itk::ConditionalConstIterator>() // abstract class
-      //&& BijectiveTest<ImageType, itk::ReflectiveImageRegionIterator>() // GoToEnd not implemented
       && BijectiveTest<ImageType, itk::ImageRandomIteratorWithIndex>()
-      //&& BijectiveTest<ImageType, itk::NeighborhoodIterator>() // different template interface, testable but not with BijectiveTest
       && BijectiveTest<ImageType, itk::ImageScanlineIterator>()
-      //&& BijectiveTest<ImageType, itk::DataObjectIterator>() // different template interface, testable but not with BijectiveTest
+      && BijectiveTest<ImageType, itk::ImageScanlineConstIterator>()
+      && BijectiveTest<ImageType, itk::ImageRandomNonRepeatingConstIteratorWithIndex>()
+      && BijectiveTest<ImageType, itk::ImageRandomNonRepeatingIteratorWithIndex>()
       ;
+
+      // Other iterators potentially compatible:
+
+      // Different template interface, testable but not with BijectiveTest:
+      // itk::PathIterator
+      // itk::NeighborhoodIterator
+      // itk::DataObjectIterator
+
+      // Different constructor, testable but not with BijectiveTest
+      // itk::LineIterator
+      // itk::SliceIterator
+
+      // GoToEnd is not implemented
+      // itk::ImageLinearIteratorWithIndex
+      // itk::ReflectiveImageRegionIterator
+      // itk::ImageRegionExclusionConstIteratorWithIndex
+      // itk::ImageRegionIteratorWithIndex
+
+      // Other problem:
+      // itk::ImageRegionReverseIterator>() // IsAtEnd not a const method
+      // otb::PolyLineImageIterator>() // header not found
+      // itk::ImageRandomConstIteratorWithOnlyIndex>() // no Value method
+
 }
-
-/*
-itkQuadEdgeMeshFrontIterator.h
-itkQuadEdgeMeshBaseIterator.h
-itkLineIterator.h
-itkShapedFloodFilledImageFunctionConditionalConstIterator.h
-itkImageConstIteratorWithOnlyIndex.h
-itkCorrespondenceDataStructureIterator.h
-itkChildTreeIterator.h
-itkImageSliceConstIteratorWithIndex.h
-itkImageRegionConstIterator.h
-itkLevelOrderTreeIterator.h
-itkSliceIterator.h
-itkImageRegionConstIteratorWithIndex.h
-itkConstSliceIterator.h
-itkImageRandomNonRepeatingConstIteratorWithIndex.h
-itkTreeIteratorClone.h
-itkImageLinearIteratorWithIndex.h
-itkImageRandomConstIteratorWithOnlyIndex.h
-itkShapedFloodFilledFunctionConditionalConstIterator.h
-itkFloodFilledImageFunctionConditionalConstIterator.h
-itkFloodFilledImageFunctionConditionalIterator.h
-itkImageRegionIteratorWithIndex.h
-itkImageRandomNonRepeatingIteratorWithIndex.h
-itkImageRegionExclusionIteratorWithIndex.h
-itkImageRegionConstIteratorWithOnlyIndex.h
-itkFloodFilledSpatialFunctionConditionalIterator.h
-itkTreeIteratorBase.h
-itkImageScanlineIterator.h
-itkPreOrderTreeIterator.h
-itkFloodFilledSpatialFunctionConditionalConstIterator.h
-itkThreadedIteratorRangePartitioner.h
-itkImageSliceIteratorWithIndex.h
-itkImageConstIteratorWithIndex.h
-itkLineConstIterator.h
-itkShapedFloodFilledImageFunctionConditionalIterator.h
-itkInOrderTreeIterator.h
-itkConditionalConstIterator.h
-itkConstNeighborhoodIteratorWithOnlyIndex.h
-itkImageRegionExclusionConstIteratorWithIndex.h
-itkFloodFilledFunctionConditionalConstIterator.h
-itkRootTreeIterator.h
-itkImageIteratorWithIndex.h
-itkPostOrderTreeIterator.h
-itkImageLinearConstIteratorWithIndex.h
-itkLeafTreeIterator.h
-itkImageScanlineConstIterator.h
-
-otbRCC8VertexIterator.txx
-otbRCC8EdgeIterator.h
-otbRCC8InEdgeIterator.txx
-otbRCC8EdgeIterator.txx
-otbRCC8OutEdgeIterator.txx
-otbRCC8OutEdgeIterator.h
-otbRCC8VertexIterator.h
-otbRCC8InEdgeIterator.h
-*/
