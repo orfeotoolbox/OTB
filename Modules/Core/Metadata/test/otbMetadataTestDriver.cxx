@@ -6,7 +6,7 @@ void RegisterTests()
   REGISTER_TEST(otbDefaultImageMetadataInterfaceFactoryNew);
   REGISTER_TEST(otbOpticalDefaultImageMetadataInterfaceFactoryNew);
   REGISTER_TEST(otbPleiadesImageMetadataInterfaceNew);
-  REGISTER_TEST(otbImageMetadataInterfaceBaseTest);
+  //##>REGISTER_TEST(otbImageMetadataInterfaceBaseTest);
   REGISTER_TEST(otbSarDefaultImageMetadataInterface);
   REGISTER_TEST(otbSarDefaultImageMetadataInterfaceNew);
   REGISTER_TEST(otbOpticalImageMetadataInterfaceTest);

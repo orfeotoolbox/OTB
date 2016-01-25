@@ -50,7 +50,7 @@ otbUtmMapProjection.cxx
 otbVectorDataProjectionFilterNew.cxx
 otbTileMapTransform.cxx
 otbImportGeoInformationImageFilter.cxx
-otbImportGeoInformationImageFilterWithKeywordList.cxx
+##>otbImportGeoInformationImageFilterWithKeywordList.cxx
 )
 
 add_executable(otbProjectionTestDriver ${OTBProjectionTests})
@@ -1178,14 +1178,14 @@ otb_add_test(NAME bfTvImportGeoInformationImageFilter COMMAND otbProjectionTestD
   ${TEMP}/bfTvImportGeoInformationOutput.img
   )
 
-otb_add_test(NAME bfTvImportGeoInformationImageFilterWithKeywordList COMMAND otbProjectionTestDriver
-  --compare-ascii ${EPSILON_7}
-  ${BASELINE_FILES}/bfTvImportGeoInformationKeywordListOutput.txt
-  ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
-  otbImportGeoInformationImageFilterWithKeywordList
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
-  )
+##>otb_add_test(NAME bfTvImportGeoInformationImageFilterWithKeywordList COMMAND otbProjectionTestDriver
+##>  --compare-ascii ${EPSILON_7}
+##>  ${BASELINE_FILES}/bfTvImportGeoInformationKeywordListOutput.txt
+##>  ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
+##>  otbImportGeoInformationImageFilterWithKeywordList
+##>  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+##>  ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
+##>  )
 
 set(GenericConversionChecking_INPUTS
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}

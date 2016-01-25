@@ -61,5 +61,5 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataProjectionFilterNew);
   REGISTER_TEST(otbTileMapTransform);
   REGISTER_TEST(otbImportGeoInformationImageFilter);
-  REGISTER_TEST(otbImportGeoInformationImageFilterWithKeywordList);
+  //##>REGISTER_TEST(otbImportGeoInformationImageFilterWithKeywordList);
 }

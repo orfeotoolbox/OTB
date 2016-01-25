@@ -69,12 +69,12 @@ otb_module_target_label(otbOSSIMAdaptersTestDriver)
   ##>${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
   ##>)
 
-otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingXmlFile COMMAND otbOSSIMAdaptersTestDriver
-  otbImageKeywordlist
-  LARGEINPUT{TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml}
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingXmlFile COMMAND otbOSSIMAdaptersTestDriver
+##>  otbImageKeywordlist
+##>  LARGEINPUT{TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml}
+##>  ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
+##>  ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
+##>  )
 
 ##>otb_add_test(NAME ioTvImageKeywordlistTerraSarX_Toronto COMMAND otbOSSIMAdaptersTestDriver
   ##>--ignore-order --compare-n-ascii ${NOTOL} 2
@@ -101,12 +101,12 @@ otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingXmlFile COMMAN
   ##>${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
   ##>)
 
-otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingHHFile COMMAND otbOSSIMAdaptersTestDriver
-  otbImageKeywordlist
-  LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos}
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingHHFile COMMAND otbOSSIMAdaptersTestDriver
+##>  otbImageKeywordlist
+##>  LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos}
+##>  ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
+##>  ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
+##>  )
 
 ##>otb_add_test(NAME ioTvImageKeywordlistTerraSarX COMMAND otbOSSIMAdaptersTestDriver
   ##>--ignore-order --compare-n-ascii ${NOTOL} 2
@@ -158,12 +158,12 @@ otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingHHFile COMMAND
   ##>${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
   ##>)
 
-otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingVVFile COMMAND otbOSSIMAdaptersTestDriver
-  otbImageKeywordlist
-  LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos}
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
-  ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
-  )
+##>otb_add_test(NAME ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingVVFile COMMAND otbOSSIMAdaptersTestDriver
+##>  otbImageKeywordlist
+##>  LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos}
+##>  ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
+##>  ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
+##>  )
 
 ##>otb_add_test(NAME ioTvImageKeywordlistFORMOSAT2 COMMAND otbOSSIMAdaptersTestDriver
   ##>--ignore-order --compare-n-ascii ${NOTOL} 2
@@ -578,17 +578,17 @@ if (OTB_DATA_USE_LARGEINPUT)
   set_property(TEST uaTvRPCSolverAdapterNotEnoughPointsTest PROPERTY WILL_FAIL TRUE)
 endif()
 
-otb_add_test(NAME uaTvRPCSolverAdapterOutGeomTest COMMAND otbOSSIMAdaptersTestDriver
-  --compare-ascii ${EPSILON_9}
-  ${BASELINE_FILES}/uaTvRPCSolverAdapterOutGeomTest.geom
-  ${TEMP}/uaTvRPCSolverAdapterOutGeomTest.geom
-  otbRPCSolverAdapterTest
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  10 0.25 0.35
-  ${INPUTDATA}/DEM/srtm_directory/
-  ${INPUTDATA}/DEM/egm96.grd
-  ${TEMP}/uaTvRPCSolverAdapterOutGeomTest.geom
-  )
+##>otb_add_test(NAME uaTvRPCSolverAdapterOutGeomTest COMMAND otbOSSIMAdaptersTestDriver
+##>  --compare-ascii ${EPSILON_9}
+##>  ${BASELINE_FILES}/uaTvRPCSolverAdapterOutGeomTest.geom
+##>  ${TEMP}/uaTvRPCSolverAdapterOutGeomTest.geom
+##>  otbRPCSolverAdapterTest
+##>  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+##>  10 0.25 0.35
+##>  ${INPUTDATA}/DEM/srtm_directory/
+##>  ${INPUTDATA}/DEM/egm96.grd
+##>  ${TEMP}/uaTvRPCSolverAdapterOutGeomTest.geom
+##>  )
 
 otb_add_test(NAME uaTvRPCSolverAdapterValidationTest COMMAND otbOSSIMAdaptersTestDriver
   otbRPCSolverAdapterTest
