@@ -2100,7 +2100,7 @@ ImageViewWidget
 	this,
 	tr( "Save screenshot..." ),
 	QDir::current().filePath( filename ),
-	tr( "Images (*.png *.jpg)" )
+	tr( "PNG File (*.png);;JPEG File (*.jpg);;TIFF file (*tif)" )
       );
 
   if( filename.isEmpty() )
