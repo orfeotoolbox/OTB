@@ -984,10 +984,10 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterAndOrtho COMMAND otbProject
   2450 2450 1.43239 43.6034 0
   )
 
-otb_add_test(NAME prTvVectorDataExtractROIandProjection COMMAND otbProjectionTestDriver
-  otbVectorDataExtractROIandProjection
-  LARGEINPUT{VECTOR/MidiPyrenees/roads.shp}
-  )
+##>otb_add_test(NAME prTvVectorDataExtractROIandProjection COMMAND otbProjectionTestDriver
+##>  otbVectorDataExtractROIandProjection
+##>  LARGEINPUT{VECTOR/MidiPyrenees/roads.shp}
+##>  )
 
 otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterWithoutDEM COMMAND otbProjectionTestDriver
   --compare-ascii ${EPSILON_4}
@@ -1282,29 +1282,29 @@ set(GenericConversionChecking_INPUTS
   ##>)
 ##>endforeach()
 
-set(VectorDataIntoImage_FILES
-    LARGEINPUT{QB_EXTRACT/qb_extract_00_withgeom.tif}
-    LARGEINPUT{QB_EXTRACT/qb_extract_00_withgeom_ENVI.hdr}
-    LARGEINPUT{QB_EXTRACT/qb_extract_11_withgeom.tif}
-    LARGEINPUT{QB_EXTRACT/qb_extract_11_withgeom_ENVI.hdr}
-    LARGEINPUT{QB_EXTRACT/qb_utm.tif}
-    LARGEINPUT{QB_EXTRACT/qb_utm_withgeom.tif}
-    LARGEINPUT{QB_EXTRACT/qb_wgs84.tif}
-    LARGEINPUT{QB_EXTRACT/qb_wgs84_withgeom.tif}
-    LARGEINPUT{QB_EXTRACT/qb_wgs84_worldfile.tif}
-    )
+##>set(VectorDataIntoImage_FILES
+    ##>LARGEINPUT{QB_EXTRACT/qb_extract_00_withgeom.tif}
+    ##>LARGEINPUT{QB_EXTRACT/qb_extract_00_withgeom_ENVI.hdr}
+    ##>LARGEINPUT{QB_EXTRACT/qb_extract_11_withgeom.tif}
+    ##>LARGEINPUT{QB_EXTRACT/qb_extract_11_withgeom_ENVI.hdr}
+    ##>LARGEINPUT{QB_EXTRACT/qb_utm.tif}
+    ##>LARGEINPUT{QB_EXTRACT/qb_utm_withgeom.tif}
+    ##>LARGEINPUT{QB_EXTRACT/qb_wgs84.tif}
+    ##>LARGEINPUT{QB_EXTRACT/qb_wgs84_withgeom.tif}
+    ##>LARGEINPUT{QB_EXTRACT/qb_wgs84_worldfile.tif}
+    ##>)
 
-  set( VectorDataIntoImage_TESTNB 0)
+  ##>set( VectorDataIntoImage_TESTNB 0)
   
-  foreach( file ${VectorDataIntoImage_FILES} )
-    math(EXPR VectorDataIntoImage_TESTNB "${VectorDataIntoImage_TESTNB} + 1")
-    otb_add_test(NAME prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB} COMMAND otbProjectionTestDriver
-      otbVectorDataIntoImageProjectionFilterTest
-      ${file}
-      ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/natural.shp
-      ${INPUTDATA}/DEM/srtm_directory
-      3 )
-  endforeach()
+  ##>foreach( file ${VectorDataIntoImage_FILES} )
+    ##>math(EXPR VectorDataIntoImage_TESTNB "${VectorDataIntoImage_TESTNB} + 1")
+    ##>otb_add_test(NAME prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB} COMMAND otbProjectionTestDriver
+      ##>otbVectorDataIntoImageProjectionFilterTest
+      ##>${file}
+      ##>${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/natural.shp
+      ##>${INPUTDATA}/DEM/srtm_directory
+      ##>3 )
+  ##>endforeach()
   
 
   set(SENSOR_TYPES
