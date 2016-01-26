@@ -163,23 +163,23 @@ otb_add_test(NAME coTvMultiChannelROI_RGB2NG_PNG3 COMMAND otbImageBaseTestDriver
   ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_3.png
   -startX 300 -startY 10 -sizeX 250 -sizeY 50  -channels 3 )
 
-otb_add_test(NAME ioTvMultiDatasetReading2 COMMAND otbImageBaseTestDriver
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
-  ${TEMP}/ioTvMultiDatasetReading2.txt
-  --ignore-lines-with 1 Pointer:
-  otbVectorImageTest
-  ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=5
-  ${TEMP}/ioTvMultiDatasetReading2.txt
-  )
+##>otb_add_test(NAME ioTvMultiDatasetReading2 COMMAND otbImageBaseTestDriver
+##>  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
+##>  ${TEMP}/ioTvMultiDatasetReading2.txt
+##>  --ignore-lines-with 1 Pointer:
+##>  otbVectorImageTest
+##>  ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=5
+##>  ${TEMP}/ioTvMultiDatasetReading2.txt
+##>  )
 
-otb_add_test(NAME ioTvMultiDatasetReading1 COMMAND otbImageBaseTestDriver
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
-  ${TEMP}/ioTvMultiDatasetReading1.txt
-  --ignore-lines-with 1 Pointer:
-  otbVectorImageTest
-  ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=0
-  ${TEMP}/ioTvMultiDatasetReading1.txt
-  )
+##>otb_add_test(NAME ioTvMultiDatasetReading1 COMMAND otbImageBaseTestDriver
+##>  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
+##>  ${TEMP}/ioTvMultiDatasetReading1.txt
+##>  --ignore-lines-with 1 Pointer:
+##>  otbVectorImageTest
+##>  ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=0
+##>  ${TEMP}/ioTvMultiDatasetReading1.txt
+##>  )
 
 otb_add_test(NAME coTvExtractROITestMetaData_TIFF COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}
@@ -782,23 +782,23 @@ otb_add_test(NAME  ioTvMultiMonoChannelROI_ENVI2PNG COMMAND otbImageBaseTestDriv
 
 # Tests to check if we can open JPEG2000 files specifying the resolution factor.
 # no access to data only PrintSelf() method.
-otb_add_test(NAME  ioTvMultiResolutionReading0 COMMAND otbImageBaseTestDriver
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
-                             ${TEMP}/ioTvMultiResolutionReading0.txt
-  --ignore-lines-with 1 SubDatasetIndex
-      otbVectorImageTest
-      ${INPUTDATA}/bretagne.j2k?&resol=0
-      ${TEMP}/ioTvMultiResolutionReading0.txt
-      )
+##>otb_add_test(NAME  ioTvMultiResolutionReading0 COMMAND otbImageBaseTestDriver
+##>  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
+##>                             ${TEMP}/ioTvMultiResolutionReading0.txt
+##>  --ignore-lines-with 1 SubDatasetIndex
+##>      otbVectorImageTest
+##>      ${INPUTDATA}/bretagne.j2k?&resol=0
+##>      ${TEMP}/ioTvMultiResolutionReading0.txt
+##>      )
 
-otb_add_test(NAME  ioTvMultiResolutionReading3 COMMAND otbImageBaseTestDriver
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
-                             ${TEMP}/ioTvMultiResolutionReading3.txt
-  --ignore-lines-with 1 SubDatasetIndex
-      otbVectorImageTest
-      ${INPUTDATA}/bretagne.j2k?&resol=3
-      ${TEMP}/ioTvMultiResolutionReading3.txt
-      )
+##>otb_add_test(NAME  ioTvMultiResolutionReading3 COMMAND otbImageBaseTestDriver
+##>  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
+##>                             ${TEMP}/ioTvMultiResolutionReading3.txt
+##>  --ignore-lines-with 1 SubDatasetIndex
+##>      otbVectorImageTest
+##>      ${INPUTDATA}/bretagne.j2k?&resol=3
+##>      ${TEMP}/ioTvMultiResolutionReading3.txt
+##>      )
 
 otb_add_test(NAME ioTvOtbVectorImageTestSpot5 COMMAND otbImageBaseTestDriver
    --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
