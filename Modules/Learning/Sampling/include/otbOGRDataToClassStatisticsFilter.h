@@ -23,6 +23,9 @@
 #include "otbOGRDataSourceWrapper.h"
 #include "otbMaskedIteratorDecorator.h"
 
+namespace otb
+{
+
 /**
  * \class PolygonClassStatisticsAccumulator
  *
@@ -82,7 +85,7 @@ protected:
 
 private:
   //Number of pixels in all the polygons
-  int nbPixelsGlobal;
+  unsigned long nbPixelsGlobal;
   //Number of pixels in each classes
   std::map<int, int> m_elmtsInClass;
   //Number of pixels in each polygons
@@ -117,6 +120,13 @@ public:
   typedef otb::ogr::DataSource                            OGRDataType;
   typedef otb::ogr::DataSource::Pointer                   OGRDataPointer;
 
+  typedef std::map<std::string, unsigned long>            ClassCountMapType;
+  typedef std::map<unsigned long, unsigned long>          PolygonSizeMapType;
+
+  /** Wrap output type as DataObject */
+  typedef itk::SimpleDataObjectDecorator<ClassCountMapType>  ClassCountObjectType;
+  typedef itk::SimpleDataObjectDecorator<PolygonSizeMapType> PolygonSizeObjectType;
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -128,8 +138,8 @@ public:
   const TInputImage* GetInput();
   
   // TODO : input #2
-  void SetMaskInput(const TMaskImage* mask);
-  const TMaskImage* GetMaskInput();
+  void SetMask(const TMaskImage* mask);
+  const TMaskImage* GetMask();
   
   // TODO : input # 1
   void SetOGRData(const otb::ogr::DataSource* vector);
@@ -146,11 +156,28 @@ public:
   itkSetMacro(ClassKey, std::string);
   itkGetMacro(ClassKey, std::string);
   
+  // TODO: store the class count map as output #2
+  const ClassCountObjectType* GetClassCountOutput();
+  ClassCountObjectType* GetClassCountOutput();
+
+  // TODO: store the polygon size map as output #3
+  const PolygonSizeObjectType* GetPolygonSizeOutput();
+  PolygonSizeObjectType* GetPolygonSizeOutput();
+
+  /** Make a DataObject of the correct type to be used as the specified
+   * output. */
+  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  using Superclass::MakeOutput;
+
 protected:
   /** Constructor */
   PersistentOGRDataToClassStatisticsFilter() {}
   /** Destructor */
   virtual ~PersistentOGRDataToClassStatisticsFilter() {}
+
+  // TODO : call UpdateOutputInfo on input image
+  // TODO : check that image and mask have the same size
+  void GenerateOutputInformation();
   
   void ThreadedGenerateData(const RegionType& outputRegionForThread,
                             itk::ThreadIdType threadId);
@@ -163,32 +190,53 @@ private:
   
   std::string m_ClassKey;
 
+  std::vector<PolygonClassStatisticsAccumulator::Pointer> m_TemporaryStats;
+
+  // Layer to use in the shape file, default to 0
+  vcl_size_t m_layerIndex;
 };
 
 /**
  * \class OGRDataToClassStatisticsFilter
  * 
- * \brief Filter to compute class statistics based on vectors
+ * \brief Computes class statistics based on vectors using a persistent filter
  * 
  * \sa PersistentOGRDataToClassStatisticsFilter
  */
-template<class TInputImage>
+template<class TInputImage, class TMaskImage>
 class ITK_EXPORT OGRDataToClassStatisticsFilter :
-  public PersistentFilterStreamingDecorator<PersistentOGRDataToClassStatisticsFilter<TInputImage> >
+  public PersistentFilterStreamingDecorator<PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage> >
 {
 public:
   /** Standard Self typedef */
-  typedef OGRDataToClassStatisticsFilter Self;
+  typedef OGRDataToClassStatisticsFilter  Self;
   typedef PersistentFilterStreamingDecorator
-  <PersistentOGRDataToClassStatisticsFilter<TInputImage> > Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+    <PersistentOGRDataToClassStatisticsFilter
+      <TInputImage,TMaskImage> >          Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
+
+  typedef TInputImage                     InputImageType;
+  typedef TMaskImage                      MaskImageType;
+  typedef otb::ogr::DataSource            OGRDataType;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
   itkTypeMacro(OGRDataToClassStatisticsFilter, PersistentFilterStreamingDecorator);
+
+  void SetInput(const TInputImage* image);
+  const TInputImage* GetInput();
+
+  void SetOGRData(const otb::ogr::DataSource* data);
+  const otb::ogr::DataSource* GetOGRData();
+
+  void SetMask(const TMaskImage* mask);
+  const TMaskImage* GetMask();
+
+  void SetClassKey(std::string &key);
+  std::string GetClassKey();
   
   
 
@@ -199,8 +247,14 @@ protected:
   virtual ~OGRDataToClassStatisticsFilter() {}
 
 private:
-
+  OGRDataToClassStatisticsFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
+} // end of namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbOGRDataToClassStatisticsFilter.txx"
+#endif
 
 #endif
