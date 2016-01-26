@@ -50,9 +50,9 @@ void RegisterTests()
   REGISTER_TEST(otbGeographicalDistance);
   REGISTER_TEST(otbTileImageFilterRSTransformTest);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterAndOrtho);
-  REGISTER_TEST(otbVectorDataIntoImageProjectionFilterTest);
+  //##>REGISTER_TEST(otbVectorDataIntoImageProjectionFilterTest);
   REGISTER_TEST(otbVectorDataIntoImageProjectionFilterCompareImplTest);
-  REGISTER_TEST(otbVectorDataExtractROIandProjection);
+  //##>REGISTER_TEST(otbVectorDataExtractROIandProjection);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterWithoutDEM);
   REGISTER_TEST(otbGeometriesProjectionFilterFromMapToImage);
   REGISTER_TEST(otbGeometriesProjectionFilterFromMapToEPSG);
