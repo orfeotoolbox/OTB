@@ -1,0 +1,6 @@
+file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/*.cxx")
+
+ADD_LIBRARY(OTBIce ${srcs})
+TARGET_LINK_LIBRARIES(OTBIce ${OTBCommon_LIBRARIES} ${OTBOpenGL_LIBRARIES} ${OTBGlew_LIBRARIES})
+
+otb_module_target(OTBIce)
