@@ -95,7 +95,7 @@ private:
     SetName("FusionOfClassifications");
     SetDescription("Fuses several classifications maps of the same image on the basis of class labels.");
     SetDocName("Fusion of Classifications");
-    SetDocLongDescription("This application allows to fuse several classification maps and produces a single more robust classification map. "
+    SetDocLongDescription("This application allows you to fuse several classification maps and produces a single more robust classification map. "
         "Fusion is done either by mean of Majority Voting, or with the Dempster Shafer combination method on class labels.\n "
         "-MAJORITY VOTING: for each pixel, the class with the highest number of votes is selected.\n "
         "-DEMPSTER SHAFER: for each pixel, the class label for which the Belief Function is maximal is selected. This Belief Function is calculated "
@@ -346,7 +346,7 @@ private:
         std::vector<std::string> confusionMatricesFilenameList = GetParameterStringList("method.dempstershafer.cmfl");
 
         MassOfBeliefDefinitionMethod massOfBeliefDefMethod;
-        //setting default to supress warning
+        //setting default to suppress warning
         massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
         switch (GetParameterInt("method.dempstershafer.mob"))
           {

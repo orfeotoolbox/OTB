@@ -36,7 +36,7 @@ namespace otb
  * is defined by SetSearchRadius() method.
  *
  * To do so, it optimizes a metric set using the SetMetric() method, which accepts any itk metric
- * deriving from the itk::ImageToImageMetric. The MinimizeOn()/MinimizeOff() flag allow to search for
+ * deriving from the itk::ImageToImageMetric. The MinimizeOn()/MinimizeOff() flag allows searching for
  * minimum or maximum depending on the metric (default is On).
  *
  * Once a coarse (pixel wise) offset has been found, this match is further refined using dichotomic search
@@ -58,7 +58,7 @@ namespace otb
  * grid step to value higher than 1 (grid step is expressed in terms of number of fixed image pixels).
  * Default value is 1.
  *
- * The FineRegistrationImageFilter allows to use the full range of itk::ImageToImageMetric provided by itk.
+ * The FineRegistrationImageFilter allows using the full range of itk::ImageToImageMetric provided by itk.
  *
  * \example DisparityMap/FineRegistrationImageFilterExample.cxx
  *

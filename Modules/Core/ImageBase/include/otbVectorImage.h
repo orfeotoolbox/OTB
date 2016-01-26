@@ -66,7 +66,7 @@ public:
   typedef typename Superclass::ValueType ValueType;
 
   /** Internal Pixel representation. Used to maintain a uniform API
-   * with Image Adaptors and allow to keep a particular internal
+   * with Image Adaptors and allow keeping a particular internal
    * representation of data while showing a different external
    * representation. */
   typedef typename Superclass::InternalPixelType InternalPixelType;

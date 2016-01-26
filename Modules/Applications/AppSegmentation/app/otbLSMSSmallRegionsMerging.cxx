@@ -325,8 +325,8 @@ private:
               if(nbPixels[curLabel]==size)
                 {
                 edgeLabel.insert(curLabel);
-                for(std::set<int>::iterator itAdjLabel=adjMap[curLabel].begin();
-                    itAdjLabel!=adjMap[curLabel].end(); ++itAdjLabel)
+                for(std::set<int>::iterator itAdjLabel=(adjMap[curLabel]).begin();
+                    itAdjLabel!=(adjMap[curLabel]).end(); ++itAdjLabel)
                   {
                   double tmpError = 0;
                   LabelImagePixelType tmpLabel = *itAdjLabel;

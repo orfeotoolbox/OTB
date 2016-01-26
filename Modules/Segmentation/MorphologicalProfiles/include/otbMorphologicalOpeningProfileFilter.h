@@ -38,7 +38,7 @@ namespace otb
  * The opening profile is a set of images beeing the result of a geodesic morphological
  * opening by reconstruction with an increasing range of structuring element sizes.
  *
- * For more informations on profiles please refer to the documentation of the otb::ImageToProfileFilter
+ * For more information on profiles please refer to the documentation of the otb::ImageToProfileFilter
  * class.
  *
  * \sa ImageToProfileFilter

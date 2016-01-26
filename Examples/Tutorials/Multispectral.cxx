@@ -91,7 +91,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   //  We need to pass the parameters to the filter for the extraction. This
-  // filter also allow to extract only a spatial subset of the image. However,
+  // filter also allow extracting only a spatial subset of the image. However,
   // we will extract the whole channel in this case.
   //
   // To do that, we need to pass the desired region using the

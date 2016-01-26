@@ -127,7 +127,7 @@ private:
 /** \class VectorImageToMatrixImageFilter
  * \brief This class streams the whole input image through the PersistentStatisticsImageFilter.
  *
- * This way, it allows to compute the first order global statistics of this image. It calls the
+ * This way, it allows computing the first order global statistics of this image. It calls the
  * Reset() method of the PersistentStatisticsImageFilter before streaming the image and the
  * Synthetize() method of the PersistentStatisticsImageFilter after having streamed the image
  * to compute the statistics. The accessor on the results are wrapping the accessors of the

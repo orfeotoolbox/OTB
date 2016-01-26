@@ -139,7 +139,7 @@ private:
     AddChoice("method.maf", "MAF");
     SetParameterDescription("method.maf", "Maximum Autocorrelation Factor.");
     AddChoice("method.ica", "ICA");
-    SetParameterDescription("method.ica", "Independant Component Analysis.");
+    SetParameterDescription("method.ica", "Independent Component Analysis.");
     AddParameter(ParameterType_Int, "method.ica.iter", "number of iterations ");
     SetMinimumParameterIntValue("method.ica.iter", 1);
     SetDefaultParameterInt("method.ica.iter", 20);

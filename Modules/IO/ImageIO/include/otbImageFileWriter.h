@@ -43,7 +43,7 @@ namespace otb
  * ImageFileWriter will write directly the streaming buffer in the image file, so
  * that the output image never needs to be completely allocated
  *
- * ImageFileWriter supports extended filenames, which allow to control
+ * ImageFileWriter supports extended filenames, which allow controling
  * some properties of the output file. See
  * http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for more
  * information.

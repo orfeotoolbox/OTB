@@ -730,7 +730,7 @@ PleiadesImageMetadataInterface::GetSatAzimuth() const
     }
   else
     {
-    //Got orientation and incidences angle which allow to compute satellite
+    //Got orientation and incidences angle which allow computing satellite
     // azimuthal angle
 
     // MSD: for the moment take only topCenter value

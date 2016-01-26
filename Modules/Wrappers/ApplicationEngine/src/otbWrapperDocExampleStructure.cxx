@@ -145,7 +145,7 @@ DocExampleStructure::GenerateCLExample( unsigned int exId )
 
   res = oss.str();
 
-  // Supress last added space
+  // Suppress last added space
   res.erase( res.size()-1, 1);
 
   return res.c_str();

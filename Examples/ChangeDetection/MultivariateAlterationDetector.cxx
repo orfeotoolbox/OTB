@@ -32,8 +32,8 @@
 // This example illustrates the class
 // \doxygen{otb}{MultivariateAlterationChangeDetectorImageFilter},
 // which implements the Multivariate Alteration Change Detector
-// algorithm \cite{nielsen2007regularized}. This algorihtm allows to
-// perform change detection from a pair multi-band images, including
+// algorithm \cite{nielsen2007regularized}. This algorihtm allows
+// performing change detection from a pair multi-band images, including
 // images with different number of bands or modalities. Its output is
 // a a multi-band image of change maps, each one being unccorrelated
 // with the remaining. The number of bands of the output image is the

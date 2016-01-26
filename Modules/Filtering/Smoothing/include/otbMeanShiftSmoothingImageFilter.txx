@@ -35,10 +35,11 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
   // , m_SpatialRadius(???)
       , m_Threshold(1e-3), m_MaxIterationNumber(10)
       // , m_Kernel(...)
-      // , m_NumberOfComponentsPerPixel(...)
+      , m_NumberOfComponentsPerPixel(0)
       // , m_JointImage(0)
       // , m_ModeTable(0)
       , m_ModeSearch(true)
+      , m_ThreadIdNumberOfBits(0)
 #if 0
       , m_BucketOptimization(false)
 #endif

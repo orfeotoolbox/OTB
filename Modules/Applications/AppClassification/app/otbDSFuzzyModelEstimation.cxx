@@ -261,6 +261,10 @@ private:
         accNbElemPS++;
         }
       }
+    if (accNbElemPS == 0)
+      {
+      otbAppLogFATAL(<< "Error : no element found in positive vector data!");
+      }
 
     TreeIteratorType itVectorNS(nsVectorData->GetDataTree());
     std::vector<double> accFirstOrderNS, accSecondOrderNS, minNS, maxNS;
@@ -299,6 +303,10 @@ private:
           }
         accNbElemNS++;
         }
+      }
+    if (accNbElemNS == 0)
+      {
+      otbAppLogFATAL(<< "Error : no element found in negative vector data!");
       }
     otbAppLogINFO( << "Descriptors Stats : ");
     otbAppLogINFO( << "Positive Samples");
@@ -406,11 +414,9 @@ private:
       {
       // An error has occurred in the optimization.
       // Update the parameters
-      otbAppLogFATAL("ERROR: Exception Catched!" << std::endl);
-      otbAppLogFATAL(<< err.GetDescription() << std::endl);
-      const unsigned int numberOfIterations = m_Optimizer->GetOptimizer()->get_num_evaluations();
-      otbAppLogFATAL("numberOfIterations : " << numberOfIterations << std::endl);
-      otbAppLogFATAL("Results : " << m_Optimizer->GetCurrentPosition() << std::endl);
+      otbAppLogFATAL("ERROR: Exception Catched : "<< err.GetDescription() << std::endl
+        << "numberOfIterations : " << m_Optimizer->GetOptimizer()->get_num_evaluations() << std::endl
+        << "Results : " << m_Optimizer->GetCurrentPosition() << std::endl);
       }
     // get the results
     const unsigned int numberOfIterations = m_Optimizer->GetOptimizer()->get_num_evaluations();

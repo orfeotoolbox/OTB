@@ -143,7 +143,7 @@ protected:
 private:
   AtmosphericCorrectionParameters(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-  /** Path to an Aeronet data file, allows to compute aerosol optical and water vapor amounts. */
+  /** Path to an Aeronet data file, allows computing aerosol optical and water vapor amounts. */
   std::string m_AeronetFileName;
   /** Day */
   int m_Day;

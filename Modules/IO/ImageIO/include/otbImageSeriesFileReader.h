@@ -57,7 +57,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(ImageSeriesFileReader, ImageSeriesFileReaderBase);
 
   typedef typename Superclass::OutputImageType        OutputImageType;
@@ -170,7 +170,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(ImageSeriesFileReader, ImageSeriesFileReaderBase);
 
   typedef typename Superclass::OutputImageType        OutputImageType;
@@ -276,7 +276,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(ImageSeriesFileReader, ImageSeriesFileReaderBase);
 
   typedef typename Superclass::OutputImageType        OutputImageType;
@@ -383,7 +383,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(ImageSeriesFileReader, ImageSeriesFileReaderBase);
 
   typedef typename Superclass::OutputImageType        OutputImageType;

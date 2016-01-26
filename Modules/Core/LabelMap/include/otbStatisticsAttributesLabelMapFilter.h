@@ -113,7 +113,7 @@ private:
  * set. The key of the statistics features in the attributes map will
  * be "STATS::FeatureName::StatisticName".
  *
- * The flag ReducedAttributesSet allows to compute only non-redundant
+ * The flag ReducedAttributesSet allows computing only non-redundant
  * statistics and statistics usefull for classification (not spatially
  * dependent statitistics). Reduced set contains only mean, variance,
  * skewness and kurtosis.

@@ -71,7 +71,7 @@ private:
 
     /** GROUP IO CLASSIFICATION */
     AddParameter(ParameterType_Group,"io","Input and output images");
-    SetParameterDescription("io","This group of parameters allows to set input and output images for classification map regularization by Majority Voting.");
+    SetParameterDescription("io","This group of parameters allows setting input and output images for classification map regularization by Majority Voting.");
 
     AddParameter(ParameterType_InputImage, "io.in",  "Input classification image");
     SetParameterDescription( "io.in", "The input labeled image to regularize.");
@@ -82,7 +82,7 @@ private:
 
 
     AddParameter(ParameterType_Group,"ip","Regularization parameters");
-    SetParameterDescription("ip","This group allows to set parameters for classification map regularization by Majority Voting.");
+    SetParameterDescription("ip","This group allows setting parameters for classification map regularization by Majority Voting.");
 
     AddParameter(ParameterType_Int, "ip.radius", "Structuring element radius (in pixels)");
     SetParameterDescription("ip.radius", "The radius of the ball shaped structuring element (expressed in pixels). By default, 'ip.radius = 1 pixel'.");

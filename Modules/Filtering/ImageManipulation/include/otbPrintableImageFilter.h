@@ -249,7 +249,7 @@ private:
   typename ChannelExtractorType::Pointer m_Extractor;
   // Foreground mask value
   FunctorFilterPointerType m_MaskFilter;
-  // Objects (of the mask) will be displayer with the choosen color.
+  // Objects (of the mask) will be displayer with the chosen color.
   OutputPixelType m_ObjectColor;
   // Use mask
   bool m_UseMask;

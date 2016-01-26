@@ -117,7 +117,7 @@ KmzProductWriter<TInputImage>
 
   if(emptyProjRef &&  emptyKWL)
     {
-    itkExceptionMacro(<<"The input image have empty keyword list, please use an image with metadata informations");
+    itkExceptionMacro(<<"The input image have empty keyword list, please use an image with metadata information");
     }
 
   // Continue processing

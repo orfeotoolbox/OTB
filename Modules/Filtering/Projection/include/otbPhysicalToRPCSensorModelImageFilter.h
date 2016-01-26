@@ -36,7 +36,7 @@ namespace otb {
  * to estimate a proper RPC sensor model, there are no warning when
  * the model estimated is inaccurate.
  *
- * The UseImageGCPs flag allows to import GCPs from the image
+ * The UseImageGCPs flag allows importing GCPs from the image
  * metadata, if any.(TODO)
  *
  * GCPs can be passed to the filter using one of the AddGCP method

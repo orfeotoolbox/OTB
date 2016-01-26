@@ -111,7 +111,7 @@ public:
   typedef typename InputMapType::PixelType             MapPixelType;
   typedef typename InputMapType::InternalPixelType   InputInternalPixelType;
   // 3D RS transform
-  // TODO: Allow to tune precision (i.e. double or float)
+  // TODO: Allow tuning precision (i.e. double or float)
   typedef double                  PrecisionType;
   typedef otb::GenericRSTransform
     <PrecisionType,3,3>           RSTransformType;

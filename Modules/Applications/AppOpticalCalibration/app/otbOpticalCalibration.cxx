@@ -124,10 +124,10 @@ private:
   void DoInit()
   {
     SetName("OpticalCalibration");
-    SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5, Pleiades, Spot6. For other sensors the application also allows to provide calibration parameters manually.");
+    SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5, Pleiades, Spot6. For other sensors the application also allows providing calibration parameters manually.");
     // Documentation
     SetDocName("Optical calibration");
-    SetDocLongDescription("The application allows to convert pixel values from DN (for Digital Numbers) to reflectance. Calibrated values are called surface reflectivity and its values lie in the range [0, 1].\nThe first level is called Top Of Atmosphere (TOA) reflectivity. It takes into account the sensor gain, sensor spectral response and the solar illuminations.\nThe second level is called Top Of Canopy (TOC) reflectivity. In addition to sensor gain and solar illuminations, it takes into account the optical thickness of the atmosphere, the atmospheric pressure, the water vapor amount, the ozone amount, as well as the composition and amount of aerosol gasses.\nIt is also possible to indicate an AERONET file which contains atmospheric parameters (version 1 and version 2 of Aeronet file are supported. Note that computing TOC reflectivity will internally compute first TOA and then TOC reflectance. \n"
+    SetDocLongDescription("The application allows converting pixel values from DN (for Digital Numbers) to reflectance. Calibrated values are called surface reflectivity and its values lie in the range [0, 1].\nThe first level is called Top Of Atmosphere (TOA) reflectivity. It takes into account the sensor gain, sensor spectral response and the solar illuminations.\nThe second level is called Top Of Canopy (TOC) reflectivity. In addition to sensor gain and solar illuminations, it takes into account the optical thickness of the atmosphere, the atmospheric pressure, the water vapor amount, the ozone amount, as well as the composition and amount of aerosol gasses.\nIt is also possible to indicate an AERONET file which contains atmospheric parameters (version 1 and version 2 of Aeronet file are supported. Note that computing TOC reflectivity will internally compute first TOA and then TOC reflectance. \n"
 "\n--------------------------\n\n"
 "If the sensor is not supported by the metadata interface factory of OTB, users still have the possibility to give the needed parameters to the application.\n"
 "For TOA conversion, these parameters are : \n"
@@ -175,7 +175,7 @@ private:
 "1540.494123 : 1826.087443 : 1982.671954 : 1094.747446\n\n"
 
 "Finally, the 'Logs' tab provides usefull messages that can help the user in knowing the process different status." );
-    
+
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("The OTB CookBook");
@@ -198,7 +198,7 @@ private:
 
     AddParameter(ParameterType_Empty, "milli", "Convert to milli reflectance");
     SetParameterDescription("milli", "Flag to use milli-reflectance instead of reflectance.\n"
-                            "This allows to save the image with integer pixel type (in the range [0, 1000]  instead of floating point in the range [0, 1]. In order to do that, use this option and set the output pixel type (-out filename double for example)");
+                            "This allows saving the image with integer pixel type (in the range [0, 1000]  instead of floating point in the range [0, 1]. In order to do that, use this option and set the output pixel type (-out filename double for example)");
     DisableParameter("milli");
     MandatoryOff("milli");
 
@@ -209,7 +209,7 @@ private:
 
     //Acquisition parameters
     AddParameter(ParameterType_Group,"acqui","Acquisition parameters");
-    SetParameterDescription("acqui","This group allows to set the parameters related to the acquisition conditions.");
+    SetParameterDescription("acqui","This group allows setting the parameters related to the acquisition conditions.");
     //Minute
     AddParameter(ParameterType_Int, "acqui.minute",   "Minute");
     SetParameterDescription("acqui.minute", "Minute (0-59)");
@@ -285,7 +285,7 @@ private:
 
     //Atmospheric parameters (TOC)
     AddParameter(ParameterType_Group,"atmo","Atmospheric parameters (for TOC)");
-    SetParameterDescription("atmo","This group allows to set the atmospheric parameters.");
+    SetParameterDescription("atmo","This group allows setting the atmospheric parameters.");
     AddParameter(ParameterType_Choice,   "atmo.aerosol", "Aerosol Model");
     AddChoice("atmo.aerosol.noaersol",    "No Aerosol Model");
     AddChoice("atmo.aerosol.continental", "Continental");
@@ -318,7 +318,7 @@ private:
     AddParameter(ParameterType_InputFilename, "atmo.aeronet", "Aeronet File");
     SetParameterDescription("atmo.aeronet","Aeronet file containing atmospheric parameters");
     MandatoryOff("atmo.aeronet");
- 
+
     AddParameter(ParameterType_InputFilename, "atmo.rsr", "Relative Spectral Response File");
     std::ostringstream oss;
     oss << "Sensor relative spectral response file"<<std::endl;
@@ -375,7 +375,7 @@ private:
       if (newInputImage)
       {
         ossOutput << std::endl << "File: " << m_inImageName << std::endl;
-        
+
         //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
         FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in");
         itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
@@ -397,7 +397,7 @@ private:
                      << "\tAcquisition Sun Azimuth Angle: " << lImageMetadataInterface->GetSunAzimuth() << std::endl
                      << "\tAcquisition Viewing Elevation Angle: " << lImageMetadataInterface->GetSatElevation() << std::endl
                      << "\tAcquisition Viewing Azimuth Angle: " << lImageMetadataInterface->GetSatAzimuth() << std::endl;
-         
+
            vlvector = lImageMetadataInterface->GetPhysicalGain();
            ossOutput << "\tAcquisition gain (per band): ";
            for(unsigned int k=0; k<vlvector.Size(); k++)
@@ -607,7 +607,7 @@ private:
     {
       // Try to retrieve information from file provided by user
       std::string filename(GetParameterString("acqui.gainbias"));
-      
+
       std::ifstream file(filename.c_str(), std::ios::in);
       if(file)
       {
@@ -643,13 +643,13 @@ private:
               m_LuminanceToImageFilter->SetAlpha(vlvector);
               GetLogger()->Info("Trying to get gains/biases information... OK (1/2)\n");
               break;
-              
+
               case 2 :
               m_ImageToLuminanceFilter->SetBeta(vlvector);
               m_LuminanceToImageFilter->SetBeta(vlvector);
               GetLogger()->Info("Trying to get gains/biases information... OK (2/2)\n");
               break;
-              
+
               default : itkExceptionMacro(<< "File : " << filename << " contains wrong number of lines (needs two, one for gains and one for biases)");
             }
           }
@@ -666,7 +666,7 @@ private:
       {
         m_ImageToLuminanceFilter->SetAlpha(lImageMetadataInterface->GetPhysicalGain());
         m_LuminanceToImageFilter->SetAlpha(lImageMetadataInterface->GetPhysicalGain());
-     
+
         m_ImageToLuminanceFilter->SetBeta(lImageMetadataInterface->GetPhysicalBias());
         m_LuminanceToImageFilter->SetBeta(lImageMetadataInterface->GetPhysicalBias());
       }
@@ -679,7 +679,7 @@ private:
     {
       // Try to retrieve information from file provided by user
       std::string filename(GetParameterString("acqui.solarilluminations"));
-      
+
       std::ifstream file(filename.c_str(), std::ios::in);
       if(file)
       {
@@ -741,7 +741,7 @@ private:
       case Level_IM_TOA:
       {
         GetLogger()->Info("Compute Top of Atmosphere reflectance\n");
-    
+
         //Pipeline
         m_ImageToLuminanceFilter->SetInput(inImage);
         m_LuminanceToReflectanceFilter->SetInput(m_ImageToLuminanceFilter->GetOutput());
@@ -759,7 +759,7 @@ private:
       case Level_TOA_IM:
       {
         GetLogger()->Info("Convert Top of Atmosphere reflectance to image DN\n");
-    
+
         //Pipeline
         m_ReflectanceToLuminanceFilter->SetInput(inImage);
         m_LuminanceToImageFilter->SetInput(m_ReflectanceToLuminanceFilter->GetOutput());
@@ -795,7 +795,7 @@ private:
           }
           break;
         }
-        
+
         // Set the atmospheric param
         m_paramAtmo->SetOzoneAmount(GetParameterFloat("atmo.oz"));
         m_paramAtmo->SetWaterVaporAmount(GetParameterFloat("atmo.wa"));
@@ -894,12 +894,12 @@ private:
         else
         {
           GetLogger()->Info("Clamp values between [0, 100]\n");
-          
+
           if (!adjComputation)
             m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
           else
             m_ClampFilter->SetInput(m_SurfaceAdjacencyEffectCorrectionSchemeFilter->GetOutput());
-          
+
           m_ClampFilter->ClampOutside(0.0, 1.0);
           m_ScaleFilter->SetInput(m_ClampFilter->GetOutput());
         }
@@ -919,7 +919,7 @@ private:
         scale=1. / 1000.;
     }
     m_ScaleFilter->SetConstant(scale);
-    
+
     SetParameterOutputImage("out", m_ScaleFilter->GetOutput());
   }
 

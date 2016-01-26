@@ -71,7 +71,7 @@ public:
    * it needs to be redone here for this subclass to compile properly with gcc. */
   typedef typename Superclass::ImageType ImageType;
 
-  /** Offset typedef support. This explicit redefinition allows to Set/Get
+  /** Offset typedef support. This explicit redefinition allows Setting/Getting
    * the location of the iterator. */
   //typedef typename Superclass::OffsetType OffsetType;
   typedef unsigned long OffsetType;

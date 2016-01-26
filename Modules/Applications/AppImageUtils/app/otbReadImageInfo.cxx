@@ -70,7 +70,7 @@ private:
     MandatoryOff("keywordlist");
 
     AddParameter(ParameterType_OutputFilename, "outkwl", "Write the OSSIM keywordlist to a geom file");
-    SetParameterDescription("outkwl", "This option allows to extract the OSSIM keywordlist of the image into a geom file.");
+    SetParameterDescription("outkwl", "This option allows extracting the OSSIM keywordlist of the image into a geom file.");
     MandatoryOff("outkwl");
 
     //Create output parameters to store image informations
@@ -179,7 +179,7 @@ private:
     EnableParameter("country");
 
     AddParameter(ParameterType_Group, "rgb", "Default RGB Display");
-    SetParameterDescription("rgb","This group of parameters allows to access to the default rgb composition.");
+    SetParameterDescription("rgb","This group of parameters provide information about the default rgb composition.");
 
     AddParameter(ParameterType_Int, "rgb.r", "Red Band");
     SetParameterDescription("rgb.r","Red band Number");
@@ -207,7 +207,7 @@ private:
     EnableParameter("keyword");
 
     AddParameter(ParameterType_Group, "gcp", "Ground Control Points information");
-    SetParameterDescription("gcp","This group of parameters allows to access to the GCPs information.");
+    SetParameterDescription("gcp","This group of parameters provide information about all GCPs.");
     SetParameterRole("gcp", Role_Output);
 
     AddParameter(ParameterType_Int, "gcp.count", "GCPs Number");
@@ -275,7 +275,7 @@ private:
 
       if(ret)
         {
-    
+
         for(unsigned int b = 0;b< inImage->GetNumberOfComponentsPerPixel();++b)
           {
           ossOutput<<"\n\t\tBand "<<b+1<<": ";
@@ -283,7 +283,7 @@ private:
           if(noDataValueAvailable[b])
             ossOutput<<noDataValues[b];
           else
-            ossOutput<<"No";  
+            ossOutput<<"No";
           }
         }
       else
@@ -491,7 +491,7 @@ private:
       ossOutput << "\t" << GetParameterString("keyword") << std::endl;
       }
 
-    //Display image informations in the dedicated logger
+    //Display image information in the dedicated logger
     otbAppLogINFO( << ossOutput.str() );
 
     if(IsParameterEnabled("outkwl"))

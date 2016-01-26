@@ -108,6 +108,7 @@ otb_test_application(NAME apTuUtReadImageInfoExtendedFilename_reader
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipgeom=true&skipcarto=true
                      )
 
+
 ##>otb_test_application(NAME  apTvUtReadImageInfoRpcTag
                      ##>APP  ReadImageInfo
                      ##>OPTIONS -in ${INPUTDATA}/QB_TOULOUSE_RpcTag_100_100.tif
@@ -147,6 +148,7 @@ otb_test_application(NAME apTuUtReadImageInfoExtendedFilename_reader
                      ##>VALID   --compare-ascii ${EPSILON_7}
                              ##>${BASELINE_FILES}/apTvUtReadImageInfoRADARSAT1.txt
                 	     ##>${TEMP}/apTvUtReadImageInfoRADARSAT1.txt)
+
 
 
 #----------- Quicklook TESTS ----------------
