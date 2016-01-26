@@ -2092,6 +2092,8 @@ ImageViewWidget
     )
   );
 
+  QString selectedFilter;
+
   if( isQuickMode )
     filename = QDir::home().filePath( filename );
   else
@@ -2100,12 +2102,33 @@ ImageViewWidget
 	this,
 	tr( "Save screenshot..." ),
 	QDir::current().filePath( filename ),
-	tr( "PNG File (*.png);;JPEG File (*.jpg);;TIFF file (*tif)" )
+	tr( "PNG File (*.png);;JPEG File (*.jpg);;TIFF file (*tif)" ),
+  &selectedFilter
       );
 
   if( filename.isEmpty() )
     return;
 
+  // If no correct extension is found
+  if(!filename.endsWith(".png",Qt::CaseInsensitive)
+     &&!filename.endsWith(".jpg",Qt::CaseInsensitive)
+     &&!filename.endsWith(".tif",Qt::CaseInsensitive))
+    {
+    if(selectedFilter.startsWith("PNG"))
+      {
+      filename+=".png";
+      }
+    else if(selectedFilter.startsWith("JPEG"))
+      {
+      filename+=".jpg";
+      }
+    else if(selectedFilter.startsWith("TIFF"))
+      {
+      filename+=".tif";
+      }
+    }
+                        
+  
   assert( m_Renderer!=NULL );
 
   try
