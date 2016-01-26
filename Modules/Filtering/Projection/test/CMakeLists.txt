@@ -40,7 +40,7 @@ otbGCPsToRPCSensorModelImageFilterCheckRpcModel.cxx
 otbGeographicalDistance.cxx
 otbTileImageFilterRSTransformTest.cxx
 otbGCPsToRPCSensorModelImageFilterAndOrtho.cxx
-##>otbVectorDataIntoImageProjectionFilterTest.cxx
+otbVectorDataIntoImageProjectionFilterTest.cxx
 ##>otbVectorDataExtractROIandProjection.cxx
 otbGCPsToRPCSensorModelImageFilterWithoutDEM.cxx
 otbGeometriesProjectionFilterFromMapToImage.cxx
