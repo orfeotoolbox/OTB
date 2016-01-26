@@ -4,7 +4,7 @@ set(OTBIOTileMapTests
 otbIOTileMapTestDriver.cxx
 otbTileMapImageIOHelperTest.cxx
 otbTileMapImageIOTest.cxx
-otbTileMapWriter.cxx
+##>otbTileMapWriter.cxx
 )
 
 add_executable(otbIOTileMapTestDriver ${OTBIOTileMapTests})
@@ -42,14 +42,14 @@ otb_add_test(NAME ioTvTileMapImageIOFile COMMAND otbIOTileMapTestDriver
   )
 set_property(TEST ioTvTileMapImageIOFile PROPERTY RESOURCE_LOCK web_access)
 
-otb_add_test(NAME ioTvTileMapWriter COMMAND otbIOTileMapTestDriver
-  otbTileMapWriter
-  LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
-  ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
-  ${TEMP}
-  500 # extract index[0]
-  500 # extract index[1]
-  200 # extract size[0]
-  200 # extract size[1]
-  )
+##>otb_add_test(NAME ioTvTileMapWriter COMMAND otbIOTileMapTestDriver
+##>  otbTileMapWriter
+##>  LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
+##>  ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
+##>  ${TEMP}
+##>  500 # extract index[0]
+##>  500 # extract index[1]
+##>  200 # extract size[0]
+##>  200 # extract size[1]
+##>  )
 
