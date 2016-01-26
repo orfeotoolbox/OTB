@@ -38,7 +38,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   // Get Input parameters
   if (argc != 6)
     {
-    std::cout << "Invalid Parameters: " << argv[0] << "<filenameIn> <posX> <posY> <sizeX> <sizeY><ouput filename>" << std::endl;
+    std::cout << "Invalid Parameters: " << argv[0] << "<filenameIn> <posX> <posY> <sizeX> <sizeY><output filename>" << std::endl;
     return EXIT_FAILURE;
     }
   int posX = (int)atoi(argv[2]);
@@ -56,7 +56,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   if( poDataset == NULL )
      return EXIT_FAILURE;
 
-  // Get some informations from file
+  // Get some information from file
   int nbBand = poDataset->GetRasterCount();
 
   GDALDataType pxlTypeInFile = poDataset->GetRasterBand(1)->GetRasterDataType();

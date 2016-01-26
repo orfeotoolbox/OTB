@@ -72,7 +72,7 @@ public:
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(PeriodicSOM, SOM);
 
   typedef TListSample                      ListSampleType;

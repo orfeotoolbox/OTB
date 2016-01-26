@@ -46,7 +46,7 @@ signals:
 protected slots:
   void SetString( const QString& value );
   virtual void AddString();
-  virtual void SupressString();
+  virtual void SuppressString();
   virtual void UpdateStringList();
 
 private:

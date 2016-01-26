@@ -44,7 +44,7 @@ namespace otb
 
 /** \class KmzProductWriter
  * \brief This class generate a Kmz from one or several input
- * images. The inputs must have a non empty metadata informations.
+ * images. The inputs must have a non empty metadata information.
  *
  * This class writes kmz files, supported by Google Earth. The input
  * must have metadata (a non empty keywordlist)

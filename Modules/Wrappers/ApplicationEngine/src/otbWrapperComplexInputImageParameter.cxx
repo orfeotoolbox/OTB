@@ -42,7 +42,7 @@ ComplexInputImageParameter::~ComplexInputImageParameter()
 bool
 ComplexInputImageParameter::SetFromFileName(const std::string& filename)
 {
-  // First clear previous file choosen
+  // First clear previous file chosen
   this->ClearValue();
 
   // No file existence is done here :

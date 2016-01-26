@@ -68,7 +68,7 @@ public:
    * \param imageList The analysed image at each level of the pyramid.
    */
   using Superclass::SetInput;
-  void SetInput(InputImageListType * imageList);
+  void SetInput(const InputImageListType * imageList);
   /**
    * Set The SupFilter details
    * \param imageList The brighter details extracted from the filtering operation.

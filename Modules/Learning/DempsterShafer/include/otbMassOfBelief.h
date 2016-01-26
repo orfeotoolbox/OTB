@@ -57,26 +57,26 @@ namespace otb
  *  retrieved using the GetMass method. If no mass has been associated
  *  with this element, null is returned.
  *
- *  The Normalize() method allows to normalize all masses so that they
- *  sum to 1. The EstimateUncertainty() method allows to associate to
+ *  The Normalize() method allows normalizing all masses so that they
+ *  sum to 1. The EstimateUncertainty() method allows associating to
  *  the uncertain set (i.e. the universe set) a mass so that all
  *  masses sum to 1.
  *
- *  The GetUniverse() method allows to retrieve the set of all symbols
- *  (i.e. the universal set), while the GetSupport() method allows to
- *  retrieve the set of all elements of the power-set for which a mass
+ *  The GetUniverse() method allows retrieving the set of all symbols
+ *  (i.e. the universal set), while the GetSupport() method allows
+ *  retrieving the set of all elements of the power-set for which a mass
  *  has been associated. This method returns a LabelSetOfSetType,
  *  which is a std::set<std::set<TLabel> >.
  *
  *  The mass function can be optionnaly initialized from a given
  *  universe set by building the power-set and associating a null mass
- *  with every elements of this power-set. This allows to ensure that
+ *  with every elements of this power-set. This allows ensuring that
  *  two mass functions will share the exact same universe and
  *  power-set, but is not mandatory, since mass is supposed to be null
  *  for any set if not stated otherwise.
  *
  *  Once masses are set, the GetPlausibility() and GetBelief()
- *  function allow to compute the belief and plausibility for an
+ *  function allow computing the belief and plausibility for an
  *  element of the power-set, or directly for a set of elements of the
  *  power-set intersecting (resp. contained in) a given hypothesis.
  *

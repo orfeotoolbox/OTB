@@ -28,7 +28,7 @@ namespace otb
  * and compatible with otb::SVMSampleListModelEstimator
  *
  * The conversion from label object to measurement vector is made
- * through a functor. This allows to support any kind of LabelObject
+ * through a functor. This allows supporting any kind of LabelObject
  * via proper redefinition of the functor.
  *
  * \sa otb::SVMSampleListModelEstimator

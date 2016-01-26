@@ -308,7 +308,7 @@ protected:
 
   /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
-    * Copy informations from the input image if existing.
+    * Copy information from the input image if existing.
     **/
   virtual void GenerateOutputInformation();
 

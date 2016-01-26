@@ -31,6 +31,7 @@ template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelI
 LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::LabelImageRegionPruningFilter()
 {
+  m_NumberOfComponentsPerPixel=0;
   m_MinRegionSize=100;
 
   this->SetNumberOfRequiredInputs( 2 );

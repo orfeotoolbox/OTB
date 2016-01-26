@@ -61,7 +61,7 @@ int otbDisparityMapToDEMFilter(int argc, char* argv[])
     std::cerr
         << " dispinput_fname sensorleftinput_fname sensorrighttinput_fname gridleftinput_fname gridrightinput_fname"
         << std::endl;
-    std::cerr << " ouputDEM_filename " << std::endl;
+    std::cerr << " outputDEM_filename " << std::endl;
     std::cerr << " elevmin elevmax avgelev DEMgridstep (maskinput_fname) " << std::endl;
     return EXIT_FAILURE;
     }

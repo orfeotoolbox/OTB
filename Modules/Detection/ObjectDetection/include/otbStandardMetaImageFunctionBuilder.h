@@ -35,7 +35,7 @@ namespace otb
 /** \class StandardMetaImageFunctionBuilder
  *  \brief Build a Standard MetaImageFunction
  *
- *  The StandardMetaImageFunctionBuilder class allows to call multiple
+ *  The StandardMetaImageFunctionBuilder class allows calling multiple
  *  ImageFunctions:
  *    - otbRadiometricMomentsImageFunction
  *    - otbFlusserMomentsImageFunction

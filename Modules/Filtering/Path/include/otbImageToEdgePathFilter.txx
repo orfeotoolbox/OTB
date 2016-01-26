@@ -108,7 +108,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   it.ActivateOffset(RIGHTDOWN);
   it.ActivateOffset(LEFTUP);
   it.ActivateOffset(LEFTDOWN);
-  // The rotation vector allows to get the clock-wise next pixel
+  // The rotation vector allows getting the clock-wise next pixel
   std::vector<typename IteratorType::OffsetType> rotation;
   rotation.push_back(RIGHT);
   rotation.push_back(RIGHTDOWN);

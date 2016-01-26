@@ -108,7 +108,7 @@ bool BSQImageIO::CanReadFile(const char* filename)
     otbMsgDevMacro(<< "BSQImageIO::CanReadFile() failed header open ! ");
     return false;
     }
-  //Read header informations
+  //Read header information
   bool lResult = InternalReadHeaderInformation(lFileName, header_file, false);
   header_file.close();
   return (lResult);
@@ -231,7 +231,7 @@ void BSQImageIO::ReadImageInformation()
     itkExceptionMacro(<< "BSQImageIO::ReadImageInformation() failed header open ! ");
     }
 
-  //Read header informations
+  //Read header information
   InternalReadHeaderInformation(m_FileName, m_HeaderFile, true);
 
   otbMsgDebugMacro(<< "Driver to read: BSQ");
@@ -375,7 +375,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
     }
   file >> m_Dimensions[0];
 
-  //Read "BITS PER PIXEL" informations
+  //Read "BITS PER PIXEL" information
   file >> lString;
   std::string lStrBitsPerPixels(lString);
   file >> lString;
@@ -397,7 +397,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   int lNbBitsPerPixels;
   file >> lNbBitsPerPixels;
 
-  //Read "SENSCODAGE" informations (optionnal)
+  //Read "SENSCODAGE" information (optionnal)
   file >> lString;
   if (lString.empty() == false)
     {
@@ -616,11 +616,11 @@ void BSQImageIO::WriteImageInformation()
   m_HeaderFile <<  "COLUMNS" << std::endl;
   m_HeaderFile << m_Dimensions[0] << std::endl;
 
-  //Write "BITS PER PIXEL" informations
+  //Write "BITS PER PIXEL" information
   m_HeaderFile <<  "BITS PER PIXEL" << std::endl;
   m_HeaderFile << this->GetComponentSize() * 8 << std::endl;
 
-  //Write "SENSCODAGE" informations
+  //Write "SENSCODAGE" information
   m_HeaderFile <<  "SENSCODAGE" << std::endl;
   if (m_ByteOrder == LittleEndian)
     {

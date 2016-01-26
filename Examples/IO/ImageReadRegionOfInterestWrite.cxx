@@ -93,8 +93,8 @@ int main(int argc, char * argv[])
   //
   //  The ExtractROI type is instantiated using
   //  the input and output pixel types. Using the pixel types as
-  //  template parameters instead of the image types allows to
-  //  restrict the use of this class to \doxygen{otb}{Image}s which
+  //  template parameters instead of the image types allows
+  //  restricting the use of this class to \doxygen{otb}{Image}s which
   //  are used with scalar pixel types. See section
   //  \ref{sec:ExtractROI} for the extraction of ROIs on
   //  \doxygen{otb}{VectorImage}s. A filter object is created with the

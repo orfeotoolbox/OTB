@@ -141,7 +141,7 @@ private:
     // TODO : use CSV input/output ?
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input Mask");
-    SetParameterDescription( "mask", "The mask allows to restrict "
+    SetParameterDescription( "mask", "The mask allow restricting "
       "classification of the input image to the area where mask pixel values "
       "are greater than 0.");
     MandatoryOff("mask");

@@ -30,8 +30,8 @@ namespace otb
  * - &geom : to specify an external geom file
  * - &sdataidx : sub-dataset index for composite files
  * - &resol : resolution factor for jpeg200 files
- * - &skipcarto : switch to skip the cartographic informations
- * - &skipgeom  : switch to skip the geometric informations
+ * - &skipcarto : switch to skip the cartographic information
+ * - &skipgeom  : switch to skip the geometric information
  *
  *  \sa ImageFileReader
  *

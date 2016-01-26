@@ -95,7 +95,7 @@ private:
     // Boolean Fast scheme
     AddParameter(ParameterType_Empty, "fast", "Use Fast Scheme");
     std::ostringstream desc;
-    desc<<"If used, this option allows to speed-up computation by iteratively"
+    desc<<"If used, this option allows one to speed-up computation by iteratively"
         <<" subsampling previous level of pyramid instead of processing the full input.";
     SetParameterDescription("fast", desc.str());
     MandatoryOff("fast");

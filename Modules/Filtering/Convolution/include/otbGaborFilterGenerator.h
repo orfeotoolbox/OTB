@@ -31,7 +31,7 @@ namespace otb
 {
 
 /** \class GaborFilterGenerator
- * This class allows to generate gabor filter convolution mask. The mask is stored
+ * This class allows generating a gabor filter convolution mask. The mask is stored
  * in a linear buffer of type itk::Array returned by the GetFilter() method.
  *
  * When calling the GetFilter() method, if the filter has to be regenerated, it will be

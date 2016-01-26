@@ -137,7 +137,7 @@ private:
   LUMImageIO(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /** Internal method to read header informations */
+  /** Internal method to read header information */
   bool InternalReadHeaderInformation(std::fstream& file, const bool reportError);
   /** This method get the LUM type */
   int CaiGetTypeLum(const char *          type_code,

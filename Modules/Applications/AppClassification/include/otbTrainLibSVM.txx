@@ -29,7 +29,7 @@ namespace Wrapper
   ::InitLibSVMParams()
   {
     AddChoice("classifier.libsvm", "LibSVM classifier");
-    SetParameterDescription("classifier.libsvm", "This group of parameters allows to set SVM classifier parameters.");
+    SetParameterDescription("classifier.libsvm", "This group of parameters allows setting SVM classifier parameters.");
     AddParameter(ParameterType_Choice, "classifier.libsvm.k", "SVM Kernel Type");
     AddChoice("classifier.libsvm.k.linear", "Linear");
     AddChoice("classifier.libsvm.k.rbf", "Gaussian radial basis function");

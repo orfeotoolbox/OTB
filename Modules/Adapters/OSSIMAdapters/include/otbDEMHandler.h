@@ -46,13 +46,13 @@ namespace otb
  * configured by this class and this will ensure consistency
  * throughout the library.
  *
- * The class allows to configure a directory containing DEM tiles
+ * The class allows configuring a directory containing DEM tiles
  * (DTED or SRTM supported) using the OpenDEMDirectory() method. The
- * OpenGeoidFile() method allows to input a geoid file as well. Last,
+ * OpenGeoidFile() method allows inputting a geoid file as well. Last,
  * a default height above ellipsoid can be set using the
  * SetDefaultHeightAboveEllipsoid() method.
  *
- * The class allows to retrieve either height above ellipsoid or
+ * The class allows retrieving either height above ellipsoid or
  * height above Mean Sea Level (MSL).
  *
  * Here is the complete description of both methods output depending
@@ -169,11 +169,11 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  // Ossim does not allow to retrieve the geoid file path
+  // Ossim does not allow retrieving the geoid file path
   // We therefore must keep it on our side
   std::string m_GeoidFile;
 
-  // Ossim does not allow to retrieve the default height above
+  // Ossim does not allow retrieving the default height above
   // ellipsoid We therefore must keep it on our side
   double m_DefaultHeightAboveEllipsoid;
 

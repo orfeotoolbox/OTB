@@ -95,7 +95,7 @@ protected:
 
   /** GenerateOutputInformation
         * Set the number of bands of the output rule image.
-        * Copy informations from the input image if existing.
+        * Copy information from the input image if existing.
         **/
   virtual void GenerateOutputInformation();
 

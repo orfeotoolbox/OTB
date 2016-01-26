@@ -53,7 +53,7 @@ private:
     SetDescription("Generate a vector data from OSM on the input image extend");
     // Documentation
     SetDocName("Open Street Map layers importations applications");
-    SetDocLongDescription("Generate a vector data from Open Street Map data. A DEM could be use. By default, the entire layer is downloaded, an image can be use as support for the OSM data. The application can provide also available classes in layers . This application required an Internet access. Informations about the OSM project : http://www.openstreetmap.fr/");
+    SetDocLongDescription("Generate a vector data from Open Street Map data. A DEM could be use. By default, the entire layer is downloaded, an image can be use as support for the OSM data. The application can provide also available classes in layers . This application required an Internet access. Information about the OSM project : http://www.openstreetmap.fr/");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Convertion");

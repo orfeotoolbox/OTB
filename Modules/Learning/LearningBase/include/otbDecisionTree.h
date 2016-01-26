@@ -68,7 +68,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(DecisionTree, DataObject);
 
   typedef typename std::pair< AttributeValueType, DecisionTreeTestType > KeyType;

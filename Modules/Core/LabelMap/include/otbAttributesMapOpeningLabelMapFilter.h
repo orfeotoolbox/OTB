@@ -28,7 +28,7 @@ namespace otb
  * \brief Attributes opening for AttributesMapLabelObject
  *
  * This class extends the itk::AttributeOpeningLabelMapFilter to
- * handle AttributesMapLabelObject. Thus it allows to perform openings
+ * handle AttributesMapLabelObject. Thus it allows performing openings
  * for any kind of attributes in the attributes map.
  *
  * \sa AttributeLabelObject, AttributeOpeningLabelMapFilter

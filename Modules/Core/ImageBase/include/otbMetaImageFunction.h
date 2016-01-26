@@ -29,7 +29,7 @@ namespace otb
 /** \class MetaImageFunction
  *  \brief Concatenate results from multiple ImageFunction
  *
- *  The MetaImageFunction class allows to call multiple ImageFunction at the same location
+ *  The MetaImageFunction class allows calling multiple ImageFunction at the same location
  *  and to concatenate their result into a single VariableLengthVector.
  *
  *  In the case of ImageFunction which do not produce VariableLengthVector, one can wrap these
