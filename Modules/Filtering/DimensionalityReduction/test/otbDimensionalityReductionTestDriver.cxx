@@ -4,7 +4,7 @@ void RegisterTests()
   REGISTER_TEST(otbNormalizeInnerProductPCAImageFilterNew);
   REGISTER_TEST(otbFastICAInternalOptimizerVectorImageFilterNewTest);
   REGISTER_TEST(otbFastICAImageFilterNewTest);
-  REGISTER_TEST(otbFastICAImageFilterTest);
+  //##>REGISTER_TEST(otbFastICAImageFilterTest);
   REGISTER_TEST(otbNormalizeInnerProductPCAImageFilter);
   REGISTER_TEST(otbMaximumAutocorrelationFactorImageFilterNew);
   REGISTER_TEST(otbMaximumAutocorrelationFactorImageFilter);

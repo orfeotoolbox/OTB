@@ -53,7 +53,7 @@ int otbDisparityMapToDEMFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) 
    return EXIT_SUCCESS;
 }
 
-int otbDisparityMapToDEMFilter(int argc, char* argv[])
+/*int otbDisparityMapToDEMFilter(int argc, char* argv[])
 {
   if ((argc != 11) && (argc != 12))
     {
@@ -112,4 +112,4 @@ int otbDisparityMapToDEMFilter(int argc, char* argv[])
   writer->Update();
 
   return EXIT_SUCCESS;
-}
+}*/

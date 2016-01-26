@@ -22,24 +22,24 @@ otb_add_test(NAME trTeOBIAShapeAttributeComputationTest COMMAND ${OTB_TEST_DRIVE
     ${TEMP}/OBIAShapeAttribute.txt
 )
 
-if(OTBMathParser_LOADED)
-otb_add_test(NAME trTeOBIARadiometricAttributesLabelMapFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
-    ${BASELINE}/OBIARadiometricAttributes.png
-    ${TEMP}/OBIARadiometricAttributes.png
-  Execute $<TARGET_FILE:RadiometricAttributesLabelMapFilterExample>
-    ${INPUTDATA}/qb_RoadExtract.tif
-    ${TEMP}/OBIARadiometricAttributes.png
-    ${TEMP}/qb_RoadExtract_Radiometry_pretty.png
-    STATS::Band1::Mean
-    0
-    0.5
-    16
-    16
-    50
-    1.0
-)
-endif()
+##>if(OTBMathParser_LOADED)
+##>otb_add_test(NAME trTeOBIARadiometricAttributesLabelMapFilterTest COMMAND ${OTB_TEST_DRIVER}
+##>  --compare-image ${NOTOL}
+##>    ${BASELINE}/OBIARadiometricAttributes.png
+##>    ${TEMP}/OBIARadiometricAttributes.png
+##>  Execute $<TARGET_FILE:RadiometricAttributesLabelMapFilterExample>
+##>    ${INPUTDATA}/qb_RoadExtract.tif
+##>    ${TEMP}/OBIARadiometricAttributes.png
+##>    ${TEMP}/qb_RoadExtract_Radiometry_pretty.png
+##>    STATS::Band1::Mean
+##>    0
+##>    0.5
+##>    16
+##>    16
+##>    50
+##>    1.0
+##>)
+##>endif()
 
 otb_add_test(NAME trTeLabelMapToVectorData COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:LabelMapToVectorData>

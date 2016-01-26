@@ -13,7 +13,7 @@ otbNNearestTransformsLinearInterpolateDisplacementFieldGeneratorNew.cxx
 otbNNearestPointsLinearInterpolateDisplacementFieldGeneratorNew.cxx
 otbNearestTransformDisplacementFieldGenerator.cxx
 otbNearestPointDisplacementFieldGenerator.cxx
-otbBSplinesInterpolateTransformDisplacementFieldGenerator.cxx
+##>otbBSplinesInterpolateTransformDisplacementFieldGenerator.cxx
 otbBSplinesInterpolateDisplacementFieldGenerator.cxx
 otbBSplinesInterpolateTransformDisplacementFieldGeneratorNew.cxx
 )
@@ -79,13 +79,13 @@ otb_add_test(NAME dmTvNearestPointDisplacementFieldGenerator COMMAND otbDisplace
   ${TEMP}/dmTvNearestPointDisplacementField.hdr
   )
 
-otb_add_test(NAME dmTvBSplinesInterpolateTransformDisplacementFieldGenerator COMMAND otbDisplacementFieldTestDriver
-  --compare-image ${EPSILON_4}
-  ${BASELINE}/dmTvBSplinesInterpolateTransformDeformationFieldGenerator.hdr
-  ${TEMP}/dmTvBSplinesInterpolateTransformDisplacementFieldGenerator.hdr
-  otbBSplinesInterpolateTransformDisplacementFieldGenerator
-  ${TEMP}/dmTvBSplinesInterpolateTransformDisplacementFieldGenerator.hdr
-  )
+##>otb_add_test(NAME dmTvBSplinesInterpolateTransformDisplacementFieldGenerator COMMAND otbDisplacementFieldTestDriver
+##>  --compare-image ${EPSILON_4}
+##>  ${BASELINE}/dmTvBSplinesInterpolateTransformDeformationFieldGenerator.hdr
+##>  ${TEMP}/dmTvBSplinesInterpolateTransformDisplacementFieldGenerator.hdr
+##>  otbBSplinesInterpolateTransformDisplacementFieldGenerator
+##>  ${TEMP}/dmTvBSplinesInterpolateTransformDisplacementFieldGenerator.hdr
+##>  )
 
 otb_add_test(NAME dmTvBSplinesInterpolateDisplacementFieldGenerator COMMAND otbDisplacementFieldTestDriver
   --compare-image ${EPSILON_10}

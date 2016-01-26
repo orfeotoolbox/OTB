@@ -35,16 +35,16 @@ otb_add_test(NAME bfTuNormalizeInnerProductPCAImageFilterNew COMMAND otbDimensio
 otb_add_test(NAME bfTuFastICAImageFilterNew COMMAND otbDimensionalityReductionTestDriver
   otbFastICAImageFilterNewTest)
 
-otb_add_test(NAME bfTvFastICAImageFilter COMMAND otbDimensionalityReductionTestDriver
-  --compare-n-images ${EPSILON_7} 2
-  ${BASELINE}/hyTvFastICAImageFilter.tif
-  ${TEMP}/hyTvFastICAImageFilter.tif
-  ${BASELINE}/hyTvFastICAImageFilterInv.tif
-  ${TEMP}/hyTvFastICAImageFilterInv.tif
-  otbFastICAImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -inv ${TEMP}/hyTvFastICAImageFilterInv.tif
-  -out ${TEMP}/hyTvFastICAImageFilter.tif)
+##>otb_add_test(NAME bfTvFastICAImageFilter COMMAND otbDimensionalityReductionTestDriver
+##>  --compare-n-images ${EPSILON_7} 2
+##>  ${BASELINE}/hyTvFastICAImageFilter.tif
+##>  ${TEMP}/hyTvFastICAImageFilter.tif
+##>  ${BASELINE}/hyTvFastICAImageFilterInv.tif
+##>  ${TEMP}/hyTvFastICAImageFilterInv.tif
+##>  otbFastICAImageFilterTest
+##>  -in ${INPUTDATA}/cupriteSubHsi.tif
+##>  -inv ${TEMP}/hyTvFastICAImageFilterInv.tif
+##>  -out ${TEMP}/hyTvFastICAImageFilter.tif)
 
 otb_add_test(NAME bfTuFastICAInternalOptimizerVectorImageFilterNew COMMAND otbDimensionalityReductionTestDriver
   otbFastICAInternalOptimizerVectorImageFilterNewTest)

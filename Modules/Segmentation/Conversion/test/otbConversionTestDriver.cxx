@@ -14,8 +14,8 @@ void RegisterTests()
   REGISTER_TEST(otbPolygonizationRasterizationTest);
   REGISTER_TEST(otbVectorDataRasterizeFilterNew);
   REGISTER_TEST(otbVectorDataRasterizeFilter);
-  REGISTER_TEST(otbLabelImageRegionPruningFilter);
-  REGISTER_TEST(otbLabelImageRegionMergingFilter);
+  //##>REGISTER_TEST(otbLabelImageRegionPruningFilter);
+  //##>REGISTER_TEST(otbLabelImageRegionMergingFilter);
   REGISTER_TEST(otbLabelMapToVectorDataFilter);
   REGISTER_TEST(otbLabelMapToVectorDataFilterNew);
 }

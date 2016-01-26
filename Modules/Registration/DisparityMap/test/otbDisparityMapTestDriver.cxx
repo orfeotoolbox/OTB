@@ -3,7 +3,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbDisparityMapEstimationMethod);
   REGISTER_TEST(otbDisparityMapToDEMFilterNew);
-  REGISTER_TEST(otbDisparityMapToDEMFilter);
+  //##>REGISTER_TEST(otbDisparityMapToDEMFilter);
   REGISTER_TEST(otbDisparityMapMedianFilterNew);
   REGISTER_TEST(otbDisparityMapMedianFilter);
   REGISTER_TEST(otbDisparityTranslateFilterNew);
@@ -12,7 +12,7 @@ void RegisterTests()
   REGISTER_TEST(otbSubPixelDisparityImageFilter);
   REGISTER_TEST(otbDisparityMapEstimationMethodNew);
   REGISTER_TEST(otbDisparityMapTo3DFilterNew);
-  REGISTER_TEST(otbDisparityMapTo3DFilter);
+  //##>REGISTER_TEST(otbDisparityMapTo3DFilter);
   REGISTER_TEST(otbMultiDisparityMapTo3DFilterNew);
   REGISTER_TEST(otbMultiDisparityMapTo3DFilter);
   REGISTER_TEST(otbFineRegistrationImageFilterNew);

@@ -190,7 +190,7 @@ int otbDescriptorsListSampleGenerator(int argc, char* argv[])
 
 
 
-int otbDescriptorsSVMModelCreation(int argc, char* argv[])
+/*int otbDescriptorsSVMModelCreation(int argc, char* argv[])
 {
   if (argc != 7)
     {
@@ -247,4 +247,4 @@ int otbDescriptorsSVMModelCreation(int argc, char* argv[])
   svmEstimator->GetModel()->SaveModel(outputFileName);
 
   return EXIT_SUCCESS;
-}
+}*/

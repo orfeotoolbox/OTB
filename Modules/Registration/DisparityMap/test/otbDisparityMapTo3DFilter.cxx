@@ -39,7 +39,7 @@ int otbDisparityMapTo3DFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) []
   return EXIT_SUCCESS;
 }
 
-int otbDisparityMapTo3DFilter(int argc, char* argv[])
+/*int otbDisparityMapTo3DFilter(int argc, char* argv[])
 {
   typedef otb::ImageFileReader<FloatImageType>    ReaderType;
 
@@ -107,4 +107,4 @@ int otbDisparityMapTo3DFilter(int argc, char* argv[])
   writer->Update();
 
   return EXIT_SUCCESS;
-}
+}*/

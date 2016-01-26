@@ -44,7 +44,7 @@ int otbFastICAImageFilterNewTest ( int itkNotUsed(argc), char* itkNotUsed(argv) 
   return EXIT_SUCCESS;
 }
 
-int otbFastICAImageFilterTest ( int argc, char* argv[] )
+/*int otbFastICAImageFilterTest ( int argc, char* argv[] )
 {
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
@@ -141,4 +141,4 @@ int otbFastICAImageFilterTest ( int argc, char* argv[] )
   }
 
   return EXIT_SUCCESS;
-}
+}*/
