@@ -143,7 +143,7 @@ int otbMaskedIteratorDecoratorReverse(int itkNotUsed(argc), char * itkNotUsed(ar
 // i.e all locations where mask value != 0 are in the iteration (injection)
 // and mask value != 0 at all iteration locations (surjection)
 // Templated to test decoration of different iterator types
-template <typename ImageType, template <typename ImageType> typename IteratorType>
+template <typename ImageType, template <class> class IteratorType>
 int BijectiveTest()
 {
   typename ImageType::Pointer image = GetTestImage<ImageType>(10, 10);
