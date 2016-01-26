@@ -143,16 +143,16 @@ int otbMaskedIteratorDecoratorReverse(int itkNotUsed(argc), char * itkNotUsed(ar
 // i.e all locations where mask value != 0 are in the iteration (injection)
 // and mask value != 0 at all iteration locations (surjection)
 // Templated to test decoration of different iterator types
-template <typename ImageType, template <class> class IteratorType>
+template <typename IteratorType>
 int BijectiveTest()
 {
-  typename ImageType::Pointer image = GetTestImage<ImageType>(10, 10);
-  typename ImageType::Pointer mask = GetTestImage<ImageType>(10, 0);
-  typename ImageType::RegionType region(image->GetLargestPossibleRegion());
-  FillHalf<ImageType>(mask, region, 1);
+  typename IteratorType::ImageType::Pointer image = GetTestImage<typename IteratorType::ImageType>(10, 10);
+  typename IteratorType::ImageType::Pointer mask = GetTestImage<typename IteratorType::ImageType>(10, 0);
+  typename IteratorType::ImageType::RegionType region(image->GetLargestPossibleRegion());
+  FillHalf<typename IteratorType::ImageType>(mask, region, 1);
 
-  otb::MaskedIteratorDecorator<IteratorType<ImageType> > itDecorated(mask, image, region);
-  IteratorType<ImageType> it(image, region);
+  otb::MaskedIteratorDecorator<IteratorType> itDecorated(mask, image, region);
+  IteratorType it(image, region);
 
   it.GoToBegin();
   itDecorated.GoToBegin();
@@ -173,27 +173,24 @@ int BijectiveTest()
 int otbMaskedIteratorDecoratorBijective(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Image<double, 2> ImageType;
-  return BijectiveTest<ImageType, itk::ImageRegionIterator>()
-      && BijectiveTest<ImageType, itk::ImageRegionConstIterator>()
-      && BijectiveTest<ImageType, itk::ImageRandomConstIteratorWithIndex>()
-      && BijectiveTest<ImageType, otb::SubsampledImageRegionIterator>()
-      && BijectiveTest<ImageType, itk::ImageRandomIteratorWithIndex>()
-      && BijectiveTest<ImageType, itk::ImageScanlineIterator>()
-      && BijectiveTest<ImageType, itk::ImageScanlineConstIterator>()
-      && BijectiveTest<ImageType, itk::ImageRandomNonRepeatingConstIteratorWithIndex>()
-      && BijectiveTest<ImageType, itk::ImageRandomNonRepeatingIteratorWithIndex>()
+  return BijectiveTest< itk::ImageRegionIterator<ImageType> >()
+      && BijectiveTest< itk::ImageRegionConstIterator<ImageType> >()
+      && BijectiveTest< itk::ImageRandomConstIteratorWithIndex<ImageType> >()
+      && BijectiveTest< otb::SubsampledImageRegionIterator<ImageType> >()
+      && BijectiveTest< itk::ImageRandomIteratorWithIndex<ImageType> >()
+      && BijectiveTest< itk::ImageScanlineIterator<ImageType> >()
+      && BijectiveTest< itk::ImageScanlineConstIterator<ImageType> >()
+      && BijectiveTest< itk::ImageRandomNonRepeatingConstIteratorWithIndex<ImageType> >()
+      && BijectiveTest< itk::ImageRandomNonRepeatingIteratorWithIndex<ImageType> >()
       ;
 
       // Other iterators potentially compatible:
 
-      // Different template interface, testable but not with BijectiveTest:
-      // itk::PathIterator
-      // itk::NeighborhoodIterator
-      // itk::DataObjectIterator
-
       // Different constructor, testable but not with BijectiveTest
+      // itk::PathIterator
       // itk::LineIterator
       // itk::SliceIterator
+      // itk::NeighborhoodIterator
 
       // GoToEnd is not implemented
       // itk::ImageLinearIteratorWithIndex
