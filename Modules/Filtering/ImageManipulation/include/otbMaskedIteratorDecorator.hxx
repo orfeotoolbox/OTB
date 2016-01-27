@@ -23,15 +23,19 @@
 namespace otb
 {
 
+/*
+For documentation on constructor argument forwarding with boost see:
+http://www.boost.org/doc/libs/1_60_0/doc/html/move/construct_forwarding.html
+*/
 template <typename TIteratorType>
 template <typename T1>
 MaskedIteratorDecorator<TIteratorType>::MaskedIteratorDecorator(
                         typename MaskType::Pointer mask,
                         typename ImageType::Pointer image,
                         BOOST_FWD_REF(T1) arg1):
-                          m_itMask(mask,
+                          m_ItMask(mask,
                                    boost::forward<T1>(arg1)),
-                          m_itImage(image,
+                          m_ItImage(image,
                                     boost::forward<T1>(arg1))
 {
   ComputeMaskedBegin();
@@ -44,7 +48,7 @@ MaskedIteratorDecorator<TIteratorType>::MaskedIteratorDecorator(
                         typename ImageType::Pointer image,
                         BOOST_FWD_REF(T1) arg1,
                         BOOST_FWD_REF(T2) arg2):
-                          m_itMask(mask,
+                          m_ItMask(mask,
                                    boost::forward<T1>(arg1),
                                    boost::forward<T2>(arg2)),
                           TIteratorType(image,
@@ -62,7 +66,7 @@ MaskedIteratorDecorator<TIteratorType>::MaskedIteratorDecorator(
                         BOOST_FWD_REF(T1) arg1,
                         BOOST_FWD_REF(T2) arg2,
                         BOOST_FWD_REF(T3) arg3):
-                          m_itMask(mask,
+                          m_ItMask(mask,
                                    boost::forward<T1>(arg1),
                                    boost::forward<T2>(arg2),
                                    boost::forward<T3>(arg3)),
@@ -77,33 +81,33 @@ MaskedIteratorDecorator<TIteratorType>::MaskedIteratorDecorator(
 template <typename TIteratorType>
 typename MaskedIteratorDecorator<TIteratorType>::IndexType MaskedIteratorDecorator<TIteratorType>::GetIndex() const
 {
-  return m_itMask.GetIndex();
+  return m_ItMask.GetIndex();
 }
 
 template <typename TIteratorType>
 void MaskedIteratorDecorator<TIteratorType>::GoToBegin()
 {
-  m_itMask.SetIndex(m_begin);
-  m_itImage.SetIndex(m_begin);
+  m_ItMask.SetIndex(m_begin);
+  m_ItImage.SetIndex(m_begin);
 }
 
 template <typename TIteratorType>
 void MaskedIteratorDecorator<TIteratorType>::GoToEnd()
 {
-  m_itMask.GoToEnd();
-  m_itImage.GoToEnd();
+  m_ItMask.GoToEnd();
+  m_ItImage.GoToEnd();
 }
 
 template <typename TIteratorType>
 bool MaskedIteratorDecorator<TIteratorType>::IsAtBegin() const
 {
-  return m_itMask.GetIndex() == m_begin || m_itImage.GetIndex() == m_begin;
+  return m_ItMask.GetIndex() == m_begin || m_ItImage.GetIndex() == m_begin;
 }
 
 template <typename TIteratorType>
 bool MaskedIteratorDecorator<TIteratorType>::IsAtEnd() const
 {
-  return m_itMask.IsAtEnd() || m_itImage.IsAtEnd();
+  return m_ItMask.IsAtEnd() || m_ItImage.IsAtEnd();
 }
 
 // Wrap the underlying iterators to skip masked pixels
@@ -112,9 +116,9 @@ MaskedIteratorDecorator<TIteratorType>& MaskedIteratorDecorator<TIteratorType>::
 {
   do
   {
-    ++m_itMask;
-    ++m_itImage;
-  } while (m_itMask.Value() == 0 && !this->IsAtEnd());
+    ++m_ItMask;
+    ++m_ItImage;
+  } while (m_ItMask.Value() == 0 && !this->IsAtEnd());
   return *this;
 }
 
@@ -124,46 +128,46 @@ MaskedIteratorDecorator<TIteratorType>& MaskedIteratorDecorator<TIteratorType>::
 {
   do
   {
-    --m_itMask;
-    --m_itImage;
-  } while (m_itMask.Value() == 0 && !this->IsAtBegin());
+    --m_ItMask;
+    --m_ItImage;
+  } while (m_ItMask.Value() == 0 && !this->IsAtBegin());
   return *this;
 }
 
 template <typename TIteratorType>
 void MaskedIteratorDecorator<TIteratorType>::Set(const PixelType& value) const
 {
-  m_itImage.Set(value);
+  m_ItImage.Set(value);
 }
 
 template <typename TIteratorType>
 typename MaskedIteratorDecorator<TIteratorType>::PixelType& MaskedIteratorDecorator<TIteratorType>::Value(void) // const ?
 {
-  return m_itImage.Value();
+  return m_ItImage.Value();
 }
 
 template <typename TIteratorType>
 TIteratorType& MaskedIteratorDecorator<TIteratorType>::GetMaskIterator()
 {
-  return m_itMask;
+  return m_ItMask;
 }
 
 template <typename TIteratorType>
 const TIteratorType& MaskedIteratorDecorator<TIteratorType>::GetMaskIterator() const
 {
-  return m_itMask;
+  return m_ItMask;
 }
 
 template <typename TIteratorType>
 TIteratorType& MaskedIteratorDecorator<TIteratorType>::GetImageIterator()
 {
-  return m_itImage;
+  return m_ItImage;
 }
 
 template <typename TIteratorType>
 const TIteratorType& MaskedIteratorDecorator<TIteratorType>::GetImageIterator() const
 {
-  return m_itImage;
+  return m_ItImage;
 }
 
 // Compute begin iterator position taking into account the mask
@@ -171,16 +175,16 @@ template <typename TIteratorType>
 void MaskedIteratorDecorator<TIteratorType>::ComputeMaskedBegin()
 {
   // Start at the iterator pair actual begin
-  m_itMask.GoToBegin();
-  m_itImage.GoToEnd();
+  m_ItMask.GoToBegin();
+  m_ItImage.GoToEnd();
 
   // Advance to the first non-masked position, or the end
-  while (m_itMask.Value() == 0 && !m_itMask.IsAtEnd() && !m_itImage.IsAtEnd())
+  while (m_ItMask.Value() == 0 && !m_ItMask.IsAtEnd() && !m_ItImage.IsAtEnd())
   {
-    ++m_itMask;
-    ++m_itImage;
+    ++m_ItMask;
+    ++m_ItImage;
   }
-  m_begin = m_itMask.GetIndex();
+  m_begin = m_ItMask.GetIndex();
 }
 
 } // namespace otb
