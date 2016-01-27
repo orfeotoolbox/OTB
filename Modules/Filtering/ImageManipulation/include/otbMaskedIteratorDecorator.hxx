@@ -174,7 +174,8 @@ const TIteratorType& MaskedIteratorDecorator<TIteratorType>::GetImageIterator() 
 template <typename TIteratorType>
 void MaskedIteratorDecorator<TIteratorType>::ComputeMaskedBegin()
 {
-  // Start at the iterator pair actual begin
+  // We must search for the first index where the image is not masked
+  // Start searching at the begining
   m_ItMask.GoToBegin();
   m_ItImage.GoToEnd();
 
@@ -184,7 +185,8 @@ void MaskedIteratorDecorator<TIteratorType>::ComputeMaskedBegin()
     ++m_ItMask;
     ++m_ItImage;
   }
-  m_Begin = m_ItMask.GetIndex();
+  // Remember it so that GoToBegin and IsAtBegin can check it
+  this->m_Begin = m_ItMask.GetIndex();
 }
 
 } // namespace otb
