@@ -194,15 +194,15 @@ otb_add_test(NAME seTeNeighborhoodConnectedImageFilterTest3 COMMAND ${OTB_TEST_D
 
 # ------- WatershedSegmentationTest----------
 
-otb_add_test(NAME seTeWatershedSegmentationTest2 COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/WatershedSegmentation1Output2.png
-    ${TEMP}/WatershedSegmentation1Output2.png
-  Execute $<TARGET_FILE:WatershedSegmentation>
-    ${INPUTDATA}/ROI_QB_MUL_3.tif
-    ${TEMP}/WatershedSegmentation1Output2.png
-    2 10 0.001 0.15 0
-)
+##>otb_add_test(NAME seTeWatershedSegmentationTest2 COMMAND ${OTB_TEST_DRIVER}
+##>  --compare-n-images ${NOTOL} 1
+##>    ${BASELINE}/WatershedSegmentation1Output2.png
+##>    ${TEMP}/WatershedSegmentation1Output2.png
+##>  Execute $<TARGET_FILE:WatershedSegmentation>
+##>    ${INPUTDATA}/ROI_QB_MUL_3.tif
+##>    ${TEMP}/WatershedSegmentation1Output2.png
+##>    2 10 0.001 0.15 0
+##>)
 
 # ------- ConnectedThresholdImageFilterTest----------
 

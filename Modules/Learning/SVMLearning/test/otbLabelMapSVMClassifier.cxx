@@ -81,7 +81,7 @@ int otbLabelMapSVMClassifierNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   return EXIT_SUCCESS;
 }
 
-int otbLabelMapSVMClassifier(int itkNotUsed(argc), char * argv[])
+/*##>int otbLabelMapSVMClassifier(int itkNotUsed(argc), char * argv[])
 {
   const char * infname  = argv[1];
   const char * lfname   = argv[2];
@@ -174,4 +174,4 @@ int otbLabelMapSVMClassifier(int itkNotUsed(argc), char * argv[])
   writer->Update();
 
   return EXIT_SUCCESS;
-}
+}*/

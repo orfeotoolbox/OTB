@@ -84,30 +84,30 @@ otb_add_test(NAME bfTeIndexedToRGBExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/buildingExtractionRGB.png
     ${TEMP}/buildingExtractionIndexed_scaled.png
 )
-if(OTBMathParser_LOADED)
-otb_add_test(NAME bfTeMeanShiftSegmentationFilterExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 4
-    ${BASELINE}/MSClusteredOutput.tif
-    ${TEMP}/MSClusteredOutput.tif
-    ${BASELINE}/MSLabeledOutput.tif
-    ${TEMP}/MSLabeledOutput.tif
-    ${BASELINE}/MSLabeledOutput-pretty.png
-    ${TEMP}/MSLabeledOutput-pretty.png
-    ${BASELINE}/MSClusteredOutput-pretty.png
-    ${TEMP}/MSClusteredOutput-pretty.png
-  Execute $<TARGET_FILE:MeanShiftSegmentationFilterExample>
-    ${INPUTDATA}/ROI_QB_MUL_1.png
-    ${TEMP}/MSLabeledOutput.tif
-    ${TEMP}/MSClusteredOutput.tif
-    ${TEMP}/MSLabeledOutput-pretty.png
-    ${TEMP}/MSClusteredOutput-pretty.png
-    16
-    16
-    100
-    100
-    0.1
-)
-endif()
+##>if(OTBMathParser_LOADED)
+##>otb_add_test(NAME bfTeMeanShiftSegmentationFilterExampleTest COMMAND ${OTB_TEST_DRIVER}
+##>  --compare-n-images ${NOTOL} 4
+##>    ${BASELINE}/MSClusteredOutput.tif
+##>    ${TEMP}/MSClusteredOutput.tif
+##>    ${BASELINE}/MSLabeledOutput.tif
+##>    ${TEMP}/MSLabeledOutput.tif
+##>    ${BASELINE}/MSLabeledOutput-pretty.png
+##>    ${TEMP}/MSLabeledOutput-pretty.png
+##>    ${BASELINE}/MSClusteredOutput-pretty.png
+##>    ${TEMP}/MSClusteredOutput-pretty.png
+##>  Execute $<TARGET_FILE:MeanShiftSegmentationFilterExample>
+##>    ${INPUTDATA}/ROI_QB_MUL_1.png
+##>    ${TEMP}/MSLabeledOutput.tif
+##>    ${TEMP}/MSClusteredOutput.tif
+##>    ${TEMP}/MSLabeledOutput-pretty.png
+##>    ${TEMP}/MSClusteredOutput-pretty.png
+##>    16
+##>    16
+##>    100
+##>    100
+##>    0.1
+##>)
+##>endif()
 # ------- HillShadingExampleTest ----------
 
 otb_add_test(NAME bfTeHillShadingExampleTest COMMAND ${OTB_TEST_DRIVER}

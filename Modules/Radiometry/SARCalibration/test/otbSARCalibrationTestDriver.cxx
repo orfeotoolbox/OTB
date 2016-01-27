@@ -3,8 +3,8 @@ void RegisterTests()
 {
   REGISTER_TEST(otbSarBrightnessFunction);
   REGISTER_TEST(otbSarBrightnessToImageFilterTestWithoutNoise);
-  REGISTER_TEST(otbTerraSarBrightnessImageFilterTest);
-  REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithRealPixelTest);
+  //##>REGISTER_TEST(otbTerraSarBrightnessImageFilterTest);
+  //##>REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithRealPixelTest);
   REGISTER_TEST(otbTerraSarBrightnessImageFilterNew);
   REGISTER_TEST(otbSarParametricMapFunctionToImageFilter);
   REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithExtractROIBeforeTest);
@@ -18,7 +18,7 @@ void RegisterTests()
   REGISTER_TEST(otbSarBrightnessFunctionWithoutNoise);
   REGISTER_TEST(otbSarRadiometricCalibrationFunction);
   REGISTER_TEST(otbSarRadiometricCalibrationFunctionWithoutNoise);
-  REGISTER_TEST(otbTerraSarBrightnessImageComplexFilterTest);
-  REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest);
+  //##>REGISTER_TEST(otbTerraSarBrightnessImageComplexFilterTest);
+  //##>REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest);
   REGISTER_TEST(otbSarBrightnessToImageFilterTest);
 }
