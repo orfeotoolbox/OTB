@@ -5,6 +5,7 @@ otb_module(OTBSampling
     OTBCommon
     OTBImageManipulation
     OTBITK
+    OTBStatistics
 
   TEST_DEPENDS
     OTBTestKernel
