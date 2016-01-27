@@ -36,19 +36,19 @@ string(TOLOWER ${filter} lfilter)
 # Derive output file name
 set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
-OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
-                     APP      Segmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
-                              -filter ${lfilter}
-                              ${${lfilter}_parameters}
-                              -mode ${lmode}
-                              -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
-                              ${${lmode}_parameters}
-                     VALID    ${${lfilter}_option}
-                              ${${lmode}_comparison}
-                              ${${lmode}_ref_path}/${OUTFILE}
-                              ${TEMP}/${OUTFILE}
-                     )
+##>OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
+##>                     APP      Segmentation
+##>                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+##>                              -filter ${lfilter}
+##>                              ${${lfilter}_parameters}
+##>                              -mode ${lmode}
+##>                              -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
+##>                              ${${lmode}_parameters}
+##>                     VALID    ${${lfilter}_option}
+##>                              ${${lmode}_comparison}
+##>                              ${${lmode}_ref_path}/${OUTFILE}
+##>                              ${TEMP}/${OUTFILE}
+##>                     )
 
 endforeach()
 endforeach()
@@ -63,19 +63,19 @@ set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" 
 
 set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
-OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULOVW
-                     APP      Segmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
-                              -filter ${lfilter}
-                              ${${lfilter}_parameters}
-                              -mode ${lmode}
-                              -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
-                              ${${lmode}_parameters}
-                     VALID    ${${lfilter}_option}
-                              ${${lmode}_comparison}
-                              ${${lmode}_ref_path}/${OUTFILE}
-                              ${TEMP}/${OUTFILE}
-                     )
+##>OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULOVW
+##>                     APP      Segmentation
+##>                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+##>                              -filter ${lfilter}
+##>                              ${${lfilter}_parameters}
+##>                              -mode ${lmode}
+##>                              -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
+##>                              ${${lmode}_parameters}
+##>                     VALID    ${${lfilter}_option}
+##>                              ${${lmode}_comparison}
+##>                              ${${lmode}_ref_path}/${OUTFILE}
+##>                              ${TEMP}/${OUTFILE}
+##>                     )
 
 set_tests_properties(apTvSeSegmentation${filter}${mode}_ULOVW
                      PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
@@ -84,19 +84,19 @@ set_tests_properties(apTvSeSegmentation${filter}${mode}_ULOVW
 # Add a test for ULU
 set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulu")
 
-OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
-                     APP      Segmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
-                              -filter ${lfilter}
-                              ${${lfilter}_parameters}
-                              -mode ${lmode}
-                              -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
-                              ${${lmode}_parameters}
-                     VALID    ${${lfilter}_option}
-                              ${${lmode}_comparison}
-                              ${${lmode}_ref_path}/${OUTFILE}_ULU
-                              ${TEMP}/${OUTFILE}
-                     )
+##>OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
+##>                     APP      Segmentation
+##>                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+##>                              -filter ${lfilter}
+##>                              ${${lfilter}_parameters}
+##>                              -mode ${lmode}
+##>                              -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
+##>                              ${${lmode}_parameters}
+##>                     VALID    ${${lfilter}_option}
+##>                              ${${lmode}_comparison}
+##>                              ${${lmode}_ref_path}/${OUTFILE}_ULU
+##>                              ${TEMP}/${OUTFILE}
+##>                     )
 
 set_tests_properties(apTvSeSegmentation${filter}${mode}_ULU
                      PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
@@ -105,19 +105,19 @@ set_tests_properties(apTvSeSegmentation${filter}${mode}_ULU
 # Add a test for ULCO
 set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulco")
 
-OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
-                     APP      Segmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
-                              -filter ${lfilter}
-                              ${${lfilter}_parameters}
-                              -mode ${lmode}
-                              -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
-                              ${${lmode}_parameters}
-                     VALID    ${${lfilter}_option}
-                              ${${lmode}_comparison}
-                              ${${lmode}_ref_path}/${OUTFILE}
-                              ${TEMP}/${OUTFILE}
-                     )
+##>OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
+##>                     APP      Segmentation
+##>                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+##>                              -filter ${lfilter}
+##>                              ${${lfilter}_parameters}
+##>                              -mode ${lmode}
+##>                              -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
+##>                              ${${lmode}_parameters}
+##>                     VALID    ${${lfilter}_option}
+##>                              ${${lmode}_comparison}
+##>                              ${${lmode}_ref_path}/${OUTFILE}
+##>                              ${TEMP}/${OUTFILE}
+##>                     )
 
 set_tests_properties(apTvSeSegmentation${filter}${mode}_ULCO
                      PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}

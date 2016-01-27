@@ -115,52 +115,52 @@ foreach(classifier ${classifierList})
   set(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
   set(OUTCONFMAP cl${classifier}ConfidenceMapQB1${raster_output_format})
 
-  otb_test_application(
-                       NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1
-                       APP      TrainImagesClassifier
-                       OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-                                -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-                                -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-                                -classifier ${lclassifier}
-                                ${${lclassifier}_parameters}
-                                -io.out ${TEMP}/${OUTMODELFILE}
-                                -rand 121212
+  ##>otb_test_application(
+                       ##>NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1
+                       ##>APP      TrainImagesClassifier
+                       ##>OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+                                ##>-io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
+                                ##>-io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
+                                ##>-classifier ${lclassifier}
+                                ##>${${lclassifier}_parameters}
+                                ##>-io.out ${TEMP}/${OUTMODELFILE}
+                                ##>-rand 121212
 
-                       VALID    ${ascii_comparison}
-                                ${ascii_ref_path}/${OUTMODELFILE}
-                                ${TEMP}/${OUTMODELFILE}
-                       )
+                       ##>VALID    ${ascii_comparison}
+                                ##>${ascii_ref_path}/${OUTMODELFILE}
+                                ##>${TEMP}/${OUTMODELFILE}
+                       ##>)
 
-  otb_test_application(
-                       NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1
-                       APP      TrainImagesClassifier
-                       OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-                                -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-                                -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-                                -classifier ${lclassifier}
-                                ${${lclassifier}_parameters}
-                                -io.out ${TEMP}/OutXML1_${OUTMODELFILE}
-                                -rand 121212
-                                -outxml ${TEMP}/cl${classifier}_OutXML1.xml
+  ##>otb_test_application(
+                       ##>NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1
+                       ##>APP      TrainImagesClassifier
+                       ##>OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+                                ##>-io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
+                                ##>-io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
+                                ##>-classifier ${lclassifier}
+                                ##>${${lclassifier}_parameters}
+                                ##>-io.out ${TEMP}/OutXML1_${OUTMODELFILE}
+                                ##>-rand 121212
+                                ##>-outxml ${TEMP}/cl${classifier}_OutXML1.xml
 
-                       VALID    ${ascii_comparison}
-                                ${ascii_ref_path}/${OUTMODELFILE}
-                                ${TEMP}/OutXML1_${OUTMODELFILE}
-                       )
+                       ##>VALID    ${ascii_comparison}
+                                ##>${ascii_ref_path}/${OUTMODELFILE}
+                                ##>${TEMP}/OutXML1_${OUTMODELFILE}
+                       ##>)
 
-  otb_test_application(
-                       NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1
-                       APP      TrainImagesClassifier
-                       OPTIONS  -inxml ${INPUTDATA}/cl${classifier}_OutXML1.xml
-                                -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-                                -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-                                -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-                                -io.out ${TEMP}/OutXML2_${OUTMODELFILE}
+  ##>otb_test_application(
+                       ##>NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1
+                       ##>APP      TrainImagesClassifier
+                       ##>OPTIONS  -inxml ${INPUTDATA}/cl${classifier}_OutXML1.xml
+                                ##>-io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+                                ##>-io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
+                                ##>-io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
+                                ##>-io.out ${TEMP}/OutXML2_${OUTMODELFILE}
 
-                       VALID    ${ascii_comparison}
-                                ${ascii_ref_path}/${OUTMODELFILE}
-                                ${TEMP}/OutXML2_${OUTMODELFILE}
-                       )
+                       ##>VALID    ${ascii_comparison}
+                                ##>${ascii_ref_path}/${OUTMODELFILE}
+                                ##>${TEMP}/OutXML2_${OUTMODELFILE}
+                       ##>)
 
                      #set_tests_properties(apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1)
 

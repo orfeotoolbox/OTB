@@ -96,23 +96,23 @@ otb_test_application(NAME apTvDmFineRegistrationTest
 #----------- GeneratePlyFile TESTS ----------------
 
 #----------- DisparityMapToElevationMap TESTS ----------------
-otb_test_application(NAME apTvDmDisparityMapToElevationMap
-                     APP  DisparityMapToElevationMap
-                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
-                             -io.left ${EXAMPLEDATA}/sensor_stereo_left.tif
-                             -io.right ${EXAMPLEDATA}/sensor_stereo_right.tif
-                             -io.lgrid ${INPUTDATA}/sensor_stereo_rectif_left.tif
-                             -io.rgrid ${INPUTDATA}/sensor_stereo_rectif_right.tif
-                             -io.out ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
-                             -hmin 130
-                             -hmax 220
-                             -elev.default 140
-                             -step 2.5
-                             -io.mask ${INPUTDATA}/sensor_stereo_dmap_mask.tif
-                     VALID   --compare-image ${EPSILON_10}
-                             ${BASELINE}/../../Examples/DisparityMap/elevationOutput.tif
-                             ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
-                     )
+##>otb_test_application(NAME apTvDmDisparityMapToElevationMap
+##>                     APP  DisparityMapToElevationMap
+##>                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
+##>                             -io.left ${EXAMPLEDATA}/sensor_stereo_left.tif
+##>                             -io.right ${EXAMPLEDATA}/sensor_stereo_right.tif
+##>                             -io.lgrid ${INPUTDATA}/sensor_stereo_rectif_left.tif
+##>                             -io.rgrid ${INPUTDATA}/sensor_stereo_rectif_right.tif
+##>                             -io.out ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
+##>                             -hmin 130
+##>                             -hmax 220
+##>                             -elev.default 140
+##>                             -step 2.5
+##>                             -io.mask ${INPUTDATA}/sensor_stereo_dmap_mask.tif
+##>                     VALID   --compare-image ${EPSILON_10}
+##>                             ${BASELINE}/../../Examples/DisparityMap/elevationOutput.tif
+##>                             ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
+##>                     )
 
 
 #----------- BlockMatching TESTS ----------------
