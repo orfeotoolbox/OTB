@@ -53,7 +53,7 @@ ctest_read_custom_files(${CTEST_BINARY_DIRECTORY})
 
 ctest_build     (BUILD "${CTEST_BINARY_DIRECTORY}" RETURN_VALUE _build_rv)
 
-ctest_test      (BUILD "${CTEST_BINARY_DIRECTORY}" INCLUDE Tu RETURN_VALUE _test_rv)
+ctest_test      (BUILD "${CTEST_BINARY_DIRECTORY}" INCLUDE New RETURN_VALUE _test_rv)
 # if(NOT _configure_rv EQUAL 0 OR NOT _build_rv EQUAL 0)
 # endif ()
 
