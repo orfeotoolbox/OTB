@@ -6,7 +6,8 @@
 
 There are two ways to install OTB library on your system: installing from a binary distribution or compiling from sources. 
 You can find information about the installation of binary packages for OTB and Monteverdi in the OTB-Cookbook.
-This chapter covers installation from sources, also known as compiling.
+This chapter covers compilation of OTB library from source.
+Because Monteverdi is a separate project, compiling it from source will be covered in the next chapter.
 
 OTB has been developed and tested across different combinations of operating systems, compilers, and hardware platforms including MS-Windows, Linux on Intel-compatible hardware and Mac OSX.  It is known to work with the following compilers in 32/64 bit:
 \begin{itemize}
@@ -201,7 +202,7 @@ If you do not know which method to use and just want to compile OTB with all its
 \label{sec:installation-linux-superbuild}
 
 The SuperBuild is a way of compiling dependencies to a project just before you build the project. Thanks to CMake and
-its ExternalProject module, it is possible to download a source archive, configure, compile and install it when building
+its ExternalProject module, it is possible to download a source archive, configure and compile it when building
 the main project. This feature has been used in other CMake-based projects (ITK, Slicer, ParaView,...).
 In OTB, the SuperBuild is implemented with no impact on the library sources : the sources for SuperBuild are located in
 the 'OTB/SuperBuild' subdirectory. It is made of CMake scripts and source patches that allow to compile all the
@@ -220,7 +221,7 @@ A pre-load script can also be used with the \texttt{-C} options (see
 Another option is to set variables manually with \texttt{cmake-gui} or \texttt{ccmake}.
 
 During the configuration step, the SuperBuild will detect any existing dependencies installed as systems libraries.
-Wheter to use them can be controlled via the \texttt{USE\_SYSTEM\_\textit{XXX}} (see
+Whether to use them can be controlled via the \texttt{USE\_SYSTEM\_\textit{XXX}} (see
 table~\ref{tab:installation-cmake-variables}).
 
 SuperBuild downloads dependencies into the \texttt{DOWNLOAD\_LOCATION} directory, which will be
@@ -237,11 +238,6 @@ Simply use the make command (other targets can be generated with CMake's \texttt
 \begin{verbatim}
 $ cd ~/OTB/build
 $ make
-\end{verbatim}
-
-The installation target will copy the binaries and libraries to the installation location:
-\begin{verbatim}
-$ make install
 \end{verbatim}
 
 A wiki page detailing the status of SuperBuild on various platforms is also available here:
