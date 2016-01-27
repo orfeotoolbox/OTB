@@ -7,8 +7,6 @@ otb_module(OTBSupervised
     OTBOpenGL
     
   OPTIONAL_DEPENDS
-    OTBGlut
-    OTBGLFW
     
   DESCRIPTION
     "${DOCUMENTATION}"
