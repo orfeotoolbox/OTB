@@ -3,6 +3,15 @@ set(DOCUMENTATION "This module provides Ice, a ligthweight efficient visualizati
 otb_module(OTBSupervised
   DEPENDS
     OTBCommon
+    OTBStatistics
+    OTBGdalAdapters
+    OTBImageIO
+    OTBTransform
+    OTBImageManipulation
+    OTBOSSIMAdapters
+    OTBProjection
+    OTBImageBase
+    OTBITK
     OTBGLEW
     OTBOpenGL
     

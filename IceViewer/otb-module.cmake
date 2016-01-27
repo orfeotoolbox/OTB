@@ -2,7 +2,9 @@ set(DOCUMENTATION "This module provides IceViewer, the ligthweight GLFW viewer b
 
 otb_module(OTBSupervised
   DEPENDS
-    OTBCIce
+    OTBIce
+    OTBMetadata
+    OTBOSSIMAdapters
     OTBGlut
     OTBGLFW
     
