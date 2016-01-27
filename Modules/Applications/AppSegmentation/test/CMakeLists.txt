@@ -77,9 +77,9 @@ set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 ##>                              ${TEMP}/${OUTFILE}
 ##>                     )
 
-set_tests_properties(apTvSeSegmentation${filter}${mode}_ULOVW
-                     PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
-                                RESOURCE_LOCK ${OUTFILE})
+##>set_tests_properties(apTvSeSegmentation${filter}${mode}_ULOVW
+##>                     PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
+##>                                RESOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULU
 set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulu")
@@ -98,9 +98,9 @@ set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" 
 ##>                              ${TEMP}/${OUTFILE}
 ##>                     )
 
-set_tests_properties(apTvSeSegmentation${filter}${mode}_ULU
-                     PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
-                                RESOURCE_LOCK ${OUTFILE})
+##>set_tests_properties(apTvSeSegmentation${filter}${mode}_ULU
+##>                     PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
+##>                                RESOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULCO
 set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulco")
@@ -119,10 +119,10 @@ set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" 
 ##>                              ${TEMP}/${OUTFILE}
 ##>                     )
 
-set_tests_properties(apTvSeSegmentation${filter}${mode}_ULCO
-                     PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
-                                WILL_FAIL TRUE
-                                RESOURCE_LOCK ${OUTFILE})
+##>set_tests_properties(apTvSeSegmentation${filter}${mode}_ULCO
+##>                     PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
+##>                                WILL_FAIL TRUE
+##>                                RESOURCE_LOCK ${OUTFILE})
 
 #----------- ConnectedComponentSegmentation TESTS ----------------
 otb_test_application(NAME  apTvCcConnectedComponentSegmentationMaskMuParserShp
