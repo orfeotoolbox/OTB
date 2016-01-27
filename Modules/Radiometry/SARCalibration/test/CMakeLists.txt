@@ -173,7 +173,7 @@ otb_add_test(NAME raTvSarBrightnessToImageWithComplexPixelFilter COMMAND  otbSAR
   1000 1000 250 250 # Extract
   )
 
-otb_add_test(NAME raTuSarParametricMapFunction COMMAND otbSARCalibrationTestDriver
+otb_add_test(NAME raTvSarParametricMapFunction COMMAND otbSARCalibrationTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/raTvSarParametricMapFunctionOutputAscii.txt
   ${TEMP}/raTvSarParametricMapFunctionOutputAscii.txt

@@ -11,7 +11,7 @@ otb_module_target_label(otbOGRProcessingTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME obTuOGRLayerStreamStitchingFilter COMMAND otbOGRProcessingTestDriver
+otb_add_test(NAME obTvOGRLayerStreamStitchingFilter COMMAND otbOGRProcessingTestDriver
   --compare-ogr  ${EPSILON_8}
   ${BASELINE_FILES}/obTvFusionOGRTile.shp
   ${TEMP}/obTvFusionOGRTile.shp
