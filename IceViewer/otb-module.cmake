@@ -1,6 +1,6 @@
 set(DOCUMENTATION "This module provides IceViewer, the ligthweight GLFW viewer based on Ice.")
 
-otb_module(OTBSupervised
+otb_module(OTBIceViewer
   DEPENDS
     OTBIce
     OTBMetadata

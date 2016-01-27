@@ -1,6 +1,6 @@
 set(DOCUMENTATION "This module provides Ice, a ligthweight efficient visualization framework for remote sensing images.")
 
-otb_module(OTBSupervised
+otb_module(OTBIce
   DEPENDS
     OTBCommon
     OTBStatistics
@@ -12,7 +12,7 @@ otb_module(OTBSupervised
     OTBProjection
     OTBImageBase
     OTBITK
-    OTBGLEW
+    OTBGlew
     OTBOpenGL
     
   OPTIONAL_DEPENDS
