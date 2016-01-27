@@ -87,8 +87,8 @@ typename MaskedIteratorDecorator<TIteratorType>::IndexType MaskedIteratorDecorat
 template <typename TIteratorType>
 void MaskedIteratorDecorator<TIteratorType>::GoToBegin()
 {
-  m_ItMask.SetIndex(m_begin);
-  m_ItImage.SetIndex(m_begin);
+  m_ItMask.SetIndex(m_Begin);
+  m_ItImage.SetIndex(m_Begin);
 }
 
 template <typename TIteratorType>
@@ -101,7 +101,7 @@ void MaskedIteratorDecorator<TIteratorType>::GoToEnd()
 template <typename TIteratorType>
 bool MaskedIteratorDecorator<TIteratorType>::IsAtBegin() const
 {
-  return m_ItMask.GetIndex() == m_begin || m_ItImage.GetIndex() == m_begin;
+  return m_ItMask.GetIndex() == m_Begin || m_ItImage.GetIndex() == m_Begin;
 }
 
 template <typename TIteratorType>
@@ -184,7 +184,7 @@ void MaskedIteratorDecorator<TIteratorType>::ComputeMaskedBegin()
     ++m_ItMask;
     ++m_ItImage;
   }
-  m_begin = m_ItMask.GetIndex();
+  m_Begin = m_ItMask.GetIndex();
 }
 
 } // namespace otb

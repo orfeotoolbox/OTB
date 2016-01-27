@@ -119,11 +119,11 @@ private:
 
 private:
   // Inner iterators on the image and mask
-
-  // Unmasked bounds
-  IndexType m_begin;
   TIteratorType m_ItMask;
   TIteratorType m_ItImage;
+
+  // Unmasked bounds
+  IndexType m_Begin;
 };
 
 }
