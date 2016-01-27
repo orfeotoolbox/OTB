@@ -1,4 +1,4 @@
-find_package(Glew REQUIRED)
+find_package(GLEW REQUIRED)
 
 mark_as_advanced(GLEW_INCLUDE_DIR)
 mark_as_advanced(GLEW_LIBRARY)

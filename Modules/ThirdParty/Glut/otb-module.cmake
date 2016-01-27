@@ -1,6 +1,6 @@
 set(DOCUMENTATION "This module imports GLUT to the build system")
 
-otb_module(OTBGLUT
+otb_module(OTBGlut
   DEPENDS
     
   TEST_DEPENDS
