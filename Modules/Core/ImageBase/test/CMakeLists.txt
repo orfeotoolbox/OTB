@@ -91,7 +91,7 @@ otb_add_test(NAME coTvExtractROI2 COMMAND otbImageBaseTestDriver
   26 97 209 100 )
 
 
-otb_add_test(NAME bfTuComplexToVectorImageCastFilterTest COMMAND otbImageBaseTestDriver
+otb_add_test(NAME bfTvComplexToVectorImageCastFilterTest COMMAND otbImageBaseTestDriver
   --compare-n-images ${NOTOL} 2
   ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
   ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif

@@ -48,7 +48,7 @@ otb_test_application(NAME apTvDmStereoFramework
 
 
 #----------- StereoRectificationGridGenerator TESTS ----------------
-otb_test_application(NAME apTuDmStereoRectificationGridGeneratorTest
+otb_test_application(NAME apTvDmStereoRectificationGridGeneratorTest
                      APP  StereoRectificationGridGenerator
 
                      OPTIONS -io.inleft ${EXAMPLEDATA}/sensor_stereo_left.tif
