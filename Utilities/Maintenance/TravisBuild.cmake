@@ -5,12 +5,14 @@ set(ENV{LC_ALL} C)
 set(CTEST_PROJECT_NAME "OTB")
 set(CTEST_BUILD_CONFIGURATION Release)
 set(CTEST_DASHBOARD_ROOT "/home/travis/build")
-#set(CTEST_DASHBOARD_ROOT "/tmp/temp")
-# define build name&co for easier identification on CDash
-set(CTEST_BUILD_NAME "travis-$ENV{TRAVIS_BUILD_NUMBER}-$ENV{TRAVIS_REPO_SLUG}-$ENV{TRAVIS_BRANCH}-$ENV{BUILD_NAME}-$ENV{CXX}")
+
+set(BUILD_NAME_PREFIX "travis-$ENV{TRAVIS_BUILD_NUMBER}")
+if(NOT "$ENV{TRAVIS_PULL_REQUEST}" MATCHES "false")
+  set(BUILD_NAME_PREFIX "PR-travis-$ENV{TRAVIS_PULL_REQUEST}")
+endif()
+
+set(CTEST_BUILD_NAME "${BUILD_NAME_PREFIX}-$ENV{CC}-${CTEST_BUILD_CONFIGURATION}-$ENV{TRAVIS_BRANCH}")
 set(CTEST_SITE "travis-ci.org")
-#set(CTEST_SOURCE_DIRECTORY "$ENV{SOURCE_DIRECTORY}")
-#set(CTEST_BINARY_DIRECTORY "${CTEST_SOURCE_DIRECTORY}/../_build")
 
 set(CTEST_SOURCE_DIRECTORY "${CTEST_DASHBOARD_ROOT}/orfeotoolbox/OTB")
 set(CTEST_BINARY_DIRECTORY "${CTEST_DASHBOARD_ROOT}/orfeotoolbox/build")
@@ -19,8 +21,17 @@ if(NOT DEFINED CTEST_GIT_COMMAND)
   find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
 endif()
 
-set(CMAKE_MAKE_PROGRAM "$ENV{MAKE_CMD}")
-set(CTEST_CMAKE_GENERATOR "$ENV{CMAKE_GEN}")
+if(DEFINED ENV{MAKE_CMD})
+  set(CMAKE_MAKE_PROGRAM "$ENV{MAKE_CMD}")
+else()
+  message(FATAL_ERROR "MAKE_CMD environment variable is not defined")
+endif()
+
+if(DEFINED ENV{CMAKE_GEN})
+  set(CTEST_CMAKE_GENERATOR "$ENV{CMAKE_GEN}")
+else()
+  message(FATAL_ERROR "CMAKE_GEN environment variable is not defined")
+endif()
 
 set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS 1000)
 set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 300)
@@ -53,7 +64,7 @@ ctest_read_custom_files(${CTEST_BINARY_DIRECTORY})
 
 ctest_build     (BUILD "${CTEST_BINARY_DIRECTORY}" RETURN_VALUE _build_rv)
 
-ctest_test      (BUILD "${CTEST_BINARY_DIRECTORY}" INCLUDE Tu RETURN_VALUE _test_rv)
+ctest_test      (BUILD "${CTEST_BINARY_DIRECTORY}" INCLUDE New RETURN_VALUE _test_rv)
 # if(NOT _configure_rv EQUAL 0 OR NOT _build_rv EQUAL 0)
 # endif ()
 

@@ -160,7 +160,7 @@ otb_add_test(NAME owTvOutputImageParameter COMMAND otbApplicationEngineTestDrive
   "my description"
   )
 
-otb_add_test(NAME owTuDocExampleStructureTest COMMAND otbApplicationEngineTestDriver
+otb_add_test(NAME owTvDocExampleStructureTest COMMAND otbApplicationEngineTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE}/owTuDocExampleStructureTest.txt
   ${TEMP}/owTuDocExampleStructureTest.txt
