@@ -341,20 +341,20 @@ void GlVectorActor::UpdateData()
 
     OGRPolygon spatialFilter;
     OGRLinearRing spatialFilterRing;
-    OGRPoint ul,ur,lr,ll;
-    ul.setX(ulx);
-    ul.setY(uly);
-    ur.setX(lrx);
-    ur.setY(uly);
-    lr.setX(lrx);
-    lr.setY(lry);
-    ll.setX(ulx);
-    ll.setY(lry);
+    OGRPoint pul,pur,plr,pll;
+    pul.setX(ulx);
+    pul.setY(uly);
+    pur.setX(lrx);
+    pur.setY(uly);
+    plr.setX(lrx);
+    plr.setY(lry);
+    pll.setX(ulx);
+    pll.setY(lry);
 
-    spatialFilterRing.addPoint(&ul);
-    spatialFilterRing.addPoint(&ur);
-    spatialFilterRing.addPoint(&lr);
-    spatialFilterRing.addPoint(&ll);
+    spatialFilterRing.addPoint(&pul);
+    spatialFilterRing.addPoint(&pur);
+    spatialFilterRing.addPoint(&plr);
+    spatialFilterRing.addPoint(&pll);
     spatialFilterRing.closeRings();
 
     spatialFilter.addRing(&spatialFilterRing);
