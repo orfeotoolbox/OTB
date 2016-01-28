@@ -61,16 +61,16 @@ otb_add_test(NAME raTvSarBrightnessToImageFilterWithoutNoise COMMAND  otbSARCali
 ##>  2000 2000 250 250 # Extract
 ##>  )
 
-otb_add_test(NAME raTvTerraSarBrightnessImageFilterTest COMMAND otbSARCalibrationTestDriver
-  --compare-image ${EPSILON_12}
-  ${BASELINE}/raTvTerraSarBrightnessImageFilterTest.tif
-  ${TEMP}/raTvTerraSarBrightnessImageFilterTest.tif
-  otbTerraSarBrightnessImageFilterTest
-  ${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
-  ${TEMP}/raTvTerraSarBrightnessImageFilterTest.tif
-  0 # don't use metadata
-  0 # results in linear scale
-  )
+##>otb_add_test(NAME raTvTerraSarBrightnessImageFilterTest COMMAND otbSARCalibrationTestDriver
+##>  --compare-image ${EPSILON_12}
+##>  ${BASELINE}/raTvTerraSarBrightnessImageFilterTest.tif
+##>  ${TEMP}/raTvTerraSarBrightnessImageFilterTest.tif
+##>  otbTerraSarBrightnessImageFilterTest
+##>  ${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
+##>  ${TEMP}/raTvTerraSarBrightnessImageFilterTest.tif
+##>  0 # don't use metadata
+##>  0 # results in linear scale
+##>  )
 
 ##>otb_add_test(NAME raTvSarRadiometricCalibrationToImageWithRealPixelFilter_TSX_PANGKALANBUUN COMMAND  otbSARCalibrationTestDriver
 ##>  --compare-image ${EPSILON_12}
