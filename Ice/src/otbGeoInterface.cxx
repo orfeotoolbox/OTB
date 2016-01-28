@@ -34,9 +34,9 @@ GeoInterface
 }
 
 
-bool
+template<> bool
 GeoInterface
-::TransformFromViewport( Point2d &,
+::TransformFromViewport<GeoInterface::Point2d>( Point2d &,
                          const Point2d &,
                          bool ) const
 {
@@ -44,9 +44,9 @@ GeoInterface
 }
 
 
-bool
+template <> bool
 GeoInterface
-::TransformFromViewport( Point2f & out,
+::TransformFromViewport<GeoInterface::Point2f>( Point2f & out,
                          const Point2f & in,
                          bool isPhysical ) const
 {
@@ -64,9 +64,9 @@ GeoInterface
 }
 
 
-bool
+template <> bool
 GeoInterface
-::TransformToViewport( Point2d &,
+::TransformToViewport<GeoInterface::Point2d>( Point2d &,
                        const Point2d &,
                        bool ) const
 {
@@ -74,9 +74,9 @@ GeoInterface
 }
 
 
-bool
+template <> bool
 GeoInterface
-::TransformToViewport( Point2f & out,
+::TransformToViewport<GeoInterface::Point2f>( Point2f & out,
                        const Point2f & in,
                        bool isPhysical ) const
 {

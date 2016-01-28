@@ -73,9 +73,7 @@ public:
    *
    * @return true if the operation has succeeded; false otherwise.
    */
-  virtual bool TransformFromViewport( Point2d & out,
-                                      const Point2d & in,
-                                      bool isPhysical = true ) const;
+  template <typename T> bool TransformFromViewport(T & out, const T & in, bool isPhysical = true) const;
 
   /**
    * Transform given point from viewport coordinate-system to this
@@ -90,44 +88,8 @@ public:
    *
    * @return true if the operation has succeeded; false otherwise.
    */
-  virtual bool TransformFromViewport( Point2f & out,
-                                      const Point2f & in,
-                                      bool isPhysical = true ) const;
-
-  /**
-   * Transform given point from viewport coordinate-system to this
-   * actor coordinate-system.
-   *
-   * By default this method return false. It should be implemented in
-   * derived classes if needed.
-   *
-   * @param out The transformed point (in this actor coordinate-system).
-   * @param in The given point (in viewport coordinate-system).
-   * @param isPhysical Indicate physical coordates are desired.
-   *
-   * @return true if the operation has succeeded; false otherwise.
-   */
-  virtual bool TransformToViewport( Point2d & out,
-                                    const Point2d & in,
-                                    bool isPhysical = true ) const;
-
-  /**
-   * Transform given point from this actor coordinate-system to
-   * viewport coordinate-system.
-   *
-   * By default this method return false. It should be implemented in
-   * derived classes if needed.
-   *
-   * @param out The transformed point (in viewport coordinate-system).
-   * @param in  The given point (in viewport coordinate-system).
-   * @param isPhysical Indicate physical coordates are desired.
-   *
-   * @return true if the operation has succeeded; false otherwise.
-   */
-  virtual bool TransformToViewport( Point2f & out,
-                                    const Point2f & in,
-                                    bool isPhysical = true ) const;
-
+  template <typename T> bool TransformToViewport(T & out, const T & in, bool isPhysical = true) const;
+  
   /**
    */
   virtual std::string GetWkt() const;
