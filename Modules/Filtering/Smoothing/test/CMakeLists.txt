@@ -2,7 +2,7 @@ otb_module_test()
 
 set(OTBSmoothingTests
 otbSmoothingTestDriver.cxx
-otbMeanShiftSmoothingImageFilter.cxx
+##>otbMeanShiftSmoothingImageFilter.cxx
 otbMeanShiftSmoothingImageFilterSpatialStability.cxx
 otbMeanShiftSmoothingImageFilterNew.cxx
 otbMeanShiftSmoothingImageFilterThreading.cxx
@@ -102,15 +102,15 @@ otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterQBPAN COMMAND otbSmoothingTes
   5 15 1.0 100
   )
 
-otb_add_test(NAME bfTuMeanShiftSmoothingImageFilterQBRoad COMMAND otbSmoothingTestDriver
-  otbMeanShiftSmoothingImageFilter
-  ${INPUTDATA}/qb_RoadExtract.img
-  ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_QBRoad.tif
-  ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_QBRoad.tif
-  ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_QBRoad.tif
-  ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_QBRoad.tif
-  4 30 0.1 100
-  )
+##>otb_add_test(NAME bfTuMeanShiftSmoothingImageFilterQBRoad COMMAND otbSmoothingTestDriver
+##>  otbMeanShiftSmoothingImageFilter
+##>  ${INPUTDATA}/qb_RoadExtract.img
+##>  ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_QBRoad.tif
+##>  ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_QBRoad.tif
+##>  ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_QBRoad.tif
+##>  ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_QBRoad.tif
+##>  4 30 0.1 100
+##>  )
 
 otb_add_test(NAME bfTuMeanShiftSmoothingImageFilterSpatialStability COMMAND otbSmoothingTestDriver
   otbMeanShiftSmoothingImageFilterSpatialStability
