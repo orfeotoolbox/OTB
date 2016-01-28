@@ -264,6 +264,10 @@ public:
 		   Spacing & spacing,
 		   double units = 1000.0 ) const;
 
+  /**
+   */
+  void SaveScreenshot( const std::string & filename ) const;
+
 protected:
   GlView();
 
