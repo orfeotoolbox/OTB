@@ -72,16 +72,11 @@ int otbMaskedIteratorDecoratorNew(int itkNotUsed(argc), char * itkNotUsed(argv) 
   return EXIT_SUCCESS;
 }
 
-// Test forward iteration interface
-int otbMaskedIteratorDecoratorForward(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+// Function to test the forward iteration interface
+template <typename IteratorType>
+int ForwardTest(typename IteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
 {
-  typedef otb::Image<double, 2> ImageType;
-  ImageType::Pointer image = GetTestImage<ImageType>(10, 10);
-  ImageType::Pointer mask = GetTestImage<ImageType>(10, 0);
-  ImageType::RegionType region(image->GetLargestPossibleRegion());
-  FillHalf<ImageType>(mask, region, 1);
-
-  otb::MaskedIteratorDecorator<itk::ImageRegionIterator<ImageType> > it(mask, image, region);
+  otb::MaskedIteratorDecorator<IteratorType> it(mask, image, region);
 
   it.GoToBegin();
   if (!it.IsAtBegin()) {return EXIT_FAILURE;}
@@ -92,7 +87,7 @@ int otbMaskedIteratorDecoratorForward(int itkNotUsed(argc), char * itkNotUsed(ar
     if (loopCount != 0 && it.IsAtBegin()) {return EXIT_FAILURE;}
     if (it.IsAtEnd()) {return EXIT_FAILURE;}
 
-    it.Set(it.Value() * 0.42);
+    //it.Set(it.Value() * 0.42);
 
     loopCount += 1;
   }
@@ -102,15 +97,10 @@ int otbMaskedIteratorDecoratorForward(int itkNotUsed(argc), char * itkNotUsed(ar
 }
 
 // Test reverse iteration interface
-int otbMaskedIteratorDecoratorReverse(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+template <typename IteratorType>
+int ReverseTest(typename IteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
 {
-  typedef otb::Image<double, 2> ImageType;
-  ImageType::Pointer image = GetTestImage<ImageType>(10, 10);
-  ImageType::Pointer mask = GetTestImage<ImageType>(10, 0);
-  ImageType::RegionType region(image->GetLargestPossibleRegion());
-  FillHalf<ImageType>(mask, region, 1);
-
-  otb::MaskedIteratorDecorator<itk::ImageRegionIterator<ImageType> > it(mask, image, region);
+  otb::MaskedIteratorDecorator<IteratorType> it(mask, image, region);
 
   it.GoToEnd();
   if (!it.IsAtEnd()) {return EXIT_FAILURE;}
@@ -132,7 +122,7 @@ int otbMaskedIteratorDecoratorReverse(int itkNotUsed(argc), char * itkNotUsed(ar
       }
     }
 
-    it.Set(it.Value() * 0.42);
+    //it.Set(it.Value() * 0.42);
   } while (!it.IsAtBegin());
 
   if(!it.IsAtBegin()) {return EXIT_FAILURE;}
@@ -144,13 +134,8 @@ int otbMaskedIteratorDecoratorReverse(int itkNotUsed(argc), char * itkNotUsed(ar
 // and mask value != 0 at all iteration locations (surjection)
 // Templated to test decoration of different iterator types
 template <typename IteratorType>
-int BijectiveTest()
+int BijectiveTest(typename IteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
 {
-  typename IteratorType::ImageType::Pointer image = GetTestImage<typename IteratorType::ImageType>(10, 10);
-  typename IteratorType::ImageType::Pointer mask = GetTestImage<typename IteratorType::ImageType>(10, 0);
-  typename IteratorType::ImageType::RegionType region(image->GetLargestPossibleRegion());
-  FillHalf<typename IteratorType::ImageType>(mask, region, 1);
-
   otb::MaskedIteratorDecorator<IteratorType> itDecorated(mask, image, region);
   IteratorType it(image, region);
 
@@ -170,37 +155,52 @@ int BijectiveTest()
   return EXIT_SUCCESS;
 }
 
-int otbMaskedIteratorDecoratorBijective(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+// Multiplex to forward, reverse and bijection test
+template <typename IteratorType>
+int TripleTest(typename IteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
+{
+  return ForwardTest<IteratorType>(mask, image, region)
+      && ReverseTest<IteratorType>(mask, image, region)
+      && BijectiveTest<IteratorType>(mask, image, region);
+}
+
+// Nominal case
+int otbMaskedIteratorDecoratorNominal(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Image<double, 2> ImageType;
-  return BijectiveTest< itk::ImageRegionIterator<ImageType> >()
-      && BijectiveTest< itk::ImageRegionConstIterator<ImageType> >()
-      && BijectiveTest< itk::ImageRandomConstIteratorWithIndex<ImageType> >()
-      && BijectiveTest< otb::SubsampledImageRegionIterator<ImageType> >()
-      && BijectiveTest< itk::ImageRandomIteratorWithIndex<ImageType> >()
-      && BijectiveTest< itk::ImageScanlineIterator<ImageType> >()
-      && BijectiveTest< itk::ImageScanlineConstIterator<ImageType> >()
-      && BijectiveTest< itk::ImageRandomNonRepeatingConstIteratorWithIndex<ImageType> >()
-      && BijectiveTest< itk::ImageRandomNonRepeatingIteratorWithIndex<ImageType> >()
+  ImageType::Pointer image = GetTestImage<ImageType>(10, 10);
+  ImageType::Pointer mask = GetTestImage<ImageType>(10, 0);
+  ImageType::RegionType region(image->GetLargestPossibleRegion());
+  FillHalf<ImageType>(mask, region, 1);
+
+  return TripleTest<itk::ImageRegionIterator<ImageType> >(image, mask, region)
+      && TripleTest< itk::ImageRegionConstIterator<ImageType> >(image, mask, region)
+      && TripleTest< itk::ImageRandomConstIteratorWithIndex<ImageType> >(image, mask, region)
+      && TripleTest< otb::SubsampledImageRegionIterator<ImageType> >(image, mask, region)
+      && TripleTest< itk::ImageRandomIteratorWithIndex<ImageType> >(image, mask, region)
+      && TripleTest< itk::ImageScanlineIterator<ImageType> >(image, mask, region)
+      && TripleTest< itk::ImageScanlineConstIterator<ImageType> >(image, mask, region)
+      && TripleTest< itk::ImageRandomNonRepeatingConstIteratorWithIndex<ImageType> >(image, mask, region)
+      && TripleTest< itk::ImageRandomNonRepeatingIteratorWithIndex<ImageType> >(image, mask, region)
       ;
-
-      // Other iterators potentially compatible:
-
-      // Different constructor, testable but not with BijectiveTest
-      // itk::PathIterator
-      // itk::LineIterator
-      // itk::SliceIterator
-      // itk::NeighborhoodIterator
-
-      // GoToEnd is not implemented
-      // itk::ImageLinearIteratorWithIndex
-      // itk::ReflectiveImageRegionIterator
-      // itk::ImageRegionExclusionConstIteratorWithIndex
-      // itk::ImageRegionIteratorWithIndex
-
-      // Other problem:
-      // itk::ImageRegionReverseIterator>() // IsAtEnd not a const method
-      // otb::PolyLineImageIterator>() // header not found
-      // itk::ImageRandomConstIteratorWithOnlyIndex>() // no Value method
-
 }
+
+/* Other iterators potentially compatible:
+
+Different constructor arguments than (image, region)
+itk::PathIterator
+itk::LineIterator
+itk::SliceIterator
+itk::NeighborhoodIterator
+
+GoToEnd is not implemented
+itk::ImageLinearIteratorWithIndex
+itk::ReflectiveImageRegionIterator
+itk::ImageRegionExclusionConstIteratorWithIndex
+itk::ImageRegionIteratorWithIndex
+
+Other problem:
+itk::ImageRegionReverseIterator>() // IsAtEnd not a const method
+otb::PolyLineImageIterator>() // header not found
+itk::ImageRandomConstIteratorWithOnlyIndex>() // no Value method
+*/

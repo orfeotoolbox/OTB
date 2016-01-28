@@ -134,14 +134,16 @@ MaskedIteratorDecorator<TIteratorType>& MaskedIteratorDecorator<TIteratorType>::
   return *this;
 }
 
+/*
 template <typename TIteratorType>
 void MaskedIteratorDecorator<TIteratorType>::Set(const PixelType& value) const
 {
   m_ItImage.Set(value);
 }
+*/
 
 template <typename TIteratorType>
-typename MaskedIteratorDecorator<TIteratorType>::PixelType& MaskedIteratorDecorator<TIteratorType>::Value(void) // const ?
+const typename MaskedIteratorDecorator<TIteratorType>::PixelType& MaskedIteratorDecorator<TIteratorType>::Value(void) const
 {
   return m_ItImage.Value();
 }

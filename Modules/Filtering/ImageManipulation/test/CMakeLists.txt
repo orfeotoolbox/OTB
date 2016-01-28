@@ -722,14 +722,6 @@ otb_add_test(NAME TuMaskedIteratorDecoratorNew COMMAND otbImageManipulationTestD
   otbMaskedIteratorDecoratorNew
 )
 
-otb_add_test(NAME TvMaskedIteratorDecoratorForward COMMAND otbImageManipulationTestDriver
-  otbMaskedIteratorDecoratorForward
-)
-
-otb_add_test(NAME TvMaskedIteratorDecoratorReverse COMMAND otbImageManipulationTestDriver
-  otbMaskedIteratorDecoratorReverse
-)
-
-otb_add_test(NAME TvMaskedIteratorDecoratorBijective COMMAND otbImageManipulationTestDriver
-  otbMaskedIteratorDecoratorBijective
+otb_add_test(NAME TvMaskedIteratorDecoratorNominal COMMAND otbImageManipulationTestDriver
+  otbMaskedIteratorDecoratorNominal
 )

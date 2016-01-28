@@ -92,10 +92,10 @@ public:
   Self & operator--();
 
   /** Set the image pixel value */
-  void Set(const PixelType& value) const;
+  //void Set(const PixelType& value) const;
 
   /** Get the image pixel value */
-  PixelType& Value(void); // const?
+  const PixelType& Value(void) const;
 
   // Can't wrap all methods because iterator interface is open ended
   // So provide access to inner iterators:

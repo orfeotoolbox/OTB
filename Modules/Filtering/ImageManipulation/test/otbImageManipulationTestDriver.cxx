@@ -83,7 +83,5 @@ void RegisterTests()
   REGISTER_TEST(otbImageToNoDataMaskFilter);
   REGISTER_TEST(otbChangeInformationImageFilter);
   REGISTER_TEST(otbMaskedIteratorDecoratorNew);
-  REGISTER_TEST(otbMaskedIteratorDecoratorForward);
-  REGISTER_TEST(otbMaskedIteratorDecoratorReverse);
-  REGISTER_TEST(otbMaskedIteratorDecoratorBijective);
+  REGISTER_TEST(otbMaskedIteratorDecoratorNominal);
 }
