@@ -160,19 +160,19 @@ void IceViewer::AddVector(const std::string & fname, const std::string & key, co
         it!=layers.end();++it)
       {
 
-      otb::GlVectorActor::Pointer actor = otb::GlVectorActor::New();
-      actor->Initialize(fname,*it);
-      actor->SetVisible(true);
-      actor->SetAlpha(0.5);
-      actor->SetColor(m_ColorMapIterator->second);
+      otb::GlVectorActor::Pointer additionalActor = otb::GlVectorActor::New();
+      additionalActor->Initialize(fname,*it);
+      additionalActor->SetVisible(true);
+      additionalActor->SetAlpha(0.5);
+      additionalActor->SetColor(m_ColorMapIterator->second);
 
       if(name == "")
         {
-        actor->SetName(key+"_"+(*it));
+        additionalActor->SetName(key+"_"+(*it));
         }
       else
         {
-        actor->SetName(name+"_"+(*it));
+        additionalActor->SetName(name+"_"+(*it));
         }
       
       ++m_ColorMapIterator;
@@ -181,7 +181,7 @@ void IceViewer::AddVector(const std::string & fname, const std::string & key, co
         m_ColorMapIterator = m_ColorMap.begin();
         }
 
-      m_View->AddActor(actor,key+"_"+(*it));
+      m_View->AddActor(additionalActor,key+"_"+(*it));
       }
     }
 }
@@ -443,13 +443,13 @@ void IceViewer::DrawHud()
 
       oss<<"    Fill: "<<(currentVectorActor->GetFill()?"On":"Off")<<", Solid border: "<<(currentVectorActor->GetSolidBorder()?"On":"Off")<<", al="<<currentVectorActor->GetAlpha()<<", lw="<<currentVectorActor->GetLineWidth()<<"\n";
       
-      std::map<std::string,GlVectorActor::ColorType>::const_iterator it = m_ColorMap.begin();
-      while(it!=m_ColorMap.end() && it->second!=currentVectorActor->GetColor())
+      std::map<std::string,GlVectorActor::ColorType>::const_iterator cIt = m_ColorMap.begin();
+      while(cIt!=m_ColorMap.end() && cIt->second!=currentVectorActor->GetColor())
         {
-        ++it;
+        ++cIt;
         }
 
-      oss<<"    Color: "<<(it!=m_ColorMap.end()?it->first:"custom");
+      oss<<"    Color: "<<(cIt!=m_ColorMap.end()?cIt->first:"custom");
       oss<<", optimized rendering (large vector): "<<(currentVectorActor->GetOptimizedRendering()?"On":"Off")<<" ("<<(currentVectorActor->GetOptimizedRenderingActive()?"active":"inactive")<<")";
 
       oss<<"\n"<<"\n";
@@ -1062,34 +1062,34 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
 
   if(key == GLFW_KEY_BACKSPACE)
     {
-    std::string key = "Current data outline";
+    std::string tmpKey = "Current data outline";
 
     if(action == GLFW_PRESS)
       {
-      double ulx(0),uly(0),lrx(0),lry(0);
+      double aulx(0),auly(0),alrx(0),alry(0);
 
       otb::GlROIActor::Pointer roiActor = GlROIActor::New();
 
       if(currentVectorActor.IsNotNull())
         {
-        currentVectorActor->GetBoundingBox(ulx,uly,lrx,lry);
+        currentVectorActor->GetBoundingBox(aulx,auly,alrx,alry);
         roiActor->SetWkt(currentVectorActor->GetWkt());
         }
       else if(currentImageActor.IsNotNull())
         {
-        ulx = currentImageActor->GetOrigin()[0];
-        uly = currentImageActor->GetOrigin()[1];
-        lrx = ulx + currentImageActor->GetLargestRegion().GetSize()[0] * currentImageActor->GetSpacing()[0];
-        lry = uly + currentImageActor->GetLargestRegion().GetSize()[1] * currentImageActor->GetSpacing()[1];
+        aulx = currentImageActor->GetOrigin()[0];
+        auly = currentImageActor->GetOrigin()[1];
+        alrx = aulx + currentImageActor->GetLargestRegion().GetSize()[0] * currentImageActor->GetSpacing()[0];
+        alry = auly + currentImageActor->GetLargestRegion().GetSize()[1] * currentImageActor->GetSpacing()[1];
         roiActor->SetWkt(currentImageActor->GetWkt());
         roiActor->SetKwl(currentImageActor->GetKwl());
         }
    
        otb::GlROIActor::PointType ul,lr;
-      ul[0]=ulx;
-      ul[1]=uly;
-      lr[0]=lrx;
-      lr[1]=lry;
+      ul[0]=aulx;
+      ul[1]=auly;
+      lr[0]=alrx;
+      lr[1]=alry;
 
       roiActor->SetUL(ul);
       roiActor->SetLR(lr);
@@ -1097,13 +1097,13 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
       roiActor->SetFill(true);
       roiActor->SetAlpha(0.2);
        
-      m_View->AddActor(roiActor,key);
-      m_View->MoveActorToEndOfRenderingOrder(key,true);
+      m_View->AddActor(roiActor,tmpKey);
+      m_View->MoveActorToEndOfRenderingOrder(tmpKey,true);
       }
      
     else if(action == GLFW_RELEASE)
       {
-      m_View->RemoveActor(key);
+      m_View->RemoveActor(tmpKey);
       }
     }
 
@@ -1316,8 +1316,6 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
       }
     shader->SetShaderType(SHADER_ALPHA_SLIDER);
     
-    double posx,posy;
-    glfwGetCursorPos(m_Window,&posx,&posy);
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
 
