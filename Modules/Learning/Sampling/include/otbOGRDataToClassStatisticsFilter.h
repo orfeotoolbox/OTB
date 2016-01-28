@@ -79,7 +79,6 @@ public:
   void Synthetize(void);
 
   /** Reset method called before starting the streaming*/
-  // TODO : inputImage->UpdateOutputInformation()
   void Reset(void);
 
   // TODO : prevent loading of data into output
@@ -102,20 +101,26 @@ public:
 
 protected:
   /** Constructor */
-  PersistentOGRDataToClassStatisticsFilter() {}
+  PersistentOGRDataToClassStatisticsFilter();
   /** Destructor */
   virtual ~PersistentOGRDataToClassStatisticsFilter() {}
 
-  void GenerateOutputInformation();
+  virtual void GenerateOutputInformation();
 
-  void GenerateInputRequestedRegion();
+  virtual void GenerateInputRequestedRegion();
 
-  void ThreadedGenerateData(const RegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+  virtual void BeforeThreadedGenerateData();
+
+  virtual void ThreadedGenerateData(const RegionType& outputRegionForThread,
+                                    itk::ThreadIdType threadId);
 
 private:
   PersistentOGRDataToClassStatisticsFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  void ApplyPolygonsSpatialFilter();
+
+  RegionType FeatureBoundingRegion(const TInputImage* image, const otb::ogr::Feature& feature) const;
 
   std::string m_ClassKey;
 
@@ -148,6 +153,10 @@ public:
   typedef TInputImage                     InputImageType;
   typedef TMaskImage                      MaskImageType;
   typedef otb::ogr::DataSource            OGRDataType;
+  
+  typedef typename Superclass::FilterType            FilterType;
+  typedef typename FilterType::ClassCountObjectType  ClassCountObjectType;
+  typedef typename FilterType::PolygonSizeObjectType PolygonSizeObjectType;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -168,6 +177,12 @@ public:
 
   void SetClassKey(std::string &key);
   std::string GetClassKey();
+
+  const ClassCountObjectType* GetClassCountOutput() const;
+  ClassCountObjectType* GetClassCountOutput();
+
+  const PolygonSizeObjectType* GetPolygonSizeOutput() const;
+  PolygonSizeObjectType* GetPolygonSizeOutput();
 
 protected:
   /** Constructor */
