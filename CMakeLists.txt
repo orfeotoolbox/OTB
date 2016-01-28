@@ -78,16 +78,6 @@ if(WIN32)
 endif()
 
 #----------------------------------------------------------------------------
-# ITK
-# find_package(ITK REQUIRED)
-# if(ITK_FOUND)
-#   MESSAGE(STATUS "ITK found")
-#   include(${ITK_USE_FILE})
-# else(ITK_FOUND)
-#   message(FATAL_ERROR "ITK not found. Please set ITK_DIR")
-# endif(ITK_FOUND)
-
-#----------------------------------------------------------------------------
 # Orfeo ToolBox
 #should we follow modularization here or import all OTB Modules?
 
@@ -103,7 +93,8 @@ find_package(OTB REQUIRED
   OTBTestKernel
   OTBCarto
   OTBProjection
-  OTBStatistics)
+  OTBStatistics
+  OTBIce)
 
 if(OTB_FOUND)
   include(${OTB_USE_FILE})
@@ -141,13 +132,6 @@ endif()
 if(WIN32)
   add_definitions(-DQWT_DLL)
 endif(WIN32)
-
-#----------------------------------------------------------------------------
-# Ice
-find_package(OTBIce REQUIRED)
-find_package(GLEW REQUIRED)
-# message( "ICE_INCLUDE_DIRS: ${ICE_INCLUDE_DIRS}" )
-# message( "ICE_LIBRARIES: ${ICE_LIBRARIES}" )
 
 #----------------------------------------------------------------------------
 # Include OTB CMake modules path.

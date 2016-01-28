@@ -135,8 +135,6 @@ set( Common_Gui_RESOURCES
 )
 
 include_directories(
-  ${ICE_INCLUDE_DIRS}
-  #
   ${Monteverdi_BINARY_DIR}
   #
   ${Monteverdi_SOURCE_DIR}/Code/Common
@@ -149,8 +147,6 @@ include_directories(
 )
 
 # message( "INCLUDE_DIRECTORIES: ${INCLUDE_DIRECTORIES}" )
-# message( "ICE_INCLUDE_DIRS: ${ICE_INCLUDE_DIRS}" )
-# message( "ICE_LIBRARIES: ${ICE_LIBRARIES}" )
 
 #############################################################################
 # Qt4 wrapped files.
@@ -180,7 +176,6 @@ add_library(Monteverdi_Gui
 target_link_libraries(Monteverdi_Gui
   Monteverdi_Core
   ${OTB_LIBRARIES}
-  ${ICE_LIBRARIES}
   ${OPENGL_LIBRARIES}
   ${GLEW_LIBRARIES}
   #Qt4::QtCore
