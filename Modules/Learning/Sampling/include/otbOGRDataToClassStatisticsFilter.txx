@@ -74,9 +74,12 @@ void
 PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 ::Synthetize(void)
 {
+  otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetOGRData());
+  vectors->GetLayer(m_layerIndex).SetSpatialFilter(NULL);
+  
+  
   // TODO : gather stats
 
-  // TODO : clear OGR spatial filter.
 }
 
 template<class TInputImage, class TMaskImage>
@@ -92,8 +95,8 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
   for (; it != m_TemporaryStats.end(); it++)
   {
     *it = PolygonClassStatisticsAccumulator::New();
+    (*it)->SetFieldName(this->m_FieldName);
   }
-  //m_resultPolygonStatistics = PolygonClassStatisticsAccumulator::New();
 }
 
 template<class TInputImage, class TMaskImage>
@@ -223,6 +226,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
   const TInputImage* inputImage = this->GetInput();
   const TMaskImage* mask = this->GetMask();
   const otb::ogr::DataSource* vectors = this->GetOGRData();
+  PointType point;
 
   // Loop across the features in the layer (filtered by requested region in BeforeTGD already)
   otb::ogr::Layer::const_iterator featIt = vectors->GetLayer(m_layerIndex).begin(); 
@@ -242,6 +246,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
         //otb::MaskedIteratorDecorator<itk::ImageRegionIterator<TInputImage> > it(m_mask, inputImage, consideredRegion);
         //for (it.GoToBegin(); !it.IsAtEnd(); ++it)
         //{
+        // inputImage->TransformIndexToPhysicalPoint(it.GetIndex(), point);
           // // add to thread statistics
           //m_TemporaryStats[threadId]->Add(featIt, it);
         // }
@@ -373,17 +378,17 @@ OGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 void
 OGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
-::SetClassKey(std::string &key)
+::SetFieldName(std::string &key)
 {
-  this->GetFilter()->SetClassKey(key);
+  this->GetFilter()->SetFieldName(key);
 }
 
 template<class TInputImage, class TMaskImage>
 std::string
 OGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
-::GetClassKey()
+::GetFieldName()
 {
-  return this->GetFilter()->GetClassKey();
+  return this->GetFilter()->GetFieldName();
 }
 
 template<class TInputImage, class TMaskImage>

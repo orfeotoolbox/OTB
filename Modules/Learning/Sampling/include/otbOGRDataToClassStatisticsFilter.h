@@ -48,6 +48,7 @@ public:
   typedef TInputImage                                     InputImageType;
   typedef typename InputImageType::Pointer                InputImagePointer;
   typedef typename InputImageType::RegionType             RegionType;
+  typedef typename InputImageType::PointType              PointType;
 
   typedef TMaskImage                                      MaskImageType;
   typedef typename MaskImageType::Pointer                 MaskImagePointer;
@@ -83,8 +84,8 @@ public:
 
   // TODO : prevent loading of data into output
 
-  itkSetMacro(ClassKey, std::string);
-  itkGetMacro(ClassKey, std::string);
+  itkSetMacro(FieldName, std::string);
+  itkGetMacro(FieldName, std::string);
 
   // TODO: store the class count map as output #2
   const ClassCountObjectType* GetClassCountOutput() const;
@@ -122,7 +123,7 @@ private:
 
   RegionType FeatureBoundingRegion(const TInputImage* image, const otb::ogr::Feature& feature) const;
 
-  std::string m_ClassKey;
+  std::string m_FieldName;
 
   std::vector<PolygonClassStatisticsAccumulator::Pointer> m_TemporaryStats;
 
@@ -175,8 +176,8 @@ public:
   void SetMask(const TMaskImage* mask);
   const TMaskImage* GetMask();
 
-  void SetClassKey(std::string &key);
-  std::string GetClassKey();
+  void SetFieldName(std::string &key);
+  std::string GetFieldName();
 
   const ClassCountObjectType* GetClassCountOutput() const;
   ClassCountObjectType* GetClassCountOutput();
