@@ -164,37 +164,37 @@ foreach(classifier ${classifierList})
 
                      #set_tests_properties(apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1)
 
-  list(FIND classifier_with_confmap ${classifier} _classifier_has_confmap)
-  if(${_classifier_has_confmap} EQUAL -1)
-    otb_test_application(
-                       NAME     apTvClMethod${classifier}ImageClassifierQB1
-                       APP      ImageClassifier
-                       OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-                                -model ${INPUTDATA}/Classification/${OUTMODELFILE}
-                                -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-                                -out ${TEMP}/${OUTRASTER} ${raster_output_option}
+  ##>list(FIND classifier_with_confmap ${classifier} _classifier_has_confmap)
+  ##>if(${_classifier_has_confmap} EQUAL -1)
+    ##>otb_test_application(
+                       ##>NAME     apTvClMethod${classifier}ImageClassifierQB1
+                       ##>APP      ImageClassifier
+                       ##>OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+                                ##>-model ${INPUTDATA}/Classification/${OUTMODELFILE}
+                                ##>-imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
+                                ##>-out ${TEMP}/${OUTRASTER} ${raster_output_option}
 
-                       VALID    ${raster_comparison}
-                                ${raster_ref_path}/${OUTRASTER}
-                                ${TEMP}/${OUTRASTER}
-                       )
-  else()
-    otb_test_application(
-                       NAME     apTvClMethod${classifier}ImageClassifierQB1
-                       APP      ImageClassifier
-                       OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-                                -model ${INPUTDATA}/Classification/${OUTMODELFILE}
-                                -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-                                -out ${TEMP}/${OUTRASTER} ${raster_output_option}
-                                -confmap ${TEMP}/${OUTCONFMAP}
+                       ##>VALID    ${raster_comparison}
+                                ##>${raster_ref_path}/${OUTRASTER}
+                                ##>${TEMP}/${OUTRASTER}
+                       ##>)
+  ##>else()
+    ##>otb_test_application(
+                       ##>NAME     apTvClMethod${classifier}ImageClassifierQB1
+                       ##>APP      ImageClassifier
+                       ##>OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+                                ##>-model ${INPUTDATA}/Classification/${OUTMODELFILE}
+                                ##>-imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
+                                ##>-out ${TEMP}/${OUTRASTER} ${raster_output_option}
+                                ##>-confmap ${TEMP}/${OUTCONFMAP}
 
-                       VALID    ${raster_comparison_two}
-                                ${raster_ref_path}/${OUTRASTER}
-                                ${TEMP}/${OUTRASTER}
-                                ${raster_ref_path}/${OUTCONFMAP}
-                                ${TEMP}/${OUTCONFMAP}
-                       )
-  endif()
+                       ##>VALID    ${raster_comparison_two}
+                                ##>${raster_ref_path}/${OUTRASTER}
+                                ##>${TEMP}/${OUTRASTER}
+                                ##>${raster_ref_path}/${OUTCONFMAP}
+                                ##>${TEMP}/${OUTCONFMAP}
+                       ##>)
+  ##>endif()
 
 endforeach()
 

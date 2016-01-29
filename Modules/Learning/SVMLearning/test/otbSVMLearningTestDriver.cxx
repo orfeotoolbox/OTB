@@ -15,7 +15,7 @@ void RegisterTests()
   REGISTER_TEST(otbSVMModelLoadSave);
   REGISTER_TEST(otbSVMClassifierPointSet);
   REGISTER_TEST(otbSVMImageClassificationWithRuleFilterNew);
-  REGISTER_TEST(otbSVMImageModelEstimatorTrain);
+  //##>REGISTER_TEST(otbSVMImageModelEstimatorTrain);
   REGISTER_TEST(otbObjectDetectionClassifierNew);
   REGISTER_TEST(otbObjectDetectionClassifier);
   REGISTER_TEST(otbSVMClassifierNew);

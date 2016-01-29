@@ -26,7 +26,7 @@ if(OTB_USE_SIFTFAST)
   list(APPEND OTBDescriptorsTests
        otbImageToFastSIFTKeyPointSetFilterNew.cxx
        otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
-       otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
+       ##>otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
        )
 endif()
 
@@ -275,13 +275,13 @@ otb_add_test(NAME feTvImageToFastSIFTKeyPointSetFilterSceneOutputInterestPointAs
   6
   )
 
-otb_add_test(NAME feTvImageToFastSIFTKeyPointSetFilterSceneOutputDescriptorAscii COMMAND otbDescriptorsTestDriver
-  --ignore-order --epsilon-boundary 0.01 --compare-ascii ${EPSILON_2}
-  ${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
-  ${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
-  otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii
-  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
-  ${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
-  6
-  )
+##>otb_add_test(NAME feTvImageToFastSIFTKeyPointSetFilterSceneOutputDescriptorAscii COMMAND otbDescriptorsTestDriver
+##>  --ignore-order --epsilon-boundary 0.01 --compare-ascii ${EPSILON_2}
+##>  ${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
+##>  ${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
+##>  otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii
+##>  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+##>  ${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
+##>  6
+##>  )
 endif()

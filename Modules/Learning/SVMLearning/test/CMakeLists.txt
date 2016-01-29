@@ -15,7 +15,7 @@ otbSVMCrossValidationCostFunctionNew.cxx
 otbSVMModelLoadSave.cxx
 otbSVMClassifierPointSet.cxx
 otbSVMImageClassificationWithRuleFilterNew.cxx
-otbSVMImageModelEstimatorTrain.cxx
+##>otbSVMImageModelEstimatorTrain.cxx
 otbObjectDetectionClassifier.cxx
 otbSVMClassifierNew.cxx
 otbSVMSampleListModelEstimatorTest.cxx
@@ -110,23 +110,23 @@ otb_add_test(NAME leTvSVMClassifierPointSet COMMAND otbSVMLearningTestDriver
 otb_add_test(NAME leTuSVMImageClassificationWithRuleFilterNew COMMAND otbSVMLearningTestDriver
   otbSVMImageClassificationWithRuleFilterNew)
 
-otb_add_test(NAME leTvSVMImageModelEstimatorTrain COMMAND otbSVMLearningTestDriver
-  --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image
-  ${TEMP}/leTvsvm_model_image
-  otbSVMImageModelEstimatorTrain
-  ${INPUTDATA}/ROI_QB_MUL_4.tif
-  ${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
-  ${TEMP}/leTvsvm_model_image
-  0 )
+##>otb_add_test(NAME leTvSVMImageModelEstimatorTrain COMMAND otbSVMLearningTestDriver
+##>  --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image
+##>  ${TEMP}/leTvsvm_model_image
+##>  otbSVMImageModelEstimatorTrain
+##>  ${INPUTDATA}/ROI_QB_MUL_4.tif
+##>  ${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
+##>  ${TEMP}/leTvsvm_model_image
+##>  0 )
 
-otb_add_test(NAME leTvSVMImageModelEstimatorTrainWithOptimization COMMAND otbSVMLearningTestDriver
-  --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image_opt
-  ${TEMP}/leTvsvm_model_image_opt
-  otbSVMImageModelEstimatorTrain
-  ${INPUTDATA}/ROI_QB_MUL_4.tif
-  ${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
-  ${TEMP}/leTvsvm_model_image_opt
-  1)
+##>otb_add_test(NAME leTvSVMImageModelEstimatorTrainWithOptimization COMMAND otbSVMLearningTestDriver
+##>  --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image_opt
+##>  ${TEMP}/leTvsvm_model_image_opt
+##>  otbSVMImageModelEstimatorTrain
+##>  ${INPUTDATA}/ROI_QB_MUL_4.tif
+##>  ${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
+##>  ${TEMP}/leTvsvm_model_image_opt
+##>  1)
 
 otb_add_test(NAME odTuObjectDetectionClassifierNew COMMAND otbSVMLearningTestDriver
   otbObjectDetectionClassifierNew

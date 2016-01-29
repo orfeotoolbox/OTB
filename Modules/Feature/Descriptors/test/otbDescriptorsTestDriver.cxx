@@ -26,6 +26,6 @@ void RegisterTests()
 #ifdef OTB_USE_SIFTFAST
   REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterNew);
   REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii);
-  REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii);
+  //##>REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii);
 #endif
 }
