@@ -19,7 +19,6 @@
 #define __otbPolygonClassStatisticsAccumulator_h
 
 #include "otbOGRDataSourceWrapper.h"
-// #include "otbMaskedIteratorDecorator.h"
 
 namespace otb
 {
@@ -40,40 +39,15 @@ public:
   /** Runtime information support. */
   itkTypeMacro(PolygonClassStatisticsAccumulator, itk::Object);
 
-  template <typename TInputImage>
+  template <typename TPointType>
   void Add(otb::ogr::Layer::const_iterator& featIt,
-           // otb::MaskedIteratorDecorator<itk::ImageRegionIterator<TInputImage> >& pixelIt,
-           const std::string &fieldName)
-  {
-    // TODO : move code to txx
-
-    // TODO : switch case with feature type
-
-    //OGRPolygon* inPolygon = dynamic_cast<OGRPolygon *>(geom);
-    //OGRLinearRing* exteriorRing = inPolygon->getExteriorRing();
-      //itk::Point<double, 2> point;
-      //inputImage->TransformIndexToPhysicalPoint(it.GetIndex(), point);
-      // ->Test if the current pixel is in a polygon hole
-      // If point is in feature
-      //if(exteriorRing->isPointInRing(&pointOGR, TRUE) && isNotInHole)
-      //{
-      //}
-      // Count
-      //nbOfPixelsInGeom++;
-      //nbPixelsGlobal++;
-
-    //Class name recuperation
-    //int className = featIt->ogr().GetFieldAsInteger(GetParameterString("cfield").c_str());
-
-    //Counters update, number of pixel in each classes and in each polygons
-    //polygon[featIt->ogr().GetFID()] += nbOfPixelsInGeom;
-
-    //Generation of a random number for the sampling in a polygon where we only need one pixel, it's choosen randomly
-    //elmtsInClass[className] = elmtsInClass[className] + nbOfPixelsInGeom;
-  }
+           const TPointType& point);
 
   /** Reset the accumulator */
   void Reset();
+
+  itkSetMacro(FieldName, std::string);
+  itkGetMacro(FieldName, std::string);
 
 protected:
   /** Constructor */
@@ -83,11 +57,13 @@ protected:
 
 private:
   //Number of pixels in all the polygons
-  unsigned long nbPixelsGlobal;
+  unsigned long m_NbPixelsGlobal;
   //Number of pixels in each classes
   std::map<int, int> m_elmtsInClass;
   //Number of pixels in each polygons
   std::map<unsigned long, int> m_polygon;  // check the feature id
+  
+  std::string m_FieldName;
 
   // Not implemented
   PolygonClassStatisticsAccumulator(const Self&);
