@@ -39,15 +39,15 @@ public:
   /** Runtime information support. */
   itkTypeMacro(PolygonClassStatisticsAccumulator, itk::Object);
 
-  template <typename TPointType>
+  template <typename TIterator>
   void Add(otb::ogr::Layer::const_iterator& featIt,
-           const TPointType& point);
+           TIterator& imgIt);
 
   /** Reset the accumulator */
   void Reset();
 
-  itkSetMacro(FieldName, std::string);
-  itkGetMacro(FieldName, std::string);
+  itkSetMacro(FieldIndex, int);
+  itkGetMacro(FieldIndex, int);
 
 protected:
   /** Constructor */
@@ -59,11 +59,11 @@ private:
   //Number of pixels in all the polygons
   unsigned long m_NbPixelsGlobal;
   //Number of pixels in each classes
-  std::map<int, int> m_elmtsInClass;
+  std::map<std::string, unsigned long> m_ElmtsInClass;
   //Number of pixels in each polygons
-  std::map<unsigned long, int> m_polygon;  // check the feature id
+  std::map<unsigned long, unsigned long> m_Polygon;  // check the feature id
   
-  std::string m_FieldName;
+  int m_FieldIndex;
 
   // Not implemented
   PolygonClassStatisticsAccumulator(const Self&);

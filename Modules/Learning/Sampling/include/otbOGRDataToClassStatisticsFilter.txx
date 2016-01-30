@@ -18,6 +18,8 @@
 #ifndef __otbOGRDataToClassStatisticsFilter_txx
 #define __otbOGRDataToClassStatisticsFilter_txx
 
+// #include "otbMaskedIteratorDecorator.h"
+
 namespace otb
 {
 // Members from otb::PersistentOGRDataToClassStatisticsFilter
@@ -89,13 +91,22 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 {
   unsigned int numberOfThreads = this->GetNumberOfThreads();
 
+  // Get OGR field index
+  const otb::ogr::DataSource* vectors = this->GetOGRData();
+  otb::ogr::Layer::const_iterator featIt = vectors->GetLayer(m_layerIndex).begin();
+  int fieldIndex = featIt->ogr().GetFieldIndex(this->m_FieldName.c_str());
+  if (fieldIndex < 0)
+    {
+    itkGenericExceptionMacro("Field named "<<this->m_FieldName<<" not found!");
+    }
+
   // Reset list of individual containers
   m_TemporaryStats = std::vector<PolygonClassStatisticsAccumulator::Pointer>(numberOfThreads);
   std::vector<PolygonClassStatisticsAccumulator::Pointer>::iterator it = m_TemporaryStats.begin();
   for (; it != m_TemporaryStats.end(); it++)
   {
     *it = PolygonClassStatisticsAccumulator::New();
-    (*it)->SetFieldName(this->m_FieldName);
+    (*it)->SetFieldIndex(fieldIndex);
   }
 }
 
@@ -248,7 +259,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
         //{
         // inputImage->TransformIndexToPhysicalPoint(it.GetIndex(), point);
           // // add to thread statistics
-          //m_TemporaryStats[threadId]->Add(featIt, it);
+          //m_TemporaryStats[threadId]->Add(featIt, point, currentClass);
         // }
         }
       else

@@ -21,13 +21,26 @@
 namespace otb
 {
 
-template <typename TPointType>
+template <typename TIterator>
 void
 PolygonClassStatisticsAccumulator
 ::Add(otb::ogr::Layer::const_iterator& featIt,
-      const TPointType& point)
+      TIterator& imgIt)
 {
-  bool isInside = false;
+  // Get class name
+  std::string className(featIt->ogr().GetFieldAsString(this->m_FieldIndex));
+  // Get Feature Id
+  unsigned long featureId = featIt->ogr().GetFID();
+
+  if (m_ElmtsInClass.count(className) == 0)
+    {
+    m_ElmtsInClass[className] = 0UL;
+    }
+  if (m_Polygon.count(featureId) == 0)
+    {
+    m_Polygon[featureId] = 0UL;
+    }
+
   OGRGeometry * geom = featIt->ogr().GetGeometryRef();
   switch (geom->getGeometryType())
     {
@@ -68,21 +81,10 @@ PolygonClassStatisticsAccumulator
       }
     }
 
-  if(!isInside)
-    {
-    return;
-    }
-
-  // Count
-  m_NbPixelsGlobal++;
-  
-    //nbOfPixelsInGeom++;
-    //nbPixelsGlobal++;
-  //Class name recuperation
-  //int className = featIt->ogr().GetFieldAsInteger(GetParameterString("cfield").c_str());
-
-  //Counters update, number of pixel in each classes and in each polygons
-  //polygon[featIt->ogr().GetFID()] += nbOfPixelsInGeom;
+  // Count increments
+  // m_NbPixelsGlobal++;
+  // m_ElmtsInClass[className]++;
+  // m_Polygon[featureId]++;
 
   //Generation of a random number for the sampling in a polygon where we only need one pixel, it's choosen randomly
   //elmtsInClass[className] = elmtsInClass[className] + nbOfPixelsInGeom;
@@ -95,16 +97,16 @@ PolygonClassStatisticsAccumulator
     //if(exteriorRing->isPointInRing(&pointOGR, TRUE) && isNotInHole)
     //{
     //}
-    
 
-  
 }
 
 void
 PolygonClassStatisticsAccumulator
 ::Reset()
 {
-  // TODO
+  m_NbPixelsGlobal = 0UL;
+  m_ElmtsInClass.clear();
+  m_Polygon.clear();
 }
 
 

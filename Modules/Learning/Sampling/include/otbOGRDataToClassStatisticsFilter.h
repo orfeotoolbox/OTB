@@ -21,7 +21,6 @@
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "otbOGRDataSourceWrapper.h"
-// #include "otbMaskedIteratorDecorator.h"
 #include "otbPolygonClassStatisticsAccumulator.h"
 #include "itkSimpleDataObjectDecorator.h"
 
