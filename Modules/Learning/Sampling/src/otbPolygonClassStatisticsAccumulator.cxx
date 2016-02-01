@@ -41,13 +41,35 @@ PolygonClassStatisticsAccumulator
     m_Polygon[featureId] = 0UL;
     }
 
+  typename TIterator::ImageType::PointType imgPoint;
+  typename TIterator::IndexType imgIndex;
+  OGRPoint tmpPoint(0.0,0.0,0.0);
+  imgIt.GoToBegin();
   OGRGeometry * geom = featIt->ogr().GetGeometryRef();
   switch (geom->getGeometryType())
     {
     case wkbPoint:
     case wkbPoint25D:
       {
-      // TODO
+      OGRPoint* castPoint = dynamic_cast<OGRPoint*>(geom);
+      if (castPoint == NULL)
+        {
+        // Wrong Type !
+        break;
+        }
+      imgPoint[0] = castPoint->getX();
+      imgPoint[1] = castPoint->getY();
+      imgIt.GetImage()->TransformPhysicalPointToIndex(imgPoint,imgIndex);
+      while (!imgIt.IsAtEnd())
+        {
+        if (imgIndex == imgIt.GetIndex())
+          {
+          m_NbPixelsGlobal++;
+          m_ElmtsInClass[className]++;
+          m_Polygon[featureId]++;
+          break;
+          }
+        }
       break;
       }
     case wkbLineString:
@@ -59,7 +81,19 @@ PolygonClassStatisticsAccumulator
     case wkbPolygon:
     case wkbPolygon25D:
       {
-      // TODO
+      while (!imgIt.IsAtEnd())
+        {
+        imgIt.GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
+        tmpPoint.setX(imgPoint[0]);
+        tmpPoint.setY(imgPoint[1]);
+        if (geom->Contains(&tmpPoint))
+          {
+          m_NbPixelsGlobal++;
+          m_ElmtsInClass[className]++;
+          m_Polygon[featureId]++;
+          }
+        ++imgIt;
+        }
       break;
       }
     case wkbMultiPoint:
