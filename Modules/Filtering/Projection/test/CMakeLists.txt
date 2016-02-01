@@ -85,6 +85,7 @@ foreach( file ${IMAGES} )
     ${current_img}
     ${TEMP}/prTvSensorModel_${IMAGES_TESTNB}.txt
     1
+    1
   )
 endforeach()
 

@@ -31,7 +31,7 @@
 
 int otbNewSensorModel(int argc, char* argv[])
 {
-  if (argc != 4)
+  if (argc != 5)
     {
     std::cout << argv[0] << " <input filename> <output filename> <imgTol>" << std::endl;
 
@@ -41,21 +41,24 @@ int otbNewSensorModel(int argc, char* argv[])
   char * filename = argv[1];
   char * outFilename = argv[2];
   double imgTol = atof(argv[3]);
+  double geoTol = atof(argv[4]);
 
 
   typedef otb::VectorImage<double, 2>     ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
+  typedef otb::GeographicalDistance<ImageType::PointType> GeographicalDistanceType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(filename);
   reader->UpdateOutputInformation();
 
-  // #1 keywordlist, only check the needed keyword
+  // #1 keywordlist, only check the needed keywords
   /*-------------------------------------*/
   std::ofstream file;
   file.open(outFilename);
   file << std::setprecision(15);
+  file << "**  keywords list  **" << std::endl;
   otb::ImageKeywordlist kwlist = reader->GetOutput()->GetImageKeywordlist();
   
   if (!kwlist.GetSize() > 0)
@@ -67,18 +70,38 @@ int otbNewSensorModel(int argc, char* argv[])
   typedef otb::ImageKeywordlist::KeywordlistMap KeywordlistMapType;
   KeywordlistMapType kwmap = kwlist.GetKeywordlist();
   
+  // list of needed keywords
   std::string allowedKw[]={"support_data.sensorID","line_den_coeff",
                            "line_den_coeff","samp_den_coeff","samp_num_coeff"};
-  std::list<std::string> allowedKwList(allowedKw, allowedKw + sizeof(allowedKw) / sizeof(std::string) );
+                           
+  int n = static_cast<int>(sizeof(allowedKw) / sizeof(std::string) );
   
-  for (std::list<std::string>::iterator ita = allowedKwList.begin(); ita != allowedKwList.end(); ++ita)
+  std::list<std::string> missingKw;
+  for (int i=0; i<n; i++)
+  {
+	bool foundAllowedKw = false;
     for(KeywordlistMapType::iterator it=kwmap.begin(); it!=kwmap.end(); ++it)
 	{
-		std::size_t found = it->first.find(*ita);
+		std::size_t found = it->first.find(allowedKw[i]);
 		if (found!=std::string::npos)
-		   file << it->first << " " << it->second << std::endl;
+		{   
+			file << it->first << " " << it->second << std::endl;
+			foundAllowedKw = true;
+		}
 	}
+	
+	if (!foundAllowedKw)
+	    missingKw.push_back(allowedKw[i]);
+  }
   file.close();
+  
+  if (missingKw.size()>0)
+  {
+	std::cout << "Missing keywords : " << std::endl;
+	for (std::list<std::string>::iterator itm = missingKw.begin(); itm != missingKw.end(); ++itm)  
+	   std::cout << *itm << std::endl;
+	return EXIT_FAILURE;
+  }
   /*-------------------------------------*/
 
   otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(16.19688987731934);
@@ -110,7 +133,7 @@ int otbNewSensorModel(int argc, char* argv[])
   typedef otb::GenericRSTransform<>       GRSTransformType;
   GRSTransformType::Pointer transform = GRSTransformType::New();
   
-    // Instantiate Image->WGS transform
+  // Instantiate Image->WGS transform
   GRSTransformType::Pointer img2wgs = GRSTransformType::New();
   img2wgs->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
   img2wgs->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
@@ -138,16 +161,19 @@ int otbNewSensorModel(int argc, char* argv[])
   geoPointGRS = img2wgs->TransformPoint(imagePoint);
   reversedImagePointGRS = wgs2img->TransformPoint(geoPointGRS);
 
+  // TODO : remove this, just for debug purpose
   std::cout << ">>>>>>>>>>>>>>" << std::endl;
   std::cout << filename << std::endl;
   std::cout << outFilename << std::endl;
+  std::cout << "ProjectionRef = " << reader->GetOutput()->GetProjectionRef() << std::endl;
   std::cout << "Image to geo: " << imagePoint << " -> " << geoPoint << "\n";
   std::cout << "Geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
   std::cout << "Image to geo: " << imagePoint << " -> " << geoPointGRS << "\n";
   std::cout << "Geo to image: " << geoPointGRS << " -> " << reversedImagePointGRS << "\n";
-  
+  // TODO (end)
   
   DistanceType::Pointer distance = DistanceType::New();
+  GeographicalDistanceType::Pointer geoDistance = GeographicalDistanceType::New();
   
   // 3. Results should be plausible (no NaN and no clearly out of bound results)
   /*-------------------------------------*/
@@ -188,11 +214,20 @@ int otbNewSensorModel(int argc, char* argv[])
   }
   /*-------------------------------------*/
   
+  //2. GenericRSTransform encapsulate Inverse/Forward SensorModel: check that the encapsulation does not modify results 
+  /*-------------------------------------*/
+  double dist = geoDistance->Evaluate(geoPoint, geoPointGRS);
+  if (dist>geoTol)
+  {
+     std::cout << "Geo distance between otbForwardSensorModel and otbGenericRSTransform too high : " << dist << "\n";
+     return EXIT_FAILURE;
+  }
+  /*-------------------------------------*/
   
   //4. Round tripping error 
   /*-------------------------------------*/
   //for otbForwardSensorModel otbInverseSensorModel classes
-  double dist = distance->Evaluate(imagePoint, reversedImagePoint);
+  dist = distance->Evaluate(imagePoint, reversedImagePoint);
   if (dist>imgTol)
   {
      std::cout << "Round tripping for otbForwardSensorModel otbInverseSensorModel : dist(imagePoint,reversedImagePoint) = " << dist << "\n";
@@ -208,5 +243,13 @@ int otbNewSensorModel(int argc, char* argv[])
   }
   /*-------------------------------------*/
 
+  //5. Stability check
+  /*-------------------------------------*/
+  file.open(outFilename,std::ios::app);
+  file << "** geo point **" << std::endl;
+  file << geoPoint << std::endl;
+  file << geoPointGRS << std::endl;
+  file.close();
+ /*-------------------------------------*/
   return EXIT_SUCCESS;
 }
