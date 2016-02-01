@@ -13,7 +13,6 @@ void RegisterTests()
   REGISTER_TEST(otbLogPolarTransformNew);
   //##>REGISTER_TEST(otbForwardSensorModelGrid);
   //##>REGISTER_TEST(otbSensorModel);
-  REGISTER_TEST(otbNewSensorModel);
   REGISTER_TEST(otbGeocentricTransform);
   REGISTER_TEST(otbCreateProjectionWithOTB);
   //##>REGISTER_TEST(otbSensorModelGrid);
