@@ -45,13 +45,9 @@ int otbNewSensorModel(int argc, char* argv[])
 
 
   typedef otb::VectorImage<double, 2>     ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
   typedef otb::GeographicalDistance<ImageType::PointType> GeographicalDistanceType;
 
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(filename);
-  reader->UpdateOutputInformation();
 
   // #1 keywordlist, only check the needed keywords
   /*-------------------------------------*/
@@ -59,7 +55,8 @@ int otbNewSensorModel(int argc, char* argv[])
   file.open(outFilename);
   file << std::setprecision(15);
   file << "**  keywords list  **" << std::endl;
-  otb::ImageKeywordlist kwlist = reader->GetOutput()->GetImageKeywordlist();
+  
+  otb::ImageKeywordlist kwlist = otb::ReadGeometryFromGEOMFile(filename);
   
   if (!kwlist.GetSize() > 0)
   {
@@ -71,7 +68,7 @@ int otbNewSensorModel(int argc, char* argv[])
   KeywordlistMapType kwmap = kwlist.GetKeywordlist();
   
   // list of needed keywords
-  std::string allowedKw[]={"support_data.sensorID","line_den_coeff",
+  std::string allowedKw[]={/*"support_data.sensorID",*/"line_den_coeff",
                            "line_den_coeff","samp_den_coeff","samp_num_coeff"};
                            
   int n = static_cast<int>(sizeof(allowedKw) / sizeof(std::string) );
@@ -135,16 +132,16 @@ int otbNewSensorModel(int argc, char* argv[])
   
   // Instantiate Image->WGS transform
   GRSTransformType::Pointer img2wgs = GRSTransformType::New();
-  img2wgs->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
-  img2wgs->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+  img2wgs->SetInputProjectionRef(wgsRef);
   img2wgs->SetOutputProjectionRef(wgsRef);
+  img2wgs->SetInputKeywordList(kwlist);
   img2wgs->InstanciateTransform();
 
   // Instantiate WGS->Image transform
   GRSTransformType::Pointer wgs2img = GRSTransformType::New();
   wgs2img->SetInputProjectionRef(wgsRef);
-  wgs2img->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
-  wgs2img->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+  wgs2img->SetOutputProjectionRef(wgsRef);
+  wgs2img->SetOutputKeywordList(kwlist);
   wgs2img->InstanciateTransform();
 
   itk::Point<double, 2> imagePoint;
@@ -165,7 +162,6 @@ int otbNewSensorModel(int argc, char* argv[])
   std::cout << ">>>>>>>>>>>>>>" << std::endl;
   std::cout << filename << std::endl;
   std::cout << outFilename << std::endl;
-  std::cout << "ProjectionRef = " << reader->GetOutput()->GetProjectionRef() << std::endl;
   std::cout << "Image to geo: " << imagePoint << " -> " << geoPoint << "\n";
   std::cout << "Geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
   std::cout << "Image to geo: " << imagePoint << " -> " << geoPointGRS << "\n";
