@@ -75,7 +75,47 @@ PolygonClassStatisticsAccumulator
     case wkbLineString:
     case wkbLineString25D:
       {
-      // TODO
+      OGRPolygon tmpPolygon;
+      tmpPolygon.getExteriorRing()->addPoint(0.0,0.0,0.0);
+      tmpPolygon.getExteriorRing()->addPoint(1.0,0.0,0.0);
+      tmpPolygon.getExteriorRing()->addPoint(1.0,1.0,0.0);
+      tmpPolygon.getExteriorRing()->addPoint(0.0,1.0,0.0);
+      tmpPolygon.getExteriorRing()->addPoint(0.0,0.0,0.0);
+      typename TIterator::ImageType::SpacingType imgAbsSpacing;
+      imgAbsSpacing = imgIt.GetImage()->GetSpacing();
+      if (imgAbsSpacing[0] < 0) imgAbsSpacing[0] = -imgAbsSpacing[0];
+      if (imgAbsSpacing[1] < 0) imgAbsSpacing[1] = -imgAbsSpacing[1];
+      while (!imgIt.IsAtEnd())
+        {
+        imgIt.GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
+        tmpPolygon.getExteriorRing()->setPoint(
+          imgPoint[0]-0.5*imgAbsSpacing[0],
+          imgPoint[1]-0.5*imgAbsSpacing[1]
+          ,0.0);
+        tmpPolygon.getExteriorRing()->setPoint(
+          imgPoint[0]+0.5*imgAbsSpacing[0],
+          imgPoint[1]-0.5*imgAbsSpacing[1]
+          ,0.0);
+        tmpPolygon.getExteriorRing()->setPoint(
+          imgPoint[0]+0.5*imgAbsSpacing[0],
+          imgPoint[1]+0.5*imgAbsSpacing[1]
+          ,0.0);
+        tmpPolygon.getExteriorRing()->setPoint(
+          imgPoint[0]-0.5*imgAbsSpacing[0],
+          imgPoint[1]+0.5*imgAbsSpacing[1]
+          ,0.0);
+        tmpPolygon.getExteriorRing()->setPoint(
+          imgPoint[0]-0.5*imgAbsSpacing[0],
+          imgPoint[1]-0.5*imgAbsSpacing[1]
+          ,0.0);
+        if (geom->Intersects(&tmpPolygon))
+          {
+          m_NbPixelsGlobal++;
+          m_ElmtsInClass[className]++;
+          m_Polygon[featureId]++;
+          }
+        ++imgIt;
+        }
       break;
       }
     case wkbPolygon:
@@ -114,24 +154,6 @@ PolygonClassStatisticsAccumulator
       break;
       }
     }
-
-  // Count increments
-  // m_NbPixelsGlobal++;
-  // m_ElmtsInClass[className]++;
-  // m_Polygon[featureId]++;
-
-  //Generation of a random number for the sampling in a polygon where we only need one pixel, it's choosen randomly
-  //elmtsInClass[className] = elmtsInClass[className] + nbOfPixelsInGeom;
-  //OGRPolygon* inPolygon = dynamic_cast<OGRPolygon *>(geom);
-  //OGRLinearRing* exteriorRing = inPolygon->getExteriorRing();
-    //itk::Point<double, 2> point;
-    //inputImage->TransformIndexToPhysicalPoint(it.GetIndex(), point);
-    // ->Test if the current pixel is in a polygon hole
-    // If point is in feature
-    //if(exteriorRing->isPointInRing(&pointOGR, TRUE) && isNotInHole)
-    //{
-    //}
-
 }
 
 void
