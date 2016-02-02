@@ -173,25 +173,25 @@ int otbNewSensorModel(int argc, char* argv[])
   
   // 3. Results should be plausible (no NaN and no clearly out of bound results)
   /*-------------------------------------*/
-  if ( (!geoPoint[0]==geoPoint[0]) || (!geoPoint[1]==geoPoint[1]) )
+  if ( !(geoPoint[0]==geoPoint[0]) || !(geoPoint[1]==geoPoint[1]) )
   {
      std::cout << "Image to geo: " << imagePoint << " -> " << geoPoint << "\n";
      return EXIT_FAILURE;
   }
   
-  if ( (!geoPointGRS[0]==geoPointGRS[0]) || (!geoPointGRS[1]==geoPointGRS[1]) )
+  if ( !(geoPointGRS[0]==geoPointGRS[0]) || !(geoPointGRS[1]==geoPointGRS[1]) )
   {
      std::cout << "Image to geo: " << imagePoint << " -> " << geoPointGRS << "\n";
      return EXIT_FAILURE;
   }
   
-  if ( (!reversedImagePoint[0]==reversedImagePoint[0]) || (!reversedImagePoint[1]==reversedImagePoint[1]) )
+  if ( !(reversedImagePoint[0]==reversedImagePoint[0]) || !(reversedImagePoint[1]==reversedImagePoint[1]) )
   {
      std::cout << "Geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
      return EXIT_FAILURE;
   }
   
-  if ( (!reversedImagePointGRS[0]==reversedImagePointGRS[0]) || (!reversedImagePointGRS[1]==reversedImagePointGRS[1]) )
+  if ( !(reversedImagePointGRS[0]==reversedImagePointGRS[0]) || !(reversedImagePointGRS[1]==reversedImagePointGRS[1]) )
   {
      std::cout << "Geo to image: " << geoPointGRS << " -> " << reversedImagePointGRS << "\n";
      return EXIT_FAILURE;
