@@ -132,14 +132,14 @@ int otbNewSensorModel(int argc, char* argv[])
   
   // Instantiate Image->WGS transform
   GRSTransformType::Pointer img2wgs = GRSTransformType::New();
-  img2wgs->SetInputProjectionRef(wgsRef);
+  img2wgs->SetInputProjectionRef("");
   img2wgs->SetOutputProjectionRef(wgsRef);
   img2wgs->SetInputKeywordList(kwlist);
   img2wgs->InstanciateTransform();
 
   // Instantiate WGS->Image transform
   GRSTransformType::Pointer wgs2img = GRSTransformType::New();
-  wgs2img->SetInputProjectionRef(wgsRef);
+  wgs2img->SetInputProjectionRef("");
   wgs2img->SetOutputProjectionRef(wgsRef);
   wgs2img->SetOutputKeywordList(kwlist);
   wgs2img->InstanciateTransform();
