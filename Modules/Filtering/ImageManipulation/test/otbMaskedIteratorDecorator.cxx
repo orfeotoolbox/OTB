@@ -160,8 +160,8 @@ template <typename IteratorType>
 int TripleTest(typename IteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
 {
   return ForwardTest<IteratorType>(mask, image, region)
-      && ReverseTest<IteratorType>(mask, image, region)
-      && BijectiveTest<IteratorType>(mask, image, region);
+      || ReverseTest<IteratorType>(mask, image, region)
+      || BijectiveTest<IteratorType>(mask, image, region);
 }
 
 // Nominal case
@@ -172,16 +172,19 @@ int otbMaskedIteratorDecoratorNominal(int itkNotUsed(argc), char * itkNotUsed(ar
   ImageType::Pointer mask = GetTestImage<ImageType>(10, 0);
   ImageType::RegionType region(image->GetLargestPossibleRegion());
   FillHalf<ImageType>(mask, region, 1);
+  
+  std::cout << "EXIT_SUCCESS : "<< int(EXIT_SUCCESS) << std::endl;
+  std::cout << "EXIT_FAILURE : "<< int(EXIT_FAILURE) << std::endl;
 
   return TripleTest<itk::ImageRegionIterator<ImageType> >(image, mask, region)
-      && TripleTest< itk::ImageRegionConstIterator<ImageType> >(image, mask, region)
-      && TripleTest< itk::ImageRandomConstIteratorWithIndex<ImageType> >(image, mask, region)
-      && TripleTest< otb::SubsampledImageRegionIterator<ImageType> >(image, mask, region)
-      && TripleTest< itk::ImageRandomIteratorWithIndex<ImageType> >(image, mask, region)
-      && TripleTest< itk::ImageScanlineIterator<ImageType> >(image, mask, region)
-      && TripleTest< itk::ImageScanlineConstIterator<ImageType> >(image, mask, region)
-      && TripleTest< itk::ImageRandomNonRepeatingConstIteratorWithIndex<ImageType> >(image, mask, region)
-      && TripleTest< itk::ImageRandomNonRepeatingIteratorWithIndex<ImageType> >(image, mask, region)
+      || TripleTest< itk::ImageRegionConstIterator<ImageType> >(image, mask, region)
+      || TripleTest< itk::ImageRandomConstIteratorWithIndex<ImageType> >(image, mask, region)
+      || TripleTest< otb::SubsampledImageRegionIterator<ImageType> >(image, mask, region)
+      || TripleTest< itk::ImageRandomIteratorWithIndex<ImageType> >(image, mask, region)
+      || TripleTest< itk::ImageScanlineIterator<ImageType> >(image, mask, region)
+      || TripleTest< itk::ImageScanlineConstIterator<ImageType> >(image, mask, region)
+      || TripleTest< itk::ImageRandomNonRepeatingConstIteratorWithIndex<ImageType> >(image, mask, region)
+      || TripleTest< itk::ImageRandomNonRepeatingIteratorWithIndex<ImageType> >(image, mask, region)
       ;
 }
 
