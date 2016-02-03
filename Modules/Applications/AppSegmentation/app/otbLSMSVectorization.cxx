@@ -335,7 +335,12 @@ private:
       firstFeature=nextFeature;
       }
 
-    layer.ogr().CommitTransaction();
+    const OGRErr err = layer.ogr().CommitTransaction();
+
+    if (err != OGRERR_NONE)
+    {
+    itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << layer.ogr().GetName() << ".");
+    }
 
     if(extension==".shp"){
     sqloss.str("");

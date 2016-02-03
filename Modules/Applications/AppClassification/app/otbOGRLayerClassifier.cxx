@@ -213,7 +213,14 @@ private:
          goesOn2 = feature2.addr() != 0;
          count++;
        }
-    layer2.ogr().CommitTransaction();
+    
+    const OGRErr err = layer2.ogr().CommitTransaction();
+
+    if (err != OGRERR_NONE)
+      {
+      itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << layer2.ogr().GetName() << ".");
+      }
+
     source2->SyncToDisk();
 
     clock_t toc = clock();

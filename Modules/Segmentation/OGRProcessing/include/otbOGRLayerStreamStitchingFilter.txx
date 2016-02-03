@@ -127,7 +127,13 @@ OGRLayerStreamStitchingFilter<TInputImage>
 
    for(unsigned int x=1; x<=nbColStream; x++)
    {
-      m_OGRLayer.ogr().StartTransaction();
+   OGRErr errStart = m_OGRLayer.ogr().StartTransaction();
+
+   if (errStart != OGRERR_NONE)
+     {
+     itkExceptionMacro(<< "Unable to start transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
+     }
+
       for(unsigned int y=1; y<=nbRowStream; y++)
       {
 
@@ -351,11 +357,19 @@ OGRLayerStreamStitchingFilter<TInputImage>
          progress.CompletedPixel();
 
       } //end for x
-      m_OGRLayer.ogr().CommitTransaction();
-
+      OGRErr errCommitX = m_OGRLayer.ogr().CommitTransaction();
+      if (errCommitX != OGRERR_NONE)
+     {
+     itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
+     }
 
    } //end for y
-   m_OGRLayer.ogr().CommitTransaction();
+   const OGRErr errCommitY = m_OGRLayer.ogr().CommitTransaction();
+  
+   if (errCommitY != OGRERR_NONE)
+     {
+     itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
+     }
 
 }
 
