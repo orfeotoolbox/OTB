@@ -1057,6 +1057,16 @@ ImageViewRenderer
 }
 
 /*****************************************************************************/
+void
+ImageViewRenderer
+::SaveScreenshot( const QString & filename ) const
+{
+  assert( !m_GlView.IsNull() );
+
+  m_GlView->SaveScreenshot( QFile::encodeName( filename ).constData() );
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void

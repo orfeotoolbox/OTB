@@ -29,6 +29,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <exception>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -592,6 +593,14 @@ ImageViewWidget
     // to:
     this,
     SLOT( OnSetReferenceRequested() )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( TakeScreenshotRequested( bool ) ),
+    // to:
+    this,
+    SLOT( SaveScreenshot( bool ) )
   );
 
 
@@ -2073,6 +2082,74 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
+::SaveScreenshot( bool isQuickMode )
+{
+  QString filename(
+    QString( "monteverdi-%1-%2.png" )
+    .arg( Monteverdi_VERSION_STRING )
+    .arg(
+      QDateTime::currentDateTime().toString( "yyyyMMdd-hhmm-ss-zzz" )
+    )
+  );
+
+  QString selectedFilter;
+
+  if( isQuickMode )
+    filename = QDir::home().filePath( filename );
+  else
+    filename =
+      QFileDialog::getSaveFileName(
+	this,
+	tr( "Save screenshot..." ),
+	QDir::current().filePath( filename ),
+	tr( "PNG File (*.png);;JPEG File (*.jpg);;TIFF file (*tif)" ),
+  &selectedFilter
+      );
+
+  if( filename.isEmpty() )
+    return;
+
+  // If no correct extension is found
+  if(!filename.endsWith(".png",Qt::CaseInsensitive)
+     &&!filename.endsWith(".jpg",Qt::CaseInsensitive)
+     &&!filename.endsWith(".tif",Qt::CaseInsensitive))
+    {
+    if(selectedFilter.startsWith("PNG"))
+      {
+      filename+=".png";
+      }
+    else if(selectedFilter.startsWith("JPEG"))
+      {
+      filename+=".jpg";
+      }
+    else if(selectedFilter.startsWith("TIFF"))
+      {
+      filename+=".tif";
+      }
+    }
+                        
+  
+  assert( m_Renderer!=NULL );
+
+  try
+    {
+    m_Renderer->SaveScreenshot( filename );
+    }
+  catch( const std::exception & exception )
+    {
+    QMessageBox::warning(
+      this,
+      "Warning!",
+      tr( "Exception caught while saving screenshot into file '%1':\n\n%2" )
+      .arg( filename )
+      .arg( exception.what() )
+    );
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
 ::OnToggleLayerVisibilityRequested( bool )
 {
   assert( m_Renderer!=NULL );
@@ -2097,6 +2174,7 @@ ImageViewWidget
 
   assert( m_Renderer!=NULL );
 
+  
   StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
   assert( stackedLayerModel!=NULL );
 

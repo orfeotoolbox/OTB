@@ -450,6 +450,10 @@ private slots:
   void on_action_Preferences_triggered();
 
   /**
+   */
+  void on_action_SaveScreenshot_triggered();
+
+  /**
    * \brief Qt auto-connected slot which is called when zoom-in button
    * is pressed.
    */
