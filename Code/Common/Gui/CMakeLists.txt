@@ -37,6 +37,7 @@ set( Common_Gui_SOURCES
   mvdLayerStackItemModel.cxx
   mvdLayerStackWidget.cxx
   mvdMainWindowTitleLoader.cxx
+  mvdMultiResolutionPyramidWidget.cxx
   #mvdMyWidget.cxx
   mvdPixelDescriptionWidget.cxx
   mvdQuicklookViewManipulator.cxx
@@ -91,6 +92,7 @@ set( Common_Gui_HEADERS_MOC
   mvdLayerStackItemModel.h
   mvdLayerStackWidget.h
   mvdMainWindowTitleLoader.h
+  mvdMultiResolutionPyramidWidget.h
   #mvdMyWidget.h
   mvdPixelDescriptionWidget.h
   mvdQuicklookViewManipulator.h
@@ -119,6 +121,7 @@ set( Common_Gui_FORMS
   mvdHistogramWidget.ui
   mvdKeymapDialog.ui
   mvdLayerStackWidget.ui
+  mvdMultiResolutionPyramidWidget.ui
   #mvdMyWidget.ui
   mvdPixelDescriptionWidget.ui
   mvdSearchableTreeWidget.ui
