@@ -18,6 +18,9 @@
 
 #include <iomanip>
 #include <iostream>
+#include <sstream>
+#include <fstream>
+#include <iterator>
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -29,98 +32,158 @@
 #include "otbGeographicalDistance.h"
 #include "otbGenericRSTransform.h"
 
+#include "ossim/projection/ossimProjection.h"
+#include "ossim/projection/ossimSensorModelFactory.h"
+#include "ossim/ossimPluginProjectionFactory.h"
+
+
+typedef std::list< itk::Point<double, 2> > pointsContainerType;
+typedef std::list< itk::Point<double, 3> > geo3dPointsContainerType;
+typedef otb::VectorImage<double, 2>     ImageType;
+typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
+typedef otb::GeographicalDistance<ImageType::PointType> GeographicalDistanceType;
+
+int produceGCP(char * outputgcpfilename, const otb::ImageKeywordlist& kwlist, double z=16.19688987731934)
+{
+   itk::Point<double, 2> imagePoint;
+   itk::Point<double, 2> geoPoint;
+	
+   //  otbForwardSensorModel
+   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
+   ForwardSensorModelType::Pointer forwardSensorModel = ForwardSensorModelType::New();
+   forwardSensorModel->SetImageGeometry(kwlist);
+   if( forwardSensorModel->IsValidSensorModel() == false )
+   {
+     std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
+     return EXIT_FAILURE;
+   }
+	
+	otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(z);
+	
+	
+	ofstream file(outputgcpfilename, std::ios::out | std::ios::trunc);
+	if (file)
+	{
+    for(double x=10.0; x<300.0; x+=10.)
+		for(double y=10.0; y<300.0; y+=10.)
+		{
+		  imagePoint[0]=x;
+		  imagePoint[1]=y;	
+		  // otbForwardSensorModel 
+	      geoPoint = forwardSensorModel->TransformPoint(imagePoint);
+		  file << std::setprecision(16) << x << " " << y << " " << geoPoint[0] << " " << geoPoint[1] << " " << z << std::endl;
+	    }
+	 
+    }
+    else
+    {
+		std::cerr << "Couldn't open " << outputgcpfilename << std::endl;
+        return EXIT_FAILURE;
+    }
+    
+    file.close(); 
+    
+    return EXIT_SUCCESS;  
+}
+
+bool provideGCP(char * gcpfilename, pointsContainerType& imgPt, geo3dPointsContainerType& geo3dPt)
+{
+	itk::Point<double, 2> imagePoint;
+	itk::Point<double, 3> geo3dPoint;
+	
+	std::ifstream file(gcpfilename,std::ios::in);
+	if (file)
+		{
+			std::string line;
+			while(getline(file,line))
+			{
+			   
+			   std::istringstream iss(line);
+	     
+		       iss >> imagePoint[0] >> imagePoint[1] >> geo3dPoint[0] >> geo3dPoint[1] >> geo3dPoint[2];
+		      
+		       imgPt.push_back(imagePoint);
+		       geo3dPt.push_back(geo3dPoint);
+		      
+		    }
+			file.close();
+		}
+		else
+		   return false;
+	
+	return true;
+}
+
 int otbNewSensorModel(int argc, char* argv[])
 {
-  if (argc != 5)
+  if (argc != 8)
     {
-    std::cout << argv[0] << " <input filename> <output filename> <imgTol>" << std::endl;
+    std::cout << argv[0] 
+              << " <input geom filename> <input gcp filename> <output gcp filename> "
+              <<" <needed keywords> <imgTol> <geoTol> <writeBaseline>" << std::endl;
 
     return EXIT_FAILURE;
     }
-
-  char * filename = argv[1];
-  char * outFilename = argv[2];
-  double imgTol = atof(argv[3]);
-  double geoTol = atof(argv[4]);
-
-
-  typedef otb::VectorImage<double, 2>     ImageType;
-  typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
-  typedef otb::GeographicalDistance<ImageType::PointType> GeographicalDistanceType;
+    
+  char * geomfilename = argv[1];
+  char * gcpfilename = argv[2];
+  char * outFilename = argv[3];
+  std::istringstream iss(argv[4]);
+  double imgTol = atof(argv[5]);
+  double geoTol = atof(argv[6]);
+  int writeBaseline = atoi(argv[7]);
 
 
-  // #1 keywordlist, only check the needed keywords
-  /*-------------------------------------*/
-  std::ofstream file;
-  file.open(outFilename);
-  file << std::setprecision(15);
-  file << "**  keywords list  **" << std::endl;
-  
-  otb::ImageKeywordlist kwlist = otb::ReadGeometryFromGEOMFile(filename);
-  
+  // -------------------
+  // Some instanciations  
+  // -------------------
+  otb::ImageKeywordlist kwlist = otb::ReadGeometryFromGEOMFile(geomfilename);
+    
   if (!kwlist.GetSize() > 0)
   {
-       std::cout<<"ImageKeywordlist is empty."<<std::endl;
+       std::cerr<<"ImageKeywordlist is empty."<<std::endl;
        return EXIT_FAILURE;
+  }   
+     
+  if (writeBaseline)
+  {
+	  return produceGCP(outFilename,kwlist);
   }   
      
   typedef otb::ImageKeywordlist::KeywordlistMap KeywordlistMapType;
   KeywordlistMapType kwmap = kwlist.GetKeywordlist();
   
-  // list of needed keywords
-  std::string allowedKw[]={/*"support_data.sensorID",*/"line_den_coeff",
-                           "line_den_coeff","samp_den_coeff","samp_num_coeff"};
-                           
-  int n = static_cast<int>(sizeof(allowedKw) / sizeof(std::string) );
-  
-  std::list<std::string> missingKw;
-  for (int i=0; i<n; i++)
-  {
-	bool foundAllowedKw = false;
-    for(KeywordlistMapType::iterator it=kwmap.begin(); it!=kwmap.end(); ++it)
-	{
-		std::size_t found = it->first.find(allowedKw[i]);
-		if (found!=std::string::npos)
-		{   
-			file << it->first << " " << it->second << std::endl;
-			foundAllowedKw = true;
-		}
-	}
-	
-	if (!foundAllowedKw)
-	    missingKw.push_back(allowedKw[i]);
-  }
-  file.close();
-  
-  if (missingKw.size()>0)
-  {
-	std::cout << "Missing keywords : " << std::endl;
-	for (std::list<std::string>::iterator itm = missingKw.begin(); itm != missingKw.end(); ++itm)  
-	   std::cout << *itm << std::endl;
-	return EXIT_FAILURE;
-  }
-  /*-------------------------------------*/
-
-  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(16.19688987731934);
-
+  //  otbForwardSensorModel
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer forwardSensorModel = ForwardSensorModelType::New();
+  if( !forwardSensorModel )
+   {
+     std::cerr<<"Invalid sensor model (ForwardSensorModelType::Pointer is NULL)"<<std::endl;
+     return EXIT_FAILURE;
+   }
   forwardSensorModel->SetImageGeometry(kwlist);
   if( forwardSensorModel->IsValidSensorModel() == false )
    {
-     std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
+     std::cerr<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
      return EXIT_FAILURE;
    }
    
+  // otbInverseSensorModel 
   typedef otb::InverseSensorModel<double> InverseSensorModelType;
   InverseSensorModelType::Pointer inverseSensorModel = InverseSensorModelType::New();
+  if( !inverseSensorModel )
+   {
+     std::cerr<<"Invalid sensor model (InverseSensorModelType::Pointer is NULL)"<<std::endl;
+     return EXIT_FAILURE;
+   }
   inverseSensorModel->SetImageGeometry(kwlist);
   if( inverseSensorModel->IsValidSensorModel() == false )
    {
-     std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
+     std::cerr<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
      return EXIT_FAILURE;
    }
    
+  // otbGenericRSTransform 
   // Build wgs ref
   OGRSpatialReference oSRS;
   oSRS.SetWellKnownGeogCS("WGS84");
@@ -128,124 +191,273 @@ int otbNewSensorModel(int argc, char* argv[])
   oSRS.exportToWkt(&wgsRef);
 
   typedef otb::GenericRSTransform<>       GRSTransformType;
-  GRSTransformType::Pointer transform = GRSTransformType::New();
   
   // Instantiate Image->WGS transform
   GRSTransformType::Pointer img2wgs = GRSTransformType::New();
-  img2wgs->SetInputProjectionRef(wgsRef);
+  if( !img2wgs )
+   {
+     std::cerr<<"Invalid sensor model (GRSTransformType::Pointer is NULL)"<<std::endl;
+     return EXIT_FAILURE;
+   }
+  img2wgs->SetInputProjectionRef("");
   img2wgs->SetOutputProjectionRef(wgsRef);
   img2wgs->SetInputKeywordList(kwlist);
   img2wgs->InstanciateTransform();
 
+
   // Instantiate WGS->Image transform
   GRSTransformType::Pointer wgs2img = GRSTransformType::New();
-  wgs2img->SetInputProjectionRef(wgsRef);
+  if( !wgs2img )
+   {
+     std::cerr<<"Invalid sensor model (GRSTransformType::Pointer is NULL)"<<std::endl;
+     return EXIT_FAILURE;
+   }
+  wgs2img->SetInputProjectionRef("");
   wgs2img->SetOutputProjectionRef(wgsRef);
   wgs2img->SetOutputKeywordList(kwlist);
   wgs2img->InstanciateTransform();
 
+  // ossim classes
+  ossimKeywordlist ossimKwlist;
+  kwlist.convertToOSSIMKeywordlist(ossimKwlist);
+  
+  ossimProjection* ossimSensorModel = ossimSensorModelFactory::instance()->createProjection(ossimKwlist);
+  if (ossimSensorModel == NULL)
+  {
+      ossimSensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(ossimKwlist);
+  }
+  if (ossimSensorModel == NULL) // Model validity
+  {
+	std::cerr << "Invalid sensor model (ossimSensorModel is NULL)" << std::endl;
+    return EXIT_FAILURE;
+  }
+
   itk::Point<double, 2> imagePoint;
-  imagePoint[0] = 10;
-  imagePoint[1] = 10;
-  itk::Point<double, 2> geoPoint;
+  itk::Point<double, 2> geoPoint,geoPointGCP;
+  itk::Point<double, 3> geo3dPoint;
   itk::Point<double, 2> geoPointGRS;
+  itk::Point<double, 2> geoPointOSSIM;
   itk::Point<double, 2> reversedImagePoint;
   itk::Point<double, 2> reversedImagePointGRS;
   
-  geoPoint = forwardSensorModel->TransformPoint(imagePoint);
-  reversedImagePoint = inverseSensorModel->TransformPoint(geoPoint);
-  
-  geoPointGRS = img2wgs->TransformPoint(imagePoint);
-  reversedImagePointGRS = wgs2img->TransformPoint(geoPointGRS);
 
-  // TODO : remove this, just for debug purpose
-  std::cout << ">>>>>>>>>>>>>>" << std::endl;
-  std::cout << filename << std::endl;
-  std::cout << outFilename << std::endl;
-  std::cout << "Image to geo: " << imagePoint << " -> " << geoPoint << "\n";
-  std::cout << "Geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
-  std::cout << "Image to geo: " << imagePoint << " -> " << geoPointGRS << "\n";
-  std::cout << "Geo to image: " << geoPointGRS << " -> " << reversedImagePointGRS << "\n";
-  // TODO (end)
-  
+  pointsContainerType pointsContainer;
+  geo3dPointsContainerType geo3dPointsContainer;
+  bool okStatus = provideGCP(gcpfilename,pointsContainer,geo3dPointsContainer);
+  if (!okStatus)
+  {
+     std::cerr << "File" << gcpfilename << " couldn't be opened" << std::endl;
+     return EXIT_FAILURE;
+  }
+ 
   DistanceType::Pointer distance = DistanceType::New();
   GeographicalDistanceType::Pointer geoDistance = GeographicalDistanceType::New();
   
-  // 3. Results should be plausible (no NaN and no clearly out of bound results)
-  /*-------------------------------------*/
-  if ( (!geoPoint[0]==geoPoint[0]) || (!geoPoint[1]==geoPoint[1]) )
-  {
-     std::cout << "Image to geo: " << imagePoint << " -> " << geoPoint << "\n";
-     return EXIT_FAILURE;
-  }
-  
-  if ( (!geoPointGRS[0]==geoPointGRS[0]) || (!geoPointGRS[1]==geoPointGRS[1]) )
-  {
-     std::cout << "Image to geo: " << imagePoint << " -> " << geoPointGRS << "\n";
-     return EXIT_FAILURE;
-  }
-  
-  if ( (!reversedImagePoint[0]==reversedImagePoint[0]) || (!reversedImagePoint[1]==reversedImagePoint[1]) )
-  {
-     std::cout << "Geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
-     return EXIT_FAILURE;
-  }
-  
-  if ( (!reversedImagePointGRS[0]==reversedImagePointGRS[0]) || (!reversedImagePointGRS[1]==reversedImagePointGRS[1]) )
-  {
-     std::cout << "Geo to image: " << geoPointGRS << " -> " << reversedImagePointGRS << "\n";
-     return EXIT_FAILURE;
-  }
-  
-  if ( !((geoPoint[0]>=-180.0) && (geoPoint[0]<=180.0)) || !((geoPoint[0]>=-90.0) && (geoPoint[0]<=90.0)) )
-  {
-	 std::cout << "GeoPoint out of bound (otbForwardSensorModel otbInverseSensorModel) : " << geoPointGRS << "\n";
-     return EXIT_FAILURE;
-  }
-  
-  if ( !((geoPointGRS[0]>=-180.0) && (geoPointGRS[0]<=180.0)) || !((geoPointGRS[0]>=-90.0) && (geoPointGRS[0]<=90.0)) )
-  {
-	 std::cout << "GeoPoint out of bound (otbGenericRSTransform) : " << geoPointGRS << "\n";
-     return EXIT_FAILURE;
-  }
-  /*-------------------------------------*/
-  
-  //2. GenericRSTransform encapsulate Inverse/Forward SensorModel: check that the encapsulation does not modify results 
-  /*-------------------------------------*/
-  double dist = geoDistance->Evaluate(geoPoint, geoPointGRS);
-  if (dist>geoTol)
-  {
-     std::cout << "Geo distance between otbForwardSensorModel and otbGenericRSTransform too high : " << dist << "\n";
-     return EXIT_FAILURE;
-  }
-  /*-------------------------------------*/
-  
-  //4. Round tripping error 
-  /*-------------------------------------*/
-  //for otbForwardSensorModel otbInverseSensorModel classes
-  dist = distance->Evaluate(imagePoint, reversedImagePoint);
-  if (dist>imgTol)
-  {
-     std::cout << "Round tripping for otbForwardSensorModel otbInverseSensorModel : dist(imagePoint,reversedImagePoint) = " << dist << "\n";
-     return EXIT_FAILURE;
-  }
-  
-  //for otbGenericRSTransform class
-  dist = distance->Evaluate(imagePoint, reversedImagePointGRS);
-  if (dist>imgTol)
-  {
-     std::cout << "Round tripping for otbGenericRSTransform : dist(imagePoint,reversedImagePoint) = " << dist << "\n";
-     return EXIT_FAILURE;
-  }
-  /*-------------------------------------*/
+  //--------------------------	
+  // Some instanciations (end)
+  //--------------------------
+	
+	
+	
+  //-----------	
+  // Tests core
+  //-----------	
 
-  //5. Stability check
-  /*-------------------------------------*/
-  file.open(outFilename,std::ios::app);
-  file << "** geo point **" << std::endl;
-  file << geoPoint << std::endl;
-  file << geoPointGRS << std::endl;
-  file.close();
- /*-------------------------------------*/
+  pointsContainerType::iterator pointsIt=pointsContainer.begin();	
+  geo3dPointsContainerType::iterator geo3dPointsIt=geo3dPointsContainer.begin();	
+  //for(; pointsIt!=pointsContainer.end(); ++pointsIt)
+  while( (pointsIt!=pointsContainer.end()) && (geo3dPointsIt!=geo3dPointsContainer.end())  )
+  {
+	  imagePoint = *pointsIt;
+	  geo3dPoint = *geo3dPointsIt;
+	  
+	  double z=geo3dPoint[2];
+	  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(z);
+	  
+	  // otbForwardSensorModel and otbInverseSensorModel
+	  geoPoint = forwardSensorModel->TransformPoint(imagePoint);
+	  reversedImagePoint = inverseSensorModel->TransformPoint(geoPoint);
+	  
+	  // otbGenericRSTransform 
+	  geoPointGRS = img2wgs->TransformPoint(imagePoint);
+	  reversedImagePointGRS = wgs2img->TransformPoint(geoPointGRS);
+	  
+	  // ossim classes
+	  ossimDpt ossimPoint(otb::internal::ConvertToOSSIMFrame(imagePoint[0]),  //x
+						  otb::internal::ConvertToOSSIMFrame(imagePoint[1])); //y
+	  ossimGpt ossimGPoint;
+	  ossimSensorModel->lineSampleHeightToWorld(ossimPoint,z, ossimGPoint);
+	  geoPointOSSIM[0] = ossimGPoint.lon;
+      geoPointOSSIM[1] = ossimGPoint.lat;
+
+	  // Just for debug purpose
+	  std::cout << ">>>>>>>>>>>>>>" << geomfilename << std::endl;
+	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+	            <<  "Image to geo (GCP): " << imagePoint << " -> " << geoPoint << "\n";
+	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+	            <<  "Image to geo (Inverse/Forward SensorModel): " << imagePoint << " -> " << geoPoint << "\n";
+	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+	            <<  "Geo to image (Inverse/Forward SensorModel): " << geoPoint << " -> " << reversedImagePoint << "\n";
+	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+	            <<  "Image to geo (GenericRSTransform): " << imagePoint << " -> " << geoPointGRS << "\n";
+	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+	            <<  "Geo to image (GenericRSTransform): " << geoPointGRS << " -> " << reversedImagePointGRS << "\n";
+	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+	            <<  "Image to geo (OSSIM): " << imagePoint << " -> " << geoPointOSSIM << "\n";
+
+	  
+	  
+	  // #1 keywordlist, only check the needed keywords
+	  /*-------------------------------------*/
+	  
+	  //Split the string into many tokens, with whitespaces as separators
+	  std::list<std::string> neededKw;
+	  copy(std::istream_iterator<std::string>(iss),
+		 std::istream_iterator<std::string>(),
+		 back_inserter(neededKw));
+								 
+	  
+	  std::list<std::string> missingKw;
+	  for(std::list<std::string>::iterator neededIt=neededKw.begin(); neededIt!=neededKw.end(); ++neededIt)
+	  {
+		bool foundNeededKw = false;
+		for(KeywordlistMapType::iterator kwlistIt=kwmap.begin(); kwlistIt!=kwmap.end(); ++kwlistIt)
+		{
+			std::size_t found = kwlistIt->first.find(*neededIt);
+			if (found!=std::string::npos)
+			{   
+				foundNeededKw = true;
+			}
+		}
+		
+		if (!foundNeededKw)
+			missingKw.push_back(*neededIt);
+	  }
+	  
+	  if ( (neededKw.size()>0) && (missingKw.size()>0) )
+	  {
+		std::cerr << "Some keywords were not found; missing keywords : " << std::endl;
+		for (std::list<std::string>::iterator itm = missingKw.begin(); itm != missingKw.end(); ++itm)  
+		   std::cerr << *itm << std::endl;
+		return EXIT_FAILURE;
+	  }
+	  /*-------------------------------------*/
+	  
+	  // 3. Results should be plausible (no NaN and no clearly out of bound results)
+	  /*-------------------------------------*/
+	  if ( (ossim::isnan(geoPoint[0])) || (ossim::isnan(geoPoint[1])) )
+	  {
+		 std::cerr << " Nan results (otbForwardSensorModel otbInverseSensorModel) : image to geo: " << imagePoint << " -> " << geoPoint << "\n";
+		 return EXIT_FAILURE;
+	  }
+	  
+	  if (  (ossim::isnan(geoPointGRS[0])) || (ossim::isnan(geoPointGRS[1])) )
+	  {
+		 std::cerr << "Nan results (otbGenericRSTransform) : image to geo: " << imagePoint << " -> " << geoPointGRS << "\n";
+		 return EXIT_FAILURE;
+	  }
+	  
+	  if ( (ossim::isnan(reversedImagePoint[0])) || (ossim::isnan(reversedImagePoint[1])) )
+	  {
+		 std::cerr << "Nan results (otbForwardSensorModel otbInverseSensorModel) : geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
+		 return EXIT_FAILURE;
+	  }
+	  
+	  if (  (ossim::isnan(reversedImagePointGRS[0])) || (ossim::isnan(reversedImagePointGRS[1])) )
+	  {
+		 std::cerr << "Nan results (otbGenericRSTransform) : geo to image: " << geoPointGRS << " -> " << reversedImagePointGRS << "\n";
+		 return EXIT_FAILURE;
+	  }
+	  
+	  if ( !((geoPoint[0]>=-180.0) && (geoPoint[0]<=180.0)) || !((geoPoint[0]>=-90.0) && (geoPoint[0]<=90.0)) )
+	  {
+		 std::cerr << "GeoPoint out of bound (otbForwardSensorModel otbInverseSensorModel) : " << geoPointGRS << "\n";
+		 return EXIT_FAILURE;
+	  }
+	  
+	  if ( !((geoPointGRS[0]>=-180.0) && (geoPointGRS[0]<=180.0)) || !((geoPointGRS[0]>=-90.0) && (geoPointGRS[0]<=90.0)) )
+	  {
+		 std::cerr << "GeoPoint out of bound (otbGenericRSTransform) : " << geoPointGRS << "\n";
+		 return EXIT_FAILURE;
+	  }
+	  /*-------------------------------------*/
+	  
+	  //2. Check that the encapsulation does not modify results 
+	  /*-------------------------------------*/
+	  // Inverse/Forward SensorModel VS GenericRSTransform
+	  double dist1 = geoDistance->Evaluate(geoPoint, geoPointGRS); 
+	  if (dist1>geoTol)
+	  {
+		 std::cerr << "Geo distance between otbForwardSensorModel and otbGenericRSTransform too high : "
+		           << "dist = " << dist1 << " (tol = " << geoTol << ")" << std::endl;
+		 return EXIT_FAILURE;
+	  }
+	  
+	  // Inverse/Forward SensorModel VS OSSIM
+	  double dist2 = geoDistance->Evaluate(geoPoint, geoPointOSSIM); 
+	  if (dist2>geoTol)
+	  {
+		 std::cerr << "Geo distance between otbForwardSensorModel and OSSIM too high : "
+		           << "dist = " << dist2 << " (tol = " << geoTol << ")" << std::endl;
+		 return EXIT_FAILURE;
+	  }
+	  /*-------------------------------------*/
+	  
+	  //4. Round tripping error 
+	  /*-------------------------------------*/
+	  //for otbForwardSensorModel otbInverseSensorModel classes
+	  double dist3 = distance->Evaluate(imagePoint, reversedImagePoint);
+	  if (dist3>imgTol)
+	  {
+		 std::cerr << "Round tripping error for otbForwardSensorModel / otbInverseSensorModel too high : "
+		           << "dist(imagePoint,reversedImagePoint) = " << dist3 << " (tol = " << imgTol << ")" << std::endl;
+		 return EXIT_FAILURE;
+	  }
+	  
+	  //for otbGenericRSTransform class
+	  double dist4 = distance->Evaluate(imagePoint, reversedImagePointGRS);
+	  if (dist4>imgTol)
+	  {
+		 std::cerr << "Round tripping error for otbGenericRSTransform too high : "
+		           << "dist(imagePoint,reversedImagePoint) = " << dist4 << " (tol = " << imgTol << ")" << std::endl;
+		 return EXIT_FAILURE;
+	  }
+	  /*-------------------------------------*/
+
+	  //5. Stability check
+	  /*-------------------------------------*/
+	  geoPointGCP[0] = geo3dPoint[0];
+	  geoPointGCP[1] = geo3dPoint[1];
+	  
+	  double dist5 = geoDistance->Evaluate(geoPoint, geoPointGCP);
+	  double dist6 = geoDistance->Evaluate(geoPointGRS, geoPointGCP);
+	  double dist7 = geoDistance->Evaluate(geoPointOSSIM, geoPointGCP);
+	  
+	  
+	  std::cout << ">>>>>>>>>>>>>>" << "Forward SensorModel VS GCP : " <<  dist5 << std::endl;
+	  std::cout << ">>>>>>>>>>>>>>" << "GenericRSTransform VS GCP : " <<  dist6 << std::endl;
+	  std::cout << ">>>>>>>>>>>>>>" << "OSSIM VS GCP : " <<  dist7 << std::endl;
+	  
+	  if (dist5>geoTol)
+	  {
+		 std::cerr << "Result for Forward SensorModel is unstable : dist from baseline = " 
+		           <<  dist5 << " (tol = " << geoTol << ")" << std::endl;
+		 return EXIT_FAILURE;
+	  }
+	  if (dist6>geoTol)
+	  {
+		 std::cerr << "Result for GenericRSTransform is unstable : dist from baseline = " 
+		           <<  dist6 << " (tol = " << geoTol << ")" << std::endl;
+		 return EXIT_FAILURE;
+	  }
+	 /*-------------------------------------*/
+ 
+  ++pointsIt;
+  ++geo3dPointsIt;
+  }
+  //-----------------	
+  // Tests core (end)
+  //-----------------	
+  
   return EXIT_SUCCESS;
 }
