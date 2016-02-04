@@ -76,22 +76,36 @@ otbImportGeoInformationImageFilter.cxx
 #)
 #set( IMAGES_TESTNB 0)
 
-set(GEOM
-gd-pleiades-1.geom
-gd-wv2-1.geom
+set(GEOMGCP
+"pleiades/gd-pleiades-1"
+"wv2/gd-wv2-1"
+"spot6/gd-spot6-1"
+"QB/gd-qb-1"
 )
+
+set(NEEDEDKW
+"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Pleiades
+"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #World view 2
+"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Spot 6
+"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #QB
+)
+
 set( GEOM_TESTNB 0)
-foreach( file ${GEOM} )
-  list(GET GEOM   ${GEOM_TESTNB} current_geom   )
+foreach( file ${GEOMGCP} )
+  list(GET GEOMGCP   ${GEOM_TESTNB} current_geomgcp   )
+  list(GET NEEDEDKW   ${GEOM_TESTNB} current_neededkw   )
   math(EXPR GEOM_TESTNB "${GEOM_TESTNB} + 1")
   
   otb_add_test(NAME prTvSensorModel_${GEOM_TESTNB} COMMAND otbProjectionTestDriver
     #BASELINE_FILES
     otbNewSensorModel
-    ${INPUTDATA}/${current_geom}
-    ${TEMP}/prTvSensorModel_${GEOM_TESTNB}.txt
+    ${INPUTDATA}/${current_geomgcp}.geom
+    ${INPUTDATA}/${current_geomgcp}.gcp
+    ${TEMP}/${current_geomgcp}.gcp
+    ${current_neededkw}
     1
     1
+    0
   )
 endforeach()
 
