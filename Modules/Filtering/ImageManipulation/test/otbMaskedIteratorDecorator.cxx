@@ -159,9 +159,35 @@ int BijectiveTest(typename IteratorType::ImageType::Pointer mask, typename Itera
 template <typename IteratorType>
 int TripleTest(typename IteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
 {
-  return ForwardTest<IteratorType>(mask, image, region)
-      || ReverseTest<IteratorType>(mask, image, region)
-      || BijectiveTest<IteratorType>(mask, image, region);
+  int ret;
+  int retGlobal = EXIT_SUCCESS;
+
+  ret = ForwardTest<IteratorType>(mask, image, region);
+  if (ret == EXIT_FAILURE)
+    {
+    std::cout << "Forward(FAILED) ";
+    retGlobal = EXIT_FAILURE;
+    }
+
+  ret = ReverseTest<IteratorType>(mask, image, region);
+  if (ret == EXIT_FAILURE)
+    {
+    std::cout << "Reverse(FAILED) ";
+    retGlobal = EXIT_FAILURE;
+    }
+
+  ret = BijectiveTest<IteratorType>(mask, image, region);
+  if (ret == EXIT_FAILURE)
+    {
+    std::cout << "Bijective(FAILED) ";
+    retGlobal = EXIT_FAILURE;
+    }
+
+  if (retGlobal == EXIT_SUCCESS)
+    {
+    std::cout << "PASSED";
+    }
+  return retGlobal;
 }
 
 // Nominal case
@@ -172,20 +198,46 @@ int otbMaskedIteratorDecoratorNominal(int itkNotUsed(argc), char * itkNotUsed(ar
   ImageType::Pointer mask = GetTestImage<ImageType>(10, 0);
   ImageType::RegionType region(image->GetLargestPossibleRegion());
   FillHalf<ImageType>(mask, region, 1);
-  
-  std::cout << "EXIT_SUCCESS : "<< int(EXIT_SUCCESS) << std::endl;
-  std::cout << "EXIT_FAILURE : "<< int(EXIT_FAILURE) << std::endl;
+  int ret;
+  int retGlobal = EXIT_SUCCESS;
 
-  return TripleTest<itk::ImageRegionIterator<ImageType> >(image, mask, region)
-      || TripleTest< itk::ImageRegionConstIterator<ImageType> >(image, mask, region)
-      || TripleTest< itk::ImageRandomConstIteratorWithIndex<ImageType> >(image, mask, region)
-      || TripleTest< otb::SubsampledImageRegionIterator<ImageType> >(image, mask, region)
-      || TripleTest< itk::ImageRandomIteratorWithIndex<ImageType> >(image, mask, region)
-      || TripleTest< itk::ImageScanlineIterator<ImageType> >(image, mask, region)
-      || TripleTest< itk::ImageScanlineConstIterator<ImageType> >(image, mask, region)
-      || TripleTest< itk::ImageRandomNonRepeatingConstIteratorWithIndex<ImageType> >(image, mask, region)
-      || TripleTest< itk::ImageRandomNonRepeatingIteratorWithIndex<ImageType> >(image, mask, region)
-      ;
+  std::cout << std::endl << "itk::ImageRegionIterator : ";
+  ret = TripleTest<itk::ImageRegionIterator<ImageType> >(image, mask, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  std::cout << std::endl << "itk::ImageRegionConstIterator : ";
+  ret = TripleTest< itk::ImageRegionConstIterator<ImageType> >(image, mask, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  std::cout << std::endl << "itk::ImageRandomConstIteratorWithIndex : ";
+  ret = TripleTest< itk::ImageRandomConstIteratorWithIndex<ImageType> >(image, mask, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  std::cout << std::endl << "otb::SubsampledImageRegionIterator : ";
+  ret = TripleTest< otb::SubsampledImageRegionIterator<ImageType> >(image, mask, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  std::cout << std::endl << "itk::ImageRandomIteratorWithIndex : ";
+  ret = TripleTest< itk::ImageRandomIteratorWithIndex<ImageType> >(image, mask, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  std::cout << std::endl << "itk::ImageScanlineIterator : ";
+  ret = TripleTest< itk::ImageScanlineIterator<ImageType> >(image, mask, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  std::cout << std::endl << "itk::ImageScanlineConstIterator : ";
+  ret = TripleTest< itk::ImageScanlineConstIterator<ImageType> >(image, mask, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  std::cout << std::endl << "itk::ImageRandomNonRepeatingConstIteratorWithIndex : ";
+  ret = TripleTest< itk::ImageRandomNonRepeatingConstIteratorWithIndex<ImageType> >(image, mask, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  std::cout << std::endl << "itk::ImageRandomNonRepeatingIteratorWithIndex : ";
+  ret = TripleTest< itk::ImageRandomNonRepeatingIteratorWithIndex<ImageType> >(image, mask, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  return retGlobal;
 }
 
 /* Other iterators potentially compatible:
