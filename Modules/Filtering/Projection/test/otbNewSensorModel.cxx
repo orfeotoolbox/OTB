@@ -61,7 +61,7 @@ int produceGCP(char * outputgcpfilename, const otb::ImageKeywordlist& kwlist, do
 	otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(z);
 	
 	
-	ofstream file(outputgcpfilename, std::ios::out | std::ios::trunc);
+	std::ofstream file(outputgcpfilename, std::ios::out | std::ios::trunc);
 	if (file)
 	{
     for(double x=10.0; x<300.0; x+=10.)
