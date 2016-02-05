@@ -139,7 +139,7 @@ int otbNewSensorModel(int argc, char* argv[])
   // -------------------
   otb::ImageKeywordlist kwlist = otb::ReadGeometryFromGEOMFile(geomfilename);
     
-  if (!kwlist.GetSize() > 0)
+  if (!(kwlist.GetSize() > 0))
   {
        std::cerr<<"ImageKeywordlist is empty."<<std::endl;
        return EXIT_FAILURE;
