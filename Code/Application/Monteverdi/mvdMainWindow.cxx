@@ -1596,6 +1596,16 @@ MainWindow
   m_KeymapDialog->show();
 }
 
+/****************************************************************************/
+void
+MainWindow
+::on_action_LoadOTBApplications_triggered()
+{
+#if USE_OTB_APPS
+  SetupOTBApplications();
+#endif // USE_OTB_APPS
+}
+
 /*****************************************************************************/
 void
 MainWindow
@@ -1616,6 +1626,16 @@ MainWindow
   PreferencesDialog prefDialog( this );
 
   prefDialog.exec();
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::on_action_SaveScreenshot_triggered()
+{
+  assert( m_ImageView!=NULL );
+
+  m_ImageView->SaveScreenshot( false );
 }
 
 /*****************************************************************************/
@@ -2359,16 +2379,6 @@ MainWindow
     }
 
   m_StatusBarWidget->SetText( text );
-}
-
-/****************************************************************************/
-void
-MainWindow
-::on_action_LoadOTBApplications_triggered()
-{
-#if USE_OTB_APPS
-  SetupOTBApplications();
-#endif // USE_OTB_APPS
 }
 
 } // end namespace 'mvd'

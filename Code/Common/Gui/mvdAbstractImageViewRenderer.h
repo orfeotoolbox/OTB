@@ -207,6 +207,10 @@ public:
 
   /**
    */
+  virtual void SaveScreenshot( const QString & ) const =0;
+
+  /**
+   */
   inline bool SetBypassRenderingEnabled( bool );
   /**
    */

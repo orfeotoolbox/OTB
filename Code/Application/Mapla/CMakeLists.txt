@@ -26,7 +26,6 @@ set( Mapla_RESOURCES
 
 # General include directories.
 include_directories(
-  # ${ICE_INCLUDE_DIRS}
   # ${QWT_INCLUDE_DIRS}
   #
   ${Monteverdi_BINARY_DIR}
