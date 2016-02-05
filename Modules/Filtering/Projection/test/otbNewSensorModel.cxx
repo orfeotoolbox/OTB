@@ -64,8 +64,8 @@ int produceGCP(char * outputgcpfilename, const otb::ImageKeywordlist& kwlist, do
 	std::ofstream file(outputgcpfilename, std::ios::out | std::ios::trunc);
 	if (file)
 	{
-    for(double x=10.0; x<300.0; x+=10.)
-		for(double y=10.0; y<300.0; y+=10.)
+    for(double x=10.0; x<300.0; x+=50.)
+		for(double y=10.0; y<300.0; y+=50.)
 		{
 		  imagePoint[0]=x;
 		  imagePoint[1]=y;	
@@ -263,6 +263,43 @@ int otbNewSensorModel(int argc, char* argv[])
   // Tests core
   //-----------	
 
+  // #1 keywordlist, only check the needed keywords
+  /*-------------------------------------*/
+  
+  //Split the string into many tokens, with whitespaces as separators
+  std::list<std::string> neededKw;
+  copy(std::istream_iterator<std::string>(iss),
+	 std::istream_iterator<std::string>(),
+	 back_inserter(neededKw));
+							 
+  
+  std::list<std::string> missingKw;
+  for(std::list<std::string>::iterator neededIt=neededKw.begin(); neededIt!=neededKw.end(); ++neededIt)
+  {
+	bool foundNeededKw = false;
+	for(KeywordlistMapType::iterator kwlistIt=kwmap.begin(); kwlistIt!=kwmap.end(); ++kwlistIt)
+	{
+		std::size_t found = kwlistIt->first.find(*neededIt);
+		if (found!=std::string::npos)
+		{   
+			foundNeededKw = true;
+		}
+	}
+	
+	if (!foundNeededKw)
+		missingKw.push_back(*neededIt);
+  }
+  
+  if ( (neededKw.size()>0) && (missingKw.size()>0) )
+  {
+	std::cerr << "Some keywords were not found; missing keywords : " << std::endl;
+	for (std::list<std::string>::iterator itm = missingKw.begin(); itm != missingKw.end(); ++itm)  
+	   std::cerr << *itm << std::endl;
+	return EXIT_FAILURE;
+  }
+  /*-------------------------------------*/
+
+
   pointsContainerType::iterator pointsIt=pointsContainer.begin();	
   geo3dPointsContainerType::iterator geo3dPointsIt=geo3dPointsContainer.begin();	
   //for(; pointsIt!=pointsContainer.end(); ++pointsIt)
@@ -307,41 +344,7 @@ int otbNewSensorModel(int argc, char* argv[])
 
 	  
 	  
-	  // #1 keywordlist, only check the needed keywords
-	  /*-------------------------------------*/
-	  
-	  //Split the string into many tokens, with whitespaces as separators
-	  std::list<std::string> neededKw;
-	  copy(std::istream_iterator<std::string>(iss),
-		 std::istream_iterator<std::string>(),
-		 back_inserter(neededKw));
-								 
-	  
-	  std::list<std::string> missingKw;
-	  for(std::list<std::string>::iterator neededIt=neededKw.begin(); neededIt!=neededKw.end(); ++neededIt)
-	  {
-		bool foundNeededKw = false;
-		for(KeywordlistMapType::iterator kwlistIt=kwmap.begin(); kwlistIt!=kwmap.end(); ++kwlistIt)
-		{
-			std::size_t found = kwlistIt->first.find(*neededIt);
-			if (found!=std::string::npos)
-			{   
-				foundNeededKw = true;
-			}
-		}
-		
-		if (!foundNeededKw)
-			missingKw.push_back(*neededIt);
-	  }
-	  
-	  if ( (neededKw.size()>0) && (missingKw.size()>0) )
-	  {
-		std::cerr << "Some keywords were not found; missing keywords : " << std::endl;
-		for (std::list<std::string>::iterator itm = missingKw.begin(); itm != missingKw.end(); ++itm)  
-		   std::cerr << *itm << std::endl;
-		return EXIT_FAILURE;
-	  }
-	  /*-------------------------------------*/
+
 	  
 	  // 3. Results should be plausible (no NaN and no clearly out of bound results)
 	  /*-------------------------------------*/
