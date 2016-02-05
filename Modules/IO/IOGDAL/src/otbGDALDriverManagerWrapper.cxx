@@ -23,43 +23,6 @@
 namespace otb
 {
 
-GDALDatasetWrapper::GDALDatasetWrapper(): m_Dataset(NULL)
-{
-}
-
-GDALDatasetWrapper::~GDALDatasetWrapper()
-{
-  if (m_Dataset)
-    {
-    GDALClose(m_Dataset);
-    }
-}
-
-// GetDataSet
-GDALDataset*
-GDALDatasetWrapper::GetDataSet() const
-{
-  return m_Dataset;
-}
-
-// IsJPEG2000
-bool
-GDALDatasetWrapper::IsJPEG2000() const
-{
-  if (m_Dataset == NULL)
-    {
-    return false;
-    }
-  std::string driverName(m_Dataset->GetDriver()->GetDescription());
-  if (driverName.compare("JP2OpenJPEG") == 0 ||
-      driverName.compare("JP2KAK") == 0 ||
-      driverName.compare("JP2ECW") == 0)
-    {
-    return true;
-    }
-  return false;
-}
-
 // GDALDriverManagerWrapper method implementation
 
 GDALDriverManagerWrapper::GDALDriverManagerWrapper()

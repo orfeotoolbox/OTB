@@ -1,4 +1,5 @@
 set(OTBIOGDAL_SRC
+  otbGDALDatasetWrapper.cxx
   otbGDALDriverManagerWrapper.cxx
   otbGDALImageIO.cxx
   otbGDALImageIOFactory.cxx

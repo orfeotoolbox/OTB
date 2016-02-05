@@ -28,49 +28,13 @@ class GDALDriver;
 #include "gdal_priv.h"
 #include "gdal_alg.h"
 
+#include "otbGDALDatasetWrapper.h"
 // otb::GDALOverviewsBuilder moved to self header & body files.
-//
 // Including its header file here for compile time compatibility.
 #include "otbGDALOverviewsBuilder.h"
 
 namespace otb
 {
-
-// only two states : the Pointer is Null or GetDataSet() returns a
-// valid dataset
-class GDALDatasetWrapper : public itk::LightObject
-{
-  friend class GDALDriverManagerWrapper;
-
-public:
-  typedef GDALDatasetWrapper      Self;
-  typedef itk::LightObject        Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
-
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(GDALImageIO, itk::LightObject);
-
-  /** Easy access to the internal GDALDataset object.
-   *  Don't close it, it will be automatic */
-  GDALDataset* GetDataSet() const;
-  
-  /** Test if the dataset corresponds to a Jpeg2000 file format
-   *  Return true if the dataset exists and has a JPEG2000 driver
-   *  Return false in all other cases */
-  bool IsJPEG2000() const;
-
-protected :
-  GDALDatasetWrapper();
-
-  ~GDALDatasetWrapper();
-
-
-private:
-  GDALDataset* m_Dataset;
-}; // end of GDALDatasetWrapper
 
 /** \class GDALDriverManagerWrapper
  *
