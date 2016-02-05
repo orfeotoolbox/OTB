@@ -358,7 +358,7 @@ OGRLayerStreamStitchingFilter<TInputImage>
 
       } //end for x
 
-      if(m_OGRLayer.ogr().TestCapability(ODsCTransactions))
+      if(m_OGRLayer.ogr().TestCapability("Transactions"))
         {
       
         OGRErr errCommitX = m_OGRLayer.ogr().CommitTransaction();
@@ -369,7 +369,7 @@ OGRLayerStreamStitchingFilter<TInputImage>
         }
    } //end for y
       
-   if(m_OGRLayer.ogr().TestCapability(ODsCTransactions))
+   if(m_OGRLayer.ogr().TestCapability("Transactions"))
      {
      const OGRErr errCommitY = m_OGRLayer.ogr().CommitTransaction();
      
