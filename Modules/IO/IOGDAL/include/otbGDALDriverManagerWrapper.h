@@ -28,6 +28,11 @@ class GDALDriver;
 #include "gdal_priv.h"
 #include "gdal_alg.h"
 
+// otb::GDALOverviewsBuilder moved to self header & body files.
+//
+// Including its header file here for compile time compatibility.
+#include "otbGDALOverviewsBuilder.h"
+
 namespace otb
 {
 
@@ -115,61 +120,5 @@ private :
   ~GDALDriverManagerWrapper();
 }; // end of GDALDriverManagerWrapper
 
-typedef enum {NONE, NEAREST, GAUSS, CUBIC, AVERAGE, MODE, AVERAGE_MAGPHASE } GDALResamplingType;
-
-
-class GDALOverviewsBuilder : public itk::ProcessObject
-{
-public:
-  typedef GDALOverviewsBuilder            Self;
-  typedef ProcessObject                   Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
-
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
-
-  void SetResamplingMethod(GDALResamplingType resampMethod)
-  {
-    m_ResamplingMethod = resampMethod;
-  };
-
-  void SetNbOfResolutions(unsigned int nbResol)
-  {
-    m_NbOfResolutions = nbResol;
-  };
-
-  void SetResolutionFactor(unsigned int factor)
-  {
-    m_ResolutionFactor = factor;
-  }
-
-  void SetInputFileName(std::string str)
-  {
-    m_InputFileName = str;
-  };
-
-  void Update();
-
-protected:
-  GDALOverviewsBuilder();
-  virtual ~GDALOverviewsBuilder() {};
-
-  void PrintSelf(std::ostream& os,itk::Indent indent) const;
-
-private:
-
-  GDALOverviewsBuilder(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
-  std::string m_InputFileName;
-  unsigned int m_NbOfResolutions;
-  unsigned int m_ResolutionFactor;
-  GDALResamplingType m_ResamplingMethod;
-
-  void GetGDALResamplingMethod(std::string &resamplingMethod);
-
-}; // end of GDALOverviewsBuilder
 
 } // end namespace otb
-
