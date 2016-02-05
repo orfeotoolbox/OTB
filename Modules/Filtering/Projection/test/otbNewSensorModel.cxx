@@ -116,11 +116,11 @@ bool provideGCP(char * gcpfilename, pointsContainerType& imgPt, geo3dPointsConta
 
 int otbNewSensorModel(int argc, char* argv[])
 {
-  if (argc != 8)
+  if (argc != 9)
     {
     std::cout << argv[0] 
               << " <input geom filename> <input gcp filename> <output gcp filename> "
-              <<" <needed keywords> <imgTol> <geoTol> <writeBaseline>" << std::endl;
+              <<" <needed keywords> <imgTol> <geoTol> <writeBaseline> <modeVerbose>" << std::endl;
 
     return EXIT_FAILURE;
     }
@@ -132,6 +132,7 @@ int otbNewSensorModel(int argc, char* argv[])
   double imgTol = atof(argv[5]);
   double geoTol = atof(argv[6]);
   int writeBaseline = atoi(argv[7]);
+  int modeVerbose = atoi(argv[8]);
 
 
   // -------------------
@@ -328,19 +329,23 @@ int otbNewSensorModel(int argc, char* argv[])
       geoPointOSSIM[1] = ossimGPoint.lat;
 
 	  // Just for debug purpose
-	  std::cout << ">>>>>>>>>>>>>>" << geomfilename << std::endl;
-	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-	            <<  "Image to geo (GCP): " << imagePoint << " -> " << geoPoint << "\n";
-	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-	            <<  "Image to geo (Inverse/Forward SensorModel): " << imagePoint << " -> " << geoPoint << "\n";
-	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-	            <<  "Geo to image (Inverse/Forward SensorModel): " << geoPoint << " -> " << reversedImagePoint << "\n";
-	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-	            <<  "Image to geo (GenericRSTransform): " << imagePoint << " -> " << geoPointGRS << "\n";
-	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-	            <<  "Geo to image (GenericRSTransform): " << geoPointGRS << " -> " << reversedImagePointGRS << "\n";
-	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-	            <<  "Image to geo (OSSIM): " << imagePoint << " -> " << geoPointOSSIM << "\n";
+	  if (modeVerbose)
+	  {
+		  std::cout << ">>>>>>>>>>>>>> ---------------------" << std::endl;
+		  std::cout << ">>>>>>>>>>>>>>" << geomfilename << std::endl;
+		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+					<<  "Image to geo (GCP, ie. baseline): " << imagePoint << " -> " << geoPoint << "\n";
+		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+					<<  "Image to geo (Inverse/Forward SensorModel): " << imagePoint << " -> " << geoPoint << "\n";
+		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+					<<  "Geo to image (Inverse/Forward SensorModel): " << geoPoint << " -> " << reversedImagePoint << "\n";
+		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+					<<  "Image to geo (GenericRSTransform): " << imagePoint << " -> " << geoPointGRS << "\n";
+		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+					<<  "Geo to image (GenericRSTransform): " << geoPointGRS << " -> " << reversedImagePointGRS << "\n";
+		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+					<<  "Image to geo (OSSIM): " << imagePoint << " -> " << geoPointOSSIM << "\n";
+	  }
 
 	  
 	  
@@ -436,10 +441,12 @@ int otbNewSensorModel(int argc, char* argv[])
 	  double dist6 = geoDistance->Evaluate(geoPointGRS, geoPointGCP);
 	  double dist7 = geoDistance->Evaluate(geoPointOSSIM, geoPointGCP);
 	  
-	  
-	  std::cout << ">>>>>>>>>>>>>>" << "Forward SensorModel VS GCP : " <<  dist5 << std::endl;
-	  std::cout << ">>>>>>>>>>>>>>" << "GenericRSTransform VS GCP : " <<  dist6 << std::endl;
-	  std::cout << ">>>>>>>>>>>>>>" << "OSSIM VS GCP : " <<  dist7 << std::endl;
+	  if (modeVerbose)
+	  {
+		  std::cout << ">>>>>>>>>>>>>>" << "Forward SensorModel VS GCP : " <<  dist5 << std::endl;
+		  std::cout << ">>>>>>>>>>>>>>" << "GenericRSTransform VS GCP : " <<  dist6 << std::endl;
+		  std::cout << ">>>>>>>>>>>>>>" << "OSSIM VS GCP : " <<  dist7 << std::endl;
+	  }
 	  
 	  if (dist5>geoTol)
 	  {
