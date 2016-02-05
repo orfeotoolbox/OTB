@@ -96,7 +96,12 @@ foreach( file ${GEOMGCP} )
   list(GET NEEDEDKW   ${GEOM_TESTNB} current_neededkw   )
   math(EXPR GEOM_TESTNB "${GEOM_TESTNB} + 1")
   
-  otb_add_test(NAME prTvSensorModel_${current_geomgcp} COMMAND otbProjectionTestDriver
+  string(FIND ${current_geomgcp} "/" POS)
+  math(EXPR POS "${POS} + 1")
+  string(LENGTH ${current_geomgcp} LENGTH)
+  string(SUBSTRING ${current_geomgcp} ${POS} ${LENGTH} TESTNAME)
+  
+  otb_add_test(NAME prTvSensorModel_${TESTNAME} COMMAND otbProjectionTestDriver
     #BASELINE_FILES
     otbNewSensorModel
     ${INPUTDATA}/${current_geomgcp}.geom
