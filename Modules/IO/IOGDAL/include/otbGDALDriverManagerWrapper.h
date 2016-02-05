@@ -15,6 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbGDALDriverManagerWrapper_h
+#define otbGDALDriverManagerWrapper_h
+
+
 #include "itkLightObject.h"
 #include "itkProcessObject.h"
 #include "otbConfigure.h"
@@ -86,3 +90,6 @@ private :
 
 
 } // end namespace otb
+
+
+#endif // otbGDALDriverManagerWrapper_h
