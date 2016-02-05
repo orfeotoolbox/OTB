@@ -377,13 +377,13 @@ int otbNewSensorModel(int argc, char* argv[])
 		 return EXIT_FAILURE;
 	  }
 	  
-	  if ( !((geoPoint[0]>=-180.0) && (geoPoint[0]<=180.0)) || !((geoPoint[0]>=-90.0) && (geoPoint[0]<=90.0)) )
+	  if ( !((geoPoint[0]>=-180.0) && (geoPoint[0]<=180.0)) || !((geoPoint[1]>=-90.0) && (geoPoint[1]<=90.0)) )
 	  {
-		 std::cerr << "GeoPoint out of bound (otbForwardSensorModel otbInverseSensorModel) : " << geoPointGRS << "\n";
+		 std::cerr << "GeoPoint out of bound (otbForwardSensorModel otbInverseSensorModel) : " << geoPoint << "\n";
 		 return EXIT_FAILURE;
 	  }
 	  
-	  if ( !((geoPointGRS[0]>=-180.0) && (geoPointGRS[0]<=180.0)) || !((geoPointGRS[0]>=-90.0) && (geoPointGRS[0]<=90.0)) )
+	  if ( !((geoPointGRS[0]>=-180.0) && (geoPointGRS[0]<=180.0)) || !((geoPointGRS[1]>=-90.0) && (geoPointGRS[1]<=90.0)) )
 	  {
 		 std::cerr << "GeoPoint out of bound (otbGenericRSTransform) : " << geoPointGRS << "\n";
 		 return EXIT_FAILURE;
