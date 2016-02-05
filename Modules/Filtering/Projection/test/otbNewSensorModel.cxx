@@ -61,11 +61,11 @@ int produceGCP(char * outputgcpfilename, const otb::ImageKeywordlist& kwlist, do
 	otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(z);
 	
 	
-	ofstream file(outputgcpfilename, std::ios::out | std::ios::trunc);
+	std::ofstream file(outputgcpfilename, std::ios::out | std::ios::trunc);
 	if (file)
 	{
-    for(double x=10.0; x<300.0; x+=10.)
-		for(double y=10.0; y<300.0; y+=10.)
+    for(double x=10.0; x<300.0; x+=50.)
+		for(double y=10.0; y<300.0; y+=50.)
 		{
 		  imagePoint[0]=x;
 		  imagePoint[1]=y;	
@@ -116,11 +116,11 @@ bool provideGCP(char * gcpfilename, pointsContainerType& imgPt, geo3dPointsConta
 
 int otbNewSensorModel(int argc, char* argv[])
 {
-  if (argc != 8)
+  if (argc != 9)
     {
     std::cout << argv[0] 
               << " <input geom filename> <input gcp filename> <output gcp filename> "
-              <<" <needed keywords> <imgTol> <geoTol> <writeBaseline>" << std::endl;
+              <<" <needed keywords> <imgTol> <geoTol> <writeBaseline> <modeVerbose>" << std::endl;
 
     return EXIT_FAILURE;
     }
@@ -132,6 +132,7 @@ int otbNewSensorModel(int argc, char* argv[])
   double imgTol = atof(argv[5]);
   double geoTol = atof(argv[6]);
   int writeBaseline = atoi(argv[7]);
+  int modeVerbose = atoi(argv[8]);
 
 
   // -------------------
@@ -139,7 +140,7 @@ int otbNewSensorModel(int argc, char* argv[])
   // -------------------
   otb::ImageKeywordlist kwlist = otb::ReadGeometryFromGEOMFile(geomfilename);
     
-  if (!kwlist.GetSize() > 0)
+  if (!(kwlist.GetSize() > 0))
   {
        std::cerr<<"ImageKeywordlist is empty."<<std::endl;
        return EXIT_FAILURE;
@@ -263,6 +264,43 @@ int otbNewSensorModel(int argc, char* argv[])
   // Tests core
   //-----------	
 
+  // #1 keywordlist, only check the needed keywords
+  /*-------------------------------------*/
+  
+  //Split the string into many tokens, with whitespaces as separators
+  std::list<std::string> neededKw;
+  copy(std::istream_iterator<std::string>(iss),
+	 std::istream_iterator<std::string>(),
+	 back_inserter(neededKw));
+							 
+  
+  std::list<std::string> missingKw;
+  for(std::list<std::string>::iterator neededIt=neededKw.begin(); neededIt!=neededKw.end(); ++neededIt)
+  {
+	bool foundNeededKw = false;
+	for(KeywordlistMapType::iterator kwlistIt=kwmap.begin(); kwlistIt!=kwmap.end(); ++kwlistIt)
+	{
+		std::size_t found = kwlistIt->first.find(*neededIt);
+		if (found!=std::string::npos)
+		{   
+			foundNeededKw = true;
+		}
+	}
+	
+	if (!foundNeededKw)
+		missingKw.push_back(*neededIt);
+  }
+  
+  if ( (neededKw.size()>0) && (missingKw.size()>0) )
+  {
+	std::cerr << "Some keywords were not found; missing keywords : " << std::endl;
+	for (std::list<std::string>::iterator itm = missingKw.begin(); itm != missingKw.end(); ++itm)  
+	   std::cerr << *itm << std::endl;
+	return EXIT_FAILURE;
+  }
+  /*-------------------------------------*/
+
+
   pointsContainerType::iterator pointsIt=pointsContainer.begin();	
   geo3dPointsContainerType::iterator geo3dPointsIt=geo3dPointsContainer.begin();	
   //for(; pointsIt!=pointsContainer.end(); ++pointsIt)
@@ -291,57 +329,27 @@ int otbNewSensorModel(int argc, char* argv[])
       geoPointOSSIM[1] = ossimGPoint.lat;
 
 	  // Just for debug purpose
-	  std::cout << ">>>>>>>>>>>>>>" << geomfilename << std::endl;
-	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-	            <<  "Image to geo (GCP): " << imagePoint << " -> " << geoPoint << "\n";
-	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-	            <<  "Image to geo (Inverse/Forward SensorModel): " << imagePoint << " -> " << geoPoint << "\n";
-	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-	            <<  "Geo to image (Inverse/Forward SensorModel): " << geoPoint << " -> " << reversedImagePoint << "\n";
-	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-	            <<  "Image to geo (GenericRSTransform): " << imagePoint << " -> " << geoPointGRS << "\n";
-	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-	            <<  "Geo to image (GenericRSTransform): " << geoPointGRS << " -> " << reversedImagePointGRS << "\n";
-	  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-	            <<  "Image to geo (OSSIM): " << imagePoint << " -> " << geoPointOSSIM << "\n";
+	  if (modeVerbose)
+	  {
+		  std::cout << ">>>>>>>>>>>>>> ---------------------" << std::endl;
+		  std::cout << ">>>>>>>>>>>>>>" << geomfilename << std::endl;
+		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+					<<  "Image to geo (GCP, ie. baseline): " << imagePoint << " -> " << geoPoint << "\n";
+		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+					<<  "Image to geo (Inverse/Forward SensorModel): " << imagePoint << " -> " << geoPoint << "\n";
+		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+					<<  "Geo to image (Inverse/Forward SensorModel): " << geoPoint << " -> " << reversedImagePoint << "\n";
+		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+					<<  "Image to geo (GenericRSTransform): " << imagePoint << " -> " << geoPointGRS << "\n";
+		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+					<<  "Geo to image (GenericRSTransform): " << geoPointGRS << " -> " << reversedImagePointGRS << "\n";
+		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
+					<<  "Image to geo (OSSIM): " << imagePoint << " -> " << geoPointOSSIM << "\n";
+	  }
 
 	  
 	  
-	  // #1 keywordlist, only check the needed keywords
-	  /*-------------------------------------*/
-	  
-	  //Split the string into many tokens, with whitespaces as separators
-	  std::list<std::string> neededKw;
-	  copy(std::istream_iterator<std::string>(iss),
-		 std::istream_iterator<std::string>(),
-		 back_inserter(neededKw));
-								 
-	  
-	  std::list<std::string> missingKw;
-	  for(std::list<std::string>::iterator neededIt=neededKw.begin(); neededIt!=neededKw.end(); ++neededIt)
-	  {
-		bool foundNeededKw = false;
-		for(KeywordlistMapType::iterator kwlistIt=kwmap.begin(); kwlistIt!=kwmap.end(); ++kwlistIt)
-		{
-			std::size_t found = kwlistIt->first.find(*neededIt);
-			if (found!=std::string::npos)
-			{   
-				foundNeededKw = true;
-			}
-		}
-		
-		if (!foundNeededKw)
-			missingKw.push_back(*neededIt);
-	  }
-	  
-	  if ( (neededKw.size()>0) && (missingKw.size()>0) )
-	  {
-		std::cerr << "Some keywords were not found; missing keywords : " << std::endl;
-		for (std::list<std::string>::iterator itm = missingKw.begin(); itm != missingKw.end(); ++itm)  
-		   std::cerr << *itm << std::endl;
-		return EXIT_FAILURE;
-	  }
-	  /*-------------------------------------*/
+
 	  
 	  // 3. Results should be plausible (no NaN and no clearly out of bound results)
 	  /*-------------------------------------*/
@@ -369,13 +377,13 @@ int otbNewSensorModel(int argc, char* argv[])
 		 return EXIT_FAILURE;
 	  }
 	  
-	  if ( !((geoPoint[0]>=-180.0) && (geoPoint[0]<=180.0)) || !((geoPoint[0]>=-90.0) && (geoPoint[0]<=90.0)) )
+	  if ( !((geoPoint[0]>=-180.0) && (geoPoint[0]<=180.0)) || !((geoPoint[1]>=-90.0) && (geoPoint[1]<=90.0)) )
 	  {
-		 std::cerr << "GeoPoint out of bound (otbForwardSensorModel otbInverseSensorModel) : " << geoPointGRS << "\n";
+		 std::cerr << "GeoPoint out of bound (otbForwardSensorModel otbInverseSensorModel) : " << geoPoint << "\n";
 		 return EXIT_FAILURE;
 	  }
 	  
-	  if ( !((geoPointGRS[0]>=-180.0) && (geoPointGRS[0]<=180.0)) || !((geoPointGRS[0]>=-90.0) && (geoPointGRS[0]<=90.0)) )
+	  if ( !((geoPointGRS[0]>=-180.0) && (geoPointGRS[0]<=180.0)) || !((geoPointGRS[1]>=-90.0) && (geoPointGRS[1]<=90.0)) )
 	  {
 		 std::cerr << "GeoPoint out of bound (otbGenericRSTransform) : " << geoPointGRS << "\n";
 		 return EXIT_FAILURE;
@@ -433,10 +441,12 @@ int otbNewSensorModel(int argc, char* argv[])
 	  double dist6 = geoDistance->Evaluate(geoPointGRS, geoPointGCP);
 	  double dist7 = geoDistance->Evaluate(geoPointOSSIM, geoPointGCP);
 	  
-	  
-	  std::cout << ">>>>>>>>>>>>>>" << "Forward SensorModel VS GCP : " <<  dist5 << std::endl;
-	  std::cout << ">>>>>>>>>>>>>>" << "GenericRSTransform VS GCP : " <<  dist6 << std::endl;
-	  std::cout << ">>>>>>>>>>>>>>" << "OSSIM VS GCP : " <<  dist7 << std::endl;
+	  if (modeVerbose)
+	  {
+		  std::cout << ">>>>>>>>>>>>>>" << "Forward SensorModel VS GCP : " <<  dist5 << std::endl;
+		  std::cout << ">>>>>>>>>>>>>>" << "GenericRSTransform VS GCP : " <<  dist6 << std::endl;
+		  std::cout << ">>>>>>>>>>>>>>" << "OSSIM VS GCP : " <<  dist7 << std::endl;
+	  }
 	  
 	  if (dist5>geoTol)
 	  {

@@ -81,6 +81,8 @@ set(GEOMGCP
 "wv2/gd-wv2-1"
 "spot6/gd-spot6-1"
 "QB/gd-qb-1"
+"ikonos/gd-ikonos-1"
+"rapideye/gd-rapideye-1"
 )
 
 set(NEEDEDKW
@@ -88,6 +90,8 @@ set(NEEDEDKW
 "line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #World view 2
 "line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Spot 6
 "line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #QB
+"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Ikonos
+"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Rapideye
 )
 
 set( GEOM_TESTNB 0)
@@ -96,16 +100,22 @@ foreach( file ${GEOMGCP} )
   list(GET NEEDEDKW   ${GEOM_TESTNB} current_neededkw   )
   math(EXPR GEOM_TESTNB "${GEOM_TESTNB} + 1")
   
-  otb_add_test(NAME prTvSensorModel_${GEOM_TESTNB} COMMAND otbProjectionTestDriver
+  string(FIND ${current_geomgcp} "/" POS)
+  math(EXPR POS "${POS} + 1")
+  string(LENGTH ${current_geomgcp} LENGTH)
+  string(SUBSTRING ${current_geomgcp} ${POS} ${LENGTH} TESTNAME)
+  
+  otb_add_test(NAME prTvSensorModel_${TESTNAME} COMMAND otbProjectionTestDriver
     #BASELINE_FILES
     otbNewSensorModel
     ${INPUTDATA}/${current_geomgcp}.geom
     ${INPUTDATA}/${current_geomgcp}.gcp
-    ${TEMP}/${current_geomgcp}.gcp
+    ${TEMP}/${TESTNAME}.gcp # baseline (produced only if argv[7] == 1)
     ${current_neededkw}
-    1
-    1
-    0
+    1 #imgTol
+    1 # geoTol
+    0 # create baseline (argv[7])
+    1 # mode verbose
   )
 endforeach()
 
