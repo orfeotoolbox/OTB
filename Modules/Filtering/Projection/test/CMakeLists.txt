@@ -110,7 +110,7 @@ foreach( file ${GEOMGCP} )
     otbNewSensorModel
     ${INPUTDATA}/${current_geomgcp}.geom
     ${INPUTDATA}/${current_geomgcp}.gcp
-    ${TEMP}/${current_geomgcp}.gcp # baseline (produced only if argv[7] == 1)
+    ${TEMP}/${TESTNAME}.gcp # baseline (produced only if argv[7] == 1)
     ${current_neededkw}
     1 #imgTol
     1 # geoTol
