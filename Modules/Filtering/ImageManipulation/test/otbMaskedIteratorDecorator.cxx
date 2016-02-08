@@ -237,34 +237,6 @@ int otbMaskedIteratorDecoratorNominal(int itkNotUsed(argc), char * itkNotUsed(ar
   ret = TripleTest< itk::ImageRegionConstIterator<ImageType> >(image, mask, region);
   retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
 
-  std::cout << std::endl << "itk::ImageRandomConstIteratorWithIndex : ";
-  ret = TripleTest< itk::ImageRandomConstIteratorWithIndex<ImageType> >(image, mask, region);
-  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
-
-  std::cout << std::endl << "otb::SubsampledImageRegionIterator : ";
-  ret = TripleTest< otb::SubsampledImageRegionIterator<ImageType> >(image, mask, region);
-  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
-
-  std::cout << std::endl << "itk::ImageRandomIteratorWithIndex : ";
-  ret = TripleTest< itk::ImageRandomIteratorWithIndex<ImageType> >(image, mask, region);
-  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
-
-  std::cout << std::endl << "itk::ImageScanlineIterator : ";
-  ret = TripleTest< itk::ImageScanlineIterator<ImageType> >(image, mask, region);
-  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
-
-  std::cout << std::endl << "itk::ImageScanlineConstIterator : ";
-  ret = TripleTest< itk::ImageScanlineConstIterator<ImageType> >(image, mask, region);
-  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
-
-  std::cout << std::endl << "itk::ImageRandomNonRepeatingConstIteratorWithIndex : ";
-  ret = TripleTest< itk::ImageRandomNonRepeatingConstIteratorWithIndex<ImageType> >(image, mask, region);
-  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
-
-  std::cout << std::endl << "itk::ImageRandomNonRepeatingIteratorWithIndex : ";
-  ret = TripleTest< itk::ImageRandomNonRepeatingIteratorWithIndex<ImageType> >(image, mask, region);
-  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
-
   return retGlobal;
 }
 
@@ -287,6 +259,17 @@ itk::PathIterator
 itk::LineIterator
 itk::SliceIterator
 itk::NeighborhoodIterator
+
+Needs initialization code:
+itk::ImageRandomConstIteratorWithIndex
+otb::SubsampledImageRegionIterator
+itk::ImageRandomIteratorWithIndex
+itk::ImageRandomNonRepeatingConstIteratorWithIndex
+itk::ImageRandomNonRepeatingIteratorWithIndex
+
+Different iteration interface than normal iterators:
+itk::ImageScanlineIterator
+itk::ImageScanlineConstIterator
 
 GoToEnd is not implemented
 itk::ImageLinearIteratorWithIndex
