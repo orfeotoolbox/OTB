@@ -19,6 +19,7 @@
 #define otbGDALDatasetWrapper_h
 
 #include "itkLightObject.h"
+
 #include "otbConfigure.h"
 
 
@@ -54,6 +55,10 @@ public:
    *  Return true if the dataset exists and has a JPEG2000 driver
    *  Return false in all other cases */
   bool IsJPEG2000() const;
+
+  /**
+   */
+  int GetOverviewsCount() const;
 
 protected :
   GDALDatasetWrapper();

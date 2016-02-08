@@ -36,7 +36,9 @@ GDALDatasetWrapper
   if( m_Dataset )
     {
     GDALClose(m_Dataset);
-    m_Dataset = NULL;
+
+    // Warning: memory leak dataset resources are closed but the
+    // GDALDataset instance is not destroyed.
     }
 }
 
@@ -74,5 +76,18 @@ GDALDatasetWrapper::IsJPEG2000() const
     }
   return false;
 }
+
+
+int
+GDALDatasetWrapper
+::GetOverviewsCount() const
+{
+  assert( m_Dataset!=NULL );
+  assert( m_Dataset->GetRasterCount()>0 );
+  assert( m_Dataset->GetRasterBand( 1 )!=NULL );
+
+  return m_Dataset->GetRasterBand( 1 )->GetOverviewCount();
+}
+
 
 } // end namespace otb
