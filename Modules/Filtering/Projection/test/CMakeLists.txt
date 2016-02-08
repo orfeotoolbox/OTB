@@ -86,12 +86,12 @@ set(GEOMGCP
 )
 
 set(NEEDEDKW
-"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Pleiades
-"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #World view 2
-"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Spot 6
-"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #QB
-"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Ikonos
-"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Rapideye
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Pleiades
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #World view 2
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Spot 6
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #QB
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Ikonos
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Rapideye
 )
 
 set( GEOM_TESTNB 0)
