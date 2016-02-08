@@ -141,10 +141,31 @@ int BijectiveTest(typename IteratorType::ImageType::Pointer mask, typename Itera
 
   it.GoToBegin();
   itDecorated.GoToBegin();
-  while (!it.IsAtEnd() && itDecorated.IsAtEnd())
+
+  // Find the non maked begin for the image iterator
+  while (mask->GetPixel(it.GetIndex()) == 0 && !it.IsAtEnd())
+  {
+    ++it;
+  }
+
+  // Begins are the same
+  if (!(it.GetIndex() == itDecorated.GetIndex()
+     && it.GetIndex() == itDecorated.GetImageIterator().GetIndex()
+     && it.GetIndex() == itDecorated.GetMaskIterator().GetIndex()))
+  {
+    return EXIT_FAILURE;
+  }
+
+  // Advance both and check
+  while (!it.IsAtEnd() && !itDecorated.IsAtEnd())
   {
     // Iteration locations are the same
-    if (it.GetIndex() != itDecorated.GetIndex()) {return EXIT_FAILURE;}
+    if (!(it.GetIndex() == itDecorated.GetIndex()
+       && it.GetIndex() == itDecorated.GetImageIterator().GetIndex()
+       && it.GetIndex() == itDecorated.GetMaskIterator().GetIndex()))
+    {
+      return EXIT_FAILURE;
+    }
 
     ++itDecorated;
     do
@@ -152,6 +173,13 @@ int BijectiveTest(typename IteratorType::ImageType::Pointer mask, typename Itera
       ++it;
     } while (mask->GetPixel(it.GetIndex()) == 0 && !it.IsAtEnd());
   }
+
+  // Check IsAtEnd
+  if (!(it.IsAtEnd() && itDecorated.IsAtEnd()))
+  {
+    return EXIT_FAILURE;
+  }
+
   return EXIT_SUCCESS;
 }
 
