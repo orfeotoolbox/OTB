@@ -103,7 +103,8 @@ foreach( file ${GEOMGCP} )
   string(FIND ${current_geomgcp} "/" POS)
   math(EXPR POS "${POS} + 1")
   string(LENGTH ${current_geomgcp} LENGTH)
-  string(SUBSTRING ${current_geomgcp} ${POS} ${LENGTH} TESTNAME)
+  math(EXPR SIZE "${LENGTH} - ${POS}")
+  string(SUBSTRING ${current_geomgcp} ${POS} ${SIZE} TESTNAME)
   
   otb_add_test(NAME prTvSensorModel_${TESTNAME} COMMAND otbProjectionTestDriver
     #BASELINE_FILES
