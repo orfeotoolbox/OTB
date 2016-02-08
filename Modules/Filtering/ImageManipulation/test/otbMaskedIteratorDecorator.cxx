@@ -268,6 +268,18 @@ int otbMaskedIteratorDecoratorNominal(int itkNotUsed(argc), char * itkNotUsed(ar
   return retGlobal;
 }
 
+// Degenerate cases
+int otbMaskedIteratorDecoratorDegenerate(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+{
+  // Fully masked (0 everywhere) and image is smaller than mask
+  typedef otb::Image<double, 2> ImageType;
+  ImageType::Pointer image = GetTestImage<ImageType>(9, 10);
+  ImageType::Pointer mask = GetTestImage<ImageType>(100, 0);
+  ImageType::RegionType region(image->GetLargestPossibleRegion());
+
+  return TripleTest<itk::ImageRegionIterator<ImageType> >(image, mask, region);
+}
+
 /* Other iterators potentially compatible:
 
 Different constructor arguments than (image, region)
