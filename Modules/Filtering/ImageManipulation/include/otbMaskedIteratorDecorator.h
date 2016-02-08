@@ -18,7 +18,9 @@
 #ifndef otbMaskedIteratorDecorator_h
 #define otbMaskedIteratorDecorator_h
 
-#include <boost/move/utility_core.hpp>
+#include "itkMacro.h"
+
+#define MY_NEW_IMPLEMENTATION
 
 namespace otb
 {
@@ -34,38 +36,29 @@ namespace otb
  * \ingroup ImageIterator
  * \ingroup OTBCommon
  */
-template <typename TIteratorType>
+template <typename TIteratorType,typename TMaskIteratorType = TIteratorType>
 class MaskedIteratorDecorator
 {
 public:
-  typedef MaskedIteratorDecorator<TIteratorType> Self;
-  typedef typename TIteratorType::ImageType      MaskType;
+  typedef MaskedIteratorDecorator
+    <TIteratorType,TMaskIteratorType>            Self;
+  typedef typename TMaskIteratorType::ImageType  MaskType;
   typedef typename TIteratorType::ImageType      ImageType;
   typedef typename ImageType::IndexType          IndexType;
+  typedef typename ImageType::RegionType         RegionType;
   typedef typename ImageType::PixelType          PixelType;
+  typedef typename MaskType::PixelType           MaskPixelType;
 
   // Run-time type information
   itkTypeMacroNoParent(MaskedIteratorDecorator);
 
-  // Constructors forward arguments to both iterators
-  template <typename T1>
-  MaskedIteratorDecorator(typename MaskType::Pointer mask,
-                          typename ImageType::Pointer image,
-                          BOOST_FWD_REF(T1) arg1);
-
-  template <typename T1, typename T2>
-  MaskedIteratorDecorator(typename MaskType::Pointer mask,
-                          typename ImageType::Pointer image,
-                          BOOST_FWD_REF(T1) arg1,
-                          BOOST_FWD_REF(T2) arg2);
-
-  template <typename T1, typename T2, typename T3>
-  MaskedIteratorDecorator(typename MaskType::Pointer mask,
-                          typename ImageType::Pointer image,
-                          BOOST_FWD_REF(T1) arg1,
-                          BOOST_FWD_REF(T2) arg2,
-                          BOOST_FWD_REF(T3) arg3);
-
+  /** Constructors forward arguments to both iterators
+   * Beware that the iterator is in a undefinite state after construction
+   * GoToBegin() or GoToEnd() should be called */
+  MaskedIteratorDecorator(MaskType* mask, 
+                          ImageType* image,
+                          const RegionType& region);
+  
   /** Current iterator index. Wraps the underlying iterator GetIndex() */
   IndexType GetIndex() const;
 
@@ -77,10 +70,10 @@ public:
   /** Move one pixel past the last valid iteration index */
   void GoToEnd();
 
-  /** True iff the iterator is at the beginning */
+  /** True if the iterator is at the beginning */
   bool IsAtBegin() const;
 
-  /** True iff the iterator is at the end */
+  /** True if the iterator is at the end */
   bool IsAtEnd() const;
 
   /** Advance to the next valid iteration position. That is the next non masked
@@ -101,16 +94,18 @@ public:
   // So provide access to inner iterators:
 
   /** Underlying mask iterator accessor */
-  TIteratorType&       GetMaskIterator();
+  TMaskIteratorType&       GetMaskIterator();
 
   /** Underlying mask iterator const accessor */
-  const TIteratorType& GetMaskIterator() const;
+  const TMaskIteratorType& GetMaskIterator() const;
 
   /** Underlying image iterator accessor */
   TIteratorType&       GetImageIterator();
 
   /** Underlying image iterator const accessor */
   const TIteratorType& GetImageIterator() const;
+  
+  const bool& HasMask() const;
 
 private:
   /** Private method to compute the begin iterator position taking into account
@@ -119,11 +114,19 @@ private:
 
 private:
   // Inner iterators on the image and mask
-  TIteratorType m_ItMask;
+  TMaskIteratorType m_ItMask;
   TIteratorType m_ItImage;
+  
+  // flag to check if mask is present
+  bool m_UseMask;
 
   // Unmasked bounds
+#ifdef MY_NEW_IMPLEMENTATION
+  TMaskIteratorType m_StartMask;
+  TIteratorType m_StartImage;
+#else
   IndexType m_Begin;
+#endif
 };
 
 }
