@@ -21,36 +21,59 @@
 
 // #include "itkLightObject.h"
 #include "itkProcessObject.h"
+
+#include "otbGDALDatasetWrapper.h"
 #include "otbConfigure.h"
-
-// class GDALDataset;
-// class GDALDriver;
-
-/* GDAL Libraries */
-// #include "gdal.h"
-// #include "gdaljp2metadata.h"
-// #include "gdal_priv.h"
-// #include "gdal_alg.h"
 
 namespace otb
 {
 
 /**
  */
-enum GdalResampling
+enum GDALResampling
 {
-  NONE = 0,
-  NEAREST,
-  GAUSS,
-  CUBIC,
-  AVERAGE,
-  MODE,
-  AVERAGE_MAGPHASE,
+  GDAL_RESAMPLING_NONE = 0,
+  //
+  GDAL_RESAMPLING_NEAREST,
+  GDAL_RESAMPLING_GAUSS,
+  GDAL_RESAMPLING_CUBIC,
+  GDAL_RESAMPLING_AVERAGE,
+  GDAL_RESAMPLING_MODE,
+  GDAL_RESAMPLING_AVERAGE_MAGPHASE,
+  //
+  GDAL_RESAMPLING_COUNT
 };
 
 
 // Compile-time compatibility alias.
-typedef GdalResampling GDALResamplingType;
+typedef GDALResampling GDALResamplingType;
+
+/**
+ */
+enum GDALCompression
+{
+  GDAL_COMPRESSION_NONE = 0,
+  //
+  GDAL_COMPRESSION_JPEG,
+  GDAL_COMPRESSION_LZW,
+  GDAL_COMPRESSION_PACKBITS,
+  GDAL_COMPRESSION_DEFLATE,
+  //
+  GDAL_COMPRESSION_COUNT,
+};
+
+
+/**
+ */
+enum GDALFormat
+{
+  GDAL_FORMAT_NONE = 0,
+  //
+  GDAL_FORMAT_ERDAS,
+  GDAL_FORMAT_GEOTIFF,
+  //
+  GDAL_FORMAT_COUNT,
+};
 
 
 /**
@@ -66,15 +89,40 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro( Self );
 
-  void SetResamplingMethod( GDALResamplingType resampMethod );
+  int GetOverviewsCount() const;
 
-  void SetNbOfResolutions( unsigned int nbResol );
+
+  GDALResampling GetResamplingMethod() const;
+
+  void SetResamplingMethod( GDALResampling );
+
+
+  GDALCompression GetCompressionMethod() const;
+
+  void SetCompressionMethod( GDALCompression );
+
+
+  GDALFormat GetFormat() const;
+
+  void SetFormat( GDALFormat );
+
+
+  unsigned int GetNbResolutions() const;
+
+  void SetNbResolutions( unsigned int nbResol );
+
+  unsigned int GetResolutionFactor() const;
 
   void SetResolutionFactor( unsigned int factor );
 
+
+  const std::string & GetInputFileName() const;
+
   void SetInputFileName( const std::string & str );
 
+
   void Update();
+
 
 protected:
   GDALOverviewsBuilder();
@@ -82,17 +130,22 @@ protected:
 
   void PrintSelf( std::ostream & os, itk::Indent indent ) const;
 
-private:
 
+private:
   GDALOverviewsBuilder( const Self & ); //purposely not implemented
   void operator = ( const Self & ); //purposely not implemented
 
-  std::string m_InputFileName;
-  unsigned int m_NbOfResolutions;
-  unsigned int m_ResolutionFactor;
-  GDALResamplingType m_ResamplingMethod;
-
   void GetGDALResamplingMethod( std::string & resamplingMethod );
+
+  void OpenDataset( const std::string & filename );
+
+  GDALDatasetWrapper::Pointer m_GdalDataset;
+  std::string m_InputFileName;
+  unsigned int m_NbResolutions;
+  unsigned int m_ResolutionFactor;
+  GDALResampling m_ResamplingMethod;
+  GDALCompression m_CompressionMethod;
+  GDALFormat m_Format;
 
 }; // end of GDALOverviewsBuilder
 
