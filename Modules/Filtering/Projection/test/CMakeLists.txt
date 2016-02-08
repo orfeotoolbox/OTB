@@ -86,12 +86,12 @@ set(GEOMGCP
 )
 
 set(NEEDEDKW
-"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Pleiades
-"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #World view 2
-"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Spot 6
-"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #QB
-"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Ikonos
-"line_den_coeff line_den_coeff samp_den_coeff samp_num_coeff" #Rapideye
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Pleiades
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #World view 2
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Spot 6
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #QB
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Ikonos
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Rapideye
 )
 
 set( GEOM_TESTNB 0)
@@ -103,7 +103,8 @@ foreach( file ${GEOMGCP} )
   string(FIND ${current_geomgcp} "/" POS)
   math(EXPR POS "${POS} + 1")
   string(LENGTH ${current_geomgcp} LENGTH)
-  string(SUBSTRING ${current_geomgcp} ${POS} ${LENGTH} TESTNAME)
+  math(EXPR SIZE "${LENGTH} - ${POS}")
+  string(SUBSTRING ${current_geomgcp} ${POS} ${SIZE} TESTNAME)
   
   otb_add_test(NAME prTvSensorModel_${TESTNAME} COMMAND otbProjectionTestDriver
     #BASELINE_FILES
