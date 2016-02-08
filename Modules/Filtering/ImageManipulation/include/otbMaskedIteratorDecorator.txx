@@ -179,7 +179,7 @@ void MaskedIteratorDecorator<TIteratorType>::ComputeMaskedBegin()
   // We must search for the first index where the image is not masked
   // Start searching at the begining
   m_ItMask.GoToBegin();
-  m_ItImage.GoToEnd();
+  m_ItImage.GoToBegin();
 
   // Advance to the first non-masked position, or the end
   while (m_ItMask.Value() == 0 && !m_ItMask.IsAtEnd() && !m_ItImage.IsAtEnd())
