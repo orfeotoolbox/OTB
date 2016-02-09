@@ -30,19 +30,6 @@
 namespace otb
 {
 
-
-char const * const GDAL_RESAMPLING_NAMES[ GDAL_RESAMPLING_COUNT ] =
-{
-  "NONE",
-  "NEAREST",
-  "GAUSS",
-  "CUBIC",
-  "AVERAGE",
-  "MODE",
-  "AVERAGE_MAGPHASE",
-};
-
-
 // Progress reporting functions compatible with GDAL C API
 extern "C"
 {
@@ -56,6 +43,41 @@ extern "C"
   }
 }
 
+char const * const
+GDAL_RESAMPLING_NAMES[ GDAL_RESAMPLING_COUNT ] =
+{
+  "NONE",
+  "NEAREST",
+  "GAUSS",
+  "CUBIC",
+  "AVERAGE",
+  "MODE",
+  "AVERAGE_MAGPHASE"
+};
+
+
+char const * const
+GDAL_COMPRESSION_NAMES[ GDAL_COMPRESSION_COUNT ] =
+{
+  "",
+  "JPEG",
+  "LZW",
+  "PACKBITS",
+  "DEFLATE",
+};
+
+
+/***************************************************************************/
+std::string
+GetConfigOption( const char * key )
+{
+  const char * value = CPLGetConfigOption( key, NULL );
+  
+  return
+    value==NULL
+    ? std::string()
+    : std::string( value );
+}
 
 /***************************************************************************/
 GDALOverviewsBuilder
@@ -70,6 +92,33 @@ GDALOverviewsBuilder
 {
   Superclass::SetNumberOfRequiredInputs(0);
   Superclass::SetNumberOfRequiredOutputs(0);
+}
+
+/***************************************************************************/
+unsigned int
+GDALOverviewsBuilder
+::CountResolutions( unsigned int factor, unsigned int n ) const
+{
+  assert( !m_GdalDataset.IsNull() );
+
+  unsigned int minSize = static_cast< unsigned int >( pow( factor, n ) );
+
+  unsigned int count = 1;
+
+  unsigned int size =
+    std::min(
+      m_GdalDataset->GetWidth(),
+      m_GdalDataset->GetHeight()
+    );
+
+  while( size >= minSize )
+    {
+    ++ count;
+
+    size /= factor;
+    }
+
+  return count;
 }
 
 /***************************************************************************/
@@ -183,6 +232,7 @@ GDALOverviewsBuilder
 }
 
 /***************************************************************************/
+/*
 void
 GDALOverviewsBuilder
 ::GetGDALResamplingMethod( std::string & resamplingMethod )
@@ -216,6 +266,7 @@ GDALOverviewsBuilder
       break;
   }
 }
+*/
 
 /***************************************************************************/
 void GDALOverviewsBuilder::Update()
@@ -231,6 +282,8 @@ void GDALOverviewsBuilder::Update()
 
   assert( !m_GdalDataset.IsNull() );
 
+  assert( m_NbResolutions>0 );
+
   if( m_NbResolutions==0 )
     {
     itkExceptionMacro(
@@ -239,9 +292,9 @@ void GDALOverviewsBuilder::Update()
     }
 
   // Build the overviews list from nb of resolution desired
-  std::vector<int> ovwlist;
+  std::vector< int > ovwlist;
   unsigned int factor = 1;
-  for (unsigned int i = 1; i < m_NbResolutions; i++)
+  for( unsigned int i = 1; i < m_NbResolutions; i++ )
     {
     factor*=m_ResolutionFactor;
     ovwlist.push_back(factor);
@@ -254,17 +307,47 @@ void GDALOverviewsBuilder::Update()
     }
     std::cout << std::endl; */
 
-  std::string resampMethod;
-  this->GetGDALResamplingMethod(resampMethod);
+  std::string erdas( GetConfigOption( "USE_RRD" ) );
 
-  CPLErr lCrGdal = m_GdalDataset->GetDataSet()->
-    BuildOverviews( resampMethod.c_str(),
-		    static_cast<int>(m_NbResolutions-1),
-		    &ovwlist.front(),
-		    0, // All bands
-		    NULL, // All bands
-		    (GDALProgressFunc)otb_UpdateGDALProgress,
-		    this);
+  CPLSetConfigOption(
+    "USE_RRD",
+    m_Format==GDAL_FORMAT_ERDAS
+    ? "YES"
+    : "NO"
+  );
+
+
+  assert(
+    m_CompressionMethod>=GDAL_COMPRESSION_NONE &&
+    m_CompressionMethod<GDAL_COMPRESSION_COUNT
+  );
+
+  std::string compression( GetConfigOption( "COMPRESS_OVERVIEW" ) );
+
+  CPLSetConfigOption(
+    "COMPRESS_OVERVIEW",
+    GDAL_COMPRESSION_NAMES[ m_CompressionMethod ]
+  );
+
+
+  assert(
+    m_ResamplingMethod>=GDAL_RESAMPLING_NONE &&
+    m_ResamplingMethod<GDAL_RESAMPLING_COUNT
+  );
+
+  CPLErr lCrGdal =
+    m_GdalDataset->GetDataSet()->BuildOverviews(
+      GDAL_RESAMPLING_NAMES[ m_ResamplingMethod ],
+      static_cast< int >( m_NbResolutions - 1 ),
+      &ovwlist.front(),
+      0, // All bands
+      NULL, // All bands
+      ( GDALProgressFunc )otb_UpdateGDALProgress,
+      this );
+
+  CPLSetConfigOption( "USE_RRD", erdas.c_str() );
+  CPLSetConfigOption( "COMPRESS_OVERVIEW", compression.c_str() );
+
   if (lCrGdal == CE_Failure)
     {
     itkExceptionMacro(<< "Error while building the GDAL overviews from " << m_InputFileName.c_str() << ".");

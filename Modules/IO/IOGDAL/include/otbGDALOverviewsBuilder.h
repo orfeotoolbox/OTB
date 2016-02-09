@@ -67,8 +67,6 @@ enum GDALCompression
  */
 enum GDALFormat
 {
-  GDAL_FORMAT_NONE = 0,
-  //
   GDAL_FORMAT_ERDAS,
   GDAL_FORMAT_GEOTIFF,
   //
@@ -88,6 +86,13 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro( Self );
+
+  /**
+   * \brief Count the number of resolution levels larger than
+   * factor^n. 
+   */
+  unsigned int
+  CountResolutions( unsigned int factor, unsigned int n =0 ) const;
 
   int GetOverviewsCount() const;
 
@@ -109,11 +114,11 @@ public:
 
   unsigned int GetNbResolutions() const;
 
-  void SetNbResolutions( unsigned int nbResol );
+  void SetNbResolutions( unsigned int );
 
   unsigned int GetResolutionFactor() const;
 
-  void SetResolutionFactor( unsigned int factor );
+  void SetResolutionFactor( unsigned int );
 
 
   const std::string & GetInputFileName() const;
@@ -133,11 +138,13 @@ protected:
 
 private:
   GDALOverviewsBuilder( const Self & ); //purposely not implemented
+
   void operator = ( const Self & ); //purposely not implemented
 
-  void GetGDALResamplingMethod( std::string & resamplingMethod );
+  // void GetGDALResamplingMethod( std::string & resamplingMethod );
 
   void OpenDataset( const std::string & filename );
+
 
   GDALDatasetWrapper::Pointer m_GdalDataset;
   std::string m_InputFileName;
