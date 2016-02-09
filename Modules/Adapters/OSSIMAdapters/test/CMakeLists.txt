@@ -3,6 +3,7 @@ otb_module_test()
 set(OTBOSSIMAdaptersTests
 otbOSSIMAdaptersTestDriver.cxx
 ##>otbImageKeywordlist.cxx
+otbTestImageKeywordlist.cxx
 otbOssimJpegFileRessourceLeakTest.cxx
 otbMapProjectionAdapterTest.cxx
 otbOssimElevManagerTest2.cxx
@@ -18,6 +19,97 @@ target_link_libraries(otbOSSIMAdaptersTestDriver ${OTBOSSIMAdapters-Test_LIBRARI
 otb_module_target_label(otbOSSIMAdaptersTestDriver)
 
 # Tests Declaration
+
+#KEYWORDLIST : OPTICAL SENSORS
+set(NAME_TESTS
+"pleiades-1" 
+"ikonos-1"
+"rapideye-1"
+"quickbird-1"
+"spot6-1"
+"worldview2-1"
+)
+
+set(IMG
+LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2} 
+LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif}
+LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
+LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2}
+LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF}
+)
+
+set(NEEDEDKW
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #PLEIADES
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #IKONOS
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #RAPIDEYE
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #QB
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #SPOT6
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #WORLDVIEW2
+)
+
+set(TOLS
+"1e-6 1e-6 1e-6 1e-6" #PLEIADES
+"1e-6 1e-6 1e-6 1e-6" #IKONOS
+"1e-6 1e-6 1e-6 1e-6" #RAPIDEYE
+"1e-6 1e-6 1e-6 1e-6" #QB
+"1e-6 1e-6 1e-6 1e-6" #SPOT6
+"1e-6 1e-6 1e-6 1e-6" #WORLDVIEW2
+)
+
+set(TESTNB 0 )
+foreach( file ${NAME_TESTS} )
+  list(GET IMG   ${TESTNB} current_img   )
+  list(GET NEEDEDKW   ${TESTNB} current_neededkw   )
+  list(GET TOLS   ${TESTNB} current_tols   )
+  list(GET NAME_TESTS   ${TESTNB} current_name   )
+  math(EXPR TESTNB "${TESTNB} + 1")
+
+  otb_add_test(NAME ioTvTestImageKeywordlist_${current_name} COMMAND otbOSSIMAdaptersTestDriver
+             otbTestImageKeywordlist
+             ${current_img}
+             ${current_neededkw}
+             ${current_tols}
+             ${current_name}.geom
+             0 # Only check the needed keyword
+            )
+            
+endforeach()     
+
+#KEYWORDLIST : RADAR SENSORS
+set(NAME_TESTS
+"radarsat2-1" 
+"terrasarx-1" 
+"sentinel1-1" 
+"envisat-asar-1" 
+"radarsat1-1" 
+)
+
+set(IMG
+LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_VH.tif}
+LARGEINPUT{TERRASARX/2008-03-21_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080321T133220_20080321T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos}
+LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
+LARGEINPUT{ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1}
+LARGEINPUT{RADARSAT1/SARDEGNA/scene01/dat_01.001}
+)
+
+set(TESTNB 0 )
+foreach( file ${NAME_TESTS} )
+  list(GET IMG   ${TESTNB} current_img   )
+  list(GET NAME_TESTS   ${TESTNB} current_name   )
+  math(EXPR TESTNB "${TESTNB} + 1")
+
+  otb_add_test(NAME ioTvTestImageKeywordlist_${current_name} COMMAND otbOSSIMAdaptersTestDriver
+             otbTestImageKeywordlist
+             ${current_img}
+             "ignore"
+             "ignore"
+             ${current_name}.geom
+             1 # Check all keywords
+            )
+            
+endforeach()       
+
 
 ##>otb_add_test(NAME ioTvImageKeywordlistSPOT5 COMMAND otbOSSIMAdaptersTestDriver
   ##>--ignore-order --compare-n-ascii ${NOTOL} 2
