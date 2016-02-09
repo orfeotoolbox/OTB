@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>236</width>
-    <height>146</height>
+    <width>248</width>
+    <height>166</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,12 +17,6 @@
    <locale language="C" country="AnyCountry"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
-    <number>4</number>
-   </property>
-   <property name="spacing">
-    <number>4</number>
-   </property>
    <item row="0" column="0">
     <widget class="QCheckBox" name="applyAllCheckBox">
      <property name="text">
@@ -31,12 +25,13 @@
     </widget>
    </item>
    <item row="1" column="0" colspan="2">
-    <widget class="QListView" name="filenamesListView"/>
+    <widget class="QListView" name="filenamesListView">
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
-   <item row="1" column="2">
-    <widget class="mvd::MultiResolutionPyramidWidget" name="pyramidWidget" native="true"/>
-   </item>
-   <item row="2" column="1" colspan="2">
+   <item row="3" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -45,6 +40,9 @@
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="mvd::MultiResolutionPyramidWidget" name="pyramidWidget" native="true"/>
    </item>
   </layout>
  </widget>
