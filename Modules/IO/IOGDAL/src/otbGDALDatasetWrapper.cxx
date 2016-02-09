@@ -37,8 +37,11 @@ GDALDatasetWrapper
     {
     GDALClose(m_Dataset);
 
-    // Warning: memory leak dataset resources are closed but the
-    // GDALDataset instance is not destroyed.
+    // GDALDataset * is statically cast from GDALDatasetH in
+    // GDALDriverManagerWrapper::Open(). So, it should be destroyed by
+    // GDALClose() (see
+    // http://gdal.org/classGDALDataset.html#a4d110533d799bac7dcfad3c41d30c0e7).
+    m_Dataset = NULL;
     }
 }
 
