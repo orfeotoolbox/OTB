@@ -54,6 +54,8 @@ assert_NaN( T val )
 {
   assert_quiet_NaN( val );
   assert_signaling_NaN( val );
+  // make production build happy
+  ((void)val);
 }
 
 /** 
