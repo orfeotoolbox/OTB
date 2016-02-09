@@ -257,12 +257,12 @@ VectorImageModel
   std::string tempfilename( QFile::encodeName( GetFilename() ) );
 
   filter->SetInputFileName(tempfilename);
-  filter->SetResamplingMethod(otb::AVERAGE);
+  filter->SetResamplingMethod( otb::GDAL_RESAMPLING_AVERAGE );
   filter->SetResolutionFactor(4);
 
   assert( m_ImageFileReader->GetOverviewsCount()==m_LodCount );
 
-  filter->SetNbOfResolutions(
+  filter->SetNbResolutions(
     GetNbLod() > 1
     ? GetNbLod() / 2
     : 1
