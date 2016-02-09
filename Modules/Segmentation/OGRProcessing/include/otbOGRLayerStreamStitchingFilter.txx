@@ -375,7 +375,7 @@ OGRLayerStreamStitchingFilter<TInputImage>
      
      if (errCommitY != OGRERR_NONE)
        {
-       itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ". Gdal error code " << errCommitY << "." << std::endl);
+       itkWarningMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ". Gdal error code " << errCommitY << "." << std::endl);
        }
      }
 }
