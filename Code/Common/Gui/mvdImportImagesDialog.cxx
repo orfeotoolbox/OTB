@@ -29,6 +29,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -61,17 +62,31 @@ namespace mvd
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
-/*******************************************************************************/
+/*****************************************************************************/
 ImportImagesDialog
-::ImportImagesDialog( QWidget * parent, Qt::WindowFlags flags  ):
+::ImportImagesDialog( const QStringList & filenames,
+		      QWidget * parent,
+		      Qt::WindowFlags flags  ) :
   QDialog( parent, flags ),
   m_UI( new Ui::ImportImagesDialog() )
 {
   m_UI->setupUi( this );
+
+  {
+  QItemSelectionModel * ism = m_UI->filenamesListView->selectionModel();
+
+  m_UI->filenamesListView->setModel(
+    new QStandardItemModel( m_UI->filenamesListView )
+  );
+
+  delete ism;
+  ism = NULL;
+  }
+
+  SetFilenames( filenames );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 ImportImagesDialog
 ::~ImportImagesDialog()
 {
@@ -79,8 +94,49 @@ ImportImagesDialog
   m_UI = NULL;
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
+/*****************************************************************************/
+void
+ImportImagesDialog
+::SetFilenames( const QStringList & filenames )
+{
+  assert( m_UI!=NULL );
+  assert( m_UI->filenamesListView!=NULL );
+
+  m_GdalOverviewsBuilders.resize( filenames.size()  );
+
+  QStandardItemModel * itemModel =
+    qobject_cast< QStandardItemModel * >( m_UI->filenamesListView->model() );
+
+  assert( itemModel!=NULL );
+
+  itemModel->clear();
+
+  for( int i=0;
+       i<filenames.size();
+       ++ i )
+    {
+    otb::GDALOverviewsBuilder::Pointer builder(
+      otb::GDALOverviewsBuilder::New()
+    );
+
+    m_GdalOverviewsBuilders[ i ] = builder;
+
+    builder->SetInputFileName(
+      QFile::encodeName( filenames[ i ] ).constData()
+    );
+
+    builder->SetResolutionFactor( 2 );
+    builder->SetNbResolutions( builder->CountResolutions( 2 ) );
+    builder->SetResamplingMethod( otb::GDAL_RESAMPLING_AVERAGE );
+    builder->SetCompressionMethod( otb::GDAL_COMPRESSION_NONE );
+    builder->SetFormat( otb::GDAL_FORMAT_GEOTIFF );
+
+    itemModel->appendRow( new QStandardItem( filenames[ i ] ) );
+    }
+}
+
+/*****************************************************************************/
+/* SLOTS                                                                     */
+/*****************************************************************************/
 
 } // end namespace 'mvd'

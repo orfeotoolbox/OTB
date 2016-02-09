@@ -41,6 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbGDALOverviewsBuilder.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -90,7 +91,9 @@ class Monteverdi_EXPORT ImportImagesDialog :
 public:
 
   /** \brief Constructor. */
-  ImportImagesDialog( QWidget * parent =NULL, Qt::WindowFlags flags =0 );
+  ImportImagesDialog( const QStringList & filename,
+		      QWidget * parent =NULL,
+		      Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~ImportImagesDialog();
@@ -113,15 +116,23 @@ signals:
 // Protected methods.
 protected:
 
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
 //
 // Protected attributes.
 protected:
 
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
+//
+// Private types.
+private:
+  typedef std::vector< otb::GDALOverviewsBuilder::Pointer > GdalOverviewsBuilderVector;
+
 //
 // Private methods.
 private:
+  /**
+   */
+  void SetFilenames( const QStringList & );
 
 //
 // Private attributes.
@@ -130,6 +141,10 @@ private:
    * \brief uic generated.
    */
   Ui::ImportImagesDialog * m_UI;
+
+  /**
+   */
+  GdalOverviewsBuilderVector m_GdalOverviewsBuilders;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
