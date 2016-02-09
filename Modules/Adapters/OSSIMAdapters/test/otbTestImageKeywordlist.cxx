@@ -33,6 +33,16 @@ double convertToDouble(const std::string& s)
 
 int otbTestImageKeywordlist(int argc, char* argv[])
 {
+	
+  if (argc != 6)
+  {
+    std::cout << argv[0] 
+              << " <input img filename> <input needed keyword list> <input list of tols for each needed kw> "
+              <<" <output kw list filename> <bool test all kw>" << std::endl;
+
+    return EXIT_FAILURE;
+  }
+    
   const unsigned int Dimension = 2;
   typedef double InputPixelType;
   typedef otb::VectorImage<InputPixelType, Dimension>  InputImageType;
