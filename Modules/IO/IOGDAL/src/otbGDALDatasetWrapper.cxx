@@ -90,4 +90,23 @@ GDALDatasetWrapper
 }
 
 
+unsigned int
+GDALDatasetWrapper
+::GetWidth() const
+{
+  assert( m_Dataset!=NULL );
+
+  return m_Dataset->GetRasterXSize();
+}
+
+
+unsigned int
+GDALDatasetWrapper
+::GetHeight() const
+{
+  assert( m_Dataset!=NULL );
+
+  return m_Dataset->GetRasterYSize();
+}
+
 } // end namespace otb

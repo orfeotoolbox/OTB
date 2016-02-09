@@ -60,6 +60,14 @@ public:
    */
   int GetOverviewsCount() const;
 
+  /**
+   */
+  unsigned int GetWidth() const;
+
+  /**
+   */
+  unsigned int GetHeight() const;
+
 protected :
   GDALDatasetWrapper();
 
