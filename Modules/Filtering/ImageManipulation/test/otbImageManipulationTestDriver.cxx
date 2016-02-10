@@ -85,4 +85,5 @@ void RegisterTests()
   REGISTER_TEST(otbMaskedIteratorDecoratorNew);
   REGISTER_TEST(otbMaskedIteratorDecoratorNominal);
   REGISTER_TEST(otbMaskedIteratorDecoratorDegenerate);
+  REGISTER_TEST(otbMaskedIteratorDecoratorExtended);
 }

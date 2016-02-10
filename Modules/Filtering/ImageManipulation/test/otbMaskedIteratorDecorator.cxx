@@ -17,6 +17,7 @@
 =========================================================================*/
 #include <set>
 #include "otbImage.h"
+#include "otbVectorImage.h"
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionReverseIterator.h"
@@ -29,7 +30,7 @@
 
 // Generate a test image of specified size and value
 template <typename ImageType>
-typename ImageType::Pointer GetTestImage(itk::SizeValueType fillSize, const typename ImageType::PixelType& value)
+typename ImageType::Pointer GetTestImage(itk::SizeValueType fillSize, const typename ImageType::PixelType& value, unsigned int nbBand=1)
 {
   typename ImageType::Pointer image = ImageType::New();
   typename ImageType::SizeType size;
@@ -38,6 +39,7 @@ typename ImageType::Pointer GetTestImage(itk::SizeValueType fillSize, const type
   typename ImageType::RegionType region;
   region.SetSize(size);
 
+  image->SetNumberOfComponentsPerPixel(nbBand);
   image->SetRegions(region);
   image->Allocate();
   image->FillBuffer(value);
@@ -80,12 +82,12 @@ InitializeIterator(IteratorType&, typename IteratorType::RegionType)
   // by default : nothing to do
 }
 
-// specialization for otb::SubsampledImageRegionIterator
+// specialization for otb::SubsampledImageRegionIterator<otb::Image<double, 2> >
 template <>
 void
-InitializeIterator<otb::SubsampledImageRegionIterator<otb::Image<double,2> > >(
-  otb::SubsampledImageRegionIterator<otb::Image<double,2> >& it,
-  typename otb::SubsampledImageRegionIterator<otb::Image<double,2> >::RegionType region)
+InitializeIterator< otb::SubsampledImageRegionIterator< otb::Image<double, 2> > >(
+  otb::SubsampledImageRegionIterator< otb::Image<double, 2> >& it,
+  typename otb::SubsampledImageRegionIterator<otb::Image<double, 2> >::RegionType)
 {
   it.SetSubsampleFactor(2);
 }
@@ -93,14 +95,17 @@ InitializeIterator<otb::SubsampledImageRegionIterator<otb::Image<double,2> > >(
 
 // -------------------------- ForwardTest --------------------------------------
 // Function to test the forward iteration interface
-template <typename IteratorType>
-int ForwardTest(typename IteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
+template <typename IteratorType, typename MaskIteratorType>
+int ForwardTest(typename MaskIteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
 {
-  otb::MaskedIteratorDecorator<IteratorType> it(mask, image, region);
+  otb::MaskedIteratorDecorator<IteratorType,MaskIteratorType> it(mask, image, region);
   
   // specific initialization code
   InitializeIterator<IteratorType>(it.GetImageIterator(),region);
-  InitializeIterator<IteratorType>(it.GetMaskIterator(),region);
+  if (it.HasMask())
+    {
+    InitializeIterator<MaskIteratorType>(it.GetMaskIterator(),region);
+    }
 
   it.GoToBegin();
   if (!it.IsAtBegin()) {return 1;}
@@ -122,14 +127,17 @@ int ForwardTest(typename IteratorType::ImageType::Pointer mask, typename Iterato
 
 // -------------------------- ReverseTest --------------------------------------
 // Test reverse iteration interface
-template <typename IteratorType>
-int ReverseTest(typename IteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
+template <typename IteratorType, typename MaskIteratorType>
+int ReverseTest(typename MaskIteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
 {
-  otb::MaskedIteratorDecorator<IteratorType> it(mask, image, region);
+  otb::MaskedIteratorDecorator<IteratorType,MaskIteratorType> it(mask, image, region);
   
   // specific initialization code
   InitializeIterator<IteratorType>(it.GetImageIterator(),region);
-  InitializeIterator<IteratorType>(it.GetMaskIterator(),region);
+  if (it.HasMask())
+    {
+    InitializeIterator<MaskIteratorType>(it.GetMaskIterator(),region);
+    }
 
   it.GoToEnd();
   if (!it.IsAtEnd()) {return 1;}
@@ -163,50 +171,71 @@ int ReverseTest(typename IteratorType::ImageType::Pointer mask, typename Iterato
 // i.e all locations where mask value != 0 are in the iteration (injection)
 // and mask value != 0 at all iteration locations (surjection)
 // Templated to test decoration of different iterator types
-template <typename IteratorType>
-int BijectiveTest(typename IteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
+template <typename IteratorType, typename MaskIteratorType>
+int BijectiveTest(typename MaskIteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
 {
-  otb::MaskedIteratorDecorator<IteratorType> itDecorated(mask, image, region);
+  otb::MaskedIteratorDecorator<IteratorType,MaskIteratorType> itDecorated(mask, image, region);
   IteratorType it(image, region);
   
   // specific initialization code
   InitializeIterator<IteratorType>(itDecorated.GetImageIterator(),region);
-  InitializeIterator<IteratorType>(itDecorated.GetMaskIterator(),region);
   InitializeIterator<IteratorType>(it,region);
+  if (itDecorated.HasMask())
+    {
+    InitializeIterator<MaskIteratorType>(itDecorated.GetMaskIterator(),region);
+    }
+  
 
   it.GoToBegin();
   itDecorated.GoToBegin();
 
   // Find the non maked begin for the image iterator
-  while (mask->GetPixel(it.GetIndex()) == 0 && !it.IsAtEnd())
-  {
-    ++it;
-  }
+  if (mask)
+    {
+    while (mask->GetPixel(it.GetIndex()) == 0 && !it.IsAtEnd())
+      {
+      ++it;
+      }
+    }
 
   // Begins are the same
   if (!(it.GetIndex() == itDecorated.GetIndex()
-     && it.GetIndex() == itDecorated.GetImageIterator().GetIndex()
-     && it.GetIndex() == itDecorated.GetMaskIterator().GetIndex()))
+     && it.GetIndex() == itDecorated.GetImageIterator().GetIndex()))
   {
     return 1;
   }
+  
+  if (itDecorated.HasMask() && it.GetIndex() != itDecorated.GetMaskIterator().GetIndex())
+    {
+    return 1;
+    }
 
   // Advance both and check
   while (!it.IsAtEnd() && !itDecorated.IsAtEnd())
   {
     // Iteration locations are the same
     if (!(it.GetIndex() == itDecorated.GetIndex()
-       && it.GetIndex() == itDecorated.GetImageIterator().GetIndex()
-       && it.GetIndex() == itDecorated.GetMaskIterator().GetIndex()))
-    {
+       && it.GetIndex() == itDecorated.GetImageIterator().GetIndex()))
+      {
       return 2;
-    }
+      }
+    if (itDecorated.HasMask() && it.GetIndex() != itDecorated.GetMaskIterator().GetIndex())
+      {
+      return 2;
+      }
 
     ++itDecorated;
-    do
-    {
+    if (mask)
+      {
+      do
+        {
+        ++it;
+        } while (mask->GetPixel(it.GetIndex()) == 0 && !it.IsAtEnd());
+      }
+    else
+      {
       ++it;
-    } while (mask->GetPixel(it.GetIndex()) == 0 && !it.IsAtEnd());
+      }
   }
 
   // Check IsAtEnd
@@ -219,27 +248,27 @@ int BijectiveTest(typename IteratorType::ImageType::Pointer mask, typename Itera
 }
 
 // Multiplex to forward, reverse and bijection test
-template <typename IteratorType>
-int TripleTest(typename IteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::Pointer image, typename IteratorType::ImageType::RegionType region)
+template <typename IteratorType, typename MaskIteratorType>
+int TripleTest(typename IteratorType::ImageType::Pointer image,typename MaskIteratorType::ImageType::Pointer mask, typename IteratorType::ImageType::RegionType region)
 {
   int ret;
   int retGlobal = EXIT_SUCCESS;
 
-  ret = ForwardTest<IteratorType>(mask, image, region);
+  ret = ForwardTest<IteratorType,MaskIteratorType>(mask, image, region);
   if (ret>0)
     {
     std::cout << "Forward(FAILED:"<<ret<<") ";
     retGlobal = EXIT_FAILURE;
     }
 
-  ret = ReverseTest<IteratorType>(mask, image, region);
+  ret = ReverseTest<IteratorType,MaskIteratorType>(mask, image, region);
   if (ret>0)
     {
     std::cout << "Reverse(FAILED:"<<ret<<") ";
     retGlobal = EXIT_FAILURE;
     }
 
-  ret = BijectiveTest<IteratorType>(mask, image, region);
+  ret = BijectiveTest<IteratorType,MaskIteratorType>(mask, image, region);
   if (ret>0)
     {
     std::cout << "Bijective(FAILED:"<<ret<<") ";
@@ -265,16 +294,19 @@ int otbMaskedIteratorDecoratorNominal(int itkNotUsed(argc), char * itkNotUsed(ar
   int retGlobal = EXIT_SUCCESS;
 
   std::cout << std::endl << "itk::ImageRegionIterator : ";
-  ret = TripleTest<itk::ImageRegionIterator<ImageType> >(image, mask, region);
+  ret = TripleTest< itk::ImageRegionIterator<ImageType>,
+                    itk::ImageRegionIterator<ImageType> >(image, mask, region);
   retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
 
   std::cout << std::endl << "itk::ImageRegionConstIterator : ";
-  ret = TripleTest< itk::ImageRegionConstIterator<ImageType> >(image, mask, region);
+  ret = TripleTest< itk::ImageRegionConstIterator<ImageType>,
+                    itk::ImageRegionConstIterator<ImageType> >(image, mask, region);
   retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
   
-  std::cout << std::endl << "otb::SubsampledImageRegionIterator : ";
-  ret = TripleTest< otb::SubsampledImageRegionIterator<ImageType> >(image, mask, region);
-  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+  // std::cout << std::endl << "otb::SubsampledImageRegionIterator : ";
+  // ret = TripleTest< otb::SubsampledImageRegionIterator<ImageType>,
+  //                   otb::SubsampledImageRegionIterator<ImageType> >(image, mask, region);
+  // retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
 
   return retGlobal;
 }
@@ -288,9 +320,46 @@ int otbMaskedIteratorDecoratorDegenerate(int itkNotUsed(argc), char * itkNotUsed
   ImageType::Pointer mask = GetTestImage<ImageType>(100, 0);
   ImageType::RegionType region(image->GetLargestPossibleRegion());
 
-  return TripleTest<itk::ImageRegionIterator<ImageType> >(image, mask, region);
+  return TripleTest<itk::ImageRegionIterator<ImageType>,
+                    itk::ImageRegionIterator<ImageType> >(image, mask, region);
 }
 
+// --------------------------- Extended cases ----------------------------------
+int otbMaskedIteratorDecoratorExtended(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+{
+  typedef otb::VectorImage<double, 2> ImageType;
+  typedef otb::Image<unsigned char, 2> MaskType;
+  otb::VectorImage<double, 2>::PixelType pixel(3);
+  pixel.Fill(12);
+  ImageType::Pointer image = GetTestImage<ImageType>(10,pixel ,3);
+  MaskType::Pointer mask = GetTestImage<MaskType>(10, 0);
+  ImageType::RegionType region(image->GetLargestPossibleRegion());
+  FillHalf<MaskType>(mask, region, 1);
+  int ret;
+  int retGlobal = EXIT_SUCCESS;
+
+  std::cout << std::endl << "itk::ImageRegionIterator : ";
+  ret = TripleTest< itk::ImageRegionIterator<ImageType>,
+                    itk::ImageRegionIterator<MaskType> >(image, mask, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  std::cout << std::endl << "itk::ImageRegionConstIterator : ";
+  ret = TripleTest< itk::ImageRegionConstIterator<ImageType>,
+                    itk::ImageRegionConstIterator<MaskType> >(image, mask, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  std::cout << std::endl << "itk::ImageRegionIterator without mask: ";
+  ret = TripleTest< itk::ImageRegionIterator<ImageType>,
+                    itk::ImageRegionIterator<MaskType> >(image, NULL, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  std::cout << std::endl << "itk::ImageRegionConstIterator without mask: ";
+  ret = TripleTest< itk::ImageRegionConstIterator<ImageType>,
+                    itk::ImageRegionConstIterator<MaskType> >(image, NULL, region);
+  retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
+
+  return retGlobal;
+}
 
 
 
