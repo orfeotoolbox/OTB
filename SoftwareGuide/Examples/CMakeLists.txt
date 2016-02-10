@@ -13,7 +13,7 @@ PROJECT(Examples C)
 MACRO(RUN_EXAMPLE EXECUTABLE OUTPUT_IMG SOURCE_FILE)
   ADD_CUSTOM_COMMAND(
       OUTPUT      "${SoftwareGuide_BINARY_DIR}/Art/Generated/${OUTPUT_IMG}"
-      COMMAND     "${OTB_DIR}/bin/${EXECUTABLE}"
+      COMMAND     "${OTB_PREFIX}/bin/${EXECUTABLE}"
       ARGS        ${ARGN}
       DEPENDS     ${RUN_EXAMPLES_SCRIPT} ${SOURCE_FILE} ${GENERATED_FIGURE_DEPS}
   )
@@ -473,7 +473,7 @@ IF( BUILD_FIGURES )
       SET(TEX_FILE ${SoftwareGuide_BINARY_DIR}/Examples/${TEX_FILE}.tex)
 
       EXECUTE_PROCESS(COMMAND ${PERL_EXECUTABLE}
-                      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_DIR}/bin ${OTB_DATA_PATHS} ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder} )
+                      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_PREFIX}/bin ${OTB_DATA_PATHS} ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder} )
       # MESSAGE( ARGS ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} ${OTB_DATA_PATHS} ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder})
       # Include each of the generated .cmake files in dependencies list
       # only if the file is generated (if it has command line tags)
