@@ -122,6 +122,16 @@ GDALOverviewsBuilder
 }
 
 /***************************************************************************/
+unsigned int
+GDALOverviewsBuilder
+::GetOverviewsCount() const
+{
+  assert( !m_GdalDataset.IsNull() );
+
+  return m_GdalDataset->GetOverviewsCount();
+}
+
+/***************************************************************************/
 GDALResampling
 GDALOverviewsBuilder
 ::GetResamplingMethod() const

@@ -94,7 +94,7 @@ public:
   unsigned int
   CountResolutions( unsigned int factor, unsigned int n =0 ) const;
 
-  int GetOverviewsCount() const;
+  unsigned int GetOverviewsCount() const;
 
 
   GDALResampling GetResamplingMethod() const;
