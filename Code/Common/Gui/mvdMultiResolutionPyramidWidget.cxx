@@ -175,10 +175,10 @@ MultiResolutionPyramidWidget
 
   ClearResolutions();
 
+  m_GDALOverviewsBuilder = p;
+
   if( p.IsNull() )
     return;
-
-  m_GDALOverviewsBuilder = p;
 
   assert( !m_GDALOverviewsBuilder.IsNull() );
 
@@ -241,5 +241,20 @@ MultiResolutionPyramidWidget
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
+void
+MultiResolutionPyramidWidget
+::on_levelsSpinBox_valueChanged( int value )
+{
+  // qDebug() << this << "::on_levelsSpinBox_valueChanged(" << value << ")";
+
+  ClearResolutions();
+
+  if( m_GDALOverviewsBuilder.IsNull() )
+    return;
+
+  m_GDALOverviewsBuilder->SetNbResolutions( value );
+
+  SetResolutions();
+}
 
 } // end namespace 'mvd'

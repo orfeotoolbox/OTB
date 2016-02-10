@@ -151,6 +151,7 @@ private:
 //
 // Slots.
 private slots:
+  void on_levelsSpinBox_valueChanged( int );
 };
 
 } // end namespace 'mvd'
