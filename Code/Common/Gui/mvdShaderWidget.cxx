@@ -41,7 +41,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAlgorithm.h"
 #include "Core/mvdImageSettings.h"
-
+#include "Gui/mvdGui.h"
 
 namespace mvd
 {
@@ -76,8 +76,7 @@ ShaderWidget
 
   assert( qApp!=NULL );
 
-  for( int i=0; i<EFFECT_COUNT; ++i )
-    m_UI->effectComboBox->addItem( qApp->translate( "mvd", EFFECT_NAME[ i ] ) );
+  AddItemsInto( m_UI->effectComboBox, "mvd", EFFECT_NAMES, EFFECT_COUNT );
 
   m_UI->valueLineEdit->setValidator(
     new QDoubleValidator( m_UI->valueLineEdit )
@@ -101,13 +100,13 @@ ShaderWidget
 
   int index =
     m_UI->effectComboBox->findText(
-      qApp->translate( "mvd", EFFECT_NAME[ EFFECT_GRADIENT ] )
+      qApp->translate( "mvd", EFFECT_NAMES[ EFFECT_GRADIENT ] )
     );
 
   if( isEnabled )
     {
     if( index<0 )
-      m_UI->effectComboBox->addItem( tr( "mvd", EFFECT_NAME[ EFFECT_GRADIENT ] ) );
+      m_UI->effectComboBox->addItem( tr( "mvd", EFFECT_NAMES[ EFFECT_GRADIENT ] ) );
     }
   else if( index>=0 )
     m_UI->effectComboBox->removeItem( index );
@@ -134,7 +133,7 @@ ShaderWidget
       if( m_UI->effectComboBox->itemText( i )
 	  .compare(
 	    qApp->translate( "mvd",
-			     EFFECT_NAME[ settings->GetEffect() ] ) )==0 )
+			     EFFECT_NAMES[ settings->GetEffect() ] ) )==0 )
         {
         m_UI->effectComboBox->setCurrentIndex( i );
 
@@ -179,7 +178,7 @@ ShaderWidget
   assert( qApp!=NULL );
 
   for( int i=0; i<EFFECT_COUNT; ++i )
-    if( QString::compare( text, qApp->translate( "mvd", EFFECT_NAME[ i ] ) )==0 )
+    if( QString::compare( text, qApp->translate( "mvd", EFFECT_NAMES[ i ] ) )==0 )
       {
       ImageSettings * settings = GetSettings();
       assert( settings!=NULL );

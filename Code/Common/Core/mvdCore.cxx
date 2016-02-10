@@ -79,7 +79,7 @@ BOUND_NAMES[ BOUND_COUNT ] = {
 };
 
 char const * const
-EFFECT_NAME[ EFFECT_COUNT ] =
+EFFECT_NAMES[ EFFECT_COUNT ] =
 {
   // QT_TRANSLATE_NOOP( "mvd", "None" ),
   QT_TRANSLATE_NOOP( "mvd", "Chessboard" ),

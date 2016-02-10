@@ -140,7 +140,7 @@ enum Effect
 Monteverdi_EXPORT
 extern
 char const * const
-EFFECT_NAME[ EFFECT_COUNT ];
+EFFECT_NAMES[ EFFECT_COUNT ];
 
 } // end of namespace mvd.
 
