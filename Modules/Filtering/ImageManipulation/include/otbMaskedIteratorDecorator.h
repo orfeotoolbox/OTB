@@ -20,8 +20,6 @@
 
 #include "itkMacro.h"
 
-#define MY_NEW_IMPLEMENTATION
-
 namespace otb
 {
 
@@ -121,12 +119,8 @@ private:
   bool m_UseMask;
 
   // Unmasked bounds
-#ifdef MY_NEW_IMPLEMENTATION
   TMaskIteratorType m_StartMask;
   TIteratorType m_StartImage;
-#else
-  IndexType m_Begin;
-#endif
 };
 
 }

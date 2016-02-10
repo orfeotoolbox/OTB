@@ -38,12 +38,8 @@ MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
     {
     m_UseMask = true;
     m_ItMask = TMaskIteratorType(mask,region);
-#ifdef MY_NEW_IMPLEMENTATION
     m_StartMask = TMaskIteratorType(mask,region);
     m_StartImage = TIteratorType(image,region);
-#else
-    this->ComputeMaskedBegin();
-#endif
     }
 }
 
@@ -62,12 +58,7 @@ MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
 {
   if (m_UseMask)
     {
-#ifdef MY_NEW_IMPLEMENTATION
     this->ComputeMaskedBegin();
-#else
-    m_ItMask.SetIndex(m_Begin);
-    m_ItImage.SetIndex(m_Begin);
-#endif
     }
   else
     {
@@ -80,21 +71,14 @@ void
 MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
 ::GoToEnd()
 {
-  
   if (m_UseMask)
     {
     // make sure masked begin is computed as next calls might be operator--() 
     // and IsAtBegin() (for a reverse iteration)
-#ifdef MY_NEW_IMPLEMENTATION
     this->ComputeMaskedBegin();
-#endif
-    m_ItImage.GoToEnd();
     m_ItMask.GoToEnd();
     }
-  else
-    {
-    m_ItImage.GoToEnd();
-    }
+  m_ItImage.GoToEnd();
 }
 
 template <typename TIteratorType, typename TMaskIteratorType>
@@ -104,11 +88,7 @@ MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
 {
   if (m_UseMask)
     {
-#ifdef MY_NEW_IMPLEMENTATION
     return m_ItMask == m_StartMask || m_ItImage == m_StartImage;
-#else
-    return m_ItMask.GetIndex() == m_Begin || m_ItImage.GetIndex() == m_Begin;
-#endif
     }
   return m_ItImage.IsAtBegin();
 }
@@ -231,7 +211,6 @@ MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
 {
   // We must search for the first index where the image is not masked
   // Start searching at the begining
-#ifdef MY_NEW_IMPLEMENTATION
   m_ItMask.GoToBegin();
   m_ItImage.GoToBegin();
 
@@ -243,17 +222,6 @@ MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
   }
   m_StartMask.SetIndex(m_ItMask.GetIndex());
   m_StartImage.SetIndex(m_ItImage.GetIndex());
-#else
-  m_ItMask.GoToBegin();
-  m_ItImage.GoToBegin();
-  
-  while (m_ItMask.Value() == 0 && !m_ItMask.IsAtEnd() && !m_ItImage.IsAtEnd())
-  {
-    ++m_ItMask;
-    ++m_ItImage;
-  }  
-  this->m_Begin = m_ItMask.GetIndex();
-#endif
 }
 
 } // namespace otb
