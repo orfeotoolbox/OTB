@@ -97,13 +97,15 @@ bool provideGCP(char * gcpfilename, pointsContainerType& imgPt, geo3dPointsConta
 			std::string line;
 			while(getline(file,line))
 			{
-			   
-			   std::istringstream iss(line);
-	     
-		       iss >> imagePoint[0] >> imagePoint[1] >> geo3dPoint[0] >> geo3dPoint[1] >> geo3dPoint[2];
-		      
-		       imgPt.push_back(imagePoint);
-		       geo3dPt.push_back(geo3dPoint);
+			   if (line.find_first_of("#") != 0)
+			   {  
+				   std::istringstream iss(line);
+			 
+				   iss >> imagePoint[0] >> imagePoint[1] >> geo3dPoint[0] >> geo3dPoint[1] >> geo3dPoint[2];
+				  
+				   imgPt.push_back(imagePoint);
+				   geo3dPt.push_back(geo3dPoint);
+		       }
 		      
 		    }
 			file.close();
