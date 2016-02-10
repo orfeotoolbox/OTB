@@ -103,7 +103,7 @@ GDALOverviewsBuilder
 
   unsigned int minSize = static_cast< unsigned int >( pow( factor, n ) );
 
-  unsigned int count = 1;
+  unsigned int count = 0;
 
   unsigned int size =
     std::min(
@@ -119,6 +119,37 @@ GDALOverviewsBuilder
     }
 
   return count;
+}
+
+/***************************************************************************/
+void
+GDALOverviewsBuilder
+::ListResolutions( SizeVector & sizes )
+{
+  ListResolutions( sizes, m_ResolutionFactor, m_NbResolutions );
+}
+
+/***************************************************************************/
+void
+GDALOverviewsBuilder
+::ListResolutions( SizeVector & sizes, unsigned int factor, unsigned int count )
+{
+  assert( !m_GdalDataset.IsNull() );
+
+  Size s;
+
+  s[ 0 ] = m_GdalDataset->GetWidth();
+  s[ 1 ] = m_GdalDataset->GetHeight();
+
+  unsigned int n = std::min( count, CountResolutions( factor, 0 ) );
+
+  for( unsigned int i=0; i<n; ++i )
+    {
+    sizes.push_back( s );
+
+    s[ 0 ] /= factor;
+    s[ 1 ] /= factor;
+    }
 }
 
 /***************************************************************************/

@@ -21,6 +21,7 @@
 
 // #include "itkLightObject.h"
 #include "itkProcessObject.h"
+#include "itkSize.h"
 
 #include "otbGDALDatasetWrapper.h"
 #include "otbConfigure.h"
@@ -84,6 +85,9 @@ public:
   typedef itk::SmartPointer< Self> Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
+  typedef itk::Size< 2 > Size;
+  typedef std::vector< Size > SizeVector;
+
   /** Method for creation through the object factory. */
   itkNewMacro( Self );
 
@@ -94,8 +98,11 @@ public:
   unsigned int
   CountResolutions( unsigned int factor, unsigned int n =0 ) const;
 
-  unsigned int GetOverviewsCount() const;
+  void ListResolutions( SizeVector &, unsigned int factor, unsigned int count );
 
+  void ListResolutions( SizeVector & );
+
+  unsigned int GetOverviewsCount() const;
 
   GDALResampling GetResamplingMethod() const;
 
@@ -131,6 +138,7 @@ public:
 
 protected:
   GDALOverviewsBuilder();
+
   virtual ~GDALOverviewsBuilder() {};
 
   void PrintSelf( std::ostream & os, itk::Indent indent ) const;
