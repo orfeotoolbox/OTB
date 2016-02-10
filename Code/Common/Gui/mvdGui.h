@@ -163,6 +163,13 @@ namespace mvd
 
 /**
  */
+void
+AddItemsInto( QComboBox * comboBox,
+	      const char * context,
+	      char const * const names[],
+	      size_t count );
+/**
+ */
 QMessageBox & CustomizeMessageBox( QMessageBox & messageBox,
                                    QWidget * widget );
 

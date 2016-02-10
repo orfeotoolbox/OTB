@@ -93,7 +93,25 @@ TILE_SIZE_VALUE[ TILE_SIZE_COUNT ] =
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
+/*****************************************************************************/
+void
+AddItemsInto( QComboBox * comboBox,
+	      const char * context,
+	      char const * const names[],
+	      size_t count )
+{
+  assert( comboBox!=NULL );
+  assert( names!=NULL );
 
+  for( size_t i=0; i<count; ++i )
+    comboBox->addItem(
+      qApp->translate(
+	context,
+	names[ i ] )
+    );
+}
+
+/*****************************************************************************/
 QMessageBox &
 CustomizeMessageBox( QMessageBox & messageBox,
                      QWidget * widget )
