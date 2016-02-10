@@ -150,6 +150,19 @@ MultiResolutionPyramidWidget
 /*****************************************************************************/
 void
 MultiResolutionPyramidWidget
+::ClearResolutions()
+{
+  QStandardItemModel * itemModel =
+    qobject_cast< QStandardItemModel * >( m_UI->resolutionsListView->model() );
+
+  assert( itemModel!=NULL );
+
+  itemModel->clear();
+}
+
+/*****************************************************************************/
+void
+MultiResolutionPyramidWidget
 ::SetBuilder( const otb::GDALOverviewsBuilder::Pointer & p )
 {
   m_UI->formatComboBox->setCurrentIndex( otb::GDAL_FORMAT_GEOTIFF );
@@ -160,12 +173,7 @@ MultiResolutionPyramidWidget
   m_UI->levelsSpinBox->setValue( 1 );
   m_UI->sizeSpinBox->setValue( 1 );
 
-  QStandardItemModel * itemModel =
-    qobject_cast< QStandardItemModel * >( m_UI->resolutionsListView->model() );
-
-  assert( itemModel!=NULL );
-
-  itemModel->clear();
+  ClearResolutions();
 
   if( p.IsNull() )
     return;
@@ -197,7 +205,21 @@ MultiResolutionPyramidWidget
     )
   );
 
-  {
+  SetResolutions();
+}
+
+/*****************************************************************************/
+void
+MultiResolutionPyramidWidget
+::SetResolutions()
+{
+  assert( !m_GDALOverviewsBuilder.IsNull() );
+
+  QStandardItemModel * itemModel =
+    qobject_cast< QStandardItemModel * >( m_UI->resolutionsListView->model() );
+
+  assert( itemModel!=NULL );
+
   otb::GDALOverviewsBuilder::SizeVector resolutions;
 
   m_GDALOverviewsBuilder->ListResolutions( resolutions );
@@ -214,7 +236,6 @@ MultiResolutionPyramidWidget
 	.arg( ( *it )[ 1 ] )
       )
     );
-  }
 }
 
 /*****************************************************************************/

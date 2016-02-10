@@ -128,6 +128,12 @@ protected:
 //
 // Private methods.
 private:
+  /**
+   */
+  void ClearResolutions();
+  /**
+   */
+  void SetResolutions();
 
 //
 // Private attributes.
