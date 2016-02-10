@@ -125,7 +125,7 @@ protected:
 //
 // Private types.
 private:
-  typedef std::vector< otb::GDALOverviewsBuilder::Pointer > GdalOverviewsBuilderVector;
+  typedef std::vector< otb::GDALOverviewsBuilder::Pointer > GDALOverviewsBuilderVector;
 
 //
 // Private methods.
@@ -144,7 +144,7 @@ private:
 
   /**
    */
-  GdalOverviewsBuilderVector m_GdalOverviewsBuilders;
+  GDALOverviewsBuilderVector m_GDALOverviewsBuilders;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

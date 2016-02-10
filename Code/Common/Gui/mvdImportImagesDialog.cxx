@@ -110,7 +110,7 @@ ImportImagesDialog
   assert( m_UI!=NULL );
   assert( m_UI->filenamesListView!=NULL );
 
-  m_GdalOverviewsBuilders.resize( filenames.size()  );
+  m_GDALOverviewsBuilders.resize( filenames.size()  );
 
   QStandardItemModel * itemModel =
     qobject_cast< QStandardItemModel * >( m_UI->filenamesListView->model() );
@@ -140,7 +140,7 @@ ImportImagesDialog
 
       item->setFlags( item->flags() | Qt::ItemIsSelectable );
 
-      if( builder->GetOverviewsCount()==0 )
+      if( builder->GetOverviewsCount()<=1 )
 	item->setFlags( item->flags() | Qt::ItemIsEnabled );
 
       builder->SetResolutionFactor( 2 );
@@ -163,7 +163,7 @@ ImportImagesDialog
       builder = otb::GDALOverviewsBuilder::Pointer();
       }
 
-    m_GdalOverviewsBuilders[ i ] = builder;
+    m_GDALOverviewsBuilders[ i ] = builder;
 
     itemModel->appendRow( item );
     }
@@ -174,9 +174,30 @@ ImportImagesDialog
 /*****************************************************************************/
 void
 ImportImagesDialog
-::OnCurrentChanged( const QModelIndex & current, const QModelIndex & previous )
+::OnCurrentChanged( const QModelIndex & current, const QModelIndex & )
 {
-  qDebug() << this << "::OnCurrentChanged(" << current << "," << previous << ")";
+  // qDebug() << this << "::OnCurrentChanged(" << current << "," << previous << ")";
+
+  // const QStandardItemModel * itemModel =
+  //   qobject_cast< const QStandardItemModel * >(
+  //     m_UI->filenamesListView->model()
+  //   );
+
+  // assert( itemModel!=NULL );
+
+  assert( current.isValid() );
+
+  assert(
+    current.row()>=0 &&
+    static_cast< size_t >( current.row() )<m_GDALOverviewsBuilders.size() );
+
+  otb::GDALOverviewsBuilder::Pointer builder(
+    m_GDALOverviewsBuilders[ current.row() ]
+  );
+
+  m_UI->pyramidWidget->setEnabled( !builder.IsNull() );
+
+  m_UI->pyramidWidget->SetBuilder( builder );
 }
 
 } // end namespace 'mvd'
