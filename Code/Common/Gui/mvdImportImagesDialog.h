@@ -151,6 +151,9 @@ private:
 //
 // Slots.
 private slots:
+  /**
+   */
+  void OnCurrentChanged( const QModelIndex & , const QModelIndex & );
 };
 
 } // end namespace 'mvd'

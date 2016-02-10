@@ -83,6 +83,14 @@ ImportImagesDialog
   ism = NULL;
   }
 
+  QObject::connect(
+    m_UI->filenamesListView->selectionModel(),
+    SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ),
+    // to:
+    this,
+    SLOT( OnCurrentChanged( const QModelIndex &, const QModelIndex & ) )
+  );
+
   SetFilenames( filenames );
 }
 
@@ -138,5 +146,11 @@ ImportImagesDialog
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
+void
+ImportImagesDialog
+::OnCurrentChanged( const QModelIndex & current, const QModelIndex & previous )
+{
+  qDebug() << this << "::OnCurrentChanged(" << current << "," << previous << ")";
+}
 
 } // end namespace 'mvd'
