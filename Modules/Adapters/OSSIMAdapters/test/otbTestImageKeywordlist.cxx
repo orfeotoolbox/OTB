@@ -23,12 +23,13 @@
 #include <sstream>
 #include <iterator>
 
-double convertToDouble(const std::string& s)
+double convertStringToDouble(const std::string& s)
 {
-  std::istringstream i(s);
-  double x;
-  i >> x;
-  return x;
+   std::istringstream i(s);
+   double x;
+   if (!(i >> x))
+     return 0;
+   return x;
 }
 
 int otbTestImageKeywordlist(int argc, char* argv[])
@@ -88,12 +89,12 @@ int otbTestImageKeywordlist(int argc, char* argv[])
 	  double val1,val2;
 	  while ( kwlistIt!=kwmap.end() )
 	  {
-		  val1 = convertToDouble(kwlistIt->second);
+		  val1 = convertStringToDouble(kwlistIt->second);
 		  
 		  KeywordlistMapType::iterator it = kwmap2.find(kwlistIt->first);
 		  if (it != kwmap2.end() )
 		  {
-		    val2 = convertToDouble(it->second);
+		    val2 = convertStringToDouble(it->second);
 		  }
 		  else
 		  {
@@ -172,7 +173,7 @@ int otbTestImageKeywordlist(int argc, char* argv[])
 	  std::list<std::string>::iterator neededKwIt=neededKw.begin();
 	  while ( (tolsIt!=tols.end()) && (neededKwIt!=neededKw.end()) )
 	  {		
-	     mapKwTol.insert(  std::pair<std::string,double>(*neededKwIt,  convertToDouble(*tolsIt) )   );
+	     mapKwTol.insert(  std::pair<std::string,double>(*neededKwIt,  convertStringToDouble(*tolsIt) )   );
 	     ++tolsIt;
 	     ++neededKwIt;
 	  }
@@ -194,7 +195,7 @@ int otbTestImageKeywordlist(int argc, char* argv[])
 			if (found!=std::string::npos) // keyword found
 			{   
 				
-				if ( fabs( convertToDouble(kwlistIt->second) - convertToDouble(kwlistIt2->second)) > mapKwTol[*neededIt] )
+				if ( fabs( convertStringToDouble(kwlistIt->second) - convertStringToDouble(kwlistIt2->second)) > mapKwTol[*neededIt] )
 				{
 					std::cerr << "Error : orig key/value (" << kwlistIt->first << " " << kwlistIt->second << ")"<< std::endl
 					    << "reloaded key/value (" << kwlistIt2->first << " " << kwlistIt2->second << ")"<< std::endl;
