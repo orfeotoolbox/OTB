@@ -129,10 +129,6 @@ protected:
 // Private methods.
 private:
 
-  /**
-   */
-  void Foo( const QStringList & );
-
 //
 // Private attributes.
 private:

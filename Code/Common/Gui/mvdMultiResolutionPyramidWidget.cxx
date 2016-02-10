@@ -100,6 +100,17 @@ MultiResolutionPyramidWidget
 {
   m_UI->setupUi( this );
 
+  {
+  QItemSelectionModel * ism = m_UI->resolutionsListView->selectionModel();
+
+  m_UI->resolutionsListView->setModel(
+    new QStandardItemModel( m_UI->resolutionsListView )
+  );
+
+  delete ism;
+  ism = NULL;
+  }
+
   AddItemsInto(
     m_UI->formatComboBox,
     "mvd::MultiResolutionPyramidWidget",
@@ -124,6 +135,8 @@ MultiResolutionPyramidWidget
   m_UI->baseSpinBox->setValue( 2 );
   m_UI->levelsSpinBox->setValue( 1 );
   m_UI->sizeSpinBox->setValue( 2 );
+
+  
 }
 
 /*****************************************************************************/
@@ -139,7 +152,69 @@ void
 MultiResolutionPyramidWidget
 ::SetBuilder( const otb::GDALOverviewsBuilder::Pointer & p )
 {
+  m_UI->formatComboBox->setCurrentIndex( otb::GDAL_FORMAT_GEOTIFF );
+  m_UI->algorithmComboBox->setCurrentIndex( otb::GDAL_RESAMPLING_AVERAGE );
+  m_UI->compressionComboBox->setCurrentIndex( otb::GDAL_COMPRESSION_NONE );
+
+  m_UI->baseSpinBox->setValue( 2 );
+  m_UI->levelsSpinBox->setValue( 1 );
+  m_UI->sizeSpinBox->setValue( 1 );
+
+  QStandardItemModel * itemModel =
+    qobject_cast< QStandardItemModel * >( m_UI->resolutionsListView->model() );
+
+  assert( itemModel!=NULL );
+
+  itemModel->clear();
+
+  if( p.IsNull() )
+    return;
+
   m_GDALOverviewsBuilder = p;
+
+  assert( !m_GDALOverviewsBuilder.IsNull() );
+
+  m_UI->formatComboBox->setCurrentIndex(
+    m_GDALOverviewsBuilder->GetFormat()
+  );
+
+  m_UI->algorithmComboBox->setCurrentIndex(
+    m_GDALOverviewsBuilder->GetResamplingMethod()
+  );
+
+  m_UI->compressionComboBox->setCurrentIndex(
+    m_GDALOverviewsBuilder->GetCompressionMethod()
+  );
+
+  m_UI->baseSpinBox->setValue( m_GDALOverviewsBuilder->GetResolutionFactor() );
+
+  m_UI->levelsSpinBox->setValue( m_GDALOverviewsBuilder->GetNbResolutions() );
+
+  m_UI->sizeSpinBox->setValue(
+    m_GDALOverviewsBuilder->CountResolutions(
+      m_GDALOverviewsBuilder->GetResolutionFactor(),
+      m_GDALOverviewsBuilder->GetNbResolutions()
+    )
+  );
+
+  {
+  otb::GDALOverviewsBuilder::SizeVector resolutions;
+
+  m_GDALOverviewsBuilder->ListResolutions( resolutions );
+
+  for( otb::GDALOverviewsBuilder::SizeVector::const_iterator it(
+	 resolutions.begin()
+       );
+       it!=resolutions.end();
+       ++ it )
+    itemModel->appendRow(
+      new QStandardItem(
+	QString( "%1x%2" )
+	.arg( ( *it )[ 0 ] )
+	.arg( ( *it )[ 1 ] )
+      )
+    );
+  }
 }
 
 /*****************************************************************************/
