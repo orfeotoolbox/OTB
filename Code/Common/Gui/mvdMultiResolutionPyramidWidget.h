@@ -41,6 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbGDALOverviewsBuilder.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -90,10 +91,15 @@ class Monteverdi_EXPORT MultiResolutionPyramidWidget :
 public:
 
   /** \brief Constructor. */
-  MultiResolutionPyramidWidget( QWidget * parent =NULL, Qt::WindowFlags flags =0 );
+  MultiResolutionPyramidWidget( QWidget * parent =NULL,
+				Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~MultiResolutionPyramidWidget();
+
+  /**
+   */
+  void SetBuilder( const otb::GDALOverviewsBuilder::Pointer & );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -123,6 +129,10 @@ protected:
 // Private methods.
 private:
 
+  /**
+   */
+  void Foo( const QStringList & );
+
 //
 // Private attributes.
 private:
@@ -130,6 +140,9 @@ private:
    * \brief uic generated.
    */
   Ui::MultiResolutionPyramidWidget * m_UI;
+  /**
+   */
+  otb::GDALOverviewsBuilder::Pointer m_GDALOverviewsBuilder;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
