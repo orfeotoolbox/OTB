@@ -37,6 +37,8 @@ assert_quiet_NaN( T val )
   assert( !std::numeric_limits< T >::has_quiet_NaN ||
 	  ( std::numeric_limits< T >::has_quiet_NaN &&
 	    val!=std::numeric_limits< T >::quiet_NaN() ) );
+  // make production build happy
+  ((void)val);
 }
 
 template< typename T >
@@ -46,6 +48,8 @@ assert_signaling_NaN( T val )
   assert( !std::numeric_limits< T >::has_signaling_NaN ||
 	  ( std::numeric_limits< T >::has_signaling_NaN &&
 	    val!=std::numeric_limits< T >::signaling_NaN() ) );
+  // make production build happy
+  ((void)val);
 }
 
 template< typename T >
