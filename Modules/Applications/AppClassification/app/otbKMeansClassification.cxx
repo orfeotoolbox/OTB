@@ -103,9 +103,9 @@ private:
 
 
 typedef FloatImageType::PixelType PixelType;
-typedef UInt8ImageType   LabeledImageType;
+typedef UInt16ImageType   LabeledImageType;
 
-typedef UInt8VectorImageType        VectorImageType;
+typedef UInt16VectorImageType        VectorImageType;
 typedef VectorImageType::PixelType  VectorPixelType;
 typedef UInt8RGBImageType           RGBImageType;
 typedef RGBImageType::PixelType     RGBPixelType;
@@ -129,7 +129,7 @@ typedef otb::StreamingShrinkImageFilter<FloatVectorImageType,
      FloatVectorImageType>              ImageSamplingFilterType;
 
 typedef otb::StreamingShrinkImageFilter<LabeledImageType,
-    UInt8ImageType>              MaskSamplingFilterType;
+    LabeledImageType>              MaskSamplingFilterType;
 typedef Functor::KMeansFunctor<SampleType, LabelType> KMeansFunctorType;
 typedef itk::UnaryFunctorImageFilter<FloatVectorImageType,
     LabeledImageType, KMeansFunctorType>     KMeansFilterType;
@@ -257,7 +257,7 @@ private:
 
     m_InImage = GetParameterImage("in");
     m_InImage->UpdateOutputInformation();
-    UInt8ImageType::Pointer maskImage;
+    UInt16ImageType::Pointer maskImage;
 
     std::ostringstream message("");
 
@@ -277,7 +277,7 @@ private:
     if (maskFlag)
       {
       otbAppLogINFO("sample choice using mask "<<std::endl);
-      maskImage = GetParameterUInt8Image("vm");
+      maskImage = GetParameterUInt16Image("vm");
       maskImage->UpdateOutputInformation();
       if (m_InImage->GetLargestPossibleRegion() != maskImage->GetLargestPossibleRegion())
         {
