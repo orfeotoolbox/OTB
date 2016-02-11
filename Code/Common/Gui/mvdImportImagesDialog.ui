@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>248</width>
-    <height>166</height>
+    <height>176</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
    <item row="0" column="0">
     <widget class="QCheckBox" name="applyAllCheckBox">
      <property name="text">
-      <string>???</string>
+      <string>Apply all</string>
      </property>
     </widget>
    </item>
