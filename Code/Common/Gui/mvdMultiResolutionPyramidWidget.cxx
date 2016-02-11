@@ -133,7 +133,9 @@ MultiResolutionPyramidWidget
   );
 
   m_UI->baseSpinBox->setValue( 2 );
+
   m_UI->levelsSpinBox->setValue( 1 );
+
   m_UI->sizeSpinBox->setValue( 2 );
 }
 
@@ -187,6 +189,7 @@ MultiResolutionPyramidWidget
   {
   bool signalsBlocked = m_UI->sizeSpinBox->blockSignals( true );
 
+  m_UI->sizeSpinBox->setRange( 1, std::numeric_limits< int >::max() );
   m_UI->sizeSpinBox->setValue( 1 );
 
   m_UI->sizeSpinBox->blockSignals( signalsBlocked );
@@ -217,9 +220,17 @@ MultiResolutionPyramidWidget
   );
 
 
+  unsigned int size =
+    std::min(
+      m_GDALOverviewsBuilder->GetWidth(),
+      m_GDALOverviewsBuilder->GetHeight()
+    );
+
+
   {
   bool signalsBlocked = m_UI->baseSpinBox->blockSignals( true );
 
+  m_UI->baseSpinBox->setRange( 2, size );
   m_UI->baseSpinBox->setValue( m_GDALOverviewsBuilder->GetResolutionFactor() );
 
   m_UI->baseSpinBox->blockSignals( signalsBlocked );
@@ -228,6 +239,7 @@ MultiResolutionPyramidWidget
   {
   bool signalsBlocked = m_UI->levelsSpinBox->blockSignals( true );
 
+  m_UI->levelsSpinBox->setRange( 0, m_GDALOverviewsBuilder->CountResolutions() );
   m_UI->levelsSpinBox->setValue( m_GDALOverviewsBuilder->GetNbResolutions() );
 
   m_UI->levelsSpinBox->blockSignals( signalsBlocked );
@@ -235,6 +247,8 @@ MultiResolutionPyramidWidget
 
   {
   bool signalsBlocked = m_UI->sizeSpinBox->blockSignals( true );
+
+  m_UI->sizeSpinBox->setRange( 1, size );
 
   m_UI->sizeSpinBox->setValue(
     m_GDALOverviewsBuilder->CountResolutions(
@@ -289,17 +303,17 @@ MultiResolutionPyramidWidget
 
   bool signalsBlocked = m_UI->sizeSpinBox->blockSignals( true );
 
-  // unsigned int n =
-  //   m_GDALOverviewsBuilder->CountResolutions(
-  //     m_GDALOverviewsBuilder->GetResolutionFactor()
-  //   )
-  //   - m_GDALOverviewsBuilder->GetNbResolutions();
+  unsigned int count = m_GDALOverviewsBuilder->CountResolutions();
 
   m_UI->sizeSpinBox->setValue( 
     static_cast< int >(
       std::pow(
 	m_GDALOverviewsBuilder->GetResolutionFactor(),
-	m_GDALOverviewsBuilder->GetNbResolutions()
+	count -
+	std::min(
+	  m_GDALOverviewsBuilder->GetNbResolutions(),
+	  count
+	)
       )
     )
   );
@@ -322,6 +336,11 @@ MultiResolutionPyramidWidget
     return;
 
   m_GDALOverviewsBuilder->SetResolutionFactor( value );
+
+  m_UI->levelsSpinBox->setRange(
+    0,
+    m_GDALOverviewsBuilder->CountResolutions()
+  );
 
   UpdateResolutions();
 
