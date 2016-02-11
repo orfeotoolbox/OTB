@@ -135,8 +135,6 @@ MultiResolutionPyramidWidget
   m_UI->baseSpinBox->setValue( 2 );
   m_UI->levelsSpinBox->setValue( 1 );
   m_UI->sizeSpinBox->setValue( 2 );
-
-  
 }
 
 /*****************************************************************************/
@@ -169,11 +167,34 @@ MultiResolutionPyramidWidget
   m_UI->algorithmComboBox->setCurrentIndex( otb::GDAL_RESAMPLING_AVERAGE );
   m_UI->compressionComboBox->setCurrentIndex( otb::GDAL_COMPRESSION_NONE );
 
+
+  {
+  bool signalsBlocked = m_UI->baseSpinBox->blockSignals( true );
+
   m_UI->baseSpinBox->setValue( 2 );
+
+  m_UI->baseSpinBox->blockSignals( signalsBlocked );
+  }
+
+  {
+  bool signalsBlocked = m_UI->levelsSpinBox->blockSignals( true );
+
   m_UI->levelsSpinBox->setValue( 1 );
+
+  m_UI->levelsSpinBox->blockSignals( signalsBlocked );
+  }
+
+  {
+  bool signalsBlocked = m_UI->sizeSpinBox->blockSignals( true );
+
   m_UI->sizeSpinBox->setValue( 1 );
 
+  m_UI->sizeSpinBox->blockSignals( signalsBlocked );
+  }
+
+
   ClearResolutions();
+
 
   m_GDALOverviewsBuilder = p;
 
@@ -181,6 +202,7 @@ MultiResolutionPyramidWidget
     return;
 
   assert( !m_GDALOverviewsBuilder.IsNull() );
+
 
   m_UI->formatComboBox->setCurrentIndex(
     m_GDALOverviewsBuilder->GetFormat()
@@ -194,9 +216,25 @@ MultiResolutionPyramidWidget
     m_GDALOverviewsBuilder->GetCompressionMethod()
   );
 
+
+  {
+  bool signalsBlocked = m_UI->baseSpinBox->blockSignals( true );
+
   m_UI->baseSpinBox->setValue( m_GDALOverviewsBuilder->GetResolutionFactor() );
 
+  m_UI->baseSpinBox->blockSignals( signalsBlocked );
+  }
+
+  {
+  bool signalsBlocked = m_UI->levelsSpinBox->blockSignals( true );
+
   m_UI->levelsSpinBox->setValue( m_GDALOverviewsBuilder->GetNbResolutions() );
+
+  m_UI->levelsSpinBox->blockSignals( signalsBlocked );
+  }
+
+  {
+  bool signalsBlocked = m_UI->sizeSpinBox->blockSignals( true );
 
   m_UI->sizeSpinBox->setValue(
     m_GDALOverviewsBuilder->CountResolutions(
@@ -204,6 +242,10 @@ MultiResolutionPyramidWidget
       m_GDALOverviewsBuilder->GetNbResolutions()
     )
   );
+
+  m_UI->sizeSpinBox->blockSignals( signalsBlocked );
+  }
+
 
   SetResolutions();
 }
@@ -240,6 +282,23 @@ MultiResolutionPyramidWidget
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
+/*****************************************************************************/
+void
+MultiResolutionPyramidWidget
+::on_baseSpinBox_valueChanged( int value )
+{
+  // qDebug() << this << "::on_baseSpinBox_valueChanged(" << value << ")";
+
+  ClearResolutions();
+
+  if( m_GDALOverviewsBuilder.IsNull() )
+    return;
+
+  m_GDALOverviewsBuilder->SetResolutionFactor( value );
+
+  SetResolutions();
+}
+
 /*****************************************************************************/
 void
 MultiResolutionPyramidWidget
