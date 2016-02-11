@@ -251,8 +251,9 @@ MultiResolutionPyramidWidget
   m_UI->sizeSpinBox->setRange( 1, size );
 
   m_UI->sizeSpinBox->setValue(
-    m_GDALOverviewsBuilder->CountResolutions(
+    std::pow(
       m_GDALOverviewsBuilder->GetResolutionFactor(),
+      m_GDALOverviewsBuilder->CountResolutions() -
       m_GDALOverviewsBuilder->GetNbResolutions()
     )
   );
@@ -364,6 +365,39 @@ MultiResolutionPyramidWidget
   UpdateResolutions();
 
   UpdateSize();
+}
+
+/*****************************************************************************/
+void
+MultiResolutionPyramidWidget
+::on_sizeSpinBox_valueChanged( int value )
+{
+  // qDebug() << this << "::on_sizeSpinBox_valueChanged(" << value << ")";
+
+  if( m_GDALOverviewsBuilder.IsNull() )
+    return;
+
+  unsigned int count =
+    m_GDALOverviewsBuilder->CountResolutions(
+      m_GDALOverviewsBuilder->GetResolutionFactor(),
+      value
+    );
+
+  if( static_cast< unsigned int >( m_UI->levelsSpinBox->value() )<=count )
+    return;
+
+  {
+  bool signalsBlocked = m_UI->levelsSpinBox->blockSignals( true );
+
+  m_UI->levelsSpinBox->setValue( count );
+  m_GDALOverviewsBuilder->SetNbResolutions( count );
+
+  m_UI->levelsSpinBox->blockSignals( signalsBlocked );
+  }
+
+  ClearResolutions();
+
+  UpdateResolutions();
 }
 
 } // end namespace 'mvd'
