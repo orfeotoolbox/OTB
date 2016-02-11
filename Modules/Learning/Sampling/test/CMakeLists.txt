@@ -13,3 +13,6 @@ otb_module_target_label(otbSamplingTestDriver)
 
 otb_add_test(NAME leTuOGRDataToClassStatisticsFilterNew COMMAND otbSamplingTestDriver
   otbOGRDataToClassStatisticsFilterNew )
+
+otb_add_test(NAME leTvOGRDataToClassStatisticsFilter COMMAND otbSamplingTestDriver
+  otbOGRDataToClassStatisticsFilter )
