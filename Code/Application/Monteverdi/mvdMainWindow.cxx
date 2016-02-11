@@ -1166,7 +1166,8 @@ MainWindow
 
   ImportImagesDialog * importDialog = new ImportImagesDialog( filenames, this );
 
-  if( importDialog->exec()!=QDialog::Accepted )
+  if( importDialog->GetEffectiveCount()>0 &&
+      importDialog->exec()!=QDialog::Accepted )
     return;
 
   if( filenames.count()==1 )

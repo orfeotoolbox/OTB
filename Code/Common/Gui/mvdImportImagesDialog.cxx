@@ -68,7 +68,8 @@ ImportImagesDialog
 		      QWidget * parent,
 		      Qt::WindowFlags flags  ) :
   QDialog( parent, flags ),
-  m_UI( new Ui::ImportImagesDialog() )
+  m_UI( new Ui::ImportImagesDialog() ),
+  m_EffectiveCount( 0 )
 {
   m_UI->setupUi( this );
 
@@ -103,6 +104,14 @@ ImportImagesDialog
 }
 
 /*****************************************************************************/
+int
+ImportImagesDialog
+::GetEffectiveCount() const
+{
+  return m_EffectiveCount;
+}
+
+/*****************************************************************************/
 void
 ImportImagesDialog
 ::SetFilenames( const QStringList & filenames )
@@ -118,6 +127,8 @@ ImportImagesDialog
   assert( itemModel!=NULL );
 
   itemModel->clear();
+
+  m_EffectiveCount = 0;
 
   for( int i=0;
        i<filenames.size();
@@ -141,7 +152,11 @@ ImportImagesDialog
       item->setFlags( item->flags() | Qt::ItemIsSelectable );
 
       if( builder->GetOverviewsCount()<=1 )
+	{
 	item->setFlags( item->flags() | Qt::ItemIsEnabled );
+
+	++ m_EffectiveCount;
+	}
 
       builder->SetResolutionFactor( 2 );
       builder->SetNbResolutions( builder->CountResolutions( 2 ) );

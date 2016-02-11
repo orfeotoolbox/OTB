@@ -98,6 +98,10 @@ public:
   /** \brief Destructor. */
   virtual ~ImportImagesDialog();
 
+  /**
+   */
+  int GetEffectiveCount() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -145,6 +149,10 @@ private:
   /**
    */
   GDALOverviewsBuilderVector m_GDALOverviewsBuilders;
+
+  /**
+   */
+  int m_EffectiveCount;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
