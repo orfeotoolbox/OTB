@@ -129,9 +129,9 @@ GDALOverviewsBuilder
 /***************************************************************************/
 unsigned int
 GDALOverviewsBuilder
-::CountResolutions( unsigned int n ) const
+::CountResolutions() const
 {
-  return CountResolutions( m_ResolutionFactor, n );
+  return CountResolutions( m_ResolutionFactor );
 }
 
 /***************************************************************************/
