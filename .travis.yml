@@ -20,8 +20,8 @@ before_script:
   - tar -xzf cmake-3.4.1-Linux-x86_64.tar.gz
   - wget https://github.com/martine/ninja/releases/download/v1.6.0/ninja-linux.zip --no-check-certificate
   - unzip ninja-linux.zip
-  - wget https://www.orfeo-toolbox.org/packages/OTB-5.2.1-Linux64.run  --no-check-certificate
-  - chmod +x /tmp/OTB-5.2.1-Linux64.run
-  - /tmp/OTB-5.2.1-Linux64.run
+  - wget ttps://www.orfeo-toolbox.org/packages/xdk/OTB-5.2/OTB-5.2.0-xdk-Linux64.run --no-check-certificate
+  - chmod +x /tmp/OTB-5.2.0-xdk-Linux64.run
+  - /tmp/OTB-5.2.0-xdk-Linux64.run
 
 script: /tmp/cmake-3.4.1-Linux-x86_64/bin/ctest -VV -S /home/travis/build/orfeotoolbox/OTB/Utilities/Maintenance/TravisBuild.cmake
