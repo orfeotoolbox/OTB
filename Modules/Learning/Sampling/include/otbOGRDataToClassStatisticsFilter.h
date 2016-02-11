@@ -55,8 +55,8 @@ public:
   typedef otb::ogr::DataSource                            OGRDataType;
   typedef otb::ogr::DataSource::Pointer                   OGRDataPointer;
 
-  typedef std::map<std::string, unsigned long>            ClassCountMapType;
-  typedef std::map<unsigned long, unsigned long>          PolygonSizeMapType;
+  typedef otb::PolygonClassStatisticsAccumulator::ClassCountMapType   ClassCountMapType;
+  typedef otb::PolygonClassStatisticsAccumulator::PolygonSizeMapType  PolygonSizeMapType;
 
   /** Wrap output type as DataObject */
   typedef itk::SimpleDataObjectDecorator<ClassCountMapType>  ClassCountObjectType;
@@ -154,9 +154,11 @@ public:
   typedef TMaskImage                      MaskImageType;
   typedef otb::ogr::DataSource            OGRDataType;
   
-  typedef typename Superclass::FilterType            FilterType;
-  typedef typename FilterType::ClassCountObjectType  ClassCountObjectType;
-  typedef typename FilterType::PolygonSizeObjectType PolygonSizeObjectType;
+  typedef typename Superclass::FilterType             FilterType;
+  typedef typename FilterType::ClassCountMapType      ClassCountMapType;
+  typedef typename FilterType::PolygonSizeMapType     PolygonSizeMapType;
+  typedef typename FilterType::ClassCountObjectType   ClassCountObjectType;
+  typedef typename FilterType::PolygonSizeObjectType  PolygonSizeObjectType;
 
   /** Type macro */
   itkNewMacro(Self);

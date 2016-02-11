@@ -165,5 +165,26 @@ PolygonClassStatisticsAccumulator
   m_Polygon.clear();
 }
 
+const PolygonClassStatisticsAccumulator::ClassCountMapType&
+PolygonClassStatisticsAccumulator
+::GetClassCountMap()
+{
+  return m_ElmtsInClass;
+}
+  
+const PolygonClassStatisticsAccumulator::PolygonSizeMapType&
+PolygonClassStatisticsAccumulator
+::GetPolygonSizeMap()
+{
+  return m_Polygon;
+}
+
+unsigned long
+PolygonClassStatisticsAccumulator
+::GetNumberOfPixels()
+{
+  return m_NbPixelsGlobal;
+}
+
 
 } // end of namespace otb

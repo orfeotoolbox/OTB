@@ -22,7 +22,7 @@
 
 namespace otb
 {
-// Members from otb::PersistentOGRDataToClassStatisticsFilter
+// --------- otb::PersistentOGRDataToClassStatisticsFilter ---------------------
 
 template<class TInputImage, class TMaskImage>
 PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
@@ -79,7 +79,40 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
   otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetOGRData());
   vectors->GetLayer(m_layerIndex).SetSpatialFilter(NULL);
   
+  ClassCountMapType &classCount = this->GetClassCountOutput()->Get();
+  PolygonSizeMapType &polygonSize = this->GetPolygonSizeOutput()->Get();
   
+  // Reset outputs
+  classCount.clear();
+  polygonSize.clear();
+  
+  std::vector<PolygonClassStatisticsAccumulator::Pointer>::iterator it = m_TemporaryStats.begin();
+  for (; it != m_TemporaryStats.end(); it++)
+    {
+    const ClassCountMapType &tempClassCount = (*it)->GetClassCountMap();
+    const PolygonSizeMapType &tempPolygonSize = (*it)->GetPolygonSizeMap();
+    
+    ClassCountMapType::const_iterator itClass = tempClassCount.begin();
+    for (; itClass != tempClassCount.end(); itClass++)
+      {
+      if (classCount.count(itClass->first) == 0)
+        {
+        classCount[itClass->first] = 0UL;
+        }
+      classCount[itClass->first] += itClass->second;
+      }
+    
+    PolygonSizeMapType::const_iterator itPoly = tempPolygonSize.begin();
+    for (; itPoly != tempPolygonSize.end() ; itPoly++)
+      {
+      if (polygonSize.count(itPoly->first) == 0)
+        {
+        polygonSize[itPoly->first] = 0UL;
+        }
+      polygonSize[itPoly->first] += itPoly->second;
+      }
+    
+    }
   // TODO : gather stats
 
 }
@@ -336,7 +369,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
   return region;
 }
 
-// Members from otb::OGRDataToClassStatisticsFilter
+// -------------- otb::OGRDataToClassStatisticsFilter --------------------------
 
 template<class TInputImage, class TMaskImage>
 void

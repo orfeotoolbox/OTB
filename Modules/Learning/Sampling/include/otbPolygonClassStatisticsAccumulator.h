@@ -36,6 +36,9 @@ public:
   typedef itk::SmartPointer<Self>            Pointer;
   itkNewMacro(Self);
 
+  typedef std::map<std::string, unsigned long>      ClassCountMapType;
+  typedef std::map<unsigned long, unsigned long>    PolygonSizeMapType;
+
   /** Runtime information support. */
   itkTypeMacro(PolygonClassStatisticsAccumulator, itk::Object);
 
@@ -45,6 +48,12 @@ public:
 
   /** Reset the accumulator */
   void Reset();
+  
+  const ClassCountMapType& GetClassCountMap();
+  
+  const PolygonSizeMapType& GetPolygonSizeMap();
+  
+  unsigned long GetNumberOfPixels();
 
   itkSetMacro(FieldIndex, int);
   itkGetMacro(FieldIndex, int);
@@ -59,9 +68,9 @@ private:
   //Number of pixels in all the polygons
   unsigned long m_NbPixelsGlobal;
   //Number of pixels in each classes
-  std::map<std::string, unsigned long> m_ElmtsInClass;
+  ClassCountMapType m_ElmtsInClass;
   //Number of pixels in each polygons
-  std::map<unsigned long, unsigned long> m_Polygon;  // check the feature id
+  PolygonSizeMapType m_Polygon;  // check the feature id
   
   int m_FieldIndex;
 
