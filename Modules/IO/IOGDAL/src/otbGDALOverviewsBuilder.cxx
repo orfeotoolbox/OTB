@@ -108,7 +108,7 @@ GDALOverviewsBuilder
 
   unsigned int minSize = static_cast< unsigned int >( pow( factor, n ) );
 
-  unsigned int count = 0;
+  unsigned int count = 1;
 
   unsigned int size =
     std::min(
