@@ -1261,6 +1261,8 @@ DatabaseBrowserController
   // Access model & database.
   DatabaseModel* model = GetModel< DatabaseModel >();
   assert( model!=NULL );
+  // make production build happy
+  ((void)model);
 
   switch( twi->type() )
     {
