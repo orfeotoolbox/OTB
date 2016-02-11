@@ -99,6 +99,11 @@ unsigned int
 GDALOverviewsBuilder
 ::CountResolutions( unsigned int factor, unsigned int n ) const
 {
+  assert( factor>1 );
+
+  if( factor<=1 )
+    return 0;
+
   assert( !m_GdalDataset.IsNull() );
 
   unsigned int minSize = static_cast< unsigned int >( pow( factor, n ) );
@@ -134,6 +139,11 @@ void
 GDALOverviewsBuilder
 ::ListResolutions( SizeVector & sizes, unsigned int factor, unsigned int count )
 {
+  assert( factor>1 );
+
+  if( factor<=1 )
+    return;
+
   assert( !m_GdalDataset.IsNull() );
 
   Size s;
