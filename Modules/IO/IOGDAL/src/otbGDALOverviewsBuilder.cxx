@@ -82,7 +82,7 @@ GetConfigOption( const char * key )
 /***************************************************************************/
 GDALOverviewsBuilder
 ::GDALOverviewsBuilder() :
-  m_GdalDataset(),
+  m_GDALDataset(),
   m_InputFileName(),
   m_NbResolutions( 1 ),
   m_ResolutionFactor( 2 ),
@@ -104,14 +104,14 @@ GDALOverviewsBuilder
   if( factor<=1 )
     return 0;
 
-  assert( !m_GdalDataset.IsNull() );
+  assert( !m_GDALDataset.IsNull() );
 
   unsigned int minSize = static_cast< unsigned int >( pow( factor, n ) );
 
   unsigned int size =
     std::min(
-      m_GdalDataset->GetWidth(),
-      m_GdalDataset->GetHeight()
+      m_GDALDataset->GetWidth(),
+      m_GDALDataset->GetHeight()
     );
 
   if( size<minSize )
@@ -155,12 +155,12 @@ GDALOverviewsBuilder
   if( factor<=1 )
     return;
 
-  assert( !m_GdalDataset.IsNull() );
+  assert( !m_GDALDataset.IsNull() );
 
   Size s;
 
-  s[ 0 ] = m_GdalDataset->GetWidth();
-  s[ 1 ] = m_GdalDataset->GetHeight();
+  s[ 0 ] = m_GDALDataset->GetWidth();
+  s[ 1 ] = m_GDALDataset->GetHeight();
 
   unsigned int n = std::min( count, CountResolutions( factor, 0 ) );
 
@@ -176,11 +176,31 @@ GDALOverviewsBuilder
 /***************************************************************************/
 unsigned int
 GDALOverviewsBuilder
+::GetWidth() const
+{
+  assert( !m_GDALDataset.IsNull() );
+
+  return m_GDALDataset->GetWidth();
+}
+
+/***************************************************************************/
+unsigned int
+GDALOverviewsBuilder
+::GetHeight() const
+{
+  assert( !m_GDALDataset.IsNull() );
+
+  return m_GDALDataset->GetHeight();
+}
+
+/***************************************************************************/
+unsigned int
+GDALOverviewsBuilder
 ::GetOverviewsCount() const
 {
-  assert( !m_GdalDataset.IsNull() );
+  assert( !m_GDALDataset.IsNull() );
 
-  return m_GdalDataset->GetOverviewsCount();
+  return m_GDALDataset->GetOverviewsCount();
 }
 
 /***************************************************************************/
@@ -342,7 +362,7 @@ void GDALOverviewsBuilder::Update()
   //     }
 
 
-  assert( !m_GdalDataset.IsNull() );
+  assert( !m_GDALDataset.IsNull() );
 
   assert( m_NbResolutions>0 );
 
@@ -398,7 +418,7 @@ void GDALOverviewsBuilder::Update()
   );
 
   CPLErr lCrGdal =
-    m_GdalDataset->GetDataSet()->BuildOverviews(
+    m_GDALDataset->GetDataSet()->BuildOverviews(
       GDAL_RESAMPLING_NAMES[ m_ResamplingMethod ],
       static_cast< int >( m_NbResolutions - 1 ),
       &ovwlist.front(),
@@ -432,7 +452,7 @@ GDALOverviewsBuilder
       << "' as GDAL dataset."
     );
 
-  m_GdalDataset = dataset;
+  m_GDALDataset = dataset;
 }
 
 

@@ -112,6 +112,10 @@ public:
   void SetResamplingMethod( GDALResampling );
 
 
+  unsigned int GetWidth() const;
+
+  unsigned int GetHeight() const;
+
   GDALCompression GetCompressionMethod() const;
 
   void SetCompressionMethod( GDALCompression );
@@ -157,7 +161,7 @@ private:
   void OpenDataset( const std::string & filename );
 
 
-  GDALDatasetWrapper::Pointer m_GdalDataset;
+  GDALDatasetWrapper::Pointer m_GDALDataset;
   std::string m_InputFileName;
   unsigned int m_NbResolutions;
   unsigned int m_ResolutionFactor;
