@@ -98,6 +98,9 @@ public:
   unsigned int
   CountResolutions( unsigned int factor, unsigned int n =0 ) const;
 
+  unsigned int
+  CountResolutions( unsigned int n =0 ) const;
+
   void ListResolutions( SizeVector &, unsigned int factor, unsigned int count );
 
   void ListResolutions( SizeVector & );

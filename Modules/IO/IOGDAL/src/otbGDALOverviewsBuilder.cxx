@@ -127,6 +127,14 @@ GDALOverviewsBuilder
 }
 
 /***************************************************************************/
+unsigned int
+GDALOverviewsBuilder
+::CountResolutions( unsigned int n ) const
+{
+  return CountResolutions( m_ResolutionFactor, n );
+}
+
+/***************************************************************************/
 void
 GDALOverviewsBuilder
 ::ListResolutions( SizeVector & sizes )
