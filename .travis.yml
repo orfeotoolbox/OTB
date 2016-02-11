@@ -24,4 +24,4 @@ before_script:
   - chmod +x /tmp/OTB-5.2.1-Linux64.run
   - /tmp/OTB-5.2.1-Linux64.run
 
-script: /tmp/cmake-3.4.1-Linux-x86_64/bin/ctest -V -S /home/travis/build/orfeotoolbox/OTB/Utilities/Maintenance/TravisBuild.cmake
+script: /tmp/cmake-3.4.1-Linux-x86_64/bin/ctest -VV -S /home/travis/build/orfeotoolbox/OTB/Utilities/Maintenance/TravisBuild.cmake
