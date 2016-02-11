@@ -133,7 +133,10 @@ private:
   void ClearResolutions();
   /**
    */
-  void SetResolutions();
+  void UpdateResolutions();
+  /**
+   */
+  void UpdateSize();
 
 //
 // Private attributes.

@@ -247,13 +247,13 @@ MultiResolutionPyramidWidget
   }
 
 
-  SetResolutions();
+  UpdateResolutions();
 }
 
 /*****************************************************************************/
 void
 MultiResolutionPyramidWidget
-::SetResolutions()
+::UpdateResolutions()
 {
   assert( !m_GDALOverviewsBuilder.IsNull() );
 
@@ -281,6 +281,33 @@ MultiResolutionPyramidWidget
 }
 
 /*****************************************************************************/
+void
+MultiResolutionPyramidWidget
+::UpdateSize()
+{
+  assert( !m_GDALOverviewsBuilder.IsNull() );
+
+  bool signalsBlocked = m_UI->sizeSpinBox->blockSignals( true );
+
+  // unsigned int n =
+  //   m_GDALOverviewsBuilder->CountResolutions(
+  //     m_GDALOverviewsBuilder->GetResolutionFactor()
+  //   )
+  //   - m_GDALOverviewsBuilder->GetNbResolutions();
+
+  m_UI->sizeSpinBox->setValue( 
+    static_cast< int >(
+      std::pow(
+	m_GDALOverviewsBuilder->GetResolutionFactor(),
+	m_GDALOverviewsBuilder->GetNbResolutions()
+      )
+    )
+  );
+
+  m_UI->sizeSpinBox->blockSignals( signalsBlocked );
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
@@ -296,7 +323,9 @@ MultiResolutionPyramidWidget
 
   m_GDALOverviewsBuilder->SetResolutionFactor( value );
 
-  SetResolutions();
+  UpdateResolutions();
+
+  UpdateSize();
 }
 
 /*****************************************************************************/
@@ -313,7 +342,9 @@ MultiResolutionPyramidWidget
 
   m_GDALOverviewsBuilder->SetNbResolutions( value );
 
-  SetResolutions();
+  UpdateResolutions();
+
+  UpdateSize();
 }
 
 } // end namespace 'mvd'
