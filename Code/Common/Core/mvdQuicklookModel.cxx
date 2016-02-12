@@ -152,7 +152,7 @@ QuicklookModel
       viModel->SetCurrentLod( bestLod );
 
     // Write quicklook file on the disk.
-    fileWriter->SetFileName( QFile::encodeName(quicklookFilename).constData()  );
+    fileWriter->SetFileName( QFile::encodeName( quicklookFilename ).constData()  );
     fileWriter->SetInput( viModel->ToImage() );
     fileWriter->Update();
 

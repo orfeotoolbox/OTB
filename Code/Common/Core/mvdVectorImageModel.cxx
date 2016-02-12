@@ -559,7 +559,7 @@ VectorImageModel
     DefaultImageFileReaderType::New()
   );
 
-  fileReader->SetFileName( QFile::encodeName(lodFilename).constData() );
+  fileReader->SetFileName( QFile::encodeName( lodFilename ).constData() );
   fileReader->UpdateOutputInformation();
 
   m_ImageFileReader = fileReader;
