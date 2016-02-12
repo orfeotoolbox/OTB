@@ -3,7 +3,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbNewSensorModel);
   REGISTER_TEST(otbVectorDataProjectionFilterFromGeoToMap);
-  //##>REGISTER_TEST(otbOrthoRectificationFilter);
+  REGISTER_TEST(otbOrthoRectificationFilter);
   //##>REGISTER_TEST(otbOrthoRectificationComplexFilter);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterNew);
   REGISTER_TEST(otbMapProjection);
