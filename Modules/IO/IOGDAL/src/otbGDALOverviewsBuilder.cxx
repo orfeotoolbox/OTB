@@ -294,6 +294,14 @@ GDALOverviewsBuilder
 }
 
 /***************************************************************************/
+const std::string &
+GDALOverviewsBuilder
+::GetInputFileName() const
+{
+  return m_InputFileName;
+}
+
+/***************************************************************************/
 void
 GDALOverviewsBuilder
 ::SetInputFileName( const std::string & filename )
