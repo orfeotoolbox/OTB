@@ -87,6 +87,11 @@ class Monteverdi_EXPORT ImportImagesDialog :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+// Private types.
+public:
+  typedef std::vector< otb::GDALOverviewsBuilder::Pointer > GDALOverviewsBuilderVector;
+
+//
 // Public methods.
 public:
 
@@ -101,6 +106,10 @@ public:
   /**
    */
   int GetEffectiveCount() const;
+
+  /**
+   */
+  const GDALOverviewsBuilderVector & GetGDALOverviewsBuilders() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -125,11 +134,6 @@ protected:
 protected:
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
-//
-// Private types.
-private:
-  typedef std::vector< otb::GDALOverviewsBuilder::Pointer > GDALOverviewsBuilderVector;
 
 //
 // Private methods.

@@ -62,8 +62,8 @@ namespace mvd
 // Internal class pre-declaration.
 class AbstractModel;
 class AbstractModelController;
+class AbstractWorker;
 class DatasetModel;
-class ImageImporter;
 class VectorImageModel;
 
 /*****************************************************************************/
@@ -287,6 +287,10 @@ protected:
 
   /**
    */
+  void BuildGDALOverviews( const QStringList & filenames );
+
+  /**
+   */
   void SaveLayout( int version ) const;
 
   /**
@@ -328,7 +332,7 @@ private:
 private:
   /**
    */
-  QObject * Import( ImageImporter * );
+  QObject * Import( AbstractWorker * );
 
   /**
    */

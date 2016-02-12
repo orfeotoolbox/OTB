@@ -39,9 +39,11 @@
 #include "Core/mvdDatabaseConnection.h"
 #include "Core/mvdDatasetModel.h"
 #include "Core/mvdImageImporter.h"
+#include "Core/mvdOverviewBuilder.h"
 #include "Core/mvdVectorImageModel.h"
 #include "Gui/mvdAboutDialog.h"
 #include "Gui/mvdI18nApplication.h"
+#include "Gui/mvdImportImagesDialog.h"
 #include "Gui/mvdTaskProgressDialog.h"
 
 namespace mvd
@@ -200,11 +202,34 @@ I18nMainWindow
     );
 }
 
+/*****************************************************************************/
+void
+I18nMainWindow
+::BuildGDALOverviews( const QStringList & filenames )
+{
+  ImportImagesDialog * importDialog = new ImportImagesDialog( filenames, this );
+
+  if( importDialog->GetEffectiveCount()>0 &&
+      importDialog->exec()!=QDialog::Accepted )
+    return;
+
+  // AbstractWorker will be automatically deleted by BackgroundTask in
+  // ::Import().
+  OverviewBuilder * builder =
+    new OverviewBuilder(
+      importDialog->GetGDALOverviewsBuilders()
+    );
+
+  delete importDialog;
+  importDialog = NULL;
+
+  Import( builder );
+}
 
 /*****************************************************************************/
 QObject *
 I18nMainWindow
-::Import( ImageImporter * importer )
+::Import( AbstractWorker * importer )
 {
   assert( importer );
 
@@ -246,9 +271,9 @@ I18nMainWindow
     return NULL;
     }
 
-  // qDebug() << "datasetModel:" << progress.GetObject< DatasetModel >();
+  // qDebug() << "object:" << progress.GetObject< DatasetModel >();
 
-  assert( progress.GetObject()!=NULL );
+  // assert( progress.GetObject()!=NULL );
 
   return progress.GetObject();
 }

@@ -112,6 +112,14 @@ ImportImagesDialog
 }
 
 /*****************************************************************************/
+const ImportImagesDialog::GDALOverviewsBuilderVector &
+ImportImagesDialog
+::GetGDALOverviewsBuilders() const
+{
+  return m_GDALOverviewsBuilders;
+}
+
+/*****************************************************************************/
 void
 ImportImagesDialog
 ::SetFilenames( const QStringList & filenames )

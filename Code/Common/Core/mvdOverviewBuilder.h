@@ -43,6 +43,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbGDALOverviewsBuilder.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -84,13 +85,20 @@ class Monteverdi_EXPORT OverviewBuilder :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+// Public types
+public:
+  typedef std::vector< otb::GDALOverviewsBuilder::Pointer > GDALOverviewsBuilderVector;
+
+
+//
 // Public methods.
 public:
 
   /**
    * \brief Constructor.
    */
-  OverviewBuilder( QObject * parent =NULL );
+  OverviewBuilder( const GDALOverviewsBuilderVector & builders,
+		   QObject * parent =NULL );
 
   /**
    * \brief Destructor.
@@ -154,6 +162,9 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   */
+  GDALOverviewsBuilderVector m_GDALOverviewsBuilders;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

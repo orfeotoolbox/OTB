@@ -70,7 +70,6 @@
 #include "Gui/mvdImageViewManipulator.h"
 #include "Gui/mvdImageViewRenderer.h"
 #include "Gui/mvdImageViewWidget.h"
-#include "Gui/mvdImportImagesDialog.h"
 #include "Gui/mvdKeymapDialog.h"
 #include "Gui/mvdLayerStackController.h"
 #include "Gui/mvdLayerStackWidget.h"
@@ -1164,11 +1163,7 @@ MainWindow
   if( filenames.isEmpty() )
     return;
 
-  ImportImagesDialog * importDialog = new ImportImagesDialog( filenames, this );
-
-  if( importDialog->GetEffectiveCount()>0 &&
-      importDialog->exec()!=QDialog::Accepted )
-    return;
+  BuildGDALOverviews( filenames );
 
   if( filenames.count()==1 )
     ImportImage( filenames.front(), 0 );

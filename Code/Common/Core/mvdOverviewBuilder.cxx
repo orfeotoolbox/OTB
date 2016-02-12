@@ -69,8 +69,10 @@ namespace
 
 /*******************************************************************************/
 OverviewBuilder
-::OverviewBuilder(QObject * parent ) :
-  AbstractWorker( parent )
+::OverviewBuilder( const GDALOverviewsBuilderVector & builders,
+		   QObject * parent ) :
+  AbstractWorker( parent ),
+  m_GDALOverviewsBuilders( builders )
 {
 }
 
@@ -100,7 +102,14 @@ OverviewBuilder
   emit ProgressRangeChanged( 0, 0 );
 
   // Load model.
-  // TODO
+
+  for( GDALOverviewsBuilderVector::const_iterator it( m_GDALOverviewsBuilders.begin() );
+       it!=m_GDALOverviewsBuilders.end();
+       ++ it )
+    if( !it->IsNull() )
+      {
+      ( *it )->Update();
+      }
 
   return NULL;
 }
@@ -110,7 +119,7 @@ QString
 OverviewBuilder
 ::virtual_GetFirstProgressText() const
 {
-  return QString();
+  return QString( tr( "Preparing to build GDAL overviews..." ) );
 }
 
 /*******************************************************************************/
