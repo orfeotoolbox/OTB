@@ -97,18 +97,47 @@ OverviewBuilder
 
   // emit ProgressTextChanged( GetFirstProgressText() );
 
-  emit ProgressValueChanged( -1 );
+  //
+  // Count elements to process.
+  int count = 0;
 
-  emit ProgressRangeChanged( 0, 0 );
-
-  // Load model.
-
-  for( GDALOverviewsBuilderVector::const_iterator it( m_GDALOverviewsBuilders.begin() );
+  for( GDALOverviewsBuilderVector::const_iterator it(
+	 m_GDALOverviewsBuilders.begin()
+       );
        it!=m_GDALOverviewsBuilders.end();
        ++ it )
-    if( !it->IsNull() )
+    if( !it->IsNull() && ( *it )->GetNbResolutions()>0 )
+      ++ count;
+
+  emit ProgressRangeChanged( 0, count - 1 );
+
+  //
+  // Process elements.
+  int i = 0;
+
+  for( GDALOverviewsBuilderVector::const_iterator it(
+	 m_GDALOverviewsBuilders.begin()
+       );
+       it!=m_GDALOverviewsBuilders.end();
+       ++ it )
+    if( !it->IsNull() && ( *it )->GetNbResolutions()>0 )
       {
       ( *it )->Update();
+
+      emit ProgressValueChanged( i ++ );
+
+      emit ProgressTextChanged(
+	QString(
+	  tr( "Generting overviews for file %1/%2 '%3'." )
+	)
+	.arg( i + 1 )
+	.arg( count )
+	.arg(
+	  QFile::decodeName(
+	    ( *it )->GetInputFileName().c_str()
+	  )
+	)
+      );
       }
 
   return NULL;
