@@ -18,7 +18,7 @@
 #ifndef _otbConfigurationManager_h
 #define _otbConfigurationManager_h
 
-#include "itksys/FundamentalType.h"
+#include "itk_kwiml.h"
 
 #include <string>
 #include <boost/cstdint.hpp>
@@ -38,7 +38,7 @@ namespace otb
 class ConfigurationManager
 {
 public:
-  typedef ::itksysFundamentalType_UInt64 RAMValueType;
+  typedef KWIML_INT_uint64_t RAMValueType;
 
   /**
    * DEMDirectory is a directory were DEM tiles are stored. 

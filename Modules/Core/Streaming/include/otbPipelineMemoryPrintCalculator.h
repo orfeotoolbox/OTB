@@ -19,7 +19,7 @@
 #define __otbPipelineMemoryPrintCalculator_h
 
 #include "itkProcessObject.h"
-#include "itksys/FundamentalType.h"
+#include "itk_kwiml.h"
 #include <set>
 
 namespace otb
@@ -75,7 +75,7 @@ public:
   typedef ProcessObjectType::Pointer          ProcessObjectPointerType;
   typedef itk::DataObject                     DataObjectType;
   typedef DataObjectType::Pointer             DataObjectPointerType;
-  typedef ::itksysFundamentalType_UInt64      MemoryPrintType;
+  typedef KWIML_INT_uint64_t                  MemoryPrintType;
   typedef std::set<const ProcessObjectType *> ProcessObjectPointerSetType;
 
   /** Run-time type information (and related methods). */
