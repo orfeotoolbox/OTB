@@ -98,7 +98,8 @@ AbstractWorker
     // We can only push to another thread,
     // so thread affinity must be set here,
     // and not in the slot that receives the object.
-    if( result->thread()!=app->thread() )
+    if( result!=NULL &&
+	result->thread()!=app->thread() )
       result->moveToThread( app->thread() );
 
     // Emit task/job has correctly been done giving resulting object
