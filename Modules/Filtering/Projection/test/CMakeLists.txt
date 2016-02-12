@@ -4,7 +4,7 @@ set(OTBProjectionTests
 otbNewSensorModel.cxx
 otbProjectionTestDriver.cxx
 otbVectorDataProjectionFilterFromGeoToMap.cxx
-##>otbOrthoRectificationFilter.cxx
+otbOrthoRectificationFilter.cxx
 otbGCPsToRPCSensorModelImageFilterNew.cxx
 otbMapProjection.cxx
 otbGenericRSResampleImageFilter.cxx
@@ -77,12 +77,12 @@ otbImportGeoInformationImageFilter.cxx
 #set( IMAGES_TESTNB 0)
 
 set(GEOMGCP
-"pleiades/gd-pleiades-1"
-"wv2/gd-wv2-1"
-"spot6/gd-spot6-1"
-"QB/gd-qb-1"
-"ikonos/gd-ikonos-1"
-"rapideye/gd-rapideye-1"
+"pleiades/gd-pleiades-1" #LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2} 
+"wv2/gd-wv2-1"           #LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF} 
+"spot6/gd-spot6-1"       #LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2}
+"QB/gd-qb-1"             #LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+"ikonos/gd-ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif} 
+"rapideye/gd-rapideye-1" #LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
 )
 
 set(NEEDEDKW
@@ -133,6 +133,126 @@ otb_add_test(NAME prTuVectorDataProjectionFilterFromGeoToMap COMMAND otbProjecti
   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
   ${TEMP}/prTvVectorDataProjectionFilterFromGeoToMap.shp
   )
+
+
+#------------------------------------------------------------------------
+#-------------------- OrthoRectification tests --------------------------
+#------------------------------------------------------------------------
+set(IMG_TEST_ORTHO
+PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2 
+WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2
+QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif 
+RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
+)
+
+set(IMG_TYPE
+"gd-pleiades-1"
+"gd-wv2-1" 
+"gd-spot6-1"
+"gd-qb-1"
+"gd-ikonos-1"     
+"gd-rapideye-1"
+)
+
+set(GEOMGCP
+"pleiades/gd-pleiades-1" #LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2} 
+"wv2/gd-wv2-1"           #LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF} 
+"spot6/gd-spot6-1"       #LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2}
+"QB/gd-qb-1"             #LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+"ikonos/gd-ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif} 
+"rapideye/gd-rapideye-1" #LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
+)
+
+set(ORIGINSX
+370000
+290450
+425000
+375000
+340000
+430000
+)
+
+set(ORIGINSY
+4830000
+4640000
+4580000
+4823000
+5524000
+6190000
+)
+
+set(UTMZONES
+31
+33
+31
+31
+31
+55
+)
+
+set(HEMIS
+N
+N
+N
+N
+N
+S
+)
+
+set(MODE
+"noDEM"
+"DEMSRTM"
+"DEMGTIFF"
+)
+
+set(DEMDIR
+"noDEM"
+"${INPUTDATA}/DEM/srtm_directory"
+"${INPUTDATA}/DEM/tif_directory"
+)
+
+set( IMGNB 0)
+foreach(current_img ${IMG_TEST_ORTHO})
+
+	list(GET IMG_TYPE   ${IMGNB} current_imgtype  )
+	list(GET GEOMGCP   ${IMGNB} current_geomgcp   )
+	list(GET ORIGINSX   ${IMGNB} current_originx  )
+	list(GET ORIGINSY   ${IMGNB} current_originy  )
+	list(GET UTMZONES   ${IMGNB} current_zone     )
+	list(GET HEMIS   ${IMGNB} current_hemis       )
+	math(EXPR IMGNB "${IMGNB} + 1")
+
+	set( MODENB 0)
+	foreach( current_mode ${MODE} )
+	  list(GET DEMDIR   ${MODENB} current_demdir   )
+	  math(EXPR MODENB "${MODENB} + 1")
+	  
+	  otb_add_test(NAME prTvOrthoRectification_${current_imgtype}_${current_mode} COMMAND otbProjectionTestDriver
+		  --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
+		  ${TEMP}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
+		  otbOrthoRectificationFilter
+		  LARGEINPUT{${current_img}?&geom=${INPUTDATA}/${current_geomgcp}.geom}
+		  ${TEMP}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
+		  ${current_originx}
+		  ${current_originy}
+		  500
+		  500
+		  0.5
+		  -0.5
+		  ${current_zone}
+		  ${current_hemis}
+		  4 # Spacing of the displacement field
+		  ${MODENB}
+		  ${current_demdir}
+		)
+			  
+	endforeach()
+endforeach()
+#------------------------------------------------------------------------
+#----------------- OrthoRectification tests (end) -----------------------
+#------------------------------------------------------------------------
 
 ##>otb_add_test(NAME prTvOrthoRectificationToulouse COMMAND otbProjectionTestDriver
   ##>--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
