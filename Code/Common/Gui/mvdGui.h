@@ -106,7 +106,7 @@ enum Resolution
 Monteverdi_EXPORT
 extern
 char const * const
-RESOLUTION_NAME[ RESOLUTION_COUNT ];
+RESOLUTION_NAMES[ RESOLUTION_COUNT ];
 
 /**
  */
@@ -130,7 +130,7 @@ enum TileSize
 Monteverdi_EXPORT
 extern
 char const * const
-TILE_SIZE_NAME[ TILE_SIZE_COUNT ];
+TILE_SIZE_NAMES[ TILE_SIZE_COUNT ];
 
 /**
  */

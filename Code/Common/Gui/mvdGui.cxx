@@ -66,7 +66,7 @@ const int MOUSE_WHEEL_STEP_DEGREES = 15;
 const int MOUSE_WHEEL_STEP_FACTOR = 8;
 
 char const * const
-RESOLUTION_NAME[ RESOLUTION_COUNT ] =
+RESOLUTION_NAMES[ RESOLUTION_COUNT ] =
 {
   // QT_TRANSLATE_NOOP( "mvd", "None" ),
   QT_TRANSLATE_NOOP( "mvd", "Nearest" ),
@@ -75,7 +75,7 @@ RESOLUTION_NAME[ RESOLUTION_COUNT ] =
 };
 
 char const * const
-TILE_SIZE_NAME[ TILE_SIZE_COUNT ] =
+TILE_SIZE_NAMES[ TILE_SIZE_COUNT ] =
 {
   // QT_TRANSLATE_NOOP( "mvd", "None" ),
   QT_TRANSLATE_NOOP( "mvd", "64" ),

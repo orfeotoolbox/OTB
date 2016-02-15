@@ -116,15 +116,9 @@ PreferencesDialog
   // Runtime UI initilization.
   m_UI->settingsGroupBox->setVisible( false );
 
-  for( int i=0; i<RESOLUTION_COUNT; ++i )
-    m_UI->resolutionComboBox->addItem(
-      QApplication::translate( "mvd", RESOLUTION_NAME[ i ] )
-    );
+  AddItemsInto( m_UI->resolutionComboBox, "mvd", RESOLUTION_NAMES, RESOLUTION_COUNT );
 
-  for( int i=0; i<TILE_SIZE_COUNT; ++i )
-    m_UI->tileSizeComboBox->addItem(
-      QApplication::translate( "mvd", TILE_SIZE_NAME[ i ] )
-    );
+  AddItemsInto( m_UI->tileSizeComboBox, "mvd", TILE_SIZE_NAMES, TILE_SIZE_COUNT );
 
   //
   // General settings.
