@@ -31,6 +31,10 @@ set(CTEST_CUSTOM_COVERAGE_EXCLUDE
  # Exclude files from the Examples directories
  #".*/Examples/.*"
 
+ # Exclude files from the Testing directories
+ ".*/test/.*"
+ ".*/Testing/.*"
+
  # Exclude files from the ThirdParty Utilities directories
  ".*/Modules/ThirdParty/.*"
  ".*/Utilities/.*"
