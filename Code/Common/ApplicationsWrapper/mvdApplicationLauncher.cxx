@@ -151,9 +151,9 @@ ApplicationLauncher
           found.m_HasDem = true;
 
           if( i18nApp->HasSettingsKey(
-                I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ) &&
+                I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE ) &&
               i18nApp->RetrieveSettingsKey(
-                I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ).toBool() )
+                I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE ).toBool() )
             {
             otbApp->EnableParameter( *it );
             otbApp->SetParameterString(
@@ -172,9 +172,9 @@ ApplicationLauncher
           found.m_HasGeoid = true;
 
           if( i18nApp->HasSettingsKey(
-                I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE ) &&
+                I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE ) &&
               i18nApp->RetrieveSettingsKey(
-                I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE )
+                I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE )
               .toBool() )
             {
             otbApp->EnableParameter( *it );

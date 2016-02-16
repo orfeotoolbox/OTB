@@ -128,6 +128,7 @@ PreferencesDialog
     )
     .toString()
   );
+
   //
   // Rendering settings.
   {
@@ -175,7 +176,7 @@ PreferencesDialog
 
   m_UI->srtmCheckbox->setChecked(
     I18nApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE
+      I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE
     )
     .toBool()
   );
@@ -191,7 +192,7 @@ PreferencesDialog
 
   m_UI->geoidCheckbox->setChecked(
     I18nApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE
+      I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE
     )
     .toBool()
   );
@@ -242,7 +243,7 @@ PreferencesDialog
     }
 
   I18nApplication::Instance()->StoreSettingsKey(
-    I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE,
+    I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE,
     m_UI->srtmCheckbox->isChecked()
   );
   I18nApplication::Instance()->StoreSettingsKey(
@@ -252,7 +253,7 @@ PreferencesDialog
   );
 
   I18nApplication::Instance()->StoreSettingsKey(
-    I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE,
+    I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE,
     m_UI->geoidCheckbox->isChecked()
   );
   I18nApplication::Instance()->StoreSettingsKey(
@@ -329,7 +330,7 @@ PreferencesDialog
 
   m_SrtmDirModified =
     IsPathModified(
-      I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE,
+      I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE,
       checked,
       I18nCoreApplication::SETTINGS_KEY_SRTM_DIR,
       m_UI->srtmLineEdit->text()
@@ -345,7 +346,7 @@ PreferencesDialog
 
   m_SrtmDirModified = 
     IsPathModified(
-      I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE,
+      I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE,
       m_UI->srtmCheckbox->isChecked(),
       I18nCoreApplication::SETTINGS_KEY_SRTM_DIR,
       text
@@ -362,7 +363,7 @@ PreferencesDialog
 
   m_GeoidFileModified =
     IsPathModified(
-      I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE,
+      I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE,
       checked,
       I18nCoreApplication::SETTINGS_KEY_GEOID_PATH,
       m_UI->geoidLineEdit->text()
@@ -376,7 +377,7 @@ PreferencesDialog
 {
   m_GeoidFileModified =
     IsPathModified(
-      I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE,
+      I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE,
       m_UI->geoidCheckbox->isChecked(),
       I18nCoreApplication::SETTINGS_KEY_GEOID_PATH,
       text

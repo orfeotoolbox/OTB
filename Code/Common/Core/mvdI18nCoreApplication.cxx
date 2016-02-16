@@ -73,12 +73,14 @@ const char* I18nCoreApplication::DATASET_EXT = ".ds";
 const char* I18nCoreApplication::SETTINGS_KEYS[ SETTINGS_KEY_COUNT ] =
 {
   "cacheDir",
+  "geoidPath",
+  "geoidPathActive",
+  "overviewsEnabled",
+  "overviewsSize",
+  "resolutionAlgorithm",
   "resultsDir",
   "srtmDir",
   "srtmDirActive",
-  "geoidPath",
-  "geoidPathActive",
-  "resolutionAlgorithm",
   "tileSize",
 };
 
@@ -572,9 +574,9 @@ I18nCoreApplication
   bool geoidUpdated = false;
 
   if( I18nCoreApplication::HasSettingsKey(
-	I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE ) &&
+	I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE ) &&
       I18nCoreApplication::RetrieveSettingsKey(
-	I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE ).toBool() )
+	I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE ).toBool() )
     {
     qDebug() <<
       "Settings/GeoidFile:" <<
@@ -628,9 +630,9 @@ I18nCoreApplication
     geoidUpdated = true;
 
   if( I18nCoreApplication::HasSettingsKey(
-	I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ) &&
+	I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE ) &&
       I18nCoreApplication::RetrieveSettingsKey(
-	I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ).toBool() )
+	I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE ).toBool() )
     {
     qDebug() <<
       "Settings/DEMDir:" <<
