@@ -143,24 +143,19 @@ int ReverseTest(typename MaskIteratorType::ImageType::Pointer mask, typename Ite
   if (!it.IsAtEnd()) {return 1;}
 
   bool beginReached = false;
-  do
-  {
-    --it;
-
-    if (it.IsAtEnd()) {return 2;}
-    if (it.IsAtBegin())
+  while (!it.IsAtBegin())
     {
-      if (beginReached)
+    --it;
+    if (it.IsAtEnd()) {return 2;}
+    if (beginReached)
       {
-        return 3;
+      return 3;
       }
-      else {
-        beginReached = true;
+    if (it.IsAtBegin())
+      {
+      beginReached = true;
       }
     }
-
-    //it.Set(it.Value() * 0.42);
-  } while (!it.IsAtBegin());
 
   if(!it.IsAtBegin()) {return 4;}
   return 0;
@@ -314,10 +309,10 @@ int otbMaskedIteratorDecoratorNominal(int itkNotUsed(argc), char * itkNotUsed(ar
 // ------------------------ Degenerate cases -----------------------------------
 int otbMaskedIteratorDecoratorDegenerate(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
-  // Fully masked (0 everywhere) and image is smaller than mask
+  // Fully masked (0 everywhere)
   typedef otb::Image<double, 2> ImageType;
-  ImageType::Pointer image = GetTestImage<ImageType>(9, 10);
-  ImageType::Pointer mask = GetTestImage<ImageType>(100, 0);
+  ImageType::Pointer image = GetTestImage<ImageType>(10, 10);
+  ImageType::Pointer mask = GetTestImage<ImageType>(10, 0);
   ImageType::RegionType region(image->GetLargestPossibleRegion());
 
   return TripleTest<itk::ImageRegionIterator<ImageType>,
