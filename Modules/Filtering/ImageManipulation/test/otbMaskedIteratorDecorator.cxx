@@ -190,7 +190,7 @@ int BijectiveTest(typename MaskIteratorType::ImageType::Pointer mask, typename I
   itDecorated.GoToBegin();
 
   // Find the non maked begin for the image iterator
-  if (mask)
+  if (itDecorated.HasMask())
     {
     while (mask->GetPixel(it.GetIndex()) == 0 && !it.IsAtEnd())
       {
@@ -225,7 +225,7 @@ int BijectiveTest(typename MaskIteratorType::ImageType::Pointer mask, typename I
       }
 
     ++itDecorated;
-    if (mask)
+    if (itDecorated.HasMask())
       {
       do
         {
