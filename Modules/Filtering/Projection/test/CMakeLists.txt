@@ -113,10 +113,11 @@ foreach( file ${GEOMGCP} )
     ${INPUTDATA}/${current_geomgcp}.gcp
     ${TEMP}/${TESTNAME}.gcp # baseline (produced only if argv[7] == 1)
     ${current_neededkw}
-    1 #imgTol
+    1 # imgTol
     1 # geoTol
     0 # create baseline (argv[7])
     1 # mode verbose
+    1 # only check needed keywords
   )
 endforeach()
 
