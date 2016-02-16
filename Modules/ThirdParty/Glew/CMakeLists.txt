@@ -1,0 +1,7 @@
+project(OTBGlew)
+set(OTBGlew_THIRD_PARTY 1)
+
+set(OTBGlew_SYSTEM_INCLUDE_DIRS ${GLEW_INCLUDE_PATH})
+set(OTBGlew_LIBRARIES ${GLEW_LIBRARY})
+
+otb_module_impl()
