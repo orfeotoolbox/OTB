@@ -19,7 +19,7 @@
 #define otbMaskedIteratorDecorator_hxx
 
 #include "otbMaskedIteratorDecorator.h"
-#include "otbMacro.h"
+#include "itkMacro.h"
 
 namespace otb
 {
@@ -39,8 +39,7 @@ MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
     {
     if (image->GetLargestPossibleRegion() != mask->GetLargestPossibleRegion())
       {
-      m_UseMask = false;
-      otbWarningMacro("Input image and mask have different largest regions : mask is discarded!");
+      itkGenericExceptionMacro("Input image and mask have different largest regions : mask is discarded!");
       }
     else
       {
