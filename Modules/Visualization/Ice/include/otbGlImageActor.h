@@ -19,18 +19,18 @@
 #define otb_GlImageActor_h
 
 
+#include <vcl_algorithm.h>
+
+#include "itkCenteredRigid2DTransform.h"
+
+#include "otbFragmentShader.h"
 #include "otbGenericRSTransform.h"
 #include "otbGeoInterface.h"
 #include "otbGlActor.h"
-#include "otbFragmentShader.h"
 #include "otbImageFileReader.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVectorImage.h"
-
-#include "itkCenteredRigid2DTransform.h"
-
-#include <vcl_algorithm.h>
 
 
 namespace otb
