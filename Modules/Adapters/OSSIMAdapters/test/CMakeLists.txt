@@ -71,7 +71,7 @@ foreach( file ${NAME_TESTS} )
              ${current_neededkw}
              ${current_tols}
              ${current_name}.geom
-             0 # Only check the needed keyword
+             0 # 1 : Check all keywords (ignore argv[2] and argv[3]) / 0 : Only check the needed keywords
             )
             
 endforeach()     
@@ -102,10 +102,10 @@ foreach( file ${NAME_TESTS} )
   otb_add_test(NAME ioTvTestImageKeywordlist_${current_name} COMMAND otbOSSIMAdaptersTestDriver
              otbTestImageKeywordlist
              ${current_img}
-             "ignore"
-             "ignore"
+             "Foo"
+             "Foo"
              ${current_name}.geom
-             1 # Check all keywords
+             1 # 1 : Check all keywords (ignore argv[2] and argv[3]) / 0 : Only check the needed keywords
             )
             
 endforeach()       
