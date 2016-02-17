@@ -112,9 +112,9 @@ endforeach()
 
 #Other sensor : no keyword check
 set(GEOMGCP
-"ers2/gd-ers2-1" #LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
-"spot5/gd-spot5-1" #LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
-"geoeye1/gd-geoeye1-1" #LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
+"ers2/gd-ers2-1"       #LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
+"spot5/gd-spot5-1"     #LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
+"geoeye1/gd-geoeye1-1" #LARGEINPUT{GEOEYE/MARCILLOLES/po_350134_bgrn_0000001.tif}
 )
 
 
