@@ -23,32 +23,19 @@
 namespace otb
 {
 
-StandardShader::StandardShader()
-  : m_MinRed(0),
-    m_MaxRed(255),
-    m_MinGreen(0),
-    m_MaxGreen(255),
-    m_MinBlue(0),
-    m_MaxBlue(255),
-    m_UseNoData(true),
-    m_NoData(0),
-    m_Gamma(1.),
-    m_Alpha(1.),
-    m_CurrentRed(0),
-    m_CurrentGreen(0),
-    m_CurrentBlue(0),
-    m_LocalContrastRange(50),
-    m_SpectralAngleRange(10),
-    m_Center(),
-    m_Radius(200),
-    m_ChessboardSize(256),
-    m_SliderPosition(500),
-    m_VerticalSlider(false),
-    m_ShaderType(SHADER_STANDARD)
+StandardShader::StandardShader() :
+  m_LocalContrastRange( 50 ),
+  m_SpectralAngleRange( 10 ),
+  m_Center(),
+  m_Radius( 200 ),
+  m_ChessboardSize( 256 ),
+  m_SliderPosition( 500 ),
+  m_VerticalSlider( false ),
+  m_ShaderType( SHADER_STANDARD )
 {
   m_Center.Fill( 0 );
 
-  this->BuildShader();
+  BuildShader();
 }
 
 StandardShader::~StandardShader()
@@ -170,15 +157,21 @@ std::string StandardShader::GetName() const
 
 void StandardShader::SetupShader()
 {
-// Compute shifts and scales
-  double shr,shg,shb,scr,scg,scb;
-  shr = -m_MinRed;
-  shg = -m_MinGreen;
-  shb = -m_MinBlue;
-  scr = 1./(m_MaxRed-m_MinRed);
-  scg = 1./(m_MaxGreen-m_MinGreen);
-  scb = 1./(m_MaxBlue-m_MinBlue);
-  
+  assert( !m_ImageSettings.IsNull() );
+
+  //
+  // Compute shifts.
+  double shr = -m_ImageSettings->GetMinRed();
+  double shg = -m_ImageSettings->GetMinGreen();
+  double shb = -m_ImageSettings->GetMinBlue();
+  //
+  // Compute scales.
+  double scr = 1.0 / ( m_ImageSettings->GetMaxRed()+shr );
+  double scg = 1.0 / ( m_ImageSettings->GetMaxGreen()+shg );
+  double scb = 1.0 / ( m_ImageSettings->GetMaxBlue()+shb );
+
+  double gamma = m_ImageSettings->GetGamma();
+
   GLint shader_a = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_a");
   glUniform4f(shader_a,scr,scg,scb,1.);
 
@@ -186,16 +179,16 @@ void StandardShader::SetupShader()
   glUniform4f(shader_b,shr,shg,shb,0);
 
   GLint shader_use_no_data = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_use_no_data");
-  glUniform1i(shader_use_no_data,m_UseNoData);
+  glUniform1i(shader_use_no_data, m_ImageSettings->GetUseNoData()  );
 
   GLint shader_no_data = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_no_data");
-  glUniform1f(shader_no_data,m_NoData);
+  glUniform1f( shader_no_data, m_ImageSettings->GetNoData() );
 
   GLint shader_gamma = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_gamma");
-  glUniform4f(shader_gamma,m_Gamma,m_Gamma,m_Gamma,m_Gamma);
+  glUniform4f( shader_gamma, gamma, gamma, gamma, gamma );
 
   GLint shader_alpha = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_alpha");
-  glUniform1f(shader_alpha,m_Alpha);
+  glUniform1f( shader_alpha, m_ImageSettings->GetAlpha() );
 
   GLint shader_radius = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_radius");
   glUniform1f(shader_radius,m_Radius);
@@ -207,7 +200,12 @@ void StandardShader::SetupShader()
   glUniform1i(shader_type,m_ShaderType);
 
   GLint shader_current = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_current");
-  glUniform3f(shader_current,m_CurrentRed,m_CurrentGreen,m_CurrentBlue);
+  glUniform3f(
+    shader_current,
+    m_ImageSettings->GetCurrentRed(),
+    m_ImageSettings->GetCurrentGreen(),
+    m_ImageSettings->GetCurrentBlue()
+  );
 
   GLint shader_localc_range = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_localc_range");
   glUniform1f(shader_localc_range,m_LocalContrastRange);

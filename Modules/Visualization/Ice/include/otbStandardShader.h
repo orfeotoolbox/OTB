@@ -18,8 +18,11 @@
 #ifndef otb_StandardShader_h
 #define otb_StandardShader_h
 
-#include "otbFragmentShader.h"
+
 #include "itkObjectFactory.h"
+
+#include "otbFragmentShader.h"
+#include "otbImageSettings.h"
 
 namespace otb
 {
@@ -46,7 +49,11 @@ public:
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   typedef itk::Point<float,2>                             PointType;
-  
+
+  itkSetObjectMacro( ImageSettings, ImageSettings );
+  itkGetObjectMacro( ImageSettings, ImageSettings );
+  itkGetConstObjectMacro( ImageSettings, ImageSettings );
+
   itkSetMacro(LocalContrastRange,double);
   itkGetMacro(LocalContrastRange,double);
 
@@ -89,19 +96,8 @@ private:
   StandardShader(const Self&);
   void operator=(const Self&);
 
-  double m_MinRed;
-  double m_MaxRed;
-  double m_MinGreen;
-  double m_MaxGreen;
-  double m_MinBlue;
-  double m_MaxBlue;
-  bool   m_UseNoData;
-  double m_NoData;
-  double m_Gamma;
-  double m_Alpha;
-  double m_CurrentRed;
-  double m_CurrentGreen;
-  double m_CurrentBlue;
+  ImageSettings::Pointer m_ImageSettings;
+
   double m_LocalContrastRange;
   double m_SpectralAngleRange;
 
