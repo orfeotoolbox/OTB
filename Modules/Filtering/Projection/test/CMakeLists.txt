@@ -55,27 +55,6 @@ otbImportGeoInformationImageFilter.cxx
 )
 
 
-#set(IMAGES 
-#LARGEINPUT{PLEIADES-PRE/TLSE_TIFF_PRIMARY_DIMAPv2_MS_lossly_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20111025_3077-004_R1C1.TIF}
-#LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2}
-#LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif}
-#LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
-#LARGEINPUT{RADARSAT1/SARDEGNA/scene01/dat_01.001}
-#LARGEINPUT{TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml}
-#LARGEINPUT{FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF}
-#LARGEINPUT{PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A}
-#LARGEINPUT{ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1}
-#LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
-#LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-#LARGEINPUT{RADARSAT1/GOMA/SCENE01/DAT_01.001}
-#LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml}
-#LARGEINPUT{TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml}
-#LARGEINPUT{TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml}
-#LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
-
-#)
-#set( IMAGES_TESTNB 0)
-
 set(GEOMGCP
 "pleiades/gd-pleiades-1" #LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2} 
 "wv2/gd-wv2-1"           #LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF} 
@@ -107,7 +86,6 @@ foreach( file ${GEOMGCP} )
   string(SUBSTRING ${current_geomgcp} ${POS} ${SIZE} TESTNAME)
   
   otb_add_test(NAME prTvSensorModel_${TESTNAME} COMMAND otbProjectionTestDriver
-    #BASELINE_FILES
     otbNewSensorModel
     ${INPUTDATA}/${current_geomgcp}.geom
     ${INPUTDATA}/${current_geomgcp}.gcp
@@ -117,7 +95,52 @@ foreach( file ${GEOMGCP} )
     1 # geoTol
     0 # create baseline (argv[7])
     1 # mode verbose
-    1 # only check needed keywords
+    1 # 0 : no keyword check  1 : check needed keywords
+  )
+endforeach()
+
+
+#Faulty sensors
+#set(GEOMGCP
+#"radarsat2/gd-radarsat2-1" #LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif} 
+#"terrasarx/gd-terrasarx-1" #LARGEINPUT{TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos} 
+#"terrasarx/gd-terrasarx-1" #LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos} 
+#"palsar/gd-palsar-1" #LARGEINPUT{PALSAR/200801280007/l1data/IMG-HH-ALPSRP037120700-H1.1__A} Ne reconnaît pas l'image
+#"s1/gd-s1-A" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff} segfault
+#)
+
+
+#Other sensor : no keyword check
+set(GEOMGCP
+"ers2/gd-ers2-1" #LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
+"spot5/gd-spot5-1" #LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
+"geoeye1/gd-geoeye1-1" #LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
+)
+
+
+set( GEOM_TESTNB 0)
+foreach( file ${GEOMGCP} )
+  list(GET GEOMGCP   ${GEOM_TESTNB} current_geomgcp   )
+  math(EXPR GEOM_TESTNB "${GEOM_TESTNB} + 1")
+  
+  string(FIND ${current_geomgcp} "/" POS)
+  math(EXPR POS "${POS} + 1")
+  string(LENGTH ${current_geomgcp} LENGTH)
+  math(EXPR SIZE "${LENGTH} - ${POS}")
+  string(SUBSTRING ${current_geomgcp} ${POS} ${SIZE} TESTNAME)
+  
+  otb_add_test(NAME prTvSensorModel_${TESTNAME} COMMAND otbProjectionTestDriver
+    #BASELINE_FILES
+    otbNewSensorModel
+    ${INPUTDATA}/${current_geomgcp}.geom
+    ${INPUTDATA}/${current_geomgcp}.gcp
+    ${TEMP}/${TESTNAME}.gcp # baseline (produced only if argv[7] == 1)
+    "Foo"
+    1 # imgTol
+    1 # geoTol
+    0 # create baseline (argv[7])
+    1 # mode verbose
+    0 # 0 : no keyword check  1 : check needed keywords
   )
 endforeach()
 
