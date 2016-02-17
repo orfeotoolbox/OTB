@@ -44,7 +44,8 @@ GlImageActor::GlImageActor()
     m_Origin(),
     m_Spacing(),
     m_NumberOfComponents(0),
-    m_Shader(StandardShader::New()),
+    m_ImageSettings( ImageSettings::New() ),
+    m_Shader( StandardShader::New() ),
     m_ViewportToImageTransform(),
     m_ImageToViewportTransform(),
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
@@ -322,33 +323,24 @@ void GlImageActor::Render()
 
       bool useNoData(false);
       double noData(0.);
-      
-      StandardShader::Pointer shader = dynamic_cast<StandardShader *>(m_Shader.GetPointer());
 
-      if(shader)
-        {
-      
-        mins[0] = shader->GetMinRed();
-        mins[1] = shader->GetMinGreen();
-        mins[2] = shader->GetMinBlue();
+      assert( !m_ImageSettings.IsNull() );
+
+      mins[ 0 ] = m_ImageSettings->GetMinRed();
+      mins[ 1 ] = m_ImageSettings->GetMinGreen();
+      mins[ 2 ] = m_ImageSettings->GetMinBlue();
     
-        maxs[0] = shader->GetMaxRed();
-        maxs[1] = shader->GetMaxGreen();
-        maxs[2] = shader->GetMaxBlue();
+      maxs[ 0 ] = m_ImageSettings->GetMaxRed();
+      maxs[ 1 ] = m_ImageSettings->GetMaxGreen();
+      maxs[ 2  ] = m_ImageSettings->GetMaxBlue();
 
-        gamma = shader->GetGamma();
+      gamma = m_ImageSettings->GetGamma();
 
-        useNoData = shader->GetUseNoData();
-
-        if(useNoData)
-          {
-          noData = shader->GetNoData();
-          }
-        
-        }
+      if( m_ImageSettings->GetUseNoData() )
+	noData = m_ImageSettings->GetNoData();
       
-      omins.Fill(0);
-      omaxs.Fill(255);
+      omins.Fill( 0 );
+      omaxs.Fill( 255 );
     
       it->m_RescaleFilter->SetInputMinimum(mins);
       it->m_RescaleFilter->SetInputMaximum(maxs);

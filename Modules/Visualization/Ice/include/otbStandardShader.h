@@ -46,46 +46,12 @@ public:
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   typedef itk::Point<float,2>                             PointType;
-
-  
-  itkSetMacro(MinRed,double);
-  itkSetMacro(MinGreen,double);
-  itkSetMacro(MinBlue,double);
-  itkGetMacro(MinRed,double);
-  itkGetMacro(MinGreen,double);
-  itkGetMacro(MinBlue,double);
-
-  itkSetMacro(MaxRed,double);
-  itkSetMacro(MaxGreen,double);
-  itkSetMacro(MaxBlue,double);
-  itkGetMacro(MaxRed,double);
-  itkGetMacro(MaxGreen,double);
-  itkGetMacro(MaxBlue,double);  
-
-  itkSetMacro(UseNoData,bool);
-  itkGetMacro(UseNoData,bool);
-  itkSetMacro(NoData,double);
-  itkGetMacro(NoData,double);
-
-  itkSetMacro(CurrentRed,double);
-  itkSetMacro(CurrentGreen,double);
-  itkSetMacro(CurrentBlue,double);
-
-  itkGetMacro(CurrentRed,double);
-  itkGetMacro(CurrentGreen,double);
-  itkGetMacro(CurrentBlue,double);
   
   itkSetMacro(LocalContrastRange,double);
   itkGetMacro(LocalContrastRange,double);
 
   itkSetMacro(SpectralAngleRange,double);
   itkGetMacro(SpectralAngleRange,double);
-
-  itkSetMacro(Gamma,double);
-  itkGetMacro(Gamma,double);
-
-  itkSetMacro(Alpha,double);
-  itkGetMacro(Alpha,double);
 
   itkSetMacro(ShaderType,ShaderType);
   itkGetMacro(ShaderType,ShaderType);

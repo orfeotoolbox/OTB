@@ -28,6 +28,7 @@
 #include "otbGeoInterface.h"
 #include "otbGlActor.h"
 #include "otbImageFileReader.h"
+#include "otbImageSettings.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVectorImage.h"
@@ -177,6 +178,8 @@ public:
   itkGetObjectMacro(Shader,FragmentShader);
   itkSetObjectMacro(Shader,FragmentShader);
 
+  itkGetObjectMacro( ImageSettings, ImageSettings );
+
   //
   // otb::GlActor overloads.
   //
@@ -304,6 +307,7 @@ private:
   RegionType   m_LargestRegion;
   unsigned int m_NumberOfComponents;
 
+  ImageSettings::Pointer m_ImageSettings;
   FragmentShader::Pointer m_Shader;
 
   RSTransformType::Pointer m_ViewportToImageTransform;
