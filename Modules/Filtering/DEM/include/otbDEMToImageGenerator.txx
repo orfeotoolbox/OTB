@@ -36,6 +36,7 @@ DEMToImageGenerator<TDEMImage>
   m_OutputSize[1] = 1;
   m_OutputOrigin[0] = 0;
   m_OutputOrigin[1] = 0;
+  m_DefaultUnknownValue = itk::NumericTraits<PixelType>::ZeroValue();
   m_AboveEllipsoid = false;
 
   m_Transform         = GenericRSTransformType::New();

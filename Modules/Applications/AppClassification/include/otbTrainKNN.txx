@@ -29,7 +29,7 @@ namespace Wrapper
   ::InitKNNParams()
   {
     AddChoice("classifier.knn", "KNN classifier");
-    SetParameterDescription("classifier.knn", "This group of parameters allows to set KNN classifier parameters. "
+    SetParameterDescription("classifier.knn", "This group of parameters allows setting KNN classifier parameters. "
         "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html}.");
 
     //K parameter

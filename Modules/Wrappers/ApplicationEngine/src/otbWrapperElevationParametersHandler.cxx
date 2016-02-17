@@ -28,14 +28,14 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
 {
   app->AddParameter(ParameterType_Group, key, "Elevation management");
   app->SetParameterDescription(key,
-                               "This group of parameters allows to manage elevation values. Supported formats are SRTM, DTED or any geotiff. DownloadSRTMTiles application could be a useful tool to list/download tiles related to a product.");
+                               "This group of parameters allows managing elevation values. Supported formats are SRTM, DTED or any geotiff. DownloadSRTMTiles application could be a useful tool to list/download tiles related to a product.");
 
   // DEM directory
   std::ostringstream oss;
   oss << key<<".dem";
   app->AddParameter(ParameterType_Directory, oss.str(), "DEM directory");
   app->SetParameterDescription(oss.str(),
-                               "This parameter allows to select a directory containing Digital Elevation Model tiles");
+                               "This parameter allows selecting a directory containing Digital Elevation Model tiles");
   app->MandatoryOff(oss.str());
 
   std::string demDirFromConfig = otb::ConfigurationManager::GetDEMDirectory();
@@ -73,7 +73,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   oss.str("");
   oss << key <<".default";
   app->AddParameter(ParameterType_Float, oss.str(), "Default elevation");
-  app->SetParameterDescription(oss.str(),"This parameter allows to set the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value.");
+  app->SetParameterDescription(oss.str(),"This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value.");
   app->SetDefaultParameterFloat(oss.str(), 0.);
 
  // TODO : not implemented yet

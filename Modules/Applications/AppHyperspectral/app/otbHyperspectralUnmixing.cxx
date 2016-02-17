@@ -96,7 +96,7 @@ private:
 
     // Documentation
     SetDocName("Hyperspectral data unmixing");
-    SetDocLongDescription("The application applies a linear unmixing algorithm to an hyperspectral data cube. This method supposes that the mixture between materials in the scene is macroscopic and simulates a linear mixing model of spectra.\nThe Linear Mixing Model (LMM) acknowledges that reflectance spectrum associated with each pixel is a linear combination of pure materials in the recovery area, commonly known as endmembers. Endmembers can be estimated using the VertexComponentAnalysis application.\nThe application allows to estimate the abundance maps with several algorithms : Unconstrained Least Square (ucls), Fully Constrained Least Square (fcls), Image Space Reconstruction Algorithm (isra) and Non-negative constrained Least Square (ncls) and Minimum Dispertion Constrained Non Negative Matrix Factorization (MDMDNMF).\n");
+    SetDocLongDescription("The application applies a linear unmixing algorithm to an hyperspectral data cube. This method supposes that the mixture between materials in the scene is macroscopic and simulates a linear mixing model of spectra.\nThe Linear Mixing Model (LMM) acknowledges that reflectance spectrum associated with each pixel is a linear combination of pure materials in the recovery area, commonly known as endmembers. Endmembers can be estimated using the VertexComponentAnalysis application.\nThe application allows one to estimate the abundance maps with several algorithms : Unconstrained Least Square (ucls), Fully Constrained Least Square (fcls), Image Space Reconstruction Algorithm (isra) and Non-negative constrained Least Square (ncls) and Minimum Dispersion Constrained Non Negative Matrix Factorization (MDMDNMF).\n");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("VertexComponentAnalysis");
@@ -128,7 +128,7 @@ private:
     SetParameterDescription("ua.isra", "Image Space Reconstruction Algorithm");
 
     AddChoice("ua.mdmdnmf", "MDMDNMF");
-    SetParameterDescription("ua.mdmdnmf", "Minimum Dispertion Constrained Non Negative Matrix Factorization");
+    SetParameterDescription("ua.mdmdnmf", "Minimum Dispersion Constrained Non Negative Matrix Factorization");
     SetParameterString("ua", "ucls");
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");

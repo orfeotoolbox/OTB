@@ -67,6 +67,12 @@ public:
 
 
 private:
+  SOMClassification()
+    {
+    m_UseMask = false;
+    m_Classifier = ClassificationFilterType::New();
+    }
+
   void DoInit()
   {
     SetName("SOMClassification");
@@ -367,7 +373,6 @@ private:
     /*******************************************/
     otbAppLogINFO("-- CLASSIFICATION --");
 
-    m_Classifier = ClassificationFilterType::New();
     m_Classifier->SetInput(input);
     m_Classifier->SetMap(m_SOMMap);
     if (m_UseMask) m_Classifier->SetInputMask(mask);

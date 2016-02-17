@@ -32,7 +32,7 @@ namespace Functor
 * StatisticsAttributesLabelObjectFunctor one each feature image
 * provided through AddFeature()
 *
-* As such, it allows to compute in one pass statistics related to
+* As such, it allows computing in one pass statistics related to
 * multiple features. It is used in the
 * BandsStatisticsAttributesLabelMapFilter.
 *
@@ -123,7 +123,7 @@ private:
  * The feature name is constructed as:
  * 'STATS' + '::' + 'Band' + band_index + '::' + statistic_name
  *
- * The ReducedAttributesSet flag allows to tell the internal
+ * The ReducedAttributesSet flag allows telling the internal
  * statistics filter to compute only the main attributes (mean, variance, skewness and kurtosis).
  *
  * \sa MultiStatsAttributesLabelObjectFunctor AttributesMapLabelObject

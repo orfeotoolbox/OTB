@@ -154,7 +154,7 @@ private:
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
-    // Set up output image informations
+    // Set up output image information
     FloatVectorImageType::SpacingType spacing = panchro->GetSpacing();
     FloatVectorImageType::IndexType   start = panchro->GetLargestPossibleRegion().GetIndex();
     FloatVectorImageType::SizeType    size = panchro->GetLargestPossibleRegion().GetSize();

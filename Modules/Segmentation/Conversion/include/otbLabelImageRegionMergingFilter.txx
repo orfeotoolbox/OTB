@@ -31,7 +31,8 @@ template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelI
 LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
 ::LabelImageRegionMergingFilter()
 {
-
+  m_RangeBandwidth=1.0;
+  m_NumberOfComponentsPerPixel=0;
   this->SetNumberOfRequiredInputs( 2 );
 
   this->SetNumberOfRequiredOutputs(2);

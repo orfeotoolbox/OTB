@@ -63,12 +63,12 @@ public:
   itkNewMacro(Self)
 
   itkTypeMacro(TrainImagesClassifier, otb::Wrapper::LearningApplicationBase)
-  
+
   typedef Superclass::SampleType              SampleType;
   typedef Superclass::ListSampleType          ListSampleType;
   typedef Superclass::TargetSampleType        TargetSampleType;
   typedef Superclass::TargetListSampleType    TargetListSampleType;
-  
+
   typedef Superclass::SampleImageType         SampleImageType;
   typedef SampleImageType::PixelType          PixelType;
 
@@ -83,7 +83,7 @@ public:
 
   // Enhance List Sample  typedef otb::Statistics::ListSampleToBalancedListSampleFilter<ListSampleType, LabelListSampleType>      BalancingListSampleFilterType;
   typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
- 
+
   // Estimate performance on validation sample
   typedef otb::ConfusionMatrixCalculator<TargetListSampleType, TargetListSampleType> ConfusionMatrixCalculatorType;
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType ConfusionMatrixType;
@@ -101,7 +101,7 @@ protected:
   //friend void InitSVMParams(TrainImagesClassifier & app);
 
 private:
-  
+
 void DoInit()
 {
   SetName("TrainImagesClassifier");
@@ -115,8 +115,8 @@ void DoInit()
     "Samples are composed of pixel values in each band optionally centered and reduced using an XML statistics file produced by "
     "the ComputeImagesStatistics application.\n The training vector data must contain polygons with a positive integer field "
     "representing the class label. The name of this field can be set using the \"Class label field\" parameter. Training and validation "
-    "sample lists are built such that each class is equally represented in both lists. One parameter allows to control the ratio "
-    "between the number of samples in training and validation sets. Two parameters allow to manage the size of the training and "
+    "sample lists are built such that each class is equally represented in both lists. One parameter allows controlling the ratio "
+    "between the number of samples in training and validation sets. Two parameters allow managing the size of the training and "
     "validation sets per class and per image.\n Several classifier parameters can be set depending on the chosen classifier. In the "
     "validation process, the confusion matrix is organized the following way: rows = reference labels, columns = produced labels. "
     "In the header of the optional confusion matrix output file, the validation (reference) and predicted (produced) class labels"
@@ -128,7 +128,7 @@ void DoInit()
 
   //Group IO
   AddParameter(ParameterType_Group, "io", "Input and output data");
-  SetParameterDescription("io", "This group of parameters allows to set input and output data.");
+  SetParameterDescription("io", "This group of parameters allows setting input and output data.");
   AddParameter(ParameterType_InputImageList, "io.il", "Input Image List");
   SetParameterDescription("io.il", "A list of input images.");
   AddParameter(ParameterType_InputVectorDataList, "io.vd", "Input Vector Data List");
@@ -149,7 +149,7 @@ void DoInit()
   //Group Sample list
   AddParameter(ParameterType_Group, "sample", "Training and validation samples parameters");
   SetParameterDescription("sample",
-                          "This group of parameters allows to set training and validation sample lists parameters.");
+                          "This group of parameters allows you to set training and validation sample lists parameters.");
 
   AddParameter(ParameterType_Int, "sample.mt", "Maximum training sample size per class");
   //MandatoryOff("mt");
@@ -197,7 +197,7 @@ void DoInit()
   SetDocExampleParameterValue("classifier.libsvm.opt", "false");
   SetDocExampleParameterValue("io.out", "svmModelQB1.txt");
   SetDocExampleParameterValue("io.confmatout", "svmConfusionMatrixQB1.csv");
-}  
+}
 
 void DoUpdateParameters()
 {

@@ -81,7 +81,7 @@ int otbGenericRSResampleImageFilter(int itkNotUsed(argc), char* argv[])
   spacing[0] = 0.6;
   spacing[1] = -0.6;
 
-  // Build the ouput projection ref : UTM ref
+  // Build the output projection ref : UTM ref
   OGRSpatialReference    oSRS;
   oSRS.SetProjCS("UTM");
   oSRS.SetUTM(31, true);

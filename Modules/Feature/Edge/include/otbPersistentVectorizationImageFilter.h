@@ -33,11 +33,11 @@ namespace otb
 /** \class PersistentVectorizationImageFilter
  *  \brief Perform vectorization in a persistent way.
  *
- * This filter allows to vectorize input labeled image while it is streamed
- * through it. The GetPathList() method allows to get the vectorized boundaries,
- * while the GetOutput() method allows to get the input image itself.
+ * This filter allows vectorizing input labeled image while it is streamed
+ * through it. The GetPathList() method allows getting the vectorized boundaries,
+ * while the GetOutput() method allows getting the input image itself.
  *
- * The Reset() method allows to clear the result  path list.
+ * The Reset() method allows clearing the result path list.
  *
  * \sa PersistentImageFilter
  *

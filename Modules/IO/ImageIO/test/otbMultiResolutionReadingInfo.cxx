@@ -29,7 +29,7 @@ int otbMultiResolutionReadingInfo(int argc, char* argv[])
 {
   if (argc != 3)
     {
-    std::cout << argv[0] << "<input filename> <ouput filename>" << std::endl;
+    std::cout << argv[0] << "<input filename> <output filename>" << std::endl;
     return EXIT_FAILURE;
     }
   const char * inputFilename  = argv[1];

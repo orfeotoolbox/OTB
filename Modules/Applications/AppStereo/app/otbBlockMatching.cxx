@@ -127,11 +127,11 @@ private:
     SetDescription("Performs block-matching to estimate pixel-wise disparities between two images");
 
     SetDocName("Pixel-wise Block-Matching");
-    SetDocLongDescription("This application allows to performs block-matching to estimate pixel-wise disparities "
-      "between two images. The application allows to choose the block-matching method to use. It also allows to input"
+    SetDocLongDescription("This application allows one to performs block-matching to estimate pixel-wise disparities "
+      "between two images. One must chose block-matching method and input"
       " masks (related to the left and right input image) of pixels for which the disparity should be investigated. "
       "Additionally, two criteria can be optionally used to disable disparity investigation for some pixel: a "
-      "no-data value, and a threshold on the local variance. This allows to speed-up computation by avoiding to "
+      "no-data value, and a threshold on the local variance. This allows one to speed-up computation by avoiding to "
       "investigate disparities that will not be reliable anyway. For efficiency reasons, if the optimal metric values"
       " image is desired, it will be concatenated to the output image (which will then have three bands : horizontal "
       "disparity, vertical disparity and metric value). One can split these images afterward.");
@@ -142,7 +142,7 @@ private:
     AddDocTag(Tags::Stereo);
 
     AddParameter(ParameterType_Group,"io","Input and output data");
-    SetParameterDescription("io","This group of parameters allows to set the input and output images.");
+    SetParameterDescription("io","This group of parameters allows setting the input and output images.");
 
     AddParameter(ParameterType_InputImage,"io.inleft","Left input image");
     SetParameterDescription("io.inleft","The left input image (reference)");
@@ -163,30 +163,30 @@ private:
     SetParameterDescription("io.outmetric","If used, the output image will have a second component with metric optimal values");
 
     AddParameter(ParameterType_Group,"mask","Image masking parameters");
-    SetParameterDescription("mask","This group of parameters allows to determine the masking parameters to prevent disparities estimation for some pixels of the left image");
+    SetParameterDescription("mask","This group of parameters allows determining the masking parameters to prevent disparities estimation for some pixels of the left image");
 
     AddParameter(ParameterType_InputImage,"mask.inleft","Discard left pixels from mask image");
-    SetParameterDescription("mask.inleft","This parameter allows to provide a custom mask for the left image.Block matching will be only perform on pixels inside the mask.");
+    SetParameterDescription("mask.inleft","This parameter allows providing a custom mask for the left image.Block matching will be only perform on pixels inside the mask.");
     MandatoryOff("mask.inleft");
 
     AddParameter(ParameterType_InputImage,"mask.inright","Discard right pixels from mask image");
-    SetParameterDescription("mask.inright","This parameter allows to provide a custom mask for the right image.Block matching will be perform only on pixels inside the mask.");
+    SetParameterDescription("mask.inright","This parameter allows providing a custom mask for the right image.Block matching will be perform only on pixels inside the mask.");
     MandatoryOff("mask.inright");
 
     AddParameter(ParameterType_Float,"mask.nodata","Discard pixels with no-data value");
-    SetParameterDescription("mask.nodata","This parameter allows to discard pixels whose value is equal to the user-defined no-data value.");
+    SetParameterDescription("mask.nodata","This parameter allows discarding pixels whose value is equal to the user-defined no-data value.");
     MandatoryOff("mask.nodata");
     SetDefaultParameterFloat("mask.nodata",0.);
     DisableParameter("mask.nodata");
 
     AddParameter(ParameterType_Float,"mask.variancet","Discard pixels with low local variance");
-    SetParameterDescription("mask.variancet","This parameter allows to discard pixels whose local variance is too small (the size of the neighborhood is given by the radius parameter)");
+    SetParameterDescription("mask.variancet","This parameter allows discarding pixels whose local variance is too small (the size of the neighborhood is given by the radius parameter)");
     MandatoryOff("mask.variancet");
     SetDefaultParameterFloat("mask.variancet",100.);
     DisableParameter("mask.variancet");
 
     AddParameter(ParameterType_Group,"bm","Block matching parameters");
-    SetParameterDescription("bm","This group of parameters allow to tune the block-matching behaviour");
+    SetParameterDescription("bm","This group of parameters allow tuning the block-matching behaviour");
 
     AddParameter(ParameterType_Choice,   "bm.metric", "Block-matching metric");
     AddChoice("bm.metric.ssd","Sum of Squared Distances");
