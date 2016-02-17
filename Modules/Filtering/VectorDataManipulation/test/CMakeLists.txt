@@ -71,7 +71,7 @@ otb_add_test(NAME bfTvPolygonCompacityFunctor COMMAND otbVectorDataManipulationT
   ${TEMP}/bfPolygonCompacityFunctorTest.txt
   )
 
-otb_add_test(NAME bfTuVectorDataToRandomLineGenerator COMMAND otbVectorDataManipulationTestDriver
+otb_add_test(NAME bfTvVectorDataToRandomLineGenerator COMMAND otbVectorDataManipulationTestDriver
   --compare-ogr ${NOTOL}
   ${BASELINE_FILES}/bfTvVectorDataToRandomLineGeneratorOutput.shp
   ${TEMP}/bfTvVectorDataToRandomLineGeneratorOutput.shp

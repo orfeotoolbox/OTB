@@ -144,16 +144,29 @@ PersistentImageToOGRLayerFilter<TImage>
   //Copy features contained in the memory layer (srcLayer) in the output layer
   itk::TimeProbe chrono;
   chrono.Start();
-  m_OGRLayer.ogr().StartTransaction();
+
+  OGRErr err = m_OGRLayer.ogr().StartTransaction();
+
+  if (err != OGRERR_NONE)
+    {
+    itkExceptionMacro(<< "Unable to start transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
+    }
+
   OGRLayerType::const_iterator featIt = srcLayer.begin();
   for(; featIt!=srcLayer.end(); ++featIt)
-  {
-      OGRFeatureType dstFeature(m_OGRLayer.GetLayerDefn());
-      dstFeature.SetFrom( *featIt, TRUE );
-      m_OGRLayer.CreateFeature( dstFeature );
-  }
+    {
+    OGRFeatureType dstFeature(m_OGRLayer.GetLayerDefn());
+    dstFeature.SetFrom( *featIt, TRUE );
+    m_OGRLayer.CreateFeature( dstFeature );
+    }
 
-  m_OGRLayer.ogr().CommitTransaction();
+  err = m_OGRLayer.ogr().CommitTransaction();
+  
+  if (err != OGRERR_NONE)
+    {
+    itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
+    }
+
   chrono.Stop();
   otbMsgDebugMacro(<< "write ogr tile took " << chrono.GetTotal() << " sec");
 
