@@ -45,7 +45,7 @@ GlImageActor::GlImageActor()
     m_Spacing(),
     m_NumberOfComponents(0),
     m_ImageSettings( ImageSettings::New() ),
-    m_Shader( StandardShader::New() ),
+    m_Shader(),
     m_ViewportToImageTransform(),
     m_ImageToViewportTransform(),
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
@@ -56,6 +56,17 @@ GlImageActor::GlImageActor()
 
 GlImageActor::~GlImageActor()
 {}
+
+void
+GlImageActor
+::CreateShader()
+{
+  StandardShader::Pointer shader( StandardShader::New() );
+
+  shader->SetImageSettings( m_ImageSettings );
+
+  m_Shader = shader;
+}
 
 const GlImageActor::PointType & GlImageActor::GetOrigin() const
 {
@@ -294,7 +305,7 @@ void GlImageActor::Render()
   //   << "\tpixel: " << m_SoftwareRendering << std::endl
   //   << "\ttile: " << m_TileSize << std::endl;
 
-  if(!m_SoftwareRendering)
+  if(!m_SoftwareRendering && !m_Shader.IsNull() )
     {
     // std::cout << "\tGLSL" << std::endl;
 

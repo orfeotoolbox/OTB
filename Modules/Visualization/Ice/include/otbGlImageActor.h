@@ -125,6 +125,8 @@ public:
   itkSetMacro(SoftwareRendering, bool );
   itkGetMacro(SoftwareRendering, bool );
 
+  void CreateShader();
+
   void SetResolutionAlgorithm(ResolutionAlgorithm::type alg)
   {
     m_ResolutionAlgorithm = alg;
