@@ -1,0 +1,7 @@
+project(OTBOpenGL)
+set(OTBOpenGL_THIRD_PARTY 1)
+
+set(OTBOpenGL_SYSTEM_INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
+set(OTBOpenGL_LIBRARIES ${OPENGL_LIBRARY})
+
+otb_module_impl()
