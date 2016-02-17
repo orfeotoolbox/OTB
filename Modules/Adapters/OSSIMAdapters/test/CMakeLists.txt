@@ -28,6 +28,8 @@ set(NAME_TESTS
 "quickbird-1"
 "spot6-1"
 "worldview2-1"
+"spot5-1"
+"geoeye1-1"
 )
 
 set(IMG
@@ -37,6 +39,8 @@ LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
 LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
 LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2}
 LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF}
+LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
+LARGEINPUT{GEOEYE/MARCILLOLES/po_350134_bgrn_0000001.tif}
 )
 
 set(NEEDEDKW
@@ -46,6 +50,8 @@ set(NEEDEDKW
 "line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff support_data.physical_gain support_data.physical_bias support_data.solar_irradiance support_data.image_date support_data.elevation_angle" #QB
 "line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff support_data.physical_gain support_data.physical_bias support_data.solar_irradiance support_data.image_date support_data.elevation_angle" #SPOT6
 "line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff support_data.physical_gain support_data.physical_bias support_data.solar_irradiance support_data.image_date support_data.elevation_angle" #WORLDVIEW2
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff support_data.physical_gain support_data.physical_bias support_data.solar_irradiance support_data.image_date support_data.elevation_angle" #SPOT5
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff support_data.physical_gain support_data.physical_bias support_data.solar_irradiance support_data.image_date support_data.elevation_angle" #geoeye1
 )
 
 set(TOLS
@@ -55,6 +61,8 @@ set(TOLS
 "1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6" #QB
 "1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6" #SPOT6
 "1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6" #WORLDVIEW2
+"1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6" #SPOT5
+"1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6" #geoeye1
 )
 
 set(TESTNB 0 )
@@ -83,6 +91,7 @@ set(NAME_TESTS
 "sentinel1-1" 
 "envisat-asar-1" 
 "radarsat1-1" 
+"ers2-1"
 )
 
 set(IMG
@@ -91,6 +100,7 @@ LARGEINPUT{TERRASARX/2008-03-21_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_2008
 LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
 LARGEINPUT{ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1}
 LARGEINPUT{RADARSAT1/SARDEGNA/scene01/dat_01.001}
+LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
 )
 
 set(TESTNB 0 )
