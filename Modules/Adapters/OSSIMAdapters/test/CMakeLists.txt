@@ -40,21 +40,21 @@ LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001
 )
 
 set(NEEDEDKW
-"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #PLEIADES
-"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #IKONOS
-"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #RAPIDEYE
-"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #QB
-"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #SPOT6
-"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #WORLDVIEW2
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff support_data.physical_gain support_data.physical_bias support_data.solar_irradiance support_data.image_date support_data.elevation_angle" #PLEIADES
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff support_data.physical_gain support_data.physical_bias support_data.solar_irradiance support_data.image_date support_data.elevation_angle" #IKONOS
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff support_data.physical_gain support_data.physical_bias support_data.solar_irradiance support_data.image_date support_data.elevation_angle" #RAPIDEYE
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff support_data.physical_gain support_data.physical_bias support_data.solar_irradiance support_data.image_date support_data.elevation_angle" #QB
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff support_data.physical_gain support_data.physical_bias support_data.solar_irradiance support_data.image_date support_data.elevation_angle" #SPOT6
+"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff support_data.physical_gain support_data.physical_bias support_data.solar_irradiance support_data.image_date support_data.elevation_angle" #WORLDVIEW2
 )
 
 set(TOLS
-"1e-6 1e-6 1e-6 1e-6" #PLEIADES
-"1e-6 1e-6 1e-6 1e-6" #IKONOS
-"1e-6 1e-6 1e-6 1e-6" #RAPIDEYE
-"1e-6 1e-6 1e-6 1e-6" #QB
-"1e-6 1e-6 1e-6 1e-6" #SPOT6
-"1e-6 1e-6 1e-6 1e-6" #WORLDVIEW2
+"1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6" #PLEIADES
+"1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6" #IKONOS
+"1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6" #RAPIDEYE
+"1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6" #QB
+"1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6" #SPOT6
+"1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6 1e-6" #WORLDVIEW2
 )
 
 set(TESTNB 0 )
