@@ -15,11 +15,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbIceViewer.h"
 #include <algorithm>
+
 #include <otbImageMetadataInterfaceFactory.h>
+
 #include "otbGlROIActor.h"
 #include "otbGlVectorActor.h"
+#include "otbGlVersionChecker.h"
+#include "otbIceViewer.h"
 
 namespace otb
 {
@@ -84,6 +87,14 @@ void IceViewer::AddImage(const std::string & fname, const std::string & key, con
     }
   
   otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
+
+  const char * glVersion = NULL;
+  const char * glslVersion = NULL;
+
+  if( GlVersionChecker::CheckGLCapabilities( glVersion,
+					     glslVersion ) )
+    actor->CreateShader();
+
   actor->Initialize(fname);
   actor->SetVisible(true);
 
@@ -140,7 +151,9 @@ void IceViewer::AddVector(const std::string & fname, const std::string & key, co
     }
 
   otb::GlVectorActor::Pointer actor = otb::GlVectorActor::New();
+
   actor->Initialize(fname);
+
   actor->SetVisible(true);
   actor->SetAlpha(0.5);
   actor->SetColor(m_ColorMapIterator->second);
@@ -429,35 +442,37 @@ void IceViewer::DrawHud()
 	)
       );
 
-      assert( !shader.IsNull() );
+      if( !shader.IsNull() )
+	{
+	switch(shader->GetShaderType())
+	  {
+	  case SHADER_STANDARD:
+	    oss<<" standard";
+	    break;
+	  case SHADER_LOCAL_CONTRAST:
+	    oss<<" local contrast - radius="<<shader->GetRadius()<<", range=["<<-shader->GetLocalContrastRange()<<", "<<shader->GetLocalContrastRange()<<"]";
+	    break;
+	  case SHADER_LOCAL_ALPHA:
+	    oss<<" local transparency - radius="<<shader->GetRadius();
+	    break;
+	  case SHADER_ALPHA_GRID:
+	    oss<<" chessboard transparency - grid="<<shader->GetChessboardSize();
+	    break;
+	  case SHADER_ALPHA_SLIDER:
+	    oss<<" swipe transparency - "<<(shader->GetVerticalSlider()?"vertical":"horizontal")<<", position="<<shader->GetSliderPosition();
+	    break;
+	  case SHADER_SPECTRAL_ANGLE:
+	    oss<<" spectral angle: - gain="<<shader->GetSpectralAngleRange();
+	    // Do nothing
+	    break;
+	  case SHADER_GRADIENT:
+	    oss<<" gradient";
+	    break;
+	  }
+	}
 
-      switch(shader->GetShaderType())
-        {
-        case SHADER_STANDARD:
-          oss<<" standard";
-          break;
-        case SHADER_LOCAL_CONTRAST:
-          oss<<" local contrast - radius="<<shader->GetRadius()<<", range=["<<-shader->GetLocalContrastRange()<<", "<<shader->GetLocalContrastRange()<<"]";
-          break;
-        case SHADER_LOCAL_ALPHA:
-          oss<<" local transparency - radius="<<shader->GetRadius();
-          break;
-        case SHADER_ALPHA_GRID:
-          oss<<" chessboard transparency - grid="<<shader->GetChessboardSize();
-          break;
-        case SHADER_ALPHA_SLIDER:
-          oss<<" swipe transparency - "<<(shader->GetVerticalSlider()?"vertical":"horizontal")<<", position="<<shader->GetSliderPosition();
-          break;
-        case SHADER_SPECTRAL_ANGLE:
-          oss<<" spectral angle: - gain="<<shader->GetSpectralAngleRange();
-          // Do nothing
-          break;
-        case SHADER_GRADIENT:
-          oss<<" gradient";
-          break;
-        }
       oss<<"\n";
-      
+
       oss<<"    Position - index: ("<<poutidx[0]<<", "<<poutidx[1]<<"), phys: "<<poutphys[0]<<", "<<poutphys[1]<<")";
       oss<<", resolution: "<<currentActor->GetCurrentResolution()<<"\n";
       if(pixelAvail)
@@ -1006,21 +1021,25 @@ void IceViewer::UpdateShaderColorAndPosition()
    
     if(currentActor.IsNotNull())
       {
-      otb::StandardShader::Pointer currentShader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+      otb::StandardShader::Pointer currentShader(
+	dynamic_cast< otb::StandardShader * >(
+	  currentActor->GetShader()
+	)
+      );
 
-      this->UpdateShaderColorAndPosition(vpx,vpy,currentActor);
+      if( !currentShader.IsNull() )
+	{
+	UpdateShaderColorAndPosition( vpx, vpy, currentActor );
       
-      if(currentShader->GetShaderType() == SHADER_ALPHA_SLIDER)
-        {
-        if(currentShader->GetVerticalSlider())
-          {
-          currentShader->SetSliderPosition(height-posy);
-          }
-        else
-          {
-          currentShader->SetSliderPosition(posx);
-          }
-        }
+	if(currentShader->GetShaderType() == SHADER_ALPHA_SLIDER)
+	  {
+	  if( currentShader->GetVerticalSlider() )
+	    currentShader->SetSliderPosition( height - posy );
+
+	  else
+	    currentShader->SetSliderPosition( posx );
+	  }
+	}
       }
     }
 }
