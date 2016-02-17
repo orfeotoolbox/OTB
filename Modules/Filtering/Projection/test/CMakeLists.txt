@@ -1,7 +1,7 @@
 otb_module_test()
 
 set(OTBProjectionTests
-otbNewSensorModel.cxx
+otbSensorModel.cxx
 otbProjectionTestDriver.cxx
 otbVectorDataProjectionFilterFromGeoToMap.cxx
 otbOrthoRectificationFilter.cxx
@@ -86,7 +86,7 @@ foreach( file ${GEOMGCP} )
   string(SUBSTRING ${current_geomgcp} ${POS} ${SIZE} TESTNAME)
   
   otb_add_test(NAME prTvSensorModel_${TESTNAME} COMMAND otbProjectionTestDriver
-    otbNewSensorModel
+    otbSensorModel
     ${INPUTDATA}/${current_geomgcp}.geom
     ${INPUTDATA}/${current_geomgcp}.gcp
     ${TEMP}/${TESTNAME}.gcp # baseline (produced only if argv[7] == 1)
@@ -131,7 +131,7 @@ foreach( file ${GEOMGCP} )
   
   otb_add_test(NAME prTvSensorModel_${TESTNAME} COMMAND otbProjectionTestDriver
     #BASELINE_FILES
-    otbNewSensorModel
+    otbSensorModel
     ${INPUTDATA}/${current_geomgcp}.geom
     ${INPUTDATA}/${current_geomgcp}.gcp
     ${TEMP}/${TESTNAME}.gcp # baseline (produced only if argv[7] == 1)

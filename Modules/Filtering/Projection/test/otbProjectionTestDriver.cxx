@@ -1,7 +1,7 @@
 #include "otbTestMain.h"
 void RegisterTests()
 {
-  REGISTER_TEST(otbNewSensorModel);
+  REGISTER_TEST(otbSensorModel);
   REGISTER_TEST(otbVectorDataProjectionFilterFromGeoToMap);
   REGISTER_TEST(otbOrthoRectificationFilter);
   //##>REGISTER_TEST(otbOrthoRectificationComplexFilter);

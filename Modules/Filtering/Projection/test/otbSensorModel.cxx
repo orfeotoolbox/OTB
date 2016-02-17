@@ -142,7 +142,7 @@ bool provideGCP(char * gcpfilename, pointsContainerType& imgPt, geo3dPointsConta
 	return true;
 }
 
-int otbNewSensorModel(int argc, char* argv[])
+int otbSensorModel(int argc, char* argv[])
 {
   if (argc != 10)
     {
