@@ -459,17 +459,17 @@ if (OTB_DATA_USE_LARGEINPUT)
   set_property(TEST uaTvRPCSolverAdapterNotEnoughPointsTest PROPERTY WILL_FAIL TRUE)
 endif()
 
-##>otb_add_test(NAME uaTvRPCSolverAdapterOutGeomTest COMMAND otbOSSIMAdaptersTestDriver
-##>  --compare-ascii ${EPSILON_9}
-##>  ${BASELINE_FILES}/uaTvRPCSolverAdapterOutGeomTest.geom
-##>  ${TEMP}/uaTvRPCSolverAdapterOutGeomTest.geom
-##>  otbRPCSolverAdapterTest
-##>  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-##>  10 0.25 0.35
-##>  ${INPUTDATA}/DEM/srtm_directory/
-##>  ${INPUTDATA}/DEM/egm96.grd
-##>  ${TEMP}/uaTvRPCSolverAdapterOutGeomTest.geom
-##>  )
+otb_add_test(NAME uaTvRPCSolverAdapterOutGeomTest COMMAND otbOSSIMAdaptersTestDriver
+  --compare-ascii ${EPSILON_9}
+  ${BASELINE_FILES}/uaTvRPCSolverAdapterOutGeomTest.geom
+  ${TEMP}/uaTvRPCSolverAdapterOutGeomTest.geom
+  otbRPCSolverAdapterTest
+  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  10 0.25 0.35
+  ${INPUTDATA}/DEM/srtm_directory/
+  ${INPUTDATA}/DEM/egm96.grd
+  ${TEMP}/uaTvRPCSolverAdapterOutGeomTest.geom
+  )
 
 otb_add_test(NAME uaTvRPCSolverAdapterValidationTest COMMAND otbOSSIMAdaptersTestDriver
   otbRPCSolverAdapterTest

@@ -9,7 +9,7 @@ set(OTBImageBaseTests
   otbExtractROI2.cxx
   otbComplexToVectorImageCastFilter.cxx
   otbMultiChannelExtractROI.cxx
-  ##>otbVectorImageTest.cxx
+  otbVectorImageTest.cxx
   otbVectorImageLegacyTest.cxx
   otbExtractROITestMetaData.cxx
   otbTestMultiExtractMultiUpdate.cxx
@@ -163,23 +163,23 @@ otb_add_test(NAME coTvMultiChannelROI_RGB2NG_PNG3 COMMAND otbImageBaseTestDriver
   ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_3.png
   -startX 300 -startY 10 -sizeX 250 -sizeY 50  -channels 3 )
 
-##>otb_add_test(NAME ioTvMultiDatasetReading2 COMMAND otbImageBaseTestDriver
-##>  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
-##>  ${TEMP}/ioTvMultiDatasetReading2.txt
-##>  --ignore-lines-with 1 Pointer:
-##>  otbVectorImageTest
-##>  ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=5
-##>  ${TEMP}/ioTvMultiDatasetReading2.txt
-##>  )
+otb_add_test(NAME ioTvMultiDatasetReading2 COMMAND otbImageBaseTestDriver
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
+  ${TEMP}/ioTvMultiDatasetReading2.txt
+  --ignore-lines-with 1 Pointer:
+  otbVectorImageTest
+  ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=5
+  ${TEMP}/ioTvMultiDatasetReading2.txt
+  )
 
-##>otb_add_test(NAME ioTvMultiDatasetReading1 COMMAND otbImageBaseTestDriver
-##>  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
-##>  ${TEMP}/ioTvMultiDatasetReading1.txt
-##>  --ignore-lines-with 1 Pointer:
-##>  otbVectorImageTest
-##>  ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=0
-##>  ${TEMP}/ioTvMultiDatasetReading1.txt
-##>  )
+otb_add_test(NAME ioTvMultiDatasetReading1 COMMAND otbImageBaseTestDriver
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
+  ${TEMP}/ioTvMultiDatasetReading1.txt
+  --ignore-lines-with 1 Pointer:
+  otbVectorImageTest
+  ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=0
+  ${TEMP}/ioTvMultiDatasetReading1.txt
+  )
 
 otb_add_test(NAME coTvExtractROITestMetaData_TIFF COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}
@@ -392,26 +392,26 @@ if(OTB_DATA_USE_LARGEINPUT)
     math(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
     string(REGEX MATCH "TIFF" PHR_TIFF_FILE ${current_type})
 
-    ##># Read info from the input file
-    ##>otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type} COMMAND otbImageBaseTestDriver
-      ##>--ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
-      ##>${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
-      ##>--ignore-lines-with 4 CacheSizeInBytes SubDatasetIndex Driver Corner 
-      ##>otbVectorImageTest
-      ##>${current_file}?&resol=0
-      ##>${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
-      ##>)
+    # Read info from the input file
+    otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type} COMMAND otbImageBaseTestDriver
+      --ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
+      ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+      --ignore-lines-with 4 CacheSizeInBytes SubDatasetIndex Driver Corner 
+      otbVectorImageTest
+      ${current_file}?&resol=0
+      ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+      )
 
     if(NOT PHR_TIFF_FILE)
-      ##># Read info from the input file (res=5)
-      ##>otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type}_res5 COMMAND otbImageBaseTestDriver
-        ##>--ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
-        ##>${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
-        ##>--ignore-lines-with 4 CacheSizeInBytes Driver Corner SubDatasetIndex
-        ##>otbVectorImageTest
-        ##>${current_file}?&resol=5
-        ##>${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
-        ##>)
+      # Read info from the input file (res=5)
+      otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type}_res5 COMMAND otbImageBaseTestDriver
+        --ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
+        ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+        --ignore-lines-with 4 CacheSizeInBytes Driver Corner SubDatasetIndex
+        otbVectorImageTest
+        ${current_file}?&resol=5
+        ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+        )
       # Decode an area inside one tile
       otb_add_test(NAME ioTvReaderWriterJP22TIF_${current_type}_1 COMMAND otbImageBaseTestDriver
 	--compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_1.tif
@@ -782,23 +782,23 @@ otb_add_test(NAME  ioTvMultiMonoChannelROI_ENVI2PNG COMMAND otbImageBaseTestDriv
 
 # Tests to check if we can open JPEG2000 files specifying the resolution factor.
 # no access to data only PrintSelf() method.
-##>otb_add_test(NAME  ioTvMultiResolutionReading0 COMMAND otbImageBaseTestDriver
-##>  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
-##>                             ${TEMP}/ioTvMultiResolutionReading0.txt
-##>  --ignore-lines-with 1 SubDatasetIndex
-##>      otbVectorImageTest
-##>      ${INPUTDATA}/bretagne.j2k?&resol=0
-##>      ${TEMP}/ioTvMultiResolutionReading0.txt
-##>      )
+otb_add_test(NAME  ioTvMultiResolutionReading0 COMMAND otbImageBaseTestDriver
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
+                             ${TEMP}/ioTvMultiResolutionReading0.txt
+  --ignore-lines-with 1 SubDatasetIndex
+      otbVectorImageTest
+      ${INPUTDATA}/bretagne.j2k?&resol=0
+      ${TEMP}/ioTvMultiResolutionReading0.txt
+      )
 
-##>otb_add_test(NAME  ioTvMultiResolutionReading3 COMMAND otbImageBaseTestDriver
-##>  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
-##>                             ${TEMP}/ioTvMultiResolutionReading3.txt
-##>  --ignore-lines-with 1 SubDatasetIndex
-##>      otbVectorImageTest
-##>      ${INPUTDATA}/bretagne.j2k?&resol=3
-##>      ${TEMP}/ioTvMultiResolutionReading3.txt
-##>      )
+otb_add_test(NAME  ioTvMultiResolutionReading3 COMMAND otbImageBaseTestDriver
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
+                             ${TEMP}/ioTvMultiResolutionReading3.txt
+  --ignore-lines-with 1 SubDatasetIndex
+      otbVectorImageTest
+      ${INPUTDATA}/bretagne.j2k?&resol=3
+      ${TEMP}/ioTvMultiResolutionReading3.txt
+      )
 
 otb_add_test(NAME ioTvOtbVectorImageTestSpot5 COMMAND otbImageBaseTestDriver
    --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt

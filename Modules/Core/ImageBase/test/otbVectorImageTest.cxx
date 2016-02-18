@@ -134,7 +134,7 @@ int otbVectorImageTest(int argc, char* argv[])
   const char * outputAsciiFilename  = argv[2];
 
   typedef double PixelType;
- const unsigned int Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
