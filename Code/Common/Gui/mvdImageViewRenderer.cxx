@@ -199,7 +199,7 @@ ImageViewRenderer
 
   //
   // Return if check has succeeded.
-  if( false && isOk )
+  if( isOk )
     return true;
 
   //
@@ -869,6 +869,13 @@ ImageViewRenderer
 	  //   << this << "\n"
 	  //   << "\tQString:" << vectorImageModel->GetFilename()
 	  //   << "\tstd::string" << QFile::encodeName( vectorImageModel->GetFilename() );
+
+	  if( m_EffectsEnabled )
+	    {
+	    qDebug() << "Created shader for" << FromStdString( it->first );
+
+	    glImageActor->CreateShader();
+	    }
 
           glImageActor->Initialize(
             QFile::encodeName(
