@@ -148,7 +148,7 @@ ImageViewRenderer
 /*****************************************************************************/
 bool
 ImageViewRenderer
-::CheckGLCapabilities( int * glsl140 ) const
+::CheckGLCapabilities( int * glsl140 )
 {
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
   return true;
@@ -199,8 +199,12 @@ ImageViewRenderer
 
   //
   // Return if check has succeeded.
-  if( isOk )
+  if( false && isOk )
     return true;
+
+  //
+  // Disable GLSL effects.
+  m_EffectsEnabled = false;
 
   //
   // Construct message.

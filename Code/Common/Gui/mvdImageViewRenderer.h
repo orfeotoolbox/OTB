@@ -134,7 +134,7 @@ public:
 
   /**
    */
-  virtual bool CheckGLCapabilities( int * ) const;
+  virtual bool CheckGLCapabilities( int * );
 
   /**
    */

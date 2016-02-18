@@ -134,7 +134,7 @@ public:
 
   /**
    */
-  virtual bool CheckGLCapabilities( int * ) const =0;
+  virtual bool CheckGLCapabilities( int * ) =0;
 
   template< typename T >
   const T * GetReferenceModel() const;

@@ -178,8 +178,7 @@ MainWindow
   //     m_ImageView->GetRenderer()==NULL )
   //   return false;
 
-  if( !m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 ) )
-    return false;
+  m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 );
 
   assert( m_ShaderWidget!=NULL );
 
