@@ -305,7 +305,7 @@ void GlImageActor::Render()
   //   << "\tpixel: " << m_SoftwareRendering << std::endl
   //   << "\ttile: " << m_TileSize << std::endl;
 
-  if(!m_SoftwareRendering && !m_Shader.IsNull() )
+  if( !m_SoftwareRendering && !m_Shader.IsNull() )
     {
     // std::cout << "\tGLSL" << std::endl;
 
