@@ -10,7 +10,6 @@ set(OTBImageBaseTests
   otbComplexToVectorImageCastFilter.cxx
   otbMultiChannelExtractROI.cxx
   otbVectorImageTest.cxx
-  otbVectorImageLegacyTest.cxx
   otbExtractROITestMetaData.cxx
   otbTestMultiExtractMultiUpdate.cxx
   otbExtractROI.cxx
