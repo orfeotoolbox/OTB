@@ -4,7 +4,6 @@ void RegisterTests()
   REGISTER_TEST(otbSensorModel);
   REGISTER_TEST(otbVectorDataProjectionFilterFromGeoToMap);
   REGISTER_TEST(otbOrthoRectificationFilter);
-  //##>REGISTER_TEST(otbOrthoRectificationComplexFilter);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterNew);
   REGISTER_TEST(otbMapProjection);
   REGISTER_TEST(otbGenericRSResampleImageFilterNew);
@@ -48,7 +47,6 @@ void RegisterTests()
   REGISTER_TEST(otbGeographicalDistance);
   REGISTER_TEST(otbTileImageFilterRSTransformTest);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterAndOrtho);
-  //##>REGISTER_TEST(otbVectorDataIntoImageProjectionFilterTest);
   REGISTER_TEST(otbVectorDataIntoImageProjectionFilterCompareImplTest);
   //##>REGISTER_TEST(otbVectorDataExtractROIandProjection);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterWithoutDEM);

@@ -14,15 +14,12 @@ otbLeastSquareAffineTransformEstimatorNew.cxx
 otbVectorDataTransformFilter.cxx
 otbRationalTransformToDisplacementFieldSource.cxx
 otbImportGeoInformationImageFilterNew.cxx
-##>otbOrthoRectificationFilterWithDEM.cxx
-##>otbGenericRSTransformGenericConversionCheckingFromGCP.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx
 otbCompositeTransformNew.cxx
 otbRationalTransform.cxx
 otbGeometriesProjectionFilterFromMapToSensor.cxx
 otbImageToEnvelopeVectorDataFilter.cxx
 otbMapProjectionsNew.cxx
-##>otbOrthoRectificationMonoThreadFilter.cxx
 otbOrthoRectificationFilterNew.cxx
 otbImageToGenericRSOutputParameters.cxx
 otbGeometriesProjectionFilterFromMapToGeo.cxx
@@ -51,7 +48,6 @@ otbUtmMapProjection.cxx
 otbVectorDataProjectionFilterNew.cxx
 otbTileMapTransform.cxx
 otbImportGeoInformationImageFilter.cxx
-##>otbImportGeoInformationImageFilterWithKeywordList.cxx
 )
 
 
