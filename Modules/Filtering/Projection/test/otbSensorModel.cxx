@@ -43,12 +43,12 @@ typedef otb::VectorImage<double, 2>     ImageType;
 typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
 typedef otb::GeographicalDistance<ImageType::PointType> GeographicalDistanceType;
 
-int produceGCP(char * outputgcpfilename, const otb::ImageKeywordlist& kwlist, double z=16.19688987731934)
+int produceGCP(char * outputgcpfilename, const otb::ImageKeywordlist& kwlist, bool useForwardSensorModel=true, double z=16.19688987731934)
 {
    itk::Point<double, 2> imagePoint;
    itk::Point<double, 2> geoPoint;
 	
-   //  otbForwardSensorModel
+  //  otbForwardSensorModel
    typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
    ForwardSensorModelType::Pointer forwardSensorModel = ForwardSensorModelType::New();
    forwardSensorModel->SetImageGeometry(kwlist);
@@ -56,21 +56,47 @@ int produceGCP(char * outputgcpfilename, const otb::ImageKeywordlist& kwlist, do
    {
      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
      return EXIT_FAILURE;
-   }
+   } 
+   
+   otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(z);
+
+  // ossim classes
+  ossimKeywordlist ossimKwlist;
+  kwlist.convertToOSSIMKeywordlist(ossimKwlist);
+  
+  ossimProjection* ossimSensorModel = ossimSensorModelFactory::instance()->createProjection(ossimKwlist);
+  if (ossimSensorModel == NULL)
+  {
+      ossimSensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(ossimKwlist);
+  }
+  if (ossimSensorModel == NULL) // Model validity
+  {
+	std::cerr << "Invalid sensor model (ossimSensorModel is NULL)" << std::endl;
+    return EXIT_FAILURE;
+  }
 	
-	otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(z);
-	
-	
-	std::ofstream file(outputgcpfilename, std::ios::out | std::ios::trunc);
-	if (file)
+  std::ofstream file(outputgcpfilename, std::ios::out | std::ios::trunc);
+  if (file)
 	{
     for(double x=10.0; x<300.0; x+=50.)
 		for(double y=10.0; y<300.0; y+=50.)
 		{
 		  imagePoint[0]=x;
 		  imagePoint[1]=y;	
-		  // otbForwardSensorModel 
-	      geoPoint = forwardSensorModel->TransformPoint(imagePoint);
+		  if (useForwardSensorModel) // otbForwardSensorModel 
+		  {
+	          geoPoint = forwardSensorModel->TransformPoint(imagePoint);
+	      }
+	      else // ossim classes
+	      {
+			  ossimDpt ossimPoint(otb::internal::ConvertToOSSIMFrame(imagePoint[0]),  //x
+								  otb::internal::ConvertToOSSIMFrame(imagePoint[1])); //y
+			  ossimGpt ossimGPoint;
+			  ossimSensorModel->lineSampleHeightToWorld(ossimPoint,z, ossimGPoint);
+			  geoPoint[0] = ossimGPoint.lon;
+			  geoPoint[1] = ossimGPoint.lat;
+		  }
+	      
 		  file << std::setprecision(16) << x << " " << y << " " << geoPoint[0] << " " << geoPoint[1] << " " << z << std::endl;
 	    }
 	 
@@ -116,13 +142,13 @@ bool provideGCP(char * gcpfilename, pointsContainerType& imgPt, geo3dPointsConta
 	return true;
 }
 
-int otbNewSensorModel(int argc, char* argv[])
+int otbSensorModel(int argc, char* argv[])
 {
-  if (argc != 9)
+  if (argc != 10)
     {
     std::cout << argv[0] 
               << " <input geom filename> <input gcp filename> <output gcp filename> "
-              <<" <needed keywords> <imgTol> <geoTol> <writeBaseline> <modeVerbose>" << std::endl;
+              <<" <needed keywords> <imgTol> <geoTol> <writeBaseline> <modeVerbose> <only check needed keywords>" << std::endl;
 
     return EXIT_FAILURE;
     }
@@ -135,7 +161,7 @@ int otbNewSensorModel(int argc, char* argv[])
   double geoTol = atof(argv[6]);
   int writeBaseline = atoi(argv[7]);
   int modeVerbose = atoi(argv[8]);
-
+  bool checkNeededKw = atoi(argv[9]);
 
   // -------------------
   // Some instanciations  
@@ -268,37 +294,39 @@ int otbNewSensorModel(int argc, char* argv[])
 
   // #1 keywordlist, only check the needed keywords
   /*-------------------------------------*/
-  
-  //Split the string into many tokens, with whitespaces as separators
-  std::list<std::string> neededKw;
-  copy(std::istream_iterator<std::string>(iss),
-	 std::istream_iterator<std::string>(),
-	 back_inserter(neededKw));
-							 
-  
-  std::list<std::string> missingKw;
-  for(std::list<std::string>::iterator neededIt=neededKw.begin(); neededIt!=neededKw.end(); ++neededIt)
+  if (checkNeededKw)
   {
-	bool foundNeededKw = false;
-	for(KeywordlistMapType::iterator kwlistIt=kwmap.begin(); kwlistIt!=kwmap.end(); ++kwlistIt)
-	{
-		std::size_t found = kwlistIt->first.find(*neededIt);
-		if (found!=std::string::npos)
-		{   
-			foundNeededKw = true;
-		}
-	}
-	
-	if (!foundNeededKw)
-		missingKw.push_back(*neededIt);
-  }
-  
-  if ( (neededKw.size()>0) && (missingKw.size()>0) )
-  {
-	std::cerr << "Some keywords were not found; missing keywords : " << std::endl;
-	for (std::list<std::string>::iterator itm = missingKw.begin(); itm != missingKw.end(); ++itm)  
-	   std::cerr << *itm << std::endl;
-	return EXIT_FAILURE;
+      //Split the string into many tokens, with whitespaces as separators
+      std::list<std::string> neededKw;
+      copy(std::istream_iterator<std::string>(iss),
+         std::istream_iterator<std::string>(),
+         back_inserter(neededKw));
+                                 
+      
+      std::list<std::string> missingKw;
+      for(std::list<std::string>::iterator neededIt=neededKw.begin(); neededIt!=neededKw.end(); ++neededIt)
+      {
+        bool foundNeededKw = false;
+        for(KeywordlistMapType::iterator kwlistIt=kwmap.begin(); kwlistIt!=kwmap.end(); ++kwlistIt)
+        {
+            std::size_t found = kwlistIt->first.find(*neededIt);
+            if (found!=std::string::npos)
+            {   
+                foundNeededKw = true;
+            }
+        }
+        
+        if (!foundNeededKw)
+            missingKw.push_back(*neededIt);
+      }
+      
+      if ( (neededKw.size()>0) && (missingKw.size()>0) )
+      {
+        std::cerr << "Some keywords were not found; missing keywords : " << std::endl;
+        for (std::list<std::string>::iterator itm = missingKw.begin(); itm != missingKw.end(); ++itm)  
+           std::cerr << *itm << std::endl;
+        return EXIT_FAILURE;
+      }
   }
   /*-------------------------------------*/
 
@@ -336,8 +364,6 @@ int otbNewSensorModel(int argc, char* argv[])
 		  std::cout << ">>>>>>>>>>>>>> ---------------------" << std::endl;
 		  std::cout << ">>>>>>>>>>>>>>" << geomfilename << std::endl;
 		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-					<<  "Image to geo (GCP, ie. baseline): " << imagePoint << " -> " << geoPoint << "\n";
-		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
 					<<  "Image to geo (Inverse/Forward SensorModel): " << imagePoint << " -> " << geoPoint << "\n";
 		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
 					<<  "Geo to image (Inverse/Forward SensorModel): " << geoPoint << " -> " << reversedImagePoint << "\n";
@@ -349,10 +375,7 @@ int otbNewSensorModel(int argc, char* argv[])
 					<<  "Image to geo (OSSIM): " << imagePoint << " -> " << geoPointOSSIM << "\n";
 	  }
 
-	  
-	  
-
-	  
+	  	  
 	  // 3. Results should be plausible (no NaN and no clearly out of bound results)
 	  /*-------------------------------------*/
 	  if ( (ossim::isnan(geoPoint[0])) || (ossim::isnan(geoPoint[1])) )

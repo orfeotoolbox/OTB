@@ -1,7 +1,7 @@
 #include "otbTestMain.h"
 void RegisterTests()
 {
-  REGISTER_TEST(otbNewSensorModel);
+  REGISTER_TEST(otbSensorModel);
   REGISTER_TEST(otbVectorDataProjectionFilterFromGeoToMap);
   REGISTER_TEST(otbOrthoRectificationFilter);
   //##>REGISTER_TEST(otbOrthoRectificationComplexFilter);
@@ -17,8 +17,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataTransformFilter);
   REGISTER_TEST(otbRationalTransformToDisplacementFieldSourceTest);
   REGISTER_TEST(otbImportGeoInformationImageFilterNew);
-  //##>REGISTER_TEST(otbOrthoRectificationFilterWithDEM);
-  //##>REGISTER_TEST(otbGenericRSTransformGenericConversionCheckingFromGCP);
   REGISTER_TEST(otbVectorDataProjectionFilterFromMapToSensor);
   REGISTER_TEST(otbCompositeTransformNew);
   REGISTER_TEST(otbRationalTransformNew);
@@ -28,7 +26,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageToEnvelopeVectorDataFilter);
   REGISTER_TEST(otbMapProjectionsNew);
   REGISTER_TEST(otbMapProjectionsTest);
-  //##>REGISTER_TEST(otbOrthoRectificationMonoThreadFilter);
   REGISTER_TEST(otbOrthoRectificationFilterNew);
   REGISTER_TEST(otbImageToGenericRSOutputParametersNew);
   REGISTER_TEST(otbImageToGenericRSOutputParameters);
@@ -62,5 +59,4 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataProjectionFilterNew);
   REGISTER_TEST(otbTileMapTransform);
   REGISTER_TEST(otbImportGeoInformationImageFilter);
-  //##>REGISTER_TEST(otbImportGeoInformationImageFilterWithKeywordList);
 }
