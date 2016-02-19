@@ -101,45 +101,45 @@ int otbOGRDataToClassStatisticsFilter(int argc, char* argv[])
   std::ofstream ofs;
   ofs.open(outputPath.c_str());
   ofs << "# Layer 0 : polygons"<<std::endl;
-  ofs << "# Class statistics ( label : sampleCount)"<<std::endl;
+  ofs << "# Class sample counts"<<std::endl;
   for (itClass = classCount.begin(); itClass != classCount.end() ; ++itClass)
     {
-    ofs << itClass->first << " : "<< itClass->second << std::endl;
+    ofs << "class "<< itClass->first << " = "<< itClass->second << std::endl;
     }
-  ofs << "# Vector sizes ( featureId : sampleCount)"<<std::endl;
+  ofs << "# Vector sizes"<<std::endl;
   for (itPoly = polySize.begin() ; itPoly != polySize.end() ; ++itPoly)
     {
-    ofs << itPoly->first << " : "<< itPoly->second << std::endl;
+    ofs << "feature " << itPoly->first << " = "<< itPoly->second << std::endl;
     }
   
   filter->SetLayerIndex(1);
   filter->Update();
   
   ofs << "# Layer 1 : lines"<<std::endl;
-  ofs << "# Class statistics ( label : sampleCount)"<<std::endl;
+  ofs << "# Class sample counts"<<std::endl;
   for (itClass = classCount.begin() ; itClass != classCount.end() ; ++itClass)
     {
-    ofs << itClass->first << " : "<< itClass->second << std::endl;
+    ofs << "class "<< itClass->first << " = "<< itClass->second << std::endl;
     }
-  ofs << "# Vector sizes ( featureId : sampleCount)"<<std::endl;
+  ofs << "# Vector sizes"<<std::endl;
   for (itPoly = polySize.begin() ; itPoly != polySize.end() ; ++itPoly)
     {
-    ofs << itPoly->first << " : "<< itPoly->second << std::endl;
+    ofs << "feature " << itPoly->first << " = "<< itPoly->second << std::endl;
     }
   
   filter->SetLayerIndex(2);
   filter->Update();
   
   ofs << "# Layer 2 : points"<<std::endl;
-  ofs << "# Class statistics ( label : sampleCount)"<<std::endl;
+  ofs << "# Class sample counts"<<std::endl;
   for (itClass = classCount.begin(); itClass != classCount.end() ; ++itClass)
     {
-    ofs << itClass->first << " : "<< itClass->second << std::endl;
+    ofs << "class "<< itClass->first << " = "<< itClass->second << std::endl;
     }
-  ofs << "# Vector sizes ( featureId : sampleCount)"<<std::endl;
+  ofs << "# Vector sizes"<<std::endl;
   for (itPoly = polySize.begin() ; itPoly != polySize.end() ; ++itPoly)
     {
-    ofs << itPoly->first << " : "<< itPoly->second << std::endl;
+    ofs << "feature " << itPoly->first << " = "<< itPoly->second << std::endl;
     }
 
   ofs.close();

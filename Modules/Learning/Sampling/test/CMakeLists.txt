@@ -15,6 +15,9 @@ otb_add_test(NAME leTuOGRDataToClassStatisticsFilterNew COMMAND otbSamplingTestD
   otbOGRDataToClassStatisticsFilterNew )
 
 otb_add_test(NAME leTvOGRDataToClassStatisticsFilter COMMAND otbSamplingTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/leTvOGRDataToClassStatisticsFilterOutput.txt
+  ${TEMP}/leTvOGRDataToClassStatisticsFilterOutput.txt
   otbOGRDataToClassStatisticsFilter
   ${INPUTDATA}/variousVectors.sqlite
   ${TEMP}/leTvOGRDataToClassStatisticsFilterOutput.txt)
