@@ -85,6 +85,9 @@ public:
 
   itkSetMacro(FieldName, std::string);
   itkGetMacro(FieldName, std::string);
+  
+  itkSetMacro(LayerIndex, int);
+  itkGetMacro(LayerIndex, int);
 
   // TODO: store the class count map as output #2
   const ClassCountObjectType* GetClassCountOutput() const;
@@ -109,10 +112,11 @@ protected:
 
   virtual void GenerateInputRequestedRegion();
 
-  virtual void BeforeThreadedGenerateData();
+  //virtual void BeforeThreadedGenerateData();
 
-  virtual void ThreadedGenerateData(const RegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId);
+  //virtual void ThreadedGenerateData(const RegionType& outputRegionForThread,
+  //                                  itk::ThreadIdType threadId);
+  virtual void GenerateData();
 
 private:
   PersistentOGRDataToClassStatisticsFilter(const Self &); //purposely not implemented
@@ -120,14 +124,14 @@ private:
 
   void ApplyPolygonsSpatialFilter();
 
-  RegionType FeatureBoundingRegion(const TInputImage* image, const otb::ogr::Feature& feature) const;
+  RegionType FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const;
 
   std::string m_FieldName;
 
-  std::vector<PolygonClassStatisticsAccumulator::Pointer> m_TemporaryStats;
+  PolygonClassStatisticsAccumulator::Pointer m_TemporaryStats;
 
   // Layer to use in the shape file, default to 0
-  vcl_size_t m_layerIndex;
+  int m_LayerIndex;
 };
 
 /**
@@ -179,6 +183,9 @@ public:
 
   void SetFieldName(std::string &key);
   std::string GetFieldName();
+  
+  void SetLayerIndex(int index);
+  int GetLayerIndex();
 
   const ClassCountObjectType* GetClassCountOutput() const;
   ClassCountObjectType* GetClassCountOutput();

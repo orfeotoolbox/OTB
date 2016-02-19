@@ -18,7 +18,9 @@
 #ifndef __otbOGRDataToClassStatisticsFilter_txx
 #define __otbOGRDataToClassStatisticsFilter_txx
 
-// #include "otbMaskedIteratorDecorator.h"
+#include "otbMaskedIteratorDecorator.h"
+#include "itkImageRegionConstIteratorWithOnlyIndex.h"
+#include "itkImageRegionConstIterator.h"
 
 namespace otb
 {
@@ -27,8 +29,12 @@ namespace otb
 template<class TInputImage, class TMaskImage>
 PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 ::PersistentOGRDataToClassStatisticsFilter() :
-  m_layerIndex(0)
+  m_LayerIndex(0)
 {
+  this->SetNumberOfRequiredOutputs(3);
+  this->SetNthOutput(0,TInputImage::New());
+  this->SetNthOutput(1,ClassCountObjectType::New());
+  this->SetNthOutput(2,PolygonSizeObjectType::New());
 }
 
 template<class TInputImage, class TMaskImage>
@@ -77,7 +83,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 ::Synthetize(void)
 {
   otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetOGRData());
-  vectors->GetLayer(m_layerIndex).SetSpatialFilter(NULL);
+  vectors->GetLayer(m_LayerIndex).SetSpatialFilter(NULL);
   
   ClassCountMapType &classCount = this->GetClassCountOutput()->Get();
   PolygonSizeMapType &polygonSize = this->GetPolygonSizeOutput()->Get();
@@ -85,36 +91,9 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
   // Reset outputs
   classCount.clear();
   polygonSize.clear();
-  
-  std::vector<PolygonClassStatisticsAccumulator::Pointer>::iterator it = m_TemporaryStats.begin();
-  for (; it != m_TemporaryStats.end(); it++)
-    {
-    const ClassCountMapType &tempClassCount = (*it)->GetClassCountMap();
-    const PolygonSizeMapType &tempPolygonSize = (*it)->GetPolygonSizeMap();
-    
-    ClassCountMapType::const_iterator itClass = tempClassCount.begin();
-    for (; itClass != tempClassCount.end(); itClass++)
-      {
-      if (classCount.count(itClass->first) == 0)
-        {
-        classCount[itClass->first] = 0UL;
-        }
-      classCount[itClass->first] += itClass->second;
-      }
-    
-    PolygonSizeMapType::const_iterator itPoly = tempPolygonSize.begin();
-    for (; itPoly != tempPolygonSize.end() ; itPoly++)
-      {
-      if (polygonSize.count(itPoly->first) == 0)
-        {
-        polygonSize[itPoly->first] = 0UL;
-        }
-      polygonSize[itPoly->first] += itPoly->second;
-      }
-    
-    }
-  // TODO : gather stats
-
+  // Copy temporary stats to outputs
+  classCount = m_TemporaryStats->GetClassCountMap();
+  polygonSize = m_TemporaryStats->GetPolygonSizeMap();
 }
 
 template<class TInputImage, class TMaskImage>
@@ -122,11 +101,9 @@ void
 PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 ::Reset(void)
 {
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
-
   // Get OGR field index
   const otb::ogr::DataSource* vectors = this->GetOGRData();
-  otb::ogr::Layer::const_iterator featIt = vectors->GetLayer(m_layerIndex).begin();
+  otb::ogr::Layer::const_iterator featIt = vectors->GetLayer(m_LayerIndex).begin();
   int fieldIndex = featIt->ogr().GetFieldIndex(this->m_FieldName.c_str());
   if (fieldIndex < 0)
     {
@@ -134,13 +111,15 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
     }
 
   // Reset list of individual containers
-  m_TemporaryStats = std::vector<PolygonClassStatisticsAccumulator::Pointer>(numberOfThreads);
-  std::vector<PolygonClassStatisticsAccumulator::Pointer>::iterator it = m_TemporaryStats.begin();
-  for (; it != m_TemporaryStats.end(); it++)
-  {
-    *it = PolygonClassStatisticsAccumulator::New();
-    (*it)->SetFieldIndex(fieldIndex);
-  }
+  //m_TemporaryStats = std::vector<PolygonClassStatisticsAccumulator::Pointer>(numberOfThreads);
+  //std::vector<PolygonClassStatisticsAccumulator::Pointer>::iterator it = m_TemporaryStats.begin();
+  //for (; it != m_TemporaryStats.end(); it++)
+  //{
+    //*it = PolygonClassStatisticsAccumulator::New();
+    //(*it)->SetFieldIndex(fieldIndex);
+  //}
+  m_TemporaryStats = PolygonClassStatisticsAccumulator::New();
+  m_TemporaryStats->SetFieldIndex(fieldIndex);
 }
 
 template<class TInputImage, class TMaskImage>
@@ -219,6 +198,8 @@ void
 PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 ::GenerateOutputInformation()
 {
+  Superclass::GenerateOutputInformation();
+  
   const MaskImageType *mask = this->GetMask();
   if (mask)
     {
@@ -252,54 +233,49 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
     }
 }
 
-template<class TInputImage, class TMaskImage>
-void
-PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
-::BeforeThreadedGenerateData()
-{
-  this->ApplyPolygonsSpatialFilter();
-}
+//template<class TInputImage, class TMaskImage>
+//void
+//PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
+//::BeforeThreadedGenerateData()
+//{
+  //this->ApplyPolygonsSpatialFilter();
+//}
 
 template<class TInputImage, class TMaskImage>
 void
 PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
-::ThreadedGenerateData(const RegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
+//::ThreadedGenerateData(const RegionType& outputRegionForThread,
+//                       itk::ThreadIdType threadId)
+::GenerateData()
 {
   // Retrieve inputs
-  const TInputImage* inputImage = this->GetInput();
-  const TMaskImage* mask = this->GetMask();
+  TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
+  TInputImage* outputImage = this->GetOutput();
+  TMaskImage* mask = const_cast<TMaskImage*>(this->GetMask());
   const otb::ogr::DataSource* vectors = this->GetOGRData();
   PointType point;
+  RegionType requestedRegion =outputImage->GetRequestedRegion();
+  
+  this->ApplyPolygonsSpatialFilter();
+  
+  ogr::Layer layer = vectors->GetLayer(m_LayerIndex);
 
   // Loop across the features in the layer (filtered by requested region in BeforeTGD already)
-  otb::ogr::Layer::const_iterator featIt = vectors->GetLayer(m_layerIndex).begin(); 
-  for(; featIt!=vectors->GetLayer(m_layerIndex).end(); featIt++)
+  otb::ogr::Layer::const_iterator featIt = layer.begin(); 
+  for(; featIt!=layer.end(); ++featIt)
     {
     // Compute the intersection of thread region and polygon bounding region, called "considered region"
     // This need not be done in ThreadedGenerateData and could be pre-processed and cached before filter execution if needed
-    RegionType consideredRegion = FeatureBoundingRegion(inputImage, *featIt);
-    bool regionNotEmpty = consideredRegion.Crop(outputRegionForThread);
-
+    RegionType consideredRegion = FeatureBoundingRegion(inputImage, featIt);
+    bool regionNotEmpty = consideredRegion.Crop(requestedRegion);
     if (regionNotEmpty)
       {
-      if (mask)
-        {
-        // use MaskedIteratorDecorator
         // For pixels in consideredRegion and not masked
-        //otb::MaskedIteratorDecorator<itk::ImageRegionIterator<TInputImage> > it(m_mask, inputImage, consideredRegion);
-        //for (it.GoToBegin(); !it.IsAtEnd(); ++it)
-        //{
-        // inputImage->TransformIndexToPhysicalPoint(it.GetIndex(), point);
-          // // add to thread statistics
-          //m_TemporaryStats[threadId]->Add(featIt, point, currentClass);
-        // }
-        }
-      else
-        {
-        // use an iterator without data
-        // TODO
-        }
+        typedef otb::MaskedIteratorDecorator<
+          itk::ImageRegionConstIterator<TInputImage>,
+          itk::ImageRegionConstIterator<TMaskImage> > MaskedIteratorType;
+        MaskedIteratorType it(mask, inputImage, consideredRegion);
+        m_TemporaryStats->Add<MaskedIteratorType>(featIt, it);
       }
     }
 }
@@ -321,7 +297,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
   outputImage->TransformIndexToPhysicalPoint(startIndex, startPoint);
   outputImage->TransformIndexToPhysicalPoint(endIndex, endPoint);
 
-  vectors->GetLayer(m_layerIndex).SetSpatialFilterRect(
+  vectors->GetLayer(m_LayerIndex).SetSpatialFilterRect(
     std::min(startPoint[0],endPoint[0]),
     std::min(startPoint[1],endPoint[1]),
     std::max(startPoint[0],endPoint[0]),
@@ -331,11 +307,11 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 typename PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>::RegionType
 PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
-::FeatureBoundingRegion(const TInputImage* image, const otb::ogr::Feature& feature) const
+::FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const
 {
   // otb::ogr wrapper is incomplete and leaky abstraction is inevitable here
   OGREnvelope envelope;
-  feature.GetGeometry()->getEnvelope(&envelope);
+  featIt->GetGeometry()->getEnvelope(&envelope);
   itk::Point<double, 2> lowerPoint, upperPoint;
   lowerPoint[0] = envelope.MinX;
   lowerPoint[1] = envelope.MinY;
@@ -433,6 +409,22 @@ OGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 ::GetFieldName()
 {
   return this->GetFilter()->GetFieldName();
+}
+
+template<class TInputImage, class TMaskImage>
+void
+OGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
+::SetLayerIndex(int index)
+{
+  this->GetFilter()->SetLayerIndex(index);
+}
+
+template<class TInputImage, class TMaskImage>
+int
+OGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
+::GetLayerIndex()
+{
+  return this->GetFilter()->GetLayerIndex();
 }
 
 template<class TInputImage, class TMaskImage>
