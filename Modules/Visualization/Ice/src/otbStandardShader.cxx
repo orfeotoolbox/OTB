@@ -199,6 +199,12 @@ void StandardShader::SetupShader()
   GLint shader_type = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_type");
   glUniform1i(shader_type,m_ShaderType);
 
+  std::cout
+    << "r: " << m_ImageSettings->GetCurrentRed()
+    << " g: " << m_ImageSettings->GetCurrentGreen()
+    << " b: " << m_ImageSettings->GetCurrentBlue()
+    << std::endl;
+
   GLint shader_current = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_current");
   glUniform3f(
     shader_current,
