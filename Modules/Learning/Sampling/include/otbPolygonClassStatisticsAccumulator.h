@@ -81,4 +81,8 @@ private:
 
 } // end of namespace otb
 
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbPolygonClassStatisticsAccumulator.txx"
+#endif
+
 #endif
