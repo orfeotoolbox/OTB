@@ -1127,6 +1127,11 @@ ImageViewRenderer
 	{
 	assert( it->m_Pixel.Size()>0 );
 
+	qDebug()
+	  << "R:" << it->m_Pixel[ 0 ]
+	  << "G:" << it->m_Pixel[ 1 ]
+	  << "B:" << it->m_Pixel[ 2 ];
+
 	imageSettings->SetCurrentRed( it->m_Pixel[ 0 ] );
 	imageSettings->SetCurrentGreen( it->m_Pixel[ 1 ] );
 	imageSettings->SetCurrentBlue( it->m_Pixel[ 2 ] );
