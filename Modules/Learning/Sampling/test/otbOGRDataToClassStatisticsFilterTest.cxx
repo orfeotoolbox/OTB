@@ -19,6 +19,7 @@
 #include "otbOGRDataToClassStatisticsFilter.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
+#include <fstream>
 
 int otbOGRDataToClassStatisticsFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
@@ -48,11 +49,15 @@ int otbOGRDataToClassStatisticsFilter(int argc, char* argv[])
   otb::ogr::DataSource::Pointer vectors = otb::ogr::DataSource::New(vectorPath);
   
   InputImageType::RegionType region;
-  region.SetSize(0,100);
+  region.SetSize(0,99);
   region.SetSize(1,50);
   
   InputImageType::PointType origin;
   origin.Fill(0.5);
+  
+  InputImageType::SpacingType spacing;
+  spacing[0] = 1.0;
+  spacing[1] = -1.0;
   
   InputImageType::PixelType pixel(3);
   pixel.Fill(1);
@@ -61,12 +66,14 @@ int otbOGRDataToClassStatisticsFilter(int argc, char* argv[])
   inputImage->SetNumberOfComponentsPerPixel(3);
   inputImage->SetRegions(region);
   inputImage->SetOrigin(origin);
+  inputImage->SetSpacing(spacing);
   inputImage->Allocate();
   inputImage->FillBuffer(pixel);
   
   MaskImageType::Pointer mask = MaskImageType::New();
   mask->SetRegions(region);
   mask->SetOrigin(origin);
+  mask->SetSpacing(spacing);
   mask->Allocate();
   itk::ImageRegionIterator<MaskImageType> it(mask,region);
   unsigned int count = 0;
@@ -82,15 +89,59 @@ int otbOGRDataToClassStatisticsFilter(int argc, char* argv[])
   filter->SetMask(mask);
   filter->SetOGRData(vectors);
   filter->SetFieldName(fieldName);
+  filter->SetLayerIndex(0);
   
   filter->Update();
   
   FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get();
   FilterType::PolygonSizeMapType &polySize = filter->GetPolygonSizeOutput()->Get();
+  FilterType::ClassCountMapType::const_iterator itClass;
+  FilterType::PolygonSizeMapType::const_iterator itPoly;
   
-  FilterType::ClassCountMapType::const_iterator itClass = classCount.begin();
+  std::ofstream ofs;
+  ofs.open(outputPath.c_str());
+  ofs << "# Layer 0 : polygons"<<std::endl;
+  ofs << "# Class statistics ( label : sampleCount)"<<std::endl;
+  for (itClass = classCount.begin(); itClass != classCount.end() ; ++itClass)
+    {
+    ofs << itClass->first << " : "<< itClass->second << std::endl;
+    }
+  ofs << "# Vector sizes ( featureId : sampleCount)"<<std::endl;
+  for (itPoly = polySize.begin() ; itPoly != polySize.end() ; ++itPoly)
+    {
+    ofs << itPoly->first << " : "<< itPoly->second << std::endl;
+    }
   
+  filter->SetLayerIndex(1);
+  filter->Update();
   
-  std::cout << filter << std::endl;
+  ofs << "# Layer 1 : lines"<<std::endl;
+  ofs << "# Class statistics ( label : sampleCount)"<<std::endl;
+  for (itClass = classCount.begin() ; itClass != classCount.end() ; ++itClass)
+    {
+    ofs << itClass->first << " : "<< itClass->second << std::endl;
+    }
+  ofs << "# Vector sizes ( featureId : sampleCount)"<<std::endl;
+  for (itPoly = polySize.begin() ; itPoly != polySize.end() ; ++itPoly)
+    {
+    ofs << itPoly->first << " : "<< itPoly->second << std::endl;
+    }
+  
+  filter->SetLayerIndex(2);
+  filter->Update();
+  
+  ofs << "# Layer 2 : points"<<std::endl;
+  ofs << "# Class statistics ( label : sampleCount)"<<std::endl;
+  for (itClass = classCount.begin(); itClass != classCount.end() ; ++itClass)
+    {
+    ofs << itClass->first << " : "<< itClass->second << std::endl;
+    }
+  ofs << "# Vector sizes ( featureId : sampleCount)"<<std::endl;
+  for (itPoly = polySize.begin() ; itPoly != polySize.end() ; ++itPoly)
+    {
+    ofs << itPoly->first << " : "<< itPoly->second << std::endl;
+    }
+
+  ofs.close();
   return EXIT_SUCCESS;
 }
