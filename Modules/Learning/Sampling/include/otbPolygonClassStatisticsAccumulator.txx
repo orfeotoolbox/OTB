@@ -43,12 +43,25 @@ PolygonClassStatisticsAccumulator
     {
     m_Polygon[featureId] = 0UL;
     }
+  
+  this->AddGeometry(featIt->ogr().GetGeometryRef(),
+                    imgIt,
+                    featureId,
+                    className);
+}
 
+template <typename TIterator>
+void
+PolygonClassStatisticsAccumulator
+::AddGeometry(OGRGeometry *geom,
+              TIterator& imgIt,
+              unsigned long &fId,
+              std::string &className)
+{
   typename TIterator::ImageType::PointType imgPoint;
   typename TIterator::IndexType imgIndex;
   OGRPoint tmpPoint(0.0,0.0,0.0);
   imgIt.GoToBegin();
-  OGRGeometry * geom = featIt->ogr().GetGeometryRef();
   switch (geom->getGeometryType())
     {
     case wkbPoint:
@@ -69,7 +82,7 @@ PolygonClassStatisticsAccumulator
           {
           m_NbPixelsGlobal++;
           m_ElmtsInClass[className]++;
-          m_Polygon[featureId]++;
+          m_Polygon[fId]++;
           break;
           }
         }
@@ -93,23 +106,23 @@ PolygonClassStatisticsAccumulator
       while (!imgIt.IsAtEnd())
         {
         imgIt.GetImageIterator().GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
-        ring.setPoint(0
+        tmpPolygon.getExteriorRing()->setPoint(0
           ,imgPoint[0]-0.5*imgAbsSpacing[0]
           ,imgPoint[1]-0.5*imgAbsSpacing[1]
           ,0.0);
-        ring.setPoint(1
+        tmpPolygon.getExteriorRing()->setPoint(1
           ,imgPoint[0]+0.5*imgAbsSpacing[0]
           ,imgPoint[1]-0.5*imgAbsSpacing[1]
           ,0.0);
-        ring.setPoint(2
+        tmpPolygon.getExteriorRing()->setPoint(2
           ,imgPoint[0]+0.5*imgAbsSpacing[0]
           ,imgPoint[1]+0.5*imgAbsSpacing[1]
           ,0.0);
-        ring.setPoint(3
+        tmpPolygon.getExteriorRing()->setPoint(3
           ,imgPoint[0]-0.5*imgAbsSpacing[0]
           ,imgPoint[1]+0.5*imgAbsSpacing[1]
           ,0.0);
-        ring.setPoint(4
+        tmpPolygon.getExteriorRing()->setPoint(4
           ,imgPoint[0]-0.5*imgAbsSpacing[0]
           ,imgPoint[1]-0.5*imgAbsSpacing[1]
           ,0.0);
@@ -117,7 +130,7 @@ PolygonClassStatisticsAccumulator
           {
           m_NbPixelsGlobal++;
           m_ElmtsInClass[className]++;
-          m_Polygon[featureId]++;
+          m_Polygon[fId]++;
           }
         ++imgIt;
         }
@@ -135,7 +148,7 @@ PolygonClassStatisticsAccumulator
           {
           m_NbPixelsGlobal++;
           m_ElmtsInClass[className]++;
-          m_Polygon[featureId]++;
+          m_Polygon[fId]++;
           }
         ++imgIt;
         }
@@ -150,7 +163,22 @@ PolygonClassStatisticsAccumulator
     case wkbGeometryCollection:
     case wkbGeometryCollection25D:
       {
-      otbWarningMacro("Geometry not handled: " << geom->getGeometryName());
+      OGRGeometryCollection *geomCollection = dynamic_cast<OGRGeometryCollection*>(geom);
+      if (geomCollection)
+        {
+        int nbGeom =  geomCollection->getNumGeometries();
+        for (unsigned int i=0 ; i < nbGeom ; ++i)
+          {
+          this->AddGeometry(geomCollection->getGeometryRef(i),
+                            imgIt,
+                            fId,
+                            className);
+          }
+        }
+      else
+        {
+        otbWarningMacro("Geometry not recognized as a collection : " << geom->getGeometryName());
+        }
       break;
       }
     default:

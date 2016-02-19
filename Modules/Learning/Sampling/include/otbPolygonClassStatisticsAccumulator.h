@@ -73,6 +73,12 @@ private:
   PolygonSizeMapType m_Polygon;  // check the feature id
   
   int m_FieldIndex;
+  
+  template <typename TIterator>
+  void AddGeometry(OGRGeometry *geom,
+                   TIterator& imgIt,
+                   unsigned long &fId,
+                   std::string &className);
 
   // Not implemented
   PolygonClassStatisticsAccumulator(const Self&);
