@@ -220,11 +220,13 @@ ImageViewRenderer
   // Warn user is check has failed.
   qWarning() << ToStdString( message ).c_str();
 
+#if 0
   QMessageBox::critical(
     qobject_cast< QWidget* >( parent() ),
     tr( "Critical error!" ),
     message
   );
+#endif
 
   //
   // KO.
