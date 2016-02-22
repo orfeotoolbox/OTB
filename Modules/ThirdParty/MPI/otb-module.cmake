@@ -8,3 +8,5 @@ otb_module(OTBMPI
   DESCRIPTION
     "${DOCUMENTATION}"
   )
+
+otb_module_activation_option("Enable MPI dependent modules" ON)
