@@ -18,6 +18,7 @@
 
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperParameter.h"
+#include "otbWrapperChoiceParameter.h"
 #include "itksys/SystemTools.hxx"
 
 
@@ -69,13 +70,38 @@ int main(int argc, char* argv[])
     ofs << "      return 0" << std::endl;
     ofs << "      ;;" << std::endl;
     ofs << "  esac" << std::endl;
-  
-  //case "$prev" in
-    //-type)
-    //key_list="none linear log2"
-    //COMPREPLY=( $( compgen -W '$key_list' -- $cur) )
-    //;;
-  //esac
+
+    // detect choice parameters
+    std::vector<std::string> choiceKeys;
+    for (unsigned int k=0 ; k < keys.size() ; k++ )
+      {
+      if ( appPtr->GetParameterType(keys[k]) == otb::Wrapper::ParameterType_Choice)
+        {
+        choiceKeys.push_back(keys[k]);
+        }
+      }
+    if (choiceKeys.size())
+      {
+      ofs << "  case \"$prev\" in" << std::endl;
+      for (unsigned int k=0 ; k < choiceKeys.size() ; k++)
+        {
+        ofs << "    -" << choiceKeys[k] << ")" << std::endl;
+        ofs << "      key_list=\"";
+        std::vector<std::string> choices = dynamic_cast<otb::Wrapper::ChoiceParameter*>(appPtr->GetParameterByKey(choiceKeys[k]))->GetChoiceKeys();
+        for (unsigned int j=0 ; j < choices.size() ; j++)
+          {
+          ofs << choices[j];
+          if (j+1 < choices.size() )
+            {
+            ofs << " ";
+            }
+          }
+        ofs << "\"" << std::endl;
+        ofs << "      COMPREPLY=( $( compgen -W '$key_list' -- $cur) )" << std::endl;
+        ofs << "      ;;" << std::endl;
+        }
+      ofs << "  esac" << std::endl;
+      }
 
     ofs << "  return 0" << std::endl;
     ofs << "}" << std::endl;
