@@ -1,6 +1,6 @@
-set(DOCUMENTATION "This module contains MPI mappers")
+set(DOCUMENTATION "This module contains MPI sources and mappers")
 
-otb_module(OTBMPIMappers
+otb_module(MPIImageIO
   DEPENDS
     OTBSPTW
     OTBCommon
