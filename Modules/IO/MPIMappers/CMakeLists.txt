@@ -1,2 +1,2 @@
-project(OTBIOMPI)
+project(OTBMPIMappers)
 otb_module_impl()

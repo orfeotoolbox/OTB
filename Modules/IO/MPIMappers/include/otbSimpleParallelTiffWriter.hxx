@@ -37,7 +37,7 @@
 // SPTW
 #include <algorithm>
 #include <vector>
-#include "sptw.h"
+#include <SPTW/sptw.h>
 
 // GDAL-OTB datatype brigde
 #include "otbGdalDataTypeBridge.h"
