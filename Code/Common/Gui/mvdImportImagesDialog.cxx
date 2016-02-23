@@ -55,6 +55,28 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
+namespace
+{
+/**
+ */
+enum Columns
+{
+  COLUMN_NONE = -1,
+  //
+  COLUMN_FILENAME = 0,
+  //
+  COLUMN_COUNT,
+};
+
+
+const char * const
+HEADERS[ COLUMN_COUNT ] =
+{
+  QT_TRANSLATE_NOOP( "mvd::ImportImagesDialog", "Filename" ),
+};
+
+} // end of anonymous namespace.
+
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -74,10 +96,10 @@ ImportImagesDialog
   m_UI->setupUi( this );
 
   {
-  QItemSelectionModel * ism = m_UI->filenamesListView->selectionModel();
+  QItemSelectionModel * ism = m_UI->filenamesTreeView->selectionModel();
 
-  m_UI->filenamesListView->setModel(
-    new QStandardItemModel( m_UI->filenamesListView )
+  m_UI->filenamesTreeView->setModel(
+    new QStandardItemModel( 0, COLUMN_COUNT, m_UI->filenamesTreeView )
   );
 
   delete ism;
@@ -85,7 +107,7 @@ ImportImagesDialog
   }
 
   QObject::connect(
-    m_UI->filenamesListView->selectionModel(),
+    m_UI->filenamesTreeView->selectionModel(),
     SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ),
     // to:
     this,
@@ -125,16 +147,18 @@ ImportImagesDialog
 ::SetFilenames( const QStringList & filenames )
 {
   assert( m_UI!=NULL );
-  assert( m_UI->filenamesListView!=NULL );
+  assert( m_UI->filenamesTreeView!=NULL );
 
   m_GDALOverviewsBuilders.resize( filenames.size()  );
 
   QStandardItemModel * itemModel =
-    qobject_cast< QStandardItemModel * >( m_UI->filenamesListView->model() );
+    qobject_cast< QStandardItemModel * >( m_UI->filenamesTreeView->model() );
 
   assert( itemModel!=NULL );
 
   itemModel->clear();
+
+  SetHeaders();
 
   m_EffectiveCount = 0;
 
@@ -193,6 +217,59 @@ ImportImagesDialog
 }
 
 /*****************************************************************************/
+void
+ImportImagesDialog
+::SetHeaders()
+{
+  assert( m_UI!=NULL );
+  assert(
+    m_UI->filenamesTreeView->model()==
+    qobject_cast< QStandardItemModel * >( m_UI->filenamesTreeView->model() )
+  );
+
+  QStandardItemModel * model =
+    qobject_cast< QStandardItemModel * >( m_UI->filenamesTreeView->model() );
+
+  assert( model!=NULL );
+
+  for( int i=0; i<COLUMN_COUNT; ++i )
+    {
+    qDebug() <<
+      qApp->translate(
+	"mvd::ImportImagesDialog",
+	HEADERS[ i ]
+      );
+
+    // labels <<
+    //   qApp->translate(
+    // 	"mvd::ImportImagesDialog",
+    // 	HEADERS[ i ]
+    //   );
+
+    // model->horizontalHeaderItem( i )->setText(
+    //   qApp->translate(
+    // 	"mvd::ImportImagesDialog",
+    // 	HEADERS[ i ]
+    //   )
+    // );
+
+    model->setHorizontalHeaderItem(
+      i,
+      new QStandardItem(
+    	qApp->translate(
+    	  "mvd::ImportImagesDialog",
+    	  HEADERS[ i ]
+    	)
+      )
+    );
+    }
+
+  // qDebug() << labels;
+
+  // model->setHorizontalHeaderLabels( labels );
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
@@ -203,7 +280,7 @@ ImportImagesDialog
 
   // const QStandardItemModel * itemModel =
   //   qobject_cast< const QStandardItemModel * >(
-  //     m_UI->filenamesListView->model()
+  //     m_UI->filenamesTreeView->model()
   //   );
 
   // assert( itemModel!=NULL );

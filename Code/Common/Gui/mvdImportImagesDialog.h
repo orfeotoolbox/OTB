@@ -136,11 +136,18 @@ protected:
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
+// Private types
+private:
+
+//
 // Private methods.
 private:
   /**
    */
   void SetFilenames( const QStringList & );
+  /**
+   */
+  void SetHeaders();
 
 //
 // Private attributes.
