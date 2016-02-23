@@ -21,6 +21,16 @@
 #include "otbWrapperChoiceParameter.h"
 #include "itksys/SystemTools.hxx"
 
+/**
+ * Small executable to :
+ *  - find available application
+ *  - get list of parameters
+ *  - and fill a bash completion script
+ *
+ * This script can be sourced to be used, or deployed into a folder such as
+ *    /etc/bash_completion.d
+ * For choice parameters, the completion will propose the available choices
+ */
 
 int main(int argc, char* argv[])
 {
