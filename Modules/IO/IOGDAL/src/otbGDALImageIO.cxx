@@ -442,13 +442,27 @@ bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector
   papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
 
   std::cout << m_Dataset->GetDataSet()->GetDriver()->GetDescription() << std::endl;
+  
+#ifdef OTB_USE_GDAL_20
+  if (m_Dataset->GetDataSet()->TestCapability("DMD_SUBDATASETS") == 0)
+    {
+    // DEBUG
+    std::cout << "Capability test failed" << std::endl;
+    return false;
+    }
+#endif
+
+  // Don't report subdataset for RS2 as the useful products are in the base dataset
+  if (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"RS2") == 0)
+    {
+    // DEBUG
+    std::cout << "Don't expose RS2 subdatasets" << std::endl;
+    return false;
+    }
 
   // Have we find some dataSet ?
   // This feature is supported only for hdf4 and hdf5 file (regards to the bug 270)
-  if ( (CSLCount(papszMetadata) > 0) &&
-       ( (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF4") == 0) ||
-         (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF5") == 0) ||
-	 (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"SENTINEL2") == 0) ) )
+  if ( CSLCount(papszMetadata) > 0 )
     {
     for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
       {
