@@ -784,14 +784,14 @@ GlImageActor
 	    IndexType & index ) const
 {
 
-  std::cout << std::endl;
+  // std::cout << std::endl;
 
-  std::cout << "O: (" << m_Origin[ 0 ] << ", " << m_Origin[ 1 ] << ")";
-  std::cout << "\tS: (" << m_Spacing[ 1 ] << ", " << m_Spacing[ 1 ] << ")";
-  std::cout << std::endl;
+  // std::cout << "O: (" << m_Origin[ 0 ] << ", " << m_Origin[ 1 ] << ")";
+  // std::cout << "\tS: (" << m_Spacing[ 1 ] << ", " << m_Spacing[ 1 ] << ")";
+  // std::cout << std::endl;
 
-  std::cout << "P: (" << physical[ 0 ] << ", " << physical[ 1 ] << ")";
-  std::cout << std::endl;
+  // std::cout << "P: (" << physical[ 0 ] << ", " << physical[ 1 ] << ")";
+  // std::cout << std::endl;
 
   // First, we need to return index in full img (not in overviews)
 #if 0
@@ -813,37 +813,37 @@ GlImageActor
 
 #endif
 
-  std::cout << "I: (" << index[ 0 ] << ", " << index[ 1 ] << ")";
-  std::cout
-    << "\tI: ("
-    << ( ( physical[ 0 ] - m_Origin[ 0 ] ) / m_Spacing[ 0 ] )
-    << ", "
-    << ( ( physical[ 1 ] - m_Origin[ 1 ] ) / m_Spacing[ 1 ] )
-    << ")";
-  std::cout << std::endl;
+  // std::cout << "I: (" << index[ 0 ] << ", " << index[ 1 ] << ")";
+  // std::cout
+  //   << "\tI: ("
+  //   << ( ( physical[ 0 ] - m_Origin[ 0 ] ) / m_Spacing[ 0 ] )
+  //   << ", "
+  //   << ( ( physical[ 1 ] - m_Origin[ 1 ] ) / m_Spacing[ 1 ] )
+  //   << ")";
+  // std::cout << std::endl;
 
   // Then, we need to find the index in the currently loaded overview
   IndexType ovrIndex;
   m_FileReader->GetOutput()->TransformPhysicalPointToIndex( physical, ovrIndex );
 
-  std::cout << "O: (" << ovrIndex[ 0 ] << ", " << ovrIndex[ 1 ] << ")";
-  std::cout << std::endl;
+  // std::cout << "O: (" << ovrIndex[ 0 ] << ", " << ovrIndex[ 1 ] << ")";
+  // std::cout << std::endl;
 
   // And look it up in loaded tiles
   for (TileVectorType::const_iterator it = m_LoadedTiles.begin();
        it!=m_LoadedTiles.end();
        ++it)
     {
-    std::cout
-      << "R: ("
-      << it->m_ImageRegion.GetIndex()[ 0 ]
-      << ", "
-      << it->m_ImageRegion.GetIndex()[ 1 ]
-      << ")-("
-      << it->m_ImageRegion.GetSize()[ 0 ]
-      << ", "
-      << it->m_ImageRegion.GetSize()[ 1 ]
-      << ")";
+    // std::cout
+    //   << "R: ("
+    //   << it->m_ImageRegion.GetIndex()[ 0 ]
+    //   << ", "
+    //   << it->m_ImageRegion.GetIndex()[ 1 ]
+    //   << ")-("
+    //   << it->m_ImageRegion.GetSize()[ 0 ]
+    //   << ", "
+    //   << it->m_ImageRegion.GetSize()[ 1 ]
+    //   << ")";
 
     if(it->m_ImageRegion.IsInside(ovrIndex))
       {
@@ -852,14 +852,14 @@ GlImageActor
       idx[ 0 ] = ovrIndex[ 0 ] - it->m_ImageRegion.GetIndex()[ 0 ];
       idx[ 1 ] = ovrIndex[ 1 ] - it->m_ImageRegion.GetIndex()[ 1 ];
 
-      std::cout << "\tIr: (" << idx[ 0 ] << ", " << idx[ 1 ] << ")";
+      // std::cout << "\tIr: (" << idx[ 0 ] << ", " << idx[ 1 ] << ")";
 
       pixel = it->m_Image->GetPixel( idx );
 
       return true;
       }
 
-    std::cout << std::endl;
+    // std::cout << std::endl;
     }
 
   return false;
