@@ -2,7 +2,7 @@ otb_module_test()
 
 set(OTBSamplingTests
 otbSamplingTestDriver.cxx
-#otbOGRDataToClassStatisticsFilterTest.cxx
+otbOGRDataToResampledOGRDataTest.cxx
 otbSamplingRateCalculatorTest.cxx
 )
 
@@ -41,12 +41,12 @@ otb_add_test(NAME leTuSamplingRateCalculatorSmallest COMMAND otbSamplingTestDriv
    )   
 
 
+otb_add_test(NAME leTvOGRDataToResampledOGRData COMMAND otbSamplingTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput.txt
+  ${TEMP}/leTvOGRDataToResampledOGRDataOutput.txt
+  otbOGRDataToResampledOGRData
+  ${INPUTDATA}/variousVectors.sqlite
+  ${TEMP}/leTvOGRDataToResampledOGRDataOutput.txt)
 
 
-#otb_add_test(NAME leTvOGRDataToClassStatisticsFilter COMMAND otbSamplingTestDriver
-#  --compare-ascii ${NOTOL}
-#  ${BASELINE_FILES}/leTvOGRDataToClassStatisticsFilterOutput.txt
-#  ${TEMP}/leTvOGRDataToClassStatisticsFilterOutput.txt
-#  otbOGRDataToClassStatisticsFilter
-#  ${INPUTDATA}/variousVectors.sqlite
-#  ${TEMP}/leTvOGRDataToClassStatisticsFilterOutput.txt)
