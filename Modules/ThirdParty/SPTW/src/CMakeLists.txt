@@ -5,8 +5,11 @@ set(OTB3P_INSTALL_LIBRARY_DIR "${OTBSPTW_INSTALL_LIBRARY_DIR}")
 set(OTB3P_INSTALL_ARCHIVE_DIR "${OTBSPTW_INSTALL_ARCHIVE_DIR}")
 
 set(OTBSPTW_MAIN_SRCS sptw.cc)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+
 add_library(otbSPTW ${OTBSPTW_MAIN_SRCS})
+target_link_libraries(otbSPTW)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 #Install TARGET & FILES for otb-lib
 if(OTB_LIBRARY_PROPERTIES)
@@ -26,3 +29,4 @@ install(TARGETS otbSPTW
   )
 
 otb_module_target( otbSPTW NO_INSTALL )
+
