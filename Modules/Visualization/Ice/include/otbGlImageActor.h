@@ -181,17 +181,9 @@ public:
   // otb::GlActor overloads.
   //
 
-  virtual bool TransformFromViewport( Point2f & out,
-                                      const Point2f & in,
-                                      bool isPhysical = true ) const;
-
   virtual bool TransformFromViewport( Point2d & out,
                                       const Point2d & in,
                                       bool isPhysical = true ) const;
-
-  virtual bool TransformToViewport( Point2f & out,
-                                    const Point2f & in,
-                                    bool isPhysical = true ) const;
 
   virtual bool TransformToViewport( Point2d & out,
                                     const Point2d & in,

@@ -783,19 +783,68 @@ GlImageActor
 	    PixelType & pixel,
 	    IndexType & index ) const
 {
+
+  // std::cout << std::endl;
+
+  // std::cout << "O: (" << m_Origin[ 0 ] << ", " << m_Origin[ 1 ] << ")";
+  // std::cout << "\tS: (" << m_Spacing[ 1 ] << ", " << m_Spacing[ 1 ] << ")";
+  // std::cout << std::endl;
+
+  // std::cout << "P: (" << physical[ 0 ] << ", " << physical[ 1 ] << ")";
+  // std::cout << std::endl;
+
   // First, we need to return index in full img (not in overviews)
+#if 0
   index[ 0 ] = static_cast<unsigned int>((physical[0]-m_Origin[0])/m_Spacing[0]);
   index[ 1 ] = static_cast<unsigned int>((physical[1]-m_Origin[1])/m_Spacing[1]);
+
+#else
+  index[ 0 ] =
+    static_cast< IndexType::IndexValueType >(
+      ( physical[ 0 ] - m_Origin[ 0 ] ) / 
+      m_Spacing[ 0 ]
+    );
+
+  index[ 1 ] =
+    static_cast< IndexType::IndexValueType >(
+      ( physical[ 1 ]-  m_Origin[ 1 ] ) /
+      m_Spacing[ 1 ]
+    );
+
+#endif
+
+  // std::cout << "I: (" << index[ 0 ] << ", " << index[ 1 ] << ")";
+  // std::cout
+  //   << "\tI: ("
+  //   << ( ( physical[ 0 ] - m_Origin[ 0 ] ) / m_Spacing[ 0 ] )
+  //   << ", "
+  //   << ( ( physical[ 1 ] - m_Origin[ 1 ] ) / m_Spacing[ 1 ] )
+  //   << ")";
+  // std::cout << std::endl;
 
   // Then, we need to find the index in the currently loaded overview
   IndexType ovrIndex;
   m_FileReader->GetOutput()->TransformPhysicalPointToIndex( physical, ovrIndex );
+
+  // std::cout << "O: (" << ovrIndex[ 0 ] << ", " << ovrIndex[ 1 ] << ")";
+  // std::cout << std::endl;
 
   // And look it up in loaded tiles
   for (TileVectorType::const_iterator it = m_LoadedTiles.begin();
        it!=m_LoadedTiles.end();
        ++it)
     {
+    // std::cout
+    //   << "R: ("
+    //   << it->m_ImageRegion.GetIndex()[ 0 ]
+    //   << ", "
+    //   << it->m_ImageRegion.GetIndex()[ 1 ]
+    //   << ")-("
+    //   << it->m_ImageRegion.GetSize()[ 0 ]
+    //   << ", "
+    //   << it->m_ImageRegion.GetSize()[ 1 ]
+    //   << ")";
+
     if(it->m_ImageRegion.IsInside(ovrIndex))
       {
       IndexType idx;
@@ -803,10 +852,14 @@ GlImageActor
       idx[ 0 ] = ovrIndex[ 0 ] - it->m_ImageRegion.GetIndex()[ 0 ];
       idx[ 1 ] = ovrIndex[ 1 ] - it->m_ImageRegion.GetIndex()[ 1 ];
 
+      // std::cout << "\tIr: (" << idx[ 0 ] << ", " << idx[ 1 ] << ")";
+
       pixel = it->m_Image->GetPixel( idx );
 
       return true;
       }
+
+    // std::cout << std::endl;
     }
 
   return false;
@@ -1086,41 +1139,11 @@ void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
 }
 
 
-
-bool
-GlImageActor
-::TransformFromViewport( Point2f & out,
-                         const Point2f & in,
-                         bool isPhysical ) const
-{
-  out = ViewportToImageTransform( in, isPhysical );
-
-  return true;
-}
-
-
 bool
 GlImageActor
 ::TransformFromViewport( Point2d & out,
                          const Point2d & in,
                          bool isPhysical ) const
-{
-  Point2f p;
-
-  if( !TransformFromViewport( p, Point2f( in ), isPhysical ) )
-    return false;
-
-  out = p;
-
-  return true;
-}
-
-
-bool
-GlImageActor
-::TransformToViewport( Point2f & out,
-                       const Point2f & in,
-                       bool isPhysical ) const
 {
   out = ViewportToImageTransform( in, isPhysical );
 
@@ -1134,12 +1157,7 @@ GlImageActor
                        const Point2d & in,
                        bool isPhysical ) const
 {
-  Point2f p;
-
-  if( !TransformToViewport( p, Point2f( in ), isPhysical ) )
-    return false;
-
-  out = p;
+  out = ViewportToImageTransform( in, isPhysical );
 
   return true;
 }
