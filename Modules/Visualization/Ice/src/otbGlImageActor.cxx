@@ -813,7 +813,7 @@ GlImageActor
 
 #endif
 
-  std::cout << " I: (" << index[ 0 ] << ", " << index[ 1 ] << ")";
+  std::cout << "I: (" << index[ 0 ] << ", " << index[ 1 ] << ")";
   std::cout
     << "\tI: ("
     << ( ( physical[ 0 ] - m_Origin[ 0 ] ) / m_Spacing[ 0 ] )
@@ -826,7 +826,7 @@ GlImageActor
   IndexType ovrIndex;
   m_FileReader->GetOutput()->TransformPhysicalPointToIndex( physical, ovrIndex );
 
-  std::cout << " O: (" << ovrIndex[ 0 ] << ", " << ovrIndex[ 1 ] << ")";
+  std::cout << "O: (" << ovrIndex[ 0 ] << ", " << ovrIndex[ 1 ] << ")";
   std::cout << std::endl;
 
   // And look it up in loaded tiles
@@ -835,7 +835,7 @@ GlImageActor
        ++it)
     {
     std::cout
-      << " R: ("
+      << "R: ("
       << it->m_ImageRegion.GetIndex()[ 0 ]
       << ", "
       << it->m_ImageRegion.GetIndex()[ 1 ]
