@@ -1139,41 +1139,11 @@ void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
 }
 
 
-
-bool
-GlImageActor
-::TransformFromViewport( Point2f & out,
-                         const Point2f & in,
-                         bool isPhysical ) const
-{
-  out = ViewportToImageTransform( in, isPhysical );
-
-  return true;
-}
-
-
 bool
 GlImageActor
 ::TransformFromViewport( Point2d & out,
                          const Point2d & in,
                          bool isPhysical ) const
-{
-  Point2f p;
-
-  if( !TransformFromViewport( p, Point2f( in ), isPhysical ) )
-    return false;
-
-  out = p;
-
-  return true;
-}
-
-
-bool
-GlImageActor
-::TransformToViewport( Point2f & out,
-                       const Point2f & in,
-                       bool isPhysical ) const
 {
   out = ViewportToImageTransform( in, isPhysical );
 
@@ -1187,12 +1157,7 @@ GlImageActor
                        const Point2d & in,
                        bool isPhysical ) const
 {
-  Point2f p;
-
-  if( !TransformToViewport( p, Point2f( in ), isPhysical ) )
-    return false;
-
-  out = p;
+  out = ViewportToImageTransform( in, isPhysical );
 
   return true;
 }

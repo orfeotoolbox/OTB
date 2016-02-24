@@ -43,6 +43,7 @@ GeoInterface
   return false;
 }
 
+#if 0
 
 bool
 GeoInterface
@@ -63,6 +64,7 @@ GeoInterface
   return true;
 }
 
+#endif
 
 bool
 GeoInterface
@@ -73,6 +75,8 @@ GeoInterface
   return false;
 }
 
+
+#if 0
 
 bool
 GeoInterface
@@ -93,6 +97,7 @@ GeoInterface
   return true;
 }
 
+#endif
 
 std::string
 GeoInterface
