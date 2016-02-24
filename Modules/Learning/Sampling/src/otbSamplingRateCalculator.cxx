@@ -272,6 +272,10 @@ SamplingRateCalculator
   if (file)
   {
      //file << m_RatesbyClass.str();
+     std::map<std::string, double>::iterator itRates = m_RatesbyClass.begin();
+     for(; itRates != m_RatesbyClass.end(); ++itRates)
+        file << itRates->first << " " << itRates->second << std::endl;
+     
      file.close();
   }
   else
