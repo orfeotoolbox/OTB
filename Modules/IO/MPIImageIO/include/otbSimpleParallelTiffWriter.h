@@ -10,6 +10,48 @@
 // Time probe
 #include "itkTimeProbe.h"
 
+#include "otbSimpleParallelTiffWriter.h"
+
+#include "itkImageFileWriter.h"
+
+#include "itkObjectFactoryBase.h"
+
+#include "itkImageRegionMultidimensionalSplitter.h"
+#include "otbImageIOFactory.h"
+
+#include "itkImageRegionIterator.h"
+
+#include "itkMetaDataObject.h"
+#include "otbImageKeywordlist.h"
+#include "otbMetaDataKey.h"
+
+#include "otbConfigure.h"
+
+#include "otbNumberOfDivisionsStrippedStreamingManager.h"
+#include "otbNumberOfDivisionsTiledStreamingManager.h"
+#include "otbNumberOfLinesStrippedStreamingManager.h"
+#include "otbRAMDrivenStrippedStreamingManager.h"
+#include "otbTileDimensionTiledStreamingManager.h"
+#include "otbRAMDrivenTiledStreamingManager.h"
+#include "otbRAMDrivenAdaptativeStreamingManager.h"
+
+#include <boost/foreach.hpp>
+#include <boost/tokenizer.hpp>
+#include <boost/algorithm/string.hpp>
+
+// GDAL
+#include <gdal.h>
+#include <ogr_spatialref.h>
+
+// SPTW
+#include <algorithm>
+#include <vector>
+//#include <SPTW/sptw.h>
+#include "sptw.h"
+
+// GDAL-OTB datatype brigde
+#include "otbGdalDataTypeBridge.h"
+
 namespace otb
 {
 
@@ -269,7 +311,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSimpleParallelTiffWriter.hxx"
+#include "otbSimpleParallelTiffWriter.txx"
 #endif
 
 #endif

@@ -1,46 +1,7 @@
-#ifndef __SimpleParallelTiffWriter_hxx
-#define __SimpleParallelTiffWriter_hxx
+#ifndef __SimpleParallelTiffWriter_txx
+#define __SimpleParallelTiffWriter_txx
 
-#include "otbSimpleParallelTiffWriter.h"
 
-#include "itkImageFileWriter.h"
-
-#include "itkObjectFactoryBase.h"
-
-#include "itkImageRegionMultidimensionalSplitter.h"
-#include "otbImageIOFactory.h"
-
-#include "itkImageRegionIterator.h"
-
-#include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
-#include "otbMetaDataKey.h"
-
-#include "otbConfigure.h"
-
-#include "otbNumberOfDivisionsStrippedStreamingManager.h"
-#include "otbNumberOfDivisionsTiledStreamingManager.h"
-#include "otbNumberOfLinesStrippedStreamingManager.h"
-#include "otbRAMDrivenStrippedStreamingManager.h"
-#include "otbTileDimensionTiledStreamingManager.h"
-#include "otbRAMDrivenTiledStreamingManager.h"
-#include "otbRAMDrivenAdaptativeStreamingManager.h"
-
-#include <boost/foreach.hpp>
-#include <boost/tokenizer.hpp>
-#include <boost/algorithm/string.hpp>
-
-// GDAL
-#include <gdal.h>
-#include <ogr_spatialref.h>
-
-// SPTW
-#include <algorithm>
-#include <vector>
-#include <SPTW/sptw.h>
-
-// GDAL-OTB datatype brigde
-#include "otbGdalDataTypeBridge.h"
 
 using std::vector;
 
