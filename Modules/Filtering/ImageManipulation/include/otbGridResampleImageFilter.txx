@@ -25,6 +25,7 @@
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 #include "itkImageScanlineIterator.h"
+#include "itkContinuousIndex.h"
 
 namespace otb
 {
@@ -125,8 +126,12 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
 
   typename TOutputImage::RegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
 
-  IndexType outULIndex,outLRIndex, inULIndex, inLRIndex;
+  IndexType outULIndex,outLRIndex;
 
+  typedef itk::ContinuousIndex<double,TInputImage::ImageDimension> ContinuousIndexType;
+  
+  ContinuousIndexType inULCIndex,inLRCIndex;
+ 
   // Get output image requested region corners as Index
   outULIndex = outputRequestedRegion.GetIndex();
   outLRIndex = outULIndex+outputRequestedRegion.GetSize();
@@ -139,24 +144,29 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
   outputPtr->TransformIndexToPhysicalPoint(outLRIndex,outLRPoint);
 
   // Transform to input image Index
-  inputPtr->TransformPhysicalPointToIndex(outULPoint,inULIndex);
-  inputPtr->TransformPhysicalPointToIndex(outLRPoint,inLRIndex);
+  inputPtr->TransformPhysicalPointToContinuousIndex(outULPoint,inULCIndex);
+  inputPtr->TransformPhysicalPointToContinuousIndex(outLRPoint,inLRCIndex);
 
   SizeType inSize;
-  
+  IndexType inULIndex,inLRIndex;
+   
   // Reorder index properly and compute size
   for(unsigned int dim = 0; dim < ImageDimension;++dim)
     {
-    if(inULIndex[dim] > inLRIndex[dim])
+    if(inULCIndex[dim] > inLRCIndex[dim])
       {
       // swap
-      typename IndexType::IndexValueType tmp(inULIndex[dim]);
-      inULIndex[dim]=inLRIndex[dim];
-      inLRIndex[dim]=tmp;
+      typename ContinuousIndexType::ValueType tmp(inULCIndex[dim]);
+      inULCIndex[dim]=inLRCIndex[dim];
+      inLRCIndex[dim]=tmp;
       }
 
-    inSize[dim] = static_cast<typename SizeType::SizeValueType>(inLRIndex[dim]-inULIndex[dim]);
+    // Ensure correct rounding of coordinates
+   
+    inULIndex[dim] = vcl_floor(inULCIndex[dim]);
+    inLRIndex[dim] = vcl_ceil(inLRCIndex[dim]);
     
+    inSize[dim] = static_cast<typename SizeType::SizeValueType>(inLRIndex[dim]-inULIndex[dim])+1;
     }
 
   // Build the input requested region
@@ -231,14 +241,30 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
   // InputImage buffered region corresponds to a region of the ouptut
   // image. Computing it beforehand allows to save IsInsideBuffer
   // calls in the interpolation loop
+  
+  // Compute the padding due to the interpolator
+
+  
   IndexType inUL = this->GetInput()->GetBufferedRegion().GetIndex();
   IndexType inLR = this->GetInput()->GetBufferedRegion().GetIndex() + this->GetInput()->GetBufferedRegion().GetSize();
   inLR[0]-=1;
   inLR[1]-=1;
+
+  // We should take interpolation radius into account here, but this
+  // does not match the IsInsideBuffer method
+  // unsigned int interpolatorRadius =
+  // StreamingTraits<typename Superclass::InputImageType>::CalculateNeededRadiusForInterpolator(this->GetInterpolator());
+  // inUL[0]+=interpolatorRadius;
+  // inUL[1]+=interpolatorRadius;
+  // inLR[0]-=interpolatorRadius;
+  // inLR[1]-=interpolatorRadius;
   
   PointType inULp, inLRp;
   this->GetInput()->TransformIndexToPhysicalPoint(inUL,inULp);
   this->GetInput()->TransformIndexToPhysicalPoint(inLR,inLRp);
+
+  inULp-=0.5*this->GetInput()->GetSpacing();
+  inLRp+=0.5*this->GetInput()->GetSpacing();
 
   ContinuousInputIndexType outUL;
   ContinuousInputIndexType outLR;
@@ -247,8 +273,8 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
 
   IndexType outputIndex;
   // This needs to take into account negative spacing
-  outputIndex[0] = vcl_floor(std::min(outUL[0],outLR[0]));
-  outputIndex[1] = vcl_floor(std::min(outUL[1],outLR[1]));
+  outputIndex[0] = vcl_ceil(std::min(outUL[0],outLR[0]));
+  outputIndex[1] = vcl_ceil(std::min(outUL[1],outLR[1]));
 
   SizeType outputSize;
   outputSize[0] = vcl_floor(std::max(outUL[0],outLR[0])) - outputIndex[0] + 1;
@@ -280,7 +306,7 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
 
   // Iterator on the output region for current thread
   OutputImageRegionType regionToCompute = outputRegionForThread;
-  regionToCompute.Crop(m_ReachableOutputRegion);
+  bool cropSucceed = regionToCompute.Crop(m_ReachableOutputRegion);
 
   // Fill thread buffer
   itk::ImageScanlineIterator<OutputImageType> outItFull(outputPtr,outputRegionForThread);
@@ -294,6 +320,9 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
       }
     outItFull.NextLine();
     }
+
+  if(!cropSucceed)
+    return;
 
   itk::ImageScanlineIterator<OutputImageType> outIt(outputPtr, regionToCompute);
 
