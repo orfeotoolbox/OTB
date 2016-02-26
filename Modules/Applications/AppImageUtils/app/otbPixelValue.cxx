@@ -148,7 +148,7 @@ private:
 
     SetParameterString("value", oss.str());
 
-    //Display image informations in the dedicated logger
+    //Display image information in the dedicated logger
     otbAppLogINFO( << oss.str() );
   }
 

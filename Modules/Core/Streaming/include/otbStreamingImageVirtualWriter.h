@@ -29,7 +29,7 @@ namespace otb
  *  \brief This class acts like a StreamingImageFileWriter, but without actually
  *  writing data to the disk.
  *
- *  This allows to stream the whole image through persistent filters such as
+ *  This allows streaming the whole image through persistent filters such as
  *  PersitentStatisticsImageFilter in order to get the global statistics of an image.
  *
  *  This filter is not intended to be used with classic ImageToImageFilter, though it

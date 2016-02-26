@@ -45,9 +45,9 @@ namespace otb
  * variance. Though the inverse transform can be computed, this filter
  * only provides the forward transform for now.
  *
- * The GetV() method allows to retrieve the linear combinations used
+ * The GetV() method allows retrieving the linear combinations used
  * to generate new variates, and the GetAutoCorrelation() method
- * allows to retrieve the auto-correlation associated to each variate.
+ * allows retrieving the auto-correlation associated to each variate.
  *
  * This filter has been implemented from the Matlab code kindly made
  * available by the authors here:

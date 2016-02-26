@@ -140,7 +140,7 @@ int DEMConvertAdapter::Convert(std::string tempFilename, std::string output)
       {
       std::cerr << "std::exception  thrown:" << std::endl;
       std::cerr << e.what() <<  std::endl;
-      itkExceptionMacro("Error occurs writing the ouput image...");
+      itkExceptionMacro("Error occurs writing the output image...");
       return EXIT_FAILURE;
       }
     }

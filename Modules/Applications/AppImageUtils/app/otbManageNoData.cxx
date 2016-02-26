@@ -61,7 +61,7 @@ private:
     SetDescription("Manage No-Data");
     // Documentation
     SetDocName("No Data management");
-    SetDocLongDescription("This application has two modes. The first allows to build a mask of no-data pixels from the no-data flags read from the image file. The second allows to update the change the no-data value of an image (pixels value and metadata). This last mode also allows to replace NaN in images with a proper no-data value. To do so, one should activate the NaN is no-data option.");
+    SetDocLongDescription("This application has two modes. The first allows building a mask of no-data pixels from the no-data flags read from the image file. The second allows updating the change the no-data value of an image (pixels value and metadata). This last mode also allows replacing NaN in images with a proper no-data value. To do so, one should activate the NaN is no-data option.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("BanMath");
@@ -81,7 +81,7 @@ private:
     DisableParameter("usenan");
    
     AddParameter(ParameterType_Choice,"mode","No-data handling mode");
-    SetParameterDescription("mode","Allows to choose between different no-data handling options");
+    SetParameterDescription("mode","Allows choosing between different no-data handling options");
 
     AddChoice("mode.buildmask","Build a no-data Mask");
     

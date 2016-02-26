@@ -112,7 +112,7 @@ bool RADImageIO::CanReadFile(const char* filename)
     return false;
     }
 
-  //Read header informations
+  //Read header information
   bool lResult = InternalReadHeaderInformation(lFileName, header_file, false);
   header_file.close();
   return (lResult);
@@ -236,7 +236,7 @@ void RADImageIO::ReadImageInformation()
     itkExceptionMacro(<< "RADImageIO::ReadImageInformation() failed header open ! ");
     }
 
-  //Read header informations
+  //Read header information
   InternalReadHeaderInformation(m_FileName, m_HeaderFile, true);
 
   otbMsgDebugMacro(<< "Driver to read: RAD");
@@ -416,7 +416,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       }
     }
 
-  // Read "SENSCODAGE" informations (optionnal)
+  // Read "SENSCODAGE" information (optionnal)
   file >> lString;
   if (lString.empty() == false)
     {
@@ -704,7 +704,7 @@ void RADImageIO::WriteImageInformation()
     }
   m_HeaderFile << m_TypeRAD << std::endl;
 
-  //Write "SENSCODAGE" informations
+  //Write "SENSCODAGE" information
   m_HeaderFile <<  "SENSCODAGE "; // << std::endl;
   if (m_ByteOrder == LittleEndian)
     {

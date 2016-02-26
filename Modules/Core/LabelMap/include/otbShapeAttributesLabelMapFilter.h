@@ -187,7 +187,7 @@ private:
  * With respect to the original itk filter, this filter also compute
  * the Flusser moments for each LabelObject.
  *
- * The flag ReducedAttributesSet allows to compute only non-redundant
+ * The flag ReducedAttributesSet allows computing only non-redundant
  * statistics and statistics usefull for classification (not spatially
  * dependent statitistics). Reduced set contains only Flusser moments,
  * physical size, elongation, Feret diameter (if activated),

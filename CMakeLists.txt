@@ -464,8 +464,8 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
       message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
     endif()
 
-  else(DEFINED MXE_TARGET_DIR)
-    message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
+  # else(DEFINED MXE_TARGET_DIR)
+  #   message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
   endif(DEFINED MXE_TARGET_DIR)
 
 endif(WIN32 AND CMAKE_CROSSCOMPILING)

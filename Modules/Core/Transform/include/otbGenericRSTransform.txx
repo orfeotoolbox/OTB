@@ -65,7 +65,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 }
 
 /**
- * Instanciate the transformation according to informations
+ * Instanciate the transformation according to information
  */
 template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void

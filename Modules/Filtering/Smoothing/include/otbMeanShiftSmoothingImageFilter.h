@@ -408,7 +408,7 @@ private:
  * SetSpatialBandwidth()) and within a spectral range (set using
  * SetRangeBandwidth()). The resulting filtered image can be retrieved by
  * GetOutput() or GetRangeOutput(). Parameter SetRangeBandwidthRamp()
- * allows to linearly adapt the range bandwidth to the intensity of
+ * allows linearly adapting the range bandwidth to the intensity of
  * each channel if set greater than 0 (default value is 0).
  *
  * There are additional output images, as explained below.
@@ -544,7 +544,7 @@ public:
   itkGetConstReferenceMacro(BucketOptimization, bool);
 #endif
 
-  /** Global shift allows to tackle down numerical instabilities by
+  /** Global shift allows tackling down numerical instabilities by
   aligning pixel indices when performing tile processing */
   itkSetMacro(GlobalShift,InputIndexType);
 

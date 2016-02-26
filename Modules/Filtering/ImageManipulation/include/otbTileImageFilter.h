@@ -23,11 +23,11 @@
 namespace otb
 {
 /** \class TileImageFilter
- *  \brief This filter allows to make a spatial mosaic from a set of images
+ *  \brief This filter allows making a spatial mosaic from a set of images
  *
  *  This filter produces a spatial mosaic from a set of images. It
  *  supports both otb::Image and otb::VectorImage. The layout
- *  parameter allows to set up of the images will be patched together:
+ *  parameter allows setting up of the images will be patched together:
  *  it is a 2D array containing the number of images in the horizontal
  *  direction and vertical direction respectively.
  *

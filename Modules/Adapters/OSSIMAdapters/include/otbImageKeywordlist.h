@@ -137,7 +137,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  /** Geo informations are in this map */
+  /** Geo information are in this map */
   KeywordlistMap m_Keywordlist;
 
 //  char m_Delimiter;

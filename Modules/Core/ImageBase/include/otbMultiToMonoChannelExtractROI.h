@@ -31,7 +31,7 @@ namespace otb
  * \brief Extract a mono channel part of a multi-channel image.
  *
  * This filter extracts either all channels or only those specified by the user.
- * The SetChannel method allows to select the channels to process.
+ * The SetChannel method allows selecting the channels to process.
  * \note If nothing is specified, only the first channel is processed.
  * \note This class is templated over the pixel types of the input and output images.
  * The input image has to be an otb::VectorImage, whereas the output image has to be an otb::Image.

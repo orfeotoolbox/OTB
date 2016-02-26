@@ -158,7 +158,7 @@ private:
 /** \class StreamingMinMaxImageFilter
  * \brief This class streams the whole input image through the PersistentMinMaxImageFilter.
  *
- * This way, it allows to compute the minimum and maximum of this image.
+ * This way, it allows computing the minimum and maximum of this image.
  *
  * It calls the Reset() method of the PersistentMinMaxImageFilter before streaming
  * the image and the Synthetize() method of the PersistentMinMaxImageFilter after

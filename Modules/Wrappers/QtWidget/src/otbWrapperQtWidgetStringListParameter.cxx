@@ -88,12 +88,12 @@ void QtWidgetStringListParameter::DoCreateWidget()
     connect( addButton, SIGNAL(clicked()), this, SLOT(AddString()) );
     addSupLayout->addWidget(addButton);
 
-    // Supress file button
+    // Suppress file button
     QPushButton * supButton = new QPushButton;
     supButton->setText("-");
     supButton->setFixedWidth(buttonSize);
-    supButton->setToolTip("Supress the selected string...");
-    connect( supButton, SIGNAL(clicked()), this, SLOT(SupressString()) );
+    supButton->setToolTip("Suppress the selected string...");
+    connect( supButton, SIGNAL(clicked()), this, SLOT(SuppressString()) );
     addSupLayout->addWidget(supButton);
     buttonLayout->addLayout(addSupLayout);
 
@@ -177,7 +177,7 @@ QtWidgetStringListParameter::AddString()
 
 
 void
-QtWidgetStringListParameter::SupressString()
+QtWidgetStringListParameter::SuppressString()
 {
   m_StringLayout = new QVBoxLayout();
   m_StringLayout->setSpacing(0);

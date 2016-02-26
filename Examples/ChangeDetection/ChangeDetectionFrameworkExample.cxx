@@ -51,7 +51,7 @@
 // something accepting the syntax \code{foo()}. This can be
 // implemented using classical C/C++ functions, but it is preferable
 // to implement it using C++ functors. These are classical C++ classes
-// which overload the \code{()} operator. This allows to use them with
+// which overload the \code{()} operator. This allows using them with
 // the same syntax as C/C++ functions.
 //
 // Since change detectors operate on neighborhoods, the functor

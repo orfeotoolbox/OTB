@@ -37,7 +37,7 @@ namespace otb {
  *  output raster.  The burn values are extracted from a field set by
  *  the user.If no burning field is set, the "FID" is used by default.
  *
- *  Setting the output raster informations can be done in two ways by:
+ *  Setting the output raster information can be done in two ways by:
  *    - Setting the Origin/Size/Spacing of the output image
  *    - Using an existing image as support via SetOutputParametersFromImage(ImageBase)
  *

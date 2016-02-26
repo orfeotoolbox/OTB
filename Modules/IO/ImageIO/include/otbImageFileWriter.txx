@@ -682,7 +682,7 @@ ImageFileWriter<TInputImage>
   this->ReleaseInputs();
 
   //Reset global shift on input region (box parameter)
-  //It allows to call multiple update over the writer
+  //It allows calling multiple update over the writer
   m_ShiftOutputIndex.Fill(0);
 }
 

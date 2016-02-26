@@ -68,7 +68,7 @@ protected:
 
   /** GenerateOutputInformation
    * Set the number of bands of the output.
-   * Copy informations from the first image of the list if existing.
+   * Copy information from the first image of the list if existing.
    **/
   virtual void GenerateOutputInformation(void);
 

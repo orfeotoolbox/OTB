@@ -88,7 +88,7 @@ public:
   typedef itk::ImageRegionSplitter<2>   SplitterType;
 
   // 3D RS transform
-  // TODO: Allow to tune precision (i.e. double or float)
+  // TODO: Allow tuning precision (i.e. double or float)
   typedef otb::GenericRSTransform<double,3,3>       RSTransformType;
   //typedef typename RSTransformType::Pointer         RSTransformPointerType;
 

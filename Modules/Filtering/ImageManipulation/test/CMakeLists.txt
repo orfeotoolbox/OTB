@@ -76,7 +76,11 @@ otbTwoNRIBandsImageToNComplexBandsImage.cxx
 otbChangeNoDataValueFilter.cxx
 otbImageToNoDataMaskFilter.cxx
 otbChangeInformationImageFilter.cxx
+<<<<<<< HEAD
 otbGridResampleImageFilter.cxx
+=======
+otbMaskedIteratorDecorator.cxx
+>>>>>>> develop
 )
 
 add_executable(otbImageManipulationTestDriver ${OTBImageManipulationTests})
@@ -720,3 +724,18 @@ otb_add_test(NAME bfTvChangeInformationImageFilter COMMAND  otbImageManipulation
 
 otb_add_test(NAME    otbGridResampleImageFilter
              COMMAND otbImageManipulationTestDriver otbGridResampleImageFilter)
+otb_add_test(NAME bfTuMaskedIteratorDecoratorNew COMMAND otbImageManipulationTestDriver
+  otbMaskedIteratorDecoratorNew
+)
+
+otb_add_test(NAME bfTvMaskedIteratorDecoratorNominal COMMAND otbImageManipulationTestDriver
+  otbMaskedIteratorDecoratorNominal
+)
+
+otb_add_test(NAME bfTvMaskedIteratorDecoratorDegenerate COMMAND otbImageManipulationTestDriver
+  otbMaskedIteratorDecoratorDegenerate
+)
+
+otb_add_test(NAME bfTvMaskedIteratorDecoratorExtended COMMAND otbImageManipulationTestDriver
+  otbMaskedIteratorDecoratorExtended
+)
