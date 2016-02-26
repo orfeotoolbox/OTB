@@ -87,7 +87,7 @@ template <>
 void
 InitializeIterator< otb::SubsampledImageRegionIterator< otb::Image<double, 2> > >(
   otb::SubsampledImageRegionIterator< otb::Image<double, 2> >& it,
-  typename otb::SubsampledImageRegionIterator<otb::Image<double, 2> >::RegionType)
+  otb::SubsampledImageRegionIterator<otb::Image<double, 2> >::RegionType)
 {
   it.SetSubsampleFactor(2);
 }
