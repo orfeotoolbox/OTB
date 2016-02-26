@@ -76,11 +76,8 @@ otbTwoNRIBandsImageToNComplexBandsImage.cxx
 otbChangeNoDataValueFilter.cxx
 otbImageToNoDataMaskFilter.cxx
 otbChangeInformationImageFilter.cxx
-<<<<<<< HEAD
 otbGridResampleImageFilter.cxx
-=======
 otbMaskedIteratorDecorator.cxx
->>>>>>> develop
 )
 
 add_executable(otbImageManipulationTestDriver ${OTBImageManipulationTests})
