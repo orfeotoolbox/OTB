@@ -23,6 +23,7 @@
 #include "itkRandomImageSource.h"
 #include "itkIdentityTransform.h"
 #include "itkTestingComparisonImageFilter.h"
+#include "itkStreamingImageFilter.h"
 
 #include "otbImageFileWriter.h"
 
@@ -52,7 +53,7 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   RandomImageSourceType::Pointer randomImageSource = RandomImageSourceType::New();
 
   ImageType::SizeType size;
-  size.Fill(100);
+  size.Fill(1000);
 
   randomImageSource->SetSize(size);
   randomImageSource->SetMin(0);
@@ -60,9 +61,12 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   
   randomImageSource->Update();
 
-  filter->SetInput(randomImageSource->GetOutput());
+  ImageType::Pointer randomImage = randomImageSource->GetOutput();
+  randomImageSource = NULL;
 
-  refFilter->SetInput(randomImageSource->GetOutput());
+  filter->SetInput(randomImage);
+
+  refFilter->SetInput(randomImage);
 
   typedef itk::IdentityTransform<double,2> IdentityTransformType;
 
@@ -70,29 +74,39 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   refFilter->SetTransform(idTransform);
 
   ImageType::SpacingType spacing;
-  spacing[0]=2.0;
-  spacing[1]=-2.0;
+  spacing[0]=0.12;
+  spacing[1]=-0.19;
   ImageType::PointType origin;
-  origin[0]=10.;
-  origin[1]=90.;
+  origin[0]=11;
+  origin[1]=17;
   ImageType::SizeType outSize;
-  outSize.Fill(200);
+  outSize.Fill(103);
 
   filter->SetOutputSize(outSize);
   filter->SetOutputOrigin(origin);
   filter->SetOutputSpacing(spacing);
-  filter->Update();
   
   refFilter->SetSize(outSize);
   refFilter->SetOutputOrigin(origin);
   refFilter->SetOutputSpacing(spacing);
-  refFilter->Update();
+
 
   typedef itk::Testing::ComparisonImageFilter<ImageType,ImageType> ComparisonFilterType;
+  typedef itk::StreamingImageFilter<ImageType,ImageType> StreamingFilterType;
+  
+  StreamingFilterType::Pointer streamingRef = StreamingFilterType::New();
+  streamingRef->SetInput(refFilter->GetOutput());
+  streamingRef->SetNumberOfStreamDivisions(10);
+
+  StreamingFilterType::Pointer streaming = StreamingFilterType::New();
+  streaming->SetInput(filter->GetOutput());
+  streaming->SetNumberOfStreamDivisions(10);
+  
 
   ComparisonFilterType::Pointer comparisonFilter = ComparisonFilterType::New();
-  comparisonFilter->SetValidInput(refFilter->GetOutput());
-  comparisonFilter->SetTestInput(filter->GetOutput());
+  comparisonFilter->SetValidInput(streamingRef->GetOutput());
+  comparisonFilter->SetTestInput(streaming->GetOutput());
+  comparisonFilter->SetDifferenceThreshold(1e-9);
   comparisonFilter->Update();
 
   unsigned int nbPixelsWithDiff = comparisonFilter->GetNumberOfPixelsWithDifferences();
@@ -108,7 +122,18 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
     writer->SetInput(comparisonFilter->GetOutput());
     writer->SetFileName("otbGridResampleImageFilterTestOutput.tif");
     writer->Update();
+
+    writer = WriterType::New();
+    writer->SetInput(streamingRef->GetOutput());
+    writer->SetFileName("otbGridResampleImageFilterTestOutput1.tif");
+    writer->Update();
     
+    writer = WriterType::New();
+    writer->SetInput(streaming->GetOutput());
+    writer->SetFileName("otbGridResampleImageFilterTestOutput2.tif");
+    writer->Update();
+
+
     return EXIT_FAILURE;
     }
   
