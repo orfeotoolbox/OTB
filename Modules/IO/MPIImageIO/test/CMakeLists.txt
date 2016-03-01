@@ -7,16 +7,10 @@ otbSPTWStripsWriteTest.cxx
 
 add_executable(otbMPIImageIOTestDriver ${OTBMPIImageIOTests})
 
-# This does not seems right : those libs are in TEST DEPENDS
-# but the build fail because of undefined references :(
-target_link_libraries(otbMPIImageIOTestDriver
-  ${OTBImageIO_LIBRARIES}
-  ${OTBTestKernel_LIBRARIES}
-  ${OTBSPTW_LIBRARIES}
-  ${OTBMPI_LIBRARIES}
-)
+# target link libraries
+target_link_libraries(otbMPIImageIOTestDriver ${OTBMPIImageIO-Test_LIBRARIES})
 
-#
+
 otb_module_target_label(otbMPIImageIOTestDriver)
 
 # Tests Declaration
