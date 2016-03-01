@@ -53,8 +53,17 @@ GlImageActor::GlImageActor()
     m_SoftwareRendering(false)
 {}
 
-GlImageActor::~GlImageActor()
-{}
+GlImageActor
+::~GlImageActor()
+{
+  // Release OpenGL texture names.
+  for( TileVectorType::iterator it( m_LoadedTiles.begin() );
+       it!=m_LoadedTiles.end();
+       ++it )
+    UnloadTile( *it );
+
+  m_LoadedTiles.clear();
+}
 
 const GlImageActor::PointType & GlImageActor::GetOrigin() const
 {
@@ -215,7 +224,7 @@ void GlImageActor::UpdateData()
     return;
 
   // std::cout << "Requested: " << requested;
-
+ 
   // Now we have the requested part of image, we need to find the
   // corresponding tiles
 
@@ -513,7 +522,10 @@ void GlImageActor::LoadTile(Tile& tile)
       }
     
     // Now load the texture
+    assert( tile.m_TextureId==0 );
+
     glGenTextures( 1, &tile.m_TextureId );
+    assert( glGetError()==GL_NO_ERROR );
 
     std::cout << "Generated texture #" << tile.m_TextureId << std::endl;
 
@@ -555,9 +567,17 @@ void GlImageActor::UnloadTile(Tile& tile)
 
   if( tile.m_Loaded )
     {
+    assert( tile.m_TextureId>0 );
+
     glDeleteTextures( 1, &tile.m_TextureId );
 
     std::cout << "Deleted texture #" << tile.m_TextureId << std::endl;
+
+    tile.m_TextureId = 0;
+
+    tile.m_Image = VectorImageType::Pointer();
+
+    tile.m_RescaleFilter = RescaleFilterType::Pointer();
 
     tile.m_Loaded = false;
     }
