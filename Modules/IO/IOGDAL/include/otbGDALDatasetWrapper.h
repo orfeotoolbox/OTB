@@ -19,6 +19,7 @@
 #define otbGDALDatasetWrapper_h
 
 #include "itkLightObject.h"
+#include "itkObjectFactory.h"
 
 #include "otbConfigure.h"
 
