@@ -907,8 +907,13 @@ void GlImageActor::UpdateResolution()
   double resolution = std::min(100/distAB,100/distAC);
   
   // Arbitrary higher than any distance we will compute here
-  double minDist       = 50000.;
-  unsigned int closest = 0;
+  double minDist = 50000.;
+  bool isFound = false;
+
+  m_CurrentResolution = 0;
+
+  // OTB always include full resolution level in available resolutions.
+  assert( !m_AvailableResolutions.empty() );
 
   // Compute the diff and keep the index that minimize the distance
   for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
@@ -917,17 +922,26 @@ void GlImageActor::UpdateResolution()
 
     double diff = 1/((double)(1<<(*it))) - resolution;
 
-    if (((m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower && diff < 0)
-         ||(m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper && diff > 0)
-         ||(m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest))
-    && vcl_abs(diff) < minDist)
+    if( ( ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower &&
+	    diff < 0 )
+	  ||
+	  ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper &&
+	    diff > 0 )
+	  ||
+	  ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest ) )
+	&&
+	vcl_abs(diff) < minDist )
       {
+      isFound = true;
+
       minDist = vcl_abs(diff);
-      closest = std::distance(m_AvailableResolutions.begin(),it);
+      m_CurrentResolution = std::distance(m_AvailableResolutions.begin(),it);
       }
     }
-      
-  m_CurrentResolution = closest;
+
+  // MANTIS-1147: Cap current-resolution.
+  if( !isFound )
+    m_CurrentResolution = m_AvailableResolutions.size() - 1;
 
   std::ostringstream extFilename;
   extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
