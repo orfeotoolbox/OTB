@@ -41,6 +41,9 @@ otb_add_test(NAME leTuSamplingRateCalculatorSmallest COMMAND otbSamplingTestDriv
    )   
 
 
+otb_add_test(NAME leTuotbOGRDataToResampledOGRDataNew COMMAND otbSamplingTestDriver
+  otbOGRDataToResampledOGRDataNew )
+
 otb_add_test(NAME leTvOGRDataToResampledOGRData COMMAND otbSamplingTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput.txt

@@ -1,5 +1,6 @@
 set(OTBSampling_SRC
   otbSamplingRateCalculator.cxx
+  otbOGRDataResampler.cxx
   )
 
 add_library(OTBSampling ${OTBSampling_SRC})
