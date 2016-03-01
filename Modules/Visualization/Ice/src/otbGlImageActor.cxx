@@ -197,7 +197,7 @@ void GlImageActor::UpdateData()
   CleanLoadedTiles();
 
   // Retrieve settings
-  ViewSettings::ConstPointer settings = this->GetSettings();
+  ViewSettings::ConstPointer settings = GetSettings();
 
   RegionType largest( m_FileReader->GetOutput()->GetLargestPossibleRegion() );
  
@@ -209,13 +209,13 @@ void GlImageActor::UpdateData()
 
   RegionType requested;
 
-  this->ViewportExtentToImageRegion(ulx,uly,lrx,lry,requested);
+  ViewportExtentToImageRegion(ulx,uly,lrx,lry,requested);
 
   if( !requested.Crop( largest ) )
     return;
 
-  // std::cout<<"Corresponding image region: "<<requested<<std::endl;
- 
+  // std::cout << "Requested: " << requested;
+
   // Now we have the requested part of image, we need to find the
   // corresponding tiles
 
@@ -226,7 +226,8 @@ void GlImageActor::UpdateData()
   unsigned int tileStartX = m_TileSize*(requested.GetIndex()[0]/m_TileSize);
   unsigned int tileStartY = m_TileSize*(requested.GetIndex()[1]/m_TileSize);
 
-  // std::cout<<"Required tiles: "<<nbTilesX<<" x "<<nbTilesY<<std::endl;
+  std::cout << std::endl;
+  std::cout << "Required tiles: " << nbTilesX << " x " << nbTilesY << std::endl;
 
   SizeType tileSize;
   tileSize.Fill(m_TileSize);
@@ -244,12 +245,14 @@ void GlImageActor::UpdateData()
       
       newTile.m_ImageRegion.SetSize(tileSize);
       newTile.m_ImageRegion.SetIndex(tileIndex);
-      
+
+      std::cout << "Largest: " << largest;
+
       newTile.m_ImageRegion.Crop( largest );
 
       ImageRegionToViewportQuad(newTile.m_ImageRegion,newTile.m_UL,newTile.m_UR,newTile.m_LL,newTile.m_LR,false);
 
-       // std::cout<<"Loading tile "<<newTile.m_ImageRegion<<std::endl;
+      std::cout << "Tile: " << newTile.m_ImageRegion; // <<std::endl;
        // std::cout<<"Mapped to "<<newTile.m_UL<<", "<<newTile.m_UR<<", "<<newTile.m_LL<<", "<<newTile.m_LR<<std::endl;
 
       newTile.m_RedIdx = m_RedIdx;
@@ -462,13 +465,30 @@ if(!m_SoftwareRendering)
 
 void GlImageActor::LoadTile(Tile& tile)
 {
+  std::cout
+    << std::hex << this
+    << "::LoadTile(" << &tile << ")"
+    << std::dec << std::endl;
+
+  std::cout
+    << "[ " << tile.m_ImageRegion.GetIndex()[ 0 ]
+    << ", " << tile.m_ImageRegion.GetIndex()[ 1 ]
+    << " ]-[ " << tile.m_ImageRegion.GetSize()[ 0 ]
+    << ", " << tile.m_ImageRegion.GetSize()[ 1 ]
+    << "]"
+    << std::endl;
+
   ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
+
   extract->SetInput(m_FileReader->GetOutput());
   extract->SetExtractionRegion(tile.m_ImageRegion);
   extract->SetChannel(tile.m_RedIdx);
   extract->SetChannel(tile.m_GreenIdx);
   extract->SetChannel(tile.m_BlueIdx);
+
+  std::cout << "ExtractROIFilter::Update()...";
   extract->Update();
+  std::cout << "\tDONE\n";
 
   tile.m_Image = extract->GetOutput();
 
@@ -493,7 +513,10 @@ void GlImageActor::LoadTile(Tile& tile)
       }
     
     // Now load the texture
-    glGenTextures(1, &(tile.m_TextureId));
+    glGenTextures( 1, &tile.m_TextureId );
+
+    std::cout << "Generated texture #" << tile.m_TextureId << std::endl;
+
     glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
 #if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
@@ -528,9 +551,14 @@ void GlImageActor::LoadTile(Tile& tile)
   
 void GlImageActor::UnloadTile(Tile& tile)
 {
-  if(tile.m_Loaded)
+  std::cout << std::hex << this << std::dec << "::UnloadTile()" << std::endl;
+
+  if( tile.m_Loaded )
     {
-    glDeleteTextures(1,&tile.m_TextureId);
+    glDeleteTextures( 1, &tile.m_TextureId );
+
+    std::cout << "Deleted texture #" << tile.m_TextureId << std::endl;
+
     tile.m_Loaded = false;
     }
 }
@@ -906,9 +934,9 @@ void GlImageActor::UpdateResolution()
   
   // Arbitrary higher than any distance we will compute here
   double minDist = 50000.;
-  bool isFound = false;
-
   m_CurrentResolution = 0;
+
+  bool isFound = false;
 
   // OTB always include full resolution level in available resolutions.
   assert( !m_AvailableResolutions.empty() );
@@ -950,6 +978,8 @@ void GlImageActor::UpdateResolution()
   m_FileReader = ReaderType::New();
   m_FileReader->SetFileName(extFilename.str());
   m_FileReader->UpdateOutputInformation();
+
+  std::cout << "Switch to resolution: " << m_CurrentResolution << std::endl;
 }
 
 void GlImageActor::UpdateTransforms()
