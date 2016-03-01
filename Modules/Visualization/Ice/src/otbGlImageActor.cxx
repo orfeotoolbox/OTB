@@ -199,7 +199,7 @@ void GlImageActor::UpdateData()
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
 
-  RegionType largest = m_FileReader->GetOutput()->GetLargestPossibleRegion();
+  RegionType largest( m_FileReader->GetOutput()->GetLargestPossibleRegion() );
  
   double ulx, uly, lrx, lry;
 
@@ -211,10 +211,8 @@ void GlImageActor::UpdateData()
 
   this->ViewportExtentToImageRegion(ulx,uly,lrx,lry,requested);
 
-  if(!requested.Crop(m_FileReader->GetOutput()->GetLargestPossibleRegion()))
-    {
+  if( !requested.Crop( largest ) )
     return;
-    }
 
   // std::cout<<"Corresponding image region: "<<requested<<std::endl;
  
@@ -247,7 +245,7 @@ void GlImageActor::UpdateData()
       newTile.m_ImageRegion.SetSize(tileSize);
       newTile.m_ImageRegion.SetIndex(tileIndex);
       
-      newTile.m_ImageRegion.Crop(m_FileReader->GetOutput()->GetLargestPossibleRegion());
+      newTile.m_ImageRegion.Crop( largest );
 
       ImageRegionToViewportQuad(newTile.m_ImageRegion,newTile.m_UL,newTile.m_UR,newTile.m_LL,newTile.m_LR,false);
 
