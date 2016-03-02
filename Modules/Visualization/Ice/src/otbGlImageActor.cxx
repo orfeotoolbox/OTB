@@ -53,8 +53,17 @@ GlImageActor::GlImageActor()
     m_SoftwareRendering(false)
 {}
 
-GlImageActor::~GlImageActor()
-{}
+GlImageActor
+::~GlImageActor()
+{
+  // Release OpenGL texture names.
+  for( TileVectorType::iterator it( m_LoadedTiles.begin() );
+       it!=m_LoadedTiles.end();
+       ++it )
+    UnloadTile( *it );
+
+  m_LoadedTiles.clear();
+}
 
 const GlImageActor::PointType & GlImageActor::GetOrigin() const
 {
@@ -197,9 +206,9 @@ void GlImageActor::UpdateData()
   CleanLoadedTiles();
 
   // Retrieve settings
-  ViewSettings::ConstPointer settings = this->GetSettings();
+  ViewSettings::ConstPointer settings = GetSettings();
 
-  RegionType largest = m_FileReader->GetOutput()->GetLargestPossibleRegion();
+  RegionType largest( m_FileReader->GetOutput()->GetLargestPossibleRegion() );
  
   double ulx, uly, lrx, lry;
 
@@ -209,14 +218,12 @@ void GlImageActor::UpdateData()
 
   RegionType requested;
 
-  this->ViewportExtentToImageRegion(ulx,uly,lrx,lry,requested);
+  ViewportExtentToImageRegion(ulx,uly,lrx,lry,requested);
 
-  if(!requested.Crop(m_FileReader->GetOutput()->GetLargestPossibleRegion()))
-    {
+  if( !requested.Crop( largest ) )
     return;
-    }
 
-  // std::cout<<"Corresponding image region: "<<requested<<std::endl;
+  // std::cout << "Requested: " << requested;
  
   // Now we have the requested part of image, we need to find the
   // corresponding tiles
@@ -228,7 +235,8 @@ void GlImageActor::UpdateData()
   unsigned int tileStartX = m_TileSize*(requested.GetIndex()[0]/m_TileSize);
   unsigned int tileStartY = m_TileSize*(requested.GetIndex()[1]/m_TileSize);
 
-  // std::cout<<"Required tiles: "<<nbTilesX<<" x "<<nbTilesY<<std::endl;
+  // std::cout << std::endl;
+  // std::cout << "Required tiles: " << nbTilesX << " x " << nbTilesY << std::endl;
 
   SizeType tileSize;
   tileSize.Fill(m_TileSize);
@@ -246,12 +254,14 @@ void GlImageActor::UpdateData()
       
       newTile.m_ImageRegion.SetSize(tileSize);
       newTile.m_ImageRegion.SetIndex(tileIndex);
-      
-      newTile.m_ImageRegion.Crop(m_FileReader->GetOutput()->GetLargestPossibleRegion());
+
+      // std::cout << "Largest: " << largest;
+
+      newTile.m_ImageRegion.Crop( largest );
 
       ImageRegionToViewportQuad(newTile.m_ImageRegion,newTile.m_UL,newTile.m_UR,newTile.m_LL,newTile.m_LR,false);
 
-       // std::cout<<"Loading tile "<<newTile.m_ImageRegion<<std::endl;
+      // std::cout << "Tile: " << newTile.m_ImageRegion; // <<std::endl;
        // std::cout<<"Mapped to "<<newTile.m_UL<<", "<<newTile.m_UR<<", "<<newTile.m_LL<<", "<<newTile.m_LR<<std::endl;
 
       newTile.m_RedIdx = m_RedIdx;
@@ -464,13 +474,30 @@ if(!m_SoftwareRendering)
 
 void GlImageActor::LoadTile(Tile& tile)
 {
+  // std::cout
+  //   << std::hex << this
+  //   << "::LoadTile(" << &tile << ")"
+  //   << std::dec << std::endl;
+
+  // std::cout
+  //   << "[ " << tile.m_ImageRegion.GetIndex()[ 0 ]
+  //   << ", " << tile.m_ImageRegion.GetIndex()[ 1 ]
+  //   << " ]-[ " << tile.m_ImageRegion.GetSize()[ 0 ]
+  //   << ", " << tile.m_ImageRegion.GetSize()[ 1 ]
+  //   << "]"
+  //   << std::endl;
+
   ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
+
   extract->SetInput(m_FileReader->GetOutput());
   extract->SetExtractionRegion(tile.m_ImageRegion);
   extract->SetChannel(tile.m_RedIdx);
   extract->SetChannel(tile.m_GreenIdx);
   extract->SetChannel(tile.m_BlueIdx);
+
+  // std::cout << "ExtractROIFilter::Update()...";
   extract->Update();
+  // std::cout << "\tDONE\n";
 
   tile.m_Image = extract->GetOutput();
 
@@ -495,7 +522,13 @@ void GlImageActor::LoadTile(Tile& tile)
       }
     
     // Now load the texture
-    glGenTextures(1, &(tile.m_TextureId));
+    assert( tile.m_TextureId==0 );
+
+    glGenTextures( 1, &tile.m_TextureId );
+    assert( glGetError()==GL_NO_ERROR );
+
+    // std::cout << "Generated texture #" << tile.m_TextureId << std::endl;
+
     glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
 #if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
@@ -530,9 +563,22 @@ void GlImageActor::LoadTile(Tile& tile)
   
 void GlImageActor::UnloadTile(Tile& tile)
 {
-  if(tile.m_Loaded)
+  // std::cout << std::hex << this << std::dec << "::UnloadTile()" << std::endl;
+
+  if( tile.m_Loaded )
     {
-    glDeleteTextures(1,&tile.m_TextureId);
+    assert( tile.m_TextureId>0 );
+
+    glDeleteTextures( 1, &tile.m_TextureId );
+
+    // std::cout << "Deleted texture #" << tile.m_TextureId << std::endl;
+
+    tile.m_TextureId = 0;
+
+    tile.m_Image = VectorImageType::Pointer();
+
+    tile.m_RescaleFilter = RescaleFilterType::Pointer();
+
     tile.m_Loaded = false;
     }
 }
@@ -907,8 +953,13 @@ void GlImageActor::UpdateResolution()
   double resolution = std::min(100/distAB,100/distAC);
   
   // Arbitrary higher than any distance we will compute here
-  double minDist       = 50000.;
-  unsigned int closest = 0;
+  double minDist = 50000.;
+  m_CurrentResolution = 0;
+
+  bool isFound = false;
+
+  // OTB always include full resolution level in available resolutions.
+  assert( !m_AvailableResolutions.empty() );
 
   // Compute the diff and keep the index that minimize the distance
   for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
@@ -917,17 +968,26 @@ void GlImageActor::UpdateResolution()
 
     double diff = 1/((double)(1<<(*it))) - resolution;
 
-    if (((m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower && diff < 0)
-         ||(m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper && diff > 0)
-         ||(m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest))
-    && vcl_abs(diff) < minDist)
+    if( ( ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower &&
+	    diff < 0 )
+	  ||
+	  ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper &&
+	    diff > 0 )
+	  ||
+	  ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest ) )
+	&&
+	vcl_abs(diff) < minDist )
       {
+      isFound = true;
+
       minDist = vcl_abs(diff);
-      closest = std::distance(m_AvailableResolutions.begin(),it);
+      m_CurrentResolution = std::distance(m_AvailableResolutions.begin(),it);
       }
     }
-      
-  m_CurrentResolution = closest;
+
+  // MANTIS-1147: Cap current-resolution.
+  if( !isFound )
+    m_CurrentResolution = m_AvailableResolutions.size() - 1;
 
   std::ostringstream extFilename;
   extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
@@ -938,6 +998,8 @@ void GlImageActor::UpdateResolution()
   m_FileReader = ReaderType::New();
   m_FileReader->SetFileName(extFilename.str());
   m_FileReader->UpdateOutputInformation();
+
+  // std::cout << "Switched to resolution: " << m_CurrentResolution << std::endl;
 }
 
 void GlImageActor::UpdateTransforms()
