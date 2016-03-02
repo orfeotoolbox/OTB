@@ -653,11 +653,6 @@ ColorDynamicsController
   if( imageModel==NULL )
     return;
 
-  const ImageProperties* imageProperties = imageModel->GetProperties();
-  assert( imageProperties!=NULL );
-  // make production build happy
-  ((void)imageProperties);
-
   assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
   ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
   assert( widget!=NULL );

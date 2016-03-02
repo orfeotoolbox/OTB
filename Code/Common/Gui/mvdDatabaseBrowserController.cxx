@@ -1257,13 +1257,6 @@ DatabaseBrowserController
   assert( item==dynamic_cast< TreeWidgetItem* >( item ) );
   TreeWidgetItem* twi = dynamic_cast< TreeWidgetItem* >( item );
 
-
-  // Access model & database.
-  DatabaseModel* model = GetModel< DatabaseModel >();
-  assert( model!=NULL );
-  // make production build happy
-  ((void)model);
-
   switch( twi->type() )
     {
     case TreeWidgetItem::ITEM_TYPE_NONE:
