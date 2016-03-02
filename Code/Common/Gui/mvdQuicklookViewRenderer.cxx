@@ -74,6 +74,8 @@ QuicklookViewRenderer
 {
   assert( !m_GlRoiActor.IsNull() );
 
+  setObjectName( "QuicklookViewRenderer" );
+
   m_EffectsEnabled = false;
 }
 
@@ -127,6 +129,10 @@ QuicklookViewRenderer
 {
   // qDebug() << this << "::SetWktAndKwl()";
 
+#if DISABLE_QUICKLOOK_VIEW
+  return;
+#endif
+
   assert( GetLayerStack()!=NULL );
 
   if( GetLayerStack()->IsEmpty() )
@@ -151,6 +157,9 @@ QuicklookViewRenderer
 
   assert( !m_GlView.IsNull() );
 
+#if DISABLE_QUICKLOOK_VIEW
+  return;
+#endif
 
   std::string key( m_GlView->AddActor( m_GlRoiActor, "ROI" ) );
 
