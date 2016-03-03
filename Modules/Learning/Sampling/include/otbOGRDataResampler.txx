@@ -32,6 +32,7 @@ OGRDataResampler
 {
   // Get class name
   std::string className(featIt->ogr().GetFieldAsString(this->m_FieldIndex));
+  
   // Get Feature Id
   unsigned long featureId = featIt->ogr().GetFID();
 
@@ -58,6 +59,8 @@ OGRDataResampler
               unsigned long &fId,
               std::string &className)
 {
+
+
   typename TIterator::ImageType::PointType imgPoint;
   typename TIterator::IndexType imgIndex;
   OGRPoint tmpPoint(0.0,0.0,0.0);
@@ -76,16 +79,19 @@ OGRDataResampler
       imgPoint[0] = castPoint->getX();
       imgPoint[1] = castPoint->getY();
       imgIt.GetImageIterator().GetImage()->TransformPhysicalPointToIndex(imgPoint,imgIndex);
-      while (!imgIt.IsAtEnd())
+      if (!imgIt.IsAtEnd())
         {
-        if (imgIndex == imgIt.GetIndex())
+        if ( (imgIndex == imgIt.GetIndex()) && (TakeSample(className)) )
           {
-          m_NbPixelsGlobal++;
-          m_ElmtsInClass[className]++;
-          m_Polygon[fId]++;
-          break;
+              m_NbPixelsGlobal++;
+              m_ElmtsInClass[className]++;
+              m_Polygon[fId]++;
+              
+              std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
+              m_ClassToPhyPositions[className].push_back(phyPos);
+              
           }
-        }
+        } 
       break;
       }
     case wkbLineString:
@@ -126,11 +132,14 @@ OGRDataResampler
           ,imgPoint[0]-0.5*imgAbsSpacing[0]
           ,imgPoint[1]-0.5*imgAbsSpacing[1]
           ,0.0);
-        if (geom->Intersects(&tmpPolygon))
+        if ((geom->Intersects(&tmpPolygon)) && (TakeSample(className)))
           {
-          m_NbPixelsGlobal++;
-          m_ElmtsInClass[className]++;
-          m_Polygon[fId]++;
+              m_NbPixelsGlobal++;
+              m_ElmtsInClass[className]++;
+              m_Polygon[fId]++;
+              
+              std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
+              m_ClassToPhyPositions[className].push_back(phyPos);
           }
         ++imgIt;
         }
@@ -144,11 +153,14 @@ OGRDataResampler
         imgIt.GetImageIterator().GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
         tmpPoint.setX(imgPoint[0]);
         tmpPoint.setY(imgPoint[1]);
-        if (geom->Contains(&tmpPoint))
+        if ( (geom->Contains(&tmpPoint)) && (TakeSample(className)) )
           {
-          m_NbPixelsGlobal++;
-          m_ElmtsInClass[className]++;
-          m_Polygon[fId]++;
+              m_NbPixelsGlobal++;
+              m_ElmtsInClass[className]++;
+              m_Polygon[fId]++;
+              
+              std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
+              m_ClassToPhyPositions[className].push_back(phyPos);
           }
         ++imgIt;
         }
@@ -167,7 +179,7 @@ OGRDataResampler
       if (geomCollection)
         {
         int nbGeom =  geomCollection->getNumGeometries();
-        for (unsigned int i=0 ; i < nbGeom ; ++i)
+        for ( int i=0 ; i < nbGeom ; ++i)
           {
           this->AddGeometry(geomCollection->getGeometryRef(i),
                             imgIt,

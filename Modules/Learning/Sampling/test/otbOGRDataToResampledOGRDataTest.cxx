@@ -16,6 +16,7 @@
 
 =========================================================================*/
 
+#include "otbSamplingRateCalculator.h"
 #include "otbOGRDataToResampledOGRData.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
@@ -82,11 +83,21 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
     it.Set(count % 2);
     }
     
+    
+  typedef otb::SamplingRateCalculator RateCalculatorype;
+  
+  RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
+  rateCalculator->produceMap();
+  rateCalculator->setMinimumNbofSamplesByClass();
+  std::map<std::string, double>  ratesbyClass = rateCalculator->GetRatesbyClass();
+    
+    
   std::string fieldName("Label");
   
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(inputImage);
   filter->SetMask(mask);
+  filter->SetRatesbyClass(ratesbyClass);
   filter->SetOGRData(vectors);
   filter->SetFieldName(fieldName);
   filter->SetLayerIndex(0);

@@ -35,6 +35,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   this->SetNthOutput(0,TInputImage::New());
   this->SetNthOutput(1,ClassCountObjectType::New());
   this->SetNthOutput(2,PolygonSizeObjectType::New());
+  this->SetNthOutput(3,ClassToPhyPosObjectType::New());
 }
 
 template<class TInputImage, class TMaskImage>
@@ -87,13 +88,27 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   
   ClassCountMapType &classCount = this->GetClassCountOutput()->Get();
   PolygonSizeMapType &polygonSize = this->GetPolygonSizeOutput()->Get();
+  ClassToPhyPosMapType &classToPhyPos = this->GetClassToPhyPosOutput()->Get();
   
   // Reset outputs
   classCount.clear();
   polygonSize.clear();
+  classToPhyPos.clear();
   // Copy temporary stats to outputs
   classCount = m_TemporaryStats->GetClassCountMap();
   polygonSize = m_TemporaryStats->GetPolygonSizeMap();
+  classToPhyPos = m_TemporaryStats->GetClassToPhyPosMap();
+  
+  std::cout << "----------------------" << std::endl;
+  ClassToPhyPosMapType::iterator it = classToPhyPos.begin();
+  for(; it!=classToPhyPos.end(); ++it)
+     {
+        std::cout << " class : " << it->first << std::endl;
+        for(int i=0; i<it->second.size(); i++)
+        std::cout << "(" <<it->second[i].first << "," << it->second[i].second << ") ";
+        std::cout << std::endl;
+     }
+  std::cout << "----------------------" << std::endl;
 }
 
 template<class TInputImage, class TMaskImage>
@@ -120,6 +135,13 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   //}
   m_TemporaryStats = OGRDataResampler::New();
   m_TemporaryStats->SetFieldIndex(fieldIndex);
+  if (m_RatesbyClass.empty())
+     {itkGenericExceptionMacro("m_RatesbyClass is empty. Use SetRatesbyClass to provide some vector statistics information.");}
+  else
+     {
+       m_TemporaryStats->SetRatesbyClass(m_RatesbyClass); 
+       m_TemporaryStats->Prepare();
+     }
 }
 
 template<class TInputImage, class TMaskImage>
@@ -170,6 +192,31 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   return static_cast<PolygonSizeObjectType *>(this->itk::ProcessObject::GetOutput(2));
 }
 
+
+template<class TInputImage, class TMaskImage>
+const typename PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassToPhyPosObjectType*
+PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+::GetClassToPhyPosOutput() const
+{
+  if (this->GetNumberOfOutputs()<4)
+    {
+    return 0;
+    }
+  return static_cast<const ClassToPhyPosObjectType *>(this->itk::ProcessObject::GetOutput(3));
+}
+
+template<class TInputImage, class TMaskImage>
+typename PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassToPhyPosObjectType*
+PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+::GetClassToPhyPosOutput()
+{
+    if (this->GetNumberOfOutputs()<4)
+    {
+    return 0;
+    }
+  return static_cast<ClassToPhyPosObjectType *>(this->itk::ProcessObject::GetOutput(3));
+}
+
 template<class TInputImage, class TMaskImage>
 itk::DataObject::Pointer
 PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
@@ -185,6 +232,9 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
       break;
     case 2:
       return static_cast<itk::DataObject*>(PolygonSizeObjectType::New().GetPointer());
+      break;
+    case 3:
+      return static_cast<itk::DataObject*>(ClassToPhyPosObjectType::New().GetPointer());
       break;
     default:
       // might as well make an image
@@ -420,6 +470,18 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 }
 
 template<class TInputImage, class TMaskImage>
+void
+OGRDataToResampledOGRData<TInputImage,TMaskImage>
+::SetRatesbyClass(const std::map<std::string, double>& map)
+  {
+     this->GetFilter()->SetRatesbyClass(map);
+     
+     /*std::map<std::string, double>::iterator it = m_RatesbyClass.begin();
+     for(;it !=m_RatesbyClass.end(); ++it)
+       std::cout << "##### " << it->first << " " << it->second << std::endl;*/
+  }
+
+template<class TInputImage, class TMaskImage>
 int
 OGRDataToResampledOGRData<TInputImage,TMaskImage>
 ::GetLayerIndex()
@@ -457,6 +519,23 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 ::GetPolygonSizeOutput()
 {
   return this->GetFilter()->GetPolygonSizeOutput();
+}
+
+
+template<class TInputImage, class TMaskImage>
+const typename OGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassToPhyPosObjectType*
+OGRDataToResampledOGRData<TInputImage,TMaskImage>
+::GetClassToPhyPosOutput() const
+{
+  return this->GetFilter()->GetClassToPhyPosOutput();
+}
+
+template<class TInputImage, class TMaskImage>
+typename OGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassToPhyPosObjectType*
+OGRDataToResampledOGRData<TInputImage,TMaskImage>
+::GetClassToPhyPosOutput()
+{
+  return this->GetFilter()->GetClassToPhyPosOutput();
 }
 
 

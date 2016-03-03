@@ -36,8 +36,9 @@ public:
   typedef itk::SmartPointer<Self>            Pointer;
   itkNewMacro(Self);
 
-  typedef std::map<std::string, unsigned long>      ClassCountMapType;
-  typedef std::map<unsigned long, unsigned long>    PolygonSizeMapType;
+  typedef std::map<std::string, unsigned long>      ClassCountMapType; //remove
+  typedef std::map<unsigned long, unsigned long>    PolygonSizeMapType;//remove
+  typedef std::map < std::string, std::vector< std::pair<double,double> > >  ClassToPhyPosMapType;
 
   /** Runtime information support. */
   itkTypeMacro(OGRDataResampler, itk::Object);
@@ -53,14 +54,22 @@ public:
   
   const PolygonSizeMapType& GetPolygonSizeMap();
   
+  const ClassToPhyPosMapType& GetClassToPhyPosMap();
+  
   unsigned long GetNumberOfPixels();
 
   itkSetMacro(FieldIndex, int);
   itkGetMacro(FieldIndex, int);
+  
+  void SetRatesbyClass(const std::map<std::string, double>& map )
+  {
+      m_RatesbyClass = map;
+  }
+  void Prepare();
 
 protected:
   /** Constructor */
-  OGRDataResampler() {}
+  OGRDataResampler() {m_alreadyPrepared=false;}
   /** Destructor */
   virtual ~OGRDataResampler() {}
 
@@ -72,13 +81,23 @@ private:
   //Number of pixels in each polygons
   PolygonSizeMapType m_Polygon;  // check the feature id
   
+  //Map a class to the physical positions of the selected samples
+  ClassToPhyPosMapType m_ClassToPhyPositions;
+  
   int m_FieldIndex;
+  bool m_alreadyPrepared;
+  std::map<std::string, double> m_RatesbyClass;
+  std::map<std::string, int > m_ClassToCurrentIndex;
+  std::map<std::string, std::vector<bool> > m_ClassToBools;
   
   template <typename TIterator>
   void AddGeometry(OGRGeometry *geom,
                    TIterator& imgIt,
                    unsigned long &fId,
                    std::string &className);
+                   
+  bool TakeSample(std::string className);
+  void keyInterpretor(std::string key, std::string &imageName, std::string &className);
 
   // Not implemented
   OGRDataResampler(const Self&);

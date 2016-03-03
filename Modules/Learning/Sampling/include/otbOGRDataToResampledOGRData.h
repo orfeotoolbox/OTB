@@ -55,12 +55,15 @@ public:
   typedef otb::ogr::DataSource                            OGRDataType;
   typedef otb::ogr::DataSource::Pointer                   OGRDataPointer;
 
-  typedef otb::OGRDataResampler::ClassCountMapType   ClassCountMapType;
-  typedef otb::OGRDataResampler::PolygonSizeMapType  PolygonSizeMapType;
+  typedef otb::OGRDataResampler::ClassCountMapType   ClassCountMapType; //remove
+  typedef otb::OGRDataResampler::PolygonSizeMapType  PolygonSizeMapType; //remove
+
+  typedef otb::OGRDataResampler::ClassToPhyPosMapType  ClassToPhyPosMapType;
 
   /** Wrap output type as DataObject */
-  typedef itk::SimpleDataObjectDecorator<ClassCountMapType>  ClassCountObjectType;
-  typedef itk::SimpleDataObjectDecorator<PolygonSizeMapType> PolygonSizeObjectType;
+  typedef itk::SimpleDataObjectDecorator<ClassCountMapType>  ClassCountObjectType; //remove
+  typedef itk::SimpleDataObjectDecorator<PolygonSizeMapType> PolygonSizeObjectType; //remove
+  typedef itk::SimpleDataObjectDecorator<ClassToPhyPosMapType> ClassToPhyPosObjectType;
 
   typedef itk::DataObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
@@ -86,21 +89,33 @@ public:
   itkSetMacro(FieldName, std::string);
   itkGetMacro(FieldName, std::string);
   
+  void SetRatesbyClass(const std::map<std::string, double>& map )
+  {
+      m_RatesbyClass = map;
+  }
+  
   itkSetMacro(LayerIndex, int);
   itkGetMacro(LayerIndex, int);
 
   // TODO: store the class count map as output #2
-  const ClassCountObjectType* GetClassCountOutput() const;
-  ClassCountObjectType* GetClassCountOutput();
+  const ClassCountObjectType* GetClassCountOutput() const;//remove
+  ClassCountObjectType* GetClassCountOutput();//remove
 
   // TODO: store the polygon size map as output #3
-  const PolygonSizeObjectType* GetPolygonSizeOutput() const;
-  PolygonSizeObjectType* GetPolygonSizeOutput();
+  const PolygonSizeObjectType* GetPolygonSizeOutput() const; //remove
+  PolygonSizeObjectType* GetPolygonSizeOutput(); //remove
+  
+  
+  const ClassToPhyPosObjectType* GetClassToPhyPosOutput() const;
+  ClassToPhyPosObjectType* GetClassToPhyPosOutput();
+  
+  
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
   virtual itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
   using Superclass::MakeOutput;
+  
 
 protected:
   /** Constructor */
@@ -129,6 +144,8 @@ private:
   std::string m_FieldName;
 
   OGRDataResampler::Pointer m_TemporaryStats;
+  
+  std::map<std::string, double>  m_RatesbyClass;
 
   // Layer to use in the shape file, default to 0
   int m_LayerIndex;
@@ -161,8 +178,9 @@ public:
   typedef typename Superclass::FilterType             FilterType;
   typedef typename FilterType::ClassCountMapType      ClassCountMapType;
   typedef typename FilterType::PolygonSizeMapType     PolygonSizeMapType;
-  typedef typename FilterType::ClassCountObjectType   ClassCountObjectType;
-  typedef typename FilterType::PolygonSizeObjectType  PolygonSizeObjectType;
+  typedef typename FilterType::ClassCountObjectType   ClassCountObjectType;  //remove
+  typedef typename FilterType::PolygonSizeObjectType  PolygonSizeObjectType; //remove
+  typedef typename FilterType::ClassToPhyPosObjectType  ClassToPhyPosObjectType;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -184,14 +202,21 @@ public:
   void SetFieldName(std::string &key);
   std::string GetFieldName();
   
+  void SetRatesbyClass(const std::map<std::string, double>& map);
+  
   void SetLayerIndex(int index);
   int GetLayerIndex();
 
-  const ClassCountObjectType* GetClassCountOutput() const;
-  ClassCountObjectType* GetClassCountOutput();
+  const ClassCountObjectType* GetClassCountOutput() const; //remove
+  ClassCountObjectType* GetClassCountOutput(); //remove
 
-  const PolygonSizeObjectType* GetPolygonSizeOutput() const;
-  PolygonSizeObjectType* GetPolygonSizeOutput();
+  const PolygonSizeObjectType* GetPolygonSizeOutput() const; //remove
+  PolygonSizeObjectType* GetPolygonSizeOutput(); //remove
+  
+  const ClassToPhyPosObjectType* GetClassToPhyPosOutput() const; 
+  ClassToPhyPosObjectType* GetClassToPhyPosOutput(); 
+  
+
 
 protected:
   /** Constructor */
@@ -202,6 +227,7 @@ protected:
 private:
   OGRDataToResampledOGRData(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+  
 };
 
 } // end of namespace otb

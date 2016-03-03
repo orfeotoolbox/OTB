@@ -68,3 +68,17 @@ int otbSamplingRateCalculatorSmallest(int argc, char* argv[])
   rateCalculator->Print(std::cout);
   return EXIT_SUCCESS;
 }
+
+
+int otbSamplingRateCalculatorSmallest2(int argc, char* argv[])
+{
+  typedef otb::SamplingRateCalculator RateCalculatorype;
+  
+  RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
+  rateCalculator->produceMap();
+  rateCalculator->setMinimumNbofSamplesByClass();
+  std::map<std::string, double>  ratesbyClass = rateCalculator->GetRatesbyClass();
+  rateCalculator->write(argv[1]);
+  rateCalculator->Print(std::cout);
+  return EXIT_SUCCESS;
+}

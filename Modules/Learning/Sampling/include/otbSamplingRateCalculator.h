@@ -60,6 +60,7 @@ public:
   itkTypeMacro(SamplingRateCalculator, itk::Object);
   
   void produceMap(int nbImg, int nbClasses, unsigned long range);
+  void produceMap();
 
   //void equalization();
   void setNbofSamplesByClass(std::string);
@@ -67,6 +68,7 @@ public:
   void setNbofSamplesAllClasses(unsigned int);
   void setMinimumNbofSamplesByClass(void);
   void write(std::string );
+  const std::map<std::string, double>& GetRatesbyClass();
 
 
 protected:

@@ -41,12 +41,19 @@ otb_add_test(NAME leTuSamplingRateCalculatorSmallest COMMAND otbSamplingTestDriv
    )   
 
 
-otb_add_test(NAME leTuotbOGRDataToResampledOGRDataNew COMMAND otbSamplingTestDriver
+otb_add_test(NAME leTuSamplingRateCalculatorSmallest2 COMMAND otbSamplingTestDriver
+            otbSamplingRateCalculatorSmallest2 
+            ${TEMP}/leTuSamplingRateCalculatorSmallest.txt
+   
+   ) 
+
+
+otb_add_test(NAME leTuOGRDataToResampledOGRDataNew COMMAND otbSamplingTestDriver
   otbOGRDataToResampledOGRDataNew )
 
 otb_add_test(NAME leTvOGRDataToResampledOGRData COMMAND otbSamplingTestDriver
   --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput.txt
+  ${BASELINE_FILES}/leTvOGRDataToClassStatisticsFilterOutput.txt
   ${TEMP}/leTvOGRDataToResampledOGRDataOutput.txt
   otbOGRDataToResampledOGRData
   ${INPUTDATA}/variousVectors.sqlite

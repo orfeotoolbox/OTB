@@ -121,6 +121,28 @@ SamplingRateCalculator
    findImagesAndClasses();
 }
 
+void 
+SamplingRateCalculator
+::produceMap()
+{
+/*
+   class 1 = 104
+   class 2 = 160
+   class 3 = 211
+
+ * */
+ 
+
+    std::string key = keyGenerator(0,1);
+    m_map[key] = 104;
+    key = keyGenerator(0,2);
+    m_map[key] = 160;
+    key = keyGenerator(0,3);
+    m_map[key] = 211;
+           
+    findImagesAndClasses();
+}
+
 
 void 
 SamplingRateCalculator
@@ -283,6 +305,14 @@ SamplingRateCalculator
      itkExceptionMacro(<< " Couldn't open " << filename);
   }
   
+}
+
+
+const std::map<std::string, double>& 
+SamplingRateCalculator
+::GetRatesbyClass()
+{
+    return m_RatesbyClass;
 }
 
 void
