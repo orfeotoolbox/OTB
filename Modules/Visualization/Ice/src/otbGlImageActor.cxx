@@ -458,7 +458,7 @@ void GlImageActor::Render()
     glDisable(GL_BLEND);
     }
 
-  if( !m_SoftwareRendering )
+  if( !m_SoftwareRendering && !m_Shader.IsNull() )
     {
     m_Shader->UnloadShader();
     }
