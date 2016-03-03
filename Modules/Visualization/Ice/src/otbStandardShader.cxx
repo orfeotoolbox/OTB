@@ -16,9 +16,12 @@
 
 =========================================================================*/
 #include "otbStandardShader.h"
+
+#include <cassert>
+#include <GL/glew.h>
+
 #include "otbFragmentShaderRegistry.h"
 #include "otbGlVersionChecker.h"
-#include <GL/glew.h>
 
 namespace otb
 {
