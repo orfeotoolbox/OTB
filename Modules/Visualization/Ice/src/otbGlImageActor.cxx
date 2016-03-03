@@ -424,45 +424,44 @@ void GlImageActor::Render()
       }
     }
 
-for(TileVectorType::iterator it = m_LoadedTiles.begin();
-    it != m_LoadedTiles.end(); ++it)
-  {
-  
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-  
-  glEnable(GL_TEXTURE_2D);  
-  glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
-  
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);     
-  if(m_CurrentResolution == 0)
+  for(TileVectorType::iterator it = m_LoadedTiles.begin();
+      it != m_LoadedTiles.end(); ++it)
     {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+  
+    glEnable(GL_TEXTURE_2D);  
+    glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
+  
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);     
+    if(m_CurrentResolution == 0)
+      {
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      }
+    else
+      {
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      }
+  
+    // Reset color before rendering
+    glColor3d(1.0f,1.0f,1.0f);
+  
+    glBegin (GL_QUADS);
+    glTexCoord2f (0.0, 1.0); glVertex2f(it->m_LL[0], it->m_LL[1]);
+    glTexCoord2f (1.0, 1.0); glVertex2f(it->m_LR[0], it->m_LR[1]);
+    glTexCoord2f (1.0, 0.0); glVertex2f(it->m_UR[0], it->m_UR[1]);
+    glTexCoord2f (0.0, 0.0); glVertex2f(it->m_UL[0], it->m_UL[1]);
+    glEnd ();
+  
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
     }
-  else
-    {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    }
-  
-  // Reset color before rendering
-  glColor3d(1.0f,1.0f,1.0f);
-  
-  glBegin (GL_QUADS);
-  glTexCoord2f (0.0, 1.0); glVertex2f(it->m_LL[0], it->m_LL[1]);
-  glTexCoord2f (1.0, 1.0); glVertex2f(it->m_LR[0], it->m_LR[1]);
-  glTexCoord2f (1.0, 0.0); glVertex2f(it->m_UR[0], it->m_UR[1]);
-  glTexCoord2f (0.0, 0.0); glVertex2f(it->m_UL[0], it->m_UL[1]);
-  glEnd ();
-  
-  glDisable(GL_TEXTURE_2D);
-  glDisable(GL_BLEND);
-  }
 
-if(!m_SoftwareRendering)
-  {
+  if( !m_SoftwareRendering )
+    {
     m_Shader->UnloadShader();
-  }
-
+    }
 }
 
 void GlImageActor::LoadTile(Tile& tile)
