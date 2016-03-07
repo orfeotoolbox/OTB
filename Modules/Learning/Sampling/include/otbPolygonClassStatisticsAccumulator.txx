@@ -28,7 +28,8 @@ template <typename TIterator>
 void
 PolygonClassStatisticsAccumulator
 ::Add(otb::ogr::Layer::const_iterator& featIt,
-      TIterator& imgIt)
+      TIterator& imgIt,
+      const typename TIterator::ImageType *img)
 {
   // Get class name
   std::string className(featIt->ogr().GetFieldAsString(this->m_FieldIndex));
@@ -46,6 +47,7 @@ PolygonClassStatisticsAccumulator
   
   this->AddGeometry(featIt->ogr().GetGeometryRef(),
                     imgIt,
+                    img,
                     featureId,
                     className);
 }
@@ -55,6 +57,7 @@ void
 PolygonClassStatisticsAccumulator
 ::AddGeometry(OGRGeometry *geom,
               TIterator& imgIt,
+              const typename TIterator::ImageType *img,
               unsigned long &fId,
               std::string &className)
 {
@@ -75,7 +78,7 @@ PolygonClassStatisticsAccumulator
         }
       imgPoint[0] = castPoint->getX();
       imgPoint[1] = castPoint->getY();
-      imgIt.GetImageIterator().GetImage()->TransformPhysicalPointToIndex(imgPoint,imgIndex);
+      img->TransformPhysicalPointToIndex(imgPoint,imgIndex);
       while (!imgIt.IsAtEnd())
         {
         if (imgIndex == imgIt.GetIndex())
@@ -99,13 +102,12 @@ PolygonClassStatisticsAccumulator
       ring.addPoint(0.0,1.0,0.0);
       ring.addPoint(0.0,0.0,0.0);
       tmpPolygon.addRing(&ring);
-      typename TIterator::ImageType::SpacingType imgAbsSpacing;
-      imgAbsSpacing = imgIt.GetImageIterator().GetImage()->GetSpacing();
+      typename TIterator::ImageType::SpacingType imgAbsSpacing = img->GetSpacing();
       if (imgAbsSpacing[0] < 0) imgAbsSpacing[0] = -imgAbsSpacing[0];
       if (imgAbsSpacing[1] < 0) imgAbsSpacing[1] = -imgAbsSpacing[1];
       while (!imgIt.IsAtEnd())
         {
-        imgIt.GetImageIterator().GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
+        img->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
         tmpPolygon.getExteriorRing()->setPoint(0
           ,imgPoint[0]-0.5*imgAbsSpacing[0]
           ,imgPoint[1]-0.5*imgAbsSpacing[1]
@@ -141,7 +143,7 @@ PolygonClassStatisticsAccumulator
       {
       while (!imgIt.IsAtEnd())
         {
-        imgIt.GetImageIterator().GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
+        img->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
         tmpPoint.setX(imgPoint[0]);
         tmpPoint.setY(imgPoint[1]);
         if (geom->Contains(&tmpPoint))
@@ -171,6 +173,7 @@ PolygonClassStatisticsAccumulator
           {
           this->AddGeometry(geomCollection->getGeometryRef(i),
                             imgIt,
+                            img,
                             fId,
                             className);
           }

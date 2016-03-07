@@ -209,6 +209,14 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
       {
       itkGenericExceptionMacro("Mask and input image have a different size!");
       }
+    if (mask->GetOrigin() != input->GetOrigin())
+      {
+      itkGenericExceptionMacro("Mask and input image have a different origin!");
+      }
+    if (mask->GetSpacing() != input->GetSpacing())
+      {
+      itkGenericExceptionMacro("Mask and input image have a different spacing!");
+      }
     }
 }
 
@@ -270,12 +278,21 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
     bool regionNotEmpty = consideredRegion.Crop(requestedRegion);
     if (regionNotEmpty)
       {
-        // For pixels in consideredRegion and not masked
-        typedef otb::MaskedIteratorDecorator<
-          itk::ImageRegionConstIterator<TInputImage>,
-          itk::ImageRegionConstIterator<TMaskImage> > MaskedIteratorType;
-        MaskedIteratorType it(mask, inputImage, consideredRegion);
-        m_TemporaryStats->Add<MaskedIteratorType>(featIt, it);
+        if (mask)
+          {
+          // For pixels in consideredRegion and not masked
+          typedef otb::MaskedIteratorDecorator<
+            itk::ImageRegionConstIterator<TMaskImage>,
+            itk::ImageRegionConstIterator<TMaskImage> > MaskedIteratorType;
+          MaskedIteratorType it(mask, mask, consideredRegion);
+          m_TemporaryStats->Add<MaskedIteratorType>(featIt, it, mask);
+          }
+        else
+          {
+          typedef itk::ImageRegionConstIteratorWithOnlyIndex<TInputImage> NoValueIteratorType;
+          NoValueIteratorType it(inputImage,consideredRegion);
+          m_TemporaryStats->Add<NoValueIteratorType>(featIt, it, inputImage);
+          }
       }
     }
 }

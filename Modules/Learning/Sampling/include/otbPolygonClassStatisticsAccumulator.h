@@ -44,7 +44,8 @@ public:
 
   template <typename TIterator>
   void Add(otb::ogr::Layer::const_iterator& featIt,
-           TIterator& imgIt);
+           TIterator& imgIt,
+           const typename TIterator::ImageType *img);
 
   /** Reset the accumulator */
   void Reset();
@@ -77,6 +78,7 @@ private:
   template <typename TIterator>
   void AddGeometry(OGRGeometry *geom,
                    TIterator& imgIt,
+                   const typename TIterator::ImageType *img,
                    unsigned long &fId,
                    std::string &className);
 
