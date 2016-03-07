@@ -527,7 +527,13 @@ void GlImageActor::LoadTile(Tile& tile)
     assert( tile.m_TextureId==0 );
 
     glGenTextures( 1, &tile.m_TextureId );
-    assert( glGetError()==GL_NO_ERROR );
+
+    // Following assert is somtimes false on some OpenGL systems for
+    // some unknown reason even though the glGenTexture() call has
+    // succeeded.
+    // assert( glGetError()==GL_NO_ERROR );
+
+    assert( tile.m_TextureId!=0 );
 
     // std::cout << "Generated texture #" << tile.m_TextureId << std::endl;
 
