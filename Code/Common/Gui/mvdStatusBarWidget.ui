@@ -171,9 +171,12 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="iceLabel">
+    <widget class="QLabel" name="renderModelLabel">
      <property name="text">
       <string>GLSL</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
