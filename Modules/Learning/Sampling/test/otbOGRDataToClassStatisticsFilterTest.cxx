@@ -64,11 +64,12 @@ int otbOGRDataToClassStatisticsFilter(int argc, char* argv[])
   
   InputImageType::Pointer inputImage = InputImageType::New();
   inputImage->SetNumberOfComponentsPerPixel(3);
-  inputImage->SetRegions(region);
+  inputImage->SetLargestPossibleRegion(region);
   inputImage->SetOrigin(origin);
   inputImage->SetSpacing(spacing);
-  inputImage->Allocate();
-  inputImage->FillBuffer(pixel);
+  // Don't allocate the input image, the filter should not need it
+  //inputImage->Allocate();
+  //inputImage->FillBuffer(pixel);
   
   MaskImageType::Pointer mask = MaskImageType::New();
   mask->SetRegions(region);
