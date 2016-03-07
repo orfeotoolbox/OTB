@@ -183,9 +183,8 @@ MainWindow
 
   assert( m_ShaderWidget!=NULL );
 
-  m_ShaderWidget->setEnabled( isGLSL );
+  m_ShaderWidget->SetGLSLEnabled( isGLSL );
   m_ShaderWidget->SetGLSL140Enabled( m_GLSL140>=0 );
-
 
   assert( m_StatusBarWidget!=NULL );
 

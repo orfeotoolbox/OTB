@@ -101,6 +101,9 @@ public:
 
   /**
    */
+  void SetGLSLEnabled( bool );
+  /**
+   */
   void SetGLSL140Enabled( bool );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
