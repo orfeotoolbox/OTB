@@ -60,9 +60,15 @@ public:
   /** Convenient typedef */
   typedef std::pair<std::string , MeasurementVectorType>  InputDataType;
   typedef std::vector< InputDataType >                   MeasurementVectorContainer;
+  
+  typedef std::map<std::string , std::string>           GenericMapType;
+  typedef std::map<std::string , GenericMapType>        GenericMapContainer;
 
   /** Method to set/get the input list sample */
   void AddInput(const char * name,  const MeasurementVectorType& inputVector );
+  
+  template <typename MapType>
+  void AddInputMap(const char * name, const MapType& map );
 
   /** Trigger the processing */
   void Update()
@@ -88,6 +94,8 @@ private:
 
   std::string                 m_FileName;
   MeasurementVectorContainer  m_MeasurementVectorContainer;
+  
+  GenericMapContainer         m_GenericMapContainer;
 
 
 }; // end of class StatisticsXMLFileWriter
