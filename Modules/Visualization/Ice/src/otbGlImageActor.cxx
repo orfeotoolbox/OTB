@@ -144,12 +144,8 @@ void GlImageActor::Initialize(const std::string & filename)
 
   m_AvailableResolutions.clear();
 
-  m_AvailableResolutions.push_back(0);
-
-  for(unsigned int i =0; i < ovrCount;++i)
-    {
-    m_AvailableResolutions.push_back(i+1);
-    }
+  for( unsigned int i=0; i<ovrCount; ++i )
+    m_AvailableResolutions.push_back( i );
 
   m_CurrentResolution = m_AvailableResolutions.front();
 
