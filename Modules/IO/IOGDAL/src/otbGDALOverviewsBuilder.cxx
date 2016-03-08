@@ -24,6 +24,7 @@
 #include "otb_boost_string_header.h"
 
 #include "otbGDALDriverManagerWrapper.h"
+#include "otbGDALImageIO.h"
 #include "otbSystem.h"
 
 
@@ -77,6 +78,26 @@ GetConfigOption( const char * key )
     value==NULL
     ? std::string()
     : std::string( value );
+}
+
+/***************************************************************************/
+bool
+GDALOverviewsBuilder
+::CanGenerateOverviews( const std::string & filename )
+{
+  GDALImageIO::Pointer io( GDALImageIO::New() );
+
+  typedef std::vector< std::string > StringVector;
+
+  StringVector names;
+  StringVector descs;
+
+  if( !io->CanReadFile( filename.c_str() ) )
+    return false;
+
+  io->SetFileName( filename );
+
+  return !io->GetSubDatasetInfo( names, descs );
 }
 
 /***************************************************************************/

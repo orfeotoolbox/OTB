@@ -92,6 +92,11 @@ public:
   itkNewMacro( Self );
 
   /**
+   */
+  static
+  bool CanGenerateOverviews( const std::string & filename );
+
+  /**
    * \brief Count the number of resolution levels larger than
    * factor^n. 
    */
