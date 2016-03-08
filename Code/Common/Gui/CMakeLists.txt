@@ -32,6 +32,7 @@ set( Common_Gui_SOURCES
   mvdImageViewManipulator.cxx
   mvdImageViewRenderer.cxx
   mvdImageViewWidget.cxx
+  mvdImportImageDialog.cxx
   mvdImportImagesDialog.cxx
   mvdKeymapDialog.cxx
   mvdLayerStackController.cxx
@@ -88,6 +89,7 @@ set( Common_Gui_HEADERS_MOC
   mvdImageViewManipulator.h
   mvdImageViewRenderer.h
   mvdImageViewWidget.h
+  mvdImportImageDialog.h
   mvdImportImagesDialog.h
   mvdKeymapDialog.h
   mvdLayerStackController.h
@@ -121,6 +123,7 @@ set( Common_Gui_FORMS
   mvdDatasetCreationProgressDialog.ui
   mvdDatasetPropertiesWidget.ui
   mvdHistogramWidget.ui
+  mvdImportImageDialog.ui
   mvdImportImagesDialog.ui
   mvdKeymapDialog.ui
   mvdLayerStackWidget.ui
