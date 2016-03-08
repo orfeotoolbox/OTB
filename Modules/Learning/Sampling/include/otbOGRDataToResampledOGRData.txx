@@ -514,13 +514,10 @@ template<class TInputImage, class TMaskImage>
 void
 OGRDataToResampledOGRData<TInputImage,TMaskImage>
 ::SetRatesbyClass(const SamplingRateCalculator::mapRateType& map)
-  {
+{
      this->GetFilter()->SetRatesbyClass(map);
      
-     /*std::map<std::string, double>::iterator it = m_RatesbyClass.begin();
-     for(;it !=m_RatesbyClass.end(); ++it)
-       std::cout << "##### " << it->first << " " << it->second << std::endl;*/
-  }
+}
 
 template<class TInputImage, class TMaskImage>
 int

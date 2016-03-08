@@ -38,20 +38,6 @@ void
 SamplingRateCalculator
 ::keyInterpretor(std::string key, std::string &className) const
 {
-
-      /*std::size_t pos = key.find_first_of("_");
-      std::string firstPart = key.substr (0,pos);
-      //std::cout << firstPart << std::endl;
-      std::size_t posA = firstPart.find_first_of("=");
-      imageName = firstPart.substr (posA+1);
-      //std::cout << nbImg << std::endl;
-      
-      std::string secondPart = key.substr (pos);
-      //std::cout << secondPart << std::endl;
-      std::size_t posB = secondPart.find_first_of("=");
-      className = secondPart.substr (posB+1);
-      //std::cout << className << std::endl;*/
-      
       std::size_t pos = key.find_first_of("=");
       className = key.substr(pos+1);
       std::cout << "className = " << className << std::endl;
@@ -283,7 +269,7 @@ SamplingRateCalculator
       
       tripletType tpt;
       tpt.required=clVsRequiredNbSamples[className];
-      tpt.tot=0;
+      tpt.tot=m_totNbSamplesByClass[className];
       tpt.rate=overallRate*100.;
       
       m_RatesbyClass[itMap->first] = tpt;

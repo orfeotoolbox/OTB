@@ -64,14 +64,8 @@ public:
   
   void SetRatesbyClass(const SamplingRateCalculator::mapRateType& map )
   {
-      //m_RatesbyClass = map;
+      m_RatesbyClass = map;
       
-      SamplingRateCalculator::mapRateType::const_iterator it = map.begin();
-      for(; it != map.end(); ++it)
-      {
-          //SamplingRateCalculator::tripletType tpt = it--s
-          m_RatesbyClass[it->first]=it->second;
-      }
   }
   void Prepare();
 
@@ -105,7 +99,7 @@ private:
                    std::string &className);
                    
   bool TakeSample(std::string className);
-  void keyInterpretor(std::string key, std::string &imageName, std::string &className);
+  void keyInterpretor2(std::string key, std::string &className) const;
 
   // Not implemented
   OGRDataResampler(const Self&);

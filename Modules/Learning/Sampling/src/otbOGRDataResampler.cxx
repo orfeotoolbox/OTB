@@ -22,10 +22,10 @@ namespace otb
 {
 
 
-void
-OGRDataResampler::keyInterpretor(std::string key, std::string &imageName, std::string &className)
+/*void
+OGRDataResampler::keyInterpretor2(std::string key, std::string &imageName, std::string &className)
 {
-
+std::cout << "-----------------------------" << std::endl;
       std::size_t pos = key.find_first_of("_");
       std::string firstPart = key.substr (0,pos);
       //std::cout << firstPart << std::endl;
@@ -38,7 +38,17 @@ OGRDataResampler::keyInterpretor(std::string key, std::string &imageName, std::s
       std::size_t posB = secondPart.find_first_of("=");
       className = secondPart.substr (posB+1);
       //std::cout << className << std::endl;
+std::cout << "-----------------------------" << std::endl;
+}*/
 
+
+void
+OGRDataResampler
+::keyInterpretor2(std::string key, std::string &className) const
+{
+      std::size_t pos = key.find_first_of("=");
+      className = key.substr(pos+1);
+      std::cout << "className = " << className << std::endl;
 }
 
 
@@ -79,10 +89,10 @@ if (!m_alreadyPrepared)
     {
 
         double mini=1000;
-        std::string imageName,className,bestClassName;
+        std::string className,bestClassName;
         std::vector<bool> bestBools;
         
-        keyInterpretor(it->first,imageName,className);
+        keyInterpretor2(it->first,className);
         
         std::map<double,std::vector<bool> >::iterator it2 = mapPercToVect.begin();
         for(;it2 !=mapPercToVect.end(); ++it2)
