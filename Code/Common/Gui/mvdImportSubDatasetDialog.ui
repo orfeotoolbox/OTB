@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>mvd::ImportImageDialog</class>
- <widget class="QDialog" name="mvd::ImportImageDialog">
+ <class>mvd::ImportSubDatasetDialog</class>
+ <widget class="QDialog" name="mvd::ImportSubDatasetDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,6 +17,12 @@
    <locale language="C" country="AnyCountry"/>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <property name="margin">
+    <number>4</number>
+   </property>
+   <property name="spacing">
+    <number>4</number>
+   </property>
    <item row="0" column="0">
     <widget class="QGroupBox" name="datasetGroupBox">
      <property name="title">
@@ -86,7 +92,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>mvd::ImportImageDialog</receiver>
+   <receiver>mvd::ImportSubDatasetDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -102,7 +108,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>mvd::ImportImageDialog</receiver>
+   <receiver>mvd::ImportSubDatasetDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

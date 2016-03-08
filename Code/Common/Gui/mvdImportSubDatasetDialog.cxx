@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdImportImageDialog.h"
-#include "ui_mvdImportImageDialog.h"
+#include "mvdImportSubDatasetDialog.h"
+#include "ui_mvdImportSubDatasetDialog.h"
 
 
 /*****************************************************************************/
@@ -46,7 +46,7 @@ namespace mvd
 {
 
 /*
-  TRANSLATOR mvd::ImportImageDialog
+  TRANSLATOR mvd::ImportSubDatasetDialog
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -58,12 +58,12 @@ namespace mvd
 /* CONSTANTS                                                                 */
 
 char const * const
-ImportImageDialog
-::DATASET_COLUMN_NAMES[ ImportImageDialog::DATASET_COLUMN_COUNT ] =
+ImportSubDatasetDialog
+::DATASET_COLUMN_NAMES[ ImportSubDatasetDialog::DATASET_COLUMN_COUNT ] =
 {
-  QT_TRANSLATE_NOOP( "mvd::ImportImageDialog", "Index" ),
-  QT_TRANSLATE_NOOP( "mvd::ImportImageDialog", "Desc" ),
-  QT_TRANSLATE_NOOP( "mvd::ImportImageDialog", "Name" ),
+  QT_TRANSLATE_NOOP( "mvd::ImportSubDatasetDialog", "Index" ),
+  QT_TRANSLATE_NOOP( "mvd::ImportSubDatasetDialog", "Desc" ),
+  QT_TRANSLATE_NOOP( "mvd::ImportSubDatasetDialog", "Name" ),
 };
 
 /*****************************************************************************/
@@ -73,12 +73,12 @@ ImportImageDialog
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-ImportImageDialog
-::ImportImageDialog( const QString & filename,
+ImportSubDatasetDialog
+::ImportSubDatasetDialog( const QString & filename,
 		     QWidget * parent,
 		     Qt::WindowFlags flags  ):
   QDialog( parent, flags ),
-  m_UI( new mvd::Ui::ImportImageDialog() ),
+  m_UI( new mvd::Ui::ImportSubDatasetDialog() ),
   m_HasSubDatasets( false )
 {
   m_UI->setupUi( this );
@@ -87,8 +87,8 @@ ImportImageDialog
 }
 
 /*****************************************************************************/
-ImportImageDialog
-::~ImportImageDialog()
+ImportSubDatasetDialog
+::~ImportSubDatasetDialog()
 {
   delete m_UI;
   m_UI = NULL;
@@ -96,7 +96,7 @@ ImportImageDialog
 
 /*****************************************************************************/
 void
-ImportImageDialog
+ImportSubDatasetDialog
 ::GetSubDatasets( IntVector & dataset ) const
 {
   assert( m_UI!=NULL );
@@ -124,7 +124,7 @@ ImportImageDialog
 
 /*****************************************************************************/
 bool
-ImportImageDialog
+ImportSubDatasetDialog
 ::HasSubDatasets() const
 {
   return m_HasSubDatasets;
@@ -132,7 +132,7 @@ ImportImageDialog
 
 /*****************************************************************************/
 void
-ImportImageDialog
+ImportSubDatasetDialog
 ::Setup( const QString & filename )
 {
   assert( m_UI!=NULL );
@@ -219,7 +219,7 @@ ImportImageDialog
 
 /*****************************************************************************/
 void
-ImportImageDialog
+ImportSubDatasetDialog
 ::SetSubDatasetsCheckState( Qt::CheckState state )
 {
   assert( m_UI!=NULL );
@@ -247,7 +247,7 @@ ImportImageDialog
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
-ImportImageDialog
+ImportSubDatasetDialog
 ::on_allButton_clicked()
 {
   SetSubDatasetsCheckState( Qt::Checked );
@@ -255,7 +255,7 @@ ImportImageDialog
 
 /*****************************************************************************/
 void
-ImportImageDialog
+ImportSubDatasetDialog
 ::on_invertButton_clicked()
 {
   assert( m_UI!=NULL );
@@ -287,7 +287,7 @@ ImportImageDialog
 
 /*****************************************************************************/
 void
-ImportImageDialog
+ImportSubDatasetDialog
 ::on_noneButton_clicked()
 {
   SetSubDatasetsCheckState( Qt::Unchecked );

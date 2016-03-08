@@ -70,7 +70,7 @@
 #include "Gui/mvdImageViewManipulator.h"
 #include "Gui/mvdImageViewRenderer.h"
 #include "Gui/mvdImageViewWidget.h"
-#include "Gui/mvdImportImageDialog.h"
+#include "Gui/mvdImportSubDatasetDialog.h"
 #include "Gui/mvdKeymapDialog.h"
 #include "Gui/mvdLayerStackController.h"
 #include "Gui/mvdLayerStackWidget.h"
@@ -1015,7 +1015,7 @@ MainWindow
   //
   // CDS import
   {
-    ImportImageDialog * importDialog = new ImportImageDialog( filename, this );
+    ImportSubDatasetDialog * importDialog = new ImportSubDatasetDialog( filename, this );
 
     assert( importDialog!=NULL );
 

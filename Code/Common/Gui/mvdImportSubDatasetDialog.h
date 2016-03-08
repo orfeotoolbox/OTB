@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdImportImageDialog_h
-#define __mvdImportImageDialog_h
+#ifndef __mvdImportSubDatasetDialog_h
+#define __mvdImportSubDatasetDialog_h
 
 //
 // Configuration include.
@@ -63,7 +63,7 @@ namespace mvd
 // Internal classes pre-declaration.
 namespace Ui
 {
-class ImportImageDialog;
+class ImportSubDatasetDialog;
 };
 
 
@@ -71,12 +71,12 @@ class ImportImageDialog;
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class ImportImageDialog
+ * \class ImportSubDatasetDialog
  *
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class Monteverdi_EXPORT ImportImageDialog :
+class Monteverdi_EXPORT ImportSubDatasetDialog :
     public QDialog
 {
 
@@ -95,12 +95,12 @@ public:
 public:
 
   /** \brief Constructor. */
-  ImportImageDialog( const QString & filename,
+  ImportSubDatasetDialog( const QString & filename,
 		     QWidget* parent = NULL,
 		     Qt::WindowFlags flags = 0 );
 
   /** \brief Destructor. */
-  virtual ~ImportImageDialog();
+  virtual ~ImportSubDatasetDialog();
 
   /**
    */
@@ -168,7 +168,7 @@ private:
   /**
    * \brief uic generated.
    */
-  Ui::ImportImageDialog * m_UI;
+  Ui::ImportSubDatasetDialog * m_UI;
 
   /**
    */
@@ -199,4 +199,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdImportImageDialog_h
+#endif // __mvdImportSubDatasetDialog_h
