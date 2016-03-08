@@ -89,7 +89,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
   rateCalculator->produceMap();
   rateCalculator->setMinimumNbofSamplesByClass();
-  std::map<std::string, double>  ratesbyClass = rateCalculator->GetRatesbyClass();
+  RateCalculatorype::mapRateType ratesbyClass = rateCalculator->GetRatesbyClass();
     
     
   std::string fieldName("Label");

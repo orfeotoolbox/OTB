@@ -23,6 +23,7 @@
 #include "otbOGRDataSourceWrapper.h"
 #include "otbOGRDataResampler.h"
 #include "itkSimpleDataObjectDecorator.h"
+#include "otbSamplingRateCalculator.h"
 
 namespace otb
 {
@@ -89,7 +90,7 @@ public:
   itkSetMacro(FieldName, std::string);
   itkGetMacro(FieldName, std::string);
   
-  void SetRatesbyClass(const std::map<std::string, double>& map )
+  void SetRatesbyClass(const SamplingRateCalculator::mapRateType& map )
   {
       m_RatesbyClass = map;
   }
@@ -145,7 +146,7 @@ private:
 
   OGRDataResampler::Pointer m_TemporaryStats;
   
-  std::map<std::string, double>  m_RatesbyClass;
+  SamplingRateCalculator::mapRateType  m_RatesbyClass;
 
   // Layer to use in the shape file, default to 0
   int m_LayerIndex;
@@ -202,7 +203,7 @@ public:
   void SetFieldName(std::string &key);
   std::string GetFieldName();
   
-  void SetRatesbyClass(const std::map<std::string, double>& map);
+  void SetRatesbyClass(const SamplingRateCalculator::mapRateType& map);
   
   void SetLayerIndex(int index);
   int GetLayerIndex();

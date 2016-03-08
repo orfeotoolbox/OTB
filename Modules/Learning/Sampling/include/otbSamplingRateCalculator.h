@@ -51,6 +51,14 @@ public:
   typedef std::set<std::string> SetType;
   typedef MapType::const_iterator constItMapType;
   typedef SetType::const_iterator constItSetType;
+  typedef struct
+   {
+     unsigned int required;
+     unsigned int tot;
+     double rate;
+   } tripletType;
+   
+  typedef std::map<std::string, tripletType > mapRateType;
   
   
   /** Type macro */
@@ -68,7 +76,7 @@ public:
   void setNbofSamplesAllClasses(unsigned int);
   void setMinimumNbofSamplesByClass(void);
   void write(std::string );
-  const std::map<std::string, double>& GetRatesbyClass();
+  const mapRateType& GetRatesbyClass();
 
 
 protected:
@@ -88,8 +96,8 @@ private:
   void operator =(const Self&);    //purposely not implemented
   
   
-  void keyInterpretor(std::string , std::string &imageName, std::string &className ) const;
-  std::string keyGenerator( int  , unsigned int );
+  void keyInterpretor(std::string , std::string &className ) const;
+  std::string keyGenerator( unsigned int );
   void findImagesAndClasses();
 
   int m_NbImg;
@@ -98,7 +106,9 @@ private:
   MapType m_totNbSamplesByClass;
   SetType m_setClassNames;
   SetType m_setImagesNames;
-  std::map<std::string, double>  m_RatesbyClass;
+  
+  
+  mapRateType m_RatesbyClass;
 
 };
 } // End namespace otb

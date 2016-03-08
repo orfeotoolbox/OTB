@@ -77,7 +77,7 @@ int otbSamplingRateCalculatorSmallest2(int argc, char* argv[])
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
   rateCalculator->produceMap();
   rateCalculator->setMinimumNbofSamplesByClass();
-  std::map<std::string, double>  ratesbyClass = rateCalculator->GetRatesbyClass();
+  RateCalculatorype::mapRateType ratesbyClass = rateCalculator->GetRatesbyClass();
   rateCalculator->write(argv[1]);
   rateCalculator->Print(std::cout);
   return EXIT_SUCCESS;

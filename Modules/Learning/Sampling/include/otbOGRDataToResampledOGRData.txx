@@ -23,6 +23,7 @@
 #include "itkImageRegionConstIterator.h"
 #include "otbOGRDataSourceWrapper.h"
 
+
 namespace otb
 {
 // --------- otb::PersistentOGRDataToResampledOGRData ---------------------
@@ -512,7 +513,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 void
 OGRDataToResampledOGRData<TInputImage,TMaskImage>
-::SetRatesbyClass(const std::map<std::string, double>& map)
+::SetRatesbyClass(const SamplingRateCalculator::mapRateType& map)
   {
      this->GetFilter()->SetRatesbyClass(map);
      

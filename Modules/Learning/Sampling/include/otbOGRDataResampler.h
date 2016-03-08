@@ -19,6 +19,7 @@
 #define __otbOGRDataResampler_h
 
 #include "otbOGRDataSourceWrapper.h"
+#include "otbSamplingRateCalculator.h"
 
 namespace otb
 {
@@ -61,9 +62,16 @@ public:
   itkSetMacro(FieldIndex, int);
   itkGetMacro(FieldIndex, int);
   
-  void SetRatesbyClass(const std::map<std::string, double>& map )
+  void SetRatesbyClass(const SamplingRateCalculator::mapRateType& map )
   {
-      m_RatesbyClass = map;
+      //m_RatesbyClass = map;
+      
+      SamplingRateCalculator::mapRateType::const_iterator it = map.begin();
+      for(; it != map.end(); ++it)
+      {
+          //SamplingRateCalculator::tripletType tpt = it--s
+          m_RatesbyClass[it->first]=it->second;
+      }
   }
   void Prepare();
 
@@ -86,7 +94,7 @@ private:
   
   int m_FieldIndex;
   bool m_alreadyPrepared;
-  std::map<std::string, double> m_RatesbyClass;
+  SamplingRateCalculator::mapRateType m_RatesbyClass;
   std::map<std::string, int > m_ClassToCurrentIndex;
   std::map<std::string, std::vector<bool> > m_ClassToBools;
   

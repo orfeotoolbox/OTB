@@ -36,10 +36,10 @@ SamplingRateCalculator
 
 void
 SamplingRateCalculator
-::keyInterpretor(std::string key, std::string &imageName, std::string &className) const
+::keyInterpretor(std::string key, std::string &className) const
 {
 
-      std::size_t pos = key.find_first_of("_");
+      /*std::size_t pos = key.find_first_of("_");
       std::string firstPart = key.substr (0,pos);
       //std::cout << firstPart << std::endl;
       std::size_t posA = firstPart.find_first_of("=");
@@ -50,8 +50,11 @@ SamplingRateCalculator
       //std::cout << secondPart << std::endl;
       std::size_t posB = secondPart.find_first_of("=");
       className = secondPart.substr (posB+1);
-      //std::cout << className << std::endl;
-
+      //std::cout << className << std::endl;*/
+      
+      std::size_t pos = key.find_first_of("=");
+      className = key.substr(pos+1);
+      std::cout << "className = " << className << std::endl;
 }
 
 
@@ -65,7 +68,7 @@ SamplingRateCalculator
   constItMapType constIt = m_map.begin();
   for(; constIt != m_map.end(); ++constIt)
    {
-      keyInterpretor(constIt->first,imageName,className);
+      keyInterpretor(constIt->first,className);
       
       m_setImagesNames.insert( imageName );
         
@@ -92,11 +95,11 @@ SamplingRateCalculator
 
 std::string
 SamplingRateCalculator
-::keyGenerator(int nbI, unsigned int nbC)
+::keyGenerator(unsigned int nbC)
 {
 
    std::ostringstream  key;
-   key << "img="<< nbI << "_class=" << nbC;
+   key << "class=" << nbC;
 
    return key.str();
 }
@@ -109,11 +112,11 @@ SamplingRateCalculator
 
    srand((unsigned)time(NULL));
 
-   for (int i=0; i<nbImg; i++)
+  // for (int i=0; i<nbImg; i++)
         for (int c=0; c<nbClasses; c++)
         {
 
-           std::string key = keyGenerator(i,c);
+           std::string key = keyGenerator(c);
            m_map[key] = rand() % (range + 1);
            
         }
@@ -133,11 +136,11 @@ SamplingRateCalculator
  * */
  
 
-    std::string key = keyGenerator(0,1);
+    std::string key = keyGenerator(1);
     m_map[key] = 104;
-    key = keyGenerator(0,2);
+    key = keyGenerator(2);
     m_map[key] = 160;
-    key = keyGenerator(0,3);
+    key = keyGenerator(3);
     m_map[key] = 211;
            
     findImagesAndClasses();
@@ -168,37 +171,37 @@ setMinimumNbofSamplesByClass(void)
 
 void 
 SamplingRateCalculator
-::setNbofSamplesAllClasses(unsigned int dNeededNbSamples)
+::setNbofSamplesAllClasses(unsigned int dRequiredNbSamples)
 {
    std::ostringstream oss;
-   oss << dNeededNbSamples;
+   oss << dRequiredNbSamples;
    
    this->setNbofSamplesAllClasses(oss.str());
 }
 
 void 
 SamplingRateCalculator
-::setNbofSamplesAllClasses(std::string neededNbSamples)
+::setNbofSamplesAllClasses(std::string RequiredNbSamples)
 {
-   std::string neededNbSamplesByClass;
+   std::string RequiredNbSamplesByClass;
    constItSetType itClass=m_setClassNames.begin();
    for(; itClass != m_setClassNames.end(); ++itClass)
    {
-      neededNbSamplesByClass += *itClass + ":" + neededNbSamples + " ";
+      RequiredNbSamplesByClass += *itClass + ":" + RequiredNbSamples + " ";
    }
-  // std::cout << " neededNbSamplesByClass = " << neededNbSamplesByClass << std::endl;
+  // std::cout << " RequiredNbSamplesByClass = " << RequiredNbSamplesByClass << std::endl;
   
-  this->setNbofSamplesByClass(neededNbSamplesByClass);
+  this->setNbofSamplesByClass(RequiredNbSamplesByClass);
 }
 
 void 
 SamplingRateCalculator
-::setNbofSamplesByClass(std::string neededNbSamplesByClass)
+::setNbofSamplesByClass(std::string RequiredNbSamplesByClass)
 {
 
    std::string className,nbSamples,imageName;
 
-   std::istringstream issNeenedNbSamples(neededNbSamplesByClass);
+   std::istringstream issNeenedNbSamples(RequiredNbSamplesByClass);
 
    std::list<std::string> tokens;
 	     copy(std::istream_iterator<std::string>(issNeenedNbSamples),
@@ -207,15 +210,15 @@ SamplingRateCalculator
 
    
    if (m_setClassNames.size() != tokens.size() )
-      itkExceptionMacro(<< "Please, set the number of samples for each class : " << tokens.size() << "/" << m_NbClasses << " given." << std::endl
-                        << "Follow this pattern classname1:nbNeededSamples1 classname2:nbNeededSamples2 ...");
+      itkExceptionMacro(<< "Please, set the number of required samples for each class : " << tokens.size() << "/" << m_NbClasses << " given." << std::endl
+                        << "Follow this pattern classname1:nbRequiredSamples1 classname2:nbRequiredSamples2 ...");
    
    
    
    constItSetType itClass=m_setClassNames.begin();
    std::list<std::string>::iterator tokenIt = tokens.begin();
    
-   MapType clVsNeededNbSamples; //<class name,neededNbSamplesByClass>
+   MapType clVsRequiredNbSamples; //<class name,RequiredNbSamplesByClass>
    
    while( (itClass != m_setClassNames.end()) && (tokenIt != tokens.end()) )
    {
@@ -226,7 +229,7 @@ SamplingRateCalculator
       //std::cout << "token = " << *tokenIt << " token.size = " << tokenIt->size() << " pos = " << pos << std::endl;
       
       if ( (pos == std::string::npos) || (pos+1>=tokenIt->size() ) )
-       itkExceptionMacro(<< "Please, follow this pattern --> classname1:nbNeededSamples1 classname2:nbNeededSamples2 ...");
+       itkExceptionMacro(<< "Please, follow this pattern --> classname1:nbRequiredSamples1 classname2:nbRequiredSamples2 ...");
        
       className = tokenIt->substr (0,pos);
       nbSamples = tokenIt->substr (pos+1);
@@ -234,23 +237,23 @@ SamplingRateCalculator
       //std::cout << "className = " << className  << " nbSamples = " << nbSamples << std::endl;
    
       std::istringstream issNbSamples(nbSamples);
-      unsigned int dNbSamples;
+      unsigned int uiNbSamples;
       
-      if (!(issNbSamples >> dNbSamples))
-         itkExceptionMacro(<< "Please, follow this pattern --> classname1:nbNeededSamples1 classname2:nbNeededSamples2 ...");
+      if (!(issNbSamples >> uiNbSamples))
+         itkExceptionMacro(<< "Please, follow this pattern --> classname1:nbRequiredSamples1 classname2:nbRequiredSamples2 ...");
    
-      if ( !(dNbSamples>0) )
+      if ( !(uiNbSamples>0) )
          itkExceptionMacro(<< "Please, set a positive number for the number of samples of the class " << className << ".");
    
-      clVsNeededNbSamples[className]=dNbSamples;
+      clVsRequiredNbSamples[className]=uiNbSamples;
       
       ++itClass;
       ++tokenIt;
    }
    
    
-   constItMapType itMap = clVsNeededNbSamples.begin();
-   for(; itMap != clVsNeededNbSamples.end(); ++itMap)
+   constItMapType itMap = clVsRequiredNbSamples.begin();
+   for(; itMap != clVsRequiredNbSamples.end(); ++itMap)
    {
       if ( !(m_totNbSamplesByClass.count(itMap->first)>0) )
           itkExceptionMacro(<< "The class " << itMap->first << " is not a element the classes set.");
@@ -264,22 +267,28 @@ SamplingRateCalculator
    constItSetType itSet = m_setClassNames.begin();
    for(; itSet != m_setClassNames.end(); ++itSet)
    {
-      if ( !(clVsNeededNbSamples.count(*itSet)>0) )
-          itkExceptionMacro(<< "Please, set the number of samples needed for the class " << *itSet << ".");
+      if ( !(clVsRequiredNbSamples.count(*itSet)>0) )
+          itkExceptionMacro(<< "Please, set the number of samples Required for the class " << *itSet << ".");
                             
    }
    
   itMap = m_map.begin();
   for(; itMap != m_map.end(); ++itMap)
    {
-      keyInterpretor(itMap->first,imageName,className);
+      keyInterpretor(itMap->first,className);
 
-      double overallRatio = static_cast<double>(clVsNeededNbSamples[className]) / static_cast<double>(m_totNbSamplesByClass[className]);
+      double overallRate = static_cast<double>(clVsRequiredNbSamples[className]) / static_cast<double>(m_totNbSamplesByClass[className]);
       //double localRatio = static_cast<double>(itMap->second) / static_cast<double>(m_totNbSamplesByClass[className]);
       
-      m_RatesbyClass[itMap->first] = overallRatio*100.;
       
-      std::cout << itMap->first << " " << m_RatesbyClass[itMap->first] << "%" << std::endl;
+      tripletType tpt;
+      tpt.required=clVsRequiredNbSamples[className];
+      tpt.tot=0;
+      tpt.rate=overallRate*100.;
+      
+      m_RatesbyClass[itMap->first] = tpt;
+      
+      //std::cout << itMap->first << " " << m_RatesbyClass[itMap->first] << "%" << std::endl;
     
    }
    
@@ -294,9 +303,12 @@ SamplingRateCalculator
   if (file)
   {
      //file << m_RatesbyClass.str();
-     std::map<std::string, double>::iterator itRates = m_RatesbyClass.begin();
+     mapRateType::iterator itRates = m_RatesbyClass.begin();
      for(; itRates != m_RatesbyClass.end(); ++itRates)
-        file << itRates->first << " " << itRates->second << std::endl;
+     {
+        tripletType tpt=itRates->second;
+        file << itRates->first << " " << tpt.required << " " << tpt.tot << " " << tpt.rate << std::endl;
+     }
      
      file.close();
   }
@@ -308,7 +320,7 @@ SamplingRateCalculator
 }
 
 
-const std::map<std::string, double>& 
+const SamplingRateCalculator::mapRateType& 
 SamplingRateCalculator
 ::GetRatesbyClass()
 {

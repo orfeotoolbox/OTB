@@ -74,7 +74,7 @@ if (!m_alreadyPrepared)
     //std::cout << "### " << mapPercToVect[15.0][i] << std::endl;
 
 
-    std::map<std::string, double>::iterator it = m_RatesbyClass.begin();
+    SamplingRateCalculator::mapRateType::iterator it = m_RatesbyClass.begin();
     for(;it !=m_RatesbyClass.end(); ++it)
     {
 
@@ -86,9 +86,9 @@ if (!m_alreadyPrepared)
         
         std::map<double,std::vector<bool> >::iterator it2 = mapPercToVect.begin();
         for(;it2 !=mapPercToVect.end(); ++it2)
-          if (fabs(it2->first - it->second)<mini)
+          if (fabs(it2->first - it->second.rate)<mini)
           {
-               mini=fabs(it2->first - it->second);
+               mini=fabs(it2->first - it->second.rate);
                bestClassName = className;
                bestBools = it2->second;
           }
