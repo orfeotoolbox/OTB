@@ -121,7 +121,7 @@ OGRDataResampler::TakeSample(std::string className)
    
    m_ClassToCurrentIndex[className]++;
 
-   return res;
+   return true;
 }
 
 void

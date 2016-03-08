@@ -21,6 +21,7 @@
 #include "otbMaskedIteratorDecorator.h"
 #include "itkImageRegionConstIteratorWithOnlyIndex.h"
 #include "itkImageRegionConstIterator.h"
+#include "otbOGRDataSourceWrapper.h"
 
 namespace otb
 {
@@ -99,16 +100,55 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   polygonSize = m_TemporaryStats->GetPolygonSizeMap();
   classToPhyPos = m_TemporaryStats->GetClassToPhyPosMap();
   
+  otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New("/home/christophe/mydev/OTB-Sandbox/otb-build/OTB/build/Testing/Temporary/outvd.sqlite", otb::ogr::DataSource::Modes::Overwrite );
+  otb::ogr::Layer outputLayer = output->CreateLayer(GetOGRData()->GetLayer( this->GetLayerIndex()  ).GetName(),NULL,wkbPoint); //Create new layer
+  
   std::cout << "----------------------" << std::endl;
-  ClassToPhyPosMapType::iterator it = classToPhyPos.begin();
-  for(; it!=classToPhyPos.end(); ++it)
+  std::cout << "output->GetLayersCount() = " << output->GetLayersCount() << std::endl;
+  std::cout << "outputLayer.GetName() = " << outputLayer.GetName() << std::endl;
+  std::cout << "outputLayer.GetGeomType() = " << OGRGeometryTypeToName(outputLayer.GetGeomType()) << std::endl;
+  std::cout << "outputLayer.GetFeatureCount() = " << outputLayer.GetFeatureCount(true) << std::endl;
+  
+  
+  for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
+  {
+     OGRFieldDefn fieldClass(it->first.c_str(), OFTString);
+     outputLayer.CreateField(fieldClass, false);
+  }
+  
+  OGRFeatureDefn featureDefn = outputLayer.GetLayerDefn();
+  
+  //int k=0;
+  for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
      {
         std::cout << " class : " << it->first << std::endl;
         for(int i=0; i<it->second.size(); i++)
-        std::cout << "(" <<it->second[i].first << "," << it->second[i].second << ") ";
+        {
+           std::cout << "(" <<it->second[i].first << "," << it->second[i].second << ") ";
+           
+           OGRPoint ogrTmpPoint;
+           ogrTmpPoint.setX(it->second[i].first);
+           ogrTmpPoint.setY(it->second[i].second);
+        
+        
+           otb::ogr::Feature feat = otb::ogr::Feature(featureDefn);
+
+           feat.SetGeometry(&ogrTmpPoint);
+           
+           outputLayer.CreateFeature(feat);
+
+           
+          // std::cout << "output->GetLayer(0).GetFeatureCount() = " << output->GetLayer(0).GetFeatureCount(true) << " " << k << std::endl;
+           //k++;
+           
+        }
         std::cout << std::endl;
      }
   std::cout << "----------------------" << std::endl;
+  
+  
+
+  
 }
 
 template<class TInputImage, class TMaskImage>

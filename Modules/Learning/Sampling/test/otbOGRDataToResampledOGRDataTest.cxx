@@ -123,7 +123,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
     ofs << "feature " << itPoly->first << " = "<< itPoly->second << std::endl;
     }
   
-  filter->SetLayerIndex(1);
+  /*filter->SetLayerIndex(1);
   filter->Update();
   
   ofs << "# Layer 1 : lines"<<std::endl;
@@ -151,7 +151,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   for (itPoly = polySize.begin() ; itPoly != polySize.end() ; ++itPoly)
     {
     ofs << "feature " << itPoly->first << " = "<< itPoly->second << std::endl;
-    }
+    }*/
 
   ofs.close();
   return EXIT_SUCCESS;
