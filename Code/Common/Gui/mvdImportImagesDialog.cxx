@@ -166,53 +166,57 @@ ImportImagesDialog
        i<filenames.size();
        ++ i )
     {
-    otb::GDALOverviewsBuilder::Pointer builder(
-      otb::GDALOverviewsBuilder::New()
-    );
+    std::string filename( QFile::encodeName( filenames[ i ] ).constData() );
+    assert( !filename.empty() );
 
-    QStandardItem * item = new QStandardItem( filenames[ i ] );
-    assert( item!=NULL );
-
-    item->setFlags( Qt::NoItemFlags );
-
-    try
+    if( otb::GDALOverviewsBuilder::CanGenerateOverviews( filename ) )
       {
-      builder->SetInputFileName(
-	QFile::encodeName( filenames[ i ] ).constData()
+      otb::GDALOverviewsBuilder::Pointer builder(
+	otb::GDALOverviewsBuilder::New()
       );
 
-      item->setFlags( item->flags() | Qt::ItemIsSelectable );
+      QStandardItem * item = new QStandardItem( filenames[ i ] );
+      assert( item!=NULL );
 
-      if( builder->GetOverviewsCount()<=1 )
+      item->setFlags( Qt::NoItemFlags );
+
+      try
 	{
-	item->setFlags( item->flags() | Qt::ItemIsEnabled );
+	builder->SetInputFileName( filename );
 
-	++ m_EffectiveCount;
+	item->setFlags( item->flags() | Qt::ItemIsSelectable );
+
+	if( builder->GetOverviewsCount()<=1 )
+	  {
+	  item->setFlags( item->flags() | Qt::ItemIsEnabled );
+
+	  ++ m_EffectiveCount;
+	  }
+
+	builder->SetResolutionFactor( 2 );
+	builder->SetNbResolutions( builder->CountResolutions( 2 ) );
+	builder->SetResamplingMethod( otb::GDAL_RESAMPLING_AVERAGE );
+	builder->SetCompressionMethod( otb::GDAL_COMPRESSION_NONE );
+	builder->SetFormat( otb::GDAL_FORMAT_GEOTIFF );
+	}
+      catch( const std::exception & e )
+	{
+	QMessageBox::warning(
+	  this,
+	  PROJECT_NAME,
+	  tr(
+	    "The following exception has raised when scanning file '%1' for GDAL overview settings:\n\n%2" )
+	  .arg( filenames[ i ] )
+	  .arg( e.what() )
+	);
+
+	builder = otb::GDALOverviewsBuilder::Pointer();
 	}
 
-      builder->SetResolutionFactor( 2 );
-      builder->SetNbResolutions( builder->CountResolutions( 2 ) );
-      builder->SetResamplingMethod( otb::GDAL_RESAMPLING_AVERAGE );
-      builder->SetCompressionMethod( otb::GDAL_COMPRESSION_NONE );
-      builder->SetFormat( otb::GDAL_FORMAT_GEOTIFF );
+      m_GDALOverviewsBuilders[ i ] = builder;
+
+      itemModel->appendRow( item );
       }
-    catch( const std::exception & e )
-      {
-      QMessageBox::warning(
-	this,
-	PROJECT_NAME,
-	tr(
-	  "The following exception has raised when scanning file '%1' for GDAL overview settings:\n\n%2" )
-	.arg( filenames[ i ] )
-	.arg( e.what() )
-      );
-
-      builder = otb::GDALOverviewsBuilder::Pointer();
-      }
-
-    m_GDALOverviewsBuilders[ i ] = builder;
-
-    itemModel->appendRow( item );
     }
 }
 
