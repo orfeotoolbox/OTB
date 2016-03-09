@@ -1,0 +1,51 @@
+\chapter{Reading and Writing Auxilary Data}
+\index{Auxilary data}
+\label{sec:ReadingAuxData}
+
+As we have seen in the previous chapter, OTB has a great capability to
+read and process images. However, images are not the only type of data
+we will need to manipulate. Images are characterized by a regular
+sampling grid. For some data, such as Digital Elevation Models (DEM)
+or Lidar, this is too restrictive and we need other representations.
+
+Vector data are also used to represent cartographic objects,
+segmentation results, etc: basically, everything which can be seen as
+points, lines or polygons. OTB provides functionnalities for accessing
+this kind of data.
+
+\section{Reading DEM Files}
+\index{Digital elevation model}
+\label{sec:ReadDEM}
+\input{DEMToImageGenerator.tex}
+
+\section{Elevation management with OTB}
+\ifitkFullVersion
+\label{sec:DEMHandler}
+\fi
+\input{DEMHandlerExample.tex}
+
+More examples about representing DEM are presented in section~\ref{sec:ViewingAltitudeImages}.
+
+\section{Reading and Writing Shapefiles and KML}
+\index{Auxilary data!vector data}
+\index{Auxilary data!shapefile}
+\index{Auxilary data!KML}
+\label{sec:ReadVectorData}
+\input{VectorDataIOExample.tex}
+
+\section{Handling large vector data through OGR}
+\index{Auxilary data!OGR vector data}
+\index{OGR wrappers}
+\index{OGR wrappers!otb::ogr::DataSource}
+\index{OGR wrappers!otb::ogr::Layer}
+\index{OGR wrappers!otb::ogr::Feature}
+\index{OGR wrappers!otb::ogr::Field}
+\index{OGR wrappers!otb::ogr::UniqueGeometryPtr}
+\index{OGR wrappers!OGRGeometry}
+\label{sec:OGRWrappers}
+\input{OGRWrappersExample.tex}
+
+% \section{Reading DXF Files}
+% \index{vector data!dxf}
+% \label{sec:ReadDXF}
+% \input{DXFReaderExample.tex}

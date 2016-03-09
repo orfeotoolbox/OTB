@@ -49,11 +49,6 @@ public:
   /**
    * Double precision point-type.
    */
-  typedef itk::Point< float, 2 > Point2f;
-
-  /**
-   * Single precision point-type.
-   */
   typedef itk::Point< double, 2 > Point2d;
 
   /**
@@ -73,7 +68,9 @@ public:
    *
    * @return true if the operation has succeeded; false otherwise.
    */
-  template <typename T> bool TransformFromViewport(T & out, const T & in, bool isPhysical = true) const;
+  virtual bool TransformFromViewport( Point2d & out,
+                                      const Point2d & in,
+                                      bool isPhysical = true ) const;
 
   /**
    * Transform given point from viewport coordinate-system to this
@@ -88,8 +85,10 @@ public:
    *
    * @return true if the operation has succeeded; false otherwise.
    */
-  template <typename T> bool TransformToViewport(T & out, const T & in, bool isPhysical = true) const;
-  
+  virtual bool TransformToViewport( Point2d & out,
+                                    const Point2d & in,
+                                    bool isPhysical = true ) const;
+
   /**
    */
   virtual std::string GetWkt() const;

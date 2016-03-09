@@ -357,27 +357,28 @@ OGRLayerStreamStitchingFilter<TInputImage>
          progress.CompletedPixel();
 
       } //end for x
-      OGRErr errCommitX = m_OGRLayer.ogr().CommitTransaction();
-      if (errCommitX != OGRERR_NONE)
-     {
-     itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
-     }
 
+      if(m_OGRLayer.ogr().TestCapability("Transactions"))
+        {
+      
+        OGRErr errCommitX = m_OGRLayer.ogr().CommitTransaction();
+        if (errCommitX != OGRERR_NONE)
+          {
+          itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
+          }
+        }
    } //end for y
-
-   const OGRErr errCommitY = m_OGRLayer.ogr().CommitTransaction();
-
-   //FIXME errCommitY return code is  OGRERR_FAILURE on some segmentation
-   //tests. Commented for now but need to investigate how it happens.
-   //stiching transcation 
-   /*
-   if (errCommitY != OGRERR_NONE)
+      
+   if(m_OGRLayer.ogr().TestCapability("Transactions"))
      {
-     itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ". Gdal error code " << errCommitY << "." << std::endl);
+     const OGRErr errCommitY = m_OGRLayer.ogr().CommitTransaction();
+     
+     if (errCommitY != OGRERR_NONE)
+       {
+       itkWarningMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ". Gdal error code " << errCommitY << "." << std::endl);
+       }
      }
-   */
 }
-
 template<class TImage>
 void
 OGRLayerStreamStitchingFilter<TImage>

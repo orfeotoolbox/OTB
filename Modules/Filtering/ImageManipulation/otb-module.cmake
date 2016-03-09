@@ -7,6 +7,7 @@ data.")
 
 otb_module(OTBImageManipulation
   DEPENDS
+    OTBBoostAdapters
     OTBCommon
     OTBITK
     OTBImageBase

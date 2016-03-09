@@ -11,6 +11,6 @@ target_link_libraries(OTBIceViewer
 
 otb_module_target(OTBIceViewer)
 
-add_executable(otbIceViewer otbIce.cxx)
-target_link_libraries(otbIceViewer OTBIceViewer)
-otb_module_target(otbIceViewer)
+add_executable(iceViewer otbIce.cxx)
+target_link_libraries(iceViewer OTBIceViewer)
+otb_module_target(iceViewer)
