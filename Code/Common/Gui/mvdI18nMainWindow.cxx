@@ -203,27 +203,38 @@ I18nMainWindow
 }
 
 /*****************************************************************************/
-void
+bool
 I18nMainWindow
 ::BuildGDALOverviews( const QStringList & filenames )
 {
   ImportImagesDialog * importDialog = new ImportImagesDialog( filenames, this );
 
-  if( importDialog->GetEffectiveCount()>0 &&
-      importDialog->exec()!=QDialog::Accepted )
-    return;
+  if( importDialog->GetEffectiveCount()<1 )
+    return true;
 
-  // AbstractWorker will be automatically deleted by BackgroundTask in
-  // ::Import().
-  OverviewBuilder * builder =
-    new OverviewBuilder(
-      importDialog->GetGDALOverviewsBuilders()
-    );
+  int result = importDialog->exec();
 
-  delete importDialog;
-  importDialog = NULL;
+  qDebug() << "result:" << result;
 
-  Import( builder );
+  if( result== QDialog::Rejected )
+    return false;
+
+  if( result==QDialog::Accepted )
+    {
+    // AbstractWorker will be automatically deleted by BackgroundTask in
+    // ::Import().
+    OverviewBuilder * builder =
+      new OverviewBuilder(
+	importDialog->GetGDALOverviewsBuilders()
+      );
+
+    delete importDialog;
+    importDialog = NULL;
+
+    Import( builder );
+    }
+
+  return true;
 }
 
 /*****************************************************************************/

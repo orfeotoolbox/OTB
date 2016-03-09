@@ -1198,7 +1198,8 @@ MainWindow
   if( filenames.isEmpty() )
     return;
 
-  BuildGDALOverviews( filenames );
+  if( !BuildGDALOverviews( filenames ) )
+    return;
 
   if( filenames.count()==1 )
     ImportImage( filenames.front(), 0 );

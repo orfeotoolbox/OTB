@@ -287,7 +287,7 @@ protected:
 
   /**
    */
-  void BuildGDALOverviews( const QStringList & filenames );
+  bool BuildGDALOverviews( const QStringList & filenames );
 
   /**
    */

@@ -159,6 +159,10 @@ private:
 
   /**
    */
+  QPushButton * m_IgnoreButton;
+
+  /**
+   */
   GDALOverviewsBuilderVector m_GDALOverviewsBuilders;
 
   /**
@@ -170,6 +174,8 @@ private:
 //
 // Slots.
 private slots:
+  void on_buttonBox_clicked( QAbstractButton * );
+
   /**
    */
   void OnCurrentChanged( const QModelIndex & , const QModelIndex & );

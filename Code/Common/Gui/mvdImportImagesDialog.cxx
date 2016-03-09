@@ -278,6 +278,37 @@ ImportImagesDialog
 /*****************************************************************************/
 void
 ImportImagesDialog
+::on_buttonBox_clicked( QAbstractButton * button )
+{
+  // qDebug() << this << "::on_buttonBox_clicked(" << button << ")";
+
+  assert( m_UI!=NULL );
+  assert( button!=NULL );
+
+  switch( m_UI->buttonBox->standardButton( button ) )
+    {
+    case QDialogButtonBox::Ok:
+      accept();
+      break;
+
+    case QDialogButtonBox::Cancel:
+      reject();
+      break;
+
+    case QDialogButtonBox::Ignore:
+      done( -1 );
+      break;
+
+    default:
+      assert( false && "Unhandled QDialogButtonBox::StandardButton enum value!" );
+      reject();
+      break;
+    }
+}
+
+/*****************************************************************************/
+void
+ImportImagesDialog
 ::OnCurrentChanged( const QModelIndex & current, const QModelIndex & )
 {
   // qDebug() << this << "::OnCurrentChanged(" << current << "," << previous << ")";
