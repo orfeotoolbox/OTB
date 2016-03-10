@@ -148,6 +148,9 @@ private:
   /**
    */
   void SetHeaders();
+  /**
+   */
+  const otb::GDALOverviewsBuilder::Pointer & GetBuilder( const QModelIndex & ) const;
 
 //
 // Private attributes.

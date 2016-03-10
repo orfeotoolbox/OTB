@@ -134,6 +134,20 @@ ImportImagesDialog
 }
 
 /*****************************************************************************/
+const otb::GDALOverviewsBuilder::Pointer &
+ImportImagesDialog
+::GetBuilder( const QModelIndex & index ) const
+{
+  assert( index.isValid() );
+
+  assert(
+    index.row()>=0 &&
+    static_cast< size_t >( index.row() )<m_GDALOverviewsBuilders.size() );
+
+  return m_GDALOverviewsBuilders[ index.row() ];
+}
+
+/*****************************************************************************/
 int
 ImportImagesDialog
 ::GetEffectiveCount() const
@@ -334,17 +348,13 @@ ImportImagesDialog
 
   // assert( itemModel!=NULL );
 
-  assert( current.isValid() );
+  const otb::GDALOverviewsBuilder::Pointer & builder =
+    GetBuilder( current );
 
-  assert(
-    current.row()>=0 &&
-    static_cast< size_t >( current.row() )<m_GDALOverviewsBuilders.size() );
-
-  otb::GDALOverviewsBuilder::Pointer builder(
-    m_GDALOverviewsBuilders[ current.row() ]
+  m_UI->pyramidWidget->setEnabled(
+    !builder.IsNull() &&
+    !builder->IsBypassEnabled()
   );
-
-  m_UI->pyramidWidget->setEnabled( !builder.IsNull() );
 
   m_UI->pyramidWidget->SetBuilder( builder );
 }
@@ -354,7 +364,31 @@ void
 ImportImagesDialog
 ::OnItemChanged( QStandardItem * item )
 {
-  qDebug() << this << "::OnItemChanged(" << item << ")";
+  // qDebug() << this << "::OnItemChanged(" << item << ")";
+
+  assert( item!=NULL );
+
+  QModelIndex index( item->index() );
+
+
+  const otb::GDALOverviewsBuilder::Pointer & builder =
+    GetBuilder( item->index() );
+
+  if( !builder.IsNull() )
+    builder->SetBypassEnabled( item->checkState()!=Qt::Checked );
+
+
+  assert( m_UI!=NULL );
+  assert( m_UI->filenamesTreeView->selectionModel()!=NULL );
+
+  if( m_UI->filenamesTreeView->selectionModel()->currentIndex()!=index )
+    return;
+
+
+  m_UI->pyramidWidget->setEnabled(
+    !builder.IsNull() &&
+    !builder->IsBypassEnabled()
+  );
 }
 
 } // end namespace 'mvd'
