@@ -843,3 +843,13 @@ otb_test_application(NAME apTvClPredictRegressionTest_monovar
 
 endif()
 
+#----------- PolygonClassStatistics TESTS ----------------
+otb_test_application(NAME apTvClPolygonClassStatisticsTest
+                     APP PolygonClassStatistics
+                     OPTIONS -in ${INPUTDATA}/cthead1_flip.tif
+                             -vec ${INPUTDATA}/variousVectors.sqlite
+                             -field label
+                             -out ${TEMP}/apTvClPolygonClassStatisticsOut.xml
+                     VALID   --compare-ascii ${NOTOL}
+                             ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
+                             ${TEMP}/apTvClPolygonClassStatisticsOut.xml)
