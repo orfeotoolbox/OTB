@@ -175,10 +175,13 @@ private:
 // Slots.
 private slots:
   void on_buttonBox_clicked( QAbstractButton * );
-
   /**
    */
   void OnCurrentChanged( const QModelIndex & , const QModelIndex & );
+
+  /**
+   */
+  void OnItemChanged( QStandardItem * );
 };
 
 } // end namespace 'mvd'

@@ -107,6 +107,14 @@ ImportImagesDialog
   }
 
   QObject::connect(
+    m_UI->filenamesTreeView->model(),
+    SIGNAL( itemChanged( QStandardItem * ) ),
+    // to:
+    this,
+    SLOT( OnItemChanged( QStandardItem * ) )
+  );
+
+  QObject::connect(
     m_UI->filenamesTreeView->selectionModel(),
     SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ),
     // to:
@@ -188,7 +196,9 @@ ImportImagesDialog
 
 	if( builder->GetOverviewsCount()<=1 )
 	  {
-	  item->setFlags( item->flags() | Qt::ItemIsEnabled );
+	  item->setFlags( item->flags() | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+
+	  item->setCheckState( Qt::Checked );
 
 	  ++ m_EffectiveCount;
 	  }
@@ -337,6 +347,14 @@ ImportImagesDialog
   m_UI->pyramidWidget->setEnabled( !builder.IsNull() );
 
   m_UI->pyramidWidget->SetBuilder( builder );
+}
+
+/*****************************************************************************/
+void
+ImportImagesDialog
+::OnItemChanged( QStandardItem * item )
+{
+  qDebug() << this << "::OnItemChanged(" << item << ")";
 }
 
 } // end namespace 'mvd'
