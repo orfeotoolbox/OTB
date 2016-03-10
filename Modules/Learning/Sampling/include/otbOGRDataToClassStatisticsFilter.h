@@ -32,6 +32,7 @@ namespace otb
  * 
  * \brief Persistent filter to compute class statistics based on vectors
  * 
+ * \ingroup OTBSampling
  */
 template<class TInputImage, class TMaskImage>
 class ITK_EXPORT PersistentOGRDataToClassStatisticsFilter :
@@ -140,6 +141,8 @@ private:
  * \brief Computes class statistics based on vectors using a persistent filter
  * 
  * \sa PersistentOGRDataToClassStatisticsFilter
+ *
+ * \ingroup OTBSampling
  */
 template<class TInputImage, class TMaskImage>
 class ITK_EXPORT OGRDataToClassStatisticsFilter :
