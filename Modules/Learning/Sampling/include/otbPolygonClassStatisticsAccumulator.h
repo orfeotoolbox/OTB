@@ -28,6 +28,7 @@ namespace otb
  *
  * \brief This class stores statistics of OGR data for each thread
  *
+ * \ingroup OTBSampling
  */
 class PolygonClassStatisticsAccumulator : public itk::Object
 {

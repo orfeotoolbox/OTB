@@ -168,7 +168,7 @@ PolygonClassStatisticsAccumulator
       OGRGeometryCollection *geomCollection = dynamic_cast<OGRGeometryCollection*>(geom);
       if (geomCollection)
         {
-        int nbGeom =  geomCollection->getNumGeometries();
+        unsigned int nbGeom =  geomCollection->getNumGeometries();
         for (unsigned int i=0 ; i < nbGeom ; ++i)
           {
           this->AddGeometry(geomCollection->getGeometryRef(i),
