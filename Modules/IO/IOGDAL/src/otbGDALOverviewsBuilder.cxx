@@ -109,7 +109,8 @@ GDALOverviewsBuilder
   m_ResolutionFactor( 2 ),
   m_ResamplingMethod( GDAL_RESAMPLING_NEAREST ),
   m_CompressionMethod( GDAL_COMPRESSION_NONE ),
-  m_Format( GDAL_FORMAT_GEOTIFF )
+  m_Format( GDAL_FORMAT_GEOTIFF ),
+  m_IsBypassEnabled( false )
 {
   Superclass::SetNumberOfRequiredInputs(0);
   Superclass::SetNumberOfRequiredOutputs(0);
@@ -201,6 +202,22 @@ GDALOverviewsBuilder
     s[ 0 ] /= factor;
     s[ 1 ] /= factor;
     }
+}
+
+/***************************************************************************/
+void
+GDALOverviewsBuilder
+::SetBypassEnabled( bool isEnabled )
+{
+  m_IsBypassEnabled = isEnabled;;
+}
+
+/***************************************************************************/
+bool
+GDALOverviewsBuilder
+::IsBypassEnabled() const
+{
+  return m_IsBypassEnabled;
 }
 
 /***************************************************************************/
@@ -389,7 +406,9 @@ GDALOverviewsBuilder
 */
 
 /***************************************************************************/
-void GDALOverviewsBuilder::Update()
+void
+GDALOverviewsBuilder
+::Update()
 {
   // typedef itk::SmartPointer<GDALDatasetWrapper> GDALDatasetWrapperPointer;
   //   GDALDatasetWrapperPointer wrappedDataset =
@@ -410,6 +429,9 @@ void GDALOverviewsBuilder::Update()
       << "Wrong number of resolutions: " << m_NbResolutions
     );
     }
+
+  if( m_IsBypassEnabled )
+    return;
 
   // Build the overviews list from nb of resolution desired
   std::vector< int > ovwlist;

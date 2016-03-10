@@ -117,6 +117,10 @@ public:
   void SetResamplingMethod( GDALResampling );
 
 
+  void SetBypassEnabled( bool );
+
+  bool IsBypassEnabled() const;
+
   unsigned int GetWidth() const;
 
   unsigned int GetHeight() const;
@@ -173,6 +177,7 @@ private:
   GDALResampling m_ResamplingMethod;
   GDALCompression m_CompressionMethod;
   GDALFormat m_Format;
+  bool m_IsBypassEnabled : 1;
 
 }; // end of GDALOverviewsBuilder
 
