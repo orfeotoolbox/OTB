@@ -97,6 +97,9 @@ public:
   
   itkSetMacro(LayerIndex, int);
   itkGetMacro(LayerIndex, int);
+  
+  itkSetMacro(MaxSamplingTabSize, unsigned int);
+  itkGetMacro(MaxSamplingTabSize, unsigned int);
 
   // TODO: store the class count map as output #2
   const ClassCountObjectType* GetClassCountOutput() const;//remove
@@ -150,6 +153,7 @@ private:
 
   // Layer to use in the shape file, default to 0
   int m_LayerIndex;
+  unsigned int m_MaxSamplingTabSize;
 };
 
 /**
@@ -207,6 +211,9 @@ public:
   
   void SetLayerIndex(int index);
   int GetLayerIndex();
+  
+  void SetMaxSamplingTabSize(unsigned int index);
+  unsigned int GetMaxSamplingTabSize();
 
   const ClassCountObjectType* GetClassCountOutput() const; //remove
   ClassCountObjectType* GetClassCountOutput(); //remove
@@ -228,6 +235,8 @@ protected:
 private:
   OGRDataToResampledOGRData(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+  
+  
   
 };
 

@@ -37,7 +37,7 @@ OGRDataResampler
 ::selectN1(double per,unsigned int T)
 {
    if (!(T>0))
-     itkExceptionMacro(<< "In OGRDataResampler::selectN1 : sizes of the sampling arrays must be non-negative ("<< T << ")." << std::endl);
+     itkExceptionMacro(<< "In OGRDataResampler::selectN1 : sizes of the sampling arrays must be non-negative (" << T << ")." << std::endl);
 
    double dist = itk::NumericTraits<double>::max();
    double d;
@@ -67,7 +67,7 @@ OGRDataResampler
 ::selectN2(double per,unsigned int T)
 {
    if (!(T>0))
-     itkExceptionMacro(<< "In OGRDataResampler::selectN2 : sizes of the sampling arrays must be non-negative ("<< T << ")." << std::endl);
+     itkExceptionMacro(<< "In OGRDataResampler::selectN2 : sizes of the sampling arrays must be non-negative (" << T << ")." << std::endl);
 
    double dist = itk::NumericTraits<double>::max();
    double d;
@@ -128,8 +128,8 @@ OGRDataResampler::findBestSize(unsigned int tot)
    if (tot%size == 0)
       return size;
       
-   otbWarningMacro(<<"prime number > m_MaxSamplingTabSize (" << tot << "," << m_MaxSamplingTabSize << ")."<< std::endl );  
-   return 1;
+   otbWarningMacro(<<"prime number > m_MaxSamplingTabSize (" << tot << ">" << m_MaxSamplingTabSize << ")."<< std::endl );  
+   return tot;
 }
 
 void
@@ -234,7 +234,7 @@ m_alreadyPrepared=true;
 bool
 OGRDataResampler::TakeSample(std::string className)
 {
-return true;
+//return true;
 
    bool res=false;
 
@@ -253,13 +253,13 @@ return true;
    
    ind1++;
    
-   if (className.compare(std::string("2")) == 0)
-   std::cout << "ind1 = " << ind1 << std::endl;
+   //if (className.compare(std::string("2")) == 0)
+   //std::cout << "ind1 = " << ind1 << std::endl;
    
    if (ind1>=tab1.size()) 
    {  ind1=0;
-   if (className.compare(std::string("2")) == 0)
-       std::cout << "ooo un tour a été fait pour le tab1, classe : " << className << std::endl;
+   //if (className.compare(std::string("2")) == 0)
+   //    std::cout << "ooo un tour a été fait pour le tab1, classe : " << className << std::endl;
    }
    
    if(!res)
@@ -275,8 +275,8 @@ return true;
          
          if (ind2>=tab2.size()) 
          {   ind2=0;
-         if (className.compare(std::string("2")) == 0)
-             std::cout << "ooo un tour a été fait pour le tab2, classe : " << className << std::endl;
+     //    if (className.compare(std::string("2")) == 0)
+     //        std::cout << "ooo un tour a été fait pour le tab2, classe : " << className << std::endl;
          }
      }
        

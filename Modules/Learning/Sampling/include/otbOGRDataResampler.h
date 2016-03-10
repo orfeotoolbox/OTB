@@ -62,6 +62,9 @@ public:
   itkSetMacro(FieldIndex, int);
   itkGetMacro(FieldIndex, int);
   
+  itkSetMacro(MaxSamplingTabSize, unsigned int);
+  itkGetMacro(MaxSamplingTabSize, unsigned int);
+  
   void SetRatesbyClass(const SamplingRateCalculator::mapRateType& map )
   {
       m_RatesbyClass = map;
@@ -71,7 +74,7 @@ public:
 
 protected:
   /** Constructor */
-  OGRDataResampler() {m_alreadyPrepared=false; m_MaxSamplingTabSize=9*9; m_MinSamplingTabSize=1;} /////////constructor
+  OGRDataResampler() {m_alreadyPrepared=false; m_MaxSamplingTabSize=1000;} /////////constructor
   /** Destructor */
   virtual ~OGRDataResampler() {}
 
@@ -100,7 +103,6 @@ private:
                    std::string &className);
                    
   unsigned int m_MaxSamplingTabSize;                 
-  unsigned int m_MinSamplingTabSize;                 
   unsigned int selectN1(double per,unsigned int T);                 
   unsigned int selectN2(double per,unsigned int T);  
   std::vector<bool> randArray(unsigned int N,unsigned int T); 

@@ -116,7 +116,7 @@ SamplingRateCalculator
 {
 /*
    class 1 = 104
-   class 2 = 169
+   class 2 = 160
    class 3 = 211
 
  * */
@@ -125,7 +125,7 @@ SamplingRateCalculator
     std::string key = keyGenerator(1);
     m_map[key] = 104;
     key = keyGenerator(2);
-    m_map[key] = 169;
+    m_map[key] = 160;
     key = keyGenerator(3);
     m_map[key] = 211;
            

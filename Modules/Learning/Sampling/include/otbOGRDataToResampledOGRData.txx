@@ -31,7 +31,8 @@ namespace otb
 template<class TInputImage, class TMaskImage>
 PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 ::PersistentOGRDataToResampledOGRData() :
-  m_LayerIndex(0)
+  m_LayerIndex(0),
+  m_MaxSamplingTabSize(1000)
 {
   this->SetNumberOfRequiredOutputs(3);
   this->SetNthOutput(0,TInputImage::New());
@@ -105,10 +106,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
     for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
        std::cout << "ooo class : " << it->first << " " << it->second.size() << std::endl;
   std::cout << "oooooooooooooooooo" << std::endl;
-  std::cout << "oooooooooooooooooo" << std::endl;
-    for(ClassCountMapType::iterator it2 = classCount.begin(); it2!=classCount.end(); ++it2)
-       std::cout << "ooo class : " << it2->first << " " << it2->second << std::endl;
-  std::cout << "oooooooooooooooooo" << std::endl;
+
   
   /*otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New("/home/christophe/mydev/OTB-Sandbox/otb-build/OTB/build/Testing/Temporary/outvd.sqlite", otb::ogr::DataSource::Modes::Overwrite );
   otb::ogr::Layer outputLayer = output->CreateLayer(GetOGRData()->GetLayer( this->GetLayerIndex()  ).GetName(),NULL,wkbPoint); //Create new layer
@@ -184,6 +182,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   std::cout << "@@@ PersistentOGRDataToResampledOGRData Reset" << std::endl;
   m_TemporaryStats = OGRDataResampler::New();
   m_TemporaryStats->SetFieldIndex(fieldIndex);
+  m_TemporaryStats->SetMaxSamplingTabSize(m_MaxSamplingTabSize);
   if (m_RatesbyClass.empty())
      {itkGenericExceptionMacro("m_RatesbyClass is empty. Use SetRatesbyClass to provide some vector statistics information.");}
   else
@@ -518,6 +517,16 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
   this->GetFilter()->SetLayerIndex(index);
 }
 
+
+template<class TInputImage, class TMaskImage>
+void
+OGRDataToResampledOGRData<TInputImage,TMaskImage>
+::SetMaxSamplingTabSize(unsigned int max)
+{
+  this->GetFilter()->SetMaxSamplingTabSize(max);
+}
+
+
 template<class TInputImage, class TMaskImage>
 void
 OGRDataToResampledOGRData<TInputImage,TMaskImage>
@@ -533,6 +542,15 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 ::GetLayerIndex()
 {
   return this->GetFilter()->GetLayerIndex();
+}
+
+
+template<class TInputImage, class TMaskImage>
+unsigned int
+OGRDataToResampledOGRData<TInputImage,TMaskImage>
+::GetMaxSamplingTabSize()
+{
+  return this->GetFilter()->GetMaxSamplingTabSize();
 }
 
 template<class TInputImage, class TMaskImage>
