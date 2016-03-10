@@ -217,6 +217,10 @@ ImportImagesDialog
 
       itemModel->appendRow( item );
       }
+#if ( defined( _DEBUG ) && 1 ) || 0
+    else
+      qDebug() << "Skipped:" << filenames[ i ];
+#endif
     }
 }
 
