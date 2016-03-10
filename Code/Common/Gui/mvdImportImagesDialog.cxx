@@ -157,7 +157,7 @@ ImportImagesDialog
   assert( m_UI!=NULL );
   assert( m_UI->filenamesTreeView!=NULL );
 
-  m_GDALOverviewsBuilders.resize( filenames.size()  );
+  m_GDALOverviewsBuilders.clear();
 
   QStandardItemModel * itemModel =
     qobject_cast< QStandardItemModel * >( m_UI->filenamesTreeView->model() );
@@ -223,7 +223,7 @@ ImportImagesDialog
 	builder = otb::GDALOverviewsBuilder::Pointer();
 	}
 
-      m_GDALOverviewsBuilders[ i ] = builder;
+      m_GDALOverviewsBuilders.push_back( builder );
 
       itemModel->appendRow( item );
       }
