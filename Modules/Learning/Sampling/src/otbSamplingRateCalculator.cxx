@@ -116,18 +116,18 @@ SamplingRateCalculator
 {
 /*
    class 1 = 104
-   class 2 = 160
+   class 2 = 169
    class 3 = 211
 
  * */
  
 
     std::string key = keyGenerator(1);
-    m_map[key] = 104;
+    m_map[key] = 127;
     key = keyGenerator(2);
-    m_map[key] = 160;
+    m_map[key] = 131;
     key = keyGenerator(3);
-    m_map[key] = 211;
+    m_map[key] = 421;
            
     findImagesAndClasses();
 }

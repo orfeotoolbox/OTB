@@ -101,7 +101,12 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   polygonSize = m_TemporaryStats->GetPolygonSizeMap();
   classToPhyPos = m_TemporaryStats->GetClassToPhyPosMap();
   
-  otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New("/home/christophe/mydev/OTB-Sandbox/otb-build/OTB/build/Testing/Temporary/outvd.sqlite", otb::ogr::DataSource::Modes::Overwrite );
+  std::cout << "oooooooooooooooooo" << std::endl;
+    for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
+       std::cout << "ooo class : " << it->first << " " << it->second.size() << std::endl;
+  std::cout << "oooooooooooooooooo" << std::endl;
+  
+  /*otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New("/home/christophe/mydev/OTB-Sandbox/otb-build/OTB/build/Testing/Temporary/outvd.sqlite", otb::ogr::DataSource::Modes::Overwrite );
   otb::ogr::Layer outputLayer = output->CreateLayer(GetOGRData()->GetLayer( this->GetLayerIndex()  ).GetName(),NULL,wkbPoint); //Create new layer
   
   std::cout << "----------------------" << std::endl;
@@ -111,12 +116,9 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   std::cout << "outputLayer.GetFeatureCount() = " << outputLayer.GetFeatureCount(true) << std::endl;
   
   
-  for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
-  {
-     OGRFieldDefn fieldClass(it->first.c_str(), OFTString);
-     outputLayer.CreateField(fieldClass, false);
-  }
-  
+  OGRFieldDefn fieldClass("label", OFTString);
+  outputLayer.CreateField(fieldClass, false); 
+   
   OGRFeatureDefn featureDefn = outputLayer.GetLayerDefn();
   
   //int k=0;
@@ -133,6 +135,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
         
         
            otb::ogr::Feature feat = otb::ogr::Feature(featureDefn);
+           feat["label"].SetValue<std::string>(it->first);
 
            feat.SetGeometry(&ogrTmpPoint);
            
@@ -145,7 +148,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
         }
         std::cout << std::endl;
      }
-  std::cout << "----------------------" << std::endl;
+  std::cout << "----------------------" << std::endl;*/
   
   
 
@@ -174,6 +177,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
     //*it = OGRDataResampler::New();
     //(*it)->SetFieldIndex(fieldIndex);
   //}
+  std::cout << "@@@ PersistentOGRDataToResampledOGRData Reset" << std::endl;
   m_TemporaryStats = OGRDataResampler::New();
   m_TemporaryStats->SetFieldIndex(fieldIndex);
   if (m_RatesbyClass.empty())

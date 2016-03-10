@@ -71,7 +71,7 @@ public:
 
 protected:
   /** Constructor */
-  OGRDataResampler() {m_alreadyPrepared=false;}
+  OGRDataResampler() {m_alreadyPrepared=false; m_MaxSamplingTabSize=9*9; m_MinSamplingTabSize=20;} /////////constructor
   /** Destructor */
   virtual ~OGRDataResampler() {}
 
@@ -89,14 +89,22 @@ private:
   int m_FieldIndex;
   bool m_alreadyPrepared;
   SamplingRateCalculator::mapRateType m_RatesbyClass;
-  std::map<std::string, int > m_ClassToCurrentIndex;
-  std::map<std::string, std::vector<bool> > m_ClassToBools;
+  
+  std::map<std::string, std::pair<unsigned int,unsigned int> > m_ClassToCurrentIndices;
+  std::map<std::string, std::pair<std::vector<bool>,std::vector<bool> > > m_ClassToBools;
   
   template <typename TIterator>
   void AddGeometry(OGRGeometry *geom,
                    TIterator& imgIt,
                    unsigned long &fId,
                    std::string &className);
+                   
+  unsigned int m_MaxSamplingTabSize;                 
+  unsigned int m_MinSamplingTabSize;                 
+  unsigned int selectN1(double per,unsigned int T);                 
+  unsigned int selectN2(double per,unsigned int T);  
+  std::vector<bool> randArray(unsigned int N,unsigned int T); 
+  unsigned int findBestSize(unsigned int tot);              
                    
   bool TakeSample(std::string className);
   void keyInterpretor2(std::string key, std::string &className) const;
