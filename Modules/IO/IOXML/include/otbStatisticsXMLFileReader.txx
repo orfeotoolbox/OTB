@@ -22,6 +22,7 @@
 #include "itkMacro.h"
 #include "itksys/SystemTools.hxx"
 #include "otb_tinyxml.h"
+#include "otbStringUtils.h"
 
 namespace otb {
 
@@ -29,9 +30,56 @@ namespace otb {
 template < class TMeasurementVector >
 StatisticsXMLFileReader<TMeasurementVector>
 ::StatisticsXMLFileReader(): m_FileName(""),
-                             m_NumberOfOutputs(0),
                              m_IsUpdated(false)
 {}
+
+template < class TMeasurementVector >
+unsigned int
+StatisticsXMLFileReader<TMeasurementVector>
+::GetNumberOfOutputs()
+{
+  return m_MeasurementVectorContainer.size() + m_GenericMapContainer.size();
+}
+
+template < class TMeasurementVector >
+std::vector<std::string>
+StatisticsXMLFileReader<TMeasurementVector>
+::GetStatisticVectorNames()
+{
+  // Read the xml file once
+  if(!m_IsUpdated)
+    {
+    this->Read();
+    }
+
+  std::vector<std::string> output;
+  for (unsigned int i=0 ; i < m_MeasurementVectorContainer.size() ; ++i )
+    {
+    output.push_back(m_MeasurementVectorContainer[i].first);
+    }
+  return output;
+}
+
+template < class TMeasurementVector >
+std::vector<std::string>
+StatisticsXMLFileReader<TMeasurementVector>
+::GetStatisticMapNames()
+{
+  // Read the xml file once
+  if(!m_IsUpdated)
+    {
+    this->Read();
+    }
+
+  std::vector<std::string> output;
+  for ( GenericMapContainer::iterator it = m_GenericMapContainer.begin() ;
+        it != m_GenericMapContainer.end() ;
+        ++it)
+    {
+    output.push_back(it->first);
+    }
+  return output;
+}
 
 template < class TMeasurementVector >
 typename StatisticsXMLFileReader<TMeasurementVector>
@@ -48,7 +96,7 @@ StatisticsXMLFileReader<TMeasurementVector>
   // Check if the name of the Statistic is present
   bool found = false;
   unsigned int index = 0;
-  for(unsigned int  idx = 0; idx < m_NumberOfOutputs; ++idx)
+  for(unsigned int  idx = 0; idx < m_MeasurementVectorContainer.size() ; ++idx)
     {
     if(strcmp(m_MeasurementVectorContainer[idx].first.c_str(), statisticName) == 0 )
       {
@@ -62,6 +110,39 @@ StatisticsXMLFileReader<TMeasurementVector>
     itkExceptionMacro(<<"No entry corresponding to the token selected ("<<statisticName<<") in the XML file");
 
   return m_MeasurementVectorContainer[index].second;
+}
+
+template < class TMeasurementVector >
+template <typename MapType>
+MapType
+StatisticsXMLFileReader<TMeasurementVector>
+::GetStatisticMapByName(const char * statisticName)
+{
+  // Read the xml file once
+  if(!m_IsUpdated)
+    {
+    this->Read();
+    }
+
+  // Check if the name of the Statistic is present
+  std::string statName(statisticName);
+  if (m_GenericMapContainer.count(statName) == 0)
+    {
+    itkExceptionMacro(<<"No entry corresponding to the token selected ("<<statName<<") in the XML file");
+    }
+
+  MapType outputMap;
+  typename MapType::key_type tmpKey;
+  typename MapType::mapped_type tmpVal;
+  for ( GenericMapType::iterator it = m_GenericMapContainer[statName].begin() ;
+        it != m_GenericMapContainer[statName].end() ;
+        ++it)
+    {
+    tmpKey = boost::lexical_cast<typename MapType::key_type>(it->first);
+    tmpVal = boost::lexical_cast<typename MapType::mapped_type>(it->second);
+    outputMap[tmpKey] = tmpVal;
+    }
+  return outputMap;
 }
 
 template < class TMeasurementVector >
@@ -80,6 +161,10 @@ StatisticsXMLFileReader<TMeasurementVector>
                       <<" is a wrong Extension FileName : Expected .xml");
     }
 
+  // Clean outputs
+  m_MeasurementVectorContainer.clear();
+  m_GenericMapContainer.clear();
+
   // Open the xml file
   TiXmlDocument doc(m_FileName.c_str());
   if (!doc.LoadFile())
@@ -88,45 +173,73 @@ StatisticsXMLFileReader<TMeasurementVector>
     }
 
   TiXmlHandle hDoc(&doc);
-  TiXmlHandle root    = hDoc.FirstChildElement("FeatureStatistics");
+  TiXmlElement *root    = hDoc.FirstChildElement("FeatureStatistics").ToElement();
 
-  // Iterate through the tree to get all the stats
-  for( TiXmlElement* currentStat = root.FirstChildElement().ToElement();
-       currentStat != NULL;
-       currentStat = currentStat->NextSiblingElement() )
+  if (root)
     {
-    InputDataType   currentStatisticVector;
-
-    // Store the stat type name
-    currentStatisticVector.first = currentStat->Attribute("name");
-
-    // The size is not stored in the XML file
-    // Store the value in a std::vector, get the size and then
-    // build a measurement vector
-    std::vector<double>   tempMeasurementVector;
-
-    for( TiXmlElement* sample = currentStat->FirstChildElement("StatisticVector");
-   sample != NULL;
-   sample = sample->NextSiblingElement() )
+    // Iterate through the tree to get all the stats
+    for( TiXmlElement* currentStat = root->FirstChildElement();
+         currentStat != NULL;
+         currentStat = currentStat->NextSiblingElement() )
       {
-      // Get the current value of the statistic vector
-      double value;
-      sample->QueryDoubleAttribute("value", &value);
-      // Store the value
-      tempMeasurementVector.push_back(value);
+      InputDataType   currentStatisticVector;
+
+      // Store the stat type name
+      currentStatisticVector.first = currentStat->Attribute("name");
+
+      // The size is not stored in the XML file
+      // Store the value in a std::vector, get the size and then
+      // build a measurement vector
+      std::vector<double>   tempMeasurementVector;
+
+      for( TiXmlElement* sample = currentStat->FirstChildElement("StatisticVector");
+     sample != NULL;
+     sample = sample->NextSiblingElement() )
+        {
+        // Get the current value of the statistic vector
+        double value;
+        sample->QueryDoubleAttribute("value", &value);
+        // Store the value
+        tempMeasurementVector.push_back(value);
+        }
+
+      // resize the Measurement Vector
+      currentStatisticVector.second.SetSize(tempMeasurementVector.size());
+      for(unsigned int i = 0; i < tempMeasurementVector.size(); ++i)
+        currentStatisticVector.second.SetElement(i,
+                                                 (static_cast<InputValueType>(tempMeasurementVector[i])));
+      m_MeasurementVectorContainer.push_back(currentStatisticVector);
       }
-
-    // resize the Measurement Vector
-    currentStatisticVector.second.SetSize(tempMeasurementVector.size());
-    for(unsigned int i = 0; i < tempMeasurementVector.size(); ++i)
-      currentStatisticVector.second.SetElement(i,
-                                               (static_cast<InputValueType>(tempMeasurementVector[i])));
-
-    // Increment the number of output
-    m_MeasurementVectorContainer.push_back(currentStatisticVector);
-    m_NumberOfOutputs++;
     }
 
+  // Parse Map statistics
+  root = hDoc.FirstChildElement("GeneralStatistics").ToElement();
+  if (root)
+    {
+    // Iterate through the tree to get all the stats
+    for( TiXmlElement* currentStat = root->FirstChildElement();
+         currentStat != NULL;
+         currentStat = currentStat->NextSiblingElement() )
+      {
+      GenericMapType currentMap;
+      std::string currentName(currentStat->Attribute("name"));
+
+      for( TiXmlElement* sample = currentStat->FirstChildElement("StatisticMap");
+          sample != NULL;
+          sample = sample->NextSiblingElement() )
+        {
+        // Get the current pair of the statistic map
+        std::string key;
+        std::string value;
+        sample->QueryStringAttribute("key", &key);
+        sample->QueryStringAttribute("value", &value);
+        // Store the pair
+        currentMap[key] = value;
+        }
+      m_GenericMapContainer[currentName] = currentMap;
+      }
+    }
+  // Reader is up-to-date
   m_IsUpdated = true;
 }
 
@@ -134,10 +247,27 @@ StatisticsXMLFileReader<TMeasurementVector>
 template < class TMeasurementVector >
 void
 StatisticsXMLFileReader<TMeasurementVector>
-::PrintSelf(std::ostream& itkNotUsed(os), itk::Indent itkNotUsed(indent)) const
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  //Superclass::PrintSelf(os, indent);
+  Superclass::PrintSelf(os, indent);
+
+  // Print info about statistics
+  os << indent << "Input FileName: "<< m_FileName << std::endl;
+  os << indent << "Vector statistics: ";
+  for (unsigned int i=0 ; i < m_MeasurementVectorContainer.size() ; ++i)
+    {
+    if (i>0) os <<", ";
+    os << m_MeasurementVectorContainer[i].first;
+    }
+  os << std::endl;
+  os << indent << "Map statistics: ";
+  for (GenericMapContainer::const_iterator it = m_GenericMapContainer.begin() ; it != m_GenericMapContainer.end() ; ++it)
+    {
+    if (it != m_GenericMapContainer.begin()) os <<", ";
+    os << it->first;
+    }
+  os << std::endl;
 }
 
 } // End namespace otb

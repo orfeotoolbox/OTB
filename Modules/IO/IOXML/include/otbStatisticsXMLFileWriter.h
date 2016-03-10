@@ -67,8 +67,12 @@ public:
   /** Method to set/get the input list sample */
   void AddInput(const char * name,  const MeasurementVectorType& inputVector );
   
+  /** Method to add a map statistic with a given type */
   template <typename MapType>
   void AddInputMap(const char * name, const MapType& map );
+
+  /** Remove previously added inputs (vectors and maps) */
+  void CleanInputs();
 
   /** Trigger the processing */
   void Update()
@@ -94,9 +98,7 @@ private:
 
   std::string                 m_FileName;
   MeasurementVectorContainer  m_MeasurementVectorContainer;
-  
   GenericMapContainer         m_GenericMapContainer;
-
 
 }; // end of class StatisticsXMLFileWriter
 
