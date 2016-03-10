@@ -104,7 +104,7 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "support_image.tif");
     SetDocExampleParameterValue("vec", "variousVectors.sqlite");
-    SetDocExampleParameterValue("field", "label")
+    SetDocExampleParameterValue("field", "label");
     SetDocExampleParameterValue("out","polygonStat.xml");
   }
 
