@@ -63,7 +63,8 @@ enum Columns
 {
   COLUMN_NONE = -1,
   //
-  COLUMN_FILENAME = 0,
+  COLUMN_SIZE = 0,
+  COLUMN_FILENAME,
   //
   COLUMN_COUNT,
 };
@@ -72,6 +73,7 @@ enum Columns
 const char * const
 HEADERS[ COLUMN_COUNT ] =
 {
+  QT_TRANSLATE_NOOP( "mvd::ImportImagesDialog", "Size" ),
   QT_TRANSLATE_NOOP( "mvd::ImportImagesDialog", "Filename" ),
 };
 
@@ -197,7 +199,7 @@ ImportImagesDialog
 	otb::GDALOverviewsBuilder::New()
       );
 
-      QStandardItem * item = new QStandardItem( filenames[ i ] );
+      QStandardItem * item = new QStandardItem();
       assert( item!=NULL );
 
       item->setFlags( Qt::NoItemFlags );
@@ -210,7 +212,11 @@ ImportImagesDialog
 
 	if( builder->GetOverviewsCount()<=1 )
 	  {
-	  item->setFlags( item->flags() | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+	  item->setFlags(
+	    item->flags() |
+	    Qt::ItemIsEnabled |
+	    Qt::ItemIsUserCheckable
+	  );
 
 	  item->setCheckState( Qt::Checked );
 
@@ -240,6 +246,24 @@ ImportImagesDialog
       m_GDALOverviewsBuilders.push_back( builder );
 
       itemModel->appendRow( item );
+
+      int row = item->index().row();
+      assert( row>=0 );
+
+      itemModel->setData(
+	itemModel->index( row, COLUMN_FILENAME ),
+	filenames[ i ]
+      );
+
+      if( !builder.IsNull() )
+	{
+	itemModel->setData(
+	  itemModel->index( row, COLUMN_SIZE ),
+	    QString( "%1x%2" )
+	    .arg( builder->GetWidth() )
+	    .arg( builder->GetHeight() )
+	);
+	}
       }
 #if ( defined( _DEBUG ) && 1 ) || 0
     else
