@@ -105,6 +105,10 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
     for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
        std::cout << "ooo class : " << it->first << " " << it->second.size() << std::endl;
   std::cout << "oooooooooooooooooo" << std::endl;
+  std::cout << "oooooooooooooooooo" << std::endl;
+    for(ClassCountMapType::iterator it2 = classCount.begin(); it2!=classCount.end(); ++it2)
+       std::cout << "ooo class : " << it2->first << " " << it2->second << std::endl;
+  std::cout << "oooooooooooooooooo" << std::endl;
   
   /*otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New("/home/christophe/mydev/OTB-Sandbox/otb-build/OTB/build/Testing/Temporary/outvd.sqlite", otb::ogr::DataSource::Modes::Overwrite );
   otb::ogr::Layer outputLayer = output->CreateLayer(GetOGRData()->GetLayer( this->GetLayerIndex()  ).GetName(),NULL,wkbPoint); //Create new layer

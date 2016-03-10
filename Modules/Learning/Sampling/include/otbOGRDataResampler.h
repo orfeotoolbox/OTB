@@ -71,7 +71,7 @@ public:
 
 protected:
   /** Constructor */
-  OGRDataResampler() {m_alreadyPrepared=false; m_MaxSamplingTabSize=9*9; m_MinSamplingTabSize=20;} /////////constructor
+  OGRDataResampler() {m_alreadyPrepared=false; m_MaxSamplingTabSize=9*9; m_MinSamplingTabSize=1;} /////////constructor
   /** Destructor */
   virtual ~OGRDataResampler() {}
 

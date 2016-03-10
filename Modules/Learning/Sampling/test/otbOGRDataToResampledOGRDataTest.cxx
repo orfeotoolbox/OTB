@@ -91,6 +91,9 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   rateCalculator->setMinimumNbofSamplesByClass();
   RateCalculatorype::mapRateType ratesbyClass = rateCalculator->GetRatesbyClass();
     
+  RateCalculatorype::mapRateType::iterator itRatesbyClass = ratesbyClass.begin();
+  for(; itRatesbyClass != ratesbyClass.end(); ++itRatesbyClass)
+  std::cout << "TEST : " << itRatesbyClass->first << " " << itRatesbyClass->second.required << " " << itRatesbyClass->second.tot << std::endl;
     
   std::string fieldName("Label");
   

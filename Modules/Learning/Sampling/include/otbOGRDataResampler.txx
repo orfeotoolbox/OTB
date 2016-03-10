@@ -81,7 +81,8 @@ OGRDataResampler
       imgIt.GetImageIterator().GetImage()->TransformPhysicalPointToIndex(imgPoint,imgIndex);
       if (!imgIt.IsAtEnd())
         {
-        if ( (imgIndex == imgIt.GetIndex()) && (TakeSample(className)) )
+        if (imgIndex == imgIt.GetIndex())
+          //if (TakeSample(className))
           {
               m_NbPixelsGlobal++;
               m_ElmtsInClass[className]++;
@@ -132,7 +133,8 @@ OGRDataResampler
           ,imgPoint[0]-0.5*imgAbsSpacing[0]
           ,imgPoint[1]-0.5*imgAbsSpacing[1]
           ,0.0);
-        if ((geom->Intersects(&tmpPolygon)) && (TakeSample(className)))
+        if (geom->Intersects(&tmpPolygon)) 
+         //if (TakeSample(className))
           {
               m_NbPixelsGlobal++;
               m_ElmtsInClass[className]++;
@@ -153,7 +155,8 @@ OGRDataResampler
         imgIt.GetImageIterator().GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
         tmpPoint.setX(imgPoint[0]);
         tmpPoint.setY(imgPoint[1]);
-        if ( (geom->Contains(&tmpPoint)) && (TakeSample(className)) )
+        if (geom->Contains(&tmpPoint))
+          //if (TakeSample(className))
           {
               m_NbPixelsGlobal++;
               m_ElmtsInClass[className]++;

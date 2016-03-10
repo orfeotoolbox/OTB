@@ -123,11 +123,11 @@ SamplingRateCalculator
  
 
     std::string key = keyGenerator(1);
-    m_map[key] = 127;
+    m_map[key] = 104;
     key = keyGenerator(2);
-    m_map[key] = 131;
+    m_map[key] = 169;
     key = keyGenerator(3);
-    m_map[key] = 421;
+    m_map[key] = 211;
            
     findImagesAndClasses();
 }
