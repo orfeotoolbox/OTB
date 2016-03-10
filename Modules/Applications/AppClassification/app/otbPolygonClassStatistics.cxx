@@ -102,7 +102,10 @@ private:
     AddRAMParameter();
 
     // Doc example parameter settings
-    // SetDocExampleParameterValue("in", "QB_1_ortho.tif");
+    SetDocExampleParameterValue("in", "support_image.tif");
+    SetDocExampleParameterValue("vec", "variousVectors.sqlite");
+    SetDocExampleParameterValue("field", "label")
+    SetDocExampleParameterValue("out","polygonStat.xml");
   }
 
   void DoUpdateParameters()
@@ -134,11 +137,7 @@ private:
   statWriter->SetFileName(this->GetParameterString("out"));
   statWriter->AddInputMap<FilterType::ClassCountMapType>("samplesPerClass",classCount);
   statWriter->AddInputMap<FilterType::PolygonSizeMapType>("samplesPerVector",polySize);
-  
   statWriter->Update();
-  // TODO : try to re-use the otb::StatisticsXMLFileWriter
-  // Need to adapt for map container
-  
   }
 
 };
