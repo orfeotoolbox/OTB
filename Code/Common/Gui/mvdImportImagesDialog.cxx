@@ -199,26 +199,17 @@ ImportImagesDialog
 	otb::GDALOverviewsBuilder::New()
       );
 
-      QStandardItem * item = new QStandardItem();
-      assert( item!=NULL );
-
-      item->setFlags( Qt::NoItemFlags );
+      Qt::ItemFlags flags = Qt::NoItemFlags;
 
       try
 	{
 	builder->SetInputFileName( filename );
 
-	item->setFlags( item->flags() | Qt::ItemIsSelectable );
+	flags |= Qt::ItemIsSelectable;
 
 	if( builder->GetOverviewsCount()<=1 )
 	  {
-	  item->setFlags(
-	    item->flags() |
-	    Qt::ItemIsEnabled |
-	    Qt::ItemIsUserCheckable
-	  );
-
-	  item->setCheckState( Qt::Checked );
+	  flags |= Qt::ItemIsEnabled;
 
 	  ++ m_EffectiveCount;
 	  }
@@ -245,25 +236,40 @@ ImportImagesDialog
 
       m_GDALOverviewsBuilders.push_back( builder );
 
-      itemModel->appendRow( item );
+      typedef QList< QStandardItem * > ItemList;
 
-      int row = item->index().row();
-      assert( row>=0 );
+      ItemList items;
 
-      itemModel->setData(
-	itemModel->index( row, COLUMN_FILENAME ),
-	filenames[ i ]
-      );
-
+      //
+      // COLUMN_SIZE
       if( !builder.IsNull() )
 	{
-	itemModel->setData(
-	  itemModel->index( row, COLUMN_SIZE ),
+	items.push_back(
+	  new QStandardItem(
 	    QString( "%1x%2" )
 	    .arg( builder->GetWidth() )
 	    .arg( builder->GetHeight() )
+	  )
 	);
+
+	items.back()->setFlags( flags );
 	}
+
+      //
+      // COLUMN_FILENAME
+      items.push_back( new QStandardItem( filenames[ i ] ) );
+
+      if( flags.testFlag( Qt::ItemIsEnabled ) )
+	{
+	items.back()->setFlags( flags | Qt::ItemIsUserCheckable );
+	items.back()->setCheckState( Qt::Checked );
+	}
+      else
+	items.back()->setFlags( flags );
+
+      //
+      // Append items.
+      itemModel->appendRow( items );
       }
 #if ( defined( _DEBUG ) && 1 ) || 0
     else
