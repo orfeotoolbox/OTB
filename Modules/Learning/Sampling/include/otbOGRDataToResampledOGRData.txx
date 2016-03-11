@@ -108,7 +108,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   std::cout << "oooooooooooooooooo" << std::endl;
 
   
-  /*otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New("/home/christophe/mydev/OTB-Sandbox/otb-build/OTB/build/Testing/Temporary/outvd.sqlite", otb::ogr::DataSource::Modes::Overwrite );
+  otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New("/home/christophe/mydev/OTB-Sandbox/otb-build/OTB/build/Testing/Temporary/outvd.sqlite", otb::ogr::DataSource::Modes::Overwrite );
   otb::ogr::Layer outputLayer = output->CreateLayer(GetOGRData()->GetLayer( this->GetLayerIndex()  ).GetName(),NULL,wkbPoint); //Create new layer
   
   std::cout << "----------------------" << std::endl;
@@ -121,9 +121,8 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   OGRFieldDefn fieldClass("label", OFTString);
   outputLayer.CreateField(fieldClass, false); 
    
-  OGRFeatureDefn featureDefn = outputLayer.GetLayerDefn();
+  //OGRFeatureDefn featureDefn = outputLayer.GetLayerDefn();
   
-  //int k=0;
   for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
      {
         std::cout << " class : " << it->first << std::endl;
@@ -136,7 +135,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
            ogrTmpPoint.setY(it->second[i].second);
         
         
-           otb::ogr::Feature feat = otb::ogr::Feature(featureDefn);
+           otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
            feat["label"].SetValue<std::string>(it->first);
 
            feat.SetGeometry(&ogrTmpPoint);
@@ -144,13 +143,17 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
            outputLayer.CreateFeature(feat);
 
            
-          // std::cout << "output->GetLayer(0).GetFeatureCount() = " << output->GetLayer(0).GetFeatureCount(true) << " " << k << std::endl;
-           //k++;
+          std::cout << "output->GetLayer(0).GetFeatureCount() = " << output->GetLayer(0).GetFeatureCount(true) << std::endl;
            
         }
         std::cout << std::endl;
      }
-  std::cout << "----------------------" << std::endl;*/
+  
+  std::cout << "output->GetLayersCount() = " << output->GetLayersCount() << std::endl;
+  std::cout << "outputLayer.GetName() = " << outputLayer.GetName() << std::endl;
+  std::cout << "outputLayer.GetGeomType() = " << OGRGeometryTypeToName(outputLayer.GetGeomType()) << std::endl;
+  std::cout << "outputLayer.GetFeatureCount() = " << outputLayer.GetFeatureCount(true) << std::endl;
+  std::cout << "----------------------" << std::endl;
   
   
 
