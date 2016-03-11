@@ -29,7 +29,6 @@ OGRDataResampler
 {
       std::size_t pos = key.find_first_of("=");
       className = key.substr(pos+1);
-      //std::cout << "className = " << className << std::endl;
 }
 
 unsigned int 
@@ -47,7 +46,6 @@ OGRDataResampler
    for(unsigned int n=0;n<=T;n++)
    {
    p=static_cast<double>(n)/static_cast<double>(T)*100.;
-   //std::cout << n << " "<< T << " " << p << std::endl;
        if (p<=per)
        {
           d = fabs(per-p);
@@ -77,7 +75,6 @@ OGRDataResampler
    for(unsigned int n=0;n<=T;n++)
    {
    p=static_cast<double>(n)/static_cast<double>(T)*100.;
-   //std::cout << n << " "<< T << " " << per << " " << p << std::endl;
        if (p>=per)
        {
           d = fabs(per-p);
@@ -98,21 +95,16 @@ OGRDataResampler::randArray(unsigned int N,unsigned int T)
 {
 
    if (N>T)
-     itkExceptionMacro(<< "In otbOGRDataResampler::randArray(unsigned int N, unsigned int T), N must be <= to T (aka m_SamplingTabSize)." << std::endl);
+     itkExceptionMacro(<< "N must be <= to T (aka m_SamplingTabSize)." << std::endl);
 
    std::vector<bool> res(T,0);
    for(unsigned int i=0; i<N;i++)
        res[i]=1;
    
-   /*std::cout << "-------------------" << std::endl;
-   for(int i=0; i<m_SamplingTabSize;i++)
-      std::cout << "res[" << i <<  "] = " << res[i] << std::endl; */
+
          
    std::random_shuffle ( res.begin(), res.end() );
    
-   /*std::cout << "-------------------" << std::endl;
-   for(int i=0; i<m_SamplingTabSize;i++)
-      std::cout << "res[" << i <<  "] = " << res[i] << std::endl; */
    return res;
 
 }
@@ -147,10 +139,10 @@ if (!m_alreadyPrepared)
    SamplingRateCalculator::mapRateType::iterator itRates = m_RatesbyClass.begin();
    for(;itRates !=m_RatesbyClass.end(); ++itRates)
    {
-      std::cout << "#" << itRates->first << " " << itRates->second.required << " " << itRates->second.tot << std::endl;
+      //std::cout << "#" << itRates->first << " " << itRates->second.required << " " << itRates->second.tot << std::endl;
       
       unsigned int T1 = findBestSize(itRates->second.tot);
-      std::cout << "*** " << itRates->second.tot << " " << T1 << " " << itRates->second.tot/T1 << std::endl;
+      //std::cout << "*** " << itRates->second.tot << " " << T1 << " " << itRates->second.tot/T1 << std::endl;
      
      
       
@@ -163,7 +155,7 @@ if (!m_alreadyPrepared)
       unsigned int left = itRates->second.required - taken;
       unsigned int newtot = itRates->second.tot - taken;
       
-      std::cout << "##" << N1 << " " << per << " " << selected_prct << " " << taken << " " << left << " " << newtot << std::endl;
+      //std::cout << "##" << N1 << " " << per << " " << selected_prct << " " << taken << " " << left << " " << newtot << std::endl;
       if ( !(per>=selected_prct) )
         itkExceptionMacro(<< "In otb::OGRDataResampler::Prepare, per < selected_prct !" << std::endl);
       
@@ -180,8 +172,8 @@ if (!m_alreadyPrepared)
              
           T2 = findBestSize(itRates->second.tot/T1*(T1-N1));
           
-          std::cout << "*** " << itRates->second.tot << " " << T1 << " " << itRates->second.tot/T1 << " " << N1 << " " 
-          << itRates->second.tot/T1*(T1-N1) << " " << T2 << std::endl;
+          /*std::cout << "*** " << itRates->second.tot << " " << T1 << " " << itRates->second.tot/T1 << " " << N1 << " " 
+          << itRates->second.tot/T1*(T1-N1) << " " << T2 << std::endl;*/
           
 
           double selected_prct2  = 0.;
@@ -192,7 +184,7 @@ if (!m_alreadyPrepared)
           }   
 
           
-          std::cout << "###" << N2 << " " << per2 << " " << selected_prct2 << std::endl;
+          //std::cout << "###" << N2 << " " << per2 << " " << selected_prct2 << std::endl;
             
           if ( !(per2<=selected_prct2) )
             itkExceptionMacro(<< "In otb::OGRDataResampler::Prepare, per2 > selected_prct2 !" << std::endl);
@@ -234,7 +226,6 @@ m_alreadyPrepared=true;
 bool
 OGRDataResampler::TakeSample(std::string className)
 {
-//return true;
 
    bool res=false;
 
@@ -253,14 +244,10 @@ OGRDataResampler::TakeSample(std::string className)
    
    ind1++;
    
-   //if (className.compare(std::string("2")) == 0)
-   //std::cout << "ind1 = " << ind1 << std::endl;
+
    
    if (ind1>=tab1.size()) 
-   {  ind1=0;
-   //if (className.compare(std::string("2")) == 0)
-   //    std::cout << "ooo un tour a été fait pour le tab1, classe : " << className << std::endl;
-   }
+     ind1=0;
    
    if(!res)
    {
@@ -274,10 +261,7 @@ OGRDataResampler::TakeSample(std::string className)
          ind2++;
          
          if (ind2>=tab2.size()) 
-         {   ind2=0;
-     //    if (className.compare(std::string("2")) == 0)
-     //        std::cout << "ooo un tour a été fait pour le tab2, classe : " << className << std::endl;
-         }
+           ind2=0;
      }
        
    }

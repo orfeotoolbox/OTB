@@ -102,33 +102,19 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   polygonSize = m_TemporaryStats->GetPolygonSizeMap();
   classToPhyPos = m_TemporaryStats->GetClassToPhyPosMap();
   
-  std::cout << "oooooooooooooooooo" << std::endl;
-    for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
-       std::cout << "ooo class : " << it->first << " " << it->second.size() << std::endl;
-  std::cout << "oooooooooooooooooo" << std::endl;
-
   
   otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New("/home/christophe/mydev/OTB-Sandbox/otb-build/OTB/build/Testing/Temporary/outvd.sqlite", otb::ogr::DataSource::Modes::Overwrite );
   otb::ogr::Layer outputLayer = output->CreateLayer(GetOGRData()->GetLayer( this->GetLayerIndex()  ).GetName(),NULL,wkbPoint); //Create new layer
-  
-  std::cout << "----------------------" << std::endl;
-  std::cout << "output->GetLayersCount() = " << output->GetLayersCount() << std::endl;
-  std::cout << "outputLayer.GetName() = " << outputLayer.GetName() << std::endl;
-  std::cout << "outputLayer.GetGeomType() = " << OGRGeometryTypeToName(outputLayer.GetGeomType()) << std::endl;
-  std::cout << "outputLayer.GetFeatureCount() = " << outputLayer.GetFeatureCount(true) << std::endl;
-  
+
   
   OGRFieldDefn fieldClass("label", OFTString);
   outputLayer.CreateField(fieldClass, false); 
    
-  //OGRFeatureDefn featureDefn = outputLayer.GetLayerDefn();
   
   for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
      {
-        std::cout << " class : " << it->first << std::endl;
         for(int i=0; i<it->second.size(); i++)
         {
-           std::cout << "(" <<it->second[i].first << "," << it->second[i].second << ") ";
            
            OGRPoint ogrTmpPoint;
            ogrTmpPoint.setX(it->second[i].first);
@@ -141,23 +127,10 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
            feat.SetGeometry(&ogrTmpPoint);
            
            outputLayer.CreateFeature(feat);
-
-           
-          std::cout << "output->GetLayer(0).GetFeatureCount() = " << output->GetLayer(0).GetFeatureCount(true) << std::endl;
            
         }
-        std::cout << std::endl;
      }
-  
-  std::cout << "output->GetLayersCount() = " << output->GetLayersCount() << std::endl;
-  std::cout << "outputLayer.GetName() = " << outputLayer.GetName() << std::endl;
-  std::cout << "outputLayer.GetGeomType() = " << OGRGeometryTypeToName(outputLayer.GetGeomType()) << std::endl;
-  std::cout << "outputLayer.GetFeatureCount() = " << outputLayer.GetFeatureCount(true) << std::endl;
-  std::cout << "----------------------" << std::endl;
-  
-  
-
-  
+    
 }
 
 template<class TInputImage, class TMaskImage>
@@ -174,15 +147,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
     itkGenericExceptionMacro("Field named "<<this->m_FieldName<<" not found!");
     }
 
-  // Reset list of individual containers
-  //m_TemporaryStats = std::vector<OGRDataResampler::Pointer>(numberOfThreads);
-  //std::vector<OGRDataResampler::Pointer>::iterator it = m_TemporaryStats.begin();
-  //for (; it != m_TemporaryStats.end(); it++)
-  //{
-    //*it = OGRDataResampler::New();
-    //(*it)->SetFieldIndex(fieldIndex);
-  //}
-  std::cout << "@@@ PersistentOGRDataToResampledOGRData Reset" << std::endl;
+
   m_TemporaryStats = OGRDataResampler::New();
   m_TemporaryStats->SetFieldIndex(fieldIndex);
   m_TemporaryStats->SetMaxSamplingTabSize(m_MaxSamplingTabSize);

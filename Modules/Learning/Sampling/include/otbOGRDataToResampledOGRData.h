@@ -131,10 +131,6 @@ protected:
 
   virtual void GenerateInputRequestedRegion();
 
-  //virtual void BeforeThreadedGenerateData();
-
-  //virtual void ThreadedGenerateData(const RegionType& outputRegionForThread,
-  //                                  itk::ThreadIdType threadId);
   virtual void GenerateData();
 
 private:

@@ -28,28 +28,28 @@ int otbSamplingRateCalculatorNew(int itkNotUsed(argc), char* itkNotUsed(argv) []
 }
 
 
-int otbSamplingRateCalculatorUI(int argc, char* argv[])
+int otbSamplingRateCalculatorUI(int itkNotUsed(argc), char* argv[])
 {
   unsigned int nbSamples = atoi(argv[1]);
 
   typedef otb::SamplingRateCalculator RateCalculatorype;
   
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  rateCalculator->produceMap(2,3,1000);
+  rateCalculator->produceMap(3,1000);
   rateCalculator->setNbofSamplesAllClasses(nbSamples);
   rateCalculator->write(argv[2]);
   rateCalculator->Print(std::cout);
   return EXIT_SUCCESS;
 }
 
-int otbSamplingRateCalculatorS(int argc, char* argv[])
+int otbSamplingRateCalculatorS(int itkNotUsed(argc), char* argv[])
 {
   std::string nbSamples(argv[1]);
 
   typedef otb::SamplingRateCalculator RateCalculatorype;
   
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  rateCalculator->produceMap(2,3,1000);
+  rateCalculator->produceMap(3,1000);
   rateCalculator->setNbofSamplesAllClasses(nbSamples);
   rateCalculator->write(argv[2]);
   rateCalculator->Print(std::cout);
@@ -57,12 +57,12 @@ int otbSamplingRateCalculatorS(int argc, char* argv[])
 }
 
 
-int otbSamplingRateCalculatorSmallest(int argc, char* argv[])
+int otbSamplingRateCalculatorSmallest(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::SamplingRateCalculator RateCalculatorype;
   
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  rateCalculator->produceMap(2,3,1000);
+  rateCalculator->produceMap(3,1000);
   rateCalculator->setMinimumNbofSamplesByClass();
   rateCalculator->write(argv[1]);
   rateCalculator->Print(std::cout);
@@ -70,7 +70,7 @@ int otbSamplingRateCalculatorSmallest(int argc, char* argv[])
 }
 
 
-int otbSamplingRateCalculatorSmallest2(int argc, char* argv[])
+int otbSamplingRateCalculatorSmallest2(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::SamplingRateCalculator RateCalculatorype;
   
