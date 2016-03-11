@@ -43,6 +43,9 @@ else()
     set(GDAL_SB_EXTRA_OPTIONS "" CACHE STRING "Extra options to be passed to GDAL configure script")
     mark_as_advanced(GDAL_SB_EXTRA_OPTIONS)
 
+    #Convert GDAL_SB_EXTRA_OPTIONS to a list to allow to add multiple instructions to the CONFIGURE_COMMAND
+    separate_arguments(GDAL_SB_EXTRA_OPTIONS)
+
     ExternalProject_Add(${proj}
       PREFIX ${proj}
       URL "http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz"
