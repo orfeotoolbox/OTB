@@ -28,30 +28,30 @@ namespace otb
 {
 // --------- otb::PersistentOGRDataToResampledOGRData ---------------------
 
-template<class TInputImage, class TMaskImage>
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+template<class TMaskImage>
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::PersistentOGRDataToResampledOGRData() :
   m_LayerIndex(0),
   m_MaxSamplingTabSize(1000)
 {
   this->SetNumberOfRequiredOutputs(2);
-  this->SetNthOutput(0,TInputImage::New());
+  this->SetNthOutput(0,TMaskImage::New());
   //this->SetNthOutput(1,ClassCountObjectType::New()); remove
   //this->SetNthOutput(2,PolygonSizeObjectType::New()); remove
   this->SetNthOutput(3,ClassToPhyPosObjectType::New());
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::SetOGRData(const otb::ogr::DataSource* vector)
 {
   this->SetNthInput(1, const_cast<otb::ogr::DataSource *>( vector ));
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 const otb::ogr::DataSource*
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GetOGRData()
 {
   if (this->GetNumberOfInputs()<2)
@@ -61,17 +61,17 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   return static_cast<const otb::ogr::DataSource *>(this->itk::ProcessObject::GetInput(1));
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::SetMask(const TMaskImage* mask)
 {
-  this->SetNthInput(2, const_cast<TMaskImage *>( mask ));
+  this->SetNthInput(0, const_cast<TMaskImage *>( mask ));
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 const TMaskImage*
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GetMask()
 {
   if (this->GetNumberOfInputs()<3)
@@ -81,9 +81,9 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(2));
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::Synthetize(void)
 {
   otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetOGRData());
@@ -131,9 +131,9 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
     
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::Reset(void)
 {
   // Get OGR field index
@@ -159,9 +159,9 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 }
 
 //remove
-/*template<class TInputImage, class TMaskImage>
-const typename PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassCountObjectType*
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+/*template<class TMaskImage>
+const typename PersistentOGRDataToResampledOGRData<TMaskImage>::ClassCountObjectType*
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GetClassCountOutput() const
 {
   if (this->GetNumberOfOutputs()<2)
@@ -171,9 +171,9 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   return static_cast<const ClassCountObjectType *>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template<class TInputImage, class TMaskImage>
-typename PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassCountObjectType* 
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+template<class TMaskImage>
+typename PersistentOGRDataToResampledOGRData<TMaskImage>::ClassCountObjectType* 
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GetClassCountOutput()
 {
   if (this->GetNumberOfOutputs()<2)
@@ -183,9 +183,9 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   return static_cast<ClassCountObjectType *>(this->itk::ProcessObject::GetOutput(1));
 }*/
 
-template<class TInputImage, class TMaskImage>
-const typename PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>::PolygonSizeObjectType*
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+template<class TMaskImage>
+const typename PersistentOGRDataToResampledOGRData<TMaskImage>::PolygonSizeObjectType*
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GetPolygonSizeOutput() const
 {
   if (this->GetNumberOfOutputs()<3)
@@ -195,9 +195,9 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   return static_cast<const PolygonSizeObjectType *>(this->itk::ProcessObject::GetOutput(2));
 }
 
-template<class TInputImage, class TMaskImage>
-typename PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>::PolygonSizeObjectType*
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+template<class TMaskImage>
+typename PersistentOGRDataToResampledOGRData<TMaskImage>::PolygonSizeObjectType*
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GetPolygonSizeOutput()
 {
     if (this->GetNumberOfOutputs()<3)
@@ -208,9 +208,9 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 }
 
 
-template<class TInputImage, class TMaskImage>
-const typename PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassToPhyPosObjectType*
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+template<class TMaskImage>
+const typename PersistentOGRDataToResampledOGRData<TMaskImage>::ClassToPhyPosObjectType*
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GetClassToPhyPosOutput() const
 {
   if (this->GetNumberOfOutputs()<4)
@@ -220,9 +220,9 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   return static_cast<const ClassToPhyPosObjectType *>(this->itk::ProcessObject::GetOutput(3));
 }
 
-template<class TInputImage, class TMaskImage>
-typename PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassToPhyPosObjectType*
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+template<class TMaskImage>
+typename PersistentOGRDataToResampledOGRData<TMaskImage>::ClassToPhyPosObjectType*
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GetClassToPhyPosOutput()
 {
     if (this->GetNumberOfOutputs()<4)
@@ -232,16 +232,16 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   return static_cast<ClassToPhyPosObjectType *>(this->itk::ProcessObject::GetOutput(3));
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 itk::DataObject::Pointer
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::MakeOutput(DataObjectPointerArraySizeType idx)
 {
   switch (idx)
     {
-    case 0:
-      return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-      break;
+    //case 0: remove
+    //  return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+    //  break;
     //case 1: remove
     //  return static_cast<itk::DataObject*>(ClassCountObjectType::New().GetPointer());
     //  break;
@@ -253,14 +253,14 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
       break;
     default:
       // might as well make an image
-      return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+      //return static_cast<itk::DataObject*>(TInputImage::New().GetPointer()); remove
       break;
     }
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -277,9 +277,9 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
     }
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GenerateInputRequestedRegion()
 {
   InputImageType *input = const_cast<InputImageType*>(this->GetInput());
@@ -298,25 +298,24 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
     }
 }
 
-//template<class TInputImage, class TMaskImage>
+//template<class TMaskImage>
 //void
-//PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+//PersistentOGRDataToResampledOGRData<TMaskImage>
 //::BeforeThreadedGenerateData()
 //{
   //this->ApplyPolygonsSpatialFilter();
 //}
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToResampledOGRData<TMaskImage>
 //::ThreadedGenerateData(const RegionType& outputRegionForThread,
 //                       itk::ThreadIdType threadId)
 ::GenerateData()
 {
   // Retrieve inputs
-  TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
-  TInputImage* outputImage = this->GetOutput();
-  TMaskImage* mask = const_cast<TMaskImage*>(this->GetMask());
+  TMaskImage* mask = const_cast<TMaskImage*>(this->GetInput());
+  TMaskImage* outputImage = this->GetOutput();
   const otb::ogr::DataSource* vectors = this->GetOGRData();
   PointType point;
   RegionType requestedRegion =outputImage->GetRequestedRegion();
@@ -331,30 +330,34 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
     {
     // Compute the intersection of thread region and polygon bounding region, called "considered region"
     // This need not be done in ThreadedGenerateData and could be pre-processed and cached before filter execution if needed
-    RegionType consideredRegion = FeatureBoundingRegion(inputImage, featIt);
+    RegionType consideredRegion = FeatureBoundingRegion(mask, featIt);
     bool regionNotEmpty = consideredRegion.Crop(requestedRegion);
     if (regionNotEmpty)
       {
-        // For pixels in consideredRegion and not masked
-        typedef otb::MaskedIteratorDecorator<
+         typedef itk::ImageRegionConstIterator<TMaskImage> IteratorType;
+         IteratorType it(mask,consideredRegion);
+         
+         m_TemporaryStats->Add<IteratorType>(featIt, it);
+         // For pixels in consideredRegion and not masked
+        /*typedef otb::MaskedIteratorDecorator< TODOTODOTODOTODO remove
           itk::ImageRegionConstIterator<TInputImage>,
           itk::ImageRegionConstIterator<TMaskImage> > MaskedIteratorType;
         MaskedIteratorType it(mask, inputImage, consideredRegion);
-        m_TemporaryStats->Add<MaskedIteratorType>(featIt, it);
+        m_TemporaryStats->Add<MaskedIteratorType>(featIt, it);*/
       }
     }
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToResampledOGRData<TMaskImage>
 ::ApplyPolygonsSpatialFilter()
 {
-  TInputImage* outputImage = this->GetOutput();
+  TMaskImage* outputImage = this->GetOutput();
   otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetOGRData());
   const RegionType& requestedRegion = outputImage->GetRequestedRegion();
-  typename TInputImage::IndexType startIndex = requestedRegion.GetIndex();
-  typename TInputImage::IndexType endIndex = requestedRegion.GetUpperIndex();
+  typename TMaskImage::IndexType startIndex = requestedRegion.GetIndex();
+  typename TMaskImage::IndexType endIndex = requestedRegion.GetUpperIndex();
 
   itk::Point<double, 2> startPoint;
   itk::Point<double, 2> endPoint;
@@ -369,10 +372,10 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
     std::max(startPoint[1],endPoint[1]));
 }
 
-template<class TInputImage, class TMaskImage>
-typename PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>::RegionType
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
-::FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const
+template<class TMaskImage>
+typename PersistentOGRDataToResampledOGRData<TMaskImage>::RegionType
+PersistentOGRDataToResampledOGRData<TMaskImage>
+::FeatureBoundingRegion(const TMaskImage* image, otb::ogr::Layer::const_iterator& featIt) const
 {
   // otb::ogr wrapper is incomplete and leaky abstraction is inevitable here
   OGREnvelope envelope;
@@ -383,8 +386,8 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   upperPoint[0] = envelope.MaxX;
   upperPoint[1] = envelope.MaxY;
 
-  typename TInputImage::IndexType lowerIndex;
-  typename TInputImage::IndexType upperIndex;
+  typename TMaskImage::IndexType lowerIndex;
+  typename TMaskImage::IndexType upperIndex;
 
   image->TransformPhysicalPointToIndex(lowerPoint, lowerIndex);
   image->TransformPhysicalPointToIndex(upperPoint, upperIndex);
@@ -412,158 +415,158 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 // -------------- otb::OGRDataToResampledOGRData --------------------------
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
-::SetInput(const TInputImage* image)
+OGRDataToResampledOGRData<TMaskImage>
+::SetInput(const TMaskImage* image)
 {
   this->GetFilter()->SetInput(image);
 }
 
-template<class TInputImage, class TMaskImage>
-const TInputImage*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+template<class TMaskImage>
+const TMaskImage*
+OGRDataToResampledOGRData<TMaskImage>
 ::GetInput()
 {
   return this->GetFilter()->GetInput();
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToResampledOGRData<TMaskImage>
 ::SetOGRData(const otb::ogr::DataSource* data)
 {
   this->GetFilter()->SetOGRData(data);
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 const otb::ogr::DataSource*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToResampledOGRData<TMaskImage>
 ::GetOGRData()
 {
   return this->GetFilter()->GetOGRData();
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToResampledOGRData<TMaskImage>
 ::SetMask(const TMaskImage* mask)
 {
   this->GetFilter()->SetMask(mask);
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 const TMaskImage*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToResampledOGRData<TMaskImage>
 ::GetMask()
 {
   return this->GetFilter()->GetMask();
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToResampledOGRData<TMaskImage>
 ::SetFieldName(std::string &key)
 {
   this->GetFilter()->SetFieldName(key);
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 std::string
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToResampledOGRData<TMaskImage>
 ::GetFieldName()
 {
   return this->GetFilter()->GetFieldName();
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToResampledOGRData<TMaskImage>
 ::SetLayerIndex(int index)
 {
   this->GetFilter()->SetLayerIndex(index);
 }
 
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToResampledOGRData<TMaskImage>
 ::SetMaxSamplingTabSize(unsigned int max)
 {
   this->GetFilter()->SetMaxSamplingTabSize(max);
 }
 
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToResampledOGRData<TMaskImage>
 ::SetRatesbyClass(const SamplingRateCalculator::mapRateType& map)
 {
      this->GetFilter()->SetRatesbyClass(map);
      
 }
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 int
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToResampledOGRData<TMaskImage>
 ::GetLayerIndex()
 {
   return this->GetFilter()->GetLayerIndex();
 }
 
 
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 unsigned int
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToResampledOGRData<TMaskImage>
 ::GetMaxSamplingTabSize()
 {
   return this->GetFilter()->GetMaxSamplingTabSize();
 }
 
-/*template<class TInputImage, class TMaskImage>
-const typename OGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassCountObjectType*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+/*template<class TMaskImage>
+const typename OGRDataToResampledOGRData<TMaskImage>::ClassCountObjectType*
+OGRDataToResampledOGRData<TMaskImage>
 ::GetClassCountOutput() const
 {
   return this->GetFilter()->GetClassCountOutput();
 }
 
-template<class TInputImage, class TMaskImage>
-typename OGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassCountObjectType*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+template<class TMaskImage>
+typename OGRDataToResampledOGRData<TMaskImage>::ClassCountObjectType*
+OGRDataToResampledOGRData<TMaskImage>
 ::GetClassCountOutput()
 {
   return this->GetFilter()->GetClassCountOutput();
 }*/
 
-/*template<class TInputImage, class TMaskImage>
-const typename OGRDataToResampledOGRData<TInputImage,TMaskImage>::PolygonSizeObjectType*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+/*template<class TMaskImage>
+const typename OGRDataToResampledOGRData<TMaskImage>::PolygonSizeObjectType*
+OGRDataToResampledOGRData<TMaskImage>
 ::GetPolygonSizeOutput() const
 {
   return this->GetFilter()->GetPolygonSizeOutput();
 }
 
-template<class TInputImage, class TMaskImage>
-typename OGRDataToResampledOGRData<TInputImage,TMaskImage>::PolygonSizeObjectType*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+template<class TMaskImage>
+typename OGRDataToResampledOGRData<TMaskImage>::PolygonSizeObjectType*
+OGRDataToResampledOGRData<TMaskImage>
 ::GetPolygonSizeOutput()
 {
   return this->GetFilter()->GetPolygonSizeOutput();
 }*/
 
 
-template<class TInputImage, class TMaskImage>
-const typename OGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassToPhyPosObjectType*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+template<class TMaskImage>
+const typename OGRDataToResampledOGRData<TMaskImage>::ClassToPhyPosObjectType*
+OGRDataToResampledOGRData<TMaskImage>
 ::GetClassToPhyPosOutput() const
 {
   return this->GetFilter()->GetClassToPhyPosOutput();
 }
 
-template<class TInputImage, class TMaskImage>
-typename OGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassToPhyPosObjectType*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+template<class TMaskImage>
+typename OGRDataToResampledOGRData<TMaskImage>::ClassToPhyPosObjectType*
+OGRDataToResampledOGRData<TMaskImage>
 ::GetClassToPhyPosOutput()
 {
   return this->GetFilter()->GetClassToPhyPosOutput();

@@ -34,18 +34,18 @@ namespace otb
  * \brief Persistent filter to compute class statistics based on vectors
  * 
  */
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>//TInputImage
 class ITK_EXPORT PersistentOGRDataToResampledOGRData :
-  public PersistentImageFilter<TInputImage, TInputImage>
+  public PersistentImageFilter<TMaskImage, TMaskImage>
 {
 public:
   /** Standard Self typedef */
   typedef PersistentOGRDataToResampledOGRData        Self;
-  typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
+  typedef PersistentImageFilter<TMaskImage, TMaskImage> Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  typedef TInputImage                                     InputImageType;
+  typedef TMaskImage                                      InputImageType;
   typedef typename InputImageType::Pointer                InputImagePointer;
   typedef typename InputImageType::RegionType             RegionType;
   typedef typename InputImageType::PointType              PointType;
@@ -139,7 +139,7 @@ private:
 
   void ApplyPolygonsSpatialFilter();
 
-  RegionType FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const;
+  RegionType FeatureBoundingRegion(const TMaskImage* image, otb::ogr::Layer::const_iterator& featIt) const;
 
   std::string m_FieldName;
 
@@ -159,20 +159,20 @@ private:
  * 
  * \sa PersistentOGRDataToResampledOGRData
  */
-template<class TInputImage, class TMaskImage>
+template<class TMaskImage>
 class ITK_EXPORT OGRDataToResampledOGRData :
-  public PersistentFilterStreamingDecorator<PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage> >
+  public PersistentFilterStreamingDecorator<PersistentOGRDataToResampledOGRData<TMaskImage> >
 {
 public:
   /** Standard Self typedef */
   typedef OGRDataToResampledOGRData  Self;
   typedef PersistentFilterStreamingDecorator
     <PersistentOGRDataToResampledOGRData
-      <TInputImage,TMaskImage> >          Superclass;
+      <TMaskImage> >          Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
   typedef itk::SmartPointer<const Self>   ConstPointer;
 
-  typedef TInputImage                     InputImageType;
+  typedef TMaskImage                     InputImageType;
   typedef TMaskImage                      MaskImageType;
   typedef otb::ogr::DataSource            OGRDataType;
   
@@ -190,9 +190,9 @@ public:
   itkTypeMacro(OGRDataToResampledOGRData, PersistentFilterStreamingDecorator);
 
   using Superclass::SetInput;
-  virtual void SetInput(const TInputImage* image);
+  virtual void SetInput(const TMaskImage* image);
 
-  const TInputImage* GetInput();
+  const TMaskImage* GetInput();
 
   void SetOGRData(const otb::ogr::DataSource* data);
   const otb::ogr::DataSource* GetOGRData();

@@ -24,9 +24,8 @@
 
 int otbOGRDataToResampledOGRDataNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
-  typedef otb::VectorImage<float> InputImageType;
   typedef otb::Image<unsigned char> MaskImageType;
-  typedef otb::OGRDataToResampledOGRData<InputImageType,MaskImageType> FilterType;
+  typedef otb::OGRDataToResampledOGRData<MaskImageType> FilterType;
   
   FilterType::Pointer filter = FilterType::New();
   std::cout << filter << std::endl;
@@ -35,9 +34,8 @@ int otbOGRDataToResampledOGRDataNew(int itkNotUsed(argc), char* itkNotUsed(argv)
 
 int otbOGRDataToResampledOGRData(int argc, char* argv[])
 {
-  typedef otb::VectorImage<float> InputImageType;
   typedef otb::Image<unsigned char> MaskImageType;
-  typedef otb::OGRDataToResampledOGRData<InputImageType,MaskImageType> FilterType;
+  typedef otb::OGRDataToResampledOGRData<MaskImageType> FilterType;
   
   if (argc < 3)
     {
@@ -48,29 +46,18 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   std::string outputPath(argv[2]);
   
   otb::ogr::DataSource::Pointer vectors = otb::ogr::DataSource::New(vectorPath);
-  
-  InputImageType::RegionType region;
+
+  MaskImageType::RegionType region;
   region.SetSize(0,99);
   region.SetSize(1,50);
-  
-  InputImageType::PointType origin;
+   
+  MaskImageType::PointType origin;
   origin.Fill(0.5);
   
-  InputImageType::SpacingType spacing;
+  MaskImageType::SpacingType spacing;
   spacing[0] = 1.0;
   spacing[1] = -1.0;
-  
-  InputImageType::PixelType pixel(3);
-  pixel.Fill(1);
-  
-  InputImageType::Pointer inputImage = InputImageType::New();
-  inputImage->SetNumberOfComponentsPerPixel(3);
-  inputImage->SetRegions(region);
-  inputImage->SetOrigin(origin);
-  inputImage->SetSpacing(spacing);
-  inputImage->Allocate();
-  inputImage->FillBuffer(pixel);
-  
+
   MaskImageType::Pointer mask = MaskImageType::New();
   mask->SetRegions(region);
   mask->SetOrigin(origin);
@@ -94,7 +81,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   std::string fieldName("Label");
   
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(inputImage);
+  //filter->SetInput(inputImage);
   filter->SetMask(mask);
   filter->SetRatesbyClass(ratesbyClass);
   filter->SetOGRData(vectors);

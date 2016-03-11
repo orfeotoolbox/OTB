@@ -69,10 +69,11 @@ OGRDataResampler
         }
       imgPoint[0] = castPoint->getX();
       imgPoint[1] = castPoint->getY();
-      imgIt.GetImageIterator().GetImage()->TransformPhysicalPointToIndex(imgPoint,imgIndex);
+      imgIt.GetImage()->TransformPhysicalPointToIndex(imgPoint,imgIndex);
       if (!imgIt.IsAtEnd())
         {
         if (imgIndex == imgIt.GetIndex())
+         if (imgIt.Get()>0)
           if (TakeSample(className))
           {
               std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
@@ -93,12 +94,12 @@ OGRDataResampler
       ring.addPoint(0.0,0.0,0.0);
       tmpPolygon.addRing(&ring);
       typename TIterator::ImageType::SpacingType imgAbsSpacing;
-      imgAbsSpacing = imgIt.GetImageIterator().GetImage()->GetSpacing();
+      imgAbsSpacing = imgIt.GetImage()->GetSpacing();
       if (imgAbsSpacing[0] < 0) imgAbsSpacing[0] = -imgAbsSpacing[0];
       if (imgAbsSpacing[1] < 0) imgAbsSpacing[1] = -imgAbsSpacing[1];
       while (!imgIt.IsAtEnd())
         {
-        imgIt.GetImageIterator().GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
+        imgIt.GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
         tmpPolygon.getExteriorRing()->setPoint(0
           ,imgPoint[0]-0.5*imgAbsSpacing[0]
           ,imgPoint[1]-0.5*imgAbsSpacing[1]
@@ -120,7 +121,8 @@ OGRDataResampler
           ,imgPoint[1]-0.5*imgAbsSpacing[1]
           ,0.0);
         if (geom->Intersects(&tmpPolygon)) 
-         if (TakeSample(className))
+         if (imgIt.Get()>0)
+          if (TakeSample(className))
           {
               std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
               m_ClassToPhyPositions[className].push_back(phyPos);
@@ -134,10 +136,11 @@ OGRDataResampler
       {
       while (!imgIt.IsAtEnd())
         {
-        imgIt.GetImageIterator().GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
+        imgIt.GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
         tmpPoint.setX(imgPoint[0]);
         tmpPoint.setY(imgPoint[1]);
         if (geom->Contains(&tmpPoint))
+         if (imgIt.Get()>0)
           if (TakeSample(className))
           {
               std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
