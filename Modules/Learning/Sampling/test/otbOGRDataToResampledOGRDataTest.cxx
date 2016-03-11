@@ -82,6 +82,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   
   FilterType::Pointer filter = FilterType::New();
   //filter->SetInput(inputImage);
+  filter->SetOutputVectorDataPath(outputPath);
   filter->SetMask(mask);
   filter->SetRatesbyClass(ratesbyClass);
   filter->SetOGRData(vectors);

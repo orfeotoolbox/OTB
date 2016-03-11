@@ -100,6 +100,9 @@ public:
   
   itkSetMacro(MaxSamplingTabSize, unsigned int);
   itkGetMacro(MaxSamplingTabSize, unsigned int);
+  
+  itkSetMacro(OutputVectorDataPath, std::string);
+  itkGetMacro(OutputVectorDataPath, std::string);
 
   // TODO: store the class count map as output #2
   //const ClassCountObjectType* GetClassCountOutput() const;//remove
@@ -149,7 +152,9 @@ private:
 
   // Layer to use in the shape file, default to 0
   int m_LayerIndex;
+  
   unsigned int m_MaxSamplingTabSize;
+  std::string m_OutputVectorDataPath;
 };
 
 /**
@@ -216,6 +221,12 @@ public:
 
  // const PolygonSizeObjectType* GetPolygonSizeOutput() const; //remove
  // PolygonSizeObjectType* GetPolygonSizeOutput(); //remove
+  
+  
+  void SetOutputVectorDataPath(std::string);
+  
+  const std::string* GetOutputVectorDataPath() const; 
+  std::string* GetOutputVectorDataPath(); 
   
   const ClassToPhyPosObjectType* GetClassToPhyPosOutput() const; 
   ClassToPhyPosObjectType* GetClassToPhyPosOutput(); 

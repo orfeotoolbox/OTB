@@ -101,7 +101,7 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
   std::cout << "ooo class : " << it->first << " " << it->second.size() << std::endl;
   std::cout << "oooooooooooooooooo" << std::endl;
 
-  otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New("/home/christophe/mydev/OTB-Sandbox/otb-build/OTB/build/Testing/Temporary/outvd.sqlite", otb::ogr::DataSource::Modes::Overwrite );
+  otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New( this->GetOutputVectorDataPath(), otb::ogr::DataSource::Modes::Overwrite );
   otb::ogr::Layer outputLayer = output->CreateLayer(GetOGRData()->GetLayer( this->GetLayerIndex()  ).GetName(),NULL,wkbPoint); //Create new layer
 
   
@@ -487,6 +487,14 @@ OGRDataToResampledOGRData<TMaskImage>
   this->GetFilter()->SetLayerIndex(index);
 }
 
+template<class TMaskImage>
+void
+OGRDataToResampledOGRData<TMaskImage>
+::SetOutputVectorDataPath(std::string path)
+{
+  this->GetFilter()->SetOutputVectorDataPath(path);
+}
+
 
 template<class TMaskImage>
 void
@@ -521,6 +529,22 @@ OGRDataToResampledOGRData<TMaskImage>
 ::GetMaxSamplingTabSize()
 {
   return this->GetFilter()->GetMaxSamplingTabSize();
+}
+
+template<class TMaskImage>
+const std::string*
+OGRDataToResampledOGRData<TMaskImage>
+::GetOutputVectorDataPath() const
+{
+  return this->GetFilter()->GetOutputVectorDataPath();
+}
+
+template<class TMaskImage>
+std::string*
+OGRDataToResampledOGRData<TMaskImage>
+::GetOutputVectorDataPath()
+{
+  return this->GetFilter()->GetOutputVectorDataPath();
 }
 
 /*template<class TMaskImage>

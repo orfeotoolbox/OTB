@@ -52,11 +52,8 @@ otb_add_test(NAME leTuOGRDataToResampledOGRDataNew COMMAND otbSamplingTestDriver
   otbOGRDataToResampledOGRDataNew )
 
 otb_add_test(NAME leTvOGRDataToResampledOGRData COMMAND otbSamplingTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/leTvOGRDataToClassStatisticsFilterOutput.txt
-  ${TEMP}/leTvOGRDataToResampledOGRDataOutput.txt
   otbOGRDataToResampledOGRData
   ${INPUTDATA}/variousVectors.sqlite
-  ${TEMP}/leTvOGRDataToResampledOGRDataOutput.txt)
+  ${TEMP}/leTvOGRDataToResampledOGRDataOutput.sqlite)
 
 
