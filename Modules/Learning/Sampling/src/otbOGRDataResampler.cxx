@@ -273,33 +273,8 @@ void
 OGRDataResampler
 ::Reset()
 {
-  m_NbPixelsGlobal = 0UL;
-  m_ElmtsInClass.clear();
-  m_Polygon.clear();
   m_ClassToPhyPositions.clear();
 }
-
-const OGRDataResampler::ClassCountMapType&
-OGRDataResampler
-::GetClassCountMap()
-{
-  return m_ElmtsInClass;
-}
-  
-const OGRDataResampler::PolygonSizeMapType&
-OGRDataResampler
-::GetPolygonSizeMap()
-{
-  return m_Polygon;
-}
-
-unsigned long
-OGRDataResampler
-::GetNumberOfPixels()
-{
-  return m_NbPixelsGlobal;
-}
-
 
 const OGRDataResampler::ClassToPhyPosMapType&
 OGRDataResampler

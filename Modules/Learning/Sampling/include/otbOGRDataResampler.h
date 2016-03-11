@@ -51,9 +51,6 @@ public:
   /** Reset the accumulator */
   void Reset();
   
-  const ClassCountMapType& GetClassCountMap();
-  
-  const PolygonSizeMapType& GetPolygonSizeMap();
   
   const ClassToPhyPosMapType& GetClassToPhyPosMap();
   
@@ -79,13 +76,7 @@ protected:
   virtual ~OGRDataResampler() {}
 
 private:
-  //Number of pixels in all the polygons
-  unsigned long m_NbPixelsGlobal;
-  //Number of pixels in each classes
-  ClassCountMapType m_ElmtsInClass;
-  //Number of pixels in each polygons
-  PolygonSizeMapType m_Polygon;  // check the feature id
-  
+ 
   //Map a class to the physical positions of the selected samples
   ClassToPhyPosMapType m_ClassToPhyPositions;
   

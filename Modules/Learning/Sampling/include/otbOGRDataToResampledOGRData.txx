@@ -89,20 +89,18 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetOGRData());
   vectors->GetLayer(m_LayerIndex).SetSpatialFilter(NULL);
   
-  ClassCountMapType &classCount = this->GetClassCountOutput()->Get();
-  PolygonSizeMapType &polygonSize = this->GetPolygonSizeOutput()->Get();
   ClassToPhyPosMapType &classToPhyPos = this->GetClassToPhyPosOutput()->Get();
   
   // Reset outputs
-  classCount.clear();
-  polygonSize.clear();
   classToPhyPos.clear();
   // Copy temporary stats to outputs
-  classCount = m_TemporaryStats->GetClassCountMap();
-  polygonSize = m_TemporaryStats->GetPolygonSizeMap();
   classToPhyPos = m_TemporaryStats->GetClassToPhyPosMap();
   
-  
+  std::cout << "oooooooooooooooooo" << std::endl;
+  for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
+  std::cout << "ooo class : " << it->first << " " << it->second.size() << std::endl;
+  std::cout << "oooooooooooooooooo" << std::endl;
+
   otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New("/home/christophe/mydev/OTB-Sandbox/otb-build/OTB/build/Testing/Temporary/outvd.sqlite", otb::ogr::DataSource::Modes::Overwrite );
   otb::ogr::Layer outputLayer = output->CreateLayer(GetOGRData()->GetLayer( this->GetLayerIndex()  ).GetName(),NULL,wkbPoint); //Create new layer
 

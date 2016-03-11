@@ -35,15 +35,6 @@ OGRDataResampler
   
   // Get Feature Id
   unsigned long featureId = featIt->ogr().GetFID();
-
-  if (m_ElmtsInClass.count(className) == 0)
-    {
-    m_ElmtsInClass[className] = 0UL;
-    }
-  if (m_Polygon.count(featureId) == 0)
-    {
-    m_Polygon[featureId] = 0UL;
-    }
   
   this->AddGeometry(featIt->ogr().GetGeometryRef(),
                     imgIt,
@@ -84,13 +75,8 @@ OGRDataResampler
         if (imgIndex == imgIt.GetIndex())
           if (TakeSample(className))
           {
-              m_NbPixelsGlobal++;
-              m_ElmtsInClass[className]++;
-              m_Polygon[fId]++;
-              
               std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
               m_ClassToPhyPositions[className].push_back(phyPos);
-              
           }
         } 
       break;
@@ -136,10 +122,6 @@ OGRDataResampler
         if (geom->Intersects(&tmpPolygon)) 
          if (TakeSample(className))
           {
-              m_NbPixelsGlobal++;
-              m_ElmtsInClass[className]++;
-              m_Polygon[fId]++;
-              
               std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
               m_ClassToPhyPositions[className].push_back(phyPos);
           }
@@ -158,10 +140,6 @@ OGRDataResampler
         if (geom->Contains(&tmpPoint))
           if (TakeSample(className))
           {
-              m_NbPixelsGlobal++;
-              m_ElmtsInClass[className]++;
-              m_Polygon[fId]++;
-              
               std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
               m_ClassToPhyPositions[className].push_back(phyPos);
           }
