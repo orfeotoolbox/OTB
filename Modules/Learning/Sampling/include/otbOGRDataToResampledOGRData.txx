@@ -34,10 +34,10 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   m_LayerIndex(0),
   m_MaxSamplingTabSize(1000)
 {
-  this->SetNumberOfRequiredOutputs(3);
+  this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0,TInputImage::New());
-  this->SetNthOutput(1,ClassCountObjectType::New());
-  this->SetNthOutput(2,PolygonSizeObjectType::New());
+  //this->SetNthOutput(1,ClassCountObjectType::New()); remove
+  //this->SetNthOutput(2,PolygonSizeObjectType::New()); remove
   this->SetNthOutput(3,ClassToPhyPosObjectType::New());
 }
 
@@ -158,7 +158,8 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
      }
 }
 
-template<class TInputImage, class TMaskImage>
+//remove
+/*template<class TInputImage, class TMaskImage>
 const typename PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassCountObjectType*
 PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 ::GetClassCountOutput() const
@@ -180,7 +181,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
     return 0;
     }
   return static_cast<ClassCountObjectType *>(this->itk::ProcessObject::GetOutput(1));
-}
+}*/
 
 template<class TInputImage, class TMaskImage>
 const typename PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>::PolygonSizeObjectType*
@@ -241,12 +242,12 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
     case 0:
       return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
       break;
-    case 1:
-      return static_cast<itk::DataObject*>(ClassCountObjectType::New().GetPointer());
-      break;
-    case 2:
-      return static_cast<itk::DataObject*>(PolygonSizeObjectType::New().GetPointer());
-      break;
+    //case 1: remove
+    //  return static_cast<itk::DataObject*>(ClassCountObjectType::New().GetPointer());
+    //  break;
+    //case 2: remove
+    //  return static_cast<itk::DataObject*>(PolygonSizeObjectType::New().GetPointer());
+    //  break;
     case 3:
       return static_cast<itk::DataObject*>(ClassToPhyPosObjectType::New().GetPointer());
       break;
@@ -519,7 +520,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
   return this->GetFilter()->GetMaxSamplingTabSize();
 }
 
-template<class TInputImage, class TMaskImage>
+/*template<class TInputImage, class TMaskImage>
 const typename OGRDataToResampledOGRData<TInputImage,TMaskImage>::ClassCountObjectType*
 OGRDataToResampledOGRData<TInputImage,TMaskImage>
 ::GetClassCountOutput() const
@@ -533,9 +534,9 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 ::GetClassCountOutput()
 {
   return this->GetFilter()->GetClassCountOutput();
-}
+}*/
 
-template<class TInputImage, class TMaskImage>
+/*template<class TInputImage, class TMaskImage>
 const typename OGRDataToResampledOGRData<TInputImage,TMaskImage>::PolygonSizeObjectType*
 OGRDataToResampledOGRData<TInputImage,TMaskImage>
 ::GetPolygonSizeOutput() const
@@ -549,7 +550,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 ::GetPolygonSizeOutput()
 {
   return this->GetFilter()->GetPolygonSizeOutput();
-}
+}*/
 
 
 template<class TInputImage, class TMaskImage>

@@ -104,12 +104,12 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   
   filter->Update();
   
-  FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get();
-  FilterType::PolygonSizeMapType &polySize = filter->GetPolygonSizeOutput()->Get();
-  FilterType::ClassCountMapType::const_iterator itClass;
-  FilterType::PolygonSizeMapType::const_iterator itPoly;
+ // FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get(); remove
+ // FilterType::PolygonSizeMapType &polySize = filter->GetPolygonSizeOutput()->Get();
+ // FilterType::ClassCountMapType::const_iterator itClass; remove
+ // FilterType::PolygonSizeMapType::const_iterator itPoly;
   
-  std::ofstream ofs;
+  /*std::ofstream ofs;
   ofs.open(outputPath.c_str());
   ofs << "# Layer 0 : polygons"<<std::endl;
   ofs << "# Class sample counts"<<std::endl;
@@ -151,8 +151,8 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   for (itPoly = polySize.begin() ; itPoly != polySize.end() ; ++itPoly)
     {
     ofs << "feature " << itPoly->first << " = "<< itPoly->second << std::endl;
-    }*/
+    }
 
-  ofs.close();
+  ofs.close();*/
   return EXIT_SUCCESS;
 }

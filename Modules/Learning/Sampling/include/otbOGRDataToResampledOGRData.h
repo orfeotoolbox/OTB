@@ -56,13 +56,13 @@ public:
   typedef otb::ogr::DataSource                            OGRDataType;
   typedef otb::ogr::DataSource::Pointer                   OGRDataPointer;
 
-  typedef otb::OGRDataResampler::ClassCountMapType   ClassCountMapType; //remove
+  //typedef otb::OGRDataResampler::ClassCountMapType   ClassCountMapType; //remove
   typedef otb::OGRDataResampler::PolygonSizeMapType  PolygonSizeMapType; //remove
 
   typedef otb::OGRDataResampler::ClassToPhyPosMapType  ClassToPhyPosMapType;
 
   /** Wrap output type as DataObject */
-  typedef itk::SimpleDataObjectDecorator<ClassCountMapType>  ClassCountObjectType; //remove
+  //typedef itk::SimpleDataObjectDecorator<ClassCountMapType>  ClassCountObjectType; //remove
   typedef itk::SimpleDataObjectDecorator<PolygonSizeMapType> PolygonSizeObjectType; //remove
   typedef itk::SimpleDataObjectDecorator<ClassToPhyPosMapType> ClassToPhyPosObjectType;
 
@@ -102,8 +102,8 @@ public:
   itkGetMacro(MaxSamplingTabSize, unsigned int);
 
   // TODO: store the class count map as output #2
-  const ClassCountObjectType* GetClassCountOutput() const;//remove
-  ClassCountObjectType* GetClassCountOutput();//remove
+  //const ClassCountObjectType* GetClassCountOutput() const;//remove
+  //ClassCountObjectType* GetClassCountOutput();//remove
 
   // TODO: store the polygon size map as output #3
   const PolygonSizeObjectType* GetPolygonSizeOutput() const; //remove
@@ -177,10 +177,10 @@ public:
   typedef otb::ogr::DataSource            OGRDataType;
   
   typedef typename Superclass::FilterType             FilterType;
-  typedef typename FilterType::ClassCountMapType      ClassCountMapType;
-  typedef typename FilterType::PolygonSizeMapType     PolygonSizeMapType;
-  typedef typename FilterType::ClassCountObjectType   ClassCountObjectType;  //remove
-  typedef typename FilterType::PolygonSizeObjectType  PolygonSizeObjectType; //remove
+  //typedef typename FilterType::ClassCountMapType      ClassCountMapType; remove
+  //typedef typename FilterType::PolygonSizeMapType     PolygonSizeMapType; remove
+  //typedef typename FilterType::ClassCountObjectType   ClassCountObjectType;  //remove
+  //typedef typename FilterType::PolygonSizeObjectType  PolygonSizeObjectType; //remove
   typedef typename FilterType::ClassToPhyPosObjectType  ClassToPhyPosObjectType;
 
   /** Type macro */
@@ -211,11 +211,11 @@ public:
   void SetMaxSamplingTabSize(unsigned int index);
   unsigned int GetMaxSamplingTabSize();
 
-  const ClassCountObjectType* GetClassCountOutput() const; //remove
-  ClassCountObjectType* GetClassCountOutput(); //remove
+  //const ClassCountObjectType* GetClassCountOutput() const; //remove
+  //ClassCountObjectType* GetClassCountOutput(); //remove
 
-  const PolygonSizeObjectType* GetPolygonSizeOutput() const; //remove
-  PolygonSizeObjectType* GetPolygonSizeOutput(); //remove
+ // const PolygonSizeObjectType* GetPolygonSizeOutput() const; //remove
+ // PolygonSizeObjectType* GetPolygonSizeOutput(); //remove
   
   const ClassToPhyPosObjectType* GetClassToPhyPosOutput() const; 
   ClassToPhyPosObjectType* GetClassToPhyPosOutput(); 
