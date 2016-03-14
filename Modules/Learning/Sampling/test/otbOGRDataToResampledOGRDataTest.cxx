@@ -47,6 +47,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   
   std::string vectorPath(argv[1]);
   std::string outputPath(argv[2]);
+  int LayerIndex = atoi(argv[3]);
   
   otb::ogr::DataSource::Pointer vectors = otb::ogr::DataSource::New(vectorPath);
   
@@ -92,75 +93,19 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   filter->SetMask(mask);
   filter->SetOGRData(vectors);
   filter->SetFieldName(fieldName);
-  filter->SetLayerIndex(0);
+  filter->SetLayerIndex(LayerIndex);
   
   filter->Update();
   
   FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get();
   FilterType::PolygonSizeMapType &polySize = filter->GetPolygonSizeOutput()->Get();
-  FilterType::ClassCountMapType::const_iterator itClass;
-  FilterType::PolygonSizeMapType::const_iterator itPoly;
-  
-  /*std::ofstream ofs;
-  ofs.open(outputPath.c_str());
-  ofs << "# Layer 0 : polygons"<<std::endl;
-  ofs << "# Class sample counts"<<std::endl;
-  for (itClass = classCount.begin(); itClass != classCount.end() ; ++itClass)
-    {
-    ofs << "class "<< itClass->first << " = "<< itClass->second << std::endl;
-    }
-  ofs << "# Vector sizes"<<std::endl;
-  for (itPoly = polySize.begin() ; itPoly != polySize.end() ; ++itPoly)
-    {
-    ofs << "feature " << itPoly->first << " = "<< itPoly->second << std::endl;
-    }
-  
-  filter->SetLayerIndex(1);
-  filter->Update();
-  
-  ofs << "# Layer 1 : lines"<<std::endl;
-  ofs << "# Class sample counts"<<std::endl;
-  for (itClass = classCount.begin() ; itClass != classCount.end() ; ++itClass)
-    {
-    ofs << "class "<< itClass->first << " = "<< itClass->second << std::endl;
-    }
-  ofs << "# Vector sizes"<<std::endl;
-  for (itPoly = polySize.begin() ; itPoly != polySize.end() ; ++itPoly)
-    {
-    ofs << "feature " << itPoly->first << " = "<< itPoly->second << std::endl;
-    }
-  
-  filter->SetLayerIndex(2);
-  filter->Update();
-  
-  ofs << "# Layer 2 : points"<<std::endl;
-  ofs << "# Class sample counts"<<std::endl;
-  for (itClass = classCount.begin(); itClass != classCount.end() ; ++itClass)
-    {
-    ofs << "class "<< itClass->first << " = "<< itClass->second << std::endl;
-    }
-  ofs << "# Vector sizes"<<std::endl;
-  for (itPoly = polySize.begin() ; itPoly != polySize.end() ; ++itPoly)
-    {
-    ofs << "feature " << itPoly->first << " = "<< itPoly->second << std::endl;
-    }
-
-  ofs.close();*/
 
     
    //-------------------------------------------------------------- 
   typedef otb::OGRDataToResampledOGRData<MaskImageType> ResamplerFilterType;  
   typedef otb::SamplingRateCalculator RateCalculatorype;
   
-  /*RateCalculatorype::Pointer rateCalculatortest = RateCalculatorype::New();
-  for (itClass = classCount.begin(); itClass != classCount.end() ; ++itClass)
-    {
-    std::cout << "class "<< itClass->first << " = "<< itClass->second << std::endl;
-    }*/
-  
-  
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  //rateCalculator->produceMap();
   rateCalculator->SetClassCount(classCount);
   rateCalculator->setMinimumNbofSamplesByClass();
   RateCalculatorype::mapRateType ratesbyClass = rateCalculator->GetRatesbyClass();

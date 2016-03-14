@@ -55,7 +55,9 @@ otb_add_test(NAME leTuOGRDataToResampledOGRDataNew COMMAND otbSamplingTestDriver
 otb_add_test(NAME leTvOGRDataToResampledOGRData COMMAND otbSamplingTestDriver
   otbOGRDataToResampledOGRData
   ${INPUTDATA}/variousVectors.sqlite
-  ${TEMP}/leTvOGRDataToResampledOGRDataOutput.sqlite)
+  ${TEMP}/leTvOGRDataToResampledOGRDataOutput.sqlite
+  0
+  )
 
 
 otb_add_test(NAME leTuOGRDataToClassStatisticsFilterNew COMMAND otbSamplingTestDriver
