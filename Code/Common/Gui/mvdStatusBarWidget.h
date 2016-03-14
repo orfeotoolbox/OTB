@@ -113,6 +113,10 @@ public slots:
    */
   void SetScale( double sx, double sy );
 
+  /**
+   */
+  void SetGLSLEnabled( bool );
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //

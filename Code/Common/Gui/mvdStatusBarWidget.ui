@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>779</width>
-    <height>41</height>
+    <width>628</width>
+    <height>20</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,23 +19,20 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="toolTip">
+   <string>Ice rendering mode (OpenGL texture or GLSL if using OpenGL Shading Language)</string>
+  </property>
   <property name="locale">
    <locale language="C" country="AnyCountry"/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <property name="sizeConstraint">
     <enum>QLayout::SetMinimumSize</enum>
    </property>
-   <property name="leftMargin">
-    <number>3</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>3</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -160,6 +157,23 @@
        <width>150</width>
        <height>20</height>
       </size>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line_3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="renderModelLabel">
+     <property name="text">
+      <string>GLSL</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
