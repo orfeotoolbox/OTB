@@ -160,7 +160,8 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   
   
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  rateCalculator->produceMap();
+  //rateCalculator->produceMap();
+  rateCalculator->SetClassCount(classCount);
   rateCalculator->setMinimumNbofSamplesByClass();
   RateCalculatorype::mapRateType ratesbyClass = rateCalculator->GetRatesbyClass();
     

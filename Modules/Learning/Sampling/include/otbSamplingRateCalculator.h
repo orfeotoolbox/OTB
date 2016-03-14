@@ -47,9 +47,9 @@ public:
   
   
   /** typdefs **/
-  typedef std::map<std::string, unsigned long>  MapType;
+  typedef std::map<std::string, unsigned long>  ClassCountMapType;
   typedef std::set<std::string> SetType;
-  typedef MapType::const_iterator constItMapType;
+  typedef ClassCountMapType::const_iterator constItMapType;
   typedef SetType::const_iterator constItSetType;
   typedef struct
    {
@@ -75,8 +75,14 @@ public:
   void setNbofSamplesAllClasses(unsigned int);
   void setMinimumNbofSamplesByClass(void);
   void write(std::string );
-  const mapRateType& GetRatesbyClass();
+  
+  itkGetConstReferenceMacro(RatesbyClass,mapRateType);
 
+  void SetClassCount(const ClassCountMapType& map)
+  {
+    m_ClassCount = map;
+    findAllClasses();
+  }
 
 protected:
   /** Constructor */
@@ -96,14 +102,12 @@ private:
   
   
   std::string keyGenerator( unsigned int );
-  void findImagesAndClasses();
+  void findAllClasses();
 
-  int m_NbImg;
   int m_NbClasses;  
-  MapType m_map;
-  MapType m_totNbSamplesByClass;
+  ClassCountMapType m_ClassCount;
+  ClassCountMapType m_totNbSamplesByClass;
   SetType m_setClassNames;
-  SetType m_setImagesNames;
   
   
   mapRateType m_RatesbyClass;

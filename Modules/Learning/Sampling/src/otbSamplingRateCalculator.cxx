@@ -29,33 +29,23 @@ namespace otb
 SamplingRateCalculator
 ::SamplingRateCalculator()
 {
-  m_NbImg = 0;
   m_NbClasses = 0; 
 }
 
 void
 SamplingRateCalculator
-::findImagesAndClasses()
+::findAllClasses()
 {
 
   std::string imageName,className;
   
-  constItMapType constIt = m_map.begin();
-  for(; constIt != m_map.end(); ++constIt)
+  constItMapType constIt = m_ClassCount.begin();
+  for(; constIt != m_ClassCount.end(); ++constIt)
    {
-      //itMap->first <=> className
-      m_setImagesNames.insert( imageName );
-        
+      //constIt->first <=> className       
       m_setClassNames.insert( constIt->first ); 
-      
-      if ( !(m_totNbSamplesByClass.count(constIt->first)>0) )
-        m_totNbSamplesByClass[constIt->first] = 0;
-    
-      m_totNbSamplesByClass[constIt->first] += constIt->second;
-        
    }
    
-   m_NbImg = m_setImagesNames.size();
    m_NbClasses = m_setClassNames.size();
    
 }
@@ -90,11 +80,11 @@ SamplingRateCalculator
     {
     
        std::string key = keyGenerator(c);
-       m_map[key] = rand() % (range + 1);
+       m_ClassCount[key] = rand() % (range + 1);
        
     }
     
-   findImagesAndClasses();
+   findAllClasses();
 }
 
 void 
@@ -110,13 +100,13 @@ SamplingRateCalculator
  
 
     std::string key = keyGenerator(1);
-    m_map[key] = 104;
+    m_ClassCount[key] = 104;
     key = keyGenerator(2);
-    m_map[key] = 160;
+    m_ClassCount[key] = 160;
     key = keyGenerator(3);
-    m_map[key] = 211;
+    m_ClassCount[key] = 211;
            
-    findImagesAndClasses();
+    findAllClasses();
 }
 
 
@@ -128,8 +118,8 @@ setMinimumNbofSamplesByClass(void)
    unsigned int smallestNbofSamples = itk::NumericTraits<unsigned int>::max();
    std::string miniClass;
 
-   constItMapType itMap = m_totNbSamplesByClass.begin();
-   for(; itMap != m_totNbSamplesByClass.end(); ++itMap)
+   constItMapType itMap = m_ClassCount.begin();
+   for(; itMap != m_ClassCount.end(); ++itMap)
       if (smallestNbofSamples > itMap->second)
       {
           smallestNbofSamples = itMap->second;
@@ -189,7 +179,7 @@ SamplingRateCalculator
    constItSetType itClass=m_setClassNames.begin();
    std::list<std::string>::iterator tokenIt = tokens.begin();
    
-   MapType clVsRequiredNbSamples; //<class name,RequiredNbSamplesByClass>
+   ClassCountMapType clVsRequiredNbSamples; //<class name,RequiredNbSamplesByClass>
    
    while( (itClass != m_setClassNames.end()) && (tokenIt != tokens.end()) )
    {
@@ -224,11 +214,11 @@ SamplingRateCalculator
    constItMapType itMap = clVsRequiredNbSamples.begin();
    for(; itMap != clVsRequiredNbSamples.end(); ++itMap)
    {
-      if ( !(m_totNbSamplesByClass.count(itMap->first)>0) )
+      if ( !(m_ClassCount.count(itMap->first)>0) )
           itkExceptionMacro(<< "The class " << itMap->first << " is not a element the classes set.");
           
-      if (m_totNbSamplesByClass[itMap->first]<itMap->second)
-          itkExceptionMacro(<< "The class " << itMap->first << " only contains " << m_totNbSamplesByClass[itMap->first]
+      if (m_ClassCount[itMap->first]<itMap->second)
+          itkExceptionMacro(<< "The class " << itMap->first << " only contains " << m_ClassCount[itMap->first]
                             << " samples, but " << itMap->second << " were required.");
                             
    }
@@ -241,16 +231,16 @@ SamplingRateCalculator
                             
    }
    
-  itMap = m_map.begin();
-  for(; itMap != m_map.end(); ++itMap)
+  itMap = m_ClassCount.begin();
+  for(; itMap != m_ClassCount.end(); ++itMap)
    {
       // itMap->first <=> className
-      double overallRate = static_cast<double>(clVsRequiredNbSamples[itMap->first]) / static_cast<double>(m_totNbSamplesByClass[itMap->first]);
+      double overallRate = static_cast<double>(clVsRequiredNbSamples[itMap->first]) / static_cast<double>(m_ClassCount[itMap->first]);
       
       
       tripletType tpt;
       tpt.required=clVsRequiredNbSamples[itMap->first];
-      tpt.tot=m_totNbSamplesByClass[itMap->first];
+      tpt.tot=m_ClassCount[itMap->first];
       tpt.rate=overallRate*100.;
       
       m_RatesbyClass[itMap->first] = tpt;
@@ -284,23 +274,16 @@ SamplingRateCalculator
 }
 
 
-const SamplingRateCalculator::mapRateType& 
-SamplingRateCalculator
-::GetRatesbyClass()
-{
-    return m_RatesbyClass;
-}
-
 void
 SamplingRateCalculator
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
 
-  constItMapType constIt = m_map.begin();
-  for(; constIt != m_map.end(); ++constIt)
+  constItMapType constIt = m_ClassCount.begin();
+  for(; constIt != m_ClassCount.end(); ++constIt)
       os << indent << constIt->first << " " << constIt->second << std::endl;
       
-   os << indent << "Nb of images : " << m_NbImg << " nb of classes : " << m_NbClasses << std::endl;
+   os << indent << "Nb of classes : " << m_NbClasses << std::endl;
 }
 
 
