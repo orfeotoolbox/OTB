@@ -96,6 +96,7 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
   classToPhyPos = m_TemporaryStats->GetClassToPhyPosMap();
   
   std::cout << "oooooooooooooooooo" << std::endl;
+  std::cout << "ooo Layer " << this->GetLayerIndex() << std::endl;
   for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
   std::cout << "ooo class : " << it->first << " " << it->second.size() << std::endl;
   std::cout << "oooooooooooooooooo" << std::endl;
