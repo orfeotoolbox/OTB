@@ -4,6 +4,7 @@ set(OTBSamplingTests
 otbSamplingTestDriver.cxx
 otbOGRDataToResampledOGRDataTest.cxx
 otbSamplingRateCalculatorTest.cxx
+otbOGRDataToClassStatisticsFilterTest.cxx
 )
 
 add_executable(otbSamplingTestDriver ${OTBSamplingTests})
@@ -56,4 +57,15 @@ otb_add_test(NAME leTvOGRDataToResampledOGRData COMMAND otbSamplingTestDriver
   ${INPUTDATA}/variousVectors.sqlite
   ${TEMP}/leTvOGRDataToResampledOGRDataOutput.sqlite)
 
+
+otb_add_test(NAME leTuOGRDataToClassStatisticsFilterNew COMMAND otbSamplingTestDriver
+  otbOGRDataToClassStatisticsFilterNew )
+
+otb_add_test(NAME leTvOGRDataToClassStatisticsFilter COMMAND otbSamplingTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/leTvOGRDataToClassStatisticsFilterOutput.txt
+  ${TEMP}/leTvOGRDataToClassStatisticsFilterOutput.txt
+  otbOGRDataToClassStatisticsFilter
+  ${INPUTDATA}/variousVectors.sqlite
+  ${TEMP}/leTvOGRDataToClassStatisticsFilterOutput.txt)
 

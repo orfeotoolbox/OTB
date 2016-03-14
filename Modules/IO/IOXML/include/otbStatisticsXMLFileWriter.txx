@@ -22,6 +22,7 @@
 #include "itkMacro.h"
 #include "itksys/SystemTools.hxx"
 #include "otb_tinyxml.h"
+#include "otbStringUtils.h"
 
 namespace otb {
 
@@ -60,8 +61,8 @@ StatisticsXMLFileWriter<TMeasurementVector>
 ::GenerateData()
 {
   // Check if the input are not null
-  if(m_MeasurementVectorContainer.size() == 0)
-    itkExceptionMacro(<<"At Least one input is required, please set input using the method AddInput");
+  if(m_MeasurementVectorContainer.size() == 0 && m_GenericMapContainer.size() == 0)
+    itkExceptionMacro(<<"At least one input is required, please set input using the methods AddInput or AddInputMap");
 
   // Check if the filename is not empty
   if(m_FileName.empty())
@@ -80,8 +81,12 @@ StatisticsXMLFileWriter<TMeasurementVector>
   TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
   doc.LinkEndChild( decl );
 
-  TiXmlElement * root = new TiXmlElement( "FeatureStatistics");
-  doc.LinkEndChild( root );
+  TiXmlElement * root = NULL;
+  if (m_MeasurementVectorContainer.size())
+    {
+    root = new TiXmlElement( "FeatureStatistics");
+    doc.LinkEndChild( root );
+    }
 
   // Iterate through the input
   for (unsigned int i = 0; i < m_MeasurementVectorContainer.size(); ++i)
@@ -103,6 +108,39 @@ StatisticsXMLFileWriter<TMeasurementVector>
       feature->LinkEndChild(curStatisticVector);
       }
     }
+    
+  // Iterate on map containers
+  TiXmlElement * mapRoot = NULL;
+  if (m_GenericMapContainer.size())
+    {
+    mapRoot = new TiXmlElement( "GeneralStatistics");
+    doc.LinkEndChild( mapRoot );
+    }
+
+  std::string keyAttr("key");
+  std::string valAttr("value");
+  GenericMapContainer::const_iterator containerIt;
+  for ( containerIt = m_GenericMapContainer.begin() ; containerIt != m_GenericMapContainer.end() ; ++containerIt)
+    {
+    std::string mapName = containerIt->first;
+    GenericMapType::const_iterator mapIter;
+
+    // The current statistic
+    TiXmlElement * feature = new TiXmlElement("Statistic");
+    feature->SetAttribute("name", mapName.c_str());
+    mapRoot->LinkEndChild( feature );
+
+    // Store the value for this statistic
+    for( mapIter = containerIt->second.begin() ; mapIter != containerIt->second.end() ; ++mapIter )
+      {
+      // For each value in Measurementvector
+      TiXmlElement * curStatisticMap = new TiXmlElement("StatisticMap");
+      curStatisticMap->SetAttribute(keyAttr , mapIter->first);
+      curStatisticMap->SetAttribute(valAttr, mapIter->second);
+      feature->LinkEndChild(curStatisticMap);
+      }
+    }
+  
 
   // Finally, write the file
   if (! doc.SaveFile( m_FileName.c_str() ) )
@@ -114,14 +152,67 @@ StatisticsXMLFileWriter<TMeasurementVector>
 
 }
 
+template < class TMeasurementVector >
+template <typename MapType>
+void
+StatisticsXMLFileWriter<TMeasurementVector>
+::AddInputMap(const char * name, const MapType& map )
+{
+  std::string token(name);
+  
+  if(m_GenericMapContainer.count(token) > 0)
+    {
+    itkExceptionMacro(<<"Token selected ("
+                      <<name<<") is already added to the XML file");
+    }
+  
+  typename MapType::const_iterator it;
+  GenericMapType insideMap;
+  std::string tmpKey;
+  std::string tmpVal;
+  for ( it = map.begin() ; it != map.end() ; ++it)
+    {
+    tmpKey = boost::lexical_cast<std::string>(it->first);
+    tmpVal = boost::lexical_cast<std::string>(it->second);
+    insideMap[tmpKey] = tmpVal;
+    }
+  m_GenericMapContainer[token] = insideMap;
+}
 
 template < class TMeasurementVector >
 void
 StatisticsXMLFileWriter<TMeasurementVector>
-::PrintSelf(std::ostream& itkNotUsed(os), itk::Indent itkNotUsed(indent)) const
+::CleanInputs()
+{
+  // clear both containers
+  m_MeasurementVectorContainer.clear();
+  m_GenericMapContainer.clear();
+}
+
+template < class TMeasurementVector >
+void
+StatisticsXMLFileWriter<TMeasurementVector>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  //Superclass::PrintSelf(os, indent);
+  Superclass::PrintSelf(os, indent);
+
+  // Print Writer state
+  os << indent << "Input FileName: "<< m_FileName << std::endl;
+  os << indent << "Vector statistics: ";
+  for (unsigned int i=0 ; i < m_MeasurementVectorContainer.size() ; ++i)
+    {
+    if (i>0) os <<", ";
+    os << m_MeasurementVectorContainer[i].first;
+    }
+  os << std::endl;
+  os << indent << "Map statistics: ";
+  for (GenericMapContainer::const_iterator it = m_GenericMapContainer.begin() ; it != m_GenericMapContainer.end() ; ++it)
+    {
+    if (it != m_GenericMapContainer.begin()) os <<", ";
+    os << it->first;
+    }
+  os << std::endl;
 }
 
 } // End namespace otb
