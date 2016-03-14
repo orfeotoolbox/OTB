@@ -37,8 +37,6 @@ public:
   typedef itk::SmartPointer<Self>            Pointer;
   itkNewMacro(Self);
 
-  typedef std::map<std::string, unsigned long>      ClassCountMapType; //remove
-  typedef std::map<unsigned long, unsigned long>    PolygonSizeMapType;//remove
   typedef std::map < std::string, std::vector< std::pair<double,double> > >  ClassToPhyPosMapType;
 
   /** Runtime information support. */
