@@ -28,7 +28,8 @@ template <typename TIterator>
 void
 OGRDataResampler
 ::Add(otb::ogr::Layer::const_iterator& featIt,
-      TIterator& imgIt)
+      TIterator& imgIt,
+      const typename TIterator::ImageType *mask)
 {
   // Get class name
   std::string className(featIt->ogr().GetFieldAsString(this->m_FieldIndex));
@@ -38,6 +39,7 @@ OGRDataResampler
   
   this->AddGeometry(featIt->ogr().GetGeometryRef(),
                     imgIt,
+                    mask,
                     featureId,
                     className);
 }
@@ -47,6 +49,7 @@ void
 OGRDataResampler
 ::AddGeometry(OGRGeometry *geom,
               TIterator& imgIt,
+              const typename TIterator::ImageType *mask,
               unsigned long &fId,
               std::string &className)
 {
@@ -69,7 +72,7 @@ OGRDataResampler
         }
       imgPoint[0] = castPoint->getX();
       imgPoint[1] = castPoint->getY();
-      imgIt.GetImage()->TransformPhysicalPointToIndex(imgPoint,imgIndex);
+      mask->TransformPhysicalPointToIndex(imgPoint,imgIndex);
       if (!imgIt.IsAtEnd())
         {
         if (imgIndex == imgIt.GetIndex())
@@ -93,13 +96,12 @@ OGRDataResampler
       ring.addPoint(0.0,1.0,0.0);
       ring.addPoint(0.0,0.0,0.0);
       tmpPolygon.addRing(&ring);
-      typename TIterator::ImageType::SpacingType imgAbsSpacing;
-      imgAbsSpacing = imgIt.GetImage()->GetSpacing();
+      typename TIterator::ImageType::SpacingType imgAbsSpacing = mask->GetSpacing();
       if (imgAbsSpacing[0] < 0) imgAbsSpacing[0] = -imgAbsSpacing[0];
       if (imgAbsSpacing[1] < 0) imgAbsSpacing[1] = -imgAbsSpacing[1];
       while (!imgIt.IsAtEnd())
         {
-        imgIt.GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
+        mask->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
         tmpPolygon.getExteriorRing()->setPoint(0
           ,imgPoint[0]-0.5*imgAbsSpacing[0]
           ,imgPoint[1]-0.5*imgAbsSpacing[1]
@@ -136,7 +138,7 @@ OGRDataResampler
       {
       while (!imgIt.IsAtEnd())
         {
-        imgIt.GetImage()->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
+        mask->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
         tmpPoint.setX(imgPoint[0]);
         tmpPoint.setY(imgPoint[1]);
         if (geom->Contains(&tmpPoint))
@@ -167,6 +169,7 @@ OGRDataResampler
           {
           this->AddGeometry(geomCollection->getGeometryRef(i),
                             imgIt,
+                            mask,
                             fId,
                             className);
           }

@@ -19,8 +19,7 @@
 #define __otbOGRDataToResampledOGRData_txx
 
 #include "otbMaskedIteratorDecorator.h"
-#include "itkImageRegionConstIteratorWithOnlyIndex.h"
-#include "itkImageRegionConstIterator.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
 #include "otbOGRDataSourceWrapper.h"
 
 
@@ -250,10 +249,10 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
     bool regionNotEmpty = consideredRegion.Crop(requestedRegion);
     if (regionNotEmpty)
       {
-         typedef itk::ImageRegionConstIterator<TMaskImage> IteratorType;
+         typedef itk::ImageRegionConstIteratorWithIndex<TMaskImage> IteratorType;
          IteratorType it(mask,consideredRegion);
          
-         m_TemporaryStats->Add<IteratorType>(featIt, it);
+         m_TemporaryStats->Add<IteratorType>(featIt, it, mask);
 
       }
     }
