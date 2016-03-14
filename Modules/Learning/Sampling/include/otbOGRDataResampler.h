@@ -28,6 +28,8 @@ namespace otb
  * \class OGRDataResampler
  *
  * \brief This class stores statistics of OGR data for each thread
+ * 
+ * \ingroup OTBSampling
  *
  */
 class OGRDataResampler : public itk::Object

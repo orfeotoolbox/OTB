@@ -162,8 +162,8 @@ OGRDataResampler
       OGRGeometryCollection *geomCollection = dynamic_cast<OGRGeometryCollection*>(geom);
       if (geomCollection)
         {
-        int nbGeom =  geomCollection->getNumGeometries();
-        for ( int i=0 ; i < nbGeom ; ++i)
+        unsigned int nbGeom =  geomCollection->getNumGeometries();
+        for (unsigned int i=0 ; i < nbGeom ; ++i)
           {
           this->AddGeometry(geomCollection->getGeometryRef(i),
                             imgIt,
