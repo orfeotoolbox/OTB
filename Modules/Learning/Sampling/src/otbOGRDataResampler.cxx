@@ -23,14 +23,6 @@ namespace otb
 
 
 
-void
-OGRDataResampler
-::keyInterpretor2(std::string key, std::string &className) const
-{
-      std::size_t pos = key.find_first_of("=");
-      className = key.substr(pos+1);
-}
-
 unsigned int 
 OGRDataResampler
 ::selectN1(double per,unsigned int T)
@@ -211,11 +203,10 @@ if (!m_alreadyPrepared)
       if (N!=N2)
         itkExceptionMacro(<< "N != N2." << std::endl);
       
-      std::string className;
-      keyInterpretor2(itRates->first,className);
       
-      m_ClassToBools[className] = std::make_pair(tab1,tab2);
-      m_ClassToCurrentIndices[className] = std::make_pair(0,0);
+      //itRates->first <=>  className     
+      m_ClassToBools[itRates->first] = std::make_pair(tab1,tab2);
+      m_ClassToCurrentIndices[itRates->first] = std::make_pair(0,0);
    }
          
 }
@@ -229,14 +220,8 @@ OGRDataResampler::TakeSample(std::string className)
 
    bool res=false;
 
-   
-   //TODO : remove this awful system
-   std::ostringstream  key;
-   key << "class=" << className;
-   
-   if (m_ClassToPhyPositions[className].size()>=m_RatesbyClass[key.str()].required)
-     return false;
-     
+   if (m_ClassToPhyPositions[className].size()>=m_RatesbyClass[className].required)
+     return false;    
 
    unsigned int &ind1 = m_ClassToCurrentIndices[className].first; //first counter
    std::vector<bool> &tab1 = m_ClassToBools[className].first; // First array

@@ -102,7 +102,6 @@ private:
   unsigned int findBestSize(unsigned int tot);              
                    
   bool TakeSample(std::string className);
-  void keyInterpretor2(std::string key, std::string &className) const;
 
   // Not implemented
   OGRDataResampler(const Self&);
