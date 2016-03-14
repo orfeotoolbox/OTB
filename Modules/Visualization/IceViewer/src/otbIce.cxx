@@ -79,8 +79,8 @@ int main(int argc, char * argv[])
         }
       catch(itk::ExceptionObject & err2)
         {
-        std::cerr<<"Failed to open object as vector: "<<err<<std::endl;
-        std::cerr<<"Could not open file "<<argv[i]<<" as an image or a vector, skipping."<<std::endl;
+        std::cerr << "Failed to open object as vector: " << err2 << std::endl;
+        std::cerr << "Could not open file " << argv[i] << " as an image or a vector, skipping." << std::endl;
         }
       }
     }

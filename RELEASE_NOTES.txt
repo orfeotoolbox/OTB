@@ -1,3 +1,21 @@
+OTB-v.5.2.1 - Changes since version 5.2.0 (2016/01/19)
+------------------------------------------
+* Bugs fixed:
+  * Mantis-1124: fix the use of Update_command and reorder the patch commands properly
+  * Fix some Coverity reports
+
+* Superbuild:
+  * Update OSSIM to latest stable and improve version checking during CMake configuration
+
+* Monteverdi:
+  * Mantis-1096: QuicklookView
+  * Mantis-1125: Use OTB_APPLICATION_PATH in startup files
+
+* Other:
+  * Apply spelling patch from DebianGIS
+  * Find only required itk components. Patch proposed by Debian.
+  * Fix mxe gcc dir and list of system dlls exceptions
+
 OTB-v.5.2.0 - Changes since version 5.0.0 (2015/12/22)
 ------------------------------------------
 * Library (the corresponding requests for changes are mentioned):
