@@ -814,6 +814,11 @@ ImageViewRenderer
 
   assert( !m_GlView.IsNull() );
 
+#if DISABLE_QUICKLOOK_VIEW
+  if( objectName()=="QuicklookViewRenderer" )
+    return;
+#endif
+
   StackedLayerModel * stackedLayerModel = GetLayerStack();
 
 

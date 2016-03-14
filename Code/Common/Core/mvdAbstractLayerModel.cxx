@@ -165,7 +165,8 @@ AbstractLayerModel
 
   epsg = ogr_sr.GetAuthorityCode( "GEOGCS" );
 
-  assert( epsg!=NULL && strcmp( epsg, "" )!=0 );
+  if( epsg==NULL || strcmp( epsg, "" )==0 )
+    return ToStdString( tr( STR_UNKNOWN ) );
 
   return epsg;
 }

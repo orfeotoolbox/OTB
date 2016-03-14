@@ -71,6 +71,7 @@
 #include "Gui/mvdImageViewManipulator.h"
 #include "Gui/mvdImageViewRenderer.h"
 #include "Gui/mvdImageViewWidget.h"
+#include "Gui/mvdImportImageDialog.h"
 #include "Gui/mvdLayerStackController.h"
 #include "Gui/mvdLayerStackWidget.h"
 #if USE_PIXEL_DESCRIPTION
@@ -998,11 +999,11 @@ MainWindow
 }
 
 /*****************************************************************************/
-void
+CountType
 MainWindow
 ::ImportImage( const QString& filename, StackedLayerModel::SizeType index )
 {
-  // qDebug() << this << "::ImportImage(" << filename << "," << forceCreate << ")";
+  qDebug() << this << "::ImportImage(" << filename << "," << index << ")";
 
   //
   // Get stacked-layer.
@@ -1016,6 +1017,38 @@ MainWindow
     Application::Instance()->GetModel< StackedLayerModel >();
 
   assert( stackedLayerModel!=NULL );
+
+  //
+  // CDS import
+  {
+    ImportImageDialog * importDialog = new ImportImageDialog( filename, this );
+
+    assert( importDialog!=NULL );
+
+    if( importDialog->HasSubDatasets() )
+      {
+      if( importDialog->exec()==QDialog::Rejected )
+	return 0;
+
+      IntVector::size_type count = 0;
+      IntVector indices;
+
+      importDialog->GetSubDatasets( indices );
+
+      for( IntVector::size_type i=0;
+	   i<indices.size();
+	   ++ i )
+	count +=
+	  ImportImage(
+	    QString( "%1?&sdataidx=%2" ).arg( filename ).arg( indices[ i ] ),
+	    index + count
+	  );
+
+      return count;
+      }
+  }
+  // CDS import.
+  //
 
   //
   // Count images regarding their spatial-reference type.
@@ -1070,7 +1103,7 @@ MainWindow
     }
 
   if( button==QMessageBox::Cancel )
-    return;
+    return 0;
 
   /*
   switch( button )
@@ -1095,7 +1128,7 @@ MainWindow
   VectorImageModel * imageModel = ImportImage( filename, -1, -1 );
 
   if( imageModel==NULL )
-    return;
+    return 0;
 
   //
   // Bypass rendering of image-views.
@@ -1159,6 +1192,8 @@ MainWindow
   referenceLayerComboBox->blockSignals( signalsBlocked );
   // }
   //
+
+  return 1;
 }
 
 /*****************************************************************************/
