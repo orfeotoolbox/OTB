@@ -253,7 +253,7 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
       break;
     default:
       // might as well make an image
-      //return static_cast<itk::DataObject*>(TInputImage::New().GetPointer()); remove
+      return static_cast<itk::DataObject*>(TMaskImage::New().GetPointer()); 
       break;
     }
 }
