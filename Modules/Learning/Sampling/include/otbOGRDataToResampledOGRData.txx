@@ -35,7 +35,7 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
 {
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0,TMaskImage::New());
-  this->SetNthOutput(3,ClassToPhyPosObjectType::New());
+  this->SetNthOutput(1,ClassToPhyPosObjectType::New());
 }
 
 template<class TMaskImage>
@@ -71,11 +71,13 @@ const TMaskImage*
 PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GetMask()
 {
-  if (this->GetNumberOfInputs()<3)
+  if (this->GetNumberOfInputs()<1)
     {
+      std::cout << "sqdlkcjnamljb" << std::endl;
     return 0;
+  
     }
-  return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(2));
+  return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(0));
 }
 
 template<class TMaskImage>
@@ -161,11 +163,11 @@ const typename PersistentOGRDataToResampledOGRData<TMaskImage>::ClassToPhyPosObj
 PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GetClassToPhyPosOutput() const
 {
-  if (this->GetNumberOfOutputs()<4)
+  if (this->GetNumberOfOutputs()<2)
     {
     return 0;
     }
-  return static_cast<const ClassToPhyPosObjectType *>(this->itk::ProcessObject::GetOutput(3));
+  return static_cast<const ClassToPhyPosObjectType *>(this->itk::ProcessObject::GetOutput(1));
 }
 
 template<class TMaskImage>
@@ -173,11 +175,11 @@ typename PersistentOGRDataToResampledOGRData<TMaskImage>::ClassToPhyPosObjectTyp
 PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GetClassToPhyPosOutput()
 {
-    if (this->GetNumberOfOutputs()<4)
+    if (this->GetNumberOfOutputs()<2)
     {
     return 0;
     }
-  return static_cast<ClassToPhyPosObjectType *>(this->itk::ProcessObject::GetOutput(3));
+  return static_cast<ClassToPhyPosObjectType *>(this->itk::ProcessObject::GetOutput(1));
 }
 
 template<class TMaskImage>
@@ -187,8 +189,10 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
 {
   switch (idx)
     {
-
-    case 3:
+    case 0:
+      return static_cast<itk::DataObject*>(TMaskImage::New().GetPointer());
+      break;
+    case 1:
       return static_cast<itk::DataObject*>(ClassToPhyPosObjectType::New().GetPointer());
       break;
     default:
@@ -205,20 +209,15 @@ void
 PersistentOGRDataToResampledOGRData<TMaskImage>
 ::GenerateInputRequestedRegion()
 {
-  InputImageType *input = const_cast<InputImageType*>(this->GetInput());
   MaskImageType *mask = const_cast<MaskImageType*>(this->GetMask());
 
   RegionType requested = this->GetOutput()->GetRequestedRegion();
-  RegionType emptyRegion = input->GetLargestPossibleRegion();
+  RegionType emptyRegion = mask->GetLargestPossibleRegion();
   emptyRegion.SetSize(0,0);
   emptyRegion.SetSize(1,0);
 
-  input->SetRequestedRegion(emptyRegion);
+  mask->SetRequestedRegion(emptyRegion);
 
-  if (mask)
-    {
-    mask->SetRequestedRegion(requested);
-    }
 }
 
 

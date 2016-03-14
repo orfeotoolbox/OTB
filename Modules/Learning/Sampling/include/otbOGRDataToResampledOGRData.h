@@ -45,13 +45,15 @@ public:
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  typedef TMaskImage                                      InputImageType;
+  /*typedef TMaskImage                                      InputImageType;
   typedef typename InputImageType::Pointer                InputImagePointer;
   typedef typename InputImageType::RegionType             RegionType;
-  typedef typename InputImageType::PointType              PointType;
+  typedef typename InputImageType::PointType              PointType;*/
 
-  typedef TMaskImage                                      MaskImageType;
-  typedef typename MaskImageType::Pointer                 MaskImagePointer;
+  typedef TMaskImage                                  MaskImageType;
+  typedef typename MaskImageType::Pointer             MaskImagePointer;
+  typedef typename TMaskImage::RegionType             RegionType;
+  typedef typename TMaskImage::PointType              PointType;
 
   typedef otb::ogr::DataSource                            OGRDataType;
   typedef otb::ogr::DataSource::Pointer                   OGRDataPointer;
