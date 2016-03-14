@@ -18,6 +18,7 @@
 
 #include "otbSamplingRateCalculator.h"
 #include "otbOGRDataToResampledOGRData.h"
+#include "otbOGRDataToClassStatisticsFilter.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include <fstream>
@@ -34,8 +35,10 @@ int otbOGRDataToResampledOGRDataNew(int itkNotUsed(argc), char* itkNotUsed(argv)
 
 int otbOGRDataToResampledOGRData(int argc, char* argv[])
 {
+
+  typedef otb::VectorImage<float> InputImageType;
   typedef otb::Image<unsigned char> MaskImageType;
-  typedef otb::OGRDataToResampledOGRData<MaskImageType> FilterType;
+  typedef otb::OGRDataToClassStatisticsFilter<InputImageType,MaskImageType> FilterType;
   
   if (argc < 3)
     {
@@ -46,18 +49,30 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   std::string outputPath(argv[2]);
   
   otb::ogr::DataSource::Pointer vectors = otb::ogr::DataSource::New(vectorPath);
-
-  MaskImageType::RegionType region;
+  
+  InputImageType::RegionType region;
   region.SetSize(0,99);
   region.SetSize(1,50);
-   
-  MaskImageType::PointType origin;
+  
+  InputImageType::PointType origin;
   origin.Fill(0.5);
   
-  MaskImageType::SpacingType spacing;
+  InputImageType::SpacingType spacing;
   spacing[0] = 1.0;
   spacing[1] = -1.0;
-
+  
+  InputImageType::PixelType pixel(3);
+  pixel.Fill(1);
+  
+  InputImageType::Pointer inputImage = InputImageType::New();
+  inputImage->SetNumberOfComponentsPerPixel(3);
+  inputImage->SetLargestPossibleRegion(region);
+  inputImage->SetOrigin(origin);
+  inputImage->SetSpacing(spacing);
+  // Don't allocate the input image, the filter should not need it
+  //inputImage->Allocate();
+  //inputImage->FillBuffer(pixel);
+  
   MaskImageType::Pointer mask = MaskImageType::New();
   mask->SetRegions(region);
   mask->SetOrigin(origin);
@@ -70,32 +85,21 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
     it.Set(count % 2);
     }
     
-    
-  typedef otb::SamplingRateCalculator RateCalculatorype;
-  
-  RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  rateCalculator->produceMap();
-  rateCalculator->setMinimumNbofSamplesByClass();
-  RateCalculatorype::mapRateType ratesbyClass = rateCalculator->GetRatesbyClass();
-    
   std::string fieldName("Label");
   
   FilterType::Pointer filter = FilterType::New();
-  //filter->SetInput(inputImage);
-  filter->SetOutputVectorDataPath(outputPath);
+  filter->SetInput(inputImage);
   filter->SetMask(mask);
-  filter->SetRatesbyClass(ratesbyClass);
   filter->SetOGRData(vectors);
   filter->SetFieldName(fieldName);
   filter->SetLayerIndex(0);
-  filter->SetMaxSamplingTabSize(81);
   
   filter->Update();
   
- // FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get(); remove
- // FilterType::PolygonSizeMapType &polySize = filter->GetPolygonSizeOutput()->Get();
- // FilterType::ClassCountMapType::const_iterator itClass; remove
- // FilterType::PolygonSizeMapType::const_iterator itPoly;
+  FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get();
+  FilterType::PolygonSizeMapType &polySize = filter->GetPolygonSizeOutput()->Get();
+  FilterType::ClassCountMapType::const_iterator itClass;
+  FilterType::PolygonSizeMapType::const_iterator itPoly;
   
   /*std::ofstream ofs;
   ofs.open(outputPath.c_str());
@@ -111,7 +115,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
     ofs << "feature " << itPoly->first << " = "<< itPoly->second << std::endl;
     }
   
-  /*filter->SetLayerIndex(1);
+  filter->SetLayerIndex(1);
   filter->Update();
   
   ofs << "# Layer 1 : lines"<<std::endl;
@@ -142,5 +146,36 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
     }
 
   ofs.close();*/
+
+    
+   //-------------------------------------------------------------- 
+  typedef otb::OGRDataToResampledOGRData<MaskImageType> ResamplerFilterType;  
+  typedef otb::SamplingRateCalculator RateCalculatorype;
+  
+  /*RateCalculatorype::Pointer rateCalculatortest = RateCalculatorype::New();
+  for (itClass = classCount.begin(); itClass != classCount.end() ; ++itClass)
+    {
+    std::cout << "class "<< itClass->first << " = "<< itClass->second << std::endl;
+    }*/
+  
+  
+  RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
+  rateCalculator->produceMap();
+  rateCalculator->setMinimumNbofSamplesByClass();
+  RateCalculatorype::mapRateType ratesbyClass = rateCalculator->GetRatesbyClass();
+    
+  
+  ResamplerFilterType::Pointer resampler = ResamplerFilterType::New();
+  resampler->SetOutputVectorDataPath(outputPath);
+  resampler->SetMask(mask);
+  resampler->SetOGRData(vectors);
+  resampler->SetRatesbyClass(ratesbyClass);
+  resampler->SetFieldName(fieldName);
+  resampler->SetLayerIndex(0);
+  resampler->SetMaxSamplingTabSize(81);
+  
+  resampler->Update();
+  
+
   return EXIT_SUCCESS;
 }
