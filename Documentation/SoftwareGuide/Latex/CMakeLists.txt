@@ -92,18 +92,9 @@ SET(DVIPS_CONVERTER_OPTIONS  -D600)
 SET(TEX4HT_OPTIONS html,2,sections+)
 SET (HTML_OUTPUT "SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 
-#
-#copy release_notes from source tree
-#
+# Copy RELEASE_NOTES.txt from OTB source tree to Software Guide build directory
 SET (RELEASE_NOTES_SRC RELEASE_NOTES.txt)
-#TODO transform the copy as a custom command
-   #ADD_CUSTOM_COMMAND(
-    #    PRE_BUILD
-     #   OUTPUT  ${SoftwareGuide_SOURCE_DIR}/Latex/${RELEASE_NOTES_SRC}
-      #  COMMAND ${CMAKE_COMMAND} -E copy ${OTB_SOURCE_DIR}/${RELEASE_NOTES_SRC}  ${SoftwareGuide_SOURCE_DIR}/Latex/${RELEASE_NOTES_SRC}
-       # COMMENT   "Copying the Release Notes"
-   #)
-EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy "${OTB_SOURCE_DIR}/${RELEASE_NOTES_SRC}" "${SoftwareGuide_SOURCE_DIR}/Latex/${RELEASE_NOTES_SRC}")
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy "${OTB_SOURCE_DIR}/${RELEASE_NOTES_SRC}" "${SoftwareGuide_BINARY_DIR}/Latex/${RELEASE_NOTES_SRC}")
    
 #
 # File that defines the path to .cxx examples in ITK sources
