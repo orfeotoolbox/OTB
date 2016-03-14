@@ -167,12 +167,6 @@ FOREACH( exampletexname ${JAVA_EXAMPLES_TEX_FILES})
   SET( ITK_EXAMPLES_TEX_SRCS ${ITK_EXAMPLES_TEX_SRCS} ${exampletexname})
 ENDFOREACH( exampletexname )
 
-#Generate random contributor list
-MESSAGE(STATUS "Generating contributors list")
-EXECUTE_PROCESS(COMMAND python  generateRandomContributorList.py
-                WORKING_DIRECTORY ${SoftwareGuide_SOURCE_DIR}/Latex/ )
-MESSAGE(STATUS "Generating contributors list done")
-
   IF (NOT UNIX)
     SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex;${SoftwareGuide_SOURCE_DIR};${SoftwareGuide_SOURCE_DIR}/Latex;${SoftwareGuide_SOURCE_DIR}/Art;${SoftwareGuide_BINARY_DIR};${SoftwareGuide_BINARY_DIR}/Examples;${SoftwareGuide_BINARY_DIR}/Art;${SoftwareGuide_BINARY_DIR}/Latex)
 
