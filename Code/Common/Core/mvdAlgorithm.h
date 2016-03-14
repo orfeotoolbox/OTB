@@ -319,6 +319,12 @@ inline
 QString
 ToQString< double >( const double& );
 
+/**
+ */
+inline
+QString
+ToHumanReadableSize( qint64 fize, bool isInBits =true );
+
 } // end namespace 'mvd'.
 
 /*****************************************************************************/
@@ -713,6 +719,39 @@ NoneOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred )
     }
 
   return true;
+}
+
+/*******************************************************************************/
+inline
+QString
+ToHumanReadableSize( qint64 size, bool isInBits )
+{
+  double thousand =
+    isInBits ? 1024.0 : 1000.0;
+
+  double remainder = static_cast< double >( size );
+
+  if( size < thousand )
+    return QString::number( size );
+
+  remainder /= thousand;
+
+  if( remainder < thousand )
+    return QString("%1 KiB" ).arg( QString::number( remainder, 'g', 3 ) );
+
+  remainder /= thousand;
+
+  if( remainder < thousand )
+    return QString("%1 MiB" ).arg( QString::number( remainder, 'g', 3 ) );
+
+  remainder /= thousand;
+
+  if( remainder < thousand )
+    return QString("%1 GiB" ).arg( QString::number( remainder, 'g', 3 ) );
+
+  remainder /= thousand;
+
+  return QString("%1 TiB" ).arg( QString::number( remainder, 'g', 3 ) );
 }
 
 } // end namespace 'mvd'

@@ -39,6 +39,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAlgorithm.h"
 
 namespace mvd
 {
@@ -63,7 +64,8 @@ enum Columns
 {
   COLUMN_NONE = -1,
   //
-  COLUMN_SIZE = 0,
+  COLUMN_IMAGE_SIZE = 0,
+  COLUMN_OVERVIEW_SIZE,
   COLUMN_FILENAME,
   //
   COLUMN_COUNT,
@@ -73,7 +75,8 @@ enum Columns
 const char * const
 HEADERS[ COLUMN_COUNT ] =
 {
-  QT_TRANSLATE_NOOP( "mvd::ImportImagesDialog", "Size" ),
+  QT_TRANSLATE_NOOP( "mvd::ImportImagesDialog", "Img Size" ),
+  QT_TRANSLATE_NOOP( "mvd::ImportImagesDialog", "Ovr Size" ),
   QT_TRANSLATE_NOOP( "mvd::ImportImagesDialog", "Filename" ),
 };
 
@@ -241,7 +244,7 @@ ImportImagesDialog
       ItemList items;
 
       //
-      // COLUMN_SIZE
+      // COLUMN_IMAGE_SIZE
       if( !builder.IsNull() )
 	{
 	items.push_back(
@@ -254,6 +257,23 @@ ImportImagesDialog
 
 	items.back()->setFlags( flags );
 	}
+
+      //
+      // COLUMN_FILE_SIZE
+      items.push_back(
+	new QStandardItem(
+	  builder->GetOverviewsCount() > 0
+	  ? ToHumanReadableSize(
+	      QFileInfo(
+		filenames[ i ] + ".ovr"
+	      )
+	      .size()
+	    )
+	  : QString()
+	)
+      );
+
+      items.back()->setFlags( flags );
 
       //
       // COLUMN_FILENAME
