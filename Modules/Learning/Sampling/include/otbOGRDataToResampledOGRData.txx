@@ -199,24 +199,7 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
     }
 }
 
-template<class TMaskImage>
-void
-PersistentOGRDataToResampledOGRData<TMaskImage>
-::GenerateOutputInformation()
-{
-  Superclass::GenerateOutputInformation();
-  
-  const MaskImageType *mask = this->GetMask();
-  if (mask)
-    {
-    const InputImageType *input = this->GetInput();
-    if (mask->GetLargestPossibleRegion() !=
-        input->GetLargestPossibleRegion() )
-      {
-      itkGenericExceptionMacro("Mask and input image have a different size!");
-      }
-    }
-}
+
 
 template<class TMaskImage>
 void

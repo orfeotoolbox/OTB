@@ -117,8 +117,6 @@ protected:
   /** Destructor */
   virtual ~PersistentOGRDataToResampledOGRData() {}
 
-  virtual void GenerateOutputInformation();
-
   virtual void GenerateInputRequestedRegion();
 
   virtual void GenerateData();
