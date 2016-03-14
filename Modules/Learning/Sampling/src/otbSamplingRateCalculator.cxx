@@ -33,16 +33,6 @@ SamplingRateCalculator
   m_NbClasses = 0; 
 }
 
-
-void
-SamplingRateCalculator
-::keyInterpretor(std::string key, std::string &className) const
-{
-      std::size_t pos = key.find_first_of("=");
-      className = key.substr(pos+1);
-}
-
-
 void
 SamplingRateCalculator
 ::findImagesAndClasses()
@@ -53,16 +43,15 @@ SamplingRateCalculator
   constItMapType constIt = m_map.begin();
   for(; constIt != m_map.end(); ++constIt)
    {
-      keyInterpretor(constIt->first,className);
-      
+      //itMap->first <=> className
       m_setImagesNames.insert( imageName );
         
-      m_setClassNames.insert( className ); 
+      m_setClassNames.insert( constIt->first ); 
       
-      if ( !(m_totNbSamplesByClass.count(className)>0) )
-        m_totNbSamplesByClass[className] = 0;
+      if ( !(m_totNbSamplesByClass.count(constIt->first)>0) )
+        m_totNbSamplesByClass[constIt->first] = 0;
     
-      m_totNbSamplesByClass[className] += constIt->second;
+      m_totNbSamplesByClass[constIt->first] += constIt->second;
         
    }
    
@@ -84,7 +73,7 @@ SamplingRateCalculator
 {
 
    std::ostringstream  key;
-   key << "class=" << nbC;
+   key << nbC;
 
    return key.str();
 }
@@ -255,18 +244,16 @@ SamplingRateCalculator
   itMap = m_map.begin();
   for(; itMap != m_map.end(); ++itMap)
    {
-      keyInterpretor(itMap->first,className);
-
-      double overallRate = static_cast<double>(clVsRequiredNbSamples[className]) / static_cast<double>(m_totNbSamplesByClass[className]);
+      // itMap->first <=> className
+      double overallRate = static_cast<double>(clVsRequiredNbSamples[itMap->first]) / static_cast<double>(m_totNbSamplesByClass[itMap->first]);
       
       
       tripletType tpt;
-      tpt.required=clVsRequiredNbSamples[className];
-      tpt.tot=m_totNbSamplesByClass[className];
+      tpt.required=clVsRequiredNbSamples[itMap->first];
+      tpt.tot=m_totNbSamplesByClass[itMap->first];
       tpt.rate=overallRate*100.;
       
       m_RatesbyClass[itMap->first] = tpt;
-      
     
    }
    

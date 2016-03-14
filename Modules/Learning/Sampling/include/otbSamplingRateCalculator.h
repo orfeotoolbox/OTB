@@ -95,7 +95,6 @@ private:
   void operator =(const Self&);    //purposely not implemented
   
   
-  void keyInterpretor(std::string , std::string &className ) const;
   std::string keyGenerator( unsigned int );
   void findImagesAndClasses();
 
