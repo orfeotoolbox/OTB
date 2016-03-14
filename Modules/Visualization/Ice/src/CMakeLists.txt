@@ -8,6 +8,7 @@ set(OTBICE_SRCS
   otbGlVectorActor.cxx
   otbGlVersionChecker.cxx
   otbGlView.cxx
+  otbImageSettings.cxx
   otbStandardShader.cxx
   otbViewSettings.cxx
   )

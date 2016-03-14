@@ -19,6 +19,7 @@
 
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbGenericRSResampleImageFilter.h"
+#include "otbImportGeoInformationImageFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 #include "itkFixedArray.h"
@@ -133,6 +134,7 @@ private:
     typedef otb::BCOInterpolateImageFunction<FloatVectorImageType> InterpolatorType;
     typedef otb::GenericRSResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  ResamplerType;
     typedef otb::StreamingResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  BasicResamplerType;
+    typedef otb::ImportGeoInformationImageFilter<FloatVectorImageType,InternalImageType> ImportGeoInformationFilterType;
     typedef otb::SimpleRcsPanSharpeningFusionImageFilter<InternalImageType, FloatVectorImageType, FloatVectorImageType> FusionFilterType;
 
     // Resample filter
@@ -141,6 +143,9 @@ private:
     
     BasicResamplerType::Pointer basicResampler = BasicResamplerType::New();
     m_Ref.push_back(basicResampler.GetPointer());
+
+    ImportGeoInformationFilterType::Pointer geoImport = ImportGeoInformationFilterType::New();
+    m_Ref.push_back(geoImport.GetPointer());
 
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     resampler->SetInterpolator(interpolator);
@@ -209,8 +214,11 @@ private:
       basicResampler->SetOutputSize(size);
       basicResampler->SetOutputStartIndex(start);
       basicResampler->SetEdgePaddingValue(defaultValue);
-      
-      fusionFilter->SetXsInput(basicResampler->GetOutput());
+
+      geoImport->SetInput(basicResampler->GetOutput());
+      geoImport->SetSource(panchro);
+
+      fusionFilter->SetXsInput(geoImport->GetOutput());
 
       // Set the profRef & Keywordlist from Pan into the resampled XS image
       basicResampler->UpdateOutputInformation();

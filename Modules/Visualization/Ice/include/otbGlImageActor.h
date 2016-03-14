@@ -19,18 +19,19 @@
 #define otb_GlImageActor_h
 
 
-#include "otbGenericRSTransform.h"
-#include "otbGeoInterface.h"
-#include "otbGlActor.h"
-#include "otbFragmentShader.h"
-#include "otbImageFileReader.h"
-#include "otbMultiChannelExtractROI.h"
-#include "otbVectorRescaleIntensityImageFilter.h"
-#include "otbVectorImage.h"
+#include <vcl_algorithm.h>
 
 #include "itkCenteredRigid2DTransform.h"
 
-#include <vcl_algorithm.h>
+#include "otbFragmentShader.h"
+#include "otbGenericRSTransform.h"
+#include "otbGeoInterface.h"
+#include "otbGlActor.h"
+#include "otbImageFileReader.h"
+#include "otbImageSettings.h"
+#include "otbMultiChannelExtractROI.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
+#include "otbVectorImage.h"
 
 
 namespace otb
@@ -124,6 +125,8 @@ public:
   itkSetMacro(SoftwareRendering, bool );
   itkGetMacro(SoftwareRendering, bool );
 
+  void CreateShader();
+
   void SetResolutionAlgorithm(ResolutionAlgorithm::type alg)
   {
     m_ResolutionAlgorithm = alg;
@@ -176,6 +179,8 @@ public:
 
   itkGetObjectMacro(Shader,FragmentShader);
   itkSetObjectMacro(Shader,FragmentShader);
+
+  itkGetObjectMacro( ImageSettings, ImageSettings );
 
   //
   // otb::GlActor overloads.
@@ -296,6 +301,7 @@ private:
   RegionType   m_LargestRegion;
   unsigned int m_NumberOfComponents;
 
+  ImageSettings::Pointer m_ImageSettings;
   FragmentShader::Pointer m_Shader;
 
   RSTransformType::Pointer m_ViewportToImageTransform;

@@ -18,6 +18,7 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbGenericRSResampleImageFilter.h"
+#include "otbImportGeoInformationImageFilter.h"
 
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
@@ -66,6 +67,8 @@ public:
 
   typedef otb::GenericRSResampleImageFilter<FloatVectorImageType,
                                             FloatVectorImageType>  ResamplerType;
+  typedef otb::ImportGeoInformationImageFilter<FloatVectorImageType,
+                                               FloatVectorImageType> ImportGeoInformationFilterType;
 
   typedef itk::ScalableAffineTransform<double, 2>                 TransformType;
   
@@ -165,6 +168,8 @@ private:
     
     m_BasicResampler = BasicResamplerType::New();
 
+    m_GeoImport = ImportGeoInformationFilterType::New();
+
     // Get Interpolator
     switch ( GetParameterInt("interpolator") )
       {
@@ -261,8 +266,11 @@ private:
       
       m_BasicResampler->SetEdgePaddingValue(defaultValue);
 
+      m_GeoImport->SetInput(m_BasicResampler->GetOutput());
+      m_GeoImport->SetSource(refImage);
+
       // Set the output image
-      SetParameterOutputImage("out", m_BasicResampler->GetOutput());
+      SetParameterOutputImage("out", m_GeoImport->GetOutput());
       }
     else
       {
@@ -273,6 +281,8 @@ private:
   ResamplerType::Pointer           m_Resampler;
   
   BasicResamplerType::Pointer      m_BasicResampler;
+
+  ImportGeoInformationFilterType::Pointer m_GeoImport;
   
 };
 
