@@ -213,6 +213,8 @@ StatisticsXMLFileReader<TMeasurementVector>
     }
 
   // Parse Map statistics
+  std::string key;
+  std::string value;
   root = hDoc.FirstChildElement("GeneralStatistics").ToElement();
   if (root)
     {
@@ -229,10 +231,18 @@ StatisticsXMLFileReader<TMeasurementVector>
           sample = sample->NextSiblingElement() )
         {
         // Get the current pair of the statistic map
-        std::string key;
-        std::string value;
-        sample->QueryStringAttribute("key", &key);
-        sample->QueryStringAttribute("value", &value);
+        const char *c_key = sample->Attribute("key");
+        const char *c_value = sample->Attribute("value");
+        if (c_key == NULL)
+          {
+          itkExceptionMacro("'key' attribute not found in StatisticMap !");
+          }
+        if (c_value == NULL)
+          {
+          itkExceptionMacro("'value' attribute not found in StatisticMap !");
+          }
+        key = std::string(c_key);
+        value = std::string(c_value);
         // Store the pair
         currentMap[key] = value;
         }
