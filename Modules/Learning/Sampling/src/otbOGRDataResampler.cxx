@@ -116,6 +116,33 @@ OGRDataResampler::findBestSize(unsigned int tot)
    return tot;
 }
 
+
+void
+OGRDataResampler::OutputSamplingVectors()
+{
+  std::ofstream file(m_OutputSamplingVectorsPath.c_str(), std::ios::out | std::ios::trunc);  
+  if(file)  
+  {
+     ClassToBoolsType::iterator it = m_ClassToBools.begin();
+     for(; it!=m_ClassToBools.end(); ++it)
+     {
+         file << it->first << " " << it->second.first.size() << " " << it->second.second.size() << std::endl;
+         file << "tab1 ";
+         for(unsigned int i=0; i<it->second.first.size(); i++)
+           file << it->second.first[i] << " ";
+          file << std::endl;
+          
+         file << "tab2 ";
+         for(unsigned int i=0; i<it->second.second.size(); i++)
+           file << it->second.first[i] << " ";
+          file << std::endl;
+     }
+     file.close();  
+  }
+  else
+     itkExceptionMacro(<< "Could not open file " << m_OutputSamplingVectorsPath << "." << std::endl);
+}
+
 void
 OGRDataResampler::Prepare()
 {
@@ -207,6 +234,11 @@ if (!m_alreadyPrepared)
       //itRates->first <=>  className     
       m_ClassToBools[itRates->first] = std::make_pair(tab1,tab2);
       m_ClassToCurrentIndices[itRates->first] = std::make_pair(0,0);
+      
+      std::cout << "###" << itRates->first << " " << tab1.size() << " " << tab2.size() << std::endl;
+      if (!m_OutputSamplingVectorsPath.empty())
+        this->OutputSamplingVectors();
+
    }
          
 }

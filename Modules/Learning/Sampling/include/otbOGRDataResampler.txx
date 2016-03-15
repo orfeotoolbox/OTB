@@ -20,6 +20,7 @@
 
 #include "otbOGRDataResampler.h"
 #include "otbMacro.h"
+#include <fstream>
 
 namespace otb
 {

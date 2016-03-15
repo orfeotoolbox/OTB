@@ -119,6 +119,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   resampler->SetFieldName(fieldName);
   resampler->SetLayerIndex(LayerIndex);
   resampler->SetMaxSamplingTabSize(81);
+  resampler->SetOutputSamplingVectorsPath(argv[4]);
   
   resampler->Update();
   

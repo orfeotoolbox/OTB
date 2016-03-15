@@ -42,7 +42,9 @@ public:
 
   typedef otb::ogr::DataSource::Pointer                                      OGRDataSourcePointerType;
   typedef otb::ogr::Layer                                                    LayerType;
-  typedef std::map<std::string, unsigned long>      ClassCountMapType;
+  typedef std::map<std::string, unsigned long>                               ClassCountMapType;
+  typedef std::map<std::string, std::pair<unsigned int,unsigned int> >       ClassToCurrentIndicesType;
+  typedef std::map<std::string, std::pair<std::vector<bool>,std::vector<bool> > > ClassToBoolsType;
 
   /** Runtime information support. */
   itkTypeMacro(OGRDataResampler, itk::Object);
@@ -114,8 +116,8 @@ private:
   bool m_alreadyPrepared;
   SamplingRateCalculator::mapRateType m_RatesbyClass;
   
-  std::map<std::string, std::pair<unsigned int,unsigned int> > m_ClassToCurrentIndices;
-  std::map<std::string, std::pair<std::vector<bool>,std::vector<bool> > > m_ClassToBools;
+  ClassToCurrentIndicesType m_ClassToCurrentIndices;
+  ClassToBoolsType m_ClassToBools;
   ClassCountMapType m_ElmtsInClass;
   
   const otb::ogr::DataSource* m_InputOGRDataSourcePointer;
@@ -141,6 +143,8 @@ private:
   unsigned int findBestSize(unsigned int tot);              
                    
   bool TakeSample(std::string className);
+  
+  void OutputSamplingVectors();
 
   // Not implemented
   OGRDataResampler(const Self&);
