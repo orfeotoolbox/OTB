@@ -97,6 +97,8 @@ public:
   
   itkSetMacro(OutputVectorDataPath, std::string);
   itkGetMacro(OutputVectorDataPath, std::string);
+  
+  itkSetMacro(OutputSamplingVectorsPath, std::string);
 
 
   /** Make a DataObject of the correct type to be used as the specified
@@ -131,6 +133,7 @@ private:
 
   // Layer to use in the shape file, default to 0
   int m_LayerIndex;
+  std::string m_OutputSamplingVectorsPath;
   
   unsigned int m_MaxSamplingTabSize;
   std::string m_OutputVectorDataPath;
@@ -190,9 +193,9 @@ public:
   void SetMaxSamplingTabSize(unsigned int index);
   unsigned int GetMaxSamplingTabSize();
 
-  
-  
   void SetOutputVectorDataPath(std::string);
+  
+  void SetOutputSamplingVectorsPath(std::string);
   
   const std::string* GetOutputVectorDataPath() const; 
   std::string* GetOutputVectorDataPath(); 

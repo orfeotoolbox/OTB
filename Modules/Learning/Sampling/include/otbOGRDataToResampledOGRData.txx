@@ -31,7 +31,8 @@ template<class TMaskImage>
 PersistentOGRDataToResampledOGRData<TMaskImage>
 ::PersistentOGRDataToResampledOGRData() :
   m_LayerIndex(0),
-  m_MaxSamplingTabSize(1000)
+  m_MaxSamplingTabSize(1000),
+  m_OutputVectorDataPath("")
 {
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0,TMaskImage::New());
@@ -109,6 +110,7 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
   m_TemporaryStats->SetLayerIndex(this->GetLayerIndex());
   m_TemporaryStats->SetOutputPath(this->GetOutputVectorDataPath());
   m_TemporaryStats->SetMaxSamplingTabSize(m_MaxSamplingTabSize);
+  m_TemporaryStats->SetOutputSamplingVectorsPath(m_OutputSamplingVectorsPath);
   m_TemporaryStats->PrepareOutputOGRData();
   
   if (m_RatesbyClass.empty())
@@ -330,6 +332,14 @@ OGRDataToResampledOGRData<TMaskImage>
 ::SetLayerIndex(int index)
 {
   this->GetFilter()->SetLayerIndex(index);
+}
+
+template<class TMaskImage>
+void
+OGRDataToResampledOGRData<TMaskImage>
+::SetOutputSamplingVectorsPath(std::string path)
+{
+  this->GetFilter()->SetOutputSamplingVectorsPath(path);
 }
 
 template<class TMaskImage>

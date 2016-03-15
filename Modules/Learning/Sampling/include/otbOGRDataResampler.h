@@ -73,6 +73,8 @@ public:
   itkSetMacro(MaxSamplingTabSize, unsigned int);
   itkGetMacro(MaxSamplingTabSize, unsigned int);
   
+  itkSetMacro(OutputSamplingVectorsPath, std::string);
+  
   void SetRatesbyClass( const SamplingRateCalculator::mapRateType& map )
   {
       m_RatesbyClass = map;
@@ -122,6 +124,8 @@ private:
   std::string              m_FieldName;
   int                      m_FieldIndex;
   std::string              m_OutputPath;
+  
+  std::string m_OutputSamplingVectorsPath;
   
   template <typename TIterator>
   void AddGeometry(OGRGeometry *geom,
