@@ -86,7 +86,7 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
 ::Synthetize(void)
 {
   
-  ClassToPhyPosMapType &classToPhyPos = this->GetClassToPhyPosOutput()->Get();
+  /*ClassToPhyPosMapType &classToPhyPos = this->GetClassToPhyPosOutput()->Get();
   
   // Reset outputs
   classToPhyPos.clear();
@@ -127,7 +127,7 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
            outputLayer.CreateFeature(feat);
            
         }
-     }
+     }*/
     
 }
 
@@ -145,10 +145,15 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
     itkGenericExceptionMacro("Field named "<<this->m_FieldName<<" not found!");
     }
 
-
   m_TemporaryStats = OGRDataResampler::New();
   m_TemporaryStats->SetFieldIndex(fieldIndex);
+  m_TemporaryStats->SetFieldName(this->GetFieldName());
   m_TemporaryStats->SetMaxSamplingTabSize(m_MaxSamplingTabSize);
+  m_TemporaryStats->SetInputOGRDataSourcePointer(vectors);
+  m_TemporaryStats->SetLayerIndex(this->GetLayerIndex());
+  m_TemporaryStats->SetOutputPath(this->GetOutputVectorDataPath());
+  m_TemporaryStats->Prepare2();
+  
   if (m_RatesbyClass.empty())
      {itkGenericExceptionMacro("m_RatesbyClass is empty. Use SetRatesbyClass to provide some vector statistics information.");}
   else

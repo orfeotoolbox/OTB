@@ -79,8 +79,33 @@ OGRDataResampler
          if (imgIt.Get()>0)
           if (TakeSample(className))
           {
-              std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
-              m_ClassToPhyPositions[className].push_back(phyPos);
+              //std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
+              //m_ClassToPhyPositions[className].push_back(phyPos);
+              std::cout << "1" << std::endl;
+              OGRPoint ogrTmpPoint;
+              ogrTmpPoint.setX(imgPoint[0]);
+              ogrTmpPoint.setY(imgPoint[1]);
+
+              LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(m_LayerIndex);
+              otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
+              feat[m_FieldName].SetValue<std::string>(className);
+              feat.SetGeometry(&ogrTmpPoint);
+              outputLayer.CreateFeature(feat);
+              
+              /*
+                          OGRPoint ogrTmpPoint;
+           ogrTmpPoint.setX(it->second[i].first);
+           ogrTmpPoint.setY(it->second[i].second);
+        
+        
+           otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
+           feat[fieldName].SetValue<std::string>(it->first);
+
+           feat.SetGeometry(&ogrTmpPoint);
+           
+           outputLayer.CreateFeature(feat); 
+               
+               */
           }
         } 
       break;
@@ -126,8 +151,19 @@ OGRDataResampler
          if (imgIt.Get()>0)
           if (TakeSample(className))
           {
-              std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
-              m_ClassToPhyPositions[className].push_back(phyPos);
+              //std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
+              //m_ClassToPhyPositions[className].push_back(phyPos);
+              std::cout << "2" << std::endl;
+              OGRPoint ogrTmpPoint;
+              ogrTmpPoint.setX(imgPoint[0]);
+              ogrTmpPoint.setY(imgPoint[1]);
+
+              LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(m_LayerIndex);
+              otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
+              feat[m_FieldName].SetValue<std::string>(className);
+              feat.SetGeometry(&ogrTmpPoint);
+              outputLayer.CreateFeature(feat);
+              
           }
         ++imgIt;
         }
@@ -145,8 +181,21 @@ OGRDataResampler
          if (imgIt.Get()>0)
           if (TakeSample(className))
           {
-              std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
-              m_ClassToPhyPositions[className].push_back(phyPos);
+              //std::pair<double, double> phyPos = std::make_pair(imgPoint[0],imgPoint[1]);
+              //m_ClassToPhyPositions[className].push_back(phyPos);
+              
+              std::cout << "3" << std::endl;
+              OGRPoint ogrTmpPoint;
+              ogrTmpPoint.setX(imgPoint[0]);
+              ogrTmpPoint.setY(imgPoint[1]);
+              
+              LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(m_LayerIndex);
+              otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
+              feat[m_FieldName].SetValue<std::string>(className);
+              feat.SetGeometry(&ogrTmpPoint);
+              outputLayer.CreateFeature(feat);
+              std::cout << "3end" << std::endl;
+              
           }
         ++imgIt;
         }

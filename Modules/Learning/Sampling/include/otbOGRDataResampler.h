@@ -21,6 +21,7 @@
 #include "otbOGRDataSourceWrapper.h"
 #include "otbSamplingRateCalculator.h"
 
+
 namespace otb
 {
 
@@ -40,6 +41,8 @@ public:
   itkNewMacro(Self);
 
   typedef std::map < std::string, std::vector< std::pair<double,double> > >  ClassToPhyPosMapType;
+  typedef otb::ogr::DataSource::Pointer                                      OGRDataSourcePointerType;
+  typedef otb::ogr::Layer                                                    LayerType;
 
   /** Runtime information support. */
   itkTypeMacro(OGRDataResampler, itk::Object);
@@ -60,19 +63,53 @@ public:
   itkSetMacro(FieldIndex, int);
   itkGetMacro(FieldIndex, int);
   
+  itkSetMacro(LayerIndex, int);
+  itkGetMacro(LayerIndex, int);
+  
+  itkSetMacro(FieldName, std::string );
+  itkGetMacro(FieldName, std::string );
+  
+  itkSetMacro(OutputPath, std::string );
+  itkGetMacro(OutputPath, std::string );
+  
   itkSetMacro(MaxSamplingTabSize, unsigned int);
   itkGetMacro(MaxSamplingTabSize, unsigned int);
   
-  void SetRatesbyClass(const SamplingRateCalculator::mapRateType& map )
+  void SetRatesbyClass( SamplingRateCalculator::mapRateType& map )
   {
       m_RatesbyClass = map;
       
   }
+  
+  //itkSetMacro(InputOGRDataSourcePointer, OGRDataSourcePointerType);
+  //itkGetMacro(InputOGRDataSourcePointer, OGRDataSourcePointerType);
+  
+  void SetInputOGRDataSourcePointer(const otb::ogr::DataSource* inOGR)
+  {
+    m_InputOGRDataSourcePointer = inOGR;
+  }
+  
   void Prepare();
+  
+  void Prepare2()
+  {
+      // Output OGR data 
+      m_OutputOGRDataSourcePointer = otb::ogr::DataSource::New(  m_OutputPath, otb::ogr::DataSource::Modes::Overwrite );
+      LayerType temp = m_OutputOGRDataSourcePointer->CreateLayer(m_InputOGRDataSourcePointer->GetLayer( m_LayerIndex  ).GetName(),NULL,wkbPoint); //Create new layer
+      m_OutputLayer = &temp;
+      OGRFieldDefn fieldClass(m_FieldName.c_str(), OFTString);
+      m_OutputLayer->CreateField(fieldClass, false);
+  }
 
 protected:
   /** Constructor */
-  OGRDataResampler() {m_alreadyPrepared=false; m_MaxSamplingTabSize=1000;} 
+  OGRDataResampler() {
+  
+  m_alreadyPrepared=false; 
+  m_MaxSamplingTabSize=1000;
+  
+  
+  } 
   /** Destructor */
   virtual ~OGRDataResampler() {}
 
@@ -81,12 +118,20 @@ private:
   //Map a class to the physical positions of the selected samples
   ClassToPhyPosMapType m_ClassToPhyPositions;
   
-  int m_FieldIndex;
+  
   bool m_alreadyPrepared;
   SamplingRateCalculator::mapRateType m_RatesbyClass;
   
   std::map<std::string, std::pair<unsigned int,unsigned int> > m_ClassToCurrentIndices;
   std::map<std::string, std::pair<std::vector<bool>,std::vector<bool> > > m_ClassToBools;
+  
+  const otb::ogr::DataSource* m_InputOGRDataSourcePointer;
+  OGRDataSourcePointerType m_OutputOGRDataSourcePointer;
+  LayerType*                m_OutputLayer;
+  int                      m_LayerIndex;
+  std::string              m_FieldName;
+  int                      m_FieldIndex;
+  std::string              m_OutputPath;
   
   template <typename TIterator>
   void AddGeometry(OGRGeometry *geom,
