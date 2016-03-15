@@ -34,6 +34,11 @@ OGRDataResampler
   // Get class name
   std::string className(featIt->ogr().GetFieldAsString(this->m_FieldIndex));
   
+  if (m_ElmtsInClass.count(className) == 0)
+    {
+    m_ElmtsInClass[className] = 0UL;
+    }
+  
   // Get Feature Id
   unsigned long featureId = featIt->ogr().GetFID();
   
@@ -89,6 +94,8 @@ OGRDataResampler
               feat[m_FieldName].SetValue<std::string>(className);
               feat.SetGeometry(&ogrTmpPoint);
               outputLayer.CreateFeature(feat);
+              
+              m_ElmtsInClass[className]++;
 
           }
         } 
@@ -146,6 +153,8 @@ OGRDataResampler
               feat.SetGeometry(&ogrTmpPoint);
               outputLayer.CreateFeature(feat);
               
+              m_ElmtsInClass[className]++;
+              
           }
         ++imgIt;
         }
@@ -173,6 +182,8 @@ OGRDataResampler
               feat[m_FieldName].SetValue<std::string>(className);
               feat.SetGeometry(&ogrTmpPoint);
               outputLayer.CreateFeature(feat);
+              
+              m_ElmtsInClass[className]++;
               
           }
         ++imgIt;

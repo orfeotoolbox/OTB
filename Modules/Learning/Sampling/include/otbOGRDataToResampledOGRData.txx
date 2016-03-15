@@ -35,7 +35,6 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
 {
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0,TMaskImage::New());
-  this->SetNthOutput(1,ClassToPhyPosObjectType::New());
 }
 
 template<class TMaskImage>
@@ -122,30 +121,6 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
 
 
 template<class TMaskImage>
-const typename PersistentOGRDataToResampledOGRData<TMaskImage>::ClassToPhyPosObjectType*
-PersistentOGRDataToResampledOGRData<TMaskImage>
-::GetClassToPhyPosOutput() const
-{
-  if (this->GetNumberOfOutputs()<2)
-    {
-    return 0;
-    }
-  return static_cast<const ClassToPhyPosObjectType *>(this->itk::ProcessObject::GetOutput(1));
-}
-
-template<class TMaskImage>
-typename PersistentOGRDataToResampledOGRData<TMaskImage>::ClassToPhyPosObjectType*
-PersistentOGRDataToResampledOGRData<TMaskImage>
-::GetClassToPhyPosOutput()
-{
-    if (this->GetNumberOfOutputs()<2)
-    {
-    return 0;
-    }
-  return static_cast<ClassToPhyPosObjectType *>(this->itk::ProcessObject::GetOutput(1));
-}
-
-template<class TMaskImage>
 itk::DataObject::Pointer
 PersistentOGRDataToResampledOGRData<TMaskImage>
 ::MakeOutput(DataObjectPointerArraySizeType idx)
@@ -154,9 +129,6 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
     {
     case 0:
       return static_cast<itk::DataObject*>(TMaskImage::New().GetPointer());
-      break;
-    case 1:
-      return static_cast<itk::DataObject*>(ClassToPhyPosObjectType::New().GetPointer());
       break;
     default:
       // might as well make an image
@@ -418,24 +390,6 @@ OGRDataToResampledOGRData<TMaskImage>
 {
   return this->GetFilter()->GetOutputVectorDataPath();
 }
-
-
-template<class TMaskImage>
-const typename OGRDataToResampledOGRData<TMaskImage>::ClassToPhyPosObjectType*
-OGRDataToResampledOGRData<TMaskImage>
-::GetClassToPhyPosOutput() const
-{
-  return this->GetFilter()->GetClassToPhyPosOutput();
-}
-
-template<class TMaskImage>
-typename OGRDataToResampledOGRData<TMaskImage>::ClassToPhyPosObjectType*
-OGRDataToResampledOGRData<TMaskImage>
-::GetClassToPhyPosOutput()
-{
-  return this->GetFilter()->GetClassToPhyPosOutput();
-}
-
 
 } // end of namespace otb
 

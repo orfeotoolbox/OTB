@@ -40,9 +40,9 @@ public:
   typedef itk::SmartPointer<Self>            Pointer;
   itkNewMacro(Self);
 
-  typedef std::map < std::string, std::vector< std::pair<double,double> > >  ClassToPhyPosMapType;
   typedef otb::ogr::DataSource::Pointer                                      OGRDataSourcePointerType;
   typedef otb::ogr::Layer                                                    LayerType;
+  typedef std::map<std::string, unsigned long>      ClassCountMapType;
 
   /** Runtime information support. */
   itkTypeMacro(OGRDataResampler, itk::Object);
@@ -55,8 +55,6 @@ public:
   /** Reset the accumulator */
   void Reset();
   
-  
-  const ClassToPhyPosMapType& GetClassToPhyPosMap();
   
   unsigned long GetNumberOfPixels();
 
@@ -110,16 +108,13 @@ protected:
   virtual ~OGRDataResampler() {}
 
 private:
- 
-  //Map a class to the physical positions of the selected samples
-  ClassToPhyPosMapType m_ClassToPhyPositions;
-  
   
   bool m_alreadyPrepared;
   SamplingRateCalculator::mapRateType m_RatesbyClass;
   
   std::map<std::string, std::pair<unsigned int,unsigned int> > m_ClassToCurrentIndices;
   std::map<std::string, std::pair<std::vector<bool>,std::vector<bool> > > m_ClassToBools;
+  ClassCountMapType m_ElmtsInClass;
   
   const otb::ogr::DataSource* m_InputOGRDataSourcePointer;
   OGRDataSourcePointerType m_OutputOGRDataSourcePointer;

@@ -58,11 +58,8 @@ public:
   typedef otb::ogr::DataSource                            OGRDataType;
   typedef otb::ogr::DataSource::Pointer                   OGRDataPointer;
 
-  typedef otb::OGRDataResampler::ClassToPhyPosMapType  ClassToPhyPosMapType;
 
   /** Wrap output type as DataObject */
-  typedef itk::SimpleDataObjectDecorator<ClassToPhyPosMapType> ClassToPhyPosObjectType;
-
   typedef itk::DataObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Method for creation through the object factory. */
@@ -101,11 +98,6 @@ public:
   itkSetMacro(OutputVectorDataPath, std::string);
   itkGetMacro(OutputVectorDataPath, std::string);
 
-
-  const ClassToPhyPosObjectType* GetClassToPhyPosOutput() const;
-  ClassToPhyPosObjectType* GetClassToPhyPosOutput();
-  
-  
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
@@ -169,7 +161,6 @@ public:
   typedef otb::ogr::DataSource            OGRDataType;
   
   typedef typename Superclass::FilterType             FilterType;
-  typedef typename FilterType::ClassToPhyPosObjectType  ClassToPhyPosObjectType;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -206,10 +197,6 @@ public:
   const std::string* GetOutputVectorDataPath() const; 
   std::string* GetOutputVectorDataPath(); 
   
-  const ClassToPhyPosObjectType* GetClassToPhyPosOutput() const; 
-  ClassToPhyPosObjectType* GetClassToPhyPosOutput(); 
-  
-
 
 protected:
   /** Constructor */

@@ -220,7 +220,7 @@ OGRDataResampler::TakeSample(std::string className)
 
    bool res=false;
 
-   if (m_ClassToPhyPositions[className].size()>=m_RatesbyClass[className].required)
+   if (m_ElmtsInClass[className] >= m_RatesbyClass[className].required)
      return false;    
 
    unsigned int &ind1 = m_ClassToCurrentIndices[className].first; //first counter
@@ -258,14 +258,7 @@ void
 OGRDataResampler
 ::Reset()
 {
-  m_ClassToPhyPositions.clear();
-}
-
-const OGRDataResampler::ClassToPhyPosMapType&
-OGRDataResampler
-::GetClassToPhyPosMap()
-{
-  return m_ClassToPhyPositions;
+  m_ElmtsInClass.clear();
 }
 
 
