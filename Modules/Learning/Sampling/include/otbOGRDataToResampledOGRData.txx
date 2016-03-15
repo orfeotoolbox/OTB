@@ -85,50 +85,7 @@ void
 PersistentOGRDataToResampledOGRData<TMaskImage>
 ::Synthetize(void)
 {
-  
-  /*ClassToPhyPosMapType &classToPhyPos = this->GetClassToPhyPosOutput()->Get();
-  
-  // Reset outputs
-  classToPhyPos.clear();
-  // Copy temporary stats to outputs
-  classToPhyPos = m_TemporaryStats->GetClassToPhyPosMap();
-  
-  std::cout << "oooooooooooooooooo" << std::endl;
-  std::cout << "ooo Layer " << this->GetLayerIndex() << std::endl;
-  for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
-  std::cout << "ooo class : " << it->first << " " << it->second.size() << std::endl;
-  std::cout << "oooooooooooooooooo" << std::endl;
-
-  otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New( this->GetOutputVectorDataPath(), otb::ogr::DataSource::Modes::Overwrite );
-  otb::ogr::Layer outputLayer = output->CreateLayer(GetOGRData()->GetLayer( this->GetLayerIndex()  ).GetName(),NULL,wkbPoint); //Create new layer
-
-  
-  std::string fieldName = this->GetFieldName();
-  
-  OGRFieldDefn fieldClass(fieldName.c_str(), OFTString);
-  outputLayer.CreateField(fieldClass, false); 
-   
-  
-  for(ClassToPhyPosMapType::iterator it = classToPhyPos.begin(); it!=classToPhyPos.end(); ++it)
-     {
-        for(int i=0; i<it->second.size(); i++)
-        {
-           
-           OGRPoint ogrTmpPoint;
-           ogrTmpPoint.setX(it->second[i].first);
-           ogrTmpPoint.setY(it->second[i].second);
-        
-        
-           otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
-           feat[fieldName].SetValue<std::string>(it->first);
-
-           feat.SetGeometry(&ogrTmpPoint);
-           
-           outputLayer.CreateFeature(feat);
-           
-        }
-     }*/
-    
+      
 }
 
 template<class TMaskImage>
@@ -152,7 +109,7 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
   m_TemporaryStats->SetInputOGRDataSourcePointer(vectors);
   m_TemporaryStats->SetLayerIndex(this->GetLayerIndex());
   m_TemporaryStats->SetOutputPath(this->GetOutputVectorDataPath());
-  m_TemporaryStats->Prepare2();
+  m_TemporaryStats->PrepareOutputOGRData();
   
   if (m_RatesbyClass.empty())
      {itkGenericExceptionMacro("m_RatesbyClass is empty. Use SetRatesbyClass to provide some vector statistics information.");}

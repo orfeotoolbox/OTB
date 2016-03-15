@@ -75,14 +75,11 @@ public:
   itkSetMacro(MaxSamplingTabSize, unsigned int);
   itkGetMacro(MaxSamplingTabSize, unsigned int);
   
-  void SetRatesbyClass( SamplingRateCalculator::mapRateType& map )
+  void SetRatesbyClass( const SamplingRateCalculator::mapRateType& map )
   {
       m_RatesbyClass = map;
       
   }
-  
-  //itkSetMacro(InputOGRDataSourcePointer, OGRDataSourcePointerType);
-  //itkGetMacro(InputOGRDataSourcePointer, OGRDataSourcePointerType);
   
   void SetInputOGRDataSourcePointer(const otb::ogr::DataSource* inOGR)
   {
@@ -91,14 +88,13 @@ public:
   
   void Prepare();
   
-  void Prepare2()
+  void PrepareOutputOGRData()
   {
       // Output OGR data 
       m_OutputOGRDataSourcePointer = otb::ogr::DataSource::New(  m_OutputPath, otb::ogr::DataSource::Modes::Overwrite );
-      LayerType temp = m_OutputOGRDataSourcePointer->CreateLayer(m_InputOGRDataSourcePointer->GetLayer( m_LayerIndex  ).GetName(),NULL,wkbPoint); //Create new layer
-      m_OutputLayer = &temp;
+      LayerType outputLayer = m_OutputOGRDataSourcePointer->CreateLayer(m_InputOGRDataSourcePointer->GetLayer( m_LayerIndex  ).GetName(),NULL,wkbPoint); //Create new layer
       OGRFieldDefn fieldClass(m_FieldName.c_str(), OFTString);
-      m_OutputLayer->CreateField(fieldClass, false);
+      outputLayer.CreateField(fieldClass, false);
   }
 
 protected:
@@ -127,7 +123,6 @@ private:
   
   const otb::ogr::DataSource* m_InputOGRDataSourcePointer;
   OGRDataSourcePointerType m_OutputOGRDataSourcePointer;
-  LayerType*                m_OutputLayer;
   int                      m_LayerIndex;
   std::string              m_FieldName;
   int                      m_FieldIndex;
