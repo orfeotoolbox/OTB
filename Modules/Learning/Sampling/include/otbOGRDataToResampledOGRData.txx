@@ -108,6 +108,7 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
   m_TemporaryStats->SetInputOGRDataSourcePointer(vectors);
   m_TemporaryStats->SetLayerIndex(this->GetLayerIndex());
   m_TemporaryStats->SetOutputPath(this->GetOutputVectorDataPath());
+  m_TemporaryStats->SetMaxSamplingTabSize(m_MaxSamplingTabSize);
   m_TemporaryStats->PrepareOutputOGRData();
   
   if (m_RatesbyClass.empty())

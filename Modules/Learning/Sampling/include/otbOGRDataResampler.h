@@ -101,7 +101,7 @@ protected:
   
   m_alreadyPrepared=false; 
   m_MaxSamplingTabSize=1000;
-  
+  m_LayerIndex = 0;
   
   } 
   /** Destructor */
