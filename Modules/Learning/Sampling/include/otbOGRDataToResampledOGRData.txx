@@ -105,7 +105,9 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
   otb::ogr::Layer outputLayer = output->CreateLayer(GetOGRData()->GetLayer( this->GetLayerIndex()  ).GetName(),NULL,wkbPoint); //Create new layer
 
   
-  OGRFieldDefn fieldClass("label", OFTString);
+  std::string fieldName = this->GetFieldName();
+  
+  OGRFieldDefn fieldClass(fieldName.c_str(), OFTString);
   outputLayer.CreateField(fieldClass, false); 
    
   
@@ -120,7 +122,7 @@ PersistentOGRDataToResampledOGRData<TMaskImage>
         
         
            otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
-           feat["label"].SetValue<std::string>(it->first);
+           feat[fieldName].SetValue<std::string>(it->first);
 
            feat.SetGeometry(&ogrTmpPoint);
            
