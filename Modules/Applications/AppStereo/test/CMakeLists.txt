@@ -1,27 +1,27 @@
 otb_module_test()
 #----------- StereoFramework TESTS ----------------
- otb_test_application(NAME apTvDmStereoFramework2
-                     APP  StereoFramework
-                     OPTIONS -input.il LARGEINPUT{PLEIADES/tristereo_Haiti_Pan/master_pan.tif}
-                     			       LARGEINPUT{PLEIADES/tristereo_Haiti_Pan/slave_pan_1.tif}
-                     			       LARGEINPUT{PLEIADES/tristereo_Haiti_Pan/slave_pan_2.tif}
-                     			       -input.co "0 1,0 2"
-                                -elev.dem ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
-                                -elev.geoid ${OTB_DATA_ROOT}/Input/DEM/egm96.grd
-                                -stereorect.invgridssrate 15
-                                -mask.variancet 100
-                                -bm.maxhoffset 15
-                                -bm.minhoffset -15
-                                -bm.radius 2
-                                -bm.metric ssdmean
-                                -postproc.med 1
-                                -postproc.bij 1
-                                -output.res 1.
-                                -output.out ${TEMP}/apTvStereoFrameworkHaiti2.tif
-                      VALID   --compare-image ${EPSILON_10}
-                            ${BASELINE}/apTvStereoFrameworkHaiti2.tif
-                            ${TEMP}/apTvStereoFrameworkHaiti2.tif
-                     )
+ #otb_test_application(NAME apTvDmStereoFramework2
+                     #APP  StereoFramework
+                     #OPTIONS -input.il LARGEINPUT{PLEIADES/tristereo_Haiti_Pan/master_pan.tif}
+                     			       #LARGEINPUT{PLEIADES/tristereo_Haiti_Pan/slave_pan_1.tif}
+                     			       #LARGEINPUT{PLEIADES/tristereo_Haiti_Pan/slave_pan_2.tif}
+                     			       #-input.co "0 1,0 2"
+                                #-elev.dem ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
+                                #-elev.geoid ${OTB_DATA_ROOT}/Input/DEM/egm96.grd
+                                #-stereorect.invgridssrate 15
+                                #-mask.variancet 100
+                                #-bm.maxhoffset 15
+                                #-bm.minhoffset -15
+                                #-bm.radius 2
+                                #-bm.metric ssdmean
+                                #-postproc.med 1
+                                #-postproc.bij 1
+                                #-output.res 1.
+                                #-output.out ${TEMP}/apTvStereoFrameworkHaiti2.tif
+                      #VALID   --compare-image ${EPSILON_10}
+                            #${BASELINE}/apTvStereoFrameworkHaiti2.tif
+                            #${TEMP}/apTvStereoFrameworkHaiti2.tif
+                     #)
 
 otb_test_application(NAME apTvDmStereoFramework
                      APP  StereoFramework
@@ -96,23 +96,23 @@ otb_test_application(NAME apTvDmFineRegistrationTest
 #----------- GeneratePlyFile TESTS ----------------
 
 #----------- DisparityMapToElevationMap TESTS ----------------
-otb_test_application(NAME apTvDmDisparityMapToElevationMap
-                     APP  DisparityMapToElevationMap
-                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
-                             -io.left ${EXAMPLEDATA}/sensor_stereo_left.tif
-                             -io.right ${EXAMPLEDATA}/sensor_stereo_right.tif
-                             -io.lgrid ${INPUTDATA}/sensor_stereo_rectif_left.tif
-                             -io.rgrid ${INPUTDATA}/sensor_stereo_rectif_right.tif
-                             -io.out ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
-                             -hmin 130
-                             -hmax 220
-                             -elev.default 140
-                             -step 2.5
-                             -io.mask ${INPUTDATA}/sensor_stereo_dmap_mask.tif
-                     VALID   --compare-image ${EPSILON_10}
-                             ${BASELINE}/../../Examples/DisparityMap/elevationOutput.tif
-                             ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
-                     )
+#otb_test_application(NAME apTvDmDisparityMapToElevationMap
+                     #APP  DisparityMapToElevationMap
+                     #OPTIONS -io.in ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
+                             #-io.left ${EXAMPLEDATA}/sensor_stereo_left.tif
+                             #-io.right ${EXAMPLEDATA}/sensor_stereo_right.tif
+                             #-io.lgrid ${INPUTDATA}/sensor_stereo_rectif_left.tif
+                             #-io.rgrid ${INPUTDATA}/sensor_stereo_rectif_right.tif
+                             #-io.out ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
+                             #-hmin 130
+                             #-hmax 220
+                             #-elev.default 140
+                             #-step 2.5
+                             #-io.mask ${INPUTDATA}/sensor_stereo_dmap_mask.tif
+                     #VALID   --compare-image ${EPSILON_10}
+                             #${BASELINE}/../../Examples/DisparityMap/elevationOutput.tif
+                             #${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
+                     #)
 
 
 #----------- BlockMatching TESTS ----------------
