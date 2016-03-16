@@ -499,6 +499,10 @@ ImportImagesDialog
   QModelIndex index( item->index() );
 
 
+  if( index.column()!=COLUMN_FILENAME )
+    return;
+
+
   const otb::GDALOverviewsBuilder::Pointer & builder =
     GetBuilder( item->index() );
 
