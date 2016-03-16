@@ -352,6 +352,42 @@ ImportImagesDialog
 }
 
 /*****************************************************************************/
+void
+ImportImagesDialog
+::UpdateFileSize( size_t row )
+{
+  assert( row<m_GDALOverviewsBuilders.size() );
+
+  assert( !m_GDALOverviewsBuilders[ row ].IsNull() );
+  assert( m_GDALOverviewsBuilders[ row ]->GetOverviewsCount()<=0 );
+
+  //
+  // Get item-model.
+  assert( m_UI!=NULL );
+  assert( m_UI->filenamesTreeView!=NULL );
+
+  QStandardItemModel * model =
+    qobject_cast< QStandardItemModel * >(
+      m_UI->filenamesTreeView->model()
+    );
+
+  assert( model!=NULL );
+
+  //
+  // Create index.
+  QModelIndex index( model->index( row, COLUMN_OVERVIEW_SIZE ) );
+
+  //
+  // Update file size.
+  model->setData(
+    index,
+    ToHumanReadableSize(
+      m_GDALOverviewsBuilders[ index.row() ]->GetEstimatedSize()
+    )
+  );
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
@@ -382,6 +418,48 @@ ImportImagesDialog
       reject();
       break;
     }
+}
+
+/*****************************************************************************/
+void
+ImportImagesDialog
+::on_pyramidWidget_BaseValueChanged( int )
+{
+  assert( m_UI!=NULL );
+  assert( m_UI->filenamesTreeView!=NULL );
+  assert( m_UI->filenamesTreeView->selectionModel()!=NULL );
+
+  UpdateFileSize(
+    m_UI->filenamesTreeView->selectionModel()->currentIndex().row()
+  );
+}
+
+/*****************************************************************************/
+void
+ImportImagesDialog
+::on_pyramidWidget_LevelsValueChanged( int )
+{
+  assert( m_UI!=NULL );
+  assert( m_UI->filenamesTreeView!=NULL );
+  assert( m_UI->filenamesTreeView->selectionModel()!=NULL );
+
+  UpdateFileSize(
+    m_UI->filenamesTreeView->selectionModel()->currentIndex().row()
+  );
+}
+
+/*****************************************************************************/
+void
+ImportImagesDialog
+::on_pyramidWidget_SizeValueChanged( int )
+{
+  assert( m_UI!=NULL );
+  assert( m_UI->filenamesTreeView!=NULL );
+  assert( m_UI->filenamesTreeView->selectionModel()!=NULL );
+
+  UpdateFileSize(
+    m_UI->filenamesTreeView->selectionModel()->currentIndex().row()
+  );
 }
 
 /*****************************************************************************/

@@ -144,13 +144,16 @@ private:
 private:
   /**
    */
+  const otb::GDALOverviewsBuilder::Pointer & GetBuilder( const QModelIndex & ) const;
+  /**
+   */
   void SetFilenames( const QStringList & );
   /**
    */
   void SetHeaders();
   /**
    */
-  const otb::GDALOverviewsBuilder::Pointer & GetBuilder( const QModelIndex & ) const;
+  void UpdateFileSize( size_t row );
 
 //
 // Private attributes.
@@ -178,10 +181,14 @@ private:
 // Slots.
 private slots:
   void on_buttonBox_clicked( QAbstractButton * );
+
+  void on_pyramidWidget_BaseValueChanged( int );
+  void on_pyramidWidget_LevelsValueChanged( int );
+  void on_pyramidWidget_SizeValueChanged( int );
+
   /**
    */
   void OnCurrentChanged( const QModelIndex & , const QModelIndex & );
-
   /**
    */
   void OnItemChanged( QStandardItem * );
