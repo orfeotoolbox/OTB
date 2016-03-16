@@ -339,7 +339,7 @@ foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
       ${TEMP}/ioTvImageMetadataInterfaceBase_${current_type}_OUT.txt
     otbImageMetadataInterfaceBaseTest
       ${current_file}
-      ${TEMP}/ioTvImageMetadataInterfaceBase_${current_type}_OUT.txt
+     ${TEMP}/ioTvImageMetadataInterfaceBase_${current_type}_OUT.txt
     )
 
   otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_${current_type} COMMAND otbMetadataTestDriver
