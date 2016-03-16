@@ -262,14 +262,14 @@ ImportImagesDialog
       // COLUMN_FILE_SIZE
       items.push_back(
 	new QStandardItem(
-	  builder->GetOverviewsCount() > 0
-	  ? ToHumanReadableSize(
-	      QFileInfo(
-		filenames[ i ] + ".ovr"
-	      )
-	      .size()
+	  ToHumanReadableSize(
+	    builder->GetOverviewsCount() > 0
+	    ? QFileInfo(
+	      filenames[ i ] + ".ovr"
 	    )
-	  : QString()
+	    .size()
+	    : builder->GetEstimatedSize()
+	  )
 	)
       );
 
