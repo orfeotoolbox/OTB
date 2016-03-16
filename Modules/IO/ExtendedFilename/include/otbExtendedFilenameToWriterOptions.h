@@ -63,6 +63,7 @@ public:
   {
     std::pair< bool, std::string  >              simpleFileName;
     std::pair< bool, bool  >                     writeGEOMFile;
+    std::pair< bool, bool  >                     writeRPCTags;
     std::pair< bool, GDALCOType >                gdalCreationOptions;
     std::pair<bool,  std::string>                streamingType;
     std::pair<bool,  std::string>                streamingSizeMode;
@@ -77,7 +78,9 @@ public:
   bool SimpleFileNameIsSet () const;
   const char* GetSimpleFileName () const;
   bool WriteGEOMFileIsSet () const;
+  bool WriteRPCTagsIsSet() const;
   bool GetWriteGEOMFile () const;
+  bool GetWriteRPCTags() const;
   bool gdalCreationOptionsIsSet () const;
   GDALCOType GetgdalCreationOptions () const;
   bool StreamingTypeIsSet () const;

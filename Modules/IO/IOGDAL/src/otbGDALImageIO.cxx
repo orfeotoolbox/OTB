@@ -160,6 +160,7 @@ GDALImageIO::GDALImageIO()
   m_NumberOfOverviews = 0;
   m_ResolutionFactor = 0;
   m_BytePerPixel = 0;
+  m_WriteRPCTags = false;
 }
 
 GDALImageIO::~GDALImageIO()
@@ -1734,7 +1735,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     itk::ExposeMetaData<ImageKeywordlist>(dict,
                                           MetaDataKey::OSSIMKeywordlistKey,
                                           otb_kwl);
-    if( otb_kwl.GetSize() != 0 )
+    if( m_WriteRPCTags && otb_kwl.GetSize() != 0 )
       {
       GDALRPCInfo gdalRpcStruct;
       if ( otb_kwl.convertToGDALRPC(gdalRpcStruct) )
