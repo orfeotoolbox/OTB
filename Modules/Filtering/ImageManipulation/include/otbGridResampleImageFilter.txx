@@ -336,11 +336,10 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
   ContinuousInputIndexType inCIndex;
   InterpolatorOutputType interpolatorValue; //(this->GetOutput()->GetNumberOfComponentsPerPixel());
   OutputPixelType outputValue; //(this->GetOutput()->GetNumberOfComponentsPerPixel());
-  double delta;
 
   // TODO: assert outputPtr->GetSpacing() != 0 here
   assert(outputPtr->GetSpacing()[0]!=0&&"Null spacing will cause division by zero.");
-  delta = outputPtr->GetSpacing()[0]/inputPtr->GetSpacing()[0];
+  const double delta = outputPtr->GetSpacing()[0]/inputPtr->GetSpacing()[0];
   
   // Iterate through the output region
   outIt.GoToBegin();
@@ -357,7 +356,7 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
       interpolatorValue = m_Interpolator->EvaluateAtContinuousIndex(inCIndex);
       
       // Cast and check bounds
-      outputValue = this->CastPixelWithBoundsChecking(interpolatorValue,minOutputValue,maxOutputValue);
+      this->CastPixelWithBoundsChecking(interpolatorValue,minOutputValue,maxOutputValue,outputValue);
   
       // Set output value
       outIt.Set(outputValue);

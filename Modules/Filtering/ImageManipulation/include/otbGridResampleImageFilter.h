@@ -1,4 +1,4 @@
-/*=========================================================================
+2;rgb:0000/0000/0000/*=========================================================================
 
   Program:   ORFEO Toolbox
   Language:  C++
@@ -152,13 +152,13 @@ protected:
 
   virtual void AfterThreadedGenerateData();
 
-  inline OutputPixelType CastPixelWithBoundsChecking( const InterpolatorOutputType& value,
-                                                       const InterpolatorComponentType& minComponent,
-                                                       const InterpolatorComponentType& maxComponent) const
+  inline void CastPixelWithBoundsChecking( const InterpolatorOutputType& value,
+                                                      const InterpolatorComponentType& minComponent,
+                                                      const InterpolatorComponentType& maxComponent,
+                                                      OutputPixelType& outputValue ) const
   {
     // Method imported from itk::ResampleImageFilter
     const unsigned int nComponents = InterpolatorConvertType::GetNumberOfComponents(value);
-    OutputPixelType outputValue;
     
     itk::NumericTraits<OutputPixelType>::SetLength( outputValue, nComponents );
     
