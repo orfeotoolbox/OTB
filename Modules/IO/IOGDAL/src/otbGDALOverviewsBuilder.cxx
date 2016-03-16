@@ -209,7 +209,7 @@ void
 GDALOverviewsBuilder
 ::SetBypassEnabled( bool isEnabled )
 {
-  m_IsBypassEnabled = isEnabled;;
+  m_IsBypassEnabled = isEnabled;
 }
 
 /***************************************************************************/
