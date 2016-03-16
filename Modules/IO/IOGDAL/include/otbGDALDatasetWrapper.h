@@ -69,6 +69,10 @@ public:
    */
   unsigned int GetHeight() const;
 
+  /**
+   */
+  size_t GetPixelBytes() const;
+
 protected :
   GDALDatasetWrapper();
 

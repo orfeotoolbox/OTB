@@ -112,6 +112,9 @@ public:
 
   unsigned int GetOverviewsCount() const;
 
+
+  size_t GetEstimatedSize() const;
+
   GDALResampling GetResamplingMethod() const;
 
   void SetResamplingMethod( GDALResampling );

@@ -251,6 +251,39 @@ GDALOverviewsBuilder
 }
 
 /***************************************************************************/
+size_t
+GDALOverviewsBuilder
+::GetEstimatedSize() const
+{
+  assert( !m_IsBypassEnabled );
+
+  if( m_IsBypassEnabled )
+    return 0;
+
+  assert( !m_GDALDataset.IsNull() );
+  assert( m_ResolutionFactor>0 );
+
+  size_t bytes = m_GDALDataset->GetPixelBytes();
+
+  assert( bytes>0 );
+
+  size_t size = 0;
+
+  unsigned int w = m_GDALDataset->GetWidth();
+  unsigned int h = m_GDALDataset->GetHeight();
+
+  for( unsigned int i=0; i<m_NbResolutions; ++i )
+    {
+    w /= m_ResolutionFactor;
+    h /= m_ResolutionFactor;
+
+    size += w * h * bytes;
+    }
+
+  return size;
+}
+
+/***************************************************************************/
 GDALResampling
 GDALOverviewsBuilder
 ::GetResamplingMethod() const
