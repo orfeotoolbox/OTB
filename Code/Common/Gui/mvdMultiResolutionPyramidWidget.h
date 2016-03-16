@@ -113,6 +113,10 @@ public slots:
 // Signals.
 signals:
 
+  void BaseValueChanged( int );
+  void LevelsValueChanged( int );
+  void SizeValueChanged( int );
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //

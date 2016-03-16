@@ -346,6 +346,8 @@ MultiResolutionPyramidWidget
   UpdateResolutions();
 
   UpdateSize();
+
+  emit BaseValueChanged( value );
 }
 
 /*****************************************************************************/
@@ -365,6 +367,8 @@ MultiResolutionPyramidWidget
   UpdateResolutions();
 
   UpdateSize();
+
+  emit LevelsValueChanged( value );
 }
 
 /*****************************************************************************/
@@ -398,6 +402,8 @@ MultiResolutionPyramidWidget
   ClearResolutions();
 
   UpdateResolutions();
+
+  emit SizeValueChanged( value );
 }
 
 } // end namespace 'mvd'
