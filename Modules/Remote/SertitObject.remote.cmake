@@ -1,7 +1,10 @@
-#Contact: Rémi Cresson <remi.cresson@teledetection.fr>
+#Contact: arnaud.durand@sertit.u-strasbg.fr
+
+#SERTIT - University of Strasbourg http://sertit.u-strasbg.fr
+#Known issue with MSVC - https://github.com/sertit/SertitObject/issues/2
 otb_fetch_module(SertitObject
   "This module provides 2 applications dedicated to object-oriented image analysis.
-   
+
    Aggregate application:
 
 The aim of this application is to merge the result of a segmentation with a
@@ -11,7 +14,7 @@ provided by the OTB application LSMSSegmentation. The output is a vector dataset
 containing objects and the corresponding class in the attribute table. Connected
 regions belonging to the same class are merged. This application could be used
 at the last step of the LSMS pipeline in replacement of the application
-LSMSVectorization.  
+LSMSVectorization.
 
    ObjectsRadiometricStatistics application:
 
