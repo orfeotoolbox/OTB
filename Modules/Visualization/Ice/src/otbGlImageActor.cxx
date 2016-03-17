@@ -158,18 +158,18 @@ void GlImageActor::Initialize(const std::string & filename)
 
   assert( ovrCount>0 );
 
-  {
-  typedef std::vector< std::string > StringVector;
+  // {
+  // typedef std::vector< std::string > StringVector;
 
-  StringVector info(
-    m_FileReader->GetOverviewsInfo()
-  );
+  // StringVector info(
+  //   m_FileReader->GetOverviewsInfo()
+  // );
 
-  for( StringVector::const_iterator it( info.begin() );
-       it!=info.end();
-       ++it )
-    std::cout << *it << std::endl;
-  }
+  // for( StringVector::const_iterator it( info.begin() );
+  //      it!=info.end();
+  //      ++it )
+  //   std::cout << *it << std::endl;
+  // }
 
   m_AvailableResolutions.clear();
 
