@@ -45,9 +45,13 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
     std::cout << "Usage : "<<argv[0]<< " input_vector  output_stats" << std::endl;
     }
   
+  
   std::string vectorPath(argv[1]);
-  std::string outputPath(argv[2]);
+  std::string samplingVectorsPath(argv[2]);
   int LayerIndex = atoi(argv[3]);
+  std::string outputPath(argv[4]);
+  std::string baselineVectorPath(argv[5]);
+  
   
   otb::ogr::DataSource::Pointer vectors = otb::ogr::DataSource::New(vectorPath);
   
@@ -118,11 +122,65 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   resampler->SetRatesbyClass(ratesbyClass);
   resampler->SetFieldName(fieldName);
   resampler->SetLayerIndex(LayerIndex);
-  resampler->SetMaxSamplingTabSize(81);
-  resampler->SetOutputSamplingVectorsPath(argv[4]);
-  resampler->SetInputSamplingVectorsPath("/home/christophe/temp/leTvOGRDataToResampledOGRDataResamplingVectors.txt");
+  //resampler->SetMaxSamplingTabSize(81);
+  //resampler->SetOutputSamplingVectorsPath(samplingVectorsPath);
+  resampler->SetInputSamplingVectorsPath(samplingVectorsPath);
   
   resampler->Update();
+  
+  
+  //TEST itself
+  double epsilon=0.01;
+  
+  otb::ogr::DataSource::Pointer baseline = otb::ogr::DataSource::New(baselineVectorPath, otb::ogr::DataSource::Modes::Read); 
+  otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(outputPath, otb::ogr::DataSource::Modes::Read);
+  
+  otb::ogr::Layer::iterator itBase = baseline->GetLayer(0).begin();
+  for (;itBase != baseline->GetLayer(0).end(); ++itBase)
+  {
+
+    const OGRGeometry* cstpgeomBase = itBase->GetGeometry();
+    OGRGeometry* pgeomBase = cstpgeomBase->clone();
+    OGRPoint* castPointBase = dynamic_cast<OGRPoint*>(pgeomBase);
+    if (castPointBase == NULL)
+    {
+        std::cerr << "Could not dynamic_cast pgeomBase" << std::endl;
+        return EXIT_FAILURE;
+    }
+    else
+    {
+       bool found=false; 
+       otb::ogr::Layer::iterator itOutput = output->GetLayer(0).begin();
+       for (;itBase != output->GetLayer(0).end(); ++itOutput)
+       {
+           const OGRGeometry* cstpgeomOutput = itOutput->GetGeometry();
+           OGRGeometry* pgeomOutput = cstpgeomOutput->clone();
+           OGRPoint* castPointOutput = dynamic_cast<OGRPoint*>(pgeomOutput);
+           if (castPointOutput == NULL)
+           {
+              std::cerr << "Could not dynamic_cast pgeomOutput" << std::endl;
+              return EXIT_FAILURE;
+           }
+           else
+           {
+              if ( (fabs(castPointBase->getX()-castPointOutput->getX())<epsilon) && (fabs(castPointBase->getY()-castPointOutput->getY())<epsilon) )
+              {
+                 found=true;
+                 break;
+              }
+           }
+       
+       }
+       if(!found)
+       {
+           unsigned long featureId = itBase->ogr().GetFID();
+           std::cerr << "Could not find point ("<< castPointBase->getX() << "," << castPointBase->getY() << "); feature ID = " << featureId << "." << std::endl;
+           return EXIT_FAILURE;
+       }
+    }
+  
+        
+  }
   
 
   return EXIT_SUCCESS;

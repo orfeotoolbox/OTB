@@ -52,12 +52,31 @@ otb_add_test(NAME leTuSamplingRateCalculatorSmallest2 COMMAND otbSamplingTestDri
 otb_add_test(NAME leTuOGRDataToResampledOGRDataNew COMMAND otbSamplingTestDriver
   otbOGRDataToResampledOGRDataNew )
 
-otb_add_test(NAME leTvOGRDataToResampledOGRData COMMAND otbSamplingTestDriver
+otb_add_test(NAME leTvOGRDataToResampledOGRDataPoly COMMAND otbSamplingTestDriver
   otbOGRDataToResampledOGRData
   ${INPUTDATA}/variousVectors.sqlite
-  ${TEMP}/leTvOGRDataToResampledOGRDataOutput.sqlite
+  ${INPUTDATA}/leTvOGRDataToResampledOGRDataResamplingVectors_Poly.txt
   0
-  ${TEMP}/leTvOGRDataToResampledOGRDataResamplingVectors.txt
+  ${TEMP}/leTvOGRDataToResampledOGRDataOutput_Poly.sqlite
+  ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput_Poly.sqlite
+  )
+  
+otb_add_test(NAME leTvOGRDataToResampledOGRDataLines COMMAND otbSamplingTestDriver
+  otbOGRDataToResampledOGRData
+  ${INPUTDATA}/variousVectors.sqlite
+  ${INPUTDATA}/leTvOGRDataToResampledOGRDataResamplingVectors_Lines.txt
+  1
+  ${TEMP}/leTvOGRDataToResampledOGRDataOutput_Lines.sqlite
+  ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput_Lines.sqlite
+  )
+  
+otb_add_test(NAME leTvOGRDataToResampledOGRDataPoints COMMAND otbSamplingTestDriver
+  otbOGRDataToResampledOGRData
+  ${INPUTDATA}/variousVectors.sqlite
+  ${INPUTDATA}/leTvOGRDataToResampledOGRDataResamplingVectors_Points.txt
+  2
+  ${TEMP}/leTvOGRDataToResampledOGRDataOutput_Points.sqlite
+  ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput_Points.sqlite
   )
 
 
