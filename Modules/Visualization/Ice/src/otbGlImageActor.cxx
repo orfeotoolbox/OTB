@@ -154,6 +154,23 @@ void GlImageActor::Initialize(const std::string & filename)
 
   unsigned int ovrCount = m_FileReader->GetOverviewsCount();
 
+  std::cout << "overview-count: " << ovrCount << std::endl;
+
+  assert( ovrCount>0 );
+
+  // {
+  // typedef std::vector< std::string > StringVector;
+
+  // StringVector info(
+  //   m_FileReader->GetOverviewsInfo()
+  // );
+
+  // for( StringVector::const_iterator it( info.begin() );
+  //      it!=info.end();
+  //      ++it )
+  //   std::cout << *it << std::endl;
+  // }
+
   m_AvailableResolutions.clear();
 
   for( unsigned int i=0; i<ovrCount; ++i )
