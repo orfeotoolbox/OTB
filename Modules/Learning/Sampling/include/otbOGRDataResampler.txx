@@ -90,7 +90,7 @@ OGRDataResampler
               ogrTmpPoint.setX(imgPoint[0]);
               ogrTmpPoint.setY(imgPoint[1]);
 
-              LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(m_LayerIndex);
+              LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(0);
               otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
               feat[m_FieldName].SetValue<std::string>(className);
               feat.SetGeometry(&ogrTmpPoint);
@@ -148,7 +148,7 @@ OGRDataResampler
               ogrTmpPoint.setX(imgPoint[0]);
               ogrTmpPoint.setY(imgPoint[1]);
 
-              LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(m_LayerIndex);
+              LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(0);
               otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
               feat[m_FieldName].SetValue<std::string>(className);
               feat.SetGeometry(&ogrTmpPoint);
@@ -178,7 +178,7 @@ OGRDataResampler
               ogrTmpPoint.setX(imgPoint[0]);
               ogrTmpPoint.setY(imgPoint[1]);
               
-              LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(m_LayerIndex);
+              LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(0);
               otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
               feat[m_FieldName].SetValue<std::string>(className);
               feat.SetGeometry(&ogrTmpPoint);
