@@ -117,8 +117,6 @@ StatisticsXMLFileWriter<TMeasurementVector>
     doc.LinkEndChild( mapRoot );
     }
 
-  std::string keyAttr("key");
-  std::string valAttr("value");
   GenericMapContainer::const_iterator containerIt;
   for ( containerIt = m_GenericMapContainer.begin() ; containerIt != m_GenericMapContainer.end() ; ++containerIt)
     {
@@ -135,8 +133,8 @@ StatisticsXMLFileWriter<TMeasurementVector>
       {
       // For each value in Measurementvector
       TiXmlElement * curStatisticMap = new TiXmlElement("StatisticMap");
-      curStatisticMap->SetAttribute(keyAttr , mapIter->first);
-      curStatisticMap->SetAttribute(valAttr, mapIter->second);
+      curStatisticMap->SetAttribute("key" , mapIter->first.c_str());
+      curStatisticMap->SetAttribute("value", mapIter->second.c_str());
       feature->LinkEndChild(curStatisticMap);
       }
     }
