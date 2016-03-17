@@ -120,6 +120,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   resampler->SetLayerIndex(LayerIndex);
   resampler->SetMaxSamplingTabSize(81);
   resampler->SetOutputSamplingVectorsPath(argv[4]);
+  resampler->SetInputSamplingVectorsPath("/home/christophe/temp/leTvOGRDataToResampledOGRDataResamplingVectors.txt");
   
   resampler->Update();
   
