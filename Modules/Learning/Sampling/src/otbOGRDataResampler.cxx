@@ -183,20 +183,6 @@ OGRDataResampler::InputSamplingVectors()
              tab2.clear();
           }
         }
-            
-        
-        /*switch (line[0])
-        {
-            case "#":
-            std::cout << "dièse" << std::endl;
-            break;
-            case ">":
-            std::cout << "chevron" << std::endl;
-            break;
-            default:
-                itkExceptionMacro(<< "File " << m_InputSamplingVectorsPath << " contains syntax errors." << std::endl);
-            break;
-        }*/
       }
   }
   else 
