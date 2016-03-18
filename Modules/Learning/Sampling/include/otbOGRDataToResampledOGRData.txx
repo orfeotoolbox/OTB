@@ -85,7 +85,8 @@ void
 PersistentOGRDataToResampledOGRData<TMaskImage>
 ::Synthetize(void)
 {
-      
+  otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetOGRData());
+  vectors->GetLayer(m_LayerIndex).SetSpatialFilter(NULL);
 }
 
 template<class TMaskImage>
