@@ -13,7 +13,7 @@ else()
   message(STATUS "  Using GDAL SuperBuild version")
 
   # declare dependencies
-  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF CURL GEOTIFF PNG JPEG OPENJPEG SQLITE GEOS ZLIB EXPAT LIBKML)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF CURL GEOTIFF PNG JPEG OPENJPEG SQLITE GEOS ZLIB EXPAT)
 
   INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
@@ -27,7 +27,6 @@ else()
   ADD_SUPERBUILD_CONFIGURE_VAR(SQLITE_ROOT   --with-sqlite3)
   ADD_SUPERBUILD_CONFIGURE_VAR(ZLIB_ROOT     --with-libz)
   ADD_SUPERBUILD_CONFIGURE_VAR(EXPAT_ROOT    --with-expat)
-  ADD_SUPERBUILD_CONFIGURE_VAR(LIBKML_ROOT   --with-libkml)
   ADD_SUPERBUILD_CONFIGURE_VAR(CURL_ROOT     --with-curl "/bin/curl-config")
   ADD_SUPERBUILD_CONFIGURE_VAR(GEOS_ROOT     --with-geos "/bin/geos-config")
   
@@ -42,6 +41,9 @@ else()
   if(UNIX)
     set(GDAL_SB_EXTRA_OPTIONS "" CACHE STRING "Extra options to be passed to GDAL configure script")
     mark_as_advanced(GDAL_SB_EXTRA_OPTIONS)
+
+    #Convert GDAL_SB_EXTRA_OPTIONS to a list to allow to add multiple instructions to the CONFIGURE_COMMAND
+    separate_arguments(GDAL_SB_EXTRA_OPTIONS)
 
     ExternalProject_Add(${proj}
       PREFIX ${proj}

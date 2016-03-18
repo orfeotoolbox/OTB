@@ -95,6 +95,11 @@ public:
   itkSetMacro(IsVectorImage, bool);
   itkGetMacro(IsVectorImage, bool);
 
+  /** Set/get wether the driver will write RPC tags to TIFF */
+  itkSetMacro(WriteRPCTags,bool);
+  itkGetMacro(WriteRPCTags,bool);
+
+  
   /** Set/Get the options */
   void SetOptions(const GDALCreationOptionsType& opts)
   {
@@ -264,6 +269,11 @@ private:
    */
   std::vector<unsigned int> m_OriginalDimensions;
 
+  /**
+   * True if RPC tags should be exported
+   */
+  bool m_WriteRPCTags;
+  
 };
 
 } // end namespace otb

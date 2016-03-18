@@ -31,8 +31,7 @@ namespace otb
  * mask is zero. There is a limitation that the image and the mask must both be
  * of the same type.
  *
- * \ingroup ImageIterator
- * \ingroup OTBCommon
+ * \ingroup OTBImageManipulation
  */
 template <typename TIteratorType,typename TMaskIteratorType = TIteratorType>
 class MaskedIteratorDecorator

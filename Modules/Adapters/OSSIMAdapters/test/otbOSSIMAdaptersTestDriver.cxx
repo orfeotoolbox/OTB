@@ -1,7 +1,7 @@
 #include "otbTestMain.h"
 void RegisterTests()
 {
-  REGISTER_TEST(otbImageKeywordlist);
+  REGISTER_TEST(otbTestImageKeywordlist);
   REGISTER_TEST(otbOssimJpegFileRessourceLeakTest);
   REGISTER_TEST(otbMapProjectionAdapterTest);
   REGISTER_TEST(otbOssimElevManagerTest2);
