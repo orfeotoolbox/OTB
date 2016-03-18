@@ -102,7 +102,6 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   filter->Update();
   
   FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get();
-  FilterType::PolygonSizeMapType &polySize = filter->GetPolygonSizeOutput()->Get();
 
     
    //-------------------------------------------------------------- 
