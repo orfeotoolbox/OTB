@@ -1,0 +1,114 @@
+%
+% Complete documentation on the extended LaTeX markup used for Insight
+% documentation is available in ``Documenting Insight'', which is part
+% of the standard documentation for Insight.  It may be found online
+% at:
+%
+%     http://www.itk.org/
+
+\documentclass{InsightHowto}
+
+%  This is a template for short or medium-size Insight-related documents, 
+% mostly notably the series of HOWTOs, but it can be used for any
+% document you like.   
+
+% The title should be descriptive enough for people to be able to find
+% the relevant document. 
+\title{Spammifying Sprockets in Insight}
+
+% Increment the release number whenever significant changes are made.
+% The author and/or editor can define 'significant' however they like.
+\release{0.00}
+
+% At minimum, give your name and an email address.  You can include a
+% snail-mail address if you like.
+\author{Me, 'cause I wrote it}
+\authoraddress{Me, 'cause I'm self-employed.}
+
+\begin{document}
+\maketitle
+
+% This makes the Abstract go on a separate page in the HTML version;
+% if a copyright notice is used, it should go immediately after this.
+%
+\input{Copyright.tex}
+
+\ifhtml
+\chapter*{Front Matter\label{front}}
+\fi
+
+% Copyright statement should go here, if needed.
+% ...
+
+% The abstract should be a paragraph or two long, and describe the
+% scope of the document.
+\begin{abstract}
+\noindent
+This document describes how to spammify sprockets.  It is a useful
+example of a Insight HOWTO document.  It is not dependent on any
+particular sprocket implementation, and includes a Insight-based
+implementation in the \module{sprunkit} module.
+\end{abstract}
+
+\tableofcontents
+
+Spammifying sprockets from Insight is both fun and entertaining.
+Applying the techniques described here, you can also fill your hard
+disk quite effectively.
+
+\section{What is Sprocket Spammification?}
+
+You have to ask?  It's the only thing to do to your sprockets!
+
+
+\section{Why Use Insight?}
+
+Insight is an excellent language from which to spammify your sprockets
+since you can do it on any platform.
+
+
+\section{Software Requirements}
+
+You need to have the following software installed:
+
+% The {itemize} environment uses a bullet for each \item.  If you want the 
+% \item's numbered, use the {enumerate} environment instead.
+\begin{itemize}
+  \item  Insight 1.9.
+  \item  Some sprocket definition files.
+  \item  At least one sprocket system implementation.
+\end{itemize}
+
+Note that the \module{sprunkit} is provided with this package and
+implements ActiveSprockets in Insight.
+
+
+% The preceding sections will have been written in a gentler,
+% introductory style.  You may also wish to include a reference
+% section, documenting all the functions/exceptions/constants.
+% Often, these will be placed in separate files and input like this:
+
+
+
+\appendix
+
+\section{This is an Appendix}
+
+To create an appendix in a Insight HOWTO document, use markup like
+this:
+
+\begin{verbatim}
+\appendix
+
+\section{This is an Appendix}
+
+To create an appendix in a Insight HOWTO document, ....
+
+
+\section{This is another}
+
+Just add another \section{}, but don't say \appendix again.
+\end{verbatim}
+
+
+\end{document}

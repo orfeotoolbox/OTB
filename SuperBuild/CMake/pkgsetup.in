@@ -34,9 +34,9 @@ done
 
 if [ -f lib/cmake/ITK-4.8/ITKConfig.cmake ]; then
     rm -fr $INSTALL_BINDIRS/*
-    sed -i "s,/home/mrashad/Dashboard/OTB/install,$OUT,g" lib/cmake/ITK-4.8/Modules/ITKZLIB.cmake
-    sed -i "s,/home/mrashad/Dashboard/OTB/install,$OUT,g" lib/cmake/ITK-4.8/ITKConfig.cmake
-    sed -i "s,/home/mrashad/Dashboard/OTB/install,$OUT,g" lib/cmake/ITK-4.8/ITKTargets-release.cmake
+    sed -i "s,/home/mrashad/dashboard/otb/install,$OUT,g" lib/cmake/ITK-4.8/Modules/ITKZLIB.cmake
+    sed -i "s,/home/mrashad/dashboard/otb/install,$OUT,g" lib/cmake/ITK-4.8/ITKConfig.cmake
+    sed -i "s,/home/mrashad/dashboard/otb/install,$OUT,g" lib/cmake/ITK-4.8/ITKTargets-release.cmake
 fi
 rm -fr $OUT/tools
 

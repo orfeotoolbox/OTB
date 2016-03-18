@@ -316,7 +316,7 @@ SubsampledImageRegionConstIterator<TImage>
 {
   // Get the index of the first pixel on the span (row)
   IndexType  ind = this->m_Image->ComputeIndex(static_cast<IndexValueType>(this->m_Offset));
-  IndexType& startIndex = this->m_Region.GetIndex();
+  const IndexType& startIndex = this->m_Region.GetIndex();
 
   // Deccrement along a row, then wrap at the beginning of the region row.
   bool         done;

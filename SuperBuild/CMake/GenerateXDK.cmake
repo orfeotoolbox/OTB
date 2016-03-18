@@ -1,7 +1,22 @@
 
 message(STATUS "Setup OTB xdk...")
 
-set(PACKAGE_VERSION xdk)
+if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
+  file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _otb_version_vars   REGEX "set\\\(OTB_VERSION_")
+  file(WRITE  ${CMAKE_BINARY_DIR}/CMakeFiles/version_vars.cmake "#OTB version\n")
+  foreach(_otb_version_var ${_otb_version_vars})
+    file(APPEND ${CMAKE_BINARY_DIR}/CMakeFiles/version_vars.cmake "${_otb_version_var}\n")
+  endforeach()
+  include(${CMAKE_BINARY_DIR}/CMakeFiles/version_vars.cmake)
+  if(OTB_VERSION_STRING)
+    set(PACKAGE_VERSION ${OTB_VERSION_STRING})
+  else()
+    message(FATAL_ERROR "Packaging: Cannot find OTB_VERSION_STRING!")
+  endif()
+else()
+  message(FATAL_ERROR "Packaging: File '${CMAKE_SOURCE_DIR}/../CMakeLists.txt' does not exists")
+endif()
+
 set(PACKAGE_NAME OTB)
 set(PACKAGE_LONG_NAME OrfeoToolBox)
 
@@ -10,7 +25,7 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(PACKAGE_ARCH Linux64)
 endif()
 
-set(ARCHIVE_NAME ${PACKAGE_NAME}-${PACKAGE_VERSION}-${PACKAGE_ARCH})
+set(ARCHIVE_NAME ${PACKAGE_NAME}-${PACKAGE_VERSION}-xdk-${PACKAGE_ARCH})
 
 set(MAKESELF_SCRIPT ${CMAKE_BINARY_DIR}/GENERATE-XDK/build/makeself.sh)
 

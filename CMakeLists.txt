@@ -66,8 +66,8 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "5")
-set(OTB_VERSION_MINOR "2")
-set(OTB_VERSION_PATCH "1")
+set(OTB_VERSION_MINOR "3")
+set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
 if(NOT OTB_INSTALL_RUNTIME_DIR)
@@ -464,8 +464,8 @@ if(WIN32 AND CMAKE_CROSSCOMPILING)
       message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
     endif()
 
-  else(DEFINED MXE_TARGET_DIR)
-    message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
+  # else(DEFINED MXE_TARGET_DIR)
+  #   message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
   endif(DEFINED MXE_TARGET_DIR)
 
 endif(WIN32 AND CMAKE_CROSSCOMPILING)
