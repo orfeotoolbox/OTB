@@ -65,7 +65,7 @@ public:
   //typedef otb::NRIBandImagesToOneNComplexBandsImage<DoubleVectorImageType, ComplexDoubleVectorImageType>               NRITOOneCFilterType;
   
   
-  typedef otb::ReciprocalHAlphaImageFilter<ComplexDoubleVectorImageType, DoubleVectorImageType> 			           HAFilterType;
+  typedef otb::ReciprocalHAlphaImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> 			           HAFilterType;
   typedef otb::ReciprocalBarnesDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>           BarnesFilterType;
   typedef otb::ReciprocalHuynenDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>           HuynenFilterType;
   //typedef otb::ReciprocalPauliDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>            PauliFilterType;
@@ -115,7 +115,7 @@ private:
     AddParameter(ParameterType_ComplexInputImage,  "invv",   "Input Image");
     SetParameterDescription("invv", "Input image (VV)");
     
-    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
+    AddParameter(ParameterType_ComplexOutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image");
     
     AddParameter(ParameterType_Choice, "decomp", "Decompositions");
@@ -184,7 +184,7 @@ private:
 		
 		m_MeanFilter->SetInput(m_SRFilter->GetOutput());
 		m_HAFilter->SetInput(m_MeanFilter->GetOutput());
-		SetParameterOutputImage("out", m_HAFilter->GetOutput() );
+		SetParameterComplexOutputImage("out", m_HAFilter->GetOutput() );
     
 		break;
         
