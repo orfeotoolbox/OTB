@@ -123,6 +123,8 @@ private:
     SetParameterDescription("decomp.haa","H-alpha-A incoherent decomposition");
     AddChoice("decomp.barnes","Barnes incoherent decomposition");
     SetParameterDescription("decomp.barnes","Barnes incoherent decomposition");
+    AddChoice("decomp.huynen","Huynen incoherent decomposition");
+    SetParameterDescription("decomp.huynen","Huynen incoherent decomposition");
     
     AddParameter(ParameterType_Group,"inco","Incoherent decompositions");
     SetParameterDescription("inco","This group allows setting parameters related to the incoherent decompositions.");
@@ -165,6 +167,7 @@ private:
 	m_MeanFilter = PerBandMeanFilterType::New();
     MeanFilterType::InputSizeType radius;
     m_BarnesFilter = BarnesFilterType::New();
+    m_HuynenFilter = HuynenFilterType::New();
     
     
     switch (GetParameterInt("decomp"))
@@ -206,6 +209,25 @@ private:
 		SetParameterComplexOutputImage("out", m_BarnesFilter->GetOutput() );
     
 		break;
+        
+		case 2: // Huynen
+
+		if (inhv)
+		  m_SRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("inhv"));
+	    else if (invh)
+		  m_SRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("invh"));
+
+		m_SRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
+		m_SRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
+		
+        radius.Fill( GetParameterInt("inco.kernelsize") );
+        m_MeanFilter->GetFilter()->SetRadius(radius);
+		
+		m_MeanFilter->SetInput(m_SRFilter->GetOutput());
+		m_HuynenFilter->SetInput(m_MeanFilter->GetOutput());
+		SetParameterComplexOutputImage("out", m_HuynenFilter->GetOutput() );
+    
+		break;
 	  }
    	 
   }
@@ -214,6 +236,7 @@ private:
   SRFilterType::Pointer m_SRFilter;
   HAFilterType::Pointer m_HAFilter;
   BarnesFilterType::Pointer m_BarnesFilter;
+  HuynenFilterType::Pointer m_HuynenFilter;
   PerBandMeanFilterType::Pointer m_MeanFilter;
   
 }; 
