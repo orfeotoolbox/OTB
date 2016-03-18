@@ -26,6 +26,7 @@ set( Common_Core_SOURCES
   mvdImageSettingsInterface.cxx
   #mvdModifiableInterface.cxx
   #mvdMyClass.cxx
+  mvdProgressInterface.cxx
   mvdProcessObjectObserver.cxx
   mvdOverviewBuilder.cxx
   mvdQuicklookModel.cxx
