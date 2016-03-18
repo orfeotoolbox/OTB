@@ -28,7 +28,7 @@ namespace otb
 namespace Functor {
 
 /** \class otbHuynenDecompFunctor
- * \brief Evaluate the H-Alpha parameters from the reciprocal covariance matrix image.
+ * \brief 
  *
  *
  * \ingroup SARPolarimetry
