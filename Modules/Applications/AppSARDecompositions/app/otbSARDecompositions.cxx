@@ -99,7 +99,8 @@ private:
 						  
 						  
 						  
-    SetDocLimitations("None");
+    SetDocLimitations("Some decompositions output real images, while this applications outputs complex images for general purpose.\n"
+                      "Users should pay attention to extract the real part of the results provided by this application.\n");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("SARPolarMatrixConvert, SARPolarSynth");
 
