@@ -26,6 +26,7 @@ set( Common_Core_SOURCES
   mvdImageSettingsInterface.cxx
   #mvdModifiableInterface.cxx
   #mvdMyClass.cxx
+  mvdProcessObjectObserver.cxx
   mvdOverviewBuilder.cxx
   mvdQuicklookModel.cxx
   mvdSerializableInterface.cxx
@@ -63,6 +64,7 @@ set( Common_Core_HEADERS_MOC
   # mvdMath.h
   #mvdMyClass.h
   mvdOverviewBuilder.h
+  mvdProcessObjectObserver.h
   mvdQuicklookModel.h
   mvdStackedLayerModel.h
   # mvdSystemError.h
