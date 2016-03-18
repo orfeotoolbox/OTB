@@ -135,65 +135,65 @@ otb_add_test(NAME bfTvVectorDataRasterizeFilterSHP COMMAND otbConversionTestDriv
   ${TEMP}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
   )
 
-otb_add_test(NAME bfTvLabelImageRegionPruningFilterQB_Suburb COMMAND otbConversionTestDriver
-  --compare-n-images ${EPSILON_7} 2
-  ${BASELINE}/bfLabelImageRegionPruningFilterMergeOutput_QB_Suburb.tif
-  ${TEMP}/bfLabelImageRegionPruningFilterMergeOutput_QB_Suburb.tif
-  ${BASELINE}/bfLabelImageRegionPruningFilterClusteredOutput_QB_Suburb.tif
-  ${TEMP}/bfLabelImageRegionPruningFilterClusteredOutput_QB_Suburb.tif
-  otbLabelImageRegionPruningFilter
-  ${INPUTDATA}/QB_Suburb.png
-  ${TEMP}/bfLabelImageRegionPruningFilterSpectralOutput_QB_Suburb.tif
-  ${TEMP}/bfLabelImageRegionPruningFilterLabelOutput_QB_Suburb.tif
-  ${TEMP}/bfLabelImageRegionPruningFilterMergeOutput_QB_Suburb.tif
-  ${TEMP}/bfLabelImageRegionPruningFilterClusteredOutput_QB_Suburb.tif
-  4 25 0.1 100 10
-  )
+#otb_add_test(NAME bfTvLabelImageRegionPruningFilterQB_Suburb COMMAND otbConversionTestDriver
+  #--compare-n-images ${EPSILON_7} 2
+  #${BASELINE}/bfLabelImageRegionPruningFilterMergeOutput_QB_Suburb.tif
+  #${TEMP}/bfLabelImageRegionPruningFilterMergeOutput_QB_Suburb.tif
+  #${BASELINE}/bfLabelImageRegionPruningFilterClusteredOutput_QB_Suburb.tif
+  #${TEMP}/bfLabelImageRegionPruningFilterClusteredOutput_QB_Suburb.tif
+  #otbLabelImageRegionPruningFilter
+  #${INPUTDATA}/QB_Suburb.png
+  #${TEMP}/bfLabelImageRegionPruningFilterSpectralOutput_QB_Suburb.tif
+  #${TEMP}/bfLabelImageRegionPruningFilterLabelOutput_QB_Suburb.tif
+  #${TEMP}/bfLabelImageRegionPruningFilterMergeOutput_QB_Suburb.tif
+  #${TEMP}/bfLabelImageRegionPruningFilterClusteredOutput_QB_Suburb.tif
+  #4 25 0.1 100 10
+  #)
 
-otb_add_test(NAME bfTvLabelImageRegionPruningFilterSPOT5 COMMAND otbConversionTestDriver
-  --compare-n-images ${EPSILON_7} 2
-  ${BASELINE}/bfLabelImageRegionPruningFilterMergeOutput_SPOT5.tif
-  ${TEMP}/bfLabelImageRegionPruningFilterMergeOutput_SPOT5.tif
-  ${BASELINE}/bfLabelImageRegionPruningFilterClusteredOutput_SPOT5.tif
-  ${TEMP}/bfLabelImageRegionPruningFilterClusteredOutput_SPOT5.tif
-  otbLabelImageRegionPruningFilter
-  ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-  ${TEMP}/bfLabelImageRegionPruningFilterSpectralOutput_SPOT5.tif
-  ${TEMP}/bfLabelImageRegionPruningFilterLabelOutput_SPOT5.tif
-  ${TEMP}/bfLabelImageRegionPruningFilterMergeOutput_SPOT5.tif
-  ${TEMP}/bfLabelImageRegionPruningFilterClusteredOutput_SPOT5.tif
-  4 25 0.1 100 20
-  )
+#otb_add_test(NAME bfTvLabelImageRegionPruningFilterSPOT5 COMMAND otbConversionTestDriver
+  #--compare-n-images ${EPSILON_7} 2
+  #${BASELINE}/bfLabelImageRegionPruningFilterMergeOutput_SPOT5.tif
+  #${TEMP}/bfLabelImageRegionPruningFilterMergeOutput_SPOT5.tif
+  #${BASELINE}/bfLabelImageRegionPruningFilterClusteredOutput_SPOT5.tif
+  #${TEMP}/bfLabelImageRegionPruningFilterClusteredOutput_SPOT5.tif
+  #otbLabelImageRegionPruningFilter
+  #${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+  #${TEMP}/bfLabelImageRegionPruningFilterSpectralOutput_SPOT5.tif
+  #${TEMP}/bfLabelImageRegionPruningFilterLabelOutput_SPOT5.tif
+  #${TEMP}/bfLabelImageRegionPruningFilterMergeOutput_SPOT5.tif
+  #${TEMP}/bfLabelImageRegionPruningFilterClusteredOutput_SPOT5.tif
+  #4 25 0.1 100 20
+  #)
 
-otb_add_test(NAME bfTvLabelImageRegionMergingFilterQB_Suburb COMMAND otbConversionTestDriver
-  --compare-n-images ${EPSILON_7} 2
-  ${BASELINE}/bfLabelImageRegionMergingFilterMergeOutput_QB_Suburb.tif
-  ${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_QB_Suburb.tif
-  ${BASELINE}/bfLabelImageRegionMergingFilterClusteredOutput_QB_Suburb.tif
-  ${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_QB_Suburb.tif
-  otbLabelImageRegionMergingFilter
-  ${INPUTDATA}/QB_Suburb.png
-  ${TEMP}/bfLabelImageRegionMergingFilterSpectralOutput_QB_Suburb.tif
-  ${TEMP}/bfLabelImageRegionMergingFilterLabelOutput_QB_Suburb.tif
-  ${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_QB_Suburb.tif
-  ${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_QB_Suburb.tif
-  4 25 0.1 100
-  )
+#otb_add_test(NAME bfTvLabelImageRegionMergingFilterQB_Suburb COMMAND otbConversionTestDriver
+  #--compare-n-images ${EPSILON_7} 2
+  #${BASELINE}/bfLabelImageRegionMergingFilterMergeOutput_QB_Suburb.tif
+  #${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_QB_Suburb.tif
+  #${BASELINE}/bfLabelImageRegionMergingFilterClusteredOutput_QB_Suburb.tif
+  #${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_QB_Suburb.tif
+  #otbLabelImageRegionMergingFilter
+  #${INPUTDATA}/QB_Suburb.png
+  #${TEMP}/bfLabelImageRegionMergingFilterSpectralOutput_QB_Suburb.tif
+  #${TEMP}/bfLabelImageRegionMergingFilterLabelOutput_QB_Suburb.tif
+  #${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_QB_Suburb.tif
+  #${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_QB_Suburb.tif
+  #4 25 0.1 100
+  #)
 
-otb_add_test(NAME bfTvLabelImageRegionMergingFilterSPOT5 COMMAND otbConversionTestDriver
-  --compare-n-images ${EPSILON_7} 2
-  ${BASELINE}/bfLabelImageRegionMergingFilterMergeOutput_SPOT5.tif
-  ${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_SPOT5.tif
-  ${BASELINE}/bfLabelImageRegionMergingFilterClusteredOutput_SPOT5.tif
-  ${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_SPOT5.tif
-  otbLabelImageRegionMergingFilter
-  ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-  ${TEMP}/bfLabelImageRegionMergingFilterSpectralOutput_SPOT5.tif
-  ${TEMP}/bfLabelImageRegionMergingFilterLabelOutput_SPOT5.tif
-  ${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_SPOT5.tif
-  ${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_SPOT5.tif
-  4 25 0.1 100
-  )
+#otb_add_test(NAME bfTvLabelImageRegionMergingFilterSPOT5 COMMAND otbConversionTestDriver
+  #--compare-n-images ${EPSILON_7} 2
+  #${BASELINE}/bfLabelImageRegionMergingFilterMergeOutput_SPOT5.tif
+  #${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_SPOT5.tif
+  #${BASELINE}/bfLabelImageRegionMergingFilterClusteredOutput_SPOT5.tif
+  #${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_SPOT5.tif
+  #otbLabelImageRegionMergingFilter
+  #${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+  #${TEMP}/bfLabelImageRegionMergingFilterSpectralOutput_SPOT5.tif
+  #${TEMP}/bfLabelImageRegionMergingFilterLabelOutput_SPOT5.tif
+  #${TEMP}/bfLabelImageRegionMergingFilterMergeOutput_SPOT5.tif
+  #${TEMP}/bfLabelImageRegionMergingFilterClusteredOutput_SPOT5.tif
+  #4 25 0.1 100
+  #)
 
 otb_add_test(NAME obTvLabelMapToVectorDataFilter2 COMMAND otbConversionTestDriver
   --compare-ogr ${NOTOL}

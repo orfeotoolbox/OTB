@@ -102,9 +102,11 @@ public:
    *  This imageIO didn't support overviews */
   virtual unsigned int GetOverviewsCount()
   {
-    return 0;
+    // MANTIS-1154: Source image is always considered as the best
+    // resolution overview.
+    return 1;
   }
-  
+
   /** Get information about overviews available into the file specified
    * This imageIO didn't support overviews */ 
   virtual std::vector<std::string> GetOverviewsInfo()

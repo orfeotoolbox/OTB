@@ -58,6 +58,9 @@ public:
   typedef std::pair<std::string , MeasurementVectorType>  InputDataType;
   typedef std::vector< InputDataType >                   MeasurementVectorContainer;
 
+  typedef std::map<std::string , std::string>           GenericMapType;
+  typedef std::map<std::string , GenericMapType>        GenericMapContainer;
+
   virtual void Modified() const
     {
       m_IsUpdated = false;
@@ -68,18 +71,29 @@ public:
   itkGetStringMacro(FileName);
 
   /** Get the number of Outputs*/
-  itkGetMacro(NumberOfOutputs, unsigned int);
+  unsigned int GetNumberOfOutputs();
+
+  /** Get the list of vector statistics names */
+  std::vector<std::string> GetStatisticVectorNames();
+
+  /** Get the list of map statistics names */
+  std::vector<std::string> GetStatisticMapNames();
 
   /** Method to get the MeasurementVector by name */
   MeasurementVectorType GetStatisticVectorByName(const char * statisticName);
 
+  /** Method to get a statistics map by name */
+  template <typename MapType>
+  MapType GetStatisticMapByName(const char * statisticName);
+
 protected:
 
+  /** Read into the file and extract information in vector and map containers */
   virtual void Read();
 
   StatisticsXMLFileReader();
   virtual ~StatisticsXMLFileReader() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   StatisticsXMLFileReader(const Self&); //purposely not implemented
@@ -87,8 +101,8 @@ private:
 
   std::string                 m_FileName;
   MeasurementVectorContainer  m_MeasurementVectorContainer;
-  unsigned int                m_NumberOfOutputs;
   mutable bool                m_IsUpdated;
+  GenericMapContainer         m_GenericMapContainer;
 
 }; // end of class StatisticsXMLFileReader
 
