@@ -20,10 +20,15 @@
 
 
 #include "otbReciprocalHAlphaImageFilter.h"
+#include "otbReciprocalBarnesDecompImageFilter.h"
+#include "otbReciprocalHuynenDecompImageFilter.h"
+#include "otbReciprocalPauliDecompImageFilter.h"
+
 #include "otbSinclairReciprocalImageFilter.h"
 #include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
 #include "otbPerBandVectorImageFilter.h"
 #include "itkMeanImageFilter.h"
+#include "otbNRIBandImagesToOneNComplexBandsImage.h"
 
 
 namespace otb
@@ -52,15 +57,19 @@ public:
 											 ComplexDoubleImageType, 
 											 ComplexDoubleImageType, 
 											 ComplexDoubleVectorImageType, 
-											 FunctorType > 												SRFilterType;
+											 FunctorType > 												    SRFilterType;
   
   
-  typedef otb::ReciprocalHAlphaImageFilter<ComplexDoubleVectorImageType, DoubleVectorImageType> 			HAFilterType;
+  typedef itk::MeanImageFilter<ComplexDoubleImageType, ComplexDoubleImageType>                                         MeanFilterType;
+  typedef otb::PerBandVectorImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType, MeanFilterType>    PerBandMeanFilterType;
+  //typedef otb::NRIBandImagesToOneNComplexBandsImage<DoubleVectorImageType, ComplexDoubleVectorImageType>               NRITOOneCFilterType;
   
   
-  typedef itk::MeanImageFilter<ComplexDoubleImageType, ComplexDoubleImageType>         MeanFilterType;
-  typedef otb::PerBandVectorImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType, MeanFilterType> PerBandMeanFilterType;
-  //FloatImageType
+  typedef otb::ReciprocalHAlphaImageFilter<ComplexDoubleVectorImageType, DoubleVectorImageType> 			           HAFilterType;
+  typedef otb::ReciprocalBarnesDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>           BarnesFilterType;
+  typedef otb::ReciprocalHuynenDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>           HuynenFilterType;
+  //typedef otb::ReciprocalPauliDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>            PauliFilterType;
+
 
   /** Standard macro */
   itkNewMacro(Self);
@@ -76,10 +85,13 @@ private:
     // Documentation
     SetDocName("SARDecompositions");
     SetDocLongDescription("From one-band complex images (HH, HV, VH, VV), returns the selected decomposition.\n \n"
-						  "The H-alpha-A decomposition is currently the only one available; it is implemented for the monostatic case (transmitter and receiver are co-located).\n"
-						  "User must provide three one-band complex images HH, HV or VH, and VV (monostatic case <=> HV = VH).\n"
-						  "The H-alpha-A decomposition consists in averaging 3x3 complex coherency matrices (incoherent analysis); the user must provide the size of the averaging window, thanks to the parameter inco.kernelsize.\n "
-						  "The applications returns a float vector image, made up of three channels : H (entropy), Alpha, A (Anisotropy)." );
+                          "All the decompositions implemented are intended for the mono-static case (transmitter and receiver are co-located).\n"
+                          "There are two kinds of decomposition : coherent ones and incoherent ones.\n"
+                          "In the coherent case, only the Pauli decomposition is available.\n"
+                          "In the incoherent case, there the decompositions available : Huynen, Barnes, and H-alpha-A.\n"   
+						  "User must provide three one-band complex images HH, HV or VH, and VV (mono-static case <=> HV = VH).\n"
+						  "Incoherent decompositions consist in averaging 3x3 complex coherency/covariance matrices; the user must provide the size of the averaging window, thanks to the parameter inco.kernelsize.\n "
+						  );
 						  
 						  
 						  
@@ -107,8 +119,10 @@ private:
     SetParameterDescription("out", "Output image");
     
     AddParameter(ParameterType_Choice, "decomp", "Decompositions");
-    AddChoice("decomp.haa","H-alpha-A decomposition");
-    SetParameterDescription("decomp.haa","H-alpha-A decomposition");
+    AddChoice("decomp.haa","H-alpha-A incoherent decomposition");
+    SetParameterDescription("decomp.haa","H-alpha-A incoherent decomposition");
+    AddChoice("decomp.barnes","Barnes incoherent decomposition");
+    SetParameterDescription("decomp.barnes","Barnes incoherent decomposition");
     
     AddParameter(ParameterType_Group,"inco","Incoherent decompositions");
     SetParameterDescription("inco","This group allows setting parameters related to the incoherent decompositions.");
@@ -146,13 +160,16 @@ private:
 	if ( (!inhv) && (!invh) )
 	  otbAppLogFATAL( << "Parameter inhv or invh not set. Please provide a HV or a VH complex image.");
     
+    m_SRFilter = SRFilterType::New();
+	m_HAFilter = HAFilterType::New();
+	m_MeanFilter = PerBandMeanFilterType::New();
+    MeanFilterType::InputSizeType radius;
+    m_BarnesFilter = BarnesFilterType::New();
+    
+    
     switch (GetParameterInt("decomp"))
       {
 		case 0: // H-alpha-A
-		
-		m_SRFilter = SRFilterType::New();
-		m_HAFilter = HAFilterType::New();
-		m_MeanFilter = PerBandMeanFilterType::New();
 		
 		if (inhv)
 		  m_SRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("inhv"));
@@ -162,14 +179,31 @@ private:
 		m_SRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
 		m_SRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		MeanFilterType::InputSizeType radius;
         radius.Fill( GetParameterInt("inco.kernelsize") );
         m_MeanFilter->GetFilter()->SetRadius(radius);
-		
 		
 		m_MeanFilter->SetInput(m_SRFilter->GetOutput());
 		m_HAFilter->SetInput(m_MeanFilter->GetOutput());
 		SetParameterOutputImage("out", m_HAFilter->GetOutput() );
+    
+		break;
+        
+		case 1: // Barnes
+
+		if (inhv)
+		  m_SRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("inhv"));
+	    else if (invh)
+		  m_SRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("invh"));
+
+		m_SRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
+		m_SRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
+		
+        radius.Fill( GetParameterInt("inco.kernelsize") );
+        m_MeanFilter->GetFilter()->SetRadius(radius);
+		
+		m_MeanFilter->SetInput(m_SRFilter->GetOutput());
+		m_BarnesFilter->SetInput(m_MeanFilter->GetOutput());
+		SetParameterComplexOutputImage("out", m_BarnesFilter->GetOutput() );
     
 		break;
 	  }
@@ -179,6 +213,7 @@ private:
   //MCPSFilterType::Pointer m_MCPSFilter;
   SRFilterType::Pointer m_SRFilter;
   HAFilterType::Pointer m_HAFilter;
+  BarnesFilterType::Pointer m_BarnesFilter;
   PerBandMeanFilterType::Pointer m_MeanFilter;
   
 }; 
