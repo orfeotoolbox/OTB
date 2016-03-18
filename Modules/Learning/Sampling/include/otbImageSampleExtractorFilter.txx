@@ -18,9 +18,6 @@
 #ifndef __otbImageSampleExtractorFilter_txx
 #define __otbImageSampleExtractorFilter_txx
 
-#include "otbMaskedIteratorDecorator.h"
-#include "itkImageRegionConstIteratorWithOnlyIndex.h"
-#include "itkImageRegionConstIterator.h"
 #include "itkDefaultConvertPixelTraits.h"
 
 namespace otb
@@ -30,62 +27,42 @@ namespace otb
 template<class TInputImage>
 PersistentImageSampleExtractorFilter<TInputImage>
 ::PersistentImageSampleExtractorFilter() :
-  m_LayerIndex(0)
+  m_LayerIndex(0),
+  m_SampleFieldPrefix(std::string("band_"))
 {
-  this->SetNumberOfRequiredInputs(2);
-  this->SetNumberOfRequiredOutputs(2);
+  this->SetNumberOfRequiredInputs(3);
+  this->SetNumberOfRequiredOutputs(1);
   this->SetNthOutput(0,TInputImage::New());
-  this->SetNthOutput(1,OGRDataType::New());
-  this->m_FieldPrefix = std::string("band_");
+  
+  // TODO : add setter for m_GeometryType in base class
 }
 
 template<class TInputImage>
 void
 PersistentImageSampleExtractorFilter<TInputImage>
-::SetInputOGRData(const otb::ogr::DataSource* vector)
+::SetSamplePositions(const otb::ogr::DataSource* vector)
 {
-  this->SetNthInput(1, const_cast<otb::ogr::DataSource *>( vector ));
+  this->SetNthInput(2, const_cast<otb::ogr::DataSource *>( vector ));
 }
 
 template<class TInputImage>
 const otb::ogr::DataSource*
 PersistentImageSampleExtractorFilter<TInputImage>
-::GetInputOGRData()
+::GetSamplePositions()
 {
-  if (this->GetNumberOfInputs()<2)
+  if (this->GetNumberOfInputs()<3)
     {
     return 0;
     }
-  return static_cast<const otb::ogr::DataSource *>(this->itk::ProcessObject::GetInput(1));
+  return static_cast<const ogr::DataSource *>(this->itk::ProcessObject::GetInput(2));
 }
-
-template<class TInputImage>
-void
-PersistentImageSampleExtractorFilter<TInputImage>
-::SetOutputOGRData(const otb::ogr::DataSource* vector)
-{
-  this->SetNthOutput(1, const_cast<otb::ogr::DataSource *>( vector ));
-}
-
-template<class TInputImage>
-const otb::ogr::DataSource*
-PersistentImageSampleExtractorFilter<TInputImage>
-::GetOutputOGRData()
-{
-  if (this->GetNumberOfOutputs()<2)
-    {
-    return 0;
-    }
-  return static_cast<const otb::ogr::DataSource *>(this->itk::ProcessObject::GetOutput(1));
-}
-
 
 template<class TInputImage>
 void
 PersistentImageSampleExtractorFilter<TInputImage>
 ::Synthetize(void)
 {
-  otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetInputOGRData());
+  ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetSamplePositions());
   vectors->GetLayer(m_LayerIndex).SetSpatialFilter(NULL);
   
   // TODO ?
@@ -96,76 +73,112 @@ void
 PersistentImageSampleExtractorFilter<TInputImage>
 ::Reset(void)
 {
-  // TODO
-}
-
-template<class TInputImage>
-itk::DataObject::Pointer
-PersistentImageSampleExtractorFilter<TInputImage>
-::MakeOutput(DataObjectPointerArraySizeType idx)
-{
-  switch (idx)
+  // initialize output DataSource if copy mode
+  const ogr::DataSource* inVectors = this->GetSamplePositions();
+  ogr::DataSource* outVectors = const_cast<ogr::DataSource*>(this->GetOGRDataSource());
+  bool updateMode = bool(inVectors == outVectors);
+  unsigned int outLayerIndex = 0;
+  if (!updateMode)
     {
-    case 0:
-      return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-      break;
-    case 1:
-      return static_cast<itk::DataObject*>(otb::ogr::DataSource::New().GetPointer());
-      break;
-    default:
-      // might as well make an image
-      return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-      break;
+    this->Initialize();
+    // TODO : get the output layer index 
+    }
+  else
+    {
+    // update mode : set LayerName and FieldName to match SamplePosition OGRDataSource
+    //this->SetLayerName(inVectors->GetLayer(m_LayerIndex).GetName());
+    
+    outLayerIndex = m_LayerIndex;
+    }
+
+  // initialize fields in output DataSource
+  ogr::Layer outLayer = outVectors->GetLayer(outLayerIndex);
+  OGRFeatureDefn &outFeatureDefn = outLayer.GetLayerDefn();
+  TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
+  unsigned int nbBand = inputImage->GetNumberOfComponentsPerPixel();
+  std::string sampleFieldName;
+  std::ostringstream oss;
+  for (unsigned int i=0 ; i<nbBand ; ++i)
+    {
+    oss.str(std::string(""));
+    oss << this->GetSampleFieldPrefix() << i;
+    sampleFieldName = oss.str();
+    // check if a field is already here
+    if (outFeatureDefn.GetFieldIndex(sampleFieldName.c_str()) < 0)
+      {
+      OGRFieldDefn field(sampleFieldName.c_str(),OFTReal);
+      outLayer.CreateField(field, true);
+      }
     }
 }
 
 //template<class TInputImage>
-//void
+//itk::DataObject::Pointer
 //PersistentImageSampleExtractorFilter<TInputImage>
-//::GenerateInputRequestedRegion()
+//::MakeOutput(DataObjectPointerArraySizeType idx)
 //{
-  //InputImageType *input = const_cast<InputImageType*>(this->GetInput());
-  //MaskImageType *mask = const_cast<MaskImageType*>(this->GetMask());
-
-  //RegionType requested = this->GetOutput()->GetRequestedRegion();
-  //RegionType emptyRegion = input->GetLargestPossibleRegion();
-  //emptyRegion.SetSize(0,0);
-  //emptyRegion.SetSize(1,0);
-
-  //input->SetRequestedRegion(emptyRegion);
-
-  //if (mask)
+  //switch (idx)
     //{
-    //mask->SetRequestedRegion(requested);
+    //case 0:
+      //return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+      //break;
+    //case 1:
+      //return static_cast<itk::DataObject*>(otb::ogr::DataSource::New().GetPointer());
+      //break;
+    //default:
+      //// might as well make an image
+      //return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+      //break;
     //}
 //}
 
 template<class TInputImage>
-void
+typename PersistentImageSampleExtractorFilter<TInputImage>::OGRDataSourcePointerType
 PersistentImageSampleExtractorFilter<TInputImage>
-::GenerateData()
+::ProcessTile()
 {
   // Retrieve inputs
   TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
   TInputImage* outputImage = this->GetOutput();
-  const otb::ogr::DataSource* inVectors = this->GetInputOGRData();
-  otb::ogr::DataSource* outVectors = const_cast<otb::ogr::DataSource*>(this->GetOutputOGRData());
+  ogr::DataSource* inVectors = const_cast<ogr::DataSource*>(this->GetSamplePositions());
+  ogr::DataSource* outVectors = const_cast<ogr::DataSource*>(this->GetOGRDataSource());
+  bool updateMode = bool(inVectors == outVectors);
   PointType imgPoint;
   IndexType imgIndex;
   PixelType imgPixel;
-  InternalPixelType imgComp;
+  double imgComp;
   RegionType requestedRegion = outputImage->GetRequestedRegion();
-  bool updateMode = bool(inVectors == outVectors);
   unsigned int nbBand = inputImage->GetNumberOfComponentsPerPixel();
+  std::ostringstream oss;
+  std::string fieldName;
+  ogr::Layer inLayer = inVectors->GetLayer(m_LayerIndex);
   
+  // Apply spatial filter on input sample positions
   this->ApplyPolygonsSpatialFilter();
   
-  ogr::Layer layer = inVectors->GetLayer(m_LayerIndex);
+  // Prepare temporary output data source
+  OGRDataSourcePointerType tmpDS = ogr::DataSource::New();
+  OGRSpatialReference * oSRS = inLayer.GetSpatialRef()->Clone();
+  tmpDS->CreateLayer( this->GetLayerName(),
+                      oSRS,
+                      this->GetGeometryType(),
+                      this->GetOGRLayerCreationOptions());
+  ogr::Layer dstLayer = tmpDS->GetLayer(0);
+  OGRFieldDefn labelField(this->GetFieldName().c_str(),OFTInteger);
+  dstLayer.CreateField(labelField, true);
+  for (unsigned int i=0 ; i<nbBand ; ++i)
+    {
+    oss.str(std::string(""));
+    oss << this->GetSampleFieldPrefix() << i;
+    fieldName = oss.str();
+    OGRFieldDefn sampleField(fieldName.c_str(),OFTReal);
+    dstLayer.CreateField(sampleField, true);
+    }
 
   // Loop across the features in the layer
   OGRGeometry *geom;
-  otb::ogr::Layer::const_iterator featIt = layer.begin(); 
-  for(; featIt!=layer.end(); ++featIt)
+  otb::ogr::Layer::iterator featIt = inLayer.begin(); 
+  for(; featIt!=inLayer.end(); ++featIt)
     {
     geom = featIt->ogr().GetGeometryRef();
     switch (geom->getGeometryType())
@@ -183,13 +196,34 @@ PersistentImageSampleExtractorFilter<TInputImage>
         imgPoint[1] = castPoint->getY();
         inputImage->TransformPhysicalPointToIndex(imgPoint,imgIndex);
         imgPixel = inputImage->GetPixel(imgIndex);
-        for (unsigned int i=0 ; i<nbBand ; ++i)
+
+        if (updateMode)
           {
-          imgComp = itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i,imgPixel);
-          // TODO
+          for (unsigned int i=0 ; i<nbBand ; ++i)
+            {
+            imgComp = static_cast<double>(itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i,imgPixel));
+            oss.str(std::string(""));
+            oss << this->GetSampleFieldPrefix() << i;
+            fieldName = oss.str();
+            // Set the fields directly in the input features
+            (*featIt)[fieldName].SetValue(imgComp);
+            }
           }
-        
-        
+        else
+          {
+          typename Superclass::OGRFeatureType dstFeature(dstLayer.GetLayerDefn());
+          dstFeature.SetFrom( *featIt, TRUE );
+          for (unsigned int i=0 ; i<nbBand ; ++i)
+            {
+            imgComp = static_cast<double>(itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i,imgPixel));
+            oss.str(std::string(""));
+            oss << this->GetSampleFieldPrefix() << i;
+            fieldName = oss.str();
+            // Fill the ouptut OGRDataSource
+            dstFeature[fieldName].SetValue(imgComp);
+            }
+          dstLayer.CreateFeature( dstFeature );
+          }
         break;
         }
       default:
@@ -199,8 +233,9 @@ PersistentImageSampleExtractorFilter<TInputImage>
         }
       }
     
-    // TODO
+    // TODO : multi-points ?
     }
+  return tmpDS;
 }
 
 template<class TInputImage>
@@ -209,7 +244,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
 ::ApplyPolygonsSpatialFilter()
 {
   TInputImage* outputImage = this->GetOutput();
-  otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetInputOGRData());
+  otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetSamplePositions());
   const RegionType& requestedRegion = outputImage->GetRequestedRegion();
   typename TInputImage::IndexType startIndex = requestedRegion.GetIndex();
   typename TInputImage::IndexType endIndex = requestedRegion.GetUpperIndex();

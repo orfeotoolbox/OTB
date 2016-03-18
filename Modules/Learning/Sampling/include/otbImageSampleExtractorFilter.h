@@ -18,7 +18,7 @@
 #ifndef __otbImageSampleExtractorFilter_h
 #define __otbImageSampleExtractorFilter_h
 
-#include "otbPersistentImageFilter.h"
+#include "otbPersistentImageToOGRDataFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "otbOGRDataSourceWrapper.h"
 
@@ -34,12 +34,12 @@ namespace otb
  */
 template<class TInputImage>
 class ITK_EXPORT PersistentImageSampleExtractorFilter :
-  public PersistentImageFilter<TInputImage, TInputImage>
+  public PersistentImageToOGRDataFilter<TInputImage>
 {
 public:
   /** Standard Self typedef */
   typedef PersistentImageSampleExtractorFilter            Self;
-  typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
+  typedef PersistentImageToOGRDataFilter<TInputImage>     Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
@@ -50,10 +50,9 @@ public:
   typedef typename InputImageType::IndexType              IndexType;
   typedef typename InputImageType::PixelType              PixelType;
   typedef typename InputImageType::InternalPixelType      InternalPixelType;
-  
 
-  typedef otb::ogr::DataSource                            OGRDataType;
-  typedef otb::ogr::DataSource::Pointer                   OGRDataPointer;
+  typedef typename Superclass::OGRDataSourceType          OGRDataSourceType;
+  typedef typename Superclass::OGRDataSourcePointerType   OGRDataSourcePointerType;
 
   typedef itk::DataObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
@@ -61,30 +60,26 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentImageSampleExtractorFilter, PersistentImageFilter);
+  itkTypeMacro(PersistentImageSampleExtractorFilter, PersistentImageToOGRDataFilter);
 
-  void SetInputOGRData(const otb::ogr::DataSource* vector);
-  const otb::ogr::DataSource* GetInputOGRData();
+  void SetSamplePositions(const otb::ogr::DataSource* vector);
+  const otb::ogr::DataSource* GetSamplePositions();
 
-  void SetOutputOGRData(const otb::ogr::DataSource* vector);
-  const otb::ogr::DataSource* GetOutputOGRData();
-
-  void Synthetize(void);
+  virtual void Synthetize(void);
 
   /** Reset method called before starting the streaming*/
-  void Reset(void);
-
+  virtual void Reset(void);
   
-  itkSetMacro(FieldPrefix, std::string);
-  itkGetMacro(FieldPrefix, std::string);
+  itkSetMacro(SampleFieldPrefix, std::string);
+  itkGetMacro(SampleFieldPrefix, std::string);
   
   itkSetMacro(LayerIndex, int);
   itkGetMacro(LayerIndex, int);
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  virtual itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
-  using Superclass::MakeOutput;
+  //virtual itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
+  //using Superclass::MakeOutput;
 
 protected:
   /** Constructor */
@@ -94,20 +89,22 @@ protected:
 
   // virtual void GenerateInputRequestedRegion();
 
-  virtual void GenerateData();
+  //virtual void GenerateData();
 
 private:
   PersistentImageSampleExtractorFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+  virtual OGRDataSourcePointerType ProcessTile();
+
+  /** Apply a spatial filtering on the OGRDataSource corresponding to the processed tile */
   void ApplyPolygonsSpatialFilter();
 
-  RegionType FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const;
-
-  std::string m_FieldPrefix;
-
-  // Layer to use in the shape file, default to 0
+  /** Layer to use in the shape file, default to 0 */
   int m_LayerIndex;
+  
+  /** Prefix to generate field names for each input channel */
+  std::string m_SampleFieldPrefix;
 };
 
 /**
