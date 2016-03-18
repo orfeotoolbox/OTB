@@ -71,7 +71,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
   /** Creation through the object factory */
   itkNewMacro(Self);
-  /** Runtime type informations */
+  /** Runtime type information */
   itkTypeMacro(RCC8GraphFileReader, RCC8GraphSource);
   /** Output related typedefs */
   typedef TOutputGraph                                OutputGraphType;
@@ -93,12 +93,12 @@ protected:
   /** Main computation method */
   virtual void GenerateData();
   /**
-   * Parse edge informations from a given line.
+   * Parse edge information from a given line.
    * \param line The line to parse.
    */
   void ParseEdge(const std::string& line);
   /**
-   * Parse vertex informations from a given line.
+   * Parse vertex information from a given line.
    * \param line The line to parse.
    */
   void  ParseVertex(const std::string& line);

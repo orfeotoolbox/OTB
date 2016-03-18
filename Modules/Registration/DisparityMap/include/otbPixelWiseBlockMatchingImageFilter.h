@@ -268,7 +268,7 @@ private:
  *  between the two input images (displacement is given in pixels, from left
  *  image to right image).
  *
- *  Masks are not mandatory. A mask allows to indicate pixels validity in
+ *  Masks are not mandatory. A mask allows indicating pixels validity in
  *  either left or right image. Left and right masks can be used independently.
  *  If masks are used, only pixels whose mask values are strictly positive
  *  will be considered for disparity matching. The other will exhibit a null

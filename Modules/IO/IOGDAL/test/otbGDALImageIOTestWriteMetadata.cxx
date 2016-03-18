@@ -560,11 +560,16 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
     }
 
   poBand = poDstDS->GetRasterBand(1);
-  poBand->RasterIO( GF_Write, 0, 0, 128, 128,
-                    abyRaster, 128, 128, GDT_Byte, 0, 0 );
+  const OGRErr errRasterIO = poBand->RasterIO( GF_Write, 0, 0, 128, 128,
+                                               abyRaster, 128, 128, GDT_Byte, 0, 0 );
 
+  if (errRasterIO != OGRERR_NONE)
+    {
+    std::cerr << "Unable to write image data." << std::endl;
+    return false;
+    }
 
-  // Get some informations from dataset
+  // Get some information from dataset
   infoDatasetCreate->m_Name = "Create";
   infoDatasetCreate->m_ProjRef = static_cast<std::string>(poDstDS->GetProjectionRef());
 
@@ -593,7 +598,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   if( poDataset == NULL )
      return false;
 
-  // Get some informations from file
+  // Get some information from file
   infoDatasetWR->m_Name = "WR";
   infoDatasetWR->m_ProjRef = static_cast<std::string>(poDataset->GetProjectionRef());
 

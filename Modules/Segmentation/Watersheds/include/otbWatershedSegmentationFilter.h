@@ -29,7 +29,7 @@ namespace otb {
 *   \brief Watershed composite filter allowing to set output type
 *
 *   This filter is a composite filter that encapsulates the
-*   itk::WatershedImageFilter and allows to set the type of the output
+*   itk::WatershedImageFilter and allows setting the type of the output
 *   image (which is not the case in the itk::WatershedImageFilter).
 *
 *   The composite filter internally casts the output from the

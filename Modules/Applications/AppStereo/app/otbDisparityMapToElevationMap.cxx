@@ -76,7 +76,7 @@ private:
     AddDocTag(Tags::Stereo);
 
     AddParameter(ParameterType_Group,"io","Input and output data");
-    SetParameterDescription("io","This group of parameters allows to set the input and output images and grids.");
+    SetParameterDescription("io","This group of parameters allows one to set input images, output images and grids.");
 
     AddParameter(ParameterType_InputImage,"io.in","Input disparity map");
     SetParameterDescription("io.in","The input disparity map (horizontal disparity in first band, vertical in second)");

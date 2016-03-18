@@ -103,7 +103,9 @@ public:
    *  This imageIO didn't support overviews */
   virtual unsigned int GetOverviewsCount()
   {
-    return 0;
+    // MANTIS-1154: Source image is always considered as the best
+    // resolution overview.
+    return 1;
   }
   
   /** Get information about overviews available into the file specified
@@ -139,7 +141,7 @@ private:
   RADImageIO(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /** Internal method to read header informations */
+  /** Internal method to read header information */
   bool InternalReadHeaderInformation(const std::string& file_name, std::fstream& file, const bool reportError);
 
 #define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \

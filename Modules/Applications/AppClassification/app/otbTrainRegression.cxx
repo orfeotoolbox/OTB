@@ -60,12 +60,12 @@ public:
   itkNewMacro(Self)
 
   itkTypeMacro(TrainRegression, otb::Wrapper::LearningApplicationBase)
-  
+
   typedef Superclass::SampleType              SampleType;
   typedef Superclass::ListSampleType          ListSampleType;
   typedef Superclass::TargetSampleType        TargetSampleType;
   typedef Superclass::TargetListSampleType    TargetListSampleType;
-  
+
   typedef Superclass::SampleImageType         SampleImageType;
   typedef SampleImageType::PixelType          PixelType;
 
@@ -82,7 +82,7 @@ public:
   typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
 
   typedef otb::ImageToEnvelopeVectorDataFilter<SampleImageType,VectorDataType> EnvelopeFilterType;
-  
+
   typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType> TreeIteratorType;
 
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
@@ -122,20 +122,20 @@ void DoInit()
 
   //Group IO
   AddParameter(ParameterType_Group, "io", "Input and output data");
-  SetParameterDescription("io", "This group of parameters allows to set input and output data.");
+  SetParameterDescription("io", "This group of parameters allows setting input and output data.");
   AddParameter(ParameterType_InputImageList, "io.il", "Input Image List");
   SetParameterDescription("io.il", "A list of input images. First (n-1) bands should contain the predictor. The last band should contain the output value to predict.");
   AddParameter(ParameterType_InputFilename, "io.csv", "Input CSV file");
   SetParameterDescription("io.csv","Input CSV file containing the predictors, and the output values in last column. Only used when no input image is given");
   MandatoryOff("io.csv");
-  
+
   AddParameter(ParameterType_InputFilename, "io.imstat", "Input XML image statistics file");
   MandatoryOff("io.imstat");
   SetParameterDescription("io.imstat",
                           "Input XML file containing the mean and the standard deviation of the input images.");
   AddParameter(ParameterType_OutputFilename, "io.out", "Output regression model");
   SetParameterDescription("io.out", "Output file containing the model estimated (.txt format).");
-  
+
   AddParameter(ParameterType_Float,"io.mse","Mean Square Error");
   SetParameterDescription("io.mse","Mean square error computed with the validation predictors");
   SetParameterRole("io.mse",Role_Output);
@@ -144,13 +144,13 @@ void DoInit()
   //Group Sample list
   AddParameter(ParameterType_Group, "sample", "Training and validation samples parameters");
   SetParameterDescription("sample",
-                          "This group of parameters allows to set training and validation sample lists parameters.");
+                          "This group of parameters allows you to set training and validation sample lists parameters.");
 
   AddParameter(ParameterType_Int, "sample.mt", "Maximum training predictors");
   //MandatoryOff("mt");
   SetDefaultParameterInt("sample.mt", 1000);
   SetParameterDescription("sample.mt", "Maximum number of training predictors (default = 1000) (no limit = -1).");
-  
+
   AddParameter(ParameterType_Int, "sample.mv", "Maximum validation predictors");
   // MandatoryOff("mv");
   SetDefaultParameterInt("sample.mv", 1000);
@@ -230,7 +230,7 @@ void ParseCSVPredictors(std::string path, ListSampleType* outputList)
           }
         if (words.size() < 2)
           {
-          otbAppLogFATAL(<< "Can't parse CSV file : less than 2 columns or unknonw separator (knowns ones are tab, space, comma and semi-colon)");
+          otbAppLogFATAL(<< "Can't parse CSV file : less than 2 columns or invalid separator (valid separators are tab, space, comma and semi-colon)");
           }
         nbCols = words.size();
         elem.SetSize(nbCols,false);
@@ -270,7 +270,7 @@ void DoExecute()
   //Iterate over all input images
 
   FloatVectorImageListType* imageList = GetParameterImageList("io.il");
-  
+
   //Iterate over all input images
   for (unsigned int imgIndex = 0; imgIndex < imageList->Size(); ++imgIndex)
     {
@@ -306,11 +306,11 @@ void DoExecute()
 
     // Setup the DEM Handler
     // otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
-    
+
     envelopeFilter->Update();
-    
+
     VectorDataType::Pointer envelope = envelopeFilter->GetOutput();
-    
+
     TreeIteratorType itVector(envelope->GetDataTree());
     for (itVector.GoToBegin(); !itVector.IsAtEnd(); ++itVector)
       {
@@ -456,14 +456,14 @@ void DoExecute()
   TargetListSampleType::Pointer labelListSample = TargetListSampleType::New();
   labelListSample->SetMeasurementVectorSize(1);
   labelListSample->Resize(rawlistSample->Size());
-  
+
   ListSampleType::Pointer validationListSample = ListSampleType::New();
   validationListSample->SetMeasurementVectorSize(nbFeatures);
   validationListSample->Resize(rawValidationListSample->Size());
   TargetListSampleType::Pointer validationLabeledListSample = TargetListSampleType::New();
   validationLabeledListSample->SetMeasurementVectorSize(1);
   validationLabeledListSample->Resize(rawValidationListSample->Size());
-  
+
   ListSampleType::MeasurementVectorType elem;
   TargetListSampleType::MeasurementVectorType outElem;
   for (ListSampleType::InstanceIdentifier i=0; i<rawlistSample->Size() ; ++i)
@@ -482,7 +482,7 @@ void DoExecute()
     elem.SetSize(nbFeatures,false);
     validationListSample->SetMeasurementVector(i,elem);
     }
-  
+
 
   otbAppLogINFO("Number of training samples: " << concatenateTrainingSamples->GetOutput()->Size());
   //--------------------------

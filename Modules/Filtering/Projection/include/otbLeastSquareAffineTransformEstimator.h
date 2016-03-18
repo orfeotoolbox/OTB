@@ -36,7 +36,7 @@ namespace otb {
  *
  * Tie points can be added through the AddTiePoints() method.
  *
- * The ClearTiePoints() method allows to remove all the tie points
+ * The ClearTiePoints() method allows removing all the tie points
  * that has been previously set.
  *
  * Once all the tie points have been feeded into the estimator, the

@@ -237,7 +237,7 @@ AeronetFileReader
     return;
     }
 
-  // Read informations lines (5 lines)
+  // Read information lines (5 lines)
   std::getline(fin, line);
   std::getline(fin, line);
   std::getline(fin, line);

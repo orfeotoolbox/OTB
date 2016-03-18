@@ -4,7 +4,7 @@ otb_fetch_module(otbGRM
 region-merging segmentation on satellite images. Three local homogeneity
 criteria are available: the Baatz & Schäpe criterion, the Full Lambda Schedule
 criterion and the simple Euclidean Distance criterion.  This application uses
-the GRM (Generic Region Merging) library which allows to add quickly a new local
+the GRM (Generic Region Merging) library which allows quickly adding a new local
 homogeneity criterion. Look at the template header file: GRMSegmenterTemplate.h
 to see which format you must respect to add a new criterion.
 

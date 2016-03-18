@@ -46,7 +46,7 @@ namespace otb
  *        on the disk.
  *
  * This filter begins by tiling the input image. An accessor
- * SetTileSize allows to set the size of each tile. For each tile
+ * SetTileSize allows setting the size of each tile. For each tile
  * generated, an entry is added to the shapefile to store the location
  * where the file is saved on the disk.
  * The product generated are a mapfile wich is the configuration file

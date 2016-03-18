@@ -86,12 +86,12 @@ void QtWidgetInputVectorDataListParameter::DoCreateWidget()
   connect(addButton, SIGNAL(clicked()), this, SLOT(AddFile()));
   addSupLayout->addWidget(addButton);
 
-  // Supress file button
+  // Suppress file button
   QPushButton * supButton = new QPushButton;
   supButton->setText("-");
   supButton->setFixedWidth(buttonSize);
-  supButton->setToolTip("Supress the selected file...");
-  connect(supButton, SIGNAL(clicked()), this, SLOT(SupressFile()));
+  supButton->setToolTip("Suppress the selected file...");
+  connect(supButton, SIGNAL(clicked()), this, SLOT(SuppressFile()));
   addSupLayout->addWidget(supButton);
   buttonLayout->addLayout(addSupLayout);
 
@@ -311,7 +311,7 @@ QtWidgetInputVectorDataListParameter::AddFile()
 }
 
 void
-QtWidgetInputVectorDataListParameter::SupressFile()
+QtWidgetInputVectorDataListParameter::SuppressFile()
 {
   m_FileLayout = new QVBoxLayout();
   m_FileLayout->setSpacing(0);

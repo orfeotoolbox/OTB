@@ -106,7 +106,7 @@ bool LUMImageIO::CanReadFile(const char* filename)
     return false;
     }
 
-  //Read header informations
+  //Read header information
   bool lResult = InternalReadHeaderInformation(header_file, false);
   header_file.close();
   return (lResult);
@@ -195,7 +195,7 @@ void LUMImageIO::ReadImageInformation()
     itkExceptionMacro(<< "LUMImageIO::ReadImageInformation() failed header open ! ");
     }
 
-  //Read header informations
+  //Read header information
   InternalReadHeaderInformation(m_File, true);
 
   otbMsgDebugMacro(<< "Driver to read: LUM");
@@ -227,7 +227,7 @@ bool LUMImageIO::InternalReadHeaderInformation(std::fstream& file, const bool re
     {
     if (reportError == true)
       {
-      itkExceptionMacro(<< "LUM : bad read of header informations");
+      itkExceptionMacro(<< "LUM : bad read of header information");
       }
     else
       {
@@ -300,7 +300,7 @@ bool LUMImageIO::InternalReadHeaderInformation(std::fstream& file, const bool re
   otbSwappFileOrderToSystemOrderMacro(int, &NbCol, 1);
   otbSwappFileOrderToSystemOrderMacro(int, &NbLig, 1);
 
-  //Initialization of image informations
+  //Initialization of image information
   m_Dimensions[0] = NbCol;
   m_Dimensions[1] = NbLig;
   this->SetNumberOfComponents(1);

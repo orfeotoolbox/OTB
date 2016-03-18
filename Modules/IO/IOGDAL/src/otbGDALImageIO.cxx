@@ -160,6 +160,7 @@ GDALImageIO::GDALImageIO()
   m_NumberOfOverviews = 0;
   m_ResolutionFactor = 0;
   m_BytePerPixel = 0;
+  m_WriteRPCTags = false;
 }
 
 GDALImageIO::~GDALImageIO()
@@ -441,11 +442,14 @@ bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector
   char** papszMetadata;
   papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
 
+  std::cout << m_Dataset->GetDataSet()->GetDriver()->GetDescription() << std::endl;
+
   // Have we find some dataSet ?
   // This feature is supported only for hdf4 and hdf5 file (regards to the bug 270)
   if ( (CSLCount(papszMetadata) > 0) &&
        ( (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF4") == 0) ||
-         (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF5") == 0) ) )
+         (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF5") == 0) ||
+	 (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"SENTINEL2") == 0) ) )
     {
     for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
       {
@@ -960,7 +964,18 @@ void GDALImageIO::InternalReadImageInformation()
   gcpCount = dataset->GetGCPCount();
   if (gcpCount > 0)
     {
-    std::string gcpProjectionKey = static_cast<std::string>(dataset->GetGCPProjection());
+    std::string gcpProjectionKey;
+
+    {
+    // Declare gcpProj in local scope. So, it won't be available outside.
+    const char * gcpProj = dataset->GetGCPProjection();
+
+    // assert( gcpProj!=NULL );
+
+    if( gcpProj!=NULL )
+      gcpProjectionKey = gcpProj;
+    }
+
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionKey);
 
     if (gcpProjectionKey.empty())
@@ -1720,7 +1735,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     itk::ExposeMetaData<ImageKeywordlist>(dict,
                                           MetaDataKey::OSSIMKeywordlistKey,
                                           otb_kwl);
-    if( otb_kwl.GetSize() != 0 )
+    if( m_WriteRPCTags && otb_kwl.GetSize() != 0 )
       {
       GDALRPCInfo gdalRpcStruct;
       if ( otb_kwl.convertToGDALRPC(gdalRpcStruct) )

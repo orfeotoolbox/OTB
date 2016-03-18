@@ -81,7 +81,7 @@ private:
     SetParameterDescription( "in", "The input image to classify.");
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input Mask");
-    SetParameterDescription( "mask", "The mask allows to restrict classification of the input image to the area where mask pixel values are greater than 0.");
+    SetParameterDescription( "mask", "The mask allows restricting classification of the input image to the area where mask pixel values are greater than 0.");
     MandatoryOff("mask");
 
     AddParameter(ParameterType_InputFilename, "model", "Model file");

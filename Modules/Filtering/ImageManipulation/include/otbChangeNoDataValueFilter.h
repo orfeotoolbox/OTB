@@ -64,7 +64,7 @@ public:
  *  This filter reads the no-data flags (a boolean vector indicating
  *  for each band if a no-data value exists) and values (the actual
  *  value to be used as no-data for each band) from
- *  MetaDataDictionary, and allows to change this value.
+ *  MetaDataDictionary, and allows changing this value.
  * 
  *  The algorithm is the following: for each pixel, for each channel
  *  in the pixel, if there is a no-data value for this channel

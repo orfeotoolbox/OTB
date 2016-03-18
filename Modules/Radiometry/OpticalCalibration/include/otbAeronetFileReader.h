@@ -82,7 +82,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
   /** Creation through the object factory */
   itkNewMacro(Self);
-  /** Runtime type informations */
+  /** Runtime type information */
   itkTypeMacro(AeronetFileReader, itk::ProcessObject);
 
   /** Overiding of the GetOutput() method */

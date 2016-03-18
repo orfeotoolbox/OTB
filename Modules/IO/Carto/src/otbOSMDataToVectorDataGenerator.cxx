@@ -193,7 +193,7 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
           // Get the value of the key
           std::string resultValue = currentTag->Attribute("v");
 
-          // Fill the element informations
+          // Fill the element information
           elementPair.first  = result;
           elementPair.second = resultValue;
 

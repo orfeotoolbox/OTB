@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
   // not stored in a file nor a data base.
   //
   // Then, the processing is started by calling \code{Update()}. The actual
-  // serialization of the results is guaranteed to be completed when the ouput
+  // serialization of the results is guaranteed to be completed when the output
   // geometries set object goes out of scope, or when \code{SyncToDisk} is
   // called.
   //

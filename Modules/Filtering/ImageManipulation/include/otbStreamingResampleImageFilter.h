@@ -35,12 +35,12 @@ namespace otb
  *         by setting a transform. The filter computes a displacement
  *         grid using the transform set and used it to warp the input.
  *
- * The otb::StreamingResampleImageFilter allows to resample a
+ * The otb::StreamingResampleImageFilter allows resampling a
  * otb::VectorImage using a transformation set with SetTransform()
  * method. First, a displacement grid, with a spacing m_DisplacementGridSpacing
  * and a size relative to this spacing, is built. Then, the image is
- * wraped using this displacement grid. The size (SetOuputSize()), the
- * spacing (SetOuputSpacing()), the start index (SetOutputIndex()) and
+ * wraped using this displacement grid. The size (SetOutputSize()), the
+ * spacing (SetOutputSpacing()), the start index (SetOutputIndex()) and
  * the  interpolator (SetInterpolator()) and the origin (SetOrigin())
  * can be set using the method between brackets.
  *

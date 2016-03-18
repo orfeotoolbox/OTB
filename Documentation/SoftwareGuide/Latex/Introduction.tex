@@ -1,0 +1,378 @@
+\chapter{Welcome}
+\label{chapter:Welcome}
+
+Welcome to the \emph{ORFEO ToolBox (OTB) Software Guide}.
+
+This document presents the essential concepts used in OTB. It will
+guide you through the road of learning and using OTB. The Doxygen
+documentation for the OTB application programming interface is
+available on line at \url{https://www.orfeo-toolbox.org/doxygen}.
+
+\section{Organization}
+\label{sec:Organization}
+
+This software guide is divided into several parts, each of which is further
+divided into several chapters. Part~\ref{part:introduction} is a general
+introduction to OTB,
+with---in the next chapter---a description of how to install the ORFEO
+Toolbox on your computer. Part~\ref{part:introduction} also
+introduces basic system concepts such as an overview of the system
+architecture, and how to build applications in the C++ programming
+language. Part \ref{part:tutorials} is a short guide with gradual difficulty to
+get you start programming with OTB. Part~\ref{part:userguide} describes the
+system from the user point of view. Dozens
+of examples are used to illustrate important system features.
+Part~\ref{part:developerguide}  is for
+the OTB developer. It explains how to create your own classes and extend
+the system.%, and interface to windowing and GUI systems.
+
+\section{How to Learn OTB}
+\label{sec:HowToLearnOTB}
+
+There are two broad categories of users of OTB. First are class
+developers, those who create classes in C++. The second, users, employ
+existing C++ classes to build applications. Class developers must be
+proficient in C++, and if they are extending or modifying OTB, they
+must also be familiar with OTB's internal structures and design
+(material covered in Part~\ref{part:developerguide}).
+
+The key to learning how to use OTB is to become familiar with its
+palette of objects and the ways of combining them. We recommend that you learn
+the system by studying the
+examples and then, if you are a class developer, study the source
+code. Start by the first few tutorials in Part~\ref{part:tutorials} to get
+familiar with the build process and the general program organization, follow by
+reading Chapter \ref{chapter:SystemOverview}, which provides an overview of some
+of the key concepts in the system, and then review the examples in
+Part~\ref{part:userguide}. You may also wish to compile and run the dozens of
+examples
+distributed with the source code found in the directory
+\code{OTB/Examples}. (Please see the file
+\code{OTB/Examples/README.txt} for a description of the examples
+contained in the various subdirectories.) There are also several
+hundreds of tests found in the source distribution in
+\code{OTB/Testing/Code}, most of which are minimally documented
+testing code. However, they may be useful to see how classes are used
+together in OTB, especially since they are designed to exercise as
+much of the functionality of each class as possible.
+
+\section{Software Organization}
+\label{sec:SoftwareOrganization}
+
+The following sections describe the directory contents, summarize the
+software functionality in each directory, and locate the documentation and
+data.
+
+\subsection{Obtaining the Software}
+\label{sec:ObtainingTheSoftware}
+
+Periodic releases of the software are available on the OTB Website. These
+official releases are available a few times a year and announced on the ORFEO
+Web pages and mailing lists.
+
+This software guide assumes that you are working with the latest official OTB
+release (available on the OTB Web site). %If you are a new user,
+%we highly recommend that you use the released version of the software.
+
+
+OTB can be downloaded without cost from the following web site:
+\begin{center}
+  \url{http://www.orfeo-toolbox.org/}
+\end{center}
+In order to track the kind of applications for which OTB is being used, you
+will be asked to complete a form prior to downloading the software.
+The information you provide in this form will help developers to get a better
+idea of the interests and skills of the toolkit users.
+
+Once you fill out this form you will have access to the download
+page. This page can be book marked to facilitate subsequent visits to
+the download site without having to complete any form again.
+
+ Then choose the tarball that better fits your system. The options
+are \code{.zip} and \code{.tgz} files.  The first type is better suited for
+MS-Windows while the second one is the preferred format for UNIX systems.
+
+Once you unzip or untar the file, a directory called \code{OTB} will be
+created in your disk and you will be ready for starting the configuration
+process described in Section \ref{chapter:Installation}.
+
+
+There are two other ways of getting the OTB source code:
+\begin{itemize}
+\item Clone the current release with \href{https://git-scm.com/}{Git} from the
+  \href{https://git.orfeo-toolbox.org/otb.git}{OTB git server}, (master branch)
+\item Clone the latest revision with \href{https://git-scm.com/}{Git} from the
+  \href{https://git.orfeo-toolbox.org/otb.git}{OTB git server} (develop branch).
+\end{itemize}
+
+These last two options need a proper \href{https://git-scm.com/}{Git} installation. To get source code from Git, do:
+\begin{verbatim}
+git clone https://git@git.orfeo-toolbox.org/git/otb.git
+\end{verbatim}
+
+Using Git, you can easily navigate through the different versions. For instance, this brings you to the stable branch for version 5.2:
+\begin{verbatim}
+git checkout release-5.2
+\end{verbatim}
+
+And this brings you to the latest development version:
+\begin{verbatim}
+git checkout develop
+\end{verbatim}
+
+There is also a mirror of OTB official repository on \href{https://github.com/orfeotoolbox/OTB}{GitHub}.
+You can find more information on the OTB git workflow in the \href{http://wiki.orfeo-toolbox.org/index.php/Git}{wiki}.
+
+\subsection{Directory Structure}
+\label{sec:DirectoryStructure}
+
+To begin your OTB odyssey, you will first need to know something about OTB's
+software organization and directory structure. It is helpful to know enough to
+navigate through the code base to find examples, code, and documentation.
+
+The \code{OTB} contains the following subdirectories:
+\begin{itemize}
+        \item \code{OTB/Modules}---the heart of the software; the location
+        of the majority of the source code.
+        \item \code{OTB/CMake}---internal files used during the
+        configuration process.
+        \item \code{OTB/Copyright}---the copyright information of OTB
+        and all the dependencies included in the OTB source tree.
+        \item \code{OTB/Examples}---a suite of simple, well-documented
+        examples used by this guide and to illustrate important
+        OTB concepts.
+        \item \code{OTB/Superbuild}---CMake scripts to automatically download, patch, build and install important
+        depencies of OTB (ITK, OSSIM, GDAL to name a few).
+        \item \code{OTB/Utilities}---small programs used for the maintenance of OTB.
+\end{itemize}
+
+
+OTB is organized into different modules, each one covering different part of image processing.
+It is therefore important to understand the source code directory structure---found in \code{OTB/Modules}---.
+\begin{itemize}
+  \item \code{OTB/Modules/Adapters}---Adapters for Boost, Curl, Gdal, OpenThreads and Ossim.
+  \item \code{OTB/Modules/Applications}---a set of applications modules that can be launched in different ways
+    (command-line, graphical interface, Python/Java), refer to the OTB Cookbook for more information.
+  \item \code{OTB/Modules/Core}---core classes, macro definitions,
+  typedefs, and other software constructs central to OTB.
+  \item \code{OTB/Modules/Detection}---detection of clouds, roads.
+  \item \code{OTB/Modules/Feature}---various local descriptors and features.
+  \item \code{OTB/Modules/Filtering}---basic image processing filters.
+  \item \code{OTB/Modules/Fusion}---image fusion algorithms, as for
+  instance, pansharpening.
+  \item \code{OTB/Modules/Hyperspectral}---hyperspectral images analysis.
+  \item \code{OTB/Modules/IO}---classes that support the reading
+  and writing of data.     
+  \item \code{OTB/Modules/Learning}---several functionalities for
+	supervised learning and classification.
+  \item \code{OTB/Modules/OBIA}---Object Based Image Analysis filters
+	and data structures.         
+  \item \code{OTB/Modules/Radiometry}---classes allowing to compute
+  vegetation indices and radiometric corrections.    
+  \item \code{OTB/Modules/Registration}---classes for registration of images or other data structures to each other.  
+  \item \code{OTB/Modules/Remote}---Functions to fetch remote modules. 
+  \item \code{OTB/Modules/Segmentation}---several functionalities for image segmentation. 
+  \item \code{OTB/Modules/ThirdParty}---Modules that import OTB's dependencies.
+  \item \code{OTB/Modules/Wrappers}---Applications wrappers with several access points (command-line, QT Gui, SWIG\ldots).
+\end{itemize}
+
+
+See also chapter \ref{chapter:newModules} for more information about how to write modules.
+
+\subsection{Documentation}
+\label{sec:Documentation}
+
+Besides this text, there are other documentation resources that you should be
+aware of.
+\begin{description}
+        \item[Doxygen Documentation.] The Doxygen documentation is an
+        essential resource when working with OTB. These extensive Web
+        pages describe in detail every class and method in the
+        system. The documentation also contains inheritance and
+        collaboration diagrams, listing of event invocations, and data
+        members. The documentation is heavily hyper-linked to other
+        classes and to the source code. The Doxygen documentation is
+        available on-line at
+        \url{http://www.orfeo-toolbox.org/doxygen/}.
+
+	\item[Header Files.] Each OTB class is implemented with a .h and
+        .cxx/.txx file (.txx file for templated classes). All methods
+        found in the .h header files are documented and provide a quick way
+        to find documentation for a particular method. (Indeed, Doxygen uses
+        the header documentation to produces its output.)
+\end{description}
+
+\subsection{Data}
+\label{sec:Data}
+
+The OTB Toolkit was designed to support the ORFEO Acompaniment Program
+and its associated data. This data is available at
+\url{http://smsc.cnes.fr/PLEIADES/index.htm}.
+
+
+
+\section{The OTB Community and Support}
+\label{sec:AdditionalResources}
+
+\subsection{Join the Mailing List}
+\label{sec:JoinMailList}
+
+\index{OTB!mailing list}
+\index{mailing list}
+
+It is strongly recommended that you join the users mailing list. This is one
+of the primary resources for guidance and help regarding the use of the
+toolkit. You can subscribe to the users list online at
+
+\begin{center}
+\url{http://groups.google.com/group/otb-users}
+\end{center}
+
+The otb-users mailing list is also the best mechanism for expressing your
+opinions about the toolbox and to let developers know about features that you
+find useful, desirable or even unnecessary. OTB developers are committed to
+creating a self-sustaining open-source OTB community. Feedback from users is
+fundamental to achieving this goal.
+
+\subsection{Community}
+OTB was created from its inception as a collaborative, community
+effort. Research, teaching, and commercial uses of the toolkit are
+expected. If you would like to participate in the community, there are a
+number of possibilities.
+
+\begin{itemize}
+       \item Users may actively report bugs, defects in the system API,
+       and/or submit feature requests. Currently the best way to do this is
+       through the OTB users mailing list.
+
+       \item Developers may contribute classes or improve existing
+       classes. If you are a developer, you may request permission to join
+       the OTB developers mailing list. Please do so by sending email to
+       otb ``at'' cnes.fr. To become a developer you need to
+       demonstrate both a level of competence as well as
+       trustworthiness. You may wish to begin by submitting fixes to the OTB
+       users mailing list.
+
+       \item Research partnerships with members of the ORFEO
+       Acompaniment Program are encouraged. CNES will encourage the use of
+       OTB in proposed work and research projects.
+
+%%        \item For those developing commercial applications with OTB,
+%%        support and consulting are available from Kitware at
+%%        \url{http://www.kitware.com}. Kitware also offers short OTB courses
+%%        either at a site of your choice or periodically at Kitware.
+
+       \item Educators may wish to use OTB in courses. Materials are being
+       developed for this purpose, e.g., a one-day, conference course and
+       semester-long graduate courses. Watch the OTB web pages or check in
+       the \code{OTB-Documents/CourseWare} directory for more information.
+\end{itemize}
+
+Orfeo ToolBox is currently in the incubation stage of being part of the
+OSGeo\footnote{http://www.osgeo.org/} foundation.Within the ORFEO ToolBox
+community we act respectfully toward others in line with the OSGeo Code of
+Conduct\footnote{http://www.osgeo.org/code\_of\_conduct}.
+
+
+\section{A Brief History of OTB}
+\label{sec:History}
+
+\index{OTB!history}
+
+
+Beside the Pleiades (PHR) and Cosmo-Skymed (CSK) systems developments forming
+ORFEO, the dual and bilateral system (France - Italy) for Earth Observation, the
+ORFEO Accompaniment Program was set up, to prepare, accompany and promote the
+use and the exploitation of the images derived from these sensors.
+
+The creation of a preparatory
+program\footnote{http://smsc.cnes.fr/PLEIADES/A\_prog\_accomp.htm} is needed
+because of :
+\begin{itemize}
+\item the new capabilities and performances of the ORFEO systems (optical and
+radar high resolution, access capability, data quality, possibility to acquire
+simultaneously in optic and radar),
+\item the implied need of new methodological developments : new processing
+methods, or adaptation of existing methods,
+\item the need to realize those new developments in very close
+  cooperation with the final users for better integration of new products in
+their systems.
+
+\end{itemize}
+
+This program was initiated by CNES mid-2003 and will last until 2010 at least
+It consists in two parts, between which it is necessary to keep a strong
+interaction :
+\begin{itemize}
+\item A Thematic part
+\item A Methodological part.
+\end{itemize}
+
+The Thematic part covers a large range of applications (civil and
+defence ones), and aims at specifying and validating value added
+products and services required by end users. This part includes
+consideration about products integration in the operational systems or
+processing lines. It also includes a careful thought on intermediary
+structures to be developed to help non-autonomous users. Lastly, this part aims
+at raising future users awareness, through practical demonstrations and
+validations.
+
+The Methodological part objective is the definition and the
+development of tools for the operational exploitation of the future
+submetric optic and radar images (tridimensional aspects, change
+detection, texture analysis, pattern matching, optic radar
+complementarities). It is mainly based on R\&D studies and doctorate
+and post-doctorate research.
+
+In this context, CNES\footnote{http://www.cnes.fr} decided to develop
+the \emph{ORFEO ToolBox} (OTB), a set of algorithms encapsulated in a
+software library. The goals of the OTB is to capitalize a methological
+\textit{savoir faire} in order to adopt an incremental development
+approach aiming to efficiently exploit the results obtained in the
+frame of methodological R\&D studies.
+
+All the developments are based on FLOSS (Free/Libre Open Source
+Software) or existing CNES developments.
+
+OTB is implemented in C++ and is mainly based on
+ITK\footnote{http://www.itk.org} (Insight Toolkit):
+\begin{itemize}
+  \item ITK is used as the core element of OTB
+  \item OTB classes inherit from ITK classes
+  \item The software development procedure of OTB is strongly inspired
+  from ITK's (Extreme Programming, test-based coding, Generic
+  Programming, etc.)
+  \item The documentation production procedure is the same as for ITK
+  \item Several chapters of the Software Guide are literally copied
+  from ITK's Software Guide (with permission).
+  \item Many examples are taken from ITK.
+\end{itemize}
+
+\subsection{ITK's history}
+
+In 1999 the US National Library of Medicine of the National Institutes of
+Health awarded six three-year contracts to develop an open-source
+registration and segmentation toolkit, that eventually came to be known as
+the Insight Toolkit (ITK) and formed the basis of the Insight Software
+Consortium. ITK's NIH/NLM Project Manager was Dr. Terry Yoo, who coordinated the
+six prime contractors composing the Insight consortium. These consortium
+members included three commercial partners---GE Corporate R\&D, Kitware,
+Inc., and MathSoft (the company name is now Insightful)---and three academic
+partners---University of North Carolina (UNC), University of Tennessee (UT)
+(Ross Whitaker subsequently moved to University of Utah), and University of
+Pennsylvania (UPenn). The Principle Investigators for these partners were,
+respectively, Bill Lorensen at GE CRD, Will Schroeder at Kitware, Vikram
+Chalana at Insightful, Stephen Aylward with Luis Ib\'a\~nez at UNC (Luis is now
+at Kitware), Ross Whitaker with Josh Cates at UT (both now at Utah), and
+Dimitri Metaxas at UPenn (now at Rutgers). In addition, several
+subcontractors rounded out the consortium including Peter Raitu at Brigham \&
+Women's Hospital, Celina Imielinska and Pat Molholt at Columbia University,
+Jim Gee at UPenn's Grasp Lab, and George Stetten at the University of
+Pittsburgh.
+
+In 2002 the first official public release of ITK was made
+available.
+
+
+
+

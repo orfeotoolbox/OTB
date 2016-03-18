@@ -463,7 +463,7 @@ ImageFileWriter<TInputImage>
 
   // Manage extended filename
   if ((strcmp(m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
-      && m_FilenameHelper->gdalCreationOptionsIsSet()   )
+      && (m_FilenameHelper->gdalCreationOptionsIsSet() || m_FilenameHelper->WriteRPCTagsIsSet())  )
     {
     typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(m_ImageIO.GetPointer());
 
@@ -477,6 +477,7 @@ ImageFileWriter<TInputImage>
       }
 
     imageIO->SetOptions(m_FilenameHelper->GetgdalCreationOptions());
+    imageIO->SetWriteRPCTags(m_FilenameHelper->GetWriteRPCTags());
     }
 
 
@@ -682,7 +683,7 @@ ImageFileWriter<TInputImage>
   this->ReleaseInputs();
 
   //Reset global shift on input region (box parameter)
-  //It allows to call multiple update over the writer
+  //It allows calling multiple update over the writer
   m_ShiftOutputIndex.Fill(0);
 }
 

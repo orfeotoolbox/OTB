@@ -34,12 +34,16 @@ ExtendedFilenameToWriterOptions
   m_Options.writeGEOMFile.first  = false;
   m_Options.writeGEOMFile.second = true;
 
+  m_Options.writeRPCTags.first = false;
+  m_Options.writeRPCTags.second = false;
+  
   m_Options.gdalCreationOptions.first = false;
   m_Options.streamingType.first       = false;
   m_Options.streamingSizeMode.first   = false;
   m_Options.streamingSizeValue.first  = false;
 
   m_Options.optionList.push_back("writegeom");
+  m_Options.optionList.push_back("writerpctags");
   m_Options.optionList.push_back("streaming:type");
   m_Options.optionList.push_back("streaming:sizemode");
   m_Options.optionList.push_back("streaming:sizevalue");
@@ -85,6 +89,20 @@ ExtendedFilenameToWriterOptions
        }
      }
 
+  if (!map["writerpctags"].empty())
+     {
+     m_Options.writeRPCTags.first = true;
+     if (   map["writerpctags"] == "On"
+         || map["writerpctags"] == "on"
+         || map["writerpctags"] == "ON"
+         || map["writerpctags"] == "true"
+         || map["writerpctags"] == "True"
+         || map["writerpctags"] == "1"   )
+       {
+       m_Options.writeRPCTags.second = true;
+       }
+     }
+  
   if(!map["streaming:type"].empty())
     {
     if(map["streaming:type"] == "auto"
@@ -184,11 +202,26 @@ ExtendedFilenameToWriterOptions
 {
   return m_Options.writeGEOMFile.first;
 }
+
+bool
+ExtendedFilenameToWriterOptions
+::WriteRPCTagsIsSet () const
+{
+  return m_Options.writeRPCTags.first;
+}
+
 bool
 ExtendedFilenameToWriterOptions
 ::GetWriteGEOMFile () const
 {
   return m_Options.writeGEOMFile.second;
+}
+
+bool
+ExtendedFilenameToWriterOptions
+::GetWriteRPCTags () const
+{
+  return m_Options.writeRPCTags.second;
 }
 
 bool

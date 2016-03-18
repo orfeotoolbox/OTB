@@ -27,7 +27,7 @@ namespace otb
 /** \class SVMCrossValidationCostFunction
  * \brief This function returns the cross validation accuracy of a SVM model.
  *
- * It allows to perform parameters selection to maximize the
+ * It allows performing parameters selection to maximize the
  * accuracy using ITK optimizers.
  *
  * Given an input SVM model, the number of parameters depends on the

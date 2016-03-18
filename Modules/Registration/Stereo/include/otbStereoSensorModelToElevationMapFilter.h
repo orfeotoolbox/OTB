@@ -43,23 +43,23 @@ namespace otb
  * map.
  *
  * Setting-up the elevation exploration range is simple : the
- * LowerElevation and HigherElevation parameters allows to set the
+ * LowerElevation and HigherElevation parameters allows setting the
  * exploration range offsets with respect to the local elevation, and
- * the ElevationStep parameter allows to set the step between
+ * the ElevationStep parameter allows setting the step between
  * candidate elevation. The local elevation can either be constant
  * over the whole scene, or interpolated in a Digital Elevation
- * Model. The latter allows to account for highly varying elevation in
- * large scene, and allows to reduce the elevation exploration
+ * Model. The latter allows accounting for highly varying elevation in
+ * large scene, and allows reducing the elevation exploration
  * range. Please note that one can also use a geoid file along with
  * the DEM.
  *
  * Correlation parameters are as follows :
- * - The radius allows to to tune patches size (default is 3),
- * - The CorrelationThreshold allows to set a threshold bellow which
+ * - The radius allows tuning patches size (default is 3),
+ * - The CorrelationThreshold allows setting a threshold bellow which
  *   correlation is considered to fail. If the correlation maxima is
  *   bellow this threshold, the estimated elevation is
  *   discarded (default is 0.7).
- * - The VarianceThreshold allows to discard master patches for which
+ * - The VarianceThreshold allows discarding master patches for which
  *   variance is too small to yeld reliable correlation. If the
  *   variance of the current master patch lies bellow this threshold, no
  *   elevation exploration is performed at this location (default is 4).

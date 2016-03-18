@@ -150,7 +150,7 @@ protected:
                              outputRegionForThread,
                              itk::ThreadIdType threadId);
 
-  /** Allows to skip the verification of physical space between
+  /** Allows skipping the verification of physical space between
    *  the two input images (see flag m_PhysicalSpaceCheck)
    */
   virtual void VerifyInputInformation();
@@ -172,7 +172,7 @@ private:
 /** \class StreamingCompareImageFilter
  * \brief This class streams the whole input image through the PersistentCompareImageFilter.
  *
- * This way, it allows to compute estimator on two images. It calls the
+ * This way, it allows computing estimator on two images. It calls the
  * Reset() method of the PersistentCompareImageFilter before streaming the image and the
  * Synthetize() method of the PersistentCompareImageFilter after having streamed the image
  * to compute the estimators. The accessor on the results are wrapping the accessors of the

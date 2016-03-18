@@ -32,7 +32,7 @@ namespace otb
  *
  *  This class uses the otb::StreamingResampleImageFilter. It defines
  *  and uses a otb::GenericRSTransform using the input/output coordinate
- *  system informations listed below. This class can resample the input to an
+ *  system information listed below. This class can resample the input to an
  *  output image with the Size/Origin/Spacing/StartIndex defined by
  *  the user. Note that there are no default values for all the
  *  parmeters, so it is mandatory to set correct parameters to have a

@@ -207,7 +207,7 @@ private:
 /** \class StreamingHistogramVectorImageFilter
  * \brief This class streams the whole input image through the PersistentHistogramVectorImageFilter.
  *
- * This way, it allows to compute the min/max of this image. It calls the
+ * This way, it allows computing the min/max of this image. It calls the
  * Reset() method of the PersistentHistogramVectorImageFilter before streaming the image and the
  * Synthetize() method of the PersistentHistogramVectorImageFilter after having streamed the image
  * to compute the statistics. The accessor on the results are wrapping the accessors of the

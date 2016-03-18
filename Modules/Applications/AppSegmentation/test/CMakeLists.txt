@@ -36,6 +36,7 @@ string(TOLOWER ${filter} lfilter)
 # Derive output file name
 set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
+if(NOT (${filter} STREQUAL "Meanshift" AND ${mode} STREQUAL "Raster"))
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                      APP      Segmentation
                      OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
@@ -49,6 +50,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                               ${${lmode}_ref_path}/${OUTFILE}
                               ${TEMP}/${OUTFILE}
                      )
+endif()
 
 endforeach()
 endforeach()
