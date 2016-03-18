@@ -29,6 +29,8 @@
 #include "otbPerBandVectorImageFilter.h"
 #include "itkMeanImageFilter.h"
 #include "otbNRIBandImagesToOneNComplexBandsImage.h"
+#include "otbImageListToVectorImageFilter.h"
+#include "otbImageList.h"
 
 
 namespace otb
@@ -63,12 +65,14 @@ public:
   typedef itk::MeanImageFilter<ComplexDoubleImageType, ComplexDoubleImageType>                                         MeanFilterType;
   typedef otb::PerBandVectorImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType, MeanFilterType>    PerBandMeanFilterType;
   //typedef otb::NRIBandImagesToOneNComplexBandsImage<DoubleVectorImageType, ComplexDoubleVectorImageType>               NRITOOneCFilterType;
+  typedef otb::ImageList<ComplexDoubleImageType>                                                                       ImageListType;
+  typedef ImageListToVectorImageFilter<ImageListType, ComplexDoubleVectorImageType >                                   ListConcatenerFilterType;
   
   
-  typedef otb::ReciprocalHAlphaImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> 			           HAFilterType;
+  typedef otb::ReciprocalHAlphaImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> 			       HAFilterType;
   typedef otb::ReciprocalBarnesDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>           BarnesFilterType;
   typedef otb::ReciprocalHuynenDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>           HuynenFilterType;
-  //typedef otb::ReciprocalPauliDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>            PauliFilterType;
+  typedef otb::ReciprocalPauliDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>            PauliFilterType;
 
 
   /** Standard macro */
@@ -125,6 +129,8 @@ private:
     SetParameterDescription("decomp.barnes","Barnes incoherent decomposition");
     AddChoice("decomp.huynen","Huynen incoherent decomposition");
     SetParameterDescription("decomp.huynen","Huynen incoherent decomposition");
+    AddChoice("decomp.pauli","Pauli coherent decomposition");
+    SetParameterDescription("decomp.pauli","Pauli coherent decomposition");
     
     AddParameter(ParameterType_Group,"inco","Incoherent decompositions");
     SetParameterDescription("inco","This group allows setting parameters related to the incoherent decompositions.");
@@ -168,7 +174,9 @@ private:
     MeanFilterType::InputSizeType radius;
     m_BarnesFilter = BarnesFilterType::New();
     m_HuynenFilter = HuynenFilterType::New();
-    
+    m_PauliFilter = PauliFilterType::New();
+    m_Concatener = ListConcatenerFilterType::New();
+    m_ImageList = ImageListType::New();    
     
     switch (GetParameterInt("decomp"))
       {
@@ -228,6 +236,24 @@ private:
 		SetParameterComplexOutputImage("out", m_HuynenFilter->GetOutput() );
     
 		break;
+        
+		case 3: // Pauli
+
+        m_ImageList->PushBack(GetParameterComplexDoubleImage("inhh"));
+
+		if (inhv)
+		  m_ImageList->PushBack(GetParameterComplexDoubleImage("inhv"));
+	    else if (invh)
+		  m_ImageList->PushBack(GetParameterComplexDoubleImage("invh"));
+
+		m_ImageList->PushBack(GetParameterComplexDoubleImage("invv"));
+        
+        m_Concatener->SetInput( m_ImageList );        
+        m_PauliFilter->SetInput(m_Concatener->GetOutput());
+        
+		SetParameterComplexOutputImage("out", m_PauliFilter->GetOutput() );
+    
+		break;
 	  }
    	 
   }
@@ -237,7 +263,10 @@ private:
   HAFilterType::Pointer m_HAFilter;
   BarnesFilterType::Pointer m_BarnesFilter;
   HuynenFilterType::Pointer m_HuynenFilter;
+  PauliFilterType::Pointer m_PauliFilter;
   PerBandMeanFilterType::Pointer m_MeanFilter;
+  ListConcatenerFilterType::Pointer  m_Concatener;
+  ImageListType::Pointer        m_ImageList;
   
 }; 
 

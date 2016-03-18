@@ -30,7 +30,18 @@ otb_test_application(NAME  apTvSARDecompositionsHuynen
 							 -inhh ${INPUTDATA}/RSAT_imageryC_HH.tif
 							 -inhv ${INPUTDATA}/RSAT_imageryC_HV.tif
 							 -invv ${INPUTDATA}/RSAT_imageryC_VV.tif
-							 -decomp barnes
+							 -decomp huynen
 							 -out ${TEMP}/apTvReciprocalHuynen.tif
+							 
+                     )
+                     
+otb_test_application(NAME  apTvSARDecompositionsPauli
+                     APP  SARDecompositions
+                     OPTIONS 
+							 -inhh ${INPUTDATA}/RSAT_imageryC_HH.tif
+							 -inhv ${INPUTDATA}/RSAT_imageryC_HV.tif
+							 -invv ${INPUTDATA}/RSAT_imageryC_VV.tif
+							 -decomp pauli
+							 -out ${TEMP}/apTvReciprocalPauli.tif
 							 
                      )
