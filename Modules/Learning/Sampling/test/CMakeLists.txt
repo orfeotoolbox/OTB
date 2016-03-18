@@ -3,6 +3,7 @@ otb_module_test()
 set(OTBSamplingTests
 otbSamplingTestDriver.cxx
 otbOGRDataToClassStatisticsFilterTest.cxx
+otbImageSampleExtractorFilterTest.cxx
 )
 
 add_executable(otbSamplingTestDriver ${OTBSamplingTests})
@@ -21,3 +22,6 @@ otb_add_test(NAME leTvOGRDataToClassStatisticsFilter COMMAND otbSamplingTestDriv
   otbOGRDataToClassStatisticsFilter
   ${INPUTDATA}/variousVectors.sqlite
   ${TEMP}/leTvOGRDataToClassStatisticsFilterOutput.txt)
+
+otb_add_test(NAME leTuImageSampleExtractorFilterNew COMMAND otbSamplingTestDriver
+  otbImageSampleExtractorFilterNew )
