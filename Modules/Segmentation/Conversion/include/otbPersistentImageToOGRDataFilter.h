@@ -104,6 +104,12 @@ public:
    * for fusioning streaming tiles.
    */
   itkGetMacro(StreamSize, SizeType);
+  
+  /** Set the geometry type */
+  itkSetMacro(GeometryType,OGRwkbGeometryType);
+  
+  /** Get the geometry type */
+  itkGetMacro(GeometryType,OGRwkbGeometryType);
 
   /** Set the \c ogr::DataSource in which the layer LayerName will be created. */
   void SetOGRDataSource( OGRDataSourcePointerType ogrDS );
@@ -118,6 +124,9 @@ public:
 
   /** Set the OGR layer creation options */
   void SetOGRLayerCreationOptions(const std::vector<std::string> & options);
+  
+  /** Get the OGR layer creation options */
+  const std::vector<std::string> & GetOGRLayerCreationOptions(void);
 
 protected:
   PersistentImageToOGRDataFilter();

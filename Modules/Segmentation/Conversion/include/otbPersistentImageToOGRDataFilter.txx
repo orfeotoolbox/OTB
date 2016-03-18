@@ -89,6 +89,13 @@ PersistentImageToOGRDataFilter<TImage>
   this->Modified();
 }
 
+template<class TImage>
+const std::vector<std::string>&
+PersistentImageToOGRDataFilter<TImage>
+::GetOGRLayerCreationOptions(void)
+{
+  return m_OGRLayerCreationOptions;
+}
 
 template<class TImage>
 void
