@@ -31,12 +31,16 @@
 
 //
 // ITK includes (sorted by alphabetic order)
+#include <itkLightProcessObject.h>
+#include <itkProcessObject.h>
 
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdProgressInterface.h"
+
 
 namespace mvd
 {
@@ -66,8 +70,9 @@ namespace
 
 /*******************************************************************************/
 ProcessObjectObserver
-::ProcessObjectObserver( QObject* parent ) :
-  QObject( parent )
+::ProcessObjectObserver() :
+  itk::Command(),
+  m_ProgressInterface( NULL )
 {
 }
 
@@ -75,6 +80,57 @@ ProcessObjectObserver
 ProcessObjectObserver
 ::~ProcessObjectObserver()
 {
+}
+
+/*******************************************************************************/
+void
+ProcessObjectObserver
+::SetProgressInterface( ProgressInterface * interface )
+{
+  m_ProgressInterface = interface;
+}
+
+/*******************************************************************************/
+void
+ProcessObjectObserver
+::Execute( itk::Object * caller, const itk::EventObject & event )
+{
+  Execute( const_cast< const itk::Object * >( caller ), event );
+}
+
+/*******************************************************************************/
+void
+ProcessObjectObserver
+::Execute( const itk::Object * caller, const itk::EventObject & event )
+{
+  assert( caller!=NULL );
+
+  if( typeid( event )==typeid( itk::ProgressEvent ) )
+    {
+    assert( m_ProgressInterface!=NULL );
+
+    // itk::LightProcessObject and itk::ProcessObject don't have any
+    // common ::GetProgress() interface (because there is no common
+    // super-class providing this interface). So, itk::Object must be
+    // dynamically casted to both types in order to get progress.
+    assert(
+      dynamic_cast< const itk::LightProcessObject * >( caller )!=NULL ||
+      dynamic_cast< const itk::ProcessObject * >( caller )!=NULL
+    );
+
+    const itk::LightProcessObject * lpo =
+      dynamic_cast< const itk::LightProcessObject * >( caller );
+
+    if( lpo!=NULL )
+      m_ProgressInterface->SetProgress( lpo->GetProgress() );
+    else
+      {
+      const itk::ProcessObject * po =
+	dynamic_cast< const itk::ProcessObject * >( caller );
+
+      m_ProgressInterface->SetProgress( po->GetProgress() );
+      }
+    }
 }
 
 /*******************************************************************************/

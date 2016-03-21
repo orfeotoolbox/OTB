@@ -40,6 +40,7 @@
 
 //
 // ITK includes (sorted by alphabetic order)
+#include <itkCommand.h>
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -61,7 +62,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-
+class ProgressInterface;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -72,24 +73,44 @@ namespace mvd
  * \brief WIP.
  */
 class Monteverdi_EXPORT ProcessObjectObserver :
-    public QObject
+    public itk::Command
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
 
-  Q_OBJECT;
+  // Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+
+//
+// Public types.
+public:
+  typedef ProcessObjectObserver Self;
+  typedef itk::Command Superclass;
+  typedef itk::SmartPointer< Self > Pointer;
+
+  itkNewMacro( Self );
 
 //
 // Public methods.
 public:
 
-  /** \brief Constructor. */
-  ProcessObjectObserver( QObject* parent =NULL );
-
   /** \brief Destructor. */
   virtual ~ProcessObjectObserver();
+
+  const ProgressInterface * GetProgressInterface() const;
+  ProgressInterface * GetProgressInterface();
+
+  void SetProgressInterface( ProgressInterface * );
+
+  //
+  // itk::Command overloads.
+
+  virtual void Execute( itk::Object * caller,
+			const itk::EventObject & event );
+
+  virtual void Execute( const itk::Object * caller,
+			const itk::EventObject & event );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -109,6 +130,9 @@ signals:
 // Protected methods.
 protected:
 
+  /** \brief Constructor. */
+  ProcessObjectObserver();
+
 //
 // Protected attributes.
 protected:
@@ -118,7 +142,7 @@ protected:
 //
 // Private methods.
 private:
-
+  ProgressInterface * m_ProgressInterface;
 
 //
 // Private attributes.
