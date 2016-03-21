@@ -210,9 +210,13 @@ ImportImagesDialog
 
 	flags |= Qt::ItemIsSelectable;
 
-	if( builder->GetOverviewsCount()<=1 )
+	if( builder->GetOverviewsCount()>1 )
+	  builder->SetBypassEnabled( true );
+	else
 	  {
 	  flags |= Qt::ItemIsEnabled;
+
+	  builder->SetBypassEnabled( false );
 
 	  ++ m_EffectiveCount;
 	  }
