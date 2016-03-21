@@ -32,6 +32,7 @@
 
 //
 // ITK includes (sorted by alphabetic order)
+#include <itkProcessObject.h>
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -40,6 +41,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdDatasetModel.h"
 #include "mvdI18nCoreApplication.h"
+#include "mvdProcessObjectObserver.h"
 #include "mvdVectorImageModel.h"
 
 namespace mvd
@@ -72,7 +74,10 @@ OverviewBuilder
 ::OverviewBuilder( const GDALOverviewsBuilderVector & builders,
 		   QObject * parent ) :
   AbstractWorker( parent ),
-  m_GDALOverviewsBuilders( builders )
+  ProgressInterface(),
+  m_GDALOverviewsBuilders( builders ),
+  m_Index( 0 ),
+  m_Count( 0 )
 {
 }
 
@@ -81,6 +86,25 @@ OverviewBuilder
 ::~OverviewBuilder()
 {
   // qDebug() << this << "destroyed.";
+}
+
+/*******************************************************************************/
+void
+OverviewBuilder
+::SetProgress( double value )
+{
+  assert( m_Count>0 );
+  assert( m_Index>=0 && m_Index<m_Count );
+  assert( value>=0.0 && value<=1.0 );
+
+  qDebug()
+    << m_Index << "/" << m_Count
+    << value << "\t"
+    << ( 100 * m_Index + static_cast< int >( 100.0 * value ) );
+
+  emit ProgressValueChanged(
+    100 * m_Index + static_cast< int >( 100.0 * value )
+  );
 }
 
 /*******************************************************************************/
@@ -99,7 +123,7 @@ OverviewBuilder
 
   //
   // Count elements to process.
-  int count = 0;
+  m_Count = 0;
 
   for( GDALOverviewsBuilderVector::const_iterator it(
 	 m_GDALOverviewsBuilders.begin()
@@ -107,39 +131,50 @@ OverviewBuilder
        it!=m_GDALOverviewsBuilders.end();
        ++ it )
     if( !it->IsNull() && ( *it )->GetNbResolutions()>0 )
-      ++ count;
+      ++ m_Count;
 
-  emit ProgressRangeChanged( 0, count - 1 );
+  emit ProgressRangeChanged( 0, 100 * m_Count );
 
   //
   // Process elements.
-  int i = 0;
+  m_Index = 0;
 
-  for( GDALOverviewsBuilderVector::const_iterator it(
-	 m_GDALOverviewsBuilders.begin()
-       );
-       it!=m_GDALOverviewsBuilders.end();
-       ++ it )
-    if( !it->IsNull() && ( *it )->GetNbResolutions()>0 )
-      {
-      ( *it )->Update();
+  {
+    ProcessObjectObserver::Pointer observer( ProcessObjectObserver::New() );
 
-      emit ProgressValueChanged( i ++ );
+    observer->SetProgressInterface( this );
 
-      emit ProgressTextChanged(
-	QString(
-	  tr( "Generting overviews for file %1/%2 '%3'." )
-	)
-	.arg( i + 1 )
-	.arg( count )
-	.arg(
-	  QFile::decodeName(
-	    ( *it )->GetInputFileName().c_str()
+    for( GDALOverviewsBuilderVector::const_iterator it(
+	   m_GDALOverviewsBuilders.begin()
+	 );
+	 it!=m_GDALOverviewsBuilders.end();
+	 ++ it, ++ m_Index )
+      if( !it->IsNull() && ( *it )->GetNbResolutions()>0 )
+	{
+	unsigned long id =
+	  ( *it )->AddObserver( itk::ProgressEvent(), observer );
+
+	( *it )->Update();
+
+	( *it )->RemoveObserver( id );
+
+	emit ProgressTextChanged(
+	  QString(
+	    tr( "Generting overviews for file %1/%2 '%3'." )
 	  )
-	)
-      );
-      }
+	  .arg( m_Index + 1 )
+	  .arg( m_Count )
+	  .arg(
+	    QFile::decodeName(
+	      ( *it )->GetInputFileName().c_str()
+	    )
+	  )
+	);
+	}
+  }
 
+  emit ProgressValueChanged( 100 * m_Count );
+ 
   return NULL;
 }
 

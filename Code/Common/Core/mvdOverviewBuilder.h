@@ -49,6 +49,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdAbstractWorker.h"
+#include "mvdProgressInterface.h"
 #endif //tag=QT4-boost-compatibility
 
 /*****************************************************************************/
@@ -75,7 +76,8 @@ namespace mvd
  * filename and the desired (width, height) best-fit size.
  */
 class Monteverdi_EXPORT OverviewBuilder :
-    public AbstractWorker
+    public AbstractWorker,
+    public ProgressInterface
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -104,6 +106,11 @@ public:
    * \brief Destructor.
    */
   virtual ~OverviewBuilder();
+
+  //
+  // ProgressInterface overloads.
+
+  virtual void SetProgress( double );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -165,6 +172,12 @@ private:
   /**
    */
   GDALOverviewsBuilderVector m_GDALOverviewsBuilders;
+  /**
+   */
+  int m_Index;
+  /**
+   */
+  int m_Count;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
