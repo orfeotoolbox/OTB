@@ -33,7 +33,11 @@ namespace otb
 
 template<class TImage>
 PersistentImageToOGRDataFilter<TImage>
-::PersistentImageToOGRDataFilter() : m_FieldName("DN"), m_LayerName("Layer"), m_GeometryType(wkbMultiPolygon)
+::PersistentImageToOGRDataFilter()
+  : m_FieldName("DN")
+  , m_LayerName("Layer")
+  , m_GeometryType(wkbMultiPolygon)
+  , m_FieldType(OFTInteger)
 {
    this->SetNumberOfRequiredInputs(2);
    this->SetNumberOfRequiredInputs(2);
@@ -137,7 +141,7 @@ PersistentImageToOGRDataFilter<TImage>
    OGRDataSourcePointerType ogrDS = this->GetOGRDataSource();
 
    ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, m_OGRLayerCreationOptions);
-   OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
+   OGRFieldDefn field(m_FieldName.c_str(),m_FieldType);
 
    //Handle the case of shapefile. A shapefile is a layer and not a datasource.
    //The layer name in a shapefile is the shapefile's name.

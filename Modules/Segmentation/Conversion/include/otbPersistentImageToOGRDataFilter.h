@@ -128,6 +128,12 @@ public:
   /** Get the OGR layer creation options */
   const std::vector<std::string> & GetOGRLayerCreationOptions(void);
 
+  /** Set the field type for class label */
+  itkSetMacro(FieldType,OGRFieldType);
+
+  /** Get the field type for class label */
+  itkGetMacro(FieldType,OGRFieldType);
+
 protected:
   PersistentImageToOGRDataFilter();
   virtual ~PersistentImageToOGRDataFilter();
@@ -148,6 +154,7 @@ private:
   OGRwkbGeometryType m_GeometryType;
   SizeType m_StreamSize;
   std::vector<std::string> m_OGRLayerCreationOptions;
+  OGRFieldType m_FieldType;
 
 }; // end of class
 } // end namespace otb
