@@ -214,8 +214,6 @@ I18nMainWindow
 
   int result = importDialog->exec();
 
-  qDebug() << "result:" << result;
-
   if( result== QDialog::Rejected )
     return false;
 
