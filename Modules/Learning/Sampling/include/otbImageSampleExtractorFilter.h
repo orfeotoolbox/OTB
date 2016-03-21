@@ -145,17 +145,20 @@ public:
 
   const TInputImage* GetInput();
 
-  void SetInputOGRData(const otb::ogr::DataSource* data);
-  const otb::ogr::DataSource* GetInputOGRData();
+  void SetSamplePositions(const otb::ogr::DataSource* data);
+  const otb::ogr::DataSource* GetSamplePositions();
   
-  void SetOutputOGRData(const otb::ogr::DataSource* data);
+  void SetOutputOGRData(OGRDataType::Pointer data);
   const otb::ogr::DataSource* GetOutputOGRData();
 
-  void SetFieldPrefix(std::string &key);
-  std::string GetFieldPrefix();
+  void SetOutputFieldPrefix(const std::string &key);
+  std::string GetOutputFieldPrefix();
   
   void SetLayerIndex(int index);
   int GetLayerIndex();
+
+  void SetClassFieldName(const std::string &name);
+  std::string GetClassFieldName(void);
 
 protected:
   /** Constructor */

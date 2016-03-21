@@ -34,6 +34,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
   this->SetNumberOfRequiredOutputs(1);
   this->SetNthOutput(0,TInputImage::New());
   
+  this->SetGeometryType(wkbPoint);
   // TODO : add setter for m_GeometryType in base class
 }
 
@@ -75,26 +76,36 @@ PersistentImageSampleExtractorFilter<TInputImage>
 {
   // initialize output DataSource if copy mode
   const ogr::DataSource* inVectors = this->GetSamplePositions();
+  OGRFeatureDefn &inLayerDefn = inVectors->GetLayer(m_LayerIndex).GetLayerDefn();
   ogr::DataSource* outVectors = const_cast<ogr::DataSource*>(this->GetOGRDataSource());
   bool updateMode = bool(inVectors == outVectors);
-  unsigned int outLayerIndex = 0;
-  if (!updateMode)
+  ogr::Layer outLayer = inVectors->GetLayer(m_LayerIndex); // has to be initialized with a real layer
+  if (updateMode)
     {
-    this->Initialize();
-    // TODO : get the output layer index 
+    outLayer = outVectors->GetLayer(m_LayerIndex);
     }
   else
     {
-    // update mode : set LayerName and FieldName to match SamplePosition OGRDataSource
-    //this->SetLayerName(inVectors->GetLayer(m_LayerIndex).GetName());
-    
-    outLayerIndex = m_LayerIndex;
+    // use the same field type for class label
+    int inCFieldIndex = inLayerDefn.GetFieldIndex(this->GetFieldName().c_str());
+    this->SetFieldType(inLayerDefn.GetFieldDefn(inCFieldIndex)->GetType());
+    // Create layer
+    this->Initialize();
+    // Get created layer
+    if (outVectors->GetLayersCount() == 1)
+      {
+      outLayer = outVectors->GetLayer(0);
+      }
+    else
+      {
+      outLayer = outVectors->GetLayer(this->GetLayerName());
+      }
     }
 
   // initialize fields in output DataSource
-  ogr::Layer outLayer = outVectors->GetLayer(outLayerIndex);
   OGRFeatureDefn &outFeatureDefn = outLayer.GetLayerDefn();
   TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
+  inputImage->UpdateOutputInformation();
   unsigned int nbBand = inputImage->GetNumberOfComponentsPerPixel();
   std::string sampleFieldName;
   std::ostringstream oss;
@@ -164,7 +175,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
                       this->GetGeometryType(),
                       this->GetOGRLayerCreationOptions());
   ogr::Layer dstLayer = tmpDS->GetLayer(0);
-  OGRFieldDefn labelField(this->GetFieldName().c_str(),OFTInteger);
+  OGRFieldDefn labelField(this->GetFieldName().c_str(),this->GetFieldType());
   dstLayer.CreateField(labelField, true);
   for (unsigned int i=0 ; i<nbBand ; ++i)
     {
@@ -207,6 +218,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
             fieldName = oss.str();
             // Set the fields directly in the input features
             (*featIt)[fieldName].SetValue(imgComp);
+            inLayer.SetFeature(*featIt);
             }
           }
         else
@@ -283,25 +295,25 @@ ImageSampleExtractorFilter<TInputImage>
 template<class TInputImage>
 void
 ImageSampleExtractorFilter<TInputImage>
-::SetInputOGRData(const otb::ogr::DataSource* data)
+::SetSamplePositions(const otb::ogr::DataSource* data)
 {
-  this->GetFilter()->SetInputOGRData(data);
+  this->GetFilter()->SetSamplePositions(data);
 }
 
 template<class TInputImage>
 const otb::ogr::DataSource*
 ImageSampleExtractorFilter<TInputImage>
-::GetInputOGRData()
+::GetSamplePositions()
 {
-  return this->GetFilter()->GetInputOGRData();
+  return this->GetFilter()->GetSamplePositions();
 }
 
 template<class TInputImage>
 void
 ImageSampleExtractorFilter<TInputImage>
-::SetOutputOGRData(const otb::ogr::DataSource* data)
+::SetOutputOGRData(OGRDataType::Pointer data)
 {
-  this->GetFilter()->SetOutputOGRData(data);
+  this->GetFilter()->SetOGRDataSource(data);
 }
 
 template<class TInputImage>
@@ -309,23 +321,23 @@ const otb::ogr::DataSource*
 ImageSampleExtractorFilter<TInputImage>
 ::GetOutputOGRData()
 {
-  return this->GetFilter()->GetOutputOGRData();
+  return this->GetFilter()->GetOGRDataSource();
 }
 
 template<class TInputImage>
 void
 ImageSampleExtractorFilter<TInputImage>
-::SetFieldPrefix(std::string &key)
+::SetOutputFieldPrefix(const std::string &key)
 {
-  this->GetFilter()->SetFieldPrefix(key);
+  this->GetFilter()->SetSampleFieldPrefix(key);
 }
 
 template<class TInputImage>
 std::string
 ImageSampleExtractorFilter<TInputImage>
-::GetFieldPrefix()
+::GetOutputFieldPrefix()
 {
-  return this->GetFilter()->GetFieldPrefix();
+  return this->GetFilter()->GetSampleFieldPrefix();
 }
 
 template<class TInputImage>
@@ -342,6 +354,22 @@ ImageSampleExtractorFilter<TInputImage>
 ::GetLayerIndex()
 {
   return this->GetFilter()->GetLayerIndex();
+}
+
+template<class TInputImage>
+void
+ImageSampleExtractorFilter<TInputImage>
+::SetClassFieldName(const std::string &name)
+{
+  this->GetFilter()->SetFieldName(name);
+}
+
+template<class TInputImage>
+std::string
+ImageSampleExtractorFilter<TInputImage>
+::GetClassFieldName(void)
+{
+  return this->GetFilter()->GetFieldName();
 }
 
 } // end of namespace otb
