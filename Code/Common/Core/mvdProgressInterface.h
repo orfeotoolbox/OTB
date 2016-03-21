@@ -72,7 +72,6 @@ namespace mvd
  */
 class Monteverdi_EXPORT ProgressInterface
 {
-
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
