@@ -97,10 +97,10 @@ OverviewBuilder
   assert( m_Index>=0 && m_Index<m_Count );
   assert( value>=0.0 && value<=1.0 );
 
-  qDebug()
-    << m_Index << "/" << m_Count
-    << value << "\t"
-    << ( 100 * m_Index + static_cast< int >( 100.0 * value ) );
+  // qDebug()
+  //   << m_Index << "/" << m_Count
+  //   << value << "\t"
+  //   << ( 100 * m_Index + static_cast< int >( 100.0 * value ) );
 
   emit ProgressValueChanged(
     100 * m_Index + static_cast< int >( 100.0 * value )
