@@ -58,7 +58,7 @@ public:
   itkTypeMacro(PleiadesPToXSAffineTransformCalculator,itk::LightObject);
   
   typedef itk::ScalableAffineTransform<double,2>   TransformType;
-  typedef typename TransformType::OutputVectorType OffsetType;
+  typedef TransformType::OutputVectorType OffsetType;
 
   
   /**
