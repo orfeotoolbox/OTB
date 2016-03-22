@@ -65,7 +65,6 @@ set( Common_Core_HEADERS_MOC
   # mvdMath.h
   #mvdMyClass.h
   mvdOverviewBuilder.h
-  mvdProcessObjectObserver.h
   mvdQuicklookModel.h
   mvdStackedLayerModel.h
   # mvdSystemError.h
