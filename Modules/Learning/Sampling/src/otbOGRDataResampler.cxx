@@ -325,7 +325,6 @@ m_alreadyPrepared=true;
 bool
 OGRDataResampler::TakeSample(std::string className)
 {
-
    bool res=false;
 
    if (m_ElmtsInClass[className] >= m_RatesbyClass[className].required)

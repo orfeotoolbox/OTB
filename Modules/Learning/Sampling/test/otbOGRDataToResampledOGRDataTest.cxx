@@ -25,8 +25,9 @@
 
 int otbOGRDataToResampledOGRDataNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
+  typedef otb::VectorImage<float> InputImageType;
   typedef otb::Image<unsigned char> MaskImageType;
-  typedef otb::OGRDataToResampledOGRData<MaskImageType> FilterType;
+  typedef otb::OGRDataToResampledOGRData<InputImageType , MaskImageType> FilterType;
   
   FilterType::Pointer filter = FilterType::New();
   std::cout << filter << std::endl;
@@ -105,7 +106,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
 
     
    //-------------------------------------------------------------- 
-  typedef otb::OGRDataToResampledOGRData<MaskImageType> ResamplerFilterType;  
+  typedef otb::OGRDataToResampledOGRData<InputImageType,MaskImageType> ResamplerFilterType;  
   typedef otb::SamplingRateCalculator RateCalculatorype;
   
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
@@ -116,6 +117,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   
   ResamplerFilterType::Pointer resampler = ResamplerFilterType::New();
   resampler->SetOutputVectorDataPath(outputPath);
+  resampler->SetInput(inputImage);
   resampler->SetMask(mask);
   resampler->SetOGRData(vectors);
   resampler->SetRatesbyClass(ratesbyClass);

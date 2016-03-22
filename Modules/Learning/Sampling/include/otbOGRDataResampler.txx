@@ -22,6 +22,7 @@
 #include "otbMacro.h"
 #include <fstream>
 
+
 namespace otb
 {
 
@@ -30,22 +31,23 @@ void
 OGRDataResampler
 ::Add(otb::ogr::Layer::const_iterator& featIt,
       TIterator& imgIt,
-      const typename TIterator::ImageType *mask)
+      const typename TIterator::ImageType *img)
 {
   // Get class name
   std::string className(featIt->ogr().GetFieldAsString(this->m_FieldIndex));
-  
+
+  // Get Feature Id
+  unsigned long featureId = featIt->ogr().GetFID();
+
   if (m_ElmtsInClass.count(className) == 0)
     {
     m_ElmtsInClass[className] = 0UL;
     }
-  
-  // Get Feature Id
-  unsigned long featureId = featIt->ogr().GetFID();
+
   
   this->AddGeometry(featIt->ogr().GetGeometryRef(),
                     imgIt,
-                    mask,
+                    img,
                     featureId,
                     className);
 }
@@ -55,12 +57,10 @@ void
 OGRDataResampler
 ::AddGeometry(OGRGeometry *geom,
               TIterator& imgIt,
-              const typename TIterator::ImageType *mask,
+              const typename TIterator::ImageType *img,
               unsigned long &fId,
               std::string &className)
 {
-
-
   typename TIterator::ImageType::PointType imgPoint;
   typename TIterator::IndexType imgIndex;
   OGRPoint tmpPoint(0.0,0.0,0.0);
@@ -78,28 +78,26 @@ OGRDataResampler
         }
       imgPoint[0] = castPoint->getX();
       imgPoint[1] = castPoint->getY();
-      mask->TransformPhysicalPointToIndex(imgPoint,imgIndex);
+      img->TransformPhysicalPointToIndex(imgPoint,imgIndex);
       if (!imgIt.IsAtEnd())
         {
         if (imgIndex == imgIt.GetIndex())
-         if (imgIt.Get()>0)
-          if (TakeSample(className))
-          {
+         if (TakeSample(className))
+           {
 
-              OGRPoint ogrTmpPoint;
-              ogrTmpPoint.setX(imgPoint[0]);
-              ogrTmpPoint.setY(imgPoint[1]);
+               OGRPoint ogrTmpPoint;
+               ogrTmpPoint.setX(imgPoint[0]);
+               ogrTmpPoint.setY(imgPoint[1]);
 
-              LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(0);
-              otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
-              feat[m_FieldName].SetValue<std::string>(className);
-              feat.SetGeometry(&ogrTmpPoint);
-              outputLayer.CreateFeature(feat);
-              
-              m_ElmtsInClass[className]++;
-
-          }
-        } 
+               LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(0);
+               otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
+               feat[m_FieldName].SetValue<std::string>(className);
+               feat.SetGeometry(&ogrTmpPoint);
+               outputLayer.CreateFeature(feat);
+               
+               m_ElmtsInClass[className]++;
+            }
+        }
       break;
       }
     case wkbLineString:
@@ -113,12 +111,12 @@ OGRDataResampler
       ring.addPoint(0.0,1.0,0.0);
       ring.addPoint(0.0,0.0,0.0);
       tmpPolygon.addRing(&ring);
-      typename TIterator::ImageType::SpacingType imgAbsSpacing = mask->GetSpacing();
+      typename TIterator::ImageType::SpacingType imgAbsSpacing = img->GetSpacing();
       if (imgAbsSpacing[0] < 0) imgAbsSpacing[0] = -imgAbsSpacing[0];
       if (imgAbsSpacing[1] < 0) imgAbsSpacing[1] = -imgAbsSpacing[1];
       while (!imgIt.IsAtEnd())
         {
-        mask->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
+        img->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
         tmpPolygon.getExteriorRing()->setPoint(0
           ,imgPoint[0]-0.5*imgAbsSpacing[0]
           ,imgPoint[1]-0.5*imgAbsSpacing[1]
@@ -139,24 +137,22 @@ OGRDataResampler
           ,imgPoint[0]-0.5*imgAbsSpacing[0]
           ,imgPoint[1]-0.5*imgAbsSpacing[1]
           ,0.0);
-        if (geom->Intersects(&tmpPolygon)) 
-         if (imgIt.Get()>0)
-          if (TakeSample(className))
-          {
+        if (geom->Intersects(&tmpPolygon))
+         if (TakeSample(className))
+           {
 
-              OGRPoint ogrTmpPoint;
-              ogrTmpPoint.setX(imgPoint[0]);
-              ogrTmpPoint.setY(imgPoint[1]);
+               OGRPoint ogrTmpPoint;
+               ogrTmpPoint.setX(imgPoint[0]);
+               ogrTmpPoint.setY(imgPoint[1]);
 
-              LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(0);
-              otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
-              feat[m_FieldName].SetValue<std::string>(className);
-              feat.SetGeometry(&ogrTmpPoint);
-              outputLayer.CreateFeature(feat);
-              
-              m_ElmtsInClass[className]++;
-              
-          }
+               LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(0);
+               otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
+               feat[m_FieldName].SetValue<std::string>(className);
+               feat.SetGeometry(&ogrTmpPoint);
+               outputLayer.CreateFeature(feat);
+               
+               m_ElmtsInClass[className]++;
+            }
         ++imgIt;
         }
       break;
@@ -166,27 +162,26 @@ OGRDataResampler
       {
       while (!imgIt.IsAtEnd())
         {
-        mask->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
+        img->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
         tmpPoint.setX(imgPoint[0]);
         tmpPoint.setY(imgPoint[1]);
         if (geom->Contains(&tmpPoint))
-         if (imgIt.Get()>0)
           if (TakeSample(className))
-          {
+           {
 
-              OGRPoint ogrTmpPoint;
-              ogrTmpPoint.setX(imgPoint[0]);
-              ogrTmpPoint.setY(imgPoint[1]);
-              
-              LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(0);
-              otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
-              feat[m_FieldName].SetValue<std::string>(className);
-              feat.SetGeometry(&ogrTmpPoint);
-              outputLayer.CreateFeature(feat);
-              
-              m_ElmtsInClass[className]++;
-              
-          }
+               OGRPoint ogrTmpPoint;
+               ogrTmpPoint.setX(imgPoint[0]);
+               ogrTmpPoint.setY(imgPoint[1]);
+
+               LayerType outputLayer = m_OutputOGRDataSourcePointer->GetLayer(0);
+               otb::ogr::Feature feat = otb::ogr::Feature(outputLayer.GetLayerDefn());
+               feat[m_FieldName].SetValue<std::string>(className);
+               feat.SetGeometry(&ogrTmpPoint);
+               outputLayer.CreateFeature(feat);
+               
+               m_ElmtsInClass[className]++;
+               
+            }
         ++imgIt;
         }
       break;
@@ -208,7 +203,7 @@ OGRDataResampler
           {
           this->AddGeometry(geomCollection->getGeometryRef(i),
                             imgIt,
-                            mask,
+                            img,
                             fId,
                             className);
           }
