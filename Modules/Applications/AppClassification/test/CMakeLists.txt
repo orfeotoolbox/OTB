@@ -97,9 +97,9 @@ set(ascii_ref_path ${OTBAPP_BASELINE_FILES})
 set(raster_ref_path ${OTBAPP_BASELINE})
 
 set(classifierList)
-if(OTB_USE_LIBSVM)
-  list(APPEND classifierList "LIBSVM")
-endif()
+#if(OTB_USE_LIBSVM)
+  #list(APPEND classifierList "LIBSVM")
+#endif()
 if(OTB_USE_OPENCV)
   #list(APPEND classifierList "SVM" "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
   list(APPEND classifierList "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
@@ -843,3 +843,13 @@ otb_test_application(NAME apTvClPredictRegressionTest_monovar
 
 endif()
 
+#----------- PolygonClassStatistics TESTS ----------------
+otb_test_application(NAME apTvClPolygonClassStatisticsTest
+                     APP PolygonClassStatistics
+                     OPTIONS -in ${INPUTDATA}/cthead1_flip.tif
+                             -vec ${INPUTDATA}/variousVectors.sqlite
+                             -field label
+                             -out ${TEMP}/apTvClPolygonClassStatisticsOut.xml
+                     VALID   --compare-ascii ${NOTOL}
+                             ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
+                             ${TEMP}/apTvClPolygonClassStatisticsOut.xml)
