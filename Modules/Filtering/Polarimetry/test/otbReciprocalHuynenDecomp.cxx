@@ -69,7 +69,7 @@ int otbReciprocalHuynenDecompImageFilter(int itkNotUsed(argc), char * argv[])
   otb::Functor::SinclairToReciprocalCovarianceMatrixFunctor<ComplexImageType::PixelType,
                                     ComplexImageType::PixelType,
                                     ComplexImageType::PixelType,
-                                    ComplexVectorImageType::PixelType> > SinclaireToC3FilterType;
+                                    ComplexVectorImageType::PixelType> > SinclairToCovFilterType;
   
   
   typedef itk::MeanImageFilter<ComplexImageType, ComplexImageType>         MeanFilterType;
@@ -86,7 +86,7 @@ int otbReciprocalHuynenDecompImageFilter(int itkNotUsed(argc), char * argv[])
   
   WriterType::Pointer writer = WriterType::New();
 
-  SinclaireToC3FilterType::Pointer sinclairtoc3 = SinclaireToC3FilterType::New();
+  SinclairToCovFilterType::Pointer sinclairtocov = SinclairToCovFilterType::New();
   PerBandMeanFilterType::Pointer perBand = PerBandMeanFilterType::New();
   FilterType::Pointer huynenfilter = FilterType::New();
         
@@ -100,11 +100,11 @@ int otbReciprocalHuynenDecompImageFilter(int itkNotUsed(argc), char * argv[])
   readerHV->SetFileName(inputFilenameHV);
   readerVV->SetFileName(inputFilenameVV);
   
-  sinclairtoc3->SetInputHH(readerHH->GetOutput());
-  sinclairtoc3->SetInputHV_VH(readerHV->GetOutput());
-  sinclairtoc3->SetInputVV(readerVV->GetOutput());
+  sinclairtocov->SetInputHH(readerHH->GetOutput());
+  sinclairtocov->SetInputHV_VH(readerHV->GetOutput());
+  sinclairtocov->SetInputVV(readerVV->GetOutput());
  
-  perBand->SetInput(sinclairtoc3->GetOutput());
+  perBand->SetInput(sinclairtocov->GetOutput());
   
   huynenfilter->SetInput(perBand->GetOutput());
 

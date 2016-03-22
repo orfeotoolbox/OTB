@@ -30,11 +30,10 @@ namespace otb
 namespace Functor {
 
 /** \class otbBarnesDecompFunctor
- * \brief 
- *
+ * 
+ * \brief Evaluate the Huynen decomposition from the reciprocal Sinclair matrix image.
  *
  * \ingroup SARPolarimetry
- *
  *
  * \ingroup OTBPolarimetry
  */
@@ -121,7 +120,7 @@ private:
 
 
 /** \class otbBarnesDecompImageFilter
- * \brief Compute the H-Alpha image (3 channels)
+ * \brief Compute the Barnes decomposition image (9 complex channels)
  * from the Reciprocal Covariance image (6 complex channels)
  *
  * For more details, please refer to the class ReciprocalBarnesDecompFunctor.
