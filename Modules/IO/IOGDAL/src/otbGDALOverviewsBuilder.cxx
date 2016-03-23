@@ -257,8 +257,6 @@ size_t
 GDALOverviewsBuilder
 ::GetEstimatedSize() const
 {
-  assert( !m_IsBypassEnabled );
-
   if( m_IsBypassEnabled )
     return 0;
 
