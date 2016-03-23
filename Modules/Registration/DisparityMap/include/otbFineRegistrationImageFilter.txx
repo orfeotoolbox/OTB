@@ -431,7 +431,7 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
     double dx=ax+gn*(bx-ax);
     double dy=optParams[1];//ay+gn*(by-ay);
     double fc,fd;
-    bool exit=false;
+    bool exitWhile=false;
     int nbIter=0;
     double bestvalold=itk::NumericTraits<double>::max(),bestval=optMetric;
     double diff=itk::NumericTraits<double>::max();
@@ -455,12 +455,12 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
     }
 	catch(itk::ExceptionObject& err)
 	{
-			exit=true;
+			exitWhile=true;
 			itkWarningMacro(<<err.GetDescription());
 	}
         
     
-    while ((diff>m_ConvergenceAccuracy) && (!exit) && (nbIter<=m_MaxIter)) 
+    while ((diff>m_ConvergenceAccuracy) && (!exitWhile) && (nbIter<=m_MaxIter)) 
     {
         nbIter++;
     
@@ -600,7 +600,7 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
 		}
 		catch(itk::ExceptionObject& err)
 		{
-			exit=true;
+			exitWhile=true;
 			itkWarningMacro(<<err.GetDescription());
 		}
         
