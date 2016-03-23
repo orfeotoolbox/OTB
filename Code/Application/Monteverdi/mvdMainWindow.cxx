@@ -997,7 +997,7 @@ CountType
 MainWindow
 ::ImportImage( const QString& filename, StackedLayerModel::SizeType index )
 {
-  qDebug() << this << "::ImportImage(" << filename << "," << index << ")";
+  // qDebug() << this << "::ImportImage(" << filename << "," << index << ")";
 
   //
   // Get stacked-layer.
