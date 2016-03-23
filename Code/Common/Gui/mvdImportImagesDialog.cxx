@@ -222,7 +222,7 @@ ImportImagesDialog
 	  }
 
 	builder->SetResolutionFactor( 2 );
-	builder->SetNbResolutions( builder->CountResolutions( 2 ) );
+	builder->SetNbResolutions( builder->CountResolutions( 2, 256 ) );
 	builder->SetResamplingMethod( otb::GDAL_RESAMPLING_AVERAGE );
 	builder->SetCompressionMethod( otb::GDAL_COMPRESSION_NONE );
 	builder->SetFormat( otb::GDAL_FORMAT_GEOTIFF );
