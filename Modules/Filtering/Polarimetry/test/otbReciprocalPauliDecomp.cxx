@@ -53,7 +53,6 @@ int otbReciprocalPauliDecompImageFilter(int itkNotUsed(argc), char * argv[])
   const unsigned int Dimension = 2;
 
 
-  typedef otb::Image<ComplexPixelType, Dimension>  	   ComplexImageType;
   typedef otb::VectorImage<ComplexPixelType, Dimension>  ComplexVectorImageType;
   typedef otb::VectorImage<double, Dimension>          RealVectorImageType;
 
