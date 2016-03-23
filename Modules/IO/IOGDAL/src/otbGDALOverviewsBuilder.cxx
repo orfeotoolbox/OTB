@@ -247,6 +247,8 @@ GDALOverviewsBuilder
 {
   assert( !m_GDALDataset.IsNull() );
 
+  // Return only GDAL already generated overview count as opposed to
+  // ImageIO::GetOverviewsCount() which include full image as one level.
   return m_GDALDataset->GetOverviewsCount();
 }
 
