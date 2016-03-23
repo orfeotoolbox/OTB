@@ -19,6 +19,8 @@
 
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbGenericRSResampleImageFilter.h"
+#include "otbGridResampleImageFilter.h"
+#include "otbImportGeoInformationImageFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 #include "itkFixedArray.h"
@@ -132,7 +134,8 @@ private:
 
     typedef otb::BCOInterpolateImageFunction<FloatVectorImageType> InterpolatorType;
     typedef otb::GenericRSResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  ResamplerType;
-    typedef otb::StreamingResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  BasicResamplerType;
+    typedef otb::GridResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  BasicResamplerType;
+    typedef otb::ImportGeoInformationImageFilter<FloatVectorImageType,InternalImageType> ImportGeoInformationFilterType;
     typedef otb::SimpleRcsPanSharpeningFusionImageFilter<InternalImageType, FloatVectorImageType, FloatVectorImageType> FusionFilterType;
 
     // Resample filter
@@ -141,6 +144,9 @@ private:
     
     BasicResamplerType::Pointer basicResampler = BasicResamplerType::New();
     m_Ref.push_back(basicResampler.GetPointer());
+
+    ImportGeoInformationFilterType::Pointer geoImport = ImportGeoInformationFilterType::New();
+    m_Ref.push_back(geoImport.GetPointer());
 
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     resampler->SetInterpolator(interpolator);
@@ -199,18 +205,30 @@ private:
       {
       otbAppLogINFO("Using the PHR mode");
       
-      otb::PleiadesPToXSAffineTransformCalculator::TransformType::Pointer transform
-        = otb::PleiadesPToXSAffineTransformCalculator::Compute(panchro, xs);
+      otb::PleiadesPToXSAffineTransformCalculator::TransformType::OffsetType offset
+        = otb::PleiadesPToXSAffineTransformCalculator::ComputeOffset(GetParameterImage("inp"),
+                                                                     GetParameterImage("inxs"));
 
-      basicResampler->SetInput(xs);
-      basicResampler->SetTransform(transform);
+      origin+=offset;
+      origin[0]=origin[0]/4;
+      origin[1]=origin[1]/4;
+      
       basicResampler->SetOutputOrigin(origin);
-      basicResampler->SetOutputSpacing(spacing);
+      basicResampler->SetInput(xs);
+      basicResampler->SetOutputOrigin(origin);
+
+      FloatVectorImageType::SpacingType xsSpacing = GetParameterImage("inxs")->GetSpacing();
+      xsSpacing*=0.25;
+      
+      basicResampler->SetOutputSpacing(xsSpacing);
       basicResampler->SetOutputSize(size);
       basicResampler->SetOutputStartIndex(start);
       basicResampler->SetEdgePaddingValue(defaultValue);
-      
-      fusionFilter->SetXsInput(basicResampler->GetOutput());
+
+      geoImport->SetInput(basicResampler->GetOutput());
+      geoImport->SetSource(panchro);
+
+      fusionFilter->SetXsInput(geoImport->GetOutput());
 
       // Set the profRef & Keywordlist from Pan into the resampled XS image
       basicResampler->UpdateOutputInformation();

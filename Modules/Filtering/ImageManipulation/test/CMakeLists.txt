@@ -76,6 +76,7 @@ otbTwoNRIBandsImageToNComplexBandsImage.cxx
 otbChangeNoDataValueFilter.cxx
 otbImageToNoDataMaskFilter.cxx
 otbChangeInformationImageFilter.cxx
+otbGridResampleImageFilter.cxx
 otbMaskedIteratorDecorator.cxx
 )
 
@@ -718,6 +719,8 @@ otb_add_test(NAME bfTvChangeInformationImageFilter COMMAND  otbImageManipulation
   ${INPUTDATA}/WV2_PAN_ROI_1000_100.tif
   )
 
+otb_add_test(NAME    otbGridResampleImageFilter
+             COMMAND otbImageManipulationTestDriver otbGridResampleImageFilter)
 otb_add_test(NAME bfTuMaskedIteratorDecoratorNew COMMAND otbImageManipulationTestDriver
   otbMaskedIteratorDecoratorNew
 )
