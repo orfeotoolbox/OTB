@@ -218,7 +218,7 @@ ImportImagesDialog
 	  {
 	  flags |= Qt::ItemIsEnabled;
 
-	  builder->SetBypassEnabled( false );
+	  builder->SetBypassEnabled( count<=1 );
 
 	  ++ m_EffectiveCount;
 	  }
@@ -288,10 +288,11 @@ ImportImagesDialog
       if( flags.testFlag( Qt::ItemIsEnabled ) )
 	{
 	items.back()->setFlags( flags | Qt::ItemIsUserCheckable );
+
 	items.back()->setCheckState(
-	  builder->GetNbResolutions() > 1
-	  ? Qt::Checked
-	  : Qt::Unchecked
+	  builder->IsBypassEnabled()
+	  ? Qt::Unchecked
+	  : Qt::Checked
 	);
 	}
       else
@@ -388,11 +389,18 @@ ImportImagesDialog
   QModelIndex index( model->index( row, COLUMN_OVERVIEW_SIZE ) );
 
   //
+  // Get GDAL overview builder.
+  otb::GDALOverviewsBuilder::Pointer builder(
+    m_GDALOverviewsBuilders[ index.row() ]
+  );
+  assert( !builder.IsNull() );
+
+  //
   // Update file size.
   model->setData(
     index,
     ToHumanReadableSize(
-      m_GDALOverviewsBuilders[ index.row() ]->GetEstimatedSize()
+      builder->GetEstimatedSize()
     )
   );
 }
@@ -517,8 +525,11 @@ ImportImagesDialog
     GetBuilder( item->index() );
 
   if( !builder.IsNull() )
+    {
     builder->SetBypassEnabled( item->checkState()!=Qt::Checked );
 
+    UpdateFileSize( index.row() );
+    }
 
   assert( m_UI!=NULL );
   assert( m_UI->filenamesTreeView->selectionModel()!=NULL );
