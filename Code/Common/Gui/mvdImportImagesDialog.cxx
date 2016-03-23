@@ -210,7 +210,9 @@ ImportImagesDialog
 
 	flags |= Qt::ItemIsSelectable;
 
-	if( builder->GetOverviewsCount()>1 )
+	unsigned int count = builder->CountResolutions( 2, 256 );
+
+	if( builder->GetOverviewsCount()>0 )
 	  builder->SetBypassEnabled( true );
 	else
 	  {
@@ -222,7 +224,7 @@ ImportImagesDialog
 	  }
 
 	builder->SetResolutionFactor( 2 );
-	builder->SetNbResolutions( builder->CountResolutions( 2, 256 ) );
+	builder->SetNbResolutions( count );
 	builder->SetResamplingMethod( otb::GDAL_RESAMPLING_AVERAGE );
 	builder->SetCompressionMethod( otb::GDAL_COMPRESSION_NONE );
 	builder->SetFormat( otb::GDAL_FORMAT_GEOTIFF );
@@ -286,7 +288,11 @@ ImportImagesDialog
       if( flags.testFlag( Qt::ItemIsEnabled ) )
 	{
 	items.back()->setFlags( flags | Qt::ItemIsUserCheckable );
-	items.back()->setCheckState( Qt::Checked );
+	items.back()->setCheckState(
+	  builder->GetNbResolutions() > 1
+	  ? Qt::Checked
+	  : Qt::Unchecked
+	);
 	}
       else
 	items.back()->setFlags( flags );
