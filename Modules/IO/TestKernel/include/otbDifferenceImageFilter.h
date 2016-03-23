@@ -45,7 +45,8 @@ public:
   typedef typename OutputImageType::RegionType                   OutputImageRegionType;
   typedef typename itk::NumericTraits<OutputPixelType>::RealType RealType;
   typedef typename itk::NumericTraits<RealType>::AccumulateType  AccumulateType;
-  typedef typename RealType::RealValueType                       ScalarRealType;
+  typedef typename itk::NumericTraits<OutputPixelType>
+                      ::ScalarRealType                           ScalarRealType;
 
   /** Set the valid image input.  This will be input 0.  */
   virtual void SetValidInput(const InputImageType* validImage);
@@ -65,7 +66,7 @@ public:
 
   /** Get parameters of the difference image after execution.  */
   itkGetMacro(MeanDifference, RealType);
-  itkGetMacro(TotalDifference, RealType);
+  itkGetMacro(TotalDifference, AccumulateType);
   itkGetMacro(NumberOfPixelsWithDifferences, unsigned long);
 
 protected:
@@ -94,12 +95,12 @@ protected:
 
   ScalarRealType m_DifferenceThreshold;
   RealType       m_MeanDifference;
-  RealType       m_TotalDifference;
+  AccumulateType m_TotalDifference;
   unsigned long  m_NumberOfPixelsWithDifferences;
   int            m_ToleranceRadius;
 
-  std::vector<RealType>     m_ThreadDifferenceSum;
-  itk::Array<unsigned long> m_ThreadNumberOfPixels;
+  std::vector<AccumulateType> m_ThreadDifferenceSum;
+  itk::Array<unsigned long>   m_ThreadNumberOfPixels;
 
 private:
   DifferenceImageFilter(const Self &); //purposely not implemented
