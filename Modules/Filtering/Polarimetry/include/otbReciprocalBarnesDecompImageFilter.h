@@ -33,8 +33,6 @@ namespace Functor {
  * 
  * \brief Evaluate the Huynen decomposition from the reciprocal Sinclair matrix image.
  *
- * \ingroup SARPolarimetry
- *
  * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
@@ -125,10 +123,8 @@ private:
  *
  * For more details, please refer to the class ReciprocalBarnesDecompFunctor.
  *
- * \ingroup SARPOlarimetry
- * \sa ReciprocalBarnesDecompFunctor
- *
  * \ingroup OTBPolarimetry
+ * \sa ReciprocalBarnesDecompFunctor
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalBarnesDecompImageFilter :

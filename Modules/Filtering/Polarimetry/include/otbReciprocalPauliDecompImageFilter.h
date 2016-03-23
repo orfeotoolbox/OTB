@@ -27,11 +27,9 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbPauliDecompFunctor
+/** \class ReciprocalPauliDecompFunctor
  * 
  * \brief Evaluate the Pauli decomposition from the reciprocal Sinclair matrix image.
- *
- * \ingroup SARPolarimetry
  *
  * \ingroup OTBPolarimetry
  */
@@ -80,16 +78,15 @@ private:
 }
 
 
-/** \class otbPauliDecompImageFilter
+/** \class ReciprocalPauliDecompImageFilter
  * \brief Compute the Pauli decomposition image (3 complex channels)
  * from the Reciprocal Sinclair image (6 complex channels)
  *
  * For more details, please refer to the class ReciprocalPauliDecompFunctor.
  *
- * \ingroup SARPOlarimetry
+ * \ingroup OTBPolarimetry
  * \sa ReciprocalPauliDecompFunctor
  *
- * \ingroup OTBPolarimetry
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalPauliDecompImageFilter :

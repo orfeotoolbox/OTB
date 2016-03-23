@@ -27,11 +27,9 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbHuynenDecompFunctor
+/** \class ReciprocalHuynenDecompFunctor
  * 
  * \brief Evaluate the Huynen decomposition from the reciprocal Sinclair matrix image.
- *
- * \ingroup SARPolarimetry
  *
  * \ingroup OTBPolarimetry
  */
@@ -89,16 +87,15 @@ private:
 }
 
 
-/** \class otbHuynenDecompImageFilter
+/** \class ReciprocalHuynenDecompImageFilter
  * \brief Compute the Huynen decomposition image (9 complex channels)
  * from the Reciprocal Covariance image (6 complex channels)
  *
  * For more details, please refer to the class ReciprocalHuynenDecompFunctor.
  *
- * \ingroup SARPOlarimetry
+ * \ingroup OTBPolarimetry
  * \sa ReciprocalHuynenDecompFunctor
  *
- * \ingroup OTBPolarimetry
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalHuynenDecompImageFilter :
