@@ -285,6 +285,71 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
     }
   return;
  }
+ 
+template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
+double
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacementField>
+::callMetric(double val1,double val2,double &oldRes,bool &flag)
+{
+   typename TranslationType::ParametersType paramsgn(2);
+   paramsgn[0]=val1;
+   paramsgn[1]=val2;
+   
+   double res=oldRes;
+   flag=false;
+   
+   try
+   {
+      res=m_Metric->GetValue(paramsgn);
+   }
+   catch(itk::ExceptionObject& err)
+   {
+      flag=true;
+      itkWarningMacro(<< err.GetDescription());
+   }
+        
+   return res;
+} 
+
+template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
+void
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacementField>
+::updateOptParams(double potBestVal,double parx,double pary,double &bestVal, typename TranslationType::ParametersType& optParams)
+{
+    if (bestVal>potBestVal)
+    {
+        bestVal=potBestVal;
+        optParams[0]=parx;
+        optParams[1]=pary;
+    }
+}
+
+
+template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
+void
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacementField>
+::updatePoints(double& gn, double& in1, double& in2, double &in3,  
+               double& out1, double& out2, double& out3, double& out4)
+{
+    out1=out2;
+    out2=in3;
+    out3=in1+gn*(in2-in1);
+    out4=in2-gn*(in2-in1);
+} 
+
+
+template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
+void
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacementField>
+::updateMinimize(double& a, double& b)
+{
+    if(!m_Minimize)
+    {
+        a = -a;
+        b = -b;
+    }
+}
+
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
 void
@@ -430,180 +495,62 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
     double cy=optParams[1];//by-gn*(by-ay);
     double dx=ax+gn*(bx-ax);
     double dy=optParams[1];//ay+gn*(by-ay);
-    double fc,fd;
+    double fc=0,fd=0;
     bool exitWhile=false;
     int nbIter=0;
     double bestvalold=itk::NumericTraits<double>::max(),bestval=optMetric;
     double diff=itk::NumericTraits<double>::max();
     
     //init
-    try
-	{
-        paramsgn[0]=cx;
-        paramsgn[1]=cy;
-        fc=m_Metric->GetValue(paramsgn);
-            
-        paramsgn[0]=dx;
-        paramsgn[1]=dy;
-        fd=m_Metric->GetValue(paramsgn);
-        
-        if(!m_Minimize)
-            {
-                fc = -fc;
-                fd = -fd;
-            }
-    }
-	catch(itk::ExceptionObject& err)
-	{
-			exitWhile=true;
-			itkWarningMacro(<<err.GetDescription());
-	}
-        
-    
+    fc=callMetric(cx,cy,fc,exitWhile);
+    fd=callMetric(dx,dy,fd,exitWhile);
+    updateMinimize(fc,fd);
+
+    //loop
     while ((diff>m_ConvergenceAccuracy) && (!exitWhile) && (nbIter<=m_MaxIter)) 
     {
         nbIter++;
     
-		try
-		{
-		    // x direction
-			if (fc<fd)
-			{
-				if (bestval>fc)
-				   {
-                     bestval=fc;
-                     optParams[0]=cx;
-                     optParams[1]=cy;
-                   }
-				
-				bx=dx;
-				
-				dx=cx;
-				dy=ay+gn*(by-ay);
-				
-				cy=by-gn*(by-ay);
-				
-				paramsgn[0]=dx;
-	            paramsgn[1]=dy;
-	            fd=m_Metric->GetValue(paramsgn);
-				
-				paramsgn[0]=cx;
-	            paramsgn[1]=cy;
-	            fc=m_Metric->GetValue(paramsgn);
-				
-			}
-			else
-			{
-                if (bestval>fd)
-				   {
-                     bestval=fd;
-                     optParams[0]=dx;
-                     optParams[1]=dy;
-                   }
-				
-				ax=cx;
-				
-				cx=dx;
-				cy=by-gn*(by-ay);
-				
-				dy=ay+gn*(by-ay);
-				
-				paramsgn[0]=cx;
-	            paramsgn[1]=cy;
-	            fc=m_Metric->GetValue(paramsgn);
-				
-				paramsgn[0]=dx;
-	            paramsgn[1]=dy;
-	            fd=m_Metric->GetValue(paramsgn);
-			}
-			
-			if(!m_Minimize)
-            {
-				fc = -fc;
-				fd = -fd;
-			}
-            
-	        // y direction
-			if (fc<fd)
-			{
-                if (bestval>fc)
-				   {
-                     bestval=fc;
-                     optParams[0]=cx;
-                     optParams[1]=cy;
-                   }
-				
-				by=dy;
-				
-				dx=ax+gn*(bx-ax);
-				dy=cy;
-				
-				cx=bx-gn*(bx-ax);
-				
-				paramsgn[0]=dx;
-	            paramsgn[1]=dy;
-	            fd=m_Metric->GetValue(paramsgn);
-				
-				paramsgn[0]=cx;
-	            paramsgn[1]=cy;
-	            fc=m_Metric->GetValue(paramsgn);
-				
-			}
-			else
-			{
-				if (bestval>fd)
-				   {
-                     bestval=fd;
-                     optParams[0]=dx;
-                     optParams[1]=dy;
-                   }
-				
-				ay=cy;
-				
-				cx=bx-gn*(bx-ax);
-				cy=dy;
-				
-				dx=ax+gn*(bx-ax);
-
-				paramsgn[0]=cx;
-	            paramsgn[1]=cy;
-	            fc=m_Metric->GetValue(paramsgn);
-				
-				paramsgn[0]=dx;
-	            paramsgn[1]=dy;
-	            fd=m_Metric->GetValue(paramsgn);
-			}
-			
-			if(!m_Minimize)
-			{
-				fc = -fc;
-				fd = -fd;
-			}
-			
-            // Before eventual exit, take benefit from the last evaluations of fd and fc
-            if (bestval>fd)
-				   {
-                     bestval=fd;
-                     optParams[0]=dx;
-                     optParams[1]=dy;
-                   }
-            if (bestval>fc)
-				   {
-                     bestval=fc;
-                     optParams[0]=cx;
-                     optParams[1]=cy;
-                   }
-			
-			if(!m_Minimize)
-                bestval=-bestval;
-    
-		}
-		catch(itk::ExceptionObject& err)
-		{
-			exitWhile=true;
-			itkWarningMacro(<<err.GetDescription());
-		}
+        // x direction
+        if (fc<fd)
+        {
+            updateOptParams(fc,cx,cy,bestval,optParams);   
+            updatePoints(gn,ay,by,cx,bx,dx,dy,cy);
+            fc=callMetric(cx,cy,fc,exitWhile);
+            fd=callMetric(dx,dy,fd,exitWhile);
+        }
+        else
+        {
+            updateOptParams(fd,dx,dy,bestval,optParams);
+            updatePoints(gn,by,ay,dx,ax,cx,cy,dy);
+            fc=callMetric(cx,cy,fc,exitWhile);
+            fd=callMetric(dx,dy,fd,exitWhile);
+        }
+        updateMinimize(fc,fd);
         
+        // y direction
+        if (fc<fd)
+        {
+            updateOptParams(fc,cx,cy,bestval,optParams);
+            updatePoints(gn,ax,bx,cy,by,dy,dx,cx);
+            fc=callMetric(cx,cy,fc,exitWhile);
+            fd=callMetric(dx,dy,fd,exitWhile);
+        }
+        else
+        {
+            updateOptParams(fd,dx,dy,bestval,optParams);
+            updatePoints(gn,bx,ax,dy,ay,cy,cx,dx);
+            fc=callMetric(cx,cy,fc,exitWhile);
+            fd=callMetric(dx,dy,fd,exitWhile);
+        }
+        updateMinimize(fc,fd);
+        
+        // Before eventual exit, take benefit from the last evaluations of fd and fc
+        updateOptParams(fd,dx,dy,bestval,optParams);
+        updateOptParams(fc,cx,cy,bestval,optParams);
+        
+        if(!m_Minimize)
+            bestval=-bestval;
         diff= fabs(bestval-bestvalold);
         bestvalold=bestval;
     
