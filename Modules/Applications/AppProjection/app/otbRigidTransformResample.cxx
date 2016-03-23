@@ -25,11 +25,11 @@
 #include "otbCompositeTransform.h"
 #include "itkScalableAffineTransform.h"
 #include "itkTranslationTransform.h"
-#include "itkIdentityTransform.h"
 #include "itkScaleTransform.h"
 #include "itkCenteredRigid2DTransform.h"
 
 #include "otbStreamingResampleImageFilter.h"
+#include "otbGridResampleImageFilter.h"
 
 namespace otb
 {
@@ -64,8 +64,7 @@ public:
 
   typedef itk::TranslationTransform<double, FloatVectorImageType::ImageDimension> TransformType;
   typedef otb::StreamingResampleImageFilter<FloatVectorImageType, FloatVectorImageType, double>    ResampleFilterType;
-
-  typedef itk::IdentityTransform<double, FloatVectorImageType::ImageDimension>      IdentityTransformType;
+  typedef otb::GridResampleImageFilter<FloatVectorImageType,FloatVectorImageType> GridResampleFilterType;
 
   typedef itk::ScalableAffineTransform<double, FloatVectorImageType::ImageDimension> ScalableTransformType;
   typedef ScalableTransformType::OutputVectorType                         OutputVectorType;
@@ -182,7 +181,9 @@ private:
     FloatVectorImageType* inputImage = GetParameterImage("in");
 
     m_Resampler = ResampleFilterType::New();
+    m_GridResampler = GridResampleFilterType::New();
     m_Resampler->SetInput(inputImage);
+    m_GridResampler->SetInput(inputImage);
 
     // Get Interpolator
     switch ( GetParameterInt("interpolator") )
@@ -218,9 +219,7 @@ private:
       {
       case Transform_Identity:
       {
-      IdentityTransformType::Pointer transform = IdentityTransformType::New();
-
-      m_Resampler->SetOutputParametersFromImage( inputImage );
+      m_GridResampler->SetOutputParametersFromImage( inputImage );
       // Scale Transform
       OutputVectorType scale;
       scale[0] = 1.0 / GetParameterFloat("transform.type.id.scalex");
@@ -232,23 +231,21 @@ private:
       OutputSpacing[0] = spacing[0] * scale[0];
       OutputSpacing[1] = spacing[1] * scale[1];
 
-      m_Resampler->SetOutputSpacing(OutputSpacing);
+      m_GridResampler->SetOutputSpacing(OutputSpacing);
 
       FloatVectorImageType::PointType origin = inputImage->GetOrigin();
       FloatVectorImageType::PointType outputOrigin;
       outputOrigin[0] = origin[0] + 0.5 * spacing[0] * (scale[0] - 1.0);
       outputOrigin[1] = origin[1] + 0.5 * spacing[1] * (scale[1] - 1.0);
 
-      m_Resampler->SetOutputOrigin(outputOrigin);
-
-      m_Resampler->SetTransform(transform);
+      m_GridResampler->SetOutputOrigin(outputOrigin);
 
       // Evaluate size
       ResampleFilterType::SizeType recomputedSize;
       recomputedSize[0] = inputImage->GetLargestPossibleRegion().GetSize()[0] / scale[0];
       recomputedSize[1] = inputImage->GetLargestPossibleRegion().GetSize()[1] / scale[1];
 
-      m_Resampler->SetOutputSize(recomputedSize);
+      m_GridResampler->SetOutputSize(recomputedSize);
       otbAppLogINFO( << "Output image size : " << recomputedSize );
       }
       break;
@@ -437,6 +434,8 @@ private:
   }
 
   ResampleFilterType::Pointer m_Resampler;
+  GridResampleFilterType::Pointer m_GridResampler;
+  
 }; //class
 
 
