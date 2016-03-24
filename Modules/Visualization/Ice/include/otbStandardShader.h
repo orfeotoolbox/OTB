@@ -18,8 +18,11 @@
 #ifndef otb_StandardShader_h
 #define otb_StandardShader_h
 
-#include "otbFragmentShader.h"
+
 #include "itkObjectFactory.h"
+
+#include "otbFragmentShader.h"
+#include "otbImageSettings.h"
 
 namespace otb
 {
@@ -41,51 +44,21 @@ class StandardShader
 {
 public:
   typedef StandardShader                                  Self;
-  typedef itk::Object                                     Superclass;
+  typedef FragmentShader                                  Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   typedef itk::Point<float,2>                             PointType;
 
-  
-  itkSetMacro(MinRed,double);
-  itkSetMacro(MinGreen,double);
-  itkSetMacro(MinBlue,double);
-  itkGetMacro(MinRed,double);
-  itkGetMacro(MinGreen,double);
-  itkGetMacro(MinBlue,double);
+  itkSetObjectMacro( ImageSettings, ImageSettings );
+  itkGetObjectMacro( ImageSettings, ImageSettings );
+  itkGetConstObjectMacro( ImageSettings, ImageSettings );
 
-  itkSetMacro(MaxRed,double);
-  itkSetMacro(MaxGreen,double);
-  itkSetMacro(MaxBlue,double);
-  itkGetMacro(MaxRed,double);
-  itkGetMacro(MaxGreen,double);
-  itkGetMacro(MaxBlue,double);  
-
-  itkSetMacro(UseNoData,bool);
-  itkGetMacro(UseNoData,bool);
-  itkSetMacro(NoData,double);
-  itkGetMacro(NoData,double);
-
-  itkSetMacro(CurrentRed,double);
-  itkSetMacro(CurrentGreen,double);
-  itkSetMacro(CurrentBlue,double);
-
-  itkGetMacro(CurrentRed,double);
-  itkGetMacro(CurrentGreen,double);
-  itkGetMacro(CurrentBlue,double);
-  
   itkSetMacro(LocalContrastRange,double);
   itkGetMacro(LocalContrastRange,double);
 
   itkSetMacro(SpectralAngleRange,double);
   itkGetMacro(SpectralAngleRange,double);
-
-  itkSetMacro(Gamma,double);
-  itkGetMacro(Gamma,double);
-
-  itkSetMacro(Alpha,double);
-  itkGetMacro(Alpha,double);
 
   itkSetMacro(ShaderType,ShaderType);
   itkGetMacro(ShaderType,ShaderType);
@@ -123,19 +96,8 @@ private:
   StandardShader(const Self&);
   void operator=(const Self&);
 
-  double m_MinRed;
-  double m_MaxRed;
-  double m_MinGreen;
-  double m_MaxGreen;
-  double m_MinBlue;
-  double m_MaxBlue;
-  bool   m_UseNoData;
-  double m_NoData;
-  double m_Gamma;
-  double m_Alpha;
-  double m_CurrentRed;
-  double m_CurrentGreen;
-  double m_CurrentBlue;
+  ImageSettings::Pointer m_ImageSettings;
+
   double m_LocalContrastRange;
   double m_SpectralAngleRange;
 

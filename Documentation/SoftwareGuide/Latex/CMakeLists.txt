@@ -92,18 +92,9 @@ SET(DVIPS_CONVERTER_OPTIONS  -D600)
 SET(TEX4HT_OPTIONS html,2,sections+)
 SET (HTML_OUTPUT "SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 
-#
-#copy release_notes from source tree
-#
+# Copy RELEASE_NOTES.txt from OTB source tree to Software Guide build directory
 SET (RELEASE_NOTES_SRC RELEASE_NOTES.txt)
-#TODO transform the copy as a custom command
-   #ADD_CUSTOM_COMMAND(
-    #    PRE_BUILD
-     #   OUTPUT  ${SoftwareGuide_SOURCE_DIR}/Latex/${RELEASE_NOTES_SRC}
-      #  COMMAND ${CMAKE_COMMAND} -E copy ${OTB_SOURCE_DIR}/${RELEASE_NOTES_SRC}  ${SoftwareGuide_SOURCE_DIR}/Latex/${RELEASE_NOTES_SRC}
-       # COMMENT   "Copying the Release Notes"
-   #)
-EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy "${OTB_SOURCE_DIR}/${RELEASE_NOTES_SRC}" "${SoftwareGuide_SOURCE_DIR}/Latex/${RELEASE_NOTES_SRC}")
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy "${OTB_SOURCE_DIR}/${RELEASE_NOTES_SRC}" "${SoftwareGuide_BINARY_DIR}/Latex/${RELEASE_NOTES_SRC}")
    
 #
 # File that defines the path to .cxx examples in ITK sources
@@ -166,12 +157,6 @@ ENDFOREACH( exampletexname )
 FOREACH( exampletexname ${JAVA_EXAMPLES_TEX_FILES})
   SET( ITK_EXAMPLES_TEX_SRCS ${ITK_EXAMPLES_TEX_SRCS} ${exampletexname})
 ENDFOREACH( exampletexname )
-
-#Generate random contributor list
-MESSAGE(STATUS "Generating contributors list")
-EXECUTE_PROCESS(COMMAND python  generateRandomContributorList.py
-                WORKING_DIRECTORY ${SoftwareGuide_SOURCE_DIR}/Latex/ )
-MESSAGE(STATUS "Generating contributors list done")
 
   IF (NOT UNIX)
     SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex;${SoftwareGuide_SOURCE_DIR};${SoftwareGuide_SOURCE_DIR}/Latex;${SoftwareGuide_SOURCE_DIR}/Art;${SoftwareGuide_BINARY_DIR};${SoftwareGuide_BINARY_DIR}/Examples;${SoftwareGuide_BINARY_DIR}/Art;${SoftwareGuide_BINARY_DIR}/Latex)

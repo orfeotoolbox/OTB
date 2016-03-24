@@ -1,4 +1,4 @@
-\chapter{Reading and Writing Images}
+2;rgb:0000/0000/0000\chapter{Reading and Writing Images}
 \label{sec:IO}
 
 This chapter describes the toolkit architecture supporting reading and
@@ -284,6 +284,11 @@ IMPORTANT: Note that you'll probably need to "quote" the filename.
   \begin{itemize}
   \item To activate writing of external geom file
   \item true by default
+  \end{itemize}  
+\item \begin{verbatim}&writerpctags=<(bool)true>\end{verbatim}
+  \begin{itemize}
+  \item To activate writing of RPC tags in TIFF files
+  \item false by default
   \end{itemize}  
 \item \begin{verbatim}&gdal:co:<GDALKEY>=<VALUE>\end{verbatim}
   \begin{itemize}

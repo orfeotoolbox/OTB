@@ -42,11 +42,11 @@ otb_add_test(NAME leTvSVMImageClassificationWithRuleFilter COMMAND otbSVMLearnin
   ${INPUTDATA}/svm_model_image
   ${TEMP}/leSVMImageClassificationWithRuleFilterOutput.tif)
 
-otb_add_test(NAME obTvLabelMapSVMClassifier COMMAND otbSVMLearningTestDriver
-  otbLabelMapSVMClassifier
-  ${INPUTDATA}/maur.tif
-  ${INPUTDATA}/maur_labelled.tif
-  ${TEMP}/obTvLabelMapSVMClassifierLabeledOutput.tif)
+#otb_add_test(NAME obTvLabelMapSVMClassifier COMMAND otbSVMLearningTestDriver
+  #otbLabelMapSVMClassifier
+  #${INPUTDATA}/maur.tif
+  #${INPUTDATA}/maur_labelled.tif
+  #${TEMP}/obTvLabelMapSVMClassifierLabeledOutput.tif)
 
 otb_add_test(NAME obTuLabelMapSVMClassifierNew COMMAND otbSVMLearningTestDriver
   otbLabelMapSVMClassifierNew)

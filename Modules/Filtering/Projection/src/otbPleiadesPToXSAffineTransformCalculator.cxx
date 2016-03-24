@@ -79,10 +79,11 @@ PleiadesPToXSAffineTransformCalculator
   return false;
 }
 
+
 PleiadesPToXSAffineTransformCalculator
-::TransformType::Pointer
+::OffsetType
 PleiadesPToXSAffineTransformCalculator
-::Compute(const itk::ImageBase<2> * panchromaticImage, const itk::ImageBase<2> * xsImage)
+::ComputeOffset(const itk::ImageBase<2> * panchromaticImage, const itk::ImageBase<2> * xsImage)
 {
   if(!CanCompute(panchromaticImage,xsImage))
     {
@@ -166,23 +167,36 @@ PleiadesPToXSAffineTransformCalculator
     double lineShift_MS_P = -vcl_floor((timeDelta/(linePeriodPan/1000)+0.5))+1.5;
     double colShift_MS_P =  -((colStartXS-1)*4 - colStartPan + 1)+1.5;
 
-     
-    // Apply the scaling
-    typedef itk::ScalableAffineTransform<double, 2>  TransformType;
-    TransformType::Pointer transform = TransformType::New();
-    transform->SetIdentity();
-
-    // Apply the offset
-    TransformType::OutputVectorType offset;
+    OffsetType offset;
+    
     offset[0] = colShift_MS_P;
     offset[1] = lineShift_MS_P;
-    transform->Translate(offset);
 
-    // Apply the scaling
-    transform->Scale(0.25);
+    return offset;
+}
 
-    return transform;
-    }
+
+PleiadesPToXSAffineTransformCalculator
+::TransformType::Pointer
+PleiadesPToXSAffineTransformCalculator
+::Compute(const itk::ImageBase<2> * panchromaticImage, const itk::ImageBase<2> * xsImage)
+{
+  // Compute the offset
+  OffsetType offset = ComputeOffset(panchromaticImage,xsImage);
+     
+  // Apply the scaling
+  typedef itk::ScalableAffineTransform<double, 2>  TransformType;
+  TransformType::Pointer transform = TransformType::New();
+  transform->SetIdentity();
+  
+  // Apply the offset
+  transform->Translate(offset);
+  
+  // Apply the scaling
+  transform->Scale(0.25);
+  
+  return transform;
+}
 
 } // End namespace otb
 

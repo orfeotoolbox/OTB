@@ -9,7 +9,15 @@ otb_test_application(NAME apTvPrBundleToPerfectSensor
                      VALID  --compare-image ${EPSILON_7}
                         ${BASELINE}/apTvPrBundleToPerfectSensor.tif
                         ${TEMP}/apTvPrBundleToPerfectSensor.tif)
-
+                      
+otb_test_application(NAME apTvPrBundleToPerfectSensor_phr
+                     APP BundleToPerfectSensor
+                     OPTIONS -inp  ${INPUTDATA}/phr_pan.tif
+                             -inxs ${INPUTDATA}/phr_xs.tif
+                             -out ${TEMP}/apTvPrBundleToPerfectSensorPHR.tif int16
+                     VALID  --compare-image ${EPSILON_7}
+                        ${BASELINE}/apTvPrBundleToPerfectSensorPHR.tif
+                        ${TEMP}/apTvPrBundleToPerfectSensorPHR.tif)
 
 #----------- Pansharpening TESTS ----------------
 otb_test_application(NAME  apTvFuPansharpening_LMVM

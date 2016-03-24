@@ -13,7 +13,8 @@ else()
     add_definitions(-DFREEGLUT_STATIC)	
 endif()
 
- add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+add_definitions(-DHAVE_FCNTL_H)
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
 set(FREEGLUT_SRCS ${FREEGLUT_SRC_DIR}/freeglut_callbacks.c 
 ${FREEGLUT_SRC_DIR}/freeglut_cursor.c 

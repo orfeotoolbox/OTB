@@ -44,7 +44,8 @@ GlImageActor::GlImageActor()
     m_Origin(),
     m_Spacing(),
     m_NumberOfComponents(0),
-    m_Shader(StandardShader::New()),
+    m_ImageSettings( ImageSettings::New() ),
+    m_Shader(),
     m_ViewportToImageTransform(),
     m_ImageToViewportTransform(),
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
@@ -63,6 +64,17 @@ GlImageActor
     UnloadTile( *it );
 
   m_LoadedTiles.clear();
+}
+
+void
+GlImageActor
+::CreateShader()
+{
+  StandardShader::Pointer shader( StandardShader::New() );
+
+  shader->SetImageSettings( m_ImageSettings );
+
+  m_Shader = shader;
 }
 
 const GlImageActor::PointType & GlImageActor::GetOrigin() const
@@ -141,6 +153,23 @@ void GlImageActor::Initialize(const std::string & filename)
   m_NumberOfComponents = m_FileReader->GetOutput()->GetNumberOfComponentsPerPixel();
 
   unsigned int ovrCount = m_FileReader->GetOverviewsCount();
+
+  std::cout << "overview-count: " << ovrCount << std::endl;
+
+  assert( ovrCount>0 );
+
+  // {
+  // typedef std::vector< std::string > StringVector;
+
+  // StringVector info(
+  //   m_FileReader->GetOverviewsInfo()
+  // );
+
+  // for( StringVector::const_iterator it( info.begin() );
+  //      it!=info.end();
+  //      ++it )
+  //   std::cout << *it << std::endl;
+  // }
 
   m_AvailableResolutions.clear();
 
@@ -299,7 +328,7 @@ void GlImageActor::Render()
   //   << "\tpixel: " << m_SoftwareRendering << std::endl
   //   << "\ttile: " << m_TileSize << std::endl;
 
-  if(!m_SoftwareRendering)
+  if( !m_SoftwareRendering && !m_Shader.IsNull() )
     {
     // std::cout << "\tGLSL" << std::endl;
 
@@ -328,33 +357,24 @@ void GlImageActor::Render()
 
       bool useNoData(false);
       double noData(0.);
-      
-      StandardShader::Pointer shader = dynamic_cast<StandardShader *>(m_Shader.GetPointer());
 
-      if(shader)
-        {
-      
-        mins[0] = shader->GetMinRed();
-        mins[1] = shader->GetMinGreen();
-        mins[2] = shader->GetMinBlue();
+      assert( !m_ImageSettings.IsNull() );
+
+      mins[ 0 ] = m_ImageSettings->GetMinRed();
+      mins[ 1 ] = m_ImageSettings->GetMinGreen();
+      mins[ 2 ] = m_ImageSettings->GetMinBlue();
     
-        maxs[0] = shader->GetMaxRed();
-        maxs[1] = shader->GetMaxGreen();
-        maxs[2] = shader->GetMaxBlue();
+      maxs[ 0 ] = m_ImageSettings->GetMaxRed();
+      maxs[ 1 ] = m_ImageSettings->GetMaxGreen();
+      maxs[ 2  ] = m_ImageSettings->GetMaxBlue();
 
-        gamma = shader->GetGamma();
+      gamma = m_ImageSettings->GetGamma();
 
-        useNoData = shader->GetUseNoData();
-
-        if(useNoData)
-          {
-          noData = shader->GetNoData();
-          }
-        
-        }
+      if( m_ImageSettings->GetUseNoData() )
+	noData = m_ImageSettings->GetNoData();
       
-      omins.Fill(0);
-      omaxs.Fill(255);
+      omins.Fill( 0 );
+      omaxs.Fill( 255 );
     
       it->m_RescaleFilter->SetInputMinimum(mins);
       it->m_RescaleFilter->SetInputMaximum(maxs);
@@ -427,45 +447,44 @@ void GlImageActor::Render()
       }
     }
 
-for(TileVectorType::iterator it = m_LoadedTiles.begin();
-    it != m_LoadedTiles.end(); ++it)
-  {
-  
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-  
-  glEnable(GL_TEXTURE_2D);  
-  glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
-  
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);     
-  if(m_CurrentResolution == 0)
+  for(TileVectorType::iterator it = m_LoadedTiles.begin();
+      it != m_LoadedTiles.end(); ++it)
     {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+  
+    glEnable(GL_TEXTURE_2D);  
+    glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
+  
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);     
+    if(m_CurrentResolution == 0)
+      {
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      }
+    else
+      {
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      }
+  
+    // Reset color before rendering
+    glColor3d(1.0f,1.0f,1.0f);
+  
+    glBegin (GL_QUADS);
+    glTexCoord2f (0.0, 1.0); glVertex2f(it->m_LL[0], it->m_LL[1]);
+    glTexCoord2f (1.0, 1.0); glVertex2f(it->m_LR[0], it->m_LR[1]);
+    glTexCoord2f (1.0, 0.0); glVertex2f(it->m_UR[0], it->m_UR[1]);
+    glTexCoord2f (0.0, 0.0); glVertex2f(it->m_UL[0], it->m_UL[1]);
+    glEnd ();
+  
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
     }
-  else
-    {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    }
-  
-  // Reset color before rendering
-  glColor3d(1.0f,1.0f,1.0f);
-  
-  glBegin (GL_QUADS);
-  glTexCoord2f (0.0, 1.0); glVertex2f(it->m_LL[0], it->m_LL[1]);
-  glTexCoord2f (1.0, 1.0); glVertex2f(it->m_LR[0], it->m_LR[1]);
-  glTexCoord2f (1.0, 0.0); glVertex2f(it->m_UR[0], it->m_UR[1]);
-  glTexCoord2f (0.0, 0.0); glVertex2f(it->m_UL[0], it->m_UL[1]);
-  glEnd ();
-  
-  glDisable(GL_TEXTURE_2D);
-  glDisable(GL_BLEND);
-  }
 
-if(!m_SoftwareRendering)
-  {
+  if( !m_SoftwareRendering && !m_Shader.IsNull() )
+    {
     m_Shader->UnloadShader();
-  }
-
+    }
 }
 
 void GlImageActor::LoadTile(Tile& tile)
@@ -521,7 +540,13 @@ void GlImageActor::LoadTile(Tile& tile)
     assert( tile.m_TextureId==0 );
 
     glGenTextures( 1, &tile.m_TextureId );
-    assert( glGetError()==GL_NO_ERROR );
+
+    // Following assert is somtimes false on some OpenGL systems for
+    // some unknown reason even though the glGenTexture() call has
+    // succeeded.
+    // assert( glGetError()==GL_NO_ERROR );
+
+    assert( tile.m_TextureId!=0 );
 
     // std::cout << "Generated texture #" << tile.m_TextureId << std::endl;
 
