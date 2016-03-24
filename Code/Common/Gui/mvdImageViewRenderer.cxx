@@ -148,7 +148,7 @@ ImageViewRenderer
 /*****************************************************************************/
 bool
 ImageViewRenderer
-::CheckGLCapabilities( int * glsl140 ) const
+::CheckGLCapabilities( int * glsl140 )
 {
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
   return true;
@@ -203,9 +203,13 @@ ImageViewRenderer
     return true;
 
   //
+  // Disable GLSL effects.
+  m_EffectsEnabled = false;
+
+  //
   // Construct message.
   QString message(
-    tr( "Current OpenGL version is '%1' supporting OpenGL Shading-Language (GLSL) version '%2'.\nRequired OpenGL version is at least '%3' with GLSL version at least '%4'.\nPlease upgrade your graphics driver and/or hardware for the application to run properly on this platform.\nIf you are running the application under some remote-desktop service, runtime OpenGL and GLSL versions may differ from those running directly on remote platform.\nPlease contact your system administrator.\nApplication will now exit!" )
+    tr( "Current OpenGL version is '%1' supporting OpenGL Shading-Language (GLSL) version '%2'.\nTo run at best performances, this application needs, at least, OpenGL version '%3' with GLSL version '%4'.\nThe application will automatically switch to a rendering mode which does not make use of OpenGL shaders and GLSL.\nIf you are running this application under some remote-desktop service, runtime OpenGL and GLSL versions may differ from those running directly on remote platform." )
     .arg( glVersion )
     .arg( glslVersion )
     .arg( otb::GlVersionChecker::REQUIRED_GL_VERSION )
@@ -216,11 +220,13 @@ ImageViewRenderer
   // Warn user is check has failed.
   qWarning() << ToStdString( message ).c_str();
 
+#if 0
   QMessageBox::critical(
     qobject_cast< QWidget* >( parent() ),
     tr( "Critical error!" ),
     message
   );
+#endif
 
   //
   // KO.
@@ -664,125 +670,128 @@ ImageViewRenderer
 
         //
         // Apply color-dynamics.
-        //
-        // Must use local variable to cast from T* to T::Pointer because
-        // of ITK set/get macros...
-        otb::FragmentShader::Pointer fragmentShader( imageActor->GetShader() );
-        assert(
-          fragmentShader==otb::DynamicCast< otb::StandardShader >( fragmentShader )
-        );
-
-        otb::StandardShader::Pointer shader(
-          otb::DynamicCast< otb::StandardShader >( fragmentShader )
-        );
-
-        assert( !shader.IsNull() );
+	otb::ImageSettings::Pointer imageSettings( imageActor->GetImageSettings() );
+	assert( !imageSettings.IsNull() );
 
         if( settings.IsGrayscaleActivated() )
           {
-          shader->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
-          shader->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_WHITE  ) );
+          imageSettings->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
+          imageSettings->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_WHITE  ) );
 
-          shader->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
-          shader->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
+          imageSettings->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
+          imageSettings->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
 
-          shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
-          shader->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
+          imageSettings->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
+          imageSettings->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
           }
         else
           {
-          shader->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_RED ) );
-          shader->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_RED  ) );
+          imageSettings->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_RED ) );
+          imageSettings->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_RED  ) );
 
-          shader->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_GREEN ) );
-          shader->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_GREEN ) );
+          imageSettings->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_GREEN ) );
+          imageSettings->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_GREEN ) );
 
-          shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_BLUE ) );
-          shader->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_BLUE ) );
+          imageSettings->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_BLUE ) );
+          imageSettings->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_BLUE ) );
           }
 
-        shader->SetGamma( settings.GetGamma() );
+        imageSettings->SetGamma( settings.GetGamma() );
 
         if( properties==NULL )
-          shader->SetUseNoData( false );
+          imageSettings->SetUseNoData( false );
 
         else
           {
-          shader->SetUseNoData( properties->IsNoDataEnabled() );
-          shader->SetNoData( properties->GetNoData() );
+          imageSettings->SetUseNoData( properties->IsNoDataEnabled() );
+          imageSettings->SetNoData( properties->GetNoData() );
           }
 
-	//
-	// Apply shader properties.
 	//
 	// qDebug()
 	//   << "alpha:" << settings.GetAlpha()
 	//   << "'" << it->first.c_str() << "'";
-	shader->SetAlpha( settings.GetAlpha() );
+	imageSettings->SetAlpha( settings.GetAlpha() );
 
-	if( m_EffectsEnabled )
-	  switch( settings.GetEffect() )
-	    {
-	    case EFFECT_CHESSBOARD:
-	      shader->SetShaderType( otb::SHADER_ALPHA_GRID );
-	      shader->SetChessboardSize( settings.GetSize() );
-	      break;
+	//
+	// Apply shader properties.
+        //
+        // Must use local variable to cast from T* to T::Pointer because
+        // of ITK set/get macros...
+        otb::FragmentShader::Pointer fragmentShader( imageActor->GetShader() );
 
-	    case EFFECT_GRADIENT:
-	      shader->SetShaderType( otb::SHADER_GRADIENT );
-	      shader->SetRadius( settings.GetSize() );
-	      break;
+	if( !fragmentShader.IsNull() )
+	  {
+	  otb::StandardShader::Pointer shader(
+	    otb::DynamicCast< otb::StandardShader >( fragmentShader )
+	  );
 
-	    case EFFECT_LOCAL_CONTRAST:
-	      shader->SetShaderType( otb::SHADER_LOCAL_CONTRAST );
-	      shader->SetRadius( settings.GetSize() );
-	      shader->SetLocalContrastRange(
+	  assert( !shader.IsNull() );
+
+	  if( m_EffectsEnabled )
+	    switch( settings.GetEffect() )
+	      {
+	      case EFFECT_CHESSBOARD:
+		shader->SetShaderType( otb::SHADER_ALPHA_GRID );
+		shader->SetChessboardSize( settings.GetSize() );
+		break;
+
+	      case EFFECT_GRADIENT:
+		shader->SetShaderType( otb::SHADER_GRADIENT );
+		shader->SetRadius( settings.GetSize() );
+		break;
+
+	      case EFFECT_LOCAL_CONTRAST:
+		shader->SetShaderType( otb::SHADER_LOCAL_CONTRAST );
+		shader->SetRadius( settings.GetSize() );
+		shader->SetLocalContrastRange(
 #if 0
-		settings.GetValue() *
-		std::max(
+		  settings.GetValue() *
 		  std::max(
-		    shader->GetMaxRed() - shader->GetMinRed(),
-		    shader->GetMaxGreen() - shader->GetMinGreen()
-		  ),
-		  shader->GetMaxBlue() - shader->GetMinBlue()
-		)
+		    std::max(
+		      shader->GetMaxRed() - shader->GetMinRed(),
+		      shader->GetMaxGreen() - shader->GetMinGreen()
+		    ),
+		    shader->GetMaxBlue() - shader->GetMinBlue()
+		  )
 #else
-		settings.GetValue()
+		  settings.GetValue()
 #endif
-	      );
-	      break;
+		);
+		break;
 
-	    case EFFECT_LOCAL_TRANSLUCENCY:
-	      shader->SetShaderType( otb::SHADER_LOCAL_ALPHA );
-	      shader->SetRadius( settings.GetSize() );
-	      break;
+	      case EFFECT_LOCAL_TRANSLUCENCY:
+		shader->SetShaderType( otb::SHADER_LOCAL_ALPHA );
+		shader->SetRadius( settings.GetSize() );
+		break;
 
-	    case EFFECT_NONE:
-	    case EFFECT_NORMAL:
-	      shader->SetShaderType( otb::SHADER_STANDARD );
-	      break;
+	      case EFFECT_NONE:
+	      case EFFECT_NORMAL:
+		shader->SetShaderType( otb::SHADER_STANDARD );
+		break;
 
-	    case EFFECT_SPECTRAL_ANGLE:
-	      shader->SetShaderType( otb::SHADER_SPECTRAL_ANGLE );
-	      shader->SetRadius( settings.GetSize() );
-	      shader->SetSpectralAngleRange( settings.GetValue() );
-	      break;
+	      case EFFECT_SPECTRAL_ANGLE:
+		shader->SetShaderType( otb::SHADER_SPECTRAL_ANGLE );
+		shader->SetRadius( settings.GetSize() );
+		shader->SetSpectralAngleRange( settings.GetValue() );
+		break;
 
-	    case EFFECT_SWIPE_H:
-	      shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
-	      shader->SetVerticalSlider( false );
-	      break;
+	      case EFFECT_SWIPE_H:
+		shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
+		shader->SetVerticalSlider( false );
+		break;
 
-	    case EFFECT_SWIPE_V:
-	      shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
-	      shader->SetVerticalSlider( true );
-	      break;
+	      case EFFECT_SWIPE_V:
+		shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
+		shader->SetVerticalSlider( true );
+		break;
 
-	    default:
-	      assert( false && "Unhandled mvd::Effect value!" );
-	      break;
-	    }
-        }
+	      default:
+		assert( false && "Unhandled mvd::Effect value!" );
+		break;
+	      }
+	  }
+	}
       //
       else
         {
@@ -867,6 +876,13 @@ ImageViewRenderer
 	  //   << this << "\n"
 	  //   << "\tQString:" << vectorImageModel->GetFilename()
 	  //   << "\tstd::string" << QFile::encodeName( vectorImageModel->GetFilename() );
+
+	  if( m_EffectsEnabled )
+	    {
+	    // qDebug() << "Created shader for" << FromStdString( it->first );
+
+	    glImageActor->CreateShader();
+	    }
 
           glImageActor->Initialize(
             QFile::encodeName(
@@ -1108,38 +1124,9 @@ ImageViewRenderer
     if( !glImageActor.IsNull() )
       {
       //
-      // Get shader.
-      otb::FragmentShader::Pointer fshader( glImageActor->GetShader() );
-      assert( !fshader.IsNull() );
-
-      otb::StandardShader::Pointer shader(
-        otb::DynamicCast< otb::StandardShader >(
-          fshader
-        )
-      );
-
-      assert( !shader.IsNull() );
-
-      //
-      // Update cursor position of shader.
-      PointType p_screen;
-
-      assert( m_GlView->GetSettings()!=NULL );
-
-      p_screen[ 0 ] = screen.x();
-      p_screen[ 1 ] =
-        m_GlView->GetSettings()->GetViewportSize()[ 1 ] - screen.y();
-
-      shader->SetCenter( p_screen );
-
-      if( shader->GetShaderType()==otb::SHADER_ALPHA_SLIDER )
-        shader->SetSliderPosition(
-          p_screen[
-            shader->GetVerticalSlider()
-            ? 1
-            : 0
-          ]
-        );
+      // Get image-settings.
+      otb::ImageSettings::Pointer imageSettings( glImageActor->GetImageSettings() );
+      assert( !imageSettings.IsNull() );
 
       //
       // Update pixel-info of shader.
@@ -1147,11 +1134,52 @@ ImageViewRenderer
 	{
 	assert( it->m_Pixel.Size()>0 );
 
-	shader->SetCurrentRed( it->m_Pixel[ 0 ] );
-	shader->SetCurrentGreen( it->m_Pixel[ 1 ] );
-	shader->SetCurrentBlue( it->m_Pixel[ 2 ] );
+	// qDebug()
+	//   << "R:" << it->m_Pixel[ 0 ]
+	//   << "G:" << it->m_Pixel[ 1 ]
+	//   << "B:" << it->m_Pixel[ 2 ];
+
+	imageSettings->SetCurrentRed( it->m_Pixel[ 0 ] );
+	imageSettings->SetCurrentGreen( it->m_Pixel[ 1 ] );
+	imageSettings->SetCurrentBlue( it->m_Pixel[ 2 ] );
 	}
       }
+
+      //
+      // Get shader.
+      otb::FragmentShader::Pointer fshader( glImageActor->GetShader() );
+
+      if( !fshader.IsNull() )
+	{
+	otb::StandardShader::Pointer shader(
+	  otb::DynamicCast< otb::StandardShader >(
+	    fshader
+	  )
+	);
+
+	assert( !shader.IsNull() );
+
+	//
+	// Update cursor position of shader.
+	PointType p_screen;
+
+	assert( m_GlView->GetSettings()!=NULL );
+
+	p_screen[ 0 ] = screen.x();
+	p_screen[ 1 ] =
+	  m_GlView->GetSettings()->GetViewportSize()[ 1 ] - screen.y();
+
+	shader->SetCenter( p_screen );
+
+	if( shader->GetShaderType()==otb::SHADER_ALPHA_SLIDER )
+	  shader->SetSliderPosition(
+	    p_screen[
+	      shader->GetVerticalSlider()
+	      ? 1
+	      : 0
+	    ]
+	  );
+	}
     }
 }
 

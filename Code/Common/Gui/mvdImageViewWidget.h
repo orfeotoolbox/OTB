@@ -145,7 +145,8 @@ public:
    *
    * \return A pointer to the abstract model-renderer of this image-view.
    */
-  inline const AbstractImageViewRenderer* GetRenderer() const;
+  inline const AbstractImageViewRenderer * GetRenderer() const;
+  inline AbstractImageViewRenderer * GetRenderer();
 
   /**
    */
@@ -448,6 +449,15 @@ inline
 const AbstractImageViewRenderer*
 ImageViewWidget
 ::GetRenderer() const
+{
+  return m_Renderer;
+}
+
+/*****************************************************************************/
+inline
+AbstractImageViewRenderer*
+ImageViewWidget
+::GetRenderer()
 {
   return m_Renderer;
 }

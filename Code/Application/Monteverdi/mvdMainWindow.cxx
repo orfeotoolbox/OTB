@@ -179,12 +179,18 @@ MainWindow
   //     m_ImageView->GetRenderer()==NULL )
   //   return false;
 
-  if( !m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 ) )
-    return false;
+  bool isGLSL = m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 );
+
 
   assert( m_ShaderWidget!=NULL );
 
+  m_ShaderWidget->SetGLSLEnabled( isGLSL );
   m_ShaderWidget->SetGLSL140Enabled( m_GLSL140>=0 );
+
+  assert( m_StatusBarWidget!=NULL );
+
+  m_StatusBarWidget->SetGLSLEnabled( isGLSL );
+
 
   return true;
 }

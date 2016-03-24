@@ -91,6 +91,28 @@ ShaderWidget
   m_UI = NULL;
 }
 
+/*****************************************************************************/
+void
+ShaderWidget
+::SetGLSLEnabled( bool isEnabled )
+{
+  setEnabled( isEnabled );
+
+  if( !isEnabled )
+    {
+    typedef QList< QWidget * > WidgetList;
+
+    WidgetList children( findChildren< QWidget * >() );
+
+    for( WidgetList::iterator it( children.begin() );
+	 it!=children.end();
+	 ++ it )
+      ( *it )->setToolTip(
+	tr( "Rendering effects have been disabled because OpenGL Shading Language minimal requirements have not been met while running on this system." )
+      );
+    }
+}
+
 /*******************************************************************************/
 void
 ShaderWidget
