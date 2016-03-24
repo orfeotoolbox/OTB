@@ -212,7 +212,7 @@ ExternalProject_Add(${proj}
 
   # detect OTB version number
   if (SUPERBUILD_OTB_VERSION)
-    set(_SB_${proj}_DIR ${SB_INSTALL_PREFIX}/lib/cmake/OTB-${SUPERBUILD_OTB_VERSION})
+    set(_SB_${proj}_DIR ${SB_INSTALL_PREFIX}/lib/cmake/OTB-${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VERSION_MINOR})
   else()
     set(_SB_${proj}_DIR ${SB_INSTALL_PREFIX})
   endif()
