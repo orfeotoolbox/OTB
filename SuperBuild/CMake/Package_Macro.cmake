@@ -219,6 +219,12 @@ function(install_common)
           PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
       endforeach()
     endif()
+
+    ################ install Qt translation files ################
+    if(WITH_MVD)
+      file(GLOB MVD_QM_FILES ${PACKAGE_INSTALLDIR}/share/otb/i18n/*.qm)
+      install(FILES ${MVD_QM_FILES} DESTINATION ${DATA_DIR}/otb/i18n)
+    endif()
   endif()
 
 
