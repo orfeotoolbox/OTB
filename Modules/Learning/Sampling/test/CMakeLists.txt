@@ -61,6 +61,16 @@ otb_add_test(NAME leTvOGRDataToResampledOGRDataPoly COMMAND otbSamplingTestDrive
   ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput_Poly.sqlite
   )
   
+otb_add_test(NAME leTvOGRDataToResampledOGRDataXMLPoly COMMAND otbSamplingTestDriver
+  otbOGRDataToResampledOGRDataXML
+  ${INPUTDATA}/variousVectors.sqlite
+  ${INPUTDATA}/leTvOGRDataToResampledOGRDataResamplingVectors_Poly.txt
+  0
+  ${INPUTDATA}/leTvOGRDataToResampledOGRDataXMLPoly.xml
+  ${TEMP}/leTvOGRDataToResampledOGRDataOutput_Poly.sqlite
+  ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput_Poly.sqlite
+  )
+  
 otb_add_test(NAME leTvOGRDataToResampledOGRDataLines COMMAND otbSamplingTestDriver
   otbOGRDataToResampledOGRData
   ${INPUTDATA}/variousVectors.sqlite

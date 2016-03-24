@@ -19,9 +19,7 @@
 #define __otbSamplingRateCalculator_h
 
 #include "itkImageRegion.h"
-
 #include "itkVectorContainer.h"
-
 #include <set>
 
 namespace otb

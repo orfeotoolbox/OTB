@@ -8,6 +8,7 @@ void RegisterTests()
   REGISTER_TEST(otbSamplingRateCalculatorSmallest2);
   REGISTER_TEST(otbOGRDataToResampledOGRDataNew);
   REGISTER_TEST(otbOGRDataToResampledOGRData);
+  REGISTER_TEST(otbOGRDataToResampledOGRDataXML);
   REGISTER_TEST(otbOGRDataToClassStatisticsFilterNew);
   REGISTER_TEST(otbOGRDataToClassStatisticsFilter);
 }
