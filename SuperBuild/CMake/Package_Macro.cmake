@@ -7,6 +7,7 @@ macro(superbuild_package)
 
   list(APPEND PACKAGE_SEARCHDIRS "${PACKAGE_INSTALLDIR}/bin") #exe
   list(APPEND PACKAGE_SEARCHDIRS "${PACKAGE_INSTALLDIR}/lib") #so
+  list(APPEND PACKAGE_SEARCHDIRS "${PACKAGE_INSTALLDIR}/lib/otb") #mvd so
   list(APPEND PACKAGE_SEARCHDIRS "${PACKAGE_INSTALLDIR}/lib/otb/applications") #otb apps
 
   execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${PACKAGE_INSTALLDIR}/${PACKAGE_OUTDIR}")
@@ -20,6 +21,11 @@ macro(superbuild_package)
 
   if(WITH_OTBGUI)
     list(APPEND PACKAGE_PEFILES ${PACKAGE_INSTALLDIR}/bin/otbApplicationLauncherQt)
+  endif()
+
+  if(WITH_MVD)
+    list(APPEND PACKAGE_PEFILES ${PACKAGE_INSTALLDIR}/bin/monteverdi)
+    list(APPEND PACKAGE_PEFILES ${PACKAGE_INSTALLDIR}/bin/mapla)
   endif()
 
   file(GLOB otbapps_list ${PACKAGE_INSTALLDIR}/lib/otb/applications/otbapp_*so) # /lib/otb
@@ -61,6 +67,15 @@ SET(SYSTEM_DLLS
   libpthread.so
   libidn.so
   libgomp.so*
+  ld-linux-x86-64.so*
+  libX11.so*
+  libXext.so*
+  libXau.so*
+  libXdmcp.so*
+  libXxf86vm.so*
+  libdrm.so.2
+  libGL.so*
+  libGLU.so*
   )
 
 ## http://www.cmake.org/Wiki/CMakeMacroListOperations
@@ -203,6 +218,12 @@ function(install_common)
           DESTINATION ${BIN_DIR}
           PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
       endforeach()
+    endif()
+
+    ################ install Qt translation files ################
+    if(WITH_MVD)
+      file(GLOB MVD_QM_FILES ${PACKAGE_INSTALLDIR}/share/otb/i18n/*.qm)
+      install(FILES ${MVD_QM_FILES} DESTINATION ${DATA_DIR}/otb/i18n)
     endif()
   endif()
 

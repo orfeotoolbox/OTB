@@ -27,7 +27,7 @@ mark_as_advanced(DOWNLOAD_LOCATION)
 # General options
 option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
-
+option(ENABLE_MONTEVERDI " Build Monteverdi on top of OTB" OFF)
 
 # check if superbuild is in OTB source or in stand-alone mode
 set(SUPERBUILD_IN_OTB_TREE OFF)
@@ -36,6 +36,13 @@ if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
     REGEX "project\\\(OTB\\\)")
   if(NOT "${_CONTENT_CMAKELIST}" STREQUAL "")
     set(SUPERBUILD_IN_OTB_TREE ON)
+    # parse the version number
+    file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _FULL_CONTENT_CMAKELIST)
+    string(REGEX REPLACE ".*set\\(OTB_VERSION_MAJOR \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_MAJOR "${_FULL_CONTENT_CMAKELIST}")
+    string(REGEX REPLACE ".*set\\(OTB_VERSION_MINOR \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_MINOR "${_FULL_CONTENT_CMAKELIST}")
+    string(REGEX REPLACE ".*set\\(OTB_VERSION_PATCH \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_PATCH "${_FULL_CONTENT_CMAKELIST}")
+    set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VERSION_MINOR}.${SUPERBUILD_OTB_VERSION_PATCH}")
+    message(STATUS "Found OTB version : ${SUPERBUILD_OTB_VERSION}")
   endif()
 endif()
 message(STATUS "Check if superbuild is in OTB tree : ${SUPERBUILD_IN_OTB_TREE}")
@@ -125,7 +132,11 @@ SETUP_SYSTEM_LIBRARY(PROJECT PCRE DEFAULT ON)
 SETUP_SYSTEM_LIBRARY(PROJECT SWIG DEFAULT ON)
 
 SETUP_SYSTEM_LIBRARY(PROJECT QT4 DEFAULT ON)
+SETUP_SYSTEM_LIBRARY(PROJECT QWT DEFAULT ON)
 
+SETUP_SYSTEM_LIBRARY(PROJECT GLEW DEFAULT ON)
+SETUP_SYSTEM_LIBRARY(PROJECT GLFW DEFAULT ON)
+SETUP_SYSTEM_LIBRARY(PROJECT GLUT DEFAULT ON)
 
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
@@ -139,6 +150,15 @@ option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
 option(OTB_USE_OPENJPEG "Enable module openjpeg in OTB" OFF)
 option(OTB_USE_QT4 "Enable module QT4 in OTB" ON)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
+option(OTB_USE_OPENGL "Enable module OpenGL in OTB" OFF)
+option(OTB_USE_GLEW "Enable module GLEW in OTB" OFF)
+option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
+option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
+
+if(${ENABLE_MONTEVERDI})
+  set(OTB_USE_OPENGL ON)
+  set(OTB_USE_GLEW ON)
+endif()
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
@@ -177,7 +197,11 @@ foreach(lib ${_SYSTEM_CHECKUP_CONTENT})
 endforeach()
 
 # Main external projet : dependencies are included (if needed) in each external project
-include(External_otb)
+if(ENABLE_MONTEVERDI)
+  include(External_mvd)
+else()
+  include(External_otb)
+endif()
 
 #check compiler is gnu?
 if(UNIX AND NOT APPLE)
