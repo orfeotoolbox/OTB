@@ -137,6 +137,12 @@ macro(otb_module_impl)
     list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_SOURCE_DIR}/include)
     install(DIRECTORY include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT Development)
   endif()
+  
+  if(NOT OTB_SOURCE_DIR)
+    # When building a module outside the OTB source tree, find the export
+    # header.
+    list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_BINARY_DIR}/include)
+  endif()
 
   if(${otb-module}_INCLUDE_DIRS)
     include_directories(${${otb-module}_INCLUDE_DIRS})
@@ -170,11 +176,11 @@ macro(otb_module_impl)
   endif()
 
   if( OTB_MODULE_${otb-module}_ENABLE_SHARED )
-
-    # Need to use relative path to work around CMake ISSUE 12645 fixed
-    # in CMake 2.8.8, to support older versions
-    set(_export_header_file "${OTBCommon_BINARY_DIR}/${otb-module}Export.h")
-    file(RELATIVE_PATH _export_header_file ${CMAKE_CURRENT_BINARY_DIR} ${_export_header_file} )
+    if(OTB_SOURCE_DIR)
+      set(_export_header_file "${OTBCommon_BINARY_DIR}/${otb-module}Export.h")
+    else()
+      set(_export_header_file "${${otb-module}_BINARY_DIR}/include/${otb-module}Export.h")
+    endif()
 
     # Generate the export macro header for symbol visibility/Windows DLL declspec
     generate_export_header(${otb-module}
@@ -183,7 +189,7 @@ macro(otb_module_impl)
       NO_EXPORT_MACRO_NAME ${otb-module}_HIDDEN
       STATIC_DEFINE OTB_STATIC )
     install(FILES
-      ${OTBCommon_BINARY_DIR}/${otb-module}Export.h
+      ${_export_header_file}
       DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
       COMPONENT Development
       )
@@ -225,7 +231,7 @@ macro(otb_module_impl)
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR}/Modules
     COMPONENT Development
     )
-  otb_module_doxygen( ${otb-module} )   # module name
+  otb_module_doxygen(${otb-module})   # module name
 endmacro()
 
 macro(otb_module_test)

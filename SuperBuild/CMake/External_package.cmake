@@ -39,7 +39,8 @@ file(WRITE "${CMAKE_BINARY_DIR}/PACKAGE-OTB/src/PACKAGE-OTB/CMakeLists.txt"
        set(CMAKE_INSTALL_PREFIX \"${SB_INSTALL_PREFIX}\")
        set(DOWNLOAD_LOCATION \"${DOWNLOAD_LOCATION}\")
        set(SETUP_SCRIPT_SRC ${CMAKE_SOURCE_DIR}/CMake/pkgsetup.in)
-       set(OTB_USE_QT4 OFF)
+       set(WITH_OTBGUI ${OTB_USE_QT4})
+       set(WITH_MVD ${ENABLE_MONTEVERDI})
        include(${CMAKE_SOURCE_DIR}/CMake/External_pkgtools.cmake)
        include(${CMAKE_SOURCE_DIR}/CMake/Package_Macro.cmake)
        superbuild_package(
