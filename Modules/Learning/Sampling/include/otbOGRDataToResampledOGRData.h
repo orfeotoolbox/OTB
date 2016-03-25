@@ -93,8 +93,8 @@ public:
       m_RatesbyClass = map;
   }
   
-  itkSetMacro(MaxSamplingTabSize, unsigned int);
-  itkGetMacro(MaxSamplingTabSize, unsigned int);
+  itkSetMacro(MaxSamplingVecSize, unsigned int);
+  itkGetMacro(MaxSamplingVecSize, unsigned int);
   
   itkSetMacro(OutputVectorDataPath, std::string);
   itkGetMacro(OutputVectorDataPath, std::string);
@@ -142,7 +142,7 @@ private:
   std::string m_OutputSamplingVectorsPath;
   std::string m_InputSamplingVectorsPath;
   
-  unsigned int m_MaxSamplingTabSize;
+  unsigned int m_MaxSamplingVecSize;
   std::string m_OutputVectorDataPath;
   
   
@@ -200,8 +200,10 @@ public:
   int GetLayerIndex();
   
   void SetRatesbyClass(const SamplingRateCalculator::mapRateType& map);
-  void SetMaxSamplingTabSize(unsigned int index);
-  unsigned int GetMaxSamplingTabSize();
+  void SetMaxSamplingVecSize(
+  
+  unsigned int index);
+  unsigned int GetMaxSamplingVecSize();
  
   void SetOutputVectorDataPath(std::string);
  

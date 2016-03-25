@@ -243,7 +243,7 @@ private:
       }
       if (IsParameterEnabled("maxsampvecsize") && HasValue("maxsampvecsize"))
       {
-        m_resampler->SetMaxSamplingTabSize(this->GetParameterInt("maxsampvecsize"));
+        m_resampler->SetMaxSamplingVecSize(this->GetParameterInt("maxsampvecsize"));
       }
       
       m_resampler->SetInput(this->GetParameterImage("in"));

@@ -127,7 +127,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
   resampler->SetRatesbyClass(ratesbyClass);
   resampler->SetFieldName(fieldName);
   resampler->SetLayerIndex(LayerIndex);
-  //resampler->SetMaxSamplingTabSize(81);
+  //resampler->SetMaxSamplingVecSize(81);
   //resampler->SetOutputSamplingVectorsPath(samplingVectorsPath);
   resampler->SetInputSamplingVectorsPath(samplingVectorsPath);
   
@@ -277,7 +277,7 @@ int otbOGRDataToResampledOGRDataXML(int argc, char* argv[])
   resampler->SetRatesbyClass(ratesbyClass);
   resampler->SetFieldName(fieldName);
   resampler->SetLayerIndex(LayerIndex);
-  //resampler->SetMaxSamplingTabSize(81);
+  //resampler->SetMaxSamplingVecSize(81);
   //resampler->SetOutputSamplingVectorsPath(samplingVectorsPath);
   resampler->SetInputSamplingVectorsPath(samplingVectorsPath);
   

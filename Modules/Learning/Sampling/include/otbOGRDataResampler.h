@@ -70,8 +70,8 @@ public:
    itkSetMacro(OutputPath, std::string );
    itkGetMacro(OutputPath, std::string );
    
-   itkSetMacro(MaxSamplingTabSize, unsigned int);
-   itkGetMacro(MaxSamplingTabSize, unsigned int);
+   itkSetMacro(MaxSamplingVecSize, unsigned int);
+   itkGetMacro(MaxSamplingVecSize, unsigned int);
    
    itkSetMacro(OutputSamplingVectorsPath, std::string);
    itkSetMacro(InputSamplingVectorsPath, std::string);
@@ -104,7 +104,7 @@ protected:
    OGRDataResampler() {
    
    m_alreadyPrepared=false; 
-   m_MaxSamplingTabSize=1000;
+   m_MaxSamplingVecSize=1000;
    m_LayerIndex = 0;
    
    } 
@@ -141,7 +141,7 @@ private:
                    unsigned long &fId,
                    std::string &className);
 
-   unsigned int m_MaxSamplingTabSize;                 
+   unsigned int m_MaxSamplingVecSize;                 
    unsigned int selectN1(double per,unsigned int T);                 
    unsigned int selectN2(double per,unsigned int T);  
    std::vector<bool> randArray(unsigned int N,unsigned int T); 

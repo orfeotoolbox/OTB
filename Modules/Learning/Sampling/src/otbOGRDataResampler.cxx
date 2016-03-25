@@ -108,14 +108,14 @@ OGRDataResampler::randArray(unsigned int N,unsigned int T)
 unsigned int
 OGRDataResampler::findBestSize(unsigned int tot)
 {
-   if (tot<m_MaxSamplingTabSize)
+   if (tot<m_MaxSamplingVecSize)
       return tot;
    
-   for(unsigned int size=m_MaxSamplingTabSize; size>=2; size--)
+   for(unsigned int size=m_MaxSamplingVecSize; size>=2; size--)
    if (tot%size == 0)
       return size;
       
-   otbWarningMacro(<<"prime number > m_MaxSamplingTabSize (" << tot << ">" << m_MaxSamplingTabSize << ")."<< std::endl );  
+   otbWarningMacro(<<"prime number > m_MaxSamplingVecSize (" << tot << ">" << m_MaxSamplingVecSize << ")."<< std::endl );  
    return tot;
 }
 

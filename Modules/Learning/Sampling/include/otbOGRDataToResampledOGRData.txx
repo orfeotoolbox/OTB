@@ -30,7 +30,7 @@ template<class TInputImage, class TMaskImage>
 PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 ::PersistentOGRDataToResampledOGRData() :
    m_LayerIndex(0),
-   m_MaxSamplingTabSize(1000),
+   m_MaxSamplingVecSize(1000),
    m_OutputVectorDataPath("")
 {
   this->SetNumberOfRequiredOutputs(1);
@@ -104,11 +104,11 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
    m_TemporaryStats = OGRDataResampler::New();
    m_TemporaryStats->SetFieldName(this->GetFieldName());
    m_TemporaryStats->SetFieldIndex(fieldIndex);
-   m_TemporaryStats->SetMaxSamplingTabSize(m_MaxSamplingTabSize);
+   m_TemporaryStats->SetMaxSamplingVecSize(m_MaxSamplingVecSize);
    m_TemporaryStats->SetInputOGRDataSourcePointer(vectors);
    m_TemporaryStats->SetLayerIndex(this->GetLayerIndex());
    m_TemporaryStats->SetOutputPath(this->GetOutputVectorDataPath());
-   m_TemporaryStats->SetMaxSamplingTabSize(m_MaxSamplingTabSize);
+   m_TemporaryStats->SetMaxSamplingVecSize(m_MaxSamplingVecSize);
    if (!m_OutputSamplingVectorsPath.empty())
       m_TemporaryStats->SetOutputSamplingVectorsPath(m_OutputSamplingVectorsPath);
    if (!m_InputSamplingVectorsPath.empty())
@@ -415,9 +415,9 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 void
 OGRDataToResampledOGRData<TInputImage,TMaskImage>
-::SetMaxSamplingTabSize(unsigned int max)
+::SetMaxSamplingVecSize(unsigned int max)
 {
-  this->GetFilter()->SetMaxSamplingTabSize(max);
+  this->GetFilter()->SetMaxSamplingVecSize(max);
 }
 
 
@@ -433,9 +433,9 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 unsigned int
 OGRDataToResampledOGRData<TInputImage,TMaskImage>
-::GetMaxSamplingTabSize()
+::GetMaxSamplingVecSize()
 {
-  return this->GetFilter()->GetMaxSamplingTabSize();
+  return this->GetFilter()->GetMaxSamplingVecSize();
 }
 
 template<class TInputImage, class TMaskImage>
