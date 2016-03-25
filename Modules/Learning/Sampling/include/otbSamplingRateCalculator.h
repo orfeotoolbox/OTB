@@ -64,9 +64,7 @@ public:
 
   /** Creation through object factory macro */
   itkTypeMacro(SamplingRateCalculator, itk::Object);
-  
-  void produceMap(int nbClasses, unsigned long range);
-  void produceMap();
+ 
 
   void setNbofSamplesByClass(std::string);
   void setNbofSamplesAllClasses(std::string);

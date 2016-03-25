@@ -28,7 +28,7 @@ int otbSamplingRateCalculatorNew(int itkNotUsed(argc), char* itkNotUsed(argv) []
 }
 
 
-int otbSamplingRateCalculatorUI(int itkNotUsed(argc), char* argv[])
+/*int otbSamplingRateCalculatorUI(int itkNotUsed(argc), char* argv[])
 {
   unsigned int nbSamples = atoi(argv[1]);
 
@@ -81,4 +81,4 @@ int otbSamplingRateCalculatorSmallest2(int itkNotUsed(argc), char* argv[])
   rateCalculator->write(argv[1]);
   rateCalculator->Print(std::cout);
   return EXIT_SUCCESS;
-}
+}*/

@@ -51,12 +51,6 @@ SamplingRateCalculator
 }
 
 
-/*
- * PrintSelf Method
- */
-
-
-
 std::string
 SamplingRateCalculator
 ::keyGenerator(unsigned int nbC)
@@ -67,48 +61,6 @@ SamplingRateCalculator
 
    return key.str();
 }
-
-
-void 
-SamplingRateCalculator
-::produceMap( int nbClasses, unsigned long range)
-{
-
-   srand((unsigned)time(NULL));
-
-    for (int c=0; c<nbClasses; c++)
-    {
-    
-       std::string key = keyGenerator(c);
-       m_ClassCount[key] = rand() % (range + 1);
-       
-    }
-    
-   findAllClasses();
-}
-
-void 
-SamplingRateCalculator
-::produceMap()
-{
-/*
-   class 1 = 104
-   class 2 = 160
-   class 3 = 211
-
- * */
- 
-
-    std::string key = keyGenerator(1);
-    m_ClassCount[key] = 104;
-    key = keyGenerator(2);
-    m_ClassCount[key] = 160;
-    key = keyGenerator(3);
-    m_ClassCount[key] = 211;
-           
-    findAllClasses();
-}
-
 
 void 
 SamplingRateCalculator
