@@ -193,7 +193,7 @@ public:
   void SetMask(const TMaskImage* mask);
   const TMaskImage* GetMask();
 
-  void SetFieldName(std::string &key);
+  void SetFieldName(std::string key);
   std::string GetFieldName();
   
   void SetLayerIndex(int index);

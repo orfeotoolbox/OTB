@@ -358,7 +358,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 void
 OGRDataToResampledOGRData<TInputImage,TMaskImage>
-::SetFieldName(std::string &key)
+::SetFieldName(std::string key)
 {
   this->GetFilter()->SetFieldName(key);
 }

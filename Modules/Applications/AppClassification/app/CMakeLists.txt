@@ -109,3 +109,8 @@ otb_create_application(
   NAME           PolygonClassStatistics
   SOURCES        otbPolygonClassStatistics.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+  
+otb_create_application(
+  NAME           OGRDataResampler
+  SOURCES        otbOGRDataResampler.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
