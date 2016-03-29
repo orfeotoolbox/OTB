@@ -23,14 +23,28 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbReciprocalHAlphaImageFilter.h"
 #include "itkMeanImageFilter.h"
+#include "otbReciprocalBarnesDecompImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 #include "otbSinclairReciprocalImageFilter.h"
 #include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
 
+int otbReciprocalBarnesDecompImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+{
+  const unsigned int Dimension = 2;
 
-int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char * argv[])
+  typedef std::complex<double>   PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+
+  typedef otb::ReciprocalBarnesDecompImageFilter<ImageType, ImageType> FilterType;
+
+  FilterType::Pointer filter = FilterType::New();
+
+  return EXIT_SUCCESS;
+}
+
+
+int otbReciprocalBarnesDecompImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilenameHH = argv[1];
   const char * inputFilenameHV = argv[2];
@@ -45,12 +59,10 @@ int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char * argv[])
 
   typedef otb::Image<ComplexPixelType, Dimension>  	   ComplexImageType;
   typedef otb::VectorImage<ComplexPixelType, Dimension>  ComplexVectorImageType;
-  typedef otb::VectorImage<double, Dimension>          RealVectorImageType;
-
 
 
   typedef otb::ImageFileReader<ComplexImageType>  ReaderType;
-  typedef otb::ImageFileWriter<RealVectorImageType> WriterType;
+  typedef otb::ImageFileWriter<ComplexVectorImageType> WriterType;
   
   
   typedef otb::SinclairReciprocalImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexVectorImageType, 
@@ -64,7 +76,7 @@ int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char * argv[])
   typedef otb::PerBandVectorImageFilter<ComplexVectorImageType, ComplexVectorImageType, MeanFilterType> PerBandMeanFilterType;
   
   
-  typedef otb::ReciprocalHAlphaImageFilter<ComplexVectorImageType, RealVectorImageType> HAlphaFilterType;
+  typedef otb::ReciprocalBarnesDecompImageFilter<ComplexVectorImageType, ComplexVectorImageType> FilterType;
   
   
 
@@ -76,7 +88,7 @@ int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char * argv[])
 
   SinclairToCovFilterType::Pointer sinclairtocov = SinclairToCovFilterType::New();
   PerBandMeanFilterType::Pointer perBand = PerBandMeanFilterType::New();
-  HAlphaFilterType::Pointer haafilter = HAlphaFilterType::New();
+  FilterType::Pointer barnesfilter = FilterType::New();
         
   
   MeanFilterType::InputSizeType radius;
@@ -94,10 +106,10 @@ int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char * argv[])
  
   perBand->SetInput(sinclairtocov->GetOutput());
   
-  haafilter->SetInput(perBand->GetOutput());
+  barnesfilter->SetInput(perBand->GetOutput());
 
   writer->SetFileName(outputFilename);
-  writer->SetInput(haafilter->GetOutput());
+  writer->SetInput(barnesfilter->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;
