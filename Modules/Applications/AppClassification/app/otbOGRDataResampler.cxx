@@ -92,10 +92,10 @@ private:
       "  - maxsampvecsize : allows to limit the size of the lists of bits mentioned above, to optimize the memory footprint.\n"
       
       "\nAs with the PolygonClassStatistics application, different types  of geometry are supported : "
-      "polygons, lines, points. \nThe behavior is different for each type of geometry :\n"
+      "polygons, lines, points. \nThe behavior of this application is different for each type of geometry :\n"
       "  - polygon: select points whose center is inside the polygon\n"
       "  - lines  : select points intersecting the line\n"
-      "  - points : select points pixel to the point\n");
+      "  - points : select closest point to the provided point\n");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
