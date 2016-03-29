@@ -17,37 +17,16 @@ otb_add_test(NAME leTuSamplingRateCalculatorNew COMMAND otbSamplingTestDriver
             otbSamplingRateCalculatorNew 
   
   )
+
+otb_add_test(NAME leTuSamplingRateCalculator COMMAND otbSamplingTestDriver
+  --compare-ascii ${NOTOL}
+            ${BASELINE_FILES}/leTuSamplingRateCalculator.txt
+            ${TEMP}/leTuSamplingRateCalculator.txt
+            otbSamplingRateCalculator 
+            ${INPUTDATA}/leTvOGRDataToResampledOGRDataXMLPoly.xml
+            83
+            ${TEMP}/leTuSamplingRateCalculator.txt)
   
-  
-#otb_add_test(NAME leTuSamplingRateCalculatorUI COMMAND otbSamplingTestDriver
-            #otbSamplingRateCalculatorUI 
-            #110
-            #${TEMP}/leTuSamplingRateCalculatorUI.txt
-   
-   #)
-   
-   
-#otb_add_test(NAME leTuSamplingRateCalculatorS COMMAND otbSamplingTestDriver
-            #otbSamplingRateCalculatorS 
-            #"110"
-            #${TEMP}/leTuSamplingRateCalculatorS.txt
-   
-   #)   
-   
-   
-#otb_add_test(NAME leTuSamplingRateCalculatorSmallest COMMAND otbSamplingTestDriver
-            #otbSamplingRateCalculatorSmallest 
-            #${TEMP}/leTuSamplingRateCalculatorSmallest.txt
-   
-   #)   
-
-
-#otb_add_test(NAME leTuSamplingRateCalculatorSmallest2 COMMAND otbSamplingTestDriver
-            #otbSamplingRateCalculatorSmallest2 
-            #${TEMP}/leTuSamplingRateCalculatorSmallest.txt
-   
-   #) 
-
 
 otb_add_test(NAME leTuOGRDataToResampledOGRDataNew COMMAND otbSamplingTestDriver
   otbOGRDataToResampledOGRDataNew )

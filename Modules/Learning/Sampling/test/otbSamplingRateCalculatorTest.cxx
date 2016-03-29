@@ -18,6 +18,9 @@
 
 #include "otbSamplingRateCalculator.h"
 
+#include "otbStatisticsXMLFileReader.h"
+#include "itkVariableLengthVector.h"
+
 int otbSamplingRateCalculatorNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   typedef otb::SamplingRateCalculator RateCalculatorype;
@@ -27,58 +30,24 @@ int otbSamplingRateCalculatorNew(int itkNotUsed(argc), char* itkNotUsed(argv) []
   return EXIT_SUCCESS;
 }
 
-
-/*int otbSamplingRateCalculatorUI(int itkNotUsed(argc), char* argv[])
+int otbSamplingRateCalculator(int itkNotUsed(argc), char* argv[])
 {
-  unsigned int nbSamples = atoi(argv[1]);
+  std::string xmlPath(argv[1]);
+  unsigned int nbSamples = atoi(argv[2]);
+  std::string outputRatesTxt(argv[3]);
+
+  typedef std::map<std::string, unsigned long>      ClassCountMapType;
+  typedef itk::VariableLengthVector<float> MeasurementType;
+  typedef otb::StatisticsXMLFileReader<MeasurementType> ReaderType;
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(xmlPath.c_str());
+  ClassCountMapType classCount = reader->GetStatisticMapByName<ClassCountMapType>("classCounts");
 
   typedef otb::SamplingRateCalculator RateCalculatorype;
-  
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  rateCalculator->produceMap(3,1000);
   rateCalculator->setNbofSamplesAllClasses(nbSamples);
-  rateCalculator->write(argv[2]);
+  rateCalculator->write(outputRatesTxt);
   rateCalculator->Print(std::cout);
+  
   return EXIT_SUCCESS;
 }
-
-int otbSamplingRateCalculatorS(int itkNotUsed(argc), char* argv[])
-{
-  std::string nbSamples(argv[1]);
-
-  typedef otb::SamplingRateCalculator RateCalculatorype;
-  
-  RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  rateCalculator->produceMap(3,1000);
-  rateCalculator->setNbofSamplesAllClasses(nbSamples);
-  rateCalculator->write(argv[2]);
-  rateCalculator->Print(std::cout);
-  return EXIT_SUCCESS;
-}
-
-
-int otbSamplingRateCalculatorSmallest(int itkNotUsed(argc), char* argv[])
-{
-  typedef otb::SamplingRateCalculator RateCalculatorype;
-  
-  RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  rateCalculator->produceMap(3,1000);
-  rateCalculator->setMinimumNbofSamplesByClass();
-  rateCalculator->write(argv[1]);
-  rateCalculator->Print(std::cout);
-  return EXIT_SUCCESS;
-}
-
-
-int otbSamplingRateCalculatorSmallest2(int itkNotUsed(argc), char* argv[])
-{
-  typedef otb::SamplingRateCalculator RateCalculatorype;
-  
-  RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  rateCalculator->produceMap();
-  rateCalculator->setMinimumNbofSamplesByClass();
-  RateCalculatorype::mapRateType ratesbyClass = rateCalculator->GetRatesbyClass();
-  rateCalculator->write(argv[1]);
-  rateCalculator->Print(std::cout);
-  return EXIT_SUCCESS;
-}*/
