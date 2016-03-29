@@ -22,7 +22,7 @@
 #include <fstream>
 #include <map>
 
-// Include differents method for color mapping
+// Include different method for color mapping
 #include "otbChangeLabelImageFilter.h"
 #include "itkLabelToRGBImageFilter.h"
 #include "itkScalarToRGBColormapImageFilter.h"

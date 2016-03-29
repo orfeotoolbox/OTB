@@ -264,7 +264,7 @@ private:
     
     
     
-    AddParameter(ParameterType_Choice, "conv", "Convertion");
+    AddParameter(ParameterType_Choice, "conv", "Conversion");
 
     //Monostatic case 
     
