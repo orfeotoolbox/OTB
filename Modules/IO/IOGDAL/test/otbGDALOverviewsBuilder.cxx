@@ -41,10 +41,10 @@ int otbGDALOverviewsBuilder(int itkNotUsed(argc), char* argv[])
   typedef otb::GDALOverviewsBuilder FilterType;
   FilterType::Pointer filter = FilterType::New();
 
-  otb::GDALResamplingType resamp = AVERAGE;
+  otb::GDALResamplingType resamp = GDAL_RESAMPLING_AVERAGE;
 
   filter->SetInputFileName(filename);
-  filter->SetNbOfResolutions(nbResolution);
+  filter->SetNbResolutions(nbResolution);
   filter->SetResamplingMethod(resamp);
 
   {

@@ -592,7 +592,7 @@ protected:
 
   virtual void AfterThreadedGenerateData();
 
-  /** Allocates the outputs (need to be reimplemented since outputs have differents type) */
+  /** Allocates the outputs (need to be reimplemented since outputs have different type) */
   virtual void AllocateOutputs();
 
   /** Constructor */
