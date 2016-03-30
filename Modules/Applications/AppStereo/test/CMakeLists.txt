@@ -84,7 +84,8 @@ otb_test_application(NAME apTvDmFineRegistrationTest
                              -mry 3
                              -ssrx 8
                              -ssry 8
-                             -cva 0.1
+                             -spa 0.1
+                             -cva 0.01
                              -cox -2
                              -vmlt 0.999
                      VALID   --compare-image ${EPSILON_10}

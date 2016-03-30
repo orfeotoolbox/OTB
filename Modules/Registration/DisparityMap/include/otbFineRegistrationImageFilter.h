@@ -136,6 +136,10 @@ public:
   itkSetMacro(ConvergenceAccuracy, double);
   itkGetMacro(ConvergenceAccuracy, double);
   
+  /** Set/Get subpixel accuracy */
+  itkSetMacro(SubPixelAccuracy, double);
+  itkGetMacro(SubPixelAccuracy, double);
+  
   /** Set/Get max number of iterations */
   itkSetMacro(MaxIter, int);
   itkGetMacro(MaxIter, int);
@@ -218,6 +222,7 @@ private:
 
   /** Search step */
   double                        m_ConvergenceAccuracy;
+  double                        m_SubPixelAccuracy;
   
   /** Max number of iterations */
   int                           m_MaxIter;

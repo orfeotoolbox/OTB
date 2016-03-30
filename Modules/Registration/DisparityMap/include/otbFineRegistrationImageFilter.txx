@@ -44,6 +44,7 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacement
   m_SearchRadius.Fill(4);
 
   // Default sub-pixel precision
+  m_SubPixelAccuracy = 0.1;
   m_ConvergenceAccuracy = 0.01;
   
   // Max number of iterations
@@ -335,6 +336,7 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
     out2=in3;
     out3=in1+gn*(in2-in1);
     out4=in2-gn*(in2-in1);
+    
 } 
 
 
@@ -499,7 +501,10 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
     bool exitWhile=false;
     int nbIter=0;
     double bestvalold=itk::NumericTraits<double>::max(),bestval=optMetric;
+    typename TranslationType::ParametersType oldOptParams=optParams;
     double diff=itk::NumericTraits<double>::max();
+    double diffParamx=itk::NumericTraits<double>::max();
+    double diffParamy=itk::NumericTraits<double>::max();
     
     //init
     fc=callMetric(cx,cy,fc,exitWhile);
@@ -507,7 +512,10 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
     updateMinimize(fc,fd);
 
     //loop
-    while ((diff>m_ConvergenceAccuracy) && (!exitWhile) && (nbIter<=m_MaxIter)) 
+    while (  (diffParamx > m_SubPixelAccuracy || diffParamy > m_SubPixelAccuracy) 
+             && (diff>m_ConvergenceAccuracy) 
+             && (!exitWhile) 
+             && (nbIter<=m_MaxIter)) 
     {
         nbIter++;
     
@@ -551,8 +559,12 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
         
         if(!m_Minimize)
             bestval=-bestval;
+            
         diff= fabs(bestval-bestvalold);
+        diffParamx=fabs(optParams[0]-oldOptParams[0]);
+        diffParamy=fabs(optParams[1]-oldOptParams[1]);
         bestvalold=bestval;
+        oldOptParams=optParams;
     
 	}
 
