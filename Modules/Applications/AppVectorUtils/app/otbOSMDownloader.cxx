@@ -56,7 +56,7 @@ private:
     SetDocLongDescription("Generate a vector data from Open Street Map data. A DEM could be use. By default, the entire layer is downloaded, an image can be use as support for the OSM data. The application can provide also available classes in layers . This application required an Internet access. Information about the OSM project : http://www.openstreetmap.fr/");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Convertion");
+    SetDocSeeAlso("Conversion");
 
     AddDocTag(Tags::Meta);
 
