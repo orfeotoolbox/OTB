@@ -66,7 +66,7 @@ else()
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND
-        ${QT4_SB_SRC}/configure -prefix ${SB_INSTALL_PREFIX} -opensource -confirm-license -release -shared -nomake demos -nomake examples -nomake tools -no-phonon-backend -no-phonon -no-script -no-scripttools -no-multimedia -no-webkit -qt-sql-sqlite -plugin-sql-sqlite -no-nis -no-qt3support  -system-zlib -system-libpng -system-libtiff -system-libjpeg -system-sqlite -L ${SB_INSTALL_PREFIX}/lib -I ${SB_INSTALL_PREFIX}/include -I ${SB_INSTALL_PREFIX}/include/freetype2
+        ${QT4_SB_SRC}/configure -prefix ${SB_INSTALL_PREFIX} -opensource -confirm-license -release -shared -nomake demos -nomake examples -nomake tools -no-phonon-backend -no-phonon -no-script -no-scripttools -no-multimedia -no-webkit -qt-sql-sqlite -plugin-sql-sqlite -no-nis -no-qt3support  -system-zlib -system-libpng -system-libtiff -system-libjpeg -system-sqlite -L ${SB_INSTALL_PREFIX}/lib -I ${SB_INSTALL_PREFIX}/include -I ${SB_INSTALL_PREFIX}/include/freetype2 -no-xrender -no-fontconfig -no-sm
       DEPENDS ${${proj}_DEPENDENCIES}
       )
   endif()

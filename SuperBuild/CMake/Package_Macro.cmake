@@ -202,6 +202,12 @@ function(install_common)
     find_path(GDAL_DATA epsg.wkt ${PACKAGE_INSTALLDIR}/share/gdal)
     install(DIRECTORY ${GDAL_DATA} DESTINATION ${DATA_DIR})
 
+    ####################### install GeoTIFF data ###########################
+    install(DIRECTORY ${PACKAGE_INSTALLDIR}/share/epsg_csv DESTINATION ${DATA_DIR})
+
+    ####################### install OSSIM data ###########################
+    install(DIRECTORY ${PACKAGE_INSTALLDIR}/share/ossim DESTINATION ${DATA_DIR})
+
     ####################### install otbcli scripts ######################
     file(GLOB CLI_SCRIPTS ${PACKAGE_INSTALLDIR}/bin/otbcli*)
     foreach(CLI_SCRIPT ${CLI_SCRIPTS})
