@@ -2,6 +2,21 @@
  Monteverdi Release Note
 =========================
 
+Monteverdi 3.2.0 - Changes since version 3.0.0 (2016/03/30)
+===========================================================
+
+* Bug fixes:
+  * BUG: mantis-1125 use OTB_APPLICATION_PATH in startup files
+  * BUG: MANTIS-1096 (QuicklookView)
+  * MRG: Merged bugfix-1096 into develop.
+
+* RFC:
+  * Request for Changes-20: Take screenshot
+  * Request for Changes-21: Support CDS import
+  * Request for Changes-23: Ice as an Orfeo ToolBox module
+  * Request for Changes-25: Disable Ice shaders if OpenGL version is lower than 2.0 (adopted, merged)
+  * Request for Changes-24: MVD/OTB GDAL overviews multi-resolution pyramid configuration (adopted, merged)
+
 Monteverdi 3.0.0 - Changes since version 0.8.1 (December 22nd, 2015)
 ===============================================================
 
