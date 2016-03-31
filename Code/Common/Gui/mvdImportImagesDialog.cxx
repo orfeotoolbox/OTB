@@ -327,11 +327,11 @@ ImportImagesDialog
 
   for( int i=0; i<COLUMN_COUNT; ++i )
     {
-    qDebug() <<
-      qApp->translate(
-	"mvd::ImportImagesDialog",
-	HEADERS[ i ]
-      );
+    // qDebug() <<
+    //   qApp->translate(
+    // 	"mvd::ImportImagesDialog",
+    // 	HEADERS[ i ]
+    //   );
 
     // labels <<
     //   qApp->translate(
