@@ -24,7 +24,7 @@ ADD_SUPERBUILD_CMAKE_VAR(QT_QMAKE_EXECUTABLE)
 ExternalProject_Add(${proj}
   PREFIX ${proj}
   GIT_REPOSITORY "https://git@git.orfeo-toolbox.org/git/monteverdi2.git"
-  GIT_TAG "develop"
+  GIT_TAG "release-3.2"
   SOURCE_DIR ${MVD_SB_SRC}
   BINARY_DIR ${MVD_SB_BUILD_DIR}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
