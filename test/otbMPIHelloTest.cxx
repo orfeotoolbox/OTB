@@ -1,6 +1,6 @@
 #include <cstdlib>
 
-int otbEmptyTest( int , char ** )
+int otbMPIHelloTest( int , char ** )
 {
   return EXIT_SUCCESS;
 }
