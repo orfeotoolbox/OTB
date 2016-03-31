@@ -9,9 +9,10 @@ set(${otb-module}Tests
 )
 
 add_executable(otbMPIModuleTestDriver ${${otb-module}Tests})
-target_link_libraries(otbMPIModuleTestDriver ${${otb-module}-Test_LIBRARIES})
+target_link_libraries(otbMPIModuleTestDriver ${${otb-module}-Test_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBMPI_LIBRARIES})
 otb_module_target_label(otbMPIModuleTestDriver)
 
+# Test MPIHello
 otb_add_test(NAME otbMPIHelloTest
   COMMAND otbMPIModuleTestDriver otbMPIHelloTest)
 

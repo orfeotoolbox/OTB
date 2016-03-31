@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.9)
+cmake_policy(SET CMP0046 NEW)
 project(MPIModule)
-set(MPIModule_LIBRARIES MPIModule)
+#set(MPIModule_LIBRARIES MPIModule)
 
 if(NOT OTB_SOURCE_DIR)
     find_package(OTB REQUIRED)
