@@ -1671,7 +1671,10 @@ L&apos;application va se terminer !</translation>
 To run at best performances, this application needs, at least, OpenGL version &apos;%3&apos; with GLSL version &apos;%4&apos;.
 The application will automatically switch to a rendering mode which does not make use of OpenGL shaders and GLSL.
 If you are running this application under some remote-desktop service, runtime OpenGL and GLSL versions may differ from those running directly on remote platform.</source>
-        <translation type="unfinished"></translation>
+        <translation>La version courante d&apos;OpenGL est &apos;%1&apos; et supporte OpenGL Shading Language (GLSL) version &apos;%2&apos;.
+Pour s&apos;exécuter avec les meilleures perfomances, cette application a besoin, au moins, de la version OpenGL &apos;%3&apos; avec GLSL version &apos;%4&apos;.
+L&apos;application va automatiquement basculer vers un mode de rendu qui ne fait pas usage des shaders OpenGL ni de GLSL..
+Si vous exécutez cette application via une système d&apos;écran déporté, les version d&apos;OpenGL et de GLSL détectées au cours de l&apos;exécution peuvent être differente celle utilisée directement par le système.</translation>
     </message>
 </context>
 <context>
@@ -1695,24 +1698,26 @@ If you are running this application under some remote-desktop service, runtime O
     </message>
     <message>
         <source>Save screenshot...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder une capture d&apos;écran...</translation>
     </message>
     <message>
         <source>PNG File (*.png);;JPEG File (*.jpg);;TIFF file (*tif)</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG File (*.png);;JPEG File (*.jpg);;TIFF file (*tif)</translation>
     </message>
     <message>
         <source>Exception caught while saving screenshot into file &apos;%1&apos;:
 
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Exeception rattrapée pendant la sauvegarde de la capture d&apos;écran dans le fichier &apos;%1&apos; :
+
+%2</translation>
     </message>
 </context>
 <context>
     <name>mvd::ImportImagesDialog</name>
     <message>
-        <source>Configure multi-resolution pyramids</source>
-        <translation type="unfinished"></translation>
+        <source>Configure multi-resolution pyramid</source>
+        <translation>Configuration de la pyramide multi-resolution</translation>
     </message>
     <message>
         <source></source>
@@ -1721,44 +1726,46 @@ If you are running this application under some remote-desktop service, runtime O
     </message>
     <message>
         <source>Img Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille Img</translation>
     </message>
     <message>
         <source>Ovr Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille Ovr</translation>
     </message>
     <message>
         <source>Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de fichier</translation>
     </message>
     <message>
         <source>The following exception has raised when scanning file &apos;%1&apos; for GDAL overview settings:
 
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;exception suivante a étée lancée pendant la lecture du fichier &apos;%1&apos; pour détecter le paramétrage des overview GDAL :
+
+%2</translation>
     </message>
 </context>
 <context>
     <name>mvd::ImportSubDatasetDialog</name>
     <message>
         <source>Import image</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer image</translation>
     </message>
     <message>
         <source>Dataset</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeu de données</translation>
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <source>Invert</source>
-        <translation type="unfinished"></translation>
+        <translation>Inverser</translation>
     </message>
     <message>
         <source></source>
@@ -1767,15 +1774,15 @@ If you are running this application under some remote-desktop service, runtime O
     </message>
     <message>
         <source>Index</source>
-        <translation type="unfinished"></translation>
+        <translation>Index</translation>
     </message>
     <message>
         <source>Desc</source>
-        <translation type="unfinished"></translation>
+        <translation>Desc</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
 </context>
 <context>
@@ -3777,15 +3784,15 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
     </message>
     <message>
         <source>Save screenshot</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder une capture d&apos;écran</translation>
     </message>
     <message>
         <source>Take screenshot of image-view and save it into file</source>
-        <translation type="unfinished"></translation>
+        <translation>Prendre une capture d&apos;écran de la vue image et la sauvegarder dans un fichier</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+P</translation>
     </message>
 </context>
 <context>
@@ -3823,55 +3830,55 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
     <name>mvd::MultiResolutionPyramidWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulaire</translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <source>File format used for overview file</source>
-        <translation type="unfinished"></translation>
+        <translation>Format du fichier Overview</translation>
     </message>
     <message>
         <source>Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Format :</translation>
     </message>
     <message>
         <source>Decimation factor = Base power Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Facteur de décimation = Base puissance Niveau</translation>
     </message>
     <message>
         <source>Base:</source>
-        <translation type="unfinished"></translation>
+        <translation>Base :</translation>
     </message>
     <message>
         <source>Size list of all overview levels</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste de la taille de tous les niveaux d&apos;Overview</translation>
     </message>
     <message>
         <source>Algorithm used when resampling image to compute overview level</source>
-        <translation type="unfinished"></translation>
+        <translation>Algorithme utilisé pendant le ré-échantillonage de l&apos;image pour calculer le niveau d&apos;Overview</translation>
     </message>
     <message>
         <source>Algorithm:</source>
-        <translation type="unfinished"></translation>
+        <translation>Algorithme :</translation>
     </message>
     <message>
         <source>Levels:</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveaux :</translation>
     </message>
     <message>
         <source>Algorithm used to compress overview level data</source>
-        <translation type="unfinished"></translation>
+        <translation>Algorithme utilisé pour compresser les niveaux d&apos;Overview</translation>
     </message>
     <message>
         <source>Compression:</source>
-        <translation type="unfinished"></translation>
+        <translation>Compression :</translation>
     </message>
     <message>
         <source>Minimal size (in pixels) of smallest overview level</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille minimale (en pixels) du niveau d&apos;Overview le plus petit</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished">Taille :</translation>
+        <translation>Taille :</translation>
     </message>
     <message>
         <source></source>
@@ -3880,55 +3887,55 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <source>Nearest</source>
-        <translation type="unfinished">Plus proche</translation>
+        <translation>Plus proche</translation>
     </message>
     <message>
         <source>Gauss</source>
-        <translation type="unfinished"></translation>
+        <translation>Gauss</translation>
     </message>
     <message>
         <source>Cubic</source>
-        <translation type="unfinished"></translation>
+        <translation>Cubique</translation>
     </message>
     <message>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation>Moyen</translation>
     </message>
     <message>
         <source>Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode</translation>
     </message>
     <message>
         <source>Average Mag/Phase</source>
-        <translation type="unfinished"></translation>
+        <translation>Mag/Phase moyenne</translation>
     </message>
     <message>
         <source>JPEG</source>
-        <translation type="unfinished"></translation>
+        <translation>JPEG</translation>
     </message>
     <message>
         <source>LZW</source>
-        <translation type="unfinished"></translation>
+        <translation>LZW</translation>
     </message>
     <message>
         <source>PACKBITS</source>
-        <translation type="unfinished"></translation>
+        <translation>PACKBITS</translation>
     </message>
     <message>
         <source>DEFLATE</source>
-        <translation type="unfinished"></translation>
+        <translation>DEFLATE</translation>
     </message>
     <message>
         <source>ERDAS</source>
-        <translation type="unfinished"></translation>
+        <translation>ERDAS</translation>
     </message>
     <message>
         <source>GeoTIFF</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoTIFF</translation>
     </message>
 </context>
 <context>
@@ -3964,11 +3971,11 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
     </message>
     <message>
         <source>Generting overviews for file %1/%2 &apos;%3&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Génération des Overview pour le fichier %1/%2 &apos;%3&apos;.</translation>
     </message>
     <message>
         <source>Preparing to build GDAL overviews...</source>
-        <translation type="unfinished"></translation>
+        <translation>Préparation à la construction des Overview GDAL...</translation>
     </message>
 </context>
 <context>
@@ -4148,7 +4155,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Image tile size</source>
-        <translation type="unfinished">Taille de la tuile image</translation>
+        <translation>Taille de la tuile image</translation>
     </message>
     <message>
         <source>Method to choose level of resolution pyramid when scale is between two levels</source>
@@ -4156,19 +4163,19 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Level of resolution pyramid</source>
-        <translation type="unfinished">Niveau dans la pyramide de multi-résolution</translation>
+        <translation>Niveau dans la pyramide de multi-résolution</translation>
     </message>
     <message>
         <source>GDAL Overviews</source>
-        <translation type="unfinished"></translation>
+        <translation>Overviews GDAL</translation>
     </message>
     <message>
         <source>Generate</source>
-        <translation type="unfinished"></translation>
+        <translation>Générer</translation>
     </message>
     <message>
         <source>Minimum size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille minimum :</translation>
     </message>
 </context>
 <context>
@@ -4268,7 +4275,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Rendering effects have been disabled because OpenGL Shading Language minimal requirements have not been met while running on this system.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les effets de rendu ont étés désactivés car le niveau de l&apos;OpenGL Shading Language minimal requis n&apos;a pas été atteint pendant l&apos;exécution sur ce système.</translation>
     </message>
 </context>
 <context>
@@ -4328,15 +4335,15 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Ice rendering mode (OpenGL texture or GLSL if using OpenGL Shading Language)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode de rendu de Ice (OpenGL texture ou GLSL si OpenGL Shading Language est utilisé)</translation>
     </message>
     <message>
         <source>GLSL</source>
-        <translation type="unfinished">GLSL</translation>
+        <translation>GLSL</translation>
     </message>
     <message>
         <source>OpenGL</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
