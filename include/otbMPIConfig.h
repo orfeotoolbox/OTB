@@ -28,6 +28,7 @@ namespace mpi
 /** \class MPIConfig
  *
  * Manage MPI ressources
+ * \ingroup MPIModule
  *
  */
 class MPIConfig
