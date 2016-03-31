@@ -259,13 +259,15 @@ MultiResolutionPyramidWidget
   // It fixes compile-time:
   // error: call of pow(unsigned int, unsigned int) is ambiguous
   double rf = m_GDALOverviewsBuilder->GetResolutionFactor();
-  int m     =  m_GDALOverviewsBuilder->CountResolutions() -
+
+  int m = 
+    m_GDALOverviewsBuilder->CountResolutions() -
     m_GDALOverviewsBuilder->GetNbResolutions();
+
   m_UI->sizeSpinBox->setValue(
     static_cast< int >(
-      std::pow ( rf,
-                 m
-      ) )
+      std::pow( rf, m )
+    )
   );
 
   m_UI->sizeSpinBox->blockSignals( signalsBlocked );

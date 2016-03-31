@@ -17,7 +17,6 @@
 
 =========================================================================*/
 #include "mvdProcessObjectObserver.h"
-#include <cassert>
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -28,6 +27,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
 
 //
 // ITK includes (sorted by alphabetic order)
