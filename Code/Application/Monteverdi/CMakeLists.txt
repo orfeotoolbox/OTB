@@ -102,5 +102,5 @@ create_monteverdi_application(NAME monteverdi
   ${QT_QTMAIN_LIBRARY}
   OUTPUT_NAME ${Monteverdi_App_OUTPUT_NAME}
   COMPONENT_NAME Monteverdi
-  NEEDS_OTB_APPS FALSE
+  NEEDS_OTB_APPS TRUE
   )
