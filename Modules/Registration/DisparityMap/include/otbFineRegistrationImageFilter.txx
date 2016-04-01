@@ -501,10 +501,9 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
     bool exitWhile=false;
     int nbIter=0;
     double bestvalold=itk::NumericTraits<double>::max(),bestval=optMetric;
-    typename TranslationType::ParametersType oldOptParams=optParams;
     double diff=itk::NumericTraits<double>::max();
-    double diffParamx=itk::NumericTraits<double>::max();
-    double diffParamy=itk::NumericTraits<double>::max();
+    double diffx=itk::NumericTraits<double>::max();
+    double diffy=itk::NumericTraits<double>::max();
     
     //init
     fc=callMetric(cx,cy,fc,exitWhile);
@@ -512,7 +511,7 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
     updateMinimize(fc,fd);
 
     //loop
-    while (  (diffParamx > m_SubPixelAccuracy || diffParamy > m_SubPixelAccuracy) 
+    while (  (diffx > m_SubPixelAccuracy || diffy > m_SubPixelAccuracy) 
              && (diff>m_ConvergenceAccuracy) 
              && (!exitWhile) 
              && (nbIter<=m_MaxIter)) 
@@ -561,11 +560,9 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
             bestval=-bestval;
             
         diff= fabs(bestval-bestvalold);
-        diffParamx=fabs(optParams[0]-oldOptParams[0]);
-        diffParamy=fabs(optParams[1]-oldOptParams[1]);
         bestvalold=bestval;
-        oldOptParams=optParams;
-    
+        diffx=fabs(bx-ax);
+        diffy=fabs(by-ay);
 	}
 
     // Store the offset and the correlation value
