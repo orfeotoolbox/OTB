@@ -328,6 +328,12 @@ MultiResolutionPyramidWidget
       count
 	  );
 
+    m_UI->sizeSpinBox->setValue(
+    static_cast< int >(
+      std::pow( rf, m )
+    )
+  );
+
   m_UI->sizeSpinBox->blockSignals( signalsBlocked );
 }
 
