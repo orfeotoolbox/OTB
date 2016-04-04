@@ -27,8 +27,8 @@ macro(package_mingw)
     list(APPEND PACKAGE_PEFILES "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine.exe")
     list(APPEND PACKAGE_PEFILES "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherQt.exe") #OTBQtWidget must exists when you are building OTB
 
-    if(EXISTS "${OTB_INSTALL_DIR}/bin/otbIceViewer.exe")
-      list(APPEND PACKAGE_PEFILES "${OTB_INSTALL_DIR}/bin/otbIceViewer.exe") #iceviewer
+    if(EXISTS "${OTB_INSTALL_DIR}/bin/iceViewer.exe")
+      list(APPEND PACKAGE_PEFILES "${OTB_INSTALL_DIR}/bin/iceViewer.exe") #iceviewer
     endif()
   endif()
 
