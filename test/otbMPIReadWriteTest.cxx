@@ -58,7 +58,7 @@ int otbMPIReadWriteTest(int argc, char * argv[]) {
    reader->SetFileName(inputFilename);
 
    // Update MPI Pipeline
-   config->UpdateMPI(reader->GetOutput(),argv[2]);
+   config->UpdateMPI(reader->GetOutput(),argv[2],true, true);
 
    return EXIT_SUCCESS;
 }

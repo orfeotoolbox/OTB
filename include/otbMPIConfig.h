@@ -67,7 +67,7 @@ public:
    void logError(const std::string message);
 
    //** MPI Update */
-   template <typename TImage> void UpdateMPI (TImage *img, const std::string &prefix, bool useStreaming, const std::string xtArgs);
+   template <typename TImage> void UpdateMPI (TImage *img, const std::string &prefix, bool useStreaming, bool writeVRTFile, const std::string xtArgs);
 
 protected:
    /** Constructor */
