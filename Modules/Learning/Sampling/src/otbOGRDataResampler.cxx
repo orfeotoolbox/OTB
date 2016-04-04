@@ -206,7 +206,7 @@ OGRDataResampler::OutputSamplingVectors()
           
          file << ">"; 
          for(unsigned int i=0; i<it->second.second.size(); i++)
-           file << it->second.first[i] << " ";
+           file << it->second.second[i] << " ";
           file << std::endl;
      }
      file.close();  
