@@ -1,25 +1,7 @@
-# Get the translation files coming with Qt, and install them in the bundle
-# They are loaded by Monteverdi.
-function(get_qt_translation_files RESULT)
-    # These files are the "qt_<localename>.qm" files
-    # They are located in QT_TRANSLATIONS_DIR, which comes from FindQt4
-    file(GLOB translation_files ${QT_TRANSLATIONS_DIR}/qt_*)
-
-    # We need to remove the "qt_help_<localename>.qm" files from this list
-    foreach(translation_item ${translation_files})
-      if(${translation_item} MATCHES "qt_help")
-        list(REMOVE_ITEM translation_files ${translation_item})
-      endif()
-    endforeach()
-
-    set(${RESULT} ${translation_files} PARENT_SCOPE)
-endfunction()
 
 #RK: two packages.
 #function(create_cpack_config application)
 function(create_cpack_config)
-
-
   #should we handle this when calling function ?
   #for now mapla has no specific version or it is same as monteverdi
   SET(CPACK_PACKAGE_VERSION "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}")
@@ -215,67 +197,67 @@ function(configure_app_package app with_otb_apps)
     endif() #(NOT CMAKE_CROSSCOMPILING AND Monteverdi_USE_CPACK)
 
 
-    if(CMAKE_CROSSCOMPILING)
-      if(NOT DEFINED MXE_TARGET_DIR)
-        message(FATAL_ERROR "MXE_TARGET_DIR is missing")
-      endif()
-      if(MXE_TARGET_DIR MATCHES "i686")
-        set(mxearch x86)
-        set(archive_name ${app}-${Monteverdi_VERSION_STRING}-win32)
-      elseif(MXE_TARGET_DIR MATCHES "x86_64")
-        set(mxearch x64)
-        set(archive_name ${app}-${Monteverdi_VERSION_STRING}-win64)
-      endif()
+    # if(CMAKE_CROSSCOMPILING)
+    #   if(NOT DEFINED MXE_TARGET_DIR)
+    #     message(FATAL_ERROR "MXE_TARGET_DIR is missing")
+    #   endif()
+    #   if(MXE_TARGET_DIR MATCHES "i686")
+    #     set(mxearch x86)
+    #     set(archive_name ${app}-${Monteverdi_VERSION_STRING}-win32)
+    #   elseif(MXE_TARGET_DIR MATCHES "x86_64")
+    #     set(mxearch x64)
+    #     set(archive_name ${app}-${Monteverdi_VERSION_STRING}-win64)
+    #   endif()
 
-      execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
+    #   execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
 
-      get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
-      get_filename_component(mxeroot ${mxeroot} PATH)
-      file(WRITE "${CMAKE_BINARY_DIR}/_mingw/${app}/CMakeLists.txt"
-        "cmake_minimum_required(VERSION 2.6)
-       include(CMakeParseArguments)
-       set(Monteverdi_SOURCE_DIR \"${Monteverdi_SOURCE_DIR}\")
-       set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")
-       set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
-       set(QT_TRANSLATIONS_DIR \"${QT_TRANSLATIONS_DIR}\")
-       set(Monteverdi_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
-       set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
-       set(Monteverdi_INSTALL_DATA_DIR \"${Monteverdi_INSTALL_DATA_DIR}\")
-        include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
-        include(${CMAKE_SOURCE_DIR}/CMake/CPackFunctions.cmake)
-        package_mingw(
-        ARCH \"${mxearch}\"
-        MXEROOT \"${mxeroot}\"
-        PREFIX_DIR \"${archive_name}\"
-        PEFILES \"${APP_NAME}\"
-        NEEDS_OTB_APPS ${with_otb_apps}
-        SEARCHDIRS \"\")")
+    #   get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
+    #   get_filename_component(mxeroot ${mxeroot} PATH)
+    #   file(WRITE "${CMAKE_BINARY_DIR}/_mingw/${app}/CMakeLists.txt"
+    #     "cmake_minimum_required(VERSION 2.6)
+    #    include(CMakeParseArguments)
+    #    set(Monteverdi_SOURCE_DIR \"${Monteverdi_SOURCE_DIR}\")
+    #    set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")
+    #    set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
+    #    set(QT_TRANSLATIONS_DIR \"${QT_TRANSLATIONS_DIR}\")
+    #    set(Monteverdi_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
+    #    set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
+    #    set(Monteverdi_INSTALL_DATA_DIR \"${Monteverdi_INSTALL_DATA_DIR}\")
+    #     include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
+    #     include(${CMAKE_SOURCE_DIR}/CMake/CPackFunctions.cmake)
+    #     package_mingw(
+    #     ARCH \"${mxearch}\"
+    #     MXEROOT \"${mxeroot}\"
+    #     PREFIX_DIR \"${archive_name}\"
+    #     PEFILES \"${APP_NAME}\"
+    #     NEEDS_OTB_APPS ${with_otb_apps}
+    #     SEARCHDIRS \"\")")
 
-      set(GDAL_DATA ${MXE_TARGET_DIR}/share/gdal)
+    #   set(GDAL_DATA ${MXE_TARGET_DIR}/share/gdal)
 
-      add_custom_target(configure-${app}-mingw-package
-        COMMAND ${CMAKE_COMMAND}
-        "${CMAKE_BINARY_DIR}/_mingw/${app}"
-        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw/${app}")
+    #   add_custom_target(configure-${app}-mingw-package
+    #     COMMAND ${CMAKE_COMMAND}
+    #     "${CMAKE_BINARY_DIR}/_mingw/${app}"
+    #     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw/${app}")
 
-      add_custom_target(make-${app}-mingw-package
-        COMMAND ${CMAKE_COMMAND}
-        "--build" "${CMAKE_BINARY_DIR}/_mingw/${app}" "--target" "install"
-        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw/${app}"
-        DEPENDS configure-${app}-mingw-package)
+    #   add_custom_target(make-${app}-mingw-package
+    #     COMMAND ${CMAKE_COMMAND}
+    #     "--build" "${CMAKE_BINARY_DIR}/_mingw/${app}" "--target" "install"
+    #     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw/${app}"
+    #     DEPENDS configure-${app}-mingw-package)
 
-      find_program(ZIP_EXECUTABLE zip)
+    #   find_program(ZIP_EXECUTABLE zip)
 
-      if(ZIP_EXECUTABLE)
-        add_custom_target(create-${app}-mingw-archive
-          COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
-          WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
-          DEPENDS make-${app}-mingw-package)
-      else()
-        message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
-      endif()
+    #   if(ZIP_EXECUTABLE)
+    #     add_custom_target(create-${app}-mingw-archive
+    #       COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
+    #       WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
+    #       DEPENDS make-${app}-mingw-package)
+    #   else()
+    #     message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
+    #   endif()
 
-    endif() # (CMAKE_CROSSCOMPILING)
+    # endif() # (CMAKE_CROSSCOMPILING)
 
   endif(WIN32)
 
@@ -321,161 +303,87 @@ function(configure_app_package app with_otb_apps)
 
   endif(APPLE)
 
-  ################################################################################
-  ################################################################################
-  ################### END OF PLATFORM SPECIFIC CMAKE VARIABLES ###################
-  ################################################################################
-  ################################################################################
+#   ################################################################################
+#   ################################################################################
+#   ################### END OF PLATFORM SPECIFIC CMAKE VARIABLES ###################
+#   ################################################################################
+#   ################################################################################
 
-  ####################### install sqldrivers plugin #######################
+#   ####################### install sqldrivers plugin #######################
 
-  install(FILES ${QT_PLUGINS_DIR}/sqldrivers/${APP_QTSQLITE_FILENAME}
-    DESTINATION ${APP_QTPLUGINS_DIR}/sqldrivers
-    COMPONENT Runtime)
+#   install(FILES ${QT_PLUGINS_DIR}/sqldrivers/${APP_QTSQLITE_FILENAME}
+#     DESTINATION ${APP_QTPLUGINS_DIR}/sqldrivers
+#     COMPONENT Runtime)
 
-  ####################### install translations #######################
-  get_qt_translation_files(QT_TRANSLATIONS_FILES)
+#   ####################### install translations #######################
+#   get_qt_translation_files(QT_TRANSLATIONS_FILES)
 
-  install(FILES ${QT_TRANSLATIONS_FILES}
-    DESTINATION ${APP_I18N_DIR}
-    COMPONENT Resources)
+#   install(FILES ${QT_TRANSLATIONS_FILES}
+#     DESTINATION ${APP_I18N_DIR}
+#     COMPONENT Resources)
 
-  ####################### install GDAL data #######################
+#   ####################### install GDAL data #######################
 
 
-  if(NOT DEFINED GDAL_DATA)
-    file(TO_CMAKE_PATH "$ENV{GDAL_DATA}" GDAL_DATA)
-    if(NOT GDAL_DATA)
-      if(Monteverdi_USE_CPACK)
-        message(FATAL_ERROR "Cannot generate installer without GDAL_DATA : GDAL_DATA")
-      else()
-        message(WARNING "Cannot generate installer without GDAL_DATA : GDAL_DATA")
-      endif()
-    endif()
-  endif() #(DEFINED GDAL_DATA)
-  # Need to include csv files provided with GDAL that contains some needed EPSG definitions
+#   if(NOT DEFINED GDAL_DATA)
+#     file(TO_CMAKE_PATH "$ENV{GDAL_DATA}" GDAL_DATA)
+#     if(NOT GDAL_DATA)
+#       if(Monteverdi_USE_CPACK)
+#         message(FATAL_ERROR "Cannot generate installer without GDAL_DATA : GDAL_DATA")
+#       else()
+#         message(WARNING "Cannot generate installer without GDAL_DATA : GDAL_DATA")
+#       endif()
+#     endif()
+#   endif() #(DEFINED GDAL_DATA)
+#   # Need to include csv files provided with GDAL that contains some needed EPSG definitions
 
-  install(DIRECTORY ${GDAL_DATA}
-    DESTINATION ${APP_DATA_DIR}
-    COMPONENT Resources)
+#   install(DIRECTORY ${GDAL_DATA}
+#     DESTINATION ${APP_DATA_DIR}
+#     COMPONENT Resources)
 
-  ####################### Check otb applications #######################
+#   ####################### Check otb applications #######################
 
-  if(with_otb_apps)
-#      message(FATAL_ERROR "No OTB-applications detected")
-    file(GLOB OTB_APPS_LIST ${OTB_MODULES_DIR}/../../../otb/applications/otbapp_*${CMAKE_SHARED_LIBRARY_SUFFIX}) # /lib/otb
-    if(NOT OTB_APPS_LIST)
-      message(FATAL_ERROR "No OTB-applications detected")
-    endif()
+#   if(with_otb_apps)
+# #      message(FATAL_ERROR "No OTB-applications detected")
+#     file(GLOB OTB_APPS_LIST ${OTB_MODULES_DIR}/../../../otb/applications/otbapp_*${CMAKE_SHARED_LIBRARY_SUFFIX}) # /lib/otb
+#     if(NOT OTB_APPS_LIST)
+#       message(FATAL_ERROR "No OTB-applications detected")
+#     endif()
 
-    ## otb apps dir /lib/otb/applications
-    install(DIRECTORY "${OTB_MODULES_DIR}/../../../otb/applications"
-      DESTINATION ${APP_OTBLIBS_DIR}
-      COMPONENT Runtime)
+#     ## otb apps dir /lib/otb/applications
+#     install(DIRECTORY "${OTB_MODULES_DIR}/../../../otb/applications"
+#       DESTINATION ${APP_OTBLIBS_DIR}
+#       COMPONENT Runtime)
 
-  endif(with_otb_apps)
+#   endif(with_otb_apps)
 
-  ## directories to look for dependencies
-  set(SEARCH_DIRS)
-  list(APPEND SEARCH_DIRS "${QT_PLUGINS_DIR}/sqldrivers")
-  list(APPEND SEARCH_DIRS "${ITK_MODULES_DIR}/../../../")
-  list(APPEND SEARCH_DIRS "${OTB_MODULES_DIR}/../../../")
-  list(APPEND SEARCH_DIRS "${CMAKE_INSTALL_PREFIX}/lib/otb/")
+#   ## directories to look for dependencies
+#   set(SEARCH_DIRS)
+#   list(APPEND SEARCH_DIRS "${QT_PLUGINS_DIR}/sqldrivers")
+#   list(APPEND SEARCH_DIRS "${ITK_MODULES_DIR}/../../../")
+#   list(APPEND SEARCH_DIRS "${OTB_MODULES_DIR}/../../../")
+#   list(APPEND SEARCH_DIRS "${CMAKE_INSTALL_PREFIX}/lib/otb/")
 
-  ####################### install fixup_bundle code #######################
-  ## fixup_bundle code
-  if(NOT CMAKE_CROSSCOMPILING)
-    if(with_otb_apps)
-      install(CODE
-        "file(GLOB APP_LIBS \"${CMAKE_INSTALL_PREFIX}/${APP_OTBLIBS_DIR}/applications/otbapp_*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
-        list(APPEND APP_LIBS \"${CMAKE_INSTALL_PREFIX}/${APP_QTPLUGINS_DIR}/sqldrivers/${APP_QTSQLITE_FILENAME}\")
-        include(BundleUtilities)
-        set(BU_CHMOD_BUNDLE_ITEMS ON)
-        fixup_bundle(\"${APP_NAME}\" \"\${APP_LIBS}\" \"${SEARCH_DIRS}\")"
-        COMPONENT ${app})
+#   ####################### install fixup_bundle code #######################
+#   ## fixup_bundle code
+#   if(NOT CMAKE_CROSSCOMPILING)
+#     if(with_otb_apps)
+#       install(CODE
+#         "file(GLOB APP_LIBS \"${CMAKE_INSTALL_PREFIX}/${APP_OTBLIBS_DIR}/applications/otbapp_*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
+#         list(APPEND APP_LIBS \"${CMAKE_INSTALL_PREFIX}/${APP_QTPLUGINS_DIR}/sqldrivers/${APP_QTSQLITE_FILENAME}\")
+#         include(BundleUtilities)
+#         set(BU_CHMOD_BUNDLE_ITEMS ON)
+#         fixup_bundle(\"${APP_NAME}\" \"\${APP_LIBS}\" \"${SEARCH_DIRS}\")"
+#         COMPONENT ${app})
 
-    else() #(with_otb_apps)
-      install(CODE
-        "file(GLOB APP_LIBS \"${CMAKE_INSTALL_PREFIX}/${APP_QTPLUGINS_DIR}/sqldrivers/${APP_QTSQLITE_FILENAME}\")
-        include(BundleUtilities)
-        set(BU_CHMOD_BUNDLE_ITEMS ON)
-        fixup_bundle(\"${APP_NAME}\" \"\${APP_LIBS}\" \"${SEARCH_DIRS}\")"
-        COMPONENT ${app})
-    endif() #(with_otb_apps)
-  endif() #(NOT CMAKE_CROSSCOMPILING)
+#     else() #(with_otb_apps)
+#       install(CODE
+#         "file(GLOB APP_LIBS \"${CMAKE_INSTALL_PREFIX}/${APP_QTPLUGINS_DIR}/sqldrivers/${APP_QTSQLITE_FILENAME}\")
+#         include(BundleUtilities)
+#         set(BU_CHMOD_BUNDLE_ITEMS ON)
+#         fixup_bundle(\"${APP_NAME}\" \"\${APP_LIBS}\" \"${SEARCH_DIRS}\")"
+#         COMPONENT ${app})
+#     endif() #(with_otb_apps)
+#   endif() #(NOT CMAKE_CROSSCOMPILING)
 endfunction(configure_app_package)
 
-
-macro(create_monteverdi_application)
-  cmake_parse_arguments(APPLICATION  "" "NAME;OUTPUT_NAME;COMPONENT_NAME;NEEDS_OTB_APPS" "SOURCES;LINK_LIBRARIES" ${ARGN} )
-
-  if(NOT DEFINED APPLICATION_NEEDS_OTB_APPS OR APPLICATION_NEEDS_OTB_APPS)
-    set(APPLICATION_NEEDS_OTB_APPS TRUE)
-  else()
-    set(APPLICATION_NEEDS_OTB_APPS FALSE)
-  endif()
-
-  if(WIN32)
-    add_executable(${APPLICATION_NAME}
-      WIN32
-      ${APPLICATION_SOURCES})
-  elseif(APPLE)
-    add_executable(${APPLICATION_NAME}
-      MACOSX_BUNDLE
-      ${APPLICATION_SOURCES})
-
-  else() #Linux
-    add_executable(${APPLICATION_NAME}
-      ${APPLICATION_SOURCES})
-  endif()
-
-  set(EXECUTABLE_NAME ${APPLICATION_NAME})
-  if(APPLE)
-
-    string(SUBSTRING ${APPLICATION_NAME} 0 1 FIRST_LETTER)
-    string(TOUPPER ${FIRST_LETTER} FIRST_LETTER)
-    string(REGEX REPLACE "^.(.*)" "${FIRST_LETTER}\\1" APPLICATION_OUTPUT_NAME "${APPLICATION_NAME}")
-  endif()
-
-  if (APPLICATION_OUTPUT_NAME)
-    set_target_properties(${APPLICATION_NAME} PROPERTIES OUTPUT_NAME ${APPLICATION_OUTPUT_NAME})
-    set(EXECUTABLE_NAME ${APPLICATION_OUTPUT_NAME})
-  endif()
-
-  if(APPLE)
-    if(Monteverdi_USE_CPACK)
-      set(MACOS_FILES_DIR "${CMAKE_SOURCE_DIR}/Packaging/MacOS")
-
-      configure_file(${MACOS_FILES_DIR}/Info.plist.in
-        ${CMAKE_BINARY_DIR}/Code/Application/${APPLICATION_NAME}/Info.plist
-	      @ONLY)
-
-      configure_file(${MACOS_FILES_DIR}/StartupCommand.in
-        ${CMAKE_BINARY_DIR}/Code/Application/${APPLICATION_NAME}/${EXECUTABLE_NAME}_start
-	      @ONLY)
-
-      set_target_properties(${APPLICATION_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Code/Application/${APPLICATION_NAME}/Info.plist")
-    endif(Monteverdi_USE_CPACK)
-
-  endif(APPLE)
-
-  target_link_libraries(${APPLICATION_NAME} ${APPLICATION_LINK_LIBRARIES})
-
-#############################################################################
-install(TARGETS ${APPLICATION_NAME}
-  BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT ${APPLICATION_COMPONENT_NAME}
-  RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR} COMPONENT ${APPLICATION_COMPONENT_NAME}
-  LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT ${APPLICATION_COMPONENT_NAME}
-  ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT ${APPLICATION_COMPONENT_NAME}
-  )
-
-#############################################################################
-
-if(WIN32)
-  if(CMAKE_CROSSCOMPILING OR Monteverdi_USE_CPACK)
-    configure_app_package(${APPLICATION_COMPONENT_NAME} ${APPLICATION_NEEDS_OTB_APPS})
-  endif()
-elseif(APPLE AND Monteverdi_USE_CPACK)
-  configure_app_package(${APPLICATION_COMPONENT_NAME} ${APPLICATION_NEEDS_OTB_APPS})
-endif()
-endmacro(create_monteverdi_application)
