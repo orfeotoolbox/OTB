@@ -1,94 +1,119 @@
 /*=========================================================================
 
- Program:   ORFEO Toolbox
- Language:  C++
- Date:      $Date$
- Version:   $Revision$
+   Program:   ORFEO Toolbox
+   Language:  C++
+   Date:      $Date$
+   Version:   $Revision$
 
 
- Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
- See OTBCopyright.txt for details.
+   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+   See OTBCopyright.txt for details.
 
 
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the above copyright notices for more information.
+      This software is distributed WITHOUT ANY WARRANTY; without even
+      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+      PURPOSE.  See the above copyright notices for more information.
 
- =========================================================================*/
-#ifndef __MPIConfig_h
-#define __MPIConfig_h
+  =========================================================================*/
+#ifndef __otbMPIConfig_h
+#define __otbMPIConfig_h
+
+#include <sstream>
+#include <string>
 
 #include <mpi.h>
 
-namespace otb 
-{ 
-namespace mpi 
-{
+#include "itkObject.h"
+#include "itkMacro.h"
+#include "itkObjectFactory.h"
 
-/** \class MPIConfig
- *
- * Manage MPI ressources
- * \ingroup MPIModule
- *
- */
-class MPIConfig
+namespace otb {
+
+namespace mpi {
+
+/** \class MPI config
+  *  \brief Manage MPI ressources
+  * TODO
+  *
+  *
+  * \ingroup MPIModule
+  */
+class MPIConfig: public itk::Object
 {
 public:
-  /** 
-   * Initialize the MPI environment.
-   *
-   *  If the MPI environment has not already been initialized,
-   *  initializes MPI with a call to MPI_Init.
-   *
-   *  @param argc Number of arguments 
-   *
-   *  @param argv Array of arguments
-   *
-   *  @param abort_on_exception When true, this object will abort the
-   *  program if it is destructed due to an uncaught exception.
-   */
-  MPIConfig(int& argc, char** &argv, bool abortOnException = true);
+   /** Standard class typedefs. */
+   typedef MPIConfig                     Self;
+   typedef itk::Object                   Superclass;
+   typedef itk::SmartPointer<Self>       Pointer;
+   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** 
-   * Shuts down the MPI environment.
-   */
-  ~MPIConfig();
+   /** Method for creation through the object factory. */
+   itkNewMacro(Self);
 
-  /** 
-   * Abort all MPI processes.
-   *
-   *  @param errcode 
-   */
-  void abort(int errcode);
+   /** Run-time type information (and related methods). */
+   itkTypeMacro(MPIConfig, itk::Object);
 
-  /** 
-   * Determine if the MPI environment has already been initialized.
-   *
-   *  @returns @c true if the MPI environment has been initialized.
-   */
-  bool initialized();
+   /** MPI Parameters accessors */
+   itkGetMacro(MyRank, int);
+   itkGetMacro(NbProcs, int);
 
-  /** 
-   * Determine if the MPI environment has already been finalized.
-   *
-   *  @returns @c true if the MPI environment has been finalized.
-   */
-  bool finalized();
+   /** Initialize MPI Processus */
+   void Init(int& argc, char** &argv, bool abortOnException = true);
+
+   /** Abort all MPI processus. */
+   void abort(int errCode);
+
+   /** Log */
+   void logError(const std::string message);
+
+   //** MPI Update */
+   template <typename TImage> void UpdateMPI (TImage *img, const std::string &prefix, bool useStreaming, const std::string xtArgs);
+
+protected:
+   /** Constructor */
+   MPIConfig();
+
+   /** Destructor */
+   virtual ~MPIConfig();
 
 private:
-  /// Whether this environment object called MPI_Init
-  bool m_initialized;
 
-  /// Whether we should abort if the destructor is
-  bool m_abortOnException;
+   MPIConfig(const MPIConfig &); //purposely not implemented
+   void operator =(const MPIConfig&); //purposely not implemented
+
+   // MPI rank
+   int m_MyRank;
+   // Number of MPI processus
+   int m_NbProcs;
+   // Boolean to abort on exception
+   bool m_abortOnException;
+   // Boolean to test if the MPI environment is initialized
+   bool m_initialized;
 
 };
 
-} // end namespace mpi
-} // end namespace otb
+/**
+  * Call the MPI routine MPIFunc with arguments Args (surrounded by
+  * parentheses). If the result is not MPI_SUCCESS, throw an exception.
+  */
+#define OTB_MPI_CHECK_RESULT( MPIFunc, Args )                         \
+  { \
+    int _result = MPIFunc Args;                                  \
+    if (_result != MPI_SUCCESS)                                  \
+    {                                                            \
+      std::stringstream message; \
+      message << "otb::mpi::ERROR: " << #MPIFunc << " (Code = " << _result; \
+      ::itk::ExceptionObject _e(__FILE__, __LINE__, message.str().c_str()); \
+      throw _e; \
+    }\
+  }
+
+} // End namespace mpi
+
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMPIConfig.txx"
 #endif
 
-#endif // MPIConfig
+#endif //__otbMPIConfig_h

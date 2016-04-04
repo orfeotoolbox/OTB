@@ -1,18 +1,18 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-class EmptyApp : public otb::Wrapper::Application
+class MPIHelloApp : public otb::Wrapper::Application
 {
 public:
-  typedef EmptyApp Self;
+  typedef MPIHelloApp Self;
   typedef itk::SmartPointer<Self> Pointer; 
 
   itkNewMacro(Self);
-  itkTypeMacro(EmptyApp, otb::Wrapper::Application);
+  itkTypeMacro(MPIHelloApp, otb::Wrapper::Application);
 private:
   void DoInit()
   {
-    SetName("EmptyApp");
+    SetName("MPIHelloApp");
     SetDescription("Empty application.");
   }
 
@@ -26,4 +26,4 @@ private:
   }
 };
 
-OTB_APPLICATION_EXPORT(EmptyApp)
+OTB_APPLICATION_EXPORT(MPIHelloApp)

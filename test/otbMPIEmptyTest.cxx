@@ -15,18 +15,10 @@
       PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
+#include <cstdlib>
 #include "otbMPIConfig.h"
-#include <iostream>
 
-int otbMPIHelloTest(int argc, char* argv[]) {
-
-   typedef otb::mpi::MPIConfig    MPIConfigType;
-   MPIConfigType::Pointer config = MPIConfigType::New();
-   config->Init(argc,argv,true);
-
-   std::cout<<"OTB Hello World ! Je suis le processus "<<config->GetMyRank()<<" parmi "<<config->GetNbProcs()<<"."<<std::endl;
-
+int otbMPIEmptyTest(int argc, char* argv[]) {
    return EXIT_SUCCESS;
 }
 
