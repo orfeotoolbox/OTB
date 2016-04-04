@@ -100,12 +100,17 @@ function(install_common outdir)
     endif()
   endforeach()
 
-  install(CODE "file(WRITE \"${CMAKE_INSTALL_PREFIX}/${PKG_PREFIX_DIR}/otbenv.cmd\"
-               \"set CURRENT_SCRIPT_DIR=%~dp0\nset PATH=%PATH%;%CURRENT_SCRIPT_DIR%\\\\bin\nset GDAL_DATA=%CURRENT_SCRIPT_DIR%\\\\share\\\\gdal\n\")" )
+  ##################### install mingw otbenv.cmd ##########################
+  if(EXISTS ${Monteverdi_SOURCE_DIR}/Packaging/Windows/mingw/otbenv.cmd)
+    install(FILES ${Monteverdi_SOURCE_DIR}/Packaging/Windows/mingw/otbenv.cmd
+      DESTINATION ${PKG_PREFIX_DIR})
+  endif()
 
-  ####################### create and install qt.conf #######################
-  install(CODE "file(WRITE \"${PKG_QTCONF_DIR}/qt.conf\"
-                \"[Paths]\nTranslations=../lib/qt4/translations\nPlugins=../lib/qt4/plugins\n\")" )
+  ####################### install mingw qt.conf ##########################
+  if(EXISTS ${Monteverdi_SOURCE_DIR}/Packaging/Windows/mingw/qt.conf)
+    install(FILES ${Monteverdi_SOURCE_DIR}/Packaging/Windows/mingw/qt.conf
+      DESTINATION ${PKG_BIN_DIR})
+  endif()
 
   ####################### install sqldriver plugin ########################
   install(FILES ${QT_PLUGINS_DIR}/sqldrivers/${PKG_QTSQLITE_FILENAME}
