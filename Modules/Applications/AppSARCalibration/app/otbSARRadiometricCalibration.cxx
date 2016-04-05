@@ -24,11 +24,11 @@ namespace otb
 {
 namespace Wrapper
 {
-class SarRadiometricCalibration : public Application
+class SARRadiometricCalibration : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef SarRadiometricCalibration     Self;
+  typedef SARRadiometricCalibration     Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -36,7 +36,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(SarRadiometricCalibration, otb::Application);
+  itkTypeMacro(SARRadiometricCalibration, otb::Application);
 
   typedef otb::SarRadiometricCalibrationToImageFilter<ComplexFloatImageType,
                                                       FloatImageType>     CalibrationFilterType;
@@ -44,7 +44,7 @@ public:
 private:
   void DoInit()
   {
-    SetName("SarRadiometricCalibration");
+    SetName("SARRadiometricCalibration");
     SetDescription("Perform radiometric calibration of SAR images. Following sensors are supported: TerraSAR-X, Sentinel1 and Radarsat-2.Both Single Look Complex(SLC) and detected products are supported as input.\n");
 
     // Documentation
@@ -83,7 +83,7 @@ private:
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "RSAT_imagery_HH.tif");
-    SetDocExampleParameterValue("out", "SarRadiometricCalibration.tif" );
+    SetDocExampleParameterValue("out", "SARRadiometricCalibration.tif" );
   }
 
   void DoUpdateParameters()
@@ -93,9 +93,6 @@ private:
 
   void DoExecute()
   {
-
-    otbAppLogINFO( << "THIS APPLICATION IS DEPRECATED AND WILL BE REMOVED IN NEXT VERSION OF OTB. PLEASE CONSIDER USING 'SARRadiometricCalibration' APPLICATION INSTEAD. SEE MANTIS - https://bugs.orfeo-toolbox.org/view.php?id=1161" );
-
     // Get the input complex image
     ComplexFloatImageType*  floatComplexImage = GetParameterComplexFloatImage("in");
 
@@ -125,4 +122,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::SarRadiometricCalibration)
+OTB_APPLICATION_EXPORT(otb::Wrapper::SARRadiometricCalibration)
