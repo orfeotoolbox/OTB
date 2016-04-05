@@ -277,7 +277,6 @@ void LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc)
 
 void DoExecute()
 {
-  GetLogger()->Debug("Entering DoExecute\n");
   //Create training and validation for list samples and label list samples
   ConcatenateLabelListSampleFilterType::Pointer concatenateTrainingLabels =
     ConcatenateLabelListSampleFilterType::New();
@@ -464,8 +463,8 @@ void DoExecute()
 
     ConfusionMatrixCalculatorType::Pointer confMatCalc = ConfusionMatrixCalculatorType::New();
 
-    std::cout << "predicted list size == " << predictedList->Size() << std::endl;
-    std::cout << "validationLabeledListSample size == " << performanceLabeledListSample->Size() << std::endl;
+    otbAppLogINFO("Predicted list size : " << predictedList->Size());
+    otbAppLogINFO("ValidationLabeledListSample size : " << performanceLabeledListSample->Size());
     confMatCalc->SetReferenceLabels(performanceLabeledListSample);
     confMatCalc->SetProducedLabels(predictedList);
 

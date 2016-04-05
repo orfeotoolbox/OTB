@@ -152,14 +152,14 @@ private:
     /*
      * Transform Endmembers image to matrix representation
      */
-    std::cout << "Endmembers extracted" << std::endl;
-    std::cout << "Converting endmembers to matrix" << std::endl;
+    otbAppLogINFO("Endmembers extracted");
+    otbAppLogINFO("Converting endmembers to matrix");
     VectorImageToMatrixImageFilterType::Pointer endMember2Matrix = VectorImageToMatrixImageFilterType::New();
     endMember2Matrix->SetInput(endmembersImage);
     endMember2Matrix->Update();
 
     MatrixType endMembersMatrix = endMember2Matrix->GetMatrix();
-    std::cout << "Endmembers matrix : " << endMembersMatrix << std::endl;
+    otbAppLogINFO("Endmembers matrix : " << endMembersMatrix);
 
     /*
      * Unmix
@@ -170,7 +170,7 @@ private:
     {
     case UnMixingMethod_UCLS:
       {
-      std::cout << "UCLS Unmixing" << std::endl;
+      otbAppLogINFO("UCLS Unmixing");
 
       UCLSUnmixingFilterType::Pointer unmixer =
           UCLSUnmixingFilterType::New();
@@ -186,7 +186,7 @@ private:
       break;
     case UnMixingMethod_ISRA:
       {
-      std::cout << "ISRA Unmixing" << std::endl;
+      otbAppLogINFO("ISRA Unmixing");
 
       ISRAUnmixingFilterType::Pointer unmixer =
           ISRAUnmixingFilterType::New();
@@ -200,7 +200,7 @@ private:
       break;
     case UnMixingMethod_NCLS:
       {
-      std::cout << "NCLS Unmixing" << std::endl;
+      otbAppLogINFO("NCLS Unmixing");
 
       NCLSUnmixingFilterType::Pointer unmixer =
           NCLSUnmixingFilterType::New();
@@ -215,7 +215,7 @@ private:
       /*
     case UnMixingMethod_FCLS:
       {
-      std::cout << "FCLS Unmixing" << std::endl;
+      otbAppLogINFO("FCLS Unmixing");
 
       FCLSUnmixingFilterType::Pointer unmixer =
           FCLSUnmixingFilterType::New();
@@ -230,7 +230,7 @@ private:
       */
     case UnMixingMethod_MDMDNMF:
       {
-      std::cout << "MDMD-NMF Unmixing" << std::endl;
+      otbAppLogINFO("MDMD-NMF Unmixing");
 
       MDMDNMFUnmixingFilterType::Pointer unmixer =
           MDMDNMFUnmixingFilterType::New();
