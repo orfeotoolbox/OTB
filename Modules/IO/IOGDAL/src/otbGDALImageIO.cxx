@@ -442,8 +442,6 @@ bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector
   char** papszMetadata;
   papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
 
-  std::cout << m_Dataset->GetDataSet()->GetDriver()->GetDescription() << std::endl;
-
   // Have we find some dataSet ?
   // This feature is supported only for hdf4 and hdf5 file (regards to the bug 270)
   if ( (CSLCount(papszMetadata) > 0) &&
