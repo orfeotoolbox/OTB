@@ -331,9 +331,11 @@ if(WIN32)
     file(WRITE "${CMAKE_BINARY_DIR}/_mingw/CMakeLists.txt"
       "cmake_minimum_required(VERSION 2.6)
        include(CMakeParseArguments)
+       include(CMakeDetermineSystem)
        set(Monteverdi_SOURCE_DIR \"${Monteverdi_SOURCE_DIR}\")
        set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")
        set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
+       set(CMAKE_CROSSCOMPILING ON)
        set(QT_TRANSLATIONS_DIR \"${QT_TRANSLATIONS_DIR}\")
        set(Monteverdi_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
        set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
@@ -343,7 +345,7 @@ if(WIN32)
         package_mingw(
         ARCH \"${mxearch}\"
         MXEROOT \"${mxeroot}\"
-        PREFIX_DIR \"${archive_name}\"
+        STAGE_DIR \"${archive_name}\"
         SEARCHDIRS \"\")")
 
     add_custom_target(InstallProject
