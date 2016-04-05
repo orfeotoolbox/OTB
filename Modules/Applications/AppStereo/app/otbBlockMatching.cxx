@@ -470,7 +470,6 @@ private:
     rightBandMathExpression << "if(" << rightBandMathCondition.str() << "," << state << "," << elseState << ")";
     #endif
 
-    std::cout << leftBandMathCondition.str() << std::endl;
     if(maskingLeft)
       {
       GetLogger()->Info("Masking criterion on left image: " + leftBandMathExpression.str() + '\n');

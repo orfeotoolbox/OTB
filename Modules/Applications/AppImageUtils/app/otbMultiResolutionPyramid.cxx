@@ -166,7 +166,7 @@ private:
         }
       else
         {
-        std::cout <<"fast scheme enabled : not implemented for the moment " << std::endl;
+        otbAppLogWARNING("fast scheme enabled : not implemented for the moment ");
         }
 
       // Create an output parameter to write the current output image

@@ -650,7 +650,6 @@ private:
 		
 				
 		case 11: // SinclairToMueller
-		std::cout << "taloula 1" << std::endl;
 		m_MSRFilter = MSRFilterType::New();
 		
 		m_MSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
