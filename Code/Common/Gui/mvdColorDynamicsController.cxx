@@ -1134,7 +1134,7 @@ ColorDynamicsController
 void
 ColorDynamicsController
 ::OnHighIntensityChanged( RgbwChannel channel, double value )
-{  
+{
   // qDebug()
   //   << this
   //   << "::OnHighIntensityChanged("
