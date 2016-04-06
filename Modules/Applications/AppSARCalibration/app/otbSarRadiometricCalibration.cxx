@@ -93,9 +93,6 @@ private:
 
   void DoExecute()
   {
-
-    otbAppLogINFO( << "THIS APPLICATION IS DEPRECATED AND WILL BE REMOVED IN NEXT VERSION OF OTB. PLEASE CONSIDER USING 'SARRadiometricCalibration' APPLICATION INSTEAD. SEE MANTIS - https://bugs.orfeo-toolbox.org/view.php?id=1161" );
-
     // Get the input complex image
     ComplexFloatImageType*  floatComplexImage = GetParameterComplexFloatImage("in");
 
