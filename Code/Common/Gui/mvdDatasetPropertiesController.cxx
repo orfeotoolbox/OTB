@@ -119,7 +119,7 @@ DatasetPropertiesController
 /*******************************************************************************/
 void
 DatasetPropertiesController
-::virtual_ResetWidget()
+::virtual_ResetWidget( bool )
 {
   // qDebug() << this << "::virtual_ResetWidget()";
 

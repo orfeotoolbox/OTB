@@ -184,7 +184,7 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
-::virtual_ResetWidget()
+::virtual_ResetWidget( bool isSettingModel )
 {
   //
   // Reset color-dynamics widget mode (grayscale/RGB).
@@ -209,7 +209,7 @@ ColorDynamicsController
 
   // Set constrained editing ON/OFF.
   // (must be called before settings intensity/quantiles)
-  SetBoundsEnabled( channels );
+  SetBoundsEnabled( channels, isSettingModel );
 
   // Set ranges.
   ResetIntensityRanges( channels );
@@ -228,6 +228,8 @@ void
 ColorDynamicsController
 ::ClearWidget()
 {
+  // qDebug() << this << "::ClearWidget()";
+
   assert( GetWidget()!=NULL &&
 	  GetWidget()==GetWidget< ColorDynamicsWidget >() );
   ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
@@ -671,8 +673,12 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
-::SetBoundsEnabled( RgbwChannel channels )
+::SetBoundsEnabled( RgbwChannel channels, bool isSettingModel )
 {
+  // qDebug()
+  //   << this
+  //   << "::SetBoundsEnabled(" << channels << "," << isSettingModel << ")";
+
   //
   // Calculate loop bounds. Return if nothing to do.
   CountType begin = -1;
@@ -713,7 +719,21 @@ ColorDynamicsController
     //...but force call to valueChanged() slot to force refresh.
     bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
     {
-    colorBandDynWgt->SetBounded( hasValidHistogram );
+    // MANTIS-1144:
+    //
+    // SetBoundsEnabled() must keep track of previous state because it
+    // is also called (circular loop) when editing quantile and/or
+    // intensity is finished.
+    //
+    // {
+    colorBandDynWgt->SetBounded(
+      ( !isSettingModel
+	? colorBandDynWgt->IsBounded()
+	: true
+      ) &&
+      hasValidHistogram
+    );
+    // }
     colorBandDynWgt->SetLinkButtonEnabled( hasValidHistogram );
     colorBandDynWgt->SetDefaultsButtonEnabled( hasValidHistogram );
     }
@@ -836,7 +856,7 @@ ColorDynamicsController
   {
     assert( imageModel->GetHistogramModel()!=NULL );
 
-    SetBoundsEnabled( RGBW_CHANNEL_ALL );
+    SetBoundsEnabled( RGBW_CHANNEL_ALL, true );
 
     if( imageModel->GetHistogramModel()->IsValid() )
       ResetQuantiles( RGBW_CHANNEL_ALL );

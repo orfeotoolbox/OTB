@@ -168,7 +168,7 @@ private:
 
   virtual void ClearWidget();
 
-  virtual void virtual_ResetWidget();
+  virtual void virtual_ResetWidget( bool );
 
   virtual void Disconnect( AbstractModel* );
 
@@ -253,7 +253,7 @@ private:
 
   /**
    */
-  void SetBoundsEnabled( RgbwChannel );
+  void SetBoundsEnabled( RgbwChannel, bool );
 
 //
 // Private attributes.

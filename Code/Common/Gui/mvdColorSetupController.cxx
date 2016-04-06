@@ -230,7 +230,7 @@ ColorSetupController
 /*******************************************************************************/
 void
 ColorSetupController
-::virtual_ResetWidget()
+::virtual_ResetWidget( bool )
 {
   // Reset color-setup widget.
   ResetIndices( RGBW_CHANNEL_RGB );
