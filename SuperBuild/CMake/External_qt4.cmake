@@ -71,6 +71,8 @@ else()
       )
   endif()
   
+  set(_SB_QT_QMAKE_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/qmake)
+
   #copying Qt4 to have out-of-source build takes too much disk space
   # ExternalProject_Add_Step(${proj} copy_source
       # COMMAND ${CMAKE_COMMAND} -E copy_directory 

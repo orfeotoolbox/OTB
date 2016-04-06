@@ -26,8 +26,15 @@ else()
   configure_file(${CMAKE_SOURCE_DIR}/patches/${proj}/qwtconfig.pri 
                  ${CMAKE_BINARY_DIR}/qwtconfig.pri
                  @ONLY)
-  # TODO : detect the qmake executable path
-  set(QT_QMAKE_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/qmake)
+
+  if(_SB_QT_QMAKE_EXECUTABLE)
+    set(QWT_SB_CONFIGURE_PROGRAM ${_SB_QT_QMAKE_EXECUTABLE})
+  elseif(QT_QMAKE_EXECUTABLE)
+    set(QWT_SB_CONFIGURE_PROGRAM ${QT_QMAKE_EXECUTABLE})
+  else()
+    set(QT_QMAKE_EXECUTABLE "" CACHE FILEPATH "Path to qmake executable")
+    message(FATAL_ERROR "Please set the qmake executable to use (QT_QMAKE_EXECUTABLE)")
+  endif()
   
   ExternalProject_Add(${proj}
     PREFIX ${proj}
@@ -40,7 +47,7 @@ else()
     DEPENDS ${${proj}_DEPENDENCIES}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory ${QWT_SB_SRC} ${QWT_SB_BUILD_DIR}
      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/qwtconfig.pri ${QWT_SB_BUILD_DIR}
-    CONFIGURE_COMMAND ${QT_QMAKE_EXECUTABLE} ${QWT_SB_BUILD_DIR}/qwt.pro
+    CONFIGURE_COMMAND ${QWT_SB_CONFIGURE_PROGRAM} ${QWT_SB_BUILD_DIR}/qwt.pro
     BUILD_COMMAND ${QWT_SB_MAKE_PROGRAM}
     INSTALL_COMMAND ${QWT_SB_MAKE_PROGRAM} install
   )
