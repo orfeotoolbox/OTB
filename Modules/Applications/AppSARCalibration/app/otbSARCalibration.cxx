@@ -24,11 +24,11 @@ namespace otb
 {
 namespace Wrapper
 {
-class SarRadiometricCalibration : public Application
+class SARCalibration : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef SarRadiometricCalibration     Self;
+  typedef SARCalibration     Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -36,7 +36,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(SarRadiometricCalibration, otb::Application);
+  itkTypeMacro(SARCalibration, otb::Application);
 
   typedef otb::SarRadiometricCalibrationToImageFilter<ComplexFloatImageType,
                                                       FloatImageType>     CalibrationFilterType;
@@ -44,11 +44,11 @@ public:
 private:
   void DoInit()
   {
-    SetName("SarRadiometricCalibration");
+    SetName("SARCalibration");
     SetDescription("Perform radiometric calibration of SAR images. Following sensors are supported: TerraSAR-X, Sentinel1 and Radarsat-2.Both Single Look Complex(SLC) and detected products are supported as input.\n");
 
     // Documentation
-    SetDocName("SAR Radiometric calibration (DEPRECATED)");
+    SetDocName("SAR Radiometric calibration");
     SetDocLongDescription("The objective of SAR calibration is to provide imagery in which the pixel values can be directly related to the radar backscatter of the scene. This application allows computing Sigma Naught (Radiometric Calibration) for TerraSAR-X, Sentinel1 L1 and Radarsat-2 sensors. Metadata are automatically retrieved from image products.The application supports complex and non-complex images (SLC or detected products).\n");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -93,9 +93,6 @@ private:
 
   void DoExecute()
   {
-    otbAppLogWARNING("This application is deprecated, it will be renamed in next"
-      " version of OTB. Please consider using the renamed copy SARCalibration."
-      " Parameters and behaviour are identic.");
     // Get the input complex image
     ComplexFloatImageType*  floatComplexImage = GetParameterComplexFloatImage("in");
 
@@ -125,4 +122,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::SarRadiometricCalibration)
+OTB_APPLICATION_EXPORT(otb::Wrapper::SARCalibration)
