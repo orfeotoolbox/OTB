@@ -326,6 +326,7 @@ ListSampleGenerator<TImage, TVectorData>
 
   assert(trainingListSample->Size() == trainingListLabel->Size());
   assert(validationListSample->Size() == validationListLabel->Size());
+  this->UpdateProgress(1.0f);
 }
 
 template <class TImage, class TVectorData>

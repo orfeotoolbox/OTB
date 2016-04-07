@@ -235,6 +235,7 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
     }
 
   this->GraftOutput(m_VdProjFilter->GetOutput());
+  this->UpdateProgress(1.0f);
 }
 
 

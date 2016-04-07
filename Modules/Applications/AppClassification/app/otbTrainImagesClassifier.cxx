@@ -288,6 +288,9 @@ void DoExecute()
   SampleType meanMeasurementVector;
   SampleType stddevMeasurementVector;
 
+  // Setup the DEM Handler
+  otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
+
   //--------------------------
   // Load measurements from images
   unsigned int nbBands = 0;
@@ -301,6 +304,10 @@ void DoExecute()
   //Iterate over all input images
   for (unsigned int imgIndex = 0; imgIndex < imageList->Size(); ++imgIndex)
     {
+    std::ostringstream oss1, oss2;
+    oss1 << "Reproject polygons for image " << (imgIndex+1) << " ...";
+    oss2 << "Extract samples from image " << (imgIndex+1) << " ...";
+
     FloatVectorImageType::Pointer image = imageList->GetNthElement(imgIndex);
     image->UpdateOutputInformation();
 
@@ -310,16 +317,11 @@ void DoExecute()
       }
 
     // read the Vectordata
-    VectorDataType::Pointer vectorData = vectorDataList->GetNthElement(imgIndex);
-    vectorData->Update();
-
     vdreproj->SetInputImage(image);
-    vdreproj->SetInput(vectorData);
+    vdreproj->SetInput(vectorDataList->GetNthElement(imgIndex));
     vdreproj->SetUseOutputSpacingAndOriginFromImage(false);
 
-    // Setup the DEM Handler
-    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
-
+    AddProcess(vdreproj, oss1.str());
     vdreproj->Update();
 
     //Sample list generator
@@ -340,15 +342,27 @@ void DoExecute()
       sampleGenerator->SetPolygonEdgeInclusion(true);
       }
 
+    AddProcess(sampleGenerator, oss2.str());
     sampleGenerator->Update();
 
+    TargetListSampleType::Pointer trainLabels = sampleGenerator->GetTrainingListLabel();
+    ListSampleType::Pointer trainSamples = sampleGenerator->GetTrainingListSample();
+    TargetListSampleType::Pointer validLabels = sampleGenerator->GetValidationListLabel();
+    ListSampleType::Pointer validSamples = sampleGenerator->GetValidationListSample();
+
+    trainLabels->DisconnectPipeline();
+    trainSamples->DisconnectPipeline();
+    validLabels->DisconnectPipeline();
+    validSamples->DisconnectPipeline();
+
     //Concatenate training and validation samples from the image
-    concatenateTrainingLabels->AddInput(sampleGenerator->GetTrainingListLabel());
-    concatenateTrainingSamples->AddInput(sampleGenerator->GetTrainingListSample());
-    concatenateValidationLabels->AddInput(sampleGenerator->GetValidationListLabel());
-    concatenateValidationSamples->AddInput(sampleGenerator->GetValidationListSample());
+    concatenateTrainingLabels->AddInput(trainLabels);
+    concatenateTrainingSamples->AddInput(trainSamples);
+    concatenateValidationLabels->AddInput(validLabels);
+    concatenateValidationSamples->AddInput(validSamples);
     }
   // Update
+  AddProcess(concatenateValidationLabels, "Concatenate samples ...");
   concatenateTrainingSamples->Update();
   concatenateTrainingLabels->Update();
   concatenateValidationSamples->Update();
@@ -384,6 +398,7 @@ void DoExecute()
   trainingShiftScaleFilter->SetInput(concatenateTrainingSamples->GetOutput());
   trainingShiftScaleFilter->SetShifts(meanMeasurementVector);
   trainingShiftScaleFilter->SetScales(stddevMeasurementVector);
+  AddProcess(trainingShiftScaleFilter, "Normalize training samples ...");
   trainingShiftScaleFilter->Update();
 
   ListSampleType::Pointer validationListSample=ListSampleType::New();
@@ -395,6 +410,7 @@ void DoExecute()
     validationShiftScaleFilter->SetInput(concatenateValidationSamples->GetOutput());
     validationShiftScaleFilter->SetShifts(meanMeasurementVector);
     validationShiftScaleFilter->SetScales(stddevMeasurementVector);
+    AddProcess(validationShiftScaleFilter, "Normalize validation samples ...");
     validationShiftScaleFilter->Update();
     validationListSample = validationShiftScaleFilter->GetOutput();
     }
@@ -467,7 +483,6 @@ void DoExecute()
     otbAppLogINFO("ValidationLabeledListSample size : " << performanceLabeledListSample->Size());
     confMatCalc->SetReferenceLabels(performanceLabeledListSample);
     confMatCalc->SetProducedLabels(predictedList);
-
     confMatCalc->Compute();
 
     otbAppLogINFO("training performances");
