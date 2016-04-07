@@ -29,7 +29,7 @@ add_executable(svm-predict svm-predict.c)
 target_link_libraries(svm-predict svm)
 
 add_executable(svm-scale svm-scale.c)
-target_link_libraries(svm-scale libsvm)
+target_link_libraries(svm-scale svm)
 
 install(TARGETS svm
   RUNTIME DESTINATION bin
