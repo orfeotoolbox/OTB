@@ -11,7 +11,7 @@ if(USE_SYSTEM_LIBSVM)
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using LibSVM SuperBuild version")
-    
+
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "http://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-3.20.tar.gz"
@@ -26,17 +26,17 @@ else()
       ${LIBSVM_FLAGS}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     DEPENDS ${${proj}_DEPENDENCIES}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
-      ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt  
+    PATCH_COMMAND ${CMAKE_COMMAND} -E copy
+      ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
       ${LIBSVM_SB_SRC}
-    )
-  
+      )
+
  set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libsvm.lib)
+    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/svm.lib)
   elseif(UNIX)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/liblibsvm${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libsvm${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-  
+
 endif()
 endif()
