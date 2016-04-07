@@ -7,7 +7,6 @@
 There are two ways to install OTB library on your system: installing from a binary distribution or compiling from sources. 
 You can find information about the installation of binary packages for OTB and Monteverdi in the OTB-Cookbook.
 This chapter covers compilation of OTB library from source.
-Because Monteverdi is a separate project, compiling it from source will be covered in the next chapter.
 
 OTB has been developed and tested across different combinations of operating systems, compilers, and hardware platforms including MS-Windows, Linux on Intel-compatible hardware and Mac OSX.  It is known to work with the following compilers in 32/64 bit:
 \begin{itemize}
@@ -214,11 +213,16 @@ The most important configuration variables are shown in table~\ref{tab:installat
 The simplest way to provide configuration variables is via the command line \texttt{-D} option:
 \begin{verbatim}
 $ cd ~/OTB/build
-$ cmake -D CMAKE_INSTALL_LOCATION=~/OTB/install ../otb/SuperBuild
+$ cmake -D CMAKE_INSTALL_PREFIX=~/OTB/install ../otb/SuperBuild
 \end{verbatim}
 A pre-load script can also be used with the \texttt{-C} options (see
 \url{https://cmake.org/cmake/help/v3.4/manual/cmake.1.html#options}).
 Another option is to set variables manually with \texttt{cmake-gui} or \texttt{ccmake}.
+
+Please note that the \texttt{CMAKE\_INSTALL\_PREFIX} variable is important
+because the SuperBuild will install some targets during the compilation step.
+Therefore this directory will be used even if you don't use make install target.
+In fact there is no make install target for the SuperBuild.
 
 During the configuration step, the SuperBuild will detect any existing dependencies installed as systems libraries.
 Whether to use them can be controlled via the \texttt{USE\_SYSTEM\_\textit{XXX}} (see
@@ -238,6 +242,30 @@ Simply use the make command (other targets can be generated with CMake's \texttt
 \begin{verbatim}
 $ cd ~/OTB/build
 $ make
+\end{verbatim}
+
+Applications will be located in the \texttt{bin/} directory, for example:
+\begin{verbatim}
+./OTB/build/bin/otbcli_ExtractROI
+\end{verbatim}
+will launch the command line version of the \textbf{ExtractROI} application,
+while:
+\begin{verbatim}
+./OTB/build/bin/otbgui_ExtractROI
+\end{verbatim}
+will launch the graphical version.
+
+We recommend adding OTB build directory to your PATH for easy access:
+\begin{verbatim}
+export PATH=$PATH:~/OTB/build/OTB/build/bin
+\end{verbatim}
+
+Monteverdi is also compiled by the SuperBuild (as long as you activate it with
+ENABLE\_MONTEVERDI). To use OTB applications from within Monteverdi you will need
+to define the OTB\_APPLICATION\_PATH environment variable.
+\begin{verbatim}
+export OTB_APPLICATION_PATH=~/OTB/build/OTB/build/lib/otb/applications
+monteverdi
 \end{verbatim}
 
 A wiki page detailing the status of SuperBuild on various platforms is also available here:
