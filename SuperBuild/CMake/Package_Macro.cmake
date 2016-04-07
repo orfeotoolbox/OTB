@@ -3,6 +3,10 @@ macro(superbuild_package)
 
   find_program(OBJDUMP_PROGRAM "objdump")
 
+  if(NOT EXISTS ${OBJDUMP_PROGRAM})
+    message(FATAL_ERROR "objdump executable not found. please check OBJDUMP_PROGRAM is set to correct cross compiled executable")
+  endif()
+
   include(GetPrerequisites)
 
   #CMAKE_INSTALL_PREFIX -> SB_INSTALL_PREFIX
@@ -17,22 +21,30 @@ macro(superbuild_package)
   list(APPEND PKG_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/lib/otb") #mvd so
   list(APPEND PKG_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/lib/otb/applications") #otb apps
 
-  clear_package_staging_directory()
+  empty_package_staging_directory()
+
+  file(WRITE
+    ${CMAKE_BINARY_DIR}/make_symlinks
+    "#!/bin/sh\n")
 
   set(PKG_PEFILES)
-
+  set(PKG_BINARY_FILES)
+  set(PKG_SO_FILES)
   configure_package()
 
+
   ############# install client configure script ################
-  configure_file(${PACKAGE_CMAKE_SOURCE_DIR}/pkgsetup.in
+  configure_file(${PACKAGE_SUPPORT_FILES_DIR}/pkgsetup.in
     ${CMAKE_BINARY_DIR}/pkgsetup @ONLY)
 
-  install(FILES ${CMAKE_BINARY_DIR}/pkgsetup
+  install(FILES
+    ${CMAKE_BINARY_DIR}/pkgsetup
+    ${CMAKE_BINARY_DIR}/make_symlinks
     DESTINATION ${PKG_STAGE_DIR}
     PERMISSIONS
-      OWNER_READ OWNER_WRITE OWNER_EXECUTE
-      GROUP_READ GROUP_EXECUTE
-      WORLD_READ WORLD_EXECUTE)
+    OWNER_READ OWNER_WRITE OWNER_EXECUTE
+    GROUP_READ GROUP_EXECUTE
+    WORLD_READ WORLD_EXECUTE)
 
   ####################### install patchelf #####################
   install(FILES ${CMAKE_INSTALL_PREFIX}/tools/patchelf
@@ -40,7 +52,6 @@ macro(superbuild_package)
     PERMISSIONS
     OWNER_EXECUTE OWNER_WRITE OWNER_READ
     GROUP_EXECUTE GROUP_READ)
-
 
   if(PKG_XDK)
     install_xdk_files()
@@ -63,44 +74,59 @@ function(process_deps infile)
           message(STATUS "Processing ${SEARCHDIR}/${infile}")
           is_file_executable("${SEARCHDIR}/${infile}" is_executable)
           if(is_executable)
-            install(FILES "${SEARCHDIR}/${infile}"
-              DESTINATION ${PKG_STAGE_DIR}/bin
-              PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
-
+            install(PROGRAMS "${SEARCHDIR}/${infile}"
+              DESTINATION ${PKG_STAGE_DIR}/bin)
           else(is_executable)
-            if(NOT MAKE_XDK)
-              if(${infile} MATCHES "otbapp_")
-                install(FILES "${CMAKE_INSTALL_PREFIX}/lib/otb/applications/${infile}"
-                  DESTINATION ${PKG_STAGE_DIR}/lib/otb/applications
-                  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
-              endif()
-            endif() # MAKE_XDK
             get_filename_component(bn_we ${infile} NAME_WE)
             file(GLOB sofiles "${SEARCHDIR}/${bn_we}*")
             foreach(sofile ${sofiles})
-              if(MAKE_XDK)
-                get_filename_component(bn_we_sofile ${sofile} NAME)
-                string(TOLOWER "${bn_we_sofile}" sofile_lower )
-                if(NOT "${sofile_lower}" MATCHES "otb")
-                  install(FILES "${sofile}"
-                    DESTINATION ${PKG_STAGE_DIR}/lib
-                    PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
-                endif()
-              else() #MAKE_XDK
-                install(FILES "${sofile}"
-                  DESTINATION ${PKG_STAGE_DIR}/lib
-                  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
-              endif() #MAKE_XDK
+              get_filename_component(sofile_ext ${sofile} EXT)
+              set(is_valid TRUE)
+              if ("${sofile_ext}" MATCHES ".la"
+                  OR "${sofile_ext}" MATCHES ".prl"
+                  OR "${sofile_ext}" MATCHES ".a")
+                set(is_valid FALSE)
+              endif()
+
+              if(is_valid)
+                get_filename_component(basename_of_sofile ${sofile} NAME)
+                is_file_a_symbolic_link("${sofile}" is_symlink linked_to_file)
+                if(is_symlink)
+                  ##NOTE: $OUT_DIR is set actually in pkgsetup.in. So don't try
+                  #any pre-mature optimization on that variable names
+                  file(APPEND
+                    ${CMAKE_BINARY_DIR}/make_symlinks
+                    "ln -sf $OUT_DIR/lib/${linked_to_file} $OUT_DIR/lib/${basename_of_sofile}\n"
+                    )
+                  #message("${sofile} is a symlink to ${linked_to_file}")
+                else() # is_symlink
+                  if("${basename_of_sofile}" MATCHES "otbapp_")
+                    if(NOT MAKE_XDK)
+                      install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib/otb/applications)
+                    endif()
+                  else() #if(.. MATCHES "otbapp_")
+                    #if we are making xdk. skill all those starting with libotb case insensitively
+                    if(MAKE_XDK)
+                      string(TOLOWER "${basename_of_sofile}" sofile_lower )
+                      if(NOT "${sofile_lower}" MATCHES "libotb")
+                        install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib)
+                      endif()
+                    else() #MAKE_XDK
+                      #just install the so file to <staging-dir>/lib
+                      install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib)
+                    endif() #MAKE_XDK
+
+                    # Finally touch a file in temp directory for globbing later
+                    # message("touching ${basename_of_sofile}")
+                    execute_process(COMMAND ${CMAKE_COMMAND} -E touch "${CMAKE_BINARY_DIR}/temp_so_names_dir/${basename_of_sofile}")
+                  endif() #if(.. MATCHES "otbapp_")
+                endif() #is_symlink
+              endif() #is_valid
             endforeach()
           endif(is_executable)
-
-          if(NOT EXISTS ${OBJDUMP_PROGRAM})
-            message(FATAL_ERROR "objdump executable not found. please check OBJDUMP_PROGRAM is set to correct cross compiled executable")
-          endif()
           execute_process(COMMAND ${OBJDUMP_PROGRAM} "-p" "${SEARCHDIR}/${infile}"  OUTPUT_VARIABLE dump_out)
           string(REGEX MATCHALL "NEEDED\\ *[A-Za-z(0-9\\.0-9)+_\\-]*" needed_dlls "${dump_out}")
           string(REGEX REPLACE "NEEDED" "" needed_dlls "${needed_dlls}")
-
           foreach(needed_dll ${needed_dlls})
             string(STRIP ${needed_dll} needed_dll)
             process_deps(${needed_dll})
@@ -117,12 +143,10 @@ function(process_deps infile)
     else(NOT DLL_FOUND)
       set( alldlls "${alldlls};${bn}" PARENT_SCOPE )
     endif(NOT DLL_FOUND)
-
     set(notfound_dlls "${notfound_dlls}" PARENT_SCOPE )
   endif()
 
 endfunction()
-
 
 
 function(install_xdk_files)

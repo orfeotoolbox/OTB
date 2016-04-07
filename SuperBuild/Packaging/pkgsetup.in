@@ -1,0 +1,39 @@
+#!/bin/sh
+
+cd `dirname $0`
+
+##NOTE: $OUT_DIR is also used in make_sylinks script (see below)
+#Avoid any pre-mature optimization on variable names here.
+
+OUT_DIR=`pwd`
+
+PATCH_ELF_EXE=$OUT_DIR/tools/patchelf
+
+# no interference with LD_LIBRARY_PATH
+LD_LIBRARY_PATH=
+
+echo "Configuring..."
+BINARY_FILES="@PKG_BINARY_FILES@"
+#run patchelf
+for bin_file in $BINARY_FILES; do
+    #echo "adding rpath to $OUT_DIR/$bin_file"
+    if [ -f $OUT_DIR/$bin_file ]; then
+        $PATCH_ELF_EXE --set-rpath "$OUT_DIR/lib" $OUT_DIR/$bin_file > /dev/null 2>&1
+    fi
+done
+
+#echo "Creating symbolic links..."
+. ./make_symlinks
+
+if [ -f lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake ]; then
+    rm -fr $OUT_DIR/bin/*
+    sed -i "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
+    sed -i "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
+    sed -i "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
+fi
+
+rm -fr $OUT_DIR/tools
+
+rm -f $OUT_DIR/pkgsetup
+
+rm -f $OUT_DIR/make_symlinks
