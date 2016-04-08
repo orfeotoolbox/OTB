@@ -32,7 +32,7 @@ namespace ossimplugins
    {
       if ( !doc->openFile( file ) )
       {
-         std::cerr << "ossimSentinel1ProductDoc::openMetadataFile() failed." << std::endl;
+         ossimNotify(ossimNotifyLevel_FATAL) << "ossimSentinel1ProductDoc::openMetadataFile" << std::endl;
          return false;
       }
 
