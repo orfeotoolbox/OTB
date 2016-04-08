@@ -543,4 +543,24 @@ namespace ossimplugins
       return true;
    }
 
+   void
+   ossimSentinel1Model::
+   lineSampleHeightToWorld(const ossimDpt& image_point,
+                             const double& heightEllipsoid,
+                                 ossimGpt& worldPoint) const {
+
+      // NOT YET IMPLEMENTED
+      setErrorStatus();
+   }
+
+   void
+   ossimSentinel1Model::
+   lineSampleToWorld(const ossimDpt& image_point,
+                           ossimGpt& gpt) const {
+
+      // NOT YET IMPLEMENTED
+      setErrorStatus();
+   }
+
+
 } //end namespace
