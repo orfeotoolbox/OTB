@@ -18,7 +18,7 @@ BINARY_FILES="@PKG_BINARY_FILES@"
 for bin_file in $BINARY_FILES; do
     #echo "adding rpath to $OUT_DIR/$bin_file"
     if [ -f $OUT_DIR/$bin_file ]; then
-        $PATCH_ELF_EXE --set-rpath "$OUT_DIR/lib" $OUT_DIR/$bin_file > /dev/null 2>&1
+        $PATCH_ELF_EXE --set-rpath "$OUT_DIR/lib" $OUT_DIR/$bin_file
     fi
 done
 
