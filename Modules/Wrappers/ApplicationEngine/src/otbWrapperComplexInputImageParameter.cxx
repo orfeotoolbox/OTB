@@ -52,10 +52,10 @@ ComplexInputImageParameter::SetFromFileName(const std::string& filename)
   if (!filename.empty())
     {
     ComplexFloatVectorReaderType::Pointer reader = ComplexFloatVectorReaderType::New();
-    reader->SetFileName(filename);
 
     try
       {
+      reader->SetFileName(filename);
       reader->UpdateOutputInformation();
       }
     catch(itk::ExceptionObject & /*err*/)
