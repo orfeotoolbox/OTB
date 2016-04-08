@@ -283,7 +283,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   if (this->m_ImageIO.IsNull())
     {
-    this->Print(std::cerr);
+    //this->Print(std::cerr);
     otb::ImageFileReaderException e(__FILE__, __LINE__);
     std::ostringstream msg;
     msg << " Could not create IO object for file "
