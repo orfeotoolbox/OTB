@@ -121,9 +121,17 @@ namespace ossimplugins
    bool ossimSentinel1Model::loadState(const ossimKeywordlist& kwl,
                                       const char* prefix)
    {
-      //theManifestKwl.addList(kwl, true);
+      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::loadState";
+
+      theManifestKwl.addList(kwl, true);
+
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG) << "theManifestKwl.getSize()" << theManifestKwl.getSize() << std::endl;
+      }
 
       ossimSarModel::loadState(kwl, prefix);
+
       return true;
    }
 
