@@ -23,7 +23,7 @@ macro(package_mingw)
   list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}") #otb apps
   list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #otbApplicationLauncher*.exe
 
-  clear_package_staging_directory()
+  empty_package_staging_directory()
 
   set(PKG_PEFILES)
 
