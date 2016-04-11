@@ -28,7 +28,7 @@ ExternalProject_Add(MAKESELF
   )
 
 ExternalProject_Add(PATCHELF
-  PREFIX "${PATCHELF_SB_PREFIX_DIR}"
+  PREFIX "${PKGTOOLS_SB_PREFIX_DIR}"
   URL "http://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.bz2"
   URL_MD5 d02687629c7e1698a486a93a0d607947
   DOWNLOAD_DIR   ${DOWNLOAD_LOCATION}
