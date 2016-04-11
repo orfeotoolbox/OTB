@@ -290,7 +290,7 @@ function(configure_package)
     endif()
     if(DEFINED Monteverdi_SOURCE_DIR)
       if(EXISTS ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT})
-        install(FILES
+        install(PROGRAMS
           ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT}
           DESTINATION
           "${PKG_STAGE_DIR}")
