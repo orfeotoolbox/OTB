@@ -123,7 +123,7 @@ function(install_common include_mvd)
   # install(CODE "message(\"CMake/PackageHelper.cmake:install_common(${outdir})\n${vars}\n\")")
 
   ##################### install environment source ##########################
-  if(WIN32 OR CROSS_COMPILING)
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
     set(ENV_SOURCE_FILES
       "${PACKAGE_SUPPORT_FILES_DIR}/otbenv.cmd"
       "${PACKAGE_SUPPORT_FILES_DIR}/otbenv.profile"
