@@ -293,7 +293,7 @@ function(configure_package)
         install(FILES
           ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT}
           DESTINATION
-          "${PKG_STAGE_DIR}/bin")
+          "${PKG_STAGE_DIR}")
       endif()
     endif()
   endforeach()
