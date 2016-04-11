@@ -40,7 +40,7 @@ file(WRITE "${CMAKE_BINARY_DIR}/PACKAGE-OTB/src/PACKAGE-OTB/CMakeLists.txt"
        include(CMakeParseArguments)
        set(CMAKE_INSTALL_PREFIX \"${SB_INSTALL_PREFIX}\")
        set(DOWNLOAD_LOCATION \"${DOWNLOAD_LOCATION}\")
-       set(PACKAGE_SUPPORT_FILES_DIR \"${CMAKE_SOURCE_DIR}/CMake/Packaging\")
+       set(PACKAGE_SUPPORT_FILES_DIR \"${CMAKE_SOURCE_DIR}/Packaging\")
        set(Monteverdi_SOURCE_DIR \"${CMAKE_BINARY_DIR}/MVD/src/MVD\")
        set(Monteverdi_BINARY_DIR \"${CMAKE_BINARY_DIR}/MVD/build\")
        set(OTB_INSTALL_DIR \"${CMAKE_BINARY_DIR}/OTB/build\")
