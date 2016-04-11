@@ -257,11 +257,11 @@ function(configure_package)
         "${CMAKE_INSTALL_PREFIX}/bin/${EXE_FILE}${EXE_EXT}")
     endif()
     if(DEFINED Monteverdi_SOURCE_DIR)
-      if(EXISTS ${Monteverdi_SOURCE_DIR}/Packaging/Windows/${EXE_FILE}${SCR_EXT})
+      if(EXISTS ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT})
         install(FILES
-          ${Monteverdi_SOURCE_DIR}/Packaging/Windows/${EXE_FILE}${SCR_EXT}
+          ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT}
           DESTINATION
-          "${PKG_STAGE_DIR}/bin")
+          "${PKG_STAGE_DIR}")
     endif()
   endif()
 
