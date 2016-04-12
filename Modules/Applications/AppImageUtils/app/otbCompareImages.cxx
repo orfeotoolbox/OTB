@@ -109,6 +109,10 @@ private:
     AddParameter(ParameterType_Float, "psnr",  "PSNR");
     SetParameterDescription("psnr", "Peak Signal to Noise Ratio value");
     SetParameterRole("psnr", Role_Output);
+    
+    AddParameter(ParameterType_Float, "count",  "count");
+    SetParameterDescription("count", "Nb of pixels which are different");
+    SetParameterRole("count", Role_Output);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("ref.in", "GomaApres.png");
@@ -208,10 +212,12 @@ private:
     otbAppLogINFO( << "MSE: " << m_CompareFilter->GetMSE() );
     otbAppLogINFO( << "MAE: " << m_CompareFilter->GetMAE() );
     otbAppLogINFO( << "PSNR: " << m_CompareFilter->GetPSNR() );
+    otbAppLogINFO( << "Number of Pixel different: " << m_CompareFilter->GetDiffCount() );
 
     SetParameterFloat( "mse", m_CompareFilter->GetMSE() );
     SetParameterFloat( "mae", m_CompareFilter->GetMAE() );
     SetParameterFloat( "psnr", m_CompareFilter->GetPSNR() );
+    SetParameterFloat( "count", m_CompareFilter->GetDiffCount() );
   }
 
 
