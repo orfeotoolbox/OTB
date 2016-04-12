@@ -153,7 +153,7 @@ private:
 private slots:
   void on_effectComboBox_currentIndexChanged( const QString & );
   void on_sizeSpinBox_valueChanged( int );
-  void on_valueLineEdit_textChanged( const QString & );
+  void on_valueLineEdit_editingFinished();
 };
 
 } // end namespace 'mvd'

@@ -180,7 +180,7 @@ ShaderWidget
     m_UI->valueLineEdit->setVisible( text!=NULL );
     m_UI->valueLineEdit->setText(
       settings->HasValue()
-      ? ToQString( settings->GetValue() )
+      ? QString::number( settings->GetValue(), 'g', std::numeric_limits< double >::digits10 ) // ToQString( settings->GetValue() )
       : QString()
     );
     m_UI->valueLineEdit->setCursorPosition( 0 );
@@ -254,19 +254,23 @@ ShaderWidget
 /*******************************************************************************/
 void
 ShaderWidget
-::on_valueLineEdit_textChanged( const QString & text )
+::on_valueLineEdit_editingFinished()
 {
-  if( !HasSettings() )
+  if( !HasSettings() ||
+      !GetSettings()->HasValue() )
     return;
 
-  if( GetSettings()->HasValue() )
-    {
-    bool isOk = true;
+  bool isOk = true;
 
-    GetSettings()->SetValue( text.toDouble( &isOk ) );
-    }
+  assert( m_UI!=NULL );
+  assert( m_UI->valueLineEdit!=NULL );
+
+  GetSettings()->SetValue( m_UI->valueLineEdit->text().toDouble( &isOk ) );
 
   // assert( isOk );
+
+  if( !isOk )
+    return;
 
   emit SettingsChanged();
 }
