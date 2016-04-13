@@ -67,7 +67,7 @@ namespace otb { namespace ogr {
  * \since OTB v 3.14.0
  */
 namespace internal { // namespace internal
-using namespace boost::mpl;
+namespace mpl = boost::mpl;
 
 /**\ingroup GeometryInternals
  * Associative map of C++ types to OGR field types (\c OGRFieldType).
@@ -76,18 +76,18 @@ using namespace boost::mpl;
  * \todo \c OFTBinary, \c OFTDate, \c OFTTime and \c OFTDateTime are not managed
  * yet.
  */
-typedef boost::mpl::map
-  < pair<int                     , int_<OFTInteger> >
-  , pair<std::vector<int>        , int_<OFTIntegerList> >
-  , pair<double                  , int_<OFTReal> >
-  , pair<std::vector<double>     , int_<OFTRealList> >
-  , pair<std::string             , int_<OFTString> >
-  , pair<char*                   , int_<OFTString> >
-  , pair<char const*             , int_<OFTString> >
-  , pair<std::vector<std::string>, int_<OFTStringList> >
+typedef mpl::map
+  < mpl::pair<int                     , mpl::int_<OFTInteger> >
+  , mpl::pair<std::vector<int>        , mpl::int_<OFTIntegerList> >
+  , mpl::pair<double                  , mpl::int_<OFTReal> >
+  , mpl::pair<std::vector<double>     , mpl::int_<OFTRealList> >
+  , mpl::pair<std::string             , mpl::int_<OFTString> >
+  , mpl::pair<char*                   , mpl::int_<OFTString> >
+  , mpl::pair<char const*             , mpl::int_<OFTString> >
+  , mpl::pair<std::vector<std::string>, mpl::int_<OFTStringList> >
   #ifdef OTB_USE_GDAL_20
-    , pair<GIntBig, int_<OFTInteger64> >
-    , pair<std::vector<GIntBig>, int_<OFTInteger64List> >
+    , mpl::pair<GIntBig, mpl::int_<OFTInteger64> >
+    , mpl::pair<std::vector<GIntBig>, mpl::int_<OFTInteger64List> >
   #endif
   // OFTBinary
   // OFTDate
@@ -310,16 +310,16 @@ template
  * \internal Relies on Boost.MPL
  * \since OTB v 3.14.0
  */
-typedef map
-  < pair<int_<OFTInteger>,     MemberGetterPtr<int,             &OGRFeature::GetFieldAsInteger> >
-  , pair<int_<OFTIntegerList>, MemberContainerGetterPtr<int,    &OGRFeature::GetFieldAsIntegerList> >
-  , pair<int_<OFTReal>,        MemberGetterPtr<double,          &OGRFeature::GetFieldAsDouble> >
-  , pair<int_<OFTRealList>,    MemberContainerGetterPtr<double, &OGRFeature::GetFieldAsDoubleList> >
-  , pair<int_<OFTString>,      MemberGetterPtr<char const*,     &OGRFeature::GetFieldAsString, std::string> >
-  , pair<int_<OFTStringList>,  StringListMemberGetterPtr<std::vector<std::string> > >
+typedef mpl::map
+  < mpl::pair<mpl::int_<OFTInteger>,     MemberGetterPtr<int,             &OGRFeature::GetFieldAsInteger> >
+  , mpl::pair<mpl::int_<OFTIntegerList>, MemberContainerGetterPtr<int,    &OGRFeature::GetFieldAsIntegerList> >
+  , mpl::pair<mpl::int_<OFTReal>,        MemberGetterPtr<double,          &OGRFeature::GetFieldAsDouble> >
+  , mpl::pair<mpl::int_<OFTRealList>,    MemberContainerGetterPtr<double, &OGRFeature::GetFieldAsDoubleList> >
+  , mpl::pair<mpl::int_<OFTString>,      MemberGetterPtr<char const*,     &OGRFeature::GetFieldAsString, std::string> >
+  , mpl::pair<mpl::int_<OFTStringList>,  StringListMemberGetterPtr<std::vector<std::string> > >
   #ifdef OTB_USE_GDAL_20
-  , pair<int_<OFTInteger64>, MemberGetterPtr<GIntBig, &OGRFeature::GetFieldAsInteger64> >
-  , pair<int_<OFTInteger64List>, MemberContainerGetterPtr<GIntBig, &OGRFeature::GetFieldAsInteger64List> >
+  , mpl::pair<mpl::int_<OFTInteger64>, MemberGetterPtr<GIntBig, &OGRFeature::GetFieldAsInteger64> >
+  , mpl::pair<mpl::int_<OFTInteger64List>, MemberContainerGetterPtr<GIntBig, &OGRFeature::GetFieldAsInteger64List> >
   #endif
   > FieldGetters_Map;
 
@@ -329,16 +329,16 @@ typedef map
  * \internal Relies on Boost.MPL
  * \since OTB v 3.14.0
  */
-typedef map
-  < pair<int_<OFTInteger>,     MemberSetterPtr<int,             &OGRFeature::SetField> >
-  , pair<int_<OFTIntegerList>, MemberContainerSetterPtr<int,    &OGRFeature::SetField> >
-  , pair<int_<OFTReal>,        MemberSetterPtr<double,          &OGRFeature::SetField> >
-  , pair<int_<OFTRealList>,    MemberContainerSetterPtr<double, &OGRFeature::SetField> >
-  , pair<int_<OFTString>,      MemberSetterPtr<char const*,     &OGRFeature::SetField/*, std::string*/> >
-  , pair<int_<OFTStringList>,  StringListMemberSetterPtr<std::vector<std::string> > >
+typedef mpl::map
+  < mpl::pair<mpl::int_<OFTInteger>,     MemberSetterPtr<int,             &OGRFeature::SetField> >
+  , mpl::pair<mpl::int_<OFTIntegerList>, MemberContainerSetterPtr<int,    &OGRFeature::SetField> >
+  , mpl::pair<mpl::int_<OFTReal>,        MemberSetterPtr<double,          &OGRFeature::SetField> >
+  , mpl::pair<mpl::int_<OFTRealList>,    MemberContainerSetterPtr<double, &OGRFeature::SetField> >
+  , mpl::pair<mpl::int_<OFTString>,      MemberSetterPtr<char const*,     &OGRFeature::SetField/*, std::string*/> >
+  , mpl::pair<mpl::int_<OFTStringList>,  StringListMemberSetterPtr<std::vector<std::string> > >
   #ifdef OTB_USE_GDAL_20
-  , pair<int_<OFTInteger64>, MemberSetterPtr<GIntBig, &OGRFeature::SetField> >
-  , pair<int_<OFTInteger64List>, MemberContainerSetterPtr<const GIntBig, &OGRFeature::SetField> >
+  , mpl::pair<mpl::int_<OFTInteger64>, MemberSetterPtr<GIntBig, &OGRFeature::SetField> >
+  , mpl::pair<mpl::int_<OFTInteger64List>, MemberContainerSetterPtr<const GIntBig, &OGRFeature::SetField> >
   #endif
   > FieldSetters_Map;
 
