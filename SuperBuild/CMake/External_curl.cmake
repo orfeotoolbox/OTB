@@ -11,7 +11,11 @@ else()
   message(STATUS "  Using cURL SuperBuild version")
 
   # declare dependencies
-  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(CURL ZLIB OPENSSL)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(CURL ZLIB)
+
+  if(NOT APPLE)
+    ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(OPENSSL)
+  endif()
 
   if(USE_SYSTEM_GEOS) #why geos here?. discuss with GP.
     ADD_SUPERBUILD_CMAKE_VAR(ZLIB_ROOT)
