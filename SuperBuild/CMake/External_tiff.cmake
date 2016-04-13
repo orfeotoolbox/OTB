@@ -80,6 +80,8 @@ else()
     -DBUILD_SHARED_LIBS:BOOL=ON
     -DBUILD_TESTING:BOOL=OFF
     -Djpeg:BOOL=TRUE
+    -Dlzma:BOOL=FALSE
+    -Djbig:BOOL=FALSE
     -Dzlib:BOOL=TRUE
     -Dpixarlog:BOOL=TRUE
     ${TIFF_SB_CONFIG}
