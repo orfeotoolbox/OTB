@@ -1,7 +1,5 @@
-set(proj CURL)
-
-if(NOT __EXTERNAL_${proj}__)
-set(__EXTERNAL_${proj}__ 1)
+if(NOT __EXTERNAL_CURL__)
+set(__EXTERNAL_CURL__ 1)
 
 message(STATUS "Setup cURL ...")
 
@@ -9,14 +7,11 @@ if(USE_SYSTEM_CURL)
   find_package ( CURL )
   message(STATUS "  Using cURL system version")
 else()
-  SETUP_SUPERBUILD(PROJECT ${proj})
+  SETUP_SUPERBUILD(PROJECT CURL)
   message(STATUS "  Using cURL SuperBuild version")
 
   # declare dependencies
-  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB OPENSSL)
-
-  # set proj back to its original value
-  set(proj CURL)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(CURL ZLIB OPENSSL)
 
   if(USE_SYSTEM_GEOS) #why geos here?. discuss with GP.
     ADD_SUPERBUILD_CMAKE_VAR(ZLIB_ROOT)
@@ -24,15 +19,15 @@ else()
 
   #TODO: add openssl and other dependencies
   if(MSVC)
-    ExternalProject_Add(${proj}
-        PREFIX ${proj}
+    ExternalProject_Add(CURL
+        PREFIX CURL
         URL "http://curl.haxx.se/download/curl-7.40.0.tar.gz"
         URL_MD5 58943642ea0ed050ab0431ea1caf3a6f
         SOURCE_DIR ${CURL_SB_SRC}
         BINARY_DIR ${CURL_SB_BUILD_DIR}/winbuild
         INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-        DEPENDS ${${proj}_DEPENDENCIES}
+        DEPENDS ${CURL_DEPENDENCIES}
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory ${CURL_SB_SRC} ${CURL_SB_BUILD_DIR}
         CONFIGURE_COMMAND ""
         BUILD_COMMAND nmake /f ${CURL_SB_BUILD_DIR}/winbuild/Makefile.vc mode=dll WITH_ZLIB=dll WITH_DEVEL=${SB_INSTALL_PREFIX}
@@ -40,8 +35,8 @@ else()
     )
 
   else(UNIX)
-    ExternalProject_Add(${proj}
-        PREFIX ${proj}
+    ExternalProject_Add(CURL
+        PREFIX CURL
         URL "http://curl.haxx.se/download/curl-7.40.0.tar.gz"
         URL_MD5 58943642ea0ed050ab0431ea1caf3a6f
         BINARY_DIR ${CURL_SB_BUILD_DIR}
@@ -59,16 +54,16 @@ else()
         -DCURL_DISABLE_LDAP:BOOL=ON
         -DCMAKE_USE_OPENLDAP:BOOL=OFF
         ${CURL_SB_CONFIG}
-        DEPENDS ${${proj}_DEPENDENCIES}
+        DEPENDS ${CURL_DEPENDENCIES}
         CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
   endif()
 
-  set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  set(_SB_CURL_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libcurl.lib)
+    set(_SB_CURL_LIBRARY ${SB_INSTALL_PREFIX}/lib/libcurl.lib)
   elseif(UNIX)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libcurl${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(_SB_CURL_LIBRARY ${SB_INSTALL_PREFIX}/lib/libcurl${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
 
 endif()

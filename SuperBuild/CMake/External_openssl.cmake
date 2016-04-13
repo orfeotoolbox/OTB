@@ -1,7 +1,5 @@
-set(proj OPENSSL)
-
-if(NOT __EXTERNAL_${proj}__)
-set(__EXTERNAL_${proj}__ 1)
+if(NOT __EXTERNAL_OPENSSL__)
+set(__EXTERNAL_OPENSSL__ 1)
 
 message(STATUS "Setup OpenSSL ...")
 
@@ -9,15 +7,11 @@ if(USE_SYSTEM_OPENSSL)
   find_package ( OPENSSL )
   message(STATUS "  Using OpenSSL system version")
 else()
-  SETUP_SUPERBUILD(PROJECT ${proj})
+  SETUP_SUPERBUILD(PROJECT OPENSSL)
   message(STATUS "  Using OpenSSL SuperBuild version")
 
   # declare dependencies
-  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB)
-
-  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
-  # set proj back to its original value
-  set(proj OPENSSL)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(OPENSSL ZLIB)
 
   if(WIN32)
     set(OPENSSL_BUILD_ARCH "linux-x32")
@@ -31,11 +25,11 @@ else()
   if(MSVC)
       STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
     STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
-    ExternalProject_Add(${proj}
-        PREFIX ${proj}
+    ExternalProject_Add(OPENSSL
+        PREFIX OPENSSL
         URL "https://github.com/openssl/openssl/archive/OpenSSL_1_0_1p.tar.gz"
         URL_MD5 6bc1f9a9d9d474aceceb377e758e48ec
-        DEPENDS ${${proj}_DEPENDENCIES}
+        DEPENDS ${OPENSSL_DEPENDENCIES}
         BINARY_DIR ${OPENSSL_SB_BUILD_DIR}
         INSTALL_DIR ${SB_INSTALL_PREFIX}
         DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -49,9 +43,9 @@ else()
     )
 
   else(UNIX)
-    ExternalProject_Add(${proj}
-      PREFIX ${proj}
-      DEPENDS ${${proj}_DEPENDENCIES}
+    ExternalProject_Add(OPENSSL
+      PREFIX OPENSSL
+      DEPENDS ${OPENSSL_DEPENDENCIES}
       URL "https://github.com/openssl/openssl/archive/OpenSSL_1_0_1p.tar.gz"
       URL_MD5 6bc1f9a9d9d474aceceb377e758e48ec
       BINARY_DIR ${OPENSSL_SB_BUILD_DIR}
@@ -65,7 +59,7 @@ else()
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install)
 
-    ExternalProject_Add_Step(${proj} remove_static
+    ExternalProject_Add_Step(OPENSSL remove_static
       COMMAND ${CMAKE_COMMAND} -E remove
       ${SB_INSTALL_PREFIX}/lib/libssl.a
       ${SB_INSTALL_PREFIX}/lib/libcrypto.a
@@ -75,11 +69,11 @@ else()
 
   endif()
 
-  set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  set(_SB_OPENSSL_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libcurl.lib)
+    set(_SB_OPENSSL_LIBRARY ${SB_INSTALL_PREFIX}/lib/libcurl.lib)
   elseif(UNIX)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libssl${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(_SB_OPENSSL_LIBRARY ${SB_INSTALL_PREFIX}/lib/libssl${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
 
 endif()

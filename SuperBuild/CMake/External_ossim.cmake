@@ -1,7 +1,5 @@
-set(proj OSSIM)
-
-if(NOT __EXTERNAL_${proj}__)
-set(__EXTERNAL_${proj}__ 1)
+if(NOT __EXTERNAL_OSSIM__)
+set(__EXTERNAL_OSSIM__ 1)
 
 message(STATUS "Setup Ossim...")
 
@@ -15,15 +13,11 @@ if(USE_SYSTEM_OSSIM)
   find_package ( Ossim )
   message(STATUS "  Using OSSIM system version")
 else()
-  SETUP_SUPERBUILD(PROJECT ${proj})
+  SETUP_SUPERBUILD(PROJECT OSSIM)
   message(STATUS "  Using OSSIM SuperBuild version")
 
   # declare dependencies
-  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF GEOTIFF GEOS JPEG OPENTHREADS FREETYPE)
-
-  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
-  # set proj back to its original value
-  set(proj OSSIM)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(OSSIM TIFF GEOTIFF GEOS JPEG OPENTHREADS FREETYPE)
 
   ADD_SUPERBUILD_CMAKE_VAR(TIFF_INCLUDE_DIR)
   ADD_SUPERBUILD_CMAKE_VAR(TIFF_LIBRARY)
@@ -46,8 +40,8 @@ else()
   endif()
 
   # archive version
-  ExternalProject_Add(${proj}
-    PREFIX ${proj}
+  ExternalProject_Add(OSSIM
+    PREFIX OSSIM
     URL "http://download.osgeo.org/ossim/source/ossim-1.8.20/ossim-1.8.20-3.tar.gz"
     URL_MD5 eb2265db0d4d9201e255b92317121cfd
     BINARY_DIR ${OSSIM_SB_BUILD_DIR}
@@ -68,22 +62,22 @@ else()
     -DINSTALL_LIBRARY_DIR:STRING=lib
     -DCMAKE_PREFIX_PATH:STRING=${SB_INSTALL_PREFIX}
     ${OSSIM_SB_CONFIG}
-    DEPENDS ${${proj}_DEPENDENCIES}
+    DEPENDS ${OSSIM_DEPENDENCIES}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
-  ExternalProject_Add_Step(${proj} patch_no_cmakelists
+  ExternalProject_Add_Step(OSSIM patch_no_cmakelists
     COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_SOURCE_DIR}/patches/${proj}/CMakeLists.txt
+    ${CMAKE_SOURCE_DIR}/patches/OSSIM/CMakeLists.txt
     ${OSSIM_SB_SRC}
     DEPENDEES patch
     DEPENDERS configure )
 
-  set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  set(_SB_OSSIM_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/ossim.lib)
+    set(_SB_OSSIM_LIBRARY ${SB_INSTALL_PREFIX}/lib/ossim.lib)
   elseif(UNIX)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libossim${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(_SB_OSSIM_LIBRARY ${SB_INSTALL_PREFIX}/lib/libossim${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
 
 endif()

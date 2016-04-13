@@ -1,7 +1,5 @@
-set(proj FFTW)
-
-if(NOT __EXTERNAL_${proj}__)
-set(__EXTERNAL_${proj}__ 1)
+if(NOT __EXTERNAL_FFTW__)
+set(__EXTERNAL_FFTW__ 1)
 
 message(STATUS "Setup FFTW ...")
 
@@ -10,22 +8,22 @@ if(USE_SYSTEM_FFTW)
   #find_package ( FFTW )
   message(STATUS "  Using FFTW system version")
 else()
-  SETUP_SUPERBUILD(PROJECT ${proj})
-  set(projFloat ${proj}F)
-  set(projDouble ${proj}D)
-  
-  set(FFTW_SB_BUILD_FLOAT_DIR ${CMAKE_BINARY_DIR}/${proj}/src/${projFloat})
-  set(FFTW_SB_BUILD_DOUBLE_DIR ${CMAKE_BINARY_DIR}/${proj}/src/${projDouble})
-  
+  SETUP_SUPERBUILD(PROJECT FFTW)
+  set(projFloat FFTWF)
+  set(projDouble FFTWD)
+
+  set(FFTW_SB_BUILD_FLOAT_DIR ${CMAKE_BINARY_DIR}/FFTW/src/${projFloat})
+  set(FFTW_SB_BUILD_DOUBLE_DIR ${CMAKE_BINARY_DIR}/FFTW/src/${projDouble})
+
   if(MSVC)
     # TODO : get precompiled binaries as not all MSVC versions can compile FFTW
       message(STATUS "  FFTW SuperBuild is not available yet...")
-      add_custom_target(${proj})
+      add_custom_target(FFTW)
   else()
     message(STATUS "  Using FFTW SuperBuild version")
     # Compile the float version of FFTW
     ExternalProject_Add(${projFloat}
-      PREFIX ${proj}
+      PREFIX FFTW
       URL "http://www.fftw.org/fftw-3.3.4.tar.gz"
       URL_MD5 2edab8c06b24feeb3b82bbb3ebf3e7b3
       SOURCE_DIR ${FFTW_SB_BUILD_FLOAT_DIR}
@@ -40,19 +38,19 @@ else()
             --enable-float
             --enable-threads
             --disable-fortran
-      DEPENDS ${${proj}_DEPENDENCIES}
+      DEPENDS ${FFTW_DEPENDENCIES}
       )
-      
+
     #ExternalProject_Add_Step(${projFloat} copy_source
-    #  COMMAND ${CMAKE_COMMAND} -E copy_directory 
+    #  COMMAND ${CMAKE_COMMAND} -E copy_directory
     #    ${FFTW_SB_SRC} ${FFTW_SB_BUILD_FLOAT_DIR}
     #  DEPENDEES patch update
     #  DEPENDERS configure
     #  )
-    
+
     # Compile the double version of FFTW
-    ExternalProject_Add(${proj}
-      PREFIX ${proj}
+    ExternalProject_Add(FFTW
+      PREFIX FFTW
       URL "http://www.fftw.org/fftw-3.3.4.tar.gz"
       URL_MD5 2edab8c06b24feeb3b82bbb3ebf3e7b3
       SOURCE_DIR ${FFTW_SB_BUILD_DOUBLE_DIR}
@@ -67,22 +65,22 @@ else()
             --disable-float
             --enable-threads
             --disable-fortran
-      DEPENDS ${${proj}_DEPENDENCIES}
+      DEPENDS ${FFTW_DEPENDENCIES}
       )
-      
+
     #ExternalProject_Add_Step(${projDouble} copy_source
-    #  COMMAND ${CMAKE_COMMAND} -E copy_directory 
+    #  COMMAND ${CMAKE_COMMAND} -E copy_directory
     #    ${FFTW_SB_SRC} ${FFTW_SB_BUILD_DOUBLE_DIR}
     #  DEPENDEES patch update
     #  DEPENDERS configure
     #  )
-    
-    add_dependencies(${proj} ${projFloat})
-    
-    set(_SB_${proj}_INCLUDE_PATH ${SB_INSTALL_PREFIX}/include)
-    
+
+    add_dependencies(FFTW ${projFloat})
+
+    set(_SB_FFTW_INCLUDE_PATH ${SB_INSTALL_PREFIX}/include)
+
   endif()
-  
+
 
 
 endif()

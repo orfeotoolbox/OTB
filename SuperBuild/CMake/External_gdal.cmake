@@ -1,7 +1,5 @@
-set(proj GDAL)
-
-if(NOT __EXTERNAL_${proj}__)
-set(__EXTERNAL_${proj}__ 1)
+if(NOT __EXTERNAL_GDAL__)
+set(__EXTERNAL_GDAL__ 1)
 
 message(STATUS "Setup GDAL...")
 
@@ -9,15 +7,11 @@ if(USE_SYSTEM_GDAL)
   find_package ( GDAL )
   message(STATUS "  Using GDAL system version")
 else()
-  SETUP_SUPERBUILD(PROJECT ${proj})
+  SETUP_SUPERBUILD(PROJECT GDAL)
   message(STATUS "  Using GDAL SuperBuild version")
 
   # declare dependencies
-  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF CURL GEOTIFF PNG JPEG OPENJPEG SQLITE GEOS ZLIB EXPAT)
-
-  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
-  # set proj back to its original value
-  set(proj GDAL)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL TIFF CURL GEOTIFF PNG JPEG OPENJPEG SQLITE GEOS ZLIB EXPAT)
 
   ADD_SUPERBUILD_CONFIGURE_VAR(TIFF_ROOT     --with-libtiff)
   ADD_SUPERBUILD_CONFIGURE_VAR(GEOTIFF_ROOT  --with-geotiff)
@@ -37,17 +31,17 @@ else()
     #Convert GDAL_SB_EXTRA_OPTIONS to a list to allow to add multiple instructions to the CONFIGURE_COMMAND
     separate_arguments(GDAL_SB_EXTRA_OPTIONS)
 
-    ExternalProject_Add(${proj}
-      PREFIX ${proj}
+    ExternalProject_Add(GDAL
+      PREFIX GDAL
       URL "http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz"
       URL_MD5 866a46f72b1feadd60310206439c1a76
       BINARY_DIR ${GDAL_SB_BUILD_DIR}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-      DEPENDS ${${proj}_DEPENDENCIES}
+      DEPENDS ${GDAL_DEPENDENCIES}
       PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/GDAL/GNUmakefile ${GDAL_SB_SRC}/swig/python/GNUmakefile
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/patches/${proj}/S2_patch ${GDAL_SB_SRC}
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/patches/GDAL/S2_patch ${GDAL_SB_SRC}
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
       CONFIGURE_COMMAND
         # use 'env' because CTest launcher doesn't perform shell interpretation
@@ -72,25 +66,25 @@ else()
   ##add libkml
   ##https://trac.osgeo.org/gdal/ticket/5725
   ##is needed for SQLITE driver
-    list(REMOVE_ITEM ${proj}_DEPENDENCIES LIBKML)
+    list(REMOVE_ITEM GDAL_DEPENDENCIES LIBKML)
 
     STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
     STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
-    configure_file(${CMAKE_SOURCE_DIR}/patches/${proj}/nmake_gdal_extra.opt.in ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
+    configure_file(${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
 
-    ExternalProject_Add(${proj}
-       PREFIX ${proj}
+    ExternalProject_Add(GDAL
+       PREFIX GDAL
        URL "http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz"
        URL_MD5 866a46f72b1feadd60310206439c1a76
        SOURCE_DIR ${GDAL_SB_SRC}
        BINARY_DIR ${GDAL_SB_BUILD_DIR}
        INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-       DEPENDS ${${proj}_DEPENDENCIES}
+       DEPENDS ${GDAL_DEPENDENCIES}
        PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/GDAL/GNUmakefile ${GDAL_SB_SRC}/swig/python/GNUmakefile
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/patches/${proj}/S2_patch ${GDAL_SB_SRC}
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/patches/GDAL/S2_patch ${GDAL_SB_SRC}
         COMMAND ${CMAKE_COMMAND} -E copy_directory  ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
-       CONFIGURE_COMMAND  ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/${proj}/ogrsqlitevirtualogr.cpp
+       CONFIGURE_COMMAND  ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/GDAL/ogrsqlitevirtualogr.cpp
       ${GDAL_SB_BUILD_DIR}/ogr/ogrsf_frmts/sqlite/ogrsqlitevirtualogr.cpp
        BUILD_COMMAND nmake /f ${GDAL_SB_BUILD_DIR}/makefile.vc MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
        INSTALL_COMMAND nmake /f ${GDAL_SB_BUILD_DIR}/makefile.vc devinstall MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
@@ -98,11 +92,11 @@ else()
 
   endif()
 
-  set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  set(_SB_GDAL_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/gdal_i.lib)
+    set(_SB_GDAL_LIBRARY ${SB_INSTALL_PREFIX}/lib/gdal_i.lib)
   elseif(UNIX)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgdal${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(_SB_GDAL_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgdal${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
 
 endif()

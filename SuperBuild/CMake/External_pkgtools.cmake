@@ -1,10 +1,8 @@
 include(ExternalProject)
-set(proj PACKAGE-TOOLS)
+if(NOT __EXTERNAL_PACKAGE_TOOLS__)
+set(__EXTERNAL_PACKAGE_TOOLS__ 1)
 
-if(NOT __EXTERNAL_${proj}__)
-set(__EXTERNAL_${proj}__ 1)
-
-set(PKGTOOLS_SB_PREFIX_DIR "${CMAKE_BINARY_DIR}/PACKAGE-OTB/${proj}")
+set(PKGTOOLS_SB_PREFIX_DIR "${CMAKE_BINARY_DIR}/PACKAGE-OTB/PACKAGE_TOOLS")
 
 ExternalProject_Add(MAKESELF
   PREFIX "${PKGTOOLS_SB_PREFIX_DIR}"
@@ -54,7 +52,7 @@ if(UNIX)
   endif(APPLE)
 endif(UNIX)
 
-ExternalProject_Add( ${proj}
+ExternalProject_Add( PACKAGE_TOOLS
   PREFIX             "${PKGTOOLS_SB_PREFIX_DIR}"
   DOWNLOAD_COMMAND   ""
   CONFIGURE_COMMAND  ""
