@@ -1,6 +1,8 @@
 if(NOT __EXTERNAL_OPENSSL__)
 set(__EXTERNAL_OPENSSL__ 1)
 
+#RK: OPENSSL is deactivated in QT4 build.
+#revisit that when you have a clean openssl
 message(STATUS "Setup OpenSSL ...")
 
 if(USE_SYSTEM_OPENSSL)
