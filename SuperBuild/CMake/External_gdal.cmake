@@ -29,14 +29,6 @@ else()
   ADD_SUPERBUILD_CONFIGURE_VAR(EXPAT_ROOT    --with-expat)
   ADD_SUPERBUILD_CONFIGURE_VAR(CURL_ROOT     --with-curl "/bin/curl-config")
   ADD_SUPERBUILD_CONFIGURE_VAR(GEOS_ROOT     --with-geos "/bin/geos-config")
-  
-  #if(USE_SYSTEM_TIFF)
-  #  if(NOT SYSTEM_TIFF_PREFIX STREQUAL "")
-  #    list(APPEND GDAL_SB_CONFIG --with-libtiff=${SYSTEM_TIFF_PREFIX})
-  #  endif()
-  #else()
-  #  list(APPEND GDAL_SB_CONFIG --with-libtiff=${SB_INSTALL_PREFIX})
-  #endif()
 
   if(UNIX)
     set(GDAL_SB_EXTRA_OPTIONS "" CACHE STRING "Extra options to be passed to GDAL configure script")
@@ -57,7 +49,7 @@ else()
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/GDAL/GNUmakefile ${GDAL_SB_SRC}/swig/python/GNUmakefile
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/patches/${proj}/S2_patch ${GDAL_SB_SRC}
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
-      CONFIGURE_COMMAND 
+      CONFIGURE_COMMAND
         # use 'env' because CTest launcher doesn't perform shell interpretation
         ${SB_ENV_CONFIGURE_CMD}
         ${GDAL_SB_BUILD_DIR}/configure
@@ -66,6 +58,10 @@ else()
         --without-ogdi
         --without-jasper
         --with-sentinel2
+        --without-netcdf #netcdf is not added by superbuild. better to deactivate it.
+        --without-hdf4
+        --without-hdf5
+        --without-xml2
         ${GDAL_SB_CONFIG}
         ${GDAL_SB_EXTRA_OPTIONS}
       BUILD_COMMAND $(MAKE)
