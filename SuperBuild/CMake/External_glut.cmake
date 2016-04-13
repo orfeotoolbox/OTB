@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_GLUT__)
 set(__EXTERNAL_GLUT__ 1)
 
-message(STATUS "Setup glut...")
-
 if(USE_SYSTEM_GLUT)
   message(STATUS "  Using glut system version")
 else()

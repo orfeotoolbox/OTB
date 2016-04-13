@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_OTB__)
 set(__EXTERNAL_OTB__ 1)
 
-message(STATUS "Setup OTB...")
-
 SETUP_SUPERBUILD(PROJECT OTB)
 message(STATUS "  Using OTB SuperBuild version")
 

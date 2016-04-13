@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_JPEG__)
 set(__EXTERNAL_JPEG__ 1)
 
-message(STATUS "Setup libjpeg...")
-
 if(USE_SYSTEM_JPEG)
   find_package ( JPEG )
   message(STATUS "  Using libjpeg system version")

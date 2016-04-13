@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_TINYXML__)
 set(__EXTERNAL_TINYXML__ 1)
 
-message(STATUS "Setup TinyXML ...")
-
 if(USE_SYSTEM_TINYXML)
   find_package ( TinyXML )
   message(STATUS "  Using TinyXML system version")

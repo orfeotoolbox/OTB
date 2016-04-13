@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_OPENJPEG__)
 set(__EXTERNAL_OPENJPEG__ 1)
 
-message(STATUS "Setup OpenJpeg...")
-
 if(USE_SYSTEM_OPENJPEG)
   # TODO : FindOpenJPEG.cmake
   find_package ( OpenJPEG )

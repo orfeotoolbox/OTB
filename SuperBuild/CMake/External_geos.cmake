@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_GEOS__)
 set(__EXTERNAL_GEOS__ 1)
 
-message(STATUS "Setup GEOS ...")
-
 if(USE_SYSTEM_GEOS)
   # TODO : FindGEOS.cmake
   find_package ( GEOS )

@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_EXPAT__)
 set(__EXTERNAL_EXPAT__ 1)
 
-message(STATUS "Setup expat ...")
-
 if(USE_SYSTEM_EXPAT)
   find_package ( EXPAT )
   message(STATUS "  Using expat system version")

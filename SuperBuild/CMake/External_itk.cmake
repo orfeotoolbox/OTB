@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_ITK__)
 set(__EXTERNAL_ITK__ 1)
 
-message(STATUS "Setup ITK...")
-
 if(USE_SYSTEM_ITK)
   find_package ( ITK )
   message(STATUS "  Using ITK system version")

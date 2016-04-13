@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_ZLIB__)
 set(__EXTERNAL_ZLIB__ 1)
 
-message(STATUS "Setup Zlib ...")
-
 if(USE_SYSTEM_ZLIB)
   find_package(ZLIB)
   message(STATUS "  Using Zlib system version")

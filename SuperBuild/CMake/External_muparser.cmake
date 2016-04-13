@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_MUPARSER__)
 set(__EXTERNAL_MUPARSER__ 1)
 
-message(STATUS "Setup muParser ...")
-
 if(USE_SYSTEM_MUPARSER)
   find_package ( MuParser )
   message(STATUS "  Using muParser system version")

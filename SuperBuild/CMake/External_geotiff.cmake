@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_GEOTIFF__)
 set(__EXTERNAL_GEOTIFF__ 1)
 
-message(STATUS "Setup libgeotiff...")
-
 if(USE_SYSTEM_GEOTIFF)
   find_package ( GeoTIFF )
   message(STATUS "  Using libgeotiff system version")

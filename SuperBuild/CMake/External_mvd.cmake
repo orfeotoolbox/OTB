@@ -1,7 +1,6 @@
 if(NOT __EXTERNAL_MVD__)
 set(__EXTERNAL_MVD__ 1)
 
-message(STATUS "Setup Monteverdi...")
 SETUP_SUPERBUILD(PROJECT MVD)
 message(STATUS "  Using Monteverdi SuperBuild version")
 

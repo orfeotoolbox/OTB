@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_QWT__)
 set(__EXTERNAL_QWT__ 1)
 
-message(STATUS "Setup Qwt...")
-
 if(USE_SYSTEM_QWT)
   message(STATUS "  Using QWT system version")
 else()

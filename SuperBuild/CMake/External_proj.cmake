@@ -1,12 +1,7 @@
 if(NOT __EXTERNAL_PROJ__)
 set(__EXTERNAL_PROJ__ 1)
 
-message(STATUS "Setup Proj.4 ...")
-
 if(USE_SYSTEM_PROJ)
-  # TODO : FindPROJ.cmake
-  #find_package ( PROJ )
-  add_custom_target(PROJ)
   message(STATUS "  Using Proj4 system version")
 else()
   SETUP_SUPERBUILD(PROJECT PROJ)

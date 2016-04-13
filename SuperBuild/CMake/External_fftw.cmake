@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_FFTW__)
 set(__EXTERNAL_FFTW__ 1)
 
-message(STATUS "Setup FFTW ...")
-
 if(USE_SYSTEM_FFTW)
   # TODO : use ITK's FindFFTW
   #find_package ( FFTW )

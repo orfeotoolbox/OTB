@@ -1,12 +1,7 @@
 if(NOT __EXTERNAL_PCRE__)
 set(__EXTERNAL_PCRE__ 1)
 
-message(STATUS "Setup pcre...")
-
 if(USE_SYSTEM_PCRE)
-  # TODO : FindPCRE.cmake
-  # find_package ( PCRE )
-  add_custom_target(PCRE)
   message(STATUS "  Using pcre system version")
 else()
   SETUP_SUPERBUILD(PROJECT PCRE)

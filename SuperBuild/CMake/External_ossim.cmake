@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_OSSIM__)
 set(__EXTERNAL_OSSIM__ 1)
 
-message(STATUS "Setup Ossim...")
-
 # OSGeo4W provides an "ossim" package : use it otherwise if it is installed and not used by OTB
 # we get conflicts (because OSGeo4W include dir is included for other dependencies
 #if(WIN32)

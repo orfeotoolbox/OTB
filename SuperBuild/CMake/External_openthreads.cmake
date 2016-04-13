@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_OPENTHREADS__)
 set(__EXTERNAL_OPENTHREADS__ 1)
 
-message(STATUS "Setup OpenThreads ...")
-
 if(MSVC)
 set(USE_SYSTEM_OPENTHREADS OFF)
 endif()

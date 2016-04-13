@@ -7,8 +7,6 @@
 if(NOT __EXTERNAL_BOOST__)
 set(__EXTERNAL_BOOST__ 1)
 
-message(STATUS "Setup Boost ...")
-
 if(USE_SYSTEM_BOOST)
   # Required
   find_package ( Boost

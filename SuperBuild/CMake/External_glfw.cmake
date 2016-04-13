@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_GLFW__)
 set(__EXTERNAL_GLFW__ 1)
 
-message(STATUS "Setup glfw...")
-
 if(USE_SYSTEM_GLFW)
   message(STATUS "  Using glfw system version")
 else()

@@ -1,11 +1,7 @@
 if(NOT __EXTERNAL_SWIG__)
 set(__EXTERNAL_SWIG__ 1)
 
-message(STATUS "Setup swig...")
-
 if(USE_SYSTEM_SWIG)
-  find_package ( SWIG )
-  add_custom_target(SWIG)
   message(STATUS "  Using swig system version")
 else()
   SETUP_SUPERBUILD(PROJECT SWIG)

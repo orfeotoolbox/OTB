@@ -1,8 +1,6 @@
 if(NOT __EXTERNAL_GDAL__)
 set(__EXTERNAL_GDAL__ 1)
 
-message(STATUS "Setup GDAL...")
-
 if(USE_SYSTEM_GDAL)
   find_package ( GDAL )
   message(STATUS "  Using GDAL system version")

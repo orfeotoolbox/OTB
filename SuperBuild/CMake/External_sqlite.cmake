@@ -1,12 +1,7 @@
 if(NOT __EXTERNAL_SQLITE__)
 set(__EXTERNAL_SQLITE__ 1)
 
-message(STATUS "Setup SQLite...")
-
 if(USE_SYSTEM_SQLITE)
-  # TODO
-  #find_package ( SQLite )
-  add_custom_target(SQLITE)
   message(STATUS "  Using SQLite system version")
 else()
   SETUP_SUPERBUILD(PROJECT SQLITE)
