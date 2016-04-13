@@ -972,43 +972,60 @@ void GlImageActor::UpdateResolution()
   double distAC = vcl_sqrt((pointA[0]-pointC[0])*(pointA[0]-pointC[0])+(pointA[1]-pointC[1])*(pointA[1]-pointC[1]));
   
   double resolution = std::min(100/distAB,100/distAC);
-  
+
+  // std::cout << std::endl;
+  // std::cout << "resolution: " << resolution << std::endl;
+
   // Arbitrary higher than any distance we will compute here
   double minDist = 50000.;
   m_CurrentResolution = 0;
 
-  bool isFound = false;
-
   // OTB always include full resolution level in available resolutions.
   assert( !m_AvailableResolutions.empty() );
 
-  // Compute the diff and keep the index that minimize the distance
-  for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
-       it != m_AvailableResolutions.end(); ++it)
+  // MANTIS-1179: resolution>1 <=> zooming in past 1:1 scale. So, cap
+  // resolution to index 0.
+  if( resolution<1.0 )
     {
+    bool isFound = false;
 
-    double diff = 1/((double)(1<<(*it))) - resolution;
-
-    if( ( ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower &&
-	    diff < 0 )
-	  ||
-	  ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper &&
-	    diff > 0 )
-	  ||
-	  ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest ) )
-	&&
-	vcl_abs(diff) < minDist )
+    // Compute the diff and keep the index that minimize the distance
+    for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
+	 it != m_AvailableResolutions.end(); ++it)
       {
-      isFound = true;
+      double diff = 1/((double)(1<<(*it))) - resolution;
 
-      minDist = vcl_abs(diff);
-      m_CurrentResolution = std::distance(m_AvailableResolutions.begin(),it);
+      // std::cout << "diff: " << diff << std::endl;
+
+      if( ( ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower &&
+	      diff <= 0 )
+	    ||
+	    ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper &&
+	      diff >= 0 )
+	    ||
+	    ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest ) )
+	  &&
+	  vcl_abs(diff) < minDist )
+	{
+	isFound = true;
+
+	minDist = vcl_abs(diff);
+	m_CurrentResolution = std::distance(m_AvailableResolutions.begin(),it);
+
+	// std::cout << "found: " << m_CurrentResolution << std::endl;
+	}
+      }
+
+    // MANTIS-1147: Cap current-resolution.
+    if( !isFound )
+      {
+      assert( m_AvailableResolutions.size() > 0 );
+
+      m_CurrentResolution = m_AvailableResolutions.size() - 1;
+
+      // std::cout << "not found: " << m_CurrentResolution << std::endl;
       }
     }
-
-  // MANTIS-1147: Cap current-resolution.
-  if( !isFound )
-    m_CurrentResolution = m_AvailableResolutions.size() - 1;
 
   std::ostringstream extFilename;
   extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
