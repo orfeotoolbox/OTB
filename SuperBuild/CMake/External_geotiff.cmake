@@ -47,6 +47,8 @@ else()
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
+  SUPERBUILD_PATCH_SOURCE(${proj} "remove-install-name-dir")
+
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
     set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/geotiff_i.lib)
