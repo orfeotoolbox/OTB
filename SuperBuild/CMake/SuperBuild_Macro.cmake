@@ -4,10 +4,11 @@ include(CMakeParseArguments)
 # internal variables
 macro(SETUP_SYSTEM_LIBRARY)
   cmake_parse_arguments(NEW_SYSLIB  "" "PROJECT;DEFAULT" "" ${ARGN})
-  option(USE_SYSTEM_${NEW_SYSLIB_PROJECT}
-    "  Use a system build of ${NEW_SYSLIB_PROJECT}."
-    ${NEW_SYSLIB_DEFAULT}
-    )
+  option(USE_SYSTEM_${NEW_SYSLIB_PROJECT} "Use a system build of ${NEW_SYSLIB_PROJECT}.")
+  set(USE_SYSTEM_${NEW_SYSLIB_PROJECT} OFF)
+  if(NEW_SYSLIB_DEFAULT)
+    set(USE_SYSTEM_${NEW_SYSLIB_PROJECT} ON)
+  endif()
   set(SYSTEM_${NEW_SYSLIB_PROJECT}_CMAKE_CACHE)
 endmacro(SETUP_SYSTEM_LIBRARY)
 
@@ -57,28 +58,25 @@ endmacro(ADD_SYSTEM_PREFIX)
 # Initialize usefull variables to build a superbuild project
 macro(SETUP_SUPERBUILD)
   cmake_parse_arguments(NEW_SB "" "PROJECT" "" ${ARGN})
-  set(${NEW_SB_PROJECT}_DEPENDENCIES)
+  #set_property(GLOBAL PROPERTY prop_${project}_DEPENDENCIES "")
+  set(${NEW_SB_PROJECT}_DEPENDENCIES "")
   set(${NEW_SB_PROJECT}_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${NEW_SB_PROJECT}/build)
   set(${NEW_SB_PROJECT}_SB_SRC ${CMAKE_BINARY_DIR}/${NEW_SB_PROJECT}/src/${NEW_SB_PROJECT})
   set(${NEW_SB_PROJECT}_SB_CONFIG)
   set(_SB_${NEW_SB_PROJECT}_ROOT ${SB_INSTALL_PREFIX})
 endmacro(SETUP_SUPERBUILD)
 
-macro(ADDTO_DEPENDENCIES_IF_NOT_SYSTEM proj)
+macro(ADDTO_DEPENDENCIES_IF_NOT_SYSTEM project)
   foreach(dep ${ARGN})
     if(NOT USE_SYSTEM_${dep})
-      list(APPEND ${proj}_DEPENDENCIES ${dep})
+      #      get_property(old_${project}_DEPENDENCIES GLOBAL PROPERTY prop_${project}_DEPENDENCIES)
+      list(APPEND ${project}_DEPENDENCIES "${dep}")
+      #     set_property(GLOBAL PROPERTY prop_${project}_DEPENDENCIES "${old_${project}_DEPENDENCIES}")
     endif()
-  endforeach()
-endmacro(ADDTO_DEPENDENCIES_IF_NOT_SYSTEM)
-
-# Macro to include dependencies
-macro(INCLUDE_SUPERBUILD_DEPENDENCIES)
-  foreach(dep ${ARGV})
     string(TOLOWER ${dep} dep_lower)
     include(External_${dep_lower})
   endforeach()
-endmacro(INCLUDE_SUPERBUILD_DEPENDENCIES)
+endmacro(ADDTO_DEPENDENCIES_IF_NOT_SYSTEM)
 
 # Macro to add a cmake variable to ${proj}_SB_CONFIG (var type: string)
 macro(ADD_SUPERBUILD_CMAKE_VAR var)
@@ -107,3 +105,15 @@ macro(ADD_SUPERBUILD_CONFIGURE_VAR var name)
       )
   endif()
 endmacro(ADD_SUPERBUILD_CONFIGURE_VAR)
+
+macro(SUPERBUILD_PATCH_SOURCE project external_project_step_name)
+  ExternalProject_Add_Step(${project} ${external_project_step_name}
+    COMMAND
+    ${CMAKE_COMMAND}
+    -DSOURCE_DIR=${${project}_SB_SRC}
+    -DPATCH_DIR=${CMAKE_SOURCE_DIR}/patches/${project}
+    -P ${CMAKE_SOURCE_DIR}/CMake/patch.cmake
+    DEPENDEES patch update
+    DEPENDERS configure
+    )
+endmacro()

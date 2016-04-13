@@ -1,15 +1,11 @@
-set(proj ITK)
-
-if(NOT __EXTERNAL_${proj}__)
-set(__EXTERNAL_${proj}__ 1)
-
-message(STATUS "Setup ITK...")
+if(NOT __EXTERNAL_ITK__)
+set(__EXTERNAL_ITK__ 1)
 
 if(USE_SYSTEM_ITK)
   find_package ( ITK )
   message(STATUS "  Using ITK system version")
 else()
-  SETUP_SUPERBUILD(PROJECT ${proj})
+  SETUP_SUPERBUILD(PROJECT ITK)
   message(STATUS "  Using ITK SuperBuild version")
 
   # if(MSVC)
@@ -106,11 +102,7 @@ else()
   endforeach()
 
   # declare dependencies
-  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} TIFF EXPAT PNG ZLIB FFTW)
-
-  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
-  # set proj back to its original value
-  set(proj ITK)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(ITK TIFF EXPAT PNG ZLIB FFTW)
 
   ADD_SUPERBUILD_CMAKE_VAR(TIFF_INCLUDE_DIR)
   ADD_SUPERBUILD_CMAKE_VAR(TIFF_LIBRARY)
@@ -152,8 +144,8 @@ else()
   set(ITK_SB_VERSION 4.8)
   set(ITK_SB_VERSION_FULL ${ITK_SB_VERSION}.1)
 
-  ExternalProject_Add(${proj}
-    PREFIX ${proj}
+  ExternalProject_Add(ITK
+    PREFIX ITK
     URL "http://sourceforge.net/projects/itk/files/itk/${ITK_SB_VERSION}/InsightToolkit-${ITK_SB_VERSION_FULL}.tar.gz/download"
     URL_MD5 b1ed53604de854501cb61f34f410420e
     SOURCE_DIR ${ITK_SB_SRC}
@@ -175,7 +167,7 @@ else()
       -DITK_USE_SYSTEM_TIFF:BOOL=ON
       -DITK_USE_SYSTEM_PNG:BOOL=ON
       ${ITK_SB_CONFIG}
-    DEPENDS ${${proj}_DEPENDENCIES}
+    DEPENDS ${ITK_DEPENDENCIES}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 

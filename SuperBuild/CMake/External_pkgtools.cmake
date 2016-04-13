@@ -1,10 +1,8 @@
 include(ExternalProject)
-set(proj PACKAGE-TOOLS)
+if(NOT __EXTERNAL_PACKAGE_TOOLS__)
+set(__EXTERNAL_PACKAGE_TOOLS__ 1)
 
-if(NOT __EXTERNAL_${proj}__)
-set(__EXTERNAL_${proj}__ 1)
-
-set(PKGTOOLS_SB_PREFIX_DIR "${CMAKE_BINARY_DIR}/PACKAGE-OTB/${proj}")
+set(PKGTOOLS_SB_PREFIX_DIR "${CMAKE_BINARY_DIR}/PACKAGE-OTB/PACKAGE_TOOLS")
 
 ExternalProject_Add(MAKESELF
   PREFIX "${PKGTOOLS_SB_PREFIX_DIR}"
@@ -26,24 +24,35 @@ ExternalProject_Add(MAKESELF
   ${CMAKE_BINARY_DIR}/PACKAGE-OTB/build/makeself.sh
 
   )
+if(UNIX)
+  if(APPLE)
+    ExternalProject_Add( PATCHELF
+      PREFIX             "${PKGTOOLS_SB_PREFIX_DIR}"
+      DOWNLOAD_COMMAND   ""
+      CONFIGURE_COMMAND  ""
+      BUILD_COMMAND      ""
+      INSTALL_COMMAND    ""
+      )
+  else()
+    ExternalProject_Add(PATCHELF
+      PREFIX "${PKGTOOLS_SB_PREFIX_DIR}"
+      URL "http://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.bz2"
+      URL_MD5 d02687629c7e1698a486a93a0d607947
+      DOWNLOAD_DIR   ${DOWNLOAD_LOCATION}
+      SOURCE_DIR "${PKGTOOLS_SB_PREFIX_DIR}/src-patchelf"
+      BINARY_DIR "${PKGTOOLS_SB_PREFIX_DIR}/build-patchelf"
+      TMP_DIR  "${PKGTOOLS_SB_PREFIX_DIR}/tmp-patchelf"
+      STAMP_DIR "${PKGTOOLS_SB_PREFIX_DIR}/stamp-patchelf"
+      PATCH_COMMAND  ${CMAKE_COMMAND} -E make_directory ${CMAKE_INSTALL_PREFIX}/tools
+      CONFIGURE_COMMAND ${CMAKE_COMMAND} -E chdir ${PKGTOOLS_SB_PREFIX_DIR}/src-patchelf
+      ./configure --prefix ${CMAKE_INSTALL_PREFIX}/tools
+      BUILD_COMMAND ${CMAKE_COMMAND} -E chdir ${PKGTOOLS_SB_PREFIX_DIR}/src-patchelf ${CMAKE_MAKE_PROGRAM}
+      INSTALL_COMMAND ${CMAKE_COMMAND} -E copy ${PKGTOOLS_SB_PREFIX_DIR}/src-patchelf/src/patchelf ${CMAKE_INSTALL_PREFIX}/tools
+      )
+  endif(APPLE)
+endif(UNIX)
 
-ExternalProject_Add(PATCHELF
-  PREFIX "${PKGTOOLS_SB_PREFIX_DIR}"
-  URL "http://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.bz2"
-  URL_MD5 d02687629c7e1698a486a93a0d607947
-  DOWNLOAD_DIR   ${DOWNLOAD_LOCATION}
-  SOURCE_DIR "${PKGTOOLS_SB_PREFIX_DIR}/src-patchelf"
-  BINARY_DIR "${PKGTOOLS_SB_PREFIX_DIR}/build-patchelf"
-  TMP_DIR  "${PKGTOOLS_SB_PREFIX_DIR}/tmp-patchelf"
-  STAMP_DIR "${PKGTOOLS_SB_PREFIX_DIR}/stamp-patchelf"
-  PATCH_COMMAND  ${CMAKE_COMMAND} -E make_directory ${CMAKE_INSTALL_PREFIX}/tools
-  CONFIGURE_COMMAND ${CMAKE_COMMAND} -E chdir ${PKGTOOLS_SB_PREFIX_DIR}/src-patchelf
-  ./configure --prefix ${CMAKE_INSTALL_PREFIX}/tools
-  BUILD_COMMAND ${CMAKE_COMMAND} -E chdir ${PKGTOOLS_SB_PREFIX_DIR}/src-patchelf ${CMAKE_MAKE_PROGRAM}
-  INSTALL_COMMAND ${CMAKE_COMMAND} -E copy ${PKGTOOLS_SB_PREFIX_DIR}/src-patchelf/src/patchelf ${CMAKE_INSTALL_PREFIX}/tools
-  )
-
-ExternalProject_Add( ${proj}
+ExternalProject_Add( PACKAGE_TOOLS
   PREFIX             "${PKGTOOLS_SB_PREFIX_DIR}"
   DOWNLOAD_COMMAND   ""
   CONFIGURE_COMMAND  ""
