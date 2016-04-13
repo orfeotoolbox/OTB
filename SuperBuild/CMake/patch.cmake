@@ -1,22 +1,24 @@
 file(GLOB all_dot_diff_files "${PATCH_DIR}/*diff")
 
 find_program(PATCH_PROGRAM NAMES patch)
-if(NOT PATCH_PROGRAM)
-  message(FATAL_ERROR "patch program not found. PATCH_PROGRAM. search names :' patch'")  
-endif()
-
-foreach(dot_diff_file ${all_dot_diff_files})
- # message("dot_diff_file=${dot_diff_file}")
-#  message(FATAL_ERROR "${PATCH_PROGRAM} ${SOURCE_DIR} -p1 < ${dot_diff_file}")
-execute_process(
-  COMMAND
-  ${CMAKE_COMMAND} -E chdir ${SOURCE_DIR}  ${PATCH_PROGRAM} "-p1" INPUT_FILE "${dot_diff_file}"
-  RESULT_VARIABLE patch_rv
-  OUTPUT_VARIABLE patch_ov
-  OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_STRIP_TRAILING_WHITESPACE)
-if(NOT "${patch_rv}" STREQUAL "0")
-  message(FATAL_ERROR "${PATCH_PROGRAM} returned non-zero exit status '${patch_rv}'")
+if(PATCH_PROGRAM)
+  foreach(dot_diff_file ${all_dot_diff_files})
+    # message("dot_diff_file=${dot_diff_file}")
+    execute_process(
+      COMMAND
+      ${CMAKE_COMMAND} -E chdir ${SOURCE_DIR}  ${PATCH_PROGRAM} "-p1" INPUT_FILE "${dot_diff_file}"
+      RESULT_VARIABLE patch_rv
+      OUTPUT_VARIABLE patch_ov
+      OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_STRIP_TRAILING_WHITESPACE)
+    if(NOT "${patch_rv}" STREQUAL "0")
+      message(FATAL_ERROR "${PATCH_PROGRAM} returned non-zero exit status '${patch_rv}'")
+    else()
+      message(STATUS "${patch_ov}")
+    endif()
+  endforeach()
 else()
-  message(STATUS "${patch_ov}")
+  if(NOT WIN32)
+    #Raise a fatal error if not on windows
+    message(FATAL_ERROR "patch program not found. PATCH_PROGRAM. search names :' patch'")
+  endif()
 endif()
-endforeach()
