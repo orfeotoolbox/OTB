@@ -11,6 +11,27 @@ set(CMAKE_MODULE_PATH
 
 include(ExternalProject)
 
+if(APPLE)
+  if(POLICY CMP0042)
+    cmake_policy(SET CMP0042 NEW)
+  endif()
+  set(CMAKE_MACOSX_RPATH TRUE)
+  # use, i.e. don't skip the full RPATH for the build tree
+  set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+  # when building, don't use the install RPATH already
+  # (but later on when installing)
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+  # add the automatically determined parts of the RPATH
+  # which point to directories outside the build tree to the install RPATH
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+  # the RPATH to be used when installing, but only if it's not a system directory
+  list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+  if("${isSystemDir}" STREQUAL "-1")
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+  endif("${isSystemDir}" STREQUAL "-1")
+endif()
+
 # TODO BUILD_TESTING is created by default by CTest.cmake, and is ON by default.
 option(BUILD_TESTING "Build the testing tree." OFF)
 
@@ -80,7 +101,13 @@ if(WIN32)
 else(UNIX)
   if(APPLE)
     set(LDLIBVAR DYLD_LIBRARY_PATH)
-    set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
+    set(OSX_CMAKE_OPTS)
+    list(APPEND OSX_CMAKE_OPTS "-DCMAKE_MACOSX_RPATH:BOOL=${CMAKE_MACOSX_RPATH}")
+    list(APPEND OSX_CMAKE_OPTS "-DCMAKE_SKIP_BUILD_RPATH:BOOL=${CMAKE_SKIP_BUILD_RPATH}")
+    list(APPEND OSX_CMAKE_OPTS "-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=${CMAKE_BUILD_WITH_INSTALL_RPATH}")
+    list(APPEND OSX_CMAKE_OPTS "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=${CMAKE_INSTALL_RPATH_USE_LINK_PATH}")
+    list(APPEND OSX_CMAKE_OPTS "-DCMAKE_INSTALL_RPATH:STRING=${CMAKE_INSTALL_RPATH}")
+    set(SB_CMAKE_COMMAND ${CMAKE_COMMAND} ${OSX_CMAKE_OPTS})
     set(SB_ENV_CONFIGURE_CMD env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER})
   else()
     set(LDLIBVAR LD_LIBRARY_PATH)

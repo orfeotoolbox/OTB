@@ -13,7 +13,7 @@ if(USE_SYSTEM_SQLITE)
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using SQLite SuperBuild version")
-  
+
   ExternalProject_Add(${proj}
     PREFIX ${proj}
     URL "http://www.sqlite.org/2015/sqlite-amalgamation-3080801.zip"
@@ -24,17 +24,18 @@ else()
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/patches/${proj} ${SQLITE_SB_SRC}
     CMAKE_CACHE_ARGS
-      -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
-      -DCMAKE_BUILD_TYPE:STRING=Release
-      -DBUILD_SHARED_LIBS:BOOL=ON
-  )
-  
+    -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
+    -DCMAKE_BUILD_TYPE:STRING=Release
+    -DBUILD_SHARED_LIBS:BOOL=ON
+    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+    )
+
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
     set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/sqlite3.lib)
   elseif(UNIX)
     set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libsqlite3${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-  
+
 endif()
 endif()
