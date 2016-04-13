@@ -32,6 +32,7 @@ else()
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND
+      ${SB_ENV_CONFIGURE_CMD}
         ${FFTW_SB_BUILD_FLOAT_DIR}/configure
             --prefix=${SB_INSTALL_PREFIX}
             --enable-shared
@@ -58,6 +59,7 @@ else()
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND
+      ${SB_ENV_CONFIGURE_CMD}
         ${FFTW_SB_BUILD_DOUBLE_DIR}/configure
             --prefix=${SB_INSTALL_PREFIX}
             --enable-shared

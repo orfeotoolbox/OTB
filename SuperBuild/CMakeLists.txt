@@ -11,7 +11,6 @@ set(CMAKE_MODULE_PATH
 
 include(ExternalProject)
 
-
 # TODO BUILD_TESTING is created by default by CTest.cmake, and is ON by default.
 option(BUILD_TESTING "Build the testing tree." OFF)
 
@@ -81,8 +80,8 @@ if(WIN32)
 else(UNIX)
   if(APPLE)
     set(LDLIBVAR DYLD_LIBRARY_PATH)
-    set(SB_ENV_CONFIGURE_CMD)
     set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
+    set(SB_ENV_CONFIGURE_CMD env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER})
   else()
     set(LDLIBVAR LD_LIBRARY_PATH)
     set(SB_ENV_CONFIGURE_CMD env ${LDLIBVAR}=${SB_INSTALL_PREFIX}/lib:$ENV{${LDLIBVAR}} CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER})

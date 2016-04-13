@@ -11,7 +11,7 @@ if(USE_SYSTEM_OPENSSL)
 else()
   SETUP_SUPERBUILD(PROJECT ${proj})
   message(STATUS "  Using OpenSSL SuperBuild version")
-  
+
   # declare dependencies
   ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB)
 
@@ -26,10 +26,10 @@ else()
       set(OPENSSL_BUILD_ARCH "linux-x86_64")
       set(OPENSSL_BUILD_ARCH "VC-WIN64A")
     endif()
-  endif() 
-  
+  endif()
+
   if(MSVC)
-      STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})    
+      STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
     STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
     ExternalProject_Add(${proj}
         PREFIX ${proj}
@@ -40,11 +40,14 @@ else()
         INSTALL_DIR ${SB_INSTALL_PREFIX}
         DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
          PATCH_COMMAND  ${CMAKE_COMMAND} -E copy_directory ${OPENSSL_SB_SRC} ${OPENSSL_SB_BUILD_DIR}
-        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E chdir ${OPENSSL_SB_BUILD_DIR} perl Configure ${OPENSSL_BUILD_ARCH} no-asm  --prefix=${CMAKE_WIN_INSTALL_PREFIX} --openssldir=${CMAKE_WIN_INSTALL_PREFIX}
+         CONFIGURE_COMMAND
+         ${SB_ENV_CONFIGURE_CMD}
+         ${CMAKE_COMMAND} -E chdir ${OPENSSL_SB_BUILD_DIR}
+         perl Configure ${OPENSSL_BUILD_ARCH} no-asm  --prefix=${CMAKE_WIN_INSTALL_PREFIX} --openssldir=${CMAKE_WIN_INSTALL_PREFIX}
       BUILD_COMMAND ms/do_ms.bat
       INSTALL_COMMAND nmake -f ms/ntdll.mak install
     )
-    
+
   else(UNIX)
     ExternalProject_Add(${proj}
       PREFIX ${proj}
@@ -55,7 +58,9 @@ else()
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       PATCH_COMMAND  ${CMAKE_COMMAND} -E copy_directory ${OPENSSL_SB_SRC} ${OPENSSL_SB_BUILD_DIR}
-      CONFIGURE_COMMAND ${CMAKE_COMMAND} -E chdir ${OPENSSL_SB_BUILD_DIR} ./config ${OPENSSL_BUILD_ARCH}
+      CONFIGURE_COMMAND
+      ${SB_ENV_CONFIGURE_CMD}
+      ${CMAKE_COMMAND} -E chdir ${OPENSSL_SB_BUILD_DIR} ./config ${OPENSSL_BUILD_ARCH}
       --prefix=${SB_INSTALL_PREFIX} shared zlib zlib-dynamic -I${SB_INSTALL_PREFIX}/include -L${SB_INSTALL_PREFIX}/lib
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install)
@@ -69,7 +74,7 @@ else()
       DEPENDEES install)
 
   endif()
-  
+
   set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
     set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libcurl.lib)
@@ -79,7 +84,3 @@ else()
 
 endif()
 endif()
-
-
-
-
