@@ -24,11 +24,7 @@ if(NOT __EXTERNAL_QT4__)
     set(QT4_SB_CONFIG)
     #RK: building faling on mac. png include is in a macframework
     if(USE_SYSTEM_PNG)
-      #why this regex below? because when the "awesome" configure of QT4
-      #is run a ';' remaining part of semicolon is considered as next
-      # command!
-      STRING(REGEX REPLACE ";" " " _PNG_INCLUDE_DIR_ ${PNG_INCLUDE_DIR})
-      set(QT4_SB_CONFIG "-I ${_PNG_INCLUDE_DIR_}")
+      set(QT4_SB_CONFIG "-I ${PNG_PNG_INCLUDE_DIR}")
     endif()
 
     if(APPLE)
