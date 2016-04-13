@@ -15,7 +15,6 @@
 #define ossimFormosatModel_HEADER
 
 #include <iostream>
-using namespace std;
 
 #include <ossimPluginConstants.h>
 #include <ossim/projection/ossimSensorModel.h>
