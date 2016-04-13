@@ -15,7 +15,6 @@ else()
   # declare dependencies
   ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(${proj} ZLIB OPENSSL)
 
-  INCLUDE_SUPERBUILD_DEPENDENCIES(${${proj}_DEPENDENCIES})
   # set proj back to its original value
   set(proj CURL)
 
@@ -55,6 +54,10 @@ else()
         -DBUILD_SHARED_LIBS:BOOL=ON
         -DBUILD_CURL_TESTS:BOOL=OFF
         -DBUILD_CURL_EXE:BOOL=ON
+        -DCMAKE_USE_OPENSSL:BOOL=${SB_ENABLE_OPENSSL_CURL}
+        -DCMAKE_USE_LIBSSH2:BOOL=OFF
+        -DCURL_DISABLE_LDAP:BOOL=ON
+        -DCMAKE_USE_OPENLDAP:BOOL=OFF
         ${CURL_SB_CONFIG}
         DEPENDS ${${proj}_DEPENDENCIES}
         CMAKE_COMMAND ${SB_CMAKE_COMMAND}
