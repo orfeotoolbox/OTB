@@ -2,11 +2,15 @@ if(NOT __EXTERNAL_GLUT__)
 set(__EXTERNAL_GLUT__ 1)
 
 if(USE_SYSTEM_GLUT)
-  message(STATUS "  Using glut system version")
+  message(STATUS "  Using GLUT system version")
 else()
-  set(GLUT_DEPENDENCIES)
-  set(GLUT_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/GLUT/build)
-  set(GLUT_SB_SRC ${CMAKE_BINARY_DIR}/GLUT/src/GLUT)
+
+  if(APPLE)
+    message(FATAL_ERROR "Cannot activate GLUT on OSX. See manits issue #1194")
+  endif()
+
+  SETUP_SUPERBUILD(PROJECT GLUT)
+  message(STATUS "  Using GLUT SuperBuild version")
 
   ExternalProject_Add(GLUT
     PREFIX GLUT
@@ -15,11 +19,14 @@ else()
     BINARY_DIR ${GLUT_SB_BUILD_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/GLUT/CMakeLists.txt ${GLUT_SB_SRC}
-    CMAKE_CACHE_ARGS
+      PATCH_COMMAND ${CMAKE_COMMAND} -E copy
+      ${CMAKE_SOURCE_DIR}/patches/GLUT/CMakeLists.txt
+      ${GLUT_SB_SRC}
+      CMAKE_CACHE_ARGS
       -DCMAKE_BUILD_TYPE:STRING=Release
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+      CMAKE_COMMAND ${SB_CMAKE_COMMAND}
   )
 
   set(_SB_GLUT_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
