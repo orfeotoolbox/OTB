@@ -16,12 +16,17 @@ else()
       BINARY_DIR ${GLEW_SB_BUILD_DIR}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
-      PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/GLEW/Makefile ${GLEW_SB_SRC}
-       COMMAND ${CMAKE_COMMAND} -E copy_directory ${GLEW_SB_SRC} ${GLEW_SB_BUILD_DIR}
-      CONFIGURE_COMMAND ""
-      BUILD_COMMAND $(MAKE) GLEW_PREFIX=${SB_INSTALL_PREFIX} GLEW_DEST=${SB_INSTALL_PREFIX}
-      INSTALL_COMMAND $(MAKE) install GLEW_PREFIX=${SB_INSTALL_PREFIX} GLEW_DEST=${SB_INSTALL_PREFIX}
+      CMAKE_CACHE_ARGS
+      -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
+      -DCMAKE_BUILD_TYPE:STRING=Release
+      -DBUILD_SHARED_LIBS:BOOL=ON
+      CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+      DEPENDS ${GLEW_DEPENDENCIES}
+      PATCH_COMMAND ${CMAKE_COMMAND} -E copy
+      ${CMAKE_SOURCE_DIR}/patches/GLEW/CMakeLists.txt
+      ${GLEW_SB_SRC}
       )
+
   elseif(MSVC)
     set(SB_GLEW_DIR "Release/Win32")
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -40,7 +45,7 @@ else()
       INSTALL_COMMAND  ${CMAKE_COMMAND} -E copy ${GLEW_SB_SRC}/bin/${SB_GLEW_DIR}/glew32.dll ${CMAKE_INSTALL_PREFIX}/bin/
       )
 
-    message(STATUS "  Using glew SuperBuild version (prebuilt binaries) ")
+    message(STATUS "  Pre-built binaries of GLEW are used for MSVC")
   endif()
 
  set(_SB_GLEW_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
