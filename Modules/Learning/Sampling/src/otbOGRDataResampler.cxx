@@ -28,10 +28,10 @@ namespace otb
 
 unsigned int 
 OGRDataResampler
-::selectN1(double per,unsigned int T)
+::SelectN1(double per,unsigned int T)
 {
    if (!(T>0))
-     itkExceptionMacro(<< "In OGRDataResampler::selectN1 : sizes of the sampling arrays must be non-negative (" << T << ")." << std::endl);
+     itkExceptionMacro(<< "In OGRDataResampler::SelectN1 : sizes of the sampling arrays must be non-negative (" << T << ")." << std::endl);
 
    double dist = itk::NumericTraits<double>::max();
    double d;
@@ -57,10 +57,10 @@ OGRDataResampler
 
 unsigned int 
 OGRDataResampler
-::selectN2(double per,unsigned int T)
+::SelectN2(double per,unsigned int T)
 {
    if (!(T>0))
-     itkExceptionMacro(<< "In OGRDataResampler::selectN2 : sizes of the sampling arrays must be non-negative (" << T << ")." << std::endl);
+     itkExceptionMacro(<< "In OGRDataResampler::SelectN2 : sizes of the sampling arrays must be non-negative (" << T << ")." << std::endl);
 
    double dist = itk::NumericTraits<double>::max();
    double d;
@@ -86,7 +86,7 @@ OGRDataResampler
 
 
 std::vector<bool>
-OGRDataResampler::randArray(unsigned int N,unsigned int T)
+OGRDataResampler::RandArray(unsigned int N,unsigned int T)
 {
 
    if (N>T)
@@ -106,7 +106,7 @@ OGRDataResampler::randArray(unsigned int N,unsigned int T)
 
 
 unsigned int
-OGRDataResampler::findBestSize(unsigned int tot)
+OGRDataResampler::FindBestSize(unsigned int tot)
 {
    if (tot<m_MaxSamplingVecSize)
       return tot;
@@ -219,7 +219,7 @@ void
 OGRDataResampler::Prepare()
 {
 
-if (!m_alreadyPrepared)
+if (!m_AlreadyPrepared)
 {
  
     if (m_RatesbyClass.empty())
@@ -236,13 +236,13 @@ if (!m_alreadyPrepared)
        {
           //std::cout << "#" << itRates->first << " " << itRates->second.required << " " << itRates->second.tot << std::endl;
           
-          unsigned int T1 = findBestSize(itRates->second.tot);
+          unsigned int T1 = FindBestSize(itRates->second.tot);
           //std::cout << "*** " << itRates->second.tot << " " << T1 << " " << itRates->second.tot/T1 << std::endl;
          
          
           
           double per = static_cast<double>(itRates->second.required) / static_cast<double>(itRates->second.tot)*100.;
-          unsigned int N1 = selectN1(per,T1);
+          unsigned int N1 = SelectN1(per,T1);
 
           
           double selected_prct = static_cast<double>(N1)/static_cast<double>(T1)*100.;
@@ -265,7 +265,7 @@ if (!m_alreadyPrepared)
               else
                  per2 = 0;
                  
-              T2 = findBestSize(itRates->second.tot/T1*(T1-N1));
+              T2 = FindBestSize(itRates->second.tot/T1*(T1-N1));
               
               /*std::cout << "*** " << itRates->second.tot << " " << T1 << " " << itRates->second.tot/T1 << " " << N1 << " " 
               << itRates->second.tot/T1*(T1-N1) << " " << T2 << std::endl;*/
@@ -274,7 +274,7 @@ if (!m_alreadyPrepared)
               double selected_prct2  = 0.;
               if (T2>0)
               {
-                 N2 = selectN2(per2,T2);
+                 N2 = SelectN2(per2,T2);
                  selected_prct2 = static_cast<double>(N2)/static_cast<double>(T2)*100.;
               }   
 
@@ -287,10 +287,10 @@ if (!m_alreadyPrepared)
         
           
           std::srand ( unsigned ( time(0) ) );
-          std::vector<bool> tab1 = randArray(N1,T1);
+          std::vector<bool> tab1 = RandArray(N1,T1);
           std::vector<bool> tab2;
           if (T2>0)
-             tab2 = randArray(N2,T2);
+             tab2 = RandArray(N2,T2);
           
           unsigned int N=0;
           for(unsigned int i=0;i<tab1.size();i++)
@@ -318,7 +318,7 @@ if (!m_alreadyPrepared)
    }
          
 }
-m_alreadyPrepared=true;
+m_AlreadyPrepared=true;
 }
 
 

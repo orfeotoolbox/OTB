@@ -103,7 +103,7 @@ protected:
   /** Constructor */
    OGRDataResampler() {
    
-   m_alreadyPrepared=false; 
+   m_AlreadyPrepared=false;
    m_MaxSamplingVecSize=1000;
    m_LayerIndex = 0;
    
@@ -114,7 +114,7 @@ protected:
 
 private:
 
-   bool m_alreadyPrepared;
+   bool m_AlreadyPrepared;
    SamplingRateCalculator::mapRateType m_RatesbyClass;
    
    ClassToCurrentIndicesType m_ClassToCurrentIndices;
@@ -141,12 +141,12 @@ private:
                    unsigned long &fId,
                    std::string &className);
 
-   unsigned int m_MaxSamplingVecSize;                 
-   unsigned int selectN1(double per,unsigned int T);                 
-   unsigned int selectN2(double per,unsigned int T);  
-   std::vector<bool> randArray(unsigned int N,unsigned int T); 
-   unsigned int findBestSize(unsigned int tot);              
-                    
+   unsigned int m_MaxSamplingVecSize;
+   unsigned int SelectN1(double per,unsigned int T);
+   unsigned int SelectN2(double per,unsigned int T);
+   std::vector<bool> RandArray(unsigned int N,unsigned int T);
+   unsigned int FindBestSize(unsigned int tot);
+
    bool TakeSample(std::string className);
    
    void OutputSamplingVectors();
