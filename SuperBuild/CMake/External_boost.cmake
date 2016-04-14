@@ -8,19 +8,11 @@ if(NOT __EXTERNAL_BOOST__)
 set(__EXTERNAL_BOOST__ 1)
 
 if(USE_SYSTEM_BOOST)
-  # Required
-  find_package ( Boost
-    1.35.0
-    )
-  # Optional components
-  find_package ( Boost
-    1.35.0
-    COMPONENTS unit_test_framework
-    )
-
   message(STATUS "  Using Boost system version")
 else()
   SETUP_SUPERBUILD(PROJECT BOOST)
+
+  message(STATUS "  Using Boost superbuild version")
 
   option(SUPERBUILD_BOOST_HEADER_ONLY "Only use Boost headers" ON)
   mark_as_advanced(SUPERBUILD_BOOST_HEADER_ONLY)
