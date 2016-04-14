@@ -32,6 +32,11 @@ include(CMakeDependentOption)
 # use ExternalProject
 include(ExternalProject)
 
+#mantis: 1193
+if(APPLE)
+  set(CMAKE_SYSTEM_FRAMEWORK_PATH "" CACHE PATH "" FORCE)
+endif()
+
 if( CMAKE_HOST_WIN32 )
 
   string( LENGTH "${CMAKE_CURRENT_SOURCE_DIR}" n )
