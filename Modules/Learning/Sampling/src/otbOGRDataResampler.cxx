@@ -108,7 +108,7 @@ OGRDataResampler::RandArray(unsigned int N,unsigned int T)
 unsigned int
 OGRDataResampler::FindBestSize(unsigned int tot)
 {
-   if (tot<m_MaxSamplingVecSize)
+   if (tot<=m_MaxSamplingVecSize)
       return tot;
    
    for(unsigned int size=m_MaxSamplingVecSize; size>=2; size--)
