@@ -855,8 +855,8 @@ otb_test_application(NAME apTvClPolygonClassStatisticsTest
                              ${TEMP}/apTvClPolygonClassStatisticsOut.xml)
                              
                              
-otb_test_application(NAME apTvClOGRDataResampler
-                     APP OGRDataResampler
+otb_test_application(NAME apTvClSampleSelection
+                     APP SampleSelection
                      OPTIONS -in ${INPUTDATA}/cthead1_flip.tif
                              -vec ${INPUTDATA}/variousVectors.sqlite
                              -field "label"

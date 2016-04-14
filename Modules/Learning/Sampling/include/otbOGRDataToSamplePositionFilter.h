@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDataToResampledOGRData_h
-#define __otbOGRDataToResampledOGRData_h
+#ifndef __otbOGRDataToSamplePositionFilter_h
+#define __otbOGRDataToSamplePositionFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
@@ -30,19 +30,19 @@ namespace otb
 {
 
 /**
- * \class PersistentOGRDataToResampledOGRData
+ * \class PersistentOGRDataToSamplePositionFilter
  * 
  * \brief Persistent filter to compute class statistics based on vectors
  * 
  * \ingroup OTBSampling
  */
 template<class TInputImage, class TMaskImage>
-class ITK_EXPORT PersistentOGRDataToResampledOGRData :
+class ITK_EXPORT PersistentOGRDataToSamplePositionFilter :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentOGRDataToResampledOGRData        Self;
+  typedef PersistentOGRDataToSamplePositionFilter        Self;
   typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentOGRDataToResampledOGRData, PersistentImageFilter);
+  itkTypeMacro(PersistentOGRDataToSamplePositionFilter, PersistentImageFilter);
 
   void SetOGRData(const otb::ogr::DataSource* vector);
   const otb::ogr::DataSource* GetOGRData();
@@ -111,9 +111,9 @@ public:
 
 protected:
   /** Constructor */
-  PersistentOGRDataToResampledOGRData();
+  PersistentOGRDataToSamplePositionFilter();
   /** Destructor */
-  virtual ~PersistentOGRDataToResampledOGRData() {}
+  virtual ~PersistentOGRDataToSamplePositionFilter() {}
 
   virtual void GenerateOutputInformation();
 
@@ -126,7 +126,7 @@ protected:
   virtual void GenerateData();
 
 private:
-  PersistentOGRDataToResampledOGRData(const Self &); //purposely not implemented
+  PersistentOGRDataToSamplePositionFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   void ApplyPolygonsSpatialFilter();
@@ -149,23 +149,23 @@ private:
 };
 
 /**
- * \class OGRDataToResampledOGRData
+ * \class OGRDataToSamplePositionFilter
  * 
  * \brief Computes class statistics based on vectors using a persistent filter
  * 
- * \sa PersistentOGRDataToResampledOGRData
+ * \sa PersistentOGRDataToSamplePositionFilter
  *
  * \ingroup OTBSampling
  */
 template<class TInputImage, class TMaskImage>
-class ITK_EXPORT OGRDataToResampledOGRData :
-  public PersistentFilterStreamingDecorator<PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage> >
+class ITK_EXPORT OGRDataToSamplePositionFilter :
+  public PersistentFilterStreamingDecorator<PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage> >
 {
 public:
   /** Standard Self typedef */
-  typedef OGRDataToResampledOGRData  Self;
+  typedef OGRDataToSamplePositionFilter  Self;
   typedef PersistentFilterStreamingDecorator
-    <PersistentOGRDataToResampledOGRData
+    <PersistentOGRDataToSamplePositionFilter
       <TInputImage,TMaskImage> >          Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
   typedef itk::SmartPointer<const Self>   ConstPointer;
@@ -180,7 +180,7 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(OGRDataToResampledOGRData, PersistentFilterStreamingDecorator);
+  itkTypeMacro(OGRDataToSamplePositionFilter, PersistentFilterStreamingDecorator);
 
   using Superclass::SetInput;
   virtual void SetInput(const TInputImage* image);
@@ -215,19 +215,19 @@ public:
  
 protected:
   /** Constructor */
-  OGRDataToResampledOGRData() {}
+  OGRDataToSamplePositionFilter() {}
   /** Destructor */
-  virtual ~OGRDataToResampledOGRData() {}
+  virtual ~OGRDataToSamplePositionFilter() {}
 
 private:
-  OGRDataToResampledOGRData(const Self &); //purposely not implemented
+  OGRDataToSamplePositionFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 };
 
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataToResampledOGRData.txx"
+#include "otbOGRDataToSamplePositionFilter.txx"
 #endif
 
 #endif

@@ -111,6 +111,6 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
   
 otb_create_application(
-  NAME           OGRDataResampler
-  SOURCES        otbOGRDataResampler.cxx
+  NAME           SampleSelection
+  SOURCES        otbSampleSelection.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})

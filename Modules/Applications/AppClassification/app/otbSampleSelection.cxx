@@ -18,7 +18,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 #include "otbSamplingRateCalculator.h"
-#include "otbOGRDataToResampledOGRData.h"
+#include "otbOGRDataToSamplePositionFilter.h"
 #include "otbStatisticsXMLFileReader.h"
 
 namespace otb
@@ -26,11 +26,11 @@ namespace otb
 namespace Wrapper
 {
 
-class OGRDataResampler : public Application
+class SampleSelection : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef OGRDataResampler        Self;
+  typedef SampleSelection        Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -38,10 +38,10 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(OGRDataResampler, otb::Application);
+  itkTypeMacro(SampleSelection, otb::Application);
 
   /** typedef */
-  typedef otb::OGRDataToResampledOGRData<FloatVectorImageType,UInt8ImageType> ResamplerFilterType;  
+  typedef otb::OGRDataToSamplePositionFilter<FloatVectorImageType,UInt8ImageType> ResamplerFilterType;  
   typedef otb::SamplingRateCalculator RateCalculatorype;
   
   typedef std::map<std::string, unsigned long>      ClassCountMapType;
@@ -49,14 +49,14 @@ public:
   typedef otb::StatisticsXMLFileReader<MeasurementType> ReaderType;
 
 private:
-  OGRDataResampler()
+  SampleSelection()
     {
    
     }
 
   void DoInit()
   {
-    SetName("OGRDataResampler");
+    SetName("SampleSelection");
     SetDescription("Selects samples from a training vector data set.");
 
     // Documentation
@@ -267,4 +267,4 @@ private:
 } // end of namespace Wrapper
 } // end of namespace otb
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::OGRDataResampler)
+OTB_APPLICATION_EXPORT(otb::Wrapper::SampleSelection)

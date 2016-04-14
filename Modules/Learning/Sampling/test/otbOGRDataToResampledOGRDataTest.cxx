@@ -17,7 +17,7 @@
 =========================================================================*/
 
 #include "otbSamplingRateCalculator.h"
-#include "otbOGRDataToResampledOGRData.h"
+#include "otbOGRDataToSamplePositionFilter.h"
 #include "otbOGRDataToClassStatisticsFilter.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
@@ -27,18 +27,18 @@
 #include "otbStatisticsXMLFileReader.h"
 #include "itkVariableLengthVector.h"
 
-int otbOGRDataToResampledOGRDataNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
+int otbOGRDataToSamplePositionFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   typedef otb::VectorImage<float> InputImageType;
   typedef otb::Image<unsigned char> MaskImageType;
-  typedef otb::OGRDataToResampledOGRData<InputImageType , MaskImageType> FilterType;
+  typedef otb::OGRDataToSamplePositionFilter<InputImageType , MaskImageType> FilterType;
   
   FilterType::Pointer filter = FilterType::New();
   std::cout << filter << std::endl;
   return EXIT_SUCCESS;
 }
 
-int otbOGRDataToResampledOGRData(int argc, char* argv[])
+int otbOGRDataToSamplePositionFilter(int argc, char* argv[])
 {
 
   typedef otb::VectorImage<float> InputImageType;
@@ -110,7 +110,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
 
     
    //-------------------------------------------------------------- 
-  typedef otb::OGRDataToResampledOGRData<InputImageType,MaskImageType> ResamplerFilterType;  
+  typedef otb::OGRDataToSamplePositionFilter<InputImageType,MaskImageType> ResamplerFilterType;  
   typedef otb::SamplingRateCalculator RateCalculatorype;
   
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
@@ -193,7 +193,7 @@ int otbOGRDataToResampledOGRData(int argc, char* argv[])
 
 
 
-int otbOGRDataToResampledOGRDataXML(int argc, char* argv[])
+int otbOGRDataToSamplePositionFilterXML(int argc, char* argv[])
 {
 
   typedef otb::VectorImage<float> InputImageType;
@@ -260,7 +260,7 @@ int otbOGRDataToResampledOGRDataXML(int argc, char* argv[])
   ClassCountMapType classCount = reader->GetStatisticMapByName<ClassCountMapType>("classCounts");
     
    //-------------------------------------------------------------- 
-  typedef otb::OGRDataToResampledOGRData<InputImageType,MaskImageType> ResamplerFilterType;  
+  typedef otb::OGRDataToSamplePositionFilter<InputImageType,MaskImageType> ResamplerFilterType;  
   typedef otb::SamplingRateCalculator RateCalculatorype;
   
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDataToResampledOGRData_txx
-#define __otbOGRDataToResampledOGRData_txx
+#ifndef __otbOGRDataToSamplePositionFilter_txx
+#define __otbOGRDataToSamplePositionFilter_txx
 
 #include "otbMaskedIteratorDecorator.h"
 #include "itkImageRegionConstIteratorWithOnlyIndex.h"
@@ -24,11 +24,11 @@
 
 namespace otb
 {
-// --------- otb::PersistentOGRDataToResampledOGRData ---------------------
+// --------- otb::PersistentOGRDataToSamplePositionFilter ---------------------
 
 template<class TInputImage, class TMaskImage>
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
-::PersistentOGRDataToResampledOGRData() :
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
+::PersistentOGRDataToSamplePositionFilter() :
    m_LayerIndex(0),
    m_MaxSamplingVecSize(1000),
    m_OutputVectorDataPath("")
@@ -39,7 +39,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::SetOGRData(const otb::ogr::DataSource* vector)
 {
   this->SetNthInput(1, const_cast<otb::ogr::DataSource *>( vector ));
@@ -47,7 +47,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 const otb::ogr::DataSource*
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GetOGRData()
 {
   if (this->GetNumberOfInputs()<2)
@@ -59,7 +59,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::SetMask(const TMaskImage* mask)
 {
   this->SetNthInput(2, const_cast<TMaskImage *>( mask ));
@@ -67,7 +67,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 const TMaskImage*
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GetMask()
 {
   if (this->GetNumberOfInputs()<3)
@@ -79,7 +79,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::Synthetize(void)
 {
   otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetOGRData());
@@ -89,7 +89,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::Reset(void)
 {
   // Get OGR field index
@@ -130,7 +130,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 itk::DataObject::Pointer
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::MakeOutput(DataObjectPointerArraySizeType idx)
 {
   switch (idx)
@@ -147,7 +147,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -174,7 +174,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GenerateInputRequestedRegion()
 {
   InputImageType *input = const_cast<InputImageType*>(this->GetInput());
@@ -196,7 +196,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GenerateData()
 {
   // Retrieve inputs
@@ -242,7 +242,7 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::ApplyPolygonsSpatialFilter()
 {
   TInputImage* outputImage = this->GetOutput();
@@ -265,8 +265,8 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
 }
 
 template<class TInputImage, class TMaskImage>
-typename PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>::RegionType
-PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
+typename PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>::RegionType
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const
 {
   // otb::ogr wrapper is incomplete and leaky abstraction is inevitable here
@@ -305,11 +305,11 @@ PersistentOGRDataToResampledOGRData<TInputImage,TMaskImage>
   return region;
 }
 
-// -------------- otb::OGRDataToResampledOGRData --------------------------
+// -------------- otb::OGRDataToSamplePositionFilter --------------------------
 
 template<class TInputImage, class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::SetInput(const TInputImage* image)
 {
   this->GetFilter()->SetInput(image);
@@ -317,7 +317,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 const TInputImage*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GetInput()
 {
   return this->GetFilter()->GetInput();
@@ -325,7 +325,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::SetOGRData(const otb::ogr::DataSource* data)
 {
   this->GetFilter()->SetOGRData(data);
@@ -333,7 +333,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 const otb::ogr::DataSource*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GetOGRData()
 {
   return this->GetFilter()->GetOGRData();
@@ -341,7 +341,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::SetMask(const TMaskImage* mask)
 {
   this->GetFilter()->SetMask(mask);
@@ -349,7 +349,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 const TMaskImage*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GetMask()
 {
   return this->GetFilter()->GetMask();
@@ -357,7 +357,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::SetFieldName(std::string key)
 {
   this->GetFilter()->SetFieldName(key);
@@ -365,7 +365,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 std::string
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GetFieldName()
 {
   return this->GetFilter()->GetFieldName();
@@ -373,7 +373,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::SetLayerIndex(int index)
 {
   this->GetFilter()->SetLayerIndex(index);
@@ -381,7 +381,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 int
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GetLayerIndex()
 {
   return this->GetFilter()->GetLayerIndex();
@@ -389,7 +389,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::SetOutputSamplingVectorsPath(std::string path)
 {
   this->GetFilter()->SetOutputSamplingVectorsPath(path);
@@ -397,7 +397,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::SetInputSamplingVectorsPath(std::string path)
 {
   this->GetFilter()->SetInputSamplingVectorsPath(path);
@@ -405,7 +405,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::SetOutputVectorDataPath(std::string path)
 {
   this->GetFilter()->SetOutputVectorDataPath(path);
@@ -414,7 +414,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::SetMaxSamplingVecSize(unsigned int max)
 {
   this->GetFilter()->SetMaxSamplingVecSize(max);
@@ -423,7 +423,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 void
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::SetRatesbyClass(const SamplingRateCalculator::mapRateType& map)
 {
      this->GetFilter()->SetRatesbyClass(map);
@@ -432,7 +432,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 unsigned int
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GetMaxSamplingVecSize()
 {
   return this->GetFilter()->GetMaxSamplingVecSize();
@@ -440,7 +440,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 const std::string*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GetOutputVectorDataPath() const
 {
   return this->GetFilter()->GetOutputVectorDataPath();
@@ -448,7 +448,7 @@ OGRDataToResampledOGRData<TInputImage,TMaskImage>
 
 template<class TInputImage, class TMaskImage>
 std::string*
-OGRDataToResampledOGRData<TInputImage,TMaskImage>
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 ::GetOutputVectorDataPath()
 {
   return this->GetFilter()->GetOutputVectorDataPath();
