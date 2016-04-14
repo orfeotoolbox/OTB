@@ -78,28 +78,55 @@ macro(ADDTO_DEPENDENCIES_IF_NOT_SYSTEM project)
 endmacro(ADDTO_DEPENDENCIES_IF_NOT_SYSTEM)
 
 # Macro to add a cmake variable to ${proj}_SB_CONFIG (var type: string)
-macro(ADD_SUPERBUILD_CMAKE_VAR var)
-  if(DEFINED _SB_${var})
-    list(APPEND ${proj}_SB_CONFIG
-      -D${var}:STRING=${_SB_${var}}
+macro(ADD_SUPERBUILD_CMAKE_VAR project var_name)
+  set (extra_macro_args ${ARGN})
+  # Did we get any optional args?
+  list(LENGTH extra_macro_args num_extra_args)
+  if (${num_extra_args} GREATER 0)
+    list(GET extra_macro_args 0 optional_arg)
+    set(var_type ${optional_arg})
+  else()
+    #try a guess for type from variable name using
+    #CMake's variable naming convention!
+    #convert to string to list so we ZLIB_INCLUDE_DIR as ZLIB, INCLUDE, DIR
+    string(REPLACE "_" ";" var_name_parts ${var_name})
+    #reverse the list.
+    #We are only interested in the last part _DIR(s) or _LIBRARY, _ROOT etc..
+    list(REVERSE var_name_parts)
+    #simply pop first item to have the last part of var_name
+    list(GET var_name_parts 0 var_name_last_part)
+
+    #set var_type.
+    if( "${var_name_last_part}" STREQUAL "DIR")
+      set(var_type PATH)
+    elseif("${var_name_last_part}" STREQUAL "LIBRARY")
+      set(var_type FILEPATH)
+    else()
+      set(var_type STRING)
+    endif()
+  endif ()
+  if(DEFINED _SB_${var_name})
+    list(APPEND ${project}_SB_CONFIG
+      -D${var_name}:${var_type}=${_SB_${var_name}}
       )
-  elseif(DEFINED ${var})
-    list(APPEND ${proj}_SB_CONFIG
-      -D${var}:STRING=${${var}}
+  elseif(DEFINED ${var_name})
+    list(APPEND ${project}_SB_CONFIG
+      -D${var_name}:${var_type}=${${var_name}}
       )
   endif()
+
 endmacro(ADD_SUPERBUILD_CMAKE_VAR)
 
 # Macro to add a configure variable to ${proj}_SB_CONFIG
 # optional 3rd argument : suffix to the variable
-macro(ADD_SUPERBUILD_CONFIGURE_VAR var name)
-  set(suffix "${ARGV2}")
+macro(ADD_SUPERBUILD_CONFIGURE_VAR project var name)
+  set(suffix "${ARGV3}")
   if(DEFINED _SB_${var})
-    list(APPEND ${proj}_SB_CONFIG
+    list(APPEND ${project}_SB_CONFIG
       ${name}=${_SB_${var}}${suffix}
       )
   elseif(DEFINED ${var})
-    list(APPEND ${proj}_SB_CONFIG
+    list(APPEND ${project}_SB_CONFIG
       ${name}=${${var}}${suffix}
       )
   endif()

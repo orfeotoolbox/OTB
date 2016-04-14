@@ -16,7 +16,7 @@ else()
   endif()
 
   if(USE_SYSTEM_GEOS) #why geos here?. discuss with GP.
-    ADD_SUPERBUILD_CMAKE_VAR(ZLIB_ROOT)
+    ADD_SUPERBUILD_CMAKE_VAR(CURL ZLIB_ROOT)
   endif()
 
   #TODO: add openssl and other dependencies
