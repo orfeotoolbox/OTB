@@ -623,7 +623,11 @@ GlView
   center = m_Settings->GetViewportCenter();
   spacing = m_Settings->GetSpacing();
 
-  // Transform center point to image space..
+  // Get native spacing.
+  GeoInterface::Spacing2 n_spacing( geo->GetSpacing() );
+
+
+  // Transform center point to image space.
   Point o;
 
   if( !geo->TransformFromViewport( o, center, true ) )
@@ -645,8 +649,11 @@ GlView
   e[ 1 ] -= o[ 1 ];
 
   // Apply extent vector length to view spacing.
+  //
+  // MANTIS-1178: Lenght of vector e must be divided by native
+  // spacing.
   spacing[ 0 ] =
-    units * spacing[ 0 ] /
+    n_spacing[ 0 ] * units * spacing[ 0 ] /
     vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
 
   //
@@ -663,15 +670,17 @@ GlView
   e[ 1 ] -= o[ 1 ];
 
   // Apply extent vector length to view spacing.
+  //
+  // MANTIS-1178: Lenght of vector e must be divided by native
+  // spacing.
   spacing[ 1 ] =
-    units * spacing[ 1 ] /
+    n_spacing[ 1 ] * units * spacing[ 1 ] /
     vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
 
   //
   // Ok.
   return true;
 }
-
 
 } // End namespace otb
 

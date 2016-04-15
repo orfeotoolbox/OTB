@@ -82,7 +82,9 @@ const GlImageActor::PointType & GlImageActor::GetOrigin() const
   return m_Origin;
 }
 
-const GlImageActor::SpacingType & GlImageActor::GetSpacing() const
+const GeoInterface::Spacing2 &
+GlImageActor
+::GetSpacing() const
 {
   return m_Spacing;
 }

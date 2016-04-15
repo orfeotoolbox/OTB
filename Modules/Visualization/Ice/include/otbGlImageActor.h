@@ -98,7 +98,7 @@ public:
 
   const PointType & GetOrigin() const;
 
-  const SpacingType & GetSpacing() const;
+  virtual const GeoInterface::Spacing2 & GetSpacing() const;
 
   virtual std::string GetWkt() const;
 
