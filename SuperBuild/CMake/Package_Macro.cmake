@@ -1,10 +1,16 @@
 macro(superbuild_package)
   cmake_parse_arguments(PKG  "" "STAGE_DIR;XDK" "SEARCHDIRS" ${ARGN} )
 
-  find_program(OBJDUMP_PROGRAM "objdump")
-
-  if(NOT EXISTS ${OBJDUMP_PROGRAM})
-    message(FATAL_ERROR "objdump executable not found. please check OBJDUMP_PROGRAM is set to correct cross compiled executable")
+  if(APPLE)
+    set(loader_program_names otool)
+    set(LOADER_PROGRAM_ARGS "-l")
+  else()
+    set(loader_program_names objdump)
+    set(LOADER_PROGRAM_ARGS "-p")
+  endif()
+  find_program(LOADER_PROGRAM "${loader_program_names}")
+  if(NOT EXISTS ${LOADER_PROGRAM})
+    message(FATAL_ERROR "${loader_program_names} not found. please check LOADER_PROGRAM variable is set correctly")
   endif()
 
   include(GetPrerequisites)
@@ -32,7 +38,6 @@ macro(superbuild_package)
   set(PKG_SO_FILES)
   configure_package()
 
-
   ############# install client configure script ################
   configure_file(${PACKAGE_SUPPORT_FILES_DIR}/pkgsetup.in
     ${CMAKE_BINARY_DIR}/pkgsetup @ONLY)
@@ -59,9 +64,13 @@ macro(superbuild_package)
 
 endmacro(superbuild_package)
 
-
 function(process_deps infile)
 
+  if(APPLE)
+    if( "${infile}" MATCHES "@rpath")
+      string(REGEX REPLACE "@rpath." "" infile "${infile}")
+    endif()
+  endif()
   get_filename_component(bn ${infile} NAME)
   list_contains(contains "${bn}" "${alldlls}")
   if(NOT contains)
@@ -124,9 +133,25 @@ function(process_deps infile)
               endif() #is_valid
             endforeach()
           endif(is_executable)
-          execute_process(COMMAND ${OBJDUMP_PROGRAM} "-p" "${SEARCHDIR}/${infile}"  OUTPUT_VARIABLE dump_out)
-          string(REGEX MATCHALL "NEEDED\\ *[A-Za-z(0-9\\.0-9)+_\\-]*" needed_dlls "${dump_out}")
-          string(REGEX REPLACE "NEEDED" "" needed_dlls "${needed_dlls}")
+          execute_process(
+            COMMAND ${LOADER_PROGRAM} ${LOADER_PROGRAM_ARGS} "${SEARCHDIR}/${infile}"
+            RESULT_VARIABLE loader_rv
+            OUTPUT_VARIABLE loader_ov
+            ERROR_VARIABLE loader_ev
+            )
+          if(loader_rv)
+            message(FATAL_ERROR "loader_ev=${loader_ev}\n PACKAGE-OTB: result_variable is '${loader_rv}'")
+          endif()
+
+          if(APPLE)
+            string(REGEX REPLACE "[^\n]+cmd LC_LOAD_DYLIB\n[^\n]+\n[^\n]+name ([^\n]+).\\(offset[^\n]+\n" "rpath \\1\n" loader_ov "${loader_ov}")
+            string(REGEX MATCHALL "rpath [^\n]+" loader_ov "${loader_ov}")
+            string(REGEX REPLACE "rpath " "" needed_dlls "${loader_ov}")
+          else()
+            string(REGEX MATCHALL "NEEDED\\ *[A-Za-z(0-9\\.0-9)+_\\-]*" loader_ov "${loader_ov}")
+            string(REGEX REPLACE "NEEDED" "" needed_dlls "${loader_ov}")
+          endif()
+
           foreach(needed_dll ${needed_dlls})
             string(STRIP ${needed_dll} needed_dll)
             process_deps(${needed_dll})
@@ -135,11 +160,11 @@ function(process_deps infile)
       endif(NOT DLL_FOUND)
     endforeach()
 
-  if(NOT DLL_FOUND)
-    is_system_dll(iss "${infile}")
-    if(NOT iss)
-      set(notfound_dlls "${notfound_dlls};${infile}")
-    endif()
+    if(NOT DLL_FOUND)
+      is_system_dll(iss "${infile}")
+      if(NOT iss)
+        set(notfound_dlls "${notfound_dlls};${infile}")
+      endif()
     else(NOT DLL_FOUND)
       set( alldlls "${alldlls};${bn}" PARENT_SCOPE )
     endif(NOT DLL_FOUND)

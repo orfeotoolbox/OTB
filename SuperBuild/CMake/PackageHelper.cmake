@@ -21,7 +21,7 @@ set(WINDOWS_SYSTEM_DLLS
   wsock32.dll
   winspool.drv)
 
-SET(UNIX_SYSTEM_DLLS
+set(LINUX_SYSTEM_DLLS
   libm.so
   libc.so
   libstdc*
@@ -41,18 +41,30 @@ SET(UNIX_SYSTEM_DLLS
   libGL.so*
   libGLU.so*
   )
-set(SYSTEM_DLLS "${UNIX_SYSTEM_DLLS}")
-if(WIN32 OR CMAKE_CROSSCOMPILING)
-  set(SYSTEM_DLLS "${WINDOWS_SYSTEM_DLLS}")
+
+set(APPLE_SYSTEM_DLLS
+  libSystem.*
+  libiconv*
+  )
+
+if(UNIX)
+  if(APPLE)
+    set(SYSTEM_DLLS "${APPLE_SYSTEM_DLLS}")
+  else()
+    set(SYSTEM_DLLS "${LINUX_SYSTEM_DLLS}")
+  endif()
+else(UNIX)
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+    set(SYSTEM_DLLS "${WINDOWS_SYSTEM_DLLS}")
+  endif()
 endif()
 
-## http://www.cmake.org/Wiki/CMakeMacroListOperations
 macro(is_system_dll matched value)
   set(${matched})
   string(TOLOWER ${value} value_)
   foreach (pattern ${SYSTEM_DLLS})
     string(TOLOWER ${pattern} pattern_)
-    if(${value_} MATCHES ${pattern_})
+    if("${value_}" MATCHES "${pattern_}")
       set(${matched} TRUE)
     endif()
   endforeach()
@@ -249,9 +261,16 @@ macro(empty_package_staging_directory)
 endmacro()
 
 function(configure_package)
-  set(EXE_EXT "")
-  set(LIB_EXT "*so")
-  set(SCR_EXT ".sh")
+  if(UNIX)
+    set(EXE_EXT "")
+    set(SCR_EXT ".sh")
+    if(APPLE)
+      set(LIB_EXT "*dylib")
+    else()
+      set(LIB_EXT "*so")
+    endif()
+  endif()
+
   if(WIN32 OR CMAKE_CROSSCOMPILING)
     set(EXE_EXT ".exe")
     set(LIB_EXT "*dll")
@@ -288,7 +307,7 @@ function(configure_package)
       list(APPEND PKG_PEFILES
         "${CMAKE_INSTALL_PREFIX}/bin/${EXE_FILE}${EXE_EXT}")
     endif()
-    if(DEFINED Monteverdi_SOURCE_DIR)     
+    if(DEFINED Monteverdi_SOURCE_DIR)
       if(EXISTS ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT})
         install(PROGRAMS
           ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT}
