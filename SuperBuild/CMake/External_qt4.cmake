@@ -82,6 +82,9 @@ if(NOT __EXTERNAL_QT4__)
         )
     endif()
 
+    FIX_RPATH_FOR_AUTOCONF_BUILD(QT4 "libQt*.dylib")
+
+
     set(_SB_QT_QMAKE_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/qmake)
 
   endif()

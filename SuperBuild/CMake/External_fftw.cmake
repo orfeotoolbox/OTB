@@ -75,6 +75,8 @@ else()
 
     add_dependencies(FFTW ${projFloat})
 
+    FIX_RPATH_FOR_AUTOCONF_BUILD(FFTW "libfftw3*dylib")
+
     set(_SB_FFTW_INCLUDE_PATH ${SB_INSTALL_PREFIX}/include)
 
   endif()

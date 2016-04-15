@@ -75,6 +75,8 @@ else()
     DEPENDS ${OPENCV_DEPENDENCIES}
     )
 
+  FIX_RPATH_FOR_AUTOCONF_BUILD(OPENCV "libopencv_*.dylib")
+
   set(_SB_OpenCV_DIR ${SB_INSTALL_PREFIX}/share/OpenCV)
 endif()
 endif()

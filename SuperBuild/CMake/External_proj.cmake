@@ -67,7 +67,9 @@ else()
         ${PROJ_SB_SRC} ${PROJ_SB_BUILD_DIR}
       DEPENDEES patch update
       DEPENDERS configure
-    )
+      )
+
+    FIX_RPATH_FOR_AUTOCONF_BUILD(PROJ "libproj*.dylib")
   endif()
 
   set(_SB_PROJ_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)

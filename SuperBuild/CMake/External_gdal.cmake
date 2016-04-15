@@ -60,6 +60,8 @@ else()
       INSTALL_COMMAND $(MAKE) install
     )
 
+  FIX_RPATH_FOR_AUTOCONF_BUILD(GDAL "libgdal*.dylib")
+
   else(MSVC)
   ##add libkml
   ##https://trac.osgeo.org/gdal/ticket/5725

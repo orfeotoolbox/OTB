@@ -71,6 +71,9 @@ else()
     DEPENDEES patch
     DEPENDERS configure )
 
+
+  FIX_RPATH_FOR_AUTOCONF_BUILD(OSSIM "libossim*.dylib")
+
   set(_SB_OSSIM_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
     set(_SB_OSSIM_LIBRARY ${SB_INSTALL_PREFIX}/lib/ossim.lib)
