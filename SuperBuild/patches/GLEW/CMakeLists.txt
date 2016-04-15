@@ -165,4 +165,4 @@ foreach(executable glew visual)
 endforeach()
 
 #install include headers
-install(FILES ${GLEW_HEADERS} DESTINATION include)
+install(FILES ${GLEW_HEADERS} DESTINATION include/GL/)
