@@ -50,6 +50,8 @@ else()
 
     SUPERBUILD_PATCH_SOURCE(GEOTIFF "patch-configure-script")
 
+    FIX_RPATH_FOR_AUTOCONF_BUILD(GEOTIFF "libgeotiff*.dylib")
+
   else()
 
     ExternalProject_Add(GEOTIFF
