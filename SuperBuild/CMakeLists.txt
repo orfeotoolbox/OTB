@@ -249,11 +249,11 @@ else()
 endif()
 
 #check compiler is gnu?
-if(UNIX AND NOT APPLE)
+if(UNIX)
   if(GENERATE_XDK)
     include(GenerateXDK)
   endif()
 
   include(External_package)
 
-endif(UNIX AND NOT APPLE)
+endif(UNIX)
