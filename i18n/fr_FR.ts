@@ -4850,7 +4850,7 @@ Merci d&apos;en sélectionner un autre.</translation>
         <translation></translation>
     </message>
     <message>
-        <source>Current view zoom-level relative to reference layer (projection and spacing).</source>
+        <source>Current zoom-level of view, relative to reference layer (projection and spacing).</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
