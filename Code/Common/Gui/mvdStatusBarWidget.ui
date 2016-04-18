@@ -159,7 +159,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Current view zoom-level relative to reference layer (projection and spacing).</string>
+      <string>Current zoom-level of view, relative to reference layer (projection and spacing).</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
