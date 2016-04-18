@@ -4851,7 +4851,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Current zoom-level of view, relative to reference layer (projection and spacing).</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau de zoom courant de la vue, relativement à la couche de référence (projection et espacement).</translation>
     </message>
 </context>
 <context>
