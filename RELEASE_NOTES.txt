@@ -2,23 +2,44 @@
  Monteverdi Release Note
 =========================
 
-Monteverdi 3.2.0 - Changes since version 3.0.0 (2016/03/30)
-===========================================================
+Monteverdi 3.2.0 - Changes since version 3.0.0 (March 30th, 2016)
+=================================================================
 
 * Bug fixes:
-  * BUG: mantis-1125 use OTB_APPLICATION_PATH in startup files
-  * BUG: MANTIS-1096 (QuicklookView)
-  * MRG: Merged bugfix-1096 into develop.
+  * MANTIS-1179: Using the Upper Bound mode for resolution lookup in preferences result in wrong resolution used
+  * MANTIS-1178: Zoom to full resolution does not zoom to 1 image pixel = 1 screen pixel for georeferenced data
+  * MANTIS-1159: TrainImageClassifier sample.vtr parameter is sometime ignored
+  * MANTIS-1157: Monteverdi crashes when trying to move the view without any images
+  * MANTIS-1156: Linux standalone package doesn't work on Fedora 22
+  * MANTIS-1154: Exception raised when opening LUM or LUM+HDR
+  * MANTIS-1153: Superimpose app in PHR mode reports wrong origin/spacing/keywordlist
+  * MANTIS-1152: Maximum number of class in KMean application limited to 255
+  * MANTIS-1148: OTB-applications not loaded
+  * MANTIS-1147: With Monteverdi develop branch of today : opening large images with overview file leads to eating all available memory
+  * MANTIS-1144: Unable to keep unconstrained dynamic mode
+  * MANTIS-1140: Lost pixel position informations in layer stack
+  * MANTIS-1138: Numeric value editing hell
+  * MANTIS-1136: Unable to open sensor products (with RPC) in Monteverdi
+  * MANTIS-1131: Non projected visualization mode seems slow
+  * MANTIS-1125: Use OTB_APPLICATION_PATH in startup files
+  * MANTIS-1122: Black screen after Zoom-to-extent (MinGW)
+  * MANTIS-1120: Unwanted zoom-to-extent when loading second image
+  * MANTIS-1118: Crash when restoring UI layout if quicklook view is visible at startup.
+  * MANTIS-1111: Geoid-file <arning message needs restart displayed when not needed.
+  * MANTIS-1105: Quicklook and ROI badly displayed when opening no-proj image
+  * MANTIS-1096: The quicklook is often lost
+  * MANTIS-0827: Import of image with 0 as value on the whole area is impossible
+
 
 * RFC:
   * Request for Changes-20: Take screenshot
   * Request for Changes-21: Support CDS import
   * Request for Changes-23: Ice as an Orfeo ToolBox module
-  * Request for Changes-25: Disable Ice shaders if OpenGL version is lower than 2.0 (adopted, merged)
-  * Request for Changes-24: MVD/OTB GDAL overviews multi-resolution pyramid configuration (adopted, merged)
+  * Request for Changes-25: Disable Ice shaders if OpenGL version is lower than 2.0 (especially when using via remote-desktop service).
+  * Request for Changes-24: MVD/OTB GDAL overviews multi-resolution pyramid configuration
 
 Monteverdi 3.0.0 - Changes since version 0.8.1 (December 22nd, 2015)
-===============================================================
+====================================================================
 
 * Versionning
   - Monteverdi2 discontinued and becomes Monteverdi 3.0.0
