@@ -85,7 +85,7 @@ std::string StandardShader::GetSource() const
     "uniform int shader_vertical_slider_flag;\n"                        \
     "void main (void) {\n"                                              \
     "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"                     \
-    "gl_FragColor = clamp(pow((p+shader_b)*shader_a,shader_gamma), 0.0, 1.0);\n" \
+    "gl_FragColor = pow( clamp( ( p+shader_b ) * shader_a, 0.0, 1.0 ), shader_gamma );\n" \
     "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
     "if(shader_use_no_data > 0 && vec3(p) == vec3(shader_no_data)){\n"  \
     "gl_FragColor[3] = 0.;\n"                                           \
