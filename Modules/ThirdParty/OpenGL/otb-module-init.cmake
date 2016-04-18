@@ -2,9 +2,24 @@
 #framework on OSX globally. see mantis #1193
 if(APPLE)
   set(OPENGL_FOUND FALSE)
-  find_library(OPENGL_gl_LIBRARY OpenGL DOC "OpenGL lib for OSX")
-  find_library(OPENGL_glu_LIBRARY AGL DOC "AGL lib for OSX")
-  find_path(OPENGL_INCLUDE_DIR OpenGL/gl.h DOC "Include for OpenGL on OSX")
+  find_library(
+    OPENGL_gl_LIBRARY OpenGL
+    PATHS "/System/Library/Frameworks/"
+    DOC "OpenGL lib for OSX"
+    )
+  
+  find_library(
+    OPENGL_glu_LIBRARY AGL
+    PATHS "/System/Library/Frameworks/"
+    DOC "AGL lib for OSX"
+    )
+
+  find_path(
+    OPENGL_INCLUDE_DIR OpenGL/gl.h
+    PATHS "/System/Library/Frameworks/"
+    DOC "Include for OpenGL on OSX"
+    )
+
   if(OPENGL_gl_LIBRARY)
     set( OPENGL_LIBRARIES  ${OPENGL_gl_LIBRARY} ${OPENGL_LIBRARIES})
     if(OPENGL_glu_LIBRARY)
@@ -27,6 +42,8 @@ if(APPLE)
     )
   if(NOT OPENGL_LIBRARY OR NOT OPENGL_INCLUDE_DIR)
     message(FATAL_ERROR "Cannot find OpenGL. Set OPENGL_INCLUDE_DIR and OPENGL_LIBRARY")
+  else()
+    message(STATUS "Found OpenGL framework: ${OPENGL_INCLUDE_DIR}")
   endif()
 
   set(OPENGL_FOUND TRUE)
