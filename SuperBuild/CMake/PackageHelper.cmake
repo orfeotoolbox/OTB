@@ -44,7 +44,10 @@ set(LINUX_SYSTEM_DLLS
 
 set(APPLE_SYSTEM_DLLS
   libSystem.*
-  libiconv*
+  libiconv.*
+  libc\\+\\+
+  libstdc.*dylib
+  libobjc.*dylib
   )
 
 if(UNIX)
