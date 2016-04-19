@@ -72,7 +72,10 @@ else()
     DEPENDERS configure )
 
 
-  FIX_RPATH_FOR_AUTOCONF_BUILD(OSSIM "libossim*.dylib")
+    if(APPLE)
+      SUPERBUILD_PATCH_SOURCE(OSSIM "patch-for-at-rpath")
+  endif()
+
 
   set(_SB_OSSIM_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
