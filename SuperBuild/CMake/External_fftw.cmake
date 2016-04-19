@@ -36,6 +36,7 @@ else()
             --enable-float
             --enable-threads
             --disable-fortran
+            --disable-dependency-tracking
       DEPENDS ${FFTW_DEPENDENCIES}
       )
 
@@ -57,7 +58,9 @@ else()
             --disable-float
             --enable-threads
             --disable-fortran
+            --disable-dependency-tracking
       )
+
 
     set(_SB_FFTW_INCLUDE_PATH ${SB_INSTALL_PREFIX}/include)
 
