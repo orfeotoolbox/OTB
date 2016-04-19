@@ -263,6 +263,11 @@ macro(empty_package_staging_directory)
   execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
 endmacro()
 
+#NOTE:
+# VAR_IN_PKGSETUP_CONFIGURE cmake variable is set below.
+# This is important and useful running configure_file()
+# over *pkgsetup.in
+
 function(configure_package)
   if(UNIX)
     set(EXE_EXT "")
@@ -281,7 +286,7 @@ function(configure_package)
   endif()
 
   #This must exist in any OTB Installation minimal or full
-  set(PKG_BINARY_FILES "bin/otbApplicationLauncherCommandLine")
+  set(VAR_IN_PKGSETUP_CONFIGURE "bin/otbApplicationLauncherCommandLine")
   set(PKG_PEFILES "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
   if(NOT EXISTS "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
     message(FATAL_ERROR "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT} not found.")
@@ -291,8 +296,8 @@ function(configure_package)
       iceViewer
       otbTestDriver)
     if(EXISTS "${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}")
-      #see the first comment about PKG_BINARY_FILES
-      set(PKG_BINARY_FILES "${PKG_BINARY_FILES} bin/${EXE_FILE}${EXE_EXT}")
+      #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
+      set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} bin/${EXE_FILE}${EXE_EXT}")
       list(APPEND PKG_PEFILES
         "${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}")
     endif()
@@ -301,12 +306,12 @@ function(configure_package)
   foreach(EXE_FILE monteverdi
       mapla)
     if(EXISTS "${CMAKE_INSTALL_PREFIX}/bin/${EXE_FILE}${EXE_EXT}")
-      #PKG_BINARY_FILES might seem a bit redundant variable if you
+      #VAR_IN_PKGSETUP_CONFIGURE might seem a bit redundant variable if you
       #consider PKG_PEFILES which also has same content.
-      #But PKG_BINARY_FILES goes into pkgsetup.in for Linux standalone binaries
+      #But VAR_IN_PKGSETUP_CONFIGURE goes into pkgsetup.in for Linux standalone binaries
       # and other one (PKG_PEFILES) is for dependency resolution in
       # process_deps() function
-      set(PKG_BINARY_FILES "${PKG_BINARY_FILES} bin/${EXE_FILE}${EXE_EXT}")
+      set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} bin/${EXE_FILE}${EXE_EXT}")
       list(APPEND PKG_PEFILES
         "${CMAKE_INSTALL_PREFIX}/bin/${EXE_FILE}${EXE_EXT}")
     endif()
@@ -322,10 +327,10 @@ function(configure_package)
 
   file(GLOB OTB_APPS_LIST ${OTB_APPLICATIONS_DIR}/otbapp_${LIB_EXT}) # /lib/otb
 
-  #see the first comment about PKG_BINARY_FILES
+  #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
   foreach(OTB_APP_SO ${OTB_APPS_LIST})
     get_filename_component(OTB_APP_SO_NAME ${OTB_APP_SO} NAME)
-    set(PKG_BINARY_FILES "${PKG_BINARY_FILES} lib/otb/applications/${OTB_APP_SO_NAME}")
+    set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} lib/otb/applications/${OTB_APP_SO_NAME}")
   endforeach()
 
   set(include_mvd 0)
@@ -356,13 +361,13 @@ function(configure_package)
   file(GLOB temp_files "${CMAKE_BINARY_DIR}/temp_so_names_dir/*") # /lib/otb
   foreach(temp_file ${temp_files})
     get_filename_component(basename_of_temp_file ${temp_file} NAME)
-    set(PKG_BINARY_FILES "${PKG_BINARY_FILES} lib/${basename_of_temp_file}")
+    set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} lib/${basename_of_temp_file}")
   endforeach()
 
   #remove this temporary directory
   execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/temp_so_names_dir")
 
-  set(PKG_BINARY_FILES "${PKG_BINARY_FILES}" PARENT_SCOPE)
+  set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE}" PARENT_SCOPE)
 
 endfunction()
 
@@ -434,7 +439,7 @@ function(is_file_a_symbolic_link file result_var1 result_var2)
         set(${result_var1} 1 PARENT_SCOPE)
         #Now find where the symlink is linked to.
         #Do a regex replace
-        string(REGEX REPLACE "_file_full_*.*symbolic.link.to.."
+        string(REGEX REPLACE "_file_full_*.*symbolic.link.to."
           "" symlinked_to ${file_ov})
         #Take out last character which is a single quote
         string(REPLACE "'" "" symlinked_to "${symlinked_to}")
