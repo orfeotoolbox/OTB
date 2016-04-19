@@ -80,7 +80,7 @@ ApplicationLauncher
 }
 
 /*******************************************************************************/
-Wrapper::QtWidgetView*
+Wrapper::QtWidgetView *
 ApplicationLauncher
 ::NewOtbApplicationWidget( const QString & appName,
 			   bool isStandalone,
@@ -195,40 +195,82 @@ ApplicationLauncher
     }
 
   // Create GUI based on module
-  Wrapper::QtWidgetView* gui =
+  Wrapper::QtWidgetView * gui =
     new Wrapper::QtWidgetView( otbApp, isStandalone, parent, flags );
 
   gui->CreateGui();
 
   return gui;
 }
+/*******************************************************************************/
+QWidget * 
+ApplicationLauncher
+::NewOtbApplicationWindow( const QString & appName,
+			   bool isStandalone,
+			   QWidget * parent,
+			   Qt::WindowFlags flags  ) const
+{
+#if 0
+  Wrapper::QtWidgetView * appWidget =
+    ApplicationLauncher::NewOtbApplicationWidget( appName, isStandalone );
+
+  assert( appWidget!=NULL );
+  assert( appWidget->GetApplication() );
+
+  QMainWindow * mainWindow = new QMainWindow( parent, flags );
+
+  mainWindow->setWindowTitle(
+    QString( "%1 (OTB-" OTB_VERSION_STRING ")" )
+    .arg( appWidget->GetApplication()->GetDocName() )
+  );
+
+  mainWindow->setWindowIcon( QIcon( ":/otb_small.png" ) );
+ 
+  mainWindow->setCentralWidget( appWidget );
+
+  // Connect OTB-app widget quit signal, to the mainWindow close slot.
+  QObject::connect(
+    appWidget,
+    SIGNAL( QuitSignal() ),
+    // to:
+    mainWindow,
+    SLOT( close() )
+  );
+
+  return mainWindow;
+
+#else
+  Wrapper::QtWidgetView * appWidget =
+    ApplicationLauncher::NewOtbApplicationWidget(
+      appName,
+      isStandalone,
+      parent,
+      flags | Qt::Window
+    );
+
+  assert( appWidget!=NULL );
+  assert( appWidget->GetApplication() );
+
+  appWidget->setWindowTitle(
+    QString( "%1 (OTB-" OTB_VERSION_STRING ")" )
+    .arg( appWidget->GetApplication()->GetDocName() )
+  );
+
+  appWidget->setWindowIcon( QIcon( ":/icons/process" ) );
+ 
+  QObject::connect(
+    appWidget,
+    SIGNAL( QuitSignal() ),
+    // to:
+    appWidget,
+    SLOT( close() )
+  );
+
+  return appWidget;
+#endif
+}
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
-/*******************************************************************************/
-void 
-ApplicationLauncher
-::OnApplicationToLaunchSelected( const QString& appName )
-{
-  QWidget* gui = ApplicationLauncher::NewOtbApplicationWidget( appName );
-
-  assert( gui!=NULL );
-
-  // MainWidget : that contains the view and any other widget
-  // (progress, logs...)
-  QMainWindow* mainWindow =  new QMainWindow();
-  mainWindow->setWindowIcon(QIcon( ":/otb_small.png" ));
-  //mainWindow->setWindowTitle(QString(gui->->GetDocName()).append(" - ").append(OTB_VERSION_STRING));
- 
-  // build the main window, central widget is the plugin view, other
-  // are docked widget (progress, logs...)
-  mainWindow->setCentralWidget( gui );
-
-  // Connect the View "Quit" signal, to the mainWindow close slot
-  QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
-  
-  // Show the main window
-  mainWindow->show();
-}
 
 } // end namespace 'mvd'

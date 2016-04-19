@@ -2023,6 +2023,7 @@ MainWindow
     Application::ConstInstance()->GetOTBApplicationsModel()->GetLauncher()!=NULL
   );
 
+#if USE_TABBED_VIEW
   Wrapper::QtWidgetView * appWidget =
     Application::ConstInstance()
     ->GetOTBApplicationsModel()
@@ -2030,16 +2031,9 @@ MainWindow
     ->NewOtbApplicationWidget(
       appName,
       true
-#if USE_TABBED_VIEW
-#else // USE_TABBED_VIEW
-      , this
-      , Qt::Window
-#endif // USE_TABBED_VIEW
     );
 
   assert( appWidget!=NULL );
-
-#if USE_TABBED_VIEW
 
   //
   // add the application in a tab
@@ -2051,7 +2045,29 @@ MainWindow
   // done. Focus on the newly added tab
   m_CentralTabWidget->setCurrentIndex( tabIndex );
 
+  //
+  // on quit widget signal, close its tab
+  QObject::connect(
+    appWidget,
+    SIGNAL( QuitSignal() ),
+    // to:
+    this,
+    SLOT( OnTabCloseRequested() )
+    );
+
 #else // USE_TABBED_VIEW
+
+  QWidget * appWidget =
+    Application::ConstInstance()
+    ->GetOTBApplicationsModel()
+    ->GetLauncher()
+    ->NewOtbApplicationWindow(
+      appName,
+      true,
+      this
+    );
+
+  assert( appWidget!=NULL );
 
   appWidget->setWindowTitle( docName );
 
@@ -2079,22 +2095,6 @@ MainWindow
     this,
     SLOT( OnExecutionDone( int ) )
   );
-
-  //
-  // on quit widget signal, close its tab
-#if USE_TABBED_VIEW
-
-  QObject::connect(
-    appWidget,
-    SIGNAL( QuitSignal() ),
-    // to:
-    this,
-    SLOT( OnTabCloseRequested() )
-    );
-
-#else // USE_TABBED_VIEW
-
-#endif // USE_TABBED_VIEW
 }
 
 #endif // defined( OTB_USE_QT4 ) && USE_OTB_APPS

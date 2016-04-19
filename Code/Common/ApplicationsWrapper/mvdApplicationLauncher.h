@@ -33,7 +33,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtCore>
+#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -98,18 +98,24 @@ public:
    * \return A new instance of the automatically-generated widget of
    * the given OTB application.
    */
-  Wrapper::QtWidgetView*
+  Wrapper::QtWidgetView *
     NewOtbApplicationWidget( const QString & appName,
                              bool isStandalone =false,
 			     QWidget * parent =NULL,
 			     Qt::WindowFlags =0 ) const;
+
+  /**
+   */
+  QWidget * NewOtbApplicationWindow( const QString & appName,
+				     bool isStandalone =false,
+				     QWidget * parent =NULL,
+				     Qt::WindowFlags =0 ) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
 // Public SLOTS.
 public slots:
-  void OnApplicationToLaunchSelected(const QString& appname);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
