@@ -6,6 +6,7 @@ Monteverdi 3.2.0 - Changes since version 3.0.0 (March 30th, 2016)
 =================================================================
 
 * Bug fixes:
+  * MANTIS-1196: OTB-application Quit button closes widget but not window when using Mapla
   * MANTIS-1179: Using the Upper Bound mode for resolution lookup in preferences result in wrong resolution used
   * MANTIS-1178: Zoom to full resolution does not zoom to 1 image pixel = 1 screen pixel for georeferenced data
   * MANTIS-1159: TrainImageClassifier sample.vtr parameter is sometime ignored

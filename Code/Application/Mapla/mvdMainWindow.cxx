@@ -239,6 +239,15 @@ MainWindow
 
   mainWindow->setCentralWidget( appWidget );
 
+  // Connect the View "Quit" signal, to the mainWindow close slot
+  QObject::connect(
+    appWidget,
+    SIGNAL( QuitSignal() ),
+    // to:
+    mainWindow,
+    SLOT( close() )
+  );
+
   mainWindow->show();
 
   /*
