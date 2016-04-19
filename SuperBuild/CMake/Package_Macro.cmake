@@ -34,12 +34,18 @@ macro(superbuild_package)
     "#!/bin/sh\n")
 
   set(PKG_PEFILES)
-  set(PKG_BINARY_FILES)
+  #NOTE: VAR_IN_PKGSETUP_CONFIGURE is copied to linux_pkgsetup.in during configure_file
+  set(VAR_IN_PKGSETUP_CONFIGURE)
   set(PKG_SO_FILES)
   configure_package()
 
   ############# install client configure script ################
-  configure_file(${PACKAGE_SUPPORT_FILES_DIR}/pkgsetup.in
+
+  set(PKGSETUP_IN_FILENAME linux_pkgsetup.in)
+  if(APPLE)
+    set(PKGSETUP_IN_FILENAME osx_pkgsetup.in)
+  endif()
+  configure_file(${PACKAGE_SUPPORT_FILES_DIR}/${PKGSETUP_IN_FILENAME}
     ${CMAKE_BINARY_DIR}/pkgsetup @ONLY)
 
   install(FILES
@@ -101,8 +107,8 @@ function(process_deps infile)
                 get_filename_component(basename_of_sofile ${sofile} NAME)
                 is_file_a_symbolic_link("${sofile}" is_symlink linked_to_file)
                 if(is_symlink)
-                  ##NOTE: $OUT_DIR is set actually in pkgsetup.in. So don't try
-                  #any pre-mature optimization on that variable names
+                  # NOTE: $OUT_DIR is set actually in pkgsetup.in. So don't try
+                  # any pre-mature optimization on that variable names
                   file(APPEND
                     ${CMAKE_BINARY_DIR}/make_symlinks
                     "ln -sf $OUT_DIR/lib/${linked_to_file} $OUT_DIR/lib/${basename_of_sofile}\n"
