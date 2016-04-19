@@ -60,6 +60,10 @@ else()
       INSTALL_COMMAND $(MAKE) install
     )
 
+  if(APPLE)
+    SUPERBUILD_PATCH_SOURCE(GDAL "patch-for-at-rpath")
+  endif()
+
   else(MSVC)
   ##add libkml
   ##https://trac.osgeo.org/gdal/ticket/5725
