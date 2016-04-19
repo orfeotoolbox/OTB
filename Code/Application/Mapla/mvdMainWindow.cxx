@@ -249,50 +249,6 @@ MainWindow
   );
 
   mainWindow->show();
-
-  /*
-  //
-  // add the application in a tab
-  // TODO : check if this application is already opened ???
-  int tabIndex = m_CentralTabWidget->addTab(
-    appWidget, QIcon( ":/icons/process" ), docName );
-
-  // no checking needed here, if index is not available nothing is
-  // done. Focus on the newly added tab
-  m_CentralTabWidget->setCurrentIndex( tabIndex );
-
-  //
-  // connections. not using m_CentralTabWidget->currentWidget() leads
-  // to a wrong connection!!!!
-  QObject::connect(
-    m_CentralTabWidget->currentWidget(),
-    SIGNAL( OTBApplicationOutputImageChanged( const QString&,
-					      const QString& ) ),
-    // to:
-    this,
-    SLOT( OnOTBApplicationOutputImageChanged( const QString&,
-					      const QString& ) )
-    );
-
-  QObject::connect(
-    appWidget,
-    SIGNAL( ExecutionDone( int ) ),
-    // to:
-    this,
-    SLOT( OnExecutionDone( int ) )
-  );
-
-  //
-  // on quit widget signal, close its tab
-  QObject::connect(
-    m_CentralTabWidget->currentWidget(),
-    SIGNAL( QuitSignal() ),
-    // to:
-    this,
-    SLOT( OnTabCloseRequested() )
-    );
-  */
-
 #endif // OTB_USE_QT4
 }
 
