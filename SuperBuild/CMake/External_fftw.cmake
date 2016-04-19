@@ -40,6 +40,10 @@ else()
       DEPENDS ${FFTW_DEPENDENCIES}
       )
 
+    if(APPLE)
+      SUPERBUILD_PATCH_SOURCE(FFTWF "patch-for-at-rpath" ${CMAKE_SOURCE_DIR}/patches/FFTW)
+    endif()
+
     # Compile the double version of FFTW
     ExternalProject_Add(FFTWD
       PREFIX FFTW/FFTWD
@@ -60,6 +64,10 @@ else()
             --disable-fortran
             --disable-dependency-tracking
       )
+
+    if(APPLE)
+      SUPERBUILD_PATCH_SOURCE(FFTWD "patch-for-at-rpath" ${CMAKE_SOURCE_DIR}/patches/FFTW)
+    endif()
 
     ExternalProject_Add(FFTW
       PREFIX FFTW
