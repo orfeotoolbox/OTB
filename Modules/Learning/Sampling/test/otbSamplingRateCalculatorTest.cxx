@@ -45,8 +45,8 @@ int otbSamplingRateCalculator(int itkNotUsed(argc), char* argv[])
 
   typedef otb::SamplingRateCalculator RateCalculatorype;
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  rateCalculator->setNbofSamplesAllClasses(nbSamples);
-  rateCalculator->write(outputRatesTxt);
+  rateCalculator->SetNbOfSamplesAllClasses(nbSamples);
+  rateCalculator->Write(outputRatesTxt);
   rateCalculator->Print(std::cout);
   
   return EXIT_SUCCESS;

@@ -115,11 +115,11 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage>
       m_TemporaryStats->SetInputSamplingVectorsPath(m_InputSamplingVectorsPath);
 
 
-   if (m_RatesbyClass.empty())
+   if (m_RatesByClass.empty())
       {itkGenericExceptionMacro("m_RatesbyClass is empty. Use SetRatesbyClass to provide some vector statistics information.");}
    else
       {
-         m_TemporaryStats->SetRatesbyClass(m_RatesbyClass); 
+         m_TemporaryStats->SetRatesbyClass(m_RatesByClass); 
          m_TemporaryStats->Prepare();
          m_TemporaryStats->PrepareOutputOGRData();
       }
@@ -424,9 +424,9 @@ OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 void
 OGRDataToSamplePositionFilter<TInputImage,TMaskImage>
-::SetRatesbyClass(const SamplingRateCalculator::mapRateType& map)
+::SetRatesByClass(const SamplingRateCalculator::MapRateType& map)
 {
-     this->GetFilter()->SetRatesbyClass(map);
+     this->GetFilter()->SetRatesByClass(map);
      
 }
 

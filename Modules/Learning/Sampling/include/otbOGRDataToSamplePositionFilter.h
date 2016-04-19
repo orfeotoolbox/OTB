@@ -86,11 +86,10 @@ public:
   
   itkSetMacro(LayerIndex, int);
   itkGetMacro(LayerIndex, int); 
-    
-  
-  void SetRatesbyClass(const SamplingRateCalculator::mapRateType& map )
+
+  void SetRatesByClass(const SamplingRateCalculator::MapRateType& map )
   {
-      m_RatesbyClass = map;
+      m_RatesByClass = map;
   }
   
   itkSetMacro(MaxSamplingVecSize, unsigned int);
@@ -135,7 +134,7 @@ private:
 
   std::string m_FieldName;
   OGRDataResampler::Pointer m_TemporaryStats;
-  SamplingRateCalculator::mapRateType  m_RatesbyClass;
+  SamplingRateCalculator::MapRateType  m_RatesByClass;
 
   // Layer to use in the shape file, default to 0
   int m_LayerIndex;
@@ -199,7 +198,7 @@ public:
   void SetLayerIndex(int index);
   int GetLayerIndex();
   
-  void SetRatesbyClass(const SamplingRateCalculator::mapRateType& map);
+  void SetRatesByClass(const SamplingRateCalculator::MapRateType& map);
   void SetMaxSamplingVecSize(
   
   unsigned int index);

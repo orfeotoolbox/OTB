@@ -42,7 +42,7 @@ public:
 
   /** typedef */
   typedef otb::OGRDataToSamplePositionFilter<FloatVectorImageType,UInt8ImageType> ResamplerFilterType;  
-  typedef otb::SamplingRateCalculator RateCalculatorype;
+  typedef otb::SamplingRateCalculator RateCalculatorType;
   
   typedef std::map<std::string, unsigned long>      ClassCountMapType;
   typedef itk::VariableLengthVector<float> MeasurementType;
@@ -198,7 +198,7 @@ private:
 
   void DoExecute()
   {
-      m_rateCalculator = RateCalculatorype::New();
+      m_rateCalculator = RateCalculatorType::New();
       m_resampler = ResamplerFilterType::New();
       m_reader = ReaderType::New();
       
@@ -210,21 +210,21 @@ private:
       switch (GetParameterInt("sampstrat"))
       {
         case 0: 
-            m_rateCalculator->setNbofSamplesByClass(GetParameterString("nbsampbyclass"));
+            m_rateCalculator->SetNbOfSamplesByClass(GetParameterString("nbsampbyclass"));
         break;
         case 1: 
-            m_rateCalculator->setNbofSamplesAllClasses(GetParameterInt("nbsampallclasses"));
+            m_rateCalculator->SetNbOfSamplesAllClasses(GetParameterInt("nbsampallclasses"));
         break;
         case 2: 
-            m_rateCalculator->setMinimumNbofSamplesByClass();
+            m_rateCalculator->SetMinimumNbOfSamplesByClass();
         break;
       }
       
-      RateCalculatorype::mapRateType ratesbyClass = m_rateCalculator->GetRatesbyClass(); 
+      RateCalculatorType::MapRateType ratesbyClass = m_rateCalculator->GetRatesByClass(); 
       
       if (IsParameterEnabled("outrates") && HasValue("outrates"))
       {
-        m_rateCalculator->write(this->GetParameterString("outrates"));
+        m_rateCalculator->Write(this->GetParameterString("outrates"));
       }
       
       m_vectors = otb::ogr::DataSource::New(this->GetParameterString("vec"));
@@ -249,7 +249,7 @@ private:
       m_resampler->SetInput(this->GetParameterImage("in"));
       m_resampler->SetOGRData(m_vectors);
       m_resampler->SetOutputVectorDataPath(this->GetParameterString("out"));
-      m_resampler->SetRatesbyClass(ratesbyClass);
+      m_resampler->SetRatesByClass(ratesbyClass);
       m_resampler->SetFieldName(this->GetParameterString("field"));
       m_resampler->SetLayerIndex(this->GetParameterInt("layer"));
       
@@ -257,7 +257,7 @@ private:
   
   }
 
-  RateCalculatorype::Pointer m_rateCalculator;
+  RateCalculatorType::Pointer m_rateCalculator;
   ResamplerFilterType::Pointer m_resampler;
   ReaderType::Pointer m_reader;
   otb::ogr::DataSource::Pointer m_vectors;

@@ -76,7 +76,7 @@ public:
    itkSetMacro(OutputSamplingVectorsPath, std::string);
    itkSetMacro(InputSamplingVectorsPath, std::string);
    
-   void SetRatesbyClass( const SamplingRateCalculator::mapRateType& map )
+   void SetRatesbyClass( const SamplingRateCalculator::MapRateType& map )
    {
        m_RatesbyClass = map;
        
@@ -115,7 +115,7 @@ protected:
 private:
 
    bool m_AlreadyPrepared;
-   SamplingRateCalculator::mapRateType m_RatesbyClass;
+   SamplingRateCalculator::MapRateType m_RatesbyClass;
    
    ClassToCurrentIndicesType m_ClassToCurrentIndices;
    ClassToBoolsType m_ClassToBools;

@@ -51,12 +51,12 @@ public:
   typedef SetType::const_iterator constItSetType;
   typedef struct
    {
-     unsigned int required;
-     unsigned int tot;
-     double rate;
-   } tripletType;
+     unsigned int Required;
+     unsigned int Tot;
+     double Rate;
+   } TripletType;
    
-  typedef std::map<std::string, tripletType > mapRateType;
+  typedef std::map<std::string, TripletType > MapRateType;
   
   
   /** Type macro */
@@ -66,18 +66,18 @@ public:
   itkTypeMacro(SamplingRateCalculator, itk::Object);
  
 
-  void setNbofSamplesByClass(std::string);
-  void setNbofSamplesAllClasses(std::string);
-  void setNbofSamplesAllClasses(unsigned int);
-  void setMinimumNbofSamplesByClass(void);
-  void write(std::string );
-  
-  itkGetConstReferenceMacro(RatesbyClass,mapRateType);
+  void SetNbOfSamplesByClass(std::string);
+  void SetNbOfSamplesAllClasses(std::string);
+  void SetNbOfSamplesAllClasses(unsigned int);
+  void SetMinimumNbOfSamplesByClass(void);
+  void Write(std::string filename);
+
+  itkGetConstReferenceMacro(RatesByClass,MapRateType);
 
   void SetClassCount(const ClassCountMapType& map)
   {
     m_ClassCount = map;
-    findAllClasses();
+    FindAllClasses();
   }
 
 protected:
@@ -90,24 +90,19 @@ protected:
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-
-
 private:
   SamplingRateCalculator(const Self &);    //purposely not implemented
   void operator =(const Self&);    //purposely not implemented
-  
-  
-  std::string keyGenerator( unsigned int );
-  void findAllClasses();
+
+  std::string KeyGenerator( unsigned int );
+  void FindAllClasses();
 
   int m_NbClasses;  
   ClassCountMapType m_ClassCount;
-  ClassCountMapType m_totNbSamplesByClass;
-  SetType m_setClassNames;
-  
-  
-  mapRateType m_RatesbyClass;
+  ClassCountMapType m_TotNbSamplesByClass;
+  SetType m_SetClassNames;
 
+  MapRateType m_RatesByClass;
 };
 } // End namespace otb
 

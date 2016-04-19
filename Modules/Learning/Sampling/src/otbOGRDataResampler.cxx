@@ -231,24 +231,24 @@ if (!m_AlreadyPrepared)
         this->InputSamplingVectors(); 
    else
    {      
-       SamplingRateCalculator::mapRateType::iterator itRates = m_RatesbyClass.begin();
+       SamplingRateCalculator::MapRateType::iterator itRates = m_RatesbyClass.begin();
        for(;itRates !=m_RatesbyClass.end(); ++itRates)
        {
           //std::cout << "#" << itRates->first << " " << itRates->second.required << " " << itRates->second.tot << std::endl;
           
-          unsigned int T1 = FindBestSize(itRates->second.tot);
+          unsigned int T1 = FindBestSize(itRates->second.Tot);
           //std::cout << "*** " << itRates->second.tot << " " << T1 << " " << itRates->second.tot/T1 << std::endl;
          
          
           
-          double per = static_cast<double>(itRates->second.required) / static_cast<double>(itRates->second.tot)*100.;
+          double per = static_cast<double>(itRates->second.Required) / static_cast<double>(itRates->second.Tot)*100.;
           unsigned int N1 = SelectN1(per,T1);
 
           
           double selected_prct = static_cast<double>(N1)/static_cast<double>(T1)*100.;
-          unsigned int taken = static_cast<unsigned int>(selected_prct*static_cast<double>(itRates->second.tot)/100.);
-          unsigned int left = itRates->second.required - taken;
-          unsigned int newtot = itRates->second.tot - taken;
+          unsigned int taken = static_cast<unsigned int>(selected_prct*static_cast<double>(itRates->second.Tot)/100.);
+          unsigned int left = itRates->second.Required - taken;
+          unsigned int newtot = itRates->second.Tot - taken;
           
           //std::cout << "##" << N1 << " " << per << " " << selected_prct << " " << taken << " " << left << " " << newtot << std::endl;
           if ( !(per>=selected_prct) )
@@ -265,7 +265,7 @@ if (!m_AlreadyPrepared)
               else
                  per2 = 0;
                  
-              T2 = FindBestSize(itRates->second.tot/T1*(T1-N1));
+              T2 = FindBestSize(itRates->second.Tot/T1*(T1-N1));
               
               /*std::cout << "*** " << itRates->second.tot << " " << T1 << " " << itRates->second.tot/T1 << " " << N1 << " " 
               << itRates->second.tot/T1*(T1-N1) << " " << T2 << std::endl;*/
@@ -327,7 +327,7 @@ OGRDataResampler::TakeSample(std::string className)
 {
    bool res=false;
 
-   if (m_ElmtsInClass[className] >= m_RatesbyClass[className].required)
+   if (m_ElmtsInClass[className] >= m_RatesbyClass[className].Required)
      return false;    
 
    unsigned int &ind1 = m_ClassToCurrentIndices[className].first; //first counter

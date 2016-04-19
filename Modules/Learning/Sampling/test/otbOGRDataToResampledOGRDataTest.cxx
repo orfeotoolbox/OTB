@@ -115,8 +115,8 @@ int otbOGRDataToSamplePositionFilter(int argc, char* argv[])
   
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
   rateCalculator->SetClassCount(classCount);
-  rateCalculator->setMinimumNbofSamplesByClass();
-  RateCalculatorype::mapRateType ratesbyClass = rateCalculator->GetRatesbyClass();
+  rateCalculator->SetMinimumNbOfSamplesByClass();
+  RateCalculatorype::MapRateType ratesbyClass = rateCalculator->GetRatesByClass();
     
   
   ResamplerFilterType::Pointer resampler = ResamplerFilterType::New();
@@ -124,7 +124,7 @@ int otbOGRDataToSamplePositionFilter(int argc, char* argv[])
   resampler->SetInput(inputImage);
   resampler->SetMask(mask);
   resampler->SetOGRData(vectors);
-  resampler->SetRatesbyClass(ratesbyClass);
+  resampler->SetRatesByClass(ratesbyClass);
   resampler->SetFieldName(fieldName);
   resampler->SetLayerIndex(LayerIndex);
   //resampler->SetMaxSamplingVecSize(81);
@@ -265,8 +265,8 @@ int otbOGRDataToSamplePositionFilterXML(int argc, char* argv[])
   
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
   rateCalculator->SetClassCount(classCount);
-  rateCalculator->setMinimumNbofSamplesByClass();
-  RateCalculatorype::mapRateType ratesbyClass = rateCalculator->GetRatesbyClass();
+  rateCalculator->SetMinimumNbOfSamplesByClass();
+  RateCalculatorype::MapRateType ratesbyClass = rateCalculator->GetRatesByClass();
     
   
   ResamplerFilterType::Pointer resampler = ResamplerFilterType::New();
@@ -274,7 +274,7 @@ int otbOGRDataToSamplePositionFilterXML(int argc, char* argv[])
   resampler->SetInput(inputImage);
   resampler->SetMask(mask);
   resampler->SetOGRData(vectors);
-  resampler->SetRatesbyClass(ratesbyClass);
+  resampler->SetRatesByClass(ratesbyClass);
   resampler->SetFieldName(fieldName);
   resampler->SetLayerIndex(LayerIndex);
   //resampler->SetMaxSamplingVecSize(81);
