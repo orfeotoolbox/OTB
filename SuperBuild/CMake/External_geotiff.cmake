@@ -48,9 +48,7 @@ else()
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install)
 
-    SUPERBUILD_PATCH_SOURCE(GEOTIFF "patch-configure-script")
-
-    FIX_RPATH_FOR_AUTOCONF_BUILD(GEOTIFF "libgeotiff*.dylib")
+      SUPERBUILD_PATCH_SOURCE(GEOTIFF "patch-configure-rpath")
 
   else()
 
