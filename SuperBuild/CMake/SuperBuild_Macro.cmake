@@ -154,26 +154,3 @@ macro(SUPERBUILD_PATCH_SOURCE project external_project_step_name)
     DEPENDERS configure
     )
 endmacro(SUPERBUILD_PATCH_SOURCE)
-
-#used only for OSX. DEPENDEES is always install target
-macro(FIX_RPATH_FOR_AUTOCONF_BUILD project pattern)
-  if(APPLE)
-    find_program(INSTALL_NAME_TOOL_PROGRAM NAMES install_name_tool)
-    if(INSTALL_NAME_TOOL_PROGRAM)
-      file(GLOB dylib_names ${SB_INSTALL_PREFIX}/lib/${pattern})
-      foreach(dylib_name ${dylib_names})
-        get_filename_component(dylib_name_base_name ${dylib_name} NAME)
-      ExternalProject_Add_Step(${project} fix_rpath_${dylib_name_base_name}
-        COMMAND
-        ${INSTALL_NAME_TOOL_PROGRAM}
-        -id
-        "@rpath/${dylib_name_base_name}"
-        "${dylib_name}"
-        DEPENDEES install)
-
-      endforeach()
-    else()
-      message(FATAL_ERROR "Cannot find install_name_tool. Tried names: install_name_tool")
-    endif()
-  endif()
-endmacro(FIX_RPATH_FOR_AUTOCONF_BUILD)
