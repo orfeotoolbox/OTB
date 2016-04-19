@@ -133,11 +133,22 @@ macro(ADD_SUPERBUILD_CONFIGURE_VAR project var name)
 endmacro(ADD_SUPERBUILD_CONFIGURE_VAR)
 
 macro(SUPERBUILD_PATCH_SOURCE project external_project_step_name)
+  set (extra_args ${ARGN})
+  # Did we get any optional args?
+  list(LENGTH extra_args num_extra_args)
+  if (${num_extra_args} GREATER 0)
+    list(GET extra_args 0 patch_dir_arg)
+    #if there is third argument set is as ${project}_PATCH_DIR
+    set(${project}_PATCH_DIR ${patch_dir_arg})
+  else()
+    #default value
+    set(${project}_PATCH_DIR ${CMAKE_SOURCE_DIR}/patches/${project})
+  endif()
   ExternalProject_Add_Step(${project} ${external_project_step_name}
     COMMAND
     ${CMAKE_COMMAND}
     -DSOURCE_DIR=${${project}_SB_SRC}
-    -DPATCH_DIR=${CMAKE_SOURCE_DIR}/patches/${project}
+    -DPATCH_DIR=${${project}_PATCH_DIR}
     -P ${CMAKE_SOURCE_DIR}/CMake/patch.cmake
     DEPENDEES patch update
     DEPENDERS configure
