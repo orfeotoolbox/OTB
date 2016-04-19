@@ -61,6 +61,14 @@ else()
             --disable-dependency-tracking
       )
 
+    ExternalProject_Add(FFTW
+      PREFIX FFTW
+      DOWNLOAD_COMMAND ""
+      CONFIGURE_COMMAND ""
+      BUILD_COMMAND ""
+      INSTALL_COMMAND ""
+      DEPENDS FFTWF FFTWD
+      )
 
     set(_SB_FFTW_INCLUDE_PATH ${SB_INSTALL_PREFIX}/include)
 
