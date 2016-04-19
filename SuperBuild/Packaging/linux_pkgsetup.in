@@ -13,7 +13,7 @@ PATCH_ELF_EXE=$OUT_DIR/tools/patchelf
 LD_LIBRARY_PATH=
 
 echo "Configuring..."
-BINARY_FILES="@PKG_BINARY_FILES@"
+BINARY_FILES="@VAR_IN_PKGSETUP_CONFIGURE@"
 # run patchelf
 for bin_file in $BINARY_FILES; do
     #echo "adding rpath to $OUT_DIR/$bin_file"
