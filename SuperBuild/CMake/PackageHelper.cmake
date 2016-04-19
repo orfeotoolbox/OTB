@@ -42,12 +42,21 @@ set(LINUX_SYSTEM_DLLS
   libGLU.so*
   )
 
+# libgcc_s.*dylib and other *.framework are dragged by QT
 set(APPLE_SYSTEM_DLLS
-  libSystem.*
-  libiconv.*
-  libc\\+\\+
+  libSystem.*dylib
+  libiconv.*dylib
+  libc\\+\\+.*dylib
   libstdc.*dylib
   libobjc.*dylib
+  ApplicationServices.framework
+  CoreFoundation.framework
+  CoreServices.framework
+  Security.framework
+  Carbon.framework
+  AppKit.framework
+  Foundation.framework
+  libgcc_s.*dylib
   )
 
 if(UNIX)
