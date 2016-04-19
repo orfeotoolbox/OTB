@@ -57,12 +57,16 @@ macro(superbuild_package)
     GROUP_READ GROUP_EXECUTE
     WORLD_READ WORLD_EXECUTE)
 
-  ####################### install patchelf #####################
-  install(FILES ${CMAKE_INSTALL_PREFIX}/tools/patchelf
-    DESTINATION ${PKG_STAGE_DIR}/tools
-    PERMISSIONS
-    OWNER_EXECUTE OWNER_WRITE OWNER_READ
-    GROUP_EXECUTE GROUP_READ)
+  if(UNIX)
+    if(NOT APPLE)
+      ####################### install patchelf #####################
+      install(FILES ${CMAKE_INSTALL_PREFIX}/tools/patchelf
+        DESTINATION ${PKG_STAGE_DIR}/tools
+        PERMISSIONS
+        OWNER_EXECUTE OWNER_WRITE OWNER_READ
+        GROUP_EXECUTE GROUP_READ)
+    endif()
+  endif()
 
   if(PKG_XDK)
     install_xdk_files()
