@@ -456,7 +456,7 @@ function(is_file_a_symbolic_link file result_var1 result_var2)
             string(REGEX REPLACE "_file_full_*.*symbolic.link.to.."
               "" symlinked_to ${file_ov})
           endif(APPLE)
-
+        endif(UNIX)
         #Take out last character which is a single quote
         string(REPLACE "'" "" symlinked_to "${symlinked_to}")
         #strip for our own sanity
