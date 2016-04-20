@@ -196,6 +196,13 @@ function(install_common include_mvd)
   ####################### install OSSIM data ###########################
   install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/ossim DESTINATION ${PKG_SHARE_DEST_DIR})
 
+  ####################### install otb share ###########################
+  install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/otb DESTINATION ${PKG_SHARE_DEST_DIR})
+
+  ####################### install proj share ###########################
+  if(EXISTS ${PKG_SHARE_SOURCE_DIR}/proj)
+    install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/proj DESTINATION ${PKG_SHARE_DEST_DIR})
+  endif()
 
   ####################### Install otb applications ######################
   install(DIRECTORY "${OTB_APPLICATIONS_DIR}"  DESTINATION ${PKG_OTBLIBS_DIR})
