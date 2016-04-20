@@ -25,26 +25,30 @@ else()
   if(UNIX)
     set(GDAL_SB_EXTRA_OPTIONS "" CACHE STRING "Extra options to be passed to GDAL configure script")
     mark_as_advanced(GDAL_SB_EXTRA_OPTIONS)
-
     #Convert GDAL_SB_EXTRA_OPTIONS to a list to allow to add multiple instructions to the CONFIGURE_COMMAND
     separate_arguments(GDAL_SB_EXTRA_OPTIONS)
+
+    #we dont do any framework build on osx. So let's be sure on case of gdal
+    if(APPLE)
+      list(APPEND GDAL_SB_CONFIG "--with-macosx-framework=no")
+    endif()
 
     ExternalProject_Add(GDAL
       PREFIX GDAL
       URL "http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz"
       URL_MD5 866a46f72b1feadd60310206439c1a76
-      BINARY_DIR ${GDAL_SB_BUILD_DIR}
+      SOURCE_DIR ${GDAL_SB_SRC}
+      BINARY_DIR ${GDAL_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       DEPENDS ${GDAL_DEPENDENCIES}
       PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/GDAL/GNUmakefile ${GDAL_SB_SRC}/swig/python/GNUmakefile
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/patches/GDAL/S2_patch ${GDAL_SB_SRC}
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
       CONFIGURE_COMMAND
         # use 'env' because CTest launcher doesn't perform shell interpretation
         ${SB_ENV_CONFIGURE_CMD}
-        ${GDAL_SB_BUILD_DIR}/configure
+        ${GDAL_SB_SRC}/configure
         --prefix=${SB_INSTALL_PREFIX}
         --enable-static=no
         --without-ogdi
@@ -60,7 +64,9 @@ else()
       INSTALL_COMMAND $(MAKE) install
     )
 
-  FIX_RPATH_FOR_AUTOCONF_BUILD(GDAL "libgdal*.dylib")
+  if(APPLE)
+    SUPERBUILD_PATCH_SOURCE(GDAL "patch-for-at-rpath")
+  endif()
 
   else(MSVC)
   ##add libkml
@@ -77,17 +83,16 @@ else()
        URL "http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz"
        URL_MD5 866a46f72b1feadd60310206439c1a76
        SOURCE_DIR ${GDAL_SB_SRC}
-       BINARY_DIR ${GDAL_SB_BUILD_DIR}
+       BINARY_DIR ${GDAL_SB_SRC}
        INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
        DEPENDS ${GDAL_DEPENDENCIES}
        PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/GDAL/GNUmakefile ${GDAL_SB_SRC}/swig/python/GNUmakefile
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/patches/GDAL/S2_patch ${GDAL_SB_SRC}
-        COMMAND ${CMAKE_COMMAND} -E copy_directory  ${GDAL_SB_SRC} ${GDAL_SB_BUILD_DIR}
        CONFIGURE_COMMAND  ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/patches/GDAL/ogrsqlitevirtualogr.cpp
-      ${GDAL_SB_BUILD_DIR}/ogr/ogrsf_frmts/sqlite/ogrsqlitevirtualogr.cpp
-       BUILD_COMMAND nmake /f ${GDAL_SB_BUILD_DIR}/makefile.vc MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
-       INSTALL_COMMAND nmake /f ${GDAL_SB_BUILD_DIR}/makefile.vc devinstall MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
+      ${GDAL_SB_SRC}/ogr/ogrsf_frmts/sqlite/ogrsqlitevirtualogr.cpp
+       BUILD_COMMAND nmake /f ${GDAL_SB_SRC}/makefile.vc MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
+       INSTALL_COMMAND nmake /f ${GDAL_SB_SRC}/makefile.vc devinstall MSVC_VER=${MSVC_VERSION} EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
     )
 
   endif()

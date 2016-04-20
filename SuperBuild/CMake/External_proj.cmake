@@ -14,7 +14,7 @@ else()
       URL "http://download.osgeo.org/proj/proj-4.8.0.tar.gz"
       URL_MD5 d815838c92a29179298c126effbb1537
       SOURCE_DIR ${PROJ_SB_SRC}
-      BINARY_DIR ${PROJ_SB_BUILD_DIR}
+      BINARY_DIR ${PROJ_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND ""
@@ -27,49 +27,39 @@ else()
       PREFIX PROJ/_install
       DOWNLOAD_COMMAND ""
       SOURCE_DIR PROJ/_install
-      BINARY_DIR ${PROJ_SB_BUILD_DIR}
+      BINARY_DIR ${PROJ_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CMAKE_CACHE_ARGS
         -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
         -DCMAKE_BUILD_TYPE:STRING=Release
-        -DPROJ4_BUILD_DIR:STRING=${PROJ_SB_BUILD_DIR}/src
+        -DPROJ4_BUILD_DIR:STRING=${PROJ_SB_SRC}/src
       DEPENDS PROJ_build
       CMAKE_COMMAND
     )
 
-    ExternalProject_Add_Step(PROJ_build copy_source
-      COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${PROJ_SB_SRC} ${PROJ_SB_BUILD_DIR}
-      DEPENDEES patch update
-      DEPENDERS configure
-    )
   else()
     ExternalProject_Add(PROJ
       PREFIX PROJ
       URL "http://download.osgeo.org/proj/proj-4.8.0.tar.gz"
       URL_MD5 d815838c92a29179298c126effbb1537
-      BINARY_DIR ${PROJ_SB_BUILD_DIR}
+      BINARY_DIR ${PROJ_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CONFIGURE_COMMAND
         # use 'env' because CTest launcher doesn't perform shell interpretation
         ${SB_ENV_CONFIGURE_CMD}
-        ${PROJ_SB_BUILD_DIR}/configure
+        ${PROJ_SB_SRC}/configure
         --prefix=${SB_INSTALL_PREFIX}
         --enable-static=no
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
-    )
-
-    ExternalProject_Add_Step(PROJ copy_source
-      COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${PROJ_SB_SRC} ${PROJ_SB_BUILD_DIR}
-      DEPENDEES patch update
-      DEPENDERS configure
       )
 
-    FIX_RPATH_FOR_AUTOCONF_BUILD(PROJ "libproj*.dylib")
+    if(APPLE)
+      SUPERBUILD_PATCH_SOURCE(PROJ "patch-for-at-rpath")
+    endif()
+
   endif()
 
   set(_SB_PROJ_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)

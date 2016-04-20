@@ -26,7 +26,7 @@ if(NOT __EXTERNAL_QT4__)
     endif()
 
     if(APPLE)
-      set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-framework -rpath")
+      set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-framework")
     endif()
 
     STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
@@ -82,8 +82,9 @@ if(NOT __EXTERNAL_QT4__)
         )
     endif()
 
-    FIX_RPATH_FOR_AUTOCONF_BUILD(QT4 "libQt*.dylib")
-
+    if(APPLE)
+      SUPERBUILD_PATCH_SOURCE(QT4 "patch-for-at-rpath")
+    endif()
 
     set(_SB_QT_QMAKE_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/qmake)
 

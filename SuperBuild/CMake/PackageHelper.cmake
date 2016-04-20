@@ -42,9 +42,23 @@ set(LINUX_SYSTEM_DLLS
   libGLU.so*
   )
 
+# libgcc_s.*dylib and other *.framework are dragged by QT
 set(APPLE_SYSTEM_DLLS
-  libSystem.*
-  libiconv*
+  libSystem.*dylib
+  libiconv.*dylib
+  libc\\+\\+.*dylib
+  libstdc.*dylib
+  libobjc.*dylib
+  ApplicationServices.framework
+  CoreFoundation.framework
+  CoreServices.framework
+  Security.framework
+  Carbon.framework
+  AppKit.framework
+  Foundation.framework
+  AGL.framework
+  OpenGL.framework
+  libgcc_s.*dylib
   )
 
 if(UNIX)
@@ -162,7 +176,7 @@ function(install_common include_mvd)
   endif()
 
   ##################### install cli and gui scripts #######################
-  install(FILES ${PKG_APP_SCRIPTS}  DESTINATION ${PKG_STAGE_BIN_DIR})
+  install(PROGRAMS ${PKG_APP_SCRIPTS}  DESTINATION ${PKG_STAGE_BIN_DIR})
 
   if(include_mvd)
     install_monteverdi_files()
@@ -182,8 +196,35 @@ function(install_common include_mvd)
   ####################### install OSSIM data ###########################
   install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/ossim DESTINATION ${PKG_SHARE_DEST_DIR})
 
+  ####################### install otb share ###########################
+  install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/otb DESTINATION ${PKG_SHARE_DEST_DIR})
+
+  ####################### install proj share ###########################
+  if(EXISTS ${PKG_SHARE_SOURCE_DIR}/proj)
+    install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/proj DESTINATION ${PKG_SHARE_DEST_DIR})
+  endif()
+
   ####################### Install otb applications ######################
   install(DIRECTORY "${OTB_APPLICATIONS_DIR}"  DESTINATION ${PKG_OTBLIBS_DIR})
+
+  ####################### Install copyrights ######################
+  install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/copyright DESTINATION ${PKG_SHARE_DEST_DIR})
+  file(WRITE "${PKG_STAGE_DIR}/Copyright.txt"
+"The OTB is released under the CeCILL-2.0 license. This license is available
+online :
+  http://www.cecill.info/licences/Licence_CeCILL_V2-en.html
+  http://www.cecill.info/licences/Licence_CeCILL_V2-fr.html
+More details on copyright information can be found in :
+  share/copyright
+
+However this binary package may be compiled with dependencies that have
+incompatible licensing. As a consequence, this OTB binary package will be
+released under GPL-v2 license in the following cases :
+- if ITK (used by OTB) was built with FFTW support enabled (FFTW is released
+under GPL-v2 license)
+- if this package was built using FreeType. FreeType allows to choose between
+the advertising FreeType license and the GPL-v2 license.
+")
 
 endfunction()
 
@@ -193,7 +234,7 @@ function(install_monteverdi_files)
   if(WIN32 OR CMAKE_CROSSCOMPILING)
     set(PKG_QTSQLITE_FILENAME "qsqlite4.dll")
   elseif(APPLE)
-    set(PKG_QTSQLITE_FILENAME "qsqlite.dylib")
+    set(PKG_QTSQLITE_FILENAME "libqsqlite.dylib")
   elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux" AND NOT CMAKE_CROSSCOMPILING)
     set(PKG_QTSQLITE_FILENAME "libqsqlite.so")
   else()
@@ -260,6 +301,11 @@ macro(empty_package_staging_directory)
   execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
 endmacro()
 
+#NOTE:
+# VAR_IN_PKGSETUP_CONFIGURE cmake variable is set below.
+# This is important and useful running configure_file()
+# over *pkgsetup.in
+
 function(configure_package)
   if(UNIX)
     set(EXE_EXT "")
@@ -278,7 +324,7 @@ function(configure_package)
   endif()
 
   #This must exist in any OTB Installation minimal or full
-  set(PKG_BINARY_FILES "bin/otbApplicationLauncherCommandLine")
+  set(VAR_IN_PKGSETUP_CONFIGURE "bin/otbApplicationLauncherCommandLine")
   set(PKG_PEFILES "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
   if(NOT EXISTS "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
     message(FATAL_ERROR "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT} not found.")
@@ -288,8 +334,8 @@ function(configure_package)
       iceViewer
       otbTestDriver)
     if(EXISTS "${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}")
-      #see the first comment about PKG_BINARY_FILES
-      set(PKG_BINARY_FILES "${PKG_BINARY_FILES} bin/${EXE_FILE}${EXE_EXT}")
+      #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
+      set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} bin/${EXE_FILE}${EXE_EXT}")
       list(APPEND PKG_PEFILES
         "${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}")
     endif()
@@ -298,12 +344,12 @@ function(configure_package)
   foreach(EXE_FILE monteverdi
       mapla)
     if(EXISTS "${CMAKE_INSTALL_PREFIX}/bin/${EXE_FILE}${EXE_EXT}")
-      #PKG_BINARY_FILES might seem a bit redundant variable if you
+      #VAR_IN_PKGSETUP_CONFIGURE might seem a bit redundant variable if you
       #consider PKG_PEFILES which also has same content.
-      #But PKG_BINARY_FILES goes into pkgsetup.in for Linux standalone binaries
+      #But VAR_IN_PKGSETUP_CONFIGURE goes into pkgsetup.in for Linux standalone binaries
       # and other one (PKG_PEFILES) is for dependency resolution in
       # process_deps() function
-      set(PKG_BINARY_FILES "${PKG_BINARY_FILES} bin/${EXE_FILE}${EXE_EXT}")
+      set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} bin/${EXE_FILE}${EXE_EXT}")
       list(APPEND PKG_PEFILES
         "${CMAKE_INSTALL_PREFIX}/bin/${EXE_FILE}${EXE_EXT}")
     endif()
@@ -319,10 +365,10 @@ function(configure_package)
 
   file(GLOB OTB_APPS_LIST ${OTB_APPLICATIONS_DIR}/otbapp_${LIB_EXT}) # /lib/otb
 
-  #see the first comment about PKG_BINARY_FILES
+  #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
   foreach(OTB_APP_SO ${OTB_APPS_LIST})
     get_filename_component(OTB_APP_SO_NAME ${OTB_APP_SO} NAME)
-    set(PKG_BINARY_FILES "${PKG_BINARY_FILES} lib/otb/applications/${OTB_APP_SO_NAME}")
+    set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} lib/otb/applications/${OTB_APP_SO_NAME}")
   endforeach()
 
   set(include_mvd 0)
@@ -346,20 +392,21 @@ function(configure_package)
 
   list(LENGTH notfound_dlls nos)
   if(${nos} GREATER 0)
-    STRING(REPLACE ".so;" ".so," notfound ${notfound_dlls})
-    message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}. Please consider adding their paths to SEARCHDIRS when calling superbuild_package macro.")
+    list(REMOVE_DUPLICATES notfound_dlls)
+    #string(REPLACE ".so;" ".so\\r\\n" notfound_dlls ${notfound_dlls})
+    message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}. Please consider adding their paths to PKG_SEARCHDIRS when calling superbuild_package macro.")
   endif()
 
   file(GLOB temp_files "${CMAKE_BINARY_DIR}/temp_so_names_dir/*") # /lib/otb
   foreach(temp_file ${temp_files})
     get_filename_component(basename_of_temp_file ${temp_file} NAME)
-    set(PKG_BINARY_FILES "${PKG_BINARY_FILES} lib/${basename_of_temp_file}")
+    set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} lib/${basename_of_temp_file}")
   endforeach()
 
   #remove this temporary directory
   execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/temp_so_names_dir")
 
-  set(PKG_BINARY_FILES "${PKG_BINARY_FILES}" PARENT_SCOPE)
+  set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE}" PARENT_SCOPE)
 
 endfunction()
 
@@ -431,8 +478,15 @@ function(is_file_a_symbolic_link file result_var1 result_var2)
         set(${result_var1} 1 PARENT_SCOPE)
         #Now find where the symlink is linked to.
         #Do a regex replace
-        string(REGEX REPLACE "_file_full_*.*symbolic.link.to.."
-          "" symlinked_to ${file_ov})
+        if(UNIX)
+          if(APPLE)
+            string(REGEX REPLACE "_file_full_*.*symbolic.link.to."
+              "" symlinked_to ${file_ov})
+          else(APPLE)
+            string(REGEX REPLACE "_file_full_*.*symbolic.link.to.."
+              "" symlinked_to ${file_ov})
+          endif(APPLE)
+        endif(UNIX)
         #Take out last character which is a single quote
         string(REPLACE "'" "" symlinked_to "${symlinked_to}")
         #strip for our own sanity

@@ -72,10 +72,13 @@ else()
       -DWITH_CUDA:BOOL=OFF
       -DWITH_OPENCL:BOOL=OFF
       ${OPENCV_SB_CONFIG}
-    DEPENDS ${OPENCV_DEPENDENCIES}
+      DEPENDS ${OPENCV_DEPENDENCIES}
+      CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
-  FIX_RPATH_FOR_AUTOCONF_BUILD(OPENCV "libopencv_*.dylib")
+  if(APPLE)
+    SUPERBUILD_PATCH_SOURCE(OPENCV "patch-for-at-rpath")
+  endif()
 
   set(_SB_OpenCV_DIR ${SB_INSTALL_PREFIX}/share/OpenCV)
 endif()
