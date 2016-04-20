@@ -93,8 +93,8 @@ function(process_deps infile)
           message(STATUS "Processing ${SEARCHDIR}/${infile}")
           is_file_executable("${SEARCHDIR}/${infile}" is_executable)
           if(is_executable)
-            install(PROGRAMS "${SEARCHDIR}/${infile}"
-              DESTINATION ${PKG_STAGE_DIR}/bin)
+              install(PROGRAMS "${SEARCHDIR}/${infile}"
+                DESTINATION ${PKG_STAGE_DIR}/bin)
           else(is_executable)
             get_filename_component(bn_we ${infile} NAME_WE)
             file(GLOB sofiles "${SEARCHDIR}/${bn_we}*")
