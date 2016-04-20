@@ -56,6 +56,8 @@ set(APPLE_SYSTEM_DLLS
   Carbon.framework
   AppKit.framework
   Foundation.framework
+  AGL.framework
+  OpenGL.framework
   libgcc_s.*dylib
   )
 
