@@ -174,7 +174,7 @@ function(install_common include_mvd)
   endif()
 
   ##################### install cli and gui scripts #######################
-  install(FILES ${PKG_APP_SCRIPTS}  DESTINATION ${PKG_STAGE_BIN_DIR})
+  install(PROGRAMS ${PKG_APP_SCRIPTS}  DESTINATION ${PKG_STAGE_BIN_DIR})
 
   if(include_mvd)
     install_monteverdi_files()
@@ -193,6 +193,7 @@ function(install_common include_mvd)
 
   ####################### install OSSIM data ###########################
   install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/ossim DESTINATION ${PKG_SHARE_DEST_DIR})
+
 
   ####################### Install otb applications ######################
   install(DIRECTORY "${OTB_APPLICATIONS_DIR}"  DESTINATION ${PKG_OTBLIBS_DIR})
@@ -363,8 +364,9 @@ function(configure_package)
 
   list(LENGTH notfound_dlls nos)
   if(${nos} GREATER 0)
-    STRING(REPLACE ".so;" ".so," notfound ${notfound_dlls})
-    message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}. Please consider adding their paths to SEARCHDIRS when calling superbuild_package macro.")
+    list(REMOVE_DUPLICATES notfound_dlls)
+    #string(REPLACE ".so;" ".so\\r\\n" notfound_dlls ${notfound_dlls})
+    message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}. Please consider adding their paths to PKG_SEARCHDIRS when calling superbuild_package macro.")
   endif()
 
   file(GLOB temp_files "${CMAKE_BINARY_DIR}/temp_so_names_dir/*") # /lib/otb
