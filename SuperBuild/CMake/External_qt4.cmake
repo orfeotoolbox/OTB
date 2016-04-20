@@ -25,10 +25,14 @@ if(NOT __EXTERNAL_QT4__)
       set(QT4_SB_CONFIG "-I ${PNG_PNG_INCLUDE_DIR}")
     endif()
 
-    if(APPLE)
-      set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-framework")
+    if(UNIX)
+      set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-openssl")
+      if(APPLE)
+        set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-framework")
+      else()
+        set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -gtkstyle")
+      endif()
     endif()
-
     STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
     STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
 
