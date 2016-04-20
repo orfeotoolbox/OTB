@@ -11,23 +11,12 @@ macro(create_monteverdi_application)
     add_executable(${APPLICATION_NAME}
       WIN32
       ${APPLICATION_SOURCES})
-  elseif(APPLE)
-    add_executable(${APPLICATION_NAME}
-      MACOSX_BUNDLE
-      ${APPLICATION_SOURCES})
-
-  else() #Linux
+  else() #Unix
     add_executable(${APPLICATION_NAME}
       ${APPLICATION_SOURCES})
   endif()
 
   set(EXECUTABLE_NAME ${APPLICATION_NAME})
-  if(APPLE)
-
-    string(SUBSTRING ${APPLICATION_NAME} 0 1 FIRST_LETTER)
-    string(TOUPPER ${FIRST_LETTER} FIRST_LETTER)
-    string(REGEX REPLACE "^.(.*)" "${FIRST_LETTER}\\1" APPLICATION_OUTPUT_NAME "${APPLICATION_NAME}")
-  endif()
 
   if (APPLICATION_OUTPUT_NAME)
     set_target_properties(${APPLICATION_NAME} PROPERTIES OUTPUT_NAME ${APPLICATION_OUTPUT_NAME})
