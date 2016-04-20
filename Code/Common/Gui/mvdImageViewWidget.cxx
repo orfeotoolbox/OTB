@@ -714,6 +714,9 @@ ImageViewWidget
   QGLWidget::mousePressEvent( event );
 
   m_Manipulator->MousePressEvent( event );
+
+  // Deactivate pixel picking during drag
+  m_IsPickingEnabled = false;
 }
 
 /*******************************************************************************/
@@ -848,6 +851,9 @@ ImageViewWidget
   QGLWidget::mouseReleaseEvent( event );
 
   m_Manipulator->MouseReleaseEvent(event);
+
+  // Reactivate picking after drag
+  m_IsPickingEnabled = true;
 }
 
 /*******************************************************************************/
