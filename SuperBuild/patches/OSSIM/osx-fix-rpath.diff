@@ -1,18 +1,8 @@
 diff -burN ossim-1.8.20-3.orig/ossim_package_support/cmake/CMakeModules/OssimUtilities.cmake ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/OssimUtilities.cmake
 --- ossim-1.8.20-3.orig/ossim_package_support/cmake/CMakeModules/OssimUtilities.cmake	2016-04-19 12:30:00.000000000 +0200
-+++ ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/OssimUtilities.cmake	2016-04-19 12:31:33.000000000 +0200
-@@ -266,18 +266,12 @@
-    ENDIF(LINK_ADDITIONAL_COMPILE_FLAGS)
-    if(APPLE)
-       IF(BUILD_SHARED_LIBS)
--#        SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
--#        SET(CMAKE_INSTALL_RPATH "${OSSIM_COMPILE_FRAMEWORKS_INSTALL_NAME_DIR}")
-         IF(BUILD_OSSIM_FRAMEWORKS)
-           SET_TARGET_PROPERTIES(${LINK_NAME} PROPERTIES 
--                             FRAMEWORK TRUE
--                             BUILD_WITH_INSTALL_RPATH ON 
--                             INSTALL_NAME_DIR @rpath/Frameworks)
-+                             FRAMEWORK TRUE)
++++ ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/OssimUtilities.cmake	2016-04-20 09:15:13.000000000 +0200
+@@ -275,9 +275,7 @@
+                              INSTALL_NAME_DIR @rpath/Frameworks)
          ELSE(BUILD_OSSIM_FRAMEWORKS)
            SET_TARGET_PROPERTIES(${LINK_NAME} PROPERTIES 
 -                             FRAMEWORK FALSE
