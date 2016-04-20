@@ -249,8 +249,6 @@ void GlImageActor::UpdateData()
 
   if( !requested.Crop( largest ) )
     return;
-
-  // std::cout << "Requested: " << requested;
  
   // Now we have the requested part of image, we need to find the
   // corresponding tiles
@@ -261,18 +259,16 @@ void GlImageActor::UpdateData()
   //unsigned int nbTilesY = vcl_ceil(static_cast<double>(requested.GetSize()[1])/m_TileSize);
   unsigned int tileStartX = m_TileSize*(requested.GetIndex()[0]/m_TileSize);
   unsigned int tileStartY = m_TileSize*(requested.GetIndex()[1]/m_TileSize);
-
-  // std::cout << std::endl;
-  // std::cout << "Required tiles: " << nbTilesX << " x " << nbTilesY << std::endl;
-
+  
   SizeType tileSize;
   tileSize.Fill(m_TileSize);
-
+  Tile newTile;
+  
    for(unsigned int i = 0; i < nbTilesX; ++i)
     {
     for(unsigned int j = 0; j<nbTilesY; ++j)
       {
-      Tile newTile;
+      
       newTile.m_TextureId = 0;
 
       IndexType tileIndex;
@@ -282,19 +278,15 @@ void GlImageActor::UpdateData()
       newTile.m_ImageRegion.SetSize(tileSize);
       newTile.m_ImageRegion.SetIndex(tileIndex);
 
-      // std::cout << "Largest: " << largest;
-
       newTile.m_ImageRegion.Crop( largest );
 
       ImageRegionToViewportQuad(newTile.m_ImageRegion,newTile.m_UL,newTile.m_UR,newTile.m_LL,newTile.m_LR,false);
-
-      // std::cout << "Tile: " << newTile.m_ImageRegion; // <<std::endl;
-       // std::cout<<"Mapped to "<<newTile.m_UL<<", "<<newTile.m_UR<<", "<<newTile.m_LL<<", "<<newTile.m_LR<<std::endl;
 
       newTile.m_RedIdx = m_RedIdx;
       newTile.m_GreenIdx = m_GreenIdx;
       newTile.m_BlueIdx = m_BlueIdx;
       newTile.m_Resolution = m_CurrentResolution;
+      newTile.m_TileSize = m_TileSize;
 
       if(!TileAlreadyLoaded(newTile))
         {
@@ -302,6 +294,7 @@ void GlImageActor::UpdateData()
         }
       }
     }
+
 }
 
 bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
@@ -632,9 +625,12 @@ void GlImageActor::CleanLoadedTiles()
        || it->m_RedIdx != m_RedIdx
        || it->m_GreenIdx != m_GreenIdx
        || it->m_BlueIdx != m_BlueIdx
-       || it->m_ImageRegion.GetSize()[0]!=m_TileSize
-       || it->m_ImageRegion.GetSize()[1]!=m_TileSize)
-      {     
+       // We need to compare with theoretical tile size as actual tile
+       // size might be smaller at images borders
+       || it->m_TileSize!=m_TileSize)
+      {
+       
+      
       // Tile will not be used anymore, unload it from GPU
       UnloadTile(*it);
       }

@@ -216,6 +216,7 @@ protected:
       : m_Loaded(false),
         m_TextureId(0),
         m_ImageRegion(),
+        m_TileSize(0),
         m_Image(),
         m_UL(),
         m_UR(),
@@ -236,6 +237,7 @@ protected:
     bool m_Loaded;
     unsigned int m_TextureId;
     RegionType m_ImageRegion;
+    unsigned int m_TileSize;
     VectorImageType::Pointer m_Image;
     PointType m_UL;
     PointType m_UR;
