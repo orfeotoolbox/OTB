@@ -43,7 +43,7 @@ macro(superbuild_package)
 
   set(PKGSETUP_IN_FILENAME linux_pkgsetup.in)
   if(APPLE)
-    set(PKGSETUP_IN_FILENAME osx_pkgsetup.in)
+    set(PKGSETUP_IN_FILENAME macx_pkgsetup.in)
   endif()
   configure_file(${PACKAGE_SUPPORT_FILES_DIR}/${PKGSETUP_IN_FILENAME}
     ${CMAKE_BINARY_DIR}/pkgsetup @ONLY)
