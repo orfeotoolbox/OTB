@@ -448,8 +448,15 @@ function(is_file_a_symbolic_link file result_var1 result_var2)
         set(${result_var1} 1 PARENT_SCOPE)
         #Now find where the symlink is linked to.
         #Do a regex replace
-        string(REGEX REPLACE "_file_full_*.*symbolic.link.to."
-          "" symlinked_to ${file_ov})
+        if(UNIX)
+          if(APPLE)
+            string(REGEX REPLACE "_file_full_*.*symbolic.link.to."
+              "" symlinked_to ${file_ov})
+          else(APPLE)
+            string(REGEX REPLACE "_file_full_*.*symbolic.link.to.."
+              "" symlinked_to ${file_ov})
+          endif(APPLE)
+
         #Take out last character which is a single quote
         string(REPLACE "'" "" symlinked_to "${symlinked_to}")
         #strip for our own sanity
