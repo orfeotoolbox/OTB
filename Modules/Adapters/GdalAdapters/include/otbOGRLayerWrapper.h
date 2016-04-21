@@ -19,9 +19,18 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbOGRLayerWrapper_h
 
 // #include <iosfwd> // std::ostream&
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <boost/shared_ptr.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/utility/enable_if.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <boost/shared_ptr.hpp>
+#include <boost/iterator/iterator_facade.hpp>
+#include <boost/utility/enable_if.hpp>
+#endif
 // #include "itkIndent.h", included from field
 #include "otbOGRFeatureWrapper.h"
 #include "otbOGRVersionProxy.h"

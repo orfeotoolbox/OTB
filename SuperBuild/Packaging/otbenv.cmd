@@ -1,0 +1,7 @@
+set CURRENT_SCRIPT_DIR=%~dp0
+
+set PATH=%PATH%;%CURRENT_SCRIPT_DIR%\bin
+
+set GDAL_DATA=%CURRENT_SCRIPT_DIR%\share\gdal
+
+set GEOTIFF_CSV=%CURRENT_SCRIPT_DIR%\share\espg_csv

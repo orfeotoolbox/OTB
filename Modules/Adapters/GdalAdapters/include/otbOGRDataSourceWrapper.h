@@ -22,10 +22,20 @@
 #include <string>
 
 // to implement copy_const
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/noncopyable.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <boost/noncopyable.hpp>
+#endif
 
 #include "itkDataObject.h"
 #include "itkMacro.h" // itkNewMacro
@@ -531,7 +541,7 @@ private:
 
   /** Get a string describing the dataset */
   std::string GetDatasetDescription() const;
-    
+
 private:
   ogr::version_proxy::GDALDatasetType *m_DataSource;
   Modes::type    m_OpenMode;

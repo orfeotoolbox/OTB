@@ -2,7 +2,7 @@ set(DOCUMENTATION "This module imports GLFW to the build system")
 
 otb_module(OTBGLFW
   DEPENDS
-    
+  OTBOpenGL
   TEST_DEPENDS
     
   DESCRIPTION

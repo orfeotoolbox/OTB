@@ -46,9 +46,9 @@ InputVectorDataParameter::SetFromFileName(const std::string& filename)
       && itksys::SystemTools::FileExists(filename.c_str()))
     {
     VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
-    reader->SetFileName(filename);
     try
       {
+      reader->SetFileName(filename);
       reader->UpdateOutputInformation();
       }
     catch(itk::ExceptionObject & /*err*/)
