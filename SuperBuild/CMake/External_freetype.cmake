@@ -22,7 +22,7 @@ else()
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
-  set(_SB_FREETYPE_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  set(_SB_FREETYPE_INCLUDE_DIRS ${SB_INSTALL_PREFIX}/include/freetype2)
   if(WIN32)
     set(_SB_FREETYPE_LIBRARY ${SB_INSTALL_PREFIX}/lib/freetype.lib)
   elseif(UNIX)

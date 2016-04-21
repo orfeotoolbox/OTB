@@ -216,7 +216,8 @@ endif()
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" OFF)
 option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
-option(GENERATE_XDK "Generate an .run with all dependencies. supported only on Linux" OFF)
+option(GENERATE_PACKAGE "Generate a portable .run package of OTB (only Unix)." OFF)
+option(GENERATE_XDK "Generate an XDK. This files provides all headers and libraries to build and or develop OTB (only Unix)." OFF)
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
@@ -248,12 +249,11 @@ else()
   include(External_otb)
 endif()
 
-#check compiler is gnu?
-if(UNIX)
-  if(GENERATE_XDK)
-    include(GenerateXDK)
-  endif()
-
-  include(External_package)
-
-endif(UNIX)
+if(GENERATE_PACKAGE)
+  if(UNIX)
+    if(GENERATE_XDK)
+      include(GenerateXDK)
+    endif()
+    include(External_package)
+  endif(UNIX)
+endif()
