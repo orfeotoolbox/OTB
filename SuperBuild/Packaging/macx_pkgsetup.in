@@ -28,15 +28,82 @@ for bin_file in $BINARY_FILES; do
     fi
 done
 
+LONG_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@.@Monteverdi_VERSION_PATCH@
+SHORT_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@
+
+rm -fr Mapla.app
+rm -fr Monteveridi.app
+
+mkdir -p Mapla.app/Contents/{MacOS,Resources}
+mkdir -p Monteverdi.app/Contents/{MacOS,Resources}
+
+cat > Mapla.app/Contents/Info.plist << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>CFBundleExecutable</key>
+		<string>STARTUP_FILE</string>
+		<key>CFBundleIconFile</key>
+		<string>Monteverdi.icns</string>
+		<key>CFBundleInfoDictionaryVersion</key>
+		<string>6.0</string>
+		<key>CFBundlePackageType</key>
+		<string>APPL</string>
+	  <key>CFBundleLongVersionString</key>
+	  <string>LONG_VERSION</string>
+	  <key>CFBundleShortVersionString</key>
+	  <string>SHORT_VERSION</string>
+	</dict>
+</plist>
+EOF
+
+cat > $OUT_DIR/Mapla.app/Contents/MacOS/Mapla << EOF
+#!/bin/sh
+export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
+export GDAL_DATA=$OUT_DIR/share/gdal
+export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
+$OUT_DIR/bin/mapla "\$@"
+EOF
+
+chmod +x $OUT_DIR/Mapla.app/Contents/MacOS/Mapla
+
+cat > $OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi << EOF
+#!/bin/sh
+export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
+export GDAL_DATA=$OUT_DIR/share/gdal
+export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
+$OUT_DIR/bin/monteverdi "\$@"
+EOF
+
+chmod +x $OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi
+
+cp Mapla.app/Contents/Info.plist Monteverdi.app/Contents/Info.plist
+cp $OUT_DIR/Monteverdi.icns Monteverdi.app/Contents/Resources/
+cp $OUT_DIR/Monteverdi.icns Mapla.app/Contents/Resources/
+
+sed -i "" "s,STARTUP_FILE,Mapla,g" Mapla.app/Contents/Info.plist
+sed -i "" "s,LONG_VERSION,$LONG_VERSION_STRING,g" Mapla.app/Contents/Info.plist
+sed -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" Mapla.app/Contents/Info.plist
+
+sed -i "" "s,STARTUP_FILE,Monteverdi,g" Monteverdi.app/Contents/Info.plist
+sed -i "" "s,LONG_VERSION,$LONG_VERSION_STRING,g" Monteverdi.app/Contents/Info.plist
+sed -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" Monteverdi.app/Contents/Info.plist
+
 # echo "Creating symbolic links..."
 . ./make_symlinks
 
 if [ -f lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake ]; then
     rm -fr $OUT_DIR/bin/*
-    sed -i "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
-    sed -i "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
-    sed -i "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
+    sed -i "" "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
+    sed -i "" "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
+    sed -i "" "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
 fi
+
+rm -f $OUT_DIR/mapla.sh
+rm -f $OUT_DIR/monteverdi.sh
+
+rm -f $OUT_DIR/Monteverdi.icns
 
 rm -fr $OUT_DIR/tools
 

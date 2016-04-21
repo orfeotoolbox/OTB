@@ -269,6 +269,12 @@ function(install_monteverdi_files)
     set(vars "${vars}  ${req}=[${${req}}]\n")
   endforeach(req)
 
+  #install icon file for .app file. Monteverdi and Mapla has same icon!
+  if(APPLE)
+    install(FILES ${Monteverdi_SOURCE_DIR}/Packaging/MacOS/Monteverdi.icns
+      DESTINATION ${PKG_STAGE_DIR})
+  endif()
+
   ####################### install mingw qt.conf ##########################
   if(EXISTS ${Monteverdi_SOURCE_DIR}/Packaging/Windows/mingw/qt.conf)
     install(FILES ${Monteverdi_SOURCE_DIR}/Packaging/Windows/mingw/qt.conf
@@ -353,14 +359,16 @@ function(configure_package)
       list(APPEND PKG_PEFILES
         "${CMAKE_INSTALL_PREFIX}/bin/${EXE_FILE}${EXE_EXT}")
     endif()
-    if(DEFINED Monteverdi_SOURCE_DIR)
-      if(EXISTS ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT})
-        install(PROGRAMS
-          ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT}
-          DESTINATION
-          "${PKG_STAGE_DIR}")
+    if(NOT UNIX)
+      if(DEFINED Monteverdi_SOURCE_DIR)
+        if(EXISTS ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT})
+          install(PROGRAMS
+            ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT}
+            DESTINATION
+            "${PKG_STAGE_DIR}")
+        endif()
       endif()
-    endif()
+    endif(NOT UNIX)
   endforeach()
 
   file(GLOB OTB_APPS_LIST ${OTB_APPLICATIONS_DIR}/otbapp_${LIB_EXT}) # /lib/otb
