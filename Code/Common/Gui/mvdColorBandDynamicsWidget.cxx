@@ -37,6 +37,10 @@
 #include "Core/mvdAlgorithm.h"
 #include "Gui/mvdDoubleValidator.h"
 
+// Used for QString::number() calls. By default, QString::number()
+// uses a 6 digit precision.
+#define MAX_SIGNIFICANT_DIGITS 17
+
 namespace mvd
 {
 /*
@@ -120,8 +124,10 @@ void
 ColorBandDynamicsWidget
 ::SetLowIntensity( double value )
 {
+  // qDebug() << this << "::SetLowIntensity(" << value << ")";
+
   QString number(
-    QString::number( value, 'g', m_LowIntensityValidator->decimals() )
+    QString::number( value, 'g', MAX_SIGNIFICANT_DIGITS )
   );
 
   assert( !number.isEmpty() );
@@ -144,8 +150,10 @@ void
 ColorBandDynamicsWidget
 ::SetHighIntensity( double value )
 {
+  // qDebug() << this << "::SetHighIntensity(" << value << ")";
+
   QString number(
-    QString::number( value, 'g', m_HighIntensityValidator->decimals() )
+    QString::number( value, 'g', MAX_SIGNIFICANT_DIGITS )
   );
 
   assert( !number.isEmpty() );
@@ -262,19 +270,20 @@ ColorBandDynamicsWidget
   return m_Channel;
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
 /*****************************************************************************/
-
+/* SLOTS                                                                     */
 /*****************************************************************************/
 void
 ColorBandDynamicsWidget
-::on_lowIntensityLineEdit_textChanged( const QString& text )
+::on_lowIntensityLineEdit_editingFinished()
 {
-  // qDebug() << this << "::on_lowIntensityLineEdit_textChanged(" << text << ")";
+  // qDebug() << this << "::on_lowIntensityLineEdit_editingFinished()";
+
+  assert( m_UI!=NULL );
+  assert( m_UI->lowIntensityLineEdit!=NULL );
 
   bool isOk = true;
-  double value = text.toDouble( &isOk );
+  double value = m_UI->lowIntensityLineEdit->text().toDouble( &isOk );
 
   if( !isOk )
     {
@@ -293,12 +302,15 @@ ColorBandDynamicsWidget
 /*****************************************************************************/
 void
 ColorBandDynamicsWidget
-::on_highIntensityLineEdit_textChanged( const QString& text )
+::on_highIntensityLineEdit_editingFinished()
 {
-  // qDebug() << this << "::on_lowIntensityLineEdit_textChanged(" << text << ")";
+  // qDebug() << this << "::on_highIntensityLineEdit_editingFinished()";
+
+  assert( m_UI!=NULL );
+  assert( m_UI->highIntensityLineEdit!=NULL );
 
   bool isOk = true;
-  double value = text.toDouble( &isOk );
+  double value = m_UI->highIntensityLineEdit->text().toDouble( &isOk );
 
   if( !isOk )
     {

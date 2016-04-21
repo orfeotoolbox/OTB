@@ -198,7 +198,7 @@ private:
 
   /**
    */
-  virtual void virtual_ResetWidget() =0;
+  virtual void virtual_ResetWidget( bool ) =0;
 
 //
 // Private attributes.

@@ -31,13 +31,20 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>File format used for overview file</string>
+     </property>
      <property name="text">
       <string>Format:</string>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QComboBox" name="formatComboBox"/>
+    <widget class="QComboBox" name="formatComboBox">
+     <property name="toolTip">
+      <string>File format used for overview file</string>
+     </property>
+    </widget>
    </item>
    <item row="0" column="2">
     <widget class="QLabel" name="baseLabel">
@@ -47,6 +54,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>Decimation factor = Base power Level</string>
+     </property>
      <property name="text">
       <string>Base:</string>
      </property>
@@ -54,13 +64,20 @@
    </item>
    <item row="0" column="3">
     <widget class="QSpinBox" name="baseSpinBox">
+     <property name="toolTip">
+      <string>Decimation factor = Base power Level</string>
+     </property>
      <property name="minimum">
       <number>2</number>
      </property>
     </widget>
    </item>
    <item row="0" column="4" rowspan="4">
-    <widget class="QListView" name="resolutionsListView"/>
+    <widget class="QListView" name="resolutionsListView">
+     <property name="toolTip">
+      <string>Size list of all overview levels</string>
+     </property>
+    </widget>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="algorithmLabel">
@@ -70,13 +87,20 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>Algorithm used when resampling image to compute overview level</string>
+     </property>
      <property name="text">
       <string>Algorithm:</string>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QComboBox" name="algorithmComboBox"/>
+    <widget class="QComboBox" name="algorithmComboBox">
+     <property name="toolTip">
+      <string>Algorithm used when resampling image to compute overview level</string>
+     </property>
+    </widget>
    </item>
    <item row="1" column="2">
     <widget class="QLabel" name="levelsLabel">
@@ -86,13 +110,20 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>Decimation factor = Base power Level</string>
+     </property>
      <property name="text">
       <string>Levels:</string>
      </property>
     </widget>
    </item>
    <item row="1" column="3">
-    <widget class="QSpinBox" name="levelsSpinBox"/>
+    <widget class="QSpinBox" name="levelsSpinBox">
+     <property name="toolTip">
+      <string>Decimation factor = Base power Level</string>
+     </property>
+    </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="compressionLabel">
@@ -102,13 +133,20 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>Algorithm used to compress overview level data</string>
+     </property>
      <property name="text">
       <string>Compression:</string>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QComboBox" name="compressionComboBox"/>
+    <widget class="QComboBox" name="compressionComboBox">
+     <property name="toolTip">
+      <string>Algorithm used to compress overview level data</string>
+     </property>
+    </widget>
    </item>
    <item row="2" column="2">
     <widget class="QLabel" name="sizeLabel">
@@ -118,13 +156,20 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>Minimal size (in pixels) of smallest overview level</string>
+     </property>
      <property name="text">
       <string>Size:</string>
      </property>
     </widget>
    </item>
    <item row="2" column="3">
-    <widget class="QSpinBox" name="sizeSpinBox"/>
+    <widget class="QSpinBox" name="sizeSpinBox">
+     <property name="toolTip">
+      <string>Minimal size (in pixels) of smallest overview level</string>
+     </property>
+    </widget>
    </item>
    <item row="3" column="0" colspan="4">
     <spacer name="verticalSpacer">

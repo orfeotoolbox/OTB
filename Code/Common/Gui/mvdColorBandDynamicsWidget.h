@@ -255,8 +255,8 @@ private:
 //
 // Slots.
 private slots:
-  void on_lowIntensityLineEdit_textChanged( const QString& );
-  void on_highIntensityLineEdit_textChanged( const QString& );
+  void on_lowIntensityLineEdit_editingFinished();
+  void on_highIntensityLineEdit_editingFinished();
 
   void on_lowQuantileSpinBox_valueChanged( double );
   void on_highQuantileSpinBox_valueChanged( double );

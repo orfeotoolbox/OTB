@@ -29,6 +29,8 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
+#include <cmath>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -39,7 +41,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Gui/mvdGui.h"
-
 
 namespace mvd
 {
@@ -250,11 +251,22 @@ MultiResolutionPyramidWidget
 
   m_UI->sizeSpinBox->setRange( 1, size );
 
+  assert(m_GDALOverviewsBuilder->CountResolutions() >= m_GDALOverviewsBuilder->GetNbResolutions() );
+
+  // Force C++ implicit cast by declaring local variables to force compiler
+  // to find correct std::pow() signature.
+  //
+  // It fixes compile-time:
+  // error: call of pow(unsigned int, unsigned int) is ambiguous
+  double rf = m_GDALOverviewsBuilder->GetResolutionFactor();
+
+  int m = 
+    m_GDALOverviewsBuilder->CountResolutions() -
+    m_GDALOverviewsBuilder->GetNbResolutions();
+
   m_UI->sizeSpinBox->setValue(
-    std::pow(
-      m_GDALOverviewsBuilder->GetResolutionFactor(),
-      m_GDALOverviewsBuilder->CountResolutions() -
-      m_GDALOverviewsBuilder->GetNbResolutions()
+    static_cast< int >(
+      std::pow( rf, m )
     )
   );
 
@@ -306,16 +318,23 @@ MultiResolutionPyramidWidget
 
   unsigned int count = m_GDALOverviewsBuilder->CountResolutions();
 
-  m_UI->sizeSpinBox->setValue( 
+  // Force C++ implicit cast by declaring local variables to force compiler
+  // to find correct std::pow() signature.
+  //
+  // It fixes compile-time:
+  // error: call of pow(unsigned int, unsigned int) is ambiguous
+  double rf = m_GDALOverviewsBuilder->GetResolutionFactor();
+
+  int m =
+    count -
+    std::min(
+      m_GDALOverviewsBuilder->GetNbResolutions(),
+      count
+    );
+
+  m_UI->sizeSpinBox->setValue(
     static_cast< int >(
-      std::pow(
-	m_GDALOverviewsBuilder->GetResolutionFactor(),
-	count -
-	std::min(
-	  m_GDALOverviewsBuilder->GetNbResolutions(),
-	  count
-	)
-      )
+      std::pow( rf, m )
     )
   );
 

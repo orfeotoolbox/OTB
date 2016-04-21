@@ -157,6 +157,11 @@ public:
   /**
    */
   void SetPickingEnabled( bool );
+
+  /**
+   * This allows to set the fallback behaviour for picking
+   */
+  void SetPickingDefaultStatus( bool );
   /**
    */
   bool IsPickingEnabled() const;
@@ -269,6 +274,7 @@ protected:
   /**
    */
   bool m_IsPickingEnabled : 1;
+  bool m_PickingDefaultStatus : 1;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 

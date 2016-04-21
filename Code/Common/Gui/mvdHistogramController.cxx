@@ -110,7 +110,7 @@ HistogramController
 /*******************************************************************************/
 void
 HistogramController
-::virtual_ResetWidget()
+::virtual_ResetWidget( bool )
 {
   ResetWidget( RGBW_CHANNEL_ALL );
 }

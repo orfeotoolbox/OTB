@@ -163,6 +163,7 @@ namespace mvd
 
 /**
  */
+Monteverdi_EXPORT
 void
 AddItemsInto( QComboBox * comboBox,
 	      const char * context,

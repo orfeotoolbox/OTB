@@ -133,7 +133,7 @@ private:
 
   virtual void ClearWidget();
 
-  virtual void virtual_ResetWidget();
+  virtual void virtual_ResetWidget( bool = false );
 
   virtual void Disconnect( AbstractModel* );
 

@@ -990,7 +990,8 @@ MainWindow
   );
 
   quicklookView->SetPickingEnabled( false );
-
+  quicklookView->SetPickingDefaultStatus( false );
+  
   quicklookView->setMinimumSize(  64,  64 );
   quicklookView->setMaximumSize( 512, 512 );
   quicklookView->setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum );
@@ -2068,8 +2069,6 @@ MainWindow
     );
 
   assert( appWidget!=NULL );
-
-  appWidget->setWindowTitle( docName );
 
   appWidget->show();
 
