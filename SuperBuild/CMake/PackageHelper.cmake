@@ -209,22 +209,7 @@ function(install_common include_mvd)
 
   ####################### Install copyrights ######################
   install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/copyright DESTINATION ${PKG_SHARE_DEST_DIR})
-  file(WRITE "${PKG_STAGE_DIR}/Copyright.txt"
-"The OTB is released under the CeCILL-2.0 license. This license is available
-online :
-  http://www.cecill.info/licences/Licence_CeCILL_V2-en.html
-  http://www.cecill.info/licences/Licence_CeCILL_V2-fr.html
-More details on copyright information can be found in :
-  share/copyright
-
-However this binary package may be compiled with dependencies that have
-incompatible licensing. As a consequence, this OTB binary package will be
-released under GPL-v2 license in the following cases :
-- if ITK (used by OTB) was built with FFTW support enabled (FFTW is released
-under GPL-v2 license)
-- if this package was built using FreeType. FreeType allows to choose between
-the advertising FreeType license and the GPL-v2 license.
-")
+  install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE DESTINATION ${PKG_STAGE_DIR})
 
 endfunction()
 
