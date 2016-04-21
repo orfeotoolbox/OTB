@@ -47,9 +47,9 @@ public:
     {
     unsigned long MaxPatternSize;
     
-    std::string InputPath;
-    
-    std::string OutputPath;
+    std::vector<bool> Pattern1;
+
+    std::vector<bool> Pattern2;
     
     unsigned int Seed;
     
@@ -93,16 +93,8 @@ private:
 
   unsigned long FindBestSize(unsigned long tot);
   
-  //void OutputSamplingVectors();
-  
-  //void InputSamplingVectors();
-  
   /** Internal parameters for the sampler */
   ParameterType m_Parameters;
-
-  std::vector<bool> m_Pattern1;
-  
-  std::vector<bool> m_Pattern2;
   
   unsigned long m_Index1;
   
