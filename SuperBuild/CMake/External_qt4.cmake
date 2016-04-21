@@ -31,6 +31,8 @@ if(NOT __EXTERNAL_QT4__)
       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-openssl")
       if(APPLE)
         set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-framework")
+      else() #Linux
+        set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-sm -no-xrender -no-fontconfig -no-gtkstyle -no-glib")
       endif()
     endif()
     STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
