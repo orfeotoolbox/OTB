@@ -60,6 +60,7 @@ EOF
 
 cat > $OUT_DIR/Mapla.app/Contents/MacOS/Mapla << EOF
 #!/bin/sh
+export LC_NUMERIC=C
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 export GDAL_DATA=$OUT_DIR/share/gdal
 export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
@@ -70,6 +71,7 @@ chmod +x $OUT_DIR/Mapla.app/Contents/MacOS/Mapla
 
 cat > $OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi << EOF
 #!/bin/sh
+export LC_NUMERIC=C
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 export GDAL_DATA=$OUT_DIR/share/gdal
 export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
