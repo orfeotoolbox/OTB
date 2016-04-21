@@ -76,6 +76,7 @@ ImageViewWidget
                    Qt::WindowFlags flags ) :
   QGLWidget( parent, shareWidget, flags ),
   m_IsPickingEnabled( true ),
+  m_PickingDefaultStatus( true ),
   m_Manipulator( NULL ),
   m_Renderer( NULL )
 #if USE_XP_REGION_OPTIM
@@ -853,7 +854,7 @@ ImageViewWidget
   m_Manipulator->MouseReleaseEvent(event);
 
   // Reactivate picking after drag
-  m_IsPickingEnabled = true;
+  m_IsPickingEnabled = m_PickingDefaultStatus;
 }
 
 /*******************************************************************************/
@@ -1152,6 +1153,14 @@ ImageViewWidget
 ::SetPickingEnabled( bool isEnabled )
 {
   m_IsPickingEnabled = isEnabled;
+}
+
+/*****************************************************************************/
+void
+ImageViewWidget
+::SetPickingDefaultStatus( bool defaultStatus )
+{
+  m_PickingDefaultStatus = defaultStatus;
 }
 
 /*******************************************************************************/
