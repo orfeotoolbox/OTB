@@ -180,6 +180,9 @@ function(install_common include_mvd)
 
   if(include_mvd)
     install_monteverdi_files()
+    if(NOT EXISTS "${PKG_SHARE_SOURCE_DIR}/otb/i18n")
+      message(FATAL_ERROR "error ${PKG_SHARE_SOURCE_DIR}/otb not exists")
+    endif()
   endif()
 
   ####################### install GDAL data ############################
