@@ -1143,7 +1143,6 @@ ImageViewRenderer
 	imageSettings->SetCurrentGreen( it->m_Pixel[ 1 ] );
 	imageSettings->SetCurrentBlue( it->m_Pixel[ 2 ] );
 	}
-      }
 
       //
       // Get shader.
@@ -1180,6 +1179,7 @@ ImageViewRenderer
 	    ]
 	  );
 	}
+      }
     }
 }
 
