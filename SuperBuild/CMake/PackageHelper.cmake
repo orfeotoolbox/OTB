@@ -148,23 +148,17 @@ function(install_common include_mvd)
   # one for debugging..
   # install(CODE "message(\"CMake/PackageHelper.cmake:install_common(${outdir})\n${vars}\n\")")
 
+  #For Unixes we make them in the *pkgsetup.in
   ##################### install environment source ##########################
   if(WIN32 OR CMAKE_CROSSCOMPILING)
-    set(ENV_SOURCE_FILES
-      "${PACKAGE_SUPPORT_FILES_DIR}/otbenv.cmd"
-      "${PACKAGE_SUPPORT_FILES_DIR}/otbenv.profile"
-      )
-
-  elseif(UNIX)
-    set(ENV_SOURCE_FILES "${PACKAGE_SUPPORT_FILES_DIR}/otbenv.profile")
+    foreach(ENV_SOURCE_FILE
+        "${PACKAGE_SUPPORT_FILES_DIR}/otbenv.cmd"
+        "${PACKAGE_SUPPORT_FILES_DIR}/otbenv.profile")
+      if(EXISTS ${ENV_SOURCE_FILE})
+        install(FILES ${ENV_SOURCE_FILE} DESTINATION ${PKG_STAGE_DIR})
+      endif()
+    endforeach()
   endif()
-
-  foreach(ENV_SOURCE_FILE ${ENV_SOURCE_FILES})
-    if(EXISTS ${ENV_SOURCE_FILE})
-      install(FILES ${ENV_SOURCE_FILE} DESTINATION ${PKG_STAGE_DIR})
-    endif()
-  endforeach()
-
   ####################### install cli and gui scripts ###########################
   file(GLOB PKG_APP_SCRIPTS
     ${OTB_INSTALL_DIR}/bin/otbcli*
@@ -347,7 +341,8 @@ function(configure_package)
       list(APPEND PKG_PEFILES
         "${CMAKE_INSTALL_PREFIX}/bin/${EXE_FILE}${EXE_EXT}")
     endif()
-    if(NOT UNIX)
+    #For Unixes we write the startup script in the *pkgsetup.in
+    if(WIN32 OR CMAKE_CROSSCOMPILING)
       if(DEFINED Monteverdi_SOURCE_DIR)
         if(EXISTS ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT})
           install(PROGRAMS
@@ -356,7 +351,7 @@ function(configure_package)
             "${PKG_STAGE_DIR}")
         endif()
       endif()
-    endif(NOT UNIX)
+    endif(WIN32 OR CMAKE_CROSSCOMPILING)
   endforeach()
 
   file(GLOB OTB_APPS_LIST ${OTB_APPLICATIONS_DIR}/otbapp_${LIB_EXT}) # /lib/otb
