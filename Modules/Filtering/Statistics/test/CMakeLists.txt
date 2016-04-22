@@ -501,3 +501,7 @@ otb_add_test(NAME bfTvPeriodicSamplerTest
 otb_add_test(NAME bfTvPatternSamplerTest
              COMMAND otbStatisticsTestDriver
              otbPatternSamplerTest)
+
+otb_add_test(NAME bfTvRandomSamplerTest
+             COMMAND otbStatisticsTestDriver
+             otbRandomSamplerTest)

@@ -49,4 +49,5 @@ void RegisterTests()
   REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorTest);
   REGISTER_TEST(otbPeriodicSamplerTest);
   REGISTER_TEST(otbPatternSamplerTest);
+  REGISTER_TEST(otbRandomSamplerTest);
 }

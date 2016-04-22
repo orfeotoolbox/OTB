@@ -2,6 +2,7 @@ set(OTBStatistics_SRC
   otbSamplerBase.cxx
   otbPeriodicSampler.cxx
   otbPatternSampler.cxx
+  otbRandomSampler.cxx
   )
 
 add_library(OTBStatistics ${OTBStatistics_SRC})
