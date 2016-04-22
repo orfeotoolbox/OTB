@@ -46,7 +46,7 @@ otb_add_test(NAME leTvOGRDataToSamplePositionFilterXMLPoly COMMAND otbSamplingTe
   ${INPUTDATA}/leTvOGRDataToResampledOGRDataResamplingVectors_Poly.txt
   0
   ${INPUTDATA}/leTvOGRDataToResampledOGRDataXMLPoly.xml
-  ${TEMP}/leTvOGRDataToResampledOGRDataOutput_Poly.sqlite
+  ${TEMP}/leTvOGRDataToResampledOGRDataOutput_XMLPoly.sqlite
   ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput_Poly.sqlite
   )
   
