@@ -541,24 +541,24 @@ GlView
 		Point & center,
 		Spacing & spacing ) const
 {
-  // std::cout
-  //   << std::hex << this
-  //   << "::ZoomToRegion( "
-  //   << "[ " << origin[ 0 ] << ", " << origin[ 1 ] << "], "
-  //   << "[ " << extent[ 0 ] << ", " << extent[ 1 ] << "], "
-  //   << "[ " << spacing[ 0 ] << ", " << spacing[ 1 ] << "] )"
-  //   << std::endl;
+  std::cout
+    << std::hex << this << std::dec
+    << "::ZoomToRegion( "
+    << "[ " << origin[ 0 ] << ", " << origin[ 1 ] << "], "
+    << "[ " << extent[ 0 ] << ", " << extent[ 1 ] << "], "
+    << "[ " << native[ 0 ] << ", " << native[ 1 ] << "] )"
+    << std::endl;
 
   // Compute center point.
   center.SetToMidPoint( origin, extent );
 
-  // std::cout << "-> center: " << center[ 0 ] << ", " << center[ 1 ] << std::endl;
+  std::cout << "-> center: " << center[ 0 ] << ", " << center[ 1 ] << std::endl;
 
   // Get scale of (o, e) in viewport.
   assert( !m_Settings.IsNull() );
   double scale = m_Settings->GetScale( origin, extent, true );
 
-  // std::cout << "-> scale: " << scale << std::endl;
+  std::cout << "-> scale: " << scale << std::endl;
 
   /*
   assert( !std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() ||
@@ -588,7 +588,7 @@ GlView
   spacing[ 0 ] = ( native[ 0 ]<0.0 ? -1 : +1 ) * scale;
   spacing[ 1 ] = ( native[ 1 ]<0.0 ? -1 : +1 ) * scale;
 
-  // std::cout << "-> spacing: " << center[ 0 ] << ", " << center[ 1 ] << std::endl;
+  // std::cout << "-> spacing: " << spacing[ 0 ] << ", " << spacing[ 1 ] << std::endl;
 
   // Ok.
   return true;
@@ -603,6 +603,11 @@ GlView
 	      Spacing & spacing,
 	      double units ) const
 {
+  // std::cout
+  //   << std::hex << this << std::dec
+  //   << "::ZoomToFull();"
+  //   << std::endl;
+
   // Get layer actor.
   GlActor::Pointer actor( GetActor( key ) );
 
@@ -623,9 +628,12 @@ GlView
   center = m_Settings->GetViewportCenter();
   spacing = m_Settings->GetSpacing();
 
+  // std::cout << "-> spacing: " << spacing[ 0 ] << ", " << spacing[ 1 ] << std::endl;
+
   // Get native spacing.
   GeoInterface::Spacing2 n_spacing( geo->GetSpacing() );
 
+  // std::cout << "-> n_spacing: " << n_spacing[ 0 ] << ", " << n_spacing[ 1 ] << std::endl;
 
   // Transform center point to image space.
   Point o;
@@ -676,6 +684,23 @@ GlView
   spacing[ 1 ] =
     n_spacing[ 1 ] * units * spacing[ 1 ] /
     vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
+
+  // std::cout << "-> spacing: " << spacing[ 0 ] << ", " << spacing[ 1 ] << std::endl;
+
+  //
+  // Compute aspect-ratio corrected spacing (smallest pixel is chosen
+  // as 1:1 reference).
+  //
+  // MANTIS-1202
+  // {
+  if( vcl_abs( spacing[ 0 ] ) < vcl_abs( spacing[ 1 ] ) )
+    spacing[ 1 ] = spacing[ 0 ];
+  else
+    spacing[ 0 ] = spacing[ 1 ];
+  // }
+  // MANTIS-1202
+
+  // std::cout << "-> spacing: " << spacing[ 0 ] << ", " << spacing[ 1 ] << std::endl;
 
   //
   // Ok.
