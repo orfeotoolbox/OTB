@@ -1,5 +1,5 @@
 macro(superbuild_package)
-  cmake_parse_arguments(PKG  "" "STAGE_DIR;XDK" "SEARCHDIRS" ${ARGN} )
+  cmake_parse_arguments(PKG  "" "STAGE_DIR" "SEARCHDIRS" ${ARGN} )
 
   if(APPLE)
     set(loader_program_names otool)
@@ -68,7 +68,7 @@ macro(superbuild_package)
     endif()
   endif()
 
-  if(PKG_XDK)
+  if(PKG_GENERATE_XDK)
     install_xdk_files()
   endif()
 
@@ -120,20 +120,20 @@ function(process_deps infile)
                   #message("${sofile} is a symlink to ${linked_to_file}")
                 else() # is_symlink
                   if("${basename_of_sofile}" MATCHES "otbapp_")
-                    if(NOT MAKE_XDK)
+                    if(NOT PKG_GENERATE_XDK)
                       install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib/otb/applications)
                     endif()
                   else() #if(.. MATCHES "otbapp_")
                     #if we are making xdk. skill all those starting with libotb case insensitively
-                    if(MAKE_XDK)
+                    if(PKG_GENERATE_XDK)
                       string(TOLOWER "${basename_of_sofile}" sofile_lower )
                       if(NOT "${sofile_lower}" MATCHES "libotb")
                         install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib)
                       endif()
-                    else() #MAKE_XDK
+                    else() #PKG_GENERATE_XDK
                       #just install the so file to <staging-dir>/lib
                       install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib)
-                    endif() #MAKE_XDK
+                    endif() #PKG_GENERATE_XDK
 
                     # Finally touch a file in temp directory for globbing later
                     # message("touching ${basename_of_sofile}")
