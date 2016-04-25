@@ -541,24 +541,24 @@ GlView
 		Point & center,
 		Spacing & spacing ) const
 {
-  std::cout
-    << std::hex << this << std::dec
-    << "::ZoomToRegion( "
-    << "[ " << origin[ 0 ] << ", " << origin[ 1 ] << "], "
-    << "[ " << extent[ 0 ] << ", " << extent[ 1 ] << "], "
-    << "[ " << native[ 0 ] << ", " << native[ 1 ] << "] )"
-    << std::endl;
+  // std::cout
+  //   << std::hex << this << std::dec
+  //   << "::ZoomToRegion( "
+  //   << "[ " << origin[ 0 ] << ", " << origin[ 1 ] << "], "
+  //   << "[ " << extent[ 0 ] << ", " << extent[ 1 ] << "], "
+  //   << "[ " << native[ 0 ] << ", " << native[ 1 ] << "] )"
+  //   << std::endl;
 
   // Compute center point.
   center.SetToMidPoint( origin, extent );
 
-  std::cout << "-> center: " << center[ 0 ] << ", " << center[ 1 ] << std::endl;
+  // std::cout << "-> center: " << center[ 0 ] << ", " << center[ 1 ] << std::endl;
 
   // Get scale of (o, e) in viewport.
   assert( !m_Settings.IsNull() );
   double scale = m_Settings->GetScale( origin, extent, true );
 
-  std::cout << "-> scale: " << scale << std::endl;
+  // std::cout << "-> scale: " << scale << std::endl;
 
   /*
   assert( !std::numeric_limits< typename Spacing::ValueType >::has_quiet_NaN() ||
@@ -660,8 +660,11 @@ GlView
   //
   // MANTIS-1178: Lenght of vector e must be divided by native
   // spacing.
+  //
+  // MANTIS-1203: absolute value of native spacing should be
+  // considered (to avoid flipping effects).
   spacing[ 0 ] =
-    n_spacing[ 0 ] * units * spacing[ 0 ] /
+    vcl_abs( n_spacing[ 0 ] ) * units * spacing[ 0 ] /
     vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
 
   //
@@ -681,8 +684,11 @@ GlView
   //
   // MANTIS-1178: Lenght of vector e must be divided by native
   // spacing.
+  //
+  // MANTIS-1203: absolute value of native spacing should be
+  // considered (to avoid flipping effects).
   spacing[ 1 ] =
-    n_spacing[ 1 ] * units * spacing[ 1 ] /
+    vcl_abs( n_spacing[ 1 ] ) * units * spacing[ 1 ] /
     vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
 
   // std::cout << "-> spacing: " << spacing[ 0 ] << ", " << spacing[ 1 ] << std::endl;
