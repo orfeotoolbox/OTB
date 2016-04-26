@@ -1,3 +1,117 @@
+macro(super_package)
+  cmake_parse_arguments(PKG  "" "STAGE_DIR" "SEARCHDIRS" ${ARGN} )
+  set(loader_program_PATHS)
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+      set(loader_program_names "${MXE_ARCH}-w64-mingw32.shared-objdump")
+      set(loader_program_PATHS "${MXE_MXEROOT}/usr/bin")
+      set(LOADER_PROGRAM_ARGS "-p")
+      #guess install directory from OTB_MODULES_DIR
+      set(OTB_INSTALL_DIR ${OTB_MODULES_DIR}/../../../..)
+      set(DEPENDENCIES_INSTALL_DIR "${MXE_MXEROOT}/usr/${MXE_ARCH}-w64-mingw32.shared")
+    else()
+      if(APPLE)
+        set(loader_program_names otool)
+        set(LOADER_PROGRAM_ARGS "-l")
+        set(loader_program_PATHS /opt/local/bin) # a path that is already listed i path on apple
+      else()
+        set(loader_program_names objdump)
+        set(LOADER_PROGRAM_ARGS "-p")
+        set(loader_program_PATHS /usr/bin) # a path that is already listed in default path on Linux
+      endif()
+      #both OTB_INSTALL_DIR DEPENDENCIES_INSTALL_DIR are same for superbuild
+      set(OTB_INSTALL_DIR ${PKG_INSTALL_PREFIX})
+      set(DEPENDENCIES_INSTALL_DIR ${PKG_INSTALL_PREFIX})
+  endif()
+
+  find_program(LOADER_PROGRAM "${loader_program_names}" PATHS ${loader_program_PATHS})
+  if(NOT EXISTS ${LOADER_PROGRAM})
+    message(FATAL_ERROR "${loader_program_names} not found in ${loader_program_PATHS}. please check LOADER_PROGRAM variable is set correctly")
+  endif()
+
+  include(GetPrerequisites)
+
+  set(PKG_SEARCHDIRS)
+
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+    set(MXE_BIN_DIR "${DEPENDENCIES_INSTALL_DIR}/bin")
+    list(APPEND PKG_SEARCHDIRS ${MXE_BIN_DIR})
+    file(GLOB MXE_GCC_LIB_DIR "${MXE_BIN_DIR}/gcc*")
+    list(APPEND PKG_SEARCHDIRS ${MXE_GCC_LIB_DIR})
+    list(APPEND PKG_SEARCHDIRS "${MXE_BIN_DIR}/../qt/bin") #Qt
+    list(APPEND PKG_SEARCHDIRS "${MXE_BIN_DIR}/../qt/lib") #Qwt
+    list(APPEND PKG_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/bin") #mvd
+    list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #otbApplicationLauncher*.exe
+  else() #unixes
+    list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #exe
+    list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib") #so
+    list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib/otb") #mvd so
+  endif()
+  #common for all platforms.
+  set(OTB_APPLICATIONS_DIR "${OTB_INSTALL_DIR}/lib/otb/applications")
+  list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}") #otb apps
+
+  empty_package_staging_directory()
+
+  set(PKG_PEFILES)
+  if(NOT WIN32 AND NOT CMAKE_CROSSCOMPILING)
+    file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks "#!/bin/sh\n")
+    #NOTE: VAR_IN_PKGSETUP_CONFIGURE is copied to linux_pkgsetup.in during configure_file
+    set(VAR_IN_PKGSETUP_CONFIGURE)
+    set(PKG_SO_FILES)
+  endif() # if(NOT WIN32 AND NOT CMAKE_CROSSCOMPILING)
+
+  configure_package()
+
+  if(NOT WIN32 AND NOT CMAKE_CROSSCOMPILING)
+    ############# install client configure script ################
+    set(PKGSETUP_IN_FILENAME linux_pkgsetup.in)
+    if(APPLE)
+      set(PKGSETUP_IN_FILENAME macx_pkgsetup.in)
+    endif()
+    configure_file(${PACKAGE_SUPPORT_FILES_DIR}/${PKGSETUP_IN_FILENAME}
+      ${CMAKE_BINARY_DIR}/pkgsetup @ONLY)
+
+    install(FILES
+      ${CMAKE_BINARY_DIR}/pkgsetup
+      ${CMAKE_BINARY_DIR}/make_symlinks
+      DESTINATION ${PKG_STAGE_DIR}
+      PERMISSIONS
+      OWNER_READ OWNER_WRITE OWNER_EXECUTE
+      GROUP_READ GROUP_EXECUTE
+      WORLD_READ WORLD_EXECUTE)
+
+    if(UNIX)
+      if(NOT APPLE)
+        ####################### install patchelf #####################
+        install(FILES ${PKG_INSTALL_PREFIX}/tools/patchelf
+          DESTINATION ${PKG_STAGE_DIR}/tools
+          PERMISSIONS
+          OWNER_EXECUTE OWNER_WRITE OWNER_READ
+          GROUP_EXECUTE GROUP_READ)
+      endif()
+    endif()
+  endif() # if(NOT WIN32 AND NOT CMAKE_CROSSCOMPILING)
+
+  if(PKG_GENERATE_XDK)
+    install_xdk_files()
+  endif()
+
+endmacro(super_package)
+
+function(install_xdk_files)
+  install(DIRECTORY ${DEPENDENCIES_INSTALL_DIR}/share
+    DESTINATION ${PKG_STAGE_DIR})
+
+  install(DIRECTORY ${DEPENDENCIES_INSTALL_DIR}/include
+    DESTINATION ${PKG_STAGE_DIR}
+    PATTERN "include/OTB*" EXCLUDE )
+
+  install(DIRECTORY ${DEPENDENCIES_INSTALL_DIR}/lib/cmake
+    DESTINATION ${PKG_STAGE_DIR}/lib/
+    PATTERN "lib/cmake/OTB*" EXCLUDE)
+endfunction()
+
+
 set(WINDOWS_SYSTEM_DLLS
   msvc.*dll
   user32.dll

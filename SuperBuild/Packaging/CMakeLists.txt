@@ -24,6 +24,7 @@ else()
 endif()
 
 set(CMAKE_INSTALL_PREFIX "${SB_INSTALL_PREFIX}")
+set(PKG_INSTALL_PREFIX "${SB_INSTALL_PREFIX}")
 
 set(PACKAGE_NAME OTB)
 set(PACKAGE_LONG_NAME OrfeoToolBox)
@@ -76,20 +77,19 @@ foreach(PACKAGE ${PACKAGE_LIST})
   file(WRITE "${PACKAGE_PROJECT_DIR}/src/PACKAGE-${PACKAGE}/CMakeLists.txt"
     "cmake_minimum_required(VERSION 2.6)
        include(CMakeParseArguments)
-       set(PKG_INSTALL_PREFIX \"${SB_INSTALL_PREFIX}\")
-       set(CMAKE_INSTALL_PREFIX \"${SB_INSTALL_PREFIX}\")
+       set(PKG_INSTALL_PREFIX \"${PKG_INSTALL_PREFIX}\")
+       set(CMAKE_INSTALL_PREFIX \"${PKG_INSTALL_PREFIX}\")
        set(DOWNLOAD_LOCATION \"${DOWNLOAD_LOCATION}\")
        set(PACKAGE_SUPPORT_FILES_DIR \"${CMAKE_CURRENT_SOURCE_DIR}\")
        set(Monteverdi_SOURCE_DIR \"${SUPERBUILD_BINARY_DIR}/MVD/src/MVD\")
        set(Monteverdi_BINARY_DIR \"${SUPERBUILD_BINARY_DIR}/MVD/build\")
        set(OTB_INSTALL_DIR \"${SUPERBUILD_BINARY_DIR}/OTB/build\")
-       set(QT_PLUGINS_DIR \"${SB_INSTALL_PREFIX}/plugins\")
-       set(QT_TRANSLATIONS_DIR \"${SB_INSTALL_PREFIX}/translations\")
+       set(QT_PLUGINS_DIR \"${PKG_INSTALL_PREFIX}/plugins\")
+       set(QT_TRANSLATIONS_DIR \"${PKG_INSTALL_PREFIX}/translations\")
        set(ITK_VERSION_STRING \"${get_version_ITK_SB_VERSION}\")
        set(PKG_GENERATE_XDK ${PKG_GENERATE_XDK})
-       include(\"${OTB_SUPERBUILD_SOURCE_DIR}/CMake/Package_Macro.cmake\")
        include(\"${OTB_SUPERBUILD_SOURCE_DIR}/CMake/PackageHelper.cmake\")
-       superbuild_package(STAGE_DIR \"${ARCHIVE_NAME}\")")
+       super_package(STAGE_DIR \"${ARCHIVE_NAME}\")")
 
   #we have a dependency to PACKAGE_TOOLS always. check External_pkgtools.cmake
   set(PACKAGE-${PACKAGE}-configure_EXTRA_DEPENDS PACKAGE-TOOLS)
@@ -148,7 +148,7 @@ foreach(PACKAGE ${PACKAGE_LIST})
     ${MAKESELF_SCRIPT}
     "--target"
     "${ARCHIVE_NAME}"
-    "${SB_INSTALL_PREFIX}/${ARCHIVE_NAME}"
+    "${PKG_INSTALL_PREFIX}/${ARCHIVE_NAME}"
     "${ARCHIVE_NAME}.run"
     "${PACKAGE_LONG_NAME} ${get_version_OTB_VERSION_STRING}"
     "./pkgsetup"
