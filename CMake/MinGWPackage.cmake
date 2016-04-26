@@ -1,14 +1,23 @@
 macro(package_mingw)
   cmake_parse_arguments(PKG  "" "STAGE_DIR;ARCH;MXEROOT" "SEARCHDIRS" ${ARGN} )
-  if("${PKG_ARCH}" STREQUAL "x86")
-    set(DEPENDENCIES_INSTALL_DIR "${PKG_MXEROOT}/usr/i686-w64-mingw32.shared")
-    set(MXE_OBJDUMP "${PKG_MXEROOT}/usr/bin/i686-w64-mingw32.shared-objdump")
-  elseif("${PKG_ARCH}" STREQUAL "x64")
-    set(DEPENDENCIES_INSTALL_DIR "${PKG_MXEROOT}/usr/x86_64-w64-mingw32.shared")
-    set(MXE_OBJDUMP "${PKG_MXEROOT}/usr/bin/x86_64-w64-mingw32.shared-objdump")
+
+  set(loader_program_PATHS)
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+      set(loader_program_names "${PKG_ARCH}-w64-mingw32.shared-objdump")
+      set(loader_program_PATHS "${PKG_MXEROOT}/usr/bin")
+      set(DEPENDENCIES_INSTALL_DIR "${PKG_MXEROOT}/usr/${PKG_ARCH}-w64-mingw32.shared")
+      set(LOADER_PROGRAM_ARGS "-p")
+  else()
+    set(loader_program_PATHS /usr/bin) # a path that is already listed in default path on unix
   endif()
 
-#  message()
+  find_program(LOADER_PROGRAM "${loader_program_names}" PATHS ${loader_program_PATHS})
+  if(NOT EXISTS ${LOADER_PROGRAM})
+    message(FATAL_ERROR "${loader_program_names} not found in ${loader_program_PATHS}. please check LOADER_PROGRAM variable is set correctly")
+  endif()
+
+  include(GetPrerequisites)
+
   #guess install directory from OTB_MODULES_DIR
   set(OTB_INSTALL_DIR ${OTB_MODULES_DIR}/../../../..)
   set(OTB_APPLICATIONS_DIR ${OTB_MODULES_DIR}/../../../otb/applications)
@@ -32,55 +41,15 @@ macro(package_mingw)
 endmacro(package_mingw)
 
 
-function(process_deps infile)
+function(install_xdk_files)
+  install(DIRECTORY ${DEPENDENCIES_INSTALL_DIR}/share
+    DESTINATION ${PKG_STAGE_DIR})
 
-  get_filename_component(bn ${infile} NAME)
+  install(DIRECTORY ${DEPENDENCIES_INSTALL_DIR}/include
+    DESTINATION ${PKG_STAGE_DIR}
+    PATTERN "include/OTB*" EXCLUDE )
 
-  list_contains(contains "${bn}" "${alldlls}")
-  if(NOT contains)
-    set(DLL_FOUND FALSE)
-    foreach(SEARCHDIR ${PKG_SEARCHDIRS})
-      if(NOT DLL_FOUND)
-        if(EXISTS ${SEARCHDIR}/${infile})
-          set(DLL_FOUND TRUE)
-        else()
-          string(TOLOWER ${infile} infile_lower)
-          if(EXISTS ${SEARCHDIR}/${infile_lower})
-            set(DLL_FOUND TRUE)
-            set(infile ${infile_lower})
-          endif()
-        endif()
-        if(DLL_FOUND)
-          message(STATUS "Processing ${SEARCHDIR}/${infile}")
-          if(NOT "${infile}" MATCHES "otbapp")
-            install(FILES "${SEARCHDIR}/${infile}"
-              DESTINATION ${PKG_STAGE_DIR}/bin)
-          else()
-            ##message(STATUS "skipping..${infile}")
-          endif()
-          if(NOT EXISTS ${MXE_OBJDUMP})
-            message(FATAL_ERROR "objdump executable not found. please check MXE_OBJDUMP is set to correct cross compiled executable")
-          endif()
-          execute_process(COMMAND ${MXE_OBJDUMP} "-p" "${SEARCHDIR}/${infile}"  OUTPUT_VARIABLE dlldeps)
-          string(REGEX MATCHALL "DLL.Name..[A-Za-z(0-9\\.0-9)+_\\-]*" OUT "${dlldeps}")
-          string(REGEX REPLACE "DLL.Name.." "" OUT "${OUT}")
-          foreach(o ${OUT})
-            process_deps(${o})
-          endforeach()
-        endif()
-      endif(NOT DLL_FOUND)
-    endforeach()
-
-    if(NOT DLL_FOUND)
-      is_system_dll(iss "${infile}")
-      if(NOT iss)
-        set(notfound_dlls "${notfound_dlls};${infile}")
-      endif()
-    else(NOT DLL_FOUND)
-
-      set( alldlls "${alldlls};${bn}" PARENT_SCOPE )
-    endif(NOT DLL_FOUND)
-
-    set(notfound_dlls "${notfound_dlls}" PARENT_SCOPE )
-   endif()
+  install(DIRECTORY ${DEPENDENCIES_INSTALL_DIR}/lib/cmake
+    DESTINATION ${PKG_STAGE_DIR}/lib/
+    PATTERN "lib/cmake/OTB*" EXCLUDE)
 endfunction()

@@ -63,13 +63,13 @@ set(Monteverdi_UI_VERSION "1")
 set(
   Monteverdi_VERSION_STRING
   "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
-)
+  )
 
 #----------------------------------------------------------------------------
 set(
   Monteverdi_DATA_VERSION_STRING
   "${Monteverdi_DATA_VERSION_MAJOR}.${Monteverdi_DATA_VERSION_MINOR}.${Monteverdi_DATA_VERSION_PATCH}"
-)
+  )
 
 #----------------------------------------------------------------------------
 set(Monteverdi_FLOATING_TYPE "float" CACHE STRING "The type of data in which input images are read (double/float)." )
@@ -234,12 +234,12 @@ set( Monteverdi_CONFIGURE_FILE "ConfigureMonteverdi.h" )
 configure_file(
   ${Monteverdi_SOURCE_DIR}/${Monteverdi_CONFIGURE_FILE}.in
   ${Monteverdi_BINARY_DIR}/${Monteverdi_CONFIGURE_FILE}
-)
+  )
 
 set(Monteverdi_LIBRARY_PROPERTIES
-    VERSION   "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}"
-    SOVERSION "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}"
-)
+  VERSION   "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}"
+  SOVERSION "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}"
+  )
 
 #----------------------------------------------------------------------------
 # Include the Packaging subdir after every other dir
@@ -291,9 +291,9 @@ endif()
 #and uses a custom target named packages.
 if(WIN32)
 
-# create_cpack_config()
+  # create_cpack_config()
 
-# stop generation of msvc packages for windows. 04-apr-2016. point OTB.
+  # stop generation of msvc packages for windows. 04-apr-2016. point OTB.
 
   #TODO: fix after 5.4.0 release.
   #set(PKG_NAME ${PROJECT_NAME})
@@ -314,10 +314,10 @@ if(WIN32)
 
     #define the name of final archive based on build architecture. win32 or win64?
     if(MXE_TARGET_DIR MATCHES "i686")
-      set(mxearch x86)
+      set(mxearch "i686")
       set(archive_name ${PKG_NAME}-${PACKAGE_VERSION_STRING}-win32)
     elseif(MXE_TARGET_DIR MATCHES "x86_64")
-      set(mxearch x64)
+      set(mxearch "x86_64")
       set(archive_name ${PKG_NAME}-${PACKAGE_VERSION_STRING}-win64)
     endif()
 
