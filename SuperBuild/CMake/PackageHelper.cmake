@@ -156,7 +156,7 @@ function(install_common include_mvd)
         install(FILES ${ENV_SOURCE_FILE} DESTINATION ${PKG_STAGE_DIR})
       endif()
     endforeach()
-    set(PKG_OTB_SHARE_SOURCE_DIR "${CMAKE_INSTALL_PREFIX}/share")
+    set(PKG_OTB_SHARE_SOURCE_DIR "${PKG_INSTALL_PREFIX}/share")
   endif()
   ####################### install cli and gui scripts ###########################
   file(GLOB PKG_APP_SCRIPTS
@@ -288,8 +288,8 @@ function(install_monteverdi_files)
 endfunction()
 
 macro(empty_package_staging_directory)
-  message(STATUS "Empty package staging directory: ${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
-  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
+  message(STATUS "Empty package staging directory: ${PKG_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
+  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${PKG_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
 endmacro()
 
 #NOTE:

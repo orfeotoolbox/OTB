@@ -76,6 +76,7 @@ foreach(PACKAGE ${PACKAGE_LIST})
   file(WRITE "${PACKAGE_PROJECT_DIR}/src/PACKAGE-${PACKAGE}/CMakeLists.txt"
     "cmake_minimum_required(VERSION 2.6)
        include(CMakeParseArguments)
+       set(PKG_INSTALL_PREFIX \"${SB_INSTALL_PREFIX}\")
        set(CMAKE_INSTALL_PREFIX \"${SB_INSTALL_PREFIX}\")
        set(DOWNLOAD_LOCATION \"${DOWNLOAD_LOCATION}\")
        set(PACKAGE_SUPPORT_FILES_DIR \"${CMAKE_CURRENT_SOURCE_DIR}\")

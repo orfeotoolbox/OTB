@@ -15,8 +15,8 @@ macro(superbuild_package)
 
   include(GetPrerequisites)
 
-  set(DEPENDENCIES_INSTALL_DIR ${SB_INSTALL_PREFIX})
-  set(OTB_INSTALL_DIR ${SB_INSTALL_PREFIX})
+  set(DEPENDENCIES_INSTALL_DIR ${PKG_INSTALL_PREFIX})
+  set(OTB_INSTALL_DIR ${PKG_INSTALL_PREFIX})
 
   set(PKG_SEARCHDIRS)
   set(OTB_APPLICATIONS_DIR "${OTB_INSTALL_DIR}/lib/otb/applications")
@@ -58,7 +58,7 @@ macro(superbuild_package)
   if(UNIX)
     if(NOT APPLE)
       ####################### install patchelf #####################
-      install(FILES ${SB_INSTALL_PREFIX}/tools/patchelf
+      install(FILES ${PKG_INSTALL_PREFIX}/tools/patchelf
         DESTINATION ${PKG_STAGE_DIR}/tools
         PERMISSIONS
         OWNER_EXECUTE OWNER_WRITE OWNER_READ
