@@ -4,21 +4,20 @@ set(WINDOWS_SYSTEM_DLLS
   gdi32.dll
   shell32.dll
   kernel32.dll
-  advapi32.dll
-  crypt32.dll
   ws2_32.dll
   wldap32.dll
   ole32.dll
-  opengl32.dll
-  glu32.dll
   comdlg32.dll
-  imm32.dll
-  oleaut32.dll
-  comctl32.dll
-  winmm.dll
   shfolder.dll
   secur32.dll
   wsock32.dll
+  advapi32.dll
+  crypt32.dll
+  imm32.dll
+  oleaut32.dll
+  winmm.dll
+  opengl32.dll
+  glu32.dll
   winspool.drv)
 
 set(LINUX_SYSTEM_DLLS
@@ -61,17 +60,15 @@ set(APPLE_SYSTEM_DLLS
   libgcc_s.*dylib
   )
 
-if(UNIX)
+if(WIN32 OR CMAKE_CROSSCOMPILING)
+  set(SYSTEM_DLLS "${WINDOWS_SYSTEM_DLLS}")
+else() #case for unixes
   if(APPLE)
     set(SYSTEM_DLLS "${APPLE_SYSTEM_DLLS}")
   else()
     set(SYSTEM_DLLS "${LINUX_SYSTEM_DLLS}")
   endif()
-else(UNIX)
-  if(WIN32 OR CMAKE_CROSSCOMPILING)
-    set(SYSTEM_DLLS "${WINDOWS_SYSTEM_DLLS}")
-  endif()
-endif()
+endif(WIN32 OR CMAKE_CROSSCOMPILING)
 
 macro(is_system_dll matched value)
   set(${matched})
@@ -148,6 +145,8 @@ function(install_common include_mvd)
   # one for debugging..
   # install(CODE "message(\"CMake/PackageHelper.cmake:install_common(${outdir})\n${vars}\n\")")
 
+  set(PKG_OTB_SHARE_SOURCE_DIR "${PKG_SHARE_SOURCE_DIR}")
+
   #For Unixes we make them in the *pkgsetup.in
   ##################### install environment source ##########################
   if(WIN32 OR CMAKE_CROSSCOMPILING)
@@ -158,6 +157,7 @@ function(install_common include_mvd)
         install(FILES ${ENV_SOURCE_FILE} DESTINATION ${PKG_STAGE_DIR})
       endif()
     endforeach()
+    set(PKG_OTB_SHARE_SOURCE_DIR "${CMAKE_INSTALL_PREFIX}/share")
   endif()
   ####################### install cli and gui scripts ###########################
   file(GLOB PKG_APP_SCRIPTS
@@ -174,8 +174,8 @@ function(install_common include_mvd)
 
   if(include_mvd)
     install_monteverdi_files()
-    if(NOT EXISTS "${PKG_SHARE_SOURCE_DIR}/otb/i18n")
-      message(FATAL_ERROR "error ${PKG_SHARE_SOURCE_DIR}/otb not exists")
+    if(NOT EXISTS "${PKG_OTB_SHARE_SOURCE_DIR}/otb/i18n")
+      message(FATAL_ERROR "error ${PKG_OTB_SHARE_SOURCE_DIR}/otb not exists")
     endif()
   endif()
 
@@ -187,26 +187,30 @@ function(install_common include_mvd)
 
   install(DIRECTORY ${GDAL_DATA} DESTINATION ${PKG_SHARE_DEST_DIR})
 
-  ####################### install GeoTIFF data ###########################
+  ####################### install GeoTIFF data ########################
   install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/epsg_csv DESTINATION ${PKG_SHARE_DEST_DIR})
 
-  ####################### install OSSIM data ###########################
+  ####################### install OSSIM data ##########################
   install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/ossim DESTINATION ${PKG_SHARE_DEST_DIR})
 
   ####################### install otb share ###########################
-  install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/otb DESTINATION ${PKG_SHARE_DEST_DIR})
+  install(DIRECTORY ${PKG_OTB_SHARE_SOURCE_DIR}/otb DESTINATION ${PKG_SHARE_DEST_DIR})
 
-  ####################### install proj share ###########################
+  ####################### install proj share ##########################
   if(EXISTS ${PKG_SHARE_SOURCE_DIR}/proj)
     install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/proj DESTINATION ${PKG_SHARE_DEST_DIR})
   endif()
 
-  ####################### Install otb applications ######################
+  ####################### Install otb applications ####################
   install(DIRECTORY "${OTB_APPLICATIONS_DIR}"  DESTINATION ${PKG_OTBLIBS_DIR})
 
-  ####################### Install copyrights ######################
-  install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/copyright DESTINATION ${PKG_SHARE_DEST_DIR})
-  install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE DESTINATION ${PKG_STAGE_DIR})
+  ####################### Install copyrights ##########################
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+    #do install license for windows package
+  else()
+    install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/copyright DESTINATION ${PKG_SHARE_DEST_DIR})
+    install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE DESTINATION ${PKG_STAGE_DIR})
+  endif()
 
 endfunction()
 
@@ -384,7 +388,7 @@ function(configure_package)
   list(LENGTH notfound_dlls nos)
   if(${nos} GREATER 0)
     list(REMOVE_DUPLICATES notfound_dlls)
-    #string(REPLACE ".so;" ".so\\r\\n" notfound_dlls ${notfound_dlls})
+    #string(REPLACE ";" "\r" notfound_dlls ${notfound_dlls})
     message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}. Please consider adding their paths to PKG_SEARCHDIRS when calling superbuild_package macro.")
   endif()
 
@@ -490,5 +494,131 @@ function(is_file_a_symbolic_link file result_var1 result_var2)
     else()
       message(STATUS "warning: No 'file' command, skipping execute_process...")
     endif()
+  endif()
+endfunction()
+
+
+
+function(process_deps infile)
+
+  if(APPLE)
+    if( "${infile}" MATCHES "@rpath")
+      string(REGEX REPLACE "@rpath." "" infile "${infile}")
+    endif()
+  endif()
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+    string(TOLOWER "${infile}" infile_lower )
+  endif()
+  get_filename_component(bn ${infile} NAME)
+
+  list_contains(contains "${bn}" "${alldlls}")
+  if(NOT contains)
+    set(DLL_FOUND FALSE)
+
+    foreach(SEARCHDIR ${PKG_SEARCHDIRS})
+      if(NOT DLL_FOUND)
+        if(WIN32 OR CMAKE_CROSSCOMPILING)
+          if(NOT EXISTS ${SEARCHDIR}/${infile} )
+            if(EXISTS ${SEARCHDIR}/${infile_lower} )
+              set(infile ${infile_lower})
+            endif()
+          endif()
+        endif()
+        if(EXISTS ${SEARCHDIR}/${infile})
+          set(DLL_FOUND TRUE)
+          message(STATUS "Processing ${SEARCHDIR}/${infile}")
+          is_file_executable("${SEARCHDIR}/${infile}" is_executable)
+          if(is_executable)
+              install(PROGRAMS "${SEARCHDIR}/${infile}"
+                DESTINATION ${PKG_STAGE_DIR}/bin)
+          else(is_executable)
+            get_filename_component(bn_we ${infile} NAME_WE)
+            file(GLOB sofiles "${SEARCHDIR}/${bn_we}*")
+            foreach(sofile ${sofiles})
+              get_filename_component(sofile_ext ${sofile} EXT)
+              set(is_valid TRUE)
+              if ("${sofile_ext}" MATCHES ".la"
+                  OR "${sofile_ext}" MATCHES ".prl"
+                  OR "${sofile_ext}" MATCHES ".a")
+                set(is_valid FALSE)
+              endif()
+
+              if(is_valid)
+                get_filename_component(basename_of_sofile ${sofile} NAME)
+                is_file_a_symbolic_link("${sofile}" is_symlink linked_to_file)
+                if(is_symlink)
+                  # NOTE: $OUT_DIR is set actually in pkgsetup.in. So don't try
+                  # any pre-mature optimization on that variable names
+                  file(APPEND
+                    ${CMAKE_BINARY_DIR}/make_symlinks
+                    "ln -sf $OUT_DIR/lib/${linked_to_file} $OUT_DIR/lib/${basename_of_sofile}\n"
+                    )
+                  #message("${sofile} is a symlink to ${linked_to_file}")
+                else() # is_symlink
+                  if("${basename_of_sofile}" MATCHES "otbapp_")
+                    if(NOT PKG_GENERATE_XDK)
+                      install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib/otb/applications)
+                    endif()
+                  else() #if(.. MATCHES "otbapp_")
+                    #if we are making xdk. skill all those starting with libotb case insensitively
+                    if(PKG_GENERATE_XDK)
+                      string(TOLOWER "${basename_of_sofile}" sofile_lower )
+                      if(NOT "${sofile_lower}" MATCHES "libotb")
+                        install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib)
+                      endif()
+                    else() #PKG_GENERATE_XDK
+                      #just install the so file to <staging-dir>/lib
+                      install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib)
+                    endif() #PKG_GENERATE_XDK
+
+                    # Finally touch a file in temp directory for globbing later
+                    # message("touching ${basename_of_sofile}")
+                    execute_process(COMMAND ${CMAKE_COMMAND} -E touch "${CMAKE_BINARY_DIR}/temp_so_names_dir/${basename_of_sofile}")
+                  endif() #if(.. MATCHES "otbapp_")
+                endif() #is_symlink
+              endif() #is_valid
+            endforeach()
+          endif(is_executable)
+          execute_process(
+            COMMAND ${LOADER_PROGRAM} ${LOADER_PROGRAM_ARGS} "${SEARCHDIR}/${infile}"
+            RESULT_VARIABLE loader_rv
+            OUTPUT_VARIABLE loader_ov
+            ERROR_VARIABLE loader_ev
+            )
+          if(loader_rv)
+            message(FATAL_ERROR "loader_ev=${loader_ev}\n PACKAGE-OTB: result_variable is '${loader_rv}'")
+          endif()
+
+          if(WIN32 OR CMAKE_CROSSCOMPILING)
+            string(REGEX MATCHALL "DLL.Name..[A-Za-z(0-9\\.0-9)+_\\-]*" loader_ov "${loader_ov}")
+            string(REGEX REPLACE "DLL.Name.." "" needed_dlls "${loader_ov}")
+          else()  #case for unixes
+            if(APPLE)
+              string(REGEX REPLACE "[^\n]+cmd LC_LOAD_DYLIB\n[^\n]+\n[^\n]+name ([^\n]+).\\(offset[^\n]+\n" "rpath \\1\n" loader_ov "${loader_ov}")
+              string(REGEX MATCHALL "rpath [^\n]+" loader_ov "${loader_ov}")
+              string(REGEX REPLACE "rpath " "" needed_dlls "${loader_ov}")
+            else(APPLE)
+              string(REGEX MATCHALL "NEEDED\\ *[A-Za-z(0-9\\.0-9)+_\\-]*" loader_ov "${loader_ov}")
+              string(REGEX REPLACE "NEEDED" "" needed_dlls "${loader_ov}")
+            endif(APPLE)
+          endif()
+
+          foreach(needed_dll ${needed_dlls})
+            string(STRIP ${needed_dll} needed_dll)
+            process_deps(${needed_dll})
+          endforeach()
+        endif()
+      endif(NOT DLL_FOUND)
+    endforeach()
+
+    if(NOT DLL_FOUND)
+      is_system_dll(iss "${infile}")
+      if(NOT iss)
+        set(notfound_dlls "${notfound_dlls};${infile}")
+      endif()
+    else(NOT DLL_FOUND)
+      set( alldlls "${alldlls};${bn}" PARENT_SCOPE )
+    endif(NOT DLL_FOUND)
+    set(notfound_dlls "${notfound_dlls}" PARENT_SCOPE )
   endif()
 endfunction()
