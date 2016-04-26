@@ -15,17 +15,15 @@ macro(superbuild_package)
 
   include(GetPrerequisites)
 
-  #CMAKE_INSTALL_PREFIX -> SB_INSTALL_PREFIX
-  #"${PKG_MXEROOT}/usr/x86_64-w64-mingw32.shared/bin")
+  set(DEPENDENCIES_INSTALL_DIR ${SB_INSTALL_PREFIX})
+  set(OTB_INSTALL_DIR ${SB_INSTALL_PREFIX})
 
-  #a helper variable. rethink
-  set(DEPENDENCIES_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
+  set(PKG_SEARCHDIRS)
   set(OTB_APPLICATIONS_DIR "${OTB_INSTALL_DIR}/lib/otb/applications")
-
-  list(APPEND PKG_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/bin") #exe
-  list(APPEND PKG_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/lib") #so
-  list(APPEND PKG_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/lib/otb") #mvd so
-  list(APPEND PKG_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/lib/otb/applications") #otb apps
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #exe
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib") #so
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib/otb") #mvd so
+  list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}") #otb apps
 
   empty_package_staging_directory()
 
@@ -60,7 +58,7 @@ macro(superbuild_package)
   if(UNIX)
     if(NOT APPLE)
       ####################### install patchelf #####################
-      install(FILES ${CMAKE_INSTALL_PREFIX}/tools/patchelf
+      install(FILES ${SB_INSTALL_PREFIX}/tools/patchelf
         DESTINATION ${PKG_STAGE_DIR}/tools
         PERMISSIONS
         OWNER_EXECUTE OWNER_WRITE OWNER_READ

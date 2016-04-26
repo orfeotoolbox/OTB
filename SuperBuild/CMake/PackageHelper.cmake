@@ -133,7 +133,6 @@ function(install_common include_mvd)
       OTB_APPLICATIONS_DIR
       PKG_STAGE_DIR
       PACKAGE_SUPPORT_FILES_DIR
-      CMAKE_INSTALL_PREFIX
       OTB_INSTALL_DIR
       )
     if(NOT DEFINED ${req})
@@ -335,7 +334,7 @@ function(configure_package)
 
   foreach(EXE_FILE monteverdi
       mapla)
-    if(EXISTS "${CMAKE_INSTALL_PREFIX}/bin/${EXE_FILE}${EXE_EXT}")
+    if(EXISTS "${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}")
       #VAR_IN_PKGSETUP_CONFIGURE might seem a bit redundant variable if you
       #consider PKG_PEFILES which also has same content.
       #But VAR_IN_PKGSETUP_CONFIGURE goes into pkgsetup.in for Linux standalone binaries
@@ -343,7 +342,7 @@ function(configure_package)
       # process_deps() function
       set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} bin/${EXE_FILE}${EXE_EXT}")
       list(APPEND PKG_PEFILES
-        "${CMAKE_INSTALL_PREFIX}/bin/${EXE_FILE}${EXE_EXT}")
+        "${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}")
     endif()
     #For Unixes we write the startup script in the *pkgsetup.in
     if(WIN32 OR CMAKE_CROSSCOMPILING)
