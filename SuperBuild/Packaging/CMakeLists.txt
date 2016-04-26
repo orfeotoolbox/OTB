@@ -151,6 +151,7 @@ foreach(PACKAGE ${PACKAGE_LIST})
     "${ARCHIVE_NAME}.run"
     "${PACKAGE_LONG_NAME} ${get_version_OTB_VERSION_STRING}"
     "./pkgsetup"
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     DEPENDS PACKAGE-${PACKAGE}-build
     )
 
