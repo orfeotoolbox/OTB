@@ -286,6 +286,9 @@ if(BUILD_TESTING)
   add_subdirectory(Testing)
 endif()
 
+if(WIN32 OR CMAKE_CROSSCOMPILING)
+  option(GENERATE_XDK  "Generate XDK" OFF)
+endif()
 ############## Packaging stuff for Windows ####################
 #cpack has a built-in target called 'package'. In our case we create two standalone installers with
 #and uses a custom target named packages.
@@ -301,8 +304,15 @@ if(WIN32)
   set(PACKAGE_VERSION_STRING ${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH})
 
   if(CMAKE_CROSSCOMPILING)
-    if(NOT DEFINED MXE_TARGET_DIR)
+
+    set(OTB_SOURCE_DIR "" CACHE PATH "path to superbuild binary directory")
+
+    if(NOT MXE_TARGET_DIR)
       message(FATAL_ERROR "MXE_TARGET_DIR is missing")
+    endif()
+
+    if(NOT OTB_SOURCE_DIR)
+      message(FATAL_ERROR "OTB_SOURCE_DIR is missing")
     endif()
 
     find_program(ZIP_EXECUTABLE zip)
@@ -314,10 +324,10 @@ if(WIN32)
 
     #define the name of final archive based on build architecture. win32 or win64?
     if(MXE_TARGET_DIR MATCHES "i686")
-      set(mxearch "i686")
+      set(MXE_ARCH "i686")
       set(archive_name ${PKG_NAME}-${PACKAGE_VERSION_STRING}-win32)
     elseif(MXE_TARGET_DIR MATCHES "x86_64")
-      set(mxearch "x86_64")
+      set(MXE_ARCH "x86_64")
       set(archive_name ${PKG_NAME}-${PACKAGE_VERSION_STRING}-win64)
     endif()
 
@@ -326,8 +336,8 @@ if(WIN32)
 
     #create a CMakeLists.txt with some contents for packaging.
     #This will let us run packaging as a seperate project!
-    get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
-    get_filename_component(mxeroot ${mxeroot} PATH)
+    get_filename_component(MXE_MXEROOT ${MXE_TARGET_DIR} PATH)
+    get_filename_component(MXE_MXEROOT ${MXE_MXEROOT} PATH)
     file(WRITE "${CMAKE_BINARY_DIR}/_mingw/CMakeLists.txt"
       "cmake_minimum_required(VERSION 2.6)
        include(CMakeParseArguments)
@@ -341,13 +351,11 @@ if(WIN32)
        set(Monteverdi_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
        set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
        set(Monteverdi_INSTALL_DATA_DIR \"${Monteverdi_INSTALL_DATA_DIR}\")
-        include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
-        include(${CMAKE_SOURCE_DIR}/CMake/PackageHelper.cmake)
-        package_mingw(
-        ARCH \"${mxearch}\"
-        MXEROOT \"${mxeroot}\"
-        STAGE_DIR \"${archive_name}\"
-        SEARCHDIRS \"\")")
+       set(MXE_ARCH \"${MXE_ARCH}\")
+       set(MXE_MXEROOT \"${MXE_MXEROOT}\")
+       set(PKG_GENERATE_XDK ${GENERATE_XDK})
+       include(${OTB_SOURCE_DIR}/SuperBuild/CMake/PackageHelper.cmake)
+       super_package(STAGE_DIR \"${archive_name}\")" )
 
     add_custom_target(InstallProject
       COMMAND ${CMAKE_COMMAND} --build "${CMAKE_BINARY_DIR}" --target install
