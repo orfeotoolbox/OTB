@@ -354,6 +354,7 @@ if(WIN32)
        set(MXE_ARCH \"${MXE_ARCH}\")
        set(MXE_MXEROOT \"${MXE_MXEROOT}\")
        set(PKG_GENERATE_XDK ${GENERATE_XDK})
+       set(PKG_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
        include(${OTB_SOURCE_DIR}/SuperBuild/CMake/PackageHelper.cmake)
        super_package(STAGE_DIR \"${archive_name}\")" )
 
