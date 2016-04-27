@@ -26,7 +26,7 @@
 namespace otb
 {
 /** \class RandomForestsMachineLearningModelFactory
- * \brief Creation d'un instance d'un objet RandomForestsMachineLearningModel utilisant les object factory.
+ * \brief Creation of an instance of a RandomForestsMachineLearningModel object using the object factory
  *
  * \ingroup OTBSupervised
  */
