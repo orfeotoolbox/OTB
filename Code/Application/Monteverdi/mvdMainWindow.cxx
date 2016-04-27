@@ -103,6 +103,8 @@ namespace mvd
 
 #define REFERENCE_LAYER_COMBOBOX_NAME "referenceLayerComboBox"
 
+#define FORCE_NO_GLSL ( ( defined( _DEBUG ) && 0 ) || 0 )
+
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
@@ -180,6 +182,12 @@ MainWindow
   //   return false;
 
   bool isGLSL = m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 );
+
+#if FORCE_NO_GLSL
+  m_ImageView->GetRenderer()->SetGLSLEnabled( false );
+
+  isGLSL = false;
+#endif // FORCE_NO_GLSL
 
   // MANTIS-1204
   // {
