@@ -178,7 +178,7 @@ SETUP_SYSTEM_LIBRARY(PROJECT LIBSVM DEFAULT OFF)
 SETUP_SYSTEM_LIBRARY(PROJECT PCRE DEFAULT ON)
 SETUP_SYSTEM_LIBRARY(PROJECT SWIG DEFAULT ON)
 SETUP_SYSTEM_LIBRARY(PROJECT QT4 DEFAULT ${QT4_DEFAULT})
-SETUP_SYSTEM_LIBRARY(PROJECT QWT DEFAULT ON)
+SETUP_SYSTEM_LIBRARY(PROJECT QWT DEFAULT ${QT4_DEFAULT})
 SETUP_SYSTEM_LIBRARY(PROJECT GLEW DEFAULT ON)
 SETUP_SYSTEM_LIBRARY(PROJECT GLFW DEFAULT ON)
 SETUP_SYSTEM_LIBRARY(PROJECT GLUT DEFAULT ON)
@@ -216,7 +216,8 @@ endif()
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" OFF)
 option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
-option(GENERATE_XDK "Generate an .run with all dependencies. supported only on Linux" OFF)
+option(GENERATE_PACKAGE "Generate a portable .run package of OTB (only Unix)." OFF)
+option(GENERATE_XDK "Generate an XDK. This files provides all headers and libraries to build and or develop OTB (only Unix)." OFF)
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
@@ -248,12 +249,8 @@ else()
   include(External_otb)
 endif()
 
-#check compiler is gnu?
-if(UNIX)
-  if(GENERATE_XDK)
-    include(GenerateXDK)
+if(GENERATE_PACKAGE)
+  if(UNIX)
+    add_subdirectory(Packaging)
   endif()
-
-  include(External_package)
-
-endif(UNIX)
+endif()

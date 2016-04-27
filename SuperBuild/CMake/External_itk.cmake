@@ -146,7 +146,7 @@ else()
 
   ExternalProject_Add(ITK
     PREFIX ITK
-    URL "http://sourceforge.net/projects/itk/files/itk/${ITK_SB_VERSION}/InsightToolkit-${ITK_SB_VERSION_FULL}.tar.gz/download"
+    URL "http://sourceforge.net/projects/itk/files/itk/4.8/InsightToolkit-4.8.1.tar.gz/download"
     URL_MD5 b1ed53604de854501cb61f34f410420e
     SOURCE_DIR ${ITK_SB_SRC}
     BINARY_DIR ${ITK_SB_BUILD_DIR}

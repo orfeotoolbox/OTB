@@ -15,6 +15,8 @@ if(NOT __EXTERNAL_QT4__)
       set(git_protocol "git")
     endif()
 
+    #NOTE: make sure your superbuild install directory does not contain any
+    #Qt files from previous install of superbuild QT.
     # declare dependencies
     ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QT4 ZLIB TIFF PNG SQLITE FREETYPE)
 
@@ -29,8 +31,8 @@ if(NOT __EXTERNAL_QT4__)
       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-openssl")
       if(APPLE)
         set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-framework")
-      else()
-        set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -gtkstyle")
+      else() #Linux
+        set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-sm -no-xrender -no-fontconfig -no-gtkstyle -no-glib")
       endif()
     endif()
     STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
@@ -84,6 +86,7 @@ if(NOT __EXTERNAL_QT4__)
         ${CMAKE_BINARY_DIR}/configure_qt4.sh
         DEPENDS ${QT4_DEPENDENCIES}
         )
+
     endif()
 
     if(APPLE)
