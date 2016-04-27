@@ -181,6 +181,15 @@ MainWindow
 
   bool isGLSL = m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 );
 
+  // MANTIS-1204
+  // {
+  //
+  // Forward GLSL state to quicklook view.
+  assert( GetQuicklookView()!=NULL );
+  assert( GetQuicklookView()->GetRenderer()!=NULL );
+
+  GetQuicklookView()->GetRenderer()->SetGLSLEnabled( isGLSL );
+  // }
 
   assert( m_ShaderWidget!=NULL );
 
