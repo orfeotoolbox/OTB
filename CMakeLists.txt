@@ -63,13 +63,13 @@ set(Monteverdi_UI_VERSION "1")
 set(
   Monteverdi_VERSION_STRING
   "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
-)
+  )
 
 #----------------------------------------------------------------------------
 set(
   Monteverdi_DATA_VERSION_STRING
   "${Monteverdi_DATA_VERSION_MAJOR}.${Monteverdi_DATA_VERSION_MINOR}.${Monteverdi_DATA_VERSION_PATCH}"
-)
+  )
 
 #----------------------------------------------------------------------------
 set(Monteverdi_FLOATING_TYPE "float" CACHE STRING "The type of data in which input images are read (double/float)." )
@@ -234,12 +234,12 @@ set( Monteverdi_CONFIGURE_FILE "ConfigureMonteverdi.h" )
 configure_file(
   ${Monteverdi_SOURCE_DIR}/${Monteverdi_CONFIGURE_FILE}.in
   ${Monteverdi_BINARY_DIR}/${Monteverdi_CONFIGURE_FILE}
-)
+  )
 
 set(Monteverdi_LIBRARY_PROPERTIES
-    VERSION   "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}"
-    SOVERSION "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}"
-)
+  VERSION   "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}"
+  SOVERSION "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}"
+  )
 
 #----------------------------------------------------------------------------
 # Include the Packaging subdir after every other dir
@@ -286,106 +286,6 @@ if(BUILD_TESTING)
   add_subdirectory(Testing)
 endif()
 
-############## Packaging stuff for Windows ####################
-#cpack has a built-in target called 'package'. In our case we create two standalone installers with
-#and uses a custom target named packages.
-if(WIN32)
-
-# create_cpack_config()
-
-# stop generation of msvc packages for windows. 04-apr-2016. point OTB.
-
-  #TODO: fix after 5.4.0 release.
-  #set(PKG_NAME ${PROJECT_NAME})
-  set(PKG_NAME OTB)
-  set(PACKAGE_VERSION_STRING ${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH})
-
-  if(CMAKE_CROSSCOMPILING)
-    if(NOT DEFINED MXE_TARGET_DIR)
-      message(FATAL_ERROR "MXE_TARGET_DIR is missing")
-    endif()
-
-    find_program(ZIP_EXECUTABLE zip)
-    if(NOT ZIP_EXECUTABLE)
-      message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
-    endif()
-    ##### End of checking required tools and platform. (cross-compile with zip)
-
-
-    #define the name of final archive based on build architecture. win32 or win64?
-    if(MXE_TARGET_DIR MATCHES "i686")
-      set(mxearch x86)
-      set(archive_name ${PKG_NAME}-${PACKAGE_VERSION_STRING}-win32)
-    elseif(MXE_TARGET_DIR MATCHES "x86_64")
-      set(mxearch x64)
-      set(archive_name ${PKG_NAME}-${PACKAGE_VERSION_STRING}-win64)
-    endif()
-
-    #empty build directory
-    execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
-
-    #create a CMakeLists.txt with some contents for packaging.
-    #This will let us run packaging as a seperate project!
-    get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
-    get_filename_component(mxeroot ${mxeroot} PATH)
-    file(WRITE "${CMAKE_BINARY_DIR}/_mingw/CMakeLists.txt"
-      "cmake_minimum_required(VERSION 2.6)
-       include(CMakeParseArguments)
-       include(CMakeDetermineSystem)
-       set(Monteverdi_SOURCE_DIR \"${Monteverdi_SOURCE_DIR}\")
-       set(PACKAGE_SUPPORT_FILES_DIR \"${Monteverdi_SOURCE_DIR}/Packaging\")
-       set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")
-       set(QT_PLUGINS_DIR \"${QT_PLUGINS_DIR}\")
-       set(CMAKE_CROSSCOMPILING ON)
-       set(QT_TRANSLATIONS_DIR \"${QT_TRANSLATIONS_DIR}\")
-       set(Monteverdi_BINARY_DIR \"${CMAKE_BINARY_DIR}\")
-       set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
-       set(Monteverdi_INSTALL_DATA_DIR \"${Monteverdi_INSTALL_DATA_DIR}\")
-        include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
-        include(${CMAKE_SOURCE_DIR}/CMake/PackageHelper.cmake)
-        package_mingw(
-        ARCH \"${mxearch}\"
-        MXEROOT \"${mxeroot}\"
-        STAGE_DIR \"${archive_name}\"
-        SEARCHDIRS \"\")")
-
-    add_custom_target(InstallProject
-      COMMAND ${CMAKE_COMMAND} --build "${CMAKE_BINARY_DIR}" --target install
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
-
-    #custom targets to configure , build and create package.
-    add_custom_target(configure-mingw-package
-      COMMAND ${CMAKE_COMMAND}
-      "${CMAKE_BINARY_DIR}/_mingw"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw"
-      DEPENDS InstallProject)
-
-    add_custom_target(make-mingw-package
-      COMMAND ${CMAKE_COMMAND}
-      "--build" "${CMAKE_BINARY_DIR}/_mingw" "--target" "install"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw"
-      DEPENDS configure-mingw-package)
-
-    add_custom_target(packages
-      COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
-      WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
-      DEPENDS make-mingw-package)
-
-
-
-  endif() # (CMAKE_CROSSCOMPILING)
-endif() # (WIN32)
-
-if(UNIX)
-
-  #TODO:
-
-  if(APPLE)
-    #TODO:
-
-  endif()
-
-endif()
-
-#For MacOS and Windows platform, we create a custom target called packages to generate packages
-#For linux: the packages are provided via respective package management tool. (deb, rpm etc..)
+if(WIN32 OR CMAKE_CROSSCOMPILING)
+  add_subdirectory(Packaging)
+endif() # (WIN32 OR CMAKE_CROSSCOMPILING)
