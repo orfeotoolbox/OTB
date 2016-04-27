@@ -54,3 +54,7 @@ endif()
 if(OTB_USE_OPENCV)
   include(tests-opencv.cmake)
 endif()
+
+if(OTB_USE_SHARK)
+  include(tests-shark.cmake)
+endif()

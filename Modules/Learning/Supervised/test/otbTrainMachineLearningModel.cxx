@@ -1035,3 +1035,12 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
     }
 }
 #endif
+
+#ifdef OTB_USE_SHARK
+int otbSharkRFMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+{
+  typedef otb::SharkRFMachineLearningModel<InputValueType,TargetValueType> SharkRFType;
+  SharkRFType::Pointer svmclassifier = SharkRFType::New();
+  return EXIT_SUCCESS;
+}
+#endif

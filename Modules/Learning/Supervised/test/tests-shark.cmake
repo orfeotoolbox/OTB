@@ -1,0 +1,3 @@
+otb_add_test(NAME leTuSharkRFMachineLearningModelNew COMMAND otbSupervisedTestDriver
+  otbSharkRFMachineLearningModelNew)
+
