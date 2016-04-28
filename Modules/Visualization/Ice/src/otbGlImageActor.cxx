@@ -347,8 +347,6 @@ void GlImageActor::Render()
       VectorImageType::PixelType mins(3),maxs(3),omins(3),omaxs(3);
       mins.Fill(0);
       maxs.Fill(255);
-        
-      double gamma(1.0);
 
       bool useNoData(false);
       double noData(0.);
@@ -363,7 +361,15 @@ void GlImageActor::Render()
       maxs[ 1 ] = m_ImageSettings->GetMaxGreen();
       maxs[ 2  ] = m_ImageSettings->GetMaxBlue();
 
-      gamma = m_ImageSettings->GetGamma();
+      // MANTIS-1204
+      // {
+      double gamma = m_ImageSettings->GetGamma();
+
+      gamma =
+	gamma == 0.0
+	? std::numeric_limits< double >::max()
+	: 1.0 / gamma;
+      // }
 
       if( m_ImageSettings->GetUseNoData() )
 	noData = m_ImageSettings->GetNoData();
