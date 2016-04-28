@@ -10,6 +10,9 @@ if(NOT PROJECT_NAME)
   project(OTBPackaging)
 endif()
 
+option(GENERATE_PACKAGE "Generate OTB package" ON)
+option(GENERATE_XDK "Generate XDK for OTB development" OFF)
+
 set(OUT_OF_SOURCE_BUILD FALSE)
 if(PROJECT_NAME STREQUAL "OTBPackaging")
   set(OUT_OF_SOURCE_BUILD TRUE)
@@ -26,26 +29,59 @@ if(OUT_OF_SOURCE_BUILD)
   if(BUILD_TESTING)
     include(CTest)
   endif()
-  set(SUPERBUILD_BINARY_DIR "" CACHE PATH "path to superbuild binary directory")
-  # From parent scope (SuperBuild) we have
-  # ENABLE_MONTEVERDI, DOWNLOAD_LOCATION, SB_INSTALL_PREFIX
-  option(ENABLE_MONTEVERDI "enable monteverdi" ON)
-  set(DOWNLOAD_LOCATION "" CACHE PATH "path to superbuild binary directory")
-  set(SB_INSTALL_PREFIX "" CACHE PATH "path to superbuild install directory")
+
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+    set(Monteverdi_SOURCE_DIR "" CACHE PATH "monteverdi source directory")
+    set(Monteverdi_BINARY_DIR "" CACHE PATH "monteverdi binary directory")
+  else()
+    set(SUPERBUILD_BINARY_DIR "" CACHE PATH "path to superbuild binary directory")
+    set(SUPERBUILD_INSTALL_DIR "" CACHE PATH "path to superbuild install directory")
+    option(ENABLE_MONTEVERDI "enable monteverdi" ON)
+    set(DOWNLOAD_LOCATION "" CACHE PATH "path to superbuild binary directory")
+  endif()
 else()
   # SUPERBUILD_BINARY_DIR is only set in Packaging/CMakeLists.txt and not available
   # in the parent scope like others. So we need to set it as CMAKE_BINARY_DIR
   # if doing packages from source tree.
   set(SUPERBUILD_BINARY_DIR ${CMAKE_BINARY_DIR})
+  set(SUPERBUILD_INSTALL_DIR ${SB_INSTALL_PREFIX})
 endif()
 
-if(NOT WIN32)
-  #set CMAKE_INSTALL_PREFIX and PKG_INSTALL_PREFIX to SB_INSTALL_PREFIX for convenience.
-  set(CMAKE_INSTALL_PREFIX "${SB_INSTALL_PREFIX}")
+get_filename_component(SUPERBUILD_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} PATH)
+get_filename_component(OTB_SOURCE_DIR ${SUPERBUILD_SOURCE_DIR} PATH)
+
+if(WIN32 OR CMAKE_CROSSCOMPILING)
+  set(MONTEVERDI_INSTALL_DIR "" CACHE PATH "monteverdi install directory")
+  foreach(req
+      Monteverdi_SOURCE_DIR
+      Monteverdi_BINARY_DIR
+      MONTEVERDI_INSTALL_DIR
+      )
+    if(NOT DEFINED ${req} OR "${${req}}" STREQUAL "")
+      message(FATAL_ERROR "you must set ${req} before calling this method")
+    endif()
+    set(vars "${vars}  ${req}=[${${req}}]\n")
+  endforeach(req)
+else() #Unix like
+  foreach(req
+      SUPERBUILD_BINARY_DIR
+      SUPERBUILD_INSTALL_DIR
+      SUPERBUILD_SOURCE_DIR
+      OTB_SOURCE_DIR
+      )
+    if(NOT DEFINED ${req} OR "${${req}}" STREQUAL "")
+      message(FATAL_ERROR "you must set ${req} before calling this method")
+    endif()
+    set(vars "${vars}  ${req}=[${${req}}]\n")
+  endforeach(req)
 endif()
 
-#used in PackageHelper.cmake (don't change)
-set(PKG_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
+
+if(WIN32 OR CMAKE_CROSSCOMPILING)
+  set(CMAKE_INSTALL_PREFIX "${Monteverdi_INSTALL_DIR}")
+else()
+  set(CMAKE_INSTALL_PREFIX "${SUPERBUILD_INSTALL_DIR}")
+endif()
 
 set(PACKAGE_NAME OTB)
 set(PACKAGE_LONG_NAME OrfeoToolBox)
@@ -72,24 +108,41 @@ else() #(WIN32 OR CMAKE_CROSSCOMPILING)
     else()
       set(PACKAGE_PLATFORM_NAME "Linux")
     endif()
-    get_version("${OTB_SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake" "ITK_SB_VERSION" ITK_SB_VERSION)
+    get_version("${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake" "ITK_SB_VERSION" ITK_SB_VERSION)
     get_version("${OTB_SOURCE_DIR}/CMakeLists.txt" "OTB_VERSION_" OTB_VERSION_STRING)
     set(PACKAGE_VERSION_STRING ${get_version_OTB_VERSION_STRING})
   endif(UNIX)
 endif() #(WIN32 OR CMAKE_CROSSCOMPILING)
 
-get_filename_component(OTB_SUPERBUILD_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} PATH)
-get_filename_component(OTB_SOURCE_DIR ${OTB_SUPERBUILD_SOURCE_DIR} PATH)
+include(${SUPERBUILD_SOURCE_DIR}/CMake/External_pkgtools.cmake)
 
-set(PACKAGE_LIST OTB)
-if(GENERATE_XDK)
-  list(APPEND PACKAGE_LIST XDK)
-endif()
+set(EXTRA_CACHE_CONFIG
+  "set(CMAKE_CROSSCOMPILING ON)
+   set(MXE_ARCH \"${MXE_ARCH}\")
+   set(MXE_MXEROOT \"${MXE_MXEROOT}\")")
 
-set(OTB_SUPERBUILD_SOURCE_DIR ${OTB_SOURCE_DIR}/SuperBuild)
-include(${OTB_SUPERBUILD_SOURCE_DIR}/CMake/External_pkgtools.cmake)
-
-set(PACKAGE_PROJECT_DIR ${CMAKE_BINARY_DIR}/${pkg}-PACKAGE)
+#guess install directory from OTB_MODULES_DIR
+#copy of cmake variables not needed.
+if(WIN32 OR CMAKE_CROSSCOMPILING)
+  set(Monteverdi_SOURCE_DIR       "${Monteverdi_SOURCE_DIR}")
+  set(Monteverdi_BINARY_DIR       "${Monteverdi_BINARY_DIR}")
+  set(MONTEVERDI_INSTALL_DIR      "${MONTEVERDI_INSTALL_DIR}")
+  set(OTB_INSTALL_DIR             "${OTB_MODULES_DIR}/../../../..")
+  set(DEPENDENCIES_INSTALL_DIR    "${MXE_MXEROOT}/usr/${MXE_ARCH}-w64-mingw32.shared")
+  set(QT_PLUGINS_DIR              "${DEPENDENCIES_INSTALL_DIR}/qt/plugins")
+  set(QT_TRANSLATIONS_DIR         "${DEPENDENCIES_INSTALL_DIR}/qt/translations")
+  set(ITK_VERSION_STRING)
+  else() #unixes
+    set(Monteverdi_SOURCE_DIR     "${SUPERBUILD_BINARY_DIR}/MVD/src/MVD")
+    set(Monteverdi_BINARY_DIR     "${SUPERBUILD_BINARY_DIR}/MVD/build")
+    set(MONTEVERDI_INSTALL_DIR    "${SUPERBUILD_INSTALL_DIR}")
+    set(QT_PLUGINS_DIR            "${SUPERBUILD_INSTALL_DIR}/plugins")
+    set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
+    set(OTB_INSTALL_DIR           "${SUPERBUILD_BINARY_DIR}/OTB/build")
+    set(DEPENDENCIES_INSTALL_DIR  "${SUPERBUILD_INSTALL_DIR}")
+    set(ITK_VERSION_STRING        "${get_version_ITK_SB_VERSION}")
+    set(EXTRA_CACHE_CONFIG)
+  endif()
 
 macro_setup_cmake_sources(OTB)
 if(GENERATE_XDK)

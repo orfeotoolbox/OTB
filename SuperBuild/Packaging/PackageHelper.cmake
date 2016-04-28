@@ -2,21 +2,22 @@ macro(super_package)
   cmake_parse_arguments(PKG  "" "STAGE_DIR" "SEARCHDIRS" ${ARGN} )
   set(loader_program_PATHS)
   if(WIN32 OR CMAKE_CROSSCOMPILING)
-      set(loader_program_names "${MXE_ARCH}-w64-mingw32.shared-objdump")
-      set(loader_program_PATHS "${MXE_MXEROOT}/usr/bin")
-      set(LOADER_PROGRAM_ARGS "-p")
-      set(DEPENDENCIES_INSTALL_DIR "${MXE_MXEROOT}/usr/${MXE_ARCH}-w64-mingw32.shared")
+      set(loader_program_names      "${MXE_ARCH}-w64-mingw32.shared-objdump")
+      set(loader_program_PATHS      "${MXE_MXEROOT}/usr/bin")
+      set(LOADER_PROGRAM_ARGS       "-p")
     else()
       if(APPLE)
-        set(loader_program_names otool)
-        set(LOADER_PROGRAM_ARGS "-l")
-        set(loader_program_PATHS /opt/local/bin) # a path that is already listed i path on apple
+        set(loader_program_names    otool)
+        set(LOADER_PROGRAM_ARGS     "-l")
+        set(loader_program_PATHS    /opt/local/bin) # a path that is already listed i path on apple
       else()
-        set(loader_program_names objdump)
-        set(LOADER_PROGRAM_ARGS "-p")
-        set(loader_program_PATHS /usr/bin) # a path that is already listed in default path on Linux
+        set(loader_program_names    objdump)
+        set(LOADER_PROGRAM_ARGS     "-p")
+        set(loader_program_PATHS    /usr/bin) # a path that is already listed in default path on Linux
       endif()
-      set(DEPENDENCIES_INSTALL_DIR ${PKG_INSTALL_PREFIX})
+      if(NOT DEPENDENCIES_INSTALL_DIR)
+        message(FATAL_ERROR "DEPENDENCIES_INSTALL_DIR is not set of empty")
+      endif()
   endif()
 
   find_program(LOADER_PROGRAM "${loader_program_names}" PATHS ${loader_program_PATHS})
@@ -29,22 +30,27 @@ macro(super_package)
   set(PKG_SEARCHDIRS)
 
   if(WIN32 OR CMAKE_CROSSCOMPILING)
-    set(MXE_BIN_DIR "${DEPENDENCIES_INSTALL_DIR}/bin")
-    list(APPEND PKG_SEARCHDIRS ${MXE_BIN_DIR})
-    file(GLOB MXE_GCC_LIB_DIR "${MXE_BIN_DIR}/gcc*")
+    file(GLOB MXE_GCC_LIB_DIR "${DEPENDENCIES_INSTALL_DIR}/bin/gcc*")
     list(APPEND PKG_SEARCHDIRS ${MXE_GCC_LIB_DIR})
-    list(APPEND PKG_SEARCHDIRS "${MXE_BIN_DIR}/../qt/bin") #Qt
-    list(APPEND PKG_SEARCHDIRS "${MXE_BIN_DIR}/../qt/lib") #Qwt
-    list(APPEND PKG_SEARCHDIRS "${CMAKE_INSTALL_PREFIX}/bin") #mvd
-    list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #otbApplicationLauncher*.exe
+    list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/qt/bin") #Qt
+    list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/qt/lib") #Qwt
+    list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/bin") #mxe dlls
   else() #unixes
-    list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #exe
     list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib") #so
-    list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib/otb") #mvd so
+    list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/lib") #superbuild .so /.dylib
+    list(APPEND PKG_SEARCHDIRS "${MONTEVERDI_INSTALL_DIR}/lib/otb") #mvd so
   endif()
+
   #common for all platforms.
   set(OTB_APPLICATIONS_DIR "${OTB_INSTALL_DIR}/lib/otb/applications")
+  list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/bin") #superbuild, mxe binaries
+  list(APPEND PKG_SEARCHDIRS "${MONTEVERDI_INSTALL_DIR}/bin") #monteverdi, mapla
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #otbApplicationLauncherCommandLine..
   list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}") #otb apps
+
+  set(EXE_SEARCH_DIRS ${OTB_INSTALL_DIR}/bin)
+  list(APPEND  EXE_SEARCH_DIRS ${MONTEVERDI_INSTALL_DIR}/bin)
+  list(APPEND  EXE_SEARCH_DIRS ${DEPENDENCIES_INSTALL_DIR}/bin)
 
   empty_package_staging_directory()
 
@@ -79,7 +85,7 @@ macro(super_package)
     if(UNIX)
       if(NOT APPLE)
         ####################### install patchelf #####################
-        install(FILES ${PKG_INSTALL_PREFIX}/tools/patchelf
+        install(FILES ${CMAKE_INSTALL_PREFIX}/tools/patchelf
           DESTINATION ${PKG_STAGE_DIR}/tools
           PERMISSIONS
           OWNER_EXECUTE OWNER_WRITE OWNER_READ
@@ -243,6 +249,7 @@ function(install_common include_mvd)
       OTB_APPLICATIONS_DIR
       PKG_STAGE_DIR
       PACKAGE_SUPPORT_FILES_DIR
+      MONTEVERDI_INSTALL_DIR
       OTB_INSTALL_DIR
       )
     if(NOT DEFINED ${req})
@@ -266,7 +273,8 @@ function(install_common include_mvd)
         install(FILES ${ENV_SOURCE_FILE} DESTINATION ${PKG_STAGE_DIR})
       endif()
     endforeach()
-    set(PKG_OTB_SHARE_SOURCE_DIR "${PKG_INSTALL_PREFIX}/share")
+    #MONTEVERDI_INSTALL_DIR/share has otb/i18N directory
+    set(PKG_OTB_SHARE_SOURCE_DIR "${MONTEVERDI_INSTALL_DIR}/share")
   endif()
   ####################### install cli and gui scripts ###########################
   file(GLOB PKG_APP_SCRIPTS
@@ -401,8 +409,8 @@ function(install_monteverdi_files)
 endfunction()
 
 macro(empty_package_staging_directory)
-  message(STATUS "Empty package staging directory: ${PKG_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
-  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${PKG_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
+  message(STATUS "Empty package staging directory: ${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
+  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
 endmacro()
 
 #NOTE:
@@ -442,14 +450,17 @@ function(configure_package)
       otbTestDriver
       monteverdi
       mapla)
-    if(EXISTS "${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}")
-      #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
-      set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} bin/${EXE_FILE}${EXE_EXT}")
-      list(APPEND PKG_PEFILES
-        "${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}")
-    else()
-      message(WARNING "'${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}'(not found. skipping)")
-    endif()
+
+    foreach(EXE_SEARCH_DIR ${EXE_SEARCH_DIRS})
+      if(EXISTS "${EXE_SEARCH_DIR}/${EXE_FILE}${EXE_EXT}")
+        #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
+        set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} bin/${EXE_FILE}${EXE_EXT}")
+        list(APPEND PKG_PEFILES
+          "${EXE_SEARCH_DIR}/${EXE_FILE}${EXE_EXT}")
+      else()
+        message(STATUS "'${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}'(not found. skipping)")
+      endif()
+      endforeach() #EXE_SEARCH_DIR
   endforeach()
 
   #For Unixes we write the startup script in the *pkgsetup.in

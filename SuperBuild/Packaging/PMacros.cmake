@@ -2,6 +2,7 @@ macro(macro_setup_cmake_sources pkg)
 
   message( "-- Configuring ${pkg} package")
 
+  set(PACKAGE_PROJECT_DIR ${CMAKE_BINARY_DIR}/PACKAGE-${pkg})
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory "${PACKAGE_PROJECT_DIR}/build")
 
   #Easy way to have the write "PACKAGE_PROJECT_DIR/src/CMakeLists.txt"
@@ -15,50 +16,24 @@ macro(macro_setup_cmake_sources pkg)
   #set archive name inside loop
   set(ARCHIVE_NAME ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
 
-  #copy of cmake variables not needed.
-  if(WIN32 OR CMAKE_CROSSCOMPILING)
-    set(cache_Monteverdi_SOURCE_DIR "${Monteverdi_SOURCE_DIR}")
-    set(cache_Monteverdi_BINARY_DIR "${Monteverdi_BINARY_DIR}")
-    set(cache_QT_PLUGINS_DIR "${QT_PLUGINS_DIR}")
-    set(cache_QT_TRANSLATIONS_DIR "${QT_TRANSLATIONS_DIR}")
-    set(cache_PKG_INSTALL_PREFIX "${PKG_INSTALL_PREFIX}")
-    set(cache_CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
-    #guess install directory from OTB_MODULES_DIR
-    set(cache_OTB_INSTALL_DIR "${OTB_MODULES_DIR}/../../../..")
-    set(cache_ITK_VERSION_STRING)
-    set(EXTRA_CACHE_CONFIG "
-        set(CMAKE_CROSSCOMPILING ON)
-        set(MXE_ARCH \"${MXE_ARCH}\")
-        set(MXE_MXEROOT \"${MXE_MXEROOT}\")")
-  else() #unixes
-    set(cache_Monteverdi_SOURCE_DIR "${SUPERBUILD_BINARY_DIR}/MVD/src/MVD")
-    set(cache_Monteverdi_BINARY_DIR "${SUPERBUILD_BINARY_DIR}/MVD/build")
-    set(cache_QT_PLUGINS_DIR "${PKG_INSTALL_PREFIX}/plugins")
-    set(cache_QT_TRANSLATIONS_DIR "${PKG_INSTALL_PREFIX}/translations")
-    set(cache_PKG_INSTALL_PREFIX "${PKG_INSTALL_PREFIX}")
-    set(cache_CMAKE_INSTALL_PREFIX "${PKG_INSTALL_PREFIX}")
-    set(cache_OTB_INSTALL_DIR "${SUPERBUILD_BINARY_DIR}/OTB/build")
-    set(cache_ITK_VERSION_STRING "${get_version_ITK_SB_VERSION}")
-    set(EXTRA_CACHE_CONFIG)
-  endif()
-
   file(WRITE "${PACKAGE_PROJECT_DIR}/src/CMakeLists.txt"
   "cmake_minimum_required(VERSION 2.6)
    include(CMakeParseArguments)
    include(CMakeDetermineSystem)
-   set(Monteverdi_SOURCE_DIR \"${cache_Monteverdi_SOURCE_DIR}\")
-   set(Monteverdi_BINARY_DIR \"${cache_Monteverdi_BINARY_DIR}\")
-   set(PACKAGE_SUPPORT_FILES_DIR \"${OTB_SOURCE_DIR}/SuperBuild/Packaging/Files\")
-   set(QT_PLUGINS_DIR \"${cache_QT_PLUGINS_DIR}\")
-   set(QT_TRANSLATIONS_DIR \"${cache_QT_TRANSLATIONS_DIR}\")
-   set(PKG_INSTALL_PREFIX \"${cache_PKG_INSTALL_PREFIX}\")
-   set(CMAKE_INSTALL_PREFIX \"${cache_CMAKE_INSTALL_PREFIX}\")
-   set(OTB_INSTALL_DIR ${cache_OTB_INSTALL_DIR})
-   set(ITK_VERSION_STRING \"${cache_ITK_VERSION_STRING}\")
-   set(Monteverdi_INSTALL_DATA_DIR \"share/otb\")
-   set(PKG_GENERATE_XDK ${PKG_GENERATE_XDK})
+   set(Monteverdi_SOURCE_DIR        \"${Monteverdi_SOURCE_DIR}\")
+   set(Monteverdi_BINARY_DIR        \"${Monteverdi_BINARY_DIR}\")
+   set(MONTEVERDI_INSTALL_DIR       \"${MONTEVERDI_INSTALL_DIR}\")
+   set(Monteverdi_INSTALL_DATA_DIR  \"share/otb\")
+   set(QT_PLUGINS_DIR               \"${QT_PLUGINS_DIR}\")
+   set(QT_TRANSLATIONS_DIR          \"${QT_TRANSLATIONS_DIR}\")
+   set(DEPENDENCIES_INSTALL_DIR     \"${DEPENDENCIES_INSTALL_DIR}\")
+   set(OTB_INSTALL_DIR              \"${OTB_INSTALL_DIR}\")
+   set(PACKAGE_SUPPORT_FILES_DIR    \"${OTB_SOURCE_DIR}/SuperBuild/Packaging/Files\")
+   set(CMAKE_INSTALL_PREFIX         \"${CMAKE_INSTALL_PREFIX}\")
+   set(ITK_VERSION_STRING           \"${cache_ITK_VERSION_STRING}\")
+   set(PKG_GENERATE_XDK              ${PKG_GENERATE_XDK})
    ${EXTRA_CACHE_CONFIG}
-   include(\"${OTB_SUPERBUILD_SOURCE_DIR}/CMake/PackageHelper.cmake\")
+   include(\"${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake\")
    super_package(STAGE_DIR \"${ARCHIVE_NAME}\")" )
 
 endmacro()
@@ -72,7 +47,6 @@ macro(macro_update_dependencies_list list_variable)
         add_custom_target(PACKAGE-check
           COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}/MVD/build"
           WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/MVD/build"
-          DEPENDS PACKAGE-check-otb
           )
       else()
         add_custom_target(PACKAGE-check
@@ -109,7 +83,7 @@ macro(macro_create_targets_for_package pkg)
   if(WIN32 OR CMAKE_CROSSCOMPILING)
     add_custom_target(PACKAGE-${pkg}
       COMMAND ${ZIP_EXECUTABLE}
-      "-r" "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.zip" "${PKG_INSTALL_PREFIX}/${ARCHIVE_NAME}"
+      "-r" "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.zip" "${CMAKE_INSTALL_PREFIX}/${ARCHIVE_NAME}"
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
       DEPENDS PACKAGE-${pkg}-build
       )
@@ -119,7 +93,7 @@ macro(macro_create_targets_for_package pkg)
       COMMAND ${MAKESELF_SCRIPT}
       "--target"
       "${ARCHIVE_NAME}"
-      "${PKG_INSTALL_PREFIX}/${ARCHIVE_NAME}"
+      "${CMAKE_INSTALL_PREFIX}/${ARCHIVE_NAME}"
       "${ARCHIVE_NAME}.run"
       "${PACKAGE_LONG_NAME} ${PACKAGE_VERSION_STRING}"
       "./pkgsetup"
@@ -135,7 +109,8 @@ macro(macro_create_targets_for_package pkg)
 
   #clean
   add_custom_target(PACKAGE-${pkg}-clean
-    COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/${pkg}-PACKAGE"
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/PACKAGE-${pkg}"
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/PACKAGE-TOOLS"
     COMMAND ${CMAKE_COMMAND} -E remove "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}${PACKAGE_EXTENSION}"
     COMMAND ${CMAKE_COMMAND} "${CMAKE_BINARY_DIR}" WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     )
@@ -146,7 +121,7 @@ endmacro(macro_create_targets_for_package)
 #macro:  get_version
 #args :
  # input_file         - Input cmake file where the version variable is set via cmake set() command.
- #                      Example: ${OTB_SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake
+ #                      Example: ${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake
  #match_string        - A match string to filter out required set() commands.
  #                      Example: "ITK_SB_VERSION" will get all set(ITK_SB_VERSION_MAJOR)
  #                      set(ITK_SB_VERSION_MINOR) set(ITK_SB_VERSION_PATCH)
@@ -155,7 +130,7 @@ endmacro(macro_create_targets_for_package)
  #                      Example: ITK_SB_VERSION. This is same as match_string but not always
  # Sample usage:
  # get_version(
- # "${OTB_SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake"
+ # "${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake"
  # "ITK_SB_VERSION"
  #  ITK_SB_VERSION)
 macro(get_version input_file match_string check_cmake_var)
