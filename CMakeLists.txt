@@ -286,14 +286,28 @@ if(BUILD_TESTING)
   add_subdirectory(Testing)
 endif()
 
-if(WIN32 OR CMAKE_CROSSCOMPILING)
-  set(MXE_TARGET_DIR "" CACHE PATH "path to mxe directory")
-  set(OTB_SOURCE_DIR "" CACHE PATH "path to otb source directory")
-  find_program(ZIP_EXECUTABLE zip)
-  if(NOT ZIP_EXECUTABLE)
-    message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
-  endif()
-endif()
+option(GENERATE_PACKAGE "Generate OTB package" ON)
+option(GENERATE_XDK "Generate XDK for OTB development" OFF)
 
-  add_subdirectory(${OTB_SOURCE_DIR}/SuperBuild/Packaging ${CMAKE_BINARY_DIR}/Packaging)
-endif() # (WIN32 OR CMAKE_CROSSCOMPILING)
+if(GENERATE_PACKAGE OR GENERATE_XDK)
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+    set(MXE_TARGET_DIR "" CACHE PATH "path to mxe directory")
+    set(OTB_SOURCE_DIR "" CACHE PATH "path to otb source directory")
+
+    if(NOT MXE_TARGET_DIR)
+      message(FATAL_ERROR "MXE_TARGET_DIR is missing")
+    endif()
+
+    if(NOT OTB_SOURCE_DIR)
+      message(FATAL_ERROR "OTB_SOURCE_DIR is missing")
+    endif()
+
+    find_program(ZIP_EXECUTABLE zip)
+    if(NOT ZIP_EXECUTABLE)
+      message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
+    endif()
+
+    add_subdirectory(${OTB_SOURCE_DIR}/SuperBuild/Packaging ${CMAKE_BINARY_DIR}/Packaging)
+
+  endif() # (WIN32 OR CMAKE_CROSSCOMPILING)
+endif() # (GENERATE_PACKAGE OR GENERATE_XDK)
