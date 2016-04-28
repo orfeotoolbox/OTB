@@ -112,7 +112,7 @@ macro(macro_create_targets_for_package pkg)
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/PACKAGE-${pkg}"
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/PACKAGE-TOOLS"
     COMMAND ${CMAKE_COMMAND} -E remove "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}${PACKAGE_EXTENSION}"
-    COMMAND ${CMAKE_COMMAND} "${CMAKE_BINARY_DIR}" WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     )
 
 endmacro(macro_create_targets_for_package)
