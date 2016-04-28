@@ -40,16 +40,16 @@ endmacro()
 
 macro(macro_update_dependencies_list list_variable)
   if(WIN32 OR CMAKE_CROSSCOMPILING)
-    add_custom_target(PACKAGE-check)
+    add_custom_target(PACKAGE-CHECK)
   else() #Unxies Using SuperBuild
 
     if(ENABLE_MONTEVERDI)
-      add_custom_target(PACKAGE-check
+      add_custom_target(PACKAGE-CHECK
         COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}/MVD/build"
         WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/MVD/build"
         )
     else()
-      add_custom_target(PACKAGE-check
+      add_custom_target(PACKAGE-CHECK
         COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}/OTB/build"
         WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/OTB/build"
         DEPENDS REMAKE
@@ -57,7 +57,7 @@ macro(macro_update_dependencies_list list_variable)
     endif(ENABLE_MONTEVERDI)
   endif()
 
-  list(APPEND ${list_variable} PACKAGE-check)
+  list(APPEND ${list_variable} PACKAGE-CHECK)
 endmacro()
 
 macro(macro_create_targets_for_package pkg)
