@@ -444,23 +444,30 @@ function(configure_package)
     message(FATAL_ERROR "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT} not found.")
   endif()
 
-  foreach(EXE_FILE
-      otbApplicationLauncherQt
-      iceViewer
-      otbTestDriver
-      monteverdi
-      mapla)
-
+  set(EXE_FILES)
+  list(APPEND EXE_FILES "otbApplicationLauncherQt")
+  list(APPEND EXE_FILES "iceViewer")
+  list(APPEND EXE_FILES "otbTestDriver")
+  list(APPEND EXE_FILES "monteverdi")
+  list(APPEND EXE_FILES "mapla")
+  foreach(EXE_FILE ${EXE_FILES})
+    set(FOUND_${EXE_FILE} FALSE)
     foreach(EXE_SEARCH_DIR ${EXE_SEARCH_DIRS})
       if(EXISTS "${EXE_SEARCH_DIR}/${EXE_FILE}${EXE_EXT}")
+        set(FOUND_${EXE_FILE} TRUE)
         #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
         set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} bin/${EXE_FILE}${EXE_EXT}")
         list(APPEND PKG_PEFILES
           "${EXE_SEARCH_DIR}/${EXE_FILE}${EXE_EXT}")
-      else()
-        message(STATUS "'${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}'(not found. skipping)")
       endif()
-      endforeach() #EXE_SEARCH_DIR
+    endforeach() #EXE_SEARCH_DIR
+  endforeach()
+
+  #loop again to report if anything is not found
+  foreach( EXE_FILE ${EXE_FILES} )
+    if(NOT FOUND_${EXE_FILE})
+      message(STATUS "'${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}'(not found. skipping)")
+    endif()
   endforeach()
 
   #For Unixes we write the startup script in the *pkgsetup.in
