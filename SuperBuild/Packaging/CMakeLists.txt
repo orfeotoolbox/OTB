@@ -15,9 +15,6 @@ if(PROJECT_NAME STREQUAL "OTBPackaging")
   set(OUT_OF_SOURCE_BUILD TRUE)
 endif()
 
-option(GENERATE_PACKAGE "Generate OTB package" ON)
-option(GENERATE_XDK "Generate XDK for OTB development" OFF)
-
 if(NOT GENERATE_PACKAGE AND NOT GENERATE_XDK)
   #well. we don't have any businees here. Let's move on..
   return()
