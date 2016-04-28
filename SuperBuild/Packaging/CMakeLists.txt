@@ -29,29 +29,31 @@ if(OUT_OF_SOURCE_BUILD)
   if(BUILD_TESTING)
     include(CTest)
   endif()
-
   if(WIN32 OR CMAKE_CROSSCOMPILING)
     set(Monteverdi_SOURCE_DIR "" CACHE PATH "monteverdi source directory")
     set(Monteverdi_BINARY_DIR "" CACHE PATH "monteverdi binary directory")
+    set(MONTEVERDI_INSTALL_DIR "" CACHE PATH "monteverdi install directory")
   else()
     set(SUPERBUILD_BINARY_DIR "" CACHE PATH "path to superbuild binary directory")
     set(SUPERBUILD_INSTALL_DIR "" CACHE PATH "path to superbuild install directory")
     option(ENABLE_MONTEVERDI "enable monteverdi" ON)
     set(DOWNLOAD_LOCATION "" CACHE PATH "path to superbuild binary directory")
   endif()
-else()
+else(OUT_OF_SOURCE_BUILD)
   # SUPERBUILD_BINARY_DIR is only set in Packaging/CMakeLists.txt and not available
   # in the parent scope like others. So we need to set it as CMAKE_BINARY_DIR
   # if doing packages from source tree.
   set(SUPERBUILD_BINARY_DIR ${CMAKE_BINARY_DIR})
   set(SUPERBUILD_INSTALL_DIR ${SB_INSTALL_PREFIX})
-endif()
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+    set(MONTEVERDI_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
+  endif()
+endif(OUT_OF_SOURCE_BUILD)
 
 get_filename_component(SUPERBUILD_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} PATH)
 get_filename_component(OTB_SOURCE_DIR ${SUPERBUILD_SOURCE_DIR} PATH)
 
 if(WIN32 OR CMAKE_CROSSCOMPILING)
-  set(MONTEVERDI_INSTALL_DIR "" CACHE PATH "monteverdi install directory")
   foreach(req
       Monteverdi_SOURCE_DIR
       Monteverdi_BINARY_DIR
@@ -78,7 +80,7 @@ endif()
 
 
 if(WIN32 OR CMAKE_CROSSCOMPILING)
-  set(CMAKE_INSTALL_PREFIX "${Monteverdi_INSTALL_DIR}")
+  set(CMAKE_INSTALL_PREFIX "${MONTEVERDI_INSTALL_DIR}")
 else()
   set(CMAKE_INSTALL_PREFIX "${SUPERBUILD_INSTALL_DIR}")
 endif()
