@@ -5,8 +5,6 @@ macro(super_package)
       set(loader_program_names "${MXE_ARCH}-w64-mingw32.shared-objdump")
       set(loader_program_PATHS "${MXE_MXEROOT}/usr/bin")
       set(LOADER_PROGRAM_ARGS "-p")
-      #guess install directory from OTB_MODULES_DIR
-      set(OTB_INSTALL_DIR ${OTB_MODULES_DIR}/../../../..)
       set(DEPENDENCIES_INSTALL_DIR "${MXE_MXEROOT}/usr/${MXE_ARCH}-w64-mingw32.shared")
     else()
       if(APPLE)
@@ -18,8 +16,6 @@ macro(super_package)
         set(LOADER_PROGRAM_ARGS "-p")
         set(loader_program_PATHS /usr/bin) # a path that is already listed in default path on Linux
       endif()
-      #both OTB_INSTALL_DIR DEPENDENCIES_INSTALL_DIR are same for superbuild
-      set(OTB_INSTALL_DIR ${PKG_INSTALL_PREFIX})
       set(DEPENDENCIES_INSTALL_DIR ${PKG_INSTALL_PREFIX})
   endif()
 
@@ -355,6 +351,7 @@ function(install_monteverdi_files)
   # Just check if required variables are defined.
   foreach(req
       Monteverdi_SOURCE_DIR
+      PACKAGE_SUPPORT_FILES_DIR
       QT_PLUGINS_DIR
       PKG_STAGE_BIN_DIR
       PKG_QTSQLITE_FILENAME
@@ -370,14 +367,16 @@ function(install_monteverdi_files)
 
   #install icon file for .app file. Monteverdi and Mapla has same icon!
   if(APPLE)
-    install(FILES ${Monteverdi_SOURCE_DIR}/Packaging/MacOS/Monteverdi.icns
+    install(FILES ${PACKAGE_SUPPORT_FILES_DIR}/Monteverdi.icns
       DESTINATION ${PKG_STAGE_DIR})
   endif()
 
-  ####################### install mingw qt.conf ##########################
-  if(EXISTS ${Monteverdi_SOURCE_DIR}/Packaging/Windows/mingw/qt.conf)
-    install(FILES ${Monteverdi_SOURCE_DIR}/Packaging/Windows/mingw/qt.conf
-      DESTINATION ${PKG_STAGE_BIN_DIR})
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+    ####################### install mingw qt.conf ##########################
+    if(EXISTS ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf)
+      install(FILES ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf
+        DESTINATION ${PKG_STAGE_BIN_DIR})
+    endif()
   endif()
 
   ####################### install sqldriver plugin ########################
@@ -412,21 +411,23 @@ endmacro()
 # over *pkgsetup.in
 
 function(configure_package)
-  if(UNIX)
-    set(EXE_EXT "")
-    set(SCR_EXT ".sh")
-    if(APPLE)
-      set(LIB_EXT "*dylib")
-    else()
-      set(LIB_EXT "*so")
-    endif()
-  endif()
 
   if(WIN32 OR CMAKE_CROSSCOMPILING)
     set(EXE_EXT ".exe")
     set(LIB_EXT "*dll")
     set(SCR_EXT ".bat")
-  endif()
+  else() #(WIN32 OR CMAKE_CROSSCOMPILING)
+    if(UNIX)
+      set(EXE_EXT "")
+      set(SCR_EXT ".sh")
+      set(LIB_EXT "*so")
+      #Q: why apple changed this one?
+      #A: To break compatibility with others and make money!
+      if(APPLE)
+        set(LIB_EXT "*dylib")
+      endif() #APPLE
+    endif() #UNIX
+  endif() #(WIN32 OR CMAKE_CROSSCOMPILING)
 
   #This must exist in any OTB Installation minimal or full
   set(VAR_IN_PKGSETUP_CONFIGURE "bin/otbApplicationLauncherCommandLine")
@@ -435,41 +436,30 @@ function(configure_package)
     message(FATAL_ERROR "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT} not found.")
   endif()
 
-  foreach(EXE_FILE otbApplicationLauncherQt
+  foreach(EXE_FILE
+      otbApplicationLauncherQt
       iceViewer
-      otbTestDriver)
+      otbTestDriver
+      monteverdi
+      mapla)
     if(EXISTS "${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}")
       #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
       set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} bin/${EXE_FILE}${EXE_EXT}")
       list(APPEND PKG_PEFILES
         "${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}")
+    else()
+      message(WARNING "'${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}'(not found. skipping)")
     endif()
   endforeach()
 
-  foreach(EXE_FILE monteverdi
-      mapla)
-    if(EXISTS "${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}")
-      #VAR_IN_PKGSETUP_CONFIGURE might seem a bit redundant variable if you
-      #consider PKG_PEFILES which also has same content.
-      #But VAR_IN_PKGSETUP_CONFIGURE goes into pkgsetup.in for Linux standalone binaries
-      # and other one (PKG_PEFILES) is for dependency resolution in
-      # process_deps() function
-      set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} bin/${EXE_FILE}${EXE_EXT}")
-      list(APPEND PKG_PEFILES
-        "${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}")
-    endif()
-    #For Unixes we write the startup script in the *pkgsetup.in
-    if(WIN32 OR CMAKE_CROSSCOMPILING)
-      if(DEFINED Monteverdi_SOURCE_DIR)
-        if(EXISTS ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT})
-          install(PROGRAMS
-            ${Monteverdi_SOURCE_DIR}/Packaging/${EXE_FILE}${SCR_EXT}
-            DESTINATION
-            "${PKG_STAGE_DIR}")
-        endif()
-      endif()
-    endif(WIN32 OR CMAKE_CROSSCOMPILING)
-  endforeach()
+  #For Unixes we write the startup script in the *pkgsetup.in
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+    install(PROGRAMS
+      "${PACKAGE_SUPPORT_FILES_DIR}/${EXE_FILE}${SCR_EXT}"
+      DESTINATION
+      "${PKG_STAGE_DIR}")
+  endif(WIN32 OR CMAKE_CROSSCOMPILING)
+
 
   file(GLOB OTB_APPS_LIST ${OTB_APPLICATIONS_DIR}/otbapp_${LIB_EXT}) # /lib/otb
 

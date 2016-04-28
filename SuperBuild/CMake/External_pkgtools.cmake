@@ -1,3 +1,8 @@
+if(WIN32 OR CMAKE_CROSSCOMPILING)
+  add_custom_target(PACKAGE-TOOLS)
+  return()
+endif()
+
 include(ExternalProject)
 if(NOT __EXTERNAL_PACKAGE_TOOLS__)
 set(__EXTERNAL_PACKAGE_TOOLS__ 1)
