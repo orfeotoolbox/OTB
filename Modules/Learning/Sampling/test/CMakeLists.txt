@@ -2,7 +2,7 @@ otb_module_test()
 
 set(OTBSamplingTests
 otbSamplingTestDriver.cxx
-otbOGRDataToResampledOGRDataTest.cxx
+otbOGRDataToSamplePositionFilterTest.cxx
 otbSamplingRateCalculatorTest.cxx
 otbOGRDataToClassStatisticsFilterTest.cxx
 )
