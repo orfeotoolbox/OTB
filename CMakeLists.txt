@@ -295,10 +295,6 @@ if(GENERATE_PACKAGE OR GENERATE_XDK)
     set(MXE_TARGET_DIR "" CACHE PATH "path to mxe directory")
     set(OTB_SOURCE_DIR "" CACHE PATH "path to otb source directory")
 
-    if(NOT MXE_TARGET_DIR)
-      message(FATAL_ERROR "MXE_TARGET_DIR is missing")
-    endif()
-
     if(NOT OTB_SOURCE_DIR)
       message(FATAL_ERROR "OTB_SOURCE_DIR is missing")
     endif()
