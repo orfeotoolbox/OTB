@@ -286,7 +286,8 @@ if(BUILD_TESTING)
   add_subdirectory(Testing)
 endif()
 
-option(GENERATE_PACKAGE "Generate OTB package" ON)
+#TODO: move this option to Packaging/CMakeLists.txt after big merge!
+option(GENERATE_PACKAGE "Generate OTB package" OFF)
 option(GENERATE_XDK "Generate XDK for OTB development" OFF)
 
 if(GENERATE_PACKAGE OR GENERATE_XDK)
