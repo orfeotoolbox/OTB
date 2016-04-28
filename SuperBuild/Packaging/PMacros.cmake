@@ -39,25 +39,29 @@ macro(macro_setup_cmake_sources pkg)
 endmacro()
 
 macro(macro_update_dependencies_list list_variable)
+  add_custom_target(REMAKE
+    COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}"
+    WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}"
+    )
   if(WIN32 OR CMAKE_CROSSCOMPILING)
     add_custom_target(PACKAGE-check)
   else() #Unxies Using SuperBuild
-    if(OUT_OF_SOURCE_BUILD)
-      if(ENABLE_MONTEVERDI)
-        add_custom_target(PACKAGE-check
-          COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}/MVD/build"
-          WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/MVD/build"
-          )
-      else()
-        add_custom_target(PACKAGE-check
-          COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}/OTB/build"
-          WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/OTB/build"
-          )
-      endif(ENABLE_MONTEVERDI)
-    else(OUT_OF_SOURCE_BUILD)
-      add_custom_target(PACKAGE-check)
-    endif(OUT_OF_SOURCE_BUILD)
+
+    if(ENABLE_MONTEVERDI)
+      add_custom_target(PACKAGE-check
+        COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}/MVD/build"
+        WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/MVD/build"
+        DEPENDS REMAKE
+        )
+    else()
+      add_custom_target(PACKAGE-check
+        COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}/OTB/build"
+        WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/OTB/build"
+        DEPENDS REMAKE
+        )
+    endif(ENABLE_MONTEVERDI)
   endif()
+
   list(APPEND ${list_variable} PACKAGE-check)
 endmacro()
 
@@ -82,6 +86,7 @@ macro(macro_create_targets_for_package pkg)
   # creation of package is different from windows and unix like
   if(WIN32 OR CMAKE_CROSSCOMPILING)
     add_custom_target(PACKAGE-${pkg}
+      ALL DEPENDS
       COMMAND ${ZIP_EXECUTABLE}
       "-r" "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.zip" "${CMAKE_INSTALL_PREFIX}/${ARCHIVE_NAME}"
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
