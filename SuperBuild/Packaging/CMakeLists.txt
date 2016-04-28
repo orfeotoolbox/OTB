@@ -23,16 +23,6 @@ if(NOT GENERATE_PACKAGE AND NOT GENERATE_XDK)
   return()
 endif()
 
-#TODO: remove afer monteverdi is merged to OTB.
-if(WIN32 OR CMAKE_CROSSCOMPILING)
-  set(MXE_TARGET_DIR "" CACHE PATH "path to mxe directory")
-  set(OTB_SOURCE_DIR "" CACHE PATH "path to otb source directory")
-  find_program(ZIP_EXECUTABLE zip)
-  if(NOT ZIP_EXECUTABLE)
-    message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
-  endif()
-endif()
-
 include(${CMAKE_CURRENT_SOURCE_DIR}/PMacros.cmake)
 
 if(OUT_OF_SOURCE_BUILD)
