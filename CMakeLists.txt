@@ -299,11 +299,6 @@ if(GENERATE_PACKAGE OR GENERATE_XDK)
       message(FATAL_ERROR "OTB_SOURCE_DIR is missing")
     endif()
 
-    find_program(ZIP_EXECUTABLE zip)
-    if(NOT ZIP_EXECUTABLE)
-      message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
-    endif()
-
     add_subdirectory(${OTB_SOURCE_DIR}/SuperBuild/Packaging ${CMAKE_BINARY_DIR}/Packaging)
 
   endif() # (WIN32 OR CMAKE_CROSSCOMPILING)
