@@ -52,7 +52,6 @@ macro(macro_update_dependencies_list list_variable)
       add_custom_target(PACKAGE-CHECK
         COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}/OTB/build"
         WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/OTB/build"
-        DEPENDS REMAKE
         )
     endif(ENABLE_MONTEVERDI)
   endif()
