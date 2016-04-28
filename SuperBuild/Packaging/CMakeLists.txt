@@ -78,6 +78,12 @@ if(WIN32 OR CMAKE_CROSSCOMPILING)
     endif()
     set(vars "${vars}  ${req}=[${${req}}]\n")
   endforeach(req)
+
+  find_program(ZIP_EXECUTABLE zip)
+  if(NOT ZIP_EXECUTABLE)
+    message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
+  endif()
+
 else() #Unix like
   foreach(req
       SUPERBUILD_BINARY_DIR
@@ -125,10 +131,11 @@ else() #(WIN32 OR CMAKE_CROSSCOMPILING)
       set(PACKAGE_PLATFORM_NAME "Linux")
     endif()
     get_version("${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake" "ITK_SB_VERSION" ITK_SB_VERSION)
-    get_version("${OTB_SOURCE_DIR}/CMakeLists.txt" "OTB_VERSION_" OTB_VERSION_STRING)
-    set(PACKAGE_VERSION_STRING ${get_version_OTB_VERSION_STRING})
   endif(UNIX)
 endif() #(WIN32 OR CMAKE_CROSSCOMPILING)
+
+get_version("${OTB_SOURCE_DIR}/CMakeLists.txt" "OTB_VERSION_" OTB_VERSION_STRING)
+set(PACKAGE_VERSION_STRING ${get_version_OTB_VERSION_STRING})
 
 include(${SUPERBUILD_SOURCE_DIR}/CMake/External_pkgtools.cmake)
 
