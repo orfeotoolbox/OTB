@@ -39,10 +39,6 @@ macro(macro_setup_cmake_sources pkg)
 endmacro()
 
 macro(macro_update_dependencies_list list_variable)
-  add_custom_target(REMAKE
-    COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}"
-    WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}"
-    )
   if(WIN32 OR CMAKE_CROSSCOMPILING)
     add_custom_target(PACKAGE-check)
   else() #Unxies Using SuperBuild
@@ -51,7 +47,6 @@ macro(macro_update_dependencies_list list_variable)
       add_custom_target(PACKAGE-check
         COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}/MVD/build"
         WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/MVD/build"
-        DEPENDS REMAKE
         )
     else()
       add_custom_target(PACKAGE-check
