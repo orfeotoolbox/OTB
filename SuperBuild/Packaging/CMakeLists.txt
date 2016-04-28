@@ -10,7 +10,7 @@ if(NOT PROJECT_NAME)
   project(OTBPackaging)
 endif()
 
-option(GENERATE_PACKAGE "Generate OTB package" ON)
+option(GENERATE_PACKAGE "Generate OTB package" OFF)
 option(GENERATE_XDK "Generate XDK for OTB development" OFF)
 
 set(OUT_OF_SOURCE_BUILD FALSE)
