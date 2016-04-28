@@ -48,9 +48,9 @@ macro(super_package)
   list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #otbApplicationLauncherCommandLine..
   list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}") #otb apps
 
-  set(EXE_SEARCH_DIRS ${OTB_INSTALL_DIR}/bin)
-  list(APPEND  EXE_SEARCH_DIRS ${MONTEVERDI_INSTALL_DIR}/bin)
-  list(APPEND  EXE_SEARCH_DIRS ${DEPENDENCIES_INSTALL_DIR}/bin)
+  set(EXE_SEARCHDIRS ${OTB_INSTALL_DIR}/bin)
+  list(APPEND  EXE_SEARCHDIRS ${MONTEVERDI_INSTALL_DIR}/bin)
+  list(APPEND  EXE_SEARCHDIRS ${DEPENDENCIES_INSTALL_DIR}/bin)
 
   empty_package_staging_directory()
 
@@ -450,16 +450,18 @@ function(configure_package)
   list(APPEND EXE_FILES "otbTestDriver")
   list(APPEND EXE_FILES "monteverdi")
   list(APPEND EXE_FILES "mapla")
+
   foreach(EXE_FILE ${EXE_FILES})
     set(FOUND_${EXE_FILE} FALSE)
-    foreach(EXE_SEARCH_DIR ${EXE_SEARCH_DIRS})
-      if(EXISTS "${EXE_SEARCH_DIR}/${EXE_FILE}${EXE_EXT}")
-        set(FOUND_${EXE_FILE} TRUE)
-        #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
-        set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} bin/${EXE_FILE}${EXE_EXT}")
-        list(APPEND PKG_PEFILES
-          "${EXE_SEARCH_DIR}/${EXE_FILE}${EXE_EXT}")
-      endif()
+    foreach(EXE_SEARCHDIR ${EXE_SEARCHDIRS})
+      if(NOT FOUND_${EXE_FILE})
+        if(EXISTS "${EXE_SEARCHDIR}/${EXE_FILE}${EXE_EXT}")
+          set(FOUND_${EXE_FILE} TRUE)
+          #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
+          set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} bin/${EXE_FILE}${EXE_EXT}")
+          list(APPEND PKG_PEFILES "${EXE_SEARCHDIR}/${EXE_FILE}${EXE_EXT}")
+        endif()
+      endif() #(NOT FOUND_${EXE_FILE})
     endforeach() #EXE_SEARCH_DIR
   endforeach()
 
