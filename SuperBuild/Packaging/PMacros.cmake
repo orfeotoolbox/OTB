@@ -15,6 +15,7 @@ macro(macro_setup_cmake_sources pkg)
   #set archive name inside loop
   set(ARCHIVE_NAME ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
 
+  #copy of cmake variables not needed.
   if(WIN32 OR CMAKE_CROSSCOMPILING)
     set(cache_Monteverdi_SOURCE_DIR "${Monteverdi_SOURCE_DIR}")
     set(cache_Monteverdi_BINARY_DIR "${Monteverdi_BINARY_DIR}")
@@ -32,7 +33,6 @@ macro(macro_setup_cmake_sources pkg)
   else() #unixes
     set(cache_Monteverdi_SOURCE_DIR "${SUPERBUILD_BINARY_DIR}/MVD/src/MVD")
     set(cache_Monteverdi_BINARY_DIR "${SUPERBUILD_BINARY_DIR}/MVD/build")
-    set(cache_PACKAGE_SUPPORT_FILES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Files")
     set(cache_QT_PLUGINS_DIR "${PKG_INSTALL_PREFIX}/plugins")
     set(cache_QT_TRANSLATIONS_DIR "${PKG_INSTALL_PREFIX}/translations")
     set(cache_PKG_INSTALL_PREFIX "${PKG_INSTALL_PREFIX}")
@@ -48,7 +48,7 @@ macro(macro_setup_cmake_sources pkg)
    include(CMakeDetermineSystem)
    set(Monteverdi_SOURCE_DIR \"${cache_Monteverdi_SOURCE_DIR}\")
    set(Monteverdi_BINARY_DIR \"${cache_Monteverdi_BINARY_DIR}\")
-   set(PACKAGE_SUPPORT_FILES_DIR \"${OTB_SOURCE_DIR}/SuperBuild/Packaging\")
+   set(PACKAGE_SUPPORT_FILES_DIR \"${OTB_SOURCE_DIR}/SuperBuild/Packaging/Files\")
    set(QT_PLUGINS_DIR \"${cache_QT_PLUGINS_DIR}\")
    set(QT_TRANSLATIONS_DIR \"${cache_QT_TRANSLATIONS_DIR}\")
    set(PKG_INSTALL_PREFIX \"${cache_PKG_INSTALL_PREFIX}\")
@@ -128,12 +128,18 @@ macro(macro_create_targets_for_package pkg)
       )
   endif()
 
+  set(PACKAGE_EXTENSION .run)
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+    set(PACKAGE_EXTENSION .zip)
+  endif()
+
   #clean
   add_custom_target(PACKAGE-${pkg}-clean
-    COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/${PACKAGE}-PACKAGE"
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/${pkg}-PACKAGE"
     COMMAND ${CMAKE_COMMAND} -E remove "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}${PACKAGE_EXTENSION}"
     COMMAND ${CMAKE_COMMAND} "${CMAKE_BINARY_DIR}" WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     )
+
 endmacro(macro_create_targets_for_package)
 
 

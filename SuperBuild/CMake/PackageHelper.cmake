@@ -454,12 +454,15 @@ function(configure_package)
 
   #For Unixes we write the startup script in the *pkgsetup.in
   if(WIN32 OR CMAKE_CROSSCOMPILING)
-    install(PROGRAMS
-      "${PACKAGE_SUPPORT_FILES_DIR}/${EXE_FILE}${SCR_EXT}"
-      DESTINATION
-      "${PKG_STAGE_DIR}")
+    install(
+      PROGRAMS "${PACKAGE_SUPPORT_FILES_DIR}/monteverdi.bat"
+      DESTINATION "${PKG_STAGE_DIR}"
+      )
+    install(
+      PROGRAMS "${PACKAGE_SUPPORT_FILES_DIR}/mapla.bat"
+      DESTINATION "${PKG_STAGE_DIR}"
+      )
   endif(WIN32 OR CMAKE_CROSSCOMPILING)
-
 
   file(GLOB OTB_APPS_LIST ${OTB_APPLICATIONS_DIR}/otbapp_${LIB_EXT}) # /lib/otb
 
