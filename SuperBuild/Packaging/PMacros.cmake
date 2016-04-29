@@ -7,9 +7,9 @@ macro(macro_setup_cmake_sources pkg)
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory "${PACKAGE_PROJECT_DIR}/build")
 
   if("${pkg}" STREQUAL "XDK")
-    set(${archive_name} ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+    set(archive_name ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
   else()
-    set(${archive_name} ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+    set(archive_name ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
   endif()
 
   if("${pkg}" STREQUAL "XDK")
@@ -74,9 +74,9 @@ macro(macro_create_targets_for_package pkg)
 
   set(PACKAGE_PROJECT_DIR ${CMAKE_BINARY_DIR}/PACKAGE-${pkg})
   if("${pkg}" STREQUAL "XDK")
-    set(${archive_name} ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+    set(archive_name ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
   else()
-    set(${archive_name} ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+    set(archive_name ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
   endif()
 
   #configure
