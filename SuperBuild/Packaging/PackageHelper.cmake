@@ -1,6 +1,10 @@
 macro(super_package)
   cmake_parse_arguments(PKG  "" "STAGE_DIR" "SEARCHDIRS" ${ARGN} )
 
+  if(${PKG_STAGE_DIR} STREQUAL "")
+    message(FATAL_ERROR "PKG_STAGE_DIR is emtpy. Just can't continue.")
+  endif()
+
   set(loader_program_PATHS)
   if(WIN32 OR CMAKE_CROSSCOMPILING)
       set(loader_program_names      "${MXE_ARCH}-w64-mingw32.shared-objdump")
