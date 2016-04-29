@@ -10,12 +10,10 @@ find_package ( Boost
 # unit_test_framework component is used only in GdalAdapters module
 if (BUILD_TESTING)
   set(OTB_Boost_OPTIONAL_COMPONENTS unit_test_framework)
+  message(STATUS "Looking for optional Boost components : ${OTB_Boost_OPTIONAL_COMPONENTS}")
+  find_package ( Boost
+    QUIET
+    1.35.0
+    COMPONENTS ${OTB_Boost_OPTIONAL_COMPONENTS}
+    )
 endif()
-
-#Quiet find package to avoid message "Could not find boost" because unit_testing_framework is not installed
-message(STATUS "Looking for optional Boost components : ${OTB_Boost_OPTIONAL_COMPONENTS}")
-find_package ( Boost
-  QUIET
-  1.35.0
-  COMPONENTS ${OTB_Boost_OPTIONAL_COMPONENTS}
-  )
