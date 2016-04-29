@@ -1,21 +1,24 @@
 macro(macro_setup_cmake_sources pkg)
 
   message( "-- Configuring ${pkg} package")
-
+  #reset it again in macro(macro_create_targets_for_package pkg)
+  #because thats the cmake macros way.
   set(PACKAGE_PROJECT_DIR ${CMAKE_BINARY_DIR}/PACKAGE-${pkg})
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory "${PACKAGE_PROJECT_DIR}/build")
 
-  #Easy way to have the write "PACKAGE_PROJECT_DIR/src/CMakeLists.txt"
-  #inside foreach()
   if("${pkg}" STREQUAL "XDK")
-    set(PACKAGE_PLATFORM_NAME "xdk-${PACKAGE_PLATFORM_NAME}")
+    set(${archive_name} ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+  else()
+    set(${archive_name} ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+  endif()
+
+  if("${pkg}" STREQUAL "XDK")
     set(PKG_GENERATE_XDK ON)
   else()
     set(PKG_GENERATE_XDK OFF)
   endif()
-  #set archive name inside loop
-  set(ARCHIVE_NAME ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
 
+  #set archive name inside loop
   file(WRITE "${PACKAGE_PROJECT_DIR}/src/CMakeLists.txt"
   "cmake_minimum_required(VERSION 2.6)
    include(CMakeParseArguments)
@@ -34,7 +37,7 @@ macro(macro_setup_cmake_sources pkg)
    set(PKG_GENERATE_XDK              ${PKG_GENERATE_XDK})
    ${EXTRA_CACHE_CONFIG}
    include(\"${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake\")
-   super_package(STAGE_DIR \"${ARCHIVE_NAME}\")" )
+   super_package(STAGE_DIR \"${archive_name}\")" )
 
 endmacro()
 
@@ -60,6 +63,22 @@ macro(macro_update_dependencies_list list_variable)
 endmacro()
 
 macro(macro_create_targets_for_package pkg)
+
+  if("${pkg}" STREQUAL "XDK")
+    set(PACKAGE_PLATFORM_NAME_ "xdk-${PACKAGE_PLATFORM_NAME}")
+    set(PKG_GENERATE_XDK ON)
+  else()
+    set(PACKAGE_PLATFORM_NAME_ "${PACKAGE_PLATFORM_NAME}")
+    set(PKG_GENERATE_XDK OFF)
+  endif()
+
+  set(PACKAGE_PROJECT_DIR ${CMAKE_BINARY_DIR}/PACKAGE-${pkg})
+  if("${pkg}" STREQUAL "XDK")
+    set(${archive_name} ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+  else()
+    set(${archive_name} ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+  endif()
+
   #configure
   add_custom_target(PACKAGE-${pkg}-configure
     COMMAND ${CMAKE_COMMAND}
@@ -82,7 +101,7 @@ macro(macro_create_targets_for_package pkg)
     add_custom_target(PACKAGE-${pkg}
       ALL DEPENDS
       COMMAND ${ZIP_EXECUTABLE}
-      "-r" "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.zip" "${CMAKE_INSTALL_PREFIX}/${ARCHIVE_NAME}"
+      "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${CMAKE_INSTALL_PREFIX}/${archive_name}"
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
       DEPENDS PACKAGE-${pkg}-build
       )
@@ -91,9 +110,9 @@ macro(macro_create_targets_for_package pkg)
       ALL DEPENDS
       COMMAND ${MAKESELF_SCRIPT}
       "--target"
-      "${ARCHIVE_NAME}"
-      "${CMAKE_INSTALL_PREFIX}/${ARCHIVE_NAME}"
-      "${ARCHIVE_NAME}.run"
+      "${archive_name}"
+      "${CMAKE_INSTALL_PREFIX}/${archive_name}"
+      "${archive_name}.run"
       "${PACKAGE_LONG_NAME} ${PACKAGE_VERSION_STRING}"
       "./pkgsetup"
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
@@ -110,7 +129,7 @@ macro(macro_create_targets_for_package pkg)
   add_custom_target(PACKAGE-${pkg}-clean
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/PACKAGE-${pkg}"
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/PACKAGE-TOOLS"
-    COMMAND ${CMAKE_COMMAND} -E remove "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}${PACKAGE_EXTENSION}"
+    COMMAND ${CMAKE_COMMAND} -E remove "${CMAKE_BINARY_DIR}/${archive_name}${PACKAGE_EXTENSION}"
     COMMAND ${CMAKE_COMMAND} "${CMAKE_BINARY_DIR}"
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     )
