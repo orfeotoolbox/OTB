@@ -2033,7 +2033,7 @@ MainWindow
 void
 MainWindow
 ::OnApplicationToLaunchSelected( const QString & appName,
-                                 const QString & itkNotUsed(docName) )
+                                 const QString & docName )
 {
   assert( Application::ConstInstance()!=NULL );
   assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );
