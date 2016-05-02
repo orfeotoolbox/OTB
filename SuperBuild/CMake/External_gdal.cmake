@@ -35,8 +35,8 @@ else()
 
     ExternalProject_Add(GDAL
       PREFIX GDAL
-      URL "http://download.osgeo.org/gdal/1.11.4/gdal-1.11.4.tar.gz"
-      URL_MD5 e9a966f0f5a88c43da47faf78a865952
+      URL "http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz"
+      URL_MD5 866a46f72b1feadd60310206439c1a76
       SOURCE_DIR ${GDAL_SB_SRC}
       BINARY_DIR ${GDAL_SB_SRC}
       INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -80,8 +80,8 @@ else()
 
     ExternalProject_Add(GDAL
        PREFIX GDAL
-       URL "http://download.osgeo.org/gdal/1.11.4/gdal-1.11.4.tar.gz"
-       URL_MD5 e9a966f0f5a88c43da47faf78a865952
+       URL "http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz"
+       URL_MD5 866a46f72b1feadd60310206439c1a76
        SOURCE_DIR ${GDAL_SB_SRC}
        BINARY_DIR ${GDAL_SB_SRC}
        INSTALL_DIR ${SB_INSTALL_PREFIX}
