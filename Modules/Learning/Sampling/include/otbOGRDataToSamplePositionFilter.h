@@ -21,9 +21,11 @@
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "otbOGRDataSourceWrapper.h"
-#include "otbOGRDataResampler.h"
+//#include "otbOGRDataResampler.h"
 #include "itkSimpleDataObjectDecorator.h"
 #include "otbSamplingRateCalculator.h"
+#include "otbPeriodicSampler.h"
+#include "otbImage.h"
 
 
 namespace otb
@@ -36,7 +38,7 @@ namespace otb
  * 
  * \ingroup OTBSampling
  */
-template<class TInputImage, class TMaskImage>
+template<class TInputImage, class TMaskImage, class TSampler>
 class ITK_EXPORT PersistentOGRDataToSamplePositionFilter :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
@@ -57,6 +59,12 @@ public:
 
   typedef otb::ogr::DataSource                            OGRDataType;
   typedef otb::ogr::DataSource::Pointer                   OGRDataPointer;
+
+  typedef TSampler                                        SamplerType;
+  typedef typename SamplerType::Pointer                   SamplerPointerType;
+  typedef typename SamplerType::ParameterType             SamplerParameterType;
+  typedef typename std::map
+    <std::string, SamplerPointerType>                     SamplerMapType;
 
   /** Wrap output type as DataObject */
 
@@ -87,22 +95,23 @@ public:
   itkSetMacro(LayerIndex, int);
   itkGetMacro(LayerIndex, int); 
 
-  void SetRatesByClass(const SamplingRateCalculator::MapRateType& map )
-  {
-      m_RatesByClass = map;
-  }
+  SamplerMapType& GetSamplers(unsigned int level);
   
-  itkSetMacro(MaxSamplingVecSize, unsigned int);
-  itkGetMacro(MaxSamplingVecSize, unsigned int);
-  
-  itkSetMacro(OutputVectorDataPath, std::string);
-  itkGetMacro(OutputVectorDataPath, std::string);
-  
-  itkSetMacro(OutputSamplingVectorsPath, std::string);
-  itkSetMacro(InputSamplingVectorsPath, std::string);
-  
-  
+  void SetOutputPositionContainerAndRates(
+    otb::ogr::DataSource* data,
+    const SamplingRateCalculator::MapRateType& map,
+    unsigned int level);
 
+  const otb::ogr::DataSource* GetOutputPositionContainer(unsigned int level) const;
+  otb::ogr::DataSource* GetOutputPositionContainer(unsigned int level);
+
+  unsigned int GetNumberOfLevels();
+  
+  void ClearOutputs();
+  
+  /** Set the OGR layer creation options */
+  void SetOGRLayerCreationOptions(const std::vector<std::string> & options);
+  
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
   virtual itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
@@ -118,10 +127,6 @@ protected:
 
   virtual void GenerateInputRequestedRegion();
 
-  //virtual void BeforeThreadedGenerateData();
-
-  //virtual void ThreadedGenerateData(const RegionType& outputRegionForThread,
-  //                                  itk::ThreadIdType threadId);
   virtual void GenerateData();
 
 private:
@@ -132,19 +137,38 @@ private:
 
   RegionType FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const;
 
+  /** Process the current geometry using an image iterator */
+  template <typename TIterator>
+  void Add(otb::ogr::Layer::const_iterator& featIt,
+           TIterator& imgIt,
+           const typename TIterator::ImageType *img);
+
+  /** Recursive method to process geometries */
+  template <typename TIterator>
+  void AddGeometry(OGRGeometry *geom,
+                   TIterator& imgIt,
+                   const typename TIterator::ImageType *img,
+                   unsigned long &fId,
+                   std::string &className);
+
+  void CallSamplers(const PointType &point,
+                    const std::string &className);
+
   std::string m_FieldName;
-  OGRDataResampler::Pointer m_TemporaryStats;
-  SamplingRateCalculator::MapRateType  m_RatesByClass;
+
+  int m_FieldIndex;
+
+  std::vector<SamplerMapType> m_Samplers;
 
   // Layer to use in the shape file, default to 0
   int m_LayerIndex;
-  std::string m_OutputSamplingVectorsPath;
-  std::string m_InputSamplingVectorsPath;
   
-  unsigned int m_MaxSamplingVecSize;
-  std::string m_OutputVectorDataPath;
-  
-  
+  // (internal) name of the layer at position 'm_LayerIndex'
+  std::string m_LayerName;
+
+  std::vector<std::string> m_OGRLayerCreationOptions;
+
+  std::vector<OGRDataPointer> m_InMemoryOutputs;
 };
 
 /**
@@ -156,16 +180,16 @@ private:
  *
  * \ingroup OTBSampling
  */
-template<class TInputImage, class TMaskImage>
+template<class TInputImage, class TMaskImage = otb::Image<unsigned char> , class TSampler = otb::PeriodicSampler >
 class ITK_EXPORT OGRDataToSamplePositionFilter :
-  public PersistentFilterStreamingDecorator<PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage> >
+  public PersistentFilterStreamingDecorator<PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler> >
 {
 public:
   /** Standard Self typedef */
   typedef OGRDataToSamplePositionFilter  Self;
   typedef PersistentFilterStreamingDecorator
     <PersistentOGRDataToSamplePositionFilter
-      <TInputImage,TMaskImage> >          Superclass;
+      <TInputImage,TMaskImage,TSampler> >          Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
   typedef itk::SmartPointer<const Self>   ConstPointer;
 
@@ -174,6 +198,12 @@ public:
   typedef otb::ogr::DataSource            OGRDataType;
   
   typedef typename Superclass::FilterType             FilterType;
+
+  typedef TSampler                                        SamplerType;
+  typedef typename SamplerType::Pointer                   SamplerPointerType;
+  typedef typename SamplerType::ParameterType             SamplerParameterType;
+  typedef typename std::map
+    <std::string, SamplerPointerType>                     SamplerMapType;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -197,20 +227,17 @@ public:
   
   void SetLayerIndex(int index);
   int GetLayerIndex();
-  
-  void SetRatesByClass(const SamplingRateCalculator::MapRateType& map);
-  void SetMaxSamplingVecSize(
-  
-  unsigned int index);
-  unsigned int GetMaxSamplingVecSize();
- 
-  void SetOutputVectorDataPath(std::string);
- 
-  void SetOutputSamplingVectorsPath(std::string);
-  void SetInputSamplingVectorsPath(std::string);
- 
-  const std::string* GetOutputVectorDataPath() const; 
-  std::string* GetOutputVectorDataPath();
+
+  void SetSamplerParameters(SamplerParameterType param, unsigned int level=0);
+
+  SamplerMapType& GetSamplers(unsigned int level=0);
+
+  void SetOutputPositionContainerAndRates(
+    otb::ogr::DataSource* data,
+    const SamplingRateCalculator::MapRateType& map,
+    unsigned int level=0);
+
+  otb::ogr::DataSource* GetOutputPositionContainer(unsigned int level=0);
  
 protected:
   /** Constructor */
