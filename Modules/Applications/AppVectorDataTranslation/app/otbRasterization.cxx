@@ -73,7 +73,7 @@ private:
     AddParameter(ParameterType_InputVectorData,  "in",   "Input vector dataset");
     SetParameterDescription( "in", "The input vector dataset to be rasterized" );
 
-    AddParameter(ParameterType_OutputImage,  "out",   "Ouptut image");
+    AddParameter(ParameterType_OutputImage,  "out",   "Output image");
     SetParameterDescription( "out", "An output image containing the rasterized vector dataset" );
 
     AddParameter(ParameterType_InputImage,  "im",   "Input reference image");

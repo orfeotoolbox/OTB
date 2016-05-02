@@ -53,10 +53,10 @@ otb_add_test(NAME srTvRCC8GraphIOEndToEnd COMMAND otbRCC8TestDriver
 
 otb_add_test(NAME srTvPolygonListToRCC8GraphFilter COMMAND otbRCC8TestDriver
   --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/srTvPolygonListToRCC8GraphFilterOuptut.dot
-  ${TEMP}/srTvPolygonListToRCC8GraphFilterOuptut.dot
+  ${BASELINE_FILES}/srTvPolygonListToRCC8GraphFilterOutput.dot
+  ${TEMP}/srTvPolygonListToRCC8GraphFilterOutput.dot
   otbPolygonListToRCC8GraphFilter
-  ${TEMP}/srTvPolygonListToRCC8GraphFilterOuptut.dot)
+  ${TEMP}/srTvPolygonListToRCC8GraphFilterOutput.dot)
 
 otb_add_test(NAME srTvRCC8VertexBase COMMAND otbRCC8TestDriver
   otbRCC8VertexBase
