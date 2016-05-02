@@ -88,6 +88,7 @@ PolygonClassStatisticsAccumulator
           m_Polygon[fId]++;
           break;
           }
+        ++imgIt;
         }
       break;
       }
