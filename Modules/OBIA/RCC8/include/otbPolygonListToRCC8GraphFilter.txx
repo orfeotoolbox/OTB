@@ -179,7 +179,7 @@ void
 PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
 ::BeforeThreadedGenerateData()
 {
-  // Ouptut graph pointer
+  // Output graph pointer
   OutputGraphPointerType      graph = this->GetOutput();
   PolygonListConstPointerType inputPtr = this->GetInput();
 
@@ -227,7 +227,7 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
 {
   //std::cout<<"Starting thread "<<threadId <<" to work on range ["<<startIndex<<", "<<stopIndex<<"]"<<std::endl;
 
-  // Ouptut graph pointer
+  // Output graph pointer
   OutputGraphPointerType      graph = this->GetOutput();
   PolygonListConstPointerType inputPtr = this->GetInput();
 
