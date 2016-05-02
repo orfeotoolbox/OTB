@@ -42,8 +42,8 @@ otb_add_test(NAME leTvOGRDataToSamplePositionFilterPoly COMMAND otbSamplingTestD
 otb_add_test(NAME leTvOGRDataToSamplePositionFilterPolyPattern COMMAND otbSamplingTestDriver
   otbOGRDataToSamplePositionFilterPattern
   ${INPUTDATA}/variousVectors.sqlite
-  ${TEMP}/leTvOGRDataToResampledOGRDataOutput_XMLPoly.sqlite
-  ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput_Poly.sqlite
+  ${TEMP}/leTvOGRDataToResampledOGRDataOutput_PolyPattern.sqlite
+  ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput_PolyPattern.sqlite
   )
   
 otb_add_test(NAME leTvOGRDataToSamplePositionFilterLines COMMAND otbSamplingTestDriver
