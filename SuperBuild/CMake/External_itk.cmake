@@ -141,13 +141,13 @@ else()
     )
 
   #later used below for _SB_ITK_DIR and then in packaging
-  set(ITK_SB_VERSION 4.9)
+  set(ITK_SB_VERSION 4.8)
   set(ITK_SB_VERSION_FULL ${ITK_SB_VERSION}.1)
 
   ExternalProject_Add(ITK
     PREFIX ITK
-    URL "https://sourceforge.net/projects/itk/files/itk/4.9/InsightToolkit-4.9.1.tar.gz/download"
-    URL_MD5 d52b9072dd3678069081fc5191d6a8f6
+    URL "http://sourceforge.net/projects/itk/files/itk/4.8/InsightToolkit-4.8.1.tar.gz/download"
+    URL_MD5 b1ed53604de854501cb61f34f410420e
     SOURCE_DIR ${ITK_SB_SRC}
     BINARY_DIR ${ITK_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
