@@ -27,10 +27,7 @@ namespace otb
 /** \class SamplingRateCalculator
  *  \brief This class represent a SamplingRateCalculator.
  *
- *
- *
- *
- * \ingroup OTBLerning
+ * \ingroup OTBSampling
  */
 
 class SamplingRateCalculator
