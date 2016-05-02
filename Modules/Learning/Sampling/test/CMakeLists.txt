@@ -12,13 +12,13 @@ target_link_libraries(otbSamplingTestDriver ${OTBSampling-Test_LIBRARIES})
 otb_module_target_label(otbSamplingTestDriver)
 
 # Tests Declaration
-
+# ---------------- SamplingRateCalculator ------------------------------------
 otb_add_test(NAME leTuSamplingRateCalculatorNew COMMAND otbSamplingTestDriver
             otbSamplingRateCalculatorNew 
   
   )
 
-otb_add_test(NAME leTuSamplingRateCalculator COMMAND otbSamplingTestDriver
+otb_add_test(NAME leTvSamplingRateCalculator COMMAND otbSamplingTestDriver
   --compare-ascii ${NOTOL}
             ${BASELINE_FILES}/leTuSamplingRateCalculator.txt
             ${TEMP}/leTuSamplingRateCalculator.txt
@@ -27,25 +27,21 @@ otb_add_test(NAME leTuSamplingRateCalculator COMMAND otbSamplingTestDriver
             83
             ${TEMP}/leTuSamplingRateCalculator.txt)
   
-
+# ----------------- OGRDataToSamplePositionFilter ----------------------------
 otb_add_test(NAME leTuOGRDataToSamplePositionFilterNew COMMAND otbSamplingTestDriver
   otbOGRDataToSamplePositionFilterNew )
 
 otb_add_test(NAME leTvOGRDataToSamplePositionFilterPoly COMMAND otbSamplingTestDriver
   otbOGRDataToSamplePositionFilter
   ${INPUTDATA}/variousVectors.sqlite
-  ${INPUTDATA}/leTvOGRDataToResampledOGRDataResamplingVectors_Poly.txt
   0
   ${TEMP}/leTvOGRDataToResampledOGRDataOutput_Poly.sqlite
   ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput_Poly.sqlite
   )
   
-otb_add_test(NAME leTvOGRDataToSamplePositionFilterXMLPoly COMMAND otbSamplingTestDriver
-  otbOGRDataToSamplePositionFilterXML
+otb_add_test(NAME leTvOGRDataToSamplePositionFilterPolyPattern COMMAND otbSamplingTestDriver
+  otbOGRDataToSamplePositionFilterPattern
   ${INPUTDATA}/variousVectors.sqlite
-  ${INPUTDATA}/leTvOGRDataToResampledOGRDataResamplingVectors_Poly.txt
-  0
-  ${INPUTDATA}/leTvOGRDataToResampledOGRDataXMLPoly.xml
   ${TEMP}/leTvOGRDataToResampledOGRDataOutput_XMLPoly.sqlite
   ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput_Poly.sqlite
   )
@@ -53,7 +49,6 @@ otb_add_test(NAME leTvOGRDataToSamplePositionFilterXMLPoly COMMAND otbSamplingTe
 otb_add_test(NAME leTvOGRDataToSamplePositionFilterLines COMMAND otbSamplingTestDriver
   otbOGRDataToSamplePositionFilter
   ${INPUTDATA}/variousVectors.sqlite
-  ${INPUTDATA}/leTvOGRDataToResampledOGRDataResamplingVectors_Lines.txt
   1
   ${TEMP}/leTvOGRDataToResampledOGRDataOutput_Lines.sqlite
   ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput_Lines.sqlite
@@ -62,13 +57,12 @@ otb_add_test(NAME leTvOGRDataToSamplePositionFilterLines COMMAND otbSamplingTest
 otb_add_test(NAME leTvOGRDataToSamplePositionFilterPoints COMMAND otbSamplingTestDriver
   otbOGRDataToSamplePositionFilter
   ${INPUTDATA}/variousVectors.sqlite
-  ${INPUTDATA}/leTvOGRDataToResampledOGRDataResamplingVectors_Points.txt
   2
   ${TEMP}/leTvOGRDataToResampledOGRDataOutput_Points.sqlite
   ${BASELINE_FILES}/leTvOGRDataToResampledOGRDataOutput_Points.sqlite
   )
 
-
+# --------------- OGRDataToClassStatisticsFilter -----------------------------
 otb_add_test(NAME leTuOGRDataToClassStatisticsFilterNew COMMAND otbSamplingTestDriver
   otbOGRDataToClassStatisticsFilterNew )
 

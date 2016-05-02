@@ -16,16 +16,118 @@
 
 =========================================================================*/
 
-#include "otbSamplingRateCalculator.h"
 #include "otbOGRDataToSamplePositionFilter.h"
-#include "otbOGRDataToClassStatisticsFilter.h"
+#include "otbPatternSampler.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include <fstream>
 
-#include "otbStatisticsXMLFileWriter.h"
-#include "otbStatisticsXMLFileReader.h"
-#include "itkVariableLengthVector.h"
+// hard-coded rates for the multi-layer OGRDataSource (polygon/lines/points)
+otb::SamplingRateCalculator::MapRateType GetRatesForMinimumSamples(unsigned int index)
+{
+  otb::SamplingRateCalculator::MapRateType ratesByClass;
+  otb::SamplingRateCalculator::TripletType triplet;
+  if (index == 0)
+    {
+    // Polygons
+    triplet.Tot = 104;
+    triplet.Required = 104;
+    triplet.Rate = 1.0;
+    ratesByClass[std::string("1")] = triplet;
+    triplet.Tot = 160;
+    triplet.Required = 104;
+    triplet.Rate = 0.65;
+    ratesByClass[std::string("2")] = triplet;
+    triplet.Tot = 211;
+    triplet.Required = 104;
+    triplet.Rate = 0.49289;
+    ratesByClass[std::string("3")] = triplet;
+    }
+  else if (index == 1)
+    {
+    // Lines
+    triplet.Tot = 63;
+    triplet.Required = 27;
+    triplet.Rate = 0.42857;
+    ratesByClass[std::string("1")] = triplet;
+    triplet.Tot = 100;
+    triplet.Required = 27;
+    triplet.Rate = 0.27;
+    ratesByClass[std::string("2")] = triplet;
+    triplet.Tot = 27;
+    triplet.Required = 27;
+    triplet.Rate = 1.0;
+    ratesByClass[std::string("3")] = triplet;
+    }
+  else if (index == 2)
+    {
+    // Points
+    triplet.Tot = 2;
+    triplet.Required = 1;
+    triplet.Rate = 0.5;
+    ratesByClass[std::string("1")] = triplet;
+    triplet.Tot = 1;
+    triplet.Required = 1;
+    triplet.Rate = 1.0;
+    ratesByClass[std::string("2")] = triplet;
+    triplet.Tot = 2;
+    triplet.Required = 1;
+    triplet.Rate = 0.5;
+    ratesByClass[std::string("3")] = triplet;
+    }
+  return ratesByClass;
+}
+
+int TestPositionContainers(otb::ogr::DataSource *output, otb::ogr::DataSource *baseline)
+{
+  double epsilon=0.01;
+  otb::ogr::Layer baselineLayer = baseline->GetLayer(0);
+  otb::ogr::Layer outputLayer = output->GetLayer(0);
+
+  otb::ogr::Layer::iterator itBase = baselineLayer.begin();
+  for (;itBase != baselineLayer.end(); ++itBase)
+    {
+    const OGRGeometry* cstpgeomBase = itBase->GetGeometry();
+    OGRGeometry* pgeomBase = cstpgeomBase->clone();
+    OGRPoint* castPointBase = dynamic_cast<OGRPoint*>(pgeomBase);
+    if (castPointBase == NULL)
+      {
+      std::cerr << "Could not dynamic_cast pgeomBase" << std::endl;
+      return EXIT_FAILURE;
+      }
+    else
+      {
+      bool found=false;
+      otb::ogr::Layer::iterator itOutput = outputLayer.begin();
+      for (;itOutput != outputLayer.end(); ++itOutput)
+        {
+        const OGRGeometry* cstpgeomOutput = itOutput->GetGeometry();
+        OGRGeometry* pgeomOutput = cstpgeomOutput->clone();
+        OGRPoint* castPointOutput = dynamic_cast<OGRPoint*>(pgeomOutput);
+        if (castPointOutput == NULL)
+          {
+          std::cerr << "Could not dynamic_cast pgeomOutput" << std::endl;
+          return EXIT_FAILURE;
+          }
+        else
+          {
+          if ( (fabs(castPointBase->getX()-castPointOutput->getX())<epsilon) && (fabs(castPointBase->getY()-castPointOutput->getY())<epsilon) )
+            {
+            found=true;
+            break;
+            }
+          }
+        }
+      if(!found)
+        {
+        unsigned long featureId = itBase->ogr().GetFID();
+        std::cerr << "Could not find point ("<< castPointBase->getX() << "," << castPointBase->getY() << "); feature ID = " << featureId << "." << std::endl;
+        return EXIT_FAILURE;
+        }
+      }
+    }
+  return EXIT_SUCCESS;
+}
 
 int otbOGRDataToSamplePositionFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
@@ -40,26 +142,22 @@ int otbOGRDataToSamplePositionFilterNew(int itkNotUsed(argc), char* itkNotUsed(a
 
 int otbOGRDataToSamplePositionFilter(int argc, char* argv[])
 {
-
   typedef otb::VectorImage<float> InputImageType;
   typedef otb::Image<unsigned char> MaskImageType;
-  typedef otb::OGRDataToClassStatisticsFilter<InputImageType,MaskImageType> FilterType;
-  
-  if (argc < 3)
+
+  if (argc < 5)
     {
-    std::cout << "Usage : "<<argv[0]<< " input_vector_path sampling_vector_path LayerIndex output_path baseline_path" << std::endl;
+    std::cout << "Usage : "<<argv[0]<< " input_vector_path LayerIndex output_path baseline_path" << std::endl;
     }
-  
-  
+
   std::string vectorPath(argv[1]);
-  std::string samplingVectorsPath(argv[2]);
-  int LayerIndex = atoi(argv[3]);
-  std::string outputPath(argv[4]);
-  std::string baselineVectorPath(argv[5]);
-  
-  
+  int LayerIndex = atoi(argv[2]);
+  std::string outputPath(argv[3]);
+  std::string baselineVectorPath(argv[4]);
+
   otb::ogr::DataSource::Pointer vectors = otb::ogr::DataSource::New(vectorPath);
-  
+
+  // --------------------- Prepare input data --------------------------------
   InputImageType::RegionType region;
   region.SetSize(0,99);
   region.SetSize(1,50);
@@ -73,7 +171,7 @@ int otbOGRDataToSamplePositionFilter(int argc, char* argv[])
   
   InputImageType::PixelType pixel(3);
   pixel.Fill(1);
-  
+
   InputImageType::Pointer inputImage = InputImageType::New();
   inputImage->SetNumberOfComponentsPerPixel(3);
   inputImage->SetLargestPossibleRegion(region);
@@ -82,7 +180,7 @@ int otbOGRDataToSamplePositionFilter(int argc, char* argv[])
   // Don't allocate the input image, the filter should not need it
   //inputImage->Allocate();
   //inputImage->FillBuffer(pixel);
-  
+
   MaskImageType::Pointer mask = MaskImageType::New();
   mask->SetRegions(region);
   mask->SetOrigin(origin);
@@ -94,132 +192,52 @@ int otbOGRDataToSamplePositionFilter(int argc, char* argv[])
     {
     it.Set(count % 2);
     }
-    
+
   std::string fieldName("Label");
-  
-  FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(inputImage);
-  filter->SetMask(mask);
-  filter->SetOGRData(vectors);
-  filter->SetFieldName(fieldName);
-  filter->SetLayerIndex(LayerIndex);
-  
-  filter->Update();
-  
-  FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get();
 
-    
-   //-------------------------------------------------------------- 
-  typedef otb::OGRDataToSamplePositionFilter<InputImageType,MaskImageType> ResamplerFilterType;  
-  typedef otb::SamplingRateCalculator RateCalculatorype;
-  
-  RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  rateCalculator->SetClassCount(classCount);
-  rateCalculator->SetMinimumNbOfSamplesByClass();
-  RateCalculatorype::MapRateType ratesbyClass = rateCalculator->GetRatesByClass();
-    
-  
-  ResamplerFilterType::Pointer resampler = ResamplerFilterType::New();
-  resampler->SetOutputVectorDataPath(outputPath);
-  resampler->SetInput(inputImage);
-  resampler->SetMask(mask);
-  resampler->SetOGRData(vectors);
-  resampler->SetRatesByClass(ratesbyClass);
-  resampler->SetFieldName(fieldName);
-  resampler->SetLayerIndex(LayerIndex);
-  //resampler->SetMaxSamplingVecSize(81);
-  //resampler->SetOutputSamplingVectorsPath(samplingVectorsPath);
-  resampler->SetInputSamplingVectorsPath(samplingVectorsPath);
-  
-  resampler->Update();
-  
-  
-  //TEST itself
-  double epsilon=0.01;
-  
-  otb::ogr::DataSource::Pointer baseline = otb::ogr::DataSource::New(baselineVectorPath, otb::ogr::DataSource::Modes::Read); 
-  otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(outputPath, otb::ogr::DataSource::Modes::Read);
-  
-  otb::ogr::Layer::iterator itBase = baseline->GetLayer(0).begin();
-  for (;itBase != baseline->GetLayer(0).end(); ++itBase)
-  {
+  otb::SamplingRateCalculator::MapRateType ratesByClass =
+    GetRatesForMinimumSamples(LayerIndex);
 
-    const OGRGeometry* cstpgeomBase = itBase->GetGeometry();
-    OGRGeometry* pgeomBase = cstpgeomBase->clone();
-    OGRPoint* castPointBase = dynamic_cast<OGRPoint*>(pgeomBase);
-    if (castPointBase == NULL)
-    {
-        std::cerr << "Could not dynamic_cast pgeomBase" << std::endl;
-        return EXIT_FAILURE;
-    }
-    else
-    {
-       bool found=false; 
-       otb::ogr::Layer::iterator itOutput = output->GetLayer(0).begin();
-       for (;itBase != output->GetLayer(0).end(); ++itOutput)
-       {
-           const OGRGeometry* cstpgeomOutput = itOutput->GetGeometry();
-           OGRGeometry* pgeomOutput = cstpgeomOutput->clone();
-           OGRPoint* castPointOutput = dynamic_cast<OGRPoint*>(pgeomOutput);
-           if (castPointOutput == NULL)
-           {
-              std::cerr << "Could not dynamic_cast pgeomOutput" << std::endl;
-              return EXIT_FAILURE;
-           }
-           else
-           {
-              if ( (fabs(castPointBase->getX()-castPointOutput->getX())<epsilon) && (fabs(castPointBase->getY()-castPointOutput->getY())<epsilon) )
-              {
-                 found=true;
-                 break;
-              }
-           }
-       
-       }
-       if(!found)
-       {
-           unsigned long featureId = itBase->ogr().GetFID();
-           std::cerr << "Could not find point ("<< castPointBase->getX() << "," << castPointBase->getY() << "); feature ID = " << featureId << "." << std::endl;
-           return EXIT_FAILURE;
-       }
-    }
-  
-        
-  }
-  
+  otb::ogr::DataSource::Pointer output =
+    otb::ogr::DataSource::New(outputPath,otb::ogr::DataSource::Modes::Overwrite);
 
-  return EXIT_SUCCESS;
+  //--------------------------------------------------------------
+  typedef otb::OGRDataToSamplePositionFilter<
+    InputImageType,MaskImageType> SelectionFilterType;
+
+  SelectionFilterType::Pointer selector = SelectionFilterType::New();
+  selector->SetInput(inputImage);
+  selector->SetMask(mask);
+  selector->SetOGRData(vectors);
+  selector->SetOutputPositionContainerAndRates(output,ratesByClass);
+  selector->SetFieldName(fieldName);
+  selector->SetLayerIndex(LayerIndex);
+
+  selector->Update();
+
+  otb::ogr::DataSource::Pointer baseline = otb::ogr::DataSource::New(baselineVectorPath, otb::ogr::DataSource::Modes::Read);
+
+  return TestPositionContainers(output,baseline);
 }
 
-
-
-int otbOGRDataToSamplePositionFilterXML(int argc, char* argv[])
+int otbOGRDataToSamplePositionFilterPattern(int argc, char* argv[])
 {
-
   typedef otb::VectorImage<float> InputImageType;
   typedef otb::Image<unsigned char> MaskImageType;
-  typedef std::map<std::string, unsigned long>      ClassCountMapType;
-  
-  
-  typedef itk::VariableLengthVector<float> MeasurementType;
-  typedef otb::StatisticsXMLFileReader<MeasurementType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
 
-  
-  if (argc < 3)
+  if (argc < 4)
     {
-    std::cout << "Usage : "<<argv[0]<< " input_vector_path sampling_vector_path xmlPath LayerIndex output_path baseline_path" << std::endl;
+    std::cout << "Usage : "<<argv[0]<< " input_vector_path output_path baseline_path" << std::endl;
     }
-  
+
   std::string vectorPath(argv[1]);
-  std::string samplingVectorsPath(argv[2]);
-  int LayerIndex = atoi(argv[3]);
-  std::string xmlPath(argv[4]);
-  std::string outputPath(argv[5]);
-  std::string baselineVectorPath(argv[6]);
-  
+  int LayerIndex = 0;
+  std::string outputPath(argv[2]);
+  std::string baselineVectorPath(argv[3]);
+
   otb::ogr::DataSource::Pointer vectors = otb::ogr::DataSource::New(vectorPath);
-  
+
+  // --------------------- Prepare input data --------------------------------
   InputImageType::RegionType region;
   region.SetSize(0,99);
   region.SetSize(1,50);
@@ -233,14 +251,16 @@ int otbOGRDataToSamplePositionFilterXML(int argc, char* argv[])
   
   InputImageType::PixelType pixel(3);
   pixel.Fill(1);
-  
+
   InputImageType::Pointer inputImage = InputImageType::New();
   inputImage->SetNumberOfComponentsPerPixel(3);
   inputImage->SetLargestPossibleRegion(region);
   inputImage->SetOrigin(origin);
   inputImage->SetSpacing(spacing);
+  // Don't allocate the input image, the filter should not need it
+  //inputImage->Allocate();
+  //inputImage->FillBuffer(pixel);
 
-  
   MaskImageType::Pointer mask = MaskImageType::New();
   mask->SetRegions(region);
   mask->SetOrigin(origin);
@@ -252,91 +272,47 @@ int otbOGRDataToSamplePositionFilterXML(int argc, char* argv[])
     {
     it.Set(count % 2);
     }
-    
+
   std::string fieldName("Label");
-  
 
-  reader->SetFileName(xmlPath.c_str());
-  ClassCountMapType classCount = reader->GetStatisticMapByName<ClassCountMapType>("classCounts");
-    
-   //-------------------------------------------------------------- 
-  typedef otb::OGRDataToSamplePositionFilter<InputImageType,MaskImageType> ResamplerFilterType;  
-  typedef otb::SamplingRateCalculator RateCalculatorype;
-  
-  RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  rateCalculator->SetClassCount(classCount);
-  rateCalculator->SetMinimumNbOfSamplesByClass();
-  RateCalculatorype::MapRateType ratesbyClass = rateCalculator->GetRatesByClass();
-    
-  
-  ResamplerFilterType::Pointer resampler = ResamplerFilterType::New();
-  resampler->SetOutputVectorDataPath(outputPath);
-  resampler->SetInput(inputImage);
-  resampler->SetMask(mask);
-  resampler->SetOGRData(vectors);
-  resampler->SetRatesByClass(ratesbyClass);
-  resampler->SetFieldName(fieldName);
-  resampler->SetLayerIndex(LayerIndex);
-  //resampler->SetMaxSamplingVecSize(81);
-  //resampler->SetOutputSamplingVectorsPath(samplingVectorsPath);
-  resampler->SetInputSamplingVectorsPath(samplingVectorsPath);
-  
-  resampler->Update();
-  
-  
-  //TEST itself
-  double epsilon=0.01;
-  
-  otb::ogr::DataSource::Pointer baseline = otb::ogr::DataSource::New(baselineVectorPath, otb::ogr::DataSource::Modes::Read); 
-  otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(outputPath, otb::ogr::DataSource::Modes::Read);
-  
-  otb::ogr::Layer::iterator itBase = baseline->GetLayer(0).begin();
-  for (;itBase != baseline->GetLayer(0).end(); ++itBase)
-  {
+  otb::SamplingRateCalculator::MapRateType ratesByClass =
+    GetRatesForMinimumSamples(LayerIndex);
 
-    const OGRGeometry* cstpgeomBase = itBase->GetGeometry();
-    OGRGeometry* pgeomBase = cstpgeomBase->clone();
-    OGRPoint* castPointBase = dynamic_cast<OGRPoint*>(pgeomBase);
-    if (castPointBase == NULL)
-    {
-        std::cerr << "Could not dynamic_cast pgeomBase" << std::endl;
-        return EXIT_FAILURE;
-    }
-    else
-    {
-       bool found=false; 
-       otb::ogr::Layer::iterator itOutput = output->GetLayer(0).begin();
-       for (;itBase != output->GetLayer(0).end(); ++itOutput)
-       {
-           const OGRGeometry* cstpgeomOutput = itOutput->GetGeometry();
-           OGRGeometry* pgeomOutput = cstpgeomOutput->clone();
-           OGRPoint* castPointOutput = dynamic_cast<OGRPoint*>(pgeomOutput);
-           if (castPointOutput == NULL)
-           {
-              std::cerr << "Could not dynamic_cast pgeomOutput" << std::endl;
-              return EXIT_FAILURE;
-           }
-           else
-           {
-              if ( (fabs(castPointBase->getX()-castPointOutput->getX())<epsilon) && (fabs(castPointBase->getY()-castPointOutput->getY())<epsilon) )
-              {
-                 found=true;
-                 break;
-              }
-           }
-       
-       }
-       if(!found)
-       {
-           unsigned long featureId = itBase->ogr().GetFID();
-           std::cerr << "Could not find point ("<< castPointBase->getX() << "," << castPointBase->getY() << "); feature ID = " << featureId << "." << std::endl;
-           return EXIT_FAILURE;
-       }
-    }
-  
-        
-  }
-  
+  otb::ogr::DataSource::Pointer output =
+    otb::ogr::DataSource::New(outputPath,otb::ogr::DataSource::Modes::Overwrite);
 
-  return EXIT_SUCCESS;
+  //--------------------------------------------------------------
+  typedef otb::OGRDataToSamplePositionFilter<
+    InputImageType,MaskImageType,otb::PatternSampler> SelectionFilterType;
+
+  SelectionFilterType::Pointer selector = SelectionFilterType::New();
+  selector->SetInput(inputImage);
+  selector->SetMask(mask);
+  selector->SetOGRData(vectors);
+  selector->SetOutputPositionContainerAndRates(output,ratesByClass);
+  selector->SetFieldName(fieldName);
+  selector->SetLayerIndex(LayerIndex);
+
+  // set sampling patterns for polygon layer
+  std::string patternClass1("1111");
+  std::string patternClass2("1001011011111011011011111011100100111001101110101111110110111110101101011110000110111111100111111110010001011010101101111110011101110011001111111110000101000110");
+  std::string patternClass3("1000011011111001011011001011100100110001101100101110110110101110101101001100000110011111100111011000010001011010101100011000011100100011001111110110000101000110101101101000001001010010011001010100101000010010110");
+
+  otb::PatternSampler::ParameterType param1, param2, param3;
+  param1.Seed = 0UL;
+  param2 = param1;
+  param3 = param1;
+  otb::PatternSampler::ImportPatterns(patternClass1,param1);
+  otb::PatternSampler::ImportPatterns(patternClass2,param2);
+  otb::PatternSampler::ImportPatterns(patternClass3,param3);
+
+  (selector->GetSamplers())[std::string("1")]->SetParameters(param1);
+  (selector->GetSamplers())[std::string("2")]->SetParameters(param2);
+  (selector->GetSamplers())[std::string("3")]->SetParameters(param3);
+
+  selector->Update();
+
+  otb::ogr::DataSource::Pointer baseline = otb::ogr::DataSource::New(baselineVectorPath, otb::ogr::DataSource::Modes::Read);
+
+  return TestPositionContainers(output,baseline);
 }
