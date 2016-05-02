@@ -46,13 +46,13 @@ public:
   typedef struct Parameter
     {
     unsigned long MaxPatternSize;
-    
+
     std::vector<bool> Pattern1;
 
     std::vector<bool> Pattern2;
-    
+
     unsigned int Seed;
-    
+
     bool operator!=(const struct Parameter  & param) const;
     } ParameterType; 
 
@@ -61,26 +61,42 @@ public:
 
   /** Runtime information support. */
   itkTypeMacro(PatternSampler,SamplerBase);
-  
+
   /** Setter/Getter for internal parameters */
   itkSetMacro(Parameters,ParameterType);
   itkGetMacro(Parameters,ParameterType);
-  
+
   /**
    * Method that resets the internal state of the sampler
    */
   virtual void Reset(void);
-  
+
   /**
    * Method to call during iteration, returns true if the sample is selected,
    * and false otherwise.
    */
   bool TakeSample(void);
 
+  /** Import sampling patterns from an input string
+   *  Two patterns may be given, separated by a slash
+   *  Beware, the second pattern may be empty
+   */
+  static void ImportPatterns(
+    const std::string &data,
+    ParameterType &param);
+
+  /** Export the sampling patterns in the input parameter to
+   *  an output string. If the second pattern is not empty, it will be
+   *  concatenated to the output string, separated by a slash
+   */
+  static void ExportPatterns(
+    const ParameterType &param,
+    std::string &data);
+
 protected:
   /** Constructor */
   PatternSampler();
-   
+
   /** Destructor */
   virtual ~PatternSampler() {}
 
@@ -92,14 +108,20 @@ private:
   std::vector<bool> RandArray(unsigned long N,unsigned long T);
 
   unsigned long FindBestSize(unsigned long tot);
-  
+
   /** Internal parameters for the sampler */
   ParameterType m_Parameters;
-  
+
   unsigned long m_Index1;
-  
+
   unsigned long m_Index2;
-  
+
+  /** Helper function to decode boolean sequence
+   *  Caracters converted into true : '1' 'X' 'y' 'Y' '|' '+'
+   *  Caracters converted into false : '0' '_' 'n' 'N' '.' '-'
+   *  Other caracters will return a 2 */
+  static unsigned int ParseSymbol(const char &s);
+
 };
 
 } // namespace otb

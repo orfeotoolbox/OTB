@@ -115,6 +115,127 @@ PatternSampler::TakeSample(void)
   return ret;
 }
 
+// [static]
+void
+PatternSampler::ImportPatterns(const std::string &data, ParameterType &param)
+{
+  // clear output patterns
+  param.Pattern1.clear();
+  param.Pattern2.clear();
+
+  // split the string on slash caracters
+  size_t sep1 = data.find('/');
+  size_t sep2 = std::string::npos;
+  if (sep1 != std::string::npos)
+    {
+    sep2 = data.find('/',sep1+1);
+    }
+
+  // convert string into bool sequence
+  for (size_t pos=0 ; pos < data.size() ; ++pos)
+    {
+    if (pos == sep1)
+      break;
+    switch (ParseSymbol(data[pos]))
+      {
+      case 0:
+        {
+        param.Pattern1.push_back(false);
+        break;
+        }
+      case 1:
+        {
+        param.Pattern1.push_back(true);
+        break;
+        }
+      default:
+        {
+        break;
+        }
+      }
+    }
+
+  if (sep1 != std::string::npos)
+    {
+    sep2 = data.find('/',sep1+1);
+    for (size_t pos=(sep1+1) ; pos < data.size() ; ++pos)
+      {
+      if (pos == sep2)
+        break;
+      switch (ParseSymbol(data[pos]))
+        {
+        case 0:
+          {
+          param.Pattern2.push_back(false);
+          break;
+          }
+        case 1:
+          {
+          param.Pattern2.push_back(true);
+          break;
+          }
+        default:
+          {
+          break;
+          }
+        }
+      }
+    }
+}
+
+// [static]
+void
+PatternSampler::ExportPatterns(const ParameterType &param, std::string &data)
+{
+  // clear output string
+  data.clear();
+  // format output patterns
+  for (unsigned int i=0 ; i< param.Pattern1.size() ; ++i)
+    {
+    if (param.Pattern1[i])
+      {
+      data.push_back('1');
+      }
+    else
+      {
+      data.push_back('0');
+      }
+    }
+  if (param.Pattern2.size())
+    {
+    data.push_back('/');
+    }
+  for (unsigned int i=0 ; i< param.Pattern2.size() ; ++i)
+    {
+    if (param.Pattern2[i])
+      {
+      data.push_back('1');
+      }
+    else
+      {
+      data.push_back('0');
+      }
+    }
+}
+
+unsigned int
+PatternSampler::ParseSymbol(const char &s)
+{
+  if ((s == '1') || (s == 'X') ||
+      (s == 'y') || (s == 'Y') ||
+      (s == '|') || (s == '+') )
+    {
+    return 1;
+    }
+  else if ((s == '0') || (s == '_') ||
+           (s == 'n') || (s == 'N') ||
+           (s == '.') || (s == '-') )
+    {
+    return 0;
+    }
+  return 2;
+}
+
 std::vector<bool>
 PatternSampler::RandArray(unsigned long N,unsigned long T)
 {
