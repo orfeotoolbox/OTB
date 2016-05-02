@@ -1,6 +1,5 @@
 set(OTBSampling_SRC
   otbSamplingRateCalculator.cxx
-  otbOGRDataResampler.cxx
   otbPolygonClassStatisticsAccumulator.cxx
 )
 
