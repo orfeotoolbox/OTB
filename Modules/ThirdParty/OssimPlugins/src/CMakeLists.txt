@@ -50,7 +50,9 @@ set(ossimplugins_SOURCES
 )
 
 add_library(otbossimplugins ${ossimplugins_LIBTYPE} ${ossimplugins_SOURCES})
+message(STATUS "lib for ossim: ${OTBBoost_LIBRARIES}")
 target_link_libraries(otbossimplugins 
+  ${OTBBoost_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
   ${OTBOssim_LIBRARIES}
   ${OTBGeoTIFF_LIBRARIES}
