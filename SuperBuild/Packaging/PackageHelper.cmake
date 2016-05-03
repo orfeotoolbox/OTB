@@ -1,7 +1,7 @@
 macro(macro_super_package)
   cmake_parse_arguments(PKG  "" "STAGE_DIR" "SEARCHDIRS" ${ARGN} )
 
-  if(${PKG_STAGE_DIR} STREQUAL "")
+  if("${PKG_STAGE_DIR}" STREQUAL "")
     message(FATAL_ERROR "PKG_STAGE_DIR is emtpy. Just can't continue.")
   endif()
 
