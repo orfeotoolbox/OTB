@@ -1,4 +1,4 @@
-macro(macro_setup_cmake_sources pkg)
+macro(macro_setup_cmake_project pkg)
 
   message( "-- Configuring ${pkg} package")
   #reset it again in macro(macro_create_targets_for_package pkg)
@@ -23,6 +23,7 @@ macro(macro_setup_cmake_sources pkg)
   "cmake_minimum_required(VERSION 2.6)
    include(CMakeParseArguments)
    include(CMakeDetermineSystem)
+   set(CMAKE_BUILD_TYPE             Release)
    set(Monteverdi_SOURCE_DIR        \"${Monteverdi_SOURCE_DIR}\")
    set(Monteverdi_BINARY_DIR        \"${Monteverdi_BINARY_DIR}\")
    set(MONTEVERDI_INSTALL_DIR       \"${MONTEVERDI_INSTALL_DIR}\")
@@ -37,32 +38,37 @@ macro(macro_setup_cmake_sources pkg)
    set(PKG_GENERATE_XDK              ${PKG_GENERATE_XDK})
    ${EXTRA_CACHE_CONFIG}
    include(\"${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake\")
-   super_package(STAGE_DIR \"${archive_name}\")" )
+   macro_super_package(STAGE_DIR \"${archive_name}\")"
+  )
+
+  macro_create_targets_for_package(${pkg})
 
 endmacro()
 
-macro(macro_update_dependencies_list list_variable)
-  if(WIN32 OR CMAKE_CROSSCOMPILING)
-    add_custom_target(PACKAGE-CHECK)
-  else() #Unxies Using SuperBuild
+macro(macro_create_targets_for_package pkg)
 
+  include(${SUPERBUILD_SOURCE_DIR}/CMake/External_pkgtools.cmake)
+
+  if(WIN32)
+    add_custom_target(PACKAGE-${pkg}-check
+      COMMAND ${CMAKE_COMMAND} --build "." --target install
+      WORKING_DIRECTORY "${Monteverdi_BINARY_DIR}"
+      )
+  else() #Unxies Using SuperBuild
     if(ENABLE_MONTEVERDI)
-      add_custom_target(PACKAGE-CHECK
-        COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}/MVD/build"
+      add_custom_target(PACKAGE-${pkg}-check
+        COMMAND ${CMAKE_COMMAND} --build "." --target install
         WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/MVD/build"
         )
     else()
-      add_custom_target(PACKAGE-CHECK
-        COMMAND ${CMAKE_COMMAND} --build "${SUPERBUILD_BINARY_DIR}/OTB/build"
+      add_custom_target(PACKAGE-${pkg}-check
+        COMMAND ${CMAKE_COMMAND} --build "."  --target install
         WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/OTB/build"
         )
     endif(ENABLE_MONTEVERDI)
   endif()
 
-  list(APPEND ${list_variable} PACKAGE-CHECK)
-endmacro()
-
-macro(macro_create_targets_for_package pkg)
+  add_dependencies(PACKAGE-${pkg}-check PACKAGE-TOOLS)
 
   if("${pkg}" STREQUAL "XDK")
     set(PACKAGE_PLATFORM_NAME_ "xdk-${PACKAGE_PLATFORM_NAME}")
@@ -84,7 +90,7 @@ macro(macro_create_targets_for_package pkg)
     COMMAND ${CMAKE_COMMAND}
     "${PACKAGE_PROJECT_DIR}/src"
     WORKING_DIRECTORY "${PACKAGE_PROJECT_DIR}/build"
-    DEPENDS ${PACKAGE-configure_DEPENDS}
+    DEPENDS PACKAGE-${pkg}-check
     )
 
   #build
@@ -97,17 +103,15 @@ macro(macro_create_targets_for_package pkg)
 
   #create package
   # creation of package is different from windows and unix like
-  if(WIN32 OR CMAKE_CROSSCOMPILING)
+  if(WIN32)
     add_custom_target(PACKAGE-${pkg}
-      ALL DEPENDS
       COMMAND ${ZIP_EXECUTABLE}
-      "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${CMAKE_INSTALL_PREFIX}/${archive_name}"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+      "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
+      WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
       DEPENDS PACKAGE-${pkg}-build
       )
   else()
     add_custom_target(PACKAGE-${pkg}
-      ALL DEPENDS
       COMMAND ${MAKESELF_SCRIPT}
       "--target"
       "${archive_name}"
@@ -115,13 +119,13 @@ macro(macro_create_targets_for_package pkg)
       "${archive_name}.run"
       "${PACKAGE_LONG_NAME} ${PACKAGE_VERSION_STRING}"
       "./pkgsetup"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+      WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
       DEPENDS PACKAGE-${pkg}-build
       )
   endif()
 
   set(PACKAGE_EXTENSION .run)
-  if(WIN32 OR CMAKE_CROSSCOMPILING)
+  if(WIN32)
     set(PACKAGE_EXTENSION .zip)
   endif()
 
