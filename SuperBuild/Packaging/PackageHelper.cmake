@@ -96,7 +96,7 @@ macro(macro_super_package)
 
   #install lib files into lib as install(FILES ..
   foreach(installable_item_in_lib ${lib_install_list})
-    install(FILES "${installable_item_in_bin}" DESTINATION ${PKG_STAGE_DIR}/lib)
+    install(FILES "${installable_item_in_lib}" DESTINATION ${PKG_STAGE_DIR}/lib)
   endforeach()
 
   ############# install package configure script ################
