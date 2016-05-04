@@ -21,12 +21,18 @@
 
 int otbMPIHelloTest(int argc, char* argv[]) {
 
-   typedef otb::mpi::MPIConfig    MPIConfigType;
-   MPIConfigType::Pointer config = MPIConfigType::New();
-   config->Init(argc,argv,true);
+  // Mono-thread execution
+  itk::MultiThreader::SetGlobalMaximumNumberOfThreads(1);
+  itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
 
-   std::cout<<"OTB Hello World ! Je suis le processus "<<config->GetMyRank()<<" parmi "<<config->GetNbProcs()<<"."<<std::endl;
+  // MPI Configuration
+  typedef otb::mpi::MPIConfig    MPIConfigType;
+  MPIConfigType::Pointer config = MPIConfigType::New();
+  config->Init(argc,argv,true);
 
-   return EXIT_SUCCESS;
+  // Test
+  std::cout<<"OTB Hello World ! Je suis le processus "<<config->GetMyRank()<<" parmi "<<config->GetNbProcs()<<"."<<std::endl;
+
+  return EXIT_SUCCESS;
 }
 
