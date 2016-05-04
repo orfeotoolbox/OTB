@@ -22,30 +22,23 @@
 // Includes
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbMPIConfig.h"
+#include "otbImageFileWriter.h"
 #include <cstdlib>
 #include <iostream>
 #include <boost/chrono/thread_clock.hpp>
 
 // Test
-int otbMPIReadWriteTest(int argc, char * argv[]) 
+int otbReadWriteTest(int argc, char * argv[]) 
 {
   // Start chrono
   boost::chrono::thread_clock::time_point startTimer = boost::chrono::thread_clock::now();
   
-  // MPI Initialization
-  typedef otb::mpi::MPIConfig    MPIConfigType;
-  MPIConfigType::Pointer config = MPIConfigType::New();
-  config->Init(argc,argv,true);
-
   // Verify the number of parameters in the command line
   if (argc != 3)
   {
-    std::stringstream message;
-    message << "Usage: " << std::endl;
-    message << argv[0] << " inputImageFile outputImageFile " << std::endl;
-    config->logError(message.str());
-    config->abort(EXIT_FAILURE);
+    std::cout << "Usage: " << std::endl;
+    std::cout << argv[0] << " inputImageFile outputImageFile " << std::endl;
+    return EXIT_FAILURE;
   } 
 
   // Image types
@@ -61,15 +54,28 @@ int otbMPIReadWriteTest(int argc, char * argv[])
   std::string inputFilename = std::string(argv[1]);
   reader->SetFileName(inputFilename);
 
-  // Update MPI Pipeline
-  std::string outputFilename = std::string(argv[2]);
-  config->UpdateMPI(reader->GetOutput(),outputFilename, false, true);
+  // Writer
+  typedef otb::ImageFileWriter<ImageType>  WriterType;
+  WriterType::Pointer writer = WriterType::New();
 
+  // Writer configuration
+  std::string outputFilename = std::string(argv[2]);
+  writer->SetFileName(outputFilename);
+  writer->SetInput(reader->GetOutput());
+  
+  // Execute the pipeline
+  try{
+    writer->Update();
+  }
+  catch (std::exception & err) {
+    std::cerr << "ExceptionObject caught !" << std::endl;
+    std::cerr << err.what() << std::endl;
+    return EXIT_FAILURE;
+  }
+  
   // End chrono
   boost::chrono::thread_clock::time_point stopTimer = boost::chrono::thread_clock::now();
-  std::stringstream message;
-  message << "Duration = " << boost::chrono::duration_cast<boost::chrono::milliseconds>(stopTimer-startTimer).count() <<" ms\n";
-  config->logInfo(message.str());
+  std::cout << "Duration = " << boost::chrono::duration_cast<boost::chrono::milliseconds>(stopTimer-startTimer).count() <<" ms\n";
   
   return EXIT_SUCCESS;
 }

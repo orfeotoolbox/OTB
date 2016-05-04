@@ -63,11 +63,14 @@ public:
    /** Abort all MPI processus. */
    void abort(int errCode);
 
-   /** Log */
+   /** Log error */
    void logError(const std::string message);
 
+   /** Log info */
+   void logInfo(const std::string message);
+
    //** MPI Update */
-   template <typename TImage> void UpdateMPI (TImage *img, const std::string &prefix, bool useStreaming, bool writeVRTFile, const std::string xtArgs);
+   template <typename TImage> void UpdateMPI (TImage *img, const std::string &prefix, bool useStreaming, bool writeVRTFile);
 
 protected:
    /** Constructor */

@@ -12,7 +12,7 @@ otb_module(MPIModule
     OTBCommon
     OTBApplicationEngine
   TEST_DEPENDS
-    OTBMPI
+    OTBMPIImageIO
     OTBTestKernel
     OTBCommandLine
   DESCRIPTION

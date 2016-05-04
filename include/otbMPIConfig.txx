@@ -26,12 +26,14 @@
 #include <iostream>
 #include <sstream>
 
+#include <itksys/SystemTools.hxx>
+
 namespace otb {
 
 namespace mpi {
 
 // Update MPI
-template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::string &prefix, bool useStreaming=true, bool writeVRTFile=false, const std::string xtArgs = "") 
+template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::string &output, bool useStreaming=true, bool writeVRTFile=false) 
 {
   typedef otb::ImageFileWriter<TImage>                                           WriterType;
   typedef otb::NumberOfDivisionsTiledStreamingManager<TImage>                    StreamingManagerType;
@@ -62,6 +64,27 @@ template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::st
     }
   }
 
+  // Output prefix
+  std::string extension = itksys::SystemTools::GetFilenameExtension(output);
+  if (extension != ".tif")
+  {
+    if (extension == "")
+	{
+	  // Missing extension
+	  this->logInfo("Filename has no extension. Adding <.tif> extension.");
+	}
+	else
+	{
+	  // Bad extension
+	  this->logError("Filename must have .tif extension!");
+	  this->abort(EXIT_FAILURE);
+	}
+  }
+  std::vector<std::string> joins;
+  joins.push_back(itksys::SystemTools::GetFilenamePath(output).append("/"));
+  joins.push_back(itksys::SystemTools::GetFilenameWithoutExtension(output));
+  std::string prefix = itksys::SystemTools::JoinPath(joins);
+  
   // Now write all the regions
   for(typename std::vector<typename TImage::RegionType>::const_iterator it = regionsToWrite.begin();
       it!=regionsToWrite.end();++it)
@@ -70,8 +93,9 @@ template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::st
     extractFilter->SetInput(img);
     extractFilter->SetRegionOfInterest(*it);
     // Writer
+	// Filename
     std::stringstream ss;
-    ss<<prefix<<"_"<<it->GetIndex()[0]<<"_"<<it->GetIndex()[1]<<"_"<<it->GetSize()[0]<<"_"<<it->GetSize()[1]<<".tif"<<xtArgs;
+    ss<<prefix<<"_"<<it->GetIndex()[0]<<"_"<<it->GetIndex()[1]<<"_"<<it->GetSize()[0]<<"_"<<it->GetSize()[1]<<".tif";
     typename WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(ss.str());
     writer->SetInput(extractFilter->GetOutput());
@@ -101,7 +125,7 @@ template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::st
 
         for(unsigned int band = 1; band<=nbBands;++band)
         {
-          ofs<<"\t<VRTRasterBand dataType=\"UInt32\" band=\""<<band<<"\">"<<std::endl;
+          ofs<<"\t<VRTRasterBand dataType=\"Float32\" band=\""<<band<<"\">"<<std::endl;
           ofs<<"\t\t<ColorInterp>Gray</ColorInterp>"<<std::endl;
 
           typename TImage::RegionType currentRegion;
@@ -110,15 +134,15 @@ template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::st
             currentRegion = streamingManager->GetSplit(id);
             int tileSizeX = currentRegion.GetSize()[0];
             int tileSizeY = currentRegion.GetSize()[1];
-            int row = currentRegion.GetIndex()[0];
-            int column = currentRegion.GetIndex()[1];
+            int tileIndexX = currentRegion.GetIndex()[0];
+            int tileIndexY = currentRegion.GetIndex()[1];
             std::stringstream tileFileName;
-            tileFileName <<prefix<<"_"<<row<<"_"<<column<<"_"<<tileSizeX<<"_"<<tileSizeY<<".tif"<<xtArgs;
+            tileFileName <<prefix<<"_"<<tileIndexX<<"_"<<tileIndexY<<"_"<<tileSizeX<<"_"<<tileSizeY<<".tif";
             ofs<<"\t\t<SimpleSource>"<<std::endl;
             ofs<<"\t\t\t<SourceFilename relativeToVRT=\"1\">"<< tileFileName.str()<<"</SourceFilename>"<<std::endl;
             ofs<<"\t\t\t<SourceBand>"<<band<<"</SourceBand>"<<std::endl;
             ofs<<"\t\t\t<SrcRect xOff=\""<<0<<"\" yOff=\""<<0<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
-            ofs<<"\t\t\t<DstRect xOff=\""<<row<<"\" yOff=\""<<column<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
+            ofs<<"\t\t\t<DstRect xOff=\""<<tileIndexX<<"\" yOff=\""<<tileIndexY<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
             ofs<<"\t\t</SimpleSource>"<<std::endl;
           }
           ofs<<"\t</VRTRasterBand>"<<std::endl;

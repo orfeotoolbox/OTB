@@ -83,6 +83,13 @@ void MPIConfig::logError(const std::string message) {
    }
 }
 
+void MPIConfig::logInfo(const std::string message) {
+   if (m_MyRank == 0)
+   {
+     std::cout << message << std::endl;
+   }
+}
+
 } // End namespace mpi
 
 } // End namespace otb

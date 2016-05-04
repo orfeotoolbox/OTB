@@ -6,9 +6,13 @@ set(${otb-module}Tests
    otbMPIModuleTestDriver.cxx
    otbMPIEmptyTest.cxx
    otbMPIHelloTest.cxx
+   otbReadWriteTest.cxx
    otbMPIReadWriteTest.cxx
+   otbMPISPTWReadWriteTest.cxx
+   otbMPIBundleToPerfectSensorTest.cxx
 )
 
+# Function otb_add_test_mpi
 function(otb_add_test_mpi)
    set( _OPTIONS_ARGS )
    set( _ONE_VALUE_ARGS NAME NBPROCS COMMAND)
@@ -27,8 +31,11 @@ function(otb_add_test_mpi)
    otb_add_test(NAME ${TEST_MPI_NAME} COMMAND "mpirun" ${test_parameters})
 endfunction()
 
+# Boost configuration
+find_package(Boost COMPONENTS system chrono REQUIRED)
+
 add_executable(otbMPIModuleTestDriver ${${otb-module}Tests}) 
-target_link_libraries(otbMPIModuleTestDriver ${${otb-module}-Test_LIBRARIES})
+target_link_libraries(otbMPIModuleTestDriver ${${otb-module}-Test_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_CHRONO_LIBRARY})
 otb_module_target_label(otbMPIModuleTestDriver)
 
 # MPI Empty test
@@ -41,10 +48,79 @@ otb_add_test_mpi(NAME otbMPIHelloTest
    NBPROCS 2
    COMMAND otbMPIModuleTestDriver otbMPIHelloTest )
 
-# MPI Read/write test
-otb_add_test_mpi(NAME otbMPIReadWriteTest
+# Read/write test
+otb_add_test(NAME otbReadWriteTest
+   COMMAND otbMPIModuleTestDriver 
+   --compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF
+   ${TEMP}/imageReadWriteTest.tif
+   otbReadWriteTest 
+   ${INPUTDATA}/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF
+   ${TEMP}/imageReadWriteTest.tif
+   )
+
+# MPI Read/write test with 1 procs
+otb_add_test_mpi(NAME otbMPIReadWriteTestNb1
+   NBPROCS 1
+   COMMAND otbMPIModuleTestDriver 
+   #--compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF
+   #--compare-image ${NOTOL} ${INPUTDATA}/FCGC600359918/IMG_PHR1A_P_001/IMG_PHR1A_P_201604170156370_ORT_1743911101-001_R1C1.TIF
+   #${TEMP}/imageMPIReadWriteTestNb1_0_0_500_500.tif
+   otbMPIReadWriteTest 
+   #${INPUTDATA}/FCGC600359918/IMG_PHR1A_P_001/IMG_PHR1A_P_201604170156370_ORT_1743911101-001_R1C1.TIF
+   ${INPUTDATA}/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF
+   ${TEMP}/imageMPIReadWriteTestNb1.tif
+   )
+
+# MPI Read/write test with 2 procs
+otb_add_test_mpi(NAME otbMPIReadWriteTestNb2
    NBPROCS 2
-   COMMAND otbMPIModuleTestDriver otbMPIReadWriteTest /ptmp/sarrazie/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF toto )
+   COMMAND otbMPIModuleTestDriver 
+   otbMPIReadWriteTest 
+   ${INPUTDATA}/FCGC600359918/IMG_PHR1A_P_001/IMG_PHR1A_P_201604170156370_ORT_1743911101-001_R1C1.TIF
+   ${TEMP}/imageMPIReadWriteTestNb2.tif
+   )
+   
+# MPI/SPTW Read/write test with 1 procs
+otb_add_test_mpi(NAME otbMPISPTWReadWriteTestNb1
+   NBPROCS 1
+   COMMAND otbMPIModuleTestDriver 
+   --compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF
+   ${TEMP}/imageMPISPTWReadWriteTestNb1.tif
+   otbMPISPTWReadWriteTest 
+   ${INPUTDATA}/FCGC600359918/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF
+   ${TEMP}/imageMPISPTWReadWriteTestNb1.tif
+   )
+   
+# MPI/SPTW Read/write test with 2 procs
+otb_add_test_mpi(NAME otbMPISPTWReadWriteTestNb2
+   NBPROCS 2
+   COMMAND otbMPIModuleTestDriver 
+   --compare-image ${NOTOL} ${INPUTDATA}/FCGC600359918/IMG_PHR1A_P_001/IMG_PHR1A_P_201604170156370_ORT_1743911101-001_R1C1.TIF
+   ${TEMP}/imageMPISPTWReadWriteTestNb2.tif
+   otbMPISPTWReadWriteTest 
+   ${INPUTDATA}/FCGC600359918/IMG_PHR1A_P_001/IMG_PHR1A_P_201604170156370_ORT_1743911101-001_R1C1.TIF
+   ${TEMP}/imageMPISPTWReadWriteTestNb2.tif
+   )
+
+# MPI Bundle To Perfect Sensor test with 1 procs
+otb_add_test_mpi(NAME otbMPIBundleToPerfectSensorTestNb1
+   NBPROCS 1
+   COMMAND otbMPIModuleTestDriver 
+   otbMPIBundleToPerfectSensorTest 
+   ${INPUTDATA}/FCGC600359918/IMG_PHR1A_P_001/IMG_PHR1A_P_201604170156370_ORT_1743911101-001_R1C1.TIF
+   ${INPUTDATA}/FCGC600359918/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201604170156370_ORT_1743911101-002_R1C1.TIF
+   ${TEMP}/imageMPIBundleToPerfectSensorTestNb1.tif
+   )
+
+# MPI Bundle To Perfect Sensor test with 2 procs
+otb_add_test_mpi(NAME otbMPIBundleToPerfectSensorTestNb2
+   NBPROCS 2
+   COMMAND otbMPIModuleTestDriver 
+   otbMPIBundleToPerfectSensorTest 
+   ${INPUTDATA}/FCGC600359918/IMG_PHR1A_P_001/IMG_PHR1A_P_201604170156370_ORT_1743911101-001_R1C1.TIF
+   ${INPUTDATA}/FCGC600359918/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201604170156370_ORT_1743911101-002_R1C1.TIF
+   ${TEMP}/imageMPIBundleToPerfectSensorTestNb2.tif
+   )
 
 #test application
 otb_test_application(NAME otbMPIHelloAppTest

@@ -59,3 +59,13 @@ Thanks
 It is a fork of the ITK template module provided by Bradley Lowekamp
 (https://github.com/blowekamp/itkExternalTemplate.git) which was adapted for the
 ORFEO ToolBox.
+
+Compilation des tests
+=====================
+module load cmake/3.4.3 openmpi/1.10.2 otb/develop
+cd build
+rm -rf *
+cmake -DCMAKE_CXX_FLAGS="-Wno-unused-local-typedefs -std=c++11" ..
+make
+ctest
+
