@@ -1,4 +1,4 @@
-OTB-v.5.4.0 - Changes since version 5.2.1 (2016/03/30)
+OTB-v.5.4.0 - Changes since version 5.2.1 (2016/05/04)
 ------------------------------------------
 * Core
   * Ice is now a regular OTB module (RFC 23)
