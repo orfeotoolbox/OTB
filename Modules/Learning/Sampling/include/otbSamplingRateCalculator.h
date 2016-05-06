@@ -43,18 +43,16 @@ public:
   
   /** typdefs **/
   typedef std::map<std::string, unsigned long>  ClassCountMapType;
-  typedef std::set<std::string> SetType;
   typedef ClassCountMapType::const_iterator constItMapType;
-  typedef SetType::const_iterator constItSetType;
-  typedef struct
+  typedef struct Triplet
    {
-     unsigned int Required;
-     unsigned int Tot;
+     unsigned long Required;
+     unsigned long Tot;
      double Rate;
+     bool operator==(const struct Triplet  & triplet) const;
    } TripletType;
-   
+
   typedef std::map<std::string, TripletType > MapRateType;
-  
   
   /** Type macro */
   itkNewMacro(Self);
@@ -63,19 +61,18 @@ public:
   itkTypeMacro(SamplingRateCalculator, itk::Object);
  
 
-  void SetNbOfSamplesByClass(std::string);
-  void SetNbOfSamplesAllClasses(std::string);
-  void SetNbOfSamplesAllClasses(unsigned int);
+  void SetNbOfSamplesByClass(const ClassCountMapType &required);
+  void SetNbOfSamplesAllClasses(unsigned long);
   void SetMinimumNbOfSamplesByClass(void);
   void Write(std::string filename);
+  void Read(std::string filename);
 
   itkGetConstReferenceMacro(RatesByClass,MapRateType);
 
-  void SetClassCount(const ClassCountMapType& map)
-  {
-    m_ClassCount = map;
-    FindAllClasses();
-  }
+  void SetClassCount(const ClassCountMapType& map);
+
+  /** Clear internal data */
+  void ClearRates(void);
 
 protected:
   /** Constructor */
@@ -90,14 +87,8 @@ protected:
 private:
   SamplingRateCalculator(const Self &);    //purposely not implemented
   void operator =(const Self&);    //purposely not implemented
-
-  std::string KeyGenerator( unsigned int );
-  void FindAllClasses();
-
-  int m_NbClasses;  
-  ClassCountMapType m_ClassCount;
-  ClassCountMapType m_TotNbSamplesByClass;
-  SetType m_SetClassNames;
+  
+  void UpdateRate(const std::string &name);
 
   MapRateType m_RatesByClass;
 };

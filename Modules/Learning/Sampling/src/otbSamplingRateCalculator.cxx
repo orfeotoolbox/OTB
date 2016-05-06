@@ -18,169 +18,89 @@
 
 
 #include "otbSamplingRateCalculator.h"
+#include "otbStringUtils.h"
+#include "otbMacro.h"
 #include <sstream>
 #include <fstream>
 #include <iterator>
+#include "itksys/SystemTools.hxx"
 
 
 namespace otb
 {
 
+bool
+SamplingRateCalculator::TripletType::operator==(const SamplingRateCalculator::TripletType & triplet) const
+{
+  return bool((Required == triplet.Required)||
+              (Tot == triplet.Tot)||
+              (Rate == triplet.Rate));
+}
+
 SamplingRateCalculator
 ::SamplingRateCalculator()
 {
-  m_NbClasses = 0; 
-}
-
-void
-SamplingRateCalculator
-::FindAllClasses()
-{
-  std::string imageName,className;
-  
-  constItMapType constIt = m_ClassCount.begin();
-  for(; constIt != m_ClassCount.end(); ++constIt)
-    {
-    //constIt->first <=> className       
-    m_SetClassNames.insert( constIt->first ); 
-    }
-  m_NbClasses = m_SetClassNames.size();
-}
-
-
-std::string
-SamplingRateCalculator
-::KeyGenerator(unsigned int nbC)
-{
-   std::ostringstream  key;
-   key << nbC;
-
-   return key.str();
 }
 
 void 
 SamplingRateCalculator
-::
-SetMinimumNbOfSamplesByClass(void)
+::SetMinimumNbOfSamplesByClass(void)
 {
-   unsigned int smallestNbofSamples = itk::NumericTraits<unsigned int>::max();
-   std::string miniClass;
-
-   constItMapType itMap = m_ClassCount.begin();
-   for(; itMap != m_ClassCount.end(); ++itMap)
-      if (smallestNbofSamples > itMap->second)
+  unsigned long smallestNbofSamples = itk::NumericTraits<unsigned long>::max();
+  MapRateType::iterator it = m_RatesByClass.begin();
+  for (; it != m_RatesByClass.end() ; ++it)
+    {
+    if (smallestNbofSamples > it->second.Tot)
       {
-          smallestNbofSamples = itMap->second;
-          miniClass = itMap->first;
-          
+      smallestNbofSamples = it->second.Tot;
       }
-    
-   this->SetNbOfSamplesAllClasses( smallestNbofSamples );      
-   
+    }
+  // Check if there is an empty class
+  if (smallestNbofSamples == 0UL)
+    {
+    otbWarningMacro("There is an empty class, sample size is set to zero!");
+    }
+  this->SetNbOfSamplesAllClasses( smallestNbofSamples );
 }
 
 void 
 SamplingRateCalculator
-::SetNbOfSamplesAllClasses(unsigned int dRequiredNbSamples)
+::SetNbOfSamplesAllClasses(unsigned long dRequiredNbSamples)
 {
-   std::ostringstream oss;
-   oss << dRequiredNbSamples;
-   
-   this->SetNbOfSamplesAllClasses(oss.str());
+  MapRateType::iterator it = m_RatesByClass.begin();
+  for (; it != m_RatesByClass.end() ; ++it)
+    {
+    it->second.Required = dRequiredNbSamples;
+    // Update rates
+    if (it->second.Tot)
+      {
+      it->second.Rate =
+        static_cast<double>(it->second.Required) /
+        static_cast<double>(it->second.Tot);
+      }
+    }
 }
 
 void 
 SamplingRateCalculator
-::SetNbOfSamplesAllClasses(std::string requiredNbSamples)
+::SetNbOfSamplesByClass(const ClassCountMapType &required)
 {
-   std::string requiredNbSamplesByClass;
-   constItSetType itClass=m_SetClassNames.begin();
-   for(; itClass != m_SetClassNames.end(); ++itClass)
-   {
-      requiredNbSamplesByClass += *itClass + ":" + requiredNbSamples + " ";
-   }
-  
-  this->SetNbOfSamplesByClass(requiredNbSamplesByClass);
-}
-
-void 
-SamplingRateCalculator
-::SetNbOfSamplesByClass(std::string requiredNbSamplesByClass)
-{
-  std::string className,nbSamples,imageName;
-
-  std::istringstream issNeenedNbSamples(requiredNbSamplesByClass);
-
-  std::list<std::string> tokens;
-  copy(std::istream_iterator<std::string>(issNeenedNbSamples),
-	  std::istream_iterator<std::string>(),
-    back_inserter(tokens));
-
-  if (m_SetClassNames.size() != tokens.size() )
-      itkExceptionMacro(<< "Please, set the number of required samples for each class : " << tokens.size() << "/" << m_NbClasses << " given." << std::endl
-                        << "Follow this pattern classname1:nbRequiredSamples1 classname2:nbRequiredSamples2 ...");
-
-  constItSetType itClass=m_SetClassNames.begin();
-  std::list<std::string>::iterator tokenIt = tokens.begin();
-
-  ClassCountMapType clVsRequiredNbSamples; //<class name,RequiredNbSamplesByClass>
-   
-  while( (itClass != m_SetClassNames.end()) && (tokenIt != tokens.end()) )
+  ClassCountMapType::const_iterator it = required.begin();
+  for (; it != required.end() ; ++it)
     {
-    std::size_t pos = tokenIt->find_first_of(":");
-
-    if ( (pos == std::string::npos) || (pos+1>=tokenIt->size() ) )
-     itkExceptionMacro(<< "Please, follow this pattern --> classname1:nbRequiredSamples1 classname2:nbRequiredSamples2 ...");
-     
-    className = tokenIt->substr (0,pos);
-    nbSamples = tokenIt->substr (pos+1);
-
-    std::istringstream issNbSamples(nbSamples);
-    unsigned int uiNbSamples;
-    
-    if (!(issNbSamples >> uiNbSamples))
-       itkExceptionMacro(<< "Please, follow this pattern --> classname1:nbRequiredSamples1 classname2:nbRequiredSamples2 ...");
- 
-    if ( !(uiNbSamples>0) )
-       itkExceptionMacro(<< "Please, set a positive number for the number of samples of the class " << className << ".");
- 
-    clVsRequiredNbSamples[className]=uiNbSamples;
-    
-    ++itClass;
-    ++tokenIt;
-    }
-
-  constItMapType itMap = clVsRequiredNbSamples.begin();
-  for(; itMap != clVsRequiredNbSamples.end(); ++itMap)
-    {
-    if ( !(m_ClassCount.count(itMap->first)>0) )
-        itkExceptionMacro(<< "The class " << itMap->first << " is not a element the classes set.");
-        
-    if (m_ClassCount[itMap->first]<itMap->second)
-        itkExceptionMacro(<< "The class " << itMap->first << " only contains " << m_ClassCount[itMap->first]
-                          << " samples, but " << itMap->second << " were required.");
-    }
-
-  constItSetType itSet = m_SetClassNames.begin();
-  for(; itSet != m_SetClassNames.end(); ++itSet)
-    {
-    if ( !(clVsRequiredNbSamples.count(*itSet)>0) )
-        itkExceptionMacro(<< "Please, set the number of samples Required for the class " << *itSet << ".");
-    }
-
-  itMap = m_ClassCount.begin();
-  for(; itMap != m_ClassCount.end(); ++itMap)
-    {
-    // itMap->first <=> className
-    double overallRate = static_cast<double>(clVsRequiredNbSamples[itMap->first]) / static_cast<double>(m_ClassCount[itMap->first]);
-    
-    
-    TripletType tpt;
-    tpt.Required=clVsRequiredNbSamples[itMap->first];
-    tpt.Tot=m_ClassCount[itMap->first];
-    tpt.Rate=overallRate*100.;
-    
-    m_RatesByClass[itMap->first] = tpt;
+    if (m_RatesByClass.count(it->first))
+      {
+      m_RatesByClass[it->first].Required = it->second;
+      this->UpdateRate(it->first);
+      }
+    else
+      {
+      TripletType triplet;
+      triplet.Tot = it->second;
+      triplet.Required = 0UL;
+      triplet.Rate = 0.0;
+      m_RatesByClass[it->first] = triplet;
+      }
     }
 }
 
@@ -192,12 +112,8 @@ SamplingRateCalculator
 
   if (file)
     {
-    MapRateType::iterator itRates = m_RatesByClass.begin();
-    for(; itRates != m_RatesByClass.end(); ++itRates)
-      {
-      TripletType tpt=itRates->second;
-      file << itRates->first << " " << tpt.Required << " " << tpt.Tot << " " << tpt.Rate << std::endl;
-      }
+    itk::Indent indent(0);
+    this->PrintSelf(file,indent);
     file.close();
     }
   else
@@ -208,13 +124,130 @@ SamplingRateCalculator
 
 void
 SamplingRateCalculator
+::Read(std::string filename)
+{
+  std::ifstream ifs(filename.c_str());
+
+  if (ifs)
+    {
+    this->ClearRates();
+    std::string line;
+    TripletType tpt;
+    std::string sep("");
+    while(!ifs.eof())
+      {
+      std::getline(ifs,line);
+      if (line.empty()) continue;
+      std::string::size_type pos = line.find_first_not_of(" \t");
+      if (pos != std::string::npos && line[pos] == '#') continue;
+
+      if (sep.size() == 0)
+        {
+        // Try to detect the separator
+        std::string separators("\t;,");
+        for (unsigned int k=0 ; k<separators.size() ; k++)
+          {
+          std::vector<itksys::String> words = itksys::SystemTools::SplitString(line,separators[k]);
+          if (words.size() == 4)
+            {
+            sep.push_back(separators[k]);
+            break;
+            }
+          }
+        if (sep.size() == 0) continue;
+        }
+      // parse the line
+      std::vector<itksys::String> parts = itksys::SystemTools::SplitString(line,sep[0]);
+      if (parts.size() == 4)
+        {
+        std::string::size_type pos1 = parts[0].find_first_not_of(" \t");
+        std::string::size_type pos2 = parts[0].find_last_not_of(" \t");
+        std::string::size_type pos3 = parts[1].find_first_not_of(" \t");
+        std::string::size_type pos4 = parts[1].find_last_not_of(" \t");
+        std::string::size_type pos5 = parts[2].find_first_not_of(" \t");
+        std::string::size_type pos6 = parts[2].find_last_not_of(" \t");
+        std::string::size_type pos7 = parts[3].find_first_not_of(" \t");
+        std::string::size_type pos8 = parts[3].find_last_not_of(" \t");
+        if (pos1 != std::string::npos && pos3 != std::string::npos &&
+            pos5 != std::string::npos && pos7 != std::string::npos)
+          {
+          std::string name = parts[0].substr(pos1, pos2 - pos1 + 1);
+          std::string val1 = parts[1].substr(pos3, pos4 - pos3 + 1);
+          std::string val2 = parts[2].substr(pos5, pos6 - pos5 + 1);
+          std::string val3 = parts[3].substr(pos7, pos8 - pos7 + 1);
+          tpt.Required = boost::lexical_cast<unsigned long>(val1);
+          tpt.Tot = boost::lexical_cast<unsigned long>(val2);
+          tpt.Rate = boost::lexical_cast<double>(val3);
+          m_RatesByClass[name] = tpt;
+          }
+        }
+      }
+    ifs.close();
+    }
+  else
+    {
+    itkExceptionMacro(<< " Couldn't open " << filename);
+    }
+}
+
+void
+SamplingRateCalculator
+::SetClassCount(const ClassCountMapType& map)
+{
+  ClassCountMapType::const_iterator it = map.begin();
+  for (; it != map.end() ; ++it)
+    {
+    if (m_RatesByClass.count(it->first))
+      {
+      m_RatesByClass[it->first].Tot = it->second;
+      this->UpdateRate(it->first);
+      }
+    else
+      {
+      TripletType triplet;
+      triplet.Tot = it->second;
+      triplet.Required = 0UL;
+      triplet.Rate = 0.0;
+      m_RatesByClass[it->first] = triplet;
+      }
+    }
+}
+
+void
+SamplingRateCalculator
+::ClearRates(void)
+{
+  m_RatesByClass.clear();
+}
+
+void
+SamplingRateCalculator
+::UpdateRate(const std::string &name)
+{
+  if (m_RatesByClass[name].Tot)
+    {
+    m_RatesByClass[name].Rate =
+      static_cast<double>(m_RatesByClass[name].Required) / 
+      static_cast<double>(m_RatesByClass[name].Tot);
+    }
+  else
+    {
+    // Set to 0 as rate is undefined
+    m_RatesByClass[name].Rate = 0.0;
+    }
+}
+
+void
+SamplingRateCalculator
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  constItMapType constIt = m_ClassCount.begin();
-  for(; constIt != m_ClassCount.end(); ++constIt)
-      os << indent << constIt->first << " " << constIt->second << std::endl;
-
-   os << indent << "Nb of classes : " << m_NbClasses << std::endl;
+  os << indent << "#className requiredSamples totalSamples rate" << std::endl;
+  MapRateType::const_iterator itRates = m_RatesByClass.begin();
+  for(; itRates != m_RatesByClass.end(); ++itRates)
+    {
+    TripletType tpt=itRates->second;
+    os << indent << itRates->first << "\t" << tpt.Required << "\t" << tpt.Tot << "\t" << tpt.Rate << std::endl;
+    }
 }
 
 } // End namespace otb
