@@ -49,5 +49,14 @@ int otbSamplingRateCalculator(int itkNotUsed(argc), char* argv[])
   rateCalculator->Write(outputRatesTxt);
   rateCalculator->Print(std::cout);
   
+  // Read back
+  RateCalculatorype::Pointer rateCalculatorCheck = RateCalculatorype::New();
+  rateCalculatorCheck->Read(outputRatesTxt);
+  if ( rateCalculator->GetRatesByClass() != rateCalculatorCheck->GetRatesByClass() )
+    {
+    std::cout << "Imported rates by class are different from exported ones!" << std::endl;
+    return EXIT_FAILURE;
+    }
+
   return EXIT_SUCCESS;
 }
