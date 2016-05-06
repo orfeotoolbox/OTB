@@ -861,8 +861,7 @@ otb_test_application(NAME apTvClSampleSelection
                              -vec ${INPUTDATA}/variousVectors.sqlite
                              -field "label"
                              -out ${TEMP}/apTvClOGRDataResamplerOut.sqlite
-                             #-insampvec ${TEMP}/apTvClOGRDataResamplerOut.txt
                              -instats ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
                              -outrates ${TEMP}/apTvClOGRDataResamplerOutRates.txt
-                             -sampstrat nbsampbyclass
-                             -nbsampbyclass "1:98 2:100 3:23")
+                             -strat byclass
+                             -strat.byclass.in ${INPUTDATA}/Classification/sampling_required.csv)

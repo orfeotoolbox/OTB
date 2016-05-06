@@ -20,6 +20,9 @@
 #include "otbSamplingRateCalculator.h"
 #include "otbOGRDataToSamplePositionFilter.h"
 #include "otbStatisticsXMLFileReader.h"
+#include "otbStatisticsXMLFileWriter.h"
+#include "otbPatternSampler.h"
+#include "otbRandomSampler.h"
 
 namespace otb
 {
@@ -41,17 +44,37 @@ public:
   itkTypeMacro(SampleSelection, otb::Application);
 
   /** typedef */
-  typedef otb::OGRDataToSamplePositionFilter<FloatVectorImageType,UInt8ImageType> ResamplerFilterType;  
-  typedef otb::SamplingRateCalculator RateCalculatorType;
+  typedef otb::OGRDataToSamplePositionFilter<
+    FloatVectorImageType,
+    UInt8ImageType,
+    otb::PeriodicSampler>                           PeriodicSamplerType;
+  typedef otb::OGRDataToSamplePositionFilter<
+    FloatVectorImageType,
+    UInt8ImageType,
+    otb::PatternSampler>                            PatternSamplerType;
+  typedef otb::OGRDataToSamplePositionFilter<
+    FloatVectorImageType,
+    UInt8ImageType,
+    otb::RandomSampler>                             RandomSamplerType;
+  typedef otb::SamplingRateCalculator               RateCalculatorType;
   
   typedef std::map<std::string, unsigned long>      ClassCountMapType;
+  typedef std::map<std::string, std::string>        PatternMapType;
+  typedef RateCalculatorType::MapRateType           MapRateType;
   typedef itk::VariableLengthVector<float> MeasurementType;
-  typedef otb::StatisticsXMLFileReader<MeasurementType> ReaderType;
+  typedef otb::StatisticsXMLFileReader<MeasurementType> XMLReaderType;
+  typedef otb::StatisticsXMLFileWriter<MeasurementType> XMLWriterType;
 
 private:
   SampleSelection()
     {
-   
+    m_Periodic = PeriodicSamplerType::New();
+    m_Pattern = PatternSamplerType::New();
+    m_Random = RandomSamplerType::New();
+    m_ReaderStat = XMLReaderType::New();
+    m_WritterPattern = XMLWriterType::New();
+    m_ReaderPattern = XMLReaderType::New();
+    m_RateCalculator = RateCalculatorType::New();
     }
 
   void DoInit()
@@ -108,160 +131,316 @@ private:
     AddParameter(ParameterType_InputImage,  "mask",   "InputMask");
     SetParameterDescription("mask", "Validity mask (only pixels corresponding to a mask value greater than 0 will be used for statistics)");
     MandatoryOff("mask");
-    
+
     AddParameter(ParameterType_InputFilename, "vec", "Input vectors");
     SetParameterDescription("vec","Input geometries to analyse");
-    
+
     AddParameter(ParameterType_OutputFilename, "out", "Output vectors");
     SetParameterDescription("out","Output resampled geometries");
-    
+
     AddParameter(ParameterType_InputFilename, "instats", "Input Statistics");
     SetParameterDescription("instats","Input file storing statistics (XML format)");
-    
-    AddParameter(ParameterType_InputFilename, "insampvec", "Input sampling vectors");
-    SetParameterDescription("insampvec","Input sampling vectors");
-    MandatoryOff("insampvec");
-    
-    AddParameter(ParameterType_OutputFilename, "outsampvec", "Output sampling vectors");
-    SetParameterDescription("outsampvec","Output sampling vectors");
-    MandatoryOff("outsampvec");
-    
-    AddParameter(ParameterType_OutputFilename, "outrates", "Output rates");
-    SetParameterDescription("outrates","Output rates");
-    MandatoryOff("outrates");
-    
-    AddParameter(ParameterType_Choice, "sampstrat", "Sampling strategy");
-    AddChoice("sampstrat.nbsampbyclass","Set nb of samples by class");
-    SetParameterDescription("sampstrat.nbsampbyclass","Set nb of samples by class");
-    
-    AddChoice("sampstrat.nbsampallclasses","Set same nb of samples for all classes");
-    SetParameterDescription("sampstrat.nbsampallclasses","Set same nb of samples for all classes");
-    
-    AddChoice("sampstrat.minnbsamp","Set same nb of samples for all classes, with the smallest class fully sampled");
-    SetParameterDescription("sampstrat.minnbsamp","Set same nb of samples for all classes, with the smallest class fully sampled");
-    SetParameterInt("sampstrat",2);
 
-    AddParameter(ParameterType_String, "nbsampbyclass", "Number of samples by class");
-    SetParameterDescription("nbsampbyclass", "Number of samples by class");
-    MandatoryOff("nbsampbyclass");
-    
-    AddParameter(ParameterType_Int, "nbsampallclasses", "Number of samples for all classes");
-    SetParameterDescription("nbsampallclasses", "Number of samples for all classes");
-    MandatoryOff("nbsampallclasses");
-    
-    AddParameter(ParameterType_Int, "maxsampvecsize", "Maximum size of the sampling vectors");
-    SetParameterDescription("maxsampvecsize", "Maximum size of the sampling vectors");
-    MandatoryOff("maxsampvecsize");
+    AddParameter(ParameterType_OutputFilename, "outrates", "Output rates");
+    SetParameterDescription("outrates","Output rates (CSV formated)");
+    MandatoryOff("outrates");
+
+    AddParameter(ParameterType_Choice, "sampler", "Sampler type");
+    SetParameterDescription("sampler", "Type of sampling (periodic, pattern based, random)");
+
+    AddChoice("sampler.periodic","Periodic sampler");
+    SetParameterDescription("sampler.periodic","Takes samples regularly spaced");
+
+    AddChoice("sampler.pattern","Pattern sampler");
+    SetParameterDescription("sampler.pattern","Takes samples according to a pattern.");
+
+    AddParameter(ParameterType_InputFilename, "sampler.pattern.in", "Input sampling patterns");
+    SetParameterDescription("sampler.pattern.in","Input sampling patterns (XML format)."
+      "This file should contains the map of patterns (class name -> pattern string)."
+      "The pattern string can be formated with the following pairs of caracters :"
+      " (0;1), (_;X), (n;y), (N;Y), (.;|). If two pattern strings are given, they"
+      "should be separated by a slash. For instance : 1001010/001001");
+    MandatoryOff("sampler.pattern.in");
+
+    AddParameter(ParameterType_OutputFilename, "sampler.pattern.out", "Output sampling patterns");
+    SetParameterDescription("sampler.pattern.out","Output sampling patterns (formated in a XML format).");
+    MandatoryOff("sampler.pattern.out");
+
+    AddParameter(ParameterType_Int, "sampler.pattern.sizemax", "Maximum size of the sampling patterns");
+    SetParameterDescription("sampler.pattern.sizemax", "Maximum size of the sampling patterns");
+    MandatoryOff("sampler.pattern.sizemax");
+    SetDefaultParameterInt("sampler.pattern.sizemax",256);
+
+    AddChoice("sampler.random","Random sampler");
+    SetParameterDescription("sampler.random","Takes samples randomly.");
+
+    AddParameter(ParameterType_Choice, "strat", "Sampling strategy");
+
+    AddChoice("strat.byclass","Set samples count for each class");
+    SetParameterDescription("strat.byclass","Set samples count for each class");
+
+    AddParameter(ParameterType_InputFilename, "strat.byclass.in", "Number of samples by class");
+    SetParameterDescription("strat.byclass.in", "Number of samples by class "
+      "(CSV format with class name in 1st column and required samples in the 2nd.");
+
+    AddChoice("strat.constant","Set the same samples counts for all classes");
+    SetParameterDescription("strat.constant","Set the same samples counts for all classes");
+
+    AddParameter(ParameterType_Int, "strat.constant.nb", "Number of samples for all classes");
+    SetParameterDescription("strat.constant.nb", "Number of samples for all classes");
+
+    AddChoice("strat.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
+    SetParameterDescription("strat.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
+
+    // Default strategy : smallest
+    SetParameterString("strat","smallest");
 
     AddParameter(ParameterType_String, "field", "Field Name");
     SetParameterDescription("field","Name of the field carrying the class name in the input vectors.");
     MandatoryOff("field");
     SetParameterString("field", "class");
-    
+
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
     MandatoryOff("layer");
     SetDefaultParameterInt("layer",0);
-    
+
     AddRAMParameter();
+
+    AddRANDParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "support_image.tif");
     SetDocExampleParameterValue("vec", "variousVectors.sqlite");
     SetDocExampleParameterValue("field", "label");
     SetDocExampleParameterValue("instats","apTvClPolygonClassStatisticsOut.xml");
-    SetDocExampleParameterValue("sampstrat","nbsampbyclass");
+    SetDocExampleParameterValue("strat","byclass");
     SetDocExampleParameterValue("nbsampbyclass","\"1:98 2:100 3:23\"");
     SetDocExampleParameterValue("out","resampledVectors.sqlite");
   }
 
   void DoUpdateParameters()
   {
-    GetParameterByKey("nbsampbyclass")->SetActive(false);
-    MandatoryOff("nbsampbyclass");
-    GetParameterByKey("nbsampallclasses")->SetActive(false);
-    MandatoryOff("nbsampallclasses");
-  
-    if (IsParameterEnabled("sampstrat.nbsampbyclass") && HasValue("sampstrat.nbsampbyclass"))
-    { 
-       GetParameterByKey("nbsampbyclass")->SetActive(true);
-       MandatoryOn("nbsampbyclass");
-    }
-
-
-    if (IsParameterEnabled("sampstrat.nbsampallclasses") && HasValue("sampstrat.nbsampallclasses"))
-    { 
-       GetParameterByKey("nbsampallclasses")->SetActive(true);
-       MandatoryOn("nbsampallclasses");
-    }
   }
+
+  ClassCountMapType ReadRequiredSamples(std::string filename)
+    {
+    ClassCountMapType output;
+    std::ifstream ifs(filename.c_str());
+
+    if (ifs)
+      {
+      std::string line;
+      std::string sep("");
+    
+      while(!ifs.eof())
+        {
+        std::getline(ifs,line);
+        if (line.empty()) continue;
+        std::string::size_type pos = line.find_first_not_of(" \t");
+        if (pos != std::string::npos && line[pos] == '#') continue;
+        
+        if (sep.size() == 0)
+          {
+          // Try to detect the separator
+          std::string separators("\t;,");
+          for (unsigned int k=0 ; k<separators.size() ; k++)
+            {
+            std::vector<itksys::String> words = itksys::SystemTools::SplitString(line,separators[k]);
+            if (words.size() >= 2)
+              {
+              sep.push_back(separators[k]);
+              break;
+              }
+            }
+          if (sep.size() == 0) continue;
+          }
+        // parse the line
+        std::vector<itksys::String> parts = itksys::SystemTools::SplitString(line,sep[0]);
+        if (parts.size() >= 2)
+          {
+          std::string::size_type pos1 = parts[0].find_first_not_of(" \t");
+          std::string::size_type pos2 = parts[0].find_last_not_of(" \t");
+          std::string::size_type pos3 = parts[1].find_first_not_of(" \t");
+          std::string::size_type pos4 = parts[1].find_last_not_of(" \t");
+          if (pos1 != std::string::npos && pos3 != std::string::npos)
+            {
+            std::string name = parts[0].substr(pos1, pos2 - pos1 + 1);
+            std::string value = parts[1].substr(pos3, pos4 - pos3 + 1);
+            output[name] = boost::lexical_cast<unsigned long>(value);
+            }
+          }
+        }
+      ifs.close();
+      }
+    else
+      {
+      otbAppLogFATAL(<< " Couldn't open " << filename);
+      }
+    return output;
+    }
 
   void DoExecute()
-  {
-      m_rateCalculator = RateCalculatorType::New();
-      m_resampler = ResamplerFilterType::New();
-      m_reader = ReaderType::New();
-      
-      m_reader->SetFileName(this->GetParameterString("instats"));
-      ClassCountMapType classCount = m_reader->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
-      
-      m_rateCalculator->SetClassCount(classCount);
-          
-      switch (GetParameterInt("sampstrat"))
+    {
+    // Clear state
+    m_RateCalculator->ClearRates();
+    m_Periodic->GetFilter()->ClearOutputs();
+    m_Pattern->GetFilter()->ClearOutputs();
+    m_Random->GetFilter()->ClearOutputs();
+    m_WritterPattern->CleanInputs();
+    
+    m_ReaderStat->SetFileName(this->GetParameterString("instats"));
+    ClassCountMapType classCount = m_ReaderStat->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
+    m_RateCalculator->SetClassCount(classCount);
+    
+    switch (this->GetParameterInt("strat"))
       {
-        case 0: 
-            m_rateCalculator->SetNbOfSamplesByClass(GetParameterString("nbsampbyclass"));
-        break;
-        case 1: 
-            m_rateCalculator->SetNbOfSamplesAllClasses(GetParameterInt("nbsampallclasses"));
-        break;
-        case 2: 
-            m_rateCalculator->SetMinimumNbOfSamplesByClass();
-        break;
+      // byclass
+      case 0:
+        {
+        ClassCountMapType requiredCount = 
+          this->ReadRequiredSamples(this->GetParameterString("strat.byclass.in"));
+        m_RateCalculator->SetNbOfSamplesByClass(requiredCount);
+        }
+      break;
+      // constant
+      case 1:
+        m_RateCalculator->SetNbOfSamplesAllClasses(GetParameterInt("strat.constant.nb"));
+      break;
+      // smallest class
+      case 2: 
+        m_RateCalculator->SetMinimumNbOfSamplesByClass();
+      break;
+      default:
+        otbAppLogFATAL("Strategy mode unknown :"<<this->GetParameterString("strat"));
+      break;
       }
       
-      RateCalculatorType::MapRateType ratesbyClass = m_rateCalculator->GetRatesByClass(); 
-      
-      if (IsParameterEnabled("outrates") && HasValue("outrates"))
+    if (IsParameterEnabled("outrates") && HasValue("outrates"))
       {
-        m_rateCalculator->Write(this->GetParameterString("outrates"));
+      m_RateCalculator->Write(this->GetParameterString("outrates"));
       }
-      
-      m_vectors = otb::ogr::DataSource::New(this->GetParameterString("vec"));
-      
-      if (IsParameterEnabled("mask") && HasValue("mask"))
+    
+    MapRateType rates = m_RateCalculator->GetRatesByClass();
+
+    // Open input geometries
+    otb::ogr::DataSource::Pointer vectors =
+      otb::ogr::DataSource::New(this->GetParameterString("vec"));
+
+    // Create output dataset for sample positions
+    otb::ogr::DataSource::Pointer outputSamples =
+      otb::ogr::DataSource::New(this->GetParameterString("out"),otb::ogr::DataSource::Modes::Overwrite);
+    
+    switch (this->GetParameterInt("sampler"))
       {
-        m_resampler->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
+      // periodic
+      case 0:
+        {
+        m_Periodic->SetInput(this->GetParameterImage("in"));
+        m_Periodic->SetOGRData(vectors);
+        m_Periodic->SetOutputPositionContainerAndRates(outputSamples, rates);
+        m_Periodic->SetFieldName(this->GetParameterString("field"));
+        m_Periodic->SetLayerIndex(this->GetParameterInt("layer"));
+        if (IsParameterEnabled("mask") && HasValue("mask"))
+          {
+          m_Periodic->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
+          }
+        // Processing ...
+        m_Periodic->Update();
+        }
+      break;
+      // pattern
+      case 1:
+        {
+        m_Pattern->SetInput(this->GetParameterImage("in"));
+        m_Pattern->SetOGRData(vectors);
+        m_Pattern->SetOutputPositionContainerAndRates(outputSamples, rates);
+        m_Pattern->SetFieldName(this->GetParameterString("field"));
+        m_Pattern->SetLayerIndex(this->GetParameterInt("layer"));
+        if (IsParameterEnabled("mask") && HasValue("mask"))
+          {
+          m_Pattern->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
+          }
+        
+        // Choice of sampling patterns
+        if (this->IsParameterEnabled("sampler.pattern.in") && 
+            this->HasValue("sampler.pattern.in"))
+          {
+          // Use input patterns
+          m_ReaderPattern->SetFileName(this->GetParameterString("sampler.pattern.in"));
+          PatternMapType inputPatterns =
+            m_ReaderPattern->GetStatisticMapByName<PatternMapType>("samplingPattern");
+          for (PatternMapType::iterator iter = inputPatterns.begin() ;
+               iter != inputPatterns.end() ;
+               ++iter)
+            {
+            otb::PatternSampler::ParameterType param;
+            param.Seed = 0UL;
+            otb::PatternSampler::ImportPatterns(iter->second , param);
+            m_Pattern->GetSamplers()[iter->first]->SetParameters(param);
+            }
+          }
+        else
+          {
+          // generate pattern using sizemax and seed
+          otb::PatternSampler::ParameterType param;
+          param.Seed = itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->GetSeed();
+          param.MaxPatternSize = this->GetParameterInt("sampler.pattern.sizemax");
+          m_Pattern->SetSamplerParameters(param);
+          }
+
+        // Processing ...
+        m_Pattern->Update();
+        
+        // Save patterns
+        if (IsParameterEnabled("sampler.pattern.out") && HasValue("sampler.pattern.out"))
+          {
+          PatternMapType outputPatterns;
+          std::string curPattern;
+          PatternSamplerType::SamplerMapType &samplers = m_Pattern->GetSamplers();
+          PatternSamplerType::SamplerMapType::iterator iter = samplers.begin();
+          for (; iter != samplers.end() ; ++iter)
+            {
+            otb::PatternSampler::ExportPatterns(iter->second->GetParameters() , curPattern);
+            outputPatterns[iter->first] = curPattern;
+            }
+          m_WritterPattern->AddInputMap<PatternMapType>("samplingPattern",outputPatterns);
+          m_WritterPattern->SetFileName(this->GetParameterString("sampler.pattern.out"));
+          m_WritterPattern->Update();
+          }
+        }
+      break;
+      // random
+      case 2:
+        {
+        m_Random->SetInput(this->GetParameterImage("in"));
+        m_Random->SetOGRData(vectors);
+        m_Random->SetOutputPositionContainerAndRates(outputSamples, rates);
+        m_Random->SetFieldName(this->GetParameterString("field"));
+        m_Random->SetLayerIndex(this->GetParameterInt("layer"));
+        if (IsParameterEnabled("mask") && HasValue("mask"))
+          {
+          m_Random->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
+          }
+        // Processing ...
+        m_Random->Update();
+        }
+      break;
+      default:
+        otbAppLogFATAL("Sampler type unknown :"<<this->GetParameterString("sampler"));
+      break;
       }
-      if (IsParameterEnabled("insampvec") && HasValue("insampvec"))
-      {
-        m_resampler->SetInputSamplingVectorsPath(this->GetParameterString("insampvec"));
-      }
-      if (IsParameterEnabled("outsampvec") && HasValue("outsampvec"))
-      {
-        m_resampler->SetOutputSamplingVectorsPath(this->GetParameterString("outsampvec"));
-      }
-      if (IsParameterEnabled("maxsampvecsize") && HasValue("maxsampvecsize"))
-      {
-        m_resampler->SetMaxSamplingVecSize(this->GetParameterInt("maxsampvecsize"));
-      }
-      
-      m_resampler->SetInput(this->GetParameterImage("in"));
-      m_resampler->SetOGRData(m_vectors);
-      m_resampler->SetOutputVectorDataPath(this->GetParameterString("out"));
-      m_resampler->SetRatesByClass(ratesbyClass);
-      m_resampler->SetFieldName(this->GetParameterString("field"));
-      m_resampler->SetLayerIndex(this->GetParameterInt("layer"));
-      
-      m_resampler->Update(); 
-  
   }
 
-  RateCalculatorType::Pointer m_rateCalculator;
-  ResamplerFilterType::Pointer m_resampler;
-  ReaderType::Pointer m_reader;
-  otb::ogr::DataSource::Pointer m_vectors;
-
+  RateCalculatorType::Pointer m_RateCalculator;
+  
+  PeriodicSamplerType::Pointer m_Periodic;
+  PatternSamplerType::Pointer m_Pattern;
+  RandomSamplerType::Pointer m_Random;
+  
+  XMLReaderType::Pointer m_ReaderStat;
+  XMLReaderType::Pointer m_ReaderPattern;
+  XMLWriterType::Pointer m_WritterPattern;
 };
 
 } // end of namespace Wrapper
