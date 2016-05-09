@@ -41,74 +41,71 @@
 namespace ossimplugins
 {
 
-   class OSSIM_PLUGINS_DLL ossimSentinel1ProductDoc : public ossimObject,
-                                                   public ossimErrorStatusInterface
-   {
-   public:
+class OSSIM_PLUGINS_DLL ossimSentinel1ProductDoc
+: public ossimObject, public ossimErrorStatusInterface
+{
+public:
 
-      typedef ossimRefPtr<ossimXmlNode> ossimXmlNodePtr;
-      typedef ossimRefPtr<ossimXmlDocument> ossimXmlDocumentPtr;
+  typedef ossimRefPtr<ossimXmlNode>     ossimXmlNodePtr;
+  typedef ossimRefPtr<ossimXmlDocument> ossimXmlDocumentPtr;
+  ossimSentinel1ProductDoc();
 
-      ossimSentinel1ProductDoc();
+  virtual ~ossimSentinel1ProductDoc();
 
-      virtual ~ossimSentinel1ProductDoc();
+  void clearFields();
 
-      void clearFields();
+  bool openMetadataFile(ossimXmlDocument& doc, ossimString const& file) const;
 
-      bool openMetadataFile(ossimRefPtr<ossimXmlDocument>& doc, const ossimString file) const;
+  bool initImageSize(ossimIpt& imageSize) const;
 
-      bool initImageSize(ossimIpt& imageSize) const;
+  bool initGsd( ossimDpt& gsd) const;
 
-      bool initGsd( ossimDpt& gsd) const;
+  void addSRGRCoefficients(const char* prefix, ossimXmlNode const& coordinateConversion);
 
-      void addSRGRCoefficients(const char* prefix, const ossimRefPtr<ossimXmlNode>& coordinateConversion);
+  void addDopplerCentroidCoefficients(ossimXmlNode const& dcEstimateList);
 
-      void addDopplerCentroidCoefficients(const ossimRefPtr<ossimXmlNode>& dcEstimateList);
+  void addOrbitStateVectors(ossimXmlNode const& orbitList);
 
-      void addOrbitStateVectors(const ossimRefPtr<ossimXmlNode>& dcEstimateList);
+  void readCalibrationMetadata();
 
-      void readCalibrationMetadata();
+  void readNoiseMetadata();
 
-      void readNoiseMetadata();
+  double getModifiedJulianDate(ossimString const& utc_time);
 
-      double getModifiedJulianDate(const ossimString utc_time);
+  bool readProductMetadata( );
 
-      bool readProductMetadata( );
+  double getBandTerrainHeight(ossimXmlDocument const& theProductXmlDocument);
 
-      double getBandTerrainHeight( const ossimRefPtr<ossimXmlDocument>& theProductXmlDocument );
+  ossimKeywordlist const& getProductKwl() const
+    {
+    return theProductKwl;
+    }
 
-      inline const ossimKeywordlist getProductKwl() const
-      {
-         return theProductKwl;
-      }
+  void setMetadataDirectory(ossimFilename const& d)
+    {
+    theManifestDirectory = d;
+    }
 
-      inline void setMetadataDirectory(const ossimFilename d)
-      {
-         theManifestDirectory = d;
-      }
+  void setSLC(bool b)
+    {
+    theSLC = true;
+    }
 
+  void setTOPSAR(bool b)
+    {
+    theTOPSAR = true;
+    }
 
-      inline void setSLC(bool b)
-      {
-         theSLC = true;
-      }
-
-      inline void setTOPSAR(bool b)
-      {
-         theTOPSAR = true;
-      }
-
-   private:
-      ossimFilename theManifestDirectory;
-      double theRangeSpacingTotal;
-      double theAzimuthSpacingTotal;
-      bool theTOPSAR;
-      bool theSLC;
-      ossimFilename theProductXmlFile;
-      ossimString theSampleType;
-      ossimKeywordlist theProductKwl;
-
-      };
+private:
+  ossimFilename    theManifestDirectory;
+  double           theRangeSpacingTotal;
+  double           theAzimuthSpacingTotal;
+  bool             theTOPSAR;
+  bool             theSLC;
+  ossimFilename    theProductXmlFile;
+  ossimString      theSampleType;
+  ossimKeywordlist theProductKwl;
+};
 
 }
 

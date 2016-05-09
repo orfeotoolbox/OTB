@@ -19,6 +19,7 @@ namespace ossimplugins {
 
     ossimXmlNode const& getExpectedFirstNode(ossimXmlNode const& node, ossimString const& xpath);
     ossimString const& getTextFromFirstNode(ossimXmlNode const& node, ossimString const& xpath);
+    ossimString const& getOptionalTextFromFirstNode(ossimXmlNode const& node, ossimString const& xpath);
     TimeType getTimeFromFirstNode(ossimXmlNode const& node, ossimString const& xpath);
     double getDoubleFromFirstNode(ossimXmlNode const& node, ossimString const& xpath);
 } // ossimplugins namespace

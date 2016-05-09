@@ -14,7 +14,7 @@
 
 ossimXmlNode const& ossimplugins::getExpectedFirstNode(ossimXmlNode const& node, ossimString const& xpath)
 {
-    ossimRefPtr<ossimXmlNode> wh = node.findFirstNode(xpath);
+    ossimRefPtr<ossimXmlNode> const& wh = node.findFirstNode(xpath);
     if (!wh) {
         throw std::runtime_error("No subnode found for xpath '" + xpath + "'");
     }
@@ -38,5 +38,12 @@ double ossimplugins::getDoubleFromFirstNode(ossimXmlNode const& node, ossimStrin
 {
     const ossimString & s = getTextFromFirstNode(node, xpath);
     return s.toDouble();
+}
+
+ossimString const& ossimplugins::getOptionalTextFromFirstNode(ossimXmlNode const& node, ossimString const& xpath)
+{
+  static const ossimString empty;
+  ossimRefPtr<ossimXmlNode> const& wh = node.findFirstNode(xpath);
+  return wh.valid() ? wh->getText() : empty;
 }
 
