@@ -1,7 +1,22 @@
 
 message(STATUS "Setup OTB xdk...")
 
-set(PACKAGE_VERSION xdk)
+if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
+  file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _otb_version_vars   REGEX "set\\\(OTB_VERSION_")
+  file(WRITE  ${CMAKE_BINARY_DIR}/CMakeFiles/version_vars.cmake "#OTB version\n")
+  foreach(_otb_version_var ${_otb_version_vars})
+    file(APPEND ${CMAKE_BINARY_DIR}/CMakeFiles/version_vars.cmake "${_otb_version_var}\n")
+  endforeach()
+  include(${CMAKE_BINARY_DIR}/CMakeFiles/version_vars.cmake)
+  if(OTB_VERSION_STRING)
+    set(PACKAGE_VERSION ${OTB_VERSION_STRING})
+  else()
+    message(FATAL_ERROR "Packaging: Cannot find OTB_VERSION_STRING!")
+  endif()
+else()
+  message(FATAL_ERROR "Packaging: File '${CMAKE_SOURCE_DIR}/../CMakeLists.txt' does not exists")
+endif()
+
 set(PACKAGE_NAME OTB)
 set(PACKAGE_LONG_NAME OrfeoToolBox)
 
@@ -10,7 +25,7 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(PACKAGE_ARCH Linux64)
 endif()
 
-set(ARCHIVE_NAME ${PACKAGE_NAME}-${PACKAGE_VERSION}-${PACKAGE_ARCH})
+set(ARCHIVE_NAME ${PACKAGE_NAME}-${PACKAGE_VERSION}-xdk-${PACKAGE_ARCH})
 
 set(MAKESELF_SCRIPT ${CMAKE_BINARY_DIR}/GENERATE-XDK/build/makeself.sh)
 
@@ -21,15 +36,18 @@ file(WRITE "${CMAKE_BINARY_DIR}/GENERATE-XDK/src/GENERATE-XDK/CMakeLists.txt"
        include(CMakeParseArguments)
        set(CMAKE_INSTALL_PREFIX \"${SB_INSTALL_PREFIX}\")
        set(DOWNLOAD_LOCATION \"${DOWNLOAD_LOCATION}\")
-       set(SETUP_SCRIPT_SRC ${CMAKE_SOURCE_DIR}/CMake/pkgsetup.in)
-       set(WITH_OTBGUI OFF)
-       set(MAKE_XDK ON)
-       include(${CMAKE_SOURCE_DIR}/CMake/External_pkgtools.cmake)
-       include(${CMAKE_SOURCE_DIR}/CMake/Package_Macro.cmake)
+       set(PACKAGE_SUPPORT_FILES_DIR \"${CMAKE_SOURCE_DIR}/Packaging\")
+       set(Monteverdi_SOURCE_DIR \"${CMAKE_BINARY_DIR}/MVD/src/MVD\")
+       set(Monteverdi_BINARY_DIR \"${CMAKE_BINARY_DIR}/MVD/build\")
+       set(OTB_INSTALL_DIR \"${CMAKE_BINARY_DIR}/OTB/build\")
+       set(QT_PLUGINS_DIR \"${SB_INSTALL_PREFIX}/plugins\")
+       set(QT_TRANSLATIONS_DIR \"${QT_TRANSLATIONS_DIR}\")
+       set(ITK_VERSION_STRING \"${ITK_SB_VERSION}\")
+       set(CREATING_XDK ON)
+       include(\"${CMAKE_SOURCE_DIR}/CMake/Package_Macro.cmake\")
+       include(\"${CMAKE_SOURCE_DIR}/CMake/PackageHelper.cmake\")
        superbuild_package(
-       OUTDIR \"${ARCHIVE_NAME}\"
-       INSTALLDIR \"${SB_INSTALL_PREFIX}\"
-       PEFILES \"${PEFILES}\"
+       STAGE_DIR \"${ARCHIVE_NAME}\"
        SEARCHDIRS \"\")")
 
   add_custom_target(GENERATE-XDK-configure

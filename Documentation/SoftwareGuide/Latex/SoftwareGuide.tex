@@ -1,0 +1,342 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Complete documentation on the extended LaTeX markup used for Insight
+% documentation is available in ``Documenting Insight'', that is part
+% of the standard documentation for Insight.  It may be found online
+% at:
+%
+%                    http://www.itk.org
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass{InsightSoftwareGuide}
+
+
+\usepackage[dvips]{graphicx}
+\usepackage{times,lscape,url}
+%\usepackage{mdwtab}
+
+
+%%% \usepackage[latin1]{inputenc}
+%%% \selectlanguage{french}
+% Configuration pour les accents francais pour l'OTB
+\usepackage[latin1]{inputenc}
+%\usepackage[french]{babel}
+\usepackage{tikz}
+
+\usepackage{color}
+
+\definecolor{listcomment}{rgb}{0.0,0.5,0.0}
+\definecolor{listkeyword}{rgb}{0.0,0.0,0.5}
+\definecolor{listnumbers}{gray}{0.65}
+\definecolor{listlightgray}{gray}{0.955}
+\definecolor{listwhite}{gray}{1.0}
+
+\usepackage{listings}
+\newcommand{\lstsetcpp}
+{
+\lstset{frame = tb,
+       framerule = 0.25pt,
+       float,
+       fontadjust,
+       backgroundcolor={\color{listlightgray}},
+       basicstyle = {\ttfamily\footnotesize},
+       keywordstyle = {\ttfamily\color{listkeyword}\textbf},
+       identifierstyle = {\ttfamily},
+       commentstyle = {\ttfamily\color{listcomment}\textit},
+       stringstyle = {\ttfamily},
+       showstringspaces = false,
+       showtabs = false,
+       numbers = none,
+       numbersep = 6pt,
+       numberstyle={\ttfamily\color{listnumbers}},
+       tabsize = 2,
+       language=[ANSI]C++,
+       floatplacement=!h
+       }
+}
+\newcommand{\lstsetpython}
+{
+\lstset{language=Python
+        }
+}
+\newcommand{\lstsetjava}
+{
+\lstset{language=Java
+        }
+}
+
+
+\newif\ifitkFullVersion
+\itkFullVersiontrue
+%\itkFullVersionfalse
+
+\newif\ifitkPrintedVersion
+\itkPrintedVersiontrue
+%\itkPrintedVersionfalse
+
+\usepackage{multicol}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  hyperref should be the last package to be loaded.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ifitkPrintedVersion
+\usepackage[dvips,
+pdftitle={OTB Software Guide},
+pdfauthor={CNES},
+pdfsubject={Remote Sensing, Orfeo, Pleiades, Cosmo Skymed},
+pdfkeywords={Image processing, Remote sensing, Guide},
+pdfpagemode={UseOutlines},
+bookmarks,bookmarksopen,
+pdfstartview={FitH},
+backref,
+colorlinks,linkcolor={black},citecolor={black},urlcolor={black},
+]{hyperref}
+\else
+\usepackage[dvips,
+pdftitle={OTB Software Guide},
+pdfauthor={CNES},
+pdfsubject={Remote Sensing, Orfeo, Pleiades, Cosmo Skymed},
+pdfkeywords={Image processing, Remote sensing, Guide},
+pdfpagemode={UseOutlines},
+bookmarks,bookmarksopen,
+pdfstartview={FitH},
+backref,
+colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
+]{hyperref}
+\fi
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{bbm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%   Load configuration parameters prepared by CMake
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{SoftwareGuideConfiguration.tex}
+
+\def\logoCNES{CNES_nom.eps}
+
+\newtheorem{algo}{Algorithm}
+\newtheorem{defin}{Definition}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%           The Insight Toolkit Software Guide
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{The ORFEO Tool Box Software Guide\\ Updated
+  for OTB-5.4.0}
+
+\author{OTB Development Team}
+
+\authoraddress{
+  \url{http://www.orfeo-toolbox.org}\\
+  e-mail: \email{otb@cnes.fr}
+}
+
+\date{\today}
+
+
+% actually write the .idx file
+\makeindex
+
+\setcounter{tocdepth}{3}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           Begin Document
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\ifitkPrintedVersion
+%% \input{PrintedPreamble.tex}
+\fi
+
+\maketitle
+
+\frontmatter
+
+\hyperbaseurl{http://www.orfeo-toolbox.org}
+
+\lstsetcpp
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Page with OTB logo
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cleardoublepage
+
+\begin{minipage}[t][10cm][b]{\textwidth}
+\center
+\includegraphics[width=0.5\textwidth]{logoVectoriel.eps}
+\large
+\begin{center}
+\emph{The ORFEO Toolbox is not a black box.}\\
+\end{center}
+\hspace{8cm} Ch.D.
+\normalsize
+\end{minipage}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% remove headings from the following material
+\pagestyle{plain}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%\ifitkPrintedVersion
+%% \input{Cover.tex}
+%%\fi
+
+\input{Abstract.tex}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Insert Table of Contents; List of Figures and Tables
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% enable headings from the following material
+\pagestyle{normal}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\small
+\tableofcontents
+\listoffigures
+\listoftables
+\normalsize
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Begin technical content
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\mainmatter
+
+\part{Introduction}\label{part:introduction}
+
+\input{Introduction.tex}
+\input{Installation.tex}
+\input{CompilingMonteverdi.tex}
+\input{SystemOverview.tex}
+
+
+\part{Tutorials}\label{part:tutorials}
+
+\input{Tutorial.tex}
+
+
+\part{User's guide}\label{part:userguide}
+
+\input{DataRepresentation.tex}
+\input{ReadWrite.tex}
+\input{ReadWriteVectorData.tex}
+\input{Filtering.tex}
+\input{ImageRegistration.tex}
+\input{DisparityEstimation.tex}
+\input{StereoReconstruction.tex}
+\input{OrthoRectification.tex}
+\input{Radiometry.tex}
+\input{Fusion.tex}
+\input{FeatureExtraction.tex}
+\input{MultiScaleAnalysis.tex}
+\input{ImageSegmentation.tex}
+\input{ImageSimulation.tex}
+\input{DimensionReduction.tex}
+\input{Classification.tex}
+\input{ObjectBasedImageAnalysis.tex}
+\input{ChangeDetection.tex}
+\input{Hyperspectral.tex}
+\input{Visualization.tex}
+\input{Online.tex}
+
+%%% \input{Applications.tex}
+
+
+
+\part{Developer's guide}\label{part:developerguide}
+\input{Iterators.tex}
+\input{ImageAdaptors.tex}
+\input{StreamingAndThreading.tex}
+\input{WriteAFilter.tex}
+\input{Persistent.tex}
+\input{WriteAnApplication.tex}
+\input{WriteModules.tex}
+\input{Contribute.tex}
+
+\part{Appendix}\label{part:appendix}
+\chapter{Frequently Asked Questions}
+\label{sec:FrequentlyAskedQuestions}
+\input{FAQ.tex}
+
+\chapter{Release Notes}
+\label{sec:ReleaseNotes}
+\input{ReleaseNotes.tex}
+
+%Comment generation of wrapping documentation for release 3.2
+\chapter{Wrappings to other languages}
+\label{chap:wrappings}
+%Set the code style to Java for the Wrapping
+
+\input{Wrapping.tex}
+
+\input{Contributors.tex}
+
+\backmatter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Insert the bibliography using BibTeX
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \bibliographystyle{plain}
+\bibliographystyle{abbrv}
+\bibliography{\bibtexdatabasepath/Insight}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Insert the Index file
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\InputIfFileExists{SoftwareGuide.ind}{}{}
+
+%%\ifitkPrintedVersion
+%%\cleardoublepage
+%%% \input{MarketingMaterial.tex}
+%%\fi
+
+\end{document}
+
+
+

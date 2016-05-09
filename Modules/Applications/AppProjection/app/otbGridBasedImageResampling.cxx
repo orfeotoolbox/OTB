@@ -205,7 +205,7 @@ void DoExecute()
       // deformation grid, which is the only type handled by StreamingWarpImageFilter
       if(GetParameterString("grid.type") == "loc")
         {
-        GetLogger()->Info("Grid intepreted as a location grid.");
+        GetLogger()->Info("Grid interpreted as a location grid.");
         m_ExtractX->SetInput(inGrid);
         m_ExtractX->SetChannel(1);
         m_BandMathX->SetNthInput(0,m_ExtractX->GetOutput(),"locX");
@@ -222,7 +222,7 @@ void DoExecute()
         }
       else
         {
-        GetLogger()->Info("Grid intepreted as a deformation grid.");
+        GetLogger()->Info("Grid interpreted as a deformation grid.");
         m_DisplacementFieldCaster->SetInput(inGrid);
         }
 

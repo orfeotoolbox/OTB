@@ -337,7 +337,7 @@ SailModel
       // Outputs for the case LAI = 0
       if (m_LAI<0)
       {
-         tss = 1;
+         //tss = 1;
          too = 1;
          tsstoo = 1;
          rdd = 0;
@@ -355,7 +355,7 @@ SailModel
          rdot = rsoil0;
          rsodt = 0;
          rsost = rsoil0;
-         rsot = rsoil0;
+         //rsot = rsoil0;
       }
 
       // Other cases (LAI > 0)

@@ -46,6 +46,9 @@ namespace ossimplugins
    {
    public:
 
+      typedef ossimRefPtr<ossimXmlNode> ossimXmlNodePtr;
+      typedef ossimRefPtr<ossimXmlDocument> ossimXmlDocumentPtr;
+
       ossimSentinel1ProductDoc();
 
       virtual ~ossimSentinel1ProductDoc();

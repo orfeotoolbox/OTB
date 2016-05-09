@@ -66,7 +66,7 @@ public:
                       OutputPixelType* outputData , size_t size);
 
 protected:
-  /** Convertions related to complex */
+  /** Conversions related to complex */
   static void ConvertGrayToComplex(InputPixelType * inputData,
                                 OutputPixelType * OutputData, size_t size);
   

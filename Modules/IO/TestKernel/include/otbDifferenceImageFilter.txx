@@ -7,6 +7,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkProgressReporter.h"
+#include "itkDefaultConvertPixelTraits.h"
 
 namespace otb
 {
@@ -26,8 +27,12 @@ DifferenceImageFilter<TInputImage, TOutputImage>
   m_ToleranceRadius = 0;
 
   // Initialize statistics about difference image.
-  m_MeanDifference.SetSize(0);
-  m_TotalDifference.SetSize(0);
+  itk::NumericTraits<RealType>::SetLength(
+    m_MeanDifference,
+    itk::DefaultConvertPixelTraits<RealType>::GetNumberOfComponents());
+  itk::NumericTraits<AccumulateType>::SetLength(
+    m_TotalDifference,
+    itk::DefaultConvertPixelTraits<RealType>::GetNumberOfComponents());
   m_MeanDifference  = itk::NumericTraits<RealType>::ZeroValue(m_MeanDifference);
   m_TotalDifference = itk::NumericTraits<AccumulateType>::ZeroValue(m_TotalDifference);
   m_NumberOfPixelsWithDifferences = 0;
@@ -89,12 +94,16 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 {
   int numberOfThreads = this->GetNumberOfThreads();
 
-  m_MeanDifference.SetSize(this->GetInput(0)->GetNumberOfComponentsPerPixel());
-  m_TotalDifference.SetSize(this->GetInput(0)->GetNumberOfComponentsPerPixel());
+  itk::NumericTraits<RealType>::SetLength(
+    m_MeanDifference,
+    this->GetInput(0)->GetNumberOfComponentsPerPixel());
+  itk::NumericTraits<AccumulateType>::SetLength(
+    m_TotalDifference,
+    this->GetInput(0)->GetNumberOfComponentsPerPixel());
 
   // Initialize statistics about difference image.
-  m_MeanDifference.Fill(itk::NumericTraits<ScalarRealType>::Zero);
-  m_TotalDifference.Fill(itk::NumericTraits<ScalarRealType>::Zero);
+  m_MeanDifference  = itk::NumericTraits<RealType>::ZeroValue(m_MeanDifference);
+  m_TotalDifference = itk::NumericTraits<AccumulateType>::ZeroValue(m_TotalDifference);
   m_NumberOfPixelsWithDifferences = 0;
 
   // Resize the thread temporaries
@@ -175,17 +184,22 @@ DifferenceImageFilter<TInputImage, TOutputImage>
         // sign.
         RealType difference = static_cast<RealType>(t) - static_cast<RealType>(test.GetPixel(i));
 
-        for (unsigned int j = 0; j < difference.Size(); ++j)
+        for (unsigned int j = 0; j < itk::NumericTraits<RealType>::GetLength(difference) ; ++j)
           {
-          if (difference[j] < 0)
+          ScalarRealType d = static_cast<ScalarRealType>(
+            itk::DefaultConvertPixelTraits<RealType>::GetNthComponent(j,difference));
+          if (d < 0)
             {
-            difference[j] *= -1;
+            d *= -1;
             }
-          ScalarRealType d = static_cast<ScalarRealType>(difference[j]);
-
-          if (d < minimumDifference[j])
+          ScalarRealType m = static_cast<ScalarRealType>(
+            itk::DefaultConvertPixelTraits<OutputPixelType>::GetNthComponent(j,minimumDifference));
+          if (d < m)
             {
-            minimumDifference[j] = d;
+            itk::DefaultConvertPixelTraits<OutputPixelType>::SetNthComponent(
+              j,
+              minimumDifference,
+              d);
 //             std::cout << std::setprecision(16) << minimumDifference[j] << std::endl;
 //             std::cout << std::setprecision(16) << t << std::endl;
 //             std::cout << std::setprecision(16) << test.GetPixel(i) << std::endl;
@@ -198,18 +212,22 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 //        ScalarRealType tMax=vcl_abs(t[0]);
       ScalarRealType tMax = 0.01; //Avoiding the 0 case for neighborhood computing
       // NB: still more restrictive than before for small values.
-      for (unsigned int j = 0; j < t.Size(); ++j)
+      for (unsigned int j = 0; j < itk::NumericTraits<InputPixelType>::GetLength(t); ++j)
         {
-        if (vcl_abs(t[j]) > tMax) tMax = vcl_abs(t[j]);
+        ScalarRealType tc = static_cast<ScalarRealType>(
+          itk::DefaultConvertPixelTraits<InputPixelType>::GetNthComponent(j,t));
+        if (vcl_abs(tc) > tMax) tMax = vcl_abs(tc);
         }
 
       // Check if difference is above threshold
       // the threshold is interpreted as relative to the value
       bool isDifferent = false;
 
-      for (unsigned int j = 0; j < minimumDifference.Size(); ++j)
+      for (unsigned int j = 0; j < itk::NumericTraits<OutputPixelType>::GetLength(minimumDifference); ++j)
         {
-        if (minimumDifference[j] > m_DifferenceThreshold * tMax)
+        ScalarRealType m = static_cast<ScalarRealType>(
+          itk::DefaultConvertPixelTraits<OutputPixelType>::GetNthComponent(j,minimumDifference));
+        if (m > m_DifferenceThreshold * tMax)
           {
 //           std::cout << std::setprecision(16) << minimumDifference[j] << std::endl;
           isDifferent = true;

@@ -46,7 +46,7 @@ namespace otb {
  *  The user can set an OutputPixelType as a burn vector via
  *  AddBurnValue(OutputImagePixelType burnValuesPix). To have a
  *  different color for each VectorData, use this method with
- *  differents burnValuesPix as many times as VectorDatas set.
+ *  different burnValuesPix as many times as VectorDatas set.
  *  Again, the color will be duplicated if only one burnValuesPix
  *  is set.
  *

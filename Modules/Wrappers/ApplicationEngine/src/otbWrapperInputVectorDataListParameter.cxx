@@ -52,9 +52,9 @@ InputVectorDataListParameter::SetListFromFileName(const std::vector<std::string>
     if (!filename.empty())
       {
       VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
-      reader->SetFileName(filename);
       try
         {
+        reader->SetFileName(filename);
         reader->UpdateOutputInformation();
         }
       catch(itk::ExceptionObject & /*err*/)

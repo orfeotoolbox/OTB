@@ -61,14 +61,14 @@ KullbackLeiblerSupervizedDistance<TInput1, TInput2, TInputROIImage, TOutput>
   typedef itk::ConstNeighborhoodIterator<
       typename ROIConversionType1::OutputImageType> ROIInputType1;
 
-  typename ROIConversionType1::Pointer convertion1 = ROIConversionType1::New();
-  convertion1->SetInputImage(img1);
-  convertion1->SetROIImage(imgROI);
-  convertion1->Update();
+  typename ROIConversionType1::Pointer conversion1 = ROIConversionType1::New();
+  conversion1->SetInputImage(img1);
+  conversion1->SetROIImage(imgROI);
+  conversion1->Update();
 
   if (m_CumROI1 != NULL) delete m_CumROI1;
 
-  m_CumROI1 = new CumulantsForEdgeworth<ROIInputType1> (convertion1->GetOutput());
+  m_CumROI1 = new CumulantsForEdgeworth<ROIInputType1> (conversion1->GetOutput());
 
   if (!m_CumROI1->IsDataAvailable())
     {
@@ -84,14 +84,14 @@ KullbackLeiblerSupervizedDistance<TInput1, TInput2, TInputROIImage, TOutput>
   typedef itk::ConstNeighborhoodIterator<
       typename ROIConversionType2::OutputImageType> ROIInputType2;
 
-  typename ROIConversionType2::Pointer convertion2 = ROIConversionType2::New();
-  convertion2->SetInputImage(img2);
-  convertion2->SetROIImage(imgROI);
-  convertion2->Update();
+  typename ROIConversionType2::Pointer conversion2 = ROIConversionType2::New();
+  conversion2->SetInputImage(img2);
+  conversion2->SetROIImage(imgROI);
+  conversion2->Update();
 
   if (m_CumROI2 != NULL) delete m_CumROI2;
 
-  m_CumROI2 = new CumulantsForEdgeworth<ROIInputType2> (convertion2->GetOutput());
+  m_CumROI2 = new CumulantsForEdgeworth<ROIInputType2> (conversion2->GetOutput());
 
   if (!m_CumROI2->IsDataAvailable())
     {

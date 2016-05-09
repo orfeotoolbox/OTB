@@ -1,0 +1,219 @@
+\chapter{Feature Extraction}
+
+% \section{Introduction}
+
+Under the term {\em Feature Extraction} we include several techniques
+aiming to detect or extract informations of low level of abstraction
+from images. These {\em features} can be objects : points, lines,
+etc. They can also be measures : moments, textures, etc.
+
+\section{Textures}
+\subsection{Haralick Descriptors}
+
+This example illustrates the use of the \doxygen{otb}{ScalarImageToTexturesFilter},
+which compute the standard Haralick's textural features~\cite{Haralick1973} presented in table~\ref{tab:haralickStandardFeatures},
+where $\mu_t$ and $\sigma_t$ are the mean and standard deviation of the row
+(or column, due to symmetry) sums, $ \mu =  $ (weighted pixel average)
+$ = \sum_{i,j}i \cdot g(i, j) =\sum_{i,j}j \cdot g(i, j) $ due to matrix summetry, and
+$ \sigma =  $ (weighted pixel variance) $ = \sum_{i,j}(i - \mu)^2 \cdot g(i, j) =\sum_{i,j}(j - \mu)^2 \cdot g(i, j)  $
+due to matrix symmetry.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+& \\
+Energy & $ f_1 = \sum_{i,j}g(i, j)^2 $ \\
+& \\
+\hline
+& \\
+Entropy & $ f_2 = -\sum_{i,j}g(i, j) \log_2 g(i, j)$, or 0 if $g(i, j) = 0$ \\
+& \\
+\hline
+& \\
+Correlation & $ f_3 = \sum_{i,j}\frac{(i - \mu)(j - \mu)g(i, j)}{\sigma^2} $ \\
+& \\
+\hline
+& \\
+Difference Moment &  $f_4 = \sum_{i,j}\frac{1}{1 + (i - j)^2}g(i, j) $ \\
+& \\
+\hline
+& \\
+Inertia (a.k.a. Contrast) & $ f_5 = \sum_{i,j}(i - j)^2g(i, j) $ \\
+& \\
+\hline
+& \\
+Cluster Shade & $ f_6 = \sum_{i,j}((i - \mu) + (j - \mu))^3 g(i, j) $ \\
+& \\
+\hline
+Cluster Prominence & $ f_7 = \sum_{i,j}((i - \mu) + (j - \mu))^4 g(i, j) $ \\
+& \\
+\hline
+& \\
+Haralick's Correlation & $ f_8 = \frac{\sum_{i,j}(i, j) g(i, j) -\mu_t^2}{\sigma_t^2} $ \\
+& \\
+\hline
+\end{tabular}
+\itkcaption[Haralick features]{Haralick features~\cite{Haralick1973} available in \doxygen{otb}{ScalarImageToTexturesFilter}}
+\end{center}
+\label{tab:haralickStandardFeatures}
+\end{table}
+
+More features are available in \doxygen{otb}{ScalarImageToAdvancedTexturesFilter}.
+\relatedClasses
+\begin{itemize}
+\item \doxygen{otb}{ScalarImageToAdvancedTexturesFilter}
+\item \doxygen{otb}{ScalarImageToPanTexTextureFilter}
+\item \doxygen{otb}{GreyLevelCooccurrenceIndexedList}
+\end{itemize}
+
+\input{TextureExample}
+
+\subsection{PanTex}
+\input{PanTexExample}
+
+\subsection{Structural Feature Set}
+\input{SFSExample}
+
+\section{Interest Points}
+\subsection{Harris detector}
+\input{HarrisExample}
+\subsection{SIFT detector}
+\label{sec:SIFTDetector}
+% \input{SIFTFastExample}
+\InputIfFileExists{SIFTFastExample.tex}{}{}
+\subsection{SURF detector}
+\input{SURFExample}
+
+\section{Alignments}
+\label{sec:Alignments}
+\input{AlignmentsExample}
+\section{Lines}
+\label{sec:LineDetectors}
+
+\subsection{Line Detection}
+\label{sec:LineDetection}
+\input{RatioLineDetectorExample}
+\input{CorrelationLineDetectorExample}
+\input{AssymmetricFusionOfLineDetectorExample}
+\input{ParallelLineDetectionExample}
+
+
+\subsection{Segment Extraction}
+\label{sec:SegmentExtraction}
+\subsubsection{Local Hough Transform}
+\input{LocalHoughExample}
+%\input{ExtractSegmentsByStepsExample}
+%\input{ExtractSegmentsExample}
+%\subsubsection{Line Segment Detector}
+%\label{sec:LSD}
+%\input{LineSegmentDetectorExample}
+%\subsection{Right Angle Detector}
+%\label{sec:RightAngleDetector}
+%\input{RightAngleDetectionExample}
+
+
+\section{Density Features}
+An interesting approach to feature extraction consists in computing
+the density of previously detected features as simple edges or
+interest points.
+\subsection{Edge Density}
+\input{EdgeDensityExample}
+\subsection{SIFT Density}
+\InputIfFileExists{SIFTDensityExample.tex}{}{}
+
+% \input{SIFTDensityExample}
+
+\section{Geometric Moments}
+
+\subsection{Complex Moments}
+\label{sec:ComplexMoments}
+The complex geometric moments are defined as:
+\begin {equation}
+c_{pq} = \int\limits_{-\infty}^{+\infty}\int\limits_{-\infty}^{+\infty}(x + iy)^p(x- iy)^qf(x,y)dxdy,
+\label{2.2}
+\end{equation}
+where $x$ and $y$ are the coordinates of the image $f(x,y)$, $i$ is the
+imaginary unit and
+$p+q$ is the order of $c_{pq}$. The geometric moments are
+particularly useful in the case of scale changes.
+
+\subsubsection{Complex Moments for Images}
+\input{ComplexMomentsImageFunctionExample}
+\subsubsection{Complex Moments for Paths}
+\input{ComplexMomentPathExample}
+
+\subsection{Hu Moments}
+\label{sec:HuMoments}
+Using the algebraic moment theory, H. Ming-Kuel obtained a family of 7
+invariants with respect to planar transformations called Hu invariants,
+\cite{hu}. Those invariants can be seen as nonlinear combinations of
+the complex moments. Hu invariants have
+been very much used in object recognition during the last 30 years,
+since they are invariant to rotation, scaling and translation. \cite{flusserinv} gives their expressions :
+
+\begin{equation}
+\begin{array}{cccc}
+\phi_1 = c_{11};& \phi_2 = c_{20}c_{02};& \phi_3 = c_{30}c_{03};& \phi_4 = c_{21}c_{12};\\
+\phi_5 = Re(c_{30}c_{12}^3);& \phi_6 = Re(c_{21}c_{12}^2);& \phi_7 = Im(c_{30}c_{12}^3).&\\
+\end{array}
+\end{equation}
+
+
+\cite{dudani} have used these invariants for the recognition of
+aircraft silhouettes. Flusser and Suk have used them for image
+registration, \cite{flusser_2}.
+
+\subsubsection{Hu Moments for Images}
+\input{HuMomentsImageFunctionExample}
+%\subsubsection{Hu Moments for Paths}
+%\input{HuMomentPathExample}
+
+
+\subsection{Flusser Moments}
+\label{sec:FlusserMoments}
+The Hu invariants have been modified and
+improved by several authors. Flusser used these moments in order to
+produce a new family of descriptors of order higher than 3,
+\cite{flusserinv}. These descriptors are invariant to scale and
+rotation. They have the following expressions:
+\begin {equation}
+\begin{array}{ccc}
+\psi_1  = c_{11} = \phi_1; &  \psi_2  = c_{21}c_{12} = \phi_4; & \psi_3  = Re(c_{20}c_{12}^2) = \phi_6;\\
+\psi_4  = Im(c_{20}c_{12}^2); & \psi_5  = Re(c_{30}c_{12}^3) = \phi_5;
+& \psi_6  = Im(c_{30}c_{12}^3) = \phi_7.\\
+\psi_7  = c_{22}; & \psi_8  = Re(c_{31}c_{12}^2); & \psi_9  = Im(c_{31}c_{12}~2);\\
+\psi_{10} = Re(c_{40}c_{12}^4); & \psi_{11} = Im(c_{40}c_{12}^2). &\\
+
+\end{array}
+\end {equation}
+
+\textbf{Examples}
+\subsubsection{Flusser Moments for Images}
+\input{FlusserMomentsImageFunctionExample}
+%\subsubsection{Flusser Moments for Paths}
+%\input{FlusserMomentPathExample}
+
+\section{Road extraction}
+\label{sec:RoadExtraction}
+
+Road extraction is a critical feature for an efficient use of high resolution satellite images. There are many applications of road extraction: update of GIS database, reference for image registration, help for identification algorithms and rapid mapping for example.  Road network can be used to register an optical image with a map or an optical image with a radar image for example. Road network extraction can help for other algorithms: isolated building detection, bridge detection. In these cases, a rough extraction can be sufficient. In the context of response to crisis, a fast mapping is necessary: within 6~hours, infrastructures for the designated area are required. Within this timeframe, a manual extraction is inconceivable and an automatic help is necessary.
+
+\subsection{Road extraction filter}
+
+\input{ExtractRoadExample}
+
+\subsection{Step by step road extraction}
+
+\input{ExtractRoadByStepsExample}
+
+
+% \section{Seam carving}
+% \label{sec:SeamCarving}
+%
+% \input{SeamCarvingExample}
+%
+% \input{SeamCarvingOtherExample}
+
+\section{Cloud Detection}
+\input{CloudDetectionExample}

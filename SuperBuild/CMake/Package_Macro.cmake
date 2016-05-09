@@ -1,210 +1,87 @@
 macro(superbuild_package)
-  cmake_parse_arguments(PACKAGE  "" "OUTDIR;INSTALLDIR;XDK" "SEARCHDIRS;PEFILES" ${ARGN} )
+  cmake_parse_arguments(PKG  "" "STAGE_DIR" "SEARCHDIRS" ${ARGN} )
 
-  find_program(OBJDUMP_PROGRAM "objdump")
+  if(APPLE)
+    set(loader_program_names otool)
+    set(LOADER_PROGRAM_ARGS "-l")
+  else()
+    set(loader_program_names objdump)
+    set(LOADER_PROGRAM_ARGS "-p")
+  endif()
+  find_program(LOADER_PROGRAM "${loader_program_names}")
+  if(NOT EXISTS ${LOADER_PROGRAM})
+    message(FATAL_ERROR "${loader_program_names} not found. please check LOADER_PROGRAM variable is set correctly")
+  endif()
 
   include(GetPrerequisites)
 
-  list(APPEND PACKAGE_SEARCHDIRS "${PACKAGE_INSTALLDIR}/bin") #exe
-  list(APPEND PACKAGE_SEARCHDIRS "${PACKAGE_INSTALLDIR}/lib") #so
-  list(APPEND PACKAGE_SEARCHDIRS "${PACKAGE_INSTALLDIR}/lib/otb/applications") #otb apps
+  set(DEPENDENCIES_INSTALL_DIR ${PKG_INSTALL_PREFIX})
+  set(OTB_INSTALL_DIR ${PKG_INSTALL_PREFIX})
 
-  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${PACKAGE_INSTALLDIR}/${PACKAGE_OUTDIR}")
+  set(PKG_SEARCHDIRS)
+  set(OTB_APPLICATIONS_DIR "${OTB_INSTALL_DIR}/lib/otb/applications")
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #exe
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib") #so
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib/otb") #mvd so
+  list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}") #otb apps
 
-  #install share/gdal, otbcli* otbgui*
-  install_common()
+  empty_package_staging_directory()
 
-  list(APPEND PACKAGE_PEFILES ${PACKAGE_INSTALLDIR}/bin/otbTestDriver)
+  file(WRITE
+    ${CMAKE_BINARY_DIR}/make_symlinks
+    "#!/bin/sh\n")
 
-  list(APPEND PACKAGE_PEFILES ${PACKAGE_INSTALLDIR}/bin/otbApplicationLauncherCommandLine)
+  set(PKG_PEFILES)
+  #NOTE: VAR_IN_PKGSETUP_CONFIGURE is copied to linux_pkgsetup.in during configure_file
+  set(VAR_IN_PKGSETUP_CONFIGURE)
+  set(PKG_SO_FILES)
+  configure_package()
 
-  if(WITH_OTBGUI)
-    list(APPEND PACKAGE_PEFILES ${PACKAGE_INSTALLDIR}/bin/otbApplicationLauncherQt)
+  ############# install client configure script ################
+
+  set(PKGSETUP_IN_FILENAME linux_pkgsetup.in)
+  if(APPLE)
+    set(PKGSETUP_IN_FILENAME macx_pkgsetup.in)
   endif()
-
-  file(GLOB otbapps_list ${PACKAGE_INSTALLDIR}/lib/otb/applications/otbapp_*so) # /lib/otb
-  list(APPEND PACKAGE_PEFILES ${otbapps_list})
-
-  set(alldlls)
-  set(notfound_dlls)
-  foreach(infile ${PACKAGE_PEFILES})
-    get_filename_component(bn ${infile} NAME)
-    process_deps(${bn})
-  endforeach()
-
-  list(LENGTH notfound_dlls nos)
-  if(${nos} GREATER 0)
-    STRING(REPLACE ".so;" ".so," notfound ${notfound_dlls})
-    message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}. Please consider adding their paths to SEARCHDIRS when calling superbuild_package macro.")
-  endif()
-
-  set(PKG_OUTPUT_DIR "${PACKAGE_INSTALLDIR}/${PACKAGE_OUTDIR}")
-  configure_file(${SETUP_SCRIPT_SRC}
+  configure_file(${PACKAGE_SUPPORT_FILES_DIR}/${PKGSETUP_IN_FILENAME}
     ${CMAKE_BINARY_DIR}/pkgsetup @ONLY)
 
-  install(FILES ${CMAKE_BINARY_DIR}/pkgsetup
-    DESTINATION ${PACKAGE_OUTDIR}
+  install(FILES
+    ${CMAKE_BINARY_DIR}/pkgsetup
+    ${CMAKE_BINARY_DIR}/make_symlinks
+    DESTINATION ${PKG_STAGE_DIR}
     PERMISSIONS
-      OWNER_READ OWNER_WRITE OWNER_EXECUTE
-      GROUP_READ GROUP_EXECUTE
-      WORLD_READ WORLD_EXECUTE)
+    OWNER_READ OWNER_WRITE OWNER_EXECUTE
+    GROUP_READ GROUP_EXECUTE
+    WORLD_READ WORLD_EXECUTE)
+
+  if(UNIX)
+    if(NOT APPLE)
+      ####################### install patchelf #####################
+      install(FILES ${PKG_INSTALL_PREFIX}/tools/patchelf
+        DESTINATION ${PKG_STAGE_DIR}/tools
+        PERMISSIONS
+        OWNER_EXECUTE OWNER_WRITE OWNER_READ
+        GROUP_EXECUTE GROUP_READ)
+    endif()
+  endif()
+
+  if(PKG_GENERATE_XDK)
+    install_xdk_files()
+  endif()
 
 endmacro(superbuild_package)
 
-SET(SYSTEM_DLLS
-  libm.so
-  libc.so
-  libstdc*
-  libgcc_s.so
-  librt.so
-  libdl.so
-  libpthread.so
-  libidn.so
-  libgomp.so*
-  )
 
-## http://www.cmake.org/Wiki/CMakeMacroListOperations
-macro(IS_SYSTEM_DLL matched value)
-  set(${matched})
-  foreach (pattern ${SYSTEM_DLLS})
-    if(${value} MATCHES ${pattern})
-      set(${matched} TRUE)
-    endif()
-  endforeach()
-endmacro()
+function(install_xdk_files)
+  install(DIRECTORY ${DEPENDENCIES_INSTALL_DIR}/share
+    DESTINATION ${PKG_STAGE_DIR})
 
-macro(list_contains var value)
-  set(${var})
-  foreach(value2 ${ARGN})
-    if(${value} STREQUAL ${value2})
-      set(${var} TRUE)
-    endif()
-  endforeach(value2)
-endmacro()
+  install(DIRECTORY ${DEPENDENCIES_INSTALL_DIR}/include
+    DESTINATION ${PKG_STAGE_DIR}
+    PATTERN "include/OTB*" EXCLUDE )
 
-macro(install_rpath_code src_filename)
-
-endmacro()
-
-function(process_deps infile)
-
-  get_filename_component(bn ${infile} NAME)
-  list_contains(contains "${bn}" "${alldlls}")
-  if(NOT contains)
-    set(DLL_FOUND FALSE)
-
-    foreach(SEARCHDIR ${PACKAGE_SEARCHDIRS})
-      if(NOT DLL_FOUND)
-        if(EXISTS ${SEARCHDIR}/${infile})
-          set(DLL_FOUND TRUE)
-          message(STATUS "Processing ${SEARCHDIR}/${infile}")
-          is_file_executable("${SEARCHDIR}/${infile}" is_executable)
-          if(is_executable)
-            install(FILES "${SEARCHDIR}/${infile}"
-              DESTINATION ${PACKAGE_OUTDIR}/bin
-              PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
-
-          else(is_executable)
-            if(NOT MAKE_XDK)
-              if(${infile} MATCHES "otbapp_")
-                install(FILES "${PACKAGE_INSTALLDIR}/lib/otb/applications/${infile}"
-                  DESTINATION ${PACKAGE_OUTDIR}/lib/otb/applications
-                  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
-              endif()
-            endif() # MAKE_XDK
-            get_filename_component(bn_we ${infile} NAME_WE)
-            file(GLOB sofiles "${SEARCHDIR}/${bn_we}*")
-            foreach(sofile ${sofiles})
-              if(MAKE_XDK)
-                get_filename_component(bn_we_sofile ${sofile} NAME)
-                string(TOLOWER "${bn_we_sofile}" sofile_lower )
-                if(NOT "${sofile_lower}" MATCHES "otb")
-                  install(FILES "${sofile}"
-                    DESTINATION ${PACKAGE_OUTDIR}/lib
-                    PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
-                endif()
-              else() #MAKE_XDK
-                install(FILES "${sofile}"
-                  DESTINATION ${PACKAGE_OUTDIR}/lib
-                  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
-              endif() #MAKE_XDK
-            endforeach()
-          endif(is_executable)
-
-          if(NOT EXISTS ${OBJDUMP_PROGRAM})
-            message(FATAL_ERROR "objdump executable not found. please check OBJDUMP_PROGRAM is set to correct cross compiled executable")
-          endif()
-          execute_process(COMMAND ${OBJDUMP_PROGRAM} "-p" "${SEARCHDIR}/${infile}"  OUTPUT_VARIABLE dump_out)
-          string(REGEX MATCHALL "NEEDED\\ *[A-Za-z(0-9\\.0-9)+_\\-]*" needed_dlls "${dump_out}")
-          string(REGEX REPLACE "NEEDED" "" needed_dlls "${needed_dlls}")
-
-          foreach(needed_dll ${needed_dlls})
-            string(STRIP ${needed_dll} needed_dll)
-            process_deps(${needed_dll})
-          endforeach()
-        endif()
-      endif(NOT DLL_FOUND)
-    endforeach()
-
-  if(NOT DLL_FOUND)
-    is_system_dll(iss "${infile}")
-    if(NOT iss)
-      set(notfound_dlls "${notfound_dlls};${infile}")
-    endif()
-    else(NOT DLL_FOUND)
-      set( alldlls "${alldlls};${bn}" PARENT_SCOPE )
-    endif(NOT DLL_FOUND)
-
-    set(notfound_dlls "${notfound_dlls}" PARENT_SCOPE )
-  endif()
-
-endfunction()
-
-function(install_common)
-  set(OUT_DIR "${PACKAGE_OUTDIR}")
-  set(BIN_DIR "${OUT_DIR}/bin")
-  set(OTBAPPS_DIR "${OUT_DIR}/lib/otb")
-  set(DATA_DIR "${OUT_DIR}/share")
-
-  ####################### install patchelf #####################
-  install(FILES ${PACKAGE_INSTALLDIR}/tools/patchelf
-    DESTINATION ${OUT_DIR}/tools
-    PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
-
-  if(MAKE_XDK)
-    install(DIRECTORY ${PACKAGE_INSTALLDIR}/share
-      DESTINATION ${OUT_DIR})
-
-    install(DIRECTORY ${PACKAGE_INSTALLDIR}/include
-      DESTINATION ${OUT_DIR}
-      PATTERN "include/OTB*" EXCLUDE )
-
-    install(DIRECTORY ${PACKAGE_INSTALLDIR}/lib/cmake
-      DESTINATION ${OUT_DIR}/lib/
-      PATTERN "lib/cmake/OTB*" EXCLUDE)
-  else()
-    ####################### install GDAL data ###########################
-    find_path(GDAL_DATA epsg.wkt ${PACKAGE_INSTALLDIR}/share/gdal)
-    install(DIRECTORY ${GDAL_DATA} DESTINATION ${DATA_DIR})
-
-    ####################### install otbcli scripts ######################
-    file(GLOB CLI_SCRIPTS ${PACKAGE_INSTALLDIR}/bin/otbcli*)
-    foreach(CLI_SCRIPT ${CLI_SCRIPTS})
-      install(FILES "${CLI_SCRIPT}"
-        DESTINATION ${BIN_DIR}
-        PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
-    endforeach()
-
-    ####################### install otbgui scripts ######################
-    if(WITH_OTBGUI)
-      file(GLOB GUI_SCRIPTS ${PACKAGE_INSTALLDIR}/bin/otbgui*)
-      foreach(GUI_SCRIPT ${GUI_SCRIPTS})
-        install(FILES "${GUI_SCRIPT}"
-          DESTINATION ${BIN_DIR}
-          PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
-      endforeach()
-    endif()
-  endif()
-
-
+  install(DIRECTORY ${DEPENDENCIES_INSTALL_DIR}/lib/cmake
+    DESTINATION ${PKG_STAGE_DIR}/lib/
+    PATTERN "lib/cmake/OTB*" EXCLUDE)
 endfunction()

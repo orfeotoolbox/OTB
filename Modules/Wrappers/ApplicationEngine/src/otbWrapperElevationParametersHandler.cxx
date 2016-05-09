@@ -35,7 +35,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   oss << key<<".dem";
   app->AddParameter(ParameterType_Directory, oss.str(), "DEM directory");
   app->SetParameterDescription(oss.str(),
-                               "This parameter allows selecting a directory containing Digital Elevation Model tiles");
+                               "This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain only DEM files. Unexpected behaviour might occurs if other images are found in this directory.");
   app->MandatoryOff(oss.str());
 
   std::string demDirFromConfig = otb::ConfigurationManager::GetDEMDirectory();

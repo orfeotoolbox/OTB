@@ -39,9 +39,19 @@ int otbGaussianAdditiveNoiseSampleListFilterNew(int itkNotUsed(argc), char * itk
 
 int otbGaussianAdditiveNoiseSampleListFilter(int argc, char * argv[])
 {
+  if (argc < 4)
+    {
+    std::cout << "Usage : test_driver output_filename sample_size samples... " << std::endl;
+    return EXIT_FAILURE;
+    }
   // Compute the number of samples
   const char * outfname = argv[1];
   unsigned int sampleSize = atoi(argv[2]);
+  if (sampleSize == 0)
+    {
+    std::cerr << "Sample size is null!" << std::endl;
+    return EXIT_FAILURE;
+    }
   unsigned int nbSamples = (argc-3)/sampleSize;
 
   FloatSampleListType::Pointer inputSampleList = FloatSampleListType::New();

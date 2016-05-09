@@ -240,9 +240,9 @@ PersistentStatisticsImageFilter<TInputImage>
 
   PixelType minimum;
   PixelType maximum;
-  RealType  mean;
-  RealType  sigma;
-  RealType  variance;
+  RealType  mean = itk::NumericTraits<RealType>::Zero;
+  RealType  sigma = itk::NumericTraits<RealType>::Zero;
+  RealType  variance = itk::NumericTraits<RealType>::Zero;
   RealType  sum;
 
   sum = sumOfSquares = itk::NumericTraits<RealType>::Zero;
@@ -267,13 +267,23 @@ PersistentStatisticsImageFilter<TInputImage>
       maximum = m_ThreadMax[i];
       }
     }
-  // compute statistics
-  mean = sum / static_cast<RealType>(count);
+  if (count > 0)
+    {
+    // compute statistics
+    mean = sum / static_cast<RealType>(count);
 
-  // unbiased estimate
-  variance = (sumOfSquares - (sum * sum / static_cast<RealType>(count)))
-             / (static_cast<RealType>(count) - 1);
-  sigma = vcl_sqrt(variance);
+    if (count > 1)
+      {
+      // unbiased estimate
+      variance = (sumOfSquares - (sum * sum / static_cast<RealType>(count)))
+             / static_cast<RealType>(count - 1);
+      sigma = vcl_sqrt(variance);
+      }
+    }
+  else
+    {
+    itkWarningMacro(<<"No pixel found to compute statistics!");
+    }
 
   // Set the outputs
   this->GetMinimumOutput()->Set(minimum);

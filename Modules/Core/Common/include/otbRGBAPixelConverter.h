@@ -30,7 +30,7 @@ namespace otb
  * \brief Convert an itk::RGBApixel<InternalType> into another pixel
  * type
  *
- * To be usable, the desired convertion must be implemented through
+ * To be usable, the desired conversion must be implemented through
  * partial specialisation mecanism.
  *
  *

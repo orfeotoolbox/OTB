@@ -472,8 +472,8 @@ int main(int argc, char* argv[])
 
       outputImage->SetPixel(currentIndexBis, pixelValue);
       }
-    delete pixelIndexArray;
-    delete currentIndexArray;
+    delete[] pixelIndexArray;
+    delete[] currentIndexArray;
 
     }
 // Software Guide : EndCodeSnippet
