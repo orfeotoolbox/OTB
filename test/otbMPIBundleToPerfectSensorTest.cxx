@@ -100,8 +100,8 @@ int otbMPIBundleToPerfectSensorTest(int argc, char* argv[])
   ExtractFilterType::Pointer channelSelect = ExtractFilterType::New();
   channelSelect->SetChannel(1);
   channelSelect->SetInput(panchroV);
-  channelSelect->UpdateOutputInformation();
   InternalImageType::Pointer panchro = channelSelect->GetOutput();
+  channelSelect->UpdateOutputInformation();
 
   typedef otb::BCOInterpolateImageFunction<FloatVectorImageType> InterpolatorType;
   typedef otb::GenericRSResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  ResamplerType;
@@ -132,8 +132,19 @@ int otbMPIBundleToPerfectSensorTest(int argc, char* argv[])
   FloatVectorImageType::PixelType defaultValue;
   itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, xs->GetNumberOfComponentsPerPixel());
 
-  otb::PleiadesPToXSAffineTransformCalculator::TransformType::OffsetType offset
-        = otb::PleiadesPToXSAffineTransformCalculator::ComputeOffset(panchroV,xs);
+  
+  otb::PleiadesPToXSAffineTransformCalculator::TransformType::OffsetType offset;
+  try
+ {
+   offset = otb::PleiadesPToXSAffineTransformCalculator::ComputeOffset(panchroV,xs);
+ }
+ catch (itk::ExceptionObject& err)
+ {
+    std::stringstream message;
+    message << "ExceptionObject caught: " << err << std::endl;
+    config->logError(message.str());
+    config->abort(EXIT_FAILURE);
+ }
 
   origin+=offset;
   origin[0]=origin[0]/4;
