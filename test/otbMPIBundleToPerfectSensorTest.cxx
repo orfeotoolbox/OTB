@@ -133,7 +133,7 @@ int otbMPIBundleToPerfectSensorTest(int argc, char* argv[])
   itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, xs->GetNumberOfComponentsPerPixel());
 
   otb::PleiadesPToXSAffineTransformCalculator::TransformType::OffsetType offset
-        = otb::PleiadesPToXSAffineTransformCalculator::ComputeOffset(panchro,xs);
+        = otb::PleiadesPToXSAffineTransformCalculator::ComputeOffset(panchroV,xs);
 
   origin+=offset;
   origin[0]=origin[0]/4;
