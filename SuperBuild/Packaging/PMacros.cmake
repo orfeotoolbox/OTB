@@ -34,7 +34,7 @@ macro(macro_setup_cmake_project pkg)
    set(OTB_INSTALL_DIR              \"${OTB_INSTALL_DIR}\")
    set(PACKAGE_SUPPORT_FILES_DIR    \"${OTB_SOURCE_DIR}/SuperBuild/Packaging/Files\")
    set(CMAKE_INSTALL_PREFIX         \"${CMAKE_INSTALL_PREFIX}\")
-   set(ITK_VERSION_STRING           \"${cache_ITK_VERSION_STRING}\")
+   set(ITK_VERSION_STRING           \"${ITK_VERSION_STRING}\")
    set(PKG_GENERATE_XDK              ${PKG_GENERATE_XDK})
    ${EXTRA_CACHE_CONFIG}
    include(\"${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake\")
@@ -106,7 +106,7 @@ macro(macro_create_targets_for_package pkg)
   if(WIN32)
     add_custom_target(PACKAGE-${pkg}
       COMMAND ${ZIP_EXECUTABLE}
-      "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
+      "-rq" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
       WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
       DEPENDS PACKAGE-${pkg}-build
       )
