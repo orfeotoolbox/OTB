@@ -82,7 +82,9 @@ const GlImageActor::PointType & GlImageActor::GetOrigin() const
   return m_Origin;
 }
 
-const GlImageActor::SpacingType & GlImageActor::GetSpacing() const
+const GeoInterface::Spacing2 &
+GlImageActor
+::GetSpacing() const
 {
   return m_Spacing;
 }
@@ -154,7 +156,7 @@ void GlImageActor::Initialize(const std::string & filename)
 
   unsigned int ovrCount = m_FileReader->GetOverviewsCount();
 
-  std::cout << "overview-count: " << ovrCount << std::endl;
+  // std::cout << "overview-count: " << ovrCount << std::endl;
 
   assert( ovrCount>0 );
 
@@ -247,8 +249,6 @@ void GlImageActor::UpdateData()
 
   if( !requested.Crop( largest ) )
     return;
-
-  // std::cout << "Requested: " << requested;
  
   // Now we have the requested part of image, we need to find the
   // corresponding tiles
@@ -259,18 +259,16 @@ void GlImageActor::UpdateData()
   //unsigned int nbTilesY = vcl_ceil(static_cast<double>(requested.GetSize()[1])/m_TileSize);
   unsigned int tileStartX = m_TileSize*(requested.GetIndex()[0]/m_TileSize);
   unsigned int tileStartY = m_TileSize*(requested.GetIndex()[1]/m_TileSize);
-
-  // std::cout << std::endl;
-  // std::cout << "Required tiles: " << nbTilesX << " x " << nbTilesY << std::endl;
-
+  
   SizeType tileSize;
   tileSize.Fill(m_TileSize);
-
+  Tile newTile;
+  
    for(unsigned int i = 0; i < nbTilesX; ++i)
     {
     for(unsigned int j = 0; j<nbTilesY; ++j)
       {
-      Tile newTile;
+      
       newTile.m_TextureId = 0;
 
       IndexType tileIndex;
@@ -280,19 +278,15 @@ void GlImageActor::UpdateData()
       newTile.m_ImageRegion.SetSize(tileSize);
       newTile.m_ImageRegion.SetIndex(tileIndex);
 
-      // std::cout << "Largest: " << largest;
-
       newTile.m_ImageRegion.Crop( largest );
 
       ImageRegionToViewportQuad(newTile.m_ImageRegion,newTile.m_UL,newTile.m_UR,newTile.m_LL,newTile.m_LR,false);
-
-      // std::cout << "Tile: " << newTile.m_ImageRegion; // <<std::endl;
-       // std::cout<<"Mapped to "<<newTile.m_UL<<", "<<newTile.m_UR<<", "<<newTile.m_LL<<", "<<newTile.m_LR<<std::endl;
 
       newTile.m_RedIdx = m_RedIdx;
       newTile.m_GreenIdx = m_GreenIdx;
       newTile.m_BlueIdx = m_BlueIdx;
       newTile.m_Resolution = m_CurrentResolution;
+      newTile.m_TileSize = m_TileSize;
 
       if(!TileAlreadyLoaded(newTile))
         {
@@ -300,6 +294,7 @@ void GlImageActor::UpdateData()
         }
       }
     }
+
 }
 
 bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
@@ -352,8 +347,6 @@ void GlImageActor::Render()
       VectorImageType::PixelType mins(3),maxs(3),omins(3),omaxs(3);
       mins.Fill(0);
       maxs.Fill(255);
-        
-      double gamma(1.0);
 
       bool useNoData(false);
       double noData(0.);
@@ -368,7 +361,15 @@ void GlImageActor::Render()
       maxs[ 1 ] = m_ImageSettings->GetMaxGreen();
       maxs[ 2  ] = m_ImageSettings->GetMaxBlue();
 
-      gamma = m_ImageSettings->GetGamma();
+      // MANTIS-1204
+      // {
+      double gamma = m_ImageSettings->GetGamma();
+
+      gamma =
+	gamma == 0.0
+	? std::numeric_limits< double >::max()
+	: 1.0 / gamma;
+      // }
 
       if( m_ImageSettings->GetUseNoData() )
 	noData = m_ImageSettings->GetNoData();
@@ -630,9 +631,12 @@ void GlImageActor::CleanLoadedTiles()
        || it->m_RedIdx != m_RedIdx
        || it->m_GreenIdx != m_GreenIdx
        || it->m_BlueIdx != m_BlueIdx
-       || it->m_ImageRegion.GetSize()[0]!=m_TileSize
-       || it->m_ImageRegion.GetSize()[1]!=m_TileSize)
-      {     
+       // We need to compare with theoretical tile size as actual tile
+       // size might be smaller at images borders
+       || it->m_TileSize!=m_TileSize)
+      {
+       
+      
       // Tile will not be used anymore, unload it from GPU
       UnloadTile(*it);
       }
@@ -972,43 +976,60 @@ void GlImageActor::UpdateResolution()
   double distAC = vcl_sqrt((pointA[0]-pointC[0])*(pointA[0]-pointC[0])+(pointA[1]-pointC[1])*(pointA[1]-pointC[1]));
   
   double resolution = std::min(100/distAB,100/distAC);
-  
+
+  // std::cout << std::endl;
+  // std::cout << "resolution: " << resolution << std::endl;
+
   // Arbitrary higher than any distance we will compute here
   double minDist = 50000.;
   m_CurrentResolution = 0;
 
-  bool isFound = false;
-
   // OTB always include full resolution level in available resolutions.
   assert( !m_AvailableResolutions.empty() );
 
-  // Compute the diff and keep the index that minimize the distance
-  for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
-       it != m_AvailableResolutions.end(); ++it)
+  // MANTIS-1179: resolution>1 <=> zooming in past 1:1 scale. So, cap
+  // resolution to index 0.
+  if( resolution<1.0 )
     {
+    bool isFound = false;
 
-    double diff = 1/((double)(1<<(*it))) - resolution;
-
-    if( ( ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower &&
-	    diff < 0 )
-	  ||
-	  ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper &&
-	    diff > 0 )
-	  ||
-	  ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest ) )
-	&&
-	vcl_abs(diff) < minDist )
+    // Compute the diff and keep the index that minimize the distance
+    for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
+	 it != m_AvailableResolutions.end(); ++it)
       {
-      isFound = true;
+      double diff = 1/((double)(1<<(*it))) - resolution;
 
-      minDist = vcl_abs(diff);
-      m_CurrentResolution = std::distance(m_AvailableResolutions.begin(),it);
+      // std::cout << "diff: " << diff << std::endl;
+
+      if( ( ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower &&
+	      diff <= 0 )
+	    ||
+	    ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper &&
+	      diff >= 0 )
+	    ||
+	    ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest ) )
+	  &&
+	  vcl_abs(diff) < minDist )
+	{
+	isFound = true;
+
+	minDist = vcl_abs(diff);
+	m_CurrentResolution = std::distance(m_AvailableResolutions.begin(),it);
+
+	// std::cout << "found: " << m_CurrentResolution << std::endl;
+	}
+      }
+
+    // MANTIS-1147: Cap current-resolution.
+    if( !isFound )
+      {
+      assert( m_AvailableResolutions.size() > 0 );
+
+      m_CurrentResolution = m_AvailableResolutions.size() - 1;
+
+      // std::cout << "not found: " << m_CurrentResolution << std::endl;
       }
     }
-
-  // MANTIS-1147: Cap current-resolution.
-  if( !isFound )
-    m_CurrentResolution = m_AvailableResolutions.size() - 1;
 
   std::ostringstream extFilename;
   extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;

@@ -2,7 +2,7 @@ set(DOCUMENTATION "This module imports GLUT to the build system")
 
 otb_module(OTBGlut
   DEPENDS
-    
+  OTBOpenGL
   TEST_DEPENDS
     
   DESCRIPTION
