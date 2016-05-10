@@ -60,9 +60,9 @@ EOF
 
 if [ -f lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake ]; then
     rm -fr $OUT_DIR/bin/*
-    sed -i "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
-    sed -i "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
-    sed -i "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
+    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
+    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
+    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
 fi
 
 rm -fr $OUT_DIR/tools
