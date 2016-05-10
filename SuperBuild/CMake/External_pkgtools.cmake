@@ -6,17 +6,9 @@ set(PKGTOOLS_SB_PREFIX_DIR "${CMAKE_BINARY_DIR}/PACKAGE-TOOLS")
 include(ExternalProject)
 
 if(WIN32)
-  ExternalProject_Add(PACKAGE-TOOLS
-    PREFIX "${PKGTOOLS_SB_PREFIX_DIR}"
-    URL "https://www.orfeo-toolbox.org/packages/qt4-native-tools-win64.zip"
-    URL_MD5 0e4bfd5677eb63ae691f4615a4338490
-    DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-    CONFIGURE_COMMAND  ""
-    BUILD_COMMAND      ""
-    INSTALL_COMMAND    ""
-    )
+  add_custom_target(PACKAGE-TOOLS)
+  return()
 endif()
-
 
 if(UNIX AND NOT WIN32)
   if(APPLE)
