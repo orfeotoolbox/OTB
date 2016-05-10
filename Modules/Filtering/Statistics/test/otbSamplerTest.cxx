@@ -48,10 +48,18 @@ int otbPeriodicSamplerTest(int, char *[])
   sampler->SetNumberOfElements(5,23);
   sampler->SetParameters(param);
   std::string test1 = RunSampler<otb::PeriodicSampler>(sampler,23);
+  
+  if ( sampler->GetChosenElements() != sampler->GetNeededElements() )    {
+    std::cout << "Wrong nb of needed elements :" << std::endl;
+    std::cout << "  expected : " << sampler->GetNeededElements() << std::endl;
+    std::cout << "  got : " << sampler->GetChosenElements() << std::endl;
+    return EXIT_FAILURE;
+    }
+  
   std::string baseline1("__X____X___X____X____X_");
   if (test1 != baseline1)
     {
-    std::cout << "Wrong sampling sequence :" << std::endl;
+    std::cout << "1 - Wrong sampling sequence :" << std::endl;
     std::cout << "  expected : " << baseline1 << std::endl;
     std::cout << "  got : " << test1 << std::endl;
     return EXIT_FAILURE;
@@ -64,7 +72,7 @@ int otbPeriodicSamplerTest(int, char *[])
   std::string baseline2("__X__X__X__X__X__X__X__");
   if (test2 != baseline2)
     {
-    std::cout << "Wrong sampling sequence :" << std::endl;
+    std::cout << "2 - Wrong sampling sequence :" << std::endl;
     std::cout << "  expected : " << baseline2<< std::endl;
     std::cout << "  got : " << test2 << std::endl;
     return EXIT_FAILURE;
@@ -83,10 +91,18 @@ int otbPatternSamplerTest(int, char *[])
   sampler->SetNumberOfElements(5,23);
   sampler->SetParameters(param);
   std::string test1 = RunSampler<otb::PatternSampler>(sampler,23);
+  
+  if ( sampler->GetChosenElements() != sampler->GetNeededElements() )    {
+    std::cout << "Wrong nb of needed elements :" << std::endl;
+    std::cout << "  expected : " << sampler->GetNeededElements() << std::endl;
+    std::cout << "  got : " << sampler->GetChosenElements() << std::endl;
+    return EXIT_FAILURE;
+    }
+  
   std::string baseline1("_______X____X____XX__X_");
   if (test1 != baseline1)
     {
-    std::cout << "Wrong sampling sequence :" << std::endl;
+    std::cout << "1 - Wrong sampling sequence :" << std::endl;
     std::cout << "  expected : " << baseline1 << std::endl;
     std::cout << "  got : " << test1 << std::endl;
     return EXIT_FAILURE;
@@ -109,7 +125,7 @@ int otbPatternSamplerTest(int, char *[])
   std::string baseline2("_X__XX__X__XX__X__X____");
   if (test2 != baseline2)
     {
-    std::cout << "Wrong sampling sequence :" << std::endl;
+    std::cout << "2 - Wrong sampling sequence :" << std::endl;
     std::cout << "  expected : " << baseline2 << std::endl;
     std::cout << "  got : " << test2 << std::endl;
     return EXIT_FAILURE;
@@ -128,10 +144,18 @@ int otbRandomSamplerTest(int, char *[])
   sampler->SetNumberOfElements(5,23);
   sampler->SetParameters(param);
   std::string test1 = RunSampler<otb::RandomSampler>(sampler,23);
+  
+  if ( sampler->GetChosenElements() != sampler->GetNeededElements() )    {
+    std::cout << "Wrong nb of needed elements :" << std::endl;
+    std::cout << "  expected : " << sampler->GetNeededElements() << std::endl;
+    std::cout << "  got : " << sampler->GetChosenElements() << std::endl;
+    return EXIT_FAILURE;
+    }
+  
   std::string baseline1("_X_X____X____X________X");
   if (test1 != baseline1)
     {
-    std::cout << "Wrong sampling sequence :" << std::endl;
+    std::cout << "1 - Wrong sampling sequence :" << std::endl;
     std::cout << "  expected : " << baseline1 << std::endl;
     std::cout << "  got : " << test1 << std::endl;
     return EXIT_FAILURE;
@@ -144,11 +168,12 @@ int otbRandomSamplerTest(int, char *[])
   std::string baseline2("__X_X_XXX_____XX_____X_");
   if (test2 != baseline2)
     {
-    std::cout << "Wrong sampling sequence :" << std::endl;
+    std::cout << "2 - Wrong sampling sequence :" << std::endl;
     std::cout << "  expected : " << baseline2 << std::endl;
     std::cout << "  got : " << test2 << std::endl;
     return EXIT_FAILURE;
     }
+    
   
   return EXIT_SUCCESS;
 }
