@@ -42,26 +42,23 @@ bool
 RandomSampler::TakeSample(void)
 {
   bool ret = false;
+  this->m_ProcessedElements += 1UL;
+  if (this->m_ProcessedElements >= this->GetTotalElements() ||
+        this->m_ChosenElements >= this->GetNeededElements())
+        return false;
+        
   double rate = this->GetRate();
   if (this->m_Parameters.Adaptative)
     {
-    if (this->m_ProcessedElements >= this->GetTotalElements() ||
-        this->m_ChosenElements >= this->GetNeededElements())
-      {
-      rate = 0.0;
-      }
-    else
-      {
       rate = double(this->GetNeededElements() - this->m_ChosenElements) /
             double(this->GetTotalElements() - this->m_ProcessedElements);
-      }
     }
+
   if (rate > m_Generator->GetUniformVariate(0.0, 1.0))
     {
     ret = true;
     this->m_ChosenElements += 1UL;
     }
-  this->m_ProcessedElements += 1UL;
   return ret;
 }
 
