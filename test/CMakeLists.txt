@@ -117,9 +117,11 @@ otb_add_test_mpi(NAME otbMPISPTWReadWriteTestNb4
 otb_add_test_mpi(NAME otbMPIBundleToPerfectSensorTestNb1
    NBPROCS 1
    COMMAND otbMPIModuleTestDriver 
+   --compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/phr_fusion.tif
+   ${TEMP}/imageMPIBundleToPerfectSensorTestNb1.vrt
    otbMPIBundleToPerfectSensorTest 
-   ${INPUTDATA}/FCGC600359918/IMG_PHR1A_P_001/IMG_PHR1A_P_201604170156370_ORT_1743911101-001_R1C1.TIF
-   ${INPUTDATA}/FCGC600359918/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201604170156370_ORT_1743911101-002_R1C1.TIF
+   ${INPUTDATA}/IMAGE_TIFF/phr_pan.tif
+   ${INPUTDATA}/IMAGE_TIFF/phr_xs.tif
    ${TEMP}/imageMPIBundleToPerfectSensorTestNb1.tif
    )
 
@@ -127,9 +129,11 @@ otb_add_test_mpi(NAME otbMPIBundleToPerfectSensorTestNb1
 otb_add_test_mpi(NAME otbMPIBundleToPerfectSensorTestNb2
    NBPROCS 2
    COMMAND otbMPIModuleTestDriver 
+   --compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/phr_fusion.tif
+   ${TEMP}/imageMPIBundleToPerfectSensorTestNb2.vrt
    otbMPIBundleToPerfectSensorTest 
-   ${INPUTDATA}/FCGC600359918/IMG_PHR1A_P_001/IMG_PHR1A_P_201604170156370_ORT_1743911101-001_R1C1.TIF
-   ${INPUTDATA}/FCGC600359918/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201604170156370_ORT_1743911101-002_R1C1.TIF
+   ${INPUTDATA}/IMAGE_TIFF/phr_pan.tif
+   ${INPUTDATA}/IMAGE_TIFF/phr_xs.tif
    ${TEMP}/imageMPIBundleToPerfectSensorTestNb2.tif
    )
 

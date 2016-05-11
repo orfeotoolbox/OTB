@@ -169,7 +169,7 @@ int otbMPIBundleToPerfectSensorTest(int argc, char* argv[])
 
   // Update MPI Pipeline
   std::string outputFilename = std::string(argv[3]);
-  config->UpdateMPI(fusionFilter->GetOutput(),outputFilename, false, true);
+  config->UpdateMPI(fusionFilter->GetOutput(),outputFilename, true, true);
   
   // End chrono
   boost::chrono::thread_clock::time_point stopTimer = boost::chrono::thread_clock::now();

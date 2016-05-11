@@ -104,6 +104,10 @@ template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::st
     {
       writer->SetNumberOfDivisionsTiledStreaming(0);
     }
+    else
+    {
+      writer->SetTileDimensionTiledStreaming(1024);
+    }
     // Pipeline execution
     try
     {
