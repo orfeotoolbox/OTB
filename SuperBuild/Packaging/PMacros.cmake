@@ -109,6 +109,7 @@ macro(macro_create_targets_for_package pkg)
       "-rq" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
       WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
       DEPENDS PACKAGE-${pkg}-build
+      COMMENT "Creating ${CMAKE_BINARY_DIR}/${archive_name}.zip"
       )
   else()
     add_custom_target(PACKAGE-${pkg}
@@ -122,6 +123,7 @@ macro(macro_create_targets_for_package pkg)
       "./pkgsetup"
       WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
       DEPENDS PACKAGE-${pkg}-build
+      COMMENT "Creating ${CMAKE_CURRENT_BINARY_DIR}/${archive_name}.run"
       )
   endif()
 
