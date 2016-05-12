@@ -70,7 +70,7 @@ EOF
 
 fi
 
-echo "Creating symbolic links..."
+#echo "Creating symbolic links..."
 . ./make_symlinks
 
 $RM -fr $OUT_DIR/tools
