@@ -20,7 +20,7 @@ macro(macro_setup_cmake_project pkg)
 
   #set archive name inside loop
   file(WRITE "${PACKAGE_PROJECT_DIR}/src/CMakeLists.txt"
-  "cmake_minimum_required(VERSION 2.6)
+  "cmake_minimum_required(VERSION 3.2)
    include(CMakeParseArguments)
    include(CMakeDetermineSystem)
    set(CMAKE_BUILD_TYPE             Release)
@@ -113,6 +113,7 @@ macro(macro_create_targets_for_package pkg)
   else()
     add_custom_target(PACKAGE-${pkg}
       COMMAND ${MAKESELF_SCRIPT}
+      "--quiet"
       "--target"
       "${archive_name}"
       "${CMAKE_INSTALL_PREFIX}/${archive_name}"
