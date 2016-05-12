@@ -8,7 +8,8 @@ cd `dirname $0`
 OUT_DIR=`pwd`
 CAT=`which cat`
 RM=`which rm`
-chmod=`which chmod`
+CHMOD=`which chmod`
+SED=`which sed`
 WHICH_ENV=`which env`
 
 PATCH_ELF_EXE=$OUT_DIR/tools/patchelf
@@ -26,12 +27,12 @@ for bin_file in $BINARY_FILES; do
     fi
 done
 
-i_am_xdk=@IS_XDK@
+I_AM_XDK=@IS_XDK@
 
-if [ "$i_am_xdk" = true ] ; then
-    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
-    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
-    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
+if [ "$I_AM_XDK" = true ] ; then
+    $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
+    $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
+    $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
 else
 $CAT > $OUT_DIR/monteverdi.sh << EOF
 #!$WHICH_ENV bash
@@ -67,10 +68,10 @@ export GDAL_DATA
 export GEOTIFF_CSV
 EOF
 
+fi
+
 echo "Creating symbolic links..."
 . ./make_symlinks
-
-fi
 
 $RM -fr $OUT_DIR/tools
 
