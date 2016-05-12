@@ -2,6 +2,7 @@
 #define __SimpleParallelTiffWriter_txx
 
 
+#include "itkTimeProbe.h"
 
 using std::vector;
 
@@ -42,7 +43,8 @@ SimpleParallelTiffWriter<TInputImage>
 
 	// By default, we use tiled streaming, with automatic tile size
 	// We don't set any parameter, so the memory size is retrieved from the OTB configuration options
-	this->SetAutomaticAdaptativeStreaming();
+	//this->SetAutomaticAdaptativeStreaming();
+	this->SetAutomaticStrippedStreaming();
 
 	m_FilenameHelper = FNameHelperType::New();
    }
@@ -56,6 +58,25 @@ SimpleParallelTiffWriter<TInputImage>
 {
 }
 
+/*
+ * Arranges the splitting layout to match the number of MPI processes
+ */
+template <class TInputImage>
+unsigned int
+SimpleParallelTiffWriter<TInputImage>
+::OptimizeStrippedSplittingLayout(unsigned int n)
+ {
+  unsigned int m = static_cast<unsigned int >(m_NProcs);
+  if (n > m_NProcs)
+    {
+    float div = static_cast<float>(n) / static_cast<float>(m_NProcs);
+    m *= static_cast<unsigned int>(div);
+    }
+  std::cout << "Changing number of split from " << n << " to " << m << std::endl;
+  return m;
+
+ }
+
 template <class TInputImage>
 void
 SimpleParallelTiffWriter<TInputImage>
@@ -66,6 +87,7 @@ SimpleParallelTiffWriter<TInputImage>
 	streamingManager->SetNumberOfDivisions(nbDivisions);
 
 	m_StreamingManager = streamingManager;
+
  }
 
 template <class TInputImage>
@@ -90,6 +112,7 @@ SimpleParallelTiffWriter<TInputImage>
 	streamingManager->SetNumberOfLinesPerStrip(nbLinesPerStrip);
 
 	m_StreamingManager = streamingManager;
+
  }
 
 template <class TInputImage>
@@ -103,6 +126,7 @@ SimpleParallelTiffWriter<TInputImage>
 	streamingManager->SetBias(bias);
 
 	m_StreamingManager = streamingManager;
+
  }
 
 template <class TInputImage>
@@ -126,6 +150,7 @@ SimpleParallelTiffWriter<TInputImage>
 	typename RAMDrivenTiledStreamingManagerType::Pointer streamingManager = RAMDrivenTiledStreamingManagerType::New();
 	streamingManager->SetAvailableRAMInMB(availableRAM);
 	streamingManager->SetBias(bias);
+
 	m_StreamingManager = streamingManager;
  }
 
@@ -138,6 +163,7 @@ SimpleParallelTiffWriter<TInputImage>
 	typename RAMDrivenAdaptativeStreamingManagerType::Pointer streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
 	streamingManager->SetAvailableRAMInMB(availableRAM);
 	streamingManager->SetBias(bias);
+
 	m_StreamingManager = streamingManager;
  }
 
@@ -616,23 +642,35 @@ SimpleParallelTiffWriter<TInputImage>
 	 *  	Raster update with SPTW
 	 ************************************************************************/
 
+	// Time probe for overall process time
+	itk::TimeProbe overallTime;
+	overallTime.Start();
+
 	// Check that streaming is relevant
 	m_StreamingManager->PrepareStreaming(inputPtr, inputRegion);
 	m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
+
+	// TODO make it work on tiled splits
+	// Recompute a new splitting layout which fits better the MPI number of processes
+	unsigned int newNumberOfStrippedSplits = OptimizeStrippedSplittingLayout(m_NumberOfDivisions);
+	this->SetNumberOfDivisionsStrippedStreaming(newNumberOfStrippedSplits);
+    m_StreamingManager->PrepareStreaming(inputPtr, inputRegion);
+    m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
+
 	//	if (inputPtr->GetBufferedRegion() == inputRegion)
 	//	{
 	//		otbMsgDevMacro(<< "Buffered region is the largest possible region, there is no need for streaming.");
 	//		this->SetNumberOfDivisionsStrippedStreaming(1);
 	//	}
 	//	else if (m_NumberOfDivisions < m_NProcs)
-	if (m_NumberOfDivisions < m_NProcs)
-	{
-		itkWarningMacro(<< "Number of divisions ("<< m_NumberOfDivisions << ") < process count ("
-				<< m_NProcs << "). Setting Number of divisions to " << m_NProcs);
-		this->SetNumberOfDivisionsStrippedStreaming(m_NProcs);
-		m_StreamingManager->PrepareStreaming(inputPtr, inputRegion);
-		m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
-	}
+//	if (m_NumberOfDivisions < m_NProcs)
+//	{
+//		itkWarningMacro(<< "Number of divisions ("<< m_NumberOfDivisions << ") < process count ("
+//				<< m_NProcs << "). Setting Number of divisions to " << m_NProcs);
+//		this->SetNumberOfDivisionsStrippedStreaming(m_NProcs);
+//		m_StreamingManager->PrepareStreaming(inputPtr, inputRegion);
+//		m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
+//	}
 
 	// Configure process objects
 	this->UpdateProgress(0);
@@ -662,8 +700,8 @@ SimpleParallelTiffWriter<TInputImage>
 	}
 
 	// Loop on streaming tiles
-	double processDuration, writeDuration;
-	double processStart, writeStart;
+	double processDuration(0), writeDuration(0), numberOfProcessedRegions(0);
+
 	InputImageRegionType streamRegion;
 	for (m_CurrentDivision = 0;
 			m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
@@ -675,16 +713,19 @@ SimpleParallelTiffWriter<TInputImage>
 			/*
 			 * Processing
 			 */
-			processStart = MPI_Wtime();
+			itk::TimeProbe processingTime;
+			processingTime.Start();
 			inputPtr->SetRequestedRegion(streamRegion);
 			inputPtr->PropagateRequestedRegion();
 			inputPtr->UpdateOutputData();
-			processDuration += (MPI_Wtime() - processStart);
+			processingTime.Stop();
+			processDuration += processingTime.GetTotal();
 
 			/*
 			 * Writing using SPTW
 			 */
-			writeStart = MPI_Wtime();
+            itk::TimeProbe writingTime;
+            writingTime.Start();
 			if (!m_VirtualMode)
 			{
 				sptw::write_area(output_raster,
@@ -694,7 +735,9 @@ SimpleParallelTiffWriter<TInputImage>
 						streamRegion.GetIndex()[0] + streamRegion.GetSize()[0] -1,
 						streamRegion.GetIndex()[1] + streamRegion.GetSize()[1] -1);
 			}
-			writeDuration += (MPI_Wtime() - writeStart);
+			writingTime.Stop();
+			writeDuration += writingTime.GetTotal();
+			numberOfProcessedRegions += 1;
 		}
 	}
 
@@ -704,10 +747,11 @@ SimpleParallelTiffWriter<TInputImage>
 
 	// We wait for other process
 	MPI_Barrier(MPI_COMM_WORLD);
+	overallTime.Stop();
 
 	// Get timings
-	const int nValues = 2;
-	double runtimes[nValues] = {processDuration, writeDuration};
+	const int nValues = 3;
+	double runtimes[nValues] = {processDuration, writeDuration, numberOfProcessedRegions};
 	std::vector<double> process_runtimes(m_NProcs*nValues);
 	MPI_Gather(runtimes,
 			nValues,
@@ -719,15 +763,23 @@ SimpleParallelTiffWriter<TInputImage>
 			MPI_COMM_WORLD);
 
 
-	if (m_MyRank == 0 && m_Verbose) {
+	if (m_MyRank == 0 && m_Verbose)
+	  {
 
-		std::cout << "Runtimes, in seconds" << std::endl;
-		std::cout <<"Process Id\tProcessing\tWriting" << std::endl;
-		for (unsigned int i = 0; i < process_runtimes.size(); i+=2) {
-			std::cout << (int (i/2)) << "\t" << process_runtimes[i] << "\t" << process_runtimes[i+1] << std::endl;
-		}
+	  std::cout << "Runtimes, in seconds" << std::endl;
+	  std::cout <<"Process Id\tProcessing\tWriting" << std::endl;
+	  for (unsigned int i = 0; i < process_runtimes.size(); i+=nValues)
+	    {
+	    std::cout << (int (i/nValues)) <<
+	        "\t" << process_runtimes[i] <<
+	        "\t" << process_runtimes[i+1] <<
+	        "\t("<< process_runtimes[i+2] << " regions)" << std::endl;
+	    }
 
-	}
+	  std::cout << "Overall time:" << overallTime.GetTotal() << std::endl;
+	  }
+
+
 
 	/**
 	 * If we ended due to aborting, push the progress up to 1.0 (since
