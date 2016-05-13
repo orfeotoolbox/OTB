@@ -41,82 +41,76 @@ namespace mpi {
 class MPIConfig: public itk::Object
 {
 public:
-   /** Standard class typedefs. */
-   typedef MPIConfig                     Self;
-   typedef itk::Object                   Superclass;
-   typedef itk::SmartPointer<Self>       Pointer;
-   typedef itk::SmartPointer<const Self> ConstPointer;
+  /** Standard class typedefs. */
+  typedef MPIConfig                     Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-   /** Method for creation through the object factory. */
-   itkNewMacro(Self);
+  /** Retrieve the singleton instance */
+  static Pointer Instance();
+  
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(MPIConfig, itk::Object);
 
-   /** Run-time type information (and related methods). */
-   itkTypeMacro(MPIConfig, itk::Object);
+  /** MPI Parameters accessors */
+  itkGetMacro(MyRank, int);
+  itkGetMacro(NbProcs, int);
 
-   /** MPI Parameters accessors */
-   itkGetMacro(MyRank, int);
-   itkGetMacro(NbProcs, int);
+  /** Initialize MPI Processus */
+  void Init(int& argc, char** &argv, bool abortOnException = true);
 
-   /** Initialize MPI Processus */
-   void Init(int& argc, char** &argv, bool abortOnException = true);
+  /** Abort all MPI processus. */
+  void abort(int errCode);
 
-   /** Abort all MPI processus. */
-   void abort(int errCode);
+  /** Log error */
+  void logError(const std::string message);
 
-   /** Log error */
-   void logError(const std::string message);
-
-   /** Log info */
-   void logInfo(const std::string message);
-
-   //** MPI Update */
-   template <typename TImage> void UpdateMPI (TImage *img, const std::string &prefix, bool useStreaming, bool writeVRTFile);
+  /** Log info */
+  void logInfo(const std::string message);
 
 protected:
-   /** Constructor */
-   MPIConfig();
+  /** Constructor */
+  MPIConfig();
 
-   /** Destructor */
-   virtual ~MPIConfig();
+  /** Destructor */
+  virtual ~MPIConfig();
 
 private:
 
-   MPIConfig(const MPIConfig &); //purposely not implemented
-   void operator =(const MPIConfig&); //purposely not implemented
+  MPIConfig(const MPIConfig &); //purposely not implemented
+  void operator =(const MPIConfig&); //purposely not implemented
 
-   // MPI rank
-   int m_MyRank;
-   // Number of MPI processus
-   int m_NbProcs;
-   // Boolean to abort on exception
-   bool m_abortOnException;
-   // Boolean to test if the MPI environment is initialized
-   bool m_initialized;
+  // MPI rank
+  int m_MyRank;
+  // Number of MPI processus
+  int m_NbProcs;
+  // Boolean to abort on exception
+  bool m_abortOnException;
+  // Boolean to test if the MPI environment is initialized
+  bool m_initialized;
 
+  static Pointer m_Singleton;
 };
 
 /**
   * Call the MPI routine MPIFunc with arguments Args (surrounded by
   * parentheses). If the result is not MPI_SUCCESS, throw an exception.
   */
-#define OTB_MPI_CHECK_RESULT( MPIFunc, Args )                         \
-  { \
-    int _result = MPIFunc Args;                                  \
-    if (_result != MPI_SUCCESS)                                  \
-    {                                                            \
-      std::stringstream message; \
+#define OTB_MPI_CHECK_RESULT( MPIFunc, Args )                           \
+  {                                                                     \
+    int _result = MPIFunc Args;                                         \
+    if (_result != MPI_SUCCESS)                                         \
+      {                                                                 \
+      std::stringstream message;                                        \
       message << "otb::mpi::ERROR: " << #MPIFunc << " (Code = " << _result; \
       ::itk::ExceptionObject _e(__FILE__, __LINE__, message.str().c_str()); \
-      throw _e; \
-    }\
+      throw _e;                                                         \
+      }                                                                 \
   }
 
 } // End namespace mpi
 
 } // End namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMPIConfig.txx"
-#endif
 
 #endif //__otbMPIConfig_h

@@ -24,13 +24,32 @@ namespace otb {
 
 namespace mpi {
 
+/** Initialize the singleton */
+MPIConfig::Pointer MPIConfig::m_Singleton = NULL;
+
+MPIConfig::Pointer MPIConfig::Instance()
+{
+  if(m_Singleton.GetPointer() == NULL)
+    {
+    m_Singleton = itk::ObjectFactory<Self>::Create();
+
+    if(m_Singleton.GetPointer() == NULL)
+      {
+      m_Singleton = new MPIConfig;
+      }
+    m_Singleton->UnRegister();
+    }
+
+  return m_Singleton;
+}
+
+
 /** CreateInitialize MPI environment */
 MPIConfig::MPIConfig()
-   : m_initialized(false),
+  :  m_MyRank(-1),
+     m_NbProcs(0),
      m_abortOnException(true),
-     m_MyRank(-1),
-     m_NbProcs(0)
-
+     m_initialized(false)
 {
 }
 
