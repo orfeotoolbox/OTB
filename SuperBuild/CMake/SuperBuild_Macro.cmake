@@ -122,13 +122,11 @@ endmacro(ADD_SUPERBUILD_CMAKE_VAR)
 macro(ADD_SUPERBUILD_CONFIGURE_VAR project var name)
   set(suffix "${ARGV3}")
   if(DEFINED _SB_${var})
-    list(APPEND ${project}_SB_CONFIG
-      ${name}=${_SB_${var}}${suffix}
-      )
+    set(${project}_SB_CONFIG
+      ${${project}_SB_CONFIG} ${name}=${_SB_${var}}${suffix})
   elseif(DEFINED ${var})
-    list(APPEND ${project}_SB_CONFIG
-      ${name}=${${var}}${suffix}
-      )
+    set(${project}_SB_CONFIG
+      ${${project}_SB_CONFIG} ${name}=${${var}}${suffix})
   endif()
 endmacro(ADD_SUPERBUILD_CONFIGURE_VAR)
 
@@ -144,13 +142,27 @@ macro(SUPERBUILD_PATCH_SOURCE project external_project_step_name)
     #default value
     set(${project}_PATCH_DIR ${CMAKE_SOURCE_DIR}/patches/${project})
   endif()
-  ExternalProject_Add_Step(${project} ${external_project_step_name}
-    COMMAND
-    ${CMAKE_COMMAND}
-    -DSOURCE_DIR=${${project}_SB_SRC}
-    -DPATCH_DIR=${${project}_PATCH_DIR}
-    -P ${CMAKE_SOURCE_DIR}/CMake/patch.cmake
-    DEPENDEES patch update
-    DEPENDERS configure
-    )
+
+  if(WIN32)
+    set(DIFF_FILE_MATCH_STRING "win")
+  else()
+    if(APPLE)
+      set(DIFF_FILE_MATCH_STRING "macx")
+    else() #Linux
+      set(DIFF_FILE_MATCH_STRING "linux")
+    endif()
+  endif() #WIN32
+  file(GLOB files_list "${PATCH_DIR}/*${DIFF_FILE_MATCH_STRING}*diff")
+  if(files_list)
+    ExternalProject_Add_Step(${project} ${external_project_step_name}
+      COMMAND
+      ${CMAKE_COMMAND}
+      -DSOURCE_DIR=${${project}_SB_SRC}
+      -DPATCH_DIR=${${project}_PATCH_DIR}
+      -DDIFF_FILE_MATCH_STRING=${DIFF_FILE_MATCH_STRING}
+      -P ${CMAKE_SOURCE_DIR}/CMake/patch.cmake
+      DEPENDEES patch update
+      DEPENDERS configure
+      )
+  endif()
 endmacro(SUPERBUILD_PATCH_SOURCE)
