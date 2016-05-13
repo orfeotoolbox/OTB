@@ -12,6 +12,7 @@ foreach(req
     CMAKE_MAKE_PROGRAM
     CTEST_CMAKE_GENERATOR
     OTB_INSTALL_DIR
+    XDK_INSTALL_DIR
     CTEST_COMMAND
     )
   if(NOT DEFINED ENV{${req}})
@@ -52,7 +53,16 @@ OTB_USE_OPENGL:BOOL=ON
 OTB_USE_GLEW:BOOL=ON
 CMAKE_C_FLAGS:STRING=-Wextra
 CMAKE_CXX_FLAGS:STRING=-Wextra -Wno-gnu-static-float-init -Wno-\\#warnings
-CMAKE_BUILD_TYPE=Release"
+CMAKE_BUILD_TYPE=${CTEST_BUILD_CONFIGURATION}
+QT_INSTALL_TRANSLATIONS:PATH=${XDK_INSTALL_DIR}/translations
+QT_MOC_EXECUTABLE:FILEPATH=${XDK_INSTALL_DIR}/bin/moc
+QT_UIC_EXECUTABLE:FILEPATH=${XDK_INSTALL_DIR}/bin/uic
+QT_RCC_EXECUTABLE:FILEPATH=${XDK_INSTALL_DIR}/bin/rcc
+QT_INSTALL_PLUGINS:PATH=${XDK_INSTALL_DIR}/plugins
+QT_INSTALL_HEADERS:PATH=${XDK_INSTALL_DIR}/include
+QMAKE_MKSPECS:PATH=${XDK_INSTALL_DIR}/mkspecs
+"
+
 )
 file(WRITE "${CTEST_BINARY_DIRECTORY}/CMakeCache.txt" ${INITIAL_CACHE})
 
@@ -64,14 +74,22 @@ message(STATUS "Found ${_update_rv} changed files")
 ctest_configure (BUILD "${CTEST_BINARY_DIRECTORY}" RETURN_VALUE _configure_rv)
 ctest_read_custom_files(${CTEST_BINARY_DIRECTORY})
 
+
+if(NOT _configure_rv EQUAL 0)
+  do_submit()
+endif()
+
 ctest_build     (BUILD "${CTEST_BINARY_DIRECTORY}" RETURN_VALUE _build_rv)
 
-execute_process(
-  COMMAND  ${CTEST_COMMAND} "-R" "Tu" "."
+if(NOT _build_rv EQUAL 0)
+  do_submit()
+endif ()
+
+execute_process(COMMAND  ${CTEST_COMMAND} "-R" "Tu" "."
   WORKING_DIRECTORY "${CTEST_BINARY_DIRECTORY}"
   )
-#ctest_test      (BUILD "${CTEST_BINARY_DIRECTORY}" INCLUDE Tu RETURN_VALUE _test_rv)
-# if(NOT _configure_rv EQUAL 0 OR NOT _build_rv EQUAL 0)
-# endif ()
 
-ctest_submit()
+macro(do_submit)
+  ctest_submit()
+  return()
+endmacro()

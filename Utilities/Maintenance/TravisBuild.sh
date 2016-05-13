@@ -71,5 +71,7 @@ wget https://www.orfeo-toolbox.org/packages/xdk/$XDK_VERSION/$XDK_FILE --no-chec
 chmod +x /tmp/$XDK_FILE
 /tmp/$XDK_FILE
 
+XDK_INSTALL_DIR=/tmp/$XDK_FILE
+export XDK_INSTALL_DIR
 echo "Running ctest -VV -S TravisBuild.cmake"
 $CTEST_COMMAND -VV -S $CTEST_DASHBOARD_ROOT/orfeotoolbox/OTB/Utilities/Maintenance/TravisBuild.cmake
