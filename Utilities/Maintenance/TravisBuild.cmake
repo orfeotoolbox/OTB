@@ -85,9 +85,13 @@ if(NOT _build_rv EQUAL 0)
   do_submit()
 endif ()
 
+#ctest_test with extra verbose is annoying in travis build log.
+#Afer all these are unit-test without much revelent extra verbose output
 execute_process(COMMAND  ${CTEST_COMMAND} "-R" "Tu" "."
   WORKING_DIRECTORY "${CTEST_BINARY_DIRECTORY}"
   )
+
+do_submit()
 
 macro(do_submit)
   ctest_submit()
