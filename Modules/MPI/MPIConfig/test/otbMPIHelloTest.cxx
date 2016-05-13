@@ -27,11 +27,11 @@ int otbMPIHelloTest(int argc, char* argv[]) {
 
   // MPI Configuration
   typedef otb::mpi::MPIConfig    MPIConfigType;
-  MPIConfigType::Pointer config = MPIConfigType::New();
+  MPIConfigType::Pointer config = MPIConfigType::Instance();
   config->Init(argc,argv,true);
 
   // Test
-  std::cout<<"OTB Hello World ! Je suis le processus "<<config->GetMyRank()<<" parmi "<<config->GetNbProcs()<<"."<<std::endl;
+  std::cout<<"OTB Hello World ! I am process "<<config->GetMyRank()<<" among "<<config->GetNbProcs()<<"."<<std::endl;
 
   return EXIT_SUCCESS;
 }
