@@ -606,10 +606,10 @@ otb_test_application(NAME apTvClKMeansImageClassification
                              -maxit 10000
                              -ct 0.0000001
                              -rand 121212
-                             -out ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.tif
+                             -out ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif
                      VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOuptut.tif
-                             ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.tif )
+                             ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOutput.tif
+                             ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif )
 
 
 #----------- TrainImagesClassifier TESTS ----------------

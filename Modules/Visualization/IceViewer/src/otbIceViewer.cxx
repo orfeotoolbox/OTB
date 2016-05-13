@@ -1642,7 +1642,7 @@ void IceViewer::CopyActorStyle(otb::GlActor::Pointer srcActor, otb::GlActor::Poi
   otb::GlImageActor::Pointer srcImgActor = dynamic_cast<otb::GlImageActor*>(srcActor.GetPointer());
   otb::GlImageActor::Pointer dstImgActor = dynamic_cast<otb::GlImageActor*>(dstActor.GetPointer());
 
-  if(srcActor.IsNotNull() && srcActor->GetVisible() && dstImgActor.IsNotNull() && dstActor->GetVisible())
+  if(srcImgActor.IsNotNull() && srcActor->GetVisible() && dstImgActor.IsNotNull() && dstActor->GetVisible())
     {
     ImageSettings::Pointer srcImageSettings( srcImgActor->GetImageSettings() );
     assert( !srcImageSettings.IsNull() );

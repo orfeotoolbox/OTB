@@ -1,6 +1,9 @@
 macro(macro_setup_cmake_project pkg)
 
   message( "-- Configuring ${pkg} package")
+
+  include(${SUPERBUILD_SOURCE_DIR}/CMake/External_pkgtools.cmake)
+
   #reset it again in macro(macro_create_targets_for_package pkg)
   #because thats the cmake macros way.
   set(PACKAGE_PROJECT_DIR ${CMAKE_BINARY_DIR}/PACKAGE-${pkg})
@@ -18,9 +21,10 @@ macro(macro_setup_cmake_project pkg)
     set(PKG_GENERATE_XDK OFF)
   endif()
 
+
   #set archive name inside loop
   file(WRITE "${PACKAGE_PROJECT_DIR}/src/CMakeLists.txt"
-  "cmake_minimum_required(VERSION 2.6)
+  "cmake_minimum_required(VERSION 3.2)
    include(CMakeParseArguments)
    include(CMakeDetermineSystem)
    set(CMAKE_BUILD_TYPE             Release)
@@ -36,6 +40,7 @@ macro(macro_setup_cmake_project pkg)
    set(CMAKE_INSTALL_PREFIX         \"${CMAKE_INSTALL_PREFIX}\")
    set(ITK_VERSION_STRING           \"${ITK_VERSION_STRING}\")
    set(PKG_GENERATE_XDK              ${PKG_GENERATE_XDK})
+   set(PATCHELF_PROGRAM              ${PATCHELF_PROGRAM})
    ${EXTRA_CACHE_CONFIG}
    include(\"${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake\")
    macro_super_package(STAGE_DIR \"${archive_name}\")"
@@ -46,8 +51,6 @@ macro(macro_setup_cmake_project pkg)
 endmacro()
 
 macro(macro_create_targets_for_package pkg)
-
-  include(${SUPERBUILD_SOURCE_DIR}/CMake/External_pkgtools.cmake)
 
   if(WIN32)
     add_custom_target(PACKAGE-${pkg}-check
@@ -109,10 +112,12 @@ macro(macro_create_targets_for_package pkg)
       "-rq" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
       WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
       DEPENDS PACKAGE-${pkg}-build
+      COMMENT "Creating ${CMAKE_BINARY_DIR}/${archive_name}.zip"
       )
   else()
     add_custom_target(PACKAGE-${pkg}
       COMMAND ${MAKESELF_SCRIPT}
+      "--quiet"
       "--target"
       "${archive_name}"
       "${CMAKE_INSTALL_PREFIX}/${archive_name}"
@@ -121,6 +126,7 @@ macro(macro_create_targets_for_package pkg)
       "./pkgsetup"
       WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
       DEPENDS PACKAGE-${pkg}-build
+      COMMENT "Creating ${CMAKE_CURRENT_BINARY_DIR}/${archive_name}.run"
       )
   endif()
 

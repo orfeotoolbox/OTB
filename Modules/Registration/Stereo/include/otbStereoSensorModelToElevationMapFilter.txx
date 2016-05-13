@@ -284,7 +284,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   rsTransform->SetInputKeywordList(outputPtr->GetImageKeywordlist());
   rsTransform->InstanciateTransform();
 
-  // Fill ouptut
+  // Fill output
   itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(outputPtr, outputPtr->GetBufferedRegion());
 
   for(outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)

@@ -154,7 +154,7 @@ NeighborhoodScalarProductFilter<TInputImage, TOutputModulus, TOutputDirection>
         angle -= CONST_PI;
         }
 
-      // Set the ouptut values
+      // Set the output values
       outputIt.Set(scalarMaxValue);
       outputDirIt.Set(angle);
       ++neighInputIt;

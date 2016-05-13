@@ -54,7 +54,14 @@ int otbGDALOverviewsBuilder(int itkNotUsed(argc), char* argv[])
 
   otb::GDALImageIO::Pointer io = otb::GDALImageIO::New();
   io->SetFileName(inputFilename);
-  io->CanReadFile(inputFilename);
+  bool canRead = io->CanReadFile(inputFilename);
+
+  if(!canRead)
+    {
+    std::cerr<<"Failed to read file "<< inputFilename <<" with GdalImageIO."<<std::endl;
+    return EXIT_FAILURE;
+    }
+  
   io->ReadImageInformation();
   //std::cout << io->GetOverviewsCount() << std::endl;
 

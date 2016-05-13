@@ -62,9 +62,10 @@ public:
 
 protected:
   /** Constructor */
-  PolygonClassStatisticsAccumulator() {}
+  PolygonClassStatisticsAccumulator();
+    
   /** Destructor */
-  virtual ~PolygonClassStatisticsAccumulator() {}
+  virtual ~PolygonClassStatisticsAccumulator();
 
 private:
   //Number of pixels in all the polygons
