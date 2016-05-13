@@ -1,5 +1,4 @@
-file(GLOB all_dot_diff_files "${PATCH_DIR}/*diff")
-
+file(GLOB all_dot_diff_files "${PATCH_DIR}/*${DIFF_FILE_MATCH_STRING}*diff")
 find_program(PATCH_PROGRAM NAMES patch)
 if(PATCH_PROGRAM)
   foreach(dot_diff_file ${all_dot_diff_files})
