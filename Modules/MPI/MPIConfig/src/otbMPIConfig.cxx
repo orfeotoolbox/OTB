@@ -24,8 +24,6 @@
 
 namespace otb {
 
-namespace mpi {
-
 /** Initialize the singleton */
 MPIConfig::Pointer MPIConfig::m_Singleton = NULL;
 
@@ -110,8 +108,6 @@ void MPIConfig::logInfo(const std::string message) {
      std::cout << message << std::endl;
    }
 }
-
-} // End namespace mpi
 
 } // End namespace otb
 
