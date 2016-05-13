@@ -1,4 +1,4 @@
-set(DOCUMENTATION "OTB module template.")
+set(DOCUMENTATION "TODO")
 
 # OTB_module() defines the module dependencies in ExternalTemplate
 # ExternalTemplate depends on OTBCommon and OTBApplicationEngine
@@ -6,15 +6,13 @@ set(DOCUMENTATION "OTB module template.")
 # and OTBCommandLine
 
 # define the dependencies of the include module and the tests
-otb_module(MPIConfig
+otb_module(OTBMPIConfig
   DEPENDS
     OTBMPI
     OTBCommon
-    OTBApplicationEngine
   TEST_DEPENDS
-    OTBMPIImageIO
+    OTBMPITiffWriter
     OTBTestKernel
-    OTBCommandLine
   DESCRIPTION
     "${DOCUMENTATION}"
 )
