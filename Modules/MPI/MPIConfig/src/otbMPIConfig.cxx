@@ -20,6 +20,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <mpi.h>
+
 namespace otb {
 
 namespace mpi {

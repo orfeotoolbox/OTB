@@ -21,8 +21,6 @@
 #include <sstream>
 #include <string>
 
-#include <mpi.h>
-
 #include "itkObject.h"
 #include "itkMacro.h"
 #include "itkObjectFactory.h"
