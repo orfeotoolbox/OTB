@@ -1,3 +1,36 @@
+OTB-v.5.4.0 - Changes since version 5.2.1 (2016/03/30)
+------------------------------------------
+* Bugs fixed:
+  * 0001137: GDALImageIO does not support SENTINEL2 sub-datasets
+  * 0001142: Fails to build with ITK 4.9.0 (itksys/FundamentalType.h: No such file or directory)
+  * 0001151: GDAL_SB_EXTRA_OPTIONS can not take multiple options
+  * 0001150: Can't "easily" deactivate LIBKML from OTB Superbuild
+  * BUG: Report the correct number of components per pixel in ImportGeoInformationImageFilter
+  * 0001153: Superimpose app in PHR mode reports wrong origin/spacing/keywordlist
+  * BUG: Enabling KMeans with more than 255 clusters
+  * 0001154: Exception raised when opening LUM or LUM+HDR
+  * 0001157: monteverdi crashes when trying to move the view without any images
+  * 0001143: Patch for various spelling errors
+
+* RFC:
+  * Request for Changes-20: Take screenshot
+  * Request for Changes-21: Support CDS import
+  * Request for Changes-22: Add Masked Iterator Decorator
+  * Request for Changes-23: Ice as an Orfeo ToolBox module
+  * Request for Changes-25: Disable Ice shaders if OpenGL version is lower than 2.0
+  * Request for Changes-27: Merge Software Guide into OTB
+  * Request for Changes-28: Remove random contributor list functionality
+  * Request for Changes-29: Sampling Framework - Polygon analysis
+  * Request for Changes-30: Faster resampling filter
+  * Request for Changes-31: Modified behavior of reading/writing of TIFF RPC tags
+  * Request for Changes-32: Allow a module to be built outside the OTB source tree
+  * Request for Changes-33: Green dashboard cleaning part 1
+  * Request for Changes-34: Enhancement of SARDecompositions : Barnes, Huynen, Pauli decompositions
+  * Request for Changes-24: MVD/OTB GDAL overviews multi-resolution pyramid configuration
+
+* SuperBuild:
+  * Add Monteverdi and its dependencies (glfw, GLEW, glut)
+
 OTB-v.5.2.1 - Changes since version 5.2.0 (2016/01/19)
 ------------------------------------------
 * Bugs fixed:

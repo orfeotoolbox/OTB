@@ -90,7 +90,7 @@ otb_add_test(NAME coTvExtractROI2 COMMAND otbImageBaseTestDriver
   26 97 209 100 )
 
 
-otb_add_test(NAME bfTuComplexToVectorImageCastFilterTest COMMAND otbImageBaseTestDriver
+otb_add_test(NAME bfTvComplexToVectorImageCastFilterTest COMMAND otbImageBaseTestDriver
   --compare-n-images ${NOTOL} 2
   ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
   ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
@@ -392,25 +392,25 @@ if(OTB_DATA_USE_LARGEINPUT)
     string(REGEX MATCH "TIFF" PHR_TIFF_FILE ${current_type})
 
     # Read info from the input file
-    otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type} COMMAND otbImageBaseTestDriver
-      --ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
-      ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
-      --ignore-lines-with 4 CacheSizeInBytes SubDatasetIndex Driver Corner 
-      otbVectorImageTest
-      ${current_file}?&resol=0
-      ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
-      )
+    #otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type} COMMAND otbImageBaseTestDriver
+      #--ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
+      #${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+      #--ignore-lines-with 4 CacheSizeInBytes SubDatasetIndex Driver Corner 
+      #otbVectorImageTest
+      #${current_file}?&resol=0
+      #${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+      #)
 
     if(NOT PHR_TIFF_FILE)
       # Read info from the input file (res=5)
-      otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type}_res5 COMMAND otbImageBaseTestDriver
-        --ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
-        ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
-        --ignore-lines-with 4 CacheSizeInBytes Driver Corner SubDatasetIndex
-        otbVectorImageTest
-        ${current_file}?&resol=5
-        ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
-        )
+      #otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type}_res5 COMMAND otbImageBaseTestDriver
+        #--ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
+        #${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+        #--ignore-lines-with 4 CacheSizeInBytes Driver Corner SubDatasetIndex
+        #otbVectorImageTest
+        #${current_file}?&resol=5
+        #${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+        #)
       # Decode an area inside one tile
       otb_add_test(NAME ioTvReaderWriterJP22TIF_${current_type}_1 COMMAND otbImageBaseTestDriver
 	--compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_1.tif

@@ -96,8 +96,6 @@ bool CommandLineLauncher::Load(const std::vector<std::string> &vexp)
 
 bool CommandLineLauncher::Load()
 {
-  // Add a space to clarify output logs
-  std::cerr << std::endl;
   if (m_VExpression.empty())
     {
     itkExceptionMacro("No expression specified...");

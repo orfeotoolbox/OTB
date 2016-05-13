@@ -545,7 +545,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
 
     //FIXME won't be intuitive for the non order case
     unsigned int numLineDiff = std::min(listStrDiffLineFileRef.size(), listStrDiffLineFileTest.size());
-    std::cout << "Nb lines differents : " << numLineDiff << std::endl;
+    std::cout << "Nb lines different : " << numLineDiff << std::endl;
     for (unsigned int i = 0; i < numLineDiff; ++i)
       {
       std::cout << "   -------------------------------" << std::endl;

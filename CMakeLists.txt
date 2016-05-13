@@ -32,6 +32,11 @@ include(CMakeDependentOption)
 # use ExternalProject
 include(ExternalProject)
 
+#mantis: 1193
+if(APPLE)
+  set(CMAKE_SYSTEM_FRAMEWORK_PATH "" CACHE PATH "" FORCE)
+endif()
+
 if( CMAKE_HOST_WIN32 )
 
   string( LENGTH "${CMAKE_CURRENT_SOURCE_DIR}" n )
@@ -54,20 +59,22 @@ if( CMAKE_HOST_WIN32 )
 
 endif()
 
-set(CMAKE_MODULE_PATH ${OTB_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH})
+set(OTB_CMAKE_DIR ${OTB_SOURCE_DIR}/CMake)
+set(CMAKE_MODULE_PATH ${OTB_CMAKE_DIR} ${CMAKE_MODULE_PATH})
 include (SourceStatus)
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
+include(OTBModuleTest)
 
 set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "5")
-set(OTB_VERSION_MINOR "2")
-set(OTB_VERSION_PATCH "1")
+set(OTB_VERSION_MINOR "5")
+set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
 if(NOT OTB_INSTALL_RUNTIME_DIR)
@@ -243,63 +250,8 @@ set(EPSILON_13 0.0000000000001)
 set(EPSILON_14 0.00000000000001)
 set(EPSILON_15 0.000000000000001)
 
-#-----------------------------------------------------------------------------
-# OTB wrapper for add_test that automatically sets the test's LABELS property
-# to the value of its containing module.
-#
-function(otb_add_test)
-  set(largeinput_regex "LARGEINPUT{([^;{}\r\n]*)}")
-
-  set(_depends_on_largeinput OFF)
-  foreach(arg IN LISTS ARGN)
-     if("x${arg}" MATCHES "${largeinput_regex}")
-       string(REGEX REPLACE "${largeinput_regex}" "\\1" largeinput_relative_path "${arg}")
-       set(_fullpath "${OTB_DATA_LARGEINPUT_ROOT}/${largeinput_relative_path}")
-       list(APPEND _out_arg ${_fullpath})
-       set(_depends_on_largeinput ON)
-     else()
-       list(APPEND _out_arg ${arg})
-     endif()
-  endforeach()
-
-  if (_depends_on_largeinput AND NOT OTB_DATA_USE_LARGEINPUT)
-    return()
-  endif()
-
-  add_test(${_out_arg})
-
-  if("NAME" STREQUAL "${ARGV0}")
-    set(_iat_testname ${ARGV1})
-  else()
-    set(_iat_testname ${ARGV0})
-  endif()
-
-  if(otb-module)
-    set(_label ${otb-module})
-  else()
-    set(_label ${main_project_name})
-  endif()
-
-  set_property(TEST ${_iat_testname} PROPERTY LABELS ${_label})
-
-endfunction()
-
-#-----------------------------------------------------------------------------
-# OTB function to ignore a test
-#
-function(otb_tests_ignore)
-  set_property(GLOBAL APPEND PROPERTY CTEST_CUSTOM_TESTS_IGNORE ${ARGN})
-endfunction()
-
-#-----------------------------------------------------------------------------
-# OTB function to ignore a test during MemCheck
-#
-function(otb_memcheck_ignore)
-  set_property(GLOBAL APPEND PROPERTY CTEST_CUSTOM_MEMCHECK_IGNORE ${ARGN})
-endfunction()
-
 # Location of OTB Example Data.
-# set(OTB_EXAMPLE_DATA_ROOT "${OTB_SOURCE_DIR}/Examples/Data")
+set(OTB_EXAMPLE_DATA_ROOT "${OTB_SOURCE_DIR}/Examples/Data")
 
 #----------------------------------------------------------------------
 # Make sure remote modules are downloaded before sorting out the module
@@ -313,7 +265,8 @@ include(OTBModuleEnablement)
 # Generate OTBConfig.cmake for the build tree.
 set(OTB_CONFIG_CODE "
 set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")")
-set(OTB_USE_FILE "${OTB_SOURCE_DIR}/CMake/UseOTB.cmake")
+set(OTB_CONFIG_CMAKE_DIR "${OTB_SOURCE_DIR}/CMake")
+set(OTB_USE_FILE "${OTB_CONFIG_CMAKE_DIR}/UseOTB.cmake")
 set(OTB_CONFIG_TARGETS_CONDITION " AND NOT OTB_BINARY_DIR")
 set(OTB_CONFIG_TARGETS_FILE "${OTB_BINARY_DIR}/OTBTargets.cmake")
 set(OTB_CONFIG_MODULE_API_FILE "${OTB_SOURCE_DIR}/CMake/OTBModuleAPI.cmake")
@@ -334,6 +287,7 @@ endforeach()
 set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
 set(OTB_MODULES_DIR \"\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/Modules\")")
 set(OTB_USE_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/UseOTB.cmake")
+set(OTB_CONFIG_CMAKE_DIR "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}")
 set(OTB_CONFIG_TARGETS_CONDITION "")
 set(OTB_CONFIG_TARGETS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBTargets.cmake")
 set(OTB_CONFIG_MODULE_API_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBModuleAPI.cmake")
@@ -409,63 +363,68 @@ endif()
 # all tests have been added that reference the group, so we put it last.
 
 
-if(WIN32 AND CMAKE_CROSSCOMPILING)
-  if(DEFINED MXE_TARGET_DIR)
+# 04-apr-2016. point OTB.
+# create a single package with OTB + Monteverdi + Mapla.
+# The below loop is commented out since generation of single
+# package happens in monteverdi project.
 
-    set(pefiles)
+# if(WIN32 AND CMAKE_CROSSCOMPILING)
+#   if(DEFINED MXE_TARGET_DIR)
 
-    message(STATUS "MXE_TARGET_DIR = ${MXE_TARGET_DIR}")
+#     set(pefiles)
 
-    if(MXE_TARGET_DIR MATCHES "i686")
-      set(mxearch x86)
-      set(archive_name ${CMAKE_PROJECT_NAME}-${OTB_VERSION_STRING}-win32)
-    elseif(MXE_TARGET_DIR MATCHES "x86_64")
-      set(mxearch x64)
-      set(archive_name ${CMAKE_PROJECT_NAME}-${OTB_VERSION_STRING}-win64)
-    endif()
+#     message(STATUS "MXE_TARGET_DIR = ${MXE_TARGET_DIR}")
 
-    execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
+#     if(MXE_TARGET_DIR MATCHES "i686")
+#       set(mxearch x86)
+#       set(archive_name ${CMAKE_PROJECT_NAME}-${OTB_VERSION_STRING}-win32)
+#     elseif(MXE_TARGET_DIR MATCHES "x86_64")
+#       set(mxearch x64)
+#       set(archive_name ${CMAKE_PROJECT_NAME}-${OTB_VERSION_STRING}-win64)
+#     endif()
 
-    get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
-    get_filename_component(mxeroot ${mxeroot} PATH)
+#     execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
 
-    file(WRITE "${CMAKE_BINARY_DIR}/_mingw/CMakeLists.txt"
-      "cmake_minimum_required(VERSION 2.6)
-       include(CMakeParseArguments)
-       set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
-        include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
-        package_mingw(
-        ARCH \"${mxearch}\"
-        MXEROOT \"${mxeroot}\"
-        PREFIX_DIR \"${archive_name}\"
-        PEFILES \"${pefiles}\"
-        WITH_OTBGUI 1
-        SEARCHDIRS \"\")")
+#     get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
+#     get_filename_component(mxeroot ${mxeroot} PATH)
 
-    add_custom_target(configure-mingw
-      COMMAND ${CMAKE_COMMAND}
-      "${CMAKE_BINARY_DIR}/_mingw"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw")
+#     file(WRITE "${CMAKE_BINARY_DIR}/_mingw/CMakeLists.txt"
+#       "cmake_minimum_required(VERSION 2.6)
+#        include(CMakeParseArguments)
+#        set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
+#         include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
+#         package_mingw(
+#         ARCH \"${mxearch}\"
+#         MXEROOT \"${mxeroot}\"
+#         PREFIX_DIR \"${archive_name}\"
+#         PEFILES \"${pefiles}\"
+#         WITH_OTBGUI 1
+#         SEARCHDIRS \"\")")
 
-    add_custom_target(prepare-mingw
-      COMMAND ${CMAKE_COMMAND}
-      "--build" "${CMAKE_BINARY_DIR}/_mingw" "--target" "install"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw"
-      DEPENDS configure-mingw)
+#     add_custom_target(configure-mingw
+#       COMMAND ${CMAKE_COMMAND}
+#       "${CMAKE_BINARY_DIR}/_mingw"
+#       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw")
 
-    find_program(ZIP_EXECUTABLE zip)
+#     add_custom_target(prepare-mingw
+#       COMMAND ${CMAKE_COMMAND}
+#       "--build" "${CMAKE_BINARY_DIR}/_mingw" "--target" "install"
+#       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw"
+#       DEPENDS configure-mingw)
 
-    if(ZIP_EXECUTABLE)
-      add_custom_target(packages
-        COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
-        WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
-        DEPENDS prepare-mingw)
-    else()
-      message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
-    endif()
+#     find_program(ZIP_EXECUTABLE zip)
 
-  else(DEFINED MXE_TARGET_DIR)
-    message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
-  endif(DEFINED MXE_TARGET_DIR)
+#     if(ZIP_EXECUTABLE)
+#       add_custom_target(packages
+#         COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
+#         WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
+#         DEPENDS prepare-mingw)
+#     else()
+#       message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
+#     endif()
 
-endif(WIN32 AND CMAKE_CROSSCOMPILING)
+#   # else(DEFINED MXE_TARGET_DIR)
+#   #   message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
+#   endif(DEFINED MXE_TARGET_DIR)
+
+# endif(WIN32 AND CMAKE_CROSSCOMPILING)

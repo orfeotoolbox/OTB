@@ -43,7 +43,7 @@ public:
   virtual ~QtWidgetComplexInputImageParameter();
 
 protected slots:
-  void SetFileName( const QString& value );
+  bool SetFileName( const QString& value );
   void SelectFile();
 
 private:

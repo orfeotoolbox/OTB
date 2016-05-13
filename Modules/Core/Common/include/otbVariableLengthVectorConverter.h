@@ -31,7 +31,7 @@ namespace otb
  * \class VariableLengthVectorConverter
  * \brief Convert any data container type into a VariableLengthVector.
  *
- * To be usable, the desired convertion must be implemented through
+ * To be usable, the desired conversion must be implemented through
  * partial specialisation mecanism.
  *
  *

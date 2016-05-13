@@ -83,6 +83,8 @@ ImportGeoInformationImageFilter<TImage, TSourceImage>
   outputPtr->CopyInformation(sourcePtr);
 
   outputPtr->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
+
+  outputPtr->SetNumberOfComponentsPerPixel(this->GetInput()->GetNumberOfComponentsPerPixel());
 }
 
 // template <class TImage, class TSourceImage>
