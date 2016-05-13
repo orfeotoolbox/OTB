@@ -6,7 +6,7 @@ set(DOCUMENTATION "OTB module template.")
 # and OTBCommandLine
 
 # define the dependencies of the include module and the tests
-otb_module(MPIModule
+otb_module(MPIConfig
   DEPENDS
     OTBMPI
     OTBCommon

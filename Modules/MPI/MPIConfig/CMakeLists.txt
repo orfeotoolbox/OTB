@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 2.8.9)
 cmake_policy(SET CMP0046 NEW)
 
 # Module
-project(MPIModule)
-set(MPIModule_LIBRARIES MPIModule)
+project(MPIConfig)
+set(MPIConfig_LIBRARIES MPIConfig)
 
 # Ctest configuration
 set(INPUTDATA $ENV{OTB_DATA_ROOT})

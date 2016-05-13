@@ -36,7 +36,7 @@ namespace mpi {
   * TODO
   *
   *
-  * \ingroup MPIModule
+  * \ingroup MPIConfig
   */
 class MPIConfig: public itk::Object
 {

@@ -3,7 +3,7 @@ otb_module_test()
 #${otb-module} will be the name of this module and will not need to be #changed when this module is renamed.
 
 set(${otb-module}Tests
-   otbMPIModuleTestDriver.cxx
+   otbMPIConfigTestDriver.cxx
    otbMPIEmptyTest.cxx
    otbMPIHelloTest.cxx
    otbReadWriteTest.cxx
@@ -34,23 +34,23 @@ endfunction()
 # Boost configuration
 find_package(Boost COMPONENTS system chrono REQUIRED)
 
-add_executable(otbMPIModuleTestDriver ${${otb-module}Tests}) 
-target_link_libraries(otbMPIModuleTestDriver ${${otb-module}-Test_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_CHRONO_LIBRARY})
-otb_module_target_label(otbMPIModuleTestDriver)
+add_executable(otbMPIConfigTestDriver ${${otb-module}Tests}) 
+target_link_libraries(otbMPIConfigTestDriver ${${otb-module}-Test_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_CHRONO_LIBRARY})
+otb_module_target_label(otbMPIConfigTestDriver)
 
 # MPI Empty test
 otb_add_test_mpi(NAME otbMPIEmptyTest
    NBPROCS 2
-   COMMAND otbMPIModuleTestDriver otbMPIEmptyTest )
+   COMMAND otbMPIConfigTestDriver otbMPIEmptyTest )
 
 # MPI Hello test
 otb_add_test_mpi(NAME otbMPIHelloTest
    NBPROCS 2
-   COMMAND otbMPIModuleTestDriver otbMPIHelloTest )
+   COMMAND otbMPIConfigTestDriver otbMPIHelloTest )
 
 # Read/write test
 otb_add_test(NAME otbReadWriteTest
-   COMMAND otbMPIModuleTestDriver 
+   COMMAND otbMPIConfigTestDriver 
    --compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF
    ${TEMP}/imageReadWriteTest.tif
    otbReadWriteTest 
@@ -61,7 +61,7 @@ otb_add_test(NAME otbReadWriteTest
 # MPI Read/write test with 1 procs
 otb_add_test_mpi(NAME otbMPIReadWriteTestNb1
    NBPROCS 1
-   COMMAND otbMPIModuleTestDriver 
+   COMMAND otbMPIConfigTestDriver 
    --compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF
    ${TEMP}/imageMPIReadWriteTestNb1.vrt
    otbMPIReadWriteTest 
@@ -72,7 +72,7 @@ otb_add_test_mpi(NAME otbMPIReadWriteTestNb1
 # MPI Read/write test with 2 procs
 otb_add_test_mpi(NAME otbMPIReadWriteTestNb2
    NBPROCS 2
-   COMMAND otbMPIModuleTestDriver 
+   COMMAND otbMPIConfigTestDriver 
    --compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF
    ${TEMP}/imageMPIReadWriteTestNb2.vrt
    otbMPIReadWriteTest 
@@ -83,7 +83,7 @@ otb_add_test_mpi(NAME otbMPIReadWriteTestNb2
 # MPI Read/write test with 4 procs
 otb_add_test_mpi(NAME otbMPIReadWriteTestNb4
    NBPROCS 4
-   COMMAND otbMPIModuleTestDriver 
+   COMMAND otbMPIConfigTestDriver 
    --compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF
    ${TEMP}/imageMPIReadWriteTestNb4.vrt
    otbMPIReadWriteTest 
@@ -94,7 +94,7 @@ otb_add_test_mpi(NAME otbMPIReadWriteTestNb4
 # MPI/SPTW Read/write test with 1 procs
 otb_add_test_mpi(NAME otbMPISPTWReadWriteTestNb1
    NBPROCS 1
-   COMMAND otbMPIModuleTestDriver 
+   COMMAND otbMPIConfigTestDriver 
    --compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF
    ${TEMP}/imageMPISPTWReadWriteTestNb1.tif
    otbMPISPTWReadWriteTest 
@@ -105,7 +105,7 @@ otb_add_test_mpi(NAME otbMPISPTWReadWriteTestNb1
 # MPI/SPTW Read/write test with 4 procs
 otb_add_test_mpi(NAME otbMPISPTWReadWriteTestNb4
    NBPROCS 4
-   COMMAND otbMPIModuleTestDriver 
+   COMMAND otbMPIConfigTestDriver 
    --compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/SPOTHERITAGE_SO14001334-29-03_50482610807311047572J7_SPOT5_HRG2_XS_L1A.TIF
    ${TEMP}/imageMPISPTWReadWriteTestNb4.tif
    otbMPISPTWReadWriteTest 
@@ -116,7 +116,7 @@ otb_add_test_mpi(NAME otbMPISPTWReadWriteTestNb4
 # MPI Bundle To Perfect Sensor test with 1 procs
 otb_add_test_mpi(NAME otbMPIBundleToPerfectSensorTestNb1
    NBPROCS 1
-   COMMAND otbMPIModuleTestDriver 
+   COMMAND otbMPIConfigTestDriver 
    --compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/phr_fusion.tif
    ${TEMP}/imageMPIBundleToPerfectSensorTestNb1.vrt
    otbMPIBundleToPerfectSensorTest 
@@ -128,7 +128,7 @@ otb_add_test_mpi(NAME otbMPIBundleToPerfectSensorTestNb1
 # MPI Bundle To Perfect Sensor test with 2 procs
 otb_add_test_mpi(NAME otbMPIBundleToPerfectSensorTestNb2
    NBPROCS 2
-   COMMAND otbMPIModuleTestDriver 
+   COMMAND otbMPIConfigTestDriver 
    --compare-image ${NOTOL} ${INPUTDATA}/IMAGE_TIFF/phr_fusion.tif
    ${TEMP}/imageMPIBundleToPerfectSensorTestNb2.vrt
    otbMPIBundleToPerfectSensorTest 
