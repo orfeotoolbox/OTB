@@ -5,6 +5,12 @@ macro(macro_super_package)
     message(FATAL_ERROR "PKG_STAGE_DIR is emtpy. Just can't continue.")
   endif()
 
+  if(UNIX AND NOT APPLE)
+    if(NOT PATCHELF_PROGRAM)
+      message(FATAL_ERROR "PATCHELF_PROGRAM not set")
+    endif()
+  endif()
+
   set(loader_program_PATHS)
   if(WIN32)
       set(loader_program_names      "${MXE_ARCH}-w64-mingw32.shared-objdump")
@@ -130,7 +136,7 @@ macro(macro_super_package)
 
     ########### install patchelf( linux only) ##################
     if(NOT APPLE)
-      install(PROGRAMS ${CMAKE_INSTALL_PREFIX}/tools/patchelf
+      install(PROGRAMS ${PATCHELF_PROGRAM}
         DESTINATION ${PKG_STAGE_DIR}/tools)
     endif()
   endif() # if(UNIX)
