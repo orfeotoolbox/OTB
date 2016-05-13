@@ -209,7 +209,7 @@ function(func_install_xdk_files)
     file(GLOB QT_EXTRA_DLL_FILES "${DEPENDENCIES_INSTALL_DIR}/qt/bin/*.dll")
     install(FILES ${QT_EXTRA_DLL_FILES} DESTINATION ${PKG_STAGE_DIR}/bin)
 
-    list(APPEND QT_REQ_DIRS lib)
+    #list(APPEND QT_REQ_DIRS lib)
     list(APPEND QT_REQ_DIRS include)
     list(APPEND QT_REQ_DIRS imports)
 
