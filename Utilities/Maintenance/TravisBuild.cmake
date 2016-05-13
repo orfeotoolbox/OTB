@@ -36,6 +36,11 @@ set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS 1000)
 set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 300)
 #set(CTEST_BUILD_FLAGS -j2)
 
+macro(do_submit)
+  ctest_submit()
+  return()
+endmacro()
+
 message(STATUS "CTEST_SOURCE_DIRECTORY: ${CTEST_SOURCE_DIRECTORY}")
 message(STATUS "CTEST_BINARY_DIRECTORY: ${CTEST_BINARY_DIRECTORY}")
 
@@ -85,15 +90,8 @@ if(NOT _build_rv EQUAL 0)
   do_submit()
 endif ()
 
-#ctest_test with extra verbose is annoying in travis build log.
-#Afer all these are unit-test without much revelent extra verbose output
 execute_process(COMMAND  ${CTEST_COMMAND} "-R" "Tu" "."
   WORKING_DIRECTORY "${CTEST_BINARY_DIRECTORY}"
   )
 
 do_submit()
-
-macro(do_submit)
-  ctest_submit()
-  return()
-endmacro()
