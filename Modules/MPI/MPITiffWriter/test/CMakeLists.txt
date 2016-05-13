@@ -1,21 +1,21 @@
 otb_module_test()
 
-set(OTBMPIImageIOTests
-otbMPIImageIOTestDriver.cxx
+set(OTBMPITiffWriterTests
+otbMPITiffWriterTestDriver.cxx
 otbSPTWStripsWriteTest.cxx
 )
 
-add_executable(otbMPIImageIOTestDriver ${OTBMPIImageIOTests})
+add_executable(otbMPITiffWriterTestDriver ${OTBMPITiffWriterTests})
 
 # target link libraries
-target_link_libraries(otbMPIImageIOTestDriver ${OTBMPIImageIO-Test_LIBRARIES})
+target_link_libraries(otbMPITiffWriterTestDriver ${OTBMPITiffWriter-Test_LIBRARIES})
 
 
-otb_module_target_label(otbMPIImageIOTestDriver)
+otb_module_target_label(otbMPITiffWriterTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME cdTvSPTWWriteStrips COMMAND otbMPIImageIOTestDriver
+otb_add_test(NAME cdTvSPTWWriteStrips COMMAND otbMPITiffWriterTestDriver
   --compare-image ${NOTOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
   ${TEMP}/cdSPTWWritedInStripsImage.tif
   otbSPTWStripsWriteTest
