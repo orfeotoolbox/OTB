@@ -34,6 +34,7 @@ VERSION_STRING=$($WGET -q -O- "https://www.orfeo-toolbox.org/packages/xdk/$XDK_V
 XDK_FILE=OTB-$VERSION_STRING-xdk-Linux64.run
 CMAKE_PREFIX_PATH=/tmp/OTB-$VERSION_STRING-xdk-Linux64
 OTB_INSTALL_DIR=$CTEST_DASHBOARD_ROOT/orfeotoolbox/install
+XDK_INSTALL_DIR="/tmp/${XDK_FILE%.*}"
 
 #export variables for later use in cmake file
 export CTEST_COMMAND
@@ -44,6 +45,7 @@ export CTEST_CMAKE_GENERATOR
 export CMAKE_MAKE_PROGRAM
 export CMAKE_PREFIX_PATH
 export OTB_INSTALL_DIR
+export XDK_INSTALL_DIR
 
 #print
 echo "VERSION_STRING=$VERSION_STRING"
@@ -54,6 +56,7 @@ echo "XDK_VERSION=$XDK_VERSION"
 echo "XDK_FILE=$XDK_FILE"
 echo "OTB_INSTALL_DIR=$OTB_INSTALL_DIR"
 echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH"
+echo "XDK_INSTALL_DIR=$XDK_INSTALL_DIR"
 
 #change to /tmp
 cd /tmp
@@ -71,7 +74,5 @@ wget https://www.orfeo-toolbox.org/packages/xdk/$XDK_VERSION/$XDK_FILE --no-chec
 chmod +x /tmp/$XDK_FILE
 /tmp/$XDK_FILE
 
-XDK_INSTALL_DIR=/tmp/$XDK_FILE
-export XDK_INSTALL_DIR
 echo "Running ctest -VV -S TravisBuild.cmake"
 $CTEST_COMMAND -VV -S $CTEST_DASHBOARD_ROOT/orfeotoolbox/OTB/Utilities/Maintenance/TravisBuild.cmake
