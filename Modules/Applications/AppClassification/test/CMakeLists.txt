@@ -853,8 +853,8 @@ otb_test_application(NAME apTvClPolygonClassStatisticsTest
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
                              ${TEMP}/apTvClPolygonClassStatisticsOut.xml)
-                             
-                             
+
+#----------- SampleSelection TESTS -----------------------
 otb_test_application(NAME apTvClSampleSelection
                      APP SampleSelection
                      OPTIONS -in ${INPUTDATA}/cthead1_flip.tif
@@ -864,4 +864,8 @@ otb_test_application(NAME apTvClSampleSelection
                              -instats ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
                              -outrates ${TEMP}/apTvClOGRDataResamplerOutRates.txt
                              -strat byclass
-                             -strat.byclass.in ${INPUTDATA}/Classification/sampling_required.csv)
+                             -strat.byclass.in ${INPUTDATA}/Classification/sampling_required.csv
+                             -sampler periodic
+                     VALID   --compare-ogr ${NOTOL}
+                             ${OTBAPP_BASELINE_FILES}/apTvClOGRDataResamplerOut.sqlite
+                             ${TEMP}/apTvClOGRDataResamplerOut.sqlite)
