@@ -42,11 +42,13 @@ bool
 RandomSampler::TakeSample(void)
 {
   bool ret = false;
-  this->m_ProcessedElements += 1UL;
   if (this->m_ProcessedElements >= this->GetTotalElements() ||
         this->m_ChosenElements >= this->GetNeededElements())
-        return false;
-        
+    {
+    this->m_ProcessedElements += 1UL;
+    return false;
+    }
+
   double rate = this->GetRate();
   if (this->m_Parameters.Adaptative)
     {
@@ -59,6 +61,7 @@ RandomSampler::TakeSample(void)
     ret = true;
     this->m_ChosenElements += 1UL;
     }
+  this->m_ProcessedElements += 1UL;
   return ret;
 }
 
