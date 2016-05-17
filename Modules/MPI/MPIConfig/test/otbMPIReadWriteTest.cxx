@@ -38,8 +38,8 @@ int otbMPIReadWriteTest(int argc, char * argv[])
   boost::chrono::thread_clock::time_point startTimer = boost::chrono::thread_clock::now();
   
   // MPI Initialization
-  typedef otb::mpi::MPIConfig    MPIConfigType;
-  MPIConfigType::Pointer config = MPIConfigType::New();
+  typedef otb::MPIConfig    MPIConfigType;
+  MPIConfigType::Pointer config = MPIConfigType::Instance();
   config->Init(argc,argv,true);
 
   // Verify the number of parameters in the command line
@@ -67,7 +67,7 @@ int otbMPIReadWriteTest(int argc, char * argv[])
 
   // Update MPI Pipeline
   std::string outputFilename = std::string(argv[2]);
-  config->UpdateMPI(reader->GetOutput(),outputFilename, false, true);
+  //config->UpdateMPI(reader->GetOutput(),outputFilename, false, true);
 
   // End chrono
   boost::chrono::thread_clock::time_point stopTimer = boost::chrono::thread_clock::now();

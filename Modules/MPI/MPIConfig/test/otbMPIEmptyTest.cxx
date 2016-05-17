@@ -17,8 +17,9 @@
 =========================================================================*/
 #include <cstdlib>
 #include "otbMPIConfig.h"
+#include "itkMultiThreader.h"
 
-int otbMPIEmptyTest(int argc, char* argv[]) {
+int otbMPIEmptyTest(int, char **) {
   itk::MultiThreader::SetGlobalMaximumNumberOfThreads(1);
   itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1); 
   return EXIT_SUCCESS;

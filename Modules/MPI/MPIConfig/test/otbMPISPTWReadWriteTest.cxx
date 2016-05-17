@@ -33,10 +33,7 @@ int otbMPISPTWReadWriteTest(int argc, char* argv[])
   // Mono-thread execution
   itk::MultiThreader::SetGlobalMaximumNumberOfThreads(1);
   itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
-
-  // Start chrono
-  boost::chrono::thread_clock::time_point startTimer = boost::chrono::thread_clock::now();
-  
+ 
   if (argc != 3)
     {
     std::cerr << "Usage: " << std::endl;

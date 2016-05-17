@@ -49,8 +49,8 @@ int otbMPIBundleToPerfectSensorTest(int argc, char* argv[])
   boost::chrono::thread_clock::time_point startTimer = boost::chrono::thread_clock::now();
   
   // MPI Initialization
-  typedef otb::mpi::MPIConfig    MPIConfigType;
-  MPIConfigType::Pointer config = MPIConfigType::New();
+  typedef otb::MPIConfig    MPIConfigType;
+  MPIConfigType::Pointer config = MPIConfigType::Instance();
   config->Init(argc,argv,true);
 
   // Verify the number of parameters in the command line
@@ -125,7 +125,6 @@ int otbMPIBundleToPerfectSensorTest(int argc, char* argv[])
   //otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
   
   // Set up output image information
-  FloatVectorImageType::SpacingType spacing = panchro->GetSpacing();
   FloatVectorImageType::IndexType   start = panchro->GetLargestPossibleRegion().GetIndex();
   FloatVectorImageType::SizeType    size = panchro->GetLargestPossibleRegion().GetSize();
   FloatVectorImageType::PointType   origin = panchro->GetOrigin();
@@ -169,7 +168,7 @@ int otbMPIBundleToPerfectSensorTest(int argc, char* argv[])
 
   // Update MPI Pipeline
   std::string outputFilename = std::string(argv[3]);
-  config->UpdateMPI(fusionFilter->GetOutput(),outputFilename, true, true);
+  //config->UpdateMPI(fusionFilter->GetOutput(),outputFilename, true, true);
   
   // End chrono
   boost::chrono::thread_clock::time_point stopTimer = boost::chrono::thread_clock::now();

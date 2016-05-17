@@ -67,7 +67,7 @@ SimpleParallelTiffWriter<TInputImage>
 ::OptimizeStrippedSplittingLayout(unsigned int n)
  {
   unsigned int m = static_cast<unsigned int >(m_NProcs);
-  if (n > m_NProcs)
+  if (n > m)
     {
     float div = static_cast<float>(n) / static_cast<float>(m_NProcs);
     m *= static_cast<unsigned int>(div);

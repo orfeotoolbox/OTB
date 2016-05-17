@@ -27,8 +27,6 @@
 
 namespace otb {
 
-namespace mpi {
-
 /** \class MPI config
   *  \brief Manage MPI ressources
   * TODO
@@ -106,8 +104,6 @@ private:
       throw _e;                                                         \
       }                                                                 \
   }
-
-} // End namespace mpi
 
 } // End namespace otb
 

@@ -18,6 +18,7 @@
 
 #include "otbMPIConfig.h"
 #include <iostream>
+#include "itkMultiThreader.h"
 
 int otbMPIHelloTest(int argc, char* argv[]) {
 
@@ -26,7 +27,7 @@ int otbMPIHelloTest(int argc, char* argv[]) {
   itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
 
   // MPI Configuration
-  typedef otb::mpi::MPIConfig    MPIConfigType;
+  typedef otb::MPIConfig    MPIConfigType;
   MPIConfigType::Pointer config = MPIConfigType::Instance();
   config->Init(argc,argv,true);
 
