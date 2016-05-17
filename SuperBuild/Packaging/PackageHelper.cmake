@@ -1,8 +1,14 @@
 macro(macro_super_package)
   cmake_parse_arguments(PKG  "" "STAGE_DIR" "SEARCHDIRS" ${ARGN} )
 
-  if("${PKG_STAGE_DIR}" STREQUAL "")
+  if(${PKG_STAGE_DIR} STREQUAL "")
     message(FATAL_ERROR "PKG_STAGE_DIR is emtpy. Just can't continue.")
+  endif()
+
+  if(UNIX AND NOT APPLE)
+    if(NOT PATCHELF_PROGRAM)
+      message(FATAL_ERROR "PATCHELF_PROGRAM not set")
+    endif()
   endif()
 
   set(loader_program_PATHS)
@@ -60,47 +66,62 @@ macro(macro_super_package)
 
   set(PKG_PEFILES)
   if(NOT WIN32)
-    file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks "#!/bin/sh\n")
-    #NOTE: VAR_IN_PKGSETUP_CONFIGURE is copied to linux_pkgsetup.in during configure_file
+    #NOTE: VAR_IN_PKGSETUP_CONFIGURE is copied to linux_pkgsetup.in
+    #during configure_file. This will be processed by func_lisp
     set(VAR_IN_PKGSETUP_CONFIGURE)
-    set(PKG_SO_FILES)
-  endif() # if(NOT WIN32)
+  endif()
+
+  set(QT_EXECUTABLES)
+  list(APPEND QT_EXECUTABLES "lrelease")
+  list(APPEND QT_EXECUTABLES "moc")
+  list(APPEND QT_EXECUTABLES "qmake")
+  list(APPEND QT_EXECUTABLES "rcc")
+  list(APPEND QT_EXECUTABLES "uic")
 
   func_prepare_package()
 
-  func_prepare_install_list(
-    "${CMAKE_BINARY_DIR}/install_to_bin"
-    ${PKG_GENERATE_XDK}
-    bin_install_list
-    )
-
-  func_prepare_install_list(
-    "${CMAKE_BINARY_DIR}/install_to_lib"
-    ${PKG_GENERATE_XDK}
-    lib_install_list
-    )
-
-  foreach(installable_item_in_bin ${bin_install_list})
-    if(WIN32)
-      #only install .exe files with install(PROGRAMS ..
-      if("${installable_item_in_bin}" MATCHES "\\.exe$")
-        install(PROGRAMS "${installable_item_in_bin}" DESTINATION ${PKG_STAGE_DIR}/bin)
-      else()
-        install(FILES "${installable_item_in_bin}" DESTINATION ${PKG_STAGE_DIR}/bin)
-      endif()
+  file(STRINGS "${CMAKE_BINARY_DIR}/install_to_bin" install_to_bin_list)
+  func_lisp(install_to_bin_list )
+  foreach(install_to_bin_item ${install_to_bin_list})
+    is_file_executable("${install_to_bin_item}" is_exe)
+    if(is_exe)
+      install(PROGRAMS "${install_to_bin_item}" DESTINATION ${PKG_STAGE_DIR}/bin)
     else()
-      #install all executable with install(PROGRAMS on unix like
-      install(PROGRAMS "${installable_item_in_bin}" DESTINATION ${PKG_STAGE_DIR}/bin)
+      install(FILES "${install_to_bin_item}" DESTINATION ${PKG_STAGE_DIR}/bin)
     endif()
   endforeach()
 
+  file(STRINGS "${CMAKE_BINARY_DIR}/install_to_lib" install_to_lib_list)
+  func_lisp( install_to_lib_list )
   #install lib files into lib as install(FILES ..
-  foreach(installable_item_in_lib ${lib_install_list})
-    install(FILES "${installable_item_in_lib}" DESTINATION ${PKG_STAGE_DIR}/lib)
+  foreach(install_to_lib_item ${install_to_lib_list})
+    install(FILES "${install_to_lib_item}" DESTINATION ${PKG_STAGE_DIR}/lib)
   endforeach()
 
   ############# install package configure script ################
   if(UNIX AND NOT WIN32)
+
+    #avoid OTB stuff inside make_symlinks script
+    file(STRINGS "${CMAKE_BINARY_DIR}/make_symlinks_temp" make_symlinks_list)
+    func_lisp( make_symlinks_list )
+    file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks "#!/usr/bin/env bash\n")
+    foreach(make_symlink_cmd ${make_symlinks_list})
+      file(APPEND ${CMAKE_BINARY_DIR}/make_symlinks
+        "${make_symlink_cmd}\n")
+    endforeach()
+
+    set(IS_XDK "false")
+    if(PKG_GENERATE_XDK)
+      set(IS_XDK "true")
+      if("${ITK_VERSION_STRING}" STREQUAL "")
+        message(FATAL_ERROR "ITK_VERSION_STRING not set. This is required for XDK")
+      endif()
+
+      #avoid OTB stuff inside pkgsetup for XDK
+      separate_arguments( VAR_IN_PKGSETUP_CONFIGURE )
+      func_lisp( VAR_IN_PKGSETUP_CONFIGURE )
+      string(REPLACE ";" " " VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE}")
+    endif()
     set(PKGSETUP_IN_FILENAME linux_pkgsetup.in)
     if(APPLE)
       set(PKGSETUP_IN_FILENAME macx_pkgsetup.in)
@@ -115,7 +136,7 @@ macro(macro_super_package)
 
     ########### install patchelf( linux only) ##################
     if(NOT APPLE)
-      install(PROGRAMS ${CMAKE_INSTALL_PREFIX}/tools/patchelf
+      install(PROGRAMS ${PATCHELF_PROGRAM}
         DESTINATION ${PKG_STAGE_DIR}/tools)
     endif()
   endif() # if(UNIX)
@@ -161,9 +182,7 @@ function(func_install_xdk_files)
     endif()
   endforeach()
 
-  # #install ${DEPENDENCIES_INSTALL_DIR}/include silently
-  func_install_without_message("${DEPENDENCIES_INSTALL_DIR}/include" "" "(may take a while)..")
-
+  set(QT_REQ_DIRS)
   if(WIN32)
     #only affects windows due to regex on dll
     file(GLOB LIB_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/*dll.*")
@@ -189,31 +208,58 @@ function(func_install_xdk_files)
     file(GLOB OPENCV_CONFIG_FILES_2 "${DEPENDENCIES_INSTALL_DIR}/OpenCV*.cmake")
     install(FILES ${OPENCV_CONFIG_FILES_2} DESTINATION ${PKG_STAGE_DIR})
 
-    #mxe install qt in a seperate directory under install prefix. So..
-    foreach(REQ_DIR
-        lib
-        mkspecs
-        include
-        imports
-        plugins
-        translations
-        )
-      if(EXISTS "${DEPENDENCIES_INSTALL_DIR}/qt/${REQ_DIR}")
-        func_install_without_message("${DEPENDENCIES_INSTALL_DIR}/qt/${REQ_DIR}" "")
-      endif()
-    endforeach()
+    #mxe installs qt in a seperate directory under install prefix. So..
+    set(QT_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}/qt")
 
-    #qt/bin is a special case here.
+    #qt/bin is also a special case for mxe.
     file(GLOB QT_EXTRA_DLL_FILES "${DEPENDENCIES_INSTALL_DIR}/qt/bin/*.dll")
     install(FILES ${QT_EXTRA_DLL_FILES} DESTINATION ${PKG_STAGE_DIR}/bin)
 
-    file(GLOB QT_EXECUTABLES "${DEPENDENCIES_INSTALL_DIR}/qt/bin/*.exe")
-    install(FILES ${QT_EXECUTABLES} DESTINATION ${PKG_STAGE_DIR}/bin)
+    #list(APPEND QT_REQ_DIRS lib)
+    list(APPEND QT_REQ_DIRS include)
+    list(APPEND QT_REQ_DIRS imports)
 
-    file(GLOB QT_EXTRA_EXECUTABLES "${Monteverdi_BINARY_DIR}/PACKAGE-TOOLS/src/PACKAGE-TOOLS/*.exe")
-    install(FILES ${QT_EXTRA_EXECUTABLES} DESTINATION ${PKG_STAGE_DIR}/bin)
+  else()
+    set(
+      QT_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}")
 
   endif(WIN32)
+
+  if(NOT QT_EXECUTABLES)
+    message(FATAL_ERROR "QT_EXECUTABLES not set")
+  endif()
+
+  list(APPEND QT_REQ_DIRS mkspecs)
+  list(APPEND QT_REQ_DIRS plugins)
+  list(APPEND QT_REQ_DIRS translations)
+  foreach(QT_REQ_DIR ${QT_REQ_DIRS} )
+    if(EXISTS "${QT_INSTALL_DIR}/${QT_REQ_DIR}")
+      func_install_without_message("${QT_INSTALL_DIR}/${QT_REQ_DIR}" "")
+    endif()
+  endforeach()
+
+  # #install ${DEPENDENCIES_INSTALL_DIR}/include directory. Attention to OTB includes
+  file(GLOB ALL_IN_INCLUDE_DIR "${DEPENDENCIES_INSTALL_DIR}/include/*")
+  foreach(INCLUDE_DIR_ITEM ${ALL_IN_INCLUDE_DIR})
+    get_filename_component(INCLUDE_DIR_ITEM_name ${INCLUDE_DIR_ITEM} NAME)
+    get_filename_component(INCLUDE_DIR_ITEM_name_we ${INCLUDE_DIR_ITEM} NAME_WE)
+    if(NOT "${INCLUDE_DIR_ITEM_name_we}" MATCHES "OTB|otb")
+      if( IS_DIRECTORY ${INCLUDE_DIR_ITEM})
+        install(CODE
+          "message(STATUS \"Installing: ${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}/include/${INCLUDE_DIR_ITEM_name}/\")" )
+        install(
+          DIRECTORY   "${INCLUDE_DIR_ITEM}"
+          DESTINATION "${PKG_STAGE_DIR}/include/"
+          MESSAGE_NEVER
+          )
+      else()
+        install(
+          FILES   "${INCLUDE_DIR_ITEM}"
+          DESTINATION "${PKG_STAGE_DIR}/include/"
+          )
+      endif() #if( IS_DIRECTORY
+    endif() #if (NOT
+  endforeach()
 
 endfunction() #func_install_xdk_files
 
@@ -239,7 +285,7 @@ function(func_install_without_message src_dir dst_dir_suffix)
     MESSAGE_NEVER )
 endfunction()
 
-function(func_install_support_files include_mvd)
+function(func_install_support_files)
 
   #a convenient cmake var for storing <prefix>/bin
   set(PKG_STAGE_BIN_DIR "${PKG_STAGE_DIR}/bin")
@@ -269,9 +315,10 @@ function(func_install_support_files include_mvd)
   if(NOT PKG_GENERATE_XDK)
     func_install_otb_support_files()
 
-    if(include_mvd)
+    #check if monteverdi executable is built?
+    if(EXISTS "${MONTEVERDI_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
       func_install_monteverdi_support_files()
-    endif(include_mvd)
+    endif()
 
   endif() #NOT PKG_GENERATE_XDK
 
@@ -483,8 +530,9 @@ function(func_prepare_package)
     set(LIB_EXT "*dylib")
   endif()
 
-  file(WRITE ${CMAKE_BINARY_DIR}/install_to_bin "")
-  file(WRITE ${CMAKE_BINARY_DIR}/install_to_lib "")
+  file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks_temp  "")
+  file(WRITE ${CMAKE_BINARY_DIR}/install_to_bin      "")
+  file(WRITE ${CMAKE_BINARY_DIR}/install_to_lib      "")
 
   #This must exist in any OTB Installation minimal or full
   set(VAR_IN_PKGSETUP_CONFIGURE "bin/otbApplicationLauncherCommandLine")
@@ -498,13 +546,11 @@ function(func_prepare_package)
   list(APPEND EXE_FILES "iceViewer")
   list(APPEND EXE_FILES "otbTestDriver")
 
-  #Q: why we need itkTestDriver?.
-  #A: Because we need to get all dlls from ITK via itkTestDriver linkage.
-  # itkvnl and itkvnl_algo are referenced in its lib/cmake/ITK-4.8/ITKTargets.cmake
-  # But OTB didn't use them and hence not counted. However an erro has been observed when
-  # using XDK on windows that the file is missing or damaged
   if(PKG_GENERATE_XDK)
+    #itk
     list(APPEND EXE_FILES "itkTestDriver")
+    #Qt stuff
+    list(APPEND EXE_FILES ${QT_EXECUTABLES})
   endif()
 
   list(APPEND EXE_FILES "monteverdi")
@@ -540,14 +586,14 @@ function(func_prepare_package)
     set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} lib/otb/applications/${OTB_APP_SO_NAME}")
   endforeach()
 
-  set(include_mvd 0)
-  if(DEFINED Monteverdi_SOURCE_DIR)
-    set(include_mvd 1)
-  endif()
+  # set(include_mvd 0)
+  # if(DEFINED Monteverdi_SOURCE_DIR)
+  #   set(include_mvd 1)
+  # endif()
 
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
 
-  func_install_support_files(${include_mvd})
+  func_install_support_files()
 
   execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/temp_so_names_dir")
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/temp_so_names_dir")
@@ -611,7 +657,6 @@ function(func_process_deps infile)
           message(STATUS "Processing ${SEARCHDIR}/${infile}")
           is_file_executable("${SEARCHDIR}/${infile}" is_executable)
           if(is_executable)
-            #install(PROGRAMS "${SEARCHDIR}/${infile}" DESTINATION ${PKG_STAGE_DIR}/bin)
             file(APPEND ${CMAKE_BINARY_DIR}/install_to_${DEST_BIN_DIR} "${SEARCHDIR}/${infile}\n")
           else(is_executable)
             get_filename_component(bn_we ${infile} NAME_WE)
@@ -631,7 +676,7 @@ function(func_process_deps infile)
                   # NOTE: $OUT_DIR is set actually in pkgsetup.in. So don't try
                   # any pre-mature optimization on that variable names
                   file(APPEND
-                    ${CMAKE_BINARY_DIR}/make_symlinks
+                    ${CMAKE_BINARY_DIR}/make_symlinks_temp
                     "ln -sf $OUT_DIR/lib/${linked_to_file} $OUT_DIR/lib/${basename_of_sofile}\n"
                     )
                   #message("${sofile} is a symlink to ${linked_to_file}")
@@ -786,36 +831,36 @@ function(func_is_file_a_symbolic_link file result_var1 result_var2)
 endfunction()
 
 
-#function to prepare list of install files to bin and lib directory
-#input_file is written by func_process_deps() macro
-#with_xdk is flag to indicate wheather we are build xdk or not.
-#Its value is same as PKG_GENERATE_XDK
-# install_list_variable -output variable that store the final list
-# This list is looped and all install() command are created there.
-function(func_prepare_install_list input_file with_xdk install_list_variable )
-  #message("-- input_file = '${input_file}'")
-  set(install_to_ITEMS)
-  file(STRINGS "${input_file}" install_to_ITEMS)
-  foreach(install_to_ITEM ${install_to_ITEMS})
-    get_filename_component(install_to_ITEM_BASENAME ${install_to_ITEM} NAME_WE)
-    #MUST remove otb applications. Installed in other macro later
-    if ("${install_to_ITEM_BASENAME}" MATCHES "otbapp_*")
-      list(REMOVE_ITEM install_to_ITEMS "${install_to_ITEM}")
+#func_lisp: - A list_process function (func_lisp)
+#This method process the input list inplace.
+#It first remove all entries in the list starting with otbapp_*
+#Then when generating XDK package it also remove
+#the all OTB and Monteverdi binaries are lib.
+#Value of PKG_GENERATE_XDK is set already
+#The final list is use to create install() commands later
+function(func_lisp install_list )
+  foreach(install_list_item ${${install_list}})
+    get_filename_component(install_list_item_NAME_WE ${install_list_item} NAME_WE)
+    #MUST remove otb applications. Installed later in otb_support_files function
+    #message("${install_list_item}")
+    if ("${install_list_item_NAME_WE}" MATCHES "otbapp_*")
+      list(REMOVE_ITEM ${install_list} "${install_list_item}")
     endif()
 
-    if(with_xdk)
-      if ("${install_to_ITEM_BASENAME}"
+    if(PKG_GENERATE_XDK)
+      if ("${install_list_item_NAME_WE}"
           MATCHES
           "libOTB|libotb|otbApp|otbTest|libMonteverdi|monteverdi|mapla|iceViewer"
           )
-        list(REMOVE_ITEM install_to_ITEMS "${install_to_ITEM}")
+        list(REMOVE_ITEM ${install_list} "${install_list_item}")
       endif()
-    endif() #with_xdk
+    endif()
   endforeach()
 
-  set(${install_list_variable} "${install_to_ITEMS}" PARENT_SCOPE)
+#  message(FATAL_ERROR "install_list=${${install_list}}")
+  set(${install_list} "${${install_list}}" PARENT_SCOPE)
 
-endfunction() # func_prepare_install_list
+endfunction() # func_lisp
 
 
 set(WINDOWS_SYSTEM_DLLS

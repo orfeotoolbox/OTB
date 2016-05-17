@@ -1,35 +1,89 @@
-OTB-v.5.4.0 - Changes since version 5.2.1 (2016/03/30)
+OTB-v.5.4.0 - Changes since version 5.2.1 (2016/05/04)
 ------------------------------------------
-* Bugs fixed:
-  * 0001137: GDALImageIO does not support SENTINEL2 sub-datasets
-  * 0001142: Fails to build with ITK 4.9.0 (itksys/FundamentalType.h: No such file or directory)
-  * 0001151: GDAL_SB_EXTRA_OPTIONS can not take multiple options
-  * 0001150: Can't "easily" deactivate LIBKML from OTB Superbuild
-  * BUG: Report the correct number of components per pixel in ImportGeoInformationImageFilter
-  * 0001153: Superimpose app in PHR mode reports wrong origin/spacing/keywordlist
-  * BUG: Enabling KMeans with more than 255 clusters
-  * 0001154: Exception raised when opening LUM or LUM+HDR
-  * 0001157: monteverdi crashes when trying to move the view without any images
-  * 0001143: Patch for various spelling errors
+* Core
+  * Ice is now a regular OTB module (RFC 23)
+  * Masked iterator decorator (RFC 22)
+  * Filter to analyse polygons for available samples (part of new sampling framework, RFC 29)
+  * Faster resampling filter for rigid scaling and translation operations (RFC 30)
+  * Modified behavior of reading/writing of TIFF RPC tags (RFC 31)
+  * Allow a module to be built outside the OTB source tree (RFC 32)
+  * Dashboard cleaning, part 1 (RFC 33)
+  * Enhancement of SARDecompositions : Barnes, Huynen, Pauli decompositions (RFC 34)
+  
+* Monteverdi
+  * Take screenshot of current display (RFC 20)
+  * Allow subdatasets import (RFC 21)
+  * Disable GLSL shader if OpenGL version is lower than 2.0 (RFC 25)
+  * Allow generation of gdal overviews when importing images (RFC 24)
 
-* RFC:
-  * Request for Changes-20: Take screenshot
-  * Request for Changes-21: Support CDS import
-  * Request for Changes-22: Add Masked Iterator Decorator
-  * Request for Changes-23: Ice as an Orfeo ToolBox module
-  * Request for Changes-25: Disable Ice shaders if OpenGL version is lower than 2.0
-  * Request for Changes-27: Merge Software Guide into OTB
-  * Request for Changes-28: Remove random contributor list functionality
-  * Request for Changes-29: Sampling Framework - Polygon analysis
-  * Request for Changes-30: Faster resampling filter
-  * Request for Changes-31: Modified behavior of reading/writing of TIFF RPC tags
-  * Request for Changes-32: Allow a module to be built outside the OTB source tree
-  * Request for Changes-33: Green dashboard cleaning part 1
-  * Request for Changes-34: Enhancement of SARDecompositions : Barnes, Huynen, Pauli decompositions
-  * Request for Changes-24: MVD/OTB GDAL overviews multi-resolution pyramid configuration
-
+* Documentation:
+  * Merge software guide into main OTB repository (RFC 17)
+  * Remove random contributor list generation (RFC 28)
+   
 * SuperBuild:
   * Add Monteverdi and its dependencies (glfw, GLEW, glut)
+
+* Bug fixed
+
+  * Monteverdi2
+    * 0001179: Using the Upper Bound mode for resolution lookup in preferences result in wrong resolution used
+    * 0001197: Clicking on minimap to navigate result in monteverdi crashing
+    * 0001178: Zoom to full resolution does not zoom to 1 image pixel = 1 screen pixel for georeferenced data
+    * 0001203: Clicking on 1:1 button several time result in strange cycling behaviour
+    * 0001205: Gamma slider effect inverted between full and quicklook view
+    * 0001202: Wrong aspect ratio at loading
+    * 0001148: OTB-applications not loaded
+    * 0001196: OTB-application Quit button closes widget but not window when using Mapla
+    * 0001147: With Monteverdi develop branch of today : opening large images with overview file leads to eating all available memory
+    * 0001138: Numeric value editing hell
+    * 0001136: Unable to open sensor products (with RPC) in Monteverdi
+    * 0001159: TrainImageClassifier sample.vtr parameter is sometime ignored
+    * 0001173: KDE grabs drag event before monteverdi, making image navigation impossible
+    * 0001144: Unable to keep unconstrained dynamic mode
+    * 0001156: Linux standalone package doesn't work on Fedora 22
+    * 0001157: monteverdi crashes when trying to move the view without any images
+    * 0001153: Superimpose app in PHR mode reports wrong origin/spacing/keywordlist
+    * 0001154: Exception raised when opening LUM or LUM+HDR
+    * 0001152: maximum number of class in KMean application limited to 255
+    * 0001140: Lost pixel position informations in layer stack
+
+  * OTB-Packaging
+    * 0001141: muparser 2.2.4 is missing in superbuild archive 5.2.1
+    * 0001171: Crash in OGR : libproj-0.dll not found
+    * 0001150: Can't "easily" deactivate LIBKML from OTB Superbuild
+
+  * Orfeo Toolbox (OTB)
+    * 0001206: Cannot maximize monteverdi window in standalone package
+    * 0001177: SuperBuild fails at MVD configure step (release-5.4 branch)
+    * 0001194: freeglut required x11 extension on osx
+    * 0001188: deactivate openldap, openssl, libssh2 when building superbuild curl.
+    * 0001190: use same compiler for all builds in the superbuild
+    * 0001184: superbuild libtiff is using libjbig from system without warning
+    * 0001185: minimal build of GDAL in superbuild
+    * 0001187: superbuild cannot find Qt4 during OTB configure on osx
+    * 0001193: deactivate finding osx framework for library
+    * 0001163: Windows MinGW packages do not contain the libsvm classifier
+    * 0001164: Monteverdi crashes when opening a tif without projection information
+    * 0001167: GUI applications visual response after clicking the "Execute" button is slow and confusing
+    * 0001158: Missing field in RefineSensorModel statistics file
+    * 0001166: otbgui_MeanShiftSmoothing problem with Mode Search parameter
+    * 0001169: add libsvm package to mxe and enable OTB_USE_LIBSVM
+    * 0001143: Patch for various spelling errors
+    * 0001151: GDAL_SB_EXTRA_OPTIONS can not take multiple options
+    * 0001142: Fails to build with ITK 4.9.0 (itksys/FundamentalType.h: No such file or directory)
+
+  * OTB-lib
+    * 0001145: Ice doesn't clamp rendered values to the specified minimum of the range
+    * 0001139: OGRLayerStreamStitchingFilter CommitTransaction fail is some cases
+    * 0001137: GDALImageIO does not support SENTINEL2 sub-datasets
+
+  * OTB-applications
+    * 0001149: ReadImageInfo application crash with Sentinel1 (SLC SM product)
+    * 0001162: Unable to perform Sentinel-1 SAR calibration on extract
+    * 0001183: Unable to edit image path in Qt GUI wrapper with complex image
+    * 0001182: Crash when editing InputImageParameter Qt widget
+    * 0001161: Inconsistency of SAR calibration applications denomination
+
 
 OTB-v.5.2.1 - Changes since version 5.2.0 (2016/01/19)
 ------------------------------------------

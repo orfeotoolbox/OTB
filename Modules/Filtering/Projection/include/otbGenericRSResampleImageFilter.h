@@ -198,7 +198,7 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
   /** Useful to set output parmaters form an existing image with type
-    * different from input or ouptut image
+    * different from input or output image
     */
   template <class TImageType> void SetOutputParametersFromImage(const TImageType * image);
 

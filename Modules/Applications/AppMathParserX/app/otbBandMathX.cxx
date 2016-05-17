@@ -201,6 +201,8 @@ private:
           }
         catch(itk::ExceptionObject& err)
           {
+          //trick to prevent unreferenced local variable warning on MSVC
+          (void)err;
           // silent catch
           useContext = false;
           }
