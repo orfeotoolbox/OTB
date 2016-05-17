@@ -6,6 +6,6 @@ dist: trusty
 compiler:
 - clang
 
-cache: false
+cache: ccache
 
 script: Utilities/Maintenance/TravisBuild.sh

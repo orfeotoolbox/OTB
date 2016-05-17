@@ -116,6 +116,7 @@ macro(macro_create_targets_for_package pkg)
       )
   else()
     add_custom_target(PACKAGE-${pkg}
+      ALL DEPENDS
       COMMAND ${MAKESELF_SCRIPT}
       "--quiet"
       "--target"
