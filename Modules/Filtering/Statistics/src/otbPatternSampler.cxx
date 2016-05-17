@@ -37,7 +37,7 @@ PatternSampler::PatternSampler()
   : m_Index1(0UL)
   , m_Index2(0UL)
 {
-  this->m_Parameters.MaxPatternSize = 256;
+  this->m_Parameters.MaxPatternSize = 1000;
   this->m_Parameters.Pattern1.clear();
   this->m_Parameters.Pattern2.clear();
   this->m_Parameters.Seed = 121212;
@@ -260,7 +260,7 @@ PatternSampler::FindBestSize(unsigned long tot)
     return tot;
 
   // try to find a sub-period in tot, between 20 and MaxPatternSize
-  for(unsigned long size = m_Parameters.MaxPatternSize; size >= 20; size--)
+  for(unsigned long size = m_Parameters.MaxPatternSize; size >= 2; size--)
     if (tot%size == 0)
       return size;
       
