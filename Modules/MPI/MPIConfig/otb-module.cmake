@@ -10,12 +10,8 @@ otb_module(OTBMPIConfig
     OTBBoost
     OTBImageBase
     OTBImageManipulation
-    OTBInterpolation
     OTBMPITiffWriter
-    OTBPanSharpening
-    OTBProjection
     OTBTestKernel
-
   DESCRIPTION
     "${DOCUMENTATION}"
 )

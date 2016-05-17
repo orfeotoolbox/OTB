@@ -33,8 +33,13 @@ namespace otb {
 namespace mpi {
 
 // Update MPI
-template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::string &output, bool useStreaming=true, bool writeVRTFile=false) 
+template <typename TImage> void WriteMPI (TImage *img, const std::string &output, bool useStreaming=true, bool writeVRTFile=false) 
 {
+  typename otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
+
+  int myRank = mpiConfig->GetMyRank();
+  int nbProcs = mpiConfig->GetNbProcs();
+  
   typedef otb::ImageFileWriter<TImage>                                           WriterType;
   typedef otb::NumberOfDivisionsTiledStreamingManager<TImage>                    StreamingManagerType;
   typedef itk::RegionOfInterestImageFilter<TImage, TImage>                       ExtractFilterType;
@@ -44,7 +49,7 @@ template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::st
 
   // Configure streaming manager
   typename StreamingManagerType::Pointer streamingManager = StreamingManagerType::New();
-  streamingManager->SetNumberOfDivisions(m_NbProcs);
+  streamingManager->SetNumberOfDivisions(nbProcs);
   streamingManager->PrepareStreaming(img,img->GetLargestPossibleRegion());
   unsigned int numberOfSplits = streamingManager->GetNumberOfSplits();
 
@@ -53,14 +58,14 @@ template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::st
 
   // Handle both cases when there are much more (resp. less) region to
   // write than NbProcs
-  if(m_MyRank < numberOfSplits)
+  if(myRank < numberOfSplits)
   {
-    unsigned int splitIdx = m_MyRank;
+    unsigned int splitIdx = myRank;
     while(splitIdx < numberOfSplits)
     {
       typename TImage::RegionType currentRegion = streamingManager->GetSplit(splitIdx);
       regionsToWrite.push_back(currentRegion);
-      splitIdx+=m_NbProcs;
+      splitIdx+=nbProcs;
     }
   }
 
@@ -71,13 +76,13 @@ template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::st
     if (extension == "")
 	{
 	  // Missing extension
-	  this->logInfo("Filename has no extension. Adding <.tif> extension.");
+	  mpiConfig->logInfo("Filename has no extension. Adding <.tif> extension.");
 	}
 	else
 	{
 	  // Bad extension
-	  this->logError("Filename must have .tif extension!");
-	  this->abort(EXIT_FAILURE);
+	  mpiConfig->logError("Filename must have .tif extension!");
+	  mpiConfig->abort(EXIT_FAILURE);
 	}
   }
   std::vector<std::string> joins;
@@ -112,7 +117,7 @@ template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::st
     try
     {
       writer->Update();
-      if (writeVRTFile && (m_MyRank == 0))
+      if (writeVRTFile && (myRank == 0))
       {
         // Write VRT File
         std::stringstream vrtfOut;
@@ -159,8 +164,8 @@ template <typename TImage> void MPIConfig::UpdateMPI (TImage *img, const std::st
     {
       std::stringstream message;
       message << "ExceptionObject caught: " << err << std::endl;
-      this->logError(message.str());
-      this->abort(EXIT_FAILURE);
+      mpiConfig->logError(message.str());
+      mpiConfig->abort(EXIT_FAILURE);
     }
   }
 }
