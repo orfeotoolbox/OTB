@@ -131,18 +131,8 @@ macro(ADD_SUPERBUILD_CONFIGURE_VAR project var name)
 endmacro(ADD_SUPERBUILD_CONFIGURE_VAR)
 
 macro(SUPERBUILD_PATCH_SOURCE project external_project_step_name)
-  set (extra_args ${ARGN})
-  # Did we get any optional args?
-  list(LENGTH extra_args num_extra_args)
-  if (${num_extra_args} GREATER 0)
-    list(GET extra_args 0 patch_dir_arg)
-    #if there is third argument set is as ${project}_PATCH_DIR
-    set(${project}_PATCH_DIR ${patch_dir_arg})
-  else()
-    #default value
-    set(${project}_PATCH_DIR ${CMAKE_SOURCE_DIR}/patches/${project})
-  endif()
-
+  set(${project}_PATCH_DIR ${CMAKE_SOURCE_DIR}/patches/${project})
+  string(TOLOWER ${project} project_)
   if(WIN32)
     set(DIFF_FILE_MATCH_STRING "win")
   else()
@@ -152,9 +142,10 @@ macro(SUPERBUILD_PATCH_SOURCE project external_project_step_name)
       set(DIFF_FILE_MATCH_STRING "linux")
     endif()
   endif() #WIN32
-  file(GLOB files_list "${PATCH_DIR}/*${DIFF_FILE_MATCH_STRING}*diff")
+  file(GLOB files_list "${${project}_PATCH_DIR}/${project_}*${DIFF_FILE_MATCH_STRING}*diff")
   if(files_list)
-    ExternalProject_Add_Step(${project} ${external_project_step_name}
+    message(STATUS "  Custom patches required for ${project}")
+    ExternalProject_Add_Step(${project} ${project}_custom_patch
       COMMAND
       ${CMAKE_COMMAND}
       -DSOURCE_DIR=${${project}_SB_SRC}
@@ -164,5 +155,4 @@ macro(SUPERBUILD_PATCH_SOURCE project external_project_step_name)
       DEPENDEES patch update
       DEPENDERS configure
       )
-  endif()
 endmacro(SUPERBUILD_PATCH_SOURCE)
