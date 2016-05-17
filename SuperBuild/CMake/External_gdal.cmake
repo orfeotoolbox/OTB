@@ -45,10 +45,11 @@ if(UNIX)
 
   # PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
   # COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/GDAL/GNUmakefile ${GDAL_SB_SRC}/swig/python/GNUmakefile
+  
+  ADD_SUPERBUILD_CONFIGURE_VAR(GDAL LIBKML_ROOT     --with-libkml)
 
   set(GDAL_PATCH_COMMAND)
-
-  set(GDAL_CONFIGURE_COMMAND  "${SB_ENV_CONFIGURE_CMD};./configure"
+  set(GDAL_CONFIGURE_COMMAND  "${SB_ENV_CONFIGURE_CMD};${GDAL_SB_SRC}/configure"
     --prefix=${SB_INSTALL_PREFIX}
     --enable-static=no
     --enable-shared=yes
@@ -68,7 +69,6 @@ if(UNIX)
     --with-jp2mrsid=no
     --with-kakadu=no
     --with-libgrass=no
-    --with-libjson-c=internal
     --with-mrsid=no
     --with-msg=no
     --with-mysql=no
@@ -117,7 +117,6 @@ else(MSVC)
 
 endif()
 
-#message(FATAL_ERROR "GDAL_CONFIGURE_COMMAND=${GDAL_CONFIGURE_COMMAND}")
 ExternalProject_Add(GDAL
   PREFIX GDAL
   URL "http://download.osgeo.org/gdal/2.1.0/gdal-2.1.0.tar.gz"
