@@ -214,8 +214,6 @@ private:
     SetDocExampleParameterValue("vec", "variousVectors.sqlite");
     SetDocExampleParameterValue("field", "label");
     SetDocExampleParameterValue("instats","apTvClPolygonClassStatisticsOut.xml");
-    SetDocExampleParameterValue("strat","byclass");
-    SetDocExampleParameterValue("nbsampbyclass","\"1:98 2:100 3:23\"");
     SetDocExampleParameterValue("out","resampledVectors.sqlite");
   }
 
@@ -391,7 +389,7 @@ private:
 
         // Processing ...
         m_Pattern->Update();
-        
+
         // Save patterns
         if (IsParameterEnabled("sampler.pattern.out") && HasValue("sampler.pattern.out"))
           {
