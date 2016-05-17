@@ -89,9 +89,10 @@ ctest_build     (BUILD "${CTEST_BINARY_DIRECTORY}" RETURN_VALUE _build_rv)
 if(NOT _build_rv EQUAL 0)
   do_submit()
 endif ()
-
-execute_process(COMMAND  ${CTEST_COMMAND} "-R" "Tu" "."
-  WORKING_DIRECTORY "${CTEST_BINARY_DIRECTORY}"
-  )
+#identify data required for failing test and make a micro OTB-Data archive.
+ctest_test      (BUILD "${CTEST_BINARY_DIRECTORY}" INCLUDE Tu RETURN_VALUE _test_rv)
+# execute_process(COMMAND  ${CTEST_COMMAND} "-R" "Tu" "."
+#   WORKING_DIRECTORY "${CTEST_BINARY_DIRECTORY}"
+#   )
 
 do_submit()
