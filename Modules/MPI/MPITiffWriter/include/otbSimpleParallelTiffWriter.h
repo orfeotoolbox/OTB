@@ -75,6 +75,7 @@ namespace otb
  *
  * SimpleParallelTiffWriter implements a version of Simple Parallel Tiff Writer (D.M. Mattli, USGS)
  *
+ *
  * \sa ImageFileWriter
  */
 template <class TInputImage>
