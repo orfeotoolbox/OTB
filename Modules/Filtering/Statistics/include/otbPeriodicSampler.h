@@ -45,6 +45,7 @@ public:
    */
   typedef struct Parameter
     {
+    /** Offset that shifts the whole periodic sampling */
     unsigned long Offset;
     
     bool operator!=(const struct Parameter  & param) const;

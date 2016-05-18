@@ -45,12 +45,17 @@ public:
    */
   typedef struct Parameter
     {
+    /** Maximum size of the internal patterns */
     unsigned long MaxPatternSize;
 
+    /** First sampling pattern */
     std::vector<bool> Pattern1;
 
+    /** Second sampling pattern (can be empty).
+     * It is called when the first pattern returns false */
     std::vector<bool> Pattern2;
 
+    /** Seed used to randomly generate patterns (used only if greater than 0) */
     unsigned int Seed;
 
     bool operator!=(const struct Parameter  & param) const;
@@ -105,15 +110,19 @@ private:
   PatternSampler(const Self&);
   void operator=(const Self&);
 
+  /** Generate a random array of booleans */
   std::vector<bool> RandArray(unsigned long N,unsigned long T);
 
+  /** Find a suitable size for internal patterns */
   unsigned long FindBestSize(unsigned long tot);
 
   /** Internal parameters for the sampler */
   ParameterType m_Parameters;
 
+  /** Index tracking the position in first internal pattern */
   unsigned long m_Index1;
 
+  /** Index tracking the position in the second internal pattern */
   unsigned long m_Index2;
 
   /** Helper function to decode boolean sequence
@@ -121,7 +130,6 @@ private:
    *  Caracters converted into false : '0' '_' 'n' 'N' '.' '-'
    *  Other caracters will return a 2 */
   static unsigned int ParseSymbol(const char &s);
-
 };
 
 } // namespace otb

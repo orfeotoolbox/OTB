@@ -47,6 +47,8 @@ public:
    */
   typedef struct Parameter
     {
+    /** Flag for adaptative mode : adapt the rate during iteration so that
+     *  the exact number of requested samples is selected */
     bool Adaptative;
     
     bool operator!=(const struct Parameter  & param) const;
@@ -87,7 +89,8 @@ private:
   
   /** Internal parameters for the sampler */
   ParameterType m_Parameters;
-  
+
+  /** Pointer to the random number generator instance */
   itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer m_Generator;
 };
 

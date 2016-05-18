@@ -21,12 +21,10 @@
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "otbOGRDataSourceWrapper.h"
-//#include "otbOGRDataResampler.h"
 #include "itkSimpleDataObjectDecorator.h"
 #include "otbSamplingRateCalculator.h"
 #include "otbPeriodicSampler.h"
 #include "otbImage.h"
-
 
 namespace otb
 {
@@ -34,8 +32,19 @@ namespace otb
 /**
  * \class PersistentOGRDataToSamplePositionFilter
  * 
- * \brief Persistent filter to compute class statistics based on vectors
+ * \brief Persistent filter to extract sample position from an image
+ *
+ * This filter uses an input image (to define the sampling grid), an optional
+ * input mask, and a set of input vectors that define the sampling regions for
+ * each class.
+ *
+ * The filter has a set of samplers (one for each class), they define what
+ * sampling rate and strategy should be performed.
  * 
+ * Several levels of output are supported. For instance, with two outputs :
+ * when the sampler from level 1 discards a sample, the sampler from level 2 is
+ * called.
+ *
  * \ingroup OTBSampling
  */
 template<class TInputImage, class TMaskImage, class TSampler>
@@ -76,37 +85,51 @@ public:
   /** Runtime information support. */
   itkTypeMacro(PersistentOGRDataToSamplePositionFilter, PersistentImageFilter);
 
+  /** Set the input OGRDataSource that contains sampling areas for each class*/
   void SetOGRData(const otb::ogr::DataSource* vector);
+
+  /** Get the input OGRDataSource with sampling regions*/
   const otb::ogr::DataSource* GetOGRData();
 
+  /** Set an input mask (optional) */
   void SetMask(const TMaskImage* mask);
+
+  /** Get the input mask (may be null) */
   const TMaskImage* GetMask();
 
+  /** Synthetize the persistent filter*/
   void Synthetize(void);
 
   /** Reset method called before starting the streaming*/
   void Reset(void);
 
-  // TODO : prevent loading of data into output
-
+  /** Set/Get macro for the field name containing class names
+   * in the input vectors.*/
   itkSetMacro(FieldName, std::string);
   itkGetMacro(FieldName, std::string);
-  
+
+  /** Set/Get macro for the layer index containing the sampling areas */
   itkSetMacro(LayerIndex, int);
   itkGetMacro(LayerIndex, int); 
 
+  /** Get a reference to the internal samplers at a given level */
   SamplerMapType& GetSamplers(unsigned int level);
-  
+
+  /** Set an output container for sample position associated
+   * with corresponding rates, for a given level.*/
   void SetOutputPositionContainerAndRates(
     otb::ogr::DataSource* data,
     const SamplingRateCalculator::MapRateType& map,
     unsigned int level);
 
+  /** Get the output position container of a given level */
   const otb::ogr::DataSource* GetOutputPositionContainer(unsigned int level) const;
   otb::ogr::DataSource* GetOutputPositionContainer(unsigned int level);
 
+  /** Get the number of sampling levels used in this filter.*/
   unsigned int GetNumberOfLevels();
-  
+
+  /** Clear all output position containers */
   void ClearOutputs();
   
   /** Set the OGR layer creation options */
@@ -133,8 +156,10 @@ private:
   PersistentOGRDataToSamplePositionFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+  /** Filter the input vector to the extent of the stream being processed.*/
   void ApplyPolygonsSpatialFilter();
 
+  /** Get the region bounding a set of features */
   RegionType FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const;
 
   /** Process the current geometry using an image iterator */
@@ -151,30 +176,36 @@ private:
                    unsigned long &fId,
                    std::string &className);
 
+  /** Call samplers on a current position, for a given class */
   void CallSamplers(const PointType &point,
                     const std::string &className);
 
+  /** Field name containing the class name*/
   std::string m_FieldName;
 
+  /** Field index containing the class name*/
   int m_FieldIndex;
 
+  /** Internal samplers*/
   std::vector<SamplerMapType> m_Samplers;
 
-  // Layer to use in the shape file, default to 0
+  /** Layer to use in the input vector file, default to 0 */
   int m_LayerIndex;
   
-  // (internal) name of the layer at position 'm_LayerIndex'
+  /** (internal) name of the layer at position 'm_LayerIndex' */
   std::string m_LayerName;
 
+  /** OGR Layer creation option for output position containers */
   std::vector<std::string> m_OGRLayerCreationOptions;
 
+  /** In-memory containers storing position during iteration loop*/
   std::vector<OGRDataPointer> m_InMemoryOutputs;
 };
 
 /**
  * \class OGRDataToSamplePositionFilter
  * 
- * \brief Computes class statistics based on vectors using a persistent filter
+ * \brief Extracts sample position from an image using a persistent filter
  * 
  * \sa PersistentOGRDataToSamplePositionFilter
  *
@@ -212,33 +243,52 @@ public:
   itkTypeMacro(OGRDataToSamplePositionFilter, PersistentFilterStreamingDecorator);
 
   using Superclass::SetInput;
+
+  /** Set the input image */
   virtual void SetInput(const TInputImage* image);
 
+  /** Get the input image*/
   const TInputImage* GetInput();
 
+  /** Set the input OGRDataSource containing sampling areas */
   void SetOGRData(const otb::ogr::DataSource* data);
+
+  /** Get the input OGRDataSource containing sampling areas */
   const otb::ogr::DataSource* GetOGRData();
 
+  /** Set the input mask (optional) */
   void SetMask(const TMaskImage* mask);
+
+  /** Get input mask (may be null)*/
   const TMaskImage* GetMask();
 
+  /** Set the field name containing class names*/
   void SetFieldName(std::string key);
+
+  /** Get the field name containing class names*/
   std::string GetFieldName();
-  
+
+  /** Set the layer index containing sampling areas*/
   void SetLayerIndex(int index);
+
+  /** Get the layer index containing sampling areas*/
   int GetLayerIndex();
 
+  /** Set the sampling parameters for all classes at a given level.*/
   void SetSamplerParameters(SamplerParameterType param, unsigned int level=0);
 
+  /** Get a reference to the internal sampler map at a given level.*/
   SamplerMapType& GetSamplers(unsigned int level=0);
 
+  /** Set the output container with the associated rates at a given level.*/
   void SetOutputPositionContainerAndRates(
     otb::ogr::DataSource* data,
     const SamplingRateCalculator::MapRateType& map,
     unsigned int level=0);
 
+  /** Get the output position container at a given level.*/
   otb::ogr::DataSource* GetOutputPositionContainer(unsigned int level=0);
- 
+
 protected:
   /** Constructor */
   OGRDataToSamplePositionFilter() {}

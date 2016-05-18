@@ -54,15 +54,20 @@ public:
   /** method to set the sampling rate, if the total number of elements
    *  is given, the number of needed elements is updated */
   void SetRate(double rate, unsigned long total=0UL);
-  
+
+  /** Get macro for sampling rate */
   itkGetMacro(Rate,double);
-  
+
+  /** Get macro for the total number of elements */
   itkGetMacro(TotalElements,unsigned long);
 
+  /** Get macro for the number of needed elements */
   itkGetMacro(NeededElements,unsigned long);
-  
+
+  /** Get macro for the current number of chosen elements */
   itkGetMacro(ChosenElements, unsigned long);
-  
+
+  /** Get macro for the current number of processed elements */
   itkGetMacro(ProcessedElements,unsigned long);
 
 protected:
