@@ -46,7 +46,6 @@
 // SPTW
 #include <algorithm>
 #include <vector>
-//#include <SPTW/sptw.h>
 #include "sptw.h"
 
 // GDAL-OTB datatype brigde
@@ -57,7 +56,7 @@ namespace otb
 
 
 /** \class SimpleParallelTiffWriter
- * \brief Writes TIFF image data to a single file with streaming process.
+ * \brief Writes a GeoTiff image using parallel non collective operations.
  *
  * SimpleParallelTiffWriter writes its input data to a single output file.
  * SimpleParallelTiffWriter interfaces with an MPI-IO based class to write out the
@@ -73,7 +72,12 @@ namespace otb
  * SimpleParallelTiffWriter will write directly the streaming buffer in the image file, so
  * that the output image never needs to be completely allocated
  *
- * SimpleParallelTiffWriter implements a version of Simple Parallel Tiff Writer (D.M. Mattli, USGS)
+ * SimpleParallelTiffWriter implements a version of Simple Parallel Tiff Writer (SPTW,
+ * D.M. Mattli, USGS)
+ *
+ * Splitting strategies are close to those implemented in ImageFileWriter, except
+ * layout is optimized for the number of MPI processes for stripped regions.
+ * TODO: optimize the splitting layout for tiled regions
  *
  *
  * \sa ImageFileWriter
@@ -219,13 +223,23 @@ public:
 	itkGetObjectMacro(ImageIO, otb::ImageIOBase);
 	itkGetConstObjectMacro(ImageIO, otb::ImageIOBase);
 
-	/* MPI accessors */
+	/* MPI parameters accessors */
 	itkSetMacro(MyRank, int);
+	itkGetMacro(MyRank, int);
 	itkSetMacro(NProcs, int);
-	itkSetMacro(TiffTileSize, int);
+	itkGetMacro(NProcs, int);
+
+	/* Writer modes */
 	itkSetMacro(Verbose, bool);
+	itkGetMacro(Verbose, bool);
 	itkSetMacro(VirtualMode, bool);
+	itkGetMacro(VirtualMode, bool);
+
+	/* GeoTiff options */
+	itkSetMacro(TiffTileSize, int);
+	itkGetMacro(TiffTileSize, int);
 	itkSetMacro(TiffTiledMode, bool);
+	itkGetMacro(TiffTiledMode, bool);
 
 protected:
 	SimpleParallelTiffWriter();
@@ -257,19 +271,20 @@ private:
 		this->UpdateProgress( (m_DivisionProgress + m_CurrentDivision) / m_NumberOfDivisions );
 	}
 
-	int GetProcFromDivision(int div)
+	/*
+	 * Returns the process id which process a given region
+	 */
+	int GetProcFromDivision(int regionIndex)
 	{
 		if (m_NProcs==0)
 			return 0;
-		return ( div % m_NProcs);
+		return ( regionIndex % m_NProcs);
 	}
 
+	/*
+	 * Arranges the splitting layout to match the number of MPI processes
+	 */
 	unsigned int OptimizeStrippedSplittingLayout(unsigned int n);
-
-	bool MyCall()
-	{
-		return (GetProcFromDivision(m_CurrentDivision) == m_MyRank);
-	}
 
 	unsigned int m_NumberOfDivisions;
 	unsigned int m_CurrentDivision;
