@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_GLEW__)
 set(__EXTERNAL_GLEW__ 1)
 
 if(USE_SYSTEM_GLEW)
-  find_package ( GLEW )
   message(STATUS "  Using GLEW system version")
 else()
   SETUP_SUPERBUILD(PROJECT GLEW)

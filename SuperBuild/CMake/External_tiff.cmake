@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_TIFF__)
 set(__EXTERNAL_TIFF__ 1)
 
 if(USE_SYSTEM_TIFF)
-  find_package ( TIFF )
   message(STATUS "  Using libtiff system version")
 else()
   SETUP_SUPERBUILD(PROJECT TIFF)

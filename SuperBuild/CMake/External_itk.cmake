@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_ITK__)
 set(__EXTERNAL_ITK__ 1)
 
 if(USE_SYSTEM_ITK)
-  find_package ( ITK )
   message(STATUS "  Using ITK system version")
 else()
   SETUP_SUPERBUILD(PROJECT ITK)

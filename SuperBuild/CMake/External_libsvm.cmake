@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_LIBSVM__)
 set(__EXTERNAL_LIBSVM__ 1)
 
 if(USE_SYSTEM_LIBSVM)
-  find_package ( LibSVM )
   message(STATUS "  Using LibSVM system version")
 else()
   SETUP_SUPERBUILD(PROJECT LIBSVM)

@@ -6,7 +6,6 @@ set(USE_SYSTEM_OPENTHREADS OFF)
 endif()
 
 if(USE_SYSTEM_OPENTHREADS)
-  find_package ( OpenThreads )
   message(STATUS "  Using OpenThread system version")
 else()
   SETUP_SUPERBUILD(PROJECT OPENTHREADS)
