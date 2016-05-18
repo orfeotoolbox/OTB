@@ -632,7 +632,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 
       ogr::Layer outputLayer = this->m_InMemoryOutputs[i]->GetLayerChecked(0);
       ogr::Feature feat(outputLayer.GetLayerDefn());
-      feat[m_FieldName].SetValue<std::string>(className);
+      feat[m_FieldName].SetValue(className);
       feat.SetGeometry(&ogrTmpPoint);
       outputLayer.CreateFeature(feat);
       break;
