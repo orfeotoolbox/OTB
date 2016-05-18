@@ -1,54 +1,51 @@
-if(NOT __EXTERNAL_JPEG__)
-set(__EXTERNAL_JPEG__ 1)
+if( __EXTERNAL_JPEG__)
+  return()
+else()
+  set(__EXTERNAL_JPEG__ 1)
+endif()
 
 if(USE_SYSTEM_JPEG)
   message(STATUS "  Using libjpeg system version")
-else()
-  SETUP_SUPERBUILD(PROJECT JPEG)
-  message(STATUS "  Using libjpeg SuperBuild version")
+  return()
+endif()
 
-  include(CheckTypeSize)
-  check_type_size("size_t" JPEG_SIZEOF_SIZE_T)
+SETUP_SUPERBUILD(PROJECT JPEG)
+message(STATUS "  Using libjpeg SuperBuild version")
 
-  ExternalProject_Add(JPEG
-    PREFIX JPEG
-    URL "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/libjpeg-turbo-1.4.1.tar.gz"
-    URL_MD5 b1f6b84859a16b8ebdcda951fa07c3f2
-    SOURCE_DIR ${JPEG_SB_SRC}
-    BINARY_DIR ${JPEG_SB_BUILD_DIR}
-    INSTALL_DIR ${SB_INSTALL_PREFIX}
-    DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-    CMAKE_ARGS
+if(WIN32)
+  set(JPEG_CONFIGURE_COMMAND ${SB_CMAKE_COMMAND}
     -DCMAKE_BUILD_TYPE=Release
-    -DCMAKE_C_FLAGS=-DSIZEOF_SIZE_T=${JPEG_SIZEOF_SIZE_T}
     -DENABLE_SHARED=TRUE
     -DENABLE_STATIC=FALSE
     -DWITH_SIMD=FALSE
     -DWITH_TURBOJPEG=FALSE
-    CMAKE_COMMAND ${SB_CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${SB_INSTALL_PREFIX}
-    )
+    -DCMAKE_INSTALL_PREFIX=${SB_INSTALL_PREFIX})
 
-  if(MSVC)
-    ExternalProject_Add_Step(JPEG patch_jconfigint
-      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/JPEG/jconfigint.h.in ${JPEG_SB_SRC}/win/
-      DEPENDEES update
-      DEPENDERS configure)
-  endif()
+  set(JPEG_PATCH_COMMAND ${CMAKE_COMMAND}
+    -E copy
+    ${CMAKE_SOURCE_DIR}/patches/JPEG/jconfigint.h.in
+    ${JPEG_SB_SRC}/win/)
 
-  if(UNIX)
-    ExternalProject_Add_Step(JPEG patch_setmode
-      COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/patches/JPEG/patch.cmake
-      WORKING_DIRECTORY ${JPEG_SB_SRC}
-      DEPENDEES update)
-  endif()
-
-
-  set(_SB_JPEG_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-    if(WIN32)
-      set(_SB_JPEG_LIBRARY ${SB_INSTALL_PREFIX}/lib/jpeg.lib)
-    elseif(UNIX)
-      set(_SB_JPEG_LIBRARY ${SB_INSTALL_PREFIX}/lib/libjpeg${CMAKE_SHARED_LIBRARY_SUFFIX})
-    endif()
-
+else()
+  set(JPEG_CONFIGURE_COMMAND  "${SB_ENV_CONFIGURE_CMD};${JPEG_SB_SRC}/configure")
+  set(JPEG_PATCH_COMMAND)
 endif()
+
+ExternalProject_Add(JPEG
+  PREFIX JPEG
+  URL "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/libjpeg-turbo-1.4.1.tar.gz"
+  URL_MD5 b1f6b84859a16b8ebdcda951fa07c3f2
+  SOURCE_DIR ${JPEG_SB_SRC}
+  BINARY_DIR ${JPEG_SB_SRC}
+  INSTALL_DIR ${SB_INSTALL_PREFIX}
+  DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
+  CONFIGURE_COMMAND ${JPEG_CONFIGURE_COMMAND}
+  PATCH_COMMAND ${JPEG_PATCH_COMMAND}
+  )
+
+set(_SB_JPEG_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+if(WIN32)
+  set(_SB_JPEG_LIBRARY ${SB_INSTALL_PREFIX}/lib/jpeg.lib)
+elseif(UNIX)
+  set(_SB_JPEG_LIBRARY ${SB_INSTALL_PREFIX}/lib/libjpeg${CMAKE_SHARED_LIBRARY_SUFFIX})
 endif()
