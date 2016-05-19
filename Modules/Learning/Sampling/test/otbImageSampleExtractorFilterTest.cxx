@@ -20,6 +20,7 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "itkPhysicalPointImageSource.h"
+#include "itkTimeProbe.h"
 #include <fstream>
 
 int otbImageSampleExtractorFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
@@ -77,7 +78,14 @@ int otbImageSampleExtractorFilter(int argc, char* argv[])
   filter->SetClassFieldName(classFieldName);
   filter->SetOutputFieldPrefix(outputPrefix);
 
+  itk::TimeProbe chrono;
+  chrono.Start();
+
   filter->Update();
+
+  chrono.Stop();
+  std::cout << "Extraction took "<< chrono.GetTotal() << " sec" << std::endl;
+
   return EXIT_SUCCESS;
 }
 
@@ -149,7 +157,13 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
   filter->SetClassFieldName(classFieldName);
   filter->SetOutputFieldPrefix(outputPrefix);
 
+  itk::TimeProbe chrono;
+  chrono.Start();
+
   filter->Update();
+
+  chrono.Stop();
+  std::cout << "Extraction took "<< chrono.GetTotal() << " sec" << std::endl;
 
   return EXIT_SUCCESS;
 }
