@@ -1,5 +1,4 @@
 otb_module_test()
-
 set(OTBSupervisedTests
 otbSupervisedTestDriver.cxx
 otbConfusionMatrixCalculatorTest.cxx

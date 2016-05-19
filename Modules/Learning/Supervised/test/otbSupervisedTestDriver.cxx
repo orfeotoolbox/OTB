@@ -59,8 +59,9 @@ void RegisterTests()
 
   //#ifdef OTB_USE_SHARK
     REGISTER_TEST(otbSharkRFMachineLearningModelNew);
+    REGISTER_TEST(otbSharkRFMachineLearningModel);
     //#endif
   
       REGISTER_TEST(otbImageClassificationFilterNew);
-      REGISTER_TEST(otbImageClassificationFilter);
+    REGISTER_TEST(otbImageClassificationFilter);
 }

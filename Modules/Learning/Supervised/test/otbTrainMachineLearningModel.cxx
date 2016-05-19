@@ -1044,4 +1044,88 @@ int otbSharkRFMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(ar
   SharkRFType::Pointer classifier = SharkRFType::New();
   return EXIT_SUCCESS;
 }
+
+int otbSharkRFMachineLearningModel(int argc, char * argv[])
+{
+  if (argc != 3 )
+    {
+    std::cout<<"Wrong number of arguments "<<std::endl;
+    std::cout<<"Usage : sample file, output file "<<std::endl;
+    return EXIT_FAILURE;
+    }
+
+  typedef otb::SharkRandomForestsMachineLearningModel<InputValueType,TargetValueType> RandomForestType;
+  InputListSampleType::Pointer samples = InputListSampleType::New();
+  TargetListSampleType::Pointer labels = TargetListSampleType::New();
+  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
+
+  if(!ReadDataFile(argv[1],samples,labels))
+    {
+    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
+    return EXIT_FAILURE;
+    }
+
+
+  RandomForestType::Pointer classifier = RandomForestType::New();
+  classifier->SetInputListSample(samples);
+  classifier->SetTargetListSample(labels);
+  classifier->SetMaxNumberOfTrees(30);
+  /*
+    //set parameters
+    // classifier->SetMaxNumberOfTrees(30);
+    // classifier->SetMaxDepth(30);
+    // classifier->SetMaxNumberOfCategories(30);
+    // classifier->SetMaxNumberOfVariables(4);
+
+    classifier->Train();
+    classifier->Save(argv[2]);
+
+    classifier->SetTargetListSample(predicted);
+    classifier->PredictAll();
+
+    ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
+
+    cmCalculator->SetProducedLabels(predicted);
+    cmCalculator->SetReferenceLabels(labels);
+    cmCalculator->Compute();
+
+    std::cout<<"Confusion matrix: "<<std::endl;
+    std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
+    const float kappaIdx = cmCalculator->GetKappaIndex();
+    std::cout<<"Kappa: "<<kappaIdx<<std::endl;
+    std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
+
+    //Load Model to new RF
+    TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
+    RandomForestType::Pointer classifierLoad = RandomForestType::New();
+
+    classifierLoad->Load(argv[2]);
+    classifierLoad->SetInputListSample(samples);
+    classifierLoad->SetTargetListSample(predictedLoad);
+    classifierLoad->PredictAll();
+
+    ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
+
+    cmCalculatorLoad->SetProducedLabels(predictedLoad);
+    cmCalculatorLoad->SetReferenceLabels(labels);
+    cmCalculatorLoad->Compute();
+
+    std::cout<<"Confusion matrix: "<<std::endl;
+    std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
+    const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
+    std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
+    std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
+
+
+    if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+      {
+      return EXIT_SUCCESS;
+      }
+    else
+      {
+      return EXIT_FAILURE;
+      }
+*/
+  return EXIT_SUCCESS;
+}
 //#endif

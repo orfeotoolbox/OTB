@@ -11,6 +11,7 @@ target_link_libraries(OTBSupervised
   ${OTBCommon_LIBRARIES}
   ${OTBSVMLearning_LIBRARIES}
   ${OTBOpenCV_LIBRARIES}
+  ${SHARK_LIBRARIES}
   )
 
 otb_module_target(OTBSupervised)

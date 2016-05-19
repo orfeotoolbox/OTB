@@ -20,6 +20,7 @@
 
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
+#include "shark/Algorithms/Trainers/RFTrainer.h"
 
 namespace otb
 {
@@ -66,6 +67,9 @@ public:
   virtual bool CanWriteFile(const std::string &);
   //@}
 
+  itkGetMacro(MaxNumberOfTrees, int);
+  itkSetMacro(MaxNumberOfTrees, int);
+
 protected:
   /** Constructor */
   SharkRandomForestsMachineLearningModel();
@@ -80,7 +84,7 @@ private:
   SharkRandomForestsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-
+  int m_MaxNumberOfTrees;
 };
 } // end namespace otb
 
