@@ -2,21 +2,26 @@
 # SET(CMAKE_MODULE_PATH "${${PROJECT_NAME}_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 otb_module_test()
 
-# Ossim
-# find_package(ossim)
-# message(STATUS "OSSIM_INSTALL_PREFIX: $ENV{OSSIM_INSTALL_PREFIX}")
-# if (NOT OSSIM_FOUND)
-    # message(FATAL_ERROR "Cannot find OSSIM.")
-# endif()
+message(STATUS "UT: ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}")
 
 
-# s1_inversemodel
+# Common dirs
 include_directories(${PROJECT_SOURCE_DIR}/Modules/ThirdParty/OssimPlugins/src/ossim ${OSSIM_INCLUDE_DIR})
 
+#==== UT for utilities
+add_executable(ossimStringUtilitiesTest ossimStringUtilitiesTest.cpp)
+target_link_libraries(ossimStringUtilitiesTest
+   otbossimplugins
+   ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+otb_module_target_label(ossimStringUtilitiesTest)
+otb_add_test(NAME ossimStringUtilitiesTest COMMAND ossimStringUtilitiesTest )
+
+
+#===== Domain tests
+# s1_inversemodel
 add_executable(s1_inversemodel s1_inversemodel.cpp)
 target_link_libraries(s1_inversemodel otbossimplugins)
 otb_module_target_label(s1_inversemodel)
-
 
 #Test executables
 add_executable(ossimSarSensorModelTest ossimSarSensorModelTest.cpp)
