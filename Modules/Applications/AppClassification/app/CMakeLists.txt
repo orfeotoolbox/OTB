@@ -109,3 +109,8 @@ otb_create_application(
   NAME           PolygonClassStatistics
   SOURCES        otbPolygonClassStatistics.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           SampleExtraction
+  SOURCES        otbSampleExtraction.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
