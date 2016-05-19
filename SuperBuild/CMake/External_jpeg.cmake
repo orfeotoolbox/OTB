@@ -27,7 +27,12 @@ if(WIN32)
     ${JPEG_SB_SRC}/win/)
 
 else()
-  set(JPEG_CONFIGURE_COMMAND  "${SB_ENV_CONFIGURE_CMD};${JPEG_SB_SRC}/configure")
+  set(JPEG_CONFIGURE_COMMAND  "${SB_ENV_CONFIGURE_CMD};${JPEG_SB_SRC}/configure"
+    --prefix=${SB_INSTALL_PREFIX}
+    --without-java
+    --disable-dependency-tracking
+    --without-simd
+    )
   set(JPEG_PATCH_COMMAND)
 endif()
 
