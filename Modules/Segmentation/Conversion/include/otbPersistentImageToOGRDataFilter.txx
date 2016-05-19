@@ -128,7 +128,6 @@ void
 PersistentImageToOGRDataFilter<TImage>
 ::Initialize()
 {
-
    std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
    bool projectionInformationAvailable = !projectionRefWkt.empty();
    OGRSpatialReference * oSRS = NULL;
@@ -137,26 +136,10 @@ PersistentImageToOGRDataFilter<TImage>
       oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
    }
 
-
    OGRDataSourcePointerType ogrDS = this->GetOGRDataSource();
-
-   ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, m_OGRLayerCreationOptions);
+   OGRLayerType outLayer = ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, m_OGRLayerCreationOptions);
    OGRFieldDefn field(m_FieldName.c_str(),m_FieldType);
-
-   //Handle the case of shapefile. A shapefile is a layer and not a datasource.
-   //The layer name in a shapefile is the shapefile's name.
-   //This is not the case for a database as sqlite or PG.
-   if (ogrDS->GetLayersCount() == 1)
-   {
-      ogrDS->GetLayer(0).CreateField(field, true);
-   }
-   else
-   {
-      ogrDS->GetLayer(m_LayerName).CreateField(field, true);
-   }
-
-   //CSLDestroy( options );
-
+   outLayer.CreateField(field, true);
 }
 
 
