@@ -91,7 +91,9 @@ PersistentImageSampleExtractorFilter<TInputImage>
     this->SetFieldType(inLayerDefn.GetFieldDefn(inCFieldIndex)->GetType());
     // Create layer
     this->Initialize();
-    // Get created layer
+    // Get created layer. Handle the case of shapefile, which is a layer and not a datasource.
+    //The layer name in a shapefile is the shapefile's name.
+    //This is not the case for a database as sqlite or PG.
     if (outVectors->GetLayersCount() == 1)
       {
       outLayer = outVectors->GetLayer(0);
@@ -103,24 +105,10 @@ PersistentImageSampleExtractorFilter<TInputImage>
     }
 
   // initialize fields in output DataSource
-  OGRFeatureDefn &outFeatureDefn = outLayer.GetLayerDefn();
   TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
   inputImage->UpdateOutputInformation();
   unsigned int nbBand = inputImage->GetNumberOfComponentsPerPixel();
-  std::string sampleFieldName;
-  std::ostringstream oss;
-  for (unsigned int i=0 ; i<nbBand ; ++i)
-    {
-    oss.str(std::string(""));
-    oss << this->GetSampleFieldPrefix() << i;
-    sampleFieldName = oss.str();
-    // check if a field is already here
-    if (outFeatureDefn.GetFieldIndex(sampleFieldName.c_str()) < 0)
-      {
-      OGRFieldDefn field(sampleFieldName.c_str(),OFTReal);
-      outLayer.CreateField(field, true);
-      }
-    }
+  this->InitializeFields(outLayer,nbBand);
 }
 
 //template<class TInputImage>
@@ -167,24 +155,22 @@ PersistentImageSampleExtractorFilter<TInputImage>
   // Apply spatial filter on input sample positions
   this->ApplyPolygonsSpatialFilter();
   
+  float featCount = static_cast<float>(inLayer.GetFeatureCount(true));
+  if (featCount == 0.0) featCount=1.0;
+  int currentCount = 0;
+
   // Prepare temporary output data source
   OGRDataSourcePointerType tmpDS = ogr::DataSource::New();
-  OGRSpatialReference * oSRS = inLayer.GetSpatialRef()->Clone();
-  tmpDS->CreateLayer( this->GetLayerName(),
-                      oSRS,
-                      this->GetGeometryType(),
-                      this->GetOGRLayerCreationOptions());
-  ogr::Layer dstLayer = tmpDS->GetLayer(0);
+  OGRSpatialReference * oSRS = NULL;
+  if (inLayer.GetSpatialRef()) oSRS = inLayer.GetSpatialRef()->Clone();
+  ogr::Layer dstLayer = tmpDS->CreateLayer(
+    this->GetLayerName(),
+    oSRS,
+    this->GetGeometryType(),
+    this->GetOGRLayerCreationOptions());
   OGRFieldDefn labelField(this->GetFieldName().c_str(),this->GetFieldType());
   dstLayer.CreateField(labelField, true);
-  for (unsigned int i=0 ; i<nbBand ; ++i)
-    {
-    oss.str(std::string(""));
-    oss << this->GetSampleFieldPrefix() << i;
-    fieldName = oss.str();
-    OGRFieldDefn sampleField(fieldName.c_str(),OFTReal);
-    dstLayer.CreateField(sampleField, true);
-    }
+  this->InitializeFields(dstLayer,nbBand);
 
   // Loop across the features in the layer
   OGRGeometry *geom;
@@ -218,8 +204,8 @@ PersistentImageSampleExtractorFilter<TInputImage>
             fieldName = oss.str();
             // Set the fields directly in the input features
             (*featIt)[fieldName].SetValue(imgComp);
-            inLayer.SetFeature(*featIt);
             }
+          inLayer.SetFeature(*featIt);
           }
         else
           {
@@ -244,9 +230,11 @@ PersistentImageSampleExtractorFilter<TInputImage>
         break;
         }
       }
-    
+    currentCount++;
+    this->UpdateProgress(static_cast<float>(currentCount)/featCount);
     // TODO : multi-points ?
     }
+
   return tmpDS;
 }
 
@@ -272,6 +260,27 @@ PersistentImageSampleExtractorFilter<TInputImage>
     std::min(startPoint[1],endPoint[1]),
     std::max(startPoint[0],endPoint[0]),
     std::max(startPoint[1],endPoint[1]));
+}
+
+template<class TInputImage>
+void
+PersistentImageSampleExtractorFilter<TInputImage>
+::InitializeFields(ogr::Layer &layer, unsigned int size)
+{
+  OGRFeatureDefn &outFeatureDefn = layer.GetLayerDefn();
+  std::ostringstream oss;
+  std::string fieldName;
+  for (unsigned int i=0 ; i<size ; ++i)
+    {
+    oss.str(std::string(""));
+    oss << this->GetSampleFieldPrefix() << i;
+    fieldName = oss.str();
+    if (outFeatureDefn.GetFieldIndex(fieldName.c_str()) < 0)
+      {
+      OGRFieldDefn sampleField(fieldName.c_str(),OFTReal);
+      layer.CreateField(sampleField, true);
+      }
+    }
 }
 
 // -------------- otb::ImageSampleExtractorFilter --------------------------

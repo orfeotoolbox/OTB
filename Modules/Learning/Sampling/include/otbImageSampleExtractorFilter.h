@@ -100,6 +100,9 @@ private:
   /** Apply a spatial filtering on the OGRDataSource corresponding to the processed tile */
   void ApplyPolygonsSpatialFilter();
 
+  /** Initialize fields to store extracted values (Real type) */
+  void InitializeFields(ogr::Layer &layer, unsigned int size);
+
   /** Layer to use in the shape file, default to 0 */
   int m_LayerIndex;
   
