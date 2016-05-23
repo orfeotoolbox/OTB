@@ -35,7 +35,6 @@ PersistentImageSampleExtractorFilter<TInputImage>
   this->SetNthOutput(0,TInputImage::New());
   
   this->SetGeometryType(wkbPoint);
-  // TODO : add setter for m_GeometryType in base class
 }
 
 template<class TInputImage>
@@ -65,8 +64,6 @@ PersistentImageSampleExtractorFilter<TInputImage>
 {
   ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetSamplePositions());
   vectors->GetLayer(m_LayerIndex).SetSpatialFilter(NULL);
-  
-  // TODO ?
 }
 
 template<class TInputImage>
@@ -83,6 +80,10 @@ PersistentImageSampleExtractorFilter<TInputImage>
   if (updateMode)
     {
     outLayer = outVectors->GetLayer(m_LayerIndex);
+    if (!outLayer.ogr().TestCapability(OLCRandomWrite))
+      {
+      itkExceptionMacro(<< "Output layer doesn't support OLCRandomWrite.");
+      }
     }
   else
     {
@@ -111,26 +112,6 @@ PersistentImageSampleExtractorFilter<TInputImage>
   this->InitializeFields(outLayer,nbBand);
 }
 
-//template<class TInputImage>
-//itk::DataObject::Pointer
-//PersistentImageSampleExtractorFilter<TInputImage>
-//::MakeOutput(DataObjectPointerArraySizeType idx)
-//{
-  //switch (idx)
-    //{
-    //case 0:
-      //return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-      //break;
-    //case 1:
-      //return static_cast<itk::DataObject*>(otb::ogr::DataSource::New().GetPointer());
-      //break;
-    //default:
-      //// might as well make an image
-      //return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-      //break;
-    //}
-//}
-
 template<class TInputImage>
 typename PersistentImageSampleExtractorFilter<TInputImage>::OGRDataSourcePointerType
 PersistentImageSampleExtractorFilter<TInputImage>
@@ -151,7 +132,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
   std::ostringstream oss;
   std::string fieldName;
   ogr::Layer inLayer = inVectors->GetLayer(m_LayerIndex);
-  
+
   // Apply spatial filter on input sample positions
   this->ApplyPolygonsSpatialFilter();
   
@@ -194,34 +175,19 @@ PersistentImageSampleExtractorFilter<TInputImage>
         inputImage->TransformPhysicalPointToIndex(imgPoint,imgIndex);
         imgPixel = inputImage->GetPixel(imgIndex);
 
-        if (updateMode)
+        typename Superclass::OGRFeatureType dstFeature(dstLayer.GetLayerDefn());
+        dstFeature.SetFrom( *featIt, TRUE );
+        dstFeature.SetFID(featIt->GetFID());
+        for (unsigned int i=0 ; i<nbBand ; ++i)
           {
-          for (unsigned int i=0 ; i<nbBand ; ++i)
-            {
-            imgComp = static_cast<double>(itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i,imgPixel));
-            oss.str(std::string(""));
-            oss << this->GetSampleFieldPrefix() << i;
-            fieldName = oss.str();
-            // Set the fields directly in the input features
-            (*featIt)[fieldName].SetValue(imgComp);
-            }
-          inLayer.SetFeature(*featIt);
+          imgComp = static_cast<double>(itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i,imgPixel));
+          oss.str(std::string(""));
+          oss << this->GetSampleFieldPrefix() << i;
+          fieldName = oss.str();
+          // Fill the ouptut OGRDataSource
+          dstFeature[fieldName].SetValue(imgComp);
           }
-        else
-          {
-          typename Superclass::OGRFeatureType dstFeature(dstLayer.GetLayerDefn());
-          dstFeature.SetFrom( *featIt, TRUE );
-          for (unsigned int i=0 ; i<nbBand ; ++i)
-            {
-            imgComp = static_cast<double>(itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i,imgPixel));
-            oss.str(std::string(""));
-            oss << this->GetSampleFieldPrefix() << i;
-            fieldName = oss.str();
-            // Fill the ouptut OGRDataSource
-            dstFeature[fieldName].SetValue(imgComp);
-            }
-          dstLayer.CreateFeature( dstFeature );
-          }
+        dstLayer.CreateFeature( dstFeature );
         break;
         }
       default:
@@ -232,7 +198,30 @@ PersistentImageSampleExtractorFilter<TInputImage>
       }
     currentCount++;
     this->UpdateProgress(static_cast<float>(currentCount)/featCount);
+
     // TODO : multi-points ?
+    }
+
+  if (updateMode)
+    {
+    inLayer.ogr().StartTransaction();
+    otb::ogr::Layer::iterator outIt = dstLayer.begin();
+    for (; outIt!=dstLayer.end(); ++outIt)
+      {
+      inLayer.SetFeature( *outIt );
+      }
+    const OGRErr err = inLayer.ogr().CommitTransaction();
+    if (err != OGRERR_NONE)
+      {
+      itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << inLayer.ogr().GetName() << ".");
+      }
+    // empty the output dataset
+    tmpDS->DeleteLayer(0);
+    tmpDS->CreateLayer(
+      this->GetLayerName(),
+      oSRS,
+      this->GetGeometryType(),
+      this->GetOGRLayerCreationOptions());
     }
 
   return tmpDS;

@@ -76,20 +76,11 @@ public:
   itkSetMacro(LayerIndex, int);
   itkGetMacro(LayerIndex, int);
 
-  /** Make a DataObject of the correct type to be used as the specified
-   * output. */
-  //virtual itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
-  //using Superclass::MakeOutput;
-
 protected:
   /** Constructor */
   PersistentImageSampleExtractorFilter();
   /** Destructor */
   virtual ~PersistentImageSampleExtractorFilter() {}
-
-  // virtual void GenerateInputRequestedRegion();
-
-  //virtual void GenerateData();
 
 private:
   PersistentImageSampleExtractorFilter(const Self &); //purposely not implemented
