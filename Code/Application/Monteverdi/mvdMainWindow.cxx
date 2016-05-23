@@ -601,7 +601,7 @@ MainWindow
 
   // get the PixelDescription widget
   // TODO: Make a widget controller!
-  PixelDescriptionWidget * pixelDescriptionWidget = 
+  PixelDescriptionWidget * pixelDescriptionWidget =
     qobject_cast< PixelDescriptionWidget * >(
       m_PixelDescriptionDock->findChild< PixelDescriptionWidget * >()
     );
@@ -626,11 +626,11 @@ MainWindow
 
   QObject::connect(
     vectorImageModel,
-    SIGNAL( CurrentPixelValueUpdated(const VectorImageType::PixelType &, 
+    SIGNAL( CurrentPixelValueUpdated(const VectorImageType::PixelType &,
                                      const QStringList & ) ),
     // to:
     pixelDescriptionWidget,
-    SLOT( OnCurrentPixelValueUpdated(const VectorImageType::PixelType &, 
+    SLOT( OnCurrentPixelValueUpdated(const VectorImageType::PixelType &,
                                      const QStringList & ) )
   );
 }
@@ -704,7 +704,7 @@ MainWindow
 
   // get the PixelDescription widget
   // TODO: Make a widget controller!
-  PixelDescriptionWidget * pixelDescriptionWidget = 
+  PixelDescriptionWidget * pixelDescriptionWidget =
     qobject_cast< PixelDescriptionWidget * >(
       m_PixelDescriptionDock->findChild< PixelDescriptionWidget * >()
     );
@@ -1008,7 +1008,7 @@ MainWindow
 
   quicklookView->SetPickingEnabled( false );
   quicklookView->SetPickingDefaultStatus( false );
-  
+
   quicklookView->setMinimumSize(  64,  64 );
   quicklookView->setMaximumSize( 512, 512 );
   quicklookView->setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum );
@@ -1350,7 +1350,7 @@ MainWindow
 {
   assert( Application::Instance() );
 
-  Application::Instance()->SetModel( new StackedLayerModel() ); 
+  Application::Instance()->SetModel( new StackedLayerModel() );
 }
 
 /*****************************************************************************/
@@ -2033,7 +2033,7 @@ MainWindow
 void
 MainWindow
 ::OnApplicationToLaunchSelected( const QString & appName,
-                                 const QString & docName )
+				 const QString & docName )
 {
   assert( Application::ConstInstance()!=NULL );
   assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );
@@ -2157,7 +2157,7 @@ MainWindow
       tr( "Warning!" ),
       tr( "Tab cannot be closed while OTB application is running." )
     );
-   
+
     return;
     }
 
@@ -2219,7 +2219,7 @@ MainWindow
   assert( I18nCoreApplication::Instance()->GetModel()==
           I18nCoreApplication::Instance()->GetModel< StackedLayerModel >() );
 
-  StackedLayerModel * model = 
+  StackedLayerModel * model =
     I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
 
   // assert( model!=NULL );
@@ -2260,7 +2260,7 @@ MainWindow
   assert( I18nCoreApplication::Instance()->GetModel()==
           I18nCoreApplication::Instance()->GetModel< StackedLayerModel >() );
 
-  StackedLayerModel * model = 
+  StackedLayerModel * model =
     I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
 
   assert( model!=NULL );

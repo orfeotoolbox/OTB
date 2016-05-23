@@ -220,7 +220,7 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::WheelEvent( QWheelEvent* itkNotUsed(event) )
+::WheelEvent( QWheelEvent* event )
 {
   assert( event!=NULL );
 }
@@ -228,7 +228,7 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::KeyPressEvent( QKeyEvent* itkNotUsed(event) )
+::KeyPressEvent( QKeyEvent* event )
 {
   assert( event!=NULL );
 
@@ -238,7 +238,7 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::KeyReleaseEvent( QKeyEvent* itkNotUsed(event) )
+::KeyReleaseEvent( QKeyEvent* event )
 {
   assert( event!=NULL );
 

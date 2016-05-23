@@ -530,7 +530,7 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::ResizeEvent( QResizeEvent* itkNotUsed(event) )
+::ResizeEvent( QResizeEvent* event )
 {
   assert( event!=NULL );
 
