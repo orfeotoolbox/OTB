@@ -43,10 +43,7 @@ public:
   typedef otb::ImageSampleExtractorFilter<FloatVectorImageType> FilterType;
 
 private:
-  SampleExtraction()
-    {
-   
-    }
+  SampleExtraction() {}
 
   void DoInit()
   {
@@ -69,7 +66,7 @@ private:
     AddParameter(ParameterType_InputFilename, "vec", "Input sampling positions");
     SetParameterDescription("vec","Vector data file containing sampling"
                                   "positions. (OGR format)");
-    
+
     AddParameter(ParameterType_OutputFilename, "out", "Output samples");
     SetParameterDescription("out","Output vector data file storing sample"
       "values (OGR format). If not given, the input vector data file is updated");
@@ -86,12 +83,12 @@ private:
       "name in the input vectors. This field is copied to output.");
     MandatoryOff("field");
     SetParameterString("field", "class");
-    
+
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
     MandatoryOff("layer");
     SetDefaultParameterInt("layer",0);
-    
+
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -109,7 +106,6 @@ private:
 
   void DoExecute()
     {
-    
     ogr::DataSource::Pointer vectors;
     ogr::DataSource::Pointer output;
     if (IsParameterEnabled("out") && HasValue("out"))
@@ -125,7 +121,7 @@ private:
                                     ogr::DataSource::Modes::Update_LayerUpdate);
       output = vectors;
       }
-    
+
     FilterType::Pointer filter = FilterType::New();
     filter->SetInput(this->GetParameterImage("in"));
     filter->SetLayerIndex(this->GetParameterInt("layer"));
@@ -133,10 +129,10 @@ private:
     filter->SetOutputOGRData(output);
     filter->SetClassFieldName(this->GetParameterString("field"));
     filter->SetOutputFieldPrefix(this->GetParameterString("pre"));
-    
+
     AddProcess(filter->GetStreamer(),"Extracting sample values...");
-    
     filter->Update();
+    output->SyncToDisk();
     }
 
 };
