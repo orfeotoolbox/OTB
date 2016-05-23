@@ -217,6 +217,12 @@ public:
   inline bool IsBypassRenderingEnabled() const;
   /**
    */
+  inline bool SetGLSLEnabled( bool );
+  /**
+   */
+  inline bool IsGLSLEnabled() const;
+  /**
+   */
   inline bool ZoomToRegion( const PointType & origin,
 			    const PointType & extent,
 			    PointType & center,
@@ -264,7 +270,8 @@ protected:
   AbstractImageViewRenderer( QObject* parent = NULL ) :
     QObject( parent ),
     m_StackedLayerModel( NULL ),
-    m_BypassRenderingEnabled( false )
+    m_BypassRenderingEnabled( false ),
+    m_GLSLEnabled( true )
   {
   }
 
@@ -330,6 +337,9 @@ private:
   /**
    */
   bool m_BypassRenderingEnabled: 1;
+  /**
+   */
+  bool m_GLSLEnabled: 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -417,6 +427,28 @@ AbstractImageViewRenderer
   m_BypassRenderingEnabled = isEnabled;
 
   return bypass;
+}
+
+/*****************************************************************************/
+inline
+bool
+AbstractImageViewRenderer
+::IsGLSLEnabled() const
+{
+  return m_GLSLEnabled;
+}
+
+/*****************************************************************************/
+inline
+bool
+AbstractImageViewRenderer
+::SetGLSLEnabled( bool isEnabled )
+{
+  bool wasEnabled = m_GLSLEnabled;
+
+  m_GLSLEnabled = isEnabled;
+
+  return wasEnabled;
 }
 
 /*****************************************************************************/

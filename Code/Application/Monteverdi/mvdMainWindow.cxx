@@ -103,6 +103,8 @@ namespace mvd
 
 #define REFERENCE_LAYER_COMBOBOX_NAME "referenceLayerComboBox"
 
+#define FORCE_NO_GLSL ( ( defined( _DEBUG ) && 0 ) || 0 )
+
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
@@ -181,6 +183,21 @@ MainWindow
 
   bool isGLSL = m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 );
 
+#if FORCE_NO_GLSL
+  m_ImageView->GetRenderer()->SetGLSLEnabled( false );
+
+  isGLSL = false;
+#endif // FORCE_NO_GLSL
+
+  // MANTIS-1204
+  // {
+  //
+  // Forward GLSL state to quicklook view.
+  assert( GetQuicklookView()!=NULL );
+  assert( GetQuicklookView()->GetRenderer()!=NULL );
+
+  GetQuicklookView()->GetRenderer()->SetGLSLEnabled( isGLSL );
+  // }
 
   assert( m_ShaderWidget!=NULL );
 
@@ -2016,7 +2033,7 @@ MainWindow
 void
 MainWindow
 ::OnApplicationToLaunchSelected( const QString & appName,
-				 const QString & docName )
+                                 const QString & docName )
 {
   assert( Application::ConstInstance()!=NULL );
   assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );

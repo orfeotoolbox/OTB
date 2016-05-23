@@ -532,7 +532,7 @@ InputProcessXMLInitializer
 inline
 ToolTipInitializer::result_type
 ToolTipInitializer
-::operator () ( argument_type widget ) const
+::operator () ( argument_type itkNotUsed(widget) ) const
 {
   assert( widget!=NULL );
 
