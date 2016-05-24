@@ -22,10 +22,6 @@
 
 int otbMPIConfigTest(int argc, char* argv[]) {
 
-  // Mono-thread execution
-  itk::MultiThreader::SetGlobalMaximumNumberOfThreads(1);
-  itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
-
   // MPI Configuration
   typedef otb::MPIConfig    MPIConfigType;
   MPIConfigType::Pointer config = MPIConfigType::Instance();
