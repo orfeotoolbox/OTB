@@ -3,10 +3,8 @@ otb_module_test()
 #${otb-module} will be the name of this module and will not need to be #changed when this module is renamed.
 
 set(${otb-module}Tests
-   otbReadWriteTest.cxx
+  otbMPIVrtWriterTestDriver.cxx
    otbMPIReadWriteTest.cxx
-   otbMPIBundleToPerfectSensorTest.cxx
-   otbMPIVrtWriterTestDriver.cxx
 )
 
 # Function otb_add_test_mpi
@@ -28,15 +26,16 @@ function(otb_add_test_mpi)
    otb_add_test(NAME ${TEST_MPI_NAME} COMMAND "mpirun" ${test_parameters})
 endfunction()
 
-# Boost configuration
-find_package(Boost COMPONENTS system chrono REQUIRED)
-
 add_executable(otbMPIVrtWriterTestDriver ${${otb-module}Tests}) 
-target_link_libraries(otbMPIVrtWriterTestDriver ${${otb-module}-Test_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_CHRONO_LIBRARY})
+target_link_libraries(otbMPIVrtWriterTestDriver ${${otb-module}-Test_LIBRARIES})
 otb_module_target_label(otbMPIVrtWriterTestDriver)
 
 
 # MPI Hello test
-otb_add_test_mpi(NAME otbMPIHelloTest
+otb_add_test_mpi(NAME otbMPIVrtWriterTest
    NBPROCS 2
-   COMMAND otbMPIVrtWriterTestDriver otbMPIHelloTest )
+   COMMAND otbMPIVrtWriterTestDriver otbMPIReadWriteTest
+   ${INPUTDATA}/ROI_QB_MUL_4.tif
+   ${TEMP}/otbMPIVrtWriterTestOutput.tif
+   
+   )
