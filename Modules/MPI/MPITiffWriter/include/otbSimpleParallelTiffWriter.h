@@ -81,6 +81,7 @@ namespace otb
  *
  *
  * \sa ImageFileWriter
+ * \ingroup OTBMPItiffWriter
  */
 template <class TInputImage>
 class ITK_EXPORT SimpleParallelTiffWriter : public itk::ProcessObject
