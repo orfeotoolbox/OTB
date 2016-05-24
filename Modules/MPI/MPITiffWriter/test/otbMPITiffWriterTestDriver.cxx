@@ -1,5 +1,5 @@
 #include "otbTestMain.h"
 void RegisterTests()
 {
-  REGISTER_TEST(otbSPTWStripsWriteTest);
+  REGISTER_TEST(otbMPISPTWReadWriteTest);
 }

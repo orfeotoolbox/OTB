@@ -26,7 +26,6 @@
 #include <mpi.h>
 #include <cstdlib>
 #include <iostream>
-#include <boost/chrono/thread_clock.hpp>
 
 int otbMPISPTWReadWriteTest(int argc, char* argv[])
 {
