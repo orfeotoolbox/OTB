@@ -34,7 +34,7 @@ namespace otb {
   *
   * \ingroup OTBMPIConfig
   */
-class MPIConfig: public itk::Object
+class MPIConfig: public itk::LightObject
 {
 public:
   /** Standard class typedefs. */
@@ -47,7 +47,7 @@ public:
   static Pointer Instance();
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MPIConfig, itk::Object);
+  itkTypeMacro(MPIConfig, itk::LightObject);
 
   /** MPI Parameters accessors */
   itkGetMacro(MyRank, int);
