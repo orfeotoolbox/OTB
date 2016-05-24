@@ -558,10 +558,10 @@ SimpleParallelTiffWriter<TInputImage>
 
 		// Set GeoTransform
 		double gt[6];
-		gt[0] = inputPtr->GetOrigin()[0];
+		gt[0] = inputPtr->GetOrigin()[0] - 0.5*inputPtr->GetSpacing()[0];
 		gt[1] = inputPtr->GetSpacing()[0];
 		gt[2] = 0.0;
-		gt[3] = inputPtr->GetOrigin()[1];
+		gt[3] = inputPtr->GetOrigin()[1] - 0.5*inputPtr->GetSpacing()[1];
 		gt[4] = 0.0;
 		gt[5] = inputPtr->GetSpacing()[1];
 		output->SetGeoTransform(gt);
