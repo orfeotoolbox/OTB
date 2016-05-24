@@ -15,8 +15,8 @@
       PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMPIConfig_txx
-#define __otbMPIConfig_txx
+#ifndef __otbMPIVrtWriter_h
+#define __otbMPIVrtWriter_h
 
 #include "otbMPIConfig.h"
 #include "otbImageFileWriter.h"
@@ -33,7 +33,7 @@ namespace otb {
 namespace mpi {
 
 // Update MPI
-template <typename TImage> void WriteMPI (TImage *img, const std::string &output, bool useStreaming=true, bool writeVRTFile=false) 
+template <typename TImage> void WriteMPI(TImage *img, const std::string &output, bool useStreaming=true, bool writeVRTFile=false) 
 {
   typename otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
 
@@ -170,9 +170,7 @@ template <typename TImage> void WriteMPI (TImage *img, const std::string &output
   }
 }
 
-
-} // End namespece mpi
-
+} // End namesapce mpi
 } // End namespace otb
-#endif //__otbMPIConfig_txx
+#endif //__otbMPIVrtWriter_h
 
