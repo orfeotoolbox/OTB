@@ -14,7 +14,7 @@ otb_module(OTBMPITiffWriter
     OTBSPTW
     OTBStreaming
     OTBMPI
-
+    OTBMPIConfig
   TEST_DEPENDS
     OTBTestKernel
 

@@ -29,10 +29,6 @@
 
 int otbMPISPTWReadWriteTest(int argc, char* argv[])
 {
-  // Mono-thread execution
-  itk::MultiThreader::SetGlobalMaximumNumberOfThreads(1);
-  itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
- 
   if (argc != 3)
     {
     std::cerr << "Usage: " << std::endl;
@@ -41,11 +37,9 @@ int otbMPISPTWReadWriteTest(int argc, char* argv[])
     }
 
   // Initialize MPI environment
-  int myrank, nprocs;
-  MPI_Init(&argc, &argv);
-  MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
-  MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
-
+  otb::MPIConfig::Pointer config = otb::MPIConfig::Instance();
+  config->Init(argc,argv);
+  
   // Image typedefs
   typedef float PixelType;
   typedef otb::VectorImage<PixelType>	ImageType;
@@ -63,9 +57,7 @@ int otbMPISPTWReadWriteTest(int argc, char* argv[])
   std::string outputFilename = std::string(argv[2]);
   writer->SetFileName(outputFilename);
   writer->SetInput(reader->GetOutput());
-  writer->SetMyRank(myrank);
-  writer->SetNProcs(nprocs);
-
+  
   // Execute the pipeline
   try{
     writer->Update();
@@ -73,12 +65,9 @@ int otbMPISPTWReadWriteTest(int argc, char* argv[])
   catch (std::exception & err) {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err.what() << std::endl;
-    MPI_Abort(MPI_COMM_WORLD, MPI_ERR_UNKNOWN);
-    return EXIT_FAILURE;
-  }
 
-  // Terminate MPI session
-  MPI_Finalize();
+    config->abort(EXIT_FAILURE);
+  }
 
   return EXIT_SUCCESS;
 

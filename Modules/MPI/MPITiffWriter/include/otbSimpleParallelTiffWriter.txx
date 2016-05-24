@@ -72,10 +72,10 @@ unsigned int
 SimpleParallelTiffWriter<TInputImage>
 ::OptimizeStrippedSplittingLayout(unsigned int n)
  {
-  unsigned int m = static_cast<unsigned int >(m_NProcs);
+  unsigned int m = static_cast<unsigned int >(otb::MPIConfig::Instance()->GetNbProcs());
   if (n > m)
     {
-    float div = static_cast<float>(n) / static_cast<float>(m_NProcs);
+    float div = static_cast<float>(n) / static_cast<float>(otb::MPIConfig::Instance()->GetNbProcs());
     m *= static_cast<unsigned int>(div);
     }
   itkDebugMacro( "Changing number of split from " << n << " to " << m );
@@ -515,7 +515,7 @@ SimpleParallelTiffWriter<TInputImage>
 	}
 
 	// If we are the process with rank 0 we are responsible for the creation of the output raster.
-	if (m_MyRank == 0 && !m_VirtualMode) {
+	if (otb::MPIConfig::Instance()->GetMyRank() == 0 && !m_VirtualMode) {
 
 		// Get GeoTiff driver
 		GDALAllRegister();
@@ -649,7 +649,7 @@ SimpleParallelTiffWriter<TInputImage>
 		output_raster = open_raster(m_FileName);
 
 		// First we have to populate blocks offsets
-		if (m_MyRank == 0) {
+		if (otb::MPIConfig::Instance()->GetMyRank() == 0) {
 			SPTW_ERROR sperr = populate_tile_offsets(output_raster,
 					m_TiffTileSize,
 					m_TiffTiledMode);
@@ -726,7 +726,7 @@ SimpleParallelTiffWriter<TInputImage>
 	{
 		streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
 		
-		if (GetProcFromDivision(m_CurrentDivision) == m_MyRank)
+		if (GetProcFromDivision(m_CurrentDivision) == otb::MPIConfig::Instance()->GetMyRank())
 		{
 			/*
 			 * Processing
@@ -770,7 +770,7 @@ SimpleParallelTiffWriter<TInputImage>
 	// Get timings
 	const int nValues = 3;
 	double runtimes[nValues] = {processDuration, writeDuration, numberOfProcessedRegions};
-	std::vector<double> process_runtimes(m_NProcs*nValues);
+	std::vector<double> process_runtimes(otb::MPIConfig::Instance()->GetNbProcs()*nValues);
 	MPI_Gather(runtimes,
 			nValues,
 			MPI_DOUBLE,
@@ -781,7 +781,7 @@ SimpleParallelTiffWriter<TInputImage>
 			MPI_COMM_WORLD);
 
 	// Display timings
-	if (m_MyRank == 0 && m_Verbose)
+	if (otb::MPIConfig::Instance()->GetMyRank() == 0 && m_Verbose)
 	  {
       itkDebugMacro( "Runtime, in seconds" );
       itkDebugMacro( "Process Id\tProcessing\tWriting" );

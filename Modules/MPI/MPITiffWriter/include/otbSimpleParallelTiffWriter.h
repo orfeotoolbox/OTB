@@ -6,6 +6,7 @@
 #include "itkProcessObject.h"
 #include "otbStreamingManager.h"
 #include "otbExtendedFilenameToWriterOptions.h"
+#include "otbMPIConfig.h"
 
 // Time probe
 #include "itkTimeProbe.h"
@@ -224,12 +225,6 @@ public:
 	itkGetObjectMacro(ImageIO, otb::ImageIOBase);
 	itkGetConstObjectMacro(ImageIO, otb::ImageIOBase);
 
-	/* MPI parameters accessors */
-	itkSetMacro(MyRank, int);
-	itkGetMacro(MyRank, int);
-	itkSetMacro(NProcs, int);
-	itkGetMacro(NProcs, int);
-
 	/* Writer modes */
 	itkSetMacro(Verbose, bool);
 	itkGetMacro(Verbose, bool);
@@ -275,11 +270,11 @@ private:
 	/*
 	 * Returns the process id which process a given region
 	 */
-	int GetProcFromDivision(int regionIndex)
+	unsigned int GetProcFromDivision(unsigned int regionIndex)
 	{
-		if (m_NProcs==0)
+		if (otb::MPIConfig::Instance()->GetNbProcs()==0)
 			return 0;
-		return ( regionIndex % m_NProcs);
+		return ( regionIndex % otb::MPIConfig::Instance()->GetNbProcs());
 	}
 
 	/*
@@ -317,8 +312,6 @@ private:
 	unsigned long m_ObserverID;
 	InputIndexType m_ShiftOutputIndex;
 
-	int m_MyRank;
-	int m_NProcs;
 	int m_TiffTileSize;
 	bool m_Verbose;
 	bool m_VirtualMode;
