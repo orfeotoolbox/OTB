@@ -33,7 +33,7 @@ namespace otb {
 namespace mpi {
 
 // Update MPI
-template <typename TImage> void WriteMPI(TImage *img, const std::string &output, bool useStreaming=true, bool writeVRTFile=false) 
+template <typename TImage> void WriteMPI(TImage *img, const std::string &output, bool useStreaming=true, bool writeVRTFile=true) 
 {
   typename otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
 
@@ -109,10 +109,7 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
     {
       writer->SetNumberOfDivisionsTiledStreaming(0);
     }
-    else
-    {
-      writer->SetTileDimensionTiledStreaming(1024);
-    }
+    
     // Pipeline execution
     try
     {
