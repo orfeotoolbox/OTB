@@ -7,25 +7,6 @@ set(${otb-module}Tests
    otbMPIReadWriteTest.cxx
 )
 
-# Function otb_add_test_mpi
-function(otb_add_test_mpi)
-   set( _OPTIONS_ARGS )
-   set( _ONE_VALUE_ARGS NAME NBPROCS COMMAND)
-   set( _MULTI_VALUE_ARGS )
-   cmake_parse_arguments( TEST_MPI "${_OPTIONS_ARGS}" "${_ONE_VALUE_ARGS}" "${_MULTI_VALUE_ARGS}" ${ARGN} )
-
-   # Test nb procs
-   if( NOT TEST_MPI_NBPROCS )
-     set(TEST_MPI_NBPROCS 2)
-   endif()
-   # Test command line
-   foreach(arg IN LISTS TEST_MPI_UNPARSED_ARGUMENTS)
-     list(APPEND ARGS ${arg})
-   endforeach()
-   set (test_parameters -np ${TEST_MPI_NBPROCS} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_MPI_COMMAND} ${ARGS})
-   otb_add_test(NAME ${TEST_MPI_NAME} COMMAND "mpirun" ${test_parameters})
-endfunction()
-
 add_executable(otbMPIVrtWriterTestDriver ${${otb-module}Tests}) 
 target_link_libraries(otbMPIVrtWriterTestDriver ${${otb-module}-Test_LIBRARIES})
 otb_module_target_label(otbMPIVrtWriterTestDriver)
