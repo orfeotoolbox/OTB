@@ -16,11 +16,32 @@
 
   =========================================================================*/
 #include "otbMPIConfig.h"
+
 #include <exception>
 #include <cstdlib>
 #include <iostream>
+#include <sstream>
+#include <string>
 
 #include <mpi.h>
+
+/**
+  * Call the MPI routine MPIFunc with arguments Args (surrounded by
+  * parentheses). If the result is not MPI_SUCCESS, throw an exception.
+  */
+#define OTB_MPI_CHECK_RESULT( MPIFunc, Args )                           \
+  {                                                                     \
+    int _result = MPIFunc Args;                                         \
+    if (_result != MPI_SUCCESS)                                         \
+      {                                                                 \
+      std::stringstream message;                                        \
+      message << "otb::mpi::ERROR: " << #MPIFunc << " (Code = " << _result; \
+      ::itk::ExceptionObject _e(__FILE__, __LINE__, message.str().c_str()); \
+      throw _e;                                                         \
+      }                                                                 \
+  }
+
+
 
 namespace otb {
 

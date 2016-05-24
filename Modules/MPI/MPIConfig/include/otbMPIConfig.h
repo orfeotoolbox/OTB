@@ -18,9 +18,6 @@
 #ifndef __otbMPIConfig_h
 #define __otbMPIConfig_h
 
-#include <sstream>
-#include <string>
-
 #include "itkObject.h"
 #include "itkMacro.h"
 #include "itkObjectFactory.h"
@@ -88,22 +85,6 @@ private:
 
   static Pointer m_Singleton;
 };
-
-/**
-  * Call the MPI routine MPIFunc with arguments Args (surrounded by
-  * parentheses). If the result is not MPI_SUCCESS, throw an exception.
-  */
-#define OTB_MPI_CHECK_RESULT( MPIFunc, Args )                           \
-  {                                                                     \
-    int _result = MPIFunc Args;                                         \
-    if (_result != MPI_SUCCESS)                                         \
-      {                                                                 \
-      std::stringstream message;                                        \
-      message << "otb::mpi::ERROR: " << #MPIFunc << " (Code = " << _result; \
-      ::itk::ExceptionObject _e(__FILE__, __LINE__, message.str().c_str()); \
-      throw _e;                                                         \
-      }                                                                 \
-  }
 
 } // End namespace otb
 
