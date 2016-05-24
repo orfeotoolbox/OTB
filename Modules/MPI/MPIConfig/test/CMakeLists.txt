@@ -4,8 +4,7 @@ otb_module_test()
 
 set(${otb-module}Tests
    otbMPIConfigTestDriver.cxx
-   otbMPIEmptyTest.cxx
-   otbMPIHelloTest.cxx
+   otbMPIConfigTest.cxx
 )
 
 # Function otb_add_test_mpi
@@ -36,6 +35,6 @@ otb_module_target_label(otbMPIConfigTestDriver)
 
 
 # MPI Hello test
-otb_add_test_mpi(NAME otbMPIHelloTest
+otb_add_test_mpi(NAME otbMPIConfigTest
    NBPROCS 2
-   COMMAND otbMPIConfigTestDriver otbMPIHelloTest )
+   COMMAND otbMPIConfigTestDriver otbMPIConfigTest )

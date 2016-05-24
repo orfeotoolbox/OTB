@@ -15,13 +15,25 @@
       PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include <cstdlib>
+
 #include "otbMPIConfig.h"
+#include <iostream>
 #include "itkMultiThreader.h"
 
-int otbMPIEmptyTest(int, char **) {
+int otbMPIConfigTest(int argc, char* argv[]) {
+
+  // Mono-thread execution
   itk::MultiThreader::SetGlobalMaximumNumberOfThreads(1);
-  itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1); 
+  itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
+
+  // MPI Configuration
+  typedef otb::MPIConfig    MPIConfigType;
+  MPIConfigType::Pointer config = MPIConfigType::Instance();
+  config->Init(argc,argv,true);
+
+  // Test
+  std::cout<<"OTB MPI config test. I am process "<<config->GetMyRank()<<" among "<<config->GetNbProcs()<<"."<<std::endl;
+
   return EXIT_SUCCESS;
 }
 
