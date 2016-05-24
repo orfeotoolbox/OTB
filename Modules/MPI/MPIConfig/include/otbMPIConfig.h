@@ -32,7 +32,7 @@ namespace otb {
   * TODO
   *
   *
-  * \ingroup MPIConfig
+  * \ingroup OTBMPIConfig
   */
 class MPIConfig: public itk::Object
 {
