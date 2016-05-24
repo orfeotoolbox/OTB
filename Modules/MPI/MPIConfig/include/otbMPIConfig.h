@@ -47,8 +47,8 @@ public:
   itkTypeMacro(MPIConfig, itk::LightObject);
 
   /** MPI Parameters accessors */
-  itkGetMacro(MyRank, int);
-  itkGetMacro(NbProcs, int);
+  itkGetMacro(MyRank, unsigned int);
+  itkGetMacro(NbProcs,unsigned int);
 
   /** Initialize MPI Processus */
   void Init(int& argc, char** &argv, bool abortOnException = true);
@@ -75,9 +75,9 @@ private:
   void operator =(const MPIConfig&); //purposely not implemented
 
   // MPI rank
-  int m_MyRank;
+  unsigned int m_MyRank;
   // Number of MPI processus
-  int m_NbProcs;
+  unsigned int m_NbProcs;
   // Boolean to abort on exception
   bool m_abortOnException;
   // Boolean to test if the MPI environment is initialized

@@ -22,6 +22,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <cassert>
 
 #include <mpi.h>
 
@@ -108,9 +109,31 @@ void MPIConfig::Init(int& argc, char** &argv, bool abortOnException) {
      m_initialized = true;
    }
    // Get MPI rank
-   OTB_MPI_CHECK_RESULT(MPI_Comm_rank, (MPI_COMM_WORLD , &m_MyRank));
+   int irank = 0;
+   OTB_MPI_CHECK_RESULT(MPI_Comm_rank, (MPI_COMM_WORLD , &irank));
+
+   if(irank<0)
+     {
+     logError("Negative MPI rank");
+     abort(EXIT_FAILURE);
+     }
+   
+   m_MyRank = static_cast<unsigned int>(irank);
+   
    // Get MPI NbProocs
-   OTB_MPI_CHECK_RESULT(MPI_Comm_size, (MPI_COMM_WORLD , &m_NbProcs)); }
+
+   int inbprocs=0;
+   
+   OTB_MPI_CHECK_RESULT(MPI_Comm_size, (MPI_COMM_WORLD , &inbprocs));
+
+   if(inbprocs<1)
+     {
+     logError("Negative or null number of processes");
+     abort(EXIT_FAILURE);
+     }
+
+   m_NbProcs = static_cast<unsigned int>(inbprocs);
+}
 
 void MPIConfig::abort(int errCode)
 {
