@@ -36,7 +36,6 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <boost/chrono/thread_clock.hpp>
 
 // Test
 int otbMPIBundleToPerfectSensorTest(int argc, char* argv[])
@@ -45,9 +44,6 @@ int otbMPIBundleToPerfectSensorTest(int argc, char* argv[])
   itk::MultiThreader::SetGlobalMaximumNumberOfThreads(1);
   itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
 
-  // Start chrono
-  boost::chrono::thread_clock::time_point startTimer = boost::chrono::thread_clock::now();
-  
   // MPI Initialization
   typedef otb::MPIConfig    MPIConfigType;
   MPIConfigType::Pointer config = MPIConfigType::Instance();
@@ -170,11 +166,6 @@ int otbMPIBundleToPerfectSensorTest(int argc, char* argv[])
   std::string outputFilename = std::string(argv[3]);
   //config->UpdateMPI(fusionFilter->GetOutput(),outputFilename, true, true);
   
-  // End chrono
-  boost::chrono::thread_clock::time_point stopTimer = boost::chrono::thread_clock::now();
-  std::stringstream message;
-  message << "Duration = " << boost::chrono::duration_cast<boost::chrono::milliseconds>(stopTimer-startTimer).count() <<" ms\n";
-  config->logInfo(message.str());
   
   return EXIT_SUCCESS;
 }
