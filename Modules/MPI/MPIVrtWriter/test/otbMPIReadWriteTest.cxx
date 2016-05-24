@@ -63,7 +63,7 @@ int otbMPIReadWriteTest(int argc, char * argv[])
   // Update MPI Pipeline
   std::string outputFilename = std::string(argv[2]);
 
-  otb::mpi::WriteMPI(reader->GetOutput(),outputFilename, false, true);
+  otb::mpi::WriteMPI(reader->GetOutput(),outputFilename);
   
   return EXIT_SUCCESS;
 }
