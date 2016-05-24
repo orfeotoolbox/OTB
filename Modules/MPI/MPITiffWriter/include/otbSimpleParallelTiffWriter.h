@@ -11,7 +11,6 @@
 // Time probe
 #include "itkTimeProbe.h"
 
-#include "otbSimpleParallelTiffWriter.h"
 
 #include "itkImageFileWriter.h"
 
