@@ -37,11 +37,17 @@ SimpleParallelTiffWriter<TInputImage>
 
 	// Default TIFF tile size, can be modified later
 	m_TiffTileSize = 1024;
+
+	// Strip blocks
 	m_TiffTiledMode = false;
-	m_Verbose = true;
+
+	// Verbose
+	m_Verbose = false;
+
+	// Virtual mode
 	m_VirtualMode = false;
 
-	// By default, we use tiled streaming, with automatic tile size
+	// By default, we use striped streaming, with automatic region size
 	// We don't set any parameter, so the memory size is retrieved from the OTB configuration options
 	//this->SetAutomaticAdaptativeStreaming();
 	this->SetAutomaticStrippedStreaming();
@@ -72,7 +78,7 @@ SimpleParallelTiffWriter<TInputImage>
     float div = static_cast<float>(n) / static_cast<float>(m_NProcs);
     m *= static_cast<unsigned int>(div);
     }
-  std::cout << "Changing number of split from " << n << " to " << m << std::endl;
+  itkDebugMacro( "Changing number of split from " << n << " to " << m );
   return m;
 
  }
@@ -650,27 +656,12 @@ SimpleParallelTiffWriter<TInputImage>
 	m_StreamingManager->PrepareStreaming(inputPtr, inputRegion);
 	m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
 
-	// TODO make it work on tiled splits
 	// Recompute a new splitting layout which fits better the MPI number of processes
+	// TODO make it work on tiled splits !
 	unsigned int newNumberOfStrippedSplits = OptimizeStrippedSplittingLayout(m_NumberOfDivisions);
 	this->SetNumberOfDivisionsStrippedStreaming(newNumberOfStrippedSplits);
     m_StreamingManager->PrepareStreaming(inputPtr, inputRegion);
     m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
-
-	//	if (inputPtr->GetBufferedRegion() == inputRegion)
-	//	{
-	//		otbMsgDevMacro(<< "Buffered region is the largest possible region, there is no need for streaming.");
-	//		this->SetNumberOfDivisionsStrippedStreaming(1);
-	//	}
-	//	else if (m_NumberOfDivisions < m_NProcs)
-//	if (m_NumberOfDivisions < m_NProcs)
-//	{
-//		itkWarningMacro(<< "Number of divisions ("<< m_NumberOfDivisions << ") < process count ("
-//				<< m_NProcs << "). Setting Number of divisions to " << m_NProcs);
-//		this->SetNumberOfDivisionsStrippedStreaming(m_NProcs);
-//		m_StreamingManager->PrepareStreaming(inputPtr, inputRegion);
-//		m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
-//	}
 
 	// Configure process objects
 	this->UpdateProgress(0);
@@ -701,14 +692,14 @@ SimpleParallelTiffWriter<TInputImage>
 
 	// Loop on streaming tiles
 	double processDuration(0), writeDuration(0), numberOfProcessedRegions(0);
-
 	InputImageRegionType streamRegion;
 	for (m_CurrentDivision = 0;
 			m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
 			m_CurrentDivision++, m_DivisionProgress = 0, this->UpdateFilterProgress())
 	{
 		streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
-		if (MyCall() )
+		
+		if (GetProcFromDivision(m_CurrentDivision) == m_MyRank)
 		{
 			/*
 			 * Processing
@@ -762,24 +753,20 @@ SimpleParallelTiffWriter<TInputImage>
 			0,
 			MPI_COMM_WORLD);
 
-
+	// Display timings
 	if (m_MyRank == 0 && m_Verbose)
 	  {
-
-	  std::cout << "Runtimes, in seconds" << std::endl;
-	  std::cout <<"Process Id\tProcessing\tWriting" << std::endl;
+      itkDebugMacro( "Runtime, in seconds" );
+      itkDebugMacro( "Process Id\tProcessing\tWriting" );
 	  for (unsigned int i = 0; i < process_runtimes.size(); i+=nValues)
 	    {
-	    std::cout << (int (i/nValues)) <<
+        itkDebugMacro( (int (i/nValues)) <<
 	        "\t" << process_runtimes[i] <<
 	        "\t" << process_runtimes[i+1] <<
-	        "\t("<< process_runtimes[i+2] << " regions)" << std::endl;
+	        "\t("<< process_runtimes[i+2] << " regions)" );
 	    }
-
-	  std::cout << "Overall time:" << overallTime.GetTotal() << std::endl;
+	  itkDebugMacro( "Overall time:" << overallTime.GetTotal() );
 	  }
-
-
 
 	/**
 	 * If we ended due to aborting, push the progress up to 1.0 (since
@@ -802,7 +789,7 @@ SimpleParallelTiffWriter<TInputImage>
 	/*
 	 * Writting the geom
 	 */
-	if (m_WriteGeomFile  || m_FilenameHelper->GetWriteGEOMFile())
+	if (m_WriteGeomFile || m_FilenameHelper->GetWriteGEOMFile())
 	{
 		otb::ImageKeywordlist otb_kwl;
 		itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
