@@ -11,4 +11,4 @@ otb_module(OTBSPTW
     "${DOCUMENTATION}"
   )
 
-
+otb_module_activation_option("Enable SPTW dependent modules" ON)
