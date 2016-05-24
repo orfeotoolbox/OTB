@@ -575,7 +575,7 @@ SimpleParallelTiffWriter<TInputImage>
 
 		// Write first and last pixel in the raster
 		double *data = new double(sizeof(*data) * 4 * output->GetRasterCount());
-		output->RasterIO(GF_Write,
+		CPLErr rcode = output->RasterIO(GF_Write,
 				0,
 				0,
 				1,
@@ -590,7 +590,20 @@ SimpleParallelTiffWriter<TInputImage>
 				0,
 				0);
 
-		output->RasterIO(GF_Write,
+    if(rcode != CE_None)
+      {
+      delete data;
+
+      // Clean stuff
+      OGRFree(wkt);
+      CSLDestroy(options);
+      GDALClose(output);
+
+      itkExceptionMacro(<<"Error while writing image with GDAL");
+      }
+
+    
+		rcode = output->RasterIO(GF_Write,
 				inputRegion.GetSize()[0]-1,
 				inputRegion.GetSize()[1]-1,
 				1,
@@ -604,7 +617,21 @@ SimpleParallelTiffWriter<TInputImage>
 				0,
 				0,
 				0);
-		delete data;
+
+    if(rcode != CE_None)
+      {
+      delete data;
+
+      // Clean stuff
+      OGRFree(wkt);
+      CSLDestroy(options);
+      GDALClose(output);
+
+      itkExceptionMacro(<<"Error while writing image with GDAL");
+      }
+
+
+    delete data;
 
 		// Clean stuff
 		OGRFree(wkt);
@@ -760,7 +787,7 @@ SimpleParallelTiffWriter<TInputImage>
       itkDebugMacro( "Process Id\tProcessing\tWriting" );
 	  for (unsigned int i = 0; i < process_runtimes.size(); i+=nValues)
 	    {
-        itkDebugMacro( (int (i/nValues)) <<
+      itkDebugMacro( <<(int (i/nValues)) << 
 	        "\t" << process_runtimes[i] <<
 	        "\t" << process_runtimes[i+1] <<
 	        "\t("<< process_runtimes[i+2] << " regions)" );
