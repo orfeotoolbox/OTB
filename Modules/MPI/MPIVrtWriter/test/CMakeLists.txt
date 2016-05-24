@@ -15,8 +15,11 @@ otb_module_target_label(otbMPIVrtWriterTestDriver)
 # MPI Hello test
 otb_add_test_mpi(NAME otbMPIVrtWriterTest
    NBPROCS 2
-   COMMAND otbMPIVrtWriterTestDriver otbMPIReadWriteTest
-   ${INPUTDATA}/ROI_QB_MUL_4.tif
-   ${TEMP}/otbMPIVrtWriterTestOutput.tif
-   
+   COMMAND otbMPIVrtWriterTestDriver
+   --compare-image ${NOTOL}
+   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   ${TEMP}/otbMPIVrtWriterTestOutput.vrt
+   otbMPIReadWriteTest
+   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   ${TEMP}/otbMPIVrtWriterTestOutput.vrt
    )
