@@ -1,13 +1,13 @@
 otb_module_test()
 #----------- ComputeOGRLayersFeaturesStatistics TESTS ----------------
-otb_test_application(NAME apTvClComputeOGRLayersFeaturesStatistics
+otb_test_application(NAME apTvClComputeVectorStatistics
                      APP  ComputeOGRLayersFeaturesStatistics
                      OPTIONS -inshp ${INPUTDATA}/Classification/apTvClLabeledVector.shp
                              -feat meanB0 meanB1 meanB2 meanB3 varB0 varB1 varB2 varB3
-                             -outstats ${TEMP}/apTvClComputeOGRLayersFeaturesStatistics.xml
+                             -outstats ${TEMP}/apTvClComputeVectorStatistics.xml
                      VALID   --compare-ascii ${NOTOL}
-                             ${OTBAPP_BASELINE_FILES}/apTvClComputeOGRLayersFeaturesStatistics.xml
-                             ${TEMP}/apTvClComputeOGRLayersFeaturesStatistics.xml)
+                             ${OTBAPP_BASELINE_FILES}/apTvClComputeVectorStatistics.xml
+                             ${TEMP}/apTvClComputeVectorStatistics.xml)
                              
 #----------- SOMClassification TESTS ----------------
 otb_test_application(NAME apTvClSOMClassificationSmall
@@ -313,17 +313,17 @@ if(OTB_USE_LIBSVM)
 endif()
 
 #----------- TrainOGRLayersClassifier TESTS ----------------
-otb_test_application(NAME apTvClTrainOGRLayersClassifier
-                     APP  TrainOGRLayersClassifier
-                     OPTIONS -inshp ${INPUTDATA}/Classification/apTvClLabeledVector.shp
+otb_test_application(NAME apTvClTrainVectorClassifier
+                     APP  TrainVectorClassifier
+                     OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClLabeledVector.shp
                              -feat meanB0 meanB1 meanB2 meanB3 varB0 varB1 varB2 varB3
-                             -instats ${TEMP}/apTvClComputeOGRLayersFeaturesStatistics.xml
-                             -outsvm ${TEMP}/apTvClModel.svm
+                             -io.stats ${TEMP}/apTvClComputeVectorStatistics.xml
+                             -io.out ${TEMP}/apTvClModel.svm
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/apTvClModel.svm
                              ${TEMP}/apTvClModel.svm)
 
-set_tests_properties(apTvClTrainOGRLayersClassifier PROPERTIES DEPENDS apTvClComputeOGRLayersFeaturesStatistics) 
+set_tests_properties(apTvClTrainVectorClassifier PROPERTIES DEPENDS apTvClComputeVectorStatistics) 
 
 #----------- ComputeConfusionMatrix TESTS ----------------
 otb_test_application(NAME apTvComputeConfusionMatrixV
