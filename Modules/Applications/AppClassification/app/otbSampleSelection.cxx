@@ -172,7 +172,7 @@ private:
     SetDefaultParameterInt("sampler.pattern.sizemax",256);
 
     AddChoice("sampler.random","Random sampler");
-    SetParameterDescription("sampler.random","Takes samples randomly.");
+    SetParameterDescription("sampler.random","Takes samples with a random test at a given probability.");
 
     AddParameter(ParameterType_Choice, "strat", "Sampling strategy");
 
@@ -191,6 +191,9 @@ private:
 
     AddChoice("strat.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
     SetParameterDescription("strat.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
+
+    AddChoice("strat.all","Take all samples");
+    SetParameterDescription("strat.all","Take all samples");
 
     // Default strategy : smallest
     SetParameterString("strat","smallest");
@@ -296,6 +299,7 @@ private:
       // byclass
       case 0:
         {
+        otbAppLogINFO("Sampling strategy : set number of samples for each class");
         ClassCountMapType requiredCount = 
           this->ReadRequiredSamples(this->GetParameterString("strat.byclass.in"));
         m_RateCalculator->SetNbOfSamplesByClass(requiredCount);
@@ -303,11 +307,24 @@ private:
       break;
       // constant
       case 1:
+        {
+        otbAppLogINFO("Sampling strategy : set a constant number of samples for all classes");
         m_RateCalculator->SetNbOfSamplesAllClasses(GetParameterInt("strat.constant.nb"));
+        }
       break;
       // smallest class
-      case 2: 
+      case 2:
+        {
+        otbAppLogINFO("Sampling strategy : fit the number of samples based on the smallest class");
         m_RateCalculator->SetMinimumNbOfSamplesByClass();
+        }
+      break;
+      // all samples
+      case 3:
+        {
+        otbAppLogINFO("Sampling strategy : take all samples");
+        m_RateCalculator->SetAllSamples();
+        }
       break;
       default:
         otbAppLogFATAL("Strategy mode unknown :"<<this->GetParameterString("strat"));
@@ -320,6 +337,15 @@ private:
       }
     
     MapRateType rates = m_RateCalculator->GetRatesByClass();
+    std::ostringstream oss;
+    oss << " className  requiredSamples  totalSamples  rate" << std::endl;
+    MapRateType::const_iterator itRates = rates.begin();
+    for(; itRates != rates.end(); ++itRates)
+      {
+      otb::SamplingRateCalculator::TripletType tpt = itRates->second;
+      oss << itRates->first << "\t" << tpt.Required << "\t" << tpt.Tot << "\t" << tpt.Rate << std::endl;
+      }
+    otbAppLogINFO("Sampling rates : " << oss.str());
 
     // Open input geometries
     otb::ogr::DataSource::Pointer vectors =
@@ -343,7 +369,7 @@ private:
           {
           m_Periodic->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
           }
-        // Processing ...
+        AddProcess(m_Periodic->GetStreamer(),"Selecting positions with periodic sampler...");
         m_Periodic->Update();
         }
       break;
@@ -387,7 +413,7 @@ private:
           m_Pattern->SetSamplerParameters(param);
           }
 
-        // Processing ...
+        AddProcess(m_Pattern->GetStreamer(),"Selecting positions with pattern sampler...");
         m_Pattern->Update();
 
         // Save patterns
@@ -420,7 +446,7 @@ private:
           {
           m_Random->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
           }
-        // Processing ...
+        AddProcess(m_Random->GetStreamer(),"Selecting positions with random sampler...");
         m_Random->Update();
         }
       break;
