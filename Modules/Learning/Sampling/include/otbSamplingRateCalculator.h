@@ -72,6 +72,9 @@ public:
    * The number of samples in each class is set to this minimum size*/
   void SetMinimumNbOfSamplesByClass(void);
 
+  /** Method to select all available samples */
+  void SetAllSamples(void);
+
   /** Method to export sampling rates in a CSV file.
    * Columns are : class name, required samples, total samples, rate.*/
   void Write(std::string filename);
@@ -83,7 +86,9 @@ public:
   /** Get macro to the computed sampling rates.*/
   itkGetConstReferenceMacro(RatesByClass,MapRateType);
 
-  /** Set method to input the total number of samples in each class.*/
+  /** Set method to input the total number of samples in each class.
+   *  This method should be called before the other Set... methods
+   *  that apply a sampling strategy */
   void SetClassCount(const ClassCountMapType& map);
 
   /** Clear internal data */

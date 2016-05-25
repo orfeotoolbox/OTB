@@ -71,13 +71,7 @@ SamplingRateCalculator
   for (; it != m_RatesByClass.end() ; ++it)
     {
     it->second.Required = dRequiredNbSamples;
-    // Update rates
-    if (it->second.Tot)
-      {
-      it->second.Rate =
-        static_cast<double>(it->second.Required) /
-        static_cast<double>(it->second.Tot);
-      }
+    this->UpdateRate(it->first);
     }
 }
 
@@ -101,6 +95,18 @@ SamplingRateCalculator
       triplet.Rate = 0.0;
       m_RatesByClass[it->first] = triplet;
       }
+    }
+}
+
+void
+SamplingRateCalculator
+::SetAllSamples(void)
+{
+  MapRateType::iterator it = m_RatesByClass.begin();
+  for (; it != m_RatesByClass.end() ; ++it)
+    {
+    it->second.Required = it->second.Tot;
+    it->second.Rate = 1.0;
     }
 }
 
@@ -226,9 +232,10 @@ SamplingRateCalculator
 {
   if (m_RatesByClass[name].Tot)
     {
-    m_RatesByClass[name].Rate =
+    m_RatesByClass[name].Rate = std::min(
       static_cast<double>(m_RatesByClass[name].Required) / 
-      static_cast<double>(m_RatesByClass[name].Tot);
+        static_cast<double>(m_RatesByClass[name].Tot),
+      1.0);
     }
   else
     {
