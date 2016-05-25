@@ -66,8 +66,8 @@ public:
   typedef TMaskImage                                      MaskImageType;
   typedef typename MaskImageType::Pointer                 MaskImagePointer;
 
-  typedef otb::ogr::DataSource                            OGRDataType;
-  typedef otb::ogr::DataSource::Pointer                   OGRDataPointer;
+  typedef ogr::DataSource                                 OGRDataType;
+  typedef ogr::DataSource::Pointer                        OGRDataPointer;
 
   typedef TSampler                                        SamplerType;
   typedef typename SamplerType::Pointer                   SamplerPointerType;
@@ -75,6 +75,7 @@ public:
   typedef typename std::map
     <std::string, SamplerPointerType>                     SamplerMapType;
 
+  typedef std::map<std::string, int>                      ClassPartitionType;
   /** Wrap output type as DataObject */
 
   typedef itk::DataObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
@@ -86,10 +87,10 @@ public:
   itkTypeMacro(PersistentOGRDataToSamplePositionFilter, PersistentImageFilter);
 
   /** Set the input OGRDataSource that contains sampling areas for each class*/
-  void SetOGRData(const otb::ogr::DataSource* vector);
+  void SetOGRData(const ogr::DataSource* vector);
 
   /** Get the input OGRDataSource with sampling regions*/
-  const otb::ogr::DataSource* GetOGRData();
+  const ogr::DataSource* GetOGRData();
 
   /** Set an input mask (optional) */
   void SetMask(const TMaskImage* mask);
@@ -150,7 +151,11 @@ protected:
 
   virtual void GenerateInputRequestedRegion();
 
-  virtual void GenerateData();
+  virtual void BeforeThreadedGenerateData(void);
+
+  virtual void AfterThreadedGenerateData(void);
+
+  virtual void ThreadedGenerateData(const RegionType &regionForThread, ThreadIdType threadid);
 
 private:
   PersistentOGRDataToSamplePositionFilter(const Self &); //purposely not implemented
@@ -166,7 +171,8 @@ private:
   template <typename TIterator>
   void Add(otb::ogr::Layer::const_iterator& featIt,
            TIterator& imgIt,
-           const typename TIterator::ImageType *img);
+           const typename TIterator::ImageType *img,
+           ThreadIdType& threadid);
 
   /** Recursive method to process geometries */
   template <typename TIterator>
@@ -174,11 +180,18 @@ private:
                    TIterator& imgIt,
                    const typename TIterator::ImageType *img,
                    unsigned long &fId,
-                   std::string &className);
+                   std::string &className,
+                   ThreadIdType& threadid);
 
   /** Call samplers on a current position, for a given class */
   void CallSamplers(const PointType &point,
-                    const std::string &className);
+                    const std::string &className,
+                    ThreadIdType& threadid);
+
+  void ComputeClassPartition(void);
+
+  /** (internal) map associating a class name with a thread number */
+  ClassPartitionType m_ClassPartition;
 
   /** Field name containing the class name*/
   std::string m_FieldName;
@@ -198,8 +211,11 @@ private:
   /** OGR Layer creation option for output position containers */
   std::vector<std::string> m_OGRLayerCreationOptions;
 
+  /** In-memory containers storing input geometries for each thread*/
+  std::vector<ogr::Layer> m_InMemoryInputs;
+
   /** In-memory containers storing position during iteration loop*/
-  std::vector<OGRDataPointer> m_InMemoryOutputs;
+  std::vector<std::vector<OGRDataPointer> > m_InMemoryOutputs;
 };
 
 /**

@@ -82,9 +82,8 @@ void
 PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 ::Synthetize(void)
 {
-  otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetOGRData());
-  vectors->GetLayer(m_LayerIndex).SetSpatialFilter(NULL);
-  
+  // clear temporary outputs
+  this->m_InMemoryOutputs.clear();
 }
 
 template<class TInputImage, class TMaskImage, class TSampler>
@@ -102,6 +101,9 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
       iter->second->Reset();
       }
     }
+
+  // compute label mapping
+  this->ComputeClassPartition();
 
   // Get OGR field index
   const otb::ogr::DataSource* vectors = this->GetOGRData();
@@ -293,44 +295,115 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
     }
 }
 
+template<class TInputImage, class TMaskImage, class TSampler>
+void
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
+::BeforeThreadedGenerateData(void)
+{
+  // apply spatial filter and fill InMemoryInput
+  this->ApplyPolygonsSpatialFilter();
+
+  // Prepare in-memory outputs
+  this->m_InMemoryOutputs.clear();
+  for (unsigned int i=0 ; i < this->GetNumberOfThreads() ; i++)
+    {
+    std::vector<OGRDataPointer> tmpContainer;
+    for (unsigned int k=0 ; k < this->GetNumberOfLevels() ; k++)
+      {
+      ogr::DataSource::Pointer tmpOutput = ogr::DataSource::New();
+      ogr::DataSource *realOutput = this->GetOutputPositionContainer(k);
+      ogr::Layer realLayer = realOutput->GetLayersCount() == 1
+                             ? realOutput->GetLayer(0)
+                             : realOutput->GetLayer(m_LayerName);
+      OGRSpatialReference * oSRS = NULL;
+      if (realLayer.GetSpatialRef())
+        {
+        oSRS = realLayer.GetSpatialRef()->Clone();
+        }
+
+      tmpOutput->CreateLayer(m_LayerName, oSRS ,wkbPoint, m_OGRLayerCreationOptions);
+      OGRFieldDefn field(m_FieldName.c_str(),OFTString);
+      tmpOutput->GetLayer(0).CreateField(field, true);
+      tmpContainer.push_back(tmpOutput);
+      }
+    this->m_InMemoryOutputs.push_back(tmpContainer);
+    }
+}
 
 template<class TInputImage, class TMaskImage, class TSampler>
 void
 PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
-::GenerateData()
+::AfterThreadedGenerateData(void)
+{
+  // clean temporary inputs
+  this->m_InMemoryInputs.clear();
+
+  // gather temporary outputs and write to output
+  itk::TimeProbe chrono;
+  chrono.Start();
+  for (unsigned int k=0 ; k < this->GetNumberOfLevels() ; k++)
+    {
+    ogr::DataSource *realOutput = this->GetOutputPositionContainer(k);
+    ogr::Layer outLayer = realOutput->GetLayersCount() == 1
+                          ? realOutput->GetLayer(0)
+                          : realOutput->GetLayer(m_LayerName);
+
+    OGRErr err = outLayer.ogr().StartTransaction();
+    if (err != OGRERR_NONE)
+      {
+      itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
+      }
+
+    for (unsigned int thread=0 ; thread < this->GetNumberOfThreads() ; thread++)
+      {
+      ogr::Layer inLayer = this->m_InMemoryOutputs[thread][k]->GetLayerChecked(0);
+      if (!inLayer)
+        {
+        continue;
+        }
+
+      ogr::Layer::const_iterator tmpIt = inLayer.begin();
+      for(; tmpIt!=inLayer.end(); ++tmpIt)
+        {
+        ogr::Feature dstFeature(outLayer.GetLayerDefn());
+        dstFeature.SetFrom( *tmpIt, TRUE );
+        outLayer.CreateFeature( dstFeature );
+        }
+      }
+
+    err = outLayer.ogr().CommitTransaction();
+    if (err != OGRERR_NONE)
+      {
+      itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << outLayer.ogr().GetName() << ".");
+      }
+    }
+  chrono.Stop();
+  otbMsgDebugMacro(<< "write ogr points took " << chrono.GetTotal() << " sec");
+}
+
+template<class TInputImage, class TMaskImage, class TSampler>
+void
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
+::ThreadedGenerateData(const RegionType &regionForThread, ThreadIdType threadid)
 {
   // Retrieve inputs
   TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
   TInputImage* outputImage = this->GetOutput();
   TMaskImage* mask = const_cast<TMaskImage*>(this->GetMask());
-  const ogr::DataSource* vectors = this->GetOGRData();
+  //const ogr::DataSource* vectors = this->GetOGRData();
   PointType point;
   RegionType requestedRegion =outputImage->GetRequestedRegion();
 
-  // Prepare in-memory outputs
-  this->m_InMemoryOutputs.clear();
-  for (unsigned int k=0 ; k < this->GetNumberOfLevels() ; k++)
+  //ogr::Layer layer = vectors->GetLayer(m_LayerIndex);
+  ogr::Layer layer = this->m_InMemoryInputs[threadid];
+  if (! layer)
     {
-    ogr::DataSource::Pointer tmpOutput = ogr::DataSource::New();
-    ogr::DataSource *realOutput = this->GetOutputPositionContainer(k);
-    ogr::Layer realLayer = realOutput->GetLayersCount() == 1
-                           ? realOutput->GetLayer(0)
-                           : realOutput->GetLayer(m_LayerName);
-    OGRSpatialReference * oSRS = NULL;
-    if (realLayer.GetSpatialRef())
-      {
-      oSRS = realLayer.GetSpatialRef()->Clone();
-      }
-
-    tmpOutput->CreateLayer(m_LayerName, oSRS ,wkbPoint, m_OGRLayerCreationOptions);
-    OGRFieldDefn field(m_FieldName.c_str(),OFTString);
-    tmpOutput->GetLayer(0).CreateField(field, true);
-    this->m_InMemoryOutputs.push_back(tmpOutput);
+    return;
     }
 
-  this->ApplyPolygonsSpatialFilter();
-
-  ogr::Layer layer = vectors->GetLayer(m_LayerIndex);
+  float featCount = static_cast<float>(layer.GetFeatureCount(true));
+  if (featCount == 0.0) featCount=1.0;
+  long currentCount = 0;
 
   // Loop across the features in the layer (filtered by requested region in BeforeTGD already)
   ogr::Layer::const_iterator featIt = layer.begin();
@@ -349,50 +422,18 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
             itk::ImageRegionConstIterator<TMaskImage>,
             itk::ImageRegionConstIterator<TMaskImage> > MaskedIteratorType;
           MaskedIteratorType it(mask, mask, consideredRegion);
-          this->Add<MaskedIteratorType>(featIt, it, mask);
+          this->Add<MaskedIteratorType>(featIt, it, mask, threadid);
           }
         else
           {
           typedef itk::ImageRegionConstIteratorWithOnlyIndex<TInputImage> NoValueIteratorType;
           NoValueIteratorType it(inputImage,consideredRegion);
-          this->Add<NoValueIteratorType>(featIt, it, inputImage);
+          this->Add<NoValueIteratorType>(featIt, it, inputImage, threadid);
           }
       }
+    currentCount++;
+    this->UpdateProgress(static_cast<float>(currentCount)/featCount);
     }
-  
-  // Copy in-memory vectors to output
-  itk::TimeProbe chrono;
-  chrono.Start();
-  for (unsigned int k=0 ; k < this->GetNumberOfLevels() ; k++)
-    {
-    ogr::Layer inLayer = this->m_InMemoryOutputs[k]->GetLayerChecked(0);
-    ogr::DataSource *realOutput = this->GetOutputPositionContainer(k);
-    ogr::Layer outLayer = realOutput->GetLayersCount() == 1
-                          ? realOutput->GetLayer(0)
-                          : realOutput->GetLayer(m_LayerName);
-
-    OGRErr err = outLayer.ogr().StartTransaction();
-    if (err != OGRERR_NONE)
-      {
-      itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
-      }
-
-    ogr::Layer::const_iterator tmpIt = inLayer.begin();
-    for(; tmpIt!=inLayer.end(); ++tmpIt)
-      {
-      ogr::Feature dstFeature(outLayer.GetLayerDefn());
-      dstFeature.SetFrom( *tmpIt, TRUE );
-      outLayer.CreateFeature( dstFeature );
-      }
-
-    err = outLayer.ogr().CommitTransaction();
-    if (err != OGRERR_NONE)
-      {
-      itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << outLayer.ogr().GetName() << ".");
-      }
-    }
-  chrono.Stop();
-  otbMsgDebugMacro(<< "write ogr points took " << chrono.GetTotal() << " sec");
 }
 
 template<class TInputImage, class TMaskImage, class TSampler>
@@ -412,11 +453,49 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
   outputImage->TransformIndexToPhysicalPoint(startIndex, startPoint);
   outputImage->TransformIndexToPhysicalPoint(endIndex, endPoint);
 
-  vectors->GetLayer(m_LayerIndex).SetSpatialFilterRect(
-    std::min(startPoint[0],endPoint[0]),
-    std::min(startPoint[1],endPoint[1]),
-    std::max(startPoint[0],endPoint[0]),
-    std::max(startPoint[1],endPoint[1]));
+  // create geometric extent
+  OGRPolygon tmpPolygon;
+  OGRLinearRing ring;
+  ring.addPoint(startPoint[0],startPoint[1],0.0);
+  ring.addPoint(startPoint[0],endPoint[1]  ,0.0);
+  ring.addPoint(endPoint[0]  ,endPoint[1]  ,0.0);
+  ring.addPoint(endPoint[0]  ,startPoint[1],0.0);
+  ring.addPoint(startPoint[0],startPoint[1],0.0);
+  tmpPolygon.addRing(&ring);
+
+  int numberOfThreads = this->GetNumberOfThreads();
+
+  // prepare temporary input
+  const ogr::DataSource* vectors = this->GetOGRData();
+  this->m_InMemoryInputs.clear();
+  std::ostringstream oss;
+  for (unsigned int i=0 ; i < numberOfThreads ; i++)
+    {
+    oss.str("");
+    oss << "SELECT * FROM \"" << m_LayerName << "\" ";
+    oss << "WHERE "<<m_FieldName<<" IN (";
+    bool isFirst = true;
+    for (ClassPartitionType::iterator iter = this->m_ClassPartition.begin() ;
+         iter != this->m_ClassPartition.end() ;
+         ++iter)
+      {
+      if (iter->second == i)
+        {
+        if (isFirst)
+          {
+          isFirst = false;
+          }
+        else
+          {
+          oss << ","
+          }
+        oss <<"'"<<iter->first<<"'";
+        }
+      }
+    oss << ")";
+    this->m_InMemoryInputs.push_back(
+      vectors->ExecuteSQL(oss.str().c_str(), &tmpPolygon, NULL));
+    }
 }
 
 template<class TInputImage, class TMaskImage, class TSampler>
@@ -466,7 +545,8 @@ void
 PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 ::Add(otb::ogr::Layer::const_iterator& featIt,
       TIterator& imgIt,
-      const typename TIterator::ImageType *img)
+      const typename TIterator::ImageType *img,
+      ThreadIdType& threadid)
 {
   // Get class name
   std::string className(featIt->ogr().GetFieldAsString(this->m_FieldIndex));
@@ -477,7 +557,8 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
                     imgIt,
                     img,
                     featureId,
-                    className);
+                    className,
+                    threadid);
 }
 
 template<class TInputImage, class TMaskImage, class TSampler>
@@ -488,7 +569,8 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
               TIterator& imgIt,
               const typename TIterator::ImageType *img,
               unsigned long &fId,
-              std::string &className)
+              std::string &className,
+              ThreadIdType& threadid)
 {
   typename TIterator::ImageType::PointType imgPoint;
   typename TIterator::IndexType imgIndex;
@@ -512,7 +594,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
         {
         if (imgIndex == imgIt.GetIndex())
           {
-          this->CallSamplers(imgPoint, className);
+          this->CallSamplers(imgPoint, className, threadid);
           break;
           }
         ++imgIt;
@@ -557,7 +639,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
           ,imgPoint[1]-0.5*imgAbsSpacing[1]
           ,0.0);
         if (geom->Intersects(&tmpPolygon))
-          this->CallSamplers(imgPoint, className);
+          this->CallSamplers(imgPoint, className, threadid);
         ++imgIt;
         }
       break;
@@ -572,7 +654,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
         tmpPoint.setY(imgPoint[1]);
         if (geom->Contains(&tmpPoint))
           {
-          this->CallSamplers(imgPoint, className);
+          this->CallSamplers(imgPoint, className, threadid);
           }
         ++imgIt;
         }
@@ -597,7 +679,8 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
                             imgIt,
                             img,
                             fId,
-                            className);
+                            className,
+                            threadid);
           }
         }
       else
@@ -619,24 +702,80 @@ template<class TInputImage, class TMaskImage, class TSampler>
 void
 PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 ::CallSamplers(const PointType &point,
-               const std::string &className)
+               const std::string &className,
+               ThreadIdType& threadid)
 {
   for (unsigned int i=0 ; i<this->GetNumberOfLevels() ; ++i)
     {
-    bool isTaken = m_Samplers[i][className]->TakeSample();
-    if (isTaken)
+    if (m_Samplers[i][className]->TakeSample())
       {
       OGRPoint ogrTmpPoint;
       ogrTmpPoint.setX(point[0]);
       ogrTmpPoint.setY(point[1]);
 
-      ogr::Layer outputLayer = this->m_InMemoryOutputs[i]->GetLayerChecked(0);
+      ogr::Layer outputLayer = this->m_InMemoryOutputs[threadid][i]->GetLayerChecked(0);
       ogr::Feature feat(outputLayer.GetLayerDefn());
       feat[m_FieldName].SetValue(className);
       feat.SetGeometry(&ogrTmpPoint);
       outputLayer.CreateFeature(feat);
       break;
       }
+    }
+}
+
+template<class TInputImage, class TMaskImage, class TSampler>
+void
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
+::ComputeClassPartition(void)
+{
+  m_ClassPartition.clear();
+  typedef std::map<std::string, unsigned long> ClassCountMapType;
+  ClassCountMapType classCounts;
+  for (SamplerMapType::const_iterator it = m_Samplers[0].begin() ;
+       it != m_Samplers[0].end();
+       ++it)
+    {
+    classCounts[it->first] = it->second->GetTotalElements();
+    }
+
+  int numberOfThreads = this->GetNumberOfThreads();
+  typedef std::vector<unsigned long> LoadVectorType;
+  LoadVectorType currentLoad;
+  currentLoad.resize(numberOfThreads, 0UL);
+  
+  ClassCountMapType::iterator largestClass;
+  unsigned long minLoad;
+  unsigned int destThread;
+  while (classCounts.size())
+    {
+    // find class with highest number of total elements
+    largestClass = classCounts.begin();
+    for (ClassCountMapType::iterator iter = classCounts.begin() ;
+         iter != classCounts.end() ;
+         ++iter)
+      {
+      if (iter->second > largestClass->second)
+        {
+        largestClass = iter;
+        }
+      }
+
+    // affect this class to the thread with lowest load
+    minLoad = currentLoad[0];
+    destThread = 0;
+    for (unsigned int k = 0 ; k < currentLoad.size() ; ++k)
+      {
+      if (currentLoad[k] < minLoad)
+        {
+        minLoad = currentLoad[k];
+        destThread = k;
+        }
+      }
+    m_ClassPartition[largestClass->first] = destThread;
+    currentLoad[destThread] += largestClass->second;
+
+    // remove class from classCounts
+    classCounts.erase(largestClass);
     }
 }
 
