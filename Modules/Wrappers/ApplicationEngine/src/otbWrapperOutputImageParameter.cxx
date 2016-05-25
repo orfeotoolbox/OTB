@@ -19,6 +19,10 @@
 #include "otbClampImageFilter.h"
 #include "otbClampVectorImageFilter.h"
 
+#ifdef OTB_USE_MPI
+#include "otbMPIVrtWriter.h"
+#endif
+
 namespace otb
 {
 namespace Wrapper
@@ -105,16 +109,28 @@ void OutputImageParameter::InitializeWriters()
 }
 
 
-#define otbClampAndWriteImageMacro(InputImageType, OutputImageType, writer)         \
-  {                                                                                 \
-    typedef otb::ClampImageFilter<InputImageType, OutputImageType> ClampFilterType; \
-    typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         \
-    clampFilter->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) );   \
-    writer->SetFileName( this->GetFileName() );                                     \
-    writer->SetInput(clampFilter->GetOutput());                                     \
-    writer->SetAutomaticAdaptativeStreaming(m_RAMValue);                            \
-    writer->Update();                                                               \
-  }
+template <typename TInput, typename TOutput> void ClampAndWriteImage(itk::ImageBase<2> * in, otb::ImageFileWriter<TOutput> * writer, const std::string & filename, const unsigned int & ramValue)
+{
+  typedef otb::ClampImageFilter<TInput, TOutput> ClampFilterType; 
+  typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         
+  clampFilter->SetInput( dynamic_cast<TInput*>(in));
+  writer->SetFileName( filename );                                     
+  writer->SetInput(clampFilter->GetOutput());                                     
+  writer->SetAutomaticAdaptativeStreaming(ramValue);
+  writer->Update(); 
+}
+
+template <typename TInput, typename TOutput > void ClampAndWriteVectorImage(itk::ImageBase<2> * in, otb::ImageFileWriter<TOutput > * writer, const std::string & filename, const unsigned int & ramValue)
+{
+  typedef otb::ClampVectorImageFilter<TInput, TOutput> ClampFilterType; 
+  typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         
+  clampFilter->SetInput( dynamic_cast<TInput*>(in));
+  writer->SetFileName( filename );                                     
+  writer->SetInput(clampFilter->GetOutput());                                     
+  writer->SetAutomaticAdaptativeStreaming(ramValue);
+  writer->Update(); 
+}
+
 
 #define otbClampAndWriteVectorImageMacro(InputImageType, OutputImageType, writer)         \
   {                                                                                       \
@@ -136,37 +152,37 @@ OutputImageParameter::SwitchImageWrite()
     {
     case ImagePixelType_uint8:
     {
-    otbClampAndWriteImageMacro(TInputImageType, UInt8ImageType, m_UInt8Writer);
+    ClampAndWriteImage<TInputImageType,UInt8ImageType>(m_Image,m_UInt8Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_int16:
     {
-    otbClampAndWriteImageMacro(TInputImageType, Int16ImageType, m_Int16Writer);
+    ClampAndWriteImage<TInputImageType,Int16ImageType>(m_Image,m_Int16Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_uint16:
     {
-    otbClampAndWriteImageMacro(TInputImageType, UInt16ImageType, m_UInt16Writer);
+    ClampAndWriteImage<TInputImageType,UInt16ImageType>(m_Image,m_UInt16Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_int32:
     {
-    otbClampAndWriteImageMacro(TInputImageType, Int32ImageType, m_Int32Writer);
+    ClampAndWriteImage<TInputImageType,Int32ImageType>(m_Image,m_Int32Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_uint32:
     {
-    otbClampAndWriteImageMacro(TInputImageType, UInt32ImageType, m_UInt32Writer);
+    ClampAndWriteImage<TInputImageType,UInt32ImageType>(m_Image,m_UInt32Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_float:
     {
-    otbClampAndWriteImageMacro(TInputImageType, FloatImageType, m_FloatWriter);
+    ClampAndWriteImage<TInputImageType,FloatImageType>(m_Image,m_FloatWriter,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_double:
     {
-    otbClampAndWriteImageMacro(TInputImageType, DoubleImageType, m_DoubleWriter);
+    ClampAndWriteImage<TInputImageType,DoubleImageType>(m_Image,m_DoubleWriter,m_FileName,m_RAMValue);
     break;
     }
     }
@@ -181,37 +197,37 @@ OutputImageParameter::SwitchVectorImageWrite()
     {
     case ImagePixelType_uint8:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, UInt8VectorImageType, m_VectorUInt8Writer);
+    ClampAndWriteVectorImage<TInputVectorImageType,UInt8VectorImageType>(m_Image,m_VectorUInt8Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_int16:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, Int16VectorImageType, m_VectorInt16Writer);
+    ClampAndWriteVectorImage<TInputVectorImageType,Int16VectorImageType>(m_Image,m_VectorInt16Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_uint16:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, UInt16VectorImageType, m_VectorUInt16Writer);
+    ClampAndWriteVectorImage<TInputVectorImageType,UInt16VectorImageType>(m_Image,m_VectorUInt16Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_int32:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, Int32VectorImageType, m_VectorInt32Writer);
+    ClampAndWriteVectorImage<TInputVectorImageType,Int32VectorImageType>(m_Image,m_VectorInt32Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_uint32:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, UInt32VectorImageType, m_VectorUInt32Writer);
+    ClampAndWriteVectorImage<TInputVectorImageType,UInt32VectorImageType>(m_Image,m_VectorUInt32Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_float:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, FloatVectorImageType, m_VectorFloatWriter);
+    ClampAndWriteVectorImage<TInputVectorImageType,FloatVectorImageType>(m_Image,m_VectorFloatWriter,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_double:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, DoubleVectorImageType, m_VectorDoubleWriter);
+    ClampAndWriteVectorImage<TInputVectorImageType,DoubleVectorImageType>(m_Image,m_VectorDoubleWriter,m_FileName,m_RAMValue);
     break;
     }
     }
