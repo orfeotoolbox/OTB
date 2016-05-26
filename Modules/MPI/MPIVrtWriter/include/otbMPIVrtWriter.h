@@ -37,8 +37,8 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
 {
   typename otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
 
-  int myRank = mpiConfig->GetMyRank();
-  int nbProcs = mpiConfig->GetNbProcs();
+  unsigned int myRank = mpiConfig->GetMyRank();
+  unsigned int nbProcs = mpiConfig->GetNbProcs();
   
   typedef otb::ImageFileWriter<TImage>                                           WriterType;
   typedef otb::NumberOfDivisionsTiledStreamingManager<TImage>                    StreamingManagerType;
@@ -71,17 +71,19 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
 
   // Output prefix
   std::string extension = itksys::SystemTools::GetFilenameExtension(output);
-  if (extension != ".tif")
+  if (extension != ".vrt")
   {
+
+  // TODO: Maybe remove this
     if (extension == "")
 	{
 	  // Missing extension
-	  mpiConfig->logInfo("Filename has no extension. Adding <.tif> extension.");
+	  mpiConfig->logInfo("Filename has no extension. Adding <.vrt> extension.");
 	}
 	else
 	{
 	  // Bad extension
-	  mpiConfig->logError("Filename must have .tif extension!");
+	  mpiConfig->logError("Filename must have .vrt extension!");
 	  mpiConfig->abort(EXIT_FAILURE);
 	}
   }
