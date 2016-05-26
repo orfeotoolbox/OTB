@@ -20,6 +20,10 @@
 #include "otb_tinyxml.h"
 #include <vector>
 
+#ifdef OTB_USE_MPI
+#include "otbMPIConfig.h"
+#endif
+
 const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key);
 std::string PrepareExpressionFromXML(std::string filename);
 std::vector<std::string> PrepareVectorExpressionFromXML(std::string filename);
@@ -250,6 +254,10 @@ std::string CleanWord(const std::string & word)
 
 int main(int argc, char* argv[])
 {
+  #ifdef OTB_USE_MPI
+  otb::MPIConfig::Instance()->Init(argc,argv);
+  #endif
+  
   if (argc < 2)
     {
     std::cerr << "Usage : " << argv[0] << " module_name [MODULEPATH] [arguments]" << std::endl;
