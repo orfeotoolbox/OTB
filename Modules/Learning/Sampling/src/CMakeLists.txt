@@ -8,6 +8,7 @@ target_link_libraries(OTBSampling
   ${OTBCommon_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
   ${OTBStatistics_LIBRARIES}
+  ${OTBIOGDAL_LBRARIES}
   )
 
 otb_module_target(OTBSampling)
