@@ -1,14 +1,14 @@
 otb_module_test()
 #----------- ComputeOGRLayersFeaturesStatistics TESTS ----------------
-otb_test_application(NAME apTvClComputeVectorStatistics
+otb_test_application(NAME apTvClComputeOGRLayersFeaturesStatistics
                      APP  ComputeOGRLayersFeaturesStatistics
                      OPTIONS -inshp ${INPUTDATA}/Classification/apTvClLabeledVector.shp
                              -feat meanB0 meanB1 meanB2 meanB3 varB0 varB1 varB2 varB3
-                             -outstats ${TEMP}/apTvClComputeVectorStatistics.xml
+                             -outstats ${TEMP}/apTvClComputeOGRLayersFeaturesStatistics.xml
                      VALID   --compare-ascii ${NOTOL}
-                             ${OTBAPP_BASELINE_FILES}/apTvClComputeVectorStatistics.xml
-                             ${TEMP}/apTvClComputeVectorStatistics.xml)
-                             
+                             ${OTBAPP_BASELINE_FILES}/apTvClComputeOGRLayersFeaturesStatistics.xml
+                             ${TEMP}/apTvClComputeOGRLayersFeaturesStatistics.xml)
+
 #----------- SOMClassification TESTS ----------------
 otb_test_application(NAME apTvClSOMClassificationSmall
                      APP  SOMClassification
@@ -317,17 +317,17 @@ otb_test_application(NAME apTvClTrainVectorClassifier
                      APP  TrainVectorClassifier
                      OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClLabeledVector.shp
                              -feat meanB0 meanB1 meanB2 meanB3 varB0 varB1 varB2 varB3
-                             -io.stats ${TEMP}/apTvClComputeVectorStatistics.xml
+                             -io.stats ${TEMP}/apTvClComputeOGRLayersFeaturesStatistics.xml
                              -classifier libsvm
                              -classifier.libsvm.c 1
                              -classifier.libsvm.k linear
-                             -classifier.libsvm.opt on
+                             -classifier.libsvm.opt true
                              -io.out ${TEMP}/apTvClModel.svm
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/apTvClModel.svm
                              ${TEMP}/apTvClModel.svm)
 
-set_tests_properties(apTvClTrainVectorClassifier PROPERTIES DEPENDS apTvClComputeVectorStatistics) 
+set_tests_properties(apTvClTrainVectorClassifier PROPERTIES DEPENDS ComputeOGRLayersFeaturesStatistics)
 
 #----------- ComputeConfusionMatrix TESTS ----------------
 otb_test_application(NAME apTvComputeConfusionMatrixV
@@ -584,7 +584,7 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt
                              ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
                              ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp)
 
-set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt) 
+set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication
                      APP  ComputePolylineFeatureFromImage
@@ -597,7 +597,7 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadE
                              ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp
                              ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp)
 
-set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication) 
+set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication)
 endif()
 
 #----------- KMeansClassification TESTS ----------------
