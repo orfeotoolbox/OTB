@@ -151,7 +151,7 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
             std::stringstream tileFileName;
             tileFileName <<prefix<<"_"<<tileIndexX<<"_"<<tileIndexY<<"_"<<tileSizeX<<"_"<<tileSizeY<<".tif";
             ofs<<"\t\t<SimpleSource>"<<std::endl;
-            ofs<<"\t\t\t<SourceFilename relativeToVRT=\"1\">"<< tileFileName.str()<<"</SourceFilename>"<<std::endl;
+            ofs<<"\t\t\t<SourceFilename relativeToVRT=\"1\">"<< itksys::SystemTools::GetFilenameName(tileFileName.str())<<"</SourceFilename>"<<std::endl;
             ofs<<"\t\t\t<SourceBand>"<<band<<"</SourceBand>"<<std::endl;
             ofs<<"\t\t\t<SrcRect xOff=\""<<0<<"\" yOff=\""<<0<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
             ofs<<"\t\t\t<DstRect xOff=\""<<tileIndexX<<"\" yOff=\""<<tileIndexY<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
