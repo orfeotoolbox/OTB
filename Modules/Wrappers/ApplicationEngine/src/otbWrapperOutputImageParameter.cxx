@@ -20,7 +20,14 @@
 #include "otbClampVectorImageFilter.h"
 
 #ifdef OTB_USE_MPI
+
+#include "otbMPIConfig.h"
 #include "otbMPIVrtWriter.h"
+
+#ifdef OTB_USE_SPTW
+#include "otbSimpleParallelTiffWriter.h"
+#endif
+
 #endif
 
 namespace otb
@@ -114,10 +121,56 @@ template <typename TInput, typename TOutput> void ClampAndWriteImage(itk::ImageB
   typedef otb::ClampImageFilter<TInput, TOutput> ClampFilterType; 
   typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         
   clampFilter->SetInput( dynamic_cast<TInput*>(in));
-  writer->SetFileName( filename );                                     
-  writer->SetInput(clampFilter->GetOutput());                                     
-  writer->SetAutomaticAdaptativeStreaming(ramValue);
-  writer->Update(); 
+  
+  bool useStandardWriter = true;
+
+  #ifdef OTB_USE_MPI
+
+  otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
+
+  if (mpiConfig->GetNbProcs() > 1)
+    {
+    useStandardWriter = false;
+
+    // Get file extension
+    std::string extension = itksys::SystemTools::GetFilenameExtension(filename);
+
+    if(extension == ".vrt")
+      {
+      // Use the WriteMPI function
+      mpi::WriteMPI(clampFilter->GetOutput(),filename);      
+      }
+    #ifdef OTB_USE_SPTW
+    else if (extension == ".tif")
+      {
+      // Use simple parallel tiff writer
+      typedef otb::SimpleParallelTiffWriter<TOutput> SPTWriterType;
+
+      typename SPTWriterType::Pointer sptWriter = SPTWriterType::New();
+      sptWriter->SetFileName(filename);
+      sptWriter->SetInput(clampFilter->GetOutput());
+      sptWriter->SetAutomaticAdaptativeStreaming(ramValue);
+      sptWriter->Update();
+      }
+    
+    #endif
+    else
+      {
+      itkGenericExceptionMacro("File format "<<extension<<" not supported for parallel writing with MPI. Supported formats are .vrt and .tif. Extended filenames are not supported.");
+      }
+  
+    }
+  
+  #endif
+  
+  if(useStandardWriter)
+    {
+    
+    writer->SetFileName( filename );                                     
+    writer->SetInput(clampFilter->GetOutput());                                     
+    writer->SetAutomaticAdaptativeStreaming(ramValue);
+    writer->Update();
+    }
 }
 
 template <typename TInput, typename TOutput > void ClampAndWriteVectorImage(itk::ImageBase<2> * in, otb::ImageFileWriter<TOutput > * writer, const std::string & filename, const unsigned int & ramValue)
@@ -125,10 +178,54 @@ template <typename TInput, typename TOutput > void ClampAndWriteVectorImage(itk:
   typedef otb::ClampVectorImageFilter<TInput, TOutput> ClampFilterType; 
   typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         
   clampFilter->SetInput( dynamic_cast<TInput*>(in));
-  writer->SetFileName( filename );                                     
-  writer->SetInput(clampFilter->GetOutput());                                     
-  writer->SetAutomaticAdaptativeStreaming(ramValue);
-  writer->Update(); 
+  
+  bool useStandardWriter = true;
+  
+#ifdef OTB_USE_MPI
+  
+  otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
+  
+  if (mpiConfig->GetNbProcs() > 1)
+    {
+    useStandardWriter = false;
+    
+    // Get file extension
+    std::string extension = itksys::SystemTools::GetFilenameExtension(filename);
+    
+    if(extension == ".vrt")
+      {
+      // Use the WriteMPI function
+      mpi::WriteMPI(clampFilter->GetOutput(),filename);      
+      }
+    #ifdef OTB_USE_SPTW
+    else if (extension == ".tif")
+      {
+      // Use simple parallel tiff writer
+      typedef otb::SimpleParallelTiffWriter<TOutput> SPTWriterType;
+      
+      typename SPTWriterType::Pointer sptWriter = SPTWriterType::New();
+      sptWriter->SetFileName(filename);
+      sptWriter->SetInput(clampFilter->GetOutput());
+      sptWriter->SetAutomaticAdaptativeStreaming(ramValue);
+      sptWriter->Update();
+      }
+    
+    #endif
+    else
+      {
+      itkGenericExceptionMacro("File format "<<extension<<" not supported for parallel writing with MPI. Supported formats are .vrt and .tif. Extended filenames are not supported.");
+      }
+    }
+  #endif
+  
+  if(useStandardWriter)
+    {
+    
+    writer->SetFileName( filename );                                     
+    writer->SetInput(clampFilter->GetOutput());                                     
+    writer->SetAutomaticAdaptativeStreaming(ramValue);
+    writer->Update();
+    }
 }
 
 
