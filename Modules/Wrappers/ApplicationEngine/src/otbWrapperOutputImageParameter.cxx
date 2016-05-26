@@ -138,7 +138,7 @@ template <typename TInput, typename TOutput> void ClampAndWriteImage(itk::ImageB
     if(extension == ".vrt")
       {
       // Use the WriteMPI function
-      mpi::WriteMPI(clampFilter->GetOutput(),filename);      
+      mpi::WriteMPI(clampFilter->GetOutput(),filename,ramValue);      
       }
     #ifdef OTB_USE_SPTW
     else if (extension == ".tif")
@@ -195,7 +195,7 @@ template <typename TInput, typename TOutput > void ClampAndWriteVectorImage(itk:
     if(extension == ".vrt")
       {
       // Use the WriteMPI function
-      mpi::WriteMPI(clampFilter->GetOutput(),filename);      
+      mpi::WriteMPI(clampFilter->GetOutput(),filename,ramValue);      
       }
     #ifdef OTB_USE_SPTW
     else if (extension == ".tif")

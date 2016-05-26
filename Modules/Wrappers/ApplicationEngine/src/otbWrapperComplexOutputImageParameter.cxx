@@ -101,7 +101,7 @@ template <typename TInput, typename TOutput> void CastAndWriteImage(itk::ImageBa
     if(extension == ".vrt")
       {
       // Use the WriteMPI function
-      mpi::WriteMPI(clampFilter->GetOutput(),filename);      
+      mpi::WriteMPI(clampFilter->GetOutput(),filename,ramValue);      
       }
     #ifdef OTB_USE_SPTW
     else if (extension == ".tif")
