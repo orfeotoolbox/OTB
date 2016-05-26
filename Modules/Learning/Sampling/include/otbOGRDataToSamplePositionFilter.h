@@ -155,7 +155,7 @@ protected:
 
   virtual void AfterThreadedGenerateData(void);
 
-  virtual void ThreadedGenerateData(const RegionType &regionForThread, ThreadIdType threadid);
+  virtual void ThreadedGenerateData(const RegionType&, itk::ThreadIdType threadid);
 
 private:
   PersistentOGRDataToSamplePositionFilter(const Self &); //purposely not implemented
@@ -172,7 +172,7 @@ private:
   void Add(otb::ogr::Layer::const_iterator& featIt,
            TIterator& imgIt,
            const typename TIterator::ImageType *img,
-           ThreadIdType& threadid);
+           itk::ThreadIdType& threadid);
 
   /** Recursive method to process geometries */
   template <typename TIterator>
@@ -181,12 +181,12 @@ private:
                    const typename TIterator::ImageType *img,
                    unsigned long &fId,
                    std::string &className,
-                   ThreadIdType& threadid);
+                   itk::ThreadIdType& threadid);
 
   /** Call samplers on a current position, for a given class */
   void CallSamplers(const PointType &point,
                     const std::string &className,
-                    ThreadIdType& threadid);
+                    itk::ThreadIdType& threadid);
 
   void ComputeClassPartition(void);
 

@@ -384,13 +384,12 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 template<class TInputImage, class TMaskImage, class TSampler>
 void
 PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
-::ThreadedGenerateData(const RegionType &regionForThread, ThreadIdType threadid)
+::ThreadedGenerateData(const RegionType&, itk::ThreadIdType threadid)
 {
   // Retrieve inputs
   TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
   TInputImage* outputImage = this->GetOutput();
   TMaskImage* mask = const_cast<TMaskImage*>(this->GetMask());
-  //const ogr::DataSource* vectors = this->GetOGRData();
   PointType point;
   RegionType requestedRegion =outputImage->GetRequestedRegion();
 
@@ -487,7 +486,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
           }
         else
           {
-          oss << ","
+          oss << ",";
           }
         oss <<"'"<<iter->first<<"'";
         }
@@ -546,7 +545,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 ::Add(otb::ogr::Layer::const_iterator& featIt,
       TIterator& imgIt,
       const typename TIterator::ImageType *img,
-      ThreadIdType& threadid)
+      itk::ThreadIdType& threadid)
 {
   // Get class name
   std::string className(featIt->ogr().GetFieldAsString(this->m_FieldIndex));
@@ -570,7 +569,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
               const typename TIterator::ImageType *img,
               unsigned long &fId,
               std::string &className,
-              ThreadIdType& threadid)
+              itk::ThreadIdType& threadid)
 {
   typename TIterator::ImageType::PointType imgPoint;
   typename TIterator::IndexType imgIndex;
@@ -703,7 +702,7 @@ void
 PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 ::CallSamplers(const PointType &point,
                const std::string &className,
-               ThreadIdType& threadid)
+               itk::ThreadIdType& threadid)
 {
   for (unsigned int i=0 ; i<this->GetNumberOfLevels() ; ++i)
     {
@@ -731,7 +730,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
   m_ClassPartition.clear();
   typedef std::map<std::string, unsigned long> ClassCountMapType;
   ClassCountMapType classCounts;
-  for (SamplerMapType::const_iterator it = m_Samplers[0].begin() ;
+  for (typename SamplerMapType::const_iterator it = m_Samplers[0].begin() ;
        it != m_Samplers[0].end();
        ++it)
     {
