@@ -20,6 +20,18 @@
 #include "itkCastImageFilter.h"
 #include "itkVectorCastImageFilter.h"
 
+#ifdef OTB_USE_MPI
+
+#include "otbMPIConfig.h"
+#include "otbMPIVrtWriter.h"
+
+#ifdef OTB_USE_SPTW
+#include "otbSimpleParallelTiffWriter.h"
+#endif
+
+#endif
+
+
 namespace otb
 {
 namespace Wrapper
@@ -67,20 +79,62 @@ void ComplexOutputImageParameter::InitializeWriters()
   m_ComplexVectorDoubleWriter = ComplexVectorDoubleWriterType::New();
 }
 
+template <typename TInput, typename TOutput> void CastAndWriteImage(itk::ImageBase<2> * in, otb::ImageFileWriter<TOutput> * writer, const std::string & filename, const unsigned int & ramValue)
+{
+  typedef itk::CastImageFilter<TInput, TOutput> ClampFilterType; 
+  typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         
+  clampFilter->SetInput( dynamic_cast<TInput*>(in));
+  
+  bool useStandardWriter = true;
 
-#define otbCastAndWriteImageMacro(InputImageType, OutputImageType, writer)        \
-  {                                                                               \
-    typedef itk::CastImageFilter<InputImageType, OutputImageType> CastFilterType; \
-    typename CastFilterType::Pointer caster = CastFilterType::New();              \
-    caster->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) );      \
-    caster->InPlaceOn();                                                          \
-    writer->SetFileName( this->GetFileName() );                                   \
-    writer->SetInput(caster->GetOutput());                                        \
-    if (m_RAMValue != 0)                                                          \
-      writer->SetAutomaticAdaptativeStreaming(m_RAMValue);                        \
-    writer->Update();                                                             \
-  }
+  #ifdef OTB_USE_MPI
 
+  otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
+
+  if (mpiConfig->GetNbProcs() > 1)
+    {
+    useStandardWriter = false;
+
+    // Get file extension
+    std::string extension = itksys::SystemTools::GetFilenameExtension(filename);
+
+    if(extension == ".vrt")
+      {
+      // Use the WriteMPI function
+      mpi::WriteMPI(clampFilter->GetOutput(),filename);      
+      }
+    #ifdef OTB_USE_SPTW
+    else if (extension == ".tif")
+      {
+      // Use simple parallel tiff writer
+      typedef otb::SimpleParallelTiffWriter<TOutput> SPTWriterType;
+
+      typename SPTWriterType::Pointer sptWriter = SPTWriterType::New();
+      sptWriter->SetFileName(filename);
+      sptWriter->SetInput(clampFilter->GetOutput());
+      sptWriter->SetAutomaticAdaptativeStreaming(ramValue);
+      sptWriter->Update();
+      }
+    
+    #endif
+    else
+      {
+      itkGenericExceptionMacro("File format "<<extension<<" not supported for parallel writing with MPI. Supported formats are .vrt and .tif. Extended filenames are not supported.");
+      }
+  
+    }
+  
+  #endif
+  
+  if(useStandardWriter)
+    {
+    
+    writer->SetFileName( filename );                                     
+    writer->SetInput(clampFilter->GetOutput());                                     
+    writer->SetAutomaticAdaptativeStreaming(ramValue);
+    writer->Update();
+    }
+}
 
 template <class TInputImageType>
 void
@@ -90,12 +144,12 @@ ComplexOutputImageParameter::SwitchImageWrite()
     {
     case ComplexImagePixelType_float:
     {
-    otbCastAndWriteImageMacro(TInputImageType, ComplexFloatImageType, m_ComplexFloatWriter);
+    CastAndWriteImage<TInputImageType,ComplexFloatImageType>(m_Image,m_ComplexFloatWriter,m_FileName,m_RAMValue);
     break;
     }
     case ComplexImagePixelType_double:
     {
-    otbCastAndWriteImageMacro(TInputImageType, ComplexDoubleImageType, m_ComplexDoubleWriter);
+    CastAndWriteImage<TInputImageType,ComplexDoubleImageType>(m_Image,m_ComplexDoubleWriter,m_FileName,m_RAMValue);
     break;
     }
     }
@@ -110,12 +164,12 @@ ComplexOutputImageParameter::SwitchVectorImageWrite()
     {
     case ComplexImagePixelType_float:
     {
-    otbCastAndWriteImageMacro(TInputVectorImageType, ComplexFloatVectorImageType, m_ComplexVectorFloatWriter);
+    CastAndWriteImage<TInputVectorImageType,ComplexFloatVectorImageType>(m_Image,m_ComplexVectorFloatWriter,m_FileName,m_RAMValue);
     break;
     }
     case ComplexImagePixelType_double:
     {
-    otbCastAndWriteImageMacro(TInputVectorImageType, ComplexDoubleVectorImageType, m_ComplexVectorDoubleWriter);
+    CastAndWriteImage<TInputVectorImageType,ComplexDoubleVectorImageType>(m_Image,m_ComplexVectorDoubleWriter,m_FileName,m_RAMValue);
     break;
     }
     }
