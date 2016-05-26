@@ -369,6 +369,7 @@ private:
           {
           m_Periodic->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
           }
+        m_Periodic->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
         AddProcess(m_Periodic->GetStreamer(),"Selecting positions with periodic sampler...");
         m_Periodic->Update();
         }
@@ -413,6 +414,7 @@ private:
           m_Pattern->SetSamplerParameters(param);
           }
 
+        m_Pattern->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
         AddProcess(m_Pattern->GetStreamer(),"Selecting positions with pattern sampler...");
         m_Pattern->Update();
 
@@ -446,6 +448,7 @@ private:
           {
           m_Random->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
           }
+        m_Random->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
         AddProcess(m_Random->GetStreamer(),"Selecting positions with random sampler...");
         m_Random->Update();
         }
