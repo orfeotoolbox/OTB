@@ -22,6 +22,9 @@
 #include "itkImageRegionConstIteratorWithOnlyIndex.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkTimeProbe.h"
+#include "otbOGRIOHelper.h"
+#include "otbPolygon.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -393,16 +396,13 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
   PointType point;
   RegionType requestedRegion =outputImage->GetRequestedRegion();
 
-  //ogr::Layer layer = vectors->GetLayer(m_LayerIndex);
-  ogr::Layer layer = this->m_InMemoryInputs[threadid];
+  ogr::Layer layer = this->m_InMemoryInputs[threadid]->GetLayerChecked(0);
   if (! layer)
     {
     return;
     }
 
-  float featCount = static_cast<float>(layer.GetFeatureCount(true));
-  if (featCount == 0.0) featCount=1.0;
-  long currentCount = 0;
+  itk::ProgressReporter progress( this, threadid, layer.GetFeatureCount(true) );
 
   // Loop across the features in the layer (filtered by requested region in BeforeTGD already)
   ogr::Layer::const_iterator featIt = layer.begin();
@@ -430,8 +430,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
           this->Add<NoValueIteratorType>(featIt, it, inputImage, threadid);
           }
       }
-    currentCount++;
-    this->UpdateProgress(static_cast<float>(currentCount)/featCount);
+    progress.CompletedPixel();
     }
 }
 
@@ -465,7 +464,6 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
   int numberOfThreads = this->GetNumberOfThreads();
 
   // prepare temporary input
-  const ogr::DataSource* vectors = this->GetOGRData();
   this->m_InMemoryInputs.clear();
   std::ostringstream oss;
   for (unsigned int i=0 ; i < numberOfThreads ; i++)
@@ -492,8 +490,20 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
         }
       }
     oss << ")";
-    this->m_InMemoryInputs.push_back(
-      vectors->ExecuteSQL(oss.str().c_str(), &tmpPolygon, NULL));
+    OGRDataPointer tmpInput = ogr::DataSource::New();
+    std::string newLayerName("thread");
+    if (isFirst)
+      {
+      // no class to process for this thread : store an empty layer
+      tmpInput->CreateLayer(newLayerName);
+      }
+    else
+      {
+      // Extract classes to process in this thread
+      ogr::Layer search = vectors->ExecuteSQL(oss.str().c_str(), &tmpPolygon, NULL);
+      tmpInput->CopyLayer(search,newLayerName);
+      }
+    this->m_InMemoryInputs.push_back(tmpInput);
     }
 }
 
@@ -573,7 +583,6 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 {
   typename TIterator::ImageType::PointType imgPoint;
   typename TIterator::IndexType imgIndex;
-  OGRPoint tmpPoint(0.0,0.0,0.0);
   imgIt.GoToBegin();
   switch (geom->getGeometryType())
     {
@@ -646,12 +655,33 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
     case wkbPolygon:
     case wkbPolygon25D:
       {
+      OGRIOHelper::Pointer OGRConversion = OGRIOHelper::New();
+      typedef otb::VectorData<>::DataNodeType   DataNodeType;
+      typedef DataNodeType::PolygonType         PolygonType;
+      DataNodeType::Pointer dataNode = DataNodeType::New();
+      OGRConversion->ConvertGeometryToPolygonNode(geom,dataNode);
+      PolygonType::VertexType vertex;
+
       while (!imgIt.IsAtEnd())
         {
         img->TransformIndexToPhysicalPoint(imgIt.GetIndex(),imgPoint);
-        tmpPoint.setX(imgPoint[0]);
-        tmpPoint.setY(imgPoint[1]);
-        if (geom->Contains(&tmpPoint))
+        vertex[0] = imgPoint[0];
+        vertex[1] = imgPoint[1];
+        bool isInside = dataNode->GetPolygonExteriorRing()->IsInside(vertex);
+        if (isInside)
+          {
+          for (unsigned int k=0 ;
+               k < dataNode->GetPolygonInteriorRings()->Size() ;
+               k++)
+            {
+            if (dataNode->GetPolygonInteriorRings()->GetNthElement(k)->IsInside(vertex))
+              {
+              isInside = false;
+              break;
+              }
+            }
+          }
+        if (isInside)
           {
           this->CallSamplers(imgPoint, className, threadid);
           }

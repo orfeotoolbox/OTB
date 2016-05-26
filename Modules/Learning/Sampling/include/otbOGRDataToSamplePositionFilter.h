@@ -212,7 +212,7 @@ private:
   std::vector<std::string> m_OGRLayerCreationOptions;
 
   /** In-memory containers storing input geometries for each thread*/
-  std::vector<ogr::Layer> m_InMemoryInputs;
+  std::vector<OGRDataPointer> m_InMemoryInputs;
 
   /** In-memory containers storing position during iteration loop*/
   std::vector<std::vector<OGRDataPointer> > m_InMemoryOutputs;
