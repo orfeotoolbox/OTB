@@ -32,6 +32,10 @@
 int otbMPIReadWriteTest(int argc, char * argv[]) 
 {
 
+  // Mono-thread execution
+  itk::MultiThreader::SetGlobalMaximumNumberOfThreads(1);
+  itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
+  
   // MPI Initialization
   typedef otb::MPIConfig    MPIConfigType;
   MPIConfigType::Pointer config = MPIConfigType::Instance();
