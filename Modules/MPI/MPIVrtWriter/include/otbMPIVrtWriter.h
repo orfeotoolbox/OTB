@@ -122,6 +122,16 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
       writer->Update();
       if (writeVRTFile && (myRank == 0))
       {
+      std::string dataType = "Float32";
+
+      GDALImageIO::Pointer gdalImageIO = dynamic_cast<GDALImageIO *>(writer->GetImageIO());
+
+      if(gdalImageIO.IsNotNull())
+        {
+        dataType = gdalImageIO->GetGdalPixelTypeAsString();
+        }
+
+      
         // Write VRT File
         std::stringstream vrtfOut;
         vrtfOut<<prefix<<".vrt";
@@ -137,7 +147,7 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
 
         for(unsigned int band = 1; band<=nbBands;++band)
         {
-          ofs<<"\t<VRTRasterBand dataType=\"Float32\" band=\""<<band<<"\">"<<std::endl;
+        ofs<<"\t<VRTRasterBand dataType=\""<<dataType<<"\" band=\""<<band<<"\">"<<std::endl;
           ofs<<"\t\t<ColorInterp>Gray</ColorInterp>"<<std::endl;
 
           typename TImage::RegionType currentRegion;
