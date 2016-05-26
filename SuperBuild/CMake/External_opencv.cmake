@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_OPENCV__)
 set(__EXTERNAL_OPENCV__ 1)
 
 if(USE_SYSTEM_OPENCV)
-  find_package ( OpenCV )
   message(STATUS "  Using OpenCV system version")
 else()
   SETUP_SUPERBUILD(PROJECT OPENCV)

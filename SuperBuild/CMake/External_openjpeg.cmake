@@ -2,8 +2,6 @@ if(NOT __EXTERNAL_OPENJPEG__)
 set(__EXTERNAL_OPENJPEG__ 1)
 
 if(USE_SYSTEM_OPENJPEG)
-  # TODO : FindOpenJPEG.cmake
-  find_package ( OpenJPEG )
   message(STATUS "  Using OpenJpeg system version")
 else()
   SETUP_SUPERBUILD(PROJECT OPENJPEG)

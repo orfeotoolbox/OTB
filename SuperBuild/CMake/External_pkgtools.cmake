@@ -1,27 +1,25 @@
-if(NOT __EXTERNAL_PACKAGE_TOOLS__)
-set(__EXTERNAL_PACKAGE_TOOLS__ 1)
-
-set(PKGTOOLS_SB_PREFIX_DIR "${CMAKE_BINARY_DIR}/PACKAGE-TOOLS")
-
-include(ExternalProject)
-
-if(WIN32)
-  ExternalProject_Add(PACKAGE-TOOLS
-    PREFIX "${PKGTOOLS_SB_PREFIX_DIR}"
-    URL "https://www.orfeo-toolbox.org/packages/qt4-native-tools-win64.zip"
-    URL_MD5 0e4bfd5677eb63ae691f4615a4338490
-    DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-    CONFIGURE_COMMAND  ""
-    BUILD_COMMAND      ""
-    INSTALL_COMMAND    ""
-    )
+if( __EXTERNAL_PACKAGE_TOOLS__)
+  return()
+else()
+  set(__EXTERNAL_PACKAGE_TOOLS__ 1)
 endif()
 
+if(WIN32)
+  add_custom_target(PACKAGE-TOOLS)
+  return()
+endif()
 
 if(UNIX AND NOT WIN32)
+
+  include(ExternalProject)
+
+  set(PKGTOOLS_SB_PREFIX_DIR "${CMAKE_BINARY_DIR}/PACKAGE-TOOLS")
+
   if(APPLE)
     add_custom_target(PATCHELF)
   else()
+    set(PATCHELF_INSTALL_DIR ${PKGTOOLS_SB_PREFIX_DIR}/install-patchelf)
+    set(PATCHELF_PROGRAM ${PATCHELF_INSTALL_DIR}/patchelf)
     ExternalProject_Add(PATCHELF
       PREFIX "${PKGTOOLS_SB_PREFIX_DIR}"
       URL "http://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.bz2"
@@ -31,13 +29,17 @@ if(UNIX AND NOT WIN32)
       BINARY_DIR "${PKGTOOLS_SB_PREFIX_DIR}/build-patchelf"
       TMP_DIR  "${PKGTOOLS_SB_PREFIX_DIR}/tmp-patchelf"
       STAMP_DIR "${PKGTOOLS_SB_PREFIX_DIR}/stamp-patchelf"
-      PATCH_COMMAND  ${CMAKE_COMMAND} -E make_directory ${CMAKE_INSTALL_PREFIX}/tools
+      PATCH_COMMAND  ${CMAKE_COMMAND} -E make_directory ${PKGTOOLS_SB_PREFIX_DIR}/install
       CONFIGURE_COMMAND ${CMAKE_COMMAND} -E chdir ${PKGTOOLS_SB_PREFIX_DIR}/src-patchelf
-      ./configure --prefix ${CMAKE_INSTALL_PREFIX}/tools
+      ./configure --prefix ${PATCHELF_INSTALL_DIR}
       BUILD_COMMAND ${CMAKE_COMMAND} -E chdir ${PKGTOOLS_SB_PREFIX_DIR}/src-patchelf ${CMAKE_MAKE_PROGRAM}
-      INSTALL_COMMAND ${CMAKE_COMMAND} -E copy ${PKGTOOLS_SB_PREFIX_DIR}/src-patchelf/src/patchelf ${CMAKE_INSTALL_PREFIX}/tools
+      INSTALL_COMMAND ${CMAKE_COMMAND} -E copy ${PKGTOOLS_SB_PREFIX_DIR}/src-patchelf/src/patchelf ${PATCHELF_PROGRAM}
       )
   endif(APPLE)
+
+  set(MAKESELF_INSTALL_DIR ${PKGTOOLS_SB_PREFIX_DIR}/install-makeself)
+  set(MAKESELF_SCRIPT ${MAKESELF_INSTALL_DIR}/makeself.sh)
+  set(MAKESELF_HEADER_SCRIPT ${MAKESELF_INSTALL_DIR}/makeself-header.sh)
 
   ExternalProject_Add(MAKESELF
     PREFIX "${PKGTOOLS_SB_PREFIX_DIR}"
@@ -49,21 +51,15 @@ if(UNIX AND NOT WIN32)
     TMP_DIR  "${PKGTOOLS_SB_PREFIX_DIR}/tmp-makeself"
     STAMP_DIR "${PKGTOOLS_SB_PREFIX_DIR}/stamp-makeself"
     CONFIGURE_COMMAND ""
-    BUILD_COMMAND ${CMAKE_COMMAND}
-    -E copy
+    BUILD_COMMAND ${CMAKE_COMMAND} -E copy
     ${PKGTOOLS_SB_PREFIX_DIR}/src-makeself/makeself-header.sh
-    ${PKGTOOLS_SB_PREFIX_DIR}/makeself-header.sh
-    INSTALL_COMMAND ${CMAKE_COMMAND}
-    -E copy
+    ${MAKESELF_HEADER_SCRIPT}
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy
     ${PKGTOOLS_SB_PREFIX_DIR}/src-makeself/makeself.sh
-    ${PKGTOOLS_SB_PREFIX_DIR}/makeself.sh
+    ${MAKESELF_SCRIPT}
     DEPENDS PATCHELF
     )
-
-  set(MAKESELF_SCRIPT ${PKGTOOLS_SB_PREFIX_DIR}/makeself.sh)
 
   add_custom_target(PACKAGE-TOOLS DEPENDS MAKESELF)
 
 endif(UNIX AND NOT WIN32)
-
-endif() #idef guard

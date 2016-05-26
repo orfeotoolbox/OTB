@@ -348,7 +348,6 @@ void GlImageActor::Render()
       mins.Fill(0);
       maxs.Fill(255);
 
-      bool useNoData(false);
       double noData(0.);
 
       assert( !m_ImageSettings.IsNull() );
@@ -367,12 +366,14 @@ void GlImageActor::Render()
 
       gamma =
 	gamma == 0.0
-	? std::numeric_limits< double >::max()
-	: 1.0 / gamma;
+        ? std::numeric_limits< double >::max()
+        : 1.0 / gamma;
       // }
-
+      
+     
       if( m_ImageSettings->GetUseNoData() )
-	noData = m_ImageSettings->GetNoData();
+        noData = m_ImageSettings->GetNoData();
+
       
       omins.Fill( 0 );
       omaxs.Fill( 255 );
@@ -405,7 +406,7 @@ void GlImageActor::Render()
         ++idx;
         buffer[idx] = 255;
 
-        if(useNoData && (inIt.Get()[0] == noData ||inIt.Get()[1] == noData ||inIt.Get()[2] == noData))
+        if(m_ImageSettings->GetUseNoData() && (inIt.Get()[0] == noData ||inIt.Get()[1] == noData ||inIt.Get()[2] == noData))
           {
           buffer[idx] = 0;
           }

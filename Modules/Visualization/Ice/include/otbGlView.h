@@ -698,11 +698,13 @@ GlView
   // as 1:1 reference).
   //
   // MANTIS-1202
+  //
+  // MANTIS-1203: restore sign of axis when applying isotrop spacing.
   // {
   if( vcl_abs( spacing[ 0 ] ) < vcl_abs( spacing[ 1 ] ) )
-    spacing[ 1 ] = spacing[ 0 ];
+    spacing[ 1 ] = ( spacing[ 1 ]<0.0 ? -1 : +1 ) * vcl_abs( spacing[ 0 ] );
   else
-    spacing[ 0 ] = spacing[ 1 ];
+    spacing[ 0 ] = ( spacing[ 0 ]<0.0 ? -1 : +1 ) * vcl_abs( spacing[ 1 ] );
   // }
   // MANTIS-1202
 

@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_GEOTIFF__)
 set(__EXTERNAL_GEOTIFF__ 1)
 
 if(USE_SYSTEM_GEOTIFF)
-  find_package ( GeoTIFF )
   message(STATUS "  Using libgeotiff system version")
 else()
   SETUP_SUPERBUILD(PROJECT GEOTIFF)

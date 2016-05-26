@@ -83,6 +83,11 @@ int main(int argc, char * argv[])
         std::cerr << "Could not open file " << argv[i] << " as an image or a vector, skipping." << std::endl;
         }
       }
+    catch(std::runtime_error & err)
+      {
+      std::cerr<<"Runtime error: "<< err.what() <<std::endl;
+      return EXIT_FAILURE;
+      }
     }
 
   std::cout<<"Press F1 for help"<<std::endl;

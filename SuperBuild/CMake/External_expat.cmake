@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_EXPAT__)
 set(__EXTERNAL_EXPAT__ 1)
 
 if(USE_SYSTEM_EXPAT)
-  find_package ( EXPAT )
   message(STATUS "  Using expat system version")
 else()
   SETUP_SUPERBUILD(PROJECT EXPAT)

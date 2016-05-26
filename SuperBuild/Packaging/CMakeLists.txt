@@ -55,8 +55,8 @@ else(OUT_OF_SOURCE_BUILD)
   # SUPERBUILD_BINARY_DIR is only set in Packaging/CMakeLists.txt and not available
   # in the parent scope like others. So we need to set it as CMAKE_BINARY_DIR
   # if doing packages from source tree.
-  set(SUPERBUILD_BINARY_DIR ${CMAKE_BINARY_DIR})
-  set(SUPERBUILD_INSTALL_DIR ${SB_INSTALL_PREFIX})
+  set( SUPERBUILD_BINARY_DIR  ${CMAKE_BINARY_DIR}  )
+  set( SUPERBUILD_INSTALL_DIR ${SB_INSTALL_PREFIX} )
   if(WIN32)
     set(MONTEVERDI_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
     get_filename_component(OTB_INSTALL_DIR ${OTB_MODULES_DIR} PATH)
@@ -101,6 +101,7 @@ else() #Unix like
   endforeach(req)
 endif()
 
+set(EXTRA_CACHE_CONFIG)
 
 if(WIN32)
   set(CMAKE_INSTALL_PREFIX "${MONTEVERDI_INSTALL_DIR}")
@@ -110,7 +111,9 @@ endif()
 
 set(PACKAGE_NAME OTB)
 set(PACKAGE_LONG_NAME OrfeoToolBox)
+
 if(WIN32)
+  set(ITK_VERSION_STRING)
   set(PACKAGE_PLATFORM_NAME "win")
   if(MXE_TARGET_DIR MATCHES "i686")
     set(MXE_ARCH "i686")
@@ -121,7 +124,15 @@ if(WIN32)
   endif()
   get_filename_component(MXE_MXEROOT ${MXE_TARGET_DIR} PATH)
   get_filename_component(MXE_MXEROOT ${MXE_MXEROOT} PATH)
+  set(EXTRA_CACHE_CONFIG
+    "set(CMAKE_CROSSCOMPILING TRUE)
+     set(WIN32 TRUE)
+     set(MXE_ARCH \"${MXE_ARCH}\")
+     set(MXE_MXEROOT \"${MXE_MXEROOT}\")"
+    )
+
   set(PACKAGE_VERSION_STRING ${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH})
+
 else() #(WIN32)
   if(UNIX)
     set(PACKAGE_ARCH 32)
@@ -134,20 +145,13 @@ else() #(WIN32)
       set(PACKAGE_PLATFORM_NAME "Linux")
     endif()
     get_version("${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake" "ITK_SB_VERSION" ITK_SB_VERSION)
+    set(ITK_VERSION_STRING        "${get_version_ITK_SB_VERSION}")
   endif(UNIX)
 endif() #(WIN32)
 
 get_version("${OTB_SOURCE_DIR}/CMakeLists.txt" "OTB_VERSION_" OTB_VERSION_STRING)
 set(PACKAGE_VERSION_STRING ${get_version_OTB_VERSION_STRING})
 
-set(EXTRA_CACHE_CONFIG
-  "set(CMAKE_CROSSCOMPILING TRUE)
-   set(WIN32 TRUE)
-   set(MXE_ARCH \"${MXE_ARCH}\")
-   set(MXE_MXEROOT \"${MXE_MXEROOT}\")")
-
-#guess install directory from OTB_MODULES_DIR
-#copy of cmake variables not needed.
 if(WIN32)
   set(Monteverdi_SOURCE_DIR       "${Monteverdi_SOURCE_DIR}")
   set(Monteverdi_BINARY_DIR       "${Monteverdi_BINARY_DIR}")
@@ -156,17 +160,14 @@ if(WIN32)
   set(DEPENDENCIES_INSTALL_DIR    "${MXE_MXEROOT}/usr/${MXE_ARCH}-w64-mingw32.shared")
   set(QT_PLUGINS_DIR              "${DEPENDENCIES_INSTALL_DIR}/qt/plugins")
   set(QT_TRANSLATIONS_DIR         "${DEPENDENCIES_INSTALL_DIR}/qt/translations")
-  set(ITK_VERSION_STRING)
-  else() #unixes
-    set(Monteverdi_SOURCE_DIR     "${SUPERBUILD_BINARY_DIR}/MVD/src/MVD")
-    set(Monteverdi_BINARY_DIR     "${SUPERBUILD_BINARY_DIR}/MVD/build")
-    set(MONTEVERDI_INSTALL_DIR    "${SUPERBUILD_INSTALL_DIR}")
-    set(QT_PLUGINS_DIR            "${SUPERBUILD_INSTALL_DIR}/plugins")
-    set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
-    set(OTB_INSTALL_DIR           "${SUPERBUILD_BINARY_DIR}/OTB/build")
-    set(DEPENDENCIES_INSTALL_DIR  "${SUPERBUILD_INSTALL_DIR}")
-    set(ITK_VERSION_STRING        "${get_version_ITK_SB_VERSION}")
-    set(EXTRA_CACHE_CONFIG)
+else() #unixes
+  set(Monteverdi_SOURCE_DIR     "${SUPERBUILD_BINARY_DIR}/MVD/src/MVD")
+  set(Monteverdi_BINARY_DIR     "${SUPERBUILD_BINARY_DIR}/MVD/build")
+  set(MONTEVERDI_INSTALL_DIR    "${SUPERBUILD_INSTALL_DIR}")
+  set(OTB_INSTALL_DIR           "${SUPERBUILD_BINARY_DIR}/OTB/build")
+  set(DEPENDENCIES_INSTALL_DIR  "${SUPERBUILD_INSTALL_DIR}")
+  set(QT_PLUGINS_DIR            "${SUPERBUILD_INSTALL_DIR}/plugins")
+  set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
   endif()
 
 macro_setup_cmake_project(OTB)

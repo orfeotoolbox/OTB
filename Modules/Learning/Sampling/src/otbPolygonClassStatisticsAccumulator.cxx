@@ -21,6 +21,15 @@
 namespace otb
 {
 
+PolygonClassStatisticsAccumulator::PolygonClassStatisticsAccumulator() :
+  m_NbPixelsGlobal(0UL),
+  m_ElmtsInClass(),
+  m_Polygon()
+{}
+  
+PolygonClassStatisticsAccumulator::~PolygonClassStatisticsAccumulator()
+{}
+
 void
 PolygonClassStatisticsAccumulator
 ::Reset()
