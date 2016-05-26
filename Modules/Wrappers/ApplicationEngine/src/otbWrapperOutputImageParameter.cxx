@@ -132,18 +132,6 @@ template <typename TInput, typename TOutput > void ClampAndWriteVectorImage(itk:
 }
 
 
-#define otbClampAndWriteVectorImageMacro(InputImageType, OutputImageType, writer)         \
-  {                                                                                       \
-    typedef otb::ClampVectorImageFilter<InputImageType, OutputImageType> ClampFilterType; \
-    typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();               \
-    clampFilter->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) );         \
-    writer->SetFileName(this->GetFileName() );                                            \
-    writer->SetInput(clampFilter->GetOutput());                                           \
-    writer->SetAutomaticAdaptativeStreaming(m_RAMValue);                                  \
-    writer->Update();                                                                     \
-  }
-
-
 template <class TInputImageType>
 void
 OutputImageParameter::SwitchImageWrite()
