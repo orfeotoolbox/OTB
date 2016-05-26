@@ -318,6 +318,10 @@ otb_test_application(NAME apTvClTrainVectorClassifier
                      OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClLabeledVector.shp
                              -feat meanB0 meanB1 meanB2 meanB3 varB0 varB1 varB2 varB3
                              -io.stats ${TEMP}/apTvClComputeVectorStatistics.xml
+                             -classifier libsvm
+                             -classifier.libsvm.c 1
+                             -classifier.libsvm.k linear
+                             -classifier.libsvm.opt on
                              -io.out ${TEMP}/apTvClModel.svm
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/apTvClModel.svm
