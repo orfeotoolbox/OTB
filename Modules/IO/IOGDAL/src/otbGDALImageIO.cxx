@@ -1997,4 +1997,12 @@ bool GDALImageIO::CreationOptionContains(std::string partialOption) const
   return (i != m_CreationOptions.size());
 }
 
+
+std::string GDALImageIO::GetGdalPixelTypeAsString() const
+{
+  std::string name = GDALGetDataTypeName(m_PxType->pixType);
+
+  return name;
+}
+
 } // end namespace otb

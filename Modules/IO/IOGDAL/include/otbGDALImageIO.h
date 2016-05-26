@@ -180,6 +180,9 @@ public:
   /** Get description about overviews available into the file specified */
   virtual std::vector<std::string> GetOverviewsInfo();
 
+  /** Returns gdal pixel type as string */
+  std::string GetGdalPixelTypeAsString() const;
+
 protected:
   /**
    * Constructor.
