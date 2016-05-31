@@ -1,6 +1,19 @@
-#include "ossimSentinel1Model.h"
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+//
+// License:  LGPL-2
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
 
+#include "ossimSentinel1Model.h"
 #include <cassert>
+#include <ossim/base/ossimDirectory.h>
+#include <ossim/base/ossimString.h>
+#include "ossimTraceHelpers.h"
 
 namespace ossimplugins
 {
@@ -9,52 +22,29 @@ namespace ossimplugins
    static ossimTrace traceExec  ("ossimSentinel1Model:exec");
    static ossimTrace traceDebug ("ossimSentinel1Model:debug");
 
-   RTTI_DEF1(ossimSentinel1Model, "ossimSentinel1Model", ossimSarModel);
+   RTTI_DEF1(ossimSentinel1Model, "ossimSentinel1Model", ossimSarSensorModel);
 
 //*************************************************************************************************
 // Constructor
 //*************************************************************************************************
    ossimSentinel1Model::ossimSentinel1Model()
-      : ossimSarModel()
+      : ossimSarSensorModel()
       , theOCN(false)
       , theSLC(false)
    {
-      theManifestDoc = new ossimXmlDocument();
-      theProduct = new ossimSentinel1ProductDoc();
-      this->clearFields();
-
+      // theManifestDoc = new ossimXmlDocument();
+      // theProduct = new ossimSentinel1ProductDoc(); // leave null
+      // this->clearFields(); // pointless at construction
    }
 
-    void ossimSentinel1Model::clearFields()
-    {
-       theOCN = false;
-       theSLC = false;
-       theManifestKwl.clear();
-       theManifestFile = ossimFilename::NIL;
-       theProductXmlFile = ossimFilename::NIL;
-       theProduct->clearFields();
-
-    }
-
-
-//*************************************************************************************************
-// Constructor
-//*************************************************************************************************
-   ossimSentinel1Model::ossimSentinel1Model(const ossimSentinel1Model& rhs)
-      :ossimSarModel(rhs)
-      , theOCN(rhs.theOCN)
-      , theSLC(rhs.theSLC)
+   void ossimSentinel1Model::clearFields()
    {
-
-   }
-
-//*************************************************************************************************
-// Destructor
-//*************************************************************************************************
-   ossimSentinel1Model::~ossimSentinel1Model()
-   {
+      theOCN = false;
+      theSLC = false;
+      theManifestKwl.clear();
+      // theManifestFile = ossimFilename::NIL;
+      theProductXmlFile = ossimFilename::NIL;
       theProduct = 0;
-      if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG DESTRUCTOR: ~ossimSentinel1Model(): entering..." << std::endl;
    }
 
 //*************************************************************************************************
@@ -84,8 +74,7 @@ namespace ossimplugins
 
       // Set the flags back.
       out.flags(f);
-      return ossimSarModel::print(out);
-
+      return ossimSarSensorModel::print(out);
    }
 
 //*************************************************************************************************
@@ -94,7 +83,6 @@ namespace ossimplugins
    bool ossimSentinel1Model::saveState(ossimKeywordlist& kwl,
                                       const char* prefix) const
    {
-
       kwl.add(prefix,
               ossimKeywordNames::TYPE_KW,
               "ossimSentinel1Model",
@@ -107,13 +95,13 @@ namespace ossimplugins
 
       kwl.addList(theManifestKwl, true);
 
-         if(theProduct.get())
-         {
-            kwl.addList(theProduct->getProductKwl(), true);
-            //   theProduct->saveState(kwl, prefix);
-         }
-         ossimSarModel::saveState(kwl, prefix);
-         return true;
+      if(theProduct.get())
+      {
+         kwl.addList(theProduct->getProductKwl(), true);
+         //   theProduct->saveState(kwl, prefix);
+      }
+      ossimSarSensorModel::saveState(kwl, prefix);
+      return true;
    }
 
 
@@ -124,19 +112,21 @@ namespace ossimplugins
                                       const char* prefix)
    {
       static const char MODULE[] = "ossimplugins::ossimSentinel1Model::loadState";
+      SCOPED_LOG(traceDebug, MODULE);
 
       theManifestKwl.addList(kwl, true);
 
       if (traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_DEBUG) << "theManifestKwl.getSize()" << theManifestKwl.getSize() << std::endl;
+         ossimNotify(ossimNotifyLevel_DEBUG) << "theManifestKwl.getSize()" << theManifestKwl.getSize() << "\n";
       }
 
-      ossimSarModel::loadState(kwl, prefix);
+      ossimSarSensorModel::loadState(kwl, prefix);
 
       return true;
    }
 
+#if 0
    bool ossimSentinel1Model::findSafeManifest(const ossimFilename& file, ossimFilename& manifestFile)
    {
       manifestFile = ossimFilename(file.path().path() + "/manifest.safe");
@@ -151,17 +141,13 @@ namespace ossimplugins
       }
       return true;
    }
+#endif
 
    bool ossimSentinel1Model::open(const ossimFilename& file)
    {
-
       static const char MODULE[] = "ossimplugins::ossimSentinel1Model::open";
       //traceDebug.setTraceFlag(true);
-
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
-      }
+      SCOPED_LOG(traceDebug, MODULE);
 
       bool result = false;
 
@@ -173,105 +159,45 @@ namespace ossimplugins
       {
          theGSD.makeNan();
 
-         ossimFilename safeFile;
-         bool foundManifestFile = findSafeManifest(file, safeFile);
-         while (foundManifestFile)
+         if ( !this->readProduct(file) )
          {
-            if(!theManifestDoc.get())
-            {
-               ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " theManifestDoc.get()" << std::endl;
-               break;
-            }
-
-            if( !theManifestDoc->openFile(safeFile))
-            {
-               ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " theManifestDoc->openFile(safeFile)" << std::endl;
-               break;
-            }
-
-            if ( !this->isSentinel1(safeFile))
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->isSentinel1(safeFile)" << std::endl;
-               break;
-            }
-
-            ossimString productFile;
-            if ( !this->getAnnotationFileLocation(safeFile, "^product"))
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->getAnnotationFileLocation(safeFile, '^product')" << std::endl;
-               break;
-            }
-
-            // Set the image ID to the scene ID.
-            if ( !this->getImageId( theImageID ) )
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->getImageId( theImageID )" << std::endl;
-               break;
-            }
-
-            if ( !this->standAloneProductInformation( ) )
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->standAloneProductInformation( )" << std::endl;
-               break;
-            }
-
-            // Set the sensor ID to the mission ID.
-            if ( !this->initSensorID( theSensorID ) )
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initSensorID( theSensorID )" << std::endl;
-               break;
-            }
-
-            if ( !this->readProduct( safeFile ) )
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->readProduct( safeFile )" << std::endl;
-               break;
-            }
-
-            if ( !this->initImageSize( theImageSize ) )
-             {
-                ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize )" << std::endl;
-                break;
-             }
-
-            theImageClipRect = ossimDrect( 0, 0, theImageSize.x-1, theImageSize.y-1 );
-            theSubImageOffset.x = 0.0;
-            theSubImageOffset.y = 0.0;
-
-            if ( !this->initGsd( theGSD ) )
-             {
-                ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initGsd( theGSD )" << std::endl;
-                break;
-             }
-
-            theMeanGSD = (theGSD.x + theGSD.y)/2.0;
-
-            if ( !this->initSRGR( ) )
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initSRGR( )" << std::endl;
-               break;
-            }
-
-            // if ( !theSafeManifest->initPlatformPosition( ) )
-            // {
-            //    break;
-            // }
-            // else
-            // {
-            //    std::cout << MODULE << "error at line:" << __LINE__ << std::endl;
-            // }
-
-
-            return true;
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->readProduct( safeFile )\n";
+            return false;
          }
 
-//    // If we broke out of the while, something happened...
-         return false;
-      }
+         if ( !this->initImageSize( theImageSize ) )
+         {
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize )\n";
+            return false;
+         }
 
+         theImageClipRect = ossimDrect( 0, 0, theImageSize.x-1, theImageSize.y-1 );
+         theSubImageOffset.x = 0.0;
+         theSubImageOffset.y = 0.0;
+
+         // from ossimSensorModel
+         if ( !this->initGsd( theGSD ) )
+         {
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initGsd( theGSD )\n";
+            return false;
+         }
+
+         // from ossimSensorModel
+         theMeanGSD = (theGSD.x + theGSD.y)/2.0;
+
+         if ( !this->initSRGR( ) )
+         {
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initSRGR( )\n";
+            return false;
+         }
+
+         // Commit the operation
+         theProductXmlFile = file;
+         return true;
+      }
    }
 
-
+#if 0
    bool ossimSentinel1Model::getImageId( ossimString& s) const
    {
       ossimString xpath;
@@ -283,21 +209,20 @@ namespace ossimplugins
    {
       const ossimRefPtr<ossimXmlNode> safePlatform = theManifestDoc->getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:platform");
       ossimString familyName, instrumentId;
-      bool ret1 = safePlatform->getChildTextValue(familyName, "safe:familyName");
-      bool ret2 = safePlatform->getChildTextValue(instrumentId, "safe:number");
+      const bool ret1 = safePlatform->getChildTextValue(familyName, "safe:familyName");
+      const bool ret2 = safePlatform->getChildTextValue(instrumentId, "safe:number");
 
       theManifestKwl.add("support_data.",
-                     "instrument",
-                      "S1" + instrumentId,
-                      true);
+            "instrument",
+            "S1" + instrumentId,
+            true);
 
       s = familyName + instrumentId;
-      return (ret1 && ret2);
+      return ret1 && ret2;
    }
 
    bool ossimSentinel1Model::getAnnotationFileLocation(const ossimFilename &manifestFile, const char* pattern)
    {
-
       static const char MODULE[] = "ossimSentinel1SafeManifest::getAnnotationFileLocation";
       //traceDebug.setTraceFlag(true);
       const ossimString prefix = "support_data.";
@@ -321,8 +246,8 @@ namespace ossimplugins
 
          if(xml_nodes.size() < 1 )
          {
-            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " getAnnotationFileLocation( )" << std::endl;
-           return  false;
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " getAnnotationFileLocation( )\n";
+            return  false;
          }
          xml_nodes[0]->getAttributeValue(theProductXmlFile , "href");
          theProductXmlFile.setPath(manifestFile.path() + "/annotation");
@@ -330,7 +255,6 @@ namespace ossimplugins
       }
       return true;
    }
-
 
    bool ossimSentinel1Model::standAloneProductInformation()
    {
@@ -346,32 +270,32 @@ namespace ossimplugins
       const ossimString version = software->getAttributeValue("version");
 
       theManifestKwl.add(prefix,
-                      "Processing_system_identifier",
-                      org + " " + name + " " + version,
-                      true);
+            "Processing_system_identifier",
+            org + " " + name + " " + version,
+            true);
 
       theManifestKwl.add(prefix,
-                      ossimKeywordNames::DATE_KW,
-                      safeProcessing->getAttributeValue("start"),
-                      true);
+            ossimKeywordNames::DATE_KW,
+            safeProcessing->getAttributeValue("start"),
+            true);
 
       const ossimRefPtr<ossimXmlNode> acquisitionPeriod = theManifestDoc->getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:acquisitionPeriod");
       ossimString acqStartTime = acquisitionPeriod->getChildTextValue("safe:startTime");
 
       theManifestKwl.add(prefix,
-                      "first_line_time",
-                      acqStartTime,
-                      true);
+            "first_line_time",
+            acqStartTime,
+            true);
 
       theManifestKwl.add(prefix,
-                      "last_line_time",
-                      acquisitionPeriod->getChildTextValue("safe:stopTime"),
-                      true);
+            "last_line_time",
+            acquisitionPeriod->getChildTextValue("safe:stopTime"),
+            true);
       //RK
       theManifestKwl.add(prefix,
-                      ossimKeywordNames::IMAGE_DATE_KW,
-                      acqStartTime,
-                      true);
+            ossimKeywordNames::IMAGE_DATE_KW,
+            acqStartTime,
+            true);
 
       const ossimRefPtr<ossimXmlNode> instrumentNode =
          theManifestDoc->getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:platform/safe:instrument");
@@ -389,24 +313,24 @@ namespace ossimplugins
       }
 
       theManifestKwl.add(prefix,
-                      "acquisition_mode",
-                      acquisition_mode,
-                      true);
+            "acquisition_mode",
+            acquisition_mode,
+            true);
 
       theManifestKwl.add(prefix,
-                      "swath",
-                      swath,
-                      true);
+            "swath",
+            swath,
+            true);
 
       if (acquisition_mode == "IW" || acquisition_mode == "EW")
-         theProduct->setTOPSAR(true);
+         theProduct->setTOPSAR();
 
       const ossimRefPtr<ossimXmlNode> orbitReference =
          theManifestDoc->getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:orbitReference");
 
       std::vector<ossimRefPtr<ossimXmlNode> > orbitNumberNodes;
       const ossimString orbitReference_xpath = "/xfdu:XFDU/metadataSection/metadataObject/metadataWrap/xmlData/safe:orbitReference";
-         theManifestDoc->findNodes(orbitReference_xpath + "/safe:orbitNumber", orbitNumberNodes);
+      theManifestDoc->findNodes(orbitReference_xpath + "/safe:orbitNumber", orbitNumberNodes);
 
       std::vector<ossimRefPtr<ossimXmlNode> >::const_iterator it = orbitNumberNodes.begin();
       while( it != orbitNumberNodes.end())
@@ -416,8 +340,8 @@ namespace ossimplugins
          {
             if( attribute->getValue() == "start" )
             {
-            theManifestKwl.add(prefix, "abs_orbit", (*it)->getText(), true);
-            break;
+               theManifestKwl.add(prefix, "abs_orbit", (*it)->getText(), true);
+               break;
             }
          }
          ++it;
@@ -452,9 +376,9 @@ namespace ossimplugins
       }
 
       theManifestKwl.add(prefix,
-                         "orbit_pass",
-                         orbit_pass,
-                         true);
+            "orbit_pass",
+            orbit_pass,
+            true);
 
       ossimString productType = "unknown";
       const ossimRefPtr<ossimXmlNode> standAloneProductInformation =
@@ -471,15 +395,15 @@ namespace ossimplugins
       }
 
       theManifestKwl.add(prefix,
-                      "product_type",
-                      productType,
-                      true);
+            "product_type",
+            productType,
+            true);
 
       if( productType.contains("SLC" ) )
       {
          //ossimKeywordNames::PIXEL_TYPE_KW;  RK
          theManifestKwl.add("sample_type", "COMPLEX",  true);
-         theProduct->setSLC(true);
+         theProduct->setSLC();
 
       }
       else
@@ -490,46 +414,43 @@ namespace ossimplugins
 
       return true;
    }
+#endif
 
    bool ossimSentinel1Model::isSentinel1(const ossimFilename &manifestFile )
    {
       theOCN = isLevel2(manifestFile);
-      if( isLevel1(manifestFile) || theOCN  || isLevel0(manifestFile))
-         return true;
-      else
-         return false;
+      return isLevel1(manifestFile) || theOCN  || isLevel0(manifestFile);
    }
 
-   bool ossimSentinel1Model::isLevel1(const ossimFilename& file)
+   bool ossimSentinel1Model::isLevel1(const ossimFilename& file) const
    {
       bool productXmlCheck = checkDirectory(file, "annotation", ".xml");
 
       return productXmlCheck && checkDirectory(file, "measurement", ".tiff");
    }
 
-   bool ossimSentinel1Model::isLevel2(const ossimFilename& file)
+   bool ossimSentinel1Model::isLevel2(const ossimFilename& file) const
    {
-
       return checkDirectory(file, "measurement",".nc");
    }
 
-   bool ossimSentinel1Model::isLevel0(const ossimFilename& file)
+   bool ossimSentinel1Model::isLevel0(const ossimFilename& file) const
    {
       return checkDirectory(file, "measurement",".dat");
    }
 
-   bool ossimSentinel1Model::checkDirectory(const ossimFilename& file, const char* d, const char* ext)
+   bool ossimSentinel1Model::checkDirectory(const ossimFilename& file, const char* d, const char* ext) const
    {
       //check dir is valid first
-      ossimDirectory dir = ossimDirectory(file.path() + "/" + d + "/");
+      ossimDirectory dir(file.path() + '/' + d + '/');
       std::vector<ossimFilename> result;
       dir.findAllFilesThatMatch(result, ext);
-      if ( result.size() < 1 )
+      if ( result.empty() )
       {
          if (traceExec())
          {
             ossimNotify(ossimNotifyLevel_FATAL)
-               << " DEBUG:" << " checkDirectory failed for: " << file.path()   << "/" << d << " with ext ="<< ext << std::endl;
+               << " DEBUG:" << " checkDirectory failed for: " << file.path()   << "/" << d << " with ext ="<< ext << "\n";
          }
          return false;
       }
@@ -537,41 +458,22 @@ namespace ossimplugins
       return true;
    }
 
-   bool ossimSentinel1Model::readProduct(const ossimFilename &manifestFile )
+   bool ossimSentinel1Model::readProduct(const ossimFilename &productXmlFile)
    {
-      theProduct->setMetadataDirectory( manifestFile.path() );
-      bool ret = theProduct->readProductMetadata( );
+      ossimRefPtr<ossimSentinel1ProductDoc>  product( new ossimSentinel1ProductDoc());
+      const bool ret = product->read(productXmlFile);
       if ( ret )
       {
-         theProduct->readCalibrationMetadata();
-         theProduct->readNoiseMetadata();
+         product->readCalibrationMetadata();
+         product->readNoiseMetadata();
+         theProduct = product;
+         return true;
       }
       else
       {
-         ossimNotify(ossimNotifyLevel_FATAL) << " theProduct->readProductMetadata() failed" << std::endl;
+         ossimNotify(ossimNotifyLevel_FATAL) << " theProduct->read() failed\n";
+         return false;
       }
-
-      return true;
    }
-
-   void
-   ossimSentinel1Model::
-   lineSampleHeightToWorld(const ossimDpt& image_point,
-                             const double& heightEllipsoid,
-                                 ossimGpt& worldPoint) const {
-
-      // NOT YET IMPLEMENTED
-      setErrorStatus();
-   }
-
-   void
-   ossimSentinel1Model::
-   lineSampleToWorld(const ossimDpt& image_point,
-                           ossimGpt& gpt) const {
-
-      // NOT YET IMPLEMENTED
-      setErrorStatus();
-   }
-
 
 } //end namespace

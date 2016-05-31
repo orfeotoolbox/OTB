@@ -406,7 +406,16 @@ void ossimSarSensorModel::applyCoordinateConversion(const double & in, const Tim
         assert(!nextRecord->coefs.empty()&&"nextRecord coefficients vector is empty.");
 
         // If azimuth time is between 2 records, interpolate
-        const double interp = (azimuthTime-(previousRecord->azimuthTime)).total_microseconds()/static_cast<double>((nextRecord->azimuthTime-previousRecord->azimuthTime).total_microseconds());
+#if 0
+        const double interp
+           = (azimuthTime-(previousRecord->azimuthTime)).total_microseconds()
+           /static_cast<double>((nextRecord->azimuthTime-previousRecord->azimuthTime).total_microseconds());
+#else
+        const double interp
+           = (azimuthTime             - previousRecord->azimuthTime)
+           / (nextRecord->azimuthTime - previousRecord->azimuthTime)
+           ;
+#endif
 
         srgrRecord.rg0 = (1-interp) * previousRecord->rg0 + interp*nextRecord->rg0;
 
@@ -503,8 +512,10 @@ bool ossimSarSensorModel::zeroDopplerLookup(const ossimEcefPoint & inputPt, Time
   const double deltat = static_cast<double>(delta_td.total_microseconds());
 
   // Compute interpolated time offset wrt record1
-  const DurationType td = boost::posix_time::microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
-  const DurationType offset = boost::posix_time::microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
+  // using boost::posix_time::microseconds;
+  using ossimplugins::time::microseconds;
+  const DurationType td = microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
+  const DurationType offset = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
 
   // Compute interpolated azimuth time
   interpAzimuthTime = record1->azimuthTime + td + offset;
@@ -519,7 +530,9 @@ void ossimSarSensorModel::computeBistaticCorrection(const ossimEcefPoint & input
 {
   // Bistatic correction (eq 25, p 28)
   double halftrange = 1000000 * (sensorPos-inputPt).magnitude()/C;
-  bistaticCorrection= boost::posix_time::microseconds(static_cast<unsigned long>(floor(halftrange+0.5)));
+  // using boost::posix_time::microseconds;
+  using ossimplugins::time::microseconds;
+  bistaticCorrection= microseconds(static_cast<unsigned long>(floor(halftrange+0.5)));
 }
 
 
@@ -611,8 +624,10 @@ void ossimSarSensorModel::lineToAzimuthTime(const double & line, TimeType & azim
 
     const double timeSinceStartInMicroSeconds = (line - currentBurst->startLine)*theAzimuthTimeInterval;
 
-    const DurationType timeSinceStart = boost::posix_time::microseconds(timeSinceStartInMicroSeconds);
-    const DurationType offset = boost::posix_time::microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
+    // using boost::posix_time::microseconds;
+    using ossimplugins::time::microseconds;
+    const DurationType timeSinceStart = microseconds(timeSinceStartInMicroSeconds);
+    const DurationType offset = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
     // Eq 22 p 27
     azimuthTime = currentBurst->azimuthStartTime + timeSinceStart + offset;
 }
@@ -775,7 +790,7 @@ bool ossimSarSensorModel::autovalidateInverseModelFromGCPs(const double & xtol, 
       if(verbose)
       {
           std::cout<<"GCP #"<<gcpId<<'\n';
-          std::cout<<"Azimuth time: ref="<<gcpIt->azimuthTime<<", predicted: "<<estimatedAzimuthTime<<", res="<<boost::posix_time::to_simple_string(estimatedAzimuthTime-gcpIt->azimuthTime)<<'\n';
+          std::cout<<"Azimuth time: ref="<<gcpIt->azimuthTime<<", predicted: "<<estimatedAzimuthTime<<", res="<<to_simple_string(estimatedAzimuthTime-gcpIt->azimuthTime)<<'\n';
           std::cout<<"Slant range time: ref="<<gcpIt->slantRangeTime<<", predicted: "<<estimatedRangeTime<<", res="<<std::abs(estimatedRangeTime - gcpIt->slantRangeTime)<<'\n';
           std::cout<<"Image point: ref="<<gcpIt->imPt<<", predicted="<<estimatedImPt<<", res="<<estimatedImPt-gcpIt->imPt<<'\n';
           std::cout<<'\n';
@@ -831,7 +846,7 @@ bool ossimSarSensorModel::autovalidateForwardModelFromGCPs(double resTol)
       if(verbose)
         {
         std::cout<<"GCP #"<<gcpId<<'\n';
-        std::cout<<"Azimuth time: ref="<<gcpIt->azimuthTime<<", predicted: "<<estimatedAzimuthTime<<", res="<<boost::posix_time::to_simple_string(estimatedAzimuthTime-gcpIt->azimuthTime)<<'\n';
+        std::cout<<"Azimuth time: ref="<<gcpIt->azimuthTime<<", predicted: "<<estimatedAzimuthTime<<", res="<<to_simple_string(estimatedAzimuthTime-gcpIt->azimuthTime)<<'\n';
         std::cout<<"Slant range time: ref="<<gcpIt->slantRangeTime<<", predicted: "<<estimatedRangeTime<<", res="<<std::abs(estimatedRangeTime - gcpIt->slantRangeTime)<<'\n';
         std::cout<<"Im point: "<<gcpIt->imPt<<'\n';
         std::cout<<"World point: ref="<<refPt<<", predicted="<<estimatedWorldPt<<", res="<<sqrt(res)<<" m\n";

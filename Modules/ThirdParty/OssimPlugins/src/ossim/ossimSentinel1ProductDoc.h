@@ -31,6 +31,7 @@
 #include <ossim/base/ossimCommon.h>
 #include "ossimPluginCommon.h"
 #include "ossimPluginConstants.h"
+#include "ossimSarSensorModel.h"
 
 #include <cstdio>
 #include <vector>
@@ -41,70 +42,79 @@
 namespace ossimplugins
 {
 
+   // TODO: move everything into the SensorModel class
+   // and deprecate this one!
 class OSSIM_PLUGINS_DLL ossimSentinel1ProductDoc
-: public ossimObject, public ossimErrorStatusInterface
+// : public ossimObject, public ossimErrorStatusInterface
+: public ossimSarSensorModel, public ossimErrorStatusInterface
 {
 public:
 
-  typedef ossimRefPtr<ossimXmlNode>     ossimXmlNodePtr;
-  typedef ossimRefPtr<ossimXmlDocument> ossimXmlDocumentPtr;
-  ossimSentinel1ProductDoc();
+   typedef ossimRefPtr<ossimXmlNode>     ossimXmlNodePtr;
+   typedef ossimRefPtr<ossimXmlDocument> ossimXmlDocumentPtr;
+   ossimSentinel1ProductDoc();
 
-  virtual ~ossimSentinel1ProductDoc();
+   virtual ~ossimSentinel1ProductDoc();
 
-  void clearFields();
+   void cleaFields();
 
-  bool openMetadataFile(ossimXmlDocument& doc, ossimString const& file) const;
+   bool openMetadataFile(ossimXmlDocument& doc, ossimString const& file) const;
 
-  bool initImageSize(ossimIpt& imageSize) const;
+   bool initImageSize(ossimIpt& imageSize) const;
 
-  bool initGsd( ossimDpt& gsd) const;
+   bool initGsd( ossimDpt & gsd) const;
 
-  void addSRGRCoefficients(const char* prefix, ossimXmlNode const& coordinateConversion);
+   void addDopplerCentroidCoefficients(ossimXmlNode const& dcEstimateList);
 
-  void addDopplerCentroidCoefficients(ossimXmlNode const& dcEstimateList);
+   void addOrbitStateVectors(ossimXmlNode const& orbitList);
 
-  void addOrbitStateVectors(ossimXmlNode const& orbitList);
+   void readCalibrationMetadata();
 
-  void readCalibrationMetadata();
+   void readNoiseMetadata();
 
-  void readNoiseMetadata();
+   bool read(ossimFilename const& annotationXml);
 
-  double getModifiedJulianDate(ossimString const& utc_time);
+   double getBandTerrainHeight(ossimXmlDocument const& theProductXmlDocument);
 
-  bool readProductMetadata( );
+   void clearFields();
+   ossimKeywordlist const& getProductKwl() const
+   {
+      return theProductKwl;
+   }
 
-  double getBandTerrainHeight(ossimXmlDocument const& theProductXmlDocument);
+   void setMetadataDirectory(ossimFilename const& d)
+   {
+      theManifestDirectory = d;
+   }
 
-  ossimKeywordlist const& getProductKwl() const
-    {
-    return theProductKwl;
-    }
+   void setSLC()
+   {
+      theSLC = true;
+   }
 
-  void setMetadataDirectory(ossimFilename const& d)
-    {
-    theManifestDirectory = d;
-    }
-
-  void setSLC(bool b)
-    {
-    theSLC = true;
-    }
-
-  void setTOPSAR(bool b)
-    {
-    theTOPSAR = true;
-    }
+   void setTOPSAR()
+   {
+      theTOPSAR = true;
+   }
 
 private:
-  ossimFilename    theManifestDirectory;
-  double           theRangeSpacingTotal;
-  double           theAzimuthSpacingTotal;
-  bool             theTOPSAR;
-  bool             theSLC;
-  ossimFilename    theProductXmlFile;
-  ossimString      theSampleType;
-  ossimKeywordlist theProductKwl;
+   void readBurstRecords(ossimXmlNode const& productRoot, ossimXmlNode const& imageInformation);
+   void addSRGRCoefficients(ossimXmlNode const& coordinateConversion);
+   void readCoordinates(
+         ossimXmlNode const& node,
+         ossimString const& rg0_xpath, ossimString const& coeffs_xpath,
+         char const * sr_gr_prefix);
+   void readGeoLocationGrid(ossimXmlNode const& productRoot);
+
+
+   ossimFilename    theManifestDirectory;
+   // double           theRangeSpacingTotal;
+   // double           theAzimuthSpacingTotal;
+   bool             theTOPSAR;
+   bool             theSLC;
+   ossimFilename    theProductXmlFile;
+   ossimString      theSampleType;
+   ossimKeywordlist theProductKwl;
 };
 
 }

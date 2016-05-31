@@ -54,7 +54,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
         OrbitRecordType orbitRecord;
 
         // Retrieve acquisition time
-        orbitRecord.azimuthTime = getTimeFromFirstNode(**itNode, attTimeUTC);
+        orbitRecord.azimuthTime = getModifiedJulianDateFromFirstNode(**itNode, attTimeUTC);
 
         // Retrieve ECEF position
         orbitRecord.position[0] = getDoubleFromFirstNode(**itNode, attPosX);
@@ -94,11 +94,11 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
     //Manage only strip map product for now (one burst)
 
     //Parse azimuth time start/stop
-    const TimeType azimuthTimeStart = getTimeFromFirstNode(xmlRoot, "productInfo/sceneInfo/start/timeUTC");
+    const TimeType azimuthTimeStart = getModifiedJulianDateFromFirstNode(xmlRoot, "productInfo/sceneInfo/start/timeUTC");
 
     std::cout << "azimuthTimeStart " << azimuthTimeStart << '\n';
 
-    const TimeType azimuthTimeStop = getTimeFromFirstNode(xmlRoot, "productInfo/sceneInfo/stop/timeUTC");
+    const TimeType azimuthTimeStop = getModifiedJulianDateFromFirstNode(xmlRoot, "productInfo/sceneInfo/stop/timeUTC");
 
     std::cout << "azimuthTimeStop " << azimuthTimeStop << '\n';
 
@@ -182,7 +182,9 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 
         // Get delta acquisition time
         const double deltaAzimuth = getDoubleFromFirstNode(**itNode, attT);
-        gcpRecord.azimuthTime = azimuthTimeStart + boost::posix_time::microseconds(deltaAzimuth * 1000000);
+        //using boost::posix_time::microseconds;
+        using ossimplugins::time::microseconds;
+        gcpRecord.azimuthTime = azimuthTimeStart + microseconds(deltaAzimuth * 1000000);
 
         //Get delta range time
         gcpRecord.slantRangeTime = theNearRangeTime + getDoubleFromFirstNode(**itNode, attTau);
