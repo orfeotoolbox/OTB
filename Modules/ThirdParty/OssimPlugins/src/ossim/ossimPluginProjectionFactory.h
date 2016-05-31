@@ -53,20 +53,21 @@ public:
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
 protected:
 
-   bool isTileMap(const ossimFilename& filename) const;
+   // Taken by copy -> copy elision
+   bool isTileMap(ossimFilename filename) const;
 
 private:
    ossimPluginProjectionFactory()
    {
-      initalized_ = true;
+      initialized_ = true;
    }
 
    ~ossimPluginProjectionFactory()
    {
-      initalized_ = false;
+      initialized_ = false;
    }
 
-   static bool initalized_;
+   static bool initialized_;
 
    static ossimPluginProjectionFactory factoryInstance;
 
