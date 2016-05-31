@@ -10,7 +10,8 @@
 
 #include <ossimXmlTools.h>
 #include <ossim/base/ossimString.h>
-#include <ossim/base/ossimXmlNode.h>
+#include "ossimTimeUtilities.h"
+// #include <ossim/base/ossimXmlNode.h>
 
 ossimXmlNode const& ossimplugins::getExpectedFirstNode(ossimXmlNode const& node, ossimString const& xpath)
 {
@@ -32,6 +33,13 @@ ossimplugins::TimeType ossimplugins::getTimeFromFirstNode(ossimXmlNode const& no
     ossimString s = getTextFromFirstNode(node, xpath);
     std::replace(s.begin(), s.end(), 'T', ' ');
     return boost::posix_time::time_from_string(s);
+}
+
+ossimplugins::time::ModifiedJulianDate
+ossimplugins::getModifiedJulianDateFromFirstNode(ossimXmlNode const& node, ossimString const& xpath)
+{
+    ossimString const& s = getTextFromFirstNode(node, xpath);
+    return time::toModifiedJulianDate(s);
 }
 
 double ossimplugins::getDoubleFromFirstNode(ossimXmlNode const& node, ossimString const& xpath)
