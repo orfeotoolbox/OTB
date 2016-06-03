@@ -33,6 +33,7 @@ namespace ossimplugins { namespace time {
          double as_seconds() const { return m_seconds; }
 
          std::ostream & display(std::ostream & os) const { return os << m_seconds; }
+         std::istream & read   (std::istream & is)       { return is >> m_seconds; }
 
       protected:
          /**@name Construction/destruction

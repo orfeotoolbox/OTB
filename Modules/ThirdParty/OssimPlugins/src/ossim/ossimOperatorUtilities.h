@@ -67,6 +67,8 @@ namespace ossimplugins {
    template <typename T> struct streamable {
       friend std::ostream & operator<<(std::ostream & os, const T & v)
       { return v.display(os); }
+      friend std::istream & operator>>(std::istream & is, T & v)
+      { return v.read(is); }
    };
 
    template <typename T> struct less_than_comparable {
