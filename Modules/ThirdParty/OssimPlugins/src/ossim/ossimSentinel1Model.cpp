@@ -13,14 +13,41 @@
 #include <cassert>
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimString.h>
+#include <ossim/base/ossimXmlNode.h>
 #include "ossimTraceHelpers.h"
+#include "ossimXmlTools.h"
+#include "ossimKeyWordListUtilities.h"
+#include "ossimSarSensorModelPathsAndKeys.h"
+
+namespace {// Anonymous namespace
+   ossimTrace traceExec  ("ossimSentinel1Model:exec");
+   ossimTrace traceDebug ("ossimSentinel1Model:debug");
+   const ossimString attAdsHeader        = "adsHeader";
+   const ossimString attAzimuthTime      = "azimuthTime";
+   const ossimString attFirstValidSample = "firstValidSample";
+   const ossimString attGr0              = "gr0";
+   const ossimString attGrsrCoefficients = "grsrCoefficients";
+   const ossimString attHeight           = "height";
+   const ossimString attLatitude         = "latitude";
+   const ossimString attLine             = "line";
+   const ossimString attLongitude        = "longitude";
+   const ossimString attPixel            = "pixel";
+   const ossimString attPosition         = "position";
+   const ossimString attSlantRangeTime   = "slantRangeTime";
+   const ossimString attSr0              = "sr0";
+   const ossimString attSrgrCoefficients = "srgrCoefficients";
+   const ossimString attTime             = "time";
+   const ossimString attVelocity         = "velocity";
+   const ossimString attX                = "x";
+   const ossimString attY                = "y";
+   const ossimString attZ                = "z";
+
+   // const char LOAD_FROM_PRODUCT_FILE_KW[] = "load_from_product_file_flag";
+   // const char PRODUCT_XML_FILE_KW[] = "product_xml_filename";
+}// Anonymous namespace
 
 namespace ossimplugins
 {
-
-// Define Trace flags for use within this file:
-   static ossimTrace traceExec  ("ossimSentinel1Model:exec");
-   static ossimTrace traceDebug ("ossimSentinel1Model:debug");
 
    RTTI_DEF1(ossimSentinel1Model, "ossimSentinel1Model", ossimSarSensorModel);
 
@@ -31,20 +58,21 @@ namespace ossimplugins
       : ossimSarSensorModel()
       , theOCN(false)
       , theSLC(false)
+      , theTOPSAR(false)
    {
       // theManifestDoc = new ossimXmlDocument();
-      // theProduct = new ossimSentinel1ProductDoc(); // leave null
       // this->clearFields(); // pointless at construction
    }
 
    void ossimSentinel1Model::clearFields()
    {
-      theOCN = false;
-      theSLC = false;
+      theOCN    = false;
+      theSLC    = false;
+      theTOPSAR = false;
       theManifestKwl.clear();
+      theProductKwl.clear();
       // theManifestFile = ossimFilename::NIL;
       theProductXmlFile = ossimFilename::NIL;
-      theProduct = 0;
    }
 
 //*************************************************************************************************
@@ -63,8 +91,8 @@ namespace ossimplugins
       // Capture stream flags since we are going to mess with them.
       std::ios_base::fmtflags f = out.flags();
 
-      out << "\nDump of ossimSentinel1Model at address " << (hex) << this
-          << (dec)
+      out << "\nDump of ossimSentinel1Model at address " << hex << this
+          << dec
           << "\n------------------------------------------------"
           << "\n  theImageID            = " << theImageID
           << "\n  theImageSize          = " << theImageSize
@@ -83,6 +111,9 @@ namespace ossimplugins
    bool ossimSentinel1Model::saveState(ossimKeywordlist& kwl,
                                       const char* prefix) const
    {
+      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::saveState";
+      SCOPED_LOG(traceDebug, MODULE);
+
       kwl.add(prefix,
               ossimKeywordNames::TYPE_KW,
               "ossimSentinel1Model",
@@ -93,13 +124,9 @@ namespace ossimplugins
               "true",
               true);
 
-      kwl.addList(theManifestKwl, true);
+      kwl.addList(theManifestKwl, true); // TODO: really ?
+      kwl.addList(theProductKwl, true);
 
-      if(theProduct.get())
-      {
-         kwl.addList(theProduct->getProductKwl(), true);
-         //   theProduct->saveState(kwl, prefix);
-      }
       ossimSarSensorModel::saveState(kwl, prefix);
       return true;
    }
@@ -121,9 +148,7 @@ namespace ossimplugins
          ossimNotify(ossimNotifyLevel_DEBUG) << "theManifestKwl.getSize()" << theManifestKwl.getSize() << "\n";
       }
 
-      ossimSarSensorModel::loadState(kwl, prefix);
-
-      return true;
+      return ossimSarSensorModel::loadState(kwl, prefix);
    }
 
 #if 0
@@ -185,11 +210,13 @@ namespace ossimplugins
          // from ossimSensorModel
          theMeanGSD = (theGSD.x + theGSD.y)/2.0;
 
+#if 0
          if ( !this->initSRGR( ) )
          {
             ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initSRGR( )\n";
             return false;
          }
+#endif
 
          // Commit the operation
          theProductXmlFile = file;
@@ -323,7 +350,7 @@ namespace ossimplugins
             true);
 
       if (acquisition_mode == "IW" || acquisition_mode == "EW")
-         theProduct->setTOPSAR();
+         setTOPSAR();
 
       const ossimRefPtr<ossimXmlNode> orbitReference =
          theManifestDoc->getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:orbitReference");
@@ -403,7 +430,7 @@ namespace ossimplugins
       {
          //ossimKeywordNames::PIXEL_TYPE_KW;  RK
          theManifestKwl.add("sample_type", "COMPLEX",  true);
-         theProduct->setSLC();
+         setSLC();
 
       }
       else
@@ -460,20 +487,606 @@ namespace ossimplugins
 
    bool ossimSentinel1Model::readProduct(const ossimFilename &productXmlFile)
    {
-      ossimRefPtr<ossimSentinel1ProductDoc>  product( new ossimSentinel1ProductDoc());
-      const bool ret = product->read(productXmlFile);
+      const bool ret = read(productXmlFile);
       if ( ret )
       {
-         product->readCalibrationMetadata();
-         product->readNoiseMetadata();
-         theProduct = product;
+         readCalibrationMetadata();
+         readNoiseMetadata();
          return true;
       }
       else
       {
-         ossimNotify(ossimNotifyLevel_FATAL) << " theProduct->read() failed\n";
+         ossimNotify(ossimNotifyLevel_FATAL) << " read() failed\n";
          return false;
       }
    }
+
+   bool ossimSentinel1Model::read(ossimFilename const& annotationXml)
+   {
+      ossimXmlDocument productXmlDocument;
+      if (! openMetadataFile(productXmlDocument, annotationXml)) {
+         ossimNotify(ossimNotifyLevel_FATAL) << "Cannot open Sar Sentinel1 model from XML file: "<<annotationXml<< std::endl;
+
+         return false;
+      }
+
+      const ossimXmlNodePtr & productRoot = productXmlDocument.getRoot();
+      assert(productRoot.get());
+
+      const ossimXmlNode & adsHeader = getExpectedFirstNode(*productRoot,attAdsHeader);
+      const ossimString & polarisation = getTextFromFirstNode(adsHeader, "polarisation");
+      const ossimString & productType  = getTextFromFirstNode(adsHeader, "productType");
+      theProductType = ProductType(productType);
+
+      theProductKwl.addPair(HEADER_PREFIX, "product_type", productType.string());
+
+      addMandatory(theProductKwl, HEADER_PREFIX, "swath",        adsHeader, "swath");
+      addMandatory(theProductKwl, HEADER_PREFIX, "polarisation", adsHeader, "polarisation");
+      theProductKwl.addPair(HEADER_PREFIX, "polarisation", polarisation.string());
+      theProductKwl.addPair(HEADER_PREFIX, "annotation",   annotationXml.file().string());
+
+      addMandatory(theProductKwl, HEADER_PREFIX, "first_line_time", adsHeader, "startTime");
+      addMandatory(theProductKwl, HEADER_PREFIX, "last_line_time",  adsHeader, "stopTime");
+
+      //RK maybe use this->getManifestPrefix()
+
+      theProductKwl.addPair(SUPPORT_DATA_PREFIX, "mds1_tx_rx_polar", polarisation, true);
+
+      const ossimXmlNode & imageInformation   = getExpectedFirstNode(*productRoot, "imageAnnotation/imageInformation");
+      const ossimXmlNode & productInformation = getExpectedFirstNode(*productRoot, "generalAnnotation/productInformation");
+
+      addOptional (theProductKwl, SUPPORT_DATA_PREFIX, "data_take_id",       adsHeader,        "missionDataTakeId");
+      addOptional (theProductKwl, SUPPORT_DATA_PREFIX, "slice_num",          imageInformation, "sliceNumber");
+
+      ossimXmlNode const& xAzimtuTimeInterval = getExpectedFirstNode(imageInformation, "azimuthTimeInterval");
+      theAzimuthTimeInterval = to<double>(xAzimtuTimeInterval.getText());
+      add(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", xAzimtuTimeInterval.getText());
+      // addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", imageInformation, "azimuthTimeInterval");
+
+      const double rangeSpacing = getDoubleFromFirstNode(imageInformation, "rangePixelSpacing");
+      theProductKwl.addPair(SUPPORT_DATA_PREFIX, "range_spacing", rangeSpacing);
+
+      const double azimuthSpacing = getDoubleFromFirstNode(imageInformation, "azimuthPixelSpacing");
+      theProductKwl.addPair(SUPPORT_DATA_PREFIX, "azimuth_spacing", azimuthSpacing);
+
+      addOptional(theProductKwl, ossimKeywordNames::NUMBER_SAMPLES_KW, imageInformation, "numberOfSamples");
+      addOptional(theProductKwl, ossimKeywordNames::NUMBER_LINES_KW,   imageInformation, "numberOfLines");
+
+      theProductKwl.addPair(
+            "sample_type" /*ossimKeywordNames::PIXEL_TYPE_KW*/,
+            getOptionalTextFromFirstNode(imageInformation, "pixelValue").upcase());
+
+      // TODO: check if it makes sense when only one file is considered
+      const double heightSum = getBandTerrainHeight(productXmlDocument);
+      theProductKwl.addPair(SUPPORT_DATA_PREFIX, "avg_scene_height", heightSum);
+
+
+      // these should be the same for all swaths
+      //RK div by oneMillion taken from S1tlbx
+      addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "range_sampling_rate",        productInformation, "rangeSamplingRate");
+      addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "radar_frequency",            productInformation, "radarFrequency");
+      addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval",         imageInformation,   "azimuthTimeInterval");
+      addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", imageInformation,   "slantRangeTime");
+
+      const ossimXmlNode & downlinkInformation =
+         getExpectedFirstNode(*productRoot, "generalAnnotation/downlinkInformationList/downlinkInformation");
+
+      addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "pulse_repetition_frequency", downlinkInformation, "prf");
+
+      ossimXmlNode const& swathProcParams =
+         getExpectedFirstNode(*productRoot, "imageAnnotation/processingInformation/swathProcParamsList/swathProcParams");
+      ossimXmlNode const& rangeProcessingNode   = getExpectedFirstNode(swathProcParams, "rangeProcessing");
+      ossimXmlNode const& azimuthProcessingNode = getExpectedFirstNode(swathProcParams, "azimuthProcessing");
+
+      addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_bandwidth", azimuthProcessingNode, "processingBandwidth");
+      addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "range_bandwidth",   rangeProcessingNode,   "processingBandwidth");
+      addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "range_looks",       rangeProcessingNode,   "numberOfLooks");
+      addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_looks",     azimuthProcessingNode, "numberOfLooks");
+
+      if(!theTOPSAR || !theSLC)
+      {
+         addOptional(theProductKwl, SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_SAMPLES_KW, imageInformation, "numberOfSamples");
+         addOptional(theProductKwl, SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_LINES_KW,   imageInformation, "numberOfLines");
+      }
+
+      ossimXmlNodePtr const& orbitList = productRoot->findFirstNode("generalAnnotation/orbitList");
+      if (!orbitList) {
+         ossimNotify(ossimNotifyLevel_DEBUG) << "No orbitVectorList info available in metadata!!\n";
+      } else {
+         addOrbitStateVectors(*orbitList);
+      }
+
+      if (isGRD()) {
+         ossimXmlNodePtr const& coordinateConversionList = productRoot->findFirstNode("coordinateConversion/coordinateConversionList/");
+         if (!coordinateConversionList) {
+            ossimNotify(ossimNotifyLevel_WARN) << "No coordinate conversion info available in metadata!!\n";
+         } else {
+            addSRGRCoefficients(*coordinateConversionList);
+         }
+      }
+
+      ossimXmlNodePtr const& dcEstimateList = productRoot->findFirstNode("dopplerCentroid/dcEstimateList");
+      if (!dcEstimateList) {
+         ossimNotify(ossimNotifyLevel_DEBUG) << "No doppler centroid coefficients available in metadata!!\n";
+      } else {
+         addDopplerCentroidCoefficients(*dcEstimateList);
+      }
+
+      readBurstRecords(*productRoot, imageInformation);
+
+      readGeoLocationGrid(*productRoot);
+
+#if 0
+      theProductKwl.addPair(SUPPORT_DATA_PREFIX,
+            ossimKeywordNames::NUMBER_BANDS_KW,
+            numBands,
+            true);
+#endif
+      return true;
+   }
+
+   void ossimSentinel1Model::readCalibrationMetadata()
+   {
+      ossimDirectory calibrationDir( theManifestDirectory.dirCat( "annotation/calibration") );
+      std::vector<ossimFilename> files;
+      calibrationDir.findAllFilesThatMatch(files, "calibration*");
+      std::vector<ossimFilename>::const_iterator it = files.begin();
+
+      std::stringstream strm;
+      for (; it != files.end(); ++it)
+      {
+         ossimXmlDocument calibrationDoc;
+         openMetadataFile(calibrationDoc, *it );
+
+         const ossimXmlNodePtr & calibrationRoot = calibrationDoc.getRoot();
+         assert(calibrationRoot.get());
+         ossimXmlNode const& adsHeader = getExpectedFirstNode(*calibrationRoot, "adsHeader");
+         ossimXmlNode const& calibrationInformation = getExpectedFirstNode(*calibrationRoot, "calibrationInformation");
+         ossimXmlNode const& calibrationVectorList  = getExpectedFirstNode(*calibrationRoot, "calibrationVectorList");
+
+         char const calibrationPrefix[] = "calibration.";
+
+         addMandatory(theProductKwl, calibrationPrefix, "swath", adsHeader, "swath");
+         addMandatory(theProductKwl, calibrationPrefix, "polarisation", adsHeader, "polarisation");
+
+         add(theProductKwl, calibrationPrefix, "startTime",
+               time::toModifiedJulianDate(getTextFromFirstNode(adsHeader, "startTime")));
+
+         add(theProductKwl, calibrationPrefix, "stopTime",
+               time::toModifiedJulianDate(getTextFromFirstNode(adsHeader, "stopTime")));
+
+         addMandatory(theProductKwl, calibrationPrefix, "absoluteCalibrationConstant", calibrationInformation, "absoluteCalibrationConstant");
+
+         theProductKwl.addPair(calibrationPrefix,
+               "count",
+               calibrationVectorList.getAttributeValue("count").string());
+
+         std::vector< ossimXmlNodePtr > calibrationVectors;
+         calibrationRoot->findChildNodes("calibrationVectorList/calibrationVector", calibrationVectors);
+         int idx = 0;
+         for (std::vector< ossimXmlNodePtr >::const_iterator b_calibVector = calibrationVectors.begin(), e_calibVector = calibrationVectors.end()
+               ; b_calibVector != e_calibVector
+               ; ++b_calibVector, ++idx
+             )
+         {
+            char calibrationVectorPrefix[256];
+            std::snprintf(calibrationVectorPrefix, sizeof(calibrationVectorPrefix), "%scalibrationVector[%d].", calibrationPrefix, idx);
+            assert(b_calibVector->get());
+
+            ossimXmlNode const& calibrationVector = **b_calibVector;
+            const ossimXmlNodePtr & node = calibrationVector.findFirstNode("pixel");
+
+            theProductKwl.addPair(calibrationVectorPrefix,
+                  "pixel_count",
+                  node->getAttributeValue("count").string());
+
+            add(theProductKwl, calibrationVectorPrefix, keyAzimuthTime,
+                  time::toModifiedJulianDate(getOptionalTextFromFirstNode(calibrationVector, "azimuthTime")));
+
+            addMandatory(theProductKwl, calibrationVectorPrefix, "line",        calibrationVector, "line");
+            addMandatory(theProductKwl, calibrationVectorPrefix, "pixel",       calibrationVector, "pixel");
+            addMandatory(theProductKwl, calibrationVectorPrefix, "sigmaNought", calibrationVector, "sigmaNought");
+            addMandatory(theProductKwl, calibrationVectorPrefix, "betaNought",  calibrationVector, "betaNought");
+            addMandatory(theProductKwl, calibrationVectorPrefix, "gamma",       calibrationVector, "gamma");
+            addMandatory(theProductKwl, calibrationVectorPrefix, "dn",          calibrationVector, "dn");
+
+            //  calibrationVectors[idx]->toKwl(theProductKwl, "calibrationVectorList_" + ossimString::toString(idx+1) + ".");
+         }
+      }
+   }
+
+   void ossimSentinel1Model::readNoiseMetadata()
+   {
+      ossimDirectory calibrationDir( theManifestDirectory.dirCat( "annotation/calibration") );
+      std::vector<ossimFilename> files;
+      calibrationDir.findAllFilesThatMatch(files, "noise*");
+      std::vector<ossimFilename>::const_iterator it = files.begin();
+      const char noisePrefix[] = "noise.";
+
+      for (; it != files.end(); ++it)
+      {
+         ossimXmlDocument noiseDoc;
+         openMetadataFile(noiseDoc, *it );
+
+         const ossimXmlNodePtr noiseRoot = noiseDoc.getRoot();
+         std::vector< ossimXmlNodePtr > noiseVectors;
+         noiseRoot->findChildNodes("noiseVectorList/noiseVector", noiseVectors);
+         int idx = 0;
+         for (std::vector< ossimXmlNodePtr >::const_iterator b_noiseVector = noiseVectors.begin(), e_noiseVector = noiseVectors.end()
+               ; b_noiseVector != e_noiseVector
+               ; ++b_noiseVector, ++idx
+             )
+         {
+            char noiseVectorPrefix [256];
+            std::snprintf(noiseVectorPrefix, sizeof(noiseVectorPrefix), "%snoiseVector[%d].", noisePrefix, idx);
+            assert(b_noiseVector->get());
+
+            ossimXmlNode const& noiseVector = **b_noiseVector;
+
+            const ossimXmlNodePtr & node = noiseVector.findFirstNode("pixel");
+
+            theProductKwl.addPair(noiseVectorPrefix,
+                  "pixel_count",
+                  node->getAttributeValue("count"),
+                  false);
+
+            add(theProductKwl, noiseVectorPrefix, keyAzimuthTime,
+                  time::toModifiedJulianDate(getTextFromFirstNode(noiseVector, "azimuthTime")));
+
+            addMandatory(theProductKwl, noiseVectorPrefix, "line",     noiseVector, "line");
+            addMandatory(theProductKwl, noiseVectorPrefix, "pixel",    noiseVector, "pixel");
+            addMandatory(theProductKwl, noiseVectorPrefix, "noiseLut", noiseVector, "noiseLut");
+            //noiseVectorList[idx]->toKwl(theProductKwl, "noiseVectorList_" + ossimString::toString(idx+1) + ".");
+         }
+      }
+   }
+
+   void ossimSentinel1Model::readBurstRecords(ossimXmlNode const& productRoot, ossimXmlNode const& imageInformation)
+   {
+      std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+      productRoot.findChildNodes("swathTiming/burstList/burst",xnodes);
+      if (xnodes.empty())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG) << "No burst records available in metadata!!\n";
+         add(theProductKwl, BURST_PREFIX, "[0].start_line", 0);
+         add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", getModifiedJulianDateFromFirstNode(imageInformation,  "productFirstLineUtcTime"));
+         add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  getModifiedJulianDateFromFirstNode(imageInformation,  "productLastLineUtcTime"));
+         add(theProductKwl, BURST_PREFIX, "[0].end_line",           getFromFirstNode<unsigned int>(imageInformation, "numberOfLines")-1);
+         add(theProductKwl, BURST_NUMBER_KEY,                       "1");
+      }
+      else
+      {
+         char burstPrefix[1024];
+
+         const unsigned int linesPerBurst = getFromFirstNode<unsigned int>(productRoot, "swathTiming/linesPerBurst");
+         unsigned int burstId(0);
+
+         for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++burstId)
+         {
+            const TimeType azTime = getModifiedJulianDateFromFirstNode(**itNode, attAzimuthTime);
+            ossimString const& s = getTextFromFirstNode(**itNode, attFirstValidSample);
+
+            ossim_int64 first_valid(0), last_valid(0);
+            bool begin_found(false), end_found(false);
+
+            std::vector<ossimString> ssp = s.split(" ");
+
+            for (std::vector<ossimString>::const_iterator sIt = ssp.begin(), e = ssp.end()
+                  ; sIt != e && !end_found
+                  ; ++sIt
+                )
+            {
+               if(!begin_found)
+               {
+                  if(*sIt!="-1")
+                  {
+                     begin_found = true;
+                  }
+                  else
+                  {
+                     ++first_valid;
+                  }
+                  ++last_valid;
+               }
+               else
+               {
+                  if(!end_found && *sIt=="-1")
+                  {
+                     end_found = true;
+                  }
+                  else
+                  {
+                     ++last_valid;
+                  }
+               }
+            }
+
+            std::snprintf(burstPrefix, sizeof(burstPrefix), "%s[%d].", BURST_PREFIX.c_str(), burstId);
+            add(theProductKwl,burstPrefix + keyStartLine,         burstId*linesPerBurst + first_valid);
+            add(theProductKwl,burstPrefix + keyEndLine,           burstId*linesPerBurst + last_valid);
+            // TODO: check units.
+            // using boost::posix_time::microseconds;
+            using ossimplugins::time::microseconds;
+            add(theProductKwl,burstPrefix + keyAzimuthStartTime, azTime + microseconds(first_valid*theAzimuthTimeInterval));
+            add(theProductKwl,burstPrefix + keyAzimuthStopTime,  azTime + microseconds(last_valid*theAzimuthTimeInterval));
+         }
+         add(theProductKwl, BURST_PREFIX+".number",             burstId);
+      }
+   }
+
+   void ossimSentinel1Model::addSRGRCoefficients(ossimXmlNode const& coordinateConversionList)
+   {
+      readCoordinates(coordinateConversionList, attSr0, attSrgrCoefficients, SR_PREFIX);
+      readCoordinates(coordinateConversionList, attGr0, attGrsrCoefficients, GR_PREFIX);
+   }
+
+   void ossimSentinel1Model::readCoordinates(
+         ossimXmlNode const& node,
+         ossimString const& rg0_xpath, ossimString const& coeffs_xpath,
+         std::string const& sr_gr_prefix)
+   {
+      char prefix[1024];
+      std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+      node.findChildNodes("coordinateConversion", xnodes);
+
+      unsigned int idx = 0;
+      for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode, ++idx)
+      {
+         int pos = std::snprintf(prefix, sizeof(prefix), "%s[%d].", sr_gr_prefix.c_str(), idx);
+         assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix));
+         addMandatory(theProductKwl, prefix + keyAzimuthTime,**itNode, attAzimuthTime);
+         addMandatory(theProductKwl, prefix + rg0_xpath,     **itNode, rg0_xpath);
+
+         ossimString const& s = getTextFromFirstNode(**itNode, coeffs_xpath);
+         std::vector<ossimString> ssplit = s.split(" ");
+
+         if (ssplit.empty())
+         {
+            throw std::runtime_error("The "+rg0_xpath+" record has an empty coef vector");
+         }
+         unsigned int coeff_idx;
+         for (std::vector<ossimString>::const_iterator cIt = ssplit.begin(), e = ssplit.end()
+               ; cIt != e
+               ; ++cIt, ++coeff_idx
+             )
+         {
+            // append to current prefix
+            std::snprintf(prefix+pos, sizeof(prefix)-pos, ".coeff[%d]", coeff_idx);
+            add(theProductKwl, prefix, *cIt); // Don't check this is really a double.
+         }
+         assert(coeff_idx>0 &&"The rg0 record has empty coefs vector.");
+         add(theProductKwl, prefix + NUMBER_KEY, coeff_idx);
+      }
+      add(theProductKwl, sr_gr_prefix + NUMBER_KEY, xnodes.size());
+   }
+
+   void ossimSentinel1Model::readGeoLocationGrid(ossimXmlNode const& productRoot)
+   {
+      char prefix[1024];
+      std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+      productRoot.findChildNodes("geolocationGrid/geolocationGridPointList/geolocationGridPoint", xnodes);
+
+      unsigned int idx = 0;
+      for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++idx)
+      {
+         int pos = std::snprintf(prefix, sizeof(prefix), "%s[%d].", GCP_PREFIX.c_str(), idx);
+         assert(pos >= sizeof(SR_PREFIX)+4 && pos < 1024);
+         const TimeType azimuthTime = time::toModifiedJulianDate(
+               addMandatory(theProductKwl, prefix, attAzimuthTime,     **itNode, attAzimuthTime)); // acquisition time
+         addMandatory(theProductKwl, prefix, keySlantRangeTime, **itNode, attSlantRangeTime);
+         addMandatory(theProductKwl, prefix, keyImPtX,          **itNode, attPixel);
+
+         // In TOPSAR products, GCPs are weird (they fall in black lines
+         // between burst. This code allows to move them to a valid area of
+         // the image.
+         if(theBurstRecords.size()>2)
+         {
+            TimeType acqStart(0);
+            unsigned long acqStartLine(0);
+
+#if 0
+            bool burstFound(false);
+            for(std::vector<BurstRecordType>::reverse_iterator bIt = theBurstRecords.rbegin();bIt!=theBurstRecords.rend() && !burstFound;++bIt)
+            {
+               if(gcpRecord.azimuthTime >= bIt->azimuthStartTime && gcpRecord.azimuthTime < bIt->azimuthStopTime)
+               {
+                  burstFound = true;
+                  acqStart = bIt->azimuthStartTime;
+                  acqStartLine = bIt->startLine;
+               }
+            }
+            if(!burstFound)
+            {
+               if(gcpRecord.azimuthTime < theBurstRecords.front().azimuthStartTime)
+               {
+                  acqStart = theBurstRecords.front().azimuthStartTime;
+                  acqStartLine = theBurstRecords.front().startLine;
+               }
+               else if (gcpRecord.azimuthTime >= theBurstRecords.front().azimuthStopTime)
+               {
+                  acqStart = theBurstRecords.back().azimuthStartTime;
+                  acqStartLine = theBurstRecords.back().startLine;
+               }
+            }
+#else
+            const std::vector<BurstRecordType>::const_reverse_iterator bIt
+               = std::find_if(theBurstRecords.rbegin(), theBurstRecords.rend(), DoesContain(azimuthTime));
+            if (bIt != theBurstRecords.rend())
+            {
+               acqStart = bIt->azimuthStartTime;
+               acqStartLine = bIt->startLine;
+            }
+            else if(azimuthTime < theBurstRecords.front().azimuthStartTime)
+            {
+               acqStart = theBurstRecords.front().azimuthStartTime;
+               acqStartLine = theBurstRecords.front().startLine;
+            }
+            else if (azimuthTime >= theBurstRecords.front().azimuthStopTime)
+            {
+               acqStart = theBurstRecords.back().azimuthStartTime;
+               acqStartLine = theBurstRecords.back().startLine;
+            }
+            else
+            {
+               assert(!"unexpected case");
+            }
+#endif
+
+            const DurationType timeSinceStart = azimuthTime - acqStart; // in sec
+
+            const double timeSinceStartInMicroSeconds = timeSinceStart.total_microseconds();
+            const double imPt_y= timeSinceStartInMicroSeconds/theAzimuthTimeInterval + acqStartLine;
+            add(theProductKwl, prefix, keyImPtY, imPt_y);
+         }
+         else
+         {
+            addMandatory(theProductKwl, prefix, keyImPtY, **itNode, attLine);
+         }
+         addMandatory(theProductKwl, prefix, keyWorldPtLat, **itNode, attLatitude);
+         addMandatory(theProductKwl, prefix, keyWorldPtLon, **itNode, attLongitude);
+         addMandatory(theProductKwl, prefix, keyWorldPtHgt, **itNode, attHeight);
+      }
+      add(theProductKwl, GCP_NUMBER_KEY, idx);
+   }
+
+   void ossimSentinel1Model::addOrbitStateVectors(ossimXmlNode const& orbitList)
+   {
+      ossimXmlNode::ChildListType stateVectorList;
+      orbitList.findChildNodes("orbit", stateVectorList);
+
+      if(stateVectorList.empty())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG) << "No orbitVectorList info available in metadata!!\n";
+         return;
+      }
+
+      std::size_t stateVectorList_size = stateVectorList.size();
+      char orbit_prefix_[256];
+      for (std::size_t i = 0; i != stateVectorList_size ; ++i)
+      {
+         //orbit_state_vectors
+         const int pos = std::snprintf(orbit_prefix_, sizeof(orbit_prefix_), "orbitList.orbit[%d].", int(i));
+         assert(pos > 0 && pos < 256);
+         const std::string orbit_prefix(orbit_prefix_, pos);
+
+         addMandatory(theProductKwl, orbit_prefix + keyTime,  *stateVectorList[i], "time");
+
+         addMandatory(theProductKwl, orbit_prefix + keyPosX, *stateVectorList[i], "position/x");
+         addMandatory(theProductKwl, orbit_prefix + keyPosY, *stateVectorList[i], "position/y");
+         addMandatory(theProductKwl, orbit_prefix + keyPosZ, *stateVectorList[i], "position/z");
+
+         addMandatory(theProductKwl, orbit_prefix + keyVelX, *stateVectorList[i], "velocity/x");
+         addMandatory(theProductKwl, orbit_prefix + keyVelY, *stateVectorList[i], "velocity/y");
+         addMandatory(theProductKwl, orbit_prefix + keyVelZ, *stateVectorList[i], "velocity/z");
+      }
+      add(theProductKwl, "orbitList.nb_orbits", stateVectorList_size);
+   }
+
+   bool ossimSentinel1Model::initGsd(ossimDpt& gsd) const
+   {
+      // TODO: cache the value, or store it in a variable?
+#if 0
+      gsd.x =  theRangeSpacingTotal;
+      gsd.y =  theAzimuthSpacingTotal;
+#endif
+      return true;
+   }
+
+   bool ossimSentinel1Model::initImageSize(ossimIpt& imageSize) const
+   {
+      std::string const& samples_cstr = theProductKwl.findKey(SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_SAMPLES_KW);
+      std::string const& lines_cstr = theProductKwl.findKey(SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_LINES_KW);
+
+      imageSize.samp = to<int>(samples_cstr);
+      imageSize.line = to<int>(lines_cstr);
+
+      return true;
+   }
+
+   double ossimSentinel1Model::getBandTerrainHeight(ossimXmlDocument const& productXmlDocument)
+   {
+      double heightSum = 0.0;
+      vector< ossimXmlNodePtr > heightList;
+      productXmlDocument.findNodes("/product/generalAnnotation/terrainHeightList/terrainHeight", heightList);
+      vector<ossimXmlNodePtr >::const_iterator it = heightList.begin();
+      for ( ; it != heightList.end() ; ++it)
+      {
+         heightSum += getOptionalTextFromFirstNode(**it, "value").toFloat64();
+      }
+      return heightSum / heightList.size();
+   }
+
+   void ossimSentinel1Model::addDopplerCentroidCoefficients(ossimXmlNode const& dcEstimateList)
+   {
+      ossimString count_str;
+      dcEstimateList.getAttributeValue(count_str, "count");
+      const int count  = count_str.toInt();
+      if( count < 1)
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG) << "No doppler centroid coefficients available in metadata!!\n";
+         return;
+      }
+      else
+      {
+         ossimXmlNode::ChildListType dcEstimates;
+         dcEstimateList.findChildNodes("dcEstimate", dcEstimates);
+
+         ossimXmlNode::ChildListType::const_iterator it = dcEstimates.begin();
+
+         for (int index = 1 ; it != dcEstimates.end() ; ++it, ++index)
+         {
+            char prefix[256];
+            //Doppler_Centroid_Coefficients.dop_coef_list;
+            std::snprintf(prefix, sizeof(prefix), "dopplerCentroid.dop_coef_list%d.", index);
+
+            const ossimXmlNodePtr & dcEstimate = *it;
+            assert(dcEstimate.get());
+            addOptional(theProductKwl, prefix, "dop_coef_time",  *dcEstimate, "azimuthTime");
+            //RK
+            const double ref_time = getOptionalTextFromFirstNode(*dcEstimate, "t0").toFloat64() * 1e9; // s to ns
+            theProductKwl.addPair(prefix, keySlantRangeTime, ref_time);
+
+            ossimString const& ns = getOptionalTextFromFirstNode(*dcEstimate, "ns");
+
+            if( !ns.empty() )
+               theProductKwl.addPair(prefix, keySlantRangeTime, ns.string());
+
+            ossimString const& coeffStr = getOptionalTextFromFirstNode(*dcEstimate, "geometryDcPolynomial");
+
+            if (!coeffStr.empty())
+            {
+               const ossimString separatorList = " ";
+               std::vector<ossimString> result;
+
+               coeffStr.split(result, separatorList, true);
+
+               std::vector<ossimString>::const_iterator coeff = result.begin();
+
+               for (int count = 1 ; coeff != result.end() ; ++count, ++coeff)
+               {
+                  char coeff_prefix[256];
+                  std::snprintf(coeff_prefix, sizeof(coeff_prefix), "%s%d.dop_coef", prefix, count);
+
+                  theProductKwl.addPair(coeff_prefix, coeff->string());
+               }
+
+            } //if (!coeffStr.empty())
+
+         } // for each dcEstimate
+
+      } // else count < 1
+   }
+
+   bool ossimSentinel1Model::openMetadataFile(ossimXmlDocument& doc, ossimString const& file) const
+   {
+      if ( !doc.openFile( file ) )
+      {
+         ossimNotify(ossimNotifyLevel_FATAL) << "ossimSentinel1ProductDoc::openMetadataFile" << std::endl;
+         return false;
+      }
+
+      return true;
+   }
+
 
 } //end namespace

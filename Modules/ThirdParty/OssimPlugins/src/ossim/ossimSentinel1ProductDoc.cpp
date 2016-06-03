@@ -8,6 +8,7 @@
 //
 //----------------------------------------------------------------------------
 // $Id$
+#if 0
 #include "ossimSentinel1ProductDoc.h"
 #include <cstdio>
 #include <ossim/base/ossimDirectory.h>
@@ -76,8 +77,6 @@ namespace ossimplugins
 
       return true;
    }
-
-
 
    bool ossimSentinel1ProductDoc::read(ossimFilename const& annotationXml)
    {
@@ -678,3 +677,4 @@ namespace ossimplugins
 
    // }
 }
+#endif

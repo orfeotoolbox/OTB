@@ -25,16 +25,14 @@
 //#include <ossim/projection/ossimSensorModel.h>
 //#include <ossim/projection/ossimCoarseGridModel.h>
 #include "ossimSarSensorModel.h"
+#include "ossimPluginConstants.h" // OSSIM_PLUGINS_DLL
 
 #include <ossim/support_data/ossimSupportFilesList.h>
 
 //#include "ossimGeometricSarSensorModel.h"
 
-#include "ossimSentinel1ProductDoc.h"
-
-//ossimGeometricSarSensorModel
-
-class OSSIM_PLUGINS_DLL ossimString;
+class OSSIMDLLEXPORT ossimXmlNode;
+class OSSIMDLLEXPORT ossimString;
 
 namespace ossimplugins
 {
@@ -42,111 +40,123 @@ namespace ossimplugins
    class OSSIM_PLUGINS_DLL ossimSentinel1Model : public ossimSarSensorModel
    {
    public:
-     /*!
-      * CONSTRUCTORS:
-      */
-     /** @brief Default constructor */
-     ossimSentinel1Model();
+      typedef ossimRefPtr<ossimXmlNode>     ossimXmlNodePtr;
+      typedef ossimRefPtr<ossimXmlDocument> ossimXmlDocumentPtr;
+
+      /**
+       * CONSTRUCTORS.
+       * @{
+       */
+      /** @brief Default constructor */
+      ossimSentinel1Model();
 
 #if ! (defined(BOOST_NO_DEFAULTED_FUNCTIONS) || defined(BOOST_NO_CXX1_DEFAULTED_FUNCTIONS))
-     /** @brief Copy constructor */
-     ossimSentinel1Model(ossimSentinel1Model const& rhs) = default;
+      /** @brief Copy constructor */
+      ossimSentinel1Model(ossimSentinel1Model const& rhs) = default;
 
-     /** @brief Move constructor */
-     ossimSentinel1Model(ossimSentinel1Model && rhs) = default;
+      /** @brief Move constructor */
+      ossimSentinel1Model(ossimSentinel1Model && rhs) = default;
 
-     /** @brief Destructor */
-     virtual ~ossimSentinel1Model() = default;
+      /** @brief Destructor */
+      virtual ~ossimSentinel1Model() = default;
+#endif
+      //@}
+
+      bool open(const ossimFilename& file);
+
+      /*!
+       * Returns pointer to a new instance, copy of this.
+       */
+      virtual ossimObject* dup() const;
+
+      /*!
+       * Extends base-class implementation. Dumps contents of object to ostream.
+       */
+      virtual std::ostream& print(std::ostream& out) const;
+
+      /*!
+       * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
+       * KWL files. Returns true if successful.
+       */
+      virtual bool saveState(ossimKeywordlist& kwl,
+            const char* prefix=NULL) const;
+
+      virtual bool loadState(const ossimKeywordlist& kwl,
+            const char* prefix=NULL);
+
+      bool checkDirectory(const ossimFilename& file, const char* d, const char *ext) const;
+
+      bool isLevel0(const ossimFilename& file) const;
+
+      bool isLevel2(const ossimFilename& file) const;
+
+      bool isLevel1(const ossimFilename& file) const;
+
+      bool isSentinel1(const ossimFilename &manifestFile);
+
+      bool readProduct(const ossimFilename &productXmlFile);
+
+      // bool getImageId(ossimString& s) const;
+
+      // bool initSensorID(ossimString& s);
+
+      // bool standAloneProductInformation();
+
+      // bool getAnnotationFileLocation(const ossimFilename &manifestFile, const char* pattern);
+
+      bool initImageSize(ossimIpt& imageSize) const;
+
+      bool initGsd(ossimDpt& gsd) const;
+
+      ossimKeywordlist const& getManifestKwl() const
+      {
+         return theManifestKwl;
+      }
+
+      bool isSLC() const { return  theSLC; }
+      bool isOCN() const { return  theOCN; }
+
+#if 0
+      bool initSRGR();
+
+      // bool findSafeManifest(const ossimFilename& file, ossimFilename& safeFile);
 #endif
 
+      void clearFields();
 
-     bool open(const ossimFilename& file);
+      double getBandTerrainHeight(ossimXmlDocument const& theProductXmlDocument);
 
-     /*!
-      * Returns pointer to a new instance, copy of this.
-      */
-     virtual ossimObject* dup() const;
-
-     /*!
-      * Extends base-class implementation. Dumps contents of object to ostream.
-      */
-     virtual std::ostream& print(std::ostream& out) const;
-
-     /*!
-      * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
-      * KWL files. Returns true if successful.
-      */
-     virtual bool saveState(ossimKeywordlist& kwl,
-         const char* prefix=NULL) const;
-
-     virtual bool loadState(const ossimKeywordlist& kwl,
-         const char* prefix=NULL);
-
-     bool checkDirectory(const ossimFilename& file, const char* d, const char *ext) const;
-
-     bool isLevel0(const ossimFilename& file) const;
-
-     bool isLevel2(const ossimFilename& file) const;
-
-     bool isLevel1(const ossimFilename& file) const;
-
-     bool isSentinel1(const ossimFilename &manifestFile);
-
-     bool readProduct(const ossimFilename &productXmlFile);
-
-     // bool getImageId(ossimString& s) const;
-
-     // bool initSensorID(ossimString& s);
-
-     // bool standAloneProductInformation();
-
-     // bool getAnnotationFileLocation(const ossimFilename &manifestFile, const char* pattern);
-
-     bool initImageSize(ossimIpt& imageSize) const
-     {
-       // theImageClipRect = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
-       // theSubImageOffset.x = 0.0;
-       // theSubImageOffset.y = 0.0;
-
-       return theProduct->initImageSize(imageSize );
-     }
-
-     bool initGsd(ossimDpt& gsd) const
-     {
-       return theProduct->initGsd( gsd );
-     }
-
-     ossimKeywordlist const& getManifestKwl() const
-     {
-       return theManifestKwl;
-     }
-
-     bool isSLC() const { return  theSLC; }
-     bool isOCN() const { return  theOCN; }
-
-     bool initSRGR()
-     {
-       //   theProduct->initSRGR( );
-       return true;
-     }
-
-     // bool findSafeManifest(const ossimFilename& file, ossimFilename& safeFile);
-
-     void clearFields();
-
+      void setMetadataDirectory(ossimFilename const& d)
+      {
+         theManifestDirectory = d;
+      }
    protected:
 
-     TYPE_DATA
+      TYPE_DATA;
 
    private:
+      bool read(ossimFilename const& annotationXml);
+      void readCalibrationMetadata();
+      void readNoiseMetadata();
+      void readBurstRecords(ossimXmlNode const& productRoot, ossimXmlNode const& imageInformation);
+      void addSRGRCoefficients(ossimXmlNode const& coordinateConversion);
+      void readCoordinates(
+            ossimXmlNode const& node,
+            ossimString const& rg0_xpath, ossimString const& coeffs_xpath,
+            std::string const& sr_gr_prefix);
+      void readGeoLocationGrid(ossimXmlNode const& productRoot);
+      void addOrbitStateVectors(ossimXmlNode const& orbitList);
+      void addDopplerCentroidCoefficients(ossimXmlNode const& dcEstimateList);
+      bool openMetadataFile(ossimXmlDocument& doc, ossimString const& file) const;
 
-       ossimFilename                          theProductXmlFile;
-       // ossimFilename                          theManifestFile;
-       ossimKeywordlist                       theManifestKwl;
-       // ossimRefPtr<ossimXmlDocument>          theManifestDoc;
-       ossimRefPtr<ossimSentinel1ProductDoc>  theProduct;
-       bool                                   theOCN;
-       bool                                   theSLC;
+      ossimFilename      theManifestDirectory;
+      ossimFilename      theProductXmlFile;
+      // ossimFilename      theManifestFile;
+      ossimKeywordlist   theManifestKwl;
+      ossimKeywordlist   theProductKwl;
+      bool               theOCN;
+      bool               theSLC;
+      bool               theTOPSAR;
    }; //end class ossimSentinel1Model
 
 }  //end namespace ossimplugins
