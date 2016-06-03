@@ -14,57 +14,63 @@
 #include <algorithm>
 #include <boost/static_assert.hpp>
 #include <ossim/base/ossimLsrSpace.h>
+#include "ossimKeyWordListUtilities.h"
+#include "ossimTraceHelpers.h"
 #include "ossimRangeUtilities.h"
+#include "ossimSarSensorModelPathsAndKeys.h"
 
 namespace {// Anonymous namespace
-    const bool k_verbose = false; // global verbose constant; TODO: use an option
+   const bool k_verbose = false; // global verbose constant; TODO: use an option
 
-    // Sometimes, we don't need to compare the actual distance, its square value is
-    // more than enough.
-    inline double squareDistance(ossimDpt const& lhs, ossimDpt const& rhs) {
-        const double dx = lhs.x - rhs.x;
-        const double dy = lhs.y - rhs.y;
-        return dx*dx + dy*dy;
-    }
+   // Sometimes, we don't need to compare the actual distance, its square value is
+   // more than enough.
+   inline double squareDistance(ossimDpt const& lhs, ossimDpt const& rhs) {
+      const double dx = lhs.x - rhs.x;
+      const double dy = lhs.y - rhs.y;
+      return dx*dx + dy*dy;
+   }
 
-    inline double squareDistance(ossimGpt const& lhs, ossimGpt const& rhs) {
-        const ossimEcefPoint l(lhs);
-        const ossimEcefPoint r(rhs);
-        return (l-r).norm2();
-    }
+   inline double squareDistance(ossimGpt const& lhs, ossimGpt const& rhs) {
+      const ossimEcefPoint l(lhs);
+      const ossimEcefPoint r(rhs);
+      return (l-r).norm2();
+   }
 
-    template <typename Container>
-    inline void unzip(Container const& in, Container& out_even, Container& out_odd)
-    {
-        typedef typename Container::const_iterator const_iterator;
-        typedef typename Container::size_type      size_type;
+   template <typename Container>
+   inline void unzip(Container const& in, Container& out_even, Container& out_odd)
+   {
+      typedef typename Container::const_iterator const_iterator;
+      typedef typename Container::size_type      size_type;
 
-        const size_type size                         = in.size();
-        const bool      has_a_odd_number_of_elements = size % 2 == 1;
+      const size_type size                         = in.size();
+      const bool      has_a_odd_number_of_elements = size % 2 == 1;
 
-        out_even.reserve(size/2+1);
-        out_odd.reserve(size/2);
+      out_even.reserve(size/2+1);
+      out_odd.reserve(size/2);
 
-        const_iterator end = in.end();
-        if (has_a_odd_number_of_elements)
-        {
-            std::advance(end, -1);
-        }
-        for (const_iterator it=in.begin(); it != end ; )
-        {
-            out_even.push_back(*it++);
-            out_odd.push_back(*it++);
-        }
-        if (has_a_odd_number_of_elements)
-        {
-            assert(end != in.end());
-            out_even.push_back(*end);
-        }
-        assert(out_even.size() >= out_odd.size());
-        assert(out_odd.capacity() == size/2); // The correct number of element have been reserved
-        assert(out_even.capacity() == size/2+1); // The correct number of element have been reserved
-        assert(out_odd.size() + out_even.size() == size);
-    }
+      const_iterator end = in.end();
+      if (has_a_odd_number_of_elements)
+      {
+         std::advance(end, -1);
+      }
+      for (const_iterator it=in.begin(); it != end ; )
+      {
+         out_even.push_back(*it++);
+         out_odd.push_back(*it++);
+      }
+      if (has_a_odd_number_of_elements)
+      {
+         assert(end != in.end());
+         out_even.push_back(*end);
+      }
+      assert(out_even.size() >= out_odd.size());
+      assert(out_odd.capacity() == size/2); // The correct number of element have been reserved
+      assert(out_even.capacity() == size/2+1); // The correct number of element have been reserved
+      assert(out_odd.size() + out_even.size() == size);
+   }
+
+   ossimTrace traceExec  ("ossimSarSensorModel:exec");
+   ossimTrace traceDebug ("ossimSarSensorModel:debug");
 
    typedef char const* const* strings_iterator;
    static char const* const PRODUCTTYPE_STRINGS[] = { "SLC", "GRD", "MGD", "GEC", "EEC" };
@@ -95,19 +101,14 @@ string_view ossimSarSensorModel::ProductType::ToString() const
 }
 
 ossimSarSensorModel::ossimSarSensorModel()
-  : theOrbitRecords(),
-    theGCPRecords(),
-    theBurstRecords(),
-    theSlantRangeToGroundRangeRecords(),
-    theGroundRangeToSlantRangeRecords(),
-    theRadarFrequency(0.),
-    theAzimuthTimeInterval(0.),
-    theNearRangeTime(0.),
-    theRangeSamplingRate(0.),
-    theRangeResolution(0.),
-    theBistaticCorrectionNeeded(false),
-    theAzimuthTimeOffset(0),
-    theRangeTimeOffset(0)
+   : theRadarFrequency(0.),
+   theAzimuthTimeInterval(0.),
+   theNearRangeTime(0.),
+   theRangeSamplingRate(0.),
+   theRangeResolution(0.),
+   theBistaticCorrectionNeeded(false),
+   theAzimuthTimeOffset(0),
+   theRangeTimeOffset(0)
 {}
 
 ossimSarSensorModel::GCPRecordType const&
@@ -929,5 +930,135 @@ void ossimSarSensorModel::optimizeTimeOffsetsFromGcps()
     }
 
   theRangeTimeOffset = cumulRangeTime/=count;
+}
+
+void get(
+      ossimKeywordlist                             const& kwl,
+      std::vector<ossimSarSensorModel::OrbitRecordType> & orbitRecords)
+{
+   char orbit_prefix_[256];
+   // TODO: read number of bursts ->
+   std::size_t nbOrbits;
+   get(kwl, "orbitList.nb_orbits", nbOrbits);
+   for (std::size_t i=0; i!=nbOrbits ; ++i) {
+      const int pos = std::snprintf(orbit_prefix_, sizeof(orbit_prefix_), "orbitList.orbit[%d].", int(i));
+      assert(pos > 0 && pos < 256);
+      const std::string orbit_prefix(orbit_prefix_, pos);
+
+      ossimSarSensorModel::OrbitRecordType orbitRecord;
+      get(kwl, orbit_prefix + keyTime, orbitRecord.azimuthTime);
+      get(kwl, orbit_prefix + keyPosX, orbitRecord.position[0]);
+      get(kwl, orbit_prefix + keyPosY, orbitRecord.position[1]);
+      get(kwl, orbit_prefix + keyPosZ, orbitRecord.position[2]);
+      get(kwl, orbit_prefix + keyVelX, orbitRecord.velocity[1]);
+      get(kwl, orbit_prefix + keyVelY, orbitRecord.velocity[1]);
+      get(kwl, orbit_prefix + keyVelZ, orbitRecord.velocity[2]);
+      orbitRecords.push_back(orbitRecord);
+   }
+}
+
+void get(
+      ossimKeywordlist                             const& kwl,
+      std::vector<ossimSarSensorModel::BurstRecordType> & burstRecords)
+{
+   char burstPrefix_[1024];
+   std::size_t nbBursts ;
+   get(kwl, BURST_NUMBER_KEY, nbBursts);
+   for (std::size_t burstId=0; burstId!=nbBursts ; ++burstId) {
+      const int pos = std::snprintf(burstPrefix_, sizeof(burstPrefix_), "%s[%d].", BURST_PREFIX.c_str(), burstId);
+      assert(pos > 0 && pos < sizeof(burstPrefix_));
+      const std::string burstPrefix(burstPrefix, pos);
+
+      ossimSarSensorModel::BurstRecordType burstRecord;
+      get(kwl, burstPrefix + keyStartLine,        burstRecord.startLine);
+      get(kwl, burstPrefix + keyEndLine,          burstRecord.endLine);
+      get(kwl, burstPrefix + keyAzimuthStartTime, burstRecord.azimuthStartTime);
+      get(kwl, burstPrefix + keyAzimuthStopTime,  burstRecord.azimuthStopTime);
+      burstRecords.push_back(burstRecord);
+   }
+}
+
+void get(
+      ossimKeywordlist                             const& kwl,
+      std::vector<ossimSarSensorModel::GCPRecordType> & gcpRecords)
+{
+   char prefix_[1024];
+   std::size_t nbGCPs ;
+   get(kwl, GCP_NUMBER_KEY, nbGCPs);
+   for (std::size_t gcpId=0; gcpId!=nbGCPs ; ++gcpId) {
+      const int pos = std::snprintf(prefix_, sizeof(prefix_), "%s[%d].", GCP_PREFIX.c_str(), gcpId);
+      assert(pos > 0 && pos < sizeof(prefix_));
+      const std::string prefix(prefix_, pos);
+
+      ossimSarSensorModel::GCPRecordType gcpRecord;
+      get(kwl, prefix, keyAzimuthTime,    gcpRecord.azimuthTime);
+      get(kwl, prefix, keySlantRangeTime, gcpRecord.slantRangeTime);
+      get(kwl, prefix, keyImPtX,          gcpRecord.imPt.x);
+      get(kwl, prefix, keyImPtY,          gcpRecord.imPt.y);
+      get(kwl, prefix, keyWorldPtLat,     gcpRecord.worldPt.lat);
+      get(kwl, prefix, keyWorldPtLon,     gcpRecord.worldPt.lon);
+      get(kwl, prefix, keyWorldPtHgt,     gcpRecord.worldPt.hgt);
+      gcpRecords.push_back(gcpRecord);
+   }
+}
+
+void get(
+      ossimKeywordlist                                            const& kwl,
+      std::string                                                 const& sr_gr_prefix,
+      std::string                                                 const& rg0,
+      std::vector<ossimSarSensorModel::CoordinateConversionRecordType> & outputRecords)
+{
+   char prefix_[1024];
+   std::size_t nbCoords ;
+   get(kwl, sr_gr_prefix + NUMBER_KEY, nbCoords);
+
+   for (std::size_t idx=0 ; idx!=nbCoords ; ++idx)
+   {
+      const int pos = std::snprintf(prefix_, sizeof(prefix_), "%s[%d].", sr_gr_prefix.c_str(), idx);
+      assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix_));
+      std::string prefix(prefix_, pos);
+
+      ossimSarSensorModel::CoordinateConversionRecordType coordRecord;
+      get(kwl, prefix + keyAzimuthTime,  coordRecord.azimuthTime);
+      get(kwl, prefix + rg0,             coordRecord.rg0);
+
+      std::size_t nbCoeffs;
+      get(kwl, prefix + NUMBER_KEY,      nbCoeffs);
+      for (std::size_t coeff_idx=0; coeff_idx!=nbCoeffs ; ++coeff_idx) {
+         const int pos2 = std::snprintf(prefix_+pos, sizeof(prefix_)-pos, ".coeff[%d]", coeff_idx);
+         assert(pos2 > 0 && pos+pos2 < sizeof(prefix_));
+         prefix.assign(prefix_, pos+pos2);
+         double coeff;
+         get(kwl, prefix, coeff);
+         coordRecord.coefs.push_back(coeff);
+      }
+      outputRecords.push_back(coordRecord);
+   }
+}
+
+bool ossimSarSensorModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
+{
+   static const char MODULE[] = "ossimplugins::ossimSarSensorModel::loadState";
+   SCOPED_LOG(traceDebug, MODULE);
+
+   ossimSensorModel::loadState(kwl, prefix);
+
+   // And finally, extract data into fields
+   std::string product_type_string;
+   get(kwl, HEADER_PREFIX + "product_type", product_type_string);
+   theProductType = ProductType(product_type_string);
+
+   get(kwl, theOrbitRecords);
+   // TODO: don't fetch burst records if already read thanks to xml loading
+   // that required them
+   get(kwl, theBurstRecords);
+   if (isGRD())
+   {
+      get(kwl, SR_PREFIX, keySr0, theSlantRangeToGroundRangeRecords);
+      get(kwl, GR_PREFIX, keyGr0, theGroundRangeToSlantRangeRecords);
+   }
+   get(kwl, theGCPRecords);
+
+   return true;
 }
 }

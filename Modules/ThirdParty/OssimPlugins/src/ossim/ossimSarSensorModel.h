@@ -209,6 +209,9 @@ public:
 
    //TODO: Add virtual method readAnnotationFile?
 
+   virtual bool loadState(const ossimKeywordlist& kwl,
+         const char* prefix=NULL);
+
    bool isGRD() const {
       switch (theProductType.ToInternal()) {
          case ProductType::GRD:
