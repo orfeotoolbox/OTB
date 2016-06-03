@@ -18,10 +18,8 @@
 #ifndef __otbOGRDataToSamplePositionFilter_h
 #define __otbOGRDataToSamplePositionFilter_h
 
-#include "otbPersistentImageFilter.h"
+#include "otbPersistentSamplingFilterBase.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-#include "otbOGRDataSourceWrapper.h"
-#include "itkSimpleDataObjectDecorator.h"
 #include "otbSamplingRateCalculator.h"
 #include "otbPeriodicSampler.h"
 #include "otbImage.h"
@@ -49,12 +47,14 @@ namespace otb
  */
 template<class TInputImage, class TMaskImage, class TSampler>
 class ITK_EXPORT PersistentOGRDataToSamplePositionFilter :
-  public PersistentImageFilter<TInputImage, TInputImage>
+  public PersistentSamplingFilterBase<TInputImage, TMaskImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentOGRDataToSamplePositionFilter        Self;
-  typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
+  typedef PersistentOGRDataToSamplePositionFilter         Self;
+  typedef PersistentSamplingFilterBase<
+    TInputImage,
+    TMaskImage>                                           Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
@@ -76,7 +76,6 @@ public:
     <std::string, SamplerPointerType>                     SamplerMapType;
 
   typedef std::map<std::string, int>                      ClassPartitionType;
-  /** Wrap output type as DataObject */
 
   typedef itk::DataObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
@@ -84,34 +83,13 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentOGRDataToSamplePositionFilter, PersistentImageFilter);
-
-  /** Set the input OGRDataSource that contains sampling areas for each class*/
-  void SetOGRData(const ogr::DataSource* vector);
-
-  /** Get the input OGRDataSource with sampling regions*/
-  const ogr::DataSource* GetOGRData();
-
-  /** Set an input mask (optional) */
-  void SetMask(const TMaskImage* mask);
-
-  /** Get the input mask (may be null) */
-  const TMaskImage* GetMask();
+  itkTypeMacro(PersistentOGRDataToSamplePositionFilter, PersistentSamplingFilterBase);
 
   /** Synthetize the persistent filter*/
   void Synthetize(void);
 
   /** Reset method called before starting the streaming*/
   void Reset(void);
-
-  /** Set/Get macro for the field name containing class names
-   * in the input vectors.*/
-  itkSetMacro(FieldName, std::string);
-  itkGetMacro(FieldName, std::string);
-
-  /** Set/Get macro for the layer index containing the sampling areas */
-  itkSetMacro(LayerIndex, int);
-  itkGetMacro(LayerIndex, int); 
 
   /** Get a reference to the internal samplers at a given level */
   SamplerMapType& GetSamplers(unsigned int level);
@@ -132,10 +110,7 @@ public:
 
   /** Clear all output position containers */
   void ClearOutputs();
-  
-  /** Set the OGR layer creation options */
-  void SetOGRLayerCreationOptions(const std::vector<std::string> & options);
-  
+
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
   virtual itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
@@ -147,75 +122,27 @@ protected:
   /** Destructor */
   virtual ~PersistentOGRDataToSamplePositionFilter() {}
 
-  virtual void GenerateOutputInformation();
+  /** Call samplers on a current position, for a given class */
+  virtual void ProcessSample(const ogr::Feature& feature,
+                             typename TInputImage::IndexType& imgIndex,
+                             typename TInputImage::PointType& imgPoint,
+                             itk::ThreadIdType& threadid);
 
-  virtual void GenerateInputRequestedRegion();
-
-  virtual void BeforeThreadedGenerateData(void);
-
-  virtual void AfterThreadedGenerateData(void);
-
-  virtual void ThreadedGenerateData(const RegionType&, itk::ThreadIdType threadid);
+  /** Split the input vectors according to the class partition */
+  virtual void PrepareInputVectors();
 
 private:
   PersistentOGRDataToSamplePositionFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
-  /** Filter the input vector to the extent of the stream being processed.*/
-  void ApplyPolygonsSpatialFilter();
-
-  /** Get the region bounding a set of features */
-  RegionType FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const;
-
-  /** Process the current geometry using an image iterator */
-  template <typename TIterator>
-  void Add(otb::ogr::Layer::const_iterator& featIt,
-           TIterator& imgIt,
-           const typename TIterator::ImageType *img,
-           itk::ThreadIdType& threadid);
-
-  /** Recursive method to process geometries */
-  template <typename TIterator>
-  void AddGeometry(OGRGeometry *geom,
-                   TIterator& imgIt,
-                   const typename TIterator::ImageType *img,
-                   unsigned long &fId,
-                   std::string &className,
-                   itk::ThreadIdType& threadid);
-
-  /** Call samplers on a current position, for a given class */
-  void CallSamplers(const PointType &point,
-                    const std::string &className,
-                    itk::ThreadIdType& threadid);
 
   void ComputeClassPartition(void);
 
   /** (internal) map associating a class name with a thread number */
   ClassPartitionType m_ClassPartition;
 
-  /** Field name containing the class name*/
-  std::string m_FieldName;
-
-  /** Field index containing the class name*/
-  int m_FieldIndex;
-
   /** Internal samplers*/
   std::vector<SamplerMapType> m_Samplers;
 
-  /** Layer to use in the input vector file, default to 0 */
-  int m_LayerIndex;
-  
-  /** (internal) name of the layer at position 'm_LayerIndex' */
-  std::string m_LayerName;
-
-  /** OGR Layer creation option for output position containers */
-  std::vector<std::string> m_OGRLayerCreationOptions;
-
-  /** In-memory containers storing input geometries for each thread*/
-  std::vector<OGRDataPointer> m_InMemoryInputs;
-
-  /** In-memory containers storing position during iteration loop*/
-  std::vector<std::vector<OGRDataPointer> > m_InMemoryOutputs;
 };
 
 /**
