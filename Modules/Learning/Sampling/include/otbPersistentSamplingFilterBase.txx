@@ -34,6 +34,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 ::PersistentSamplingFilterBase()
   : m_FieldName(std::string("class"))
   , m_LayerIndex(0)
+  , m_OutLayerName(std::string("output"))
 {
 }
 
@@ -184,7 +185,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       {
       ogr::Layer outLayer = realOutput->GetLayersCount() == 1
                             ? realOutput->GetLayer(0)
-                            : realOutput->GetLayer(m_LayerName);
+                            : realOutput->GetLayer(m_OutLayerName);
 
       OGRErr err = outLayer.ogr().StartTransaction();
       if (err != OGRERR_NONE)
@@ -574,15 +575,19 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 {
   TInputImage* outputImage = this->GetOutput();
   ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetOGRData());
-  const RegionType& requestedRegion = outputImage->GetRequestedRegion();
-  typename TInputImage::IndexType startIndex = requestedRegion.GetIndex();
-  typename TInputImage::IndexType endIndex = requestedRegion.GetUpperIndex();
+  ogr::Layer inLayer = vectors->GetLayer(m_LayerIndex);
 
+  const RegionType& requestedRegion = outputImage->GetRequestedRegion();
+  itk::ContinuousIndex<double> startIndex(requestedRegion.GetIndex());
+  itk::ContinuousIndex<double> endIndex(requestedRegion.GetUpperIndex());
+  startIndex[0] += -0.5;
+  startIndex[1] += -0.5;
+  endIndex[0] += 0.5;
+  endIndex[1] += 0.5;
   itk::Point<double, 2> startPoint;
   itk::Point<double, 2> endPoint;
-
-  outputImage->TransformIndexToPhysicalPoint(startIndex, startPoint);
-  outputImage->TransformIndexToPhysicalPoint(endIndex, endPoint);
+  outputImage->TransformContinuousIndexToPhysicalPoint(startIndex, startPoint);
+  outputImage->TransformContinuousIndexToPhysicalPoint(endIndex, endPoint);
 
   // create geometric extent
   OGRPolygon tmpPolygon;
@@ -594,11 +599,12 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   ring.addPoint(startPoint[0],startPoint[1],0.0);
   tmpPolygon.addRing(&ring);
 
+  inLayer.SetSpatialFilter(&tmpPolygon);
+
   int numberOfThreads = this->GetNumberOfThreads();
 
   // prepare temporary input : split input features between available threads
   this->m_InMemoryInputs.clear();
-  ogr::Layer inLayer = vectors->GetLayer(m_LayerIndex);
   std::string tmpLayerName("thread");
   OGRSpatialReference * oSRS = NULL;
   if (inLayer.GetSpatialRef())
@@ -637,6 +643,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     if (counter >= numberOfThreads)
       counter = 0;
     }
+  inLayer.SetSpatialFilter(NULL);
 }
 
 template<class TInputImage, class TMaskImage>
@@ -646,6 +653,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 {
   // Prepare in-memory outputs
   this->m_InMemoryOutputs.clear();
+  std::string tmpLayerName("threadOut");
   for (unsigned int i=0 ; i < this->GetNumberOfThreads() ; i++)
     {
     std::vector<OGRDataPointer> tmpContainer;
@@ -658,7 +666,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
         {
         ogr::Layer realLayer = realOutput->GetLayersCount() == 1
                                ? realOutput->GetLayer(0)
-                               : realOutput->GetLayer(m_LayerName);
+                               : realOutput->GetLayer(m_OutLayerName);
         OGRSpatialReference * oSRS = NULL;
         if (realLayer.GetSpatialRef())
           {
@@ -667,7 +675,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
         OGRFeatureDefn &layerDefn = realLayer.GetLayerDefn();
         ogr::DataSource::Pointer tmpOutput = ogr::DataSource::New();
         ogr::Layer tmpLayer = tmpOutput->CreateLayer(
-          m_LayerName, oSRS,  realLayer.GetGeomType());
+          tmpLayerName, oSRS,  realLayer.GetGeomType());
         // add field definitions
         for (unsigned int f=0 ; f < layerDefn.GetFieldCount() ; f++)
           {

@@ -85,6 +85,10 @@ public:
   itkSetMacro(LayerIndex, int);
   itkGetMacro(LayerIndex, int);
 
+  /** Set/Get macro for the layer name */
+  itkSetMacro(OutLayerName, std::string);
+  itkGetMacro(OutLayerName, std::string);
+
 protected:
   /** Constructor */
   PersistentSamplingFilterBase();
@@ -178,8 +182,8 @@ private:
   /** Layer to use in the input vector file, default to 0 */
   int m_LayerIndex;
 
-  /** (internal) name of the layer at position 'm_LayerIndex' */
-  std::string m_LayerName;
+  /** name of the output layers */
+  std::string m_OutLayerName;
 
   /** Creation option for output layers */
   std::vector<std::string> m_OGRLayerCreationOptions;
