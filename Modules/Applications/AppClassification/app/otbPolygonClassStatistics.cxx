@@ -128,6 +128,8 @@ private:
   filter->SetOGRData(vectors);
   filter->SetFieldName(fieldName);
   filter->SetLayerIndex(this->GetParameterInt("layer"));
+
+  AddProcess(filter->GetStreamer(),"Analyse polygons...");
   filter->Update();
   
   FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get();
