@@ -1,6 +1,5 @@
 set(OTBSampling_SRC
   otbSamplingRateCalculator.cxx
-  otbPolygonClassStatisticsAccumulator.cxx
 )
 
 add_library(OTBSampling ${OTBSampling_SRC})
