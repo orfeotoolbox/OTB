@@ -13,6 +13,9 @@
 #define ossimSarSensorModel_HEADER
 
 #include <boost/config.hpp>
+#include <string>
+#include <stdint.h>
+#include <cassert>
 
 #if defined(__GNUC__) || defined(__clang__)
 # pragma GCC diagnostic push
@@ -38,6 +41,57 @@ namespace ossimplugins
 class ossimSarSensorModel : public ossimSensorModel
 {
 public:
+
+   struct ProductType
+   : private equality_comparable<ProductType>
+   , private less_than_comparable<ProductType>
+   {
+      enum Type { SLC, GRD, MGD, GEC, EEC, MAX__, UNDEFINED__, FIRST__=0 };
+
+      explicit ProductType(unsigned char value)
+         : m_value(Type(value))
+         {
+            if (value >= MAX__)
+               throw std::runtime_error("Invalid Sar Sensor Product Type id");
+         }
+      ProductType(Type value)
+         : m_value(Type(value))
+         { assert(m_value < MAX__); }
+      ProductType()
+         : m_value(UNDEFINED__)
+         {}
+      ProductType(string_view const& s);
+      ProductType& operator++() {
+         assert(m_value < MAX__);
+         m_value = ProductType::Type(m_value+1);
+         return *this;
+      }
+      ProductType operator++(int) {
+         ProductType tmp = *this;
+         ++*this;
+         return tmp;
+      }
+
+      string_view ToString() const;
+      Type ToInternal() const { return m_value; }
+      friend bool operator< (ProductType lhs, ProductType rhs)
+      { return lhs.m_value <  rhs.m_value; }
+      friend bool operator==(ProductType lhs, ProductType rhs)
+      { return lhs.m_value == rhs.m_value; }
+
+      static ProductType Max  ()
+      { return ProductType(build_max()); }
+      static ProductType begin()
+      { return FIRST__; }
+      static ProductType end  ()
+      { return ProductType(build_max()); }
+
+   private:
+      struct build_max {};
+      ProductType(build_max) : m_value(MAX__) {}
+
+      Type m_value;
+   };
 
    typedef time::ModifiedJulianDate TimeType;
    typedef time::Duration           DurationType;
@@ -155,6 +209,17 @@ public:
 
    //TODO: Add virtual method readAnnotationFile?
 
+   bool isGRD() const {
+      switch (theProductType.ToInternal()) {
+         case ProductType::GRD:
+         case ProductType::MGD:
+         case ProductType::GEC:
+         case ProductType::EEC:
+            return true;
+         default:
+            return false;
+      }
+   }
 protected:
 
    /**
@@ -258,7 +323,7 @@ protected:
    double                                      theRangeResolution; // in meters
    bool                                        theBistaticCorrectionNeeded; // Do we need to compute
    // bistatic correction ?
-   bool                                        isGRD; // True if the product is GRD. False if it is SLC
+   ProductType                                 theProductType; // GRD/SLC
    double                                      theAzimuthTimeOffset; // Offset in microseconds
    double                                      theRangeTimeOffset; // Offset in seconds;
 

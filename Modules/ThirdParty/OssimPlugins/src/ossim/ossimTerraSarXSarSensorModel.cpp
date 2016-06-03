@@ -41,7 +41,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 
     std::cout << "type " <<  product_type << '\n';
 
-    isGRD = (product_type == "MGD" || product_type == "GEC" || product_type == "EEC");
+    theProductType = ProductType(product_type);
 
     // First, lookup position/velocity records
     std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
@@ -126,7 +126,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
     theBurstRecords.push_back(burstRecord);
 
     //GRD (detected product)
-    if(isGRD)
+    if(isGRD())
     {
         //Retrieve Slant Range to Ground range coeddifcients
         CoordinateConversionRecordType coordRecord;

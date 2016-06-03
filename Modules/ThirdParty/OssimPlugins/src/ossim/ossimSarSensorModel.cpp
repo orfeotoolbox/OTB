@@ -9,8 +9,12 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <ossimSarSensorModel.h>
+#include "ossimSarSensorModel.h"
+#include <vector>
+#include <algorithm>
+#include <boost/static_assert.hpp>
 #include <ossim/base/ossimLsrSpace.h>
+#include "ossimRangeUtilities.h"
 
 namespace {// Anonymous namespace
     const bool k_verbose = false; // global verbose constant; TODO: use an option
@@ -62,11 +66,33 @@ namespace {// Anonymous namespace
         assert(out_odd.size() + out_even.size() == size);
     }
 
+   typedef char const* const* strings_iterator;
+   static char const* const PRODUCTTYPE_STRINGS[] = { "SLC", "GRD", "MGD", "GEC", "EEC" };
 }// Anonymous namespace
 
 namespace ossimplugins
 {
 const double ossimSarSensorModel::C = 299792458;
+
+ossimSarSensorModel::ProductType::ProductType(string_view const& s)
+{
+   using ossimplugins::begin;
+   using ossimplugins::end;
+   strings_iterator const ProductType_it = std::find(begin(::PRODUCTTYPE_STRINGS),end(::PRODUCTTYPE_STRINGS), s);
+   if (ProductType_it == end(::PRODUCTTYPE_STRINGS))  {
+      throw std::runtime_error("Invalid Sar Sensor Product type: `"+s+"'");
+   }
+   m_value = Type(std::distance(begin(::PRODUCTTYPE_STRINGS), ProductType_it));
+   assert(m_value < MAX__);
+}
+
+string_view ossimSarSensorModel::ProductType::ToString() const
+{
+   BOOST_STATIC_ASSERT((MAX__ == array_size(::PRODUCTTYPE_STRINGS)));
+   assert(m_value != UNDEFINED__); // Yes, I know UNDEFINED__ > MAX__
+   assert(m_value < MAX__);
+   return PRODUCTTYPE_STRINGS[m_value];
+}
 
 ossimSarSensorModel::ossimSarSensorModel()
   : theOrbitRecords(),
@@ -80,7 +106,6 @@ ossimSarSensorModel::ossimSarSensorModel()
     theRangeSamplingRate(0.),
     theRangeResolution(0.),
     theBistaticCorrectionNeeded(false),
-    isGRD(false),
     theAzimuthTimeOffset(0),
     theRangeTimeOffset(0)
 {}
@@ -173,7 +198,7 @@ void ossimSarSensorModel::worldToLineSample(const ossimGpt& worldPt, ossimDpt & 
   // Convert azimuth time to line
   azimuthTimeToLine(azimuthTime,imPt.y);
 
-  if(isGRD)
+  if(isGRD())
     {
     // GRD case
     double groundRange(0);
@@ -237,7 +262,7 @@ void ossimSarSensorModel::lineSampleToAzimuthRangeTime(const ossimDpt & imPt, Ti
   lineToAzimuthTime(imPt.y,azimuthTime);
 
   // Then compute range time
-  if(isGRD)
+  if(isGRD())
     {
     // Handle grd case here
     double slantRange;

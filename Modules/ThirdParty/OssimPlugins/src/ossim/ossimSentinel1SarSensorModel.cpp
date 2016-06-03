@@ -85,7 +85,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
     const std::string & swath        = getTextFromFirstNode(xmlRoot, "adsHeader/swath");
     const std::string & polarisation = getTextFromFirstNode(xmlRoot, "adsHeader/polarisation");
 
-    isGRD = (product_type == "GRD");
+    theProductType = ProductType(product_type);
 
     // First, lookup position/velocity records
     std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
@@ -211,7 +211,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
         }
     }
 
-    if(isGRD)
+    if(isGRD())
     {
         readCoordinates(*xmlDoc,
                 "/product/coordinateConversion/coordinateConversionList/coordinateConversion",
