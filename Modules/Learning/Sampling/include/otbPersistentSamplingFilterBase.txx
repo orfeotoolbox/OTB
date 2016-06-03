@@ -88,6 +88,14 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 }
 
 template<class TInputImage, class TMaskImage>
+const std::vector<std::string>&
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::GetOGRLayerCreationOptions()
+{
+  return m_OGRLayerCreationOptions;
+}
+
+template<class TInputImage, class TMaskImage>
 void
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
 ::GenerateOutputInformation()

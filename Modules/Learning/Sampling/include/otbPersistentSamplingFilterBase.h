@@ -70,6 +70,9 @@ public:
   /** Set the OGR layer creation options */
   void SetOGRLayerCreationOptions(const std::vector<std::string> & options);
 
+  /** Get the OGR layer creation options */
+  const std::vector<std::string>& GetOGRLayerCreationOptions();
+
   /** Set/Get macro for the field name containing class names
    * in the input vectors.*/
   itkSetMacro(FieldName, std::string);
