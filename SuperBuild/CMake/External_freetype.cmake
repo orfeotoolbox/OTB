@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_FREETYPE__)
 set(__EXTERNAL_FREETYPE__ 1)
 
 if(USE_SYSTEM_FREETYPE)
-  find_package ( FreeType )
   message(STATUS "  Using FreeType system version")
 else()
   SETUP_SUPERBUILD(PROJECT FREETYPE)

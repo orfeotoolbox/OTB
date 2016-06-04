@@ -194,7 +194,7 @@ ExternalProject_Add(OTB
       -DOTB_WRAP_PYTHON:BOOL=${OTB_WRAP_PYTHON}
       -DOTB_WRAP_JAVA:BOOL=${OTB_WRAP_JAVA}
       ${OTB_ADDITIONAL_CACHE}
-    CMAKE_COMMAND ${OTB_SB_CMAKE_COMMAND}
+    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
 ExternalProject_Add_Step(OTB install_copyright

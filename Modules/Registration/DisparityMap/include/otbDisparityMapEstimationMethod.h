@@ -33,7 +33,7 @@ namespace otb
  *
  *  It uses the ITK registration framework locally for each point and thus
  *  provides the flexibility of this framework. The parameters of each transform
- *  are stored in the ouptut point set associated data. Optimizer, metric,
+ *  are stored in the output point set associated data. Optimizer, metric,
  *  interpolator and transform fixed parameters have to be set by the user.
  *
  *  This filters returns the pointset enriched with a set of value as PointData, in order of apparition :
@@ -77,7 +77,7 @@ public:
   typedef typename MovingImageType::Pointer   MovingImagePointerType;
   typedef typename MovingImageType::PixelType MovingPixelType;
 
-  /** Typedef for the input and ouptut point set */
+  /** Typedef for the input and output point set */
   typedef TPointSet                      PointSetType;
   typedef typename PointSetType::Pointer PointSetPointerType;
 

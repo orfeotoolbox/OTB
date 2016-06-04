@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_PNG__)
 set(__EXTERNAL_PNG__ 1)
 
 if(USE_SYSTEM_PNG)
-  find_package ( PNG )
   message(STATUS "  Using libpng system version")
 else()
   SETUP_SUPERBUILD(PROJECT PNG)

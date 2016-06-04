@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_TINYXML__)
 set(__EXTERNAL_TINYXML__ 1)
 
 if(USE_SYSTEM_TINYXML)
-  find_package ( TinyXML )
   message(STATUS "  Using TinyXML system version")
 else()
   SETUP_SUPERBUILD(PROJECT TINYXML)

@@ -265,7 +265,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
     norm = 1.0;
     }
 
-  // Fill the ouptut image
+  // Fill the output image
   outputIt.GoToBegin();
   while (!outputIt.IsAtEnd())
     {

@@ -133,24 +133,30 @@ macro(ADD_SUPERBUILD_CONFIGURE_VAR project var name)
 endmacro(ADD_SUPERBUILD_CONFIGURE_VAR)
 
 macro(SUPERBUILD_PATCH_SOURCE project external_project_step_name)
-  set (extra_args ${ARGN})
-  # Did we get any optional args?
-  list(LENGTH extra_args num_extra_args)
-  if (${num_extra_args} GREATER 0)
-    list(GET extra_args 0 patch_dir_arg)
-    #if there is third argument set is as ${project}_PATCH_DIR
-    set(${project}_PATCH_DIR ${patch_dir_arg})
+  set(${project}_PATCH_DIR ${CMAKE_SOURCE_DIR}/patches/${project})
+  string(TOLOWER ${project} project_)
+  if(WIN32)
+    set(DIFF_FILE_MATCH_STRING "win")
   else()
-    #default value
-    set(${project}_PATCH_DIR ${CMAKE_SOURCE_DIR}/patches/${project})
+    if(APPLE)
+      set(DIFF_FILE_MATCH_STRING "macx")
+    else() #Linux
+      set(DIFF_FILE_MATCH_STRING "linux")
+    endif()
+  endif() #WIN32
+  file(GLOB files_list "${${project}_PATCH_DIR}/${project_}*${DIFF_FILE_MATCH_STRING}*diff")
+  if(files_list)
+    message(STATUS "  Custom patches required for ${project}")
+    ExternalProject_Add_Step(${project} ${project}_custom_patch
+      COMMAND
+      ${CMAKE_COMMAND}
+      -DSOURCE_DIR=${${project}_SB_SRC}
+      -DPATCH_DIR=${${project}_PATCH_DIR}
+      -DDIFF_FILE_MATCH_STRING=${DIFF_FILE_MATCH_STRING}
+      -P ${CMAKE_SOURCE_DIR}/CMake/patch.cmake
+      DEPENDEES patch update
+      DEPENDERS configure
+      )
   endif()
-  ExternalProject_Add_Step(${project} ${external_project_step_name}
-    COMMAND
-    ${CMAKE_COMMAND}
-    -DSOURCE_DIR=${${project}_SB_SRC}
-    -DPATCH_DIR=${${project}_PATCH_DIR}
-    -P ${CMAKE_SOURCE_DIR}/CMake/patch.cmake
-    DEPENDEES patch update
-    DEPENDERS configure
-    )
+
 endmacro(SUPERBUILD_PATCH_SOURCE)

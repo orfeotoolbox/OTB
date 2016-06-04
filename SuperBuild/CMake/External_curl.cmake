@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_CURL__)
 set(__EXTERNAL_CURL__ 1)
 
 if(USE_SYSTEM_CURL)
-  find_package ( CURL )
   message(STATUS "  Using cURL system version")
 else()
   SETUP_SUPERBUILD(PROJECT CURL)

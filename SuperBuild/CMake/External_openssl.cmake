@@ -4,7 +4,6 @@ set(__EXTERNAL_OPENSSL__ 1)
 #RK: OPENSSL is deactivated in QT4 build.
 #revisit that when you have a clean openssl
 if(USE_SYSTEM_OPENSSL)
-  find_package ( OPENSSL )
   message(STATUS "  Using OpenSSL system version")
 else()
   SETUP_SUPERBUILD(PROJECT OPENSSL)
