@@ -73,10 +73,10 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 {
   shark::RealVector samples;
   for(size_t i = 0; i < value.Size();i++)
+    {
     samples.push_back(value[i]);
-
+    }
   auto probas = m_RFModel(samples);
-
   if (quality != NULL)
     {
     if(m_ComputeMargin)
@@ -92,7 +92,6 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
       (*quality) = static_cast<ConfidenceValueType>(max_proba);
       }
     }
-
   shark::ArgMaxConverter<shark::RFClassifier> amc;
   amc.decisionFunction() = m_RFModel;
   unsigned int res;
