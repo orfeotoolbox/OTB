@@ -322,10 +322,10 @@ otb_test_application(NAME apTvClTrainVectorClassifier
                              -classifier.libsvm.c 1
                              -classifier.libsvm.k linear
                              -classifier.libsvm.opt true
-                             -io.out ${TEMP}/apTvClModel.svm
+                             -io.out ${TEMP}/apTvClTrainVectorSVMModel.svm
                      VALID   --compare-ascii ${NOTOL}
-                             ${OTBAPP_BASELINE_FILES}/apTvClModel.svm
-                             ${TEMP}/apTvClModel.svm)
+                             ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorSVMModel.svm
+                             ${TEMP}/apTvClTrainVectorSVMModel.svm)
 
 set_tests_properties(apTvClTrainVectorClassifier PROPERTIES DEPENDS ComputeOGRLayersFeaturesStatistics)
 
