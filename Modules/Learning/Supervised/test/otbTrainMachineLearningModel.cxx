@@ -1094,38 +1094,40 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   const float kappaIdx = cmCalculator->GetKappaIndex();
   std::cout<<"Kappa: "<<kappaIdx<<std::endl;
   std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
-  /*
-    //Load Model to new RF
-    TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
-    RandomForestType::Pointer classifierLoad = RandomForestType::New();
+  
+//Load Model to new RF
+  TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
+  RandomForestType::Pointer classifierLoad = RandomForestType::New();
 
-    classifierLoad->Load(argv[2]);
-    classifierLoad->SetInputListSample(samples);
-    classifierLoad->SetTargetListSample(predictedLoad);
-    classifierLoad->PredictAll();
+  std::cout << "Load\n";
+  classifierLoad->Load(argv[2]);
+  classifierLoad->SetInputListSample(samples);
+  classifierLoad->SetTargetListSample(predictedLoad);
+  std::cout << "Predict loaded\n";
+  classifierLoad->PredictAll();
 
-    ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
+  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
-    cmCalculatorLoad->SetProducedLabels(predictedLoad);
-    cmCalculatorLoad->SetReferenceLabels(labels);
-    cmCalculatorLoad->Compute();
+  cmCalculatorLoad->SetProducedLabels(predictedLoad);
+  cmCalculatorLoad->SetReferenceLabels(labels);
+  cmCalculatorLoad->Compute();
 
-    std::cout<<"Confusion matrix: "<<std::endl;
-    std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-    const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-    std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-    std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
+  std::cout<<"Confusion matrix: "<<std::endl;
+  std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
+  const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
+  std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
+  std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
 
 
-    if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-      {
-      return EXIT_SUCCESS;
-      }
-    else
-      {
-      return EXIT_FAILURE;
-      }
-    */
-      return EXIT_SUCCESS;
+  if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+    {
+    return EXIT_SUCCESS;
+    }
+  else
+    {
+    return EXIT_FAILURE;
+    }
+  
+    return EXIT_SUCCESS;
 }
 //#endif

@@ -108,6 +108,9 @@ void
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
+  std::ofstream ofs(filename.c_str());
+  boost::archive::polymorphic_text_oarchive oa(ofs);
+  m_RFModel.save(oa,0);
 }
 
 template <class TInputValue, class TOutputValue>
@@ -115,6 +118,9 @@ void
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
+  std::ifstream ifs(filename.c_str());
+  boost::archive::polymorphic_text_iarchive ia(ifs);
+  m_RFModel.load(ia,0);
 }
 
 template <class TInputValue, class TOutputValue>
