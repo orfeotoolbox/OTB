@@ -32,19 +32,20 @@ int otbSamplingRateCalculatorNew(int itkNotUsed(argc), char* itkNotUsed(argv) []
 
 int otbSamplingRateCalculator(int itkNotUsed(argc), char* argv[])
 {
-  std::string xmlPath(argv[1]);
-  unsigned int nbSamples = atoi(argv[2]);
-  std::string outputRatesTxt(argv[3]);
+  std::string outputRatesTxt(argv[1]);
 
-  typedef std::map<std::string, unsigned long>      ClassCountMapType;
-  typedef itk::VariableLengthVector<float> MeasurementType;
-  typedef otb::StatisticsXMLFileReader<MeasurementType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(xmlPath.c_str());
-  ClassCountMapType classCount = reader->GetStatisticMapByName<ClassCountMapType>("classCounts");
+  typedef otb::SamplingRateCalculator::ClassCountMapType     ClassCountMapType;
+
+  ClassCountMapType classCount;
+  classCount[std::string("1")] = 104;
+  classCount[std::string("2")] = 160;
+  classCount[std::string("3")] = 211;
+
+  unsigned int nbSamples = 83;
 
   typedef otb::SamplingRateCalculator RateCalculatorype;
   RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
+  rateCalculator->SetClassCount(classCount);
   rateCalculator->SetNbOfSamplesAllClasses(nbSamples);
   rateCalculator->Write(outputRatesTxt);
   rateCalculator->Print(std::cout);
