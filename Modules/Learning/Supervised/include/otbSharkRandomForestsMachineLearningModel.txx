@@ -23,6 +23,7 @@
 #include "otbSharkRandomForestsMachineLearningModel.h"
 #include <shark/Models/Converter.h>
 #include "otbSharkUtils.h"
+#include <algorithm>
 
 namespace otb
 {
@@ -73,6 +74,25 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   shark::RealVector samples;
   for(size_t i = 0; i < value.Size();i++)
     samples.push_back(value[i]);
+
+  auto probas = m_RFModel(samples);
+
+  if (quality != NULL)
+    {
+    if(m_ComputeMargin)
+      {
+      std::nth_element(probas.begin(), probas.begin()+1, 
+                       probas.end(), std::greater<double>());
+      (*quality) = static_cast<ConfidenceValueType>(probas[0]-probas[1]);
+      }
+    else
+      {
+      auto max_proba = *(std::max_element(probas.begin(), 
+                                          probas.end()));
+      (*quality) = static_cast<ConfidenceValueType>(max_proba);
+      }
+    }
+
   shark::ArgMaxConverter<shark::RFClassifier> amc;
   amc.decisionFunction() = m_RFModel;
   unsigned int res;
