@@ -103,7 +103,7 @@ public:
   virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = NULL) const = 0;
 
   /** Classify all samples in InputListSample and fill TargetListSample with the associated label */
-  void PredictAll();
+  virtual void PredictAll();
 
   /**\name Classification model file manipulation */
   //@{

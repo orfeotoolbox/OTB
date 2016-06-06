@@ -21,7 +21,8 @@
 #include <fstream>
 #include "itkMacro.h"
 #include "otbSharkRandomForestsMachineLearningModel.h"
-#include "otbOpenCVUtils.h"
+#include <shark/Models/Converter.h>
+#include "otbSharkUtils.h"
 
 namespace otb
 {
@@ -47,6 +48,19 @@ void
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Train()
 {
+  std::vector<shark::RealVector> features;
+  std::vector<unsigned int> class_labels;
+
+  Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
+  Shark::ListSampleToSharkVector(this->GetTargetListSample(), class_labels);
+  shark::ClassificationDataset TrainSamples = shark::createLabeledDataFromRange(features,class_labels);
+
+  //Set parameters
+  m_RFTrainer.setMTry(m_MTry);
+  m_RFTrainer.setNTrees(m_NumberOfTrees);
+  m_RFTrainer.setNodeSize(m_NodeSize);
+  m_RFTrainer.setOOBratio(m_OobRatio);
+  m_RFTrainer.train(m_RFModel, TrainSamples);
 
 }
 
@@ -56,8 +70,37 @@ typename SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Predict(const InputSampleType & value, ConfidenceValueType *quality) const
 {
+  shark::RealVector samples;
+  for(size_t i = 0; i < value.Size();i++)
+    samples.push_back(value[i]);
+  shark::ArgMaxConverter<shark::RFClassifier> amc;
+  amc.decisionFunction() = m_RFModel;
+  unsigned int res;
+  amc.eval(samples, res);
+  TargetSampleType target;
+  target[0] = static_cast<TOutputValue>(res);
+  return target;
+}
 
-  return SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>::TargetSampleType{};
+template <class TInputValue, class TOutputValue>
+void
+SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
+::PredictAll()
+{
+  std::vector<shark::RealVector> features;
+  Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
+  shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange(features);
+  shark::ArgMaxConverter<shark::RFClassifier> amc;
+  amc.decisionFunction() = m_RFModel;
+  auto prediction = amc(inputSamples);
+  TargetListSampleType * targets = this->GetTargetListSample();
+  targets->Clear();
+  for(const auto& p : prediction.elements())
+    {
+    TargetSampleType target;
+    target[0] = static_cast<TOutputValue>(p);
+    targets->PushBack(target);
+    }
 }
 
 template <class TInputValue, class TOutputValue>

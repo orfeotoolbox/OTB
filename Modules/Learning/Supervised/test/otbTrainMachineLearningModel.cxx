@@ -1069,32 +1069,32 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   RandomForestType::Pointer classifier = RandomForestType::New();
   classifier->SetInputListSample(samples);
   classifier->SetTargetListSample(labels);
-  classifier->SetMaxNumberOfTrees(30);
+  classifier->SetRegressionMode(false);
+  classifier->SetNumberOfTrees(100);
+  classifier->SetMTry(0);
+  classifier->SetNodeSize(25);
+  classifier->SetOobRatio(0.3);
+  std::cout << "Train\n";
+  classifier->Train();
+  std::cout << "Save\n";
+  classifier->Save(argv[2]); 
+  
+  std::cout << "Predict\n";
+  classifier->SetTargetListSample(predicted);
+  classifier->PredictAll();
+
+  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
+
+  cmCalculator->SetProducedLabels(predicted);
+  cmCalculator->SetReferenceLabels(labels);
+  cmCalculator->Compute();
+
+  std::cout<<"Confusion matrix: "<<std::endl;
+  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
+  const float kappaIdx = cmCalculator->GetKappaIndex();
+  std::cout<<"Kappa: "<<kappaIdx<<std::endl;
+  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
   /*
-    //set parameters
-    // classifier->SetMaxNumberOfTrees(30);
-    // classifier->SetMaxDepth(30);
-    // classifier->SetMaxNumberOfCategories(30);
-    // classifier->SetMaxNumberOfVariables(4);
-
-    classifier->Train();
-    classifier->Save(argv[2]);
-
-    classifier->SetTargetListSample(predicted);
-    classifier->PredictAll();
-
-    ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
-
-    cmCalculator->SetProducedLabels(predicted);
-    cmCalculator->SetReferenceLabels(labels);
-    cmCalculator->Compute();
-
-    std::cout<<"Confusion matrix: "<<std::endl;
-    std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
-    const float kappaIdx = cmCalculator->GetKappaIndex();
-    std::cout<<"Kappa: "<<kappaIdx<<std::endl;
-    std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
-
     //Load Model to new RF
     TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
     RandomForestType::Pointer classifierLoad = RandomForestType::New();
@@ -1125,7 +1125,7 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
       {
       return EXIT_FAILURE;
       }
-*/
-  return EXIT_SUCCESS;
+    */
+      return EXIT_SUCCESS;
 }
 //#endif

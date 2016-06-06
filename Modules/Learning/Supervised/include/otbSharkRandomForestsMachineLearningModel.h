@@ -58,6 +58,8 @@ public:
   /** Load the model from file */
   virtual void Load(const std::string & filename, const std::string & name="");
 
+  /** Classify all samples in InputListSample and fill TargetListSample with the associated label */
+  virtual void PredictAll() override;
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
@@ -67,8 +69,21 @@ public:
   virtual bool CanWriteFile(const std::string &);
   //@}
 
-  itkGetMacro(MaxNumberOfTrees, int);
-  itkSetMacro(MaxNumberOfTrees, int);
+  itkGetMacro(NumberOfTrees,unsigned int);
+  itkSetMacro(NumberOfTrees,unsigned int);
+
+  itkGetMacro(MTry, unsigned int);
+  itkSetMacro(MTry, unsigned int);
+
+  itkGetMacro(NodeSize, unsigned int);
+  itkSetMacro(NodeSize, unsigned int);
+  
+  itkGetMacro(OobRatio, float);
+  itkSetMacro(OobRatio, float);
+
+  itkGetMacro(ComputeMargin, bool);
+  itkSetMacro(ComputeMargin, bool);
+
 
 protected:
   /** Constructor */
@@ -84,8 +99,15 @@ private:
   SharkRandomForestsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  int m_MaxNumberOfTrees;
-};
+  shark::RFClassifier m_RFModel;
+  shark::RFTrainer m_RFTrainer;
+
+  unsigned int m_NumberOfTrees;
+  unsigned int m_MTry;
+  unsigned int m_NodeSize;
+  float m_OobRatio;
+  bool m_ComputeMargin;
+    };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
