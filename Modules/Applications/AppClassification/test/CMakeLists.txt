@@ -867,5 +867,5 @@ otb_test_application(NAME apTvClSampleSelection
                              -strat.byclass.in ${INPUTDATA}/Classification/sampling_required.csv
                              -sampler periodic
                      VALID   --compare-ogr ${NOTOL}
-                             ${OTBAPP_BASELINE_FILES}/apTvClOGRDataResamplerOut.sqlite
-                             ${TEMP}/apTvClOGRDataResamplerOut.sqlite)
+                             ${OTBAPP_BASELINE_FILES}/apTvClSampleSelectionOut.sqlite
+                             ${TEMP}/apTvClSampleSelectionOut.sqlite)
