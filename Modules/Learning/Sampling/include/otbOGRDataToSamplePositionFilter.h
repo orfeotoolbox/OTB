@@ -75,7 +75,7 @@ public:
   typedef typename std::map
     <std::string, SamplerPointerType>                     SamplerMapType;
 
-  typedef std::map<std::string, int>                      ClassPartitionType;
+  typedef std::map<std::string, unsigned int>             ClassPartitionType;
 
   typedef itk::DataObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 

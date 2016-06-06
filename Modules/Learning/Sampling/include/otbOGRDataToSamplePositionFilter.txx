@@ -243,7 +243,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
   ring.addPoint(startPoint[0],startPoint[1],0.0);
   tmpPolygon.addRing(&ring);
 
-  int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int numberOfThreads = this->GetNumberOfThreads();
 
   // prepare temporary input : split input features according to the class partition
   this->m_InMemoryInputs.clear();

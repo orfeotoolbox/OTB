@@ -484,7 +484,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   bool ret = poly->getExteriorRing()->isPointInRing(tmpPoint);
   if (ret)
     {
-    for (unsigned int k=0 ; k<poly->getNumInteriorRings() ; k++)
+    for (int k=0 ; k<poly->getNumInteriorRings() ; k++)
       {
       if (poly->getInteriorRing(k)->isPointInRing(tmpPoint))
         {
@@ -601,7 +601,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 
   inLayer.SetSpatialFilter(&tmpPolygon);
 
-  int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int numberOfThreads = this->GetNumberOfThreads();
 
   // prepare temporary input : split input features between available threads
   this->m_InMemoryInputs.clear();
@@ -621,7 +621,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       oSRS,
       inLayer.GetGeomType());
     // add field definitions
-    for (unsigned int k=0 ; k < layerDefn.GetFieldCount() ; k++)
+    for (int k=0 ; k < layerDefn.GetFieldCount() ; k++)
       {
       OGRFieldDefn originDefn(layerDefn.GetFieldDefn(k));
       ogr::FieldDefn fieldDefn(originDefn);
@@ -632,7 +632,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     }
 
   ogr::Layer::const_iterator featIt = inLayer.begin();
-  int counter=0;
+  unsigned int counter=0;
   for(; featIt!=inLayer.end(); ++featIt)
     {
     ogr::Feature dstFeature(layerDefn);
@@ -652,9 +652,10 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 ::PrepareOutputVectors()
 {
   // Prepare in-memory outputs
+  unsigned int numberOfThreads = this->GetNumberOfThreads();
   this->m_InMemoryOutputs.clear();
   std::string tmpLayerName("threadOut");
-  for (unsigned int i=0 ; i < this->GetNumberOfThreads() ; i++)
+  for (unsigned int i=0 ; i < numberOfThreads ; i++)
     {
     std::vector<OGRDataPointer> tmpContainer;
     // iterate over outputs, only process ogr::DataSource
@@ -677,7 +678,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
         ogr::Layer tmpLayer = tmpOutput->CreateLayer(
           tmpLayerName, oSRS,  realLayer.GetGeomType());
         // add field definitions
-        for (unsigned int f=0 ; f < layerDefn.GetFieldCount() ; f++)
+        for (int f=0 ; f < layerDefn.GetFieldCount() ; f++)
           {
           OGRFieldDefn originDefn(layerDefn.GetFieldDefn(f));
           tmpLayer.CreateField(originDefn);
