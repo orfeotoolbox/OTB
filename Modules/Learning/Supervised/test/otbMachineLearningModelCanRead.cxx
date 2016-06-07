@@ -303,3 +303,31 @@ int otbKNNMachineLearningModelCanRead(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
+int otbSharkRFMachineLearningModelCanRead(int argc, char* argv[])
+{
+  if (argc != 2)
+    {
+    std::cerr << "Usage: " << argv[0]
+              << "<model>" << std::endl;
+    std::cerr << "Called here with " << argc << " arguments\n";
+    for (int i = 1; i < argc; ++i)
+      {
+      std::cerr << " - " << argv[i] << "\n";
+      }
+    return EXIT_FAILURE;
+    }
+  std::string filename(argv[1]);
+  
+#ifdef OTB_USE_OPENCV
+  typedef otb::SharkRandomForestsMachineLearningModel<InputValueType, TargetValueType> RFType;
+  RFType::Pointer classifier = RFType::New();
+  bool lCanRead = classifier->CanReadFile(filename);
+  if (lCanRead == false)
+    {
+    std::cerr << "Erreur otb::SharkRandomForestsMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
+    return EXIT_FAILURE;
+    }
+#endif
+
+  return EXIT_SUCCESS;
+}
