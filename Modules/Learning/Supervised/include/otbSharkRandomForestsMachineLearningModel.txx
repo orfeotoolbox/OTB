@@ -147,7 +147,14 @@ bool
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::CanReadFile(const std::string & file)
 {
-
+  try
+    {
+    this->Load(file);
+    }
+  catch(...)
+    {
+    return false;
+    }
   return true;
 }
 
