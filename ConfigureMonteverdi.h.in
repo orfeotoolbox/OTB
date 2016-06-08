@@ -148,4 +148,15 @@
 // #if (defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
 #define USE_OPTION_SAMPLE ((defined( _DEBUG )  && 0) || 0)
 
+//
+// Macros
+
+#ifdef _DEBUG
+# define mvdUseInDebug( name ) name
+# define mvdUseInRelease( name ) 
+#else // _DEBUG
+# define mvdUseInDebug( name )
+# define mvdUseInRelease( name ) name
+#endif // _DEBUG
+
 #endif // __ConfigureMonteverdi_h

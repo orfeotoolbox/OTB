@@ -314,7 +314,7 @@ StackedLayerModel
 /*******************************************************************************/
 std::string
 StackedLayerModel
-::GenerateKey( AbstractLayerModel * layerModel )
+::GenerateKey( AbstractLayerModel * mvdUseInDebug( layerModel ) )
 {
   std::ostringstream oss;
 

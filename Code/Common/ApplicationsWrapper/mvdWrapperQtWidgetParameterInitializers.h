@@ -532,7 +532,7 @@ InputProcessXMLInitializer
 inline
 ToolTipInitializer::result_type
 ToolTipInitializer
-::operator () ( argument_type widget ) const
+::operator () ( argument_type mvdUseInDebug( widget ) ) const
 {
   assert( widget!=NULL );
 
