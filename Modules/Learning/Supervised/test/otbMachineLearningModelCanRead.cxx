@@ -33,6 +33,7 @@
 #include "otbGradientBoostedTreeMachineLearningModel.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"
 #endif
+#include "otbSharkRandomForestsMachineLearningModel.h"
 
 typedef otb::MachineLearningModel<float,short>         MachineLearningModelType;
 typedef MachineLearningModelType::InputValueType       InputValueType;
@@ -318,7 +319,6 @@ int otbSharkRFMachineLearningModelCanRead(int argc, char* argv[])
     }
   std::string filename(argv[1]);
   
-#ifdef OTB_USE_OPENCV
   typedef otb::SharkRandomForestsMachineLearningModel<InputValueType, TargetValueType> RFType;
   RFType::Pointer classifier = RFType::New();
   bool lCanRead = classifier->CanReadFile(filename);
@@ -327,7 +327,6 @@ int otbSharkRFMachineLearningModelCanRead(int argc, char* argv[])
     std::cerr << "Erreur otb::SharkRandomForestsMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
     }
-#endif
 
   return EXIT_SUCCESS;
 }
