@@ -17,6 +17,14 @@
 =========================================================================*/
 #include "otbExtendedFilenameHelper.h"
 #include "otb_boost_string_header.h"
+
+#include <boost/fusion/include/std_pair.hpp>
+#include <boost/spirit/include/qi.hpp>
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
+#include <boost/fusion/include/adapt_struct.hpp>
+
+BOOST_FUSION_ADAPT_STRUCT(otb::internal::SingleBandRange, (int,index) );
+
 namespace otb
 {
 
@@ -71,6 +79,43 @@ ExtendedFilenameHelper
 ::GetOptionMap(void) const
 {
   return this->m_OptionMap;
+}
+
+namespace qi = boost::spirit::qi;
+
+template <typename Iterator>
+struct BandRangeParser
+  : qi::grammar<Iterator, std::vector<GenericBandRange >()>
+  {
+  BandRangeParser()
+    : BandRangeParser::base_type(query)
+  {
+      query =  (pair | pelem ) % qi::lit(';');
+      pair  =  -(qi::int_) >> ':' >> -(qi::int_);
+      pelem =  qi::int_;
+  }
+  qi::rule<Iterator, std::vector<GenericBandRange >()> query;
+  qi::rule<Iterator, std::pair<int,int>()> pair;
+  qi::rule<Iterator, internal::SingleBandRange()> pelem;
+  };
+
+bool
+ExtendedFilenameHelper
+::ParseBandRange(std::string value, std::vector<GenericBandRange>& output)
+{
+  namespace qi = boost::spirit::qi;
+  std::string::iterator begin = value.begin();
+  std::string::iterator end = value.end();
+
+  BandRangeParser<std::string::iterator> p;    // create instance of parser
+  std::vector<GenericBandRange > m;        // map to receive results
+  bool result = qi::parse(begin, end, p, m);
+
+  if (result)
+    {
+    output = m;
+    }
+  return result;
 }
 
 } // end namespace otb
