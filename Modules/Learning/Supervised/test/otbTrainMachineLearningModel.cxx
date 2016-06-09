@@ -1036,7 +1036,7 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
 }
 #endif
 
-//#ifdef OTB_USE_SHARK
+#ifdef OTB_USE_SHARK
 #include "otbSharkRandomForestsMachineLearningModel.h"
 int otbSharkRFMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
@@ -1141,4 +1141,4 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   
     return EXIT_SUCCESS;
 }
-//#endif
+#endif

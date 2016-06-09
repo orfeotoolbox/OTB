@@ -31,6 +31,9 @@
 #ifdef OTB_USE_LIBSVM
 #include "otbLibSVMMachineLearningModelFactory.h"
 #endif
+#ifdef OTB_USE_SHARK
+#include "otbSharkRandomForestsMachineLearningModelFactory.h"
+#endif
 
 #include "itkMutexLockHolder.h"
 
@@ -104,6 +107,9 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
   RegisterFactory(DecisionTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+#endif
+#ifdef OTB_USE_SHARK
+  RegisterFactory(SharkRandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 #endif
 
 }

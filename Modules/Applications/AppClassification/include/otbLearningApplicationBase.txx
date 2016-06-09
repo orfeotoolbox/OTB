@@ -195,11 +195,11 @@ LearningApplicationBase<TInputValue,TOutputValue>
     }
   else if (modelName == "sharkrf")
     {
-    //#ifdef OTB_USE_SHARK
+    #ifdef OTB_USE_SHARK
     TrainSharkRandomForests(trainingListSample, trainingLabeledListSample, modelPath);
-// #else
-//     otbAppLogFATAL("Module Shark is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
-// #endif
+#else
+    otbAppLogFATAL("Module Shark is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
+     #endif
     }
   // update reporter
   dummyFilter->UpdateProgress(1.0f);
