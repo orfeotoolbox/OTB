@@ -53,11 +53,13 @@ struct OptionParser
 OptionParser()
   : OptionParser::base_type(query)
   {
-  query = pair % qi::lit('&');
-  pair = qi::char_ >> '=' >> qi::char_;
+  query = ( pair | '&' >> pair ) >> *( '&' >> pair);
+  pair = key >> '=' >> key;
+  key = +(~qi::char_("=&"));
   }
 qi::rule<Iterator, ExtendedFilenameHelper::OptionMapType()> query;
-qi::rule<Iterator, std::pair<std::string, std::string> > pair;
+qi::rule<Iterator, std::pair<std::string, std::string>()> pair;
+qi::rule<Iterator, std::string()> key;
 };
 
 
@@ -80,17 +82,18 @@ ExtendedFilenameHelper
     if (tmp1.size()>1)
       {
       OptionParser<std::string::iterator> p;    // create instance of parser
-      OptionMapType m;        // map to receive results
-      bool result = qi::parse(tmp1[1].begin(), tmp1[1].end(), p, m);
-
-  if (result)
-    {
-    std::cout << "Succeed" << std::endl;
-    }
-
-
-
-
+      bool result = qi::parse(tmp1[1].begin(), tmp1[1].end(), p, m_OptionMap);
+      if (!result)
+        {
+        itkGenericExceptionMacro( << "Can't parse extended filename :"<<tmp1[1]);
+        }
+      else
+        {
+        for (OptionMapType::iterator iter=m_OptionMap.begin() ; iter != m_OptionMap.end() ; ++iter)
+          {
+          std::cout << iter->first << " -> "<< iter->second << std::endl;
+          }
+        }
 
 #if 0
       boost::split(tmp2, tmp1[1], boost::is_any_of("&"), boost::token_compress_on);
