@@ -432,7 +432,7 @@ public:
    * \in parameter The parameter key
    * \in inputImage ImageBase pointer to use as input
    * \throw itk::Exception if parameter is not found or not an
-   * InputImageParameter
+   * ComplexInputImageParameter
    */
   void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
 
@@ -443,7 +443,7 @@ public:
    * \in parameter The parameter key
    * \return The ImageBase * pointer to the output image
    * \throw itk::Exception if parameter is not found or not an
-   * OutputImageParameter
+   * ComplexOutputImageParameter
    */
   ComplexOutputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
 
