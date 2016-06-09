@@ -163,7 +163,7 @@ bool
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::CanWriteFile(const std::string & itkNotUsed(file))
 {
-  return false;
+  return true;
 }
 
 template <class TInputValue, class TOutputValue>
