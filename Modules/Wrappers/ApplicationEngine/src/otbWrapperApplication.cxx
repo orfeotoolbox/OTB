@@ -1170,6 +1170,39 @@ OutputImageParameter::ImageBaseType * Application::GetParameterOutputImage(std::
 }
 
 
+void Application::SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*> (param);
+  
+  if (paramDown)
+    {
+    paramDown->SetImage(inputImage);
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to ComplexInputImageParameter");
+    }
+}
+
+ComplexOutputImageParameter::ImageBaseType * Application::GetParameterComplexOutputImage(std::string parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  
+  ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*> (param);
+  
+  if (paramDown)
+    {    
+    return paramDown->GetValue();
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to ComplexOutputImageParameter");
+    }
+}
+
+
 FloatVectorImageType* Application::GetParameterImage(std::string parameter)
 {
   FloatVectorImageType::Pointer ret = NULL;

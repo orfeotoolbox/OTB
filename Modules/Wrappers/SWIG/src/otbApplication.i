@@ -205,9 +205,10 @@ public:
   std::string GetParameterAsString(std::string paramKey);
   
   InputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
-
   void SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage);
-  
+  ComplexInputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
+  void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
+
   itkProcessObject* GetProgressSource() const;
 
   std::string GetProgressDescription() const;

@@ -425,6 +425,28 @@ public:
    */
   OutputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
 
+  /** 
+   * Set the input complex image parameter as an ImageBase * pointer instead
+   * of filename. Useful to connect pipelines between different
+   * application instances.
+   * \in parameter The parameter key
+   * \in inputImage ImageBase pointer to use as input
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageParameter
+   */
+  void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
+
+  /**
+   * Get the complex output image pamaraeter as an ImageBase * pointer instead
+   * of writing to disk. Useful to connect pipelines between different
+   * application instances.
+   * \in parameter The parameter key
+   * \return The ImageBase * pointer to the output image
+   * \throw itk::Exception if parameter is not found or not an
+   * OutputImageParameter
+   */
+  ComplexOutputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
+
   
   /* Get an image value
    *
