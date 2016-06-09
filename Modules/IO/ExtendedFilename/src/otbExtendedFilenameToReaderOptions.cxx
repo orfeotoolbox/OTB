@@ -229,4 +229,21 @@ ExtendedFilenameToReaderOptions
   return m_Options.skipRpcTag.second;
 }
 
+bool
+ExtendedFilenameToReaderOptions
+::BandRangeIsSet () const
+{
+  return m_Options.bandRange.first;
+}
+std::vector<GenericBandRange>
+ExtendedFilenameToReaderOptions
+::GetBandRange () const
+{
+  //Parse string to return vector of band range
+  std::vector<otb::GenericBandRange> vBands;
+  m_FilenameHelper->ParseBandRange(m_Options.bandRange.second,vBands); 
+
+  return vBands;
+}
+
 } // end namespace otb

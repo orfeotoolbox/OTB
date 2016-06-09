@@ -64,6 +64,7 @@ public:
     std::pair< bool, bool         >  skipCarto;
     std::pair< bool, bool         >  skipGeom;
     std::pair< bool, bool         >  skipRpcTag;
+    std::pair< bool, std::string  >  bandRange;
     std::vector<std::string>         optionList;
   };
 
@@ -84,6 +85,11 @@ public:
   bool GetSkipGeom () const;
   bool SkipRpcTagIsSet () const;
   bool GetSkipRpcTag () const;
+
+  /* Test if band range extended filename is set */
+  bool BandRangeIsSet () const;
+  /* Use BandRange parser to get list of bands*/
+  std::vector<GenericBandRange> GetBandRange() const;
 
 protected:
   ExtendedFilenameToReaderOptions();
