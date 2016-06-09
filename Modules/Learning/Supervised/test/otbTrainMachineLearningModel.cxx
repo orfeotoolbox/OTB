@@ -1095,6 +1095,17 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   std::cout<<"Kappa: "<<kappaIdx<<std::endl;
   std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
   
+  //Predict single samples
+  std::cout << "Predict single samples\n";
+  double oa{0};
+  auto sIt = samples->Begin();
+  auto lIt = labels->Begin();
+  for(; sIt != samples->End(); ++sIt, ++lIt)
+    {
+    auto p = classifier->Predict(sIt.GetMeasurementVector())[0];
+    oa += (p==(lIt.GetMeasurementVector())[0])?1.0/samples->Size():0;
+    }
+  std::cout << "Single sample OA = " << oa << '\n';
 //Load Model to new RF
   TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
   RandomForestType::Pointer classifierLoad = RandomForestType::New();
