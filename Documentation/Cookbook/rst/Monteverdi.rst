@@ -1,0 +1,567 @@
+A brief tour of 
+================
+
+Introduction
+------------
+
+The package makes available a set of simple software tools, designed to
+demonstrate what can be done with . Many users started using these
+applications for real processing tasks, so we tried to make them more
+generic, more robust and easy to use. users have been asking for an
+integrated application for a while, since using several applications for
+a complete processing (ortho-rectification, segmentation,
+classification, etc.) can be a burden. The OTB team received a request
+from CNES’ Strategy and Programs Office in order to provide an
+integrated application for capacity building activities (teaching,
+simple image manipulation, etc.). The specifications included ease of
+integration of new processing modules.
+
+**Warning** : since version 3.0.0, there is only one , which replaces
+monteverdi2 and the original monteverdi 1 (version lower than 1.24.0).
+
+Installation
+------------
+
+The application is called , since this is the name of the Orfeo
+composer. The application allows you to build interactively remote
+sensing processes based on the . This is also in remembering of the
+great (and once open source) Khoros/Cantata software.
+
+Installation of is very simple. The standalone packages described for
+the installation of (see [sec:appinstall]) also contain and Mapla. Get
+the latest information on binary packages on the in the Download
+section.
+
+In this section we will focus on alternative ways that are specific for
+. We will describe how to install it on:
+
+-  for Windows platform (Seven and later)
+
+-  for 64bit Linux distribution
+
+-  for MacOS X 10.10
+
+If you want to build from source or if we don’t provide packages for
+your system, some informations are available into the , in the section
+**(**\ Building from Source). Note that the git repository of is located
+here : https://git.orfeo-toolbox.org/monteverdi2.git. In order to get
+the source of , you will have to checkout the right version. For
+instance, use :
+
+::
+
+    git checkout 3.0.0-rc1
+
+to get 3.0.0 Release Candidate version.
+
+Windows
+~~~~~~~
+
+We provide for Windows Seven and later through standalone packages. They
+are cross-compiled with MinGW, for 32bit and 64bit platforms. They
+contain with all . These packages are the same as the one used to
+install . Check the download page : `OTB Download
+page <https://www.orfeo-toolbox.org/download>`__
+
+There is a 32bit and a 64bit version. They contain the same directory
+structure:
+
+-  ``monteverdi.bat`` : A launcher script for
+
+-  ``mapla.bat`` : A launcher script for Mapla
+
+-  ``otbenv.bat`` : A script to initialize the environment for OTB
+   executables
+
+-  ``bin`` : A folder containing executable and the DLLs.
+
+-  ``lib`` : A folder containing application DLLs.
+
+To launch , simply use the launcher script in the base directory
+
+Linux 64bit
+~~~~~~~~~~~
+
+We provide for Linux 64bit OS through standalone packages. They contain
+with all OTB Applications. These packages are the same as the one used
+to install . Check the download page : `OTB Download
+page <https://www.orfeo-toolbox.org/download>`__
+
+This package is a self-extractible archive. You may uncompress it with a
+double-click on the file, or with the command line :
+
+::
+
+    > sh  OTB-5.2.1-Linux64.run
+
+Please note that the resulting installation is not meant to be moved,
+you should uncompress the archive in its final location. Once the
+archive is extracted, the directory structure is made of :
+
+-  ``monteverdi.sh`` : A launcher script for
+
+-  ``mapla.sh`` : A launcher script for Mapla
+
+-  ``otbenv.profile`` : A script to initialize the environment for OTB
+   executables
+
+-  ``bin`` : A folder containing application launchers (otbcli.sh,
+   otbgui.sh), Monteverdi and Mapla.
+
+-  ``lib`` : A folder containing all shared libraries and OTB
+   applications.
+
+-  ``share`` : A folder containing common resources and copyright
+   mentions.
+
+In order to run the command line launchers, this package doesn’t require
+any special library that is not present in most modern Linux
+distributions. The graphical executable (otbgui launchers, Monteverdi
+and Mapla) use the X11 libraries, which are widely used in a lot of
+distributions :
+
+::
+
+    libx11-6 libxext6 libxau6 libxxf86vm1 libxdmcp6 libdrm2
+
+Monteverdi also requires the standard graphics libraries **libgl1** and
+**libglu1**. Make sure you have at least one version of them installed
+in your system.
+
+To launch , simply use the launcher script in the base directory
+
+MacOS X
+~~~~~~~
+
+We provide for MacOS X through a standalone package. This package is a
+self-extractible archive, quite similar to the Linux one. You may
+uncompress it with the command line :
+
+::
+
+    > sh  OTB-5.4.0-Darwin64.run
+
+Please note that the resulting installation is not meant to be moved,
+you should uncompress the archive in its final location.
+
+Once the archive is extracted, the directory structure is made of :
+
+-  ``monteverdi.sh`` : A launcher script for
+
+-  ``mapla.sh`` : A launcher script for Mapla
+
+-  ``otbenv.profile`` : A script to initialize the environment for OTB
+   executables
+
+-  ``bin`` : A folder containing application launchers (otbcli.sh,
+   otbgui.sh), Monteverdi and Mapla.
+
+-  ``lib`` : A folder containing all shared libraries and OTB
+   applications.
+
+-  ``share`` : A folder containing common resources and copyright
+   mentions.
+
+To launch , simply use the launcher script in the base directory
+
+Other packages
+~~~~~~~~~~~~~~
+
+OSGeo4W
+^^^^^^^
+
+For Windows Seven/8.1 users, there is a classical standalone
+installation program for , available from the after each release.
+
+It is also possible to get package through for Windows XP/Seven users.
+Package for is available directly in the OSGeo4W installer when you
+select the **otb-monteverdi** package. Follow the instructions in the
+OSGeo4W installer and select the **otb-monteverdi**. The installer will
+proceed with the installation of the package and all its dependencies.
+will be directly installed in the OSGeo4W repository and a shortcut will
+be added to your desktop and in the start menu (in the OSGeo4W folder).
+You can now use directly from your desktop, from the start menu and from
+an OSGeo4W shell with command ``monteverdi``. Currently, you should use
+the 32bit OSGeo4W installer but we will soon distribute package for 64
+bit installer.
+
+Ubuntu 12.04 and higher
+^^^^^^^^^^^^^^^^^^^^^^^
+
+For Ubuntu 12.04 and higher, package may be available as Debian package
+through APT repositories. You can add it by using these command-lines:
+
+::
+
+    sudo apt-get install add-apt-repository
+    sudo apt-add-repository ppa:ubuntugis/ubuntugis-unstable
+
+Now run:
+
+::
+
+    sudo apt-get install monteverdi
+
+If you are using *Synaptic*, you can add the repository, update and
+install the package through the graphical interface.
+
+**apt-add-repository** will try to retrieve the GPG keys of the
+repositories to certify the origin of the packages. If you are behind a
+http proxy, this step won’t work and apt-add-repository will stall and
+eventually quit. You can temporarily ignore this error and proceed with
+the update step. Following this, aptitude update will issue a warning
+about a signature problem. This warning won’t prevent you from
+installing the packages.
+
+MacOS X DMG
+^^^^^^^^^^^
+
+A standard DMG package is available for for MacOS X 10.10. Please go the
+. Click on the file to launch .
+
+GUI : what does it look like ?
+------------------------------
+
+|image| [fig:mongui]
+
+This is ’s main window (figure  [fig:mongui]) where the different
+functionalities are reachable:
+
+-  1. Main menu
+
+-  2. Top toolbar
+
+-  3. Image displaying
+
+-  4. Right side dock
+
+-  5. Stack layer
+
+Main menu
+~~~~~~~~~
+
+The main menu is made up of four items. The main one is the File item,
+from which you can : open a image, load the otb applications, and
+finally quit . The Edit item lets the user change his/her preferences.
+The view item is intended to let the user display or hide different
+parts of the main window. Finally, the Help item lets the user know the
+’About’ information of the software, and also can display an useful
+keymap.
+
+Top toolbar
+~~~~~~~~~~~
+
+The top toolbar is made up of ten icons; from left to right:
+
+-  1st : open one or more image(s)
+
+-  2nd : zoom in
+
+-  3rd : zoom out
+
+-  4th : zoom to full extent
+
+-  5th : zoom to layer extent
+
+-  6th : zoom to full resolution
+
+-  7th : gives/changes the current projection, used as reference of the
+   view
+
+-  8th : selects the effect to be applied to the selected layer :
+   chessboard, local constrast, local translucency, normal, spectral
+   angle, swipe (horizontal and vertical)
+
+-  9th : a parameter used for the following effects : chessboard, local
+   contrast, local translucency, spectral angle
+
+-  10th : a parameter used for the following effects : local constrast,
+   spectral angle
+
+Image displaying
+~~~~~~~~~~~~~~~~
+
+This part of the main window is intented to display the images loaded by
+the user. There are many nice keyboard shortcuts or mouse tricks that
+let the user have a better experience in navigating throughout the
+loaded images. These shortcuts and tricks are given within the Help item
+of the main menu, by clicking Keymap; here is a short list of the most
+useful ones :
+
+The classical ones:
+
+-  CTRL+O = Open file(s)
+
+-  CTRL+Q = Quit application
+
+In the image displaying part:
+
+-  Mouse drag = Scroll view
+
+-  CTRL+Mouse drag = Quick scroll view (rending is done after releasing
+   CTRL key)
+
+-  CTRL+Mouse wheel = Zoom in out
+
+-  + or - = Zoom in out
+
+In the layer stack part:
+
+-  SHIFT+Page Up = Move layer to top of stack
+
+-  SHIFT+Page Down = Move layer to bottom of stack
+
+-  Delete = Delete selected layer
+
+-  SHIFT+Delete = Delete all layers
+
+Right side dock
+~~~~~~~~~~~~~~~
+
+The dock on the right side is divided into four tabs :
+
+-  Quicklook : gives the user a degraded view of the whole extent,
+   letting him/her easily select the area to be displayed
+
+-  Histogram : gives the user information about the value distribution
+   of the selected channels. By clicking the mouse’s left button, user
+   can sample their values.
+
+-  Color Setup : lets the user map the image channels to the RGB
+   channels. Also lets him/her set the alpha parameter (translucency).
+
+-  Color dynamics : lets the user change the displaying dynamics of a
+   selected image. For each RGB channel (each mapped to an image
+   channel), the user can decide how the pixel range of a selected image
+   will be shortcut before being rescaled to 0-255 : either by setting
+   the extremal values, or by setting the extremal quantiles.
+
+Each tab is represented by the figures below ( [fig:quickhisto]
+ [fig:colorsetdyn]).
+
+|image| [fig:quickhisto]
+
+|image| [fig:colorsetdyn]
+
+Layer stack
+~~~~~~~~~~~
+
+The layer stack is made up of one list of layers located beneath six
+icons. The list of layers gives the user some information about the
+loaded images: projection, resolution (if available), name, and effect
+applied to the images (see top toolbar subsection). If the user moves
+the mouse over the displayed images, they will get more information:
+
+-  (i,j) : pixel index
+
+-  (Red Green Blue) : original image pixel values from channel mapped to
+   the RGB ones.
+
+-  (X,Y) : pixel position
+
+Concerning the six icons, from left to right:
+
+-  1st : moves the selected layer to the top of the stack
+
+-  2nd : moves the selected layer up within the stack
+
+-  3rd : moves the selected layer down within the stack
+
+-  4th : moves the selected layer to the bottom of the stack
+
+-  5th : use selected layer as projection reference
+
+-  6th : applies all display settings (color-setup, color-dynamics,
+   shader and so forth) of selected layer to all other layers
+
+The layer stack is represented in the figure below ( [fig:layerstack]) :
+
+|image| [fig:layerstack]
+
+Examples
+--------
+
+With , it is also possible to interactively load otb-applications and
+use them to process images. For that purpose, the user just has to load
+otb-applications by clicking on the Main menu, File/Load
+OTB-Applications (or by simply using the shortcut CTRL+A). The figure
+below ( [fig:applications]) represents the otb-applications loading
+window. The applications are arranged in thematic functionalities; the
+user can also quickly find the wanted application by typing its name in
+the dedicated field at the top of the loading window.
+
+|image| [fig:applications]
+
+Optical calibration
+~~~~~~~~~~~~~~~~~~~
+
+In order to perform an optical calibration, launch the Optical
+calibration application (shortcut CTRL+A). We are going to use this
+application to perform a TOA (Top Of Atmosphere) conversion, which
+consists in converting the DN pixel values into spectral radiance (in
+W/m2/steradians/micrometers). Once the application is launched, the user
+must fill the required fields in (in, out, gainbias.txt -gain and bias
+values in a txt file-, solarillumination.txt -solar illumination values
+in watt/m2/micron for each band in a txt file-, and so on... refer to
+the documentation of the application).
+
+-  Note : if OTB (on which is based ) is able to parse the metadata of
+   the image to be calibrated, then some of the fields will be
+   automatically filled in.
+
+In the figure below ( [fig:OC]), by taking a look at the layer stack,
+one can notice that the values of the calibrated image are now expressed
+in spectral radiance.
+
+|image| [fig:OC]
+
+BandMath
+~~~~~~~~
+
+BandMath application is intended to apply mathematical operations on
+pixels (launch it with shortcut CTRL+A). In this example, we are going
+to use this application to change the dynamics of an image, and check
+the result by looking at histogram tab, in the right side dock. The
+formula used is the following : :math:`\text{im1b1} \times 1000`. In the
+figures below ( [fig:BM]), one can notice that the mode of the
+distribution is located at position :math:`356.0935`, whereas in the
+transformed image, the mode is located at position :math:`354737.1454`,
+that’s to say 1000 times farther away approximately (the cursors aren’t
+placed exactly at the same position in the screenshots).
+
+|image| [fig:BM]
+
+Segmentation
+~~~~~~~~~~~~
+
+Now, let’s use the segmentation application (launch it with shortcut
+CTRL+A). We let the user take a look at the application’s documentation;
+let’s simply say that as we wish we could display the segmentation with
+, we must tell the application to output the segmentation in raster
+format. Thus, the value of the mode option must be set to raster. The
+following figure ( [fig:seg12]) shows the original image and the labels
+image.
+
+|image| [fig:seg12]
+
+Gray colors aren’t very convenient for visualizing a segmentation.
+That’s why we are going to use another application, the ColorMapping one
+(launch it with the shortcut CTRL+A as usual). There are many ways to
+use this application (see the documentation for more details). We wish
+we could colour the segmentation so that color difference between
+adjacent regions is maximized. For this purpose, we can use the method
+optimal (set the value of this option to optimal). The figure below
+( [fig:seg3]) shows the result of such colorization.
+
+|image| [fig:seg3]
+
+Now it should be nice to superimpose this colorization with the original
+image to assess the quality of the segmentation. provides the user a
+very simple way to do it. Once the two images are loaded in and that the
+original image is placed on the top of the stack, the user just has to
+select the translucency layer effect and set the size of the exploration
+circle to convenience. The figure below ( [fig:seg4]) shows the result
+of such colorization. We encourage the reader to test the other layer
+effects.
+
+|image| [fig:seg4]
+
+Polarimetry
+~~~~~~~~~~~
+
+In this example, we are going to use three applications :
+
+-  the first one is SARDecompositions. This application is used to
+   compute the HaA decomposition. It takes as inputs three complex
+   channels from bands HH HV and VV.
+
+-  the second one is SplitImage. Indeed, the previous application had
+   produced an output image made up of three channels, H a and A, and we
+   wish to focus on the H parameter (entropy). So we let this
+   application split this image into three one-band-images.
+
+-  the last one is ColorMapping. The entropy image has values ranging
+   from 0 to 1, and they can be easily displayed by . But since we have
+   a nice visualizing tool in hand, we wish we could go a little bit
+   further. Here comes the application ColorMapping. It is going to be
+   used with the following parameter settings:
+
+   -  method = continuous. This parameters tells the application to use
+      a gradient of colors to represent the entropy image.
+
+   -  method.continuous.lut = hot. We specify here the kind of gradient
+      to be used : low values in black, high ones in white, and
+      intermediate ones in red/orange/yellow...
+
+   -  method.continuous.min = 0 and method.continuous.max = 1. Here, the
+      gradient of colors must be adjusted to the dynamic of the entropy
+      image (note: it is theoretically known that in HaA decomposition,
+      H ranges from 0 to 1. Generally speaking, the histogram of can
+      also be used for this purpose).
+
+In the figure below ( [fig:pol1]), we show the obtained result, with the
+local contrast layer effect.
+
+|image| [fig:pol1]
+
+Pansharpening
+~~~~~~~~~~~~~
+
+Finally, let’s try a last example with the Pansharpening application
+(launch it with shortcut CTRL+A). The fields are quite easy to fill in :
+this application needs a panchromatic image, a XS image, and an output
+image. These images are represented in the figures below ( [fig:ps12]
+and  [fig:ps3]):
+
+|image| [fig:ps12]
+
+|image| [fig:ps3]
+
+Now, in order to inspect the result properly, these three images are
+loaded in . The pansharpened image is placed to the top of the stack
+layer, and different layer effects are applied to it :
+
+-  in figure  [fig:ps4] : chessboard effect, to compare the result with
+   the XS image.
+
+-  in figure  [fig:ps5] : translucency effect, to compare the result
+   with the panchromatic image.
+
+|image| [fig:ps4]
+
+|image| [fig:ps5]
+
+Conclusion
+~~~~~~~~~~
+
+The images used in this documentation can be found in the OTB-Data
+repository (https://git.orfeo-toolbox.org/otb-data.git):
+
+-  in OTB-Data/Input :
+
+   -  QB\_TOULOUSE\_MUL\_Extract\_500\_500.tif and
+      QB\_Toulouse\_Ortho\_XS\_ROI\_170x230.tif (GUI presentation)
+
+   -  RSAT\_imagery\_HH.tif RSAT\_imagery\_HV.tif RSAT\_imagery\_VV.tif
+      (polarimetry example)
+
+   -  QB\_Toulouse\_Ortho\_PAN.tif QB\_Toulouse\_Ortho\_XS.tif
+      (pansharpening example)
+
+-  in OTB-Data/Input/mv2-test : QB\_1\_ortho.tif
+
+.. |image| image:: ../Art/MonteverdiImages/gui.png
+.. |image| image:: ../Art/MonteverdiImages/quickhisto.png
+.. |image| image:: ../Art/MonteverdiImages/colsetdyn.png
+.. |image| image:: ../Art/MonteverdiImages/layerstack.png
+.. |image| image:: ../Art/MonteverdiImages/applications.png
+.. |image| image:: ../Art/MonteverdiImages/OC.png
+.. |image| image:: ../Art/MonteverdiImages/BM.png
+.. |image| image:: ../Art/MonteverdiImages/seg1-2.png
+.. |image| image:: ../Art/MonteverdiImages/seg3.png
+.. |image| image:: ../Art/MonteverdiImages/seg4.png
+.. |image| image:: ../Art/MonteverdiImages/pol1.png
+.. |image| image:: ../Art/MonteverdiImages/ps1-2.png
+.. |image| image:: ../Art/MonteverdiImages/ps3.png
+.. |image| image:: ../Art/MonteverdiImages/ps4.png
+.. |image| image:: ../Art/MonteverdiImages/ps5.png
