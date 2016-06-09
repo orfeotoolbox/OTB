@@ -66,6 +66,11 @@ LearningApplicationBase<TInputValue,TOutputValue>
   InitRandomForestsParams();
   InitKNNParams();
 #endif
+
+#ifdef OTB_USE_SHARK
+  InitSharkRandomForestsParams();
+#endif
+
 }
 
 template <class TInputValue, class TOutputValue>
