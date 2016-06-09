@@ -46,6 +46,7 @@
 #ifdef OTB_USE_LIBSVM 
 #include "otbLibSVMMachineLearningModel.h"
 #endif
+# include "otbSharkRandomForestsMachineLearningModel.h"
 
 namespace otb
 {
@@ -204,6 +205,10 @@ private:
                 typename TargetListSampleType::Pointer trainingLabeledListSample,
                 std::string modelPath);
 #endif
+  void InitSharkRandomForestsParams();
+  void TrainSharkRandomForests(typename ListSampleType::Pointer trainingListSample,
+                           typename TargetListSampleType::Pointer trainingLabeledListSample,
+                           std::string modelPath);
   //@}
 };
 
@@ -227,6 +232,7 @@ private:
 #ifdef OTB_USE_LIBSVM
 #include "otbTrainLibSVM.txx"
 #endif
+#include "otbTrainSharkRandomForests.txx"
 #endif
 
 #endif
