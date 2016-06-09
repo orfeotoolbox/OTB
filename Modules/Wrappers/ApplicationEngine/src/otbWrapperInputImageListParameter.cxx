@@ -51,9 +51,9 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
     if (!filename.empty())
       {
       ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-      reader->SetFileName(filename);
       try
         {
+        reader->SetFileName(filename);
         reader->UpdateOutputInformation();
         }
       catch(itk::ExceptionObject & /*err*/)

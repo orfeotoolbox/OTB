@@ -110,12 +110,16 @@ These last two options need a proper \href{https://git-scm.com/}{Git} installati
 git clone https://git@git.orfeo-toolbox.org/git/otb.git
 \end{verbatim}
 
-Using Git, you can easily navigate through the different versions. For instance, this brings you to the stable branch for version 5.2:
+Using Git, you can easily navigate through the different versions. The master
+branch contains the latest stable version:
 \begin{verbatim}
-git checkout release-5.2
+git checkout master
 \end{verbatim}
-
-And this brings you to the latest development version:
+Specific versions are availables with tags:
+\begin{verbatim}
+git checkout 5.2.0
+\end{verbatim}
+Finally, this brings you to the latest development version:
 \begin{verbatim}
 git checkout develop
 \end{verbatim}

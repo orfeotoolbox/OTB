@@ -53,10 +53,10 @@ InputImageParameter::SetFromFileName(const std::string& filename)
   if (!filename.empty())
     {
     FloatVectorReaderType::Pointer reader = FloatVectorReaderType::New();
-    reader->SetFileName(filename);
 
     try
       {
+      reader->SetFileName(filename);
       reader->UpdateOutputInformation();
       }
     catch(itk::ExceptionObject & /*err*/)

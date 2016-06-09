@@ -34,7 +34,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
 {
   if(argc<14)
     {
-    std::cerr<<"Usage: "<<argv[0]<<"input_point_x input_point_y output_point_x output_point_y input_projection_type[IMAGE, WKT, EPSG] input_projection_source output_projection_type[IMAGE, WKT, EPSG] output_projection_source input_distance[PHYSICAL, GEO] input_threshold output_distance[PHYSICAL, GEO] ouptut_threshold elevation_flag[NOELEV, AVERAGE, DEM] elevation_source";
+    std::cerr<<"Usage: "<<argv[0]<<"input_point_x input_point_y output_point_x output_point_y input_projection_type[IMAGE, WKT, EPSG] input_projection_source output_projection_type[IMAGE, WKT, EPSG] output_projection_source input_distance[PHYSICAL, GEO] input_threshold output_distance[PHYSICAL, GEO] output_threshold elevation_flag[NOELEV, AVERAGE, DEM] elevation_source";
     return EXIT_FAILURE;
     }
 

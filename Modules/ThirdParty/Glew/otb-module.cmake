@@ -2,7 +2,7 @@ set(DOCUMENTATION "This module imports Glew to the build system")
 
 otb_module(OTBGlew
   DEPENDS
-    
+  OTBOpenGL
   TEST_DEPENDS
     
   DESCRIPTION

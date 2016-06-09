@@ -577,10 +577,7 @@ private:
 
       // Generate
       histogramFilter->Update();
-      const HistogramListType * histogramList = histogramFilter->GetOutput(); //
-      // HistogramPointerType histoBand=histogramList->GetNelements(0);
-      //  std::cout<<histoBand->GetFrequency(0, 0)<<std::endl;
-
+      const HistogramListType * histogramList = histogramFilter->GetOutput();
 
       ImageMetadataInterfaceType::Pointer
           metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(supportImage->GetMetaDataDictionary());

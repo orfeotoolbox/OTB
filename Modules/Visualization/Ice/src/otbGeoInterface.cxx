@@ -21,6 +21,28 @@
 namespace otb
 {
 
+class StaticInitializer
+{
+public:
+  StaticInitializer() :
+    m_Spacing()
+  {
+    m_Spacing.Fill( 1 );
+  }
+
+  const GeoInterface::Spacing2 &
+  GetSpacing() const
+  {
+    return m_Spacing;
+  }
+
+private:
+  GeoInterface::Spacing2 m_Spacing;
+};
+
+
+static const StaticInitializer INITIALIZER;
+
 
 GeoInterface
 ::GeoInterface()
@@ -98,6 +120,21 @@ GeoInterface
 }
 
 #endif
+
+
+const GeoInterface::Spacing2 &
+GeoInterface
+::GetSpacing() const
+{
+  // By default, spacing is (1, 1) if sub-class has no scale-related
+  // spacing.
+  //
+  // This method is especially usefull in otb::GlView::ZoomToFull() in
+  // order to correct transformed zooming factors.
+
+  return INITIALIZER.GetSpacing();
+}
+
 
 std::string
 GeoInterface
