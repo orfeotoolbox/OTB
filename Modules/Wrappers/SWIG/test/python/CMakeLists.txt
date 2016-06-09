@@ -89,3 +89,9 @@ add_test( NAME pyTvNewStyleParametersInstanciateAll
           COMMAND ${TEST_DRIVER} Execute
           ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonNewStyleParametersInstanciateAllTest.py
           )
+
+        add_test( NAME pyTvConnectApplications
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonConnectApplications.py
+                  ${OTB_DATA_ROOT}/Input/poupees.tif
+                  ${TEMP}/pyTvConnectApplicationsOutput.tif)
