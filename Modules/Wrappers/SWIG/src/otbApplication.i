@@ -203,7 +203,11 @@ public:
   std::string GetParameterString(std::string parameter);
   std::vector<std::string> GetParameterStringList(std::string parameter);
   std::string GetParameterAsString(std::string paramKey);
+  
+  InputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
 
+  void SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage);
+  
   itkProcessObject* GetProgressSource() const;
 
   std::string GetProgressDescription() const;
