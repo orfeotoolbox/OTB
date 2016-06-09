@@ -1137,6 +1137,38 @@ std::vector<std::string> Application::GetParameterStringList(std::string paramet
   return ret;
 }
 
+void Application::SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  InputImageParameter* paramDown = dynamic_cast<InputImageParameter*> (param);
+  
+  if (paramDown)
+    {
+    paramDown->SetImage(inputImage);
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageParameter");
+    }
+}
+
+OutputImageParameter::ImageBaseType * Application::GetParameterOutputImage(std::string parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  
+  OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*> (param);
+  
+  if (paramDown)
+    {    
+    return paramDown->GetValue();
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to OutputImageParameter");
+    }
+}
+
 
 FloatVectorImageType* Application::GetParameterImage(std::string parameter)
 {

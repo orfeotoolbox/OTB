@@ -402,6 +402,30 @@ public:
    */
   std::vector<std::string> GetParameterStringList(std::string parameter);
 
+
+  /** 
+   * Set the input image parameter as an ImageBase * pointer instead
+   * of filename. Useful to connect pipelines between different
+   * application instances.
+   * \in parameter The parameter key
+   * \in inputImage ImageBase pointer to use as input
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageParameter
+   */
+  void SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage);
+
+  /**
+   * Get the output image pamaraeter as an ImageBase * pointer instead
+   * of writing to disk. Useful to connect pipelines between different
+   * application instances.
+   * \in parameter The parameter key
+   * \return The ImageBase * pointer to the output image
+   * \throw itk::Exception if parameter is not found or not an
+   * OutputImageParameter
+   */
+  OutputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
+
+  
   /* Get an image value
    *
    * Can be called for types :
