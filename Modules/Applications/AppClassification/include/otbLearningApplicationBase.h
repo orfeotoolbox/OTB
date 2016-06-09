@@ -133,6 +133,7 @@ public:
   typedef otb::LibSVMMachineLearningModel<InputValueType, OutputValueType> LibSVMType;
 #endif
  
+  typedef otb::SharkRandomForestsMachineLearningModel<InputValueType, OutputValueType> SharkRandomForestType;
 protected:
   LearningApplicationBase();
 
