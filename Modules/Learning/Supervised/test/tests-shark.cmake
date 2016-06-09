@@ -1,5 +1,3 @@
-find_package(Shark REQUIRED)
-include(${SHARK_USE_FILE})
 otb_add_test(NAME leTuSharkRFMachineLearningModelNew COMMAND otbSupervisedTestDriver
   otbSharkRFMachineLearningModelNew)
 
