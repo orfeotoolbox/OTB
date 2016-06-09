@@ -8,7 +8,7 @@ otb_module(OTBSupervised
     OTBCommon
     OTBITK
     OTBImageBase
-    OTBSHARK
+    OTBShark
 
   OPTIONAL_DEPENDS
     OTBOpenCV

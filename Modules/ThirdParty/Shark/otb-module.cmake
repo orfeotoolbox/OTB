@@ -1,6 +1,6 @@
 set(DOCUMENTATION "This module imports SHARK to the build system")
 
-otb_module(OTBSHARK
+otb_module(OTBShark
   DEPENDS
     
   TEST_DEPENDS
