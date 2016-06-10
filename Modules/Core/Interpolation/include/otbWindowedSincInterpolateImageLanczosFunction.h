@@ -135,8 +135,8 @@ public:
 
 protected:
   WindowedSincInterpolateImageLanczosFunction() {};
-  ~WindowedSincInterpolateImageLanczosFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~WindowedSincInterpolateImageLanczosFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

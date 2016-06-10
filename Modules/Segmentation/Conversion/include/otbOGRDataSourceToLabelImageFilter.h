@@ -137,14 +137,14 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
 protected:
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   OGRDataSourceToLabelImageFilter();
-  virtual ~OGRDataSourceToLabelImageFilter() {}
+  ~OGRDataSourceToLabelImageFilter() ITK_OVERRIDE {}
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   OGRDataSourceToLabelImageFilter(const Self&); //purposely not implemented

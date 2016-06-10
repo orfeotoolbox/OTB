@@ -60,8 +60,8 @@ public:
 
 protected:
   GeometricMomentPathFunction() {};
-  ~GeometricMomentPathFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~GeometricMomentPathFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

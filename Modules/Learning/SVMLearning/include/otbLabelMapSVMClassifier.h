@@ -87,11 +87,11 @@ public:
 
 protected:
   LabelMapSVMClassifier();
-  ~LabelMapSVMClassifier() {};
+  ~LabelMapSVMClassifier() ITK_OVERRIDE {};
 
-  virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
+  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
 
-  virtual void ReleaseInputs();
+  void ReleaseInputs() ITK_OVERRIDE;
 
 
 private:

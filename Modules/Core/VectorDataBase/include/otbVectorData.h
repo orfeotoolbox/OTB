@@ -126,15 +126,15 @@ public:
    * SmartPointers to the same VectorData since separate DataObjects are
    * still maintained. This method is similar to
    * VectorDataSource::GraftOutput(). */
-  virtual void Graft(const itk::DataObject *data);
+  void Graft(const itk::DataObject *data) ITK_OVERRIDE;
 
 protected:
   /** Constructor */
   VectorData();
   /** Destructor */
-  virtual ~VectorData() {}
+  ~VectorData() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   VectorData(const Self&); //purposely not implemented

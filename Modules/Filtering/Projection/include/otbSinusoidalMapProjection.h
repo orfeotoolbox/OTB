@@ -59,7 +59,7 @@ public:
 
 protected:
   SinusoidalMapProjection();
-  virtual ~SinusoidalMapProjection();
+  ~SinusoidalMapProjection() ITK_OVERRIDE;
 
 private:
   SinusoidalMapProjection(const Self &); //purposely not implemented

@@ -32,7 +32,7 @@ public:
 
   itkGetStringMacro(FileName);
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     if(m_FileName.empty())
       return false;
@@ -66,7 +66,7 @@ protected:
   InputProcessXMLParameter();
 
   /** Destructor */
-  virtual ~InputProcessXMLParameter();
+  ~InputProcessXMLParameter() ITK_OVERRIDE;
 
 private:
 

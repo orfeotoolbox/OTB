@@ -144,13 +144,13 @@ public:
   void  SetTrainingArea(const TInputROIImage * trainingImage);
 
 protected:
-  virtual void BeforeThreadedGenerateData(void);
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
 
   KullbackLeiblerSupervizedDistanceImageFilter()
     {
     this->SetNumberOfRequiredInputs(3);
     }
-  virtual ~KullbackLeiblerSupervizedDistanceImageFilter() {}
+  ~KullbackLeiblerSupervizedDistanceImageFilter() ITK_OVERRIDE {}
 
 private:
   KullbackLeiblerSupervizedDistanceImageFilter(const Self &); //purposely not implemented

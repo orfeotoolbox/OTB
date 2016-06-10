@@ -66,10 +66,10 @@ public:
 
 protected:
   ChangeInformationImageFilter() {}
-  virtual ~ChangeInformationImageFilter() {}
+  ~ChangeInformationImageFilter() ITK_OVERRIDE {}
 
   /** Apply changes to the output image metadata. */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   ChangeInformationImageFilter(const Self &); //purposely not implemented

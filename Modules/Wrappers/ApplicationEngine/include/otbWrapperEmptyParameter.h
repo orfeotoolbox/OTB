@@ -47,12 +47,12 @@ public:
   itkTypeMacro(EmptyParameter, Parameter);
 
   /** HasValue */
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     return false;
   }
 
-  bool HasUserValue() const
+  bool HasUserValue() const ITK_OVERRIDE
   {
     return this->m_UserValue;
   }
@@ -66,7 +66,7 @@ protected:
   }
 
   /** Destructor */
-  virtual ~EmptyParameter()
+  ~EmptyParameter() ITK_OVERRIDE
   {}
 
 private:

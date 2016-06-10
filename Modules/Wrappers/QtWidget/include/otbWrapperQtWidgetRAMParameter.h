@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetRAMParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetRAMParameter(RAMParameter*, QtWidgetModel*);
-  virtual ~QtWidgetRAMParameter();
+  ~QtWidgetRAMParameter() ITK_OVERRIDE;
 
 protected slots:
   void SetValue( int value );
@@ -49,9 +49,9 @@ private:
   QtWidgetRAMParameter(const QtWidgetRAMParameter&); //purposely not implemented
   void operator=(const QtWidgetRAMParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   QHBoxLayout *         m_QHBoxLayout;
   QSpinBox *            m_QSpinBox;

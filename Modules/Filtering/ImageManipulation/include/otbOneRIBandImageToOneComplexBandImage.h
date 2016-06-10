@@ -69,12 +69,12 @@ public:
 
 protected:
   OneRIBandImageToOneComplexBandImage();
-  virtual ~OneRIBandImageToOneComplexBandImage() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~OneRIBandImageToOneComplexBandImage() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  void BeforeThreadedGenerateData(void);
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   OneRIBandImageToOneComplexBandImage(const Self &); //purposely not implemented

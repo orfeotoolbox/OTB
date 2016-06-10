@@ -139,7 +139,7 @@ protected:
   MRFEnergy() :
     m_NumberOfParameters(1),
     m_Parameters(0) {};
-  virtual ~MRFEnergy() {}
+  ~MRFEnergy() ITK_OVERRIDE {}
   unsigned int   m_NumberOfParameters;
   ParametersType m_Parameters;
 };
@@ -221,7 +221,7 @@ protected:
     m_NumberOfParameters(1),
     m_Parameters(0)
       {};
-  virtual ~MRFEnergy() {}
+  ~MRFEnergy() ITK_OVERRIDE {}
   unsigned int   m_NumberOfParameters;
   ParametersType m_Parameters;
 };

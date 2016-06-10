@@ -61,13 +61,13 @@ public:
   itkGetMacro(Radius, unsigned int);
 
   /** Evaluate Method */
-  virtual OutputType Evaluate(const InputType& input) const;
+  OutputType Evaluate(const InputType& input) const ITK_OVERRIDE;
 
 protected:
   PointSetDensityFunction() : m_Radius(1) {};
-  virtual ~PointSetDensityFunction() {}
+  ~PointSetDensityFunction() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   PointSetDensityFunction(const Self &);  //purposely not implemented

@@ -83,10 +83,10 @@ public:
 
 protected:
   SarBrightnessToImageFilter();
-  virtual ~SarBrightnessToImageFilter() {}
+  ~SarBrightnessToImageFilter() ITK_OVERRIDE {}
 
   /** Update the function list and input parameters*/
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 private:
   SarBrightnessToImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

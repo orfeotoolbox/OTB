@@ -125,12 +125,12 @@ protected:
   /** Constructor */
   MorphologicalPyramidSynthesisFilter();
   /** Destructor */
-  virtual ~MorphologicalPyramidSynthesisFilter();
-  virtual void GenerateOutputInformation() {}  // does nothing
+  ~MorphologicalPyramidSynthesisFilter() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE {}  // does nothing
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** Printself method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 };
 } // End namespace otb
 

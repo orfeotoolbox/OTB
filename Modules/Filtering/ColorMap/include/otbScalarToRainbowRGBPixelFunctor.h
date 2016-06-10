@@ -136,7 +136,7 @@ class ITK_EXPORT ScalarToRainbowRGBPixelFunctor
 {
 public:
   ScalarToRainbowRGBPixelFunctor();
-  ~ScalarToRainbowRGBPixelFunctor() {}
+  ~ScalarToRainbowRGBPixelFunctor() ITK_OVERRIDE {}
 
   typedef ScalarToRainbowRGBPixelFunctor                      Self;
   typedef itk::Function::ColormapFunction<TScalar, TRGBPixel> Superclass;
@@ -151,7 +151,7 @@ public:
   typedef TScalar                              ScalarType;
   typedef HSVToRGBFunctor<RGBPixelType>        HSVToRGBFunctorType;
 
-  RGBPixelType operator ()(const TScalar&) const;
+  RGBPixelType operator ()(const TScalar&) const ITK_OVERRIDE;
 
   /** Set the input maximum to be mapped to red
    * \deprecated use SetMaximumInputValue() */

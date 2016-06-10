@@ -171,9 +171,9 @@ public:
 protected:
   NCLSUnmixingImageFilter();
 
-  virtual ~NCLSUnmixingImageFilter();
+  ~NCLSUnmixingImageFilter() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   NCLSUnmixingImageFilter(const Self &); //purposely not implemented

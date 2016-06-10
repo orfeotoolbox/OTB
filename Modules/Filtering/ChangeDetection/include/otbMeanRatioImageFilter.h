@@ -77,7 +77,7 @@ public:
 
 protected:
   MeanRatioImageFilter() {}
-  virtual ~MeanRatioImageFilter() {}
+  ~MeanRatioImageFilter() ITK_OVERRIDE {}
 
 private:
   MeanRatioImageFilter(const Self &); //purposely not implemented

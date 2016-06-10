@@ -277,7 +277,7 @@ public:
 protected:
   GlView();
 
-  virtual ~GlView();
+  ~GlView() ITK_OVERRIDE;
 
 private:
   // prevent implementation

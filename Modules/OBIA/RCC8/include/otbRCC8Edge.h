@@ -53,9 +53,9 @@ protected:
   /** Constructor */
   RCC8Edge();
   /** Desctructor */
-  ~RCC8Edge() {}
+  ~RCC8Edge() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** The RCC8 value */

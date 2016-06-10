@@ -63,13 +63,13 @@ public:
   typedef double RealType;
 
   /** Evaluate the function at non-integer positions */
-  virtual OutputType Evaluate(const PathType& path) const;
+  OutputType Evaluate(const PathType& path) const ITK_OVERRIDE;
   virtual OutputType Evaluate() const;
 
 protected:
   OrientationPathFunction() {};
-  virtual ~OrientationPathFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~OrientationPathFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   OrientationPathFunction(const Self &);  //purposely not implemented

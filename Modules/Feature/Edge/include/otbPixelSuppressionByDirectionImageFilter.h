@@ -99,16 +99,16 @@ public:
   void SetInputImageDirection(const InputImageType *image);
   const InputImageType * GetInputImageDirection(void);
 
-  virtual void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError);
+  void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
 
 protected:
   PixelSuppressionByDirectionImageFilter();
-  virtual ~PixelSuppressionByDirectionImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PixelSuppressionByDirectionImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   PixelSuppressionByDirectionImageFilter(const Self &); //purposely not implemented

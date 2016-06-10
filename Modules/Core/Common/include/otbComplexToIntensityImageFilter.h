@@ -96,7 +96,7 @@ public:
 
 protected:
   ComplexToIntensityImageFilter() {}
-  virtual ~ComplexToIntensityImageFilter() {}
+  ~ComplexToIntensityImageFilter() ITK_OVERRIDE {}
 
 private:
   ComplexToIntensityImageFilter(const Self&); //purposely not implemented

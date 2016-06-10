@@ -67,7 +67,7 @@ protected:
   {
   }
 ;
-  virtual ~SimulationStep2Base()
+  ~SimulationStep2Base() ITK_OVERRIDE
   {
   }
 

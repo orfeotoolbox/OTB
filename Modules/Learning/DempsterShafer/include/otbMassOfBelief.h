@@ -177,10 +177,10 @@ protected:
   MassOfBelief() {}
 
   /** Desctructor */
-  virtual ~MassOfBelief() {}
+  ~MassOfBelief() ITK_OVERRIDE {}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   MassOfBelief(const Self&); //purposely not implemented

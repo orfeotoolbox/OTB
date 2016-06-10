@@ -224,16 +224,16 @@ public:
 
 protected:
   /** Actually process the input */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Constructor */
   ImageToSIFTKeyPointSetFilter();
 
   /** Destructor */
-  virtual ~ImageToSIFTKeyPointSetFilter() {}
+  ~ImageToSIFTKeyPointSetFilter() ITK_OVERRIDE {}
 
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Initialize input image */
   void InitializeInputImage();

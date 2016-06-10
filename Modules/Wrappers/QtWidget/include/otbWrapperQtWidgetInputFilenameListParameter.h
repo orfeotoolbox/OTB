@@ -38,7 +38,7 @@ class ITK_ABI_EXPORT QtWidgetInputFilenameListParameter : public QtWidgetParamet
   Q_OBJECT
 public:
   QtWidgetInputFilenameListParameter(InputFilenameListParameter*, QtWidgetModel*);
-  virtual ~QtWidgetInputFilenameListParameter();
+  ~QtWidgetInputFilenameListParameter() ITK_OVERRIDE;
 
 
 signals:
@@ -59,9 +59,9 @@ private:
   QtWidgetInputFilenameListParameter(const QtWidgetInputFilenameListParameter&); //purposely not implemented
   void operator=(const QtWidgetInputFilenameListParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   void RecreateFilenameList();
   void UpdateFileList( std::map<unsigned int, unsigned int> idMap );

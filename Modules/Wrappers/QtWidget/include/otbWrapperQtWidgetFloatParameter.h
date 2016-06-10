@@ -39,7 +39,7 @@ class ITK_ABI_EXPORT QtWidgetFloatParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetFloatParameter(FloatParameter*, QtWidgetModel*);
-  virtual ~QtWidgetFloatParameter();
+  ~QtWidgetFloatParameter() ITK_OVERRIDE;
 
 protected slots:
   void SetValue( double value );
@@ -48,9 +48,9 @@ private:
   QtWidgetFloatParameter(const QtWidgetFloatParameter&); //purposely not implemented
   void operator=(const QtWidgetFloatParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   QHBoxLayout *           m_QHBoxLayout;
   QDoubleSpinBox *        m_QDoubleSpinBox;

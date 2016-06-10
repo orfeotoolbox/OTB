@@ -93,12 +93,12 @@ public:
 
 protected:
   FastICAInternalOptimizerVectorImageFilter();
-  virtual ~FastICAInternalOptimizerVectorImageFilter() { }
+  ~FastICAInternalOptimizerVectorImageFilter() ITK_OVERRIDE { }
 
-  virtual void GenerateOutputInformation();
-  virtual void BeforeThreadedGenerateData ();
-  virtual void ThreadedGenerateData ( const OutputRegionType &, itk::ThreadIdType );
-  virtual void AfterThreadedGenerateData();
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData () ITK_OVERRIDE;
+  void ThreadedGenerateData ( const OutputRegionType &, itk::ThreadIdType ) ITK_OVERRIDE;
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
   unsigned int m_CurrentBandForLoop;
 

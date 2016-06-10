@@ -71,9 +71,9 @@ public:
 
 protected:
   RAndBAndNIRIndexImageFilter();
-  virtual ~RAndBAndNIRIndexImageFilter() {}
+  ~RAndBAndNIRIndexImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   RAndBAndNIRIndexImageFilter(const Self &); //purposely not implemented

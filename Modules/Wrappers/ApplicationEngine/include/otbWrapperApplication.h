@@ -653,7 +653,7 @@ protected:
   Application();
 
   /** Destructor */
-  virtual ~Application();
+  ~Application() ITK_OVERRIDE;
 
   /* Register a ProcessObject as a new progress source */
   void AddProcess(itk::ProcessObject* object, std::string description);

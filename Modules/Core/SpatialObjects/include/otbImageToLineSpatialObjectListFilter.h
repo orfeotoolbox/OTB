@@ -82,8 +82,8 @@ public:
 
 protected:
   ImageToLineSpatialObjectListFilter();
-  virtual ~ImageToLineSpatialObjectListFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageToLineSpatialObjectListFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageToLineSpatialObjectListFilter(const Self &); //purposely not implemented

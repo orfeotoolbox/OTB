@@ -70,9 +70,9 @@ protected:
   /** Constructor */
   ImageListToRCC8GraphFilter();
   /** Destructor */
-  virtual ~ImageListToRCC8GraphFilter() {}
+  ~ImageListToRCC8GraphFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageListToRCC8GraphFilter(const Self &); //purposely not implemented

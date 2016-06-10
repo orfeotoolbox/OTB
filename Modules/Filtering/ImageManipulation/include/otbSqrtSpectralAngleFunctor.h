@@ -39,10 +39,10 @@ public:
   typedef SpectralAngleFunctor<TInputVectorPixel, TOutputPixel> Superclass;
 
   SqrtSpectralAngleFunctor() {}
-  virtual ~SqrtSpectralAngleFunctor() {}
+  ~SqrtSpectralAngleFunctor() ITK_OVERRIDE {}
 
 protected:
-  virtual TOutputPixel Evaluate(const TInputVectorPixel& inPix) const
+  TOutputPixel Evaluate(const TInputVectorPixel& inPix) const ITK_OVERRIDE
   {
     return static_cast<TOutputPixel>(vcl_sqrt(Superclass::Evaluate(inPix)));
   }

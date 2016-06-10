@@ -91,9 +91,9 @@ protected:
   /** Constructor */
   SOMMap();
   /** Destructor */
-  virtual ~SOMMap();
+  ~SOMMap() ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SOMMap(const Self &); // purposely not implemented

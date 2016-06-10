@@ -122,11 +122,11 @@ protected:
   /** Constructor */
   PointSetToDisplacementFieldGenerator();
   /** Destructor */
-  virtual ~PointSetToDisplacementFieldGenerator() {}
+  ~PointSetToDisplacementFieldGenerator() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Generate output information */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
   /**
    * Generate the n nearest valid point in point set, where a valid point has a sufficient metric value.
    *  \param index The index of the pixel to compute.

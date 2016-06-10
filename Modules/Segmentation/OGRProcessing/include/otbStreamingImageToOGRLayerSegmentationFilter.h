@@ -143,14 +143,14 @@ public:
 protected:
   PersistentImageToOGRLayerSegmentationFilter();
 
-  virtual ~PersistentImageToOGRLayerSegmentationFilter();
+  ~PersistentImageToOGRLayerSegmentationFilter() ITK_OVERRIDE;
 
 
 private:
   PersistentImageToOGRLayerSegmentationFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  virtual OGRDataSourcePointerType ProcessTile();
+  OGRDataSourcePointerType ProcessTile() ITK_OVERRIDE;
 
 
   int m_TileMaxLabel;
@@ -348,7 +348,7 @@ protected:
   /** Constructor */
   StreamingImageToOGRLayerSegmentationFilter() {}
   /** Destructor */
-  virtual ~StreamingImageToOGRLayerSegmentationFilter() {}
+  ~StreamingImageToOGRLayerSegmentationFilter() ITK_OVERRIDE {}
 
 private:
   StreamingImageToOGRLayerSegmentationFilter(const Self &); //purposely not implemented

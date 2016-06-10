@@ -194,16 +194,16 @@ public:
 
 protected:
   ShiftScaleVectorImageFilter() {}
-  virtual ~ShiftScaleVectorImageFilter() {}
+  ~ShiftScaleVectorImageFilter() ITK_OVERRIDE {}
 
   /** Process to execute before entering the multithreaded section */
-  void BeforeThreadedGenerateData(void);
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
 
   /** Generate output information */
-  void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
 private:
   ShiftScaleVectorImageFilter(const Self&); //purposely not implemented

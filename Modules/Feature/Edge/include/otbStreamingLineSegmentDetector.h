@@ -76,15 +76,15 @@ public:
 protected:
   PersistentStreamingLineSegmentDetector();
 
-  virtual ~PersistentStreamingLineSegmentDetector();
+  ~PersistentStreamingLineSegmentDetector() ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
 private:
   PersistentStreamingLineSegmentDetector(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  virtual OutputVectorDataPointerType ProcessTile();
+  OutputVectorDataPointerType ProcessTile() ITK_OVERRIDE;
 };
 
 template <class TImageType>

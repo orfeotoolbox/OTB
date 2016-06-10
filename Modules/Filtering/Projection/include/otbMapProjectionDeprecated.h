@@ -87,7 +87,7 @@ public:
 
 protected:
   MapProjectionDeprecated();
-  virtual ~MapProjectionDeprecated() {};
+  ~MapProjectionDeprecated() ITK_OVERRIDE {};
 
 private:
   MapProjectionDeprecated(const Self &); //purposely not implemented

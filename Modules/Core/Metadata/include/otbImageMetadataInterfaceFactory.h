@@ -58,7 +58,7 @@ public:
 
 protected:
   ImageMetadataInterfaceFactory();
-  ~ImageMetadataInterfaceFactory();
+  ~ImageMetadataInterfaceFactory() ITK_OVERRIDE;
 
 private:
   ImageMetadataInterfaceFactory(const Self &); //purposely not implemented

@@ -72,7 +72,7 @@ public:
   typedef std::vector<FunctionPointerType>            FunctionContainerType;
 
   /** Evaluate the function at the given location */
-  OutputType Evaluate(const PointType & point) const;
+  OutputType Evaluate(const PointType & point) const ITK_OVERRIDE;
 
   /** Add a new function to the functions vector */
   void AddFunction(FunctionType * function);
@@ -97,10 +97,10 @@ protected:
   MetaImageFunction();
 
   /** Destructor */
-  ~MetaImageFunction();
+  ~MetaImageFunction() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   MetaImageFunction(const Self& ); //purposely not implemented

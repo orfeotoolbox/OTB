@@ -128,8 +128,8 @@ public:
 
 protected:
   ModelComponentBase();
-  virtual ~ModelComponentBase() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ModelComponentBase() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   virtual void GenerateData();
 

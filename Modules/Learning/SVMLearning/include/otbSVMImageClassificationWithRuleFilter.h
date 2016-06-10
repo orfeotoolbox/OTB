@@ -91,21 +91,21 @@ protected:
   /** Constructor */
   SVMImageClassificationWithRuleFilter();
   /** Destructor */
-  virtual ~SVMImageClassificationWithRuleFilter() {}
+  ~SVMImageClassificationWithRuleFilter() ITK_OVERRIDE {}
 
   /** GenerateOutputInformation
         * Set the number of bands of the output rule image.
         * Copy information from the input image if existing.
         **/
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** AllocateOutputs
    * Output allocation redefinition for VectorImage (used in TOutputRuleImage)
    **/
-  virtual void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   SVMImageClassificationWithRuleFilter(const Self &); //purposely not implemented

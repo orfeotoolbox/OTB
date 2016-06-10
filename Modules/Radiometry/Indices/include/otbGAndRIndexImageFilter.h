@@ -69,9 +69,9 @@ public:
 
 protected:
   GAndRIndexImageFilter();
-  virtual ~GAndRIndexImageFilter() {}
+  ~GAndRIndexImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /*  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                               itk::ThreadIdType threadId );

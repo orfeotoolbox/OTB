@@ -77,7 +77,7 @@ public:
 
 protected:
   OGRIOHelper();
-  ~OGRIOHelper();
+  ~OGRIOHelper() ITK_OVERRIDE;
 
 private:
   OGRIOHelper(const Self &); //purposely not implemented

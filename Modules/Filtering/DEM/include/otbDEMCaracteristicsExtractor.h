@@ -143,11 +143,11 @@ public:
 
 protected:
   DEMCaracteristicsExtractor();
-  virtual ~DEMCaracteristicsExtractor();
+  ~DEMCaracteristicsExtractor() ITK_OVERRIDE;
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   /** Angle parameters*/

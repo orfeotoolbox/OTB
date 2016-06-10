@@ -77,17 +77,17 @@ public:
                       OutputImageType::ImageDimension);
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 protected:
   ExtractROI();
-  virtual ~ExtractROI() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ExtractROI() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** ExtractROI
    *
    * \sa ExtractROIBase::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   ExtractROI(const Self &); //purposely not implemented

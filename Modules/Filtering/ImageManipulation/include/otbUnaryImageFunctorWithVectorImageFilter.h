@@ -88,7 +88,7 @@ public:
 
 protected:
   UnaryImageFunctorWithVectorImageFilter();
-  virtual ~UnaryImageFunctorWithVectorImageFilter() {}
+  ~UnaryImageFunctorWithVectorImageFilter() ITK_OVERRIDE {}
 
   /** UnaryImageFunctorWithVectorImageFilter can produce an image which is a different
    * resolution than its input image.  As such, UnaryImageFunctorWithVectorImageFilter
@@ -98,7 +98,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** UnaryImageFunctorWithVectorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -110,9 +110,9 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** Ponderation declaration*/

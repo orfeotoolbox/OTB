@@ -84,9 +84,9 @@ public:
 
 protected:
   RandomPointSetSource();
-  virtual ~RandomPointSetSource() {}
+  ~RandomPointSetSource() ITK_OVERRIDE {}
 
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
 private:
   RandomPointSetSource(const Self &); //purposely not implemented

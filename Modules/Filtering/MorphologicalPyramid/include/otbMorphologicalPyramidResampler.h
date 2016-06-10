@@ -74,17 +74,17 @@ protected:
   /** Constructor */
   Resampler();
   /** Destructor */
-  virtual ~Resampler() {}
+  ~Resampler() ITK_OVERRIDE {}
   /** Generate output information */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
   /** Configure input requested region to be the largest possible region */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
   /** Configure output requested region to be the largest possible region */
-  virtual void EnlargeOutputRequestedRegion(itk::DataObject * itkNotUsed(output));
+  void EnlargeOutputRequestedRegion(itk::DataObject * itkNotUsed(output)) ITK_OVERRIDE;
   /** Main computation method */
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 private:
   Resampler(const Self &); // purposely not implemented
   void operator =(const Self&); // purposely not implemented

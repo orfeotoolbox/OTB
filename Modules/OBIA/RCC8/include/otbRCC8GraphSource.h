@@ -54,9 +54,9 @@ protected:
   /** Constructor */
   RCC8GraphSource();
   /** Destructor */
-  virtual ~RCC8GraphSource() {}
+  ~RCC8GraphSource() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   RCC8GraphSource(const Self &); //purposely not implemented

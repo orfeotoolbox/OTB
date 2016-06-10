@@ -93,7 +93,7 @@ protected:
   {
     this->SetRadius(1);
   }
-  virtual ~LabelToBoundaryImageFilter() { }
+  ~LabelToBoundaryImageFilter() ITK_OVERRIDE { }
 
 private:
   LabelToBoundaryImageFilter( const Self & ); // Not implemented

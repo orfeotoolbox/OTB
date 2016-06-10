@@ -128,7 +128,7 @@ template
  * <tt> = T</tt>)
  *
  * \internal
- * This override is required because of the particular nature of the
+ * This ITK_OVERRIDE is required because of the particular nature of the
  * <tt>char**</tt> type chosen by OGR API, plus the fact this is the only
  * const-correct getter...
  * \since OTB v 3.14.0
@@ -258,7 +258,7 @@ template
  * <tt> = T</tt>)
  *
  * \internal
- * This override is required because of the particular nature of the
+ * This ITK_OVERRIDE is required because of the particular nature of the
  * <tt>char**</tt> type chosen by OGR API.
  * \since OTB v 3.14.0
  */

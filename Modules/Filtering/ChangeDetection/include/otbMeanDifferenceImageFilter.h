@@ -79,7 +79,7 @@ public:
 
 protected:
   MeanDifferenceImageFilter() {}
-  virtual ~MeanDifferenceImageFilter() {}
+  ~MeanDifferenceImageFilter() ITK_OVERRIDE {}
 
 private:
   MeanDifferenceImageFilter(const Self &); //purposely not implemented

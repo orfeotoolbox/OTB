@@ -123,9 +123,9 @@ public:
 
 protected:
   AngularProjectionSetImageFilter();
-  virtual ~AngularProjectionSetImageFilter() { }
+  ~AngularProjectionSetImageFilter() ITK_OVERRIDE { }
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   AngularProjectionSetImageFilter(const Self&); // not implemented

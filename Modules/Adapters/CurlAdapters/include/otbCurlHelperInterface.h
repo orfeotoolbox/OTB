@@ -62,7 +62,7 @@ public:
 
 protected:
   CurlHelperInterface() {}
-  virtual ~CurlHelperInterface() {}
+  ~CurlHelperInterface() ITK_OVERRIDE {}
 
 private:
   CurlHelperInterface(const Self &);  //purposely not implemented

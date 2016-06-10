@@ -121,18 +121,18 @@ public:
   /** Make a DataObject of the correct type to be used as the specified
    * output.
    */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs();
-  void GenerateOutputInformation();
+  void AllocateOutputs() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
   // Override since the filter needs all the data for the algorithm
-  virtual void GenerateInputRequestedRegion();
-  virtual void Reset(void);
-  virtual void Synthetize(void);
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void Reset(void) ITK_OVERRIDE;
+  void Synthetize(void) ITK_OVERRIDE;
 
   /** Input wrapper */
   void SetFirstInput(const TInputImage  *input1)
@@ -164,10 +164,10 @@ public:
 
 protected:
   PersistentMatrixTransposeMatrixImageFilter();
-  virtual ~PersistentMatrixTransposeMatrixImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PersistentMatrixTransposeMatrixImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Multi-thread version GenerateData. */
-  virtual void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   PersistentMatrixTransposeMatrixImageFilter(const Self &); //purposely not implemented
@@ -273,7 +273,7 @@ protected:
   /** Constructor */
   StreamingMatrixTransposeMatrixImageFilter() {};
   /** Destructor */
-  virtual ~StreamingMatrixTransposeMatrixImageFilter() {}
+  ~StreamingMatrixTransposeMatrixImageFilter() ITK_OVERRIDE {}
 
 private:
   StreamingMatrixTransposeMatrixImageFilter(const Self &); //purposely not implemented

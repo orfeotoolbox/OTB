@@ -55,7 +55,7 @@ public:
 
 protected:
   LineSpatialObjectList() {};
-  ~LineSpatialObjectList() {}
+  ~LineSpatialObjectList() ITK_OVERRIDE {}
 
 private:
   LineSpatialObjectList(const Self &); //purposely not implemented

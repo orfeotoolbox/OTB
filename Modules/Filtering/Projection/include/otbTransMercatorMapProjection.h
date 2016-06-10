@@ -61,7 +61,7 @@ public:
 
 protected:
   TransMercatorMapProjection();
-  virtual ~TransMercatorMapProjection();
+  ~TransMercatorMapProjection() ITK_OVERRIDE;
 
 private:
   TransMercatorMapProjection(const Self &); //purposely not implemented

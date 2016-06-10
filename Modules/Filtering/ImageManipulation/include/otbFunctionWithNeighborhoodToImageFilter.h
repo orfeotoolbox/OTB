@@ -121,11 +121,11 @@ public:
 
 protected:
   FunctionWithNeighborhoodToImageFilter();
-  virtual ~FunctionWithNeighborhoodToImageFilter(){}
+  ~FunctionWithNeighborhoodToImageFilter() ITK_OVERRIDE{}
 
-  void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** SpatialFunctionImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -138,7 +138,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   FunctionWithNeighborhoodToImageFilter(const Self &); //purposely not implemented

@@ -101,7 +101,7 @@ public:
   }
 protected:
   Log10ThresholdedImageFilter() {}
-  virtual ~Log10ThresholdedImageFilter() {}
+  ~Log10ThresholdedImageFilter() ITK_OVERRIDE {}
 
 private:
   Log10ThresholdedImageFilter(const Self&); //purposely not implemented

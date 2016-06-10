@@ -57,7 +57,7 @@ protected:
     this->SetParameter("StandardParallel2", "47.69601389");
   }
 
-  virtual ~Lambert2EtenduProjection() {}
+  ~Lambert2EtenduProjection() ITK_OVERRIDE {}
 
 private:
   Lambert2EtenduProjection(const Self &); //purposely not implemented

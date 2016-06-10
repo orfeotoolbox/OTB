@@ -133,15 +133,15 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~ImageToSURFKeyPointSetFilter();
+  ~ImageToSURFKeyPointSetFilter() ITK_OVERRIDE;
   /**
    * Standard PrintSelf method.
    */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Main computation method.
    */
-  virtual void  GenerateData();
+  void  GenerateData() ITK_OVERRIDE;
 
   /** Check local extremum for 8 neighbors (current)
    *

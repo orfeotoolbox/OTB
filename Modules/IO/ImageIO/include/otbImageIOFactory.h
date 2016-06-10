@@ -56,7 +56,7 @@ public:
 
 protected:
   ImageIOFactory();
-  ~ImageIOFactory();
+  ~ImageIOFactory() ITK_OVERRIDE;
 
 private:
   ImageIOFactory(const Self &); //purposely not implemented

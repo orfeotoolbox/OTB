@@ -65,7 +65,7 @@ protected:
   PolygonClassStatisticsAccumulator();
     
   /** Destructor */
-  virtual ~PolygonClassStatisticsAccumulator();
+  ~PolygonClassStatisticsAccumulator() ITK_OVERRIDE;
 
 private:
   //Number of pixels in all the polygons

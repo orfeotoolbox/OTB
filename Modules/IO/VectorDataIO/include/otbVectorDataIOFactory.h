@@ -59,7 +59,7 @@ public:
 
 protected:
   VectorDataIOFactory();
-  ~VectorDataIOFactory();
+  ~VectorDataIOFactory() ITK_OVERRIDE;
 
 private:
   VectorDataIOFactory(const Self &); //purposely not implemented

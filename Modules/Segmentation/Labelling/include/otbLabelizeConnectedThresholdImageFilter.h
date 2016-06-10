@@ -79,11 +79,11 @@ public:
 
 protected:
   LabelizeConnectedThresholdImageFilter();
-  virtual ~LabelizeConnectedThresholdImageFilter() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LabelizeConnectedThresholdImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Region growing */
-  virtual void RegionGrowing(const IndexType indexSeed);
+  void RegionGrowing(const IndexType indexSeed) ITK_OVERRIDE;
 
 private:
   LabelizeConnectedThresholdImageFilter(const Self &); //purposely not implemented

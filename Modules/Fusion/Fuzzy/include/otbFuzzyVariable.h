@@ -104,9 +104,9 @@ protected:
   /** Constructor */
   FuzzyVariable();
   /** Destructor */
-  virtual ~FuzzyVariable() {}
+  ~FuzzyVariable() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** Map containing the membership functions */

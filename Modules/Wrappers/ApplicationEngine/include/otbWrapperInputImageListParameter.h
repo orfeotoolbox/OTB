@@ -82,14 +82,14 @@ public:
   /** Add an image to the list. */
   void AddImage(FloatVectorImageType* image);
 
-  bool HasValue() const;
+  bool HasValue() const ITK_OVERRIDE;
 
 
   /** Erase one element of the list. */
   void Erase( unsigned int id );
 
  /** Clear all the list. */
-  virtual void ClearValue();
+  void ClearValue() ITK_OVERRIDE;
 
 
 protected:
@@ -97,7 +97,7 @@ protected:
   InputImageListParameter();
 
   /** Destructor */
-  virtual ~InputImageListParameter();
+  ~InputImageListParameter() ITK_OVERRIDE;
 
 
   FloatVectorImageListType::Pointer m_ImageList;

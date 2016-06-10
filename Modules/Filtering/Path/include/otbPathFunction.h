@@ -77,8 +77,8 @@ public:
 
 protected:
   PathFunction();
-  virtual ~PathFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PathFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   InputPathConstPointer m_Path;
 

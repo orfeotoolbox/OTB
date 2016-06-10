@@ -187,24 +187,24 @@ protected:
   StereoSensorModelToElevationFilter();
 
   /** Destructor */
-  virtual ~StereoSensorModelToElevationFilter();
+  ~StereoSensorModelToElevationFilter() ITK_OVERRIDE;
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
+                                    itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** Generate the input requested regions  */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   /** Things to do before the threaded generate-data */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Override VerifyInputInformation() since this filter's inputs do
       * not need to occupy the same physical space.
       *
       * \sa ProcessObject::VerifyInputInformation
       */
-  virtual void VerifyInputInformation() {}
+  void VerifyInputInformation() ITK_OVERRIDE {}
 
 
 private:

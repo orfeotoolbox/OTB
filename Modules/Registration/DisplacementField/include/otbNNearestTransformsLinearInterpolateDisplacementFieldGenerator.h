@@ -71,11 +71,11 @@ protected:
   /** Constructor */
   NNearestTransformsLinearInterpolateDisplacementFieldGenerator() {};
   /** Destructor */
-  virtual ~NNearestTransformsLinearInterpolateDisplacementFieldGenerator() {}
+  ~NNearestTransformsLinearInterpolateDisplacementFieldGenerator() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   NNearestTransformsLinearInterpolateDisplacementFieldGenerator(const Self &); //purposely not implemented

@@ -42,7 +42,7 @@ class ITK_ABI_EXPORT QtWidgetSimpleProgressReport : public QWidget
   Q_OBJECT
 public:
   QtWidgetSimpleProgressReport(QtWidgetModel * model);
-  virtual ~QtWidgetSimpleProgressReport();
+  ~QtWidgetSimpleProgressReport() ITK_OVERRIDE;
 
   void SetApplication(Application::Pointer app);
 

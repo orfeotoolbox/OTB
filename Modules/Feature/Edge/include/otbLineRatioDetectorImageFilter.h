@@ -111,10 +111,10 @@ public:
 
 protected:
   LineRatioDetectorImageFilter();
-  virtual ~LineRatioDetectorImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LineRatioDetectorImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3);
+  double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3) ITK_OVERRIDE;
 
 private:
   LineRatioDetectorImageFilter(const Self &); //purposely not implemented

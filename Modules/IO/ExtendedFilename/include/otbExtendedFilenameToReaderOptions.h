@@ -87,7 +87,7 @@ public:
 
 protected:
   ExtendedFilenameToReaderOptions();
-  virtual ~ExtendedFilenameToReaderOptions() {}
+  ~ExtendedFilenameToReaderOptions() ITK_OVERRIDE {}
 
 private:
   ExtendedFilenameToReaderOptions(const Self &);  //purposely not implemented

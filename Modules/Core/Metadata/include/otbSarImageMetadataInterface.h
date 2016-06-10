@@ -100,7 +100,7 @@ public:
   virtual const std::string GetAcquisitionMode() const;
 
   /** Get the enhanced band names (No enhanced band name support for SAR) */
-  StringVectorType GetEnhancedBandNames() const
+  StringVectorType GetEnhancedBandNames() const ITK_OVERRIDE
   {
     StringVectorType nothing;
     return nothing;
@@ -108,12 +108,12 @@ public:
 
 protected:
   SarImageMetadataInterface();
-  virtual ~SarImageMetadataInterface() {}
+  ~SarImageMetadataInterface() ITK_OVERRIDE {}
 
   PointSetPointer GetConstantValuePointSet(const RealType& value) const;
   IndexType GetConstantPolynomialDegree() const;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   LookupDataPointerType m_SarLut;
 

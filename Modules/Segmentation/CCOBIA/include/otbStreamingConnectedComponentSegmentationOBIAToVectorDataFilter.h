@@ -178,9 +178,9 @@ public:
 protected:
   PersistentConnectedComponentSegmentationOBIAToVectorDataFilter();
 
-  virtual ~PersistentConnectedComponentSegmentationOBIAToVectorDataFilter();
+  ~PersistentConnectedComponentSegmentationOBIAToVectorDataFilter() ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 private:
 
   ObjectSizeType m_MinimumObjectSize;
@@ -196,7 +196,7 @@ private:
   bool m_ComputeFeretDiameter;
   bool m_ComputePerimeter;
 
-  virtual VectorDataPointerType ProcessTile();
+  VectorDataPointerType ProcessTile() ITK_OVERRIDE;
 };
 
 /** \class StreamingConnectedComponentSegmentationOBIAToVectorDataFilter

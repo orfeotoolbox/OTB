@@ -39,7 +39,7 @@ class ITK_ABI_EXPORT QtWidgetChoiceParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetChoiceParameter(ChoiceParameter*, QtWidgetModel*);
-  virtual ~QtWidgetChoiceParameter();
+  ~QtWidgetChoiceParameter() ITK_OVERRIDE;
 
 protected slots:
   void SetValue( int value );
@@ -48,9 +48,9 @@ private:
   QtWidgetChoiceParameter(const QtWidgetChoiceParameter&); //purposely not implemented
   void operator=(const QtWidgetChoiceParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   ChoiceParameter::Pointer m_ChoiceParam;
 

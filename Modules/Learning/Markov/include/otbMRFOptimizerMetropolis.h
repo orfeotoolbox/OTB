@@ -69,7 +69,7 @@ public:
     this->Modified();
   }
 
-  inline bool Compute(double deltaEnergy)
+  inline bool Compute(double deltaEnergy) ITK_OVERRIDE
   {
     if (deltaEnergy < 0)
       {
@@ -109,7 +109,7 @@ protected:
     m_Generator = RandomGeneratorType::GetInstance();
     m_Generator->SetSeed();
     }
-  virtual ~MRFOptimizerMetropolis() {}
+  ~MRFOptimizerMetropolis() ITK_OVERRIDE {}
   RandomGeneratorType::Pointer m_Generator;
 };
 

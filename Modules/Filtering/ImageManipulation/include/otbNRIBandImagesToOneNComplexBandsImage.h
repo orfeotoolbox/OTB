@@ -69,13 +69,13 @@ public:
 
 protected:
   NRIBandImagesToOneNComplexBandsImage();
-  virtual ~NRIBandImagesToOneNComplexBandsImage() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~NRIBandImagesToOneNComplexBandsImage() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  void GenerateOutputInformation(void);
-  void BeforeThreadedGenerateData(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   NRIBandImagesToOneNComplexBandsImage(const Self &); //purposely not implemented

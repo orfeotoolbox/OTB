@@ -119,17 +119,17 @@ public:
    * number of splits, and call the EstimateSplitMap() method if
    * necessary.
    */
-  virtual unsigned int GetNumberOfSplits(const RegionType& region,
-                                         unsigned int requestedNumber);
+  unsigned int GetNumberOfSplits(const RegionType& region,
+                                         unsigned int requestedNumber) ITK_OVERRIDE;
 
   /** Calling this method will set the image region and the requested
    * number of splits, and call the EstimateSplitMap() method if
    * necessary. */
-  virtual RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                              const RegionType& region);
+  RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
+                              const RegionType& region) ITK_OVERRIDE;
 
   /** Make the Modified() method update the IsUpToDate flag */
-  virtual void Modified() const
+  void Modified() const ITK_OVERRIDE
   {
     // Call superclass implementation
     Superclass::Modified();
@@ -146,8 +146,8 @@ protected:
                                     m_IsUpToDate(false)
                                       {}
 
-  virtual ~ImageRegionAdaptativeSplitter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageRegionAdaptativeSplitter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** This methods actually estimate the split map and stores it in a

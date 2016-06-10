@@ -44,7 +44,7 @@ public:
 
 protected:
   DEMConvertAdapter();
-  virtual ~DEMConvertAdapter();
+  ~DEMConvertAdapter() ITK_OVERRIDE;
 
 private:
   DEMConvertAdapter(const Self &); //purposely not implemented

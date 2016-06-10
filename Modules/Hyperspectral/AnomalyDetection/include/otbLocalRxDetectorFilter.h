@@ -90,16 +90,16 @@ public:
   itkGetMacro(ExternalRadius, int);
 
   /** Main computation method */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 //       virtual void GenerateData();
-  virtual void BeforeThreadedGenerateData();
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 
 protected:
   LocalRxDetectorFilter();
-  virtual ~LocalRxDetectorFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LocalRxDetectorFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LocalRxDetectorFilter(const Self&); //purposely not implemented

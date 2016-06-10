@@ -62,7 +62,7 @@ public:
 
 protected:
   EllipsoidAdapter();
-  virtual ~EllipsoidAdapter();
+  ~EllipsoidAdapter() ITK_OVERRIDE;
 
 private:
   EllipsoidAdapter(const Self &); //purposely not implemented

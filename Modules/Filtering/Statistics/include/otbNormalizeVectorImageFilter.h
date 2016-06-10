@@ -193,9 +193,9 @@ public:
 
 protected:
   NormalizeVectorImageFilter ();
-  virtual ~NormalizeVectorImageFilter() { }
+  ~NormalizeVectorImageFilter() ITK_OVERRIDE { }
 
-  void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 
 private:

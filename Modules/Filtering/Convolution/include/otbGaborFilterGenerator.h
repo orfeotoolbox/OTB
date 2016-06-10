@@ -111,17 +111,17 @@ protected:
   /** constructor */
   GaborFilterGenerator();
   /** destructor */
-  virtual ~GaborFilterGenerator() {}
+  ~GaborFilterGenerator() ITK_OVERRIDE {}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Generate the filter coefficients */
   void GenerateFilter();
 
   /** Reimplement the Modified() method
    *to set the NeedToGenerateFilter to true */
-  virtual void Modified() const;
+  void Modified() const ITK_OVERRIDE;
 
 private:
   GaborFilterGenerator(const Self&); //purposely not implemented

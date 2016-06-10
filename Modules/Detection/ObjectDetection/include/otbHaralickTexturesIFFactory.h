@@ -80,8 +80,8 @@ public:
 
 protected:
   HaralickTexturesIFFactory(){}
-  ~HaralickTexturesIFFactory(){}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~HaralickTexturesIFFactory() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   HaralickTexturesIFFactory(const Self& ); //purposely not implemented

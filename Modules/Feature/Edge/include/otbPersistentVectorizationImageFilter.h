@@ -81,16 +81,16 @@ public:
   typedef otb::ImageToEdgePathFilter<ImageType, PathType> ImageToEdgePathFilterType;
   typedef typename ImageToEdgePathFilterType::Pointer     ImageToEdgePathFilterPointerType;
 
-  virtual void Reset(void);
-  virtual void Synthetize(void);
+  void Reset(void) ITK_OVERRIDE;
+  void Synthetize(void) ITK_OVERRIDE;
 
   itkGetObjectMacro(PathList, PathListType);
 
 protected:
   PersistentVectorizationImageFilter();
-  virtual ~PersistentVectorizationImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateData();
+  ~PersistentVectorizationImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   PersistentVectorizationImageFilter(const Self &); //purposely not implemented

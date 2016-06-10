@@ -40,15 +40,15 @@ class ITK_ABI_EXPORT QtWidgetEmptyParameter : public QtWidgetParameterBase
 
 public:
   QtWidgetEmptyParameter(EmptyParameter*, QtWidgetModel*);
-  virtual ~QtWidgetEmptyParameter();
+  ~QtWidgetEmptyParameter() ITK_OVERRIDE;
 
 private:
   QtWidgetEmptyParameter(const QtWidgetEmptyParameter&); //purposely not implemented
   void operator=(const QtWidgetEmptyParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 };
 
 

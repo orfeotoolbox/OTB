@@ -88,14 +88,14 @@ public:
   std::vector<std::string> GetParametersKeys(bool recursive = true);
 
   // Always has value
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     return true;
   }
 
 protected:
   ParameterGroup();
-  virtual ~ParameterGroup();
+  ~ParameterGroup() ITK_OVERRIDE;
 
   typedef std::vector<Parameter::Pointer> ParameterListType;
   ParameterListType m_ParameterList;

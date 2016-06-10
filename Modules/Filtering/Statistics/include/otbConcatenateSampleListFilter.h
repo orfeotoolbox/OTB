@@ -64,11 +64,11 @@ public:
 
 protected:
   /** This method causes the filter to generate its output. */
-   virtual void GenerateData();
+   void GenerateData() ITK_OVERRIDE;
 
   ConcatenateSampleListFilter();
-  virtual ~ConcatenateSampleListFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ConcatenateSampleListFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ConcatenateSampleListFilter(const Self&); //purposely not implemented

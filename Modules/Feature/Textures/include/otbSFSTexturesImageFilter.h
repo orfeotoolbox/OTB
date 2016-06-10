@@ -210,18 +210,18 @@ public:
   const OutputImageType * GetSDOutput() const;
   OutputImageType * GetSDOutput();
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
   std::vector<FunctorType> m_FunctorList;
 
 protected:
   SFSTexturesImageFilter();
-  virtual ~SFSTexturesImageFilter(){}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~SFSTexturesImageFilter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void BeforeThreadedGenerateData();
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
   /** Pad the input requested region by radius */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
 private:
   SFSTexturesImageFilter(const Self &); //purposely not implemented

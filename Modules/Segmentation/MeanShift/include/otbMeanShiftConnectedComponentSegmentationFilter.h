@@ -127,10 +127,10 @@ public:
 protected:
   MeanShiftConnectedComponentSegmentationFilter();
 
-  virtual ~MeanShiftConnectedComponentSegmentationFilter();
+  ~MeanShiftConnectedComponentSegmentationFilter() ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
-  virtual void GenerateData();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateData() ITK_OVERRIDE;
 
 private:
 

@@ -81,7 +81,7 @@ public:
   
 protected:
   DateTimeAdapter();
-  virtual ~DateTimeAdapter();
+  ~DateTimeAdapter() ITK_OVERRIDE;
 
 private:
   DateTimeAdapter(const Self &); //purposely not implemented

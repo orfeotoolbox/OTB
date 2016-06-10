@@ -82,11 +82,11 @@ public:
 
 protected:
   LineCorrelationDetectorImageFilter();
-  virtual ~LineCorrelationDetectorImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LineCorrelationDetectorImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Compute the measure */
-  virtual double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3);
+  double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3) ITK_OVERRIDE;
 
 private:
   LineCorrelationDetectorImageFilter(const Self &); //purposely not implemented

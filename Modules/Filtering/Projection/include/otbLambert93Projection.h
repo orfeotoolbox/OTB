@@ -57,7 +57,7 @@ protected:
     this->SetParameter("StandardParallel2", "49");
   }
 
-  virtual ~Lambert93Projection() {}
+  ~Lambert93Projection() ITK_OVERRIDE {}
 
 private:
   Lambert93Projection(const Self &); //purposely not implemented

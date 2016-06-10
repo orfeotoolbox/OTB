@@ -417,8 +417,8 @@ public:
 
 protected:
   ImageIOBase();
-  virtual ~ImageIOBase();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageIOBase() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Used internally to keep track of the type of the pixel. */
   IOPixelType m_PixelType;

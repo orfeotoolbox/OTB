@@ -172,19 +172,19 @@ public:
   }
 
   /** Override itk::ProcessObject method to let the internal filter do the propagation */
-  virtual void PropagateRequestedRegion(itk::DataObject *output);
+  void PropagateRequestedRegion(itk::DataObject *output) ITK_OVERRIDE;
 
 protected:
   StreamingResampleImageFilter();
 
   /** Destructor */
-  virtual ~StreamingResampleImageFilter() {};
+  ~StreamingResampleImageFilter() ITK_OVERRIDE {};
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   StreamingResampleImageFilter(const Self &); //purposely not implemented

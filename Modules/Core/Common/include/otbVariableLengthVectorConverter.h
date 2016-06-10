@@ -70,8 +70,8 @@ public:
 
 protected:
   VariableLengthVectorConverter(){}
-  virtual ~VariableLengthVectorConverter(){}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~VariableLengthVectorConverter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << "Attempt to use inexistant implementation of the converter!"
@@ -113,8 +113,8 @@ public:
 
 protected:
   VariableLengthVectorConverter(){}
-  virtual ~VariableLengthVectorConverter(){}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~VariableLengthVectorConverter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << "Attempt to use inexistant implementation of the converter!"
@@ -154,8 +154,8 @@ public:
 
 protected:
   VariableLengthVectorConverter(){}
-  virtual ~VariableLengthVectorConverter(){}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~VariableLengthVectorConverter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << "Converter: std::vector<std::vector<RealType>>  => VariableLengthVector<RealType>"
@@ -195,8 +195,8 @@ public:
 
 protected:
   VariableLengthVectorConverter(){}
-  virtual ~VariableLengthVectorConverter(){}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~VariableLengthVectorConverter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << "Converter: std::vector<std::vector<std::complex<RealType>>>  => VariableLengthVector<RealType>"
@@ -236,8 +236,8 @@ public:
 
 protected:
   VariableLengthVectorConverter(){}
-  virtual ~VariableLengthVectorConverter(){}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~VariableLengthVectorConverter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << "Converter: itk::FixedArray<RealType, VArrayDimension>  => VariableLengthVector<RealType>"
@@ -276,8 +276,8 @@ public:
 
 protected:
   VariableLengthVectorConverter(){}
-  virtual ~VariableLengthVectorConverter(){}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~VariableLengthVectorConverter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << "Converter: itk::Statistics::Histogram<RealType, VMeasurementVectorSize, TFrequencyContainer>  => VariableLengthVector<RealType>"

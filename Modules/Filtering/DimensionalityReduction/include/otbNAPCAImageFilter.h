@@ -86,10 +86,10 @@ public:
 
 protected:
   NAPCAImageFilter() { }
-  virtual ~NAPCAImageFilter () { }
+  ~NAPCAImageFilter () ITK_OVERRIDE { }
 
   /** Specific functionality of NAPCA */
-  virtual void GenerateTransformationMatrix();
+  void GenerateTransformationMatrix() ITK_OVERRIDE;
 }; // end of class
 
 } // end of namespace otb

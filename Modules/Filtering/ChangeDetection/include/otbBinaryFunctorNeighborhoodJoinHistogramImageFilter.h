@@ -145,9 +145,9 @@ public:
 
 protected:
   BinaryFunctorNeighborhoodJoinHistogramImageFilter();
-  virtual ~BinaryFunctorNeighborhoodJoinHistogramImageFilter() {}
+  ~BinaryFunctorNeighborhoodJoinHistogramImageFilter() ITK_OVERRIDE {}
 
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** BinaryFunctorNeighborhoodJoinHistogramImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -159,13 +159,13 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                    itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /**
    * Pad the inputs requested regions by radius
    */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   RadiusSizeType m_Radius;
 

@@ -105,10 +105,10 @@ public:
 
 protected:
   ExtractROIBase();
-  virtual ~ExtractROIBase() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ExtractROIBase() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** ExtractROIBase can produce an image which is a different
    * resolution than its input image.  As such, ExtractROIBase
@@ -118,7 +118,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** This function calls the actual region copier to do the mapping from
    * output image space to input image space.  It uses a
@@ -130,8 +130,8 @@ protected:
    * support output images of a lower dimension that the input.
    *
    * \sa ImageToImageFilter::CallCopyRegion() */
-  virtual void CallCopyOutputRegionToInputRegion(InputImageRegionType& destRegion,
-                                                 const OutputImageRegionType& srcRegion);
+  void CallCopyOutputRegionToInputRegion(InputImageRegionType& destRegion,
+                                                 const OutputImageRegionType& srcRegion) ITK_OVERRIDE;
 
   /** ExtractROIBase can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData()
@@ -146,7 +146,7 @@ protected:
 //  ATTENTION bizarre
 
   void ThreadedGenerateData(const OutputImageRegionType& /*outputRegionForThread*/,
-                            itk::ThreadIdType /*threadId*/)
+                            itk::ThreadIdType /*threadId*/) ITK_OVERRIDE
 
   {
 

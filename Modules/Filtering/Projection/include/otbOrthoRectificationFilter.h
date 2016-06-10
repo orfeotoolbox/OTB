@@ -90,11 +90,11 @@ public:
 
 protected:
   OrthoRectificationFilter();
-  virtual ~OrthoRectificationFilter();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~OrthoRectificationFilter() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateInputRequestedRegion();
-  virtual void GenerateOutputInformation(void);
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
 private:
   OrthoRectificationFilter(const Self &); //purposely not implemented

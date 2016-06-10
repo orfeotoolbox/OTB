@@ -86,8 +86,8 @@ public:
 
 protected:
   Parser();
-  virtual ~Parser();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~Parser() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 
 private:

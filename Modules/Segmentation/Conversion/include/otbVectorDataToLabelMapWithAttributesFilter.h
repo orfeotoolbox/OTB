@@ -184,20 +184,20 @@ public:
 ; itkGetMacro(InitialLabel, LabelType)
 ;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 protected:
   VectorDataToLabelMapWithAttributesFilter();
-  virtual ~VectorDataToLabelMapWithAttributesFilter()
+  ~VectorDataToLabelMapWithAttributesFilter() ITK_OVERRIDE
   {
   }
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /**
    * Standard pipeline method.
    */
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** VectorDataToLabelMapWithAttributesFilter needs the entire input. Therefore
    * it must provide an implementation GenerateInputRequestedRegion().

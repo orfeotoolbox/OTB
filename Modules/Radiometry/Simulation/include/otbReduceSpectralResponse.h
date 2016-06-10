@@ -110,7 +110,7 @@ public:
   virtual bool Clear();
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /**
    * \param PrecisionType
@@ -132,7 +132,7 @@ protected:
   /** Constructor from a ASCII file */
   //ReduceSpectralResponse( const std::string & filename );
   /** Destructor */
-  virtual ~ReduceSpectralResponse()
+  ~ReduceSpectralResponse() ITK_OVERRIDE
   {
   }
 ;

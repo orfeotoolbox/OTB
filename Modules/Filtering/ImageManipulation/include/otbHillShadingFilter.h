@@ -79,7 +79,7 @@ public:
 
 protected:
   HillShadingFilter() {}
-  virtual ~HillShadingFilter() {}
+  ~HillShadingFilter() ITK_OVERRIDE {}
 
 private:
   HillShadingFilter(const Self &); //purposely not implemented

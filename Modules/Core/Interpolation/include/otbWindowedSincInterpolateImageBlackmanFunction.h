@@ -131,8 +131,8 @@ public:
 
 protected:
   WindowedSincInterpolateImageBlackmanFunction() {};
-  ~WindowedSincInterpolateImageBlackmanFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~WindowedSincInterpolateImageBlackmanFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

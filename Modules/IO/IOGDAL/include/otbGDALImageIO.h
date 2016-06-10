@@ -113,8 +113,8 @@ public:
   
   /** Provide hist about the output container to deal with complex pixel
    *  type */ 
-  virtual void SetOutputImagePixelType( bool isComplexInternalPixelType, 
-                                        bool isVectorImage)
+  void SetOutputImagePixelType( bool isComplexInternalPixelType, 
+                                        bool isVectorImage) ITK_OVERRIDE
   {
     this->SetIsComplex(isComplexInternalPixelType);
     this->SetIsVectorImage(isVectorImage);
@@ -124,19 +124,19 @@ public:
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*);
+  bool CanReadFile(const char*) ITK_OVERRIDE;
 
   /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
-  virtual bool CanStreamRead()
+  bool CanStreamRead() ITK_OVERRIDE
   {
     return true;
   }
 
   /** Set the spacing and dimention information for the set filename. */
-  virtual void ReadImageInformation();
+  void ReadImageInformation() ITK_OVERRIDE;
 
   /** Reads the data from disk into the memory buffer provided. */
-  virtual void Read(void* buffer);
+  void Read(void* buffer) ITK_OVERRIDE;
 
   /** Reads 3D data from multiple files assuming one slice per file. */
   virtual void ReadVolume(void* buffer);
@@ -151,18 +151,18 @@ public:
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanWriteFile(const char*);
+  bool CanWriteFile(const char*) ITK_OVERRIDE;
 
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
-  virtual bool CanStreamWrite();
+  bool CanStreamWrite() ITK_OVERRIDE;
 
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */
-  virtual void WriteImageInformation();
+  void WriteImageInformation() ITK_OVERRIDE;
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegion has been set properly. */
-  virtual void Write(const void* buffer);
+  void Write(const void* buffer) ITK_OVERRIDE;
 
   /** Get all resolutions possible from the file dimensions */
   bool GetAvailableResolutions(std::vector<unsigned int>& res);
@@ -175,10 +175,10 @@ public:
    *  Currently this overview count is only based on the first band
    *  If no pre-computed overviews are available we provide the overview
    *  count based on size division by 2*/
-  virtual unsigned int GetOverviewsCount();
+  unsigned int GetOverviewsCount() ITK_OVERRIDE;
 
   /** Get description about overviews available into the file specified */
-  virtual std::vector<std::string> GetOverviewsInfo();
+  std::vector<std::string> GetOverviewsInfo() ITK_OVERRIDE;
 
 protected:
   /**
@@ -188,9 +188,9 @@ protected:
    */
   GDALImageIO();
   /** Destructor.*/
-  virtual ~GDALImageIO();
+  ~GDALImageIO() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Read all information on the image*/
   void InternalReadImageInformation();
   /** Write all information on the image*/

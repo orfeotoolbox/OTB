@@ -105,7 +105,7 @@ public:
 
 protected:
   UnaryFunctorNeighborhoodVectorImageFilter();
-  virtual ~UnaryFunctorNeighborhoodVectorImageFilter() { }
+  ~UnaryFunctorNeighborhoodVectorImageFilter() ITK_OVERRIDE { }
 
   /** UnaryFunctorNeighborhoodVectorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -117,14 +117,14 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                    itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /**
    * Since the number of components per pixel depends on the radius range, one must reimplement
    * this method to set the proper number of component on the filter output.
    */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   RadiusType m_Radius;
 

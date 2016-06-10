@@ -140,8 +140,8 @@ public:
 
 protected:
   ConfusionMatrixCalculator();
-  virtual ~ConfusionMatrixCalculator() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ConfusionMatrixCalculator() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 
 private:

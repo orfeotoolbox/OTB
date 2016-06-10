@@ -137,9 +137,9 @@ public:
 protected:
   DotProductImageFilter();
 
-  virtual ~DotProductImageFilter() {}
+  ~DotProductImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   DotProductImageFilter(const Self &); //purposely not implemented

@@ -140,7 +140,7 @@ public:
 
 protected:
   ConfusionMatrixMeasurements();
-  virtual ~ConfusionMatrixMeasurements() {}
+  ~ConfusionMatrixMeasurements() ITK_OVERRIDE {}
   //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 

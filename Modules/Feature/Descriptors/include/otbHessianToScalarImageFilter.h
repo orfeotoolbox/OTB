@@ -104,7 +104,7 @@ public:
   }
 protected:
   HessianToScalarImageFilter() {}
-  virtual ~HessianToScalarImageFilter() {}
+  ~HessianToScalarImageFilter() ITK_OVERRIDE {}
 
 private:
   HessianToScalarImageFilter(const Self &); //purposely not implemented

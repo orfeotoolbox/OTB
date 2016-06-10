@@ -38,7 +38,7 @@ class ITK_ABI_EXPORT QtWidgetInputImageListParameter : public QtWidgetParameterB
   Q_OBJECT
 public:
   QtWidgetInputImageListParameter(InputImageListParameter*, QtWidgetModel*);
-  virtual ~QtWidgetInputImageListParameter();
+  ~QtWidgetInputImageListParameter() ITK_OVERRIDE;
 
 
 signals:
@@ -59,9 +59,9 @@ private:
   QtWidgetInputImageListParameter(const QtWidgetInputImageListParameter&); //purposely not implemented
   void operator=(const QtWidgetInputImageListParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   void RecreateImageList();
   void UpdateFileList( std::map<unsigned int, unsigned int> idMap );

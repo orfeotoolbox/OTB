@@ -89,7 +89,7 @@ public:
   typedef std::complex<PrecisionType> ComplexPrecisionType;
 
   /** Evalulate the function */
-  virtual OutputType Evaluate(const PathType& path) const;
+  OutputType Evaluate(const PathType& path) const ITK_OVERRIDE;
   virtual OutputType Evaluate() const;
 
   itkSetMacro(P, unsigned int);
@@ -99,8 +99,8 @@ public:
 
 protected:
   ComplexMomentPathFunction();
-  virtual ~ComplexMomentPathFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ComplexMomentPathFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ComplexMomentPathFunction(const Self &);  //purposely not implemented

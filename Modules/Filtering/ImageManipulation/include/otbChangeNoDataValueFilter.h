@@ -134,10 +134,10 @@ protected:
   ChangeNoDataValueFilter()
   {}
 
-  virtual ~ChangeNoDataValueFilter()
+  ~ChangeNoDataValueFilter() ITK_OVERRIDE
   {}
 
-  virtual void GenerateOutputInformation()
+  void GenerateOutputInformation() ITK_OVERRIDE
   {
     Superclass::GenerateOutputInformation();
 

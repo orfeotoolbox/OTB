@@ -123,10 +123,10 @@ protected:
   PipelineMemoryPrintCalculator();
 
   /** Destructor */
-  virtual ~PipelineMemoryPrintCalculator();
+  ~PipelineMemoryPrintCalculator() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Recursive method to evaluate memory print in bytes */
   MemoryPrintType EvaluateProcessObjectPrintRecursive(ProcessObjectType * process);

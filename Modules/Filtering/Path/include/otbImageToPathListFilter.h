@@ -73,9 +73,9 @@ public:
 
 protected:
   ImageToPathListFilter();
-  virtual ~ImageToPathListFilter() {}
+  ~ImageToPathListFilter() ITK_OVERRIDE {}
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageToPathListFilter(const Self &); //purposely not implemented

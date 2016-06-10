@@ -122,7 +122,7 @@ protected:
   CommandLineLauncher(const char * exp);
 
   /** Destructor */
-  virtual ~CommandLineLauncher();
+  ~CommandLineLauncher() ITK_OVERRIDE;
 
   /** Load the executable path. It looks for the key --modulePath,
     * extract and interpret as path the following strings.

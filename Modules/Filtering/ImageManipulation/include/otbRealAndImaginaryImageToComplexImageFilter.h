@@ -113,7 +113,7 @@ public:
 
 protected:
   RealAndImaginaryImageToComplexImageFilter() {}
-  virtual ~RealAndImaginaryImageToComplexImageFilter() {}
+  ~RealAndImaginaryImageToComplexImageFilter() ITK_OVERRIDE {}
 
 private:
   RealAndImaginaryImageToComplexImageFilter(const Self&); //purposely not implemented

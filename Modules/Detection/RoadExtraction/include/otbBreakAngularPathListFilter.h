@@ -64,11 +64,11 @@ protected:
   /** Constructor */
   BreakAngularPathListFilter();
   /** Destructor */
-  virtual ~BreakAngularPathListFilter() {}
+  ~BreakAngularPathListFilter() ITK_OVERRIDE {}
   /** GenerateData method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   BreakAngularPathListFilter(const Self &); //purposely not implemented

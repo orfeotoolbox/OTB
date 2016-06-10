@@ -39,7 +39,7 @@ class ITK_ABI_EXPORT QtWidgetStringParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetStringParameter(StringParameter*, QtWidgetModel*);
-  virtual ~QtWidgetStringParameter();
+  ~QtWidgetStringParameter() ITK_OVERRIDE;
 
 protected slots:
   void SetValue( const QString& value );
@@ -48,9 +48,9 @@ private:
   QtWidgetStringParameter(const QtWidgetStringParameter&); //purposely not implemented
   void operator=(const QtWidgetStringParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   StringParameter::Pointer m_StringParam;
   QHBoxLayout *            m_HLayout;

@@ -74,17 +74,17 @@ public:
   }
 
   /** Main computation method */
-  virtual void ThreadedGenerateData(const InputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
-  virtual void BeforeThreadedGenerateData();
-  virtual void GenerateInputRequestedRegion();
+  void ThreadedGenerateData(const InputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
 protected:
   /** Constructor */
   BinaryImageToDensityImageFilter();
   /** Destructor */
-  virtual ~BinaryImageToDensityImageFilter();
+  ~BinaryImageToDensityImageFilter() ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   BinaryImageToDensityImageFilter(const Self &); //purposely not implemented

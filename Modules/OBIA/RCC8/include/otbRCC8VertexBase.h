@@ -79,9 +79,9 @@ protected:
   /** Constructor */
   RCC8VertexBase();
   /** Desctructor */
-  virtual ~RCC8VertexBase() {}
+  ~RCC8VertexBase() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** The segmentation level */

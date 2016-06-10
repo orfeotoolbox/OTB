@@ -165,9 +165,9 @@ public:
 
 protected:
   DEMHandler();
-  virtual ~DEMHandler() {}
+  ~DEMHandler() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   // Ossim does not allow retrieving the geoid file path
   // We therefore must keep it on our side

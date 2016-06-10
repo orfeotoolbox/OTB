@@ -85,12 +85,12 @@ public:
 
   /** Evaluate the function at specified DataNode position.
    * Subclasses must provide this method. */
-  virtual TOutput Evaluate( const DataNodeType& node ) const = 0;
+  TOutput Evaluate( const DataNodeType& node ) const ITK_OVERRIDE = 0;
 
 protected:
   DataNodeVectorDataFunction();
-  ~DataNodeVectorDataFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~DataNodeVectorDataFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Const pointer to the input VectorData. */
   VectorDataConstPointerType  m_VectorData;

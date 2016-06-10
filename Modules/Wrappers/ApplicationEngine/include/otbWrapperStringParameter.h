@@ -60,12 +60,12 @@ public:
     return m_Value;
   }
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     return !m_Value.empty();
   }
 
-  void ClearValue()
+  void ClearValue() ITK_OVERRIDE
   {
     m_Value = "";
   }
@@ -76,7 +76,7 @@ protected:
   {}
 
   /** Destructor */
-  virtual ~StringParameter()
+  ~StringParameter() ITK_OVERRIDE
   {}
 
   std::string  m_Value;

@@ -57,8 +57,8 @@ public:
 
 protected:
   PlaceNameToLonLat();
-  virtual ~PlaceNameToLonLat() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PlaceNameToLonLat() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   void RetrieveXML(const std::ostringstream& urlStream);
   void ParseXMLYahoo();
   void ParseXMLGoogle();

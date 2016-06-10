@@ -134,8 +134,8 @@ public:
 
 protected:
   ContinuousMinimumMaximumImageCalculator();
-  virtual ~ContinuousMinimumMaximumImageCalculator() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ContinuousMinimumMaximumImageCalculator() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   PixelType         m_Minimum;
   PixelType         m_Maximum;

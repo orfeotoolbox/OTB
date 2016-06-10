@@ -81,7 +81,7 @@ public:
   itkGetMacro(AngleArray, AngleArrayType);
   itkSetMacro(AngleArray, AngleArrayType);
 
-  void SetInput ( unsigned int i, const InputImageType * );
+  void SetInput ( unsigned int i, const InputImageType * ) ITK_OVERRIDE;
   using Superclass::SetInput;
 
   const InputImageType * GetInput( unsigned int i ) const;
@@ -89,9 +89,9 @@ public:
 
 protected:
   AngularProjectionImageFilter();
-  virtual ~AngularProjectionImageFilter() { }
+  ~AngularProjectionImageFilter() ITK_OVERRIDE { }
 
-  virtual void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadID );
+  void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadID ) ITK_OVERRIDE;
   virtual OutputImagePixelType InternalGenerateData ( const ImageRegionConstIteratorVectorType & ) const;
 
 private:

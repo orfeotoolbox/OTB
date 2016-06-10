@@ -87,7 +87,7 @@ protected:
   CommandLineParser();
 
   /** Destructor */
-  virtual ~CommandLineParser();
+  ~CommandLineParser() ITK_OVERRIDE;
 
 private:
   CommandLineParser(const CommandLineParser &); //purposely not implemented

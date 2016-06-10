@@ -121,10 +121,10 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
 protected:
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   VectorDataToLabelImageFilter();
-  virtual ~VectorDataToLabelImageFilter()
+  ~VectorDataToLabelImageFilter() ITK_OVERRIDE
   {
     // Destroy the geometries stored
     for (unsigned int idx = 0; idx < m_SrcDataSetGeometries.size(); ++idx)
@@ -138,9 +138,9 @@ protected:
       }
   }
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   VectorDataToLabelImageFilter(const Self&); //purposely not implemented

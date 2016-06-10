@@ -43,18 +43,18 @@ class ITK_ABI_EXPORT QtWidgetParameterGroup : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*);
-  virtual ~QtWidgetParameterGroup();
+  ~QtWidgetParameterGroup() ITK_OVERRIDE;
 
 public slots:
-  virtual void SetActivationState( bool value );
+  void SetActivationState( bool value ) ITK_OVERRIDE;
 
 private:
   QtWidgetParameterGroup(const QtWidgetParameterGroup&); //purposely not implemented
   void operator=(const QtWidgetParameterGroup&); //purposely not implemented
 
-  void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   virtual void ProcessChild(Parameter * currentNode, bool status);
 

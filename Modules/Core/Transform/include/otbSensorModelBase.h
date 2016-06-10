@@ -89,10 +89,10 @@ public:
 
 protected:
   SensorModelBase();
-  virtual ~SensorModelBase();
+  ~SensorModelBase() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** ImageKeywordlist */
   ImageKeywordlist m_ImageKeywordlist;

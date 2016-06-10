@@ -106,9 +106,9 @@ protected:
   /** Constructor */
   PolygonToPolygonRCC8Calculator();
   /** Destructor */
-  virtual ~PolygonToPolygonRCC8Calculator() {}
+  ~PolygonToPolygonRCC8Calculator() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** The RCC8 relation value */

@@ -93,7 +93,7 @@ protected:
     m_LonSpacing(0.0), m_LatSpacing(0.0),
     m_LonRotation(0.0), m_LatRotation(0.0),
     m_ImageFilename("") {}
-  ~WorldFile() {}
+  ~WorldFile() ITK_OVERRIDE {}
 
 private:
   WorldFile(const Self &); //purposely not implemented

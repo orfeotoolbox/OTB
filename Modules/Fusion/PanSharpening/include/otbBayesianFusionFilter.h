@@ -300,14 +300,14 @@ public:
 
 protected:
   BayesianFusionFilter();
-  virtual ~BayesianFusionFilter();
+  ~BayesianFusionFilter() ITK_OVERRIDE;
   /** Check if internal statistics need to be computed, and do so */
-  void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
   /** Compute internal statistics required for fusion */
   void ComputeInternalStatistics(void);
   /** Call the superclass implementation and set the StatisticsHaveBeenGenerated
    * flag to false */
-  virtual void Modified(void) const;
+  void Modified(void) const ITK_OVERRIDE;
 
 private:
   /** Ponderation declaration*/

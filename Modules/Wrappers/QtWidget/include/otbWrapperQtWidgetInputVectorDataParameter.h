@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetInputVectorDataParameter : public QtWidgetParameter
   Q_OBJECT
 public:
   QtWidgetInputVectorDataParameter(InputVectorDataParameter*, QtWidgetModel*);
-  virtual ~QtWidgetInputVectorDataParameter();
+  ~QtWidgetInputVectorDataParameter() ITK_OVERRIDE;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -53,9 +53,9 @@ private:
   QtWidgetInputVectorDataParameter(const QtWidgetInputVectorDataParameter&); //purposely not implemented
   void operator=(const QtWidgetInputVectorDataParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
 
   InputVectorDataParameter::Pointer m_InputVectorDataParam;

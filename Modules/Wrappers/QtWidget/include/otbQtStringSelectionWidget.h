@@ -46,7 +46,7 @@ signals:
 
 public:
   QtStringSelectionWidget();
-  virtual ~QtStringSelectionWidget();
+  ~QtStringSelectionWidget() ITK_OVERRIDE;
 
   bool IsChecked()
   {

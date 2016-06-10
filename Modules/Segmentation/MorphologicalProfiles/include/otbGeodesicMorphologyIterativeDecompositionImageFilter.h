@@ -113,7 +113,7 @@ public:
    * Get The leveling images for each scale.
    * \return The leveling images for each scale.
    */
-  OutputImageListType* GetOutput(void);
+  OutputImageListType* GetOutput(void) ITK_OVERRIDE;
   /**
    * Get convex membership function for each scale
    * \return The convex membership function for each scale.
@@ -129,15 +129,15 @@ protected:
   /** Constructor */
   GeodesicMorphologyIterativeDecompositionImageFilter();
   /** Destructor */
-  virtual ~GeodesicMorphologyIterativeDecompositionImageFilter() {}
+  ~GeodesicMorphologyIterativeDecompositionImageFilter() ITK_OVERRIDE {}
   /** Generate output information */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
   /** Generate input requested region */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** Printself method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** The step for the scale analysis */

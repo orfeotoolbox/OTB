@@ -412,9 +412,9 @@ protected:
   /** Constructor */
   SVMModel();
   /** Destructor */
-  virtual ~SVMModel();
+  ~SVMModel() ITK_OVERRIDE;
   /** Display infos */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 /** Delete any allocated problem */
   void DeleteProblem();
@@ -423,7 +423,7 @@ protected:
   void DeleteModel();
 
   /** Initializes default parameters */
-  void Initialize();
+  void Initialize() ITK_OVERRIDE;
 
 private:
   SVMModel(const Self &); //purposely not implemented

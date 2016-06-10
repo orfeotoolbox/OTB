@@ -114,7 +114,7 @@ public:
    * initializing them.
    * \post <tt>GetOutput() != NULL</tt>
    */
-  virtual void PrepareOutputs();
+  void PrepareOutputs() ITK_OVERRIDE;
 
 protected:
   /** Default constructor.
@@ -124,7 +124,7 @@ protected:
   /** Destructor.
    * Does nothing.
    */
-  virtual ~GeometriesSource();
+  ~GeometriesSource() ITK_OVERRIDE;
 
   /** Ensures that the output geometries are allocated before processing.
    * If the output hasn't been set, at this point, the default output geometries

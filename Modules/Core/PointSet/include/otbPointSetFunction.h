@@ -68,9 +68,9 @@ public:
 
 protected:
   PointSetFunction();
-  ~PointSetFunction() {}
+  ~PointSetFunction() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   PointSetFunction(const Self &);  //purposely not implemented

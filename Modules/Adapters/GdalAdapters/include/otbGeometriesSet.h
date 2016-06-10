@@ -156,10 +156,10 @@ protected:
   GeometriesSet(ogr::Layer layer);
 
   /** Destructor. */
-  virtual ~GeometriesSet();
+  ~GeometriesSet() ITK_OVERRIDE;
 
   /** Prints self to stream. */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 private:
   typedef boost::variant<ogr::DataSource::Pointer, ogr::Layer> AnyGeometriesSetType;
   AnyGeometriesSetType m_GeometriesSet;

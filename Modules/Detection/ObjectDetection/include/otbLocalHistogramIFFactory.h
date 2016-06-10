@@ -79,8 +79,8 @@ public:
 
 protected:
   LocalHistogramIFFactory(){}
-  ~LocalHistogramIFFactory(){}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LocalHistogramIFFactory() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LocalHistogramIFFactory(const Self& ); //purposely not implemented

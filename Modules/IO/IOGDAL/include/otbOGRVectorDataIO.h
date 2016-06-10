@@ -86,29 +86,29 @@ public:
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*) const;
+  bool CanReadFile(const char*) const ITK_OVERRIDE;
 
   /** Reads the data from disk into the memory buffer provided. */
-  virtual void Read(itk::DataObject* data);
+  void Read(itk::DataObject* data) ITK_OVERRIDE;
 
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanWriteFile(const char*) const;
+  bool CanWriteFile(const char*) const ITK_OVERRIDE;
 
   /** Writes the data to disk from the memory buffer provided */
-  virtual void Write(const itk::DataObject* data,  char ** papszOptions = NULL);
+  void Write(const itk::DataObject* data,  char ** papszOptions = NULL) ITK_OVERRIDE;
 
 protected:
   /** Constructor.*/
   OGRVectorDataIO();
   /** Destructor.*/
-  virtual ~OGRVectorDataIO();
+  ~OGRVectorDataIO() ITK_OVERRIDE;
 
   /*   virtual void InternalReadVectorDataInformation(){}; */
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   OGRVectorDataIO(const Self &); //purposely not implemented

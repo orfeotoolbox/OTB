@@ -135,10 +135,10 @@ protected:
   /** Constructor */
   LeastSquareAffineTransformEstimator();
   /** Destructor */
-  virtual ~LeastSquareAffineTransformEstimator();
+  ~LeastSquareAffineTransformEstimator() ITK_OVERRIDE;
 
   /** The PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LeastSquareAffineTransformEstimator (const Self &);   // purposely not implemented

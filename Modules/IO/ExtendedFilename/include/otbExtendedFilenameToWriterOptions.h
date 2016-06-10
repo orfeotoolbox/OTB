@@ -96,7 +96,7 @@ public:
 
 protected:
   ExtendedFilenameToWriterOptions();
-  virtual ~ExtendedFilenameToWriterOptions() {}
+  ~ExtendedFilenameToWriterOptions() ITK_OVERRIDE {}
 
 private:
   ExtendedFilenameToWriterOptions(const Self &);  //purposely not implemented

@@ -108,7 +108,7 @@ public:
 
 protected:
   SensorModelAdapter();
-  virtual ~SensorModelAdapter();
+  ~SensorModelAdapter() ITK_OVERRIDE;
 
 private:
   SensorModelAdapter(const Self &); //purposely not implemented

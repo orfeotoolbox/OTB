@@ -58,14 +58,14 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(MRFEnergyFisherClassification, MRFEnergy);
 
-  void SetNumberOfParameters(const unsigned int nParameters)
+  void SetNumberOfParameters(const unsigned int nParameters) ITK_OVERRIDE
   {
     Superclass::SetNumberOfParameters(nParameters);
     this->m_Parameters.SetSize(nParameters);
     this->Modified();
   }
 
-  double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
+  double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2) ITK_OVERRIDE
   {
     if ((unsigned int)value2 >= this->GetNumberOfParameters()/3)
       {
@@ -87,7 +87,7 @@ public:
 protected:
   // The constructor and destructor.
   MRFEnergyFisherClassification() {};
-  virtual ~MRFEnergyFisherClassification() {};
+  ~MRFEnergyFisherClassification() ITK_OVERRIDE {};
 };
 }
 #endif

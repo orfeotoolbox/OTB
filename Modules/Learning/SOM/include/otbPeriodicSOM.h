@@ -89,19 +89,19 @@ protected:
   /** Constructor */
   PeriodicSOM() {}
   /** Destructor */
-  virtual ~PeriodicSOM() {}
+  ~PeriodicSOM() ITK_OVERRIDE {}
   /** Output information redefinition */
-  virtual void GenerateOutputInformation()
+  void GenerateOutputInformation() ITK_OVERRIDE
   {
     Superclass::GenerateOutputInformation ();
   }
   /** Output allocation redefinition */
-  virtual void AllocateOutputs()
+  void AllocateOutputs() ITK_OVERRIDE
   {
     Superclass::AllocateOutputs();
   }
   /** Main computation method */
-  virtual void GenerateData(void)
+  void GenerateData(void) ITK_OVERRIDE
   {
     Superclass::GenerateData();
   }
@@ -111,16 +111,16 @@ protected:
   * \param beta The learning coefficient,
   * \param radius The radius of the nieghbourhood.
   */
-  virtual void UpdateMap(const NeuronType& sample, double beta, SizeType& radius);
+  void UpdateMap(const NeuronType& sample, double beta, SizeType& radius) ITK_OVERRIDE;
   /**
   * Step one iteration.
   */
-  virtual void Step(unsigned int currentIteration)
+  void Step(unsigned int currentIteration) ITK_OVERRIDE
   {
     Superclass::Step(currentIteration);
   }
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

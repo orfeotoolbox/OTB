@@ -158,13 +158,13 @@ public:
 
 protected:
   /** Triggers the Computation */
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /** Constructor */
   VectorDataToDSValidatedVectorDataFilter();
   /** Destructor */
-  virtual ~VectorDataToDSValidatedVectorDataFilter() {}
+  ~VectorDataToDSValidatedVectorDataFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   std::string GetNextID()
     {

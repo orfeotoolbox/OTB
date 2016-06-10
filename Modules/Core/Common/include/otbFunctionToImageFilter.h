@@ -103,11 +103,11 @@ public:
 
 protected:
   FunctionToImageFilter();
-  virtual ~FunctionToImageFilter() {}
+  ~FunctionToImageFilter() ITK_OVERRIDE {}
 
   /** Validate the presence of all three inputs. If one or more inputs
    * are missing, throw an exception. */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** SpatialFunctionImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -119,8 +119,8 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   FunctionToImageFilter(const Self &); //purposely not implemented

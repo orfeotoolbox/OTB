@@ -82,10 +82,10 @@ public:
 
 protected:
   ImageToEdgePathFilter();
-  virtual ~ImageToEdgePathFilter() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateOutputInformation() {}  //does nothing
-  virtual void GenerateData();
+  ~ImageToEdgePathFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE {}  //does nothing
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   ImageToEdgePathFilter(const Self &); // purposely not implemented

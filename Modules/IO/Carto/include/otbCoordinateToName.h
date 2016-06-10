@@ -114,8 +114,8 @@ public:
 
 protected:
   CoordinateToName();
-  virtual ~CoordinateToName() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~CoordinateToName() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   void ParseXMLGeonames(std::string& placeName, std::string& countryName) const;
 
   virtual void DoEvaluate();

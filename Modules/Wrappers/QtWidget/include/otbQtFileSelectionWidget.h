@@ -41,7 +41,7 @@ class ITK_ABI_EXPORT QtFileSelectionWidget : public QWidget
   Q_OBJECT
 public:
   QtFileSelectionWidget();
-  virtual ~QtFileSelectionWidget();
+  ~QtFileSelectionWidget() ITK_OVERRIDE;
 
   bool IsChecked()
   {

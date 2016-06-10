@@ -154,13 +154,13 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType *image);
 
   /** DisplacementFieldImageFilter produces a vector image. */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) override;
 
   /** Just checking if transform is set. */
-  virtual void BeforeThreadedGenerateData(void);
+  void BeforeThreadedGenerateData(void) override;
 
   /** Compute the Modified Time based on changes to the components. */
-  ModifiedTimeType GetMTime(void) const;
+  ModifiedTimeType GetMTime(void) const override;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -173,16 +173,16 @@ public:
 
 protected:
   TransformToDisplacementFieldSource(void);
-  ~TransformToDisplacementFieldSource(void) {}
+  ~TransformToDisplacementFieldSource(void) override {}
 
-  void PrintSelf(std::ostream & os, Indent indent) const;
+  void PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** TransformToDisplacementFieldSource can be implemented as a multithreaded
    * filter.
    */
   void ThreadedGenerateData(
     const OutputImageRegionType & outputRegionForThread,
-    ThreadIdType threadId);
+    ThreadIdType threadId) override;
 
   /** Default implementation for resampling that works for any
    * transformation type.

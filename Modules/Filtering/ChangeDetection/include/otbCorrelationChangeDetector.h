@@ -80,7 +80,7 @@ public:
 
 protected:
   CorrelationChangeDetector() {}
-  virtual ~CorrelationChangeDetector() {}
+  ~CorrelationChangeDetector() ITK_OVERRIDE {}
 
 private:
   CorrelationChangeDetector(const Self &); //purposely not implemented

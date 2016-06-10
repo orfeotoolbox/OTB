@@ -167,17 +167,17 @@ protected:
   /** Constructor */
   GCPsToRPCSensorModelImageFilter();
   /** Destructor */
-  virtual ~GCPsToRPCSensorModelImageFilter();
+  ~GCPsToRPCSensorModelImageFilter() ITK_OVERRIDE;
 
   /** The PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Actual estimation of the sensor model takes place in the
    * GenerateOutputInformation() method */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Drive the model up-to-date flag */
-  virtual void Modified() const;
+  void Modified() const ITK_OVERRIDE;
 
 private:
   GCPsToRPCSensorModelImageFilter (const Self &);   // purposely not implemented

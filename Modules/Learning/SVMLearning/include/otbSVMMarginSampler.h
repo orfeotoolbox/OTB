@@ -84,11 +84,11 @@ public:
 
 protected:
   SVMMarginSampler();
-  virtual ~SVMMarginSampler() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~SVMMarginSampler() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Starts the classification process */
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   virtual void DoMarginSampling();
 
 private:

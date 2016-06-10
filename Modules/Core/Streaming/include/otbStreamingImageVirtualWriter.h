@@ -137,18 +137,18 @@ public:
 
   /** Override Update() from ProcessObject
    *  This filter does not produce an output */
-  virtual void Update();
+  void Update() ITK_OVERRIDE;
 
 protected:
   StreamingImageVirtualWriter();
 
-  virtual ~StreamingImageVirtualWriter();
+  ~StreamingImageVirtualWriter() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
 private:
   StreamingImageVirtualWriter(const StreamingImageVirtualWriter &); //purposely not implemented

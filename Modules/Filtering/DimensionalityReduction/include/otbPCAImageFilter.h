@@ -158,7 +158,7 @@ public:
 
 protected:
   PCAImageFilter();
-  virtual ~PCAImageFilter() { }
+  ~PCAImageFilter() ITK_OVERRIDE { }
 
   /** GenerateOutputInformation
    * Propagate vector length info and modify if needed
@@ -168,14 +168,14 @@ protected:
    * (which may not be square) has to be given,
    * otherwize, GenerateOutputInformation throws an itk::ExceptionObject
    */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** GenerateData
    * Through a filter of filter structure
    */
-  virtual void GenerateData ();
+  void GenerateData () ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Internal methods */
   virtual void ForwardGenerateOutputInformation();

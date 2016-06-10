@@ -90,15 +90,15 @@ public:
 
 protected:
   UnaryFunctorObjectListBooleanFilter();
-  virtual ~UnaryFunctorObjectListBooleanFilter() {}
+  ~UnaryFunctorObjectListBooleanFilter() ITK_OVERRIDE {}
 
   /** Multi-threading implementation */
 
-  virtual void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
   /** startIndex and stopIndex represent the indices of the Objects to
   examine in thread threadId */
-  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** Internal structure used for passing image data into the threading library */
   struct ThreadStruct

@@ -64,22 +64,22 @@ public:
   typedef typename OutputImageType::Pointer       OutputImagePointerType;
 
   /** Generate the input requested region from the first element in the list. */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   /** Generate the output information by building the output list. */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
 protected:
 
   /** Main computation method */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   /** Constructor */
   VectorImageToImageListFilter() {};
   /** Destructor */
-  virtual ~VectorImageToImageListFilter() {}
+  ~VectorImageToImageListFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   VectorImageToImageListFilter(const Self &); //purposely not implemented

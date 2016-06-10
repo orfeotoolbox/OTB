@@ -59,7 +59,7 @@ protected:
     this->SetParameter("FalseEasting", "28001.642");
     this->SetParameter("ScaleFactor", "1.00");
   }
-  virtual ~SVY21MapProjection() {}
+  ~SVY21MapProjection() ITK_OVERRIDE {}
 
 private:
   SVY21MapProjection(const Self &); //purposely not implemented

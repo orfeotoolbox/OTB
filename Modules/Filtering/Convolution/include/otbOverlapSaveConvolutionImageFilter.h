@@ -138,8 +138,8 @@ public:
   /** Since this filter implements a neighborhood operation, it requests a largest input
    * region than the output region.
    */
-  virtual void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError);
+  void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -151,13 +151,13 @@ protected:
   /** Constructor */
   OverlapSaveConvolutionImageFilter();
   /** destructor */
-  virtual ~OverlapSaveConvolutionImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~OverlapSaveConvolutionImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /* TODO For the moment this class provide only a GenerateData(),
    * due to limited thread-safety of FFTW plan creation.
    */
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   // void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:

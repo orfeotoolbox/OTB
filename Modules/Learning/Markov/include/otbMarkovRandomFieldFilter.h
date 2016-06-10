@@ -316,8 +316,8 @@ public:
 
 protected:
   MarkovRandomFieldFilter();
-  virtual ~MarkovRandomFieldFilter(){}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~MarkovRandomFieldFilter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Allocate memory for labelled images. This is automatically called
    * in GenerateData().
@@ -332,10 +332,10 @@ protected:
 
   virtual void ApplyMarkovRandomFieldFilter();
 
-  virtual void GenerateData();
-  virtual void GenerateInputRequestedRegion();
-  virtual void EnlargeOutputRequestedRegion(itk::DataObject *);
-  virtual void GenerateOutputInformation();
+  void GenerateData() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void EnlargeOutputRequestedRegion(itk::DataObject *) ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   MarkovRandomFieldFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

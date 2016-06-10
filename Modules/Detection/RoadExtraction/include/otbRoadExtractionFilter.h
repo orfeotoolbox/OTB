@@ -138,15 +138,15 @@ protected:
   /** Constructor */
   RoadExtractionFilter();
   /** Destructor */
-  ~RoadExtractionFilter() {}
+  ~RoadExtractionFilter() ITK_OVERRIDE {}
 
   /** Prepare main computation method */
   void BeforeGenerateData(void);
 
   /** Main computation method */
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

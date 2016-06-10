@@ -61,7 +61,7 @@ public:
   typedef std::map<std::string , std::string>           GenericMapType;
   typedef std::map<std::string , GenericMapType>        GenericMapContainer;
 
-  virtual void Modified() const
+  void Modified() const ITK_OVERRIDE
     {
       m_IsUpdated = false;
     }
@@ -92,8 +92,8 @@ protected:
   virtual void Read();
 
   StatisticsXMLFileReader();
-  virtual ~StatisticsXMLFileReader() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~StatisticsXMLFileReader() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   StatisticsXMLFileReader(const Self&); //purposely not implemented

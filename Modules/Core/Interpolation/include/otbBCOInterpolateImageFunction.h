@@ -106,12 +106,12 @@ public:
    *
    * ImageFunction::IsInsideBuffer() can be used to check bounds before
    * calling the method. */
-  virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const = 0;
+  OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const ITK_OVERRIDE = 0;
 
 protected:
   BCOInterpolateImageFunctionBase() : m_Radius(2), m_WinSize(5), m_Alpha(-0.5) {};
-  virtual ~BCOInterpolateImageFunctionBase() {};
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~BCOInterpolateImageFunctionBase() ITK_OVERRIDE {};
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Compute the BCO coefficients. */
   virtual CoefContainerType EvaluateCoef( const ContinuousIndexValueType & indexValue ) const;
   
@@ -154,12 +154,12 @@ public:
   typedef typename Superclass::ContinuousIndexType   ContinuousIndexType;
   typedef typename Superclass::CoefContainerType     CoefContainerType;
 
-  virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const;
+  OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const ITK_OVERRIDE;
 
 protected:
   BCOInterpolateImageFunction() {};
-  virtual ~BCOInterpolateImageFunction() {};
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~BCOInterpolateImageFunction() ITK_OVERRIDE {};
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   BCOInterpolateImageFunction( const Self& ); //purposely not implemented
@@ -193,12 +193,12 @@ public:
   typedef typename Superclass::ContinuousIndexType   ContinuousIndexType;
   typedef typename Superclass::CoefContainerType     CoefContainerType;
 
-  virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const;
+  OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const ITK_OVERRIDE;
 
 protected:
   BCOInterpolateImageFunction() {};
-  virtual ~BCOInterpolateImageFunction() {};
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~BCOInterpolateImageFunction() ITK_OVERRIDE {};
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   BCOInterpolateImageFunction( const Self& ); //purposely not implemented

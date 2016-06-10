@@ -54,7 +54,7 @@ public:
 
 protected:
   ExtendedFilenameHelper() {}
-  virtual ~ExtendedFilenameHelper() {}
+  ~ExtendedFilenameHelper() ITK_OVERRIDE {}
 
 private:
   ExtendedFilenameHelper(const Self &);  //purposely not implemented

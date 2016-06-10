@@ -76,14 +76,14 @@ public:
   const InputImageType * GetInput();
 
   /** Prepare the output */
-  void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
 protected:
   ImageToPointSetFilter();
-  virtual ~ImageToPointSetFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageToPointSetFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   /** Multi-threading implementation */
 

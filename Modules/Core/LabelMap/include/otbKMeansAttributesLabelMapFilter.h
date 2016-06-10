@@ -120,7 +120,7 @@ public:
 
 protected:
   KMeansAttributesLabelMapFilter();
-  ~KMeansAttributesLabelMapFilter() {};
+  ~KMeansAttributesLabelMapFilter() ITK_OVERRIDE {};
 
 
 private:

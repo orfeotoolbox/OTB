@@ -99,13 +99,13 @@ public:
 
 protected:
   LabelMapToAttributeImageFilter();
-  ~LabelMapToAttributeImageFilter() {};
+  ~LabelMapToAttributeImageFilter() ITK_OVERRIDE {};
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
-  virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
+  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
 
 private:
   /** Background pixel value */

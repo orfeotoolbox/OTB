@@ -138,12 +138,12 @@ protected:
   /** Constructor */
   MorphologicalPyramidSegmentationFilter();
   /** Destructor */
-  virtual ~MorphologicalPyramidSegmentationFilter();
-  virtual void GenerateOutputInformation() {}  // does nothing
+  ~MorphologicalPyramidSegmentationFilter() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE {}  // does nothing
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** Printself method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 private:
   unsigned long m_MinimumObjectSize;
   /** Quantile for seeds determination */

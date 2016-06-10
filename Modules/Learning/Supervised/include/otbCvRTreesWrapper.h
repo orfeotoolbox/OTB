@@ -34,7 +34,7 @@ class CV_EXPORTS_W CvRTreesWrapper : public CvRTrees
 public:
   typedef std::vector<unsigned int> VotesVectorType;
   CvRTreesWrapper();
-  virtual ~CvRTreesWrapper();
+  ~CvRTreesWrapper() ITK_OVERRIDE;
 
   /** Compute the number of votes for each class. */
   void get_votes(const cv::Mat& sample, 

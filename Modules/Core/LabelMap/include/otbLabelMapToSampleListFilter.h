@@ -93,15 +93,15 @@ public:
 
 protected:
   LabelMapToSampleListFilter();
-  virtual ~LabelMapToSampleListFilter();
+  ~LabelMapToSampleListFilter() ITK_OVERRIDE;
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Make Output */
-  virtual DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LabelMapToSampleListFilter(const Self&); //purposely not implemented

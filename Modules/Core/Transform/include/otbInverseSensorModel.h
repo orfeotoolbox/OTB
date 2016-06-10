@@ -71,16 +71,16 @@ public:
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
 
   // Transform of geographic point in image sensor index
-  virtual OutputPointType TransformPoint(const InputPointType& point) const;
+  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
   // Transform of geographic point in image sensor index -- Backward Compatibility
   //  OutputPointType TransformPoint(const InputPointType &point, double height) const;
 
 protected:
   InverseSensorModel();
-  virtual ~InverseSensorModel();
+  ~InverseSensorModel() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

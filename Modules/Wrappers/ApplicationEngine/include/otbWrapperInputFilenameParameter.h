@@ -48,7 +48,7 @@ public:
   itkTypeMacro(InputFilenameParameter, Parameter);
 
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     return m_StringParam->HasValue();
   }
@@ -66,7 +66,7 @@ public:
     }
 
   // Clear Value
-  void ClearValue()
+  void ClearValue() ITK_OVERRIDE
   {
     m_StringParam->ClearValue();
   }
@@ -82,7 +82,7 @@ protected:
   }
 
   /** Destructor */
-  virtual ~InputFilenameParameter()
+  ~InputFilenameParameter() ITK_OVERRIDE
   {}
 
 private:

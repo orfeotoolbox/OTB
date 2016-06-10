@@ -245,7 +245,7 @@ protected:
   }
 
   /** Destructor */
-  virtual ~ChannelSelectorFunctor() {}
+  ~ChannelSelectorFunctor() ITK_OVERRIDE {}
 
 private:
 

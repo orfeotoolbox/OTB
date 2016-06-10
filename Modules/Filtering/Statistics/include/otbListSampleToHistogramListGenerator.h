@@ -146,14 +146,14 @@ public:
 
 protected:
   ListSampleToHistogramListGenerator();
-  virtual ~ListSampleToHistogramListGenerator() {}
+  ~ListSampleToHistogramListGenerator() ITK_OVERRIDE {}
 
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   //ListSampleConstPointerType m_List;

@@ -49,7 +49,7 @@ public:
   /** RTTI support */
   itkTypeMacro(DirectoryParameter, Parameter);
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     return m_StringParam->HasValue();
   }
@@ -59,13 +59,13 @@ public:
   otbGetObjectMemberMacro(StringParam, Value , std::string);
 
   // Clear Value
-  void ClearValue()
+  void ClearValue() ITK_OVERRIDE
   {
     m_StringParam->ClearValue();
   }
 
   // Reimplement the SetActive method
-  void SetActive(  const bool value )
+  void SetActive(  const bool value ) ITK_OVERRIDE
   {
     Superclass::SetActive( value );
     m_StringParam->SetActive( value );
@@ -82,7 +82,7 @@ protected:
   }
 
   /** Destructor */
-  virtual ~DirectoryParameter()
+  ~DirectoryParameter() ITK_OVERRIDE
   {}
 
 private:

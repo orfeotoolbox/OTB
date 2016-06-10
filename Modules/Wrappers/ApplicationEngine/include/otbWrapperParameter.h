@@ -231,7 +231,7 @@ protected:
   {}
 
   /** Destructor */
-  virtual ~Parameter()
+  ~Parameter() ITK_OVERRIDE
   {}
 
   /** Name of the parameter */

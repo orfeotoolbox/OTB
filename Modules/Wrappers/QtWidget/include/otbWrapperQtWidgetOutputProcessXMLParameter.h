@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetOutputProcessXMLParameter : public QtWidgetParamete
   Q_OBJECT
 public:
   QtWidgetOutputProcessXMLParameter(OutputProcessXMLParameter*, QtWidgetModel*);
-  virtual ~QtWidgetOutputProcessXMLParameter();
+  ~QtWidgetOutputProcessXMLParameter() ITK_OVERRIDE;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -55,9 +55,9 @@ private:
   QtWidgetOutputProcessXMLParameter(const QtWidgetOutputProcessXMLParameter&); //purposely not implemented
   void operator=(const QtWidgetOutputProcessXMLParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
 
   OutputProcessXMLParameter::Pointer m_XMLParam;

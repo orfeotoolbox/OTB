@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetInputFilenameParameter : public QtWidgetParameterBa
   Q_OBJECT
 public:
   QtWidgetInputFilenameParameter(InputFilenameParameter*, QtWidgetModel*);
-  virtual ~QtWidgetInputFilenameParameter();
+  ~QtWidgetInputFilenameParameter() ITK_OVERRIDE;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -53,9 +53,9 @@ private:
   QtWidgetInputFilenameParameter(const QtWidgetInputFilenameParameter&); //purposely not implemented
   void operator=(const QtWidgetInputFilenameParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
 
   InputFilenameParameter::Pointer m_FilenameParam;

@@ -77,10 +77,10 @@ public:
   void SetMask(const TMaskImage* mask);
   const TMaskImage* GetMask();
 
-  void Synthetize(void);
+  void Synthetize(void) ITK_OVERRIDE;
 
   /** Reset method called before starting the streaming*/
-  void Reset(void);
+  void Reset(void) ITK_OVERRIDE;
 
   // TODO : prevent loading of data into output
 
@@ -100,24 +100,24 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  virtual itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
+  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
 protected:
   /** Constructor */
   PersistentOGRDataToClassStatisticsFilter();
   /** Destructor */
-  virtual ~PersistentOGRDataToClassStatisticsFilter() {}
+  ~PersistentOGRDataToClassStatisticsFilter() ITK_OVERRIDE {}
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   //virtual void BeforeThreadedGenerateData();
 
   //virtual void ThreadedGenerateData(const RegionType& outputRegionForThread,
   //                                  itk::ThreadIdType threadId);
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   PersistentOGRDataToClassStatisticsFilter(const Self &); //purposely not implemented
@@ -200,7 +200,7 @@ protected:
   /** Constructor */
   OGRDataToClassStatisticsFilter() {}
   /** Destructor */
-  virtual ~OGRDataToClassStatisticsFilter() {}
+  ~OGRDataToClassStatisticsFilter() ITK_OVERRIDE {}
 
 private:
   OGRDataToClassStatisticsFilter(const Self &); //purposely not implemented

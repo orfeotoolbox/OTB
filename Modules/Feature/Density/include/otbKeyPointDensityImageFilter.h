@@ -98,16 +98,16 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~KeyPointDensityImageFilter();
+  ~KeyPointDensityImageFilter() ITK_OVERRIDE;
   /**
    * Standard PrintSelf method.
    */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Main computation method.
    */
   //virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
 

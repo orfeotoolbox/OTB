@@ -229,11 +229,11 @@ public:
   itkSetMacro(SobelUpperThreshold, double);
 
   /** Methods */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 protected:
   UrbanAreaDetectionImageFilter();
-  virtual ~UrbanAreaDetectionImageFilter(){}
+  ~UrbanAreaDetectionImageFilter() ITK_OVERRIDE{}
 
 private:
   UrbanAreaDetectionImageFilter(const Self &); //purposely not implemented

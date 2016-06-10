@@ -101,16 +101,16 @@ public:
   /** Make a DataObject of the correct type to be used as the specified
    * output.
    */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  virtual void AllocateOutputs();
-  virtual void GenerateOutputInformation();
-  virtual void Synthetize(void);
-  virtual void Reset(void);
+  void AllocateOutputs() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void Synthetize(void) ITK_OVERRIDE;
+  void Reset(void) ITK_OVERRIDE;
 
   /** Enable/Disable center data */
   itkSetMacro(CenterData, bool);
@@ -119,10 +119,10 @@ public:
 
 protected:
   PersistentInnerProductVectorImageFilter();
-  virtual ~PersistentInnerProductVectorImageFilter() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PersistentInnerProductVectorImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   PersistentInnerProductVectorImageFilter(const Self &); //purposely not implemented
@@ -216,7 +216,7 @@ protected:
   /** Constructor */
   StreamingInnerProductVectorImageFilter() {};
   /** Destructor */
-  virtual ~StreamingInnerProductVectorImageFilter() {}
+  ~StreamingInnerProductVectorImageFilter() ITK_OVERRIDE {}
 
 private:
   StreamingInnerProductVectorImageFilter(const Self &); //purposely not implemented

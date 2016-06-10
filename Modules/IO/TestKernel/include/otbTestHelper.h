@@ -66,7 +66,7 @@ public:
     m_MaxArea(1024*1024)
   {}
 
-  ~TestHelper(){}
+  ~TestHelper() ITK_OVERRIDE{}
 
   int RegressionTestAllImages(const StringList& baselineFilenamesImage,
                               const StringList& testFilenamesImage);

@@ -77,16 +77,16 @@ public:
   void Initialize(const std::string & filename);
 
   // Retrieve the full extent of the actor
-  virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const;
+  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const ITK_OVERRIDE;
 
   // Update internal actor state with respect to ViewSettings
-  virtual void ProcessViewSettings();
+  void ProcessViewSettings() ITK_OVERRIDE;
 
   // Heavy load/unload operations of data
-  virtual void UpdateData();
+  void UpdateData() ITK_OVERRIDE;
 
   // Gl rendering of current state
-  virtual void Render();
+  void Render() ITK_OVERRIDE;
 
   // Automatic color adjustment
   void AutoColorAdjustment( double & minRed, double & maxRed,
@@ -98,15 +98,15 @@ public:
 
   const PointType & GetOrigin() const;
 
-  virtual const GeoInterface::Spacing2 & GetSpacing() const;
+  const GeoInterface::Spacing2 & GetSpacing() const ITK_OVERRIDE;
 
-  virtual std::string GetWkt() const;
+  std::string GetWkt() const ITK_OVERRIDE;
 
   ImageKeywordlistType GetKwl() const;
 
-  virtual bool HasKwl() const;
+  bool HasKwl() const ITK_OVERRIDE;
 
-  bool GetKwl( ImageKeywordlist & ) const;
+  bool GetKwl( ImageKeywordlist & ) const ITK_OVERRIDE;
 
   MetaDataDictionaryType & GetMetaDataDictionary() const;
 
@@ -186,13 +186,13 @@ public:
   // otb::GlActor overloads.
   //
 
-  virtual bool TransformFromViewport( Point2d & out,
+  bool TransformFromViewport( Point2d & out,
                                       const Point2d & in,
-                                      bool isPhysical = true ) const;
+                                      bool isPhysical = true ) const ITK_OVERRIDE;
 
-  virtual bool TransformToViewport( Point2d & out,
+  bool TransformToViewport( Point2d & out,
                                     const Point2d & in,
-                                    bool isPhysical = true ) const;
+                                    bool isPhysical = true ) const ITK_OVERRIDE;
 
 
   void UpdateTransforms();
@@ -200,7 +200,7 @@ public:
 protected:
   GlImageActor();
   
-  virtual ~GlImageActor();
+  ~GlImageActor() ITK_OVERRIDE;
 
   typedef ImageFileReader<VectorImageType>                                        ReaderType;
   typedef MultiChannelExtractROI<float,float>                                     ExtractROIFilterType;

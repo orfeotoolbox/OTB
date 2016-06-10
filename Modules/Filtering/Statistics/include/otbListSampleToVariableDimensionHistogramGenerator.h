@@ -110,10 +110,10 @@ public:
 
 protected:
   ListSampleToVariableDimensionHistogramGenerator();
-  virtual ~ListSampleToVariableDimensionHistogramGenerator() {}
-  void GenerateData();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  ~ListSampleToVariableDimensionHistogramGenerator() ITK_OVERRIDE {}
+  void GenerateData() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
 private:

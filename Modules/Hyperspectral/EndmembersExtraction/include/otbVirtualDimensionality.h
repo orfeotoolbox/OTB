@@ -117,8 +117,8 @@ public:
 
 protected:
   VirtualDimensionality();
-  virtual ~VirtualDimensionality() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~VirtualDimensionality() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   VirtualDimensionality(const Self &); //purposely not implemented

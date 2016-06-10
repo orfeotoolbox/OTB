@@ -103,7 +103,7 @@ protected:
    *
    */
 
-  virtual void GenerateOutputInformation(){}
+  void GenerateOutputInformation() ITK_OVERRIDE{}
 
   /**
    * Constructor.
@@ -112,15 +112,15 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~LineSpatialObjectListToRightAnglePointSetFilter(){}
+  ~LineSpatialObjectListToRightAnglePointSetFilter() ITK_OVERRIDE{}
   /**
    * Standard PrintSelf method.
    */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Main computation method.
    */
-  virtual void  GenerateData();
+  void  GenerateData() ITK_OVERRIDE;
   /**
    * Angle computation
    */

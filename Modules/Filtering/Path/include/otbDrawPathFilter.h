@@ -87,10 +87,10 @@ public:
 
 protected:
   DrawPathFilter();
-  virtual ~DrawPathFilter() {}
+  ~DrawPathFilter() ITK_OVERRIDE {}
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateData();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   DrawPathFilter(const Self &); //purposely not implemented

@@ -176,8 +176,8 @@ public:
 
 protected:
   WindowedSincInterpolateImageFunctionBase();
-  virtual ~WindowedSincInterpolateImageFunctionBase();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~WindowedSincInterpolateImageFunctionBase() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   WindowedSincInterpolateImageFunctionBase(const Self &); //purposely not implemented

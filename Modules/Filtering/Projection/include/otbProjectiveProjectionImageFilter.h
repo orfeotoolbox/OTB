@@ -151,11 +151,11 @@ public:
 protected:
   ProjectiveProjectionImageFilter();
 
-  virtual ~ProjectiveProjectionImageFilter() {}
+  ~ProjectiveProjectionImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation()
+  void GenerateOutputInformation() ITK_OVERRIDE
   {
     Superclass::GenerateOutputInformation();
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();

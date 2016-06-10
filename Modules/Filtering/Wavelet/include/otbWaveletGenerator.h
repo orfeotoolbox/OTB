@@ -98,7 +98,7 @@ public:
 
 protected:
   WaveletGenerator() {}
-  ~WaveletGenerator() {}
+  ~WaveletGenerator() ITK_OVERRIDE {}
 
 private:
   WaveletGenerator(const Self &);  // not implemented

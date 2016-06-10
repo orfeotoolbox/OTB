@@ -310,8 +310,8 @@ public:
 
 protected:
   ProlateInterpolateImageFunction();
-  ~ProlateInterpolateImageFunction();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ProlateInterpolateImageFunction() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ProlateInterpolateImageFunction(const Self &); //purposely not implemented

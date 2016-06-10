@@ -200,7 +200,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
    m_InputRpcEstimator->SetInput(tempPtr);
    m_InputRpcEstimator->UpdateOutputInformation();
 
-   // No need to override the input kwl, just setup the
+   // No need to ITK_OVERRIDE the input kwl, just setup the
    // transform with the kwl estimated
    if(m_InputRpcEstimator->GetInput()->GetImageKeywordlist().GetSize() > 0)
      m_Transform->SetOutputKeywordList(m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());

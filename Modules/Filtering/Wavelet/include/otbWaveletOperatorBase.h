@@ -98,7 +98,7 @@ public:
     m_WaveletGenerator = WaveletGeneratorType::New();
     }
 
-  virtual ~WaveletOperatorBase() {}
+  ~WaveletOperatorBase() ITK_OVERRIDE {}
 
   /** Assignment operator */
   Self & operator =(const Self& other)
@@ -136,7 +136,7 @@ protected:
   /**
    * Prints some debugging information
    */
-  virtual void PrintSelf(std::ostream& os, itk::Indent i) const;
+  void PrintSelf(std::ostream& os, itk::Indent i) const ITK_OVERRIDE;
 
   typedef WaveletGenerator<TMotherWaveletOperator> WaveletGeneratorType;
   typedef typename WaveletGeneratorType::Pointer   WaveletGeneratorPointerType;
@@ -185,7 +185,7 @@ protected:
   void ReduceFilterLength(CoefficientVector& coeff);
 
   /** Arranges coefficients spatially in the memory buffer. */
-  void Fill(const CoefficientVector& coeff)
+  void Fill(const CoefficientVector& coeff) ITK_OVERRIDE
   {
     this->FillCenteredDirectional(coeff);
   }

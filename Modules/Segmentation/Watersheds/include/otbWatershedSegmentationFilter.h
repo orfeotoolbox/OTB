@@ -81,9 +81,9 @@ public:
 protected:
   WatershedSegmentationFilter();
 
-  virtual ~WatershedSegmentationFilter();
+  ~WatershedSegmentationFilter() ITK_OVERRIDE;
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   typename CastImageFilterType::Pointer m_CastFilter;

@@ -58,8 +58,8 @@ public:
 
 protected:
   ImageToPathFilter();
-  virtual ~ImageToPathFilter() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageToPathFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageToPathFilter(const Self &);

@@ -124,8 +124,8 @@ public:
 
 protected:
   WindowedSincInterpolateImageGaussianFunction() {};
-  ~WindowedSincInterpolateImageGaussianFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~WindowedSincInterpolateImageGaussianFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

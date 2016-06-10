@@ -256,12 +256,12 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::ThreadedGenerateData(const InputImageRegionType&, itk::ThreadIdType)
 {
   // The following code is equivalent to:
-  // itkExceptionMacro("subclass should override this method!!!");
+  // itkExceptionMacro("subclass should ITK_OVERRIDE this method!!!");
   // The ExceptionMacro is not used because gcc warns that a
   // 'noreturn' function does return
   std::ostringstream message;
   message << "itk::ERROR: " << this->GetNameOfClass()
-          << "(" << this << "): " << "Subclass should override this method!!!";
+          << "(" << this << "): " << "Subclass should ITK_OVERRIDE this method!!!";
   itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION);
   throw e_;
 

@@ -81,7 +81,7 @@ public:
 
 protected:
   LHMIChangeDetector() {}
-  virtual ~LHMIChangeDetector() {}
+  ~LHMIChangeDetector() ITK_OVERRIDE {}
 
 private:
   LHMIChangeDetector(const Self &); //purposely not implemented

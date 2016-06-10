@@ -100,12 +100,12 @@ public:
     m_Value[i] = value;
   }
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     return !m_Value.empty();
   }
 
-  void ClearValue()
+  void ClearValue() ITK_OVERRIDE
   {
     m_Value.clear();
   }
@@ -126,7 +126,7 @@ protected:
   }
 
   /** Destructor */
-  virtual ~StringListParameter()
+  ~StringListParameter() ITK_OVERRIDE
   {
   }
 

@@ -189,12 +189,12 @@ public:
 
 protected:
   LineSegmentDetector();
-  virtual ~LineSegmentDetector() {}
+  ~LineSegmentDetector() ITK_OVERRIDE {}
 
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Generate Data method*/
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Sort the image and store the coordinates in a histogram
    *  this method is used to determine the seeds where to begin the search segments
@@ -254,7 +254,7 @@ protected:
   virtual void CopyRectangle(RectangleType& rDst, RectangleType& rSrc) const;
 
   /** Printself method*/
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LineSegmentDetector(const Self &);  //purposely not implemented

@@ -92,7 +92,7 @@ public:
   PolyLineImageIterator(ImageType * imagePtr, PathType * pathPtr)
     : Superclass(imagePtr, pathPtr) {};
   /** Default Destructor. */
-  virtual ~PolyLineImageIterator() {}
+  ~PolyLineImageIterator() ITK_OVERRIDE {}
 };
 } // End namespace otb
 

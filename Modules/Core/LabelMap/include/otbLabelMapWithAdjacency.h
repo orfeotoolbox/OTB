@@ -215,16 +215,16 @@ protected:
   /** Constructor */
   LabelMapWithAdjacency(){}
   /** Destructor */
-  virtual ~LabelMapWithAdjacency(){}
+  ~LabelMapWithAdjacency() ITK_OVERRIDE{}
   /** Printself */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }
 
   /** Re-implement CopyInformation to pass the adjancency graph
    * through */
-  virtual void CopyInformation(const itk::DataObject * data)
+  void CopyInformation(const itk::DataObject * data) ITK_OVERRIDE
   {
     // Call superclass implementation
     Superclass::CopyInformation(data);

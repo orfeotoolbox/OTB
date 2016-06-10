@@ -180,13 +180,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "LandsatTM SpectralRuleBasedClassifier";
   }
 
   SpectralRuleBasedClassifier() { }
-  virtual ~SpectralRuleBasedClassifier() {}
+  ~SpectralRuleBasedClassifier() ITK_OVERRIDE {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {

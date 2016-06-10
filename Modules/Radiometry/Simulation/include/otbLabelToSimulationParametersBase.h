@@ -90,7 +90,7 @@ public:
 
 protected:
    LabelToSimulationParametersBase(){};
-   virtual ~LabelToSimulationParametersBase() {}
+   ~LabelToSimulationParametersBase() ITK_OVERRIDE {}
 
 
 private:

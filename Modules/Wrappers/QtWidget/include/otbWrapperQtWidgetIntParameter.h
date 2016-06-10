@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetIntParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetIntParameter(IntParameter*, QtWidgetModel*);
-  virtual ~QtWidgetIntParameter();
+  ~QtWidgetIntParameter() ITK_OVERRIDE;
 
 protected slots:
   void SetValue( int value );
@@ -49,9 +49,9 @@ private:
   QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
   void operator=(const QtWidgetIntParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   QHBoxLayout *         m_QHBoxLayout;
   QSpinBox *            m_QSpinBox;

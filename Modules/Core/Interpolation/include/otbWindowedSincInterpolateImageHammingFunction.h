@@ -125,8 +125,8 @@ public:
 
 protected:
   WindowedSincInterpolateImageHammingFunction() {};
-  ~WindowedSincInterpolateImageHammingFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~WindowedSincInterpolateImageHammingFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

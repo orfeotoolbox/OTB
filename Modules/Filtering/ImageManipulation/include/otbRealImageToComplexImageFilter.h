@@ -89,7 +89,7 @@ public:
 
 protected:
   RealImageToComplexImageFilter() {}
-  virtual ~RealImageToComplexImageFilter() {}
+  ~RealImageToComplexImageFilter() ITK_OVERRIDE {}
 
 private:
   RealImageToComplexImageFilter(const Self&); //purposely not implemented

@@ -170,11 +170,11 @@ public:
 protected:
   MeanShiftSegmentationFilter();
 
-  virtual ~MeanShiftSegmentationFilter();
+  ~MeanShiftSegmentationFilter() ITK_OVERRIDE;
 
 //  virtual void GenerateOutputInformation(void);
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
 

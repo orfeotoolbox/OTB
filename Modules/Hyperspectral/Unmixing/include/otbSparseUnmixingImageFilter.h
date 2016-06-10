@@ -159,9 +159,9 @@ public:
 
 protected:
   SparseUnmixingImageFilter();
-  virtual ~SparseUnmixingImageFilter() { }
+  ~SparseUnmixingImageFilter() ITK_OVERRIDE { }
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   virtual void GenerateNumberOfComponentsRequired ();
 private:
   SparseUnmixingImageFilter(const Self &); //purposely not implemented

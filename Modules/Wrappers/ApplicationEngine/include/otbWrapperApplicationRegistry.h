@@ -76,7 +76,7 @@ public:
 
 protected:
   ApplicationRegistry();
-  virtual ~ApplicationRegistry();
+  ~ApplicationRegistry() ITK_OVERRIDE;
 
 private:
   ApplicationRegistry(const Self&); //purposely not implemented

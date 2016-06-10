@@ -93,15 +93,15 @@ protected:
   /// Constructor
   ImageToVectorImageCastFilter() {}
   /// Detructor
-  virtual ~ImageToVectorImageCastFilter() {}
+  ~ImageToVectorImageCastFilter() ITK_OVERRIDE {}
   /// Additionnal output information for allocation
-  virtual void GenerateOutputInformation(void)
+  void GenerateOutputInformation(void) ITK_OVERRIDE
   {
     Superclass::GenerateOutputInformation();
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
   }
   /// Copy output requested region to input requested region
-  virtual void GenerateInputRequestedRegion(void)
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE
   {
     if (this->GetInput())
       {

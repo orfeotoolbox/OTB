@@ -63,8 +63,8 @@ public:
 
 protected:
   RGBAPixelConverter(){}
-  virtual ~RGBAPixelConverter(){}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~RGBAPixelConverter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }
@@ -100,8 +100,8 @@ public:
 
 protected:
   RGBAPixelConverter(){}
-  virtual ~RGBAPixelConverter(){}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~RGBAPixelConverter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }
@@ -137,8 +137,8 @@ public:
 
 protected:
   RGBAPixelConverter(){}
-  virtual ~RGBAPixelConverter(){}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~RGBAPixelConverter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

@@ -133,9 +133,9 @@ public:
   * Return the polygon length (perimeter).
   * \return The length.
   */
-  virtual double GetLength() const;
+  double GetLength() const ITK_OVERRIDE;
 
-  void  AddVertex(const ContinuousIndexType& vertex);
+  void  AddVertex(const ContinuousIndexType& vertex) ITK_OVERRIDE;
 
 protected:
   /** Constructor */
@@ -147,13 +147,13 @@ protected:
     };
 
   /** Destructor */
-  virtual ~Polygon() {}
+  ~Polygon() ITK_OVERRIDE {}
 
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   virtual void ComputeArea() const;
-  virtual void Modified() const;
+  void Modified() const ITK_OVERRIDE;
 
 private:
   Polygon(const Self &); //purposely not implemented

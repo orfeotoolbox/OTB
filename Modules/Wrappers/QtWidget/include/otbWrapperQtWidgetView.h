@@ -39,7 +39,7 @@ class ITK_ABI_EXPORT QtWidgetView : public QWidget
   Q_OBJECT
 public:
   QtWidgetView(Application* app);
-  virtual ~QtWidgetView();
+  ~QtWidgetView() ITK_OVERRIDE;
 
   void CreateGui();
 

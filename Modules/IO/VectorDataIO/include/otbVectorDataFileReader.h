@@ -117,20 +117,20 @@ public:
 
   /** Prepare the allocation of the output vector data during the first back
    * propagation of the pipeline. */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   /** Does the real work. */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 protected:
   VectorDataFileReader();
-  virtual ~VectorDataFileReader();
+  ~VectorDataFileReader() ITK_OVERRIDE;
   std::string m_ExceptionMessage;
 
   typename VectorDataIOBaseType::Pointer m_VectorDataIO;
   bool m_UserSpecifiedVectorDataIO;  // keep track whether the
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   std::string m_FileName; // The file to be read
 

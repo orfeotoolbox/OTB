@@ -89,10 +89,10 @@ public:
 
 protected:
   RadiometricMomentsImageFilter();
-  virtual ~RadiometricMomentsImageFilter() {}
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
-  virtual void GenerateInputRequestedRegion(void);
-  virtual void GenerateOutputInformation(void);
+  ~RadiometricMomentsImageFilter() ITK_OVERRIDE {}
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
 private:
   RadiometricMomentsImageFilter(const Self &);  //purposely not implemented

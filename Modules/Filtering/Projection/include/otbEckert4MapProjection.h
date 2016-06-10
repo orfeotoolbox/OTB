@@ -58,7 +58,7 @@ public:
 
 protected:
   Eckert4MapProjection();
-  virtual ~Eckert4MapProjection();
+  ~Eckert4MapProjection() ITK_OVERRIDE;
 
 private:
   Eckert4MapProjection(const Self &); //purposely not implemented

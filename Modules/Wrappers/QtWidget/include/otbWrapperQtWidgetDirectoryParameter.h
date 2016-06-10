@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetDirectoryParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetDirectoryParameter(DirectoryParameter*, QtWidgetModel*);
-  virtual ~QtWidgetDirectoryParameter();
+  ~QtWidgetDirectoryParameter() ITK_OVERRIDE;
 
 protected slots:
   void SetFileName( const QString& value );
@@ -50,9 +50,9 @@ private:
   QtWidgetDirectoryParameter(const QtWidgetDirectoryParameter&); //purposely not implemented
   void operator=(const QtWidgetDirectoryParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
 
   DirectoryParameter::Pointer m_DirectoryParam;

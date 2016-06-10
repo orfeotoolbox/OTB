@@ -56,7 +56,7 @@ public:
 
 protected:
   MollweidMapProjection();
-  virtual ~MollweidMapProjection();
+  ~MollweidMapProjection() ITK_OVERRIDE;
 
 private:
   MollweidMapProjection(const Self &); //purposely not implemented

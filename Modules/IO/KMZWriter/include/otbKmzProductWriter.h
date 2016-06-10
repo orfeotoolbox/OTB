@@ -133,7 +133,7 @@ public:
   itkSetStringMacro(Path);
 
   /** Update Method */
-  virtual void Update()
+  void Update() ITK_OVERRIDE
   {
     this->Write();
   }
@@ -164,8 +164,8 @@ public:
 
 protected:
   KmzProductWriter();
-  virtual ~KmzProductWriter();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~KmzProductWriter() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /**Method for Tiling the input image*/
   virtual void Tiling();

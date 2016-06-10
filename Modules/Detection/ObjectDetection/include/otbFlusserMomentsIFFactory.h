@@ -79,8 +79,8 @@ public:
 
 protected:
   FlusserMomentsIFFactory(){}
-  ~FlusserMomentsIFFactory(){}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~FlusserMomentsIFFactory() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   FlusserMomentsIFFactory(const Self& ); //purposely not implemented

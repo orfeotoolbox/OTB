@@ -75,9 +75,9 @@ class ITK_EXPORT LeafParameters : public itk::DataObject
       /** Constructor */
       LeafParameters();
       /** Destructor */
-      ~LeafParameters();
+      ~LeafParameters() ITK_OVERRIDE;
       /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const;
+      void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
    private:
       LeafParameters(const Self&); //purposely not implemented

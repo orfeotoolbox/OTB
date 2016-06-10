@@ -102,7 +102,7 @@ public:
     m_HasClassLabel = false;
   }
 
-  virtual void CopyAttributesFrom( const LabelObjectType * lo )
+  void CopyAttributesFrom( const LabelObjectType * lo ) ITK_OVERRIDE
     {
     Superclass::CopyAttributesFrom( lo );
 
@@ -122,10 +122,10 @@ protected:
   AttributesMapLabelObjectWithClassLabel() : m_ClassLabel(itk::NumericTraits<ClassLabelType>::Zero), m_HasClassLabel(false)
     {}
   /** Destructor */
-  virtual ~AttributesMapLabelObjectWithClassLabel() {}
+  ~AttributesMapLabelObjectWithClassLabel() ITK_OVERRIDE {}
 
   /** The printself method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
     {
       Superclass::PrintSelf( os, indent );
       if(m_HasClassLabel)

@@ -111,17 +111,17 @@ public:
 
 protected:
   LabelImageToOGRDataSourceFilter();
-  virtual ~LabelImageToOGRDataSourceFilter() {}
+  ~LabelImageToOGRDataSourceFilter() ITK_OVERRIDE {}
 
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Generate Data method*/
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** DataObject pointer */
   typedef itk::DataObject::Pointer DataObjectPointer;
 
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
 private:

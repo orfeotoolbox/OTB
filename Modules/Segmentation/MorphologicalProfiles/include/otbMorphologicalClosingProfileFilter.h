@@ -74,7 +74,7 @@ public:
 
 protected:
   /** Set the profile parameter */
-  virtual void SetProfileParameter(ParameterType param)
+  void SetProfileParameter(ParameterType param) ITK_OVERRIDE
   {
     StructuringElementType se;
     se.SetRadius(param);
@@ -84,9 +84,9 @@ protected:
   /** Constructor */
   MorphologicalClosingProfileFilter() {};
   /** Destructor */
-  virtual ~MorphologicalClosingProfileFilter() {}
+  ~MorphologicalClosingProfileFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

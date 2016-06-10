@@ -185,11 +185,11 @@ protected:
   /** Constructor */
   ScalarImageToHigherOrderTexturesFilter();
   /** Destructor */
-  ~ScalarImageToHigherOrderTexturesFilter();
+  ~ScalarImageToHigherOrderTexturesFilter() ITK_OVERRIDE;
   /** Generate the input requested region */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
   /** Parallel textures extraction */
-  virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   ScalarImageToHigherOrderTexturesFilter(const Self&); //purposely not implemented

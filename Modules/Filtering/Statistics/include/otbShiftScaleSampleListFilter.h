@@ -84,11 +84,11 @@ public:
 
 protected:
   /** This method causes the filter to generate its output. */
-   virtual void GenerateData();
+   void GenerateData() ITK_OVERRIDE;
 
   ShiftScaleSampleListFilter();
-  virtual ~ShiftScaleSampleListFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ShiftScaleSampleListFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ShiftScaleSampleListFilter(const Self&); //purposely not implemented

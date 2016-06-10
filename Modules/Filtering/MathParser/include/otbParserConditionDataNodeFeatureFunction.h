@@ -84,7 +84,7 @@ public:
 
   typedef std::vector<PrecisionType>                  OutputType;
 
-  virtual OutputType Evaluate( const DataNodeType& node ) const;
+  OutputType Evaluate( const DataNodeType& node ) const ITK_OVERRIDE;
 
   std::string GetExpression() const
   {
@@ -103,8 +103,8 @@ public:
 
 protected:
   ParserConditionDataNodeFeatureFunction();
-  virtual ~ParserConditionDataNodeFeatureFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ParserConditionDataNodeFeatureFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ParserConditionDataNodeFeatureFunction(const Self&); //purposely not implemented

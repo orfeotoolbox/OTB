@@ -105,9 +105,9 @@ public:
     TOutputImage* CastVectorImageFromImage();
 
 
-  bool HasValue() const;
+  bool HasValue() const ITK_OVERRIDE;
 
-  void ClearValue();
+  void ClearValue() ITK_OVERRIDE;
 
 
 protected:
@@ -115,7 +115,7 @@ protected:
   InputImageParameter();
 
   /** Destructor */
-  virtual ~InputImageParameter();
+  ~InputImageParameter() ITK_OVERRIDE;
 
   ImageBaseType::Pointer m_Image;
   std::string m_FileName;

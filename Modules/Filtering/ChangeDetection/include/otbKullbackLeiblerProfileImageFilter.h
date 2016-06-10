@@ -186,7 +186,7 @@ public:
 
 protected:
   KullbackLeiblerProfileImageFilter() {}
-  virtual ~KullbackLeiblerProfileImageFilter() {}
+  ~KullbackLeiblerProfileImageFilter() ITK_OVERRIDE {}
 
 private:
   KullbackLeiblerProfileImageFilter(const Self &); //purposely not implemented

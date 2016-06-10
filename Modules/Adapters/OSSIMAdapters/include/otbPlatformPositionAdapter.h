@@ -73,7 +73,7 @@ public:
 
 protected:
   PlatformPositionAdapter();
-  virtual ~PlatformPositionAdapter();
+  ~PlatformPositionAdapter() ITK_OVERRIDE;
 
 private:
   PlatformPositionAdapter(const Self &); //purposely not implemented

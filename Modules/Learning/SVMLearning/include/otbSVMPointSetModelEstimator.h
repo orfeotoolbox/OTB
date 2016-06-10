@@ -109,11 +109,11 @@ protected:
   /** Constructor */
   SVMPointSetModelEstimator();
   /** Destructor */
-  virtual ~SVMPointSetModelEstimator();
+  ~SVMPointSetModelEstimator() ITK_OVERRIDE;
   /** PrintSelf */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Prepare data */
-  virtual void PrepareData();
+  void PrepareData() ITK_OVERRIDE;
 
 private:
   SVMPointSetModelEstimator(const Self &); //purposely not implemented

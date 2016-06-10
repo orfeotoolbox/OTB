@@ -173,13 +173,13 @@ public:
 
 protected:
   DEMToImageGenerator();
-  virtual ~DEMToImageGenerator(){}
+  ~DEMToImageGenerator() ITK_OVERRIDE{}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  void BeforeThreadedGenerateData();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
-  virtual void GenerateOutputInformation();
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   DEMHandlerType::Pointer m_DEMHandler;
   PointType               m_OutputOrigin;

@@ -59,32 +59,32 @@ public:
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*);
+  bool CanReadFile(const char*) ITK_OVERRIDE;
 
   /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
-  virtual bool CanStreamRead()
+  bool CanStreamRead() ITK_OVERRIDE
   {
     return true;
   }
 
   /** Set the spacing and dimention information for the set filename. */
-  virtual void ReadImageInformation();
+  void ReadImageInformation() ITK_OVERRIDE;
 
   /** Get description about overviews available into the file specified */
-  virtual std::vector<std::string> GetOverviewsInfo();
+  std::vector<std::string> GetOverviewsInfo() ITK_OVERRIDE;
   
   /** Provide hist about the output container to deal with complex pixel
    *  type (Not used here) */ 
-  virtual void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType), 
-                                        bool itkNotUsed(isVectorImage)){}
+  void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType), 
+                                        bool itkNotUsed(isVectorImage)) ITK_OVERRIDE{}
   
   /** Get number of available overviews in the jpeg2000 file
    *  ( if return = 0 => no overviews available because only one resolution
    *  is encoded in the file) */
-  virtual unsigned int GetOverviewsCount();
+  unsigned int GetOverviewsCount() ITK_OVERRIDE;
 
   /** Reads the data from disk into the memory buffer provided. */
-  virtual void Read(void* buffer);
+  void Read(void* buffer) ITK_OVERRIDE;
 
   /** Reads 3D data from multiple files assuming one slice per file. */
   virtual void ReadVolume(void* buffer);
@@ -93,21 +93,21 @@ public:
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanWriteFile(const char*);
+  bool CanWriteFile(const char*) ITK_OVERRIDE;
 
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
-  virtual bool CanStreamWrite()
+  bool CanStreamWrite() ITK_OVERRIDE
   {
     return true;
   }
 
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */
-  virtual void WriteImageInformation();
+  void WriteImageInformation() ITK_OVERRIDE;
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegion has been set properly. */
-  virtual void Write(const void* buffer);
+  void Write(const void* buffer) ITK_OVERRIDE;
 
 
   /** Return the multithreader used by this class. */
@@ -127,9 +127,9 @@ protected:
   /** Constructor.*/
   JPEG2000ImageIO();
   /** Destructor.*/
-  virtual ~JPEG2000ImageIO();
+  ~JPEG2000ImageIO() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   typedef std::vector<boost::shared_ptr<JPEG2000InternalReader> > ReaderVectorType;
 

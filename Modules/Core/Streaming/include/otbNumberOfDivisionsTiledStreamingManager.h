@@ -64,11 +64,11 @@ public:
   itkGetMacro(NumberOfDivisions, unsigned int);
 
   /** Actually computes the stream divisions given a DataObject and its region to write */
-  virtual void PrepareStreaming(itk::DataObject * input, const RegionType &region);
+  void PrepareStreaming(itk::DataObject * input, const RegionType &region) ITK_OVERRIDE;
 
 protected:
   NumberOfDivisionsTiledStreamingManager();
-  virtual ~NumberOfDivisionsTiledStreamingManager();
+  ~NumberOfDivisionsTiledStreamingManager() ITK_OVERRIDE;
 
   /** The number of lines per strip desired by the user.
    *  This may be different than the one computed by the Splitter */

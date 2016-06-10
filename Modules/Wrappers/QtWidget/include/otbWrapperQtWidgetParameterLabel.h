@@ -38,7 +38,7 @@ class ITK_ABI_EXPORT QtWidgetParameterLabel : public QWidget
   Q_OBJECT
 public:
   QtWidgetParameterLabel(Parameter*);
-  virtual ~QtWidgetParameterLabel();
+  ~QtWidgetParameterLabel() ITK_OVERRIDE;
 
 private:
   QtWidgetParameterLabel(const QtWidgetParameterLabel&); //purposely not implemented

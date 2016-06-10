@@ -60,7 +60,7 @@ protected:
   /** Constructor */
   PathListToPathListFilter() {};
   /** Destructor */
-  virtual ~PathListToPathListFilter() {}
+  ~PathListToPathListFilter() ITK_OVERRIDE {}
 
 private:
   PathListToPathListFilter(const Self &); //purposely not implemented

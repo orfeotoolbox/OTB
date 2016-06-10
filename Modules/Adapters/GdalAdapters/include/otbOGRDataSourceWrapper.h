@@ -286,7 +286,7 @@ public:
    * meta information of another data source and use the same underlying \c
    * GDALDataset.
    */
-  virtual void Graft(const itk::DataObject *data);
+  void Graft(const itk::DataObject *data) ITK_OVERRIDE;
 
   /**
    * Resets current data source with the one in parameter.
@@ -510,12 +510,12 @@ protected:
   /** Destructor.
    * \post The \c GDALDataset owned is released (if not null).
    */
-  virtual ~DataSource();
+  ~DataSource() ITK_OVERRIDE;
 
   static Pointer OpenDataSource(std::string const& datasourceName, Modes::type mode);
 
   /** Prints self into stream. */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /**

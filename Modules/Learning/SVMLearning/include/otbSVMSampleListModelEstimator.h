@@ -178,12 +178,12 @@ protected:
   /** Constructor */
   SVMSampleListModelEstimator();
   /** Destructor */
-  virtual ~SVMSampleListModelEstimator();
+  ~SVMSampleListModelEstimator() ITK_OVERRIDE;
   /** PrintSelf */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** PrepareData method */
-  virtual void PrepareData();
+  void PrepareData() ITK_OVERRIDE;
 
 private:
   SVMSampleListModelEstimator(const Self &); //purposely not implemented

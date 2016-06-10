@@ -109,9 +109,9 @@ public:
 protected:
 
   EdgeDetectorImageFilter();
-  virtual ~EdgeDetectorImageFilter();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateData();
+  ~EdgeDetectorImageFilter() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void GenerateData() ITK_OVERRIDE;
 
 private:
 

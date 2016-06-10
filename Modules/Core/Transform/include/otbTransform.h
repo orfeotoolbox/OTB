@@ -55,10 +55,10 @@ public:
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
 
   /** Get the size of the input space */
-  unsigned int GetInputSpaceDimension(void) const { return NInputDimensions; }
+  unsigned int GetInputSpaceDimension(void) const ITK_OVERRIDE { return NInputDimensions; }
 
   /** Get the size of the output space */
-  unsigned int GetOutputSpaceDimension(void) const { return NOutputDimensions; }
+  unsigned int GetOutputSpaceDimension(void) const ITK_OVERRIDE { return NOutputDimensions; }
 
   /** Type of the scalar representing coordinate and vector elements. */
   typedef  TScalarType ScalarType;
@@ -95,12 +95,12 @@ public:
 
   /**  Method to transform a point. */
 
-  virtual OutputPointType TransformPoint(const InputPointType  & ) const
+  OutputPointType TransformPoint(const InputPointType  & ) const ITK_OVERRIDE
     { return OutputPointType(); }
   
   using Superclass::TransformVector;
   /**  Method to transform a vector. */
-  virtual OutputVectorType    TransformVector(const InputVectorType &) const
+  OutputVectorType    TransformVector(const InputVectorType &) const ITK_OVERRIDE
   { return OutputVectorType(); }
 
   /**  Method to transform a vnl_vector. */
@@ -109,8 +109,8 @@ public:
 
   using Superclass::TransformCovariantVector;
   /**  Method to transform a CovariantVector. */
-  virtual OutputCovariantVectorType TransformCovariantVector(
-    const InputCovariantVectorType &) const
+  OutputCovariantVectorType TransformCovariantVector(
+    const InputCovariantVectorType &) const ITK_OVERRIDE
   { return OutputCovariantVectorType(); }
 
 
@@ -121,12 +121,12 @@ public:
    * SetParametersByValue.
    * \sa SetParametersByValue
    */
-    virtual void SetParameters( const ParametersType & )
-    { itkExceptionMacro( << "Subclasses should override this method (SetParameters)" ) }
+    void SetParameters( const ParametersType & ) ITK_OVERRIDE
+    { itkExceptionMacro( << "Subclasses should ITK_OVERRIDE this method (SetParameters)" ) }
 
-  virtual void ComputeJacobianWithRespectToParameters(const InputPointType  &, JacobianType& ) const
+  void ComputeJacobianWithRespectToParameters(const InputPointType  &, JacobianType& ) const ITK_OVERRIDE
   {
-    itkExceptionMacro(<<  "Subclasses should override this method (ComputeJacobianWithRespectToParamters)" );
+    itkExceptionMacro(<<  "Subclasses should ITK_OVERRIDE this method (ComputeJacobianWithRespectToParamters)" );
   }
 
   /** Set the transformation parameters and update internal transformation.
@@ -136,23 +136,23 @@ public:
    * by keeping a reference to the parameters.
    * \sa SetParameters
    */
-  virtual void SetParametersByValue(const ParametersType & p)
+  void SetParametersByValue(const ParametersType & p) ITK_OVERRIDE
   { this->SetParameters (p); }
 
   /** Get the Transformation Parameters. */
-  virtual const ParametersType & GetParameters(void) const
+  const ParametersType & GetParameters(void) const ITK_OVERRIDE
   {
     return m_Parameters;
   }
 
   /** Set the fixed parameters and update internal transformation. */
-  virtual void SetFixedParameters( const ParametersType & )
-    { itkExceptionMacro( << "Subclasses should override this method (SetFixedParameters)" ) }
+  void SetFixedParameters( const ParametersType & ) ITK_OVERRIDE
+    { itkExceptionMacro( << "Subclasses should ITK_OVERRIDE this method (SetFixedParameters)" ) }
 
   /** Get the Fixed Parameters. */
-  virtual const ParametersType& GetFixedParameters(void) const
+  const ParametersType& GetFixedParameters(void) const ITK_OVERRIDE
     {
-    itkExceptionMacro( << "Subclasses should override this method (GetFixedParameters)" );
+    itkExceptionMacro( << "Subclasses should ITK_OVERRIDE this method (GetFixedParameters)" );
     // Next line is needed to avoid errors due to:
     // "function must return a value".
     return this->m_FixedParameters;
@@ -187,14 +187,14 @@ public:
    * */
   virtual const JacobianType & GetJacobian(const InputPointType  &) const
     {
-    itkExceptionMacro( << "Subclass should override this method (GetJacobian)" );
+    itkExceptionMacro( << "Subclass should ITK_OVERRIDE this method (GetJacobian)" );
     // Next line is needed to avoid errors due to:
     // "function must return a value" .
     return this->m_Jacobian;
     }
 
   /** Return the number of parameters that completely define the Transfom  */
-  virtual NumberOfParametersType GetNumberOfParameters(void) const
+  NumberOfParametersType GetNumberOfParameters(void) const ITK_OVERRIDE
   { return this->m_Parameters.Size(); }
 
 protected:
@@ -205,9 +205,9 @@ protected:
     : Superclass::Transform(numberOfParameters)
   {}
 
-  virtual ~Transform() {}
+  ~Transform() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
 #if 0

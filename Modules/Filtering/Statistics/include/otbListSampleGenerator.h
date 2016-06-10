@@ -95,7 +95,7 @@ public:
 
   // Build the outputs
   typedef itk::DataObject::Pointer DataObjectPointer;
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   //virtual void Update();
@@ -149,13 +149,13 @@ public:
 
 protected:
   ListSampleGenerator();
-  virtual ~ListSampleGenerator() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ListSampleGenerator() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Triggers the Computation of the sample list */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   /** Compute the calss statistics*/
   void GenerateClassStatistics();

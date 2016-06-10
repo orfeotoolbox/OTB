@@ -124,9 +124,9 @@ protected:
   /** Constructor */
   RCC8Graph();
   /** Destructor */
-  ~RCC8Graph() {}
+  ~RCC8Graph() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Initialize a range of vertex.
    * \param num The index of the last vertices to intialize.

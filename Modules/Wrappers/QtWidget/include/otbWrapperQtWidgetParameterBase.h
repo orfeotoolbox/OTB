@@ -39,7 +39,7 @@ class ITK_ABI_EXPORT QtWidgetParameterBase : public QWidget
   Q_OBJECT
 public:
   QtWidgetParameterBase(Parameter *, QtWidgetModel*);
-  virtual ~QtWidgetParameterBase();
+  ~QtWidgetParameterBase() ITK_OVERRIDE;
 
   void CreateWidget();
 

@@ -109,31 +109,31 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void Synthetize(void);
+  void Synthetize(void) ITK_OVERRIDE;
 
-  void Reset(void);
+  void Reset(void) ITK_OVERRIDE;
 
   /** Due to heterogeneous input template GenerateInputRequestedRegion must be reimplemented using explicit cast **/
   /** This new implementation is inspired by the one of itk::ImageToImageFilter **/
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
 protected:
   PersistentStreamingStatisticsMapFromLabelImageFilter();
-  virtual ~PersistentStreamingStatisticsMapFromLabelImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PersistentStreamingStatisticsMapFromLabelImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** GenerateData. */
-  void  GenerateData();
+  void  GenerateData() ITK_OVERRIDE;
 
 private:
   PersistentStreamingStatisticsMapFromLabelImageFilter(const Self &); //purposely not implemented
@@ -257,7 +257,7 @@ protected:
   /** Constructor */
   StreamingStatisticsMapFromLabelImageFilter() {}
   /** Destructor */
-  virtual ~StreamingStatisticsMapFromLabelImageFilter() {}
+  ~StreamingStatisticsMapFromLabelImageFilter() ITK_OVERRIDE {}
 
 private:
   StreamingStatisticsMapFromLabelImageFilter(const Self &); //purposely not implemented

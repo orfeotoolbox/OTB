@@ -57,7 +57,7 @@ public:
 
 protected:
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent i) const
+  void PrintSelf(std::ostream& os, itk::Indent i) const ITK_OVERRIDE
   {
     os << i << "WaveletLowPassOperator {this=" << this << "}" << std::endl;
     Superclass::PrintSelf(os, i.GetNextIndent());
@@ -73,7 +73,7 @@ protected:
   /**
    * Set operator coefficients.
    */
-  CoefficientVector GenerateCoefficients()
+  CoefficientVector GenerateCoefficients() ITK_OVERRIDE
   {
     CoefficientVector coeff;
     if (DirectionOfTransformation == Wavelet::FORWARD)

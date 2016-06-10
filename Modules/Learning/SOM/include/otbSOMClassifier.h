@@ -85,11 +85,11 @@ protected:
   /** Constructor */
   SOMClassifier();
   /** Destructor */
-  virtual ~SOMClassifier() {}
+  ~SOMClassifier() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Starts the classification process */
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   /// The input sample

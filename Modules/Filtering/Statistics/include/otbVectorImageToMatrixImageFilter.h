@@ -100,22 +100,22 @@ public:
   /** Make a DataObject of the correct type to be used as the specified
    * output.
    */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  virtual void AllocateOutputs();
-  virtual void GenerateOutputInformation();
-  virtual void Synthetize(void);
-  virtual void Reset(void);
+  void AllocateOutputs() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void Synthetize(void) ITK_OVERRIDE;
+  void Reset(void) ITK_OVERRIDE;
 
 protected:
   PersistentVectorImageToMatrixFilter();
-  virtual ~PersistentVectorImageToMatrixFilter() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  ~PersistentVectorImageToMatrixFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   PersistentVectorImageToMatrixFilter(const Self &); //purposely not implemented
@@ -196,7 +196,7 @@ protected:
   /** Constructor */
   VectorImageToMatrixImageFilter() {};
   /** Destructor */
-  virtual ~VectorImageToMatrixImageFilter() {}
+  ~VectorImageToMatrixImageFilter() ITK_OVERRIDE {}
 
 private:
   VectorImageToMatrixImageFilter(const Self &); //purposely not implemented

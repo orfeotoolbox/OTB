@@ -284,7 +284,7 @@ class IR : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "IR";
   }
@@ -292,10 +292,10 @@ public:
   /// Constructor
   IR() {}
   /// Desctructor
-  virtual ~IR() {}
+  ~IR() ITK_OVERRIDE {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const
+  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const ITK_OVERRIDE
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
@@ -327,7 +327,7 @@ class IC : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "IC";
   }
@@ -335,10 +335,10 @@ public:
   /// Constructor
   IC() {}
   /// Desctructor
-  virtual ~IC() {}
+  ~IC() ITK_OVERRIDE {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const
+  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const ITK_OVERRIDE
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
@@ -366,7 +366,7 @@ class IB : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "IB";
   }
@@ -374,10 +374,10 @@ public:
   /// Constructor
   IB() {}
   /// Desctructor
-  virtual ~IB() {}
+  ~IB() ITK_OVERRIDE {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const
+  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const ITK_OVERRIDE
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
@@ -401,7 +401,7 @@ class IB2 : public GAndRAndNirIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "IB2";
   }
@@ -409,10 +409,10 @@ public:
   /// Constructor
   IB2() {}
   /// Desctructor
-  virtual ~IB2() {}
+  ~IB2() ITK_OVERRIDE {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed, const TInput2& pNir) const
+  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed, const TInput2& pNir) const ITK_OVERRIDE
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);

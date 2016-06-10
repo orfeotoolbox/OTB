@@ -120,7 +120,7 @@ protected:
   /**
    * Destructor
    */
-  virtual ~UnaryFunctorNeighborhoodImageFilter() {}
+  ~UnaryFunctorNeighborhoodImageFilter() ITK_OVERRIDE {}
 
   /** UnaryFunctorNeighborhoodImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -132,12 +132,12 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /**
    * Pad the input requested region by radius
    */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
 private:
   UnaryFunctorNeighborhoodImageFilter(const Self &); //purposely not implemented

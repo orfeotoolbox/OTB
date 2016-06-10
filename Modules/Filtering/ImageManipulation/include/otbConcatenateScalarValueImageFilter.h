@@ -138,11 +138,11 @@ public:
 protected:
   ConcatenateScalarValueImageFilter();
 
-  virtual ~ConcatenateScalarValueImageFilter() {}
+  ~ConcatenateScalarValueImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   ConcatenateScalarValueImageFilter(const Self &); //purposely not implemented

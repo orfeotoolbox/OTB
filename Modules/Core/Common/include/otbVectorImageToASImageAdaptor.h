@@ -63,7 +63,7 @@ public:
 
 protected:
   VectorImageToASImageAdaptor() {}
-  virtual ~VectorImageToASImageAdaptor() {}
+  ~VectorImageToASImageAdaptor() ITK_OVERRIDE {}
 
 private:
   VectorImageToASImageAdaptor(const Self &); //purposely not implemented

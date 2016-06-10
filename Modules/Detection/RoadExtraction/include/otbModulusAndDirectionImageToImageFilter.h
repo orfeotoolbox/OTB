@@ -67,15 +67,15 @@ public:
 
   /** Set/Get the image input of this process object.  */
   using Superclass::SetInput;
-  virtual void SetInput(const InputImageType *input);
+  void SetInput(const InputImageType *input) ITK_OVERRIDE;
   virtual void SetInputDirection(const InputImageDirectionType *direction);
   const InputImageType * GetInput(void);
   const InputImageDirectionType * GetInputDirection(void);
 
 protected:
   ModulusAndDirectionImageToImageFilter();
-  virtual ~ModulusAndDirectionImageToImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ModulusAndDirectionImageToImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ModulusAndDirectionImageToImageFilter(const Self &); //purposely not implemented

@@ -83,7 +83,7 @@ public:
   virtual VariableLengthVectorType GetLastWavelengths() const = 0;
 
   /** Get the enhanced band names */
-  std::vector<std::string> GetEnhancedBandNames() const = 0;
+  std::vector<std::string> GetEnhancedBandNames() const ITK_OVERRIDE = 0;
 
   /** This method is to handle the permutation of the spectral band by some image provider
    * in most cases, this method won't change the value, but for SPOT data, the bands are set up as
@@ -96,9 +96,9 @@ public:
   virtual WavelengthSpectralBandVectorType GetSpectralSensitivity ()  const = 0;
 protected:
   OpticalImageMetadataInterface();
-  virtual ~OpticalImageMetadataInterface() {}
+  ~OpticalImageMetadataInterface() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 
 private:

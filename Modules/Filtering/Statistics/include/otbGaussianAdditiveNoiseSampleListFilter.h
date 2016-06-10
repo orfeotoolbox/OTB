@@ -85,7 +85,7 @@ public:
 
 protected:
   /** This method causes the filter to generate its output. */
-   virtual void GenerateData();
+   void GenerateData() ITK_OVERRIDE;
 
   /** Generate a white gaussian noise with mean m_Mean and variance
     * m_Variance
@@ -93,8 +93,8 @@ protected:
   void GenerateRandomSequence();
 
   GaussianAdditiveNoiseSampleListFilter();
-  virtual ~GaussianAdditiveNoiseSampleListFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~GaussianAdditiveNoiseSampleListFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   GaussianAdditiveNoiseSampleListFilter(const Self&); //purposely not implemented

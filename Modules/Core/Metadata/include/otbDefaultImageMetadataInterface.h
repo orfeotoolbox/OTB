@@ -72,49 +72,49 @@ public:
   }
 
   /** Get the imaging acquisition day from the ossim metadata */
-  int GetDay() const
+  int GetDay() const ITK_OVERRIDE
   {
     itkExceptionMacro("GetDay not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition month from the ossim metadata */
-  int GetMonth() const
+  int GetMonth() const ITK_OVERRIDE
   {
     itkExceptionMacro("GetMonth not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition year from the ossim metadata */
-  int GetYear() const
+  int GetYear() const ITK_OVERRIDE
   {
     itkExceptionMacro("GetYear not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition hour from the ossim metadata */
-  int GetHour() const
+  int GetHour() const ITK_OVERRIDE
   {
     itkExceptionMacro("GetHour not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition minute from the ossim metadata */
-  int GetMinute() const
+  int GetMinute() const ITK_OVERRIDE
   {
     itkExceptionMacro("GetMinute not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging production day from the ossim metadata */
-  int GetProductionDay() const
+  int GetProductionDay() const ITK_OVERRIDE
   {
     itkExceptionMacro("GetProductionDay not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging production month from the ossim metadata */
-  int GetProductionMonth() const
+  int GetProductionMonth() const ITK_OVERRIDE
   {
     itkExceptionMacro("GetProductionMonth not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging production year from the ossim metadata */
-  int GetProductionYear() const
+  int GetProductionYear() const ITK_OVERRIDE
   {
     itkExceptionMacro("GetProductionYear not implemented in DefaultImageMetadataInterface, no captor type found");
   }
@@ -144,13 +144,13 @@ public:
   }
 
   /** Get the enhanced band names */
-  std::vector<std::string> GetEnhancedBandNames() const
+  std::vector<std::string> GetEnhancedBandNames() const ITK_OVERRIDE
   {
     itkExceptionMacro("GetEnhancedBandNames not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
 
-  bool CanRead() const
+  bool CanRead() const ITK_OVERRIDE
   {
     // This clas is the default one, it has to be able to call every metadata
     return true;
@@ -163,7 +163,7 @@ public:
    *         When one spectral band is available : the only band is given to the R, G and B channel.
    *
    */
-  std::vector<unsigned int> GetDefaultDisplay() const
+  std::vector<unsigned int> GetDefaultDisplay() const ITK_OVERRIDE
   {
     unsigned int i = 0;
     std::vector<unsigned int> rgb(3);
@@ -190,7 +190,7 @@ public:
 
 protected:
   DefaultImageMetadataInterface(){};
-  virtual ~DefaultImageMetadataInterface() {}
+  ~DefaultImageMetadataInterface() ITK_OVERRIDE {}
 
 private:
 

@@ -142,10 +142,10 @@ protected:
   NormalizeAttributesLabelMapFilter(){}
 
   /** Destructor */
-  virtual ~NormalizeAttributesLabelMapFilter(){}
+  ~NormalizeAttributesLabelMapFilter() ITK_OVERRIDE{}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   NormalizeAttributesLabelMapFilter(const Self &); //purposely not implemented

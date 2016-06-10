@@ -70,12 +70,12 @@ public:
 
 protected:
   /** Standard itk::ProcessObject subclass method. */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   ListSampleSource();
-  virtual ~ListSampleSource() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ListSampleSource() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ListSampleSource(const Self&); //purposely not implemented

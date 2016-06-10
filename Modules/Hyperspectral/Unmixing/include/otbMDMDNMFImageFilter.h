@@ -190,18 +190,18 @@ public:
 
 protected:
   MDMDNMFImageFilter();
-  virtual ~MDMDNMFImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~MDMDNMFImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** GenerateOutputInformation
    * Propagate vector length info and modify if needed
    */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 
 private:

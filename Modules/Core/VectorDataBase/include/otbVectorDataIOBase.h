@@ -148,9 +148,9 @@ public:
 
 protected:
   VectorDataIOBase();
-  virtual ~VectorDataIOBase();
+  ~VectorDataIOBase() ITK_OVERRIDE;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Big or Little Endian, and the type of the file. (May be ignored.) */
   ByteOrder m_ByteOrder;

@@ -130,10 +130,10 @@ protected:
   ImageToNoDataMaskFilter()
   {}
 
-  virtual ~ImageToNoDataMaskFilter()
+  ~ImageToNoDataMaskFilter() ITK_OVERRIDE
   {}
 
-  virtual void BeforeThreadedGenerateData()
+  void BeforeThreadedGenerateData() ITK_OVERRIDE
   {
     std::vector<bool> noDataValueAvailable;
     std::vector<double> noDataValues;

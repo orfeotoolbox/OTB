@@ -105,11 +105,11 @@ protected:
   /**  Constructor */
   SinclairReciprocalImageFilter() {}
   /**  Destructor */
-  virtual ~SinclairReciprocalImageFilter() {}
+  ~SinclairReciprocalImageFilter() ITK_OVERRIDE {}
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

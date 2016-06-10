@@ -165,31 +165,31 @@ public:
   /** Methods prototypes */
   virtual const TransformType * GetTransform() const;
 
-  OutputPointType TransformPoint(const InputPointType& point) const;
+  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
 
   virtual void  InstanciateTransform();
 
   // Get inverse methods
   bool GetInverse(Self * inverseTransform) const;
-  virtual InverseTransformBasePointer GetInverseTransform() const;
+  InverseTransformBasePointer GetInverseTransform() const ITK_OVERRIDE;
 
   // Dummy set parameter method
-  virtual void SetParameters(const typename Superclass::ParametersType &)  {}
+  void SetParameters(const typename Superclass::ParametersType &) ITK_OVERRIDE  {}
 
   // Dummy ComputeJacobianWithRespectToParameters method
-  virtual void ComputeJacobianWithRespectToParameters(const InputPointType  &, JacobianType& ) const {}
+  void ComputeJacobianWithRespectToParameters(const InputPointType  &, JacobianType& ) const ITK_OVERRIDE {}
 
 protected:
   GenericRSTransform();
-  virtual ~GenericRSTransform() {}
+  ~GenericRSTransform() ITK_OVERRIDE {}
 
-  virtual void Modified() const
+  void Modified() const ITK_OVERRIDE
   {
     this->Superclass::Modified();
     m_TransformUpToDate = false;
   }
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   GenericRSTransform(const Self &);    //purposely not implemented

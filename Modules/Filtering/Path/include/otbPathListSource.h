@@ -169,7 +169,7 @@ public:
 
 protected:
   PathListSource() {};
-  virtual ~PathListSource() {}
+  ~PathListSource() ITK_OVERRIDE {}
 //   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

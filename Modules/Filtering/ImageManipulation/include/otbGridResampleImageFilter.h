@@ -134,23 +134,23 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
   /** Method Compute the Modified Time based on changed to the components. */
-  itk::ModifiedTimeType GetMTime(void) const;
+  itk::ModifiedTimeType GetMTime(void) const ITK_OVERRIDE;
   
 protected:
   GridResampleImageFilter();
 
   /** Destructor */
-  virtual ~GridResampleImageFilter() {};
+  ~GridResampleImageFilter() ITK_OVERRIDE {};
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
   
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
-  virtual void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
   inline void CastPixelWithBoundsChecking( const InterpolatorOutputType& value,
                                                       const InterpolatorComponentType& minComponent,
@@ -183,7 +183,7 @@ protected:
   }
   
   
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   GridResampleImageFilter(const Self &); //purposely not implemented

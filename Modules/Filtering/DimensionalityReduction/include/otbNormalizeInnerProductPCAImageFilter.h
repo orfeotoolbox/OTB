@@ -81,7 +81,7 @@ public:
 
 protected:
   NormalizeInnerProductPCAImageFilter();
-  virtual ~NormalizeInnerProductPCAImageFilter() {}
+  ~NormalizeInnerProductPCAImageFilter() ITK_OVERRIDE {}
 
   /** NormalizeInnerProductPCAImageFilter can produce an image which is a different
    * resolution than its input image.  As such, NormalizeInnerProductPCAImageFilter
@@ -91,7 +91,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** NormalizeInnerProductPCAImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -103,12 +103,12 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** BeforeThreadedGenerateData method */
-  void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

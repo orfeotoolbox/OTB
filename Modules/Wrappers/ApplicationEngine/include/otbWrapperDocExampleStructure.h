@@ -117,7 +117,7 @@ protected:
   /** Constructor */
   DocExampleStructure();
   /** Destructor */
-  virtual ~DocExampleStructure();
+  ~DocExampleStructure() ITK_OVERRIDE;
 
 private:
   DocExampleStructure(const DocExampleStructure &); //purposely not implemented

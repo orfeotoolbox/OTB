@@ -81,11 +81,11 @@ protected:
   /** Constructor */
   ImageMultiSegmentationToRCC8GraphFilter();
   /** Destructor */
-  virtual ~ImageMultiSegmentationToRCC8GraphFilter();
+  ~ImageMultiSegmentationToRCC8GraphFilter() ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Get the composition knowledge.
    * \param r1 First RCC8 relation value,

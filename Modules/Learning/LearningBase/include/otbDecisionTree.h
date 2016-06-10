@@ -97,11 +97,11 @@ protected:
   /** Constructor */
   DecisionTree();
   /** Destructor */
-  virtual ~DecisionTree();
+  ~DecisionTree() ITK_OVERRIDE;
   /** Output information redefinition */
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   DecisionTree(const Self &); // purposely not implemented

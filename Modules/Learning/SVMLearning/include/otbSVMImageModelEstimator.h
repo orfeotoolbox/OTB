@@ -108,12 +108,12 @@ protected:
   /** Constructor */
   SVMImageModelEstimator();
   /** Destructor */
-  virtual ~SVMImageModelEstimator();
+  ~SVMImageModelEstimator() ITK_OVERRIDE;
   /** PrintSelf */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Implement the prepare data step from SVMModelEstimator */
-  virtual void PrepareData();
+  void PrepareData() ITK_OVERRIDE;
 
 private:
   SVMImageModelEstimator(const Self &); //purposely not implemented

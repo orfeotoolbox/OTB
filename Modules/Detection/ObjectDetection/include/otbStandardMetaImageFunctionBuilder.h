@@ -167,8 +167,8 @@ public:
 
 protected:
   StandardMetaImageFunctionBuilder();
-  ~StandardMetaImageFunctionBuilder();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~StandardMetaImageFunctionBuilder() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   StandardMetaImageFunctionBuilder(const Self& ); //purposely not implemented

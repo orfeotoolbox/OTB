@@ -67,7 +67,7 @@ public:
 
 protected:
   FullyDecomposedWaveletPacketCost () {}
-  virtual ~FullyDecomposedWaveletPacketCost() {}
+  ~FullyDecomposedWaveletPacketCost() ITK_OVERRIDE {}
 
 private:
   FullyDecomposedWaveletPacketCost (const Self &);   // not implemented

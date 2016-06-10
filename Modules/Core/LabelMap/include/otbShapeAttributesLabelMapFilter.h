@@ -287,19 +287,19 @@ protected:
   ShapeAttributesLabelMapFilter(){}
 
   /** Destructor */
-  virtual ~ShapeAttributesLabelMapFilter(){}
+  ~ShapeAttributesLabelMapFilter() ITK_OVERRIDE{}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
   /** Things to to before threaded data generation */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *){};
+  void EnlargeOutputRequestedRegion(itk::DataObject *) ITK_OVERRIDE{};
 
 private:
   ShapeAttributesLabelMapFilter(const Self &); //purposely not implemented

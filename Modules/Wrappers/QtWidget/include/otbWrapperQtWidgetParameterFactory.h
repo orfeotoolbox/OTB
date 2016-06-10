@@ -59,7 +59,7 @@ public:
 
 protected:
   QtWidgetParameterFactory();
-  virtual ~QtWidgetParameterFactory();
+  ~QtWidgetParameterFactory() ITK_OVERRIDE;
 
 private:
   QtWidgetParameterFactory(const Self&); //purposely not implemented

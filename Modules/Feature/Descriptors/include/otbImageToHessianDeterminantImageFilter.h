@@ -132,15 +132,15 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~ImageToHessianDeterminantImageFilter();
+  ~ImageToHessianDeterminantImageFilter() ITK_OVERRIDE;
   /**
    * Standard PrintSelf method.
    */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Main computation method.
    */
-  virtual void  GenerateData();
+  void  GenerateData() ITK_OVERRIDE;
 
 private:
 

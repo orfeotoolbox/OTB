@@ -85,13 +85,13 @@ public:
   /** Return any value */
   virtual unsigned int GetValue();
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     // a choice parameter always has a value
     return true;
   }
 
-  void ClearValue()
+  void ClearValue() ITK_OVERRIDE
   {
     // nothing to do : a choice parameter always has a value
   }
@@ -101,7 +101,7 @@ protected:
   ChoiceParameter();
 
   /** Destructor */
-  virtual ~ChoiceParameter();
+  ~ChoiceParameter() ITK_OVERRIDE;
 
   struct Choice
   {

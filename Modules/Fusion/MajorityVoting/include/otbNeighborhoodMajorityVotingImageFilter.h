@@ -152,7 +152,7 @@ public:
 
 protected:
   NeighborhoodMajorityVotingImageFilter();
-  ~NeighborhoodMajorityVotingImageFilter() {};
+  ~NeighborhoodMajorityVotingImageFilter() ITK_OVERRIDE {};
 
   /** Evaluate image neighborhood with kernel to find the new value
    * for the center pixel value
@@ -162,9 +162,9 @@ protected:
    * Evaluate is used for non-boundary pixels. */
   PixelType Evaluate(const NeighborhoodIteratorType &nit,
                      const KernelIteratorType kernelBegin,
-                     const KernelIteratorType kernelEnd);
+                     const KernelIteratorType kernelEnd) ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   NeighborhoodMajorityVotingImageFilter(const Self&); //purposely not implemented

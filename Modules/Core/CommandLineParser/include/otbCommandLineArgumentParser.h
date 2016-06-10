@@ -137,7 +137,7 @@ public:
 //  const char *GetOptionParameter(const char *option, unsigned int number = 0);
   int GetNumberOfParameters(const std::string& option);
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 #define otbGetParameterMacro(name, type)                                                 \
   virtual type GetParameter ## name (const std::string& option, unsigned int number = 0) const     \
@@ -167,7 +167,7 @@ public:
 
 protected:
   CommandLineArgumentParseResult();
-  virtual ~CommandLineArgumentParseResult();
+  ~CommandLineArgumentParseResult() ITK_OVERRIDE;
 
 private:
   template<typename TypeValeur>
@@ -251,7 +251,7 @@ public:
 
 protected:
   CommandLineArgumentParser();
-  virtual ~CommandLineArgumentParser();
+  ~CommandLineArgumentParser() ITK_OVERRIDE;
 
 private:
 
