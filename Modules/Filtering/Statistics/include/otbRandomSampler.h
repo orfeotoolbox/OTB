@@ -19,7 +19,6 @@
 #define __otbRandomSampler_h
 
 #include "otbSamplerBase.h"
-#include "itkMersenneTwisterRandomVariateGenerator.h"
 
 namespace otb
 {
@@ -47,9 +46,8 @@ public:
    */
   typedef struct Parameter
     {
-    /** Flag for adaptative mode : adapt the rate during iteration so that
-     *  the exact number of requested samples is selected */
-    bool Adaptative;
+    /** Maximum buffer size to generate permutations */
+    unsigned long MaxBufferSize;
     
     bool operator!=(const struct Parameter  & param) const;
     } ParameterType; 
@@ -90,8 +88,11 @@ private:
   /** Internal parameters for the sampler */
   ParameterType m_Parameters;
 
-  /** Pointer to the random number generator instance */
-  itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer m_Generator;
+  /** Internal list of positions to select */
+  std::vector<unsigned long> m_Positions;
+
+  /** Internal current position */
+  std::vector<unsigned long>::iterator m_CurrentPosition;
 };
 
 } // namespace otb
