@@ -362,6 +362,127 @@ endif()
 # Create target to download data from the OTBData group. This must come after
 # all tests have been added that reference the group, so we put it last.
 
+#macro to put a fixed space between key, value  in summary
+macro(get_white_spaces var res)
+  string(LENGTH "${var}" len)
+  math(EXPR required_spaces "22 - ${len}")
+  set(${res})
+  foreach(loop_var RANGE ${required_spaces})
+    set(${res} "${${res}} ")
+  endforeach()
+endmacro()
+
+message("=== Begin OTB CMake Summary ===")
+set(option_list ${OTB_MODULE_ACTIVATION_OPTION_LIST})
+list(SORT option_list)
+
+foreach(otb_option
+    CMAKE_COMMAND
+    CMAKE_C_COMPILER
+    CMAKE_CXX_COMPILER
+    CMAKE_MAKE_PROGRAM
+    CMAKE_GENERATOR
+    CMAKE_BUILD_TYPE
+    CMAKE_C_FLAGS
+    CMAKE_CXX_FLAGS
+    ${option_list}
+    OTB_WRAP_PYTHON
+    OTB_WRAP_JAVA
+    )
+    get_white_spaces("${otb_option}" spaces)
+  message("${otb_option} ${spaces} = ${${otb_option}}")
+endforeach()
+
+# set(modules_list_for_summary "${OTB_MODULES_ENABLED}")
+# list(SORT modules_list_for_summary)
+# string(REPLACE ";" " " modules_list_for_summary "${modules_list_for_summary}")
+# message("OTB_MODULES_ENABLED      = ${modules_list_for_summary}")
+# unset(modules_list_for_summary)
+
+list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_OPENCV" "OTB_USE_QT4")
+foreach(item ${option_list})
+  if(NOT ${item})
+    list(REMOVE_ITEM option_list "${item}" )
+  endif()
+endforeach()
+
+#To report non-optional dependencies inside summary
+list(APPEND option_list Boost)
+list(APPEND option_list GDAL)
+list(APPEND option_list GEOTIFF)
+list(APPEND option_list ITK)
+list(APPEND option_list OSSIM)
+list(APPEND option_list TINYXML)
+
+#RK
+#Q: Why these two guys here? we already have option_list
+#A: Because cmake case sensitivity with variables.
+list(APPEND option_list OpenCV)
+list(APPEND option_list QT)
+
+#sort again!
+list(SORT option_list)
+
+foreach(dep ${option_list})
+
+  string(REGEX REPLACE "OTB_USE_" "" dep ${dep})
+
+  unset(var1_key)
+  unset(var2_key)
+  unset(var3_key)
+
+  unset(var1_val)
+  unset(var2_val)
+  unset(var3_val)
+
+  set(var1_key "${dep}")
+  if(${dep}_VERSION_STRING)
+    set(var1_val ${${dep}_VERSION_STRING})
+  endif()
+  if(NOT var1_val)
+    if(${dep}_VERSION)
+      set(var1_val ${${dep}_VERSION})
+    endif()
+  endif()
+
+  if(${dep}_DIR)
+    set(var2_key  ${dep}_DIR)
+    set(var2_val ${${dep}_DIR})
+  else()
+    if(${dep}_INCLUDE_DIR)
+      set(var2_key  ${dep}_INCLUDE_DIR)
+      set(var2_val ${${dep}_INCLUDE_DIR})
+    elseif(${dep}_INCLUDE_DIRS)
+      set(var2_key  ${dep}_INCLUDE_DIRS)
+      set(var2_val ${${dep}_INCLUDE_DIRS})
+    endif()
+    if(${dep}_LIBRARY)
+      set(var3_key  ${dep}_LIBRARY)
+      set(var3_val ${${dep}_LIBRARY})
+    elseif(${dep}_LIBRARIES)
+      set(var3_key  ${dep}_LIBRARIES)
+      set(var3_val ${${dep}_LIBRARIES})
+    endif()
+  endif()
+
+  get_white_spaces("${var1_key}" insert_spaces1)
+  get_white_spaces("${var2_key}" insert_spaces2)
+  get_white_spaces("${var3_key}" insert_spaces3)
+
+  message("${var1_key} ${insert_spaces1} = ${var1_val}")
+  if(var2_val)
+    message("${var2_key} ${insert_spaces2} = ${var2_val}")
+  endif()
+  if(var3_val)
+    message("${var3_key} ${insert_spaces3} = ${var3_val}")
+  endif()
+
+endforeach()
+
+message("=== End OTB CMake Summary ===")
+
+#don't need this one anymore. so unset it.
+unset(option_list)
 
 # 04-apr-2016. point OTB.
 # create a single package with OTB + Monteverdi + Mapla.
