@@ -67,7 +67,8 @@ int main(int argc, char* argv[])
     
     ofs << "  local cur prev" << std::endl;
     ofs << "  COMPREPLY=()" << std::endl;
-    ofs << "  _get_comp_words_by_ref cur prev" << std::endl;
+    ofs << "  cur=\"${COMP_WORDS[COMP_CWORD]}\"" << std::endl;
+    ofs << "  prev=\"${COMP_WORDS[COMP_CWORD-1]}\"" << std::endl;
     ofs << "  case \"$cur\" in" << std::endl;
     ofs << "    -*)" << std::endl;
     ofs << "      key_list=\"";
@@ -76,7 +77,7 @@ int main(int argc, char* argv[])
       ofs << "-" << keys[k] << " ";
       }
     ofs << "\"" << std::endl;
-    ofs << "      COMPREPLY=( $( compgen -W '$key_list' -- $cur) )" << std::endl;
+    ofs << "      COMPREPLY=( $( compgen -W \"$key_list\" -- $cur) )" << std::endl;
     ofs << "      return 0" << std::endl;
     ofs << "      ;;" << std::endl;
     ofs << "  esac" << std::endl;
@@ -107,7 +108,7 @@ int main(int argc, char* argv[])
             }
           }
         ofs << "\"" << std::endl;
-        ofs << "      COMPREPLY=( $( compgen -W '$key_list' -- $cur) )" << std::endl;
+        ofs << "      COMPREPLY=( $( compgen -W \"$key_list\" -- $cur) )" << std::endl;
         ofs << "      ;;" << std::endl;
         }
       ofs << "  esac" << std::endl;
