@@ -19,6 +19,7 @@
 #include "otbPeriodicSampler.h"
 #include "otbPatternSampler.h"
 #include "otbRandomSampler.h"
+#include "itkMersenneTwisterRandomVariateGenerator.h"
 
 template <typename SamplerType>
 std::string RunSampler(SamplerType *sampler, unsigned long total)
@@ -139,7 +140,7 @@ int otbRandomSamplerTest(int, char *[])
   itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(121212);
   otb::RandomSampler::Pointer sampler = otb::RandomSampler::New();
   otb::RandomSampler::ParameterType param;
-  param.Adaptative = false;
+  param.MaxBufferSize = 100000000;
   
   sampler->SetNumberOfElements(5,23);
   sampler->SetParameters(param);
@@ -152,7 +153,7 @@ int otbRandomSamplerTest(int, char *[])
     return EXIT_FAILURE;
     }
   
-  std::string baseline1("_X_X____X____X________X");
+  std::string baseline1("_______X____X____XX__X_");
   if (test1 != baseline1)
     {
     std::cout << "1 - Wrong sampling sequence :" << std::endl;
@@ -161,11 +162,11 @@ int otbRandomSamplerTest(int, char *[])
     return EXIT_FAILURE;
     }
   
-  param.Adaptative = true;
-  sampler->SetRate(0.34,23);
+  param.MaxBufferSize = 5;
+  sampler->SetRate(0.1,23);
   sampler->SetParameters(param);
   std::string test2 = RunSampler<otb::RandomSampler>(sampler,23);
-  std::string baseline2("__X_X_XXX_____XX_____X_");
+  std::string baseline2("_____________X_______X_");
   if (test2 != baseline2)
     {
     std::cout << "2 - Wrong sampling sequence :" << std::endl;
