@@ -13,12 +13,11 @@ set(GDAL_CONFIG_CHECKING ON CACHE BOOL "Tests to check gdal config." FORCE)
 mark_as_advanced(GDAL_CONFIG_CHECKING)
 
 if(GDAL_CONFIG_CHECKING)
+  message(STATUS "Checking GDAL installation.. " )
 	set(MIN_MAJOR_VERSION 1)
 	set(MIN_MINOR_VERSION 10)
 
 	set(GDAL_QUALIFIES TRUE)
-	set(COMPILE_ERRORS FALSE)
-
 	# Ensure that the temporary dir always exists before starting tests
 	if(NOT EXISTS ${TEMP})
 	  FILE(MAKE_DIRECTORY ${TEMP})
@@ -80,20 +79,18 @@ if(GDAL_CONFIG_CHECKING)
 	endif()
 	#------------------- TESTS (END)---------------------
 
-
 	# Warning messages
 	if (NOT COMPILE_RESULT_VERSION)
-		message(WARNING "Modules/ThirdParty/GDAL/gdalVersionTest.cxx did not compile.")
-		set(COMPILE_ERRORS TRUE)
+	  message(FATAL_ERROR "Modules/ThirdParty/GDAL/gdalVersionTest.cxx did not compile.")
 	elseif (${RUN_RESULT_VERSION} EQUAL 1)
-		file(READ "${TEMP}/gdalVersion.txt" DETECTED_VERSION)
-		message(WARNING "Version of GDAL must be >= " ${MIN_MAJOR_VERSION} "." ${MIN_MINOR_VERSION} " : " ${DETECTED_VERSION} " detected.")
-		set(GDAL_QUALIFIES FALSE)
-  else((${RUN_RESULT_VERSION} EQUAL 1))
-    file(READ "${TEMP}/gdalVersion.txt" DETECTED_VERSION)
-    string(SUBSTRING ${DETECTED_VERSION} 0 2 VER2)
-    if(${VER2} EQUAL "2.")
-      message(STATUS "Gdal >= 2.0.0 detected")
+	  file(READ "${TEMP}/gdalVersion.txt" DETECTED_VERSION)
+	  message(FATAL_ERROR "Version of GDAL must be >= " ${MIN_MAJOR_VERSION} "." ${MIN_MINOR_VERSION} " : " ${DETECTED_VERSION} " detected.")
+	  set(GDAL_QUALIFIES FALSE)
+        else((${RUN_RESULT_VERSION} EQUAL 1))
+          file(READ "${TEMP}/gdalVersion.txt" DETECTED_VERSION)
+          string(SUBSTRING ${DETECTED_VERSION} 0 2 VER2)
+          if(${VER2} EQUAL "2.")
+            message(STATUS "Gdal >= 2.0.0 detected")
       set(OTB_USE_GDAL_20 true CACHE INTERNAL "True if GDAL >= 2.0.0 has been detected" FORCE )
     else(${VER2} EQUAL "2.")
       set(OTB_USE_GDAL_20 false CACHE INTERNAL "True if GDAL >= 2.0.0 has been detected" FORCE )
@@ -101,28 +98,27 @@ if(GDAL_CONFIG_CHECKING)
 	endif()
 
 	if (NOT GDAL_HAS_OGR)
-		message(WARNING "GDAL doesn't expose OGR library symbols.")
-		set(GDAL_QUALIFIES FALSE)
+		message(FATAL_ERROR "GDAL doesn't expose OGR library symbols.")
+		unset(GDAL_QUALIFIES)
 	endif()
 
 	if (NOT COMPILE_RESULT_FORMATS)
-		message(WARNING "Modules/ThirdParty/GDAL/gdalFormatsTest.cxx did not compile.")
-		set(COMPILE_ERRORS TRUE)
+		message(FATAL_ERROR "Modules/ThirdParty/GDAL/gdalFormatsTest.cxx did not compile.")
+                
 	else()
 
 		if (NOT GDAL_HAS_J2K_JG2000 AND NOT GDAL_HAS_J2K_OPJG AND NOT GDAL_HAS_J2K_KAK AND NOT GDAL_HAS_J2K_ECW)
 		message(STATUS "No Jpeg2000 driver found (compatible drivers are : OpenJpeg, Kakadu, ECW).")
-		#set(GDAL_QUALIFIES FALSE)
 		endif()
 
 		if (NOT GDAL_HAS_JPEG)
 		message(WARNING "No jpeg driver found.")
-		set(GDAL_QUALIFIES FALSE)
+                unset(GDAL_QUALIFIES)
 		endif()
 
 		if (NOT GDAL_HAS_GTIF)
 		message(WARNING "No geotiff driver found.")
-		set(GDAL_QUALIFIES FALSE)
+		unset(GDAL_QUALIFIES)
 		endif()
 
 	endif()
@@ -132,31 +128,27 @@ if(GDAL_CONFIG_CHECKING)
   endif()
 
 	if (NOT COMPILE_RESULT_CREATE)
-		message(WARNING "Modules/ThirdParty/GDAL/gdalCreateTest.cxx did not compile.")
-		set(COMPILE_ERRORS TRUE)
+		message(FATAL_ERROR "Modules/ThirdParty/GDAL/gdalCreateTest.cxx did not compile.")
 	elseif (NOT GDAL_CAN_CREATE_GEOTIFF)
-			message(WARNING "GDAL can't create geotiff files.")
-			set(GDAL_QUALIFIES FALSE)
+			message(FATAL_ERROR "GDAL can't create geotiff files.")
+			unset(GDAL_QUALIFIES)
 	endif()
 
 
 	if (NOT COMPILE_RESULT_CREATECOPY)
-		message(WARNING "Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx did not compile.")
-		set(COMPILE_ERRORS TRUE)
-
+		message(FATAL_ERROR "Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx did not compile.")
 		if (NOT GDAL_CAN_CREATE_BIGTIFF)
 			message(WARNING "No BIGTIFF capatilities.")
-			set(GDAL_QUALIFIES FALSE)
+			unset(GDAL_QUALIFIES)
 		endif()
-
 		if (NOT GDAL_CAN_CREATE_JPEG)
 			message(WARNING "GDAL can't create jpeg files.")
-			set(GDAL_QUALIFIES FALSE)
+			unset(GDAL_QUALIFIES)
 		endif()
 
 		if (NOT GDAL_CAN_CREATE_JPEG2000)
 			message(WARNING "GDAL can't create jpeg2000 files.")
-			set(GDAL_QUALIFIES FALSE)
+			unset(GDAL_QUALIFIES)
 		endif()
 
 	endif()
@@ -168,7 +160,6 @@ if(GDAL_CONFIG_CHECKING)
 	if(UNIX)
 
 	  if(GDAL_QUALIFIES)
-
 			# Prepare bash script
 			configure_file(${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest.sh.in ${CMAKE_CURRENT_BINARY_DIR}/gdalTest.sh @ONLY)
 			execute_process(COMMAND chmod u+x ${CMAKE_CURRENT_BINARY_DIR}/gdalTest.sh)
@@ -183,10 +174,10 @@ if(GDAL_CONFIG_CHECKING)
 
 			# Warning messages
 			if (NOT COMPILE_RESULT_SYMBOLS)
-				message(WARNING "Modules/ThirdParty/GDAL/gdalSymbolsTest.cxx did not compile.")
-				set(COMPILE_ERRORS TRUE)
+				message(FATAL_ERROR "Modules/ThirdParty/GDAL/gdalSymbolsTest.cxx did not compile.")
+			
 			elseif (${RUN_RESULT_SYMBOLS} EQUAL 1)
-				message(WARNING "Internal versions of libtiff/libgeotiff detected without symbol renaming (when configuring GDAL, if options --with-libtiff or --with-geotiff are set to 'internal', then options --with-rename-internal-libtiff-symbols and --with-rename-internal-libgeotiff-symbols should be set to 'yes').")
+				message(FATAL_ERROR "Internal versions of libtiff/libgeotiff detected without symbol renaming (when configuring GDAL, if options --with-libtiff or --with-geotiff are set to 'internal', then options --with-rename-internal-libtiff-symbols and --with-rename-internal-libgeotiff-symbols should be set to 'yes').")
 				set(GDAL_QUALIFIES FALSE)
 			endif()
 
@@ -197,17 +188,21 @@ if(GDAL_CONFIG_CHECKING)
 	endif() #UNIX
 
 
-	if(GDAL_QUALIFIES AND NOT COMPILE_ERRORS)
+        if(NOT GDAL_VERSION)
+          if(EXISTS "${TEMP}/gdalVersion.txt")
+            file(READ "${TEMP}/gdalVersion.txt" GDAL_VERSION)
+          else()
+           set(GDAL_QUALIFIES FALSE) 
+          endif()
+        endif()
+	if(GDAL_QUALIFIES)
           message(STATUS "Check if Gdal qualifies for Orfeo ToolBox -- yes.")
 	else()
-          message(STATUS "Check if Gdal qualifies for Orfeo ToolBox -- no.")
+          message(FATAL_ERROR "Check if Gdal qualifies for Orfeo ToolBox -- no.")
 	endif()
 
-  if(NOT GDAL_VERSION)
-    if(EXISTS "${TEMP}/gdalVersion.txt")
-      file(READ "${TEMP}/gdalVersion.txt" GDAL_VERSION)
-    endif()
-  endif()
+
+  set(GDAL_VERSION_STRING "${GDAL_VERSION}" CACHE INTERNAL "" FORCE)
   message(STATUS "  Version : ${GDAL_VERSION}")
   message(STATUS "  Drivers for JPEG 2000 : ")
   if(GDAL_HAS_J2K_JG2000)
