@@ -50,9 +50,6 @@ namespace Functor {
  * - \f$ if p[i] > 1, p[i]=1 \f$
  * - \f$ if \alpha_{i} > 90, \alpha_{i}=90 \f$
  *
- * \ingroup SARPolarimetry
- *
- *
  * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
@@ -194,10 +191,9 @@ private:
  *
  * For more details, please refer to the class ReciprocalHAlphaFunctor.
  *
- * \ingroup SARPOlarimetry
+ * \ingroup OTBPolarimetry
  * \sa ReciprocalHAlphaFunctor
  *
- * \ingroup OTBPolarimetry
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalHAlphaImageFilter :

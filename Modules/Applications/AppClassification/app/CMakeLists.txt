@@ -104,3 +104,8 @@ otb_create_application(
   NAME           VectorDataDSValidation
   SOURCES        otbVectorDataDSValidation.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           PolygonClassStatistics
+  SOURCES        otbPolygonClassStatistics.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})

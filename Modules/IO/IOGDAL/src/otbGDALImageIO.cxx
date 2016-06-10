@@ -160,6 +160,7 @@ GDALImageIO::GDALImageIO()
   m_NumberOfOverviews = 0;
   m_ResolutionFactor = 0;
   m_BytePerPixel = 0;
+  m_WriteRPCTags = false;
 }
 
 GDALImageIO::~GDALImageIO()
@@ -440,8 +441,6 @@ bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector
   // Note: we assume that the subdatasets are in order : SUBDATASET_ID_NAME, SUBDATASET_ID_DESC, SUBDATASET_ID+1_NAME, SUBDATASET_ID+1_DESC
   char** papszMetadata;
   papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
-
-  std::cout << m_Dataset->GetDataSet()->GetDriver()->GetDescription() << std::endl;
 
   // Have we find some dataSet ?
   // This feature is supported only for hdf4 and hdf5 file (regards to the bug 270)
@@ -1734,7 +1733,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     itk::ExposeMetaData<ImageKeywordlist>(dict,
                                           MetaDataKey::OSSIMKeywordlistKey,
                                           otb_kwl);
-    if( otb_kwl.GetSize() != 0 )
+    if( m_WriteRPCTags && otb_kwl.GetSize() != 0 )
       {
       GDALRPCInfo gdalRpcStruct;
       if ( otb_kwl.convertToGDALRPC(gdalRpcStruct) )

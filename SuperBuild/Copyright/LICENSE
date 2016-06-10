@@ -1,0 +1,19 @@
+This package is made of several open source components. Each one of the
+components present in this package is licensed under the terms specified by the
+authors of that component.
+
+The OTB is released under the CeCILL-2.0 license. This license is available
+online :
+  http://www.cecill.info/licences/Licence_CeCILL_V2-en.html
+  http://www.cecill.info/licences/Licence_CeCILL_V2-fr.html
+
+However this package may be compiled with dependencies that have
+incompatible licensing. As a consequence, the OTB binaries will be
+released under GPL-v2 license in the following cases :
+- if ITK (used by OTB) was built with FFTW support enabled (FFTW is released
+under GPL-v2 license)
+- if this package was built using FreeType. FreeType allows to choose between
+the 'advertising' FreeType license and the GPL-v2 license.
+
+More details on copyright information can be found in :
+  share/copyright

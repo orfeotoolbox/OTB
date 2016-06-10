@@ -553,7 +553,6 @@ private:
           BI2FilterType::Pointer l_BI2Filter = BI2FilterType::New();
           std::ostringstream oss;
           oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan1;
-          std::cout << "flag" << std::endl;
           l_BI2Filter->GetFunctor().SetNIRIndex(this->GetParameterInt(oss.str()));
           oss.str("");
           oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan2;

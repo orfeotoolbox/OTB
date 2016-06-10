@@ -19,18 +19,19 @@
 #define otb_GlImageActor_h
 
 
-#include "otbGenericRSTransform.h"
-#include "otbGeoInterface.h"
-#include "otbGlActor.h"
-#include "otbFragmentShader.h"
-#include "otbImageFileReader.h"
-#include "otbMultiChannelExtractROI.h"
-#include "otbVectorRescaleIntensityImageFilter.h"
-#include "otbVectorImage.h"
+#include <vcl_algorithm.h>
 
 #include "itkCenteredRigid2DTransform.h"
 
-#include <vcl_algorithm.h>
+#include "otbFragmentShader.h"
+#include "otbGenericRSTransform.h"
+#include "otbGeoInterface.h"
+#include "otbGlActor.h"
+#include "otbImageFileReader.h"
+#include "otbImageSettings.h"
+#include "otbMultiChannelExtractROI.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
+#include "otbVectorImage.h"
 
 
 namespace otb
@@ -97,7 +98,7 @@ public:
 
   const PointType & GetOrigin() const;
 
-  const SpacingType & GetSpacing() const;
+  virtual const GeoInterface::Spacing2 & GetSpacing() const;
 
   virtual std::string GetWkt() const;
 
@@ -123,6 +124,8 @@ public:
   itkBooleanMacro(SoftwareRendering );
   itkSetMacro(SoftwareRendering, bool );
   itkGetMacro(SoftwareRendering, bool );
+
+  void CreateShader();
 
   void SetResolutionAlgorithm(ResolutionAlgorithm::type alg)
   {
@@ -177,21 +180,15 @@ public:
   itkGetObjectMacro(Shader,FragmentShader);
   itkSetObjectMacro(Shader,FragmentShader);
 
+  itkGetObjectMacro( ImageSettings, ImageSettings );
+
   //
   // otb::GlActor overloads.
   //
 
-  virtual bool TransformFromViewport( Point2f & out,
-                                      const Point2f & in,
-                                      bool isPhysical = true ) const;
-
   virtual bool TransformFromViewport( Point2d & out,
                                       const Point2d & in,
                                       bool isPhysical = true ) const;
-
-  virtual bool TransformToViewport( Point2f & out,
-                                    const Point2f & in,
-                                    bool isPhysical = true ) const;
 
   virtual bool TransformToViewport( Point2d & out,
                                     const Point2d & in,
@@ -219,6 +216,7 @@ protected:
       : m_Loaded(false),
         m_TextureId(0),
         m_ImageRegion(),
+        m_TileSize(0),
         m_Image(),
         m_UL(),
         m_UR(),
@@ -239,6 +237,7 @@ protected:
     bool m_Loaded;
     unsigned int m_TextureId;
     RegionType m_ImageRegion;
+    unsigned int m_TileSize;
     VectorImageType::Pointer m_Image;
     PointType m_UL;
     PointType m_UR;
@@ -304,6 +303,7 @@ private:
   RegionType   m_LargestRegion;
   unsigned int m_NumberOfComponents;
 
+  ImageSettings::Pointer m_ImageSettings;
   FragmentShader::Pointer m_Shader;
 
   RSTransformType::Pointer m_ViewportToImageTransform;

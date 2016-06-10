@@ -19,7 +19,14 @@
 #define __otbOGRFeatureWrapper_h
 
 // #include <iosfwd> // std::ostream&
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <boost/shared_ptr.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <boost/shared_ptr.hpp>
+#endif
 // #include "itkIndent.h", included from field
 #include "otbOGRFieldWrapper.h"
 #include "otbOGRGeometryWrapper.h"

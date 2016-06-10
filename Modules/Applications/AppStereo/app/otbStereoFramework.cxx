@@ -319,7 +319,7 @@ private:
 
     SetDocName("Stereo Framework");
     SetDocLongDescription("Compute the ground elevation with a stereo block matching algorithm "
-                          "between one or mulitple stereo pair in sensor geometry. The output is projected in "
+                          "between one or multiple stereo pair in sensor geometry. The output is projected in "
                           "desired geographic or cartographic map projection (UTM by default). The pipeline is made of the following steps:\n"
                           "for each sensor pair :\n"
                           "\t- compute the epipolar displacement grids from the stereo pair (direct and inverse)\n"

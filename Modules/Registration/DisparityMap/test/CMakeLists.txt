@@ -35,23 +35,23 @@ otb_add_test(NAME dmTvDisparityMapEstimationMethod COMMAND otbDisparityMapTestDr
   20 20
   )
 
-otb_add_test(NAME dmTvDisparityMapToDEMFilter COMMAND otbDisparityMapTestDriver
-  --compare-image ${NOTOL}
-  ${BASELINE}/../../Examples/DisparityMap/elevationOutput.tif
-  ${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
-  otbDisparityMapToDEMFilter
-  ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
-  ${EXAMPLEDATA}/sensor_stereo_left.tif
-  ${EXAMPLEDATA}/sensor_stereo_right.tif
-  ${INPUTDATA}/sensor_stereo_rectif_left.tif
-  ${INPUTDATA}/sensor_stereo_rectif_right.tif
-  ${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
-  130
-  220
-  140
-  2.5
-  ${INPUTDATA}/sensor_stereo_dmap_mask.tif
-  )
+#otb_add_test(NAME dmTvDisparityMapToDEMFilter COMMAND otbDisparityMapTestDriver
+  #--compare-image ${NOTOL}
+  #${BASELINE}/../../Examples/DisparityMap/elevationOutput.tif
+  #${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
+  #otbDisparityMapToDEMFilter
+  #${INPUTDATA}/sensor_stereo_blockmatching_output.tif
+  #${EXAMPLEDATA}/sensor_stereo_left.tif
+  #${EXAMPLEDATA}/sensor_stereo_right.tif
+  #${INPUTDATA}/sensor_stereo_rectif_left.tif
+  #${INPUTDATA}/sensor_stereo_rectif_right.tif
+  #${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
+  #130
+  #220
+  #140
+  #2.5
+  #${INPUTDATA}/sensor_stereo_dmap_mask.tif
+  #)
 
 otb_add_test(NAME dmTuDisparityMapToDEMFilterNew COMMAND otbDisparityMapTestDriver
   otbDisparityMapToDEMFilterNew)
@@ -114,19 +114,19 @@ otb_add_test(NAME dmTuSubPixelDisparityImageFilterNew COMMAND otbDisparityMapTes
 otb_add_test(NAME dmTuDisparityMapEstimationMethodNew COMMAND otbDisparityMapTestDriver
   otbDisparityMapEstimationMethodNew)
 
-otb_add_test(NAME dmTvDisparityMapTo3DFilter COMMAND otbDisparityMapTestDriver
-  --compare-image ${EPSILON_6}
-  ${BASELINE}/dmTvDisparityMapTo3DFilterOutput.tif
-  ${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif
-  otbDisparityMapTo3DFilter
-  ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
-  ${EXAMPLEDATA}/sensor_stereo_left.tif
-  ${EXAMPLEDATA}/sensor_stereo_right.tif
-  ${INPUTDATA}/sensor_stereo_rectif_left.tif
-  ${INPUTDATA}/sensor_stereo_rectif_right.tif
-  ${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif
-  ${INPUTDATA}/sensor_stereo_dmap_mask.tif
-  )
+#otb_add_test(NAME dmTvDisparityMapTo3DFilter COMMAND otbDisparityMapTestDriver
+  #--compare-image ${EPSILON_6}
+  #${BASELINE}/dmTvDisparityMapTo3DFilterOutput.tif
+  #${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif
+  #otbDisparityMapTo3DFilter
+  #${INPUTDATA}/sensor_stereo_blockmatching_output.tif
+  #${EXAMPLEDATA}/sensor_stereo_left.tif
+  #${EXAMPLEDATA}/sensor_stereo_right.tif
+  #${INPUTDATA}/sensor_stereo_rectif_left.tif
+  #${INPUTDATA}/sensor_stereo_rectif_right.tif
+  #${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif
+  #${INPUTDATA}/sensor_stereo_dmap_mask.tif
+  #)
 
 otb_add_test(NAME dmTuDisparityMapTo3DFilterNew COMMAND otbDisparityMapTestDriver
   otbDisparityMapTo3DFilterNew)

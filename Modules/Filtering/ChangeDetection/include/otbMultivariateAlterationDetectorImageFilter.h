@@ -50,7 +50,7 @@ namespace otb
  * - Each change map is orthogonal to the others.
  *
  * This is a statistical method which can handle different modalities
- * and even differents bands and number of bands between images.
+ * and even different bands and number of bands between images.
  *
  * If numbers of bands in image 1 and 2 are equal, then change maps
  * are sorted by increasing correlation. If number of bands is

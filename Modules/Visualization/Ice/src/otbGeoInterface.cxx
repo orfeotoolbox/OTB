@@ -21,6 +21,28 @@
 namespace otb
 {
 
+class StaticInitializer
+{
+public:
+  StaticInitializer() :
+    m_Spacing()
+  {
+    m_Spacing.Fill( 1 );
+  }
+
+  const GeoInterface::Spacing2 &
+  GetSpacing() const
+  {
+    return m_Spacing;
+  }
+
+private:
+  GeoInterface::Spacing2 m_Spacing;
+};
+
+
+static const StaticInitializer INITIALIZER;
+
 
 GeoInterface
 ::GeoInterface()
@@ -34,19 +56,20 @@ GeoInterface
 }
 
 
-template<> bool
+bool
 GeoInterface
-::TransformFromViewport<GeoInterface::Point2d>( Point2d &,
+::TransformFromViewport( Point2d &,
                          const Point2d &,
                          bool ) const
 {
   return false;
 }
 
+#if 0
 
-template <> bool
+bool
 GeoInterface
-::TransformFromViewport<GeoInterface::Point2f>( Point2f & out,
+::TransformFromViewport( Point2f & out,
                          const Point2f & in,
                          bool isPhysical ) const
 {
@@ -63,10 +86,11 @@ GeoInterface
   return true;
 }
 
+#endif
 
-template <> bool
+bool
 GeoInterface
-::TransformToViewport<GeoInterface::Point2d>( Point2d &,
+::TransformToViewport( Point2d &,
                        const Point2d &,
                        bool ) const
 {
@@ -74,9 +98,11 @@ GeoInterface
 }
 
 
-template <> bool
+#if 0
+
+bool
 GeoInterface
-::TransformToViewport<GeoInterface::Point2f>( Point2f & out,
+::TransformToViewport( Point2f & out,
                        const Point2f & in,
                        bool isPhysical ) const
 {
@@ -91,6 +117,22 @@ GeoInterface
   out[ 1 ] = p[ 1 ];
 
   return true;
+}
+
+#endif
+
+
+const GeoInterface::Spacing2 &
+GeoInterface
+::GetSpacing() const
+{
+  // By default, spacing is (1, 1) if sub-class has no scale-related
+  // spacing.
+  //
+  // This method is especially usefull in otb::GlView::ZoomToFull() in
+  // order to correct transformed zooming factors.
+
+  return INITIALIZER.GetSpacing();
 }
 
 

@@ -32,7 +32,7 @@ namespace ossimplugins
    {
       if ( !doc->openFile( file ) )
       {
-         std::cerr << "ossimSentinel1ProductDoc::openMetadataFile() failed." << std::endl;
+         ossimNotify(ossimNotifyLevel_FATAL) << "ossimSentinel1ProductDoc::openMetadataFile" << std::endl;
          return false;
       }
 
@@ -143,10 +143,14 @@ namespace ossimplugins
          ossimRefPtr<ossimXmlDocument> theProductXmlDocument = new ossimXmlDocument();
          openMetadataFile(theProductXmlDocument, (*it) );
 
-         const ossimRefPtr<ossimXmlNode> adsHeader = theProductXmlDocument->getRoot()->findFirstNode("adsHeader");
+         const ossimXmlNodePtr productRoot = theProductXmlDocument->getRoot();
+
+         const ossimXmlNodePtr adsHeader = productRoot->findFirstNode("adsHeader");
 
          const ossimString swath = adsHeader->getChildTextValue("swath");
-         const ossimString polarisation = adsHeader->getChildTextValue("polarisation");
+
+         const ossimString polarisation =
+            adsHeader->getChildTextValue("polarisation");
 
          std::stringstream _tempstrm;
          _tempstrm << "Band[" << count << "].";
@@ -182,9 +186,11 @@ namespace ossimplugins
                       polarisation,
                       true);
 
-         const ossimRefPtr<ossimXmlNode> imageInformation = theProductXmlDocument->getRoot()->findFirstNode("imageAnnotation/imageInformation");
+         const ossimXmlNodePtr imageInformation =
+            productRoot->findFirstNode("imageAnnotation/imageInformation");
 
-         const ossimRefPtr<ossimXmlNode> productInformation = theProductXmlDocument->getRoot()->findFirstNode("generalAnnotation/productInformation");
+         const ossimXmlNodePtr productInformation =
+            productRoot->findFirstNode("generalAnnotation/productInformation");
 
          theProductKwl.add(SUPPORT_DATA_PREFIX,
                          "data_take_id",
@@ -201,9 +207,13 @@ namespace ossimplugins
                          imageInformation->getChildTextValue("azimuthTimeInterval"),
                          true);
 
-         theRangeSpacingTotal += imageInformation->getChildTextValue("rangePixelSpacing").toFloat64();
+         theRangeSpacingTotal +=
+            imageInformation->getChildTextValue("rangePixelSpacing")
+            .toFloat64();
 
-         theAzimuthSpacingTotal += imageInformation->getChildTextValue("azimuthPixelSpacing").toFloat64();
+         theAzimuthSpacingTotal +=
+            imageInformation->getChildTextValue("azimuthPixelSpacing")
+            .toFloat64();
 
          theProductKwl.add(bandPrefix,
                          ossimKeywordNames::NUMBER_SAMPLES_KW,
@@ -217,7 +227,8 @@ namespace ossimplugins
 
          theProductKwl.add(bandPrefix,
                          "sample_type", //ossimKeywordNames::PIXEL_TYPE_KW,
-                         imageInformation->getChildTextValue("pixelValue").upcase(),
+                         imageInformation->getChildTextValue("pixelValue")
+                           .upcase(),
                          true);
 
          heightSum += getBandTerrainHeight(theProductXmlDocument);
@@ -247,59 +258,75 @@ namespace ossimplugins
                               imageInformation->getChildTextValue("slantRangeTime"),
                               true);
 
-            const ossimRefPtr<ossimXmlNode> downlinkInformation =
-               theProductXmlDocument->getRoot()->findFirstNode("generalAnnotation/downlinkInformationList/downlinkInformation");
+            const ossimXmlNodePtr downlinkInformation =
+               productRoot->findFirstNode
+               ("generalAnnotation/downlinkInformationList/downlinkInformation");
 
             theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "pulse_repetition_frequency",
                             downlinkInformation->getChildTextValue("prf"),
                             true);
 
-            const ossimRefPtr<ossimXmlNode> swathProcParams =
-               theProductXmlDocument->getRoot()->findFirstNode("imageAnnotation/processingInformation/swathProcParamsList/swathProcParams");
-            const ossimRefPtr<ossimXmlNode> rangeProcessingNode = swathProcParams->findFirstNode("rangeProcessing");
-            const ossimRefPtr<ossimXmlNode> azimuthProcessingNode = swathProcParams->findFirstNode("azimuthProcessing");
+            const ossimXmlNodePtr swathProcParams =
+               productRoot->findFirstNode("imageAnnotation/processingInformation/swathProcParamsList/swathProcParams");
+            const ossimXmlNodePtr rangeProcessingNode =
+               swathProcParams->findFirstNode("rangeProcessing");
+
+            const ossimXmlNodePtr azimuthProcessingNode =
+               swathProcParams->findFirstNode("azimuthProcessing");
 
             theProductKwl.add(SUPPORT_DATA_PREFIX,
-                            "azimuth_bandwidth",
-                              azimuthProcessingNode->getChildTextValue("processingBandwidth"),
+                              "azimuth_bandwidth",
+                              azimuthProcessingNode->getChildTextValue(
+                                 "processingBandwidth"),
                             true);
 
             theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "range_bandwidth",
-                              rangeProcessingNode->getChildTextValue("processingBandwidth"),
+                              rangeProcessingNode->getChildTextValue(
+                                 "processingBandwidth"),
                             true);
 
             theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "range_looks",
-                            rangeProcessingNode->getChildTextValue("numberOfLooks"),
+                            rangeProcessingNode->getChildTextValue(
+                               "numberOfLooks"),
                             true);
 
             theProductKwl.add(SUPPORT_DATA_PREFIX,
                             "azimuth_looks",
-                            azimuthProcessingNode->getChildTextValue("numberOfLooks"),
+                            azimuthProcessingNode->getChildTextValue(
+                               "numberOfLooks"),
                             true);
 
             if(!theTOPSAR || !theSLC)
             {
                theProductKwl.add(SUPPORT_DATA_PREFIX,
                                ossimKeywordNames::NUMBER_SAMPLES_KW,
-                               imageInformation->getChildTextValue("numberOfSamples"),
+                               imageInformation->getChildTextValue(
+                                  "numberOfSamples"),
                                true);
 
                theProductKwl.add(SUPPORT_DATA_PREFIX,
                                ossimKeywordNames::NUMBER_LINES_KW,
-                               imageInformation->getChildTextValue("numberOfLines"),
+                               imageInformation->getChildTextValue(
+                                  "numberOfLines"),
                             true);
             }
 
-            const ossimRefPtr<ossimXmlNode> orbitList = theProductXmlDocument->getRoot()->findFirstNode("generalAnnotation/orbitList");
+            const ossimXmlNodePtr orbitList =
+               productRoot->findFirstNode("generalAnnotation/orbitList");
             addOrbitStateVectors(orbitList);
 
-            const ossimRefPtr<ossimXmlNode> coordinateConversionList = theProductXmlDocument->getRoot()->findFirstNode("coordinateConversion/coordinateConversionList");
+            const ossimXmlNodePtr coordinateConversionList =
+               productRoot->findFirstNode(
+                  "coordinateConversion/coordinateConversionList");
+
             addSRGRCoefficients(SUPPORT_DATA_PREFIX, coordinateConversionList);
 
-            const ossimRefPtr<ossimXmlNode> dcEstimateList = theProductXmlDocument->getRoot()->findFirstNode("dopplerCentroid/dcEstimateList");
+            const ossimXmlNodePtr dcEstimateList = productRoot->findFirstNode(
+               "dopplerCentroid/dcEstimateList");
+
             addDopplerCentroidCoefficients(dcEstimateList);
 
             commonMetadataRetrieved = true;
@@ -473,7 +500,8 @@ namespace ossimplugins
          return;
       }
 
-      for (int i = 0; i < stateVectorList.size(); ++i)
+      int stateVectorList_size = stateVectorList.size();
+      for (int i = 0; i < stateVectorList_size ; ++i)
       {
          //orbit_state_vectors
          const ossimString orbit_prefix = "orbitList.orbit[" + ossimString::toString(i)  + "].";
@@ -526,12 +554,12 @@ namespace ossimplugins
       if( count < 1)
       {
          if(traceDebug())
-            ossimNotify(ossimNotifyLevel_DEBUG) << "No coordinate conversion info available in metadata!!\n";
+            ossimNotify(ossimNotifyLevel_DEBUG) << "No coordinate conversion info available in metadata!" << std::endl;
          return;
       }
       else
       {
-         ossimNotify(ossimNotifyLevel_FATAL) << "shouldn't reach here!!\n";
+         //NOT IMPLEMENTED YET
          return;
       }
 

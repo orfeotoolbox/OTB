@@ -46,11 +46,8 @@ public:
   typedef itk::SmartPointer<const Self>
   ConstPointer;
 
-  /** New macro */
-  itkNewMacro(Self);
-
   /** Creation through object factory macro */
-  itkTypeMacro(PointSetAndValuesFunction, FunctionBase);
+  itkTypeMacro(PointSetAndValuesFunction, itk::FunctionBase);
 
   typedef TPointSet                           PointSetType;
   typedef typename PointSetType::ConstPointer PointSetConstPointerType;

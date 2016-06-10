@@ -133,7 +133,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
   // Input image list pointer
   InputImageListPointerType segList = this->GetInput();
 
-  // Ouptut graph pointer
+  // Output graph pointer
   OutputGraphPointerType graph = this->GetOutput();
 
   // invert value vector
