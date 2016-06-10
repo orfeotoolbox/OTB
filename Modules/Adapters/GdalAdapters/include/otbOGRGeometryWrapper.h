@@ -18,7 +18,15 @@
 #ifndef __otbOGRGeometryWrapper_h
 #define __otbOGRGeometryWrapper_h
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <boost/interprocess/smart_ptr/unique_ptr.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <boost/interprocess/smart_ptr/unique_ptr.hpp>
+#endif
+
 class OGRGeometry;
 
 namespace otb { namespace ogr {

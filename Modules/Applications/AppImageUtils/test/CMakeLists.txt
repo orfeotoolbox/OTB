@@ -107,46 +107,39 @@ otb_test_application(NAME apTuUtReadImageInfoExtendedFilename_reader
                      APP  ReadImageInfo
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipgeom=true&skipcarto=true
                      )
+                     
 
-otb_test_application(NAME  apTvUtReadImageInfoRpcTag
-                     APP  ReadImageInfo
-                     OPTIONS -in ${INPUTDATA}/QB_TOULOUSE_RpcTag_100_100.tif
-                             -outkwl ${TEMP}/apTvUtReadImageInfoRpcTag.geom
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/apTvUtReadImageInfoRpcTag.geom
-                       ${TEMP}/apTvUtReadImageInfoRpcTag.geom)
+set(TESTNAME
+"gd-pleiades-1" #LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2} 
+"gd-wv2-1"           #LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF} 
+"gd-spot6-1"       #LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2}
+"gd-qb-1"             #LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+"gd-ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif} 
+"gd-rapideye-1" #LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
+)
 
-otb_test_application(NAME  apTvUtReadImageInfoTest
-                     APP  ReadImageInfo
-                     OPTIONS -in ${INPUTDATA}/poupees.tif
-                     TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoTest.txt
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/apTvUtReadImageInfoTest.txt
-                	     ${TEMP}/apTvUtReadImageInfoTest.txt)
+set(IMG
+LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2} 
+LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF} 
+LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2}
+LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif} 
+LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
+)
 
-otb_test_application(NAME  apTvUtReadImageInfoSpot5
+set( GEOM_TESTNB 0)
+foreach( file ${IMG} )
+  list(GET TESTNAME   ${GEOM_TESTNB} current_testname   )
+  math(EXPR GEOM_TESTNB "${GEOM_TESTNB} + 1")
+  
+  otb_test_application(NAME  apTuReadImageInfoTest_${current_testname}
                      APP  ReadImageInfo
-                     OPTIONS -in LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
-                     TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoSpot5.txt
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/apTvUtReadImageInfoSpot5.txt
-                	     ${TEMP}/apTvUtReadImageInfoSpot5.txt)
+                     OPTIONS -in ${file}
+                     -outkwl ${TEMP}/apTvUtReadImageInfoTest_${current_testname}.geom
+                     #No baseline, just check that the process finished well
+                     )
+endforeach()
 
-otb_test_application(NAME  apTvUtReadImageInfoERS
-                     APP  ReadImageInfo
-                     OPTIONS -in LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
-                     TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoERS.txt
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/apTvUtReadImageInfoERS.txt
-                	     ${TEMP}/apTvUtReadImageInfoERS.txt)
-
-otb_test_application(NAME  apTvUtReadImageInfoRADARSAT1
-                     APP  ReadImageInfo
-                     OPTIONS -in LARGEINPUT{RADARSAT1/GOMA/SCENE01/DAT_01.001}
-                     TESTENVOPTIONS ${TEMP}/apTvUtReadImageInfoRADARSAT1.txt
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/apTvUtReadImageInfoRADARSAT1.txt
-                	     ${TEMP}/apTvUtReadImageInfoRADARSAT1.txt)
 
 
 #----------- Quicklook TESTS ----------------

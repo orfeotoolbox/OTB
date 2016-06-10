@@ -74,7 +74,7 @@ VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
 }
 
 /**
-   * GenerateData Performs the coordinate convertion for each element in the tree
+   * GenerateData Performs the coordinate conversion for each element in the tree
  */
 template <class TInputVectorData, class TOutputVectorData>
 void

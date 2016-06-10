@@ -35,6 +35,11 @@ typedef otb::GeographicalDistance<Point2DType> GeoDistanceType;
 
 int otbRPCSolverAdapterTest(int argc, char* argv[])
 {
+  if (argc < 7)
+    {
+    std::cout << "Usage: test_driver input grid_size geo_tol img_tol dem_dir geoid" << std::endl;
+    return EXIT_FAILURE;
+    }
   // This test takes a sensor model (possibly a rpc one), use it to
   // generate gcps and estimate a rpc model. It then checks the
   // precision of both forward and inverse transform
@@ -44,6 +49,12 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
   const double imgTol = atof(argv[4]);
   const std::string demdir = argv[5];
   const std::string geoid = argv[6];
+
+  if (gridSize == 0)
+    {
+    std::cerr << "Grid size is null!" << std::endl;
+    return EXIT_FAILURE;
+    }
 
   std::cout<<"GeoTol: "<<geoTol<<" meters"<<std::endl;
   std::cout<<"ImgTol: "<<imgTol<<" pixels"<<std::endl;

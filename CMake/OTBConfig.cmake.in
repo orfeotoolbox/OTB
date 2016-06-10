@@ -16,6 +16,9 @@ set(OTB_VERSION_MAJOR "@OTB_VERSION_MAJOR@")
 set(OTB_VERSION_MINOR "@OTB_VERSION_MINOR@")
 set(OTB_VERSION_PATCH "@OTB_VERSION_PATCH@")
 
+# OTB's CMake directory with modules OTB uses.
+set(OTB_CMAKE_DIR "@OTB_CONFIG_CMAKE_DIR@")
+
 # The location of the UseOTB.cmake file.
 set(OTB_USE_FILE "@OTB_USE_FILE@")
 

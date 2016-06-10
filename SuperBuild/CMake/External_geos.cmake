@@ -1,20 +1,16 @@
-set(proj GEOS)
-
-if(NOT __EXTERNAL_${proj}__)
-set(__EXTERNAL_${proj}__ 1)
-
-message(STATUS "Setup GEOS ...")
+if(NOT __EXTERNAL_GEOS__)
+set(__EXTERNAL_GEOS__ 1)
 
 if(USE_SYSTEM_GEOS)
   # TODO : FindGEOS.cmake
   find_package ( GEOS )
   message(STATUS "  Using GEOS system version")
 else()
-  SETUP_SUPERBUILD(PROJECT ${proj})
+  SETUP_SUPERBUILD(PROJECT GEOS)
   message(STATUS "  Using GEOS SuperBuild version")
-  
-  ExternalProject_Add(${proj}
-    PREFIX ${proj}
+
+  ExternalProject_Add(GEOS
+    PREFIX GEOS
     URL "http://download.osgeo.org/geos/geos-3.4.2.tar.bz2"
     URL_MD5 fc5df2d926eb7e67f988a43a92683bae
     SOURCE_DIR ${GEOS_SB_SRC}
@@ -29,17 +25,17 @@ else()
       -DGEOS_ENABLE_TESTS:BOOL=OFF
       CMAKE_COMMAND ${SB_CMAKE_COMMAND} )
 
-    ExternalProject_Add_Step(${proj} remove_static
+    ExternalProject_Add_Step(GEOS remove_static
       COMMAND ${CMAKE_COMMAND} -E remove
       ${SB_INSTALL_PREFIX}/lib/libgeos.a
       DEPENDEES install)
-  
-  set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+
+  set(_SB_GEOS_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/geos.lib)
+    set(_SB_GEOS_LIBRARY ${SB_INSTALL_PREFIX}/lib/geos.lib)
   elseif(UNIX)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgeos${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(_SB_GEOS_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgeos${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-  
+
  endif()
 endif()

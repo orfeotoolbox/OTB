@@ -18,24 +18,22 @@ endif()
 set(LIBSVM_SRCS "svm.cpp" )
 set(LIBSVM_HEADERS "svm.h")
 
-add_library(libsvm ${LIBSVM_SRCS})
+add_library(svm ${LIBSVM_SRCS})
 
 option(BUILD_SAMPLES "Build executables" ON)
 
 add_executable(svm-train svm-train.c)
-target_link_libraries(svm-train libsvm)
+target_link_libraries(svm-train svm)
 
 add_executable(svm-predict svm-predict.c)
-target_link_libraries(svm-predict libsvm)
+target_link_libraries(svm-predict svm)
 
 add_executable(svm-scale svm-scale.c)
-target_link_libraries(svm-scale libsvm)
+target_link_libraries(svm-scale svm)
 
-install(TARGETS libsvm
-  RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-  LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
-  ARCHIVE DESTINATION lib COMPONENT Development)
+install(TARGETS svm
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)
 
-install(FILES ${LIBSVM_HEADERS}
-  DESTINATION include
-  COMPONENT Development)
+install(FILES ${LIBSVM_HEADERS} DESTINATION include)

@@ -160,6 +160,7 @@ GDALImageIO::GDALImageIO()
   m_NumberOfOverviews = 0;
   m_ResolutionFactor = 0;
   m_BytePerPixel = 0;
+  m_WriteRPCTags = false;
 }
 
 GDALImageIO::~GDALImageIO()
@@ -445,7 +446,8 @@ bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector
   // This feature is supported only for hdf4 and hdf5 file (regards to the bug 270)
   if ( (CSLCount(papszMetadata) > 0) &&
        ( (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF4") == 0) ||
-         (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF5") == 0) ) )
+         (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF5") == 0) ||
+	 (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"SENTINEL2") == 0) ) )
     {
     for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
       {
@@ -1731,7 +1733,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     itk::ExposeMetaData<ImageKeywordlist>(dict,
                                           MetaDataKey::OSSIMKeywordlistKey,
                                           otb_kwl);
-    if( otb_kwl.GetSize() != 0 )
+    if( m_WriteRPCTags && otb_kwl.GetSize() != 0 )
       {
       GDALRPCInfo gdalRpcStruct;
       if ( otb_kwl.convertToGDALRPC(gdalRpcStruct) )
