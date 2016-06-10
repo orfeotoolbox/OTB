@@ -21,6 +21,7 @@
 
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
+#include "itkMath.h"
 #include "otbMacro.h"
 
 namespace otb
@@ -347,12 +348,13 @@ PersistentCompareImageFilter<TInputImage>
       {
       m_ThreadMaxRef[threadId] = value1;
       }
-
-    m_SquareOfDifferences[threadId] += ( realValue1 - realValue2 ) * ( realValue1 - realValue2 );
-    m_AbsoluteValueOfDifferences[threadId] += vcl_abs( realValue1 - realValue2 );
-    if (vcl_abs( realValue1 - realValue2 ) != 0.0 )
+    
+    PixelType diffVal = realValue1 - realValue2;
+    m_SquareOfDifferences[threadId] +=  diffVal * diffVal;
+    m_AbsoluteValueOfDifferences[threadId] += vcl_abs( diffVal );
+    if (! itk::Math::FloatAlmostEqual(realValue1, realValue2))
       {
-        m_DiffCount[threadId]++;
+      m_DiffCount[threadId]++;
       }
     m_Count[threadId]++;
     ++it1;
