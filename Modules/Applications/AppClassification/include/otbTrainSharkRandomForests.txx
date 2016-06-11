@@ -54,12 +54,12 @@ LearningApplicationBase<TInputValue,TOutputValue>
     "then the node will not be split. A reasonable value is a small percentage of the total data e.g. 1 percent.");
 
   //MTry
-  AddParameter(ParameterType_Float, "classifier.sharkrf.mtry", "Number of features tested at each node");
-  SetParameterFloat("classifier.sharkrf.mtry", 10);
+  AddParameter(ParameterType_Int, "classifier.sharkrf.mtry", "Number of features tested at each node");
+  SetParameterInt("classifier.sharkrf.mtry", 0);
   SetParameterDescription(
     "classifier.sharkrf.mtry",
     "The number of features (variables) which will be tested at each node in "
-    "order to compute the split. Typically, the square root of the number of "
+    "order to compute the split. If set to zero, the square root of the number of "
     "features is used.");
 
 
@@ -85,7 +85,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   classifier->SetNodeSize(GetParameterInt("classifier.sharkrf.nodesize"));
   classifier->SetOobRatio(GetParameterFloat("classifier.sharkrf.oobr"));
   classifier->SetNumberOfTrees(GetParameterInt("classifier.sharkrf.nbtrees"));
-  classifier->SetMTry(GetParameterFloat("classifier.sharkrf.mtry"));
+  classifier->SetMTry(GetParameterInt("classifier.sharkrf.mtry"));
 
   classifier->Train();
   classifier->Save(modelPath);
