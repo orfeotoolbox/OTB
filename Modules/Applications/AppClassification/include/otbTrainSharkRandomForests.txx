@@ -54,8 +54,8 @@ LearningApplicationBase<TInputValue,TOutputValue>
     "then the node will not be split. A reasonable value is a small percentage of the total data e.g. 1 percent.");
 
   //MTry
-  AddParameter(ParameterType_Int, "classifier.sharkrf.mtry", "Number of features tested at each node");
-  SetParameterInt("classifier.sharkrf.mtry", 10);
+  AddParameter(ParameterType_Float, "classifier.sharkrf.mtry", "Number of features tested at each node");
+  SetParameterFloat("classifier.sharkrf.mtry", 10);
   SetParameterDescription(
     "classifier.sharkrf.mtry",
     "The number of features (variables) which will be tested at each node in "
