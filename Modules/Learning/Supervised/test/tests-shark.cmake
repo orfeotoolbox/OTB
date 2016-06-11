@@ -21,5 +21,5 @@ set_property(TEST leTuSharkRFMachineLearningModelCanReadFail PROPERTY WILL_FAIL 
 otb_add_test(NAME leTvImageClassificationFilterSharkLoadModel COMMAND otbSupervisedTestDriver
   otbImageClassificationFilterLoadModel
   ${inputdata}/ROI_QB_MUL_4.tif
-  ${INPUTDATA}/ROI_QB_MUL_4_svmModel.txt
+  ${TEMP}/shark_rf_model.txt
   )
