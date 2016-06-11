@@ -326,7 +326,7 @@ int otbSharkRFMachineLearningModelCanRead(int argc, char* argv[])
   bool lCanRead = classifier->CanReadFile(filename);
   if (lCanRead == false)
     {
-    std::cerr << "Erreur otb::SharkRandomForestsMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
+    std::cerr << "Error otb::SharkRandomForestsMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
     }
 #endif
