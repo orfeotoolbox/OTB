@@ -60,6 +60,7 @@ set(ann_input "")
 set(bayes_input "")
 set(rf_input "")
 set(knn_input "")
+set(sharkrf_input "")
 
 # Output type
 set(raster_output_format ".tif")
@@ -75,6 +76,7 @@ set(ann_output_format ".ann")
 set(bayes_output_format ".bayes")
 set(rf_output_format ".rf")
 set(knn_output_format ".knn")
+set(sharkrf_output_format ".sharkrf")
 
 # Training algorithms parameters
 set(libsvm_parameters "-classifier.libsvm.opt" "true" "-classifier.libsvm.prob" "true")
@@ -86,6 +88,7 @@ set(ann_parameters "-classifier.ann.sizes" "100")
 set(bayes_parameters "")
 set(rf_parameters "")
 set(knn_parameters "")
+set(sharkrf_parameters "")
 
 # Validation depending on mode
 set(ascii_comparison --compare-ascii ${NOTOL})
@@ -102,7 +105,7 @@ set(classifierList)
 #endif()
 if(OTB_USE_OPENCV)
   #list(APPEND classifierList "SVM" "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
-  list(APPEND classifierList "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
+  list(APPEND classifierList "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN" "SHARKRF")
 endif()
 set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
 
