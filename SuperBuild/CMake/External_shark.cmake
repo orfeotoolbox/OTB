@@ -16,7 +16,7 @@ else()
 
   ExternalProject_Add(SHARK
     PREFIX SHARK
-    GIT_REPOSITORY "https://github.com/Shark-ML/Shark.git"
+    GIT_REPOSITORY "https://github.com/inglada/Shark.git"
     GIT_TAG "master"
     SOURCE_DIR ${SHARK_SB_SRC}
     BINARY_DIR ${SHARK_SB_BUILD_DIR}
