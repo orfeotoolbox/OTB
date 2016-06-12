@@ -70,9 +70,6 @@ template <class T> void ListSampleToSharkVector(const T * listSample, std::vecto
     // Build an iterator
     typename T::ConstIterator sampleIt = listSample->Begin();
 
-    // Retrieve samples size alike
-    const unsigned int sampleSize = listSample->GetMeasurementVectorSize();
-
     // Fill the output vector
     for(;sampleIt != listSample->End();++sampleIt,++sampleIdx)
       {
