@@ -33,7 +33,6 @@ else()
       -DENABLE_HDF5:BOOL=OFF
       CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
-  SUPERBUILD_PATCH_SOURCE(SHARK "patch-for-at-rpath")
   set(_SB_SHARK_DIR ${SB_INSTALL_PREFIX}/share/SHARK)
 endif()
 endif()
