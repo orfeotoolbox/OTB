@@ -56,6 +56,9 @@ public:
   /** Abort all MPI processus. */
   void abort(int errCode);
 
+  /** Blocks until all processes have reached this routine */
+  void barrier();
+
   /** Log error */
   void logError(const std::string message);
 

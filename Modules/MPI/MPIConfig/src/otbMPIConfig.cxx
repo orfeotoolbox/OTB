@@ -137,7 +137,13 @@ void MPIConfig::Init(int& argc, char** &argv, bool abortOnException) {
 
 void MPIConfig::abort(int errCode)
 {
-   OTB_MPI_CHECK_RESULT(MPI_Abort, (MPI_COMM_WORLD, errCode)); }
+   OTB_MPI_CHECK_RESULT(MPI_Abort, (MPI_COMM_WORLD, errCode));
+}
+
+void MPIConfig::barrier()
+{
+	OTB_MPI_CHECK_RESULT(MPI_Barrier, (MPI_COMM_WORLD));
+}
 
 void MPIConfig::logError(const std::string message) {
    if (m_MyRank == 0)
