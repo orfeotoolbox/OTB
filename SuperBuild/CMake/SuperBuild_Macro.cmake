@@ -188,6 +188,4 @@ macro(SUPERBUILD_UPDATE_CMAKE_VARIABLES PROJECT with_prefix)
   set(_SB_${PROJECT}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/${include_dir})
   set(_SB_${PROJECT}_LIBRARY ${SB_INSTALL_PREFIX}/lib/${lib_file})
 
-  message( "lib/${lib_file}  '${include_dir}'")
-
 endmacro()
