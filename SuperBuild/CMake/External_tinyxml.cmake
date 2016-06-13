@@ -1,9 +1,14 @@
-if(NOT __EXTERNAL_TINYXML__)
-set(__EXTERNAL_TINYXML__ 1)
+if( __EXTERNAL_TINYXML__)
+  return()
+else()
+  set(__EXTERNAL_TINYXML__ 1)
+endif()
 
 if(USE_SYSTEM_TINYXML)
   message(STATUS "  Using TinyXML system version")
-else()
+  return()
+endif()
+
   SETUP_SUPERBUILD(PROJECT TINYXML)
   message(STATUS "  Using TinyXML SuperBuild version")
 
@@ -30,6 +35,3 @@ else()
   elseif(UNIX)
     set(_SB_TINYXML_LIBRARY ${SB_INSTALL_PREFIX}/lib/libtinyxml${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-
-endif()
-endif()

@@ -76,7 +76,7 @@ else()
     )
 
   if(APPLE)
-    SUPERBUILD_PATCH_SOURCE(OPENCV "patch-for-at-rpath")
+    SUPERBUILD_PATCH_SOURCE(OPENCV)
   endif()
 
   set(_SB_OpenCV_DIR ${SB_INSTALL_PREFIX}/share/OpenCV)

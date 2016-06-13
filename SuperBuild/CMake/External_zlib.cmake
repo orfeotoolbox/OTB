@@ -1,9 +1,14 @@
-if(NOT __EXTERNAL_ZLIB__)
-set(__EXTERNAL_ZLIB__ 1)
+if( __EXTERNAL_ZLIB__)
+  return()
+else()
+  set(__EXTERNAL_ZLIB__ 1)
+endif()
 
 if(USE_SYSTEM_ZLIB)
   message(STATUS "  Using Zlib system version")
-else()
+  return()
+endif()
+
   SETUP_SUPERBUILD(PROJECT ZLIB)
   message(STATUS "  Using zlib SuperBuild version")
 
@@ -41,7 +46,3 @@ else()
     elseif(UNIX)
       set(_SB_ZLIB_LIBRARY ${SB_INSTALL_PREFIX}/lib/libz${CMAKE_SHARED_LIBRARY_SUFFIX})
     endif()
-
-endif()
-
-endif()
