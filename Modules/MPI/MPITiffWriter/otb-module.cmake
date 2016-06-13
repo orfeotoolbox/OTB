@@ -1,4 +1,4 @@
-set(DOCUMENTATION "This module contains MPI sources and mappers")
+set(DOCUMENTATION "This module contains MPI tiff writer")
 
 otb_module(OTBMPITiffWriter
   DEPENDS
