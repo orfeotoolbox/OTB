@@ -45,6 +45,7 @@ int otbPeriodicSamplerTest(int, char *[])
   otb::PeriodicSampler::Pointer sampler = otb::PeriodicSampler::New();
   otb::PeriodicSampler::ParameterType param;
   param.Offset = 2;
+  param.MaxJitter = 0;
 
   sampler->SetNumberOfElements(5,23);
   sampler->SetParameters(param);
@@ -57,7 +58,7 @@ int otbPeriodicSamplerTest(int, char *[])
     return EXIT_FAILURE;
     }
   
-  std::string baseline1("__X____X___X____X____X_");
+  std::string baseline1("__X___X____X___X____X__");
   if (test1 != baseline1)
     {
     std::cout << "1 - Wrong sampling sequence :" << std::endl;
@@ -66,11 +67,12 @@ int otbPeriodicSamplerTest(int, char *[])
     return EXIT_FAILURE;
     }
   
-  param.Offset = 3;
-  sampler->SetRate(0.34,23);
+  param.Offset = 0;
+  param.MaxJitter = 10;
+  sampler->SetRate(0.2,50);
   sampler->SetParameters(param);
-  std::string test2 = RunSampler<otb::PeriodicSampler>(sampler,23);
-  std::string baseline2("__X__X__X__X__X__X__X__");
+  std::string test2 = RunSampler<otb::PeriodicSampler>(sampler,50);
+  std::string baseline2("_X___X_______X_X_______X___X___X_____X__X_____X___");
   if (test2 != baseline2)
     {
     std::cout << "2 - Wrong sampling sequence :" << std::endl;

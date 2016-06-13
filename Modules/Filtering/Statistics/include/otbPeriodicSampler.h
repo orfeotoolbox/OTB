@@ -45,8 +45,12 @@ public:
    */
   typedef struct Parameter
     {
-    /** Offset that shifts the whole periodic sampling */
+    /** Offset that shifts the whole periodic sampling
+     *  (disabled if jitter is used) */
     unsigned long Offset;
+
+    /** Maximum jitter to introduce (0 means no jitter) */
+    unsigned long MaxJitter;
     
     bool operator!=(const struct Parameter  & param) const;
     } ParameterType; 
@@ -86,11 +90,13 @@ private:
   
   /** Internal parameters for the sampler */
   ParameterType m_Parameters;
-  
-  /** Internal temporary value : 
-   * (m_ProcessedElements+Offset)*m_NeededElements / m_TotalElements
-   */
-  double m_Value;
+
+  /** Internal width for jitter */
+  double m_JitterSize;
+
+  /** Internal current offset value
+   *  (either fixed, or reset each time a sample is taken)*/
+  double m_OffsetValue;
 };
 
 } // namespace otb
