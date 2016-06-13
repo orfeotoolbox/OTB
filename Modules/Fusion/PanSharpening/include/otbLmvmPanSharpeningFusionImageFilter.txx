@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLmvmPanSharpeningFusionImageFilter_txx
-#define __otbLmvmPanSharpeningFusionImageFilter_txx
+#ifndef otbLmvmPanSharpeningFusionImageFilter_txx
+#define otbLmvmPanSharpeningFusionImageFilter_txx
 
 #include "otbLmvmPanSharpeningFusionImageFilter.h"
 

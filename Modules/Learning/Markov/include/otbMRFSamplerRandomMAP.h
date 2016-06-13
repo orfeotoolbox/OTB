@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMRFSamplerRandomMAP_h
-#define __otbMRFSamplerRandomMAP_h
+#ifndef otbMRFSamplerRandomMAP_h
+#define otbMRFSamplerRandomMAP_h
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "otbMRFSampler.h"

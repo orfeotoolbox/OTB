@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPlaceNameToLonLat_h
-#define __otbPlaceNameToLonLat_h
+#ifndef otbPlaceNameToLonLat_h
+#define otbPlaceNameToLonLat_h
 
 #include "otbCurlHelperInterface.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBCOInterpolateImageFunction_h
-#define __otbBCOInterpolateImageFunction_h
+#ifndef otbBCOInterpolateImageFunction_h
+#define otbBCOInterpolateImageFunction_h
 
 #include "itkInterpolateImageFunction.h"
 #include "vnl/vnl_vector.h"

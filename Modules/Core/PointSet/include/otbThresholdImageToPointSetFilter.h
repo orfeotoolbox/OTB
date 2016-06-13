@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbThresholdImageToPointSetFilter_h
-#define __otbThresholdImageToPointSetFilter_h
+#ifndef otbThresholdImageToPointSetFilter_h
+#define otbThresholdImageToPointSetFilter_h
 
 #include "otbImageToPointSetFilter.h"
 #include "itkPointSet.h"

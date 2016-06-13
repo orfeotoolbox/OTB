@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMSampleListModelEstimator_h
-#define __otbSVMSampleListModelEstimator_h
+#ifndef otbSVMSampleListModelEstimator_h
+#define otbSVMSampleListModelEstimator_h
 
 #include "vcl_deprecated_header.h"
 

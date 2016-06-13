@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbShiftScaleSampleListFilter_h
-#define __otbShiftScaleSampleListFilter_h
+#ifndef otbShiftScaleSampleListFilter_h
+#define otbShiftScaleSampleListFilter_h
 
 #include "otbListSampleToListSampleFilter.h"
 

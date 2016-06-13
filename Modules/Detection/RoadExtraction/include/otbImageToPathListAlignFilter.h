@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToPathListAlignFilter_h
-#define __otbImageToPathListAlignFilter_h
+#ifndef otbImageToPathListAlignFilter_h
+#define otbImageToPathListAlignFilter_h
 
 #include "itkImageSource.h"
 #include "itkConceptChecking.h"

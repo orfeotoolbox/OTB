@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentImageFilter_h
-#define __otbPersistentImageFilter_h
+#ifndef otbPersistentImageFilter_h
+#define otbPersistentImageFilter_h
 
 #include "itkImageToImageFilter.h"
 

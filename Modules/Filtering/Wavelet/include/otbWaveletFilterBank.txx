@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletFilterBank_txx
-#define __otbWaveletFilterBank_txx
+#ifndef otbWaveletFilterBank_txx
+#define otbWaveletFilterBank_txx
 #include "otbWaveletFilterBank.h"
 
 #include "otbSubsampleImageFilter.h"

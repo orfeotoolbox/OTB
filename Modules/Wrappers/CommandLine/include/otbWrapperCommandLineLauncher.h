@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperCommandLineLauncher_h
-#define __otbWrapperCommandLineLauncher_h
+#ifndef otbWrapperCommandLineLauncher_h
+#define otbWrapperCommandLineLauncher_h
 
 
 #include "otbWrapperApplication.h"
@@ -190,4 +190,4 @@ private:
 } // end namespace Wrapper
 } //end namespace otb
 
-#endif // __otbWrapperCommandLineLauncher_h_
+#endif // otbWrapperCommandLineLauncher_h_

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAdhesionCorrectionFilter_h
-#define __otbAdhesionCorrectionFilter_h
+#ifndef otbAdhesionCorrectionFilter_h
+#define otbAdhesionCorrectionFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbImage.h"

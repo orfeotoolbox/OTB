@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSarDefaultImageMetadataInterfaceFactory_h
-#define __otbSarDefaultImageMetadataInterfaceFactory_h
+#ifndef otbSarDefaultImageMetadataInterfaceFactory_h
+#define otbSarDefaultImageMetadataInterfaceFactory_h
 
 
 #include "itkObjectFactoryBase.h"

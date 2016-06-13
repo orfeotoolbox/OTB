@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleToListSampleFilter_h
-#define __otbListSampleToListSampleFilter_h
+#ifndef otbListSampleToListSampleFilter_h
+#define otbListSampleToListSampleFilter_h
 
 #include "otbListSampleSource.h"
 

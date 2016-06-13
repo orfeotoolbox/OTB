@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSobelVectorImageFilter_h
-#define __otbSobelVectorImageFilter_h
+#ifndef otbSobelVectorImageFilter_h
+#define otbSobelVectorImageFilter_h
 
 #include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
 
@@ -107,4 +107,4 @@ private:
 } // end of namespace otb
 
 
-#endif // __otbSobelVectorImageFilter_h
+#endif // otbSobelVectorImageFilter_h

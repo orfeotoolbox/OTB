@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8VertexBase_h
-#define __otbRCC8VertexBase_h
+#ifndef otbRCC8VertexBase_h
+#define otbRCC8VertexBase_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinusoidalMapProjection_h
-#define __otbSinusoidalMapProjection_h
+#ifndef otbSinusoidalMapProjection_h
+#define otbSinusoidalMapProjection_h
 
 #include "otbGenericMapProjection.h"
 

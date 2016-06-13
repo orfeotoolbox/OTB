@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelMapSource_h
-#define __otbLabelMapSource_h
+#ifndef otbLabelMapSource_h
+#define otbLabelMapSource_h
 
 
 #include "itkProcessObject.h"
@@ -80,4 +80,4 @@ private:
 #include "otbLabelMapSource.txx"
 #endif
 
-#endif // __otbLabelMapSource_h
+#endif // otbLabelMapSource_h

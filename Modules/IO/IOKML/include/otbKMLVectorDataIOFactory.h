@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKMLVectorDataIOFactory_h
-#define __otbKMLVectorDataIOFactory_h
+#ifndef otbKMLVectorDataIOFactory_h
+#define otbKMLVectorDataIOFactory_h
 
 #include "itkObjectFactoryBase.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMSTARImageIO_h
-#define __otbMSTARImageIO_h
+#ifndef otbMSTARImageIO_h
+#define otbMSTARImageIO_h
 
 #include "otbImageIOBase.h"
 
@@ -155,4 +155,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbMSTARImageIO_h
+#endif // otbMSTARImageIO_h

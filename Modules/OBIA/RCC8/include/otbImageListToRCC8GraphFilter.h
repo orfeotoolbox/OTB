@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageListToRCC8GraphFilter_h
-#define __otbImageListToRCC8GraphFilter_h
+#ifndef otbImageListToRCC8GraphFilter_h
+#define otbImageListToRCC8GraphFilter_h
 
 #include "otbRCC8GraphSource.h"
 #include "otbImageList.h"

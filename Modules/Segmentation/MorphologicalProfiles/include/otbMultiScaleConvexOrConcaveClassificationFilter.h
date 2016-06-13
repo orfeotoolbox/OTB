@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiScaleConvexOrConcaveClassificationFilter_h
-#define __otbMultiScaleConvexOrConcaveClassificationFilter_h
+#ifndef otbMultiScaleConvexOrConcaveClassificationFilter_h
+#define otbMultiScaleConvexOrConcaveClassificationFilter_h
 
 #include "otbQuaternaryFunctorImageFilter.h"
 namespace otb

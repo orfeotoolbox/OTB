@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAeronetFileReader_h
-#define __otbAeronetFileReader_h
+#ifndef otbAeronetFileReader_h
+#define otbAeronetFileReader_h
 
 #include <string>
 #include <vector>

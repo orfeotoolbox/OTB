@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorImageToMatrixFilter_h
-#define __otbVectorImageToMatrixFilter_h
+#ifndef otbVectorImageToMatrixFilter_h
+#define otbVectorImageToMatrixFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"

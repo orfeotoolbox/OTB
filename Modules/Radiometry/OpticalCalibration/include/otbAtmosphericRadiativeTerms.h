@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAtmosphericRadiativeTerms_h
-#define __otbAtmosphericRadiativeTerms_h
+#ifndef otbAtmosphericRadiativeTerms_h
+#define otbAtmosphericRadiativeTerms_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"

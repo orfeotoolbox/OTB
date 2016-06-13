@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFourierMellinDescriptorsImageFunction_h
-#define __otbFourierMellinDescriptorsImageFunction_h
+#ifndef otbFourierMellinDescriptorsImageFunction_h
+#define otbFourierMellinDescriptorsImageFunction_h
 
 #include "itkImageFunction.h"
 

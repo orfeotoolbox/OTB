@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericRoadExtractionFilter_h
-#define __otbGenericRoadExtractionFilter_h
+#ifndef otbGenericRoadExtractionFilter_h
+#define otbGenericRoadExtractionFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"

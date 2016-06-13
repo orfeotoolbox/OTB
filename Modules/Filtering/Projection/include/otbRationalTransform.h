@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRationalTransform_h
-#define __otbRationalTransform_h
+#ifndef otbRationalTransform_h
+#define otbRationalTransform_h
 
 #include "otbTransform.h"
 #include "itkMacro.h"

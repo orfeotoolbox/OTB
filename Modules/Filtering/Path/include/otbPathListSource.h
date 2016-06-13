@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPathListSource_h
-#define __otbPathListSource_h
+#ifndef otbPathListSource_h
+#define otbPathListSource_h
 
 // #include "itkProcessObject.h"
 // #include "itkDataObject.h"

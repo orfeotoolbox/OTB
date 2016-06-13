@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMMachineLearningModel_txx
-#define __otbSVMMachineLearningModel_txx
+#ifndef otbSVMMachineLearningModel_txx
+#define otbSVMMachineLearningModel_txx
 
 #include <fstream>
 #include "itkMacro.h"

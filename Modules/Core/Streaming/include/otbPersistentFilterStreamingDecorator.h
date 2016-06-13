@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentFilterStreamingDecorator_h
-#define __otbPersistentFilterStreamingDecorator_h
+#ifndef otbPersistentFilterStreamingDecorator_h
+#define otbPersistentFilterStreamingDecorator_h
 
 #include "otbStreamingImageVirtualWriter.h"
 #include "itkProcessObject.h"

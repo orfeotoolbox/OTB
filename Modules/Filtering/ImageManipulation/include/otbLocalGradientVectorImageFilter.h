@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLocalGradientVectorImageFilter_h
-#define __otbLocalGradientVectorImageFilter_h
+#ifndef otbLocalGradientVectorImageFilter_h
+#define otbLocalGradientVectorImageFilter_h
 
 #include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
 
@@ -103,4 +103,4 @@ private:
 } // end of namespace otb
 
 
-#endif // __otbLocalGradientVectorImageFilter_h
+#endif // otbLocalGradientVectorImageFilter_h

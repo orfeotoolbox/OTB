@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDisparityTranslateFilter_h
-#define __otbDisparityTranslateFilter_h
+#ifndef otbDisparityTranslateFilter_h
+#define otbDisparityTranslateFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbVectorImage.h"

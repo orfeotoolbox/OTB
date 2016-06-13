@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbRandomPointSetSource_h
-#define __otbRandomPointSetSource_h
+#ifndef otbRandomPointSetSource_h
+#define otbRandomPointSetSource_h
 
 #include "otbPointSetSource.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"

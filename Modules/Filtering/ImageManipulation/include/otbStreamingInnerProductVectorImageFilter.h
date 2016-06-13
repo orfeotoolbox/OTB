@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingInnerProductVectorImageFilter_h
-#define __otbStreamingInnerProductVectorImageFilter_h
+#ifndef otbStreamingInnerProductVectorImageFilter_h
+#define otbStreamingInnerProductVectorImageFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"

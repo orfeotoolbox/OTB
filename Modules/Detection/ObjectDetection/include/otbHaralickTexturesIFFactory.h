@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHaralickTexturesIFFactory_h
-#define __otbHaralickTexturesIFFactory_h
+#ifndef otbHaralickTexturesIFFactory_h
+#define otbHaralickTexturesIFFactory_h
 
 #include "itkLightObject.h"
 

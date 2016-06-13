@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetToPointSetFilter_h
-#define __otbPointSetToPointSetFilter_h
+#ifndef otbPointSetToPointSetFilter_h
+#define otbPointSetToPointSetFilter_h
 
 #include "otbPointSetSource.h"
 #include "otbStreamingTraits.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineDetectorImageFilterBase_h
-#define __otbLineDetectorImageFilterBase_h
+#ifndef otbLineDetectorImageFilterBase_h
+#define otbLineDetectorImageFilterBase_h
 
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"

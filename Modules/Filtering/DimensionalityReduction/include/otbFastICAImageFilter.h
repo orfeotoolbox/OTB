@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFastICAImageFilter_h
-#define __otbFastICAImageFilter_h
+#ifndef otbFastICAImageFilter_h
+#define otbFastICAImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbPCAImageFilter.h"

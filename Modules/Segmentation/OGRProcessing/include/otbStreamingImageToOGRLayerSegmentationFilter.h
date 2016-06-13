@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingImageToOGRLayerSegmentationFilter_h
-#define __otbStreamingImageToOGRLayerSegmentationFilter_h
+#ifndef otbStreamingImageToOGRLayerSegmentationFilter_h
+#define otbStreamingImageToOGRLayerSegmentationFilter_h
 
 #include "itkExtractImageFilter.h"
 

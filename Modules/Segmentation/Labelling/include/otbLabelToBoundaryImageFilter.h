@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelToBoundaryImageFilter_h
-#define __otbLabelToBoundaryImageFilter_h
+#ifndef otbLabelToBoundaryImageFilter_h
+#define otbLabelToBoundaryImageFilter_h
 
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 

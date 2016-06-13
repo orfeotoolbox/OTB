@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorizationPathListFilter_txx
-#define __otbVectorizationPathListFilter_txx
+#ifndef otbVectorizationPathListFilter_txx
+#define otbVectorizationPathListFilter_txx
 
 #include "otbVectorizationPathListFilter.h"
 #include "otbMacro.h"

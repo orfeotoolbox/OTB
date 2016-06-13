@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorizationPathListFilter_h
-#define __otbVectorizationPathListFilter_h
+#ifndef otbVectorizationPathListFilter_h
+#define otbVectorizationPathListFilter_h
 
 #include "otbPathListSource.h"
 #include "itkImageRegionIterator.h"

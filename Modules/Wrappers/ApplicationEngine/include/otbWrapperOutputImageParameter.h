@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperOutputImageParameter_h
-#define __otbWrapperOutputImageParameter_h
+#ifndef otbWrapperOutputImageParameter_h
+#define otbWrapperOutputImageParameter_h
 
 //#include "otbVectorImage.h"
 #include "itkImageBase.h"

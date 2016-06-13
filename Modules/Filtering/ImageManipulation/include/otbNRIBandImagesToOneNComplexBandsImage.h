@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNRIBandImagesToOneNComplexBandsImage_h
-#define __otbNRIBandImagesToOneNComplexBandsImage_h
+#ifndef otbNRIBandImagesToOneNComplexBandsImage_h
+#define otbNRIBandImagesToOneNComplexBandsImage_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"

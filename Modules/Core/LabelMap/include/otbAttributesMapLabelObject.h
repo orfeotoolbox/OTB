@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAttributesMapLabelObject_h
-#define __otbAttributesMapLabelObject_h
+#ifndef otbAttributesMapLabelObject_h
+#define otbAttributesMapLabelObject_h
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push

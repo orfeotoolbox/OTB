@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbGDALImageIOFactory_h
-#define __otbGDALImageIOFactory_h
+#ifndef otbGDALImageIOFactory_h
+#define otbGDALImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
 

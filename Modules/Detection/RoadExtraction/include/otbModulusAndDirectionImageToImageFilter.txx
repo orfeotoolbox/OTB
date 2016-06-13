@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbModulusAndDirectionImageToImageFilter_txx
-#define __otbModulusAndDirectionImageToImageFilter_txx
+#ifndef otbModulusAndDirectionImageToImageFilter_txx
+#define otbModulusAndDirectionImageToImageFilter_txx
 
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "itkProcessObject.h"

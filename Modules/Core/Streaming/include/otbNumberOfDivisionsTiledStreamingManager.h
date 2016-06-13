@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
    =========================================================================*/
-#ifndef __otbNumberOfDivisionsTiledStreamingManager_h
-#define __otbNumberOfDivisionsTiledStreamingManager_h
+#ifndef otbNumberOfDivisionsTiledStreamingManager_h
+#define otbNumberOfDivisionsTiledStreamingManager_h
 
 #include "otbStreamingManager.h"
 

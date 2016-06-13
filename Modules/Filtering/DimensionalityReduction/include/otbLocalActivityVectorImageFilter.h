@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLocalActivityVectorImageFilter_h
-#define __otbLocalActivityVectorImageFilter_h
+#ifndef otbLocalActivityVectorImageFilter_h
+#define otbLocalActivityVectorImageFilter_h
 
 #include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
 
@@ -116,4 +116,4 @@ private:
 } // end of namespace otb
 
 
-#endif // __otbLocalActivityVectorImageFilter_h
+#endif // otbLocalActivityVectorImageFilter_h

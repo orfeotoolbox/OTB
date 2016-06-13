@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCompacityPathFunction_h
-#define __otbCompacityPathFunction_h
+#ifndef otbCompacityPathFunction_h
+#define otbCompacityPathFunction_h
 
 #include "otbPathFunction.h"
 #include "itkVectorContainer.h"

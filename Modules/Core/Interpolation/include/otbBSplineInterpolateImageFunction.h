@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBSplineInterpolateImageFunction_h
-#define __otbBSplineInterpolateImageFunction_h
+#ifndef otbBSplineInterpolateImageFunction_h
+#define otbBSplineInterpolateImageFunction_h
 
 #include <vector>
 

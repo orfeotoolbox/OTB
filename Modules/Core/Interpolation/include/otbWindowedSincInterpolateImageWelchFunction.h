@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWindowedSincInterpolateImageWelchFunction_h
-#define __otbWindowedSincInterpolateImageWelchFunction_h
+#ifndef otbWindowedSincInterpolateImageWelchFunction_h
+#define otbWindowedSincInterpolateImageWelchFunction_h
 
 #include "otbWindowedSincInterpolateImageFunctionBase.h"
 #include "vnl/vnl_math.h"

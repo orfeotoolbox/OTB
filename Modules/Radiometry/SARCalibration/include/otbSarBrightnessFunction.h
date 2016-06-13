@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSarBrightnessFunction_h
-#define __otbSarBrightnessFunction_h
+#ifndef otbSarBrightnessFunction_h
+#define otbSarBrightnessFunction_h
 
 #include "otbSarBrightnessFunctor.h"
 #include "otbSarParametricMapFunction.h"

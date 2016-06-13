@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKmzProductWriter_h
-#define __otbKmzProductWriter_h
+#ifndef otbKmzProductWriter_h
+#define otbKmzProductWriter_h
 
 #include <fstream>
 

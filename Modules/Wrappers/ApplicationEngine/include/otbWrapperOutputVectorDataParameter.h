@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperOutputVectorDataParameter_h
-#define __otbWrapperOutputVectorDataParameter_h
+#ifndef otbWrapperOutputVectorDataParameter_h
+#define otbWrapperOutputVectorDataParameter_h
 
 #include "otbWrapperParameter.h"
 

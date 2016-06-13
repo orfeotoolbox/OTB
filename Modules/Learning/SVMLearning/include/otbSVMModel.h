@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMModel_h
-#define __otbSVMModel_h
+#ifndef otbSVMModel_h
+#define otbSVMModel_h
 
 #include "itkObjectFactory.h"
 #include "itkDataObject.h"

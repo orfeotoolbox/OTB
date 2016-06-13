@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericInterpolateImageFunction_h
-#define __otbGenericInterpolateImageFunction_h
+#ifndef otbGenericInterpolateImageFunction_h
+#define otbGenericInterpolateImageFunction_h
 
 #include "itkInterpolateImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

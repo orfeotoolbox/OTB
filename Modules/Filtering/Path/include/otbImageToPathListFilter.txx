@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageToPathListFilter_txx
-#define __otbImageToPathListFilter_txx
+#ifndef otbImageToPathListFilter_txx
+#define otbImageToPathListFilter_txx
 
 #include "otbImageToPathListFilter.h"
 #include "itkProcessObject.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDBOverlapDataNodeFeatureFunction_h
-#define __otbDBOverlapDataNodeFeatureFunction_h
+#ifndef otbDBOverlapDataNodeFeatureFunction_h
+#define otbDBOverlapDataNodeFeatureFunction_h
 
 #include "otbDataNodeVectorDataFunction.h"
 

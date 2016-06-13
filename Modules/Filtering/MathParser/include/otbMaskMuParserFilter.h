@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMaskMuParserFilter_h
-#define __otbMaskMuParserFilter_h
+#ifndef otbMaskMuParserFilter_h
+#define otbMaskMuParserFilter_h
 
 
 #include "itkProgressReporter.h"

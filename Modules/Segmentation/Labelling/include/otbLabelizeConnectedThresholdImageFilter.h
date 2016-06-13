@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelizeConnectedThresholdImageFilter_h
-#define __otbLabelizeConnectedThresholdImageFilter_h
+#ifndef otbLabelizeConnectedThresholdImageFilter_h
+#define otbLabelizeConnectedThresholdImageFilter_h
 
 #include "itkConnectedThresholdImageFilter.h"
 #include "otbLabelizeImageFilterBase.h"

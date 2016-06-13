@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOpticalDefaultImageMetadataInterface_h
-#define __otbOpticalDefaultImageMetadataInterface_h
+#ifndef otbOpticalDefaultImageMetadataInterface_h
+#define otbOpticalDefaultImageMetadataInterface_h
 
 
 #include "otbMacro.h"

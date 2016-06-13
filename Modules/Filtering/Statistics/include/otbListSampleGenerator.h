@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbListSampleGenerator_h
-#define __otbListSampleGenerator_h
+#ifndef otbListSampleGenerator_h
+#define otbListSampleGenerator_h
 
 #include "itkProcessObject.h"
 #include "itkListSample.h"

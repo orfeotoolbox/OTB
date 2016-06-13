@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageRegionSquareTileSplitter_h
-#define __otbImageRegionSquareTileSplitter_h
+#ifndef otbImageRegionSquareTileSplitter_h
+#define otbImageRegionSquareTileSplitter_h
 
 #include "itkRegion.h"
 #include "itkImageRegionSplitter.h"

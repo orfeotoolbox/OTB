@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRectangle_h
-#define __otbRectangle_h
+#ifndef otbRectangle_h
+#define otbRectangle_h
 
 #include "itkImageRegion.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMPointSetModelEstimator_h
-#define __otbSVMPointSetModelEstimator_h
+#ifndef otbSVMPointSetModelEstimator_h
+#define otbSVMPointSetModelEstimator_h
 
 #include "vcl_deprecated_header.h"
 

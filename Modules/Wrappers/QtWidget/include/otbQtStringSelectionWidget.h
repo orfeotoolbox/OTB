@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbQtStringSelectionWidget_h
-#define __otbQtStringSelectionWidget_h
+#ifndef otbQtStringSelectionWidget_h
+#define otbQtStringSelectionWidget_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility

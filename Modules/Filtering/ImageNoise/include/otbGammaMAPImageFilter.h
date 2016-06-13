@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGammaMAPImageFilter_h
-#define __otbGammaMAPImageFilter_h
+#ifndef otbGammaMAPImageFilter_h
+#define otbGammaMAPImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataToLabelMapFilter_h
-#define __otbVectorDataToLabelMapFilter_h
+#ifndef otbVectorDataToLabelMapFilter_h
+#define otbVectorDataToLabelMapFilter_h
 
 #include "itkLabelObject.h"
 #include "itkProgressReporter.h"

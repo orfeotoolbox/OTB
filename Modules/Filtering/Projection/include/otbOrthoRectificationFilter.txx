@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOrthoRectificationFilter_txx
-#define __otbOrthoRectificationFilter_txx
+#ifndef otbOrthoRectificationFilter_txx
+#define otbOrthoRectificationFilter_txx
 
 #include "otbOrthoRectificationFilter.h"
 #include "itkMetaDataObject.h"

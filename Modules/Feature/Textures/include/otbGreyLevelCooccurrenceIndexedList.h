@@ -16,8 +16,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
-#ifndef __otbGreyLevelCooccurrenceIndexedList_h
-#define __otbGreyLevelCooccurrenceIndexedList_h
+#ifndef otbGreyLevelCooccurrenceIndexedList_h
+#define otbGreyLevelCooccurrenceIndexedList_h
 
 #include "itkNumericTraits.h"
 #include "itkObjectFactory.h"

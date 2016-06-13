@@ -20,8 +20,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBayesianFusionFilter_h
-#define __otbBayesianFusionFilter_h
+#ifndef otbBayesianFusionFilter_h
+#define otbBayesianFusionFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbVectorImage.h"

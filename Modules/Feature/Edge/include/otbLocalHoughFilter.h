@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLocalHoughFilter_h
-#define __otbLocalHoughFilter_h
+#ifndef otbLocalHoughFilter_h
+#define otbLocalHoughFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkHoughTransform2DLinesImageFilter.h"

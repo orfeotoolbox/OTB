@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelImageToLabelMapWithAdjacencyFilter_h
-#define __otbLabelImageToLabelMapWithAdjacencyFilter_h
+#ifndef otbLabelImageToLabelMapWithAdjacencyFilter_h
+#define otbLabelImageToLabelMapWithAdjacencyFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbLabelMapWithAdjacency.h"

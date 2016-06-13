@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetView_h
-#define __otbWrapperQtWidgetView_h
+#ifndef otbWrapperQtWidgetView_h
+#define otbWrapperQtWidgetView_h
 
 #include <QtGui>
 #include <QObject>

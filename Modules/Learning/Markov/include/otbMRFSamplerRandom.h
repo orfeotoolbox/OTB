@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMRFSamplerRandom_h
-#define __otbMRFSamplerRandom_h
+#ifndef otbMRFSamplerRandom_h
+#define otbMRFSamplerRandom_h
 
 #include "otbMRFSampler.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"

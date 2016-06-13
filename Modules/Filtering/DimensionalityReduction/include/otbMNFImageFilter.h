@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMNFImageFilter_h
-#define __otbMNFImageFilter_h
+#ifndef otbMNFImageFilter_h
+#define otbMNFImageFilter_h
 
 #include "otbPCAImageFilter.h"
 

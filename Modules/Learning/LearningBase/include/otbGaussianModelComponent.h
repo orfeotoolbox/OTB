@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGaussianModelComponent_h
-#define __otbGaussianModelComponent_h
+#ifndef otbGaussianModelComponent_h
+#define otbGaussianModelComponent_h
 
 #include "itkCovarianceSampleFilter.h"
 #include "itkGaussianMembershipFunction.h"

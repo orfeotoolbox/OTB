@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSEMClassifier_txx
-#define __otbSEMClassifier_txx
+#ifndef otbSEMClassifier_txx
+#define otbSEMClassifier_txx
 
 #include <cstdlib>
 

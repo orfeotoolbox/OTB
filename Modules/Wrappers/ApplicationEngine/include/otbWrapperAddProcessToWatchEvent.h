@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperAddProcessToWatchEvent_h
-#define __otbWrapperAddProcessToWatchEvent_h
+#ifndef otbWrapperAddProcessToWatchEvent_h
+#define otbWrapperAddProcessToWatchEvent_h
 
 #include "itkEventObject.h"
 #include "itkProcessObject.h"

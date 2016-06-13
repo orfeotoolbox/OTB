@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbChangeInformationImageFilter_txx
-#define __otbChangeInformationImageFilter_txx
+#ifndef otbChangeInformationImageFilter_txx
+#define otbChangeInformationImageFilter_txx
 
 #include "otbChangeInformationImageFilter.h"
 #include "itkMetaDataObject.h"

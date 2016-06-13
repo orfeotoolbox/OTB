@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWaveletOperatorBase_h
-#define __otbWaveletOperatorBase_h
+#ifndef otbWaveletOperatorBase_h
+#define otbWaveletOperatorBase_h
 
 #include "itkMacro.h"
 #include "itkNeighborhoodOperator.h"

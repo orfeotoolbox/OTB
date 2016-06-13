@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMachineLearningModelFactoryBase_h
-#define __otbMachineLearningModelFactoryBase_h
+#ifndef otbMachineLearningModelFactoryBase_h
+#define otbMachineLearningModelFactoryBase_h
 
 #include "itkMutexLock.h"
 

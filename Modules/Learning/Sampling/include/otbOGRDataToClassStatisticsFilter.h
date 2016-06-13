@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDataToClassStatisticsFilter_h
-#define __otbOGRDataToClassStatisticsFilter_h
+#ifndef otbOGRDataToClassStatisticsFilter_h
+#define otbOGRDataToClassStatisticsFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"

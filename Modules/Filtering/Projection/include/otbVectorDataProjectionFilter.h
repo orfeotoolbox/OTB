@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataProjectionFilter_h
-#define __otbVectorDataProjectionFilter_h
+#ifndef otbVectorDataProjectionFilter_h
+#define otbVectorDataProjectionFilter_h
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbGenericRSTransform.h"

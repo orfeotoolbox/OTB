@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetExtractROI_h
-#define __otbPointSetExtractROI_h
+#ifndef otbPointSetExtractROI_h
+#define otbPointSetExtractROI_h
 
 #include "otbPointSetToPointSetFilter.h"
 #include "itkTransform.h"

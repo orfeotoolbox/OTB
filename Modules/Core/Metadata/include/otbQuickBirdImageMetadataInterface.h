@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbQuickBirdImageMetadataInterface_h
-#define __otbQuickBirdImageMetadataInterface_h
+#ifndef otbQuickBirdImageMetadataInterface_h
+#define otbQuickBirdImageMetadataInterface_h
 
 #include "otbOpticalImageMetadataInterface.h"
 

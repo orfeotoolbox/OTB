@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAtmosphericEffects_h
-#define __otbAtmosphericEffects_h
+#ifndef otbAtmosphericEffects_h
+#define otbAtmosphericEffects_h
 
 #include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
 

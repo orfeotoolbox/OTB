@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMImageClassificationFilter_h
-#define __otbSVMImageClassificationFilter_h
+#ifndef otbSVMImageClassificationFilter_h
+#define otbSVMImageClassificationFilter_h
 
 #include "vcl_deprecated_header.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRAMDrivenStrippedStreamingManager_h
-#define __otbRAMDrivenStrippedStreamingManager_h
+#ifndef otbRAMDrivenStrippedStreamingManager_h
+#define otbRAMDrivenStrippedStreamingManager_h
 
 #include "itkImageRegionSplitter.h"
 #include "otbStreamingManager.h"

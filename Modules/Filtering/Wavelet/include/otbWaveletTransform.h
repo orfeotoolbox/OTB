@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletTransform_h
-#define __otbWaveletTransform_h
+#ifndef otbWaveletTransform_h
+#define otbWaveletTransform_h
 
 #include "otbImageToImageListFilter.h"
 #include "otbImageListToImageFilter.h"

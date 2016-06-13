@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAeronetData_h
-#define __otbAeronetData_h
+#ifndef otbAeronetData_h
+#define otbAeronetData_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"

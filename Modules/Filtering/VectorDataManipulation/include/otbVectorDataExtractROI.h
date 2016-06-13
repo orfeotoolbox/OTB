@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataExtractROI_h
-#define __otbVectorDataExtractROI_h
+#ifndef otbVectorDataExtractROI_h
+#define otbVectorDataExtractROI_h
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbRemoteSensingRegion.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBSplinesInterpolateDisplacementFieldGenerator_h
-#define __otbBSplinesInterpolateDisplacementFieldGenerator_h
+#ifndef otbBSplinesInterpolateDisplacementFieldGenerator_h
+#define otbBSplinesInterpolateDisplacementFieldGenerator_h
 
 #include "otbPointSetToDisplacementFieldGenerator.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericRSResampleImageFilter_h
-#define __otbGenericRSResampleImageFilter_h
+#ifndef otbGenericRSResampleImageFilter_h
+#define otbGenericRSResampleImageFilter_h
 
 #include "otbStreamingResampleImageFilter.h"
 #include "otbPhysicalToRPCSensorModelImageFilter.h"

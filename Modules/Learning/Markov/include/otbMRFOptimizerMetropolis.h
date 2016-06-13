@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMRFOptimizerMetropolis_h
-#define __otbMRFOptimizerMetropolis_h
+#ifndef otbMRFOptimizerMetropolis_h
+#define otbMRFOptimizerMetropolis_h
 
 #include "otbMRFOptimizer.h"
 #include "otbMath.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbParserConditionDataNodeFeatureFunction_txx
-#define __otbParserConditionDataNodeFeatureFunction_txx
+#ifndef otbParserConditionDataNodeFeatureFunction_txx
+#define otbParserConditionDataNodeFeatureFunction_txx
 
 #include "otbParserConditionDataNodeFeatureFunction.h"
 

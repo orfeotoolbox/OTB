@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperParameter_h
-#define __otbWrapperParameter_h
+#ifndef otbWrapperParameter_h
+#define otbWrapperParameter_h
 
 #include "otbMacro.h"
 #include "itkObjectFactory.h"

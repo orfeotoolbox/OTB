@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDecisionTree_txx
-#define __otbDecisionTree_txx
+#ifndef otbDecisionTree_txx
+#define otbDecisionTree_txx
 
 #include "otbDecisionTree.h"
 #include "otbMacro.h"

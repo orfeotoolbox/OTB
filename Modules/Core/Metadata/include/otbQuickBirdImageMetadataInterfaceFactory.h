@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbQuickBirdImageMetadataInterfaceFactory_h
-#define __otbQuickBirdImageMetadataInterfaceFactory_h
+#ifndef otbQuickBirdImageMetadataInterfaceFactory_h
+#define otbQuickBirdImageMetadataInterfaceFactory_h
 
 
 #include "itkObjectFactoryBase.h"

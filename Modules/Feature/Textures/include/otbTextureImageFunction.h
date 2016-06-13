@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTextureImageFunction_h
-#define __otbTextureImageFunction_h
+#ifndef otbTextureImageFunction_h
+#define otbTextureImageFunction_h
 
 #include "itkImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

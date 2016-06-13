@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericInterpolateImageFunction_txx
-#define __otbGenericInterpolateImageFunction_txx
+#ifndef otbGenericInterpolateImageFunction_txx
+#define otbGenericInterpolateImageFunction_txx
 #include "otbGenericInterpolateImageFunction.h"
 #include "vnl/vnl_math.h"
 

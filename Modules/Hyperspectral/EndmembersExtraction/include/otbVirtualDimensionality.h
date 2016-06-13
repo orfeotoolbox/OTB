@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVirtualDimensionality_h
-#define __otbVirtualDimensionality_h
+#ifndef otbVirtualDimensionality_h
+#define otbVirtualDimensionality_h
 
 #include "itkObjectFactory.h"
 #include "itkLightObject.h"

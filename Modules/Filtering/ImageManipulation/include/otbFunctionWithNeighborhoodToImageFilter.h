@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFunctionWithNeighborhoodToImageFilter_h
-#define __otbFunctionWithNeighborhoodToImageFilter_h
+#ifndef otbFunctionWithNeighborhoodToImageFilter_h
+#define otbFunctionWithNeighborhoodToImageFilter_h
 
 #include "otbFunctionToImageFilter.h"
 

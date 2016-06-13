@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetToDensityImageFilter_h
-#define __otbPointSetToDensityImageFilter_h
+#ifndef otbPointSetToDensityImageFilter_h
+#define otbPointSetToDensityImageFilter_h
 
 #include "itkProcessObject.h"
 #include "itkPointSet.h"

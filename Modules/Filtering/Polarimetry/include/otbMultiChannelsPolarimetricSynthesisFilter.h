@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiChannelsPolarimetricSynthesisFilter_h
-#define __otbMultiChannelsPolarimetricSynthesisFilter_h
+#ifndef otbMultiChannelsPolarimetricSynthesisFilter_h
+#define otbMultiChannelsPolarimetricSynthesisFilter_h
 
 #include "itkInPlaceImageFilter.h"
 #include "otbPolarimetricSynthesisFunctor.h"

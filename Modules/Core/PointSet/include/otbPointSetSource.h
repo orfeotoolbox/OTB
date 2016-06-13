@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbPointSetSource_h
-#define __otbPointSetSource_h
+#ifndef otbPointSetSource_h
+#define otbPointSetSource_h
 
 
 #include "itkProcessObject.h"

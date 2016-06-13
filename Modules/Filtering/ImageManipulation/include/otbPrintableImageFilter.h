@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbPrintableImageFilter_h
-#define __otbPrintableImageFilter_h
+#ifndef otbPrintableImageFilter_h
+#define otbPrintableImageFilter_h
 
 #include "otbImage.h"
 #include "itkImageToImageFilter.h"

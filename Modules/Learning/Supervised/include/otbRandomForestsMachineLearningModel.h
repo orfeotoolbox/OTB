@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRandomForestsMachineLearningModel_h
-#define __otbRandomForestsMachineLearningModel_h
+#ifndef otbRandomForestsMachineLearningModel_h
+#define otbRandomForestsMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
 

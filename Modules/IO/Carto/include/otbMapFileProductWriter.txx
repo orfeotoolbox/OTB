@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMapFileProductWriter_txx
-#define __otbMapFileProductWriter_txx
+#ifndef otbMapFileProductWriter_txx
+#define otbMapFileProductWriter_txx
 
 #include "otbMapFileProductWriter.h"
 #include "itksys/SystemTools.hxx"

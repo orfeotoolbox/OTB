@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMImageClassificationFilter_h
-#define __otbSOMImageClassificationFilter_h
+#ifndef otbSOMImageClassificationFilter_h
+#define otbSOMImageClassificationFilter_h
 
 #include "otbSOMClassifier.h"
 #include "itkInPlaceImageFilter.h"

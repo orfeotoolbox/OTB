@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbExtractROIBase_h
-#define __otbExtractROIBase_h
+#ifndef otbExtractROIBase_h
+#define otbExtractROIBase_h
 
 #include "itkImageToImageFilter.h"
 #include "itkSmartPointer.h"

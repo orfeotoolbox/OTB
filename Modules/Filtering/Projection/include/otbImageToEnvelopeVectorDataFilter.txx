@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToEnvelopeVectorDataFilter_txx
-#define __otbImageToEnvelopeVectorDataFilter_txx
+#ifndef otbImageToEnvelopeVectorDataFilter_txx
+#define otbImageToEnvelopeVectorDataFilter_txx
 
 #include "otbImageToEnvelopeVectorDataFilter.h"
 #include "otbDataNode.h"

@@ -19,8 +19,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToReflectanceImageFilter_h
-#define __otbImageToReflectanceImageFilter_h
+#ifndef otbImageToReflectanceImageFilter_h
+#define otbImageToReflectanceImageFilter_h
 
 #include "otbImageToLuminanceImageFilter.h"
 #include "otbLuminanceToReflectanceImageFilter.h"

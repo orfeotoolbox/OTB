@@ -1,5 +1,5 @@
-#ifndef __otbDifferenceImageFilter_h
-#define __otbDifferenceImageFilter_h
+#ifndef otbDifferenceImageFilter_h
+#define otbDifferenceImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkNumericTraits.h"

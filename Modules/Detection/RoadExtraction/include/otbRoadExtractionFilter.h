@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRoadExtractionFilter_h
-#define __otbRoadExtractionFilter_h
+#ifndef otbRoadExtractionFilter_h
+#define otbRoadExtractionFilter_h
 
 
 #include "otbSpectralAngleDistanceImageFilter.h"

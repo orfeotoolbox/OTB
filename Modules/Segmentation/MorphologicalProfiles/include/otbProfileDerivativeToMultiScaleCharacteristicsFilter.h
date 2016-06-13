@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProfileDerivativeToMultiScaleCharacteristicsFilter_h
-#define __otbProfileDerivativeToMultiScaleCharacteristicsFilter_h
+#ifndef otbProfileDerivativeToMultiScaleCharacteristicsFilter_h
+#define otbProfileDerivativeToMultiScaleCharacteristicsFilter_h
 
 #include "otbImageListToImageFilter.h"
 

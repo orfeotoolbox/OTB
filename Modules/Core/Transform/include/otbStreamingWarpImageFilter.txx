@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingWarpImageFilter_txx
-#define __otbStreamingWarpImageFilter_txx
+#ifndef otbStreamingWarpImageFilter_txx
+#define otbStreamingWarpImageFilter_txx
 
 #include "otbStreamingWarpImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

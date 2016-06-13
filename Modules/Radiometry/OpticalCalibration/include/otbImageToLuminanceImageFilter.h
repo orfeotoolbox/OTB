@@ -19,8 +19,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToLuminanceImageFilter_h
-#define __otbImageToLuminanceImageFilter_h
+#ifndef otbImageToLuminanceImageFilter_h
+#define otbImageToLuminanceImageFilter_h
 
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "itkNumericTraits.h"

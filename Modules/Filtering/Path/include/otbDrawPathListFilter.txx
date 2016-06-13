@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbDrawPathListFilter_txx
-#define __otbDrawPathListFilter_txx
+#ifndef otbDrawPathListFilter_txx
+#define otbDrawPathListFilter_txx
 
 #include "otbDrawPathListFilter.h"
 

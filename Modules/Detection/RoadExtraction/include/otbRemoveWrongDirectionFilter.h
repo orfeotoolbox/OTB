@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRemoveWrongDirectionFilter_h
-#define __otbRemoveWrongDirectionFilter_h
+#ifndef otbRemoveWrongDirectionFilter_h
+#define otbRemoveWrongDirectionFilter_h
 
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "itkBinaryFunctorImageFilter.h"

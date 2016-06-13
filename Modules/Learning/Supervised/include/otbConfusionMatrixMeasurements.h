@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbConfusionMatrixMeasurements_h
-#define __otbConfusionMatrixMeasurements_h
+#ifndef otbConfusionMatrixMeasurements_h
+#define otbConfusionMatrixMeasurements_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"

@@ -17,8 +17,8 @@
 =========================================================================*/
 
 // Adapted from otbImageToPathListAlignFilter.h
-#ifndef __otbRegionImageToRectangularPathListFilter_h
-#define __otbRegionImageToRectangularPathListFilter_h
+#ifndef otbRegionImageToRectangularPathListFilter_h
+#define otbRegionImageToRectangularPathListFilter_h
 
 #include "itkImageSource.h"
 #include "itkConceptChecking.h"

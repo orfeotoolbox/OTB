@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbWrapperApplicationFactory_h
-#define __otbWrapperApplicationFactory_h
+#ifndef otbWrapperApplicationFactory_h
+#define otbWrapperApplicationFactory_h
 
 #include "otbWrapperApplicationFactoryBase.h"
 #include "itkVersion.h"
@@ -133,4 +133,4 @@ private:
   }
 
 
-#endif // __otbWrapperApplication_h_
+#endif // otbWrapperApplication_h_

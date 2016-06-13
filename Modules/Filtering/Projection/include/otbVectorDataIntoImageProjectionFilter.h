@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataIntoImageProjectionFilter_h
-#define __otbVectorDataIntoImageProjectionFilter_h
+#ifndef otbVectorDataIntoImageProjectionFilter_h
+#define otbVectorDataIntoImageProjectionFilter_h
 
 
 #include "otbImage.h"

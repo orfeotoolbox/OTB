@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHillShadingFilter_h
-#define __otbHillShadingFilter_h
+#ifndef otbHillShadingFilter_h
+#define otbHillShadingFilter_h
 
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 #include "otbHillShadingFunctor.h"

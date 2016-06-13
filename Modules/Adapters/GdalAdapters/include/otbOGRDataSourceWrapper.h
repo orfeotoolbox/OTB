@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbOGRDataSourceWrapper_h
-#define __otbOGRDataSourceWrapper_h
+#ifndef otbOGRDataSourceWrapper_h
+#define otbOGRDataSourceWrapper_h
 
 #include <string>
 
@@ -563,4 +563,4 @@ namespace boost { namespace foreach {
 #include "otbOGRDataSourceWrapper.txx"
 #endif
 
-#endif // __otbOGRDataSourceWrapper_h
+#endif // otbOGRDataSourceWrapper_h

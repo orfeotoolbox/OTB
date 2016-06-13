@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLambert2EtenduProjection_h
-#define __otbLambert2EtenduProjection_h
+#ifndef otbLambert2EtenduProjection_h
+#define otbLambert2EtenduProjection_h
 
 #include "otbLambertConformalConicMapProjection.h"
 

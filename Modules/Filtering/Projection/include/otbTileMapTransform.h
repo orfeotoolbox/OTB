@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTileMapTransform_h
-#define __otbTileMapTransform_h
+#ifndef otbTileMapTransform_h
+#define otbTileMapTransform_h
 
 
 // Only for the enum definition

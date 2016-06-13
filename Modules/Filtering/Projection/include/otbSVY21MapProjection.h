@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVY21MapProjection_h
-#define __otbSVY21MapProjection_h
+#ifndef otbSVY21MapProjection_h
+#define otbSVY21MapProjection_h
 
 #include "otbTransMercatorMapProjection.h"
 

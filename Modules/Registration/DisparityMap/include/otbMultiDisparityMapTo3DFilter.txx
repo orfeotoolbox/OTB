@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiDisparityMapTo3DFilter_txx
-#define __otbMultiDisparityMapTo3DFilter_txx
+#ifndef otbMultiDisparityMapTo3DFilter_txx
+#define otbMultiDisparityMapTo3DFilter_txx
 
 #include "otbMultiDisparityMapTo3DFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"

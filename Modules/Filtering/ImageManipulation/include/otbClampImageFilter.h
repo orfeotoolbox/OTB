@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbClampImageFilter_h
-#define __otbClampImageFilter_h
+#ifndef otbClampImageFilter_h
+#define otbClampImageFilter_h
 
 #include "itkImageToImageFilter.h"
 

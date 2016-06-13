@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadiometricMomentsIFFactory_h
-#define __otbRadiometricMomentsIFFactory_h
+#ifndef otbRadiometricMomentsIFFactory_h
+#define otbRadiometricMomentsIFFactory_h
 
 #include "itkLightObject.h"
 

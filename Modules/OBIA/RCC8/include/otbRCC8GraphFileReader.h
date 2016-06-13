@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8GraphFileReader_h
-#define __otbRCC8GraphFileReader_h
+#ifndef otbRCC8GraphFileReader_h
+#define otbRCC8GraphFileReader_h
 
 #include "otbRCC8GraphSource.h"
 #include "itkMacro.h"

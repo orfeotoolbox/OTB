@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineCorrelationDetectorImageFilter_h
-#define __otbLineCorrelationDetectorImageFilter_h
+#ifndef otbLineCorrelationDetectorImageFilter_h
+#define otbLineCorrelationDetectorImageFilter_h
 
 #include "otbLineDetectorImageFilterBase.h"
 

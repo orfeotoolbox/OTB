@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSentinel1ImageMetadataInterface_h
-#define __otbSentinel1ImageMetadataInterface_h
+#ifndef otbSentinel1ImageMetadataInterface_h
+#define otbSentinel1ImageMetadataInterface_h
 
 #include "otbSarImageMetadataInterface.h"
 

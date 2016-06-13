@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelMapToAttributeImageFilter_h
-#define __otbLabelMapToAttributeImageFilter_h
+#ifndef otbLabelMapToAttributeImageFilter_h
+#define otbLabelMapToAttributeImageFilter_h
 
 #include "itkLabelMapFilter.h"
 #include "otbAttributesMapLabelObject.h"

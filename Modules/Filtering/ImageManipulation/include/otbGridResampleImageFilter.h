@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGridResampleImageFilter_h
-#define __otbGridResampleImageFilter_h
+#ifndef otbGridResampleImageFilter_h
+#define otbGridResampleImageFilter_h
 
 
 #include "itkImageToImageFilter.h"

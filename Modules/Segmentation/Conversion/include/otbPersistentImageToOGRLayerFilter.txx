@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentImageToOGRLayerFilter_txx
-#define __otbPersistentImageToOGRLayerFilter_txx
+#ifndef otbPersistentImageToOGRLayerFilter_txx
+#define otbPersistentImageToOGRLayerFilter_txx
 
 #include "otbPersistentImageToOGRLayerFilter.h"
 #include "itkTimeProbe.h"

@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSimpleRcsPanSharpeningFusionImageFilter_h
-#define __otbSimpleRcsPanSharpeningFusionImageFilter_h
+#ifndef otbSimpleRcsPanSharpeningFusionImageFilter_h
+#define otbSimpleRcsPanSharpeningFusionImageFilter_h
 
 #include "otbConvolutionImageFilter.h"
 #include "otbImage.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDataToClassStatisticsFilter_txx
-#define __otbOGRDataToClassStatisticsFilter_txx
+#ifndef otbOGRDataToClassStatisticsFilter_txx
+#define otbOGRDataToClassStatisticsFilter_txx
 
 #include "otbMaskedIteratorDecorator.h"
 #include "itkImageRegionConstIteratorWithOnlyIndex.h"

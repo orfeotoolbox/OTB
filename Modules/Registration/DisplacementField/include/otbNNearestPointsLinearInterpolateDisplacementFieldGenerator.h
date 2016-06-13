@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNNearestPointsLinearInterpolateDisplacementFieldGenerator_h
-#define __otbNNearestPointsLinearInterpolateDisplacementFieldGenerator_h
+#ifndef otbNNearestPointsLinearInterpolateDisplacementFieldGenerator_h
+#define otbNNearestPointsLinearInterpolateDisplacementFieldGenerator_h
 
 #include "otbPointSetToDisplacementFieldGenerator.h"
 

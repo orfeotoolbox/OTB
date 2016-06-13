@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolyLineParametricPathWithValue_h
-#define __otbPolyLineParametricPathWithValue_h
+#ifndef otbPolyLineParametricPathWithValue_h
+#define otbPolyLineParametricPathWithValue_h
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push

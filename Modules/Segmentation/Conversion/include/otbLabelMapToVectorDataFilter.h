@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapToVectorDataFilter_h
-#define __otbLabelMapToVectorDataFilter_h
+#ifndef otbLabelMapToVectorDataFilter_h
+#define otbLabelMapToVectorDataFilter_h
 
 #include "otbVectorDataSource.h"
 #include "itkLabelMap.h"

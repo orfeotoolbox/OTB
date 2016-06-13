@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentImageToVectorDataFilter_h
-#define __otbPersistentImageToVectorDataFilter_h
+#ifndef otbPersistentImageToVectorDataFilter_h
+#define otbPersistentImageToVectorDataFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "itkExtractImageFilter.h"

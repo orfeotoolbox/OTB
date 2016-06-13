@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMRFEnergyGaussianClassification_h
-#define __otbMRFEnergyGaussianClassification_h
+#ifndef otbMRFEnergyGaussianClassification_h
+#define otbMRFEnergyGaussianClassification_h
 
 #include "otbMRFEnergy.h"
 #include "otbMath.h"

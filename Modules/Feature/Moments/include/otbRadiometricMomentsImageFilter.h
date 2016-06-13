@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadiometricMomentsImageFilter_h
-#define __otbRadiometricMomentsImageFilter_h
+#ifndef otbRadiometricMomentsImageFilter_h
+#define otbRadiometricMomentsImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbRadiometricMomentsFunctor.h"

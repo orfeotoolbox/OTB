@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbHooverMatrixFilter_h
-#define __otbHooverMatrixFilter_h
+#ifndef otbHooverMatrixFilter_h
+#define otbHooverMatrixFilter_h
 
 #include "itkLabelMapFilter.h"
 #include "itkVariableSizeMatrix.h"

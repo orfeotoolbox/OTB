@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMapFileProductWriter_h
-#define __otbMapFileProductWriter_h
+#ifndef otbMapFileProductWriter_h
+#define otbMapFileProductWriter_h
 
 #include <fstream>
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLHMIChangeDetector_h
-#define __otbLHMIChangeDetector_h
+#ifndef otbLHMIChangeDetector_h
+#define otbLHMIChangeDetector_h
 
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 #include "otbLHMI.h"

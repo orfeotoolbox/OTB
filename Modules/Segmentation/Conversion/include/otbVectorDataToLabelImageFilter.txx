@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToLabelImageFilter_txx
-#define __otbVectorDataToLabelImageFilter_txx
+#ifndef otbVectorDataToLabelImageFilter_txx
+#define otbVectorDataToLabelImageFilter_txx
 
 #include "gdal_alg.h"
 #include "ogr_srs_api.h"

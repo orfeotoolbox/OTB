@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLambert93Projection_h
-#define __otbLambert93Projection_h
+#ifndef otbLambert93Projection_h
+#define otbLambert93Projection_h
 
 #include "otbLambertConformalConicMapProjection.h"
 

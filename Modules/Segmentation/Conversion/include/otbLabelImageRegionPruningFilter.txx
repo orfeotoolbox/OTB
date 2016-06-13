@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelImageRegionPruningFilter_txx
-#define __otbLabelImageRegionPruningFilter_txx
+#ifndef otbLabelImageRegionPruningFilter_txx
+#define otbLabelImageRegionPruningFilter_txx
 
 #include "otbLabelImageRegionPruningFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBSQImageIO_h
-#define __otbBSQImageIO_h
+#ifndef otbBSQImageIO_h
+#define otbBSQImageIO_h
 
 #include <fstream>
 #include <string>
@@ -183,4 +183,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbBSQImageIO_h
+#endif // otbBSQImageIO_h

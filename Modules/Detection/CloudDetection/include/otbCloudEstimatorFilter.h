@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCloudEstimatorFilter_h
-#define __otbCloudEstimatorFilter_h
+#ifndef otbCloudEstimatorFilter_h
+#define otbCloudEstimatorFilter_h
 
 #include "otbSpectralAngleFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"

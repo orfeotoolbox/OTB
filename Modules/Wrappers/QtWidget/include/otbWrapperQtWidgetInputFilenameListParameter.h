@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetInputFilenameListParameter_h
-#define __otbWrapperQtWidgetInputFilenameListParameter_h
+#ifndef otbWrapperQtWidgetInputFilenameListParameter_h
+#define otbWrapperQtWidgetInputFilenameListParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility

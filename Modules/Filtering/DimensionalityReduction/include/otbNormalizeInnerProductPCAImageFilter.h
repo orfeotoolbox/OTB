@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNormalizeInnerProductPCAImageFilter_h
-#define __otbNormalizeInnerProductPCAImageFilter_h
+#ifndef otbNormalizeInnerProductPCAImageFilter_h
+#define otbNormalizeInnerProductPCAImageFilter_h
 
 #include "itkInPlaceImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"

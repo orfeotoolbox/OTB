@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbJointMassOfBeliefFilter_txx
-#define __otbJointMassOfBeliefFilter_txx
+#ifndef otbJointMassOfBeliefFilter_txx
+#define otbJointMassOfBeliefFilter_txx
 
 #include "otbJointMassOfBeliefFilter.h"
 

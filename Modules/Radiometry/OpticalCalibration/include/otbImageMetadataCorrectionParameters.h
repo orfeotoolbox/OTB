@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageMetadataCorrectionParameters_h
-#define __otbImageMetadataCorrectionParameters_h
+#ifndef otbImageMetadataCorrectionParameters_h
+#define otbImageMetadataCorrectionParameters_h
 
 #include "itkObject.h"
 #include "itkVariableSizeMatrix.h"

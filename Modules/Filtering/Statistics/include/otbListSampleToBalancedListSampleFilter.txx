@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleToBalancedListSampleFilter_txx
-#define __otbListSampleToBalancedListSampleFilter_txx
+#ifndef otbListSampleToBalancedListSampleFilter_txx
+#define otbListSampleToBalancedListSampleFilter_txx
 
 #include "otbListSampleToBalancedListSampleFilter.h"
 #include "itkProgressReporter.h"

@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbConfusionMatrixToMassOfBelief_h
-#define __otbConfusionMatrixToMassOfBelief_h
+#ifndef otbConfusionMatrixToMassOfBelief_h
+#define otbConfusionMatrixToMassOfBelief_h
 
 // First make sure that the configuration is available.
 // This line can be removed once the optimized versions

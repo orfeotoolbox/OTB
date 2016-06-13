@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTouziEdgeDetectorImageFilter_h
-#define __otbTouziEdgeDetectorImageFilter_h
+#ifndef otbTouziEdgeDetectorImageFilter_h
+#define otbTouziEdgeDetectorImageFilter_h
 
 #include "otbImageToModulusAndDirectionImageFilter.h"
 #include "otbImage.h"

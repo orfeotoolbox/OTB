@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbONERAImageIOFactory_h
-#define __otbONERAImageIOFactory_h
+#ifndef otbONERAImageIOFactory_h
+#define otbONERAImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
 

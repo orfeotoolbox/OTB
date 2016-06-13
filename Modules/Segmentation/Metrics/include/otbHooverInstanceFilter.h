@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbHooverInstanceFilter_h
-#define __otbHooverInstanceFilter_h
+#ifndef otbHooverInstanceFilter_h
+#define otbHooverInstanceFilter_h
 
 #include <set>
 #include "itkInPlaceLabelMapFilter.h"

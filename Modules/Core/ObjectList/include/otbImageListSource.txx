@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageListSource_txx
-#define __otbImageListSource_txx
+#ifndef otbImageListSource_txx
+#define otbImageListSource_txx
 
 #include "otbImageListSource.h"
 

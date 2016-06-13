@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeometriesProjectionFilter_h
-#define __otbGeometriesProjectionFilter_h
+#ifndef otbGeometriesProjectionFilter_h
+#define otbGeometriesProjectionFilter_h
 
 #include "otbGeometriesToGeometriesFilter.h"
 #include "otbOGRGeometryWrapper.h"
@@ -292,4 +292,4 @@ private:
 #include "otbGeometriesProjectionFilter.txx"
 #endif
 
-#endif // __otbGeometriesProjectionFilter_h
+#endif // otbGeometriesProjectionFilter_h

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToLabelImageFilter_h
-#define __otbVectorDataToLabelImageFilter_h
+#ifndef otbVectorDataToLabelImageFilter_h
+#define otbVectorDataToLabelImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionIterator.h"

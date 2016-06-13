@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbInverseSensorModel_h
-#define __otbInverseSensorModel_h
+#ifndef otbInverseSensorModel_h
+#define otbInverseSensorModel_h
 
 #include "otbSensorModelBase.h"
 

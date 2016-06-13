@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadarsat2ImageMetadataInterfaceFactory_h
-#define __otbRadarsat2ImageMetadataInterfaceFactory_h
+#ifndef otbRadarsat2ImageMetadataInterfaceFactory_h
+#define otbRadarsat2ImageMetadataInterfaceFactory_h
 
 #include "itkObjectFactoryBase.h"
 

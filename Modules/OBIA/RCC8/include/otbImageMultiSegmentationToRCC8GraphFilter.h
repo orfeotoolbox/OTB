@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageMultiSegmentationToRCC8GraphFilter_h
-#define __otbImageMultiSegmentationToRCC8GraphFilter_h
+#ifndef otbImageMultiSegmentationToRCC8GraphFilter_h
+#define otbImageMultiSegmentationToRCC8GraphFilter_h
 
 #include "otbImageListToRCC8GraphFilter.h"
 

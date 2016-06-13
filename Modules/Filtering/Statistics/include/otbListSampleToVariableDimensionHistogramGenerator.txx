@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleToVariableDimensionHistogramGenerator_txx
-#define __otbListSampleToVariableDimensionHistogramGenerator_txx
+#ifndef otbListSampleToVariableDimensionHistogramGenerator_txx
+#define otbListSampleToVariableDimensionHistogramGenerator_txx
 
 #include "otbMacro.h"
 #include "itkStatisticsAlgorithm.h"

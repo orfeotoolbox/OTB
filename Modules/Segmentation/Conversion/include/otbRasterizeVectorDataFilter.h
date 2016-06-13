@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRasterizeVectorDataFilter_h
-#define __otbRasterizeVectorDataFilter_h
+#ifndef otbRasterizeVectorDataFilter_h
+#define otbRasterizeVectorDataFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkImageToImageFilter.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineOfSightOptimizer_h
-#define __otbLineOfSightOptimizer_h
+#ifndef otbLineOfSightOptimizer_h
+#define otbLineOfSightOptimizer_h
 
 #include "itkObject.h"
 

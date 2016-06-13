@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUrbanAreaDetectionImageFilter_h
-#define __otbUrbanAreaDetectionImageFilter_h
+#ifndef otbUrbanAreaDetectionImageFilter_h
+#define otbUrbanAreaDetectionImageFilter_h
 
 #include "otbImage.h"
 #include "otbWaterIndicesFunctor.h"

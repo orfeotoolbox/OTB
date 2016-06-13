@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDisparityTranslateFilter_txx
-#define __otbDisparityTranslateFilter_txx
+#ifndef otbDisparityTranslateFilter_txx
+#define otbDisparityTranslateFilter_txx
 
 #include "otbDisparityTranslateFilter.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8VertexWithCompacity_h
-#define __otbRCC8VertexWithCompacity_h
+#ifndef otbRCC8VertexWithCompacity_h
+#define otbRCC8VertexWithCompacity_h
 
 #include "otbRCC8VertexBase.h"
 

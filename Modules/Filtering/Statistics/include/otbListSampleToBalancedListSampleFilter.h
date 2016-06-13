@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleToBalancedListSampleFilter_h
-#define __otbListSampleToBalancedListSampleFilter_h
+#ifndef otbListSampleToBalancedListSampleFilter_h
+#define otbListSampleToBalancedListSampleFilter_h
 
 #include "otbGaussianAdditiveNoiseSampleListFilter.h"
 #include "itkDataObjectDecorator.h"

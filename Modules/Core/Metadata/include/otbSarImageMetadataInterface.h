@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSarImageMetadataInterface_h
-#define __otbSarImageMetadataInterface_h
+#ifndef otbSarImageMetadataInterface_h
+#define otbSarImageMetadataInterface_h
 
 #include <string>
 #include <vector>

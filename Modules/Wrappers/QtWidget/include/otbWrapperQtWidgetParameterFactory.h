@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetFactory_h
-#define __otbWrapperQtWidgetFactory_h
+#ifndef otbWrapperQtWidgetFactory_h
+#define otbWrapperQtWidgetFactory_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility

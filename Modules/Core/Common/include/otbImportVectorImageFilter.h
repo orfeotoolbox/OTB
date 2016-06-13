@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImportVectorImageFilter_h
-#define __otbImportVectorImageFilter_h
+#ifndef otbImportVectorImageFilter_h
+#define otbImportVectorImageFilter_h
 
 #include "itkImageSource.h"
 

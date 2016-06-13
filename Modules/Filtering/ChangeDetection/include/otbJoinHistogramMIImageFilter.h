@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbJoinHistogramMIImageFilter_h
-#define __otbJoinHistogramMIImageFilter_h
+#ifndef otbJoinHistogramMIImageFilter_h
+#define otbJoinHistogramMIImageFilter_h
 
 #include "otbBinaryFunctorNeighborhoodJoinHistogramImageFilter.h"
 #include "otbJoinHistogramMI.h"

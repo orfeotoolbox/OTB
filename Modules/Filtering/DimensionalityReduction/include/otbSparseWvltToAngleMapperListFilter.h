@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSparseWvltToAngleMapperListFilter_h
-#define __otbSparseWvltToAngleMapperListFilter_h
+#ifndef otbSparseWvltToAngleMapperListFilter_h
+#define otbSparseWvltToAngleMapperListFilter_h
 
 #include "otbMath.h"
 #include "otbImageList.h"

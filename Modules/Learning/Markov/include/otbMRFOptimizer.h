@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMRFOptimizer_h
-#define __otbMRFOptimizer_h
+#ifndef otbMRFOptimizer_h
+#define otbMRFOptimizer_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"

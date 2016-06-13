@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKeyPointDensityImageFilter_h
-#define __otbKeyPointDensityImageFilter_h
+#ifndef otbKeyPointDensityImageFilter_h
+#define otbKeyPointDensityImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbPointSetToDensityImageFilter.h"

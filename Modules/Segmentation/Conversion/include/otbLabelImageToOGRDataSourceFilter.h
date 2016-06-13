@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelImageToOGRDataSourceFilter_h
-#define __otbLabelImageToOGRDataSourceFilter_h
+#ifndef otbLabelImageToOGRDataSourceFilter_h
+#define otbLabelImageToOGRDataSourceFilter_h
 
 #include "itkProcessObject.h"
 #include "otbOGRDataSourceWrapper.h"

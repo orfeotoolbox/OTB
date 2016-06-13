@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingMinMaxImageFilter_h
-#define __otbStreamingMinMaxImageFilter_h
+#ifndef otbStreamingMinMaxImageFilter_h
+#define otbStreamingMinMaxImageFilter_h
 
 #include <vector>
 #include "otbPersistentImageFilter.h"

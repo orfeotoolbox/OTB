@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbScalarImageToHigherOrderTexturesFilter_h
-#define __otbScalarImageToHigherOrderTexturesFilter_h
+#ifndef otbScalarImageToHigherOrderTexturesFilter_h
+#define otbScalarImageToHigherOrderTexturesFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkScalarImageToRunLengthFeaturesFilter.h"

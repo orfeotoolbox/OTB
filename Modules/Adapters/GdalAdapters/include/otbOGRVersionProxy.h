@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRVersionProxy_h
-#define __otbOGRVersionProxy_h
+#ifndef otbOGRVersionProxy_h
+#define otbOGRVersionProxy_h
 
 #include <string>
 #include <vector>

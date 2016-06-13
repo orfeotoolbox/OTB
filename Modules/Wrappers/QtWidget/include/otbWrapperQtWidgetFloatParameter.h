@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetFloatParameter_h
-#define __otbWrapperQtWidgetFloatParameter_h
+#ifndef otbWrapperQtWidgetFloatParameter_h
+#define otbWrapperQtWidgetFloatParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBSplinesInterpolateTransformDisplacementFieldGenerator_h
-#define __otbBSplinesInterpolateTransformDisplacementFieldGenerator_h
+#ifndef otbBSplinesInterpolateTransformDisplacementFieldGenerator_h
+#define otbBSplinesInterpolateTransformDisplacementFieldGenerator_h
 
 #include "otbPointSetWithTransformToDisplacementFieldGenerator.h"
 #include "itkUnaryFunctorImageFilter.h"

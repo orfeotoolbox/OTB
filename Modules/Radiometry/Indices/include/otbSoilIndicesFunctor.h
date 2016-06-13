@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSoilIndicesFunctor_h
-#define __otbSoilIndicesFunctor_h
+#ifndef otbSoilIndicesFunctor_h
+#define otbSoilIndicesFunctor_h
 
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"

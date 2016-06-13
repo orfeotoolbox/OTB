@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRVectorDataIO_h
-#define __otbOGRVectorDataIO_h
+#ifndef otbOGRVectorDataIO_h
+#define otbOGRVectorDataIO_h
 
 #include <string>
 #include <cassert>
@@ -124,4 +124,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbOGRVectorDataIO_h
+#endif // otbOGRVectorDataIO_h

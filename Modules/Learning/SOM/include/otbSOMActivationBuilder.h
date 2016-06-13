@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMActivationBuilder_h
-#define __otbSOMActivationBuilder_h
+#ifndef otbSOMActivationBuilder_h
+#define otbSOMActivationBuilder_h
 
 #include "itkImageToImageFilter.h"
 

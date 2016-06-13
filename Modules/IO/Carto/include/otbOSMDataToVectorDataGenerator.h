@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbOSMDataToVectorDataGenerator_h
-#define __otbOSMDataToVectorDataGenerator_h
+#ifndef otbOSMDataToVectorDataGenerator_h
+#define otbOSMDataToVectorDataGenerator_h
 
 // store the nodes (points) coordinates
 #include <map>

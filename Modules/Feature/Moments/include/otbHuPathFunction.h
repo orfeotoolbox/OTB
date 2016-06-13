@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHuPathFunction_h
-#define __otbHuPathFunction_h
+#ifndef otbHuPathFunction_h
+#define otbHuPathFunction_h
 
 #include "otbRealMomentPathFunction.h"
 

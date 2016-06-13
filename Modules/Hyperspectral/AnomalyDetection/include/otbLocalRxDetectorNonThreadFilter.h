@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLocalRxDetectorNonThreadFilter_h
-#define __otbLocalRxDetectorNonThreadFilter_h
+#ifndef otbLocalRxDetectorNonThreadFilter_h
+#define otbLocalRxDetectorNonThreadFilter_h
 
 #include "itkImageToImageFilter.h"
 

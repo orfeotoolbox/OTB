@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPathListToPathListFilter_h
-#define __otbPathListToPathListFilter_h
+#ifndef otbPathListToPathListFilter_h
+#define otbPathListToPathListFilter_h
 
 #include "otbObjectListToObjectListFilter.h"
 #include "otbObjectList.h"

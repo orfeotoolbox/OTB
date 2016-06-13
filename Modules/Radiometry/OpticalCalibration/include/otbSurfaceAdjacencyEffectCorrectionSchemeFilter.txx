@@ -20,8 +20,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSurfaceAdjacencyEffectCorrectionSchemeFilter_txx
-#define __otbSurfaceAdjacencyEffectCorrectionSchemeFilter_txx
+#ifndef otbSurfaceAdjacencyEffectCorrectionSchemeFilter_txx
+#define otbSurfaceAdjacencyEffectCorrectionSchemeFilter_txx
 
 #include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 

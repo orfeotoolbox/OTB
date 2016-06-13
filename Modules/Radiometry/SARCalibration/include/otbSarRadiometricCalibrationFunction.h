@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSarRadiometricCalibrationFunction_h
-#define __otbSarRadiometricCalibrationFunction_h
+#ifndef otbSarRadiometricCalibrationFunction_h
+#define otbSarRadiometricCalibrationFunction_h
 
 #include "otbSarParametricMapFunction.h"
 #include "otbSarCalibrationLookupData.h"

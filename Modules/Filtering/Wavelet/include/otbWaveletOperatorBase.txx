@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletOperatorBase_txx
-#define __otbWaveletOperatorBase_txx
+#ifndef otbWaveletOperatorBase_txx
+#define otbWaveletOperatorBase_txx
 
 #include "otbWaveletOperatorBase.h"
 

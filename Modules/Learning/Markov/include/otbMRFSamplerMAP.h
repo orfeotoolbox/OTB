@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMRFSamplerMAP_h
-#define __otbMRFSamplerMAP_h
+#ifndef otbMRFSamplerMAP_h
+#define otbMRFSamplerMAP_h
 
 #include "otbMRFSampler.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDisparityMapMedianFilter_txx
-#define __otbDisparityMapMedianFilter_txx
+#ifndef otbDisparityMapMedianFilter_txx
+#define otbDisparityMapMedianFilter_txx
 
 #ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
 #else

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFusionImageBase_h
-#define __otbFusionImageBase_h
+#ifndef otbFusionImageBase_h
+#define otbFusionImageBase_h
 
 #include "itkTernaryFunctorImageFilter.h"
 #include "itkNumericTraits.h"

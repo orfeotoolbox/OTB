@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFilterFunctionValues_h
-#define __otbFilterFunctionValues_h
+#ifndef otbFilterFunctionValues_h
+#define otbFilterFunctionValues_h
 
 #include <vector>
 #include <iostream>

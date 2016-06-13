@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCurlHelperStub_h
-#define __otbCurlHelperStub_h
+#ifndef otbCurlHelperStub_h
+#define otbCurlHelperStub_h
 
 #include "otbCurlHelperInterface.h"
 

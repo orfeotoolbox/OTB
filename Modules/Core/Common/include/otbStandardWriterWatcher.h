@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStandardWriterWatcher_h
-#define __otbStandardWriterWatcher_h
+#ifndef otbStandardWriterWatcher_h
+#define otbStandardWriterWatcher_h
 
 #include "otbWriterWatcherBase.h"
 

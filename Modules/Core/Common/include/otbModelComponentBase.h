@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbModelComponentBase_h
-#define __otbModelComponentBase_h
+#ifndef otbModelComponentBase_h
+#define otbModelComponentBase_h
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

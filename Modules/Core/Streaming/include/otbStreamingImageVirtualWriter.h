@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingImageVirtualWriter_h
-#define __otbStreamingImageVirtualWriter_h
+#ifndef otbStreamingImageVirtualWriter_h
+#define otbStreamingImageVirtualWriter_h
 
 #include "itkMacro.h"
 #include "itkImageToImageFilter.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEckert4MapProjection_h
-#define __otbEckert4MapProjection_h
+#ifndef otbEckert4MapProjection_h
+#define otbEckert4MapProjection_h
 
 #include "otbGenericMapProjection.h"
 

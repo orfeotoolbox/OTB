@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHistogramOfOrientedGradientCovariantImageFunction_h
-#define __otbHistogramOfOrientedGradientCovariantImageFunction_h
+#ifndef otbHistogramOfOrientedGradientCovariantImageFunction_h
+#define otbHistogramOfOrientedGradientCovariantImageFunction_h
 
 #include "itkImageFunction.h"
 #include "itkFixedArray.h"

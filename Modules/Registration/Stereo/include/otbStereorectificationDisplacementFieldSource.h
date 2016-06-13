@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStereorectificationDisplacementFieldSource_h
-#define __otbStereorectificationDisplacementFieldSource_h
+#ifndef otbStereorectificationDisplacementFieldSource_h
+#define otbStereorectificationDisplacementFieldSource_h
 
 #include "itkImageSource.h"
 #include "otbGenericRSTransform.h"

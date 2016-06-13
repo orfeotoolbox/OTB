@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
    =========================================================================*/
-#ifndef __otbNumberOfDivisionsStrippedStreamingManager_h
-#define __otbNumberOfDivisionsStrippedStreamingManager_h
+#ifndef otbNumberOfDivisionsStrippedStreamingManager_h
+#define otbNumberOfDivisionsStrippedStreamingManager_h
 
 #include "otbStreamingManager.h"
 #include "itkImageRegionSplitterSlowDimension.h"

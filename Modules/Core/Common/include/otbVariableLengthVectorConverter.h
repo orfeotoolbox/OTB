@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVariableLengthVectorConverter_h
-#define __otbVariableLengthVectorConverter_h
+#ifndef otbVariableLengthVectorConverter_h
+#define otbVariableLengthVectorConverter_h
 
 #include "itkProcessObject.h"
 #include "itkVariableLengthVector.h"

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMRFEnergyPotts_h
-#define __otbMRFEnergyPotts_h
+#ifndef otbMRFEnergyPotts_h
+#define otbMRFEnergyPotts_h
 
 #include "otbMRFEnergy.h"
 

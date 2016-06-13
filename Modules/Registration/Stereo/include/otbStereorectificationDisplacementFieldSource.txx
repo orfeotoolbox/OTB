@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStereoSensorModelToElevationMapFilter_txx
-#define __otbStereoSensorModelToElevationMapFilter_txx
+#ifndef otbStereoSensorModelToElevationMapFilter_txx
+#define otbStereoSensorModelToElevationMapFilter_txx
 
 #include "otbStereorectificationDisplacementFieldSource.h"
 #include "itkProgressReporter.h"

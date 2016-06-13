@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperRAMParameter_h
-#define __otbWrapperRAMParameter_h
+#ifndef otbWrapperRAMParameter_h
+#define otbWrapperRAMParameter_h
 
 #include "otbWrapperNumericalParameter.h"
 

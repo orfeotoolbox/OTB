@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbShiftScaleImageFilter_h
-#define __otbShiftScaleImageFilter_h
+#ifndef otbShiftScaleImageFilter_h
+#define otbShiftScaleImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkVariableLengthVector.h"

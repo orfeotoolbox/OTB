@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbJPEG2000ImageIOFactory_h
-#define __otbJPEG2000ImageIOFactory_h
+#ifndef otbJPEG2000ImageIOFactory_h
+#define otbJPEG2000ImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
 

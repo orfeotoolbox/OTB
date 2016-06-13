@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
    =========================================================================*/
-#ifndef __otbTileDimensionTiledStreamingManager_h
-#define __otbTileDimensionTiledStreamingManager_h
+#ifndef otbTileDimensionTiledStreamingManager_h
+#define otbTileDimensionTiledStreamingManager_h
 
 #include "otbStreamingManager.h"
 

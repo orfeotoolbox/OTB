@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAmplitudeFunctor_h
-#define __otbAmplitudeFunctor_h
+#ifndef otbAmplitudeFunctor_h
+#define otbAmplitudeFunctor_h
 
 #include "otbChannelSelectorFunctor.h"
 

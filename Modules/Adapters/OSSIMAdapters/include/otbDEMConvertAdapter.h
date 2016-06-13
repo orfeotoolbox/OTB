@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbDEMConvertAdapter_h
-#define __otbDEMConvertAdapter_h
+#ifndef otbDEMConvertAdapter_h
+#define otbDEMConvertAdapter_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"

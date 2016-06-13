@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbIkonosImageMetadataInterface_h
-#define __otbIkonosImageMetadataInterface_h
+#ifndef otbIkonosImageMetadataInterface_h
+#define otbIkonosImageMetadataInterface_h
 
 #include "otbOpticalImageMetadataInterface.h"
 

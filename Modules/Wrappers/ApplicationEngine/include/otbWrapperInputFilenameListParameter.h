@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperInputFilenameListParameter_h
-#define __otbWrapperInputFilenameListParameter_h
+#ifndef otbWrapperInputFilenameListParameter_h
+#define otbWrapperInputFilenameListParameter_h
 
 #include <string>
 #include "otbWrapperStringParameter.h"

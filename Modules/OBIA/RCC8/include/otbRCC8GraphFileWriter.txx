@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8GraphFileWriter_txx
-#define __otbRCC8GraphFileWriter_txx
+#ifndef otbRCC8GraphFileWriter_txx
+#define otbRCC8GraphFileWriter_txx
 
 #include "otbRCC8GraphFileWriter.h"
 #include "otbRCC8VertexIterator.h"

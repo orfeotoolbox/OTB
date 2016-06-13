@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFlusserMomentsImageFunction_h
-#define __otbFlusserMomentsImageFunction_h
+#ifndef otbFlusserMomentsImageFunction_h
+#define otbFlusserMomentsImageFunction_h
 
 #include "itkImageFunction.h"
 #include "itkFixedArray.h"

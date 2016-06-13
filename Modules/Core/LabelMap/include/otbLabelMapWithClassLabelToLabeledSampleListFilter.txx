@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapWithClassLabelToLabeledSampleListFilter_txx
-#define __otbLabelMapWithClassLabelToLabeledSampleListFilter_txx
+#ifndef otbLabelMapWithClassLabelToLabeledSampleListFilter_txx
+#define otbLabelMapWithClassLabelToLabeledSampleListFilter_txx
 
 #include "otbLabelMapWithClassLabelToLabeledSampleListFilter.h"
 #include "itkDataObject.h"

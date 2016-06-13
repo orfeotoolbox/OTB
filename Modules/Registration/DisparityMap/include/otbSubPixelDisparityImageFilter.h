@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSubPixelDisparityImageFilter_h
-#define __otbSubPixelDisparityImageFilter_h
+#ifndef otbSubPixelDisparityImageFilter_h
+#define otbSubPixelDisparityImageFilter_h
 
 #include "otbPixelWiseBlockMatchingImageFilter.h"
 

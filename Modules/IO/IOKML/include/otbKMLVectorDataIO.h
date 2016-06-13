@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKMLVectorDataIO_h
-#define __otbKMLVectorDataIO_h
+#ifndef otbKMLVectorDataIO_h
+#define otbKMLVectorDataIO_h
 
 #include <string>
 
@@ -143,4 +143,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbKMLVectorDataIO_h
+#endif // otbKMLVectorDataIO_h

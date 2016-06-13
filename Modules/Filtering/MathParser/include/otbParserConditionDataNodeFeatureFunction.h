@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbParserConditionDataNodeFeatureFunction_h
-#define __otbParserConditionDataNodeFeatureFunction_h
+#ifndef otbParserConditionDataNodeFeatureFunction_h
+#define otbParserConditionDataNodeFeatureFunction_h
 
 #include "otbDataNodeImageFunction.h"
 #include "otbPolyLineImageConstIterator.h"

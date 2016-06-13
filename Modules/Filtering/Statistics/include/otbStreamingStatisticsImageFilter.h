@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingStatisticsImageFilter_h
-#define __otbStreamingStatisticsImageFilter_h
+#ifndef otbStreamingStatisticsImageFilter_h
+#define otbStreamingStatisticsImageFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "itkNumericTraits.h"

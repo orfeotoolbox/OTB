@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8GraphSource_txx
-#define __otbRCC8GraphSource_txx
+#ifndef otbRCC8GraphSource_txx
+#define otbRCC8GraphSource_txx
 
 #include "otbRCC8GraphSource.h"
 

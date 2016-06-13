@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeometriesToGeometriesFilter_h
-#define __otbGeometriesToGeometriesFilter_h
+#ifndef otbGeometriesToGeometriesFilter_h
+#define otbGeometriesToGeometriesFilter_h
 
 /**\ingroup GeometriesFilters
  * \file    otbGeometriesToGeometriesFilter.h
@@ -391,4 +391,4 @@ protected:
 #include "otbGeometriesToGeometriesFilter.txx"
 #endif
 
-#endif // __otbGeometriesToGeometriesFilter_h
+#endif // otbGeometriesToGeometriesFilter_h

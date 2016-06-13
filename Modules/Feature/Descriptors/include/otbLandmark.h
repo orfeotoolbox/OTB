@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLandmark_h
-#define __otbLandmark_h
+#ifndef otbLandmark_h
+#define otbLandmark_h
 
 #include "itkDataObject.h"
 #include "otbMacro.h"

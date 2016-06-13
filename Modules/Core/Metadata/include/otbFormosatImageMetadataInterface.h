@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFormosatImageMetadataInterface_h
-#define __otbFormosatImageMetadataInterface_h
+#ifndef otbFormosatImageMetadataInterface_h
+#define otbFormosatImageMetadataInterface_h
 
 #include "otbOpticalImageMetadataInterface.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMorphologicalPyramidResampler_h
-#define __otbMorphologicalPyramidResampler_h
+#ifndef otbMorphologicalPyramidResampler_h
+#define otbMorphologicalPyramidResampler_h
 
 #include "itkImageToImageFilter.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTransform_h
-#define __otbTransform_h
+#ifndef otbTransform_h
+#define otbTransform_h
 
 #include "itkTransform.h"
 #include "vnl/vnl_vector_fixed.h"

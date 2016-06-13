@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTileMapImageIO_h
-#define __otbTileMapImageIO_h
+#ifndef otbTileMapImageIO_h
+#define otbTileMapImageIO_h
 
 
 /* C++ Libraries */
@@ -225,4 +225,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbTileMapImageIO_h
+#endif // otbTileMapImageIO_h

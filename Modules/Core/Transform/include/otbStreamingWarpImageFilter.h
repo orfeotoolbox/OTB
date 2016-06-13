@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingWarpImageFilter_h
-#define __otbStreamingWarpImageFilter_h
+#ifndef otbStreamingWarpImageFilter_h
+#define otbStreamingWarpImageFilter_h
 
 #include "otbWarpImageFilter.h"
 #include "otbStreamingTraits.h"
