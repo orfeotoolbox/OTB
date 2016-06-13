@@ -1,9 +1,15 @@
-if(NOT __EXTERNAL_OPENJPEG__)
-set(__EXTERNAL_OPENJPEG__ 1)
+if( __EXTERNAL_OPENJPEG__)
+  return()
+else()
+  set(__EXTERNAL_OPENJPEG__ 1)
+endif()
 
 if(USE_SYSTEM_OPENJPEG)
-  message(STATUS "  Using OpenJpeg system version")
-else()
+  message(STATUS "  Using OpenJPEG system version")
+  return()
+endif()
+
+
   SETUP_SUPERBUILD(PROJECT OPENJPEG)
   message(STATUS "  Using OpenJPEG SuperBuild version")
 
@@ -46,12 +52,4 @@ else()
         CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 
-  set(_SB_OPENJPEG_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-  if(WIN32)
-    set(_SB_OPENJPEG_LIBRARY ${SB_INSTALL_PREFIX}/lib/openjp2.lib)
-  elseif(UNIX)
-    set(_SB_OPENJPEG_LIBRARY ${SB_INSTALL_PREFIX}/lib/libopenjp2${CMAKE_SHARED_LIBRARY_SUFFIX})
-  endif()
-
-endif()
-endif()
+    SUPERBUILD_UPDATE_CMAKE_VARIABLES(OPENJPEG FALSE)

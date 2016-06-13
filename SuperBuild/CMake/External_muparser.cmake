@@ -1,9 +1,14 @@
-if(NOT __EXTERNAL_MUPARSER__)
-set(__EXTERNAL_MUPARSER__ 1)
+if( __EXTERNAL_MUPARSER__)
+  return()
+else()
+  set(__EXTERNAL_MUPARSER__ 1)
+endif()
 
 if(USE_SYSTEM_MUPARSER)
   message(STATUS "  Using muParser system version")
-else()
+  return()
+endif()
+
   SETUP_SUPERBUILD(PROJECT MUPARSER)
   message(STATUS "  Using muParser SuperBuild version")
 
@@ -22,14 +27,6 @@ else()
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy
         ${CMAKE_SOURCE_DIR}/patches/MUPARSER/CMakeLists.txt
         ${MUPARSER_SB_SRC}
-    )
+        )
 
-  set(_SB_MUPARSER_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-  if(WIN32)
-    set(_SB_MUPARSER_LIBRARY ${SB_INSTALL_PREFIX}/lib/muparser.lib)
-  elseif(UNIX)
-    set(_SB_MUPARSER_LIBRARY ${SB_INSTALL_PREFIX}/lib/libmuparser${CMAKE_SHARED_LIBRARY_SUFFIX})
-  endif()
-
-endif()
-endif()
+  SUPERBUILD_UPDATE_CMAKE_VARIABLES(MUPARSER FALSE)

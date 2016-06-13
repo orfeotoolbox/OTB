@@ -1,9 +1,14 @@
-if(NOT __EXTERNAL_SQLITE__)
-set(__EXTERNAL_SQLITE__ 1)
+if( __EXTERNAL_SQLITE__)
+  return()
+else()
+  set(__EXTERNAL_SQLITE__ 1)
+endif()
 
 if(USE_SYSTEM_SQLITE)
   message(STATUS "  Using SQLite system version")
-else()
+  return()
+endif()
+
   SETUP_SUPERBUILD(PROJECT SQLITE)
   message(STATUS "  Using SQLite SuperBuild version")
 
@@ -29,6 +34,3 @@ else()
   elseif(UNIX)
     set(_SB_SQLITE_LIBRARY ${SB_INSTALL_PREFIX}/lib/libsqlite3${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-
-endif()
-endif()

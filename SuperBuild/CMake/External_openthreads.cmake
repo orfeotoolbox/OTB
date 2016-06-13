@@ -1,13 +1,15 @@
-if(NOT __EXTERNAL_OPENTHREADS__)
-set(__EXTERNAL_OPENTHREADS__ 1)
-
-if(MSVC)
-set(USE_SYSTEM_OPENTHREADS OFF)
+if( __EXTERNAL_OPENTHREADS__)
+  return()
+else()
+  set(__EXTERNAL_OPENTHREADS__ 1)
 endif()
 
 if(USE_SYSTEM_OPENTHREADS)
-  message(STATUS "  Using OpenThread system version")
-else()
+  message(STATUS "  Using OpenThreads system version")
+  return()
+endif()
+
+
   SETUP_SUPERBUILD(PROJECT OPENTHREADS)
   message(STATUS "  Using OpenThreads SuperBuild version")
 
@@ -58,6 +60,3 @@ else()
   elseif(UNIX)
     set(_SB_OPENTHREADS_LIBRARY ${SB_INSTALL_PREFIX}/lib/libOpenThreads${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-
-endif()
-endif()

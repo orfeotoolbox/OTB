@@ -1,15 +1,14 @@
-if(NOT __EXTERNAL_OSSIM__)
-set(__EXTERNAL_OSSIM__ 1)
-
-# OSGeo4W provides an "ossim" package : use it otherwise if it is installed and not used by OTB
-# we get conflicts (because OSGeo4W include dir is included for other dependencies
-#if(WIN32)
-#  set(DEFAULT_USE_SYSTEM_OSSIM  ON)
-#endif()
+if( __EXTERNAL_OSSIM__)
+  return()
+else()
+  set(__EXTERNAL_OSSIM__ 1)
+endif()
 
 if(USE_SYSTEM_OSSIM)
   message(STATUS "  Using OSSIM system version")
-else()
+  return()
+endif()
+
   SETUP_SUPERBUILD(PROJECT OSSIM)
   message(STATUS "  Using OSSIM SuperBuild version")
 
@@ -71,18 +70,8 @@ else()
     DEPENDERS configure )
 
 
-    if(APPLE)
-      SUPERBUILD_PATCH_SOURCE(OSSIM)
-  endif()
+
+    SUPERBUILD_PATCH_SOURCE(OSSIM)
 
 
-  set(_SB_OSSIM_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-  if(WIN32)
-    set(_SB_OSSIM_LIBRARY ${SB_INSTALL_PREFIX}/lib/ossim.lib)
-  elseif(UNIX)
-    set(_SB_OSSIM_LIBRARY ${SB_INSTALL_PREFIX}/lib/libossim${CMAKE_SHARED_LIBRARY_SUFFIX})
-  endif()
-
-endif()
-
-endif()
+SUPERBUILD_UPDATE_CMAKE_VARIABLES(OSSIM FALSE)

@@ -1,9 +1,14 @@
-if(NOT __EXTERNAL_MUPARSERX__)
-set(__EXTERNAL_MUPARSERX__ 1)
+if( __EXTERNAL_MUPARSERX__)
+  return()
+else()
+  set(__EXTERNAL_MUPARSERX__ 1)
+endif()
 
 if(USE_SYSTEM_MUPARSERX)
   message(STATUS "  Using muParserX system version")
-else()
+  return()
+endif()
+
   SETUP_SUPERBUILD(PROJECT MUPARSERX)
   message(STATUS "  Using muParserX SuperBuild version")
 
@@ -40,11 +45,4 @@ else()
     ${MUPARSERX_SB_SRC}/parser/
     )
 
-  set(_SB_MUPARSERX_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-  if(WIN32)
-    set(_SB_MUPARSERX_LIBRARY ${SB_INSTALL_PREFIX}/lib/muparserx.lib)
-  elseif(UNIX)
-    set(_SB_MUPARSERX_LIBRARY ${SB_INSTALL_PREFIX}/lib/libmuparserx${CMAKE_SHARED_LIBRARY_SUFFIX})
-  endif()
-endif()
-endif()
+  SUPERBUILD_UPDATE_CMAKE_VARIABLES(MUPARSERX FALSE)

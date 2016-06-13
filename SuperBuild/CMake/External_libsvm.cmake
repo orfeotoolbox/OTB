@@ -1,9 +1,14 @@
-if(NOT __EXTERNAL_LIBSVM__)
-set(__EXTERNAL_LIBSVM__ 1)
+if( __EXTERNAL_LIBSVM__)
+  return()
+else()
+  set(__EXTERNAL_LIBSVM__ 1)
+endif()
 
 if(USE_SYSTEM_LIBSVM)
   message(STATUS "  Using LibSVM system version")
-else()
+  return()
+endif()
+
   SETUP_SUPERBUILD(PROJECT LIBSVM)
   message(STATUS "  Using LibSVM SuperBuild version")
 
@@ -26,12 +31,5 @@ else()
       ${LIBSVM_SB_SRC}
       )
 
- set(_SB_LIBSVM_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-  if(WIN32)
-    set(_SB_LIBSVM_LIBRARY ${SB_INSTALL_PREFIX}/lib/svm.lib)
-  elseif(UNIX)
-    set(_SB_LIBSVM_LIBRARY ${SB_INSTALL_PREFIX}/lib/libsvm${CMAKE_SHARED_LIBRARY_SUFFIX})
-  endif()
 
-endif()
-endif()
+  SUPERBUILD_UPDATE_CMAKE_VARIABLES(LIBSVM FALSE)
