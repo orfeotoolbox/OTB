@@ -78,30 +78,27 @@ private:
       "class). \n\nFirst of all, the geometries must be analyzed by the PolygonClassStatistics application "
       "to compute statistics about the geometries, which are summarized in an xml file. "
       "\nThen, this xml file must be given as input to this application (parameter instats).\n\n"
-      "There are three different strategies to select samples (parameter sampstrat) :\n"
-      "  - minnbsamp (default) : randomly select samples in such a way that the final sampled\n" 
-      "    classes have the size of the smallest one.\n"
-      "  - nbsampallclasses : randomly select samples in such a way that the final sampled\n" 
-      "    classes have a size of N (with N below or equal to the size of the smallest class).\n"
-      "  - nbsampbyclass : set the required number for each class manually with the\n" 
-      "    following pattern : \"class_name1:nb_samples1 class_name2:nb_samples2 ...\".\n"
-      "Once the strategy is selected, the application outputs samples which are spatially uniformly distributed "
+      "The input support image and the input training vectors shall be given in "
+      "parameters 'in' and 'vec' respectively. Only the sampling grid (origin, size, spacing)"
+      "will be read in the input image.\n"
+      "There are several strategies to select samples (parameter strat) :\n"
+      "  - smallest (default) : select the same number of sample in each class\n" 
+      "    so that the smallest one is fully sampled.\n"
+      "  - constant : select the same number of samples N in each class\n" 
+      "    (with N below or equal to the size of the smallest class).\n"
+      "  - byclass : set the required number for each class manually, with an input CSV file\n" 
+      "    (first column is class name, second one is the required samples number).\n"
+      "There is also a choice on the sampling type to performs :\n"
+      "  - periodic : select samples uniformly distributed\n"
+      "  - random : select samples randomly distributed\n"
+      "Once the strategy and type are selected, the application outputs samples positions"
       "(parameter out).\n\n"
       
-      "In addition to the parameters instats, sampstrat, and out, some others must be compulsorily specified:\n"
-      "  - in : an input image must be provided to this application (parameter in). Here, the values of its pixels are not used;\n"
-      "    the purpose is rather to provide geometry information so that the selected samples can be outputted as physical points.\n"
-      "  - vec : input training vector data set, from where to pick samples.\n"
-      "  - layer : index specifying from which layer to pick samples.\n"
-      "  - field : set the field of the selected samples.\n"
-      
-      "\nSome other optional arguments can also be passed to the application:\n"
+      "The other parameters to look at are :\n"
+      "  - layer : index specifying from which layer to pick geometries.\n"
+      "  - field : set the field name containing the class.\n"
       "  - mask : an optional raster mask can be used to discard samples.\n"
-      "  - outrates : allows to output a txt file that summarizes the sampling rates for each class.\n"
-      "  - outsampvec / insampvec : internally, this application uses a random lists of bits to decide\n"
-      "    whether to select a sample or not. If users wish they could exactly repeat the selection,\n "
-      "    they should output these lists in a txt file, and reload it the next time. This is the purpose of these two parameters.\n"
-      "  - maxsampvecsize : allows to limit the size of the lists of bits mentioned above, to optimize the memory footprint.\n"
+      "  - outrates : allows to output a CSV file that summarizes the sampling rates for each class.\n"
       
       "\nAs with the PolygonClassStatistics application, different types  of geometry are supported : "
       "polygons, lines, points. \nThe behavior of this application is different for each type of geometry :\n"
@@ -141,7 +138,7 @@ private:
     SetParameterDescription("sampler.periodic","Takes samples regularly spaced");
 
     AddChoice("sampler.random","Random sampler");
-    SetParameterDescription("sampler.random","Takes samples with a random test at a given probability.");
+    SetParameterDescription("sampler.random","The positions to select are randomly shuffled.");
 
     AddParameter(ParameterType_Choice, "strat", "Sampling strategy");
 
