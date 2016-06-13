@@ -7,55 +7,58 @@
 
 int main(int argc, char * argv[])
 {
-    const char *pszFormat = argv[1];
-    GDALDriver *poDriver;
-    char **papszMetadata;
+  const char *pszFormat = argv[1];
+  char **papszMetadata;
 
 	GDALAllRegister();
 
 	// ------------------- step 1 -------------------
-    poDriver = GetGDALDriverManager()->GetDriverByName(pszFormat);
 
-    if( poDriver == NULL )
-    {
-		std::cout << "poDriver NULL" << std::endl;
-        return EXIT_FAILURE; //FAIL
-	}
+  GDALDriverH hDriver = GDALGetDriverByName( pszFormat );
 
-    papszMetadata = poDriver->GetMetadata();
-    if( CSLFetchBoolean( papszMetadata, GDAL_DCAP_CREATE, FALSE ) )
-        printf( "Driver %s supports Create() method.\n", pszFormat );
-    if( CSLFetchBoolean( papszMetadata, GDAL_DCAP_CREATECOPY, FALSE ) )
-        printf( "Driver %s supports CreateCopy() method.\n", pszFormat );
+  if( hDriver == NULL ) {
+  printf("poDriver == NULL\n" );
+  return EXIT_FAILURE;
+  }
 
-    // ------------------- step 2 -------------------
-    GDALDataset *poDstDS;
-    char **papszOptions = NULL;
+  papszMetadata = GDALGetMetadata( hDriver, NULL );
 
-    poDstDS = poDriver->Create( argv[2], 512, 512, 1, GDT_Byte,
-                                papszOptions );
+  if( CSLFetchBoolean( papszMetadata, GDAL_DCAP_CREATE, FALSE ) )
+    printf( "Driver %s supports Create() method.\n", pszFormat );
+  else {
+  printf( "Driver %s does supports Create() method.\n", pszFormat );
+  return EXIT_FAILURE;
+  }
 
-  	// ------------------- step 3 -------------------
-    double adfGeoTransform[6] = { 444720, 30, 0, 3751320, 0, -30 };
-    OGRSpatialReference oSRS;
-    char *pszSRS_WKT = NULL;
-    GDALRasterBand *poBand;
-    GByte abyRaster[512*512];
+  // ------------------- step 2 -------------------
 
-    poDstDS->SetGeoTransform( adfGeoTransform );
+  GDALDatasetH hDstDS;
+  char **papszOptions = NULL;
+  hDstDS = GDALCreate( hDriver, argv[2], 512, 512, 1, GDT_Byte,
+                       papszOptions );
 
-    oSRS.SetUTM( 11, TRUE );
-    oSRS.SetWellKnownGeogCS( "NAD27" );
-    oSRS.exportToWkt( &pszSRS_WKT );
-    poDstDS->SetProjection( pszSRS_WKT );
-    CPLFree( pszSRS_WKT );
+  // ------------------- step 3 -------------------
 
-    poBand = poDstDS->GetRasterBand(1);
-    poBand->RasterIO( GF_Write, 0, 0, 512, 512,
-                      abyRaster, 512, 512, GDT_Byte, 0, 0 );
-
+  double adfGeoTransform[6] = { 444720, 30, 0, 3751320, 0, -30 };
+  OGRSpatialReferenceH hSRS;
+  char *pszSRS_WKT = NULL;
+  GDALRasterBandH hBand;
+  GByte abyRaster[512*512];
+  GDALSetGeoTransform( hDstDS, adfGeoTransform );
+  hSRS = OSRNewSpatialReference( NULL );
+  OSRSetUTM( hSRS, 11, TRUE );
+  OSRSetWellKnownGeogCS( hSRS, "NAD27" );
+  OSRExportToWkt( hSRS, &pszSRS_WKT );
+  OSRDestroySpatialReference( hSRS );
+  GDALSetProjection( hDstDS, pszSRS_WKT );
+  CPLFree( pszSRS_WKT );
+  hBand = GDALGetRasterBand( hDstDS, 1 );
+  GDALRasterIO( hBand, GF_Write, 0, 0, 512, 512,
+                abyRaster, 512, 512, GDT_Byte, 0, 0 );
 	// ------------------- step 4 -------------------
-    GDALClose( (GDALDatasetH) poDstDS );
 
-    return EXIT_SUCCESS;// SUCCESS
+/* Once we're done, close properly the dataset */
+  GDALClose( hDstDS );
+
+  return EXIT_SUCCESS;// SUCCESS
 }

@@ -8,9 +8,12 @@ int main(int argc, char * argv[])
 {
   GDALAllRegister();
 
-  GDALDriverH hDriver = GDALGetDriverByName( argv[3] );
+  const char *pszFormat = argv[3];
+
+  GDALDriverH hDriver = GDALGetDriverByName( pszFormat );
 
   if( hDriver == NULL ) {
+  printf ("gdalCreateCopyTest.cxx: hDriver == NULL ");
   return EXIT_FAILURE;
   }
 
@@ -20,8 +23,14 @@ int main(int argc, char * argv[])
   papszCreateOptions = CSLAddString( papszCreateOptions, argv[4] );
   }
 
+  char **papszMetadata;
+  papszMetadata = GDALGetMetadata( hDriver, NULL );
+  if( CSLFetchBoolean( papszMetadata, GDAL_DCAP_CREATECOPY, FALSE ) )
+    printf( "Driver %s supports CreateCopy() method.\n", pszFormat );
+
   GDALDatasetH hSrcDS = GDALOpen( argv[1], GA_ReadOnly );
   if( hSrcDS == NULL ) {
+  printf ("gdalCreateCopyTest.cxx: hSrcDS == NULL ");
   return EXIT_FAILURE;
   }
 
@@ -29,15 +38,18 @@ int main(int argc, char * argv[])
   hDstDS = GDALCreateCopy( hDriver, argv[2], hSrcDS, FALSE,   NULL, NULL, NULL );
 
   if( hDstDS == NULL )
+    {
+    printf ("gdalCreateCopyTest.cxx: hDstDS == NULL ");
     return EXIT_FAILURE;
-}
+    }
+
 
 /* Once we're done, close properly the dataset */
-if( hDstDS != NULL )
-  GDALClose( hDstDS );
+  if( hDstDS != NULL )
+    GDALClose( hDstDS );
 
-GDALClose(hSrcDS);
+  GDALClose(hSrcDS);
 
-return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 
 }
