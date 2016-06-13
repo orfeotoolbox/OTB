@@ -132,7 +132,7 @@ macro(ADD_SUPERBUILD_CONFIGURE_VAR project var name)
   endif()
 endmacro(ADD_SUPERBUILD_CONFIGURE_VAR)
 
-macro(SUPERBUILD_PATCH_SOURCE project external_project_step_name)
+macro(SUPERBUILD_PATCH_SOURCE project)
   set(${project}_PATCH_DIR ${CMAKE_SOURCE_DIR}/patches/${project})
   string(TOLOWER ${project} project_)
   if(WIN32)
@@ -160,3 +160,34 @@ macro(SUPERBUILD_PATCH_SOURCE project external_project_step_name)
   endif()
 
 endmacro(SUPERBUILD_PATCH_SOURCE)
+
+macro(SUPERBUILD_UPDATE_CMAKE_VARIABLES PROJECT with_prefix)
+
+  if("${ARGV3}" STREQUAL "")
+    string(TOLOWER ${PROJECT} lib_file_we)
+  else()
+    set(lib_file_we "${ARGV3}")
+  endif()
+
+  if("${ARGV4}" STREQUAL "")
+    set(include_dir "include")
+  else()
+    set(include_dir "include/${ARGV4}")
+  endif()
+
+  if(WIN32)
+    if(${with_prefix})
+      set(lib_file lib${lib_file_we}${CMAKE_LINK_LIBRARY_SUFFIX})
+    else()
+      set(lib_file ${lib_file_we}${CMAKE_LINK_LIBRARY_SUFFIX})
+    endif()
+  else()
+    set(lib_file "lib${lib_file_we}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+  endif()
+
+  set(_SB_${PROJECT}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/${include_dir})
+  set(_SB_${PROJECT}_LIBRARY ${SB_INSTALL_PREFIX}/lib/${lib_file})
+
+  message( "lib/${lib_file}  '${include_dir}'")
+
+endmacro()
