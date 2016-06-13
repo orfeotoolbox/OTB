@@ -29,14 +29,14 @@ macro(gdal_try_run msg_type var source_file)
 try_run(${var} COMPILE_${var} ${CMAKE_CURRENT_BINARY_DIR}
 ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/${source_file}
 CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-w" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
-COMPILE_OUTPUT_VARIABLE RUN_OUTPUT_${var}
+COMPILE_OUTPUT_VARIABLE COMPILE_OUTPUT_${var}
 RUN_OUTPUT_VARIABLE RUN_OUTPUT_${var}
 ARGS ${ARGN}
 )
 
 
 if(NOT COMPILE_${var})
-  message(${msg_type} "Compiling Test ${var} - Failed \n
+  message(FATAL_ERROR "Compiling Test ${var} - Failed \n
 COMPILE_OUTPUT_${var}: '${COMPILE_OUTPUT_${var}}'")
 endif()
 if(${var})
@@ -77,12 +77,15 @@ endif()
 
 #check OGR
 gdal_try_run(FATAL_ERROR GDAL_HAS_OGR gdalOGRTest.cxx)
+
 # check formats TIFF, GeoTIFF, JPEG, JPEG2000, HDF5
 # Note : exact format names can be found here http://www.gdal.org/formats_list.html
 
-gdal_try_run(FATAL_ERROR GDAL_HAS_JPEG gdalFormatsTest.cxx JPEG)
+gdal_try_run(STATUS GDAL_FORMATS_LIST gdalFormatsListTest.c ${TEMP}/gdalFormatsList.csv)
 
-gdal_try_run(FATAL_ERROR GDAL_HAS_GTiff gdalFormatsTest.cxx GTiff)
+gdal_try_run(FATAL_ERROR GDAL_HAS_JPEG gdalFormatsTest.c JPEG)
+
+gdal_try_run(FATAL_ERROR GDAL_HAS_GTiff gdalFormatsTest.c GTiff)
 
 gdal_try_run(FATAL_ERROR GDAL_CAN_CREATE_GTiff gdalCreateTest.cxx GTiff ${TEMP}/testImage.gtif )
 
@@ -91,35 +94,35 @@ gdal_try_run(FATAL_ERROR GDAL_CAN_CREATE_GTiff_BIGTIFF gdalCreateCopyTest.cxx ${
 gdal_try_run(FATAL_ERROR GDAL_CAN_CREATE_JPEG gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.jpeg JPEG)
 
 set(JPEG2000_DRIVER_USED)
-gdal_try_run(STATUS GDAL_HAS_JP2OpenJPEG gdalFormatsTest.cxx JP2OpenJPEG ${TEMP}/gdalFormats.txt)
+gdal_try_run(STATUS GDAL_HAS_JP2OpenJPEG gdalFormatsTest.c JP2OpenJPEG)
 #NOT is neeed because it keep the output of try_run execution which is non-zero if failed
 if (NOT GDAL_HAS_JP2OpenJPEG)
   set(JPEG2000_DRIVER_USED "OpenJPEG")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JP2OpenJPEG gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2OpenJPEG)
 endif()
 
-gdal_try_run(STATUS GDAL_HAS_JP2KAK gdalFormatsTest.cxx JP2KAK ${TEMP}/gdalFormats.txt)
+gdal_try_run(STATUS GDAL_HAS_JP2KAK gdalFormatsTest.c JP2KAK)
 #NOT is neeed because it keep the output of try_run execution which is non-zero if failed
 if (NOT GDAL_HAS_JP2KAK)
   set(JPEG2000_DRIVER_USED "Kakadu")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JP2KAK gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2KAK)
 endif()
 
-gdal_try_run(STATUS GDAL_HAS_JP2ECW gdalFormatsTest.cxx JP2ECW ${TEMP}/gdalFormats.txt)
+gdal_try_run(STATUS GDAL_HAS_JP2ECW gdalFormatsTest.c JP2ECW)
 #NOT is neeed because it keep the output of try_run execution which is non-zero if failed
 if (NOT GDAL_HAS_JP2ECW)
   set(JPEG2000_DRIVER_USED "ECW")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JP2ECW gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2ECW)
 endif()
 
-gdal_try_run(STATUS GDAL_HAS_JPEG2000 gdalFormatsTest.cxx JPEG2000 ${TEMP}/gdalFormats.txt)
+gdal_try_run(STATUS GDAL_HAS_JPEG2000 gdalFormatsTest.c JPEG2000)
 #NOT is neeed because it keep the output of try_run execution which is non-zero if failed
 if (NOT GDAL_HAS_JPEG2000)
   message(WARNING "JPEG2000 Driver found is 'Jasper'. OTB cannot use this driver. Possible options are OpenJPEG, ECW, Kakadu")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JPEG2000 gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JPEG2000)
 endif()
 
-gdal_try_run(STATUS GDAL_HAS_HDF5 gdalFormatsTest.cxx HDF5)
+gdal_try_run(STATUS GDAL_HAS_HDF5 gdalFormatsTest.c HDF5)
 
 #------------------- TESTS (END)---------------------
 
