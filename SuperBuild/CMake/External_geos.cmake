@@ -25,17 +25,14 @@ else()
       -DGEOS_ENABLE_TESTS:BOOL=OFF
       CMAKE_COMMAND ${SB_CMAKE_COMMAND} )
 
-    ExternalProject_Add_Step(GEOS remove_static
-      COMMAND ${CMAKE_COMMAND} -E remove
-      ${SB_INSTALL_PREFIX}/lib/libgeos.a
-      DEPENDEES install)
-
   set(_SB_GEOS_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   if(WIN32)
     set(_SB_GEOS_LIBRARY ${SB_INSTALL_PREFIX}/lib/geos.lib)
   elseif(UNIX)
     set(_SB_GEOS_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgeos${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
+
+  SUPERBUILD_PATCH_SOURCE(GEOS "nostatic")
 
  endif()
 endif()
