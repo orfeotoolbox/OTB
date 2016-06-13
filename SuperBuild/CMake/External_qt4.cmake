@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_QT4__)
   set(__EXTERNAL_QT4__ 1)
 
   if(USE_SYSTEM_QT4)
-    find_package ( Qt4 )
     message(STATUS "  Using Qt4 system version")
   else()
     SETUP_SUPERBUILD(PROJECT QT4)
@@ -18,7 +17,7 @@ if(NOT __EXTERNAL_QT4__)
     #NOTE: make sure your superbuild install directory does not contain any
     #Qt files from previous install of superbuild QT.
     # declare dependencies
-    ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QT4 ZLIB TIFF PNG SQLITE FREETYPE)
+    ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QT4 ZLIB SQLITE FREETYPE)
 
     #use system libs always for Qt4 as we build them from source or have already in system
     set(QT4_SB_CONFIG)

@@ -156,4 +156,5 @@ macro(SUPERBUILD_PATCH_SOURCE project external_project_step_name)
       DEPENDERS configure
       )
   endif()
+
 endmacro(SUPERBUILD_PATCH_SOURCE)

@@ -113,15 +113,7 @@ set(PACKAGE_NAME OTB)
 set(PACKAGE_LONG_NAME OrfeoToolBox)
 
 if(WIN32)
-  set(EXTRA_CACHE_CONFIG
-    "set(CMAKE_CROSSCOMPILING TRUE)
-     set(WIN32 TRUE)
-     set(MXE_ARCH \"${MXE_ARCH}\")
-     set(MXE_MXEROOT \"${MXE_MXEROOT}\")"
-    )
-
   set(ITK_VERSION_STRING)
-
   set(PACKAGE_PLATFORM_NAME "win")
   if(MXE_TARGET_DIR MATCHES "i686")
     set(MXE_ARCH "i686")
@@ -132,6 +124,13 @@ if(WIN32)
   endif()
   get_filename_component(MXE_MXEROOT ${MXE_TARGET_DIR} PATH)
   get_filename_component(MXE_MXEROOT ${MXE_MXEROOT} PATH)
+  set(EXTRA_CACHE_CONFIG
+    "set(CMAKE_CROSSCOMPILING TRUE)
+     set(WIN32 TRUE)
+     set(MXE_ARCH \"${MXE_ARCH}\")
+     set(MXE_MXEROOT \"${MXE_MXEROOT}\")"
+    )
+
   set(PACKAGE_VERSION_STRING ${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH})
 
 else() #(WIN32)

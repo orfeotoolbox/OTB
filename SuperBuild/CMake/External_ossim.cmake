@@ -8,7 +8,6 @@ set(__EXTERNAL_OSSIM__ 1)
 #endif()
 
 if(USE_SYSTEM_OSSIM)
-  find_package ( Ossim )
   message(STATUS "  Using OSSIM system version")
 else()
   SETUP_SUPERBUILD(PROJECT OSSIM)

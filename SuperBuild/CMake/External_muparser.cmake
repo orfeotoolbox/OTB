@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_MUPARSER__)
 set(__EXTERNAL_MUPARSER__ 1)
 
 if(USE_SYSTEM_MUPARSER)
-  find_package ( MuParser )
   message(STATUS "  Using muParser system version")
 else()
   SETUP_SUPERBUILD(PROJECT MUPARSER)
