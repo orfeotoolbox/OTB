@@ -269,12 +269,7 @@ private:
 	/*
 	 * Returns the process id which process a given region
 	 */
-	unsigned int GetProcFromDivision(unsigned int regionIndex)
-	{
-		if (otb::MPIConfig::Instance()->GetNbProcs()==0)
-			return 0;
-		return ( regionIndex % otb::MPIConfig::Instance()->GetNbProcs());
-	}
+	unsigned int GetProcFromDivision(unsigned int regionIndex);
 
 	/*
 	 * Arranges the splitting layout to match the number of MPI processes
