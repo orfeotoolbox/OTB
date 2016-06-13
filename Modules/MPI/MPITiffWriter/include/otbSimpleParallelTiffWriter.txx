@@ -640,7 +640,7 @@ SimpleParallelTiffWriter<TInputImage>
 	}
 
 	// Wait for rank 0 to finish creating the file
-	MPI_Barrier(MPI_COMM_WORLD);
+	otb::MPIConfig::Instance()->barrier();
 
 	// Open raster (if not in virtual mode)
 	PTIFF* output_raster = NULL;
@@ -659,12 +659,12 @@ SimpleParallelTiffWriter<TInputImage>
 		}
 
 		// Wait for tile offsets to be populated
-		MPI_Barrier(MPI_COMM_WORLD);
+		otb::MPIConfig::Instance()->barrier();
 		close_raster(output_raster);
 
 		// Now open it
 		output_raster = open_raster(m_FileName);
-		MPI_Barrier(MPI_COMM_WORLD);
+		otb::MPIConfig::Instance()->barrier();
 
 		if (output_raster == NULL) {
 			fprintf(stderr, "Could not open output raster\n");
@@ -764,9 +764,10 @@ SimpleParallelTiffWriter<TInputImage>
 	output_raster = NULL;
 
 	// We wait for other process
-	MPI_Barrier(MPI_COMM_WORLD);
+	otb::MPIConfig::Instance()->barrier();
 	overallTime.Stop();
 
+	/* TODO: Use MPIConfig helper instead of MPI methods
 	// Get timings
 	const int nValues = 3;
 	double runtimes[nValues] = {processDuration, writeDuration, numberOfProcessedRegions};
@@ -794,6 +795,7 @@ SimpleParallelTiffWriter<TInputImage>
 	    }
 	  itkDebugMacro( "Overall time:" << overallTime.GetTotal() );
 	  }
+	  */
 
 	/**
 	 * If we ended due to aborting, push the progress up to 1.0 (since
@@ -814,9 +816,10 @@ SimpleParallelTiffWriter<TInputImage>
 	}
 
 	/*
-	 * Writting the geom
+	 * Writting the geom (only master process)
 	 */
-	if (m_WriteGeomFile || m_FilenameHelper->GetWriteGEOMFile())
+	if ( otb::MPIConfig::Instance()->GetMyRank() == 0 &&
+			(m_WriteGeomFile || m_FilenameHelper->GetWriteGEOMFile()) )
 	{
 		otb::ImageKeywordlist otb_kwl;
 		itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
@@ -832,6 +835,9 @@ SimpleParallelTiffWriter<TInputImage>
 	//Reset global shift on input region (box parameter)
 	//It allows to call multiple update over the writer
 	m_ShiftOutputIndex.Fill(0);
+
+	// Wait for other processes
+	otb::MPIConfig::Instance()->barrier();
  }
 
 template <class TInputImage>
