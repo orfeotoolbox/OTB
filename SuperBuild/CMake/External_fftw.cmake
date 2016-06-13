@@ -1,13 +1,13 @@
 if( __EXTERNAL_FFTW__)
   return()
-else()  
+else()
   set(__EXTERNAL_FFTW__ 1)
 endif()
 
 if(USE_SYSTEM_FFTW)
   message(STATUS "  Using FFTW system version")
   return()
-endif()  
+endif()
 
 SETUP_SUPERBUILD(PROJECT FFTW)
 
@@ -46,7 +46,7 @@ ExternalProject_Add(FFTWF
   DEPENDS ${FFTW_DEPENDENCIES}
   )
 
-SUPERBUILD_PATCH_SOURCE(FFTWF "patch-for-at-rpath")
+SUPERBUILD_PATCH_SOURCE(FFTWF)
 
 # Compile the double version of FFTW
 ExternalProject_Add(FFTWD
@@ -70,7 +70,7 @@ ExternalProject_Add(FFTWD
   )
 
 
-SUPERBUILD_PATCH_SOURCE(FFTWD "patch-for-at-rpath")
+SUPERBUILD_PATCH_SOURCE(FFTWD)
 
 ExternalProject_Add(FFTW
   PREFIX FFTW

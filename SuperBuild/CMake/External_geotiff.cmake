@@ -47,7 +47,7 @@ else()
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install)
 
-      SUPERBUILD_PATCH_SOURCE(GEOTIFF "patch-configure-rpath")
+      SUPERBUILD_PATCH_SOURCE(GEOTIFF)
 
   else()
 

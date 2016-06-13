@@ -72,7 +72,7 @@ else()
 
 
     if(APPLE)
-      SUPERBUILD_PATCH_SOURCE(OSSIM "patch-for-at-rpath")
+      SUPERBUILD_PATCH_SOURCE(OSSIM)
   endif()
 
 
