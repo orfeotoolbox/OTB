@@ -20,8 +20,6 @@
 #include "otbSamplingRateCalculator.h"
 #include "otbOGRDataToSamplePositionFilter.h"
 #include "otbStatisticsXMLFileReader.h"
-#include "otbStatisticsXMLFileWriter.h"
-#include "otbPatternSampler.h"
 #include "otbRandomSampler.h"
 
 namespace otb
@@ -51,29 +49,20 @@ public:
   typedef otb::OGRDataToSamplePositionFilter<
     FloatVectorImageType,
     UInt8ImageType,
-    otb::PatternSampler>                            PatternSamplerType;
-  typedef otb::OGRDataToSamplePositionFilter<
-    FloatVectorImageType,
-    UInt8ImageType,
     otb::RandomSampler>                             RandomSamplerType;
   typedef otb::SamplingRateCalculator               RateCalculatorType;
   
   typedef std::map<std::string, unsigned long>      ClassCountMapType;
-  typedef std::map<std::string, std::string>        PatternMapType;
   typedef RateCalculatorType::MapRateType           MapRateType;
   typedef itk::VariableLengthVector<float> MeasurementType;
   typedef otb::StatisticsXMLFileReader<MeasurementType> XMLReaderType;
-  typedef otb::StatisticsXMLFileWriter<MeasurementType> XMLWriterType;
 
 private:
   SampleSelection()
     {
     m_Periodic = PeriodicSamplerType::New();
-    m_Pattern = PatternSamplerType::New();
     m_Random = RandomSamplerType::New();
     m_ReaderStat = XMLReaderType::New();
-    m_WritterPattern = XMLWriterType::New();
-    m_ReaderPattern = XMLReaderType::New();
     m_RateCalculator = RateCalculatorType::New();
     }
 
@@ -150,26 +139,6 @@ private:
 
     AddChoice("sampler.periodic","Periodic sampler");
     SetParameterDescription("sampler.periodic","Takes samples regularly spaced");
-
-    AddChoice("sampler.pattern","Pattern sampler");
-    SetParameterDescription("sampler.pattern","Takes samples according to a pattern.");
-
-    AddParameter(ParameterType_InputFilename, "sampler.pattern.in", "Input sampling patterns");
-    SetParameterDescription("sampler.pattern.in","Input sampling patterns (XML format)."
-      "This file should contains the map of patterns (class name -> pattern string)."
-      "The pattern string can be formated with the following pairs of caracters :"
-      " (0;1), (_;X), (n;y), (N;Y), (.;|). If two pattern strings are given, they"
-      "should be separated by a slash. For instance : 1001010/001001");
-    MandatoryOff("sampler.pattern.in");
-
-    AddParameter(ParameterType_OutputFilename, "sampler.pattern.out", "Output sampling patterns");
-    SetParameterDescription("sampler.pattern.out","Output sampling patterns (formated in a XML format).");
-    MandatoryOff("sampler.pattern.out");
-
-    AddParameter(ParameterType_Int, "sampler.pattern.sizemax", "Maximum size of the sampling patterns");
-    SetParameterDescription("sampler.pattern.sizemax", "Maximum size of the sampling patterns");
-    MandatoryOff("sampler.pattern.sizemax");
-    SetDefaultParameterInt("sampler.pattern.sizemax",256);
 
     AddChoice("sampler.random","Random sampler");
     SetParameterDescription("sampler.random","Takes samples with a random test at a given probability.");
@@ -286,9 +255,7 @@ private:
     // Clear state
     m_RateCalculator->ClearRates();
     m_Periodic->GetFilter()->ClearOutputs();
-    m_Pattern->GetFilter()->ClearOutputs();
     m_Random->GetFilter()->ClearOutputs();
-    m_WritterPattern->CleanInputs();
     
     m_ReaderStat->SetFileName(this->GetParameterString("instats"));
     ClassCountMapType classCount = m_ReaderStat->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
@@ -374,70 +341,8 @@ private:
         m_Periodic->Update();
         }
       break;
-      // pattern
-      case 1:
-        {
-        m_Pattern->SetInput(this->GetParameterImage("in"));
-        m_Pattern->SetOGRData(vectors);
-        m_Pattern->SetOutputPositionContainerAndRates(outputSamples, rates);
-        m_Pattern->SetFieldName(this->GetParameterString("field"));
-        m_Pattern->SetLayerIndex(this->GetParameterInt("layer"));
-        if (IsParameterEnabled("mask") && HasValue("mask"))
-          {
-          m_Pattern->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
-          }
-        
-        // Choice of sampling patterns
-        if (this->IsParameterEnabled("sampler.pattern.in") && 
-            this->HasValue("sampler.pattern.in"))
-          {
-          // Use input patterns
-          m_ReaderPattern->SetFileName(this->GetParameterString("sampler.pattern.in"));
-          PatternMapType inputPatterns =
-            m_ReaderPattern->GetStatisticMapByName<PatternMapType>("samplingPattern");
-          for (PatternMapType::iterator iter = inputPatterns.begin() ;
-               iter != inputPatterns.end() ;
-               ++iter)
-            {
-            otb::PatternSampler::ParameterType param;
-            param.Seed = 0UL;
-            otb::PatternSampler::ImportPatterns(iter->second , param);
-            m_Pattern->GetSamplers()[iter->first]->SetParameters(param);
-            }
-          }
-        else
-          {
-          // generate pattern using sizemax and seed
-          otb::PatternSampler::ParameterType param;
-          param.Seed = itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->GetSeed();
-          param.MaxPatternSize = this->GetParameterInt("sampler.pattern.sizemax");
-          m_Pattern->SetSamplerParameters(param);
-          }
-
-        m_Pattern->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
-        AddProcess(m_Pattern->GetStreamer(),"Selecting positions with pattern sampler...");
-        m_Pattern->Update();
-
-        // Save patterns
-        if (IsParameterEnabled("sampler.pattern.out") && HasValue("sampler.pattern.out"))
-          {
-          PatternMapType outputPatterns;
-          std::string curPattern;
-          PatternSamplerType::SamplerMapType &samplers = m_Pattern->GetSamplers();
-          PatternSamplerType::SamplerMapType::iterator iter = samplers.begin();
-          for (; iter != samplers.end() ; ++iter)
-            {
-            otb::PatternSampler::ExportPatterns(iter->second->GetParameters() , curPattern);
-            outputPatterns[iter->first] = curPattern;
-            }
-          m_WritterPattern->AddInputMap<PatternMapType>("samplingPattern",outputPatterns);
-          m_WritterPattern->SetFileName(this->GetParameterString("sampler.pattern.out"));
-          m_WritterPattern->Update();
-          }
-        }
-      break;
       // random
-      case 2:
+      case 1:
         {
         m_Random->SetInput(this->GetParameterImage("in"));
         m_Random->SetOGRData(vectors);
@@ -462,12 +367,9 @@ private:
   RateCalculatorType::Pointer m_RateCalculator;
   
   PeriodicSamplerType::Pointer m_Periodic;
-  PatternSamplerType::Pointer m_Pattern;
   RandomSamplerType::Pointer m_Random;
   
   XMLReaderType::Pointer m_ReaderStat;
-  XMLReaderType::Pointer m_ReaderPattern;
-  XMLWriterType::Pointer m_WritterPattern;
 };
 
 } // end of namespace Wrapper
