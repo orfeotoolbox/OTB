@@ -1,6 +1,25 @@
-diff -burN geos-3.4.2.orig/src/CMakeLists.txt geos-3.4.2/src/CMakeLists.txt
---- geos-3.4.2.orig/src/CMakeLists.txt	2016-06-13 10:33:31.170294946 +0200
-+++ geos-3.4.2/src/CMakeLists.txt	2016-06-13 10:35:15.630300001 +0200
+Binary files libgeos.org/.git/index and libgeos/.git/index differ
+diff -burN libgeos.org/.git/logs/HEAD libgeos/.git/logs/HEAD
+--- libgeos.org/.git/logs/HEAD	2016-06-14 14:15:23.619557617 +0200
++++ libgeos/.git/logs/HEAD	2016-06-14 09:15:34.507698261 +0200
+@@ -1 +1 @@
+-0000000000000000000000000000000000000000 714127ef49087634e7f6687424fdf041d18c3d0f Rashad Kanavath <rashad.kanavath@c-s.fr> 1465906523 +0200	clone: from https://github.com/libgeos/libgeos
++0000000000000000000000000000000000000000 714127ef49087634e7f6687424fdf041d18c3d0f Rashad Kanavath <rashad.kanavath@c-s.fr> 1465888534 +0200	clone: from https://github.com/libgeos/libgeos
+diff -burN libgeos.org/.git/logs/refs/heads/svn-trunk libgeos/.git/logs/refs/heads/svn-trunk
+--- libgeos.org/.git/logs/refs/heads/svn-trunk	2016-06-14 14:15:23.619557617 +0200
++++ libgeos/.git/logs/refs/heads/svn-trunk	2016-06-14 09:15:34.507698261 +0200
+@@ -1 +1 @@
+-0000000000000000000000000000000000000000 714127ef49087634e7f6687424fdf041d18c3d0f Rashad Kanavath <rashad.kanavath@c-s.fr> 1465906523 +0200	clone: from https://github.com/libgeos/libgeos
++0000000000000000000000000000000000000000 714127ef49087634e7f6687424fdf041d18c3d0f Rashad Kanavath <rashad.kanavath@c-s.fr> 1465888534 +0200	clone: from https://github.com/libgeos/libgeos
+diff -burN libgeos.org/.git/logs/refs/remotes/origin/HEAD libgeos/.git/logs/refs/remotes/origin/HEAD
+--- libgeos.org/.git/logs/refs/remotes/origin/HEAD	2016-06-14 14:15:23.619557617 +0200
++++ libgeos/.git/logs/refs/remotes/origin/HEAD	2016-06-14 09:15:34.507698261 +0200
+@@ -1 +1 @@
+-0000000000000000000000000000000000000000 714127ef49087634e7f6687424fdf041d18c3d0f Rashad Kanavath <rashad.kanavath@c-s.fr> 1465906523 +0200	clone: from https://github.com/libgeos/libgeos
++0000000000000000000000000000000000000000 714127ef49087634e7f6687424fdf041d18c3d0f Rashad Kanavath <rashad.kanavath@c-s.fr> 1465888534 +0200	clone: from https://github.com/libgeos/libgeos
+diff -burN libgeos.org/src/CMakeLists.txt libgeos/src/CMakeLists.txt
+--- libgeos.org/src/CMakeLists.txt	2016-06-14 14:15:23.675557617 +0200
++++ libgeos/src/CMakeLists.txt	2016-06-14 14:14:23.687558086 +0200
 @@ -62,7 +62,7 @@
  else()
  
@@ -36,8 +55,3 @@ diff -burN geos-3.4.2.orig/src/CMakeLists.txt geos-3.4.2/src/CMakeLists.txt
      RUNTIME DESTINATION bin
      LIBRARY DESTINATION lib
      ARCHIVE DESTINATION lib)
-@@ -192,4 +192,3 @@
- ### geso/util
- file(GLOB geos_util_HEADERS ${CMAKE_SOURCE_DIR}/include/geos/util/*.h)
- source_group("Header Files\\geos\\util" FILES ${geos_util_HEADERS})
--
