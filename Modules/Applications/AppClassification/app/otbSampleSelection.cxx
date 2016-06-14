@@ -137,6 +137,11 @@ private:
     AddChoice("sampler.periodic","Periodic sampler");
     SetParameterDescription("sampler.periodic","Takes samples regularly spaced");
 
+    AddParameter(ParameterType_Int, "sampler.periodic.jitter","Jitter amplitude");
+    SetParameterDescription("sampler.periodic.jitter", "Jitter amplitude added during sample selection (0 = no jitter)");
+    SetDefaultParameterInt("sampler.periodic.jitter",0);
+    MandatoryOff("sampler.periodic.jitter");
+
     AddChoice("sampler.random","Random sampler");
     SetParameterDescription("sampler.random","The positions to select are randomly shuffled.");
 
@@ -324,11 +329,16 @@ private:
       // periodic
       case 0:
         {
+        PeriodicSamplerType::SamplerParameterType param;
+        param.Offset = 0;
+        param.MaxJitter = this->GetParameterInt("sampler.periodic.jitter");
+
         m_Periodic->SetInput(this->GetParameterImage("in"));
         m_Periodic->SetOGRData(vectors);
         m_Periodic->SetOutputPositionContainerAndRates(outputSamples, rates);
         m_Periodic->SetFieldName(this->GetParameterString("field"));
         m_Periodic->SetLayerIndex(this->GetParameterInt("layer"));
+        m_Periodic->SetSamplerParameters(param);
         if (IsParameterEnabled("mask") && HasValue("mask"))
           {
           m_Periodic->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
