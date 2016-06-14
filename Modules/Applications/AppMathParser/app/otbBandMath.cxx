@@ -57,9 +57,11 @@ private:
 
     SetDocName("Band Math");
     SetDocLongDescription("This application performs a mathematical operation on monoband images."
-      " Mathematical formula interpretation is done via MuParser libraries http://muparser.sourceforge.net/."
-      "For MuParser version prior to v2 use 'and' and 'or' logical operators, and ternary operator 'if(; ; )'."
-      "For MuParser version superior to 2.0 uses '&&' and '||' logical operators, and C++ like ternary if-then-else operator.");
+      "Mathematical formula interpretation is done via MuParser libraries.\n"
+      "For MuParser version superior to 2.0 uses '&&' and '||' logical operators, and ternary operator 'boolean_expression ? if_true : if_false'\n"
+      "For older version of MuParser (prior to v2) use 'and' and 'or' logical operators, and ternary operator 'if(; ; )'.\n"
+      "The list of features and operators is available on MuParser website: http://muparser.sourceforge.net/\n"
+      );
 
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -81,7 +83,7 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "verySmallFSATSW_r.tif verySmallFSATSW_nir.tif verySmallFSATSW.tif");
     SetDocExampleParameterValue("out", "apTvUtBandMathOutput.tif");
-    SetDocExampleParameterValue("exp", "\"cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3, im3b4)\"");
+    SetDocExampleParameterValue("exp", "\"cos(im1b1) > cos(im2b1) ? im3b1 : im3b2 \"");
   }
 
   void DoUpdateParameters()
