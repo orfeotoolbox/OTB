@@ -90,6 +90,11 @@ elseif(UNIX)
   endif()
 endif()
 
+if(NOT CMAKE_BUILD_TYPE)
+  message(STATUS "CMake build type is none. Setting it to Release")
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
 set(CMAKE_OPTS)
 list(APPEND CMAKE_OPTS "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}")
 list(APPEND CMAKE_OPTS "-DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}")
