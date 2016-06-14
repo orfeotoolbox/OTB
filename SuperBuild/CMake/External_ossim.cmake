@@ -32,7 +32,6 @@ endif()
 
   if(MSVC)
     set(OSSIM_CXX_FLAGS /EHsc)
-    list(APPEND OSSIM_SB_CONFIG "-GNMake\ Makefiles")
   endif()
 
   # archive version
