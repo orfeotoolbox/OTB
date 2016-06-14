@@ -7,6 +7,12 @@ else()
   SETUP_SUPERBUILD(PROJECT FREETYPE)
   message(STATUS "  Using FreeType SuperBuild version")
 
+set(FREETYPE_SB_CONFIG)
+if(MSVC AND BUILD_SHARED_LIBS)
+  list(APPEND FREETYPE_SB_CONFIG
+    -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS:BOOL=TRUE)
+endif()
+
   ExternalProject_Add(FREETYPE
     PREFIX FREETYPE
     URL "http://download.savannah.gnu.org/releases/freetype/freetype-2.6.tar.gz"
@@ -14,7 +20,7 @@ else()
     BINARY_DIR ${FREETYPE_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+    CMAKE_COMMAND ${SB_CMAKE_COMMAND} ${FREETYPE_SB_CONFIG}
     )
 
   set(_SB_FREETYPE_INCLUDE_DIRS ${SB_INSTALL_PREFIX}/include/freetype2)
