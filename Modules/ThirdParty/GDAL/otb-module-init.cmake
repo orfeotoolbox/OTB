@@ -118,7 +118,7 @@ endif()
 gdal_try_run(STATUS GDAL_HAS_JPEG2000 gdalFormatsTest.c JPEG2000)
 #NOT is neeed because it keep the output of try_run execution which is non-zero if failed
 if (NOT GDAL_HAS_JPEG2000)
-  message(WARNING "JPEG2000 Driver found is 'Jasper'. OTB cannot use this driver. Possible options are OpenJPEG, ECW, Kakadu")
+  message(STATUS "Jasper JPEG2000 driver is available will be skipped by OTB. supported drivers OpenJPEG, ECW, Kakadu")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JPEG2000 gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JPEG2000)
 endif()
 
