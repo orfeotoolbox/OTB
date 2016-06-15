@@ -30,7 +30,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 ::PersistentOGRDataToSamplePositionFilter()
 {
   this->SetNumberOfRequiredOutputs(2);
-  m_OriginFieldName = std::string("originFID");
+  m_OriginFieldName = std::string("originfid");
 }
 
 template<class TInputImage, class TMaskImage, class TSampler>
@@ -191,7 +191,6 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
       ogr::Feature feat(outputLayer.GetLayerDefn());
       feat.SetFrom(feature);
       feat[this->GetOriginFieldName()].SetValue(static_cast<int>(feature.GetFID()));
-      //feat[this->GetFieldName()].SetValue(className);
       feat.SetGeometry(&ogrTmpPoint);
       outputLayer.CreateFeature(feat);
       break;
@@ -202,78 +201,18 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 template<class TInputImage, class TMaskImage, class TSampler>
 void
 PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
-::PrepareInputVectors(void)
+::DispatchInputVectors(ogr::Layer &inLayer, std::vector<ogr::Layer> &tmpLayers)
 {
-  TInputImage* outputImage = this->GetOutput();
-  ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetOGRData());
-  ogr::Layer inLayer = vectors->GetLayer(this->GetLayerIndex());
-
-  const RegionType& requestedRegion = outputImage->GetRequestedRegion();
-  itk::ContinuousIndex<double> startIndex(requestedRegion.GetIndex());
-  itk::ContinuousIndex<double> endIndex(requestedRegion.GetUpperIndex());
-  startIndex[0] += -0.5;
-  startIndex[1] += -0.5;
-  endIndex[0] += 0.5;
-  endIndex[1] += 0.5;
-  itk::Point<double, 2> startPoint;
-  itk::Point<double, 2> endPoint;
-  outputImage->TransformContinuousIndexToPhysicalPoint(startIndex, startPoint);
-  outputImage->TransformContinuousIndexToPhysicalPoint(endIndex, endPoint);
-
-  // create geometric extent
-  OGRPolygon tmpPolygon;
-  OGRLinearRing ring;
-  ring.addPoint(startPoint[0],startPoint[1],0.0);
-  ring.addPoint(startPoint[0],endPoint[1]  ,0.0);
-  ring.addPoint(endPoint[0]  ,endPoint[1]  ,0.0);
-  ring.addPoint(endPoint[0]  ,startPoint[1],0.0);
-  ring.addPoint(startPoint[0],startPoint[1],0.0);
-  tmpPolygon.addRing(&ring);
-
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
-
-  // prepare temporary input : split input features according to the class partition
-  this->m_InMemoryInputs.clear();
-  std::string tmpLayerName("thread");
-  std::string inLayerName(inLayer.GetName());
-  std::ostringstream oss;
-  for (unsigned int i=0 ; i < numberOfThreads ; i++)
+  OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
+  ogr::Layer::const_iterator featIt = inLayer.begin();
+  std::string className;
+  for(; featIt!=inLayer.end(); ++featIt)
     {
-    oss.str("");
-    oss << "SELECT * FROM \"" << inLayerName << "\" ";
-    oss << "WHERE "<<this->GetFieldName()<<" IN (";
-    bool isFirst = true;
-    for (ClassPartitionType::iterator iter = this->m_ClassPartition.begin() ;
-         iter != this->m_ClassPartition.end() ;
-         ++iter)
-      {
-      if (iter->second == i)
-        {
-        if (isFirst)
-          {
-          isFirst = false;
-          }
-        else
-          {
-          oss << ",";
-          }
-        oss <<"'"<<iter->first<<"'";
-        }
-      }
-    oss << ")";
-    OGRDataPointer tmpInput = ogr::DataSource::New();
-    if (isFirst)
-      {
-      // no class to process for this thread : store an empty layer
-      tmpInput->CreateLayer(tmpLayerName);
-      }
-    else
-      {
-      // Extract classes to process in this thread
-      ogr::Layer search = vectors->ExecuteSQL(oss.str().c_str(), &tmpPolygon, NULL);
-      tmpInput->CopyLayer(search,tmpLayerName);
-      }
-    this->m_InMemoryInputs.push_back(tmpInput);
+    ogr::Feature dstFeature(layerDefn);
+    dstFeature.SetFrom( *featIt, TRUE );
+    dstFeature.SetFID(featIt->GetFID());
+    className = featIt->ogr().GetFieldAsString(this->GetFieldIndex());
+    tmpLayers[m_ClassPartition[className]].CreateFeature( dstFeature );
     }
 }
 

@@ -86,10 +86,10 @@ public:
   itkTypeMacro(PersistentOGRDataToSamplePositionFilter, PersistentSamplingFilterBase);
 
   /** Synthetize the persistent filter*/
-  void Synthetize(void);
+  virtual void Synthetize(void);
 
   /** Reset method called before starting the streaming*/
-  void Reset(void);
+  virtual void Reset(void);
 
   /** Get a reference to the internal samplers at a given level */
   SamplerMapType& GetSamplers(unsigned int level);
@@ -132,8 +132,10 @@ protected:
                              typename TInputImage::PointType& imgPoint,
                              itk::ThreadIdType& threadid);
 
-  /** Split the input vectors according to the class partition */
-  virtual void PrepareInputVectors();
+  /** Method to split the input OGRDataSource
+   *  according to the class partition
+   */
+  virtual void DispatchInputVectors(ogr::Layer &inLayer, std::vector<ogr::Layer> &tmpLayers);
 
 private:
   PersistentOGRDataToSamplePositionFilter(const Self &); //purposely not implemented
