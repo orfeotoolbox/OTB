@@ -1,11 +1,7 @@
-if(NOT __EXTERNAL_PROJ__)
-set(__EXTERNAL_PROJ__ 1)
+INCLUDE_ONCE_MACRO(PROJ)
 
-if(USE_SYSTEM_PROJ)
-  message(STATUS "  Using Proj4 system version")
-else()
   SETUP_SUPERBUILD(PROJECT PROJ)
-  message(STATUS "  Using Proj4 SuperBuild version")
+
 
   if(MSVC)
 
@@ -68,6 +64,3 @@ else()
   elseif(UNIX)
     set(_SB_PROJ_LIBRARY ${SB_INSTALL_PREFIX}/lib/libproj${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-
-endif()
-endif()

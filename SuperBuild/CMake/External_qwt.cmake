@@ -1,11 +1,6 @@
-if(NOT __EXTERNAL_QWT__)
-set(__EXTERNAL_QWT__ 1)
+INCLUDE_ONCE_MACRO(QWT)
 
-if(USE_SYSTEM_QWT)
-  message(STATUS "  Using QWT system version")
-else()
-  SETUP_SUPERBUILD(PROJECT QWT)
-  message(STATUS "  Using Qwt SuperBuild version")
+SETUP_SUPERBUILD(PROJECT QWT)
 
   # declare dependencies
   ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QWT QT4)
@@ -50,6 +45,3 @@ else()
   elseif(UNIX)
     set(_SB_QWT_LIBRARY ${SB_INSTALL_PREFIX}/lib/libqwt${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-
-endif()
-endif()

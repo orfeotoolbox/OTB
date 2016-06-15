@@ -1,16 +1,7 @@
-if( __EXTERNAL_OSSIM__)
-  return()
-else()
-  set(__EXTERNAL_OSSIM__ 1)
-endif()
-
-if(USE_SYSTEM_OSSIM)
-  message(STATUS "  Using OSSIM system version")
-  return()
-endif()
+INCLUDE_ONCE_MACRO(OSSIM)
 
 SETUP_SUPERBUILD(PROJECT OSSIM)
-message(STATUS "  Using OSSIM SuperBuild version")
+
 
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(OSSIM TIFF GEOTIFF GEOS JPEG OPENTHREADS FREETYPE)

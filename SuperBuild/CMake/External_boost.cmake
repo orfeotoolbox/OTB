@@ -4,15 +4,9 @@
 # support both libraries. See the related changeset in OTB trunk:
 # http://hg.orfeo-toolbox.org/OTB/r# ev/8da67e36c78d
 
-if(NOT __EXTERNAL_BOOST__)
-set(__EXTERNAL_BOOST__ 1)
+INCLUDE_ONCE_MACRO(BOOST)
 
-if(USE_SYSTEM_BOOST)
-  message(STATUS "  Using Boost system version")
-else()
   SETUP_SUPERBUILD(PROJECT BOOST)
-
-  message(STATUS "  Using Boost superbuild version")
 
   option(SUPERBUILD_BOOST_HEADER_ONLY "Only use Boost headers" ON)
   mark_as_advanced(SUPERBUILD_BOOST_HEADER_ONLY)
@@ -61,7 +55,6 @@ else()
       )
     endif()
 
-    message(STATUS "  Using Boost SuperBuild version")
 
   else(MSVC)
     #TODO: find hash for archives properly
@@ -127,6 +120,3 @@ else()
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
   set(_SB_Boost_LIBRARY_DIR ${SB_INSTALL_PREFIX}/lib)
 
-
-endif()
-endif()

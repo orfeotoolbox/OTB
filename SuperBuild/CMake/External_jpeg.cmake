@@ -1,16 +1,6 @@
-if( __EXTERNAL_JPEG__)
-  return()
-else()
-  set(__EXTERNAL_JPEG__ 1)
-endif()
-
-if(USE_SYSTEM_JPEG)
-  message(STATUS "  Using libjpeg system version")
-  return()
-endif()
+INCLUDE_ONCE_MACRO(JPEG)
 
 SETUP_SUPERBUILD(PROJECT JPEG)
-message(STATUS "  Using libjpeg SuperBuild version")
 
 if(WIN32)
   set(JPEG_PATCH_COMMAND ${CMAKE_COMMAND}

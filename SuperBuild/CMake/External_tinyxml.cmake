@@ -1,16 +1,5 @@
-if( __EXTERNAL_TINYXML__)
-  return()
-else()
-  set(__EXTERNAL_TINYXML__ 1)
-endif()
-
-if(USE_SYSTEM_TINYXML)
-  message(STATUS "  Using TinyXML system version")
-  return()
-endif()
-
+INCLUDE_ONCE_MACRO(TINYXML)
   SETUP_SUPERBUILD(PROJECT TINYXML)
-  message(STATUS "  Using TinyXML SuperBuild version")
 
   ExternalProject_Add(TINYXML
     PREFIX TINYXML

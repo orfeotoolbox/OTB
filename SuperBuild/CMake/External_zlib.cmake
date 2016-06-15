@@ -1,16 +1,7 @@
-if( __EXTERNAL_ZLIB__)
-  return()
-else()
-  set(__EXTERNAL_ZLIB__ 1)
-endif()
-
-if(USE_SYSTEM_ZLIB)
-  message(STATUS "  Using Zlib system version")
-  return()
-endif()
+INCLUDE_ONCE_MACRO(ZLIB)
 
 SETUP_SUPERBUILD(PROJECT ZLIB)
-message(STATUS "  Using zlib SuperBuild version")
+
 
 # Try official release 1.2.8
 ExternalProject_Add(ZLIB

@@ -1,13 +1,4 @@
-if( __EXTERNAL_FFTW__)
-  return()
-else()
-  set(__EXTERNAL_FFTW__ 1)
-endif()
-
-if(USE_SYSTEM_FFTW)
-  message(STATUS "  Using FFTW system version")
-  return()
-endif()
+INCLUDE_ONCE_MACRO(FFTW)
 
 SETUP_SUPERBUILD(PROJECT FFTW)
 
@@ -22,7 +13,6 @@ if(MSVC)
 endif()
 
 
-message(STATUS "  Using FFTW SuperBuild version")
 
 # Compile the float version of FFTW
 ExternalProject_Add(FFTWF

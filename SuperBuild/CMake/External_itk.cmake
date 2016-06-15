@@ -1,11 +1,6 @@
-if(NOT __EXTERNAL_ITK__)
-set(__EXTERNAL_ITK__ 1)
+INCLUDE_ONCE_MACRO(ITK)
 
-if(USE_SYSTEM_ITK)
-  message(STATUS "  Using ITK system version")
-else()
   SETUP_SUPERBUILD(PROJECT ITK)
-  message(STATUS "  Using ITK SuperBuild version")
 
   # if(MSVC)
     # set(ITK_SB_SRC "C:/Temp/ITK")
@@ -149,6 +144,7 @@ else()
     INSTALL_DIR ${SB_INSTALL_PREFIX}
       DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
       CMAKE_CACHE_ARGS
+      ${SB_CMAKE_CACHE_ARGS}
       ${ITK_SB_COMPILATION_FLAGS}
       -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF
       ${ITK_MODULES_CMAKE_CACHE}
@@ -165,6 +161,3 @@ else()
     )
 
   set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${ITK_SB_VERSION})
-
-endif()
-endif()

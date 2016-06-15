@@ -1,17 +1,6 @@
-if( __EXTERNAL_OPENTHREADS__)
-  return()
-else()
-  set(__EXTERNAL_OPENTHREADS__ 1)
-endif()
-
-if(USE_SYSTEM_OPENTHREADS)
-  message(STATUS "  Using OpenThreads system version")
-  return()
-endif()
-
+INCLUDE_ONCE_MACRO(OPENTHREADS)
 
 SETUP_SUPERBUILD(PROJECT OPENTHREADS)
-message(STATUS "  Using OpenThreads SuperBuild version")
 
 #TODO: try to use cmake variable for DOWNLOAD_COMMAND for different platforms
 #if(MSVC)
