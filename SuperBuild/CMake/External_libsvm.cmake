@@ -2,7 +2,6 @@ INCLUDE_ONCE_MACRO(LIBSVM)
 
 SETUP_SUPERBUILD(PROJECT LIBSVM)
 
-
 ExternalProject_Add(LIBSVM
   PREFIX LIBSVM
   URL "http://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-3.20.tar.gz"
@@ -21,7 +20,6 @@ ExternalProject_Add(LIBSVM
   ${CMAKE_SOURCE_DIR}/patches/LIBSVM/CMakeLists.txt
   ${LIBSVM_SB_SRC}
   )
-
 
 set(_SB_LIBSVM_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
