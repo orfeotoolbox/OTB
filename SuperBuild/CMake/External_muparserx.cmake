@@ -1,16 +1,6 @@
-if( __EXTERNAL_MUPARSERX__)
-  return()
-else()
-  set(__EXTERNAL_MUPARSERX__ 1)
-endif()
-
-if(USE_SYSTEM_MUPARSERX)
-  message(STATUS "  Using muParserX system version")
-  return()
-endif()
+INCLUDE_ONCE_MACRO(MUPARSERX)
 
 SETUP_SUPERBUILD(PROJECT MUPARSERX)
-message(STATUS "  Using muParserX SuperBuild version")
 
 set(MUPARSERX_FLAGS)
 if(APPLE)

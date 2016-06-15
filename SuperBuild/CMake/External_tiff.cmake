@@ -1,16 +1,6 @@
-if( __EXTERNAL_TIFF__)
-  return()
-else()
-  set(__EXTERNAL_TIFF__ 1)
-endif()
-
-if(USE_SYSTEM_TIFF)
-  message(STATUS "  Using libtiff system version")
-  return()
-endif()
+INCLUDE_ONCE_MACRO(TIFF)
 
 SETUP_SUPERBUILD(PROJECT TIFF)
-message(STATUS "  Using libtiff SuperBuild version")
 
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(TIFF ZLIB JPEG)

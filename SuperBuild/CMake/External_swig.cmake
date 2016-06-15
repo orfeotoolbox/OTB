@@ -1,11 +1,7 @@
-if(NOT __EXTERNAL_SWIG__)
-set(__EXTERNAL_SWIG__ 1)
+INCLUDE_ONCE_MACRO(SWIG)
 
-if(USE_SYSTEM_SWIG)
-  message(STATUS "  Using swig system version")
-else()
   SETUP_SUPERBUILD(PROJECT SWIG)
-  message(STATUS "  Using swig SuperBuild version")
+
 
   set(PythonInterp_FIND_VERSION 2.7)
   find_package(PythonInterp)
@@ -77,6 +73,3 @@ else()
   elseif(UNIX)
     set(_SB_SWIG_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/swig)
   endif()
-
-endif()
-endif()

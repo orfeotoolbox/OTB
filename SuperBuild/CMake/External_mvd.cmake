@@ -1,8 +1,10 @@
-if(NOT __EXTERNAL_MVD__)
-set(__EXTERNAL_MVD__ 1)
+if( __EXTERNAL_MVD__)
+  return()
+else()
+  set(__EXTERNAL_MVD__ 1)
+endif()
 
 SETUP_SUPERBUILD(PROJECT MVD)
-message(STATUS "  Using Monteverdi SuperBuild version")
 
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(MVD OTB QWT QT4)
@@ -34,5 +36,3 @@ ExternalProject_Add(MVD
   ${MVD_SB_CONFIG}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
 )
-
-endif()

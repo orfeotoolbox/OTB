@@ -1,16 +1,7 @@
-if( __EXTERNAL_PNG__)
-  return()
-else()
-  set(__EXTERNAL_PNG__ 1)
-endif()
-
-if(USE_SYSTEM_PNG)
-  message(STATUS "  Using libpng system version")
-  return()
-endif()
+INCLUDE_ONCE_MACRO(PNG)
 
 SETUP_SUPERBUILD(PROJECT PNG)
-message(STATUS "  Using libpng SuperBuild version")
+
 
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(PNG ZLIB)

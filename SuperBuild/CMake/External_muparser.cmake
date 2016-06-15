@@ -1,16 +1,6 @@
-if( __EXTERNAL_MUPARSER__)
-  return()
-else()
-  set(__EXTERNAL_MUPARSER__ 1)
-endif()
-
-if(USE_SYSTEM_MUPARSER)
-  message(STATUS "  Using muParser system version")
-  return()
-endif()
+INCLUDE_ONCE_MACRO(MUPARSER)
 
 SETUP_SUPERBUILD(PROJECT MUPARSER)
-message(STATUS "  Using muParser SuperBuild version")
 
 ExternalProject_Add(MUPARSER
   PREFIX MUPARSER

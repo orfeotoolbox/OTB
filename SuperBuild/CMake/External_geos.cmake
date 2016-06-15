@@ -1,16 +1,6 @@
-if( __EXTERNAL_GEOS__)
-  return()
-else()
-  set(__EXTERNAL_GEOS__ 1)
-endif()
-
-if(USE_SYSTEM_GEOS)
-  message(STATUS "  Using GEOS system version")
-  return()
-endif()
+INCLUDE_ONCE_MACRO(GEOS)
 
 SETUP_SUPERBUILD(PROJECT GEOS)
-message(STATUS "  Using GEOS SuperBuild version")
 
 ExternalProject_Add(GEOS
   PREFIX GEOS
@@ -21,6 +11,7 @@ ExternalProject_Add(GEOS
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   CMAKE_CACHE_ARGS
+  ${SB_CMAKE_CACHE_ARGS}
   -DBUILD_TESTING:BOOL=OFF
   -DGEOS_ENABLE_TESTS:BOOL=OFF
   CMAKE_COMMAND ${SB_CMAKE_COMMAND} )
