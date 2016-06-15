@@ -201,6 +201,10 @@ int otbOGRDataToSamplePositionFilter(int argc, char* argv[])
   otb::ogr::DataSource::Pointer output =
     otb::ogr::DataSource::New(outputPath,otb::ogr::DataSource::Modes::Overwrite);
 
+  itk::MetaDataDictionary dict;
+  inputImage->SetMetaDataDictionary(dict);
+  mask->SetMetaDataDictionary(dict);
+
   //--------------------------------------------------------------
   typedef otb::OGRDataToSamplePositionFilter<
     InputImageType,MaskImageType> SelectionFilterType;
