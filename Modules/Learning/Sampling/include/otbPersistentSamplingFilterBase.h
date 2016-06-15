@@ -154,10 +154,14 @@ protected:
   /** Get the region bounding a set of features */
   RegionType FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const;
 
+  /** Prepares in-memory layers for each thread,
+   *  then calls DispatchInputVectors() for the actual dispatch */
+  virtual void PrepareInputVectors();
+
   /** Method to split the input OGRDataSource between several containers
    *  for each thread. Default is to put the same number of features for
    *  each thread.*/
-  virtual void PrepareInputVectors();
+  virtual void DispatchInputVectors(ogr::Layer &inLayer, std::vector<ogr::Layer> &tmpLayers);
 
   /** Prepare output feature containers for each thread and each output
    *  OGRDataSource*/

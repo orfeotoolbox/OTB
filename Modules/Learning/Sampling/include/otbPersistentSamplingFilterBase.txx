@@ -632,6 +632,17 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     tmpLayers.push_back(tmpLayer);
     }
 
+  this->DispatchInputVectors(inLayer,tmpLayers);
+
+  inLayer.SetSpatialFilter(NULL);
+}
+
+template<class TInputImage, class TMaskImage>
+void
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::DispatchInputVectors(ogr::Layer &inLayer, std::vector<ogr::Layer> &tmpLayers)
+{
+  OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
   ogr::Layer::const_iterator featIt = inLayer.begin();
   unsigned int counter=0;
   for(; featIt!=inLayer.end(); ++featIt)
@@ -641,10 +652,9 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     dstFeature.SetFID(featIt->GetFID());
     tmpLayers[counter].CreateFeature( dstFeature );
     counter++;
-    if (counter >= numberOfThreads)
+    if (counter >= tmpLayers.size())
       counter = 0;
     }
-  inLayer.SetSpatialFilter(NULL);
 }
 
 template<class TInputImage, class TMaskImage>
@@ -712,13 +722,11 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   // First get list of current fields
   OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
   std::map<std::string, OGRFieldType> currentFields;
-  std::vector<OGRFieldDefn> fieldDefnVector;
   for (unsigned int k=0 ; k<layerDefn.GetFieldCount() ; k++)
     {
     OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
     std::string currentName(fieldDefn.GetNameRef());
     currentFields[currentName] = fieldDefn.GetType();
-    fieldDefnVector.push_back(fieldDefn);
     }
 
   ogr::Layer outLayer = inLayer;
@@ -738,9 +746,10 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       wkbPoint,
       this->GetOGRLayerCreationOptions());
     // Copy existing fields
-    for (unsigned int k=0 ; k<fieldDefnVector.size() ; k++)
+    for (unsigned int k=0 ; k<layerDefn.GetFieldCount() ; k++)
       {
-      outLayer.CreateField(fieldDefnVector[k]);
+      OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
+      outLayer.CreateField(fieldDefn);
       }
     }
 
