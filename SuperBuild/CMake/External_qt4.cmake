@@ -89,6 +89,3 @@ INCLUDE_ONCE_MACRO(QT4)
     endif()
 
     set(_SB_QT_QMAKE_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/qmake)
-
-  endif()
-endif()
