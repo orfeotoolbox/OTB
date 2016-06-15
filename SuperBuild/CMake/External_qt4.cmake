@@ -1,10 +1,14 @@
 INCLUDE_ONCE_MACRO(QT4)
 
 SETUP_SUPERBUILD(PROJECT QT4)
-message(STATUS "  Using Qt4 SuperBuild version")
-if(UNIX AND NOT APPLE)
-  message(STATUS "  SuperBuild may fail to compile Qt4. If so, you should install it via package manager.")
-endif()
+
+#RK: are we ready for QT4 build on linux?.
+#This comment here scares me away.
+#Installing QT4 from packages also need sqlite otherwise there is issue
+
+# if(UNIX AND NOT APPLE)
+#   message(STATUS "  SuperBuild may fail to compile Qt4. If so, you should install it via package manager.")
+# endif()
 
 if(NOT DEFINED git_protocol)
   set(git_protocol "git")
