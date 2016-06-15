@@ -1,47 +1,5 @@
 include(CMakeParseArguments)
 
-# Macro ADD_SYSTEM_LOCATION : define variables to specific system locations
-macro(ADD_SYSTEM_LOCATION)
-  cmake_parse_arguments(NEW_SYSLOC  "" "PROJECT" "VARIABLES" ${ARGN})
-  foreach(var ${NEW_SYSLOC_VARIABLES})
-    set(${var} "" CACHE FILEPATH "Set a custom system location")
-    mark_as_advanced(${var})
-    if(USE_SYSTEM_${NEW_SYSLOC_PROJECT})
-      set_property(CACHE ${var} PROPERTY TYPE FILEPATH)
-    else()
-      set_property(CACHE ${var} PROPERTY TYPE INTERNAL)
-    endif()
-    # add variable to cache if not empty
-    if(NOT ${var} STREQUAL "")
-      # additional argument for CMake cache
-      set(ITEM_FOR_CMAKE_CACHE "-D${var}:STRING=${${var}}")
-      list(APPEND SYSTEM_${NEW_SYSLOC_PROJECT}_CMAKE_CACHE ${ITEM_FOR_CMAKE_CACHE})
-    endif()
-  endforeach(var)
-endmacro(ADD_SYSTEM_LOCATION)
-
-# Macro ADD_SYSTEM_PREFIX : defines a system prefix for the given project
-#   - creates a cache variable SYSTEM_${PROJECT}_PREFIX
-#   - if CMAKE_ALIAS is defined, it is used to add an entry in cache
-#       -D${CMAKE_ALIAS}:PATH=${SYSTEM_${PROJECT}_PREFIX}
-macro(ADD_SYSTEM_PREFIX)
-  cmake_parse_arguments(NEW_SYSPREFIX  "" "PROJECT;CMAKE_ALIAS" "" ${ARGN})
-  set(SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX "" CACHE PATH "Set a custom system prefix")
-  mark_as_advanced(SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX)
-  if(USE_SYSTEM_${NEW_SYSPREFIX_PROJECT})
-    set_property(CACHE SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX PROPERTY TYPE PATH)
-  else()
-    set_property(CACHE SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX PROPERTY TYPE INTERNAL)
-  endif()
-  if(NOT ${NEW_SYSPREFIX_CMAKE_ALIAS} STREQUAL "")
-    if(NOT SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX STREQUAL "")
-      set(ITEM_FOR_CMAKE_CACHE
-        "-D${NEW_SYSPREFIX_CMAKE_ALIAS}:PATH=${SYSTEM_${NEW_SYSPREFIX_PROJECT}_PREFIX}")
-      list(APPEND SYSTEM_${NEW_SYSLOC_PROJECT}_CMAKE_CACHE ${ITEM_FOR_CMAKE_CACHE})
-    endif()
-  endif()
-endmacro(ADD_SYSTEM_PREFIX)
-
 macro(INCLUDE_ONCE_MACRO project)
   if( __included_${project}__)
   return()
