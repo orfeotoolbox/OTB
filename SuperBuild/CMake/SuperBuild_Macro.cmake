@@ -1,16 +1,5 @@
 include(CMakeParseArguments)
 
-# Macro SETUP_SYSTEM_LIBRARY : defines USE_SYSTEM_XXX option, initialize
-# internal variables
-macro(SETUP_SYSTEM_LIBRARY)
-  cmake_parse_arguments(NEW_SYSLIB  "" "PROJECT;DEFAULT" "" ${ARGN})
-  option(USE_SYSTEM_${NEW_SYSLIB_PROJECT}
-    "  Use a system build of ${NEW_SYSLIB_PROJECT}."
-    ${NEW_SYSLIB_DEFAULT}
-    )
-  set(SYSTEM_${NEW_SYSLIB_PROJECT}_CMAKE_CACHE)
-endmacro(SETUP_SYSTEM_LIBRARY)
-
 # Macro ADD_SYSTEM_LOCATION : define variables to specific system locations
 macro(ADD_SYSTEM_LOCATION)
   cmake_parse_arguments(NEW_SYSLOC  "" "PROJECT" "VARIABLES" ${ARGN})
@@ -64,7 +53,7 @@ if(USE_SYSTEM_${project})
   #message(STATUS "  Using ${project} system version")
   list(APPEND FROM_SYSTEM_LIST ${project})
   return()
-endif()  
+endif()
 endmacro()
 
 # Macro SETUP_SUPERBUILD
