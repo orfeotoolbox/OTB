@@ -33,7 +33,7 @@ namespace otb
  * \ingroup OTBSampling
  */
 
-class SamplingRateCalculator
+class ITK_EXPORT SamplingRateCalculator
   : public itk::Object
 {
 public:
