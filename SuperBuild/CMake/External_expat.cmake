@@ -1,6 +1,16 @@
-INCLUDE_ONCE_MACRO(EXPAT)
+if( __EXTERNAL_EXPAT__)
+  return()
+else()
+  set(__EXTERNAL_EXPAT__ 1)
+endif()
+
+if(USE_SYSTEM_EXPAT)
+  message(STATUS "  Using Expat system version")
+  return()
+endif()
 
 SETUP_SUPERBUILD(PROJECT EXPAT)
+message(STATUS "  Using Expat SuperBuild version")
 
 ExternalProject_Add(EXPAT
   PREFIX EXPAT
@@ -10,7 +20,9 @@ ExternalProject_Add(EXPAT
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   CMAKE_CACHE_ARGS
-  ${SB_CMAKE_CACHE_ARGS}
+  -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
+  -DCMAKE_BUILD_TYPE:STRING=Release
+  -DBUILD_SHARED_LIBS:BOOL=ON
   -DBUILD_examples:BOOL=OFF
   -DBUILD_tests:BOOL=OFF
   -DBUILD_tools:BOOL=OFF

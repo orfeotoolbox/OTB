@@ -1,7 +1,16 @@
-INCLUDE_ONCE_MACRO(SQLITE)
+if( __EXTERNAL_SQLITE__)
+  return()
+else()
+  set(__EXTERNAL_SQLITE__ 1)
+endif()
+
+if(USE_SYSTEM_SQLITE)
+  message(STATUS "  Using SQLite system version")
+  return()
+endif()
 
 SETUP_SUPERBUILD(PROJECT SQLITE)
-
+message(STATUS "  Using SQLite SuperBuild version")
 
 ExternalProject_Add(SQLITE
   PREFIX SQLITE

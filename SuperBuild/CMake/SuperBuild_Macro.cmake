@@ -53,26 +53,10 @@ macro(ADD_SYSTEM_PREFIX)
   endif()
 endmacro(ADD_SYSTEM_PREFIX)
 
-macro(INCLUDE_ONCE_MACRO project)
-  if( __included_${project}__)
-  return()
-else()
-  set(__included_${project}__ 1)
-endif()
-
-if(USE_SYSTEM_${project})
-  #message(STATUS "  Using ${project} system version")
-  list(APPEND FROM_SYSTEM_LIST ${project})
-  return()
-endif()  
-endmacro()
-
 # Macro SETUP_SUPERBUILD
 # Initialize usefull variables to build a superbuild project
 macro(SETUP_SUPERBUILD)
   cmake_parse_arguments(NEW_SB "" "PROJECT" "" ${ARGN})
-  list(APPEND FROM_SUPERBUILD_LIST ${NEW_SB_PROJECT})
-  #message(STATUS "  Using ${NEW_SB_PROJECT} SuperBuild version")
   #set_property(GLOBAL PROPERTY prop_${project}_DEPENDENCIES "")
   set(${NEW_SB_PROJECT}_DEPENDENCIES "")
   set(${NEW_SB_PROJECT}_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${NEW_SB_PROJECT}/build)

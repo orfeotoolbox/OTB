@@ -1,7 +1,11 @@
-INCLUDE_ONCE_MACRO(OPENCV)
+if(NOT __EXTERNAL_OPENCV__)
+set(__EXTERNAL_OPENCV__ 1)
 
+if(USE_SYSTEM_OPENCV)
+  message(STATUS "  Using OpenCV system version")
+else()
   SETUP_SUPERBUILD(PROJECT OPENCV)
-
+  message(STATUS "  Using OpenCV SuperBuild version")
 
   # declare dependencies
   ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(OPENCV ZLIB TIFF PNG)
@@ -72,3 +76,5 @@ INCLUDE_ONCE_MACRO(OPENCV)
   endif()
 
   set(_SB_OpenCV_DIR ${SB_INSTALL_PREFIX}/share/OpenCV)
+endif()
+endif()

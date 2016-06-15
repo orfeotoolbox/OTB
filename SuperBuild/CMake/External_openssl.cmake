@@ -1,6 +1,13 @@
-INCLUDE_ONCE_MACRO(OPENSSL)
-  SETUP_SUPERBUILD(PROJECT OPENSSL)
+if(NOT __EXTERNAL_OPENSSL__)
+set(__EXTERNAL_OPENSSL__ 1)
 
+#RK: OPENSSL is deactivated in QT4 build.
+#revisit that when you have a clean openssl
+if(USE_SYSTEM_OPENSSL)
+  message(STATUS "  Using OpenSSL system version")
+else()
+  SETUP_SUPERBUILD(PROJECT OPENSSL)
+  message(STATUS "  Using OpenSSL SuperBuild version")
 
   # declare dependencies
   ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(OPENSSL ZLIB)
@@ -67,3 +74,6 @@ INCLUDE_ONCE_MACRO(OPENSSL)
   elseif(UNIX)
     set(_SB_OPENSSL_LIBRARY ${SB_INSTALL_PREFIX}/lib/libssl${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
+
+endif()
+endif()

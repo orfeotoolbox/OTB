@@ -1,6 +1,17 @@
-INCLUDE_ONCE_MACRO(OPENJPEG)
+if( __EXTERNAL_OPENJPEG__)
+  return()
+else()
+  set(__EXTERNAL_OPENJPEG__ 1)
+endif()
+
+if(USE_SYSTEM_OPENJPEG)
+  message(STATUS "  Using OpenJPEG system version")
+  return()
+endif()
+
 
 SETUP_SUPERBUILD(PROJECT OPENJPEG)
+message(STATUS "  Using OpenJPEG SuperBuild version")
 
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(OPENJPEG ZLIB TIFF PNG)

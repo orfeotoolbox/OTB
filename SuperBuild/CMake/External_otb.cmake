@@ -1,6 +1,8 @@
-INCLUDE_ONCE_MACRO(OTB)
+if(NOT __EXTERNAL_OTB__)
+set(__EXTERNAL_OTB__ 1)
 
 SETUP_SUPERBUILD(PROJECT OTB)
+message(STATUS "  Using OTB SuperBuild version")
 
 if(SUPERBUILD_IN_OTB_TREE)
   set(OTB_SB_SRC ${CMAKE_SOURCE_DIR}/..)
@@ -196,3 +198,6 @@ ExternalProject_Add_Step(OTB install_copyright
   else()
     set(_SB_OTB_DIR ${SB_INSTALL_PREFIX})
   endif()
+
+
+endif()

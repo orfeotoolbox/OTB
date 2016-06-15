@@ -1,6 +1,17 @@
-INCLUDE_ONCE_MACRO(GDAL)
+if( __EXTERNAL_GDAL__)
+  return()
+else()
+  set(__EXTERNAL_GDAL__ 1)
+endif()
+
+if(USE_SYSTEM_GDAL)
+  message(STATUS "  Using GDAL system version")
+  return()
+endif()
 
 SETUP_SUPERBUILD(PROJECT GDAL)
+
+message(STATUS "  Using GDAL SuperBuild version")
 
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL TIFF CURL GEOTIFF PNG JPEG OPENJPEG SQLITE GEOS ZLIB EXPAT)

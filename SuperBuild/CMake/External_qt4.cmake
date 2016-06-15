@@ -1,5 +1,9 @@
-INCLUDE_ONCE_MACRO(QT4)
+if(NOT __EXTERNAL_QT4__)
+  set(__EXTERNAL_QT4__ 1)
 
+  if(USE_SYSTEM_QT4)
+    message(STATUS "  Using Qt4 system version")
+  else()
     SETUP_SUPERBUILD(PROJECT QT4)
     message(STATUS "  Using Qt4 SuperBuild version")
     if(UNIX AND NOT APPLE)

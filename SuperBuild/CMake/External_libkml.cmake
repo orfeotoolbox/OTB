@@ -1,6 +1,11 @@
-INCLUDE_ONCE_MACRO(LIBKML)
+if(NOT __EXTERNAL_LIBKML__)
+set(__EXTERNAL_LIBKML__ 1)
 
+if(USE_SYSTEM_LIBKML)
+  message(STATUS "  Using libKML system version")
+else()
   SETUP_SUPERBUILD(PROJECT LIBKML)
+  message(STATUS "  Using libKML SuperBuild version")
 
   # declare dependencies
   ##set(LIBKML_DEPENDENCIES EXPAT ZLIB BOOST)
@@ -55,3 +60,6 @@ INCLUDE_ONCE_MACRO(LIBKML)
     set(_SB_LIBKML_XSD_LIBRARY ${SB_INSTALL_PREFIX}/lib/libkmlxsd${CMAKE_SHARED_LIBRARY_SUFFIX})
     set(_SB_LIBKML_MINIZIP_LIBRARY ${SB_INSTALL_PREFIX}/lib/libminizip${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
+
+endif()
+endif()

@@ -1,7 +1,16 @@
-INCLUDE_ONCE_MACRO(LIBSVM)
+if( __EXTERNAL_LIBSVM__)
+  return()
+else()
+  set(__EXTERNAL_LIBSVM__ 1)
+endif()
+
+if(USE_SYSTEM_LIBSVM)
+  message(STATUS "  Using LibSVM system version")
+  return()
+endif()
 
 SETUP_SUPERBUILD(PROJECT LIBSVM)
-
+message(STATUS "  Using LibSVM SuperBuild version")
 
 ExternalProject_Add(LIBSVM
   PREFIX LIBSVM
