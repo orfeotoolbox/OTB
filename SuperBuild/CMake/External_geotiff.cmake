@@ -17,7 +17,7 @@ ADD_SUPERBUILD_CMAKE_VAR(GEOTIFF JPEG_LIBRARY)
 
 #RK: we are forced to use autoconf on osx due to cmake's find_* functions
 #Do we need to use the same of Linux ?
-if(APPLE)
+if(UNIX)
   set(GEOTIFF_SB_CONFIG)
   ADD_SUPERBUILD_CONFIGURE_VAR(GEOTIFF PROJ_ROOT     --with-proj)
   ADD_SUPERBUILD_CONFIGURE_VAR(GEOTIFF TIFF_ROOT     --with-libtiff)
