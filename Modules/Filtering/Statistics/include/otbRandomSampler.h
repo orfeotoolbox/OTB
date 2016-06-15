@@ -33,7 +33,7 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-class RandomSampler : public SamplerBase
+class ITK_EXPORT RandomSampler : public SamplerBase
 {
 public:
   typedef RandomSampler  Self;
@@ -57,10 +57,22 @@ public:
 
   /** Runtime information support. */
   itkTypeMacro(RandomSampler,SamplerBase);
-  
-  /** Setter/Getter for internal parameters */
-  itkSetMacro(Parameters,ParameterType);
-  itkGetMacro(Parameters,ParameterType);
+
+  /** Setter for internal parameters */
+  void SetParameters(const ParameterType &param)
+    {
+    if (m_Parameters != param)
+      {
+      this->Modified();
+      m_Parameters = param;
+      }
+    }
+
+  /** Getter for internal parameters */
+  ParameterType GetParameters()
+    {
+    return m_Parameters;
+    }
 
   /**
    * Reset internal counter (to be called before starting iteration)

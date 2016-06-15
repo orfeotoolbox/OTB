@@ -31,7 +31,7 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-class SamplerBase : public itk::Object
+class ITK_EXPORT SamplerBase : public itk::Object
 {
 public:
   typedef SamplerBase  Self;

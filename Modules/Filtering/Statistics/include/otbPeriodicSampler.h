@@ -32,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-class PeriodicSampler : public SamplerBase
+class ITK_EXPORT PeriodicSampler : public SamplerBase
 {
 public:
   typedef PeriodicSampler  Self;
@@ -61,10 +61,22 @@ public:
   /** Runtime information support. */
   itkTypeMacro(PeriodicSampler,SamplerBase);
   
-  /** Setter/Getter for internal parameters */
-  itkSetMacro(Parameters,ParameterType);
-  itkGetMacro(Parameters,ParameterType);
-  
+  /** Setter for internal parameters */
+  void SetParameters(const ParameterType &param)
+    {
+    if (m_Parameters != param)
+      {
+      this->Modified();
+      m_Parameters = param;
+      }
+    }
+
+  /** Getter for internal parameters */
+  ParameterType GetParameters()
+    {
+    return m_Parameters;
+    }
+
   /**
    * Method that resets the internal state of the sampler
    */
