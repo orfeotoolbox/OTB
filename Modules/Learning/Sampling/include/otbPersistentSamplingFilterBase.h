@@ -163,11 +163,17 @@ protected:
    *  OGRDataSource*/
   virtual void PrepareOutputVectors();
 
+  /** Utility method to add new fields on an output layer */
+  virtual void InitializeOutputDataSource(ogr::DataSource* inputDS, ogr::DataSource* outputDS);
+
   /** In-memory containers storing input geometries for each thread*/
   std::vector<OGRDataPointer> m_InMemoryInputs;
 
   /** In-memory containers storing position during iteration loop*/
   std::vector<std::vector<OGRDataPointer> > m_InMemoryOutputs;
+
+  /** Additional field definitions to add in output data sources */
+  std::vector<ogr::FieldDefn> m_AdditionalFields;
 
 private:
   PersistentSamplingFilterBase(const Self &); //purposely not implemented

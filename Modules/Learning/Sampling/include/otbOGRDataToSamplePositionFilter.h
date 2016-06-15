@@ -116,6 +116,10 @@ public:
   virtual itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
   using Superclass::MakeOutput;
 
+  /** Get/Set of the field name storing the original FID of each sample */
+  itkSetMacro(OriginFieldName, std::string);
+  itkGetMacro(OriginFieldName, std::string);
+
 protected:
   /** Constructor */
   PersistentOGRDataToSamplePositionFilter();
@@ -143,6 +147,8 @@ private:
   /** Internal samplers*/
   std::vector<SamplerMapType> m_Samplers;
 
+  /** Field name to store the FID of the geometry each sample comes from */
+  std::string m_OriginFieldName;
 };
 
 /**
@@ -231,6 +237,12 @@ public:
 
   /** Get the output position container at a given level.*/
   otb::ogr::DataSource* GetOutputPositionContainer(unsigned int level=0);
+
+  /** Set the field name storing the original FID of each sample*/
+  void SetOriginFieldName(std::string key);
+
+  /** Get the field name storing the original FID of each sample*/
+  std::string GetOriginFieldName();
 
 protected:
   /** Constructor */

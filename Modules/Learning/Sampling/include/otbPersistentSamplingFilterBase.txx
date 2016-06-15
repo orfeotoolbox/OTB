@@ -36,6 +36,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   , m_LayerIndex(0)
   , m_OutLayerName(std::string("output"))
 {
+  this->SetNthOutput(0,TInputImage::New());
 }
 
 
@@ -687,6 +688,78 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
         }
       }
     this->m_InMemoryOutputs.push_back(tmpContainer);
+    }
+}
+
+template<class TInputImage, class TMaskImage>
+void
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::InitializeOutputDataSource(ogr::DataSource* inputDS, ogr::DataSource* outputDS)
+{
+  TInputImage *inputImage = const_cast<TInputImage*>(this->GetInput());
+  inputImage->UpdateOutputInformation();
+  
+  ogr::Layer inLayer = inputDS->GetLayer(this->GetLayerIndex());
+
+  bool updateMode = false;
+  if (inputDS == outputDS)
+    {
+    updateMode = true;
+    // Check input layer name is same as m_OutLayerName
+    // TODO
+    }
+
+  // First get list of current fields
+  OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
+  std::map<std::string, OGRFieldType> currentFields;
+  std::vector<OGRFieldDefn> fieldDefnVector;
+  for (unsigned int k=0 ; k<layerDefn.GetFieldCount() ; k++)
+    {
+    OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
+    std::string currentName(fieldDefn.GetNameRef());
+    currentFields[currentName] = fieldDefn.GetType();
+    fieldDefnVector.push_back(fieldDefn);
+    }
+
+  ogr::Layer outLayer = inLayer;
+  if (!updateMode)
+    {
+    std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
+    bool projectionInformationAvailable = !projectionRefWkt.empty();
+    OGRSpatialReference * oSRS = NULL;
+    if(projectionInformationAvailable)
+      {
+      oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
+      }
+    // Create layer
+    outLayer = outputDS->CreateLayer(
+      this->GetOutLayerName(),
+      oSRS,
+      wkbPoint,
+      this->GetOGRLayerCreationOptions());
+    // Copy existing fields
+    for (unsigned int k=0 ; k<fieldDefnVector.size() ; k++)
+      {
+      outLayer.CreateField(fieldDefnVector[k]);
+      }
+    }
+
+  // Add new fields
+  for (unsigned int k=0 ; k<m_AdditionalFields.size() ; k++)
+    {
+    // test if field is already present
+    if (currentFields.count(m_AdditionalFields[k].GetName()))
+      {
+      // test the field type
+      if (currentFields[m_AdditionalFields[k].GetName()] != m_AdditionalFields[k].GetType())
+        {
+        itkExceptionMacro("Field name "<< m_AdditionalFields[k].GetName() << " already exists with a different type!");
+        }
+      }
+    else
+      {
+      outLayer.CreateField(m_AdditionalFields[k]);
+      }
     }
 }
 

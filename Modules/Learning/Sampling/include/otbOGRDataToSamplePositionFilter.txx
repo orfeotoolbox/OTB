@@ -30,7 +30,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 ::PersistentOGRDataToSamplePositionFilter()
 {
   this->SetNumberOfRequiredOutputs(2);
-  this->SetNthOutput(0,TInputImage::New());
+  m_OriginFieldName = std::string("originFID");
 }
 
 template<class TInputImage, class TMaskImage, class TSampler>
@@ -58,38 +58,23 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
       }
     }
 
+  // Add an extra field for the original FID
+  this->m_AdditionalFields.clear();
+  OGRFieldDefn fidField(this->GetOriginFieldName().c_str(),OFTInteger);
+  fidField.SetWidth(12);
+  this->m_AdditionalFields.push_back(ogr::FieldDefn(fidField));
+
   // compute label mapping
   this->ComputeClassPartition();
 
   // Prepare outputs
-  // TODO : forward all fields from input vectors
+  ogr::DataSource* inputDS = const_cast<ogr::DataSource*>(this->GetOGRData());
   for (unsigned int k=0 ; k < this->GetNumberOfLevels() ; k++)
     {
     otb::ogr::DataSource* output = this->GetOutputPositionContainer(k);
     if (output)
       {
-      std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
-      bool projectionInformationAvailable = !projectionRefWkt.empty();
-      OGRSpatialReference * oSRS = NULL;
-      if(projectionInformationAvailable)
-        {
-        oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
-        }
-
-      output->CreateLayer(this->GetOutLayerName(), oSRS ,wkbPoint, this->GetOGRLayerCreationOptions());
-      OGRFieldDefn field(this->GetFieldName().c_str(),OFTString);
-
-      //Handle the case of shapefile. A shapefile is a layer and not a datasource.
-      //The layer name in a shapefile is the shapefile's name.
-      //This is not the case for a database as sqlite or PG.
-      if (output->GetLayersCount() == 1)
-        {
-        output->GetLayer(0).CreateField(field, true);
-        }
-      else
-        {
-        output->GetLayer(this->GetOutLayerName()).CreateField(field, true);
-        }
+      this->InitializeOutputDataSource(inputDS, output);
       }
     }
 }
@@ -204,7 +189,9 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 
       ogr::Layer outputLayer = this->m_InMemoryOutputs[threadid][i]->GetLayerChecked(0);
       ogr::Feature feat(outputLayer.GetLayerDefn());
-      feat[this->GetFieldName()].SetValue(className);
+      feat.SetFrom(feature);
+      feat[this->GetOriginFieldName()].SetValue(static_cast<int>(feature.GetFID()));
+      //feat[this->GetFieldName()].SetValue(className);
       feat.SetGeometry(&ogrTmpPoint);
       outputLayer.CreateFeature(feat);
       break;
@@ -465,6 +452,22 @@ OGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 ::GetOutputPositionContainer(unsigned int level)
 {
   return this->GetFilter()->GetOutputPositionContainer(level);
+}
+
+template<class TInputImage, class TMaskImage, class TSampler>
+void
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
+::SetOriginFieldName(std::string key)
+{
+  this->GetFilter()->SetOriginFieldName(key);
+}
+
+template<class TInputImage, class TMaskImage, class TSampler>
+std::string
+OGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
+::GetOriginFieldName()
+{
+  return this->GetFilter()->GetOriginFieldName();
 }
 
 } // end of namespace otb
