@@ -150,3 +150,20 @@ macro(SUPERBUILD_UPDATE_CMAKE_VARIABLES PROJECT with_prefix)
   set(_SB_${PROJECT}_LIBRARY ${SB_INSTALL_PREFIX}/lib/${lib_file})
 
 endmacro()
+
+function(CREATE_UNINSTALL_TARGET_FOR prj)
+  set(SUPERBUILD_PROJECT_BINARY_DIR ${${prj}_SB_BUILD_DIR})
+  if(SUPERBUILD_PROJECT_BINARY_DIR)
+  configure_file(
+    "${CMAKE_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
+    "${SUPERBUILD_PROJECT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
+
+  add_custom_target(${prj}-uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${${prj}_SB_BUILD_DIR}/cmake_uninstall.cmake
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/${prj}/src/${prj}-stamp/${prj}-install
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/${prj}/src/${prj}-stamp/${prj}-done
+    )
+  unset(SUPERBUILD_PROJECT_BINARY_DIR)
+endif()
+endfunction()
