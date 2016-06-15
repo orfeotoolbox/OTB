@@ -17,7 +17,6 @@
 =========================================================================*/
 #ifndef otbWarpImageFilter_h
 #define otbWarpImageFilter_h
-
 #include "itkImageBase.h"
 #include "itkImageToImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"

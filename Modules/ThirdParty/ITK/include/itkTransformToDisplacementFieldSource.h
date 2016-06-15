@@ -15,6 +15,9 @@
  *  limitations under the License.
  *
  *=========================================================================*/
+#ifndef __itkTransformToDisplacementFieldSource_h
+#define __itkTransformToDisplacementFieldSource_h
+
 #ifndef itkTransformToDisplacementFieldSource_h
 #define itkTransformToDisplacementFieldSource_h
 
@@ -215,3 +218,4 @@ private:
 #endif
 
 #endif
+#endif // end #ifndef __itkTransformToDisplacementFieldSource_h

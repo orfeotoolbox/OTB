@@ -15,6 +15,9 @@
  *  limitations under the License.
  *
  *=========================================================================*/
+#ifndef __itkImageRegionSplitter_h
+#define __itkImageRegionSplitter_h
+
 #ifndef itkImageRegionSplitter_h
 #define itkImageRegionSplitter_h
 
@@ -175,4 +178,5 @@ private:
 #include "itkImageRegionSplitter.hxx"
 #endif
 
+#endif
 #endif
