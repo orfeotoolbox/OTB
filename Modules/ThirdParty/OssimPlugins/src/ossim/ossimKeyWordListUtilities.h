@@ -86,6 +86,14 @@ namespace ossimplugins {
          const ossimString s = ossimString::toString(v);
          kwl.addPair(prefix, key, s.string());
       }
+
+template <typename DataType> inline
+      void add(ossimKeywordlist & kwl, std::string const& key, DataType const& v)
+      {
+         const ossimString s = ossimString::toString(v);
+         kwl.addPair(key, s.string());
+      }
+
    inline
       void add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, ossimString const& v)
       {
