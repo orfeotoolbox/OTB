@@ -123,7 +123,7 @@ namespace ossimplugins
               "calibration_lookup_flag",
               "true",
               true);
-
+      
       kwl.addList(theManifestKwl, true); // TODO: really ?
       kwl.addList(theProductKwl, true);
 
@@ -878,7 +878,7 @@ namespace ossimplugins
          assert(coeff_idx>0 &&"The rg0 record has empty coefs vector.");
          add(theProductKwl, prefix + NUMBER_KEY, coeff_idx);
       }
-      add(theProductKwl, sr_gr_prefix + NUMBER_KEY, xnodes.size());
+      add(theProductKwl, sr_gr_prefix + NUMBER_KEY, static_cast<ossim_uint32>(xnodes.size()));
    }
 
    void ossimSentinel1Model::readGeoLocationGrid(ossimXmlNode const& productRoot)
@@ -976,7 +976,7 @@ namespace ossimplugins
          addMandatory(theProductKwl, prefix, keyWorldPtLon, **itNode, attLongitude);
          addMandatory(theProductKwl, prefix, keyWorldPtHgt, **itNode, attHeight);
       }
-      add(theProductKwl, GCP_NUMBER_KEY, idx);
+      add(theProductKwl, GCP_NUMBER_KEY, static_cast<ossim_uint32>(idx));
    }
 
    void ossimSentinel1Model::addOrbitStateVectors(ossimXmlNode const& orbitList)
@@ -1009,7 +1009,8 @@ namespace ossimplugins
          addMandatory(theProductKwl, orbit_prefix + keyVelY, *stateVectorList[i], "velocity/y");
          addMandatory(theProductKwl, orbit_prefix + keyVelZ, *stateVectorList[i], "velocity/z");
       }
-      add(theProductKwl, "orbitList.nb_orbits", stateVectorList_size);
+
+      add(theProductKwl,"orbitList.nb_orbits", static_cast<ossim_uint32>(stateVectorList_size));
    }
 
    bool ossimSentinel1Model::initGsd(ossimDpt& gsd) const
