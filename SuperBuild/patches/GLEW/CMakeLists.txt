@@ -63,6 +63,10 @@ else()
   add_definitions("-DGLEW_STATIC")
 endif()
 
+if(UNIX AND NOT APPLE)
+  find_package(X11 REQUIRED)
+endif()
+
 if(UNIX)
   if(CMAKE_C_FLAGS)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fPIC -pedantic")
@@ -155,7 +159,7 @@ install(TARGETS libGLEWmx
 foreach(executable glew visual)
   add_executable(${executable}info src/${executable}info.c)
   add_dependencies(${executable}info libGLEW)
-  target_link_libraries(${executable}info libGLEW)
+  target_link_libraries(${executable}info libGLEW ${X11_LIBRARIES})
   #install
   install(TARGETS ${executable}info
     RUNTIME DESTINATION bin
