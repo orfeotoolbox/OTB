@@ -48,7 +48,7 @@ function(find_cots NAME inc_file lib_file target)
    endif()
    # set(${NAME}_INCLUDE_DIR ${NAME}_INCLUDE_DIR  PARENT_SCOPE)
    # set(${NAME}_LIBRARY     ${NAME}_LIBRARY      PARENT_SCOPE)
-   set(${NAME}_FOUND     ${NAME}_FOUND      PARENT_SCOPE)
+   set(${NAME}_FOUND     ${${NAME}_FOUND}      PARENT_SCOPE)
 endfunction()
 
 # Common dirs
@@ -73,6 +73,7 @@ otb_add_test(NAME ossimTimeUtilitiesTest COMMAND ossimTimeUtilitiesTest )
 #==== Benchmarking Time conversion
 # (requires google.benchmark)
 find_cots(GBenchmark benchmark/benchmark.h benchmark "OSSIM Time utilities")
+
 if (GBenchmark_FOUND)
    add_executable(ossimTimeUtilitiesBench ossimTimeUtilitiesBench.cpp)
    include_directories(${GBenchmark_INCLUDE_DIR})
