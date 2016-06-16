@@ -34,8 +34,13 @@ if(UNIX)
 
   # PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
   # COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/GDAL/GNUmakefile ${GDAL_SB_SRC}/swig/python/GNUmakefile
-  
-  ADD_SUPERBUILD_CONFIGURE_VAR(GDAL LIBKML_ROOT     --with-libkml)
+
+  list(APPEND GDAL_SB_CONFIG "--with-libkml=no")
+  if(OTB_USE_LIBKML)
+    #RK: disabled libkml. Here are in External_otb.cmake
+    #ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(LIBKML)
+    #ADD_SUPERBUILD_CONFIGURE_VAR(GDAL LIBKML_ROOT     --with-libkml)
+  endif()
 
   set(GDAL_PATCH_COMMAND)
   set(GDAL_CONFIGURE_COMMAND  "${SB_ENV_CONFIGURE_CMD};${GDAL_SB_SRC}/configure"
@@ -57,6 +62,7 @@ if(UNIX)
     --with-ingres=no
     --with-jp2mrsid=no
     --with-kakadu=no
+    --with-jasper=no
     --with-libgrass=no
     --with-mrsid=no
     --with-msg=no
@@ -77,6 +83,7 @@ if(UNIX)
     --with-spatialite=no
     --with-xerces=no
     --with-xml2=no
+    --with-pg=no
     ${GDAL_SB_CONFIG}
     ${GDAL_SB_EXTRA_OPTIONS}
     )
@@ -84,10 +91,6 @@ if(UNIX)
   #set(GDAL_INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install)
 
 else(MSVC)
-
-  ##remove libkml?
-  list(REMOVE_ITEM GDAL_DEPENDENCIES LIBKML)
-
   STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
   STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
   configure_file(${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
