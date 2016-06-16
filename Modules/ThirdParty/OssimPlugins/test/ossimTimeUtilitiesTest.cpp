@@ -135,7 +135,7 @@ void check_time(char const* format, char const* sDate,
    iso.setIso8601(sDate);
    BOOST_CHECK_EQUAL(d.getModifiedJulian(), iso.getModifiedJulian());
 
-   // Is ossimDate |--> MJD bijective ? 
+   // Is ossimDate |--> MJD bijective ?
    const double dMJD = d.getModifiedJulian();
    ossimDate d2; d2.setDateFromModifiedJulian(dMJD);
    BOOST_CHECK_EQUAL(d2.getYear(), year);
@@ -146,14 +146,14 @@ void check_time(char const* format, char const* sDate,
    BOOST_CHECK_CLOSE_FRACTION(d2.getSec()+d2.getFractionalSecond(), sec+fsec, 0.0001);
 
    // Alternative implementation
-   BOOST_CHECK_EQUAL(d.getModifiedJulian(), getModifiedJulianDate(sDate));
+   BOOST_CHECK_CLOSE_FRACTION(d.getModifiedJulian(), getModifiedJulianDate(sDate), 0.01);
 
    // Check string conversion
    // Yes, this is likelly to fail du to double imprecisions
    // - official ossimDate string conversion
    time::ModifiedJulianDate mjd = time::toModifiedJulianDate(sDate);
-   // std::cout << "MJD("<<sDate<<"): " << mjd.as_seconds() << std::endl;
-   BOOST_CHECK_EQUAL(d.getModifiedJulian(), mjd.as_seconds());
+   // std::cout << "MJD("<<sDate<<"): " << mjd.as_day_frac() << std::endl;
+   BOOST_CHECK_CLOSE_FRACTION(d.getModifiedJulian(), mjd.as_day_frac(), 0.01);
    std::ostringstream oss;
    oss << d.getYear() << '-' << std::setw(2) << std::setfill('0') << d.getMonth() << '-' << d.getDay() << 'T';
    d.printTime(oss);
@@ -162,6 +162,9 @@ void check_time(char const* format, char const* sDate,
    }
    BOOST_CHECK_EQUAL(oss.str(), sDate);
    // - our string conversion
+   // std::cout << std::setprecision(20) ;
+   // std::cout << mjd.as_day_frac() << " -> " << to_simple_string(mjd) << " / " << d.getModifiedJulian() << "\n";
+   // std::cout << oss.str() << "\n";
    BOOST_CHECK_EQUAL(to_simple_string(mjd), sDate);
 }
 

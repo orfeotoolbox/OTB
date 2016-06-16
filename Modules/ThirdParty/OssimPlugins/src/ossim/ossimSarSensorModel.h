@@ -34,6 +34,10 @@
 #   include "ossimTimeUtilities.h"
 #endif
 
+#if defined(USE_BOOST_TIME)
+#  include <boost/date_time/posix_time/posix_time.hpp>
+#endif
+
 namespace ossimplugins
 {
 
@@ -93,8 +97,13 @@ public:
       Type m_value;
    };
 
+#if defined(USE_BOOST_TIME)
+   typedef boost::posix_time::ptime         TimeType;
+   typedef boost::posix_time::time_duration DurationType;
+#else
    typedef time::ModifiedJulianDate TimeType;
    typedef time::Duration           DurationType;
+#endif
 
    struct OrbitRecordType
    {
