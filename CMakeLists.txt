@@ -417,9 +417,13 @@ list(APPEND option_list TINYXML)
 #RK
 #Q: Why these two guys here? we already have option_list
 #A: Because cmake case sensitivity with variables.
-list(APPEND option_list OpenCV)
-list(APPEND option_list QT)
+if(OTB_USE_OPENCV)
+  list(APPEND option_list OpenCV)
+endif()
 
+if(OTB_USE_QT4)
+  list(APPEND option_list QT)
+endif()
 #sort again!
 list(SORT option_list)
 
