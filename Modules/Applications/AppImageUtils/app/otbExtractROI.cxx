@@ -55,7 +55,7 @@ public:
                                       FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ExtractROI");
     SetDescription("Extract a ROI defined by the user.");
@@ -116,7 +116,7 @@ private:
     SetDocExampleParameterValue("out", "ExtractROI.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Update the sizes only if the user has not defined a size
     if ( HasValue("in") )
@@ -219,7 +219,7 @@ private:
     return false;
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
     inImage->UpdateOutputInformation();

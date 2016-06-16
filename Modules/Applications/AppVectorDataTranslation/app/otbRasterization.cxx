@@ -57,7 +57,7 @@ public:
   typedef otb::OGRDataSourceToLabelImageFilter<FloatImageType> OGRDataSourceToMapFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
     {
     SetName("Rasterization");
     SetDescription("Rasterize a vector dataset.");
@@ -139,13 +139,13 @@ private:
     SetDocExampleParameterValue("spy","1.");
     }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
     {
     // Nothing to do
     }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
     {
     otb::ogr::DataSource::Pointer ogrDS;
     UInt8ImageType::Pointer referenceImage;

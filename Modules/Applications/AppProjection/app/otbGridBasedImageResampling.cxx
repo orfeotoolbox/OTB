@@ -101,7 +101,7 @@ private:
     m_DisplacementFieldCaster = DisplacementFieldCastFilterType::New();
   }
 
- void DoInit()
+ void DoInit() ITK_OVERRIDE
   {
     SetName("GridBasedImageResampling");
     SetDescription("Resamples an image according to a resampling grid");
@@ -183,12 +183,12 @@ private:
     SetDocExampleParameterValue("grid.type","def");
   }
 
- void DoUpdateParameters()
+ void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here
   }
 
-void DoExecute()
+void DoExecute() ITK_OVERRIDE
     {
       // Get the input image
       FloatVectorImageType* inImage = GetParameterImage("io.in");

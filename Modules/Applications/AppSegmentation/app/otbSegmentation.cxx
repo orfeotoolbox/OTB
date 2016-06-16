@@ -131,7 +131,7 @@ public:
   itkTypeMacro(Segmentation, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Segmentation");
     SetDescription("Performs segmentation of an image, and output either a raster or a vector file. In vector mode, large input datasets are supported.");
@@ -340,7 +340,7 @@ private:
     SetDocExampleParameterValue("filter", "meanshift",1);
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
@@ -441,7 +441,7 @@ private:
     return streamingVectorizedFilter->GetStreamSize();
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Switch on segmentation mode
     const std::string segModeType = GetParameterString("mode");

@@ -43,7 +43,7 @@ public:
   itkTypeMacro(MeanShiftSmoothing, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("MeanShiftSmoothing");
     SetDescription("Perform mean shift filtering");
@@ -115,7 +115,7 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if(IsParameterEnabled("modesearch"))
       {
@@ -128,7 +128,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType* input = GetParameterImage("in");
 

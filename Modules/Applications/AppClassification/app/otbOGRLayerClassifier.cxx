@@ -51,7 +51,7 @@ public:
 ;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("OGRLayerClassifier");
     SetDescription("Classify an OGR layer based on a machine learning model and a list of features to consider.");
@@ -89,7 +89,7 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if ( HasValue("inshp") )
       {
@@ -120,7 +120,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
       
     #ifdef OTB_USE_LIBSVM 

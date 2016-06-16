@@ -87,7 +87,7 @@ public:
 
   LSMSSegmentation(): m_FinalReader(),m_ImportGeoInformationFilter(),m_FilesToRemoveAfterExecute(),m_TmpDirCleanup(false){}
 
-  virtual ~LSMSSegmentation(){}
+  ~LSMSSegmentation() ITK_OVERRIDE{}
 
 private:
   LabelImageReaderType::Pointer m_FinalReader;
@@ -211,7 +211,7 @@ private:
     return vrtfname;
   }
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("LSMSSegmentation");
     SetDescription("Second step of the exact Large-Scale Mean-Shift segmentation workflow.");
@@ -284,11 +284,11 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     m_FilesToRemoveAfterExecute.clear();
 
@@ -683,7 +683,7 @@ private:
       SetParameterOutputImage("out",m_ImportGeoInformationFilter->GetOutput());
   }
 
-  void AfterExecuteAndWriteOutputs()
+  void AfterExecuteAndWriteOutputs() ITK_OVERRIDE
   {
     // Release input files
     m_FinalReader = 0;

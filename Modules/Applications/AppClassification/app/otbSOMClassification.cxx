@@ -73,7 +73,7 @@ private:
     m_Classifier = ClassificationFilterType::New();
     }
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("SOMClassification");
     SetDescription("SOM image classification.");
@@ -173,12 +173,12 @@ private:
     SetDocExampleParameterValue("iv", "0");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // initiating random number generation
     itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer

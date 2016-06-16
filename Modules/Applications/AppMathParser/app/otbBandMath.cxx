@@ -50,7 +50,7 @@ public:
 
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("BandMath");
     SetDescription("Perform a mathematical operation on monoband images");
@@ -84,7 +84,7 @@ private:
     SetDocExampleParameterValue("exp", "\"cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3, im3b4)\"");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Check if the expression is correctly set
     if (HasValue("il"))
@@ -155,7 +155,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the input image list
     FloatVectorImageListType::Pointer inList = GetParameterImageList("il");

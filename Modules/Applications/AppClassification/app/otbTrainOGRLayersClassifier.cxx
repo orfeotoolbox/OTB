@@ -51,7 +51,7 @@ public:
 ;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("TrainOGRLayersClassifier");
     SetDescription("Train a SVM classifier based on labeled geometries and a list of features to consider.");
@@ -88,7 +88,7 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if ( HasValue("inshp") )
       {
@@ -119,7 +119,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     #ifdef OTB_USE_LIBSVM 
     clock_t tic = clock();

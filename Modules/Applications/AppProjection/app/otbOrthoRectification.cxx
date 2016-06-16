@@ -84,7 +84,7 @@ public:
   typedef otb::BCOInterpolateImageFunction<FloatVectorImageType>   BCOInterpolationType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("OrthoRectification");
     std::ostringstream oss;
@@ -231,7 +231,7 @@ private:
     SetDocExampleParameterValue("io.out","QB_Toulouse_ortho.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if (HasValue("io.in"))
       {
@@ -590,7 +590,7 @@ private:
       } // if (HasValue("io.in"))
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
     {
     // Get the input image
     FloatVectorImageType* inImage = GetParameterImage("io.in");

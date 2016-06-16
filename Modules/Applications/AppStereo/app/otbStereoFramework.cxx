@@ -312,7 +312,7 @@ private:
   }
 
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("StereoFramework");
     SetDescription("Compute the ground elevation based on one or multiple stereo pair(s)");
@@ -525,7 +525,7 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if( HasValue("input.il") )
       {
@@ -591,7 +591,7 @@ private:
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Setup the DSM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");

@@ -53,7 +53,7 @@ public:
   itkTypeMacro(RefineSensorModel, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("RefineSensorModel");
     SetDescription("Perform least-square fit of a sensor model to a set of tie points");
@@ -100,12 +100,12 @@ private:
     SetDocExampleParameterValue("map.epsg.code","32631");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     OGRMultiLineString mls;
 

@@ -77,7 +77,7 @@ public:
   itkTypeMacro(HomologousPointsExtraction, otb::Wrapper::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("HomologousPointsExtraction");
     SetDocName("Homologous points extraction");
@@ -197,7 +197,7 @@ private:
     SetDocExampleParameterValue("out","homologous.txt");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
 
   }
@@ -321,7 +321,7 @@ private:
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     OGRMultiLineString mls;
 
