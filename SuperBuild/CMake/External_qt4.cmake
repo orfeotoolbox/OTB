@@ -42,17 +42,17 @@ if(MSVC)
     ${CMAKE_SOURCE_DIR}/patches/QT4/configure_qt4.bat.in
     ${CMAKE_BINARY_DIR}/configure_qt4.bat
     @ONLY)
-   
+
   set(QT4_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt4.bat)
-  
+
 else()
   configure_file(
-    ${QT4_SB_SRC}/patches/QT4/configure_qt4.sh.in
+    ${CMAKE_SOURCE_DIR}/patches/patches/QT4/configure_qt4.sh.in
     ${CMAKE_BINARY_DIR}/configure_qt4.sh
     @ONLY)
-    
+
   set(QT4_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt4.sh)
-  
+
 endif()
 
   ExternalProject_Add(QT4
@@ -72,11 +72,11 @@ endif()
  #RK: Because QT4 sucks with qmake -query.
   ExternalProject_Add_Step(QT4 copy_specs
     COMMAND
-    ${CMAKE_COMMAND} -E copy_directory 
+    ${CMAKE_COMMAND} -E copy_directory
     ${QT4_SB_SRC}/mkspecs ${SB_INSTALL_PREFIX}/mkspecs
     DEPENDEES patch update
     DEPENDERS configure )
-    
+
   ExternalProject_Add_Step(QT4 _jpeg_lib_name
     COMMAND
     ${CMAKE_COMMAND} -E copy
@@ -84,7 +84,7 @@ endif()
     ${QT4_SB_SRC}/src/gui/image/
     DEPENDEES patch update
     DEPENDERS configure )
-  
+
 endif()
 
 
