@@ -434,7 +434,7 @@ void ossimSarSensorModel::applyCoordinateConversion(const double & in, const Tim
          // std::cout << " NOT found => next!\n";
         }
     }
-    assert(nextRecord != records.end());
+   assert(nextRecord == it);
     if(it == records.end())
     {
         if(azimuthTime < records.front().azimuthTime)
@@ -450,6 +450,7 @@ void ossimSarSensorModel::applyCoordinateConversion(const double & in, const Tim
     }
     else
     {
+      assert(nextRecord != records.end());
         assert(!previousRecord->coefs.empty()&&"previousRecord coefficients vector is empty.");
         assert(!nextRecord->coefs.empty()&&"nextRecord coefficients vector is empty.");
 
@@ -540,7 +541,6 @@ bool ossimSarSensorModel::zeroDopplerLookup(const ossimEcefPoint & inputPt, Time
       {
           doppler1 = doppler2;
           record1 = record2;
-          ++it;
       }
   }
 
