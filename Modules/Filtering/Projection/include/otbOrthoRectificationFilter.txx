@@ -26,7 +26,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision>
 OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolatorPrecision>
-::OrthoRectificationFilter(): m_MapProjection(NULL)
+::OrthoRectificationFilter(): m_MapProjection(ITK_NULLPTR)
 {}
 
 template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision>

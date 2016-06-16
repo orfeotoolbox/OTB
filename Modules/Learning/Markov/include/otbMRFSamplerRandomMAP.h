@@ -74,8 +74,8 @@ public:
     if ((nClasses != this->m_NumberOfClasses) || (m_EnergiesInvalid == true))
       {
       this->m_NumberOfClasses = nClasses;
-      if (m_Energy != NULL) free(m_Energy);
-      if (m_RepartitionFunction != NULL) free(m_RepartitionFunction);
+      if (m_Energy != ITK_NULLPTR) free(m_Energy);
+      if (m_RepartitionFunction != ITK_NULLPTR) free(m_RepartitionFunction);
       m_Energy = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
       m_RepartitionFunction = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
       this->Modified();
@@ -156,8 +156,8 @@ public:
 protected:
   // The constructor and destructor.
   MRFSamplerRandomMAP() :
-    m_RepartitionFunction(NULL),
-    m_Energy(NULL),
+    m_RepartitionFunction(ITK_NULLPTR),
+    m_Energy(ITK_NULLPTR),
     m_EnergiesInvalid(true)
     {
     m_Generator = RandomGeneratorType::GetInstance();
@@ -165,8 +165,8 @@ protected:
     }
   ~MRFSamplerRandomMAP() ITK_OVERRIDE
     {
-    if (m_Energy != NULL) free(m_Energy);
-    if (m_RepartitionFunction != NULL) free(m_RepartitionFunction);
+    if (m_Energy != ITK_NULLPTR) free(m_Energy);
+    if (m_RepartitionFunction != ITK_NULLPTR) free(m_RepartitionFunction);
     }
 
 private:

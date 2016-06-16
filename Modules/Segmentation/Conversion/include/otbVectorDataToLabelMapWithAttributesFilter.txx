@@ -224,7 +224,7 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TVectorData *>

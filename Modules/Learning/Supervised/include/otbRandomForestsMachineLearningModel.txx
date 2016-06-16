@@ -79,7 +79,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   //Define random forests paramneters
   //FIXME do this in the constructor?
 
-  float * priors = m_Priors.empty() ? 0 : &m_Priors.front();
+  float * priors = m_Priors.empty() ? ITK_NULLPTR : &m_Priors.front();
 
   CvRTParams params = CvRTParams(m_MaxDepth,                    // max depth
                                  m_MinSampleCount,              // min sample count
@@ -124,7 +124,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
   target[0] = static_cast<TOutputValue>(result);
 
-  if (quality != NULL)
+  if (quality != ITK_NULLPTR)
     {
     if(m_ComputeMargin)
       (*quality) = m_RFModel->predict_margin(sample);
@@ -141,7 +141,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_RFModel->save(filename.c_str(), 0);
+    m_RFModel->save(filename.c_str(), ITK_NULLPTR);
   else
     m_RFModel->save(filename.c_str(), name.c_str());
 }
@@ -152,7 +152,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_RFModel->load(filename.c_str(), 0);
+    m_RFModel->load(filename.c_str(), ITK_NULLPTR);
   else
     m_RFModel->load(filename.c_str(), name.c_str());
 }

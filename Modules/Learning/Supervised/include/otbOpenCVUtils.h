@@ -66,7 +66,7 @@ namespace otb
     unsigned int sampleIdx = 0;
 
     // Check for valid listSample
-    if(listSample != NULL && listSample->Size() > 0)
+    if(listSample != ITK_NULLPTR && listSample->Size() > 0)
       {
        // Retrieve samples count
        unsigned int sampleCount = listSample->Size();

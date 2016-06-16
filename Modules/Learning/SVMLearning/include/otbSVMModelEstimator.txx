@@ -52,7 +52,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<ModelType *>(this->itk::ProcessObject::GetOutput(0));
 }

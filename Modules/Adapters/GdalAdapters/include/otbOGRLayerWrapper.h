@@ -230,7 +230,7 @@ public:
    */
   operator int boolean ::* () const
     {
-    return m_Layer ? &boolean::i : 0;
+    return m_Layer ? &boolean::i : ITK_NULLPTR;
     }
 
   /** Access to raw \c OGRLayer.
@@ -332,12 +332,12 @@ public:
     struct enabler {};
   public:
     feature_iter()
-      : m_Layer(0), m_Crt(0) {}
+      : m_Layer(ITK_NULLPTR), m_Crt(ITK_NULLPTR) {}
     explicit feature_iter(otb::ogr::Layer & layer)
       : m_Layer(&layer), m_Crt(layer.GetNextFeature()) {}
     template <class OtherValue> feature_iter(
       feature_iter<OtherValue> const& other,
-      typename boost::enable_if<boost::is_convertible<OtherValue*,Value*> >::type* = 0
+      typename boost::enable_if<boost::is_convertible<OtherValue*,Value*> >::type* = ITK_NULLPTR
     )
       : m_Layer(other.m_Layer), m_Crt(other.m_Crt)
       {}

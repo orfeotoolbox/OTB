@@ -40,8 +40,8 @@ CompositeTransform<TFirstTransform,
     NOutputDimensions>
 ::CompositeTransform() : Superclass(ParametersDimension)
 {
-  m_FirstTransform = 0;
-  m_SecondTransform = 0;
+  m_FirstTransform = ITK_NULLPTR;
+  m_SecondTransform = ITK_NULLPTR;
 }
 
 template<class TFirstTransform,

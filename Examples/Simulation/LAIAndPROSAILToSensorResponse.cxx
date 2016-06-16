@@ -130,7 +130,7 @@ public:
 protected:
   ImageUniqueValuesCalculator()
     {
-    m_Image = NULL;
+    m_Image = ITK_NULLPTR;
     }
   ~ImageUniqueValuesCalculator() ITK_OVERRIDE
   {
@@ -469,7 +469,7 @@ private:
 
 int main(int argc, char *argv[])
 {
-  char *cmifname = NULL;
+  char *cmifname = ITK_NULLPTR;
   if (argc != 10)
     {
     if (argc == 11) // cloud mask filename optional parameter
@@ -804,7 +804,7 @@ int main(int argc, char *argv[])
   miReader->UpdateOutputInformation();
   MaskImageType::Pointer maskImage = miReader->GetOutput();
 
-  if (cmifname != NULL)
+  if (cmifname != ITK_NULLPTR)
     {
 
     MaskReaderType::Pointer cmiReader = MaskReaderType::New();

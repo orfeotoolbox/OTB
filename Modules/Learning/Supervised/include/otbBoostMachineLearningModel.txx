@@ -61,7 +61,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
-  CvBoostParams params = CvBoostParams(m_BoostType, m_WeakCount, m_WeightTrimRate, m_MaxDepth, false, 0);
+  CvBoostParams params = CvBoostParams(m_BoostType, m_WeakCount, m_WeightTrimRate, m_MaxDepth, false, ITK_NULLPTR);
   params.split_criteria = m_SplitCrit;
 
   //train the Boost model
@@ -92,7 +92,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
 
   target[0] = static_cast<TOutputValue>(result);
 
-  if (quality != NULL)
+  if (quality != ITK_NULLPTR)
     {
     (*quality) = static_cast<ConfidenceValueType>(
       m_BoostModel->predict(sample,missing,cv::Range::all(),false,true));
@@ -107,7 +107,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_BoostModel->save(filename.c_str(), 0);
+    m_BoostModel->save(filename.c_str(), ITK_NULLPTR);
   else
     m_BoostModel->save(filename.c_str(), name.c_str());
 }
@@ -118,7 +118,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
   if (name == "")
-      m_BoostModel->load(filename.c_str(), 0);
+      m_BoostModel->load(filename.c_str(), ITK_NULLPTR);
   else
       m_BoostModel->load(filename.c_str(), name.c_str());
 }

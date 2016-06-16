@@ -45,7 +45,7 @@ int otbConnectedComponentMuParserFunctorTest(int argc, char *argv[])
    }
    else
        {
-       maskFilename = NULL;
+       maskFilename = ITK_NULLPTR;
        }
 
   typedef float InputPixelType;
@@ -74,7 +74,7 @@ int otbConnectedComponentMuParserFunctorTest(int argc, char *argv[])
 
  filter->SetInput(reader->GetOutput());
 
- if(NULL != maskFilename)
+ if(ITK_NULLPTR != maskFilename)
  {
   maskReader = MaskReaderType::New();
   maskReader->SetFileName(maskFilename);

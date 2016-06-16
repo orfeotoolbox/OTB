@@ -31,7 +31,7 @@ template <class TPointSet, class TDisplacementField>
 PointSetWithTransformToDisplacementFieldGenerator<TPointSet, TDisplacementField>
 ::PointSetWithTransformToDisplacementFieldGenerator()
 {
-  m_Transform = 0;    // has to be provided by the user
+  m_Transform = ITK_NULLPTR;    // has to be provided by the user
 }
 /**
  * PrintSelf Method

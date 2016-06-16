@@ -40,7 +40,7 @@ SVMImageClassificationWithRuleFilter<TInputImage, TOutputImage, TMaskImage>
 {
   Superclass::GenerateOutputInformation();
 
-  if (this->GetModel() == NULL)
+  if (this->GetModel() == ITK_NULLPTR)
     {
     itkGenericExceptionMacro(<< "No model for classification");
     }
@@ -60,7 +60,7 @@ SVMImageClassificationWithRuleFilter<TInputImage, TOutputImage, TMaskImage>
 {
   Superclass::AllocateOutputs();
 
-  if (this->GetModel() == NULL)
+  if (this->GetModel() == ITK_NULLPTR)
     {
     itkGenericExceptionMacro(<< "No model for classification");
     }

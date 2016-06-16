@@ -324,13 +324,13 @@ public:
   double * GetRho(void) const
   {
     if (m_Model) return m_Model->rho;
-    return NULL;
+    return ITK_NULLPTR;
   }
   /** Return the support vectors */
   svm_node ** GetSupportVectors(void)
   {
     if (m_Model) return m_Model->SV;
-    return NULL;
+    return ITK_NULLPTR;
   }
   /** Set the support vectors and changes the l number of support vectors accordind to sv.*/
   void SetSupportVectors(svm_node ** sv, int nbOfSupportVector);
@@ -339,7 +339,7 @@ public:
   double ** GetAlpha(void)
   {
     if (m_Model) return m_Model->sv_coef;
-    return NULL;
+    return ITK_NULLPTR;
   }
   /** Set the alphas values (SV Coef) */
   void SetAlpha(double ** alpha, int nbOfSupportVector);
@@ -348,14 +348,14 @@ public:
   int * GetLabels()
   {
     if (m_Model) return m_Model->label;
-    return NULL;
+    return ITK_NULLPTR;
   }
 
   /** Get the number of SV per classes */
   int * GetNumberOfSVPerClasse()
   {
     if (m_Model) return m_Model->nSV;
-    return NULL;
+    return ITK_NULLPTR;
   }
 
   struct svm_problem& GetProblem()

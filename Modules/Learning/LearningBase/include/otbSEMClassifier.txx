@@ -42,15 +42,15 @@ SEMClassifier<TInputImage, TOutputImage>
   m_TerminationCode = NOT_CONVERGED;
   m_ExternalLabels = 0;
   m_ComponentDeclared = 0;
-  m_Sample = 0;
+  m_Sample = ITK_NULLPTR;
   m_NbSamples = 0;
-  m_SampleList = 0;
+  m_SampleList = ITK_NULLPTR;
   m_NbChange = 0;
   m_TerminationThreshold = 1E-5;
   m_Neighborhood = 1;
 
-  m_OutputImage = 0;
-  m_Output = 0;
+  m_OutputImage = ITK_NULLPTR;
+  m_Output = ITK_NULLPTR;
 
 }
 
@@ -164,7 +164,7 @@ SEMClassifier<TInputImage, TOutputImage>
   typename TInputImage::SizeType size = imgLabels->GetBufferedRegion().GetSize();
   int                            theSize = (int) size[0] * size[1];
 
-  if (m_Sample == NULL)
+  if (m_Sample == ITK_NULLPTR)
     {
     m_ClassLabels.resize(theSize);
 

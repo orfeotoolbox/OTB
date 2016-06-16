@@ -56,7 +56,7 @@ ImageListToImageListFilter<TInputImage, TOutputImage>
   if (this->GetNumberOfInputs() < 1)
     {
     // exit
-    return 0;
+    return ITK_NULLPTR;
     }
   // else return the first input
   return static_cast<InputImageListType *>

@@ -84,8 +84,8 @@ InputVectorDataListParameter::SetListFromFileName(const std::vector<std::string>
 void
 InputVectorDataListParameter::AddNullElement()
 {
-  m_ReaderList->PushBack(NULL);
-  m_VectorDataList->PushBack(NULL);
+  m_ReaderList->PushBack(ITK_NULLPTR);
+  m_VectorDataList->PushBack(ITK_NULLPTR);
   SetActive(false);
   this->Modified();
 }

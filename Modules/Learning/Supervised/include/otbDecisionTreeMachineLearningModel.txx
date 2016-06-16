@@ -64,7 +64,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
-  float * priors = m_Priors.empty() ? 0 : &m_Priors.front();
+  float * priors = m_Priors.empty() ? ITK_NULLPTR : &m_Priors.front();
 
   CvDTreeParams params = CvDTreeParams(m_MaxDepth, m_MinSampleCount, m_RegressionAccuracy,
                                        m_UseSurrogates, m_MaxCategories, m_CVFolds, m_Use1seRule, m_TruncatePrunedTree, priors);
@@ -96,7 +96,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 
   target[0] = static_cast<TOutputValue>(result);
 
-  if (quality != NULL)
+  if (quality != ITK_NULLPTR)
     {
     if (!this->m_ConfidenceIndex)
       {
@@ -113,7 +113,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_DTreeModel->save(filename.c_str(), 0);
+    m_DTreeModel->save(filename.c_str(), ITK_NULLPTR);
   else
     m_DTreeModel->save(filename.c_str(), name.c_str());
 }
@@ -124,7 +124,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_DTreeModel->load(filename.c_str(), 0);
+    m_DTreeModel->load(filename.c_str(), ITK_NULLPTR);
   else
     m_DTreeModel->load(filename.c_str(), name.c_str());
 }

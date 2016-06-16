@@ -175,7 +175,7 @@ public:
   {
     m_File = fopen(infname, "wb");
 
-    if (m_File == NULL)
+    if (m_File == ITK_NULLPTR)
       {
       itkExceptionMacro(<<" otbCurlHelper::FileResource : failed to open the file ."<< infname);
       }

@@ -78,7 +78,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -104,7 +104,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->itk::ProcessObject::GetOutput(1));
 }

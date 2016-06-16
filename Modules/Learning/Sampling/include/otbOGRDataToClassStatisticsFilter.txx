@@ -52,7 +52,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const otb::ogr::DataSource *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -72,7 +72,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -83,7 +83,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 ::Synthetize(void)
 {
   otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetOGRData());
-  vectors->GetLayer(m_LayerIndex).SetSpatialFilter(NULL);
+  vectors->GetLayer(m_LayerIndex).SetSpatialFilter(ITK_NULLPTR);
   
   ClassCountMapType &classCount = this->GetClassCountOutput()->Get();
   PolygonSizeMapType &polygonSize = this->GetPolygonSizeOutput()->Get();
@@ -129,7 +129,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 {
   if (this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const ClassCountObjectType *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -141,7 +141,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 {
   if (this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<ClassCountObjectType *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -153,7 +153,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 {
   if (this->GetNumberOfOutputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const PolygonSizeObjectType *>(this->itk::ProcessObject::GetOutput(2));
 }
@@ -165,7 +165,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 {
     if (this->GetNumberOfOutputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<PolygonSizeObjectType *>(this->itk::ProcessObject::GetOutput(2));
 }

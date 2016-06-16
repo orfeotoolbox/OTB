@@ -226,7 +226,7 @@ protected:
         m_RedIdx(1),
         m_GreenIdx(2),
         m_BlueIdx(3),
-        m_RescaleFilter(NULL)
+        m_RescaleFilter(ITK_NULLPTR)
     {
       m_UL.Fill(0);
       m_UR.Fill(0);

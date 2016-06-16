@@ -144,7 +144,7 @@ public:
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. The buffer is cast to a
    * pointer to the beginning of the image data. */
-  virtual void Write(const itk::DataObject* data, char ** papszOptions = NULL) = 0;
+  virtual void Write(const itk::DataObject* data, char ** papszOptions = ITK_NULLPTR) = 0;
 
 protected:
   VectorDataIOBase();

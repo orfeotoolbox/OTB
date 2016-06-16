@@ -27,7 +27,7 @@
 #endif
 
 #if @OTB_MUPARSERX_HIDE_NULLPTR@
-#define nullptr NULL
+#define ITK_NULLPTR NULL
 #endif
 
 #endif

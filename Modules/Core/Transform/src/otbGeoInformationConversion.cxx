@@ -29,12 +29,12 @@ namespace otb
 
 std::string GeoInformationConversion::ToWKT(int srid)
 {
-  char * wkt = NULL;
+  char * wkt = ITK_NULLPTR;
   std::string ret;
 
   // Build the srs from the epsg number
-  OGRSpatialReferenceH hSRS = NULL;
-  hSRS = OSRNewSpatialReference(NULL);
+  OGRSpatialReferenceH hSRS = ITK_NULLPTR;
+  hSRS = OSRNewSpatialReference(ITK_NULLPTR);
 
   if (OSRImportFromEPSG(hSRS, srid ) == OGRERR_NONE)
     {

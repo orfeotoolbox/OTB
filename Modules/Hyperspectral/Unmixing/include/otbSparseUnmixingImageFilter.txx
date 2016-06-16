@@ -75,7 +75,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 {
   if ( i >= this->GetNumberOfInputs() )
   {
-    return 0;
+    return ITK_NULLPTR;
   }
 
   return static_cast<const InputImageType * >

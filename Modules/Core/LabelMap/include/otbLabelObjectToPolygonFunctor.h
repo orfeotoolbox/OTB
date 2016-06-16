@@ -117,7 +117,7 @@ public:
   }
 
   /** Constructor */
-  LabelObjectToPolygonFunctor() : m_Polygon(NULL),
+  LabelObjectToPolygonFunctor() : m_Polygon(ITK_NULLPTR),
     m_CurrentState(UP_LEFT),
     m_PositionFlag(LEFT_END),
     m_StartingPoint(),

@@ -37,7 +37,7 @@ namespace otb
 template <class TOutputVectorData>
 VectorDataFileReader<TOutputVectorData>
 ::VectorDataFileReader() :
-  m_VectorDataIO(NULL),
+  m_VectorDataIO(ITK_NULLPTR),
   m_UserSpecifiedVectorDataIO(false),
   m_FileName("")
 {

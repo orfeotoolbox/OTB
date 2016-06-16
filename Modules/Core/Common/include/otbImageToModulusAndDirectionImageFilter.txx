@@ -62,7 +62,7 @@ GetOutput()
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>
            (this->itk::ProcessObject::GetOutput(0));
@@ -92,7 +92,7 @@ GetOutputDirection()
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageDirectionType *>
            (this->itk::ProcessObject::GetOutput(1));

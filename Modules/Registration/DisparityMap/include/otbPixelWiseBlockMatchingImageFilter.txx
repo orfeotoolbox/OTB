@@ -129,7 +129,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if (this->GetNumberOfInputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -143,7 +143,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if(this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -157,7 +157,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if(this->GetNumberOfInputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -171,7 +171,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if(this->GetNumberOfInputs()<4)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(3));
 }
@@ -185,7 +185,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if (this->GetNumberOfOutputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TOutputMetricImage *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -199,7 +199,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if (this->GetNumberOfOutputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TOutputMetricImage *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -214,7 +214,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if (this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TOutputDisparityImage *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -228,7 +228,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
 if (this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TOutputDisparityImage *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -242,7 +242,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if (this->GetNumberOfOutputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TOutputDisparityImage *>(this->itk::ProcessObject::GetOutput(2));
 }
@@ -256,7 +256,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
 if (this->GetNumberOfOutputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TOutputDisparityImage *>(this->itk::ProcessObject::GetOutput(2));
 }
@@ -292,7 +292,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if(this->GetNumberOfInputs()<5)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TOutputDisparityImage *>(this->itk::ProcessObject::GetInput(4));
 }
@@ -306,7 +306,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if(this->GetNumberOfInputs()<6)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TOutputDisparityImage *>(this->itk::ProcessObject::GetInput(5));
 }

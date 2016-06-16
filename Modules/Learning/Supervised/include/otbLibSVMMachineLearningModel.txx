@@ -79,7 +79,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 
   target = m_SVMestimator->GetModel()->EvaluateLabel(mfunctor(input));
 
-  if (quality != NULL)
+  if (quality != ITK_NULLPTR)
     {
     if (!this->m_ConfidenceIndex)
       {

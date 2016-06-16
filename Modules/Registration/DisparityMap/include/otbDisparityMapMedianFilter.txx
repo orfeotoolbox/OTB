@@ -61,7 +61,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 {
   if (this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMask *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -73,7 +73,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 {
   if (this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TMask *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -86,7 +86,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 {
   if (this->GetNumberOfOutputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TOutputImage *>(this->itk::ProcessObject::GetOutput(2));
 }
@@ -98,7 +98,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 {
   if (this->GetNumberOfOutputs()<4)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TMask *>(this->itk::ProcessObject::GetOutput(3));
 }

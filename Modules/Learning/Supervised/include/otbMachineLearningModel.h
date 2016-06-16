@@ -100,7 +100,7 @@ public:
   virtual void Train() =0;
 
   /** Predict values using the model */
-  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = NULL) const = 0;
+  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = ITK_NULLPTR) const = 0;
 
   /** Classify all samples in InputListSample and fill TargetListSample with the associated label */
   void PredictAll();

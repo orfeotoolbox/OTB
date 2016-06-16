@@ -86,7 +86,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const  LabelSampleListType* >

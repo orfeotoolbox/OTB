@@ -98,7 +98,7 @@ public:
   {
     if (this->GetNumberOfInputs() < 1)
       {
-      return 0;
+      return ITK_NULLPTR;
       }
     else return (static_cast<const InputMultiSpectralImageType *>(this->itk::ProcessObject::GetInput(0)));
   }
@@ -107,7 +107,7 @@ public:
   {
     if (this->GetNumberOfInputs() < 2)
       {
-      return 0;
+      return ITK_NULLPTR;
       }
     else return (static_cast<const InputMultiSpectralInterpImageType *>(this->itk::ProcessObject::GetInput(1)));
   }
@@ -116,7 +116,7 @@ public:
   {
     if (this->GetNumberOfInputs() < 3)
       {
-      return 0;
+      return ITK_NULLPTR;
       }
     else return (static_cast<const InputPanchroImageType *>(this->itk::ProcessObject::GetInput(2)));
   }

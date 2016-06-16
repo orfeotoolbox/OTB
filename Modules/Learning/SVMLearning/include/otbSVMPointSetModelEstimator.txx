@@ -74,7 +74,7 @@ SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TInputPointSet *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -86,7 +86,7 @@ SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TTrainingPointSet *>(this->itk::ProcessObject::GetInput(1));
 }

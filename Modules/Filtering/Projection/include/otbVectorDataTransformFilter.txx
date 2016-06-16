@@ -38,7 +38,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
   // use the otb::Transform or we loose the capability of using all the existing
   // itk transform, so we just keep it as NULL and you have to be careful not
   // to burn yourself when using it.
-  m_Transform = NULL;
+  m_Transform = ITK_NULLPTR;
 }
 
 /**

@@ -66,7 +66,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(0));
 }
@@ -79,7 +79,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(1));
 }
@@ -92,7 +92,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(2));
 }
@@ -105,7 +105,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 4)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(3));
 }
@@ -118,7 +118,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 5)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(4));
 }
@@ -131,7 +131,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 6)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(5));
 }
@@ -144,7 +144,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 7)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(6));
 }
@@ -157,7 +157,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 8)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(7));
 }
@@ -170,7 +170,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 9)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(8));
 }
@@ -183,7 +183,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 10)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(9));
 }

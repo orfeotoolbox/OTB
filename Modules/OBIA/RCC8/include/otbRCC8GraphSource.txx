@@ -43,7 +43,7 @@ RCC8GraphSource<TOutputGraph>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputGraphType *> (this->ProcessObject::GetOutput(0));
 }

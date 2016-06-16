@@ -152,7 +152,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if (this->GetNumberOfIndexedInputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -166,7 +166,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if(this->GetNumberOfIndexedInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -180,7 +180,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if(this->GetNumberOfIndexedInputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -194,7 +194,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if(this->GetNumberOfIndexedInputs()<4)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(3));
 }
@@ -208,7 +208,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if(this->GetNumberOfIndexedInputs()<5)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(4));
 }
@@ -222,7 +222,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if(this->GetNumberOfIndexedInputs()<6)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(5));
 }
@@ -250,7 +250,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
 if (this->GetNumberOfOutputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TDisparityImage *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -278,7 +278,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
 if (this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TDisparityImage *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -306,7 +306,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   if (this->GetNumberOfOutputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TOutputMetricImage *>(this->itk::ProcessObject::GetOutput(2));
 }

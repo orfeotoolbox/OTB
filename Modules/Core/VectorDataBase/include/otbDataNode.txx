@@ -602,7 +602,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
     default: break;
     }
 
-  return NULL;
+  return ITK_NULLPTR;
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>

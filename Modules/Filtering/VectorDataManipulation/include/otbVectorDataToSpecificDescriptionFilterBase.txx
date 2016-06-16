@@ -51,7 +51,7 @@ VectorDataToSpecificDescriptionFilterBase<TVectorData>
 {
   if (this->GetNumberOfInputs() < idx+2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const DataObject *>

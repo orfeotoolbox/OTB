@@ -50,7 +50,7 @@ LikelihoodPathListFilter<TPath, TImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const ImageType *>(this->itk::ProcessObject::GetInput(1));
 }

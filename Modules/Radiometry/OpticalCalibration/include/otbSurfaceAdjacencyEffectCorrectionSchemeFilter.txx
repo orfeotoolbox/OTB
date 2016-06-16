@@ -79,7 +79,7 @@ void
 SurfaceAdjacencyEffectCorrectionSchemeFilter<TInputImage, TOutputImage>
 ::UpdateAtmosphericRadiativeTerms()
 {
-  if (this->GetInput() == NULL)
+  if (this->GetInput() == ITK_NULLPTR)
     {
       itkExceptionMacro(<< "Input must be set before updating the atmospheric radiative terms");
     }

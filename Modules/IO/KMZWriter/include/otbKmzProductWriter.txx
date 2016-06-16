@@ -47,7 +47,7 @@ KmzProductWriter<TInputImage>
 {
   // Reset the boost::intrusive_ptr<KmzFile> :
   // TODO : when upgrading boost > 1.42 use method release().
-  m_KmzFile = NULL;
+  m_KmzFile = ITK_NULLPTR;
 }
 
 /**
@@ -84,7 +84,7 @@ KmzProductWriter<TInputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TInputImage * >
@@ -270,7 +270,7 @@ KmzProductWriter<TInputImage>
   // Build wgs ref to compute long/lat
   OGRSpatialReference oSRS;
   oSRS.SetWellKnownGeogCS("WGS84");
-  char * wgsRef = NULL;
+  char * wgsRef = ITK_NULLPTR;
   oSRS.exportToWkt(&wgsRef);
 
   // Update image base information

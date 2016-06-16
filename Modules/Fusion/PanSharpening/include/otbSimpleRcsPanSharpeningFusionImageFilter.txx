@@ -75,7 +75,7 @@ SimpleRcsPanSharpeningFusionImageFilter
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TPanImageType *>
@@ -104,7 +104,7 @@ SimpleRcsPanSharpeningFusionImageFilter
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TXsImageType *>

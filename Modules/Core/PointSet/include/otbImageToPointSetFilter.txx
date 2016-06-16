@@ -94,7 +94,7 @@ const typename ImageToPointSetFilter<TInputImage, TOutputPointSet>::InputImageTy
 ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::GetInput(void)
 {
-  if (this->GetNumberOfInputs() < 1) return 0;
+  if (this->GetNumberOfInputs() < 1) return ITK_NULLPTR;
 
   return dynamic_cast<const InputImageType*>
            (this->ProcessObjectType::GetInput(0));

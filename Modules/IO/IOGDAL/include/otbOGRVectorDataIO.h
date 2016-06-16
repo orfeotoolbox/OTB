@@ -98,7 +98,7 @@ public:
   bool CanWriteFile(const char*) const ITK_OVERRIDE;
 
   /** Writes the data to disk from the memory buffer provided */
-  void Write(const itk::DataObject* data,  char ** papszOptions = NULL) ITK_OVERRIDE;
+  void Write(const itk::DataObject* data,  char ** papszOptions = ITK_NULLPTR) ITK_OVERRIDE;
 
 protected:
   /** Constructor.*/

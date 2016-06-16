@@ -43,10 +43,10 @@ SVMModel<TValue, TLabel>::SVMModel()
   this->DoProbabilityEstimates(false);
 
   m_Parameters.nr_weight = 0;
-  m_Parameters.weight_label = NULL;
-  m_Parameters.weight = NULL;
+  m_Parameters.weight_label = ITK_NULLPTR;
+  m_Parameters.weight = ITK_NULLPTR;
 
-  m_Model = NULL;
+  m_Model = ITK_NULLPTR;
 
   this->Initialize();
 }
@@ -83,8 +83,8 @@ SVMModel<TValue, TLabel>::Initialize()
 
   // Intialize problem
   m_Problem.l = 0;
-  m_Problem.y = NULL;
-  m_Problem.x = NULL;
+  m_Problem.y = ITK_NULLPTR;
+  m_Problem.x = ITK_NULLPTR;
 
   m_ProblemUpToDate = false;
 }
@@ -111,7 +111,7 @@ SVMModel<TValue, TLabel>::DeleteModel()
     {
     svm_free_and_destroy_model(&m_Model);
     }
-  m_Model = NULL;
+  m_Model = ITK_NULLPTR;
 }
 
 template <class TValue, class TLabel>
@@ -122,7 +122,7 @@ SVMModel<TValue, TLabel>::DeleteProblem()
   if (m_Problem.y)
     {
     delete[] m_Problem.y;
-    m_Problem.y = NULL;
+    m_Problem.y = ITK_NULLPTR;
     }
 
   if (m_Problem.x)
@@ -135,7 +135,7 @@ SVMModel<TValue, TLabel>::DeleteProblem()
         }
       }
     delete[] m_Problem.x;
-    m_Problem.x = NULL;
+    m_Problem.x = ITK_NULLPTR;
     }
   m_Problem.l = 0;
   m_ProblemUpToDate = false;
@@ -358,7 +358,7 @@ SVMModel<TValue, TLabel>::EvaluateLabel(const MeasurementType& measure) const
   int nr_class = svm_get_nr_class(m_Model);
 
   // Allocate space for labels
-  double *prob_estimates = NULL;
+  double *prob_estimates = ITK_NULLPTR;
 
   // Eventually allocate space for probabilities
   if (predict_probability)
@@ -532,7 +532,7 @@ SVMModel<TValue, TLabel>::LoadModel(const char* model_file_name)
 {
   this->DeleteModel();
   m_Model = svm_load_model(model_file_name);
-  if (m_Model == 0)
+  if (m_Model == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "Problem while loading SVM model "
                       << std::string(model_file_name));
@@ -563,10 +563,10 @@ SVMModel<TValue, TLabel>::SetSupportVectors(svm_node ** sv, int nbOfSupportVecto
 
   for (int n = 0; n < m_Model->l; ++n)
     {
-    m_Model->SV[n] = NULL;
+    m_Model->SV[n] = ITK_NULLPTR;
     }
   delete[] (m_Model->SV);
-  m_Model->SV = NULL;
+  m_Model->SV = ITK_NULLPTR;
 
   m_Model->SV = new struct svm_node*[m_Model->l];
 

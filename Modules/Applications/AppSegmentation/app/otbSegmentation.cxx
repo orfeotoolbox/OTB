@@ -449,7 +449,7 @@ private:
     const std::string segType = GetParameterString("filter");
 
     otb::ogr::DataSource::Pointer ogrDS;
-    otb::ogr::Layer layer(NULL, false);
+    otb::ogr::Layer layer(ITK_NULLPTR, false);
 
     std::string projRef = GetParameterFloatVectorImage("in")->GetProjectionRef();
 
@@ -686,7 +686,7 @@ private:
 
            std::string repack("REPACK ");
            repack = repack + shpLayerName;
-           ogrDS->ExecuteSQL(repack, NULL, NULL);
+           ogrDS->ExecuteSQL(repack, ITK_NULLPTR, ITK_NULLPTR);
          }
        }
       }
