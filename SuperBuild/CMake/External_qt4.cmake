@@ -47,7 +47,7 @@ if(MSVC)
 
 else()
   configure_file(
-    ${CMAKE_SOURCE_DIR}/patches/patches/QT4/configure_qt4.sh.in
+    ${CMAKE_SOURCE_DIR}/patches/QT4/configure_qt4.sh.in
     ${CMAKE_BINARY_DIR}/configure_qt4.sh
     @ONLY)
 
