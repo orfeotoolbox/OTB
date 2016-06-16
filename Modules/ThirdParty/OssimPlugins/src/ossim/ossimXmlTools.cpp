@@ -28,14 +28,17 @@ ossimString const& ossimplugins::getTextFromFirstNode(ossimXmlNode const& node, 
     return s;
 }
 
-#if 0
+
 ossimplugins::TimeType ossimplugins::getTimeFromFirstNode(ossimXmlNode const& node, ossimString const& xpath)
 {
-    ossimString s = getTextFromFirstNode(node, xpath);
-    std::replace(s.begin(), s.end(), 'T', ' ');
-    return boost::posix_time::time_from_string(s);
-}
+#if defined(USE_BOOST_TIME)
+   ossimString s = getTextFromFirstNode(node, xpath);
+   std::replace(s.begin(), s.end(), 'T', ' ');
+   return boost::posix_time::time_from_string(s);
+#else
+   return getModifiedJulianDateFromFirstNode(node, xpath);
 #endif
+}
 
 ossimplugins::time::ModifiedJulianDate
 ossimplugins::getModifiedJulianDateFromFirstNode(ossimXmlNode const& node, ossimString const& xpath)

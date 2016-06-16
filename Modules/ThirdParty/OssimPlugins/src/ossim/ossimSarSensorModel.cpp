@@ -10,14 +10,21 @@
 // $Id$
 
 #include "ossimSarSensorModel.h"
-#include <vector>
-#include <algorithm>
-#include <boost/static_assert.hpp>
-#include <ossim/base/ossimLsrSpace.h>
 #include "ossimKeyWordListUtilities.h"
 #include "ossimTraceHelpers.h"
 #include "ossimRangeUtilities.h"
 #include "ossimSarSensorModelPathsAndKeys.h"
+#include <ossim/base/ossimLsrSpace.h>
+#include <boost/static_assert.hpp>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+#if defined(USE_BOOST_TIME)
+using boost::posix_time::microseconds;
+#else
+using ossimplugins::time::microseconds;
+#endif
 
 namespace {// Anonymous namespace
    const bool k_verbose = false; // global verbose constant; TODO: use an option
@@ -195,6 +202,9 @@ void ossimSarSensorModel::worldToLineSample(const ossimGpt& worldPt, ossimDpt & 
     imPt.makeNan();
     return;
     }
+  // std::cout << "AzimuthTime: " << azimuthTime << "\n";
+  // std::cout << "RangeTime: " << rangeTime << "\n";
+  // std::cout << "GRD: " << isGRD() << "\n";
 
   // Convert azimuth time to line
   azimuthTimeToLine(azimuthTime,imPt.y);
@@ -203,8 +213,9 @@ void ossimSarSensorModel::worldToLineSample(const ossimGpt& worldPt, ossimDpt & 
     {
     // GRD case
     double groundRange(0);
-    double nearGroundRange(0);
     slantRangeToGroundRange(rangeTime*C/2,azimuthTime,groundRange);
+    // std::cout << "GroundRange: " << groundRange << "\n";
+    // std::cout << "TheRangeResolution: " << theRangeResolution << "\n";
 
     // Eq 32 p. 31
     // TODO: possible micro-optimization: precompute 1/theRangeResolution, and
@@ -213,6 +224,8 @@ void ossimSarSensorModel::worldToLineSample(const ossimGpt& worldPt, ossimDpt & 
     }
   else
     {
+    // std::cout << "TheNearRangeTime: " << theNearRangeTime << "\n";
+    // std::cout << "TheRangeSamplingRate: " << theRangeSamplingRate << "\n";
     // SLC case
     // Eq 23 and 24 p. 28
     imPt.x = (rangeTime - theNearRangeTime)*theRangeSamplingRate;
@@ -375,17 +388,20 @@ void ossimSarSensorModel::interpolateSensorPosVel(const TimeType & azimuthTime, 
 
 void ossimSarSensorModel::slantRangeToGroundRange(const double & slantRange, const TimeType & azimuthTime, double & groundRange) const
 {
+   // std::cout << "SR -> GR\n";
   applyCoordinateConversion(slantRange,azimuthTime,theSlantRangeToGroundRangeRecords,groundRange);
 }
 
 void ossimSarSensorModel::groundRangeToSlantRange(const double & groundRange, const TimeType & azimuthTime, double & slantRange) const
 {
+   // std::cout << "GR -> SR\n";
   applyCoordinateConversion(groundRange,azimuthTime,theGroundRangeToSlantRangeRecords,slantRange);
 }
 
 void ossimSarSensorModel::applyCoordinateConversion(const double & in, const TimeType& azimuthTime, const std::vector<CoordinateConversionRecordType> & records, double & out) const
 {
     assert(!records.empty()&&"The records vector is empty.");
+   // std::cout << "conv coord(" << in << ", az="<<azimuthTime<<")\n";
 
     // First, we need to find the correct pair of records for interpolation
     std::vector<CoordinateConversionRecordType>::const_iterator it = records.begin();
@@ -398,13 +414,16 @@ void ossimSarSensorModel::applyCoordinateConversion(const double & in, const Tim
     std::vector<CoordinateConversionRecordType>::const_iterator nextRecord = it;
 
     // Look for the correct record
+   // std::cout << "Looking for " << azimuthTime << " within records:\n";
     while(it!=records.end())
     {
+      // std::cout << "- record: " << it->azimuthTime << "...";
         // nextRecord = it;
 
         if(azimuthTime >= previousRecord->azimuthTime
                 && azimuthTime < nextRecord->azimuthTime)
         {
+         // std::cout << " found!\n";
             break;
         }
         else
@@ -412,6 +431,7 @@ void ossimSarSensorModel::applyCoordinateConversion(const double & in, const Tim
             previousRecord = nextRecord;
             ++it;
             nextRecord = it;
+         // std::cout << " NOT found => next!\n";
         }
     }
     assert(nextRecord != records.end());
@@ -420,10 +440,12 @@ void ossimSarSensorModel::applyCoordinateConversion(const double & in, const Tim
         if(azimuthTime < records.front().azimuthTime)
         {
             srgrRecord = records.front();
+         // std::cout << "Not found, but before first => srgrRecord: " << srgrRecord.azimuthTime << "\n";
         }
         else if(azimuthTime >= records.back().azimuthTime)
         {
             srgrRecord = records.back();
+         // std::cout << "Not found, but after last => srgrRecord: " << srgrRecord.azimuthTime << "\n";
         }
     }
     else
@@ -432,16 +454,20 @@ void ossimSarSensorModel::applyCoordinateConversion(const double & in, const Tim
         assert(!nextRecord->coefs.empty()&&"nextRecord coefficients vector is empty.");
 
         // If azimuth time is between 2 records, interpolate
-#if 0
+#if defined(USE_BOOST_TIME)
         const double interp
-           = (azimuthTime-(previousRecord->azimuthTime)).total_microseconds()
-           /static_cast<double>((nextRecord->azimuthTime-previousRecord->azimuthTime).total_microseconds());
+         =                    (azimuthTime             - previousRecord->azimuthTime).total_microseconds()
+         /static_cast<double>((nextRecord->azimuthTime - previousRecord->azimuthTime).total_microseconds());
 #else
         const double interp
            = (azimuthTime             - previousRecord->azimuthTime)
            / (nextRecord->azimuthTime - previousRecord->azimuthTime)
            ;
 #endif
+      // std::cout << "interp: " << interp << " ="
+         // << " (" << azimuthTime             << " - " << previousRecord->azimuthTime << " (="<< (azimuthTime             - previousRecord->azimuthTime)<< ") )"
+         // << "/(" << nextRecord->azimuthTime << " - " << previousRecord->azimuthTime << " (="<< (nextRecord->azimuthTime - previousRecord->azimuthTime)<< ") )"
+         // << "\n";
 
         srgrRecord.rg0 = (1-interp) * previousRecord->rg0 + interp*nextRecord->rg0;
 
@@ -532,19 +558,23 @@ bool ossimSarSensorModel::zeroDopplerLookup(const ossimEcefPoint & inputPt, Time
   assert(interpDenom>0&&"Both doppler frequency are null in interpolation weight computation");
 
   const double interp = abs_doppler1/interpDenom;
+  // std::cout << "OK - interp: " << interp << "\n";
 
   // Note that microsecond precision is used here
   const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
   const double deltat = static_cast<double>(delta_td.total_microseconds());
+  // std::cout << "OK - delta_td: " << delta_td << "\n";
+  // std::cout << "OK - deltat: " << deltat << "ms\n";
 
   // Compute interpolated time offset wrt record1
-  // using boost::posix_time::microseconds;
-  using ossimplugins::time::microseconds;
   const DurationType td = microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
   const DurationType offset = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
+  // std::cout << "td: " << td << "\n";
+  // std::cout << "offset: " << offset << "\n";
 
   // Compute interpolated azimuth time
   interpAzimuthTime = record1->azimuthTime + td + offset;
+  // std::cout << "interpAzimuthTime: " << interpAzimuthTime << "\n";
 
   // Interpolate sensor position and velocity
   interpolateSensorPosVel(interpAzimuthTime,interpSensorPos, interpSensorVel);
@@ -556,8 +586,6 @@ void ossimSarSensorModel::computeBistaticCorrection(const ossimEcefPoint & input
 {
   // Bistatic correction (eq 25, p 28)
   double halftrange = 1000000 * (sensorPos-inputPt).magnitude()/C;
-  // using boost::posix_time::microseconds;
-  using ossimplugins::time::microseconds;
   bistaticCorrection= microseconds(static_cast<unsigned long>(floor(halftrange+0.5)));
 }
 
@@ -649,13 +677,15 @@ void ossimSarSensorModel::lineToAzimuthTime(const double & line, TimeType & azim
     }
 
     const double timeSinceStartInMicroSeconds = (line - currentBurst->startLine)*theAzimuthTimeInterval;
+    // std::cout << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
 
-    // using boost::posix_time::microseconds;
-    using ossimplugins::time::microseconds;
     const DurationType timeSinceStart = microseconds(timeSinceStartInMicroSeconds);
     const DurationType offset = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
     // Eq 22 p 27
     azimuthTime = currentBurst->azimuthStartTime + timeSinceStart + offset;
+    // std::cout << "timeSinceStart: " << timeSinceStart << "\n";
+    // std::cout << "offset: "         << offset << " (" << theAzimuthTimeOffset << ")\n";
+    // std::cout << "->azimuthTime: "  << azimuthTime << "\n";
 }
 
 
@@ -666,6 +696,7 @@ bool ossimSarSensorModel::projToSurface(const GCPRecordType & initGcp, const oss
   ossimEcefPoint currentEstimation(initGcp.worldPt);
 
   // Compute corresponding image position
+  // std::cout << "initGCP: " << initGcp.imPt << "\n";
   ossimDpt currentImPoint(initGcp.imPt);
 
   ossim_float64 currentImSquareResidual = squareDistance(target,currentImPoint);
@@ -711,6 +742,10 @@ bool ossimSarSensorModel::projToSurface(const GCPRecordType & initGcp, const oss
     ossimGpt currentEstimationWorld(currentEstimation);
     ossimGpt tmpGpt = ossimGpt(currentEstimation+dx);
     worldToLineSample(tmpGpt,tmpImPt);
+    // std::cout << "currentEstimationWorld: " << currentEstimationWorld << "\n";
+    // std::cout << "currentEstimation: " << currentEstimation << "\n";
+    // std::cout << "tmpGpt: " << tmpGpt << "\n";
+    // std::cout << "tmpImPt: " << tmpImPt << "\n";
     p_fx[0] = (currentImPoint.x-tmpImPt.x)/d;
     p_fy[0] = (currentImPoint.y-tmpImPt.y)/d;
     p_fh[0] = (currentEstimationWorld.height()-tmpGpt.height())/d;

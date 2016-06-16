@@ -106,6 +106,18 @@ namespace ossimplugins {
       {
          add(kwl, key, v.as_day_frac());
       }
+#if defined(USE_BOOST_TIME)
+   inline
+      void add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, boost::posix_time::ptime const& v)
+      {
+         add(kwl, prefix, key, ossimString(to_iso_string(v)));
+      }
+   inline
+      void add(ossimKeywordlist & kwl, std::string const& key, boost::posix_time::ptime const& v)
+      {
+         add(kwl, key, to_iso_string(v));
+      }
+#endif
 
    template <typename T>
    inline void get(ossimKeywordlist const& kwl, std::string const& prefix, std::string const& key, T & v)

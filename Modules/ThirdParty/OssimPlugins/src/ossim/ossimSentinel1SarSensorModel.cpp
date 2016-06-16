@@ -46,7 +46,7 @@ void ossimplugins::ossimSentinel1SarSensorModel::readCoordinates(
    {
       CoordinateConversionRecordType coordRecord;
 
-      coordRecord.azimuthTime = getModifiedJulianDateFromFirstNode(**itNode, attAzimuthTime);
+      coordRecord.azimuthTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
 
       coordRecord.rg0 = getDoubleFromFirstNode(**itNode, rg0_xpath);;
 
@@ -99,7 +99,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
         OrbitRecordType orbitRecord;
 
         // Retrieve acquisition time
-        orbitRecord.azimuthTime = getModifiedJulianDateFromFirstNode(**itNode, attTime);
+        orbitRecord.azimuthTime = getTimeFromFirstNode(**itNode, attTime);
 
         // Retrieve ECEF position
         ossimXmlNode const& positionNode = getExpectedFirstNode(**itNode, attPosition);
@@ -142,11 +142,11 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
         BurstRecordType burstRecord;
 
         burstRecord.startLine = 0;
-        burstRecord.azimuthStartTime = getModifiedJulianDateFromFirstNode(xmlRoot,"imageAnnotation/imageInformation/productFirstLineUtcTime");
+        burstRecord.azimuthStartTime = getTimeFromFirstNode(xmlRoot,"imageAnnotation/imageInformation/productFirstLineUtcTime");
 
         std::cout<< burstRecord.azimuthStartTime<<'\n';
 
-        burstRecord.azimuthStopTime = getModifiedJulianDateFromFirstNode(xmlRoot,"imageAnnotation/imageInformation/productLastLineUtcTime");
+        burstRecord.azimuthStopTime = getTimeFromFirstNode(xmlRoot,"imageAnnotation/imageInformation/productLastLineUtcTime");
         burstRecord.endLine = getTextFromFirstNode(xmlRoot, "imageAnnotation/imageInformation/numberOfLines").toUInt16()-1;
 
         theBurstRecords.push_back(burstRecord);
@@ -160,7 +160,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
         {
             BurstRecordType burstRecord;
 
-            const ossimSarSensorModel::TimeType azTime = getModifiedJulianDateFromFirstNode(**itNode, attAzimuthTime);
+            const ossimSarSensorModel::TimeType azTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
 
             ossimString const& s = getTextFromFirstNode(**itNode, attFirstValidSample);
 
@@ -202,8 +202,11 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
             burstRecord.startLine = burstId*linesPerBurst + first_valid;
             burstRecord.endLine = burstId*linesPerBurst + last_valid;
 
-            // using boost::posix_time::microseconds;
+#if defined(USE_BOOST_TIME)
+            using boost::posix_time::microseconds;
+#else
             using ossimplugins::time::microseconds;
+#endif
             burstRecord.azimuthStartTime = azTime + microseconds(first_valid*theAzimuthTimeInterval);
             burstRecord.azimuthStopTime = azTime + microseconds(last_valid*theAzimuthTimeInterval);
 
@@ -232,7 +235,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
         GCPRecordType gcpRecord;
 
         // Retrieve acquisition time
-        gcpRecord.azimuthTime = getModifiedJulianDateFromFirstNode(**itNode, attAzimuthTime);
+        gcpRecord.azimuthTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
 
         gcpRecord.slantRangeTime = getDoubleFromFirstNode(**itNode, attSlantRangeTime);
 

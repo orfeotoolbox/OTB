@@ -13,8 +13,8 @@
 class ossimString;
 // class ossimXmlNode;
 
-#if 0
-#include <boost/date_time/posix_time/posix_time.hpp>
+#if defined(USE_BOOST_TIME)
+#   include <boost/date_time/posix_time/posix_time.hpp>
 #endif
 #include "ossimStringUtilities.h"
 #include "ossimTimeUtilities.h"
@@ -23,17 +23,17 @@ class ossimString;
 namespace ossimplugins {
    namespace time {
       class ModifiedJulianDate;
-   }// namespace
-#if 0
+   }// time namespace
+#if defined(USE_BOOST_TIME)
    typedef boost::posix_time::ptime         TimeType;
+#else
+   typedef time::ModifiedJulianDate         TimeType;
 #endif
 
    ossimXmlNode const& getExpectedFirstNode(ossimXmlNode const& node, ossimString const& xpath);
    ossimString const& getTextFromFirstNode(ossimXmlNode const& node, ossimString const& xpath);
    ossimString const& getOptionalTextFromFirstNode(ossimXmlNode const& node, ossimString const& xpath);
-#if 0
    TimeType getTimeFromFirstNode(ossimXmlNode const& node, ossimString const& xpath);
-#endif
    time::ModifiedJulianDate getModifiedJulianDateFromFirstNode(ossimXmlNode const& node, ossimString const& xpath);
    double getDoubleFromFirstNode(ossimXmlNode const& node, ossimString const& xpath);
 

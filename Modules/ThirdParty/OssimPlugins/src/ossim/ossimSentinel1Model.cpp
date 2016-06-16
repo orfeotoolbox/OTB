@@ -649,11 +649,13 @@ namespace ossimplugins
          addMandatory(theProductKwl, calibrationPrefix, "swath", adsHeader, "swath");
          addMandatory(theProductKwl, calibrationPrefix, "polarisation", adsHeader, "polarisation");
 
+#if !defined(USE_BOOST_TIME)
          add(theProductKwl, calibrationPrefix, "startTime",
                time::toModifiedJulianDate(getTextFromFirstNode(adsHeader, "startTime")));
 
          add(theProductKwl, calibrationPrefix, "stopTime",
                time::toModifiedJulianDate(getTextFromFirstNode(adsHeader, "stopTime")));
+#endif
 
          addMandatory(theProductKwl, calibrationPrefix, "absoluteCalibrationConstant", calibrationInformation, "absoluteCalibrationConstant");
 
@@ -680,8 +682,10 @@ namespace ossimplugins
                   "pixel_count",
                   node->getAttributeValue("count").string());
 
+#if !defined(USE_BOOST_TIME)
             add(theProductKwl, calibrationVectorPrefix, keyAzimuthTime,
                   time::toModifiedJulianDate(getOptionalTextFromFirstNode(calibrationVector, "azimuthTime")));
+#endif
 
             addMandatory(theProductKwl, calibrationVectorPrefix, "line",        calibrationVector, "line");
             addMandatory(theProductKwl, calibrationVectorPrefix, "pixel",       calibrationVector, "pixel");
@@ -730,8 +734,10 @@ namespace ossimplugins
                   node->getAttributeValue("count"),
                   false);
 
+#if !defined(USE_BOOST_TIME)
             add(theProductKwl, noiseVectorPrefix, keyAzimuthTime,
                   time::toModifiedJulianDate(getTextFromFirstNode(noiseVector, "azimuthTime")));
+#endif
 
             addMandatory(theProductKwl, noiseVectorPrefix, "line",     noiseVector, "line");
             addMandatory(theProductKwl, noiseVectorPrefix, "pixel",    noiseVector, "pixel");
@@ -749,8 +755,8 @@ namespace ossimplugins
       {
          ossimNotify(ossimNotifyLevel_DEBUG) << "No burst records available in metadata!!\n";
          add(theProductKwl, BURST_PREFIX, "[0].start_line", 0);
-         add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", getModifiedJulianDateFromFirstNode(imageInformation,  "productFirstLineUtcTime"));
-         add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  getModifiedJulianDateFromFirstNode(imageInformation,  "productLastLineUtcTime"));
+         add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", getTimeFromFirstNode(imageInformation,  "productFirstLineUtcTime"));
+         add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  getTimeFromFirstNode(imageInformation,  "productLastLineUtcTime"));
          add(theProductKwl, BURST_PREFIX, "[0].end_line",           getFromFirstNode<unsigned int>(imageInformation, "numberOfLines")-1);
          add(theProductKwl, BURST_NUMBER_KEY,                       "1");
       }
@@ -763,7 +769,7 @@ namespace ossimplugins
 
          for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++burstId)
          {
-            const TimeType azTime = getModifiedJulianDateFromFirstNode(**itNode, attAzimuthTime);
+            const TimeType azTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
             ossimString const& s = getTextFromFirstNode(**itNode, attFirstValidSample);
 
             ossim_int64 first_valid(0), last_valid(0);
@@ -805,8 +811,11 @@ namespace ossimplugins
             add(theProductKwl,burstPrefix + keyStartLine,         burstId*linesPerBurst + first_valid);
             add(theProductKwl,burstPrefix + keyEndLine,           burstId*linesPerBurst + last_valid);
             // TODO: check units.
-            // using boost::posix_time::microseconds;
+#if defined(USE_BOOST_TIME)
+            using boost::posix_time::microseconds;
+#else
             using ossimplugins::time::microseconds;
+#endif
             add(theProductKwl,burstPrefix + keyAzimuthStartTime, azTime + microseconds(first_valid*theAzimuthTimeInterval));
             add(theProductKwl,burstPrefix + keyAzimuthStopTime,  azTime + microseconds(last_valid*theAzimuthTimeInterval));
          }
@@ -871,8 +880,13 @@ namespace ossimplugins
       {
          int pos = std::snprintf(prefix, sizeof(prefix), "%s[%d].", GCP_PREFIX.c_str(), idx);
          assert(pos >= sizeof(SR_PREFIX)+4 && pos < 1024);
+#if defined(USE_BOOST_TIME)
+         const TimeType azimuthTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
+         add(theProductKwl, prefix, attAzimuthTime, ossimString(to_iso_string(azimuthTime)));
+#else
          const TimeType azimuthTime = time::toModifiedJulianDate(
                addMandatory(theProductKwl, prefix, attAzimuthTime,     **itNode, attAzimuthTime)); // acquisition time
+#endif
          addMandatory(theProductKwl, prefix, keySlantRangeTime, **itNode, attSlantRangeTime);
          addMandatory(theProductKwl, prefix, keyImPtX,          **itNode, attPixel);
 
@@ -881,7 +895,11 @@ namespace ossimplugins
          // the image.
          if(theBurstRecords.size()>2)
          {
+#if defined(USE_BOOST_TIME)
+            TimeType acqStart;
+#else
             TimeType acqStart(0);
+#endif
             unsigned long acqStartLine(0);
 
 #if 0
