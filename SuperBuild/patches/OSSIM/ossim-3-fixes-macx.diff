@@ -1,0 +1,156 @@
+diff -burN ossim-1.8.20-3.orig/ossim/include/ossim/ossimConfig.h ossim-1.8.20-3/ossim/include/ossim/ossimConfig.h
+--- ossim-1.8.20-3.orig/ossim/include/ossim/ossimConfig.h	1970-01-01 01:00:00.000000000 +0100
++++ ossim-1.8.20-3/ossim/include/ossim/ossimConfig.h	2016-06-16 15:14:15.251654701 +0200
+@@ -0,0 +1,20 @@
++/*  $Id: ossimConfig.h.in 13607 2008-09-25 19:39:45Z gpotts $ */
++#ifndef ossimConfig_HEADER
++#define ossimConfig_HEADER
++
++/* Define to "1" if you have libz installed, "0" if not. */
++#define OSSIM_HAS_LIBZ 1
++
++/* Define to "1" if you have MPI(lam/mpi), "0" if not. */
++#define OSSIM_HAS_MPI 0
++
++/* Define to "1" if you have FREETYPE, "0" if not. */
++#define OSSIM_HAS_FREETYPE 1
++
++/* Define to "1" if you have GEOTIFF, "0" if not. */
++#define OSSIM_HAS_GEOTIFF 1
++
++/* Enable cvs id strings for use with "ident" application. */
++#define OSSIM_ID_ENABLED 1
++
++#endif /* End of "#ifndef ossimConfig_HEADER" */
+diff -burN ossim-1.8.20-3.orig/ossim/include/ossim/ossimVersion.h ossim-1.8.20-3/ossim/include/ossim/ossimVersion.h
+--- ossim-1.8.20-3.orig/ossim/include/ossim/ossimVersion.h	1970-01-01 01:00:00.000000000 +0100
++++ ossim-1.8.20-3/ossim/include/ossim/ossimVersion.h	2016-06-16 15:14:15.251654701 +0200
+@@ -0,0 +1,14 @@
++#ifndef ossimVersion_HEADER
++#define ossimVersion_HEADER 1
++
++#define OSSIM_VERSION "1.8.20"
++#define OSSIM_MAJOR_VERSION_NUMBER 1
++#define OSSIM_MINOR_VERSION_NUMBER 8
++#define OSSIM_PATCH_VERSION_NUMBER 20  
++#define OSSIM_RELEASE_NUMBER 1  
++#define OSSIM_REVISION_NUMBER "23665"  
++
++// date format = (yyyymmdd)
++#define OSSIM_BUILD_DATE "20160614"
++
++#endif /* End of #ifndef ossimVersion_HEADER */
+diff -burN ossim-1.8.20-3.orig/ossim/src/ossim/base/ossimDate.cpp ossim-1.8.20-3/ossim/src/ossim/base/ossimDate.cpp
+--- ossim-1.8.20-3.orig/ossim/src/ossim/base/ossimDate.cpp	2016-06-16 15:13:59.447653936 +0200
++++ ossim-1.8.20-3/ossim/src/ossim/base/ossimDate.cpp	2016-06-16 15:14:15.283654702 +0200
+@@ -232,15 +232,21 @@
+    // struct tm gmt = *this;
+ #if !defined(_MSC_VER) 
+    tzset();
++  #define TM_TIMEZONE timezone
+ #else
+    _tzset();
++   #if _MSC_VER > 1800
++     #define TM_TIMEZONE _timezone
++   #else
++    #define TM_TIMEZONE timezone
++   #endif
+ #endif
+    
+ #if ( defined(__APPLE__) || defined(__FreeBSD__)  || defined(__OpenBSD__) )
+    //gmt.tm_sec -= tm_gmtoff; // Seconds east of UTC
+    m_timezoneOffset = tm_gmtoff;
+ #else
+-   m_timezoneOffset = timezone; // Seconds west of UTC
++   m_timezoneOffset = TM_TIMEZONE; // Seconds west of UTC
+    if ( tm_isdst )
+    {
+       m_timezoneOffset -= 3600; // Subtract an hour.
+@@ -668,16 +674,23 @@
+ {
+   m_mutex.lock();
+    struct tm gmt = *this;
+-#if !defined(_MSC_VER) 
++
++   #if !defined(_MSC_VER) 
+    tzset();
++  #define TM_TIMEZONE timezone
+ #else
+    _tzset();
++   #if _MSC_VER > 1800
++     #define TM_TIMEZONE _timezone
++   #else
++    #define TM_TIMEZONE timezone
++   #endif
+ #endif
+ 
+ #if ( defined(__APPLE__) || defined(__FreeBSD__)  || defined(__OpenBSD__) )
+    gmt.tm_sec -= tm_gmtoff; // Seconds east of UTC
+ #else
+-   gmt.tm_sec += timezone; // Seconds west of UTC
++   gmt.tm_sec += TM_TIMEZONE; // Seconds west of UTC
+    if ( tm_isdst )
+    {
+       gmt.tm_sec -= 3600; // Subtract an hour.
+diff -burN ossim-1.8.20-3.orig/ossim/src/ossim/base/ossimPolyArea2d.cpp ossim-1.8.20-3/ossim/src/ossim/base/ossimPolyArea2d.cpp
+--- ossim-1.8.20-3.orig/ossim/src/ossim/base/ossimPolyArea2d.cpp	2016-06-16 15:13:59.451653936 +0200
++++ ossim-1.8.20-3/ossim/src/ossim/base/ossimPolyArea2d.cpp	2016-06-16 15:14:15.287654703 +0200
+@@ -32,15 +32,16 @@
+ {
+ public:
+    ossimGeometryFactoryWrapper()
+-      : m_geomFactory(0)
+    {
+       geos::geom::PrecisionModel *pm =
+          new geos::geom::PrecisionModel(geos::geom::PrecisionModel::FLOATING);
+-      m_geomFactory = new geos::geom::GeometryFactory(pm, -1); 
++      m_geomFactory = geos::geom::GeometryFactory::create(pm, -1); 
++      
+    }
+-   virtual ~ossimGeometryFactoryWrapper(){if(m_geomFactory) delete m_geomFactory;m_geomFactory=0;}
++   virtual ~ossimGeometryFactoryWrapper(){}
+    
+-   geos::geom::GeometryFactory* m_geomFactory;
++   geos::geom::GeometryFactory::unique_ptr m_geomFactory;
++   //geos::geom::GeometryFactory* m_geomFactory;
+ };
+ 
+ class OssimPolyArea2dPrivate
+@@ -55,7 +56,7 @@
+    void deleteGeometry() { if(m_geometry) { delete m_geometry; m_geometry = 0; }}
+    void setGeometry(const ossimPolygon& polygon, const vector<ossimPolygon>& holes = vector<ossimPolygon>());
+    void setGeometry(GeometryPtr geom){deleteGeometry();m_geometry=geom;}
+-   geos::geom::GeometryFactory* geomFactory(){{return m_globalFactory.valid()?m_globalFactory->m_geomFactory:0;}}
++   geos::geom::GeometryFactory* geomFactory(){{return m_globalFactory.valid()?m_globalFactory->m_geomFactory.get():0;}}
+    GeometryPtr m_geometry;
+    static ossimRefPtr<ossimGeometryFactoryWrapper> m_globalFactory; 
+ };
+diff -burN ossim-1.8.20-3.orig/ossim/src/ossim/elevation/ossimElevManager.cpp ossim-1.8.20-3/ossim/src/ossim/elevation/ossimElevManager.cpp
+--- ossim-1.8.20-3.orig/ossim/src/ossim/elevation/ossimElevManager.cpp	2016-06-16 15:13:59.459653937 +0200
++++ ossim-1.8.20-3/ossim/src/ossim/elevation/ossimElevManager.cpp	2016-06-16 15:14:15.295654703 +0200
+@@ -634,7 +634,10 @@
+    }
+    return spacing;
+ }
+-
++inline std::ostream& operator<<(std::ostream& out, std::ostream& obj)
++{
++	return obj;
++}
+ std::ostream& ossimElevManager::print(ostream& out) const
+ {
+    out << "\nossimElevManager @ "<< (ossim_uint64) this
+diff -burN ossim-1.8.20-3.orig/ossim/src/ossim/elevation/ossimElevSource.cpp ossim-1.8.20-3/ossim/src/ossim/elevation/ossimElevSource.cpp
+--- ossim-1.8.20-3.orig/ossim/src/ossim/elevation/ossimElevSource.cpp	2016-06-16 15:13:59.459653937 +0200
++++ ossim-1.8.20-3/ossim/src/ossim/elevation/ossimElevSource.cpp	2016-06-16 15:14:15.295654703 +0200
+@@ -261,6 +261,10 @@
+ {
+    theComputeStatsFlag = flag;
+ }
++inline std::ostream& operator<<(std::ostream& out, std::ostream& obj)
++{
++	return obj;
++}
+ 
+ std::ostream& ossimElevSource::print(std::ostream& out) const
+ {
