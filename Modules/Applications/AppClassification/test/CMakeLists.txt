@@ -846,9 +846,9 @@ endif()
 #----------- PolygonClassStatistics TESTS ----------------
 otb_test_application(NAME apTvClPolygonClassStatisticsTest
                      APP PolygonClassStatistics
-                     OPTIONS -in ${INPUTDATA}/cthead1_flip.tif
-                             -vec ${INPUTDATA}/variousVectors.sqlite
-                             -field label
+                     OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho.tif
+                             -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
+                             -field Class
                              -out ${TEMP}/apTvClPolygonClassStatisticsOut.xml
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
@@ -857,12 +857,12 @@ otb_test_application(NAME apTvClPolygonClassStatisticsTest
 #----------- SampleSelection TESTS -----------------------
 otb_test_application(NAME apTvClSampleSelection
                      APP SampleSelection
-                     OPTIONS -in ${INPUTDATA}/cthead1_flip.tif
-                             -vec ${INPUTDATA}/variousVectors.sqlite
-                             -field "label"
-                             -out ${TEMP}/apTvClOGRDataResamplerOut.sqlite
+                     OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho.tif
+                             -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
+                             -field Class
+                             -out ${TEMP}/apTvClSampleSelectionOut.sqlite
                              -instats ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
-                             -outrates ${TEMP}/apTvClOGRDataResamplerOutRates.txt
+                             -outrates ${TEMP}/apTvClSampleSelectionOutRates.txt
                              -strat byclass
                              -strat.byclass.in ${INPUTDATA}/Classification/sampling_required.csv
                              -sampler periodic
