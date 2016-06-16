@@ -175,8 +175,8 @@ namespace ossimplugins
       SCOPED_LOG(traceDebug, MODULE);
 
       bool result = false;
-
-      if ( !file.exists() || (file.ext().downcase() != "tiff") )
+    
+      if ( !file.exists() || ((file.ext().downcase() != "tiff") && file.ext().downcase() != ".xml" ))
       {
          return false;
       }
@@ -184,7 +184,17 @@ namespace ossimplugins
       {
          theGSD.makeNan();
 
-         if ( !this->readProduct(file) )
+         ossimFilename xmlFileName = file;
+
+         // If this is tiff file, look for corresponding annotation file
+         if(file.ext().downcase() != ".xml")
+           {
+           ossimFilename fileNameWihtoutExtension = file.fileNoExtension();
+           ossimFilename path = file.path().path();
+           xmlFileName = ossimFilename(path+"/annotation/"+fileNameWihtoutExtension+".xml");
+           }
+       
+         if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
          {
             ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->readProduct( safeFile )\n";
             return false;
@@ -192,8 +202,8 @@ namespace ossimplugins
 
          if ( !this->initImageSize( theImageSize ) )
          {
-            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize )\n";
-            return false;
+           ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize )\n";
+           return false;
          }
 
          theImageClipRect = ossimDrect( 0, 0, theImageSize.x-1, theImageSize.y-1 );
@@ -213,15 +223,15 @@ namespace ossimplugins
 #if 0
          if ( !this->initSRGR( ) )
          {
-            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initSRGR( )\n";
-            return false;
+         ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initSRGR( )\n";
+         return false;
          }
-#endif
-
+#endif      
+         
          // Commit the operation
          theProductXmlFile = file;
          return true;
-      }
+      }     
    }
 
 #if 0
@@ -597,7 +607,7 @@ namespace ossimplugins
       }
 
       if (isGRD()) {
-         ossimXmlNodePtr const& coordinateConversionList = productRoot->findFirstNode("coordinateConversion/coordinateConversionList/");
+         ossimXmlNodePtr const& coordinateConversionList = productRoot->findFirstNode("coordinateConversion/coordinateConversionList");
          if (!coordinateConversionList) {
             ossimNotify(ossimNotifyLevel_WARN) << "No coordinate conversion info available in metadata!!\n";
          } else {
@@ -747,7 +757,9 @@ namespace ossimplugins
       productRoot.findChildNodes("swathTiming/burstList/burst",xnodes);
       if (xnodes.empty())
       {
-         ossimNotify(ossimNotifyLevel_DEBUG) << "No burst records available in metadata!!\n";
+      // Appart from TopSAR products, there won't be any burst
+      //records, so this warning is unnecessary
+      //ossimNotify(ossimNotifyLevel_DEBUG) << "No burst records available in metadata!!\n";
          add(theProductKwl, BURST_PREFIX, "[0].start_line", 0);
          add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", getModifiedJulianDateFromFirstNode(imageInformation,  "productFirstLineUtcTime"));
          add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  getModifiedJulianDateFromFirstNode(imageInformation,  "productLastLineUtcTime"));
