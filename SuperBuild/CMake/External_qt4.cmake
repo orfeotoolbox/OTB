@@ -42,6 +42,18 @@ if(MSVC)
     ${CMAKE_SOURCE_DIR}/patches/QT4/configure_qt4.bat.in
     ${CMAKE_BINARY_DIR}/configure_qt4.bat
     @ONLY)
+   
+  set(QT4_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt4.bat)
+  
+else()
+  configure_file(
+    ${QT4_SB_SRC}/patches/QT4/configure_qt4.sh.in
+    ${CMAKE_BINARY_DIR}/configure_qt4.sh
+    @ONLY)
+    
+  set(QT4_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt4.sh)
+  
+endif()
 
   ExternalProject_Add(QT4
     PREFIX QT4
@@ -50,46 +62,34 @@ if(MSVC)
     BINARY_DIR ${QT4_SB_SRC}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_BINARY_DIR}/configure_qt4.bat
-    ${QT4_SB_SRC}
-    CONFIGURE_COMMAND
-    configure_qt4.bat
-    DEPENDS ${QT4_DEPENDENCIES} )
+    CONFIGURE_COMMAND ${QT4_CONFIGURE_COMMAND}
+    DEPENDS ${QT4_DEPENDENCIES}
+    )
 
+
+ if(MSVC)
+ #Q: why this copy here?.
+ #RK: Because QT4 sucks with qmake -query.
+  ExternalProject_Add_Step(QT4 copy_specs
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_directory 
+    ${QT4_SB_SRC}/mkspecs ${SB_INSTALL_PREFIX}/mkspecs
+    DEPENDEES patch update
+    DEPENDERS configure )
+    
   ExternalProject_Add_Step(QT4 _jpeg_lib_name
     COMMAND
     ${CMAKE_COMMAND} -E copy
     ${CMAKE_SOURCE_DIR}/patches/QT4/qjpeghandler.pri
     ${QT4_SB_SRC}/src/gui/image/
     DEPENDEES patch update
-    DEPENDERS configure  )
-
-else()
-  configure_file(
-    ${CMAKE_SOURCE_DIR}/patches/QT4/configure_qt4.sh.in
-    ${CMAKE_BINARY_DIR}/configure_qt4.sh
-    @ONLY)
-
-  ExternalProject_Add(QT4
-    PREFIX QT4
-    URL "http://download.qt.io/official_releases/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz"
-    URL_MD5 d990ee66bf7ab0c785589776f35ba6ad
-    BINARY_DIR ${QT4_SB_SRC}
-    INSTALL_DIR ${SB_INSTALL_PREFIX}
-    DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-    PATCH_COMMAND
-    ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/configure_qt4.sh
-    ${QT4_SB_SRC}
-    CONFIGURE_COMMAND
-    ${CMAKE_BINARY_DIR}/configure_qt4.sh
-    DEPENDS ${QT4_DEPENDENCIES}
-    )
-
+    DEPENDERS configure )
+  
 endif()
 
-if(APPLE)
+
+
   SUPERBUILD_PATCH_SOURCE(QT4)
-endif()
+
 
 set(_SB_QT_QMAKE_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/qmake)

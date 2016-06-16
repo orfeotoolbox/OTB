@@ -4,7 +4,7 @@ set SB_SAVE_LIB=%LIB%
 set INCLUDE=%INCLUDE%;@CMAKE_WIN_INSTALL_PREFIX@\include
 set LIB=%LIB%;@CMAKE_WIN_INSTALL_PREFIX@\lib
 
-configure -prefix @CMAKE_WIN_INSTALL_PREFIX@ -opensource -confirm-license -release -shared -nomake demos -nomake examples -nomake tools -no-phonon-backend -no-phonon -no-script -no-scripttools -no-multimedia -no-webkit -qt-sql-sqlite -plugin-sql-sqlite -no-qt3support  -system-zlib -system-sqlite -L @CMAKE_WIN_INSTALL_PREFIX@\lib -I @CMAKE_WIN_INSTALL_PREFIX@\include -no-openssl -silent -fast -no-javascript-jit -no-openssl -no-declarative -no-libpng -no-libtiff -no-libjpeg -no-libmng -system-zlib
+configure -prefix @CMAKE_WIN_INSTALL_PREFIX@ -opensource -confirm-license -release -shared -nomake demos -nomake examples -nomake tools -no-phonon-backend -no-phonon -no-script -no-scripttools -no-multimedia -no-webkit -system-sqlite -qt-sql-sqlite -plugin-sql-sqlite -L @CMAKE_WIN_INSTALL_PREFIX@\lib -I @CMAKE_WIN_INSTALL_PREFIX@\include -no-qt3support -no-openssl -fast -no-declarative -no-libpng -no-libtiff -no-libjpeg -no-libmng -system-zlib
 
 set INCLUDE=%SB_SAVE_INCLUDE%
 set LIB=%SB_SAVE_LIB%
