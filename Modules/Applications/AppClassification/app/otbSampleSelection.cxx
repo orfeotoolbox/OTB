@@ -21,6 +21,8 @@
 #include "otbOGRDataToSamplePositionFilter.h"
 #include "otbStatisticsXMLFileReader.h"
 #include "otbRandomSampler.h"
+#include "otbGeometriesProjectionFilter.h"
+#include "otbGeometriesSet.h"
 
 namespace otb
 {
@@ -56,6 +58,10 @@ public:
   typedef RateCalculatorType::MapRateType           MapRateType;
   typedef itk::VariableLengthVector<float> MeasurementType;
   typedef otb::StatisticsXMLFileReader<MeasurementType> XMLReaderType;
+
+  typedef otb::GeometriesSet GeometriesType;
+
+  typedef otb::GeometriesProjectionFilter ProjectionFilterType;
 
 private:
   SampleSelection()
@@ -320,6 +326,43 @@ private:
     otb::ogr::DataSource::Pointer vectors =
       otb::ogr::DataSource::New(this->GetParameterString("vec"));
 
+    // Reproject geometries
+    FloatVectorImageType::Pointer inputImg = this->GetParameterImage("in");
+    std::string imageProjectionRef = inputImg->GetProjectionRef();
+    FloatVectorImageType::ImageKeywordlistType imageKwl =
+      inputImg->GetImageKeywordlist();
+    std::string vectorProjectionRef =
+      vectors->GetLayer(GetParameterInt("layer")).GetProjectionRef();
+
+    otb::ogr::DataSource::Pointer reprojVector = vectors;
+    GeometriesType::Pointer inputGeomSet;
+    ProjectionFilterType::Pointer geometriesProjFilter;
+    GeometriesType::Pointer outputGeomSet;
+    bool doReproj = true;
+    // don't reproject for these cases
+    if (vectorProjectionRef.empty() ||
+        (imageProjectionRef == vectorProjectionRef) ||
+        (imageProjectionRef.empty() && imageKwl.GetSize() == 0))
+      doReproj = false;
+  
+    if (doReproj)
+      {
+      inputGeomSet = GeometriesType::New(vectors);
+      reprojVector = otb::ogr::DataSource::New();
+      outputGeomSet = GeometriesType::New(reprojVector);
+      // Filter instanciation
+      geometriesProjFilter = ProjectionFilterType::New();
+      geometriesProjFilter->SetInput(inputGeomSet);
+      if (imageProjectionRef.empty())
+        {
+        geometriesProjFilter->SetOutputKeywordList(inputImg->GetImageKeywordlist()); // nec qd capteur
+        }
+      geometriesProjFilter->SetOutputProjectionRef(imageProjectionRef);
+      geometriesProjFilter->SetOutput(outputGeomSet);
+      otbAppLogINFO("Reprojecting input vectors...");
+      geometriesProjFilter->Update();
+      }
+
     // Create output dataset for sample positions
     otb::ogr::DataSource::Pointer outputSamples =
       otb::ogr::DataSource::New(this->GetParameterString("out"),otb::ogr::DataSource::Modes::Overwrite);
@@ -334,7 +377,7 @@ private:
         param.MaxJitter = this->GetParameterInt("sampler.periodic.jitter");
 
         m_Periodic->SetInput(this->GetParameterImage("in"));
-        m_Periodic->SetOGRData(vectors);
+        m_Periodic->SetOGRData(reprojVector);
         m_Periodic->SetOutputPositionContainerAndRates(outputSamples, rates);
         m_Periodic->SetFieldName(this->GetParameterString("field"));
         m_Periodic->SetLayerIndex(this->GetParameterInt("layer"));
@@ -352,7 +395,7 @@ private:
       case 1:
         {
         m_Random->SetInput(this->GetParameterImage("in"));
-        m_Random->SetOGRData(vectors);
+        m_Random->SetOGRData(reprojVector);
         m_Random->SetOutputPositionContainerAndRates(outputSamples, rates);
         m_Random->SetFieldName(this->GetParameterString("field"));
         m_Random->SetLayerIndex(this->GetParameterInt("layer"));
