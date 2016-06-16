@@ -132,13 +132,14 @@ set(ITK_SB_COMPILATION_FLAGS
   )
 
 #later used below for _SB_ITK_DIR and then in packaging
-set(ITK_SB_VERSION 4.8)
-set(ITK_SB_VERSION_FULL ${ITK_SB_VERSION}.1)
+set(ITK_SB_VERSION 4.10)
+set(ITK_SB_VERSION_FULL ${ITK_SB_VERSION}.0)
+set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${ITK_SB_VERSION})
 
 ExternalProject_Add(ITK
   PREFIX ITK
-  URL "http://sourceforge.net/projects/itk/files/itk/4.8/InsightToolkit-4.8.1.tar.gz/download"
-  URL_MD5 b1ed53604de854501cb61f34f410420e
+  URL "https://sourceforge.net/projects/itk/files/itk/4.10/InsightToolkit-4.10.0.tar.xz"
+  URL_MD5 15beb120e580ce85117496795746e628
   SOURCE_DIR ${ITK_SB_SRC}
   BINARY_DIR ${ITK_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -161,6 +162,3 @@ ExternalProject_Add(ITK
   )
 
 SUPERBUILD_PATCH_SOURCE(ITK)
-
-
-set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${ITK_SB_VERSION})
