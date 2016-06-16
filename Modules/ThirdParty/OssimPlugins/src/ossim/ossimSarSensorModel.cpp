@@ -770,7 +770,12 @@ bool ossimSarSensorModel::projToSurface(const GCPRecordType & initGcp, const oss
     // std::cout<<"B: "<<B<<'\n';
 
     // Invert system
-    dR = B.i() * F;
+    try {
+        dR = B.i() * F;
+    } catch (RBD_COMMON::BaseException const& e) {
+       // NEWMATH exception
+       throw std::runtime_error(e.what());
+    }
 
     // Update estimate
     for (ossim_int32 k=0; k<3; k++)
