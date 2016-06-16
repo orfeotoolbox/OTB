@@ -108,7 +108,6 @@ create_monteverdi_application(NAME mapla
   ${QT_QTMAIN_LIBRARY}
   OUTPUT_NAME ${MAPLA_OUTPUT_NAME}
   COMPONENT_NAME Mapla
-  NEEDS_OTB_APPS TRUE
   )
 
 

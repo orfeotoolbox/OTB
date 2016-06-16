@@ -104,7 +104,7 @@ AbstractModelController
   // Enable GUI widget when there is a model.
   if( m_Model!=NULL )
     {
-    ResetWidget();
+    virtual_ResetWidget( true );
 
     GetWidget()->setEnabled( true );
     }
@@ -165,11 +165,12 @@ AbstractModelController
 ::ResetWidget()
 {
   // Reset UI from model.
-  virtual_ResetWidget();
+  virtual_ResetWidget( false );
 
+#if 0
   // Signal model has been updated.
-#if 0 // When resetting widget, data is read from model and set into
-      // widget so, there's no need to signal back model update.
+  // When resetting widget, data is read from model and set into
+  // widget so, there's no need to signal back model update.
   emit ModelUpdated();
 #endif
 }

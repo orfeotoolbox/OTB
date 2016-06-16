@@ -356,7 +356,7 @@ LayerStackController
 /*******************************************************************************/
 void
 LayerStackController
-::virtual_ResetWidget()
+::virtual_ResetWidget( bool )
 {
 }
 

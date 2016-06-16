@@ -7,6 +7,12 @@ if(POLICY CMP0040)
   cmake_policy(SET CMP0040 OLD)
 endif()
 
+# CMP0040 : from CMake 3.0 or higher,
+# old behaviour is to link to qtmain if explicitly said so.
+if(POLICY CMP0020)
+  cmake_policy(SET CMP0020 OLD)
+endif()
+
 #----------------------------------------------------------------------------
 # Modules
 set( CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH} )
@@ -57,13 +63,13 @@ set(Monteverdi_UI_VERSION "1")
 set(
   Monteverdi_VERSION_STRING
   "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
-)
+  )
 
 #----------------------------------------------------------------------------
 set(
   Monteverdi_DATA_VERSION_STRING
   "${Monteverdi_DATA_VERSION_MAJOR}.${Monteverdi_DATA_VERSION_MINOR}.${Monteverdi_DATA_VERSION_PATCH}"
-)
+  )
 
 #----------------------------------------------------------------------------
 set(Monteverdi_FLOATING_TYPE "float" CACHE STRING "The type of data in which input images are read (double/float)." )
@@ -220,7 +226,7 @@ include( PreventInstallOnBuildTree )
 include( DeployQtConf )
 
 #function to create installer for applications
-include( CPackFunctions )
+include( MonteverdiApplicationMacros )
 
 #----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
@@ -228,12 +234,12 @@ set( Monteverdi_CONFIGURE_FILE "ConfigureMonteverdi.h" )
 configure_file(
   ${Monteverdi_SOURCE_DIR}/${Monteverdi_CONFIGURE_FILE}.in
   ${Monteverdi_BINARY_DIR}/${Monteverdi_CONFIGURE_FILE}
-)
+  )
 
 set(Monteverdi_LIBRARY_PROPERTIES
-    VERSION   "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}"
-    SOVERSION "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}"
-)
+  VERSION   "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}"
+  SOVERSION "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}"
+  )
 
 #----------------------------------------------------------------------------
 # Include the Packaging subdir after every other dir
@@ -280,41 +286,20 @@ if(BUILD_TESTING)
   add_subdirectory(Testing)
 endif()
 
-############## Packaging stuff for Windows ####################
-#cpack has a built-in target called 'package'. In our case we create two standalone installers with
-#and uses a custom target named packages.
-if(WIN32)
-  #RK: two packages
-  create_cpack_config()
-  if(Monteverdi_USE_CPACK)
-    add_custom_target(packages
-    COMMAND ${CMAKE_COMMAND} "--build" "${CMAKE_BINARY_DIR}" "--target" "install"
-    COMMAND ${CMAKE_CPACK_COMMAND} "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Monteverdi.cmake" "--verbose")
+#TODO: move this option to Packaging/CMakeLists.txt after big merge!
+option(GENERATE_PACKAGE "Generate OTB package" OFF)
+option(GENERATE_XDK "Generate XDK for OTB development" OFF)
 
-    #   add_custom_target(PACKAGE_Mapla
-    #     COMMAND ${CMAKE_CPACK_COMMAND}
-    #     "--config" "${CMAKE_BINARY_DIR}/CPackConfig-Mapla.cmake" "--verbose"
-    #     DEPENDS PACKAGE_Monteverdi)
+if(GENERATE_PACKAGE OR GENERATE_XDK)
+  if(WIN32 OR CMAKE_CROSSCOMPILING)
+    set(MXE_TARGET_DIR "" CACHE PATH "path to mxe directory")
+    set(OTB_SOURCE_DIR "" CACHE PATH "path to otb source directory")
 
-  endif() # (Monteverdi_USE_CPACK)
+    if(NOT OTB_SOURCE_DIR)
+      message(FATAL_ERROR "OTB_SOURCE_DIR is missing")
+    endif()
 
-  if(CMAKE_CROSSCOMPILING)
- 
-    #print MXE_TARGET_DIR for the sake of debugging. This is visible on on dashboard log
-    if(DEFINED MXE_TARGET_DIR)
-      message(STATUS "MXE_TARGET_DIR = ${MXE_TARGET_DIR}")
-    endif() # (DEFINED MXE_TARGET_DIR)
+    add_subdirectory(${OTB_SOURCE_DIR}/SuperBuild/Packaging ${CMAKE_BINARY_DIR}/Packaging)
 
-    #add custom target that create mapla and monteverdi2 archives.
-    add_custom_target(packages
-      COMMAND ${CMAKE_COMMAND} -E touch mingw-package
-      WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
-      DEPENDS
-      create-Monteverdi-mingw-archive
-      create-Mapla-mingw-archive)
-
-  endif() # (CMAKE_CROSSCOMPILING)
-endif() # (WIN32)
-
-#For MacOS and Windows platform, we create a custom target called packages to generate packages
-#For linux: the packages are provided via respective package management tool. (deb, rpm etc..)
+  endif() # (WIN32 OR CMAKE_CROSSCOMPILING)
+endif() # (GENERATE_PACKAGE OR GENERATE_XDK)
