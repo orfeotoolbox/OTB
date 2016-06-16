@@ -12,7 +12,7 @@ diff -burN geos-3.6.0dev.orig/CMakeLists.txt geos-3.6.0dev/CMakeLists.txt
    GET_SVN_REVISION()
 diff -burN geos-3.6.0dev.orig/src/CMakeLists.txt geos-3.6.0dev/src/CMakeLists.txt
 --- geos-3.6.0dev.orig/src/CMakeLists.txt	2016-06-16 14:53:39.062188675 +0200
-+++ geos-3.6.0dev/src/CMakeLists.txt	2016-06-16 14:54:11.170188424 +0200
++++ geos-3.6.0dev/src/CMakeLists.txt	2016-06-16 15:31:00.450171151 +0200
 @@ -62,7 +62,7 @@
  else()
  
@@ -44,7 +44,7 @@ diff -burN geos-3.6.0dev.orig/src/CMakeLists.txt geos-3.6.0dev/src/CMakeLists.tx
  
  if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
 -  install(TARGETS geos geos-static
-+  install(TARGETS
++  install(TARGETS geos
      RUNTIME DESTINATION bin
      LIBRARY DESTINATION lib
      ARCHIVE DESTINATION lib)
