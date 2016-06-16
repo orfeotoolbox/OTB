@@ -99,12 +99,12 @@ namespace ossimplugins {
    inline
       void add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, time::ModifiedJulianDate const& v)
       {
-         add(kwl, prefix, key, v.as_seconds());
+         add(kwl, prefix, key, v.as_day_frac());
       }
    inline
-      void add(ossimKeywordlist & kwl, std::string const& prefix, time::ModifiedJulianDate const& v)
+      void add(ossimKeywordlist & kwl, std::string const& key, time::ModifiedJulianDate const& v)
       {
-         add(kwl, prefix, v.as_seconds());
+         add(kwl, key, v.as_day_frac());
       }
 
    template <typename T>

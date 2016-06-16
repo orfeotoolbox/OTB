@@ -101,24 +101,31 @@ ossimplugins::time::ModifiedJulianDate ossimplugins::time::toModifiedJulianDate(
 std::string ossimplugins::time::to_simple_string(ModifiedJulianDate const& d)
 {
    ossimDate date ;
-   date.setDateFromModifiedJulian(d.as_seconds());
+   date.setDateFromModifiedJulian(d.as_day_frac());
    char buffer[1024] = {0};
    size_t s = std::strftime(buffer, sizeof(buffer), "%Y-%m-%dT%H:%M:%S", &date);
    if (s == 0) {
-      // TODO d.as_seconds() -> string
+      // TODO d.as_day_frac() -> string
       throw std::runtime_error("Cannot encode date into a string");
    }
    assert(s < 1000); // should be more than enough
    typedef unsigned long ulong;
+   const double frac_sec = date.getFractionalSecond();
+   // const double fs2 = fmod(d.as_day_frac() * 24L*60*60, 1);
+   // assert(fs2==frac_sec);
+   // std::cout << "From: " << d.as_day_frac() << " -> frac_sec: " << fs2
+      // << " --> *10^6: " << fs2*1000L*1000
+      // << " --> %10^6: " << ulong(fs2*1000L*1000)%(1000L*1000)
+      // << "\n";
    s += std::snprintf(&buffer[s], sizeof(buffer)-s, ".%06ld",
-         std::abs(ulong((date.getFractionalSecond() * 1000 * 1000)) % (1000*1000)));
+         ulong(frac_sec * 1000L * 1000) % (1000L*1000));
    return std::string(buffer, s);
 }
 
 std::string ossimplugins::time::to_simple_string(Duration const& d)
 {
    typedef unsigned long ulong;
-   const double fs = d.as_seconds();
+   const double fs = d.as_day_frac() * 24L * 60 * 60; // in seconds
    const ulong  ls(fs);
    const ulong  us = ulong(fs * 1000*1000) % (1000*1000);
    const ulong  s  = ls % 60;
