@@ -479,6 +479,8 @@ foreach(dep ${option_list})
 
 endforeach()
 
+message(STATUS "CMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator")
+
 message("=== End OTB CMake Summary ===")
 
 #don't need this one anymore. so unset it.
