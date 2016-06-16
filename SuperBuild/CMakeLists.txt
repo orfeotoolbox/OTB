@@ -13,6 +13,8 @@ include(ExternalProject)
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 
+set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
+
 if(APPLE)
   if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW)
@@ -51,26 +53,21 @@ option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
 option(ENABLE_MONTEVERDI " Build Monteverdi on top of OTB" OFF)
 
-# check if superbuild is in OTB source or in stand-alone mode
-set(SUPERBUILD_IN_OTB_TREE OFF)
 if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
   file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _CONTENT_CMAKELIST
     REGEX "project\\\(OTB\\\)")
   if(NOT "${_CONTENT_CMAKELIST}" STREQUAL "")
-    set(SUPERBUILD_IN_OTB_TREE ON)
     # parse the version number
     file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _FULL_CONTENT_CMAKELIST)
     string(REGEX REPLACE ".*set\\(OTB_VERSION_MAJOR \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_MAJOR "${_FULL_CONTENT_CMAKELIST}")
     string(REGEX REPLACE ".*set\\(OTB_VERSION_MINOR \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_MINOR "${_FULL_CONTENT_CMAKELIST}")
     string(REGEX REPLACE ".*set\\(OTB_VERSION_PATCH \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_PATCH "${_FULL_CONTENT_CMAKELIST}")
     set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VERSION_MINOR}.${SUPERBUILD_OTB_VERSION_PATCH}")
-    message(STATUS "Found OTB version : ${SUPERBUILD_OTB_VERSION}")
+    message(STATUS "OTB version : ${SUPERBUILD_OTB_VERSION}")
   endif()
 endif()
-message(STATUS "Check if superbuild is in OTB tree : ${SUPERBUILD_IN_OTB_TREE}")
 
 set(SB_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
-
 
 # Check if CMAKE_INSTALL_PREFIX is set by default
 if(WIN32)
@@ -193,7 +190,12 @@ option(USE_SYSTEM_GLUT  "Use a system build of glut" OFF)
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
 option(OTB_USE_CURL "Enable module Curl in OTB" ON)
-option(OTB_USE_LIBKML "Enable module libKML in OTB" ON)
+#RK: disabled libkml. problems on windows msvc
+if(MSVC)
+  option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
+else()
+  option(OTB_USE_LIBKML "Enable module libKML in OTB" ON)
+endif()
 option(OTB_USE_LIBSVM "Enable module libSVM in OTB" ON)
 option(OTB_USE_MAPNIK "Enable module Mapnik in OTB" OFF)
 option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
