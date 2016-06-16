@@ -124,7 +124,7 @@ namespace ossimplugins {
    {
       std::string const& str = kwl.findKey(prefix, key);
       assert(!str.empty());
-      v = to<T>(str);
+      v = to<T>(str, " extracting " + prefix + key + "from KWL");
    }
 
    template <typename T>
@@ -132,7 +132,7 @@ namespace ossimplugins {
    {
       std::string const& str = kwl.findKey(key);
       assert(!str.empty());
-      v = to<T>(str);
+      v = to<T>(str, " extracting " + key + "from KWL");
    }
 
 } // ossimplugins namespace

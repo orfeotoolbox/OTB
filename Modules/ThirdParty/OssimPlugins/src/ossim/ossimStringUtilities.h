@@ -482,7 +482,7 @@ part_range<splitter_on_delim> split_on(String const& str, char delim) {
 //@{
 template <typename T>
 inline
-T to(ossimplugins::string_view const& v)
+T to(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
 {
    T res ;
    std::stringstream iss;
@@ -490,13 +490,13 @@ T to(ossimplugins::string_view const& v)
       return res;
    }
    throw std::runtime_error("Cannot decode "+v+" as "+
-         typeid(T).name());
+         typeid(T).name() + " while " + context);
 }
 
 namespace details {
     // In a perfect world, we'd used enable_if & co to restrict the code to
     // integral types
-    template <typename Int> inline Int to_integer(string_view const& v)
+    template <typename Int> inline Int to_integer(string_view const& v, ossimplugins::string_view const& context)
     {
         // string_view::data() isn't compatible with strtol => we emulate it
 
@@ -515,7 +515,7 @@ namespace details {
             for ( ; it != end ; ++it) {
                 // only support arabic digits
                 if (!std::isdigit(*it)) {
-                    throw std::runtime_error("Invalid int format (" + v + ")");
+                    throw std::runtime_error("Cannot decode "+v+" as integer while " + context);
                 }
                 res  = 10 * res + *it - '0';
             }
@@ -523,15 +523,16 @@ namespace details {
         return is_negative ? -res : res;
     }
 
-    template <typename FloatType> FloatType to_float(string_view const& v) {
+    template <typename FloatType> FloatType to_float(string_view const& v, ossimplugins::string_view const& context) {
        if (contains(v, "nan")) {
           return ::ossim::nan();
        }
        FloatType res = FloatType(); // 0-construction
        if (!v.empty()) {
           std::stringstream iss;
-          iss << v;
-          iss >> res;
+          if (! (iss << v && iss >> res))  {
+             throw std::runtime_error("Cannot decode "+v+" as float value while " + context);
+          }
        }
        return res;
     }
@@ -550,30 +551,30 @@ namespace details {
     }
 } // ossimplugins::details namespace
 
-template <> inline char to<char>(ossimplugins::string_view const& v)
-{ return details::to_integer<char>(v); }
+template <> inline char to<char>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
+{ return details::to_integer<char>(v, context); }
 
-template <> inline short to<short>(ossimplugins::string_view const& v)
-{ return details::to_integer<short>(v); }
+template <> inline short to<short>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
+{ return details::to_integer<short>(v, context); }
 
-template <> inline int to<int>(ossimplugins::string_view const& v)
-{ return details::to_integer<int>(v); }
+template <> inline int to<int>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
+{ return details::to_integer<int>(v, context); }
 
-template <> inline unsigned int to<unsigned int>(ossimplugins::string_view const& v)
-{ return details::to_integer<unsigned int>(v); }
+template <> inline unsigned int to<unsigned int>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
+{ return details::to_integer<unsigned int>(v, context); }
 
-template <> inline long to<long>(ossimplugins::string_view const& v)
-{ return details::to_integer<long>(v); }
+template <> inline long to<long>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
+{ return details::to_integer<long>(v, context); }
 
-template <> inline ossim_float32 to<ossim_float32>(ossimplugins::string_view const& v)
-{ return details::to_float<ossim_float32>(v); }
+template <> inline ossim_float32 to<ossim_float32>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
+{ return details::to_float<ossim_float32>(v, context); }
 
-template <> inline ossim_float64 to<ossim_float64>(ossimplugins::string_view const& v)
-{ return details::to_float<ossim_float64>(v); }
+template <> inline ossim_float64 to<ossim_float64>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
+{ return details::to_float<ossim_float64>(v, context); }
 
-template <typename T> inline T const& to(T const& v) { return v; }
+template <typename T> inline T const& to(T const& v, ossimplugins::string_view const& /*context*/) { return v; }
 
-template <typename T> inline T const& to(T const& v, T const& /* default*/) { return v; }
+template <typename T> inline T const& to_default(T const& v, T const& /* default*/, ossimplugins::string_view const& /*context*/) { return v; }
 
 // template <> inline double to<double>(ossimplugins::string_view const& v)
 // { return details::to_float<double>(v); }

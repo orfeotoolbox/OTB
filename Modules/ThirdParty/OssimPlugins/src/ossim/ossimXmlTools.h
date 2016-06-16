@@ -41,7 +41,7 @@ namespace ossimplugins {
       DataType getFromFirstNode(ossimXmlNode const& node, ossimString const& xpath) {
          ossimXmlNode const& childNode = getExpectedFirstNode(node, xpath);
          ossimString const& sValue = childNode.getText();
-         DataType const& value = to<DataType>(sValue);
+         DataType const& value = to<DataType>(sValue, "decoding " + xpath + " node");
          return value;
       }
 

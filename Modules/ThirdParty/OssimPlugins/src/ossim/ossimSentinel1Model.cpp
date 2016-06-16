@@ -539,7 +539,7 @@ namespace ossimplugins
       addOptional (theProductKwl, SUPPORT_DATA_PREFIX, "slice_num",          imageInformation, "sliceNumber");
 
       ossimXmlNode const& xAzimtuTimeInterval = getExpectedFirstNode(imageInformation, "azimuthTimeInterval");
-      theAzimuthTimeInterval = to<double>(xAzimtuTimeInterval.getText());
+      theAzimuthTimeInterval = to<double>(xAzimtuTimeInterval.getText(), "decoding imageInformation/azimuthTimeInterval");
       add(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", xAzimtuTimeInterval.getText());
       // addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", imageInformation, "azimuthTimeInterval");
 
@@ -1015,8 +1015,8 @@ namespace ossimplugins
       std::string const& samples_cstr = theProductKwl.findKey(SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_SAMPLES_KW);
       std::string const& lines_cstr = theProductKwl.findKey(SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_LINES_KW);
 
-      imageSize.samp = to<int>(samples_cstr);
-      imageSize.line = to<int>(lines_cstr);
+      imageSize.samp = to<int>(samples_cstr, "decoding sample number from KWL");
+      imageSize.line = to<int>(lines_cstr, "decoding line number from KWL");
 
       return true;
    }
