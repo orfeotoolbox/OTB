@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbScalarImageToPanTexTextureFilter_h
-#define __otbScalarImageToPanTexTextureFilter_h
+#ifndef otbScalarImageToPanTexTextureFilter_h
+#define otbScalarImageToPanTexTextureFilter_h
 
 #include "otbGreyLevelCooccurrenceIndexedList.h"
 #include "itkImageToImageFilter.h"

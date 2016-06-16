@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMRFEnergyEdgeFidelity_h
-#define __otbMRFEnergyEdgeFidelity_h
+#ifndef otbMRFEnergyEdgeFidelity_h
+#define otbMRFEnergyEdgeFidelity_h
 
 #include "otbMRFEnergy.h"
 

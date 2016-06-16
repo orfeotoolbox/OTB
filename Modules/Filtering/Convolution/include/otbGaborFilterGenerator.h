@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGaborFilterGenerator_h
-#define __otbGaborFilterGenerator_h
+#ifndef otbGaborFilterGenerator_h
+#define otbGaborFilterGenerator_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"

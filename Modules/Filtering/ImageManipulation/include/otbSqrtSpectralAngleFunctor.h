@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSqrtSpectralAngleFunctor_h
-#define __otbSqrtSpectralAngleFunctor_h
+#ifndef otbSqrtSpectralAngleFunctor_h
+#define otbSqrtSpectralAngleFunctor_h
 
 #include "otbSpectralAngleFunctor.h"
 

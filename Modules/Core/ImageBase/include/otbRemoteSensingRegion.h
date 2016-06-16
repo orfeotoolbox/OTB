@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRemoteSensingRegion_h
-#define __otbRemoteSensingRegion_h
+#ifndef otbRemoteSensingRegion_h
+#define otbRemoteSensingRegion_h
 
 #include <algorithm>
 #include <iomanip>

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToSpecificDescriptionFilterBase_txx
-#define __otbVectorDataToSpecificDescriptionFilterBase_txx
+#ifndef otbVectorDataToSpecificDescriptionFilterBase_txx
+#define otbVectorDataToSpecificDescriptionFilterBase_txx
 
 #include "otbVectorDataToSpecificDescriptionFilterBase.h"
 

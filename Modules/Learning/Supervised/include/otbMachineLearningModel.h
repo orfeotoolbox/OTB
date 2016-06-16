@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMachineLearningModel_h
-#define __otbMachineLearningModel_h
+#ifndef otbMachineLearningModel_h
+#define otbMachineLearningModel_h
 
 #include "itkObject.h"
 #include "itkVariableLengthVector.h"

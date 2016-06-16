@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMeanShiftSegmentationFilter_h
-#define __otbMeanShiftSegmentationFilter_h
+#ifndef otbMeanShiftSegmentationFilter_h
+#define otbMeanShiftSegmentationFilter_h
 
 #include "itkMacro.h"
 

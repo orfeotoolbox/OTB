@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProspectModel_h
-#define __otbProspectModel_h
+#ifndef otbProspectModel_h
+#define otbProspectModel_h
 
 
 #include "otbLeafParameters.h"

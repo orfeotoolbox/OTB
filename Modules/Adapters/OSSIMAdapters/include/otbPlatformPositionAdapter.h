@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPlatformPositionAdapter_h
-#define __otbPlatformPositionAdapter_h
+#ifndef otbPlatformPositionAdapter_h
+#define otbPlatformPositionAdapter_h
 
 #include <vector>
 

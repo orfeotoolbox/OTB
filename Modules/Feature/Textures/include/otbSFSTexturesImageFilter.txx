@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSFSTexturesImageFilter_txx
-#define __otbSFSTexturesImageFilter_txx
+#ifndef otbSFSTexturesImageFilter_txx
+#define otbSFSTexturesImageFilter_txx
 
 #include "otbSFSTexturesImageFilter.h"
 

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelToProSailParameters_h
-#define __otbLabelToProSailParameters_h
+#ifndef otbLabelToProSailParameters_h
+#define otbLabelToProSailParameters_h
 
 #include "otbLabelToSimulationParametersBase.h"
 

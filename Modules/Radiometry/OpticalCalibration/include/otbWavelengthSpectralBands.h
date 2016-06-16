@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWavelengthSpectralBands_h
-#define __otbWavelengthSpectralBands_h
+#ifndef otbWavelengthSpectralBands_h
+#define otbWavelengthSpectralBands_h
 
 #include "otbObjectList.h"
 #include "otbFilterFunctionValues.h"

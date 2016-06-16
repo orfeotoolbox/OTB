@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFourierMellinDescriptorsIFFactory_h
-#define __otbFourierMellinDescriptorsIFFactory_h
+#ifndef otbFourierMellinDescriptorsIFFactory_h
+#define otbFourierMellinDescriptorsIFFactory_h
 
 #include "itkLightObject.h"
 

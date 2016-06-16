@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStandardDSCostFunction_h
-#define __otbStandardDSCostFunction_h
+#ifndef otbStandardDSCostFunction_h
+#define otbStandardDSCostFunction_h
 
 #include "itkSingleValuedCostFunction.h"
 

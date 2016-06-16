@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRIOHelper_h
-#define __otbOGRIOHelper_h
+#ifndef otbOGRIOHelper_h
+#define otbOGRIOHelper_h
 
 #include <vector>
 

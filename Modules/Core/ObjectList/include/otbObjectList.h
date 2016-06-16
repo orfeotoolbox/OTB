@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectList_h
-#define __otbObjectList_h
+#ifndef otbObjectList_h
+#define otbObjectList_h
 
 #include <vector>
 #include "itkDataObject.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProjectiveProjectionImageFilter_h
-#define __otbProjectiveProjectionImageFilter_h
+#ifndef otbProjectiveProjectionImageFilter_h
+#define otbProjectiveProjectionImageFilter_h
 
 #include "itkMacro.h"
 #include "otbUnaryFunctorImageFilter.h"

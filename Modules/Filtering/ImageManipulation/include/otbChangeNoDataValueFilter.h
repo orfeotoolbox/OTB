@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbChangeNoDataValueFilter_h
-#define __otbChangeNoDataValueFilter_h
+#ifndef otbChangeNoDataValueFilter_h
+#define otbChangeNoDataValueFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkMetaDataObject.h"

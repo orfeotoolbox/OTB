@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSpatialisationFilter_h
-#define __otbSpatialisationFilter_h
+#ifndef otbSpatialisationFilter_h
+#define otbSpatialisationFilter_h
 
 #include "itkLabelObject.h"
 #include "otbLabelMapSource.h"

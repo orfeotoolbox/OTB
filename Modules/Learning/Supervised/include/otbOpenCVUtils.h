@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
   =========================================================================*/
-#ifndef __otbOpenCVUtils_h
-#define __otbOpenCVUtils_h
+#ifndef otbOpenCVUtils_h
+#define otbOpenCVUtils_h
 
 #include <opencv2/core/core_c.h>
 

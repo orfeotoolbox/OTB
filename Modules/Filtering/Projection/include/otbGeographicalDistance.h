@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeographicalDistance_h
-#define __otbGeographicalDistance_h
+#ifndef otbGeographicalDistance_h
+#define otbGeographicalDistance_h
 
 #include "itkNumericTraits.h"
 #include "itkDistanceMetric.h"

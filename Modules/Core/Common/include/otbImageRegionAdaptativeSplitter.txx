@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageRegionAdaptativeSplitter_txx
-#define __otbImageRegionAdaptativeSplitter_txx
+#ifndef otbImageRegionAdaptativeSplitter_txx
+#define otbImageRegionAdaptativeSplitter_txx
 
 #include "otbImageRegionAdaptativeSplitter.h"
 #include "otbMath.h"

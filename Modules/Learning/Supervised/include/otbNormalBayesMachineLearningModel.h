@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNormalBayesMachineLearningModel_h
-#define __otbNormalBayesMachineLearningModel_h
+#ifndef otbNormalBayesMachineLearningModel_h
+#define otbNormalBayesMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
 

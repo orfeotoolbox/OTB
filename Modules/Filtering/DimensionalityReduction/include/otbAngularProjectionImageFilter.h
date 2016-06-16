@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAngularProjectionImageFilter_h
-#define __otbAngularProjectionImageFilter_h
+#ifndef otbAngularProjectionImageFilter_h
+#define otbAngularProjectionImageFilter_h
 
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"

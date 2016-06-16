@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPathFunction_h
-#define __otbPathFunction_h
+#ifndef otbPathFunction_h
+#define otbPathFunction_h
 
 #include "itkFunctionBase.h"
 

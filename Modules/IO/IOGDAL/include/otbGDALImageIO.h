@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGDALImageIO_h
-#define __otbGDALImageIO_h
+#ifndef otbGDALImageIO_h
+#define otbGDALImageIO_h
 
 
 /* C++ Libraries */
@@ -278,4 +278,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbGDALImageIO_h
+#endif // otbGDALImageIO_h

@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbPeriodicSOM_h
-#define __otbPeriodicSOM_h
+#ifndef otbPeriodicSOM_h
+#define otbPeriodicSOM_h
 
 #include "otbSOM.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbReduceSpectralResponse_h
-#define __otbReduceSpectralResponse_h
+#ifndef otbReduceSpectralResponse_h
+#define otbReduceSpectralResponse_h
 
 
 #include "itkDataObject.h"

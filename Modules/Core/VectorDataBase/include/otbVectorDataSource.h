@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataSource_h
-#define __otbVectorDataSource_h
+#ifndef otbVectorDataSource_h
+#define otbVectorDataSource_h
 
 
 #include "itkProcessObject.h"
@@ -99,4 +99,4 @@ private:
 #include "otbVectorDataSource.txx"
 #endif
 
-#endif // __otbVectorDataSource_h
+#endif // otbVectorDataSource_h

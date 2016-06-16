@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultivariateAlterationDetectorImageFilter_h
-#define __otbMultivariateAlterationDetectorImageFilter_h
+#ifndef otbMultivariateAlterationDetectorImageFilter_h
+#define otbMultivariateAlterationDetectorImageFilter_h
 
 
 #include "otbStreamingStatisticsVectorImageFilter.h"

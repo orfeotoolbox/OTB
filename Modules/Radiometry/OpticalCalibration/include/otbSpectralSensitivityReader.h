@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpectralSensitivityReader_h
-#define __otbSpectralSensitivityReader_h
+#ifndef otbSpectralSensitivityReader_h
+#define otbSpectralSensitivityReader_h
 
 #include "itkProcessObject.h"
 #include "itkImageBase.h"

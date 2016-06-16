@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageRegionAdaptativeSplitter_h
-#define __otbImageRegionAdaptativeSplitter_h
+#ifndef otbImageRegionAdaptativeSplitter_h
+#define otbImageRegionAdaptativeSplitter_h
 
 #include "itkRegion.h"
 #include "itkImageRegionSplitter.h"

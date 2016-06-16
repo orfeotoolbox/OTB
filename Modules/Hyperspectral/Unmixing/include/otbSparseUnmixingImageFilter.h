@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSparseUnmixingImageFilter_h
-#define __otbSparseUnmixingImageFilter_h
+#ifndef otbSparseUnmixingImageFilter_h
+#define otbSparseUnmixingImageFilter_h
 
 #include "itkListSample.h"
 #include "itkHistogram.h"

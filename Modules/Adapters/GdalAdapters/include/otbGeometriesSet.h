@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeometriesSet_h
-#define __otbGeometriesSet_h
+#ifndef otbGeometriesSet_h
+#define otbGeometriesSet_h
 
 #include <boost/variant.hpp>
 // #include "otbOGRLayerWrapper.h"
@@ -172,4 +172,4 @@ private:
 // #include "otbGeometriesSet.txx"
 #endif
 
-#endif // __otbGeometriesSet_h
+#endif // otbGeometriesSet_h

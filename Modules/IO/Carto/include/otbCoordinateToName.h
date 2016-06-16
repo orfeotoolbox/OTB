@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCoordinateToName_h
-#define __otbCoordinateToName_h
+#ifndef otbCoordinateToName_h
+#define otbCoordinateToName_h
 
 #include "itkPoint.h"
 #include "itkMultiThreader.h"

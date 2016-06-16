@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEdgeDensityImageFilter_h
-#define __otbEdgeDensityImageFilter_h
+#ifndef otbEdgeDensityImageFilter_h
+#define otbEdgeDensityImageFilter_h
 
 #include "otbBinaryImageToDensityImageFilter.h"
 #include "itkProcessObject.h"

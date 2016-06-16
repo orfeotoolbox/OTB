@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbROIdataConversion_h
-#define __otbROIdataConversion_h
+#ifndef otbROIdataConversion_h
+#define otbROIdataConversion_h
 
 #include <vector>
 #include "otbImage.h"

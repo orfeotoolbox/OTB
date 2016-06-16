@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbThresholdVectorImageFilter_h
-#define __otbThresholdVectorImageFilter_h
+#ifndef otbThresholdVectorImageFilter_h
+#define otbThresholdVectorImageFilter_h
 
 #include "itkImageToImageFilter.h"
 

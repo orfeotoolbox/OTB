@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLibSVMMachineLearningModelFactory_h
-#define __otbLibSVMMachineLearningModelFactory_h
+#ifndef otbLibSVMMachineLearningModelFactory_h
+#define otbLibSVMMachineLearningModelFactory_h
 
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"

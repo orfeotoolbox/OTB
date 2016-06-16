@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProfileDerivativeToMultiScaleCharacteristicsFilter_txx
-#define __otbProfileDerivativeToMultiScaleCharacteristicsFilter_txx
+#ifndef otbProfileDerivativeToMultiScaleCharacteristicsFilter_txx
+#define otbProfileDerivativeToMultiScaleCharacteristicsFilter_txx
 
 #include "otbProfileDerivativeToMultiScaleCharacteristicsFilter.h"
 #include "itkImageRegionIterator.h"

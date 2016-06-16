@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToLabelMapWithAttributesFilter_h
-#define __otbImageToLabelMapWithAttributesFilter_h
+#ifndef otbImageToLabelMapWithAttributesFilter_h
+#define otbImageToLabelMapWithAttributesFilter_h
 
 #include "itkShapeLabelMapFilter.h"
 #include "otbAttributesMapLabelObjectWithClassLabel.h"

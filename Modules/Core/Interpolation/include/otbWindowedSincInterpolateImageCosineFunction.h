@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWindowedSincInterpolateImageCosineFunction_h
-#define __otbWindowedSincInterpolateImageCosineFunction_h
+#ifndef otbWindowedSincInterpolateImageCosineFunction_h
+#define otbWindowedSincInterpolateImageCosineFunction_h
 
 #include "otbWindowedSincInterpolateImageFunctionBase.h"
 #include "vnl/vnl_math.h"

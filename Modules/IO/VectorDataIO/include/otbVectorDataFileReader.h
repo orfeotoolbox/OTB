@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataFileReader_h
-#define __otbVectorDataFileReader_h
+#ifndef otbVectorDataFileReader_h
+#define otbVectorDataFileReader_h
 
 #include "otbVectorDataSource.h"
 #include "otbVectorDataIOBase.h"
@@ -151,4 +151,4 @@ private:
 #include "otbVectorDataFileReader.txx"
 #endif
 
-#endif // __otbVectorDataFileReader_h
+#endif // otbVectorDataFileReader_h

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetDensityEpanechnikovFunction_h
-#define __otbPointSetDensityEpanechnikovFunction_h
+#ifndef otbPointSetDensityEpanechnikovFunction_h
+#define otbPointSetDensityEpanechnikovFunction_h
 
 #include "otbPointSetFunction.h"
 #include "itkPoint.h"

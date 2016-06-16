@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMorphologicalPyramidSegmenter_h
-#define __otbMorphologicalPyramidSegmenter_h
+#ifndef otbMorphologicalPyramidSegmenter_h
+#define otbMorphologicalPyramidSegmenter_h
 
 #include "itkImageToImageFilter.h"
 

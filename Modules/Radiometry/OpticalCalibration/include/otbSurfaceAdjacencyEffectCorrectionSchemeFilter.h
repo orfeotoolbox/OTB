@@ -19,8 +19,8 @@
     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSurfaceAdjacencyEffectCorrectionSchemeFilter_h
-#define __otbSurfaceAdjacencyEffectCorrectionSchemeFilter_h
+#ifndef otbSurfaceAdjacencyEffectCorrectionSchemeFilter_h
+#define otbSurfaceAdjacencyEffectCorrectionSchemeFilter_h
 
 #include "itkNumericTraits.h"
 #include <vector>

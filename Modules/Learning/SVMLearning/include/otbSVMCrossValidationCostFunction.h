@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMCrossValidationCostFunction_h
-#define __otbSVMCrossValidationCostFunction_h
+#ifndef otbSVMCrossValidationCostFunction_h
+#define otbSVMCrossValidationCostFunction_h
 
 #include "otbSVMModel.h"
 #include "itkSingleValuedCostFunction.h"

@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageIOBase_h
-#define __otbImageIOBase_h
+#ifndef otbImageIOBase_h
+#define otbImageIOBase_h
 
 #include "itkLightProcessObject.h"
 #include "itkIndent.h"
@@ -547,4 +547,4 @@ private:
 
 } // end namespace itk
 
-#endif // __otbImageIOBase_h
+#endif // otbImageIOBase_h

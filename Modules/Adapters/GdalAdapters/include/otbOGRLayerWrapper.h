@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRLayerWrapper_h
-#define __otbOGRLayerWrapper_h
+#ifndef otbOGRLayerWrapper_h
+#define otbOGRLayerWrapper_h
 
 // #include <iosfwd> // std::ostream&
 #if defined(__GNUC__) || defined(__clang__)
@@ -548,4 +548,4 @@ inline bool operator!=(Layer const& lhs, Layer const& rhs)
 // #include "otbLayerWrapper.txx"
 #endif
 
-#endif // __otbOGRLayerWrapper_h
+#endif // otbOGRLayerWrapper_h

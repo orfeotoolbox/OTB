@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBinaryImageDensityFunction_h
-#define __otbBinaryImageDensityFunction_h
+#ifndef otbBinaryImageDensityFunction_h
+#define otbBinaryImageDensityFunction_h
 
 #include "itkImageFunction.h"
 #include "itkNumericTraits.h"

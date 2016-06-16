@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBoostMachineLearningModelFactory_h
-#define __otbBoostMachineLearningModelFactory_h
+#ifndef otbBoostMachineLearningModelFactory_h
+#define otbBoostMachineLearningModelFactory_h
 
 #include "otbRequiresOpenCVCheck.h"
 

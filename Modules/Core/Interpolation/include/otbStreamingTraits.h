@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingTraits_h
-#define __otbStreamingTraits_h
+#ifndef otbStreamingTraits_h
+#define otbStreamingTraits_h
 
 #include "otbMacro.h"
 

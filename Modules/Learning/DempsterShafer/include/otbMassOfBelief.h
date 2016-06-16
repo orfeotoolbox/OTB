@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMassOfBelief_h
-#define __otbMassOfBelief_h
+#ifndef otbMassOfBelief_h
+#define otbMassOfBelief_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"

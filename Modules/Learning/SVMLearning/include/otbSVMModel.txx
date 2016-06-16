@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMModel_txx
-#define __otbSVMModel_txx
+#ifndef otbSVMModel_txx
+#define otbSVMModel_txx
 #include "otbSVMModel.h"
 #include "otbMacro.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUtmMapProjection_h
-#define __otbUtmMapProjection_h
+#ifndef otbUtmMapProjection_h
+#define otbUtmMapProjection_h
 
 #include "otbGenericMapProjection.h"
 

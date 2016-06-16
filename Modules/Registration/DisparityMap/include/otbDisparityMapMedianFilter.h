@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDisparityMapMedianFilter_h
-#define __otbDisparityMapMedianFilter_h
+#ifndef otbDisparityMapMedianFilter_h
+#define otbDisparityMapMedianFilter_h
 
 #ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
 #include "itkOptMedianImageFilter.h"

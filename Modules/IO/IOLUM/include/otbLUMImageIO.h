@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLUMImageIO_h
-#define __otbLUMImageIO_h
+#ifndef otbLUMImageIO_h
+#define otbLUMImageIO_h
 
 #include "otbImageIOBase.h"
 #include <fstream>
@@ -192,4 +192,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbLUMImageIO_h
+#endif // otbLUMImageIO_h

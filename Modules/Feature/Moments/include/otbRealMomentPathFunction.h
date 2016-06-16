@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRealMomentPathFunction_h
-#define __otbRealMomentPathFunction_h
+#ifndef otbRealMomentPathFunction_h
+#define otbRealMomentPathFunction_h
 
 #include "otbGeometricMomentPathFunction.h"
 #include "itkVectorContainer.h"

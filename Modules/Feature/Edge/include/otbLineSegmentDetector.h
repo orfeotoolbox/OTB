@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineSegmentDetector_h
-#define __otbLineSegmentDetector_h
+#ifndef otbLineSegmentDetector_h
+#define otbLineSegmentDetector_h
 
 #include "otbImage.h"
 #include "otbVectorDataSource.h"

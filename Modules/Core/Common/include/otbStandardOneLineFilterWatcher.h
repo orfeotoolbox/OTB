@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStandardOneLineFilterWatcher_h
-#define __otbStandardOneLineFilterWatcher_h
+#ifndef otbStandardOneLineFilterWatcher_h
+#define otbStandardOneLineFilterWatcher_h
 
 #include "otbFilterWatcherBase.h"
 

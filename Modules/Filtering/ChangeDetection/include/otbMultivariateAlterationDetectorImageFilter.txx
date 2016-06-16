@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultivariateAlterationDetectorImageFilter_txx
-#define __otbMultivariateAlterationDetectorImageFilter_txx
+#ifndef otbMultivariateAlterationDetectorImageFilter_txx
+#define otbMultivariateAlterationDetectorImageFilter_txx
 
 #include "otbMultivariateAlterationDetectorImageFilter.h"
 #include "otbMath.h"

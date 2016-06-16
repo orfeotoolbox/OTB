@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectListSource_txx
-#define __otbObjectListSource_txx
+#ifndef otbObjectListSource_txx
+#define otbObjectListSource_txx
 
 #include "otbObjectListSource.h"
 #include "itkProgressReporter.h"

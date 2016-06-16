@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericRSTransform_h
-#define __otbGenericRSTransform_h
+#ifndef otbGenericRSTransform_h
+#define otbGenericRSTransform_h
 
 #include "otbCompositeTransform.h"
 

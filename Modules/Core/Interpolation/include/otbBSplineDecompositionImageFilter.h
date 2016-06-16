@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBSplineDecompositionImageFilter_h
-#define __otbBSplineDecompositionImageFilter_h
+#ifndef otbBSplineDecompositionImageFilter_h
+#define otbBSplineDecompositionImageFilter_h
 
 #include <vector>
 

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbForwardSensorModel_h
-#define __otbForwardSensorModel_h
+#ifndef otbForwardSensorModel_h
+#define otbForwardSensorModel_h
 
 #include "otbSensorModelBase.h"
 #include "itkMacro.h"

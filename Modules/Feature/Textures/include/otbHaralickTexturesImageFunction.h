@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHaralickTexturesImageFunction_h
-#define __otbHaralickTexturesImageFunction_h
+#ifndef otbHaralickTexturesImageFunction_h
+#define otbHaralickTexturesImageFunction_h
 
 #include "otbGreyLevelCooccurrenceIndexedList.h"
 #include "itkImageToImageFilter.h"

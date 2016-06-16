@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbChangeLabelImageFilter_h
-#define __otbChangeLabelImageFilter_h
+#ifndef otbChangeLabelImageFilter_h
+#define otbChangeLabelImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkConceptChecking.h"

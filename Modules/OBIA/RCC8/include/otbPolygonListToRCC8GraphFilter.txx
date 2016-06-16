@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygonListToRCC8GraphFilter_txx
-#define __otbPolygonListToRCC8GraphFilter_txx
+#ifndef otbPolygonListToRCC8GraphFilter_txx
+#define otbPolygonListToRCC8GraphFilter_txx
 
 #include "otbPolygonListToRCC8GraphFilter.h"
 #include "itkProgressReporter.h"

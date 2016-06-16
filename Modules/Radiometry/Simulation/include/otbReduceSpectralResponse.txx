@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbReduceSpectralResponse_txx
-#define __otbReduceSpectralResponse_txx
+#ifndef otbReduceSpectralResponse_txx
+#define otbReduceSpectralResponse_txx
 
 #include <algorithm>
 #include "itkNumericTraits.h"

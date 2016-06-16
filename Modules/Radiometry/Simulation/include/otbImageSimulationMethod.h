@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageSimulationMethod_h
-#define __otbImageSimulationMethod_h
+#ifndef otbImageSimulationMethod_h
+#define otbImageSimulationMethod_h
 
 
 #include "itkImageSource.h"

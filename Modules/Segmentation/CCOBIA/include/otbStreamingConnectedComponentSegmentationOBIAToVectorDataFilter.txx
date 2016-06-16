@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_txx
-#define __otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_txx
+#ifndef otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_txx
+#define otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_txx
 
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
 #include "otbVectorDataTransformFilter.h"

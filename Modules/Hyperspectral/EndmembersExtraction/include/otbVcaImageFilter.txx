@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVCAImageFilter_txx
-#define __otbVCAImageFilter_txx
+#ifndef otbVCAImageFilter_txx
+#define otbVCAImageFilter_txx
 
 #include "otbVcaImageFilter.h"
 #include "otbStandardWriterWatcher.h"

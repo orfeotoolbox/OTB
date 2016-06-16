@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpatialObjectSource_h
-#define __otbSpatialObjectSource_h
+#ifndef otbSpatialObjectSource_h
+#define otbSpatialObjectSource_h
 
 #include "otbMacro.h"
 #include "itkProcessObject.h"

@@ -19,8 +19,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbReflectanceToLuminanceImageFilter_h
-#define __otbReflectanceToLuminanceImageFilter_h
+#ifndef otbReflectanceToLuminanceImageFilter_h
+#define otbReflectanceToLuminanceImageFilter_h
 
 #include "otbVarSol.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"

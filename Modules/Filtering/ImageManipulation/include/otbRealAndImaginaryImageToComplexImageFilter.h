@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRealAndImaginaryImageToComplexImageFilter_h
-#define __otbRealAndImaginaryImageToComplexImageFilter_h
+#ifndef otbRealAndImaginaryImageToComplexImageFilter_h
+#define otbRealAndImaginaryImageToComplexImageFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
 #include "vnl/vnl_math.h"

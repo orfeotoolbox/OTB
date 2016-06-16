@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygonClassStatisticsAccumulator_txx
-#define __otbPolygonClassStatisticsAccumulator_txx
+#ifndef otbPolygonClassStatisticsAccumulator_txx
+#define otbPolygonClassStatisticsAccumulator_txx
 
 #include "otbPolygonClassStatisticsAccumulator.h"
 #include "otbMacro.h"

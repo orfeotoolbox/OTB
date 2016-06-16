@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineSegmentDetector_txx
-#define __otbLineSegmentDetector_txx
+#ifndef otbLineSegmentDetector_txx
+#define otbLineSegmentDetector_txx
 
 #include "otbLineSegmentDetector.h"
 #include "itkImageRegionIterator.h"

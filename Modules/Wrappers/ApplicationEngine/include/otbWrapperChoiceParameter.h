@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperChoiceParameter_h
-#define __otbWrapperChoiceParameter_h
+#ifndef otbWrapperChoiceParameter_h
+#define otbWrapperChoiceParameter_h
 
 #include "otbWrapperParameterGroup.h"
 

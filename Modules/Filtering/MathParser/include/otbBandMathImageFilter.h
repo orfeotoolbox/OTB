@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbBandMathImageFilter_h
-#define __otbBandMathImageFilter_h
+#ifndef otbBandMathImageFilter_h
+#define otbBandMathImageFilter_h
 
 #include "itkInPlaceImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

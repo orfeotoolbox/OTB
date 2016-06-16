@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeodesicMorphologyLevelingFilter_h
-#define __otbGeodesicMorphologyLevelingFilter_h
+#ifndef otbGeodesicMorphologyLevelingFilter_h
+#define otbGeodesicMorphologyLevelingFilter_h
 
 #include "itkTernaryFunctorImageFilter.h"
 

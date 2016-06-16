@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbScalarToRainbowRGBPixelFunctor_h
-#define __otbScalarToRainbowRGBPixelFunctor_h
+#ifndef otbScalarToRainbowRGBPixelFunctor_h
+#define otbScalarToRainbowRGBPixelFunctor_h
 
 #include "itkColormapFunction.h"
 

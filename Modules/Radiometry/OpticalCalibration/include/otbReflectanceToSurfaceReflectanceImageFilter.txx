@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbReflectanceToSurfaceReflectanceImageFilter_txx
-#define __otbReflectanceToSurfaceReflectanceImageFilter_txx
+#ifndef otbReflectanceToSurfaceReflectanceImageFilter_txx
+#define otbReflectanceToSurfaceReflectanceImageFilter_txx
 
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"

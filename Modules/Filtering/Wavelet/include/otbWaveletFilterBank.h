@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletFilterBank_h
-#define __otbWaveletFilterBank_h
+#ifndef otbWaveletFilterBank_h
+#define otbWaveletFilterBank_h
 
 #include "itkProgressReporter.h"
 #include "itkImageToImageFilter.h"

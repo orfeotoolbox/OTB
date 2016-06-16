@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToCarvingPathFilter_h
-#define __otbImageToCarvingPathFilter_h
+#ifndef otbImageToCarvingPathFilter_h
+#define otbImageToCarvingPathFilter_h
 
 #include "otbImageToPathFilter.h"
 #include "itkImageSliceConstIteratorWithIndex.h"

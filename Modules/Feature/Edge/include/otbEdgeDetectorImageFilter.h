@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEdgeDetectorImageFilter_h
-#define __otbEdgeDetectorImageFilter_h
+#ifndef otbEdgeDetectorImageFilter_h
+#define otbEdgeDetectorImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkImageToImageFilter.h"

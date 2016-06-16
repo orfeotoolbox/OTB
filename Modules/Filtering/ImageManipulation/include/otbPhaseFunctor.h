@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPhaseFunctor_h
-#define __otbPhaseFunctor_h
+#ifndef otbPhaseFunctor_h
+#define otbPhaseFunctor_h
 
 #include "otbChannelSelectorFunctor.h"
 

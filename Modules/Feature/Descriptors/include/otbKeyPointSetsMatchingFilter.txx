@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKeyPointSetsMatchingFilter_txx
-#define __otbKeyPointSetsMatchingFilter_txx
+#ifndef otbKeyPointSetsMatchingFilter_txx
+#define otbKeyPointSetsMatchingFilter_txx
 
 #include "otbKeyPointSetsMatchingFilter.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToVectorImageCastFilter_h
-#define __otbImageToVectorImageCastFilter_h
+#ifndef otbImageToVectorImageCastFilter_h
+#define otbImageToVectorImageCastFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkVariableLengthVector.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAngularProjectionSetImageFilter_txx
-#define __otbAngularProjectionSetImageFilter_txx
+#ifndef otbAngularProjectionSetImageFilter_txx
+#define otbAngularProjectionSetImageFilter_txx
 #include "otbAngularProjectionSetImageFilter.h"
 
 #include <vnl/vnl_math.h>

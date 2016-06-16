@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFastICAInternalOptimizerVectorImageFilter_h
-#define __otbFastICAInternalOptimizerVectorImageFilter_h
+#ifndef otbFastICAInternalOptimizerVectorImageFilter_h
+#define otbFastICAInternalOptimizerVectorImageFilter_h
 
 #include "otbMacro.h"
 #include "otbMatrixImageFilter.h"

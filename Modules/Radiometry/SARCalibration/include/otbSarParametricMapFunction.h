@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSarParametricMapFunction_h
-#define __otbSarParametricMapFunction_h
+#ifndef otbSarParametricMapFunction_h
+#define otbSarParametricMapFunction_h
 
 #include "itkImageFunction.h"
 #include "itkPointSet.h"

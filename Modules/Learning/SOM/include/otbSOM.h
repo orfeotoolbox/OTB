@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOM_h
-#define __otbSOM_h
+#ifndef otbSOM_h
+#define otbSOM_h
 
 #include "itkImageToImageFilter.h"
 #include "itkEuclideanDistanceMetric.h"

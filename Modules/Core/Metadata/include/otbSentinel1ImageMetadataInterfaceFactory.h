@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSentinel1ImageMetadataInterfaceFactory_h
-#define __otbSentinel1ImageMetadataInterfaceFactory_h
+#ifndef otbSentinel1ImageMetadataInterfaceFactory_h
+#define otbSentinel1ImageMetadataInterfaceFactory_h
 
 
 #include "itkObjectFactoryBase.h"

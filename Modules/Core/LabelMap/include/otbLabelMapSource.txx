@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelMapSource_txx
-#define __otbLabelMapSource_txx
+#ifndef otbLabelMapSource_txx
+#define otbLabelMapSource_txx
 
 #include "otbLabelMapSource.h"
 

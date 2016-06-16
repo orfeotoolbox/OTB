@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8GraphSource_h
-#define __otbRCC8GraphSource_h
+#ifndef otbRCC8GraphSource_h
+#define otbRCC8GraphSource_h
 
 #include "itkProcessObject.h"
 

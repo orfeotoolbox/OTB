@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelMapToSimulatedImageFilter_h
-#define __otbLabelMapToSimulatedImageFilter_h
+#ifndef otbLabelMapToSimulatedImageFilter_h
+#define otbLabelMapToSimulatedImageFilter_h
 
 
 #include "itkLabelMapFilter.h"

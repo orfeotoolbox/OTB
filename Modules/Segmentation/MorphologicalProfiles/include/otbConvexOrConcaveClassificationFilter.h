@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConvexOrConcaveClassificationFilter_h
-#define __otbConvexOrConcaveClassificationFilter_h
+#ifndef otbConvexOrConcaveClassificationFilter_h
+#define otbConvexOrConcaveClassificationFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
 namespace otb

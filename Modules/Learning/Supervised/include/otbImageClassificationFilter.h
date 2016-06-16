@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageClassificationFilter_h
-#define __otbImageClassificationFilter_h
+#ifndef otbImageClassificationFilter_h
+#define otbImageClassificationFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbMachineLearningModel.h"

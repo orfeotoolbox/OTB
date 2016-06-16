@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCvRTreesWrapper_h
-#define __otbCvRTreesWrapper_h
+#ifndef otbCvRTreesWrapper_h
+#define otbCvRTreesWrapper_h
 
 #include "otbOpenCVUtils.h"
 #include <vector>

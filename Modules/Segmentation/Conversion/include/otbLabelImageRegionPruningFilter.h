@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelImageRegionPruningFilter_h
-#define __otbLabelImageRegionPruningFilter_h
+#ifndef otbLabelImageRegionPruningFilter_h
+#define otbLabelImageRegionPruningFilter_h
 
 #include "otbImage.h"
 #include "otbVectorImage.h"

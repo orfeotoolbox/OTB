@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToEnvelopeVectorDataFilter_h
-#define __otbImageToEnvelopeVectorDataFilter_h
+#ifndef otbImageToEnvelopeVectorDataFilter_h
+#define otbImageToEnvelopeVectorDataFilter_h
 
 #include "otbVectorDataSource.h"
 #include "otbGenericRSTransform.h"

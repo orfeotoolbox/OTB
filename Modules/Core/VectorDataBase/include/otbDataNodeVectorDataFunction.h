@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDataNodeVectorDataFunction_h
-#define __otbDataNodeVectorDataFunction_h
+#ifndef otbDataNodeVectorDataFunction_h
+#define otbDataNodeVectorDataFunction_h
 
 #include "otbDataNodeFunctionBase.h"
 #include "otbVectorDataProperties.h"

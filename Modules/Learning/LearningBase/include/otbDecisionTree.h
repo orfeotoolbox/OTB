@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDecisionTree_h
-#define __otbDecisionTree_h
+#ifndef otbDecisionTree_h
+#define otbDecisionTree_h
 
 #include <map>
 #include "itkObjectFactory.h"

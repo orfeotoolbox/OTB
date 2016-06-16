@@ -18,8 +18,8 @@ See IMTCopyright.txt for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMMap_h
-#define __otbSOMMap_h
+#ifndef otbSOMMap_h
+#define otbSOMMap_h
 
 #include "itkVariableLengthVector.h"
 #include "itkEuclideanDistanceMetric.h"

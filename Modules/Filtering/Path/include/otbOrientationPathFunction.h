@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOrientationPathFunction_h
-#define __otbOrientationPathFunction_h
+#ifndef otbOrientationPathFunction_h
+#define otbOrientationPathFunction_h
 
 #include "otbPathFunction.h"
 #include "itkVectorContainer.h"

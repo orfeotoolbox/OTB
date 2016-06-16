@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFileReader_h
-#define __otbImageFileReader_h
+#ifndef otbImageFileReader_h
+#define otbImageFileReader_h
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -207,4 +207,4 @@ private:
 #include "otbImageFileReader.txx"
 #endif
 
-#endif // __otbImageFileReader_h
+#endif // otbImageFileReader_h

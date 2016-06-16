@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFlusserMomentsIFFactory_h
-#define __otbFlusserMomentsIFFactory_h
+#ifndef otbFlusserMomentsIFFactory_h
+#define otbFlusserMomentsIFFactory_h
 
 #include "itkLightObject.h"
 

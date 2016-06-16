@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbModelComponentBase_txx
-#define __otbModelComponentBase_txx
+#ifndef otbModelComponentBase_txx
+#define otbModelComponentBase_txx
 
 #include <iostream>
 

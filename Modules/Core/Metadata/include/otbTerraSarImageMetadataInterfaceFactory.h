@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTerraSarImageMetadataInterfaceFactory_h
-#define __otbTerraSarImageMetadataInterfaceFactory_h
+#ifndef otbTerraSarImageMetadataInterfaceFactory_h
+#define otbTerraSarImageMetadataInterfaceFactory_h
 
 
 #include "itkObjectFactoryBase.h"

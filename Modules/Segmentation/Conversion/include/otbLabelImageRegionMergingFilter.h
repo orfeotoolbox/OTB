@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelImageRegionMergingFilter_h
-#define __otbLabelImageRegionMergingFilter_h
+#ifndef otbLabelImageRegionMergingFilter_h
+#define otbLabelImageRegionMergingFilter_h
 
 #include "otbImage.h"
 #include "otbVectorImage.h"

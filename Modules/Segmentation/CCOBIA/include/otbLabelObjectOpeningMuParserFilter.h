@@ -19,8 +19,8 @@
 
  =========================================================================*/
 
-#ifndef __otbLabelObjectOpeningMuParserFilter_h
-#define __otbLabelObjectOpeningMuParserFilter_h
+#ifndef otbLabelObjectOpeningMuParserFilter_h
+#define otbLabelObjectOpeningMuParserFilter_h
 
 #include "itkProgressReporter.h"
 #include <iostream>

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorImageToASImageAdaptor_h
-#define __otbVectorImageToASImageAdaptor_h
+#ifndef otbVectorImageToASImageAdaptor_h
+#define otbVectorImageToASImageAdaptor_h
 
 #include "itkImageAdaptor.h"
 #include "otbVectorImageToASPixelAccessor.h"

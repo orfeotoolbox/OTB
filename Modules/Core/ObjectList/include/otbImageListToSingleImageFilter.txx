@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageListToSingleImageFilter_txx
-#define __otbImageListToSingleImageFilter_txx
+#ifndef otbImageListToSingleImageFilter_txx
+#define otbImageListToSingleImageFilter_txx
 
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIteratorWithIndex.h"

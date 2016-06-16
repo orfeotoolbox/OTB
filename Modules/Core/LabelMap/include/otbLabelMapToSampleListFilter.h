@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapToSampleListFilter_h
-#define __otbLabelMapToSampleListFilter_h
+#ifndef otbLabelMapToSampleListFilter_h
+#define otbLabelMapToSampleListFilter_h
 
 #include <algorithm>
 

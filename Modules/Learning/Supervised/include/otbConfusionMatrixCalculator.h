@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbConfusionMatrixCalculator_h
-#define __otbConfusionMatrixCalculator_h
+#ifndef otbConfusionMatrixCalculator_h
+#define otbConfusionMatrixCalculator_h
 
 #include "otbMacro.h"
 #include "otbConfusionMatrixMeasurements.h"

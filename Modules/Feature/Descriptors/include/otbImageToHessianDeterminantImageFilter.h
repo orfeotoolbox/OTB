@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToHessianDeterminantImageFilter_h
-#define __otbImageToHessianDeterminantImageFilter_h
+#ifndef otbImageToHessianDeterminantImageFilter_h
+#define otbImageToHessianDeterminantImageFilter_h
 
 #include "itkProcessObject.h"
 #include "itkImageToImageFilter.h"

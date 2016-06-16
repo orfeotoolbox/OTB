@@ -1,5 +1,5 @@
-#ifndef __otbWrapperOutputProcessXMLParameter_h
-#define __otbWrapperOutputProcessXMLParameter_h
+#ifndef otbWrapperOutputProcessXMLParameter_h
+#define otbWrapperOutputProcessXMLParameter_h
 #include "otbWrapperApplication.h"
 #include "otb_tinyxml.h"
 

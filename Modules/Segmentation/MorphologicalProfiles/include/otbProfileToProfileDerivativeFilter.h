@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProfileToProfileDerivativeFilter_h
-#define __otbProfileToProfileDerivativeFilter_h
+#ifndef otbProfileToProfileDerivativeFilter_h
+#define otbProfileToProfileDerivativeFilter_h
 
 #include "otbImageListToImageListFilter.h"
 #include "itkUnaryFunctorImageFilter.h"

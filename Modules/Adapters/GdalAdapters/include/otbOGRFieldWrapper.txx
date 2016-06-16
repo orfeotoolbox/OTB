@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbOGRFieldWrapper_txx
-#define __otbOGRFieldWrapper_txx
+#ifndef otbOGRFieldWrapper_txx
+#define otbOGRFieldWrapper_txx
 
 /*===========================================================================*/
 /*===============================[ Includes ]================================*/
@@ -479,4 +479,4 @@ OGRField & otb::ogr::Field::ogr()
   return *f;
 }
 
-#endif // __otbOGRFieldWrapper_txx
+#endif // otbOGRFieldWrapper_txx

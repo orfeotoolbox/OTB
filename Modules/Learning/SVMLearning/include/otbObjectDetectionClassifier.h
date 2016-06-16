@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectDetectionClassifier_h
-#define __otbObjectDetectionClassifier_h
+#ifndef otbObjectDetectionClassifier_h
+#define otbObjectDetectionClassifier_h
 
 #include <vector>
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataTransformFilter_h
-#define __otbVectorDataTransformFilter_h
+#ifndef otbVectorDataTransformFilter_h
+#define otbVectorDataTransformFilter_h
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "itkTransform.h"

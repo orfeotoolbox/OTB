@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbReduceSpectralResponseClassifierRAndNIR_h
-#define __otbReduceSpectralResponseClassifierRAndNIR_h
+#ifndef otbReduceSpectralResponseClassifierRAndNIR_h
+#define otbReduceSpectralResponseClassifierRAndNIR_h
 
 
 #include "otbReduceSpectralResponse.h"

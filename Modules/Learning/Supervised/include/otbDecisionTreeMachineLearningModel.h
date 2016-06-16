@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDecisionTreeMachineLearningModel_h
-#define __otbDecisionTreeMachineLearningModel_h
+#ifndef otbDecisionTreeMachineLearningModel_h
+#define otbDecisionTreeMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
 

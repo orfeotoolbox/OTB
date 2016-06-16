@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStatisticsAttributesLabelMapFilter_h
-#define __otbStatisticsAttributesLabelMapFilter_h
+#ifndef otbStatisticsAttributesLabelMapFilter_h
+#define otbStatisticsAttributesLabelMapFilter_h
 
 #include "otbLabelMapFeaturesFunctorImageFilter.h"
 #include "itkMatrix.h"

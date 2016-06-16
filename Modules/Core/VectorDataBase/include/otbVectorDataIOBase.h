@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataIOBase_h
-#define __otbVectorDataIOBase_h
+#ifndef otbVectorDataIOBase_h
+#define otbVectorDataIOBase_h
 
 #include <string>
 
@@ -172,4 +172,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbVectorDataIOBase_h
+#endif // otbVectorDataIOBase_h

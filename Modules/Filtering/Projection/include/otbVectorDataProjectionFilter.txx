@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataProjectionFilter_txx
-#define __otbVectorDataProjectionFilter_txx
+#ifndef otbVectorDataProjectionFilter_txx
+#define otbVectorDataProjectionFilter_txx
 
 #include "otbVectorDataProjectionFilter.h"
 #include "itkProgressReporter.h"

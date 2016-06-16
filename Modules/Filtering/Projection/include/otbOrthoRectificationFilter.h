@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOrthoRectificationFilter_h
-#define __otbOrthoRectificationFilter_h
+#ifndef otbOrthoRectificationFilter_h
+#define otbOrthoRectificationFilter_h
 
 #include <iostream>
 #include <sstream>

@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbBandMathXImageFilter_h
-#define __otbBandMathXImageFilter_h
+#ifndef otbBandMathXImageFilter_h
+#define otbBandMathXImageFilter_h
 
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageToImageFilter.h"

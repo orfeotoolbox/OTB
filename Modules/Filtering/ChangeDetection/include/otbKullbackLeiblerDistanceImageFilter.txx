@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKullbackLeiblerDistanceImageFilter_txx
-#define __otbKullbackLeiblerDistanceImageFilter_txx
+#ifndef otbKullbackLeiblerDistanceImageFilter_txx
+#define otbKullbackLeiblerDistanceImageFilter_txx
 
 #include <vector>
 

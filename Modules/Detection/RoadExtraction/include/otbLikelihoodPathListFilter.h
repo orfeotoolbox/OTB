@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLikelihoodPathListFilter_h
-#define __otbLikelihoodPathListFilter_h
+#ifndef otbLikelihoodPathListFilter_h
+#define otbLikelihoodPathListFilter_h
 
 #include "otbPathListToPathListFilter.h"
 #include "otbMacro.h"

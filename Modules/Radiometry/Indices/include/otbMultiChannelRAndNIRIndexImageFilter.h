@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiChannelRAndNIRIndexImageFilter_h
-#define __otbMultiChannelRAndNIRIndexImageFilter_h
+#ifndef otbMultiChannelRAndNIRIndexImageFilter_h
+#define otbMultiChannelRAndNIRIndexImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbVegetationIndicesFunctor.h"

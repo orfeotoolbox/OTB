@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSparseUnmixingImageFilter_txx
-#define __otbSparseUnmixingImageFilter_txx
+#ifndef otbSparseUnmixingImageFilter_txx
+#define otbSparseUnmixingImageFilter_txx
 
 #include "otbSparseUnmixingImageFilter.h"
 

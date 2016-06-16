@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletPacketTransform_h
-#define __otbWaveletPacketTransform_h
+#ifndef otbWaveletPacketTransform_h
+#define otbWaveletPacketTransform_h
 
 #include "itkProgressAccumulator.h"
 

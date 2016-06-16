@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRLayerStreamStitchingFilter_txx
-#define __otbOGRLayerStreamStitchingFilter_txx
+#ifndef otbOGRLayerStreamStitchingFilter_txx
+#define otbOGRLayerStreamStitchingFilter_txx
 
 #include "otbOGRLayerStreamStitchingFilter.h"
 #include "itkContinuousIndex.h"

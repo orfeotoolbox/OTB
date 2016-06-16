@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRandomForestsMachineLearningModel_txx
-#define __otbRandomForestsMachineLearningModel_txx
+#ifndef otbRandomForestsMachineLearningModel_txx
+#define otbRandomForestsMachineLearningModel_txx
 
 #include <fstream>
 #include "itkMacro.h"

@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnaryImageFunctorWithVectorImageFilter_h
-#define __otbUnaryImageFunctorWithVectorImageFilter_h
+#ifndef otbUnaryImageFunctorWithVectorImageFilter_h
+#define otbUnaryImageFunctorWithVectorImageFilter_h
 
 #include "otbVectorImage.h"
 #include "itkVariableLengthVector.h"

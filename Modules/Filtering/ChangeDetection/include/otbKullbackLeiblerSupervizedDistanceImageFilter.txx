@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbKullbackLeiblerSupervizedDistanceImageFilter_txx
-#define __otbKullbackLeiblerSupervizedDistanceImageFilter_txx
+#ifndef otbKullbackLeiblerSupervizedDistanceImageFilter_txx
+#define otbKullbackLeiblerSupervizedDistanceImageFilter_txx
 
 #include "otbKullbackLeiblerSupervizedDistanceImageFilter.h"
 

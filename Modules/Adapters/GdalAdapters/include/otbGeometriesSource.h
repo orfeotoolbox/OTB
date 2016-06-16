@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeometriesSource_h
-#define __otbGeometriesSource_h
+#ifndef otbGeometriesSource_h
+#define otbGeometriesSource_h
 
 #include <boost/noncopyable.hpp>
 #include "itkProcessObject.h"
@@ -135,4 +135,4 @@ protected:
   };
 } // end namespace otb
 
-#endif // __otbGeometriesSource_h
+#endif // otbGeometriesSource_h

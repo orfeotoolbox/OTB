@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetDensityGaussianFunction_h
-#define __otbPointSetDensityGaussianFunction_h
+#ifndef otbPointSetDensityGaussianFunction_h
+#define otbPointSetDensityGaussianFunction_h
 
 #include "otbPointSetFunction.h"
 #include "itkPoint.h"

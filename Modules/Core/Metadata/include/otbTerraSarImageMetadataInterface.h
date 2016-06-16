@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbTerraSarImageMetadataInterface_h
-#define __otbTerraSarImageMetadataInterface_h
+#ifndef otbTerraSarImageMetadataInterface_h
+#define otbTerraSarImageMetadataInterface_h
 
 #include <string>
 

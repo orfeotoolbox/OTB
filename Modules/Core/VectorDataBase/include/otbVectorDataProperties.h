@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataProperties_h
-#define __otbVectorDataProperties_h
+#ifndef otbVectorDataProperties_h
+#define otbVectorDataProperties_h
 
 #include "itkObjectFactory.h"
 

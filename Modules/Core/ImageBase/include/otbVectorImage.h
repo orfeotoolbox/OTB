@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorImage_h
-#define __otbVectorImage_h
+#ifndef otbVectorImage_h
+#define otbVectorImage_h
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push

@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMRFEnergyFisherClassification_h
-#define __otbMRFEnergyFisherClassification_h
+#ifndef otbMRFEnergyFisherClassification_h
+#define otbMRFEnergyFisherClassification_h
 
 #include "otbMRFEnergy.h"
 #include "otbMath.h"

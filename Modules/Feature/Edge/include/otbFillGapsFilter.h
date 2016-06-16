@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFillGapsFilter_h
-#define __otbFillGapsFilter_h
+#ifndef otbFillGapsFilter_h
+#define otbFillGapsFilter_h
 
 
 #include "itkProcessObject.h"

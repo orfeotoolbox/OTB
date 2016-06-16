@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFormosatImageMetadataInterfaceFactory_h
-#define __otbFormosatImageMetadataInterfaceFactory_h
+#ifndef otbFormosatImageMetadataInterfaceFactory_h
+#define otbFormosatImageMetadataInterfaceFactory_h
 
 
 #include "itkObjectFactoryBase.h"

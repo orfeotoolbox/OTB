@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFittingPolygonListFilter_txx
-#define __otbImageFittingPolygonListFilter_txx
+#ifndef otbImageFittingPolygonListFilter_txx
+#define otbImageFittingPolygonListFilter_txx
 
 #include "otbImageFittingPolygonListFilter.h"
 #include "otbPolyLineImageConstIterator.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDescriptorsListSampleGenerator_h
-#define __otbDescriptorsListSampleGenerator_h
+#ifndef otbDescriptorsListSampleGenerator_h
+#define otbDescriptorsListSampleGenerator_h
 
 #include <vector>
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBijectionCoherencyFilter_txx
-#define __otbBijectionCoherencyFilter_txx
+#ifndef otbBijectionCoherencyFilter_txx
+#define otbBijectionCoherencyFilter_txx
 
 #include "otbBijectionCoherencyFilter.h"
 

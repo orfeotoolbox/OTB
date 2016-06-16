@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLeastSquareAffineTransformEstimator_h
-#define __otbLeastSquareAffineTransformEstimator_h
+#ifndef otbLeastSquareAffineTransformEstimator_h
+#define otbLeastSquareAffineTransformEstimator_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"

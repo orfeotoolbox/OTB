@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbShapeAttributesLabelMapFilter_txx
-#define __otbShapeAttributesLabelMapFilter_txx
+#ifndef otbShapeAttributesLabelMapFilter_txx
+#define otbShapeAttributesLabelMapFilter_txx
 
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "itkProgressReporter.h"

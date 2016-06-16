@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMClassifier_h
-#define __otbSOMClassifier_h
+#ifndef otbSOMClassifier_h
+#define otbSOMClassifier_h
 
 #include "itkProcessObject.h"
 #include "itkMembershipSample.h"

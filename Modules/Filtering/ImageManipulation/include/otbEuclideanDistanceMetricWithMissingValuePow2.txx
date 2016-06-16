@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbEuclideanDistanceMetricWithMissingValuePow2_txx
-#define __otbEuclideanDistanceMetricWithMissingValuePow2_txx
+#ifndef otbEuclideanDistanceMetricWithMissingValuePow2_txx
+#define otbEuclideanDistanceMetricWithMissingValuePow2_txx
 
 #include "itkMeasurementVectorTraits.h"
 

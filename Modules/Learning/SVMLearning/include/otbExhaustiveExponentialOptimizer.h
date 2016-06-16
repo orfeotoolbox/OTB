@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbExhaustiveExponentialOptimizer_h
-#define __otbExhaustiveExponentialOptimizer_h
+#ifndef otbExhaustiveExponentialOptimizer_h
+#define otbExhaustiveExponentialOptimizer_h
 
 #include "itkSingleValuedNonLinearOptimizer.h"
 

@@ -19,8 +19,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSurfaceReflectanceToReflectanceFilter_h
-#define __otbSurfaceReflectanceToReflectanceFilter_h
+#ifndef otbSurfaceReflectanceToReflectanceFilter_h
+#define otbSurfaceReflectanceToReflectanceFilter_h
 
 
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"

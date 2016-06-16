@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperNumericalParameter_h
-#define __otbWrapperNumericalParameter_h
+#ifndef otbWrapperNumericalParameter_h
+#define otbWrapperNumericalParameter_h
 
 #include "otbWrapperParameter.h"
 #include "itkNumericTraits.h"

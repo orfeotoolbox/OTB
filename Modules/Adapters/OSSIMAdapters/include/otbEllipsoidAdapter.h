@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEllipsoidAdapter_h
-#define __otbEllipsoidAdapter_h
+#ifndef otbEllipsoidAdapter_h
+#define otbEllipsoidAdapter_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"

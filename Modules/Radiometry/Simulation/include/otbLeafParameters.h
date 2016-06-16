@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLeafParameters_h
-#define __otbLeafParameters_h
+#ifndef otbLeafParameters_h
+#define otbLeafParameters_h
 
 
 #include "itkDataObject.h"

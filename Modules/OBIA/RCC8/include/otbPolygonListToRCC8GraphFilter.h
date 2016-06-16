@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygonListToRCC8GraphFilter_h
-#define __otbPolygonListToRCC8GraphFilter_h
+#ifndef otbPolygonListToRCC8GraphFilter_h
+#define otbPolygonListToRCC8GraphFilter_h
 
 #include "otbRCC8GraphSource.h"
 #include "otbPolygonToPolygonRCC8Calculator.h"

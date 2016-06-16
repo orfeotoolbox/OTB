@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWarpImageFilter_txx
-#define __otbWarpImageFilter_txx
+#ifndef otbWarpImageFilter_txx
+#define otbWarpImageFilter_txx
 #include "otbWarpImageFilter.h"
 
 #include "itkImageRegionIterator.h"

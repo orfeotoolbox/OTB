@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpatialObjectSource_txx
-#define __otbSpatialObjectSource_txx
+#ifndef otbSpatialObjectSource_txx
+#define otbSpatialObjectSource_txx
 
 #include "otbSpatialObjectSource.h"
 

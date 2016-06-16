@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMModelEstimator_h
-#define __otbSVMModelEstimator_h
+#ifndef otbSVMModelEstimator_h
+#define otbSVMModelEstimator_h
 
 #include "otbSVMModel.h"
 #include "itkProcessObject.h"

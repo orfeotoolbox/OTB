@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletGenerator_h
-#define __otbWaveletGenerator_h
+#ifndef otbWaveletGenerator_h
+#define otbWaveletGenerator_h
 
 #include <vector>
 #include "itkLightObject.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLocalHistogramImageFunction_h
-#define __otbLocalHistogramImageFunction_h
+#ifndef otbLocalHistogramImageFunction_h
+#define otbLocalHistogramImageFunction_h
 
 #include "itkImageFunction.h"
 #include "itkHistogram.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMaximumAutocorrelationFactorImageFilter_h
-#define __otbMaximumAutocorrelationFactorImageFilter_h
+#ifndef otbMaximumAutocorrelationFactorImageFilter_h
+#define otbMaximumAutocorrelationFactorImageFilter_h
 
 
 #include "otbStreamingStatisticsVectorImageFilter.h"

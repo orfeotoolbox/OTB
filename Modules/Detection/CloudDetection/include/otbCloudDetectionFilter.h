@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCloudDetectionFilter_h
-#define __otbCloudDetectionFilter_h
+#ifndef otbCloudDetectionFilter_h
+#define otbCloudDetectionFilter_h
 
 #include "otbCloudDetectionFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBuiltUpIndicesFunctor_h
-#define __otbBuiltUpIndicesFunctor_h
+#ifndef otbBuiltUpIndicesFunctor_h
+#define otbBuiltUpIndicesFunctor_h
 
 #include "otbVegetationIndicesFunctor.h"
 

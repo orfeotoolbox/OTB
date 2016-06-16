@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLocalHistogramIFFactory_h
-#define __otbLocalHistogramIFFactory_h
+#ifndef otbLocalHistogramIFFactory_h
+#define otbLocalHistogramIFFactory_h
 
 #include "itkLightObject.h"
 

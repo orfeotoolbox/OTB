@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingShrinkImageFilter_txx
-#define __otbStreamingShrinkImageFilter_txx
+#ifndef otbStreamingShrinkImageFilter_txx
+#define otbStreamingShrinkImageFilter_txx
 
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

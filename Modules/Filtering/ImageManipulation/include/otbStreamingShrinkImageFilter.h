@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingShrinkImageFilter_h
-#define __otbStreamingShrinkImageFilter_h
+#ifndef otbStreamingShrinkImageFilter_h
+#define otbStreamingShrinkImageFilter_h
 
 
 #include "otbPersistentImageFilter.h"

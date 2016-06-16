@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLog10ThresholdedImageFilter_h
-#define __otbLog10ThresholdedImageFilter_h
+#ifndef otbLog10ThresholdedImageFilter_h
+#define otbLog10ThresholdedImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "vnl/vnl_math.h"

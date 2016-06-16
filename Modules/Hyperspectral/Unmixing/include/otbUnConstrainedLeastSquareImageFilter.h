@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnConstrainedLeastSquareImageFilter_h
-#define __otbUnConstrainedLeastSquareImageFilter_h
+#ifndef otbUnConstrainedLeastSquareImageFilter_h
+#define otbUnConstrainedLeastSquareImageFilter_h
 
 #include "itkMacro.h"
 #include "otbUnaryFunctorImageFilter.h"

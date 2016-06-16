@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConcatenateVectorDataFilter_h
-#define __otbConcatenateVectorDataFilter_h
+#ifndef otbConcatenateVectorDataFilter_h
+#define otbConcatenateVectorDataFilter_h
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbVectorData.h"

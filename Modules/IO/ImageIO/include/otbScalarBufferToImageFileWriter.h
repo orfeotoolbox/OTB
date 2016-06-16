@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbScalarBufferToImageFileWriter_h
-#define __otbScalarBufferToImageFileWriter_h
+#ifndef otbScalarBufferToImageFileWriter_h
+#define otbScalarBufferToImageFileWriter_h
 
 
 #include "otbVectorImage.h"

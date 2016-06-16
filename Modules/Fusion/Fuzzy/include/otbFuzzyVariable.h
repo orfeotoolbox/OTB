@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFuzzyVariable_h
-#define __otbFuzzyVariable_h
+#ifndef otbFuzzyVariable_h
+#define otbFuzzyVariable_h
 
 #include "itkDataObject.h"
 #include "itkFixedArray.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAtmosphericCorrectionParameters_h
-#define __otbAtmosphericCorrectionParameters_h
+#ifndef otbAtmosphericCorrectionParameters_h
+#define otbAtmosphericCorrectionParameters_h
 
 #include "itkObject.h"
 #include "itkVariableSizeMatrix.h"

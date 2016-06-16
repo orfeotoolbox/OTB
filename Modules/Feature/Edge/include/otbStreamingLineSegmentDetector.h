@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingLineSegmentDetector_h
-#define __otbStreamingLineSegmentDetector_h
+#ifndef otbStreamingLineSegmentDetector_h
+#define otbStreamingLineSegmentDetector_h
 
 #include <vector>
 

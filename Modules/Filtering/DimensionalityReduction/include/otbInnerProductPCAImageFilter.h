@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbInnerProductPCAImageFilter_h
-#define __otbInnerProductPCAImageFilter_h
+#ifndef otbInnerProductPCAImageFilter_h
+#define otbInnerProductPCAImageFilter_h
 
 #include "otbImage.h"
 #include "otbMacro.h"

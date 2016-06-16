@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFineRegistrationImageFilter_txx
-#define __otbFineRegistrationImageFilter_txx
+#ifndef otbFineRegistrationImageFilter_txx
+#define otbFineRegistrationImageFilter_txx
 
 #include "otbFineRegistrationImageFilter.h"
 

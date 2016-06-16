@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPleiadesPToXSAffineTransformCalculator__h
-#define __otbPleiadesPToXSAffineTransformCalculator__h
+#ifndef otbPleiadesPToXSAffineTransformCalculator__h
+#define otbPleiadesPToXSAffineTransformCalculator__h
 
 #include "itkLightObject.h"
 #include "itkScalableAffineTransform.h"

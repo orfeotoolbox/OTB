@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStandardMetaImageFunctionBuilder_h
-#define __otbStandardMetaImageFunctionBuilder_h
+#ifndef otbStandardMetaImageFunctionBuilder_h
+#define otbStandardMetaImageFunctionBuilder_h
 
 
 #include "itkVariableLengthVector.h"

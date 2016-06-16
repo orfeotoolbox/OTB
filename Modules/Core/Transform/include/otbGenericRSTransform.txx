@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericRSTransform_txx
-#define __otbGenericRSTransform_txx
+#ifndef otbGenericRSTransform_txx
+#define otbGenericRSTransform_txx
 
 #include "otbGenericRSTransform.h"
 #include "otbMacro.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCompositeTransform_h
-#define __otbCompositeTransform_h
+#ifndef otbCompositeTransform_h
+#define otbCompositeTransform_h
 
 #include <iostream>
 #include <sstream>

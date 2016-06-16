@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapWithAdjacency_h
-#define __otbLabelMapWithAdjacency_h
+#ifndef otbLabelMapWithAdjacency_h
+#define otbLabelMapWithAdjacency_h
 
 #include "itkLabelMap.h"
 #include "otbMergeLabelObjectFunctor.h"

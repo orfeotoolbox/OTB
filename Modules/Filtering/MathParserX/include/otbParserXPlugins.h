@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbParserXPlugins_h
-#define __otbParserXPlugins_h
+#ifndef otbParserXPlugins_h
+#define otbParserXPlugins_h
 
 #include "itkMacro.h"
 #include "otbMath.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadarsat2ImageMetadataInterface_h
-#define __otbRadarsat2ImageMetadataInterface_h
+#ifndef otbRadarsat2ImageMetadataInterface_h
+#define otbRadarsat2ImageMetadataInterface_h
 
 #include "otbSarImageMetadataInterface.h"
 

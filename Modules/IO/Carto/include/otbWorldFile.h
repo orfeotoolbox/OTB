@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWorldFile_h
-#define __otbWorldFile_h
+#ifndef otbWorldFile_h
+#define otbWorldFile_h
 
 #include <iomanip>
 #include <fstream>

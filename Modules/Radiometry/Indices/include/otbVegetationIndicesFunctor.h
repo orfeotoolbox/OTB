@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVegetationIndicesFunctor_h
-#define __otbVegetationIndicesFunctor_h
+#ifndef otbVegetationIndicesFunctor_h
+#define otbVegetationIndicesFunctor_h
 
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"

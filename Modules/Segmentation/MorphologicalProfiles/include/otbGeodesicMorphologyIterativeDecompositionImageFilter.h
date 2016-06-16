@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeodesicMorphologyIterativeDecompositionImageFilter_h
-#define __otbGeodesicMorphologyIterativeDecompositionImageFilter_h
+#ifndef otbGeodesicMorphologyIterativeDecompositionImageFilter_h
+#define otbGeodesicMorphologyIterativeDecompositionImageFilter_h
 
 #include "otbImageToImageListFilter.h"
 #include "otbGeodesicMorphologyDecompositionImageFilter.h"

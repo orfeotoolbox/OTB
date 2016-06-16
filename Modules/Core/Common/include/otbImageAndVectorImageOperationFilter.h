@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageAndVectorImageOperationFilter_h
-#define __otbImageAndVectorImageOperationFilter_h
+#ifndef otbImageAndVectorImageOperationFilter_h
+#define otbImageAndVectorImageOperationFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
 #include "itkImageToImageFilter.h"

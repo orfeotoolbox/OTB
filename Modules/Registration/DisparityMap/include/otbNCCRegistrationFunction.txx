@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNCCRegistrationFunction_txx
-#define __otbNCCRegistrationFunction_txx
+#ifndef otbNCCRegistrationFunction_txx
+#define otbNCCRegistrationFunction_txx
 
 #include "vnl/vnl_math.h"
 #include "itkNeighborhoodIterator.h"

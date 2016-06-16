@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8GraphFileWriter_h
-#define __otbRCC8GraphFileWriter_h
+#ifndef otbRCC8GraphFileWriter_h
+#define otbRCC8GraphFileWriter_h
 
 #include "itkProcessObject.h"
 #include "itkMacro.h"

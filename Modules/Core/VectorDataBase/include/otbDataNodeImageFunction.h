@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDataNodeImageFunction_h
-#define __otbDataNodeImageFunction_h
+#ifndef otbDataNodeImageFunction_h
+#define otbDataNodeImageFunction_h
 
 #include "otbDataNodeFunctionBase.h"
 #include "otbDataNode.h"

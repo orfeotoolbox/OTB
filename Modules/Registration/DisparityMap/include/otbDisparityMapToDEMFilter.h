@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDisparityMapToDEMFilter_h
-#define __otbDisparityMapToDEMFilter_h
+#ifndef otbDisparityMapToDEMFilter_h
+#define otbDisparityMapToDEMFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbGenericRSTransform.h"

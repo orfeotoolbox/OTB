@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFileWriter_h
-#define __otbImageFileWriter_h
+#ifndef otbImageFileWriter_h
+#define otbImageFileWriter_h
 
 #include "otbImageIOBase.h"
 #include "itkProcessObject.h"

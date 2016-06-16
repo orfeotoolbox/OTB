@@ -52,7 +52,7 @@
 // \item allow the computation of the radiative terms by other libraries
 // than 6S (such as SMAC method).
 // \item allow the users of the OpticalCalibration application to set
-// and override each correction parameter.
+// and ITK_OVERRIDE each correction parameter.
 // \end{itemize}
 //
 // Let's look at the minimal code required to use this

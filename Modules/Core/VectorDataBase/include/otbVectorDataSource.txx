@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataSource_txx
-#define __otbVectorDataSource_txx
+#ifndef otbVectorDataSource_txx
+#define otbVectorDataSource_txx
 
 #include "otbVectorDataSource.h"
 

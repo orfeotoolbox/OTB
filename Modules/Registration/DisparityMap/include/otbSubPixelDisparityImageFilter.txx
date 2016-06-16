@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSubPixelDisparityImageFilter_txx
-#define __otbSubPixelDisparityImageFilter_txx
+#ifndef otbSubPixelDisparityImageFilter_txx
+#define otbSubPixelDisparityImageFilter_txx
 
 
 namespace otb

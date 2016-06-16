@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWaterIndicesFunctor_h
-#define __otbWaterIndicesFunctor_h
+#ifndef otbWaterIndicesFunctor_h
+#define otbWaterIndicesFunctor_h
 
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbForwardFourierMellinTransformImageFilter_h
-#define __otbForwardFourierMellinTransformImageFilter_h
+#ifndef otbForwardFourierMellinTransformImageFilter_h
+#define otbForwardFourierMellinTransformImageFilter_h
 
 #include "otbImage.h"
 #include "itkForwardFFTImageFilter.h"

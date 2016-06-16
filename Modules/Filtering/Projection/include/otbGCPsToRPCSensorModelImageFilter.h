@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGCPsToRPCSensorModelImageFilter_h
-#define __otbGCPsToRPCSensorModelImageFilter_h
+#ifndef otbGCPsToRPCSensorModelImageFilter_h
+#define otbGCPsToRPCSensorModelImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkCastImageFilter.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetInputProcessXMLParameter_h
-#define __otbWrapperQtWidgetInputProcessXMLParameter_h
+#ifndef otbWrapperQtWidgetInputProcessXMLParameter_h
+#define otbWrapperQtWidgetInputProcessXMLParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility

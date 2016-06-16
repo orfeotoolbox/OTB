@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSVMImageClassificationWithRuleFilter_txx
-#define __otbSVMImageClassificationWithRuleFilter_txx
+#ifndef otbSVMImageClassificationWithRuleFilter_txx
+#define otbSVMImageClassificationWithRuleFilter_txx
 #include "otbSVMImageClassificationWithRuleFilter.h"
 
 #include "itkNumericTraits.h"

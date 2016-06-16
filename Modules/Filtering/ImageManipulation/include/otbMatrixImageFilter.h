@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMatrixImageFilter_h
-#define __otbMatrixImageFilter_h
+#ifndef otbMatrixImageFilter_h
+#define otbMatrixImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbMath.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToLabelMapWithAttributesFilter_txx
-#define __otbImageToLabelMapWithAttributesFilter_txx
+#ifndef otbImageToLabelMapWithAttributesFilter_txx
+#define otbImageToLabelMapWithAttributesFilter_txx
 
 #include "otbImageToLabelMapWithAttributesFilter.h"
 #include "itkProcessObject.h"

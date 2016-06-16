@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbExtendedFilenameToWriterOptions_h
-#define __otbExtendedFilenameToWriterOptions_h
+#ifndef otbExtendedFilenameToWriterOptions_h
+#define otbExtendedFilenameToWriterOptions_h
 
 #include "otbExtendedFilenameHelper.h"
 #include "otbGDALImageIO.h"
@@ -108,4 +108,4 @@ private:
 };
 } // end namespace otb
 
-#endif // __otbExtendedFilenameToWriterOptions_h
+#endif // otbExtendedFilenameToWriterOptions_h

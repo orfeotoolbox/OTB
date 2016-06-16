@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageListToImageFilter_h
-#define __otbImageListToImageFilter_h
+#ifndef otbImageListToImageFilter_h
+#define otbImageListToImageFilter_h
 
 #include "itkImageSource.h"
 #include "otbImageList.h"

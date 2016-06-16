@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRAMDrivenAdaptativeStreamingManager_h
-#define __otbRAMDrivenAdaptativeStreamingManager_h
+#ifndef otbRAMDrivenAdaptativeStreamingManager_h
+#define otbRAMDrivenAdaptativeStreamingManager_h
 
 #include "otbStreamingManager.h"
 

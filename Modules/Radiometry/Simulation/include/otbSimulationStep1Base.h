@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSimulationStep1Base_h
-#define __otbSimulationStep1Base_h
+#ifndef otbSimulationStep1Base_h
+#define otbSimulationStep1Base_h
 
 
 #include "itkProcessObject.h"

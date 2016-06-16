@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnaryFunctorObjectListBooleanFilter_h
-#define __otbUnaryFunctorObjectListBooleanFilter_h
+#ifndef otbUnaryFunctorObjectListBooleanFilter_h
+#define otbUnaryFunctorObjectListBooleanFilter_h
 
 #include "otbObjectListToObjectListFilter.h"
 

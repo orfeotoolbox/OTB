@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHoughTransform2DLinesImageFilter_h
-#define __otbHoughTransform2DLinesImageFilter_h
+#ifndef otbHoughTransform2DLinesImageFilter_h
+#define otbHoughTransform2DLinesImageFilter_h
 
 
 #include "itkImageToImageFilter.h"

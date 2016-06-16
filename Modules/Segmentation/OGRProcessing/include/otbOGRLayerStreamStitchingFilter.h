@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRLayerStreamStitchingFilter_h
-#define __otbOGRLayerStreamStitchingFilter_h
+#ifndef otbOGRLayerStreamStitchingFilter_h
+#define otbOGRLayerStreamStitchingFilter_h
 
 #include "otbOGRDataSourceWrapper.h"
 #include "otbMacro.h"

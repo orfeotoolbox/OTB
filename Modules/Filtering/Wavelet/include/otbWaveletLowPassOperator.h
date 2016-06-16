@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWaveletLowPassOperator_h
-#define __otbWaveletLowPassOperator_h
+#ifndef otbWaveletLowPassOperator_h
+#define otbWaveletLowPassOperator_h
 
 #include "otbWaveletOperatorBase.h"
 

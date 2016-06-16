@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeodesicMorphologyDecompositionImageFilter_txx
-#define __otbGeodesicMorphologyDecompositionImageFilter_txx
+#ifndef otbGeodesicMorphologyDecompositionImageFilter_txx
+#define otbGeodesicMorphologyDecompositionImageFilter_txx
 
 #include "otbGeodesicMorphologyDecompositionImageFilter.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRHelpers_h
-#define __otbOGRHelpers_h
+#ifndef otbOGRHelpers_h
+#define otbOGRHelpers_h
 
 #include <string>
 #include <vector>
@@ -95,4 +95,4 @@ private:
 } // ogr namespace
 } // end namespace otb
 
-#endif // __otbOGRHelpers_h
+#endif // otbOGRHelpers_h

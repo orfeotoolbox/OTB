@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingResampleImageFilter_h
-#define __otbStreamingResampleImageFilter_h
+#ifndef otbStreamingResampleImageFilter_h
+#define otbStreamingResampleImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbStreamingWarpImageFilter.h"

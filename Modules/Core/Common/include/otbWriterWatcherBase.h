@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWriterWatcherBase_h
-#define __otbWriterWatcherBase_h
+#ifndef otbWriterWatcherBase_h
+#define otbWriterWatcherBase_h
 
 #include "itkCommand.h"
 #include "itkProcessObject.h"

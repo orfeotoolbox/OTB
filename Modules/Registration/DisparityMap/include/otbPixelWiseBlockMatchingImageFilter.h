@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPixelWiseBlockMatchingImageFilter_h
-#define __otbPixelWiseBlockMatchingImageFilter_h
+#ifndef otbPixelWiseBlockMatchingImageFilter_h
+#define otbPixelWiseBlockMatchingImageFilter_h
 
 
 #include "itkImageToImageFilter.h"

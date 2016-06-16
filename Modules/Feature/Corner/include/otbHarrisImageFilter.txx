@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHarrisImageFilter_txx
-#define __otbHarrisImageFilter_txx
+#ifndef otbHarrisImageFilter_txx
+#define otbHarrisImageFilter_txx
 
 #include "otbHarrisImageFilter.h"
 

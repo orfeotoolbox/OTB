@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEigenvalueLikelihoodMaximisation_h
-#define __otbEigenvalueLikelihoodMaximisation_h
+#ifndef otbEigenvalueLikelihoodMaximisation_h
+#define otbEigenvalueLikelihoodMaximisation_h
 
 #include "itkObjectFactory.h"
 #include "itkLightObject.h"

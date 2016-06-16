@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbTileMapImageIOFactory_h
-#define __otbTileMapImageIOFactory_h
+#ifndef otbTileMapImageIOFactory_h
+#define otbTileMapImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
 

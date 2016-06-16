@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNormalBayesMachineLearningModel_txx
-#define __otbNormalBayesMachineLearningModel_txx
+#ifndef otbNormalBayesMachineLearningModel_txx
+#define otbNormalBayesMachineLearningModel_txx
 
 #include <fstream>
 #include "itkMacro.h"

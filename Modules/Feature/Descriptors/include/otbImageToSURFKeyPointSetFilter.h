@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToSURFKeyPointSetFilter_h
-#define __otbImageToSURFKeyPointSetFilter_h
+#ifndef otbImageToSURFKeyPointSetFilter_h
+#define otbImageToSURFKeyPointSetFilter_h
 
 #include "itkConstNeighborhoodIterator.h"
 #include "otbImageToHessianDeterminantImageFilter.h"

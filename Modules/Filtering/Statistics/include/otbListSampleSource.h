@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleSource_h
-#define __otbListSampleSource_h
+#ifndef otbListSampleSource_h
+#define otbListSampleSource_h
 
 #include "itkProcessObject.h"
 #include "itkDataObjectDecorator.h"

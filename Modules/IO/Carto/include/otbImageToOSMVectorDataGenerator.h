@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToOSMVectorDataGenerator_h
-#define __otbImageToOSMVectorDataGenerator_h
+#ifndef otbImageToOSMVectorDataGenerator_h
+#define otbImageToOSMVectorDataGenerator_h
 
 #include "otbOSMDataToVectorDataGenerator.h"
 

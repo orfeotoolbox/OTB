@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProlateInterpolateImageFunction_h
-#define __otbProlateInterpolateImageFunction_h
+#ifndef otbProlateInterpolateImageFunction_h
+#define otbProlateInterpolateImageFunction_h
 
 #include "otbGenericInterpolateImageFunction.h"
 #include "itkSize.h"

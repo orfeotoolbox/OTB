@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLandsatTMSRBC_h
-#define __otbLandsatTMSRBC_h
+#ifndef otbLandsatTMSRBC_h
+#define otbLandsatTMSRBC_h
 
 #include "otbLandsatTMIndices.h"
 

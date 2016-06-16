@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNeighborhoodScalarProductFilter_h
-#define __otbNeighborhoodScalarProductFilter_h
+#ifndef otbNeighborhoodScalarProductFilter_h
+#define otbNeighborhoodScalarProductFilter_h
 
 #include "otbImageToModulusAndDirectionImageFilter.h"
 

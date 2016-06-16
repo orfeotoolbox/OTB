@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSailModel_h
-#define __otbSailModel_h
+#ifndef otbSailModel_h
+#define otbSailModel_h
 
 
 #include "otbSpectralResponse.h"

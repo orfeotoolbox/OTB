@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStereoSensorModelToElevationMapFilter_h
-#define __otbStereoSensorModelToElevationMapFilter_h
+#ifndef otbStereoSensorModelToElevationMapFilter_h
+#define otbStereoSensorModelToElevationMapFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkInterpolateImageFunction.h"

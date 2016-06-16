@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMMarginSampler_h
-#define __otbSVMMarginSampler_h
+#ifndef otbSVMMarginSampler_h
+#define otbSVMMarginSampler_h
 
 #include "itkSampleClassifierFilter.h"
 #include "itkVectorImage.h"

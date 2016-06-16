@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelImageToVectorDataFilter_txx
-#define __otbLabelImageToVectorDataFilter_txx
+#ifndef otbLabelImageToVectorDataFilter_txx
+#define otbLabelImageToVectorDataFilter_txx
 
 #include "otbLabelImageToVectorDataFilter.h"
 #include "otbOGRIOHelper.h"

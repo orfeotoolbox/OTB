@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKNearestNeighborsMachineLearningModel_txx
-#define __otbKNearestNeighborsMachineLearningModel_txx
+#ifndef otbKNearestNeighborsMachineLearningModel_txx
+#define otbKNearestNeighborsMachineLearningModel_txx
 
 #include <boost/lexical_cast.hpp>
 #include "otbKNearestNeighborsMachineLearningModel.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabeledSampleLocalizationGenerator_txx
-#define __otbLabeledSampleLocalizationGenerator_txx
+#ifndef otbLabeledSampleLocalizationGenerator_txx
+#define otbLabeledSampleLocalizationGenerator_txx
 
 #include "otbLabeledSampleLocalizationGenerator.h"
 

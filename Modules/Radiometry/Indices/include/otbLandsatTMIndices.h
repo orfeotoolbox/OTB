@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLandsatTMIndices_h
-#define __otbLandsatTMIndices_h
+#ifndef otbLandsatTMIndices_h
+#define otbLandsatTMIndices_h
 
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"

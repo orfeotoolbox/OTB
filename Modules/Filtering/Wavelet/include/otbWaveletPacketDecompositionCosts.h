@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletPacketDecompositionCosts_h
-#define __otbWaveletPacketDecompositionCosts_h
+#ifndef otbWaveletPacketDecompositionCosts_h
+#define otbWaveletPacketDecompositionCosts_h
 
 #include "itkObject.h"
 #include "itkMacro.h"

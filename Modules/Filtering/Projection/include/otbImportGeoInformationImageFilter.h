@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImportGeoInformationImageFilter_h
-#define __otbImportGeoInformationImageFilter_h
+#ifndef otbImportGeoInformationImageFilter_h
+#define otbImportGeoInformationImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkCastImageFilter.h"

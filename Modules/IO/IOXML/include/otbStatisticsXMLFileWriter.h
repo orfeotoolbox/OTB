@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStatisticsXMLFileWriter_h
-#define __otbStatisticsXMLFileWriter_h
+#ifndef otbStatisticsXMLFileWriter_h
+#define otbStatisticsXMLFileWriter_h
 
 #include "itkProcessObject.h"
 #include <utility>

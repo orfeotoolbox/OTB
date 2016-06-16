@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToLineSpatialObjectListFilter_h
-#define __otbImageToLineSpatialObjectListFilter_h
+#ifndef otbImageToLineSpatialObjectListFilter_h
+#define otbImageToLineSpatialObjectListFilter_h
 
 
 #include "itkProcessObject.h"

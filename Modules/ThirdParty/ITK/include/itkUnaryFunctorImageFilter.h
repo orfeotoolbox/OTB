@@ -102,7 +102,7 @@ public:
 
 protected:
   UnaryFunctorImageFilter();
-  ~UnaryFunctorImageFilter() override {}
+  ~UnaryFunctorImageFilter() ITK_OVERRIDE {}
 
   /** UnaryFunctorImageFilter can produce an image which is a different
    * resolution than its input image.  As such, UnaryFunctorImageFilter
@@ -112,7 +112,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() override;
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** UnaryFunctorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -125,7 +125,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                            ThreadIdType threadId) override;
+                            ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   UnaryFunctorImageFilter(const Self &); //purposely not implemented

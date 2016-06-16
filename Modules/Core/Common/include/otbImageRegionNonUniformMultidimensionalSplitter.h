@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageRegionNonUniformMultidimensionalSplitter_h
-#define __otbImageRegionNonUniformMultidimensionalSplitter_h
+#ifndef otbImageRegionNonUniformMultidimensionalSplitter_h
+#define otbImageRegionNonUniformMultidimensionalSplitter_h
 
 #include "itkRegion.h"
 #include "itkObjectFactory.h"

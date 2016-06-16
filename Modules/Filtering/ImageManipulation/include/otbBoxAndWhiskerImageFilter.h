@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBoxAndWhiskerImageFilter_h
-#define __otbBoxAndWhiskerImageFilter_h
+#ifndef otbBoxAndWhiskerImageFilter_h
+#define otbBoxAndWhiskerImageFilter_h
 
 #include "itkMacro.h"
 #include "itkUnaryFunctorImageFilter.h"

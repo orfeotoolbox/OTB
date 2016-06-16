@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCorrelationChangeDetector_h
-#define __otbCorrelationChangeDetector_h
+#ifndef otbCorrelationChangeDetector_h
+#define otbCorrelationChangeDetector_h
 
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 #include "otbCrossCorrelation.h"

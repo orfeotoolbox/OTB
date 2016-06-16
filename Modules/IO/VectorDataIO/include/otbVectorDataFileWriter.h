@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataFileWriter_h
-#define __otbVectorDataFileWriter_h
+#ifndef otbVectorDataFileWriter_h
+#define otbVectorDataFileWriter_h
 
 #include "itkProcessObject.h"
 #include "itkMacro.h"
@@ -124,4 +124,4 @@ private:
 #include "otbVectorDataFileWriter.txx"
 #endif
 
-#endif // __otbVectorDataFileWriter_h
+#endif // otbVectorDataFileWriter_h

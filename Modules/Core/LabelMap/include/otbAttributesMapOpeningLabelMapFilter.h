@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAttributesMapOpeningLabelMapFilter_h
-#define __otbAttributesMapOpeningLabelMapFilter_h
+#ifndef otbAttributesMapOpeningLabelMapFilter_h
+#define otbAttributesMapOpeningLabelMapFilter_h
 
 #include "otbAttributesMapLabelObject.h"
 #include "itkAttributeOpeningLabelMapFilter.h"
@@ -94,4 +94,4 @@ private:
 #include "otbAttributesMapOpeningLabelMapFilter.txx"
 #endif
 
-#endif // __otbAttributesMapOpeningLabelMapFilter_h
+#endif // otbAttributesMapOpeningLabelMapFilter_h

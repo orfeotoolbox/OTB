@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentVectorizationImageFilter_h
-#define __otbPersistentVectorizationImageFilter_h
+#ifndef otbPersistentVectorizationImageFilter_h
+#define otbPersistentVectorizationImageFilter_h
 
 #include "otbPersistentImageFilter.h"
 

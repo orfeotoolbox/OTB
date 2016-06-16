@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBandsStatisticsAttributesLabelMapFilter_h
-#define __otbBandsStatisticsAttributesLabelMapFilter_h
+#ifndef otbBandsStatisticsAttributesLabelMapFilter_h
+#define otbBandsStatisticsAttributesLabelMapFilter_h
 
 #include "otbStatisticsAttributesLabelMapFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"

@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbFlexibleDistanceWithMissingValue_h
-#define __otbFlexibleDistanceWithMissingValue_h
+#ifndef otbFlexibleDistanceWithMissingValue_h
+#define otbFlexibleDistanceWithMissingValue_h
 
 #include "otbEuclideanDistanceMetricWithMissingValuePow2.h"
 

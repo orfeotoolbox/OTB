@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGaussianAdditiveNoiseSampleListFilter_h
-#define __otbGaussianAdditiveNoiseSampleListFilter_h
+#ifndef otbGaussianAdditiveNoiseSampleListFilter_h
+#define otbGaussianAdditiveNoiseSampleListFilter_h
 
 #include "otbListSampleToListSampleFilter.h"
 

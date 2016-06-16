@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGaussianModelComponent_txx
-#define __otbGaussianModelComponent_txx
+#ifndef otbGaussianModelComponent_txx
+#define otbGaussianModelComponent_txx
 
 #include <iostream>
 

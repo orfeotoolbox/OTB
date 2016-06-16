@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageClassificationFilter_txx
-#define __otbImageClassificationFilter_txx
+#ifndef otbImageClassificationFilter_txx
+#define otbImageClassificationFilter_txx
 
 #include "otbImageClassificationFilter.h"
 #include "itkImageRegionIterator.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetFunction_h
-#define __otbPointSetFunction_h
+#ifndef otbPointSetFunction_h
+#define otbPointSetFunction_h
 
 #include "itkSpatialFunction.h"
 #include "itkProcessObject.h"

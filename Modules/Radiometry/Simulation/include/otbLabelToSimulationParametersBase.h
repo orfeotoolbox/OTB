@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelToSimulationParametersBase_h
-#define __otbLabelToSimulationParametersBase_h
+#ifndef otbLabelToSimulationParametersBase_h
+#define otbLabelToSimulationParametersBase_h
 
 
 #include "itkProcessObject.h"

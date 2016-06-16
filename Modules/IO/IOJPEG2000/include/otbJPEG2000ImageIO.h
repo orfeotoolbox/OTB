@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbJPEG2000ImageIO_h
-#define __otbJPEG2000ImageIO_h
+#ifndef otbJPEG2000ImageIO_h
+#define otbJPEG2000ImageIO_h
 
 #include "otbImageIOBase.h"
 #include "itkMultiThreader.h"
@@ -172,4 +172,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbJPEG2000ImageIO_h
+#endif // otbJPEG2000ImageIO_h

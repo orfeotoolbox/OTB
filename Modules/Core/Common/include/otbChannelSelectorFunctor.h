@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbChannelSelectorFunctor_h
-#define __otbChannelSelectorFunctor_h
+#ifndef otbChannelSelectorFunctor_h
+#define otbChannelSelectorFunctor_h
 #include <cassert>
 
 #include "itkVariableLengthVector.h"

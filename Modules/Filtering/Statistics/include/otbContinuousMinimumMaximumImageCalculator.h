@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbContinuousMinimumMaximumImageCalculator_h
-#define __otbContinuousMinimumMaximumImageCalculator_h
+#ifndef otbContinuousMinimumMaximumImageCalculator_h
+#define otbContinuousMinimumMaximumImageCalculator_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"

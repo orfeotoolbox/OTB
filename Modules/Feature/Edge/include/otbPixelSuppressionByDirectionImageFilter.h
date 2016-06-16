@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPixelSuppressionByDirectionImageFilter_h
-#define __otbPixelSuppressionByDirectionImageFilter_h
+#ifndef otbPixelSuppressionByDirectionImageFilter_h
+#define otbPixelSuppressionByDirectionImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"

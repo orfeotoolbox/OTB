@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNCLSUnmixingImageFilter_h
-#define __otbNCLSUnmixingImageFilter_h
+#ifndef otbNCLSUnmixingImageFilter_h
+#define otbNCLSUnmixingImageFilter_h
 
 #include "itkMacro.h"
 #include "itkNumericTraits.h"

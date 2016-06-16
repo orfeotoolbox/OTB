@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbPathListToHistogramGenerator_h
-#define __otbPathListToHistogramGenerator_h
+#ifndef otbPathListToHistogramGenerator_h
+#define otbPathListToHistogramGenerator_h
 
 #include "itkSampleToHistogramFilter.h"
 #include "itkHistogram.h"

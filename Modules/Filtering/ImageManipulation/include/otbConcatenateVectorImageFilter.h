@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConcatenateVectorImageFilter_h
-#define __otbConcatenateVectorImageFilter_h
+#ifndef otbConcatenateVectorImageFilter_h
+#define otbConcatenateVectorImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbVectorImage.h"

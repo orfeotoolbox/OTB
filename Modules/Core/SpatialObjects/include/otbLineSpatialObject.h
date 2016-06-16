@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineSpatialObject_h
-#define __otbLineSpatialObject_h
+#ifndef otbLineSpatialObject_h
+#define otbLineSpatialObject_h
 
 #include "itkPointBasedSpatialObject.h"
 #include "itkLineSpatialObjectPoint.h"

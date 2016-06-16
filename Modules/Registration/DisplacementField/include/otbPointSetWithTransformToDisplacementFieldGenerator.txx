@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetWithTransformToDisplacementFieldGenerator_txx
-#define __otbPointSetWithTransformToDisplacementFieldGenerator_txx
+#ifndef otbPointSetWithTransformToDisplacementFieldGenerator_txx
+#define otbPointSetWithTransformToDisplacementFieldGenerator_txx
 
 #include "otbPointSetWithTransformToDisplacementFieldGenerator.h"
 

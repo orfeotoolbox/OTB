@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFunctionAdaptor_h
-#define __otbImageFunctionAdaptor_h
+#ifndef otbImageFunctionAdaptor_h
+#define otbImageFunctionAdaptor_h
 
 #include "itkImageFunction.h"
 

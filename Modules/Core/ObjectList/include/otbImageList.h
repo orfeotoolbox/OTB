@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageList_h
-#define __otbImageList_h
+#ifndef otbImageList_h
+#define otbImageList_h
 
 #include "otbObjectList.h"
 

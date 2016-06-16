@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolyLineParametricPathWithValue_txx
-#define __otbPolyLineParametricPathWithValue_txx
+#ifndef otbPolyLineParametricPathWithValue_txx
+#define otbPolyLineParametricPathWithValue_txx
 
 #include "otbPolyLineParametricPathWithValue.h"
 

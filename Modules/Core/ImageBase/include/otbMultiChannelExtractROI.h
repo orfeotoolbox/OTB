@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiChannelExtractROI_h
-#define __otbMultiChannelExtractROI_h
+#ifndef otbMultiChannelExtractROI_h
+#define otbMultiChannelExtractROI_h
 
 #include "otbExtractROIBase.h"
 #include "otbVectorImage.h"

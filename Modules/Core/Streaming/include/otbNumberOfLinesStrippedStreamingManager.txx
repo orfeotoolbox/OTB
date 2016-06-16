@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
    =========================================================================*/
-#ifndef __otbNumberOfLinesStrippedStreamingManager_txx
-#define __otbNumberOfLinesStrippedStreamingManager_txx
+#ifndef otbNumberOfLinesStrippedStreamingManager_txx
+#define otbNumberOfLinesStrippedStreamingManager_txx
 
 #include "otbNumberOfLinesStrippedStreamingManager.h"
 #include "otbMacro.h"

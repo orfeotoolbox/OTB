@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelizeConfidenceConnectedImageFilter_h
-#define __otbLabelizeConfidenceConnectedImageFilter_h
+#ifndef otbLabelizeConfidenceConnectedImageFilter_h
+#define otbLabelizeConfidenceConnectedImageFilter_h
 
 #include "itkConfidenceConnectedImageFilter.h"
 #include "otbLabelizeImageFilterBase.h"

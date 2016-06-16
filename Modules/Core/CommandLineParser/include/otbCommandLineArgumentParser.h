@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCommandLineArgumentParser_h
-#define __otbCommandLineArgumentParser_h
+#ifndef otbCommandLineArgumentParser_h
+#define otbCommandLineArgumentParser_h
 
 #include <iostream>
 #include <vector>
@@ -287,4 +287,4 @@ private:
 
 }
 
-#endif // __otbCommandLineArgumentParser_h_
+#endif // otbCommandLineArgumentParser_h_

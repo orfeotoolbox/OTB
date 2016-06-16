@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbShiftScaleImageAdaptor_h
-#define __otbShiftScaleImageAdaptor_h
+#ifndef otbShiftScaleImageAdaptor_h
+#define otbShiftScaleImageAdaptor_h
 
 #include "vnl/vnl_math.h"
 #include "itkImageAdaptor.h"

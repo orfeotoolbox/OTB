@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFineRegistrationImageFilter_h
-#define __otbFineRegistrationImageFilter_h
+#ifndef otbFineRegistrationImageFilter_h
+#define otbFineRegistrationImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkInterpolateImageFunction.h"

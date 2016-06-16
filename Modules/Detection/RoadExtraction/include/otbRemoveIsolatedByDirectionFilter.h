@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRemoveIsolatedByDirectionFilter_h
-#define __otbRemoveIsolatedByDirectionFilter_h
+#ifndef otbRemoveIsolatedByDirectionFilter_h
+#define otbRemoveIsolatedByDirectionFilter_h
 
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"

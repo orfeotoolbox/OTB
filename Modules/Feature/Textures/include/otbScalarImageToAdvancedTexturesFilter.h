@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbScalarImageToAdvancedTexturesFilter_h
-#define __otbScalarImageToAdvancedTexturesFilter_h
+#ifndef otbScalarImageToAdvancedTexturesFilter_h
+#define otbScalarImageToAdvancedTexturesFilter_h
 
 #include "otbGreyLevelCooccurrenceIndexedList.h"
 #include "itkImageToImageFilter.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingResampleImageFilter_txx
-#define __otbStreamingResampleImageFilter_txx
+#ifndef otbStreamingResampleImageFilter_txx
+#define otbStreamingResampleImageFilter_txx
 
 #include "itkProgressAccumulator.h"
 

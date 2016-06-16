@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKNearestNeighborsMachineLearningModel_h
-#define __otbKNearestNeighborsMachineLearningModel_h
+#ifndef otbKNearestNeighborsMachineLearningModel_h
+#define otbKNearestNeighborsMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
 

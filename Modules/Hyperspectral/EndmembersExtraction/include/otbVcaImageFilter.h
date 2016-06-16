@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVCAImageFilter_h
-#define __otbVCAImageFilter_h
+#ifndef otbVCAImageFilter_h
+#define otbVCAImageFilter_h
 
 #include "otbImage.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -136,4 +136,4 @@ private:
 
 #include "otbVcaImageFilter.txx"
 
-#endif /* __otbVCAImageFilter_h */
+#endif /* otbVCAImageFilter_h */

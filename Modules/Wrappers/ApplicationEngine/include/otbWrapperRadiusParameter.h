@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperRadiusParameter_h
-#define __otbWrapperRadiusParameter_h
+#ifndef otbWrapperRadiusParameter_h
+#define otbWrapperRadiusParameter_h
 
 #include "otbWrapperNumericalParameter.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWaterSqrtSpectralAngleImageFilter_h
-#define __otbWaterSqrtSpectralAngleImageFilter_h
+#ifndef otbWaterSqrtSpectralAngleImageFilter_h
+#define otbWaterSqrtSpectralAngleImageFilter_h
 
 #include "otbWaterIndicesFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"

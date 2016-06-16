@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGradientBoostedTreeMachineLearningModel_h
-#define __otbGradientBoostedTreeMachineLearningModel_h
+#ifndef otbGradientBoostedTreeMachineLearningModel_h
+#define otbGradientBoostedTreeMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
 

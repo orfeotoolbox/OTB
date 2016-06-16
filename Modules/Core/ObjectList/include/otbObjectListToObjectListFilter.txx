@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectListToObjectListFilter_txx
-#define __otbObjectListToObjectListFilter_txx
+#ifndef otbObjectListToObjectListFilter_txx
+#define otbObjectListToObjectListFilter_txx
 
 #include "otbObjectListToObjectListFilter.h"
 #include "itkProgressReporter.h"

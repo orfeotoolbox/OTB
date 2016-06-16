@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorImageToAmplitudeImageFilter_h
-#define __otbVectorImageToAmplitudeImageFilter_h
+#ifndef otbVectorImageToAmplitudeImageFilter_h
+#define otbVectorImageToAmplitudeImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbMath.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetOutputImageParameter_h
-#define __otbWrapperQtWidgetOutputImageParameter_h
+#ifndef otbWrapperQtWidgetOutputImageParameter_h
+#define otbWrapperQtWidgetOutputImageParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility

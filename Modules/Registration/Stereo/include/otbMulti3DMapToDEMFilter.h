@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMulti3DMapToDEMFilter_h
-#define __otbMulti3DMapToDEMFilter_h
+#ifndef otbMulti3DMapToDEMFilter_h
+#define otbMulti3DMapToDEMFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbImageToGenericRSOutputParameters.h"

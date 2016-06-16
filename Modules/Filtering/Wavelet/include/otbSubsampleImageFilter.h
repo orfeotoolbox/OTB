@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSubsampleImageFilter_h
-#define __otbSubsampleImageFilter_h
+#ifndef otbSubsampleImageFilter_h
+#define otbSubsampleImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"

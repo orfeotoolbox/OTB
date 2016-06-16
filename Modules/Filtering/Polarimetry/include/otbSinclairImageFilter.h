@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairImageFilter_h
-#define __otbSinclairImageFilter_h
+#ifndef otbSinclairImageFilter_h
+#define otbSinclairImageFilter_h
 
 #include "otbQuaternaryFunctorImageFilter.h"
 #include "otbSinclairToCovarianceMatrixFunctor.h"

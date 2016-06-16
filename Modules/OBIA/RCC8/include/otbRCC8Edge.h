@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8Edge_h
-#define __otbRCC8Edge_h
+#ifndef otbRCC8Edge_h
+#define otbRCC8Edge_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"

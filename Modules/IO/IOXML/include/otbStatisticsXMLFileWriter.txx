@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStatisticsXMLFileWriter_txx
-#define __otbStatisticsXMLFileWriter_txx
+#ifndef otbStatisticsXMLFileWriter_txx
+#define otbStatisticsXMLFileWriter_txx
 
 #include "otbStatisticsXMLFileWriter.h"
 #include "itkMacro.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDEMHandler_h
-#define __otbDEMHandler_h
+#ifndef otbDEMHandler_h
+#define otbDEMHandler_h
 
 #include <iostream>
 #include <cstdio>

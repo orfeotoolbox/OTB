@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelObjectToPolygonFunctor_h
-#define __otbLabelObjectToPolygonFunctor_h
+#ifndef otbLabelObjectToPolygonFunctor_h
+#define otbLabelObjectToPolygonFunctor_h
 
 #include <vector>
 

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbRGBAPixelConverter_h
-#define __otbRGBAPixelConverter_h
+#ifndef otbRGBAPixelConverter_h
+#define otbRGBAPixelConverter_h
 
 #include "itkProcessObject.h"
 #include "itkRGBAPixel.h"

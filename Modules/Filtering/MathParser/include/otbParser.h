@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbParser_h
-#define __otbParser_h
+#ifndef otbParser_h
+#define otbParser_h
 
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProSailParameters_h
-#define __otbProSailParameters_h
+#ifndef otbProSailParameters_h
+#define otbProSailParameters_h
 
 
 #include "itkDataObject.h"

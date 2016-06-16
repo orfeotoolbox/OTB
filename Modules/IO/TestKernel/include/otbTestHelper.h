@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTestHelper_h
-#define __otbTestHelper_h
+#ifndef otbTestHelper_h
+#define otbTestHelper_h
 
 #include <map>
 #include <string>

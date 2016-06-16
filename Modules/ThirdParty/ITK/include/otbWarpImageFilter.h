@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWarpImageFilter_h
-#define __otbWarpImageFilter_h
+#ifndef otbWarpImageFilter_h
+#define otbWarpImageFilter_h
 #include "itkImageBase.h"
 #include "itkImageToImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"
@@ -200,7 +200,7 @@ public:
    * implemenation for GenerateOutputInformation() which set
    * the output information according the OutputSpacing, OutputOrigin
    * and the deformation field's LargestPossibleRegion. */
-  void GenerateOutputInformation() override;
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** It is difficult to compute in advance the input image region
    * required to compute the requested output region. Thus the safest
@@ -208,15 +208,15 @@ public:
    *
    * For the deformation field, the input requested region
    * set to be the same as that of the output requested region. */
-  void GenerateInputRequestedRegion() override;
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** This method is used to set the state of the filter before
    * multi-threading. */
-  void BeforeThreadedGenerateData() override;
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** This method is used to set the state of the filter after
    * multi-threading. */
-  void AfterThreadedGenerateData() override;
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -233,21 +233,21 @@ public:
 
 protected:
   WarpImageFilter();
-  ~WarpImageFilter() override {};
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  ~WarpImageFilter() ITK_OVERRIDE {};
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** WarpImageFilter is implemented as a multi-threaded filter.
    * As such, it needs to provide and implementation for
    * ThreadedGenerateData(). */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId ) override;
+                            itk::ThreadIdType threadId ) ITK_OVERRIDE;
 
   /** Override VerifyInputInformation() since this filter's inputs do
     * not need to occupy the same physical space.
     *
     * \sa ProcessObject::VerifyInputInformation
     */
-   void VerifyInputInformation() override {}
+   void VerifyInputInformation() ITK_OVERRIDE {}
 
 private:
 

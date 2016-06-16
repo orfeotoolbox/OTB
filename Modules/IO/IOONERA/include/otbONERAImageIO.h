@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbONERAImageIO_h
-#define __otbONERAImageIO_h
+#ifndef otbONERAImageIO_h
+#define otbONERAImageIO_h
 
 #include "itkByteSwapper.h"
 #include "otbImageIOBase.h"
@@ -188,4 +188,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbONERAImageIO_h
+#endif // otbONERAImageIO_h

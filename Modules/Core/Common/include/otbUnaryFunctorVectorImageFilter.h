@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnaryFunctorVectorImageFilter_h
-#define __otbUnaryFunctorVectorImageFilter_h
+#ifndef otbUnaryFunctorVectorImageFilter_h
+#define otbUnaryFunctorVectorImageFilter_h
 
 #include "itkInPlaceImageFilter.h"
 

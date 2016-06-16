@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbParallelLinePathListFilter_h
-#define __otbParallelLinePathListFilter_h
+#ifndef otbParallelLinePathListFilter_h
+#define otbParallelLinePathListFilter_h
 
 #include "otbPathListToPathListFilter.h"
 #include "otbMacro.h"

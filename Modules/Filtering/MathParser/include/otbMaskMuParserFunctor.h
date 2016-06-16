@@ -19,8 +19,8 @@
 
  =========================================================================*/
 
-#ifndef __otbMaskMuParserFunctor_h
-#define __otbMaskMuParserFunctor_h
+#ifndef otbMaskMuParserFunctor_h
+#define otbMaskMuParserFunctor_h
 
 #include "otbParser.h"
 #include "otbMacro.h"

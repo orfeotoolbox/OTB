@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMPointSetModelEstimator_txx
-#define __otbSVMPointSetModelEstimator_txx
+#ifndef otbSVMPointSetModelEstimator_txx
+#define otbSVMPointSetModelEstimator_txx
 
 #include "otbSVMPointSetModelEstimator.h"
 #include "itkCommand.h"

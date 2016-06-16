@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDSFusionOfClassifiersImageFilter_txx
-#define __otbDSFusionOfClassifiersImageFilter_txx
+#ifndef otbDSFusionOfClassifiersImageFilter_txx
+#define otbDSFusionOfClassifiersImageFilter_txx
 
 #include "otbDSFusionOfClassifiersImageFilter.h"
 #include "itkImageRegionIterator.h"

@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSEMClassifier_h
-#define __otbSEMClassifier_h
+#ifndef otbSEMClassifier_h
+#define otbSEMClassifier_h
 
 #include "itkListSample.h"
 #include "itkSampleClassifierFilter.h"

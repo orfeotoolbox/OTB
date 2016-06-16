@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingManager_h
-#define __otbStreamingManager_h
+#ifndef otbStreamingManager_h
+#define otbStreamingManager_h
 
 #include "otbMacro.h"
 

@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageAndVectorImageOperationFilter_txx
-#define __otbImageAndVectorImageOperationFilter_txx
+#ifndef otbImageAndVectorImageOperationFilter_txx
+#define otbImageAndVectorImageOperationFilter_txx
 
 #include "otbImageAndVectorImageOperationFilter.h"
 #include "itkObjectFactory.h"
