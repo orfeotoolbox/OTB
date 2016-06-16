@@ -28,6 +28,7 @@
 #include <iostream>
 #include <fstream>
 #include "itksys/SystemTools.hxx"
+#include "itkMacro.h"
 
 // include SharedForward to avoid duplicating the code which find the library path variable
 // name and the path separator

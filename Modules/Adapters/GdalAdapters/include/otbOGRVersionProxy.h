@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include "otbConfigure.h"
+#include "itkMacro.h"
 
 #ifdef OTB_USE_GDAL_20
 class GDALDataset;

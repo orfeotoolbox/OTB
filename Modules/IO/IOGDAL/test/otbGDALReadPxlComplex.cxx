@@ -21,6 +21,8 @@
 #include <iostream>
 #include <complex>
 
+#include "itkMacro.h"
+
 // Do all comparison in double precision
 const double Epsilon = 1.E-6;
 

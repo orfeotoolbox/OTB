@@ -27,6 +27,8 @@
 #include <cstring>
 #include <cstdlib>
 
+#include "itkMacro.h"
+
 namespace otb
 {
 

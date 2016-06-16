@@ -22,7 +22,7 @@
 
 #include "cpl_conv.h"
 #include "boost/lexical_cast.hpp"
-
+#include "itkMacro.h"
 
 namespace otb
 {
