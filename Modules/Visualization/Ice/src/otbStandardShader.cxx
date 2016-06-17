@@ -67,6 +67,9 @@ std::string StandardShader::GetSource() const
     }
 
   shader_source = 
+    "#define PI 3.1415926535897932384626433832795\n"			\
+    "\n"								\
+    "uniform int pixel_type;\n"						\
     "uniform sampler2D src;\n"                                          \
     "uniform vec4 shader_a;\n"                                          \
     "uniform vec4 shader_b;\n"                                          \
@@ -85,18 +88,39 @@ std::string StandardShader::GetSource() const
     "uniform int shader_vertical_slider_flag;\n"                        \
     "void main (void) {\n"                                              \
     "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"                     \
-    "gl_FragColor = pow( clamp( ( p+shader_b ) * shader_a, 0.0, 1.0 ), shader_gamma );\n" \
-    "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
+    "vec4 p2 = p;\n"							\
+    "// Modulus (complex)\n"						\
+    "if( pixel_type==1 )\n"						\
+    "{\n"								\
+    "  p2[ 0 ] =\n"							\
+    "  p2[ 1 ] =\n"							\
+    "  p2[ 2 ] =\n"							\
+    "    sqrt( p[ 0 ] * p[ 0 ] + p[ 1 ] * p[ 1 ] );\n"			\
+    "}\n"								\
+    "// Phasis (complex)\n"						\
+    "else if( pixel_type==2 )\n"					\
+    "{\n"								\
+    "  p2[ 0 ] =\n"							\
+    "  p2[ 1 ] =\n"							\
+    "  p2[ 2 ] =\n"							\
+    "    p[ 0 ]==0.0\n"							\
+    "    ? PI / 2.0\n"							\
+    "    : atan( p[ 1 ] / p[ 0 ] );\n"					\
+    "}\n"								\
+    "// Dynamics\n"							\
+    "gl_FragColor =\n"						\
+    "  pow( clamp( ( p2 + shader_b ) * shader_a, 0.0, 1.0 ), shader_gamma );\n" \
+    "gl_FragColor[3] = clamp(shader_alpha, 0.0, 1.0);\n"		\
     "if(shader_use_no_data > 0 && vec3(p) == vec3(shader_no_data)){\n"  \
     "gl_FragColor[3] = 0.;\n"                                           \
     "}\n"                                                               \
     "float alpha = gl_FragColor[3];\n"                                  \
-    "float dist = distance(gl_FragCoord.xy,shader_center);\n" \
+    "float dist = distance(gl_FragCoord.xy, shader_center);\n" \
     "if(shader_type == 1)\n"                                            \
     "{\n"                                                               \
     "if(dist < shader_radius)\n"                                        \
     "{\n"                                                               \
-    "vec3 tmp = clamp((vec3(p)-vec3(shader_current)+vec3(shader_localc_range))/(2.*vec3(shader_localc_range)),0.0,1.0);\n" \
+    "vec3 tmp = clamp((vec3(p2)-vec3(shader_current)+vec3(shader_localc_range))/(2.*vec3(shader_localc_range)),0.0,1.0);\n" \
     "gl_FragColor[0] = tmp[0];\n"                                       \
     "gl_FragColor[1] = tmp[1];\n"                                       \
     "gl_FragColor[2] = tmp[2];\n"                                       \
@@ -121,8 +145,8 @@ std::string StandardShader::GetSource() const
     "{\n"                                                               \
     "if(dist < shader_radius)\n"                                        \
     "{\n"                                                               \
-    "float angle = acos(clamp(dot(vec3(p),shader_current)/(length(vec3(p))*length(shader_current)),-1.0,1.0));\n" \
-    "vec3 tmp = clamp(vec3(1.-shader_spectral_angle_range*abs(angle)/3.142),0.0,1.0);\n" \
+    "float angle = acos(clamp(dot(vec3(p2),shader_current)/(length(vec3(p2))*length(shader_current)),-1.0,1.0));\n" \
+    "vec3 tmp = clamp(vec3(1.-shader_spectral_angle_range*abs(angle)/PI), 0.0, 1.0);\n" \
     "gl_FragColor[0] = tmp[0];\n"                                       \
     "gl_FragColor[1] = tmp[1];\n"                                       \
     "gl_FragColor[2] = tmp[2];\n"                                       \
@@ -160,6 +184,9 @@ std::string StandardShader::GetName() const
 
 void StandardShader::SetupShader()
 {
+  FragmentShaderRegistry::Pointer registry( otb::FragmentShaderRegistry::Instance() );
+  assert( !registry.IsNull() );
+
   assert( !m_ImageSettings.IsNull() );
 
   //
@@ -175,31 +202,36 @@ void StandardShader::SetupShader()
 
   double gamma = m_ImageSettings->GetGamma();
 
-  GLint shader_a = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_a");
+  GLint pixel_type =
+    glGetUniformLocation( registry->GetShaderProgram( "StandardShader" ), "pixel_type" );
+
+  glUniform1i( pixel_type, m_ImageSettings->GetPixelType() );
+
+  GLint shader_a = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_a");
   glUniform4f(shader_a,scr,scg,scb,1.);
 
-  GLint shader_b = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_b");
+  GLint shader_b = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_b");
   glUniform4f(shader_b,shr,shg,shb,0);
 
-  GLint shader_use_no_data = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_use_no_data");
+  GLint shader_use_no_data = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_use_no_data");
   glUniform1i(shader_use_no_data, m_ImageSettings->GetUseNoData()  );
 
-  GLint shader_no_data = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_no_data");
+  GLint shader_no_data = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_no_data");
   glUniform1f( shader_no_data, m_ImageSettings->GetNoData() );
 
-  GLint shader_gamma = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_gamma");
+  GLint shader_gamma = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_gamma");
   glUniform4f( shader_gamma, gamma, gamma, gamma, gamma );
 
-  GLint shader_alpha = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_alpha");
+  GLint shader_alpha = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_alpha");
   glUniform1f( shader_alpha, m_ImageSettings->GetAlpha() );
 
-  GLint shader_radius = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_radius");
+  GLint shader_radius = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_radius");
   glUniform1f(shader_radius,m_Radius);
 
-  GLint shader_center = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_center");
+  GLint shader_center = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_center");
   glUniform2f(shader_center,m_Center[0],m_Center[1]);
   
-  GLint shader_type = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_type");
+  GLint shader_type = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_type");
   glUniform1i(shader_type,m_ShaderType);
 
   // std::cout
@@ -208,7 +240,7 @@ void StandardShader::SetupShader()
   //   << " b: " << m_ImageSettings->GetCurrentBlue()
   //   << std::endl;
 
-  GLint shader_current = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_current");
+  GLint shader_current = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_current");
   glUniform3f(
     shader_current,
     m_ImageSettings->GetCurrentRed(),
@@ -216,19 +248,19 @@ void StandardShader::SetupShader()
     m_ImageSettings->GetCurrentBlue()
   );
 
-  GLint shader_localc_range = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_localc_range");
+  GLint shader_localc_range = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_localc_range");
   glUniform1f(shader_localc_range,m_LocalContrastRange);
 
-  GLint shader_spectral_angle_range = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_spectral_angle_range");
+  GLint shader_spectral_angle_range = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_spectral_angle_range");
   glUniform1f(shader_spectral_angle_range,m_SpectralAngleRange);
 
-  GLint shader_chessboard_size = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_chessboard_size");
+  GLint shader_chessboard_size = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_chessboard_size");
   glUniform1f(shader_chessboard_size,m_ChessboardSize);
 
-  GLint shader_slider_pos = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_slider_pos");
+  GLint shader_slider_pos = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_slider_pos");
   glUniform1f(shader_slider_pos,m_SliderPosition);
 
-  GLint shader_vertical_slider_flag = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_vertical_slider_flag");
+  GLint shader_vertical_slider_flag = glGetUniformLocation(registry->GetShaderProgram("StandardShader"), "shader_vertical_slider_flag");
   glUniform1i(shader_vertical_slider_flag,m_VerticalSlider);
 
 }
