@@ -17,7 +17,7 @@ endif()
 #NOTE: make sure your superbuild install directory does not contain any
 #Qt files from previous install of superbuild QT.
 # declare dependencies
-ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QT4 ZLIB SQLITE FREETYPE)
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QT4 ZLIB PNG JPEG SQLITE FREETYPE)
 
 #use system libs always for Qt4 as we build them from source or have already in system
 set(QT4_SB_CONFIG)
