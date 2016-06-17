@@ -372,11 +372,14 @@ macro(get_white_spaces var res)
   endforeach()
 endmacro()
 
-message("=== Begin OTB CMake Summary ===")
+message("\n======================= Begin of OTB cmake summary =======================\n")
 set(option_list ${OTB_MODULE_ACTIVATION_OPTION_LIST})
 list(SORT option_list)
 
 foreach(otb_option
+    CMAKE_SOURCE_DIR
+    CMAKE_BINARY_DIR
+    CMAKE_INSTALL_PREFIX
     CMAKE_COMMAND
     CMAKE_C_COMPILER
     CMAKE_CXX_COMPILER
@@ -449,7 +452,7 @@ foreach(dep ${option_list})
     endif()
   endif()
 
-  if(${dep}_DIR)
+  if(DEFINED ${dep}_DIR)
     set(var2_key  ${dep}_DIR)
     set(var2_val ${${dep}_DIR})
   else()
@@ -483,9 +486,9 @@ foreach(dep ${option_list})
 
 endforeach()
 
-message(STATUS "CMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator")
+message("\nCMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator\n")
 
-message("=== End OTB CMake Summary ===")
+message("======================= End of OTB cmake summary =======================")
 
 #don't need this one anymore. so unset it.
 unset(option_list)
