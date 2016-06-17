@@ -67,10 +67,6 @@ LearningApplicationBase<TInputValue,TOutputValue>
   InitKNNParams();
 #endif
 
-#ifdef OTB_USE_SHARK
-  InitSharkRandomForestsParams();
-#endif
-
 }
 
 template <class TInputValue, class TOutputValue>
@@ -198,14 +194,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
     #endif
     }
-  else if (modelName == "sharkrf")
-    {
-    #ifdef OTB_USE_SHARK
-    TrainSharkRandomForests(trainingListSample, trainingLabeledListSample, modelPath);
-#else
-    otbAppLogFATAL("Module Shark is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
-     #endif
-    }
+
   // update reporter
   dummyFilter->UpdateProgress(1.0f);
   dummyFilter->InvokeEvent(itk::EndEvent());

@@ -46,9 +46,6 @@
 #ifdef OTB_USE_LIBSVM 
 #include "otbLibSVMMachineLearningModel.h"
 #endif
-#ifdef OTB_USE_SHARK
-#include "otbSharkRandomForestsMachineLearningModel.h"
-#endif
 
 namespace otb
 {
@@ -66,7 +63,7 @@ namespace Wrapper
  * 3 methods to handle the machine learning model.
  *
  * There are multiple machine learning models in OTB, some imported
- * from OpenCV, Shark ML, and one imported from LibSVM. They all have
+ * from OpenCV and one imported from LibSVM. They all have
  * different parameters. The purpose of this class is to handle the
  * creation of all parameters related to machine learning models (in
  * DoInit() ), and to dispatch the calls to specific train functions
@@ -136,9 +133,6 @@ public:
   typedef otb::LibSVMMachineLearningModel<InputValueType, OutputValueType> LibSVMType;
 #endif
  
-#ifdef OTB_USE_SHARK
-  typedef otb::SharkRandomForestsMachineLearningModel<InputValueType, OutputValueType> SharkRandomForestType;
-#endif
 protected:
   LearningApplicationBase();
 
@@ -211,12 +205,7 @@ private:
                 typename TargetListSampleType::Pointer trainingLabeledListSample,
                 std::string modelPath);
 #endif
-#ifdef OTB_USE_SHARK
-  void InitSharkRandomForestsParams();
-  void TrainSharkRandomForests(typename ListSampleType::Pointer trainingListSample,
-                           typename TargetListSampleType::Pointer trainingLabeledListSample,
-                           std::string modelPath);
-#endif
+
   //@}
 };
 
@@ -240,10 +229,6 @@ private:
 #ifdef OTB_USE_LIBSVM
 #include "otbTrainLibSVM.txx"
 #endif
-#ifdef OTB_USE_SHARK
-#include "otbTrainSharkRandomForests.txx"
-#endif
-
 #endif
 
 #endif
