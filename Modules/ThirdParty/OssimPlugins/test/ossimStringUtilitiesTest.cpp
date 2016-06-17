@@ -187,47 +187,47 @@ BOOST_AUTO_TEST_CASE(split1) {
 
 
 BOOST_AUTO_TEST_CASE(to_int) {
-   BOOST_CHECK_EQUAL(to<int>("12"), 12);
-   BOOST_CHECK_EQUAL(to<int>("0"), 0);
-   BOOST_CHECK_EQUAL(to<int>("13576"), 13576);
-   BOOST_CHECK_EQUAL(to<int>("+12"), 12);
-   BOOST_CHECK_EQUAL(to<int>("+0"), 0);
-   BOOST_CHECK_EQUAL(to<int>("+13576"), 13576);
-   BOOST_CHECK_EQUAL(to<int>("-12"), -12);
-   BOOST_CHECK_EQUAL(to<int>("-0"), 0);
-   BOOST_CHECK_EQUAL(to<int>("-13576"), -13576);
-   BOOST_CHECK_THROW(to<int>("abc"), std::runtime_error);
-   BOOST_CHECK_THROW(to<int>("12h"), std::runtime_error);
-   BOOST_CHECK_THROW(to<int>("0x12"), std::runtime_error);
+   BOOST_CHECK_EQUAL(to<int>("12", "UT"), 12);
+   BOOST_CHECK_EQUAL(to<int>("0", "UT"), 0);
+   BOOST_CHECK_EQUAL(to<int>("13576", "UT"), 13576);
+   BOOST_CHECK_EQUAL(to<int>("+12", "UT"), 12);
+   BOOST_CHECK_EQUAL(to<int>("+0", "UT"), 0);
+   BOOST_CHECK_EQUAL(to<int>("+13576", "UT"), 13576);
+   BOOST_CHECK_EQUAL(to<int>("-12", "UT"), -12);
+   BOOST_CHECK_EQUAL(to<int>("-0", "UT"), 0);
+   BOOST_CHECK_EQUAL(to<int>("-13576", "UT"), -13576);
+   BOOST_CHECK_THROW(to<int>("abc", "UT"), std::runtime_error);
+   BOOST_CHECK_THROW(to<int>("12h", "UT"), std::runtime_error);
+   BOOST_CHECK_THROW(to<int>("0x12", "UT"), std::runtime_error);
 
-   BOOST_CHECK_EQUAL(to<unsigned int>("12"), 12u);
-   BOOST_CHECK_EQUAL(to<unsigned int>("-1"), UINT_MAX);
+   BOOST_CHECK_EQUAL(to<unsigned int>("12", "UT"), 12u);
+   BOOST_CHECK_EQUAL(to<unsigned int>("-1", "UT"), UINT_MAX);
 }
 BOOST_AUTO_TEST_CASE(to_double) {
-   BOOST_CHECK_CLOSE(to<double>("12"),       12,       0.00001);
-   BOOST_CHECK_CLOSE(to<double>("0"),        0,        0.00001);
-   BOOST_CHECK_CLOSE(to<double>("13576"),    13576,    0.00001);
-   BOOST_CHECK_CLOSE(to<double>("+12"),      12,       0.00001);
-   BOOST_CHECK_CLOSE(to<double>("+0"),       0,        0.00001);
-   BOOST_CHECK_CLOSE(to<double>("+13576"),   13576,    0.00001);
-   BOOST_CHECK_CLOSE(to<double>("-12"),      -12,      0.00001);
-   BOOST_CHECK_CLOSE(to<double>("-0"),       0,        0.00001);
-   BOOST_CHECK_CLOSE(to<double>("-13576"),   -13576,   0.00001);
+   BOOST_CHECK_CLOSE(to<double>("12", "UT"),       12,       0.00001);
+   BOOST_CHECK_CLOSE(to<double>("0", "UT"),        0,        0.00001);
+   BOOST_CHECK_CLOSE(to<double>("13576", "UT"),    13576,    0.00001);
+   BOOST_CHECK_CLOSE(to<double>("+12", "UT"),      12,       0.00001);
+   BOOST_CHECK_CLOSE(to<double>("+0", "UT"),       0,        0.00001);
+   BOOST_CHECK_CLOSE(to<double>("+13576", "UT"),   13576,    0.00001);
+   BOOST_CHECK_CLOSE(to<double>("-12", "UT"),      -12,      0.00001);
+   BOOST_CHECK_CLOSE(to<double>("-0", "UT"),       0,        0.00001);
+   BOOST_CHECK_CLOSE(to<double>("-13576", "UT"),   -13576,   0.00001);
 
-   BOOST_CHECK_CLOSE(to<double>("12.1"),     12.1,     0.00001);
-   BOOST_CHECK_CLOSE(to<double>("0.1"),      0.1,      0.00001);
-   BOOST_CHECK_CLOSE(to<double>("13576.1"),  13576.1,  0.00001);
-   BOOST_CHECK_CLOSE(to<double>("+12.1"),    12.1,     0.00001);
-   BOOST_CHECK_CLOSE(to<double>("+0.1"),     0.1,      0.00001);
-   BOOST_CHECK_CLOSE(to<double>("+13576.1"), 13576.1,  0.00001);
-   BOOST_CHECK_CLOSE(to<double>("-12.1"),    -12.1,    0.00001);
-   BOOST_CHECK_CLOSE(to<double>("-0.1"),     -0.1,     0.00001);
-   BOOST_CHECK_CLOSE(to<double>("-13576.1"), -13576.1, 0.00001);
+   BOOST_CHECK_CLOSE(to<double>("12.1", "UT"),     12.1,     0.00001);
+   BOOST_CHECK_CLOSE(to<double>("0.1", "UT"),      0.1,      0.00001);
+   BOOST_CHECK_CLOSE(to<double>("13576.1", "UT"),  13576.1,  0.00001);
+   BOOST_CHECK_CLOSE(to<double>("+12.1", "UT"),    12.1,     0.00001);
+   BOOST_CHECK_CLOSE(to<double>("+0.1", "UT"),     0.1,      0.00001);
+   BOOST_CHECK_CLOSE(to<double>("+13576.1", "UT"), 13576.1,  0.00001);
+   BOOST_CHECK_CLOSE(to<double>("-12.1", "UT"),    -12.1,    0.00001);
+   BOOST_CHECK_CLOSE(to<double>("-0.1", "UT"),     -0.1,     0.00001);
+   BOOST_CHECK_CLOSE(to<double>("-13576.1", "UT"), -13576.1, 0.00001);
 
    // invalid double conversions return 0 as per ossim way of doind things
-   BOOST_CHECK_CLOSE(to<double>("abc"),      0,        0.00001);
-   BOOST_CHECK_CLOSE(to<double>("12h"),      12,       0.00001);
-   BOOST_CHECK_CLOSE(to<double>("0x12"),     0,        0.00001);
+   BOOST_CHECK_CLOSE(to<double>("abc", "UT"),      0,        0.00001);
+   BOOST_CHECK_CLOSE(to<double>("12h", "UT"),      12,       0.00001);
+   BOOST_CHECK_CLOSE(to<double>("0x12", "UT"),     0,        0.00001);
 
-   BOOST_CHECK(ossim::isnan(to<double>("nan")));
+   BOOST_CHECK(ossim::isnan(to<double>("nan", "UT")));
 }
