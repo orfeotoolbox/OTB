@@ -8,9 +8,6 @@ CTEST_DASHBOARD_ROOT=$HOME/build
 WGET=`which wget`
 SED=`which sed`
 
-#develop xdk is used for all branches whose name does not contains release-X.Y
-XDK_VERSION="develop"
-
 if [[ -z "$TRAVIS_BRANCH" ]]; then
     TRAVIS_BRANCH='develop'
     TRAVIS_BUILD_NUMBER=1
@@ -18,28 +15,29 @@ if [[ -z "$TRAVIS_BRANCH" ]]; then
     export TRAVIS_BRANCH
     export TRAVIS_BUILD_NUMBER
     export TRAVIS_PULL_REQUEST
-    mkdir -p $CTEST_DASHBOARD_ROOT/orfeotoolbox/build
+fi
+
+if [ ! -f $CTEST_DASHBOARD_ROOT/orfeotoolbox/OTB/CMakeLists.txt ]; then
+    mkdir -p $CTEST_DASHBOARD_ROOT/orfeotoolbox
+    cd $CTEST_DASHBOARD_ROOT/orfeotoolbox
     git clone --depth=1 --branch=$TRAVIS_BRANCH https://github.com/orfeotoolbox/OTB
 fi
 
-#if a branch contains release-X.Y then xdk is taken from packages/xdk/OTB-X.Y
-if [[ "$TRAVIS_BRANCH" =~ release-* ]]; then
-    VERSION_SMALL=$(echo $TRAVIS_BRANCH| sed 's/.*release-//'| cut -d'-' -f 1)
-    XDK_VERSION="OTB-$VERSION_SMALL"
-fi
+CMAKE_FILE=$CTEST_DASHBOARD_ROOT/orfeotoolbox/OTB/CMakeLists.txt
+VERION_MAJOR=$(sed -n  '/set.OTB_VERSION_MAJOR/p' $CMAKE_FILE|cut -d '"' -f 2)
+VERION_MINOR=$(sed -n  '/set.OTB_VERSION_MINOR/p' $CMAKE_FILE|cut -d '"' -f 2)
+VERION_PATCH=$(sed -n  '/set.OTB_VERSION_PATCH/p' $CMAKE_FILE|cut -d '"' -f 2)
+OTB_VERSION="$VERION_MAJOR.$VERION_MINOR"
+OTB_VERSION_FULL="$VERION_MAJOR.$VERION_MINOR.$VERION_PATCH"
 
-VERSION_STRING=$($WGET -q -O- "https://www.orfeo-toolbox.org/packages/xdk/$XDK_VERSION/"| \
-                        $SED -n 's,.*OTB-\([0-9][^<]*\).*-xdk-Linux.*,\1,p')
-
-XDK_FILE=OTB-$VERSION_STRING-xdk-Linux64.run
-CMAKE_PREFIX_PATH=/tmp/OTB-$VERSION_STRING-xdk-Linux64
+XDK_FILE=OTB-$OTB_VERSION_FULL-xdk-Linux64.run
+CMAKE_PREFIX_PATH=/tmp/OTB-$OTB_VERSION_FULL-xdk-Linux64
 OTB_INSTALL_DIR=$CTEST_DASHBOARD_ROOT/orfeotoolbox/install
 XDK_INSTALL_DIR="/tmp/${XDK_FILE%.*}"
 
 #export variables for later use in cmake file
 export CTEST_COMMAND
 export OTB_VERSION
-export XDK_VERSION
 export CTEST_DASHBOARD_ROOT
 export CTEST_CMAKE_GENERATOR
 export CMAKE_MAKE_PROGRAM
@@ -48,15 +46,15 @@ export OTB_INSTALL_DIR
 export XDK_INSTALL_DIR
 
 #print
-echo "VERSION_STRING=$VERSION_STRING"
 echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
-echo "CTEST_DASHBOARD_ROOT=$CTEST_DASHBOARD_ROOT"
 echo "CTEST_COMMAND=$CTEST_COMMAND"
-echo "XDK_VERSION=$XDK_VERSION"
+echo "OTB_VERSION=$OTB_VERSION"
+echo "CTEST_DASHBOARD_ROOT=$CTEST_DASHBOARD_ROOT"
 echo "XDK_FILE=$XDK_FILE"
 echo "OTB_INSTALL_DIR=$OTB_INSTALL_DIR"
 echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH"
 echo "XDK_INSTALL_DIR=$XDK_INSTALL_DIR"
+echo "XDK_URL=https://www.orfeo-toolbox.org/packages/xdk/OTB-$OTB_VERSION/$XDK_FILE"
 
 #change to /tmp
 cd /tmp
@@ -70,7 +68,7 @@ wget https://github.com/martine/ninja/releases/download/v1.6.0/ninja-linux.zip -
 unzip ninja-linux.zip
 
 #download, extract OTB XDK
-wget https://www.orfeo-toolbox.org/packages/xdk/$XDK_VERSION/$XDK_FILE --no-check-certificate
+wget https://www.orfeo-toolbox.org/packages/xdk/OTB-$OTB_VERSION/$XDK_FILE --no-check-certificate
 chmod +x /tmp/$XDK_FILE
 /tmp/$XDK_FILE
 
