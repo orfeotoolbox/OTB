@@ -26,7 +26,8 @@ endif()
 
 #------------------- Helper Macro ---------------------
 macro(gdal_try_run msg_type var source_file)
-try_run(${var} COMPILE_${var} ${CMAKE_CURRENT_BINARY_DIR}
+set(${var})
+try_run(RUN_${var} COMPILE_${var} ${CMAKE_CURRENT_BINARY_DIR}
 ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/${source_file}
 CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-w" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
 COMPILE_OUTPUT_VARIABLE COMPILE_OUTPUT_${var}
@@ -34,22 +35,23 @@ RUN_OUTPUT_VARIABLE RUN_OUTPUT_${var}
 ARGS ${ARGN}
 )
 
-
 if(NOT COMPILE_${var})
   message(FATAL_ERROR "Compiling Test ${var} - Failed \n
 COMPILE_OUTPUT_${var}: '${COMPILE_OUTPUT_${var}}'")
 endif()
-if(${var})
+if(RUN_${var})
+  set(${var} FALSE)
   #if msg_type is STATUS (ie "okay" if test is failing),
   #then we don't need to give an run-output and exit status.
   if("${msg_type}" STREQUAL "STATUS")
     message(${msg_type} "Performing Test ${var} - Failed")
   else()
     message(${msg_type} "Performing Test ${var} - Failed \n
-Exit status: '${${var}}' \n
-RUN_OUTPUT_${var}: '${RUN_OUTPUT_${var}}'")
+            Exit status: '${RUN_${var}}' \n
+            RUN_OUTPUT_${var}: '${RUN_OUTPUT_${var}}'")
   endif()
 else()
+  set(${var} TRUE)
   message(STATUS "Performing Test ${var} - Success")
 endif()
 unset(RUN_OUTPUT_${var})
@@ -118,7 +120,7 @@ endif()
 gdal_try_run(STATUS GDAL_HAS_JPEG2000 gdalFormatsTest.c JPEG2000)
 #NOT is neeed because it keep the output of try_run execution which is non-zero if failed
 if (NOT GDAL_HAS_JPEG2000)
-  message(STATUS "Jasper JPEG2000 driver is available will be skipped by OTB. supported drivers OpenJPEG, ECW, Kakadu")
+    set(JPEG2000_DRIVER_USED "JPEG2000")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JPEG2000 gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JPEG2000)
 endif()
 
@@ -136,7 +138,10 @@ if(UNIX)
 endif()
 
 if (NOT JPEG2000_DRIVER_USED)
-  message(STATUS "No Jpeg2000 driver found (compatible drivers are : OpenJpeg, Kakadu, ECW).")
+  message(STATUS "No Jpeg2000 gdal driver found. Supported drivers are : OpenJpeg, Kakadu, ECW.")
+elseif("${JPEG2000_DRIVER_USED}" STREQUAL "JPEG2000")
+  message(STATUS "Jasper JPEG2000 gdal driver is available. This will be skipped by OTB. supported drivers are OpenJPEG, ECW, Kakadu")
+  unset(JPEG2000_DRIVER_USED)
 else()
   message(STATUS "GDAL driver used for JPEG2000 dataset is '${JPEG2000_DRIVER_USED}'")
 endif()
