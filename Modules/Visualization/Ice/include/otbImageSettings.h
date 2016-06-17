@@ -35,7 +35,18 @@ public:
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
-  
+  enum PixelType
+  {
+    PIXEL_TYPE_INTENSITY = 0,
+    PIXEL_TYPE_MODULUS,
+    PIXEL_TYPE_PHASIS,
+    //
+    PIXEL_TYPE_COUNT,
+  };
+
+  itkSetMacro( PixelType, PixelType );
+  itkGetMacro( PixelType, PixelType );
+
   itkSetMacro( MinRed, double );
   itkSetMacro( MinGreen, double );
   itkSetMacro( MinBlue, double );
@@ -85,6 +96,8 @@ private:
   // prevent implementation
   ImageSettings( const Self & );
   void operator = ( const Self & );
+
+  PixelType m_PixelType;
 
   double m_MinRed;
   double m_MaxRed;

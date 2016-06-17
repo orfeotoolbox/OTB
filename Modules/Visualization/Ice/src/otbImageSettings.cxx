@@ -23,20 +23,21 @@
 namespace otb
 {
 
-ImageSettings::ImageSettings()
-  : m_MinRed( 0 ),
-    m_MaxRed( 255 ),
-    m_MinGreen( 0 ),
-    m_MaxGreen( 255 ),
-    m_MinBlue( 0 ),
-    m_MaxBlue( 255 ),
-    m_UseNoData( true ),
-    m_NoData( 0 ),
-    m_Gamma( 1. ),
-    m_Alpha( 1. ),
-    m_CurrentRed( 0 ),
-    m_CurrentGreen( 0 ),
-    m_CurrentBlue( 0 )
+ImageSettings::ImageSettings() :
+  m_PixelType( PIXEL_TYPE_INTENSITY ),
+  m_MinRed( 0 ),
+  m_MaxRed( 255 ),
+  m_MinGreen( 0 ),
+  m_MaxGreen( 255 ),
+  m_MinBlue( 0 ),
+  m_MaxBlue( 255 ),
+  m_UseNoData( true ),
+  m_NoData( 0 ),
+  m_Gamma( 1. ),
+  m_Alpha( 1. ),
+  m_CurrentRed( 0 ),
+  m_CurrentGreen( 0 ),
+  m_CurrentBlue( 0 )
 {
 }
 
