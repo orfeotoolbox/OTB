@@ -373,6 +373,12 @@ macro(get_white_spaces var res)
 endmacro()
 
 message("\n======================= Begin of OTB cmake summary =======================\n")
+
+if(OTB_GIT_LAST_COMMIT)
+    get_white_spaces("git log -1 --oneline" insert_sp)
+  message("git log -1 --oneline     = [${OTB_GIT_LAST_COMMIT}]")
+endif()
+
 set(option_list ${OTB_MODULE_ACTIVATION_OPTION_LIST})
 list(SORT option_list)
 
