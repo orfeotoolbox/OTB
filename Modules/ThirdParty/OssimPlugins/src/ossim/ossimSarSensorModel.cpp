@@ -990,7 +990,7 @@ namespace ossimplugins
          get(kwl, orbit_prefix + keyPosX, orbitRecord.position[0]);
          get(kwl, orbit_prefix + keyPosY, orbitRecord.position[1]);
          get(kwl, orbit_prefix + keyPosZ, orbitRecord.position[2]);
-         get(kwl, orbit_prefix + keyVelX, orbitRecord.velocity[1]);
+         get(kwl, orbit_prefix + keyVelX, orbitRecord.velocity[0]);
          get(kwl, orbit_prefix + keyVelY, orbitRecord.velocity[1]);
          get(kwl, orbit_prefix + keyVelZ, orbitRecord.velocity[2]);
          orbitRecords.push_back(orbitRecord);
@@ -1000,7 +1000,7 @@ namespace ossimplugins
    void get(
          ossimKeywordlist                             const& kwl,
          std::vector<ossimSarSensorModel::BurstRecordType> & burstRecords)
-   {   
+   {
       char burstPrefix_[1024];
       std::size_t nbBursts ;
       get(kwl, BURST_NUMBER_KEY, nbBursts);
@@ -1133,12 +1133,12 @@ namespace ossimplugins {
 {
    return ossimSensorModel::print(out)
       << "\n ossimSarSensorModel data-members:\n"
-      << "\n           theRadarFrequency: " << theRadarFrequency << "Hz"
-      << "\n      theAzimuthTimeInterval: " << theAzimuthTimeInterval << "us"
-      << "\n            theNearRangeTime: " << theNearRangeTime << "s"
-      << "\n        theRangeSamplingRate: " << theRangeSamplingRate << "Hz"
-      << "\n          theRangeResolution: " << theRangeResolution << "m"
-      << "\n theBistaticCorrectionNeeded: " << theBistaticCorrectionNeeded
+      << "\n                 theRadarFrequency: " << theRadarFrequency << "Hz"
+      << "\n            theAzimuthTimeInterval: " << theAzimuthTimeInterval << "us"
+      << "\n                  theNearRangeTime: " << theNearRangeTime << "s"
+      << "\n              theRangeSamplingRate: " << theRangeSamplingRate << "Hz"
+      << "\n                theRangeResolution: " << theRangeResolution << "m"
+      << "\n       theBistaticCorrectionNeeded: " << theBistaticCorrectionNeeded
       << "\n                    theProductType: " << theProductType
       << "\n              theAzimuthTimeOffset: " << theAzimuthTimeOffset << "us offset"
       << "\n                theRangeTimeOffset: " << theRangeTimeOffset << "s offset"
