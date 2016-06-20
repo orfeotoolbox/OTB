@@ -1,0 +1,4448 @@
+diff --git a/.travis.yml b/.travis.yml
+index 0618f26..3d73f75 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -10,6 +10,9 @@ matrix:
+       env: OPJ_CI_ARCH=x86_64 OPJ_CI_BUILD_CONFIGURATION=Release OPJ_CI_INCLUDE_IF_DEPLOY=1
+     - os: linux
+       compiler: gcc
++      env: OPJ_CI_ARCH=x86_64 OPJ_CI_BUILD_CONFIGURATION=Release OPJ_NUM_THREADS=2
++    - os: linux
++      compiler: gcc
+       env: OPJ_CI_ARCH=i386 OPJ_CI_BUILD_CONFIGURATION=Release
+       addons:
+         apt:
+diff --git a/src/bin/jp2/CMakeLists.txt b/src/bin/jp2/CMakeLists.txt
+index dc013c2..ad7bce7 100644
+--- a/src/bin/jp2/CMakeLists.txt
++++ b/src/bin/jp2/CMakeLists.txt
+@@ -57,6 +57,9 @@ foreach(exe opj_decompress opj_compress opj_dump)
+   # On unix you need to link to the math library:
+   if(UNIX)
+     target_link_libraries(${exe} m)
++    IF("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
++      target_link_libraries(${exe} rt)
++    endif()
+   endif()
+   # Install exe
+   install(TARGETS ${exe}
+diff --git a/src/bin/jp2/opj_decompress.c b/src/bin/jp2/opj_decompress.c
+index ab7ff04..57fe554 100644
+--- a/src/bin/jp2/opj_decompress.c
++++ b/src/bin/jp2/opj_decompress.c
+@@ -43,6 +43,7 @@
+ #include <string.h>
+ #include <stdlib.h>
+ #include <math.h>
++#include <time.h>
+ 
+ #ifdef _WIN32
+ #include "windirent.h"
+@@ -150,6 +151,8 @@ typedef struct opj_decompress_params
+ 	int upsample;
+ 	/* split output components to different files */
+ 	int split_pnm;
++    /** number of threads */
++    int num_threads;
+ }opj_decompress_parameters;
+ 
+ /* -------------------------------------------------------------------------- */
+@@ -224,8 +227,11 @@ static void decode_help_display(void) {
+ 	               "  -upsample\n"
+ 	               "    Downsampled components will be upsampled to image size\n"
+ 	               "  -split-pnm\n"
+-	               "    Split output components to different files when writing to PNM\n"
+-	               "\n");
++	               "    Split output components to different files when writing to PNM\n");
++	if( opj_has_thread_support() ) {
++	  fprintf(stdout,"  -threads <num_threads>\n"
++					"    Number of threads to use for decoding.\n");
++	}
+ /* UniPG>> */
+ #ifdef USE_JPWL
+ 	fprintf(stdout,"  -W <options>\n"
+@@ -520,7 +526,8 @@ int parse_cmdline_decoder(int argc, char **argv, opj_decompress_parameters *para
+ 		{"OutFor",    REQ_ARG, NULL,'O'},
+ 		{"force-rgb", NO_ARG,  NULL, 1},
+ 		{"upsample",  NO_ARG,  NULL, 1},
+-		{"split-pnm", NO_ARG,  NULL, 1}
++		{"split-pnm", NO_ARG,  NULL, 1},
++		{"threads",   REQ_ARG, NULL, 'T'}
+ 	};
+ 
+ 	const char optlist[] = "i:o:r:l:x:d:t:p:"
+@@ -808,6 +815,22 @@ int parse_cmdline_decoder(int argc, char **argv, opj_decompress_parameters *para
+ 			break;	
+ #endif /* USE_JPWL */
+ /* <<UniPG */            
++				
++				/* ----------------------------------------------------- */
++			case 'T':  /* Number of threads */
++				{
++					if( strcmp(opj_optarg, "ALL_CPUS") == 0 )
++					{
++						parameters->num_threads = opj_get_num_cpus();
++						if( parameters->num_threads == 1 )
++							parameters->num_threads = 0;
++					}
++					else
++					{
++					  sscanf(opj_optarg, "%d", &parameters->num_threads);
++					}
++				}
++				break;
+ 
+ 				/* ----------------------------------------------------- */
+ 			
+@@ -885,17 +908,22 @@ OPJ_FLOAT64 opj_clock(void) {
+     /* t is the high resolution performance counter (see MSDN) */
+     QueryPerformanceCounter ( & t ) ;
+ 	return freq.QuadPart ? (t.QuadPart / (OPJ_FLOAT64)freq.QuadPart) : 0;
++#elif defined(__linux)
++	struct timespec ts;
++	clock_gettime(CLOCK_REALTIME, &ts);
++	return( ts.tv_sec + ts.tv_nsec * 1e-9 );
+ #else
+-	/* Unix or Linux: use resource usage */
+-    struct rusage t;
+-    OPJ_FLOAT64 procTime;
+-    /* (1) Get the rusage data structure at this moment (man getrusage) */
+-    getrusage(0,&t);
+-    /* (2) What is the elapsed time ? - CPU time = User time + System time */
++	/* Unix : use resource usage */
++	/* FIXME: this counts the total CPU time, instead of the user perceived time */
++	struct rusage t;
++	OPJ_FLOAT64 procTime;
++	/* (1) Get the rusage data structure at this moment (man getrusage) */
++	getrusage(0,&t);
++	/* (2) What is the elapsed time ? - CPU time = User time + System time */
+ 	/* (2a) Get the seconds */
+-    procTime = (OPJ_FLOAT64)(t.ru_utime.tv_sec + t.ru_stime.tv_sec);
+-    /* (2b) More precisely! Get the microseconds part ! */
+-    return ( procTime + (OPJ_FLOAT64)(t.ru_utime.tv_usec + t.ru_stime.tv_usec) * 1e-6 ) ;
++	procTime = (OPJ_FLOAT64)(t.ru_utime.tv_sec + t.ru_stime.tv_sec);
++	/* (2b) More precisely! Get the microseconds part ! */
++	return ( procTime + (OPJ_FLOAT64)(t.ru_utime.tv_usec + t.ru_stime.tv_usec) * 1e-6 ) ;
+ #endif
+ }
+ 
+@@ -1306,7 +1334,13 @@ int main(int argc, char **argv)
+ 			opj_destroy_codec(l_codec);
+ 			failed = 1; goto fin;
+ 		}
+-
++		
++		if( parameters.num_threads >= 1 && !opj_codec_set_threads(l_codec, parameters.num_threads) ) {
++			fprintf(stderr, "ERROR -> opj_decompress: failed to set number of threads\n");
++			opj_stream_destroy(l_stream);
++			opj_destroy_codec(l_codec);
++			failed = 1; goto fin;
++		}
+ 
+ 		/* Read the main header of the codestream and if necessary the JP2 boxes*/
+ 		if(! opj_read_header(l_stream, l_codec, &image)){
+diff --git a/src/lib/openjp2/CMakeLists.txt b/src/lib/openjp2/CMakeLists.txt
+index 367a7a8..f45ceb3 100644
+--- a/src/lib/openjp2/CMakeLists.txt
++++ b/src/lib/openjp2/CMakeLists.txt
+@@ -9,6 +9,8 @@ include_directories(
+ )
+ # Defines the source code for the library
+ set(OPENJPEG_SRCS
++  ${CMAKE_CURRENT_SOURCE_DIR}/thread.c
++  ${CMAKE_CURRENT_SOURCE_DIR}/thread.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/bio.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/bio.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/cio.c
+@@ -29,6 +31,7 @@ set(OPENJPEG_SRCS
+   ${CMAKE_CURRENT_SOURCE_DIR}/mct.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/mqc.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/mqc.h
++  ${CMAKE_CURRENT_SOURCE_DIR}/mqc_inl.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opj_clock.c
+@@ -73,6 +76,11 @@ if(OPJ_DISABLE_TPSOT_FIX)
+   add_definitions(-DOPJ_DISABLE_TPSOT_FIX)
+ endif()
+ 
++# Special case for old i586-mingw32msvc-gcc cross compiler
++if(NOT WIN32 AND CMAKE_COMPILER_IS_GNUCC AND CMAKE_C_COMPILER MATCHES ".*mingw32msvc.*" )
++  set(WIN32 YES)
++endif()
++
+ # Build the library
+ if(WIN32)
+   if(BUILD_SHARED_LIBS)
+@@ -142,3 +150,36 @@ if(OPJ_USE_DSYMUTIL)
+     DEPENDS ${OPENJPEG_LIBRARY_NAME})
+   endif()
+ endif()
++
++#################################################################################
++# threading configuration
++#################################################################################
++set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
++
++option(USE_THREAD "Build with thread/mutex support " ON)
++if(NOT USE_THREAD)
++   add_definitions( -DMUTEX_stub)
++endif(NOT USE_THREAD)
++
++find_package(Threads QUIET)
++
++if(USE_THREAD AND WIN32 AND NOT Threads_FOUND )
++    add_definitions( -DMUTEX_win32)
++    set(Threads_FOUND YES)
++endif()
++
++if(USE_THREAD AND Threads_FOUND AND CMAKE_USE_WIN32_THREADS_INIT )
++   add_definitions( -DMUTEX_win32)
++endif(USE_THREAD AND Threads_FOUND AND CMAKE_USE_WIN32_THREADS_INIT )
++
++if(USE_THREAD AND Threads_FOUND AND CMAKE_USE_PTHREADS_INIT )
++   add_definitions( -DMUTEX_pthread)
++endif(USE_THREAD AND Threads_FOUND AND CMAKE_USE_PTHREADS_INIT )
++
++if(USE_THREAD AND NOT Threads_FOUND)
++  message(FATAL_ERROR "No thread library found and thread/mutex support is required by USE_THREAD option")
++endif(USE_THREAD AND NOT Threads_FOUND)
++
++if(USE_THREAD AND Threads_FOUND AND CMAKE_USE_PTHREADS_INIT)
++   TARGET_LINK_LIBRARIES(${OPENJPEG_LIBRARY_NAME} ${CMAKE_THREAD_LIBS_INIT})
++endif(USE_THREAD AND Threads_FOUND AND CMAKE_USE_PTHREADS_INIT)
+diff --git a/src/lib/openjp2/dwt.c b/src/lib/openjp2/dwt.c
+index a4ff01b..18f8d9c 100644
+--- a/src/lib/openjp2/dwt.c
++++ b/src/lib/openjp2/dwt.c
+@@ -124,7 +124,7 @@ static void opj_dwt_encode_stepsize(OPJ_INT32 stepsize, OPJ_INT32 numbps, opj_st
+ /**
+ Inverse wavelet transform in 2-D.
+ */
+-static OPJ_BOOL opj_dwt_decode_tile(opj_tcd_tilecomp_t* tilec, OPJ_UINT32 i, DWT1DFN fn);
++static OPJ_BOOL opj_dwt_decode_tile(opj_thread_pool_t* tp, opj_tcd_tilecomp_t* tilec, OPJ_UINT32 i, DWT1DFN fn);
+ 
+ static OPJ_BOOL opj_dwt_encode_procedure(	opj_tcd_tilecomp_t * tilec,
+ 										    void (*p_function)(OPJ_INT32 *, OPJ_INT32,OPJ_INT32,OPJ_INT32) );
+@@ -473,8 +473,8 @@ OPJ_BOOL opj_dwt_encode(opj_tcd_tilecomp_t * tilec)
+ /* <summary>                            */
+ /* Inverse 5-3 wavelet transform in 2-D. */
+ /* </summary>                           */
+-OPJ_BOOL opj_dwt_decode(opj_tcd_tilecomp_t* tilec, OPJ_UINT32 numres) {
+-	return opj_dwt_decode_tile(tilec, numres, &opj_dwt_decode_1);
++OPJ_BOOL opj_dwt_decode(opj_thread_pool_t* tp, opj_tcd_tilecomp_t* tilec, OPJ_UINT32 numres) {
++	return opj_dwt_decode_tile(tp, tilec, numres, &opj_dwt_decode_1);
+ }
+ 
+ 
+@@ -556,10 +556,72 @@ static OPJ_UINT32 opj_dwt_max_resolution(opj_tcd_resolution_t* restrict r, OPJ_U
+ 	return mr ;
+ }
+ 
++typedef struct
++{
++    opj_dwt_t h;
++    DWT1DFN dwt_1D;
++    OPJ_UINT32 rw;
++    OPJ_UINT32 w;
++    OPJ_INT32 * restrict tiledp;
++    int min_j;
++    int max_j;
++} opj_dwd_decode_h_job_t;
++
++static void opj_dwt_decode_h_func(void* user_data, opj_tls_t* tls)
++{
++    int j;
++    opj_dwd_decode_h_job_t* job;
++    (void)tls;
++
++    job = (opj_dwd_decode_h_job_t*)user_data;
++    for( j = job->min_j; j < job->max_j; j++ )
++    {
++          opj_dwt_interleave_h(&job->h, &job->tiledp[j*job->w]);
++          (job->dwt_1D)(&job->h);
++          memcpy(&job->tiledp[j*job->w], job->h.mem, job->rw * sizeof(OPJ_INT32));
++    }
++
++    opj_aligned_free(job->h.mem);
++    opj_free(job);
++}
++
++typedef struct
++{
++    opj_dwt_t v;
++    DWT1DFN dwt_1D;
++    OPJ_UINT32 rh;
++    OPJ_UINT32 w;
++    OPJ_INT32 * restrict tiledp;
++    int min_j;
++    int max_j;
++} opj_dwd_decode_v_job_t;
++
++static void opj_dwt_decode_v_func(void* user_data, opj_tls_t* tls)
++{
++    int j;
++    opj_dwd_decode_v_job_t* job;
++    (void)tls;
++
++    job = (opj_dwd_decode_v_job_t*)user_data;
++    for( j = job->min_j; j < job->max_j; j++ )
++    {
++        OPJ_UINT32 k;
++        opj_dwt_interleave_v(&job->v, &job->tiledp[j], (OPJ_INT32)job->w);
++        (job->dwt_1D)(&job->v);
++        for(k = 0; k < job->rh; ++k) {
++            job->tiledp[k * job->w + j] = job->v.mem[k];
++        }
++    }
++
++    opj_aligned_free(job->v.mem);
++    opj_free(job);
++}
++
++
+ /* <summary>                            */
+ /* Inverse wavelet transform in 2-D.     */
+ /* </summary>                           */
+-static OPJ_BOOL opj_dwt_decode_tile(opj_tcd_tilecomp_t* tilec, OPJ_UINT32 numres, DWT1DFN dwt_1D) {
++static OPJ_BOOL opj_dwt_decode_tile(opj_thread_pool_t* tp, opj_tcd_tilecomp_t* tilec, OPJ_UINT32 numres, DWT1DFN dwt_1D) {
+ 	opj_dwt_t h;
+ 	opj_dwt_t v;
+ 
+@@ -569,11 +631,15 @@ static OPJ_BOOL opj_dwt_decode_tile(opj_tcd_tilecomp_t* tilec, OPJ_UINT32 numres
+ 	OPJ_UINT32 rh = (OPJ_UINT32)(tr->y1 - tr->y0);	/* height of the resolution level computed */
+ 
+ 	OPJ_UINT32 w = (OPJ_UINT32)(tilec->x1 - tilec->x0);
++    size_t h_mem_size;
++    int num_threads;
+ 	
+ 	if (numres == 1U) {
+ 		return OPJ_TRUE;
+ 	}
+-	h.mem = (OPJ_INT32*)opj_aligned_malloc(opj_dwt_max_resolution(tr, numres) * sizeof(OPJ_INT32));
++	num_threads = opj_thread_pool_get_thread_count(tp);
++	h_mem_size = opj_dwt_max_resolution(tr, numres) * sizeof(OPJ_INT32);
++	h.mem = (OPJ_INT32*)opj_aligned_malloc(h_mem_size);
+ 	if (! h.mem){
+ 		/* FIXME event manager error callback */
+ 		return OPJ_FALSE;
+@@ -595,23 +661,113 @@ static OPJ_BOOL opj_dwt_decode_tile(opj_tcd_tilecomp_t* tilec, OPJ_UINT32 numres
+ 		h.dn = (OPJ_INT32)(rw - (OPJ_UINT32)h.sn);
+ 		h.cas = tr->x0 % 2;
+ 
+-		for(j = 0; j < rh; ++j) {
+-			opj_dwt_interleave_h(&h, &tiledp[j*w]);
+-			(dwt_1D)(&h);
+-			memcpy(&tiledp[j*w], h.mem, rw * sizeof(OPJ_INT32));
+-		}
++        if( num_threads <= 1 || rh == 1 )
++        {
++            for(j = 0; j < rh; ++j) {
++                opj_dwt_interleave_h(&h, &tiledp[j*w]);
++                (dwt_1D)(&h);
++                memcpy(&tiledp[j*w], h.mem, rw * sizeof(OPJ_INT32));
++            }
++        }
++        else
++        {
++            int num_jobs = num_threads;
++            if( rh < num_jobs )
++                num_jobs = rh;
++            for( j = 0; j < num_jobs; j++ )
++            {
++                opj_dwd_decode_h_job_t* job;
++
++                job = (opj_dwd_decode_h_job_t*) opj_malloc(sizeof(opj_dwd_decode_h_job_t));
++                if( !job )
++                {
++                    /* It would be nice to fallback to single thread case, but */
++                    /* unfortunately some jobs may be launched and have modified */
++                    /* tiledp, so it is not practical to recover from that error */
++                    /* FIXME event manager error callback */
++                    opj_thread_pool_wait_completion(tp, 0);
++                    opj_aligned_free(h.mem);
++                    return OPJ_FALSE;
++                }
++                job->h = h;
++                job->dwt_1D = dwt_1D;
++                job->rw = rw;
++                job->w = w;
++                job->tiledp = tiledp;
++                job->min_j = j * (rh / num_jobs);
++                job->max_j = (j+1) * (rh / num_jobs);
++                if( job->max_j > rh || j == num_jobs - 1 )
++                    job->max_j = rh;
++                job->h.mem = (OPJ_INT32*)opj_aligned_malloc(h_mem_size);
++                if (!job->h.mem)
++                {
++                    /* FIXME event manager error callback */
++                    opj_thread_pool_wait_completion(tp, 0);
++                    opj_free(job);
++                    opj_aligned_free(h.mem);
++                    return OPJ_FALSE;
++                }
++                opj_thread_pool_submit_job( tp, opj_dwt_decode_h_func, job );
++            }
++            opj_thread_pool_wait_completion(tp, 0);
++        }
+ 
+ 		v.dn = (OPJ_INT32)(rh - (OPJ_UINT32)v.sn);
+ 		v.cas = tr->y0 % 2;
+ 
+-		for(j = 0; j < rw; ++j){
+-			OPJ_UINT32 k;
+-			opj_dwt_interleave_v(&v, &tiledp[j], (OPJ_INT32)w);
+-			(dwt_1D)(&v);
+-			for(k = 0; k < rh; ++k) {
+-				tiledp[k * w + j] = v.mem[k];
+-			}
+-		}
++        if( num_threads <= 1 || rw == 1 )
++        {
++            for(j = 0; j < rw; ++j){
++                OPJ_UINT32 k;
++                opj_dwt_interleave_v(&v, &tiledp[j], (OPJ_INT32)w);
++                (dwt_1D)(&v);
++                for(k = 0; k < rh; ++k) {
++                    tiledp[k * w + j] = v.mem[k];
++                }
++            }
++        }
++        else
++        {
++            int num_jobs = num_threads;
++            if( rw < num_jobs )
++                num_jobs = rw;
++            for( j = 0; j < num_jobs; j++ )
++            {
++                opj_dwd_decode_v_job_t* job;
++
++                job = (opj_dwd_decode_v_job_t*) opj_malloc(sizeof(opj_dwd_decode_v_job_t));
++                if( !job )
++                {
++                    /* It would be nice to fallback to single thread case, but */
++                    /* unfortunately some jobs may be launched and have modified */
++                    /* tiledp, so it is not practical to recover from that error */
++                    /* FIXME event manager error callback */
++                    opj_thread_pool_wait_completion(tp, 0);
++                    opj_aligned_free(v.mem);
++                    return OPJ_FALSE;
++                }
++                job->v = v;
++                job->dwt_1D = dwt_1D;
++                job->rh = rh;
++                job->w = w;
++                job->tiledp = tiledp;
++                job->min_j = j * (rw / num_jobs);
++                job->max_j = (j+1) * (rw / num_jobs);
++                if( job->max_j > rw || j == num_jobs - 1 )
++                    job->max_j = rw;
++                job->v.mem = (OPJ_INT32*)opj_aligned_malloc(h_mem_size);
++                if (!job->v.mem)
++                {
++                    /* FIXME event manager error callback */
++                    opj_thread_pool_wait_completion(tp, 0);
++                    opj_free(job);
++                    opj_aligned_free(v.mem);
++                    return OPJ_FALSE;
++                }
++                opj_thread_pool_submit_job( tp, opj_dwt_decode_v_func, job );
++            }
++            opj_thread_pool_wait_completion(tp, 0);
++        }
+ 	}
+ 	opj_aligned_free(h.mem);
+ 	return OPJ_TRUE;
+diff --git a/src/lib/openjp2/dwt.h b/src/lib/openjp2/dwt.h
+index 21fe942..9385002 100644
+--- a/src/lib/openjp2/dwt.h
++++ b/src/lib/openjp2/dwt.h
+@@ -63,10 +63,11 @@ OPJ_BOOL opj_dwt_encode(opj_tcd_tilecomp_t * tilec);
+ /**
+ Inverse 5-3 wavelet transform in 2-D.
+ Apply a reversible inverse DWT transform to a component of an image.
++@param tp Thread pool
+ @param tilec Tile component information (current tile)
+ @param numres Number of resolution levels to decode
+ */
+-OPJ_BOOL opj_dwt_decode(opj_tcd_tilecomp_t* tilec, OPJ_UINT32 numres);
++OPJ_BOOL opj_dwt_decode(opj_thread_pool_t* tp, opj_tcd_tilecomp_t* tilec, OPJ_UINT32 numres);
+ 
+ /**
+ Get the gain of a subband for the reversible 5-3 DWT.
+diff --git a/src/lib/openjp2/j2k.c b/src/lib/openjp2/j2k.c
+index 9eaa155..68b2f82 100644
+--- a/src/lib/openjp2/j2k.c
++++ b/src/lib/openjp2/j2k.c
+@@ -5944,6 +5944,32 @@ void opj_j2k_setup_decoder(opj_j2k_t *j2k, opj_dparameters_t *parameters)
+         }
+ }
+ 
++OPJ_BOOL opj_j2k_set_threads(opj_j2k_t *j2k, OPJ_UINT32 num_threads)
++{
++        if( opj_has_thread_support() )
++        {
++            opj_thread_pool_destroy(j2k->m_tp);
++            j2k->m_tp = opj_thread_pool_create((int)num_threads);
++            if( j2k->m_tp == 0 )
++            {
++                j2k->m_tp = opj_thread_pool_create(0);
++                return OPJ_FALSE;
++            }
++            return OPJ_TRUE;
++        }
++        return OPJ_FALSE;
++}
++
++static int opj_j2k_get_default_thread_count()
++{
++    const char* num_threads = getenv("OPJ_NUM_THREADS");
++    if( num_threads == NULL || !opj_has_thread_support() )
++        return 0;
++    if( strcmp(num_threads, "ALL_CPUS") == 0 )
++        return opj_get_num_cpus();
++    return atoi(num_threads);
++}
++
+ /* ----------------------------------------------------------------------- */
+ /* J2K encoder interface                                                       */
+ /* ----------------------------------------------------------------------- */
+@@ -5981,6 +6007,17 @@ opj_j2k_t* opj_j2k_create_compress(void)
+                 return NULL;
+         }
+ 
++        l_j2k->m_tp = opj_thread_pool_create(opj_j2k_get_default_thread_count());
++        if( !l_j2k->m_tp )
++        {
++            l_j2k->m_tp = opj_thread_pool_create(0);
++        }
++        if( !l_j2k->m_tp )
++        {
++            opj_j2k_destroy(l_j2k);
++            return NULL;
++        }
++
+         return l_j2k;
+ }
+ 
+@@ -7486,7 +7523,7 @@ static OPJ_BOOL opj_j2k_copy_default_tcp_and_create_tcd (       opj_j2k_t * p_j2
+                 return OPJ_FALSE;
+         }
+ 
+-        if ( !opj_tcd_init(p_j2k->m_tcd, l_image, &(p_j2k->m_cp)) ) {
++        if ( !opj_tcd_init(p_j2k->m_tcd, l_image, &(p_j2k->m_cp), p_j2k->m_tp) ) {
+                 opj_tcd_destroy(p_j2k->m_tcd);
+                 p_j2k->m_tcd = 00;
+                 opj_event_msg(p_manager, EVT_ERROR, "Cannot decode tile, memory error\n");
+@@ -7567,6 +7604,9 @@ void opj_j2k_destroy (opj_j2k_t *p_j2k)
+         opj_image_destroy(p_j2k->m_output_image);
+         p_j2k->m_output_image = NULL;
+ 
++        opj_thread_pool_destroy(p_j2k->m_tp);
++        p_j2k->m_tp = NULL;
++
+         opj_free(p_j2k);
+ }
+ 
+@@ -8658,6 +8698,17 @@ opj_j2k_t* opj_j2k_create_decompress(void)
+                 return 00;
+         }
+ 
++        l_j2k->m_tp = opj_thread_pool_create(opj_j2k_get_default_thread_count());
++        if( !l_j2k->m_tp )
++        {
++            l_j2k->m_tp = opj_thread_pool_create(0);
++        }
++        if( !l_j2k->m_tp )
++        {
++            opj_j2k_destroy(l_j2k);
++            return NULL;
++        }
++
+         return l_j2k;
+ }
+ 
+@@ -10934,7 +10985,7 @@ static OPJ_BOOL opj_j2k_create_tcd(     opj_j2k_t *p_j2k,
+                 return OPJ_FALSE;
+         }
+ 
+-        if (!opj_tcd_init(p_j2k->m_tcd,p_j2k->m_private_image,&p_j2k->m_cp)) {
++        if (!opj_tcd_init(p_j2k->m_tcd,p_j2k->m_private_image,&p_j2k->m_cp, p_j2k->m_tp)) {
+                 opj_tcd_destroy(p_j2k->m_tcd);
+                 p_j2k->m_tcd = 00;
+                 return OPJ_FALSE;
+diff --git a/src/lib/openjp2/j2k.h b/src/lib/openjp2/j2k.h
+index 358e073..be85d5d 100644
+--- a/src/lib/openjp2/j2k.h
++++ b/src/lib/openjp2/j2k.h
+@@ -589,6 +589,12 @@ typedef struct opj_j2k
+ 
+ 	/** the current tile coder/decoder **/
+ 	struct opj_tcd *	m_tcd;
++
++    /** Number of threads to use */
++    int m_num_threads;
++
++    /** Thread pool */
++    opj_thread_pool_t* m_tp;
+ }
+ opj_j2k_t;
+ 
+@@ -607,6 +613,8 @@ Decoding parameters are returned in j2k->cp.
+ */
+ void opj_j2k_setup_decoder(opj_j2k_t *j2k, opj_dparameters_t *parameters);
+ 
++OPJ_BOOL opj_j2k_set_threads(opj_j2k_t *j2k, OPJ_UINT32 num_threads);
++
+ /**
+  * Creates a J2K compression structure
+  *
+diff --git a/src/lib/openjp2/jp2.c b/src/lib/openjp2/jp2.c
+index a607c8a..e156ebf 100644
+--- a/src/lib/openjp2/jp2.c
++++ b/src/lib/openjp2/jp2.c
+@@ -1767,6 +1767,11 @@ void opj_jp2_setup_decoder(opj_jp2_t *jp2, opj_dparameters_t *parameters)
+     jp2->ignore_pclr_cmap_cdef = parameters->flags & OPJ_DPARAMETERS_IGNORE_PCLR_CMAP_CDEF_FLAG;
+ }
+ 
++OPJ_BOOL opj_jp2_set_threads(opj_jp2_t *jp2, OPJ_UINT32 num_threads)
++{
++     return opj_j2k_set_threads(jp2->j2k, num_threads);
++}
++
+ /* ----------------------------------------------------------------------- */
+ /* JP2 encoder interface                                             */
+ /* ----------------------------------------------------------------------- */
+diff --git a/src/lib/openjp2/jp2.h b/src/lib/openjp2/jp2.h
+index 9413883..b54d0bf 100644
+--- a/src/lib/openjp2/jp2.h
++++ b/src/lib/openjp2/jp2.h
+@@ -243,6 +243,8 @@ Decoding parameters are returned in jp2->j2k->cp.
+ */
+ void opj_jp2_setup_decoder(opj_jp2_t *jp2, opj_dparameters_t *parameters);
+ 
++OPJ_BOOL opj_jp2_set_threads(opj_jp2_t *jp2, OPJ_UINT32 num_threads);
++
+ /**
+  * Decode an image from a JPEG-2000 file stream
+  * @param jp2 JP2 decompressor handle
+diff --git a/src/lib/openjp2/mqc.c b/src/lib/openjp2/mqc.c
+index 4e409a7..7119c3a 100644
+--- a/src/lib/openjp2/mqc.c
++++ b/src/lib/openjp2/mqc.c
+@@ -70,28 +70,6 @@ Fill mqc->c with 1's for flushing
+ @param mqc MQC handle
+ */
+ static void opj_mqc_setbits(opj_mqc_t *mqc);
+-/**
+-FIXME DOC
+-@param mqc MQC handle
+-@return 
+-*/
+-static INLINE OPJ_INT32 opj_mqc_mpsexchange(opj_mqc_t *const mqc);
+-/**
+-FIXME DOC
+-@param mqc MQC handle
+-@return 
+-*/
+-static INLINE OPJ_INT32 opj_mqc_lpsexchange(opj_mqc_t *const mqc);
+-/**
+-Input a byte
+-@param mqc MQC handle
+-*/
+-static INLINE void opj_mqc_bytein(opj_mqc_t *const mqc);
+-/**
+-Renormalize mqc->a and mqc->c while decoding
+-@param mqc MQC handle
+-*/
+-static INLINE void opj_mqc_renormd(opj_mqc_t *const mqc);
+ /*@}*/
+ 
+ /*@}*/
+@@ -284,82 +262,6 @@ static void opj_mqc_setbits(opj_mqc_t *mqc) {
+ 	}
+ }
+ 
+-static INLINE OPJ_INT32 opj_mqc_mpsexchange(opj_mqc_t *const mqc) {
+-	OPJ_INT32 d;
+-	if (mqc->a < (*mqc->curctx)->qeval) {
+-		d = (OPJ_INT32)(1 - (*mqc->curctx)->mps);
+-		*mqc->curctx = (*mqc->curctx)->nlps;
+-	} else {
+-		d = (OPJ_INT32)(*mqc->curctx)->mps;
+-		*mqc->curctx = (*mqc->curctx)->nmps;
+-	}
+-	
+-	return d;
+-}
+-
+-static INLINE OPJ_INT32 opj_mqc_lpsexchange(opj_mqc_t *const mqc) {
+-	OPJ_INT32 d;
+-	if (mqc->a < (*mqc->curctx)->qeval) {
+-		mqc->a = (*mqc->curctx)->qeval;
+-		d = (OPJ_INT32)(*mqc->curctx)->mps;
+-		*mqc->curctx = (*mqc->curctx)->nmps;
+-	} else {
+-		mqc->a = (*mqc->curctx)->qeval;
+-		d = (OPJ_INT32)(1 - (*mqc->curctx)->mps);
+-		*mqc->curctx = (*mqc->curctx)->nlps;
+-	}
+-	
+-	return d;
+-}
+-
+-#ifdef MQC_PERF_OPT
+-static INLINE void opj_mqc_bytein(opj_mqc_t *const mqc) {
+-	unsigned int i = *((unsigned int *) mqc->bp);
+-	mqc->c += i & 0xffff00;
+-	mqc->ct = i & 0x0f;
+-	mqc->bp += (i >> 2) & 0x04;
+-}
+-#else
+-static void opj_mqc_bytein(opj_mqc_t *const mqc) {
+-	if (mqc->bp != mqc->end) {
+-		OPJ_UINT32 c;
+-		if (mqc->bp + 1 != mqc->end) {
+-			c = *(mqc->bp + 1);
+-		} else {
+-			c = 0xff;
+-		}
+-		if (*mqc->bp == 0xff) {
+-			if (c > 0x8f) {
+-				mqc->c += 0xff00;
+-				mqc->ct = 8;
+-			} else {
+-				mqc->bp++;
+-				mqc->c += c << 9;
+-				mqc->ct = 7;
+-			}
+-		} else {
+-			mqc->bp++;
+-			mqc->c += c << 8;
+-			mqc->ct = 8;
+-		}
+-	} else {
+-		mqc->c += 0xff00;
+-		mqc->ct = 8;
+-	}
+-}
+-#endif
+-
+-static INLINE void opj_mqc_renormd(opj_mqc_t *const mqc) {
+-	do {
+-		if (mqc->ct == 0) {
+-			opj_mqc_bytein(mqc);
+-		}
+-		mqc->a <<= 1;
+-		mqc->c <<= 1;
+-		mqc->ct--;
+-	} while (mqc->a < 0x8000);
+-}
+-
+ /* 
+ ==========================================================
+    MQ-Coder interface
+@@ -585,25 +487,6 @@ OPJ_BOOL opj_mqc_init_dec(opj_mqc_t *mqc, OPJ_BYTE *bp, OPJ_UINT32 len) {
+         return OPJ_TRUE;
+ }
+ 
+-OPJ_INT32 opj_mqc_decode(opj_mqc_t *const mqc) {
+-	OPJ_INT32 d;
+-	mqc->a -= (*mqc->curctx)->qeval;
+-	if ((mqc->c >> 16) < (*mqc->curctx)->qeval) {
+-		d = opj_mqc_lpsexchange(mqc);
+-		opj_mqc_renormd(mqc);
+-	} else {
+-		mqc->c -= (*mqc->curctx)->qeval << 16;
+-		if ((mqc->a & 0x8000) == 0) {
+-			d = opj_mqc_mpsexchange(mqc);
+-			opj_mqc_renormd(mqc);
+-		} else {
+-			d = (OPJ_INT32)(*mqc->curctx)->mps;
+-		}
+-	}
+-
+-	return d;
+-}
+-
+ void opj_mqc_resetstates(opj_mqc_t *mqc) {
+ 	OPJ_UINT32 i;
+ 	for (i = 0; i < MQC_NUMCTXS; i++) {
+diff --git a/src/lib/openjp2/mqc.h b/src/lib/openjp2/mqc.h
+index 69a2d46..491ee50 100644
+--- a/src/lib/openjp2/mqc.h
++++ b/src/lib/openjp2/mqc.h
+@@ -77,11 +77,14 @@ typedef struct opj_mqc {
+ 	OPJ_BYTE *end;
+ 	opj_mqc_state_t *ctxs[MQC_NUMCTXS];
+ 	opj_mqc_state_t **curctx;
++	const OPJ_BYTE *lut_ctxno_zc_orient; /* lut_ctxno_zc shifted by 256 * bandno */
+ #ifdef MQC_PERF_OPT
+ 	unsigned char *buffer;
+ #endif
+ } opj_mqc_t;
+ 
++#include "mqc_inl.h"
++
+ /** @name Exported functions */
+ /*@{*/
+ /* ----------------------------------------------------------------------- */
+@@ -198,7 +201,7 @@ Decode a symbol
+ @param mqc MQC handle
+ @return Returns the decoded symbol (0 or 1)
+ */
+-OPJ_INT32 opj_mqc_decode(opj_mqc_t * const mqc);
++static INLINE OPJ_INT32 opj_mqc_decode(opj_mqc_t * const mqc);
+ /* ----------------------------------------------------------------------- */
+ /*@}*/
+ 
+diff --git a/src/lib/openjp2/mqc_inl.h b/src/lib/openjp2/mqc_inl.h
+new file mode 100644
+index 0000000..882b59f
+--- /dev/null
++++ b/src/lib/openjp2/mqc_inl.h
+@@ -0,0 +1,159 @@
++/*
++ * The copyright in this software is being made available under the 2-clauses 
++ * BSD License, included below. This software may be subject to other third 
++ * party and contributor rights, including patent rights, and no such rights
++ * are granted under this license.
++ *
++ * Copyright (c) 2002-2014, Universite catholique de Louvain (UCL), Belgium
++ * Copyright (c) 2002-2014, Professor Benoit Macq
++ * Copyright (c) 2001-2003, David Janssens
++ * Copyright (c) 2002-2003, Yannick Verschueren
++ * Copyright (c) 2003-2007, Francois-Olivier Devaux 
++ * Copyright (c) 2003-2014, Antonin Descampe
++ * Copyright (c) 2005, Herve Drolon, FreeImage Team
++ * Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS `AS IS'
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#ifndef __MQC_INL_H
++#define __MQC_INL_H
++/**
++FIXME DOC
++@param mqc MQC handle
++@return
++*/
++static INLINE OPJ_INT32 opj_mqc_mpsexchange(opj_mqc_t *const mqc) {
++	OPJ_INT32 d;
++	if (mqc->a < (*mqc->curctx)->qeval) {
++		d = (OPJ_INT32)(1 - (*mqc->curctx)->mps);
++		*mqc->curctx = (*mqc->curctx)->nlps;
++	} else {
++		d = (OPJ_INT32)(*mqc->curctx)->mps;
++		*mqc->curctx = (*mqc->curctx)->nmps;
++	}
++
++	return d;
++}
++
++/**
++FIXME DOC
++@param mqc MQC handle
++@return
++*/
++static INLINE OPJ_INT32 opj_mqc_lpsexchange(opj_mqc_t *const mqc) {
++	OPJ_INT32 d;
++	if (mqc->a < (*mqc->curctx)->qeval) {
++		mqc->a = (*mqc->curctx)->qeval;
++		d = (OPJ_INT32)(*mqc->curctx)->mps;
++		*mqc->curctx = (*mqc->curctx)->nmps;
++	} else {
++		mqc->a = (*mqc->curctx)->qeval;
++		d = (OPJ_INT32)(1 - (*mqc->curctx)->mps);
++		*mqc->curctx = (*mqc->curctx)->nlps;
++	}
++
++	return d;
++}
++
++/**
++Input a byte
++@param mqc MQC handle
++*/
++#ifdef MQC_PERF_OPT
++static INLINE void opj_mqc_bytein(opj_mqc_t *const mqc) {
++	unsigned int i = *((unsigned int *) mqc->bp);
++	mqc->c += i & 0xffff00;
++	mqc->ct = i & 0x0f;
++	mqc->bp += (i >> 2) & 0x04;
++}
++#else
++static INLINE void opj_mqc_bytein(opj_mqc_t *const mqc) {
++	if (mqc->bp != mqc->end) {
++		OPJ_UINT32 c;
++		if (mqc->bp + 1 != mqc->end) {
++			c = *(mqc->bp + 1);
++		} else {
++			c = 0xff;
++		}
++		if (*mqc->bp == 0xff) {
++			if (c > 0x8f) {
++				mqc->c += 0xff00;
++				mqc->ct = 8;
++			} else {
++				mqc->bp++;
++				mqc->c += c << 9;
++				mqc->ct = 7;
++			}
++		} else {
++			mqc->bp++;
++			mqc->c += c << 8;
++			mqc->ct = 8;
++		}
++	} else {
++		mqc->c += 0xff00;
++		mqc->ct = 8;
++	}
++}
++#endif
++
++/**
++Renormalize mqc->a and mqc->c while decoding
++@param mqc MQC handle
++*/
++static INLINE void opj_mqc_renormd(opj_mqc_t *const mqc) {
++	do {
++		if (mqc->ct == 0) {
++			opj_mqc_bytein(mqc);
++		}
++		mqc->a <<= 1;
++		mqc->c <<= 1;
++		mqc->ct--;
++	} while (mqc->a < 0x8000);
++}
++
++/**
++Decode a symbol
++@param mqc MQC handle
++@return Returns the decoded symbol (0 or 1)
++*/
++static INLINE OPJ_INT32 opj_mqc_decode(opj_mqc_t *const mqc) {
++	OPJ_INT32 d;
++	mqc->a -= (*mqc->curctx)->qeval;
++	if ((mqc->c >> 16) < (*mqc->curctx)->qeval) {
++		d = opj_mqc_lpsexchange(mqc);
++		opj_mqc_renormd(mqc);
++	} else {
++		mqc->c -= (*mqc->curctx)->qeval << 16;
++		if ((mqc->a & 0x8000) == 0) {
++			d = opj_mqc_mpsexchange(mqc);
++			opj_mqc_renormd(mqc);
++		} else {
++			d = (OPJ_INT32)(*mqc->curctx)->mps;
++		}
++	}
++
++	return d;
++}
++
++#endif /* __MQC_INL_H */
+diff --git a/src/lib/openjp2/openjpeg.c b/src/lib/openjp2/openjpeg.c
+index 5114cc1..ee3e14b 100644
+--- a/src/lib/openjp2/openjpeg.c
++++ b/src/lib/openjp2/openjpeg.c
+@@ -239,6 +239,9 @@ opj_codec_t* OPJ_CALLCONV opj_create_decompress(OPJ_CODEC_FORMAT p_format)
+ 									OPJ_UINT32 res_factor,
+ 									struct opj_event_mgr * p_manager)) opj_j2k_set_decoded_resolution_factor;
+ 
++            l_codec->opj_set_threads = 
++                    (OPJ_BOOL (*) ( void * p_codec, OPJ_UINT32 num_threads )) opj_j2k_set_threads;
++
+ 			l_codec->m_codec = opj_j2k_create_decompress();
+ 
+ 			if (! l_codec->m_codec) {
+@@ -315,6 +318,9 @@ opj_codec_t* OPJ_CALLCONV opj_create_decompress(OPJ_CODEC_FORMAT p_format)
+ 						    		OPJ_UINT32 res_factor,
+ 							    	opj_event_mgr_t * p_manager)) opj_jp2_set_decoded_resolution_factor;
+ 
++            l_codec->opj_set_threads = 
++                    (OPJ_BOOL (*) ( void * p_codec, OPJ_UINT32 num_threads )) opj_jp2_set_threads;
++
+ 			l_codec->m_codec = opj_jp2_create(OPJ_TRUE);
+ 
+ 			if (! l_codec->m_codec) {
+@@ -354,6 +360,18 @@ void OPJ_CALLCONV opj_set_default_decoder_parameters(opj_dparameters_t *paramete
+ 	}
+ }
+ 
++
++OPJ_API OPJ_CALLCONV opj_codec_set_threads(opj_codec_t *p_codec,
++                                                    int num_threads)
++{
++  if (p_codec ) { 
++        opj_codec_private_t * l_codec = (opj_codec_private_t *) p_codec;
++
++        return l_codec->opj_set_threads(l_codec->m_codec, num_threads);
++    }
++    return OPJ_FALSE;
++}
++
+ OPJ_BOOL OPJ_CALLCONV opj_setup_decoder(opj_codec_t *p_codec,
+                                         opj_dparameters_t *parameters 
+ 										)
+diff --git a/src/lib/openjp2/openjpeg.h b/src/lib/openjp2/openjpeg.h
+index c07e9c8..7912c23 100644
+--- a/src/lib/openjp2/openjpeg.h
++++ b/src/lib/openjp2/openjpeg.h
+@@ -1263,6 +1263,25 @@ OPJ_API OPJ_BOOL OPJ_CALLCONV opj_setup_decoder(opj_codec_t *p_codec,
+ 												opj_dparameters_t *parameters );
+ 
+ /**
++ * Allocates worker threads for the compressor/decompressor.
++ *
++ * By default, only the main thread is used. If this function is not used,
++ * but the OPJ_NUM_THREADS environment variable is set, its value will be
++ * used to initialize the number of threads. The value can be either an integer
++ * number, or "ALL_CPUS". If OPJ_NUM_THREADS is set and this function is called,
++ * this function will override the behaviour of the environment variable.
++ *
++ * Note: currently only has effect on the decompressor.
++ *
++ * @param p_codec       decompressor handler
++ * @param num_threads   number of threads.
++ *
++ * @return OPJ_TRUE     if the decoder is correctly set
++ */
++OPJ_API OPJ_BOOL OPJ_CALLCONV opj_codec_set_threads(opj_codec_t *p_codec,
++                                                    int num_threads);
++
++/**
+  * Decodes an image header.
+  *
+  * @param	p_stream		the jpeg2000 stream.
+@@ -1554,6 +1573,19 @@ OPJ_API OPJ_BOOL OPJ_CALLCONV opj_set_MCT( opj_cparameters_t *parameters,
+ 		                               	   OPJ_INT32 * p_dc_shift,
+ 		                               	   OPJ_UINT32 pNbComp);
+ 
++/*
++==========================================================
++   Thread functions
++==========================================================
++*/
++
++/** Returns if the library is built with thread support.
++ * OPJ_TRUE if mutex, condition, thread, thread pool are available.
++ */
++OPJ_API OPJ_BOOL OPJ_CALLCONV opj_has_thread_support(void);
++
++/** Return the number of virtual CPUs */
++OPJ_API int OPJ_CALLCONV opj_get_num_cpus(void);
+ 
+ 
+ #ifdef __cplusplus
+diff --git a/src/lib/openjp2/opj_codec.h b/src/lib/openjp2/opj_codec.h
+index 6bd791f..c88005d 100644
+--- a/src/lib/openjp2/opj_codec.h
++++ b/src/lib/openjp2/opj_codec.h
+@@ -113,6 +113,7 @@ typedef struct opj_codec_private
+             OPJ_BOOL (*opj_set_decoded_resolution_factor) ( void * p_codec,
+                                                             OPJ_UINT32 res_factor,
+                                                             opj_event_mgr_t * p_manager);
++
+         } m_decompression;
+ 
+         /**
+@@ -157,6 +158,9 @@ typedef struct opj_codec_private
+     void (*opj_dump_codec) (void * p_codec, OPJ_INT32 info_flag, FILE* output_stream);
+     opj_codestream_info_v2_t* (*opj_get_codec_info)(void* p_codec);
+     opj_codestream_index_t* (*opj_get_codec_index)(void* p_codec);
++
++    /** Set number of threads */
++    OPJ_BOOL (*opj_set_threads) ( void * p_codec, OPJ_UINT32 num_threads );
+ }
+ opj_codec_private_t;
+ 
+diff --git a/src/lib/openjp2/opj_includes.h b/src/lib/openjp2/opj_includes.h
+index 58a5a9a..e835fae 100644
+--- a/src/lib/openjp2/opj_includes.h
++++ b/src/lib/openjp2/opj_includes.h
+@@ -182,6 +182,9 @@ static INLINE long opj_lrintf(float f) {
+ #include "bio.h"
+ #include "cio.h"
+ 
++#include "thread.h"
++#include "tls_keys.h"
++
+ #include "image.h"
+ #include "invert.h"
+ #include "j2k.h"
+diff --git a/src/lib/openjp2/t1.c b/src/lib/openjp2/t1.c
+index 1bf7205..b1c6128 100644
+--- a/src/lib/openjp2/t1.c
++++ b/src/lib/openjp2/t1.c
+@@ -39,26 +39,27 @@
+ #include "opj_includes.h"
+ #include "t1_luts.h"
+ 
++/* #define CONSISTENCY_CHECK */
++
+ /** @defgroup T1 T1 - Implementation of the tier-1 coding */
+ /*@{*/
+ 
+ /** @name Local static functions */
+ /*@{*/
+ 
+-static INLINE OPJ_BYTE opj_t1_getctxno_zc(OPJ_UINT32 f, OPJ_UINT32 orient);
++static INLINE OPJ_BYTE opj_t1_getctxno_zc(opj_mqc_t *mqc, OPJ_UINT32 f);
+ static OPJ_BYTE opj_t1_getctxno_sc(OPJ_UINT32 f);
+ static INLINE OPJ_UINT32 opj_t1_getctxno_mag(OPJ_UINT32 f);
+ static OPJ_BYTE opj_t1_getspb(OPJ_UINT32 f);
+ static OPJ_INT16 opj_t1_getnmsedec_sig(OPJ_UINT32 x, OPJ_UINT32 bitpos);
+ static OPJ_INT16 opj_t1_getnmsedec_ref(OPJ_UINT32 x, OPJ_UINT32 bitpos);
+-static void opj_t1_updateflags(opj_flag_t *flagsp, OPJ_UINT32 s, OPJ_UINT32 stride);
++static INLINE void opj_t1_updateflags(opj_flag_t *flagsp, OPJ_UINT32 s, OPJ_UINT32 stride);
+ /**
+ Encode significant pass
+ */
+ static void opj_t1_enc_sigpass_step(opj_t1_t *t1,
+                                     opj_flag_t *flagsp,
+                                     OPJ_INT32 *datap,
+-                                    OPJ_UINT32 orient,
+                                     OPJ_INT32 bpno,
+                                     OPJ_INT32 one,
+                                     OPJ_INT32 *nmsedec,
+@@ -81,23 +82,27 @@ static void opj_t1_dec_sigpass_step(opj_t1_t *t1,
+ static INLINE void opj_t1_dec_sigpass_step_raw(
+                 opj_t1_t *t1,
+                 opj_flag_t *flagsp,
++                opj_colflag_t* colflagsp,
+                 OPJ_INT32 *datap,
+-                OPJ_INT32 orient,
+                 OPJ_INT32 oneplushalf,
+-                OPJ_INT32 vsc);
++                OPJ_INT32 vsc,
++                OPJ_INT32 row);
+ static INLINE void opj_t1_dec_sigpass_step_mqc(
+                 opj_t1_t *t1,
+                 opj_flag_t *flagsp,
++                opj_colflag_t* colflagsp,
+                 OPJ_INT32 *datap,
+-                OPJ_INT32 orient,
+-                OPJ_INT32 oneplushalf);
++                OPJ_INT32 oneplushalf,
++                OPJ_INT32 row,
++                OPJ_INT32 flags_stride);
+ static INLINE void opj_t1_dec_sigpass_step_mqc_vsc(
+                 opj_t1_t *t1,
+                 opj_flag_t *flagsp,
++                opj_colflag_t* colflagsp,
+                 OPJ_INT32 *datap,
+-                OPJ_INT32 orient,
+                 OPJ_INT32 oneplushalf,
+-                OPJ_INT32 vsc);
++                OPJ_INT32 vsc,
++                OPJ_INT32 row);
+ 
+ 
+ /**
+@@ -105,7 +110,6 @@ Encode significant pass
+ */
+ static void opj_t1_enc_sigpass( opj_t1_t *t1,
+                                 OPJ_INT32 bpno,
+-                                OPJ_UINT32 orient,
+                                 OPJ_INT32 *nmsedec,
+                                 OPJ_BYTE type,
+                                 OPJ_UINT32 cblksty);
+@@ -116,16 +120,10 @@ Decode significant pass
+ static void opj_t1_dec_sigpass_raw(
+                 opj_t1_t *t1,
+                 OPJ_INT32 bpno,
+-                OPJ_INT32 orient,
+                 OPJ_INT32 cblksty);
+-static void opj_t1_dec_sigpass_mqc(
+-                opj_t1_t *t1,
+-                OPJ_INT32 bpno,
+-                OPJ_INT32 orient);
+ static void opj_t1_dec_sigpass_mqc_vsc(
+                 opj_t1_t *t1,
+-                OPJ_INT32 bpno,
+-                OPJ_INT32 orient);
++                OPJ_INT32 bpno);
+ 
+ 
+ 
+@@ -158,9 +156,6 @@ static void opj_t1_dec_refpass_raw(
+                 opj_t1_t *t1,
+                 OPJ_INT32 bpno,
+                 OPJ_INT32 cblksty);
+-static void opj_t1_dec_refpass_mqc(
+-                opj_t1_t *t1,
+-                OPJ_INT32 bpno);
+ static void opj_t1_dec_refpass_mqc_vsc(
+                 opj_t1_t *t1,
+                 OPJ_INT32 bpno);
+@@ -182,23 +177,28 @@ static void opj_t1_dec_refpass_step(opj_t1_t *t1,
+ static INLINE void  opj_t1_dec_refpass_step_raw(
+                 opj_t1_t *t1,
+                 opj_flag_t *flagsp,
++                opj_colflag_t *colflagsp,
+                 OPJ_INT32 *datap,
+                 OPJ_INT32 poshalf,
+                 OPJ_INT32 neghalf,
+-                OPJ_INT32 vsc);
++                OPJ_INT32 row);
+ static INLINE void opj_t1_dec_refpass_step_mqc(
+                 opj_t1_t *t1,
+                 opj_flag_t *flagsp,
++                opj_colflag_t *colflagsp,
+                 OPJ_INT32 *datap,
+                 OPJ_INT32 poshalf,
+-                OPJ_INT32 neghalf);
++                OPJ_INT32 neghalf,
++                OPJ_INT32 row);
+ static INLINE void opj_t1_dec_refpass_step_mqc_vsc(
+                 opj_t1_t *t1,
+                 opj_flag_t *flagsp,
++                opj_colflag_t *colflagsp,
+                 OPJ_INT32 *datap,
+                 OPJ_INT32 poshalf,
+                 OPJ_INT32 neghalf,
+-                OPJ_INT32 vsc);
++                OPJ_INT32 vsc,
++                OPJ_INT32 row);
+ 
+ 
+ 
+@@ -209,7 +209,6 @@ static void opj_t1_enc_clnpass_step(
+ 		opj_t1_t *t1,
+ 		opj_flag_t *flagsp,
+ 		OPJ_INT32 *datap,
+-		OPJ_UINT32 orient,
+ 		OPJ_INT32 bpno,
+ 		OPJ_INT32 one,
+ 		OPJ_INT32 *nmsedec,
+@@ -221,30 +220,32 @@ Decode clean-up pass
+ static void opj_t1_dec_clnpass_step_partial(
+ 		opj_t1_t *t1,
+ 		opj_flag_t *flagsp,
++		opj_colflag_t *colflagsp,
+ 		OPJ_INT32 *datap,
+-		OPJ_INT32 orient,
+-		OPJ_INT32 oneplushalf);
++		OPJ_INT32 oneplushalf,
++		OPJ_INT32 row);
+ static void opj_t1_dec_clnpass_step(
+ 		opj_t1_t *t1,
+ 		opj_flag_t *flagsp,
++		opj_colflag_t *colflagsp,
+ 		OPJ_INT32 *datap,
+-		OPJ_INT32 orient,
+-		OPJ_INT32 oneplushalf);
++		OPJ_INT32 oneplushalf,
++		OPJ_INT32 row);
+ static void opj_t1_dec_clnpass_step_vsc(
+ 		opj_t1_t *t1,
+ 		opj_flag_t *flagsp,
++		opj_colflag_t *colflagsp,
+ 		OPJ_INT32 *datap,
+-		OPJ_INT32 orient,
+ 		OPJ_INT32 oneplushalf,
+ 		OPJ_INT32 partial,
+-		OPJ_INT32 vsc);
++		OPJ_INT32 vsc,
++		OPJ_INT32 row);
+ /**
+ Encode clean-up pass
+ */
+ static void opj_t1_enc_clnpass(
+ 		opj_t1_t *t1,
+ 		OPJ_INT32 bpno,
+-		OPJ_UINT32 orient,
+ 		OPJ_INT32 *nmsedec,
+ 		OPJ_UINT32 cblksty);
+ /**
+@@ -253,7 +254,6 @@ Decode clean-up pass
+ static void opj_t1_dec_clnpass(
+ 		opj_t1_t *t1,
+ 		OPJ_INT32 bpno,
+-		OPJ_INT32 orient,
+ 		OPJ_INT32 cblksty);
+ 
+ static OPJ_FLOAT64 opj_t1_getwmsedec(
+@@ -305,8 +305,8 @@ static OPJ_BOOL opj_t1_allocate_buffers(   opj_t1_t *t1,
+ 
+ /* ----------------------------------------------------------------------- */
+ 
+-static OPJ_BYTE opj_t1_getctxno_zc(OPJ_UINT32 f, OPJ_UINT32 orient) {
+-	return lut_ctxno_zc[(orient << 8) | (f & T1_SIG_OTH)];
++static OPJ_BYTE opj_t1_getctxno_zc(opj_mqc_t *mqc, OPJ_UINT32 f) {
++	return mqc->lut_ctxno_zc_orient[(f & T1_SIG_OTH)];
+ }
+ 
+ static OPJ_BYTE opj_t1_getctxno_sc(OPJ_UINT32 f) {
+@@ -339,34 +339,73 @@ static OPJ_INT16 opj_t1_getnmsedec_ref(OPJ_UINT32 x, OPJ_UINT32 bitpos) {
+     return lut_nmsedec_ref0[x & ((1 << T1_NMSEDEC_BITS) - 1)];
+ }
+ 
+-static void opj_t1_updateflags(opj_flag_t *flagsp, OPJ_UINT32 s, OPJ_UINT32 stride) {
++static INLINE void opj_t1_updateflags(opj_flag_t *flagsp, OPJ_UINT32 s, OPJ_UINT32 stride) {
+ 	opj_flag_t *np = flagsp - stride;
+ 	opj_flag_t *sp = flagsp + stride;
+ 
+-	static const opj_flag_t mod[] = {
+-		T1_SIG_S, T1_SIG_S|T1_SGN_S,
+-		T1_SIG_E, T1_SIG_E|T1_SGN_E,
+-		T1_SIG_W, T1_SIG_W|T1_SGN_W,
+-		T1_SIG_N, T1_SIG_N|T1_SGN_N
+-	};
++	/* We strongly rely on (T1_SGN_N == 0x0100) == (T1_SIG_N == 0x0010) << 4 */
++	/* and T1_SIG_E == T1_SIG_N << 1, T1_SIG_W == T1_SIG_N << 2 and T1_SIG_S == T1_SIG_N << 2 */
++	/* and T1_SGN_E == T1_SGN_N << 1, T1_SGN_W == T1_SGN_N << 2 and T1_SGN_S == T1_SGN_N << 2 */
++
++	opj_flag_t flag_N = T1_SIG_N | (T1_SIG_N << (4 * s));
+ 
+ 	np[-1] |= T1_SIG_SE;
+-	np[0]  |= mod[s];
++	np[0]  |= flag_N << 2;
+ 	np[1]  |= T1_SIG_SW;
+ 
+-	flagsp[-1] |= mod[s+2];
++	flagsp[-1] |= flag_N << 1;
+ 	flagsp[0]  |= T1_SIG;
+-	flagsp[1]  |= mod[s+4];
++	flagsp[1]  |= flag_N << 3;
+ 
+ 	sp[-1] |= T1_SIG_NE;
+-	sp[0]  |= mod[s+6];
++	sp[0]  |= flag_N;
+ 	sp[1]  |= T1_SIG_NW;
+ }
+ 
++static INLINE void opj_t1_updateflagscolflags(opj_flag_t *flagsp, opj_colflag_t *colflagsp, OPJ_UINT32 s, OPJ_UINT32 stride, OPJ_INT32 row)
++{
++	opj_t1_updateflags(flagsp, s, stride);
++	if( row == 0 )
++	{
++			*colflagsp |= (T1_COLFLAG_SIG_ROW_0 <<  (T1_COLFLAG_RBS * row)) |
++						  (T1_COLFLAG_SIG_OTHER_ROW_0 <<  (T1_COLFLAG_RBS * (row+1)));
++			*(colflagsp - 1) |= (T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * row)) |
++							    (T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * (row+1)));
++			*(colflagsp + 1) |= (T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * row)) |
++								(T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * (row+1)));
++			*(colflagsp - stride - 1) |= (T1_COLFLAG_SIG_OTHER_ROW_3);
++			*(colflagsp - stride) |= (T1_COLFLAG_SIG_OTHER_ROW_3);
++			*(colflagsp - stride + 1) |= (T1_COLFLAG_SIG_OTHER_ROW_3);
++	}
++	else if( row == 3 )
++	{
++			*colflagsp |= (T1_COLFLAG_SIG_ROW_0 <<  (T1_COLFLAG_RBS * row)) |
++						  (T1_COLFLAG_SIG_OTHER_ROW_0 <<  (T1_COLFLAG_RBS * (row-1)));
++			*(colflagsp - 1) |= (T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * row)) |
++							    (T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * (row-1)));
++			*(colflagsp + 1) |= (T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * row)) |
++								(T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS* (row-1)));
++			*(colflagsp + stride - 1) |= (T1_COLFLAG_SIG_OTHER_ROW_0);
++			*(colflagsp + stride) |= (T1_COLFLAG_SIG_OTHER_ROW_0);
++			*(colflagsp + stride + 1) |= (T1_COLFLAG_SIG_OTHER_ROW_0);
++	}
++	else
++	{
++			*(colflagsp - 1) |= (T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * row)) |
++								(T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * (row-1))) |
++								(T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * (row+1)));
++			*colflagsp |= (T1_COLFLAG_SIG_ROW_0 <<  (T1_COLFLAG_RBS * row)) |
++						  (T1_COLFLAG_SIG_OTHER_ROW_0 <<  (T1_COLFLAG_RBS * (row-1))) |
++						  (T1_COLFLAG_SIG_OTHER_ROW_0 <<  (T1_COLFLAG_RBS * (row+1)));
++			*(colflagsp + 1) |= (T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * row)) |
++								(T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * (row-1))) |
++								(T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * (row+1)));
++	}
++}
++
+ static void opj_t1_enc_sigpass_step(   opj_t1_t *t1,
+                                 opj_flag_t *flagsp,
+                                 OPJ_INT32 *datap,
+-                                OPJ_UINT32 orient,
+                                 OPJ_INT32 bpno,
+                                 OPJ_INT32 one,
+                                 OPJ_INT32 *nmsedec,
+@@ -382,7 +421,7 @@ static void opj_t1_enc_sigpass_step(   opj_t1_t *t1,
+ 	flag = vsc ? (OPJ_UINT32)((*flagsp) & (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW | T1_SGN_S))) : (OPJ_UINT32)(*flagsp);
+ 	if ((flag & T1_SIG_OTH) && !(flag & (T1_SIG | T1_VISIT))) {
+ 		v = (opj_int_abs(*datap) & one) ? 1 : 0;
+-		opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc(flag, orient));	/* ESSAI */
++		opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc(mqc, flag));	/* ESSAI */
+ 		if (type == T1_TYPE_RAW) {	/* BYPASS/LAZY MODE */
+ 			opj_mqc_bypass_enc(mqc, (OPJ_UINT32)v);
+ 		} else {
+@@ -407,72 +446,89 @@ static void opj_t1_enc_sigpass_step(   opj_t1_t *t1,
+ static INLINE void opj_t1_dec_sigpass_step_raw(
+                 opj_t1_t *t1,
+                 opj_flag_t *flagsp,
++                opj_colflag_t* colflagsp,
+                 OPJ_INT32 *datap,
+-                OPJ_INT32 orient,
+                 OPJ_INT32 oneplushalf,
+-                OPJ_INT32 vsc)
++                OPJ_INT32 vsc,
++                OPJ_INT32 row)
+ {
+         OPJ_INT32 v, flag;
+         opj_raw_t *raw = t1->raw;       /* RAW component */
+-        OPJ_ARG_NOT_USED(orient);
+-       
++
+         flag = vsc ? ((*flagsp) & (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW | T1_SGN_S))) : (*flagsp);
+-        if ((flag & T1_SIG_OTH) && !(flag & (T1_SIG | T1_VISIT))) {
++        if ((flag & T1_SIG_OTH) && !(*colflagsp & ((T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0) << (T1_COLFLAG_RBS * row)))) {
+                         if (opj_raw_decode(raw)) {
+                                 v = (OPJ_INT32)opj_raw_decode(raw);    /* ESSAI */
+                                 *datap = v ? -oneplushalf : oneplushalf;
+-                                opj_t1_updateflags(flagsp, (OPJ_UINT32)v, t1->flags_stride);
++                                opj_t1_updateflagscolflags(flagsp, colflagsp, (OPJ_UINT32)v, t1->flags_stride, row);
+                         }
++#ifdef CONSISTENCY_CHECK
+                 *flagsp |= T1_VISIT;
++#endif
++                *colflagsp |= (T1_COLFLAG_VISIT_ROW_0 << (T1_COLFLAG_RBS * row));
+         }
+ }      
+ 
+ static INLINE void opj_t1_dec_sigpass_step_mqc(
+                 opj_t1_t *t1,
+                 opj_flag_t *flagsp,
++                opj_colflag_t* colflagsp,
+                 OPJ_INT32 *datap,
+-                OPJ_INT32 orient,
+-                OPJ_INT32 oneplushalf)
++                OPJ_INT32 oneplushalf,
++                OPJ_INT32 row,
++                OPJ_INT32 flags_stride)
+ {
+         OPJ_INT32 v, flag;
+        
+         opj_mqc_t *mqc = t1->mqc;       /* MQC component */
+-       
+-        flag = *flagsp;
+-        if ((flag & T1_SIG_OTH) && !(flag & (T1_SIG | T1_VISIT))) {
+-                        opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc((OPJ_UINT32)flag, (OPJ_UINT32)orient));
++#ifdef CONSISTENCY_CHECK
++		assert( ((*flagsp & T1_SIG_OTH) && !(*flagsp & (T1_SIG | T1_VISIT))) ==
++				((*colflagsp & ((T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0 | T1_COLFLAG_SIG_OTHER_ROW_0) << (T1_COLFLAG_RBS * row))) ==
++				  (T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * row))) );
++#endif
++        if( (*colflagsp & ((T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0 | T1_COLFLAG_SIG_OTHER_ROW_0) << (T1_COLFLAG_RBS * row))) ==
++            (T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * row)) ) {
++                        flag = *flagsp;
++                        opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc(mqc, (OPJ_UINT32)flag));
+                         if (opj_mqc_decode(mqc)) {
+                                 opj_mqc_setcurctx(mqc, opj_t1_getctxno_sc((OPJ_UINT32)flag));
+                                 v = opj_mqc_decode(mqc) ^ opj_t1_getspb((OPJ_UINT32)flag);
+                                 *datap = v ? -oneplushalf : oneplushalf;
+-                                opj_t1_updateflags(flagsp, (OPJ_UINT32)v, t1->flags_stride);
++                                opj_t1_updateflagscolflags(flagsp, colflagsp, (OPJ_UINT32)v, flags_stride, row);
+                         }
++#ifdef CONSISTENCY_CHECK
+                 *flagsp |= T1_VISIT;
++#endif
++                *colflagsp |= (T1_COLFLAG_VISIT_ROW_0 << (T1_COLFLAG_RBS * row));
+         }
+ }                               /* VSC and  BYPASS by Antonin */
+ 
+ static INLINE void opj_t1_dec_sigpass_step_mqc_vsc(
+                 opj_t1_t *t1,
+                 opj_flag_t *flagsp,
++                opj_colflag_t* colflagsp,
+                 OPJ_INT32 *datap,
+-                OPJ_INT32 orient,
+                 OPJ_INT32 oneplushalf,
+-                OPJ_INT32 vsc)
++                OPJ_INT32 vsc,
++                OPJ_INT32 row)
+ {
+         OPJ_INT32 v, flag;
+        
+         opj_mqc_t *mqc = t1->mqc;       /* MQC component */
+        
+         flag = vsc ? ((*flagsp) & (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW | T1_SGN_S))) : (*flagsp);
+-        if ((flag & T1_SIG_OTH) && !(flag & (T1_SIG | T1_VISIT))) {
+-                opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc((OPJ_UINT32)flag, (OPJ_UINT32)orient));
++        if ((flag & T1_SIG_OTH) && !(*colflagsp & ((T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0) << (T1_COLFLAG_RBS * row)))) {
++                opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc(mqc, (OPJ_UINT32)flag));
+                 if (opj_mqc_decode(mqc)) {
+                         opj_mqc_setcurctx(mqc, opj_t1_getctxno_sc((OPJ_UINT32)flag));
+                         v = opj_mqc_decode(mqc) ^ opj_t1_getspb((OPJ_UINT32)flag);
+                         *datap = v ? -oneplushalf : oneplushalf;
+-                        opj_t1_updateflags(flagsp, (OPJ_UINT32)v, t1->flags_stride);
++                        opj_t1_updateflagscolflags(flagsp, colflagsp, (OPJ_UINT32)v, t1->flags_stride, row);
+                 }
++#ifdef CONSISTENCY_CHECK
+                 *flagsp |= T1_VISIT;
++#endif
++                *colflagsp |= (T1_COLFLAG_VISIT_ROW_0 << (T1_COLFLAG_RBS * row));
+         }
+ }                               /* VSC and  BYPASS by Antonin */
+ 
+@@ -480,7 +536,6 @@ static INLINE void opj_t1_dec_sigpass_step_mqc_vsc(
+ 
+ static void opj_t1_enc_sigpass(opj_t1_t *t1,
+                         OPJ_INT32 bpno,
+-                        OPJ_UINT32 orient,
+                         OPJ_INT32 *nmsedec,
+                         OPJ_BYTE type,
+                         OPJ_UINT32 cblksty
+@@ -499,7 +554,6 @@ static void opj_t1_enc_sigpass(opj_t1_t *t1,
+ 						t1,
+ 						&t1->flags[((j+1) * t1->flags_stride) + i + 1],
+ 						&t1->data[(j * t1->data_stride) + i],
+-						orient,
+ 						bpno,
+ 						one,
+ 						nmsedec,
+@@ -513,95 +567,139 @@ static void opj_t1_enc_sigpass(opj_t1_t *t1,
+ static void opj_t1_dec_sigpass_raw(
+                 opj_t1_t *t1,
+                 OPJ_INT32 bpno,
+-                OPJ_INT32 orient,
+                 OPJ_INT32 cblksty)
+ {
+         OPJ_INT32 one, half, oneplushalf, vsc;
+         OPJ_UINT32 i, j, k; 
++        opj_colflag_t *colflags1 = &t1->colflags[t1->flags_stride + 1];
+         one = 1 << bpno;
+         half = one >> 1;
+         oneplushalf = one | half;
+         for (k = 0; k < t1->h; k += 4) {
+                 for (i = 0; i < t1->w; ++i) {
++                        opj_colflag_t *colflags2 = colflags1 + i;
+                         for (j = k; j < k + 4 && j < t1->h; ++j) {
+                                 vsc = ((cblksty & J2K_CCP_CBLKSTY_VSC) && (j == k + 3 || j == t1->h - 1)) ? 1 : 0;
+                                 opj_t1_dec_sigpass_step_raw(
+                                                 t1,
+                                                 &t1->flags[((j+1) * t1->flags_stride) + i + 1],
++                                                colflags2,
+                                                 &t1->data[(j * t1->w) + i],
+-                                                orient,
+                                                 oneplushalf,
+-                                                vsc);
++                                                vsc,
++                                                j - k);
+                         }
+                 }
++                colflags1 += t1->flags_stride;
+         }
+ }                               /* VSC and  BYPASS by Antonin */
+ 
+-static void opj_t1_dec_sigpass_mqc(
++#define opj_t1_dec_sigpass_mqc_internal(t1, bpno, w, h, flags_stride) \
++{ \
++        OPJ_INT32 one, half, oneplushalf; \
++        OPJ_UINT32 i, j, k; \
++        OPJ_INT32 *data1 = t1->data; \
++        opj_flag_t *flags1 = &t1->flags[1]; \
++        opj_colflag_t *colflags1 = &t1->colflags[flags_stride + 1]; \
++        one = 1 << bpno; \
++        half = one >> 1; \
++        oneplushalf = one | half; \
++        for (k = 0; k < (h & ~3u); k += 4) { \
++                for (i = 0; i < w; ++i) { \
++                        OPJ_INT32 *data2 = data1 + i; \
++                        opj_flag_t *flags2 = flags1 + i; \
++                        opj_colflag_t *colflags2 = colflags1 + i; \
++                        if( *colflags2 == 0 ) continue; \
++                        flags2 += flags_stride; \
++                        opj_t1_dec_sigpass_step_mqc(t1, flags2, colflags2, data2, oneplushalf, 0, flags_stride); \
++                        data2 += w; \
++                        flags2 += flags_stride; \
++                        opj_t1_dec_sigpass_step_mqc(t1, flags2, colflags2, data2, oneplushalf, 1, flags_stride); \
++                        data2 += w; \
++                        flags2 += flags_stride; \
++                        opj_t1_dec_sigpass_step_mqc(t1, flags2, colflags2, data2, oneplushalf, 2, flags_stride); \
++                        data2 += w; \
++                        flags2 += flags_stride; \
++                        opj_t1_dec_sigpass_step_mqc(t1, flags2, colflags2, data2, oneplushalf, 3, flags_stride); \
++                        data2 += w; \
++                } \
++                data1 += w << 2; \
++                flags1 += flags_stride << 2; \
++                colflags1 += flags_stride; \
++        } \
++        for (i = 0; i < w; ++i) { \
++                OPJ_INT32 *data2 = data1 + i; \
++                opj_flag_t *flags2 = flags1 + i; \
++                opj_colflag_t *colflags2 = colflags1 + i; \
++                for (j = k; j < h; ++j) { \
++                        flags2 += flags_stride; \
++                        opj_t1_dec_sigpass_step_mqc(t1, flags2, colflags2, data2, oneplushalf, j - k, flags_stride); \
++                        data2 += w; \
++                } \
++        } \
++}
++
++static void opj_t1_dec_sigpass_mqc_64x64(
+                 opj_t1_t *t1,
+-                OPJ_INT32 bpno,
+-                OPJ_INT32 orient)
++                OPJ_INT32 bpno)
++{
++	opj_t1_dec_sigpass_mqc_internal(t1, bpno, 64, 64, 66);
++}
++
++static void opj_t1_dec_sigpass_mqc_generic(
++                opj_t1_t *t1,
++                OPJ_INT32 bpno)
++{
++	opj_t1_dec_sigpass_mqc_internal(t1, bpno, t1->w, t1->h, t1->flags_stride);
++}
++
++/* VSC and  BYPASS by Antonin */
++static void opj_t1_dec_sigpass_mqc_vsc(
++                opj_t1_t *t1,
++                OPJ_INT32 bpno)
+ {
+-        OPJ_INT32 one, half, oneplushalf;
++        OPJ_INT32 one, half, oneplushalf, vsc;
+         OPJ_UINT32 i, j, k;
+         OPJ_INT32 *data1 = t1->data;
+         opj_flag_t *flags1 = &t1->flags[1];
++        opj_colflag_t *colflags1 = &t1->colflags[t1->flags_stride + 1];
+         one = 1 << bpno;
+         half = one >> 1;
+         oneplushalf = one | half;
+-        for (k = 0; k < (t1->h & ~3u); k += 4) {
++        for (k = 0; k < (t1->h & ~3); k += 4) {
+                 for (i = 0; i < t1->w; ++i) {
+                         OPJ_INT32 *data2 = data1 + i;
+                         opj_flag_t *flags2 = flags1 + i;
++                        opj_colflag_t *colflags2 = colflags1 + i;
+                         flags2 += t1->flags_stride;
+-                        opj_t1_dec_sigpass_step_mqc(t1, flags2, data2, orient, oneplushalf);
++                        opj_t1_dec_sigpass_step_mqc_vsc(t1, flags2, colflags2, data2, oneplushalf, 0, 0);
+                         data2 += t1->w;
+                         flags2 += t1->flags_stride;
+-                        opj_t1_dec_sigpass_step_mqc(t1, flags2, data2, orient, oneplushalf);
++                        opj_t1_dec_sigpass_step_mqc_vsc(t1, flags2, colflags2, data2, oneplushalf, 0, 1);
+                         data2 += t1->w;
+                         flags2 += t1->flags_stride;
+-                        opj_t1_dec_sigpass_step_mqc(t1, flags2, data2, orient, oneplushalf);
++                        opj_t1_dec_sigpass_step_mqc_vsc(t1, flags2, colflags2, data2, oneplushalf, 0, 2);
+                         data2 += t1->w;
+                         flags2 += t1->flags_stride;
+-                        opj_t1_dec_sigpass_step_mqc(t1, flags2, data2, orient, oneplushalf);
++                        opj_t1_dec_sigpass_step_mqc_vsc(t1, flags2, colflags2, data2, oneplushalf, 1, 3);
+                         data2 += t1->w;
+                 }
+                 data1 += t1->w << 2;
+                 flags1 += t1->flags_stride << 2;
++                colflags1 += t1->flags_stride;
+         }
+         for (i = 0; i < t1->w; ++i) {
+-                OPJ_INT32 *data2 = data1 + i;
+-                opj_flag_t *flags2 = flags1 + i;
++                opj_colflag_t *colflags2 = colflags1 + i;
+                 for (j = k; j < t1->h; ++j) {
+-                        flags2 += t1->flags_stride;
+-                        opj_t1_dec_sigpass_step_mqc(t1, flags2, data2, orient, oneplushalf);
+-                        data2 += t1->w;
+-                }
+-        }
+-}                               /* VSC and  BYPASS by Antonin */
+-
+-static void opj_t1_dec_sigpass_mqc_vsc(
+-                opj_t1_t *t1,
+-                OPJ_INT32 bpno,
+-                OPJ_INT32 orient)
+-{
+-        OPJ_INT32 one, half, oneplushalf, vsc;
+-        OPJ_UINT32 i, j, k;
+-        one = 1 << bpno;
+-        half = one >> 1;
+-        oneplushalf = one | half;
+-        for (k = 0; k < t1->h; k += 4) {
+-                for (i = 0; i < t1->w; ++i) {
+-                        for (j = k; j < k + 4 && j < t1->h; ++j) {
+-                                vsc = (j == k + 3 || j == t1->h - 1) ? 1 : 0;
+-                                opj_t1_dec_sigpass_step_mqc_vsc(
+-                                                t1,
+-                                                &t1->flags[((j+1) * t1->flags_stride) + i + 1],
+-                                                &t1->data[(j * t1->w) + i],
+-                                                orient,
+-                                                oneplushalf,
+-                                                vsc);
+-                        }
++                        vsc = (j == t1->h - 1) ? 1 : 0;
++                        opj_t1_dec_sigpass_step_mqc_vsc(
++                                        t1,
++                                        &t1->flags[((j+1) * t1->flags_stride) + i + 1],
++                                        colflags2,
++                                        &t1->data[(j * t1->w) + i],
++                                        oneplushalf,
++                                        vsc,
++                                        j - k);
+                 }
+         }
+ }                               /* VSC and  BYPASS by Antonin */
+@@ -639,64 +737,81 @@ static void opj_t1_enc_refpass_step(   opj_t1_t *t1,
+ static INLINE void opj_t1_dec_refpass_step_raw(
+                 opj_t1_t *t1,
+                 opj_flag_t *flagsp,
++                opj_colflag_t *colflagsp,
+                 OPJ_INT32 *datap,
+                 OPJ_INT32 poshalf,
+                 OPJ_INT32 neghalf,
+-                OPJ_INT32 vsc)
++                OPJ_INT32 row)
+ {
+-        OPJ_INT32 v, t, flag;
++        OPJ_INT32 v, t;
+        
+         opj_raw_t *raw = t1->raw;       /* RAW component */
+        
+-        flag = vsc ? ((*flagsp) & (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW | T1_SGN_S))) : (*flagsp);
+-        if ((flag & (T1_SIG | T1_VISIT)) == T1_SIG) {
++        if ((*colflagsp & ((T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0) << (T1_COLFLAG_RBS * row))) ==
++            ((T1_COLFLAG_SIG_ROW_0) << (T1_COLFLAG_RBS * row))) {
+                         v = (OPJ_INT32)opj_raw_decode(raw);
+                 t = v ? poshalf : neghalf;
+                 *datap += *datap < 0 ? -t : t;
+-                *flagsp |= T1_REFINE;
++                *colflagsp |= (T1_COLFLAG_REFINE_ROW_0 << (T1_COLFLAG_RBS * row));
+         }
+ }                               /* VSC and  BYPASS by Antonin  */
+ 
+ static INLINE void opj_t1_dec_refpass_step_mqc(
+                 opj_t1_t *t1,
++#ifdef CONSISTENCY_CHECK
+                 opj_flag_t *flagsp,
++#else
++                opj_flag_t *flagsp_unused,
++#endif
++                opj_colflag_t *colflagsp,
+                 OPJ_INT32 *datap,
+                 OPJ_INT32 poshalf,
+-                OPJ_INT32 neghalf)
++                OPJ_INT32 neghalf,
++                OPJ_INT32 row)
+ {
+-        OPJ_INT32 v, t, flag;
++        OPJ_INT32 v, t;
+        
+         opj_mqc_t *mqc = t1->mqc;       /* MQC component */
+-       
+-        flag = *flagsp;
+-        if ((flag & (T1_SIG | T1_VISIT)) == T1_SIG) {
+-                opj_mqc_setcurctx(mqc, opj_t1_getctxno_mag((OPJ_UINT32)flag));      /* ESSAI */
++#ifdef CONSISTENCY_CHECK
++		assert( ((*flagsp & (T1_SIG | T1_VISIT)) == T1_SIG) == 
++				((*colflagsp & ((T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0) << (T1_COLFLAG_RBS * row))) == ((T1_COLFLAG_SIG_ROW_0) << (T1_COLFLAG_RBS * row))) );
++#endif
++        if ((*colflagsp & ((T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0) << (T1_COLFLAG_RBS * row))) ==
++            ((T1_COLFLAG_SIG_ROW_0) << (T1_COLFLAG_RBS * row))) {
++                OPJ_UINT32 tmp1 = (*colflagsp & (T1_COLFLAG_SIG_OTHER_ROW_0 << (T1_COLFLAG_RBS * row))) ? T1_CTXNO_MAG + 1 : T1_CTXNO_MAG;
++                OPJ_UINT32 tmp2 = (*colflagsp & (T1_COLFLAG_REFINE_ROW_0 << (T1_COLFLAG_RBS * row))) ? T1_CTXNO_MAG + 2 : tmp1;
++                opj_mqc_setcurctx(mqc, tmp2);      /* ESSAI */
+                         v = opj_mqc_decode(mqc);
+                 t = v ? poshalf : neghalf;
+                 *datap += *datap < 0 ? -t : t;
+-                *flagsp |= T1_REFINE;
++                *colflagsp |= (T1_COLFLAG_REFINE_ROW_0 << (T1_COLFLAG_RBS * row));
+                 }
+ }                               /* VSC and  BYPASS by Antonin  */
+ 
+ static INLINE void opj_t1_dec_refpass_step_mqc_vsc(
+                 opj_t1_t *t1,
+                 opj_flag_t *flagsp,
++                opj_colflag_t *colflagsp,
+                 OPJ_INT32 *datap,
+                 OPJ_INT32 poshalf,
+                 OPJ_INT32 neghalf,
+-                OPJ_INT32 vsc)
++                OPJ_INT32 vsc,
++                OPJ_INT32 row)
+ {
+         OPJ_INT32 v, t, flag;
+        
+         opj_mqc_t *mqc = t1->mqc;       /* MQC component */
+        
+-        flag = vsc ? ((*flagsp) & (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW | T1_SGN_S))) : (*flagsp);
+-        if ((flag & (T1_SIG | T1_VISIT)) == T1_SIG) {
+-                opj_mqc_setcurctx(mqc, opj_t1_getctxno_mag((OPJ_UINT32)flag));      /* ESSAI */
++        if ((*colflagsp & ((T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0) << (T1_COLFLAG_RBS * row))) ==
++                ((T1_COLFLAG_SIG_ROW_0) << (T1_COLFLAG_RBS * row))) {
++                OPJ_INT32 flag = vsc ? ((*flagsp) & (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW | T1_SGN_S))) : (*flagsp);
++                OPJ_UINT32 tmp1 = (flag & T1_SIG_OTH) ? T1_CTXNO_MAG + 1 : T1_CTXNO_MAG;
++                OPJ_UINT32 tmp2 = (*colflagsp & (T1_COLFLAG_REFINE_ROW_0 << (T1_COLFLAG_RBS * row))) ? T1_CTXNO_MAG + 2 : tmp1;
++                opj_mqc_setcurctx(mqc, tmp2);      /* ESSAI */
+                 v = opj_mqc_decode(mqc);
+                 t = v ? poshalf : neghalf;
+                 *datap += *datap < 0 ? -t : t;
+-                *flagsp |= T1_REFINE;
++                *colflagsp |= (T1_COLFLAG_REFINE_ROW_0 << (T1_COLFLAG_RBS * row));
+         }
+ }                               /* VSC and  BYPASS by Antonin  */
+ 
+@@ -739,89 +854,134 @@ static void opj_t1_dec_refpass_raw(
+         OPJ_INT32 one, poshalf, neghalf;
+         OPJ_UINT32 i, j, k;
+         OPJ_INT32 vsc;
++        opj_colflag_t *colflags1 = &t1->colflags[t1->flags_stride + 1];
+         one = 1 << bpno;
+         poshalf = one >> 1;
+         neghalf = bpno > 0 ? -poshalf : -1;
+         for (k = 0; k < t1->h; k += 4) {
+                 for (i = 0; i < t1->w; ++i) {
++                        opj_colflag_t *colflags2 = colflags1 + i;
+                         for (j = k; j < k + 4 && j < t1->h; ++j) {
+-                                vsc = ((cblksty & J2K_CCP_CBLKSTY_VSC) && (j == k + 3 || j == t1->h - 1)) ? 1 : 0;
+                                 opj_t1_dec_refpass_step_raw(
+                                                 t1,
+                                                 &t1->flags[((j+1) * t1->flags_stride) + i + 1],
++                                                colflags2,
+                                                 &t1->data[(j * t1->w) + i],
+                                                 poshalf,
+-                                                neghalf,
+-                                                vsc);
++                                                neghalf, j - k);
+                         }
+                 }
++                colflags1 += t1->flags_stride;
+         }
+ }                               /* VSC and  BYPASS by Antonin */
+ 
+-static void opj_t1_dec_refpass_mqc(
++#define opj_t1_dec_refpass_mqc_internal(t1, bpno, w, h, flags_stride) \
++{ \
++        OPJ_INT32 one, poshalf, neghalf; \
++        OPJ_UINT32 i, j, k; \
++        OPJ_INT32 *data1 = t1->data; \
++        opj_flag_t *flags1 = &t1->flags[1]; \
++        opj_colflag_t *colflags1 = &t1->colflags[flags_stride + 1]; \
++        one = 1 << bpno; \
++        poshalf = one >> 1; \
++        neghalf = bpno > 0 ? -poshalf : -1; \
++        for (k = 0; k < (h & ~3u); k += 4) { \
++                for (i = 0; i < w; ++i) { \
++                        OPJ_INT32 *data2 = data1 + i; \
++                        opj_flag_t *flags2 = flags1 + i; \
++                        opj_colflag_t *colflags2 = colflags1 + i; \
++                        if( *colflags2 == 0 ) continue; \
++                        flags2 += flags_stride; \
++                        opj_t1_dec_refpass_step_mqc(t1, flags2, colflags2, data2, poshalf, neghalf, 0); \
++                        data2 += w; \
++                        flags2 += flags_stride; \
++                        opj_t1_dec_refpass_step_mqc(t1, flags2, colflags2, data2, poshalf, neghalf, 1); \
++                        data2 += w; \
++                        flags2 += flags_stride; \
++                        opj_t1_dec_refpass_step_mqc(t1, flags2, colflags2, data2, poshalf, neghalf, 2); \
++                        data2 += w; \
++                        flags2 += flags_stride; \
++                        opj_t1_dec_refpass_step_mqc(t1, flags2, colflags2, data2, poshalf, neghalf, 3); \
++                        data2 += w; \
++                } \
++                data1 += w << 2; \
++                flags1 += flags_stride << 2; \
++                colflags1 += flags_stride; \
++        } \
++        for (i = 0; i < w; ++i) { \
++                OPJ_INT32 *data2 = data1 + i; \
++                opj_flag_t *flags2 = flags1 + i; \
++                opj_colflag_t *colflags2 = colflags1 + i; \
++                for (j = k; j < h; ++j) { \
++                        flags2 += flags_stride; \
++                        opj_t1_dec_refpass_step_mqc(t1, flags2, colflags2, data2, poshalf, neghalf, j - k); \
++                        data2 += w; \
++                } \
++        } \
++}
++
++static void opj_t1_dec_refpass_mqc_64x64(
++                opj_t1_t *t1,
++                OPJ_INT32 bpno)
++{
++	opj_t1_dec_refpass_mqc_internal(t1, bpno, 64, 64, 66);
++}
++
++static void opj_t1_dec_refpass_mqc_generic(
++                opj_t1_t *t1,
++                OPJ_INT32 bpno)
++{
++	opj_t1_dec_refpass_mqc_internal(t1, bpno, t1->w, t1->h, t1->flags_stride);
++}
++
++/* VSC and  BYPASS by Antonin */
++static void opj_t1_dec_refpass_mqc_vsc(
+                 opj_t1_t *t1,
+                 OPJ_INT32 bpno)
+ {
+         OPJ_INT32 one, poshalf, neghalf;
+         OPJ_UINT32 i, j, k;
++        OPJ_INT32 vsc;
+         OPJ_INT32 *data1 = t1->data;
+         opj_flag_t *flags1 = &t1->flags[1];
++        opj_colflag_t *colflags1 = &t1->colflags[t1->flags_stride + 1];
+         one = 1 << bpno;
+         poshalf = one >> 1;
+         neghalf = bpno > 0 ? -poshalf : -1;
+-        for (k = 0; k < (t1->h & ~3u); k += 4) {
++        for (k = 0; k < (t1->h & ~3); k += 4) {
+                 for (i = 0; i < t1->w; ++i) {
+                         OPJ_INT32 *data2 = data1 + i;
+                         opj_flag_t *flags2 = flags1 + i;
++                        opj_colflag_t *colflags2 = colflags1 + i;
+                         flags2 += t1->flags_stride;
+-                        opj_t1_dec_refpass_step_mqc(t1, flags2, data2, poshalf, neghalf);
++                        opj_t1_dec_refpass_step_mqc_vsc(t1, flags2, colflags2, data2, poshalf, neghalf, 0, 0);
+                         data2 += t1->w;
+                         flags2 += t1->flags_stride;
+-                        opj_t1_dec_refpass_step_mqc(t1, flags2, data2, poshalf, neghalf);
++                        opj_t1_dec_refpass_step_mqc_vsc(t1, flags2, colflags2, data2, poshalf, neghalf, 0, 1);
+                         data2 += t1->w;
+                         flags2 += t1->flags_stride;
+-                        opj_t1_dec_refpass_step_mqc(t1, flags2, data2, poshalf, neghalf);
++                        opj_t1_dec_refpass_step_mqc_vsc(t1, flags2, colflags2, data2, poshalf, neghalf, 0, 2);
+                         data2 += t1->w;
+                         flags2 += t1->flags_stride;
+-                        opj_t1_dec_refpass_step_mqc(t1, flags2, data2, poshalf, neghalf);
++                        opj_t1_dec_refpass_step_mqc_vsc(t1, flags2, colflags2, data2, poshalf, neghalf, 1, 3);
+                         data2 += t1->w;
+                 }
+                 data1 += t1->w << 2;
+                 flags1 += t1->flags_stride << 2;
++                colflags1 += t1->flags_stride;
+         }
+         for (i = 0; i < t1->w; ++i) {
+-                OPJ_INT32 *data2 = data1 + i;
+-                opj_flag_t *flags2 = flags1 + i;
++                opj_colflag_t *colflags2 = colflags1 + i;
+                 for (j = k; j < t1->h; ++j) {
+-                        flags2 += t1->flags_stride;
+-                        opj_t1_dec_refpass_step_mqc(t1, flags2, data2, poshalf, neghalf);
+-                        data2 += t1->w;
+-                }
+-        }
+-}                               /* VSC and  BYPASS by Antonin */
+-
+-static void opj_t1_dec_refpass_mqc_vsc(
+-                opj_t1_t *t1,
+-                OPJ_INT32 bpno)
+-{
+-        OPJ_INT32 one, poshalf, neghalf;
+-        OPJ_UINT32 i, j, k;
+-        OPJ_INT32 vsc;
+-        one = 1 << bpno;
+-        poshalf = one >> 1;
+-        neghalf = bpno > 0 ? -poshalf : -1;
+-        for (k = 0; k < t1->h; k += 4) {
+-                for (i = 0; i < t1->w; ++i) {
+-                        for (j = k; j < k + 4 && j < t1->h; ++j) {
+-                                vsc = ((j == k + 3 || j == t1->h - 1)) ? 1 : 0;
+-                                opj_t1_dec_refpass_step_mqc_vsc(
+-                                                t1,
+-                                                &t1->flags[((j+1) * t1->flags_stride) + i + 1],
+-                                                &t1->data[(j * t1->w) + i],
+-                                                poshalf,
+-                                                neghalf,
+-                                                vsc);
+-                        }
++                        vsc = (j == t1->h - 1) ? 1 : 0;
++                        opj_t1_dec_refpass_step_mqc_vsc(
++                                        t1,
++                                        &t1->flags[((j+1) * t1->flags_stride) + i + 1],
++                                        colflags2,
++                                        &t1->data[(j * t1->w) + i],
++                                        poshalf, neghalf,
++                                        vsc,
++                                        j - k);
+                 }
+         }
+ }                               /* VSC and  BYPASS by Antonin */
+@@ -831,7 +991,6 @@ static void opj_t1_enc_clnpass_step(
+ 		opj_t1_t *t1,
+ 		opj_flag_t *flagsp,
+ 		OPJ_INT32 *datap,
+-		OPJ_UINT32 orient,
+ 		OPJ_INT32 bpno,
+ 		OPJ_INT32 one,
+ 		OPJ_INT32 *nmsedec,
+@@ -848,7 +1007,7 @@ static void opj_t1_enc_clnpass_step(
+ 		goto LABEL_PARTIAL;
+ 	}
+ 	if (!(*flagsp & (T1_SIG | T1_VISIT))) {
+-		opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc(flag, orient));
++		opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc(mqc, flag));
+ 		v = (opj_int_abs(*datap) & one) ? 1 : 0;
+ 		opj_mqc_encode(mqc, (OPJ_UINT32)v);
+ 		if (v) {
+@@ -866,55 +1025,90 @@ static void opj_t1_enc_clnpass_step(
+ static void opj_t1_dec_clnpass_step_partial(
+ 		opj_t1_t *t1,
+ 		opj_flag_t *flagsp,
++		opj_colflag_t *colflagsp,
+ 		OPJ_INT32 *datap,
+-		OPJ_INT32 orient,
+-		OPJ_INT32 oneplushalf)
++		OPJ_INT32 oneplushalf,
++		OPJ_INT32 row)
+ {
+ 	OPJ_INT32 v, flag;
+ 	opj_mqc_t *mqc = t1->mqc;	/* MQC component */
+ 	
+-	OPJ_ARG_NOT_USED(orient);
+-	
+ 	flag = *flagsp;
+ 	opj_mqc_setcurctx(mqc, opj_t1_getctxno_sc((OPJ_UINT32)flag));
+ 	v = opj_mqc_decode(mqc) ^ opj_t1_getspb((OPJ_UINT32)flag);
+ 	*datap = v ? -oneplushalf : oneplushalf;
+-	opj_t1_updateflags(flagsp, (OPJ_UINT32)v, t1->flags_stride);
++	opj_t1_updateflagscolflags(flagsp, colflagsp, (OPJ_UINT32)v, t1->flags_stride, row);
++#ifdef CONSISTENCY_CHECK
+ 	*flagsp &= ~T1_VISIT;
++#endif
+ }				/* VSC and  BYPASS by Antonin */
+ 
+ static void opj_t1_dec_clnpass_step(
+ 		opj_t1_t *t1,
+ 		opj_flag_t *flagsp,
++		opj_colflag_t *colflagsp,
+ 		OPJ_INT32 *datap,
+-		OPJ_INT32 orient,
+-		OPJ_INT32 oneplushalf)
++		OPJ_INT32 oneplushalf,
++		OPJ_INT32 row)
+ {
+ 	OPJ_INT32 v, flag;
+ 	
+ 	opj_mqc_t *mqc = t1->mqc;	/* MQC component */
+-	
+-	flag = *flagsp;
+-	if (!(flag & (T1_SIG | T1_VISIT))) {
+-		opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc((OPJ_UINT32)flag, (OPJ_UINT32)orient));
++#ifdef CONSISTENCY_CHECK
++	assert( (!(*flagsp & (T1_SIG | T1_VISIT))) == (!(*colflagsp & ((T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0) << (4*row)))) );
++#endif
++	if (!(*colflagsp & ((T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0) << (4*row)))) {
++		flag = *flagsp;
++		opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc(mqc, (OPJ_UINT32)flag));
+ 		if (opj_mqc_decode(mqc)) {
+ 			opj_mqc_setcurctx(mqc, opj_t1_getctxno_sc((OPJ_UINT32)flag));
+ 			v = opj_mqc_decode(mqc) ^ opj_t1_getspb((OPJ_UINT32)flag);
+ 			*datap = v ? -oneplushalf : oneplushalf;
+-			opj_t1_updateflags(flagsp, (OPJ_UINT32)v, t1->flags_stride);
++			opj_t1_updateflagscolflags(flagsp, colflagsp, (OPJ_UINT32)v, t1->flags_stride, row);
+ 		}
+ 	}
++#ifdef CONSISTENCY_CHECK
+ 	*flagsp &= ~T1_VISIT;
++#endif
+ }				/* VSC and  BYPASS by Antonin */
+ 
++static void opj_t1_dec_clnpass_step_only_if_flag_not_sig_visit(
++        opj_t1_t *t1,
++        opj_flag_t *flagsp,
++        opj_colflag_t *colflagsp,
++        OPJ_INT32 *datap,
++        OPJ_INT32 oneplushalf,
++        OPJ_INT32 row,
++        OPJ_INT32 flags_stride)
++{
++    OPJ_INT32 v;
++    OPJ_INT32 flag;
++
++    opj_mqc_t *mqc = t1->mqc;   /* MQC component */
++
++    flag = *flagsp;
++    /*if (!(flag & (T1_SIG | T1_VISIT)))*/
++    {
++        opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc(mqc, (OPJ_UINT32)flag));
++        if (opj_mqc_decode(mqc)) {
++            opj_mqc_setcurctx(mqc, opj_t1_getctxno_sc((OPJ_UINT32)flag));
++            v = opj_mqc_decode(mqc) ^ opj_t1_getspb((OPJ_UINT32)flag);
++            *datap = v ? -oneplushalf : oneplushalf;
++            opj_t1_updateflagscolflags(flagsp, colflagsp, v, flags_stride, row);
++        }
++    }
++    /*flagsp &= ~T1_VISIT;*/
++}
++
+ static void opj_t1_dec_clnpass_step_vsc(
+ 		opj_t1_t *t1,
+ 		opj_flag_t *flagsp,
++        opj_colflag_t *colflagsp,
+ 		OPJ_INT32 *datap,
+-		OPJ_INT32 orient,
+ 		OPJ_INT32 oneplushalf,
+ 		OPJ_INT32 partial,
+-		OPJ_INT32 vsc)
++		OPJ_INT32 vsc,
++        OPJ_INT32 row)
+ {
+ 	OPJ_INT32 v, flag;
+ 	
+@@ -924,23 +1118,24 @@ static void opj_t1_dec_clnpass_step_vsc(
+ 	if (partial) {
+ 		goto LABEL_PARTIAL;
+ 	}
+-	if (!(flag & (T1_SIG | T1_VISIT))) {
+-		opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc((OPJ_UINT32)flag, (OPJ_UINT32)orient));
++	if (!(*colflagsp & ((T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0) << (T1_COLFLAG_RBS * row)))) {
++		opj_mqc_setcurctx(mqc, opj_t1_getctxno_zc(mqc, (OPJ_UINT32)flag));
+ 		if (opj_mqc_decode(mqc)) {
+ LABEL_PARTIAL:
+ 			opj_mqc_setcurctx(mqc, opj_t1_getctxno_sc((OPJ_UINT32)flag));
+ 			v = opj_mqc_decode(mqc) ^ opj_t1_getspb((OPJ_UINT32)flag);
+ 			*datap = v ? -oneplushalf : oneplushalf;
+-			opj_t1_updateflags(flagsp, (OPJ_UINT32)v, t1->flags_stride);
++			opj_t1_updateflagscolflags(flagsp, colflagsp, v, t1->flags_stride, row);
+ 		}
+ 	}
++#ifdef CONSISTENCY_CHECK
+ 	*flagsp &= ~T1_VISIT;
++#endif
+ }
+ 
+ static void opj_t1_enc_clnpass(
+ 		opj_t1_t *t1,
+ 		OPJ_INT32 bpno,
+-		OPJ_UINT32 orient,
+ 		OPJ_INT32 *nmsedec,
+ 		OPJ_UINT32 cblksty)
+ {
+@@ -992,7 +1187,6 @@ static void opj_t1_enc_clnpass(
+ 						t1,
+ 						&t1->flags[((j+1) * t1->flags_stride) + i + 1],
+ 						&t1->data[(j * t1->data_stride) + i],
+-						orient,
+ 						bpno,
+ 						one,
+ 						nmsedec,
+@@ -1003,130 +1197,186 @@ static void opj_t1_enc_clnpass(
+ 	}
+ }
+ 
+-static void opj_t1_dec_clnpass(
++#define MACRO_t1_flags_internal(x,y,flags_stride) t1->flags[((x)*(flags_stride))+(y)]
++
++#define opj_t1_dec_clnpass_internal(consistency_check, t1, bpno, cblksty, w, h, flags_stride) \
++{ \
++	OPJ_INT32 one, half, oneplushalf, agg, runlen, vsc; \
++    OPJ_UINT32 i, j, k; \
++	OPJ_INT32 segsym = cblksty & J2K_CCP_CBLKSTY_SEGSYM; \
++	 \
++	opj_mqc_t *mqc = t1->mqc;	/* MQC component */ \
++	 \
++	one = 1 << bpno; \
++	half = one >> 1; \
++	oneplushalf = one | half; \
++	if (cblksty & J2K_CCP_CBLKSTY_VSC) { \
++	opj_colflag_t *colflags1 = &t1->colflags[flags_stride + 1]; \
++	for (k = 0; k < h; k += 4) { \
++		for (i = 0; i < w; ++i) { \
++			opj_colflag_t *colflags2 = colflags1 + i; \
++			if (k + 3 < h) { \
++					agg = !((*colflags2 & (T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0 | T1_COLFLAG_SIG_OTHER_ROW_0 | \
++						                   T1_COLFLAG_SIG_ROW_1 | T1_COLFLAG_VISIT_ROW_1 | T1_COLFLAG_SIG_OTHER_ROW_1 | \
++						                   T1_COLFLAG_SIG_ROW_2 | T1_COLFLAG_VISIT_ROW_2 | T1_COLFLAG_SIG_OTHER_ROW_2 | \
++						                   T1_COLFLAG_SIG_ROW_3 | T1_COLFLAG_VISIT_ROW_3)) || \
++						  ((MACRO_t1_flags_internal(1 + k + 3,1 + i,flags_stride) \
++						   & ((~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW |	T1_SGN_S))) & (T1_SIG_OTH)))); \
++				} else { \
++				agg = 0; \
++			} \
++			if (agg) { \
++				opj_mqc_setcurctx(mqc, T1_CTXNO_AGG); \
++				if (!opj_mqc_decode(mqc)) { \
++					continue; \
++				} \
++				opj_mqc_setcurctx(mqc, T1_CTXNO_UNI); \
++				runlen = opj_mqc_decode(mqc); \
++				runlen = (runlen << 1) | opj_mqc_decode(mqc); \
++			} else { \
++				runlen = 0; \
++			} \
++			for (j = k + (OPJ_UINT32)runlen; j < k + 4 && j < h; ++j) { \
++					vsc = (j == k + 3 || j == h - 1) ? 1 : 0; \
++					opj_t1_dec_clnpass_step_vsc( \
++						t1, \
++						&t1->flags[((j+1) * flags_stride) + i + 1], \
++						colflags2, \
++						&t1->data[(j * w) + i], \
++						oneplushalf, \
++						agg && (j == k + (OPJ_UINT32)runlen), \
++						vsc, j - k); \
++			} \
++			*colflags2 &= ~(T1_COLFLAG_VISIT_ROW_0 | T1_COLFLAG_VISIT_ROW_1 | T1_COLFLAG_VISIT_ROW_2 | T1_COLFLAG_VISIT_ROW_3); \
++		} \
++		colflags1 += flags_stride; \
++	} \
++	} else { \
++		OPJ_INT32 *data1 = t1->data; \
++		opj_flag_t *flags1 = &t1->flags[1]; \
++		opj_colflag_t *colflags1 = &t1->colflags[flags_stride + 1]; \
++		for (k = 0; k < (h & ~3u); k += 4) { \
++			for (i = 0; i < w; ++i) { \
++				OPJ_INT32 *data2 = data1 + i; \
++				opj_flag_t *flags2 = flags1 + i; \
++				opj_colflag_t *colflags2 = colflags1 + i; \
++				opj_colflag_t colflags = *colflags2; \
++				agg = !(colflags & (T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0 | T1_COLFLAG_SIG_OTHER_ROW_0 | \
++									 T1_COLFLAG_SIG_ROW_1 | T1_COLFLAG_VISIT_ROW_1 | T1_COLFLAG_SIG_OTHER_ROW_1 | \
++								 	 T1_COLFLAG_SIG_ROW_2 | T1_COLFLAG_VISIT_ROW_2 | T1_COLFLAG_SIG_OTHER_ROW_2 | \
++									 T1_COLFLAG_SIG_ROW_3 | T1_COLFLAG_VISIT_ROW_3 | T1_COLFLAG_SIG_OTHER_ROW_3)); \
++				if( consistency_check ) { \
++					assert( agg == !((MACRO_t1_flags_internal(1 + k, 1 + i,flags_stride) | \
++									  MACRO_t1_flags_internal(1 + k + 1, 1 + i,flags_stride) | \
++									  MACRO_t1_flags_internal(1 + k + 2, 1 + i,flags_stride) | \
++									  MACRO_t1_flags_internal(1 + k + 3, 1 + i,flags_stride)) & (T1_SIG | T1_VISIT | T1_SIG_OTH)) ); \
++				} \
++				if (agg) { \
++					opj_mqc_setcurctx(mqc, T1_CTXNO_AGG); \
++					if (!opj_mqc_decode(mqc)) { \
++						continue; \
++					} \
++					opj_mqc_setcurctx(mqc, T1_CTXNO_UNI); \
++					runlen = opj_mqc_decode(mqc); \
++					runlen = (runlen << 1) | opj_mqc_decode(mqc); \
++					flags2 += (OPJ_UINT32)runlen * flags_stride; \
++					data2 += (OPJ_UINT32)runlen * w; \
++					for (j = (OPJ_UINT32)runlen; j < 4; ++j) { \
++						flags2 += flags_stride; \
++						if (j == (OPJ_UINT32)runlen) { \
++							opj_t1_dec_clnpass_step_partial(t1, flags2, colflags2, data2, oneplushalf, j); \
++						} else { \
++							opj_t1_dec_clnpass_step(t1, flags2, colflags2, data2, oneplushalf, j); \
++						} \
++						data2 += w; \
++					} \
++				} else { \
++					flags2 += flags_stride; \
++					if( consistency_check ) { assert( (!(colflags & (T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0))) == (!(*flags2 & (T1_SIG | T1_VISIT))) ); } \
++					if (!(colflags & (T1_COLFLAG_SIG_ROW_0 | T1_COLFLAG_VISIT_ROW_0))) {\
++						opj_t1_dec_clnpass_step_only_if_flag_not_sig_visit(t1, flags2, colflags2, data2, oneplushalf, 0, flags_stride); \
++					} \
++					if( consistency_check ) *flags2 &= ~T1_VISIT; \
++					data2 += w; \
++					flags2 += flags_stride; \
++					if( consistency_check ) { assert( (!(colflags & (T1_COLFLAG_SIG_ROW_1 | T1_COLFLAG_VISIT_ROW_1))) == (!(*flags2 & (T1_SIG | T1_VISIT))) ); } \
++					if (!(colflags & (T1_COLFLAG_SIG_ROW_1 | T1_COLFLAG_VISIT_ROW_1))) {\
++						opj_t1_dec_clnpass_step_only_if_flag_not_sig_visit(t1, flags2, colflags2, data2, oneplushalf, 1, flags_stride); \
++					} \
++					if( consistency_check ) *flags2 &= ~T1_VISIT; \
++					data2 += w; \
++					flags2 += flags_stride; \
++					if( consistency_check ) { assert( (!(colflags & (T1_COLFLAG_SIG_ROW_2 | T1_COLFLAG_VISIT_ROW_2))) == (!(*flags2 & (T1_SIG | T1_VISIT))) ); } \
++					if (!(colflags & (T1_COLFLAG_SIG_ROW_2 | T1_COLFLAG_VISIT_ROW_2))) {\
++						opj_t1_dec_clnpass_step_only_if_flag_not_sig_visit(t1, flags2, colflags2, data2, oneplushalf, 2, flags_stride); \
++					} \
++					if( consistency_check ) *flags2 &= ~T1_VISIT; \
++					data2 += w; \
++					flags2 += flags_stride; \
++					if( consistency_check ) { assert( (!(colflags & (T1_COLFLAG_SIG_ROW_3 | T1_COLFLAG_VISIT_ROW_3))) == (!(*flags2 & (T1_SIG | T1_VISIT))) ); } \
++					if (!(colflags & (T1_COLFLAG_SIG_ROW_3 | T1_COLFLAG_VISIT_ROW_3))) {\
++						opj_t1_dec_clnpass_step_only_if_flag_not_sig_visit(t1, flags2, colflags2, data2, oneplushalf, 3, flags_stride); \
++					} \
++					if( consistency_check ) *flags2 &= ~T1_VISIT; \
++					data2 += w; \
++				} \
++				*colflags2 &= ~(T1_COLFLAG_VISIT_ROW_0 | T1_COLFLAG_VISIT_ROW_1 | T1_COLFLAG_VISIT_ROW_2 | T1_COLFLAG_VISIT_ROW_3); \
++			} \
++			data1 += w << 2; \
++			flags1 += flags_stride << 2; \
++			colflags1 += flags_stride; \
++		} \
++		for (i = 0; i < w; ++i) { \
++			OPJ_INT32 *data2 = data1 + i; \
++			opj_flag_t *flags2 = flags1 + i; \
++			opj_colflag_t *colflags2 = colflags1 + i; \
++			for (j = k; j < h; ++j) { \
++				flags2 += flags_stride; \
++				opj_t1_dec_clnpass_step(t1, flags2, colflags2, data2, oneplushalf, j - k); \
++				data2 += w; \
++			} \
++			*colflags2 &= ~(T1_COLFLAG_VISIT_ROW_0 | T1_COLFLAG_VISIT_ROW_1 | T1_COLFLAG_VISIT_ROW_2 | T1_COLFLAG_VISIT_ROW_3); \
++		} \
++	} \
++ \
++	if (segsym) { \
++		OPJ_INT32 v = 0; \
++		opj_mqc_setcurctx(mqc, T1_CTXNO_UNI); \
++		v = opj_mqc_decode(mqc); \
++		v = (v << 1) | opj_mqc_decode(mqc); \
++		v = (v << 1) | opj_mqc_decode(mqc); \
++		v = (v << 1) | opj_mqc_decode(mqc); \
++		/* \
++		if (v!=0xa) { \
++			opj_event_msg(t1->cinfo, EVT_WARNING, "Bad segmentation symbol %x\n", v); \
++		} \
++		*/ \
++	} \
++}				/* VSC and  BYPASS by Antonin */
++
++static void opj_t1_dec_clnpass_64x64(
+ 		opj_t1_t *t1,
+ 		OPJ_INT32 bpno,
+-		OPJ_INT32 orient,
+ 		OPJ_INT32 cblksty)
+ {
+-	OPJ_INT32 one, half, oneplushalf, agg, runlen, vsc;
+-    OPJ_UINT32 i, j, k;
+-	OPJ_INT32 segsym = cblksty & J2K_CCP_CBLKSTY_SEGSYM;
+-	
+-	opj_mqc_t *mqc = t1->mqc;	/* MQC component */
+-	
+-	one = 1 << bpno;
+-	half = one >> 1;
+-	oneplushalf = one | half;
+-	if (cblksty & J2K_CCP_CBLKSTY_VSC) {
+-	for (k = 0; k < t1->h; k += 4) {
+-		for (i = 0; i < t1->w; ++i) {
+-			if (k + 3 < t1->h) {
+-					agg = !(MACRO_t1_flags(1 + k,1 + i) & (T1_SIG | T1_VISIT | T1_SIG_OTH)
+-						|| MACRO_t1_flags(1 + k + 1,1 + i) & (T1_SIG | T1_VISIT | T1_SIG_OTH)
+-						|| MACRO_t1_flags(1 + k + 2,1 + i) & (T1_SIG | T1_VISIT | T1_SIG_OTH)
+-						|| (MACRO_t1_flags(1 + k + 3,1 + i) 
+-						& (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW |	T1_SGN_S))) & (T1_SIG | T1_VISIT | T1_SIG_OTH));
+-				} else {
+-				agg = 0;
+-			}
+-			if (agg) {
+-				opj_mqc_setcurctx(mqc, T1_CTXNO_AGG);
+-				if (!opj_mqc_decode(mqc)) {
+-					continue;
+-				}
+-				opj_mqc_setcurctx(mqc, T1_CTXNO_UNI);
+-				runlen = opj_mqc_decode(mqc);
+-				runlen = (runlen << 1) | opj_mqc_decode(mqc);
+-			} else {
+-				runlen = 0;
+-			}
+-			for (j = k + (OPJ_UINT32)runlen; j < k + 4 && j < t1->h; ++j) {
+-					vsc = (j == k + 3 || j == t1->h - 1) ? 1 : 0;
+-					opj_t1_dec_clnpass_step_vsc(
+-						t1,
+-						&t1->flags[((j+1) * t1->flags_stride) + i + 1],
+-						&t1->data[(j * t1->w) + i],
+-						orient,
+-						oneplushalf,
+-						agg && (j == k + (OPJ_UINT32)runlen),
+-						vsc);
+-			}
+-		}
+-	}
+-	} else {
+-		OPJ_INT32 *data1 = t1->data;
+-		opj_flag_t *flags1 = &t1->flags[1];
+-		for (k = 0; k < (t1->h & ~3u); k += 4) {
+-			for (i = 0; i < t1->w; ++i) {
+-				OPJ_INT32 *data2 = data1 + i;
+-				opj_flag_t *flags2 = flags1 + i;
+-				agg = !((MACRO_t1_flags(1 + k, 1 + i) |
+-							MACRO_t1_flags(1 + k + 1, 1 + i) |
+-							MACRO_t1_flags(1 + k + 2, 1 + i) |
+-							MACRO_t1_flags(1 + k + 3, 1 + i)) & (T1_SIG | T1_VISIT | T1_SIG_OTH));
+-				if (agg) {
+-					opj_mqc_setcurctx(mqc, T1_CTXNO_AGG);
+-					if (!opj_mqc_decode(mqc)) {
+-						continue;
+-					}
+-					opj_mqc_setcurctx(mqc, T1_CTXNO_UNI);
+-					runlen = opj_mqc_decode(mqc);
+-					runlen = (runlen << 1) | opj_mqc_decode(mqc);
+-					flags2 += (OPJ_UINT32)runlen * t1->flags_stride;
+-					data2 += (OPJ_UINT32)runlen * t1->w;
+-					for (j = (OPJ_UINT32)runlen; j < 4 && j < t1->h; ++j) {
+-						flags2 += t1->flags_stride;
+-						if (agg && (j == (OPJ_UINT32)runlen)) {
+-							opj_t1_dec_clnpass_step_partial(t1, flags2, data2, orient, oneplushalf);
+-						} else {
+-							opj_t1_dec_clnpass_step(t1, flags2, data2, orient, oneplushalf);
+-						}
+-						data2 += t1->w;
+-					}
+-				} else {
+-					flags2 += t1->flags_stride;
+-					opj_t1_dec_clnpass_step(t1, flags2, data2, orient, oneplushalf);
+-					data2 += t1->w;
+-					flags2 += t1->flags_stride;
+-					opj_t1_dec_clnpass_step(t1, flags2, data2, orient, oneplushalf);
+-					data2 += t1->w;
+-					flags2 += t1->flags_stride;
+-					opj_t1_dec_clnpass_step(t1, flags2, data2, orient, oneplushalf);
+-					data2 += t1->w;
+-					flags2 += t1->flags_stride;
+-					opj_t1_dec_clnpass_step(t1, flags2, data2, orient, oneplushalf);
+-					data2 += t1->w;
+-				}
+-			}
+-			data1 += t1->w << 2;
+-			flags1 += t1->flags_stride << 2;
+-		}
+-		for (i = 0; i < t1->w; ++i) {
+-			OPJ_INT32 *data2 = data1 + i;
+-			opj_flag_t *flags2 = flags1 + i;
+-			for (j = k; j < t1->h; ++j) {
+-				flags2 += t1->flags_stride;
+-				opj_t1_dec_clnpass_step(t1, flags2, data2, orient, oneplushalf);
+-				data2 += t1->w;
+-			}
+-		}
+-	}
++#ifdef CONSISTENCY_CHECK
++	opj_t1_dec_clnpass_internal(OPJ_TRUE, t1, bpno, cblksty, 64, 64, 66);
++#else
++	opj_t1_dec_clnpass_internal(OPJ_FALSE, t1, bpno, cblksty, 64, 64, 66);
++#endif
++}
+ 
+-	if (segsym) {
+-		OPJ_INT32 v = 0;
+-		opj_mqc_setcurctx(mqc, T1_CTXNO_UNI);
+-		v = opj_mqc_decode(mqc);
+-		v = (v << 1) | opj_mqc_decode(mqc);
+-		v = (v << 1) | opj_mqc_decode(mqc);
+-		v = (v << 1) | opj_mqc_decode(mqc);
+-		/*
+-		if (v!=0xa) {
+-			opj_event_msg(t1->cinfo, EVT_WARNING, "Bad segmentation symbol %x\n", v);
+-		} 
+-		*/
+-	}
+-}				/* VSC and  BYPASS by Antonin */
++static void opj_t1_dec_clnpass_generic(
++		opj_t1_t *t1,
++		OPJ_INT32 bpno,
++		OPJ_INT32 cblksty)
++{
++#ifdef CONSISTENCY_CHECK
++	opj_t1_dec_clnpass_internal(OPJ_TRUE, t1, bpno, cblksty, t1->w, t1->h, t1->flags_stride);
++#else
++	opj_t1_dec_clnpass_internal(OPJ_FALSE, t1, bpno, cblksty, t1->w, t1->h, t1->flags_stride);
++#endif
++}
+ 
+ 
+ /** mod fixed_quality */
+@@ -1198,6 +1448,21 @@ static OPJ_BOOL opj_t1_allocate_buffers(
+ 		t1->flagssize=flagssize;
+ 	}
+ 	memset(t1->flags,0,flagssize * sizeof(opj_flag_t));
++	
++	if (!t1->encoder) {
++		OPJ_UINT32 colflags_size=t1->flags_stride * ((h+3) / 4 + 2);
++
++		if(colflags_size > t1->colflags_size){
++			opj_aligned_free(t1->colflags);
++			t1->colflags = (opj_colflag_t*) opj_aligned_malloc(colflags_size * sizeof(opj_colflag_t));
++			if(!t1->colflags){
++				/* FIXME event manager error callback */
++				return OPJ_FALSE;
++			}
++			t1->colflags_size=colflags_size;
++		}
++		memset(t1->colflags,0,colflags_size * sizeof(opj_colflag_t));
++	}
+ 
+ 	t1->w=w;
+ 	t1->h=h;
+@@ -1268,16 +1533,147 @@ void opj_t1_destroy(opj_t1_t *p_t1)
+ 		p_t1->flags = 00;
+ 	}
+ 
++	if (p_t1->colflags) {
++		opj_aligned_free(p_t1->colflags);
++		p_t1->colflags = 00;
++	}
+ 	opj_free(p_t1);
+ }
+ 
+-OPJ_BOOL opj_t1_decode_cblks(   opj_t1_t* t1,
+-                            opj_tcd_tilecomp_t* tilec,
+-                            opj_tccp_t* tccp
+-                            )
++typedef struct
++{
++    OPJ_UINT32 resno;
++    opj_tcd_cblk_dec_t* cblk;
++    opj_tcd_band_t* band;
++    opj_tcd_tilecomp_t* tilec;
++    opj_tccp_t* tccp;
++    volatile OPJ_BOOL* pret;
++} opj_t1_cblk_decode_processing_job_t;
++
++static void opj_t1_destroy_wrapper(void* t1)
++{
++    opj_t1_destroy( (opj_t1_t*) t1 );
++}
++
++static void opj_t1_clbl_decode_processor(void* user_data, opj_tls_t* tls)
++{
++    opj_tcd_cblk_dec_t* cblk;
++    opj_tcd_band_t* band;
++    opj_tcd_tilecomp_t* tilec;
++    opj_tccp_t* tccp;
++    OPJ_INT32* restrict datap;
++    OPJ_UINT32 cblk_w, cblk_h;
++    OPJ_INT32 x, y;
++    OPJ_UINT32 i, j;
++    opj_t1_cblk_decode_processing_job_t* job;
++    opj_t1_t* t1;
++    OPJ_UINT32 resno;
++    OPJ_UINT32 tile_w;
++
++    job = (opj_t1_cblk_decode_processing_job_t*) user_data;
++    resno = job->resno;
++    cblk = job->cblk;
++    band = job->band;
++    tilec = job->tilec;
++    tccp = job->tccp;
++    tile_w = (OPJ_UINT32)(tilec->x1 - tilec->x0);
++
++    if( !*(job->pret) )
++    {
++        opj_free(job);
++        return;
++    }
++
++    t1 = (opj_t1_t*) opj_tls_get(tls, OPJ_TLS_KEY_T1);
++    if( t1 == NULL )
++    {
++        t1 = opj_t1_create( OPJ_FALSE );
++        opj_tls_set( tls, OPJ_TLS_KEY_T1, t1, opj_t1_destroy_wrapper );
++    }
++
++    if (OPJ_FALSE == opj_t1_decode_cblk(
++                            t1,
++                            cblk,
++                            band->bandno,
++                            (OPJ_UINT32)tccp->roishift,
++                            tccp->cblksty)) {
++            *(job->pret) = OPJ_FALSE;
++            opj_free(job);
++            return;
++    }
++
++    x = cblk->x0 - band->x0;
++    y = cblk->y0 - band->y0;
++    if (band->bandno & 1) {
++        opj_tcd_resolution_t* pres = &tilec->resolutions[resno - 1];
++        x += pres->x1 - pres->x0;
++    }
++    if (band->bandno & 2) {
++        opj_tcd_resolution_t* pres = &tilec->resolutions[resno - 1];
++        y += pres->y1 - pres->y0;
++    }
++
++    datap=t1->data;
++    cblk_w = t1->w;
++    cblk_h = t1->h;
++
++    if (tccp->roishift) {
++        OPJ_INT32 thresh = 1 << tccp->roishift;
++        for (j = 0; j < cblk_h; ++j) {
++            for (i = 0; i < cblk_w; ++i) {
++                OPJ_INT32 val = datap[(j * cblk_w) + i];
++                OPJ_INT32 mag = abs(val);
++                if (mag >= thresh) {
++                    mag >>= tccp->roishift;
++                    datap[(j * cblk_w) + i] = val < 0 ? -mag : mag;
++                }
++            }
++        }
++    }
++    if (tccp->qmfbid == 1) {
++        OPJ_INT32* restrict tiledp = &tilec->data[(OPJ_UINT32)y * tile_w + (OPJ_UINT32)x];
++        for (j = 0; j < cblk_h; ++j) {
++            i = 0;
++            for (; i < (cblk_w & ~3); i += 4) {
++                OPJ_INT32 tmp0 = datap[(j * cblk_w) + i];
++                OPJ_INT32 tmp1 = datap[(j * cblk_w) + i+1];
++                OPJ_INT32 tmp2 = datap[(j * cblk_w) + i+2];
++                OPJ_INT32 tmp3 = datap[(j * cblk_w) + i+3];
++                ((OPJ_INT32*)tiledp)[(j * tile_w) + i] = tmp0/2;
++                ((OPJ_INT32*)tiledp)[(j * tile_w) + i+1] = tmp1/2;
++                ((OPJ_INT32*)tiledp)[(j * tile_w) + i+2] = tmp2/2;
++                ((OPJ_INT32*)tiledp)[(j * tile_w) + i+3] = tmp3/2;
++            }
++            for (; i < cblk_w; ++i) {
++                OPJ_INT32 tmp = datap[(j * cblk_w) + i];
++                ((OPJ_INT32*)tiledp)[(j * tile_w) + i] = tmp/2;
++            }
++        }
++    } else {        /* if (tccp->qmfbid == 0) */
++        OPJ_FLOAT32* restrict tiledp = (OPJ_FLOAT32*) &tilec->data[(OPJ_UINT32)y * tile_w + (OPJ_UINT32)x];
++        for (j = 0; j < cblk_h; ++j) {
++            OPJ_FLOAT32* restrict tiledp2 = tiledp;
++            for (i = 0; i < cblk_w; ++i) {
++                OPJ_FLOAT32 tmp = (OPJ_FLOAT32)*datap * band->stepsize;
++                *tiledp2 = tmp;
++                datap++;
++                tiledp2++;
++            }
++            tiledp += tile_w;
++        }
++    }
++
++    opj_free(job);
++}
++
++
++void opj_t1_decode_cblks( opj_thread_pool_t* tp,
++                          volatile OPJ_BOOL* pret,
++                          opj_tcd_tilecomp_t* tilec,
++                          opj_tccp_t* tccp
++                         )
+ {
+ 	OPJ_UINT32 resno, bandno, precno, cblkno;
+-	OPJ_UINT32 tile_w = (OPJ_UINT32)(tilec->x1 - tilec->x0);
+ 
+ 	for (resno = 0; resno < tilec->minimum_num_resolutions; ++resno) {
+ 		opj_tcd_resolution_t* res = &tilec->resolutions[resno];
+@@ -1290,74 +1686,29 @@ OPJ_BOOL opj_t1_decode_cblks(   opj_t1_t* t1,
+ 
+ 				for (cblkno = 0; cblkno < precinct->cw * precinct->ch; ++cblkno) {
+ 					opj_tcd_cblk_dec_t* cblk = &precinct->cblks.dec[cblkno];
+-					OPJ_INT32* restrict datap;
+-					OPJ_UINT32 cblk_w, cblk_h;
+-					OPJ_INT32 x, y;
+-					OPJ_UINT32 i, j;
+-
+-                    if (OPJ_FALSE == opj_t1_decode_cblk(
+-                                            t1,
+-                                            cblk,
+-                                            band->bandno,
+-                                            (OPJ_UINT32)tccp->roishift,
+-                                            tccp->cblksty)) {
+-                            return OPJ_FALSE;
+-                    }
++                    opj_t1_cblk_decode_processing_job_t* job;
+ 
+-					x = cblk->x0 - band->x0;
+-					y = cblk->y0 - band->y0;
+-					if (band->bandno & 1) {
+-						opj_tcd_resolution_t* pres = &tilec->resolutions[resno - 1];
+-						x += pres->x1 - pres->x0;
+-					}
+-					if (band->bandno & 2) {
+-						opj_tcd_resolution_t* pres = &tilec->resolutions[resno - 1];
+-						y += pres->y1 - pres->y0;
+-					}
+-
+-					datap=t1->data;
+-					cblk_w = t1->w;
+-					cblk_h = t1->h;
+-
+-					if (tccp->roishift) {
+-						OPJ_INT32 thresh = 1 << tccp->roishift;
+-						for (j = 0; j < cblk_h; ++j) {
+-							for (i = 0; i < cblk_w; ++i) {
+-								OPJ_INT32 val = datap[(j * cblk_w) + i];
+-								OPJ_INT32 mag = abs(val);
+-								if (mag >= thresh) {
+-									mag >>= tccp->roishift;
+-									datap[(j * cblk_w) + i] = val < 0 ? -mag : mag;
+-								}
+-							}
+-						}
+-					}
+-					if (tccp->qmfbid == 1) {
+-                        OPJ_INT32* restrict tiledp = &tilec->data[(OPJ_UINT32)y * tile_w + (OPJ_UINT32)x];
+-						for (j = 0; j < cblk_h; ++j) {
+-							for (i = 0; i < cblk_w; ++i) {
+-								OPJ_INT32 tmp = datap[(j * cblk_w) + i];
+-								((OPJ_INT32*)tiledp)[(j * tile_w) + i] = tmp/2;
+-							}
+-						}
+-					} else {		/* if (tccp->qmfbid == 0) */
+-                        OPJ_FLOAT32* restrict tiledp = (OPJ_FLOAT32*) &tilec->data[(OPJ_UINT32)y * tile_w + (OPJ_UINT32)x];
+-						for (j = 0; j < cblk_h; ++j) {
+-                            OPJ_FLOAT32* restrict tiledp2 = tiledp;
+-							for (i = 0; i < cblk_w; ++i) {
+-                                OPJ_FLOAT32 tmp = (OPJ_FLOAT32)*datap * band->stepsize;
+-                                *tiledp2 = tmp;
+-                                datap++;
+-                                tiledp2++;
+-							}
+-                            tiledp += tile_w;
+-						}
+-					}
++                    job = (opj_t1_cblk_decode_processing_job_t*) opj_calloc(1, sizeof(opj_t1_cblk_decode_processing_job_t));
++                    if( !job )
++                    {
++                        *pret = OPJ_FALSE;
++                        return;
++                    }
++                    job->resno = resno;
++                    job->cblk = cblk;
++                    job->band = band;
++                    job->tilec = tilec;
++                    job->tccp = tccp;
++                    job->pret = pret;
++                    opj_thread_pool_submit_job( tp, opj_t1_clbl_decode_processor, job );
++                    if( !(*pret) )
++                        return;
+ 				} /* cblkno */
+ 			} /* precno */
+ 		} /* bandno */
+ 	} /* resno */
+-        return OPJ_TRUE;
++
++    return;
+ }
+ 
+ 
+@@ -1369,12 +1720,14 @@ static OPJ_BOOL opj_t1_decode_cblk(opj_t1_t *t1,
+ {
+ 	opj_raw_t *raw = t1->raw;	/* RAW component */
+ 	opj_mqc_t *mqc = t1->mqc;	/* MQC component */
+-
++	
+ 	OPJ_INT32 bpno_plus_one;
+ 	OPJ_UINT32 passtype;
+ 	OPJ_UINT32 segno, passno;
+ 	OPJ_BYTE type = T1_TYPE_MQ; /* BYPASS mode */
+ 
++	mqc->lut_ctxno_zc_orient = lut_ctxno_zc + orient * 256;
++
+ 	if(!opj_t1_allocate_buffers(
+ 				t1,
+ 				(OPJ_UINT32)(cblk->x1 - cblk->x0),
+@@ -1408,45 +1761,91 @@ static OPJ_BOOL opj_t1_decode_cblk(opj_t1_t *t1,
+             }
+ 		}
+ 
+-		for (passno = 0; (passno < seg->real_num_passes) && (bpno_plus_one >= 1); ++passno) {
+-            switch (passtype) {
+-                case 0:
+-                    if (type == T1_TYPE_RAW) {
+-                        opj_t1_dec_sigpass_raw(t1, bpno_plus_one, (OPJ_INT32)orient, (OPJ_INT32)cblksty);
+-                    } else {
+-                        if (cblksty & J2K_CCP_CBLKSTY_VSC) {
+-                            opj_t1_dec_sigpass_mqc_vsc(t1, bpno_plus_one, (OPJ_INT32)orient);
+-                        } else {
+-                            opj_t1_dec_sigpass_mqc(t1, bpno_plus_one, (OPJ_INT32)orient);
+-                        }
+-                    }
+-                    break;
+-                case 1:
+-                    if (type == T1_TYPE_RAW) {
+-                            opj_t1_dec_refpass_raw(t1, bpno_plus_one, (OPJ_INT32)cblksty);
+-                    } else {
+-                        if (cblksty & J2K_CCP_CBLKSTY_VSC) {
+-                            opj_t1_dec_refpass_mqc_vsc(t1, bpno_plus_one);
+-                        } else {
+-                            opj_t1_dec_refpass_mqc(t1, bpno_plus_one);
+-                        }
+-                    }
+-                    break;
+-                case 2:
+-                    opj_t1_dec_clnpass(t1, bpno_plus_one, (OPJ_INT32)orient, (OPJ_INT32)cblksty);
+-                    break;
+-            }
+-
+-			if ((cblksty & J2K_CCP_CBLKSTY_RESET) && type == T1_TYPE_MQ) {
+-				opj_mqc_resetstates(mqc);
+-				opj_mqc_setstate(mqc, T1_CTXNO_UNI, 0, 46);
+-				opj_mqc_setstate(mqc, T1_CTXNO_AGG, 0, 3);
+-				opj_mqc_setstate(mqc, T1_CTXNO_ZC, 0, 4);
+-			}
+-			if (++passtype == 3) {
+-				passtype = 0;
+-				bpno_plus_one--;
+-			}
++		if( t1->w == 64 && t1->h == 64 )
++		{
++		  for (passno = 0; (passno < seg->real_num_passes) && (bpno_plus_one >= 1); ++passno) {
++			  switch (passtype) {
++				  case 0:
++					  if (type == T1_TYPE_RAW) {
++						  opj_t1_dec_sigpass_raw(t1, bpno_plus_one, (OPJ_INT32)cblksty);
++					  } else {
++						  if (cblksty & J2K_CCP_CBLKSTY_VSC) {
++							  opj_t1_dec_sigpass_mqc_vsc(t1, bpno_plus_one);
++						  } else {
++							  opj_t1_dec_sigpass_mqc_64x64(t1, bpno_plus_one);
++						  }
++					  }
++					  break;
++				  case 1:
++					  if (type == T1_TYPE_RAW) {
++							  opj_t1_dec_refpass_raw(t1, bpno_plus_one, (OPJ_INT32)cblksty);
++					  } else {
++						  if (cblksty & J2K_CCP_CBLKSTY_VSC) {
++							  opj_t1_dec_refpass_mqc_vsc(t1, bpno_plus_one);
++						  } else {
++							  opj_t1_dec_refpass_mqc_64x64(t1, bpno_plus_one);
++						  }
++					  }
++					  break;
++				  case 2:
++					  opj_t1_dec_clnpass_64x64(t1, bpno_plus_one, (OPJ_INT32)cblksty);
++					  break;
++			  }
++
++			  if ((cblksty & J2K_CCP_CBLKSTY_RESET) && type == T1_TYPE_MQ) {
++				  opj_mqc_resetstates(mqc);
++				  opj_mqc_setstate(mqc, T1_CTXNO_UNI, 0, 46);
++				  opj_mqc_setstate(mqc, T1_CTXNO_AGG, 0, 3);
++				  opj_mqc_setstate(mqc, T1_CTXNO_ZC, 0, 4);
++			  }
++			  if (++passtype == 3) {
++				  passtype = 0;
++				  bpno_plus_one--;
++			  }
++		  }
++		}
++		else
++		{
++		  for (passno = 0; (passno < seg->real_num_passes) && (bpno_plus_one >= 1); ++passno) {
++			  switch (passtype) {
++				  case 0:
++					  if (type == T1_TYPE_RAW) {
++						  opj_t1_dec_sigpass_raw(t1, bpno_plus_one, (OPJ_INT32)cblksty);
++					  } else {
++						  if (cblksty & J2K_CCP_CBLKSTY_VSC) {
++							  opj_t1_dec_sigpass_mqc_vsc(t1, bpno_plus_one);
++						  } else {
++							  opj_t1_dec_sigpass_mqc_generic(t1, bpno_plus_one);
++						  }
++					  }
++					  break;
++				  case 1:
++					  if (type == T1_TYPE_RAW) {
++							  opj_t1_dec_refpass_raw(t1, bpno_plus_one, (OPJ_INT32)cblksty);
++					  } else {
++						  if (cblksty & J2K_CCP_CBLKSTY_VSC) {
++							  opj_t1_dec_refpass_mqc_vsc(t1, bpno_plus_one);
++						  } else {
++							  opj_t1_dec_refpass_mqc_generic(t1, bpno_plus_one);
++						  }
++					  }
++					  break;
++				  case 2:
++					  opj_t1_dec_clnpass_generic(t1, bpno_plus_one, (OPJ_INT32)cblksty);
++					  break;
++			  }
++
++			  if ((cblksty & J2K_CCP_CBLKSTY_RESET) && type == T1_TYPE_MQ) {
++				  opj_mqc_resetstates(mqc);
++				  opj_mqc_setstate(mqc, T1_CTXNO_UNI, 0, 46);
++				  opj_mqc_setstate(mqc, T1_CTXNO_AGG, 0, 3);
++				  opj_mqc_setstate(mqc, T1_CTXNO_ZC, 0, 4);
++			  }
++			  if (++passtype == 3) {
++				  passtype = 0;
++				  bpno_plus_one--;
++			  }
++		  }
+ 		}
+ 	}
+     return OPJ_TRUE;
+@@ -1585,6 +1984,8 @@ static void opj_t1_encode_cblk(opj_t1_t *t1,
+ 	OPJ_BYTE type = T1_TYPE_MQ;
+ 	OPJ_FLOAT64 tempwmsedec;
+ 
++	mqc->lut_ctxno_zc_orient = lut_ctxno_zc + orient * 256;
++
+ 	max = 0;
+ 	for (i = 0; i < t1->w; ++i) {
+ 		for (j = 0; j < t1->h; ++j) {
+@@ -1611,13 +2012,13 @@ static void opj_t1_encode_cblk(opj_t1_t *t1,
+ 
+ 		switch (passtype) {
+ 			case 0:
+-				opj_t1_enc_sigpass(t1, bpno, orient, &nmsedec, type, cblksty);
++				opj_t1_enc_sigpass(t1, bpno, &nmsedec, type, cblksty);
+ 				break;
+ 			case 1:
+ 				opj_t1_enc_refpass(t1, bpno, &nmsedec, type, cblksty);
+ 				break;
+ 			case 2:
+-				opj_t1_enc_clnpass(t1, bpno, orient, &nmsedec, cblksty);
++				opj_t1_enc_clnpass(t1, bpno, &nmsedec, cblksty);
+ 				/* code switch SEGMARK (i.e. SEGSYM) */
+ 				if (cblksty & J2K_CCP_CBLKSTY_SEGSYM)
+ 					opj_mqc_segmark_enc(mqc);
+diff --git a/src/lib/openjp2/t1.h b/src/lib/openjp2/t1.h
+index 3bc0ad9..5afc649 100644
+--- a/src/lib/openjp2/t1.h
++++ b/src/lib/openjp2/t1.h
+@@ -50,6 +50,9 @@ in T1.C are used by some function in TCD.C.
+ /* ----------------------------------------------------------------------- */
+ #define T1_NMSEDEC_BITS 7
+ 
++/* CAUTION: the value of those constants must not be changed, otherwise the */
++/* optimization of opj_t1_updateflags() will break! */
++/* BEGINNING of flags that apply to opj_flag_t */
+ #define T1_SIG_NE 0x0001	/**< Context orientation : North-East direction */
+ #define T1_SIG_SE 0x0002	/**< Context orientation : South-East direction */
+ #define T1_SIG_SW 0x0004	/**< Context orientation : South-West direction */
+@@ -67,9 +70,10 @@ in T1.C are used by some function in TCD.C.
+ #define T1_SGN_W 0x0800
+ #define T1_SGN (T1_SGN_N|T1_SGN_E|T1_SGN_S|T1_SGN_W)
+ 
+-#define T1_SIG 0x1000
+-#define T1_REFINE 0x2000
+-#define T1_VISIT 0x4000
++#define T1_SIG 0x1000		/**< No longer used by decoder */
++#define T1_REFINE 0x2000	/**< No longer used by decoder */
++#define T1_VISIT 0x4000		/**< No longer used by decoder */
++/* END of flags that apply to opj_flag_t */
+ 
+ #define T1_NUMCTXS_ZC 9
+ #define T1_NUMCTXS_SC 5
+@@ -89,10 +93,32 @@ in T1.C are used by some function in TCD.C.
+ #define T1_TYPE_MQ 0	/**< Normal coding using entropy coder */
+ #define T1_TYPE_RAW 1	/**< No encoding the information is store under raw format in codestream (mode switch RAW)*/
+ 
++/* Those flags are used by opj_colflag_t */
++#define T1_COLFLAG_RBS				4 /* RBS = Row Bit Shift */
++#define T1_COLFLAG_SIG_OTHER_ROW_0	(1 << 0)  /**< This sample has at least one significant neighbour */
++#define T1_COLFLAG_SIG_ROW_0		(1 << 1)  /**< This sample is significant */
++#define T1_COLFLAG_VISIT_ROW_0		(1 << 2)  /**< This sample has been visited */
++#define T1_COLFLAG_REFINE_ROW_0		(1 << 3)  /**< This sample has been refined */
++#define T1_COLFLAG_SIG_OTHER_ROW_1	(T1_COLFLAG_SIG_OTHER_ROW_0 << T1_COLFLAG_RBS)
++#define T1_COLFLAG_SIG_ROW_1		(T1_COLFLAG_SIG_ROW_0 << T1_COLFLAG_RBS)
++#define T1_COLFLAG_VISIT_ROW_1		(T1_COLFLAG_VISIT_ROW_0 << T1_COLFLAG_RBS)
++#define T1_COLFLAG_REFINE_ROW_1		(T1_COLFLAG_REFINE_ROW_0 << T1_COLFLAG_RBS)
++#define T1_COLFLAG_SIG_OTHER_ROW_2	(T1_COLFLAG_SIG_OTHER_ROW_0 << (2*T1_COLFLAG_RBS))
++#define T1_COLFLAG_SIG_ROW_2		(T1_COLFLAG_SIG_ROW_0 << (2*T1_COLFLAG_RBS))
++#define T1_COLFLAG_VISIT_ROW_2		(T1_COLFLAG_VISIT_ROW_0 << (2*T1_COLFLAG_RBS))
++#define T1_COLFLAG_REFINE_ROW_2		(T1_COLFLAG_REFINE_ROW_0 << (2*T1_COLFLAG_RBS))
++#define T1_COLFLAG_SIG_OTHER_ROW_3	(T1_COLFLAG_SIG_OTHER_ROW_0 << (3*T1_COLFLAG_RBS))
++#define T1_COLFLAG_SIG_ROW_3		(T1_COLFLAG_SIG_ROW_0 << (3*T1_COLFLAG_RBS))
++#define T1_COLFLAG_VISIT_ROW_3		(T1_COLFLAG_VISIT_ROW_0 << (3*T1_COLFLAG_RBS))
++#define T1_COLFLAG_REFINE_ROW_3		(T1_COLFLAG_REFINE_ROW_0 << (3*T1_COLFLAG_RBS))
++
+ /* ----------------------------------------------------------------------- */
+ 
+ typedef OPJ_INT16 opj_flag_t;
+ 
++/** Flags for 4 consecutive rows of a column */
++typedef OPJ_UINT16 opj_colflag_t;
++
+ /**
+ Tier-1 coding (coding of code-block coefficients)
+ */
+@@ -105,11 +131,17 @@ typedef struct opj_t1 {
+ 
+ 	OPJ_INT32  *data;
+ 	opj_flag_t *flags;
++	/** Addition flag array such that colflags[1+0] is for state of col=0,row=0..3,
++	   colflags[1+1] for col=1, row=0..3, colflags[1+flags_stride] for col=0,row=4..7, ... 
++	   This array avoids too much cache trashing when processing by 4 vertical samples
++	   as done in the various decoding steps. */
++	opj_colflag_t* colflags;
+ 	OPJ_UINT32 w;
+ 	OPJ_UINT32 h;
+ 	OPJ_UINT32 datasize;
+ 	OPJ_UINT32 flagssize;
+ 	OPJ_UINT32 flags_stride;
++	OPJ_UINT32 colflags_size;
+ 	OPJ_UINT32 data_stride;
+ 	OPJ_BOOL   encoder;
+ } opj_t1_t;
+@@ -140,7 +172,8 @@ Decode the code-blocks of a tile
+ @param tilec The tile to decode
+ @param tccp Tile coding parameters
+ */
+-OPJ_BOOL opj_t1_decode_cblks(   opj_t1_t* t1,
++void opj_t1_decode_cblks(   opj_thread_pool_t* tp,
++                                volatile OPJ_BOOL* pret,
+                                 opj_tcd_tilecomp_t* tilec,
+                                 opj_tccp_t* tccp);
+ 
+diff --git a/src/lib/openjp2/t1_generate_luts.c b/src/lib/openjp2/t1_generate_luts.c
+index cba7245..1e6e7b0 100644
+--- a/src/lib/openjp2/t1_generate_luts.c
++++ b/src/lib/openjp2/t1_generate_luts.c
+@@ -216,7 +216,7 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	printf("static OPJ_BYTE lut_ctxno_zc[1024] = {\n  ");
++	printf("static const OPJ_BYTE lut_ctxno_zc[1024] = {\n  ");
+ 	for (i = 0; i < 1023; ++i) {
+ 		printf("%i, ", lut_ctxno_zc[i]);
+ 		if(!((i+1)&0x1f))
+@@ -225,7 +225,7 @@ int main(int argc, char **argv)
+ 	printf("%i\n};\n\n", lut_ctxno_zc[1023]);
+ 
+ 	/* lut_ctxno_sc */
+-	printf("static OPJ_BYTE lut_ctxno_sc[256] = {\n  ");
++	printf("static const OPJ_BYTE lut_ctxno_sc[256] = {\n  ");
+ 	for (i = 0; i < 255; ++i) {
+ 		printf("0x%x, ", t1_init_ctxno_sc(i << 4));
+ 		if(!((i+1)&0xf))
+@@ -234,7 +234,7 @@ int main(int argc, char **argv)
+ 	printf("0x%x\n};\n\n", t1_init_ctxno_sc(255 << 4));
+ 
+ 	/* lut_spb */
+-	printf("static OPJ_BYTE lut_spb[256] = {\n  ");
++	printf("static const OPJ_BYTE lut_spb[256] = {\n  ");
+ 	for (i = 0; i < 255; ++i) {
+ 		printf("%i, ", t1_init_spb(i << 4));
+ 		if(!((i+1)&0x1f))
+@@ -268,16 +268,16 @@ int main(int argc, char **argv)
+ 					(int) (floor((u * u) * pow(2, T1_NMSEDEC_FRACBITS) + 0.5) / pow(2, T1_NMSEDEC_FRACBITS) * 8192.0));
+ 	}
+ 
+-	printf("static OPJ_INT16 lut_nmsedec_sig[1 << T1_NMSEDEC_BITS] = {\n  ");
++	printf("static const OPJ_INT16 lut_nmsedec_sig[1 << T1_NMSEDEC_BITS] = {\n  ");
+ 	dump_array16(lut_nmsedec_sig, 1 << T1_NMSEDEC_BITS);
+ 
+-	printf("static OPJ_INT16 lut_nmsedec_sig0[1 << T1_NMSEDEC_BITS] = {\n  ");
++	printf("static const OPJ_INT16 lut_nmsedec_sig0[1 << T1_NMSEDEC_BITS] = {\n  ");
+ 	dump_array16(lut_nmsedec_sig0, 1 << T1_NMSEDEC_BITS);
+ 
+-	printf("static OPJ_INT16 lut_nmsedec_ref[1 << T1_NMSEDEC_BITS] = {\n  ");
++	printf("static const OPJ_INT16 lut_nmsedec_ref[1 << T1_NMSEDEC_BITS] = {\n  ");
+ 	dump_array16(lut_nmsedec_ref, 1 << T1_NMSEDEC_BITS);
+ 
+-	printf("static OPJ_INT16 lut_nmsedec_ref0[1 << T1_NMSEDEC_BITS] = {\n  ");
++	printf("static const OPJ_INT16 lut_nmsedec_ref0[1 << T1_NMSEDEC_BITS] = {\n  ");
+ 	dump_array16(lut_nmsedec_ref0, 1 << T1_NMSEDEC_BITS);
+ 
+ 	return 0;
+diff --git a/src/lib/openjp2/t1_luts.h b/src/lib/openjp2/t1_luts.h
+index 37776b6..c66a8ae 100644
+--- a/src/lib/openjp2/t1_luts.h
++++ b/src/lib/openjp2/t1_luts.h
+@@ -1,6 +1,6 @@
+ /* This file was automatically generated by t1_generate_luts.c */
+ 
+-static OPJ_BYTE lut_ctxno_zc[1024] = {
++static const OPJ_BYTE lut_ctxno_zc[1024] = {
+   0, 1, 1, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+   5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 
+   3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 
+@@ -35,7 +35,7 @@ static OPJ_BYTE lut_ctxno_zc[1024] = {
+   2, 5, 5, 7, 5, 7, 7, 8, 5, 7, 7, 8, 7, 8, 8, 8, 2, 5, 5, 7, 5, 7, 7, 8, 5, 7, 7, 8, 7, 8, 8, 8
+ };
+ 
+-static OPJ_BYTE lut_ctxno_sc[256] = {
++static const OPJ_BYTE lut_ctxno_sc[256] = {
+   0x9, 0xa, 0xc, 0xd, 0xa, 0xa, 0xd, 0xd, 0xc, 0xd, 0xc, 0xd, 0xd, 0xd, 0xd, 0xd, 
+   0x9, 0xa, 0xc, 0xb, 0xa, 0x9, 0xd, 0xc, 0xc, 0xb, 0xc, 0xb, 0xd, 0xc, 0xd, 0xc, 
+   0x9, 0xa, 0xc, 0xb, 0xa, 0xa, 0xb, 0xb, 0xc, 0xd, 0x9, 0xa, 0xd, 0xd, 0xa, 0xa, 
+@@ -54,7 +54,7 @@ static OPJ_BYTE lut_ctxno_sc[256] = {
+   0x9, 0xa, 0xc, 0xd, 0xa, 0xa, 0xd, 0xd, 0xc, 0xd, 0xc, 0xd, 0xd, 0xd, 0xd, 0xd
+ };
+ 
+-static OPJ_BYTE lut_spb[256] = {
++static const OPJ_BYTE lut_spb[256] = {
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+   0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 
+   0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+@@ -65,7 +65,7 @@ static OPJ_BYTE lut_spb[256] = {
+   0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+ };
+ 
+-static OPJ_INT16 lut_nmsedec_sig[1 << T1_NMSEDEC_BITS] = {
++static const OPJ_INT16 lut_nmsedec_sig[1 << T1_NMSEDEC_BITS] = {
+   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 
+   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 
+   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 
+@@ -84,7 +84,7 @@ static OPJ_INT16 lut_nmsedec_sig[1 << T1_NMSEDEC_BITS] = {
+   0x6c00, 0x6d80, 0x6f00, 0x7080, 0x7200, 0x7380, 0x7500, 0x7680
+ };
+ 
+-static OPJ_INT16 lut_nmsedec_sig0[1 << T1_NMSEDEC_BITS] = {
++static const OPJ_INT16 lut_nmsedec_sig0[1 << T1_NMSEDEC_BITS] = {
+   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0080, 0x0080, 
+   0x0080, 0x0080, 0x0100, 0x0100, 0x0100, 0x0180, 0x0180, 0x0200, 
+   0x0200, 0x0280, 0x0280, 0x0300, 0x0300, 0x0380, 0x0400, 0x0400, 
+@@ -103,7 +103,7 @@ static OPJ_INT16 lut_nmsedec_sig0[1 << T1_NMSEDEC_BITS] = {
+   0x7080, 0x7280, 0x7480, 0x7600, 0x7800, 0x7a00, 0x7c00, 0x7e00
+ };
+ 
+-static OPJ_INT16 lut_nmsedec_ref[1 << T1_NMSEDEC_BITS] = {
++static const OPJ_INT16 lut_nmsedec_ref[1 << T1_NMSEDEC_BITS] = {
+   0x1800, 0x1780, 0x1700, 0x1680, 0x1600, 0x1580, 0x1500, 0x1480, 
+   0x1400, 0x1380, 0x1300, 0x1280, 0x1200, 0x1180, 0x1100, 0x1080, 
+   0x1000, 0x0f80, 0x0f00, 0x0e80, 0x0e00, 0x0d80, 0x0d00, 0x0c80, 
+@@ -122,7 +122,7 @@ static OPJ_INT16 lut_nmsedec_ref[1 << T1_NMSEDEC_BITS] = {
+   0x1400, 0x1480, 0x1500, 0x1580, 0x1600, 0x1680, 0x1700, 0x1780
+ };
+ 
+-static OPJ_INT16 lut_nmsedec_ref0[1 << T1_NMSEDEC_BITS] = {
++static const OPJ_INT16 lut_nmsedec_ref0[1 << T1_NMSEDEC_BITS] = {
+   0x2000, 0x1f00, 0x1e00, 0x1d00, 0x1c00, 0x1b00, 0x1a80, 0x1980, 
+   0x1880, 0x1780, 0x1700, 0x1600, 0x1500, 0x1480, 0x1380, 0x1300, 
+   0x1200, 0x1180, 0x1080, 0x1000, 0x0f00, 0x0e80, 0x0e00, 0x0d00, 
+diff --git a/src/lib/openjp2/tcd.c b/src/lib/openjp2/tcd.c
+index b8cd307..2980f72 100644
+--- a/src/lib/openjp2/tcd.c
++++ b/src/lib/openjp2/tcd.c
+@@ -580,7 +580,8 @@ OPJ_BOOL opj_tcd_rateallocate(  opj_tcd_t *tcd,
+ 
+ OPJ_BOOL opj_tcd_init( opj_tcd_t *p_tcd,
+                                            opj_image_t * p_image,
+-                                           opj_cp_t * p_cp )
++                                           opj_cp_t * p_cp,
++                       opj_thread_pool_t* p_tp )
+ {
+         p_tcd->image = p_image;
+         p_tcd->cp = p_cp;
+@@ -597,6 +598,7 @@ OPJ_BOOL opj_tcd_init( opj_tcd_t *p_tcd,
+ 
+         p_tcd->tcd_image->tiles->numcomps = p_image->numcomps;
+         p_tcd->tp_pos = p_cp->m_specific_param.m_enc.m_tp_pos;
++        p_tcd->thread_pool = p_tp;
+ 
+         return OPJ_TRUE;
+ }
+@@ -1566,30 +1568,22 @@ static OPJ_BOOL opj_tcd_t2_decode (opj_tcd_t *p_tcd,
+ static OPJ_BOOL opj_tcd_t1_decode ( opj_tcd_t *p_tcd )
+ {
+         OPJ_UINT32 compno;
+-        opj_t1_t * l_t1;
+         opj_tcd_tile_t * l_tile = p_tcd->tcd_image->tiles;
+         opj_tcd_tilecomp_t* l_tile_comp = l_tile->comps;
+         opj_tccp_t * l_tccp = p_tcd->tcp->tccps;
+-
+-
+-        l_t1 = opj_t1_create(OPJ_FALSE);
+-        if (l_t1 == 00) {
+-                return OPJ_FALSE;
+-        }
++        volatile OPJ_BOOL ret = OPJ_TRUE;
+ 
+         for (compno = 0; compno < l_tile->numcomps; ++compno) {
+-                /* The +3 is headroom required by the vectorized DWT */
+-                if (OPJ_FALSE == opj_t1_decode_cblks(l_t1, l_tile_comp, l_tccp)) {
+-                        opj_t1_destroy(l_t1);
+-                        return OPJ_FALSE;
+-                }
++                opj_t1_decode_cblks(p_tcd->thread_pool, &ret, l_tile_comp, l_tccp);
++                if( !ret )
++                    break;
+                 ++l_tile_comp;
+                 ++l_tccp;
+         }
+ 
+-        opj_t1_destroy(l_t1);
++        opj_thread_pool_wait_completion(p_tcd->thread_pool, 0);
+ 
+-        return OPJ_TRUE;
++        return ret;
+ }
+ 
+ 
+@@ -1616,7 +1610,7 @@ static OPJ_BOOL opj_tcd_dwt_decode ( opj_tcd_t *p_tcd )
+                 */
+ 
+                 if (l_tccp->qmfbid == 1) {
+-                        if (! opj_dwt_decode(l_tile_comp, l_img_comp->resno_decoded+1)) {
++                        if (! opj_dwt_decode(p_tcd->thread_pool, l_tile_comp, l_img_comp->resno_decoded+1)) {
+                                 return OPJ_FALSE;
+                         }
+                 }
+diff --git a/src/lib/openjp2/tcd.h b/src/lib/openjp2/tcd.h
+index 07f8379..77817bf 100644
+--- a/src/lib/openjp2/tcd.h
++++ b/src/lib/openjp2/tcd.h
+@@ -220,6 +220,8 @@ typedef struct opj_tcd
+ 	OPJ_UINT32 tcd_tileno;
+ 	/** tell if the tcd is a decoder. */
+ 	OPJ_UINT32 m_is_decoder : 1;
++    /** Thread pool */
++    opj_thread_pool_t* thread_pool;
+ } opj_tcd_t;
+ 
+ /** @name Exported functions */
+@@ -249,12 +251,14 @@ void opj_tcd_destroy(opj_tcd_t *tcd);
+  * @param	p_tcd		TCD handle.
+  * @param	p_image		raw image.
+  * @param	p_cp		coding parameters.
++ * @param   p_tp        thread pool
+  *
+  * @return true if the encoding values could be set (false otherwise).
+ */
+ OPJ_BOOL opj_tcd_init(	opj_tcd_t *p_tcd,
+ 						opj_image_t * p_image,
+-						opj_cp_t * p_cp );
++						opj_cp_t * p_cp,
++                        opj_thread_pool_t* p_tp);
+ 
+ /**
+  * Allocates memory for decoding a specific tile.
+diff --git a/src/lib/openjp2/thread.c b/src/lib/openjp2/thread.c
+new file mode 100644
+index 0000000..b2f8b5b
+--- /dev/null
++++ b/src/lib/openjp2/thread.c
+@@ -0,0 +1,959 @@
++/*
++ * The copyright in this software is being made available under the 2-clauses 
++ * BSD License, included below. This software may be subject to other third 
++ * party and contributor rights, including patent rights, and no such rights
++ * are granted under this license.
++ *
++ * Copyright (c) 2016, Even Rouault
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS `AS IS'
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#include "opj_includes.h"
++
++#include "thread.h"
++#include <assert.h>
++
++#ifdef MUTEX_win32
++
++/* Some versions of x86_64-w64-mingw32-gc -m32 resolve InterlockedCompareExchange() */
++/* as __sync_val_compare_and_swap_4 but fails to link it. As this protects against */
++/* a rather unlikely race, skip it */
++#if !(defined(__MINGW32__) && defined(__i386__))
++#define HAVE_INTERLOCKED_COMPARE_EXCHANGE 1
++#endif
++
++#include <windows.h>
++
++OPJ_BOOL OPJ_CALLCONV opj_has_thread_support(void)
++{
++    return OPJ_TRUE;
++}
++
++int OPJ_CALLCONV opj_get_num_cpus(void)
++{
++    SYSTEM_INFO info;
++    DWORD dwNum;
++    GetSystemInfo(&info);
++    dwNum = info.dwNumberOfProcessors;
++    if( dwNum < 1 )
++        return 1;
++    return (int)dwNum;
++}
++
++struct opj_mutex_t
++{
++    CRITICAL_SECTION cs;
++};
++
++opj_mutex_t* opj_mutex_create(void)
++{
++    opj_mutex_t* mutex = (opj_mutex_t*) opj_malloc(sizeof(opj_mutex_t));
++    if( !mutex )
++        return NULL;
++    InitializeCriticalSectionAndSpinCount(&(mutex->cs), 4000);
++    return mutex;
++}
++
++void opj_mutex_lock(opj_mutex_t* mutex)
++{
++    EnterCriticalSection( &(mutex->cs) );
++}
++
++void opj_mutex_unlock(opj_mutex_t* mutex)
++{
++    LeaveCriticalSection( &(mutex->cs) );
++}
++
++void opj_mutex_destroy(opj_mutex_t* mutex)
++{
++    if( !mutex ) return;
++    DeleteCriticalSection( &(mutex->cs) );
++    opj_free( mutex );
++}
++
++struct opj_cond_waiter_list_t
++{
++    HANDLE hEvent;
++    struct opj_cond_waiter_list_t* next;
++};
++typedef struct opj_cond_waiter_list_t opj_cond_waiter_list_t;
++
++struct opj_cond_t
++{
++    opj_mutex_t             *internal_mutex;
++    opj_cond_waiter_list_t  *waiter_list;
++};
++
++static DWORD TLSKey = 0;
++static volatile LONG inTLSLockedSection = 0;
++static volatile int TLSKeyInit = OPJ_FALSE;
++
++opj_cond_t* opj_cond_create(void)
++{
++    opj_cond_t* cond = (opj_cond_t*) opj_malloc(sizeof(opj_cond_t));
++    if( !cond )
++        return NULL;
++
++    /* Make sure that the TLS key is allocated in a thread-safe way */
++    /* We cannot use a global mutex/critical section since its creation itself would not be */
++    /* thread-safe, so use InterlockedCompareExchange trick */
++    while( OPJ_TRUE )
++    {
++
++#if HAVE_INTERLOCKED_COMPARE_EXCHANGE
++        if( InterlockedCompareExchange(&inTLSLockedSection, 1, 0) == 0 )
++#endif
++        {
++            if( !TLSKeyInit )
++            {
++                TLSKey = TlsAlloc();
++                TLSKeyInit = OPJ_TRUE;
++            }
++#if HAVE_INTERLOCKED_COMPARE_EXCHANGE
++            InterlockedCompareExchange(&inTLSLockedSection, 0, 1);
++#endif
++            break;
++        }
++    }
++
++    if( TLSKey == TLS_OUT_OF_INDEXES )
++    {
++        opj_free(cond);
++        return NULL;
++    }
++    cond->internal_mutex = opj_mutex_create();
++    if (cond->internal_mutex == NULL)
++    {
++        opj_free(cond);
++        return NULL;
++    }
++    cond->waiter_list = NULL;
++    return cond;
++}
++
++void opj_cond_wait(opj_cond_t* cond, opj_mutex_t* mutex)
++{
++    opj_cond_waiter_list_t* item;
++    HANDLE hEvent = (HANDLE) TlsGetValue( TLSKey );
++    if (hEvent == NULL)
++    {
++        hEvent = CreateEvent(NULL, /* security attributes */
++                             0,    /* manual reset = no */
++                             0,    /* initial state = unsignaled */
++                             NULL  /* no name */);
++        assert(hEvent);
++
++        TlsSetValue( TLSKey, hEvent );
++    }
++
++    /* Insert the waiter into the waiter list of the condition */
++    opj_mutex_lock(cond->internal_mutex);
++
++    item = (opj_cond_waiter_list_t*)opj_malloc(sizeof(opj_cond_waiter_list_t));
++    assert(item != NULL);
++
++    item->hEvent = hEvent;
++    item->next = cond->waiter_list;
++
++    cond->waiter_list = item;
++
++    opj_mutex_unlock(cond->internal_mutex);
++
++    /* Release the client mutex before waiting for the event being signaled */
++    opj_mutex_unlock(mutex);
++
++    /* Ideally we would check that we do not get WAIT_FAILED but it is hard */
++    /* to report a failure. */
++    WaitForSingleObject(hEvent, INFINITE);
++
++    /* Reacquire the client mutex */
++    opj_mutex_lock(mutex);
++}
++
++void opj_cond_signal(opj_cond_t* cond)
++{
++    opj_cond_waiter_list_t* psIter;
++
++    /* Signal the first registered event, and remove it from the list */
++    opj_mutex_lock(cond->internal_mutex);
++
++    psIter = cond->waiter_list;
++    if (psIter != NULL)
++    {
++        SetEvent(psIter->hEvent);
++        cond->waiter_list = psIter->next;
++        opj_free(psIter);
++    }
++
++    opj_mutex_unlock(cond->internal_mutex);
++}
++
++void opj_cond_destroy(opj_cond_t* cond)
++{
++    if( !cond ) return;
++    opj_mutex_destroy(cond->internal_mutex);
++    assert(cond->waiter_list == NULL);
++    opj_free(cond);
++}
++
++struct opj_thread_t
++{
++    opj_thread_fn thread_fn;
++    void* user_data;
++    HANDLE hThread;
++};
++
++static DWORD WINAPI opj_thread_callback_adapter( void *info )
++{
++    opj_thread_t* thread = (opj_thread_t*) info;
++    HANDLE hEvent = NULL;
++    
++    thread->thread_fn( thread->user_data );
++
++    /* Free the handle possible allocated by a cond */
++    while( OPJ_TRUE )
++    {
++        /* Make sure TLSKey is not being created just at that moment... */
++#if HAVE_INTERLOCKED_COMPARE_EXCHANGE
++        if( InterlockedCompareExchange(&inTLSLockedSection, 1, 0) == 0 )
++#endif
++        {
++            if( TLSKeyInit )
++            {
++                hEvent = (HANDLE) TlsGetValue( TLSKey );
++            }
++#if HAVE_INTERLOCKED_COMPARE_EXCHANGE
++            InterlockedCompareExchange(&inTLSLockedSection, 0, 1);
++#endif
++            break;
++        }
++    }
++    if( hEvent )
++        CloseHandle(hEvent);
++
++    return 0;
++}
++
++opj_thread_t* opj_thread_create( opj_thread_fn thread_fn, void* user_data )
++{
++    opj_thread_t* thread;
++    DWORD nThreadId = 0;
++
++    assert( thread_fn );
++
++    thread = (opj_thread_t*) opj_malloc( sizeof(opj_thread_t) );
++    if( !thread )
++        return NULL;
++    thread->thread_fn = thread_fn;
++    thread->user_data = user_data;
++
++    thread->hThread = CreateThread( NULL, 0, opj_thread_callback_adapter, thread,
++                                    0, &nThreadId );
++
++    if( thread->hThread == NULL )
++    {
++        opj_free( thread );
++        return NULL;
++    }
++    return thread;
++}
++
++void opj_thread_join( opj_thread_t* thread )
++{
++    WaitForSingleObject(thread->hThread, INFINITE);
++    CloseHandle( thread->hThread );
++
++    opj_free(thread);
++}
++
++#elif MUTEX_pthread
++
++#include <pthread.h>
++#include <stdlib.h>
++#include <unistd.h>
++
++OPJ_BOOL OPJ_CALLCONV opj_has_thread_support(void)
++{
++    return OPJ_TRUE;
++}
++
++int OPJ_CALLCONV opj_get_num_cpus(void)
++{
++#ifdef _SC_NPROCESSORS_ONLN
++    return (int)sysconf(_SC_NPROCESSORS_ONLN);
++#else
++    return 1;
++#endif
++}
++
++struct opj_mutex_t
++{
++    pthread_mutex_t mutex;
++};
++
++opj_mutex_t* opj_mutex_create(void)
++{
++    opj_mutex_t* mutex = (opj_mutex_t*) opj_malloc(sizeof(opj_mutex_t));
++    if( !mutex )
++        return NULL;
++    pthread_mutex_t pthr_mutex = PTHREAD_MUTEX_INITIALIZER;
++    mutex->mutex = pthr_mutex;
++    return mutex;
++}
++
++void opj_mutex_lock(opj_mutex_t* mutex)
++{
++    pthread_mutex_lock(&(mutex->mutex));
++}
++
++void opj_mutex_unlock(opj_mutex_t* mutex)
++{
++    pthread_mutex_unlock(&(mutex->mutex));
++}
++
++void opj_mutex_destroy(opj_mutex_t* mutex)
++{
++    if( !mutex ) return;
++    pthread_mutex_destroy(&(mutex->mutex));
++    opj_free(mutex);
++}
++
++struct opj_cond_t
++{
++    pthread_cond_t cond;
++};
++
++opj_cond_t* opj_cond_create(void)
++{
++    opj_cond_t* cond = (opj_cond_t*) opj_malloc(sizeof(opj_cond_t));
++    if( !cond )
++        return NULL;
++    if( pthread_cond_init(&(cond->cond), NULL) != 0 )
++    {
++        opj_free(cond);
++        return NULL;
++    }
++    return cond;
++}
++
++void opj_cond_wait(opj_cond_t* cond, opj_mutex_t* mutex)
++{
++    pthread_cond_wait(&(cond->cond), &(mutex->mutex));
++}
++
++void opj_cond_signal(opj_cond_t* cond)
++{
++    int ret = pthread_cond_signal(&(cond->cond));
++    (void)ret;
++    assert(ret == 0);
++}
++
++void opj_cond_destroy(opj_cond_t* cond)
++{
++    if( !cond ) return;
++    pthread_cond_destroy(&(cond->cond));
++    opj_free(cond);
++}
++
++
++struct opj_thread_t
++{
++    opj_thread_fn thread_fn;
++    void* user_data;
++    pthread_t thread;
++};
++
++static void* opj_thread_callback_adapter( void* info )
++{
++    opj_thread_t* thread = (opj_thread_t*) info;
++    thread->thread_fn( thread->user_data );
++    return NULL;
++}
++
++opj_thread_t* opj_thread_create( opj_thread_fn thread_fn, void* user_data )
++{
++    pthread_attr_t attr;
++    opj_thread_t* thread;
++
++    assert( thread_fn );
++
++    thread = (opj_thread_t*) opj_malloc( sizeof(opj_thread_t) );
++    if( !thread )
++        return NULL;
++    thread->thread_fn = thread_fn;
++    thread->user_data = user_data;
++
++    pthread_attr_init( &attr );
++    pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_JOINABLE );
++    if( pthread_create( &(thread->thread), &attr,
++                        opj_thread_callback_adapter, (void *) thread ) != 0 )
++    {
++        opj_free( thread );
++        return NULL;
++    }
++    return thread;
++}
++
++void opj_thread_join( opj_thread_t* thread )
++{
++    void* status;
++    pthread_join( thread->thread, &status);
++
++    opj_free(thread);
++}
++
++#else
++/* Stub implementation */
++
++OPJ_BOOL OPJ_CALLCONV opj_has_thread_support(void)
++{
++    return OPJ_FALSE;
++}
++
++int OPJ_CALLCONV opj_get_num_cpus(void)
++{
++    return 1;
++}
++
++opj_mutex_t* opj_mutex_create(void)
++{
++    return NULL;
++}
++
++void opj_mutex_lock(opj_mutex_t* mutex)
++{
++    (void) mutex;
++}
++
++void opj_mutex_unlock(opj_mutex_t* mutex)
++{
++    (void) mutex;
++}
++
++void opj_mutex_destroy(opj_mutex_t* mutex)
++{
++    (void) mutex;
++}
++
++opj_cond_t* opj_cond_create(void)
++{
++    return NULL;
++}
++
++void opj_cond_wait(opj_cond_t* cond, opj_mutex_t* mutex)
++{
++    (void) cond;
++    (void) mutex;
++}
++
++void opj_cond_signal(opj_cond_t* cond)
++{
++    (void) cond;
++}
++
++void opj_cond_destroy(opj_cond_t* cond)
++{
++    (void) cond;
++}
++
++opj_thread_t* opj_thread_create( opj_thread_fn thread_fn, void* user_data )
++{
++    (void) thread_fn; 
++    (void) user_data;
++    return NULL;
++}
++
++void opj_thread_join( opj_thread_t* thread )
++{
++    (void) thread;
++}
++
++#endif
++
++typedef struct
++{
++    int key;
++    void* value;
++    opj_tls_free_func opj_free_func;
++} opj_tls_key_val_t;
++
++struct opj_tls_t
++{
++    opj_tls_key_val_t* key_val;
++    int                key_val_count;
++};
++
++static opj_tls_t* opj_tls_new(void)
++{
++    return (opj_tls_t*) opj_calloc(1, sizeof(opj_tls_t));
++}
++
++static void opj_tls_destroy(opj_tls_t* tls)
++{
++    int i;
++    if( !tls ) return;
++    for(i=0;i<tls->key_val_count;i++)
++    {
++        if( tls->key_val[i].opj_free_func )
++            tls->key_val[i].opj_free_func(tls->key_val[i].value);
++    }
++    opj_free(tls->key_val);
++    opj_free(tls);
++}
++
++void* opj_tls_get(opj_tls_t* tls, int key)
++{
++    int i;
++    for(i=0;i<tls->key_val_count;i++)
++    {
++        if( tls->key_val[i].key == key )
++            return tls->key_val[i].value;
++    }
++    return NULL;
++}
++
++OPJ_BOOL opj_tls_set(opj_tls_t* tls, int key, void* value, opj_tls_free_func opj_free_func)
++{
++    opj_tls_key_val_t* new_key_val;
++    int i;
++    for(i=0;i<tls->key_val_count;i++)
++    {
++        if( tls->key_val[i].key == key )
++        {
++            if( tls->key_val[i].opj_free_func )
++                tls->key_val[i].opj_free_func(tls->key_val[i].value);
++            tls->key_val[i].value = value;
++            tls->key_val[i].opj_free_func = opj_free_func;
++            return OPJ_TRUE;
++        }
++    }
++    new_key_val = (opj_tls_key_val_t*) opj_realloc( tls->key_val,
++                        (tls->key_val_count + 1) * sizeof(opj_tls_key_val_t) );
++    if( !new_key_val )
++        return OPJ_FALSE;
++    tls->key_val = new_key_val;
++    new_key_val[tls->key_val_count].key = key;
++    new_key_val[tls->key_val_count].value = value;
++    new_key_val[tls->key_val_count].opj_free_func = opj_free_func;
++    tls->key_val_count ++;
++    return OPJ_TRUE;
++}
++
++
++typedef struct
++{
++    opj_job_fn          job_fn;
++    void               *user_data;
++} opj_worker_thread_job_t;
++
++typedef struct
++{
++    opj_thread_pool_t   *tp;
++    opj_thread_t        *thread;
++    int                  marked_as_waiting;
++
++    opj_mutex_t         *mutex;
++    opj_cond_t          *cond;
++} opj_worker_thread_t;
++
++typedef enum
++{
++    OPJWTS_OK,
++    OPJWTS_STOP,
++    OPJWTS_ERROR
++} opj_worker_thread_state;
++
++struct opj_job_list_t
++{
++    opj_worker_thread_job_t* job;
++    struct opj_job_list_t* next;
++};
++typedef struct opj_job_list_t opj_job_list_t;
++
++struct opj_worker_thread_list_t
++{
++    opj_worker_thread_t* worker_thread;
++    struct opj_worker_thread_list_t* next;
++};
++typedef struct opj_worker_thread_list_t opj_worker_thread_list_t;
++
++struct opj_thread_pool_t
++{
++    opj_worker_thread_t*             worker_threads;
++    int                              worker_threads_count;
++    opj_cond_t*                      cond;
++    opj_mutex_t*                     mutex;
++    volatile opj_worker_thread_state state;
++    opj_job_list_t*                  job_queue;
++    volatile int                     pending_jobs_count;
++    opj_worker_thread_list_t*        waiting_worker_thread_list;
++    int                              waiting_worker_thread_count;
++    opj_tls_t*                       tls;
++    int                              signaling_threshold;
++};
++
++static OPJ_BOOL opj_thread_pool_setup(opj_thread_pool_t* tp, int num_threads);
++static opj_worker_thread_job_t* opj_thread_pool_get_next_job(opj_thread_pool_t* tp,
++                                                             opj_worker_thread_t* worker_thread,
++                                                             OPJ_BOOL signal_job_finished);
++
++opj_thread_pool_t* opj_thread_pool_create(int num_threads)
++{
++    opj_thread_pool_t* tp;
++
++    tp = (opj_thread_pool_t*) opj_calloc(1, sizeof(opj_thread_pool_t));
++    if( !tp )
++        return NULL;
++    tp->state = OPJWTS_OK;
++
++    if( num_threads <= 0 )
++    {
++        tp->tls = opj_tls_new();
++        if( !tp->tls )
++        {
++            opj_free(tp);
++            tp = NULL;
++        }
++        return tp;
++    }
++
++    tp->mutex = opj_mutex_create();
++    if( !tp->mutex )
++    {
++        opj_free(tp);
++        return NULL;
++    }
++    if( !opj_thread_pool_setup(tp, num_threads) )
++    {
++        opj_thread_pool_destroy(tp);
++        return NULL;
++    }
++    return tp;
++}
++
++static void opj_worker_thread_function(void* user_data)
++{
++    opj_worker_thread_t* worker_thread;
++    opj_thread_pool_t* tp;
++    opj_tls_t* tls;
++    OPJ_BOOL job_finished = OPJ_FALSE;
++
++    worker_thread = (opj_worker_thread_t* ) user_data;
++    tp = worker_thread->tp;
++    tls = opj_tls_new();
++
++    while( OPJ_TRUE )
++    {
++        opj_worker_thread_job_t* job = opj_thread_pool_get_next_job(tp, worker_thread, job_finished);
++        if( job == NULL )
++            break;
++
++        if( job->job_fn )
++        {
++            job->job_fn(job->user_data, tls);
++        }
++        opj_free(job);
++        job_finished = OPJ_TRUE;
++    }
++
++    opj_tls_destroy(tls);
++}
++
++static OPJ_BOOL opj_thread_pool_setup(opj_thread_pool_t* tp, int num_threads)
++{
++    int i;
++    OPJ_BOOL bRet = OPJ_TRUE;
++
++    assert( num_threads > 0 );
++
++    tp->cond = opj_cond_create();
++    if( tp->cond == NULL )
++        return OPJ_FALSE;
++
++    tp->worker_threads = (opj_worker_thread_t*) opj_calloc( num_threads,
++                                                        sizeof(opj_worker_thread_t) );
++    if( tp->worker_threads == NULL )
++        return OPJ_FALSE;
++    tp->worker_threads_count = num_threads;
++
++    for(i=0;i<num_threads;i++)
++    {
++        tp->worker_threads[i].tp = tp;
++
++        tp->worker_threads[i].mutex = opj_mutex_create();
++        if( tp->worker_threads[i].mutex == NULL )
++        {
++            tp->worker_threads_count = i;
++            bRet = OPJ_FALSE;
++            break;
++        }
++
++        tp->worker_threads[i].cond = opj_cond_create();
++        if( tp->worker_threads[i].cond == NULL )
++        {
++            opj_mutex_destroy(tp->worker_threads[i].mutex);
++            tp->worker_threads_count = i;
++            bRet = OPJ_FALSE;
++            break;
++        }
++
++        tp->worker_threads[i].marked_as_waiting = OPJ_FALSE;
++
++        tp->worker_threads[i].thread = opj_thread_create(opj_worker_thread_function,
++                                                         &(tp->worker_threads[i]));
++        if( tp->worker_threads[i].thread == NULL )
++        {
++            tp->worker_threads_count = i;
++            bRet = OPJ_FALSE;
++            break;
++        }
++    }
++
++    /* Wait all threads to be started */
++    /* printf("waiting for all threads to be started\n"); */
++    opj_mutex_lock(tp->mutex);
++    while( tp->waiting_worker_thread_count < num_threads )
++    {
++        opj_cond_wait(tp->cond, tp->mutex);
++    }
++    opj_mutex_unlock(tp->mutex);
++    /* printf("all threads started\n"); */
++
++    if( tp->state == OPJWTS_ERROR )
++        bRet = OPJ_FALSE;
++
++    return bRet;
++}
++
++/*
++void opj_waiting()
++{
++    printf("waiting!\n");
++}
++*/
++
++static opj_worker_thread_job_t* opj_thread_pool_get_next_job(opj_thread_pool_t* tp,
++                                                             opj_worker_thread_t* worker_thread,
++                                                             OPJ_BOOL signal_job_finished)
++{
++    while( OPJ_TRUE )
++    {
++        opj_job_list_t* top_job_iter;
++
++        opj_mutex_lock(tp->mutex);
++
++        if( signal_job_finished )
++        {
++            signal_job_finished = OPJ_FALSE;
++            tp->pending_jobs_count --;
++            /*printf("tp=%p, remaining jobs: %d\n", tp, tp->pending_jobs_count);*/
++            if( tp->pending_jobs_count <= tp->signaling_threshold )
++                opj_cond_signal(tp->cond);
++        }
++
++        if( tp->state == OPJWTS_STOP )
++        {
++            opj_mutex_unlock(tp->mutex);
++            return NULL;
++        }
++        top_job_iter = tp->job_queue;
++        if( top_job_iter )
++        {
++            opj_worker_thread_job_t* job;
++            tp->job_queue = top_job_iter->next;
++
++            job = top_job_iter->job;
++            opj_mutex_unlock(tp->mutex);
++            opj_free(top_job_iter);
++            return job;
++        }
++
++        /* opj_waiting(); */
++        if( !worker_thread->marked_as_waiting )
++        {
++            opj_worker_thread_list_t* item;
++
++            worker_thread->marked_as_waiting = OPJ_TRUE;
++            tp->waiting_worker_thread_count ++;
++            assert(tp->waiting_worker_thread_count <= tp->worker_threads_count);
++
++            item= (opj_worker_thread_list_t*) opj_malloc(sizeof(opj_worker_thread_list_t));
++            if( item == NULL )
++            {
++                tp->state = OPJWTS_ERROR;
++                opj_cond_signal(tp->cond);
++
++                opj_mutex_unlock(tp->mutex);
++                return NULL;
++            }
++
++            item->worker_thread = worker_thread;
++            item->next = tp->waiting_worker_thread_list;
++            tp->waiting_worker_thread_list = item;
++        }
++
++        /* printf("signaling that worker thread is ready\n"); */
++        opj_cond_signal(tp->cond);
++
++        opj_mutex_lock(worker_thread->mutex);
++        opj_mutex_unlock(tp->mutex);
++
++        /* printf("waiting for job\n"); */
++        opj_cond_wait( worker_thread->cond, worker_thread->mutex );
++
++        opj_mutex_unlock(worker_thread->mutex);
++        /* printf("got job\n"); */
++    }
++}
++
++OPJ_BOOL opj_thread_pool_submit_job(opj_thread_pool_t* tp,
++                                    opj_job_fn job_fn,
++                                    void* user_data)
++{
++    opj_worker_thread_job_t* job;
++    opj_job_list_t* item;
++
++    if( tp->mutex == NULL )
++    {
++        job_fn( user_data, tp->tls );
++        return OPJ_TRUE;
++    }
++
++    job = (opj_worker_thread_job_t*)opj_malloc(sizeof(opj_worker_thread_job_t));
++    if( job == NULL )
++        return OPJ_FALSE;
++    job->job_fn = job_fn;
++    job->user_data = user_data;
++
++    item = (opj_job_list_t*) opj_malloc(sizeof(opj_job_list_t));
++    if( item == NULL )
++    {
++        opj_free(job);
++        return OPJ_FALSE;
++    }
++    item->job = job;
++
++    opj_mutex_lock(tp->mutex);
++
++    tp->signaling_threshold = 100 * tp->worker_threads_count;
++    while( tp->pending_jobs_count > tp->signaling_threshold )
++    {
++        /* printf("%d jobs enqueued. Waiting\n", tp->pending_jobs_count); */
++        opj_cond_wait(tp->cond, tp->mutex);
++        /* printf("...%d jobs enqueued.\n", tp->pending_jobs_count); */
++    }
++
++    item->next = tp->job_queue;
++    tp->job_queue = item;
++    tp->pending_jobs_count ++;
++
++    if( tp->waiting_worker_thread_list )
++    {
++        opj_worker_thread_t* worker_thread;
++        opj_worker_thread_list_t* next;
++        opj_worker_thread_list_t* to_opj_free;
++
++        worker_thread = tp->waiting_worker_thread_list->worker_thread;
++
++        assert( worker_thread->marked_as_waiting );
++        worker_thread->marked_as_waiting = OPJ_FALSE;
++
++        next = tp->waiting_worker_thread_list->next;
++        to_opj_free = tp->waiting_worker_thread_list;
++        tp->waiting_worker_thread_list = next;
++        tp->waiting_worker_thread_count --;
++
++        opj_mutex_lock(worker_thread->mutex);
++        opj_mutex_unlock(tp->mutex);
++        opj_cond_signal(worker_thread->cond);
++        opj_mutex_unlock(worker_thread->mutex);
++
++        opj_free(to_opj_free);
++    }
++    else
++        opj_mutex_unlock(tp->mutex);
++
++    return OPJ_TRUE;
++}
++
++void opj_thread_pool_wait_completion(opj_thread_pool_t* tp, int max_remaining_jobs)
++{
++    if( tp->mutex == NULL )
++    {
++        return;
++    }
++
++    if( max_remaining_jobs < 0 )
++        max_remaining_jobs = 0;
++    opj_mutex_lock(tp->mutex);
++    tp->signaling_threshold = max_remaining_jobs;
++    while( tp->pending_jobs_count > max_remaining_jobs )
++    {
++        /*printf("tp=%p, jobs before wait = %d, max_remaining_jobs = %d\n", tp, tp->pending_jobs_count, max_remaining_jobs);*/
++        opj_cond_wait(tp->cond, tp->mutex);
++        /*printf("tp=%p, jobs after wait = %d\n", tp, tp->pending_jobs_count);*/
++    }
++    opj_mutex_unlock(tp->mutex);
++}
++
++int opj_thread_pool_get_thread_count(opj_thread_pool_t* tp)
++{
++    return tp->worker_threads_count;
++}
++
++void opj_thread_pool_destroy(opj_thread_pool_t* tp)
++{
++    if( !tp ) return;
++    if( tp->cond )
++    {
++        int i;
++        opj_thread_pool_wait_completion(tp, 0);
++
++        tp->state = OPJWTS_STOP;
++
++        for(i=0;i<tp->worker_threads_count;i++)
++        {
++            opj_mutex_lock(tp->worker_threads[i].mutex);
++            opj_cond_signal(tp->worker_threads[i].cond);
++            opj_mutex_unlock(tp->worker_threads[i].mutex);
++            opj_thread_join(tp->worker_threads[i].thread);
++            opj_cond_destroy(tp->worker_threads[i].cond);
++            opj_mutex_destroy(tp->worker_threads[i].mutex);
++        }
++
++        opj_free(tp->worker_threads);
++
++        while( tp->waiting_worker_thread_list != NULL )
++        {
++            opj_worker_thread_list_t* next = tp->waiting_worker_thread_list->next;
++            opj_free( tp->waiting_worker_thread_list );
++            tp->waiting_worker_thread_list = next;
++        }
++
++        opj_cond_destroy(tp->cond);
++    }
++    opj_mutex_destroy(tp->mutex);
++    opj_tls_destroy(tp->tls);
++    opj_free(tp);
++}
+diff --git a/src/lib/openjp2/thread.h b/src/lib/openjp2/thread.h
+new file mode 100644
+index 0000000..241e6d8
+--- /dev/null
++++ b/src/lib/openjp2/thread.h
+@@ -0,0 +1,253 @@
++/*
++ * The copyright in this software is being made available under the 2-clauses 
++ * BSD License, included below. This software may be subject to other third 
++ * party and contributor rights, including patent rights, and no such rights
++ * are granted under this license.
++ *
++ * Copyright (c) 2016, Even Rouault
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS `AS IS'
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#ifndef THREAD_H
++#define THREAD_H
++
++#include "openjpeg.h"
++
++/**
++@file thread.h
++@brief Thread API
++
++The functions in thread.c have for goal to manage mutex, conditions, thread
++creation and thread pools that accept jobs.
++*/
++
++/** @defgroup THREAD THREAD - Mutex, conditions, threads and thread pools */
++/*@{*/
++
++/** @name Mutex */
++/*@{*/
++
++/** Opaque type for a mutex */
++typedef struct opj_mutex_t opj_mutex_t;
++
++/** Creates a mutex.
++ * @return the mutex or NULL in case of error (can for example happen if the library
++ * is built without thread support)
++ */
++opj_mutex_t* opj_mutex_create(void);
++
++/** Lock/acquire the mutex.
++ * @param mutex the mutex to acquire.
++ */
++void opj_mutex_lock(opj_mutex_t* mutex);
++
++/** Unlock/release the mutex.
++ * @param mutex the mutex to release.
++ */
++void opj_mutex_unlock(opj_mutex_t* mutex);
++
++/** Destroy a mutex
++ * @param mutex the mutex to destroy.
++ */
++void opj_mutex_destroy(opj_mutex_t* mutex);
++
++/*@}*/
++
++/** @name Condition */
++/*@{*/
++
++/** Opaque type for a condition */
++typedef struct opj_cond_t opj_cond_t;
++
++/** Creates a condition.
++ * @return the condition or NULL in case of error (can for example happen if the library
++ * is built without thread support)
++ */
++opj_cond_t* opj_cond_create(void);
++
++/** Wait for the condition to be signaled.
++ * The semantics is the same as the POSIX pthread_cond_wait.
++ * The provided mutex *must* be acquired before calling this function, and
++ * released afterwards.
++ * The mutex will be released by this function while it must wait for the condition
++ * and reacquired afterwards.
++ * In some particular situations, the function might return even if the condition is not signaled
++ * with opj_cond_signal(), hence the need to check with an application level
++ * mechanism.
++ *
++ * Waiting thread :
++ * \code
++ *    opj_mutex_lock(mutex);
++ *    while( !some_application_level_condition )
++ *    {
++ *        opj_cond_wait(cond, mutex);
++ *    }
++ *    opj_mutex_unlock(mutex);
++ * \endcode
++ *
++ * Signaling thread :
++ * \code
++ *    opj_mutex_lock(mutex);
++ *    some_application_level_condition = TRUE;
++ *    opj_cond_signal(cond);
++ *    opj_mutex_unlock(mutex);
++ * \endcode
++ *
++ * @param cond the condition to wait.
++ * @param mutex the mutex (in acquired state before calling this function)
++ */
++void opj_cond_wait(opj_cond_t* cond, opj_mutex_t* mutex);
++
++/** Signal waiting threads on a condition.
++ * One of the thread waiting with opj_cond_wait() will be waken up.
++ * It is strongly advised that this call is done with the mutex that is used
++ * by opj_cond_wait(), in a acquired state.
++ * @param cond the condition to signal.
++ */
++void opj_cond_signal(opj_cond_t* cond);
++
++/** Destroy a condition
++ * @param cond the condition to destroy.
++ */
++void opj_cond_destroy(opj_cond_t* cond);
++
++/*@}*/
++
++/** @name Thread */
++/*@{*/
++
++/** Opaque type for a thread handle */
++typedef struct opj_thread_t opj_thread_t;
++
++/** User function to execute in a thread
++ * @param user_data user data provided with opj_thread_create()
++ */
++typedef void (*opj_thread_fn)(void* user_data);
++
++/** Creates a new thread.
++ * @param thread_fn Function to run in the new thread.
++ * @param user_data user data provided to the thread function. Might be NULL.
++ * @return a thread handle or NULL in case of failure (can for example happen if the library
++ * is built without thread support)
++ */
++opj_thread_t* opj_thread_create( opj_thread_fn thread_fn, void* user_data );
++
++/** Wait for a thread to be finished and release associated resources to the
++ * thread handle.
++ * @param thread the thread to wait for being finished.
++ */
++void opj_thread_join( opj_thread_t* thread );
++
++/*@}*/
++
++/** @name Thread local storage */
++/*@{*/
++/** Opaque type for a thread local storage */
++typedef struct opj_tls_t opj_tls_t;
++
++/** Get a thread local value corresponding to the provided key.
++ * @param tls thread local storage handle
++ * @param key key whose value to retrieve.
++ * @return value associated with the key, or NULL is missing.
++ */
++void* opj_tls_get(opj_tls_t* tls, int key);
++
++/** Type of the function used to free a TLS value */
++typedef void (*opj_tls_free_func)(void* value);
++
++/** Set a thread local value corresponding to the provided key.
++ * @param tls thread local storage handle
++ * @param key key whose value to set.
++ * @param value value to set (may be NULL).
++ * @param free_func function to call currently installed value. 
++ * @return OPJ_TRUE if successful.
++ */
++OPJ_BOOL opj_tls_set(opj_tls_t* tls, int key, void* value, opj_tls_free_func free_func);
++
++/*@}*/
++
++/** @name Thread pool */
++/*@{*/
++
++/** Opaque type for a thread pool */
++typedef struct opj_thread_pool_t opj_thread_pool_t;
++
++/** Create a new thread pool.
++ * num_thread must nominally be >= 1 to create a real thread pool. If num_threads
++ * is negative or null, then a dummy thread pool will be created. All functions
++ * operating on the thread pool will work, but job submission will be run
++ * synchronously in the calling thread.
++ *
++ * @param num_threads the number of threads to allocate for this thread pool.
++ * @return a thread pool handle, or NULL in case of failure (can for example happen if the library
++ * is built without thread support)
++ */
++opj_thread_pool_t* opj_thread_pool_create(int num_threads);
++
++/** User function to execute in a thread
++ * @param user_data user data provided with opj_thread_create()
++ * @param tls handle to thread local storage
++ */
++typedef void (*opj_job_fn)(void* user_data, opj_tls_t* tls);
++
++
++/** Submit a new job to be run by one of the thread in the thread pool.
++ * The job ( thread_fn, user_data ) will be added in the queue of jobs managed
++ * by the thread pool, and run by the first thread that is no longer busy.
++ *
++ * @param tp the thread pool handle.
++ * @param job_fn Function to run. Must not be NULL.
++ * @param user_data User data provided to thread_fn.
++ * @return OPJ_TRUE if the job was successfully submitted.
++ */
++OPJ_BOOL opj_thread_pool_submit_job(opj_thread_pool_t* tp, opj_job_fn job_fn, void* user_data);
++
++/** Wait that no more than max_remaining_jobs jobs are remaining in the queue of
++ * the thread pool. The aim of this function is to avoid submitting too many
++ * jobs while the thread pool cannot cope fast enough with them, which would
++ * result potentially in out-of-memory situations with too many job descriptions
++ * being queued.
++ *
++ * @param tp the thread pool handle
++ * @param max_remaining_jobs maximum number of jobs allowed to be queued without waiting.
++ */
++void opj_thread_pool_wait_completion(opj_thread_pool_t* tp, int max_remaining_jobs);
++
++/** Return the number of threads associated with the thread pool.
++ *
++ * @param tp the thread pool handle.
++ * @return number of threads associated with the thread pool.
++ */
++int opj_thread_pool_get_thread_count(opj_thread_pool_t* tp);
++
++/** Destroy a thread pool.
++ * @param tp the thread pool handle.
++ */
++void opj_thread_pool_destroy(opj_thread_pool_t* tp);
++
++/*@}*/
++
++/*@}*/
++
++#endif /* THREAD_H */
+diff --git a/src/lib/openjp2/tls_keys.h b/src/lib/openjp2/tls_keys.h
+new file mode 100644
+index 0000000..fb26498
+--- /dev/null
++++ b/src/lib/openjp2/tls_keys.h
+@@ -0,0 +1,37 @@
++/*
++ * The copyright in this software is being made available under the 2-clauses 
++ * BSD License, included below. This software may be subject to other third 
++ * party and contributor rights, including patent rights, and no such rights
++ * are granted under this license.
++ *
++ * Copyright (c) 2016, Even Rouault
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS `AS IS'
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#ifndef TLS_KEYS_H
++#define TLS_KEYS_H
++
++#define OPJ_TLS_KEY_T1  0
++
++#endif
