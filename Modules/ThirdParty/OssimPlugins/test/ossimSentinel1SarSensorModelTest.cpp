@@ -11,25 +11,48 @@
 
 #include "ossimSentinel1SarSensorModel.h"
 
+enum Inverse { forward, inv, undef};
 
 int main(int argc, char * argv[])
 {
   std::cout.precision(9);
   
-  if(argc != 3)
-    return EXIT_FAILURE;
-  
-  std::string annotationXml = argv[2];
-  bool inverse = atoi(argv[1]);
+   string annotationXml;
+   Inverse inverse = undef;
+   bool verbose;
 
-  
+   for (int i=1; i!=argc ; ++i) {
+      std::string const a(argv[i]);
+      if (a == "-v" || a == "-verbose") {
+         verbose = true;
+      } else if (inverse == undef)  {
+         inverse = atoi(argv[i]) == 1 ? inv : forward;
+      } else if (annotationXml.empty())  {
+         annotationXml = a;
+      } else {
+         std::cerr << "Too many arguments\n"
+            << argv[0] << "[-v|--verbose] <inverse> <annotationXml>\n";
+         return EXIT_FAILURE;
+      }
+   }
+
+   if(annotationXml.empty())
+   {
+      std::cerr << "Not enough arguments\n"
+         << argv[0] << "[-v|--verbose] <inverse> <annotationXml>\n";
+      return EXIT_FAILURE;
+   }
+
   ossimplugins::ossimSentinel1SarSensorModel * sensor = new ossimplugins::ossimSentinel1SarSensorModel();
 
   sensor->readAnnotationFile(annotationXml);
+  if (verbose) {
+     sensor->print(std::cout);
+  }
 
   bool validate(false);
 
-  if(inverse)
+  if(inverse == inv)
     {
     validate = sensor->autovalidateInverseModelFromGCPs();
     }

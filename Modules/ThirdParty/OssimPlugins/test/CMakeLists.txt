@@ -97,9 +97,15 @@ add_executable(ossimSarSensorModelTest ossimSarSensorModelTest.cpp)
 target_link_libraries(ossimSarSensorModelTest otbossimplugins)
 otb_module_target_label(ossimSarSensorModelTest)
 
+# old
 add_executable(ossimSentinel1SarSensorModelTest ossimSentinel1SarSensorModelTest.cpp)
 target_link_libraries(ossimSentinel1SarSensorModelTest otbossimplugins)
 
+# new
+add_executable(ossimSentinel1ModelTest ossimSentinel1ModelTest.cpp)
+target_link_libraries(ossimSentinel1ModelTest otbossimplugins)
+
+# old
 add_executable(ossimTerraSarXSarSensorModelTest ossimTerraSarXSarSensorModelTest.cpp)
 target_link_libraries(ossimTerraSarXSarSensorModelTest otbossimplugins)
 
@@ -112,8 +118,10 @@ file(GLOB s1_files ${CMAKE_CURRENT_SOURCE_DIR}/data/s1/*.xml)
 #Loop over all S1 annotation files
 foreach(entry ${s1_files})
   get_filename_component(name ${entry} NAME_WE)
-  otb_add_test( NAME s1_inverse_${name} COMMAND ossimSentinel1SarSensorModelTest 1 ${entry})
-  otb_add_test( NAME s1_forward_${name} COMMAND ossimSentinel1SarSensorModelTest 0 ${entry})
+  otb_add_test( NAME s1_inverse_${name}_old COMMAND ossimSentinel1SarSensorModelTest 1 ${entry})
+  otb_add_test( NAME s1_forward_${name}_old COMMAND ossimSentinel1SarSensorModelTest 0 ${entry})
+  otb_add_test( NAME s1_inverse_${name}_new COMMAND ossimSentinel1ModelTest 1 ${entry})
+  otb_add_test( NAME s1_forward_${name}_new COMMAND ossimSentinel1ModelTest 0 ${entry})
 endforeach()
 
 # #TSX tests
