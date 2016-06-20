@@ -85,7 +85,7 @@ public:
       { return lhs.m_value == rhs.m_value; }
       friend std::ostream & operator<<(std::ostream & os, const ossimSarSensorModel::ProductType & v)
       { return os << v.ToString(); }
-      
+
 
       static ProductType Max  ()
       { return ProductType(build_max()); }
@@ -114,6 +114,13 @@ public:
       TimeType        azimuthTime;
       ossimEcefPoint  position;
       ossimEcefVector velocity;
+      friend std::ostream & operator<<(std::ostream & os, const OrbitRecordType & v)
+      {
+         return os << "{ azimuthTime: " << v.azimuthTime
+            <<        ", position: "    << v.position
+            <<        ", velocity: "    << v.velocity
+            <<        "}";
+      }
    };
 
    struct GCPRecordType
@@ -122,9 +129,9 @@ public:
       double   slantRangeTime;
       ossimDpt imPt;
       ossimGpt worldPt;
-      friend std::ostream & operator<<(std::ostream & os, const ossimSarSensorModel::GCPRecordType & v)
+      friend std::ostream & operator<<(std::ostream & os, const GCPRecordType & v)
       {
-         return os << "{azimuthTime: " << v.azimuthTime 
+         return os << "{ azimuthTime: " << v.azimuthTime
             <<        ", imPt: "       << v.imPt
             <<        ", worldPt: "    << v.worldPt
             <<        "}";
@@ -137,6 +144,14 @@ public:
       unsigned long startLine;
       TimeType      azimuthStopTime;
       unsigned long endLine;
+      friend std::ostream & operator<<(std::ostream & os, const BurstRecordType & v)
+      {
+         return os << "{ azimuthStartTime: " << v.azimuthStartTime
+            <<        ", azimuthStopTime: "  << v.azimuthStopTime
+            <<        ", startLine: "        << v.startLine
+            <<        ", stopLine: "         << v.endLine
+            <<        "}";
+      }
    };
 
    struct IsWithin {
@@ -166,6 +181,13 @@ public:
       TimeType            azimuthTime;
       double              rg0;
       std::vector<double> coefs;
+      friend std::ostream & operator<<(std::ostream & os, const CoordinateConversionRecordType & v)
+      {
+         return os << "{ azimuthTime: " << v.azimuthTime
+            <<        ", rg0: "         << v.rg0
+            <<        ", coeffs: "      << v.coefs.size()
+            <<        "}";
+      }
    };
 
    /** Constructor */

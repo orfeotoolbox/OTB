@@ -1139,10 +1139,14 @@ namespace ossimplugins {
       << "\n        theRangeSamplingRate: " << theRangeSamplingRate << "Hz"
       << "\n          theRangeResolution: " << theRangeResolution << "m"
       << "\n theBistaticCorrectionNeeded: " << theBistaticCorrectionNeeded
-      << "\n              theProductType: " << theProductType
-      << "\n        theAzimuthTimeOffset: " << theAzimuthTimeOffset << "us offset"
-      << "\n          theRangeTimeOffset: " << theRangeTimeOffset << "s offset"
-      << "\n               theGCPRecords: " << theGCPRecords
+      << "\n                    theProductType: " << theProductType
+      << "\n              theAzimuthTimeOffset: " << theAzimuthTimeOffset << "us offset"
+      << "\n                theRangeTimeOffset: " << theRangeTimeOffset << "s offset"
+      << "\n                     theGCPRecords: " << "\n" << theGCPRecords
+      << "\n                   theOrbitRecords: " << "\n" << theOrbitRecords
+      << "\n                   theBurstRecords: " << "\n" << theBurstRecords
+      << "\n theSlantRangeToGroundRangeRecords: " << "\n" << theSlantRangeToGroundRangeRecords
+      << "\n theGroundRangeToSlantRangeRecords: " << "\n" << theGroundRangeToSlantRangeRecords
       << "\n"
       ;
 }
