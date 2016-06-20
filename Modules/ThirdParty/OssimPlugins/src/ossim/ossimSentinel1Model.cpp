@@ -573,5 +573,22 @@ namespace ossimplugins
       setErrorStatus();
    }
 
+   void
+   ossimSentinel1Model::
+   worldToLineSample(const ossimGpt& world_point,
+                     ossimDpt&  image_point) const {
+
+      // NOT YET IMPLEMENTED
+      setErrorStatus();
+   }
+
+   void ossimSentinel1Model::
+   imagingRay(const ossimDpt& image_point,
+              ossimEcefRay&   image_ray) const {
+
+      // NOT YET IMPLEMENTED
+      setErrorStatus();
+   }
+
 
 } //end namespace
