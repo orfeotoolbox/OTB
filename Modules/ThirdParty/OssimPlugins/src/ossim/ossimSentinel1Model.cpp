@@ -851,11 +851,15 @@ namespace ossimplugins
       std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
       node.findChildNodes("coordinateConversion", xnodes);
 
+      add(theProductKwl,sr_gr_prefix+"."+NUMBER_KEY, static_cast<ossim_uint32>(xnodes.size()));
+      
       unsigned int idx = 0;
       for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode, ++idx)
-      {
+      {   
          int pos = std::snprintf(prefix, sizeof(prefix), "%s[%d].", sr_gr_prefix.c_str(), idx);
          assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix));
+         
+        
          addMandatory(theProductKwl, prefix + keyAzimuthTime,**itNode, attAzimuthTime);
          addMandatory(theProductKwl, prefix + rg0_xpath,     **itNode, rg0_xpath);
 
@@ -866,20 +870,24 @@ namespace ossimplugins
          {
             throw std::runtime_error("The "+rg0_xpath+" record has an empty coef vector");
          }
-         add(theProductKwl, prefix + NUMBER_KEY, ssplit.size());
+
+         add(theProductKwl,prefix+ NUMBER_KEY, static_cast<ossim_uint32>(ssplit.size()));
+         
          unsigned int coeff_idx = 0;
+
          for (std::vector<ossimString>::const_iterator cIt = ssplit.begin(), e = ssplit.end()
                ; cIt != e
                ; ++cIt, ++coeff_idx
              )
          {
             // append to current prefix
-            std::snprintf(prefix+pos, sizeof(prefix)-pos, ".coeff[%d]", coeff_idx);
+            std::snprintf(prefix+pos, sizeof(prefix)-pos, "coeff[%d]", coeff_idx);
             add(theProductKwl, prefix, *cIt); // Don't check this is really a double.
          }
-         assert(coeff_idx>0 &&"The rg0 record has empty coefs vector.");
+
+         assert(coeff_idx>0 &&"The rg0 record has empty coefs vector.");               
       }
-      add(theProductKwl, sr_gr_prefix + NUMBER_KEY, static_cast<ossim_uint32>(xnodes.size()));
+      
    }
 
    void ossimSentinel1Model::readGeoLocationGrid(ossimXmlNode const& productRoot)
