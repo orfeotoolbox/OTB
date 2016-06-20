@@ -124,8 +124,7 @@ ExternalProject_Add(GDAL
   INSTALL_COMMAND ${GDAL_INSTALL_COMMAND}
   )
 
-#avoid/fixup  second arg "GDAL-custom-patch" in macro
-SUPERBUILD_PATCH_SOURCE(GDAL "GDAL-custom-patch")
+SUPERBUILD_PATCH_SOURCE(GDAL)
 
 set(_SB_GDAL_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
