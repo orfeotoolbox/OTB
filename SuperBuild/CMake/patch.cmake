@@ -20,14 +20,19 @@ if(PATCH_PROGRAM)
       OUTPUT_VARIABLE patch_ov
       OUTPUT_STRIP_TRAILING_WHITESPACE
       ERROR_STRIP_TRAILING_WHITESPACE)
+    set(PATCHING_FAILED FALSE)
     if(NOT "${patch_rv}" STREQUAL "0")
       if( NOT "${patch_ov}" MATCHES "previously applied")
-        message(FATAL_ERROR "${PATCH_PROGRAM} returned non-zero exit status '${patch_ov}'")
+        set(PATCHING_FAILED TRUE)
       endif()
     endif()
 
     if( "${patch_ov}" MATCHES "FAILED")
-      message(FATAL_ERROR "${PATCH_PROGRAM} returned non-zero exit status '${patch_ov}'")
+      set(PATCHING_FAILED TRUE)
+    endif()
+
+    if(PATCHING_FAILED)
+      message(FATAL_ERROR "${PATCH_PROGRAM} returned non-zero exit status \n ${patch_ov} \n")
     else()
       message("${patch_ov}")      
     endif()
