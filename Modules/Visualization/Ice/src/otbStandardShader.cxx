@@ -86,29 +86,63 @@ std::string StandardShader::GetSource() const
     "uniform float shader_chessboard_size;\n"                           \
     "uniform float shader_slider_pos;\n"                                \
     "uniform int shader_vertical_slider_flag;\n"                        \
+    "\n"								\
+    "float modulus( float x, float y )\n"				\
+    "{\n"								\
+    "  return sqrt( x * x + y * y );\n"					\
+    "}\n"								\
+    "\n"								\
+    "float phasis( float x, float y )\n"				\
+    "{\n"								\
+    "  return atan( y / x );\n"						\
+    "}\n"								\
+    "\n"								\
+    "vec3 modulus( vec3 v )\n"						\
+    "{\n"								\
+    "  // v.r = v.g = v.b = modulus( v.x, v.y );\n"			\
+    "  v.r = v.g = v.b = length( vec2( v ) );\n"			\
+    "  return v;\n"							\
+    "}\n"								\
+    "\n"								\
+    "vec3 phasis( vec3 v )\n"						\
+    "{\n"								\
+    "  v.r = v.g = v.b = phasis( v.x, v.y );\n"				\
+    "  return v;\n"							\
+    "}\n"								\
+    "\n"								\
+    "vec4 modulus( vec4 v )\n"						\
+    "{\n"								\
+    "  // v.r = v.g = v.b = modulus( v.x, v.y );\n"			\
+    "  v.r = v.g = v.b = length( vec2( v ) );\n"			\
+    "  return v;\n"							\
+    "}\n"								\
+    "\n"								\
+    "vec4 phasis( vec4 v )\n"						\
+    "{\n"								\
+    "  v.r = v.g = v.b = phasis( v.x, v.y );\n"				\
+    "  return v;\n"							\
+    "}\n"								\
+    "\n"								\
     "void main (void) {\n"                                              \
     "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"                     \
     "vec4 p2 = p;\n"							\
+    "vec3 p_current = shader_current;\n"				\
     "// Modulus (complex)\n"						\
     "if( pixel_type==1 )\n"						\
     "{\n"								\
-    "  p2[ 0 ] =\n"							\
-    "  p2[ 1 ] =\n"							\
-    "  p2[ 2 ] =\n"							\
-    "    sqrt( p[ 0 ] * p[ 0 ] + p[ 1 ] * p[ 1 ] );\n"			\
+    "  p2 = modulus( p );\n"						\
+    "\n"								\
+    "  p_current = modulus( shader_current );\n"			\
     "}\n"								\
     "// Phasis (complex)\n"						\
     "else if( pixel_type==2 )\n"					\
     "{\n"								\
-    "  p2[ 0 ] =\n"							\
-    "  p2[ 1 ] =\n"							\
-    "  p2[ 2 ] =\n"							\
-    "    p[ 0 ]==0.0\n"							\
-    "    ? PI / 2.0\n"							\
-    "    : atan( p[ 1 ] / p[ 0 ] );\n"					\
+    "  p2 = phasis( p );\n"						\
+    "\n"								\
+    "  p_current = phasis( shader_current );\n"				\
     "}\n"								\
     "// Dynamics\n"							\
-    "gl_FragColor =\n"						\
+    "gl_FragColor =\n"							\
     "  pow( clamp( ( p2 + shader_b ) * shader_a, 0.0, 1.0 ), shader_gamma );\n" \
     "gl_FragColor[3] = clamp(shader_alpha, 0.0, 1.0);\n"		\
     "if(shader_use_no_data > 0 && vec3(p) == vec3(shader_no_data)){\n"  \
@@ -120,7 +154,7 @@ std::string StandardShader::GetSource() const
     "{\n"                                                               \
     "if(dist < shader_radius)\n"                                        \
     "{\n"                                                               \
-    "vec3 tmp = clamp((vec3(p2)-vec3(shader_current)+vec3(shader_localc_range))/(2.*vec3(shader_localc_range)),0.0,1.0);\n" \
+    "vec3 tmp = clamp((vec3(p2)-vec3(p_current)+vec3(shader_localc_range))/(2.*vec3(shader_localc_range)),0.0,1.0);\n" \
     "gl_FragColor[0] = tmp[0];\n"                                       \
     "gl_FragColor[1] = tmp[1];\n"                                       \
     "gl_FragColor[2] = tmp[2];\n"                                       \
@@ -145,7 +179,7 @@ std::string StandardShader::GetSource() const
     "{\n"                                                               \
     "if(dist < shader_radius)\n"                                        \
     "{\n"                                                               \
-    "float angle = acos(clamp(dot(vec3(p2),shader_current)/(length(vec3(p2))*length(shader_current)),-1.0,1.0));\n" \
+    "float angle = acos(clamp(dot(vec3(p2),p_current)/(length(vec3(p2))*length(p_current)),-1.0,1.0));\n" \
     "vec3 tmp = clamp(vec3(1.-shader_spectral_angle_range*abs(angle)/PI), 0.0, 1.0);\n" \
     "gl_FragColor[0] = tmp[0];\n"                                       \
     "gl_FragColor[1] = tmp[1];\n"                                       \
