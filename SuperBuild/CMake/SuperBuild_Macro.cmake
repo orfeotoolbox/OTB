@@ -106,6 +106,11 @@ macro(SUPERBUILD_PATCH_SOURCE project)
     endif()
   endif() #WIN32
   file(GLOB files_list "${${project}_PATCH_DIR}/${project_}*${DIFF_FILE_MATCH_STRING}*diff")
+  
+  file(GLOB all_files_list "${${project}_PATCH_DIR}/${project_}*all*diff")
+  
+  list(APPEND files_list ${all_files_list})
+
   if(files_list)
     message(STATUS "  Custom patches required for ${project}")
     ExternalProject_Add_Step(${project} ${project}_custom_patch

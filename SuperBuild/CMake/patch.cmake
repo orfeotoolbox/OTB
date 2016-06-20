@@ -1,4 +1,5 @@
-file(GLOB all_dot_diff_files "${PATCH_DIR}/*${DIFF_FILE_MATCH_STRING}*diff")
+file(GLOB all_dot_diff_files "${PATCH_DIR}/*${DIFF_FILE_MATCH_STRING}*diff" "${PATCH_DIR}/*all.diff")
+message("all_dot_diff_files=${all_dot_diff_files}") 
 find_program(PATCH_PROGRAM NAMES patch)
 if(PATCH_PROGRAM)
 set(OPTS)
@@ -7,7 +8,7 @@ set(OPTS "--binary")
 endif()
   list(REVERSE all_dot_diff_files)
   foreach(dot_diff_file ${all_dot_diff_files})
-    # message("dot_diff_file=${dot_diff_file}")
+    message("dot_diff_file=${dot_diff_file}")
     execute_process(
       COMMAND
       ${CMAKE_COMMAND} -E chdir ${SOURCE_DIR} 
