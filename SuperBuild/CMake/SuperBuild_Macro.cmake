@@ -95,7 +95,7 @@ endmacro(ADD_SUPERBUILD_CONFIGURE_VAR)
 
 macro(SUPERBUILD_PATCH_SOURCE project)
   set(${project}_PATCH_DIR ${CMAKE_SOURCE_DIR}/patches/${project})
-  string(TOLOWER ${project} project_)
+  string(TOLOWER ${project} patch_dir_prefix)
   if(WIN32)
     set(DIFF_FILE_MATCH_STRING "win")
   else()
@@ -105,11 +105,21 @@ macro(SUPERBUILD_PATCH_SOURCE project)
       set(DIFF_FILE_MATCH_STRING "linux")
     endif()
   endif() #WIN32
-  file(GLOB files_list "${${project}_PATCH_DIR}/${project_}*${DIFF_FILE_MATCH_STRING}*diff")
+
+  #If files_list is not empty we notify user about it.
+  #Custom patches requrired for...
+
+  #glob all files ending with DIFF_FILE_MATCH_STRING.diff
+  file(GLOB files_list "${${project}_PATCH_DIR}/${patch_dir_prefix}*${DIFF_FILE_MATCH_STRING}.diff")
+
+  #glob all files ending with all.diff
+  file(GLOB all_files_list "${${project}_PATCH_DIR}/${patch_dir_prefix}*all.diff")
   
-  file(GLOB all_files_list "${${project}_PATCH_DIR}/${project_}*all*diff")
-  
+  #merge two list for the final one
   list(APPEND files_list ${all_files_list})
+  
+  #because we are passing it cmake_command using -D!!
+  string(REPLACE ";" " " DOT_DIFF_FILES "${files_list}")
 
   if(files_list)
     message(STATUS "  Custom patches required for ${project}")
@@ -117,8 +127,7 @@ macro(SUPERBUILD_PATCH_SOURCE project)
       COMMAND
       ${CMAKE_COMMAND}
       -DSOURCE_DIR=${${project}_SB_SRC}
-      -DPATCH_DIR=${${project}_PATCH_DIR}
-      -DDIFF_FILE_MATCH_STRING=${DIFF_FILE_MATCH_STRING}
+      -DDOT_DIFF_FILES=${DOT_DIFF_FILES}
       -P ${CMAKE_SOURCE_DIR}/CMake/patch.cmake
       DEPENDEES patch update
       DEPENDERS configure
