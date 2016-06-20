@@ -87,7 +87,7 @@ private:
       "The input support image and the input training vectors shall be given in "
       "parameters 'in' and 'vec' respectively. Only the sampling grid (origin, size, spacing)"
       "will be read in the input image.\n"
-      "There are several strategies to select samples (parameter strat) :\n"
+      "There are several strategies to select samples (parameter strategy) :\n"
       "  - smallest (default) : select the same number of sample in each class\n" 
       "    so that the smallest one is fully sampled.\n"
       "  - constant : select the same number of samples N in each class\n" 
@@ -151,29 +151,29 @@ private:
     AddChoice("sampler.random","Random sampler");
     SetParameterDescription("sampler.random","The positions to select are randomly shuffled.");
 
-    AddParameter(ParameterType_Choice, "strat", "Sampling strategy");
+    AddParameter(ParameterType_Choice, "strategy", "Sampling strategy");
 
-    AddChoice("strat.byclass","Set samples count for each class");
-    SetParameterDescription("strat.byclass","Set samples count for each class");
+    AddChoice("strategy.byclass","Set samples count for each class");
+    SetParameterDescription("strategy.byclass","Set samples count for each class");
 
-    AddParameter(ParameterType_InputFilename, "strat.byclass.in", "Number of samples by class");
-    SetParameterDescription("strat.byclass.in", "Number of samples by class "
+    AddParameter(ParameterType_InputFilename, "strategy.byclass.in", "Number of samples by class");
+    SetParameterDescription("strategy.byclass.in", "Number of samples by class "
       "(CSV format with class name in 1st column and required samples in the 2nd.");
 
-    AddChoice("strat.constant","Set the same samples counts for all classes");
-    SetParameterDescription("strat.constant","Set the same samples counts for all classes");
+    AddChoice("strategy.constant","Set the same samples counts for all classes");
+    SetParameterDescription("strategy.constant","Set the same samples counts for all classes");
 
-    AddParameter(ParameterType_Int, "strat.constant.nb", "Number of samples for all classes");
-    SetParameterDescription("strat.constant.nb", "Number of samples for all classes");
+    AddParameter(ParameterType_Int, "strategy.constant.nb", "Number of samples for all classes");
+    SetParameterDescription("strategy.constant.nb", "Number of samples for all classes");
 
-    AddChoice("strat.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
-    SetParameterDescription("strat.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
+    AddChoice("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
+    SetParameterDescription("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
 
-    AddChoice("strat.all","Take all samples");
-    SetParameterDescription("strat.all","Take all samples");
+    AddChoice("strategy.all","Take all samples");
+    SetParameterDescription("strategy.all","Take all samples");
 
     // Default strategy : smallest
-    SetParameterString("strat","smallest");
+    SetParameterString("strategy","smallest");
 
     AddParameter(ParameterType_String, "field", "Field Name");
     SetParameterDescription("field","Name of the field carrying the class name in the input vectors.");
@@ -269,14 +269,14 @@ private:
     ClassCountMapType classCount = m_ReaderStat->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
     m_RateCalculator->SetClassCount(classCount);
     
-    switch (this->GetParameterInt("strat"))
+    switch (this->GetParameterInt("strategy"))
       {
       // byclass
       case 0:
         {
         otbAppLogINFO("Sampling strategy : set number of samples for each class");
         ClassCountMapType requiredCount = 
-          this->ReadRequiredSamples(this->GetParameterString("strat.byclass.in"));
+          this->ReadRequiredSamples(this->GetParameterString("strategy.byclass.in"));
         m_RateCalculator->SetNbOfSamplesByClass(requiredCount);
         }
       break;
@@ -284,7 +284,7 @@ private:
       case 1:
         {
         otbAppLogINFO("Sampling strategy : set a constant number of samples for all classes");
-        m_RateCalculator->SetNbOfSamplesAllClasses(GetParameterInt("strat.constant.nb"));
+        m_RateCalculator->SetNbOfSamplesAllClasses(GetParameterInt("strategy.constant.nb"));
         }
       break;
       // smallest class
@@ -302,7 +302,7 @@ private:
         }
       break;
       default:
-        otbAppLogFATAL("Strategy mode unknown :"<<this->GetParameterString("strat"));
+        otbAppLogFATAL("Strategy mode unknown :"<<this->GetParameterString("strategy"));
       break;
       }
       

@@ -863,8 +863,8 @@ otb_test_application(NAME apTvClSampleSelection
                              -out ${TEMP}/apTvClSampleSelectionOut.sqlite
                              -instats ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
                              -outrates ${TEMP}/apTvClSampleSelectionOutRates.txt
-                             -strat byclass
-                             -strat.byclass.in ${INPUTDATA}/Classification/sampling_required.csv
+                             -strategy byclass
+                             -strategy.byclass.in ${INPUTDATA}/Classification/sampling_required.csv
                              -sampler periodic
                      VALID   --compare-ogr ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/apTvClSampleSelectionOut.sqlite
