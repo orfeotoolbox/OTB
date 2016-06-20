@@ -277,6 +277,9 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
 
             const double timeSinceStartInMicroSeconds = timeSinceStart.total_microseconds();
             gcpRecord.imPt.y= timeSinceStartInMicroSeconds/theAzimuthTimeInterval + acqStartLine;
+            // std::cout << "timeSinceStart: " << timeSinceStart << " = " << gcpRecord.azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
+            // std::cout << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
+            // std::cout << "imPt_y: " << gcpRecord.imPt.y << "\n";
         }
         else
         {

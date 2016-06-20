@@ -90,60 +90,70 @@ namespace ossimplugins {
    };
 
    inline
-      void add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, std::size_t v, ShallOverwrite overwrite = ShallOverwrite::yes)
+      std::size_t add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, std::size_t v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
          const ossimString s = ossimString::toString(static_cast<ossim_uint64>(v));
          kwl.addPair(prefix, key, s.string(), overwrite.shall_we());
+         return v;
       }
    inline
-      void add(ossimKeywordlist & kwl, std::string const& key, std::size_t v, ShallOverwrite overwrite = ShallOverwrite::yes)
+      std::size_t add(ossimKeywordlist & kwl, std::string const& key, std::size_t v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
          const ossimString s = ossimString::toString(static_cast<ossim_uint64>(v));
          kwl.addPair(key, s.string(), overwrite.shall_we());
+         return v;
       }
    inline
-      void add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, std::string const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
+      std::string const& add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, std::string const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
          kwl.addPair(prefix, key, v, overwrite.shall_we());
+         return v;
       }
    inline
-      void add(ossimKeywordlist & kwl, std::string const& key, std::string const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
+      std::string const& add(ossimKeywordlist & kwl, std::string const& key, std::string const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
          kwl.addPair(key, v, overwrite.shall_we());
+         return v;
       }
    template <typename DataType> inline
-      void add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, DataType const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
+      DataType const& add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, DataType const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
          const ossimString s = ossimString::toString(v);
          kwl.addPair(prefix, key, s.string(), overwrite.shall_we());
+         return v;
       }
 
    template <typename DataType> inline
-      void add(ossimKeywordlist & kwl, std::string const& key, DataType const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
+      DataType const& add(ossimKeywordlist & kwl, std::string const& key, DataType const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
          const ossimString s = ossimString::toString(v);
          kwl.addPair(key, s.string(), overwrite.shall_we());
+         return v;
       }
 
    inline
-      void add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, ossimString const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
+      ossimString const& add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, ossimString const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
          kwl.addPair(prefix, key, v.string(), overwrite.shall_we());
+         return v;
       }
    inline
-      void add(ossimKeywordlist & kwl, std::string const& prefix, ossimString const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
+      ossimString const& add(ossimKeywordlist & kwl, std::string const& prefix, ossimString const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
          kwl.addPair(prefix, v, overwrite.shall_we());
+         return v;
       }
    inline
-      void add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, time::ModifiedJulianDate const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
+      time::ModifiedJulianDate const& add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, time::ModifiedJulianDate const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
          add(kwl, prefix, key, to_simple_string(v), overwrite);
+         return v;
       }
    inline
-      void add(ossimKeywordlist & kwl, std::string const& key, time::ModifiedJulianDate const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
+      time::ModifiedJulianDate const& add(ossimKeywordlist & kwl, std::string const& key, time::ModifiedJulianDate const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
          add(kwl, key, to_simple_string(v), overwrite);
+         return v;
       }
 #if defined(USE_BOOST_TIME)
    inline

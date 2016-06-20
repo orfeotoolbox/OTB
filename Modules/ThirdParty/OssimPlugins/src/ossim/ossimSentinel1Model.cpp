@@ -18,6 +18,7 @@
 #include "ossimXmlTools.h"
 #include "ossimKeyWordListUtilities.h"
 #include "ossimSarSensorModelPathsAndKeys.h"
+#include <iostream>
 
 namespace {// Anonymous namespace
    ossimTrace traceExec  ("ossimSentinel1Model:exec");
@@ -549,7 +550,7 @@ namespace ossimplugins
       addOptional (theProductKwl, SUPPORT_DATA_PREFIX, "slice_num",          imageInformation, "sliceNumber");
 
       ossimXmlNode const& xAzimutTimeInterval = getExpectedFirstNode(imageInformation, "azimuthTimeInterval");
-      theAzimuthTimeInterval = to<double>(xAzimutTimeInterval.getText(), "decoding imageInformation/azimuthTimeInterval");
+      theAzimuthTimeInterval = to<double>(xAzimutTimeInterval.getText(), "decoding imageInformation/azimuthTimeInterval")*1000000;
       add(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", xAzimutTimeInterval.getText());
       // addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", imageInformation, "azimuthTimeInterval");
 
@@ -764,14 +765,16 @@ namespace ossimplugins
       productRoot.findChildNodes("swathTiming/burstList/burst",xnodes);
       if (xnodes.empty())
       {
-      // Appart from TopSAR products, there won't be any burst
-      //records, so this warning is unnecessary
-      //ossimNotify(ossimNotifyLevel_DEBUG) << "No burst records available in metadata!!\n";
-         add(theProductKwl, BURST_PREFIX, "[0].start_line", 0);
-         add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", getTimeFromFirstNode(imageInformation,  "productFirstLineUtcTime"));
-         add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  getTimeFromFirstNode(imageInformation,  "productLastLineUtcTime"));
-         add(theProductKwl, BURST_PREFIX, "[0].end_line",           getFromFirstNode<unsigned int>(imageInformation, "numberOfLines")-1);
+         // Appart from TopSAR products, there won't be any burst
+         //records, so this warning is unnecessary
+         //ossimNotify(ossimNotifyLevel_DEBUG) << "No burst records available in metadata!!\n";
          add(theProductKwl, BURST_NUMBER_KEY,                       "1");
+         BurstRecordType burstRecord;
+         burstRecord.startLine        = add(theProductKwl, BURST_PREFIX, "[0].start_line", 0);
+         burstRecord.azimuthStartTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", getTimeFromFirstNode(imageInformation,  "productFirstLineUtcTime"));
+         burstRecord.azimuthStopTime  = add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  getTimeFromFirstNode(imageInformation,  "productLastLineUtcTime"));
+         burstRecord.endLine          = add(theProductKwl, BURST_PREFIX, "[0].end_line",           getFromFirstNode<unsigned int>(imageInformation, "numberOfLines")-1);
+         theBurstRecords.push_back(burstRecord);
       }
       else
       {
@@ -782,6 +785,7 @@ namespace ossimplugins
 
          for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++burstId)
          {
+            BurstRecordType burstRecord;
             const TimeType azTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
             ossimString const& s = getTextFromFirstNode(**itNode, attFirstValidSample);
 
@@ -821,16 +825,18 @@ namespace ossimplugins
             }
 
             std::snprintf(burstPrefix, sizeof(burstPrefix), "%s[%d].", BURST_PREFIX.c_str(), burstId);
-            add(theProductKwl,burstPrefix + keyStartLine,         burstId*linesPerBurst + first_valid);
-            add(theProductKwl,burstPrefix + keyEndLine,           burstId*linesPerBurst + last_valid);
+            burstRecord.startLine = add(theProductKwl,burstPrefix + keyStartLine,         burstId*linesPerBurst + first_valid);
+            burstRecord.endLine   = add(theProductKwl,burstPrefix + keyEndLine,           burstId*linesPerBurst + last_valid);
             // TODO: check units.
 #if defined(USE_BOOST_TIME)
             using boost::posix_time::microseconds;
 #else
             using ossimplugins::time::microseconds;
 #endif
-            add(theProductKwl,burstPrefix + keyAzimuthStartTime, azTime + microseconds(first_valid*theAzimuthTimeInterval));
-            add(theProductKwl,burstPrefix + keyAzimuthStopTime,  azTime + microseconds(last_valid*theAzimuthTimeInterval));
+            burstRecord.azimuthStartTime = add(theProductKwl,burstPrefix + keyAzimuthStartTime, azTime + microseconds(first_valid*theAzimuthTimeInterval));
+            burstRecord.azimuthStopTime  = add(theProductKwl,burstPrefix + keyAzimuthStopTime,  azTime + microseconds(last_valid*theAzimuthTimeInterval));
+
+            theBurstRecords.push_back(burstRecord);
          }
          add(theProductKwl, BURST_NUMBER_KEY, burstId);
       }
@@ -887,6 +893,7 @@ namespace ossimplugins
 
    void ossimSentinel1Model::readGeoLocationGrid(ossimXmlNode const& productRoot)
    {
+      SCOPED_LOG(traceDebug, "ossimSentinel1Model::readGeoLocationGrid");
       char prefix[1024];
       std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
       productRoot.findChildNodes("geolocationGrid/geolocationGridPointList/geolocationGridPoint", xnodes);
@@ -922,7 +929,7 @@ namespace ossimplugins
             bool burstFound(false);
             for(std::vector<BurstRecordType>::reverse_iterator bIt = theBurstRecords.rbegin();bIt!=theBurstRecords.rend() && !burstFound;++bIt)
             {
-               if(gcpRecord.azimuthTime >= bIt->azimuthStartTime && gcpRecord.azimuthTime < bIt->azimuthStopTime)
+               if(azimuthTime >= bIt->azimuthStartTime && azimuthTime < bIt->azimuthStopTime)
                {
                   burstFound = true;
                   acqStart = bIt->azimuthStartTime;
@@ -931,12 +938,12 @@ namespace ossimplugins
             }
             if(!burstFound)
             {
-               if(gcpRecord.azimuthTime < theBurstRecords.front().azimuthStartTime)
+               if(azimuthTime < theBurstRecords.front().azimuthStartTime)
                {
                   acqStart = theBurstRecords.front().azimuthStartTime;
                   acqStartLine = theBurstRecords.front().startLine;
                }
-               else if (gcpRecord.azimuthTime >= theBurstRecords.front().azimuthStopTime)
+               else if (azimuthTime >= theBurstRecords.front().azimuthStopTime)
                {
                   acqStart = theBurstRecords.back().azimuthStartTime;
                   acqStartLine = theBurstRecords.back().startLine;
@@ -966,10 +973,13 @@ namespace ossimplugins
             }
 #endif
 
-            const DurationType timeSinceStart = azimuthTime - acqStart; // in sec
+            const DurationType timeSinceStart = azimuthTime - acqStart; // in day frac
 
             const double timeSinceStartInMicroSeconds = timeSinceStart.total_microseconds();
             const double imPt_y= timeSinceStartInMicroSeconds/theAzimuthTimeInterval + acqStartLine;
+            // std::cout << "timeSinceStart: " << timeSinceStart << " = " << azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
+            // std::cout << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
+            // std::cout << "imPt_y: " << imPt_y << "\n";
             add(theProductKwl, prefix, keyImPtY, imPt_y);
          }
          else
