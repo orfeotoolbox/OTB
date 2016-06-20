@@ -528,19 +528,19 @@ namespace ossimplugins
       const ossimString & productType  = getTextFromFirstNode(adsHeader, "productType");
       theProductType = ProductType(productType);
 
-      theProductKwl.addPair(HEADER_PREFIX, "product_type", productType.string());
+      add(theProductKwl, HEADER_PREFIX, "product_type", productType.string());
 
       addMandatory(theProductKwl, HEADER_PREFIX, "swath",        adsHeader, "swath");
       addMandatory(theProductKwl, HEADER_PREFIX, "polarisation", adsHeader, "polarisation");
-      theProductKwl.addPair(HEADER_PREFIX, "polarisation", polarisation.string());
-      theProductKwl.addPair(HEADER_PREFIX, "annotation",   annotationXml.file().string());
+      add(theProductKwl, HEADER_PREFIX, "polarisation", polarisation.string());
+      add(theProductKwl, HEADER_PREFIX, "annotation",   annotationXml.file().string());
 
       addMandatory(theProductKwl, HEADER_PREFIX, "first_line_time", adsHeader, "startTime");
       addMandatory(theProductKwl, HEADER_PREFIX, "last_line_time",  adsHeader, "stopTime");
 
       //RK maybe use this->getManifestPrefix()
 
-      theProductKwl.addPair(SUPPORT_DATA_PREFIX, "mds1_tx_rx_polar", polarisation, true);
+      add(theProductKwl, SUPPORT_DATA_PREFIX, "mds1_tx_rx_polar", polarisation);
 
       const ossimXmlNode & imageInformation   = getExpectedFirstNode(*productRoot, "imageAnnotation/imageInformation");
       const ossimXmlNode & productInformation = getExpectedFirstNode(*productRoot, "generalAnnotation/productInformation");
@@ -554,27 +554,28 @@ namespace ossimplugins
       // addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", imageInformation, "azimuthTimeInterval");
 
       const double rangeSpacing = getDoubleFromFirstNode(imageInformation, "rangePixelSpacing");
-      theProductKwl.addPair(SUPPORT_DATA_PREFIX, "range_spacing", rangeSpacing);
+      add(theProductKwl, SUPPORT_DATA_PREFIX, "range_spacing", rangeSpacing);
 
       const double azimuthSpacing = getDoubleFromFirstNode(imageInformation, "azimuthPixelSpacing");
-      theProductKwl.addPair(SUPPORT_DATA_PREFIX, "azimuth_spacing", azimuthSpacing);
+      add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_spacing", azimuthSpacing);
 
       addOptional(theProductKwl, ossimKeywordNames::NUMBER_SAMPLES_KW, imageInformation, "numberOfSamples");
       addOptional(theProductKwl, ossimKeywordNames::NUMBER_LINES_KW,   imageInformation, "numberOfLines");
 
-      theProductKwl.addPair(
+      add(theProductKwl, 
             "sample_type" /*ossimKeywordNames::PIXEL_TYPE_KW*/,
             getOptionalTextFromFirstNode(imageInformation, "pixelValue").upcase());
 
       // TODO: check if it makes sense when only one file is considered
       const double heightSum = getBandTerrainHeight(productXmlDocument);
-      theProductKwl.addPair(SUPPORT_DATA_PREFIX, "avg_scene_height", heightSum);
+      add(theProductKwl, SUPPORT_DATA_PREFIX, "avg_scene_height", heightSum);
 
 
       // these should be the same for all swaths
       //RK div by oneMillion taken from S1tlbx
       addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "range_sampling_rate",        productInformation, "rangeSamplingRate");
       addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "radar_frequency",            productInformation, "radarFrequency");
+      // TODO: store the line_time_interval * 1000000
       addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval",         imageInformation,   "azimuthTimeInterval");
       addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", imageInformation,   "slantRangeTime");
 
@@ -627,7 +628,7 @@ namespace ossimplugins
       readGeoLocationGrid(*productRoot);
 
 #if 0
-      theProductKwl.addPair(SUPPORT_DATA_PREFIX,
+      add(theProductKwl, SUPPORT_DATA_PREFIX,
             ossimKeywordNames::NUMBER_BANDS_KW,
             numBands,
             true);
@@ -669,7 +670,7 @@ namespace ossimplugins
 
          addMandatory(theProductKwl, calibrationPrefix, "absoluteCalibrationConstant", calibrationInformation, "absoluteCalibrationConstant");
 
-         theProductKwl.addPair(calibrationPrefix,
+         add(theProductKwl, calibrationPrefix,
                "count",
                calibrationVectorList.getAttributeValue("count").string());
 
@@ -688,7 +689,7 @@ namespace ossimplugins
             ossimXmlNode const& calibrationVector = **b_calibVector;
             const ossimXmlNodePtr & node = calibrationVector.findFirstNode("pixel");
 
-            theProductKwl.addPair(calibrationVectorPrefix,
+            add(theProductKwl, calibrationVectorPrefix,
                   "pixel_count",
                   node->getAttributeValue("count").string());
 
@@ -739,10 +740,10 @@ namespace ossimplugins
 
             const ossimXmlNodePtr & node = noiseVector.findFirstNode("pixel");
 
-            theProductKwl.addPair(noiseVectorPrefix,
+            add(theProductKwl, noiseVectorPrefix,
                   "pixel_count",
                   node->getAttributeValue("count"),
-                  false);
+                  ShallOverwrite::no);
 
 #if !defined(USE_BOOST_TIME)
             add(theProductKwl, noiseVectorPrefix, keyAzimuthTime,
@@ -831,7 +832,7 @@ namespace ossimplugins
             add(theProductKwl,burstPrefix + keyAzimuthStartTime, azTime + microseconds(first_valid*theAzimuthTimeInterval));
             add(theProductKwl,burstPrefix + keyAzimuthStopTime,  azTime + microseconds(last_valid*theAzimuthTimeInterval));
          }
-         add(theProductKwl, BURST_PREFIX+".number",             burstId);
+         add(theProductKwl, BURST_NUMBER_KEY, burstId);
       }
    }
 
@@ -872,7 +873,8 @@ namespace ossimplugins
 
          add(theProductKwl,prefix+ NUMBER_KEY, static_cast<ossim_uint32>(ssplit.size()));
          
-         unsigned int coeff_idx(0);
+         unsigned int coeff_idx = 0;
+
          for (std::vector<ossimString>::const_iterator cIt = ssplit.begin(), e = ssplit.end()
                ; cIt != e
                ; ++cIt, ++coeff_idx
@@ -882,6 +884,7 @@ namespace ossimplugins
             std::snprintf(prefix+pos, sizeof(prefix)-pos, "coeff[%d]", coeff_idx);
             add(theProductKwl, prefix, *cIt); // Don't check this is really a double.
          }
+
          assert(coeff_idx>0 &&"The rg0 record has empty coefs vector.");               
       }
       
@@ -1081,12 +1084,12 @@ namespace ossimplugins
             addOptional(theProductKwl, prefix, "dop_coef_time",  *dcEstimate, "azimuthTime");
             //RK
             const double ref_time = getOptionalTextFromFirstNode(*dcEstimate, "t0").toFloat64() * 1e9; // s to ns
-            theProductKwl.addPair(prefix, keySlantRangeTime, ref_time);
+            add(theProductKwl, prefix, keySlantRangeTime, ref_time);
 
             ossimString const& ns = getOptionalTextFromFirstNode(*dcEstimate, "ns");
 
             if( !ns.empty() )
-               theProductKwl.addPair(prefix, keySlantRangeTime, ns.string());
+               add(theProductKwl, prefix, keySlantRangeTime, ns);
 
             ossimString const& coeffStr = getOptionalTextFromFirstNode(*dcEstimate, "geometryDcPolynomial");
 
@@ -1104,7 +1107,7 @@ namespace ossimplugins
                   char coeff_prefix[256];
                   std::snprintf(coeff_prefix, sizeof(coeff_prefix), "%s%d.dop_coef", prefix, count);
 
-                  theProductKwl.addPair(coeff_prefix, coeff->string());
+                  add(theProductKwl, coeff_prefix, coeff->string());
                }
 
             } //if (!coeffStr.empty())

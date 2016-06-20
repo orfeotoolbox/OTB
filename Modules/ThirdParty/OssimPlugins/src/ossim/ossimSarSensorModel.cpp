@@ -1088,6 +1088,13 @@ namespace ossimplugins
       get(kwl, HEADER_PREFIX + "product_type", product_type_string);
       theProductType = ProductType(product_type_string);
 
+      get(kwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", theNearRangeTime      );
+      get(kwl, SUPPORT_DATA_PREFIX, "range_sampling_rate"       , theRangeSamplingRate  );
+      get(kwl, SUPPORT_DATA_PREFIX, "range_spacing"             , theRangeResolution    );
+      get(kwl, SUPPORT_DATA_PREFIX, "radar_frequency"           , theRadarFrequency     );
+      get(kwl, SUPPORT_DATA_PREFIX, "line_time_interval"        , theAzimuthTimeInterval);
+      theAzimuthTimeInterval *= 1000000;
+
       get(kwl, theOrbitRecords);
       // TODO: don't fetch burst records if already read thanks to xml loading
       // that required them
