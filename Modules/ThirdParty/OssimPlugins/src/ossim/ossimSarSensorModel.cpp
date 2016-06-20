@@ -1106,6 +1106,44 @@ namespace ossimplugins
       }
       get(kwl, theGCPRecords);
 
+      optimizeTimeOffsetsFromGcps();
+
       return true;
    }
 }
+
+namespace ossimplugins {
+   template <typename T> inline
+   std::ostream & operator<<(std::ostream & os, const std::vector<T> & v)
+   {
+      for (typename std::vector<T>::const_iterator b = v.begin(), e = v.end()
+            ; b != e
+            ; ++b
+          )
+      {
+         os << "- " << *b << "\n";
+      }
+
+      return os;
+   }
+} // ossimplugins namespace
+
+
+/*virtual*/ std::ostream& ossimplugins::ossimSarSensorModel::print(std::ostream& out) const
+{
+   return ossimSensorModel::print(out)
+      << "\n ossimSarSensorModel data-members:\n"
+      << "\n           theRadarFrequency: " << theRadarFrequency << "Hz"
+      << "\n      theAzimuthTimeInterval: " << theAzimuthTimeInterval << "us"
+      << "\n            theNearRangeTime: " << theNearRangeTime << "s"
+      << "\n        theRangeSamplingRate: " << theRangeSamplingRate << "Hz"
+      << "\n          theRangeResolution: " << theRangeResolution << "m"
+      << "\n theBistaticCorrectionNeeded: " << theBistaticCorrectionNeeded
+      << "\n              theProductType: " << theProductType
+      << "\n        theAzimuthTimeOffset: " << theAzimuthTimeOffset << "us offset"
+      << "\n          theRangeTimeOffset: " << theRangeTimeOffset << "s offset"
+      << "\n               theGCPRecords: " << theGCPRecords
+      << "\n"
+      ;
+}
+

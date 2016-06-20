@@ -138,12 +138,12 @@ namespace ossimplugins {
    inline
       void add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, time::ModifiedJulianDate const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
-         add(kwl, prefix, key, v.as_day_frac(), overwrite);
+         add(kwl, prefix, key, to_simple_string(v), overwrite);
       }
    inline
       void add(ossimKeywordlist & kwl, std::string const& key, time::ModifiedJulianDate const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
-         add(kwl, key, v.as_day_frac(), overwrite);
+         add(kwl, key, to_simple_string(v), overwrite);
       }
 #if defined(USE_BOOST_TIME)
    inline
@@ -162,6 +162,7 @@ namespace ossimplugins {
    inline void get(ossimKeywordlist const& kwl, std::string const& prefix, std::string const& key, T & v)
    {
       std::string const& str = kwl.findKey(prefix, key);
+      assert(&str != &ossimKeywordlist::NULL_KW);
       assert(!str.empty());
       v = to<T>(str, " extracting " + prefix + key + "from KWL");
    }
@@ -170,8 +171,22 @@ namespace ossimplugins {
    inline void get(ossimKeywordlist const& kwl, std::string const& key, T & v)
    {
       std::string const& str = kwl.findKey(key);
+      assert(&str != &ossimKeywordlist::NULL_KW);
       assert(!str.empty());
       v = to<T>(str, " extracting " + key + "from KWL");
+   }
+
+   inline void get(ossimKeywordlist const& kwl, std::string const& key, time::ModifiedJulianDate & v)
+   {
+      std::string const& str = kwl.findKey(key);
+      assert(&str != &ossimKeywordlist::NULL_KW);
+      assert(!str.empty());
+      v = time::toModifiedJulianDate(str);
+   }
+
+   inline void get(ossimKeywordlist const& kwl, std::string const& prefix, std::string const& key, time::ModifiedJulianDate & v)
+   {
+      get(kwl, prefix + key, v);
    }
 
 } // ossimplugins namespace

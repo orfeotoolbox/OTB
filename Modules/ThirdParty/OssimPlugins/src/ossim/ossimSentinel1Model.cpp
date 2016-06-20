@@ -548,9 +548,9 @@ namespace ossimplugins
       addOptional (theProductKwl, SUPPORT_DATA_PREFIX, "data_take_id",       adsHeader,        "missionDataTakeId");
       addOptional (theProductKwl, SUPPORT_DATA_PREFIX, "slice_num",          imageInformation, "sliceNumber");
 
-      ossimXmlNode const& xAzimtuTimeInterval = getExpectedFirstNode(imageInformation, "azimuthTimeInterval");
-      theAzimuthTimeInterval = to<double>(xAzimtuTimeInterval.getText(), "decoding imageInformation/azimuthTimeInterval");
-      add(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", xAzimtuTimeInterval.getText());
+      ossimXmlNode const& xAzimutTimeInterval = getExpectedFirstNode(imageInformation, "azimuthTimeInterval");
+      theAzimuthTimeInterval = to<double>(xAzimutTimeInterval.getText(), "decoding imageInformation/azimuthTimeInterval");
+      add(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", xAzimutTimeInterval.getText());
       // addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", imageInformation, "azimuthTimeInterval");
 
       const double rangeSpacing = getDoubleFromFirstNode(imageInformation, "rangePixelSpacing");

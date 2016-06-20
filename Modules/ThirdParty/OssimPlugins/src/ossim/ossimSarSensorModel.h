@@ -36,6 +36,7 @@
 
 #if defined(USE_BOOST_TIME)
 #  include <boost/date_time/posix_time/posix_time.hpp>
+#include <ostream>
 #endif
 
 namespace ossimplugins
@@ -82,6 +83,9 @@ public:
       { return lhs.m_value <  rhs.m_value; }
       friend bool operator==(ProductType lhs, ProductType rhs)
       { return lhs.m_value == rhs.m_value; }
+      friend std::ostream & operator<<(std::ostream & os, const ossimSarSensorModel::ProductType & v)
+      { return os << v.ToString(); }
+      
 
       static ProductType Max  ()
       { return ProductType(build_max()); }
@@ -118,6 +122,13 @@ public:
       double   slantRangeTime;
       ossimDpt imPt;
       ossimGpt worldPt;
+      friend std::ostream & operator<<(std::ostream & os, const ossimSarSensorModel::GCPRecordType & v)
+      {
+         return os << "{azimuthTime: " << v.azimuthTime 
+            <<        ", imPt: "       << v.imPt
+            <<        ", worldPt: "    << v.worldPt
+            <<        "}";
+      }
    };
 
    struct BurstRecordType
@@ -232,6 +243,8 @@ public:
             return false;
       }
    }
+
+   virtual std::ostream& print(std::ostream& out) const;
 protected:
 
    /**
@@ -336,8 +349,8 @@ protected:
    bool                                        theBistaticCorrectionNeeded; // Do we need to compute
    // bistatic correction ?
    ProductType                                 theProductType; // GRD/SLC
-   double                                      theAzimuthTimeOffset; // Offset in microseconds
-   double                                      theRangeTimeOffset; // Offset in seconds;
+   double                                      theAzimuthTimeOffset; // Offset in microseconds, computed
+   double                                      theRangeTimeOffset; // Offset in seconds, computed
 
    static const double C;
 private:
