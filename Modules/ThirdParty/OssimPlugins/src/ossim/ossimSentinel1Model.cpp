@@ -575,6 +575,7 @@ namespace ossimplugins
       //RK div by oneMillion taken from S1tlbx
       addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "range_sampling_rate",        productInformation, "rangeSamplingRate");
       addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "radar_frequency",            productInformation, "radarFrequency");
+      // TODO: store the line_time_interval * 1000000
       addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval",         imageInformation,   "azimuthTimeInterval");
       addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", imageInformation,   "slantRangeTime");
 
@@ -831,7 +832,7 @@ namespace ossimplugins
             add(theProductKwl,burstPrefix + keyAzimuthStartTime, azTime + microseconds(first_valid*theAzimuthTimeInterval));
             add(theProductKwl,burstPrefix + keyAzimuthStopTime,  azTime + microseconds(last_valid*theAzimuthTimeInterval));
          }
-         add(theProductKwl, BURST_PREFIX+".number",             burstId);
+         add(theProductKwl, BURST_NUMBER_KEY, burstId);
       }
    }
 
@@ -865,7 +866,8 @@ namespace ossimplugins
          {
             throw std::runtime_error("The "+rg0_xpath+" record has an empty coef vector");
          }
-         unsigned int coeff_idx;
+         add(theProductKwl, prefix + NUMBER_KEY, ssplit.size());
+         unsigned int coeff_idx = 0;
          for (std::vector<ossimString>::const_iterator cIt = ssplit.begin(), e = ssplit.end()
                ; cIt != e
                ; ++cIt, ++coeff_idx
@@ -876,7 +878,6 @@ namespace ossimplugins
             add(theProductKwl, prefix, *cIt); // Don't check this is really a double.
          }
          assert(coeff_idx>0 &&"The rg0 record has empty coefs vector.");
-         add(theProductKwl, prefix + NUMBER_KEY, coeff_idx);
       }
       add(theProductKwl, sr_gr_prefix + NUMBER_KEY, static_cast<ossim_uint32>(xnodes.size()));
    }
