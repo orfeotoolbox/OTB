@@ -124,7 +124,7 @@ namespace ossimplugins
               "calibration_lookup_flag",
               "true",
               true);
-      
+
       kwl.addList(theManifestKwl, true); // TODO: really ?
       kwl.addList(theProductKwl, true);
 
@@ -176,8 +176,9 @@ namespace ossimplugins
       SCOPED_LOG(traceDebug, MODULE);
 
       bool result = false;
-    
-      if ( !file.exists() || ((file.ext().downcase() != "tiff") && file.ext().downcase() != ".xml" ))
+
+      const ossimString ext = file.ext().downcase();
+      if ( !file.exists() || (ext != "tiff" && ext != "xml" ))
       {
          return false;
       }
@@ -188,13 +189,13 @@ namespace ossimplugins
          ossimFilename xmlFileName = file;
 
          // If this is tiff file, look for corresponding annotation file
-         if(file.ext().downcase() != ".xml")
+         if(ext != "xml")
            {
-           ossimFilename fileNameWihtoutExtension = file.fileNoExtension();
-           ossimFilename path = file.path().path();
+           const ossimFilename fileNameWihtoutExtension = file.fileNoExtension();
+           const ossimFilename path = file.path().path();
            xmlFileName = ossimFilename(path+"/annotation/"+fileNameWihtoutExtension+".xml");
            }
-       
+
          if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
          {
             ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->readProduct( safeFile )\n";
@@ -227,12 +228,12 @@ namespace ossimplugins
          ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initSRGR( )\n";
          return false;
          }
-#endif      
-         
+#endif
+
          // Commit the operation
          theProductXmlFile = file;
          return true;
-      }     
+      }
    }
 
 #if 0
@@ -563,7 +564,7 @@ namespace ossimplugins
       addOptional(theProductKwl, ossimKeywordNames::NUMBER_SAMPLES_KW, imageInformation, "numberOfSamples");
       addOptional(theProductKwl, ossimKeywordNames::NUMBER_LINES_KW,   imageInformation, "numberOfLines");
 
-      add(theProductKwl, 
+      add(theProductKwl,
             "sample_type" /*ossimKeywordNames::PIXEL_TYPE_KW*/,
             getOptionalTextFromFirstNode(imageInformation, "pixelValue").upcase());
 

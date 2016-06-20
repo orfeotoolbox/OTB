@@ -51,9 +51,8 @@ int main(int argc, char * argv[])
    }
 
    try {
-#if 0
       std::auto_ptr<ossimProjection> projection
-         (ossimPluginProjectionFactory::instance()->createProjection(annotationXml));
+         (ossimPluginProjectionFactory::instance()->createProjection(annotationXml, 42));
       if (!projection.get()) {
          throw std::runtime_error("Cannot read annotation file ("+annotationXml+"). Cannot create a projection from it.");
       }
@@ -63,11 +62,7 @@ int main(int argc, char * argv[])
          throw std::runtime_error(
                "Unlike Expectations, the annotation file ("+annotationXml+") is not a Sentinel Annotation File");
       }
-#else
-      std::auto_ptr<ossimSentinel1Model> sensor(new ossimSentinel1Model());
-      if (!sensor->readProduct(annotationXml)) {
-         throw std::runtime_error("Cannot read annotation file ("+annotationXml+"). Cannot create a projection from it.");
-      }
+
       if (verbose)
       {
          std::map<std::string, std::string> const& kwl = sensor->theProductKwl.getMap();
@@ -79,8 +74,7 @@ int main(int argc, char * argv[])
             std::cout << "kwl["<<b->first<<"] -> " << b->second << "\n";
          }
       }
-#endif
-      // TODO: check whether we need an explicit save+load conf
+
       ossimKeywordlist kwl;
       sensor->saveState(kwl, "S1.");
       sensor->loadState(kwl, "S1.");
