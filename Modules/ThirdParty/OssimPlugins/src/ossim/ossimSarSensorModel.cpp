@@ -1000,14 +1000,14 @@ namespace ossimplugins
    void get(
          ossimKeywordlist                             const& kwl,
          std::vector<ossimSarSensorModel::BurstRecordType> & burstRecords)
-   {
+   {   
       char burstPrefix_[1024];
       std::size_t nbBursts ;
       get(kwl, BURST_NUMBER_KEY, nbBursts);
       for (std::size_t burstId=0; burstId!=nbBursts ; ++burstId) {
          const int pos = std::snprintf(burstPrefix_, sizeof(burstPrefix_), "%s[%d].", BURST_PREFIX.c_str(), burstId);
          assert(pos > 0 && pos < sizeof(burstPrefix_));
-         const std::string burstPrefix(burstPrefix, pos);
+         const std::string burstPrefix(burstPrefix_, pos);
 
          ossimSarSensorModel::BurstRecordType burstRecord;
          get(kwl, burstPrefix + keyStartLine,        burstRecord.startLine);
@@ -1050,7 +1050,7 @@ namespace ossimplugins
    {
       char prefix_[1024];
       std::size_t nbCoords ;
-      get(kwl, sr_gr_prefix + NUMBER_KEY, nbCoords);
+      get(kwl, sr_gr_prefix +"."+ NUMBER_KEY, nbCoords);
 
       for (std::size_t idx=0 ; idx!=nbCoords ; ++idx)
       {
@@ -1065,7 +1065,7 @@ namespace ossimplugins
          std::size_t nbCoeffs;
          get(kwl, prefix + NUMBER_KEY,      nbCoeffs);
          for (std::size_t coeff_idx=0; coeff_idx!=nbCoeffs ; ++coeff_idx) {
-            const int pos2 = std::snprintf(prefix_+pos, sizeof(prefix_)-pos, ".coeff[%d]", coeff_idx);
+            const int pos2 = std::snprintf(prefix_+pos, sizeof(prefix_)-pos, "coeff[%d]", coeff_idx);
             assert(pos2 > 0 && pos+pos2 < sizeof(prefix_));
             prefix.assign(prefix_, pos+pos2);
             double coeff;
