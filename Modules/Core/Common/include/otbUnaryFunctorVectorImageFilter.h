@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnaryFunctorVectorImageFilter_h
-#define __otbUnaryFunctorVectorImageFilter_h
+#ifndef otbUnaryFunctorVectorImageFilter_h
+#define otbUnaryFunctorVectorImageFilter_h
 
 #include "itkInPlaceImageFilter.h"
 
@@ -90,7 +90,7 @@ public:
 
 protected:
   UnaryFunctorVectorImageFilter();
-  virtual ~UnaryFunctorVectorImageFilter() { }
+  ~UnaryFunctorVectorImageFilter() ITK_OVERRIDE { }
 
   /** UnaryFunctorVectorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -102,14 +102,14 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                    itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /**
    * Since the number of components per pixel depends on the radius range, one must reimplement
    * this method to set the proper number of component on the filter output.
    */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
 private:
   UnaryFunctorVectorImageFilter(const Self &); //purposely not implemented

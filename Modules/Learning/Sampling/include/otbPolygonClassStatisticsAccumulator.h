@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygonClassStatisticsAccumulator_h
-#define __otbPolygonClassStatisticsAccumulator_h
+#ifndef otbPolygonClassStatisticsAccumulator_h
+#define otbPolygonClassStatisticsAccumulator_h
 
 #include "otbOGRDataSourceWrapper.h"
 
@@ -65,7 +65,7 @@ protected:
   PolygonClassStatisticsAccumulator();
     
   /** Destructor */
-  virtual ~PolygonClassStatisticsAccumulator();
+  ~PolygonClassStatisticsAccumulator() ITK_OVERRIDE;
 
 private:
   //Number of pixels in all the polygons

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKMLVectorDataIO_h
-#define __otbKMLVectorDataIO_h
+#ifndef otbKMLVectorDataIO_h
+#define otbKMLVectorDataIO_h
 
 #include <string>
 
@@ -87,27 +87,27 @@ public:
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*) const;
+  bool CanReadFile(const char*) const ITK_OVERRIDE;
 
   /** Reads the data from disk into the data structure provided. */
-  virtual void Read(itk::DataObject* data);
+  void Read(itk::DataObject* data) ITK_OVERRIDE;
 
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
-  virtual bool CanWriteFile(const char*) const;
+  bool CanWriteFile(const char*) const ITK_OVERRIDE;
 
   /** Writes the data to disk from the data structure provided */
-  virtual void Write(const itk::DataObject* data, char ** papszOptions = NULL);
+  void Write(const itk::DataObject* data, char ** papszOptions = ITK_NULLPTR) ITK_OVERRIDE;
 
 protected:
   /** Constructor.*/
   KMLVectorDataIO();
   /** Destructor.*/
-  virtual ~KMLVectorDataIO();
+  ~KMLVectorDataIO() ITK_OVERRIDE;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   static const kmldom::FeaturePtr GetRootFeature(const kmldom::ElementPtr& root);
 
@@ -143,4 +143,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbKMLVectorDataIO_h
+#endif // otbKMLVectorDataIO_h

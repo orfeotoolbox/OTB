@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMActivationBuilder_h
-#define __otbSOMActivationBuilder_h
+#ifndef otbSOMActivationBuilder_h
+#define otbSOMActivationBuilder_h
 
 #include "itkImageToImageFilter.h"
 
@@ -71,11 +71,11 @@ protected:
   /** Constructor */
   SOMActivationBuilder();
   /** Destructor */
-  ~SOMActivationBuilder();
+  ~SOMActivationBuilder() ITK_OVERRIDE;
   /** Main computation method */
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SOMActivationBuilder(const Self &); // purposely not implemented

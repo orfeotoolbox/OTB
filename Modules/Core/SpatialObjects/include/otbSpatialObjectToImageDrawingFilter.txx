@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpatialObjectToImageDrawingFilter_txx
-#define __otbSpatialObjectToImageDrawingFilter_txx
+#ifndef otbSpatialObjectToImageDrawingFilter_txx
+#define otbSpatialObjectToImageDrawingFilter_txx
 
 #include "otbSpatialObjectToImageDrawingFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -82,7 +82,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject, TOutputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TInputSpatialObject *>

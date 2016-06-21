@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataExtractROI_h
-#define __otbVectorDataExtractROI_h
+#ifndef otbVectorDataExtractROI_h
+#define otbVectorDataExtractROI_h
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbRemoteSensingRegion.h"
@@ -103,8 +103,8 @@ public:
 
 protected:
   VectorDataExtractROI();
-  virtual ~VectorDataExtractROI() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~VectorDataExtractROI() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Method to compare the projection embedded in the cartoRegion And the the InputVectorData*/
   virtual void CompareInputAndRegionProjection();
@@ -119,7 +119,7 @@ protected:
   virtual VertexType  PointToContinuousIndex(ProjPointType point);
 
   /** Prototype of the generate data method*/
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   /** Method to check if the polygon Bounding Box ha ve a non-null intersection with the ROI*/
   virtual bool IsPolygonIntersectionNotNull(PolygonPointerType polygon);

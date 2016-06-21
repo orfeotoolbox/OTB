@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelImageRegionMergingFilter_h
-#define __otbLabelImageRegionMergingFilter_h
+#ifndef otbLabelImageRegionMergingFilter_h
+#define otbLabelImageRegionMergingFilter_h
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -112,20 +112,20 @@ public:
   InputSpectralImageType * GetInputSpectralImage();
 
 protected:
-  virtual void EnlargeOutputRequestedRegion( itk::DataObject *output );
+  void EnlargeOutputRequestedRegion( itk::DataObject *output ) ITK_OVERRIDE;
 
-   virtual void GenerateOutputInformation(void);
+   void GenerateOutputInformation(void) ITK_OVERRIDE;
 
-   virtual void GenerateData();
+   void GenerateData() ITK_OVERRIDE;
 
   /** Constructor */
   LabelImageRegionMergingFilter();
 
   /** Destructor */
-  virtual ~LabelImageRegionMergingFilter();
+  ~LabelImageRegionMergingFilter() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Method to build a map of adjacent regions */
   RegionAdjacencyMapType LabelImageToRegionAdjacencyMap(typename OutputLabelImageType::Pointer inputLabelImage);

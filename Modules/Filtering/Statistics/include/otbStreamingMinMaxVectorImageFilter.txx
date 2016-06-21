@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingMinMaxVectorImageFilter_txx
-#define __otbStreamingMinMaxVectorImageFilter_txx
+#ifndef otbStreamingMinMaxVectorImageFilter_txx
+#define otbStreamingMinMaxVectorImageFilter_txx
 #include "otbStreamingMinMaxVectorImageFilter.h"
 
 #include "itkImageRegionIterator.h"

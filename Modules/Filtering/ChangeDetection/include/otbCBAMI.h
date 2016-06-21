@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCBAMI_h
-#define __otbCBAMI_h
+#ifndef otbCBAMI_h
+#define otbCBAMI_h
 
 #include <vector>
 #include "itkMath.h"

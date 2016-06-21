@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapFeaturesFunctorImageFilter_h
-#define __otbLabelMapFeaturesFunctorImageFilter_h
+#ifndef otbLabelMapFeaturesFunctorImageFilter_h
+#define otbLabelMapFeaturesFunctorImageFilter_h
 
 #include "itkInPlaceLabelMapFilter.h"
 
@@ -96,17 +96,17 @@ protected:
   LabelMapFeaturesFunctorImageFilter() : m_Functor() {}
 
   /** Destructor */
-  ~LabelMapFeaturesFunctorImageFilter() {}
+  ~LabelMapFeaturesFunctorImageFilter() ITK_OVERRIDE {}
 
   /** Threaded generate data */
-  virtual void ThreadedProcessLabelObject(LabelObjectType * labelObject)
+  void ThreadedProcessLabelObject(LabelObjectType * labelObject) ITK_OVERRIDE
   {
     // Call the functor
     m_Functor(labelObject);
   }
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     // Call superclass implementation
     Superclass::PrintSelf(os, indent);

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRFeatureWrapper_h
-#define __otbOGRFeatureWrapper_h
+#ifndef otbOGRFeatureWrapper_h
+#define otbOGRFeatureWrapper_h
 
 // #include <iosfwd> // std::ostream&
 #if defined(__GNUC__) || defined(__clang__)
@@ -365,4 +365,4 @@ private:
 #include "otbOGRFeatureWrapper.txx"
 #endif
 
-#endif // __otbOGRFeatureWrapper_h
+#endif // otbOGRFeatureWrapper_h

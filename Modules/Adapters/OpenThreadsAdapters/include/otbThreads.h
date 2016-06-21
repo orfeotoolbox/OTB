@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbThreads_h
-#define __otbThreads_h
+#ifndef otbThreads_h
+#define otbThreads_h
 
 namespace otb
 {

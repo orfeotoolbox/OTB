@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbMaskMuParserFilter_txx
-#define __otbMaskMuParserFilter_txx
+#ifndef otbMaskMuParserFilter_txx
+#define otbMaskMuParserFilter_txx
 
 #include "otbMaskMuParserFilter.h"
 #include <iostream>

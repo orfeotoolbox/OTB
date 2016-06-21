@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadiometricMomentsImageFilter_h
-#define __otbRadiometricMomentsImageFilter_h
+#ifndef otbRadiometricMomentsImageFilter_h
+#define otbRadiometricMomentsImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbRadiometricMomentsFunctor.h"
@@ -89,10 +89,10 @@ public:
 
 protected:
   RadiometricMomentsImageFilter();
-  virtual ~RadiometricMomentsImageFilter() {}
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
-  virtual void GenerateInputRequestedRegion(void);
-  virtual void GenerateOutputInformation(void);
+  ~RadiometricMomentsImageFilter() ITK_OVERRIDE {}
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
 private:
   RadiometricMomentsImageFilter(const Self &);  //purposely not implemented

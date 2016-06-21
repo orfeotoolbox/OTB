@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
    =========================================================================*/
-#ifndef __otbTileDimensionTiledStreamingManager_txx
-#define __otbTileDimensionTiledStreamingManager_txx
+#ifndef otbTileDimensionTiledStreamingManager_txx
+#define otbTileDimensionTiledStreamingManager_txx
 
 #include "otbTileDimensionTiledStreamingManager.h"
 #include "otbMacro.h"

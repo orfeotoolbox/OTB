@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetInputImageParameter_h
-#define __otbWrapperQtWidgetInputImageParameter_h
+#ifndef otbWrapperQtWidgetInputImageParameter_h
+#define otbWrapperQtWidgetInputImageParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetInputImageParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetInputImageParameter(InputImageParameter*, QtWidgetModel*);
-  virtual ~QtWidgetInputImageParameter();
+  ~QtWidgetInputImageParameter() ITK_OVERRIDE;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -53,9 +53,9 @@ private:
   QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
   void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
 
   InputImageParameter::Pointer m_InputImageParam;

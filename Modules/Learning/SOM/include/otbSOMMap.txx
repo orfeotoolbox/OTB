@@ -18,8 +18,8 @@ See IMTCopyright.txt for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMMap_txx
-#define __otbSOMMap_txx
+#ifndef otbSOMMap_txx
+#define otbSOMMap_txx
 
 #include "itkImageRegionIteratorWithIndex.h"
 

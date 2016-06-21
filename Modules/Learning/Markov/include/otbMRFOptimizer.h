@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMRFOptimizer_h
-#define __otbMRFOptimizer_h
+#ifndef otbMRFOptimizer_h
+#define otbMRFOptimizer_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -73,7 +73,7 @@ protected:
   MRFOptimizer() :
     m_NumberOfParameters(1),
     m_Parameters(1) {}
-  virtual ~MRFOptimizer() {}
+  ~MRFOptimizer() ITK_OVERRIDE {}
   unsigned int   m_NumberOfParameters;
   ParametersType m_Parameters;
 

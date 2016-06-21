@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToHessianDeterminantImageFilter_h
-#define __otbImageToHessianDeterminantImageFilter_h
+#ifndef otbImageToHessianDeterminantImageFilter_h
+#define otbImageToHessianDeterminantImageFilter_h
 
 #include "itkProcessObject.h"
 #include "itkImageToImageFilter.h"
@@ -132,15 +132,15 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~ImageToHessianDeterminantImageFilter();
+  ~ImageToHessianDeterminantImageFilter() ITK_OVERRIDE;
   /**
    * Standard PrintSelf method.
    */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Main computation method.
    */
-  virtual void  GenerateData();
+  void  GenerateData() ITK_OVERRIDE;
 
 private:
 

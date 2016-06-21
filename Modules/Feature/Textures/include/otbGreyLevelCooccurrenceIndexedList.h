@@ -16,8 +16,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
-#ifndef __otbGreyLevelCooccurrenceIndexedList_h
-#define __otbGreyLevelCooccurrenceIndexedList_h
+#ifndef otbGreyLevelCooccurrenceIndexedList_h
+#define otbGreyLevelCooccurrenceIndexedList_h
 
 #include "itkNumericTraits.h"
 #include "itkObjectFactory.h"
@@ -135,7 +135,7 @@ public:
 
 protected:
   GreyLevelCooccurrenceIndexedList();
-  ~GreyLevelCooccurrenceIndexedList() { }
+  ~GreyLevelCooccurrenceIndexedList() ITK_OVERRIDE { }
 
   /** create a cooccurrence pair with given index and frequency = 1
     * value. Next occurrence of same index is checked via m_LookupArray and the
@@ -152,7 +152,7 @@ protected:
   /** Get index of the pixelPair combination and save the result in index **/
   bool GetIndex(const PixelPairType & pixelPair, IndexType & index) const;
 
-  void PrintSelf(std::ostream & os, itk::Indent indent) const;
+  void PrintSelf(std::ostream & os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

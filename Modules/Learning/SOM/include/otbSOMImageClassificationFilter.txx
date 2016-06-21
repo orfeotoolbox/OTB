@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMImageClassificationFilter_txx
-#define __otbSOMImageClassificationFilter_txx
+#ifndef otbSOMImageClassificationFilter_txx
+#define otbSOMImageClassificationFilter_txx
 
 #include "otbSOMImageClassificationFilter.h"
 #include "itkImageRegionIterator.h"
@@ -52,7 +52,7 @@ SOMImageClassificationFilter<TInputImage, TOutputImage, TSOMMap, TMaskImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const MaskImageType *>(this->itk::ProcessObject::GetInput(1));
 }

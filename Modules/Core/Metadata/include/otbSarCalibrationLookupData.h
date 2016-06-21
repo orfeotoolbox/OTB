@@ -38,7 +38,7 @@ class ITK_EXPORT SarCalibrationLookupData : public itk::LightObject {
 
   }
 
-  virtual ~SarCalibrationLookupData()
+  ~SarCalibrationLookupData() ITK_OVERRIDE
   {
   }
 
@@ -54,7 +54,7 @@ class ITK_EXPORT SarCalibrationLookupData : public itk::LightObject {
 
   itkGetMacro(Type, short);
 
-  void PrintSelf(std::ostream & os, itk::Indent indent) const
+  void PrintSelf(std::ostream & os, itk::Indent indent) const ITK_OVERRIDE
   {
     os << indent << " lookup table type:'" << m_Type << "'" << std::endl;
     Superclass::PrintSelf(os, indent);

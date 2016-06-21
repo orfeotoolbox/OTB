@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnaryFunctorNeighborhoodImageFilter_txx
-#define __otbUnaryFunctorNeighborhoodImageFilter_txx
+#ifndef otbUnaryFunctorNeighborhoodImageFilter_txx
+#define otbUnaryFunctorNeighborhoodImageFilter_txx
 
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 #include "itkImageRegionIterator.h"

@@ -73,13 +73,13 @@ namespace otb
 {
 
 MapProjectionAdapter::MapProjectionAdapter():
-  m_MapProjection(NULL), m_ProjectionRefWkt(""), m_ReinstanciateProjection(true)
+  m_MapProjection(ITK_NULLPTR), m_ProjectionRefWkt(""), m_ReinstanciateProjection(true)
 {
 }
 
 MapProjectionAdapter::~MapProjectionAdapter()
 {
-  if (m_MapProjection != NULL)
+  if (m_MapProjection != ITK_NULLPTR)
     {
     delete m_MapProjection;
     }
@@ -88,7 +88,7 @@ MapProjectionAdapter::~MapProjectionAdapter()
 MapProjectionAdapter::InternalMapProjectionPointer MapProjectionAdapter::GetMapProjection()
 {
   itkDebugMacro("returning MapProjection address " << this->m_MapProjection);
-  if ((m_ReinstanciateProjection) || (m_MapProjection == NULL))
+  if ((m_ReinstanciateProjection) || (m_MapProjection == ITK_NULLPTR))
     {
     this->InstanciateProjection();
     }
@@ -99,7 +99,7 @@ MapProjectionAdapter::InternalMapProjectionPointer MapProjectionAdapter::GetMapP
 MapProjectionAdapter::InternalMapProjectionConstPointer MapProjectionAdapter::GetMapProjection() const
 {
   itkDebugMacro("returning MapProjection address " << this->m_MapProjection);
-  if ((m_ReinstanciateProjection) || (m_MapProjection == NULL))
+  if ((m_ReinstanciateProjection) || (m_MapProjection == ITK_NULLPTR))
     {
     itkExceptionMacro(<< "m_MapProjection not up-to-date, call InstanciateProjection() first");
     }
@@ -111,7 +111,7 @@ std::string MapProjectionAdapter::GetWkt() const
 {
   ossimKeywordlist kwl;
   this->GetMapProjection();
-  if (m_MapProjection == NULL)
+  if (m_MapProjection == ITK_NULLPTR)
     {
     return "";
     }
@@ -217,7 +217,7 @@ std::string MapProjectionAdapter::GetParameter(const std::string& key) const
 
 bool MapProjectionAdapter::InstanciateProjection()
 {
-  if ((this->m_ReinstanciateProjection) || (m_MapProjection == NULL))
+  if ((this->m_ReinstanciateProjection) || (m_MapProjection == ITK_NULLPTR))
     {
     ossimKeywordlist      kwl;
     ossimOgcWktTranslator wktTranslator;
@@ -248,7 +248,7 @@ bool MapProjectionAdapter::InstanciateProjection()
       // ossimUtmProjection for example)
       ossimString name(m_ProjectionRefWkt);
       m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(name);
-      if (m_MapProjection == NULL)
+      if (m_MapProjection == ITK_NULLPTR)
         {
         // Trying directly extending the m_ProjectionRefWkt (convert the
         // Utm to ossimUtmProjection for example)
@@ -258,7 +258,7 @@ bool MapProjectionAdapter::InstanciateProjection()
         m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(extendedName);
        }
 
-      if (m_MapProjection == NULL) return false;
+      if (m_MapProjection == ITK_NULLPTR) return false;
 
       }
 
@@ -272,7 +272,7 @@ bool MapProjectionAdapter::InstanciateProjection()
 void MapProjectionAdapter::InverseTransform(double x, double y, double z,
                                        double& lon, double& lat, double& h)
 {
-  if (m_MapProjection == NULL)
+  if (m_MapProjection == ITK_NULLPTR)
     {
     otbMsgDevMacro(<< "WARNING: Using identity");
     lon = x;
@@ -296,7 +296,7 @@ void MapProjectionAdapter::InverseTransform(double x, double y, double z,
 void MapProjectionAdapter::ForwardTransform(double lon, double lat, double h,
                                        double& x, double& y, double& z)
 {
-  if (m_MapProjection == NULL)
+  if (m_MapProjection == ITK_NULLPTR)
     {
     otbMsgDevMacro(<< "WARNING: Using identity");
     x = lon;

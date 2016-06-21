@@ -51,7 +51,7 @@ private:
    
     }
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("PolygonClassStatistics");
     SetDescription("Computes statistics on a training polygon set.");
@@ -108,12 +108,12 @@ private:
     SetDocExampleParameterValue("out","polygonStat.xml");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
   otb::ogr::DataSource::Pointer vectors = 
     otb::ogr::DataSource::New(this->GetParameterString("vec"));

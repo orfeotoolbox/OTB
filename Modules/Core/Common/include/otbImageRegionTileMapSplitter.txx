@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageRegionTileMapSplitter_txx
-#define __otbImageRegionTileMapSplitter_txx
+#ifndef otbImageRegionTileMapSplitter_txx
+#define otbImageRegionTileMapSplitter_txx
 
 #include "otbImageRegionTileMapSplitter.h"
 #include "otbMath.h"

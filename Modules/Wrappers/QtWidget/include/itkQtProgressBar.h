@@ -36,7 +36,7 @@ public:
   QtProgressBar( QWidget *parent );
 
   /** Destructor */
-  ~QtProgressBar();
+  ~QtProgressBar() ITK_OVERRIDE;
 
   /** Get Command */
   RedrawCommandType * GetRedrawCommand( void ) const;

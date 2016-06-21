@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentImageToOGRLayerFilter_h
-#define __otbPersistentImageToOGRLayerFilter_h
+#ifndef otbPersistentImageToOGRLayerFilter_h
+#define otbPersistentImageToOGRLayerFilter_h
 
 #include "otbPersistentImageFilter.h"
 
@@ -73,9 +73,9 @@ public:
   typedef ogr::Layer                                 OGRLayerType;
   typedef ogr::Feature                               OGRFeatureType;
 
-  void AllocateOutputs();
-  virtual void Reset(void);
-  virtual void Synthetize(void);
+  void AllocateOutputs() ITK_OVERRIDE;
+  void Reset(void) ITK_OVERRIDE;
+  void Synthetize(void) ITK_OVERRIDE;
 
   /** This method creates the output layer in the OGRLayer set by the user.
    * \note This methode must be called before the call of Update .
@@ -95,11 +95,11 @@ public:
 
 protected:
   PersistentImageToOGRLayerFilter();
-  virtual ~PersistentImageToOGRLayerFilter();
+  ~PersistentImageToOGRLayerFilter() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 
 private:

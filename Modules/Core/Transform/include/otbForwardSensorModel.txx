@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbForwardSensorModel_txx
-#define __otbForwardSensorModel_txx
+#ifndef otbForwardSensorModel_txx
+#define otbForwardSensorModel_txx
 
 #include "otbForwardSensorModel.h"
 #include "otbMacro.h"

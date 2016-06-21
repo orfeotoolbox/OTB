@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageSimulationMethod_txx
-#define __otbImageSimulationMethod_txx
+#ifndef otbImageSimulationMethod_txx
+#define otbImageSimulationMethod_txx
 
 #include "otbImageSimulationMethod.h"
 

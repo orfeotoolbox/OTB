@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageListSource_txx
-#define __otbImageListSource_txx
+#ifndef otbImageListSource_txx
+#define otbImageListSource_txx
 
 #include "otbImageListSource.h"
 
@@ -43,7 +43,7 @@ ImageListSource<TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageListType *> (this->ProcessObject::GetOutput(0));
 }

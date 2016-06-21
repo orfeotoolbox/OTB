@@ -155,7 +155,7 @@ public:
 
 protected:
    MuellerToReciprocalCovarianceImageFilter() {}
-  virtual ~MuellerToReciprocalCovarianceImageFilter() {}
+  ~MuellerToReciprocalCovarianceImageFilter() ITK_OVERRIDE {}
 
 private:
   MuellerToReciprocalCovarianceImageFilter(const Self&); // purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRAndNIRIndexImageFilter_h
-#define __otbRAndNIRIndexImageFilter_h
+#ifndef otbRAndNIRIndexImageFilter_h
+#define otbRAndNIRIndexImageFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
 #include "otbVegetationIndicesFunctor.h"
@@ -68,9 +68,9 @@ public:
 
 protected:
   RAndNIRIndexImageFilter();
-  virtual ~RAndNIRIndexImageFilter() {}
+  ~RAndNIRIndexImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /*  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                               itk::ThreadIdType threadId );

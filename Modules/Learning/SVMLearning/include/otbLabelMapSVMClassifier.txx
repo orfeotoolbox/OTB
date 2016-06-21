@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapSVMClassifier_txx
-#define __otbLabelMapSVMClassifier_txx
+#ifndef otbLabelMapSVMClassifier_txx
+#define otbLabelMapSVMClassifier_txx
 
 #include "otbLabelMapSVMClassifier.h"
 

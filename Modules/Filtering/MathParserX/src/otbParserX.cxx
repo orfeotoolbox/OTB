@@ -232,11 +232,11 @@ protected:
     InitConst();
   }
 
-  virtual ~ParserXImpl()
+  ~ParserXImpl() ITK_OVERRIDE
   {
   }
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

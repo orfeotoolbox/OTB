@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNormalBayesMachineLearningModel_txx
-#define __otbNormalBayesMachineLearningModel_txx
+#ifndef otbNormalBayesMachineLearningModel_txx
+#define otbNormalBayesMachineLearningModel_txx
 
 #include <fstream>
 #include "itkMacro.h"
@@ -76,7 +76,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 
   target[0] = static_cast<TOutputValue>(result);
 
-  if (quality != NULL)
+  if (quality != ITK_NULLPTR)
     {
     if (!this->HasConfidenceIndex())
       {
@@ -93,7 +93,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_NormalBayesModel->save(filename.c_str(), 0);
+    m_NormalBayesModel->save(filename.c_str(), ITK_NULLPTR);
   else
     m_NormalBayesModel->save(filename.c_str(), name.c_str());
 }
@@ -104,7 +104,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_NormalBayesModel->load(filename.c_str(), 0);
+    m_NormalBayesModel->load(filename.c_str(), ITK_NULLPTR);
   else
     m_NormalBayesModel->load(filename.c_str(), name.c_str());
 }
