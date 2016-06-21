@@ -78,7 +78,17 @@ else()
 endif()
 
 #check OGR
-gdal_try_run(FATAL_ERROR GDAL_HAS_OGR gdalOGRTest.cxx)
+#gdal_try_run(FATAL_ERROR GDAL_HAS_OGR gdalOGRTest.cxx)
+try_compile(COMPILE_GDAL_HAS_OGR ${CMAKE_CURRENT_BINARY_DIR}
+${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalOGRTest.cxx
+CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-w" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+OUTPUT_VARIABLE COMPILE_OUTPUT_GDAL_HAS_OGR
+)
+if(NOT COMPILE_GDAL_HAS_OGR)
+ message(FATAL_ERROR "Performing Test COMPILE_GDAL_HAS_OGR - Failed\n COMPILE_OUTPUT:${COMPILE_OUTPUT_GDAL_HAS_OGR}\n")
+  else()
+ message(STATUS "Performing Test COMPILE_GDAL_HAS_OGR - Success")
+endif()
 
 # check formats TIFF, GeoTIFF, JPEG, JPEG2000, HDF5
 # Note : exact format names can be found here http://www.gdal.org/formats_list.html
@@ -97,29 +107,25 @@ gdal_try_run(FATAL_ERROR GDAL_CAN_CREATE_JPEG gdalCreateCopyTest.cxx ${TEMP}/tes
 
 set(JPEG2000_DRIVER_USED)
 gdal_try_run(STATUS GDAL_HAS_JP2OpenJPEG gdalFormatsTest.c JP2OpenJPEG)
-#NOT is neeed because it keep the output of try_run execution which is non-zero if failed
-if (NOT GDAL_HAS_JP2OpenJPEG)
+if (GDAL_HAS_JP2OpenJPEG)
   set(JPEG2000_DRIVER_USED "OpenJPEG")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JP2OpenJPEG gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2OpenJPEG)
 endif()
 
 gdal_try_run(STATUS GDAL_HAS_JP2KAK gdalFormatsTest.c JP2KAK)
-#NOT is neeed because it keep the output of try_run execution which is non-zero if failed
-if (NOT GDAL_HAS_JP2KAK)
+if (GDAL_HAS_JP2KAK)
   set(JPEG2000_DRIVER_USED "Kakadu")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JP2KAK gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2KAK)
 endif()
 
 gdal_try_run(STATUS GDAL_HAS_JP2ECW gdalFormatsTest.c JP2ECW)
-#NOT is neeed because it keep the output of try_run execution which is non-zero if failed
-if (NOT GDAL_HAS_JP2ECW)
+if (GDAL_HAS_JP2ECW)
   set(JPEG2000_DRIVER_USED "ECW")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JP2ECW gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2ECW)
 endif()
 
 gdal_try_run(STATUS GDAL_HAS_JPEG2000 gdalFormatsTest.c JPEG2000)
-#NOT is neeed because it keep the output of try_run execution which is non-zero if failed
-if (NOT GDAL_HAS_JPEG2000)
+if (GDAL_HAS_JPEG2000)
     set(JPEG2000_DRIVER_USED "JPEG2000")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JPEG2000 gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JPEG2000)
 endif()
