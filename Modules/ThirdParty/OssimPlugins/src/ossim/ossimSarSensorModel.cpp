@@ -501,7 +501,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::zeroDopplerLookup(const ossimEcefPoint & inputPt, TimeType & interpAzimuthTime, ossimEcefPoint & interpSensorPos, ossimEcefVector & interpSensorVel) const
    {
-      assert(!theOrbitRecords.empty()&&"Orbit records vector is empty()");
+      assert(!theOrbitRecords.size()<2&&"Orbit records vector contains less than 2 elements");
 
       std::vector<OrbitRecordType>::const_iterator it = theOrbitRecords.begin();
 
@@ -544,43 +544,57 @@ namespace ossimplugins
          }
       }
 
-      // If not found, pass error to caller (not a programming error, but
-      // eronous input parameters
+      bool extrapolate = false;
+      
+      // In this case, we need to extrapolate
       if(it == theOrbitRecords.end())
-      {
-         return false;
-      }
+        {
+        record1 = theOrbitRecords.begin();
+        record2 = record1 + theOrbitRecords.size()-1;
+        doppler1 = (inputPt-record1->position).dot(record1->velocity);
+        doppler2 = (inputPt-record2->position).dot(record2->velocity);
+        double delta_td = record2->azimuthTime.as_day_frac() - record1->azimuthTime.as_day_frac();
+        double a = (doppler2 - doppler1)/delta_td;
+        double b = doppler1 - a * record1->azimuthTime.as_day_frac();
 
-      // now interpolate time and sensor position
-      const double abs_doppler1 = std::abs(doppler1);
-      const double interpDenom = abs_doppler1+std::abs(doppler2);
+        std::cout<<delta_td<<" "<<a<<" "<<b<<std::endl;
+        
+        interpAzimuthTime = time::ModifiedJulianDate(-b / a);
+        
+        }
+      else
+        {
+        // now interpolate time and sensor position
+        const double abs_doppler1 = std::abs(doppler1);
+        const double interpDenom = abs_doppler1+std::abs(doppler2);
+        
+        assert(interpDenom>0&&"Both doppler frequency are null in interpolation weight computation");
 
-      assert(interpDenom>0&&"Both doppler frequency are null in interpolation weight computation");
+        const double interp = abs_doppler1/interpDenom;
+        // std::cout << "OK - interp: " << interp << "\n";
+        
+        // Note that microsecond precision is used here
+        const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
+        // std::cout << "OK - delta_td: " << delta_td.total_seconds() << "\n";
+        // std::cout << "OK - deltat: " << deltat << "ms\n";
+        
+        // Compute interpolated time offset wrt record1
+        // const DurationType td     = microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
+        const DurationType td     = delta_td * interp;
+        const DurationType offset = microseconds(theAzimuthTimeOffset);
+        // std::cout << "td: " << td.total_seconds() << "\n";
+        // std::cout << "offset: " << offset.total_seconds() << "\n";
+        
+        // Compute interpolated azimuth time
+        interpAzimuthTime = record1->azimuthTime + td + offset;
+        // std::cout << "interpAzimuthTime: " << interpAzimuthTime << "\n";
+        }
 
-      const double interp = abs_doppler1/interpDenom;
-      // std::cout << "OK - interp: " << interp << "\n";
-
-      // Note that microsecond precision is used here
-      const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
-      const double deltat = static_cast<double>(delta_td.total_microseconds());
-      // std::cout << "OK - delta_td: " << delta_td << "\n";
-      // std::cout << "OK - deltat: " << deltat << "ms\n";
-
-      // Compute interpolated time offset wrt record1
-      // const DurationType td     = microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
-      const DurationType td     = delta_td * interp;
-      const DurationType offset = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
-      // std::cout << "td: " << td << "\n";
-      // std::cout << "offset: " << offset << "\n";
-
-      // Compute interpolated azimuth time
-      interpAzimuthTime = record1->azimuthTime + td + offset;
-      // std::cout << "interpAzimuthTime: " << interpAzimuthTime << "\n";
-
-      // Interpolate sensor position and velocity
-      interpolateSensorPosVel(interpAzimuthTime,interpSensorPos, interpSensorVel);
-
-      return true;
+      
+        // Interpolate sensor position and velocity
+        interpolateSensorPosVel(interpAzimuthTime,interpSensorPos, interpSensorVel);
+        
+        return true;
    }
 
    void ossimSarSensorModel::computeBistaticCorrection(const ossimEcefPoint & inputPt, const ossimEcefPoint & sensorPos, DurationType & bistaticCorrection) const
