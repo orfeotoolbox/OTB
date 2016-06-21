@@ -131,6 +131,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
 
     //Parse azimuth time interval
     theAzimuthTimeInterval = getDoubleFromFirstNode(xmlRoot, "imageAnnotation/imageInformation/azimuthTimeInterval")*1000000;
+    std::cout << "theAzimuthTimeInterval " << theAzimuthTimeInterval << "\n";
 
 
     // Now read burst records as well
@@ -277,9 +278,9 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
 
             const double timeSinceStartInMicroSeconds = timeSinceStart.total_microseconds();
             gcpRecord.imPt.y= timeSinceStartInMicroSeconds/theAzimuthTimeInterval + acqStartLine;
-            // std::cout << "timeSinceStart: " << timeSinceStart << " = " << gcpRecord.azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
-            // std::cout << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
-            // std::cout << "imPt_y: " << gcpRecord.imPt.y << "\n";
+            std::cout << "timeSinceStart: " << timeSinceStart << " = " << gcpRecord.azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
+            std::cout << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
+            std::cout << "imPt_y: " << gcpRecord.imPt.y << " = " << timeSinceStartInMicroSeconds << "/" << theAzimuthTimeInterval << "+" << acqStartLine << "\n";
         }
         else
         {

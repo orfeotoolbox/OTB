@@ -558,24 +558,29 @@ namespace ossimplugins
       assert(interpDenom>0&&"Both doppler frequency are null in interpolation weight computation");
 
       const double interp = abs_doppler1/interpDenom;
-      // std::cout << "OK - interp: " << interp << "\n";
+      std::cout << "interp: " << interp << "\n";
 
       // Note that microsecond precision is used here
       const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
       const double deltat = static_cast<double>(delta_td.total_microseconds());
-      // std::cout << "OK - delta_td: " << delta_td << "\n";
-      // std::cout << "OK - deltat: " << deltat << "ms\n";
+      std::cout << "delta_td: " << delta_td << "\n";
+      std::cout << "deltat: " << deltat << "ms\n";
 
       // Compute interpolated time offset wrt record1
-      // const DurationType td     = microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
+#if defined(USE_BOOST_TIME)
+      const DurationType td     = microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
+      std::cout << "td: " << td  << "(old formula)" << "\t" << (delta_td * interp)<< "(new formula)\n";
+#else
+      // No need for that many computations (day-frac -> ms -> day frac)
       const DurationType td     = delta_td * interp;
+      std::cout << "td: " << td  << "\n";
+#endif
       const DurationType offset = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
-      // std::cout << "td: " << td << "\n";
-      // std::cout << "offset: " << offset << "\n";
+      std::cout << "offset: " << offset << "\n";
 
       // Compute interpolated azimuth time
       interpAzimuthTime = record1->azimuthTime + td + offset;
-      // std::cout << "interpAzimuthTime: " << interpAzimuthTime << "\n";
+      std::cout << "interpAzimuthTime: " << interpAzimuthTime << "\n";
 
       // Interpolate sensor position and velocity
       interpolateSensorPosVel(interpAzimuthTime,interpSensorPos, interpSensorVel);

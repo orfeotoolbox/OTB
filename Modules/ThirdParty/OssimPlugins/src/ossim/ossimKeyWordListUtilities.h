@@ -157,17 +157,29 @@ namespace ossimplugins {
       }
 #if defined(USE_BOOST_TIME)
    inline
-      boost::posix_time::ptime const& add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, boost::posix_time::ptime const& v)
+      boost::posix_time::ptime const& add(ossimKeywordlist & kwl, std::string const& key, boost::posix_time::ptime const& v)
       {
-         add(kwl, prefix, key, ossimString(to_iso_string(v)));
+         add(kwl, key, to_iso_extended_string(v));
          return v;
       }
    inline
-      boost::posix_time::ptime const& add(ossimKeywordlist & kwl, std::string const& key, boost::posix_time::ptime const& v)
+      boost::posix_time::ptime const& add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, boost::posix_time::ptime const& v)
       {
-         add(kwl, key, to_iso_string(v));
-         return v;
+         return add(kwl, prefix+key, v);
       }
+
+   inline void get(ossimKeywordlist const& kwl, std::string const& key, boost::posix_time::ptime & v)
+   {
+      std::string str = kwl.findKey(key);
+      assert(&str != &ossimKeywordlist::NULL_KW);
+      assert(!str.empty());
+      std::replace(str.begin(), str.end(), 'T', ' ');
+      v = boost::posix_time::time_from_string(str);
+   }
+   inline void get(ossimKeywordlist const& kwl, std::string const& prefix, std::string const& key, boost::posix_time::ptime & v)
+   {
+      get(kwl, prefix+key, v);
+   }
 #endif
 
    template <typename T>

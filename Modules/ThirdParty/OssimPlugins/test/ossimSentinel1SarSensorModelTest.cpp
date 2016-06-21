@@ -15,7 +15,7 @@ enum Inverse { forward, inv, undef};
 
 int main(int argc, char * argv[])
 {
-  std::cout.precision(9);
+  std::cout.precision(20);
   
    string annotationXml;
    Inverse inverse = undef;

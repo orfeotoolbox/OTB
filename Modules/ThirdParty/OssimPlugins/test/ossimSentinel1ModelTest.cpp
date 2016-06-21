@@ -22,7 +22,7 @@ enum Inverse { forward, inv, undef};
 
 int main(int argc, char * argv[])
 {
-   std::cout.precision(9);
+   std::cout.precision(20);
 
    string annotationXml;
    Inverse inverse = undef;
@@ -50,7 +50,7 @@ int main(int argc, char * argv[])
       return EXIT_FAILURE;
    }
 
-   try {
+   // try {
       std::auto_ptr<ossimProjection> projection
          (ossimPluginProjectionFactory::instance()->createProjection(annotationXml, 42));
       if (!projection.get()) {
@@ -89,8 +89,8 @@ int main(int argc, char * argv[])
 
       std::cout << "Validate: " << validate << "\n";
       return validate ? EXIT_SUCCESS : EXIT_FAILURE;
-   } catch (std::exception const& e) {
-      std::cerr << "Error: " << e.what() << "\n";
-   }
+   // } catch (std::exception const& e) {
+      // std::cerr << "Error: " << e.what() << "\n";
+   // }
    return EXIT_FAILURE;
 }

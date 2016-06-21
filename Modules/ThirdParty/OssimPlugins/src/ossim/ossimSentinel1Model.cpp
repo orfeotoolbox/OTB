@@ -10,16 +10,21 @@
 // $Id$
 
 #include "ossimSentinel1Model.h"
-#include <cassert>
-#include <ossim/base/ossimDirectory.h>
-#include <ossim/base/ossimString.h>
-#include <ossim/base/ossimXmlNode.h>
 #include "ossimTraceHelpers.h"
 #include "ossimXmlTools.h"
 #include "ossimKeyWordListUtilities.h"
 #include "ossimSarSensorModelPathsAndKeys.h"
+#include <ossim/base/ossimDirectory.h>
+#include <ossim/base/ossimString.h>
+#include <ossim/base/ossimXmlNode.h>
 #include <iostream>
+#include <cassert>
 
+#if defined(USE_BOOST_TIME)
+            using boost::posix_time::microseconds;
+#else
+            using ossimplugins::time::microseconds;
+#endif
 namespace {// Anonymous namespace
    ossimTrace traceExec  ("ossimSentinel1Model:exec");
    ossimTrace traceDebug ("ossimSentinel1Model:debug");
@@ -552,6 +557,7 @@ namespace ossimplugins
 
       ossimXmlNode const& xAzimutTimeInterval = getExpectedFirstNode(imageInformation, "azimuthTimeInterval");
       theAzimuthTimeInterval = to<double>(xAzimutTimeInterval.getText(), "decoding imageInformation/azimuthTimeInterval")*1000000;
+      std::cout << "theAzimuthTimeInterval " << theAzimuthTimeInterval << "\n";
       add(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", xAzimutTimeInterval.getText());
       // addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", imageInformation, "azimuthTimeInterval");
 
@@ -663,6 +669,9 @@ namespace ossimplugins
          addMandatory(theProductKwl, calibrationPrefix, "polarisation", adsHeader, "polarisation");
 
 #if !defined(USE_BOOST_TIME)
+         addMandatory(theProductKwl, calibrationPrefix, "startTime", adsHeader, "startTime");
+         addMandatory(theProductKwl, calibrationPrefix, "stopTime",  adsHeader, "stopTime");
+#else
          add(theProductKwl, calibrationPrefix, "startTime",
                time::toModifiedJulianDate(getTextFromFirstNode(adsHeader, "startTime")));
 
@@ -698,6 +707,8 @@ namespace ossimplugins
 #if !defined(USE_BOOST_TIME)
             add(theProductKwl, calibrationVectorPrefix, keyAzimuthTime,
                   time::toModifiedJulianDate(getOptionalTextFromFirstNode(calibrationVector, "azimuthTime")));
+#else
+            addMandatory(theProductKwl, calibrationVectorPrefix, keyAzimuthTime, calibrationVector, "azimuthTime");
 #endif
 
             addMandatory(theProductKwl, calibrationVectorPrefix, "line",        calibrationVector, "line");
@@ -750,6 +761,8 @@ namespace ossimplugins
 #if !defined(USE_BOOST_TIME)
             add(theProductKwl, noiseVectorPrefix, keyAzimuthTime,
                   time::toModifiedJulianDate(getTextFromFirstNode(noiseVector, "azimuthTime")));
+#else
+            addMandatory(theProductKwl, noiseVectorPrefix, keyAzimuthTime, noiseVector, "azimuthTime");
 #endif
 
             addMandatory(theProductKwl, noiseVectorPrefix, "line",     noiseVector, "line");
@@ -829,11 +842,6 @@ namespace ossimplugins
             burstRecord.startLine = add(theProductKwl,burstPrefix + keyStartLine,         burstId*linesPerBurst + first_valid);
             burstRecord.endLine   = add(theProductKwl,burstPrefix + keyEndLine,           burstId*linesPerBurst + last_valid);
             // TODO: check units.
-#if defined(USE_BOOST_TIME)
-            using boost::posix_time::microseconds;
-#else
-            using ossimplugins::time::microseconds;
-#endif
             burstRecord.azimuthStartTime = add(theProductKwl,burstPrefix + keyAzimuthStartTime, azTime + microseconds(first_valid*theAzimuthTimeInterval));
             burstRecord.azimuthStopTime  = add(theProductKwl,burstPrefix + keyAzimuthStopTime,  azTime + microseconds(last_valid*theAzimuthTimeInterval));
 
@@ -906,7 +914,7 @@ namespace ossimplugins
          assert(pos >= sizeof(SR_PREFIX)+4 && pos < 1024);
 #if defined(USE_BOOST_TIME)
          const TimeType azimuthTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
-         add(theProductKwl, prefix, attAzimuthTime, ossimString(to_iso_string(azimuthTime)));
+         add(theProductKwl, prefix, attAzimuthTime, azimuthTime);
 #else
          const TimeType azimuthTime = time::toModifiedJulianDate(
                addMandatory(theProductKwl, prefix, attAzimuthTime,     **itNode, attAzimuthTime)); // acquisition time
@@ -978,9 +986,9 @@ namespace ossimplugins
 
             const double timeSinceStartInMicroSeconds = timeSinceStart.total_microseconds();
             const double imPt_y= timeSinceStartInMicroSeconds/theAzimuthTimeInterval + acqStartLine;
-            // std::cout << "timeSinceStart: " << timeSinceStart << " = " << azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
-            // std::cout << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
-            // std::cout << "imPt_y: " << imPt_y << "\n";
+            std::cout << "timeSinceStart: " << timeSinceStart << " = " << azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
+            std::cout << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
+            std::cout << "imPt_y: " << imPt_y << " = " << timeSinceStartInMicroSeconds << "/" << theAzimuthTimeInterval << "+" << acqStartLine << "\n";
             add(theProductKwl, prefix, keyImPtY, imPt_y);
          }
          else
