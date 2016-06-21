@@ -22,7 +22,7 @@ enum Inverse { fwd, inv, undef};
 
 int main(int argc, char * argv[])
 {
-   std::cout.precision(20);
+   std::clog.precision(20);
 
    string annotationXml;
    Inverse inverse = undef;
@@ -49,8 +49,11 @@ int main(int argc, char * argv[])
          << argv[0] << "[-v|--verbose] <inverse> <annotationXml>\n";
       return EXIT_FAILURE;
    }
+   if (!verbose) {
+      std::clog.setstate(std::ios_base::badbit);
+   }
 
-   // try {
+   try {
       std::auto_ptr<ossimProjection> projection
          (ossimPluginProjectionFactory::instance()->createProjection(annotationXml, 42));
       if (!projection.get()) {
@@ -71,7 +74,7 @@ int main(int argc, char * argv[])
                ; ++b
              )
          {
-            std::cout << "kwl["<<b->first<<"] -> " << b->second << "\n";
+            std::clog << "kwl["<<b->first<<"] -> " << b->second << "\n";
          }
       }
 
@@ -79,7 +82,7 @@ int main(int argc, char * argv[])
       sensor->saveState(kwl, "S1.");
       sensor->loadState(kwl, "S1.");
       if (verbose) {
-         sensor->print(std::cout);
+         sensor->print(std::clog);
       }
 
       const bool validate = inverse == inv
@@ -89,8 +92,8 @@ int main(int argc, char * argv[])
 
       std::cout << "Validate: " << validate << "\n";
       return validate ? EXIT_SUCCESS : EXIT_FAILURE;
-   // } catch (std::exception const& e) {
-      // std::cerr << "Error: " << e.what() << "\n";
-   // }
+   } catch (std::exception const& e) {
+      std::cerr << "Error: " << e.what() << "\n";
+   }
    return EXIT_FAILURE;
 }

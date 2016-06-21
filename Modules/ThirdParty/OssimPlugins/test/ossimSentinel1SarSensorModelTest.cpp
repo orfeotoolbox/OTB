@@ -15,7 +15,7 @@ enum Inverse { fwd, inv, undef};
 
 int main(int argc, char * argv[])
 {
-  std::cout.precision(20);
+  std::clog.precision(20);
   
    string annotationXml;
    Inverse inverse = undef;
@@ -41,6 +41,9 @@ int main(int argc, char * argv[])
       std::cerr << "Not enough arguments\n"
          << argv[0] << "[-v|--verbose] <inverse> <annotationXml>\n";
       return EXIT_FAILURE;
+   }
+   if (!verbose) {
+      std::clog.setstate(std::ios_base::badbit);
    }
 
   ossimplugins::ossimSentinel1SarSensorModel * sensor = new ossimplugins::ossimSentinel1SarSensorModel();

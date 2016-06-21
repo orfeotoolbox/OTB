@@ -131,7 +131,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
 
     //Parse azimuth time interval
     theAzimuthTimeInterval = getDoubleFromFirstNode(xmlRoot, "imageAnnotation/imageInformation/azimuthTimeInterval")*1000000;
-    std::cout << "theAzimuthTimeInterval " << theAzimuthTimeInterval << "\n";
+    std::clog << "theAzimuthTimeInterval " << theAzimuthTimeInterval << "\n";
 
 
     // Now read burst records as well
@@ -145,7 +145,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
         burstRecord.startLine = 0;
         burstRecord.azimuthStartTime = getTimeFromFirstNode(xmlRoot,"imageAnnotation/imageInformation/productFirstLineUtcTime");
 
-        std::cout<< burstRecord.azimuthStartTime<<'\n';
+        std::clog<< burstRecord.azimuthStartTime<<'\n';
 
         burstRecord.azimuthStopTime = getTimeFromFirstNode(xmlRoot,"imageAnnotation/imageInformation/productLastLineUtcTime");
         burstRecord.endLine = getTextFromFirstNode(xmlRoot, "imageAnnotation/imageInformation/numberOfLines").toUInt16()-1;
@@ -278,9 +278,9 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
 
             const double timeSinceStartInMicroSeconds = timeSinceStart.total_microseconds();
             gcpRecord.imPt.y= timeSinceStartInMicroSeconds/theAzimuthTimeInterval + acqStartLine;
-            std::cout << "timeSinceStart: " << timeSinceStart << " = " << gcpRecord.azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
-            std::cout << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
-            std::cout << "imPt_y: " << gcpRecord.imPt.y << " = " << timeSinceStartInMicroSeconds << "/" << theAzimuthTimeInterval << "+" << acqStartLine << "\n";
+            std::clog << "timeSinceStart: " << timeSinceStart << " = " << gcpRecord.azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
+            std::clog << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
+            std::clog << "imPt_y: " << gcpRecord.imPt.y << " = " << timeSinceStartInMicroSeconds << "/" << theAzimuthTimeInterval << "+" << acqStartLine << "\n";
         }
         else
         {

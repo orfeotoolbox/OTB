@@ -557,7 +557,7 @@ namespace ossimplugins
 
       ossimXmlNode const& xAzimutTimeInterval = getExpectedFirstNode(imageInformation, "azimuthTimeInterval");
       theAzimuthTimeInterval = to<double>(xAzimutTimeInterval.getText(), "decoding imageInformation/azimuthTimeInterval")*1000000;
-      std::cout << "theAzimuthTimeInterval " << theAzimuthTimeInterval << "\n";
+      std::clog << "theAzimuthTimeInterval " << theAzimuthTimeInterval << "\n";
       add(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", xAzimutTimeInterval.getText());
       // addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", imageInformation, "azimuthTimeInterval");
 
@@ -986,9 +986,9 @@ namespace ossimplugins
 
             const double timeSinceStartInMicroSeconds = timeSinceStart.total_microseconds();
             const double imPt_y= timeSinceStartInMicroSeconds/theAzimuthTimeInterval + acqStartLine;
-            std::cout << "timeSinceStart: " << timeSinceStart << " = " << azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
-            std::cout << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
-            std::cout << "imPt_y: " << imPt_y << " = " << timeSinceStartInMicroSeconds << "/" << theAzimuthTimeInterval << "+" << acqStartLine << "\n";
+            std::clog << "timeSinceStart: " << timeSinceStart << " = " << azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
+            std::clog << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
+            std::clog << "imPt_y: " << imPt_y << " = " << timeSinceStartInMicroSeconds << "/" << theAzimuthTimeInterval << "+" << acqStartLine << "\n";
             add(theProductKwl, prefix, keyImPtY, imPt_y);
          }
          else

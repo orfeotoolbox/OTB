@@ -202,9 +202,9 @@ namespace ossimplugins
          imPt.makeNan();
          return;
       }
-      // std::cout << "AzimuthTime: " << azimuthTime << "\n";
-      // std::cout << "RangeTime: " << rangeTime << "\n";
-      // std::cout << "GRD: " << isGRD() << "\n";
+      // std::clog << "AzimuthTime: " << azimuthTime << "\n";
+      // std::clog << "RangeTime: " << rangeTime << "\n";
+      // std::clog << "GRD: " << isGRD() << "\n";
 
       // Convert azimuth time to line
       azimuthTimeToLine(azimuthTime,imPt.y);
@@ -214,8 +214,8 @@ namespace ossimplugins
          // GRD case
          double groundRange(0);
          slantRangeToGroundRange(rangeTime*C/2,azimuthTime,groundRange);
-         // std::cout << "GroundRange: " << groundRange << "\n";
-         // std::cout << "TheRangeResolution: " << theRangeResolution << "\n";
+         // std::clog << "GroundRange: " << groundRange << "\n";
+         // std::clog << "TheRangeResolution: " << theRangeResolution << "\n";
 
          // Eq 32 p. 31
          // TODO: possible micro-optimization: precompute 1/theRangeResolution, and
@@ -224,8 +224,8 @@ namespace ossimplugins
       }
       else
       {
-         // std::cout << "TheNearRangeTime: " << theNearRangeTime << "\n";
-         // std::cout << "TheRangeSamplingRate: " << theRangeSamplingRate << "\n";
+         // std::clog << "TheNearRangeTime: " << theNearRangeTime << "\n";
+         // std::clog << "TheRangeSamplingRate: " << theRangeSamplingRate << "\n";
          // SLC case
          // Eq 23 and 24 p. 28
          imPt.x = (rangeTime - theNearRangeTime)*theRangeSamplingRate;
@@ -388,20 +388,20 @@ namespace ossimplugins
 
    void ossimSarSensorModel::slantRangeToGroundRange(const double & slantRange, const TimeType & azimuthTime, double & groundRange) const
    {
-      // std::cout << "SR -> GR\n";
+      // std::clog << "SR -> GR\n";
       applyCoordinateConversion(slantRange,azimuthTime,theSlantRangeToGroundRangeRecords,groundRange);
    }
 
    void ossimSarSensorModel::groundRangeToSlantRange(const double & groundRange, const TimeType & azimuthTime, double & slantRange) const
    {
-      // std::cout << "GR -> SR\n";
+      // std::clog << "GR -> SR\n";
       applyCoordinateConversion(groundRange,azimuthTime,theGroundRangeToSlantRangeRecords,slantRange);
    }
 
    void ossimSarSensorModel::applyCoordinateConversion(const double & in, const TimeType& azimuthTime, const std::vector<CoordinateConversionRecordType> & records, double & out) const
    {
       assert(!records.empty()&&"The records vector is empty.");
-      // std::cout << "conv coord(" << in << ", az="<<azimuthTime<<")\n";
+      // std::clog << "conv coord(" << in << ", az="<<azimuthTime<<")\n";
 
       // First, we need to find the correct pair of records for interpolation
       std::vector<CoordinateConversionRecordType>::const_iterator it = records.begin();
@@ -414,16 +414,16 @@ namespace ossimplugins
       std::vector<CoordinateConversionRecordType>::const_iterator nextRecord = it;
 
       // Look for the correct record
-      // std::cout << "Looking for " << azimuthTime << " within records:\n";
+      // std::clog << "Looking for " << azimuthTime << " within records:\n";
       while(it!=records.end())
       {
-         // std::cout << "- record: " << it->azimuthTime << "...";
+         // std::clog << "- record: " << it->azimuthTime << "...";
          // nextRecord = it;
 
          if(azimuthTime >= previousRecord->azimuthTime
                && azimuthTime < nextRecord->azimuthTime)
          {
-            // std::cout << " found!\n";
+            // std::clog << " found!\n";
             break;
          }
          else
@@ -431,7 +431,7 @@ namespace ossimplugins
             previousRecord = nextRecord;
             ++it;
             nextRecord = it;
-            // std::cout << " NOT found => next!\n";
+            // std::clog << " NOT found => next!\n";
          }
       }
       assert(nextRecord == it);
@@ -440,12 +440,12 @@ namespace ossimplugins
          if(azimuthTime < records.front().azimuthTime)
          {
             srgrRecord = records.front();
-            // std::cout << "Not found, but before first => srgrRecord: " << srgrRecord.azimuthTime << "\n";
+            // std::clog << "Not found, but before first => srgrRecord: " << srgrRecord.azimuthTime << "\n";
          }
          else if(azimuthTime >= records.back().azimuthTime)
          {
             srgrRecord = records.back();
-            // std::cout << "Not found, but after last => srgrRecord: " << srgrRecord.azimuthTime << "\n";
+            // std::clog << "Not found, but after last => srgrRecord: " << srgrRecord.azimuthTime << "\n";
          }
       }
       else
@@ -465,7 +465,7 @@ namespace ossimplugins
             / (nextRecord->azimuthTime - previousRecord->azimuthTime)
             ;
 #endif
-         // std::cout << "interp: " << interp << " ="
+         // std::clog << "interp: " << interp << " ="
          // << " (" << azimuthTime             << " - " << previousRecord->azimuthTime << " (="<< (azimuthTime             - previousRecord->azimuthTime)<< ") )"
          // << "/(" << nextRecord->azimuthTime << " - " << previousRecord->azimuthTime << " (="<< (nextRecord->azimuthTime - previousRecord->azimuthTime)<< ") )"
          // << "\n";
@@ -576,32 +576,32 @@ namespace ossimplugins
          assert(interpDenom>0&&"Both doppler frequency are null in interpolation weight computation");
 
          const double interp = abs_doppler1/interpDenom;
-         std::cout << "interp: " << interp << "\n";
+         std::clog << "interp: " << interp << "\n";
 
          // Note that microsecond precision is used here
          const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
          const double deltat = static_cast<double>(delta_td.total_microseconds());
-         std::cout << "delta_td: " << delta_td << "\n";
-         std::cout << "deltat: " << deltat << "ms\n";
+         std::clog << "delta_td: " << delta_td << "\n";
+         std::clog << "deltat: " << deltat << "ms\n";
 
          // Compute interpolated time offset wrt record1
 #if defined(USE_BOOST_TIME)
          const DurationType td     = microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
-         std::cout << "td: " << td  << "(old formula)" << "\t" << (delta_td * interp)<< "(new formula)\n";
+         std::clog << "td: " << td  << "(old formula)" << "\t" << (delta_td * interp)<< "(new formula)\n";
 #else
          // No need for that many computations (day-frac -> ms -> day frac)
          const DurationType td     = delta_td * interp;
-         std::cout << "td: " << td  << "\n";
+         std::clog << "td: " << td  << "\n";
 #endif
          // const DurationType offset = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
          const DurationType offset = microseconds(theAzimuthTimeOffset);
-         std::cout << "offset: " << offset.total_seconds() << "s\n";
+         std::clog << "offset: " << offset.total_seconds() << "s\n";
 
          // Compute interpolated azimuth time
          interpAzimuthTime = record1->azimuthTime + td + offset;
       }
 
-      std::cout << "interpAzimuthTime: " << interpAzimuthTime << "\n";
+      std::clog << "interpAzimuthTime: " << interpAzimuthTime << "\n";
 
       // Interpolate sensor position and velocity
       interpolateSensorPosVel(interpAzimuthTime,interpSensorPos, interpSensorVel);
@@ -704,16 +704,16 @@ namespace ossimplugins
       }
 
       const double timeSinceStartInMicroSeconds = (line - currentBurst->startLine)*theAzimuthTimeInterval;
-      // std::cout << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
+      // std::clog << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
 
       const DurationType timeSinceStart = microseconds(timeSinceStartInMicroSeconds);
       const DurationType offset         = microseconds(theAzimuthTimeOffset);
       // const DurationType offset         = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
       // Eq 22 p 27
       azimuthTime = currentBurst->azimuthStartTime + timeSinceStart + offset;
-      // std::cout << "timeSinceStart: " << timeSinceStart << "\n";
-      // std::cout << "offset: "         << offset << " (" << theAzimuthTimeOffset << ")\n";
-      // std::cout << "->azimuthTime: "  << azimuthTime << "\n";
+      // std::clog << "timeSinceStart: " << timeSinceStart << "\n";
+      // std::clog << "offset: "         << offset << " (" << theAzimuthTimeOffset << ")\n";
+      // std::clog << "->azimuthTime: "  << azimuthTime << "\n";
    }
 
 
@@ -724,7 +724,7 @@ namespace ossimplugins
       ossimEcefPoint currentEstimation(initGcp.worldPt);
 
       // Compute corresponding image position
-      // std::cout << "initGCP: " << initGcp.imPt << "\n";
+      // std::clog << "initGCP: " << initGcp.imPt << "\n";
       ossimDpt currentImPoint(initGcp.imPt);
 
       ossim_float64 currentImSquareResidual = squareDistance(target,currentImPoint);
@@ -749,14 +749,14 @@ namespace ossimplugins
          if(init)
             init =false;
 
-         // std::cout<<"Iter: "<<iter<<", Res: im="<<currentImSquareResidual<<", hgt="<<currentHeightResidual<<'\n';
+         // std::clog<<"Iter: "<<iter<<", Res: im="<<currentImSquareResidual<<", hgt="<<currentHeightResidual<<'\n';
 
          // compute residuals
          F(1) = target.x - currentImPoint.x;
          F(2) = target.y - currentImPoint.y;
          F(3) = currentHeightResidual;
 
-         // std::cout<<"F("<<iter<<")="<<F<<'\n';
+         // std::clog<<"F("<<iter<<")="<<F<<'\n';
 
          // Delta use for partial derivatives estimation (in meters)
          const double d = 10.;
@@ -770,10 +770,10 @@ namespace ossimplugins
          ossimGpt currentEstimationWorld(currentEstimation);
          ossimGpt tmpGpt = ossimGpt(currentEstimation+dx);
          worldToLineSample(tmpGpt,tmpImPt);
-         // std::cout << "currentEstimationWorld: " << currentEstimationWorld << "\n";
-         // std::cout << "currentEstimation: " << currentEstimation << "\n";
-         // std::cout << "tmpGpt: " << tmpGpt << "\n";
-         // std::cout << "tmpImPt: " << tmpImPt << "\n";
+         // std::clog << "currentEstimationWorld: " << currentEstimationWorld << "\n";
+         // std::clog << "currentEstimation: " << currentEstimation << "\n";
+         // std::clog << "tmpGpt: " << tmpGpt << "\n";
+         // std::clog << "tmpImPt: " << tmpImPt << "\n";
          p_fx[0] = (currentImPoint.x-tmpImPt.x)/d;
          p_fy[0] = (currentImPoint.y-tmpImPt.y)/d;
          p_fh[0] = (currentEstimationWorld.height()-tmpGpt.height())/d;
@@ -795,7 +795,7 @@ namespace ossimplugins
                p_fy[0], p_fy[1], p_fy[2],
                p_fh[0], p_fh[1], p_fh[2]);
 
-         // std::cout<<"B: "<<B<<'\n';
+         // std::clog<<"B: "<<B<<'\n';
 
          // Invert system
          try {
@@ -811,7 +811,7 @@ namespace ossimplugins
             currentEstimation[k] -= dR(k+1);
          }
 
-         // std::cout<<"dR: "<<dR<<'\n';
+         // std::clog<<"dR: "<<dR<<'\n';
 
          currentEstimationWorld=ossimGpt(currentEstimation);
 
@@ -821,14 +821,14 @@ namespace ossimplugins
 
          worldToLineSample(currentEstimationWorld,currentImPoint);
 
-         // std::cout<<currentImPoint<<'\n';
+         // std::clog<<currentImPoint<<'\n';
 
          currentImSquareResidual = squareDistance(currentImPoint,target);
 
          ++iter;
       }
 
-      // std::cout<<"Iter: "<<iter<<", Res: im="<<currentImSquareResidual<<", hgt="<<currentHeightResidual<<'\n';
+      // std::clog<<"Iter: "<<iter<<", Res: im="<<currentImSquareResidual<<", hgt="<<currentHeightResidual<<'\n';
 
       ellPt = currentEstimation;
       return true;
@@ -883,11 +883,11 @@ namespace ossimplugins
 
          if(verbose)
          {
-            std::cout<<"GCP #"<<gcpId<<'\n';
-            std::cout<<"Azimuth time: ref="<<gcpIt->azimuthTime<<", predicted: "<<estimatedAzimuthTime<<", res="<<to_simple_string(estimatedAzimuthTime-gcpIt->azimuthTime)<<'\n';
-            std::cout<<"Slant range time: ref="<<gcpIt->slantRangeTime<<", predicted: "<<estimatedRangeTime<<", res="<<std::abs(estimatedRangeTime - gcpIt->slantRangeTime)<<'\n';
-            std::cout<<"Image point: ref="<<gcpIt->imPt<<", predicted="<<estimatedImPt<<", res="<<estimatedImPt-gcpIt->imPt<<'\n';
-            std::cout<<'\n';
+            std::clog<<"GCP #"<<gcpId<<'\n';
+            std::clog<<"Azimuth time: ref="<<gcpIt->azimuthTime<<", predicted: "<<estimatedAzimuthTime<<", res="<<to_simple_string(estimatedAzimuthTime-gcpIt->azimuthTime)<<'\n';
+            std::clog<<"Slant range time: ref="<<gcpIt->slantRangeTime<<", predicted: "<<estimatedRangeTime<<", res="<<std::abs(estimatedRangeTime - gcpIt->slantRangeTime)<<'\n';
+            std::clog<<"Image point: ref="<<gcpIt->imPt<<", predicted="<<estimatedImPt<<", res="<<estimatedImPt-gcpIt->imPt<<'\n';
+            std::clog<<'\n';
          }
       }
 
@@ -939,12 +939,12 @@ namespace ossimplugins
 
             if(verbose)
             {
-               std::cout<<"GCP #"<<gcpId<<'\n';
-               std::cout<<"Azimuth time: ref="<<gcpIt->azimuthTime<<", predicted: "<<estimatedAzimuthTime<<", res="<<to_simple_string(estimatedAzimuthTime-gcpIt->azimuthTime)<<'\n';
-               std::cout<<"Slant range time: ref="<<gcpIt->slantRangeTime<<", predicted: "<<estimatedRangeTime<<", res="<<std::abs(estimatedRangeTime - gcpIt->slantRangeTime)<<'\n';
-               std::cout<<"Im point: "<<gcpIt->imPt<<'\n';
-               std::cout<<"World point: ref="<<refPt<<", predicted="<<estimatedWorldPt<<", res="<<sqrt(res)<<" m\n";
-               std::cout<<'\n';
+               std::clog<<"GCP #"<<gcpId<<'\n';
+               std::clog<<"Azimuth time: ref="<<gcpIt->azimuthTime<<", predicted: "<<estimatedAzimuthTime<<", res="<<to_simple_string(estimatedAzimuthTime-gcpIt->azimuthTime)<<'\n';
+               std::clog<<"Slant range time: ref="<<gcpIt->slantRangeTime<<", predicted: "<<estimatedRangeTime<<", res="<<std::abs(estimatedRangeTime - gcpIt->slantRangeTime)<<'\n';
+               std::clog<<"Im point: "<<gcpIt->imPt<<'\n';
+               std::clog<<"World point: ref="<<refPt<<", predicted="<<estimatedWorldPt<<", res="<<sqrt(res)<<" m\n";
+               std::clog<<'\n';
             }
          }
       }
