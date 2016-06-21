@@ -557,10 +557,7 @@ namespace ossimplugins
         double a = (doppler2 - doppler1)/delta_td;
         double b = doppler1 - a * record1->azimuthTime.as_day_frac();
 
-        std::cout<<delta_td<<" "<<a<<" "<<b<<std::endl;
-        
         interpAzimuthTime = time::ModifiedJulianDate(-b / a);
-        
         }
       else
         {
