@@ -157,14 +157,16 @@ namespace ossimplugins {
       }
 #if defined(USE_BOOST_TIME)
    inline
-      void add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, boost::posix_time::ptime const& v)
+      boost::posix_time::ptime const& add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, boost::posix_time::ptime const& v)
       {
          add(kwl, prefix, key, ossimString(to_iso_string(v)));
+         return v;
       }
    inline
-      void add(ossimKeywordlist & kwl, std::string const& key, boost::posix_time::ptime const& v)
+      boost::posix_time::ptime const& add(ossimKeywordlist & kwl, std::string const& key, boost::posix_time::ptime const& v)
       {
          add(kwl, key, to_iso_string(v));
+         return v;
       }
 #endif
 
