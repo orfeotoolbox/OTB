@@ -19,7 +19,7 @@
 #define MUP_COMPAT_H
 
 #if @OTB_MUPARSERX_HIDE_OVERRIDE@
-#define ITK_OVERRIDE
+#define override
 #endif
 
 #if @OTB_MUPARSERX_HIDE_UNIQUE_PTR@
@@ -27,7 +27,7 @@
 #endif
 
 #if @OTB_MUPARSERX_HIDE_NULLPTR@
-#define ITK_NULLPTR NULL
+#define nullptr NULL
 #endif
 
 #endif
